@@ -9,10 +9,10 @@
 
 ## Task 0.2 技术栈与依赖
 
-- [ ] 先写依赖清单合同测试并确认 RED。
-- [ ] 固定 Python 与运行/测试依赖，生成 `uv.lock` 和 ADR。
-- [ ] 冻结同步及合同测试 GREEN。
-- [ ] 提交 `build: lock workflow runtime and test dependencies`。
+- [x] 先写依赖清单合同测试并确认 RED。
+- [x] 固定 Python 与运行/测试依赖，生成 `uv.lock` 和 ADR。
+- [x] 冻结同步及合同测试 GREEN。
+- [x] 提交 `build: lock workflow runtime and test dependencies`。
 
 ## Task 0.3 康哲合同
 

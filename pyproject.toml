@@ -1,0 +1,114 @@
+[project]
+name = "competitive-intelligence-workflow"
+version = "0.1.0a0"
+description = "面向临床试验医学人员的可安装竞品调研多 Skill 工作流"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "pydantic==2.13.4",
+  "Jinja2==3.1.6",
+  "reportlab==5.0.0",
+  "pypdf==6.15.0",
+  "pdfplumber==0.11.10",
+  "playwright==1.61.0",
+  "PyYAML==6.0.3",
+  "jsonschema==4.26.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest==9.1.1",
+  "ruff==0.16.2",
+  "mypy==2.3.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+
+[tool.ci-workflow.dependencies.pydantic]
+version = "2.13.4"
+license = "MIT"
+purpose = "类型化项目合同、状态和科学数据边界校验"
+source = "https://pypi.org/project/pydantic/2.13.4/"
+
+[tool.ci-workflow.dependencies.jinja2]
+version = "3.1.6"
+license = "BSD-3-Clause"
+purpose = "站点式 HTML 与格式原生模板渲染"
+source = "https://pypi.org/project/Jinja2/3.1.6/"
+
+[tool.ci-workflow.dependencies.reportlab]
+version = "5.0.0"
+license = "BSD-3-Clause"
+purpose = "原生 PDF 排版与绘制"
+source = "https://docs.reportlab.com/releases/notes/whats-new-50/"
+
+[tool.ci-workflow.dependencies.pypdf]
+version = "6.15.0"
+license = "BSD-3-Clause"
+purpose = "PDF 结构检查、合并与页级元数据核验"
+source = "https://pypi.org/project/pypdf/6.15.0/"
+
+[tool.ci-workflow.dependencies.pdfplumber]
+version = "0.11.10"
+license = "MIT"
+purpose = "用户补充 PDF 的文本、表格和定位信息抽取"
+source = "https://pypi.org/project/pdfplumber/0.11.10/"
+
+[tool.ci-workflow.dependencies.playwright]
+version = "1.61.0"
+license = "Apache-2.0"
+purpose = "真实浏览器渲染、交互和视觉验收"
+source = "https://pypi.org/project/playwright/1.61.0/"
+
+[tool.ci-workflow.dependencies.pyyaml]
+version = "6.0.3"
+license = "MIT"
+purpose = "版本化页面、筛选、来源和证据策略合同读取"
+source = "https://pypi.org/project/PyYAML/6.0.3/"
+
+[tool.ci-workflow.dependencies.jsonschema]
+version = "4.26.0"
+license = "MIT"
+purpose = "安装包、项目、证据和产物 JSON Schema 验证"
+source = "https://pypi.org/project/jsonschema/4.26.0/"
+
+[tool.ci-workflow.dependencies.pytest]
+version = "9.1.1"
+license = "MIT"
+purpose = "确定性合同、单元、集成、浏览器与验收测试"
+source = "https://pypi.org/project/pytest/9.1.1/"
+
+[tool.ci-workflow.dependencies.ruff]
+version = "0.16.2"
+license = "MIT"
+purpose = "Python 静态质量和格式一致性检查"
+source = "https://pypi.org/project/ruff/0.16.2/"
+
+[tool.ci-workflow.dependencies.mypy]
+version = "2.3.0"
+license = "MIT"
+purpose = "Python 类型边界和状态模型静态检查"
+source = "https://pypi.org/project/mypy/2.3.0/"
+
+[tool.ci-workflow.assets.echarts]
+version = "6.1.0"
+license = "Apache-2.0"
+purpose = "交互式临床数据图表"
+source = "https://www.npmjs.com/package/echarts/v/6.1.0"

@@ -4,11 +4,11 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
 import os
-from pathlib import Path
 import sys
-
+from collections.abc import Iterator
+from dataclasses import dataclass
+from pathlib import Path
 
 DEFAULT_LEGACY_ROOT = Path(
     "/Users/smkzw/Documents/AI Products/" + "竞品调研" + "工作流"
@@ -61,7 +61,7 @@ def _is_within(path: Path, root: Path) -> bool:
     return True
 
 
-def _iter_paths(root: Path):
+def _iter_paths(root: Path) -> Iterator[Path]:
     for directory, names, filenames in os.walk(root, followlinks=False):
         names[:] = sorted(name for name in names if name not in SKIPPED_DIRECTORY_NAMES)
         current = Path(directory)
