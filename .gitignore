@@ -1,0 +1,19 @@
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+node_modules/
+dist/
+build/
+.artifacts/
+playwright-report/
+test-results/
+*.log
+
+# Trellis runtime pointers are session-local; task/spec/workspace records remain tracked.
+.trellis/.runtime/

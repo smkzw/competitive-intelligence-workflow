@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/migration/legacy-manifest.schema.json",
+  "title": "旧工程迁移候选登记",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "category",
+    "source_path",
+    "source_sha256",
+    "target_path",
+    "status",
+    "runtime_dependency",
+    "decision_basis"
+  ],
+  "properties": {
+    "item_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "category": {
+      "enum": ["approved_spec", "decision_context", "design_contract_candidate"]
+    },
+    "source_path": {"type": "string", "minLength": 1},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "target_path": {"type": ["string", "null"]},
+    "status": {
+      "enum": ["registered", "copied_verified", "pending_user_confirmation", "rejected"]
+    },
+    "runtime_dependency": {"const": false},
+    "decision_basis": {"type": "string", "minLength": 1}
+  }
+}
