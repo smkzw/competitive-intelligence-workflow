@@ -25,6 +25,16 @@ SKIPPED_DIRECTORY_NAMES = {
 }
 SKIPPED_FILES = {Path("migration/legacy_manifest.jsonl")}
 HISTORICAL_ROOTS = {"docs", "fixtures"}
+NON_RUNTIME_TOP_LEVELS = {
+    "archives",
+    "context",
+    "logs",
+    "metrics",
+    "plans",
+    "prompts",
+    "reviews",
+    "runs",
+}
 TEXT_SUFFIXES = {
     "",
     ".css",
@@ -91,11 +101,21 @@ def _read_text(path: Path) -> str | None:
 def scan(root: Path, legacy_root: Path) -> list[Finding]:
     root = root.resolve()
     legacy_text = str(legacy_root.resolve())
+    legacy_name = legacy_root.name
+    legacy_markers = (
+        legacy_text,
+        f"../{legacy_name}",
+        f"..\\{legacy_name}",
+        f"{legacy_name}/",
+        f"{legacy_name}\\",
+    )
     findings: list[Finding] = []
 
     for path in _iter_paths(root):
         relative = path.relative_to(root)
         if relative in SKIPPED_FILES:
+            continue
+        if relative.parts[0] in NON_RUNTIME_TOP_LEVELS:
             continue
 
         if path.is_symlink():
@@ -112,7 +132,8 @@ def scan(root: Path, legacy_root: Path) -> list[Finding]:
 
         is_historical_surface = relative.parts[0] in HISTORICAL_ROOTS
         for line_number, line in enumerate(text.splitlines(), start=1):
-            if legacy_text not in line:
+            marker = next((item for item in legacy_markers if item in line), None)
+            if marker is None:
                 continue
             if is_historical_surface:
                 if "historical:" not in line.casefold():
@@ -128,7 +149,7 @@ def scan(root: Path, legacy_root: Path) -> list[Finding]:
                 Finding(
                     "LEGACY_RUNTIME_REFERENCE",
                     relative,
-                    f"line={line_number}",
+                    f"line={line_number} marker={marker!r}",
                 )
             )
 

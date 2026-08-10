@@ -20,6 +20,7 @@ dev = [
   "pytest==9.1.1",
   "ruff==0.16.2",
   "mypy==2.3.0",
+  "types-jsonschema==4.26.0.20260518",
 ]
 
 [tool.uv]
@@ -106,6 +107,12 @@ version = "2.3.0"
 license = "MIT"
 purpose = "Python 类型边界和状态模型静态检查"
 source = "https://pypi.org/project/mypy/2.3.0/"
+
+[tool.ci-workflow.dependencies.types-jsonschema]
+version = "4.26.0.20260518"
+license = "Apache-2.0"
+purpose = "JSON Schema 合同测试的静态类型定义"
+source = "https://pypi.org/project/types-jsonschema/4.26.0.20260518/"
 
 [tool.ci-workflow.assets.echarts]
 version = "6.1.0"

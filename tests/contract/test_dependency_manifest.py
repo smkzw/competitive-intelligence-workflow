@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import tomllib
 from pathlib import Path
 
@@ -17,7 +18,7 @@ REQUIRED_RUNTIME_DEPENDENCIES = {
     "pyyaml",
     "jsonschema",
 }
-REQUIRED_DEVELOPMENT_DEPENDENCIES = {"pytest", "ruff", "mypy"}
+REQUIRED_DEVELOPMENT_DEPENDENCIES = {"pytest", "ruff", "mypy", "types-jsonschema"}
 APPROVED_LICENSES = {"Apache-2.0", "BSD-3-Clause", "MIT"}
 
 
@@ -73,3 +74,14 @@ def test_dependency_manifest_has_locked_version_license_and_purpose() -> None:
         "purpose": "交互式临床数据图表",
         "source": "https://www.npmjs.com/package/echarts/v/6.1.0",
     }
+
+
+def test_uv_lock_is_fresh_for_current_pyproject() -> None:
+    result = subprocess.run(
+        ["uv", "lock", "--check"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
