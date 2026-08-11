@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/claim.schema.json",
+  "title": "报告声明版本",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "fact_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fact_version_id": {"type": "string", "minLength": 1},
+        "support_role": {"enum": ["supports", "limits", "contradicts"]},
+        "fact_review_state": {"const": "accepted"}
+      },
+      "required": ["fact_version_id", "support_role", "fact_review_state"]
+    },
+    "calculation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "operation": {"const": "treatment_minus_control"},
+        "formula_zh": {"type": "string", "minLength": 1},
+        "input_fact_version_ids": {
+          "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "input_values": {
+          "type": "array", "minItems": 2, "maxItems": 2,
+          "items": {"type": "number"}
+        },
+        "result": {"type": "number"},
+        "unit": {"type": "string", "minLength": 1}
+      },
+      "required": [
+        "operation", "formula_zh", "input_fact_version_ids",
+        "input_values", "result", "unit"
+      ]
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "claim_id": {"type": "string", "minLength": 1},
+    "claim_version_id": {"type": "string", "minLength": 1},
+    "claim_text": {"type": "string", "minLength": 1},
+    "claim_kind": {"enum": ["direct_evidence", "deterministic_calculation", "synthesis"]},
+    "fact_links": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/fact_link"}
+    },
+    "supporting_fact_version_ids": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "calculation": {"anyOf": [{"$ref": "#/$defs/calculation"}, {"type": "null"}]},
+    "synthesis_method_zh": {"type": ["string", "null"], "minLength": 1},
+    "ai_disclosure_label_zh": {"enum": ["AI 综合判断", null]},
+    "review_state": {"enum": ["candidate", "accepted", "rejected", "superseded"]},
+    "created_at": {
+      "type": "string", "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "supersedes_claim_version_id": {"type": ["string", "null"], "minLength": 1}
+  },
+  "required": [
+    "schema_version", "claim_id", "claim_version_id", "claim_text", "claim_kind",
+    "fact_links", "supporting_fact_version_ids", "calculation", "synthesis_method_zh",
+    "ai_disclosure_label_zh", "review_state", "created_at",
+    "supersedes_claim_version_id"
+  ],
+  "allOf": [
+    {
+      "if": {"properties": {"claim_kind": {"const": "direct_evidence"}}},
+      "then": {
+        "properties": {
+          "calculation": {"type": "null"},
+          "synthesis_method_zh": {"type": "null"},
+          "ai_disclosure_label_zh": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"claim_kind": {"const": "deterministic_calculation"}}},
+      "then": {
+        "properties": {
+          "calculation": {"$ref": "#/$defs/calculation"},
+          "synthesis_method_zh": {"type": "null"},
+          "ai_disclosure_label_zh": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"claim_kind": {"const": "synthesis"}}},
+      "then": {
+        "properties": {
+          "claim_text": {"type": "string", "pattern": "^AI 综合判断："},
+          "calculation": {"type": "null"},
+          "synthesis_method_zh": {"type": "string"},
+          "ai_disclosure_label_zh": {"const": "AI 综合判断"}
+        }
+      }
+    }
+  ]
+}

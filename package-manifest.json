@@ -37,6 +37,8 @@
       "schemas/source-eligibility.schema.json",
       "schemas/evidence-gap.schema.json",
       "schemas/evidence-fragment.schema.json",
+      "schemas/fact.schema.json",
+      "schemas/claim.schema.json",
       "schemas/event.schema.json",
       "schemas/checkpoint.schema.json",
       "schemas/evidence-snapshot-manifest.schema.json",

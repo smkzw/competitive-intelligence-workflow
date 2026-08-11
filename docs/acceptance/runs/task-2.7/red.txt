@@ -1,0 +1,8 @@
+Task 2.7 精确 RED 记录（2026-08-12，Asia/Shanghai）
+
+ER01：缺少 ci_workflow.capabilities.extraction_normalization，模块导入失败。
+ER02：缺少 FactNormalizationInput，模块导入失败。
+ER03：缺少 ci_workflow.capabilities.resolution，模块导入失败。
+ER04：缺少声明类型与声明创建函数，模块导入失败。
+
+每个失败均来自对应 exact node，未用全仓其他失败替代预期 RED。

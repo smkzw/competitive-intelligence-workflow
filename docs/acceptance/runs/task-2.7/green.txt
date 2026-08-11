@@ -1,0 +1,24 @@
+Task 2.7 本地 GREEN 记录（2026-08-12，Asia/Shanghai）
+
+命令：uv run pytest tests/integration/test_source_to_claim_chain.py tests/integration/test_conflicts_preserved.py -q
+结果：4 passed in 0.07s
+
+命令：uv run pytest -q
+结果：182 passed in 5.77s
+
+命令：uv run ruff check src tests
+结果：All checks passed!
+
+命令：uv run mypy --strict src
+结果：Success: no issues found in 44 source files
+
+命令：uv run python -m ci_workflow.cli package verify --root .
+结果：PACKAGE_OK version=0.1.0a0 stage=phase-0-task-0.4
+
+对抗断言包括：次日重跑标识稳定、重复规范化幂等、零值与非零原文矛盾拒绝、确定性计算文字与复算结果不一致拒绝、未明确标识的 AI 综合判断拒绝、未决字段冲突不预选事实。
+
+独立审查复用 OpenCode Go / DeepSeek V4 Flash 同一 session 三轮：首轮 6 个 P2、第一次复核 3 个残余 P2 均转成反例并修复，最终复核 P0/P1/P2=0。最终还固化了布尔零值、错误方向、错误幅度和无关幅度注入回归。
+
+最终真实 wheel 包含 facts、claims、extraction_normalization、resolution 四个新增模块。
+
+本记录是构建者锚点，不替代独立验收者重新执行。
