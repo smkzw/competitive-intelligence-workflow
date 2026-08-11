@@ -34,6 +34,7 @@ EXPECTED_MIGRATIONS = (
     "0005_corrections_idempotency.sql",
     "0006_append_only_guards.sql",
     "0007_evidence_audit_chain.sql",
+    "0008_project_lineage_guards.sql",
 )
 
 EXPECTED_TABLES = {
@@ -145,6 +146,38 @@ def test_project_creation_migrates_database_and_persists_contract_version(
             "2026-08-10T23:59:59.999999+08:00",
         )
         assert json.loads(stored[4]) == contract.model_dump(mode="json")
+
+
+def test_project_scoped_snapshots_gates_and_corrections_reject_orphan_projects(
+    tmp_path: Path,
+) -> None:
+    database_path = tmp_path / "lineage.sqlite"
+    apply_migrations(database_path)
+    orphan_statements = (
+        """
+        INSERT INTO gate_evaluations (
+            gate_evaluation_id, project_id, report_kind, gate_id, result,
+            details_json, created_at
+        ) VALUES ('gate_orphan', 'project_missing', 'A', 'gate-a', 'failed', '{}', 'now')
+        """,
+        """
+        INSERT INTO report_snapshots (
+            snapshot_id, project_id, report_kind, report_version, evidence_state,
+            manifest_json, created_at
+        ) VALUES ('snapshot_orphan', 'project_missing', 'B', 'v1', 'queued', '{}', 'now')
+        """,
+        """
+        INSERT INTO correction_proposals (
+            proposal_id, project_id, state, proposal_json, created_at
+        ) VALUES ('proposal_orphan', 'project_missing', 'submitted', '{}', 'now')
+        """,
+    )
+    with open_database(database_path) as database:
+        for statement in orphan_statements:
+            with pytest.raises(sqlite3.IntegrityError, match="project lineage"):
+                database.execute(statement)
+        for table in ("gate_evaluations", "report_snapshots", "correction_proposals"):
+            assert database.execute(f"SELECT count(*) FROM {table}").fetchone() == (0,)
 
 
 def _seed_state_parents(database: sqlite3.Connection) -> None:
