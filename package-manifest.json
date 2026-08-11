@@ -32,6 +32,7 @@
       "schemas/package-manifest.schema.json",
       "schemas/project-contract.schema.json",
       "schemas/source-version.schema.json",
+      "schemas/guideline-basis.schema.json",
       "schemas/source-receipt.schema.json",
       "schemas/source-eligibility.schema.json",
       "schemas/evidence-gap.schema.json",

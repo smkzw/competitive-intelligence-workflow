@@ -1,0 +1,18 @@
+Task 2.4 GREEN 记录（2026-08-11）
+
+- FG01–FG07 组合：7 passed。
+- 全库：166 passed。
+- `ruff check src tests`：通过。
+- `mypy --strict`（37 个源文件及 Task 2.4 三个测试文件）：通过。
+- `ci-workflow package verify --root .`：`PACKAGE_OK version=0.1.0a0 stage=phase-0-task-0.4`。
+- `git diff --check`：通过。
+- 独立验收提出的 3 个 P2 已在本任务修复：方案字段只接受登记/监管材料；指南替代链拒绝环，同系列拒绝多个当前版本；当前指南选择函数强制先过完整谱系校验。
+- 带 PMID 但未提供引文的登记引用保留交叉引用边，并以“未提供引文”状态记录，避免单条不完整引用阻断整个登记页。
+
+实时诊断与离线测试分轨：
+
+- ClinicalTrials.gov API v2 返回版本 `2.0.5`；CRSwNP 查询第一页 NCT01564849，携带下一页令牌，第二页 NCT06930612，身份不同且均非空。
+- PubMed NCT02912468 ESearch 返回 31 条；抽取前 5 个 PMID 后，项目解析器从 EFetch XML 精确返回同 5 个目标文章 PMID，未把评论/引用中的嵌套 PMID 纳入文章身份。
+- FDA 指南检索页实际包含 Draft or Final、Guidance Status、Issue Date、Docket Number 字段。
+
+实时结果只证明当次连接和结构诊断，不替代录制形态的确定性集成测试，也不把网络故障写成“未公开”。
