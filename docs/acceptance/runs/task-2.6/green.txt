@@ -1,0 +1,23 @@
+Task 2.6 本地 GREEN 记录（2026-08-12，Asia/Shanghai）
+
+命令：uv run pytest tests/unit/test_source_classifier.py tests/integration/test_fragment_locators.py -q
+结果：5 passed in 0.05s
+
+命令：uv run pytest -q
+结果：178 passed in 5.88s
+
+命令：uv run ruff check src tests
+结果：All checks passed!
+
+命令：uv run mypy --strict src
+结果：Success: no issues found in 40 source files
+
+共享 locator 扩展后，来源版本链与 FDA/CDE 指南 schema 回归 6 项通过。
+独立审查三轮关闭：
+- 登记、网页、PDF 定位坐标篡改可在同快照静默改指。
+- PDF 同页重复表名在定位阶段才失败。
+- PDF 顶层表名/列名未进入 locator_id，但重开使用它们取值。
+
+最终同 session 复核：5 个节点、全库 178 项、Ruff、strict mypy、包校验和差异检查通过；P0/P1/P2=0。
+真实构建的 wheel 内包含三个新增摄取模块。
+本记录是构建者锚点，不替代独立验收者重新执行。

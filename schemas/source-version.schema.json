@@ -11,16 +11,22 @@
       "properties": {
         "document_role": {"type": "string", "minLength": 1},
         "field_path": {"type": ["string", "null"], "minLength": 1},
+        "heading": {"type": ["string", "null"], "minLength": 1},
         "page": {"type": ["integer", "null"], "minimum": 1},
         "table": {"type": ["string", "null"], "minLength": 1},
+        "row": {"type": ["string", "null"], "minLength": 1},
+        "column": {"type": ["string", "null"], "minLength": 1},
         "paragraph": {"type": ["string", "null"], "minLength": 1},
         "url": {"type": ["string", "null"], "minLength": 1}
       },
-      "required": ["document_role", "field_path", "page", "table", "paragraph", "url"],
+      "required": ["document_role", "field_path", "heading", "page", "table", "row", "column", "paragraph", "url"],
       "anyOf": [
         {"properties": {"field_path": {"type": "string"}}},
+        {"properties": {"heading": {"type": "string"}}},
         {"properties": {"page": {"type": "integer"}}},
         {"properties": {"table": {"type": "string"}}},
+        {"properties": {"row": {"type": "string"}}},
+        {"properties": {"column": {"type": "string"}}},
         {"properties": {"paragraph": {"type": "string"}}},
         {"properties": {"url": {"type": "string"}}}
       ]

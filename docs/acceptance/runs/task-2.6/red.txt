@@ -1,0 +1,9 @@
+Task 2.6 精确 RED 记录（2026-08-12，Asia/Shanghai）
+
+IF01：缺少 ci_workflow.ingestion.classifier，模块导入失败。
+IF02：缺少 RegistryJsonSnapshot，导入失败。
+IF03：缺少 WebPageSnapshot，导入失败。
+IF04：缺少 PdfDocumentSnapshot，导入失败。
+IF05：缺少 ci_workflow.ingestion.fragmenter，模块导入失败。
+
+每个失败均来自对应 exact node，未用全仓其他失败替代预期 RED。

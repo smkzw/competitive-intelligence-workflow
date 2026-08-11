@@ -30,8 +30,11 @@ class EvidenceLocator(BaseModel):
 
     document_role: str
     field_path: str | None = None
+    heading: str | None = None
     page: int | None = Field(default=None, ge=1)
     table: str | None = None
+    row: str | None = None
+    column: str | None = None
     paragraph: str | None = None
     url: str | None = None
 
@@ -40,14 +43,25 @@ class EvidenceLocator(BaseModel):
     def _role_is_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
-    @field_validator("field_path", "table", "paragraph", "url")
+    @field_validator("field_path", "heading", "table", "row", "column", "paragraph", "url")
     @classmethod
     def _optional_text_is_not_blank(cls, value: str | None) -> str | None:
         return None if value is None else _not_blank(value)
 
     @model_validator(mode="after")
     def _has_precise_anchor(self) -> EvidenceLocator:
-        if not any((self.field_path, self.page, self.table, self.paragraph, self.url)):
+        if not any(
+            (
+                self.field_path,
+                self.heading,
+                self.page,
+                self.table,
+                self.row,
+                self.column,
+                self.paragraph,
+                self.url,
+            )
+        ):
             raise ValueError("证据位置必须包含字段、页、表、段落或链接")
         return self
 
