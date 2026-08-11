@@ -33,6 +33,7 @@ EXPECTED_MIGRATIONS = (
     "0004_delivery_workflow.sql",
     "0005_corrections_idempotency.sql",
     "0006_append_only_guards.sql",
+    "0007_evidence_audit_chain.sql",
 )
 
 EXPECTED_TABLES = {
@@ -60,16 +61,22 @@ EXPECTED_TABLES = {
     "download_requests",
     "correction_proposals",
     "idempotency_keys",
+    "content_blobs",
+    "source_date_assertions",
 }
 
 
-def test_six_ordered_migrations_create_every_required_truth_table(tmp_path: Path) -> None:
+def test_ordered_migrations_preserve_task_1_3_and_extend_the_truth_store(
+    tmp_path: Path,
+) -> None:
     assert tuple(path.name for path in sorted(migration_directory().glob("*.sql"))) == (
         EXPECTED_MIGRATIONS
     )
     database_path = tmp_path / "project.sqlite"
     applied = apply_migrations(database_path)
-    assert [migration.version for migration in applied] == list(range(1, 7))
+    assert [migration.version for migration in applied] == list(
+        range(1, len(EXPECTED_MIGRATIONS) + 1)
+    )
 
     with open_database(database_path) as database:
         tables = {
@@ -81,7 +88,9 @@ def test_six_ordered_migrations_create_every_required_truth_table(tmp_path: Path
         assert tables >= EXPECTED_TABLES
         assert database.execute("PRAGMA foreign_keys").fetchone() == (1,)
         assert database.execute("PRAGMA integrity_check").fetchone() == ("ok",)
-        assert database.execute("PRAGMA user_version").fetchone() == (6,)
+        assert database.execute("PRAGMA user_version").fetchone() == (
+            len(EXPECTED_MIGRATIONS),
+        )
         recorded = database.execute(
             "SELECT version, name, length(sha256) FROM schema_migrations ORDER BY version"
         ).fetchall()

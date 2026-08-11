@@ -26,6 +26,8 @@ IMMUTABLE_TABLES = {
     "coverage_projections",
     "artifact_records",
     "idempotency_keys",
+    "content_blobs",
+    "source_date_assertions",
 }
 
 
