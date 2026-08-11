@@ -1,0 +1,6 @@
+Task: 0.5 固定页面、筛选、图形和格式合同
+Verified: 2026-08-11
+Command: PYTHONDONTWRITEBYTECODE=1 uv run --frozen pytest -p no:cacheprovider tests/contract/test_page_catalogs.py tests/contract/test_filter_contracts.py tests/contract/test_format_contracts.py -q
+Result: 16 passed in 0.16s
+Quality: uv run --frozen ruff check tests/contract/test_page_catalogs.py tests/contract/test_filter_contracts.py tests/contract/test_format_contracts.py
+Quality result: All checks passed.

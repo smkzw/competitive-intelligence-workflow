@@ -1,0 +1,6 @@
+Phase: 0
+Verified: 2026-08-11
+Command: PYTHONDONTWRITEBYTECODE=1 uv run --frozen pytest -p no:cacheprovider tests/contract tests/integration/test_cli_help.py tests/integration/test_cli_command_catalog.py -q && uv run --frozen python tools/check_no_legacy_refs.py
+Result: 61 passed in 1.22s
+Legacy runtime dependency scan: LEGACY_REF_OK scanned_without_runtime_dependency=true
+Additional anchors: package verify succeeded; full repository 69 passed; Ruff and strict mypy passed; Trellis context validation passed; Task 0.5 conference review gate passed.

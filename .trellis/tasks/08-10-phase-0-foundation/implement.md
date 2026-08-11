@@ -55,7 +55,7 @@
 - [x] 明确 Python wheel 只承载 CLI 模块；Task 9.5 仍负责完整 `.tar.zst` Skill bundle、fresh install 和三真实宿主验收，当前未越阶段。
 - [x] A/B/C 页面、筛选和 HTML/PDF/HTML-PPT/PPTX 格式合同：固定 A 11 类、B 21 个内容页、C 12 类，筛选/证据/格式交叉绑定；三轮同会话独立审查从 VETO 修复至 PASS，16 项专项、69 项全库与 Ruff 通过。
 - [x] Task 0.5 阶段清理：7.3 MB 原始流式日志和不适用的 Hermes 归档尝试移入独立废纸篓目录；保留三轮最终报告、指标、审查结论和确定性测试。
-- [ ] Phase 0 全套确定性检查和独立验收。
+- [x] Phase 0 全套确定性检查和独立验收：正式退出命令 61 passed + `LEGACY_REF_OK`，全库 69 passed，包校验、Ruff、strict mypy、Trellis validate 与 Task 0.5 review gate 均通过；验收记录落在 `docs/acceptance/runs/`。
 
 ## 停止与回滚
 

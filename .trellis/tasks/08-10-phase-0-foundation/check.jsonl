@@ -7,3 +7,4 @@
 {"file":"docs/architecture/filter-contracts/B.yaml","reason":"Task 0.5 重点复核基线、疗效安全性矩阵与试验完成情况多维筛选"}
 {"file":"docs/architecture/format-contracts/html-ppt.yaml","reason":"Task 0.5 固定康哲 HTML 演示稿视口、演讲者视图、页码和原生验证"}
 {"file":"reviews/codex_conference_ci_phase0_task05_report_contracts_review.md","reason":"Task 0.5 三轮独立会商从 VETO 修复至 PASS 的接受证据"}
+{"file":"docs/acceptance/runs/phase-0-exit/verdict.md","reason":"Phase 0 正式退出边界、确定性命令和未提前接受能力的恢复锚点"}

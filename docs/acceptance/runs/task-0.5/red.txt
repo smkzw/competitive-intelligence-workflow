@@ -1,0 +1,6 @@
+Task: 0.5 固定页面、筛选、图形和格式合同
+Observed: 2026-08-11
+Command: uv run --frozen pytest -p no:cacheprovider tests/contract/test_page_catalogs.py tests/contract/test_filter_contracts.py tests/contract/test_format_contracts.py -q
+Result: 9 failed
+Failure class: 三类目标 YAML 尚不存在，全部为预期的 FileNotFoundError；没有语法、导入或 fixture 路径错误。
+Note: 原始长输出未在当时持久化，本记录只保留已观察事实，不重构伪日志。
