@@ -1,0 +1,8 @@
+Task 1.2 regression
+
+- Full repository: 102 passed.
+- Ruff: all checks passed.
+- strict mypy: no issues in 11 source files.
+- Package verification: PACKAGE_OK.
+- Trellis context validation and git diff check: passed.
+- Independent executable review reproduced 29/102 passes, Ruff and mypy; verdict PASS.

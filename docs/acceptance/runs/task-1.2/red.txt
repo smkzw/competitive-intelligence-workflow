@@ -1,0 +1,4 @@
+Task 1.2 RED
+
+Command: .venv/bin/pytest tests/integration/test_project_workspace.py tests/integration/test_project_move_portability.py tests/integration/test_artifact_paths.py -q
+Observed: 3 collection errors. ci_workflow.application and ci_workflow.storage did not exist; no unrelated assertion failed.

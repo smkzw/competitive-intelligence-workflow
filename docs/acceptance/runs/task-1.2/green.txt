@@ -1,0 +1,4 @@
+Task 1.2 GREEN
+
+Command: .venv/bin/pytest tests/integration/test_project_workspace.py tests/integration/test_project_move_portability.py tests/integration/test_artifact_paths.py -q
+Observed: 29 passed.

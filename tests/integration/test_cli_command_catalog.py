@@ -50,14 +50,17 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
     assert created.returncode == 0, created.stderr
     assert "PROJECT_CREATED" in created.stdout
     stub = json.loads((project_root / "project.yaml").read_text(encoding="utf-8"))
-    assert stub["indication"] == "慢性鼻窦炎伴鼻息肉"
-    assert stub["reports"] == ["A", "B", "C"]
-    assert stub["outputs"] == ["html", "pdf", "html-ppt"]
-    assert stub["contract_status"] == "skeleton_pending_phase_1"
+    assert stub["schema_version"] == "1.0"
+    assert stub["active_contract_version"] == 1
+    contract = stub["project_contract_versions"][0]
+    assert contract["indication"] == "慢性鼻窦炎伴鼻息肉"
+    assert contract["reports"] == ["A", "B", "C"]
+    assert contract["outputs"] == ["html", "pdf", "html-ppt"]
 
     verified = _run("project", "verify", "--root", str(project_root))
     assert verified.returncode == 0, verified.stderr
     assert verified.stdout.strip().startswith("PROJECT_OK")
+    assert "项目可继续使用" in verified.stdout
 
     deferred_commands = [
         ("capability", "preflight", "--host", "omp", "--reports", "A", "--outputs", "html"),

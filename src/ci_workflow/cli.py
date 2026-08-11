@@ -16,6 +16,12 @@ from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError, ValidationError
 
 from ci_workflow import __version__
+from ci_workflow.application.project_service import (
+    ProjectWorkspaceError,
+    create_project_workspace,
+    verify_project_workspace,
+)
+from ci_workflow.domain.contracts import create_project_contract
 
 EXPECTED_INTERNAL_SKILLS = {
     "intake-preflight",
@@ -273,50 +279,33 @@ def _atomic_json_write(path: Path, value: dict[str, Any]) -> None:
 
 
 def _create_project(args: argparse.Namespace) -> int:
-    root = Path(args.root).resolve()
-    if root.exists() and any(root.iterdir()):
-        raise ContractError(f"项目目录不是空目录：{root}")
     reports = _split_choices(args.reports, VALID_REPORTS, "报告类型")
     outputs = _split_choices(args.outputs, VALID_OUTPUTS, "交付格式")
-    project = {
-        "schema_version": "0.1-skeleton",
-        "contract_status": "skeleton_pending_phase_1",
-        "workflow_version": __version__,
-        "indication": args.indication.strip(),
-        "reports": reports,
-        "outputs": outputs,
-    }
-    if not project["indication"]:
-        raise ContractError("适应症不能为空")
-    _atomic_json_write(root / "project.yaml", project)
-    print(f"PROJECT_CREATED root={root}")
+    try:
+        contract = create_project_contract(
+            indication=args.indication,
+            reports=reports,
+            outputs=outputs,
+            timezone=args.timezone,
+            cutoff=args.cutoff,
+        )
+        root = create_project_workspace(Path(args.root), contract)
+    except (ValueError, ProjectWorkspaceError) as exc:
+        raise ContractError(str(exc)) from exc
+    print(f"PROJECT_CREATED 项目已创建：{root}")
     return 0
 
 
 def _verify_project(args: argparse.Namespace) -> int:
-    root = Path(args.root).resolve()
-    project = _load_json(root / "project.yaml")
-    required = {
-        "schema_version",
-        "contract_status",
-        "workflow_version",
-        "indication",
-        "reports",
-        "outputs",
-    }
-    if set(project) != required:
-        raise ContractError("项目骨架字段与当前阶段合同不一致")
-    if project["contract_status"] != "skeleton_pending_phase_1":
-        raise ContractError("项目骨架状态不符合当前阶段合同")
-    if project["workflow_version"] != __version__:
-        raise ContractError("项目骨架版本与当前工作流不一致")
-    reports = project["reports"]
-    outputs = project["outputs"]
-    if not isinstance(reports, list) or not reports or not set(reports) <= VALID_REPORTS:
-        raise ContractError("项目报告类型无效")
-    if not isinstance(outputs, list) or not outputs or not set(outputs) <= VALID_OUTPUTS:
-        raise ContractError("项目交付格式无效")
-    print(f"PROJECT_OK root={root} status={project['contract_status']}")
+    try:
+        verification = verify_project_workspace(Path(args.root))
+    except ProjectWorkspaceError as exc:
+        raise ContractError(str(exc)) from exc
+    print(
+        "PROJECT_OK 项目可继续使用："
+        f"{verification.project_root}；合同版本 "
+        f"{verification.contract.contract_version}"
+    )
     return 0
 
 
@@ -362,6 +351,12 @@ def _build_parser() -> argparse.ArgumentParser:
     project_create.add_argument("--reports", required=True, help="报告类型，如 A,B,C")
     project_create.add_argument(
         "--outputs", default="html", help="交付格式，默认 html；可追加 pdf、html-ppt、pptx"
+    )
+    project_create.add_argument(
+        "--timezone", default="Asia/Shanghai", help="项目时区，默认 Asia/Shanghai"
+    )
+    project_create.add_argument(
+        "--cutoff", help="可选的历史数据截止日或日期时间"
     )
     project_create.set_defaults(handler=_create_project)
     project_verify = project_commands.add_parser("verify", help="核验项目合同")
