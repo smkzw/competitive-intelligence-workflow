@@ -1,0 +1,21 @@
+Task 2.2 RED — 2026-08-11
+
+批准计划的首批四个节点：
+- stable_internal_identity：模块不存在，1 failed；实现后 1 passed。
+- alias_conflict：模块不存在，1 failed；实现后 1 passed。
+- organization_trial_cohort_arm_relationships：模块不存在，1 failed；实现后 1 passed。
+- complete_competitor_universe：最初只调用 Task 2.1 的宇宙闭合函数并意外通过，未覆盖实体绑定与 Top-N 风险。测试经收紧为 150 个稳定实体与适格记录绑定后，因实体模块不存在取得真实 1 failed；实现后 1 passed。
+
+计划对象覆盖复核新增三个节点：
+- product_project_regimen_with_nct_ctr：既有通用实体图已支持，首次运行 1 passed；因此仅作为已存在行为的回归覆盖，不虚构 RED。
+- external_identifier_conflict：缺少外部标识符解析接口，1 failed。
+- inconsistent_same_internal_identity：索引静默覆盖同一内部身份的不同内容，1 failed。
+
+后两项已在失败后补最小实现。上述“意外通过”与原因保留在验收记录中，不作为测试驱动完成证据。
+
+首次独立验收返回 FAIL（P0=0、P1=2）：重复适格记录会重复计数，已登记但无适格记录的实体会被静默丢弃且宇宙仍闭合。随后新增精确节点：
+- identity_basis 直接等于名称、别名或外部登记号：修复前 1 failed。
+- 重复或缺失适格记录：修复前 1 failed。
+- 待审查记录阻止身份绑定宇宙闭合：既有实现首次运行 1 passed，作为回归覆盖，不虚构 RED。
+
+两项 P1 与身份依据守卫均在取得失败信号后补最小实现；须由原验收会话复核。
