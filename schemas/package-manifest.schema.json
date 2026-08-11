@@ -58,12 +58,13 @@
     "components": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["schemas", "policies", "contracts", "assets"],
+      "required": ["schemas", "policies", "contracts", "assets", "migrations"],
       "properties": {
         "schemas": {"$ref": "#/$defs/path_list"},
         "policies": {"$ref": "#/$defs/path_list"},
         "contracts": {"$ref": "#/$defs/path_list"},
-        "assets": {"$ref": "#/$defs/path_list"}
+        "assets": {"$ref": "#/$defs/path_list"},
+        "migrations": {"$ref": "#/$defs/path_list"}
       }
     },
     "cli": {

@@ -102,7 +102,7 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
         assert policy["allow_implicit_invocation"] is False
 
     components = cast(dict[str, list[str]], manifest["components"])
-    for category in ("schemas", "contracts", "assets"):
+    for category in ("schemas", "contracts", "assets", "migrations"):
         assert components[category]
         for relative_path in components[category]:
             assert (ROOT / relative_path).exists(), relative_path

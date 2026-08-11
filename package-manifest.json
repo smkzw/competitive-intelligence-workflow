@@ -46,6 +46,14 @@
       "assets/brand/manifest.json",
       "assets/html-ppt/manifest.json",
       "assets/third-party/echarts/manifest.json"
+    ],
+    "migrations": [
+      "migrations/0001_project_identity.sql",
+      "migrations/0002_evidence_claims.sql",
+      "migrations/0003_gates_snapshots.sql",
+      "migrations/0004_delivery_workflow.sql",
+      "migrations/0005_corrections_idempotency.sql",
+      "migrations/0006_append_only_guards.sql"
     ]
   },
   "cli": {

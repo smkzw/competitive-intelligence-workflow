@@ -23,7 +23,7 @@ def _copy_verifiable_package(target: Path) -> None:
     target.mkdir()
     for file_name in ("package-manifest.json", "pyproject.toml"):
         shutil.copy2(ROOT / file_name, target / file_name)
-    for directory in ("schemas", "contracts", "assets", "skills"):
+    for directory in ("schemas", "contracts", "assets", "skills", "migrations"):
         shutil.copytree(ROOT / directory, target / directory)
 
 

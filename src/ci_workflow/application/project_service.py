@@ -13,6 +13,11 @@ from pydantic import ValidationError as PydanticValidationError
 
 from ci_workflow import __version__
 from ci_workflow.domain.contracts import ProjectContract, validate_project_contract_document
+from ci_workflow.storage.migrations import (
+    MigrationError,
+    apply_migrations,
+    persist_project_contract,
+)
 
 _DIRECTORIES = (
     "state/checkpoints",
@@ -123,8 +128,10 @@ def create_project_workspace(root: Path, contract: ProjectContract) -> Path:
         _atomic_json_write(project_root / relative, json_content)
 
     database_path = project_root / "state/project.sqlite"
-    with sqlite3.connect(database_path) as database:
-        database.execute("PRAGMA user_version = 0")
+    try:
+        persist_project_contract(database_path, contract)
+    except (MigrationError, sqlite3.DatabaseError) as exc:
+        raise ProjectWorkspaceError("项目数据库无法初始化") from exc
     return project_root
 
 
@@ -207,12 +214,26 @@ def verify_project_workspace(root: Path) -> ProjectWorkspaceVerification:
         payload = _load_json_object(project_root / relative)
         _assert_no_absolute_values(payload, location=relative)
     try:
+        apply_migrations(project_root / "state/project.sqlite")
         with sqlite3.connect(project_root / "state/project.sqlite") as database:
+            database.execute("PRAGMA foreign_keys = ON")
             integrity = database.execute("PRAGMA integrity_check").fetchone()
-    except sqlite3.DatabaseError as exc:
+            stored_contract = database.execute(
+                """
+                SELECT contract_json FROM project_contract_versions
+                WHERE project_id = ? AND contract_version = ?
+                """,
+                (active_contract.project_id, active_contract.contract_version),
+            ).fetchone()
+    except (MigrationError, sqlite3.DatabaseError) as exc:
         raise ProjectWorkspaceError("项目数据库无法读取") from exc
     if integrity != ("ok",):
         raise ProjectWorkspaceError("项目数据库完整性检查未通过")
+    expected_contract_json = json.dumps(
+        active_contract.model_dump(mode="json"), ensure_ascii=False, sort_keys=True
+    )
+    if stored_contract is None or str(stored_contract[0]) != expected_contract_json:
+        raise ProjectWorkspaceError("数据库中的当前项目合同与项目文件不一致")
     return ProjectWorkspaceVerification(
         project_root=project_root,
         contract=active_contract,
