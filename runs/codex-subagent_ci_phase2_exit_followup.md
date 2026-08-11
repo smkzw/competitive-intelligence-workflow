@@ -47,36 +47,36 @@ FileNotFoundError: No usable temporary directory found
 
 ## 新发现缺陷
 
-1. P1：非成功路线状态没有覆盖全部政策必查单元，也没有绑定恢复穷尽条件。  
-   最小复现：一个 `not_found` 回执即可 `route_completed`；`route_not_applicable` 或 `route_access_blocked` 只提交 `s1`，同时存在未处理的必查 `s2`，仍可完成。`RouteProgress` 的 `attempts` 也没有与审计回执绑定。  
+1. P1：非成功路线状态没有覆盖全部政策必查单元，也没有绑定恢复穷尽条件。
+   最小复现：一个 `not_found` 回执即可 `route_completed`；`route_not_applicable` 或 `route_access_blocked` 只提交 `s1`，同时存在未处理的必查 `s2`，仍可完成。`RouteProgress` 的 `attempts` 也没有与审计回执绑定。
    位置：[receipts.py:85](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/receipts.py:85>)、[planner.py:44](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/planner.py:44>)。
 
-2. P1：技术失败回执可以组成“双轮饱和”。  
-   两个不同策略、两个 `network_error` 回执、空 `InformationGain`，`RecoveryHistory.can_declare_information_saturated` 返回 `True`。  
+2. P1：技术失败回执可以组成“双轮饱和”。
+   两个不同策略、两个 `network_error` 回执、空 `InformationGain`，`RecoveryHistory.can_declare_information_saturated` 返回 `True`。
    位置：[retries.py:174](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/retries.py:174>)、[retries.py:185](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/retries.py:185>)。
 
-3. P1：恢复/替代路径只绑定摘要型 `RecoveredSourceVersion`，不绑定真实 `SourceVersionRecord` 或已登记正文。  
-   最小复现：构造两个 `content_acquired` 回执，分别指向 `fake-version-1/a*64` 和 `fake-version-2/b*64`，再提供同值的 `RecoveredSourceVersion`，`minimum_distinct_alternatives_met` 返回 `True`。  
+3. P1：恢复/替代路径只绑定摘要型 `RecoveredSourceVersion`，不绑定真实 `SourceVersionRecord` 或已登记正文。
+   最小复现：构造两个 `content_acquired` 回执，分别指向 `fake-version-1/a*64` 和 `fake-version-2/b*64`，再提供同值的 `RecoveredSourceVersion`，`minimum_distinct_alternatives_met` 返回 `True`。
    位置：[retries.py:95](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/retries.py:95>)、[retries.py:273](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/retries.py:273>)。
 
-4. P1：公众号正文与精确定位的来源链接未绑定。  
-   最小复现：`source_url="https://mp.weixin.qq.com/s/real"`，但 `locator.url="https://evil.invalid"`、`locator.paragraph="正"`，模型仍接受。  
+4. P1：公众号正文与精确定位的来源链接未绑定。
+   最小复现：`source_url="https://mp.weixin.qq.com/s/real"`，但 `locator.url="https://evil.invalid"`、`locator.paragraph="正"`，模型仍接受。
    位置：[authoritative_wechat.py:120](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/connectors/authoritative_wechat.py:120>)。
 
-5. P1：直接构造 `ClaimVersion` 仍可引用未注册事实。  
-   `create_direct_evidence_claim()` 会通过注册表拒绝，但直接 `ClaimVersion.model_validate()` 使用 `fact_version_id="unregistered-fact"` 可接受；注册表约束没有成为声明模型本身的不可绕过边界。  
+5. P1：直接构造 `ClaimVersion` 仍可引用未注册事实。
+   `create_direct_evidence_claim()` 会通过注册表拒绝，但直接 `ClaimVersion.model_validate()` 使用 `fact_version_id="unregistered-fact"` 可接受；注册表约束没有成为声明模型本身的不可绕过边界。
    位置：[resolution.py:123](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/capabilities/resolution.py:123>)。
 
-6. P1：宇宙闭合只验证调用方提供的字符串 ID，不验证真实注册表；边界审查回执的证据 ID也未检查。  
-   最小复现：`verified_fragment_ids=frozenset({"fake-fragment"})` 配合同名 `ComponentEligibility` 即可闭合；边界审查回执使用 `unregistered-review-fragment` 也不阻止闭合。  
+6. P1：宇宙闭合只验证调用方提供的字符串 ID，不验证真实注册表；边界审查回执的证据 ID也未检查。
+   最小复现：`verified_fragment_ids=frozenset({"fake-fragment"})` 配合同名 `ComponentEligibility` 即可闭合；边界审查回执使用 `unregistered-review-fragment` 也不阻止闭合。
    位置：[ontology_universe.py:272](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/capabilities/ontology_universe.py:272>)、[identity.py:106](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/ingestion/identity.py:106>)。
 
-7. P1：中国注册/监管记录模型仍可接受非官方 URL，且临床试验版本没有正文摘要字段。  
-   最小复现：`ChinaDrugTrialVersion(source_url="https://evil.invalid", raw_record_json='{"forged":true}')` 可接受；`ChinaRegulatoryRecordVersion` 同样接受非官方 URL。首次披露日期字段本身已补齐，但来源真实性绑定仍不足。  
+7. P1：中国注册/监管记录模型仍可接受非官方 URL，且临床试验版本没有正文摘要字段。
+   最小复现：`ChinaDrugTrialVersion(source_url="https://evil.invalid", raw_record_json='{"forged":true}')` 可接受；`ChinaRegulatoryRecordVersion` 同样接受非官方 URL。首次披露日期字段本身已补齐，但来源真实性绑定仍不足。
    位置：[china_registries.py:58](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/connectors/china_registries.py:58>)、[china_registries.py:194](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/sources/connectors/china_registries.py:194>)。
 
-8. P1：运行时 `SourceVersionRecord` 未强制内容寻址路径与摘要一致。  
-   最小复现：`content_sha256="a"*64`、`content_relative_path="not-a-content-addressed-path"` 可直接构造并进入回执绑定；JSON Schema 虽有路径正则，但 Pydantic 运行时边界未执行。  
+8. P1：运行时 `SourceVersionRecord` 未强制内容寻址路径与摘要一致。
+   最小复现：`content_sha256="a"*64`、`content_relative_path="not-a-content-addressed-path"` 可直接构造并进入回执绑定；JSON Schema 虽有路径正则，但 Pydantic 运行时边界未执行。
    位置：[evidence.py:133](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/src/ci_workflow/domain/evidence.py:133>)、[schemas/source-version.schema.json](</Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/schemas/source-version.schema.json)。
 
 ## 已确认闭合项
