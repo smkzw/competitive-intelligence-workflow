@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "name": "康哲品牌标识",
+  "source": "contracts/kangzhe/design_specs/assets/logo_bot.svg",
+  "file": "cms-logo.svg",
+  "sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
+  "bytes": 9542,
+  "view_box": "0 0 121 25",
+  "official_url": "https://web.cms.net.cn/wp-content/themes/qnz/assets/img/logo_bot.svg",
+  "official_retrieval_date": "2026-08-11",
+  "usage": "项目报告左上角品牌标识；不得拉伸、重绘或替换为文字占位。"
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "competitive-intelligence-kangzhe-design-v1",
+  "created_at": "2026-08-11T09:30:00+08:00",
+  "source": {
+    "entry": "康哲模板目录/design.md",
+    "entry_sha256": "e513b4c5d56ae666148f1c22d535295483447f236da02d55efead0d8d185ed18",
+    "stable_collection_sha256": "82a81132a0284f4bc984a582e0ad9a82de36e5b2ef065438a092b2cd9babc25b",
+    "stable_double_read": true,
+    "observed_at": "2026-08-11T09:20:00+08:00",
+    "compatibility_stubs": {
+      "design.md": "e513b4c5d56ae666148f1c22d535295483447f236da02d55efead0d8d185ed18",
+      "design_share_v2.md": "e513b4c5d56ae666148f1c22d535295483447f236da02d55efead0d8d185ed18",
+      "design_shareable.md": "e513b4c5d56ae666148f1c22d535295483447f236da02d55efead0d8d185ed18",
+      "design_v2.md": "e513b4c5d56ae666148f1c22d535295483447f236da02d55efead0d8d185ed18"
+    },
+    "design_specs_files": {
+      "ARCHITECTURE.md": "cdd7b1e3babc418fd41aed4183323c4c3d53deadb62c144269277d7e01e27e55",
+      "README.md": "cfd65931d33f09248f9fcab4ef55bc83a5fc34818e1d46879617efea3dbd4fb1",
+      "ROUTER.md": "b67125001153dd6733b7d34f43544fdc9a01c551b45e9fc6bca19f308a09a807",
+      "assets/logo_bot.svg": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
+      "core.md": "acdd64bf0281bc0d27c7da5b8fd48127f69997403ce7cd48fc649291cf554aeb",
+      "local_map.md": "681db3df67f2c27fdb502ca3e1f0bcad3e58811de0dae54725856e8fa7a4dea1",
+      "tests/test_package_load.py": "258d3650457bba70744841dd1d25879d0aed17658f1b4d95b1d08e2640c36093",
+      "track_htmlppt.md": "91e9395fa3668d5fb94e8fc05422831688eafe4677387f9026205b2a5c1e14fa",
+      "track_interactive.md": "68501e5f4fcc3ae72b3a22e858e240c5739e0133f71fed512cd504f9c8086687",
+      "track_pptx.md": "7e7dcd0833d7e6a79d41cc0ada48efe7b5d9ffbcaf09aa2bbad9b39acd1d88f3",
+      "track_site.md": "0baf152a342678e93d2666ca679e584848bed273678def225bc9dca79702a663",
+      "track_stream.md": "4e1baca0b306b99272bfe4dcb437ef44ceb421eb30396fa1faa0e4c58812bc8e"
+    }
+  },
+  "decision": {
+    "policy": "project_owned_frozen_copy",
+    "upstream_sync_required": false,
+    "user_instruction": "康哲design.md请选取最新版，并内化为项目自己的design spec，后续不用同步改通用版design.md。",
+    "meaning": "通用版只记录来源；项目运行只读取本清单绑定的合同，后续设计变更仅在本项目发生。"
+  },
+  "runtime": {
+    "entrypoint": "design.md",
+    "authority": "design_specs",
+    "collection_sha256": "a8342b2f253f3e12a0f245bf969ef0b829dc218edcce882232e3e65596fa6a5e",
+    "files": {
+      "design.md": "fa30cea68539a37aee2767b573e9a74acf3d9d38d86da9910661c5baef71735c",
+      "design_specs/ARCHITECTURE.md": "398e8d2c3556b3b427485187f546875543f7627757db182931ac22707c64701d",
+      "design_specs/README.md": "1a4903095e89c4281e2b7a2eb6c6e2bfd4d8247d567c414d07ad7d9d6badff66",
+      "design_specs/ROUTER.md": "3db0450cbb6cca4c0b7892c36c311fd0e549b6e7f8a1deb53fea4c51baff169e",
+      "design_specs/assets/logo_bot.svg": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
+      "design_specs/core.md": "acdd64bf0281bc0d27c7da5b8fd48127f69997403ce7cd48fc649291cf554aeb",
+      "design_specs/local_map.md": "f8ced5b8de8de74267fcd48f74b07a69279f5190ab9ff05db5501cfd07798512",
+      "design_specs/project_profile.md": "5d45c694ceec95fc6b279accb4cb01080a8b1bb648c218046df85357d22d7a94",
+      "design_specs/schemas/design-run-manifest.schema.json": "c66b1e7f41f4937dccbd450f269320db757c4070adbe955437fe44669fc12440",
+      "design_specs/schemas/design-source-pack.schema.json": "d468d5c1dce0039be60c2610c5fc528ddc15087d8981a77ce44f9848198484d6",
+      "design_specs/schemas/design-verdict.schema.json": "c32bdf184b7f308b645fe6107c0e35f5fc9ecf9c685eb926c55eeadea8764996",
+      "design_specs/tests/test_package_load.py": "caa64bf615addb098ccdf12bf509a861340e618cfb21223fde63b383f83778e9",
+      "design_specs/track_htmlppt.md": "91e9395fa3668d5fb94e8fc05422831688eafe4677387f9026205b2a5c1e14fa",
+      "design_specs/track_interactive.md": "68501e5f4fcc3ae72b3a22e858e240c5739e0133f71fed512cd504f9c8086687",
+      "design_specs/track_pdf.md": "bd42978e89daf119ca74a0916affdab5dbd2ab8fafedba8b267c5da135ab0af9",
+      "design_specs/track_pptx.md": "79d6f865d2cf944b970b095bd456af9206707daf4a4ca89446fa3eb68c184cc7",
+      "design_specs/track_site.md": "0baf152a342678e93d2666ca679e584848bed273678def225bc9dca79702a663",
+      "design_specs/track_stream.md": "4e1baca0b306b99272bfe4dcb437ef44ceb421eb30396fa1faa0e4c58812bc8e"
+    }
+  }
+}

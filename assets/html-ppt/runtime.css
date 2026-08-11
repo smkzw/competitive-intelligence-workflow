@@ -1,0 +1,157 @@
+/*
+ * 竞品调研 HTML-PPT 结构运行层。
+ * 本文件只负责固定画布、页面显隐、进度与逐字稿抽屉；品牌视觉由康哲合同 CSS 提供。
+ */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+}
+
+.deck {
+  --deck-scale: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  transform: translate(-50%, -50%) scale(var(--deck-scale));
+  transform-origin: center center;
+}
+
+.deck > .slide {
+  position: absolute;
+  inset: 0;
+  width: 1280px;
+  height: 720px;
+}
+
+.deck > .slide:not(.is-active) {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.deck > .slide.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.deck-progress {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.deck-progress > span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: currentColor;
+  transition: width 180ms ease-out;
+}
+
+.deck-notes-drawer {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1100;
+  max-height: min(42vh, 360px);
+  padding: 20px 24px;
+  overflow: auto;
+  color: CanvasText;
+  background: Canvas;
+  border: 1px solid ButtonBorder;
+  border-radius: 8px;
+  box-shadow: 0 12px 36px rgb(0 0 0 / 18%);
+  transform: translateY(calc(100% + 32px));
+  transition: transform 180ms ease-out;
+}
+
+.deck-notes-drawer.is-open {
+  transform: translateY(0);
+}
+
+.deck-notes-drawer[hidden] {
+  display: none;
+}
+
+.deck-notes-drawer__title {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.deck-notes-drawer__body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+aside.notes {
+  display: none !important;
+}
+
+html[data-preview="true"] .deck-progress,
+html[data-preview="true"] .deck-notes-drawer {
+  display: none !important;
+}
+
+html[data-preview="true"] .deck {
+  --deck-scale: 1;
+  top: 0;
+  left: 0;
+  transform: none;
+  transform-origin: top left;
+}
+
+@media print {
+  html,
+  body {
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .deck {
+    position: static;
+    width: 1280px;
+    height: auto;
+    transform: none;
+  }
+
+  .deck > .slide,
+  .deck > .slide:not(.is-active) {
+    position: relative;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    break-after: page;
+  }
+
+  .deck-progress,
+  .deck-notes-drawer {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-progress > span,
+  .deck-notes-drawer {
+    transition: none;
+  }
+}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>离线图表运行验收</title>
+    <style>
+      html, body, #chart { width: 100%; height: 100%; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="chart" role="img" aria-label="主要疗效比较"></div>
+    <script src="../../../assets/third-party/echarts/echarts.min.js"></script>
+    <script>
+      const chart = echarts.init(document.querySelector("#chart"), null, { renderer: "svg" });
+      chart.setOption({
+        animation: false,
+        xAxis: { type: "category", data: ["竞品甲", "竞品乙", "竞品丙"] },
+        yAxis: { type: "value", name: "主要终点变化值" },
+        series: [{ name: "治疗组", type: "bar", data: [5.2, 3.8, 4.6] }]
+      });
+      window.__chart_ready__ = true;
+    </script>
+  </body>
+</html>

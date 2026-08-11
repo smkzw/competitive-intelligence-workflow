@@ -7,3 +7,12 @@
 # picking either side (task state lives in task.json, not index.md). See
 # .trellis/spec/cli/backend/directory-structure.md for details.
 .trellis/workspace/*/journal-*.md merge=union
+
+# 已核验 SVG 必须逐字节保存；不对其执行文本差异或换行归一化。
+assets/brand/*.svg -diff -text
+contracts/kangzhe/design_specs/assets/*.svg -diff -text
+
+# 上游合同与独立审查报告使用 Markdown 双空格硬换行，不能作为尾随空格清洗。
+contracts/kangzhe/*.md whitespace=-trailing-space
+contracts/kangzhe/design_specs/*.md whitespace=-trailing-space
+runs/conference/**/*.md whitespace=-trailing-space

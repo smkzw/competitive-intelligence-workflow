@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "name": "echarts",
+  "version": "6.1.0",
+  "license": "Apache-2.0",
+  "source": "https://registry.npmjs.org/echarts/-/echarts-6.1.0.tgz",
+  "source_repository": "https://github.com/apache/echarts",
+  "source_commit": "c5a48f5f97d23e5379720870b8444cd05b50ffb4f",
+  "npm_integrity": "sha512-q0yaFPggC9FUdsWH4blavRWFmxdrIodbkoKNAjJudAI6CA9gNPxHtV2RcZNEepZVlk4yvBYkOkbk6HIVpIyHZA==",
+  "bundle": "echarts.min.js",
+  "bundle_sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+  "license_file": "LICENSE",
+  "license_sha256": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a",
+  "delivery": "报告运行时仅引用本地文件，不依赖外部网络。"
+}

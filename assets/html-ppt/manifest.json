@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "name": "竞品调研 HTML-PPT 固定运行时",
+  "license": "MIT",
+  "source_repository": "https://github.com/lewislulu/html-ppt-skill",
+  "source_commit": "f3a8435d3901697d5ac5e64d356c933637e43107",
+  "source_runtime_sha256": "d7b066a96b99fcf5c9e15b593283a57a3d43ac2bcf795d172adc7f3ba0844f79",
+  "license_file": "LICENSE",
+  "license_sha256": "a5ed4059e25a3ec35e439abd2623753d1f42d4aa4989ffb5c6b7a97b61f6a949",
+  "derivation": "保留固定画布、翻页、页码、逐字稿、演讲者视图、计时、预览和窗口同步；删除通用主题切换、演示动画和缩略总览，视觉全部交由项目康哲设计合同定义。",
+  "derived_files": {
+    "runtime.css": "7613a3884d7f502a0313cfa8c716707d6fe3579345fbb4f898d3ea4b144bb15e",
+    "runtime.js": "ab31d115026ce6ef57292c95a022962b054d7ec1d9e85bdd09ba0515997cbcc4"
+  },
+  "required_features": [
+    "1280×720 固定画布",
+    "键盘和页码导航",
+    "逐字稿抽屉",
+    "中文演讲者视图",
+    "演讲计时",
+    "跨窗口同步",
+    "单页预览",
+    "离线运行"
+  ],
+  "removed_features": [
+    "通用主题切换",
+    "演示动画切换",
+    "缩略总览"
+  ]
+}
