@@ -167,3 +167,50 @@ share 从第 8 行起、local 从第 60 行起不再逐字节相同：
 本项目只接受完成实产物验证并修正内部矛盾后的整个 `design_specs/` 目录，不再复制两份历史全文，也不对 `ROUTER.md` 做项目内改写。根目录两个 stub 可作为兼容入口一并保存，但不作为权威正文。
 
 在上游 S1 验收尚未结束时，本项目继续完成 Logo、ECharts 和 HTML-PPT 运行层的只读来源核验；不复制设计包、不进入 Task 0.4。上游稳定后重新计算全部文件与集合摘要，再向用户只请求一次精确确认。
+
+## 13. 用户确认后对已批准计划 Task 0.3 的等价适配
+
+这不是另起一套实施计划，而是让 Task 0.3 保持原目标——“包内自包含、摘要锁定、用户确认后才启用”——同时匹配上游已经采用的单一权威结构。确认前只记录映射，不创建目标文件。
+
+| 原计划位置 | 旧假设 | 确认后的等价实现 |
+|---|---|---|
+| 结构树约第 311 行 | `contracts/kangzhe/{design_share_v2.md,design_v2.md,manifest.json}` | `contracts/kangzhe/design_specs/**` 为权威包；两个 829 字节 stub 原样放在 `contracts/kangzhe/` 与 `design_specs/` 同级，使其相对链接可解析，但不参与规则加载 |
+| Task 0.3 Files | 创建两份完整合同 | 原样复制用户确认时的整个 `design_specs/`；不得从五轨重新拼接一份隐藏 monorepo |
+| Task 0.3 Step 2 | 两个全文摘要 + 共同正文摘要 | 记录全目录集合摘要、每个文件摘要、`ROUTER/core/各 track/Logo` 角色、批准时间；不存在“共同正文摘要” |
+| Task 0.3 Step 3 | 固定两个全文摘要 | 固定确认后的集合摘要和逐文件摘要；验证路由仅加载 `core + 恰好一轨`，多格式分别加载，不把 optional `local_map` 当跨机器依赖 |
+| Task 0.3 Step 4 | `design.md` 解析到 share 全文 | 公共 Skill 的康哲入口解析到包内 `design_specs/ROUTER.md`；不得把 stub 或全局 symlink 当运行权威 |
+| Task 0.3 Step 5 | HTML-PPT runtime 直接放入 | 按 ADR 0003 生成有来源清单的康哲衍生运行层：保留讲者/翻页，删除主题和演示动画，修正逐页页码，中文化讲者界面 |
+| Task 8.8 PM03 | 收据绑定两份设计全文 | 收据绑定确认后的 design_specs 集合摘要、实际 track 摘要、Logo 摘要及适用章节；PPTX 仍由 PPT Master 生成 |
+
+确认后 Task 0.3 的目标文件应为：
+
+```text
+contracts/kangzhe/
+├── design_share_v2.md
+├── design_v2.md
+├── design_specs/
+│   ├── ROUTER.md
+│   ├── core.md
+│   ├── track_pptx.md
+│   ├── track_htmlppt.md
+│   ├── track_stream.md
+│   ├── track_site.md
+│   ├── track_interactive.md
+│   ├── assets/logo_bot.svg
+│   ├── README.md
+│   ├── ARCHITECTURE.md
+│   ├── local_map.md
+│   └── tests/test_package_load.py
+└── manifest.json
+```
+
+项目内新增合同测试必须至少机械验证：
+
+1. manifest 的 collection digest 与逐文件 SHA-256 重算一致；任一文件新增、删除或漂移均失败。
+2. `ROUTER → core → one track` 的全部相对链接可解析；五轨均可独立加载，多格式不能只加载一轨冒充。
+3. 除 optional `local_map.md` 外，权威包不含 `/Users/`；运行时不得读取 `local_map.md` 才能合规。
+4. 两个同级 compat stub 内容相同、相对链接可解析到包内路由，不承载第二份 MUST/NEVER 正文。
+5. Logo 摘要、`viewBox`、ECharts 版本/许可、HTML-PPT 衍生运行层来源和离线依赖符合 ADR 0003。
+6. `site`、`htmlppt`、`pptx`、`interactive` 四条本项目实际路线分别能从公共 Skill 解析到正确 track；站点不得继承 1280×720，HTML-PPT 必须继承讲者运行时，PPTX 必须继承可编辑/PPT Master 要求。
+
+如果用户确认前上游再次改动，或 S1 视觉验收导致任何 track 修订，本节的目标树仍有效，但所有摘要必须重新计算，不能复用本节之前记录的候选值。
