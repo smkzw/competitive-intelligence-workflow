@@ -1,0 +1,4 @@
+Task: 1.1 稳定 ID、枚举和项目合同
+Command: PYTHONDONTWRITEBYTECODE=1 uv run --frozen pytest -p no:cacheprovider tests/unit/test_ids.py tests/unit/test_state_enums.py tests/contract/test_project_contract.py -q
+Result: 3 failed in 0.03s
+Failure class: ids.py、enums.py、contracts.py 目标文件不存在；均为预期能力缺失，没有导入、语法或 fixture 错误。

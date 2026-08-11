@@ -30,6 +30,7 @@
   "components": {
     "schemas": [
       "schemas/package-manifest.schema.json",
+      "schemas/project-contract.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-run-manifest.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-source-pack.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"

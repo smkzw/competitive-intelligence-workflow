@@ -1,0 +1,3 @@
+{"file":"docs/decisions/0001-technology-stack.md","reason":"沿用已冻结的 Python、Pydantic、JSON Schema 和测试工具边界"}
+{"file":"docs/decisions/0004-phase-1-contract-boundaries.md","reason":"Phase 1 相关规格与实施计划的精简、不可妥协边界，避免注入 89KB 全规格"}
+{"file":"docs/acceptance/runs/phase-0-exit/verdict.md","reason":"确认 Phase 0 已接受且未提前接受 Phase 1 能力"}

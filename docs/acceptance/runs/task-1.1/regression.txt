@@ -1,0 +1,4 @@
+Task: 1.1 回归
+Command: PYTHONDONTWRITEBYTECODE=1 uv run --frozen pytest -p no:cacheprovider -q
+Result: 73 passed
+Independent executable repeats: Pi/CMS 4 + 73 passed; Pi/Minimax 4 + 73 passed.

@@ -1,0 +1,4 @@
+{"file":"docs/decisions/0004-phase-1-contract-boundaries.md","reason":"独立检查九组状态、日期语义、项目可移动性和能力选择性"}
+{"file":"docs/acceptance/runs/phase-0-exit/regression.txt","reason":"Phase 1 进入前确定性基线"}
+{"file":"reviews/codex_conference_ci_phase1_task11_domain_contracts_review.md","reason":"Task 1.1 两条独立可执行 PASS、失败路线与争议裁决"}
+{"file":"docs/acceptance/runs/task-1.1/verdict.md","reason":"Task 1.1 完成边界与后续未接受能力的恢复锚点"}

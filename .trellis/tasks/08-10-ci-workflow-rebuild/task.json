@@ -19,7 +19,8 @@
   "pr_url": null,
   "subtasks": [],
   "children": [
-    "08-10-phase-0-foundation"
+    "08-10-phase-0-foundation",
+    "08-11-phase-1-project-truth-base"
   ],
   "parent": null,
   "relatedFiles": [],
