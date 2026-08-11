@@ -1,0 +1,11 @@
+Task 2.5 精确 RED 记录（2026-08-11，Asia/Shanghai）
+
+CN01：缺少 ChinaRegulatoryRecordVersion，导入失败。
+CN02：缺少 ChinaDrugTrialVersion，导入失败。
+CN03：缺少 ChinaDrugReferenceVersion，导入失败。
+CN04：缺少 ci_workflow.sources.connectors.company，模块导入失败。
+CN05：缺少 ci_workflow.sources.connectors.authoritative_wechat，模块导入失败。
+CN06：在 CN05 建模后新增，既有模型拒绝公众号冒充同行评议论文，首次运行即通过；其失败关闭行为由显式反例断言覆盖。
+CN07：缺少 capture_cde_guideline_basis，导入失败。
+
+每个失败均来自对应 exact node，未用全仓其他失败替代预期 RED。

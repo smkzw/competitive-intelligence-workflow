@@ -1,0 +1,26 @@
+Task 2.5 本地 GREEN 记录（2026-08-11，Asia/Shanghai）
+
+命令：uv run pytest tests/integration/sources/test_china_routes.py tests/integration/sources/test_company_sources.py tests/integration/sources/test_authoritative_wechat.py -q
+结果：7 passed in 0.06s
+
+命令：uv run ruff check src tests
+结果：All checks passed!
+
+命令：uv run mypy --strict src
+结果：Success: no issues found in 37 source files
+
+命令：uv run pytest -q
+结果：173 passed in 6.26s
+
+独立审查首轮发现并修复：
+- NMPA 可误承载 CDE 专有事件。
+- 国内药品参考页角色未绑定当前来源策略。
+
+修复后同 session 复核：
+- 7 个 CN 节点通过（0.06s）。
+- 全库 173 项通过（5.58s）。
+- Ruff、strict mypy、package verify、git diff --check 全部通过。
+- 真实构建的 wheel 内包含三个新增连接器模块。
+- P0=0，P1=0，P2=0。
+
+本记录是构建者锚点，不替代独立验收者重新执行。
