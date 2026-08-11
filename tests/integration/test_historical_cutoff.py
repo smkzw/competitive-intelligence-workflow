@@ -57,3 +57,36 @@ def test_unknown_first_disclosure_for_key_historical_evidence_fails_closed() -> 
     assert assessment.refresh_candidate is False
     assert assessment.recovery_required is True
     assert "首次披露时间" in assessment.rationale_zh
+
+
+def test_calendar_day_disclosure_is_blocked_inside_that_day_and_resolves_at_day_end() -> None:
+    from ci_workflow.domain.evidence import DateEvidence
+    from ci_workflow.sources.planner import (
+        HistoricalCutoffState,
+        assess_historical_source,
+    )
+
+    source = _source("acquired-after-disclosed-before.json")
+    source = source.model_copy(
+        update={
+            "first_disclosed_at": DateEvidence(
+                state="reported",
+                value="2026-08-09T00:00:00+08:00",
+                precision="calendar_day",
+                locator=source.first_disclosed_at.locator,
+            )
+        }
+    )
+
+    ambiguous = assess_historical_source(
+        source,
+        cutoff=datetime.fromisoformat("2026-08-09T12:00:00+08:00"),
+        key_evidence=True,
+    )
+    assert ambiguous.state is HistoricalCutoffState.BLOCKED_AMBIGUOUS_DISCLOSURE_DAY
+    assert ambiguous.can_enter_snapshot is False
+    assert ambiguous.recovery_required is True
+
+    end_of_day = assess_historical_source(source, cutoff=CUTOFF, key_evidence=True)
+    assert end_of_day.state is HistoricalCutoffState.SNAPSHOT_ELIGIBLE
+    assert end_of_day.can_enter_snapshot is True

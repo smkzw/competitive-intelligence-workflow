@@ -5,6 +5,7 @@ import re
 from datetime import datetime
 from typing import Any
 
+from ci_workflow.capabilities.lineage_registry import ScientificLineageRegistry
 from ci_workflow.domain.claims import (
     ClaimFactLink,
     ClaimKind,
@@ -125,10 +126,12 @@ def _claim_version(
     claim_text: str,
     claim_kind: ClaimKind,
     facts: tuple[AtomicFactVersion, ...],
+    lineage_registry: ScientificLineageRegistry,
     created_at: datetime,
     calculation: DeterministicCalculationRecord | None = None,
     synthesis_method_zh: str | None = None,
 ) -> ClaimVersion:
+    lineage_registry.assert_registered_facts(facts)
     ordered_facts, links = _accepted_fact_links(facts)
     claim_id = stable_id("claim", claim_identity)
     extra_payload = json.dumps(
@@ -143,25 +146,30 @@ def _claim_version(
         separators=(",", ":"),
     )
     supporting_ids = tuple(fact.fact_version_id for fact in ordered_facts)
-    return ClaimVersion(
-        claim_id=claim_id,
-        claim_version_id=stable_id(
-            "claim-version",
-            claim_id,
-            claim_kind,
-            claim_text,
-            *supporting_ids,
-            extra_payload,
-        ),
-        claim_text=claim_text,
-        claim_kind=claim_kind,
-        fact_links=links,
-        supporting_fact_version_ids=supporting_ids,
-        calculation=calculation,
-        synthesis_method_zh=synthesis_method_zh,
-        ai_disclosure_label_zh=("AI 综合判断" if claim_kind == "synthesis" else None),
-        review_state=FactReviewState.CANDIDATE,
-        created_at=created_at,
+    return ClaimVersion.model_validate(
+        {
+            "claim_id": claim_id,
+            "claim_version_id": stable_id(
+                "claim-version",
+                claim_id,
+                claim_kind,
+                claim_text,
+                *supporting_ids,
+                extra_payload,
+            ),
+            "claim_text": claim_text,
+            "claim_kind": claim_kind,
+            "fact_links": links,
+            "supporting_fact_version_ids": supporting_ids,
+            "calculation": calculation,
+            "synthesis_method_zh": synthesis_method_zh,
+            "ai_disclosure_label_zh": (
+                "AI 综合判断" if claim_kind == "synthesis" else None
+            ),
+            "review_state": FactReviewState.CANDIDATE,
+            "created_at": created_at,
+        },
+        context={"lineage_registry": lineage_registry},
     )
 
 
@@ -170,6 +178,7 @@ def create_direct_evidence_claim(
     claim_identity: str,
     claim_text: str,
     supporting_facts: tuple[AtomicFactVersion, ...],
+    lineage_registry: ScientificLineageRegistry,
     created_at: datetime,
 ) -> ClaimVersion:
     return _claim_version(
@@ -177,6 +186,7 @@ def create_direct_evidence_claim(
         claim_text=claim_text,
         claim_kind="direct_evidence",
         facts=supporting_facts,
+        lineage_registry=lineage_registry,
         created_at=created_at,
     )
 
@@ -197,8 +207,17 @@ def create_deterministic_difference_claim(
     claim_text: str,
     treatment_fact: AtomicFactVersion,
     control_fact: AtomicFactVersion,
+    lineage_registry: ScientificLineageRegistry,
     created_at: datetime,
 ) -> ClaimVersion:
+    if treatment_fact.entity_id != control_fact.entity_id:
+        raise ValueError("组间差值只能使用同一试验实体的事实")
+    if (
+        treatment_fact.arm_id is None
+        or control_fact.arm_id is None
+        or treatment_fact.arm_id == control_fact.arm_id
+    ):
+        raise ValueError("组间差值必须使用同一试验内两个不同组别的事实")
     comparable_fields = (
         "field_id",
         "context",
@@ -266,6 +285,7 @@ def create_deterministic_difference_claim(
         claim_text=claim_text,
         claim_kind="deterministic_calculation",
         facts=(treatment_fact, control_fact),
+        lineage_registry=lineage_registry,
         created_at=created_at,
         calculation=calculation,
     )
@@ -276,6 +296,7 @@ def create_synthesis_claim(
     claim_identity: str,
     claim_text: str,
     supporting_facts: tuple[AtomicFactVersion, ...],
+    lineage_registry: ScientificLineageRegistry,
     synthesis_method_zh: str,
     created_at: datetime,
 ) -> ClaimVersion:
@@ -286,6 +307,7 @@ def create_synthesis_claim(
         claim_text=claim_text,
         claim_kind="synthesis",
         facts=supporting_facts,
+        lineage_registry=lineage_registry,
         created_at=created_at,
         synthesis_method_zh=synthesis_method_zh,
     )

@@ -38,6 +38,15 @@ def test_registry_json_locator_reopens_exact_field() -> None:
     assert locator.source_version_id == snapshot.source_version_id
     assert locator.source_content_sha256 == snapshot.content_sha256
 
+    with pytest.raises(ValueError, match="摘要与正文不一致"):
+        RegistryJsonSnapshot(
+            source_version_id=snapshot.source_version_id,
+            source_url=snapshot.source_url,
+            document_role_label_zh=snapshot.document_role_label_zh,
+            canonical_json=snapshot.canonical_json,
+            content_sha256="f" * 64,
+        )
+
     payload["protocolSection"]["outcomesModule"]["primaryOutcomes"][0][
         "timeFrame"
     ] = "被外部修改"

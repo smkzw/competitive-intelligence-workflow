@@ -3,8 +3,16 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
+from ci_workflow.capabilities.lineage_registry import ScientificLineageRegistry
 from ci_workflow.domain.enums import FactReviewState
 
 ClaimKind = Literal["direct_evidence", "deterministic_calculation", "synthesis"]
@@ -106,7 +114,14 @@ class ClaimVersion(BaseModel):
         return value
 
     @model_validator(mode="after")
-    def _claim_kind_contract_is_explicit(self) -> ClaimVersion:
+    def _claim_kind_contract_is_explicit(self, info: ValidationInfo) -> ClaimVersion:
+        validation_context = info.context or {}
+        lineage_registry = validation_context.get("lineage_registry")
+        if not isinstance(lineage_registry, ScientificLineageRegistry):
+            raise ValueError("声明必须通过科学证据注册表校验后创建或重开")
+        lineage_registry.assert_registered_fact_version_ids(
+            self.supporting_fact_version_ids
+        )
         linked_ids = tuple(link.fact_version_id for link in self.fact_links)
         if linked_ids != self.supporting_fact_version_ids:
             raise ValueError("声明支持事实与事实链接不一致")

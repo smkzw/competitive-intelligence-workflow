@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import re
 from datetime import datetime
 from typing import Literal
+from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
@@ -73,6 +75,7 @@ class AuthoritativeWechatArticleVersion(BaseModel):
     event_identity: str | None = None
     published_at: datetime
     acquired_at: datetime
+    content_snapshot: str
     content_sha256: str
     source_url: str
     locator: EvidenceLocator
@@ -88,6 +91,7 @@ class AuthoritativeWechatArticleVersion(BaseModel):
         "policy_id",
         "policy_version",
         "source_url",
+        "content_snapshot",
     )
     @classmethod
     def _text_is_not_blank(cls, value: str) -> str:
@@ -130,6 +134,40 @@ class AuthoritativeWechatArticleVersion(BaseModel):
             )
             if authority != expected:
                 raise ValueError("指定行业信息来源的声明权限与批准范围不一致")
+        if not all((self.product_identity, self.trial_identity, self.event_identity)):
+            raise ValueError("公众号临床证据必须绑定产品、试验和披露事件身份")
+        parts = urlsplit(self.source_url)
+        if (
+            parts.scheme != "https"
+            or parts.hostname != "mp.weixin.qq.com"
+            or not parts.path.startswith("/s/")
+        ):
+            raise ValueError("公众号证据必须使用微信公众平台文章链接")
+        expected_digest = hashlib.sha256(
+            self.content_snapshot.encode("utf-8")
+        ).hexdigest()
+        if self.content_sha256 != expected_digest:
+            raise ValueError("公众号文章摘要与已保存正文不一致")
+        paragraph = self.locator.paragraph
+        if self.locator.url != self.source_url:
+            raise ValueError("公众号定位链接必须与已保存文章链接一致")
+        if self.locator.document_role != f"微信公众号：{self.account_label_zh}":
+            raise ValueError("公众号定位必须标明对应账号")
+        stored_paragraphs = {
+            item.strip() for item in self.content_snapshot.splitlines() if item.strip()
+        }
+        if paragraph is None or paragraph.strip() not in stored_paragraphs:
+            raise ValueError("公众号定位必须使用已保存正文中的完整段落")
+        expected_record_id = stable_id(
+            "authoritative-wechat-article", self.source_id, self.external_record_id
+        )
+        expected_version_id = stable_id(
+            "authoritative-wechat-version", expected_record_id, self.content_sha256
+        )
+        if self.source_record_id != expected_record_id:
+            raise ValueError("公众号文章标识与账号及文章编号不一致")
+        if self.source_version_id != expected_version_id:
+            raise ValueError("公众号文章版本与已保存正文不一致")
         return self
 
     def authority_for(self, claim_domain: ClaimDomain) -> SourceAuthority:
@@ -146,8 +184,8 @@ class AuthoritativeWechatArticleVersion(BaseModel):
         title: str,
         published_at: str,
         acquired_at: str,
-        content_sha256: str,
         source_url: str,
+        content_snapshot: str,
         locator_label: str,
         product_identity: str | None = None,
         trial_identity: str | None = None,
@@ -173,6 +211,8 @@ class AuthoritativeWechatArticleVersion(BaseModel):
         if source_definition.authorities != expected_authorities:
             raise ValueError("来源策略中的公众号声明权限与批准范围不一致")
         external_record_id = _required_text(external_record_id)
+        content_snapshot = _required_text(content_snapshot)
+        content_sha256 = hashlib.sha256(content_snapshot.encode("utf-8")).hexdigest()
         source_record_id = stable_id(
             "authoritative-wechat-article", source_id, external_record_id
         )
@@ -196,6 +236,7 @@ class AuthoritativeWechatArticleVersion(BaseModel):
             event_identity=event_identity,
             published_at=_offset_datetime(published_at),
             acquired_at=_offset_datetime(acquired_at),
+            content_snapshot=content_snapshot,
             content_sha256=content_sha256,
             source_url=source_url,
             locator=EvidenceLocator(

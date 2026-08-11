@@ -4,6 +4,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from ci_workflow.capabilities.lineage_registry import ScientificLineageRegistry
 from ci_workflow.capabilities.ontology_universe import ComponentEligibility
 from ci_workflow.domain.entities import EntityIdentity, EntityType, ExternalIdentifier
 
@@ -108,6 +109,7 @@ class CompetitorUniverse(BaseModel):
         *,
         entities: tuple[EntityIdentity, ...],
         eligibility: tuple[ComponentEligibility, ...],
+        evidence_registry: ScientificLineageRegistry,
     ) -> CompetitorUniverse:
         by_id = {entity.entity_id: entity for entity in entities}
         if len(by_id) != len(entities):
@@ -121,6 +123,22 @@ class CompetitorUniverse(BaseModel):
             raise ValueError("适格记录引用了未登记实体")
         if set(by_id) - eligibility_id_set:
             raise ValueError("每个实体必须且只能有一条适格记录")
+        verified_fragment_ids = evidence_registry.verified_fragment_ids
+        referenced_fragments = {
+            fragment_id
+            for item in eligibility
+            for fragment_id in item.evidence_fragment_ids
+        }
+        if not referenced_fragments <= verified_fragment_ids:
+            raise ValueError("竞品宇宙引用了尚未登记并重开的证据片段")
+        review_fragments = {
+            fragment_id
+            for item in eligibility
+            if item.review_receipt is not None
+            for fragment_id in item.review_receipt.evidence_fragment_ids
+        }
+        if not review_fragments <= verified_fragment_ids:
+            raise ValueError("边界审查引用了尚未登记并重开的证据片段")
         pending = any(item.decision == "review_pending" for item in eligibility)
         members = tuple(
             CompetitorUniverseMember(entity=by_id[item.component_id], eligibility=item)

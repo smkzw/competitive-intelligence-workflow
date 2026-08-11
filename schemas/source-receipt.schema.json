@@ -39,6 +39,7 @@
     "alternative_paths": {
       "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
     },
+    "source_version_id": {"type": ["string", "null"], "minLength": 1},
     "content_sha256": {
       "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"
     },
@@ -51,7 +52,7 @@
     "gap_id", "claim_domain", "query_or_identifier", "language", "access_method",
     "attempt_index", "started_at", "ended_at", "scheduled_backoff_ms",
     "actual_backoff_ms", "result_class", "error_class",
-    "completeness_checks", "alternative_paths", "content_sha256",
+    "completeness_checks", "alternative_paths", "source_version_id", "content_sha256",
     "diagnostic_confidence", "parent_attempt_id", "recovery_round"
   ],
   "allOf": [
@@ -60,11 +61,15 @@
       "then": {
         "properties": {
           "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "source_version_id": {"type": "string", "minLength": 1},
           "error_class": {"type": "null"}
         }
       },
       "else": {
-        "properties": {"error_class": {"type": "string", "minLength": 1}}
+        "properties": {
+          "error_class": {"type": "string", "minLength": 1},
+          "source_version_id": {"type": "null"}
+        }
       }
     }
   ]

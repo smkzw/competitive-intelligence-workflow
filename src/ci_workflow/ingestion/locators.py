@@ -72,6 +72,12 @@ class RegistryJsonSnapshot(BaseModel):
             raise ValueError("登记快照摘要必须是小写 SHA-256")
         return value
 
+    @model_validator(mode="after")
+    def _digest_matches_canonical_json(self) -> RegistryJsonSnapshot:
+        if _content_sha256(self.canonical_json) != self.content_sha256:
+            raise ValueError("登记快照摘要与正文不一致")
+        return self
+
     @property
     def payload(self) -> dict[str, Any]:
         parsed = json.loads(self.canonical_json)
@@ -236,6 +242,18 @@ class WebPageSnapshot(BaseModel):
         if _SHA256.fullmatch(value) is None:
             raise ValueError("网页快照摘要必须是小写 SHA-256")
         return value
+
+    @model_validator(mode="after")
+    def _digest_matches_sections(self) -> WebPageSnapshot:
+        canonical = json.dumps(
+            [item.model_dump(mode="json") for item in self.sections],
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        if _content_sha256(canonical) != self.content_sha256:
+            raise ValueError("网页快照摘要与正文不一致")
+        return self
 
     @classmethod
     def create(
@@ -439,6 +457,14 @@ class PdfDocumentSnapshot(BaseModel):
         page_numbers = tuple(page.page_number for page in self.pages)
         if len(set(page_numbers)) != len(page_numbers):
             raise ValueError("PDF 快照页码不得重复")
+        canonical = json.dumps(
+            [page.model_dump(mode="json") for page in self.pages],
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        if _content_sha256(canonical) != self.content_sha256:
+            raise ValueError("PDF 快照摘要与正文不一致")
         return self
 
     @classmethod

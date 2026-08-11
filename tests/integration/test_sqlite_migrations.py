@@ -35,6 +35,7 @@ EXPECTED_MIGRATIONS = (
     "0006_append_only_guards.sql",
     "0007_evidence_audit_chain.sql",
     "0008_project_lineage_guards.sql",
+    "0009_source_date_precision.sql",
 )
 
 EXPECTED_TABLES = {

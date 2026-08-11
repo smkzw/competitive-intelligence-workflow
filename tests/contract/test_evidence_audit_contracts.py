@@ -42,6 +42,7 @@ def _receipt() -> dict[str, object]:
         "error_class": None,
         "completeness_checks": ["页面身份一致", "结果模块完整"],
         "alternative_paths": ["PubMed NCT 号检索", "申办方结果公告"],
+        "source_version_id": "source-version-registry-001",
         "content_sha256": "a" * 64,
         "diagnostic_confidence": "high",
         "parent_attempt_id": None,
@@ -88,14 +89,59 @@ def _source_eligibility() -> dict[str, object]:
     }
 
 
+def _source_version() -> dict[str, object]:
+    locator = {
+        "document_role": "临床试验登记结果",
+        "field_path": "resultsSection",
+        "heading": None,
+        "page": None,
+        "table": None,
+        "row": None,
+        "column": None,
+        "paragraph": None,
+        "url": None,
+    }
+    return {
+        "schema_version": "1.0",
+        "source_version_id": "source-version-registry-001",
+        "source_id": "clinicaltrials_gov",
+        "content_sha256": "a" * 64,
+        "content_relative_path": f"evidence/raw/sha256/aa/{'a' * 64}.bin",
+        "media_type": "application/json",
+        "acquired_at": "2026-08-11T10:00:00+08:00",
+        "acquired_locator": locator,
+        "published_at": {
+            "state": "reported",
+            "value": "2026-08-01T00:00:00+08:00",
+            "locator": locator,
+        },
+        "effective_at": {
+            "state": "not_applicable",
+            "value": None,
+            "locator": locator,
+        },
+        "first_disclosed_at": {
+            "state": "reported",
+            "value": "2026-08-01T00:00:00+08:00",
+            "locator": locator,
+        },
+        "created_at": "2026-08-11T10:00:00+08:00",
+    }
+
+
 def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
+    from ci_workflow.domain.evidence import SourceVersionRecord
     from ci_workflow.sources.planner import (
         RouteCompletion,
         RouteCompletionState,
         RouteProgress,
     )
     from ci_workflow.sources.policy import SourceEligibility
-    from ci_workflow.sources.receipts import EvidenceAuditBundle
+    from ci_workflow.sources.receipts import (
+        AttemptResultClass,
+        EvidenceAuditBundle,
+        RouteAttemptResult,
+    )
 
     receipt = _receipt()
     gap = _gap()
@@ -110,6 +156,11 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
     assert SourceReceipt.model_validate(receipt).content_sha256 == "a" * 64
     assert EvidenceGap.model_validate(gap).field_id == "efficacy.primary_endpoint"
     assert SourceEligibility.model_validate(source_eligibility).required_by_policy is True
+
+    with pytest.raises(PydanticValidationError, match="正文路径必须与内容摘要一致"):
+        SourceVersionRecord.model_validate(
+            {**_source_version(), "content_relative_path": "not-content-addressed.bin"}
+        )
 
     for required in receipt:
         invalid = deepcopy(receipt)
@@ -159,6 +210,7 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
         **receipt,
         "result_class": "network_error",
         "error_class": "network_timeout",
+        "source_version_id": None,
         "content_sha256": None,
     }
     receipt_validator.validate(failed_route)
@@ -175,17 +227,73 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
 
     audit_bundle = EvidenceAuditBundle(
         source_receipts=(SourceReceipt.model_validate(receipt),),
+        source_versions=(SourceVersionRecord.model_validate(_source_version()),),
         source_eligibilities=(SourceEligibility.model_validate(source_eligibility),),
         evidence_gap=EvidenceGap.model_validate(gap),
     )
+    with pytest.raises(PydanticValidationError, match="同一来源版本注册表"):
+        EvidenceAuditBundle(
+            source_receipts=(SourceReceipt.model_validate(receipt),),
+            source_versions=(
+                SourceVersionRecord.model_validate(
+                    {
+                        **_source_version(),
+                        "content_sha256": "b" * 64,
+                        "content_relative_path": (
+                            f"evidence/raw/sha256/bb/{'b' * 64}.bin"
+                        ),
+                    }
+                ),
+            ),
+            source_eligibilities=(
+                SourceEligibility.model_validate(source_eligibility),
+            ),
+            evidence_gap=EvidenceGap.model_validate(gap),
+        )
     completion = RouteCompletion(
         state=RouteCompletionState.COMPLETED,
         rationale_zh="已完成全部适用策略并核对完整审计包",
         completed_strategy_unit_ids=("registry-nct-id",),
     )
-    route = RouteProgress(route_id="clinicaltrials-registry")
+    route = RouteProgress(
+        route_id="clinicaltrials-registry",
+        attempts=(
+            RouteAttemptResult(
+                attempt_id=receipt["receipt_id"],
+                strategy_unit_id=receipt["strategy_unit_id"],
+                entity_id=receipt["entity_id"],
+                gap_id=receipt["gap_id"],
+                claim_domain=receipt["claim_domain"],
+                result_class=AttemptResultClass.CONTENT_ACQUIRED,
+                detail_zh="已取得并保存登记原文",
+            ),
+        ),
+    )
     completed_route = route.complete(completion, audit_bundle=audit_bundle)
     assert completed_route.is_complete is True
+
+    second_required = SourceEligibility.model_validate(
+        {
+            **source_eligibility,
+            "source_eligibility_id": "source-eligibility-002",
+            "strategy_unit_id": "registry-secondary-required",
+        }
+    )
+    with pytest.raises(ValueError, match="遗漏政策必查来源单元"):
+        route.complete(
+            completion,
+            audit_bundle=EvidenceAuditBundle(
+                source_receipts=(SourceReceipt.model_validate(receipt),),
+                source_versions=(
+                    SourceVersionRecord.model_validate(_source_version()),
+                ),
+                source_eligibilities=(
+                    SourceEligibility.model_validate(source_eligibility),
+                    second_required,
+                ),
+                evidence_gap=EvidenceGap.model_validate(gap),
+            ),
+        )
 
     with pytest.raises(TypeError):
         cast(Any, route.complete)(completion)
@@ -193,16 +301,33 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
     not_applicable_eligibility = SourceEligibility.model_validate(
         {**source_eligibility, "applicability": "not_applicable"}
     )
+    not_applicable_route = RouteProgress(route_id="clinicaltrials-registry")
     not_applicable_bundle = EvidenceAuditBundle(
         source_eligibilities=(not_applicable_eligibility,),
         evidence_gap=EvidenceGap.model_validate(gap),
     )
-    assert route.complete(
+    assert not_applicable_route.complete(
         completion.model_copy(
             update={"state": RouteCompletionState.NOT_APPLICABLE}
         ),
         audit_bundle=not_applicable_bundle,
     ).is_complete
+    second_not_applicable = second_required.model_copy(
+        update={"applicability": "not_applicable"}
+    )
+    with pytest.raises(ValueError, match="路线终态遗漏政策必查来源单元"):
+        not_applicable_route.complete(
+            completion.model_copy(
+                update={"state": RouteCompletionState.NOT_APPLICABLE}
+            ),
+            audit_bundle=EvidenceAuditBundle(
+                source_eligibilities=(
+                    not_applicable_eligibility,
+                    second_not_applicable,
+                ),
+                evidence_gap=EvidenceGap.model_validate(gap),
+            ),
+        )
 
     access_blocked_eligibility = SourceEligibility.model_validate(
         {**source_eligibility, "applicability": "access_blocked"}
@@ -214,6 +339,9 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
             ),
             audit_bundle=EvidenceAuditBundle(
                 source_receipts=(SourceReceipt.model_validate(receipt),),
+                source_versions=(
+                    SourceVersionRecord.model_validate(_source_version()),
+                ),
                 source_eligibilities=(access_blocked_eligibility,),
                 evidence_gap=EvidenceGap.model_validate(gap),
             ),
@@ -224,12 +352,64 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
         source_eligibilities=(access_blocked_eligibility,),
         evidence_gap=EvidenceGap.model_validate(gap),
     )
-    assert route.complete(
+    blocked_route = RouteProgress(
+        route_id="clinicaltrials-registry",
+        attempts=(
+            RouteAttemptResult(
+                attempt_id=failed_route["receipt_id"],
+                strategy_unit_id=failed_route["strategy_unit_id"],
+                entity_id=failed_route["entity_id"],
+                gap_id=failed_route["gap_id"],
+                claim_domain=failed_route["claim_domain"],
+                result_class=AttemptResultClass.NETWORK_ERROR,
+                detail_zh="网络连接失败",
+            ),
+        ),
+    )
+    assert blocked_route.complete(
         completion.model_copy(
             update={"state": RouteCompletionState.ACCESS_BLOCKED}
         ),
         audit_bundle=blocked_bundle,
     ).is_complete
+    mismatched_attempt_route = RouteProgress(
+        route_id="clinicaltrials-registry",
+        attempts=(
+            RouteAttemptResult(
+                attempt_id=failed_route["receipt_id"],
+                strategy_unit_id=failed_route["strategy_unit_id"],
+                entity_id=failed_route["entity_id"],
+                gap_id=failed_route["gap_id"],
+                claim_domain=failed_route["claim_domain"],
+                result_class=AttemptResultClass.CONTENT_ACQUIRED,
+                detail_zh="错误地声称已取得内容",
+            ),
+        ),
+    )
+    with pytest.raises(ValueError, match="路线尝试内容与来源审计回执不一致"):
+        mismatched_attempt_route.complete(
+            completion.model_copy(
+                update={"state": RouteCompletionState.ACCESS_BLOCKED}
+            ),
+            audit_bundle=blocked_bundle,
+        )
+    second_access_blocked = second_required.model_copy(
+        update={"applicability": "access_blocked"}
+    )
+    with pytest.raises(ValueError, match="路线终态遗漏政策必查来源单元"):
+        blocked_route.complete(
+            completion.model_copy(
+                update={"state": RouteCompletionState.ACCESS_BLOCKED}
+            ),
+            audit_bundle=EvidenceAuditBundle(
+                source_receipts=(SourceReceipt.model_validate(failed_route),),
+                source_eligibilities=(
+                    access_blocked_eligibility,
+                    second_access_blocked,
+                ),
+                evidence_gap=EvidenceGap.model_validate(gap),
+            ),
+        )
 
 
 @pytest.mark.parametrize(

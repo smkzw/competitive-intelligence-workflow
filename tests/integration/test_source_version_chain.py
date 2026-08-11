@@ -80,7 +80,8 @@ def test_source_version_separates_acquired_published_effective_and_first_disclos
         assert versions[0][1] == "2026-08-11T10:00:00+08:00"
         assert versions[0][3] is None
         assertions = database.execute(
-            "SELECT date_role, disclosure_state, observed_at, timezone, locator_json "
+            "SELECT date_role, disclosure_state, observed_at, timezone, date_precision, "
+            "locator_json "
             "FROM source_date_assertions WHERE source_version_id = ? ORDER BY date_role",
             (first.source_version_id,),
         ).fetchall()
@@ -91,7 +92,8 @@ def test_source_version_separates_acquired_published_effective_and_first_disclos
             "published_at",
         }
         assert all(row[3] for row in assertions)
-        assert all(json.loads(row[4]) for row in assertions)
+        assert all(row[4] == "instant" for row in assertions)
+        assert all(json.loads(row[5]) for row in assertions)
 
 
 def test_fragment_locator_returns_to_field_page_table_or_paragraph_and_fact_needs_original(

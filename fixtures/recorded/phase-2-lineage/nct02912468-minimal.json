@@ -1,0 +1,168 @@
+{
+  "fixture_id": "phase-2-lineage-nct02912468-v1",
+  "fixture_kind": "recorded_official_minimal",
+  "captured_at": "2026-08-12T01:20:00+08:00",
+  "official_api_url": "https://clinicaltrials.gov/api/v2/studies/NCT02912468",
+  "results_first_disclosed_at": "2019-07-25T00:00:00+00:00",
+  "data_cutoff": "2026-08-10T23:59:59.999999+08:00",
+  "endpoint": {
+    "field_path": "resultsSection.outcomeMeasuresModule.outcomeMeasures[0].classes[0].categories[0].measurements[1].value",
+    "expected_original_value": "-1.34",
+    "unit": "分",
+    "context_zh": "第 24 周鼻塞/阻塞症状严重程度评分较基线变化",
+    "arm_label_zh": "度普利尤单抗 300 mg 组",
+    "population_zh": "意向治疗人群",
+    "timepoint_zh": "第 24 周",
+    "denominator": 143
+  },
+  "universe_candidates": [
+    {
+      "canonical_name": "度普利尤单抗",
+      "identity_basis": "sanofi-regeneron-il4ra-program-001",
+      "modality": "monoclonal_antibody",
+      "evidence_fragment_id": "fragment-nct02912468-dupilumab-intervention"
+    },
+    {
+      "canonical_name": "糠酸莫米松鼻喷雾剂",
+      "identity_basis": "nct02912468-background-mfns-001",
+      "modality": "traditional_corticosteroid",
+      "evidence_fragment_id": "fragment-nct02912468-mometasone-background"
+    }
+  ],
+  "china_route_expectations": {
+    "required_official_source_ids": ["cde", "chinadrugtrials"],
+    "authoritative_secondary_accounts": {
+      "medical_cube_info": "医药魔方info",
+      "pharnex_circle": "药融圈",
+      "dxy_insight_database": "丁香园Insight数据库",
+      "menet": "米内网",
+      "china_drug_review": "中国药审"
+    }
+  },
+  "record": {
+    "protocolSection": {
+      "identificationModule": {
+        "nctId": "NCT02912468",
+        "briefTitle": "A Controlled Clinical Study of Dupilumab in Patients With Bilateral Nasal Polyps"
+      },
+      "statusModule": {
+        "studyFirstSubmitDate": "2016-09-21",
+        "studyFirstPostDateStruct": {"date": "2016-09-23", "type": "ESTIMATED"},
+        "resultsFirstSubmitDate": "2019-07-03",
+        "resultsFirstPostDateStruct": {"date": "2019-07-25", "type": "ACTUAL"},
+        "lastUpdatePostDateStruct": {"date": "2019-07-25", "type": "ACTUAL"}
+      },
+      "designModule": {
+        "studyType": "INTERVENTIONAL",
+        "phases": ["PHASE3"],
+        "designInfo": {
+          "allocation": "RANDOMIZED",
+          "interventionModel": "PARALLEL",
+          "primaryPurpose": "TREATMENT",
+          "maskingInfo": {"masking": "DOUBLE", "whoMasked": ["PARTICIPANT", "INVESTIGATOR"]}
+        },
+        "enrollmentInfo": {"count": 276, "type": "ACTUAL"}
+      },
+      "eligibilityModule": {"sex": "ALL", "minimumAge": "18 Years"},
+      "armsInterventionsModule": {
+        "armGroups": [
+          {
+            "label": "Placebo",
+            "type": "PLACEBO_COMPARATOR",
+            "interventionNames": ["Drug: Placebo", "Drug: Mometasone furoate 50 micrograms"]
+          },
+          {
+            "label": "Dupilumab 300 mg",
+            "type": "EXPERIMENTAL",
+            "interventionNames": ["Drug: Dupilumab SAR231893 (REGN668)", "Drug: Mometasone furoate 50 micrograms"]
+          }
+        ],
+        "interventions": [
+          {"type": "DRUG", "name": "Dupilumab SAR231893 (REGN668)", "armGroupLabels": ["Dupilumab 300 mg"]},
+          {"type": "DRUG", "name": "Placebo", "armGroupLabels": ["Placebo"]},
+          {
+            "type": "DRUG",
+            "name": "Mometasone furoate 50 micrograms",
+            "armGroupLabels": ["Dupilumab 300 mg", "Placebo"]
+          }
+        ]
+      },
+      "outcomesModule": {
+        "primaryOutcomes": [
+          {
+            "measure": "Change From Baseline at Week 24 in Nasal Congestion/Obstruction Symptom Severity Score",
+            "timeFrame": "Baseline, Week 24"
+          },
+          {
+            "measure": "Change From Baseline at Week 24 in Nasal Polyp Score",
+            "timeFrame": "Baseline, Week 24"
+          }
+        ]
+      },
+      "referencesModule": {
+        "references": [
+          {
+            "pmid": "31543428",
+            "type": "DERIVED",
+            "citation": "Bachert C, et al. Efficacy and safety of dupilumab in severe CRSwNP: SINUS-24 and SINUS-52. Lancet. 2019."
+          }
+        ]
+      }
+    },
+    "resultsSection": {
+      "outcomeMeasuresModule": {
+        "outcomeMeasures": [
+          {
+            "type": "PRIMARY",
+            "title": "Change From Baseline at Week 24 in Nasal Congestion/Obstruction Symptom Severity Score",
+            "populationDescription": "Intent-to-treat population",
+            "reportingStatus": "POSTED",
+            "paramType": "LEAST_SQUARES_MEAN",
+            "dispersionType": "Standard Error",
+            "unitOfMeasure": "score on a scale",
+            "timeFrame": "Baseline, Week 24",
+            "groups": [
+              {"id": "OG000", "title": "Placebo"},
+              {"id": "OG001", "title": "Dupilumab 300 mg"}
+            ],
+            "denoms": [
+              {
+                "units": "Participants",
+                "counts": [
+                  {"groupId": "OG000", "value": "133"},
+                  {"groupId": "OG001", "value": "143"}
+                ]
+              }
+            ],
+            "classes": [
+              {
+                "categories": [
+                  {
+                    "measurements": [
+                      {"groupId": "OG000", "value": "-0.45", "spread": "0.07"},
+                      {"groupId": "OG001", "value": "-1.34", "spread": "0.07"}
+                    ]
+                  }
+                ]
+              }
+            ],
+            "analyses": [
+              {
+                "groupIds": ["OG000", "OG001"],
+                "nonInferiorityType": "SUPERIORITY",
+                "pValue": "<0.0001",
+                "statisticalMethod": "ANCOVA",
+                "paramType": "LS mean difference",
+                "paramValue": "-0.89",
+                "ciPctValue": "95",
+                "ciLowerLimit": "-1.07",
+                "ciUpperLimit": "-0.71"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "derivedSection": {"miscInfoModule": {"versionHolder": "2026-08-11"}}
+  }
+}

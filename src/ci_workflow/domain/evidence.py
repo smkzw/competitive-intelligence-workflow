@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 _SHA256 = re.compile(r"[0-9a-f]{64}")
 DateEvidenceState = Literal["reported", "not_publicly_disclosed", "not_applicable"]
+DatePrecision = Literal["instant", "calendar_day"]
 
 
 def _not_blank(value: str) -> str:
@@ -73,6 +74,7 @@ class DateEvidence(BaseModel):
 
     state: DateEvidenceState
     value: datetime | None
+    precision: DatePrecision = "instant"
     locator: EvidenceLocator
 
     @field_validator("value")
@@ -86,6 +88,22 @@ class DateEvidence(BaseModel):
             raise ValueError("已披露日期必须有日期时间")
         if self.state != "reported" and self.value is not None:
             raise ValueError("未公开或不适用日期不得伪造日期时间")
+        if self.state != "reported" and self.precision != "instant":
+            raise ValueError("未公开或不适用日期不能声明日期精度")
+        if (
+            self.state == "reported"
+            and self.precision == "calendar_day"
+            and self.value is not None
+            and any(
+                (
+                    self.value.hour,
+                    self.value.minute,
+                    self.value.second,
+                    self.value.microsecond,
+                )
+            )
+        ):
+            raise ValueError("仅公开自然日的日期必须按来源时区零点保存")
         return self
 
 
@@ -146,6 +164,16 @@ class SourceVersionRecord(BaseModel):
     @classmethod
     def _record_datetimes_have_offsets(cls, value: datetime) -> datetime:
         return _offset_datetime(value)
+
+    @model_validator(mode="after")
+    def _content_path_matches_digest(self) -> SourceVersionRecord:
+        expected_path = (
+            f"evidence/raw/sha256/{self.content_sha256[:2]}/"
+            f"{self.content_sha256}.bin"
+        )
+        if self.content_relative_path != expected_path:
+            raise ValueError("来源版本正文路径必须与内容摘要一致")
+        return self
 
 
 class EvidenceFragmentRecord(BaseModel):
@@ -219,6 +247,7 @@ class SourceReceipt(BaseModel):
     error_class: str | None
     completeness_checks: tuple[str, ...] = Field(min_length=1)
     alternative_paths: tuple[str, ...] = Field(min_length=1)
+    source_version_id: str | None
     content_sha256: str | None
     diagnostic_confidence: Literal["low", "medium", "high"]
     parent_attempt_id: str | None
@@ -239,7 +268,7 @@ class SourceReceipt(BaseModel):
     def _receipt_text_is_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
-    @field_validator("error_class", "parent_attempt_id")
+    @field_validator("error_class", "parent_attempt_id", "source_version_id")
     @classmethod
     def _nullable_text_is_not_blank(cls, value: str | None) -> str | None:
         return None if value is None else _not_blank(value)
@@ -267,10 +296,14 @@ class SourceReceipt(BaseModel):
     def _attempt_has_forward_time(self) -> SourceReceipt:
         if self.ended_at < self.started_at:
             raise ValueError("路线尝试结束时间不得早于开始时间")
-        if self.result_class == "content_acquired" and self.content_sha256 is None:
-            raise ValueError("取得内容时必须保存内容摘要")
+        if self.result_class == "content_acquired" and (
+            self.content_sha256 is None or self.source_version_id is None
+        ):
+            raise ValueError("取得内容时必须保存来源版本和内容摘要")
         if self.result_class != "content_acquired" and self.error_class is None:
             raise ValueError("未取得内容时必须保存错误分类")
+        if self.result_class != "content_acquired" and self.source_version_id is not None:
+            raise ValueError("未取得内容时不得伪造来源版本")
         return self
 
 

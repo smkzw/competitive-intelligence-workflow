@@ -89,6 +89,10 @@ def test_route_attempt_results_are_exact_and_never_fact_states() -> None:
     }
     accepted = RouteAttemptResult(
         attempt_id="attempt-001",
+        strategy_unit_id="registry-nct-id",
+        entity_id="trial-001",
+        gap_id="gap-trial-identity",
+        claim_domain="trial_identity_design_status",
         result_class=AttemptResultClass.NOT_FOUND,
         detail_zh="在完成本次精确查询后未找到匹配记录",
     )

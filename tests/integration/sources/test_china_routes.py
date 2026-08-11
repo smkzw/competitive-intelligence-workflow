@@ -22,7 +22,7 @@ def test_cde_route_versions_drug_and_regulatory_status() -> None:
         occurred_on="2026-01-05",
         published_at="2026-01-06T09:00:00+08:00",
         acquired_at="2026-08-10T09:00:00+08:00",
-        content_sha256="1" * 64,
+        content_snapshot="CXSL2600001 已受理，适应症为慢性鼻窦炎伴鼻息肉。",
         source_url="https://www.cde.org.cn/example/CXSL2600001",
         locator_label="受理品种信息第 1 行",
     )
@@ -37,7 +37,7 @@ def test_cde_route_versions_drug_and_regulatory_status() -> None:
         occurred_on="2026-02-01",
         published_at="2026-02-02T09:00:00+08:00",
         acquired_at="2026-08-11T09:00:00+08:00",
-        content_sha256="2" * 64,
+        content_snapshot="CXSL2600001 当前处于审评中。",
         source_url="https://www.cde.org.cn/example/CXSL2600001",
         locator_label="审评任务公示第 1 行",
     )
@@ -52,7 +52,7 @@ def test_cde_route_versions_drug_and_regulatory_status() -> None:
         occurred_on="2026-07-01",
         published_at="2026-07-02T09:00:00+08:00",
         acquired_at="2026-08-11T09:00:00+08:00",
-        content_sha256="3" * 64,
+        content_snapshot="国药准字S20260001 已批准上市。",
         source_url="https://www.nmpa.gov.cn/example/S20260001",
         locator_label="药品批准信息",
     )
@@ -88,9 +88,14 @@ def test_cde_route_versions_drug_and_regulatory_status() -> None:
             occurred_on="2026-02-01",
             published_at="2026-02-02T09:00:00+08:00",
             acquired_at="2026-08-11T09:00:00+08:00",
-            content_sha256="0" * 64,
+            content_snapshot="错误映射记录",
             source_url="https://www.nmpa.gov.cn/example/invalid",
             locator_label="错误映射",
+        )
+
+    with pytest.raises(ValueError, match="对应机构官方网站"):
+        ChinaRegulatoryRecordVersion.model_validate(
+            {**accepted.model_dump(), "source_url": "https://evil.invalid/record"}
         )
 
 
@@ -108,6 +113,7 @@ def test_chinadrugtrials_route_versions_trial_fields_and_results() -> None:
             "protocol_number": "CMS-K10-301",
             "protocol_version": "V1.0",
             "updated_on": "2026-03-01",
+            "first_disclosed_on": "2026-03-01",
             "sections": {
                 "试验题目": "测试创新药治疗慢性鼻窦炎伴鼻息肉的 III 期研究",
                 "目标适应症": "慢性鼻窦炎伴鼻息肉",
@@ -131,6 +137,7 @@ def test_chinadrugtrials_route_versions_trial_fields_and_results() -> None:
             "protocol_number": "CMS-K10-301",
             "protocol_version": "V2.0",
             "updated_on": "2026-08-01",
+            "first_disclosed_on": "2026-08-01",
             "sections": {
                 "试验题目": "测试创新药治疗慢性鼻窦炎伴鼻息肉的 III 期研究",
                 "目标适应症": "慢性鼻窦炎伴鼻息肉",
@@ -159,6 +166,25 @@ def test_chinadrugtrials_route_versions_trial_fields_and_results() -> None:
     assert with_results.result_disclosure_state == "reported"
     assert first.protocol_version == "V1.0"
     assert with_results.protocol_version == "V2.0"
+    assert first.first_disclosed_precision == "calendar_day"
+    assert first.first_disclosed_at.isoformat() == "2026-03-01T00:00:00+08:00"
+    assert first.content_sha256
+
+    with pytest.raises(ValueError, match="官方平台链接"):
+        ChinaDrugTrialVersion.model_validate(
+            {**first.model_dump(), "source_url": "https://evil.invalid/CTR20260001"}
+        )
+    with pytest.raises(ValueError, match="摘要与已保存正文不一致"):
+        ChinaDrugTrialVersion.model_validate(
+            {**first.model_dump(), "raw_record_json": '{"forged":true}'}
+        )
+    with pytest.raises(ValueError, match="必须按北京时间保存"):
+        ChinaDrugTrialVersion.model_validate(
+            {
+                **first.model_dump(),
+                "first_disclosed_at": "2026-03-01T00:00:00+00:00",
+            }
+        )
 
     observations = extract_china_trial_observations(with_results)
     by_path = {item.locator.field_path: item for item in observations}

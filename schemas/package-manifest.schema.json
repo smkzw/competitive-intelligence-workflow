@@ -23,7 +23,7 @@
         "name": {"type": "string", "const": "competitive-intelligence-workflow"},
         "version": {"type": "string", "minLength": 1},
         "cli_version": {"type": "string", "minLength": 1},
-        "build_stage": {"type": "string", "const": "phase-0-task-0.4"},
+        "build_stage": {"type": "string", "const": "phase-2-accepted"},
         "python": {"type": "string", "minLength": 1},
         "hosts": {
           "type": "array",

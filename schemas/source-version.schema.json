@@ -40,9 +40,10 @@
           "type": ["string", "null"], "format": "date-time",
           "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
         },
+        "precision": {"enum": ["instant", "calendar_day"]},
         "locator": {"$ref": "#/$defs/locator"}
       },
-      "required": ["state", "value", "locator"],
+      "required": ["state", "value", "precision", "locator"],
       "allOf": [
         {
           "if": {"properties": {"state": {"const": "reported"}}},
@@ -55,6 +56,21 @@
             }
           },
           "else": {"properties": {"value": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"state": {"not": {"const": "reported"}}}},
+          "then": {"properties": {"precision": {"const": "instant"}}}
+        },
+        {
+          "if": {"properties": {"precision": {"const": "calendar_day"}}},
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "T00:00:00(?:\\.0+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+              }
+            }
+          }
         }
       ]
     }

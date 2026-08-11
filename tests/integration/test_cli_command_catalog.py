@@ -32,7 +32,9 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
 ) -> None:
     package = _run("package", "verify", "--root", str(ROOT))
     assert package.returncode == 0, package.stderr
-    assert package.stdout.strip() == "PACKAGE_OK version=0.1.0a0 stage=phase-0-task-0.4"
+    assert package.stdout.strip() == (
+        "PACKAGE_OK version=0.1.0a0 stage=phase-2-accepted"
+    )
 
     project_root = tmp_path / "呼吸疾病竞品项目"
     created = _run(

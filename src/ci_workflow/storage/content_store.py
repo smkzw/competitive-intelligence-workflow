@@ -13,6 +13,7 @@ from ci_workflow.domain.evidence import (
     ContentBlob,
     DateEvidence,
     DateEvidenceState,
+    DatePrecision,
     EvidenceFragmentRecord,
     EvidenceLocator,
     SourceVersionRecord,
@@ -178,8 +179,8 @@ class EvidenceRepository:
                     """
                     INSERT INTO source_date_assertions (
                         assertion_id, source_version_id, date_role, disclosure_state,
-                        observed_at, timezone, locator_json, created_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        observed_at, timezone, date_precision, locator_json, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         stable_id("source-date", version_id, role),
@@ -188,6 +189,7 @@ class EvidenceRepository:
                         date_evidence.state,
                         value.isoformat() if value else None,
                         _offset_label(value if value else acquired_at),
+                        date_evidence.precision,
                         _canonical_json(date_evidence.locator.model_dump(mode="json")),
                         acquired_at.isoformat(),
                     ),
@@ -210,10 +212,16 @@ class EvidenceRepository:
         if row is None:
             raise KeyError(f"来源版本不存在：{source_version_id}")
         assertions = {
-            str(item[0]): (str(item[1]), item[2], json.loads(str(item[3])))
+            str(item[0]): (
+                str(item[1]),
+                item[2],
+                str(item[3]),
+                json.loads(str(item[4])),
+            )
             for item in database.execute(
                 """
-                SELECT date_role, disclosure_state, observed_at, locator_json
+                SELECT date_role, disclosure_state, observed_at, date_precision,
+                       locator_json
                 FROM source_date_assertions WHERE source_version_id = ?
                 """,
                 (source_version_id,),
@@ -221,12 +229,13 @@ class EvidenceRepository:
         }
 
         def date_evidence(role: str) -> DateEvidence:
-            state, observed_at, locator = assertions[role]
+            state, observed_at, precision, locator = assertions[role]
             return DateEvidence(
                 state=cast(DateEvidenceState, state),
                 value=datetime.fromisoformat(str(observed_at))
                 if observed_at is not None
                 else None,
+                precision=cast(DatePrecision, precision),
                 locator=EvidenceLocator.model_validate(locator),
             )
 
@@ -318,3 +327,45 @@ class EvidenceRepository:
             content_sha256=str(row[4]),
             created_at=datetime.fromisoformat(str(row[5])),
         )
+
+    def verify_reopened_fragment_record(
+        self,
+        fragment: EvidenceFragmentRecord,
+        *,
+        reopened_original_text: str,
+        source_version_id: str,
+    ) -> SourceVersionRecord:
+        """从项目真源库重读来源、正文和片段，供科学注册表验真。"""
+
+        stored_fragment = self.read_fragment(fragment.fragment_id)
+        if stored_fragment != fragment:
+            raise ContentIntegrityError("待验片段与项目真源库记录不一致")
+        if fragment.source_version_id != source_version_id:
+            raise ContentIntegrityError("重开来源版本与证据片段不一致")
+        if reopened_original_text != stored_fragment.original_text:
+            raise ContentIntegrityError("重开原文与项目真源库片段不一致")
+        with open_database(self.database_path) as database:
+            source_version = self._read_source_version(database, source_version_id)
+            row = database.execute(
+                """
+                SELECT byte_size FROM content_blobs WHERE content_sha256 = ?
+                """,
+                (source_version.content_sha256,),
+            ).fetchone()
+        if row is None:
+            raise ContentIntegrityError("来源版本缺少内容寻址正文")
+        blob = ContentBlob(
+            sha256=source_version.content_sha256,
+            relative_path=source_version.content_relative_path,
+            byte_size=int(row[0]),
+            media_type=source_version.media_type,
+        )
+        source_content = self.content_store.read_bytes(blob)
+        if source_version.media_type.startswith("text/") or any(
+            marker in source_version.media_type
+            for marker in ("json", "xml", "javascript")
+        ):
+            decoded = source_content.decode("utf-8")
+            if stored_fragment.original_text not in decoded:
+                raise ContentIntegrityError("证据片段原文不存在于已保存来源正文")
+        return source_version

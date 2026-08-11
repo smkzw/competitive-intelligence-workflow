@@ -7,6 +7,7 @@ from typing import Literal, cast
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from ci_workflow.capabilities.lineage_registry import ScientificLineageRegistry
 from ci_workflow.domain.ids import stable_id
 
 EligibilityDecision = Literal["included", "excluded", "review_pending"]
@@ -271,7 +272,25 @@ class InnovationOntology:
 
 def close_competitor_universe(
     component_results: tuple[ComponentEligibility, ...],
+    *,
+    evidence_registry: ScientificLineageRegistry,
 ) -> CompetitorUniverseDecision:
+    verified_fragment_ids = evidence_registry.verified_fragment_ids
+    referenced_fragments = {
+        fragment_id
+        for item in component_results
+        for fragment_id in item.evidence_fragment_ids
+    }
+    if not referenced_fragments <= verified_fragment_ids:
+        raise ValueError("创新药宇宙引用了尚未登记并重开的证据片段")
+    review_fragments = {
+        fragment_id
+        for item in component_results
+        if item.review_receipt is not None
+        for fragment_id in item.review_receipt.evidence_fragment_ids
+    }
+    if not review_fragments <= verified_fragment_ids:
+        raise ValueError("边界审查引用了尚未登记并重开的证据片段")
     pending = any(item.decision == "review_pending" for item in component_results)
     return CompetitorUniverseDecision(
         universe_closed=not pending,

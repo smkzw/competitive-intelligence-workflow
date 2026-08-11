@@ -4,16 +4,26 @@ import hashlib
 import json
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 from ci_workflow.domain.enums import FactDisclosureState, FactReviewState
-from ci_workflow.domain.evidence import EvidenceFragmentRecord
+from ci_workflow.domain.evidence import EvidenceFragmentRecord, SourceVersionRecord
 from ci_workflow.domain.facts import (
     AtomicFactVersion,
     NormalizationRecord,
     NormalizedValue,
 )
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.storage.content_store import EvidenceRepository
+
+_VERIFIED_FRAGMENT_TOKEN = object()
 
 
 def _text(value: str) -> str:
@@ -28,6 +38,16 @@ class VerifiedEvidenceFragment(BaseModel):
 
     fragment: EvidenceFragmentRecord
     reopened_original_text: str
+    source_version: SourceVersionRecord
+
+    @model_validator(mode="before")
+    @classmethod
+    def _requires_repository_verification(
+        cls, value: object, info: ValidationInfo
+    ) -> object:
+        if (info.context or {}).get("verified_fragment_token") is not _VERIFIED_FRAGMENT_TOKEN:
+            raise ValueError("已重开证据片段只能由项目真源库验真后创建")
+        return value
 
     @field_validator("reopened_original_text")
     @classmethod
@@ -43,6 +63,8 @@ class VerifiedEvidenceFragment(BaseModel):
             raise ValueError("证据片段原文与摘要不一致")
         if self.reopened_original_text != self.fragment.original_text:
             raise ValueError("重开原文与证据片段不一致")
+        if self.source_version.source_version_id != self.fragment.source_version_id:
+            raise ValueError("已重开片段与来源版本不一致")
         return self
 
 
@@ -51,12 +73,21 @@ def verify_reopened_fragment(
     *,
     reopened_original_text: str,
     source_version_id: str,
+    repository: EvidenceRepository,
 ) -> VerifiedEvidenceFragment:
-    if fragment.source_version_id != _text(source_version_id):
-        raise ValueError("重开来源版本与证据片段不一致")
-    return VerifiedEvidenceFragment(
-        fragment=fragment,
+    normalized_source_version_id = _text(source_version_id)
+    source_version = repository.verify_reopened_fragment_record(
+        fragment,
         reopened_original_text=reopened_original_text,
+        source_version_id=normalized_source_version_id,
+    )
+    return VerifiedEvidenceFragment.model_validate(
+        {
+            "fragment": fragment,
+            "reopened_original_text": reopened_original_text,
+            "source_version": source_version,
+        },
+        context={"verified_fragment_token": _VERIFIED_FRAGMENT_TOKEN},
     )
 
 

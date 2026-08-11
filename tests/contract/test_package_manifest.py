@@ -70,7 +70,7 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
     assert package["name"] == project["name"]
     assert package["version"] == project["version"]
     assert package["cli_version"] == project["version"]
-    assert package["build_stage"] == "phase-0-task-0.4"
+    assert package["build_stage"] == "phase-2-accepted"
     assert package["hosts"] == ["codex", "hermes", "omp"]
 
     public_path = ROOT / str(manifest["public_skill"])
@@ -112,6 +112,7 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
         "policies/recovery/source-strategies-v1.yaml",
     ]
     assert "migrations/0008_project_lineage_guards.sql" in components["migrations"]
+    assert "migrations/0009_source_date_precision.sql" in components["migrations"]
 
     cli = cast(dict[str, object], manifest["cli"])
     assert cli["catalog"] == EXPECTED_CLI_CATALOG

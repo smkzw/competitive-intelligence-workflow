@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from collections.abc import Iterator, Mapping
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 from typing import Any, Literal
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
@@ -39,6 +40,13 @@ _CDE_REGULATORY_EVENTS = {
     "application_withdrawn",
     "review_resumed",
 }
+_OFFICIAL_CHINA_DOMAINS = {
+    "CDE": frozenset({"cde.org.cn", "www.cde.org.cn"}),
+    "NMPA": frozenset({"nmpa.gov.cn", "www.nmpa.gov.cn"}),
+}
+_CHINA_TRIAL_DOMAINS = frozenset(
+    {"chinadrugtrials.org.cn", "www.chinadrugtrials.org.cn"}
+)
 
 
 def _text(value: str) -> str:
@@ -74,6 +82,7 @@ class ChinaRegulatoryRecordVersion(BaseModel):
     occurred_on: date
     published_at: datetime
     acquired_at: datetime
+    content_snapshot: str
     content_sha256: str
     source_url: str
     locator: EvidenceLocator
@@ -89,6 +98,7 @@ class ChinaRegulatoryRecordVersion(BaseModel):
         "indication",
         "status_label_zh",
         "source_url",
+        "content_snapshot",
     )
     @classmethod
     def _required_text(cls, value: str) -> str:
@@ -119,6 +129,37 @@ class ChinaRegulatoryRecordVersion(BaseModel):
             raise ValueError("批准及批准撤回事项必须归属 NMPA")
         if self.event_type in _CDE_REGULATORY_EVENTS and self.authority != "CDE":
             raise ValueError("CDE 专有事项不能归属 NMPA")
+        parts = urlsplit(self.source_url)
+        if (
+            parts.scheme != "https"
+            or parts.hostname not in _OFFICIAL_CHINA_DOMAINS[self.authority]
+        ):
+            raise ValueError("中国监管记录必须使用对应机构官方网站")
+        if self.locator.url != self.source_url:
+            raise ValueError("中国监管记录定位链接必须与来源链接一致")
+        expected_digest = hashlib.sha256(
+            self.content_snapshot.encode("utf-8")
+        ).hexdigest()
+        if self.content_sha256 != expected_digest:
+            raise ValueError("中国监管记录摘要与已保存正文不一致")
+        expected_record_id = stable_id(
+            "china-regulatory-record", self.authority, self.external_record_id
+        )
+        expected_version_id = stable_id(
+            "china-regulatory-version", expected_record_id, self.content_sha256
+        )
+        expected_event_id = stable_id(
+            "china-regulatory-event",
+            expected_record_id,
+            self.event_type,
+            self.occurred_on.isoformat(),
+        )
+        if self.source_record_id != expected_record_id:
+            raise ValueError("中国监管记录标识与机构及记录编号不一致")
+        if self.source_version_id != expected_version_id:
+            raise ValueError("中国监管记录版本与已保存正文不一致")
+        if self.event_id != expected_event_id:
+            raise ValueError("中国监管事件标识与事件内容不一致")
         return self
 
     @classmethod
@@ -135,12 +176,14 @@ class ChinaRegulatoryRecordVersion(BaseModel):
         occurred_on: str,
         published_at: str,
         acquired_at: str,
-        content_sha256: str,
+        content_snapshot: str,
         source_url: str,
         locator_label: str,
     ) -> ChinaRegulatoryRecordVersion:
         authority = source_system
         external_record_id = _text(external_record_id)
+        content_snapshot = _text(content_snapshot)
+        content_sha256 = hashlib.sha256(content_snapshot.encode("utf-8")).hexdigest()
         source_record_id = stable_id(
             "china-regulatory-record", authority, external_record_id
         )
@@ -166,6 +209,7 @@ class ChinaRegulatoryRecordVersion(BaseModel):
             occurred_on=occurred,
             published_at=_offset_datetime(published_at),
             acquired_at=_offset_datetime(acquired_at),
+            content_snapshot=content_snapshot,
             content_sha256=content_sha256,
             source_url=source_url,
             locator=EvidenceLocator(
@@ -204,10 +248,13 @@ class ChinaDrugTrialVersion(BaseModel):
     protocol_number: str
     protocol_version: str
     updated_on: date
+    first_disclosed_at: datetime
+    first_disclosed_precision: Literal["calendar_day"] = "calendar_day"
     acquired_at: datetime
     source_url: str
     result_disclosure_state: Literal["reported", "not_publicly_disclosed"]
     raw_record_json: str
+    content_sha256: str
 
     @field_validator(
         "ctr_number",
@@ -231,12 +278,52 @@ class ChinaDrugTrialVersion(BaseModel):
             raise ValueError("中国登记记录缺少有效 CTR 号")
         return normalized
 
-    @field_validator("acquired_at")
+    @field_validator("acquired_at", "first_disclosed_at")
     @classmethod
     def _trial_acquired_at_has_offset(cls, value: datetime) -> datetime:
         if value.tzinfo is None or value.utcoffset() is None:
             raise ValueError("中国登记采集时间必须包含明确时区")
         return value
+
+    @field_validator("content_sha256")
+    @classmethod
+    def _trial_digest_is_valid(cls, value: str) -> str:
+        if _SHA256.fullmatch(value) is None:
+            raise ValueError("中国登记记录摘要必须是小写 SHA-256")
+        return value
+
+    @model_validator(mode="after")
+    def _trial_snapshot_is_official_and_immutable(self) -> ChinaDrugTrialVersion:
+        parts = urlsplit(self.source_url)
+        if parts.scheme != "https" or parts.hostname not in _CHINA_TRIAL_DOMAINS:
+            raise ValueError("中国试验登记记录必须使用官方平台链接")
+        expected_digest = hashlib.sha256(
+            self.raw_record_json.encode("utf-8")
+        ).hexdigest()
+        if self.content_sha256 != expected_digest:
+            raise ValueError("中国登记记录摘要与已保存正文不一致")
+        expected_trial_id = stable_id(
+            "source-trial", "chinadrugtrials", self.ctr_number
+        )
+        expected_version_id = stable_id(
+            "source-version", "chinadrugtrials", self.ctr_number, expected_digest
+        )
+        if self.source_trial_id != expected_trial_id:
+            raise ValueError("中国登记试验标识与 CTR 号不一致")
+        if self.source_version_id != expected_version_id:
+            raise ValueError("中国登记版本与已保存正文不一致")
+        if any(
+            (
+                self.first_disclosed_at.hour,
+                self.first_disclosed_at.minute,
+                self.first_disclosed_at.second,
+                self.first_disclosed_at.microsecond,
+            )
+        ):
+            raise ValueError("仅公开自然日的首次披露时间必须按北京时间零点保存")
+        if self.first_disclosed_at.utcoffset() != timedelta(hours=8):
+            raise ValueError("中国登记首次披露自然日必须按北京时间保存")
+        return self
 
     @property
     def raw_record(self) -> dict[str, Any]:
@@ -259,6 +346,7 @@ class ChinaDrugTrialVersion(BaseModel):
             "protocol_number",
             "protocol_version",
             "updated_on",
+            "first_disclosed_on",
             "sections",
         }
         missing = required - set(record)
@@ -280,23 +368,32 @@ class ChinaDrugTrialVersion(BaseModel):
             separators=(",", ":"),
         )
         source_trial_id = stable_id("source-trial", "chinadrugtrials", ctr_number)
+        content_sha256 = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+        first_disclosed_on = date.fromisoformat(str(record["first_disclosed_on"]))
+        first_disclosed_at = datetime.combine(
+            first_disclosed_on,
+            datetime.min.time(),
+            tzinfo=timezone(timedelta(hours=8)),
+        )
         return cls(
             ctr_number=ctr_number,
             source_trial_id=source_trial_id,
             source_version_id=stable_id(
-                "source-version", "chinadrugtrials", ctr_number, canonical
+                "source-version", "chinadrugtrials", ctr_number, content_sha256
             ),
             title=title,
             trial_status=str(record["trial_status"]),
             protocol_number=str(record["protocol_number"]),
             protocol_version=str(record["protocol_version"]),
             updated_on=date.fromisoformat(str(record["updated_on"])),
+            first_disclosed_at=first_disclosed_at,
             acquired_at=_offset_datetime(acquired_at),
             source_url=source_url,
             result_disclosure_state=(
                 "reported" if has_results else "not_publicly_disclosed"
             ),
             raw_record_json=canonical,
+            content_sha256=content_sha256,
         )
 
 

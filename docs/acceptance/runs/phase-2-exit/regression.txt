@@ -1,0 +1,13 @@
+Phase 2 本地退出回归（2026-08-12，Asia/Shanghai）
+
+正式命令：
+uv run pytest tests/unit/test_innovation_eligibility.py tests/unit/test_regimen_eligibility.py tests/unit/test_entity_identity.py tests/unit/test_source_policy.py tests/unit/test_source_classifier.py tests/contract/test_evidence_audit_contracts.py tests/integration/test_competitor_universe.py tests/integration/test_route_recovery.py tests/integration/sources tests/integration/test_historical_cutoff.py tests/integration/test_fragment_locators.py tests/integration/test_source_to_claim_chain.py tests/integration/test_conflicts_preserved.py -q
+结果：61 passed in 0.58s
+
+全库：188 passed in 6.08s
+Ruff：All checks passed!
+strict mypy：Success: no issues found in 45 source files
+包校验：PACKAGE_OK version=0.1.0a0 stage=phase-2-accepted
+git diff --check：退出 0
+
+隔离科学数据验收者最终结论：PASS，P0=0、P1=0、P2=0；详见 `runs/codex-subagent_ci_phase2_exit_followup3.md`。
