@@ -1,0 +1,5 @@
+Task 1.6 RED
+
+CP01–CP08 的 8 个精确 node 分别单独运行，均得到 `1 failed`。
+
+失败原因一致且符合预期：`ci_workflow.application.capability_preflight` 尚不存在；没有通过放宽断言、跳过测试或伪造能力矩阵消除失败。

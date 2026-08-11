@@ -1,0 +1,9 @@
+Task 1.6 regression
+
+- 全库：`132 passed in 5.82s`。
+- Ruff：通过。
+- strict mypy：20 个源文件无问题。
+- 包校验：`PACKAGE_OK version=0.1.0a0 stage=phase-0-task-0.4`。
+- `git diff --check` 与 Trellis context 校验：通过。
+- 真实 `local` A/B/C × 四格式预检：10 项适用能力 ready，登录浏览器/OCR 准确 not_applicable。
+- 独立首轮与同 session 修订复核：PASS，无 P0/P1，无 fallback。

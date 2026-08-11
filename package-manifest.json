@@ -40,6 +40,7 @@
       "schemas/evidence-snapshot-manifest.schema.json",
       "schemas/report-snapshot-manifest.schema.json",
       "schemas/artifact-manifest.schema.json",
+      "schemas/capability-matrix.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-run-manifest.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-source-pack.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"

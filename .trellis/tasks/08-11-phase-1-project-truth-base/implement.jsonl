@@ -1,4 +1,5 @@
 {"file":"docs/decisions/0001-technology-stack.md","reason":"沿用已冻结的 Python、Pydantic、JSON Schema 和测试工具边界"}
 {"file":"docs/decisions/0004-phase-1-contract-boundaries.md","reason":"Phase 1 相关规格与实施计划的精简、不可妥协边界，避免注入 89KB 全规格"}
 {"file":"docs/decisions/0004-phase-1-contract-boundaries.md","reason":"Task 1.5 事件恢复、副作用幂等、当前运行写入上下文及 SQLite/不可变清单职责裁决"}
+{"file":"context/ci_phase1_task16_capability_preflight_context.md","reason":"Task 1.6 选择驱动能力适用性、中文阻断说明、实机结果与恢复重排边界"}
 {"file":"docs/acceptance/runs/phase-0-exit/verdict.md","reason":"确认 Phase 0 已接受且未提前接受 Phase 1 能力"}

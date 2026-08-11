@@ -63,7 +63,6 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
     assert "项目可继续使用" in verified.stdout
 
     deferred_commands = [
-        ("capability", "preflight", "--host", "omp", "--reports", "A", "--outputs", "html"),
         ("project", "run", "--root", str(project_root)),
         ("project", "run", "--root", str(project_root), "--resume"),
         ("fixture", "run", "--case", "a-complete", "--root", str(tmp_path / "fixture")),

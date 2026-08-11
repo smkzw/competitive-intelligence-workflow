@@ -16,6 +16,12 @@ from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError, ValidationError
 
 from ci_workflow import __version__
+from ci_workflow.application.capability_preflight import (
+    CapabilitySelection,
+    RuntimeCapabilityProbe,
+    run_capability_preflight,
+    selection_from_project,
+)
 from ci_workflow.application.project_service import (
     ProjectWorkspaceError,
     create_project_workspace,
@@ -316,6 +322,54 @@ def _package_verify(args: argparse.Namespace) -> int:
     return 0
 
 
+def _capability_preflight(args: argparse.Namespace) -> int:
+    source_routes = tuple(
+        _split_choices(
+            args.source_routes,
+            {"public-http", "public-browser", "authenticated-browser"},
+            "来源访问方式",
+        )
+    )
+    if bool(args.project) == bool(args.reports):
+        raise ContractError("请在项目目录和内联报告选择中任选一种，不要同时填写")
+    try:
+        if args.project:
+            project_root = Path(args.project)
+            selection = selection_from_project(
+                project_root,
+                source_routes=cast(Any, source_routes),
+                needs_document_ingestion=True,
+                needs_ocr=args.require_ocr,
+            )
+        else:
+            reports = _split_choices(args.reports, VALID_REPORTS, "报告类型")
+            requested_outputs = _split_choices(
+                args.outputs or "html", VALID_OUTPUTS, "交付格式"
+            )
+            outputs = ["html", *(item for item in requested_outputs if item != "html")]
+            selection = CapabilitySelection(
+                reports=cast(Any, tuple(reports)),
+                outputs=cast(Any, tuple(outputs)),
+                source_routes=cast(Any, source_routes),
+                needs_document_ingestion=True,
+                needs_ocr=args.require_ocr,
+            )
+            project_root = Path.cwd()
+        matrix = run_capability_preflight(
+            selection,
+            host=args.host,
+            probe=RuntimeCapabilityProbe(),
+            project_root=project_root,
+        )
+    except (ValueError, ProjectWorkspaceError) as exc:
+        raise ContractError(str(exc)) from exc
+    _atomic_json_write(Path(args.json), matrix.model_dump(mode="json"))
+    print(f"能力预检完成 PREFLIGHT_COMPLETE；结果已保存：{Path(args.json)}")
+    for message in matrix.user_messages:
+        print(message)
+    return 0
+
+
 def _not_implemented(args: argparse.Namespace) -> int:
     print(
         f"CAPABILITY_NOT_IMPLEMENTED 功能尚未实现：{args.command_path}",
@@ -370,10 +424,22 @@ def _build_parser() -> argparse.ArgumentParser:
     capability = groups.add_parser("capability", help="检查所选任务所需能力")
     capability_commands = capability.add_subparsers(dest="capability_command", required=True)
     preflight = capability_commands.add_parser("preflight", help="检查所选任务所需能力")
-    preflight.add_argument("--host", required=True, choices=("codex", "hermes", "omp"))
-    preflight.add_argument("--reports", required=True, help="报告类型，如 A,B,C")
-    preflight.add_argument("--outputs", default="html", help="交付格式")
-    preflight.set_defaults(handler=_not_implemented, command_path="capability preflight")
+    preflight.add_argument(
+        "--host", required=True, choices=("local", "codex", "hermes", "omp")
+    )
+    preflight.add_argument("--project", help="从已保存的项目合同读取报告与格式选择")
+    preflight.add_argument("--reports", help="创建项目前内联指定报告类型，如 A,B,C")
+    preflight.add_argument("--outputs", help="内联交付格式；站点式 HTML 会自动包含")
+    preflight.add_argument(
+        "--source-routes",
+        default="public-http,public-browser",
+        help="适用的来源访问方式",
+    )
+    preflight.add_argument(
+        "--require-ocr", action="store_true", help="本次已知需要读取扫描件"
+    )
+    preflight.add_argument("--json", required=True, help="保存机器可读能力矩阵的位置")
+    preflight.set_defaults(handler=_capability_preflight)
 
     fixture = groups.add_parser("fixture", help="运行固定验收案例")
     fixture_commands = fixture.add_subparsers(dest="fixture_command", required=True)

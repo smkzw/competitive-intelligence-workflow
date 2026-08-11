@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/ci-workflow/capability-matrix.schema.json",
+  "title": "竞品调研能力预检矩阵",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "host",
+    "selection",
+    "capabilities",
+    "research",
+    "deliveries",
+    "overall_state",
+    "user_messages"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "host": {"enum": ["local", "codex", "hermes", "omp"]},
+    "selection": {"$ref": "#/$defs/selection"},
+    "capabilities": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/capability"}
+    },
+    "research": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/research"}
+    },
+    "deliveries": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/delivery"}
+    },
+    "overall_state": {"enum": ["ready", "partially_available", "blocked"]},
+    "user_messages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reports",
+        "outputs",
+        "source_routes",
+        "needs_document_ingestion",
+        "needs_ocr"
+      ],
+      "properties": {
+        "reports": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["A", "B", "C"]}
+        },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "prefixItems": [{"const": "html"}],
+          "items": {"enum": ["html", "pdf", "html-ppt", "pptx"]}
+        },
+        "source_routes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["public-http", "public-browser", "authenticated-browser"]}
+        },
+        "needs_document_ingestion": {"type": "boolean"},
+        "needs_ocr": {"type": "boolean"}
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability_id", "label", "state", "required_by", "detail", "user_action"],
+      "properties": {
+        "capability_id": {"enum": [
+          "project_file_io", "script_runtime", "http_network", "search_browser",
+          "login_browser", "document_ingestion", "ocr", "browser_validation",
+          "native_pdf", "html_ppt_runtime", "ppt_master", "office_renderer"
+        ]},
+        "label": {"type": "string", "minLength": 1},
+        "state": {"enum": ["ready", "blocked", "not_applicable"]},
+        "required_by": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "detail": {"type": "string", "minLength": 1},
+        "user_action": {"type": "string", "minLength": 1}
+      }
+    },
+    "research": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report", "state", "blocked_by"],
+      "properties": {
+        "report": {"enum": ["A", "B", "C"]},
+        "state": {"enum": ["ready", "blocked"]},
+        "blocked_by": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report", "output", "state", "blocked_by"],
+      "properties": {
+        "report": {"enum": ["A", "B", "C"]},
+        "output": {"enum": ["html", "pdf", "html-ppt", "pptx"]},
+        "state": {"enum": ["ready", "blocked"]},
+        "blocked_by": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    }
+  }
+}

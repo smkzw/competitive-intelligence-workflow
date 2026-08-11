@@ -1,0 +1,6 @@
+Task 1.6 GREEN
+
+- CP01–CP08 八个精确 node 分别：`1 passed`。
+- 整套：`11 passed in 0.67s`。
+
+覆盖：项目文件/脚本、来源 HTTP/公开浏览器/登录浏览器、文档/OCR、真实 HTML 浏览器、原生 PDF、HTML 演示稿、PPT Master/目标 Office、选择性阻断、项目合同/内联入口一致性、完整唯一矩阵、中文用户指引、三次网络短退避和环境恢复局部重排。

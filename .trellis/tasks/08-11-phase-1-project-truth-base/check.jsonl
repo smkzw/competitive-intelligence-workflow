@@ -10,3 +10,5 @@
 {"file":"docs/acceptance/runs/task-1.4/verdict.md","reason":"Task 1.4 接受边界与 Task 1.5 后续约束"}
 {"file":"reviews/codex_ci_phase1_task15_event_snapshot_review.md","reason":"Task 1.5 首轮攻击、同 session 修订复核、路由诊断与 Codex 最终裁决"}
 {"file":"docs/acceptance/runs/task-1.5/verdict.md","reason":"Task 1.5 事件、检查点、幂等、快照与附录 C 清单接受锚点"}
+{"file":"reviews/codex_ci_phase1_task16_capability_preflight_review.md","reason":"Task 1.6 实机全矩阵、网络重试/Office 修订、同 session 复核与 Codex 裁决"}
+{"file":"docs/acceptance/runs/task-1.6/verdict.md","reason":"Task 1.6 能力选择性、中文指引和局部恢复接受锚点"}
