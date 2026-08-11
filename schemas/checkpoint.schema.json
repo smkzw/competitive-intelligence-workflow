@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/schemas/checkpoint.schema.json",
+  "title": "规范工作流检查点",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "checkpoint_id", "project_id", "run_id", "last_sequence",
+    "applied_event_ids", "state", "state_digest", "event_stream_digest", "created_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "checkpoint_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "last_sequence": {"type": "integer", "minimum": 0},
+    "applied_event_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "state": {"type": "object"},
+    "state_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "event_stream_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

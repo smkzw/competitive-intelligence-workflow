@@ -1,0 +1,10 @@
+Task 1.5 regression
+
+- 全库：`121 passed in 5.41s`。
+- 产品范围 Ruff：通过。
+- strict mypy：19 个源文件无问题。
+- 包校验：`PACKAGE_OK version=0.1.0a0 stage=phase-0-task-0.4`。
+- `git diff --check` 与 Trellis context 校验：通过。
+- 独立首轮及同 session 修订复核：PASS，无 P0/P1。
+
+诊断记录：仓库根 Ruff 会额外扫描 `.trellis/`、`.codebuddy/` 上游脚手架并报告 284 条既有风格告警；产品冻结检查范围为 `src tests`，未为制造全仓绿灯而批量修改脚手架。

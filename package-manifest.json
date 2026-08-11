@@ -35,6 +35,11 @@
       "schemas/source-receipt.schema.json",
       "schemas/evidence-gap.schema.json",
       "schemas/evidence-fragment.schema.json",
+      "schemas/event.schema.json",
+      "schemas/checkpoint.schema.json",
+      "schemas/evidence-snapshot-manifest.schema.json",
+      "schemas/report-snapshot-manifest.schema.json",
+      "schemas/artifact-manifest.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-run-manifest.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-source-pack.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"

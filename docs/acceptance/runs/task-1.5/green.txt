@@ -1,0 +1,8 @@
+Task 1.5 GREEN
+
+命令：
+`uv run pytest tests/contract/test_artifact_manifest.py tests/integration/test_event_checkpoint_replay.py tests/integration/test_snapshot_identity.py -q`
+
+最终结果：`3 passed in 0.11s`。
+
+覆盖：追加式事件与摘要/序号校验、幂等事件去重、检查点恢复与私有缓存删除、崩溃窗口副作用去重、跨 run 前缀绑定、内容寻址快照、移动读回、篡改拒绝、附录 C 双合同、当前运行/快照写入上下文和真实产物摘要/字节/mtime 验证。

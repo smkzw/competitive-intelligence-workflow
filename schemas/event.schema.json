@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/schemas/event.schema.json",
+  "title": "规范工作流事件",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "event_id", "project_id", "run_id", "event_type",
+    "occurred_at", "actor_id", "idempotency_key", "payload", "sequence",
+    "event_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "event_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "event_type": {"type": "string", "minLength": 1},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "actor_id": {"type": "string", "minLength": 1},
+    "idempotency_key": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "event_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
