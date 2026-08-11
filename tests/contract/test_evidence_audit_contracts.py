@@ -77,8 +77,6 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
     assert EvidenceGap.model_validate(gap).field_id == "efficacy.primary_endpoint"
 
     for required in receipt:
-        if required == "error_class" or required == "parent_attempt_id":
-            continue
         invalid = deepcopy(receipt)
         invalid.pop(required)
         with pytest.raises(ValidationError):

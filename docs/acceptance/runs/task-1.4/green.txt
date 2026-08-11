@@ -1,0 +1,9 @@
+Task 1.4 GREEN
+
+命令：
+`.venv/bin/pytest tests/unit/test_content_store.py tests/contract/test_evidence_audit_contracts.py tests/integration/test_source_version_chain.py -q`
+
+结果：
+`10 passed in 0.15s`
+
+覆盖：内容寻址去重与并存、移动后读回核摘要、四类来源日期与未公开状态、同内容不改写、证据定位与空原文拒绝、来源回执/证据缺口双合同及缺字段失败关闭。

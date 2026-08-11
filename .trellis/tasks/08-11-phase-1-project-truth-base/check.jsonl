@@ -6,3 +6,5 @@
 {"file":"docs/acceptance/runs/task-1.2/verdict.md","reason":"Task 1.2 可移动项目与产物路径接受锚点"}
 {"file":"reviews/codex_ci_phase1_task13_sqlite_truth_store_review.md","reason":"Task 1.3 独立可执行审查、历史路由说明与 Codex 最终裁决"}
 {"file":"docs/acceptance/runs/task-1.3/verdict.md","reason":"Task 1.3 六迁移、不可变历史与后续边界接受锚点"}
+{"file":"reviews/codex_ci_phase1_task14_evidence_chain_review.md","reason":"Task 1.4 内容寻址、日期、片段与审计双合同的独立复验和 Codex 裁决"}
+{"file":"docs/acceptance/runs/task-1.4/verdict.md","reason":"Task 1.4 接受边界与 Task 1.5 后续约束"}

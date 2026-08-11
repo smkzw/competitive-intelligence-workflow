@@ -1,0 +1,10 @@
+Task 1.4 RED
+
+首次精确测试：3 个 collection errors。
+
+失败原因仅为目标能力尚不存在：
+- `ci_workflow.storage.content_store` 未实现；
+- `ci_workflow.domain.evidence` 未实现；
+- 对应 JSON Schema、0007 迁移与存储服务尚未创建。
+
+未以断言放宽、跳过测试或伪造产物消除失败。

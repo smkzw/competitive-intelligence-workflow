@@ -1,0 +1,9 @@
+Task 1.4 regression
+
+- `.venv/bin/pytest -q`：`118 passed in 5.38s`
+- `.venv/bin/ruff check src tests`：通过
+- `.venv/bin/mypy --strict src`：15 个源文件无问题
+- `.venv/bin/ci-workflow package verify --root .`：`PACKAGE_OK version=0.1.0a0 stage=phase-0-task-0.4`
+- 独立审查：PASS，无 P0/P1，无 fallback
+
+环境诊断：系统 Python 缺少项目包与锁定依赖，直接执行会出现 collection errors；固定使用仓库 `.venv/bin/*` 后全部通过。未进行全局依赖安装。
