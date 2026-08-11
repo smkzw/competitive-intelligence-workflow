@@ -1,0 +1,12 @@
+Task 2.1 GREEN — 2026-08-11
+
+Each approved exact node passed independently after implementation:
+- test_innovation_modalities_include_adc_and_fusion_protein: 1 passed
+- test_innovative_plus_traditional_background_includes_regimen_without_promoting_background_component: 1 passed
+- test_pure_traditional_regimen_is_excluded: 1 passed
+- test_unmatched_reformulation_repositioning_or_fixed_combination_stays_review_pending: 1 passed
+
+Combined Task 2.1 suite: 4 passed.
+Task 2.1 plus package contract: 5 passed.
+Repository regression: 137 passed.
+Ruff, strict mypy, package verify and git diff check passed.

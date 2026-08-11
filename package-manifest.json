@@ -45,7 +45,9 @@
       "contracts/kangzhe/design_specs/schemas/design-source-pack.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"
     ],
-    "policies": [],
+    "policies": [
+      "policies/ontology/innovation-therapy-v1.yaml"
+    ],
     "contracts": [
       "contracts/kangzhe/manifest.json",
       "contracts/kangzhe/design.md",
@@ -64,7 +66,8 @@
       "migrations/0004_delivery_workflow.sql",
       "migrations/0005_corrections_idempotency.sql",
       "migrations/0006_append_only_guards.sql",
-      "migrations/0007_evidence_audit_chain.sql"
+      "migrations/0007_evidence_audit_chain.sql",
+      "migrations/0008_project_lineage_guards.sql"
     ]
   },
   "cli": {

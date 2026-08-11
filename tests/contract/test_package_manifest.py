@@ -106,7 +106,10 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
         assert components[category]
         for relative_path in components[category]:
             assert (ROOT / relative_path).exists(), relative_path
-    assert components["policies"] == []
+    assert components["policies"] == [
+        "policies/ontology/innovation-therapy-v1.yaml"
+    ]
+    assert "migrations/0008_project_lineage_guards.sql" in components["migrations"]
 
     cli = cast(dict[str, object], manifest["cli"])
     assert cli["catalog"] == EXPECTED_CLI_CATALOG

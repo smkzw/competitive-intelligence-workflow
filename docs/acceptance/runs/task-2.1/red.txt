@@ -1,0 +1,7 @@
+Task 2.1 RED — 2026-08-11
+
+Each approved exact node failed before implementation because `ci_workflow.capabilities.ontology_universe` did not exist:
+- test_innovation_modalities_include_adc_and_fusion_protein: 1 failed
+- test_innovative_plus_traditional_background_includes_regimen_without_promoting_background_component: 1 failed
+- test_pure_traditional_regimen_is_excluded: 1 failed
+- test_unmatched_reformulation_repositioning_or_fixed_combination_stays_review_pending: 1 failed

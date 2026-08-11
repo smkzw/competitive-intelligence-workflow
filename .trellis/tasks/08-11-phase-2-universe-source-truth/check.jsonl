@@ -1,0 +1,5 @@
+{"file":"docs/decisions/0006-phase-2-universe-and-source-boundaries.md","reason":"独立审查创新药范围、来源路线、冲突保留和用户阻断边界"}
+{"file":"docs/acceptance/runs/phase-1-exit/regression.txt","reason":"Phase 2 进入前的 133 项全库确定性基线"}
+{"file":"reviews/codex_ci_phase1_exit_review.md","reason":"Phase 1 接受证据和未接受 Phase 2 能力的边界"}
+{"file":"runs/pi_ci_phase2_task21_ontology.md","reason":"Task 2.1 独立 RED/GREEN、对抗探针和 P0/P1 裁决"}
+{"file":"docs/acceptance/runs/task-2.1/verdict.md","reason":"Task 2.1 正式接受及 Task 2.2 后续边界"}

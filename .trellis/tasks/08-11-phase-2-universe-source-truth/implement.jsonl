@@ -1,0 +1,4 @@
+{"file":"docs/decisions/0006-phase-2-universe-and-source-boundaries.md","reason":"Phase 2 创新药边界、来源权威、恢复、日期和科学链的精简批准合同，避免注入 89KB 全规格"}
+{"file":"docs/decisions/0004-phase-1-contract-boundaries.md","reason":"复用 Phase 1 项目合同、内容寻址、事件和快照边界，不建立第二真源"}
+{"file":"docs/acceptance/runs/phase-1-exit/verdict.md","reason":"确认 Phase 1 已接受且 Phase 2 后续能力未提前接受"}
+{"file":"context/ci_phase2_task21_ontology_context.md","reason":"Task 2.1 精确本体、方案计数、边界审查和包登记验收合同"}

@@ -20,7 +20,8 @@
   "subtasks": [],
   "children": [
     "08-10-phase-0-foundation",
-    "08-11-phase-1-project-truth-base"
+    "08-11-phase-1-project-truth-base",
+    "08-11-phase-2-universe-source-truth"
   ],
   "parent": null,
   "relatedFiles": [],

@@ -1,0 +1,62 @@
+schema_version: "1.0"
+policy_id: innovation-therapy-v1
+version: "1.0"
+included:
+  monoclonal_antibody:
+    rule_id: include-monoclonal-antibody
+    label_zh: 单克隆抗体
+    reason_zh: 具有明确靶点和工程化生物药身份，纳入创新药竞品范围
+  multispecific_antibody:
+    rule_id: include-multispecific-antibody
+    label_zh: 多特异性抗体
+    reason_zh: 具有多靶点工程化抗体身份，纳入创新药竞品范围
+  small_molecule:
+    rule_id: include-small-molecule
+    label_zh: 创新小分子
+    reason_zh: 具有明确创新项目身份的小分子药物，纳入竞品范围
+  protac:
+    rule_id: include-protac
+    label_zh: 靶向蛋白降解剂
+    reason_zh: 采用靶向蛋白降解机制，纳入创新药竞品范围
+  sirna:
+    rule_id: include-sirna
+    label_zh: 小干扰 RNA
+    reason_zh: 采用 RNA 干扰机制，纳入创新药竞品范围
+  adc:
+    rule_id: include-adc
+    label_zh: 抗体偶联药物
+    reason_zh: 具有抗体靶向与偶联载荷的工程化药物身份，纳入竞品范围
+  fusion_protein:
+    rule_id: include-fusion-protein
+    label_zh: 融合蛋白
+    reason_zh: 具有工程化融合蛋白身份，纳入创新药竞品范围
+excluded:
+  antihistamine:
+    rule_id: exclude-antihistamine
+    label_zh: 抗组胺药
+    reason_zh: 属于传统对症治疗，不建立创新药竞品档案
+  csdmard:
+    rule_id: exclude-csdmard
+    label_zh: 传统合成改善病情抗风湿药
+    reason_zh: 属于传统药物类别，不建立创新药竞品档案
+  traditional_corticosteroid:
+    rule_id: exclude-traditional-corticosteroid
+    label_zh: 传统糖皮质激素
+    reason_zh: 属于传统治疗，不建立创新药竞品档案
+  generic:
+    rule_id: exclude-generic
+    label_zh: 仿制药
+    reason_zh: 不具有本工作流定义的独立创新项目身份
+  biosimilar:
+    rule_id: exclude-biosimilar
+    label_zh: 生物类似药
+    reason_zh: 不具有本工作流定义的独立创新项目身份
+boundary_review:
+  rule_id: review-unmatched-boundary
+  label_zh: 创新属性待审查
+  reason_zh: 未命中明确规则，必须由证据与独立审查决定纳入或排除
+  modalities:
+    - reformulation
+    - repositioning
+    - fixed_combination
+    - unknown_boundary
