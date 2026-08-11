@@ -15,13 +15,13 @@ Task 1.1-1.6：稳定标识与状态、可移动项目、SQLite、不可变来�
 
 ## Acceptance Criteria
 
-- [ ] Task 1.1 稳定 ID、九组状态枚举和版本化项目合同通过精确 RED/GREEN。
-- [ ] Task 1.2 空项目创建、移动、恢复和 A/B/C×四格式路径合同通过。
-- [ ] Task 1.3 SQLite 迁移、状态列隔离、追加式版本和 `integrity_check=ok` 通过。
-- [ ] Task 1.4 内容寻址、四类日期、来源回执、证据缺口和片段 locator 通过。
-- [ ] Task 1.5 事件重放、幂等、检查点、快照和附录 C 产物清单通过。
-- [ ] Task 1.6 选择性感知能力预检 CP01–CP08 通过，CLI 输出类型化中文阻断说明。
-- [ ] Phase 1 正式退出命令全绿，并由独立 verifier 接受。
+- [x] Task 1.1 稳定 ID、九组状态枚举和版本化项目合同通过精确 RED/GREEN。
+- [x] Task 1.2 空项目创建、移动、恢复和 A/B/C×四格式路径合同通过。
+- [x] Task 1.3 SQLite 迁移、状态列隔离、追加式版本和 `integrity_check=ok` 通过。
+- [x] Task 1.4 内容寻址、四类日期、来源回执、证据缺口和片段 locator 通过。
+- [x] Task 1.5 事件重放、幂等、检查点、快照和附录 C 产物清单通过。
+- [x] Task 1.6 选择性感知能力预检 CP01–CP08 通过，CLI 输出类型化中文阻断说明。
+- [x] Phase 1 正式退出命令全绿，并由独立 verifier 接受。
 
 ## Notes
 

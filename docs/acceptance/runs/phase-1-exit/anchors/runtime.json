@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "executed_at": "2026-08-11T21:55:31+08:00",
+  "source_commit": "c9dea6d6399c183faf55bfe534470652444392d6",
+  "project": {
+    "reports": ["A", "B", "C"],
+    "outputs": ["html", "pdf", "html-ppt", "pptx"],
+    "moved_and_verified": true,
+    "moved_after_evidence_chain_and_verified": true,
+    "checked_non_sqlite_files_without_absolute_paths": 12
+  },
+  "database": {
+    "integrity_check": "ok",
+    "user_version": 8,
+    "orphan_project_record_test": "passed"
+  },
+  "evidence_chain": {
+    "source_version_id": "source-version_c781972e37f926036a2e01e9",
+    "fragment_id": "evidence-fragment_445c5d0e8abfa6cc32b31b0b",
+    "source_receipt_schema_valid": true,
+    "evidence_gap_schema_valid": true,
+    "source_dates": {
+      "acquired_at": "2026-08-11T21:55:31+08:00",
+      "published_at": "2025-01-01T09:00:00+08:00",
+      "effective_at": "not_publicly_disclosed",
+      "first_disclosed_at": "2025-01-01T09:00:00+08:00"
+    }
+  },
+  "recovery": {
+    "event_count": 1,
+    "checkpoint_recovered_without_duplicate_effect": true,
+    "evidence_snapshot_id": "evidence-snapshot_ec8410a603421956eae224ea",
+    "report_snapshot_id": "report-snapshot_772b36f94d66f3ad50daafa9"
+  },
+  "artifact_manifest": {
+    "manifest_id": "artifact-manifest_phase1_001",
+    "sha256": "01a7b0ca6ddd60103f2a9a99f91d4d94e7ac80a952f931e940262dbf38d93d57",
+    "bound_to_current_context": true,
+    "browser_anchor": "真实 Chromium 页面已完成渲染"
+  },
+  "capability_preflight": {
+    "overall_state": "ready",
+    "applicable_ready": 10,
+    "not_applicable": ["login_browser", "ocr"],
+    "deliveries_ready": 12,
+    "sha256": "094ada24c9e827a760a02017c8a2c1dde302b665e3e338da2ecc6192d7e7e151"
+  },
+  "cleanup": {
+    "evidence_chain_project": "temporary_directory_removed",
+    "cli_project": "/Users/smkzw/.Trash/ci-phase1-cli-20260811-215447-58511"
+  }
+}

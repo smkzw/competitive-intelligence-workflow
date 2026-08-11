@@ -12,3 +12,6 @@
 {"file":"docs/acceptance/runs/task-1.5/verdict.md","reason":"Task 1.5 事件、检查点、幂等、快照与附录 C 清单接受锚点"}
 {"file":"reviews/codex_ci_phase1_task16_capability_preflight_review.md","reason":"Task 1.6 实机全矩阵、网络重试/Office 修订、同 session 复核与 Codex 裁决"}
 {"file":"docs/acceptance/runs/task-1.6/verdict.md","reason":"Task 1.6 能力选择性、中文指引和局部恢复接受锚点"}
+{"file":"runs/pi_ci_phase1_exit.md","reason":"Phase 1 独立复现 62/133 项、真实移动项目和 P0/P1 裁决"}
+{"file":"reviews/codex_ci_phase1_exit_review.md","reason":"Codex 对 Phase 1 退出证据、路由边界和后续未接受能力的最终裁决"}
+{"file":"docs/acceptance/runs/phase-1-exit/verdict.md","reason":"Phase 1 正式接受与进入 Phase 2 的恢复锚点"}

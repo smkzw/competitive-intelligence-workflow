@@ -1,0 +1,34 @@
+Phase 1 exit regression — 2026-08-11
+
+Approved deterministic suite:
+- Command:
+  PYTHONDONTWRITEBYTECODE=1 uv run --frozen pytest -p no:cacheprovider -q tests/unit/test_ids.py tests/unit/test_state_enums.py tests/unit/test_content_store.py tests/contract/test_project_contract.py tests/contract/test_evidence_audit_contracts.py tests/contract/test_artifact_manifest.py tests/contract/test_capability_matrix.py tests/integration/test_project_workspace.py tests/integration/test_project_move_portability.py tests/integration/test_artifact_paths.py tests/integration/test_sqlite_migrations.py tests/integration/test_append_only_records.py tests/integration/test_source_version_chain.py tests/integration/test_event_checkpoint_replay.py tests/integration/test_snapshot_identity.py tests/integration/test_capability_preflight.py
+- 62 passed in 1.12s
+
+Repository regression and quality checks:
+- uv run pytest -q: 133 passed in 6.19s
+- uv run ruff check src tests: All checks passed
+- uv run mypy --strict src: Success, 20 source files
+- uv run ci-workflow package verify --root .: PACKAGE_OK
+- python3 ./.trellis/scripts/task.py validate .trellis/tasks/08-11-phase-1-project-truth-base: passed
+- git diff --check: passed
+
+Focused SQLite lineage regression:
+- tests/integration/test_sqlite_migrations.py
+- tests/integration/test_append_only_records.py
+- 7 passed in 0.14s
+
+Real runtime anchors:
+- A/B/C and HTML/PDF/HTML-PPT/PPTX project created through the public CLI.
+- Real capability preflight: 10 applicable capabilities ready, login browser and OCR not applicable, all 12 deliveries ready.
+- Project moved and renamed, then verified through the public CLI.
+- 12 non-SQLite persisted files checked without original or moved machine absolute paths.
+- SQLite integrity_check=ok and user_version=8.
+- Content-addressed source, precise fragment, all four date roles, complete source receipt and evidence gap validated.
+- Canonical event replay recovered after private cache removal without duplicate side effect.
+- Evidence/report snapshots and current-context-bound Appendix C artifact manifest survived the move.
+- Chromium rendered the phase anchor successfully.
+
+Diagnostic note:
+- The first composite anchor script used a non-canonical /var path when relativizing a resolved /private/var manifest path. The temporary directory was automatically removed. The successful rerun normalized both roots and proved the product project remained portable.
+- The initial generic commands `ruff check .`, `package verify` without `--root`, and an obsolete external Trellis script path were not treated as product failures. Current project-scoped commands above were recovered from live configuration and passed.
