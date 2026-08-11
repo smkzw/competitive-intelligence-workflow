@@ -1,0 +1,6 @@
+interface:
+  display_name: "需求核对"
+  short_description: "核对适应症、报告类型和交付格式的内部受控能力，供工作流自动调用"
+  default_prompt: "运行 $intake-preflight 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

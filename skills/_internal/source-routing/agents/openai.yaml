@@ -1,0 +1,6 @@
+interface:
+  display_name: "来源规划"
+  short_description: "按证据缺口规划境内外检索路线并记录尝试的内部能力，供工作流自动调用"
+  default_prompt: "运行 $source-routing 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

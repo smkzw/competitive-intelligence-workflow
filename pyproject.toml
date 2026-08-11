@@ -15,16 +15,27 @@ dependencies = [
   "jsonschema==4.26.0",
 ]
 
+[project.scripts]
+ci-workflow = "ci_workflow.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.7,<0.12"]
+build-backend = "uv_build"
+
 [dependency-groups]
 dev = [
   "pytest==9.1.1",
   "ruff==0.16.2",
   "mypy==2.3.0",
   "types-jsonschema==4.26.0.20260518",
+  "types-PyYAML==6.0.12.20260518",
 ]
 
 [tool.uv]
-package = false
+package = true
+
+[tool.uv.build-backend]
+module-name = "ci_workflow"
 
 [tool.pytest.ini_options]
 addopts = "--strict-config --strict-markers"
@@ -114,6 +125,12 @@ version = "4.26.0.20260518"
 license = "Apache-2.0"
 purpose = "JSON Schema 合同测试的静态类型定义"
 source = "https://pypi.org/project/types-jsonschema/4.26.0.20260518/"
+
+[tool.ci-workflow.dependencies.types-pyyaml]
+version = "6.0.12.20260518"
+license = "Apache-2.0"
+purpose = "YAML Skill 元数据和项目合同读取的静态类型定义"
+source = "https://pypi.org/project/types-PyYAML/6.0.12.20260518/"
 
 [tool.ci-workflow.assets.echarts]
 version = "6.1.0"

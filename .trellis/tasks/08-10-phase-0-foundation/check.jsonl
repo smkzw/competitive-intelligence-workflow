@@ -1,1 +1,2 @@
-{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file":"docs/decisions/0000-design-v1.2-approval.md","reason":"按摘要确认 v1.2 权威规格；具体章节由检查者按需读取，不做全量自动注入"}
+{"file":"docs/decisions/0003-offline-presentation-assets.md","reason":"复核包清单绑定的品牌、ECharts 与 HTML-PPT 离线资产"}

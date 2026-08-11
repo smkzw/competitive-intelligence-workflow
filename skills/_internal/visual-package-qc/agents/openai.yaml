@@ -1,0 +1,6 @@
+interface:
+  display_name: "视觉验收"
+  short_description: "在真实浏览器与办公格式中核验内容和视觉可用性的内部能力，供工作流自动调用"
+  default_prompt: "运行 $visual-package-qc 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

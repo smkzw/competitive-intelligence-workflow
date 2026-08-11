@@ -1,0 +1,6 @@
+interface:
+  display_name: "身份消歧"
+  short_description: "识别药物、试验、企业和来源版本冲突的内部能力，供工作流自动调用"
+  default_prompt: "运行 $identity-conflict 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

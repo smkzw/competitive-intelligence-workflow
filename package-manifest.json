@@ -1,0 +1,61 @@
+{
+  "$schema": "schemas/package-manifest.schema.json",
+  "schema_version": "1.0",
+  "package": {
+    "name": "competitive-intelligence-workflow",
+    "version": "0.1.0a0",
+    "cli_version": "0.1.0a0",
+    "build_stage": "phase-0-task-0.4",
+    "python": ">=3.12,<3.14",
+    "hosts": ["codex", "hermes", "omp"]
+  },
+  "public_skill": "skills/competitive-intelligence-workflow/SKILL.md",
+  "internal_skills": [
+    {"id": "intake-preflight", "path": "skills/_internal/intake-preflight/SKILL.md", "contract_version": "1.0"},
+    {"id": "ontology-universe", "path": "skills/_internal/ontology-universe/SKILL.md", "contract_version": "1.0"},
+    {"id": "source-routing", "path": "skills/_internal/source-routing/SKILL.md", "contract_version": "1.0"},
+    {"id": "ingestion-identity", "path": "skills/_internal/ingestion-identity/SKILL.md", "contract_version": "1.0"},
+    {"id": "extraction-normalization", "path": "skills/_internal/extraction-normalization/SKILL.md", "contract_version": "1.0"},
+    {"id": "identity-conflict", "path": "skills/_internal/identity-conflict/SKILL.md", "contract_version": "1.0"},
+    {"id": "coverage-gates", "path": "skills/_internal/coverage-gates/SKILL.md", "contract_version": "1.0"},
+    {"id": "analysis-a", "path": "skills/_internal/analysis-a/SKILL.md", "contract_version": "1.0"},
+    {"id": "analysis-b", "path": "skills/_internal/analysis-b/SKILL.md", "contract_version": "1.0"},
+    {"id": "analysis-c", "path": "skills/_internal/analysis-c/SKILL.md", "contract_version": "1.0"},
+    {"id": "scientific-qc", "path": "skills/_internal/scientific-qc/SKILL.md", "contract_version": "1.0"},
+    {"id": "render-deliver", "path": "skills/_internal/render-deliver/SKILL.md", "contract_version": "1.0"},
+    {"id": "visual-package-qc", "path": "skills/_internal/visual-package-qc/SKILL.md", "contract_version": "1.0"},
+    {"id": "correction-refresh", "path": "skills/_internal/correction-refresh/SKILL.md", "contract_version": "1.0"},
+    {"id": "monitoring", "path": "skills/_internal/monitoring/SKILL.md", "contract_version": "1.0"}
+  ],
+  "components": {
+    "schemas": [
+      "schemas/package-manifest.schema.json",
+      "contracts/kangzhe/design_specs/schemas/design-run-manifest.schema.json",
+      "contracts/kangzhe/design_specs/schemas/design-source-pack.schema.json",
+      "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"
+    ],
+    "policies": [],
+    "contracts": [
+      "contracts/kangzhe/manifest.json",
+      "contracts/kangzhe/design.md",
+      "contracts/kangzhe/design_specs/project_profile.md",
+      "contracts/kangzhe/design_specs/ROUTER.md"
+    ],
+    "assets": [
+      "assets/brand/manifest.json",
+      "assets/html-ppt/manifest.json",
+      "assets/third-party/echarts/manifest.json"
+    ]
+  },
+  "cli": {
+    "executable": "ci-workflow",
+    "catalog": [
+      "package verify",
+      "project create",
+      "project verify",
+      "project run",
+      "capability preflight",
+      "fixture run"
+    ]
+  }
+}

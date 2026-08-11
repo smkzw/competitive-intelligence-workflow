@@ -1,0 +1,6 @@
+interface:
+  display_name: "完整性核验"
+  short_description: "依照报告类型核验关键证据完整性并阻止缺证草稿的内部能力，供工作流自动调用"
+  default_prompt: "运行 $coverage-gates 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

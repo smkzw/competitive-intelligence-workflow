@@ -1,0 +1,6 @@
+interface:
+  display_name: "资料归档"
+  short_description: "接收用户补充资料并自动识别重命名归档的内部能力，供工作流自动调用"
+  default_prompt: "运行 $ingestion-identity 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

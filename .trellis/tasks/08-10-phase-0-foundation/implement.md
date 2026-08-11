@@ -47,14 +47,15 @@
 
 ## Task 0.4–0.5 包与报告机器合同
 
-- [ ] 公共 Skill、内部能力边界、包 manifest 和唯一 CLI catalog。
+- [x] 用 Skill Creator 初始化一个公开入口与 15 个内部 Skill；正文只保留输入、输出、禁止与恢复合同，内部入口全部关闭隐式调用。
+- [x] 建立严格 `package-manifest.json`/Schema 与唯一六命令 CLI；包校验绑定当前 Schema、Skill 提示词、康哲合同及离线资产摘要。
+- [x] `project create/verify` 建立 Phase 0 最小骨架；后续 capability/project run/fixture 明确退出 3，不以 argparse 错误冒充功能阻断。
+- [x] 将 argparse 固定帮助和参数错误改为中文原生；禁止别名和第七条 CLI，临时变异均失败关闭。
+- [x] 53 项全量、Ruff、mypy、包校验和 Python 构建通过；Pi 原 session 与 Minimax 独立复核 P0=0、P1=0，会商 gate 通过。
+- [x] 明确 Python wheel 只承载 CLI 模块；Task 9.5 仍负责完整 `.tar.zst` Skill bundle、fresh install 和三真实宿主验收，当前未越阶段。
 - [ ] A/B/C 页面、筛选和 HTML/PDF/HTML-PPT/PPTX 格式合同。
 - [ ] Phase 0 全套确定性检查和独立验收。
 
 ## 停止与回滚
 
 康哲合同未确认、摘要漂移、依赖无法冻结、CLI 名称不唯一或存在旧运行依赖时立即停止；回滚只处理新仓，不触碰旧工程。
-
-## 暂停检查点
-
-- 2026-08-11 09:09 +0800：用户要求无损暂停。ADR 0005 的独立 Luna 审查已正常结束并给出 `FAIL`（P0=2，P1=4），尚未修复、测试或提交；恢复入口为 `context/PAUSE_CHECKPOINT_2026-08-11_0909.md`。

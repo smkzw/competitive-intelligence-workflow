@@ -15,10 +15,10 @@
 
 ## Acceptance Criteria
 
-- [ ] `git rev-parse --show-toplevel` 精确指向新根，Trellis 六个宿主入口和 296 个受管文件完整。
-- [ ] Task 0.1 的失败先行测试、迁移清单、旧依赖扫描器通过并输出 `LEGACY_REF_OK`。
-- [ ] Task 0.2 的依赖合同测试通过，`uv sync --all-extras --frozen` 可重建环境。
-- [ ] Task 0.3 的稳定双读、内化决定、来源/项目摘要及项目内合同测试可审计；项目运行不依赖通用版。
+- [x] `git rev-parse --show-toplevel` 精确指向新根，Trellis 多宿主入口可用。
+- [x] Task 0.1 的失败先行测试、迁移清单、旧依赖扫描器通过并输出 `LEGACY_REF_OK`。
+- [x] Task 0.2 的依赖合同测试通过，`uv sync --all-extras --frozen` 可重建环境。
+- [x] Task 0.3 的稳定双读、内化决定、来源/项目摘要及项目内合同测试可审计；项目运行不依赖通用版。
 - [ ] Task 0.4–0.5 的包清单、公共 Skill、CLI catalog、页面/筛选/格式合同测试全部通过。
 - [ ] 独立接受者复核 Phase 0 真实文件与测试锚点；失败时只删除新根即可回滚，旧根不受影响。
 

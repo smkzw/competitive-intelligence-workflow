@@ -1,0 +1,6 @@
+interface:
+  display_name: "持续监测"
+  short_description: "对已交付项目执行增量证据监测与版本刷新提醒的内部能力，供工作流自动调用"
+  default_prompt: "运行 $monitoring 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

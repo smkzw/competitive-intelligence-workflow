@@ -18,7 +18,13 @@ REQUIRED_RUNTIME_DEPENDENCIES = {
     "pyyaml",
     "jsonschema",
 }
-REQUIRED_DEVELOPMENT_DEPENDENCIES = {"pytest", "ruff", "mypy", "types-jsonschema"}
+REQUIRED_DEVELOPMENT_DEPENDENCIES = {
+    "pytest",
+    "ruff",
+    "mypy",
+    "types-jsonschema",
+    "types-pyyaml",
+}
 APPROVED_LICENSES = {"Apache-2.0", "BSD-3-Clause", "MIT"}
 
 

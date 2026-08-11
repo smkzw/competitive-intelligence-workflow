@@ -1,0 +1,6 @@
+interface:
+  display_name: "修订刷新"
+  short_description: "接收用户修订并对受影响证据、分析和报告进行更新的内部能力，供工作流自动调用"
+  default_prompt: "运行 $correction-refresh 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/schemas/package-manifest.schema.json",
+  "title": "竞品调研工作流安装包清单",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package",
+    "public_skill",
+    "internal_skills",
+    "components",
+    "cli"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "const": "schemas/package-manifest.schema.json"},
+    "schema_version": {"type": "string", "const": "1.0"},
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "cli_version", "build_stage", "python", "hosts"],
+      "properties": {
+        "name": {"type": "string", "const": "competitive-intelligence-workflow"},
+        "version": {"type": "string", "minLength": 1},
+        "cli_version": {"type": "string", "minLength": 1},
+        "build_stage": {"type": "string", "const": "phase-0-task-0.4"},
+        "python": {"type": "string", "minLength": 1},
+        "hosts": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "codex"},
+            {"const": "hermes"},
+            {"const": "omp"}
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "public_skill": {"type": "string", "minLength": 1},
+    "internal_skills": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "contract_version"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+          "path": {"type": "string", "pattern": "^skills/_internal/.+/SKILL\\.md$"},
+          "contract_version": {"type": "string", "const": "1.0"}
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemas", "policies", "contracts", "assets"],
+      "properties": {
+        "schemas": {"$ref": "#/$defs/path_list"},
+        "policies": {"$ref": "#/$defs/path_list"},
+        "contracts": {"$ref": "#/$defs/path_list"},
+        "assets": {"$ref": "#/$defs/path_list"}
+      }
+    },
+    "cli": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executable", "catalog"],
+      "properties": {
+        "executable": {"type": "string", "const": "ci-workflow"},
+        "catalog": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 6,
+          "maxItems": 6,
+          "prefixItems": [
+            {"const": "package verify"},
+            {"const": "project create"},
+            {"const": "project verify"},
+            {"const": "project run"},
+            {"const": "capability preflight"},
+            {"const": "fixture run"}
+          ],
+          "items": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "path_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

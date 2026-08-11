@@ -1,1 +1,3 @@
-{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file":"docs/decisions/0000-design-v1.2-approval.md","reason":"确认 v1.2 权威规格、摘要和按需读取边界，避免自动注入 89 KB 全文"}
+{"file":"docs/decisions/0001-technology-stack.md","reason":"Python 构建、固定依赖和开放许可证边界"}
+{"file":"docs/decisions/0002-kangzhe-contract-reconciliation.md","reason":"项目内化康哲设计合同的来源和独立演进边界"}
