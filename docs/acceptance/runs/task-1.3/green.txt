@@ -1,0 +1,4 @@
+Task 1.3 GREEN
+
+Command: .venv/bin/pytest tests/integration/test_sqlite_migrations.py tests/integration/test_append_only_records.py -q
+Observed: 6 passed.

@@ -1,0 +1,9 @@
+Task 1.3 regression
+
+- Full repository: 108 passed.
+- Ruff: all checks passed.
+- strict mypy: no issues in 13 source files.
+- Package verification: PACKAGE_OK.
+- Trellis context validation and git diff check: passed.
+- Independent executable review reproduced 6/108 passes, Ruff, mypy and package verification; verdict PASS.
+- SQLite runtime probes: user_version=6, foreign_keys=1, integrity_check=ok, idempotent replay, drift/gap rejection and append-only guards passed.

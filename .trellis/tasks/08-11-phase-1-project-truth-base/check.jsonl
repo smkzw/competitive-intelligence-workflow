@@ -4,3 +4,5 @@
 {"file":"docs/acceptance/runs/task-1.1/verdict.md","reason":"Task 1.1 完成边界与后续未接受能力的恢复锚点"}
 {"file":"reviews/codex_ci_phase1_task12_project_workspace_review.md","reason":"Task 1.2 独立可执行复验、路由诊断与 Codex 最终裁决"}
 {"file":"docs/acceptance/runs/task-1.2/verdict.md","reason":"Task 1.2 可移动项目与产物路径接受锚点"}
+{"file":"reviews/codex_ci_phase1_task13_sqlite_truth_store_review.md","reason":"Task 1.3 独立可执行审查、历史路由说明与 Codex 最终裁决"}
+{"file":"docs/acceptance/runs/task-1.3/verdict.md","reason":"Task 1.3 六迁移、不可变历史与后续边界接受锚点"}
