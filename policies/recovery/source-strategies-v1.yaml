@@ -1,0 +1,35 @@
+schema_version: "1.0"
+policy_id: source-strategies-v1
+version: "1.0"
+minimum_same_path_attempts: 3
+minimum_alternative_strategy_units: 2
+saturation_rounds: 2
+retryable_result_classes:
+  - network_error
+  - rate_limited
+  - proxy_error
+  - dns_error
+  - tls_error
+  - http_error
+  - parser_error
+  - tool_unavailable
+  - content_truncated
+alternative_strategy_kinds:
+  - alias_variant
+  - language_variant
+  - identifier_cross_reference
+  - citation_traversal
+  - alternate_access
+  - alternate_source
+diagnostic_branches:
+  - network_error
+  - rate_limited
+  - captcha_required
+  - permission_denied
+  - proxy_error
+  - dns_error
+  - tls_error
+  - http_error
+  - parser_error
+  - tool_unavailable
+  - content_truncated

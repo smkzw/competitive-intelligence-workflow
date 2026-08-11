@@ -1,0 +1,163 @@
+schema_version: "1.0"
+policy_id: source-policy-v1
+version: "1.0"
+claim_domains:
+  - drug_identity_mechanism
+  - trial_identity_design_status
+  - efficacy_safety_results
+  - baseline_disposition
+  - regulatory_development_status
+  - china_development_regulatory_status
+  - company_relationships_transactions
+  - patents_protection
+sources:
+  - source_id: clinicaltrials_gov
+    label_zh: 美国临床试验登记平台
+    required_global_baseline: true
+    required_for_china: false
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: cross_check
+      trial_identity_design_status: direct
+      efficacy_safety_results: direct
+      baseline_disposition: direct
+      regulatory_development_status: cross_check
+      china_development_regulatory_status: cross_check
+      company_relationships_transactions: lead_only
+      patents_protection: not_applicable
+  - source_id: cde
+    label_zh: 国家药品监督管理局药品审评中心
+    required_global_baseline: false
+    required_for_china: true
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: direct
+      trial_identity_design_status: direct
+      efficacy_safety_results: cross_check
+      baseline_disposition: cross_check
+      regulatory_development_status: direct
+      china_development_regulatory_status: direct
+      company_relationships_transactions: cross_check
+      patents_protection: cross_check
+  - source_id: chinadrugtrials
+    label_zh: 中国药物临床试验登记与信息公示平台
+    required_global_baseline: false
+    required_for_china: true
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: direct
+      trial_identity_design_status: direct
+      efficacy_safety_results: direct
+      baseline_disposition: direct
+      regulatory_development_status: cross_check
+      china_development_regulatory_status: direct
+      company_relationships_transactions: lead_only
+      patents_protection: not_applicable
+  - source_id: dxy_drug_assistant
+    label_zh: 丁香园用药助手
+    required_global_baseline: false
+    required_for_china: true
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: cross_check
+      trial_identity_design_status: cross_check
+      efficacy_safety_results: cross_check
+      baseline_disposition: lead_only
+      regulatory_development_status: cross_check
+      china_development_regulatory_status: cross_check
+      company_relationships_transactions: lead_only
+      patents_protection: lead_only
+  - source_id: pubmed
+    label_zh: PubMed
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: direct
+      trial_identity_design_status: cross_check
+      efficacy_safety_results: direct
+      baseline_disposition: direct
+      regulatory_development_status: lead_only
+      china_development_regulatory_status: lead_only
+      company_relationships_transactions: lead_only
+      patents_protection: lead_only
+  - source_id: regulator_official
+    label_zh: 适用司法辖区监管机构
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: direct
+      trial_identity_design_status: direct
+      efficacy_safety_results: direct
+      baseline_disposition: direct
+      regulatory_development_status: direct
+      china_development_regulatory_status: direct
+      company_relationships_transactions: cross_check
+      patents_protection: direct
+  - source_id: company_disclosure
+    label_zh: 企业正式披露
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: direct
+      trial_identity_design_status: cross_check
+      efficacy_safety_results: cross_check
+      baseline_disposition: cross_check
+      regulatory_development_status: cross_check
+      china_development_regulatory_status: cross_check
+      company_relationships_transactions: direct
+      patents_protection: cross_check
+  - source_id: conference_disclosure
+    label_zh: 学术会议披露
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: cross_check
+      trial_identity_design_status: cross_check
+      efficacy_safety_results: cross_check
+      baseline_disposition: cross_check
+      regulatory_development_status: lead_only
+      china_development_regulatory_status: lead_only
+      company_relationships_transactions: lead_only
+      patents_protection: lead_only
+  - source_id: medical_cube_info
+    label_zh: 医药魔方info
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: true
+    authorities: &authorized_cn_authorities
+      drug_identity_mechanism: cross_check
+      trial_identity_design_status: cross_check
+      efficacy_safety_results: direct
+      baseline_disposition: cross_check
+      regulatory_development_status: cross_check
+      china_development_regulatory_status: direct
+      company_relationships_transactions: direct
+      patents_protection: direct
+  - source_id: pharnex_circle
+    label_zh: 药融圈
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: true
+    authorities: *authorized_cn_authorities
+  - source_id: dxy_insight_database
+    label_zh: 丁香园Insight数据库
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: true
+    authorities: *authorized_cn_authorities
+  - source_id: menet
+    label_zh: 米内网
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: true
+    authorities: *authorized_cn_authorities
+  - source_id: china_drug_review
+    label_zh: 中国药审
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: true
+    authorities: *authorized_cn_authorities

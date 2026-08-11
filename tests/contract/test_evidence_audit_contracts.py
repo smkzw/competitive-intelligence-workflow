@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from copy import deepcopy
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
 from jsonschema import Draft202012Validator, FormatChecker
@@ -35,6 +36,8 @@ def _receipt() -> dict[str, object]:
         "attempt_index": 1,
         "started_at": "2026-08-11T10:00:00+08:00",
         "ended_at": "2026-08-11T10:00:05+08:00",
+        "scheduled_backoff_ms": 0,
+        "actual_backoff_ms": 0,
         "result_class": "content_acquired",
         "error_class": None,
         "completeness_checks": ["页面身份一致", "结果模块完整"],
@@ -65,16 +68,48 @@ def _gap() -> dict[str, object]:
     }
 
 
+def _source_eligibility() -> dict[str, object]:
+    return {
+        "schema_version": "1.0",
+        "source_eligibility_id": "source-eligibility-001",
+        "route_id": "clinicaltrials-registry",
+        "strategy_unit_id": "registry-nct-id",
+        "entity_id": "trial-001",
+        "gap_id": "gap_001",
+        "claim_domain": "trial_identity_design_status",
+        "applicability": "applicable",
+        "required_by_policy": True,
+        "rationale_zh": "全球基线路线，且该试验存在 NCT 标识符",
+        "policy_id": "source-policy-v1",
+        "policy_version": "1.0",
+        "evidence_fragment_ids": ["fragment-route-applicability"],
+        "decided_by": "source-planner-v1",
+        "decided_at": "2026-08-11T10:00:00+08:00",
+    }
+
+
 def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
+    from ci_workflow.sources.planner import (
+        RouteCompletion,
+        RouteCompletionState,
+        RouteProgress,
+    )
+    from ci_workflow.sources.policy import SourceEligibility
+    from ci_workflow.sources.receipts import EvidenceAuditBundle
+
     receipt = _receipt()
     gap = _gap()
+    source_eligibility = _source_eligibility()
     receipt_validator = _validator("source-receipt.schema.json")
     gap_validator = _validator("evidence-gap.schema.json")
+    source_eligibility_validator = _validator("source-eligibility.schema.json")
 
     receipt_validator.validate(receipt)
     gap_validator.validate(gap)
+    source_eligibility_validator.validate(source_eligibility)
     assert SourceReceipt.model_validate(receipt).content_sha256 == "a" * 64
     assert EvidenceGap.model_validate(gap).field_id == "efficacy.primary_endpoint"
+    assert SourceEligibility.model_validate(source_eligibility).required_by_policy is True
 
     for required in receipt:
         invalid = deepcopy(receipt)
@@ -92,6 +127,29 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
         with pytest.raises(PydanticValidationError):
             EvidenceGap.model_validate(invalid)
 
+    for invalid_rounds in (
+        [
+            {"round": 1, "new_fields": [], "new_source_versions": []},
+            {"round": 1, "new_fields": [], "new_source_versions": []},
+        ],
+        [
+            {"round": 1, "new_fields": [], "new_source_versions": []},
+            {"round": 3, "new_fields": [], "new_source_versions": []},
+        ],
+    ):
+        with pytest.raises(PydanticValidationError, match="信息增益轮次必须从一开始连续递增"):
+            EvidenceGap.model_validate(
+                {**gap, "information_gain_diff": invalid_rounds}
+            )
+
+    for required in source_eligibility:
+        invalid = deepcopy(source_eligibility)
+        invalid.pop(required)
+        with pytest.raises(ValidationError):
+            source_eligibility_validator.validate(invalid)
+        with pytest.raises(PydanticValidationError):
+            SourceEligibility.model_validate(invalid)
+
     with pytest.raises(ValidationError):
         receipt_validator.validate({**receipt, "password": "secret"})
     with pytest.raises(PydanticValidationError):
@@ -99,7 +157,7 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
 
     failed_route = {
         **receipt,
-        "result_class": "technical_failure",
+        "result_class": "network_error",
         "error_class": "network_timeout",
         "content_sha256": None,
     }
@@ -115,11 +173,71 @@ def test_source_receipt_and_evidence_gap_require_v12_audit_fields() -> None:
         with pytest.raises(PydanticValidationError):
             SourceReceipt.model_validate(invalid)
 
+    audit_bundle = EvidenceAuditBundle(
+        source_receipts=(SourceReceipt.model_validate(receipt),),
+        source_eligibilities=(SourceEligibility.model_validate(source_eligibility),),
+        evidence_gap=EvidenceGap.model_validate(gap),
+    )
+    completion = RouteCompletion(
+        state=RouteCompletionState.COMPLETED,
+        rationale_zh="已完成全部适用策略并核对完整审计包",
+        completed_strategy_unit_ids=("registry-nct-id",),
+    )
+    route = RouteProgress(route_id="clinicaltrials-registry")
+    completed_route = route.complete(completion, audit_bundle=audit_bundle)
+    assert completed_route.is_complete is True
+
+    with pytest.raises(TypeError):
+        cast(Any, route.complete)(completion)
+
+    not_applicable_eligibility = SourceEligibility.model_validate(
+        {**source_eligibility, "applicability": "not_applicable"}
+    )
+    not_applicable_bundle = EvidenceAuditBundle(
+        source_eligibilities=(not_applicable_eligibility,),
+        evidence_gap=EvidenceGap.model_validate(gap),
+    )
+    assert route.complete(
+        completion.model_copy(
+            update={"state": RouteCompletionState.NOT_APPLICABLE}
+        ),
+        audit_bundle=not_applicable_bundle,
+    ).is_complete
+
+    access_blocked_eligibility = SourceEligibility.model_validate(
+        {**source_eligibility, "applicability": "access_blocked"}
+    )
+    with pytest.raises(ValueError, match="访问阻断路线不能使用成功或未找到回执"):
+        route.complete(
+            completion.model_copy(
+                update={"state": RouteCompletionState.ACCESS_BLOCKED}
+            ),
+            audit_bundle=EvidenceAuditBundle(
+                source_receipts=(SourceReceipt.model_validate(receipt),),
+                source_eligibilities=(access_blocked_eligibility,),
+                evidence_gap=EvidenceGap.model_validate(gap),
+            ),
+        )
+
+    blocked_bundle = EvidenceAuditBundle(
+        source_receipts=(SourceReceipt.model_validate(failed_route),),
+        source_eligibilities=(access_blocked_eligibility,),
+        evidence_gap=EvidenceGap.model_validate(gap),
+    )
+    assert route.complete(
+        completion.model_copy(
+            update={"state": RouteCompletionState.ACCESS_BLOCKED}
+        ),
+        audit_bundle=blocked_bundle,
+    ).is_complete
+
 
 @pytest.mark.parametrize(
     "field,value",
     (
         ("attempt_index", 0),
+        ("scheduled_backoff_ms", -1),
+        ("actual_backoff_ms", -1),
         ("content_sha256", "not-a-digest"),
         ("diagnostic_confidence", "certain"),
         ("started_at", "2026-08-11T10:00:00"),

@@ -1,0 +1,18 @@
+Task 2.3 RED — 2026-08-11
+
+SP01–SP11 均在对应实现前取得真实失败信号：
+- SP01：`ci_workflow.sources` 不存在，1 failed。
+- SP02：`ci_workflow.sources.receipts` 不存在，1 failed。
+- SP03：`ci_workflow.sources.planner` 不存在，1 failed。
+- SP04：`ci_workflow.sources.retries` 不存在，1 failed。
+- SP05：恢复历史缺少连续两轮饱和判断，1 failed。
+- SP06：缺少同路径三次带退避审计，1 failed；逐文件复核后新增版本化恢复策略要求，再因缺少 `RecoveryPolicy` 取得 1 failed。
+- SP07：缺少两条不同适用替代路径审计，1 failed。
+- SP08：缺少历史截止日判断，1 failed。
+- SP09：截止日后首次披露状态尚未实现，1 failed。
+- SP10：关键证据首次披露时间未知状态尚未实现，1 failed。
+- SP11：缺少规划器审计包，1 failed；随后分别因来源适用性合同缺失、审计包未绑定适用性决定、访问阻断可错误使用成功回执取得真实失败信号。
+
+首次独立验收返回 PASS、P0=0、P1=0、P2=2；其中信息增益账本允许重复或跳号轮次属于本步合同缺口。新增对重复 `[1,1]` 与跳号 `[1,3]` 的拒绝断言后取得 1 failed，再补连续性校验。
+
+全库首次扩展回归还正确发现新 schema 与两份新策略未进入安装包清单，共 2 failed；补齐分发合同后恢复。所有预期外结果均定位到具体合同或实现原因，没有以“流程已跑通”代替诊断。

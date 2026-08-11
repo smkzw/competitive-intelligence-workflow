@@ -185,12 +185,22 @@ class SourceReceipt(BaseModel):
     attempt_index: int = Field(ge=1)
     started_at: datetime
     ended_at: datetime
+    scheduled_backoff_ms: int = Field(ge=0)
+    actual_backoff_ms: int = Field(ge=0)
     result_class: Literal[
         "content_acquired",
         "not_found",
-        "access_blocked",
-        "technical_failure",
-        "unusable_content",
+        "network_error",
+        "rate_limited",
+        "captcha_required",
+        "permission_denied",
+        "proxy_error",
+        "dns_error",
+        "tls_error",
+        "http_error",
+        "parser_error",
+        "tool_unavailable",
+        "content_truncated",
     ]
     error_class: str | None
     completeness_checks: tuple[str, ...] = Field(min_length=1)
@@ -298,3 +308,10 @@ class EvidenceGap(BaseModel):
     @classmethod
     def _gap_list_items_are_not_blank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(_not_blank(value) for value in values)
+
+    @model_validator(mode="after")
+    def _information_gain_rounds_are_contiguous(self) -> EvidenceGap:
+        rounds = tuple(item.round for item in self.information_gain_diff)
+        if rounds != tuple(range(1, len(rounds) + 1)):
+            raise ValueError("信息增益轮次必须从一开始连续递增")
+        return self

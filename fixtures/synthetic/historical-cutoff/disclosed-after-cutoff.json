@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "source_version_id": "source-version-after-cutoff",
+  "source_id": "company_disclosure",
+  "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "content_relative_path": "evidence/raw/sha256/bb/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.bin",
+  "media_type": "text/html",
+  "acquired_at": "2026-08-11T13:00:00+08:00",
+  "acquired_locator": {
+    "document_role": "企业结果公告",
+    "field_path": null,
+    "page": null,
+    "table": null,
+    "paragraph": "公告正文",
+    "url": "https://example.test/topline"
+  },
+  "published_at": {
+    "state": "reported",
+    "value": "2026-08-10T09:00:00+08:00",
+    "locator": {
+      "document_role": "企业结果公告",
+      "field_path": null,
+      "page": null,
+      "table": null,
+      "paragraph": "发布日期",
+      "url": "https://example.test/topline"
+    }
+  },
+  "effective_at": {
+    "state": "not_applicable",
+    "value": null,
+    "locator": {
+      "document_role": "企业结果公告",
+      "field_path": null,
+      "page": null,
+      "table": null,
+      "paragraph": "该来源不适用监管生效日期",
+      "url": null
+    }
+  },
+  "first_disclosed_at": {
+    "state": "reported",
+    "value": "2026-08-10T09:00:00+08:00",
+    "locator": {
+      "document_role": "企业结果公告",
+      "field_path": null,
+      "page": null,
+      "table": null,
+      "paragraph": "首次发布记录",
+      "url": "https://example.test/topline"
+    }
+  },
+  "created_at": "2026-08-11T13:00:01+08:00"
+}
