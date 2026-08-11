@@ -1,0 +1,35 @@
+contract_version: "1.0"
+report: A
+extends: common-v1
+filters:
+  - {id: anchor-trial, label: 关键临床试验, url_key: anchor_trial, multiselect: true, domains: [疗效与安全性, 临床开发]}
+  - {id: endpoint, label: 疗效指标, url_key: endpoint, multiselect: true, domains: [疗效与安全性]}
+  - {id: timepoint, label: 评估时间点, url_key: timepoint, multiselect: true, domains: [疗效与安全性]}
+  - {id: effect-form, label: 结果表达方式, url_key: effect_form, multiselect: true, domains: [疗效与安全性]}
+  - {id: analysis-population, label: 分析人群, url_key: population, multiselect: true, domains: [疗效与安全性]}
+  - {id: treatment-arm, label: 治疗组与对照组, url_key: arm, multiselect: true, domains: [疗效与安全性]}
+  - {id: safety-dimension, label: 安全性维度, url_key: safety, multiselect: true, domains: [疗效与安全性]}
+  - {id: ae-term-grade, label: 不良事件与严重程度, url_key: ae, multiselect: true, domains: [疗效与安全性]}
+  - {id: safety-window, label: 安全性观察期, url_key: safety_window, multiselect: true, domains: [疗效与安全性]}
+  - {id: denominator, label: 计算人群与分母, url_key: denominator, multiselect: true, domains: [疗效与安全性]}
+  - {id: bubble-size, label: 气泡大小依据, url_key: bubble_size, multiselect: true, domains: [疗效与安全性]}
+  - {id: region, label: 国家与地区, url_key: region, multiselect: true, domains: [临床开发, 注册进展]}
+  - {id: lifecycle-status, label: 开发与上市状态, url_key: lifecycle, multiselect: true, domains: [竞争格局, 注册进展]}
+  - {id: company-role, label: 企业关系, url_key: company_role, multiselect: true, domains: [企业与交易]}
+  - {id: patent-type, label: 专利与保护类型, url_key: patent_type, multiselect: true, domains: [专利与保护]}
+  - {id: disclosure-status, label: 数据披露状态, url_key: disclosure, multiselect: true, domains: [全局]}
+profiles:
+  a-overview: [indication, product, target-mechanism, trial, endpoint, timepoint, safety-dimension]
+  a-efficacy-safety: [product, target-mechanism, anchor-trial, endpoint, timepoint, effect-form, analysis-population, treatment-arm, safety-dimension, ae-term-grade, safety-window, denominator, bubble-size, disclosure-status]
+  a-landscape: [product, target-mechanism, lifecycle-status, region]
+  a-product: [product, target-mechanism, lifecycle-status, company-role]
+  a-product-profile: [product, target-mechanism, lifecycle-status, region]
+  a-clinical-portfolio: [product, target-mechanism, trial, region, lifecycle-status]
+  a-regulatory: [product, target-mechanism, region, lifecycle-status, disclosure-status]
+  a-companies: [product, target-mechanism, company-role, region]
+  a-patents: [product, target-mechanism, patent-type, region]
+  a-history: [product, target-mechanism, trial, lifecycle-status, disclosure-status]
+  a-evidence: [product, target-mechanism, trial, disclosure-status]
+applicability:
+  irrelevant_dimension: 隐藏或禁用，并显示简洁中文原因
+  empty_result: 保持当前范围并显示空状态，不自动扩大

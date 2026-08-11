@@ -1,0 +1,27 @@
+contract_version: "1.0"
+format: html
+user_label: 站点式网页报告
+design_contract: &design
+  manifest: contracts/kangzhe/manifest.json
+  policy: 项目内冻结合同，后续不自动同步通用版
+source_contract: &source
+  same_locked_report_snapshot: true
+  same_claim_and_evidence_sets: true
+  canonical_coverage_set_required: true
+  coverage_projection_required: true
+  unexplained_coverage_difference_fails: true
+  filtered_export_is_distinct_artifact: true
+  filtered_export_has_no_scope_explanation_page: true
+content_contract:
+  chart_before_table: true
+  complete_table_after_chart: true
+  table_omission_allowed: false
+runtime:
+  minimum_physical_pages: 2
+  file_and_static_server: true
+  remote_runtime_assets_allowed: false
+  navigation: 门户首页与分主题内容页
+  state: 筛选状态写入网址，可恢复并可分享
+  accessibility: 键盘可达，焦点清晰，图表同时提供文字与表格
+forbidden_shortcuts: [仅做门户首页, 截图代替图表, 远程运行时依赖, 隐藏未披露项, 只展示部分药物]
+verification: [全部页面可离线打开, 链接与目录跳转正确, 浏览器控制台无错误, 图表与下方完整表格一致, 筛选与证据抽屉联动, 页面无溢出或遮挡, 键盘可完成导航与证据查看, 中文标签与空状态人工复核, 在合同视口逐页进行真实视觉检查]

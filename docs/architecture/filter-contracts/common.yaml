@@ -1,0 +1,50 @@
+contract_version: "1.0"
+id: common-v1
+filters:
+  - {id: indication, label: 适应症, url_key: indication, multiselect: true, domains: [全局]}
+  - {id: product, label: 药物, url_key: product, multiselect: true, domains: [全局]}
+  - {id: target-mechanism, label: 靶点与作用机制, url_key: target, multiselect: true, domains: [全局]}
+  - {id: trial, label: 临床试验, url_key: trial, multiselect: true, domains: [全局]}
+state_contract:
+  page_reset_separate_from_module_reset: true
+  page_and_module_state_in_url: true
+  named_large_views_in_local_manifest: true
+  no_state_truncation: true
+  no_auto_expand_on_empty: true
+  chart_table_evidence_share_fact_set: true
+  hover_focus_selection_linked: true
+evidence_drawer:
+  fields:
+    - product
+    - trial
+    - cohort-arm
+    - measure-or-design-element
+    - source-name-definition
+    - scale-version-direction
+    - timepoint-window
+    - value-threshold-unit
+    - numerator-denominator
+    - denominator-role
+    - source-version
+    - precise-locator
+    - disclosure-status
+    - compatibility-difference
+    - source-excerpt
+    - normalization-note
+    - canonical-field-family
+    - statistic-form-or-measurement-object
+    - reason-original-canonical
+    - reason-mutual-exclusivity
+  same_page_right_drawer: true
+  preserve_filter_scroll_focus: true
+  keyboard_and_focus_return: true
+  pin_multiple_items_for_side_by_side_review: true
+  reduced_motion_supported: true
+  profiles:
+    common-clinical: [product, trial, cohort-arm, measure-or-design-element, source-name-definition, scale-version-direction, timepoint-window, value-threshold-unit, numerator-denominator, denominator-role, source-version, precise-locator, disclosure-status, compatibility-difference, source-excerpt, normalization-note]
+    common-regulatory: [product, measure-or-design-element, source-name-definition, source-version, precise-locator, disclosure-status, source-excerpt, normalization-note]
+    common-corporate: [product, measure-or-design-element, source-name-definition, timepoint-window, value-threshold-unit, source-version, precise-locator, disclosure-status, source-excerpt, normalization-note]
+    common-patent: [product, measure-or-design-element, source-name-definition, timepoint-window, source-version, precise-locator, disclosure-status, source-excerpt, normalization-note]
+    baseline-observation: [product, trial, cohort-arm, measure-or-design-element, canonical-field-family, source-name-definition, statistic-form-or-measurement-object, scale-version-direction, timepoint-window, value-threshold-unit, numerator-denominator, denominator-role, source-version, precise-locator, disclosure-status, compatibility-difference, source-excerpt, normalization-note]
+    trial-disposition: [product, trial, cohort-arm, measure-or-design-element, canonical-field-family, statistic-form-or-measurement-object, reason-original-canonical, reason-mutual-exclusivity, timepoint-window, value-threshold-unit, numerator-denominator, denominator-role, source-version, precise-locator, disclosure-status, compatibility-difference, source-excerpt, normalization-note]
+    design-fact: [product, trial, cohort-arm, measure-or-design-element, source-name-definition, scale-version-direction, timepoint-window, value-threshold-unit, numerator-denominator, denominator-role, source-version, precise-locator, disclosure-status, compatibility-difference, source-excerpt, normalization-note]

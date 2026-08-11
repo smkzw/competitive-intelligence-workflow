@@ -53,7 +53,8 @@
 - [x] 将 argparse 固定帮助和参数错误改为中文原生；禁止别名和第七条 CLI，临时变异均失败关闭。
 - [x] 53 项全量、Ruff、mypy、包校验和 Python 构建通过；Pi 原 session 与 Minimax 独立复核 P0=0、P1=0，会商 gate 通过。
 - [x] 明确 Python wheel 只承载 CLI 模块；Task 9.5 仍负责完整 `.tar.zst` Skill bundle、fresh install 和三真实宿主验收，当前未越阶段。
-- [ ] A/B/C 页面、筛选和 HTML/PDF/HTML-PPT/PPTX 格式合同。
+- [x] A/B/C 页面、筛选和 HTML/PDF/HTML-PPT/PPTX 格式合同：固定 A 11 类、B 21 个内容页、C 12 类，筛选/证据/格式交叉绑定；三轮同会话独立审查从 VETO 修复至 PASS，16 项专项、69 项全库与 Ruff 通过。
+- [x] Task 0.5 阶段清理：7.3 MB 原始流式日志和不适用的 Hermes 归档尝试移入独立废纸篓目录；保留三轮最终报告、指标、审查结论和确定性测试。
 - [ ] Phase 0 全套确定性检查和独立验收。
 
 ## 停止与回滚

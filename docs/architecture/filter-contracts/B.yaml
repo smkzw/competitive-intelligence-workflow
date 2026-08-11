@@ -1,0 +1,55 @@
+contract_version: "1.0"
+report: B
+extends: common-v1
+filters:
+  - {id: cohort-arm, label: 队列与治疗组, url_key: cohort_arm, multiselect: true, domains: [全局]}
+  - {id: endpoint, label: 疗效指标, url_key: endpoint, multiselect: true, domains: [疗效]}
+  - {id: timepoint, label: 评估时间点, url_key: timepoint, multiselect: true, domains: [疗效]}
+  - {id: effect-form, label: 结果表达方式, url_key: effect_form, multiselect: true, domains: [疗效]}
+  - {id: analysis-population, label: 分析人群, url_key: population, multiselect: true, domains: [疗效, 安全性]}
+  - {id: treatment-arm, label: 治疗组与对照组, url_key: arm, multiselect: true, domains: [疗效, 安全性]}
+  - {id: ae-term-grade, label: 不良事件与严重程度, url_key: ae, multiselect: true, domains: [安全性]}
+  - {id: safety-dimension, label: 安全性维度, url_key: safety, multiselect: true, domains: [安全性]}
+  - {id: safety-window, label: 安全性观察期, url_key: safety_window, multiselect: true, domains: [安全性]}
+  - {id: bubble-size, label: 气泡大小依据, url_key: bubble_size, multiselect: true, domains: [疗效与安全性矩阵]}
+  - {id: region, label: 国家与地区, url_key: region, multiselect: true, domains: [基线特征, 试验概览]}
+  - {id: baseline-population, label: 基线分析人群, url_key: baseline_population, multiselect: true, domains: [基线特征]}
+  - {id: variable-domain, label: 基线信息类别, url_key: variable_domain, multiselect: true, domains: [基线特征]}
+  - {id: variable, label: 基线变量, url_key: variable, multiselect: true, domains: [基线特征]}
+  - {id: statistic, label: 汇总方式, url_key: statistic, multiselect: true, domains: [基线特征]}
+  - {id: scale-unit, label: 量表与单位, url_key: scale_unit, multiselect: true, domains: [基线特征]}
+  - {id: disclosure-status, label: 数据披露状态, url_key: disclosure, multiselect: true, domains: [全局]}
+  - {id: period, label: 研究阶段, url_key: period, multiselect: true, domains: [试验完成情况]}
+  - {id: disposition-population, label: 完成情况统计人群, url_key: disposition_population, multiselect: true, domains: [试验完成情况]}
+  - {id: field-family, label: 完成情况类别, url_key: field_family, multiselect: true, domains: [试验完成情况]}
+  - {id: reason, label: 原因, url_key: reason, multiselect: true, domains: [试验完成情况]}
+  - {id: denominator-role, label: 计算人群与分母, url_key: denominator_role, multiselect: true, domains: [试验完成情况, 安全性, 疗效与安全性矩阵]}
+  - {id: measurement-object, label: 观察对象, url_key: measurement_object, multiselect: true, domains: [试验完成情况]}
+  - {id: time-window, label: 观察时间范围, url_key: time_window, multiselect: true, domains: [试验完成情况]}
+  - {id: study-role, label: 研究证据角色, url_key: study_role, multiselect: true, domains: [试验概览]}
+  - {id: subgroup, label: 亚组, url_key: subgroup, multiselect: true, domains: [支持性证据]}
+profiles:
+  b-overview: [indication, product, target-mechanism, trial, endpoint, timepoint, safety-dimension, disclosure-status]
+  b-matrix: [product, target-mechanism, trial, cohort-arm, endpoint, timepoint, effect-form, analysis-population, safety-dimension, ae-term-grade, safety-window, denominator-role, bubble-size, disclosure-status]
+  b-efficacy: [product, target-mechanism, trial, cohort-arm, endpoint, timepoint, effect-form, analysis-population, treatment-arm, disclosure-status]
+  b-longitudinal: [product, trial, cohort-arm, endpoint, timepoint, effect-form, analysis-population]
+  b-safety: [product, target-mechanism, trial, cohort-arm, ae-term-grade, safety-dimension, safety-window, denominator-role, disclosure-status]
+  b-baseline: [product, target-mechanism, trial, cohort-arm, region, baseline-population, variable-domain, variable, statistic, scale-unit, disclosure-status]
+  b-baseline-demographics: [product, target-mechanism, trial, cohort-arm, region, baseline-population, variable-domain, variable, statistic, scale-unit, disclosure-status]
+  b-baseline-disease: [product, target-mechanism, trial, cohort-arm, region, baseline-population, variable-domain, variable, statistic, scale-unit, disclosure-status]
+  b-baseline-severity: [product, target-mechanism, trial, cohort-arm, region, baseline-population, variable-domain, variable, statistic, scale-unit, disclosure-status]
+  b-disposition: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, field-family, reason, denominator-role, measurement-object, time-window, disclosure-status]
+  b-participant-flow: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, denominator-role, disclosure-status]
+  b-adherence: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, measurement-object, time-window, disclosure-status]
+  b-loss-exit: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, reason, denominator-role, time-window, disclosure-status]
+  b-screen-failure: [product, target-mechanism, trial, analysis-population, reason, denominator-role, disclosure-status]
+  b-rescue-treatment: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, denominator-role, time-window, disclosure-status]
+  b-prohibited-medication: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, denominator-role, time-window, disclosure-status]
+  b-plan-deviation: [product, target-mechanism, trial, cohort-arm, period, analysis-population, disposition-population, denominator-role, measurement-object, time-window, disclosure-status]
+  b-trial-context: [product, target-mechanism, trial, cohort-arm, study-role, disclosure-status]
+  b-supporting-evidence: [product, target-mechanism, trial, cohort-arm, subgroup, endpoint, timepoint, disclosure-status]
+  b-profiles: [product, target-mechanism, trial, cohort-arm, study-role, disclosure-status]
+  b-evidence: [product, trial, cohort-arm, disclosure-status]
+applicability:
+  irrelevant_dimension: 隐藏或禁用，并显示简洁中文原因
+  empty_result: 保持当前范围并显示空状态，不自动扩大

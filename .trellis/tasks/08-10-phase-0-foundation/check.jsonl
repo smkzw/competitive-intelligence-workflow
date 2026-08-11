@@ -1,2 +1,9 @@
 {"file":"docs/decisions/0000-design-v1.2-approval.md","reason":"按摘要确认 v1.2 权威规格；具体章节由检查者按需读取，不做全量自动注入"}
 {"file":"docs/decisions/0003-offline-presentation-assets.md","reason":"复核包清单绑定的品牌、ECharts 与 HTML-PPT 离线资产"}
+{"file":"docs/architecture/page-catalogs/A.yaml","reason":"Task 0.5 固定 A 类 11 类页面、默认选择和气泡图语义"}
+{"file":"docs/architecture/page-catalogs/B.yaml","reason":"Task 0.5 固定 B 类主干、基线、试验完成情况及医学默认顺序"}
+{"file":"docs/architecture/page-catalogs/C.yaml","reason":"Task 0.5 固定 C 类 12 类页面与至少两条候选设计路径"}
+{"file":"docs/architecture/filter-contracts/common.yaml","reason":"Task 0.5 固定 URL 状态、图表表格证据联动与同页证据抽屉"}
+{"file":"docs/architecture/filter-contracts/B.yaml","reason":"Task 0.5 重点复核基线、疗效安全性矩阵与试验完成情况多维筛选"}
+{"file":"docs/architecture/format-contracts/html-ppt.yaml","reason":"Task 0.5 固定康哲 HTML 演示稿视口、演讲者视图、页码和原生验证"}
+{"file":"reviews/codex_conference_ci_phase0_task05_report_contracts_review.md","reason":"Task 0.5 三轮独立会商从 VETO 修复至 PASS 的接受证据"}

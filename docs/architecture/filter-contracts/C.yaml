@@ -1,0 +1,36 @@
+contract_version: "1.0"
+report: C
+extends: common-v1
+filters:
+  - {id: cohort-arm, label: 队列与治疗组, url_key: cohort_arm, multiselect: true, domains: [全局]}
+  - {id: design-element, label: 试验设计要素, url_key: design_element, multiselect: true, domains: [全局]}
+  - {id: criterion-family, label: 入排标准类别, url_key: criterion_family, multiselect: true, domains: [入排标准]}
+  - {id: scale-score, label: 量表与评分, url_key: scale_score, multiselect: true, domains: [人群, 入排标准, 终点]}
+  - {id: assessment-time, label: 评估时间点, url_key: assessment_time, multiselect: true, domains: [入排标准, 终点]}
+  - {id: operator-threshold-unit, label: 判断关系、阈值与单位, url_key: threshold, multiselect: true, domains: [入排标准, 终点]}
+  - {id: endpoint-role, label: 终点角色, url_key: endpoint_role, multiselect: true, domains: [终点]}
+  - {id: visit-period, label: 访视与研究阶段, url_key: visit_period, multiselect: true, domains: [访视与随访]}
+  - {id: region, label: 国家与地区, url_key: region, multiselect: true, domains: [试验概览]}
+  - {id: phase-role, label: 研究分期与证据角色, url_key: phase_role, multiselect: true, domains: [试验概览]}
+  - {id: intervention-control, label: 干预与对照, url_key: intervention_control, multiselect: true, domains: [治疗方案]}
+  - {id: dose-route, label: 剂量、频次与给药途径, url_key: dose_route, multiselect: true, domains: [治疗方案]}
+  - {id: analysis-population, label: 分析人群, url_key: population, multiselect: true, domains: [样本量与分析设计]}
+  - {id: statistic-design, label: 样本量与分析设计, url_key: analysis_design, multiselect: true, domains: [样本量与分析设计]}
+  - {id: evidence-version, label: 资料版本, url_key: evidence_version, multiselect: true, domains: [资料与版本]}
+  - {id: disclosure-status, label: 数据披露状态, url_key: disclosure, multiselect: true, domains: [全局]}
+profiles:
+  c-overview: [indication, product, target-mechanism, trial, phase-role, region, disclosure-status]
+  c-design-map: [product, target-mechanism, trial, cohort-arm, design-element, phase-role]
+  c-trial-profile: [product, trial, cohort-arm, design-element, region, phase-role, disclosure-status]
+  c-population: [product, trial, cohort-arm, design-element, scale-score, assessment-time, operator-threshold-unit]
+  c-inclusion: [product, trial, cohort-arm, criterion-family, scale-score, assessment-time, operator-threshold-unit, disclosure-status]
+  c-exclusion: [product, trial, cohort-arm, criterion-family, scale-score, assessment-time, operator-threshold-unit, disclosure-status]
+  c-treatment-arms: [product, trial, cohort-arm, intervention-control, dose-route, visit-period]
+  c-endpoints: [product, trial, cohort-arm, endpoint-role, scale-score, assessment-time, operator-threshold-unit, analysis-population]
+  c-visits: [product, trial, cohort-arm, visit-period, assessment-time, design-element]
+  c-analysis: [product, trial, cohort-arm, analysis-population, statistic-design, endpoint-role]
+  c-patterns: [product, target-mechanism, trial, design-element, phase-role, region]
+  c-evidence: [product, trial, cohort-arm, evidence-version, disclosure-status]
+applicability:
+  irrelevant_dimension: 隐藏或禁用，并显示简洁中文原因
+  empty_result: 保持当前范围并显示空状态，不自动扩大

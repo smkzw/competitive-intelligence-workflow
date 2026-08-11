@@ -1,0 +1,28 @@
+contract_version: "1.0"
+format: pptx
+user_label: 可编辑 PPTX
+design_contract:
+  manifest: contracts/kangzhe/manifest.json
+  policy: 项目内冻结合同，后续不自动同步通用版
+source_contract:
+  same_locked_report_snapshot: true
+  same_claim_and_evidence_sets: true
+  canonical_coverage_set_required: true
+  coverage_projection_required: true
+  unexplained_coverage_difference_fails: true
+  filtered_export_is_distinct_artifact: true
+  filtered_export_has_no_scope_explanation_page: true
+content_contract:
+  visual_first: true
+  table_omission_allowed_only_when_chart_is_equivalent: true
+  coverage_exception_receipt_required: true
+  unlimited_pages_before_shrinking_or_deleting: true
+  narration: 直接展示所选或默认全量结果，不增加筛选范围说明页
+runtime:
+  generator: PPT Master
+  editable_objects_required: true
+  html_or_image_page_allowed: false
+  serial_steps: [初始化, 内容策略与设计锁定, 逐页 SVG, 质量检查, 备注, 收尾处理, 原生导出, 可编辑性核验, 原分辨率逐页视觉检查]
+  presentation_objects: 图表、文字、图形与必要表格均须可编辑
+forbidden_shortcuts: [整页图片, 网页截图, 将 HTML 直接改名, 以不可编辑图形冒充图表, 并行调用 PPT Master]
+verification: [在 PowerPoint 中逐项编辑抽检, 原分辨率逐页视觉检查, 备注与目录检查, 与同一报告快照的覆盖投影核对]

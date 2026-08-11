@@ -1,0 +1,30 @@
+contract_version: "1.0"
+format: pdf
+user_label: 原生 PDF 报告
+design_contract:
+  manifest: contracts/kangzhe/manifest.json
+  policy: 项目内冻结合同，后续不自动同步通用版
+source_contract:
+  same_locked_report_snapshot: true
+  same_claim_and_evidence_sets: true
+  canonical_coverage_set_required: true
+  coverage_projection_required: true
+  unexplained_coverage_difference_fails: true
+  filtered_export_is_distinct_artifact: true
+  filtered_export_has_no_scope_explanation_page: true
+content_contract:
+  chart_before_table: true
+  complete_table_after_chart: true
+  table_omission_allowed: false
+  writing: 克制、段落逻辑分明、信息密度高且内容完整
+runtime:
+  native_pdf_not_web_or_slide_capture: true
+  searchable_selectable_text: true
+  default_page: A4 纵向
+  landscape_auto_switch: [宽表, 森林图, 纵向多系列, 设计时间线, 终点矩阵]
+  orientation_change_only_at_page_boundary: true
+  bookmarks_required: true
+  pagination: 先增加页数，再调整版式；不删减覆盖项
+  evidence_navigation: 目录、页码、脚注与来源定位可追溯
+forbidden_shortcuts: [网页截图拼接, 演示稿截图拼接, 只放图不放完整表, 以缩小至不可读代替分页]
+verification: [标准 PDF 阅读器可打开, 文字可检索与复制, 图表在对应完整表格之前, 表格跨页表头重复, 页面无截断与重叠, 书签与页码正确, 百分之百缩放与打印均可读]

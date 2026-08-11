@@ -1,0 +1,32 @@
+contract_version: "1.0"
+format: html-ppt
+user_label: HTML 演示稿
+design_contract:
+  manifest: contracts/kangzhe/manifest.json
+  policy: 项目内冻结合同，后续不自动同步通用版
+source_contract:
+  same_locked_report_snapshot: true
+  same_claim_and_evidence_sets: true
+  canonical_coverage_set_required: true
+  coverage_projection_required: true
+  unexplained_coverage_difference_fails: true
+  filtered_export_is_distinct_artifact: true
+  filtered_export_has_no_scope_explanation_page: true
+content_contract:
+  visual_first: true
+  table_omission_allowed_only_when_chart_is_equivalent: true
+  coverage_exception_receipt_required: true
+  unlimited_pages_before_shrinking_or_deleting: true
+  narration: 直接展示所选或默认全量结果，不增加筛选范围说明页
+runtime:
+  canvas: 1280×720
+  speaker_view_key: S
+  speaker_notes_chinese_characters: 150–300
+  speaker_view_contents: [当前页, 下一页, 逐字稿, 计时器]
+  site_page_capture_allowed: false
+  visual_acceptance_viewports: [1280×720, 1920×1080, 2048×1024, 用户实际最大化窗口]
+  page_number_excluded_page_types: [封面, 目录, 章节首页, 结束页]
+  navigation: 逐页演示、目录跳转、全屏与演讲者视图
+  offline_assets_only: true
+forbidden_shortcuts: [站点页面截图, 单张长图切片, 用小字号塞满一页, 图表不能看出组间差异, 程序或运行记录出现在演示页]
+verification: [逐页原分辨率视觉检查, 演讲者备注完整, 键盘与目录跳转可用, 图形与文字均为原生网页元素, 页码仅出现在合同允许的页型]
