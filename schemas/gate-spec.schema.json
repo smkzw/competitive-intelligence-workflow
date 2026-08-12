@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/gate-spec.schema.json",
+  "title": "版本化证据规则说明书",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "spec_id",
+    "version",
+    "report_kind",
+    "units",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "spec_id": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "vocabulary": {"anyOf": [{"$ref": "#/$defs/gate-vocabulary"}, {"type": "null"}]},
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/gate-unit"}
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    }
+  },
+  "$defs": {
+    "source-role": {
+      "enum": [
+        "clinical_trial_registry",
+        "regulatory_material",
+        "primary_trial_report",
+        "protocol_sap",
+        "conference_disclosure",
+        "company_disclosure",
+        "designated_industry_source"
+      ]
+    },
+    "disclosure-maturity": {
+      "enum": [
+        "attributable_numeric_disclosure",
+        "conference_complete_numerics",
+        "registry_result_or_primary_report",
+        "final_regulatory_conclusion"
+      ]
+    },
+    "conflict-disposition": {
+      "enum": [
+        "resolved_selected_accepted_fact",
+        "open_conflict_preserved"
+      ]
+    },
+    "conflict-strategy": {
+      "enum": ["resolved_only", "preserve_open"]
+    },
+    "missing-strategy": {
+      "enum": ["block", "preserve_disclosure_state"]
+    },
+    "blocking-level": {
+      "enum": ["critical", "extension"]
+    },
+    "object-type": {
+      "enum": [
+        "product",
+        "trial",
+        "comparison",
+        "group",
+        "endpoint",
+        "timepoint"
+      ]
+    },
+    "fact-domain": {
+      "enum": ["trial_design", "efficacy", "safety"]
+    },
+    "observation-kind": {
+      "enum": [
+        "observed_result",
+        "planned_value",
+        "target_value",
+        "protocol_assumption"
+      ]
+    },
+    "development-maturity": {
+      "enum": [
+        "preclinical",
+        "clinical",
+        "submission",
+        "approved",
+        "paused_terminated_withdrawn"
+      ]
+    },
+    "clinical-result-state": {
+      "enum": [
+        "no_eligible_clinical_trial",
+        "eligible_trial_without_observed_numeric_results",
+        "has_observed_clinical_numeric_results"
+      ]
+    },
+    "context-field": {
+      "enum": [
+        "numeric_value",
+        "unit",
+        "denominator",
+        "source_location",
+        "definition",
+        "direction",
+        "timepoint",
+        "analysis_population",
+        "treatment_group",
+        "control_group",
+        "event_definition",
+        "time_window",
+        "endpoint_id"
+      ]
+    },
+    "fact-disclosure-state": {
+      "enum": [
+        "reported_value",
+        "reported_zero",
+        "not_reported",
+        "below_reporting_threshold",
+        "not_publicly_disclosed",
+        "not_applicable",
+        "conflicting",
+        "unresolved_due_to_route"
+      ]
+    },
+    "gate-vocabulary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "development_maturity",
+        "clinical_result_states",
+        "observation_kinds",
+        "result_bearing_source_roles"
+      ],
+      "properties": {
+        "development_maturity": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/development-maturity"}
+        },
+        "clinical_result_states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/clinical-result-state"}
+        },
+        "observation_kinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/observation-kind"}
+        },
+        "result_bearing_source_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/source-role"}
+        }
+      }
+    },
+    "gate-unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "report_kind",
+        "blocking_level",
+        "object_type",
+        "applicability_predicate_id",
+        "allowed_source_roles",
+        "minimum_disclosure_maturity",
+        "accepted_fact_states",
+        "missing_strategy",
+        "conflict_strategy",
+        "user_label_zh",
+        "missing_impact_zh",
+        "user_next_step_zh"
+      ],
+      "properties": {
+        "unit_id": {"type": "string", "minLength": 1},
+        "report_kind": {"enum": ["A", "B", "C"]},
+        "blocking_level": {"$ref": "#/$defs/blocking-level"},
+        "object_type": {"$ref": "#/$defs/object-type"},
+        "scope_parent": {
+          "anyOf": [{"$ref": "#/$defs/object-type"}, {"type": "null"}]
+        },
+        "applicability_predicate_id": {"type": "string", "minLength": 1},
+        "required_context_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/context-field"}
+        },
+        "allowed_source_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/source-role"}
+        },
+        "allowed_fact_domains": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/fact-domain"}
+        },
+        "allowed_observation_kinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/observation-kind"}
+        },
+        "minimum_disclosure_maturity": {
+          "$ref": "#/$defs/disclosure-maturity"
+        },
+        "accepted_fact_states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/fact-disclosure-state"}
+        },
+        "missing_strategy": {"$ref": "#/$defs/missing-strategy"},
+        "conflict_strategy": {"$ref": "#/$defs/conflict-strategy"},
+        "threshold": {"type": "integer", "minimum": 1},
+        "user_label_zh": {"type": "string", "minLength": 1},
+        "missing_impact_zh": {"type": "string", "minLength": 1},
+        "user_next_step_zh": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

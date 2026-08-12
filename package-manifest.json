@@ -38,6 +38,9 @@
       "schemas/evidence-gap.schema.json",
       "schemas/evidence-fragment.schema.json",
       "schemas/fact.schema.json",
+      "schemas/gate-override.schema.json",
+      "schemas/gate-result.schema.json",
+      "schemas/gate-spec.schema.json",
       "schemas/claim.schema.json",
       "schemas/event.schema.json",
       "schemas/checkpoint.schema.json",
@@ -50,9 +53,12 @@
       "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"
     ],
     "policies": [
+      "policies/gates/A-v1.yaml",
+      "policies/gates/B-v1.yaml",
+      "policies/gates/C-v1.yaml",
       "policies/ontology/innovation-therapy-v1.yaml",
-      "policies/sources/source-policy-v1.yaml",
-      "policies/recovery/source-strategies-v1.yaml"
+      "policies/recovery/source-strategies-v1.yaml",
+      "policies/sources/source-policy-v1.yaml"
     ],
     "contracts": [
       "contracts/kangzhe/manifest.json",

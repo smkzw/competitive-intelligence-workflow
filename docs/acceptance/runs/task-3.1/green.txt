@@ -1,0 +1,12 @@
+2026-08-12 Task 3.1 机械验证
+
+两项最终攻击：2 passed, 53 deselected
+Task 3.1 精确套件：143 passed
+全库回归：331 passed
+Ruff：All checks passed
+strict mypy：Success, 4 source files
+包校验：PACKAGE_OK version=0.1.0a0 stage=phase-2-accepted
+公开接口探针：PUBLIC_ATOMIC_EVALUATION_ONLY
+git diff --check：通过
+
+测试均使用无缓存模式；浏览器测试使用明确的系统临时目录，避免项目内临时目录导致 Playwright 无法创建子目录。

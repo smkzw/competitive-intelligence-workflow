@@ -107,9 +107,12 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
         for relative_path in components[category]:
             assert (ROOT / relative_path).exists(), relative_path
     assert components["policies"] == [
+        "policies/gates/A-v1.yaml",
+        "policies/gates/B-v1.yaml",
+        "policies/gates/C-v1.yaml",
         "policies/ontology/innovation-therapy-v1.yaml",
-        "policies/sources/source-policy-v1.yaml",
         "policies/recovery/source-strategies-v1.yaml",
+        "policies/sources/source-policy-v1.yaml",
     ]
     assert "migrations/0008_project_lineage_guards.sql" in components["migrations"]
     assert "migrations/0009_source_date_precision.sql" in components["migrations"]

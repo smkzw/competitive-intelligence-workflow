@@ -1,0 +1,18 @@
+{
+  "task_id": "ci_phase3_task31_implementation",
+  "mode": "apply",
+  "sources": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/prompts/execution/ci_phase3_task31_implementation",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/execution/ci_phase3_task31_implementation",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase3_task31_implementation"
+  ],
+  "archive_root": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/archives/execution/ci_phase3_task31_implementation",
+  "archived": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/archives/execution/ci_phase3_task31_implementation/ci_phase3_task31_implementation_20260812_174017"
+  ],
+  "post_acceptance_cleanup": {
+    "duplicate_compact_reports": "/Users/smkzw/.Trash/ci-task31-process-logs-20260812-1742/duplicate-compact-reports",
+    "full_stdout_logs": "/Users/smkzw/.Trash/ci-task31-process-logs-20260812-1742/full-stdout-logs",
+    "reason": "Task 3.1 已接受；保留紧凑 runner 报告，130 MB 全量过程日志与重复报告移入废纸篓，仍可恢复"
+  }
+}

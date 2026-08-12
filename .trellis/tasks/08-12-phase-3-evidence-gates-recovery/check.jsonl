@@ -1,0 +1,3 @@
+{"file":"docs/decisions/0011-phase-3-evidence-gates-and-recovery.md","reason":"逐项否证 A/B/C 关键证据、只收紧覆盖、无草稿和状态迁移是否符合批准规格"}
+{"file":"docs/acceptance/runs/phase-2-exit/verdict.md","reason":"验收者不得改写 Phase 2 accepted 科学数据，也不得把 Phase 3 结论外推到报告视觉"}
+{"file":"reviews/codex_ci_phase2_exit_review.md","reason":"复用真源、恢复穷尽和独立否决的已闭合信任边界"}

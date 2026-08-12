@@ -1,0 +1,510 @@
+schema_version: "1.0"
+spec_id: gate-spec-b-v1
+version: "1.0"
+report_kind: B
+updated_at: "2026-08-12T00:00:00+08:00"
+units:
+  - unit_id: b_trial_identity_role
+    report_kind: B
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 试验身份、阶段与研究角色
+    missing_impact_zh: 无法确认试验身份与核心比较资格
+    user_next_step_zh: 请提供官方登记或主要试验报告中的试验身份、阶段与角色
+  - unit_id: b_target_population_groups
+    report_kind: B
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 目标人群与组别构成
+    missing_impact_zh: 无法确认试验人群与可比较组别
+    user_next_step_zh: 请提供官方登记或主要试验报告中的目标人群与组别信息
+  - unit_id: b_treatment_control_identity
+    report_kind: B
+    blocking_level: critical
+    object_type: comparison
+    scope_parent: trial
+    applicability_predicate_id: has_comparator
+    required_context_fields:
+      - treatment_group
+      - control_group
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 治疗与对照身份
+    missing_impact_zh: 无法并列呈现治疗组与对照组的比较
+    user_next_step_zh: 请提供官方登记或主要试验报告中的治疗组与对照组身份
+  - unit_id: b_baseline_sample_size
+    report_kind: B
+    blocking_level: critical
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - denominator
+      - analysis_population
+      - unit
+    allowed_fact_domains:
+      - trial_design
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - primary_trial_report
+      - clinical_trial_registry
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 组别基线样本量
+    missing_impact_zh: 无法确认各可比较组的基线规模
+    user_next_step_zh: 请提供主要试验报告或官方登记中的组别基线样本量与人群
+  - unit_id: b_baseline_age
+    report_kind: B
+    blocking_level: critical
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - definition
+      - unit
+      - analysis_population
+    allowed_fact_domains:
+      - trial_design
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - primary_trial_report
+      - clinical_trial_registry
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 组别基线年龄
+    missing_impact_zh: 无法确认各可比较组的人口学构成
+    user_next_step_zh: 请提供主要试验报告或官方登记中的组别基线年龄统计形式与值
+  - unit_id: b_baseline_sex
+    report_kind: B
+    blocking_level: critical
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - denominator
+      - analysis_population
+    allowed_fact_domains:
+      - trial_design
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - primary_trial_report
+      - clinical_trial_registry
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 组别基线性别构成
+    missing_impact_zh: 无法确认各可比较组的性别构成
+    user_next_step_zh: 请提供主要试验报告或官方登记中的组别基线性别分类与分母
+  - unit_id: b_baseline_severity_anchor
+    report_kind: B
+    blocking_level: critical
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - definition
+      - unit
+      - analysis_population
+      - timepoint
+    allowed_fact_domains:
+      - trial_design
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - primary_trial_report
+      - clinical_trial_registry
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 适应症疾病严重程度锚点
+    missing_impact_zh: 无法确认各可比较组的基线疾病严重程度
+    user_next_step_zh: 请提供主要试验报告中的严重度量表、统计形式、单位与基线时间
+  - unit_id: b_core_efficacy_endpoint
+    report_kind: B
+    blocking_level: critical
+    object_type: endpoint
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - definition
+      - direction
+      - unit
+      - timepoint
+      - analysis_population
+      - denominator
+      - source_location
+    allowed_fact_domains:
+      - efficacy
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 核心疗效终点完整记录
+    missing_impact_zh: 无法呈现核心疗效终点的定义、方向、时间点与两组数值
+    user_next_step_zh: 请提供主要试验报告或官方登记结果中的核心疗效终点记录
+  - unit_id: b_effect_difference_support
+    report_kind: B
+    blocking_level: critical
+    object_type: comparison
+    scope_parent: trial
+    applicability_predicate_id: has_comparator
+    required_context_fields:
+      - numeric_value
+      - definition
+      - direction
+      - unit
+      - source_location
+      - endpoint_id
+    allowed_fact_domains:
+      - efficacy
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 组间差值或效应量来源
+    missing_impact_zh: 组间差值、相对效应或置信区间无法由来源直接支持或复算
+    user_next_step_zh: 请提供支持组间差值或效应量的原始数值与来源定位
+  - unit_id: b_safety_minimum_record
+    report_kind: B
+    blocking_level: critical
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - control_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 不良事件最低数值记录
+    missing_impact_zh: 无法呈现该组至少一个不良事件或严重不良事件的数值
+    user_next_step_zh: 请提供主要试验报告或官方登记结果中的不良事件数值、定义与时间窗
+  - unit_id: b_source_role_maturity_location
+    report_kind: B
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - source_location
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 结果来源角色与精确定位
+    missing_impact_zh: 结果数值无法追溯来源角色、披露成熟度与精确定位
+    user_next_step_zh: 请提供结果数值对应的来源版本、披露成熟度与页面定位
+  - unit_id: b_trial_disposition
+    report_kind: B
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - regulatory_material
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 试验完成与受试者处置字段
+    missing_impact_zh: 完成与处置字段缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供筛选、随机、完成与退出等流转数值来源
+  - unit_id: b_safety_event_teae
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 治疗期间不良事件单元
+    missing_impact_zh: 该不良事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供治疗期间不良事件数值与时间窗来源
+  - unit_id: b_safety_event_sae
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 严重不良事件单元
+    missing_impact_zh: 严重不良事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供严重不良事件数值与时间窗来源
+  - unit_id: b_safety_event_aesi
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - regulatory_material
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 特别关注不良事件单元
+    missing_impact_zh: 特别关注不良事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供特别关注不良事件数值与定义来源
+  - unit_id: b_safety_event_death
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - regulatory_material
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 死亡事件单元
+    missing_impact_zh: 死亡事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供死亡事件数值与时间窗来源
+  - unit_id: b_safety_event_grade3plus
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - regulatory_material
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 三级及以上不良事件单元
+    missing_impact_zh: 三级及以上不良事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供三级及以上不良事件数值与时间窗来源
+  - unit_id: b_safety_event_discontinuation
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - regulatory_material
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 导致停药不良事件单元
+    missing_impact_zh: 导致停药不良事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供导致停药不良事件数值与时间窗来源
+  - unit_id: b_safety_event_common
+    report_kind: B
+    blocking_level: extension
+    object_type: group
+    scope_parent: trial
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - primary_trial_report
+      - regulatory_material
+      - conference_disclosure
+      - company_disclosure
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 常见不良事件单元
+    missing_impact_zh: 常见不良事件单元缺失不影响报告通过，将保留真实披露状态
+    user_next_step_zh: 如已公开，请提供常见不良事件数值与时间窗来源

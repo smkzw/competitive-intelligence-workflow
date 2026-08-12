@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/gate-result.schema.json",
+  "title": "版本化证据门槛结果",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "result_key",
+    "report_kind",
+    "evidence_snapshot_id",
+    "spec_version",
+    "contract_version",
+    "universe_summary",
+    "spec_fingerprint",
+    "decision",
+    "unit_results",
+    "applicable_unit_ids",
+    "blocked_unit_ids",
+    "user_summary_zh"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "result_key": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "evidence_snapshot_id": {"type": "string", "minLength": 1},
+    "spec_version": {"type": "string", "minLength": 1},
+    "contract_version": {"type": "string", "minLength": 1},
+    "universe_summary": {"type": "string", "minLength": 1},
+    "spec_fingerprint": {"type": "string", "minLength": 1},
+    "decision": {"enum": ["passed", "blocked"]},
+    "unit_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/gate-unit-result"}
+    },
+    "applicable_unit_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "blocked_unit_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "user_summary_zh": {"type": "string", "minLength": 1}
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["decision"],
+        "properties": {"decision": {"const": "blocked"}}
+      },
+      "then": {
+        "required": ["unit_results"],
+        "properties": {
+          "unit_results": {
+            "contains": {
+              "required": ["outcome"],
+              "properties": {"outcome": {"const": "blocked"}}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["decision"],
+        "properties": {"decision": {"const": "passed"}}
+      },
+      "then": {
+        "required": ["unit_results"],
+        "properties": {
+          "unit_results": {
+            "not": {
+              "contains": {
+                "required": ["outcome"],
+                "properties": {"outcome": {"const": "blocked"}}
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "fact-disclosure-state": {
+      "enum": [
+        "reported_value",
+        "reported_zero",
+        "not_reported",
+        "below_reporting_threshold",
+        "not_publicly_disclosed",
+        "not_applicable",
+        "conflicting",
+        "unresolved_due_to_route"
+      ]
+    },
+    "gate-unit-result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "report_kind",
+        "object_id",
+        "applicable",
+        "outcome",
+        "blocking",
+        "threshold",
+        "satisfied_count"
+      ],
+      "properties": {
+        "unit_id": {"type": "string", "minLength": 1},
+        "report_kind": {"enum": ["A", "B", "C"]},
+        "object_id": {"type": "string", "minLength": 1},
+        "applicable": {"type": "boolean"},
+        "outcome": {
+          "enum": ["satisfied", "blocked", "not_applicable", "extension_missing"]
+        },
+        "blocking": {"type": "boolean"},
+        "threshold": {"type": "integer", "minimum": 1},
+        "satisfied_count": {"type": "integer", "minimum": 0},
+        "fact_version_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "disclosure_state": {
+          "anyOf": [{"$ref": "#/$defs/fact-disclosure-state"}, {"type": "null"}]
+        },
+        "failure_code": {
+          "anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]
+        },
+        "user_note_zh": {
+          "anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["outcome"],
+            "properties": {"outcome": {"const": "satisfied"}}
+          },
+          "then": {
+            "required": ["applicable", "blocking", "satisfied_count"],
+            "properties": {
+              "applicable": {"const": true},
+              "blocking": {"const": false},
+              "satisfied_count": {"minimum": 1}
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["outcome"],
+            "properties": {"outcome": {"const": "blocked"}}
+          },
+          "then": {
+            "required": ["applicable", "blocking"],
+            "properties": {
+              "applicable": {"const": true},
+              "blocking": {"const": true}
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["outcome"],
+            "properties": {"outcome": {"const": "not_applicable"}}
+          },
+          "then": {
+            "required": ["applicable", "blocking", "satisfied_count"],
+            "properties": {
+              "applicable": {"const": false},
+              "blocking": {"const": false},
+              "satisfied_count": {"const": 0}
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["outcome"],
+            "properties": {"outcome": {"const": "extension_missing"}}
+          },
+          "then": {
+            "required": ["applicable", "blocking"],
+            "properties": {
+              "applicable": {"const": true},
+              "blocking": {"const": false}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

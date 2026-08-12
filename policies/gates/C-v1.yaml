@@ -1,0 +1,298 @@
+schema_version: "1.0"
+spec_id: gate-spec-c-v1
+version: "1.0"
+report_kind: C
+updated_at: "2026-08-12T00:00:00+08:00"
+units:
+  - unit_id: c_trial_identity_stage_role
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+      - regulatory_material
+      - primary_trial_report
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 试验身份、阶段与开发角色
+    missing_impact_zh: 无法确认核心试验身份与设计分析资格
+    user_next_step_zh: 请提供官方登记或试验方案中的试验身份、阶段与开发角色
+  - unit_id: c_target_population_criteria
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 目标人群与关键入排标准
+    missing_impact_zh: 无法比较目标人群定义与入选排除边界
+    user_next_step_zh: 请提供官方登记公开的全部入选与排除条目或试验方案
+  - unit_id: c_arm_randomization_blinding
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 分组、随机化与盲法
+    missing_impact_zh: 无法比较随机、非随机与盲法设计
+    user_next_step_zh: 请提供官方登记或试验方案中的分组、随机化与盲法信息
+  - unit_id: c_intervention_control_rescue
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 干预、对照、背景与救援治疗
+    missing_impact_zh: 无法比较治疗组合与背景用药设计
+    user_next_step_zh: 请提供官方登记或试验方案中的干预、对照、背景与救援治疗信息
+  - unit_id: c_dose_schedule_followup
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 剂量、给药、疗程、随访与延伸
+    missing_impact_zh: 无法比较剂量方案与随访安排
+    user_next_step_zh: 请提供官方登记或试验方案中的剂量、给药、疗程、随访与延伸设计
+  - unit_id: c_endpoint_definitions_timepoints
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 主要与重要次要终点定义及时间点
+    missing_impact_zh: 无法比较终点定义与评估时间点
+    user_next_step_zh: 请提供官方登记或试验方案中的主要与重要次要终点定义和评估时间点
+  - unit_id: c_planned_or_actual_sample_size
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields:
+      - numeric_value
+      - unit
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 计划或实际样本量
+    missing_impact_zh: 无法比较试验规模与把握度设计
+    user_next_step_zh: 请提供官方登记或试验方案中的计划或实际样本量
+  - unit_id: c_region_visit_operational
+    report_kind: C
+    blocking_level: critical
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: region_visit_operational_key
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 关键地区、访视与操作特征
+    missing_impact_zh: 适应症规则明确列为关键的地区、访视或操作特征缺失
+    user_next_step_zh: 请提供官方登记或试验方案中的地区、访视与操作特征信息
+  - unit_id: c_analysis_population
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 分析人群
+    missing_impact_zh: 分析人群为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供分析人群定义来源
+  - unit_id: c_comparison_logic
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 主要比较逻辑
+    missing_impact_zh: 主要比较逻辑为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供主要比较逻辑来源
+  - unit_id: c_statistical_model
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 统计模型与检验
+    missing_impact_zh: 统计模型与检验为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供统计模型与检验方法来源
+  - unit_id: c_effect_size
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 效应量
+    missing_impact_zh: 效应量为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供效应量定义来源
+  - unit_id: c_multiplicity
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 多重性控制
+    missing_impact_zh: 多重性控制为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供多重性控制方法来源
+  - unit_id: c_sample_size_assumptions
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 样本量假设
+    missing_impact_zh: 样本量假设为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供样本量假设来源
+  - unit_id: c_estimand_intercurrent
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 估计目标与伴发事件
+    missing_impact_zh: 估计目标与伴发事件为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供估计目标与伴发事件定义来源
+  - unit_id: c_missing_data_sensitivity
+    report_kind: C
+    blocking_level: extension
+    object_type: trial
+    scope_parent: product
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - protocol_sap
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 缺失数据处理与敏感性分析
+    missing_impact_zh: 缺失数据处理与敏感性分析为扩展信息，缺失不影响报告通过
+    user_next_step_zh: 如已公开，请提供缺失数据处理与敏感性分析方法来源

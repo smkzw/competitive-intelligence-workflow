@@ -1,0 +1,402 @@
+schema_version: "1.0"
+spec_id: gate-spec-a-v1
+version: "1.0"
+report_kind: A
+updated_at: "2026-08-12T00:00:00+08:00"
+vocabulary:
+  development_maturity:
+    - preclinical
+    - clinical
+    - submission
+    - approved
+    - paused_terminated_withdrawn
+  clinical_result_states:
+    - no_eligible_clinical_trial
+    - eligible_trial_without_observed_numeric_results
+    - has_observed_clinical_numeric_results
+  observation_kinds:
+    - observed_result
+    - planned_value
+    - target_value
+    - protocol_assumption
+  result_bearing_source_roles:
+    - clinical_trial_registry
+    - regulatory_material
+    - primary_trial_report
+    - conference_disclosure
+    - company_disclosure
+    - designated_industry_source
+units:
+  - unit_id: a_product_identity
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - protocol_sap
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 产品规范身份与别名
+    missing_impact_zh: 无法确认产品身份，影响竞品识别与定位
+    user_next_step_zh: 请提供官方登记或监管材料中的产品名称、代码与别名
+  - unit_id: a_innovation_eligibility
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 创新本体纳排结论
+    missing_impact_zh: 无法判断产品是否符合创新药范围
+    user_next_step_zh: 请提供可核验的产品机制与类别资料以完成创新本体判定
+  - unit_id: a_target_mechanism
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 靶点与作用机制
+    missing_impact_zh: 无法建立靶点层面的竞争格局
+    user_next_step_zh: 请提供官方登记、监管或主要试验报告中的靶点与机制描述
+  - unit_id: a_modality
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 药物模态
+    missing_impact_zh: 无法按模态呈现竞争格局
+    user_next_step_zh: 请提供官方登记或监管材料中的药物类别与剂型信息
+  - unit_id: a_developer_originator
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 当前开发者与原研方
+    missing_impact_zh: 无法识别研发主体与合作关系
+    user_next_step_zh: 请提供官方登记、监管材料或企业正式披露中的研发主体信息
+  - unit_id: a_indication_relationship
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 与目标适应症的关系
+    missing_impact_zh: 无法确认产品是否属于本适应症竞品范围
+    user_next_step_zh: 请提供官方登记或监管材料中的适应症与研发状态信息
+  - unit_id: a_china_max_phase_status
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 中国最高开发阶段与状态
+    missing_impact_zh: 无法呈现中国管线布局与申报状态
+    user_next_step_zh: 请提供中国官方登记或监管审评材料中的阶段、状态与日期
+  - unit_id: a_global_max_phase_status
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - company_disclosure
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 境外最高开发阶段与状态
+    missing_impact_zh: 无法呈现全球与中国开发的差异化进度
+    user_next_step_zh: 请提供境外官方登记或监管材料中的阶段、状态与日期
+  - unit_id: a_core_trial_identity
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: maturity_ge_clinical
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 核心试验身份与开发角色
+    missing_impact_zh: 无法呈现临床开发组合与试验状态
+    user_next_step_zh: 请提供官方登记或主要试验报告中的核心试验身份、角色与状态
+  - unit_id: a_regulatory_events
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: maturity_ge_submission
+    required_context_fields: []
+    allowed_source_roles:
+      - regulatory_material
+      - clinical_trial_registry
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 申报、批准、撤回与终止事件
+    missing_impact_zh: 无法呈现监管时间线与关键变化
+    user_next_step_zh: 请提供监管审评材料或官方登记中的申报、批准、撤回、终止或放弃事件及地域
+  - unit_id: a_efficacy_summary
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: result_bearing
+    required_context_fields:
+      - numeric_value
+      - definition
+      - direction
+      - unit
+      - timepoint
+      - analysis_population
+      - treatment_group
+      - control_group
+      - denominator
+    allowed_fact_domains:
+      - efficacy
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 核心疗效结果摘要
+    missing_impact_zh: 无法呈现该产品已公开的疗效结果
+    user_next_step_zh: 请提供官方登记结果或主要试验报告中的核心疗效终点记录
+  - unit_id: a_safety_summary
+    report_kind: A
+    blocking_level: critical
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: result_bearing
+    required_context_fields:
+      - numeric_value
+      - event_definition
+      - time_window
+      - treatment_group
+      - control_group
+      - denominator
+    allowed_fact_domains:
+      - safety
+    allowed_observation_kinds:
+      - observed_result
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - conference_disclosure
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero]
+    missing_strategy: block
+    conflict_strategy: resolved_only
+    threshold: 1
+    user_label_zh: 安全性数值摘要
+    missing_impact_zh: 无法判断该产品的关键安全性风险
+    user_next_step_zh: 请提供官方登记结果或主要试验报告中的不良事件数值摘要
+  - unit_id: a_molecular_parameters
+    report_kind: A
+    blocking_level: extension
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - company_disclosure
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 分子参数
+    missing_impact_zh: 分子层面的扩展信息不足
+    user_next_step_zh: 如已公开，请提供分子量、亲和力等参数来源
+  - unit_id: a_formulation_detail
+    report_kind: A
+    blocking_level: extension
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - company_disclosure
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 制剂与给药详情
+    missing_impact_zh: 制剂细节为扩展信息，不影响报告门槛
+    user_next_step_zh: 如已公开，请提供制剂与给药途径来源
+  - unit_id: a_transaction_amounts
+    report_kind: A
+    blocking_level: extension
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - company_disclosure
+      - designated_industry_source
+      - primary_trial_report
+    minimum_disclosure_maturity: attributable_numeric_disclosure
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 交易金额
+    missing_impact_zh: 交易金额为扩展信息，不影响报告门槛
+    user_next_step_zh: 如已公开，请提供交易公告或可核验专业资料
+  - unit_id: a_patent_family
+    report_kind: A
+    blocking_level: extension
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 专利族与保护范围
+    missing_impact_zh: 专利信息为扩展内容，不影响报告门槛
+    user_next_step_zh: 如已公开，请提供可核验的专利与监管独占记录
+  - unit_id: a_inferred_development_strategy
+    report_kind: A
+    blocking_level: extension
+    object_type: product
+    scope_parent: null
+    applicability_predicate_id: always_applicable
+    required_context_fields: []
+    allowed_source_roles:
+      - clinical_trial_registry
+      - regulatory_material
+      - primary_trial_report
+      - company_disclosure
+      - designated_industry_source
+    minimum_disclosure_maturity: registry_result_or_primary_report
+    accepted_fact_states: [reported_value, reported_zero, not_applicable]
+    missing_strategy: preserve_disclosure_state
+    conflict_strategy: preserve_open
+    threshold: 1
+    user_label_zh: 推断性开发策略
+    missing_impact_zh: 策略推断为扩展信息，不影响报告门槛
+    user_next_step_zh: 推断性策略仅基于已公开事实呈现，不另行请求资料
