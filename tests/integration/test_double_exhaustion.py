@@ -43,7 +43,8 @@ def test_per_gap_omission_review_is_required() -> None:
 def test_two_saturated_recovery_rounds_are_required() -> None:
     """连续两轮饱和、无关键信息增益的科学穷尽证据是阻断前提。"""
     gap = gap_exhaustion(gap_id="gap-two-rounds")
-    history = gap.recovery_exhaustion_proof.recovery_history
+    assert len(gap.recovery_exhaustion_proofs) == 1
+    history = gap.recovery_exhaustion_proofs[0].recovery_history
     assert len(history.rounds) >= 2
     assert history.can_declare_information_saturated is True
     # 两轮策略签名必须不同
@@ -62,7 +63,7 @@ def test_technical_failure_cannot_become_scientific_absence() -> None:
             final_result_class="rate_limited",
             technical=True,
         )
-        mutated = gap.model_dump(mode="json")
+        mutated = _gap_content_dump(gap)
         mutated["current_state"] = bad_state
         mutated["route_evidence"] = [
             {**route, "final_result_class": "not_found"}
@@ -111,14 +112,10 @@ def test_access_blocked_conclusion_requires_technical_diagnosis() -> None:
     assert gap.technical_diagnosis.reviewer_role_id == gap.reviewer_role_id
 
     # 访问阻断结论但缺口缺少技术诊断 → 失败关闭
+    broken = _gap_content_dump(gap)
+    broken["technical_diagnosis"] = None
     with pytest.raises(ValidationError):
-        gap_exhaustion(
-            gap_id="gap-access-no-dx",
-            current_state="unresolved_due_to_route",
-            route_completion="route_access_blocked",
-            final_result_class="rate_limited",
-            technical=False,  # 声明访问阻断但没有技术诊断
-        )
+        GapDoubleExhaustion.model_validate(broken)
 
 
 def test_diagnosis_requires_completed_retries_and_alternatives() -> None:
@@ -231,6 +228,7 @@ def _gap_content_dump(gap: GapDoubleExhaustion) -> dict:
         "conclusion_digest",
         "diagnosis_digest",
         "record_digest",
+        "evidence_digest",
     }
 
     def strip(node):
@@ -268,23 +266,45 @@ def test_gap_applicable_route_ids_must_match_route_evidence() -> None:
 
 
 def test_reviewer_inputs_digest_binds_route_and_rounds() -> None:
-    """复核输入摘要由缺口内容确定性计算：任一路线/轮次改动都改变摘要。"""
+    """复核输入摘要由缺口内容确定性计算；输入变化必须改变摘要或拒绝重验证。"""
     from ci_workflow.gates.exhaustion import compute_reviewer_inputs_digest
 
     gap = gap_exhaustion(gap_id="gap-digest-in")
     digest_before = gap.reviewer_inputs_digest
 
-    # 复核者输入的路线回执变化 → 摘要变化
-    altered_dump = _gap_content_dump(gap)
-    altered_dump["route_evidence"][0]["receipt_ids"] = (
-        altered_dump["route_evidence"][0]["receipt_ids"][:-1]
-    )
-    altered = GapDoubleExhaustion.model_validate(altered_dump)
-    assert altered.reviewer_inputs_digest != digest_before
-
     # 摘要可直接由同一内容重算，与字段一致（机械绑定）
     recomputed = compute_reviewer_inputs_digest(gap)
     assert recomputed == gap.reviewer_inputs_digest
+    assert gap.omission_review.reviewed_inputs_digest == digest_before
+
+    # 缺口状态变化（仍是科学缺失）→ 纯函数输入摘要变化
+    from ci_workflow.gates.exhaustion import (
+        compute_reviewer_inputs_digest_from_parts,
+    )
+
+    altered_digest = compute_reviewer_inputs_digest_from_parts(
+        gap_id=gap.gap_id,
+        gate_unit_id=gap.gate_unit_id,
+        object_type=gap.object_type,
+        object_id=gap.object_id,
+        current_state="not_publicly_disclosed",
+        applicable_route_ids=gap.applicable_route_ids,
+        route_evidence=gap.route_evidence,
+        recovery_exhaustion_proofs=gap.recovery_exhaustion_proofs,
+        same_path_retry_audit=gap.same_path_retry_audit,
+        alternative_path_audit=gap.alternative_path_audit,
+        information_gain_rounds=gap.information_gain_rounds,
+        associated_entity_ids=gap.associated_entity_ids,
+    )
+    assert altered_digest != digest_before
+
+    # 路线回执变化（脱离证明）→ 模型拒绝（逐路线精确绑定）
+    broken_dump = _gap_content_dump(gap)
+    broken_dump["route_evidence"][0]["receipt_ids"] = (
+        broken_dump["route_evidence"][0]["receipt_ids"][:-1]
+    )
+    with pytest.raises(ValidationError):
+        GapDoubleExhaustion.model_validate(broken_dump)
 
 
 def test_technical_gap_cannot_reuse_scientific_not_found_proof() -> None:
@@ -298,26 +318,20 @@ def test_technical_gap_cannot_reuse_scientific_not_found_proof() -> None:
         technical=True,
     )
     scientific = gap_exhaustion(gap_id="gap-sci")
+    # 技术缺口 + 科学饱和证明 → 拒绝
     mutated = _gap_content_dump(technical)
-    mutated["recovery_exhaustion_proof"] = (
-        scientific.recovery_exhaustion_proof.model_dump(mode="json")
-    )
+    mutated["recovery_exhaustion_proofs"] = [
+        proof.model_dump(mode="json")
+        for proof in scientific.recovery_exhaustion_proofs
+    ]
     with pytest.raises(ValidationError):
         GapDoubleExhaustion.model_validate(mutated)
 
     # 技术缺口剥离技术证据 → 拒绝
     stripped = _gap_content_dump(technical)
-    stripped["route_evidence"] = [
-        {**r, "final_result_class": "not_found",
-         "completion": "completed"}
-        for r in stripped["route_evidence"]
-    ]
     stripped["same_path_retry_audit"] = None
     stripped["alternative_path_audit"] = None
     stripped["technical_diagnosis"] = None
-    stripped["recovery_exhaustion_proof"] = (
-        scientific.recovery_exhaustion_proof.model_dump(mode="json")
-    )
     with pytest.raises(ValidationError):
         GapDoubleExhaustion.model_validate(stripped)
 

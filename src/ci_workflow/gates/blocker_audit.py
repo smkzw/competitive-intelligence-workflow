@@ -34,6 +34,7 @@ from ci_workflow.gates.exhaustion import (
     SCIENCE_ABSENT_STATES,
     DoubleExhaustionRecord,
     OmissionReviewConclusion,
+    assert_user_text_has_chinese_context,
 )
 from ci_workflow.gates.models import (
     ApplicableUniverseSnapshot,
@@ -49,6 +50,41 @@ _GAP_STATES = frozenset(
     {"not_reported", "not_publicly_disclosed", "conflicting", "unresolved_due_to_route"}
 )
 _URL_PATTERN = re.compile(r"^https?://\S+$")
+
+# 计算字段：重验证/内容转储时必须剔除，否则 extra=forbid 拒绝输入。
+_COMPUTED_FIELDS = frozenset(
+    {
+        "gap_digest",
+        "reviewer_inputs_digest",
+        "conclusion_digest",
+        "diagnosis_digest",
+        "record_digest",
+        "audit_digest",
+        "evidence_digest",
+        "universe_closure_digest",
+    }
+)
+
+
+def _strip_computed(node: object) -> object:
+    """递归剔除全部计算字段，供从原始内容完整重验证。"""
+    if isinstance(node, dict):
+        return {
+            key: _strip_computed(value)
+            for key, value in node.items()
+            if key not in _COMPUTED_FIELDS
+        }
+    if isinstance(node, list):
+        return [_strip_computed(item) for item in node]
+    return node
+
+
+def _revalidate(model: BaseModel) -> BaseModel:
+    """从原始内容完整重验证（拒绝 model_copy 调包跳过校验的输入）。"""
+    return type(model).model_validate(
+        _strip_computed(model.model_dump(mode="json"))
+    )
+
 
 # 用户可见中文说明不得出现的内部/编程表达
 _FORBIDDEN_USER_TOKENS = frozenset(
@@ -141,10 +177,17 @@ class EmptyUniverseEvidence(BaseModel):
     eligibility_rule_version: str = Field(min_length=1)
     eligibility_policy_id: str = Field(min_length=1)
     discovery_summary: str = Field(min_length=1)
-    candidate_ids: tuple[str, ...] = ()
-    eligible_ids: tuple[str, ...] = ()
-    excluded_ids: tuple[str, ...] = ()
+    # 产品与试验分别封闭建模：A 的适格产品为空；B/C 的适格试验为空，产品可存在。
+    # 检索任务范围（search_scope_id）不得伪装为产品/试验对象。
+    candidate_product_ids: tuple[str, ...] = ()
+    eligible_product_ids: tuple[str, ...] = ()
+    excluded_product_ids: tuple[str, ...] = ()
+    candidate_trial_ids: tuple[str, ...] = ()
+    eligible_trial_ids: tuple[str, ...] = ()
+    excluded_trial_ids: tuple[str, ...] = ()
+    search_scope_id: str | None = None
     exclusion_receipt_summary: tuple[str, ...] = Field(min_length=1)
+    exclusion_receipt_ids: tuple[str, ...] = Field(min_length=1)
     exhaustion: DoubleExhaustionRecord
     created_at: datetime
 
@@ -158,6 +201,11 @@ class EmptyUniverseEvidence(BaseModel):
     def _policy_text_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
+    @field_validator("discovery_summary")
+    @classmethod
+    def _discovery_summary_has_chinese(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
     @field_validator("report_version")
     @classmethod
     def _version_segment_is_safe(cls, value: str) -> str:
@@ -165,10 +213,31 @@ class EmptyUniverseEvidence(BaseModel):
             raise ValueError("报告版本必须是单个小写 v 开头的安全路径段")
         return value
 
-    @field_validator("candidate_ids", "eligible_ids", "excluded_ids", "exclusion_receipt_summary")
+    @field_validator(
+        "candidate_product_ids",
+        "eligible_product_ids",
+        "excluded_product_ids",
+        "candidate_trial_ids",
+        "eligible_trial_ids",
+        "excluded_trial_ids",
+        "exclusion_receipt_summary",
+        "exclusion_receipt_ids",
+    )
     @classmethod
     def _items_not_blank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(_not_blank(value) for value in values)
+
+    @field_validator("exclusion_receipt_ids")
+    @classmethod
+    def _exclusion_receipt_ids_unique(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        if len(set(values)) != len(values):
+            raise ValueError("排除回执标识不得重复")
+        return values
+
+    @field_validator("search_scope_id")
+    @classmethod
+    def _optional_scope_not_blank(cls, value: str | None) -> str | None:
+        return None if value is None else _not_blank(value)
 
     @field_validator("created_at")
     @classmethod
@@ -177,19 +246,72 @@ class EmptyUniverseEvidence(BaseModel):
 
     @model_validator(mode="after")
     def _eligible_is_empty_and_bound_to_report(self) -> EmptyUniverseEvidence:
-        if self.eligible_ids:
-            raise ValueError("空场景证据的适格对象集合必须为空")
+        # A：适格产品为空且不涉及试验适格维度；B/C：适格试验为空，产品可存在。
+        if self.report_kind is ReportKind.A:
+            if self.eligible_product_ids or self.eligible_trial_ids:
+                raise ValueError("A 空场景证据的适格产品集合必须为空")
+        else:
+            if self.eligible_trial_ids:
+                raise ValueError("B/C 空场景证据的适格试验集合必须为空")
+        # 候选必须全部处置：candidate == eligible ∪ excluded，互斥且均为候选子集；
+        # A 允许三集合全空。
+        for candidate, eligible, excluded in (
+            (self.candidate_product_ids, self.eligible_product_ids, self.excluded_product_ids),
+            (self.candidate_trial_ids, self.eligible_trial_ids, self.excluded_trial_ids),
+        ):
+            if not set(eligible).isdisjoint(set(excluded)):
+                raise ValueError("适格与排除对象必须互斥")
+            if not set(eligible) <= set(candidate):
+                raise ValueError("适格对象必须是候选子集")
+            if not set(excluded) <= set(candidate):
+                raise ValueError("排除对象必须是候选子集")
+            if set(eligible) | set(excluded) != set(candidate):
+                missing = sorted(set(candidate) - (set(eligible) | set(excluded)))
+                raise ValueError(
+                    "候选对象必须全部处置（适格或排除），未处置=" + str(missing)
+                )
+        if self.discovery_summary != compute_empty_universe_discovery_summary(self):
+            raise ValueError("空场景发现摘要必须由候选/适格/排除集合确定性生成")
+        if self.universe_closure_digest != compute_empty_universe_closure_digest(self):
+            raise ValueError("空场景宇宙闭合摘要必须由候选集合与全部回执确定性生成")
+        # 排除回执必须精确覆盖空场景穷尽缺口的全部路线回执
+        eligibility_gap = self.exhaustion.gaps[0]
+        receipt_ids = {receipt.receipt_id for receipt in eligibility_gap._all_receipts()}
+        if set(self.exclusion_receipt_ids) != receipt_ids:
+            missing = sorted(receipt_ids - set(self.exclusion_receipt_ids))
+            extra = sorted(set(self.exclusion_receipt_ids) - receipt_ids)
+            raise ValueError(
+                "排除回执必须精确覆盖空场景穷尽缺口全部路线回执："
+                f"缺失={missing} 多余={extra}"
+            )
         if self.exhaustion.project_id != self.project_id:
             raise ValueError("空场景双重穷尽记录必须绑定同一项目")
         if self.exhaustion.report_kind is not self.report_kind:
             raise ValueError("空场景双重穷尽记录必须绑定同一报告类型")
+        if len(self.exhaustion.gaps) != 1:
+            raise ValueError("空场景证据必须恰有一个资格穷尽缺口")
+        eligibility_gap = self.exhaustion.gaps[0]
         expected_unit = self.kind().eligibility_gate_unit_id()
-        for gap in self.exhaustion.gaps:
-            if gap.gate_unit_id != expected_unit:
-                raise ValueError(
-                    "空场景穷尽缺口必须使用对应报告类型的封闭资格单元标识"
-                )
+        if eligibility_gap.gate_unit_id != expected_unit:
+            raise ValueError(
+                "空场景穷尽缺口必须使用对应报告类型的封闭资格单元标识"
+            )
+        if self.search_scope_id is None:
+            raise ValueError("空场景证据必须声明检索任务范围")
+        if eligibility_gap.object_id != self.search_scope_id:
+            raise ValueError(
+                "空场景穷尽缺口对象必须等于检索任务范围，不得伪装为产品/试验"
+            )
+        if eligibility_gap.current_state not in SCIENCE_ABSENT_STATES:
+            raise ValueError(
+                "空场景穷尽缺口状态必须是科学缺失状态（未列示或明确未披露）"
+            )
         return self
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def universe_closure_digest(self) -> str:
+        return compute_empty_universe_closure_digest(self)
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -208,6 +330,56 @@ class EmptyUniverseEvidence(BaseModel):
             ReportKind.B: EmptyUniverseKind.B_NO_ELIGIBLE_RESULT_TRIAL,
             ReportKind.C: EmptyUniverseKind.C_NO_ELIGIBLE_CORE_DESIGN_TRIAL,
         }[self.report_kind]
+
+
+def compute_empty_universe_discovery_summary(
+    evidence: EmptyUniverseEvidence,  # noqa: F821
+) -> str:
+    """发现摘要由候选/适格/排除集合确定性生成：候选必须全部处置。"""
+    parts = [
+        f"候选产品 {len(evidence.candidate_product_ids)} 项、"
+        f"候选试验 {len(evidence.candidate_trial_ids)} 项",
+        f"适格产品 {len(evidence.eligible_product_ids)} 项、"
+        f"适格试验 {len(evidence.eligible_trial_ids)} 项",
+        "全部候选均已处置（适格或排除）",
+    ]
+    return "；".join(parts) + "。"
+
+
+def compute_empty_universe_closure_digest(
+    evidence: EmptyUniverseEvidence,  # noqa: F821
+) -> str:
+    """宇宙闭合摘要由候选/适格/排除集合、检索范围、排除回执摘要与全部路线回执
+    确定性生成：closure 摘要不得与回执内容脱节。"""
+    eligibility_gap = evidence.exhaustion.gaps[0]
+    receipts = eligibility_gap._all_receipts()
+    canonical = json.dumps(
+        {
+            "candidate_product_ids": tuple(sorted(evidence.candidate_product_ids)),
+            "eligible_product_ids": tuple(sorted(evidence.eligible_product_ids)),
+            "excluded_product_ids": tuple(sorted(evidence.excluded_product_ids)),
+            "candidate_trial_ids": tuple(sorted(evidence.candidate_trial_ids)),
+            "eligible_trial_ids": tuple(sorted(evidence.eligible_trial_ids)),
+            "excluded_trial_ids": tuple(sorted(evidence.excluded_trial_ids)),
+            "search_scope_id": evidence.search_scope_id,
+            "exclusion_receipt_ids": tuple(sorted(evidence.exclusion_receipt_ids)),
+            "exclusion_receipt_summary": tuple(evidence.exclusion_receipt_summary),
+            "evidence_gap": eligibility_gap.evidence_gap.model_dump(mode="json"),
+            "receipts": [
+                {
+                    "receipt_id": receipt.receipt_id,
+                    "route_id": receipt.route_id,
+                    "access_method": receipt.access_method,
+                    "result_class": receipt.result_class,
+                }
+                for receipt in receipts
+            ],
+        },
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return stable_id("empty-universe-closure", canonical)
 
 
 def classify_empty_universe(
@@ -272,6 +444,11 @@ class FailedGateUnit(BaseModel):
     def _items_not_blank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(_not_blank(value) for value in values)
 
+    @field_validator("object_name_zh", "user_label_zh", "missing_or_conflict_summary_zh")
+    @classmethod
+    def _user_text_has_chinese_context(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
     @model_validator(mode="after")
     def _conflict_is_not_absence(self) -> FailedGateUnit:
         if self.current_state == "conflicting":
@@ -304,10 +481,22 @@ class RouteAuditSummary(BaseModel):
     def _text_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
+    @field_validator("route_name_zh")
+    @classmethod
+    def _route_name_has_chinese_context(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
     @field_validator("receipt_ids", "access_methods")
     @classmethod
     def _items_not_blank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(_not_blank(value) for value in values)
+
+    @field_validator("access_methods")
+    @classmethod
+    def _access_methods_have_chinese_context(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        for value in values:
+            assert_user_text_has_chinese_context(value)
+        return values
 
 
 class GapAuditSummary(BaseModel):
@@ -331,6 +520,21 @@ class GapAuditSummary(BaseModel):
     omission_notes_zh: str = Field(min_length=1)
     technical_diagnosis_zh: str | None = None
     gap_digest: str = Field(min_length=1)
+
+    @field_validator("gap_id", "gate_unit_id", "object_type", "object_id", "object_name_zh")
+    @classmethod
+    def _text_not_blank(cls, value: str) -> str:
+        return _not_blank(value)
+
+    @field_validator("object_name_zh", "user_label_zh", "missing_or_conflict_summary_zh")
+    @classmethod
+    def _user_text_has_chinese_context(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
+    @field_validator("omission_notes_zh")
+    @classmethod
+    def _omission_notes_clean_and_chinese(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
 
 
 def compute_audit_digest(
@@ -366,7 +570,7 @@ class BlockerAudit(BaseModel):
     spec_fingerprint: str = Field(min_length=1)
     evidence_snapshot_id: str = Field(min_length=1)
     universe_summary: str = Field(min_length=1)
-    gate_result_key: str = ""
+    gate_result_key: str | None = None
     empty_universe: EmptyUniverseKind | None = None
     empty_evidence: EmptyUniverseEvidence | None = None
     empty_justification_zh: str | None = None
@@ -471,6 +675,11 @@ class BlockerAudit(BaseModel):
                 raise ValueError("类型化空场景必须给出中文依据")
             if self.empty_evidence is None:
                 raise ValueError("类型化空场景必须绑定空场景证据")
+            if self.gate_result_key is not None:
+                raise ValueError("类型化空场景不进行门槛评估，不得携带结果键")
+        else:
+            if self.gate_result_key is None:
+                raise ValueError("非空阻断说明必须绑定门槛评估结果键")
         return self
 
     @model_validator(mode="after")
@@ -511,9 +720,12 @@ class BlockerAudit(BaseModel):
             "minimal_user_action_zh",
             "resume_instruction_zh",
         ):
-            assert_user_facing_zh_clean(getattr(self, field))
+            value = getattr(self, field)
+            assert_user_facing_zh_clean(value)
+            assert_user_text_has_chinese_context(value)
         if self.empty_justification_zh is not None:
             assert_user_facing_zh_clean(self.empty_justification_zh)
+            assert_user_text_has_chinese_context(self.empty_justification_zh)
         for gap in self.per_gap_audits:
             assert_user_facing_zh_clean(gap.object_name_zh)
             assert_user_facing_zh_clean(gap.missing_or_conflict_summary_zh)
@@ -521,6 +733,7 @@ class BlockerAudit(BaseModel):
                 assert_user_facing_zh_clean(route.route_name_zh)
             if gap.technical_diagnosis_zh is not None:
                 assert_user_facing_zh_clean(gap.technical_diagnosis_zh)
+                assert_user_text_has_chinese_context(gap.technical_diagnosis_zh)
         return self
 
 
@@ -637,30 +850,40 @@ def _render_audit_markdown_zh(audit: BlockerAudit) -> str:
             lines.append("")
     lines.append("## 二、已经尝试过的检索范围")
     lines.append("")
-    seen_routes: set[tuple[str, int]] = set()
+    # 按路线中文名真正汇总：同一路线跨缺口不重复打印，给出累计尝试总数。
+    route_attempts: dict[str, int] = {}
+    route_methods: dict[str, set[str]] = {}
     for gap in audit.per_gap_audits:
         for route in gap.route_summaries:
-            key = (route.route_name_zh, route.attempt_count)
-            if key in seen_routes:
-                continue
-            seen_routes.add(key)
-            lines.append(
-                f"- {route.route_name_zh}：已完成 {route.attempt_count} 次尝试；"
-                f"访问方式：{'、'.join(route.access_methods)}"
+            route_attempts[route.route_name_zh] = (
+                route_attempts.get(route.route_name_zh, 0) + route.attempt_count
             )
+            route_methods.setdefault(route.route_name_zh, set()).update(
+                route.access_methods
+            )
+    for route_name_zh in sorted(route_attempts):
+        lines.append(
+            f"- {route_name_zh}：累计完成 {route_attempts[route_name_zh]} 次尝试；"
+            f"访问方式：{'、'.join(sorted(route_methods[route_name_zh]))}"
+        )
     lines.append("- 已连续完成两轮穷尽核对，两轮之间没有取得新的关键信息。")
     lines.append("")
     lines.append("## 三、判断")
     lines.append("")
     if audit.empty_universe is not None:
         lines.append("- 经双重穷尽核对，本轮不存在符合条件的对象，未发现可归因遗漏。")
-    elif audit.has_technical_access_issue:
-        lines.append("- 部分内容属于访问问题尚未解决，不能判断是否公开。")
-        for gap in audit.per_gap_audits:
-            if gap.technical_diagnosis_zh is not None:
-                lines.append(f"- 技术诊断（{gap.object_name_zh}）：{gap.technical_diagnosis_zh}")
     else:
-        lines.append("- 本次缺失属于来源未披露或尚未公开；独立遗漏复核未发现可归因遗漏。")
+        # 逐缺口给出各自结论：科学未列示/明确未公开/冲突与技术访问分别说明，
+        # 不得因存在技术缺口而覆盖其他结论。
+        for gap in audit.per_gap_audits:
+            lines.append(
+                f"- {gap.object_name_zh}：{_STATE_USER_TEXT[gap.current_state]}；"
+                "独立遗漏复核未发现可归因遗漏。"
+            )
+            if gap.technical_diagnosis_zh is not None:
+                lines.append(
+                    f"- 技术诊断（{gap.object_name_zh}）：{gap.technical_diagnosis_zh}"
+                )
     lines.append("")
     lines.append("## 四、您只需要做什么")
     lines.append("")
@@ -668,7 +891,7 @@ def _render_audit_markdown_zh(audit: BlockerAudit) -> str:
         lines.append(f"- 您只需要：{audit.minimal_user_action_zh}")
         lines.append(f"- 请将相关材料放入：{audit.user_input_directory}")
     else:
-        lines.append(f"- 您只需要：{audit.minimal_user_action_zh}")
+        lines.append("- 目前不需要您提供材料。")
     lines.append("")
     if audit.source_links:
         lines.append("## 五、原文链接")
@@ -703,10 +926,8 @@ def _report_name_zh(report_kind: ReportKind) -> str:
 
 
 def _empty_object_name_zh(object_id: str) -> str:
-    return {
-        "candidate-1": "候选创新产品 · 编号一",
-        "trial-1": "候选临床研究 · 编号一",
-    }.get(object_id, "候选研究对象")
+    """空场景缺口对象是检索任务范围，不是医学对象：不得伪造产品/试验名。"""
+    return "本次资格检索范围"
 
 
 def _empty_unit_label_zh(gate_unit_id: str) -> str:
@@ -743,7 +964,7 @@ def _derive_per_gap_audits(
                 current_state=gap.current_state,
                 user_label_zh=_empty_unit_label_zh(gap.gate_unit_id),
                 missing_or_conflict_summary_zh=(
-                    "该产品/试验的相应内容经两轮穷尽检索仍未获得"
+                    "经两轮穷尽核对，未发现符合资格条件的候选对象"
                     if gap.current_state
                     in ("not_reported", "not_publicly_disclosed")
                     else "该内容存在相互矛盾的来源值且尚未解决"
@@ -843,6 +1064,8 @@ def _build_blocker_audit(
 
     空/无适格路径不进行 GateSpec 评估（gate_result=None），身份取自
     EmptyUniverseEvidence；非空路径必须绑定 BLOCKED 的真实 gate_result。
+    所有输入从原始内容完整重验证并重新核算摘要：model_copy 调包伪造
+    角色/结果键/指纹/回执/摘要/中文显示字段都在此失败关闭。
     """
     _text(project_id)
     _text(residual_uncertainty_zh)
@@ -850,6 +1073,28 @@ def _build_blocker_audit(
     _text(resume_instruction_zh)
     if empty_justification_zh is not None:
         _text(empty_justification_zh)
+
+    # ── 公共边界完整重验证：model_copy 跳过校验的伪造在此失败关闭 ──────────
+    spec = GateSpec.model_validate(_strip_computed(spec.model_dump(mode="json")))
+    if snapshot is not None:
+        snapshot = ApplicableUniverseSnapshot.model_validate(
+            _strip_computed(snapshot.model_dump(mode="json"))
+        )
+    if gate_result is not None:
+        gate_result = ReportGateResult.model_validate(
+            _strip_computed(gate_result.model_dump(mode="json"))
+        )
+    failed_units = tuple(
+        FailedGateUnit.model_validate(_strip_computed(unit.model_dump(mode="json")))
+        for unit in failed_units
+    )
+    exhaustion = DoubleExhaustionRecord.model_validate(
+        _strip_computed(exhaustion.model_dump(mode="json"))
+    )
+    if empty_evidence is not None:
+        empty_evidence = EmptyUniverseEvidence.model_validate(
+            _strip_computed(empty_evidence.model_dump(mode="json"))
+        )
 
     if exhaustion.project_id != project_id or exhaustion.report_kind is not report_kind:
         raise ValueError("双重穷尽记录必须绑定同一项目与报告类型")
@@ -874,15 +1119,53 @@ def _build_blocker_audit(
             raise ValueError("空场景证据必须绑定同一报告版本")
         if empty_evidence.contract_version != contract_version:
             raise ValueError("空场景证据必须绑定同一合同版本")
-        if snapshot is not None and (
-            snapshot.evidence_snapshot_id != empty_evidence.evidence_snapshot_id
+        if empty_evidence.eligibility_rule_spec_id != spec.spec_id:
+            raise ValueError("空场景证据必须绑定同一资格规则说明书标识")
+        if empty_evidence.eligibility_rule_version != spec.version:
+            raise ValueError("空场景证据必须绑定同一资格规则版本")
+        if report_kind is ReportKind.A:
+            # A 无适格创新产品路径不得携带 Task3.1 非空快照（避免矛盾宇宙摘要）
+            if snapshot is not None:
+                raise ValueError("A 空场景不得绑定非空宇宙快照")
+        else:
+            # B/C 空场景必须绑定闭合宇宙快照，且候选集合与快照完全一致
+            if snapshot is None:
+                raise ValueError("B/C 空场景必须绑定闭合宇宙快照")
+            if snapshot.evidence_snapshot_id != empty_evidence.evidence_snapshot_id:
+                raise ValueError("空场景证据与宇宙快照证据快照不一致")
+            if tuple(sorted(empty_evidence.candidate_product_ids)) != tuple(
+                sorted(snapshot.product_ids)
+            ):
+                raise ValueError("B/C 空场景候选产品必须与闭合宇宙产品完全一致")
+            if tuple(sorted(empty_evidence.candidate_trial_ids)) != tuple(
+                sorted(snapshot.trial_ids)
+            ):
+                raise ValueError("B/C 空场景候选试验必须与闭合宇宙试验完全一致")
+        # 空证据的双重穷尽记录必须与传入记录是同一证据内容（摘要 + 内容双重绑定）
+        if empty_evidence.exhaustion.record_digest != exhaustion.record_digest:
+            raise ValueError("空场景证据的双重穷尽记录与传入记录摘要不一致")
+        if _strip_computed(
+            empty_evidence.exhaustion.model_dump(mode="json")
+        ) != _strip_computed(exhaustion.model_dump(mode="json")):
+            raise ValueError("空场景证据的双重穷尽记录与传入记录内容不一致")
+        exhaustion = empty_evidence.exhaustion
+        eligibility_gap = exhaustion.gaps[0]
+        if eligibility_gap.evidence_gap.gate_spec_id != spec.spec_id:
+            raise ValueError(
+                "空场景资格缺口锚点必须绑定真实 GateSpec 说明书标识"
+            )
+        if (
+            eligibility_gap.evidence_gap.field_id
+            != empty_universe.eligibility_gate_unit_id()
         ):
-            raise ValueError("空场景证据与宇宙快照证据快照不一致")
+            raise ValueError(
+                "空场景资格缺口锚点字段必须等于资格单元字段"
+            )
         classified = classify_empty_universe(
             report_kind,
-            eligible_product_ids=empty_evidence.eligible_ids,
-            eligible_result_trial_ids=empty_evidence.eligible_ids,
-            eligible_core_design_trial_ids=empty_evidence.eligible_ids,
+            eligible_product_ids=empty_evidence.eligible_product_ids,
+            eligible_result_trial_ids=empty_evidence.eligible_trial_ids,
+            eligible_core_design_trial_ids=empty_evidence.eligible_trial_ids,
         )
         if classified != empty_universe:
             raise ValueError("空场景证据与类型化空场景判定不一致")
@@ -890,7 +1173,7 @@ def _build_blocker_audit(
         resolved_universe_summary = (
             snapshot.universe_summary if snapshot is not None else empty_evidence.discovery_summary
         )
-        resolved_gate_result_key = ""
+        resolved_gate_result_key = None
     else:
         # 非空路径：必须绑定真实 BLOCKED 门槛评估结果
         if gate_result is None:
@@ -932,6 +1215,31 @@ def _build_blocker_audit(
                 "失败单元集合必须与门槛评估阻断集合完全一致："
                 f"缺失={missing} 多余={extra}"
             )
+        # 回执实体必须与宇宙关系图一致：产品缺口允许关联试验，其他对象只能自指
+        _assert_receipt_entities_bound_to_universe(
+            exhaustion, spec, snapshot, failed_units
+        )
+        # Phase2 证据缺口锚点：gate_spec_id 与字段必须属于对应失败单元
+        failed_unit_by_pair = {
+            (unit.unit_id, unit.object_id): unit for unit in failed_units
+        }
+        for anchor_gap in exhaustion.gaps:
+            if anchor_gap.evidence_gap.gate_spec_id != spec.spec_id:
+                raise ValueError(
+                    "证据缺口锚点必须绑定真实 GateSpec 说明书标识"
+                )
+            anchor_unit = failed_unit_by_pair.get(
+                (anchor_gap.gate_unit_id, anchor_gap.object_id)
+            )
+            if anchor_unit is None:
+                raise ValueError(
+                    f"证据缺口锚点缺少对应失败单元：{anchor_gap.gate_unit_id}"
+                )
+            if anchor_gap.evidence_gap.field_id not in anchor_unit.field_ids:
+                raise ValueError(
+                    "证据缺口锚点字段必须属于对应失败单元字段："
+                    f"{anchor_gap.evidence_gap.field_id}"
+                )
 
     gaps_by_unit_object = {
         (gap.gate_unit_id, gap.object_id): gap for gap in exhaustion.gaps
@@ -960,8 +1268,12 @@ def _build_blocker_audit(
 
     per_gap_audits = _derive_per_gap_audits(exhaustion, failed_units)
     if empty_universe is not None:
-        impacted_products = tuple(sorted(empty_evidence.candidate_ids)) if empty_evidence else ()
-        impacted_trials = tuple(sorted(empty_evidence.candidate_ids)) if empty_evidence else ()
+        impacted_products = tuple(
+            sorted(empty_evidence.candidate_product_ids)
+        ) if empty_evidence else ()
+        impacted_trials = tuple(
+            sorted(empty_evidence.candidate_trial_ids)
+        ) if empty_evidence else ()
     else:
         impacted_products, impacted_trials = _derive_impacted_scope(failed_units, snapshot)
     route_summaries = tuple(
@@ -975,7 +1287,8 @@ def _build_blocker_audit(
     audit_id = stable_id(
         "blocker-audit", project_id, report_kind.value, report_version
     )
-    resolved_created_at = created_at or datetime.now().astimezone()
+    # 幂等：默认时间确定性取自已绑定记录，不取当前时刻。
+    resolved_created_at = created_at or exhaustion.created_at
     fields: dict[str, object] = {
         "schema_version": "1.0",
         "audit_id": audit_id,
@@ -1015,6 +1328,47 @@ def _build_blocker_audit(
 
 def _expected_spec_id(report_kind: ReportKind) -> str:
     return f"gate-spec-{report_kind.value.lower()}-v1"
+
+
+def _assert_receipt_entities_bound_to_universe(
+    exhaustion: DoubleExhaustionRecord,
+    spec: GateSpec,
+    snapshot: ApplicableUniverseSnapshot,
+    failed_units: Sequence[FailedGateUnit],
+) -> None:
+    """回执实体必须与已闭合宇宙关系图一致：产品缺口允许显式关联试验来源，
+    其他对象类型只能自指缺口对象；任意 trial-001 之类未声明对象一律拒绝。"""
+    spec_units = {unit.unit_id: unit for unit in spec.units}
+    for gap in exhaustion.gaps:
+        unit = spec_units.get(gap.gate_unit_id)
+        if unit is None:
+            raise ValueError(f"双重穷尽缺口引用了未知规则单元：{gap.gate_unit_id}")
+        if unit.object_type.value == "product":
+            # 关联实体必须是该产品在关系图中的子试验
+            product_edges = {
+                edge.child_id
+                for edge in snapshot.relationship_edges
+                if edge.parent_type.value == "product"
+                and edge.parent_id == gap.object_id
+                and edge.child_type.value == "trial"
+            }
+            if not set(gap.associated_entity_ids) <= product_edges:
+                raise ValueError(
+                    "产品缺口的关联试验必须属于已闭合宇宙关系图："
+                    f"{gap.object_id}"
+                )
+        else:
+            if gap.associated_entity_ids:
+                raise ValueError(
+                    f"非产品缺口不得声明关联实体：{gap.gate_unit_id}"
+                )
+            if any(
+                receipt.entity_id != gap.object_id
+                for receipt in gap._all_receipts()
+            ):
+                raise ValueError(
+                    f"非产品缺口回执实体必须等于缺口对象：{gap.object_id}"
+                )
 
 
 def _text(value: str) -> str:
@@ -1077,7 +1431,23 @@ def apply_scientific_qc_rejection(
 ) -> str:
     """科学质控必须在 GateSpec 通过之后；可修复回 recovering，已穷尽进
     evidence_blocked。绑定项目/宇宙/快照；两者都不得产生任何下游报告产物。
+
+    与阻断写入口一致：所有输入从原始内容完整重验证并重新核算摘要，
+    model_copy 伪造项目/快照/宇宙/结果键/穷尽角色一律失败关闭。
     """
+    rejection = ScientificQcRejection.model_validate(
+        _strip_computed(rejection.model_dump(mode="json"))
+    )
+    snapshot = ApplicableUniverseSnapshot.model_validate(
+        _strip_computed(snapshot.model_dump(mode="json"))
+    )
+    gate_result = ReportGateResult.model_validate(
+        _strip_computed(gate_result.model_dump(mode="json"))
+    )
+    if exhaustion is not None:
+        exhaustion = DoubleExhaustionRecord.model_validate(
+            _strip_computed(exhaustion.model_dump(mode="json"))
+        )
     if snapshot.project_id != rejection.project_id:
         raise ValueError("宇宙快照必须绑定同一项目")
     if snapshot.evidence_snapshot_id != rejection.candidate_snapshot_id:
@@ -1201,6 +1571,13 @@ def _write_blocker_package(
     if final_dir.exists():
         _verify_existing_package(
             final_dir, audit_json_content, audit_md_content
+        )
+        assert_no_report_downstream_artifacts(
+            database_path,
+            project_id=audit.project_id,
+            report_kind=audit.report_kind,
+            report_version=audit.report_version,
+            workspace_root=workspace_root,
         )
         return final_dir / "audit.json", final_dir / "audit.md"
 

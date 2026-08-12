@@ -8,12 +8,21 @@
 - 遗漏复核结论必须与缺口类型相容：科学缺失/冲突只能 NO_MATERIAL_OMISSION；
   技术未解决必须 TECHNICAL_ACCESS_UNRESOLVED；MATERIAL_OMISSION_FOUND 一律不得
   生成审计包。
-- 复核输入摘要由缺口内容确定性计算，调用方不得随填。
+- 复核结论必须精确绑定其审阅的输入摘要（reviewed_inputs_digest）：由缺口身份、
+  单元/对象/状态、适用路线计划、全部路线/回执、恢复/技术证明与逐缺口信息增益
+  确定性计算，调用方不得随填；旧摘要、错摘要、换路线后沿用旧结论均失败。
+- 路线证据与实际证明逐路线精确绑定：适用路线集合与证明路线完全一致；每条路线的
+  回执、尝试次数与访问方式由实际回执派生；回执实体必须是缺口对象或显式声明的
+  关联实体；科学 not_found 证明不得重贴到另一路线或塞给技术路线。
+- 用户可见文本（路线名称、访问方式、复核说明、诊断说明）必须包含中文语境，
+  拒绝纯英文 API/内部标识。
 """
 
 from __future__ import annotations
 
 import json
+import re
+from collections.abc import Sequence
 from datetime import datetime
 from enum import StrEnum
 
@@ -27,7 +36,7 @@ from pydantic import (
 )
 
 from ci_workflow.domain.enums import ReportKind
-from ci_workflow.domain.evidence import InformationGainDiff
+from ci_workflow.domain.evidence import EvidenceGap, InformationGainDiff, SourceReceipt
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.sources.planner import RouteCompletionState
 from ci_workflow.sources.retries import (
@@ -58,12 +67,45 @@ GAP_STATES = frozenset(
     {"not_reported", "not_publicly_disclosed", "conflicting", "unresolved_due_to_route"}
 )
 
+# 用户可见文本必须真正包含中文：英文专有来源名必须带中文说明
+# （如 "ClinicalTrials.gov 登记页"）；NCT/PMID/DOI 只可作为中文句中的标识符。
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+
+
+def has_chinese_context(value: str) -> bool:
+    """机械要求至少含一个中文字符；纯英文专名不再豁免。"""
+    return _CJK_RE.search(value) is not None
+
+
+def assert_user_text_has_chinese_context(value: str) -> str:
+    if not has_chinese_context(value):
+        raise ValueError("用户可见文本必须包含中文语境，不得使用纯英文内部标识")
+    return value
+
 
 def _not_blank(value: str) -> str:
     normalized = " ".join(value.split())
     if not normalized:
         raise ValueError("文本不能为空")
     return normalized
+
+
+def derive_terminal_result_class(
+    receipts: Sequence[SourceReceipt],
+) -> str:
+    """路线最终结果类别由实际回执的确定性终端规则派生。
+
+    终端回执 = 按 ended_at 时间最晚（稳定平局：receipt_id 升序）的最后一次尝试；
+    其 result_class 即为路线最终类别。科学路线允许任意终端类别（成功取得内容
+    但缺所需字段是合法的），技术访问阻断路线的终端类别必须属于技术失败类别。
+    """
+    if not receipts:
+        raise ValueError("路线回执不能为空")
+    terminal = max(
+        receipts,
+        key=lambda receipt: (receipt.ended_at, receipt.receipt_id),
+    )
+    return terminal.result_class
 
 
 def _offset_datetime(value: datetime) -> datetime:
@@ -87,49 +129,64 @@ class OmissionReviewConclusion(StrEnum):
     TECHNICAL_ACCESS_UNRESOLVED = "technical_access_unresolved"
 
 
-def compute_reviewer_inputs_digest(
-    gap: GapDoubleExhaustion,  # noqa: F821
+def compute_reviewer_inputs_digest_from_parts(
+    *,
+    gap_id: str,
+    gate_unit_id: str,
+    object_type: str,
+    object_id: str,
+    current_state: str,
+    applicable_route_ids: Sequence[str],
+    route_evidence: Sequence[GapRouteEvidence],
+    recovery_exhaustion_proofs: Sequence[RecoveryExhaustionProof],
+    same_path_retry_audit: SamePathRetryAudit | None,
+    alternative_path_audit: AlternativePathAudit | None,
+    information_gain_rounds: Sequence[InformationGainDiff],
+    associated_entity_ids: Sequence[str],
+    evidence_gap: EvidenceGap | None = None,
 ) -> str:
-    """复核输入摘要由缺口内容确定性计算：缺口、单元/对象/状态、适用路线、
-    路线回执、恢复证明与信息增益轮次全部参与，调用方不得随填。"""
-    route_ids = tuple(sorted(route.route_id for route in gap.route_evidence))
+    """复核输入摘要的纯函数：由缺口身份、单元/对象/状态、适用路线计划、
+    Phase2 证据缺口锚点、全部路线/回执、恢复/技术证明与逐缺口信息增益
+    确定性计算。复核结论本身不参与本摘要（它是消费方，不是输入）。"""
+    route_ids = tuple(sorted(route.route_id for route in route_evidence))
     receipt_ids = tuple(
         sorted(
             receipt_id
-            for route in gap.route_evidence
+            for route in route_evidence
             for receipt_id in route.receipt_ids
         )
     )
-    proof_digest = (
-        gap.recovery_exhaustion_proof.model_dump(mode="json")
-        if gap.recovery_exhaustion_proof is not None
-        else None
-    )
-    retry_digest = (
-        gap.same_path_retry_audit.model_dump(mode="json")
-        if gap.same_path_retry_audit is not None
-        else None
-    )
-    alternative_digest = (
-        gap.alternative_path_audit.model_dump(mode="json")
-        if gap.alternative_path_audit is not None
-        else None
-    )
     canonical = json.dumps(
         {
-            "gap_id": gap.gap_id,
-            "gate_unit_id": gap.gate_unit_id,
-            "object_type": gap.object_type,
-            "object_id": gap.object_id,
-            "current_state": gap.current_state,
+            "gap_id": gap_id,
+            "gate_unit_id": gate_unit_id,
+            "object_type": object_type,
+            "object_id": object_id,
+            "current_state": current_state,
             "applicable_route_ids": route_ids,
             "receipt_ids": receipt_ids,
-            "recovery_exhaustion_proof": proof_digest,
-            "same_path_retry_audit": retry_digest,
-            "alternative_path_audit": alternative_digest,
+            "associated_entity_ids": tuple(sorted(associated_entity_ids)),
+            "evidence_gap": (
+                evidence_gap.model_dump(mode="json")
+                if evidence_gap is not None
+                else None
+            ),
+            "recovery_exhaustion_proofs": [
+                proof.model_dump(mode="json") for proof in recovery_exhaustion_proofs
+            ],
+            "same_path_retry_audit": (
+                same_path_retry_audit.model_dump(mode="json")
+                if same_path_retry_audit is not None
+                else None
+            ),
+            "alternative_path_audit": (
+                alternative_path_audit.model_dump(mode="json")
+                if alternative_path_audit is not None
+                else None
+            ),
             "information_gain_rounds": [
                 round_.model_dump(mode="json")
-                for round_ in gap.information_gain_rounds
+                for round_ in information_gain_rounds
             ],
         },
         sort_keys=True,
@@ -139,6 +196,27 @@ def compute_reviewer_inputs_digest(
     return stable_id("omission-review-inputs", canonical)
 
 
+def compute_reviewer_inputs_digest(
+    gap: GapDoubleExhaustion,  # noqa: F821
+) -> str:
+    """由缺口内容确定性计算复核输入摘要；调用方不得随填。"""
+    return compute_reviewer_inputs_digest_from_parts(
+        gap_id=gap.gap_id,
+        gate_unit_id=gap.gate_unit_id,
+        object_type=gap.object_type,
+        object_id=gap.object_id,
+        current_state=gap.current_state,
+        applicable_route_ids=gap.applicable_route_ids,
+        route_evidence=gap.route_evidence,
+        recovery_exhaustion_proofs=gap.recovery_exhaustion_proofs,
+        same_path_retry_audit=gap.same_path_retry_audit,
+        alternative_path_audit=gap.alternative_path_audit,
+        information_gain_rounds=gap.information_gain_rounds,
+        associated_entity_ids=gap.associated_entity_ids,
+        evidence_gap=gap.evidence_gap,
+    )
+
+
 def compute_omission_review_digest(review: GapOmissionReview) -> str:  # noqa: F811
     return stable_id(
         "omission-review",
@@ -146,13 +224,15 @@ def compute_omission_review_digest(review: GapOmissionReview) -> str:  # noqa: F
         review.reviewer_role_id,
         review.conclusion.value,
         review.review_notes_zh,
+        review.reviewed_inputs_digest,
     )
 
 
 class GapOmissionReview(BaseModel):
     """独立遗漏复核者对单一证据缺口的结论；逐缺口绑定，不能以一句话代替。
 
-    复核输入摘要由所属缺口确定性计算，故不在复核对象上存储。
+    必填 reviewed_inputs_digest 证明本结论审阅的是哪一份输入内容；缺口必须
+    与摘要精确一致，结论摘要必须包含该摘要。
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -161,10 +241,21 @@ class GapOmissionReview(BaseModel):
     reviewer_role_id: str = Field(min_length=1)
     conclusion: OmissionReviewConclusion
     review_notes_zh: str = Field(min_length=1)
+    reviewed_inputs_digest: str = Field(min_length=1)
 
     @field_validator("gap_id", "reviewer_role_id", "review_notes_zh")
     @classmethod
     def _text_not_blank(cls, value: str) -> str:
+        return _not_blank(value)
+
+    @field_validator("review_notes_zh")
+    @classmethod
+    def _notes_need_chinese_context(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
+    @field_validator("reviewed_inputs_digest")
+    @classmethod
+    def _digest_is_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
     @computed_field  # type: ignore[prop-decorator]
@@ -202,6 +293,11 @@ class GapTechnicalDiagnosis(BaseModel):
     def _text_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
+    @field_validator("diagnosis_zh")
+    @classmethod
+    def _diagnosis_needs_chinese_context(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
     @field_validator("technical_result_classes")
     @classmethod
     def _technical_classes_are_unique_and_closed(
@@ -227,7 +323,7 @@ class GapTechnicalDiagnosis(BaseModel):
 
 
 class GapRouteEvidence(BaseModel):
-    """单个缺口绑定的路线证据摘要；路线 ID 可重复（多条回执），但 receipt 互不相交。"""
+    """单个缺口绑定的一条路线摘要；每条路线仅一行，可汇总多条互不重复的回执。"""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -244,10 +340,22 @@ class GapRouteEvidence(BaseModel):
     def _text_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
+    @field_validator("route_name_zh")
+    @classmethod
+    def _route_name_needs_chinese_context(cls, value: str) -> str:
+        return assert_user_text_has_chinese_context(value)
+
     @field_validator("receipt_ids", "access_methods")
     @classmethod
     def _items_not_blank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(_not_blank(value) for value in values)
+
+    @field_validator("access_methods")
+    @classmethod
+    def _access_methods_need_chinese_context(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        for value in values:
+            assert_user_text_has_chinese_context(value)
+        return values
 
 
 def compute_gap_digest(gap: GapDoubleExhaustion) -> str:  # noqa: F811
@@ -269,6 +377,25 @@ def compute_gap_digest(gap: GapDoubleExhaustion) -> str:  # noqa: F811
     )
 
 
+def _proof_receipts(proof: RecoveryExhaustionProof) -> tuple[SourceReceipt, ...]:
+    """证明内全部来源回执：恢复轮次 + 替代策略 + 同路径重试。"""
+    return tuple(
+        [
+            *[
+                receipt
+                for recovery_round in proof.recovery_history.rounds
+                for receipt in recovery_round.source_receipts
+            ],
+            *proof.alternative_paths.source_receipts,
+            *[
+                receipt
+                for audit in proof.same_path_retries
+                for receipt in audit.receipts
+            ],
+        ]
+    )
+
+
 class GapDoubleExhaustion(BaseModel):
     """单个证据缺口的双重穷尽证据：角色分离、复核输入绑定、路线与证明绑定。"""
 
@@ -285,13 +412,18 @@ class GapDoubleExhaustion(BaseModel):
     reviewer_role_id: str = Field(min_length=1)
     applicable_route_ids: tuple[str, ...] = Field(min_length=1)
     route_evidence: tuple[GapRouteEvidence, ...] = Field(min_length=1)
-    # 科学缺口：饱和科学穷尽证明；技术缺口：同路径重试 + 替代策略审计
-    recovery_exhaustion_proof: RecoveryExhaustionProof | None = None
+    # 科学缺口：逐路线绑定饱和科学穷尽证明（每个适用科学路线一份证明）；
+    # 技术缺口：同路径重试 + 替代策略审计。
+    recovery_exhaustion_proofs: tuple[RecoveryExhaustionProof, ...] = ()
     same_path_retry_audit: SamePathRetryAudit | None = None
     alternative_path_audit: AlternativePathAudit | None = None
     omission_review: GapOmissionReview
     technical_diagnosis: GapTechnicalDiagnosis | None = None
     information_gain_rounds: tuple[InformationGainDiff, ...] = Field(min_length=2)
+    # 显式声明的关联实体（产品缺口允许关联试验来源）；builder 用宇宙关系图验证。
+    associated_entity_ids: tuple[str, ...] = ()
+    # Phase2 证据缺口锚点：适用路线计划、缺口身份与信息增益的来源，不得自报。
+    evidence_gap: EvidenceGap
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -308,12 +440,12 @@ class GapDoubleExhaustion(BaseModel):
     def _text_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
-    @field_validator("applicable_route_ids")
+    @field_validator("applicable_route_ids", "associated_entity_ids")
     @classmethod
-    def _applicable_routes_unique(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+    def _id_sets_unique(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         normalized = tuple(_not_blank(value) for value in values)
         if len(set(normalized)) != len(normalized):
-            raise ValueError("适用路线集合不得重复")
+            raise ValueError("标识集合不得重复")
         return normalized
 
     @field_validator("current_state")
@@ -343,8 +475,20 @@ class GapDoubleExhaustion(BaseModel):
         return self
 
     @model_validator(mode="after")
+    def _reviewed_inputs_digest_is_exact(self) -> GapDoubleExhaustion:
+        expected = compute_reviewer_inputs_digest(self)
+        if self.omission_review.reviewed_inputs_digest != expected:
+            raise ValueError("遗漏复核必须精确绑定其审阅的输入摘要，摘要与缺口内容不一致")
+        return self
+
+    @model_validator(mode="after")
     def _applicable_routes_and_receipts_are_bound(self) -> GapDoubleExhaustion:
         route_ids = {route.route_id for route in self.route_evidence}
+        if len(self.route_evidence) != len(self.applicable_route_ids):
+            raise ValueError(
+                "每个适用路线必须恰有一条路线摘要："
+                f"摘要数={len(self.route_evidence)} 适用路线数={len(self.applicable_route_ids)}"
+            )
         if route_ids != set(self.applicable_route_ids):
             missing = sorted(set(self.applicable_route_ids) - route_ids)
             extra = sorted(route_ids - set(self.applicable_route_ids))
@@ -359,6 +503,58 @@ class GapDoubleExhaustion(BaseModel):
         return self
 
     @model_validator(mode="after")
+    def _evidence_gap_binds_gap_content(self) -> GapDoubleExhaustion:
+        """Phase2 EvidenceGap 必须与缺口内容精确一致：身份、候选路线、信息增益、
+        已完成策略全部机械绑定，换旧证据缺口/删候选路线/错字段对象状态均失败。"""
+        if self.evidence_gap.gap_id != self.gap_id:
+            raise ValueError("证据缺口锚点必须绑定同一缺口标识")
+        if self.evidence_gap.object_type != self.object_type:
+            raise ValueError("证据缺口锚点对象类型与缺口不一致")
+        if self.evidence_gap.object_id != self.object_id:
+            raise ValueError("证据缺口锚点对象与缺口不一致")
+        if self.evidence_gap.current_state != self.current_state:
+            raise ValueError("证据缺口锚点状态与缺口不一致")
+        if set(self.evidence_gap.candidate_sources) != set(self.applicable_route_ids):
+            missing = sorted(
+                set(self.applicable_route_ids) - set(self.evidence_gap.candidate_sources)
+            )
+            extra = sorted(
+                set(self.evidence_gap.candidate_sources) - set(self.applicable_route_ids)
+            )
+            raise ValueError(
+                "证据缺口候选路线必须与适用路线完全一致："
+                f"缺失={missing} 多余={extra}"
+            )
+        if self.evidence_gap.information_gain_diff != self.information_gain_rounds:
+            raise ValueError("证据缺口信息增益必须与逐缺口信息增益完全一致")
+        expected_strategies = self._derive_completed_strategies()
+        if tuple(sorted(self.evidence_gap.completed_strategies)) != tuple(
+            sorted(expected_strategies)
+        ):
+            raise ValueError(
+                "证据缺口已完成策略必须与实际证明/路线已完成策略相容"
+            )
+        return self
+
+    def _derive_completed_strategies(self) -> frozenset[str]:
+        """从实际证明/审计派生已完成策略标识集合。"""
+        strategy_ids: set[str] = set()
+        for proof in self.recovery_exhaustion_proofs:
+            strategy_ids.update(proof.completed_strategy_unit_ids)
+        if self.same_path_retry_audit is not None:
+            strategy_ids.update(
+                receipt.strategy_unit_id
+                for receipt in self.same_path_retry_audit.receipts
+            )
+        if self.alternative_path_audit is not None:
+            strategy_ids.update(
+                unit.strategy_unit_id
+                for unit in self.alternative_path_audit.strategy_units
+                if unit.applicable and unit.completed
+            )
+        return frozenset(strategy_ids)
+
+    @model_validator(mode="after")
     def _gap_type_binds_compatible_evidence(self) -> GapDoubleExhaustion:
         final_classes = {route.final_result_class for route in self.route_evidence}
         has_technical = bool(final_classes & TECHNICAL_RESULT_CLASSES)
@@ -369,23 +565,23 @@ class GapDoubleExhaustion(BaseModel):
         is_technical_state = self.current_state == "unresolved_due_to_route"
 
         if self.current_state in SCIENCE_ABSENT_STATES or self.current_state == "conflicting":
-            # 科学缺口：禁止技术证据，必须绑定饱和科学穷尽证明
+            # 科学缺口：禁止技术证据，必须绑定逐路线的饱和科学穷尽证明
             if has_technical or access_blocked:
                 raise ValueError("科学缺口不得携带技术失败或访问阻断路线")
-            if self.recovery_exhaustion_proof is None:
+            if not self.recovery_exhaustion_proofs:
                 raise ValueError("科学缺口必须绑定饱和的科学穷尽证明")
-            if not (
-                self.recovery_exhaustion_proof.recovery_history
-                .can_declare_information_saturated
-            ):
-                raise ValueError("尚未形成连续两轮无新增关键信息的科学穷尽证据")
+            for proof in self.recovery_exhaustion_proofs:
+                if not (
+                    proof.recovery_history.can_declare_information_saturated
+                ):
+                    raise ValueError("尚未形成连续两轮无新增关键信息的科学穷尽证据")
             if self.same_path_retry_audit is not None or self.alternative_path_audit is not None:
                 raise ValueError("科学缺口不得携带技术重试/替代策略审计")
             if self.technical_diagnosis is not None:
                 raise ValueError("科学缺口不得携带技术诊断")
         elif is_technical_state:
             # 技术缺口：不得复用科学 not_found 证明，必须绑定技术证据
-            if self.recovery_exhaustion_proof is not None:
+            if self.recovery_exhaustion_proofs:
                 raise ValueError("技术缺口不得复用科学 not_found 穷尽证明")
             if self.same_path_retry_audit is None or self.alternative_path_audit is None:
                 raise ValueError("技术缺口必须绑定同路径重试与替代策略审计")
@@ -396,50 +592,142 @@ class GapDoubleExhaustion(BaseModel):
         return self
 
     @model_validator(mode="after")
-    def _routes_bind_proof_receipts(self) -> GapDoubleExhaustion:
-        if self.recovery_exhaustion_proof is not None:
-            proof_receipt_ids = {
-                receipt.receipt_id
-                for recovery_round in self.recovery_exhaustion_proof.recovery_history.rounds
-                for receipt in recovery_round.source_receipts
-            }
-            proof_gap_ids = {
-                receipt.gap_id
-                for recovery_round in self.recovery_exhaustion_proof.recovery_history.rounds
-                for receipt in recovery_round.source_receipts
-            }
-            if proof_gap_ids != {self.gap_id}:
-                raise ValueError("恢复证明回执必须全部绑定同一缺口")
+    def _routes_bind_proofs_per_route(self) -> GapDoubleExhaustion:
+        """路线证据与实际证明逐路线精确绑定：route IDs exact、每条路线回执 exact、
+        attempt_count 与 access_methods 由实际回执派生。"""
+        is_scientific = (
+            self.current_state in SCIENCE_ABSENT_STATES or self.current_state == "conflicting"
+        )
+        if is_scientific:
+            proof_routes = [
+                proof.execution_context[0] for proof in self.recovery_exhaustion_proofs
+            ]
+            if len(proof_routes) != len(set(proof_routes)):
+                raise ValueError("同一科学证明不得重复贴到同一路线")
+            if set(proof_routes) != set(self.applicable_route_ids):
+                missing = sorted(set(self.applicable_route_ids) - set(proof_routes))
+                extra = sorted(set(proof_routes) - set(self.applicable_route_ids))
+                raise ValueError(
+                    "逐路线科学证明必须与适用路线集合完全一致："
+                    f"缺失={missing} 多余={extra}"
+                )
+            for proof in self.recovery_exhaustion_proofs:
+                route_id = proof.execution_context[0]
+                route = next(
+                    item for item in self.route_evidence if item.route_id == route_id
+                )
+                receipts = _proof_receipts(proof)
+                self._assert_route_derived_from_receipts(route, receipts)
+        else:
+            # 技术缺口：每条适用路线都必须失败关闭验证。
+            # 当前 Phase2 合同不能表示多路线技术/科学完成/不适用路线，
+            # 故只接受访问阻断路线，且回执必须来自本路线的重试/替代审计；
+            # 第二假路线、已完成科学路线、不适用路线一律拒绝。
+            if self.same_path_retry_audit is None or self.alternative_path_audit is None:
+                raise ValueError("技术缺口必须绑定同路径重试与替代策略审计")
+            tech_receipts = (
+                *self.same_path_retry_audit.receipts,
+                *self.alternative_path_audit.source_receipts,
+            )
+            if len(self.route_evidence) != len(self.applicable_route_ids):
+                raise ValueError("路线证据必须与适用路线集合一一对应")
             for route in self.route_evidence:
-                if not set(route.receipt_ids) <= proof_receipt_ids:
-                    raise ValueError("科学路线回执必须来自恢复证明")
-                for receipt_id in route.receipt_ids:
-                    matching = [
-                        r
-                        for recovery_round in self.recovery_exhaustion_proof.recovery_history.rounds
-                        for r in recovery_round.source_receipts
-                        if r.receipt_id == receipt_id
-                    ]
-                    if not matching or matching[0].route_id != route.route_id:
-                        raise ValueError("路线回执与恢复证明路线不一致")
+                if (
+                    route.completion
+                    is not RouteCompletionState.ACCESS_BLOCKED
+                ):
+                    raise ValueError(
+                        "技术缺口当前合同只接受访问阻断路线，"
+                        "不得接收自由完成的科学路线或自由不适用路线"
+                    )
+                route_receipts = tuple(
+                    receipt
+                    for receipt in tech_receipts
+                    if receipt.route_id == route.route_id
+                )
+                self._assert_route_derived_from_receipts(route, route_receipts)
+        return self
+
+    @staticmethod
+    def _assert_route_derived_from_receipts(
+        route: GapRouteEvidence,
+        receipts: Sequence[SourceReceipt],
+    ) -> None:
+        by_id: dict[str, SourceReceipt] = {}
+        for receipt in receipts:
+            by_id.setdefault(receipt.receipt_id, receipt)
+        unique = tuple(by_id.values())
+        receipt_ids = set(by_id)
+        if set(route.receipt_ids) != receipt_ids:
+            missing = sorted(receipt_ids - set(route.receipt_ids))
+            extra = sorted(set(route.receipt_ids) - receipt_ids)
+            raise ValueError(
+                "路线回执必须与实际证明完全一致：缺失="
+                f"{missing} 多余={extra}"
+            )
+        if route.attempt_count != len(receipt_ids):
+            raise ValueError("路线尝试次数必须由实际回执数派生")
+        derived_methods = tuple(sorted({receipt.access_method for receipt in unique}))
+        if tuple(sorted(route.access_methods)) != derived_methods:
+            raise ValueError("路线访问方式必须由实际回执派生")
+        # 最终结果类别必须由实际回执终端规则派生，调用方不得自报
+        derived_class = derive_terminal_result_class(unique)
+        if route.final_result_class != derived_class:
+            raise ValueError(
+                "路线最终结果类别必须由实际回执终端规则派生："
+                f"声明={route.final_result_class} 派生={derived_class}"
+            )
+        if (
+            route.completion is RouteCompletionState.ACCESS_BLOCKED
+            and derived_class not in TECHNICAL_RESULT_CLASSES
+        ):
+            raise ValueError(
+                "访问阻断路线的最终结果类别必须是技术失败类别："
+                f"派生={derived_class}"
+            )
+
+    @model_validator(mode="after")
+    def _receipt_entities_bind_gap_or_associated(self) -> GapDoubleExhaustion:
+        """回执 gap/entity/claim 上下文必须与缺口及显式关联实体一致。"""
+        allowed_entities = frozenset({self.object_id, *self.associated_entity_ids})
+        for receipt in self._all_receipts():
+            if receipt.gap_id != self.gap_id:
+                raise ValueError("缺口回执必须全部绑定同一证据缺口")
+            if receipt.entity_id not in allowed_entities:
+                raise ValueError(
+                    f"回执实体 {receipt.entity_id} 必须绑定缺口对象或显式声明的关联实体"
+                )
+        return self
+
+    def _all_receipts(self) -> tuple[SourceReceipt, ...]:
+        receipts: list[SourceReceipt] = []
+        for proof in self.recovery_exhaustion_proofs:
+            receipts.extend(_proof_receipts(proof))
         if self.same_path_retry_audit is not None:
-            retry_receipt_ids = {r.receipt_id for r in self.same_path_retry_audit.receipts}
-            route_receipt_ids = {
-                r for route in self.route_evidence for r in route.receipt_ids
-            }
-            if not retry_receipt_ids <= route_receipt_ids:
-                raise ValueError("技术重试回执必须进入缺口路线证据")
-            if any(r.gap_id != self.gap_id for r in self.same_path_retry_audit.receipts):
-                raise ValueError("技术重试回执必须绑定同一缺口")
+            receipts.extend(self.same_path_retry_audit.receipts)
         if self.alternative_path_audit is not None:
-            alternative_receipt_ids = {
-                r.receipt_id for r in self.alternative_path_audit.source_receipts
-            }
-            route_receipt_ids = {
-                r for route in self.route_evidence for r in route.receipt_ids
-            }
-            if not alternative_receipt_ids <= route_receipt_ids:
-                raise ValueError("替代策略回执必须进入缺口路线证据")
+            receipts.extend(self.alternative_path_audit.source_receipts)
+        return tuple(receipts)
+
+    @model_validator(mode="after")
+    def _information_gain_rounds_align_with_history(self) -> GapDoubleExhaustion:
+        """信息增益轮次必须与每个科学证明的恢复历史逐轮对齐：
+        摘要声明有增益 ⇔ 历史轮次有门槛相关增益；不得笼统宣称两轮无增益。"""
+        if self.current_state in SCIENCE_ABSENT_STATES or self.current_state == "conflicting":
+            for proof in self.recovery_exhaustion_proofs:
+                history_rounds = proof.recovery_history.rounds
+                if len(history_rounds) != len(self.information_gain_rounds):
+                    raise ValueError("信息增益轮次必须与恢复历史轮次一一对应")
+                for gain_diff, history_round in zip(
+                    self.information_gain_rounds, history_rounds, strict=True
+                ):
+                    declared_gain = bool(
+                        gain_diff.new_fields or gain_diff.new_source_versions
+                    )
+                    if declared_gain != history_round.information_gain.has_gate_relevant_gain:
+                        raise ValueError(
+                            "信息增益摘要必须与恢复历史逐轮对齐，不得自报增益"
+                        )
         return self
 
     @model_validator(mode="after")

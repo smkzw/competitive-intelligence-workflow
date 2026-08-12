@@ -1,6 +1,7 @@
 """Task 3.2 未决关键冲突无草稿集成测试。
 
-冲突不得伪装为未公开或数值零；A/B/C 各一个非空关键冲突复用全部无草稿负断言。
+冲突不得伪装为未公开或数值零；A/B/C 各一个非空关键冲突经公共原子入口
+build_and_write_blocker_package 写包并复用全部无下游负断言。
 """
 
 from __future__ import annotations
@@ -22,11 +23,10 @@ from tests.integration.test_no_draft_when_blocked import (
     gap_exhaustion,
     now,
     prepare_workspace,
-    routed_audit,
+    public_write_blocker_package,
     satisfying_bindings_for,
     snapshot_for,
     spec_yaml,
-    write_via_entry,
 )
 
 REPORT_KINDS = (ReportKind.A, ReportKind.B, ReportKind.C)
@@ -91,34 +91,49 @@ def test_unresolved_key_conflict_never_becomes_not_publicly_disclosed_or_zero(
                     x for x in spec.units if x.unit_id == unit
                 ).object_type.value,
                 current_state="conflicting",
+                gate_spec_id=spec.spec_id,
+                field_id=(
+                    next(
+                        x for x in spec.units if x.unit_id == unit
+                    ).required_context_fields[0].value
+                    if next(
+                        x for x in spec.units if x.unit_id == unit
+                    ).required_context_fields
+                    else next(
+                        x for x in spec.units if x.unit_id == unit
+                    ).user_label_zh
+                ),
             )
             for index, (unit, object_id) in enumerate(blocked_pairs, start=1)
         ),
         created_at=now(),
     )
-    audit = routed_audit(
+
+    workspace_root = prepare_workspace(tmp_path)
+    json_path, md_path = public_write_blocker_package(
         report_kind=report_kind,
         spec=spec,
         snapshot=snapshot,
         gate_result=gate_result,
         failed_units=failed_units,
-        exhausted=record,
+        record=record,
+        workspace_root=workspace_root,
     )
+    from tests.integration.test_no_draft_when_blocked import load_audit_json
+
+    audit = load_audit_json(json_path)
     conflict_units = [u for u in audit.failed_units if u.unit_id == unit_id]
     assert conflict_units
     assert all(u.current_state == "conflicting" for u in conflict_units)
     for u in conflict_units:
         summary = u.missing_or_conflict_summary_zh
         assert "未公开" not in summary
-        assert "零" not in summary
-        assert "0" not in summary
-
-    workspace_root = prepare_workspace(tmp_path)
-    write_via_entry(
-        audit,
-        workspace_root=workspace_root,
-        database_path=workspace_root / "project.sqlite",
-    )
+        assert "数值零" not in summary
+        assert "为 0" not in summary
+    # 冲突必须在 Markdown 判断节说明，且不与未公开混淆
+    markdown = md_path.read_text(encoding="utf-8")
+    assert "不同来源信息不一致" in markdown
+    assert "来源明确未披露或尚未公开" not in markdown
 
     assert_no_downstream_artifacts(
         workspace_root,

@@ -239,3 +239,108 @@ def test_exhausted_qc_rejection_requires_matching_exhaustion_record(
             exhaustion=wrong_record,
         )
     assert (workspace_root / "blockers").exists() is False
+
+
+def test_qc_public_entry_revalidates_forged_inputs(tmp_path: Path) -> None:
+    """QC 公共入口从原始内容完整重验证：model_copy 伪造项目/快照/宇宙/结果键/
+    穷尽角色全部失败关闭，且无下游产物。"""
+    report_kind = ReportKind.A
+    gate_result = _passed_gate_result(report_kind)
+    snapshot = snapshot_for(report_kind)
+    rejection = _rejection(report_kind, gate_result, recoverable=True, exhausted=False)
+    workspace_root = prepare_workspace(tmp_path)
+    database_path = workspace_root / "project.sqlite"
+
+    # 伪造结果键 → 拒绝
+    forged_result = gate_result.model_copy(update={"result_key": "forged-key"})
+    with pytest.raises(ValueError):
+        apply_scientific_qc_rejection(
+            rejection,
+            gate_result=forged_result,
+            snapshot=snapshot,
+            workspace_root=workspace_root,
+            database_path=database_path,
+        )
+
+    # 伪造宇宙摘要 → 拒绝
+    forged_snapshot = snapshot.model_copy(
+        update={"universe_summary": "forged-summary"}
+    )
+    with pytest.raises(ValueError):
+        apply_scientific_qc_rejection(
+            rejection,
+            gate_result=gate_result,
+            snapshot=forged_snapshot,
+            workspace_root=workspace_root,
+            database_path=database_path,
+        )
+
+    # 伪造项目（rejection 调包）→ 拒绝
+    forged_rejection = ScientificQcRejection.model_validate(
+        {
+            **rejection.model_dump(mode="json"),
+            "project_id": "project-other",
+        }
+    )
+    with pytest.raises(ValueError):
+        apply_scientific_qc_rejection(
+            forged_rejection,
+            gate_result=gate_result,
+            snapshot=snapshot,
+            workspace_root=workspace_root,
+            database_path=database_path,
+        )
+
+    # 已穷尽否决 + 伪造穷尽角色 → 拒绝
+    exhausted_rejection = _rejection(
+        report_kind, gate_result, recoverable=False, exhausted=True
+    )
+    from ci_workflow.gates.exhaustion import ExhaustionRole
+    from tests.integration.test_no_draft_when_blocked import gap_exhaustion
+
+    good_gap = gap_exhaustion(
+        gap_id="gap-qc-forged",
+        gate_spec_id=spec_yaml("A").spec_id,
+        field_id=spec_yaml("A").units[0].user_label_zh,
+    )
+    valid_record = DoubleExhaustionRecord(
+        project_id="project_000000000000000000000001",
+        report_kind=report_kind,
+        gaps=(good_gap,),
+        created_at=now(),
+    )
+    # model_copy 伪造执行者角色（跳过模型校验）→ QC 入口重验证拒绝
+    forged_record = valid_record.model_copy(
+        update={
+            "gaps": (
+                good_gap.model_copy(
+                    update={"executor_role": ExhaustionRole.REVIEWER}
+                ),
+            )
+        }
+    )
+    with pytest.raises(ValueError):
+        apply_scientific_qc_rejection(
+            exhausted_rejection,
+            gate_result=gate_result,
+            snapshot=snapshot,
+            workspace_root=workspace_root,
+            database_path=database_path,
+            exhaustion=forged_record,
+        )
+
+    # 正常路径仍返回原状态且零下游
+    next_state = apply_scientific_qc_rejection(
+        rejection,
+        gate_result=gate_result,
+        snapshot=snapshot,
+        workspace_root=workspace_root,
+        database_path=database_path,
+    )
+    assert next_state == "recovering"
+    assert_no_downstream_artifacts(
+        workspace_root,
+        project_id="project_000000000000000000000001",
+        report_kind=report_kind,
+        report_version=rejection.report_version,
+    )
