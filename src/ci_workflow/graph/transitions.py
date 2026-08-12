@@ -86,6 +86,19 @@ PROJECT_TRANSITIONS: frozenset[DeclaredEdge] = frozenset(
             "remaining_selected_blocked",
             "g_project_partially_delivered_partial_delivery_blocked",
         ),
+        # v1.2 §10.2 勘误：有交付但剩余选定对象已穷尽阻断时，running /
+        # awaiting_user 也可直接进入 partial_delivery_blocked（无需先经
+        # partially_delivered 两步）。触发与守卫复用既有声明。
+        _edge(
+            "project", _PR.RUNNING, _PR.PARTIAL_DELIVERY_BLOCKED,
+            "remaining_selected_blocked",
+            "g_project_partially_delivered_partial_delivery_blocked",
+        ),
+        _edge(
+            "project", _PR.AWAITING_USER, _PR.PARTIAL_DELIVERY_BLOCKED,
+            "remaining_selected_blocked",
+            "g_project_partially_delivered_partial_delivery_blocked",
+        ),
         # 任一未完成态 -> blocked：固定源集合 {running, awaiting_user, partially_delivered}
         _edge(
             "project", _PR.RUNNING, _PR.BLOCKED,

@@ -65,6 +65,22 @@ GT01_PROJECT_FIXTURE: tuple[LiteralEdge, ...] = (
         trigger="remaining_selected_blocked",
         guard_id="g_project_partially_delivered_partial_delivery_blocked",
     ),
+    # v1.2 §10.2 勘误：有交付但剩余选定对象已穷尽阻断时，running /
+    # awaiting_user 直接进入 partial_delivery_blocked（不需中间 partially_delivered）
+    LiteralEdge(
+        family="project",
+        from_state="running",
+        to_state="partial_delivery_blocked",
+        trigger="remaining_selected_blocked",
+        guard_id="g_project_partially_delivered_partial_delivery_blocked",
+    ),
+    LiteralEdge(
+        family="project",
+        from_state="awaiting_user",
+        to_state="partial_delivery_blocked",
+        trigger="remaining_selected_blocked",
+        guard_id="g_project_partially_delivered_partial_delivery_blocked",
+    ),
     # 任一未完成态 -> blocked：固定源集合展开，不用宽松通配符
     LiteralEdge(
         family="project",
