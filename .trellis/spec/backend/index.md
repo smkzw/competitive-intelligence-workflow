@@ -19,6 +19,7 @@ This directory contains guidelines for backend development. Fill in each file wi
 | [Error Handling](./error-handling.md) | Error types, handling strategies | To fill |
 | [Quality Guidelines](./quality-guidelines.md) | Fail-closed evidence evaluation, integrity boundaries, and tests | Active |
 | [Logging Guidelines](./logging-guidelines.md) | Structured logging, log levels | To fill |
+| [Manual Inbox Recovery](./manual-inbox-recovery.md) | User-assisted source recovery, matching, quarantine, and replay invariants | Active |
 
 ---
 

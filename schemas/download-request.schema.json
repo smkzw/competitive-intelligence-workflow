@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/download-request.schema.json",
+  "title": "用户辅助下载请求",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "request_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "blocking_priority": {"enum": ["blocking", "non_blocking"]},
+    "product_id": {"type": ["string", "null"], "minLength": 1},
+    "trial_id": {"type": ["string", "null"], "minLength": 1},
+    "registry_identifiers": {
+      "type": "array", "items": {"type": "string", "minLength": 1}
+    },
+    "doi": {"type": ["string", "null"], "minLength": 1},
+    "pmid": {"type": ["string", "null"], "minLength": 1},
+    "document_role": {
+      "enum": [
+        "registry_record",
+        "web_page",
+        "publication_pdf",
+        "supplementary_material",
+        "conference_slides",
+        "company_release",
+        "user_provided_file",
+        "review_pending"
+      ]
+    },
+    "title": {"type": "string", "minLength": 1},
+    "publisher": {"type": "string", "minLength": 1},
+    "landing_page_url": {"type": "string", "minLength": 1},
+    "attachment_url": {"type": "string", "minLength": 1},
+    "missing_fields": {
+      "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+    },
+    "expected_to_close_units": {
+      "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+    },
+    "reason_zh": {"type": "string", "minLength": 1},
+    "inbox_directory": {"type": "string", "minLength": 1},
+    "spec_id": {"type": "string", "minLength": 1},
+    "spec_fingerprint": {"type": "string", "minLength": 1},
+    "state": {
+      "enum": [
+        "awaiting_user",
+        "file_detected",
+        "matched",
+        "accepted",
+        "needs_re_download",
+        "not_required"
+      ]
+    },
+    "original_filename": {"type": ["string", "null"], "minLength": 1},
+    "content_sha256": {
+      "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"
+    },
+    "media_type": {"type": ["string", "null"], "minLength": 1},
+    "canonical_filename": {"type": ["string", "null"], "minLength": 1},
+    "canonical_relative_path": {
+      "type": ["string", "null"], "minLength": 1,
+      "pattern": "^evidence/library/[^/]+/[^/]+$"
+    },
+    "source_version_id": {"type": ["string", "null"], "minLength": 1},
+    "re_extraction_job_ids": {
+      "type": "array", "items": {"type": "string", "minLength": 1}
+    },
+    "matched_identifiers": {
+      "type": "array", "items": {"type": "string", "minLength": 1}
+    },
+    "quarantine_reason_zh": {"type": ["string", "null"], "minLength": 1},
+    "quarantine_rejected_paths": {
+      "type": "array", "items": {
+        "type": "string", "minLength": 1,
+        "pattern": "^evidence/quarantine/[^/]+/[0-9a-f]{16}/[^/]+$"
+      }
+    },
+    "attempt_number": {"type": "integer", "minimum": 1},
+    "created_at": {
+      "type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "updated_at": {
+      "type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    }
+  },
+  "required": [
+    "schema_version", "request_id", "project_id", "run_id", "report_kind",
+    "blocking_priority", "product_id", "trial_id", "registry_identifiers",
+    "doi", "pmid", "document_role", "title", "publisher", "landing_page_url",
+    "attachment_url", "missing_fields", "expected_to_close_units", "reason_zh",
+    "inbox_directory", "state",
+    "spec_id", "spec_fingerprint",
+    "original_filename", "content_sha256", "media_type", "canonical_filename",
+    "canonical_relative_path", "source_version_id", "re_extraction_job_ids",
+    "matched_identifiers", "quarantine_reason_zh", "quarantine_rejected_paths",
+    "attempt_number",
+    "created_at", "updated_at"
+  ],
+  "allOf": [
+    {
+      "if": {"properties": {"state": {"enum": ["matched", "accepted"]}}},
+      "then": {
+        "properties": {
+          "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "matched_identifiers": {"type": "array", "minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "accepted"}}},
+      "then": {
+        "properties": {
+          "original_filename": {"type": "string", "minLength": 1},
+          "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "canonical_filename": {"type": "string", "minLength": 1},
+          "canonical_relative_path": {"type": "string", "minLength": 1},
+          "source_version_id": {"type": "string", "minLength": 1},
+          "re_extraction_job_ids": {"type": "array", "minItems": 1}
+        }
+      }
+    }
+  ]
+}

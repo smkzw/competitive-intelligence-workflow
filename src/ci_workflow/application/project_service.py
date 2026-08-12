@@ -47,7 +47,7 @@ _INITIAL_TEXT_FILES = {
     "receipts/download_requests.jsonl": "",
     "logs/status.md": "# 项目状态\n\n项目已创建，尚未开始调研。\n",
     "logs/run_summary.md": "# 运行摘要\n\n暂无运行记录。\n",
-    "logs/download_requests.md": "# 待补充资料\n\n当前无需用户补充的文件。\n",
+    "logs/download_requests.md": "# 待补充资料\n\n当前无需补充资料。\n",
 }
 
 _INITIAL_JSON_FILES: dict[str, dict[str, Any]] = {
