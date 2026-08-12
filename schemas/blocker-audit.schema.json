@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/blocker-audit.schema.json",
+  "title": "证据不足阻断说明",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "audit_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "contract_version": {"type": "string", "minLength": 1},
+    "report_version": {"type": "string", "pattern": "^v[0-9]+(?:\\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?$"},
+    "rule_spec_id": {"type": "string", "minLength": 1},
+    "rule_version": {"type": "string", "minLength": 1},
+    "spec_fingerprint": {"type": "string", "minLength": 1},
+    "evidence_snapshot_id": {"type": "string", "minLength": 1},
+    "universe_summary": {"type": "string", "minLength": 1},
+    "gate_result_key": {"type": "string", "minLength": 1},
+    "empty_universe": {
+      "type": ["string", "null"],
+      "enum": [
+        "a_no_eligible_innovative_product",
+        "b_no_eligible_result_trial",
+        "c_no_eligible_core_design_trial",
+        null
+      ]
+    },
+    "empty_evidence": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "evidence_id": {"type": "string", "minLength": 1},
+        "project_id": {"type": "string", "minLength": 1},
+        "report_kind": {"enum": ["A", "B", "C"]},
+        "contract_version": {"type": "string", "minLength": 1},
+        "report_version": {"type": "string", "minLength": 1},
+        "evidence_snapshot_id": {"type": "string", "minLength": 1},
+        "eligibility_rule_spec_id": {"type": "string", "minLength": 1},
+        "eligibility_rule_version": {"type": "string", "minLength": 1},
+        "eligibility_policy_id": {"type": "string", "minLength": 1},
+        "discovery_summary": {"type": "string", "minLength": 1},
+        "candidate_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "eligible_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "excluded_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "exclusion_receipt_summary": {
+          "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+        },
+        "exhaustion": {"type": "object"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "evidence_digest": {"type": "string", "minLength": 1}
+      },
+      "required": [
+        "schema_version", "evidence_id", "project_id", "report_kind",
+        "contract_version", "report_version", "evidence_snapshot_id",
+        "eligibility_rule_spec_id", "eligibility_rule_version",
+        "eligibility_policy_id", "discovery_summary", "candidate_ids",
+        "eligible_ids", "excluded_ids", "exclusion_receipt_summary",
+        "exhaustion", "created_at", "evidence_digest"
+      ]
+    },
+    "empty_justification_zh": {"type": ["string", "null"], "minLength": 1},
+    "failed_units": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "unit_id": {"type": "string", "minLength": 1},
+          "object_type": {"type": "string", "minLength": 1},
+          "object_id": {"type": "string", "minLength": 1},
+          "object_name_zh": {"type": "string", "minLength": 1},
+          "field_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "current_state": {
+            "enum": [
+              "not_reported",
+              "not_publicly_disclosed",
+              "conflicting",
+              "unresolved_due_to_route"
+            ]
+          },
+          "user_label_zh": {"type": "string", "minLength": 1},
+          "missing_or_conflict_summary_zh": {"type": "string", "minLength": 1},
+          "impacted_product_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "impacted_trial_ids": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        },
+        "required": [
+          "unit_id", "object_type", "object_id", "object_name_zh", "field_ids",
+          "current_state", "user_label_zh", "missing_or_conflict_summary_zh",
+          "impacted_product_ids", "impacted_trial_ids"
+        ]
+      }
+    },
+    "impacted_products": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "impacted_trials": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "per_gap_audits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gap_id": {"type": "string", "minLength": 1},
+          "gate_unit_id": {"type": "string", "minLength": 1},
+          "object_type": {"type": "string", "minLength": 1},
+          "object_id": {"type": "string", "minLength": 1},
+          "object_name_zh": {"type": "string", "minLength": 1},
+          "current_state": {"type": "string", "minLength": 1},
+          "field_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "user_label_zh": {"type": "string", "minLength": 1},
+          "missing_or_conflict_summary_zh": {"type": "string", "minLength": 1},
+          "route_summaries": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "gap_id": {"type": "string", "minLength": 1},
+                "route_id": {"type": "string", "minLength": 1},
+                "route_name_zh": {"type": "string", "minLength": 1},
+                "completion": {"type": "string", "minLength": 1},
+                "final_result_class": {"type": "string", "minLength": 1},
+                "attempt_count": {"type": "integer", "minimum": 1},
+                "receipt_ids": {
+                  "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+                },
+                "access_methods": {
+                  "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+                }
+              },
+              "required": [
+                "gap_id", "route_id", "route_name_zh", "completion",
+                "final_result_class", "attempt_count", "receipt_ids", "access_methods"
+              ]
+            }
+          },
+          "information_gain_rounds": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "round": {"type": "integer", "minimum": 1},
+                "new_fields": {"type": "array", "items": {"type": "string"}},
+                "new_source_versions": {"type": "array", "items": {"type": "string"}}
+              },
+              "required": ["round", "new_fields", "new_source_versions"]
+            }
+          },
+          "omission_conclusion": {"type": "string", "minLength": 1},
+          "omission_notes_zh": {"type": "string", "minLength": 1},
+          "technical_diagnosis_zh": {"type": ["string", "null"], "minLength": 1},
+          "gap_digest": {"type": "string", "minLength": 1}
+        },
+        "required": [
+          "gap_id", "gate_unit_id", "object_type", "object_id", "object_name_zh",
+          "current_state", "field_ids", "user_label_zh",
+          "missing_or_conflict_summary_zh", "route_summaries",
+          "information_gain_rounds", "omission_conclusion", "omission_notes_zh",
+          "technical_diagnosis_zh", "gap_digest"
+        ]
+      }
+    },
+    "route_summaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gap_id": {"type": "string", "minLength": 1},
+          "route_id": {"type": "string", "minLength": 1},
+          "route_name_zh": {"type": "string", "minLength": 1},
+          "completion": {"type": "string", "minLength": 1},
+          "final_result_class": {"type": "string", "minLength": 1},
+          "attempt_count": {"type": "integer", "minimum": 1},
+          "receipt_ids": {
+            "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+          },
+          "access_methods": {
+            "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "required": [
+          "gap_id", "route_id", "route_name_zh", "completion",
+          "final_result_class", "attempt_count", "receipt_ids", "access_methods"
+        ]
+      }
+    },
+    "omission_review_result_zh": {"type": "string", "minLength": 1},
+    "has_technical_access_issue": {"type": "boolean"},
+    "residual_uncertainty_zh": {"type": "string", "minLength": 1},
+    "user_help_needed": {"type": "boolean"},
+    "user_input_directory": {"type": ["string", "null"], "minLength": 1},
+    "minimal_user_action_zh": {"type": "string", "minLength": 1},
+    "source_links": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "audit_directory": {"type": "string", "minLength": 1},
+    "resume_instruction_zh": {"type": "string", "minLength": 1},
+    "record_digest": {"type": "string", "minLength": 1},
+    "gap_digests": {
+      "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+    },
+    "audit_digest": {"type": "string", "minLength": 1},
+    "created_at": {
+      "type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    }
+  },
+  "required": [
+    "schema_version", "audit_id", "project_id", "report_kind", "contract_version",
+    "report_version", "rule_spec_id", "rule_version", "spec_fingerprint",
+    "evidence_snapshot_id", "universe_summary", "gate_result_key",
+    "empty_universe", "empty_evidence", "empty_justification_zh", "failed_units",
+    "impacted_products", "impacted_trials", "per_gap_audits", "route_summaries",
+    "omission_review_result_zh", "has_technical_access_issue",
+    "residual_uncertainty_zh", "user_help_needed", "user_input_directory",
+    "minimal_user_action_zh", "source_links", "audit_directory",
+    "resume_instruction_zh", "record_digest", "gap_digests", "audit_digest",
+    "created_at"
+  ],
+  "allOf": [
+    {
+      "if": {"properties": {"empty_universe": {"const": null}}},
+      "then": {"properties": {"failed_units": {"minItems": 1}}},
+      "else": {"properties": {"failed_units": {"maxItems": 0}}}
+    }
+  ]
+}

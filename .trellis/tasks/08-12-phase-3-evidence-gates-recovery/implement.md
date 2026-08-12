@@ -64,9 +64,20 @@
 - `test_report_specific_gates.py` exact nodes：`test_a_each_base_unit_is_independently_required`、`test_a_preclinical_numeric_result_does_not_trigger_clinical_result_summary`、`test_a_early_clinical_without_results_is_not_blocked_by_result_summary`、`test_a_result_bearing_uses_observed_clinical_numeric_result_not_planned_registry_values`、`test_a_maturity_trigger_matrix`、`test_a_result_bearing_cannot_be_manually_downgraded`、`test_a_result_bearing_missing_efficacy_blocks`、`test_a_result_bearing_missing_safety_blocks`、`test_report_specific_gates_reject_dropped_eligible_product_or_trial`、`test_b_each_comparable_group_requires_baseline_fields`、`test_b_treatment_control_scope_is_explicit`、`test_b_single_arm_does_not_fabricate_control`、`test_b_multiarms_require_all_applicable_group_values`、`test_b_group_scoped_safety_cannot_use_trial_overall_value`、`test_b_completion_and_disposition_are_modeled_nonblocking_and_state_preserved`、`test_c_official_registry_passes_without_protocol_or_sap`、`test_c_each_core_design_unit_blocks_when_missing`、`test_c_optional_statistical_details_are_nonblocking_and_state_preserved`、`test_user_reason_contract_is_chinese_and_excludes_internal_status_names`。
 - `test_gate_override_strictness.py` exact nodes：`test_override_accepts_added_unit`、`test_override_accepts_raised_threshold`、`test_override_rejects_deleted_unit`、`test_override_rejects_lowered_threshold`、`test_override_rejects_applicability_scope_shrink`、`test_override_rejects_source_role_or_disclosure_maturity_relaxation`、`test_override_rejects_missing_or_conflict_policy_relaxation`、`test_override_compares_each_monotonic_field`、`test_override_binds_result_to_parent_version_and_evidence_snapshot`、`test_override_rejects_incorrect_affected_report_set`、`test_override_creates_child_version_without_mutating_parent`、`test_override_recomputes_only_dependency_affected_reports`、`test_unaffected_report_result_remains_unchanged`。
 
-## Task 3.2–3.7
+## Task 3.2 双重穷尽和用户可读证据不足说明
 
-- [ ] 双重穷尽、证据不足说明和所有无草稿负断言。
+- [ ] 创建 `gates/{exhaustion,blocker_audit}.py`、`blocker-audit.schema.json` 和四份指定集成测试。
+- [ ] 自动检索执行者完成多路径恢复，独立遗漏复核者逐缺口复审；角色、结论与回执分离，不能由同一自报替代。
+- [ ] 每个阻断报告只生成 `blockers/<report>/<version>/{audit.json,audit.md}`；中文说明列出医学对象、缺失内容、已尝试范围、是否需要用户、最小动作、原文/附件链接、唯一投递目录和恢复节点，不展示搜索日志或内部状态词。
+- [ ] `test_no_draft_when_blocked.py` 两层参数化：A 空创新药宇宙、B 无达到最低结果门槛的适格试验、C 无达到设计核心门槛的适格试验；再从 A/B/C GateSpec 枚举每个适用关键单元，构造非空候选且只缺该单元。
+- [ ] 每个缺口 case 断言：无锁定报告快照、coverage/projection、format job/render queue、artifact record；对应报告版本目录不存在正式、draft 或占位门户。允许的用户产物只有证据不足说明，内部回执可存在。
+- [ ] A/B/C 各一个非空关键冲突复用全部无草稿负断言；冲突不得伪装为未公开或数值零。
+- [ ] A/B/C 各一个 GateSpec 通过但独立科学质控否决场景：可修复者回 `recovering`，已穷尽者进 `evidence_blocked`；均无下游报告产物。
+- [ ] 精确命令通过，case 总数等于 3 个空/无适格场景 + 三份 GateSpec 适用阻断单元总数 + 3 个关键冲突 + 3 个科学质控否决场景。
+- [ ] 独立验收 P0/P1=0 后提交 Task 3.2。
+
+## Task 3.3–3.7
+
 - [ ] 下载请求、manual-inbox 自动识别、规范命名、归档与恢复。
 - [ ] GT01–GT11 类型化控制图、非法迁移拒绝、节点合同与重放幂等。
 - [ ] 报告/格式独立的部分交付与阻断。

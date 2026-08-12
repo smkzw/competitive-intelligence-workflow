@@ -37,6 +37,7 @@
       "schemas/source-eligibility.schema.json",
       "schemas/evidence-gap.schema.json",
       "schemas/evidence-fragment.schema.json",
+      "schemas/blocker-audit.schema.json",
       "schemas/fact.schema.json",
       "schemas/gate-override.schema.json",
       "schemas/gate-result.schema.json",

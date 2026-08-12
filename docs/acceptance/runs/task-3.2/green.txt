@@ -1,0 +1,18 @@
+2026-08-12 Task 3.2 机械验证
+
+Task 3.2 精确套件（四项集成测试）：77 passed
+全库回归：408 passed
+Ruff：All checks passed（src/ 与 tests/）
+strict mypy：Success, no issues found in 6 source files
+包校验：PACKAGE_OK version=0.1.0a0 stage=phase-2-accepted
+blocker-audit.schema.json：Draft202012Validator.check_schema 通过
+git diff --check：通过
+
+最终攻击（原子性/不可绕过/机械绑定反例）：8 passed
+- 伪造或脱离的审计不能经唯一公共原子入口发布（超集 failed_units、空场景伪造 gate_result）
+- build_and_write_blocker_package 首次写原子、零下游产物内置断言
+- 空场景证据拒绝：适格集合非空、跨项目、跨报告、调包缺口
+- 技术缺口不得复用科学 not_found 穷尽证明
+- 科学质控否决跨项目/跨宇宙/错快照/结果键不符全部失败关闭
+
+测试均使用无缓存模式（-p no:cacheprovider）；浏览器测试使用明确的系统临时目录 /tmp/ci32-accept，避免项目内临时目录导致 Playwright 无法创建子目录。

@@ -1,0 +1,16 @@
+2026-08-12 Task 3.2 回归范围
+
+- 空/无适格对象宇宙不伪造 GateResult：只交付 blockers/<report>/<version>/{audit.json,audit.md}。
+- GateSpec 与快照机械绑定：伪造 spec id、同版本异指纹、跨项目快照全部拒绝。
+- 双重穷尽角色分离：搜索/恢复执行者与独立遗漏复核者必须是不同角色。
+- 复核输入摘要由缺口内容确定性计算；适用路线集合与路线证据机械一致；不同路线来源回执互不相交。
+- 科学缺口不得携带技术证据/诊断/重试审计；技术缺口不得复用科学 not_found 证明，必须绑定同路径重试、替代策略与独立技术诊断。
+- 逐缺口审计：A/B/C 每个适用关键单元单缺口参数化，混合缺口允许且各缺口信息增益轮次独立。
+- 显式计数：A=12/B=11/C=8 关键单元，与 YAML 及真实 evaluator 双向一致。
+- 独立科学质控否决绑定项目、候选快照、结果键与宇宙摘要；可修复回 recovering、已穷尽进 evidence_blocked，两者均零下游产物。
+- 来源链接只接受 http/https 原文或工作区相对附件路径；审计包中文清洁，不泄露内部标识。
+- 未决关键冲突不伪装为未公开或数值零；A/B/C 各一非空关键冲突复用全量无草稿负断言。
+- 阻断包原子写入、幂等、漂移拒绝、路径类型化失败；不可经唯一公共原子入口之外发布。
+- blockers/ 不是报告目录，不进入报告渲染器；assert_no_report_downstream_artifacts 检查 DB 六表（report_snapshots/coverage_sets/coverage_projections/format_jobs/render_queue/artifact_records）与 reports/<kind>/<version> 目录。
+
+独立验收：同一会话最终 PASS；P0=0，P1=0，P2=0。
