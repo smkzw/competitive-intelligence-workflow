@@ -6,18 +6,15 @@ Date: 2026-08-13
 |---|---|
 | Task type | `finite_code_task` |
 | Risk | `high` |
-| Selected provider | `cms-smk` |
-| Selected model | `deepseek-v4-flash` |
-| Selected effort | `max` |
-| Duration | connectivity diagnostic 90.009s; live attempt approximately 6m01s before authorized pause |
-| API calls | unavailable; no worker report was produced |
-| Artifact size | no implementation artifact |
-| Result | paused by user before worker output |
+| Implementation commit | `8d50e13` |
+| Primary worker session | `019ff883-4620-7000-8dec-bc07b18315a4` |
+| Independent verifier session | `019ffaf1-86f4-7623-bc7c-24d656940c61` |
+| Final independent result | `PASS; P0=0; P1=0; P2=1` |
+| Exact and contract checks | 21 passed |
+| Associated gate and graph checks | 102 passed |
+| Phase 3 exit suite | 277 passed |
+| Full suite | 472 passed |
 
-## Verification Burden
+## Routing Note
 
-Task 3.7 has not reached implementation or acceptance. On resume, retain the same task ID and declared route policy, rerun preflight against the recorded prompt hash, and use the route contract's same-session recovery if the Pi harness exposes a recoverable session. Do not count the timed-out catalog/auth diagnostic as a live-route failure.
-
-## Routing Decision
-
-Initial route reason: approved finite-code route from the current global route manifest. The diagnostic timed out; the required live attempt was started and then stopped only because the user explicitly requested a lossless pause. No fallback occurred.
+实现和修复均优先沿用原会话。北京夜间路由切换时，运行器按全局策略把一次续发改写为 OpenCode Go 并新建会话；Codex未把该执行报告作为验收依据，只检查实际差异和机械结果。独立验收始终沿用原 Luna 会话并最终通过。
