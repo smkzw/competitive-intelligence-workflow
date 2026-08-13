@@ -1,0 +1,735 @@
+[
+  {
+    "label": "initial-1280",
+    "data": {
+      "label": "initial-1280",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177",
+      "summary": [
+        "匹配 5 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 0
+    },
+    "t": "2026-08-13T20:29:19.044Z"
+  },
+  {
+    "label": "title-text-1280",
+    "data": {
+      "h1": "竞品数据筛选",
+      "kicker": "总览",
+      "pageBody": "系统性红斑狼疮竞品研究\n总览\n全局搜索\n\n总览\n\n竞品数据筛选\n\n选择适应症、产品和终点，快速查看对应的竞品临床试验数据。\n\n筛选条件\n无筛选条件\n\n匹配 5 项结果\n\n名称\t产品\t试验\n疗效 · 产品甲 · 主要终点\t产品甲\tNCT00000001\n疗效 · 产品乙 · 主要终点\t产品乙\tNCT00000002\n疗效 · 产品甲 · 次要终点\t产品甲\tNCT00000003\n安全 · 产品丙 · 治疗期不良事件\t产品丙\tNCT00000004\n安全 · 产品乙 · 严重不良事件\t产品乙\tNCT00000005\n重点模块\n01\n疗效数据\n02\n安全性数据\n竞品临床试验数据"
+    },
+    "t": "2026-08-13T20:29:19.114Z"
+  },
+  {
+    "label": "forbidden-terms-1280",
+    "data": [
+      {
+        "n": "验证",
+        "hit": false
+      },
+      {
+        "n": "合成数据",
+        "hit": false
+      },
+      {
+        "n": "测试用途",
+        "hit": false
+      },
+      {
+        "n": "超长标识",
+        "hit": false
+      },
+      {
+        "n": "超长状态机械测试项",
+        "hit": false
+      },
+      {
+        "n": "placeholder",
+        "hit": false
+      },
+      {
+        "n": "TODO",
+        "hit": false
+      },
+      {
+        "n": "lorem",
+        "hit": false
+      },
+      {
+        "n": "ipsum",
+        "hit": false
+      },
+      {
+        "n": "favicon",
+        "hit": false
+      }
+    ],
+    "t": "2026-08-13T20:29:19.115Z"
+  },
+  {
+    "label": "links-1280",
+    "data": [
+      {
+        "rel": "icon",
+        "href": "data:,"
+      },
+      {
+        "rel": "stylesheet",
+        "href": "http://127.0.0.1:8765/assets/portal.css"
+      }
+    ],
+    "t": "2026-08-13T20:29:19.116Z"
+  },
+  {
+    "label": "groups-1280",
+    "data": [
+      {
+        "items": [
+          "系统性红斑狼疮",
+          "类风湿关节炎"
+        ],
+        "section": "整份报告条件",
+        "resetBtn": "清除整份报告条件",
+        "firstItemScope": "page"
+      },
+      {
+        "items": [
+          "产品甲",
+          "产品乙",
+          "产品丙",
+          "超长标识测试项"
+        ],
+        "section": "适应症\n        \n          系统性红斑狼疮\n          类风湿关节炎",
+        "resetBtn": "清除整份报告条件",
+        "firstItemScope": "page"
+      },
+      {
+        "items": [
+          "BAFF",
+          "CD20",
+          "JAK"
+        ],
+        "section": "产品\n        \n          产品甲\n          产品乙\n          产品丙\n          超长标识测试项",
+        "resetBtn": "清除整份报告条件",
+        "firstItemScope": "page"
+      },
+      {
+        "items": [
+          "主要终点",
+          "次要终点"
+        ],
+        "section": "疗效数据",
+        "resetBtn": "清除疗效条件",
+        "firstItemScope": "module"
+      },
+      {
+        "items": [
+          "安全性人群",
+          "意向性治疗人群"
+        ],
+        "section": "› 更多条件",
+        "resetBtn": null,
+        "firstItemScope": "module"
+      },
+      {
+        "items": [
+          "治疗期不良事件",
+          "严重不良事件"
+        ],
+        "section": "安全性数据",
+        "resetBtn": "清除安全性条件",
+        "firstItemScope": "module"
+      }
+    ],
+    "t": "2026-08-13T20:29:19.342Z"
+  },
+  {
+    "label": "section-resets-1280",
+    "data": [],
+    "t": "2026-08-13T20:29:19.343Z"
+  },
+  {
+    "label": "after-sle",
+    "data": {
+      "label": "after-sle",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle",
+      "summary": [
+        "已选 1 项",
+        "匹配 3 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 1
+    },
+    "t": "2026-08-13T20:29:19.793Z"
+  },
+  {
+    "label": "after-product-jia",
+    "data": {
+      "label": "after-product-jia",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha",
+      "summary": [
+        "已选 2 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 2
+    },
+    "t": "2026-08-13T20:29:20.035Z"
+  },
+  {
+    "label": "after-ep-pri",
+    "data": {
+      "label": "after-ep-pri",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha~m=b-efficacy~ms=endpoint:ep-pri",
+      "summary": [
+        "已选 3 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 3
+    },
+    "t": "2026-08-13T20:29:20.288Z"
+  },
+  {
+    "label": "after-teae",
+    "data": {
+      "label": "after-teae",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha~m=b-efficacy~ms=endpoint:ep-pri~m=b-safety~ms=ae_term:ae-teae",
+      "summary": [
+        "已选 4 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 4
+    },
+    "t": "2026-08-13T20:29:20.525Z"
+  },
+  {
+    "label": "summary-chips",
+    "data": [
+      "整份报告 · 适应症：系统性红斑狼疮×",
+      "整份报告 · 产品：产品甲×",
+      "疗效数据 · 终点：主要终点×",
+      "安全性数据 · 不良事件术语：治疗期不良事件×"
+    ],
+    "t": "2026-08-13T20:29:20.547Z"
+  },
+  {
+    "label": "summary-chips-v2",
+    "data": [
+      "整份报告 · 适应症：系统性红斑狼疮×",
+      "整份报告 · 适应症：",
+      "系统性红斑狼疮",
+      "×",
+      "整份报告 · 产品：产品甲×",
+      "整份报告 · 产品：",
+      "产品甲",
+      "×",
+      "疗效数据 · 终点：主要终点×",
+      "疗效数据 · 终点：",
+      "主要终点",
+      "×",
+      "安全性数据 · 不良事件术语：治疗期不良事件×",
+      "安全性数据 · 不良事件术语：",
+      "治疗期不良事件",
+      "×"
+    ],
+    "t": "2026-08-13T20:29:20.547Z"
+  },
+  {
+    "label": "chip-detail",
+    "data": [
+      "系统性红斑狼疮竞品研究",
+      "整份报告 · 适应症：系统性红斑狼疮×",
+      "系统性红斑狼疮",
+      "整份报告 · 产品：产品甲×",
+      "产品甲",
+      "疗效数据 · 终点：主要终点×",
+      "主要终点",
+      "安全性数据 · 不良事件术语：治疗期不良事件×",
+      "治疗期不良事件",
+      "适应症\n        \n          ✓系统性红斑狼疮\n          类风湿关节炎",
+      "✓系统性红斑狼疮\n          类风湿关节炎",
+      "✓系统性红斑狼疮",
+      "产品\n        \n          ✓产品甲\n          产品乙\n          产品丙\n          超长标识测试项",
+      "✓产品甲",
+      "终点\n        \n          ✓主要终点\n          次要终点",
+      "✓主要终点\n          次要终点",
+      "✓主要终点",
+      "不良事件术语\n        \n          ✓治疗期不良事件\n          严重不良事件",
+      "✓治疗期不良事件\n          严重不良事件",
+      "✓治疗期不良事件"
+    ],
+    "t": "2026-08-13T20:29:20.548Z"
+  },
+  {
+    "label": "efficacy-reset-info",
+    "data": [
+      {
+        "text": "安全性人群",
+        "id": "",
+        "dataset": {
+          "dim": "denominator_role",
+          "val": "den-safety",
+          "scope": "module",
+          "moduleId": "b-efficacy"
+        }
+      },
+      {
+        "text": "清除疗效条件",
+        "id": "kz-filter-reset-module",
+        "dataset": {
+          "moduleId": "b-efficacy"
+        }
+      },
+      {
+        "text": "清除安全性条件",
+        "id": "kz-filter-reset-module-2",
+        "dataset": {
+          "moduleId": "b-safety"
+        }
+      },
+      {
+        "text": "清除疗效条件",
+        "id": "",
+        "dataset": {
+          "moduleId": "b-efficacy"
+        }
+      },
+      {
+        "text": "清除安全性条件",
+        "id": "",
+        "dataset": {
+          "moduleId": "b-safety"
+        }
+      }
+    ],
+    "t": "2026-08-13T20:29:20.548Z"
+  },
+  {
+    "label": "clear-buttons",
+    "data": [
+      {
+        "text": "清除整份报告条件",
+        "id": "kz-filter-reset-page",
+        "dataset": {}
+      },
+      {
+        "text": "清除疗效条件",
+        "id": "kz-filter-reset-module",
+        "dataset": {
+          "moduleId": "b-efficacy"
+        }
+      },
+      {
+        "text": "清除安全性条件",
+        "id": "kz-filter-reset-module-2",
+        "dataset": {
+          "moduleId": "b-safety"
+        }
+      },
+      {
+        "text": "清除整份报告条件",
+        "id": "kz-filter-empty-reset-page",
+        "dataset": {}
+      },
+      {
+        "text": "清除疗效条件",
+        "id": "",
+        "dataset": {
+          "moduleId": "b-efficacy"
+        }
+      },
+      {
+        "text": "清除安全性条件",
+        "id": "",
+        "dataset": {
+          "moduleId": "b-safety"
+        }
+      }
+    ],
+    "t": "2026-08-13T20:29:20.549Z"
+  },
+  {
+    "label": "eff-reset-count",
+    "data": 1,
+    "t": "2026-08-13T20:29:20.550Z"
+  },
+  {
+    "label": "after-clear-efficacy",
+    "data": {
+      "label": "after-clear-efficacy",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha~m=b-safety~ms=ae_term:ae-teae",
+      "summary": [
+        "已选 3 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 3
+    },
+    "t": "2026-08-13T20:29:20.783Z"
+  },
+  {
+    "label": "safety-reset-count",
+    "data": 1,
+    "t": "2026-08-13T20:29:20.806Z"
+  },
+  {
+    "label": "after-clear-safety",
+    "data": {
+      "label": "after-clear-safety",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha",
+      "summary": [
+        "已选 2 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 2
+    },
+    "t": "2026-08-13T20:29:21.043Z"
+  },
+  {
+    "label": "url-after-both-resets",
+    "data": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha",
+    "t": "2026-08-13T20:29:21.064Z"
+  },
+  {
+    "label": "after-reset-state",
+    "data": {
+      "activeChips": [
+        "✓系统性红斑狼疮",
+        "✓产品甲"
+      ],
+      "summary": "整份报告 · 适应症：\n系统性红斑狼疮\n×\n整份报告 · 产品：\n产品甲\n×"
+    },
+    "t": "2026-08-13T20:29:21.065Z"
+  },
+  {
+    "label": "empty",
+    "data": {
+      "emptyVisible": true,
+      "emptyText": "当前选择下暂无可比较数据\n\n整份报告 · 适应症：类风湿关节炎\n\n整份报告 · 产品：产品乙、产品丙\n\n整份报告 · 靶点或机制：JAK\n\n疗效数据 · 终点：次要终点\n\n安全性数据 · 不良事件术语：严重不良事件\n\n清除整份报告条件\n清除疗效条件\n清除安全性条件",
+      "count": "匹配 0 项结果",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra|product:product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae"
+    },
+    "t": "2026-08-13T20:29:21.699Z"
+  },
+  {
+    "label": "after-reset-1",
+    "data": {
+      "label": "after-reset-1",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra|product:product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae",
+      "summary": [
+        "已选 6 项",
+        "匹配 0 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 6
+    },
+    "t": "2026-08-13T20:29:21.932Z"
+  },
+  {
+    "label": "before-back",
+    "data": {
+      "label": "before-back",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra,ind-sle|product:product-alpha,product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae",
+      "summary": [
+        "已选 8 项",
+        "匹配 0 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 8
+    },
+    "t": "2026-08-13T20:29:22.259Z"
+  },
+  {
+    "label": "after-back",
+    "data": {
+      "label": "after-back",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra,ind-sle|product:product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae",
+      "summary": [
+        "已选 7 项",
+        "匹配 0 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 7
+    },
+    "t": "2026-08-13T20:29:22.541Z"
+  },
+  {
+    "label": "after-forward",
+    "data": {
+      "label": "after-forward",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra,ind-sle|product:product-alpha,product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae",
+      "summary": [
+        "已选 8 项",
+        "匹配 0 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 8
+    },
+    "t": "2026-08-13T20:29:22.829Z"
+  },
+  {
+    "label": "after-reload",
+    "data": {
+      "label": "after-reload",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652958177#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra,ind-sle|product:product-alpha,product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae",
+      "summary": [
+        "已选 8 项",
+        "匹配 0 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 8
+    },
+    "t": "2026-08-13T20:29:23.670Z"
+  },
+  {
+    "label": "console-errors-1280",
+    "data": [],
+    "t": "2026-08-13T20:29:23.670Z"
+  },
+  {
+    "label": "initial-1024",
+    "data": {
+      "label": "initial-1024",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652963748",
+      "summary": [
+        "匹配 5 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 0
+    },
+    "t": "2026-08-13T20:29:24.605Z"
+  },
+  {
+    "label": "layout-1024",
+    "data": {
+      "nav": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0,
+        "display": "none",
+        "visibility": "visible",
+        "right": 0
+      },
+      "menu": {
+        "w": 58,
+        "h": 40,
+        "x": 942,
+        "y": 12,
+        "display": "flex",
+        "visibility": "visible",
+        "right": 1000
+      },
+      "search": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0,
+        "display": "inline-block",
+        "visibility": "visible",
+        "right": 0
+      },
+      "header": {
+        "w": 1024,
+        "h": 68,
+        "x": 0,
+        "y": 0,
+        "display": "block",
+        "visibility": "visible",
+        "right": 1024
+      }
+    },
+    "t": "2026-08-13T20:29:24.667Z"
+  },
+  {
+    "label": "1024-4-selected",
+    "data": {
+      "label": "1024-4-selected",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652963748#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha~m=b-efficacy~ms=endpoint:ep-pri~m=b-safety~ms=ae_term:ae-teae",
+      "summary": [
+        "已选 4 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 4
+    },
+    "t": "2026-08-13T20:29:25.621Z"
+  },
+  {
+    "label": "1024-eff-count",
+    "data": 1,
+    "t": "2026-08-13T20:29:25.673Z"
+  },
+  {
+    "label": "1024-after-clear-eff",
+    "data": {
+      "label": "1024-after-clear-eff",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652963748#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha~m=b-safety~ms=ae_term:ae-teae",
+      "summary": [
+        "已选 3 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 3
+    },
+    "t": "2026-08-13T20:29:25.905Z"
+  },
+  {
+    "label": "1024-saf-count",
+    "data": 1,
+    "t": "2026-08-13T20:29:25.932Z"
+  },
+  {
+    "label": "1024-after-clear-saf",
+    "data": {
+      "label": "1024-after-clear-saf",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652963748#v1~pid=%2Fb%2Foverview~ps=indication:ind-sle|product:product-alpha",
+      "summary": [
+        "已选 2 项",
+        "匹配 1 项结果"
+      ],
+      "rows": 5,
+      "chips": 15,
+      "activeChips": 2
+    },
+    "t": "2026-08-13T20:29:26.167Z"
+  },
+  {
+    "label": "1024-empty",
+    "data": {
+      "emptyVisible": true,
+      "count": "匹配 0 项结果",
+      "url": "http://127.0.0.1:8765/filter-test.html?bust=1786652963748#v1~pid=%2Fb%2Foverview~ps=indication:ind-ra|product:product-beta,product-gamma|target_or_mechanism:target-jak~m=b-efficacy~ms=endpoint:ep-sec~m=b-safety~ms=ae_term:ae-sae"
+    },
+    "t": "2026-08-13T20:29:26.824Z"
+  },
+  {
+    "label": "1024-chips",
+    "data": [
+      {
+        "text": "系统性红斑狼疮",
+        "right": 186,
+        "bottom": -180.015625,
+        "visible": true
+      },
+      {
+        "text": "✓类风湿关节炎",
+        "right": 324.125,
+        "bottom": -180.015625,
+        "visible": true
+      },
+      {
+        "text": "产品甲",
+        "right": 126,
+        "bottom": -92.625,
+        "visible": true
+      },
+      {
+        "text": "✓产品乙",
+        "right": 219.125,
+        "bottom": -92.625,
+        "visible": true
+      },
+      {
+        "text": "✓产品丙",
+        "right": 312.25,
+        "bottom": -92.625,
+        "visible": true
+      },
+      {
+        "text": "超长标识测试项",
+        "right": 0,
+        "bottom": 0,
+        "visible": true
+      },
+      {
+        "text": "BAFF",
+        "right": 118.328125,
+        "bottom": -5.234375,
+        "visible": true
+      },
+      {
+        "text": "CD20",
+        "right": 195.84375,
+        "bottom": -5.234375,
+        "visible": true
+      },
+      {
+        "text": "✓JAK",
+        "right": 272.9375,
+        "bottom": -5.234375,
+        "visible": true
+      },
+      {
+        "text": "主要终点",
+        "right": 141,
+        "bottom": 202.203125,
+        "visible": true
+      },
+      {
+        "text": "✓次要终点",
+        "right": 249.125,
+        "bottom": 202.203125,
+        "visible": true
+      },
+      {
+        "text": "安全性人群",
+        "right": 156,
+        "bottom": 323.984375,
+        "visible": true
+      },
+      {
+        "text": "意向性治疗人群",
+        "right": 299,
+        "bottom": 323.984375,
+        "visible": true
+      },
+      {
+        "text": "治疗期不良事件",
+        "right": 186,
+        "bottom": 468.03125,
+        "visible": true
+      },
+      {
+        "text": "✓严重不良事件",
+        "right": 324.125,
+        "bottom": 468.03125,
+        "visible": true
+      }
+    ],
+    "t": "2026-08-13T20:29:26.849Z"
+  },
+  {
+    "label": "1024-table",
+    "data": {
+      "w": 0,
+      "scrollWidth": 0,
+      "overflow": "visible"
+    },
+    "t": "2026-08-13T20:29:26.850Z"
+  },
+  {
+    "label": "console-errors-1024",
+    "data": [],
+    "t": "2026-08-13T20:29:26.850Z"
+  }
+]
