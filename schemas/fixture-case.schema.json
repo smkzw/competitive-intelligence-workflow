@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "fixture-case",
+  "description": "验证用例目录声明：唯一标识、报告/格式选择、输入文件与预期契约",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "description_zh",
+    "indication",
+    "timezone",
+    "data_cutoff",
+    "created_at",
+    "reports",
+    "outputs",
+    "inputs",
+    "expected",
+    "case_digest"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "minLength": 1,
+      "description": "案例唯一标识，只允许小写字母、数字与连字符"
+    },
+    "description_zh": {
+      "type": "string",
+      "minLength": 1,
+      "description": "案例中文说明"
+    },
+    "indication": {
+      "type": "string",
+      "minLength": 1,
+      "description": "项目适应症，必须显式声明，禁止空字符串"
+    },
+    "timezone": {
+      "type": "string",
+      "minLength": 1,
+      "description": "项目 IANA 时区，必须显式声明并由项目合同校验"
+    },
+    "data_cutoff": {
+      "type": "string",
+      "format": "iso-date-or-datetime",
+      "minLength": 1,
+      "description": "数据截止日，必须为真实 ISO 日期或日期时间，禁止空字符串或默认值"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "offset-date-time",
+      "minLength": 1,
+      "description": "项目创建时间，必须为带明确时区偏移的 ISO 日期时间，禁止空字符串或默认值"
+    },
+    "reports": {
+      "type": "array",
+      "items": { "enum": ["A", "B", "C"] },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "选定报告类型"
+    },
+    "outputs": {
+      "type": "array",
+      "items": { "enum": ["html", "pdf", "html-ppt", "pptx"] },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "选定输出格式"
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "sha256"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "案例目录内相对路径"
+          },
+          "role": {
+            "enum": ["universe_closure"],
+            "description": "输入文件角色"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "输入文件内容 SHA-256 摘要"
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "输入文件声明"
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report", "report_version", "outcome"],
+      "properties": {
+        "report": {
+          "enum": ["A", "B", "C"],
+          "description": "预期阻断/渲染的报告类型"
+        },
+        "report_version": {
+          "type": "string",
+          "pattern": "^v[0-9]+(\\.[0-9]+){0,2}(-[a-z0-9][a-z0-9.-]*)?$",
+          "description": "预期报告版本段"
+        },
+        "outcome": {
+          "enum": ["evidence_blocked", "rendered"],
+          "description": "预期运行结果"
+        }
+      }
+    },
+    "case_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "案例内容确定性摘要，由 catalog 注册者填入，runner 重算后比对"
+    }
+  }
+}

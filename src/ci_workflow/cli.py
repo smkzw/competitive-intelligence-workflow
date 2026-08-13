@@ -370,6 +370,121 @@ def _capability_preflight(args: argparse.Namespace) -> int:
     return 0
 
 
+def _project_run_handler(args: argparse.Namespace) -> int:
+    from ci_workflow.application.run_service import (
+        ContractConfigError,
+        EvidenceBlockedError,
+        RendererUnavailableError,
+        RunError,
+        run_project,
+    )
+
+    try:
+        result = run_project(
+            Path(args.root),
+            resume=args.resume,
+        )
+    except ContractConfigError as exc:
+        raise ContractError(str(exc)) from exc
+    except RendererUnavailableError as exc:
+        print(f"RENDERER_UNAVAILABLE {exc}", file=sys.stderr)
+        return 3
+    except EvidenceBlockedError as exc:
+        print(f"EVIDENCE_BLOCKED {exc}", file=sys.stderr)
+        return 4
+    except RunError as exc:
+        print(f"RUN_FAILED {exc}", file=sys.stderr)
+        return 2
+
+    if result.outcome == "evidence_blocked":
+        print(
+            "项目因关键证据不足暂时无法继续。\n"
+            f"运行标识：{result.run_id}\n"
+            "请查看项目目录中的「证据不足说明」了解详情。"
+        )
+        return 4
+    elif result.outcome == "failed":
+        print(
+            "本轮运行遇到技术问题，未能完成。\n"
+            f"运行标识：{result.run_id}"
+        )
+        return 2
+    elif result.outcome == "running":
+        print(
+            "项目已启动，证据采集工作正在进行中。\n"
+            f"运行标识：{result.run_id}"
+        )
+        return 0
+    else:
+        print(
+            f"项目运行完成。运行标识：{result.run_id}"
+        )
+        return 0
+
+
+def _fixture_run_handler(args: argparse.Namespace) -> int:
+    from ci_workflow.application.fixture_runner import (
+        FixtureCaseError,
+        run_fixture_case,
+    )
+    from ci_workflow.application.run_service import (
+        EvidenceBlockedError,
+        RendererUnavailableError,
+        RunError,
+    )
+
+    try:
+        reports = _split_choices(args.reports, VALID_REPORTS, "报告类型")
+        outputs = _split_choices(args.outputs, VALID_OUTPUTS, "输出格式")
+        result = run_fixture_case(
+            case_id=args.case,
+            project_root=Path(args.project),
+            reports=reports,
+            outputs=outputs,
+        )
+    except ContractError:
+        raise
+    except FixtureCaseError as exc:
+        raise ContractError(str(exc)) from exc
+    except RendererUnavailableError as exc:
+        print(f"RENDERER_UNAVAILABLE {exc}", file=sys.stderr)
+        return 3
+    except EvidenceBlockedError as exc:
+        print(f"EVIDENCE_BLOCKED {exc}", file=sys.stderr)
+        return 4
+    except RunError as exc:
+        print(f"RUN_FAILED {exc}", file=sys.stderr)
+        return 2
+
+    run_r = result.run_result
+    if run_r.outcome == "evidence_blocked":
+        print(
+            "项目因关键证据不足暂时无法继续。\n"
+            f"运行标识：{run_r.run_id}\n"
+            f"案例：{result.case_id}\n"
+            "请查看项目目录中的「证据不足说明」了解详情。"
+        )
+        return 4
+    elif run_r.outcome == "failed":
+        print(
+            "本轮运行遇到技术问题，未能完成。\n"
+            f"运行标识：{run_r.run_id}"
+        )
+        return 2
+    elif run_r.outcome == "running":
+        print(
+            "案例已启动，证据采集工作正在进行中。\n"
+            f"运行标识：{run_r.run_id}\n"
+            f"案例：{result.case_id}"
+        )
+        return 0
+    else:
+        print(
+            f"案例运行完成。运行标识：{run_r.run_id}"
+        )
+        return 0
+
+
 def _not_implemented(args: argparse.Namespace) -> int:
     print(
         f"CAPABILITY_NOT_IMPLEMENTED 功能尚未实现：{args.command_path}",
@@ -419,7 +534,7 @@ def _build_parser() -> argparse.ArgumentParser:
     project_run = project_commands.add_parser("run", help="运行或恢复项目")
     project_run.add_argument("--root", required=True, help="项目目录")
     project_run.add_argument("--resume", action="store_true", help="从同一项目检查点恢复")
-    project_run.set_defaults(handler=_not_implemented, command_path="project run")
+    project_run.set_defaults(handler=_project_run_handler)
 
     capability = groups.add_parser("capability", help="检查所选任务所需能力")
     capability_commands = capability.add_subparsers(dest="capability_command", required=True)
@@ -445,8 +560,10 @@ def _build_parser() -> argparse.ArgumentParser:
     fixture_commands = fixture.add_subparsers(dest="fixture_command", required=True)
     fixture_run = fixture_commands.add_parser("run", help="运行固定验收案例")
     fixture_run.add_argument("--case", required=True, help="案例标识")
-    fixture_run.add_argument("--root", required=True, help="案例运行目录")
-    fixture_run.set_defaults(handler=_not_implemented, command_path="fixture run")
+    fixture_run.add_argument("--reports", required=True, help="报告类型，如 A,B,C")
+    fixture_run.add_argument("--outputs", default="html", help="输出格式，默认 html")
+    fixture_run.add_argument("--project", required=True, help="案例运行输出目录")
+    fixture_run.set_defaults(handler=_fixture_run_handler)
     return parser
 
 

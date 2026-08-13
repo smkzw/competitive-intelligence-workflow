@@ -1,0 +1,19 @@
+schema_version: "1.0"
+cases:
+  - id: no-draft-a-empty
+    description_zh: "A 报告：空创新药宇宙，只生成中文证据不足说明"
+    indication: "非小细胞肺癌"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-12T10:00:00+08:00"
+    reports: ["A"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/universe.json
+        role: universe_closure
+        sha256: "1cb90ce0133412374281b5c112fac4c3e2768a7f2c2cddf0649e8e5fbecff64c"
+    expected:
+      report: A
+      report_version: v1
+      outcome: evidence_blocked
+    case_digest: "7d37a12eccf537c7c49d7fdc1f0a1630c86cf3add72bd1b8557450f0d3ee50fc"
