@@ -1,0 +1,33 @@
+{
+  "id": "phase-4-common-report-portal",
+  "name": "phase-4-common-report-portal",
+  "title": "Phase 4 共用报告视图与康哲站点式门户",
+  "description": "Task 4.1-4.6：规范报告视图、覆盖集、页面注册、康哲多页面壳层、分层筛选、图表表格联动、证据抽屉与真实浏览器验收。",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "Phase 4 only：共用视图和门户运行时；不实现 A/B/C 各自完整业务页面或 PDF/PPT",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-13",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [],
+  "notes": "Phase 3 已接受。Task 4.1 已于 2026-08-14 通过主验收与独立 Luna 复审；下一步 Task 4.2 构建康哲多页面门户壳层。后续视觉任务须采用真实医学经理角色做端到端视觉试用。",
+  "meta": {
+    "phase3Dependency": "accepted",
+    "nextTask": "4.2",
+    "task41Status": "accepted",
+    "task41Commit": "f44c06a",
+    "task41Context": "context/ci_phase4_task41_context.md",
+    "task41IndependentVerdict": "PASS; P0=0; P1=0; P2=0"
+  }
+}
