@@ -7,6 +7,7 @@ contradictory_evidence / scope_mismatch），绝无 allowed=True 绕过。
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -15,14 +16,25 @@ from ci_workflow.graph.types import GuardResult
 
 @dataclass(frozen=True)
 class GuardSpec:
-    """声明式结构化守卫：全部字段为字面常量。"""
+    """声明式结构化守卫：全部字段为字面常量。
+
+    ``required_fields`` 非空字符串；``sha256_fields`` 必须为小写 SHA-256；
+    ``object_bound_fields`` 必须等于请求目标对象标识；``forbidden_fields``
+    出现即拒绝（如可修复否决不得携带穷尽记录摘要）。
+    """
 
     guard_id: str
     required_true: tuple[str, ...] = ()
     required_any: tuple[tuple[str, ...], ...] = ()
     required_fields: tuple[str, ...] = ()
+    sha256_fields: tuple[str, ...] = ()
+    object_bound_fields: tuple[str, ...] = ()
+    forbidden_fields: tuple[str, ...] = ()
     contradictions: tuple[tuple[str, str], ...] = ()
     description: str = ""
+
+
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 def evaluate_spec(
@@ -32,7 +44,8 @@ def evaluate_spec(
     target_family: str,
     target_object_id: str,
 ) -> GuardResult:
-    """按固定顺序求值：作用域 → 必需字段 → 必需真键 → 任一组 → 矛盾对。"""
+    """按固定顺序求值：作用域 → 必需字段 → SHA-256 → 对象绑定 → 必需真键 →
+    任一组 → 禁字段 → 矛盾对。"""
     # 跨对象/跨族证据失败关闭：证据可声明 target_family/target_object_id，
     # 一旦声明就必须与请求目标一致
     declared_family = evidence.get("target_family")
@@ -49,6 +62,16 @@ def evaluate_spec(
         if value is None or value == "" or value == [] or value == {}:
             return GuardResult(False, f"guard_not_satisfied:{key}")
 
+    for key in spec.sha256_fields:
+        value = evidence.get(key)
+        if value is None or not isinstance(value, str) or _SHA256_RE.fullmatch(value) is None:
+            return GuardResult(False, f"guard_not_satisfied:{key}")
+
+    for key in spec.object_bound_fields:
+        value = evidence.get(key)
+        if value is None or value != target_object_id:
+            return GuardResult(False, f"scope_mismatch:object:{key}")
+
     for key in spec.required_true:
         if key not in evidence:
             return GuardResult(False, f"missing_evidence:{key}")
@@ -63,6 +86,10 @@ def evaluate_spec(
         if missing:
             return GuardResult(False, f"missing_evidence:{marker}")
         return GuardResult(False, f"guard_not_satisfied:{marker}")
+
+    for key in spec.forbidden_fields:
+        if key in evidence and evidence.get(key) is not None:
+            return GuardResult(False, f"guard_not_satisfied:{key}")
 
     for first, second in spec.contradictions:
         if evidence.get(first) and evidence.get(second):
@@ -156,14 +183,73 @@ GUARD_SPECS: dict[str, GuardSpec] = {
     "g_report_scientific_qc_snapshot_locked": GuardSpec(
         guard_id="g_report_scientific_qc_snapshot_locked",
         required_true=("isolated_qc_accepted",),
-        contradictions=(("isolated_qc_accepted", "qc_veto"),),
-        description="隔离质控接受；否决与接受不能并存",
+        required_fields=(
+            "qc_verdict_id",
+            "qc_verdict_digest",
+            "qc_candidate_snapshot_id",
+            "qc_candidate_content_digest",
+            "qc_review_input_digest",
+            "qc_report_object_id",
+            "qc_context_digest",
+            "qc_authorization_id",
+        ),
+        sha256_fields=(
+            "qc_verdict_digest",
+            "qc_candidate_content_digest",
+            "qc_review_input_digest",
+            "qc_context_digest",
+        ),
+        object_bound_fields=("qc_report_object_id",),
+        forbidden_fields=("qc_exhaustion_record_digest",),
+        contradictions=(
+            ("isolated_qc_accepted", "qc_veto"),
+            ("isolated_qc_accepted", "qc_veto_fixable"),
+            ("isolated_qc_accepted", "qc_veto_unfixable"),
+            ("isolated_qc_accepted", "recovery_exhausted"),
+            ("isolated_qc_accepted", "independent_review_exhausted"),
+            ("isolated_qc_accepted", "no_continuable_user_action"),
+        ),
+        description=(
+            "隔离质控接受且携带由质控边界发出的验证授权材料"
+            "（摘要为小写 SHA-256、对象绑定报告对象）；"
+            "否决/恢复/穷尽标志与接受互斥"
+        ),
     ),
     "g_report_scientific_qc_recovering": GuardSpec(
         guard_id="g_report_scientific_qc_recovering",
         required_true=("qc_veto", "qc_veto_fixable"),
-        contradictions=(("qc_veto", "isolated_qc_accepted"),),
-        description="质控否决且可修复：只能回 recovering",
+        required_fields=(
+            "qc_verdict_id",
+            "qc_verdict_digest",
+            "qc_candidate_snapshot_id",
+            "qc_candidate_content_digest",
+            "qc_review_input_digest",
+            "qc_report_object_id",
+            "qc_context_digest",
+            "qc_authorization_id",
+        ),
+        sha256_fields=(
+            "qc_verdict_digest",
+            "qc_candidate_content_digest",
+            "qc_review_input_digest",
+            "qc_context_digest",
+        ),
+        object_bound_fields=("qc_report_object_id",),
+        forbidden_fields=("qc_exhaustion_record_digest",),
+        contradictions=(
+            ("qc_veto", "isolated_qc_accepted"),
+            ("qc_veto_fixable", "qc_veto_unfixable"),
+            ("qc_veto_fixable", "recovery_exhausted"),
+            ("qc_veto_fixable", "independent_review_exhausted"),
+            ("qc_veto_fixable", "no_continuable_user_action"),
+            ("qc_veto", "recovery_exhausted"),
+            ("qc_veto", "independent_review_exhausted"),
+            ("qc_veto", "no_continuable_user_action"),
+        ),
+        description=(
+            "质控否决且可修复（携带验证授权材料）：只能回 recovering；"
+            "不得携带穷尽记录摘要或穷尽标志"
+        ),
     ),
     "g_report_collecting_evidence_blocked": GuardSpec(
         guard_id="g_report_collecting_evidence_blocked",
@@ -194,8 +280,32 @@ GUARD_SPECS: dict[str, GuardSpec] = {
             "independent_review_exhausted",
             "no_continuable_user_action",
         ),
-        contradictions=(("qc_veto_fixable", "qc_veto_unfixable"),),
-        description="质控否决且不可修复、恢复与独立审查已穷尽、无继续用户动作",
+        required_fields=(
+            "qc_verdict_id",
+            "qc_verdict_digest",
+            "qc_candidate_snapshot_id",
+            "qc_candidate_content_digest",
+            "qc_review_input_digest",
+            "qc_report_object_id",
+            "qc_context_digest",
+            "qc_exhaustion_record_digest",
+            "qc_authorization_id",
+        ),
+        sha256_fields=(
+            "qc_verdict_digest",
+            "qc_candidate_content_digest",
+            "qc_review_input_digest",
+            "qc_context_digest",
+            "qc_exhaustion_record_digest",
+        ),
+        object_bound_fields=("qc_report_object_id",),
+        contradictions=(
+            ("qc_veto_fixable", "qc_veto_unfixable"),
+            ("qc_veto_unfixable", "isolated_qc_accepted"),
+            ("qc_veto", "isolated_qc_accepted"),
+            ("qc_veto_unfixable", "qc_veto_fixable"),
+        ),
+        description="质控否决且不可修复（携带验证授权材料与穷尽记录摘要）、恢复与独立审查已穷尽、无继续用户动作；接受/可修复标志互斥",
     ),
     "g_report_collecting_awaiting_user": GuardSpec(
         guard_id="g_report_collecting_awaiting_user",

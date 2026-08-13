@@ -7,6 +7,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import NamedTuple
@@ -289,8 +291,29 @@ GT02_VALID_EVIDENCE: dict[str, dict[str, object]] = {
         "gate_deterministic_pass": True,
         "candidate_snapshot_established": True,
     },
-    "g_report_scientific_qc_snapshot_locked": {"isolated_qc_accepted": True},
-    "g_report_scientific_qc_recovering": {"qc_veto": True, "qc_veto_fixable": True},
+    "g_report_scientific_qc_snapshot_locked": {
+        "isolated_qc_accepted": True,
+        "qc_verdict_id": "qc-verdict-1",
+        "qc_verdict_digest": "a" * 64,
+        "qc_candidate_snapshot_id": "snap-1",
+        "qc_candidate_content_digest": "b" * 64,
+        "qc_review_input_digest": "c" * 64,
+        "qc_report_object_id": "obj_probe",
+        "qc_context_digest": "d" * 64,
+        "qc_authorization_id": "auth-1",
+    },
+    "g_report_scientific_qc_recovering": {
+        "qc_veto": True,
+        "qc_veto_fixable": True,
+        "qc_verdict_id": "qc-verdict-1",
+        "qc_verdict_digest": "a" * 64,
+        "qc_candidate_snapshot_id": "snap-1",
+        "qc_candidate_content_digest": "b" * 64,
+        "qc_review_input_digest": "c" * 64,
+        "qc_report_object_id": "obj_probe",
+        "qc_context_digest": "d" * 64,
+        "qc_authorization_id": "auth-1",
+    },
     "g_report_collecting_evidence_blocked": {
         "critical_units_still_failing": True,
         "recovery_exhausted": True,
@@ -309,6 +332,15 @@ GT02_VALID_EVIDENCE: dict[str, dict[str, object]] = {
         "recovery_exhausted": True,
         "independent_review_exhausted": True,
         "no_continuable_user_action": True,
+        "qc_verdict_id": "qc-verdict-1",
+        "qc_verdict_digest": "a" * 64,
+        "qc_candidate_snapshot_id": "snap-1",
+        "qc_candidate_content_digest": "b" * 64,
+        "qc_review_input_digest": "c" * 64,
+        "qc_report_object_id": "obj_probe",
+        "qc_context_digest": "d" * 64,
+        "qc_exhaustion_record_digest": "e" * 64,
+        "qc_authorization_id": "auth-1",
     },
     "g_report_collecting_awaiting_user": {
         "recovery_exhausted": True,
@@ -852,20 +884,122 @@ def test_report_evidence_transitions_and_guards_match_v12() -> None:
     # 否决与接受同时出现（矛盾证据）不能锁定快照
     contradictory = TRANSITION_REGISTRY.evaluate_guard(
         "g_report_scientific_qc_snapshot_locked",
-        {"isolated_qc_accepted": True, "qc_veto": True},
+        {
+            **GT02_VALID_EVIDENCE["g_report_scientific_qc_snapshot_locked"],
+            "qc_veto": True,
+        },
         target_family="report_evidence",
-        target_object_id="report_A",
+        target_object_id="obj_probe",
     )
     assert contradictory.allowed is False
     assert "contradictory_evidence" in contradictory.reason
     # 否决但未声明可修复 → 不能回 recovering
     not_fixable = TRANSITION_REGISTRY.evaluate_guard(
         "g_report_scientific_qc_recovering",
-        {"qc_veto": True},
+        {
+            **GT02_VALID_EVIDENCE["g_report_scientific_qc_recovering"],
+            "qc_veto_fixable": False,
+        },
         target_family="report_evidence",
-        target_object_id="report_A",
+        target_object_id="obj_probe",
     )
     assert not_fixable.allowed is False
+    # 裸布尔（无验证授权材料）→ 不能锁定
+    naked = TRANSITION_REGISTRY.evaluate_guard(
+        "g_report_scientific_qc_snapshot_locked",
+        {"isolated_qc_accepted": True},
+        target_family="report_evidence",
+        target_object_id="obj_probe",
+    )
+    assert naked.allowed is False
+    assert naked.reason.startswith("missing_evidence:qc_verdict_id")
+    # 非 SHA 摘要授权 → 拒绝
+    bad_digest = TRANSITION_REGISTRY.evaluate_guard(
+        "g_report_scientific_qc_snapshot_locked",
+        {
+            **GT02_VALID_EVIDENCE["g_report_scientific_qc_snapshot_locked"],
+            "qc_verdict_digest": "not-a-digest",
+        },
+        target_family="report_evidence",
+        target_object_id="obj_probe",
+    )
+    assert bad_digest.allowed is False
+    assert bad_digest.reason.startswith("guard_not_satisfied:qc_verdict_digest")
+    # 错对象授权 → 拒绝
+    wrong_obj = TRANSITION_REGISTRY.evaluate_guard(
+        "g_report_scientific_qc_snapshot_locked",
+        {
+            **GT02_VALID_EVIDENCE["g_report_scientific_qc_snapshot_locked"],
+            "qc_report_object_id": "report_OTHER",
+        },
+        target_family="report_evidence",
+        target_object_id="obj_probe",
+    )
+    assert wrong_obj.allowed is False
+    assert wrong_obj.reason.startswith("scope_mismatch:object:qc_report_object_id")
+    # ── 互斥路径证据（P1）：跨路径标志组合全部拒绝 ───────────────────────────
+    # 接受路径：任何否决/恢复/穷尽标志 → 拒绝
+    acc = GT02_VALID_EVIDENCE["g_report_scientific_qc_snapshot_locked"]
+    for flag in (
+        "qc_veto",
+        "qc_veto_fixable",
+        "qc_veto_unfixable",
+        "recovery_exhausted",
+        "independent_review_exhausted",
+        "no_continuable_user_action",
+    ):
+        cross = TRANSITION_REGISTRY.evaluate_guard(
+            "g_report_scientific_qc_snapshot_locked",
+            {**acc, flag: True},
+            target_family="report_evidence",
+            target_object_id="obj_probe",
+        )
+        assert cross.allowed is False, f"accepted+{flag} 不应通过"
+        assert cross.reason.startswith("contradictory_evidence"), cross.reason
+    # 可修复否决路径：不可修复/穷尽标志与记录 → 拒绝
+    rec = GT02_VALID_EVIDENCE["g_report_scientific_qc_recovering"]
+    for flag in (
+        "qc_veto_unfixable",
+        "recovery_exhausted",
+        "independent_review_exhausted",
+        "no_continuable_user_action",
+        "qc_exhaustion_record_digest",
+    ):
+        cross = TRANSITION_REGISTRY.evaluate_guard(
+            "g_report_scientific_qc_recovering",
+            {**rec, flag: True},
+            target_family="report_evidence",
+            target_object_id="obj_probe",
+        )
+        assert cross.allowed is False, f"recovering+{flag} 不应通过"
+    # 可修复 + 不可修复标志并存 → 拒绝
+    fixable_unfixable = TRANSITION_REGISTRY.evaluate_guard(
+        "g_report_scientific_qc_recovering",
+        {**rec, "qc_veto_unfixable": True},
+        target_family="report_evidence",
+        target_object_id="obj_probe",
+    )
+    assert fixable_unfixable.allowed is False
+    # 已穷尽路径：接受/可修复标志 → 拒绝
+    exh = GT02_VALID_EVIDENCE["g_report_scientific_qc_evidence_blocked"]
+    for flag in ("isolated_qc_accepted", "qc_veto_fixable"):
+        cross = TRANSITION_REGISTRY.evaluate_guard(
+            "g_report_scientific_qc_evidence_blocked",
+            {**exh, flag: True},
+            target_family="report_evidence",
+            target_object_id="obj_probe",
+        )
+        assert cross.allowed is False, f"evidence_blocked+{flag} 不应通过"
+        assert cross.reason.startswith("contradictory_evidence"), cross.reason
+    # 已穷尽路径缺穷尽记录摘要 → 拒绝（missing_evidence）
+    no_record = TRANSITION_REGISTRY.evaluate_guard(
+        "g_report_scientific_qc_evidence_blocked",
+        {k: v for k, v in exh.items() if k != "qc_exhaustion_record_digest"},
+        target_family="report_evidence",
+        target_object_id="obj_probe",
+    )
+    assert no_record.allowed is False
+    assert no_record.reason.startswith("missing_evidence:qc_exhaustion_record_digest")
 
 
 def test_artifact_transitions_and_guards_match_v12() -> None:
@@ -1044,9 +1178,69 @@ def test_every_undeclared_transition_is_rejected_and_logged(
             occurred_at=_NOW,
         )
 
+    def issue_auth_for_evidence(
+        *,
+        object_id: str,
+        from_state: str | None,
+        to_state: str,
+        evidence: dict[str, object],
+        run_id: str = "run_gt06",
+        project_id: str = "p_gt06",
+    ) -> str:
+        """测试专用：经测试夹具签发授权事件；返回 qc_authorization_id。"""
+        from tests.graph._qc_authorization_fixture import (
+            issue_test_qc_authorization,
+        )
+
+        evidence_without_auth = {
+            k: v for k, v in evidence.items() if k != "qc_authorization_id"
+        }
+        evidence_digest = hashlib.sha256(
+            (
+                json.dumps(
+                    evidence_without_auth,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
+                + "\n"
+            ).encode("utf-8")
+        ).hexdigest()
+        auth_id = issue_test_qc_authorization(
+            executor,
+            report_object_id=object_id,
+            from_state=from_state if from_state is not None else "scientific_qc",
+            to_state=to_state,
+            verdict="accepted" if to_state == "snapshot_locked" else "veto",
+            exhaustion_record_digest=(
+                evidence.get("qc_exhaustion_record_digest")
+                if isinstance(evidence.get("qc_exhaustion_record_digest"), str)
+                else None
+            ),
+            evidence_digest=evidence_digest,
+            actor_id="pi",
+            project_id=project_id,
+            occurred_at=_NOW,
+        )
+        evidence["qc_authorization_id"] = auth_id
+        return auth_id
+
     def position(family: str, target: str, object_id: str) -> None:
         """经字面 fixture 声明路径把新鲜对象定位到目标源状态。"""
         for edge in _positioning_path(family, target):
+            evidence = dict(_ALL_VALID_EVIDENCE[edge.guard_id])
+            if edge.guard_id in (
+                "g_report_scientific_qc_snapshot_locked",
+                "g_report_scientific_qc_recovering",
+                "g_report_scientific_qc_evidence_blocked",
+            ):
+                evidence["qc_report_object_id"] = object_id
+                issue_auth_for_evidence(
+                    object_id=object_id,
+                    from_state=edge.from_state,
+                    to_state=edge.to_state,
+                    evidence=evidence,
+                )
             event = executor.submit(
                 make_request(
                     family=family,
@@ -1054,7 +1248,7 @@ def test_every_undeclared_transition_is_rejected_and_logged(
                     from_state=edge.from_state,
                     to_state=edge.to_state,
                     trigger=edge.trigger,
-                    evidence=_ALL_VALID_EVIDENCE[edge.guard_id],
+                    evidence=evidence,
                 )
             )
             assert event.event_type == "graph.transition.accepted", (
@@ -1094,6 +1288,24 @@ def test_every_undeclared_transition_is_rejected_and_logged(
                 declared = TRANSITION_REGISTRY.declared(family, from_state, to_state)
                 if from_state is not None:
                     position(family, from_state, object_id)
+                evidence = (
+                    dict(_ALL_VALID_EVIDENCE[declared.guard_id])
+                    if declared is not None
+                    else {}
+                )
+                # 科学质控守卫把报告对象绑定到被定位的对象标识，并签发授权
+                if declared is not None and declared.guard_id in (
+                    "g_report_scientific_qc_snapshot_locked",
+                    "g_report_scientific_qc_recovering",
+                    "g_report_scientific_qc_evidence_blocked",
+                ):
+                    evidence["qc_report_object_id"] = object_id
+                    issue_auth_for_evidence(
+                        object_id=object_id,
+                        from_state=from_state,
+                        to_state=to_state,
+                        evidence=evidence,
+                    )
                 event = executor.submit(
                     make_request(
                         family=family,
@@ -1103,11 +1315,7 @@ def test_every_undeclared_transition_is_rejected_and_logged(
                         trigger=(
                             declared.trigger if declared is not None else "gt06_probe"
                         ),
-                        evidence=(
-                            _ALL_VALID_EVIDENCE[declared.guard_id]
-                            if declared is not None
-                            else {}
-                        ),
+                        evidence=evidence,
                     )
                 )
                 if declared is None:

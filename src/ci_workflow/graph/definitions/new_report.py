@@ -227,12 +227,22 @@ NEW_REPORT_NODES: tuple[NodeContract, ...] = (
         typed_inputs=(
             _field("report_kind", "ReportKind", "A/B/C 报告类型"),
             _field("snapshot_id", "str", "候选快照标识"),
+            _field(
+                "review_bundle", "dict[str, object]",
+                "隔离审阅包（候选/标准/覆盖/来源引用，不含构建者过程）"
+            ),
         ),
-        typed_outputs=(_field("qc_verdict", "str", "隔离质控接受/否决裁定"),),
+        typed_outputs=(
+            _field(
+                "qc_verdict",
+                "QCVerificationReference",
+                "隔离质控结论引用（verdict_id/digest + 候选快照 ID/内容摘要 + 审阅输入摘要）",
+            ),
+        ),
         completion_predicate=_completion_requires("qc_verdict"),
         completion_summary="执行独立科学质控：只能接受或否决，不能静默重写证据",
         reads=("snapshot.{report_kind}",),
-        writes=("snapshot.{report_kind}",),
+        writes=("qc.{report_kind}",),
         retry_policy=RetryPolicy(1, 0.0, ("QCVerdictError",)),
         declared_errors=("QCVerdictError",),
         idempotency_material=_IDEMPOTENCY_MATERIAL,

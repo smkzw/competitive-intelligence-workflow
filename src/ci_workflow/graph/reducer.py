@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from typing import Any, TypeGuard
 
 from ci_workflow.domain.ids import stable_id
@@ -12,6 +13,8 @@ from ci_workflow.graph.registry import TRANSITION_REGISTRY
 from ci_workflow.graph.state import (
     EVIDENCE_LEDGER_KEY,
     FAMILY_DEFAULT_STATES,
+    QC_AUTHORIZATIONS_KEY,
+    QC_EPOCHS_KEY,
     RUNTIME_STATE_FAMILIES,
     SIDE_EFFECT_LEDGER_KEY,
     render_write_template,
@@ -23,13 +26,26 @@ _SIDE_EFFECT_EVENT_TYPES = frozenset(
     {"artifact.publish", "artifact.move", "revision.approve", "artifact.delete"}
 )
 
-# 本图拥有的事件类型：迁移、节点完成、四类声明副作用
+# 科学质控授权事件：由质控边界签发，被迁移守卫消费
+_QC_AUTHORIZATION_EVENT_TYPE = "scientific_qc.authorization.issued"
+
+# 本图拥有的事件类型：迁移、节点完成、质控授权、四类声明副作用
 GRAPH_EVENT_TYPES = frozenset(
     {
         "graph.transition.accepted",
         "graph.transition.rejected",
         "graph.node.completed",
+        _QC_AUTHORIZATION_EVENT_TYPE,
         *_SIDE_EFFECT_EVENT_TYPES,
+    }
+)
+
+# 科学质控三迁移守卫：必须消费边界签发的授权
+_SCIENTIFIC_QC_GUARD_IDS = frozenset(
+    {
+        "g_report_scientific_qc_snapshot_locked",
+        "g_report_scientific_qc_recovering",
+        "g_report_scientific_qc_evidence_blocked",
     }
 )
 
@@ -231,6 +247,61 @@ def _validate_accepted_transition(
     )
     if not guard.allowed:
         raise GraphEventContractError(f"守卫重求值拒绝: {guard_id}: {guard.reason}")
+    # 科学质控迁移必须消费质控边界签发的授权；直接伪造（自造 SHA 字符串、
+    # 无授权事件）在归约/重放时失败关闭，不能成为规范状态。
+    if guard_id in _SCIENTIFIC_QC_GUARD_IDS:
+        auth_id = guard_evidence.get("qc_authorization_id")
+        if not isinstance(auth_id, str) or not auth_id.strip():
+            raise GraphEventContractError(
+                f"科学质控迁移缺少授权标识: {event_id}"
+            )
+        ledger = state.get(QC_AUTHORIZATIONS_KEY, {})
+        object_ledger = ledger.get(object_id, {})
+        record = object_ledger.get(auth_id)
+        if record is None:
+            raise GraphEventContractError(
+                f"科学质控迁移消费了未签发的授权: {auth_id}"
+            )
+        if record.get("project_id") != event.project_id:
+            raise GraphEventContractError(
+                f"授权项目与迁移不一致: {event_id}"
+            )
+        if record.get("run_id") != event.run_id:
+            raise GraphEventContractError(
+                f"授权运行与迁移不一致: {event_id}"
+            )
+        if record.get("report_object_id") != object_id:
+            raise GraphEventContractError(
+                f"授权报告对象与迁移对象不一致: {event_id}"
+            )
+        if record.get("from_state") != from_state:
+            raise GraphEventContractError(
+                f"授权源状态与迁移不一致: {event_id}"
+            )
+        if record.get("to_state") != to_state:
+            raise GraphEventContractError(
+                f"授权目标状态与迁移不一致: {event_id}"
+            )
+        # 代次绑定：授权必须绑定当前 QC 入口代次（跨恢复周期旧授权拒绝）
+        current_epoch = int(state.get(QC_EPOCHS_KEY, {}).get(object_id, 0))
+        if int(record.get("qc_entry_epoch", -1)) != current_epoch:
+            raise GraphEventContractError(
+                f"授权代次与当前 QC 入口代次不一致: {event_id}"
+            )
+        evidence_without_auth = {
+            k: value for k, value in guard_evidence.items()
+            if k != "qc_authorization_id"
+        }
+        if _payload_digest(evidence_without_auth) != record.get("evidence_digest"):
+            raise GraphEventContractError(
+                f"授权守卫证据摘要不匹配: {event_id}"
+            )
+        # 一次性消费：同一授权已被另一事件消费 → 拒绝（同事件精确重放除外）
+        consumed_event_id = record.get("consumed_event_id")
+        if consumed_event_id is not None and consumed_event_id != event.event_id:
+            raise GraphEventContractError(
+                f"授权已被消费，不得重复使用: {auth_id}"
+            )
 
 
 def _validate_node_completed(event: StoredWorkflowEvent) -> None:
@@ -317,6 +388,129 @@ def _validate_node_completed(event: StoredWorkflowEvent) -> None:
         )
 
 
+def _validate_qc_authorization(event: StoredWorkflowEvent) -> None:
+    """对 ``scientific_qc.authorization.issued`` 载荷做完整契约校验。
+
+    校验：封闭类型 → 必需非空字段 → 摘要字段为小写 SHA-256 → 事件 ID/幂等键
+    重算。伪造或漂移的授权事件无法进入规范状态。
+    """
+    payload = event.payload
+    event_id = event.event_id
+    required = (
+        "authorization_id",
+        "boundary_proof_digest",
+        "qc_entry_epoch",
+        "project_id",
+        "run_id",
+        "report_object_id",
+        "from_state",
+        "to_state",
+        "verdict_id",
+        "verdict_digest",
+        "candidate_snapshot_id",
+        "candidate_content_digest",
+        "review_input_digest",
+        "context_digest",
+        "reviewer_actor_id",
+        "evidence_digest",
+    )
+    for key in required:
+        if key == "qc_entry_epoch":
+            continue
+        _require_nonblank(
+            _QC_AUTHORIZATION_EVENT_TYPE, event_id, key, payload.get(key)
+        )
+    sha256_fields = (
+        "boundary_proof_digest",
+        "verdict_digest",
+        "candidate_content_digest",
+        "review_input_digest",
+        "context_digest",
+        "evidence_digest",
+    )
+    for key in sha256_fields:
+        value = payload.get(key)
+        if (
+            not isinstance(value, str)
+            or re.fullmatch(r"^[0-9a-f]{64}$", value) is None
+        ):
+            raise GraphEventContractError(
+                f"{_QC_AUTHORIZATION_EVENT_TYPE} 事件 {event_id} 的 {key} "
+                "必须是小写 SHA-256"
+            )
+    epoch = payload.get("qc_entry_epoch")
+    if not isinstance(epoch, int) or epoch < 0:
+        raise GraphEventContractError(
+            f"{_QC_AUTHORIZATION_EVENT_TYPE} 事件 {event_id} 的 "
+            "qc_entry_epoch 必须是非负整数"
+        )
+    # 边界证明摘要必须等于从载荷字段确定性重算的值（直接追加形状正确事件
+    # 无法通过：证明摘要只能由质控边界从完整验证输入计算）
+    recomputed_proof = _payload_digest(
+        {
+            "authorization_id": str(payload["authorization_id"]),
+            "project_id": str(payload["project_id"]),
+            "run_id": str(payload["run_id"]),
+            "report_object_id": str(payload["report_object_id"]),
+            "from_state": str(payload["from_state"]),
+            "to_state": str(payload["to_state"]),
+            "verdict_id": str(payload["verdict_id"]),
+            "verdict_digest": str(payload["verdict_digest"]),
+            "candidate_snapshot_id": str(payload["candidate_snapshot_id"]),
+            "candidate_content_digest": str(payload["candidate_content_digest"]),
+            "review_input_digest": str(payload["review_input_digest"]),
+            "context_digest": str(payload["context_digest"]),
+            "exhaustion_record_digest": payload.get("exhaustion_record_digest"),
+            "reviewer_actor_id": str(payload["reviewer_actor_id"]),
+            "evidence_digest": str(payload["evidence_digest"]),
+        }
+    )
+    if str(payload["boundary_proof_digest"]) != recomputed_proof:
+        raise GraphEventContractError(
+            f"{_QC_AUTHORIZATION_EVENT_TYPE} 事件 {event_id} 的 "
+            "boundary_proof_digest 与载荷不匹配（非边界签发）"
+        )
+    exhaustion = payload.get("exhaustion_record_digest")
+    if (
+        exhaustion is not None
+        and (
+            not isinstance(exhaustion, str)
+            or re.fullmatch(r"^[0-9a-f]{64}$", exhaustion) is None
+        )
+    ):
+        raise GraphEventContractError(
+            f"{_QC_AUTHORIZATION_EVENT_TYPE} 事件 {event_id} 的 "
+            "exhaustion_record_digest 必须是小写 SHA-256"
+        )
+    if str(payload.get("run_id")) != event.run_id:
+        raise GraphEventContractError(
+            f"授权事件运行与事件运行不一致: {event_id}"
+        )
+    if str(payload.get("project_id")) != event.project_id:
+        raise GraphEventContractError(
+            f"授权事件项目与事件项目不一致: {event_id}"
+        )
+    expected_event_id = stable_id(
+        "scientific-qc-authorization",
+        event.project_id,
+        event.run_id,
+        str(payload["report_object_id"]),
+        str(payload["authorization_id"]),
+    )
+    if event.event_id != expected_event_id:
+        raise GraphEventContractError(
+            f"授权事件 ID 不匹配: {event.event_id} != {expected_event_id}"
+        )
+    expected_key = (
+        f"scientific_qc.authorization:{event.project_id}:{event.run_id}:"
+        f"{payload['report_object_id']}:{payload['authorization_id']}"
+    )
+    if event.idempotency_key != expected_key:
+        raise GraphEventContractError(
+            f"授权幂等键不匹配: {event.idempotency_key} != {expected_key}"
+        )
+
+
 def graph_reducer(state: dict[str, Any], event: StoredWorkflowEvent) -> dict[str, Any]:
     """把一条规范事件归约到状态的确定性副本（绝不原地改写输入状态）。
 
@@ -329,20 +523,63 @@ def graph_reducer(state: dict[str, Any], event: StoredWorkflowEvent) -> dict[str
     if event.event_type.startswith("graph."):
         if event.event_type not in GRAPH_EVENT_TYPES:
             raise GraphEventContractError(f"未知图事件类型: {event.event_type}")
-    elif event.event_type not in _SIDE_EFFECT_EVENT_TYPES:
+    elif (
+        event.event_type not in _SIDE_EFFECT_EVENT_TYPES
+        and event.event_type != _QC_AUTHORIZATION_EVENT_TYPE
+    ):
         return dict(state)
     result = dict(state)
     if event.event_type == "graph.transition.accepted":
         _validate_accepted_transition(state, event)
         family = str(event.payload["family"])
         family_state = dict(result.get(family, {}))
-        family_state[str(event.payload["object_id"])] = str(event.payload["to_state"])
+        object_id = str(event.payload["object_id"])
+        to_state = str(event.payload["to_state"])
+        family_state[object_id] = to_state
         result[family] = family_state
+        # 科学质控迁移：消费授权（一次性）+ 进入 scientific_qc 时递增代次
+        guard_id = str(event.payload.get("guard_id", ""))
+        if guard_id in _SCIENTIFIC_QC_GUARD_IDS:
+            auth_id = (event.payload.get("guard_evidence") or {}).get(
+                "qc_authorization_id"
+            )
+            if isinstance(auth_id, str) and auth_id:
+                ledger = dict(result.get(QC_AUTHORIZATIONS_KEY, {}))
+                object_ledger = dict(ledger.get(object_id, {}))
+                record = dict(object_ledger.get(auth_id, {}))
+                record["consumed_event_id"] = event.event_id
+                object_ledger[auth_id] = record
+                ledger[object_id] = object_ledger
+                result[QC_AUTHORIZATIONS_KEY] = ledger
+        if family == "report_evidence" and to_state == "scientific_qc":
+            epochs = dict(result.get(QC_EPOCHS_KEY, {}))
+            epochs[object_id] = int(epochs.get(object_id, 0)) + 1
+            result[QC_EPOCHS_KEY] = epochs
     elif event.event_type == "graph.transition.rejected":
         pass  # 拒绝是可审计事件，不改写规范状态
     elif event.event_type == "graph.node.completed":
         _validate_node_completed(event)
         result = _apply_node_completed(result, event)
+    elif event.event_type == _QC_AUTHORIZATION_EVENT_TYPE:
+        _validate_qc_authorization(event)
+        payload = event.payload
+        ledger = dict(result.get(QC_AUTHORIZATIONS_KEY, {}))
+        object_ledger = dict(
+            ledger.get(str(payload["report_object_id"]), {})
+        )
+        object_ledger[str(payload["authorization_id"])] = {
+            "project_id": event.project_id,
+            "run_id": event.run_id,
+            "report_object_id": str(payload["report_object_id"]),
+            "from_state": str(payload["from_state"]),
+            "to_state": str(payload["to_state"]),
+            "evidence_digest": str(payload["evidence_digest"]),
+            "qc_entry_epoch": int(payload["qc_entry_epoch"]),
+            "boundary_proof_digest": str(payload["boundary_proof_digest"]),
+            "consumed_event_id": None,
+        }
+        ledger[str(payload["report_object_id"])] = object_ledger
+        result[QC_AUTHORIZATIONS_KEY] = ledger
     else:
         # 四类声明副作用
         ledger = dict(result.get(SIDE_EFFECT_LEDGER_KEY, {}))

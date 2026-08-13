@@ -166,6 +166,21 @@ def _check_output_value(type_decl: str, value: Any) -> bool:
             if not isinstance(sha256, str) or _SHA256_RE.fullmatch(sha256) is None:
                 return False
         return True
+    if normalized == "qcverificationreference":
+        """独立质控验证授权引用：结论 ID/摘要 + 候选快照 ID/内容摘要 +
+        审阅输入摘要；所有字段必须为非空字符串，纯字符串结论不合法。"""
+        if not isinstance(value, dict):
+            return False
+        for key in (
+            "verdict_id",
+            "verdict_digest",
+            "candidate_snapshot_id",
+            "candidate_content_digest",
+            "review_input_digest",
+        ):
+            if not _is_nonblank_str(value.get(key)):
+                return False
+        return True
     if normalized in ("dict[str, object]", "dict"):
         return isinstance(value, dict)
     raise ValueError(f"未知输出类型声明: {type_decl}")

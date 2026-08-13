@@ -1,0 +1,588 @@
+{
+  "$defs": {
+    "LocatorDetail": {
+      "additionalProperties": false,
+      "description": "精确来源定位：字段路径、页、表、链接等。\n\n必须至少包含一个真实可检索维度（字段路径/标题/页/表/行/列/段落/链接），\n且该维度文本非空、页码 >= 1；仅有 document_role 不构成精确定位。",
+      "properties": {
+        "document_role": {
+          "title": "Document Role",
+          "type": "string"
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "heading": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "table": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "row": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "column": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "document_role"
+      ],
+      "title": "LocatorDetail",
+      "type": "object",
+      "allOf": [
+        {
+          "anyOf": [
+            {
+              "required": [
+                "field_path"
+              ],
+              "properties": {
+                "field_path": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "heading"
+              ],
+              "properties": {
+                "heading": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "page"
+              ],
+              "properties": {
+                "page": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "table"
+              ],
+              "properties": {
+                "table": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "row"
+              ],
+              "properties": {
+                "row": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "column"
+              ],
+              "properties": {
+                "column": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "paragraph"
+              ],
+              "properties": {
+                "paragraph": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "not": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ],
+          "errorMessage": "来源定位必须包含至少一个真实可检索维度（字段/标题/页/表/行/列/段落/链接）"
+        }
+      ]
+    },
+    "LocatorRef": {
+      "additionalProperties": false,
+      "description": "精确来源定位条目：片段标识 + 定位详情。",
+      "properties": {
+        "fragment_id": {
+          "title": "Fragment Id",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/LocatorDetail"
+        }
+      },
+      "required": [
+        "fragment_id",
+        "locator"
+      ],
+      "title": "LocatorRef",
+      "type": "object"
+    },
+    "ReportKind": {
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ],
+      "title": "ReportKind",
+      "type": "string"
+    },
+    "ScientificIssue": {
+      "additionalProperties": false,
+      "description": "质控审查发现的单项问题。",
+      "properties": {
+        "issue_id": {
+          "title": "Issue Id",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "blocking",
+            "non_blocking"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "description_zh": {
+          "title": "Description Zh",
+          "type": "string"
+        },
+        "source_version_id": {
+          "title": "Source Version Id",
+          "type": "string"
+        },
+        "fragment_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fragment Ids",
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "issue_id",
+        "severity",
+        "category",
+        "description_zh",
+        "source_version_id",
+        "fragment_ids"
+      ],
+      "title": "ScientificIssue",
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "description": "已复核来源版本/片段/声明引用。\n\n片段/声明/事实版本引用与定位都不得为空：无声明/事实谱系的来源\n不能支撑接受结论。",
+      "properties": {
+        "source_version_id": {
+          "title": "Source Version Id",
+          "type": "string"
+        },
+        "fragment_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fragment Ids",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Claim Ids",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "fact_version_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fact Version Ids",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "locators": {
+          "items": {
+            "$ref": "#/$defs/LocatorRef"
+          },
+          "minItems": 1,
+          "title": "Locators",
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "source_version_id",
+        "fragment_ids",
+        "claim_ids",
+        "fact_version_ids",
+        "locators"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "独立科学质控结论：只接受或否决；绑定当前候选快照内容摘要、\nGateSpec 结果键、覆盖范围、来源定位与审查输入摘要。不可变、\nextra=forbid、规范确定性可摘要。\n\n- ``accepted``：不得携带否决处置（veto_disposition=None），不得有阻断性问题；\n- ``veto``：必须且只能声明 ``recoverable``/``exhausted`` 之一，且至少一个阻断性问题。",
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "criteria_version": {
+      "title": "Criteria Version",
+      "type": "string"
+    },
+    "verdict_id": {
+      "title": "Verdict Id",
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "accepted",
+        "veto"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    },
+    "veto_disposition": {
+      "anyOf": [
+        {
+          "enum": [
+            "recoverable",
+            "exhausted"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Veto Disposition"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "contract_version": {
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "report_kind": {
+      "$ref": "#/$defs/ReportKind"
+    },
+    "report_version": {
+      "title": "Report Version",
+      "type": "string"
+    },
+    "report_object_id": {
+      "title": "Report Object Id",
+      "type": "string"
+    },
+    "candidate_snapshot_id": {
+      "title": "Candidate Snapshot Id",
+      "type": "string"
+    },
+    "candidate_content_digest": {
+      "title": "Candidate Content Digest",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gate_result_key": {
+      "title": "Gate Result Key",
+      "type": "string"
+    },
+    "coverage_set_id": {
+      "title": "Coverage Set Id",
+      "type": "string"
+    },
+    "coverage_digest": {
+      "title": "Coverage Digest",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_refs": {
+      "items": {
+        "$ref": "#/$defs/SourceRef"
+      },
+      "title": "Source Refs",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "locators": {
+      "items": {
+        "$ref": "#/$defs/LocatorRef"
+      },
+      "title": "Locators",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "issues": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ScientificIssue"
+      },
+      "title": "Issues",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "reviewer_id": {
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "review_input_digest": {
+      "title": "Review Input Digest",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "valid_until": {
+      "format": "date-time",
+      "title": "Valid Until",
+      "type": "string"
+    },
+    "verdict_digest": {
+      "title": "Verdict Digest",
+      "type": "string",
+      "description": "确定性可摘要内容摘要",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "criteria_version",
+    "verdict_id",
+    "verdict",
+    "project_id",
+    "contract_version",
+    "report_kind",
+    "report_version",
+    "report_object_id",
+    "candidate_snapshot_id",
+    "candidate_content_digest",
+    "gate_result_key",
+    "coverage_set_id",
+    "coverage_digest",
+    "source_refs",
+    "locators",
+    "reviewer_id",
+    "review_input_digest",
+    "reviewed_at",
+    "valid_until"
+  ],
+  "title": "独立科学质控结论",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/scientific-qc-verdict.schema.json",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "accepted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "veto_disposition": {
+            "const": null
+          },
+          "issues": {
+            "items": {
+              "properties": {
+                "severity": {
+                  "enum": [
+                    "non_blocking"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "veto"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "veto_disposition": {
+            "enum": [
+              "recoverable",
+              "exhausted"
+            ]
+          }
+        },
+        "required": [
+          "veto_disposition"
+        ],
+        "allOf": [
+          {
+            "properties": {
+              "issues": {
+                "minItems": 1
+              }
+            }
+          },
+          {
+            "properties": {
+              "issues": {
+                "contains": {
+                  "properties": {
+                    "severity": {
+                      "const": "blocking"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "x-ciworkflow-unique-semantic-ids": {
+    "source_refs": "source_version_id",
+    "locators": "fragment_id",
+    "issues": "issue_id"
+  }
+}

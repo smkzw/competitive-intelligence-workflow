@@ -257,6 +257,7 @@ def recompute_report_result(
     expected_parent_key = compute_gate_result_key(
         parent_result.report_kind,
         parent_result.evidence_snapshot_id,
+        parent_result.candidate_snapshot_digest,
         parent_result.spec_version,
         parent_result.contract_version,
         parent_result.universe_summary,

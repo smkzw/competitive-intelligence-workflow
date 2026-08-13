@@ -783,6 +783,7 @@ class ReportGateResult(BaseModel):
     result_key: str
     report_kind: ReportKind
     evidence_snapshot_id: str
+    candidate_snapshot_digest: str
     spec_version: str
     contract_version: str
     universe_summary: str
@@ -829,6 +830,7 @@ class ReportGateResult(BaseModel):
         expected_key = compute_gate_result_key(
             self.report_kind,
             self.evidence_snapshot_id,
+            self.candidate_snapshot_digest,
             self.spec_version,
             self.contract_version,
             self.universe_summary,
@@ -853,6 +855,7 @@ class ReportGateResult(BaseModel):
         report_kind: ReportKind,
         unit_results: Sequence[GateUnitResult],
         evidence_snapshot_id: str,
+        candidate_snapshot_digest: str,
         spec_version: str,
         contract_version: str,
         universe_summary: str,
@@ -880,6 +883,7 @@ class ReportGateResult(BaseModel):
         result_key = compute_gate_result_key(
             report_kind,
             evidence_snapshot_id,
+            candidate_snapshot_digest,
             spec_version,
             contract_version,
             universe_summary,
@@ -889,6 +893,7 @@ class ReportGateResult(BaseModel):
             result_key=result_key,
             report_kind=report_kind,
             evidence_snapshot_id=evidence_snapshot_id,
+            candidate_snapshot_digest=candidate_snapshot_digest,
             spec_version=spec_version,
             contract_version=contract_version,
             universe_summary=universe_summary,
@@ -1028,20 +1033,34 @@ def compute_universe_summary(
     )
 
 
+def compute_candidate_snapshot_digest(snapshot: ApplicableUniverseSnapshot) -> str:
+    """由候选快照完整规范内容确定性生成内容摘要；内容变化 → 摘要变化。"""
+    canonical = json.dumps(
+        snapshot.model_dump(mode="json"),
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return stable_id("candidate-snapshot", canonical)
+
+
 def compute_gate_result_key(
     report_kind: ReportKind,
     evidence_snapshot_id: str,
+    candidate_snapshot_digest: str,
     spec_version: str,
     contract_version: str,
     universe_summary: str,
     *,
     spec_fingerprint: str,
 ) -> str:
-    """结果不可变键：报告类型、证据快照、规则指纹、合同版本与集合摘要。"""
+    """结果不可变键：报告类型、证据快照、候选快照内容摘要、规则指纹、
+    合同版本与集合摘要。"""
     return stable_id(
         "gate-result",
         report_kind.value,
         evidence_snapshot_id,
+        candidate_snapshot_digest,
         spec_version,
         contract_version,
         universe_summary,
@@ -1783,6 +1802,7 @@ def _aggregate_report_gates(
         report_kind=spec.report_kind,
         unit_results=unit_results,
         evidence_snapshot_id=snapshot.evidence_snapshot_id,
+        candidate_snapshot_digest=compute_candidate_snapshot_digest(snapshot),
         spec_version=spec.version,
         contract_version=contract_version,
         universe_summary=snapshot.universe_summary,

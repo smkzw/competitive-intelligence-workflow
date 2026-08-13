@@ -26,12 +26,20 @@ ALL_STATE_FAMILIES: tuple[str, ...] = EVIDENCE_STATE_FAMILIES + RUNTIME_STATE_FA
 # 共享证据账本键：A/B/C 共同只读；控制图只记录引用，不拥有科学事实
 EVIDENCE_LEDGER_KEY = "evidence"
 
-# 按报告隔离的写键族：gate / 候选快照 / 分析 / 格式产物
-REPORT_SCOPED_FAMILIES: tuple[str, ...] = ("gate", "snapshot", "analysis", "artifact")
+# 按报告隔离的写键族：gate / 候选快照 / 科学质控 / 分析 / 格式产物
+REPORT_SCOPED_FAMILIES: tuple[str, ...] = (
+    "gate", "snapshot", "qc", "analysis", "artifact",
+)
 REPORT_KINDS: tuple[str, ...] = ("A", "B", "C")
 
 # 副作用账本键（规范状态内的幂等记录）
 SIDE_EFFECT_LEDGER_KEY = "side_effects"
+
+# 科学质控授权账本键：由质控边界签发、被迁移守卫消费的授权记录
+QC_AUTHORIZATIONS_KEY = "qc_authorizations"
+
+# QC 入口代次键：对象进入 scientific_qc 的次数（授权一次性消费 + 代次绑定）
+QC_EPOCHS_KEY = "qc_epochs"
 
 # 未见对象的固定类型化起始状态：调用方不得自行断言其他起始状态
 FAMILY_DEFAULT_STATES: dict[str, str | None] = {
@@ -44,7 +52,7 @@ FAMILY_DEFAULT_STATES: dict[str, str | None] = {
 
 
 def report_scoped_key(family: str, report_kind: str) -> str:
-    """按报告隔离的规范状态键：gate.A / snapshot.B / analysis.C / artifact.A 等。"""
+    """按报告隔离的规范状态键：gate.A / snapshot.B / qc.A / analysis.C / artifact.A 等。"""
     if family not in REPORT_SCOPED_FAMILIES:
         raise ValueError(f"非报告写键族: {family}")
     if report_kind not in REPORT_KINDS:
@@ -67,4 +75,6 @@ def initial_state() -> dict[str, Any]:
         for kind in REPORT_KINDS:
             state[report_scoped_key(family, kind)] = {}
     state[SIDE_EFFECT_LEDGER_KEY] = {}
+    state[QC_AUTHORIZATIONS_KEY] = {}
+    state[QC_EPOCHS_KEY] = {}
     return state

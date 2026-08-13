@@ -40,8 +40,10 @@ GT07_INTAKE_GROUP: tuple[str, ...] = ("intake", "preflight", "universe", "route"
 GT08_MID_GROUP: tuple[str, ...] = ("ingest", "extract", "resolve", "gate", "recovery")
 GT09_TAIL_GROUP: tuple[str, ...] = ("snapshot", "scientific_qc", "analyze", "format", "acceptance")
 
-# 报告写键族：gate / 候选快照 / 分析 / 格式产物；不存在共享的 gate 状态键
-GT09_REPORT_SCOPED_FAMILIES: tuple[str, ...] = ("gate", "snapshot", "analysis", "artifact")
+# 报告写键族：gate / 候选快照 / 科学质控 / 分析 / 格式产物；不存在共享的 gate 状态键
+GT09_REPORT_SCOPED_FAMILIES: tuple[str, ...] = (
+    "gate", "snapshot", "qc", "analysis", "artifact",
+)
 GT09_REPORT_KINDS: tuple[str, ...] = ("A", "B", "C")
 GT09_SIDE_EFFECT_CLASSES: frozenset[str] = frozenset(
     {"none", "publish", "move", "approve", "delete"}
@@ -64,7 +66,15 @@ _TYPED_OUTPUT_FIXTURES: dict[str, dict[str, object]] = {
     "gate": {"gate_passed": True, "failures": ["unit_x"], "evidence_digest": "d" * 64},
     "recovery": {"recovery_receipt": "recovery_1"},
     "snapshot": {"snapshot_id": "snap_1"},
-    "scientific_qc": {"qc_verdict": "accepted"},
+    "scientific_qc": {
+        "qc_verdict": {
+            "verdict_id": "qc-verdict-1",
+            "verdict_digest": "a" * 64,
+            "candidate_snapshot_id": "snap_1",
+            "candidate_content_digest": "b" * 64,
+            "review_input_digest": "c" * 64,
+        }
+    },
     "analyze": {"pages": ["page_1"]},
     "format": {"format": "html", "artifact_id": "art_1"},
     "acceptance": {"acceptance_verdict": "passed"},
@@ -78,6 +88,7 @@ _INVALID_FLIPS: dict[str, object] = {
     "tuple[EvidenceReference]": [{"fragment_id": "", "sha256": "0" * 64}],
     "OutputFormat": "unknown_format",
     "dict[str, object]": [],
+    "QCVerificationReference": "accepted",
     "ReportKind": "X",
     "tuple[ReportKind]": ["X"],
     "tuple[OutputFormat]": ["bogus"],
@@ -376,10 +387,19 @@ def test_snapshot_analysis_format_and_acceptance_nodes_declare_complete_contract
             key = report_scoped_key(family, kind)
             assert key in state
             scoped_keys.add(key)
-    assert len(scoped_keys) == 12
+    assert len(scoped_keys) == 15
     for family in GT09_REPORT_SCOPED_FAMILIES:
         rendered = {report_scoped_key(family, kind) for kind in GT09_REPORT_KINDS}
         assert len(rendered) == 3
+    # 科学质控只写自己的质控键，绝不改写快照/证据/分析/产物键
+    qc_contract = node_contract("scientific_qc")
+    assert qc_contract.writes == ("qc.{report_kind}",)
+    forbidden_writes = {
+        "snapshot.{report_kind}", "evidence",
+        "analysis.{report_kind}", "artifact.{report_kind}",
+    }
+    assert not (set(qc_contract.writes) & forbidden_writes)
+    assert "snapshot.{report_kind}" in qc_contract.reads
 
 
 def test_report_branches_share_evidence_without_sharing_gate_state(
@@ -423,6 +443,29 @@ def test_report_branches_share_evidence_without_sharing_gate_state(
         trigger: str,
         evidence: dict[str, object],
     ) -> None:
+        if trigger == "isolated_qc_accepted":
+            evidence = dict(evidence)
+            evidence_without_auth = {
+                k: v for k, v in evidence.items()
+                if k != "qc_authorization_id"
+            }
+            evidence_digest = _canonical_digest(evidence_without_auth)
+            from tests.graph._qc_authorization_fixture import (
+                issue_test_qc_authorization,
+            )
+
+            auth_id = issue_test_qc_authorization(
+                executor,
+                report_object_id=object_id,
+                from_state=from_state,
+                to_state=to_state,
+                verdict="accepted",
+                evidence_digest=evidence_digest,
+                actor_id="gt10",
+                project_id="p_gt10",
+                occurred_at=_NOW,
+            )
+            evidence["qc_authorization_id"] = auth_id
         executor.submit(
             TransitionRequest(
                 schema_version="1.0",
@@ -577,7 +620,16 @@ def test_report_branches_share_evidence_without_sharing_gate_state(
         from_state="scientific_qc",
         to_state="snapshot_locked",
         trigger="isolated_qc_accepted",
-        evidence={"isolated_qc_accepted": True},
+        evidence={
+            "isolated_qc_accepted": True,
+            "qc_verdict_id": "qc-verdict-1",
+            "qc_verdict_digest": "a" * 64,
+            "qc_candidate_snapshot_id": "snap_B_1",
+            "qc_candidate_content_digest": "b" * 64,
+            "qc_review_input_digest": "c" * 64,
+            "qc_report_object_id": "report_B",
+            "qc_context_digest": "d" * 64,
+        },
     )
     state = executor.state()
     assert state["report_evidence"]["report_A"] == "evidence_blocked"

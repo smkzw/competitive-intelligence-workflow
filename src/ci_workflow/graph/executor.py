@@ -14,6 +14,7 @@ import json
 import os
 import tempfile
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -22,7 +23,11 @@ from ci_workflow.domain.ids import stable_id
 from ci_workflow.graph.definitions import node_contract
 from ci_workflow.graph.reducer import derive_side_effect_target, graph_reducer
 from ci_workflow.graph.registry import TRANSITION_REGISTRY
-from ci_workflow.graph.state import FAMILY_DEFAULT_STATES, initial_state
+from ci_workflow.graph.state import (
+    FAMILY_DEFAULT_STATES,
+    QC_EPOCHS_KEY,
+    initial_state,
+)
 from ci_workflow.graph.types import (
     DeclaredEdge,
     TransitionRequest,
@@ -30,11 +35,43 @@ from ci_workflow.graph.types import (
 )
 from ci_workflow.storage.checkpoint_store import CheckpointStore, WorkflowCheckpoint
 from ci_workflow.storage.event_store import (
+    _AUTHORIZATION_APPEND_CAPABILITY,
     EventConflictError,
     EventStore,
     StoredWorkflowEvent,
     WorkflowEvent,
 )
+
+# 科学质控三迁移守卫：必须由质控边界签发授权事件背书，禁止自造证据
+_SCIENTIFIC_QC_GUARD_IDS = frozenset(
+    {
+        "g_report_scientific_qc_snapshot_locked",
+        "g_report_scientific_qc_recovering",
+        "g_report_scientific_qc_evidence_blocked",
+    }
+)
+
+
+@dataclass(frozen=True)
+class _ScientificQcAuthorizationProof:
+    """不透明授权证明：只由科学质控边界在完整重验证后构造。
+
+    持有已验证模型实例（非原始字符串）；执行器私有发行方法只接受该证明，
+    并从证明内的已验证模型重新计算全部摘要与绑定。证明对象本身不可从
+    普通调用方构造（无公开工厂）。
+    """
+
+    project_id: str
+    run_id: str
+    report_object_id: str
+    from_state: str
+    to_state: str
+    verdict: Any
+    context: Any
+    exhaustion_record_digest: str | None
+    reviewer_actor_id: str
+    evidence_digest: str
+    occurred_at: datetime
 
 
 class SideEffectError(RuntimeError):
@@ -282,6 +319,171 @@ class GraphExecutor:
         self.side_effects = side_effects or IdempotentSideEffects(self.project_root)
 
     # ── 迁移 ───────────────────────────────────────────────────────────────
+    def _issue_scientific_qc_authorization(
+        self, proof: _ScientificQcAuthorizationProof
+    ) -> StoredWorkflowEvent:
+        """由科学质控边界签发授权事件（私有，只接受不透明证明）。
+
+        全部摘要与绑定都由执行器从证明内已验证模型重新计算；普通调用方
+        无法提供任意 verdict/候选/上下文/SHA 字段换取已接受授权。
+        授权事件携带边界证明摘要（从完整验证输入确定性重算）与当前 QC
+        入口代次；归约/重放时重新校验。
+
+        存储走 EventStore 专用授权追加路径，必须携带模块私有能力对象
+        （按身份校验）：公开 ``EventStore.append`` 无条件拒绝授权事件，
+        即使攻击者计算出完全正确的摘要/事件 ID/幂等键。Python 私有符号
+        不是恶意进程安全边界——该契约保证公开 API 溯源正确性。
+        """
+        verdict = proof.verdict
+        context = proof.context
+        authorization_id = _payload_digest(
+            {
+                "project_id": proof.project_id,
+                "run_id": proof.run_id,
+                "report_object_id": proof.report_object_id,
+                "from_state": proof.from_state,
+                "to_state": proof.to_state,
+                "verdict_id": verdict.verdict_id,
+                "verdict_digest": verdict.verdict_digest,
+                "candidate_snapshot_id": verdict.candidate_snapshot_id,
+                "candidate_content_digest": verdict.candidate_content_digest,
+                "review_input_digest": verdict.review_input_digest,
+                "context_digest": context.context_digest,
+                "exhaustion_record_digest": proof.exhaustion_record_digest,
+            }
+        )
+        # 边界证明摘要：从完整已验证输入确定性重算，归约时重新校验
+        boundary_proof_digest = _payload_digest(
+            {
+                "authorization_id": authorization_id,
+                "project_id": proof.project_id,
+                "run_id": proof.run_id,
+                "report_object_id": proof.report_object_id,
+                "from_state": proof.from_state,
+                "to_state": proof.to_state,
+                "verdict_id": verdict.verdict_id,
+                "verdict_digest": verdict.verdict_digest,
+                "candidate_snapshot_id": verdict.candidate_snapshot_id,
+                "candidate_content_digest": verdict.candidate_content_digest,
+                "review_input_digest": verdict.review_input_digest,
+                "context_digest": context.context_digest,
+                "exhaustion_record_digest": proof.exhaustion_record_digest,
+                "reviewer_actor_id": proof.reviewer_actor_id,
+                "evidence_digest": proof.evidence_digest,
+            }
+        )
+        # 当前 QC 入口代次：对象进入 scientific_qc 的次数（一次性消费 + 代次绑定）
+        qc_entry_epoch = int(
+            self.state().get(QC_EPOCHS_KEY, {}).get(proof.report_object_id, 0)
+        )
+        payload: dict[str, Any] = {
+            "authorization_id": authorization_id,
+            "boundary_proof_digest": boundary_proof_digest,
+            "qc_entry_epoch": qc_entry_epoch,
+            "project_id": proof.project_id,
+            "run_id": self.run_id,
+            "report_object_id": proof.report_object_id,
+            "from_state": proof.from_state,
+            "to_state": proof.to_state,
+            "verdict_id": verdict.verdict_id,
+            "verdict_digest": verdict.verdict_digest,
+            "candidate_snapshot_id": verdict.candidate_snapshot_id,
+            "candidate_content_digest": verdict.candidate_content_digest,
+            "review_input_digest": verdict.review_input_digest,
+            "context_digest": context.context_digest,
+            "reviewer_actor_id": proof.reviewer_actor_id,
+            "evidence_digest": proof.evidence_digest,
+        }
+        if proof.exhaustion_record_digest is not None:
+            payload["exhaustion_record_digest"] = proof.exhaustion_record_digest
+        event = WorkflowEvent(
+            schema_version="1.0",
+            event_id=stable_id(
+                "scientific-qc-authorization",
+                proof.project_id,
+                self.run_id,
+                proof.report_object_id,
+                authorization_id,
+            ),
+            project_id=proof.project_id,
+            run_id=self.run_id,
+            event_type="scientific_qc.authorization.issued",
+            occurred_at=proof.occurred_at,
+            actor_id=proof.reviewer_actor_id,
+            idempotency_key=(
+                f"scientific_qc.authorization:{proof.project_id}:{self.run_id}:"
+                f"{proof.report_object_id}:{authorization_id}"
+            ),
+            payload=payload,
+        )
+        return self.store._append_authorization(
+            event, _AUTHORIZATION_APPEND_CAPABILITY
+        )
+
+    def _qc_authorization_matches(
+        self,
+        *,
+        authorization_event: StoredWorkflowEvent,
+        request: TransitionRequest,
+        evidence_without_auth: dict[str, Any],
+        qc_entry_epoch: int,
+    ) -> tuple[bool, str]:
+        """校验迁移守卫证据是否由已签发授权事件背书。
+
+        返回 (是否匹配, 失败原因)；不匹配时失败关闭且不产生接受事件。
+        绑定项目/运行/对象/from/to/证据摘要/代次；已消费授权拒绝新请求。
+        """
+        payload = authorization_event.payload
+        if request.project_id != payload.get("project_id"):
+            return False, "authorization_project_mismatch"
+        if self.run_id != payload.get("run_id") or request.run_id != self.run_id:
+            return False, "authorization_run_mismatch"
+        if request.object_id != payload.get("report_object_id"):
+            return False, "authorization_object_mismatch"
+        if request.from_state != payload.get("from_state"):
+            return False, "authorization_from_mismatch"
+        if request.to_state != payload.get("to_state"):
+            return False, "authorization_to_mismatch"
+        if int(payload.get("qc_entry_epoch", -1)) != qc_entry_epoch:
+            return False, "authorization_epoch_mismatch"
+        evidence_digest = _payload_digest(evidence_without_auth)
+        if evidence_digest != payload.get("evidence_digest"):
+            return False, "authorization_evidence_mismatch"
+        # 一次性消费：同一授权已被另一请求消费 → 拒绝。
+        # （同一 request 的精确重放已在 submit 入口由 _existing_transition_event 短路）
+        for record in self.store.read_all():
+            if record.event_type != "graph.transition.accepted":
+                continue
+            if record.payload.get("object_id") != request.object_id:
+                continue
+            guard_evidence = record.payload.get("guard_evidence") or {}
+            if guard_evidence.get("qc_authorization_id") != str(
+                payload.get("authorization_id")
+            ):
+                continue
+            return False, "authorization_already_consumed"
+        return True, "authorization_matches"
+
+    def _find_qc_authorization(
+        self,
+        authorization_id: str,
+        *,
+        project_id: str,
+        run_id: str,
+        report_object_id: str,
+    ) -> StoredWorkflowEvent | None:
+        for record in self.store.read_all():
+            if record.event_type != "scientific_qc.authorization.issued":
+                continue
+            if record.payload.get("authorization_id") != authorization_id:
+                continue
+            if record.payload.get("report_object_id") != report_object_id:
+                continue
+            if record.project_id != project_id or record.run_id != run_id:
+                continue
+            return record
+        return None
+
     def submit(self, request: TransitionRequest) -> StoredWorkflowEvent:
         """把一次迁移尝试归约为接受或拒绝规范事件。
 
@@ -385,6 +587,65 @@ class GraphExecutor:
             target_object_id=request.object_id,
         )
         if guard.allowed:
+            # 科学质控迁移必须由质控边界签发的授权事件背书；直接自造
+            # 形状正确的证据（自造 SHA 字符串）没有对应授权 → 失败关闭。
+            if edge.guard_id in _SCIENTIFIC_QC_GUARD_IDS:
+                auth_id = request.evidence.get("qc_authorization_id")
+                if not isinstance(auth_id, str) or not auth_id.strip():
+                    event = self._rejection_event(
+                        request,
+                        reason="qc_authorization_missing",
+                        guard_id=edge.guard_id,
+                        guard_reason="missing_evidence:qc_authorization_id",
+                        request_digest=request_digest,
+                        event_id=event_id,
+                        event_project=event_project,
+                        event_run=event_run,
+                    )
+                    return self.store.append(event)
+                auth_event = self._find_qc_authorization(
+                    auth_id,
+                    project_id=request.project_id,
+                    run_id=request.run_id,
+                    report_object_id=request.object_id,
+                )
+                if auth_event is None:
+                    event = self._rejection_event(
+                        request,
+                        reason="qc_authorization_missing",
+                        guard_id=edge.guard_id,
+                        guard_reason=f"authorization_not_found:{auth_id}",
+                        request_digest=request_digest,
+                        event_id=event_id,
+                        event_project=event_project,
+                        event_run=event_run,
+                    )
+                    return self.store.append(event)
+                evidence_without_auth = {
+                    k: v for k, v in request.evidence.items()
+                    if k != "qc_authorization_id"
+                }
+                current_epoch = int(
+                    self.state().get(QC_EPOCHS_KEY, {}).get(request.object_id, 0)
+                )
+                ok, reason = self._qc_authorization_matches(
+                    authorization_event=auth_event,
+                    request=request,
+                    evidence_without_auth=evidence_without_auth,
+                    qc_entry_epoch=current_epoch,
+                )
+                if not ok:
+                    event = self._rejection_event(
+                        request,
+                        reason="qc_authorization_mismatch",
+                        guard_id=edge.guard_id,
+                        guard_reason=reason,
+                        request_digest=request_digest,
+                        event_id=event_id,
+                        event_project=event_project,
+                        event_run=event_run,
+                    )
+                    return self.store.append(event)
             event = self._acceptance_event(
                 request,
                 edge,

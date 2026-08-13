@@ -19,6 +19,8 @@ B 不污染 A/C，项目为 partially_delivered 而非 complete/blocked。
 
 from __future__ import annotations
 
+import hashlib
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -27,6 +29,14 @@ import pytest
 _NOW = datetime(2026, 8, 13, 10, 0, tzinfo=UTC)
 _PROJECT_ID = "p_35a"
 _RUN_ID = "run_35a"
+
+
+def _canonical_digest(value: object) -> str:
+    encoded = (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 _PROJECT_OBJECT = "proj_1"
 
 
@@ -87,6 +97,29 @@ def test_reports_and_formats_progress_independently_with_partial_delivery(
         evidence: dict[str, object],
         request_id: str,
     ) -> None:
+        if trigger == "isolated_qc_accepted":
+            evidence = dict(evidence)
+            evidence_without_auth = {
+                k: v for k, v in evidence.items()
+                if k != "qc_authorization_id"
+            }
+            evidence_digest = _canonical_digest(evidence_without_auth)
+            from tests.graph._qc_authorization_fixture import (
+                issue_test_qc_authorization,
+            )
+
+            auth_id = issue_test_qc_authorization(
+                executor,
+                report_object_id=object_id,
+                from_state=str(from_state),
+                to_state=to_state,
+                verdict="accepted",
+                evidence_digest=evidence_digest,
+                actor_id="pi_35a",
+                project_id=_PROJECT_ID,
+                occurred_at=_NOW,
+            )
+            evidence["qc_authorization_id"] = auth_id
         event = executor.submit(
             TransitionRequest(
                 schema_version="1.0",
@@ -204,7 +237,14 @@ def test_reports_and_formats_progress_independently_with_partial_delivery(
         ("collecting", "scientific_qc", "gate_deterministic_pass",
          {"gate_deterministic_pass": True, "candidate_snapshot_established": True}, "35a:A:qc"),
         ("scientific_qc", "snapshot_locked", "isolated_qc_accepted",
-         {"isolated_qc_accepted": True}, "35a:A:locked"),
+         {"isolated_qc_accepted": True,
+          "qc_verdict_id": "qc-verdict-1",
+          "qc_verdict_digest": "a" * 64,
+          "qc_candidate_snapshot_id": "snap-1",
+          "qc_candidate_content_digest": "b" * 64,
+          "qc_review_input_digest": "c" * 64,
+          "qc_report_object_id": "report_A",
+          "qc_context_digest": "d" * 64}, "35a:A:locked"),
     )
     for from_state, to_state, trigger, evidence, request_id in a_path:
         submit(

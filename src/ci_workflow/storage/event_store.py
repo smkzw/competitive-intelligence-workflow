@@ -18,6 +18,36 @@ class EventConflictError(EventStoreError):
     """同一事件或幂等键被另一份业务载荷复用。"""
 
 
+class AuthorizationAppendForbiddenError(EventStoreError):
+    """公开追加路径无条件拒绝科学质控授权事件。
+
+    授权事件只能由质控边界经专用路径签发；即使攻击者计算出完全正确的
+    boundary_proof_digest、事件 ID 与幂等键，公开 ``append`` 也在存储前
+    确定性失败。
+    """
+
+
+# 科学质控授权事件类型：公开追加无条件拒绝，只能经专用能力路径签发
+_QC_AUTHORIZATION_EVENT_TYPE = "scientific_qc.authorization.issued"
+
+
+class _AuthorizationAppendCapability:
+    """模块私有授权追加能力标记：只按对象身份（``is``）校验。
+
+    无公开工厂、无数据；伪造或复制的能力对象一律被拒绝。Python 私有符号
+    不是恶意进程安全边界——本能力保证的是公开 API 溯源正确性：普通调用方
+    无法通过任何公开入口签发/追加授权事件。
+    """
+
+    __slots__ = ()
+
+    def __repr__(self) -> str:
+        return "<scientific-qc-authorization append capability>"
+
+
+_AUTHORIZATION_APPEND_CAPABILITY = _AuthorizationAppendCapability()
+
+
 def _not_blank(value: str) -> str:
     normalized = " ".join(value.split())
     if not normalized:
@@ -144,6 +174,34 @@ class EventStore:
         return tuple(records)
 
     def append(self, event: WorkflowEvent) -> StoredWorkflowEvent:
+        # 公开追加路径无条件拒绝科学质控授权事件（存储前、去重前）：即使
+        # 攻击者计算出完全正确的 boundary_proof_digest/事件 ID/幂等键，
+        # 也不能经公开 API 写入授权事件。
+        if event.event_type == _QC_AUTHORIZATION_EVENT_TYPE:
+            raise AuthorizationAppendForbiddenError(
+                "科学质控授权事件只能由质控边界经专用路径签发"
+            )
+        return self._append(event)
+
+    def _append_authorization(
+        self,
+        event: WorkflowEvent,
+        capability: _AuthorizationAppendCapability,
+    ) -> StoredWorkflowEvent:
+        """专用授权追加路径：要求模块私有能力对象并按身份（``is``）校验。
+
+        只有 ``GraphExecutor._issue_scientific_qc_authorization`` 持有并
+        使用该能力；伪造/复制的能力对象、或对非授权事件的误用一律拒绝。
+        Python 私有符号不是恶意进程安全边界——该契约保证公开 API 溯源
+        正确性（普通调用方无法经任何公开入口签发授权事件）。
+        """
+        if capability is not _AUTHORIZATION_APPEND_CAPABILITY:
+            raise EventStoreError("缺少科学质控授权追加能力（非边界签发）")
+        if event.event_type != _QC_AUTHORIZATION_EVENT_TYPE:
+            raise EventStoreError("专用授权追加路径只接受授权事件")
+        return self._append(event)
+
+    def _append(self, event: WorkflowEvent) -> StoredWorkflowEvent:
         # Validate JSON before consulting existing records so unsupported values fail closed.
         _canonical_json(event.model_dump(mode="json"))
         existing = self.read_all()

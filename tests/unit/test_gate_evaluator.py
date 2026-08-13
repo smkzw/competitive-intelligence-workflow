@@ -41,6 +41,7 @@ from ci_workflow.gates.models import (
     _GateEvaluationBatch,
     assert_applicable_universe_closed,
     assert_bindings_in_universe,
+    compute_candidate_snapshot_digest,
     compute_gate_result_key,
     compute_universe_summary,
     derive_expected_unit_object_pairs,
@@ -949,6 +950,7 @@ def test_gate_result_and_override_documents_validate_against_schemas() -> None:
             ),
         ),
         evidence_snapshot_id=snapshot.evidence_snapshot_id,
+        candidate_snapshot_digest=compute_candidate_snapshot_digest(snapshot),
         spec_version="1.0",
         contract_version="1",
         universe_summary=snapshot.universe_summary,
@@ -1005,6 +1007,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     key = compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+            "candidate-snapshot-digest",
         "1.0",
         "1",
         "universe-summary-abc",
@@ -1014,6 +1017,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     assert key != compute_gate_result_key(
         ReportKind.B,
         "snapshot-001",
+            "candidate-snapshot-digest",
         "1.0",
         "1",
         "universe-summary-abc",
@@ -1022,6 +1026,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     assert key != compute_gate_result_key(
         ReportKind.A,
         "snapshot-002",
+            "candidate-snapshot-digest",
         "1.0",
         "1",
         "universe-summary-abc",
@@ -1030,6 +1035,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     assert key != compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+            "candidate-snapshot-digest",
         "1.1",
         "1",
         "universe-summary-abc",
@@ -1038,6 +1044,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     assert key != compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+            "candidate-snapshot-digest",
         "1.0",
         "2",
         "universe-summary-abc",
@@ -1046,6 +1053,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     assert key != compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+            "candidate-snapshot-digest",
         "1.0",
         "1",
         "universe-summary-xyz",
@@ -1054,6 +1062,7 @@ def test_gate_result_key_binds_report_evidence_rule_contract_and_universe() -> N
     assert key != compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+            "candidate-snapshot-digest",
         "1.0",
         "1",
         "universe-summary-abc",

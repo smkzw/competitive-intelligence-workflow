@@ -369,7 +369,16 @@ def test_replay_never_duplicates_publish_move_approve_or_delete(
                 to_state="snapshot_locked",
                 trigger="isolated_qc_accepted",
                 guard_id="g_report_scientific_qc_snapshot_locked",
-                guard_evidence={"isolated_qc_accepted": True},
+                guard_evidence={
+                    "isolated_qc_accepted": True,
+                    "qc_verdict_id": "qc-verdict-1",
+                    "qc_verdict_digest": "a" * 64,
+                    "qc_candidate_snapshot_id": "snap-1",
+                    "qc_candidate_content_digest": "b" * 64,
+                    "qc_review_input_digest": "c" * 64,
+                    "qc_report_object_id": "report_B",
+                    "qc_context_digest": "d" * 64,
+                },
                 suffix="undeclared",
             ),
         ),
@@ -529,6 +538,59 @@ def test_replay_never_duplicates_publish_move_approve_or_delete(
         side_effect=IdempotentSideEffects(legal_root),
     )
     assert legal_again == legal_checkpoint
+
+    # 8) 科学质控迁移重放必须消费边界签发的授权：直接追加的
+    #    "scientific_qc -> snapshot_locked" 接受事件（无授权事件背书）
+    #    在归约/重放时失败关闭，不能成为规范状态。
+    assert_raw_replay_fails(
+        "项目_raw_qc_forged",
+        (
+            raw_accepted(
+                family="report_evidence",
+                object_id="report_1",
+                from_state="queued",
+                to_state="collecting",
+                trigger="candidate_scope_locked",
+                guard_id="g_report_queued_collecting",
+                guard_evidence={"candidate_scope_locked": True},
+                suffix="collect",
+            ),
+            raw_accepted(
+                family="report_evidence",
+                object_id="report_1",
+                from_state="collecting",
+                to_state="scientific_qc",
+                trigger="gate_deterministic_pass",
+                guard_id="g_report_collecting_scientific_qc",
+                guard_evidence={
+                    "gate_deterministic_pass": True,
+                    "candidate_snapshot_established": True,
+                },
+                suffix="qc",
+            ),
+            raw_accepted(
+                family="report_evidence",
+                object_id="report_1",
+                from_state="scientific_qc",
+                to_state="snapshot_locked",
+                trigger="isolated_qc_accepted",
+                guard_id="g_report_scientific_qc_snapshot_locked",
+                guard_evidence={
+                    "isolated_qc_accepted": True,
+                    "qc_verdict_id": "v1",
+                    "qc_verdict_digest": "a" * 64,
+                    "qc_candidate_snapshot_id": "snap-1",
+                    "qc_candidate_content_digest": "b" * 64,
+                    "qc_review_input_digest": "c" * 64,
+                    "qc_report_object_id": "report_1",
+                    "qc_context_digest": "d" * 64,
+                    "qc_authorization_id": "forged-auth",
+                },
+                suffix="locked",
+            ),
+        ),
+        "消费了未签发的授权",
+    )
 
     # 直接向共享 EventStore 追加的伪造/漂移 graph.node.completed 载荷：
     # 归约时以图事件契约错误失败关闭且不保存检查点（与 complete_node 边界一致）

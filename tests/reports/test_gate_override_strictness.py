@@ -43,6 +43,7 @@ from ci_workflow.gates.models import (
     TrialDesignEvidence,
     TrialDesignKind,
     UniverseEdge,
+    compute_candidate_snapshot_digest,
     compute_gate_result_key,
     compute_universe_summary,
 )
@@ -758,6 +759,7 @@ def test_override_binds_result_to_parent_version_and_evidence_snapshot() -> None
     assert child_result.result_key == compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "2",
         snapshot.universe_summary,
@@ -766,6 +768,7 @@ def test_override_binds_result_to_parent_version_and_evidence_snapshot() -> None
     assert parent_result.result_key == compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "1",
         snapshot.universe_summary,
@@ -935,6 +938,7 @@ def test_override_recomputes_only_dependency_affected_reports() -> None:
     assert parent_b.result_key == compute_gate_result_key(
         ReportKind.B,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "1",
         snapshot.universe_summary,
@@ -944,6 +948,7 @@ def test_override_recomputes_only_dependency_affected_reports() -> None:
     assert parent_c.result_key == compute_gate_result_key(
         ReportKind.C,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "1",
         snapshot.universe_summary,
@@ -998,6 +1003,7 @@ def test_recompute_rejects_parent_spec_fingerprint_mismatch_and_preserves_blocke
     assert parent_key == compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "1",
         snapshot.universe_summary,
@@ -1039,6 +1045,7 @@ def test_recompute_rejects_parent_spec_fingerprint_mismatch_and_preserves_blocke
     assert child_result.result_key == compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "2",
         snapshot.universe_summary,
@@ -1075,6 +1082,7 @@ def test_recompute_rejects_research_role_set_mismatch_and_binds_summary() -> Non
     assert parent_key == compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot_v1),
         "1.0",
         "1",
         snapshot_v1.universe_summary,
@@ -1084,6 +1092,7 @@ def test_recompute_rejects_research_role_set_mismatch_and_binds_summary() -> Non
     other_role_key = compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot_v2),
         "1.0",
         "1",
         snapshot_v2.universe_summary,
@@ -1115,6 +1124,7 @@ def test_recompute_rejects_research_role_set_mismatch_and_binds_summary() -> Non
     assert child_result.result_key == compute_gate_result_key(
         ReportKind.A,
         "snapshot-001",
+        compute_candidate_snapshot_digest(snapshot_v1),
         "1.0",
         "2",
         snapshot_v1.universe_summary,
@@ -1491,6 +1501,7 @@ def test_b_core_efficacy_respects_raised_unit_threshold_during_recompute() -> No
     assert child_result.result_key == compute_gate_result_key(
         ReportKind.B,
         snapshot.evidence_snapshot_id,
+        compute_candidate_snapshot_digest(snapshot),
         "1.0",
         "2",
         snapshot.universe_summary,
