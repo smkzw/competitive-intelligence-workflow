@@ -1,0 +1,1 @@
+继续同一会话做修复后复验。页面仍是 http://127.0.0.1:8766/tests/fixtures/task44-chart-table-sync/index.html 。必须强制刷新并真实使用浏览器，不能依据旧截图或源码。重点复核你上轮的 P1：未公开大空白、对比度、空结果引导、柱端数值，并补查新标题是否直接含指标名、负值标签是否清楚、筛选浮层/chip/URL 刷新与前进后退、图点→表高亮、表点/键盘→图。保存新证据到 codebuddy_evidence/recheck/。只输出复验操作、残余 P0/P1/P2、PASS/REVISE；仅限 fixture，不声称门户完成。

@@ -1,0 +1,187 @@
+[
+  {
+    "key": "P1-5-unr",
+    "what": "未公开组紧凑态",
+    "ok": true,
+    "extra": {
+      "chart_h": 74.53125,
+      "chart_w": 1190,
+      "data": null,
+      "x": null,
+      "yaxis_show": null,
+      "grid": null
+    }
+  },
+  {
+    "key": "P1-neg",
+    "what": "负值 LDL-C",
+    "ok": true,
+    "extra": {
+      "x": [
+        "对照组",
+        "治疗组"
+      ],
+      "data": [
+        {
+          "value": -1.5,
+          "status": null,
+          "itemStyle": {
+            "color": "#407AAA"
+          },
+          "label": {
+            "show": true,
+            "position": "bottom",
+            "formatter": "-1.5",
+            "color": "#0F1115",
+            "fontSize": 12,
+            "fontWeight": 600
+          },
+          "emphasis": {
+            "label": {
+              "show": true
+            }
+          }
+        },
+        {
+          "value": -2.1,
+          "status": null,
+          "itemStyle": {
+            "color": "#FF9900"
+          },
+          "label": {
+            "show": true,
+            "position": "bottom",
+            "formatter": "-2.1",
+            "color": "#0F1115",
+            "fontSize": 12,
+            "fontWeight": 600
+          },
+          "emphasis": {
+            "label": {
+              "show": true
+            }
+          }
+        }
+      ],
+      "y_min": null
+    }
+  },
+  {
+    "key": "P1-titles",
+    "what": "标题/指标名",
+    "ok": true,
+    "extra": {
+      "titles": [
+        "单位：mg/dL；方向：越高越有利；时间窗：12周；分析人群：ITT",
+        "单位：mg/dL；方向：越低越有利；时间窗：12周；分析人群：ITT",
+        "单位：mg/dL；方向：越低越有利；时间窗：24周；分析人群：PP",
+        "单位：nmol/L；方向：越高越有利；时间窗：12周；分析人群：ITT"
+      ],
+      "labels": [
+        "主要终点 HbA1c 变化值",
+        "主要终点 HbA1c 变化值",
+        "探索终点 IL-6 变化值",
+        "次要终点 LDL-C 变化值",
+        "次要终点 LDL-C 变化值",
+        "探索终点 25-OH-VD 变化值"
+      ]
+    }
+  },
+  {
+    "key": "link-api",
+    "what": "图→表 API",
+    "ok": true,
+    "extra": {
+      "selected": "row-treat-endpoint-a",
+      "row_text": "主要终点 HbA1c 变化值治疗组5.2mg/dL已披露"
+    }
+  },
+  {
+    "key": "link-click",
+    "what": "表→图 点击",
+    "ok": true,
+    "extra": {
+      "selected": "row-treat-endpoint-b",
+      "row_text": "次要终点 LDL-C 变化值治疗组-2.1mg/dL已披露"
+    }
+  },
+  {
+    "key": "link-kb",
+    "what": "键盘 Enter",
+    "ok": true,
+    "extra": {
+      "selected": "row-ctrl-endpoint-a"
+    }
+  },
+  {
+    "key": "empty-state",
+    "what": "空结果 12周+PP URL 直链",
+    "ok": false,
+    "extra": {
+      "count": "匹配 0 项结果",
+      "empty_title": "\n    当前选择下暂无可比较数据\n  ",
+      "empty_visible": false,
+      "filter_empty_visible": true,
+      "visible_rows": 0,
+      "visible_groups": 0,
+      "chips_text": "整份报告 · 分析人群：符合方案人群（PP）×整份报告 · 时间窗：12周×"
+    }
+  },
+  {
+    "key": "panel-visible",
+    "what": "点 24周 后 panel 仍可见",
+    "ok": true,
+    "extra": null
+  },
+  {
+    "key": "toggle-off",
+    "what": "再次点取消选择",
+    "ok": true,
+    "extra": {
+      "summary": "无筛选条件",
+      "count": "匹配 6 项结果",
+      "url": "http://127.0.0.1:8766/tests/fixtures/task44-chart-table-sync/index.html#v1~pid=%2Foverview"
+    }
+  },
+  {
+    "key": "1024-init",
+    "what": "1024 初始",
+    "ok": true,
+    "extra": {
+      "scrollWidth": 1024
+    }
+  },
+  {
+    "key": "1024-panel",
+    "what": "1024 浮层首屏",
+    "ok": true,
+    "extra": {
+      "display": "block",
+      "position": "absolute",
+      "bbox_y": 268.125,
+      "bbox_h": 520,
+      "in_viewport": true
+    }
+  },
+  {
+    "key": "1024-chip",
+    "what": "1024 chip 顶部",
+    "ok": true,
+    "extra": {
+      "count": 1,
+      "y": 169.78125,
+      "text": "整份报告 · 时间窗：24周×"
+    }
+  },
+  {
+    "key": "1024-reload",
+    "what": "1024 URL 持久化",
+    "ok": true,
+    "extra": {
+      "url": "http://127.0.0.1:8766/tests/fixtures/task44-chart-table-sync/index.html#v1~pid=%2Foverview~ps=time_window:24%E5%91%A8",
+      "count": "匹配 2 项结果",
+      "chips_count": 1,
+      "chips_text": "整份报告 · 时间窗：24周×"
+    }
+  }
+]

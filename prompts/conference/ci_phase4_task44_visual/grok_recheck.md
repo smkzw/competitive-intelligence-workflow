@@ -1,0 +1,1 @@
+继续同一会话做修复后复验。页面仍是 http://127.0.0.1:8766/tests/fixtures/task44-chart-table-sync/index.html 。必须强制刷新并真实使用浏览器，不能依据旧截图或源码。逐项复核你上轮 P0/P1：24周筛选后整组隐藏/无旧 tooltip、空态、负值两柱、双向点选、键盘、浮层与选项布局、URL 状态、未公开紧凑态、中文指标标题、无内部文字；1024也要真实设置。保存新证据到 grok_evidence/recheck/。只输出复验操作、残余 P0/P1/P2、PASS/REVISE；仅限 fixture，不声称门户完成。

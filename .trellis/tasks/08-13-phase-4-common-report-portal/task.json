@@ -21,10 +21,10 @@
   "children": [],
   "parent": "08-10-ci-workflow-rebuild",
   "relatedFiles": [],
-  "notes": "Phase 3 已接受。Task 4.1、4.2、4.3 均已于 2026-08-14 通过确定性验收和独立视觉复审；下一步 Task 4.4 构建图形合同、完整表、小多图拆分及图表联动。后续视觉任务继续采用真实医学经理角色做端到端视觉试用。",
+  "notes": "Phase 3 已接受。Task 4.1–4.4 均已于 2026-08-14 通过确定性验收和独立视觉复审。Task 4.4 经首轮医学经理否决后修复筛选可见性/URL、未公开紧凑态、负值零基线、指标标题、组别与数值标签，再由 CodeBuddy 与 Minimax 同会话复验通过；Grok 修复后无实质复验输出，明确排除。下一步 Task 4.5 构建同页证据抽屉、固定比较和焦点恢复。",
   "meta": {
     "phase3Dependency": "accepted",
-    "nextTask": "4.4",
+    "nextTask": "4.5",
     "task43Status": "accepted",
     "task43Context": "context/ci_phase4_task43_context.md",
     "task43IndependentVerdict": "PASS; CodeBuddy kimi-k2.6 / Pi minimax-m3 / Grok Build grok-4.6; P0=0; P1=0",

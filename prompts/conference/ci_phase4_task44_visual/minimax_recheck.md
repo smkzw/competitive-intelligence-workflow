@@ -1,0 +1,1 @@
+继续同一会话做修复后复验。页面仍是 http://127.0.0.1:8766/tests/fixtures/task44-chart-table-sync/index.html 。必须改用项目 Playwright/Chromium 强制刷新并真实操作，不能依据旧截图或源码。逐项复核你上轮 P0/P1：浮层首屏、具体 chip、URL 刷新/前进后退、筛选整组隐藏与空态清除、未公开紧凑态、负值治疗/对照、标题指标名、图点/表点/键盘。保存新证据到 pi_minimax_evidence/recheck/。只输出复验操作、残余 P0/P1/P2、PASS/REVISE；仅限 fixture，不声称门户完成。
