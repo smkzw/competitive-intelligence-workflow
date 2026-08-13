@@ -92,9 +92,7 @@ def _build_nav_groups(spec: _PortalLike) -> list[tuple[str, list[dict[str, str]]
             for item in spec.nav
         ]
     else:
-        source = [
-            (page.slug, page.nav_label, _page_group(page)) for page in spec.pages
-        ]
+        source = [(page.slug, page.nav_label, _page_group(page)) for page in spec.pages]
 
     for slug, label, group_label in source:
         bucket = index.get(group_label)
@@ -106,9 +104,7 @@ def _build_nav_groups(spec: _PortalLike) -> list[tuple[str, list[dict[str, str]]
     return groups
 
 
-def _render_grouped_nav(
-    groups: list[tuple[str, list[dict[str, str]]]], current_slug: str
-) -> str:
+def _render_grouped_nav(groups: list[tuple[str, list[dict[str, str]]]], current_slug: str) -> str:
     """Render shallow grouped navigation: group triggers + page panels."""
     parts: list[str] = []
     for group_index, (label, pages) in enumerate(groups, start=1):
@@ -225,18 +221,12 @@ def _render_filter_panel(
             item_disabled = disabled or bool(item.get("disabled", False))
             item_test_only = bool(item.get("test_only", False))
             item_reason = _e(
-                str(
-                    item.get("disabled_reason")
-                    or disabled_reason
-                    or "当前页面或模块不适用此条件"
-                )
+                str(item.get("disabled_reason") or disabled_reason or "当前页面或模块不适用此条件")
             )
             disabled_attrs = ""
             disabled_class = ""
             if item_disabled:
-                disabled_attrs = (
-                    f' aria-disabled="true" disabled title="{item_reason}"'
-                )
+                disabled_attrs = f' aria-disabled="true" disabled title="{item_reason}"'
                 disabled_class = " kz-filter-item--disabled"
             test_only_attrs = ' hidden data-test-only="true"' if item_test_only else ""
             items_html_parts.append(
@@ -312,11 +302,10 @@ def _render_filter_panel(
         for module_id in module_ids
     )
 
-    rows_literal = json.dumps(
-        synthetic_rows or [], ensure_ascii=False, separators=(",", ":")
-    )
+    rows_literal = json.dumps(synthetic_rows or [], ensure_ascii=False, separators=(",", ":"))
 
-    return f"""    <div class="kz-filter-bar">
+    return f"""    <div class="kz-filter-host">
+    <div class="kz-filter-bar">
       <button type="button" class="kz-filter-entry" id="kz-filter-entry"
               aria-expanded="false" aria-controls="kz-filter-panel">
         筛选条件
@@ -347,6 +336,7 @@ def _render_filter_panel(
       </section>
 {module_section}
     </details>
+    </div>
 
     <p class="kz-filter-row-count" id="kz-filter-row-count"></p>
     <div class="kz-filter-empty" id="kz-filter-empty" style="display:none">
@@ -491,6 +481,8 @@ def render_page_html(
   <script>window.__SEARCH_INDEX__ = {search_json};</script>
   <script src="{assets_rel}/search-index.js"></script>
   <script src="{assets_rel}/portal.js"></script>
+  <script src="{assets_rel}/echarts.min.js"></script>
+  <script src="{assets_rel}/charts.js"></script>
 </body>
 </html>
 """

@@ -1,14 +1,25 @@
-"""Task 4.1 共用报告视图与覆盖合同包。
+"""共用报告视图、覆盖合同与图表兼容性合同包。
 
 对外公开：规范覆盖集合/格式投影（``coverage``）、稳定行视图
 （``view_state``）、冻结页面注册表与站点地图（``page_registry``）、
-单行集图表/表格联动合同（``chart_specs``）。
+单行集图表/表格联动合同（``chart_specs``）、Task 4.4 图表类型化注册
+与可比性分组（``chart_specs``）。
 """
 
 from ci_workflow.reports.common.chart_specs import (
+    COMPARABILITY_DIMS,
+    DISPLAY_CONTEXT_DIMS,
+    ChartSpec,
     ChartTableBoundaryError,
     ChartTableModule,
+    ChartType,
     FilteredRowSet,
+    SmallMultipleGroup,
+    register_chart_type,
+    resolve_chart_type,
+    split_compatible_groups,
+    validate_all_rows_covered,
+    validate_chart_input_rows,
     validate_chart_table_module_payload,
     validate_filtered_row_set_payload,
 )
@@ -47,8 +58,12 @@ from ci_workflow.reports.common.view_state import (
 )
 
 __all__ = [
+    "ChartSpec",
     "ChartTableBoundaryError",
     "ChartTableModule",
+    "ChartType",
+    "COMPARABILITY_DIMS",
+    "DISPLAY_CONTEXT_DIMS",
     "CoverageBoundaryError",
     "CoverageException",
     "CoverageExceptionKind",
@@ -60,6 +75,12 @@ __all__ = [
     "EquivalenceEvidence",
     "FilteredRowSet",
     "PageRegistry",
+    "SmallMultipleGroup",
+    "register_chart_type",
+    "resolve_chart_type",
+    "split_compatible_groups",
+    "validate_all_rows_covered",
+    "validate_chart_input_rows",
     "PageRegistryError",
     "ReportCatalog",
     "ReportRow",

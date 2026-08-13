@@ -825,7 +825,11 @@
         return countFilters(moduleFilters[mid] || {}) > 0;
       });
     if (filterEmpty) {
-      filterEmpty.style.display = hasFilters && count === 0 ? "" : "none";
+      var showEmpty = hasFilters && count === 0;
+      filterEmpty.style.display = showEmpty ? "block" : "none";
+      if (filterPanel) {
+        filterPanel.classList.toggle("kz-filter-panel--inflow", showEmpty);
+      }
       if (filterEmptyRestrictions) {
         var lines = listRestrictionLines();
         filterEmptyRestrictions.innerHTML = "";
@@ -839,6 +843,12 @@
     var rowTable = document.getElementById("kz-filter-row-table");
     if (rowTable) {
       rowTable.style.display = count === 0 && hasFilters ? "none" : "";
+    }
+    if (
+      window.__CHART_SYNC__ &&
+      typeof window.__CHART_SYNC__.syncWithFilter === "function"
+    ) {
+      window.__CHART_SYNC__.syncWithFilter();
     }
   }
 
@@ -874,6 +884,12 @@
     if (!filterPanel) return;
     filterPanel.removeAttribute("open");
     if (filterEntry) filterEntry.setAttribute("aria-expanded", "false");
+    if (
+      window.__CHART_SYNC__ &&
+      typeof window.__CHART_SYNC__.clearSelection === "function"
+    ) {
+      window.__CHART_SYNC__.clearSelection();
+    }
     if (lastFocusEl && typeof lastFocusEl.focus === "function") {
       lastFocusEl.focus();
     } else if (filterEntry) {
@@ -976,4 +992,12 @@
   buildAllowlists();
   readFilterFromHash();
   syncCheckboxes();
+
+  window.__PORTAL_FILTER__ = {
+    reapply: function () {
+      syncCheckboxes();
+      renderChips();
+      filterVisibleRows();
+    }
+  };
 })();

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <title>疗效与安全性概览</title>
+  <link rel="stylesheet" href="assets/portal.css">
+  <style>
+    :root {
+      --kz-orange: #FF9900;
+      --surface: #FFFFFF;
+      --bg: #F8F9FA;
+      --border: #E5E7EB;
+      --text-1: #0F1115;
+      --text-2: #404040;
+      --text-3: #808080;
+      --font-sans: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.65;
+      padding: 24px;
+    }
+    .portal-page-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .portal-lead {
+      color: var(--text-2);
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    /* 图表模块 */
+    .kz-chart-module {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .kz-chart-module__group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* 图表组标题 */
+    .kz-chart-group__title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-1);
+      border-left: 3px solid var(--kz-orange);
+      padding-left: 10px;
+    }
+    .kz-chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    .kz-chart-legend__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kz-chart-legend__swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    /* 图表容器 */
+    .kz-chart-group__chart {
+      width: 100%;
+      height: 340px;
+      margin-bottom: 16px;
+    }
+
+    /* 表格 */
+    .kz-chart-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+    .kz-chart-table__th {
+      text-align: left;
+      padding: 8px 10px;
+      background: #F3F4F6;
+      border-bottom: 2px solid var(--border);
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+    .kz-chart-table__row {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .kz-chart-table__row:hover {
+      background: #FFF7ED;
+    }
+    .kz-chart-table__row--selected {
+      background: #FFF7ED !important;
+      box-shadow: inset 3px 0 0 var(--kz-orange);
+    }
+    .kz-chart-table__row--unrenderable {
+      background: #FAFAFA;
+    }
+    .kz-chart-table__cell--status,
+    .kz-chart-table__cell--unrenderable {
+      color: #8A5A12;
+      font-weight: 600;
+      font-style: normal;
+    }
+    .kz-chart-undisclosed {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 1px solid #E8D2B0;
+      border-left: 3px solid var(--kz-orange);
+      border-radius: 8px;
+      background: #FFF9F2;
+    }
+    .kz-chart-undisclosed__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8A5A12;
+      margin-bottom: 4px;
+    }
+    .kz-chart-undisclosed__hint {
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    .kz-chart-group__chart--undisclosed {
+      height: auto !important;
+      min-height: 0 !important;
+      margin-bottom: 8px;
+    }
+    .kz-filter-host {
+      position: relative;
+      z-index: 6;
+      margin-bottom: 16px;
+    }
+
+    .kz-chart-table__cell {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      overflow-wrap: anywhere;
+    }
+    .kz-chart-table__cell--label {
+      font-weight: 500;
+      color: var(--text-1);
+    }
+    .kz-chart-table__cell--value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .kz-chart-table__cell--unit {
+      color: var(--text-3);
+    }
+    .kz-chart-table__cell--status {
+      font-weight: 600;
+      color: #8A5A12;
+    }
+    .kz-chart-table__cell--disclosure {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* 空状态 */
+    .kz-chart-empty {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-3);
+    }
+    .kz-chart-empty__title {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    /* 筛选条 */
+    .kz-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .kz-filter-entry {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .kz-filter-summary {
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .kz-filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .kz-filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: #FEF3C7;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+    .kz-filter-chip__remove {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      color: var(--text-3);
+    }
+    .kz-filter-row-count {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 8px;
+    }
+    .kz-filter-empty {
+      text-align: center;
+      padding: 24px;
+    }
+    .kz-filter-empty__title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 8px;
+    }
+    .kz-filter-empty__actions {
+      margin-top: 12px;
+    }
+    .kz-filter-reset-btn {
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* 元数据区（不显示给用户） */
+    .kz-meta {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    /* 小多图分隔线 */
+    .kz-chart-module__group + .kz-chart-module__group {
+      border-top: 2px solid #F3F4F6;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="portal-page-head">
+    <h1 class="portal-page-title">疗效与安全性概览</h1>
+    <p class="portal-lead">主要终点与关键次要终点的疗效比较及安全性监测。
+    图表与完整表格联动展示。</p>
+  </header>
+
+    <div class="kz-filter-host">
+    <div class="kz-filter-bar">
+      <button type="button" class="kz-filter-entry" id="kz-filter-entry"
+              aria-expanded="false" aria-controls="kz-filter-panel">
+        筛选条件
+        <span class="kz-filter-entry__count" style="display:none">0</span>
+      </button>
+      <div class="kz-filter-chips" id="kz-filter-chips" aria-label="已选筛选条件"></div>
+      <span class="kz-filter-summary" id="kz-filter-summary">无筛选条件</span>
+      <p class="kz-filter-local-hint" id="kz-filter-local-hint" hidden
+         role="status">当前选择过多，请保存为本地视图</p>
+      <p class="kz-filter-restore-error" id="kz-filter-restore-error" hidden
+         role="alert">无法恢复此筛选网址</p>
+    </div>
+
+    <details class="kz-filter-panel" id="kz-filter-panel"
+             data-page-id="/overview" data-module-id="efficacy">
+      <summary class="kz-filter-panel__native-summary">筛选条件</summary>
+      <div class="kz-filter-panel__header">
+        <h2 class="kz-filter-panel__title">筛选条件</h2>
+        <button type="button" class="kz-filter-panel__close" id="kz-filter-close"
+                aria-label="关闭筛选面板">×</button>
+      </div>
+      <section class="kz-filter-scope" data-scope="page" aria-label="整份报告条件">
+        <h3 class="kz-filter-scope__title">整份报告条件</h3>
+      <div class="kz-filter-group" data-scope="page" data-module-id="">
+        <h4 class="kz-filter-group__title">单位</h4>
+        <div class="kz-filter-group__items">
+          <button type="button" class="kz-filter-item" data-dim="unit" data-val="mg/dL" data-scope="page" data-module-id="" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>mg/dL</button>
+          <button type="button" class="kz-filter-item" data-dim="unit" data-val="nmol/L" data-scope="page" data-module-id="" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>nmol/L</button>
+        </div>
+      </div>
+      <div class="kz-filter-group" data-scope="page" data-module-id="">
+        <h4 class="kz-filter-group__title">时间窗</h4>
+        <div class="kz-filter-group__items">
+          <button type="button" class="kz-filter-item" data-dim="time_window" data-val="12周" data-scope="page" data-module-id="" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>12周</button>
+          <button type="button" class="kz-filter-item" data-dim="time_window" data-val="24周" data-scope="page" data-module-id="" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>24周</button>
+        </div>
+      </div>
+      <div class="kz-filter-group" data-scope="page" data-module-id="">
+        <h4 class="kz-filter-group__title">分析人群</h4>
+        <div class="kz-filter-group__items">
+          <button type="button" class="kz-filter-item" data-dim="analysis_population" data-val="ITT" data-scope="page" data-module-id="" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>意向治疗人群（ITT）</button>
+          <button type="button" class="kz-filter-item" data-dim="analysis_population" data-val="PP" data-scope="page" data-module-id="" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>符合方案人群（PP）</button>
+        </div>
+      </div>
+        <button type="button" class="kz-filter-reset-btn" id="kz-filter-reset-page">
+          清除整份报告条件
+        </button>
+      </section>
+      <section class="kz-filter-scope" data-scope="module"
+               data-module-id="efficacy" data-module-label="疗效数据"
+               aria-label="疗效数据">
+        <h3 class="kz-filter-scope__title">疗效数据</h3>
+      <div class="kz-filter-group" data-scope="module" data-module-id="efficacy">
+        <h4 class="kz-filter-group__title">对照角色</h4>
+        <div class="kz-filter-group__items">
+          <button type="button" class="kz-filter-item" data-dim="control_role" data-val="安慰剂" data-scope="module" data-module-id="efficacy" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>安慰剂</button>
+          <button type="button" class="kz-filter-item" data-dim="control_role" data-val="活性对照" data-scope="module" data-module-id="efficacy" role="checkbox" aria-checked="false" tabindex="0"><span class="kz-filter-item__check" aria-hidden="true"></span>活性对照</button>
+        </div>
+      </div>
+
+        <button type="button" class="kz-filter-reset-btn kz-filter-reset-module"
+                id="kz-filter-reset-module" data-module-id="efficacy">
+          清除疗效条件
+        </button>
+      </section>
+    </details>
+    </div>
+
+    <p class="kz-filter-row-count" id="kz-filter-row-count"></p>
+    <div class="kz-filter-empty" id="kz-filter-empty" style="display:none">
+      <p class="kz-filter-empty__title">当前选择下暂无可比较数据</p>
+      <div class="kz-filter-empty__restrictions" id="kz-filter-empty-restrictions"></div>
+      <div class="kz-filter-empty__actions">
+        <button type="button" class="kz-filter-reset-btn" id="kz-filter-empty-reset-page">
+          清除整份报告条件
+        </button>
+        <button type="button" class="kz-filter-reset-btn kz-filter-empty-reset-module"
+                data-module-id="efficacy">
+          清除疗效条件
+        </button>
+      </div>
+    </div>
+
+    <script>window.__FILTER_ROWS__ = [{"id":"row-treat-endpoint-a","unit":"mg/dL","time_window":"12周","analysis_population":"ITT","control_role":"安慰剂","module_id":"efficacy"},{"id":"row-ctrl-endpoint-a","unit":"mg/dL","time_window":"12周","analysis_population":"ITT","control_role":"安慰剂","module_id":"efficacy"},{"id":"row-treat-endpoint-b","unit":"mg/dL","time_window":"24周","analysis_population":"PP","control_role":"活性对照","module_id":"efficacy"},{"id":"row-ctrl-endpoint-b","unit":"mg/dL","time_window":"24周","analysis_population":"PP","control_role":"活性对照","module_id":"efficacy"},{"id":"row-unique-endpoint-c","unit":"nmol/L","time_window":"12周","analysis_population":"ITT","control_role":"安慰剂","module_id":"efficacy"},{"id":"row-not-disclosed","unit":"mg/dL","time_window":"12周","analysis_population":"ITT","control_role":"安慰剂","module_id":"efficacy"}];</script>
+
+  <div class="kz-chart-empty" id="kz-chart-empty" style="display:none" aria-live="polite">
+    <p class="kz-chart-empty__title">当前选择下暂无可比较数据</p>
+  </div>
+  <section class="kz-chart-module" id="kz-chart-module" aria-label="图表与数据表"></section>
+  <div class="kz-meta" id="kz-meta" hidden>
+    <span id="kz-meta-row-set-digest"></span>
+    <span id="kz-meta-snapshot-id"></span>
+    <span id="kz-meta-row-count"></span>
+  </div>
+
+  <script src="assets/echarts.min.js"></script>
+  <script>
+  window.__CHART_ROWS__ = [{"row_id": "row-treat-endpoint-a", "display_label_zh": "主要终点 HbA1c 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "higher_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 120, "disclosure_state": "reported_value", "category": "治疗组", "value": 5.2, "numeric_value": 5.2, "display_value": "5.2", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-treat", "endpoint_id": "endpoint-hba1c", "_chart_type": "bar", "renderable": true}, {"row_id": "row-ctrl-endpoint-a", "display_label_zh": "主要终点 HbA1c 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "higher_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 118, "disclosure_state": "reported_value", "category": "对照组", "value": 3.8, "numeric_value": 3.8, "display_value": "3.8", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-ctrl", "endpoint_id": "endpoint-hba1c", "_chart_type": "bar", "renderable": true}, {"row_id": "row-treat-endpoint-b", "display_label_zh": "次要终点 LDL-C 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "lower_better", "time_window": "24周", "analysis_population": "PP", "control_role": "活性对照", "denominator": 95, "disclosure_state": "reported_value", "category": "治疗组", "value": -2.1, "numeric_value": -2.1, "display_value": "-2.1", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-treat", "endpoint_id": "endpoint-ldlc", "_chart_type": "bar", "renderable": true}, {"row_id": "row-ctrl-endpoint-b", "display_label_zh": "次要终点 LDL-C 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "lower_better", "time_window": "24周", "analysis_population": "PP", "control_role": "活性对照", "denominator": 93, "disclosure_state": "reported_value", "category": "对照组", "value": -1.5, "numeric_value": -1.5, "display_value": "-1.5", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-ctrl", "endpoint_id": "endpoint-ldlc", "_chart_type": "bar", "renderable": true}, {"row_id": "row-unique-endpoint-c", "display_label_zh": "探索终点 25-OH-VD 变化值", "unit": "nmol/L", "scale": "原始", "statistical_form": "均值差", "direction": "higher_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 88, "disclosure_state": "reported_value", "category": "治疗组", "value": 12.5, "numeric_value": 12.5, "display_value": "12.5", "report_snapshot_id": "report-snapshot-01", "product_id": "product-02", "trial_id": "trial-02", "group_id": "group-treat", "endpoint_id": "endpoint-vitd", "_chart_type": "bar", "renderable": true}, {"row_id": "row-not-disclosed", "display_label_zh": "探索终点 IL-6 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "lower_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 80, "disclosure_state": "not_publicly_disclosed", "category": "治疗组", "value": null, "numeric_value": null, "display_value": null, "report_snapshot_id": "report-snapshot-01", "product_id": "product-02", "trial_id": "trial-02", "group_id": "group-treat", "endpoint_id": "endpoint-il6", "_chart_type": "bar", "renderable": false}];
+  window.__CHART_GROUPS__ = [{"title_zh": "单位：mg/dL；方向：越高越有利；时间窗：12周；分析人群：ITT", "split_dims": ["unit", "direction", "time_window", "analysis_population"], "rows": [{"row_id": "row-ctrl-endpoint-a", "display_label_zh": "主要终点 HbA1c 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "higher_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 118, "disclosure_state": "reported_value", "category": "对照组", "value": 3.8, "numeric_value": 3.8, "display_value": "3.8", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-ctrl", "endpoint_id": "endpoint-hba1c", "_chart_type": "bar", "renderable": true}, {"row_id": "row-treat-endpoint-a", "display_label_zh": "主要终点 HbA1c 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "higher_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 120, "disclosure_state": "reported_value", "category": "治疗组", "value": 5.2, "numeric_value": 5.2, "display_value": "5.2", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-treat", "endpoint_id": "endpoint-hba1c", "_chart_type": "bar", "renderable": true}]}, {"title_zh": "单位：mg/dL；方向：越低越有利；时间窗：12周；分析人群：ITT", "split_dims": ["unit", "direction", "time_window", "analysis_population"], "rows": [{"row_id": "row-not-disclosed", "display_label_zh": "探索终点 IL-6 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "lower_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 80, "disclosure_state": "not_publicly_disclosed", "category": "治疗组", "value": null, "numeric_value": null, "display_value": null, "report_snapshot_id": "report-snapshot-01", "product_id": "product-02", "trial_id": "trial-02", "group_id": "group-treat", "endpoint_id": "endpoint-il6", "_chart_type": "bar", "renderable": false}]}, {"title_zh": "单位：mg/dL；方向：越低越有利；时间窗：24周；分析人群：PP", "split_dims": ["unit", "direction", "time_window", "analysis_population"], "rows": [{"row_id": "row-ctrl-endpoint-b", "display_label_zh": "次要终点 LDL-C 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "lower_better", "time_window": "24周", "analysis_population": "PP", "control_role": "活性对照", "denominator": 93, "disclosure_state": "reported_value", "category": "对照组", "value": -1.5, "numeric_value": -1.5, "display_value": "-1.5", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-ctrl", "endpoint_id": "endpoint-ldlc", "_chart_type": "bar", "renderable": true}, {"row_id": "row-treat-endpoint-b", "display_label_zh": "次要终点 LDL-C 变化值", "unit": "mg/dL", "scale": "原始", "statistical_form": "均值差", "direction": "lower_better", "time_window": "24周", "analysis_population": "PP", "control_role": "活性对照", "denominator": 95, "disclosure_state": "reported_value", "category": "治疗组", "value": -2.1, "numeric_value": -2.1, "display_value": "-2.1", "report_snapshot_id": "report-snapshot-01", "product_id": "product-01", "trial_id": "trial-01", "group_id": "group-treat", "endpoint_id": "endpoint-ldlc", "_chart_type": "bar", "renderable": true}]}, {"title_zh": "单位：nmol/L；方向：越高越有利；时间窗：12周；分析人群：ITT", "split_dims": ["unit", "direction", "time_window", "analysis_population"], "rows": [{"row_id": "row-unique-endpoint-c", "display_label_zh": "探索终点 25-OH-VD 变化值", "unit": "nmol/L", "scale": "原始", "statistical_form": "均值差", "direction": "higher_better", "time_window": "12周", "analysis_population": "ITT", "control_role": "安慰剂", "denominator": 88, "disclosure_state": "reported_value", "category": "治疗组", "value": 12.5, "numeric_value": 12.5, "display_value": "12.5", "report_snapshot_id": "report-snapshot-01", "product_id": "product-02", "trial_id": "trial-02", "group_id": "group-treat", "endpoint_id": "endpoint-vitd", "_chart_type": "bar", "renderable": true}]}];
+  window.__SNAPSHOT_ID__ = "report-snapshot-01";
+  window.__ROW_SET_DIGEST__ = "c40613b8611a5e0bc2c66e2254fd9bd83777631dbe69187e62cd6c97efc593a2";
+  </script>
+  <script src="assets/portal.js"></script>
+  <script src="assets/charts.js"></script>
+</body>
+</html>

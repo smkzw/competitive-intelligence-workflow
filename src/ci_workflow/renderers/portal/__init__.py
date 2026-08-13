@@ -4,7 +4,8 @@
 
 * ``build_portal`` — 从 ``PortalSpec`` 生成确定性物理 HTML 页面。
 * ``PageSpec``, ``NavEntry``, ``PortalSpec``, ``SearchIndexEntry`` — 类型化输入。
-* ``resolve_logo_src`` / ``resolve_portal_asset`` — 轮分发安全的资产解析。
+* ``resolve_logo_src`` / ``resolve_portal_asset`` / ``resolve_echarts_bundle``
+  — 轮分发安全的资产解析。
 * ``render_page_html`` — 支持 filter_groups / synthetic_rows 参数。
 """
 
@@ -14,6 +15,7 @@ from ci_workflow.renderers.portal.builder import (
     PortalBuildError,
     PortalSpec,
     build_portal,
+    resolve_echarts_bundle,
     resolve_logo_src,
     resolve_portal_asset,
 )
@@ -87,6 +89,7 @@ __all__ = [
     "encode_filter_state",
     "render_page_html",
     "render_search_index_json",
+    "resolve_echarts_bundle",
     "resolve_logo_src",
     "resolve_portal_asset",
     "select_view_rows",
