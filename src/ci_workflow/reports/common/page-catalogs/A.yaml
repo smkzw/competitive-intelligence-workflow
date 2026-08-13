@@ -1,0 +1,125 @@
+contract_version: "1.0"
+report: A
+portal_title_pattern: "{适应症}竞品全景"
+selection_policy:
+  top_n_allowed: false
+  all_in_scope_objects_visible: true
+  default_product_order: "按靶点分组，组内按稳定产品标识"
+presentation_policy:
+  chart_before_table: true
+  graph_and_table_same_fact_set: true
+  complete_table_never_replaced_by_summary: true
+selection_rules:
+  version: "1.0"
+  anchor_trial: "依次按注册角色、研究阶段、结果披露成熟度和稳定试验标识选择；不使用疗效或安全性数值偏好。"
+  endpoint_family: "同时并列显示适用指导原则推荐的主要终点族与核心竞品共同采用的主要终点族；各终点族均完整保留。"
+  common_ae_rows: "强制摘要行优先；其余依次按预定义特别关注不良事件与临床重要性、具有可比已报告值的产品数、最大绝对治疗—对照差、最高报告发生率和稳定术语标识选择默认显示行，不形成安全性排名。"
+  baseline_variable_order: 不适用
+  disposition_field_order: 不适用
+bubble_chart_contract:
+  y_axis: 原始治疗期间不良事件发生率倒序
+  y_axis_annotation: "向上 = 发生率更低 = 观察到的安全性位置更有利"
+  x_axis_direction: 越右表示所选疗效指标的观察信号越强
+  radius_formula: "r = k × sqrt(N/pi)"
+  no_pooling: true
+  no_composite_score: true
+pages:
+  - id: overview
+    route: /a/overview
+    title: 首页
+    navigation_group: 总览
+    responsibility: "呈现创新药全景、靶点与模态结构、开发阶段、中国及境外状态、关键变化、疗效与安全性概览。"
+    visuals: [结构分布图, 开发阶段管线图, 疗效分组柱状图, 安全性热图, 疗效安全性气泡图]
+    complete_table: true
+    filter_profiles: [a-overview, a-efficacy-safety]
+    evidence_drawer_profile: common-clinical
+  - id: landscape
+    route: /a/landscape
+    title: 竞争格局
+    navigation_group: 竞品与开发
+    responsibility: "展示全部项目的靶点、模态、阶段、地域、生命周期和开发状态，可切换管线、时间线与矩阵。"
+    visuals: [管线图, 时间线, 竞争矩阵]
+    complete_table: true
+    filter_profiles: [a-landscape]
+    evidence_drawer_profile: common-clinical
+  - id: product-overview
+    route: /a/product-overview
+    title: 产品总览
+    navigation_group: 竞品与开发
+    responsibility: "提供全部范围内产品的可筛选事实表和比较视图，不截断证据稀疏或开发终止的项目。"
+    visuals: [目标模态矩阵, 阶段地域矩阵]
+    complete_table: true
+    filter_profiles: [a-product]
+    evidence_drawer_profile: common-clinical
+  - id: product-profile
+    route: /a/product-profile
+    title: 产品档案
+    navigation_group: 竞品与开发
+    responsibility: "逐产品呈现别名、机制、模态、给药、组织关系、开发时间线、试验组合、关键结果与风险、监管、交易和专利。"
+    visuals: [开发时间线, 企业关系图, 试验组合图]
+    complete_table: true
+    filter_profiles: [a-product-profile]
+    evidence_drawer_profile: common-clinical
+  - id: clinical-portfolio
+    route: /a/clinical-portfolio
+    title: 临床开发组合
+    navigation_group: 竞品与开发
+    responsibility: "展示产品、试验、地区、阶段与状态的关系，并下钻到各核心试验。"
+    visuals: [产品试验关系图, 阶段地域管线图, 试验时间线]
+    complete_table: true
+    filter_profiles: [a-clinical-portfolio]
+    evidence_drawer_profile: common-clinical
+  - id: efficacy-safety-overview
+    route: /a/efficacy-safety-overview
+    title: 疗效与安全性概览
+    navigation_group: 医学结果
+    responsibility: "按锚定核心试验比较常用疗效终点、对照结果、安全性维度和疗效安全性位置，不跨试验池化或默认排名。"
+    visuals: [分组柱状图, 折线图, 安全性热图, 疗效安全性气泡图]
+    complete_table: true
+    filter_profiles: [a-efficacy-safety]
+    evidence_drawer_profile: common-clinical
+  - id: regulatory
+    route: /a/regulatory
+    title: 中国与全球监管
+    navigation_group: 监管与权益
+    responsibility: "并列展示申报、批准、审评、撤回、暂停和终止事件及中国与境外状态差异。"
+    visuals: [监管时间线, 地域状态矩阵]
+    complete_table: true
+    filter_profiles: [a-regulatory]
+    evidence_drawer_profile: common-regulatory
+  - id: companies-transactions
+    route: /a/companies-transactions
+    title: 企业与交易
+    navigation_group: 监管与权益
+    responsibility: "呈现原研、开发者、许可方、被许可方、合作、并购、地域权益和公开交易条款。"
+    visuals: [企业关系图, 地域权益图, 交易时间线]
+    complete_table: true
+    filter_profiles: [a-companies]
+    evidence_drawer_profile: common-corporate
+  - id: patents-protection
+    route: /a/patents-protection
+    title: 专利与保护
+    navigation_group: 监管与权益
+    responsibility: "分开呈现可核验专利族、保护范围、到期信息和监管独占，不把推断写成事实。"
+    visuals: [保护时间线, 专利族矩阵]
+    complete_table: true
+    filter_profiles: [a-patents]
+    evidence_drawer_profile: common-patent
+  - id: historical-edge
+    route: /a/historical-edge
+    title: 历史与边缘观察
+    navigation_group: 观察与依据
+    responsibility: "保留暂停、终止、撤回、放弃项目及邻近机制观察层，不从当前竞品范围静默删除。"
+    visuals: [状态时间线, 项目分层矩阵]
+    complete_table: true
+    filter_profiles: [a-history]
+    evidence_drawer_profile: common-clinical
+  - id: evidence-limitations
+    route: /a/evidence-limitations
+    title: 研究依据与局限
+    navigation_group: 观察与依据
+    responsibility: "只呈现影响医学解释的来源、方法与简洁局限；检索尝试和技术诊断留在项目记录。"
+    visuals: [来源构成图, 披露状态矩阵]
+    complete_table: true
+    filter_profiles: [a-evidence]
+    evidence_drawer_profile: common-clinical

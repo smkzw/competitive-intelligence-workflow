@@ -1,0 +1,129 @@
+contract_version: "1.0"
+report: C
+portal_title_pattern: "{适应症}临床试验设计比较"
+selection_policy:
+  top_n_allowed: false
+  all_in_scope_objects_visible: true
+  default_product_order: "按靶点分组，组内按稳定产品标识"
+presentation_policy:
+  chart_before_table: true
+  graph_and_table_same_fact_set: true
+  complete_table_never_replaced_by_summary: true
+selection_rules:
+  version: "1.0"
+  anchor_trial: 不适用
+  endpoint_family: "按终点角色、定义、评估时间点和稳定终点标识排列，不按结果数值选择。"
+  common_ae_rows: 不适用
+  baseline_variable_order: 不适用
+  disposition_field_order: 不适用
+  minimum_candidate_design_paths: 2
+  unique_best_design_allowed: false
+pages:
+  - id: overview
+    route: /c/overview
+    title: 首页
+    navigation_group: 总览
+    responsibility: "呈现核心设计格局、关键模式和差异，不只凭适应症给出唯一或最佳设计。"
+    visuals: [设计结构图, 关键差异矩阵, 设计模式雷达图]
+    complete_table: true
+    filter_profiles: [c-overview]
+    evidence_drawer_profile: design-fact
+  - id: design-map
+    route: /c/design-map
+    title: 设计图谱
+    navigation_group: 试验设计
+    responsibility: "展示试验角色、阶段、地区、随机与盲法、组别、疗程和随访全景。"
+    visuals: [设计关系图, 阶段地域矩阵, 疗程时间线]
+    complete_table: true
+    filter_profiles: [c-design-map]
+    evidence_drawer_profile: design-fact
+  - id: trial-profile
+    route: /c/trial-profile
+    title: 试验档案
+    navigation_group: 试验设计
+    responsibility: "逐试验呈现可定位到队列、组别、原始字段和来源版本的完整设计事实。"
+    visuals: [试验结构图, 设计事实覆盖矩阵, 时间线]
+    complete_table: true
+    filter_profiles: [c-trial-profile]
+    evidence_drawer_profile: design-fact
+  - id: population-disease-definition
+    route: /c/population-disease-definition
+    title: 人群与疾病定义
+    navigation_group: 人群与标准
+    responsibility: "比较目标人群、疾病诊断、病程、严重度、既往与背景治疗、年龄和重要合并症规则。"
+    visuals: [人群范围图, 定义差异矩阵, 小多图]
+    complete_table: true
+    filter_profiles: [c-population]
+    evidence_drawer_profile: design-fact
+  - id: inclusion-criteria
+    route: /c/inclusion-criteria
+    title: 入选标准
+    navigation_group: 人群与标准
+    responsibility: "逐条比较入选原文、量表或评分、筛选或基线时间、运算符、阈值、值和单位。"
+    visuals: [标准范围图, 量表阈值矩阵, 时间点小多图]
+    complete_table: true
+    filter_profiles: [c-inclusion]
+    evidence_drawer_profile: design-fact
+  - id: exclusion-criteria
+    route: /c/exclusion-criteria
+    title: 排除标准
+    navigation_group: 人群与标准
+    responsibility: "逐条比较排除原文、条件类别、时间引用、运算符、阈值、值和单位。"
+    visuals: [排除条件矩阵, 时间范围图, 条件小多图]
+    complete_table: true
+    filter_profiles: [c-exclusion]
+    evidence_drawer_profile: design-fact
+  - id: treatment-arms
+    route: /c/treatment-arms
+    title: 分组、干预与对照
+    navigation_group: 干预与终点
+    responsibility: "比较随机与盲法、治疗组、对照、背景和救援治疗、剂量、给药、疗程与延伸设计。"
+    visuals: [组别结构图, 干预时间线, 剂量矩阵]
+    complete_table: true
+    filter_profiles: [c-treatment-arms]
+    evidence_drawer_profile: design-fact
+  - id: endpoint-timepoint-matrix
+    route: /c/endpoint-timepoint-matrix
+    title: 终点、定义与时间点
+    navigation_group: 干预与终点
+    responsibility: "逐试验比较主要和重要次要终点、原始定义、角色、量表、评估时间与分析人群。"
+    visuals: [终点时间点矩阵, 终点时间线, 小多图]
+    complete_table: true
+    filter_profiles: [c-endpoints]
+    evidence_drawer_profile: design-fact
+  - id: visit-duration-followup
+    route: /c/visit-duration-followup
+    title: 访视、疗程与随访
+    navigation_group: 干预与终点
+    responsibility: "比较访视、治疗期、随访和延伸安排，未登记不解释成未实施。"
+    visuals: [访视时间线, 疗程范围图, 随访矩阵]
+    complete_table: true
+    filter_profiles: [c-visits]
+    evidence_drawer_profile: design-fact
+  - id: sample-analysis-statistics
+    route: /c/sample-analysis-statistics
+    title: 样本量、分析集与统计设计
+    navigation_group: 分析与判断
+    responsibility: "呈现计划或实际样本量以及公开的分析集、主要比较、模型、效应量、多重性和缺失数据处理；未公开不推断。"
+    visuals: [样本量气泡图, 分析集矩阵, 统计设计雷达图]
+    complete_table: true
+    filter_profiles: [c-analysis]
+    evidence_drawer_profile: design-fact
+  - id: design-patterns
+    route: /c/design-patterns
+    title: 设计模式、权衡与可选路径
+    navigation_group: 分析与判断
+    responsibility: "在事实之上呈现模式、异常点、权衡、风险和至少两条有依据的可选设计路径，不输出唯一最佳方案。"
+    visuals: [设计模式雷达图, 权衡矩阵, 多路径图]
+    complete_table: true
+    filter_profiles: [c-patterns]
+    evidence_drawer_profile: design-fact
+  - id: evidence-versions-limitations
+    route: /c/evidence-versions-limitations
+    title: 资料版本与局限
+    navigation_group: 分析与判断
+    responsibility: "呈现登记版本、附件可用性、设计事实来源范围和影响解释的局限；技术过程留在项目记录。"
+    visuals: [版本时间线, 来源覆盖矩阵]
+    complete_table: true
+    filter_profiles: [c-evidence]
+    evidence_drawer_profile: design-fact

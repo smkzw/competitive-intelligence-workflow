@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/coverage-set.schema.json",
+  "title": "规范覆盖集合",
+  "description": "绑定项目/合同/报告/版本/数据截止/证据快照/声明快照的不可变规范覆盖项集合。\nDraft 2020-12 无法表达的跨数组语义（逐项身份唯一、确定性身份/摘要重算、\n页面责任归属同一报告目录）由生产验证器语义层强制执行。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "coverage_set_id",
+    "project_id",
+    "contract_version",
+    "report",
+    "report_version",
+    "data_cutoff",
+    "evidence_snapshot_id",
+    "claim_snapshot_id",
+    "items",
+    "created_at",
+    "content_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "coverage_set_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "contract_version": {"type": "integer", "minimum": 1},
+    "report": {"enum": ["A", "B", "C"]},
+    "report_version": {"type": "string", "minLength": 1},
+    "data_cutoff": {"type": "string", "format": "date-time"},
+    "evidence_snapshot_id": {"type": "string", "minLength": 1},
+    "claim_snapshot_id": {"type": "string", "minLength": 1},
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/CoverageItem"}
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "content_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "CoverageItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id",
+        "kind",
+        "page_responsibility_id",
+        "referenced_ids",
+        "label_zh"
+      ],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "kind": {
+          "enum": [
+            "chapter",
+            "page",
+            "product",
+            "trial",
+            "claim",
+            "chart",
+            "table",
+            "evidence",
+            "appendix"
+          ]
+        },
+        "page_responsibility_id": {"type": "string", "minLength": 1},
+        "referenced_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "label_zh": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
