@@ -38,7 +38,13 @@
   "runtime": {
     "entrypoint": "design.md",
     "authority": "design_specs",
-    "collection_sha256": "a8342b2f253f3e12a0f245bf969ef0b829dc218edcce882232e3e65596fa6a5e",
+    "collection_sha256": "902681627f31b32a6ee3c4ae3d3008245a7cd6c4565348e5324a2232bbff50f4",
+    "latest_site_refresh": {
+      "refreshed_at": "2026-08-14T00:20:30+08:00",
+      "upstream_track_sha256": "29961fc88c252bdbadf217e2a77717bce4cb94bf576ec40f7c58c8b165da1d1f",
+      "project_track_sha256": "29961fc88c252bdbadf217e2a77717bce4cb94bf576ec40f7c58c8b165da1d1f",
+      "policy_after_refresh": "project_owned_frozen_copy_no_future_sync"
+    },
     "files": {
       "design.md": "fa30cea68539a37aee2767b573e9a74acf3d9d38d86da9910661c5baef71735c",
       "design_specs/ARCHITECTURE.md": "398e8d2c3556b3b427485187f546875543f7627757db182931ac22707c64701d",
@@ -56,7 +62,7 @@
       "design_specs/track_interactive.md": "68501e5f4fcc3ae72b3a22e858e240c5739e0133f71fed512cd504f9c8086687",
       "design_specs/track_pdf.md": "bd42978e89daf119ca74a0916affdab5dbd2ab8fafedba8b267c5da135ab0af9",
       "design_specs/track_pptx.md": "79d6f865d2cf944b970b095bd456af9206707daf4a4ca89446fa3eb68c184cc7",
-      "design_specs/track_site.md": "0baf152a342678e93d2666ca679e584848bed273678def225bc9dca79702a663",
+      "design_specs/track_site.md": "29961fc88c252bdbadf217e2a77717bce4cb94bf576ec40f7c58c8b165da1d1f",
       "design_specs/track_stream.md": "4e1baca0b306b99272bfe4dcb437ef44ceb421eb30396fa1faa0e4c58812bc8e"
     }
   }

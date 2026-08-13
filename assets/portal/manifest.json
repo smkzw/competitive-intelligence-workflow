@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "name": "竞品调研门户壳层静态资源",
+  "purpose": "康哲站点式 HTML 门户共享样式与交互脚本；随包复制，零远程依赖。",
+  "files": {
+    "portal.css": {
+      "sha256": "c88d37e937819c786d0e85e5b5f2eb997be487d89b55872e690077dc6e04aef9",
+      "bytes": 11063
+    },
+    "portal.js": {
+      "sha256": "39ee4bcc024da488de9636b2ed262ebb174cc15f6eea27c8392569c28d7ab038",
+      "bytes": 8378
+    }
+  },
+  "packaged_module_assets": "src/ci_workflow/renderers/portal/assets/",
+  "logo_source": "assets/brand/cms-logo.svg",
+  "logo_sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae"
+}

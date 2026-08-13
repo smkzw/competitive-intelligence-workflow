@@ -75,6 +75,7 @@
     "assets": [
       "assets/brand/manifest.json",
       "assets/html-ppt/manifest.json",
+      "assets/portal/manifest.json",
       "assets/third-party/echarts/manifest.json"
     ],
     "migrations": [

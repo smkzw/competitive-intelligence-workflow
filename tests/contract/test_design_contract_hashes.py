@@ -113,6 +113,19 @@ def test_project_contract_is_self_contained_and_has_one_runtime_authority() -> N
     assert "不读取通用版" in local_map
 
 
+def test_latest_site_track_was_refreshed_once_then_frozen_in_project() -> None:
+    manifest = _load_manifest()
+    runtime = manifest["runtime"]
+    assert isinstance(runtime, dict)
+    refresh = runtime["latest_site_refresh"]
+    assert isinstance(refresh, dict)
+    expected = "29961fc88c252bdbadf217e2a77717bce4cb94bf576ec40f7c58c8b165da1d1f"
+    assert refresh["upstream_track_sha256"] == expected
+    assert refresh["project_track_sha256"] == expected
+    assert refresh["policy_after_refresh"] == "project_owned_frozen_copy_no_future_sync"
+    assert _sha256(DESIGN_PACKAGE / "track_site.md") == expected
+
+
 def test_runtime_manifest_binds_every_project_contract_file() -> None:
     manifest = _load_manifest()
     runtime = manifest["runtime"]
@@ -121,7 +134,14 @@ def test_runtime_manifest_binds_every_project_contract_file() -> None:
     assert isinstance(recorded, dict)
 
     actual_files = sorted(
-        [DESIGN_ENTRY, *[path for path in DESIGN_PACKAGE.rglob("*") if path.is_file()]]
+        [
+            DESIGN_ENTRY,
+            *[
+                path
+                for path in DESIGN_PACKAGE.rglob("*")
+                if path.is_file() and "__pycache__" not in path.parts
+            ],
+        ]
     )
     actual = {path.relative_to(CONTRACT_ROOT).as_posix(): _sha256(path) for path in actual_files}
     assert recorded == actual
