@@ -14,7 +14,7 @@ import json
 import re
 from collections.abc import Sequence
 from html import escape
-from typing import Protocol
+from typing import Any, Protocol
 
 from ci_workflow.renderers.portal.global_search import SearchIndexEntry, build_search_index
 
@@ -172,6 +172,198 @@ def render_search_index_json(entries: list[SearchIndexEntry]) -> str:
     return f"window.__SEARCH_INDEX__ = {_search_index_literal(entries)};\n"
 
 
+def _render_filter_panel(
+    filter_groups: list[dict[str, Any]] | None = None,
+    synthetic_rows: list[dict[str, str]] | None = None,
+    page_id: str = "",
+) -> str:
+    """Render filter panel HTML for page-level and module-level filters.
+
+    Expected group keys:
+    - title: Chinese dimension label
+    - scope: ``page`` | ``module``
+    - module_id: required when scope is module
+    - advanced: optional bool — collapsed under「更多条件」
+    - disabled / disabled_reason: hide-or-disable with Chinese reason
+    - items: [{id, label, dim}]
+    """
+    if not filter_groups:
+        return ""
+
+    page_groups: list[str] = []
+    module_groups: dict[str, list[str]] = {}
+    advanced_groups: dict[str, list[str]] = {}
+    module_labels: dict[str, str] = {}
+    active_module_id = ""
+
+    for group in filter_groups:
+        group_title = _e(str(group.get("title", "")))
+        group_items = group.get("items", [])
+        scope = str(group.get("scope", "page"))
+        module_id = str(group.get("module_id", ""))
+        module_label = str(group.get("module_label", "") or "").strip()
+        is_advanced = bool(group.get("advanced", False))
+        disabled = bool(group.get("disabled", False))
+        disabled_reason = _e(str(group.get("disabled_reason", "") or ""))
+        if scope == "module" and module_id and not active_module_id:
+            active_module_id = module_id
+        if scope == "module" and module_id:
+            if not module_label:
+                if "efficacy" in module_id:
+                    module_label = "疗效数据"
+                elif "safety" in module_id:
+                    module_label = "安全性数据"
+                else:
+                    module_label = "当前数据"
+            module_labels[module_id] = module_label
+
+        items_html_parts: list[str] = []
+        for item in group_items:
+            item_id = _e(str(item.get("id", "")))
+            item_label = _e(str(item.get("label", "")))
+            dim_id = _e(str(item.get("dim", "")))
+            item_disabled = disabled or bool(item.get("disabled", False))
+            item_test_only = bool(item.get("test_only", False))
+            item_reason = _e(
+                str(
+                    item.get("disabled_reason")
+                    or disabled_reason
+                    or "当前页面或模块不适用此条件"
+                )
+            )
+            disabled_attrs = ""
+            disabled_class = ""
+            if item_disabled:
+                disabled_attrs = (
+                    f' aria-disabled="true" disabled title="{item_reason}"'
+                )
+                disabled_class = " kz-filter-item--disabled"
+            test_only_attrs = ' hidden data-test-only="true"' if item_test_only else ""
+            items_html_parts.append(
+                f'          <button type="button" class="kz-filter-item'
+                f'{disabled_class}" '
+                f'data-dim="{dim_id}" data-val="{item_id}" '
+                f'data-scope="{_e(scope)}" '
+                f'data-module-id="{_e(module_id)}" '
+                f'role="checkbox" aria-checked="false" tabindex="0"'
+                f"{disabled_attrs}{test_only_attrs}>"
+                f'<span class="kz-filter-item__check" aria-hidden="true"></span>'
+                f"{item_label}</button>"
+            )
+        items_html = "\n".join(items_html_parts)
+        block = (
+            f'      <div class="kz-filter-group" data-scope="{_e(scope)}" '
+            f'data-module-id="{_e(module_id)}">\n'
+            f'        <h4 class="kz-filter-group__title">{group_title}</h4>\n'
+            f'        <div class="kz-filter-group__items">\n'
+            f"{items_html}\n"
+            f"        </div>\n"
+            f"      </div>"
+        )
+        if scope == "module" and is_advanced:
+            advanced_groups.setdefault(module_id, []).append(block)
+        elif scope == "module":
+            module_groups.setdefault(module_id, []).append(block)
+        else:
+            page_groups.append(block)
+
+    page_html = "\n".join(page_groups)
+    module_sections: list[str] = []
+    module_ids = list(dict.fromkeys([*module_groups, *advanced_groups]))
+    for module_index, module_id in enumerate(module_ids):
+        module_html = "\n".join(module_groups.get(module_id, []))
+        advanced_html = ""
+        module_advanced = advanced_groups.get(module_id, [])
+        if module_advanced:
+            advanced_html = (
+                '      <details class="kz-filter-advanced">\n'
+                '        <summary class="kz-filter-advanced__summary">'
+                '<span aria-hidden="true">›</span> 更多条件</summary>\n'
+                + "\n".join(module_advanced)
+                + "\n      </details>"
+            )
+        label = module_labels[module_id]
+        reset_label = label.removesuffix("数据")
+        reset_id = (
+            "kz-filter-reset-module"
+            if module_index == 0
+            else f"kz-filter-reset-module-{module_index + 1}"
+        )
+        module_sections.append(
+            f"""      <section class="kz-filter-scope" data-scope="module"
+               data-module-id="{_e(module_id)}" data-module-label="{_e(label)}"
+               aria-label="{_e(label)}">
+        <h3 class="kz-filter-scope__title">{_e(label)}</h3>
+{module_html}
+{advanced_html}
+        <button type="button" class="kz-filter-reset-btn kz-filter-reset-module"
+                id="{_e(reset_id)}" data-module-id="{_e(module_id)}">
+          清除{_e(reset_label)}条件
+        </button>
+      </section>"""
+        )
+    module_section = "\n".join(module_sections)
+
+    empty_module_buttons = "\n".join(
+        f'''        <button type="button" class="kz-filter-reset-btn kz-filter-empty-reset-module"
+                data-module-id="{_e(module_id)}">
+          清除{_e(module_labels[module_id].removesuffix("数据"))}条件
+        </button>'''
+        for module_id in module_ids
+    )
+
+    rows_literal = json.dumps(
+        synthetic_rows or [], ensure_ascii=False, separators=(",", ":")
+    )
+
+    return f"""    <div class="kz-filter-bar">
+      <button type="button" class="kz-filter-entry" id="kz-filter-entry"
+              aria-expanded="false" aria-controls="kz-filter-panel">
+        筛选条件
+        <span class="kz-filter-entry__count" style="display:none">0</span>
+      </button>
+      <div class="kz-filter-chips" id="kz-filter-chips" aria-label="已选筛选条件"></div>
+      <span class="kz-filter-summary" id="kz-filter-summary">无筛选条件</span>
+      <p class="kz-filter-local-hint" id="kz-filter-local-hint" hidden
+         role="status">当前选择过多，请保存为本地视图</p>
+      <p class="kz-filter-restore-error" id="kz-filter-restore-error" hidden
+         role="alert">无法恢复此筛选网址</p>
+    </div>
+
+    <details class="kz-filter-panel" id="kz-filter-panel"
+             data-page-id="{_e(page_id)}" data-module-id="{_e(active_module_id)}">
+      <summary class="kz-filter-panel__native-summary">筛选条件</summary>
+      <div class="kz-filter-panel__header">
+        <h2 class="kz-filter-panel__title">筛选条件</h2>
+        <button type="button" class="kz-filter-panel__close" id="kz-filter-close"
+                aria-label="关闭筛选面板">×</button>
+      </div>
+      <section class="kz-filter-scope" data-scope="page" aria-label="整份报告条件">
+        <h3 class="kz-filter-scope__title">整份报告条件</h3>
+{page_html}
+        <button type="button" class="kz-filter-reset-btn" id="kz-filter-reset-page">
+          清除整份报告条件
+        </button>
+      </section>
+{module_section}
+    </details>
+
+    <p class="kz-filter-row-count" id="kz-filter-row-count"></p>
+    <div class="kz-filter-empty" id="kz-filter-empty" style="display:none">
+      <p class="kz-filter-empty__title">当前选择下暂无可比较数据</p>
+      <div class="kz-filter-empty__restrictions" id="kz-filter-empty-restrictions"></div>
+      <div class="kz-filter-empty__actions">
+        <button type="button" class="kz-filter-reset-btn" id="kz-filter-empty-reset-page">
+          清除整份报告条件
+        </button>
+{empty_module_buttons}
+      </div>
+    </div>
+
+    <script>window.__FILTER_ROWS__ = {rows_literal};</script>
+"""
+
+
 def _render_reading_path(sections: list[str]) -> str:
     if not sections:
         return (
@@ -203,6 +395,8 @@ def render_page_html(
     page: _PageLike,
     spec: _PortalLike,
     assets_rel: str = "assets",
+    filter_groups: list[dict[str, Any]] | None = None,
+    synthetic_rows: list[dict[str, str]] | None = None,
 ) -> str:
     """Render a complete HTML page from typed portal specs."""
     slug = page.slug
@@ -224,6 +418,11 @@ def render_page_html(
     if body_text:
         lead_html = f'      <p class="portal-lead">{_e(body_text)}</p>\n'
 
+    filter_html = _render_filter_panel(
+        filter_groups=filter_groups,
+        synthetic_rows=synthetic_rows,
+        page_id=slug if slug.startswith("/") else f"/{slug}",
+    )
     reading_path = _render_reading_path(sections)
     kicker_html = ""
     page_group = _page_group(page)
@@ -236,6 +435,7 @@ def render_page_html(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="only light">
+  <link rel="icon" href="data:,">
   <title>{_e(title)} - {_e(report_title)}</title>
   <link rel="stylesheet" href="{assets_rel}/portal.css">
 </head>
@@ -280,7 +480,7 @@ def render_page_html(
 {kicker_html}      
       <h1 class="portal-page-title">{_e(title)}</h1>
 {lead_html}    </header>
-{reading_path}  </main>
+{filter_html}{reading_path}  </main>
 
   <footer class="site-footer" role="contentinfo">
     <div class="site-footer__inner">
