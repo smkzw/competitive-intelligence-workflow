@@ -1,19 +1,27 @@
 {
   "schema_version": "1.0",
   "name": "竞品调研门户壳层静态资源",
-  "purpose": "康哲站点式 HTML 门户共享样式与交互脚本；随包复制，零远程依赖。含 Task 4.4 离线图表联动与包内 ECharts。",
+  "purpose": "康哲站点式 HTML 门户共享样式与交互脚本；随包复制，零远程依赖。含离线图表联动、数据依据面板与包内 ECharts。",
   "files": {
     "portal.css": {
-      "sha256": "00bfaf95198ba62e1726be04baa13552052f01f82ee6d592fbdf46efad16369e",
-      "bytes": 21788
+      "sha256": "622874d839cea2f0b83ccf7e5ecb401f5962171f296834a0ea0ab9e9d0852e86",
+      "bytes": 21917
     },
     "portal.js": {
-      "sha256": "3ea79035e073c90b682967f1f2716f6a6823ae450cf899043c8b86eebca86253",
-      "bytes": 32395
+      "sha256": "2c08b7a2beaf28cba466f127f50aaa1077cbd485691b0ccc02f213793cc365b3",
+      "bytes": 38080
     },
     "charts.js": {
-      "sha256": "0114cf3125d57284d18ba7e2ac6190367bdb62238ba6cc24778c025ac60d6103",
-      "bytes": 35706
+      "sha256": "69d3bf92a6f083f3aba1ec7efc0170d4a9095ff07ff171f3aa4d3dc382a97491",
+      "bytes": 39683
+    },
+    "evidence-drawer.js": {
+      "sha256": "df3c8fdd9834dd5ad22f0f1a72a1dbcdbaf8aa91979c4c8a835d5750cddc8e1a",
+      "bytes": 27715
+    },
+    "evidence-drawer.css": {
+      "sha256": "d6d946528b7ce833ae09f493899cc5c27315e828f043ff22a18074841f446e92",
+      "bytes": 9524
     },
     "echarts.min.js": {
       "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",

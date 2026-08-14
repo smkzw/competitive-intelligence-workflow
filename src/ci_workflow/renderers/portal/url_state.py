@@ -123,6 +123,9 @@ def encode_filter_state(state: FilterState) -> str:
     if state.anchor.trial_id:
         segments.append(f"a={_enc(state.anchor.trial_id)}")
 
+    if state.evidence.open_id:
+        segments.append(f"eo={_enc(state.evidence.open_id)}")
+
     if state.evidence.selected_ids:
         sorted_ids = sorted(state.evidence.selected_ids)
         segments.append("e=" + ",".join(_enc(i) for i in sorted_ids))
@@ -181,7 +184,9 @@ def decode_filter_state(data: str) -> FilterState:
     sort_direction: str = "asc"
     anchor_trial_id: str | None = None
     evidence_ids: tuple[str, ...] = ()
+    evidence_open_id: str | None = None
     saw_evidence = False
+    saw_evidence_open = False
     current_page = 1
     saw_pg = False
     saw_sort = False
@@ -249,6 +254,13 @@ def decode_filter_state(data: str) -> FilterState:
                 raise UrlStateError("锚定试验段重复")
             saw_anchor = True
             anchor_trial_id = _dec(seg[2:])
+        elif seg.startswith("eo="):
+            if saw_evidence_open:
+                raise UrlStateError("打开的数据依据段重复")
+            saw_evidence_open = True
+            evidence_open_id = _dec(seg[3:])
+            if not evidence_open_id:
+                raise UrlStateError("打开的数据依据标识不能为空")
         elif seg.startswith("e="):
             if saw_evidence:
                 raise UrlStateError("证据选择段重复")
@@ -285,7 +297,10 @@ def decode_filter_state(data: str) -> FilterState:
                 direction=sort_direction,  # type: ignore[arg-type]
             ),
             anchor=AnchorTrialState(trial_id=anchor_trial_id),
-            evidence=EvidenceSelection(selected_ids=evidence_ids),
+            evidence=EvidenceSelection(
+                selected_ids=evidence_ids,
+                open_id=evidence_open_id,
+            ),
             pagination=PaginationState(current_page=current_page),
         )
     except UrlStateError:

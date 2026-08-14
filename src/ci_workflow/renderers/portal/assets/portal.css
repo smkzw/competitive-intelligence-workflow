@@ -326,6 +326,13 @@ input:focus-visible {
   border-bottom: 1px solid var(--border);
 }
 
+.site-header__search-empty {
+  padding: 12px 14px;
+  color: var(--text-3);
+  font-size: 14px;
+  line-height: var(--lh-tight);
+}
+
 .site-header__search-result:last-child {
   border-bottom: none;
 }

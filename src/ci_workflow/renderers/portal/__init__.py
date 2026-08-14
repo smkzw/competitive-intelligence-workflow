@@ -1,4 +1,5 @@
-"""Task 4.2/4.3 康哲门户壳层：builder + page_shell + global_search + filters。
+"""康哲门户壳层与同页数据依据面板：builder + page_shell + global_search
+ filters + url_state + evidence_drawer（Task 4.2–4.5）。
 
 公开 API：
 
@@ -6,7 +7,7 @@
 * ``PageSpec``, ``NavEntry``, ``PortalSpec``, ``SearchIndexEntry`` — 类型化输入。
 * ``resolve_logo_src`` / ``resolve_portal_asset`` / ``resolve_echarts_bundle``
   — 轮分发安全的资产解析。
-* ``render_page_html`` — 支持 filter_groups / synthetic_rows 参数。
+* ``render_page_html`` — 支持 filter_groups / synthetic_rows / evidence_views。
 """
 
 from ci_workflow.renderers.portal.builder import (
@@ -18,6 +19,18 @@ from ci_workflow.renderers.portal.builder import (
     resolve_echarts_bundle,
     resolve_logo_src,
     resolve_portal_asset,
+)
+from ci_workflow.renderers.portal.evidence_drawer import (
+    DISCLOSURE_STATE_LABELS_ZH,
+    DOCUMENT_ROLE_LABELS_ZH,
+    EVIDENCE_DRAWER_CSS_ASSET,
+    EVIDENCE_DRAWER_JS_ASSET,
+    ORIGINAL_TEXT_STATUS_LABELS_ZH,
+    evidence_drawer_css_link_tag,
+    evidence_drawer_script_tag,
+    render_evidence_drawer_embed,
+    render_evidence_drawer_host,
+    serialize_evidence_views,
 )
 from ci_workflow.renderers.portal.filters import (
     MODULE_DIMENSION_IDS,
@@ -56,8 +69,13 @@ from ci_workflow.renderers.portal.url_state import (
 )
 
 __all__ = [
+    "DISCLOSURE_STATE_LABELS_ZH",
+    "DOCUMENT_ROLE_LABELS_ZH",
+    "EVIDENCE_DRAWER_CSS_ASSET",
+    "EVIDENCE_DRAWER_JS_ASSET",
     "MODULE_DIMENSION_IDS",
     "MODULE_DIMENSION_LABELS_ZH",
+    "ORIGINAL_TEXT_STATUS_LABELS_ZH",
     "PAGE_DIMENSION_IDS",
     "PAGE_DIMENSION_LABELS_ZH",
     "SAVE_LOCAL_VIEW_HINT_ZH",
@@ -87,11 +105,16 @@ __all__ = [
     "decode_filter_state",
     "dimension_applicability_reason",
     "encode_filter_state",
+    "evidence_drawer_css_link_tag",
+    "evidence_drawer_script_tag",
+    "render_evidence_drawer_embed",
+    "render_evidence_drawer_host",
     "render_page_html",
     "render_search_index_json",
     "resolve_echarts_bundle",
     "resolve_logo_src",
     "resolve_portal_asset",
     "select_view_rows",
+    "serialize_evidence_views",
     "serialize_filter_state",
 ]

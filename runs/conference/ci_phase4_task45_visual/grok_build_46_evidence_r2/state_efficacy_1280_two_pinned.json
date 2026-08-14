@@ -1,0 +1,127 @@
+{
+  "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_02b92005f96706a1a381e928~e=report-row_b94633ad615c4492774e6fa4",
+  "vw": 1280,
+  "vh": 900,
+  "title": "疗效与安全性概览 - 特应性皮炎竞品研究",
+  "h1": "疗效与安全性概览",
+  "drawerHidden": false,
+  "drawerTop": 68,
+  "headerBottom": 68,
+  "drawerBelowHeader": true,
+  "heading": "产品甲 · 主要终点 EASI评分较基线变化值",
+  "drawerText": "数据依据\n×\n产品甲 · 主要终点 EASI评分较基线变化值\n产品\n产品甲\n试验\n试验一\n组别\n治疗组\n终点/事件/设计要素\n主要终点 EASI评分较基线变化值\n量表\n原始\n时间点\n第16周\n值\n-18.4\n阈值\n不适用\n单位\n分\n分子\n不适用\n分母\n120\n披露状态\n已报告值\n规范化说明\n直接取自登记结果，未做换算\n来源版本\nClinicalTrials.gov 登记结果（2026年5月1日）\n原文定位\n来源类型：主要登记记录；字段：Results.outcomeMeasures；主要终点结果表；第 14 页；打开原文\n简短原文\nAt week 16, the mean change from baseline in EASI total score was -18.4 points in the treatment arm.\n冲突\n\n冲突取值：-16.9 分\n\n冲突说明：会议摘要的早期数值与登记结果不一致，本报告以登记结果为准并保留差异记录\n\n冲突方来源版本：会议摘要（2026年2月）\n\n冲突方定位：来源类型：会议披露；章节：Late-breaking abstract；打开原文\n\n取消固定\n固定对照\n\n以下为已固定条目，可并列核对定义、时间点、分母与冲突。\n\n核对字段\t\n产品乙 · 主要终点 EASI评分较基线变化值\n查看完整依据\n取消固定\n\n定义\t主要终点 EASI评分较基线变化值\n产品\t产品乙\n试验\t试验二\n组别\t治疗组\n时间点\t第24周\n值\t尚未公开\n单位\t技术暂不可用\n分子\t不适用\n分母\t尚未公开\n披露状态\t未公开\n来源版本\tClinicalTrials.gov 登记结果（2026年5月1日）\n冲突\t无冲突\n原文定位\t来源类型：主要登记记录（可打开原文）",
+  "pinText": "取消固定",
+  "pinnedHint": "以下为已固定条目，可并列核对定义、时间点、分母与冲突。",
+  "compareText": "核对字段\t\n产品乙 · 主要终点 EASI评分较基线变化值\n查看完整依据\n取消固定\n\n定义\t主要终点 EASI评分较基线变化值\n产品\t产品乙\n试验\t试验二\n组别\t治疗组\n时间点\t第24周\n值\t尚未公开\n单位\t技术暂不可用\n分子\t不适用\n分母\t尚未公开\n披露状态\t未公开\n来源版本\tClinicalTrials.gov 登记结果（2026年5月1日）\n冲突\t无冲突\n原文定位\t来源类型：主要登记记录（可打开原文）",
+  "status": "",
+  "rowCount": "匹配 9 项结果",
+  "filterSummary": "无筛选条件",
+  "menuText": "菜单",
+  "menuExpanded": "false",
+  "searchW": 180,
+  "searchPlaceholder": "搜索页面或关键词…",
+  "spacerH": 420,
+  "bodyTextHas2400": false,
+  "groups": [
+    {
+      "title": "主要终点 EASI评分较基线变化值｜单位：",
+      "display": "block",
+      "h": 240,
+      "values": [
+        {
+          "text": "该指标结果尚未公开",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "指标名称",
+        "组别",
+        "比较值",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "主要终点 EASI评分较基线变化值｜单位：\n\n该指标结果尚未公开\n\n完整记录仍列于下方表格，便于核对来源与口径。\n\n指标名称\t组别\t比较值\t单位\t披露状态\n主要终点 EASI评分较基线变化值\t治疗组\t该指标结果尚未公开\t\t该指标结果尚未公开"
+    },
+    {
+      "title": "主要终点 EASI评分较基线变化值｜单位：分",
+      "display": "block",
+      "h": 624,
+      "values": [
+        {
+          "text": "-18.4",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "-8.6",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "-7.9",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "指标名称",
+        "组别",
+        "比较值",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "主要终点 EASI评分较基线变化值｜单位：分\n治疗组\n对照组\n分\n-18\n-15\n-12\n-9\n-6\n-3\n0\n治疗组\n对照组\n对照组\n-18.4\n-8.6\n-7.9\n指标名称\t组别\t比较值\t单位\t披露状态\n主要终点 EASI评分较基线变化值\t治疗组\t-18.4\t分\t已披露\n主要终点 EASI评分较基线变化值\t对照组\t-8.6\t分\t已披露\n主要终点 EASI评分较基线变化值\t对照组\t-7.9\t分\t已披露"
+    },
+    {
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "display": "block",
+      "h": 628,
+      "values": [
+        {
+          "text": "-12.1",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "-9.4",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "指标名称",
+        "组别",
+        "比较值",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "次要终点疾病活动度评分较基线变化值\n治疗组\n对照组\n治疗组\n对照组\n比较\n-12.1\n-9.4\n指标名称\t组别\t比较值\t单位\t披露状态\n次要终点疾病活动度评分较基线变化值\t治疗组\t-12.1\t分\t已披露\n次要终点疾病活动度评分较基线变化值\t对照组\t-9.4\t分\t已披露"
+    },
+    {
+      "title": "试验完成状态",
+      "display": "block",
+      "h": 552,
+      "values": [
+        {
+          "text": "已完成",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "进行中",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "试验",
+        "组别",
+        "试验状态",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "试验完成状态\n试验一\n试验二\n状态\n已完成\n进行中\n试验\t组别\t试验状态\t单位\t披露状态\n试验一\t全试验\t已完成\t\t已披露\n试验二\t全试验\t进行中\t\t已披露"
+    }
+  ]
+}

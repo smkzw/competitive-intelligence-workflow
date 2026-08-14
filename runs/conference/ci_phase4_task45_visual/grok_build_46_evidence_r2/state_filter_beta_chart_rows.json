@@ -1,0 +1,101 @@
+[
+  {
+    "title": "主要终点 EASI评分较基线变化值｜单位：",
+    "display": "block",
+    "h": 240,
+    "rows": [
+      {
+        "hidden": false,
+        "text": "主要终点 EASI评分较基线变化值 治疗组 该指标结果尚未公开 该指标结果尚未公开",
+        "row": "report-row_b94633ad615c4492774e6fa4"
+      }
+    ],
+    "labels": []
+  },
+  {
+    "title": "主要终点 EASI评分较基线变化值｜单位：分",
+    "display": "block",
+    "h": 547,
+    "rows": [
+      {
+        "hidden": true,
+        "text": "主要终点 EASI评分较基线变化值治疗组-18.4分已披露",
+        "row": "report-row_02b92005f96706a1a381e928"
+      },
+      {
+        "hidden": true,
+        "text": "主要终点 EASI评分较基线变化值对照组-8.6分已披露",
+        "row": "report-row_6164b98647e90d3eb1caa974"
+      },
+      {
+        "hidden": false,
+        "text": "主要终点 EASI评分较基线变化值 对照组 -7.9 分 已披露",
+        "row": "report-row_db4deafae32c4bc8d13f3e41"
+      }
+    ],
+    "labels": [
+      "分",
+      "-18",
+      "-15",
+      "-12",
+      "-9",
+      "-6",
+      "-3",
+      "0",
+      "治疗组",
+      "对照组",
+      "对照组",
+      "-18.4",
+      "-8.6",
+      "-7.9"
+    ]
+  },
+  {
+    "title": "次要终点疾病活动度评分较基线变化值",
+    "display": "none",
+    "h": 0,
+    "rows": [
+      {
+        "hidden": true,
+        "text": "次要终点疾病活动度评分较基线变化值治疗组-12.1分已披露",
+        "row": "report-row_31abe33259abf8ba593403a7"
+      },
+      {
+        "hidden": true,
+        "text": "次要终点疾病活动度评分较基线变化值对照组-9.4分已披露",
+        "row": "report-row_e9041f1e18fe41b750b65dc1"
+      }
+    ],
+    "labels": [
+      "治疗组",
+      "对照组",
+      "比较",
+      "-12.1",
+      "-9.4"
+    ]
+  },
+  {
+    "title": "试验完成状态",
+    "display": "block",
+    "h": 513,
+    "rows": [
+      {
+        "hidden": true,
+        "text": "试验一全试验已完成已披露",
+        "row": "report-row_0276ae29f6c78d0655704fb0"
+      },
+      {
+        "hidden": false,
+        "text": "试验二 全试验 进行中 已披露",
+        "row": "report-row_4bc62e3ec09a57919faf5e17"
+      }
+    ],
+    "labels": [
+      "试验一",
+      "试验二",
+      "状态",
+      "已完成",
+      "进行中"
+    ]
+  }
+]

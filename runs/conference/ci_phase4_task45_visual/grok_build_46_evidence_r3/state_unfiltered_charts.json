@@ -1,0 +1,119 @@
+{
+  "url": "http://127.0.0.1:8767/efficacy.html",
+  "rowCount": "匹配 9 项结果",
+  "groups": [
+    {
+      "title": "主要终点 EASI评分较基线变化值｜单位：",
+      "display": "block",
+      "h": 157,
+      "svgTexts": [],
+      "hasJia": false,
+      "hasYi79": false,
+      "hasShiEr": false,
+      "hasJinxing": false,
+      "hasYiwancheng": false,
+      "rows": [
+        {
+          "hidden": false,
+          "text": "主要终点 EASI评分较基线变化值 治疗组 该指标结果尚未公开 该指标结果尚未公开"
+        }
+      ]
+    },
+    {
+      "title": "主要终点 EASI评分较基线变化值｜单位：分",
+      "display": "block",
+      "h": 624,
+      "svgTexts": [
+        "分",
+        "-18",
+        "-15",
+        "-12",
+        "-9",
+        "-6",
+        "-3",
+        "0",
+        "治疗组",
+        "对照组",
+        "对照组",
+        "-18.4",
+        "-8.6",
+        "-7.9"
+      ],
+      "hasJia": true,
+      "hasYi79": true,
+      "hasShiEr": false,
+      "hasJinxing": false,
+      "hasYiwancheng": false,
+      "rows": [
+        {
+          "hidden": false,
+          "text": "主要终点 EASI评分较基线变化值 治疗组 -18.4 分 已披露"
+        },
+        {
+          "hidden": false,
+          "text": "主要终点 EASI评分较基线变化值 对照组 -8.6 分 已披露"
+        },
+        {
+          "hidden": false,
+          "text": "主要终点 EASI评分较基线变化值 对照组 -7.9 分 已披露"
+        }
+      ]
+    },
+    {
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "display": "block",
+      "h": 628,
+      "svgTexts": [
+        "治疗组",
+        "对照组",
+        "比较",
+        "-12.1",
+        "-9.4"
+      ],
+      "hasJia": false,
+      "hasYi79": false,
+      "hasShiEr": false,
+      "hasJinxing": false,
+      "hasYiwancheng": false,
+      "rows": [
+        {
+          "hidden": false,
+          "text": "次要终点疾病活动度评分较基线变化值 治疗组 -12.1 分 已披露"
+        },
+        {
+          "hidden": false,
+          "text": "次要终点疾病活动度评分较基线变化值 对照组 -9.4 分 已披露"
+        }
+      ]
+    },
+    {
+      "title": "试验完成状态",
+      "display": "block",
+      "h": 552,
+      "svgTexts": [
+        "试验一",
+        "试验二",
+        "状态",
+        "已完成",
+        "进行中"
+      ],
+      "hasJia": true,
+      "hasYi79": false,
+      "hasShiEr": true,
+      "hasJinxing": true,
+      "hasYiwancheng": true,
+      "rows": [
+        {
+          "hidden": false,
+          "text": "试验一 全试验 已完成 已披露"
+        },
+        {
+          "hidden": false,
+          "text": "试验二 全试验 进行中 已披露"
+        }
+      ]
+    }
+  ],
+  "bodyHasJia": true,
+  "visibleJiaInCharts": true
+}

@@ -1,0 +1,61 @@
+{
+  "url": "http://127.0.0.1:8765/baseline.html",
+  "vw": 1280,
+  "vh": 900,
+  "title": "人口学 - 特应性皮炎竞品研究",
+  "drawerHidden": true,
+  "drawerW": 0,
+  "drawerX": 0,
+  "pinText": "固定此条",
+  "compareText": "",
+  "heading": "",
+  "status": "",
+  "focus": {
+    "tag": "BODY",
+    "id": "",
+    "text": "特应性皮炎竞品研究\n      \n        医学结果\n        基线与人群\n        试验完成情况\n      \n      \n       ",
+    "aria": null
+  },
+  "rowCount": "",
+  "filterSummary": "",
+  "emptyVisible": true,
+  "emptyText": "",
+  "hits": {
+    "未公开": false,
+    "尚未公开": false,
+    "不适用": false,
+    "技术暂不可用": false,
+    "来源未列示": false,
+    "未提供": false,
+    "原文未提供": false
+  },
+  "charts": [],
+  "navItems": [
+    {
+      "text": "医学结果",
+      "x": 740,
+      "w": 88,
+      "coveredBy": "site-header__nav-item"
+    },
+    {
+      "text": "基线与人群",
+      "x": 832,
+      "w": 104,
+      "coveredBy": "site-header__nav-item site-header__nav-item--active"
+    },
+    {
+      "text": "试验完成情况",
+      "x": 940,
+      "w": 120,
+      "coveredBy": "site-header__nav-item"
+    }
+  ],
+  "overflowX": false,
+  "scrollW": 1280,
+  "visibleRowLabels": [
+    "基线 · 产品甲 · 治疗组 · 年龄\n          产品甲\n          基线试验一",
+    "基线 · 产品甲 · 治疗组 · 年龄",
+    "基线 · 产品乙 · 治疗组 · 湿疹面积与严重程度指数\n          产品乙\n          基线试验二",
+    "基线 · 产品乙 · 治疗组 · 湿疹面积与严重程度指数"
+  ]
+}

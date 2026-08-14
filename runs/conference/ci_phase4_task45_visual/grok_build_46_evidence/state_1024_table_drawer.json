@@ -1,0 +1,22 @@
+{
+  "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_02b92005f96706a1a381e928",
+  "hidden": false,
+  "heading": "产品甲 · 主要终点 HbA1c 较基线变化值",
+  "drawerW": 560,
+  "mainW": 1024,
+  "overflowX": false,
+  "navCovered": [
+    {
+      "text": "基线与人群",
+      "coveredBy": "DT"
+    },
+    {
+      "text": "试验完成情况",
+      "coveredBy": "DT"
+    },
+    {
+      "text": "菜单",
+      "coveredBy": "kz-evidence-drawer__header"
+    }
+  ]
+}

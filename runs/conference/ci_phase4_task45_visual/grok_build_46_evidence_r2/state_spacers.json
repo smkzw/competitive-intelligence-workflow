@@ -1,0 +1,23 @@
+{
+  "efficacy": {
+    "exists": true,
+    "h": 420,
+    "inline": "height:420px",
+    "scrollH": 3576,
+    "innerH": 900
+  },
+  "baseline": {
+    "exists": false,
+    "h": 0,
+    "inline": null,
+    "scrollH": 900,
+    "innerH": 900
+  },
+  "disposition": {
+    "exists": false,
+    "h": 0,
+    "inline": null,
+    "scrollH": 900,
+    "innerH": 900
+  }
+}

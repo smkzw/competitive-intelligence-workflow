@@ -149,7 +149,13 @@ def resolve_portal_asset(name: str) -> Path:
 
     repo_assets = _repo_assets_root()
     if repo_assets is not None:
-        if name in {"portal.css", "portal.js", "charts.js"}:
+        if name in {
+            "portal.css",
+            "portal.js",
+            "charts.js",
+            "evidence-drawer.css",
+            "evidence-drawer.js",
+        }:
             repo_candidate = repo_assets / "portal" / name
             if repo_candidate.is_file():
                 return repo_candidate
@@ -239,6 +245,8 @@ def build_portal(spec: PortalSpec, output_dir: Path) -> list[Path]:
     _copy_asset(resolve_portal_asset("portal.css"), assets_dir, "portal.css")
     _copy_asset(resolve_portal_asset("portal.js"), assets_dir, "portal.js")
     _copy_asset(resolve_portal_asset("charts.js"), assets_dir, "charts.js")
+    _copy_asset(resolve_portal_asset("evidence-drawer.css"), assets_dir, "evidence-drawer.css")
+    _copy_asset(resolve_portal_asset("evidence-drawer.js"), assets_dir, "evidence-drawer.js")
     _copy_asset(resolve_echarts_bundle(), assets_dir, _ECHARTS_BUNDLE_NAME)
 
     search_entries: list[SearchIndexEntry] = build_search_index(spec.pages)

@@ -1,9 +1,9 @@
 """共用报告视图、覆盖合同与图表兼容性合同包。
 
 对外公开：规范覆盖集合/格式投影（``coverage``）、稳定行视图
-（``view_state``）、冻结页面注册表与站点地图（``page_registry``）、
-单行集图表/表格联动合同（``chart_specs``）、Task 4.4 图表类型化注册
-与可比性分组（``chart_specs``）。
+（``view_state``）、规范证据视图与固定对照（``evidence_view``）、冻结页面
+注册表与站点地图（``page_registry``）、单行集图表/表格联动合同与
+Task 4.4 图表类型化注册与可比性分组（``chart_specs``）。
 """
 
 from ci_workflow.reports.common.chart_specs import (
@@ -41,6 +41,21 @@ from ci_workflow.reports.common.coverage import (
     validate_coverage_projection_payload,
     validate_coverage_set_payload,
 )
+from ci_workflow.reports.common.evidence_view import (
+    EVIDENCE_FIELD_STATE_LABELS_ZH,
+    MUTUAL_EXCLUSION_MARKS_ZH,
+    EvidenceConflict,
+    EvidenceField,
+    EvidenceFieldState,
+    EvidenceHistoricalVersion,
+    EvidenceObservationKind,
+    EvidenceView,
+    EvidenceViewBoundaryError,
+    EvidenceViewSet,
+    OriginalTextStatus,
+    validate_evidence_view_payload,
+    validate_evidence_view_set_payload,
+)
 from ci_workflow.reports.common.page_registry import (
     DynamicRouteSpec,
     PageRegistry,
@@ -72,19 +87,25 @@ __all__ = [
     "CoverageProjection",
     "CoverageSet",
     "DynamicRouteSpec",
+    "EVIDENCE_FIELD_STATE_LABELS_ZH",
     "EquivalenceEvidence",
+    "EvidenceConflict",
+    "EvidenceField",
+    "EvidenceFieldState",
+    "EvidenceHistoricalVersion",
+    "EvidenceObservationKind",
+    "EvidenceView",
+    "EvidenceViewBoundaryError",
+    "EvidenceViewSet",
     "FilteredRowSet",
+    "MUTUAL_EXCLUSION_MARKS_ZH",
+    "OriginalTextStatus",
     "PageRegistry",
-    "SmallMultipleGroup",
-    "register_chart_type",
-    "resolve_chart_type",
-    "split_compatible_groups",
-    "validate_all_rows_covered",
-    "validate_chart_input_rows",
     "PageRegistryError",
     "ReportCatalog",
     "ReportRow",
     "ReportViewModel",
+    "SmallMultipleGroup",
     "StaticPage",
     "ViewStateBoundaryError",
     "compute_coverage_projection_content_digest",
@@ -94,9 +115,16 @@ __all__ = [
     "derive_coverage_projection_id",
     "derive_coverage_set_id",
     "derive_row_id",
+    "register_chart_type",
+    "resolve_chart_type",
+    "split_compatible_groups",
+    "validate_all_rows_covered",
+    "validate_chart_input_rows",
     "validate_chart_table_module_payload",
     "validate_coverage_projection_payload",
     "validate_coverage_set_payload",
+    "validate_evidence_view_payload",
+    "validate_evidence_view_set_payload",
     "validate_filtered_row_set_payload",
     "validate_report_row_payload",
     "validate_report_view_model_payload",

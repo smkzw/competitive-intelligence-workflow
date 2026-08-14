@@ -1,0 +1,103 @@
+{
+  "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-alpha~e=report-row_02b92005f96706a1a381e928",
+  "title": "疗效与安全性概览 - 特应性皮炎竞品研究",
+  "vw": 1280,
+  "vh": 900,
+  "drawerHidden": true,
+  "drawerTitle": "产品乙 · 治疗期不良事件发生例数",
+  "status": "",
+  "pinText": "固定此条",
+  "pinnedHidden": false,
+  "pinnedHint": "以下为已固定条目，可并列核对定义、时间点、分母与冲突。",
+  "compareText": "核对字段产品甲 · 主要终点 HbA1c 较基线变化值查看完整依据取消固定定义主要终点 HbA1c 较基线变化值产品产品甲试验试验一组别治疗组时间点第12周值5.2单位mg/dL分子不适用分母120披露状态已报告值来源版本ClinicalTrials.gov 登记结果（2026年5月1日）冲突1 条冲突：3.1 mg/dL原文定位来源类型：主要登记记录（可打开原文）",
+  "focus": {
+    "tag": "BUTTON",
+    "id": "kz-filter-entry",
+    "role": null,
+    "text": "筛选条件\n        1",
+    "aria": null
+  },
+  "rowCount": "匹配 2 项结果",
+  "filterSummary": "已选 1 项",
+  "emptyVisible": false,
+  "searchBox": {
+    "placeholder": "搜索页面或关键词…",
+    "w": 180,
+    "overflow": "clip"
+  },
+  "headerSearchW": 180,
+  "charts": [
+    {
+      "i": 0,
+      "title": "主要终点 HbA1c 较基线变化值",
+      "hasSvg": true,
+      "hasCanvas": false,
+      "undisclosed": null,
+      "valueCells": [
+        {
+          "text": "5.2",
+          "row": "report-row_02b92005f96706a1a381e928",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        },
+        {
+          "text": "7.8",
+          "row": "report-row_6164b98647e90d3eb1caa974",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "hasSvg": true,
+      "hasCanvas": false,
+      "undisclosed": null,
+      "valueCells": [
+        {
+          "text": "",
+          "row": "report-row_31abe33259abf8ba593403a7",
+          "empty": true,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        },
+        {
+          "text": "",
+          "row": "report-row_e9041f1e18fe41b750b65dc1",
+          "empty": true,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "title": "主要终点 HbA1c 较基线变化值",
+      "hasSvg": true,
+      "hasCanvas": false,
+      "undisclosed": null,
+      "valueCells": [
+        {
+          "text": "已完成",
+          "row": "report-row_02b92005f96706a1a381e928",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        },
+        {
+          "text": "进行中",
+          "row": "report-row_6164b98647e90d3eb1caa974",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        }
+      ]
+    }
+  ],
+  "visibleFacts": [
+    "report-row_02b92005f96706a1a381e928",
+    "report-row_6164b98647e90d3eb1caa974",
+    "report-row_02b92005f96706a1a381e928",
+    "report-row_6164b98647e90d3eb1caa974",
+    "report-row_02b92005f96706a1a381e928",
+    "report-row_6164b98647e90d3eb1caa974"
+  ],
+  "bodyOverflowX": false
+}

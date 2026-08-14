@@ -1,0 +1,114 @@
+{
+  "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-alpha",
+  "vw": 1280,
+  "vh": 900,
+  "title": "疗效与安全性概览 - 特应性皮炎竞品研究",
+  "drawerHidden": true,
+  "drawerW": 0,
+  "drawerX": 0,
+  "pinText": "固定此条",
+  "compareText": "",
+  "heading": "",
+  "status": "",
+  "focus": {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "✓产品甲",
+    "aria": null
+  },
+  "rowCount": "匹配 2 项结果",
+  "filterSummary": "已选 1 项",
+  "emptyVisible": false,
+  "emptyText": "\n      当前选择下暂无可比较数据\n      整份报告 · 产品：产品甲\n      \n        \n          清除整份报告条件\n        \n\n      \n    ",
+  "hits": {
+    "未公开": false,
+    "尚未公开": false,
+    "不适用": false,
+    "技术暂不可用": false,
+    "来源未列示": false,
+    "未提供": false,
+    "原文未提供": false
+  },
+  "charts": [
+    {
+      "i": 0,
+      "cls": "kz-chart-module__group",
+      "title": "主要终点 HbA1c 较基线变化值",
+      "undisclosed": null,
+      "emptyValues": [
+        {
+          "text": "5.2",
+          "empty": false
+        },
+        {
+          "text": "7.8",
+          "empty": false
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "cls": "kz-chart-module__group",
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "undisclosed": null,
+      "emptyValues": [
+        {
+          "text": "",
+          "empty": true
+        },
+        {
+          "text": "",
+          "empty": true
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "cls": "kz-chart-module__group",
+      "title": "主要终点 HbA1c 较基线变化值",
+      "undisclosed": null,
+      "emptyValues": [
+        {
+          "text": "已完成",
+          "empty": false
+        },
+        {
+          "text": "进行中",
+          "empty": false
+        }
+      ]
+    }
+  ],
+  "navItems": [
+    {
+      "text": "医学结果",
+      "x": 740,
+      "w": 88,
+      "coveredBy": "site-header__nav-item site-header__nav-item--active"
+    },
+    {
+      "text": "基线与人群",
+      "x": 832,
+      "w": 104,
+      "coveredBy": "site-header__nav-item"
+    },
+    {
+      "text": "试验完成情况",
+      "x": 940,
+      "w": 120,
+      "coveredBy": "site-header__nav-item"
+    }
+  ],
+  "overflowX": false,
+  "scrollW": 1280,
+  "visibleRowLabels": [
+    "疗效 · 产品甲 · 治疗组 · HbA1c 变化值\n          产品甲\n          试验一",
+    "疗效 · 产品甲 · 治疗组 · HbA1c 变化值",
+    "疗效 · 产品甲 · 对照组 · HbA1c 变化值\n          产品甲\n          试验一",
+    "疗效 · 产品甲 · 对照组 · HbA1c 变化值",
+    "主要终点 HbA1c 较基线变化值治疗组5.2mg/dL已披露",
+    "主要终点 HbA1c 较基线变化值对照组7.8mg/dL已披露",
+    "主要终点 HbA1c 较基线变化值治疗组已完成mg/dL已披露",
+    "主要终点 HbA1c 较基线变化值对照组进行中mg/dL已披露"
+  ]
+}

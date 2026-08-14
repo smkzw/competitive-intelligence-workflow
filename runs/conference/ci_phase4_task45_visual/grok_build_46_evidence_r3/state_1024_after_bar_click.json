@@ -1,0 +1,34 @@
+{
+  "click": {
+    "ok": true,
+    "cx": 512,
+    "cy": 1236.640625,
+    "w": 934,
+    "h": 340,
+    "nMarks": 3,
+    "mark": {
+      "x": 272.7929992675781,
+      "y": 1220.640625,
+      "w": 64,
+      "h": 236
+    },
+    "elementFromPoint": null,
+    "afterUrl": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+    "drawerHidden": false,
+    "heading": "产品乙 · 主要终点 EASI评分较基线变化值"
+  },
+  "drawer": {
+    "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+    "hidden": false,
+    "top": 68,
+    "headerBottom": 68,
+    "belowHeader": true,
+    "heading": "产品乙 · 主要终点 EASI评分较基线变化值",
+    "status": "",
+    "hint": "",
+    "compare": "",
+    "drawerText": "数据依据\n×\n产品乙 · 主要终点 EASI评分较基线变化值\n产品\n产品乙\n试验\n试验二\n组别\n治疗组\n终点/事件/设计要素\n主要终点 EASI评分较基线变化值\n量表\n来源未列示\n时间点\n第24周\n值\n尚未公开\n阈值\n不适用\n单位\n技术暂不可用\n分子\n不适用\n分母\n尚未公开\n披露状态\n未公开\n规范化说明\n来源尚未公开主要终点数值，保留未公开状态\n来源版本\nClinicalTrials.gov 登记结果（2026年5月1日）\n原文定位\n来源类型：主要登记记录；字段：Results.outcomeMeasures；主要终点结果表；第 14 页；打开原文\n简短原文\n原文未提供\n固定此条",
+    "mismatchHits": [],
+    "pageHits": []
+  }
+}

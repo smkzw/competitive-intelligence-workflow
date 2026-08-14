@@ -17,6 +17,7 @@
   var chartInstances = {};
   var chartRowMap = {};
   var chartRowIdsByGroup = {};
+  var chartTypeByGroup = {};
   var rowElementMap = {};
   var optionCache = {};
 
@@ -522,7 +523,7 @@
     var rowIds = collectRowIds(group);
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
-      labels.push(row.display_label_zh || "");
+      labels.push(row.trial_zh || row.display_label_zh || "");
       if (!isRenderable(row)) {
         seriesData.push({ value: [0, i, null], status: row.disclosure_state });
       } else {
@@ -637,6 +638,24 @@
     container.appendChild(legend);
   }
 
+  function renderUndisclosedMessage(chartDiv) {
+    chartDiv.classList.add("kz-chart-group__chart--undisclosed");
+    chartDiv.style.height = "auto";
+    chartDiv.style.minHeight = "0";
+    var status = document.createElement("div");
+    status.className = "kz-chart-undisclosed";
+    status.setAttribute("role", "status");
+    var p1 = document.createElement("p");
+    p1.className = "kz-chart-undisclosed__title";
+    p1.textContent = "该指标结果尚未公开";
+    var p2 = document.createElement("p");
+    p2.className = "kz-chart-undisclosed__hint";
+    p2.textContent = "完整记录仍列于下方表格，便于核对来源与口径。";
+    status.appendChild(p1);
+    status.appendChild(p2);
+    chartDiv.appendChild(status);
+  }
+
   function renderChartContainer(container, groupIndex, group) {
     container.setAttribute("data-group-index", String(groupIndex));
 
@@ -658,29 +677,19 @@
         ? indicatorTitle + "｜" + dimensionTitle
         : indicatorTitle;
     container.appendChild(title);
-    if (groupHasRenderable(group)) renderArmLegend(container, group);
+    if (groupHasRenderable(group) && resolveChartType(group) !== "status_matrix") {
+      renderArmLegend(container, group);
+    }
 
     var chartDiv = document.createElement("div");
     chartDiv.className = "kz-chart-group__chart";
     chartDiv.id = "kz-chart-" + groupIndex;
+    var chartType = resolveChartType(group);
+    if (chartType) chartDiv.setAttribute("data-chart-type", chartType);
     chartDiv.setAttribute("role", "img");
     chartDiv.setAttribute("aria-label", title.textContent + " 图形");
     if (!groupHasRenderable(group)) {
-      chartDiv.classList.add("kz-chart-group__chart--undisclosed");
-      chartDiv.style.height = "auto";
-      chartDiv.style.minHeight = "0";
-      var status = document.createElement("div");
-      status.className = "kz-chart-undisclosed";
-      status.setAttribute("role", "status");
-      var p1 = document.createElement("p");
-      p1.className = "kz-chart-undisclosed__title";
-      p1.textContent = "该指标结果尚未公开";
-      var p2 = document.createElement("p");
-      p2.className = "kz-chart-undisclosed__hint";
-      p2.textContent = "完整记录仍列于下方表格，便于核对来源与口径。";
-      status.appendChild(p1);
-      status.appendChild(p2);
-      chartDiv.appendChild(status);
+      renderUndisclosedMessage(chartDiv);
     } else {
       chartDiv.style.width = "100%";
       chartDiv.style.height = "340px";
@@ -697,10 +706,13 @@
 
     var thead = document.createElement("thead");
     var headerRow = document.createElement("tr");
+    var chartType = resolveChartType(group);
+    var labelHeader = chartType === "status_matrix" ? "试验" : "指标名称";
+    var valueHeader = chartType === "status_matrix" ? "试验状态" : "比较值";
     headerRow.innerHTML =
-      '<th class="kz-chart-table__th">指标名称</th>' +
+      '<th class="kz-chart-table__th">' + labelHeader + '</th>' +
       '<th class="kz-chart-table__th">组别</th>' +
-      '<th class="kz-chart-table__th">比较值</th>' +
+      '<th class="kz-chart-table__th">' + valueHeader + '</th>' +
       '<th class="kz-chart-table__th">单位</th>' +
       '<th class="kz-chart-table__th">披露状态</th>';
     thead.appendChild(headerRow);
@@ -718,12 +730,19 @@
 
       var tdLabel = document.createElement("td");
       tdLabel.className = "kz-chart-table__cell kz-chart-table__cell--label";
-      tdLabel.textContent = row.display_label_zh || "";
+      tdLabel.textContent =
+        chartType === "status_matrix"
+          ? row.trial_zh || row.display_label_zh || ""
+          : row.display_label_zh || "";
+      tdLabel.setAttribute("data-evidence-field", "label");
+      markEvidenceCell(tdLabel, row.row_id);
       tr.appendChild(tdLabel);
 
       var tdArm = document.createElement("td");
       tdArm.className = "kz-chart-table__cell kz-chart-table__cell--arm";
       tdArm.textContent = armLabel(row);
+      tdArm.setAttribute("data-evidence-field", "group");
+      markEvidenceCell(tdArm, row.row_id);
       tr.appendChild(tdArm);
 
       var tdValue = document.createElement("td");
@@ -741,20 +760,28 @@
                 ? String(row.effect)
                 : row.status != null
                   ? String(row.status)
-                  : "";
+                  : Array.isArray(row.value_matrix)
+                    ? String(row.value_matrix[0] == null ? "" : row.value_matrix[0])
+                    : "";
         tdValue.textContent = shown;
       }
+      tdValue.setAttribute("data-evidence-field", "value");
+      markEvidenceCell(tdValue, row.row_id);
       tr.appendChild(tdValue);
 
       var tdUnit = document.createElement("td");
       tdUnit.className = "kz-chart-table__cell kz-chart-table__cell--unit";
       tdUnit.textContent = row.unit || "";
+      tdUnit.setAttribute("data-evidence-field", "unit");
+      markEvidenceCell(tdUnit, row.row_id);
       tr.appendChild(tdUnit);
 
       var tdStatus = document.createElement("td");
       tdStatus.className = "kz-chart-table__cell kz-chart-table__cell--disclosure";
       tdStatus.textContent = !isRenderable(row) ? "该指标结果尚未公开" : "已披露";
       if (!isRenderable(row)) tdStatus.classList.add("kz-chart-table__cell--unrenderable");
+      tdStatus.setAttribute("data-evidence-field", "disclosure");
+      markEvidenceCell(tdStatus, row.row_id);
       tr.appendChild(tdStatus);
 
       tbody.appendChild(tr);
@@ -827,29 +854,81 @@
     markChartSelection(rowId);
   }
 
+  function activateRow(rowId, triggerEl) {
+    var preserve =
+      window.__EVIDENCE_DRAWER__ &&
+      typeof window.__EVIDENCE_DRAWER__.hasView === "function" &&
+      window.__EVIDENCE_DRAWER__.hasView(rowId);
+    var x = window.scrollX;
+    var y = window.scrollY;
+    selectByRowId(rowId);
+    if (preserve) {
+      var api = window.__EVIDENCE_DRAWER__;
+      if (triggerEl && triggerEl.setAttribute) {
+        if (triggerEl.tabIndex === undefined || triggerEl.tabIndex < 0) {
+          triggerEl.setAttribute("tabindex", "-1");
+        }
+      }
+      api.openByRowId(rowId, triggerEl || null);
+      window.scrollTo(x, y);
+    }
+  }
+
+  function rowIndexFromClick(groupIndex, params) {
+    var kind = chartTypeByGroup[groupIndex];
+    if (
+      (kind === "heatmap" || kind === "status_matrix") &&
+      Array.isArray(params.value) &&
+      typeof params.value[1] === "number"
+    ) {
+      return params.value[1];
+    }
+    return params.dataIndex;
+  }
+
   function wireChartClick(groupIndex) {
     var inst = chartInstances[groupIndex];
     if (!inst) return;
     inst.off("click");
     inst.on("click", function (params) {
       var rowIds = chartRowIdsByGroup[groupIndex] || [];
-      var idx = params.dataIndex;
+      var idx = rowIndexFromClick(groupIndex, params);
       if (typeof idx === "number" && idx >= 0 && idx < rowIds.length) {
-        selectByRowId(rowIds[idx]);
+        var trigger = null;
+        if (params.event && params.event.event && params.event.event.target) {
+          trigger = params.event.event.target;
+        }
+        activateRow(rowIds[idx], trigger);
+      }
+    });
+  }
+
+  function markEvidenceCell(td, rowId) {
+    td.setAttribute("data-evidence-open", rowId);
+    td.setAttribute("tabindex", "0");
+    td.setAttribute("role", "button");
+    td.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+        activateRow(rowId, td);
       }
     });
   }
 
   function wireTableRowClick(tr) {
-    tr.addEventListener("click", function () {
+    tr.addEventListener("click", function (e) {
       var rowId = tr.getAttribute("data-row-id");
-      if (rowId) selectByRowId(rowId);
+      if (!rowId) return;
+      var cell =
+        e.target && e.target.closest ? e.target.closest("td") : null;
+      activateRow(rowId, cell || tr);
     });
     tr.addEventListener("keydown", function (e) {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         var rowId = tr.getAttribute("data-row-id");
-        if (rowId) selectByRowId(rowId);
+        if (rowId) activateRow(rowId, tr);
         return;
       }
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -865,7 +944,7 @@
         if (!next) return;
         next.focus();
         var nid = next.getAttribute("data-row-id");
-        if (nid) selectByRowId(nid);
+        if (nid) activateRow(nid, next);
       }
     });
   }
@@ -916,11 +995,13 @@
     for (var i = 0; i < gKeys.length; i++) {
       var gIdx = gKeys[i];
       var rowIds = chartRowIdsByGroup[gIdx] || [];
+      var sourceGroup = chartGroups[Number(gIdx)];
+      var filteredRows = [];
       var anyVisible = false;
-      for (var j = 0; j < rowIds.length; j++) {
-        if (visibleSet[rowIds[j]]) {
+      for (var j = 0; sourceGroup && j < sourceGroup.rows.length; j++) {
+        if (visibleSet[String(sourceGroup.rows[j].row_id)]) {
           anyVisible = true;
-          break;
+          filteredRows.push(sourceGroup.rows[j]);
         }
       }
       var wrapper = document.querySelector(
@@ -933,8 +1014,21 @@
       if (wrapper) wrapper.style.display = anyVisible ? "" : "none";
       var inst = chartInstances[gIdx];
       if (inst && !inst.isDisposed()) {
-        inst.dispatchAction({ type: "hideTip" });
-        inst.dispatchAction({ type: "downplay" });
+        inst.dispose();
+        delete chartInstances[gIdx];
+      }
+      if (anyVisible && sourceGroup) {
+        var chartEl = document.getElementById("kz-chart-" + gIdx);
+        if (chartEl) {
+          chartEl.innerHTML = "";
+          var filteredGroup = {};
+          var sourceKeys = Object.keys(sourceGroup);
+          for (var sk = 0; sk < sourceKeys.length; sk++) {
+            filteredGroup[sourceKeys[sk]] = sourceGroup[sourceKeys[sk]];
+          }
+          filteredGroup.rows = filteredRows;
+          initGroupChart(chartEl, Number(gIdx), filteredGroup);
+        }
       }
     }
 
@@ -955,11 +1049,15 @@
   function initGroupChart(chartDiv, groupIndex, group) {
     var rowIds = collectRowIds(group);
     chartRowIdsByGroup[groupIndex] = rowIds.slice();
+    chartTypeByGroup[groupIndex] = resolveChartType(group);
     var idxMap = {};
     for (var r = 0; r < rowIds.length; r++) idxMap[rowIds[r]] = r;
     chartRowMap[groupIndex] = idxMap;
 
     if (!groupHasRenderable(group)) {
+      if (!chartDiv.querySelector(".kz-chart-undisclosed")) {
+        renderUndisclosedMessage(chartDiv);
+      }
       var stubData = [];
       for (var s = 0; s < group.rows.length; s++) {
         stubData.push({
@@ -970,6 +1068,11 @@
       optionCache[groupIndex] = withMeta({ series: [{ data: stubData }] }, rowIds);
       return;
     }
+
+    chartDiv.classList.remove("kz-chart-group__chart--undisclosed");
+    chartDiv.style.width = "100%";
+    chartDiv.style.height = "340px";
+    chartDiv.style.minHeight = "";
 
     var option = buildOption(group);
     if (!option || !ECHARTS_READY) {
@@ -991,6 +1094,7 @@
     chartInstances = {};
     chartRowMap = {};
     chartRowIdsByGroup = {};
+    chartTypeByGroup = {};
     rowElementMap = {};
     optionCache = {};
 

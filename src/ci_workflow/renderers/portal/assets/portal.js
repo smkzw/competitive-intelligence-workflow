@@ -88,7 +88,12 @@
     searchResults.innerHTML = "";
     focusedIdx = -1;
     if (results.length === 0) {
-      searchResults.hidden = true;
+      var empty = document.createElement("div");
+      empty.className = "site-header__search-empty";
+      empty.setAttribute("role", "status");
+      empty.textContent = "未找到匹配页面或数据";
+      searchResults.appendChild(empty);
+      searchResults.hidden = false;
       return;
     }
     for (var i = 0; i < results.length; i += 1) {
@@ -312,7 +317,10 @@
   var sortDirection = "asc";
   var anchorTrialId = null;
   var evidenceIds = [];
+  var evidenceOpenId = null;
   var paginationPage = 1;
+  var applyingFromUrl = false;
+  var syncingFilter = false;
 
   function enc(value) {
     return encodeURIComponent(String(value)).replace(/[!'()*]/g, function (c) {
@@ -446,6 +454,9 @@
     if (anchorTrialId) {
       hash += FILTER_SEP + "a=" + enc(anchorTrialId);
     }
+    if (evidenceOpenId) {
+      hash += FILTER_SEP + "eo=" + enc(evidenceOpenId);
+    }
     if (evidenceIds && evidenceIds.length) {
       hash +=
         FILTER_SEP +
@@ -473,7 +484,9 @@
     if (filterRestoreError) filterRestoreError.hidden = true;
   }
 
-  function writeFilterToHash() {
+  function writeFilterToHash(options) {
+    options = options || {};
+    if (applyingFromUrl && !options.replace) return false;
     var hash = buildHash();
     if (utf8ByteLength(hash) > URL_SIZE_LIMIT) {
       if (filterLocalHint) {
@@ -483,7 +496,12 @@
       return false;
     }
     if (filterLocalHint) filterLocalHint.hidden = true;
-    history.pushState({ filterHash: hash }, "", "#" + hash);
+    var next = "#" + hash;
+    if (options.replace) {
+      history.replaceState({ filterHash: hash }, "", next);
+    } else {
+      history.pushState({ filterHash: hash }, "", next);
+    }
     return true;
   }
 
@@ -500,10 +518,12 @@
     var nextSortDir = "asc";
     var nextAnchor = null;
     var nextEvidence = [];
+    var nextEvidenceOpen = null;
     var nextPage = 1;
     var sawSort = false;
     var sawAnchor = false;
     var sawEvidence = false;
+    var sawEvidenceOpen = false;
     var sawPg = false;
     for (var i = 1; i < parts.length; i++) {
       var seg = parts[i];
@@ -545,6 +565,11 @@
         sawAnchor = true;
         nextAnchor = dec(seg.substring(2));
         if (!nextAnchor) throw new Error("bad-anchor");
+      } else if (seg.indexOf("eo=") === 0) {
+        if (sawEvidenceOpen) throw new Error("dup-evidence-open");
+        sawEvidenceOpen = true;
+        nextEvidenceOpen = dec(seg.substring(3));
+        if (!nextEvidenceOpen) throw new Error("bad-evidence-open");
       } else if (seg.indexOf("e=") === 0) {
         if (sawEvidence) throw new Error("dup-evidence");
         sawEvidence = true;
@@ -581,42 +606,158 @@
       sortDirection: nextSortDir,
       anchorTrialId: nextAnchor,
       evidenceIds: nextEvidence,
+      evidenceOpenId: nextEvidenceOpen,
       paginationPage: nextPage
     };
   }
 
+  function collectVisibleRowIds() {
+    var ids = [];
+    var seen = {};
+    var nodes = document.querySelectorAll("[data-filter-row-id]");
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].style.display === "none") continue;
+      var id = nodes[i].getAttribute("data-filter-row-id");
+      if (!id || seen[id]) continue;
+      seen[id] = true;
+      ids.push(id);
+    }
+    return ids;
+  }
+
+  function syncEvidenceVarsFromDrawer() {
+    var api = window.__EVIDENCE_DRAWER__;
+    if (!api) return;
+    evidenceOpenId = api.getOpenRowId();
+    evidenceIds = api.getPinnedRowIds() || [];
+  }
+
+  function knownEvidenceIdSet() {
+    var set = {};
+    var api = window.__EVIDENCE_DRAWER__;
+    if (api && typeof api.listRowIds === "function") {
+      var listed = api.listRowIds() || [];
+      for (var i = 0; i < listed.length; i++) set[String(listed[i])] = true;
+      return set;
+    }
+    var views = window.__EVIDENCE_VIEWS__ || [];
+    for (var j = 0; j < views.length; j++) {
+      if (views[j] && views[j].row && views[j].row.row_id) {
+        set[String(views[j].row.row_id)] = true;
+      }
+    }
+    return set;
+  }
+
+  function applyEvidenceFromHash() {
+    var api = window.__EVIDENCE_DRAWER__;
+    var known = knownEvidenceIdSet();
+    var hasCatalog = Object.keys(known).length > 0;
+    var visibleNodes = document.querySelectorAll("[data-filter-row-id]");
+    var visible = {};
+    var restrictVisible = visibleNodes.length > 0;
+    if (restrictVisible) {
+      var visList = collectVisibleRowIds();
+      for (var v = 0; v < visList.length; v++) visible[visList[v]] = true;
+    }
+    function acceptEvidenceId(id) {
+      if (!id) return false;
+      if (hasCatalog && !known[id]) return false;
+      if (api && typeof api.hasView === "function" && !api.hasView(id)) return false;
+      // 无数据依据目录时，e= 是既有全局片段选择，不得按表格行可见性丢弃。
+      if (hasCatalog && restrictVisible && !visible[id]) return false;
+      return true;
+    }
+    var dropped = false;
+    var nextPins = [];
+    for (var i = 0; i < evidenceIds.length; i++) {
+      var pid = evidenceIds[i];
+      if (!acceptEvidenceId(pid)) {
+        dropped = true;
+        continue;
+      }
+      nextPins.push(pid);
+    }
+    var nextOpen = evidenceOpenId;
+    if (nextOpen && !acceptEvidenceId(nextOpen)) {
+      nextOpen = null;
+      dropped = true;
+    }
+    if (api) {
+      var currentPins = api.getPinnedRowIds() || [];
+      var p;
+      for (p = 0; p < currentPins.length; p++) {
+        if (nextPins.indexOf(currentPins[p]) === -1) api.unpin(currentPins[p]);
+      }
+      for (p = 0; p < nextPins.length; p++) {
+        if (!api.isPinned(nextPins[p])) api.pin(nextPins[p]);
+      }
+      if (nextOpen) {
+        api.openByRowId(nextOpen, null);
+      } else if (api.isOpen()) {
+        api.close(false);
+      }
+    }
+    evidenceIds = nextPins;
+    evidenceOpenId = nextOpen;
+    return dropped;
+  }
+
+  function restoreEvidenceFromUrl() {
+    applyingFromUrl = true;
+    var dropped = false;
+    try {
+      dropped = applyEvidenceFromHash();
+      if (dropped) writeFilterToHash({ replace: true });
+    } finally {
+      applyingFromUrl = false;
+    }
+    return dropped;
+  }
+
   function readFilterFromHash() {
     var hash = window.location.hash.replace(/^#\/?/, "");
-    if (!hash) {
-      pageFilters = {};
-      moduleFilters = {};
-      sortField = null;
-      sortDirection = "asc";
-      anchorTrialId = null;
-      evidenceIds = [];
-      paginationPage = 1;
-      hideRestoreError();
-      renderChips();
-      filterVisibleRows();
-      return;
-    }
+    applyingFromUrl = true;
     try {
-      var parsed = parseHash(hash);
-      hideRestoreError();
-      filterVersion = "v1";
-      currentPageId = parsed.pageId;
-      pageFilters = parsed.pageFilters;
-      moduleFilters = parsed.moduleFilters;
-      sortField = parsed.sortField;
-      sortDirection = parsed.sortDirection || "asc";
-      anchorTrialId = parsed.anchorTrialId;
-      evidenceIds = parsed.evidenceIds || [];
-      paginationPage = parsed.paginationPage || 1;
-      renderChips();
-      filterVisibleRows();
-    } catch (err) {
-      showRestoreError();
-      // keep prior UI state; do not rewrite hash
+      if (!hash) {
+        pageFilters = {};
+        moduleFilters = {};
+        sortField = null;
+        sortDirection = "asc";
+        anchorTrialId = null;
+        evidenceIds = [];
+        evidenceOpenId = null;
+        paginationPage = 1;
+        hideRestoreError();
+        renderChips();
+        filterVisibleRows();
+        applyEvidenceFromHash();
+        return;
+      }
+      try {
+        var parsed = parseHash(hash);
+        hideRestoreError();
+        filterVersion = "v1";
+        currentPageId = parsed.pageId;
+        pageFilters = parsed.pageFilters;
+        moduleFilters = parsed.moduleFilters;
+        sortField = parsed.sortField;
+        sortDirection = parsed.sortDirection || "asc";
+        anchorTrialId = parsed.anchorTrialId;
+        evidenceIds = parsed.evidenceIds || [];
+        evidenceOpenId = parsed.evidenceOpenId || null;
+        paginationPage = parsed.paginationPage || 1;
+        renderChips();
+        filterVisibleRows();
+        var dropped = applyEvidenceFromHash();
+        applyingFromUrl = false;
+        if (dropped) writeFilterToHash({ replace: true });
+      } catch (err) {
+        showRestoreError();
+        // keep prior UI state; do not rewrite hash
+      }
+    } finally {
+      applyingFromUrl = false;
     }
   }
 
@@ -808,12 +949,16 @@
     for (var r = 0; r < syntheticRows.length; r++) {
       var row = syntheticRows[r];
       var visible = rowMatches(row);
-      var rowEl =
-        document.getElementById("filter-row-" + row.id) ||
-        document.querySelector(
-          '[data-filter-row-id="' + row.id + '"]'
-        );
-      if (rowEl) rowEl.style.display = visible ? "" : "none";
+      var rowEls = document.querySelectorAll(
+        '[data-filter-row-id="' + row.id + '"]'
+      );
+      var rowEl = document.getElementById("filter-row-" + row.id);
+      if (rowEl && rowEls.length === 0) {
+        rowEl.style.display = visible ? "" : "none";
+      }
+      for (var re = 0; re < rowEls.length; re++) {
+        rowEls[re].style.display = visible ? "" : "none";
+      }
       if (visible) count++;
     }
     if (filterRowCount) {
@@ -849,6 +994,18 @@
       typeof window.__CHART_SYNC__.syncWithFilter === "function"
     ) {
       window.__CHART_SYNC__.syncWithFilter();
+    }
+    if (!applyingFromUrl && window.__EVIDENCE_DRAWER__) {
+      var visibleIds = collectVisibleRowIds();
+      if (visibleIds.length || document.querySelectorAll("[data-filter-row-id]").length) {
+        syncingFilter = true;
+        try {
+          window.__EVIDENCE_DRAWER__.pruneToVisible(visibleIds);
+          syncEvidenceVarsFromDrawer();
+        } finally {
+          syncingFilter = false;
+        }
+      }
     }
   }
 
@@ -918,7 +1075,9 @@
   }
 
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && filterPanel && filterPanel.hasAttribute("open")) {
+    if (e.key !== "Escape" && e.key !== "Esc") return;
+    if (window.__EVIDENCE_DRAWER__ && window.__EVIDENCE_DRAWER__.isOpen()) return;
+    if (filterPanel && filterPanel.hasAttribute("open")) {
       closePanel();
     }
   });
@@ -980,6 +1139,14 @@
     })(emptyResetModules[ermi]);
   }
 
+  document.addEventListener("kz-evidence-drawer-change", function (ev) {
+    if (applyingFromUrl || syncingFilter) return;
+    var detail = (ev && ev.detail) || {};
+    evidenceOpenId = detail.openRowId || null;
+    evidenceIds = detail.pinnedRowIds || [];
+    writeFilterToHash();
+  });
+
   window.addEventListener("popstate", function () {
     readFilterFromHash();
     syncCheckboxes();
@@ -998,6 +1165,7 @@
       syncCheckboxes();
       renderChips();
       filterVisibleRows();
-    }
+    },
+    restoreEvidence: restoreEvidenceFromUrl
   };
 })();

@@ -1,0 +1,59 @@
+{
+  "url": "http://127.0.0.1:8765/disposition.html",
+  "vw": 1280,
+  "vh": 900,
+  "title": "试验完成情况总览 - 特应性皮炎竞品研究",
+  "drawerHidden": true,
+  "drawerW": 0,
+  "drawerX": 0,
+  "pinText": "固定此条",
+  "compareText": "",
+  "heading": "",
+  "status": "",
+  "focus": {
+    "tag": "BODY",
+    "id": "",
+    "text": "特应性皮炎竞品研究\n      \n        医学结果\n        基线与人群\n        试验完成情况\n      \n      \n       ",
+    "aria": null
+  },
+  "rowCount": "",
+  "filterSummary": "",
+  "emptyVisible": true,
+  "emptyText": "",
+  "hits": {
+    "未公开": false,
+    "尚未公开": false,
+    "不适用": false,
+    "技术暂不可用": false,
+    "来源未列示": false,
+    "未提供": false,
+    "原文未提供": false
+  },
+  "charts": [],
+  "navItems": [
+    {
+      "text": "医学结果",
+      "x": 740,
+      "w": 88,
+      "coveredBy": "site-header__nav-item"
+    },
+    {
+      "text": "基线与人群",
+      "x": 832,
+      "w": 104,
+      "coveredBy": "site-header__nav-item"
+    },
+    {
+      "text": "试验完成情况",
+      "x": 940,
+      "w": 120,
+      "coveredBy": "site-header__nav-item site-header__nav-item--active"
+    }
+  ],
+  "overflowX": false,
+  "scrollW": 1280,
+  "visibleRowLabels": [
+    "完成情况 · 产品甲 · 治疗组 · 停止治疗（不良事件）\n          产品甲\n          完成情况试验",
+    "完成情况 · 产品甲 · 治疗组 · 停止治疗（不良事件）"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+  "hidden": true,
+  "top": 0,
+  "headerBottom": 68,
+  "belowHeader": false,
+  "heading": "产品甲 · 主要终点 EASI评分较基线变化值",
+  "status": "",
+  "hint": "",
+  "compare": "核对字段产品甲 · 主要终点 EASI评分较基线变化值查看完整依据取消固定定义主要终点 EASI评分较基线变化值产品产品甲试验试验一组别治疗组时间点第16周值-18.4单位分分子不适用分母120披露状态已报告值来源版本ClinicalTrials.gov 登记结果（2026年5月1日）冲突1 条冲突：-16.9 分原文定位来源类型：主要登记记录（可打开原文）",
+  "drawerText": "\n  \n    \n      数据依据\n      \n        ×\n      \n    \n    \n    \n      \n        产品甲 · 主要终点 EASI评分较基线变化值\n        产品产品甲试验试验一组别治疗组终点/事件/设计要素主要终点 EASI评分较基线变化值量表原始时间点第16周值-18.4阈值不适用单位分分子不适用分母120披露状态已报告值规范化说明直接取自登记结果，未做换算来源版本ClinicalTrials.gov 登记结果（2026年5月1日）原文定位来源类型：主要登记记录；字段：Results.outcomeMeasures；主要终点结果表；第 14 页；打开原文简短原文At week 16, the mean change from baseline in EASI total score was -18.4 points in the treatment arm.\n        \n          冲突\n          冲突取值：-16.9 分冲突说明：会议摘要的早期数值与登记结果不一致，本报告以登记结果为准并保留差异记录冲突方来源版本：会议摘要（2026年2月）冲突方定位：来源类型：会议披露；章节：Late-breaking abstract；打开原文\n        \n        \n          历史版本\n          \n        \n        \n          固定此条\n        \n      \n      \n        固定对照\n        \n        核对字段产品甲 · 主要终点 EASI评分较基线变化值查看完整依据取消固定定义主要终点 EASI评分较基线变化值产品产品甲试验试验一组别治疗组时间点第16周值-18.4单位分分子不适用分母120披露状态已报告值来源版本ClinicalTrials.gov 登记结果（2026年5月1日）冲突1 条冲突：-16.9 分原文定位来源类型：主要登记记录（可打开原文）\n      \n    \n  \n",
+  "mismatchHits": [
+    "差异"
+  ],
+  "pageHits": [
+    "固定数据"
+  ]
+}

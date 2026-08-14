@@ -1,0 +1,27 @@
+{
+  "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_31abe33259abf8ba593403a7~e=report-row_02b92005f96706a1a381e928",
+  "status": "",
+  "hint": "以下为已固定条目，可并列核对定义、时间点、分母与冲突。",
+  "compare": "核对字段\t\n产品甲 · 主要终点 EASI评分较基线变化值\n查看完整依据\n取消固定\n\n定义\t主要终点 EASI评分较基线变化值\n产品\t产品甲\n试验\t试验一\n组别\t治疗组\n时间点\t第16周\n值\t-18.4\n单位\t分\n分子\t不适用\n分母\t120\n披露状态\t已报告值\n来源版本\tClinicalTrials.gov 登记结果（2026年5月1日）\n冲突\t1 条冲突：-16.9 分\n原文定位\t来源类型：主要登记记录（可打开原文）",
+  "alerts": [
+    {
+      "cls": "kz-filter-local-hint",
+      "text": "当前选择过多，请保存为本地视图"
+    },
+    {
+      "cls": "kz-filter-restore-error",
+      "text": "无法恢复此筛选网址"
+    },
+    {
+      "cls": "kz-chart-undisclosed",
+      "text": "该指标结果尚未公开\n\n完整记录仍列于下方表格，便于核对来源与口径。"
+    },
+    {
+      "cls": "kz-evidence-drawer__status",
+      "text": ""
+    }
+  ],
+  "bodyHits": [
+    "口径。"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "url": "http://127.0.0.1:8765/disposition.html#v1~eo=report-row_fc7eb295ed0e09a012253065~e=report-row_fc7eb295ed0e09a012253065",
+  "vw": 1280,
+  "vh": 900,
+  "title": "试验完成情况总览 - 特应性皮炎竞品研究",
+  "drawerHidden": false,
+  "drawerW": 560,
+  "drawerX": 720,
+  "pinText": "取消固定",
+  "compareText": "核对字段\t\n产品甲 · 停止治疗原因：不良事件\n查看完整依据\n取消固定\n\n定义\t停止治疗原因：不良事件\n产品\t产品甲\n试验\t完成情况试验一\n组别\t治疗组\n时间点\t第1天至第12周\n值\t3\n单位\t例\n分子\t3\n分母\t118\n披露状态\t已报告值\n来源版本\tClinicalTrials.gov 登记结果（2026年5月1日）\n冲突\t1 条冲突：2 例\n原文定位\t来源类型：主要登记记录（可打开原文）",
+  "heading": "产品甲 · 停止治疗原因：不良事件",
+  "status": "",
+  "focus": {
+    "tag": "BUTTON",
+    "id": "kz-evidence-pin-btn",
+    "text": "取消固定",
+    "aria": null
+  },
+  "rowCount": "",
+  "filterSummary": "",
+  "emptyVisible": true,
+  "emptyText": "",
+  "hits": {
+    "未公开": false,
+    "尚未公开": false,
+    "不适用": true,
+    "技术暂不可用": false,
+    "来源未列示": false,
+    "未提供": true,
+    "原文未提供": true
+  },
+  "charts": [],
+  "navItems": [
+    {
+      "text": "医学结果",
+      "x": 740,
+      "w": 88,
+      "coveredBy": "kz-evidence-drawer-title"
+    },
+    {
+      "text": "基线与人群",
+      "x": 832,
+      "w": 104,
+      "coveredBy": "kz-evidence-drawer__header"
+    },
+    {
+      "text": "试验完成情况",
+      "x": 940,
+      "w": 120,
+      "coveredBy": "kz-evidence-drawer__header"
+    }
+  ],
+  "overflowX": false,
+  "scrollW": 1280,
+  "visibleRowLabels": [
+    "完成情况 · 产品甲 · 治疗组 · 停止治疗（不良事件）\n          产品甲\n          完成情况试验",
+    "完成情况 · 产品甲 · 治疗组 · 停止治疗（不良事件）"
+  ]
+}

@@ -37,6 +37,22 @@ from ci_workflow.renderers.portal.url_state import (
     serialize_filter_state,
 )
 
+
+def test_portal_public_api_exports_documented_search_page_and_url_contracts() -> None:
+    """包级公开 API 不得只写进 ``__all__`` 却缺少真实导入。"""
+    from ci_workflow.renderers import portal
+
+    for name in (
+        "SearchIndexEntry",
+        "build_search_index",
+        "render_page_html",
+        "render_search_index_json",
+        "encode_filter_state",
+        "decode_filter_state",
+        "serialize_filter_state",
+    ):
+        assert hasattr(portal, name), f"门户公开 API 缺少真实导入：{name}"
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -462,7 +478,26 @@ class TestUrlStateEncodeDecode:
         assert decoded.sort.direction == "desc"
         assert decoded.anchor.trial_id == "NCT01234567"
         assert decoded.evidence.selected_ids == ("frag-001", "frag-002")
+        assert decoded.evidence.open_id is None
         assert decoded.pagination.current_page == 5
+
+    def test_roundtrip_open_and_pinned_evidence(self) -> None:
+        state = _make_full_state(
+            evidence=EvidenceSelection(
+                selected_ids=("row-pin-b", "row-pin-a"),
+                open_id="row-open-1",
+            ),
+        )
+        encoded = encode_filter_state(state)
+        assert "eo=row-open-1" in encoded
+        assert encoded.index("eo=") < encoded.index("e=")
+        decoded = decode_filter_state(encoded)
+        assert decoded.evidence.open_id == "row-open-1"
+        assert decoded.evidence.selected_ids == ("row-pin-a", "row-pin-b")
+
+    def test_duplicate_open_evidence_rejected(self) -> None:
+        with pytest.raises(UrlStateError, match=r"重复"):
+            decode_filter_state("v1~pid=%2Fb%2Foverview~eo=row-a~eo=row-b")
 
     def test_deterministic_encoding(self) -> None:
         state = _make_full_state(

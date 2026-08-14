@@ -1,0 +1,27 @@
+{
+  "before": {
+    "ok": true,
+    "title": "试验完成状态",
+    "drawerLeft": 594,
+    "drawerTop": 68,
+    "nMarks": 2,
+    "nFree": 0,
+    "pick": {
+      "x": 574,
+      "y": 257.109375,
+      "w": 730.5,
+      "h": 132.5,
+      "left": 208.75,
+      "right": 939.25
+    },
+    "hit": {
+      "tag": "text",
+      "id": "",
+      "cls": "[object SVGAnimatedString]"
+    }
+  },
+  "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_0276ae29f6c78d0655704fb0",
+  "hidden": false,
+  "heading": "产品甲 · 试验完成状态",
+  "top": 68
+}

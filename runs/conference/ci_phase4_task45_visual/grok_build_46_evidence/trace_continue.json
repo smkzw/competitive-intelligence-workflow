@@ -1,0 +1,257 @@
+{
+  "steps": [
+    {
+      "t": "11:18:51",
+      "step": "screenshot",
+      "path": "16_disposition_1280x900_landing.png",
+      "url": "http://127.0.0.1:8765/disposition.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:18:51",
+      "step": "disp_chart",
+      "marks": {
+        "ok": false,
+        "reason": "no-group",
+        "n": 0
+      }
+    },
+    {
+      "t": "11:18:52",
+      "step": "screenshot",
+      "path": "17_disposition_1280x900_two_pinned.png",
+      "url": "http://127.0.0.1:8765/disposition.html#v1~eo=report-row_fc7eb295ed0e09a012253065~e=report-row_fc7eb295ed0e09a012253065",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:18:52",
+      "step": "screenshot",
+      "path": "18_disposition_1280x900_charts.png",
+      "url": "http://127.0.0.1:8765/disposition.html#v1~eo=report-row_fc7eb295ed0e09a012253065~e=report-row_fc7eb295ed0e09a012253065",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:18:53",
+      "step": "disp_esc",
+      "hidden": true,
+      "focus": {
+        "tag": "TD",
+        "id": "",
+        "text": "完成情况 · 产品甲 · 治疗组 · 停止治疗（不良事件）",
+        "aria": "查看数据依据：完成情况 · 产品甲 · 治疗组 · 停止治疗（不良事件）"
+      }
+    },
+    {
+      "t": "11:18:53",
+      "step": "screenshot",
+      "path": "19_disposition_1280x900_after_esc.png",
+      "url": "http://127.0.0.1:8765/disposition.html#v1~e=report-row_fc7eb295ed0e09a012253065",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:18:54",
+      "step": "screenshot",
+      "path": "15b_baseline_1280x900_chart_area.png",
+      "url": "http://127.0.0.1:8765/baseline.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:18:54",
+      "step": "base_chart",
+      "marks": {
+        "ok": false,
+        "reason": "no-group",
+        "n": 0
+      }
+    },
+    {
+      "t": "11:18:54",
+      "step": "screenshot",
+      "path": "15c_baseline_1280x900_after_chart_click.png",
+      "url": "http://127.0.0.1:8765/baseline.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:18:55",
+      "step": "baseline_disclosure_scan",
+      "found_states": [
+        {
+          "id": "report-row_697a9c6b3a5289cf7f663372",
+          "has_undisclosed": true
+        },
+        {
+          "id": "report-row_8e2a17032e949e11c8777470",
+          "has_undisclosed": true
+        }
+      ]
+    },
+    {
+      "t": "11:18:56",
+      "step": "screenshot",
+      "path": "20_efficacy_1024x768_landing.png",
+      "url": "http://127.0.0.1:8765/efficacy.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:18:56",
+      "step": "screenshot",
+      "path": "21_efficacy_1024x768_drawer.png",
+      "url": "http://127.0.0.1:8765/efficacy.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:18:58",
+      "step": "screenshot",
+      "path": "22_efficacy_1024x768_filter_beta.png",
+      "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:18:58",
+      "step": "screenshot",
+      "path": "28_efficacy_1024x768_after_esc_focus.png",
+      "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:18:58",
+      "step": "focus_esc",
+      "before": {
+        "tag": "BUTTON",
+        "id": "kz-filter-entry",
+        "text": "筛选条件\n        1",
+        "aria": null
+      },
+      "opened": true,
+      "after": {
+        "tag": "BUTTON",
+        "id": "kz-filter-entry",
+        "text": "筛选条件\n        1",
+        "aria": null
+      },
+      "afterHidden": true
+    },
+    {
+      "t": "11:18:59",
+      "step": "screenshot",
+      "path": "23_baseline_1024x768_landing.png",
+      "url": "http://127.0.0.1:8765/baseline.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:19:00",
+      "step": "screenshot",
+      "path": "24_baseline_1024x768_drawer.png",
+      "url": "http://127.0.0.1:8765/baseline.html#v1~eo=report-row_697a9c6b3a5289cf7f663372",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:19:01",
+      "step": "screenshot",
+      "path": "25_disposition_1024x768_landing.png",
+      "url": "http://127.0.0.1:8765/disposition.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:19:02",
+      "step": "screenshot",
+      "path": "26_disposition_1024x768_drawer.png",
+      "url": "http://127.0.0.1:8765/disposition.html#v1~eo=report-row_fc7eb295ed0e09a012253065",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:19:02",
+      "step": "screenshot",
+      "path": "27_disposition_1024x768_charts.png",
+      "url": "http://127.0.0.1:8765/disposition.html#v1~eo=report-row_fc7eb295ed0e09a012253065",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:19:03",
+      "step": "screenshot",
+      "path": "29_efficacy_1280x900_filter_narrow_panel.png",
+      "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-alpha",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:19:05",
+      "step": "screenshot",
+      "path": "30_efficacy_1280x900_heatmap_full.png",
+      "url": "http://127.0.0.1:8765/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:19:05",
+      "step": "screenshot",
+      "path": "31_efficacy_1280x900_heatmap_empty_cell.png",
+      "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_e9041f1e18fe41b750b65dc1",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:19:06",
+      "step": "screenshot",
+      "path": "32_efficacy_1280x900_status_matrix_full.png",
+      "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_e9041f1e18fe41b750b65dc1",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    }
+  ],
+  "console": [],
+  "remote": []
+}

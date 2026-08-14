@@ -1,0 +1,110 @@
+{
+  "url": "http://127.0.0.1:8765/efficacy.html",
+  "title": "疗效与安全性概览 - 特应性皮炎竞品研究",
+  "vw": 1280,
+  "vh": 900,
+  "drawerHidden": true,
+  "drawerTitle": "",
+  "status": "",
+  "pinText": "固定此条",
+  "pinnedHidden": true,
+  "pinnedHint": "",
+  "compareText": "",
+  "focus": {
+    "tag": "BODY",
+    "id": "",
+    "role": null,
+    "text": "特应性皮炎竞品研究\n      \n        医学结果\n        基线与人群\n        试验完成情况\n      \n      \n       ",
+    "aria": null
+  },
+  "rowCount": "匹配 7 项结果",
+  "filterSummary": "无筛选条件",
+  "emptyVisible": false,
+  "searchBox": {
+    "placeholder": "搜索页面或关键词…",
+    "w": 180,
+    "overflow": "clip"
+  },
+  "headerSearchW": 180,
+  "charts": [
+    {
+      "i": 0,
+      "title": "主要终点 HbA1c 较基线变化值",
+      "hasSvg": true,
+      "hasCanvas": false,
+      "undisclosed": null,
+      "valueCells": [
+        {
+          "text": "5.2",
+          "row": "report-row_02b92005f96706a1a381e928",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        },
+        {
+          "text": "7.8",
+          "row": "report-row_6164b98647e90d3eb1caa974",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "hasSvg": true,
+      "hasCanvas": false,
+      "undisclosed": null,
+      "valueCells": [
+        {
+          "text": "",
+          "row": "report-row_31abe33259abf8ba593403a7",
+          "empty": true,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        },
+        {
+          "text": "",
+          "row": "report-row_e9041f1e18fe41b750b65dc1",
+          "empty": true,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "title": "主要终点 HbA1c 较基线变化值",
+      "hasSvg": true,
+      "hasCanvas": false,
+      "undisclosed": null,
+      "valueCells": [
+        {
+          "text": "已完成",
+          "row": "report-row_02b92005f96706a1a381e928",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        },
+        {
+          "text": "进行中",
+          "row": "report-row_6164b98647e90d3eb1caa974",
+          "empty": false,
+          "cls": "kz-chart-table__cell kz-chart-table__cell--value"
+        }
+      ]
+    }
+  ],
+  "visibleFacts": [
+    "report-row_02b92005f96706a1a381e928",
+    "report-row_6164b98647e90d3eb1caa974",
+    "report-row_b94633ad615c4492774e6fa4",
+    "report-row_d94d011208fe8bf89b6bf983",
+    "report-row_31abe33259abf8ba593403a7",
+    "report-row_e9041f1e18fe41b750b65dc1",
+    "report-row_db4deafae32c4bc8d13f3e41",
+    "report-row_02b92005f96706a1a381e928",
+    "report-row_6164b98647e90d3eb1caa974",
+    "report-row_31abe33259abf8ba593403a7",
+    "report-row_e9041f1e18fe41b750b65dc1",
+    "report-row_02b92005f96706a1a381e928",
+    "report-row_6164b98647e90d3eb1caa974"
+  ],
+  "bodyOverflowX": false
+}

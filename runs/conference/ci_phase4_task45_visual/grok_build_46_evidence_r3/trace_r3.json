@@ -1,0 +1,154 @@
+{
+  "steps": [
+    {
+      "t": "12:11:50",
+      "step": "screenshot",
+      "path": "r3_01_efficacy_1280_landing.png",
+      "url": "http://127.0.0.1:8767/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:50",
+      "step": "screenshot",
+      "path": "r3_02_efficacy_1280_heatmap.png",
+      "url": "http://127.0.0.1:8767/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:50",
+      "step": "screenshot",
+      "path": "r3_03_efficacy_1280_status.png",
+      "url": "http://127.0.0.1:8767/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:51",
+      "step": "screenshot",
+      "path": "r3_04_efficacy_1280_mismatch_hint.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_31abe33259abf8ba593403a7~e=report-row_02b92005f96706a1a381e928",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:54",
+      "step": "screenshot",
+      "path": "r3_05_efficacy_1280_filter_beta_page.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:54",
+      "step": "screenshot",
+      "path": "r3_06_efficacy_1280_filter_beta_bar.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:54",
+      "step": "screenshot",
+      "path": "r3_07_efficacy_1280_filter_beta_status.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:56",
+      "step": "screenshot",
+      "path": "r3_08_baseline_1280_easi.png",
+      "url": "http://127.0.0.1:8767/baseline.html#v1~eo=report-row_8e2a17032e949e11c8777470",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "12:11:57",
+      "step": "screenshot",
+      "path": "r3_09_efficacy_1024_landing.png",
+      "url": "http://127.0.0.1:8767/efficacy.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "12:11:57",
+      "step": "screenshot",
+      "path": "r3_10_efficacy_1024_drawer_open.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "12:11:57",
+      "step": "click_bar_center_1024",
+      "ok": true,
+      "cx": 512,
+      "cy": 1236.640625,
+      "w": 934,
+      "h": 340,
+      "nMarks": 3,
+      "elementFromPoint": null,
+      "afterUrl": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+      "drawerHidden": false,
+      "heading": "产品乙 · 主要终点 EASI评分较基线变化值"
+    },
+    {
+      "t": "12:11:57",
+      "step": "screenshot",
+      "path": "r3_11_efficacy_1024_after_bar_click.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "12:11:58",
+      "step": "click_status_center_1024",
+      "ok": true,
+      "cx": 512,
+      "cy": 2583.109375,
+      "w": 934,
+      "h": 340,
+      "nMarks": 2,
+      "elementFromPoint": null,
+      "afterUrl": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+      "drawerHidden": false,
+      "heading": "产品乙 · 主要终点 EASI评分较基线变化值"
+    },
+    {
+      "t": "12:11:58",
+      "step": "screenshot",
+      "path": "r3_12_efficacy_1024_after_status_click.png",
+      "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    }
+  ],
+  "console": [],
+  "remote": []
+}

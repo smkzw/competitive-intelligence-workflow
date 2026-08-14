@@ -1,0 +1,23 @@
+{
+  "menuText": "菜单",
+  "expanded": "false",
+  "navItems": [
+    {
+      "text": "医学结果",
+      "visible": false,
+      "h": 0
+    },
+    {
+      "text": "基线与人群",
+      "visible": false,
+      "h": 0
+    },
+    {
+      "text": "试验完成情况",
+      "visible": false,
+      "h": 0
+    }
+  ],
+  "drawerTop": 68,
+  "headerBottom": 68
+}

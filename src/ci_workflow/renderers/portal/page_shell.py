@@ -14,9 +14,12 @@ import json
 import re
 from collections.abc import Sequence
 from html import escape
-from typing import Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
 
 from ci_workflow.renderers.portal.global_search import SearchIndexEntry, build_search_index
+
+if TYPE_CHECKING:
+    from ci_workflow.reports.common.evidence_view import EvidenceView
 
 
 class _PageLike(Protocol):
@@ -387,8 +390,14 @@ def render_page_html(
     assets_rel: str = "assets",
     filter_groups: list[dict[str, Any]] | None = None,
     synthetic_rows: list[dict[str, str]] | None = None,
+    evidence_views: Sequence[EvidenceView] | None = None,
 ) -> str:
-    """Render a complete HTML page from typed portal specs."""
+    """Render a complete HTML page from typed portal specs.
+
+    ``evidence_views`` 可选：经生产校验器验证的不可变证据视图（同一锁定
+    快照、同一页面责任）。提供时嵌入同页「数据依据」面板宿主、只读数据与
+    面板资产；不提供时页面行为与 Task 4.1–4.4 完全一致。
+    """
     slug = page.slug
     title = page.title
     sections = list(page.sections)
@@ -419,6 +428,25 @@ def render_page_html(
     if title != "首页" and page_group != title:
         kicker_html = f'      <p class="portal-page-kicker">{_e(page_group)}</p>\n'
 
+    drawer_head = ""
+    drawer_body = ""
+    drawer_scripts = ""
+    if evidence_views:
+        from ci_workflow.renderers.portal.evidence_drawer import (
+            evidence_drawer_css_link_tag,
+            evidence_drawer_script_tag,
+            render_evidence_drawer_embed,
+            render_evidence_drawer_host,
+        )
+
+        drawer_head = "\n" + evidence_drawer_css_link_tag(assets_rel)
+        drawer_body = (
+            "\n"
+            + render_evidence_drawer_host()
+            + "\n"
+            + render_evidence_drawer_embed(list(evidence_views))
+        )
+        drawer_scripts = evidence_drawer_script_tag(assets_rel)
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -427,7 +455,7 @@ def render_page_html(
   <meta name="color-scheme" content="only light">
   <link rel="icon" href="data:,">
   <title>{_e(title)} - {_e(report_title)}</title>
-  <link rel="stylesheet" href="{assets_rel}/portal.css">
+  <link rel="stylesheet" href="{assets_rel}/portal.css">{drawer_head}
 </head>
 <body>
   <header class="site-header" role="banner">
@@ -471,6 +499,7 @@ def render_page_html(
       <h1 class="portal-page-title">{_e(title)}</h1>
 {lead_html}    </header>
 {filter_html}{reading_path}  </main>
+{drawer_body}
 
   <footer class="site-footer" role="contentinfo">
     <div class="site-footer__inner">
@@ -483,6 +512,7 @@ def render_page_html(
   <script src="{assets_rel}/portal.js"></script>
   <script src="{assets_rel}/echarts.min.js"></script>
   <script src="{assets_rel}/charts.js"></script>
+{drawer_scripts}
 </body>
 </html>
 """

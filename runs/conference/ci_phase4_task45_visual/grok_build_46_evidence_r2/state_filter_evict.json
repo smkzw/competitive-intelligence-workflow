@@ -1,0 +1,33 @@
+{
+  "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta",
+  "status": "",
+  "hint": "",
+  "drawerText": "\n  \n    \n      数据依据\n      \n        ×\n      \n    \n    \n    \n      \n        产品丙 · 次要终点疾病活动度评分较基线变化值\n        产品产品丙试验试验三组别治疗组终点/事件/设计要素次要终点疾病活动度评分较基线变化值量表原始时间点第16周值-12.1阈值不适用单位分分子不适用分母104披露状态已报告值规范化说明直接取自登记结果，未做换算来源版本ClinicalTrials.gov 登记结果（2026年5月1日）原文定位来源类型：主要试验报告；章节：Efficacy results；表 2；段落：次要终点部分；第 18 页简短原文原文未提供\n        \n          冲突\n          冲突取值：-10.8 分冲突说明：企业演示材料与论文数值不同，以论文为准冲突方来源版本：企业演示材料（2026年3月）冲突方定位：来源类型：企业披露；段落：第 12 页疾病活动度部分\n        \n        \n          历史版本\n          \n        \n        \n          固定此条\n        \n      \n      \n        固定对照\n        \n        核对字段产品甲 · 主要终点 EASI评分较基线变化值查看完整依据取消固定定义主要终点 EASI评分较基线变化值产品产品甲试验试验一组别治疗组时间点第16周值-18.4单位分分子不适用分母120披露状态已报告值来源版本ClinicalTrials.gov 登记结果（2026年5月1日）冲突1 条冲突：-16.9 分原文定位来源类型：主要登记记录（可打开原文）\n      \n    \n  \n",
+  "alerts": [
+    {
+      "id": "kz-filter-local-hint",
+      "hidden": true,
+      "cls": "kz-filter-local-hint",
+      "text": "当前选择过多，请保存为本地视图"
+    },
+    {
+      "id": "kz-filter-restore-error",
+      "hidden": true,
+      "cls": "kz-filter-restore-error",
+      "text": "无法恢复此筛选网址"
+    },
+    {
+      "id": "",
+      "hidden": false,
+      "cls": "kz-chart-undisclosed",
+      "text": "该指标结果尚未公开\n\n完整记录仍列于下方表格，便于核对来源与口径。"
+    },
+    {
+      "id": "kz-evidence-drawer-status",
+      "hidden": true,
+      "cls": "kz-evidence-drawer__status",
+      "text": ""
+    }
+  ],
+  "bodyHits": []
+}

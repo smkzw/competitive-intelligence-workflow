@@ -1,0 +1,27 @@
+{
+  "before": {
+    "ok": true,
+    "title": "主要终点 EASI评分较基线变化值｜单位：分",
+    "drawerLeft": 594,
+    "drawerTop": 68,
+    "nMarks": 3,
+    "nFree": 2,
+    "pick": {
+      "x": 272.7929992675781,
+      "y": 286.640625,
+      "w": 64,
+      "h": 236,
+      "left": 240.79299926757812,
+      "right": 304.7929992675781
+    },
+    "hit": {
+      "tag": "path",
+      "id": "",
+      "cls": "[object SVGAnimatedString]"
+    }
+  },
+  "url": "http://127.0.0.1:8767/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_02b92005f96706a1a381e928",
+  "hidden": false,
+  "heading": "产品甲 · 主要终点 EASI评分较基线变化值",
+  "top": 68
+}

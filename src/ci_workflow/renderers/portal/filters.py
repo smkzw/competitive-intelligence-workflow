@@ -401,11 +401,17 @@ class AnchorTrialState(BaseModel):
 
 
 class EvidenceSelection(BaseModel):
-    """选中证据片段列表；默认无选中。"""
+    """当前打开的数据依据与已固定条目；默认均无。
+
+    ``open_id`` 为当前打开行；``selected_ids`` 为固定对照行（排序去重）。
+    打开行可以同时被固定。未知/过期标识由网址层失败关闭并规范化，
+    不在本模型放宽。
+    """
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     selected_ids: tuple[str, ...] = ()
+    open_id: str | None = None
 
     @field_validator("selected_ids")
     @classmethod
@@ -413,6 +419,16 @@ class EvidenceSelection(BaseModel):
         if len(value) != len(set(value)):
             raise PortalFilterError("证据标识重复")
         return tuple(sorted(value))
+
+    @field_validator("open_id")
+    @classmethod
+    def _open_id_not_blank(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        stripped = value.strip()
+        if not stripped:
+            raise PortalFilterError("打开的数据依据标识不能为空")
+        return stripped
 
 
 class PaginationState(BaseModel):

@@ -1,0 +1,157 @@
+{
+  "steps": [
+    {
+      "t": "11:54:45",
+      "step": "screenshot",
+      "path": "r2_01_efficacy_1280x900_landing.png",
+      "url": "http://127.0.0.1:8766/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:46",
+      "step": "screenshot",
+      "path": "r2_02_efficacy_1280x900_charts.png",
+      "url": "http://127.0.0.1:8766/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:46",
+      "step": "screenshot",
+      "path": "r2_03_efficacy_1280x900_heatmap.png",
+      "url": "http://127.0.0.1:8766/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:46",
+      "step": "screenshot",
+      "path": "r2_04_efficacy_1280x900_status.png",
+      "url": "http://127.0.0.1:8766/efficacy.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:47",
+      "step": "screenshot",
+      "path": "r2_05_efficacy_1280x900_two_pinned.png",
+      "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_02b92005f96706a1a381e928~e=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:48",
+      "step": "screenshot",
+      "path": "r2_06_efficacy_1280x900_filter_beta.png",
+      "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta~e=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:48",
+      "step": "screenshot",
+      "path": "r2_07_efficacy_1280x900_filter_beta_charts.png",
+      "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta~e=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:49",
+      "step": "screenshot",
+      "path": "r2_08_efficacy_1280x900_search_beta.png",
+      "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta~e=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:49",
+      "step": "screenshot",
+      "path": "r2_09_efficacy_1280x900_search_empty.png",
+      "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-beta~e=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:51",
+      "step": "screenshot",
+      "path": "r2_10_baseline_1280x900_landing.png",
+      "url": "http://127.0.0.1:8766/baseline.html",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:51",
+      "step": "screenshot",
+      "path": "r2_11_baseline_1280x900_easi_drawer.png",
+      "url": "http://127.0.0.1:8766/baseline.html#v1~eo=report-row_8e2a17032e949e11c8777470",
+      "vw": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "t": "11:54:55",
+      "step": "screenshot",
+      "path": "r2_12_efficacy_1024x768_landing.png",
+      "url": "http://127.0.0.1:8766/efficacy.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:54:55",
+      "step": "screenshot",
+      "path": "r2_13_efficacy_1024x768_menu_open.png",
+      "url": "http://127.0.0.1:8766/efficacy.html",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:54:55",
+      "step": "screenshot",
+      "path": "r2_14_efficacy_1024x768_drawer.png",
+      "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "t": "11:54:57",
+      "step": "screenshot",
+      "path": "r2_15_baseline_1024x768_easi_drawer.png",
+      "url": "http://127.0.0.1:8766/baseline.html#v1~eo=report-row_8e2a17032e949e11c8777470",
+      "vw": {
+        "width": 1024,
+        "height": 768
+      }
+    }
+  ],
+  "console": [],
+  "console_err": [],
+  "remote": []
+}

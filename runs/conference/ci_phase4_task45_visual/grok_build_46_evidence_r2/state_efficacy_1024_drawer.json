@@ -1,0 +1,127 @@
+{
+  "url": "http://127.0.0.1:8766/efficacy.html#v1~pid=%2Fefficacy~eo=report-row_b94633ad615c4492774e6fa4",
+  "vw": 1024,
+  "vh": 768,
+  "title": "疗效与安全性概览 - 特应性皮炎竞品研究",
+  "h1": "疗效与安全性概览",
+  "drawerHidden": false,
+  "drawerTop": 68,
+  "headerBottom": 68,
+  "drawerBelowHeader": true,
+  "heading": "产品乙 · 主要终点 EASI评分较基线变化值",
+  "drawerText": "数据依据\n×\n产品乙 · 主要终点 EASI评分较基线变化值\n产品\n产品乙\n试验\n试验二\n组别\n治疗组\n终点/事件/设计要素\n主要终点 EASI评分较基线变化值\n量表\n来源未列示\n时间点\n第24周\n值\n尚未公开\n阈值\n不适用\n单位\n技术暂不可用\n分子\n不适用\n分母\n尚未公开\n披露状态\n未公开\n规范化说明\n来源尚未公开主要终点数值，保留未公开状态\n来源版本\nClinicalTrials.gov 登记结果（2026年5月1日）\n原文定位\n来源类型：主要登记记录；字段：Results.outcomeMeasures；主要终点结果表；第 14 页；打开原文\n简短原文\n原文未提供\n固定此条",
+  "pinText": "固定此条",
+  "pinnedHint": "",
+  "compareText": "",
+  "status": "",
+  "rowCount": "匹配 9 项结果",
+  "filterSummary": "无筛选条件",
+  "menuText": "菜单",
+  "menuExpanded": "false",
+  "searchW": 0,
+  "searchPlaceholder": "搜索页面或关键词…",
+  "spacerH": 420,
+  "bodyTextHas2400": false,
+  "groups": [
+    {
+      "title": "主要终点 EASI评分较基线变化值｜单位：",
+      "display": "block",
+      "h": 261,
+      "values": [
+        {
+          "text": "该指标结果尚未公开",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "指标名称",
+        "组别",
+        "比较值",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "主要终点 EASI评分较基线变化值｜单位：\n\n该指标结果尚未公开\n\n完整记录仍列于下方表格，便于核对来源与口径。\n\n指标名称\t组别\t比较值\t单位\t披露状态\n主要终点 EASI评分较基线变化值\t治疗组\t该指标结果尚未公开\t\t该指标结果尚未公开"
+    },
+    {
+      "title": "主要终点 EASI评分较基线变化值｜单位：分",
+      "display": "block",
+      "h": 688,
+      "values": [
+        {
+          "text": "-18.4",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "-8.6",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "-7.9",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "指标名称",
+        "组别",
+        "比较值",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "主要终点 EASI评分较基线变化值｜单位：分\n治疗组\n对照组\n分\n-18\n-15\n-12\n-9\n-6\n-3\n0\n治疗组\n对照组\n对照组\n-18.4\n-8.6\n-7.9\n指标名称\t组别\t比较值\t单位\t披露状态\n主要终点 EASI评分较基线变化值\t治疗组\t-18.4\t分\t已披露\n主要终点 EASI评分较基线变化值\t对照组\t-8.6\t分\t已披露\n主要终点 EASI评分较基线变化值\t对照组\t-7.9\t分\t已披露"
+    },
+    {
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "display": "block",
+      "h": 628,
+      "values": [
+        {
+          "text": "-12.1",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "-9.4",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "指标名称",
+        "组别",
+        "比较值",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "次要终点疾病活动度评分较基线变化值\n治疗组\n对照组\n治疗组\n对照组\n比较\n-12.1\n-9.4\n指标名称\t组别\t比较值\t单位\t披露状态\n次要终点疾病活动度评分较基线变化值\t治疗组\t-12.1\t分\t已披露\n次要终点疾病活动度评分较基线变化值\t对照组\t-9.4\t分\t已披露"
+    },
+    {
+      "title": "试验完成状态",
+      "display": "block",
+      "h": 552,
+      "values": [
+        {
+          "text": "已完成",
+          "field": "value",
+          "empty": false
+        },
+        {
+          "text": "进行中",
+          "field": "value",
+          "empty": false
+        }
+      ],
+      "headers": [
+        "试验",
+        "组别",
+        "试验状态",
+        "单位",
+        "披露状态"
+      ],
+      "preview": "试验完成状态\n试验一\n试验二\n状态\n已完成\n进行中\n试验\t组别\t试验状态\t单位\t披露状态\n试验一\t全试验\t已完成\t\t已披露\n试验二\t全试验\t进行中\t\t已披露"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "url": "http://127.0.0.1:8765/baseline.html#v1~eo=report-row_8e2a17032e949e11c8777470~e=report-row_697a9c6b3a5289cf7f663372",
+  "title": "人口学 - 特应性皮炎竞品研究",
+  "vw": 1280,
+  "vh": 900,
+  "drawerHidden": false,
+  "drawerTitle": "产品乙 · 基线变量：湿疹面积与严重程度指数",
+  "status": "",
+  "pinText": "取消固定",
+  "pinnedHidden": false,
+  "pinnedHint": "以下为已固定条目，可并列核对定义、时间点、分母与冲突。",
+  "compareText": "核对字段\t\n产品甲 · 基线变量：年龄\n查看完整依据\n取消固定\n\n定义\t基线变量：年龄\n产品\t产品甲\n试验\t基线试验一\n组别\t治疗组\n时间点\t基线\n值\t42.3\n单位\t岁\n分子\t不适用\n分母\t120\n披露状态\t已报告值\n来源版本\tClinicalTrials.gov 登记结果（2026年5月1日）\n冲突\t无冲突\n原文定位\t来源类型：主要登记记录（可打开原文）",
+  "focus": {
+    "tag": "TD",
+    "id": "",
+    "role": "button",
+    "text": "基线 · 产品乙 · 治疗组 · 湿疹面积与严重程度指数",
+    "aria": "查看数据依据：基线 · 产品乙 · 治疗组 · 湿疹面积与严重程度指数"
+  },
+  "rowCount": "",
+  "filterSummary": "",
+  "emptyVisible": true,
+  "searchBox": {
+    "placeholder": "搜索页面或关键词…",
+    "w": 180,
+    "overflow": "clip"
+  },
+  "headerSearchW": 180,
+  "charts": [],
+  "visibleFacts": [
+    "report-row_697a9c6b3a5289cf7f663372",
+    "report-row_8e2a17032e949e11c8777470"
+  ],
+  "bodyOverflowX": false
+}

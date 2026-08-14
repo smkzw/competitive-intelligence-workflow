@@ -1,0 +1,16 @@
+{
+  "url": "http://127.0.0.1:8767/baseline.html#v1~eo=report-row_8e2a17032e949e11c8777470",
+  "hidden": false,
+  "top": 68,
+  "headerBottom": 68,
+  "belowHeader": true,
+  "heading": "产品乙 · 基线变量：湿疹面积与严重程度指数",
+  "status": "",
+  "hint": "",
+  "compare": "",
+  "drawerText": "数据依据\n×\n产品乙 · 基线变量：湿疹面积与严重程度指数\n产品\n产品乙\n试验\n基线试验二\n组别\n治疗组\n终点/事件/设计要素\n基线变量：湿疹面积与严重程度指数\n量表\nEASI\n时间点\n基线\n值\n24.6\n阈值\n不适用\n单位\n分\n分子\n不适用\n分母\n96\n披露状态\n已报告值\n规范化说明\n直接取自论文基线特征表，未做换算\n来源版本\n期刊论文（2026年4月）\n原文定位\n来源类型：论文；章节：Baseline characteristics；表 1；第 5 页\n简短原文\n原文未提供\n规范变量族\n疾病严重程度\n来源字段原名\nEASI total score\n来源字段定义\n基线湿疹面积与严重程度指数总分\n统计形式/计量对象\n均值（标准差）\n量表版本与方向\nEASI；0–72分；分数越高表示病情越重\n分母角色\n随机化人群\n时间窗/基线定义\n基线＝首次给药前最近一次评估\n原因原文\nEASI total score at baseline\n规范原因\n按来源原字段规范为基线疾病严重程度\n互斥与穷尽\n不适用\n兼容规则\n同量表、同版本、同基线定义时可直接比较\n差异标签\n不适用\n固定此条",
+  "mismatchHits": [
+    "差异"
+  ],
+  "pageHits": []
+}

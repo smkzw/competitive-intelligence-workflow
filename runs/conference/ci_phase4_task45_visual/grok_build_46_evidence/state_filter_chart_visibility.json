@@ -1,0 +1,70 @@
+{
+  "url": "http://127.0.0.1:8765/efficacy.html#v1~pid=%2Fefficacy~ps=product:product-alpha",
+  "groups": [
+    {
+      "title": "主要终点 HbA1c 较基线变化值",
+      "display": "block",
+      "visibility": "visible",
+      "h": 585,
+      "w": 1152,
+      "hiddenAttr": false,
+      "textPreview": "主要终点 HbA1c 较基线变化值\n治疗组\n对照组\nmg/dL\n0\n2\n4\n6\n7.8\n治疗组\n对照组\n5.2\n7.8\n指标名称\t组别\t比较值\t单位\t披露状态\n"
+    },
+    {
+      "title": "次要终点疾病活动度评分较基线变化值",
+      "display": "none",
+      "visibility": "visible",
+      "h": 0,
+      "w": 0,
+      "hiddenAttr": false,
+      "textPreview": "次要终点疾病活动度评分较基线变化值治疗组对照组治疗组对照组比较8.49.6指标名称组别比较值单位披露状态次要终点疾病活动度评分较基线变化值治疗组分已披露次要终点"
+    },
+    {
+      "title": "主要终点 HbA1c 较基线变化值",
+      "display": "block",
+      "visibility": "visible",
+      "h": 585,
+      "w": 1152,
+      "hiddenAttr": false,
+      "textPreview": "主要终点 HbA1c 较基线变化值\n治疗组\n对照组\n主要终点 HbA1c 较基线变化值\n主要终点 HbA1c 较基线变化值\n状态\n已完成\n进行中\n指标名称\t组别"
+    }
+  ],
+  "facts": [
+    {
+      "id": "report-row_02b92005f96706a1a381e928",
+      "hidden": false,
+      "text": "疗效 · 产品甲 · 治疗组 · HbA1c 变化值"
+    },
+    {
+      "id": "report-row_6164b98647e90d3eb1caa974",
+      "hidden": false,
+      "text": "疗效 · 产品甲 · 对照组 · HbA1c 变化值"
+    },
+    {
+      "id": "report-row_b94633ad615c4492774e6fa4",
+      "hidden": true,
+      "text": "疗效 · 产品乙 · 治疗组 · HbA1c 变化值"
+    },
+    {
+      "id": "report-row_d94d011208fe8bf89b6bf983",
+      "hidden": true,
+      "text": "安全 · 产品乙 · 治疗组 · 治疗期不良事件"
+    },
+    {
+      "id": "report-row_31abe33259abf8ba593403a7",
+      "hidden": true,
+      "text": "疗效 · 产品丙 · 治疗组 · 疾病活动度变化值"
+    },
+    {
+      "id": "report-row_e9041f1e18fe41b750b65dc1",
+      "hidden": true,
+      "text": "疗效 · 产品丙 · 对照组 · 疾病活动度变化值"
+    },
+    {
+      "id": "report-row_db4deafae32c4bc8d13f3e41",
+      "hidden": true,
+      "text": "疗效 · 产品乙 · 对照组 · HbA1c 变化值"
+    }
+  ],
+  "rowCount": "匹配 2 项结果"
+}
