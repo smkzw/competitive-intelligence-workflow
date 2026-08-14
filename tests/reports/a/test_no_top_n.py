@@ -227,6 +227,7 @@ def _complete_project(**overrides: object) -> AProjectContract:
         ),
         "regulatory_events": (
             RegulatoryEventRecord(
+                event_id="ev-1",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="中国"),
                 event_date=_field(value="2020-06-19"),
@@ -309,6 +310,7 @@ def _mixed_universe() -> tuple[
             ),
             regulatory_events=(
                 RegulatoryEventRecord(
+                    event_id="ev-2",
                     event_kind=RegulatoryEventKind.SUBMISSION,
                     jurisdiction=_field(value="中国"),
                     event_date=_field(value="2025-03-01"),
@@ -328,6 +330,7 @@ def _mixed_universe() -> tuple[
             ),
             regulatory_events=(
                 RegulatoryEventRecord(
+                    event_id="ev-3",
                     event_kind=RegulatoryEventKind.TERMINATION,
                     jurisdiction=_field(value="境外"),
                     event_date=_field(value="2023-11-01"),

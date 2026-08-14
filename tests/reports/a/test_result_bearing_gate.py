@@ -277,6 +277,7 @@ def _complete_project(**overrides: object) -> AProjectContract:
         ),
         "regulatory_events": (
             RegulatoryEventRecord(
+                event_id="ev-1",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="中国"),
                 event_date=_field(value="2020-06-19"),

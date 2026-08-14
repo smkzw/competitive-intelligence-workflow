@@ -59,6 +59,7 @@ class EvidenceSnapshotManifest(BaseModel):
     source_version_ids: tuple[str, ...] = Field(min_length=1)
     fragment_ids: tuple[str, ...] = Field(min_length=1)
     fact_version_ids: tuple[str, ...] = Field(min_length=1)
+    scientific_content_digest: str
     created_at: datetime
 
     @field_validator("project_id")
@@ -73,6 +74,13 @@ class EvidenceSnapshotManifest(BaseModel):
         if len(set(normalized)) != len(normalized):
             raise ValueError("快照标识列表不得重复")
         return normalized
+
+    @field_validator("scientific_content_digest")
+    @classmethod
+    def _digest_is_sha256(cls, value: str) -> str:
+        if _SHA256.fullmatch(value) is None:
+            raise ValueError("科学证据内容摘要必须是小写 SHA-256")
+        return value
 
     @field_validator("data_cutoff", "created_at")
     @classmethod
@@ -143,6 +151,46 @@ class LockedSnapshot(BaseModel):
         return value
 
 
+def compute_locked_snapshot(
+    *,
+    kind: Literal["evidence", "report"],
+    report: Literal["A", "B", "C"] | None,
+    manifest: dict[str, Any],
+) -> LockedSnapshot:
+    """公共纯校验函数：按本模块同一规范 JSON 算法计算锁定快照身份。
+
+    与 ``SnapshotStore._lock`` 使用完全同一算法（规范 JSON → SHA-256 →
+    stable_id → 相对路径 → 字节数），供视图权威校验逐项比对锁定元数据，
+    避免在调用方复制一套将来会漂移的算法。
+    """
+    validated = (
+        EvidenceSnapshotManifest.model_validate(manifest)
+        if kind == "evidence"
+        else ReportSnapshotManifest.model_validate(manifest)
+    )
+    payload = validated.model_dump(mode="json")
+    encoded = _canonical_json(payload)
+    digest = hashlib.sha256(encoded).hexdigest()
+    identity_parts = (digest,) if report is None else (report, digest)
+    snapshot_id = stable_id(f"{kind}-snapshot", *identity_parts)
+    if kind == "evidence":
+        relative = PurePosixPath("snapshots", "evidence", f"{snapshot_id}.json")
+    else:
+        if report is None:
+            raise SnapshotIntegrityError("报告快照必须声明报告类型")
+        relative = PurePosixPath(
+            "snapshots", "reports", report, f"{snapshot_id}.json"
+        )
+    return LockedSnapshot(
+        snapshot_id=snapshot_id,
+        kind=kind,
+        report=report,
+        sha256=digest,
+        relative_path=relative.as_posix(),
+        byte_size=len(encoded),
+    )
+
+
 class SnapshotStore:
     """项目内不可覆盖、按规范 JSON 内容寻址的证据与报告快照。"""
 
@@ -156,20 +204,10 @@ class SnapshotStore:
         report: Literal["A", "B", "C"] | None,
         payload: dict[str, Any],
     ) -> LockedSnapshot:
-        encoded = _canonical_json(payload)
-        digest = hashlib.sha256(encoded).hexdigest()
-        identity_parts = (digest,) if report is None else (report, digest)
-        snapshot_id = stable_id(f"{kind}-snapshot", *identity_parts)
-        if kind == "evidence":
-            relative = PurePosixPath("snapshots", "evidence", f"{snapshot_id}.json")
-        else:
-            if report is None:
-                raise SnapshotIntegrityError("报告快照必须声明报告类型")
-            relative = PurePosixPath(
-                "snapshots", "reports", report, f"{snapshot_id}.json"
-            )
-        path = self.project_root.joinpath(*relative.parts)
+        locked = compute_locked_snapshot(kind=kind, report=report, manifest=payload)
+        path = self.project_root.joinpath(*PurePosixPath(locked.relative_path).parts)
         path.parent.mkdir(parents=True, exist_ok=True)
+        encoded = _canonical_json(payload)
         if path.exists():
             if path.read_bytes() != encoded:
                 raise SnapshotIntegrityError("同一快照身份对应了不同内容")
@@ -186,14 +224,7 @@ class SnapshotStore:
                 os.replace(temporary, path)
             finally:
                 temporary.unlink(missing_ok=True)
-        return LockedSnapshot(
-            snapshot_id=snapshot_id,
-            kind=kind,
-            report=report,
-            sha256=digest,
-            relative_path=relative.as_posix(),
-            byte_size=len(encoded),
-        )
+        return locked
 
     def lock_evidence_snapshot(self, manifest: dict[str, Any]) -> LockedSnapshot:
         validated = EvidenceSnapshotManifest.model_validate(manifest)

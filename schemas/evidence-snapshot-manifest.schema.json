@@ -6,7 +6,8 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "project_id", "contract_version", "data_cutoff",
-    "source_version_ids", "fragment_ids", "fact_version_ids", "created_at"
+    "source_version_ids", "fragment_ids", "fact_version_ids",
+    "scientific_content_digest", "created_at"
   ],
   "properties": {
     "schema_version": {"const": "1.0"},
@@ -16,6 +17,10 @@
     "source_version_ids": {"$ref": "#/$defs/nonempty_ids"},
     "fragment_ids": {"$ref": "#/$defs/nonempty_ids"},
     "fact_version_ids": {"$ref": "#/$defs/nonempty_ids"},
+    "scientific_content_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
     "created_at": {"type": "string", "format": "date-time"}
   },
   "$defs": {

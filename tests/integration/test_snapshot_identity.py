@@ -31,6 +31,7 @@ def test_snapshot_identity_is_content_stable_and_immutable(tmp_path: Path) -> No
         "source_version_ids": ["source-version_001"],
         "fragment_ids": ["fragment_001"],
         "fact_version_ids": ["fact-version_001"],
+        "scientific_content_digest": "0" * 64,
         "created_at": "2026-08-11T20:55:00+08:00",
     }
     first = store.lock_evidence_snapshot(evidence)

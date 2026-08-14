@@ -91,6 +91,29 @@ def verify_reopened_fragment(
     )
 
 
+def revalidate_verified_fragment(
+    item: VerifiedEvidenceFragment,
+) -> VerifiedEvidenceFragment:
+    """重新验证一个已验证片段（内层片段/来源版本重新 model_validate）。
+
+    供视图权威边界在重验证后重建注册表使用；仍走受控构造，拒绝伪造对象。
+    """
+    fragment = EvidenceFragmentRecord.model_validate(
+        item.fragment.model_dump(mode="python")
+    )
+    source_version = SourceVersionRecord.model_validate(
+        item.source_version.model_dump(mode="python")
+    )
+    return VerifiedEvidenceFragment.model_validate(
+        {
+            "fragment": fragment,
+            "reopened_original_text": item.reopened_original_text,
+            "source_version": source_version,
+        },
+        context={"verified_fragment_token": _VERIFIED_FRAGMENT_TOKEN},
+    )
+
+
 class AtomicFactExtractionInput(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 

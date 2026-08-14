@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import hashlib
+import json
+
 from pydantic import BaseModel, ConfigDict, ValidationInfo, model_validator
 
 from ci_workflow.capabilities.extraction_normalization import VerifiedEvidenceFragment
@@ -77,6 +80,24 @@ class ScientificLineageRegistry(BaseModel):
             context={"lineage_registry_token": _LINEAGE_REGISTRY_TOKEN},
         )
 
+    @classmethod
+    def from_state(
+        cls,
+        fragments: tuple[VerifiedEvidenceFragment, ...],
+        accepted_facts: tuple[AtomicFactVersion, ...],
+    ) -> ScientificLineageRegistry:
+        """公开重建入口：由已重验片段与已接受事实重建注册表（同一受控构造）。"""
+        return cls._from_state(fragments, accepted_facts)
+
+    def with_revalidated_content(
+        self,
+        *,
+        fragments: tuple[VerifiedEvidenceFragment, ...],
+        accepted_facts: tuple[AtomicFactVersion, ...],
+    ) -> ScientificLineageRegistry:
+        """以重新验证后的片段/事实替换注册表内容，其余身份不变。"""
+        return ScientificLineageRegistry._from_state(fragments, accepted_facts)
+
     @property
     def verified_fragment_ids(self) -> frozenset[str]:
         return frozenset(
@@ -140,3 +161,53 @@ class ScientificLineageRegistry(BaseModel):
         registered_ids = {item.fact_version_id for item in self.accepted_facts}
         if not set(fact_version_ids) <= registered_ids:
             raise ValueError("声明引用了未在科学证据注册表接受的事实")
+
+
+def _canonical_json(value: object) -> bytes:
+    """规范 JSON：排序键、紧凑、中文不转义；与快照存储同一算法。"""
+    return (
+        json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+        + "\n"
+    ).encode("utf-8")
+
+
+def compute_scientific_content_digest(registry: ScientificLineageRegistry) -> str:
+    """科学证据内容摘要：每个已验证片段的完整内容 + 每条已接受事实。
+
+    排序稳定（片段按 fragment_id、事实按 fact_version_id）。对每个
+    ``VerifiedEvidenceFragment`` 纳入完整规范序列化：完整 ``fragment``
+    （含定位/原文/摘要/创建时间）、完整 ``source_version``（含来源 ID、
+    内容摘要/路径/媒体类型、获取/发布/生效/首次披露日期、定位）、以及
+    ``reopened_original_text``；事实完整纳入。任何仅改来源版本内容或审计
+    字段（保留全部 ID 与 manifest）的同步伪造都会改变摘要；写入与验证共用
+    本实现。
+    """
+    fragments: list[dict[str, object]] = [
+        {
+            "fragment": item.fragment.model_dump(mode="json"),
+            "source_version": item.source_version.model_dump(mode="json"),
+            "reopened_original_text": item.reopened_original_text,
+        }
+        for item in registry.verified_fragments
+    ]
+    fragments_sorted = sorted(
+        fragments,
+        key=lambda entry: str(entry["fragment"]["fragment_id"]),  # type: ignore[index]
+    )
+    facts: list[dict[str, object]] = [
+        fact.model_dump(mode="json") for fact in registry.accepted_facts
+    ]
+    facts_sorted = sorted(
+        facts,
+        key=lambda entry: str(entry["fact_version_id"]),
+    )
+    digest = hashlib.sha256(
+        _canonical_json({"fragments": fragments_sorted, "facts": facts_sorted})
+    )
+    return digest.hexdigest()

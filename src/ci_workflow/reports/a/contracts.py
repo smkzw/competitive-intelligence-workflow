@@ -297,13 +297,23 @@ class RegulatoryEventKind(StrEnum):
 
 
 class RegulatoryEventRecord(BaseModel):
-    """申报/上市/终止项目的一个监管事件；地域与日期必须由同一事件同时满足。"""
+    """申报/上市/终止项目的一个监管事件；地域与日期必须由同一事件同时满足。
+
+    ``event_id`` 是事件的稳定不可变身份：版本化监管记录按该 ID 精确绑定，
+    禁止用「类型+地域+日期」的计数配对冒充事件身份。
+    """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
+    event_id: str
     event_kind: RegulatoryEventKind
     jurisdiction: EvidenceField
     event_date: EvidenceField
+
+    @field_validator("event_id")
+    @classmethod
+    def _event_id_is_not_blank(cls, value: str) -> str:
+        return _text(value)
 
 
 class AnchorTrialRecord(BaseModel):

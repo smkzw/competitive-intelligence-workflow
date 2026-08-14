@@ -285,6 +285,7 @@ def _complete_project(**overrides: object) -> AProjectContract:
         ),
         "regulatory_events": (
             RegulatoryEventRecord(
+                event_id="ev-1",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="中国"),
                 event_date=_field(value="2020-06-19"),
@@ -421,6 +422,7 @@ def _terminated_project(**overrides: object) -> AProjectContract:
         ),
         "regulatory_events": (
             RegulatoryEventRecord(
+                event_id="ev-2",
                 event_kind=RegulatoryEventKind.TERMINATION,
                 jurisdiction=_field(value="境外"),
                 event_date=_field(value="2023-11-01"),
@@ -545,6 +547,7 @@ def test_unknown_inactive_predicate_and_event_mismatch_fail_closed() -> None:
         core_trials=project.core_trials,
         regulatory_events=(
             RegulatoryEventRecord(
+                event_id="ev-3",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="境外"),
                 event_date=_field(value="2023-11-01"),
@@ -751,6 +754,7 @@ def test_region_na_conflicts_with_same_region_regulatory_event() -> None:
         },
         regulatory_events=(
             RegulatoryEventRecord(
+                event_id="ev-4",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="境外"),
                 event_date=_field(value="2017-03-28"),
@@ -845,6 +849,7 @@ def test_filing_project_requires_regulatory_events_with_jurisdiction_and_date() 
     missing_jurisdiction = _complete_project(
         regulatory_events=(
             RegulatoryEventRecord(
+                event_id="ev-5",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(state=EvidenceFieldState.NOT_YET_DISCLOSED),
                 event_date=_field(value="2020-06-19"),
@@ -859,11 +864,13 @@ def test_regulatory_jurisdiction_and_date_require_same_event() -> None:
     stitched = _complete_project(
         regulatory_events=(
             RegulatoryEventRecord(
+                event_id="ev-6",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="中国"),
                 event_date=_field(state=EvidenceFieldState.NOT_YET_DISCLOSED),
             ),
             RegulatoryEventRecord(
+                event_id="ev-7",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(state=EvidenceFieldState.NOT_YET_DISCLOSED),
                 event_date=_field(value="2020-06-19"),
@@ -877,6 +884,7 @@ def test_regulatory_jurisdiction_and_date_require_same_event() -> None:
     complete = _complete_project(
         regulatory_events=(
             RegulatoryEventRecord(
+                event_id="ev-8",
                 event_kind=RegulatoryEventKind.APPROVAL,
                 jurisdiction=_field(value="中国"),
                 event_date=_field(value="2020-06-19"),
