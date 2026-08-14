@@ -1,0 +1,22 @@
+{
+  "id": "phase-5-report-a",
+  "name": "phase-5-report-a",
+  "title": "Phase 5 A 类完整竞品门户",
+  "description": "Task 5.1-5.5：A 类创新治疗范围、成熟度、完整视图、疗效安全矩阵、全部物理页面与独立验收。",
+  "status": "in_progress",
+  "scope": "Phase 5 only：A 类适应症竞品 Profile；不实施 B/C、PDF/PPT 或安全测试",
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-14",
+  "completedAt": null,
+  "parent": "08-10-ci-workflow-rebuild",
+  "notes": "Phase 4 已由 1816e67 接受。Task 5.1 已完成：强证据输入、全宇宙保留、成熟度递增与缺证阻断经 Luna 三轮独立审查和 1110 项全仓回归接受。下一步 Task 5.2。",
+  "meta": {
+    "phase4Dependency": "accepted",
+    "nextTask": "5.2",
+    "task51Status": "completed",
+    "task51Context": "context/ci_phase5_task51_context.md",
+    "task51Verification": "91 A tests; 30 independent counterexamples; 1110 full-suite tests; Ruff; strict mypy; Luna PASS"
+  }
+}

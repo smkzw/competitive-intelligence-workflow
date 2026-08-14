@@ -16,7 +16,15 @@ from pathlib import Path
 from typing import Literal, cast
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictFloat,
+    StrictInt,
+    field_validator,
+    model_validator,
+)
 
 from ci_workflow.domain.enums import (
     FactDisclosureState,
@@ -613,9 +621,9 @@ class GateEvidenceBinding(BaseModel):
     timepoint_id: str | None = None
     fact_domain: FactDomain
     observation_kind: ObservationKind
-    numeric_value: int | float | None = None
+    numeric_value: StrictInt | StrictFloat | None = None
     unit: str | None = None
-    denominator: int | None = Field(default=None, gt=0)
+    denominator: StrictInt | None = Field(default=None, gt=0)
     definition: str | None = None
     direction: str | None = None
     timepoint: str | None = None
