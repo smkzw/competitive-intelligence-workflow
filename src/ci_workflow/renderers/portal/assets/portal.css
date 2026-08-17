@@ -171,10 +171,10 @@
 .kz-a-bubble-key { position:absolute; left:20px; right:20px; bottom:42px; display:flex; flex-wrap:wrap; gap:6px 14px; max-height:78px; overflow:auto; padding:8px 10px; border-top:1px solid var(--border); list-style:none; }
 .kz-a-bubble-key li { display:flex; align-items:center; gap:6px; color:var(--text-2); font-size:13px; }
 .kz-a-bubble-key b { display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--kz-orange); color:#21180d; }
-.kz-a-matrix-missing { position:absolute; left:20px; right:20px; bottom:4px; color:var(--text-3); font-size:12px; }
-.kz-a-matrix-missing summary { cursor:pointer; font-weight:700; }
-.kz-a-matrix-missing p { max-height:72px; overflow:auto; padding:6px 0; }
-.kz-chart[data-a-chart="matrix"] .kz-a-chart-note { bottom:132px; }
+.kz-a-matrix-coverage { margin:10px 0 12px; border-left:4px solid var(--kz-orange); background:var(--warm-1); padding:10px 14px; color:var(--text-2); font-size:14px; line-height:1.45; }
+.kz-a-matrix-coverage__details summary { cursor:pointer; font-weight:700; color:var(--text-1); }
+.kz-a-matrix-coverage__details p { max-height:96px; overflow:auto; padding:8px 0 0; color:var(--text-3); }
+.kz-chart[data-a-chart="matrix"] .kz-a-chart-note { top:4px; right:20px; bottom:auto; left:auto; background:#fff; padding:2px 5px; }
 .kz-a-axis-tick { position:absolute; font-size:13px; color:var(--text-3); white-space:nowrap; }
 .kz-a-axis-tick--x { bottom:-28px; transform:translateX(-50%); }
 .kz-a-axis-tick--y { left:-62px; width:52px; text-align:right; transform:translateY(50%); }

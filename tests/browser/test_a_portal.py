@@ -132,6 +132,9 @@ def test_a_matrix_page_updates_bubble_axes_size_filters_and_table(
     _open(page, a_site, "matrix.html")
     chart = page.locator('[data-module="matrix"] .kz-chart')
     before = chart.get_attribute("data-view-digest")
+    coverage = page.locator("[data-matrix-coverage]")
+    assert coverage.is_visible()
+    assert "绘入" in coverage.inner_text()
     page.locator('[data-matrix-control="safety-axis"]').select_option(index=1)
     after = chart.get_attribute("data-view-digest")
     assert before != after

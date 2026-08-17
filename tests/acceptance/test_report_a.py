@@ -364,5 +364,10 @@ def test_matrix_uses_numbered_bubbles_and_readable_product_legend(
     legend = page.locator("[data-chart-id='matrix-full'] .kz-a-bubble-key")
     assert bubbles.count() == legend.locator("li").count()
     assert bubbles.count() >= 2
+    coverage = page.locator("[data-matrix-coverage]")
+    assert coverage.is_visible()
+    coverage_text = coverage.inner_text()
+    assert f"本图绘入 {bubbles.count()} 个产品" in coverage_text
+    assert f"{38 - bubbles.count()} 个因当前三维数据未完整公开而未绘入" in coverage_text
     for index in range(bubbles.count()):
         assert bubbles.nth(index).inner_text() == str(index + 1)

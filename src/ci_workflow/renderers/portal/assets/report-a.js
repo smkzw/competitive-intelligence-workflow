@@ -151,6 +151,7 @@
   }
   function renderMatrix(host) {
     host.innerHTML = "";
+    var coverage = document.querySelector("[data-matrix-coverage]");
     var plot = el("div", "kz-a-bubble-plot");
     var efficacySelect = document.querySelector('[data-matrix-control="efficacy-axis"]');
     var safetySelect = document.querySelector('[data-matrix-control="safety-axis"]');
@@ -168,6 +169,7 @@
         (useTotalSample || trialFor(p.id).treatment_sample_size != null);
     });
     if (!shownProducts.length) {
+      if (coverage) coverage.innerHTML = "当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。";
       host.appendChild(el("div", "kz-empty", "当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。"));
       return;
     }
@@ -233,10 +235,12 @@
       return !shownProducts.some(function (shown) { return shown.id === product.id; });
     });
     if (missing.length) {
-      var disclosure = el("details", "kz-a-matrix-missing");
-      disclosure.appendChild(el("summary", "", "另有 " + missing.length + " 个产品因当前三维数据未完整公开，未绘入气泡图"));
+      var disclosure = el("details", "kz-a-matrix-coverage__details");
+      disclosure.appendChild(el("summary", "", "本图绘入 " + shownProducts.length + " 个产品；另有 " + missing.length + " 个因当前三维数据未完整公开而未绘入"));
       disclosure.appendChild(el("p", "", missing.map(function (product) { return product.name; }).join("、")));
-      host.appendChild(disclosure);
+      if (coverage) { coverage.innerHTML = ""; coverage.appendChild(disclosure); }
+    } else if (coverage) {
+      coverage.textContent = "本图已绘入当前筛选范围内全部 " + shownProducts.length + " 个产品。";
     }
     host.appendChild(el("p", "kz-a-chart-note", "横轴：越靠右，疗效观察值越高｜纵轴：发生率（越低越靠上）；固定量程避免放大细小差异"));
     var sizeNote = document.querySelector(".kz-a-bubble-size");
@@ -430,7 +434,7 @@
       counts[s].textContent = count ? "已选择 " + count + " 项" : "默认显示全部 " + totalCount + " 项";
     }
     var summaries = document.querySelectorAll("[data-filter-summary]");
-    for (var u = 0; u < summaries.length; u += 1) summaries[u].textContent = Object.keys(selected).length ? "筛选已生效" : "当前显示全部";
+    for (var u = 0; u < summaries.length; u += 1) summaries[u].textContent = Object.keys(selected).length ? "筛选范围：已选择" : "筛选范围：全部";
     var query = new URLSearchParams();
     Object.keys(selected).forEach(function (dim) { selected[dim].forEach(function (value) { query.append(dim, value); }); });
     var matrixControls = document.querySelectorAll("[data-matrix-control]");
@@ -480,7 +484,7 @@
     var tools = el("div", "kz-a-filter-tools");
     var reset = el("button", "", "清除筛选");
     reset.type = "button"; reset.setAttribute("data-filter-reset", "");
-    tools.appendChild(reset); tools.appendChild(el("span", "", "当前显示全部"));
+    tools.appendChild(reset); tools.appendChild(el("span", "", "筛选范围：全部"));
     tools.lastChild.setAttribute("data-filter-summary", "");
     var grid = filterRoots[f].querySelector(".kz-a-filter-grid") || filterRoots[f].querySelector("[data-filter-dimension]");
     if (grid) grid.insertAdjacentElement("afterend", tools);

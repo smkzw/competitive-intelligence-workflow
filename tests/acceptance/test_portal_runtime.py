@@ -1501,12 +1501,14 @@ def test_fixture_search_reaches_products_from_root_and_product_depth(
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1280, "height": 800})
         page.goto((site_root / "product-overview.html").as_uri())
+        page.locator("#menu-toggle").click()
         page.locator("#global-search-input").fill("环柏单抗")
         product_result = page.locator('#global-search-results a[href="products/product-01.html"]')
         assert product_result.is_visible()
         product_result.click()
         assert page.locator("h1").inner_text() == "环柏单抗"
 
+        page.locator("#menu-toggle").click()
         page.locator("#global-search-input").fill("洛普利单抗")
         second_product = page.locator('#global-search-results a[href="product-02.html"]')
         assert second_product.is_visible()
