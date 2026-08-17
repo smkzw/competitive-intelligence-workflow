@@ -41,7 +41,7 @@ def _manifest() -> dict[str, object]:
         "table_ids": ["table_001"],
         "evidence_reference_ids": ["fragment_001"],
         "design_contract": {
-            "roles": ["core", "project_profile", "site", "interactive"],
+            "roles": ["core", "project_profile", "site"],
             "digest": "c" * 64,
             "applicable_sections": ["首页", "疗效", "安全性"],
         },

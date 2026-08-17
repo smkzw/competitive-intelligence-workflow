@@ -73,6 +73,13 @@ class TestPortablePackage(unittest.TestCase):
         for route in ("portal", "pdf", "htmlppt", "pptx"):
             self.assertIn(f"`{route}`", r)
 
+    def test_portal_uses_site_as_its_only_main_track(self) -> None:
+        router = (PKG / "ROUTER.md").read_text(encoding="utf-8")
+        portal_row = next(line for line in router.splitlines() if "`portal`" in line)
+        self.assertIn("track_site.md", portal_row)
+        self.assertNotIn("track_interactive.md", portal_row)
+        self.assertIn("独立的单页驾驶舱", router)
+
     def test_project_authority_is_single_and_independent(self) -> None:
         architecture = (PKG / "ARCHITECTURE.md").read_text(encoding="utf-8")
         local_map = (PKG / "local_map.md").read_text(encoding="utf-8")

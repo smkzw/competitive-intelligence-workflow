@@ -7,14 +7,14 @@
 1. `ROUTER.md`：根据交付格式确定项目路线；
 2. `core.md`：读取共享康哲品牌、排版、图表和质量合同到 EOF；
 3. `project_profile.md`：读取竞品调研专属用户与内容表达合同到 EOF；
-4. 读取路线指定的一个或多个 `track_*.md` 到 EOF；
+4. 读取路线指定的一个主轨到 EOF；PDF 的 `track_pdf.md` 是项目补充合同，不是第二个媒介主轨；
 5. 使用 `assets/logo_bot.svg`。
 
 ## 项目路线
 
 | 项目交付物 | 必须加载 |
 |---|---|
-| 站点式门户 | `track_site.md` + `track_interactive.md` |
+| 站点式门户 | `track_site.md`；筛选、联动和下钻见 `project_profile.md` |
 | 原生 PDF | `track_stream.md` + `track_pdf.md` |
 | HTML-PPT | `track_htmlppt.md` |
 | 可编辑 PPTX | `track_pptx.md`，并走 PPT Master |
@@ -34,7 +34,7 @@
 | `core.md` | 康哲共享品牌和设计硬合同 |
 | `project_profile.md` | 竞品调研用户、中文、页面与验收专属合同 |
 | `track_site.md` | 多页面站点壳层 |
-| `track_interactive.md` | 筛选、联动和下钻组件 |
+| `track_interactive.md` | 未来独立单页驾驶舱；不参与多页面门户加载 |
 | `track_stream.md` | 连续阅读与原生 PDF 内容基线 |
 | `track_pdf.md` | 原生 PDF 专属排版与验收 |
 | `track_htmlppt.md` | 浏览器幻灯片及讲者运行时 |

@@ -59,7 +59,7 @@ contracts/kangzhe/
 
 | 交付物 | 读取路线 | 格式边界 |
 |---|---|---|
-| 门户 | `core + project_profile + site + interactive` | 多物理页面、筛选/联动/下钻；不继承幻灯片画布 |
+| 门户 | `core + project_profile + site` | 多物理页面；筛选/联动/下钻属于站点页面责任，不继承单页驾驶舱或幻灯片画布 |
 | 原生 PDF | `core + project_profile + stream + pdf` | 原生文字、矢量图、书签、续表；不拼网页截图 |
 | HTML-PPT | `core + project_profile + htmlppt` | 固定 1280×720 与讲者运行时；不是门户/PPTX |
 | PPTX | `core + project_profile + pptx` | 必经 PPT Master 串行来源包与原生导出 |
