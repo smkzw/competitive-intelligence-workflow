@@ -73,13 +73,15 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
         assert result.returncode == 0
         assert "项目已启动" in result.stdout or "运行标识" in result.stdout
 
-    # fixture run without valid case still fails
+    # Task 5.4 起，登记完整且有真实 A 渲染器的案例必须真正完成。
     result = _run(
         "fixture", "run", "--case", "a-complete",
         "--reports", "A", "--outputs", "html",
         "--project", str(tmp_path / "fixture"),
     )
-    assert result.returncode == 2
+    assert result.returncode == 0, result.stderr
+    assert "案例运行完成" in result.stdout
+    assert (tmp_path / "fixture/reports/A/v-fixture-001/html/overview.html").is_file()
 
     for forbidden_alias in (
         ("verify-project",),

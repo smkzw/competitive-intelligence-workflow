@@ -19,7 +19,7 @@ from typing import Any
 from ci_workflow.reports.common.view_state import derive_row_id
 
 SNAPSHOT = "report-snapshot-45"
-PAGE_EFFICACY = "efficacy-safety-overview"
+PAGE_EFFICACY = "efficacy"
 PAGE_BASELINE = "baseline-demographics"
 PAGE_DISPOSITION = "disposition-overview"
 

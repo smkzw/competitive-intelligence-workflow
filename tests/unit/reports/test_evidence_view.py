@@ -32,7 +32,7 @@ from ci_workflow.reports.common.evidence_view import (
 from ci_workflow.reports.common.view_state import derive_row_id
 
 SNAPSHOT = "report-snapshot-45"
-PAGE_A = "efficacy-safety-overview"
+PAGE_A = "efficacy"
 PAGE_B_BASELINE = "baseline-demographics"
 PAGE_B_DISPOSITION = "disposition-overview"
 

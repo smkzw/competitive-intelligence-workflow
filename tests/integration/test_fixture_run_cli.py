@@ -69,7 +69,7 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
 ) -> None:
     """FX02：完整 catalog/摘要/输入校验通过后，期望 rendered 的案例在无注册
     渲染器时以 RendererUnavailableError 失败关闭，不创建伪项目/产物/收据。"""
-    case_id = "rendered-html"
+    case_id = "rendered-pptx"
     cases_dir = tmp_path / "cases"
     case_root = cases_dir / case_id
     inputs_dir = case_root / "inputs"
@@ -85,8 +85,8 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
         "timezone": "Asia/Shanghai",
         "data_cutoff": "2026-07-31",
         "created_at": "2026-08-12T10:00:00+08:00",
-        "reports": ["A"],
-        "outputs": ["html"],
+        "reports": ["B"],
+        "outputs": ["pptx"],
         "inputs": [
             {
                 "path": "inputs/universe.json",
@@ -94,7 +94,7 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
                 "sha256": case_sha,
             }
         ],
-        "expected": {"report": "A", "report_version": "v1", "outcome": "rendered"},
+        "expected": {"report": "B", "report_version": "v1", "outcome": "rendered"},
     }
     case_digest = _sha256_bytes(
         json.dumps(
@@ -120,8 +120,8 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
         run_fixture_case(
             case_id,
             project_root=project_root,
-            reports=["A"],
-            outputs=["html"],
+            reports=["B"],
+            outputs=["pptx"],
             catalog_path=catalog_path,
         )
 

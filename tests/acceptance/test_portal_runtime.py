@@ -122,9 +122,7 @@ def test_expected_sitemap_covers_every_static_and_every_detail_page(
     # 一一对应：提供的每一个身份都生成路由，绝不 Top-N 或固定示例。
     assert len(contract.routes) == len(set(contract.routes)), "期望站点地图不允许重复路由"
     assert len(contract.routes) == (
-        len(catalog.pages) + len(PRODUCT_IDS) + len(TRIAL_IDS)
-        if report is ReportKind.A or report is ReportKind.B
-        else len(catalog.pages) + len(TRIAL_IDS)
+        len(catalog.pages) + len(contract.product_routes) + len(contract.trial_routes)
     )
 
 
@@ -140,13 +138,10 @@ def test_expected_sitemap_kind_classification() -> None:
 
     product = by_route["/a/products/product-01"]
     assert product.kind is SitemapKind.PRODUCT_DETAIL
-    assert product.page_responsibility_id == "product-profile"
+    assert product.page_responsibility_id == "product-overview"
     assert product.identity == "product-01"
 
-    trial = by_route["/a/trials/trial-01"]
-    assert trial.kind is SitemapKind.TRIAL_DETAIL
-    assert trial.page_responsibility_id == "clinical-portfolio"
-    assert trial.identity == "trial-01"
+    assert not contract.trial_routes
 
     # C 只有试验详情动态责任：提供的产品不产生任何产品路由。
     c_contract = _contract(ReportKind.C)
@@ -220,12 +215,11 @@ def test_sitemap_fails_closed_on_top_n_truncation() -> None:
     """只保留前 N 个详情页（Top-N 截断）必须失败关闭，不得静默放行。"""
     contract = _contract(ReportKind.A)
     static = tuple(r for r in contract.routes if "/products/" not in r and "/trials/" not in r)
-    truncated = (*static, "/a/products/product-01", "/a/trials/trial-01")
+    truncated = (*static, "/a/products/product-01")
     result = verify_sitemap_one_to_one(contract, truncated)
     assert not result.ok
     codes = {v.code for v in result.violations}
     assert SitemapViolationCode.MISSING_PRODUCT_DETAIL in codes
-    assert SitemapViolationCode.MISSING_TRIAL_DETAIL in codes
     assert len([v for v in result.violations if v.route.startswith("/a/products/")]) == 2
 
 
@@ -324,7 +318,7 @@ def test_site_route_enumeration_and_full_acceptance(tmp_path: Path) -> None:
 
 
 def _reachability_contract() -> SitemapContract:
-    """可达性测试合同：A 报告 + 1 产品 + 1 试验（11 静态 + 2 详情）。"""
+    """可达性测试合同：A 报告 + 1 产品（12 个静态页 + 1 个详情页）。"""
     return derive_sitemap_contract(
         PageRegistry.load(),
         ReportKind.A,
@@ -361,13 +355,13 @@ def _flat_href(route: str) -> str:
 
 
 def _reachable_routes() -> tuple[str, ...]:
-    """全部可达目标路由：除入口外的全部静态责任页 + 2 个动态详情页。"""
+    """全部可达目标路由：除入口外的全部静态责任页 + 1 个产品详情页。"""
     contract = _reachability_contract()
     return tuple(
         entry.route
         for entry in contract.entries
         if entry.kind is SitemapKind.STATIC and entry.route != "/a/overview"
-    ) + ("/a/products/product-01", "/a/trials/trial-01")
+    ) + ("/a/products/product-01",)
 
 
 def test_site_path_route_round_trip() -> None:
@@ -399,37 +393,34 @@ def test_reachability_orphan_dynamic_page_fails_closed() -> None:
             "/a/overview": tuple(
                 (_flat_href(target), target)
                 for target in _reachable_routes()
-                if target not in ("/a/products/product-01", "/a/trials/trial-01")
+                if target != "/a/products/product-01"
             ),
         }
     )
     result = verify_route_reachability(contract, inspections)
     assert not result.ok
-    assert result.unreachable_routes == ("/a/products/product-01", "/a/trials/trial-01")
+    assert result.unreachable_routes == ("/a/products/product-01",)
     codes = {v.code for v in result.violations}
     assert codes == {ReachabilityViolationCode.UNREACHABLE_ROUTE}
     assert "/a/products/product-01" in result.message_zh
-    assert "/a/trials/trial-01" in result.message_zh
 
 
 def test_reachability_multi_hop_route_stays_reachable() -> None:
-    """多跳可达（首页→产品总览→产品详情、首页→临床开发组合→试验详情）通过。"""
+    """多跳可达（首页→产品总览→产品详情）通过。"""
     contract, inspections = _scan_graph_contract(
         {
             "/a/overview": tuple(
                 (_flat_href(route), route)
                 for route in _reachable_routes()
-                if route not in ("/a/products/product-01", "/a/trials/trial-01")
+                if route != "/a/products/product-01"
             ),
             "/a/product-overview": ((_flat_href("/a/products/product-01"), "环柏单抗"),),
-            "/a/clinical-portfolio": ((_flat_href("/a/trials/trial-01"), "关键注册研究"),),
         }
     )
     # 详情页只能经中间静态页两跳到达：首页→产品总览→产品详情。
     result = verify_route_reachability(contract, inspections)
     assert result.ok, result.message_zh
     assert "/a/products/product-01" in result.reachable_routes
-    assert "/a/trials/trial-01" in result.reachable_routes
 
 
 def test_reachability_external_fragment_mail_links_do_not_count() -> None:
@@ -461,7 +452,6 @@ def test_reachability_external_fragment_mail_links_do_not_count() -> None:
     result = verify_route_reachability(contract, inspections)
     assert result.ok, result.message_zh
     assert "/a/products/product-01" in result.reachable_routes
-    assert "/a/trials/trial-01" in result.reachable_routes
 
 
 def test_reachability_never_modifies_site_files(tmp_path: Path) -> None:
@@ -469,20 +459,20 @@ def test_reachability_never_modifies_site_files(tmp_path: Path) -> None:
     site_root = tmp_path / "site"
     site_root.mkdir()
     (site_root / "overview.html").write_text(
-        '<a href="clinical-portfolio.html">临床开发组合</a>', encoding="utf-8"
+        '<a href="product-overview.html">产品总览</a>', encoding="utf-8"
     )
-    (site_root / "clinical-portfolio.html").write_text(
-        '<a href="trials/trial-01.html">关键注册研究</a>', encoding="utf-8"
+    (site_root / "product-overview.html").write_text(
+        '<a href="products/product-01.html">环柏单抗</a>', encoding="utf-8"
     )
-    (site_root / "trials").mkdir()
-    (site_root / "trials" / "trial-01.html").write_text(
+    (site_root / "products").mkdir()
+    (site_root / "products" / "product-01.html").write_text(
         '<a href="../overview.html">首页</a>', encoding="utf-8"
     )
     contract = derive_sitemap_contract(
         PageRegistry.load(),
         ReportKind.A,
-        product_ids=(),
-        trial_ids=("trial-01",),
+        product_ids=("product-01",),
+        trial_ids=(),
     )
     before = {
         path.relative_to(site_root): path.read_bytes()
@@ -498,7 +488,7 @@ def test_reachability_never_modifies_site_files(tmp_path: Path) -> None:
         if (site_root / route_to_site_path(route)).is_file()
     )
     result = verify_route_reachability(contract, inspections)
-    assert "/a/trials/trial-01" in result.reachable_routes
+    assert "/a/products/product-01" in result.reachable_routes
     after = {
         path.relative_to(site_root): path.read_bytes()
         for path in site_root.rglob("*")
@@ -1162,10 +1152,11 @@ def _expand_search_index(
         encoding="utf-8",
     )
     for scope in ("products", "trials"):
-        (site_root / scope / "search-index.js").write_text(
-            f"window.__SEARCH_INDEX__ = {literal_for(scope)};\n",
-            encoding="utf-8",
-        )
+        if (site_root / scope).is_dir():
+            (site_root / scope / "search-index.js").write_text(
+                f"window.__SEARCH_INDEX__ = {literal_for(scope)};\n",
+                encoding="utf-8",
+            )
 
 
 def _write_locked_report_artifacts(
@@ -1303,12 +1294,8 @@ def _build_task46_project(
         _render_detail_page(
             spec, site_root, "products", product, _PRODUCT_DISPLAY_NAMES[product], "产品详情"
         )
-    for trial in trials:
-        _render_detail_page(
-            spec, site_root, "trials", trial, _TRIAL_DISPLAY_NAMES[trial], "试验详情"
-        )
-    _inject_detail_entries(site_root, products=products, trials=trials)
-    _expand_search_index(site_root, spec, products=products, trials=trials)
+    _inject_detail_entries(site_root, products=products, trials=())
+    _expand_search_index(site_root, spec, products=products, trials=())
     _write_locked_report_artifacts(project_root, site_root, products=products, trials=trials)
     contract = derive_sitemap_contract(
         registry,
@@ -1400,6 +1387,29 @@ def test_runtime_collection_of_clean_shell_passes(tmp_path: Path) -> None:
     assert result.ok, result.message_zh
 
 
+def test_runtime_collection_does_not_treat_sticky_table_header_as_occlusion(
+    tmp_path: Path,
+) -> None:
+    """粘性表头位于所属表格容器内时属于正常阅读辅助，不得误报为遮挡。"""
+    page_path = tmp_path / "sticky-table.html"
+    page_path.write_text(
+        """<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<style>th{position:sticky;top:0;background:white}</style></head><body>
+<main><section><h1>疗效比较</h1><table><thead><tr><th>产品</th></tr></thead>
+<tbody><tr><td>示例产品</td></tr></tbody></table></section></main>
+<footer class="site-footer">页脚</footer></body></html>""",
+        encoding="utf-8",
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        page = browser.new_page(viewport={"width": 1280, "height": 800})
+        inspection = collect_page_runtime_observations(
+            page, "/a/efficacy", page_path.as_uri()
+        )
+        browser.close()
+    assert inspection.occlusions == ()
+
+
 def test_merge_observations_combines_static_and_runtime_deduplicating_requests() -> None:
     """静态扫描与运行时观察合并为同一 PageInspection，重复请求去重。"""
     static = scan_page_html(
@@ -1435,7 +1445,7 @@ def _project_files(project_root: Path) -> dict[str, bytes]:
     }
 
 
-def test_fixture_search_reaches_product_and_trial_from_different_depths(
+def test_fixture_search_reaches_products_from_root_and_product_depth(
     tmp_path: Path,
 ) -> None:
     """全局搜索从根页面和产品详情页都能进入正确的中文详情页。"""
@@ -1451,11 +1461,11 @@ def test_fixture_search_reaches_product_and_trial_from_different_depths(
         product_result.click()
         assert page.locator("h1").inner_text() == "环柏单抗"
 
-        page.locator("#global-search-input").fill("关键注册研究")
-        trial_result = page.locator('#global-search-results a[href="../trials/trial-01.html"]')
-        assert trial_result.is_visible()
-        trial_result.click()
-        assert page.locator("h1").inner_text() == "关键注册研究"
+        page.locator("#global-search-input").fill("洛普利单抗")
+        second_product = page.locator('#global-search-results a[href="product-02.html"]')
+        assert second_product.is_visible()
+        second_product.click()
+        assert page.locator("h1").inner_text() == "洛普利单抗"
         browser.close()
 
 
@@ -1525,7 +1535,7 @@ def test_cli_fails_closed_on_runtime_defect_with_chinese_actionable_message(
     """运行时缺陷（控制台错误 + 固定遮挡）使 CLI 失败关闭并给出中文可操作说明。"""
     project_root = tmp_path / "project"
     site_root, routes = _build_task46_project(project_root)
-    tampered = site_root / route_to_site_path("/a/trials/trial-01")
+    tampered = site_root / route_to_site_path("/a/products/product-01")
     html = tampered.read_text(encoding="utf-8")
     tampered.write_text(
         html.replace(
@@ -1543,15 +1553,17 @@ def test_cli_fails_closed_on_runtime_defect_with_chinese_actionable_message(
     result = _run_cli(*_default_cli_argv(project_root))
     assert result.returncode == 1, result.stdout + result.stderr
     assert "全站验收失败" in result.stdout
-    assert "/a/trials/trial-01" in result.stdout
+    assert "/a/products/product-01" in result.stdout
     assert "控制台错误" in result.stdout
     assert f"A_PORTAL_FAIL routes={len(routes)} browsers=2" in result.stdout
 
     output_dir = project_root / "verification" / "A" / _FIXTURE_VERSION
     report = json.loads((output_dir / "report.json").read_text(encoding="utf-8"))
     assert report["ok"] is False
-    trial = next(page for page in report["pages"] if page["route"] == "/a/trials/trial-01")
-    assert trial["ok"] is False
+    product = next(
+        page for page in report["pages"] if page["route"] == "/a/products/product-01"
+    )
+    assert product["ok"] is False
     codes = {
         check["violations"][0]["code"]
         for page in report["pages"]

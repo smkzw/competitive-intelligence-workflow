@@ -153,13 +153,7 @@ _DYNAMIC_ROUTE_DEFS: Mapping[ReportKind, tuple[dict[str, str], ...]] = {
             "route_kind": "product_detail",
             "path": "products",
             "identity_field": "product_id",
-            "page_responsibility_id": "product-profile",
-        },
-        {
-            "route_kind": "trial_detail",
-            "path": "trials",
-            "identity_field": "trial_id",
-            "page_responsibility_id": "clinical-portfolio",
+            "page_responsibility_id": "product-overview",
         },
     ),
     ReportKind.B: (

@@ -1,0 +1,13 @@
+{% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
+{% block title %}产品总览{% endblock %}{% block heading %}产品总览与逐产品档案{% endblock %}
+{% block lead %}从完整产品集合进入逐产品档案，查看机制、给药、临床、监管、企业交易与专利信息。{% endblock %}
+{% block content %}
+<section class="kz-a-panel" data-module="products">
+  {{ ui.filter_group('target', '靶点', products|map(attribute='target')|unique|list) }}
+  {{ ui.filter_group('status', '开发状态', products|map(attribute='status')|unique|list) }}
+  {{ ui.section_head('产品—机制分布', '产品卡和完整表格使用同一产品集合') }}
+  {{ ui.chart('product-map', 'product-map', '产品机制与开发阶段分布') }}
+  <div class="kz-a-product-grid">{% for p in products %}<article class="kz-a-product-card" data-product-id="{{ p.id }}" data-target="{{ p.target }}" data-status="{{ p.status }}"><span>{{ p.target }}｜{{ p.modality }}</span><h2>{{ p.name }}</h2><p>{{ p.mechanism }}</p><dl><div><dt>最高阶段</dt><dd>{{ p.phase }}</dd></div><div><dt>给药</dt><dd>{{ p.route }}</dd></div></dl><a href="products/{{ p.id }}.html">打开完整档案</a></article>{% endfor %}</div>
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>靶点</th><th>技术类型</th><th>给药</th><th>开发企业</th><th>状态</th><th>详情</th></tr></thead><tbody>{% for p in products %}<tr data-product-id="{{ p.id }}" data-target="{{ p.target }}" data-status="{{ p.status }}"><td>{{ p.name }}</td><td>{{ p.target }}</td><td>{{ p.modality }}</td><td>{{ p.route }}</td><td>{{ p.developer }}</td><td>{{ p.status }}</td><td><a href="products/{{ p.id }}.html">查看</a></td></tr>{% endfor %}</tbody></table></div>
+</section>
+{% endblock %}

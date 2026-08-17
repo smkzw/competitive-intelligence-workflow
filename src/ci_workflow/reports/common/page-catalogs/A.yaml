@@ -51,15 +51,6 @@ pages:
     complete_table: true
     filter_profiles: [a-product]
     evidence_drawer_profile: common-clinical
-  - id: product-profile
-    route: /a/product-profile
-    title: 产品档案
-    navigation_group: 竞品与开发
-    responsibility: "逐产品呈现别名、机制、模态、给药、组织关系、开发时间线、试验组合、关键结果与风险、监管、交易和专利。"
-    visuals: [开发时间线, 企业关系图, 试验组合图]
-    complete_table: true
-    filter_profiles: [a-product-profile]
-    evidence_drawer_profile: common-clinical
   - id: clinical-portfolio
     route: /a/clinical-portfolio
     title: 临床开发组合
@@ -69,14 +60,32 @@ pages:
     complete_table: true
     filter_profiles: [a-clinical-portfolio]
     evidence_drawer_profile: common-clinical
-  - id: efficacy-safety-overview
-    route: /a/efficacy-safety-overview
-    title: 疗效与安全性概览
+  - id: efficacy
+    route: /a/efficacy
+    title: 疗效
     navigation_group: 医学结果
-    responsibility: "按锚定核心试验比较常用疗效终点、对照结果、安全性维度和疗效安全性位置，不跨试验池化或默认排名。"
-    visuals: [分组柱状图, 折线图, 安全性热图, 疗效安全性气泡图]
+    responsibility: "按锚定核心试验比较常用主要疗效终点，治疗组与各自对照组始终并列，不跨试验池化或默认排名。"
+    visuals: [分组柱状图, 折线图, 不合并森林图]
     complete_table: true
-    filter_profiles: [a-efficacy-safety]
+    filter_profiles: [a-efficacy]
+    evidence_drawer_profile: common-clinical
+  - id: safety
+    route: /a/safety
+    title: 安全性
+    navigation_group: 医学结果
+    responsibility: "以热图和完整表格比较严重、特别关注、治疗期间及常见不良事件，保留发生率、观察窗和披露状态。"
+    visuals: [安全性热图, 事件发生率点图]
+    complete_table: true
+    filter_profiles: [a-safety]
+    evidence_drawer_profile: common-clinical
+  - id: matrix
+    route: /a/matrix
+    title: 疗效与安全性矩阵
+    navigation_group: 医学结果
+    responsibility: "以可调整疗效、安全性与气泡大小维度的气泡图展示观察位置，不生成综合分数。"
+    visuals: [疗效安全性气泡图]
+    complete_table: true
+    filter_profiles: [a-matrix]
     evidence_drawer_profile: common-clinical
   - id: regulatory
     route: /a/regulatory

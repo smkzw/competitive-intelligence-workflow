@@ -93,6 +93,7 @@ class RunContext:
     project_root: Path
     contract: Any
     universe_input_path: Path | None = None
+    report_data_path: Path | None = None
     universe_evidence: Any = None
     run_inputs: dict[str, str] = field(default_factory=dict)
 
@@ -106,7 +107,9 @@ NODE_REUSED_EVENT = "run.node.reused"
 TERMINAL_DECISION_EVENT = "run.terminal_decision.recorded"
 CANONICAL_UNIVERSE_RELATIVE_PATH = "evidence/library/universe.json"
 
-_VERSION_PATTERN = re.compile(r"^v[0-9]+(?:\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?$")
+_VERSION_PATTERN = re.compile(
+    r"^v(?:[0-9]+(?:\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?|-fixture-[a-z0-9][a-z0-9.-]*)$"
+)
 _ARTIFACT_PATH_SERVICE = ArtifactPathService()
 
 
@@ -480,7 +483,26 @@ def _universe_input_digest(contract: Any, path: Path) -> str:
 
 # ─── Renderer registry ─────────────────────────────────────────────────────
 
-_RENDERER_REGISTRY: dict[str, Any] = {}  # empty in Task 3.6
+def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
+    """当前唯一生产 HTML 渲染适配：A 类已校验报告数据包。"""
+    if ctx.report_data_path is None:
+        raise ContractConfigError("A 类 HTML 渲染缺少报告数据包")
+    from ci_workflow.renderers.portal.report_a import build_report_a_artifact
+
+    site_root, manifest_path = build_report_a_artifact(
+        project_root=ctx.project_root,
+        data_path=ctx.report_data_path,
+        project_id=ctx.contract.project_id,
+        contract_version=ctx.contract.contract_version,
+        run_id=run_id,
+    )
+    return (
+        site_root.relative_to(ctx.project_root).as_posix(),
+        manifest_path.relative_to(ctx.project_root).as_posix(),
+    )
+
+
+_RENDERER_REGISTRY: dict[str, Any] = {"html": _render_html_a}
 
 
 def _check_renderer_availability(outputs: list[str]) -> None:
@@ -978,6 +1000,33 @@ def run_project(
     if outcome == "failed":
         return _finalize("failed")
 
+    # ── 已验证报告数据包：Task 5.4 的正向 A/HTML 真实渲染路径 ────────
+    if ctx.report_data_path is not None:
+        if tuple(report.value for report in contract.reports) != ("A",):
+            raise ContractConfigError("当前报告数据包只允许生成 A 类报告")
+        if tuple(output.value for output in contract.outputs) != ("html",):
+            raise ContractConfigError("当前报告数据包只允许生成站点式 HTML")
+        if not ctx.report_data_path.is_file():
+            raise ContractConfigError(f"报告数据包不存在：{ctx.report_data_path}")
+        render_digest = _compute_input_digest(
+            "render",
+            "A",
+            contract.contract_version,
+            extra=_sha256_file(ctx.report_data_path),
+        )
+
+        def _render_positive_a(current: RunContext) -> dict[str, Any]:
+            site_path, manifest_path = _render_html_a(current, run_id)
+            return {
+                "format": "html",
+                "artifact_id": stable_id("artifact", site_path, manifest_path),
+            }
+
+        _run_node("format", "A", _render_positive_a, input_digest=render_digest)
+        if outcome == "failed":
+            return _finalize("failed")
+        return _finalize("completed")
+
     # ── 项目对象在当前运行内确立（新项目或失败后恢复驱动终态）──────────
     # 持久化状态为 None（从未建立）或 running（先前运行 bootstrap 后失败）时，
     # 在当前运行内经声明迁移重新确立项目对象，随后协调器才能按声明契约把
@@ -1396,6 +1445,18 @@ def _collect_outputs(
                 if outcome == "evidence_blocked":
                     reused.append(_compute_output_file(project_root, rel))
             else:
+                created.append(_compute_output_file(project_root, rel))
+    reports = project_root / "reports"
+    if reports.is_dir():
+        for path in sorted(reports.glob("*/*/*.manifest.json")):
+            rel = path.relative_to(project_root).as_posix()
+            try:
+                validate_run_output_path(rel)
+            except RunError:
+                continue
+            stat = path.stat()
+            sha = _sha256_file(path)
+            if rel not in baseline or baseline[rel] != (sha, stat.st_size, stat.st_mtime_ns):
                 created.append(_compute_output_file(project_root, rel))
     return created, reused
 

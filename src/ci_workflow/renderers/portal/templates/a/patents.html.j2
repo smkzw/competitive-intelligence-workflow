@@ -1,0 +1,4 @@
+{% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
+{% block title %}专利与保护{% endblock %}{% block heading %}专利族、法域与保护期限{% endblock %}
+{% block lead %}专利族、保护范围、法域、期限状态和监管独占分列；预计期限保留法域核验提示，不写成确定结论。{% endblock %}
+{% block content %}<section class="kz-a-panel" data-module="patents">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.section_head('保护时间线', '不同法域的授权、维持和期限可能不同') }}{{ ui.chart('timeline', 'patent-timeline', '专利与保护期限时间线') }}<div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>专利族</th><th>法域</th><th>保护范围</th><th>期限状态</th><th>监管独占</th></tr></thead><tbody>{% for row in patents %}<tr data-product="{{ product_names[row.product_id] }}"><td>{{ product_names[row.product_id] }}</td><td>{{ row.display_family }}</td><td>{{ row.jurisdiction }}</td><td>{{ row.scope }}</td><td>{{ row.expiry }}</td><td>{{ row.exclusivity }}</td></tr>{% endfor %}</tbody></table></div></section>{% endblock %}

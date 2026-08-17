@@ -1,0 +1,16 @@
+{% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
+{% block title %}临床开发组合{% endblock %}{% block heading %}产品与临床试验组合{% endblock %}
+{% block lead %}按产品、靶点、阶段和地域多选查看全部核心与支持研究，筛选同时作用于图形和完整表格。{% endblock %}
+{% block content %}
+<section class="kz-a-panel" data-module="clinical-portfolio">
+  <div class="kz-a-filter-grid">
+    {{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}
+    {{ ui.filter_group('target', '靶点', products|map(attribute='target')|unique|list) }}
+    {{ ui.filter_group('phase', '阶段', trials|map(attribute='phase')|unique|list) }}
+    {{ ui.filter_group('region', '地域', trials|map(attribute='region')|unique|list) }}
+  </div>
+  {{ ui.section_head('临床试验一览', '按产品、阶段和地域并列查看核心与支持研究') }}
+  {{ ui.chart('portfolio', 'clinical-portfolio', '产品试验阶段地域组合') }}
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>靶点</th><th>试验</th><th>研究角色</th><th>阶段</th><th>地域</th><th>样本量</th><th>状态</th></tr></thead><tbody>{% for row in trials %}{% set p = products|selectattr('id','equalto',row.product_id)|first %}<tr data-product="{{ p.name }}" data-target="{{ p.target }}" data-phase="{{ row.phase }}" data-region="{{ row.region }}"><td><a href="products/{{ p.id }}.html">{{ p.name }}</a></td><td>{{ p.target }}</td><td>{{ row.name }}<br><small>{{ row.display_id }}</small></td><td>{{ row.role }}</td><td>{{ row.phase }}</td><td>{{ row.region }}</td><td>{{ row.sample_size }}</td><td>{{ row.status }}</td></tr>{% endfor %}</tbody></table></div>{{ ui.empty_state() }}
+</section>
+{% endblock %}

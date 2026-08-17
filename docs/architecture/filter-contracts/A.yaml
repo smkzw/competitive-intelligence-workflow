@@ -21,6 +21,9 @@ filters:
 profiles:
   a-overview: [indication, product, target-mechanism, trial, endpoint, timepoint, safety-dimension]
   a-efficacy-safety: [product, target-mechanism, anchor-trial, endpoint, timepoint, effect-form, analysis-population, treatment-arm, safety-dimension, ae-term-grade, safety-window, denominator, bubble-size, disclosure-status]
+  a-efficacy: [product, target-mechanism, anchor-trial, endpoint, timepoint, effect-form, analysis-population, treatment-arm, disclosure-status]
+  a-safety: [product, target-mechanism, anchor-trial, safety-dimension, ae-term-grade, safety-window, denominator, disclosure-status]
+  a-matrix: [product, target-mechanism, anchor-trial, endpoint, timepoint, safety-dimension, ae-term-grade, bubble-size, disclosure-status]
   a-landscape: [product, target-mechanism, lifecycle-status, region]
   a-product: [product, target-mechanism, lifecycle-status, company-role]
   a-product-profile: [product, target-mechanism, lifecycle-status, region]

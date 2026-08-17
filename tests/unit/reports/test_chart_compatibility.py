@@ -129,7 +129,7 @@ def _base_row(**overrides: Any) -> dict[str, Any]:
     defaults: dict[str, Any] = {
         "row_id": "row-auto",
         "display_label_zh": "第3组治疗组主要终点",
-        "page_responsibility_id": "efficacy-safety-overview",
+        "page_responsibility_id": "efficacy",
         "report_snapshot_id": "snapshot-01",
         "disclosure_state": "reported_value",
         "unit": "mg/dL",

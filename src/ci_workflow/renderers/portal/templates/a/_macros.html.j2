@@ -1,0 +1,24 @@
+{% macro filter_group(dimension, label, values) -%}
+<div class="kz-a-filter" data-filter-dimension="{{ dimension }}" aria-label="{{ label }}">
+  <span class="kz-a-filter__label">{{ label }}</span>
+  {% for value in values %}<button type="button" data-filter-value="{{ value }}" aria-pressed="false">{{ value }}</button>{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro section_head(title, note='', product_scope='') -%}
+<div class="kz-a-section-head">
+  <div><h2>{{ title }}</h2>{% if note %}<p>{{ note }}</p>{% endif %}</div>
+  <button type="button" class="kz-a-evidence-button" data-open-evidence="{{ title }}"
+          {% if product_scope %}data-evidence-product="{{ product_scope }}"{% endif %}>查看数据依据</button>
+</div>
+{%- endmacro %}
+
+{% macro chart(chart_type, chart_id, aria_label, product_scope='') -%}
+<div class="kz-chart" data-a-chart="{{ chart_type }}" data-chart-id="{{ chart_id }}"
+     {% if product_scope %}data-product-scope="{{ product_scope }}"{% endif %}
+     data-view-digest="initial" role="img" aria-label="{{ aria_label }}"></div>
+{%- endmacro %}
+
+{% macro empty_state() -%}
+<div class="kz-a-empty" hidden><strong>当前选择下暂无可比较数据</strong><span>可清除部分条件后继续查看。</span></div>
+{%- endmacro %}

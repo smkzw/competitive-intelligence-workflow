@@ -337,6 +337,7 @@ def run_fixture_case(
 
     input_hashes: dict[str, str] = {}
     universe_input_path: Path | None = None
+    report_data_path: Path | None = None
     for inp in case["inputs"]:
         src = case_root_base / case_id / inp["path"]
         dst = project_root / "evidence" / "library" / Path(inp["path"]).name
@@ -345,12 +346,15 @@ def run_fixture_case(
         input_hashes[inp["path"]] = inp["sha256"]
         if inp["role"] == "universe_closure":
             universe_input_path = dst
+        elif inp["role"] == "report_data":
+            report_data_path = dst
 
     case_digest = _compute_case_digest(case)
     ctx = RunContext(
         project_root=project_root,
         contract=contract,
         universe_input_path=universe_input_path,
+        report_data_path=report_data_path,
         run_inputs={
             "case_id": case_id,
             "case_digest": case_digest,
@@ -358,7 +362,10 @@ def run_fixture_case(
         },
     )
     run_result = run_project(project_root, resume=False, run_context=ctx)
-    expected_outcome = case["expected"]["outcome"]
+    expected_outcome = (
+        "completed" if case["expected"]["outcome"] == "rendered"
+        else case["expected"]["outcome"]
+    )
     if run_result.outcome != expected_outcome:
         raise FixtureCaseError(
             f"案例 {case_id} 运行结果与预期不符："

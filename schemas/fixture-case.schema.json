@@ -78,7 +78,7 @@
             "description": "案例目录内相对路径"
           },
           "role": {
-            "enum": ["universe_closure"],
+            "enum": ["universe_closure", "report_data"],
             "description": "输入文件角色"
           },
           "sha256": {
@@ -102,12 +102,22 @@
         },
         "report_version": {
           "type": "string",
-          "pattern": "^v[0-9]+(\\.[0-9]+){0,2}(-[a-z0-9][a-z0-9.-]*)?$",
+          "pattern": "^v([0-9]+(\\.[0-9]+){0,2}(-[a-z0-9][a-z0-9.-]*)?|-fixture-[a-z0-9][a-z0-9.-]*)$",
           "description": "预期报告版本段"
         },
         "outcome": {
           "enum": ["evidence_blocked", "rendered"],
           "description": "预期运行结果"
+        },
+        "product_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "正向报告案例的锁定产品数"
+        },
+        "static_route_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "正向报告案例的静态责任页数"
         }
       }
     },

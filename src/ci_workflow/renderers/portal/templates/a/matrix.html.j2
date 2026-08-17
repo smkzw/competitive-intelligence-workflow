@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
+{% block title %}疗效与安全性矩阵{% endblock %}{% block heading %}疗效与安全性位置{% endblock %}
+{% block lead %}默认横轴为第16周EASI-75应答率，纵轴为治疗期间不良事件发生率倒序，气泡面积对应治疗组样本量；可随时更换观察维度。{% endblock %}
+{% block content %}
+<section class="kz-a-panel" data-module="matrix">
+  <div class="kz-a-matrix-controls">
+    <label>疗效横轴<select data-matrix-control="efficacy-axis"><option>EASI-75应答率</option><option>治疗组与对照组差值</option></select></label>
+    <label>安全性纵轴<select data-matrix-control="safety-axis"><option>任何TEAE发生率</option><option>任何SAE发生率</option></select></label>
+    <label>气泡大小<select data-matrix-control="bubble-size"><option>治疗组样本量</option><option>全部随机样本量</option></select></label>
+  </div>
+  {{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}
+  {{ ui.section_head('疗效—安全性气泡图', '向右表示所选疗效观察值更高；向上表示所选安全事件发生率更低') }}
+  <div class="kz-a-comparability">不同试验的入组人群、对照反应和观察时间可能不同，气泡位置用于快速观察，不作为头对头结论。</div>
+  <p class="kz-a-bubble-size">气泡大小：治疗组样本量</p>
+  {{ ui.chart('matrix', 'matrix-full', '可调整维度的疗效安全性气泡图') }}
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th>试验样本量</th></tr></thead><tbody>{% for p in products %}{% set pe = efficacy|selectattr('product_id','equalto',p.id)|list %}{% set ps = safety|selectattr('product_id','equalto',p.id)|list %}{% set pt = trials|selectattr('product_id','equalto',p.id)|first %}<tr data-product="{{ p.name }}"><td>{{ p.name }}</td><td>{{ (pe|selectattr('arm','equalto','治疗组')|first).value }}%</td><td>{{ (pe|selectattr('arm','equalto','对照组')|first).value }}%</td><td>{{ (ps|selectattr('term','equalto','任何TEAE')|first).value }}%</td><td>{{ (ps|selectattr('term','equalto','任何SAE')|first).value }}%</td><td>{{ pt.sample_size }}</td></tr>{% endfor %}</tbody></table></div>
+</section>
+{% endblock %}

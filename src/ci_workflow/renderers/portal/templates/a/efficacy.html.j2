@@ -1,0 +1,12 @@
+{% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
+{% block title %}疗效{% endblock %}{% block heading %}主要疗效横向比较{% endblock %}
+{% block lead %}默认展示主要竞品共同采用的第16周EASI-75应答率；治疗组和各自对照组始终并列，跨试验差异就近提示。{% endblock %}
+{% block content %}
+<section class="kz-a-panel" data-module="efficacy">
+  <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('endpoint', '疗效指标', efficacy|map(attribute='endpoint')|unique|list) }}{{ ui.filter_group('timepoint', '时间点', efficacy|map(attribute='timepoint')|unique|list) }}</div>
+  {{ ui.section_head('第16周EASI-75应答率', '柱状图先呈现观察值；下表保留试验、组别、分析人群和完整数值') }}
+  <p class="kz-a-comparability">不同试验的对照组应答率存在差异，横向观察时需同时阅读治疗组与本试验对照组。</p>
+  {{ ui.chart('efficacy', 'efficacy-full', '第16周EASI-75应答率治疗组和对照组柱状图') }}
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>试验</th><th>疗效指标</th><th>时间点</th><th>组别</th><th>观察值</th><th>分析人群</th></tr></thead><tbody>{% for row in efficacy %}<tr data-product="{{ product_names[row.product_id] }}" data-endpoint="{{ row.endpoint }}" data-timepoint="{{ row.timepoint }}"><td>{{ product_names[row.product_id] }}</td><td>{{ trial_names[row.trial_id] }}</td><td>{{ row.endpoint }}</td><td>{{ row.timepoint }}</td><td>{{ row.arm }}</td><td><strong>{{ row.value }}{{ row.unit }}</strong></td><td>{{ row.population }}</td></tr>{% endfor %}</tbody></table></div>{{ ui.empty_state() }}
+</section>
+{% endblock %}

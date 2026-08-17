@@ -29,7 +29,7 @@ from ci_workflow.reports.common.evidence_view import EvidenceView, validate_evid
 
 _THIS_DIR = Path(__file__).resolve().parent
 
-PAGE_EFFICACY = "efficacy-safety-overview"
+PAGE_EFFICACY = "efficacy"
 PAGE_BASELINE = "baseline-demographics"
 PAGE_DISPOSITION = "disposition-overview"
 SNAPSHOT = "report-snapshot-45"

@@ -77,18 +77,18 @@ def set_items() -> list[dict[str, Any]]:
     return [
         item("chapter", "overview", ("overview",), "总览章节"),
         item("page", "overview", ("product-01", "product-02"), "首页全景"),
-        item("product", "product-profile", ("product-01",), "产品一档案"),
+        item("product", "product-overview", ("product-01",), "产品一档案"),
         item("trial", "clinical-portfolio", ("trial-01",), "试验一核心试验"),
-        item("claim", "efficacy-safety-overview", ("claim-01",), "疗效声明"),
+        item("claim", "efficacy", ("claim-01",), "疗效声明"),
         item(
             "chart",
-            "efficacy-safety-overview",
+            "efficacy",
             (ROW_SET_DIGEST, "claim-01"),
             "疗效分组柱状图",
         ),
         item(
             "table",
-            "efficacy-safety-overview",
+            "efficacy",
             (ROW_SET_DIGEST, "fact-01"),
             "疗效完整数值表",
         ),
@@ -378,7 +378,7 @@ def test_internal_registry_path_accepts_custom_catalog(tmp_path: Path) -> None:
     target = tmp_path / "docs" / "architecture" / "page-catalogs"
     target.mkdir(parents=True, exist_ok=True)
     (target / "A.yaml").write_text(
-        _minimal_catalog("A", ("overview", "product-profile", "clinical-portfolio")),
+        _minimal_catalog("A", ("overview", "product-overview", "clinical-portfolio")),
         encoding="utf-8",
     )
     (target / "B.yaml").write_text(
@@ -688,7 +688,7 @@ def test_projection_equivalence_is_anchored_in_chart_table_row_set(
                 timepoint_id="timepoint-01",
             ),
             "display_label_zh": "第3组治疗组主要终点",
-            "page_responsibility_id": "efficacy-safety-overview",
+            "page_responsibility_id": "efficacy",
             "report_snapshot_id": "report-snapshot-01",
             "disclosure_state": "reported_value",
             "product_id": "product-01", "trial_id": "trial-01",
@@ -701,7 +701,7 @@ def test_projection_equivalence_is_anchored_in_chart_table_row_set(
                 group_id="group-01", event_id="event-01",
             ),
             "display_label_zh": "第3组严重不良事件",
-            "page_responsibility_id": "efficacy-safety-overview",
+            "page_responsibility_id": "efficacy",
             "report_snapshot_id": "report-snapshot-01",
             "disclosure_state": "not_reported",
             "product_id": "product-01", "trial_id": "trial-01",
@@ -711,7 +711,7 @@ def test_projection_equivalence_is_anchored_in_chart_table_row_set(
     view = validate_report_view_model_payload(
         {
             "report_kind": "A",
-            "page_responsibility_id": "efficacy-safety-overview",
+            "page_responsibility_id": "efficacy",
             "report_snapshot_id": "report-snapshot-01",
             "report_version": "1.0",
             "rows": list(rows),

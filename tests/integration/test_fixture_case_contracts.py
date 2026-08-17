@@ -361,3 +361,38 @@ def test_no_draft_a_empty_case_records_case_digest_and_current_run_id(
         for path in (project_root / "reports").rglob("*")
         if path.is_file()
     )
+
+
+def test_a_complete_case_is_registered_hashed_and_bound_to_current_run(
+    tmp_path: Path,
+) -> None:
+    """Task 5.4：a-complete 的输入、案例、当前运行、12+P 站点与清单闭合。"""
+    project_root = tmp_path / "完整门户"
+    result = run_fixture_case(
+        "a-complete",
+        project_root=project_root,
+        reports=["A"],
+        outputs=["html"],
+    )
+    assert result.run_result.outcome == "completed"
+    run_manifest = json.loads(
+        (project_root / MANIFEST_RELATIVE_PATH).read_text(encoding="utf-8")
+    )
+    artifact_manifest = json.loads(
+        (project_root / "reports/A/v-fixture-001/html.manifest.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert run_manifest["run_id"] == result.run_result.run_id
+    assert run_manifest["case_id"] == "a-complete"
+    assert run_manifest["case_digest"] == result.case_digest
+    assert run_manifest["input_hashes"] == result.run_result.input_hashes
+    assert artifact_manifest["producer_run_id"] == result.run_result.run_id
+    assert artifact_manifest["status"] == "generated"
+    assert artifact_manifest["accepted_by"] is None
+    assert len(artifact_manifest["product_ids"]) == 4
+    assert len(artifact_manifest["pages_or_sections"]) == 12
+    site = project_root / "reports/A/v-fixture-001/html"
+    assert len(list(site.glob("*.html"))) == 12
+    assert len(list((site / "products").glob("*.html"))) == 4
+    assert all(_SHA256_RE.fullmatch(value) for value in run_manifest["input_hashes"].values())

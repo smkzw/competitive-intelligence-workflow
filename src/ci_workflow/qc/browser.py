@@ -1108,6 +1108,9 @@ _RUNTIME_OCCLUSION_JS = """() => {
   for (const fixedEl of fixed) {
     const fixedRect = fixedEl.getBoundingClientRect();
     for (const coveredEl of covered) {
+      // 粘性表头、粘性工具栏属于其容器的正常内容；父子包含关系不是遮挡。
+      // 真正的悬浮遮挡层通常与被遮挡内容是兄弟或无包含关系，仍会被检测。
+      if (fixedEl.contains(coveredEl) || coveredEl.contains(fixedEl)) continue;
       const coveredRect = coveredEl.getBoundingClientRect();
       const overlapWidth =
         Math.min(fixedRect.right, coveredRect.right) - Math.max(fixedRect.left, coveredRect.left);

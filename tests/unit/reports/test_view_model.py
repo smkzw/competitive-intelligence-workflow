@@ -36,7 +36,7 @@ from ci_workflow.reports.common.view_state import (
     validate_report_view_model_payload,
 )
 
-PAGE = "efficacy-safety-overview"
+PAGE = "efficacy"
 SNAPSHOT = "report-snapshot-01"
 
 
@@ -187,10 +187,10 @@ def test_standalone_row_validator_requires_frozen_page_in_report_catalog() -> No
         report_kind=ReportKind.A,
     )
     assert validated.page_responsibility_id == PAGE
-    # 同一行在 B 报告上下文失败：efficacy-safety-overview 是 A 专属页面。
+    # A 的独立疗效－安全性矩阵责任页在 B 目录中不存在。
     with pytest.raises(ViewStateBoundaryError, match="目录"):
         validate_report_row_payload(
-            row(product_id="product-01", trial_id="trial-01"),
+            row(page="matrix", product_id="product-01", trial_id="trial-01"),
             report_kind=ReportKind.B,
         )
 
@@ -221,7 +221,7 @@ def test_view_model_binds_rows_to_one_locked_snapshot_and_page() -> None:
     with pytest.raises(ViewStateBoundaryError, match="快照"):
         validate_report_view_model_payload(view((*rows, other_snapshot)))
     other_page = row(
-        page="product-profile",
+        page="product-overview",
         product_id="product-01", trial_id="trial-01",
         group_id="group-01", endpoint_id="endpoint-01", timepoint_id="timepoint-09",
     )
@@ -376,7 +376,10 @@ def test_row_set_digest_is_order_independent() -> None:
         (lambda r: {**r, "disclosure_state": "reported_zero"}, {}),
         (lambda r: {**r, "disclosure_state": "not_publicly_disclosed"}, {}),
         (lambda r: {**r, "display_label_zh": "中文标签变化必须改变行集摘要"}, {}),
-        (lambda r: {**r, "page_responsibility_id": "product-profile"}, {"page": "product-profile"}),
+        (
+            lambda r: {**r, "page_responsibility_id": "product-overview"},
+            {"page": "product-overview"},
+        ),
         (
             lambda r: {**r, "report_snapshot_id": "report-snapshot-另一锁定快照"},
             {"snapshot": "report-snapshot-另一锁定快照"},
@@ -423,7 +426,7 @@ def test_filtered_row_set_rejects_drift_from_canonical_view_row() -> None:
         {"disclosure_state": "not_publicly_disclosed"},
         {"display_label_zh": "被篡改的中文标签"},
         {"report_snapshot_id": "report-snapshot-被替换快照"},
-        {"page_responsibility_id": "product-profile"},
+        {"page_responsibility_id": "product-overview"},
     ):
         payload = {"view": view_payload, "rows": [drifted(**mutation), rows[1], rows[2]]}
         with pytest.raises(ChartTableBoundaryError, match="全等"):
@@ -480,7 +483,7 @@ def _page(
 
 def test_registry_loads_frozen_abc_catalogs_preserving_chinese_labels() -> None:
     registry = PageRegistry.load()
-    expected_counts = {ReportKind.A: 11, ReportKind.B: 21, ReportKind.C: 12}
+    expected_counts = {ReportKind.A: 12, ReportKind.B: 21, ReportKind.C: 12}
     for kind, count in expected_counts.items():
         catalog = registry.catalog(kind)
         assert len(catalog.pages) == count
@@ -504,7 +507,7 @@ def test_registry_loads_packaged_catalog_layout_without_repo_docs() -> None:
     )
     registry = PageRegistry._load_from_dir(packaged_dir)
     assert [c.report.value for c in registry.catalogs] == ["A", "B", "C"]
-    assert len(registry.catalog(ReportKind.A).pages) == 11
+    assert len(registry.catalog(ReportKind.A).pages) == 12
     assert len(registry.catalog(ReportKind.B).pages) == 21
     assert len(registry.catalog(ReportKind.C).pages) == 12
     sitemap = registry.sitemap(
@@ -646,7 +649,7 @@ def test_registry_separates_static_and_dynamic_responsibilities() -> None:
                 != next(p.route for p in catalog.pages if p.id == spec.page_responsibility_id)
             )
     a = registry.catalog(ReportKind.A)
-    assert {s.route_kind for s in a.dynamic_routes} == {"product_detail", "trial_detail"}
+    assert {s.route_kind for s in a.dynamic_routes} == {"product_detail"}
     c = registry.catalog(ReportKind.C)
     assert {s.route_kind for s in c.dynamic_routes} == {"trial_detail"}
 
@@ -664,9 +667,9 @@ def test_sitemap_expands_every_supplied_product_and_trial_deterministically() ->
     assert "/a/products/product-01" in sitemap
     assert "/a/products/product-02" in sitemap
     assert "/a/products/product-03" in sitemap
-    assert "/a/trials/trial-01" in sitemap
-    assert "/a/trials/trial-02" in sitemap
-    assert len(sitemap) == len(static) + 3 + 2
+    assert "/a/trials/trial-01" not in sitemap
+    assert "/a/trials/trial-02" not in sitemap
+    assert len(sitemap) == len(static) + 3
     assert sitemap == registry.sitemap(ReportKind.A, product_ids=products, trial_ids=trials)
     # C 只有试验详情动态责任：提供的产品不产生产品路由。
     c_sitemap = registry.sitemap(ReportKind.C, product_ids=products, trial_ids=trials)

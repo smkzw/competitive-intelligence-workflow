@@ -1,5 +1,24 @@
 schema_version: "1.0"
 cases:
+  - id: a-complete
+    description_zh: "A 报告：完整创新治疗竞品门户与多页面交互验收案例"
+    indication: "特应性皮炎"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-12T10:00:00+08:00"
+    reports: ["A"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/report-data.json
+        role: report_data
+        sha256: "295a6dff36f4523dcb48b71d4144befc169cdfcbd643ee9d0b9a838b62245738"
+    expected:
+      report: A
+      report_version: v-fixture-001
+      outcome: rendered
+      product_count: 4
+      static_route_count: 12
+    case_digest: "e21d441325fe230feefd11b1e29c634cc2ae38c9c2dc4789af4462038a6c4062"
   - id: no-draft-a-empty
     description_zh: "A 报告：空创新药宇宙，只生成中文证据不足说明"
     indication: "非小细胞肺癌"

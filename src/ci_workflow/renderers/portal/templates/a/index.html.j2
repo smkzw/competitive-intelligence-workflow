@@ -1,0 +1,30 @@
+{% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
+{% block title %}首页{% endblock %}{% block heading %}创新治疗格局与医学结果{% endblock %}
+{% block lead %}先看全部创新治疗的靶点结构、开发阶段与关键疗效安全性，再按产品或专题下钻。{% endblock %}
+{% block content %}
+<section class="kz-a-hero-grid" aria-label="核心概览">
+  <article class="kz-a-summary kz-a-summary--wide" data-summary-module="landscape">
+    {{ ui.section_head('竞争格局', '默认按靶点分组，不形成产品名次') }}
+    {{ ui.chart('landscape', 'home-landscape', '全部创新治疗按靶点和阶段分布') }}
+    <div class="kz-a-target-groups">
+      {% for group in products|groupby('target') %}<div data-target-group="{{ group.grouper }}"><strong>{{ group.grouper }}</strong><span>{{ group.list|length }}个项目</span></div>{% endfor %}
+    </div>
+    <a class="kz-a-more" href="landscape.html">查看完整竞争格局</a>
+  </article>
+  <article class="kz-a-summary" data-summary-module="efficacy">
+    {{ ui.section_head('主要疗效', '第16周EASI-75应答率，治疗组与对照组并列') }}
+    {{ ui.chart('efficacy', 'home-efficacy', '主要疗效治疗组与对照组比较') }}
+    <a class="kz-a-more" href="efficacy.html">查看全部疗效数据</a>
+  </article>
+  <article class="kz-a-summary" data-summary-module="safety">
+    {{ ui.section_head('关键安全性', '颜色深浅表示同一事件维度内的发生率差异') }}
+    {{ ui.chart('safety', 'home-safety', '严重及常见不良事件热图') }}
+    <a class="kz-a-more" href="safety.html">查看完整安全性谱</a>
+  </article>
+  <article class="kz-a-summary kz-a-summary--wide" data-summary-module="matrix">
+    {{ ui.section_head('疗效与安全性位置', '横轴为疗效，纵轴越高表示TEAE发生率越低，气泡面积对应治疗组样本量') }}
+    {{ ui.chart('matrix', 'home-matrix', '疗效与安全性气泡图') }}
+    <a class="kz-a-more" href="matrix.html">调整比较维度</a>
+  </article>
+</section>
+{% endblock %}

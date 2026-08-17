@@ -5,7 +5,9 @@ from pathlib import PurePosixPath
 
 from ci_workflow.domain.enums import OutputFormat, ReportKind
 
-_VERSION_PATTERN = re.compile(r"^v[0-9]+(?:\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?$")
+_VERSION_PATTERN = re.compile(
+    r"^v(?:[0-9]+(?:\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?|-fixture-[a-z0-9][a-z0-9.-]*)$"
+)
 
 
 class ArtifactPathViolation(ValueError):
