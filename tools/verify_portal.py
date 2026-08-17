@@ -123,10 +123,15 @@ def _build_parser() -> ChineseArgumentParser:
         required=True,
         help="项目根目录（含 reports/<报告>/<版本>/html/ 站点产物）",
     )
-    parser.add_argument(
+    version_group = parser.add_mutually_exclusive_group(required=True)
+    version_group.add_argument(
         "--version",
-        required=True,
         help="报告版本目录名（例如 v-fixture-001）",
+    )
+    version_group.add_argument(
+        "--latest",
+        action="store_true",
+        help="自动选择该报告最近生成且清单有效的版本",
     )
     parser.add_argument(
         "--browser",
@@ -151,6 +156,26 @@ def _build_parser() -> ChineseArgumentParser:
         "<project>/verification/<报告>/<版本>，绝不写入被验收的 html/ 站点目录",
     )
     return parser
+
+
+def _resolve_version(project_root: Path, report: str, requested: str | None) -> str:
+    if requested is not None:
+        return requested
+    report_root = project_root / "reports" / report
+    candidates: list[tuple[datetime, str]] = []
+    if report_root.is_dir():
+        for manifest_path in report_root.glob("*/html.manifest.json"):
+            try:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                generated_at = datetime.fromisoformat(str(manifest["generated_at"]))
+            except (OSError, KeyError, ValueError, json.JSONDecodeError):
+                continue
+            candidates.append((generated_at, manifest_path.parent.name))
+    if not candidates:
+        raise LockedSitemapSourceError(
+            f"报告 {report} 没有可用于验收的已生成版本"
+        )
+    return max(candidates, key=lambda item: (item[0], item[1]))[1]
 
 
 def _run_digest(
@@ -323,7 +348,8 @@ def verify_cli(argv: list[str]) -> int:
     # 并核对站点目录摘要与清单一致。缺清单、缺快照、绑定不一致或站点
     # 摘要过期均失败关闭（退出 2），且不启动浏览器。
     try:
-        source = load_locked_sitemap_source(project_root, report_kind, args.version)
+        version = _resolve_version(project_root, args.report, args.version)
+        source = load_locked_sitemap_source(project_root, report_kind, version)
     except LockedSitemapSourceError as error:
         print(f"{parser.prog}：参数错误：{error}", file=sys.stderr)
         return EXIT_USAGE
@@ -340,7 +366,7 @@ def verify_cli(argv: list[str]) -> int:
         print(f"{parser.prog}：参数错误：{error}", file=sys.stderr)
         return EXIT_USAGE
 
-    site_root = project_root / "reports" / args.report / args.version / "html"
+    site_root = project_root / "reports" / args.report / version / "html"
 
     # 站点地图一一对应：期望与实际一一对应，缺页/多页/Top-N/额外 slug 失败关闭。
     sitemap = verify_sitemap_one_to_one(contract, enumerate_site_routes(site_root, report_kind))
@@ -370,12 +396,12 @@ def verify_cli(argv: list[str]) -> int:
     output_dir = (
         Path(args.output_dir).expanduser()
         if args.output_dir
-        else project_root / "verification" / args.report / args.version
+        else project_root / "verification" / args.report / version
     )
     site_digest = source.manifest.artifact.sha256
     run_digest = _run_digest(
         report=args.report,
-        version=args.version,
+        version=version,
         site_digest=site_digest,
         browsers=browsers,
         viewports=viewports,
@@ -420,7 +446,7 @@ def verify_cli(argv: list[str]) -> int:
         "tool": "verify_portal",
         "ok": ok,
         "report": args.report,
-        "version": args.version,
+        "version": version,
         "manifest_id": source.manifest.manifest_id,
         "report_snapshot_id": source.manifest.report_snapshot_id,
         "run_digest": run_digest,

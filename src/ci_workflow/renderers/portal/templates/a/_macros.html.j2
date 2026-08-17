@@ -1,8 +1,17 @@
-{% macro filter_group(dimension, label, values) -%}
+{% macro filter_group(dimension, label, values, default_values=()) -%}
+{% if values|length > 12 %}
+<details class="kz-a-filter kz-a-filter-disclosure" data-filter-dimension="{{ dimension }}" data-filter-total="{{ values|length }}" aria-label="{{ label }}">
+  <summary><span class="kz-a-filter__label">{{ label }}</span><span data-filter-selection-count="{{ dimension }}">默认显示全部 {{ values|length }} 项</span></summary>
+  <div class="kz-a-filter-options">
+    {% for value in values %}<button type="button" data-filter-value="{{ value }}" aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
+  </div>
+</details>
+{% else %}
 <div class="kz-a-filter" data-filter-dimension="{{ dimension }}" aria-label="{{ label }}">
   <span class="kz-a-filter__label">{{ label }}</span>
-  {% for value in values %}<button type="button" data-filter-value="{{ value }}" aria-pressed="false">{{ value }}</button>{% endfor %}
+  {% for value in values %}<button type="button" data-filter-value="{{ value }}" aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
 </div>
+{% endif %}
 {%- endmacro %}
 
 {% macro section_head(title, note='', product_scope='') -%}
@@ -20,5 +29,5 @@
 {%- endmacro %}
 
 {% macro empty_state() -%}
-<div class="kz-a-empty" hidden><strong>当前选择下暂无可比较数据</strong><span>可清除部分条件后继续查看。</span></div>
+<div class="kz-a-empty" data-filter-empty hidden><strong>当前选择下暂无可比较数据</strong><span>请清除部分条件后继续查看。</span></div>
 {%- endmacro %}

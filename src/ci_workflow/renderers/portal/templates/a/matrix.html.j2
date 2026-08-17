@@ -10,9 +10,9 @@
   </div>
   {{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}
   {{ ui.section_head('疗效—安全性气泡图', '向右表示所选疗效观察值更高；向上表示所选安全事件发生率更低') }}
-  <div class="kz-a-comparability">不同试验的入组人群、对照反应和观察时间可能不同，气泡位置用于快速观察，不作为头对头结论。</div>
   <p class="kz-a-bubble-size">气泡大小：治疗组样本量</p>
   {{ ui.chart('matrix', 'matrix-full', '可调整维度的疗效安全性气泡图') }}
-  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th>试验样本量</th></tr></thead><tbody>{% for p in products %}{% set pe = efficacy|selectattr('product_id','equalto',p.id)|list %}{% set ps = safety|selectattr('product_id','equalto',p.id)|list %}{% set pt = trials|selectattr('product_id','equalto',p.id)|first %}<tr data-product="{{ p.name }}"><td>{{ p.name }}</td><td>{{ (pe|selectattr('arm','equalto','治疗组')|first).value }}%</td><td>{{ (pe|selectattr('arm','equalto','对照组')|first).value }}%</td><td>{{ (ps|selectattr('term','equalto','任何TEAE')|first).value }}%</td><td>{{ (ps|selectattr('term','equalto','任何SAE')|first).value }}%</td><td>{{ pt.sample_size }}</td></tr>{% endfor %}</tbody></table></div>
+  <div class="kz-a-comparability">不同试验的入组人群、对照反应和观察时间可能不同，气泡位置用于快速观察，不作为头对头结论。</div>
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th>试验样本量</th></tr></thead><tbody>{% for p in products %}{% set pe = efficacy|selectattr('product_id','equalto',p.id)|list %}{% set ps = safety|selectattr('product_id','equalto',p.id)|list %}{% set pts = trials|selectattr('product_id','equalto',p.id)|list %}{% set tr = pe|selectattr('arm','equalto','治疗组')|list %}{% set ct = pe|selectattr('arm','equalto','对照组')|list %}{% set te = ps|selectattr('term','equalto','任何TEAE')|list %}{% set sa = ps|selectattr('term','equalto','任何SAE')|list %}<tr data-product="{{ p.name }}"><td>{{ p.name }}</td><td>{% if tr %}{{ tr[0].value }}%{% else %}未公开{% endif %}</td><td>{% if ct %}{{ ct[0].value }}%{% else %}未公开{% endif %}</td><td>{% if te and te[0].value is not none %}{{ te[0].value }}%{% else %}未公开{% endif %}</td><td>{% if sa and sa[0].value is not none %}{{ sa[0].value }}%{% else %}未公开{% endif %}</td><td>{% if pts %}{{ pts[0].sample_size }}{% else %}未公开{% endif %}</td></tr>{% endfor %}</tbody></table></div>
 </section>
 {% endblock %}

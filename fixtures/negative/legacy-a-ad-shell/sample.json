@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "sample_kind": "unanchored_ad_shell",
+  "payload_file": "qc-report.json",
+  "source_sha256": "0fb60d81f30b82e6f2772acdc9055225a668e09e75c9a15c21a6e05660522840",
+  "expected_issue": "unanchored_report_shell"
+}

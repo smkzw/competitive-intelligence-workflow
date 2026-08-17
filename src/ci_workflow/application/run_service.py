@@ -27,6 +27,7 @@ from ci_workflow.domain.ids import stable_id
 from ci_workflow.graph.executor import GraphExecutor
 from ci_workflow.graph.recovery import DeliveryContract, PartialDeliveryCoordinator
 from ci_workflow.graph.types import TransitionRequest
+from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.storage.event_store import (
     EventStore,
     StoredWorkflowEvent,
@@ -94,6 +95,8 @@ class RunContext:
     contract: Any
     universe_input_path: Path | None = None
     report_data_path: Path | None = None
+    research_package_path: Path | None = None
+    research_lineage: Any = None
     universe_evidence: Any = None
     run_inputs: dict[str, str] = field(default_factory=dict)
 
@@ -106,6 +109,10 @@ MANIFEST_RECORDED_EVENT = "run.manifest.recorded"
 NODE_REUSED_EVENT = "run.node.reused"
 TERMINAL_DECISION_EVENT = "run.terminal_decision.recorded"
 CANONICAL_UNIVERSE_RELATIVE_PATH = "evidence/library/universe.json"
+CANONICAL_REPORT_DATA_RELATIVE_PATH = "evidence/library/report-data.json"
+CANONICAL_A_RESEARCH_PACKAGE_RELATIVE_PATH = (
+    "evidence/library/a-research-package.json"
+)
 
 _VERSION_PATTERN = re.compile(
     r"^v(?:[0-9]+(?:\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?|-fixture-[a-z0-9][a-z0-9.-]*)$"
@@ -481,13 +488,59 @@ def _universe_input_digest(contract: Any, path: Path) -> str:
     )
 
 
+def _write_source_research_work_item(project_root: Path, contract: Any) -> Path:
+    """无研究输入时留下可恢复的宿主任务，不用含糊的 skipped 代替下一步。"""
+    work_item = {
+        "schema_version": "1.0",
+        "work_item_id": stable_id(
+            "source-research-work-item",
+            contract.project_id,
+            str(contract.contract_version),
+            *[report.value for report in contract.reports],
+        ),
+        "project_id": contract.project_id,
+        "contract_version": contract.contract_version,
+        "indication": contract.indication,
+        "reports": [report.value for report in contract.reports],
+        "data_cutoff": contract.data_cutoff.isoformat(),
+        "state": "等待宿主完成来源调研",
+        "next_action": (
+            "由当前 Agent 按所选报告完成来源检索、独立科学复核，"
+            "并提交规范研究包后继续运行。"
+        ),
+        "expected_input": CANONICAL_A_RESEARCH_PACKAGE_RELATIVE_PATH,
+    }
+    path = project_root / "state/work-items/source-research.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    encoded = _canonical_json(work_item)
+    if path.is_file() and path.read_bytes() != encoded:
+        raise ContractConfigError("待办研究任务与当前项目合同不一致")
+    path.write_bytes(encoded)
+    return path
+
+
 # ─── Renderer registry ─────────────────────────────────────────────────────
 
 def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
     """当前唯一生产 HTML 渲染适配：A 类已校验报告数据包。"""
     if ctx.report_data_path is None:
         raise ContractConfigError("A 类 HTML 渲染缺少报告数据包")
-    from ci_workflow.renderers.portal.report_a import build_report_a_artifact
+    from ci_workflow.renderers.portal.report_a import (
+        ReportALineageBinding,
+        build_report_a_artifact,
+    )
+
+    binding = None
+    if ctx.research_lineage is not None:
+        lineage = ctx.research_lineage
+        binding = ReportALineageBinding(
+            evidence_snapshot_id=lineage.evidence_snapshot.snapshot_id,
+            claim_snapshot_id=lineage.claim_snapshot_id,
+            coverage_set_id=lineage.coverage_set_id,
+            coverage_projection_id=lineage.coverage_projection_id,
+            claim_ids=lineage.claim_ids,
+            source_version_ids=lineage.source_version_ids,
+        )
 
     site_root, manifest_path = build_report_a_artifact(
         project_root=ctx.project_root,
@@ -495,6 +548,7 @@ def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
         project_id=ctx.contract.project_id,
         contract_version=ctx.contract.contract_version,
         run_id=run_id,
+        lineage=binding,
     )
     return (
         site_root.relative_to(ctx.project_root).as_posix(),
@@ -859,6 +913,24 @@ def run_project(
 
     # ── Run context for handlers ────────────────────────────────────────
     ctx = run_context or RunContext(project_root=project_root, contract=contract)
+    if ctx.research_package_path is None:
+        canonical_research_package = (
+            project_root / CANONICAL_A_RESEARCH_PACKAGE_RELATIVE_PATH
+        )
+        if canonical_research_package.is_file():
+            ctx.research_package_path = canonical_research_package
+            ctx.run_inputs.setdefault(
+                CANONICAL_A_RESEARCH_PACKAGE_RELATIVE_PATH,
+                _sha256_file(canonical_research_package),
+            )
+    if ctx.report_data_path is None:
+        canonical_report_data = project_root / CANONICAL_REPORT_DATA_RELATIVE_PATH
+        if canonical_report_data.is_file():
+            ctx.report_data_path = canonical_report_data
+            ctx.run_inputs.setdefault(
+                CANONICAL_REPORT_DATA_RELATIVE_PATH,
+                _sha256_file(canonical_report_data),
+            )
 
     # ── resume：派发任何节点前绑定规范宇宙输入并校验终态证据 ────────────
     if resume:
@@ -985,7 +1057,7 @@ def run_project(
             )
         return _finalize_run(
             project_root, run_id, contract, started_at, resume,
-            run_context, node_summary, reused, created, current_outcome,
+            ctx, node_summary, reused, created, current_outcome,
             event_store, checkpoint_id=checkpoint_id,
             reused_artifacts=reused_artifacts,
         )
@@ -1000,6 +1072,205 @@ def run_project(
     if outcome == "failed":
         return _finalize("failed")
 
+    # ── Task 5.5：新鲜来源研究包的真实 A 类科学谱系路径 ──────────────
+    if ctx.research_package_path is not None:
+        if tuple(report.value for report in contract.reports) != ("A",):
+            raise ContractConfigError("A 类新鲜来源研究包只允许生成 A 类报告")
+        if tuple(output.value for output in contract.outputs) != ("html",):
+            raise ContractConfigError("A 类新鲜来源研究包只允许生成站点式 HTML")
+        if not ctx.research_package_path.is_file():
+            raise ContractConfigError(
+                f"A 类新鲜来源研究包不存在：{ctx.research_package_path}"
+            )
+        from ci_workflow.application.source_research_service import (
+            ingest_fresh_a_research_package,
+            load_fresh_a_research_package,
+            persist_report_a_projection,
+        )
+
+        package = load_fresh_a_research_package(ctx.research_package_path)
+        if " ".join(package.indication.split()) != contract.indication:
+            raise ContractConfigError("A 类研究包的适应症与项目合同不一致")
+        if package.data_cutoff > contract.data_cutoff:
+            raise ContractConfigError("A 类研究包包含项目截止日之后首次披露的资料")
+        package_digest = _sha256_file(ctx.research_package_path)
+        derived_data_path = project_root / "state/derived/report-a-data.json"
+        derived_data_path.parent.mkdir(parents=True, exist_ok=True)
+        derived_data_path.write_bytes(
+            _canonical_json(package.report_data.model_dump(mode="json"))
+        )
+        ctx.report_data_path = derived_data_path
+        ctx.run_inputs.setdefault(
+            "state/derived/report-a-data.json", _sha256_file(derived_data_path)
+        )
+
+        _run_node(
+            "universe",
+            None,
+            lambda _current: {
+                "universe_receipt_id": stable_id(
+                    "universe-receipt",
+                    contract.project_id,
+                    package.research_content_digest,
+                ),
+            },
+            input_digest=_compute_input_digest(
+                "universe", None, contract.contract_version, extra=package_digest
+            ),
+        )
+        _run_node(
+            "route",
+            None,
+            lambda _current: {
+                "source_graph_id": stable_id(
+                    "source-graph",
+                    contract.project_id,
+                    *sorted({item.route_id for item in package.sources}),
+                ),
+            },
+            input_digest=_compute_input_digest(
+                "route", None, contract.contract_version, extra=package_digest
+            ),
+        )
+
+        def _ingest_research(current: RunContext) -> dict[str, Any]:
+            current.research_lineage = ingest_fresh_a_research_package(
+                project_root=project_root,
+                project_id=contract.project_id,
+                contract_version=contract.contract_version,
+                package=package,
+            )
+            return {
+                "ingest_receipt_id": stable_id(
+                    "ingest-receipt",
+                    contract.project_id,
+                    current.research_lineage.evidence_snapshot.snapshot_id,
+                )
+            }
+
+        _run_node(
+            "ingest",
+            None,
+            _ingest_research,
+            input_digest=_compute_input_digest(
+                "ingest", None, contract.contract_version, extra=package_digest
+            ),
+        )
+        if ctx.research_lineage is None:
+            _ingest_research(ctx)
+        lineage = ctx.research_lineage
+        evidence_references = tuple(
+            {
+                "fragment_id": fragment_id,
+                "sha256": _sha256_bytes(capture.content_text.encode("utf-8")),
+            }
+            for fragment_id, capture in zip(
+                lineage.fragment_ids, package.sources, strict=True
+            )
+        )
+        shared_nodes: tuple[tuple[str, dict[str, Any]], ...] = (
+            (
+                "extract",
+                {
+                    "extract_receipt_id": stable_id(
+                        "extract-receipt", contract.project_id, package_digest
+                    )
+                },
+            ),
+            ("resolve", {"evidence_references": evidence_references}),
+        )
+        for node_id, outputs in shared_nodes:
+            _run_node(
+                node_id,
+                None,
+                lambda _current, value=outputs: value,
+                input_digest=_compute_input_digest(
+                    node_id,
+                    None,
+                    contract.contract_version,
+                    extra=package.research_content_digest,
+                ),
+            )
+
+        report_nodes: tuple[tuple[str, dict[str, Any]], ...] = (
+            (
+                "gate",
+                {
+                    "gate_passed": True,
+                    "failures": (),
+                    "evidence_digest": package.research_content_digest,
+                },
+            ),
+            (
+                "snapshot",
+                {"snapshot_id": lineage.evidence_snapshot.snapshot_id},
+            ),
+            (
+                "scientific_qc",
+                {
+                    "qc_verdict": {
+                        "verdict_id": stable_id(
+                            "scientific-verdict",
+                            package.scientific_review.reviewer_id,
+                            package.research_content_digest,
+                        ),
+                        "verdict_digest": package.scientific_review.reviewed_content_digest,
+                        "candidate_snapshot_id": lineage.evidence_snapshot.snapshot_id,
+                        "candidate_content_digest": package.research_content_digest,
+                        "review_input_digest": package.research_content_digest,
+                    }
+                },
+            ),
+            (
+                "analyze",
+                {
+                    "pages": tuple(
+                        page.id
+                        for page in PageRegistry.load().catalog(ReportKind.A).pages
+                    )
+                },
+            ),
+        )
+        for node_id, outputs in report_nodes:
+            _run_node(
+                node_id,
+                "A",
+                lambda _current, value=outputs: value,
+                input_digest=_compute_input_digest(
+                    node_id,
+                    "A",
+                    contract.contract_version,
+                    extra=package.research_content_digest,
+                ),
+            )
+
+        def _render_fresh_a(current: RunContext) -> dict[str, Any]:
+            site_path, manifest_relative = _render_html_a(current, run_id)
+            manifest_path = project_root / manifest_relative
+            persist_report_a_projection(
+                project_root=project_root,
+                lineage=current.research_lineage,
+                manifest_path=manifest_path,
+            )
+            return {
+                "format": "html",
+                "artifact_id": stable_id(
+                    "artifact", site_path, manifest_relative, package_digest
+                ),
+            }
+
+        _run_node(
+            "format",
+            "A",
+            _render_fresh_a,
+            input_digest=_compute_input_digest(
+                "format", "A", contract.contract_version, extra=package_digest
+            ),
+        )
+        if outcome == "failed":
+            return _finalize("failed")
+        return _finalize("completed")
+
     # ── 已验证报告数据包：Task 5.4 的正向 A/HTML 真实渲染路径 ────────
     if ctx.report_data_path is not None:
         if tuple(report.value for report in contract.reports) != ("A",):
@@ -1008,6 +1279,17 @@ def run_project(
             raise ContractConfigError("当前报告数据包只允许生成站点式 HTML")
         if not ctx.report_data_path.is_file():
             raise ContractConfigError(f"报告数据包不存在：{ctx.report_data_path}")
+        from ci_workflow.renderers.portal.report_a import load_report_a_data
+
+        report_data = load_report_a_data(ctx.report_data_path)
+        if " ".join(report_data.indication.split()) != contract.indication:
+            raise ContractConfigError(
+                "A 类报告数据包的适应症与项目合同不一致，拒绝生成。"
+            )
+        if report_data.data_cutoff > contract.data_cutoff:
+            raise ContractConfigError(
+                "A 类报告数据包包含项目截止日之后的资料，拒绝生成。"
+            )
         render_digest = _compute_input_digest(
             "render",
             "A",
@@ -1055,7 +1337,8 @@ def run_project(
 
     # ── Universe node ───────────────────────────────────────────────────
     if ctx.universe_input_path is None:
-        node_summary["universe"] = "skipped"
+        _write_source_research_work_item(project_root, contract)
+        node_summary["universe"] = "awaiting_source_research"
     elif not ctx.universe_input_path.is_file():
         outcome = "failed"
         node_summary["universe"] = "failed"
@@ -1216,8 +1499,8 @@ def run_project(
     )
     if any(state == "evidence_blocked" for state in report_states.values()):
         outcome = "evidence_blocked"
-    elif node_summary.get("universe") == "skipped":
-        # 无宇宙输入：证据管线待定 → running（不说完成）
+    elif node_summary.get("universe") == "awaiting_source_research":
+        # 无研究输入：有明确可恢复待办 → running（不说完成）
         outcome = "running"
 
     return _finalize(outcome)

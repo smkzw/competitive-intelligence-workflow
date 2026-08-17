@@ -21,18 +21,22 @@
     for (var i = 0; i < trials.length; i += 1) if (trials[i].product_id === productId) return trials[i];
     return null;
   }
-  function efficacyFor(productId, arm) {
+  function efficacyFor(productId, arm, endpointFilter, timepointFilter) {
     for (var i = 0; i < efficacy.length; i += 1) {
       if (efficacy[i].product_id !== productId || efficacy[i].arm !== arm) continue;
-      if (selected.endpoint && selected.endpoint.indexOf(efficacy[i].endpoint) === -1) continue;
-      if (selected.timepoint && selected.timepoint.indexOf(efficacy[i].timepoint) === -1) continue;
+      var endpoints = endpointFilter || selected.endpoint;
+      var timepoints = timepointFilter || selected.timepoint;
+      if (endpoints && endpoints.indexOf(efficacy[i].endpoint) === -1) continue;
+      if (timepoints && timepoints.indexOf(efficacy[i].timepoint) === -1) continue;
       return efficacy[i].value;
     }
     return null;
   }
   function safetyFor(productId, term) {
+    var chosenArm = selected.arm && selected.arm.length ? selected.arm[0] : "治疗组";
     for (var i = 0; i < safety.length; i += 1) {
       if (safety[i].product_id !== productId || safety[i].term !== term) continue;
+      if ((safety[i].arm || "治疗组") !== chosenArm) continue;
       if (selected.category && selected.category.indexOf(safety[i].category) === -1) continue;
       if (selected.event && selected.event.indexOf(safety[i].term) === -1) continue;
       return safety[i].value;
@@ -46,6 +50,11 @@
     return node;
   }
   function visibleProductNames() {
+    if (selected.product && selected.product.length) {
+      var chosen = {};
+      selected.product.forEach(function (name) { chosen[name] = true; });
+      return chosen;
+    }
     var active = {};
     var rows = document.querySelectorAll("tbody tr:not([hidden]), [data-product-id]:not([hidden])");
     for (var i = 0; i < rows.length; i += 1) {
@@ -60,14 +69,24 @@
     host.innerHTML = "";
     var active = visibleProductNames();
     var productScope = host.getAttribute("data-product-scope");
+    var isHome = host.getAttribute("data-chart-id") === "home-efficacy";
+    var endpointFilter = isHome ? ["EASI-75"] : null;
+    var timepointFilter = isHome ? ["第16周"] : null;
     var rows = products.filter(function (p) {
       if (productScope) return p.id === productScope;
       return Object.keys(active).length === 0 || active[p.name];
+    }).filter(function (p) {
+      return efficacyFor(p.id, "治疗组", endpointFilter, timepointFilter) != null &&
+        efficacyFor(p.id, "对照组", endpointFilter, timepointFilter) != null;
     });
+    if (!rows.length) {
+      host.appendChild(el("div", "kz-empty", "当前产品暂无可横向比较的公开关键疗效数值。"));
+      return;
+    }
     for (var i = 0; i < rows.length; i += 1) {
       var p = rows[i];
-      var treat = efficacyFor(p.id, "治疗组") || 0;
-      var ctrl = efficacyFor(p.id, "对照组") || 0;
+      var treat = efficacyFor(p.id, "治疗组", endpointFilter, timepointFilter);
+      var ctrl = efficacyFor(p.id, "对照组", endpointFilter, timepointFilter);
       var row = el("div", "kz-a-bar-row");
       row.appendChild(el("strong", "", p.name));
       var bars = el("div", "kz-a-bar-row__bars");
@@ -95,8 +114,10 @@
   function renderSafety(host) {
     host.innerHTML = "";
     var productScope = host.getAttribute("data-product-scope");
+    var active = visibleProductNames();
     var shownProducts = products.filter(function (item) {
-      return !productScope || item.id === productScope;
+      if (productScope) return item.id === productScope;
+      return Object.keys(active).length === 0 || active[item.name];
     });
     var grid = el("div", "kz-a-heatmap");
     grid.style.setProperty("--product-count", shownProducts.length);
@@ -112,19 +133,21 @@
     for (var t = 0; t < terms.length; t += 1) {
       var values = shownProducts.map(function (item) { return safetyFor(item.id, terms[t]); });
       var published = values.filter(function (value) { return value != null; });
-      var min = Math.min.apply(null, published);
-      var max = Math.max.apply(null, values.map(function (v) { return v == null ? 0 : v; }));
+      var min = published.length ? Math.min.apply(null, published) : 0;
+      var max = published.length ? Math.max.apply(null, published) : 0;
       grid.appendChild(el("div", "kz-a-heat-label", terms[t]));
       for (var j = 0; j < values.length; j += 1) {
         var cell = el("div", "", values[j] == null ? "未公开" : values[j] + "%");
-        var ratio = max === min ? 0.5 : (values[j] - min) / (max - min);
+        var ratio = values[j] == null ? 0 : (max === min ? 0.5 : (values[j] - min) / (max - min));
         cell.style.background = values[j] == null ? "#eeeeec" : color(values[j], min, max);
         cell.style.color = values[j] != null && ratio > 0.55 ? "#fff" : "#17130f";
         grid.appendChild(cell);
       }
     }
     host.appendChild(grid);
-    host.appendChild(el("p", "kz-a-heat-note", "颜色深浅仅在同一事件内比较；灰色表示未公开。"));
+    host.setAttribute("data-view-digest", shownProducts.map(function (item) { return item.id; }).join("|"));
+    var armLabel = selected.arm && selected.arm.length ? selected.arm[0] : "治疗组";
+    host.appendChild(el("p", "kz-a-heat-note", "当前组别：" + armLabel + "。颜色深浅仅在同一事件内比较；灰色表示未公开。"));
   }
   function renderMatrix(host) {
     host.innerHTML = "";
@@ -138,14 +161,23 @@
     var active = visibleProductNames();
     var shownProducts = products.filter(function (p) {
       return Object.keys(active).length === 0 || active[p.name];
+    }).filter(function (p) {
+      return efficacyFor(p.id, "治疗组") != null &&
+        efficacyFor(p.id, "对照组") != null &&
+        safetyFor(p.id, term) != null && trialFor(p.id) != null &&
+        (useTotalSample || trialFor(p.id).treatment_sample_size != null);
     });
+    if (!shownProducts.length) {
+      host.appendChild(el("div", "kz-empty", "当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。"));
+      return;
+    }
     var points = shownProducts.map(function (p) {
-      var treatment = efficacyFor(p.id, "治疗组") || 0;
-      var control = efficacyFor(p.id, "对照组") || 0;
+      var treatment = efficacyFor(p.id, "治疗组");
+      var control = efficacyFor(p.id, "对照组");
       return {
         product: p,
         x: useDifference ? treatment - control : treatment,
-        eventRate: safetyFor(p.id, term) || 0,
+        eventRate: safetyFor(p.id, term),
         trial: trialFor(p.id)
       };
     });
@@ -169,13 +201,14 @@
       var trial = point.trial;
       var n = trial ? (useTotalSample ? trial.sample_size : trial.treatment_sample_size) : 1;
       var size = 34 + 46 * Math.sqrt(n / maxN);
-      var bubble = el("div", "kz-a-bubble", p.name);
+      var bubble = el("div", "kz-a-bubble", String(i + 1));
       bubble.style.left = xPosition + "%";
       bubble.style.bottom = yPosition + "%";
       bubble.style.width = size + "px"; bubble.style.height = size + "px";
       bubble.setAttribute("data-efficacy-value", point.x.toFixed(1));
       bubble.setAttribute("data-event-rate", point.eventRate.toFixed(1));
       bubble.title = "疗效 " + point.x.toFixed(1) + "%｜" + term + " " + point.eventRate + "%｜样本量 " + n;
+      bubble.setAttribute("aria-label", p.name + "：" + bubble.title);
       plot.appendChild(bubble);
     }
     [0, 0.25, 0.5, 0.75, 1].forEach(function (ratio) {
@@ -187,7 +220,25 @@
     plot.appendChild(el("span", "kz-a-axis-title kz-a-axis-title--x", useDifference ? "治疗组－对照组差值" : "治疗组疗效观察值"));
     plot.appendChild(el("span", "kz-a-axis-title kz-a-axis-title--y", term + "发生率"));
     host.appendChild(plot);
-    host.appendChild(el("p", "kz-a-chart-note", "横轴：越靠右，疗效观察值越高｜纵轴：发生率（越低越靠上）｜固定范围避免放大细小差异"));
+    var key = el("ol", "kz-a-bubble-key");
+    points.forEach(function (point, index) {
+      var item = el("li", "");
+      item.appendChild(el("b", "", String(index + 1)));
+      item.appendChild(el("span", "", point.product.name));
+      key.appendChild(item);
+    });
+    host.appendChild(key);
+    var missing = products.filter(function (product) {
+      if (selected.product && selected.product.length && selected.product.indexOf(product.name) === -1) return false;
+      return !shownProducts.some(function (shown) { return shown.id === product.id; });
+    });
+    if (missing.length) {
+      var disclosure = el("details", "kz-a-matrix-missing");
+      disclosure.appendChild(el("summary", "", "另有 " + missing.length + " 个产品因当前三维数据未完整公开，未绘入气泡图"));
+      disclosure.appendChild(el("p", "", missing.map(function (product) { return product.name; }).join("、")));
+      host.appendChild(disclosure);
+    }
+    host.appendChild(el("p", "kz-a-chart-note", "横轴：越靠右，疗效观察值越高｜纵轴：发生率（越低越靠上）；固定量程避免放大细小差异"));
     var sizeNote = document.querySelector(".kz-a-bubble-size");
     if (sizeNote) sizeNote.textContent = "气泡大小：" + (useTotalSample ? "全部随机样本量" : "治疗组样本量");
   }
@@ -199,17 +250,20 @@
     wrapper.style.setProperty("--stage-count", stages.length);
     wrapper.appendChild(el("div", "kz-a-landscape-head", "靶点"));
     stages.forEach(function (stage) { wrapper.appendChild(el("div", "kz-a-landscape-head", stage)); });
+    function stageForProduct(product) {
+      if (/终止|暂停|撤回|停止|清算/.test(product.status)) return "历史观察";
+      if (/申报|上市|获批|NDA/.test(product.phase + product.status)) return "申报或上市";
+      if (/III期/.test(product.phase)) return "III期";
+      return "II期及更早";
+    }
+    var active = visibleProductNames();
     targets.forEach(function (target) {
       wrapper.appendChild(el("strong", "kz-a-landscape-target", target));
       stages.forEach(function (stage) {
         var cell = el("div", "kz-a-landscape-cell");
         products.filter(function (p) {
-          if (p.target !== target) return false;
-          if (stage === "历史观察") return /终止|暂停|撤回/.test(p.status);
-          if (/终止|暂停|撤回/.test(p.status)) return false;
-          if (stage === "II期及更早") return /I期|II期/.test(p.phase);
-          if (stage === "III期") return /III期/.test(p.phase);
-          return /申报|上市/.test(p.phase + p.status);
+          return p.target === target && stageForProduct(p) === stage &&
+            (Object.keys(active).length === 0 || active[p.name]);
         }).forEach(function (p) {
           var chip = el("span", "kz-a-landscape-product", p.name);
           chip.setAttribute("data-visual-node", "product"); cell.appendChild(chip);
@@ -219,11 +273,19 @@
       });
     });
     host.appendChild(wrapper);
+    host.setAttribute("data-view-digest", Object.keys(active).sort().join("|") || "全部产品");
   }
   function renderPortfolio(host) {
     host.innerHTML = "";
     var wrapper = el("div", "kz-a-portfolio-visual");
-    trials.forEach(function (trial) {
+    var active = visibleProductNames();
+    trials.filter(function (trial) {
+      var name = productName(trial.product_id);
+      if (Object.keys(active).length && !active[name]) return false;
+      if (selected.phase && selected.phase.indexOf(trial.phase) === -1) return false;
+      if (selected.region && selected.region.indexOf(trial.region) === -1) return false;
+      return true;
+    }).forEach(function (trial) {
       var item = el("article", "kz-a-portfolio-item");
       item.setAttribute("data-visual-node", "trial");
       item.appendChild(el("span", "", trial.region + "｜" + trial.phase));
@@ -238,6 +300,10 @@
     host.innerHTML = "";
     var chartId = host.getAttribute("data-chart-id") || "";
     var rows = (chartId.indexOf("patent") >= 0 ? patents : chartId.indexOf("history") >= 0 ? historyRows : regulatory).slice();
+    var active = visibleProductNames();
+    rows = rows.filter(function (row) {
+      return Object.keys(active).length === 0 || active[productName(row.product_id)];
+    });
     rows.sort(function (left, right) {
       var leftDate = left.date || left.expiry || "";
       var rightDate = right.date || right.expiry || "";
@@ -249,8 +315,9 @@
       item.setAttribute("data-visual-node", "event");
       item.appendChild(el("span", "kz-a-timeline-dot"));
       item.appendChild(el("strong", "", productName(row.product_id)));
-      item.appendChild(el("b", "", row.event || row.display_family || row.observation));
-      item.appendChild(el("small", "", row.date || (row.jurisdiction + "｜" + row.expiry)));
+      var track = row.track ? row.track + "｜" : "";
+      item.appendChild(el("b", "", track + (row.event || row.display_family || row.observation)));
+      item.appendChild(el("small", "", (row.date || (row.jurisdiction + "｜" + row.expiry)) + (row.status ? "｜" + row.status : "")));
       wrapper.appendChild(item);
     });
     host.appendChild(wrapper);
@@ -293,7 +360,10 @@
   function renderNetwork(host) {
     host.innerHTML = "";
     var wrapper = el("div", "kz-a-network-visual");
-    companies.forEach(function (row) {
+    var active = visibleProductNames();
+    companies.filter(function (row) {
+      return Object.keys(active).length === 0 || active[productName(row.product_id)];
+    }).forEach(function (row) {
       var flow = el("article", "kz-a-network-flow");
       flow.setAttribute("data-visual-node", "relationship");
       flow.appendChild(el("strong", "", productName(row.product_id)));
@@ -309,7 +379,8 @@
   function renderGeneric(host) {
     host.innerHTML = "";
     var wrapper = el("div", "kz-a-target-groups");
-    products.forEach(function (p) { var card=el("div","");card.appendChild(el("strong","",p.name));card.appendChild(el("span","",p.target+"｜"+p.phase+"｜"+p.status));wrapper.appendChild(card); });
+    var active = visibleProductNames();
+    products.filter(function (p) { return Object.keys(active).length === 0 || active[p.name]; }).forEach(function (p) { var card=el("div","");card.appendChild(el("strong","",p.name));card.appendChild(el("span","",p.target+"｜"+p.phase+"｜"+p.status));wrapper.appendChild(card); });
     host.appendChild(wrapper);
   }
   function renderCharts() {
@@ -331,7 +402,9 @@
     var items = document.querySelectorAll("[data-filter-dimension] button[aria-pressed='true']");
     selected = {};
     for (var i = 0; i < items.length; i += 1) {
-      var dim = items[i].parentElement.getAttribute("data-filter-dimension");
+      var group = items[i].closest("[data-filter-dimension]");
+      var dim = group ? group.getAttribute("data-filter-dimension") : null;
+      if (!dim) continue;
       if (!selected[dim]) selected[dim] = [];
       selected[dim].push(items[i].getAttribute("data-filter-value"));
     }
@@ -346,8 +419,18 @@
       candidates[r].hidden = !ok;
       if (ok) shown += 1;
     }
-    var empty = document.querySelector(".kz-a-empty");
-    if (empty) empty.hidden = shown !== 0;
+    var empties = document.querySelectorAll("[data-filter-empty]");
+    for (var e = 0; e < empties.length; e += 1) empties[e].hidden = shown !== 0;
+    var counts = document.querySelectorAll("[data-filter-selection-count]");
+    for (var s = 0; s < counts.length; s += 1) {
+      var countDim = counts[s].getAttribute("data-filter-selection-count");
+      var count = countDim && selected[countDim] ? selected[countDim].length : 0;
+      var total = counts[s].closest("[data-filter-total]");
+      var totalCount = total ? total.getAttribute("data-filter-total") : String(products.length);
+      counts[s].textContent = count ? "已选择 " + count + " 项" : "默认显示全部 " + totalCount + " 项";
+    }
+    var summaries = document.querySelectorAll("[data-filter-summary]");
+    for (var u = 0; u < summaries.length; u += 1) summaries[u].textContent = Object.keys(selected).length ? "筛选已生效" : "当前显示全部";
     var query = new URLSearchParams();
     Object.keys(selected).forEach(function (dim) { selected[dim].forEach(function (value) { query.append(dim, value); }); });
     var matrixControls = document.querySelectorAll("[data-matrix-control]");
@@ -365,6 +448,11 @@
     if (!(target instanceof Element)) return;
     var filter = target.closest("[data-filter-dimension] button");
     if (filter) { filter.setAttribute("aria-pressed", filter.getAttribute("aria-pressed") === "true" ? "false" : "true"); applyFilters(); }
+    if (target.closest("[data-filter-reset]")) {
+      var pressed = document.querySelectorAll("[data-filter-dimension] button[aria-pressed='true']");
+      for (var i = 0; i < pressed.length; i += 1) pressed[i].setAttribute("aria-pressed", "false");
+      applyFilters();
+    }
     var evidence = target.closest("[data-open-evidence]");
     if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"));} }
     if (target.closest("[data-close-evidence]")) { var p=document.getElementById("data-basis-panel");if(p)p.hidden=true; }
@@ -374,11 +462,28 @@
     var host=document.querySelector('[data-module="matrix"] .kz-chart'); if(host){host.setAttribute("data-view-digest", Array.prototype.map.call(controls,function(x){return x.selectedIndex;}).join("-"));applyFilters();}
   });
   var params = new URLSearchParams(window.location.search);
+  var parameterDimensions = {};
+  params.forEach(function (_value, key) { parameterDimensions[key] = true; });
+  Object.keys(parameterDimensions).forEach(function (key) {
+    var defaults = document.querySelectorAll('[data-filter-dimension="'+CSS.escape(key)+'"] button[aria-pressed="true"]');
+    for (var d = 0; d < defaults.length; d += 1) defaults[d].setAttribute("aria-pressed", "false");
+  });
   params.forEach(function (value, key) { var button=document.querySelector('[data-filter-dimension="'+CSS.escape(key)+'"] [data-filter-value="'+CSS.escape(value)+'"]');if(button)button.setAttribute("aria-pressed","true"); });
   if (controls.length) {
     controls[0].selectedIndex = params.get("matrix_x") === "difference" ? 1 : 0;
     controls[1].selectedIndex = params.get("matrix_y") === "sae" ? 1 : 0;
     controls[2].selectedIndex = params.get("matrix_size") === "total" ? 1 : 0;
+  }
+  var filterRoots = document.querySelectorAll("[data-module]");
+  for (var f = 0; f < filterRoots.length; f += 1) {
+    if (!filterRoots[f].querySelector("[data-filter-dimension]")) continue;
+    var tools = el("div", "kz-a-filter-tools");
+    var reset = el("button", "", "清除筛选");
+    reset.type = "button"; reset.setAttribute("data-filter-reset", "");
+    tools.appendChild(reset); tools.appendChild(el("span", "", "当前显示全部"));
+    tools.lastChild.setAttribute("data-filter-summary", "");
+    var grid = filterRoots[f].querySelector(".kz-a-filter-grid") || filterRoots[f].querySelector("[data-filter-dimension]");
+    if (grid) grid.insertAdjacentElement("afterend", tools);
   }
   applyFilters();
 })();

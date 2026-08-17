@@ -1,0 +1,11 @@
+{
+  "verdict": "FAIL",
+  "results": [
+    {
+      "id": "M1",
+      "status": "fail",
+      "detail": "关键数字未锚定 180、锚点指向未知实体 0、锚点快照缺失 0"
+    },
+    {"id": "V3", "status": "pass", "detail": "三视口截图通过（84 页）"}
+  ]
+}

@@ -363,8 +363,13 @@ def _capability_preflight(args: argparse.Namespace) -> int:
         )
     except (ValueError, ProjectWorkspaceError) as exc:
         raise ContractError(str(exc)) from exc
-    _atomic_json_write(Path(args.json), matrix.model_dump(mode="json"))
-    print(f"能力预检完成 PREFLIGHT_COMPLETE；结果已保存：{Path(args.json)}")
+    receipt_path = (
+        Path(args.json)
+        if args.json
+        else project_root / "capabilities" / "preflight.json"
+    )
+    _atomic_json_write(receipt_path, matrix.model_dump(mode="json"))
+    print(f"能力预检完成 PREFLIGHT_COMPLETE；结果已保存：{receipt_path}")
     for message in matrix.user_messages:
         print(message)
     return 0
@@ -515,7 +520,9 @@ def _build_parser() -> argparse.ArgumentParser:
     project = groups.add_parser("project", help="创建竞品调研项目并管理运行")
     project_commands = project.add_subparsers(dest="project_command", required=True)
     project_create = project_commands.add_parser("create", help="创建竞品调研项目")
-    project_create.add_argument("--root", required=True, help="新项目目录")
+    project_create.add_argument(
+        "--root", "--project", dest="root", required=True, help="新项目目录"
+    )
     project_create.add_argument("--indication", required=True, help="适应症")
     project_create.add_argument("--reports", required=True, help="报告类型，如 A,B,C")
     project_create.add_argument(
@@ -529,10 +536,14 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     project_create.set_defaults(handler=_create_project)
     project_verify = project_commands.add_parser("verify", help="核验项目合同")
-    project_verify.add_argument("--root", required=True, help="项目目录")
+    project_verify.add_argument(
+        "--root", "--project", dest="root", required=True, help="项目目录"
+    )
     project_verify.set_defaults(handler=_verify_project)
     project_run = project_commands.add_parser("run", help="运行或恢复项目")
-    project_run.add_argument("--root", required=True, help="项目目录")
+    project_run.add_argument(
+        "--root", "--project", dest="root", required=True, help="项目目录"
+    )
     project_run.add_argument("--resume", action="store_true", help="从同一项目检查点恢复")
     project_run.set_defaults(handler=_project_run_handler)
 
@@ -553,7 +564,10 @@ def _build_parser() -> argparse.ArgumentParser:
     preflight.add_argument(
         "--require-ocr", action="store_true", help="本次已知需要读取扫描件"
     )
-    preflight.add_argument("--json", required=True, help="保存机器可读能力矩阵的位置")
+    preflight.add_argument(
+        "--json",
+        help="保存机器可读能力矩阵的位置；项目模式默认保存到项目内 capabilities/preflight.json",
+    )
     preflight.set_defaults(handler=_capability_preflight)
 
     fixture = groups.add_parser("fixture", help="运行固定验收案例")

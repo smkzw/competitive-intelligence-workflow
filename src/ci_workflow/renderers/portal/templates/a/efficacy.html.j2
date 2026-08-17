@@ -3,7 +3,7 @@
 {% block lead %}默认展示主要竞品共同采用的第16周EASI-75应答率；治疗组和各自对照组始终并列，跨试验差异就近提示。{% endblock %}
 {% block content %}
 <section class="kz-a-panel" data-module="efficacy">
-  <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('endpoint', '疗效指标', efficacy|map(attribute='endpoint')|unique|list) }}{{ ui.filter_group('timepoint', '时间点', efficacy|map(attribute='timepoint')|unique|list) }}</div>
+  <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('endpoint', '疗效指标', efficacy|map(attribute='endpoint')|unique|list, ('EASI-75',)) }}{{ ui.filter_group('timepoint', '时间点', efficacy|map(attribute='timepoint')|unique|list, ('第16周',)) }}</div>
   {{ ui.section_head('第16周EASI-75应答率', '柱状图先呈现观察值；下表保留试验、组别、分析人群和完整数值') }}
   <p class="kz-a-comparability">不同试验的对照组应答率存在差异，横向观察时需同时阅读治疗组与本试验对照组。</p>
   {{ ui.chart('efficacy', 'efficacy-full', '第16周EASI-75应答率治疗组和对照组柱状图') }}

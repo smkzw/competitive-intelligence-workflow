@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "sample_kind": "zero_card_false_green",
+  "payload_file": "qc-report.json",
+  "source_sha256": "db4c3af8691c54496a2a3d19048254a514637648d72b4fdb4b57963ce8490cd0",
+  "expected_issue": "zero_card_false_green"
+}

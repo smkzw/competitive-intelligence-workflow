@@ -150,6 +150,36 @@ def test_cli_project_run_resume_rebinds_canonical_input_and_preserves_blocked_de
     assert "证据" in third.stderr
 
 
+def test_task55_plan_commands_accept_project_alias_and_default_preflight_receipt(
+    tmp_path: Path,
+) -> None:
+    """Task 5.5 实施计划中的精确命令可以原样运行，不要求用户翻译 CLI 参数。"""
+    project_root = tmp_path / "a-fresh-source"
+    created = _run(
+        "project", "create",
+        "--project", str(project_root),
+        "--reports", "A",
+        "--indication", "特应性皮炎",
+        "--outputs", "html",
+    )
+    assert created.returncode == 0, created.stderr
+    assert "项目已创建" in created.stdout
+
+    preflight = _run(
+        "capability", "preflight",
+        "--host", "local",
+        "--project", str(project_root),
+    )
+    assert preflight.returncode == 0, preflight.stderr
+    receipt = project_root / "capabilities" / "preflight.json"
+    assert receipt.is_file()
+    assert str(receipt) in preflight.stdout
+
+    run = _run("project", "run", "--project", str(project_root))
+    assert run.returncode == 0, run.stderr
+    assert "运行标识" in run.stdout
+
+
 def test_cli_project_run_resume_rejects_pre_drifted_blocker_package(
     tmp_path: Path,
 ) -> None:

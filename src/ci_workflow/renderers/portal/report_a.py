@@ -8,7 +8,7 @@ import shutil
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Self
+from typing import Any, Literal, Self
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -46,6 +46,7 @@ class ProductRow(BaseModel):
     route: str
     developer: str
     mechanism: str
+    result_status: Literal["有公开关键结果", "暂无公开关键结果", "临床前"] = "有公开关键结果"
 
     @field_validator("id")
     @classmethod
@@ -65,12 +66,15 @@ class TrialRow(BaseModel):
     region: str
     status: str
     sample_size: int = Field(gt=0)
-    treatment_sample_size: int = Field(gt=0)
+    treatment_sample_size: int | None = Field(default=None, gt=0)
     role: str
 
     @model_validator(mode="after")
     def _treatment_group_cannot_exceed_trial(self) -> TrialRow:
-        if self.treatment_sample_size > self.sample_size:
+        if (
+            self.treatment_sample_size is not None
+            and self.treatment_sample_size > self.sample_size
+        ):
             raise ValueError("治疗组样本量不得大于试验总样本量")
         return self
 
@@ -92,11 +96,32 @@ class SafetyRow(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     row_id: str
     product_id: str
+    trial_id: str | None = None
+    arm: str = "治疗组"
     category: str
     term: str
-    value: float
+    value: float | None
+    numerator: int | None = Field(default=None, ge=0)
+    denominator: int | None = Field(default=None, gt=0)
     unit: str
     time_window: str
+    disclosure_state: Literal["已公开", "未公开"] = "已公开"
+
+    @model_validator(mode="after")
+    def _value_matches_disclosure_state(self) -> SafetyRow:
+        if self.disclosure_state == "已公开" and self.value is None:
+            raise ValueError("已公开安全性记录必须包含数值")
+        if self.disclosure_state == "未公开" and self.value is not None:
+            raise ValueError("未公开安全性记录不得填入推测数值")
+        if (self.numerator is None) != (self.denominator is None):
+            raise ValueError("安全性分子与分母必须同时公开或同时缺失")
+        if (
+            self.numerator is not None
+            and self.denominator is not None
+            and self.numerator > self.denominator
+        ):
+            raise ValueError("安全性分子不得大于分母")
+        return self
 
 
 class RegulatoryRow(BaseModel):
@@ -145,6 +170,18 @@ class SourceRow(BaseModel):
     limitation: str
 
 
+class ReportALineageBinding(BaseModel):
+    """新鲜来源路径传给渲染器的已锁定科学谱系。"""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    evidence_snapshot_id: str
+    claim_snapshot_id: str
+    coverage_set_id: str
+    coverage_projection_id: str
+    claim_ids: tuple[str, ...] = Field(min_length=1)
+    source_version_ids: tuple[str, ...] = Field(min_length=1)
+
+
 class ReportAPortalData(BaseModel):
     """模板只读输入；产品/试验/结果关系必须在入模时闭合。"""
 
@@ -190,8 +227,16 @@ class ReportAPortalData(BaseModel):
             raise ValueError("报告事实引用了未知产品")
         if any(item.trial_id not in trials for item in self.efficacy):
             raise ValueError("疗效事实引用了未知试验")
+        if any(
+            item.trial_id is not None and item.trial_id not in trials
+            for item in self.safety
+        ):
+            raise ValueError("安全性事实引用了未知试验")
         required_safety = {"治疗期间不良事件", "严重不良事件", "特别关注不良事件", "常见不良事件"}
+        product_by_id = {item.id: item for item in self.products}
         for product_id in products:
+            if product_by_id[product_id].result_status != "有公开关键结果":
+                continue
             categories = {row.category for row in self.safety if row.product_id == product_id}
             if not required_safety <= categories:
                 raise ValueError(f"产品 {product_id} 的关键安全性维度不完整")
@@ -225,6 +270,36 @@ _STATIC_TEMPLATES: tuple[tuple[str, str], ...] = (
     ("historical-edge", "history_edge.html.j2"),
     ("evidence-limitations", "evidence_limitations.html.j2"),
 )
+
+_TRIAL_STATUS_ZH = {
+    "COMPLETED": "已完成",
+    "RECRUITING": "招募中",
+    "ACTIVE_NOT_RECRUITING": "进行中（已停止招募）",
+    "NOT_YET_RECRUITING": "尚未开始招募",
+    "ENROLLING_BY_INVITATION": "仅限邀请入组",
+    "SUSPENDED": "已暂停",
+    "TERMINATED": "已提前终止",
+    "WITHDRAWN": "启动前撤回",
+    "UNKNOWN": "登记状态尚不明确",
+}
+
+
+def _contains_chinese(value: str) -> bool:
+    return any("\u4e00" <= character <= "\u9fff" for character in value)
+
+
+def _display_trials(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
+    """把登记平台字段投影成面向医学用户的中文展示，不改写证据原文。"""
+    product_names = {item.id: item.name for item in data.products}
+    rows: list[dict[str, object]] = []
+    for trial in data.trials:
+        row = trial.model_dump(mode="json")
+        row["original_name"] = trial.name
+        if not _contains_chinese(trial.name):
+            row["name"] = f"{product_names[trial.product_id]}{trial.phase}临床研究"
+        row["status"] = _TRIAL_STATUS_ZH.get(trial.status, trial.status)
+        rows.append(row)
+    return tuple(rows)
 
 
 def load_report_a_data(path: Path) -> ReportAPortalData:
@@ -279,11 +354,15 @@ def _navigation() -> tuple[dict[str, str], ...]:
 
 def _view_context(data: ReportAPortalData, *, current: str, depth: int = 0) -> dict[str, Any]:
     product_names = {item.id: item.name for item in data.products}
-    trial_names = {item.id: item.name for item in data.trials}
+    display_trials = _display_trials(data)
+    trial_names = {str(item["id"]): str(item["name"]) for item in display_trials}
+    trial_original_names = {
+        str(item["id"]): str(item["original_name"]) for item in display_trials
+    }
     return {
         "report": data,
         "products": data.products,
-        "trials": data.trials,
+        "trials": display_trials,
         "efficacy": data.efficacy,
         "safety": data.safety,
         "regulatory": data.regulatory,
@@ -293,6 +372,7 @@ def _view_context(data: ReportAPortalData, *, current: str, depth: int = 0) -> d
         "sources": data.sources,
         "product_names": product_names,
         "trial_names": trial_names,
+        "trial_original_names": trial_original_names,
         "navigation": _navigation(),
         "current": current,
         "root_prefix": "../" * depth,
@@ -314,7 +394,9 @@ def render_report_a_site(data: ReportAPortalData, site_root: Path) -> tuple[Path
     _copy_assets(site_root)
     data_dir = site_root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
-    literal = json.dumps(data.model_dump(mode="json"), ensure_ascii=False, separators=(",", ":"))
+    display_payload = data.model_dump(mode="json")
+    display_payload["trials"] = list(_display_trials(data))
+    literal = json.dumps(display_payload, ensure_ascii=False, separators=(",", ":"))
     (data_dir / "report.js").write_text(f"window.REPORT_A={literal};\n", encoding="utf-8")
 
     generated: list[Path] = []
@@ -334,7 +416,7 @@ def render_report_a_site(data: ReportAPortalData, site_root: Path) -> tuple[Path
         context = _view_context(data, current="product-overview", depth=1)
         context["product"] = product
         context["product_trials"] = tuple(
-            row for row in data.trials if row.product_id == product.id
+            row for row in context["trials"] if row["product_id"] == product.id
         )
         context["product_efficacy"] = tuple(
             row for row in data.efficacy if row.product_id == product.id
@@ -383,7 +465,13 @@ def render_report_a_site(data: ReportAPortalData, site_root: Path) -> tuple[Path
 
 
 def build_report_a_artifact(
-    *, project_root: Path, data_path: Path, project_id: str, contract_version: int, run_id: str
+    *,
+    project_root: Path,
+    data_path: Path,
+    project_id: str,
+    contract_version: int,
+    run_id: str,
+    lineage: ReportALineageBinding | None = None,
 ) -> tuple[Path, Path]:
     """生成站点、锁定报告快照并写入 generated 清单。"""
     data = load_report_a_data(data_path)
@@ -395,11 +483,25 @@ def build_report_a_artifact(
     render_report_a_site(data, site_root)
 
     result_rows: tuple[EfficacyRow | SafetyRow, ...] = (*data.efficacy, *data.safety)
-    claim_ids = tuple(stable_id("claim", row.row_id) for row in result_rows)
     data_digest = hashlib.sha256(_canonical_json(data.model_dump(mode="json"))).hexdigest()
-    evidence_snapshot_id = stable_id("evidence-snapshot", project_id, data_digest)
-    claim_snapshot_id = stable_id("claim-snapshot", project_id, data_digest)
-    coverage_set_id = stable_id("coverage-set", project_id, "A", data_digest)
+    if lineage is None:
+        claim_ids = tuple(stable_id("claim", row.row_id) for row in result_rows)
+        evidence_snapshot_id = stable_id("evidence-snapshot", project_id, data_digest)
+        claim_snapshot_id = stable_id("claim-snapshot", project_id, data_digest)
+        coverage_set_id = stable_id("coverage-set", project_id, "A", data_digest)
+        coverage_projection_id = stable_id(
+            "coverage-projection", project_id, "A", data.report_version
+        )
+        evidence_reference_ids = tuple(
+            stable_id("source", row.source) for row in data.sources
+        )
+    else:
+        claim_ids = lineage.claim_ids
+        evidence_snapshot_id = lineage.evidence_snapshot_id
+        claim_snapshot_id = lineage.claim_snapshot_id
+        coverage_set_id = lineage.coverage_set_id
+        coverage_projection_id = lineage.coverage_projection_id
+        evidence_reference_ids = lineage.source_version_ids
     snapshot_payload = ReportSnapshotManifest(
         schema_version="1.0",
         project_id=project_id,
@@ -439,9 +541,7 @@ def build_report_a_artifact(
         claim_snapshot_id=claim_snapshot_id,
         report_snapshot_id=locked.snapshot_id,
         coverage_set_id=coverage_set_id,
-        coverage_projection_id=stable_id(
-            "coverage-projection", project_id, "A", data.report_version
-        ),
+        coverage_projection_id=coverage_projection_id,
         structured_exceptions=(),
         pages_or_sections=tuple(page.id for page in catalog.pages),
         product_ids=data.product_ids,
@@ -458,7 +558,7 @@ def build_report_a_artifact(
             "patents",
             "history",
         ),
-        evidence_reference_ids=tuple(stable_id("source", row.source) for row in data.sources),
+        evidence_reference_ids=evidence_reference_ids,
         design_contract=DesignContractBinding(
             roles=("report-portal",),
             digest=package_digest,

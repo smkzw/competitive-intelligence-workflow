@@ -73,6 +73,14 @@ def test_project_run_dispatches_typed_graph_from_saved_project_contract(
     assert result.exit_code == 0
     assert result.node_summary.get("intake") == "completed"
     assert result.node_summary.get("preflight") == "completed"
+    assert result.node_summary.get("universe") == "awaiting_source_research"
+    work_item = json.loads(
+        (project_root / "state/work-items/source-research.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert work_item["state"] == "等待宿主完成来源调研"
+    assert work_item["expected_input"] == "evidence/library/a-research-package.json"
 
     # 事件流非空且全部属于本次新运行身份
     events = EventStore(project_root).read_all()
@@ -100,6 +108,41 @@ def test_project_run_dispatches_typed_graph_from_saved_project_contract(
     validated = validate_run_manifest(project_root)
     assert isinstance(validated, dict)
     assert validated.get("run_id") == result.run_id
+
+
+def test_project_resume_discovers_agent_prepared_report_data_and_binds_current_input(
+    tmp_path: Path,
+) -> None:
+    """宿主 Agent 完成来源研究后把规范数据包放入项目，默认执行器可恢复生成。"""
+    contract = create_project_contract(
+        indication="特应性皮炎", reports=["A"], outputs=["html"]
+    )
+    project_root = create_project_workspace(tmp_path / "项目", contract)
+
+    first = run_project(project_root)
+    assert first.outcome == "running"
+
+    source = (
+        Path(__file__).resolve().parents[2]
+        / "fixtures/synthetic/a-complete/inputs/report-data.json"
+    )
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    payload["report_version"] = "v1"
+    canonical = project_root / "evidence/library/report-data.json"
+    canonical.parent.mkdir(parents=True, exist_ok=True)
+    canonical.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+    second = run_project(project_root, resume=True)
+    assert second.outcome == "completed"
+    manifest = _load_manifest(project_root)
+    assert manifest["run_id"] == second.run_id
+    assert manifest["input_hashes"] == {
+        "evidence/library/report-data.json": _sha256_file(canonical)
+    }
+    assert (project_root / "reports/A/v1/html/overview.html").is_file()
+    assert validate_run_manifest(project_root)["run_id"] == second.run_id
 
 
 _FIXTURE_UNIVERSE = (

@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "sample_kind": "malformed_stylesheet",
+  "payload_file": "competitive-report.css",
+  "source_sha256": "4583373abc7f6b8b4048fb12be471bbd16bfa64a312c54b1e0f35f5abddcffa4",
+  "expected_issue": "malformed_stylesheet"
+}

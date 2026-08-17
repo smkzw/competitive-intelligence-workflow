@@ -3,10 +3,10 @@
 {% block lead %}先以热图观察严重不良事件、特别关注不良事件、治疗期间不良事件和常见不良事件，再核对发生率与观察窗。{% endblock %}
 {% block content %}
 <section class="kz-a-panel" data-module="safety">
-  <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('category', '安全性维度', safety|map(attribute='category')|unique|list) }}{{ ui.filter_group('event', '不良事件', safety|map(attribute='term')|unique|list) }}</div>
+  <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('arm', '组别', safety|map(attribute='arm')|unique|list) }}{{ ui.filter_group('category', '安全性维度', safety|map(attribute='category')|unique|list) }}{{ ui.filter_group('event', '不良事件', safety|map(attribute='term')|unique|list) }}</div>
   {{ ui.section_head('安全性热图', '颜色只表示同一事件行内的发生率高低，不形成安全性排名') }}
   {{ ui.chart('safety', 'safety-full', '多维安全性发生率热图') }}
   <div class="kz-a-safety-legend" aria-label="颜色说明"><span>较低发生率</span><i></i><i></i><i></i><i></i><span>较高发生率</span></div>
-  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>维度</th><th>事件</th><th>发生率</th><th>观察窗</th></tr></thead><tbody>{% for row in safety %}<tr data-product="{{ product_names[row.product_id] }}" data-category="{{ row.category }}" data-event="{{ row.term }}"><td>{{ product_names[row.product_id] }}</td><td>{{ row.category }}</td><td>{{ row.term }}</td><td><strong>{{ row.value }}{{ row.unit }}</strong></td><td>{{ row.time_window }}</td></tr>{% endfor %}</tbody></table></div>{{ ui.empty_state() }}
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>试验</th><th>组别</th><th>维度</th><th>事件</th><th>发生率</th><th>人数</th><th>观察窗</th></tr></thead><tbody>{% for row in safety %}<tr data-product="{{ product_names[row.product_id] }}" data-arm="{{ row.arm }}" data-category="{{ row.category }}" data-event="{{ row.term }}"><td>{{ product_names[row.product_id] }}</td><td{% if row.trial_id %} title="{{ trial_original_names[row.trial_id] }}"{% endif %}>{% if row.trial_id %}{{ trial_names[row.trial_id] }}{% else %}未公开{% endif %}</td><td>{{ row.arm }}</td><td>{{ row.category }}</td><td>{{ row.term }}</td><td><strong>{% if row.value is none %}未公开{% else %}{{ row.value }}{{ row.unit }}{% endif %}</strong></td><td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% else %}未公开{% endif %}</td><td>{{ row.time_window }}</td></tr>{% endfor %}</tbody></table></div>{{ ui.empty_state() }}
 </section>
 {% endblock %}

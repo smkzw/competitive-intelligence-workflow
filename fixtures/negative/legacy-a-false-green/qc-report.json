@@ -1,0 +1,8 @@
+{
+  "verdict": "FAIL",
+  "results": [
+    {"id": "S1", "status": "pass", "detail": "0 张卡的引用链均落在许可来源"},
+    {"id": "S2", "status": "pass", "detail": "0 张卡快照均存在且非空"},
+    {"id": "S3", "status": "pass", "detail": "0 张卡 schema 校验通过"}
+  ]
+}

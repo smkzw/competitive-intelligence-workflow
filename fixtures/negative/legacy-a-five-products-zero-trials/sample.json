@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "sample_kind": "five_products_zero_trials",
+  "payload_file": "manifest.json",
+  "source_sha256": "48f23f413e6700e3b18a20525571f444b558ede044c7160356b7c6b497303b68",
+  "expected_issue": "products_without_trials"
+}

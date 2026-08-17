@@ -26,6 +26,7 @@ worker_03 节点：Chromium/WebKit 在 1280/1440/1920 的运行时失败测试
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -871,6 +872,14 @@ TOOLS_DIR = Path(__file__).resolve().parents[2] / "tools"
 CLI_VERIFY_PORTAL = TOOLS_DIR / "verify_portal.py"
 
 
+def _load_verify_portal_module() -> object:
+    spec = importlib.util.spec_from_file_location("task46_verify_portal", CLI_VERIFY_PORTAL)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def _run_cli(*argv: str, timeout: int = 600) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [sys.executable, str(CLI_VERIFY_PORTAL), *argv],
@@ -935,6 +944,43 @@ def test_cli_rejects_removed_identity_arguments_in_chinese() -> None:
     assert result.returncode == 2
     assert "参数错误" in result.stderr
     assert "--product" in result.stderr
+
+
+def test_cli_rejects_version_and_latest_together_in_chinese() -> None:
+    """显式版本与自动选择互斥，避免调用方以为锁定了另一份产物。"""
+    result = _run_cli(
+        "--report",
+        "A",
+        "--project",
+        "p",
+        "--version",
+        "v-one",
+        "--latest",
+        timeout=60,
+    )
+    assert result.returncode == 2
+    assert "参数错误" in result.stderr
+
+
+def test_latest_selects_most_recent_valid_manifest_and_ignores_broken_one(
+    tmp_path: Path,
+) -> None:
+    """--latest 只在可解析清单中按生成时刻选最新版本。"""
+    report_root = tmp_path / "reports" / "A"
+    manifests = {
+        "v-old": "2026-08-17T08:00:00+08:00",
+        "v-new": "2026-08-18T08:00:00+08:00",
+    }
+    for version, generated_at in manifests.items():
+        path = report_root / version / "html.manifest.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"generated_at": generated_at}), encoding="utf-8")
+    broken = report_root / "v-broken" / "html.manifest.json"
+    broken.parent.mkdir(parents=True, exist_ok=True)
+    broken.write_text("不是合法清单", encoding="utf-8")
+
+    module = _load_verify_portal_module()
+    assert module._resolve_version(tmp_path, "A", None) == "v-new"  # type: ignore[attr-defined]
 
 
 def test_cli_fails_closed_when_site_directory_missing() -> None:
