@@ -114,6 +114,27 @@ def test_a_efficacy_page_shows_chart_before_complete_table_and_controls(
         assert rows.nth(index).locator(".kz-a-bar-lane").count() == 2
 
 
+def test_a_efficacy_endpoint_and_timepoint_are_single_select_and_drive_title(
+    page: Page, a_site: Path
+) -> None:
+    _open(page, a_site, "efficacy.html")
+    endpoint = page.locator('[data-filter-dimension="endpoint"] button').first
+    timepoint = page.locator('[data-filter-dimension="timepoint"] button').first
+    endpoint.click()
+    timepoint.click()
+
+    assert (
+        page.locator('[data-filter-dimension="endpoint"] button[aria-pressed="true"]').count()
+        == 1
+    )
+    assert (
+        page.locator('[data-filter-dimension="timepoint"] button[aria-pressed="true"]').count()
+        == 1
+    )
+    title = timepoint.inner_text() + endpoint.inner_text()
+    assert title in page.locator("[data-efficacy-heading] h2").inner_text()
+    assert title in page.locator('[data-chart-id="efficacy-full"]').get_attribute("aria-label")
+
 def test_a_safety_page_shows_multidimensional_heatmap_before_table(
     page: Page, a_site: Path
 ) -> None:

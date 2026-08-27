@@ -3,13 +3,13 @@
 <details class="kz-a-filter kz-a-filter-disclosure" data-filter-dimension="{{ dimension }}" data-filter-total="{{ values|length }}" aria-label="{{ label }}">
   <summary><span class="kz-a-filter__label">{{ label }}</span><span data-filter-selection-count="{{ dimension }}">默认显示全部 {{ values|length }} 项</span></summary>
   <div class="kz-a-filter-options">
-    {% for value in values %}<button type="button" data-filter-value="{{ value }}" aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
+    {% for value in values %}<button type="button" data-filter-value="{{ value }}"{% if value in default_values %} data-filter-default{% endif %} aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
   </div>
 </details>
 {% else %}
 <div class="kz-a-filter" data-filter-dimension="{{ dimension }}" aria-label="{{ label }}">
   <span class="kz-a-filter__label">{{ label }}</span>
-  {% for value in values %}<button type="button" data-filter-value="{{ value }}" aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
+  {% for value in values %}<button type="button" data-filter-value="{{ value }}"{% if value in default_values %} data-filter-default{% endif %} aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
 </div>
 {% endif %}
 {%- endmacro %}

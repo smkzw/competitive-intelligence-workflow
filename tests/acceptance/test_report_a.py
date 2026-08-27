@@ -302,6 +302,27 @@ def test_default_efficacy_view_is_truthful_compact_and_resettable(
         for index in range(visible.count())
     } == {"第16周"}
 
+    page.locator("[data-filter-value='IGA 0/1且改善≥2分']").click()
+    page.locator("[data-filter-value='第12周']").click()
+    assert (
+        page.locator("[data-filter-dimension='endpoint'] button[aria-pressed='true']").count()
+        == 1
+    )
+    assert (
+        page.locator("[data-filter-dimension='timepoint'] button[aria-pressed='true']").count()
+        == 1
+    )
+    title = "第12周IGA 0/1且改善≥2分"
+    assert title in page.locator("[data-efficacy-heading] h2").inner_text()
+    assert title in page.locator("[data-chart-id='efficacy-full']").get_attribute(
+        "aria-label"
+    )
+
+    page.locator("[data-filter-reset]").click()
+    assert page.locator("[data-filter-value='EASI-75'][aria-pressed='true']").count() == 1
+    assert page.locator("[data-filter-value='第16周'][aria-pressed='true']").count() == 1
+    assert page.locator("[data-efficacy-heading] h2").inner_text() == "第16周EASI-75应答率"
+
 
 def test_safety_heatmap_is_scrollable_and_product_filter_updates_the_chart(
     page: Page, rendered_ad_site: Path
@@ -333,6 +354,8 @@ def test_landscape_assigns_each_product_once_and_regulatory_timeline_is_directly
     for index in range(events.count()):
         assert events.nth(index).locator("strong").inner_text() == "度普利尤单抗"
         assert events.nth(index).locator("b").inner_text().startswith(("中国｜", "境外｜"))
+    overseas = page.locator("[data-region-track='境外']")
+    assert "中国已获批" not in overseas.inner_text()
 
 
 def test_trial_labels_are_native_chinese_and_header_collapses_before_it_clips(

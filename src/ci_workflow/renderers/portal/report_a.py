@@ -302,6 +302,21 @@ def _display_trials(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
     return tuple(rows)
 
 
+def _display_regulatory(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
+    rows: list[dict[str, object]] = []
+    for item in data.regulatory:
+        row = item.model_dump(mode="json")
+        if item.track == "境外":
+            parts = [
+                part.strip()
+                for part in item.status.split("；")
+                if part.strip() and "中国" not in part
+            ]
+            row["status"] = "；".join(parts) or "境外状态未核实"
+        rows.append(row)
+    return tuple(rows)
+
+
 def load_report_a_data(path: Path) -> ReportAPortalData:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -365,7 +380,7 @@ def _view_context(data: ReportAPortalData, *, current: str, depth: int = 0) -> d
         "trials": display_trials,
         "efficacy": data.efficacy,
         "safety": data.safety,
-        "regulatory": data.regulatory,
+        "regulatory": _display_regulatory(data),
         "companies": data.companies,
         "patents": data.patents,
         "history": data.history,
@@ -396,6 +411,7 @@ def render_report_a_site(data: ReportAPortalData, site_root: Path) -> tuple[Path
     data_dir.mkdir(parents=True, exist_ok=True)
     display_payload = data.model_dump(mode="json")
     display_payload["trials"] = list(_display_trials(data))
+    display_payload["regulatory"] = list(_display_regulatory(data))
     literal = json.dumps(display_payload, ensure_ascii=False, separators=(",", ":"))
     (data_dir / "report.js").write_text(f"window.REPORT_A={literal};\n", encoding="utf-8")
 
@@ -425,7 +441,7 @@ def render_report_a_site(data: ReportAPortalData, site_root: Path) -> tuple[Path
             row for row in data.safety if row.product_id == product.id
         )
         context["product_regulatory"] = tuple(
-            row for row in data.regulatory if row.product_id == product.id
+            row for row in context["regulatory"] if row["product_id"] == product.id
         )
         context["product_companies"] = tuple(
             row for row in data.companies if row.product_id == product.id

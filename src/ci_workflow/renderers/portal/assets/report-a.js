@@ -72,6 +72,16 @@
     var isHome = host.getAttribute("data-chart-id") === "home-efficacy";
     var endpointFilter = isHome ? ["EASI-75"] : null;
     var timepointFilter = isHome ? ["第16周"] : null;
+    if (!isHome) {
+      var endpoint = selected.endpoint && selected.endpoint[0] ? selected.endpoint[0] : "EASI-75";
+      var timepoint = selected.timepoint && selected.timepoint[0] ? selected.timepoint[0] : "第16周";
+      var title = timepoint + endpoint + (endpoint.indexOf("率") === -1 ? "应答率" : "");
+      var heading = document.querySelector("[data-efficacy-heading] h2");
+      var evidenceButton = document.querySelector("[data-efficacy-heading] [data-open-evidence]");
+      if (heading) heading.textContent = title;
+      if (evidenceButton) evidenceButton.setAttribute("data-open-evidence", title);
+      host.setAttribute("aria-label", title + "治疗组和对照组柱状图");
+    }
     var rows = products.filter(function (p) {
       if (productScope) return p.id === productScope;
       return Object.keys(active).length === 0 || active[p.name];
@@ -451,10 +461,23 @@
     var target = event.target;
     if (!(target instanceof Element)) return;
     var filter = target.closest("[data-filter-dimension] button");
-    if (filter) { filter.setAttribute("aria-pressed", filter.getAttribute("aria-pressed") === "true" ? "false" : "true"); applyFilters(); }
+    if (filter) {
+      var group = filter.closest("[data-filter-dimension]");
+      var dimension = group ? group.getAttribute("data-filter-dimension") : "";
+      if (dimension === "endpoint" || dimension === "timepoint") {
+        var peers = group.querySelectorAll("button[aria-pressed='true']");
+        for (var p = 0; p < peers.length; p += 1) peers[p].setAttribute("aria-pressed", "false");
+        filter.setAttribute("aria-pressed", "true");
+      } else {
+        filter.setAttribute("aria-pressed", filter.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      }
+      applyFilters();
+    }
     if (target.closest("[data-filter-reset]")) {
       var pressed = document.querySelectorAll("[data-filter-dimension] button[aria-pressed='true']");
       for (var i = 0; i < pressed.length; i += 1) pressed[i].setAttribute("aria-pressed", "false");
+      var defaults = document.querySelectorAll("[data-filter-default]");
+      for (var j = 0; j < defaults.length; j += 1) defaults[j].setAttribute("aria-pressed", "true");
       applyFilters();
     }
     var evidence = target.closest("[data-open-evidence]");
