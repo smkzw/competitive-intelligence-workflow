@@ -1,0 +1,430 @@
+/* Kangzhe HTML-PPT FX v1.1 — copy verbatim from design_specs/assets/htmlppt/gx_fx.css */
+@property --gx-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+/* ---------- 内容页：纯白，去掉橘黄光晕 ---------- */
+.tpl-kangzhe .slide.content-slide {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+.tpl-kangzhe .slide.content-slide .slide-body::before { content: none !important; display: none !important; }
+.tpl-kangzhe .slide.content-slide > .gx-env,
+.tpl-kangzhe .slide.content-slide > .gx-net { display: none !important; }
+.tpl-kangzhe:has(.slide.content-slide.is-active) .deck::after { opacity: 0 !important; }
+.tpl-kangzhe:has(.slide.content-slide.is-active) .gx-grain { opacity: .018; }
+
+/* ---------- 英雄页环境：优雅游走的暖色光斑 ---------- */
+.gx-env { position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.gx-env .gx-blob {
+  position:absolute; border-radius:50%; pointer-events:none;
+  filter:blur(48px); will-change:transform;
+}
+.gx-env .gx-blob.a {
+  width:380px; height:260px; left:-6%; top:-8%;
+  background:radial-gradient(closest-side, rgba(255,153,0,.18), rgba(255,204,0,.07) 54%, transparent 76%);
+  animation:gx-drift-a 20s ease-in-out infinite;
+}
+.gx-env .gx-blob.b {
+  width:400px; height:280px; right:-8%; top:8%;
+  background:radial-gradient(closest-side, rgba(64,122,170,.10), rgba(220,230,242,.05) 56%, transparent 76%);
+  animation:gx-drift-b 24s ease-in-out infinite;
+}
+.gx-env .gx-blob.c {
+  width:340px; height:240px; left:32%; bottom:-10%;
+  background:radial-gradient(closest-side, rgba(255,204,0,.12), rgba(255,153,0,.06) 58%, transparent 76%);
+  animation:gx-drift-c 22s ease-in-out infinite;
+}
+.gx-env .gx-caustic {
+  position:absolute; inset:-18% -8%; pointer-events:none; opacity:.32;
+  background:
+    repeating-linear-gradient(118deg, transparent 0 54px, rgba(255,255,255,.16) 56px, transparent 72px);
+  filter:blur(12px); mix-blend-mode:soft-light;
+  animation:gx-caustic 22s ease-in-out infinite alternate;
+}
+.gx-env .gx-dust {
+  position:absolute; inset:0; opacity:.7;
+  background-image:
+    radial-gradient(1.3px 1.3px at 14% 24%, rgba(255,153,0,.50), transparent 60%),
+    radial-gradient(1.1px 1.1px at 32% 70%, rgba(64,122,170,.40), transparent 60%),
+    radial-gradient(1.5px 1.5px at 64% 18%, rgba(255,204,0,.46), transparent 60%),
+    radial-gradient(1.0px 1.0px at 78% 74%, rgba(255,153,0,.36), transparent 60%),
+    radial-gradient(1.2px 1.2px at 90% 38%, rgba(64,122,170,.34), transparent 60%);
+  animation:gx-dust 20s linear infinite;
+}
+@keyframes gx-drift-a {
+  0%   { transform:translate(0,0) scale(1); }
+  35%  { transform:translate(160px,70px) scale(1.12); }
+  70%  { transform:translate(40px,130px) scale(.92); }
+  100% { transform:translate(0,0) scale(1); }
+}
+@keyframes gx-drift-b {
+  0%   { transform:translate(0,0) scale(1.04); }
+  40%  { transform:translate(-150px,50px) scale(.9); }
+  75%  { transform:translate(-60px,-90px) scale(1.14); }
+  100% { transform:translate(0,0) scale(1.04); }
+}
+@keyframes gx-drift-c {
+  0%   { transform:translate(0,0) scale(1); }
+  50%  { transform:translate(120px,-100px) scale(1.12); }
+  100% { transform:translate(0,0) scale(1); }
+}
+@keyframes gx-caustic { from { transform:translateX(-6%) rotate(.4deg); } to { transform:translateX(6%) rotate(-.4deg); } }
+@keyframes gx-dust { from { transform:translateY(0); } to { transform:translateY(-14px); } }
+
+.tpl-kangzhe .slide.cover-slide .cover-hero,
+.tpl-kangzhe .slide.ending-slide .ending-hero {
+  background-image:
+    radial-gradient(620px 360px at 76% 16%, rgba(255,153,0,.18), transparent 64%),
+    radial-gradient(520px 320px at 12% 80%, rgba(64,122,170,.12), transparent 62%),
+    radial-gradient(480px 280px at 48% 48%, rgba(255,204,0,.08), transparent 66%);
+  background-size: 150% 150%, 150% 150%, 170% 170%;
+  background-repeat: no-repeat;
+  animation: gx-orb-move 18s ease-in-out infinite alternate;
+}
+.tpl-kangzhe .slide.toc-slide::before,
+.tpl-kangzhe .slide.section-slide::before {
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  pointer-events:none !important;
+  z-index:0 !important;
+  background-image:
+    radial-gradient(360px 220px at 50% 50%, rgba(255,153,0,.10), transparent 70%),
+    radial-gradient(320px 200px at 50% 50%, rgba(255,204,0,.06), transparent 68%),
+    radial-gradient(300px 190px at 50% 50%, rgba(64,122,170,.05), transparent 70%),
+    linear-gradient(rgba(15,17,21,.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,17,21,.032) 1px, transparent 1px) !important;
+  background-size: 160% 160%, 170% 170%, 180% 180%, 46px 46px, 46px 46px !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat !important;
+  animation: gx-orb-move 14s ease-in-out infinite alternate !important;
+}
+.tpl-kangzhe .slide.section-slide::after {
+  animation: gx-sec-blob 16s ease-in-out infinite alternate !important;
+}
+@keyframes gx-orb-move {
+  0%   { background-position: 0% 15%, 100% 90%, 30% 40%, 0 0, 0 0; }
+  50%  { background-position: 75% 80%, 15% 10%, 85% 65%, 0 0, 0 0; }
+  100% { background-position: 95% 25%, 5% 70%, 20% 90%, 0 0, 0 0; }
+}
+@keyframes gx-sec-blob {
+  0%   { transform:translate(0,0) scale(1); opacity:.9; }
+  100% { transform:translate(-140px,-70px) scale(1.18); opacity:1; }
+}
+.tpl-kangzhe .toc-title,
+.tpl-kangzhe .toc-rule,
+.tpl-kangzhe .toc-meta,
+.tpl-kangzhe .toc-board,
+.tpl-kangzhe .toc-wordmark,
+.tpl-kangzhe .section-number,
+.tpl-kangzhe .section-title,
+.tpl-kangzhe .section-rule,
+.tpl-kangzhe .section-wordmark,
+.tpl-kangzhe .section-lead { z-index:3; }
+.gx-env { z-index:1 !important; }
+
+/* ---------- 目录卡：文字统一居中 ---------- */
+.tpl-kangzhe .toc-item {
+  display:flex !important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  grid-template-columns:none !important;
+  cursor:pointer;
+}
+.tpl-kangzhe .toc-item > div { min-width:0; width:100%; text-align:center; }
+.tpl-kangzhe .toc-index { display:block; margin:0 0 8px; text-align:center; }
+.tpl-kangzhe .toc-label { display:block; text-align:center; }
+.tpl-kangzhe .toc-item small { display:block; margin-top:8px; text-align:center; }
+
+/* ---------- 玻璃卡（英雄页更透，内容页更实） ---------- */
+.tpl-kangzhe .toc-item,
+.tpl-kangzhe .slide:is(.cover-slide,.toc-slide,.section-slide,.ending-slide) .blk {
+  position:relative; isolation:isolate;
+  background: linear-gradient(180deg, rgba(255,255,255,.40) 0%, rgba(255,253,248,.22) 100%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(1.7) !important;
+  backdrop-filter: blur(6px) saturate(1.7) !important;
+  border: 1px solid rgba(255,255,255,.92) !important;
+  box-shadow:
+    0 10px 26px rgba(15,17,21,.10),
+    inset 0 4px 16px rgba(255,255,255,.42) !important;
+  transform-style: preserve-3d;
+}
+.tpl-kangzhe .slide.content-slide .blk,
+.tpl-kangzhe .slide.content-slide .stat-strip__item,
+.tpl-kangzhe .slide.content-slide .anchor-cell,
+.tpl-kangzhe .slide.content-slide .content-conclusion,
+.tpl-kangzhe .slide.content-slide .kz-card,
+.tpl-kangzhe .slide.content-slide .panel {
+  background: rgba(255,255,255,.96) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.tpl-kangzhe .toc-item::after {
+  content:"" !important;
+  position:absolute !important; inset:0 !important;
+  border-radius:inherit !important; pointer-events:none !important; z-index:0 !important;
+  opacity:.8 !important;
+  background: radial-gradient(160px 110px at var(--lx,18%) var(--ly,12%), rgba(255,255,255,.72), transparent 64%) !important;
+  box-shadow:
+    inset -10px -8px 0 -11px rgba(255,255,255,1),
+    inset 0 -8px 0 -8px rgba(255,255,255,.92) !important;
+  filter: blur(.35px) !important;
+}
+.tpl-kangzhe .toc-item > * { position:relative; z-index:1; }
+
+/* 目录旋转细边 */
+.tpl-kangzhe .toc-item::before {
+  content:""; position:absolute; inset:-1.5px; border-radius:inherit; z-index:-1; pointer-events:none;
+  background: conic-gradient(from var(--gx-a), transparent, rgba(255,153,0,.80), transparent 32%, rgba(64,122,170,.55), transparent 68%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  padding:1.5px; opacity:.55;
+  animation: gx-spin 10s linear infinite;
+}
+@keyframes gx-spin { to { --gx-a: 360deg; } }
+
+.gx-refract {
+  position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:0;
+  -webkit-backdrop-filter: blur(2px) saturate(1.4) url(#gx-glass);
+  backdrop-filter: blur(2px) saturate(1.4) url(#gx-glass);
+  opacity:.7;
+}
+.tpl-kangzhe .slide.content-slide .gx-refract { display:none !important; }
+.gx-svg-defs { position:absolute; width:0; height:0; overflow:hidden; }
+
+.tpl-kangzhe .soa-tbl, .tpl-kangzhe .info10, .tpl-kangzhe .crit,
+.tpl-kangzhe .tgt-tbl, .tpl-kangzhe .wo-tbl, .tpl-kangzhe .soa-wrap > div {
+  -webkit-backdrop-filter:none !important; backdrop-filter:none !important;
+  background: rgba(255,255,255,.96) !important;
+}
+
+/* ---------- 章节数字：弃圆圈，改为浅浮雕 + 地面光池 ---------- */
+.tpl-kangzhe .section-number::after { content:none !important; display:none !important; }
+.tpl-kangzhe .section-number {
+  overflow:visible;
+  text-shadow:
+    0 1px 0 #E89400,
+    0 2px 0 #DE8A00,
+    0 3px 0 #D08000,
+    0 10px 18px rgba(255,153,0,.22),
+    0 18px 28px rgba(15,17,21,.08);
+  animation: gx-num-float 5.2s ease-in-out infinite;
+}
+.tpl-kangzhe .section-number::before {
+  content:""; position:absolute; left:18px; top:86px; width:170px; height:28px;
+  background: radial-gradient(ellipse, rgba(255,153,0,.20), transparent 72%);
+  filter: blur(5px); z-index:-1; pointer-events:none;
+}
+@keyframes gx-num-float {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-5px); }
+}
+.tpl-kangzhe .section-title {
+  animation: gx-title-in .7s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes gx-title-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+/* ---------- 封面文字 ---------- */
+.tpl-kangzhe .cover-main h1 .hl {
+  background: linear-gradient(110deg, #FF9900 0%, #FFE08A 40%, #FF9900 55%, #FFCC00 78%, #FF9900 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter: drop-shadow(0 2px 0 rgba(232,140,0,.25)) drop-shadow(0 8px 14px rgba(255,153,0,.22));
+  animation: gx-shine 6.4s ease-in-out infinite;
+}
+@keyframes gx-shine { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
+.tpl-kangzhe .toc-index {
+  text-shadow: 0 1px 0 #E89400, 0 6px 12px rgba(255,153,0,.22);
+}
+
+/* ---------- 左上双色块 + 右上 Logo：光影 / 微 3D ---------- */
+.tpl-kangzhe .title-row::before {
+  background: linear-gradient(148deg, #FFE199 0%, #FF9900 46%, #E07C00 100%);
+  filter:
+    drop-shadow(0 0 6px rgba(255,200,80,.95))
+    drop-shadow(0 0 14px rgba(255,153,0,.70))
+    drop-shadow(0 0 26px rgba(255,153,0,.38))
+    drop-shadow(2px 5px 8px rgba(224,124,0,.35));
+  transform-origin: 60% 40%;
+  animation: gx-facet-a 3.4s ease-in-out infinite;
+}
+.tpl-kangzhe .title-row::after {
+  background: linear-gradient(148deg, #FFF6C4 0%, #FFCC00 50%, #E8B000 100%);
+  filter:
+    drop-shadow(0 0 5px rgba(255,230,120,.95))
+    drop-shadow(0 0 12px rgba(255,204,0,.62))
+    drop-shadow(0 0 20px rgba(255,204,0,.32))
+    drop-shadow(2px 4px 6px rgba(232,176,0,.30));
+  transform-origin: 50% 50%;
+  animation: gx-facet-b 3.8s ease-in-out infinite;
+}
+@keyframes gx-facet-a {
+  0%,100% { transform:translateY(0) rotate(0deg); filter:drop-shadow(0 0 6px rgba(255,200,80,.95)) drop-shadow(0 0 14px rgba(255,153,0,.70)) drop-shadow(0 0 26px rgba(255,153,0,.38)) drop-shadow(2px 5px 8px rgba(224,124,0,.35)); }
+  50% { transform:translateY(-3px) rotate(-2deg); filter:drop-shadow(0 0 10px rgba(255,220,120,1)) drop-shadow(0 0 22px rgba(255,153,0,.85)) drop-shadow(0 0 36px rgba(255,153,0,.48)) drop-shadow(2px 7px 10px rgba(224,124,0,.40)); }
+}
+@keyframes gx-facet-b {
+  0%,100% { transform:translateY(0) rotate(0deg); }
+  50% { transform:translateY(3px) rotate(2.2deg); }
+}
+.tpl-kangzhe .brand-lockup {
+  overflow:visible;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.85))
+    drop-shadow(0 3px 0 rgba(160,160,160,.22))
+    drop-shadow(0 6px 8px rgba(15,17,21,.16));
+  animation: none !important;
+  transform: none !important;
+}
+.tpl-kangzhe .brand-lockup::after { content:none !important; display:none !important; }
+.tpl-kangzhe .cover-wordmark,
+.tpl-kangzhe .toc-wordmark,
+.tpl-kangzhe .section-wordmark,
+.tpl-kangzhe .ending-wordmark {
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.8))
+    drop-shadow(0 3px 0 rgba(160,160,160,.18))
+    drop-shadow(0 6px 9px rgba(15,17,21,.14));
+  animation: none !important;
+  transform: none !important;
+}
+
+/* ---------- 黄线扫光 ---------- */
+.tpl-kangzhe .cover-rule, .tpl-kangzhe .toc-rule,
+.tpl-kangzhe .section-rule, .tpl-kangzhe .ending-rule {
+  position:relative; overflow:hidden;
+  box-shadow: 0 0 10px rgba(255,204,0,.35);
+}
+.tpl-kangzhe .cover-rule::after, .tpl-kangzhe .toc-rule::after,
+.tpl-kangzhe .section-rule::after, .tpl-kangzhe .ending-rule::after {
+  content:""; position:absolute; inset:0; width:32%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.9), transparent);
+  animation: gx-scan 3.2s ease-in-out infinite;
+}
+@keyframes gx-scan { 0% { transform:translateX(-170%); } 100% { transform:translateX(380%); } }
+
+.tpl-kangzhe .slide.content-slide::before { box-shadow: none; }
+.tpl-kangzhe .slide-number { text-shadow: 0 0 6px rgba(255,153,0,.28); }
+.progress-bar { display:block !important; position:fixed; left:0; right:0; bottom:0; height:3px; background:transparent; z-index:100; }
+.progress-bar > span {
+  display:block; width:var(--progress,0%); height:100%;
+  background: linear-gradient(90deg, var(--kz-yellow), var(--kz-orange));
+  box-shadow: 0 0 8px rgba(255,153,0,.45);
+}
+.tpl-kangzhe .ending-thanks { text-shadow: 0 6px 16px rgba(15,17,21,.08); }
+
+/* ---------- 鼠标光晕：缩小、仅英雄页 ---------- */
+.tpl-kangzhe .deck::after {
+  background: radial-gradient(72px 56px at var(--mx,50%) var(--my,38%), rgba(255,220,150,.18), rgba(255,153,0,.06) 46%, transparent 70%) !important;
+}
+
+/* 划过玻璃卡：高光跟随 + 3D 倾斜由 JS 写 transform */
+.tpl-kangzhe .toc-item.is-lit,
+.tpl-kangzhe .blk.is-lit,
+.tpl-kangzhe .stat-strip__item.is-lit,
+.tpl-kangzhe .anchor-cell.is-lit {
+  border-color: rgba(255,255,255,.98) !important;
+  box-shadow:
+    0 16px 34px rgba(15,17,21,.13),
+    0 4px 12px rgba(255,153,0,.12),
+    inset 0 5px 18px rgba(255,255,255,.50) !important;
+}
+.tpl-kangzhe .toc-item.is-lit::after {
+  opacity:1 !important;
+}
+
+.gx-sheen { position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden; border-radius:inherit; }
+.gx-sheen::after {
+  content:""; position:absolute; top:-20%; bottom:-20%; width:26%; left:-40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.36), transparent);
+  transform:skewX(-18deg);
+  animation: gx-card-sheen 5.4s ease-in-out infinite;
+}
+@keyframes gx-card-sheen { 0%,60% { left:-42%; } 100% { left:132%; } }
+.tpl-kangzhe .slide.content-slide .gx-sheen { display:none !important; }
+
+/* ---------- 强调字：仅加粗/加红有浅立体阴影，无动效 ---------- */
+.tpl-kangzhe .slide-body .r {
+  color: var(--kz-risk);
+  font-weight: 700;
+}
+.tpl-kangzhe .slide.content-slide .slide-body :is(strong, b, .kz-em-underline, .gx-em) {
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.65),
+    0 1px 3px rgba(15,17,21,.10);
+}
+.tpl-kangzhe .slide.content-slide .slide-body :is(.kz-em-red, .r, .gx-em-red) {
+  color: var(--kz-risk);
+  font-weight: 700;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.55),
+    0 1px 3px rgba(192,0,0,.10);
+}
+.gx-gem, .gx-em-short { animation: none !important; transform: none !important; }
+
+/* ---------- 图表：入场生长 + 轻立体 ---------- */
+.tpl-kangzhe .slide.is-active .panel svg,
+.tpl-kangzhe .slide.is-active .blk svg {
+  filter: drop-shadow(0 5px 8px rgba(15,17,21,.08));
+}
+.gx-bar-v { transform-box:fill-box; transform-origin:center bottom; animation:gx-bar-v .8s cubic-bezier(.22,1,.36,1) both; }
+.gx-bar-h { transform-box:fill-box; transform-origin:left center; animation:gx-bar-h .8s cubic-bezier(.22,1,.36,1) both; }
+@keyframes gx-bar-v { from { transform:scaleY(0); opacity:.25; } to { transform:scaleY(1); opacity:1; } }
+@keyframes gx-bar-h { from { transform:scaleX(0); opacity:.25; } to { transform:scaleX(1); opacity:1; } }
+.gx-draw {
+  stroke-dasharray: var(--gx-len, 280);
+  stroke-dashoffset: var(--gx-len, 280);
+  animation: gx-draw 1.05s cubic-bezier(.4,0,.2,1) .12s both;
+}
+@keyframes gx-draw { to { stroke-dashoffset: 0; } }
+
+.gx-grain {
+  position:fixed; inset:0; pointer-events:none; z-index:80; opacity:.04;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode:multiply;
+}
+
+.gx-net { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+.tpl-kangzhe .slide.is-active {
+  animation: gx-content-in .2s cubic-bezier(.22,1,.36,1) both !important;
+  filter: none !important;
+}
+@keyframes gx-content-in { from { opacity:0; } to { opacity:1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .gx-env .gx-blob, .gx-env .gx-caustic, .gx-env .gx-dust,
+  .cover-main h1 .hl, .toc-item::before, .section-number,
+  .title-row::before, .title-row::after, .brand-lockup,
+  .slide.toc-slide::before, .slide.section-slide::before, .slide.section-slide::after,
+  .cover-hero, .ending-hero,
+  .cover-wordmark, .toc-wordmark, .section-wordmark, .ending-wordmark,
+  .cover-rule::after, .toc-rule::after, .section-rule::after, .ending-rule::after,
+  .gx-sheen::after, .gx-gem, .stat-strip__num, .anchor-cell .v,
+  .gx-bar-v, .gx-bar-h, .gx-draw { animation:none !important; }
+  .gx-refract { display:none !important; }
+  .section-number { transform:none !important; }
+}
+html[data-export="true"] .gx-env,
+html[data-qc="true"] .gx-env,
+html[data-export="true"] .gx-refract,
+html[data-qc="true"] .gx-refract,
+html[data-export="true"] .gx-grain,
+html[data-qc="true"] .gx-grain,
+html[data-export="true"] .gx-net,
+html[data-qc="true"] .gx-net,
+html[data-export="true"] .gx-sheen,
+html[data-qc="true"] .gx-sheen { display:none !important; }
+html[data-export="true"] .toc-item, html[data-qc="true"] .toc-item,
+html[data-export="true"] .blk, html[data-qc="true"] .blk,
+html[data-export="true"] .stat-strip__item, html[data-qc="true"] .stat-strip__item,
+html[data-export="true"] .anchor-cell, html[data-qc="true"] .anchor-cell,
+html[data-export="true"] .content-conclusion, html[data-qc="true"] .content-conclusion,
+html[data-export="true"] .kz-card, html[data-qc="true"] .kz-card {
+  background:#FFFFFF !important;
+  -webkit-backdrop-filter:none !important; backdrop-filter:none !important;
+}
+html[data-export="true"] .section-number,
+html[data-qc="true"] .section-number,
+html[data-export="true"] .title-row::before,
+html[data-qc="true"] .title-row::before,
+html[data-export="true"] .brand-lockup,
+html[data-qc="true"] .brand-lockup { animation:none !important; transform:none !important; }

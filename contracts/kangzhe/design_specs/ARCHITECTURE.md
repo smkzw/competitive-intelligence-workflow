@@ -5,8 +5,10 @@
 1. **唯一运行权威**：`contracts/kangzhe/design_specs/`。
 2. **根文件仅为兼容入口**：`contracts/kangzhe/design.md` 不承载第二份正文。
 3. **项目专属层**：`project_profile.md` 固定竞品调研用户、中文表达、页面结构和完成判定。
-4. **单一主轨**：门户只加载站点轨，页面内筛选、联动与下钻由项目专属合同补充；原生 PDF 以流式轨为主并叠加项目自有 PDF 补充合同；HTML-PPT、PPTX 分别加载自己的唯一主轨。
+4. **单一主轨**：门户只加载站点轨，页面内筛选、联动与下钻由项目专属合同补充；原生 PDF 以流式轨为主并叠加项目自有 PDF 补充合同；HTML-PPT 加载自己的唯一主轨及同轨 `htmlppt_fx.md` 动效附录，PPTX 加载自己的唯一主轨。
 5. **独立演进**：来源通用版不再是运行依赖；本项目不读取、不自动同步、不反向修改通用版。
 6. **格式原生**：门户、PDF、HTML-PPT、PPTX 分别生成和验收，不以截图或其他格式冒充。
 
 共享品牌与排版规则保留在 `core.md`，竞品调研专属规则只在 `project_profile.md` 和 `track_pdf.md` 增补，避免复制五轨正文。
+
+HTML-PPT 的 `htmlppt_fx.md` 与 `assets/htmlppt/gx_fx.*` 是同一媒介轨的组成部分，不构成跨轨叠加。

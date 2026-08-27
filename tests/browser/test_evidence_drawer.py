@@ -104,6 +104,15 @@ def _launch(playwright: Playwright, browser_name: str) -> Browser:
     return cast(Browser, getattr(playwright, browser_name).launch())
 
 
+def _open_compact_header(page: Page) -> None:
+    toggle = page.locator("#menu-toggle")
+    nav = page.locator(".site-header__nav")
+    if toggle.is_visible() and not nav.is_visible():
+        toggle.click()
+        page.wait_for_timeout(100)
+    assert nav.is_visible()
+
+
 def _attach_collectors(page: Page) -> tuple[list[str], list[str], list[str]]:
     page_errors: list[str] = []
     console_errors: list[str] = []
@@ -889,6 +898,7 @@ def test_fixture_global_search_finds_products_and_explains_no_match(
             page = browser.new_page(viewport={"width": 1280, "height": 900})
             page.goto(f"http://127.0.0.1:{port}/efficacy.html")
             page.wait_for_load_state("domcontentloaded")
+            _open_compact_header(page)
             search = page.locator("#global-search-input")
             search.fill("产品乙")
             results = page.locator("#global-search-results")
@@ -1085,6 +1095,7 @@ def test_drawer_starts_below_sticky_header_and_keeps_navigation_available(
             drawer_top = page.locator("#kz-evidence-drawer").bounding_box()["y"]
             header_bottom = page.locator(".site-header").bounding_box()["height"]
             assert drawer_top >= header_bottom
+            _open_compact_header(page)
             page.get_by_role("link", name="基线与人群", exact=True).click()
             page.wait_for_url("**/baseline.html")
             browser.close()

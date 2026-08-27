@@ -8,7 +8,8 @@ Package root：当前 `design_specs/`。这是项目运行时唯一设计权威�
 2. 读取 `core.md` 到 EOF；
 3. 读取 `project_profile.md` 到 EOF；
 4. 按下表读取该交付物的**一个主轨**到 EOF；项目补充合同不得把另一媒介轨的版式规则叠加进来；
-5. 使用 `assets/logo_bot.svg`。
+5. HTML-PPT 继续读取 `htmlppt_fx.md` 到 EOF，并原样注入 `assets/htmlppt/gx_fx.css` 与 `gx_fx.js`；
+6. 使用 `assets/logo_bot.svg`。
 
 ## 项目路线表
 
@@ -16,7 +17,7 @@ Package root：当前 `design_specs/`。这是项目运行时唯一设计权威�
 |---|---|---|
 | 多页面交互式 HTML 门户 | `portal` | `track_site.md` |
 | 原生 PDF | `pdf` | `track_stream.md + track_pdf.md` |
-| HTML-PPT | `htmlppt` | `track_htmlppt.md` |
+| HTML-PPT | `htmlppt` | `track_htmlppt.md + htmlppt_fx.md` |
 | 可编辑 PPTX | `pptx` | `track_pptx.md` |
 
 四种格式同时生成时，每条路线独立完成读取、渲染和验收。共享同一份锁定报告快照和内容覆盖集合，不共享最终页面代码。
@@ -33,6 +34,7 @@ Package root：当前 `design_specs/`。这是项目运行时唯一设计权威�
 ## 资产
 
 - Logo：`assets/logo_bot.svg`
+- HTML-PPT 动效层：`assets/htmlppt/gx_fx.css`、`assets/htmlppt/gx_fx.js`
 - 来源与本项目摘要：上一级 `manifest.json`
 
 `local_map.md` 仅提供项目相对路径；运行合规不依赖它。

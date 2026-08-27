@@ -18,7 +18,10 @@ class TestPortablePackage(unittest.TestCase):
             "project_profile.md",
             "README.md",
             "ARCHITECTURE.md",
+            "htmlppt_fx.md",
             "assets/logo_bot.svg",
+            "assets/htmlppt/gx_fx.css",
+            "assets/htmlppt/gx_fx.js",
             "local_map.md",
             "schemas/design-run-manifest.schema.json",
             "schemas/design-source-pack.schema.json",
@@ -65,6 +68,18 @@ class TestPortablePackage(unittest.TestCase):
         self.assertTrue("1280" in htmlppt and "720" in htmlppt)
         site = (PKG / "track_site.md").read_text(encoding="utf-8")
         self.assertIn("sticky", site.lower())
+
+    def test_htmlppt_fx_layer_is_bound_to_its_track(self) -> None:
+        router = (PKG / "ROUTER.md").read_text(encoding="utf-8")
+        htmlppt = (PKG / "track_htmlppt.md").read_text(encoding="utf-8")
+        fx = (PKG / "htmlppt_fx.md").read_text(encoding="utf-8")
+        css = (PKG / "assets/htmlppt/gx_fx.css").read_text(encoding="utf-8")
+        js = (PKG / "assets/htmlppt/gx_fx.js").read_text(encoding="utf-8")
+        for text in (router, htmlppt):
+            self.assertIn("htmlppt_fx.md", text)
+        self.assertIn("assets/htmlppt/gx_fx.css", fx)
+        self.assertIn(".gx-env", css)
+        self.assertIn("gx-net", js)
 
     def test_router_lists_all_tracks(self) -> None:
         r = (PKG / "ROUTER.md").read_text(encoding="utf-8")

@@ -296,6 +296,20 @@ def _launch(playwright: Playwright, browser_name: str) -> Browser:
     return cast(Browser, browser_type.launch())
 
 
+def _open_compact_header(page: Page) -> bool:
+    """展开当前宽度下的折叠顶栏；常规桌面顶栏保持原状。"""
+    toggle = page.locator("#menu-toggle")
+    nav = page.locator(".site-header__nav")
+    if not toggle.is_visible():
+        return False
+    if not nav.is_visible():
+        toggle.click()
+        page.wait_for_timeout(100)
+    assert nav.is_visible()
+    assert page.locator(".site-header__search").is_visible()
+    return True
+
+
 def _rects_overlap(a: dict[str, float], b: dict[str, float], *, tol: float = 1.0) -> bool:
     return (
         a["x"] + a["width"] - tol > b["x"]
@@ -609,6 +623,7 @@ class TestPortalShell:
             page = browser.new_page(viewport={"width": width, "height": 800})
             page.goto(url)
             page.wait_for_load_state("domcontentloaded")
+            compact = _open_compact_header(page)
 
             boxes = {
                 "logo": page.locator(".site-header__logo").bounding_box(),
@@ -630,8 +645,12 @@ class TestPortalShell:
             for left, right in pairs:
                 assert not _rects_overlap(left, right), f"header collision at {width}: {boxes}"
             assert title["x"] >= logo["x"] + logo["width"] - 1
-            assert nav["x"] >= title["x"] + title["width"] - 1
-            assert search["x"] >= nav["x"] + nav["width"] - 1
+            if compact:
+                assert nav["y"] >= logo["y"] + logo["height"] - 1
+                assert search["y"] >= nav["y"] + nav["height"] - 1
+            else:
+                assert nav["x"] >= title["x"] + title["width"] - 1
+                assert search["x"] >= nav["x"] + nav["width"] - 1
             rightmost = search["x"] + search["width"]
             assert rightmost <= width + 1
 
@@ -733,6 +752,7 @@ class TestPortalShell:
             page = browser.new_page(viewport={"width": 1280, "height": 900})
             page.goto((portal_dir / "overview.html").as_uri())
             page.wait_for_load_state("domcontentloaded")
+            _open_compact_header(page)
             trigger = page.locator(".site-nav-group__trigger", has_text="疗效与安全性")
             chevron = trigger.locator(".site-nav-group__chevron")
             assert chevron.count() == 1
@@ -854,6 +874,8 @@ class TestPortalShell:
             page.goto((portal_dir / "overview.html").as_uri())
             page.wait_for_load_state("domcontentloaded")
 
+            compact = page.locator("#menu-toggle").is_visible()
+
             group_labels = page.evaluate(
                 """() => Array.from(document.querySelectorAll(
                   '.site-header__nav-item, .site-nav-group__trigger'
@@ -865,6 +887,11 @@ class TestPortalShell:
             assert page.locator(".site-nav-group").count() == 5
             assert page.locator(".site-nav-group__link").count() >= 16
 
+            header_box = page.locator(".site-header").bounding_box()
+            assert header_box is not None
+            assert header_box["height"] <= 88
+            if compact:
+                _open_compact_header(page)
             boxes = {
                 "logo": page.locator(".site-header__logo").bounding_box(),
                 "title": page.locator(".site-header__title").bounding_box(),
@@ -879,9 +906,6 @@ class TestPortalShell:
             for left, right in [(logo, title), (title, nav), (nav, search)]:
                 assert not _rects_overlap(left, right), boxes
             assert search["x"] + search["width"] <= width + 1
-            header_box = page.locator(".site-header").bounding_box()
-            assert header_box is not None
-            assert header_box["height"] <= 88
             _assert_no_text_clipping(page)
 
             # Open a multi-page group and navigate by keyboard-accessible link.
@@ -958,6 +982,7 @@ class TestPortalShell:
                     target = portal_dir / normpath(href)
                     assert target.exists(), f"Dead link on {slug}: {href}"
 
+            _open_compact_header(page)
             page.locator('.site-header__nav-item[href*="efficacy"]').first.click()
             page.wait_for_load_state("domcontentloaded")
             assert "efficacy" in page.url
@@ -997,6 +1022,7 @@ class TestPortalShell:
             page = browser.new_page(viewport={"width": 1280, "height": 800})
             page.goto((portal_dir / "overview.html").as_uri())
             page.wait_for_load_state("domcontentloaded")
+            _open_compact_header(page)
 
             search = page.locator("#global-search-input")
             search.fill("疗效")
@@ -1013,6 +1039,7 @@ class TestPortalShell:
             page.wait_for_load_state("domcontentloaded")
             assert "efficacy" in page.url
 
+            _open_compact_header(page)
             search = page.locator("#global-search-input")
             search.fill("安全性")
             page.wait_for_timeout(150)
@@ -1054,6 +1081,7 @@ class TestPortalShell:
             page = context.new_page()
             page.goto(url)
             page.wait_for_load_state("domcontentloaded")
+            _open_compact_header(page)
             duration = page.evaluate(
                 """() => {
                   const el = document.querySelector('.site-header__nav-item');
@@ -1068,7 +1096,8 @@ class TestPortalShell:
             assert page.locator(".site-footer").is_visible()
             _assert_no_text_clipping(page)
             # Chromium tabs through links; macOS WebKit defaults to form controls only.
-            page.keyboard.press("Tab")
+            page.locator("#menu-toggle").focus()
+            page.keyboard.press("Shift+Tab")
             focus_state = page.evaluate(
                 """() => {
                   const focused = document.activeElement;

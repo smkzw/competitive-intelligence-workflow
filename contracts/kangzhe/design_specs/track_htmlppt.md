@@ -6,7 +6,7 @@
 > **Authority**: This pack + `core.md` are the load-time contract for this product. Machine-only samples live in `local_map.md` (optional).  
 > **Do not** require reading the legacy monorepo body for this product.
 
-**Also read**: core.md；可选 peer html-ppt runtime skill
+**Also read**: core.md；本轨强制附录 `htmlppt_fx.md` + `assets/htmlppt/gx_fx.css` / `gx_fx.js`；可选 peer html-ppt runtime skill
 
 ---
 
@@ -26,6 +26,7 @@
 - **NEVER** 把本节画布规则套到 stream/site/interactive。
 - 可编辑 PPTX 交付走 `track_pptx.md`，不得用本轨 HTML 截图替代。
 - 方案汇报 Playbook 见本轨 §14.14；runtime 可与 peer `html-ppt` skill 组合。
+- **V1.1 FX 层强制**：读完本文件后 MUST 再读 `htmlppt_fx.md` 到 EOF，并把 `assets/htmlppt/gx_fx.css` / `gx_fx.js` 原样注入产物（kangzhe.css 之后、runtime 之后）。英雄页液态玻璃/光斑/粒子、内容页页眉荧光、图表入场以该附录为准，覆盖本节旧“禁玻璃拟态/粒子仅封面”口径。
 
 ### 0.0 可移植包权威（本包为 SSOT）
 
@@ -103,11 +104,13 @@
 
 ```html
 <link rel="stylesheet" href="assets/base.css">
-<link rel="stylesheet" href="kangzhe.css"><!-- 必须最后 -->
+<link rel="stylesheet" href="kangzhe.css">
+<link rel="stylesheet" href="assets/htmlppt/gx_fx.css"><!-- HTML-PPT 视觉最后一层 -->
 <script src="assets/runtime.js"></script>
+<script src="assets/htmlppt/gx_fx.js"></script>
 ```
 
-正式医学汇报允许使用§14.7.3定义的“渐进增强动效层”，但视觉基线必须在无动画、无hover、截图导出和PPT转换时完整成立。对象飞入、弹跳、循环漂浮、逐字动画和持续旋转仍禁止。若加载`animations.css`，必须位于`base.css`之后、`kangzhe.css`之前；康哲主题最终覆盖时长、位移和降级规则。
+正式医学汇报 **MUST** 使用 `htmlppt_fx.md` 的 V1.1 FX 层（英雄页液态玻璃/光斑/粒子、内容页页眉荧光、图表入场）。视觉基线必须在无动画、无hover、截图导出和PPT转换时完整成立。对象飞入、弹跳、逐字动画和整页持续旋转仍禁止；斜切荧光、章节编号 ≤5px 浮动、黄线扫光、封面 `.hl`、目录 conic 边按 FX 层允许。若加载`animations.css`，必须位于`base.css`之后、`kangzhe.css`之前；`gx_fx.css` 必须在 `kangzhe.css` 之后。
 
 若执行环境没有 `html-ppt` 的 `runtime.js`，可使用 §14.3 的最小运行时；不得因此放弃固定画布与等比居中。
 
@@ -121,7 +124,7 @@
 - 默认第一页：§8.1 的固定正式封面。
 - 默认后续页：§7.1 的康哲内容页 chrome。
 - 默认字体：使用§6.1固定字体栈，选择设备上第一个已安装字体；Windows通常命中微软雅黑，macOS通常命中苹方，若macOS已安装微软雅黑则允许优先命中微软雅黑；不下载远程字体。
-- 默认转场：页面切换使用180–240ms轻微淡入；卡片可按§14.7.3做一次性短距离揭示与指针hover抬升。`prefers-reduced-motion`、打印、截图和PPT转换模式必须冻结为无动画稳定终态。
+- 默认转场：页面切换使用180–240ms轻微淡入；**MUST** 叠加 `htmlppt_fx.md`（英雄页环境层与玻璃交互、内容页页眉动效、图表生长）。卡片可按§14.7.3做一次性短距离揭示与指针hover抬升。`prefers-reduced-motion`、打印、截图和PPT转换模式必须冻结为无动画稳定终态。
 - 默认交付：保留模块化源文件；如用户需要直接转发，再额外生成单文件 HTML。
 - 默认审阅：管理层视角，20–30 秒能看懂本页结论，正文逻辑字号不低于 16 px。
 
@@ -842,7 +845,7 @@ never_use_in_final:
 }
 ```
 
-正式医学汇报不使用通用模板的18–26 px大圆角、彩色渐变球、玻璃拟态和重阴影。默认圆角8 px，阴影仅用于把白卡与白底轻微分开。
+正式医学汇报不使用通用模板的18–26 px大圆角、彩色渐变球和重阴影。默认圆角8 px。内容页白卡用轻阴影与白底分开，**禁止**内容页毛玻璃。英雄页（封面/目录/章节/结束）的液态玻璃、光斑、粒子网 **MUST** 使用 `assets/htmlppt/gx_fx.css`，不得用通用 glassmorphism 主题替代，也不得因旧“禁玻璃”条文删掉本层。
 
 ### 14.2 固定逻辑画布：必须覆盖通用`100vw/100vh`
 
@@ -1036,6 +1039,7 @@ window.addEventListener('hashchange', () => showSlide(indexFromHash(deckSlides.l
   <title>汇报标题</title>
   <link rel="stylesheet" href="assets/base.css">
   <link rel="stylesheet" href="kangzhe.css">
+  <link rel="stylesheet" href="assets/htmlppt/gx_fx.css">
 </head>
 <body class="tpl-kangzhe">
   <div class="deck">
@@ -1068,6 +1072,7 @@ window.addEventListener('hashchange', () => showSlide(indexFromHash(deckSlides.l
   </div>
   <div class="progress-bar" aria-hidden="true"><span></span></div>
   <script src="assets/runtime.js"></script>
+  <script src="assets/htmlppt/gx_fx.js"></script>
 </body>
 </html>
 ```
@@ -1893,12 +1898,12 @@ wordmark和ribbon固定外框内部必须保留上述官网Logo`<img>`；hero �
 | 数字滚动（count-up） | 不适用 | MAY，一次性≤900ms，静态终态即真值 | MAY | MAY |
 | SVG描边流动/描边生长（dash-flow/draw-on） | 转为静态终态 | MAY，仅装饰流程线 | MAY | MAY |
 | 状态呼吸灯（lamp） | 转为静态终态 | MAY，仅状态图例 | MAY | MAY |
-| 环境光斑（radial-gradient静态或低速漂移） | 不适用 | MAY，仅封面且低对比 | MAY，仅首屏 | MAY，首屏与章节分隔 |
-| 粒子网络（canvas） | NEVER | MAY，仅封面且用本节C可选脚本 | NEVER | MAY，仅首屏hero |
+| 环境光斑（radial-gradient静态或低速漂移） | 不适用 | MUST 四个英雄页用 `.gx-env`；内容页 NEVER 铺橘黄光晕 | MAY，仅首屏 | MAY，首屏与章节分隔 |
+| 粒子网络（canvas） | NEVER | MUST 四个英雄页用 `gx_fx.js` 的 `canvas.gx-net`（cover/ending 48 节点，toc/section 32）；内容页 NEVER | NEVER | MAY，仅首屏hero |
 | 轨道环/环绕图（慢速旋转） | 转为静态终态 | MAY，单页≤1处装饰 | MAY | MAY |
-| 轻微3D倾斜 | NEVER | MAY，仅封面/目录的非证据装饰，最大1deg | MAY，最大2deg | MAY，最大2deg，仅非证据卡片 |
+| 轻微3D倾斜 | NEVER | 英雄页玻璃卡指针倾斜以 `gx_fx.js` 为准（rotateX≤5deg，rotateY≤6deg）；内容页证据/表格/甘特 NEVER | MAY，最大2deg | MAY，最大2deg，仅非证据卡片 |
 | 滚动驱动揭示 | 不适用 | NEVER，幻灯片不是滚动文档 | MAY，必须渐进增强 | MAY，必须渐进增强 |
-| 逐卡循环漂浮、玻璃拟态、霓虹发光、视差背景、整页粒子 | NEVER | NEVER | NEVER | NEVER（站点仅§14.12.6列明的hero例外） |
+| 逐卡循环漂浮、霓虹发光、视差背景、整页粒子、内容页毛玻璃墙 | NEVER | NEVER（英雄页液态玻璃/斜切荧光/编号浮动/黄线扫光按 `htmlppt_fx.md` MUST） | NEVER | NEVER（站点仅§14.12.6列明的hero例外） |
 
 ##### B. 深度Token与静态基线
 
@@ -2211,13 +2216,13 @@ html[data-qc="true"] .kz-drawon path, html[data-qc="true"] .kz-drawon circle {
 - transition声明MUST使用显式属性列表（如`transition:transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out)`）；NEVER使用`transition:all …`或只写时长缓动的简写`transition:180ms ease-out`——后者computed值为`all`，会连带布局属性一起过渡并干扰冻结态检查。
 - 媒体查询MUST带空格书写：`@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)`；NEVER写成无空格`@media(...)and(...)`——CSS规范要求`and`前后空白分隔，无空格形式是静默解析错误，会导致整个hover/指针块被浏览器整体丢弃（computed transition回落为`all`、hover抬升失效），且构建期不报错、肉眼难发现。压缩CSS时同样必须保留`and`两侧空格。
 - hash写入MUST先归一化：`history.replaceState(null,"",location.pathname+location.search+"#"+token)`，NEVER直接拼接`location.hash+token`；否则深链会退化成`#/2#/3`或`#q=X#q=X`这类重复hash。
-- hover位移最大3 px、缩放最大1.01、3D倾斜最大1deg；不能使元素跨出原分配网格或与相邻元素相交。
+- 内容页 hover 位移最大 3 px、缩放最大 1.01。英雄页玻璃卡 3D 倾斜以 `gx_fx.js` 为准（rotateX≤5deg，rotateY≤6deg）；不能使元素跨出原分配网格或与相邻元素相交。
 - 默认只让目录卡和明确标记`data-interactive="true"`的摘要卡响应hover。表格单元格、甘特阶段条、风险标签、证据截图和结束页不响应hover。
 - 任何信息在静态态必须完整可见；NEVER把解释、来源、风险或操作提示只放在hover后。
 - `kz-stagger`只加在成组容器（`.toc-board`、`.grid.g2/.g3`、`.comparison-card-grid`）上，最多数8个直接子项；超过8个按容器整体淡入，不逐项级联。
 - `kz-item-in`的fill-mode固定为`backwards`（不得用`both`/`forwards`）：`both`会把末帧`transform:none`永久锁在子项上，覆盖后续`:hover`的`translateY`抬升，造成“阴影变了但卡片不抬升”的失效；`backwards`只在延迟期保持起始帧，动画结束后交还控制权给transition/hover。
 - `data-countup`元素在DOM中必须先写最终真值（截图与无JS环境直接读DOM即为真值），滚动只是进入活动页时的一次性视觉增强；NEVER用滚动过程承载唯一数值。
-- 粒子脚本只允许挂在`.slide.cover-slide`，节点≤40、连线距离≤110px、橙色低透明度按本节常量；内容页、目录页、章节页、结束页NEVER出现canvas粒子。
+- 粒子脚本 **MUST** 使用 `gx_fx.js` 挂在四个英雄页（cover/toc/section/ending）的 `canvas.gx-net`；cover/ending 48 节点、toc/section 32 节点、连线距离≤108px。内容页 NEVER 出现 canvas 粒子。本节 C 旧封面-only IIFE 已被 `gx_fx.js` 取代，不要再另写一套。
 - 可交互卡必须有键盘可达性：`tabindex="0"`且`:focus-visible`使用`--shadow-focus`，hover与focus使用同一信息层级，不得只服务鼠标。
 - 正式交付的HTML/HTML-PPT默认根节点不得永久写死`data-export="true"`或`data-qc="true"`；正常打开必须处于交互态。只有静态导出、HTML-to-PPT和机器验收期间才临时设置该属性，完成后MUST删除或恢复原值。
 - 截图、PNG/PDF导出、HTML-to-PPT和机器验收前MUST设置`document.documentElement.dataset.export="true"`或`data-qc="true"`，等待两个`requestAnimationFrame`后再测量；导出完成后恢复。允许通过`?export=1`、自动化注入或打印事件进入冻结态，但不得让普通`file://`打开永久冻结。
@@ -2275,16 +2280,16 @@ html.js .kz-reveal-stagger.is-in > :nth-child(8) { transition-delay:.42s; }
 
 ##### G. 反扁平设计原则（在品牌克制约束内做"活"）
 
-康哲规范刻意克制（白底≥80%、禁玻璃拟态/极光/深色霓虹/渐变标题/整页铺色），但"克制"不等于"扁平死板"。Agent MUST 在本节约束内主动用层次与微动效让页面有质感，避免"白卡+顶堆文字+下半页空白"的模板感；同时 NEVER 越过§5/§14.7.3 的红线去追求"科技感"。
+康哲规范刻意克制（白底≥80%、禁极光/深色霓虹/整页铺色），但"克制"不等于"扁平死板"。HTML-PPT **MUST** 注入 `htmlppt_fx.md`：英雄页液态玻璃与环境层、内容页页眉荧光与图表入场。Agent 同时 NEVER 越过§5 与内容页禁毛玻璃/禁橘黄洗底的红线去追求"科技感"。
 
 - **已验证范式（包括但不限于，Agent MAY 自创新范式）**：①**流程脊**——KPI 条+全宽 living SVG+结论条；②**覆盖率+机制**——左栏覆盖率条+右栏闭环图；③**收敛+资产轨**——左栏汇聚图+右栏资产轨卡；④**环形闭环**——KPI 条+环形 N 节点 living SVG（中心 hub+外圈节点+里程碑菱形+描边弦线）+结论条；⑤**分支处置流**——KPI 条+主脊 N 节点→M 处置分支卡→汇聚关闭+底部辅流程泳道；⑥**双泳道对照**——KPI 条+上下两条独立泳道 SVG（各含节点+里程碑+回流线）；⑦**场景+红线 split**——KPI 条+左栏场景状态卡+右栏推进原则+红线胶囊簇。以上 7 套均已在真实构建中验证通过丰富度闸门；Agent 面对新主题时 MAY 组合或自创，只要满足闸门 (a)-(e)。；⑥**粘性叙事**——左栏 sticky 标题+进度、右栏滚动阶段（流式/站点，<768px 降级自然流）；⑦**便当总览**——`.kz-bento` 大小模块开篇，大块核心结论+小块 KPI/状态（流式/站点/交互）；⑧**横向画廊**——`.kz-hscroll`+scroll-snap+边缘渐隐方向暗示（站点/交互）。
-- **封面要"活"**：封面（仅封面）MUST 使用§14.7.3 C 的环境层组合——`aria-hidden` 的低对比网格底纹（`mask-image` 径向渐隐）+ 低对比品牌橙/医学蓝光斑 + 粒子网络（节点≤40、连线≤110px、橙色低透明、离屏停帧）。这些是封面唯一允许的"氛围层"；内容页/目录页/章节页/结束页 NEVER 使用粒子或光斑。
+- **英雄页要"活"**：封面/目录/章节/结束 MUST 使用 `htmlppt_fx.md` 环境层——`.gx-env` 游走光斑 + `canvas.gx-net` 粒子网 + 低对比网格。内容页 NEVER 使用粒子或整页光斑；内容页只保留页眉斜切荧光、图表入场与强调字静态阴影。
 - **内容卡要撑满纵向、有视觉锚点（禁止"空中段"）**：内容页卡片用 flex 列布局（`display:flex;flex-direction:column`），让正文与底部 `.card-foot`（来源/口径）之间用 `margin-top:auto` 撑开。每张卡 MUST 同时满足两层：①**身份层**——顶部 4px 部门色条（`--card-accent`，每卡必有，同页用不同部门色形成节奏）；②**内容层视觉锚点**——在标题与卡脚之间的中段 MUST 放一个非纯文本的视觉元素：内嵌 `kz-drawon` 描边迷你图（流程线/环形进度/部门色柱/汇聚图，`aria-hidden`，进场描边生长）、或一个 `data-countup` 大数字+单位块、或一行部门徽章/`.kz-lamp` 状态簇。**仅靠 4px 顶色条不算锚点**；若一张卡的中段只有正文、且正文末行到卡脚之间留下 >120px 的空白，则该卡违反本节（"空中段"反模式，多轮实测中弱模型高频踩中）。同一内容页的三卡中至少两卡应使用描边迷你图或数字块，避免整页只剩"文字+顶线"。
 - **层次靠排版与色条，不靠堆卡**：用字号字重对比（大数字 44–46px/800 vs 正文 17px/400 vs 卡脚 13px/600 灰）、部门徽章胶囊、呼吸状态灯 `.kz-lamp` 制造层次；NEVER 把每个次级信息都包成悬浮卡，也 NEVER 用阴影替代间距。
 - **章节页加一句 lead**：章节首页在标题下方加一句 20px 的章节导语（`max-height` 受限、不超两行），让章节页不只剩"编号+标题"的空旷感；导语仍只放章节定位，不放摘要卡或目标清单。
 - **动效要可感知但一次性**：进入活动页时 `kz-stagger` 逐项淡入、`kz-sweep` 扫光、`kz-drawon` 描边生长、`data-countup` 数字滚动应同时编排，形成"页面活过来"的入场；但全部一次性，NEVER 循环漂浮/逐字闪烁/持续旋转（封面粒子除外且可停）。
 - **静态基线优先**：上述所有增强在 `data-export`/`data-qc` 冻结态与 `prefers-reduced-motion:reduce` 下 MUST 退化为完整静态终态（描边画满、数字即真值、揭示可见）。**粒子是 rAF 驱动的 canvas，CSS 的 `animation/transition/transform:none` 停不住它**：除用 `html[data-export] .kz-particles{display:none}` 在视觉上隐藏外，粒子 IIFE MUST 在每次状态同步检查 `html[data-export]`/`[data-qc]` 与 reduced-motion，命中即 `cancelAnimationFrame` 并 `clearRect`，并用 MutationObserver 监听 `<html>` 的 `data-export`/`data-qc` 属性变化触发停帧；只隐藏 canvas 而让循环空转不合格（冻结态截图虽看不到粒子，但"无活动"语义被破坏）。任何增强不得承载唯一信息，截图与无 JS 环境读 DOM 即得完整内容。
-- **禁区重申（含 scoped override）**：NEVER 整页毛玻璃卡片墙（毛玻璃面按 §14.13.2 scoped 规则：每视口≤4 面、背景不透明度≥88%、1px 边界、冻结回退）、NEVER 极光/彩色渐变球背景、NEVER 深色模式或近黑底+霓虹、NEVER 渐变填充标题、NEVER 整页橙/黄/红铺底、NEVER 大圆角(>14px)卡片墙。这些是"扁平"的反面但同样不合格——它们破坏医学汇报的可信度与可读性。
+- **禁区重申（含 scoped override）**：NEVER 内容页毛玻璃卡片墙、NEVER 极光/彩色渐变球背景、NEVER 深色模式或近黑底+霓虹、NEVER 整页橙/黄/红铺底、NEVER 大圆角(>14px)卡片墙。英雄页目录液态玻璃与封面 `.hl` 扫光按 `htmlppt_fx.md` 强制，不属于本禁区。这些是"扁平"的反面但同样不合格——它们破坏医学汇报的可信度与可读性。
 
 ### 14.8 资源、字体、离线与单文件交付
 
@@ -2307,6 +2312,8 @@ deck/
   kangzhe.css
   assets/
     runtime.js
+    htmlppt/gx_fx.css     # V1.1 FX，kangzhe.css 之后加载
+    htmlppt/gx_fx.js      # runtime.js 之后加载
     cover_hero.jpg        # 必须预裁为1280×565
     logo_bot.svg          # 官网正式Logo；内容页 158×33 槽、hero 页 200–240×44–50 槽内 contain
     footer_ribbon.jpg     # 必须预裁为1280×155
@@ -2528,7 +2535,8 @@ html_ppt_runtime_gates:
 | HTML-PPT沿用通用`100vw/100vh`页面 | 用固定`1280×720`逻辑画布和单一全精度`transform:scale()` |
 | `.deck`设置`max-width:1280px` | 删除上限，让固定画布在大屏按统一比例放大 |
 | `.slide`直接挂在`<body>`下、缺少`.deck`包裹层 | 所有`.slide`MUST是`<div class="deck">`直接子元素；缺`.deck`时缩放/翻页/页码整体静默失效，按`deck_wrapper_contract`闸门阻断 |
-| 通用`base.css`在康哲主题之后加载 | 固定加载顺序为`base.css → animations.css（可选）→ kangzhe.css`；康哲主题必须最后 |
+| 通用`base.css`在康哲主题之后加载 | 固定加载顺序为`base.css → animations.css（可选）→ kangzhe.css → gx_fx.css`；FX 必须最后 |
+| 做康哲 HTML-PPT 却不注入 `gx_fx.css/js` | 按 `htmlppt_fx.md` 原样注入；缺 FX 层 = 未完成视觉母版 |
 | 直接复制`html-ppt`通用full-deck或utility类 | 只复用runtime/notes；视觉仅用§14.4–§14.7，禁用class/data按§14.2扫描 |
 | `base.css`把`.slide`改回`justify-content:center`或添加`translateX()` | 康哲主题显式覆盖`justify-content:flex-start;align-items:stretch;transform:none`，再查最终computed style |
 | 对单页再做一次scale或translate补偿 | 只允许共同祖先`.deck`做一次scale；单页和组件不得二次缩放整页 |
@@ -2561,7 +2569,7 @@ html_ppt_runtime_gates:
 | 文字被`overflow:hidden`裁掉但页面无溢出 | 标记`data-qc-text`，用Range墨迹框检查真实裁切；缩短文案、减项或拆页，不以隐藏溢出掩盖 |
 | 卡片、标签或结论条彼此压住但整页无overflow | 在共同父层标记`data-qc-zone`、同层对象标记`data-qc-block`，执行两两矩形相交检查；只有背景/连线可显式`data-qc-overlap="allow"` |
 | 为增加设计感给所有卡片做3D旋转或大幅hover | 只对目录或明确交互卡启用最大3px抬升（站点式HTML可交互元素≤4px）；证据、表格、甘特、风险和结束页保持静态，导出/QC冻结transform |
-| 把站点动效库整库照搬到幻灯片内容页 | 粒子只允许封面（§14.7.3 C），内容页NEVER出现canvas粒子；轨道环/呼吸灯/扫光按§14.7.3 A四轨边界取用，同页动效对象≤8个 |
+| 把站点动效库整库照搬到幻灯片内容页 | 粒子只用 `gx_fx.js` 挂在四个英雄页；内容页 NEVER canvas 粒子；轨道环/呼吸灯按§14.7.3 A；斜切/编号/黄线扫光按 `htmlppt_fx.md` |
 | 站点式HTML用fetch加载本地JSON | 数据以`data/*.js`的`window.DATA_X`全局注入，规避file:// CORS（§14.12.2） |
 | 资料证据链复用通用`.grid`后变成单列向下堆叠 | 只用§14.7.2`.evidence-layout/.evidence-chain`五列模板；两条连接带必须是水平箭头，子列和整页不得溢出 |
 | 三列责任对照做成九张无序卡片 | 只用§14.7.1固定3×3矩阵，每行重复场景名，结论条落到底部 |

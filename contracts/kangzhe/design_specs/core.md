@@ -50,7 +50,7 @@ Agent 修订或扩展本文件时，引入的新规则必须显式落入 MUST、
 | --- | --- |
 | 任意轨 | §0 路由 + §0.5–§0.6 + §5 + §10.3 + §19 |
 | 可编辑PPT | + §6–§8 + §13 + §16.A pre_delivery |
-| HTML-PPT | + §6–§8 + §14.1–§14.9 + §16.A html_ppt |
+| HTML-PPT | + §6–§8 + §14.1–§14.9 + `htmlppt_fx.md` + §16.A html_ppt |
 | 流式HTML | + §14.10 + §14.7.3 D + §16.A 内核闸门 |
 | 站点式HTML | + §14.12 + §14.7.3 E + I-61 |
 | 交互单页 | + §14.13 + §14.12.2 数据层 |
@@ -334,7 +334,7 @@ single_result / comparison / evidence / ending
 | 画布 | 13.333×7.5 in | 1280×720 缩放 | 响应式 | 响应式多页 | 响应式单页 |
 | chrome/页脚 | §7 强制 | §7 强制 | 不强制 | 全局 nav/footer，非幻灯片 chrome | 应用壳，非幻灯片 chrome |
 | 原型 §8 | 强制 | 强制 | 不强制 | 不强制（用 §14.12.4 模式） | 不强制 |
-| 动效 | 静态终态 | 轻量 MAY | 滚动揭示 MAY | 鼓励层次/立体/局部 dark | 过滤/下钻为主 |
+| 动效 | 静态终态 | **MUST** `htmlppt_fx.md`（英雄页玻璃/粒子，内容页页眉+图表） | 滚动揭示 MAY | 鼓励层次/立体/局部 dark | 过滤/下钻为主 |
 | 内核 §10/§19 | 强制 | 强制 | 强制 | 强制 | 强制 |
 
 站点式HTML（§14.12）为第四轨：多页面互通、全局导航与搜索；共享内核与§14.7.3静态基线，不套§8与固定画布。交互单页（§14.13）为第五轨：数据驱动可过滤/下钻看板；数据层同§14.12.2。
@@ -1025,9 +1025,13 @@ verification_gates:
     - id: heading_no_vertical_clip
       assert: "ALL h1,h2,h3,h4 with computed font-size>=32px EITHER have computed line-height>=font-size*1.3 OR computed overflow=='visible'; if neither, scrollHeight MUST <= clientHeight+1"
       severity: MUST
+    - id: htmlppt_fx_layer
+      when: "output_type == html_ppt"
+      assert: "document CONTAINS gx_fx.css rules (content-slide background #FFFFFF AND .gx-env) AND gx_fx.js boot; FOR EACH hero slide in {cover,toc,section,ending}: HAS .gx-env AND canvas.gx-net (aria-hidden, pointer-events none); content slides HAVE NO .gx-env AND NO canvas.gx-net AND computed background is white"
+      severity: MUST
     - id: cover_ambient_layer
       when: "slide MATCHES .cover-slide"
-      assert: "cover CONTAINS (canvas.kz-particles OR .kz-ambient OR .cover-hero::before grid/glow) AND that layer HAS aria-hidden=='true' AND pointer-events=='none'; ambient/particles MUST NOT appear on toc/section/content/ending slides"
+      assert: "cover CONTAINS (.gx-env OR canvas.gx-net OR canvas.kz-particles OR .kz-ambient OR .cover-hero::before grid/glow) AND that layer HAS aria-hidden=='true' AND pointer-events=='none'"
       severity: MUST
     - id: section_has_lead
       when: "slide MATCHES .section-slide"
@@ -1163,7 +1167,7 @@ verification_gates:
 - 表格没有拥挤到需要眯眼阅读。
 - 页脚不遮挡引用。
 - 原始分辨率逐页图中，核心内容自然使用页面下半部，没有非设计性大空白。
-- 内容卡不得读起来"扁平/模板化"：每张内容卡 MUST 带一条彩色身份顶条 + 一个中段视觉锚点（描边迷你图/数字滚动/徽章或状态灯簇），同页多卡用不同部门色形成节奏；封面 MUST 有环境深度层（粒子/光斑/网格底纹，aria-hidden）；NEVER 出现"三张等大白卡+顶部堆文字+中段空白"的模板布局。丰富度只来自层次、色条、微动效与字号字重对比，NEVER 来自极光/玻璃/渐变标题/深色霓虹（这些仍被§5与§14.7.3 G 禁止）。
+- 内容卡不得读起来"扁平/模板化"：每张内容卡 MUST 带一条彩色身份顶条 + 一个中段视觉锚点（描边迷你图/数字滚动/徽章或状态灯簇），同页多卡用不同部门色形成节奏；HTML-PPT 四个英雄页 MUST 有 `htmlppt_fx.md` 环境深度层，内容页 MUST 有页眉斜切荧光。NEVER 出现"三张等大白卡+顶部堆文字+中段空白"的模板布局。NEVER 极光/深色霓虹/内容页毛玻璃墙。
 
 ### 16.2 内容检查
 
@@ -1266,7 +1270,7 @@ verification_gates:
 | I-59 | `ultra-ai-boundary`的18个表体行必须逐行等于24 px且单行不换行；A0–A3图例固定112 px高、四项各18 px且不得溢出或换行 | MUST / NEVER |
 | I-60 | HTML-PPT必须逐页绑定页码：内容页`data-current`等于该页在deck中的1-based索引，`data-total`等于总页数；不得所有内容页重复显示`1 / TOTAL` | MUST / NEVER |
 | I-61 | 站点式HTML（§14.12）共享§14.10.2内核与§19全部不变量；不套§8页面原型与1280×720画布；数据层必须`window.DATA_X`注入且与源材料一致、自检通过 | MUST |
-| I-62 | HTML-PPT粒子只允许`.slide.cover-slide`且节点≤40；内容页/目录页/章节页/结束页NEVER出现canvas粒子；所有环境装饰必须`aria-hidden`且离屏停帧 | MUST / NEVER |
+| I-62 | HTML-PPT 粒子网 `canvas.gx-net` MUST 出现在四个英雄页（cover/toc/section/ending；cover/ending 48 节点、toc/section 32）；内容页 NEVER canvas 粒子；环境层 `aria-hidden` 且离屏/冻结停帧。实现以 `htmlppt_fx.md` + `assets/htmlppt/gx_fx.*` 为准 | MUST / NEVER |
 | I-63 | 动效不得承载唯一信息：`[data-countup]`静态DOM即真值，揭示动画`html.js`门控；冻结态（export/qc）与reduced-motion下内容完整可见且无动画 | MUST / NEVER |
 | I-64 | 汇报方部门身份固定为`产品中心-医学部`，出现于内容页页脚左槽`.footer-id`（文本匹配`^产品中心-医学部｜20\d{2}年\d{1,2}月$`、灰#808080/400）、封面`.cover-department`、结束页`.ending-meta`；NEVER 用源材料 owner/编制部门/项目名替换；页脚右槽页码橙#FF9900/700；`.deck-footer` 恰两槽，NEVER 出现来源/依据/SOP 等第三元素 | MUST / NEVER |
 | I-65 | 底部参考文献行 ONLY 用于外部同行评审论文/公开法规指南；内部 SOP/章节/文件出处 NEVER 生成底部参考文献行（进讲者备注或行内括注）；参考文献行与页脚及正文末行垂直分离、NEVER 重叠；无外部引用页 NEVER 出现该行 | MUST / NEVER |
@@ -1279,7 +1283,7 @@ verification_gates:
 | I-72 | 卡状表面须有可感知层次（阴影或顶条，禁纯白扁块）；但阴影深度/hover 幅度/圆角在 token 范围内自由——此为发挥空间，不同模型/主题的合法差异不是缺陷 | MUST（底线）/ MAY（深度） |
 | I-73 | 流式/站点式 HTML 的页脚（`.report-footer`/`.site-footer`）仅在文档最末或每页全局出现一次；NEVER 在每个 section/章节末尾重复页脚两槽或页码编号——逐节页脚是 HTML-PPT 专属规则 | NEVER |
 | I-74 | 新控件 MUST 用 `kz-` 前缀 class、§5 token、§6 字体栈、§14.7.3 静态基线与冻结语义；NEVER 污染 §14.5–§14.7 命名组件合同 | MUST / NEVER |
-| I-75 | 禁止控件（NEVER）：深色霓虹/自定义光标（含附加式）/无限滚动/WebGL/新野兽派/整页视差/整页毛玻璃墙；玻璃拟态仅 scoped（α≥0.88+1px 边界+blur≤12px+每视口≤4 面+冻结回退不透明）、新拟态仅 scoped（图标/按钮/小控件/卡+双阴影叠加边界）；局部视差≤40px、倾斜≤4deg、磁吸≤6px | NEVER（禁止项）/ MUST（scoped 约束） |
+| I-75 | 禁止控件（NEVER）：深色霓虹/自定义光标（含附加式）/无限滚动/WebGL/新野兽派/整页视差/整页毛玻璃墙。玻璃拟态：流式/站点/交互仍 scoped（α≥0.88+1px 边界+blur≤12px+每视口≤4 面+冻结回退不透明）；**HTML-PPT 英雄页目录卡**按 `htmlppt_fx.md`（α 0.22–0.40 + 白 rim + blur 6px + 指针倾斜 rotateX≤5/rotateY≤6）；**HTML-PPT 内容页**禁止玻璃（实底 α≥0.96）。新拟态仅 scoped（图标/按钮/小控件/卡+双阴影叠加边界）；局部视差≤40px、磁吸≤6px | NEVER（禁止项）/ MUST（scoped 约束） |
 | I-76 | 性能预算：单文件≤100MB、同页动效对象≤8 累计计入、新增 IO/rAF 离屏停帧+RM/冻结全清 | MUST |
 | I-77 | 构建后强制 QC 闭环：文字逐节点溢出/SVG 内部 pairwise 重叠/标记锚点对齐/图例语义/文字-SVG 互叠五项 MUST 实测并修复到全过；带失败交付=不合格 | MUST |
 | I-78 | 图例标签 MUST 语义词（里程碑/红线/风险/状态），NEVER 裸形状名；红标 MUST 有语义解释 | MUST / NEVER |

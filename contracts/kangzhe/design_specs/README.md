@@ -8,7 +8,8 @@
 2. `core.md`：读取共享康哲品牌、排版、图表和质量合同到 EOF；
 3. `project_profile.md`：读取竞品调研专属用户与内容表达合同到 EOF；
 4. 读取路线指定的一个主轨到 EOF；PDF 的 `track_pdf.md` 是项目补充合同，不是第二个媒介主轨；
-5. 使用 `assets/logo_bot.svg`。
+5. HTML-PPT 继续读取 `htmlppt_fx.md`，并注入 `assets/htmlppt/gx_fx.css` 与 `gx_fx.js`；
+6. 使用 `assets/logo_bot.svg`。
 
 ## 项目路线
 
@@ -16,7 +17,7 @@
 |---|---|
 | 站点式门户 | `track_site.md`；筛选、联动和下钻见 `project_profile.md` |
 | 原生 PDF | `track_stream.md` + `track_pdf.md` |
-| HTML-PPT | `track_htmlppt.md` |
+| HTML-PPT | `track_htmlppt.md` + `htmlppt_fx.md` |
 | 可编辑 PPTX | `track_pptx.md`，并走 PPT Master |
 
 ## 独立演进
@@ -38,5 +39,7 @@
 | `track_stream.md` | 连续阅读与原生 PDF 内容基线 |
 | `track_pdf.md` | 原生 PDF 专属排版与验收 |
 | `track_htmlppt.md` | 浏览器幻灯片及讲者运行时 |
+| `htmlppt_fx.md` | HTML-PPT 动效与冻结验收合同 |
+| `assets/htmlppt/gx_fx.css`、`gx_fx.js` | HTML-PPT 随包注入的视觉运行层 |
 | `track_pptx.md` | PPT Master 与可编辑 PPTX |
 | `assets/logo_bot.svg` | 康哲 Logo |

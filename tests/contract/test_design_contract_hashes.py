@@ -11,21 +11,24 @@ MANIFEST = CONTRACT_ROOT / "manifest.json"
 DESIGN_ENTRY = CONTRACT_ROOT / "design.md"
 DESIGN_PACKAGE = CONTRACT_ROOT / "design_specs"
 
-SOURCE_COLLECTION_SHA256 = "75fb7372f41e0073ac5df5b2dcd510e36b01b4f683805ea14b38ffe1d4cc29c2"
-SOURCE_ENTRY_SHA256 = "1795cb46981595236e4dab88b26b54bbfcda4cb9da4c9e5667273893de2fe24f"
+SOURCE_COLLECTION_SHA256 = "be066868dd15d693c9b1d4c66cda45de7908f164bb8fe99f88d43d13b07cfc4f"
+SOURCE_ENTRY_SHA256 = "049c0406823ce66bcfd5b5271ff8741730ed18abae0e5f2a7d19f92e8d3c9711"
 SOURCE_COMPAT_STUB_SHA256 = "e513b4c5d56ae666148f1c22d535295483447f236da02d55efead0d8d185ed18"
 PROJECT_ENTRY_SHA256 = "fa30cea68539a37aee2767b573e9a74acf3d9d38d86da9910661c5baef71735c"
 SOURCE_DESIGN_SPECS_FILES = {
-    "ARCHITECTURE.md": "b12df3a1cf28f245e8f6a2221d87532eaac06627dcb2945a4a7a8884a40106a2",
-    "README.md": "c9c0469ce70f55e33ae4fffec161c5d38df296c296e7b752f0f00bc04bde9c32",
-    "ROUTER.md": "b67125001153dd6733b7d34f43544fdc9a01c551b45e9fc6bca19f308a09a807",
+    "ARCHITECTURE.md": "c10c9b347fec85d0e147c2059a554cffdcc3c6e81e54d6a718a625a95f76622b",
+    "README.md": "bf7e8d81881733c69d03782dbc52afaa1bc3b2553bfa2cdb691b8c409ce621fc",
+    "ROUTER.md": "b007e9fd9b8005b8e1ccc592a520c6f35136c6bb411cf93a9afb4fc762fc65f5",
+    "assets/htmlppt/gx_fx.css": "7e2ba09538f2e9c59c07f2ad2c8f708828c71f5f8e71771c5aa337da6bb5a572",
+    "assets/htmlppt/gx_fx.js": "92cdb59102b888db0d046caeae34700cc29c97275dba626a652560603cb9c86b",
     "assets/logo_bot.svg": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
-    "core.md": "acdd64bf0281bc0d27c7da5b8fd48127f69997403ce7cd48fc649291cf554aeb",
-    "local_map.md": "23dfe8fdcba7410a22ec2d64fa5cb7ec2697c340408387fdbaf4e33794e94cc0",
+    "core.md": "43a820323808dcbf6061226b9aaac82f64be31c0ceccc5514c929e2faf5edc5f",
+    "htmlppt_fx.md": "0c3dbbe693f2cb39d463f360376b4c6237458734f1f9d677e04a271ee3a0496a",
+    "local_map.md": "d9547afd2fcd476bd294b96c8ed032009803f3361fb9c5e2a061869d96610747",
     "tests/test_package_load.py": (
-        "7894f53ca3257cad1578a1dfc0ac4380555d9958f3c603b14907b683fe8a6af1"
+        "fc797f3540d1374b1c5137857d2d40f5a6e23131b123c38e6668a19a6f9e092c"
     ),
-    "track_htmlppt.md": "4a1dd9b5d224dc5a1a339339b1449e99cb0e85a89f6b1a8d2fc9a5bd184bb4f9",
+    "track_htmlppt.md": "deb873581246d8ce130805b27de2171adee53babe2ccb6ae902c9ee33f32e592",
     "track_interactive.md": "0e5c3cdfdd3e2cbfb68dd404e3afa9bb1c943b6bc849933cbd94a331ee1a3932",
     "track_pptx.md": "85e7a4910f80cef081cc0f7b29fbc8beaa7577806a730a3616916dd960543ad6",
     "track_site.md": "29961fc88c252bdbadf217e2a77717bce4cb94bf576ec40f7c58c8b165da1d1f",
