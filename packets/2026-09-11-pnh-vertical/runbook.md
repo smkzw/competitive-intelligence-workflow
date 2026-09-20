@@ -1508,3 +1508,13 @@ format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
   2. 措辞面：结论层"全部公开疗效观察"改为与实际口径一致的精确表述
      （如"按登记终点族与观察窗分组呈现；特殊时间窗的排除口径见数据依据"）。
 - A r16 verdict 待收；视觉文档已在 A 链中重算（v53 digest）。
+
+### A r16 accepted + 回执 ✓（v53 上 A/C 双全）；视觉文档已按 v53 重算
+### B r31 精确修复方向（下一会话首批，v54）
+1. `_weeks` 的 through 拒绝对"Baseline through Week N"比例型终点改为：
+   返回窗口末端第 N 周（unit week），B 行时间标签由原 time_frame 文本
+   （抽屉可见）承载窗口语义——恢复 NCT05886244 四个比例型终点
+   （96.0/36.0/4.0/80.0，含 95%CI 无法入表则 CI 留抽屉）。
+2. 结论层"全部公开疗效观察"改为"按登记终点族与观察窗分组呈现"+ 例外口径声明。
+3. v54 → B r32 + A/C 视觉（v53 digest 生成脚本在 /tmp/gen_visual_prompts_v53.py，
+   改 abc-v54 后复用）→ accept-visual ×3。
