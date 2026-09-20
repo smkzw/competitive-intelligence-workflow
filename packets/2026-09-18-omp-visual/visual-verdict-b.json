@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc52-b",
+  "verdict_id": "verdict-omp-gemini38-vis-abc53-b",
   "format": "html",
-  "visual_plan_digest": "697fe7fabe6ea740201589da5f4b309556601153536e7c62c13c9a87f6f79dcf",
-  "candidate_artifact_digest": "2862ce2066e6c5e0949dd85ea3893a5f455d366bb14c135ff5e7004ef6d3d457",
-  "render_evidence_digest": "6b4f9fe0e745132cc3b1d980ed4abd550a030ec3a57d5c025396201ff22644b3",
+  "visual_plan_digest": "4f5e083512b49ad6cd44295bed7d3acc1eed78b7bf1f36123a5925e6a8a6d142",
+  "candidate_artifact_digest": "2c2ce4d3b8e82d1d86ae74aea2ae257bd2b351a2a96430a3a7b80b19f0f2de78",
+  "render_evidence_digest": "5c21392365761e477c9d003d6c165c89e07cf691276ebeca99f6a096d7bdecef",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-google-antigravity-gemini38flash-high",
   "verdict": "accepted",
@@ -17,9 +17,9 @@
         "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/overview.html",
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/efficacy.html",
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/plan-deviation.html",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/overview.html",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/efficacy.html",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/trials/nct04469465.html",
         "packets/2026-09-18-omp-visual/render-evidence-b.json#target-chromium-1440-overview.visible_text_scan"
       ]
     },
@@ -31,9 +31,10 @@
         "同一数据在图、表、抽屉三投影中保持同源一致"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/overview.html",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/overview.html",
         "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__efficacy.html.png"
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__efficacy.html.png",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/trials/nct04469465.html"
       ]
     },
     {
@@ -44,10 +45,11 @@
         "长药品名/试验名换行不截断关键标识"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/assets/portal.css",
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/trials/nct04469465.html",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/assets/report-b.css",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/assets/portal.css",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/overview.html",
         "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__trials__nct04469465.html.png",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png"
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/390__overview.html.png"
       ]
     },
     {
@@ -58,9 +60,10 @@
         "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/assets/portal.css",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/assets/portal.css",
         "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png",
-        "packets/2026-09-18-omp-visual/screenshots/B/webkit/1440__overview.html.png"
+        "packets/2026-09-18-omp-visual/screenshots/B/webkit/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__efficacy.html.png"
       ]
     },
     {
@@ -71,9 +74,10 @@
         "图表与对应表格数值一致（同源投影）"
       ],
       "evidence_refs": [
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/efficacy.html",
         "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__efficacy.html.png",
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/efficacy.html",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1024__efficacy.html.png"
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1024__efficacy.html.png",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/overview.html"
       ]
     },
     {
@@ -86,7 +90,8 @@
       "evidence_refs": [
         "packets/2026-09-18-omp-visual/render-evidence-b.json#target-chromium-1440-overview.interaction_checks",
         "packets/2026-09-18-omp-visual/render-evidence-b.json#target-webkit-1440-efficacy.interaction_checks",
-        "runs/pnh-vertical/abc-v52/reports/B/v1/html/assets/portal.js"
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/assets/portal.js",
+        "runs/pnh-vertical/abc-v57/reports/B/v1/html/assets/evidence-drawer.js"
       ]
     },
     {
@@ -99,10 +104,11 @@
       "evidence_refs": [
         "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png",
         "packets/2026-09-18-omp-visual/screenshots/B/webkit/1440__overview.html.png",
-        "packets/2026-09-18-omp-visual/screenshots/B/webkit/320__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/390__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/B/webkit/390__overview.html.png",
         "packets/2026-09-18-omp-visual/render-evidence-b.json#metrics"
       ]
     }
   ],
-  "created_at": "2026-09-20T15:31:42Z"
+  "created_at": "2026-09-20T18:19:32.347178+00:00"
 }

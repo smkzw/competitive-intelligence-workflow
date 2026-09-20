@@ -1644,3 +1644,7 @@ report-b.css + overview——v56 新增行（基线/窗口比例终点）的标�
 - B r35 accepted（CSS 132 条修复经复审确认）；A r20 ✓；C r18 ✓。
 - 三节点视觉（v57 digest，contract digest + 断言）后台运行中。
 - verdict 落盘后全 accepted → resume → accept-visual ×3 → PNH 竖向收口。
+
+## 视觉 B 全域通过（v57，contract digest 绑定核验通过）
+B（gemini）：accepted 7/7——typography 修复（132 条 CSS 声明）确认生效。
+B 报告在 v57 = 科学回执（r35）+ 视觉验收双全。A/C 视觉后台运行中。
