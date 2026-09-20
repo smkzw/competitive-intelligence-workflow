@@ -151,9 +151,9 @@ def test_statistical_form_and_time_band_remain_separate_axes() -> None:
 
     assert len(groups) == 3
     assert {group["title_zh"] for group in groups} == {
-        "EASI-75应答 · 应答率 · 约6个月 · 全分析集 · 语义信息未完整，按试验列示",
-        "EASI-75应答 · 均值 · 约6个月 · 全分析集 · 语义信息未完整，按试验列示",
-        "EASI-75应答 · 应答率 · 约第12周 · 全分析集 · 语义信息未完整，按试验列示",
+        "EASI-75应答 · 应答率 · 约6个月 · 全分析集 · 该组部分观察的登记分组信息不全，已按试验合并展示",
+        "EASI-75应答 · 均值 · 约6个月 · 全分析集 · 该组部分观察的登记分组信息不全，已按试验合并展示",
+        "EASI-75应答 · 应答率 · 约第12周 · 全分析集 · 该组部分观察的登记分组信息不全，已按试验合并展示",
     }
 
 
@@ -230,7 +230,7 @@ def test_unknown_semantics_keep_trials_in_adjacent_descriptive_groups() -> None:
     groups = _groups_for_page("efficacy", [(first, None), (second, None)])
     assert len(groups) == 2
     assert all(group["cross_trial"] is False for group in groups)
-    assert all("语义信息未完整" in group["title_zh"] for group in groups)
+    assert all("登记分组信息不全" in group["title_zh"] for group in groups)
     assert {row["row_id"] for group in groups for row in group["rows"]} == {
         "first", "second",
     }

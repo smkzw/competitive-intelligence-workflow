@@ -256,7 +256,7 @@ def main() -> None:
         else:
             trials_rows.append({
                 "id": nct.lower(), "display_id": nct, "product_id": pid,
-                "name": ident.get("briefTitle", nct)[:120], "phase": phase_zh,
+                "name": ident.get("briefTitle", nct), "phase": phase_zh,
                 "region": trial_region, "status": status_zh,
                 "sample_size": count,
                 "treatment_sample_size": None, "role": "登记研究",
@@ -338,7 +338,7 @@ def main() -> None:
                     if len(_cls_days) == 1:
                         row_time_frame = cls_title
                     base_population = (
-                        f"登记结果人群（{cls_title[:40]}）" if cls_title
+                        f"登记结果人群（{cls_title}）" if cls_title
                         else "登记结果人群"
                     )
                     for cat in (cls.get("categories") or []):

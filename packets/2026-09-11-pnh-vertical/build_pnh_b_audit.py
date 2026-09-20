@@ -210,7 +210,7 @@ def main() -> None:
         trials_out.append({
             "trial_id": trial["id"],
             "product_id": trial["product_id"],
-            "display_name": trial["name"][:80],
+            "display_name": trial["name"],
             "phase": trial["phase"],
             "study_role": "pivotal_or_registry_observed",
             "design_kind": "comparative" if is_comparative else "single_arm",
@@ -957,6 +957,13 @@ def main() -> None:
                 portal_product_ids.add(pid)
     b_portal["products"] = [p for p in b_portal["products"] if p["id"] in portal_product_ids]
     b_portal["trials"] = [t for t in b_portal["trials"] if t["id"] in kept_trial_ids]
+    # 独立复核第二十四轮：门户试验名以内容层完整登记名为准
+    # （静态载荷的名称为旧构建的截断产物）
+    _full_name_by_trial = {t["trial_id"]: t["display_name"] for t in trials_out}
+    for _t in b_portal["trials"]:
+        _full = _full_name_by_trial.get(_t["id"])
+        if _full:
+            _t["name"] = _full
     content_payload["universe_product_ids"] = sorted(portal_product_ids)
     b_portal["efficacy"] = portal_efficacy
     b_portal["safety"] = [

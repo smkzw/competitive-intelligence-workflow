@@ -3052,7 +3052,7 @@ def _dress_membership_groups(
             ))
             title += " · 实际观察时间：" + " / ".join(actual_times)
         if any(semantic_value_is_unknown(value) for value in key):
-            title += " · 语义信息未完整，按试验列示"
+            title += " · 该组部分观察的登记分组信息不全，已按试验合并展示"
         group = _group(
             title,
             bucket,
@@ -3412,6 +3412,7 @@ def _filter_dimensions(
 
 
 _FILTER_WEEK_BAND_RE = re.compile(r"^week_([0-9]+(?:\.[0-9]+)?)$")
+_FILTER_DAY_BAND_RE = re.compile(r"^day_([0-9]+(?:\.[0-9]+)?)$")
 _FILTER_COHORT_RE = re.compile(r"^cohort\s*(\d+)$")
 # 独立复核第二十轮 veto：基线概念内部键 → 中文概念名（图表类别/筛选直出兜底）
 _BASELINE_CONCEPT_TOKEN_ZH = {
@@ -3487,6 +3488,9 @@ def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
     week = _FILTER_WEEK_BAND_RE.match(text)
     if week:
         return f"第{float(week.group(1)):g}周"
+    day = _FILTER_DAY_BAND_RE.match(text)
+    if day:
+        return f"第{float(day.group(1)):g}天"
     cohort = _FILTER_COHORT_RE.match(text.casefold())
     if cohort:
         return f"第{int(cohort.group(1))}队列"
@@ -3955,7 +3959,7 @@ def _render_page_context(
     if detail_kind == "product":
         title = f"{names.get(detail_id or '', '产品')}产品档案"
     elif detail_kind == "trial":
-        title = f"{trial_names.get(detail_id or '', '试验')}试验档案"
+        title = f"{trial_names.get(detail_id or '', '试验')} · 试验档案"
     if page_id in _BASELINE_PAGE_IDS:
         empty_state_title = "暂无公开记录（基线）"
     elif page_id in _DISPOSITION_PAGE_IDS:
@@ -3998,6 +4002,21 @@ def _render_page_context(
         "report": data,
         "report_version": data.report_version,
         "report_title": f"{data.indication}临床试验结果比较",
+        "overview_conclusions": (
+            [
+                {"label": "试验宇宙", "text": (
+                    f"覆盖 {len(data.products)} 个产品、{len(data.trials)} 项基线信息完整的注册试验；"
+                    "宇宙按登记检索全闭包，不以名单排序替代。")},
+                {"label": "疗效证据", "text": (
+                    "全部公开疗效观察按登记终点族与观察窗分组，与数据表同源，数值可回溯登记来源。")},
+                {"label": "安全性证据", "text": (
+                    "严重不良事件与死亡病例按登记组别汇总呈现，并附登记的同组风险人数分母。")},
+                {"label": "阅读边界", "text": (
+                    "不同试验的测量与人群不同，数值不默认可比；跨试验比较以同试验内治疗—对照差值为准。")},
+            ]
+            if page_id == "overview" and detail_kind is None
+            else None
+        ),
         "page_title": title,
         "page_id": page.id,
         "page": page,
@@ -4345,7 +4364,7 @@ def render_report_b_site(
         product_name = names.get(trial.product_id, "未列示产品")
         display_name = trial_names.get(trial.id, trial.name)
         add_search_entry(
-            f"{display_name}试验档案",
+            f"{display_name} · 试验档案",
             f"trials/{trial.id}",
             "试验档案",
             "试验登记",

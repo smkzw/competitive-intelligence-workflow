@@ -9,6 +9,17 @@
     </div>
   </header>
 
+  {% if overview_conclusions %}
+  <section class="kz-b-conclusions" aria-label="核心结论">
+    <h2 class="kz-b-conclusions__title">核心结论</h2>
+    <ul class="kz-b-conclusions__list">
+      {% for item in overview_conclusions %}
+      <li class="kz-b-conclusions__item"><strong>{{ item.label }}</strong><span>{{ item.text }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
   {% if quick_filter_groups %}
   <div class="kz-b-filter-quick" aria-label="快速筛选产品">
     <span class="kz-b-filter-quick__label">快速筛选产品</span>

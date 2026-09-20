@@ -1628,3 +1628,10 @@ input:focus-visible {
 .kz-b-site--safety .kz-chart-table th { color: var(--kz-pv-brown); }
 .kz-c-site .kz-chart { border-top: 3px solid var(--kz-med-blue); }
 .kz-c-site--design-map .kz-chart { border-top-color: var(--kz-stats-green); }
+
+/* ── B 总览结论层（设计专修：首屏先给结论再铺卡片）── */
+.kz-b-conclusions { background: var(--bg-warm, #faf7f2); border: 1px solid #ece9e4; border-left: 5px solid var(--kz-orange); border-radius: 12px; padding: 16px 20px; margin: 0 0 20px; }
+.kz-b-conclusions__title { margin: 0 0 10px; font-size: 20px; color: var(--text-1, #171a1f); }
+.kz-b-conclusions__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.kz-b-conclusions__item { display: flex; gap: 10px; align-items: baseline; font-size: 14px; line-height: 1.55; color: var(--text-2, #3c434d); }
+.kz-b-conclusions__item strong { flex: 0 0 auto; color: var(--text-1, #171a1f); }

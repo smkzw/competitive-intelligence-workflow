@@ -356,7 +356,7 @@ def main() -> None:
                     if len(_cls_days) == 1:
                         row_time_frame = cls_title
                     base_population = (
-                        f"登记结果人群（{cls_title[:40]}）" if cls_title
+                        f"登记结果人群（{cls_title}）" if cls_title
                         else "登记结果人群"
                     )
                     for cat in (cls.get("categories") or []):
