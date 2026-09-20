@@ -1497,3 +1497,14 @@ format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
 - **v53 = 当前候选**（gates 过、362 疗效行）。后台：B r31/A r16/C r14。
 - 视觉文档重算与三份 v53 提示词生成脚本：/tmp/gen_visual_prompts_v53.py
   （digest 用 visual_contract_digest + 断言）。A/C 视觉重测 → accept-visual ×3。
+
+### B r31（v53）：veto 1 项——结论层"全部"措辞与 NCT05886244 缺项
+- NCT05886244 的比例型终点（输血回避 96.0、LDH 正常化 36.0、突破性溶血 4.0、
+  LDH≤1.5×ULN 80.0，均含 95%CI）在门户缺项；TEAE/ADA 计数亦未呈现。
+- 双重修复方向（下一会话）：
+  1. 数据面：这些终点 timeFrame="Baseline through Week 12"——含 through 语义被
+     `_weeks` 拒绝（单点归属不明）。比例型+through+单试验窗口：应按窗口中点或
+     终点窗语义入表，或在结论层如实声明排除口径。
+  2. 措辞面：结论层"全部公开疗效观察"改为与实际口径一致的精确表述
+     （如"按登记终点族与观察窗分组呈现；特殊时间窗的排除口径见数据依据"）。
+- A r16 verdict 待收；视觉文档已在 A 链中重算（v53 digest）。
