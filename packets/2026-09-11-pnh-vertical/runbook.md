@@ -1724,3 +1724,11 @@ C 落盘后同法处理）→ resume → accept-visual ×3 → PNH 竖向收口�
 4. format：320px 热力图 grid left 178px 固定导致绘图区仅 58px。修：
    grid.left 按容器宽响应式（min(178, w*0.32)）。
 全部为 report_c.py/report-c.js 的明确点位，下一会话逐项实施 → v60 → 重测。
+
+### 视觉 A（v60，cursor）：2 域（copy_zh/typography），已探查无内部令牌
+- 正则扫描 efficacy/safety 页可见文本：snake_case 内部令牌 0 命中。
+- cursor 指认的应为：页面大段登记英文原文（endpoint/timepoint 原文）与
+  safety 页排版细节。处理方向（下会话）：efficacy/safety 页的英文注册原文
+  保留策略与 zh 标签并列呈现的方式需与复核者口径对齐（或对 endpoint 列
+  增加 zh 概念列，原文留抽屉）——属呈现策略决策，非缺陷修复。
+- v60 计分：B ✓ 7/7（contract digest 绑定通过）、C 运行中、A 差 2 域。
