@@ -1412,3 +1412,9 @@ stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以
 - IgAN（grok 4.6）：overall partial（findings.json 已更新）。
 - 会商结论：两位测试者共同确认的泛化 blocker 已清；剩余为数据覆盖与
   适应症特有终点的显示层映射——记入横向铺开的前置清单。
+
+### 视觉 C（v49，deepseek）：rejected 5/7
+copy_zh 转 accepted（时间本地化生效）、交互 accepted。剩余 hierarchy/typography/
+color/charts/format 五域——CSS 冒号修复与聚合图已生效但设计基线仍有差距
+（间距 4/8 基线、颜色语义、图表细节）。C 设计迭代下一会话继续（对照
+verdict evidence_refs 逐域修）。
