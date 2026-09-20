@@ -1760,3 +1760,13 @@ copy_zh/hierarchy/color ✓（累计三域修复生效）。剩余 4 域（refs 
   report-c.js applyState/updateChartFromState 的执行顺序契约。
 - 该项 + format 双引擎换行判定（建议判非缺陷：水平溢出 0）→ v61 → C 视觉
   重测 → accept-visual ×3 → PNH 收口。
+
+### C 交互深挖结论（MutationObserver 实证）
+点击筛选按钮后目标行的 style 属性被**两处整体清空**（removeAttribute("style")
+语义），而非被设为 display:none 后又被恢复——即存在某个"清除全部行内样式"
+的代码路径（疑似门户框架的筛选重置/重渲染路径，或 kz-filter-panel 的
+inflow 切换逻辑）在 click 处理后运行。行显隐被该清空路径覆盖。
+下一会话：定位该 style 清空点（对 overview 全部 .kz-chart-table__row 挂
+MutationObserver + 对 removeAttribute("style") 打断点，或全文 grep
+removeAttribute("style")/cssText=""），在其执行后重跑 applyState 行显隐，
+或将 C 页筛选显隐统一改由单一权威（report-c.js）写入。
