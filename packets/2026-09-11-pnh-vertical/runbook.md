@@ -1166,3 +1166,9 @@ mtplx 连续 4 次崩溃（exit 1）→ 换 gemini 或 deepseek 重试
    卡片层级、量纲标注），然后视觉重测 A/B/C（verdict 模板已含执行纪律守卫）。
 3. 视觉通过后：A 回执重签（绑 v4x 摘要）→ accept-visual A/B/C。
 4. UC/IgAN 用修复后构建器重测；AD B/C 竖向；横向 6 适应症。
+
+### 视觉第七轮补记
+- A（cursor/default，守卫生效后成功执行）：rejected 3/7（copy_zh、hierarchy_density、
+  charts_tables）；typography/color/interaction/format 已 accepted——A 距通过最近。
+  copy_zh 修复方向与 B r23 第 1/4 项同源（内部令牌直出）；A 的图表/层级属设计批次。
+- C（deepseek）：verdict 落盘后以 packets/2026-09-18-omp-visual/visual-verdict-c.json 为准。
