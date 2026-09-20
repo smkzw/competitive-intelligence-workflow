@@ -1003,3 +1003,10 @@ S1(S2) → S3 → S4(S5) → S6(S7)：先修共性（矩阵+披露），再修�
 2. 视觉验证重测 → accept-visual
 3. AD B/C 竖向
 4. 横向其余 6 适应症
+
+### ECharts SVG 标签重叠修复（最新）
+1. series label 条件显示：类目 >12 时隐藏 value 标签（hover 时显示）
+2. dataZoom slider + inside：类目 >8 时添加滚动缩放
+3. legend 移至底部；grid bottom 加宽
+4. 全部 axisLabel rotate 25 + hideOverlap + overflow break
+5. 双副本同步 + manifest sha 更新（契约测试 306 绿）
