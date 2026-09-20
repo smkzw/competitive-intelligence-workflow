@@ -3457,6 +3457,10 @@ _FILTER_STATIC_LABELS = {
     "baseline_ldh": "基线乳酸脱氢酶",
     "baseline_easi": "基线EASI",
     "baseline_age": "基线年龄",
+    # 独立复核第二十九轮：披露状态筛选键映射中文（与表格列口径一致）
+    "reported_value": "已报告值",
+    "reported_zero": "已报告零值",
+    "not_applicable": "不适用",
     "pnh_clone_size": "PNH 克隆大小",
     "free_hemoglobin": "游离血红蛋白",
     "free_hemoglobin_pct": "游离血红蛋白变化（%）",

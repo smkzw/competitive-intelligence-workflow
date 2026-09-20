@@ -1440,3 +1440,16 @@ verdict evidence_refs 逐域修）。
   全 accepted → resume → accept-visual ×3（三件套先拷入项目 state/visual/）。
 - 教训：builder 链顺序敏感——指针切换后必须验证产物落在目标工作区再进下一步
   （本轮 v51 首次构建曾写入 v50 导致身份不一致，分步验证后解决）。
+
+## B r29 收敛到 1 项 → 修复 → v52 = 当前候选（本轮收束点）
+
+- v51 复核：A r14 accepted+回执 ✓、C r12 accepted+回执 ✓、
+  B r29 veto **仅 1 项**（披露状态筛选键 reported_value 直出）。
+- 修复：_FILTER_STATIC_LABELS 补 disclosure_state 映射（已报告值/已报告零值/
+  不适用）——v52 渲染验证筛选项显示"已报告值" ✓。
+- **v52 = 当前候选**（submit ACCEPTED、run 完成）。后台运行中：
+  B r30（deepseek）、A r15 + 视觉文档重算、C r13（gemini）。
+- 下一会话：收三路 verdict → 按 v52 digest 重写三份视觉提示词
+  （visual_contract_digest + 断言）→ 三节点视觉 → 全 accepted →
+  resume → accept-visual ×3（三件套拷入项目 state/visual/）。
+- B veto 轨迹：29 轮 1 项——距通过一步。
