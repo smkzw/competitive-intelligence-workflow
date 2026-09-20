@@ -1,6 +1,6 @@
 schema_version: '1.0'
 policy_id: registry-endpoint-family
-version: '7.1'
+version: '7.3'
 description: 适应症无关的登记终点族分类规则（per-indication 配置块）
 safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|serious
   adverse|number of participants with adverse
@@ -44,13 +44,24 @@ rules:
     form: absolute_value
     units:
     - mg/dL
-- rule_id: endpoint-pnh-ldh-change-v1
-  match_pattern: ldh|lactate dehydrogenase
+- rule_id: endpoint-pnh-ldh-change-v2
+  match_pattern: (change|reduction|decrease)[^;]{0,40}(ldh|lactate dehydrogenase)|(ldh|lactate dehydrogenase)[^;]{0,40}(change|reduction|decrease)
   family_meta:
     canonical_id: ldh
     label_zh: LDH 水平变化
     direction: lower_is_better
     form: change_from_baseline
+    units:
+    - U/L
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-ldh-levels-v1
+  match_pattern: ldh|lactate dehydrogenase
+  family_meta:
+    canonical_id: ldh_levels
+    label_zh: LDH 水平
+    direction: lower_is_better
+    form: absolute_value
     units:
     - U/L
     - percent
@@ -280,16 +291,75 @@ rules:
     units:
     - mg/dL
     - umol/L
-- rule_id: endpoint-uc-mayo-v1
-  match_pattern: mayo|partial mayo|mayo score
+- rule_id: endpoint-uc-mayo-response-v1
+  match_pattern: (clinical )?(remission|response)( (per|based on|by) )?(partial )?mayo|mayo (clinical )?(remission|response)
   family_meta:
-    canonical_id: mayo_score
-    label_zh: Mayo 评分
+    canonical_id: mayo_response
+    label_zh: Mayo 应答/缓解
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - '%'
+    - percent
+- rule_id: endpoint-uc-steroid-free-v1
+  match_pattern: corticosteroid[- ]free|steroid[- ]free
+  family_meta:
+    canonical_id: steroid_free_remission
+    label_zh: 无激素缓解
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - '%'
+    - percent
+- rule_id: endpoint-uc-histologic-v1
+  match_pattern: histolog|geboes|robbins|heml|epithelial
+  family_meta:
+    canonical_id: histologic_improvement
+    label_zh: 组织学改善
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - '%'
+    - percent
+- rule_id: endpoint-uc-calprotectin-v1
+  match_pattern: calprotectin
+  family_meta:
+    canonical_id: fecal_calprotectin
+    label_zh: 粪便钙卫蛋白
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - mg/kg
+- rule_id: endpoint-uc-urgency-v1
+  match_pattern: urgency|urgent bowel
+  family_meta:
+    canonical_id: bowel_urgency
+    label_zh: 排便急迫感
     direction: lower_is_better
     form: change_from_baseline
     units:
     - score
     - points
+- rule_id: endpoint-uc-ibdq-v1
+  match_pattern: ibdq|inflammatory bowel disease questionnaire
+  family_meta:
+    canonical_id: ibdq
+    label_zh: IBDQ 评分
+    direction: higher_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - points
+- rule_id: endpoint-uc-endoscopic-v1
+  match_pattern: endoscopic|mucosal healing|colonoscopy
+  family_meta:
+    canonical_id: endoscopic_improvement
+    label_zh: 内镜改善
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - '%'
+    - percent
 - rule_id: endpoint-uc-remission-v1
   match_pattern: clinical remission|remission
   family_meta:
@@ -300,16 +370,16 @@ rules:
     units:
     - percent
     - '%'
-- rule_id: endpoint-uc-endoscopic-v1
-  match_pattern: endoscopic|mucosal healing|colonoscopy
+- rule_id: endpoint-uc-mayo-v1
+  match_pattern: mayo|partial mayo|mayo score
   family_meta:
-    canonical_id: endoscopic_improvement
-    label_zh: 内镜改善
-    direction: higher_is_better
-    form: response_rate
+    canonical_id: mayo_score
+    label_zh: Mayo 评分
+    direction: lower_is_better
+    form: change_from_baseline
     units:
-    - percent
-    - '%'
+    - score
+    - points
 - rule_id: endpoint-uc-bleeding-v1
   match_pattern: bleeding|rectal bleeding|stool frequency
   family_meta:
@@ -320,19 +390,9 @@ rules:
     units:
     - score
     - count
-- rule_id: endpoint-pnh-registry-generic-v1
-  match_pattern: safety|death|infection|events\b|event rate
-  family_meta:
-    canonical_id: generic
-    label_zh: 登记通用观察
-    direction: higher_is_better
-    form: event_rate
-    units:
-    - Participants
-    - percent
-    - '%'
-    - count
-    - days
+# 独立测试第二轮（UC）：endpoint-pnh-registry-generic-v1 已删除——其
+# events\b 模式把其他适应症的 AE 行误拉入 PNH 命名的"通用观察"族；
+# 此类行现在落入通用兜底族（诚实披露），显式 AE/TEAE 仍由安全性域拒判。
 - rule_id: endpoint-easi75-response-v1
   match_pattern: easi[ -]?75|easi_75
   family_meta:

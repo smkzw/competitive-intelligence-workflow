@@ -22,6 +22,17 @@ CAS = sorted(
 OUT = Path(__file__).resolve().parent / "pnh-a-payload.json"
 NA = "未公开披露"
 
+# 登记结果测量的互斥子类 → 中文行标签（独立复核第二十一轮 veto）
+_REGISTRY_CATEGORY_ZH = {
+    "improved from baseline": "较基线改善",
+    "worsened from baseline": "较基线恶化",
+    "no change from baseline": "较基线无变化",
+    "no change": "较基线无变化",
+    "not applicable": "不适用",
+    "na": "不适用",
+}
+
+
 _STATUS_RANK = {
     "已批准上市": 8, "招募中": 75, "邀请入组中": 74, "进行中（不招募）": 73,
     "尚未招募": 6, "已完成": 5, "可用": 4, "不再可用": 3, "状态未更新": 2,
@@ -309,18 +320,39 @@ def main() -> None:
                         group_titles[gid] = title[:40]
             for measure in ((results.get("outcomeMeasuresModule") or {})
                             .get("outcomeMeasures") or []):
-                title = str(measure.get("title") or "")[:80] or NA
-                time_frame = str(measure.get("timeFrame") or "")[:40] or "时间窗未登记"
+                title = str(measure.get("title") or "").strip() or NA
+                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
                 for cls in (measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
-                    population = (
+                    # 分析集标签自带单一访视日（如 "Fatigue: Day 253"）时，
+                    # 该行实际时间点取类标签，而非列出双访视日的测量级 time_frame
+                    row_time_frame = time_frame
+                    _cls_days = set(
+                        m.group(1) for m in re.finditer(
+                            r"(?:day|week)\s+(\d+(?:\.\d+)?)", cls_title.casefold()
+                        )
+                    )
+                    if len(_cls_days) == 1:
+                        row_time_frame = cls_title
+                    base_population = (
                         f"登记结果人群（{cls_title[:40]}）" if cls_title
                         else "登记结果人群"
                     )
                     for cat in (cls.get("categories") or []):
+                        # 独立复核第二十一轮 veto：登记测量的互斥子类
+                        # （如 Improved/Worsened from Baseline）必须进入行标签，
+                        # 否则同臂同测量的 4 行同名并列，数值含义无法还原
+                        cat_title = str(cat.get("title") or "").strip()
+                        cat_label = _REGISTRY_CATEGORY_ZH.get(
+                            cat_title.casefold(), cat_title
+                        )
+                        if cat_label:
+                            population = base_population[:-1] + f"；{cat_label}）"                                 if base_population.endswith("）") else f"{base_population}（{cat_label}）"
+                        else:
+                            population = base_population
                         for measurement in (cat.get("measurements") or []):
                             raw = str(measurement.get("value") or "").strip()
                             try:
@@ -336,6 +368,7 @@ def main() -> None:
                                 "arm": group_titles.get(group_id, group_id or "组别未登记"),
                                 "value": value, "unit": unit,
                                 "population": population,
+                                "timepoint": row_time_frame,
                             })
             events = (results.get("adverseEventsModule", {})
                       .get("eventGroups") or [])

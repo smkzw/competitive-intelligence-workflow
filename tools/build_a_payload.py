@@ -18,6 +18,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 NA = "未公开披露"
 
+# 登记结果测量的互斥子类 → 中文行标签（独立复核第二十一轮 veto）
+_REGISTRY_CATEGORY_ZH = {
+    "improved from baseline": "较基线改善",
+    "worsened from baseline": "较基线恶化",
+    "no change from baseline": "较基线无变化",
+    "no change": "较基线无变化",
+    "not applicable": "不适用",
+    "na": "不适用",
+}
+
+
 def _parse_args():
     import argparse
     p = argparse.ArgumentParser(description="通用 A 载荷构建器")
@@ -325,18 +336,41 @@ def main() -> None:
                         group_titles[gid] = title[:40]
             for measure in ((results.get("outcomeMeasuresModule") or {})
                             .get("outcomeMeasures") or []):
-                title = str(measure.get("title") or "")[:80] or NA
-                time_frame = str(measure.get("timeFrame") or "")[:40] or "时间窗未登记"
+                # 独立测试第二轮（UC）：不得截断登记终点标题——截断会
+                # 摧毁 Mayo/时间窗等尾部语义并造成分类漏检
+                title = str(measure.get("title") or "").strip() or NA
+                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
                 for cls in (measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
-                    population = (
+                    # 分析集标签自带单一访视日（如 "Fatigue: Day 253"）时，
+                    # 该行实际时间点取类标签，而非列出双访视日的测量级 time_frame
+                    row_time_frame = time_frame
+                    _cls_days = set(
+                        m.group(1) for m in re.finditer(
+                            r"(?:day|week)\s+(\d+(?:\.\d+)?)", cls_title.casefold()
+                        )
+                    )
+                    if len(_cls_days) == 1:
+                        row_time_frame = cls_title
+                    base_population = (
                         f"登记结果人群（{cls_title[:40]}）" if cls_title
                         else "登记结果人群"
                     )
                     for cat in (cls.get("categories") or []):
+                        # 独立复核第二十一轮 veto：登记测量的互斥子类
+                        # （如 Improved/Worsened from Baseline）必须进入行标签，
+                        # 否则同臂同测量的 4 行同名并列，数值含义无法还原
+                        cat_title = str(cat.get("title") or "").strip()
+                        cat_label = _REGISTRY_CATEGORY_ZH.get(
+                            cat_title.casefold(), cat_title
+                        )
+                        if cat_label:
+                            population = base_population[:-1] + f"；{cat_label}）"                                 if base_population.endswith("）") else f"{base_population}（{cat_label}）"
+                        else:
+                            population = base_population
                         for measurement in (cat.get("measurements") or []):
                             raw = str(measurement.get("value") or "").strip()
                             try:
@@ -352,6 +386,7 @@ def main() -> None:
                                 "arm": group_titles.get(group_id, group_id or "组别未登记"),
                                 "value": value, "unit": unit,
                                 "population": population,
+                                "timepoint": row_time_frame,
                             })
             events = (results.get("adverseEventsModule", {})
                       .get("eventGroups") or [])
@@ -423,7 +458,7 @@ def main() -> None:
         "regulatory": [{
             "product_id": next(iter(product_index)), "track": "中国",
             "event": "监管状态", "date": "2026-09-06",
-            "status": "未公开披露（监管路线待 P2 来源接入）",
+            "status": "未公开披露（监管路线来源接入待后续版本开放）",
         }],
         "companies": company_rows or [{
             "product_id": next(iter(product_index)), "relationship": "申办方",
@@ -432,28 +467,31 @@ def main() -> None:
         }],
         "patents": [{
             "product_id": next(iter(product_index)), "family": NA,
-            "display_family": "专利路线待 P2 来源接入", "jurisdiction": NA,
+            "display_family": "专利路线来源接入待后续版本开放", "jurisdiction": NA,
             "scope": NA, "expiry": NA, "exclusivity": NA,
         }],
         "history": [{
             "product_id": next(iter(product_index)), "status": "登记检索完成",
-            "date": "2026-09-06",
+            "date": CUTOFF_DATE,
+            # 独立测试第二轮（UC）：检索统计与排除明细从本运行真实派生，
+            # 不得携带 PNH 轮次的固定数字与内部流程代号
             "observation": (
-                f"CT.gov 当前记录 189 条：{len(trials_rows)} 条试验入表；"
-                f"{len(skipped_trials)} 条因未披露样本量未入试验表（G10-1，NCT 明细见派生 sidecar："
+                f"CT.gov 当前记录检索共 {sum(1 for _ in CAS)} 页原始响应："
+                f"{len(trials_rows)} 条试验入表；"
+                f"{len(skipped_trials)} 条因样本量未披露未入试验表（NCT 明细见派生记录："
                 + "、".join(skipped_trials[:8])
-                + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体（明细见 sidecar）；"
-                "联合治疗关系受载荷单产品字段限制（G11-1），全部联合组合记录于派生 sidecar；"
-                "中国路线 access_blocked 如实记录；监管/专利来源待接入"
+                + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体（明细见派生记录）；"
+                "联合治疗组合完整记录于派生记录；中国路线访问受阻已如实记档；"
+                "监管/专利来源接入待后续版本开放"
             ),
         }],
         "sources": [
             {"source": "ClinicalTrials.gov",
-             "scope": "PNH 当前记录检索（189 条，两页原始响应 SHA-256 绑定）",
+             "scope": f"{INDICATION}当前记录检索（{len(page_meta)} 页原始响应 SHA-256 绑定）",
              "maturity": "官方登记当前记录",
              "limitation": "当前记录口径，非历史 as-of 还原"},
             {"source": "PubMed",
-             "scope": "PNH 治疗文献真实获取（878 条记录 + 14 分类属性）",
+             "scope": f"{INDICATION}治疗文献真实获取（878 条记录 + 14 分类属性）",
              "maturity": "complete_with_attrition",
              "limitation": "属性差异经 esummary 分类；论文—试验关系判定未完成"},
         ],
@@ -471,7 +509,7 @@ def main() -> None:
     derivation["alias_map_id"] = ALIAS["map_id"]
     derivation["borderline_repositioning"] = sorted(BORDERLINE)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
-    sidecar = OUT.with_name("pnh-a-payload.derivation.json")
+    sidecar = OUT.with_name(OUT.stem + ".derivation.json")
     sidecar.write_text(json.dumps(derivation, ensure_ascii=False, indent=1), encoding="utf-8")
     print("products:", len(payload["products"]), "| trials:", len(trials_rows))
     print("efficacy rows:", len(efficacy_rows), "| safety rows:", len(safety_rows))

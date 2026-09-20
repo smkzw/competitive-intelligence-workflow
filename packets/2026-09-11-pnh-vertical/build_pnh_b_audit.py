@@ -265,6 +265,18 @@ def main() -> None:
         elif re.search(r"number\s+of\s+participants\s+who", _text_cf):
             # 人数计数口径（第十五轮 veto）：不是应答率
             meta["form"] = "absolute_value"
+        else:
+            # 独立复核第二十二轮 veto：登记子类标注或"Measurement of … at Day"
+            # 题名声明绝对值口径时，族默认的较基线变化必须回正为绝对值
+            _pop_cf = str(fact.get("population") or "").casefold()
+            if "change from baseline" in _pop_cf:
+                meta["form"] = "change_from_baseline"
+            elif "absolute" in _pop_cf or (
+                meta.get("form") == "change_from_baseline"
+                and "change" not in _text_cf
+                and re.search(r"measurement of|\bat day\b|\bat week\b|\bat baseline\b", _text_cf)
+            ):
+                meta["form"] = "absolute_value"
         efficacy_rows.append({
             "row_id": fact["row_id"],
             "source_row_id": fact["row_id"],
@@ -1137,9 +1149,12 @@ def _normalize_unit(raw_unit: str, allowed: list[str]) -> str:
         for candidate in allowed:
             if "percent" in candidate.casefold():
                 return candidate
-    for candidate in allowed:
-        if candidate.casefold() in text.casefold() or text.casefold() in candidate.casefold():
-            return candidate
+    # 复合描述性单位（含 ":" 或括号说明，如 Ratio of LDH:ULN (250 U/L)）
+    # 不做子串折算：子串会抽走局部单位而丢失口径语义（第二十二轮 veto）
+    if ":" not in text and "(" not in text:
+        for candidate in allowed:
+            if candidate.casefold() in text.casefold() or text.casefold() in candidate.casefold():
+                return candidate
     # 独立复核第二十轮 veto：登记单位优先于族占位——单位列必须忠实呈现登记口径
     return text
 

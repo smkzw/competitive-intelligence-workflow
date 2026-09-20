@@ -11,7 +11,11 @@ from ci_workflow.reports.b.registry_observation import (
 def test_classifier_maps_real_registry_sentences_to_families() -> None:
     assert classify_registry_endpoint(
         "Percent Change From Baseline in Lactate Dehydrogenase (LDH) Level at Day 92"
-    ) == "endpoint-pnh-ldh-change-v1"
+    ) == "endpoint-pnh-ldh-change-v2"
+    # 绝对值测量不得落入"变化"族（第二十二轮 veto：Coversin LDH 绝对值误标）
+    assert classify_registry_endpoint(
+        "Measurement of Lactate Dehydrogenase (LDH) at Baseline, Day 90 and Day 180"
+    ) == "endpoint-pnh-ldh-levels-v1"
     assert classify_registry_endpoint(
         "Change From Baseline in Hgb at Week 12"
     ) == "endpoint-pnh-hemoglobin-v1"

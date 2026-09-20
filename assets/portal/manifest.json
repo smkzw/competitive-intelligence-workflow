@@ -13,7 +13,7 @@
   },
   "charts.js": {
    "sha256": "969f165c466c13ec62efcd413eecf390a6e909bfed255ef1559b3a6b2dc129c3",
-   "bytes": 63109
+   "bytes": 66033
   },
   "evidence-drawer.js": {
    "sha256": "d74406c6e52641d86aff2bd8b85bf45daf06de1ddd5a089df43d61d2a7933d50",
@@ -26,6 +26,10 @@
   "echarts.min.js": {
    "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
    "bytes": 1121883
+  },
+  "report-a.js": {
+   "sha256": "31ab9fd6c34998089ab7e5b100d979ff1163b59d6c4d7d7d85890aeebecd66b8",
+   "bytes": 75103
   }
  },
  "packaged_module_assets": "src/ci_workflow/renderers/portal/assets/",

@@ -91,6 +91,12 @@
   function numericValue(value) {
     return typeof value === "number" && Number.isFinite(value);
   }
+  // 独立测试第二轮（UC）：百分率单位同义归一——登记口径写法多样
+  // （%、percent、Percentage of Participants 等），不得硬编码单一 "%"
+  function isPercentUnit(unit) {
+    var u = String(unit || "").trim().toLowerCase().replace("％", "%");
+    return u === "%" || u.indexOf("percent") !== -1 || u.indexOf("%") !== -1;
+  }
   function isEasi75(value) {
     var text = String(value || "").toLowerCase();
     return /easi\s*[- ]?\s*75/.test(text)
@@ -217,9 +223,19 @@
         || (context.rows["治疗组"] && !context.rows["对照组"])
         || (!context.rows["治疗组"] && Object.keys(context.rows).length > 0);
     });
+    // 独立测试第二轮（UC/IgAN）：登记臂名不一定是"治疗组"，排序锚行
+    // 必须兜底到该上下文的任一臂行，不得硬读 rows["治疗组"]
+    function pairAnchorRow(context) {
+      return context.rows["治疗组"]
+        || context.rows["对照组"]
+        || context.rows[Object.keys(context.rows)[0]];
+    }
     pairs.sort(function (left, right) {
-      return efficacyRank(right.rows["治疗组"]) - efficacyRank(left.rows["治疗组"])
-        || left.rows["治疗组"].row_id.localeCompare(right.rows["治疗组"].row_id, "zh-CN");
+      var leftRow = pairAnchorRow(left);
+      var rightRow = pairAnchorRow(right);
+      if (!leftRow || !rightRow) return leftRow ? -1 : 1;
+      return efficacyRank(rightRow) - efficacyRank(leftRow)
+        || String(leftRow.row_id).localeCompare(String(rightRow.row_id), "zh-CN");
     });
     return pairs.length ? pairs[0] : null;
   }
@@ -353,7 +369,7 @@
     var contexts = {};
     for (var i = 0; i < efficacy.length; i += 1) {
       var row = efficacy[i];
-      if (row.product_id !== productId || !numericValue(row.value) || row.unit !== "%") continue;
+      if (row.product_id !== productId || !numericValue(row.value) || !isPercentUnit(row.unit)) continue;
       var key = [row.trial_id, row.endpoint, row.timepoint, row.unit, row.population].join("\u0001");
       if (!contexts[key]) {
         contexts[key] = {
@@ -770,7 +786,7 @@
       var first = observations[0];
       var trial = trialById(first.trial_id);
       var minimum = Math.min.apply(null, [0].concat(observations.map(function (item) { return item.value; })));
-      var maximum = Math.max.apply(null, [first.unit === "%" ? 100 : 0].concat(observations.map(function (item) { return item.value; })));
+      var maximum = Math.max.apply(null, [isPercentUnit(first.unit) ? 100 : 0].concat(observations.map(function (item) { return item.value; })));
       var span = maximum - minimum || 1;
       var row = el("div", "kz-a-bar-row kz-a-observation-group");
       row.setAttribute("data-product-id", first.product_id);
@@ -860,7 +876,7 @@
         eventLabel.setAttribute("data-heat-label", "event");
         cell.appendChild(eventLabel);
         var value = el("strong", "kz-a-heat-value", safetyDisplayValue(record));
-        if (numericValue(record.value) && record.unit === "%" && record.value >= 0 && record.value <= 100) {
+        if (numericValue(record.value) && isPercentUnit(record.unit) && record.value >= 0 && record.value <= 100) {
           value.style.background = color(record.value, 0, 100);
           value.style.color = record.value > 55 ? "#fff" : "#17130f";
         }
@@ -978,7 +994,7 @@
     var shownProducts = points.map(function (point) { return point.product; });
     var xMin = useDifference ? -100 : 0, xMax = 100;
     var allEventRates = safety.filter(function (record) {
-      return safetyTermKey(record) === termKey && record.unit === "%" && numericValue(record.value);
+      return safetyTermKey(record) === termKey && isPercentUnit(record.unit) && numericValue(record.value);
     }).map(function (record) { return record.value; });
     var yMin = 0, yMax = termKey === "any_sae"
       ? Math.max(10, Math.ceil(Math.max.apply(null, [0].concat(allEventRates)) / 10) * 10) : 100;

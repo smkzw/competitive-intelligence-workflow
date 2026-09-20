@@ -4,12 +4,12 @@
 
 ## 工作目录（必须在此目录内操作）
 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow`（仓库根）。
-被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v37/reports/B/v1/html`
+被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v41/reports/B/v1/html`
 
 ## 材料（均相对项目根）
 1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-b.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
 2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-b.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
-3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v37/reports/B/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
+3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v41/reports/B/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
 4. 截图可自行用浏览器或读图复核；至少亲自检查 3 个页面（可结合读 HTML）
 
 ## 审阅域（七域，逐域独立判断）
@@ -22,11 +22,11 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 ```json
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc37-b",
+  "verdict_id": "verdict-omp-gemini38-vis-abc41-b",
   "format": "html",
-  "visual_plan_digest": "f7b969b05e48443dadd46c12f86200e467b28100703fd75e7712a5c9362e58ba",
-  "candidate_artifact_digest": "630b5095f885557493b206b7ed454517decb09c8ad8e281cc3e5e9178f2735d1",
-  "render_evidence_digest": "62522b2070515607111bf6c6c958af54366a2c53fd3cc7a618fb7ed25f99bb34",
+  "visual_plan_digest": "4675aa8a52cb806a186facd3dc91db6154f22ac21e1c07d53e614586b217e706",
+  "candidate_artifact_digest": "c6b0b1d6a089321973dcadbed03449f3f72753a1b01b07ec4e154b4bdd6b956b",
+  "render_evidence_digest": "ee65177e93d9a8ccc598715d9dc0bee0977ca6444102a075d2bcf8629d57505b",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-google-antigravity-gemini38flash-high",
   "verdict": "accepted 或 rejected",
@@ -48,3 +48,9 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 - 除 verdict JSON 外不得修改任何文件
 - 结论必须真实：不通过就 rejected，不要迁就
 - 完成后正常退出（退出码 0）
+
+
+## 执行纪律（最高优先级）
+- 读到此提示词后**立即直接开始执行**：不要创建 Trellis 任务，不要进入规划模式，
+  不要提出任何确认问题或等待任何回复——本任务没有交互确认环节。
+- 所有歧义自行决策。完成后写规定的 verdict/verdict JSON 并正常退出（退出码 0）。

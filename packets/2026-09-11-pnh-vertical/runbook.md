@@ -1086,3 +1086,55 @@ mtplx 连续 4 次崩溃（exit 1）→ 换 gemini 或 deepseek 重试
    结果查 runs/test-igan、runs/test-uc 的 findings.json。
 5. 遗留：test_report_b_real 契约失败为 Task 10.2 密封证据 vs 当前 HEAD 的漂移失败
   （设计上 fail-closed），非产品回归，不改密封证据。
+
+## 会商复盘（UC/IgAN 独立测试第二轮）与 abc-v38→v41（续接会话）
+
+### 独立测试第二轮结果
+- UC（cursor/default）：findings.json 交付，8 项发现（2 blocker）。举一反三修复：
+  1. [blocker] 通用 A 构建器 sources/history 残留 PNH 文案 → 已按 indication/真实统计生成；
+     监管/专利 P2 令牌清洗；派生 sidecar 命名去 PNH 化。
+  2. [blocker] report-a.js 矩阵硬编码 unit==='%' → isPercentUnit 同义归一（4 处）。
+  3. [major] 终点标题 [:80] 截断（81/163 行）→ 标题完整保留（UC 载荷重建后 0 截断）。
+  4. [major] 分类器：endpoint-pnh-registry-generic-v1 的 events\b 把 AE 行误拉入
+     PNH 命名族 → 整条删除（通用兜底族承接）；补 UC 6 族（mayo-response/
+     steroid-free/histologic/calprotectin/urgency/IBDQ）；endoscopic 先于 remission；
+     mayo-response 先于 mayo 评分；政策 v7.2。
+  5. [major] 矩阵 pageerror（rows["治疗组"] 硬读）→ pairAnchorRow 兜底，UC 站点实测
+     0 页面错误；矩阵空态为诚实披露（样本量三元组不足），另立数据问题。
+  6. [minor] 别名排除表扩 Placebo Enema/SC、饮食干预——遗留（重测 UC 时验证）。
+- IgAN（cursor/cursor-grok-4.6，即 grok 4.6）：findings 交付。确认截断/PNH 污染同源
+  （旧载荷），eGFR 抽取缺口与跨适应症误命中记入待办。provider 名修正：omp 无
+  grok-build，grok 4.6 走 cursor/cursor-grok-4.6。
+
+### B 复核收敛（veto 驱动的数据修复，每轮问题更少更具体）
+- r20（v37）：页面绑定错绑 page-2（属实，builder 四处陈旧循环变量）→ 已修；
+  中文原生 4 项泄漏 → 已修。
+- r21（v38）：互斥子类合并（NCT02605993 症状量表 Improved/Worsened 同名并列）→
+  A 构建器把登记 categories 子类标题写入行 population；且发现类标签自带单一访视日
+  （"Fatigue at Day 253"）→ 行时间点取类标签，no_timepoint 2403→968，B 疗效行
+  299→361（此前被误弃的大量行恢复）。
+- r22（v40）：Coversin LDH 两项 → 族拆分（ldh-change 要求变化语义 + 新 ldh-levels
+  绝对值族，政策 v7.3）；population 含 "(change from baseline)"/"absolute" 时形式
+  随登记子类回正；复合描述性单位（含 :/(）不做子串折算，忠实呈现登记原文。
+- 回执链教训：deepseek veto 的 issues[].fragment_ids 必须⊆其 source_version_id 对应
+  source_refs 条目的 fragment_ids（两次因混用双片段被拒签）；提示词已写明精确约束。
+  veto 本身无回执属预期（回执只签 accepted）。
+
+### 版本链与当前状态（v41 = 当前候选）
+- v38：单位+绑定+中文修复承载（C accepted 未及时签发即被 v39 取代——注意：
+  submit 前必须完成全部修复再一次性进链，v38/v39 为过程版本留档）。
+- v39：过程版本（提交了 163 行中间态载荷，被 v40 取代）。
+- v40：361 行 + 子类标签 + Coversin 前修复；C accepted（回执已签）；B r22 veto 2 项。
+- **v41：当前候选**（706 测试绿；A/B gates 过；C r6 accepted 回执已签发；
+  B r23 运行中；视觉三节点 v41 提示词已派发：A=cursor/default、B=gemini、C=deepseek）。
+- 视觉量测探针已修正（父子文本伪重叠）——v41 起指标可信。
+
+### 已知非回归失败（不改密封证据）
+- tests/acceptance/test_full_matrix.py 21 项 + preview/legacy 若干：密封验收工件
+  绑定旧 bundle/提交摘要，设计上 fail-closed；与本会话改动无关（graph 管线自
+  d6cb6d5 未动）。留待安装包重建阶段统一重做。
+
+### 下一步
+1. B r23 结果 → 若 accepted 则 A 需重签（A 回执在 v35，绑旧摘要）→ 视觉三节点
+  verdict → accept-visual A/B/C。
+2. UC/IgAN 重测（重建载荷后）→ AD B/C 竖向 → 横向 6 适应症。
