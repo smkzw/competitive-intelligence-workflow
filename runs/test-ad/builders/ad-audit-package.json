@@ -1,0 +1,1072 @@
+{
+ "schema_version": "1.3",
+ "package_id": "ad-vertical-audit-001",
+ "contract_identity": {
+  "project_id": "project_6ade237ac7c7dba5ef1d8e81",
+  "indication": "特应性皮炎",
+  "contract_version": "1.3"
+ },
+ "reports": [
+  "A",
+  "B",
+  "C"
+ ],
+ "data_cutoff": "2026-09-20",
+ "source_policy_id": "source-policy-v1",
+ "source_policy_version": "1.1",
+ "producer_id": "zcode-main-thread",
+ "producer_context": "producer-context-ad-vertical",
+ "entities": [
+  {
+   "entity_id": "pf-08049820",
+   "entity_type": "product",
+   "name": "pf-08049820",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "rabeprazole",
+   "entity_type": "product",
+   "name": "rabeprazole",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "amlitelimab",
+   "entity_type": "product",
+   "name": "amlitelimab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "ustekinumab",
+   "entity_type": "product",
+   "name": "ustekinumab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "ruxolitinib-cream",
+   "entity_type": "product",
+   "name": "ruxolitinib-cream",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "aqx-1125",
+   "entity_type": "product",
+   "name": "aqx-1125",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "dupilumab",
+   "entity_type": "product",
+   "name": "dupilumab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "crisaborole",
+   "entity_type": "product",
+   "name": "crisaborole",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "triamcinolone",
+   "entity_type": "product",
+   "name": "triamcinolone",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "montelukast",
+   "entity_type": "product",
+   "name": "montelukast",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "emollient",
+   "entity_type": "product",
+   "name": "emollient",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "calcipotriol-and-leo80122",
+   "entity_type": "product",
+   "name": "calcipotriol and leo80122",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "hl-009-liposomal-gel",
+   "entity_type": "product",
+   "name": "hl-009 liposomal gel",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "elidel",
+   "entity_type": "product",
+   "name": "elidel",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "lebrikizumab",
+   "entity_type": "product",
+   "name": "lebrikizumab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "ati-502",
+   "entity_type": "product",
+   "name": "ati-502",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "0416",
+   "entity_type": "product",
+   "name": "0416",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "vehicle-of-0416-test-product",
+   "entity_type": "product",
+   "name": "vehicle of 0416 test product",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "xmab7195",
+   "entity_type": "product",
+   "name": "xmab7195",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "comm-fast",
+   "entity_type": "product",
+   "name": "comm-fast",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "comm-fed",
+   "entity_type": "product",
+   "name": "comm-fed",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "p3-fast",
+   "entity_type": "product",
+   "name": "p3-fast",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "vari-fast",
+   "entity_type": "product",
+   "name": "vari-fast",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "roseomonas-mucosa",
+   "entity_type": "product",
+   "name": "roseomonas mucosa",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "cnto-7160",
+   "entity_type": "product",
+   "name": "cnto 7160",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "pf-04965842",
+   "entity_type": "product",
+   "name": "pf-04965842",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "pf-07038124-ointment-0-01",
+   "entity_type": "product",
+   "name": "pf-07038124 ointment 0.01%",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "pf-07038124-ointment-0-03",
+   "entity_type": "product",
+   "name": "pf-07038124 ointment 0.03%",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "pf-07038124-ointment-0-06",
+   "entity_type": "product",
+   "name": "pf-07038124 ointment 0.06%",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "vehicle-ointment",
+   "entity_type": "product",
+   "name": "vehicle ointment",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "rocatinlimab",
+   "entity_type": "product",
+   "name": "rocatinlimab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  },
+  {
+   "entity_id": "risankizumab",
+   "entity_type": "product",
+   "name": "risankizumab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-ad-page-1"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "source_id": "ctgov-ad-page-1",
+   "title": "ClinicalTrials.gov AD 当前记录检索第 1 页",
+   "source_role": "official_registry",
+   "source_type": "registry",
+   "url": "https://clinicaltrials.gov/api/v2/studies?query.cond=atopic+dermatitis&filter.overallStatus=COMPLETED",
+   "locator": "studies[]",
+   "locator_detail": {
+    "document_role": "registry-search-page",
+    "field_path": "studies[]",
+    "url": "https://clinicaltrials.gov/"
+   },
+   "content_sha256": "0c80647d42157dc8803fe9bec02a7cf4e18d1faead4db2e0ada0b8b531918365",
+   "retrieved_at": "2026-09-20T00:00:00+08:00",
+   "published_at": null,
+   "effective_at": null,
+   "publication_classification": "not_applicable",
+   "access_state": "available"
+  },
+  {
+   "source_id": "ctgov-ad-page-2",
+   "title": "ClinicalTrials.gov AD 当前记录检索第 2 页",
+   "source_role": "official_registry",
+   "source_type": "registry",
+   "url": "https://clinicaltrials.gov/api/v2/studies?query.cond=atopic+dermatitis&filter.overallStatus=COMPLETED",
+   "locator": "studies[]",
+   "locator_detail": {
+    "document_role": "registry-search-page",
+    "field_path": "studies[]",
+    "url": "https://clinicaltrials.gov/"
+   },
+   "content_sha256": "891efdf31a8d8b9176751ba533529d9aa785287210f8e98704598dc34d3113a7",
+   "retrieved_at": "2026-09-20T00:00:00+08:00",
+   "published_at": null,
+   "effective_at": null,
+   "publication_classification": "not_applicable",
+   "access_state": "available"
+  }
+ ],
+ "routes": [
+  {
+   "route_id": "global-baseline",
+   "region": "global",
+   "strategy_id": "global-ctgov-baseline",
+   "result_class": "completed",
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "source_ids": [
+    "ctgov-ad-page-1",
+    "ctgov-ad-page-2"
+   ]
+  },
+  {
+   "route_id": "china-baseline",
+   "region": "china",
+   "strategy_id": "china-cde-baseline",
+   "result_class": "access_blocked",
+   "attempt_ids": [
+    "attempt-china-1"
+   ],
+   "source_ids": [],
+   "query_or_identifier": "CDE/中国药物临床试验登记平台 AD",
+   "diagnostic": "中国路线连接器尚未部署（G7-2 工具能力缺口）；本首验如实记录为访问受阻而非无数据，待 CDE 执行器实施后重新检索"
+  }
+ ],
+ "expansion_receipts": [
+  {
+   "receipt_id": "ad-alias-1",
+   "dimension": "alias",
+   "round_id": "0",
+   "strategy_id": "alias-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "source_ids": [
+    "ctgov-ad-page-1"
+   ],
+   "query_sha256": "1a0a6a36ca0a3953b997ddaeb722cb31e9e421b038f6a67ef55593f21dcf92b1",
+   "result_class": "success_with_evidence",
+   "diagnostic": "基线宇宙经别名维度入表"
+  },
+  {
+   "receipt_id": "ad-target-1",
+   "dimension": "target",
+   "round_id": "0",
+   "strategy_id": "target-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "34a04005bcaf206eec990bd9637d9fdb6725e0a0c0d4aebf003f17f4c956eb5c",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "ad-company-1",
+   "dimension": "company",
+   "round_id": "0",
+   "strategy_id": "company-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "f168ccdd91548c5a8c871bd4b9b757c5e889a1672e774bddef4a2714759a7a8f",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "ad-trial-1",
+   "dimension": "trial",
+   "round_id": "0",
+   "strategy_id": "trial-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "79891e980747ffbd21e690297394efe764fa56d7e37750f800879fbb2d34571a",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "ad-company-r1",
+   "dimension": "company",
+   "round_id": "1",
+   "strategy_id": "company-reverse-r1",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "f168ccdd91548c5a8c871bd4b9b757c5e889a1672e774bddef4a2714759a7a8f",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "ad-trial-r1",
+   "dimension": "trial",
+   "round_id": "1",
+   "strategy_id": "trial-reverse-r1",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "79891e980747ffbd21e690297394efe764fa56d7e37750f800879fbb2d34571a",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "ad-alias-r2",
+   "dimension": "alias",
+   "round_id": "2",
+   "strategy_id": "alias-reverse-r2",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "1a0a6a36ca0a3953b997ddaeb722cb31e9e421b038f6a67ef55593f21dcf92b1",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "ad-target-r2",
+   "dimension": "target",
+   "round_id": "2",
+   "strategy_id": "target-reverse-r2",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "34a04005bcaf206eec990bd9637d9fdb6725e0a0c0d4aebf003f17f4c956eb5c",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  }
+ ],
+ "closure": {
+  "closed": true,
+  "global_route_ids": [
+   "global-baseline"
+  ],
+  "china_route_ids": [
+   "china-baseline"
+  ],
+  "alias_expansion_receipts": [
+   "ad-alias-1",
+   "ad-alias-r2"
+  ],
+  "target_expansion_receipts": [
+   "ad-target-1",
+   "ad-target-r2"
+  ],
+  "company_expansion_receipts": [
+   "ad-company-1",
+   "ad-company-r1"
+  ],
+  "trial_expansion_receipts": [
+   "ad-trial-1",
+   "ad-trial-r1"
+  ],
+  "independent_review_id": "ad-universe-review-1",
+  "independent_reviewer_id": "independent-reviewer-ad",
+  "independent_context": "clean-context-ad-vertical",
+  "candidate_entity_ids": [
+   "pf-08049820",
+   "rabeprazole",
+   "amlitelimab",
+   "ustekinumab",
+   "ruxolitinib-cream",
+   "aqx-1125",
+   "dupilumab",
+   "crisaborole",
+   "triamcinolone",
+   "montelukast",
+   "emollient",
+   "calcipotriol-and-leo80122",
+   "hl-009-liposomal-gel",
+   "elidel",
+   "lebrikizumab",
+   "ati-502",
+   "0416",
+   "vehicle-of-0416-test-product",
+   "xmab7195",
+   "comm-fast",
+   "comm-fed",
+   "p3-fast",
+   "vari-fast",
+   "roseomonas-mucosa",
+   "cnto-7160",
+   "pf-04965842",
+   "pf-07038124-ointment-0-01",
+   "pf-07038124-ointment-0-03",
+   "pf-07038124-ointment-0-06",
+   "vehicle-ointment",
+   "rocatinlimab",
+   "risankizumab"
+  ],
+  "new_entity_ids_by_round": {
+   "0": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ],
+   "1": [],
+   "2": []
+  },
+  "convergence_round_ids": [
+   "1",
+   "2"
+  ],
+  "review_digest_version": "2",
+  "reviewed_universe_sha256": "96aea3f8f2573fa462f4885204fb0b76ff2bf9ceabd2a683547f8bcd35986d79"
+ },
+ "report_payloads": [
+  {
+   "report": "A",
+   "relative_path": "evidence/library/a-research-package.json",
+   "content_sha256": "ad1b60f82534d94bba6877c1f402ca9eb32023bcabaab966973794fa41e1bd3b",
+   "universe_product_ids": [
+    "pf-08049820",
+    "rabeprazole",
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "aqx-1125",
+    "dupilumab",
+    "crisaborole",
+    "triamcinolone",
+    "montelukast",
+    "emollient",
+    "calcipotriol-and-leo80122",
+    "hl-009-liposomal-gel",
+    "elidel",
+    "lebrikizumab",
+    "ati-502",
+    "0416",
+    "vehicle-of-0416-test-product",
+    "xmab7195",
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast",
+    "roseomonas-mucosa",
+    "cnto-7160",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-07038124-ointment-0-03",
+    "pf-07038124-ointment-0-06",
+    "vehicle-ointment",
+    "rocatinlimab",
+    "risankizumab"
+   ]
+  },
+  {
+   "report": "B",
+   "relative_path": "evidence/library/b-research-package.json",
+   "content_sha256": "16f8c3770014f248b6dd739e2f69f617f5136fde5095bce474b6040f3de6890b",
+   "universe_product_ids": [
+    "0416",
+    "amlitelimab",
+    "aqx-1125",
+    "ati-502",
+    "calcipotriol-and-leo80122",
+    "cnto-7160",
+    "crisaborole",
+    "dupilumab",
+    "elidel",
+    "hl-009-liposomal-gel",
+    "lebrikizumab",
+    "montelukast",
+    "p3-fast",
+    "pf-04965842",
+    "pf-07038124-ointment-0-01",
+    "pf-08049820",
+    "risankizumab",
+    "rocatinlimab",
+    "roseomonas-mucosa",
+    "ruxolitinib-cream",
+    "ustekinumab",
+    "xmab7195"
+   ]
+  },
+  {
+   "report": "C",
+   "relative_path": "evidence/library/c-research-package.json",
+   "content_sha256": "f4123ffc24708b2c731dbef697eeac0593e0ad3090ed80c41bf7202ff88d2009",
+   "universe_product_ids": [
+    "amlitelimab",
+    "ustekinumab",
+    "ruxolitinib-cream",
+    "dupilumab"
+   ]
+  }
+ ]
+}

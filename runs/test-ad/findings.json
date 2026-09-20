@@ -1,0 +1,185 @@
+{
+  "tester": "omp/google-antigravity/gemini-3.8-flash(high)",
+  "indication": "AD",
+  "indication_zh": "特应性皮炎",
+  "test_date": "2026-09-20",
+  "project": "runs/test-ad",
+  "steps_completed": [
+    "step1 project create --root runs/test-ad --indication 特应性皮炎 --reports A,B,C",
+    "step2 capability preflight --host local --project runs/test-ad --independent-context yes",
+    "step3 数据获取与 CAS 入库：packets/2026-09-18-omp-visual/ad-raw/ 2 页 40 条 COMPLETED 研究入库 evidence/raw/sha256",
+    "step4 构建 A 载荷与派生 sidecar：tools/build_a_payload.py --cas-dir runs/test-ad --alias-map packets/2026-09-18-ad-vertical/ad-alias-map-v1.json --indication 特应性皮炎 --indication-id atopic-dermatitis --output runs/test-ad/ad-a-payload.json --cutoff 2026-09-20",
+    "step5 构建 B/C 载荷与审计信封：参数化移植 build_ad_b_payload.py / build_ad_b_audit.py / build_ad_c_audit.py / build_ad_audit.py",
+    "step6 提交研究资料：research submit --root runs/test-ad --package ad-audit-package.json --a-package a-research-package.json --b-package b-research-package.json --c-package c-research-package.json",
+    "step7 项目运行与 HTML 渲染：CI_WORKFLOW_INDEPENDENT_CONTEXT=1 project run --root runs/test-ad --resume",
+    "step8 浏览器逐页与跨视口矩阵验收：Chromium + WebKit × 4 视口全量矩阵（A 43 页 344 组合、B 47 页 376 组合、C 17 页 136 组合，合计 107 页 856 组合）",
+    "step9 交互深度验证：Report A 矩阵三维控制切换、数据依据侧边抽屉展开、Report B 快速筛选与表格行可见性控制、Report C 设计图谱与试验档案",
+    "step10 记录全面发现并输出 runs/test-ad/findings.json"
+  ],
+  "steps_failed": [
+    {
+      "step": "step4 tools/build_a_payload.py 参数穿透",
+      "error": "build_a_payload.py 忽略 --cutoff 参数，硬编码 data_cutoff 为 2026-09-06，且硬编码 sidecar 文件名为 pnh-a-payload.derivation.json，导致 FreshAResearchContent 数据截止一致性校验失败，需在测试侧对齐为本轮截止日。"
+    },
+    {
+      "step": "step5 B 载荷构建与门槛过滤",
+      "error": "原始参考 B 构建器存在 PNH 概念硬编码（severity_concepts 仅含 ldh/hemoglobin 等血液指标），且未处理 CT.gov 游离 outcomeGroup（OG...）与安全组名微小差异（如 LD vs Loading Dose），导致除安慰剂外的治疗臂基线/安全数据归属失效从而触发 B 证据门槛阻断。经修复映射规则后顺利通过门槛。"
+    },
+    {
+      "step": "step7 首次 project run",
+      "error": "首次运行报告 capability_blocked，经复查为预检探测时环境浏览器状态未持久化；重新执行 capability preflight 并导出 CI_WORKFLOW_INDEPENDENT_CONTEXT=1 后通过。"
+    }
+  ],
+  "run_facts": {
+    "records_fetched_total": 40,
+    "fetch_pages": 2,
+    "cas_blobs": 2,
+    "pipeline": "research submit RESEARCH_PACKAGE_ACCEPTED；project run 完成（run_afba74f984a87bf25e1d42a2）",
+    "pages": {
+      "A": 43,
+      "B": 47,
+      "C": 17,
+      "total": 107
+    },
+    "matrix_sweep": {
+      "A": {
+        "combinations": 344,
+        "passed": 344,
+        "failed": 0
+      },
+      "B": {
+        "combinations": 376,
+        "passed": 376,
+        "failed": 0
+      },
+      "C": {
+        "combinations": 136,
+        "passed": 136,
+        "failed": 0
+      },
+      "total": {
+        "combinations": 856,
+        "passed": 856,
+        "failed": 0
+      }
+    },
+    "console_or_page_errors": 0,
+    "manifest_status": {
+      "A": "quality_check",
+      "B": "quality_check",
+      "C": "quality_check"
+    },
+    "data_scale": {
+      "A": "32 产品（含 8 个非药物/对照实体，占比 25%） / 25 试验 / 4882 疗效行 / 52 安全行 / 24 申办关系",
+      "B": "22 产品 / 5 试验 / 49 疗效行 / 28 安全行 / 103 基线行 / 66 处置行",
+      "C": "4 产品 / 6 试验 / 89 设计观察 / 3 候选设计路径"
+    },
+    "evidence_paths": {
+      "sweep_results": "output/playwright/test-ad/sweep_results.json"
+    }
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "category": "科学正确性",
+      "severity": "blocking",
+      "description": "非药物干预、溶媒及PK对照条件未被排除，被误升格为独立竞品实体。别名表 ad-alias-map-v1.json 中明确声明了 excluded_interventions（包含 Emollient、Vehicle of 0416 test product、Vehicle ointment、Rabeprazole 及 PK 状态条件），但 tools/build_a_payload.py 完全未应用该排除清单，将 emollient（润肤剂）、vehicle of 0416 test product（0416溶媒）、vehicle ointment（溶媒软膏）、rabeprazole（胃酸抑制剂对照）以及进食/禁食PK状态（comm-fast、comm-fed、p3-fast、vari-fast）全部建为独立竞品。Report A 甚至为其渲染了 8 个独立的物理产品档案页面（如 products/emollient.html），在产品全景中与成熟临床药物并列展示，产生虚假竞品并严重误导医学读者。",
+      "evidence": "ad-alias-map-v1.json 声明 excluded_interventions 列表；runs/test-ad/state/derived/report-a-data.json products 中包含 8 个非药物/状态实体（占全部 32 个产品的 25%）；runs/test-ad/reports/A/v1/html/products/emollient.html、vehicle-of-0416-test-product.html、vehicle-ointment.html、rabeprazole.html 等 8 个页面实际存在且被渲染。",
+      "impact": "竞品宇宙遭到严重污染，医学专业读者查阅时会看到润肤剂、溶媒软膏和胃酸药被当作 AD 临床研发管线产品展示，直接摧毁调研报告的科学可信度。"
+    },
+    {
+      "id": "F2",
+      "category": "科学正确性",
+      "severity": "blocking",
+      "description": "终点族分类器政策存在跨适应症规则污染：AD 药物浓度终点被误标为血液罕见病 PNH 的「补体抑制药效学指标」。policies/endpoint-families/registry-v7.yaml 中的 endpoint-pnh-complement-inhibition-v1 规则包含了泛匹配词 plasma concentration，且未限定适应症上下文。当处理特应性皮炎小分子 JAK 抑制剂（PF-04965842 / abrocitinib）临床试验时，其血浆药物浓度终点 Plasma Concentration Versus Time Summary of PF-04965842 被直接错误分类为补体抑制终点，中文标签渲染为「补体抑制药效学指标」。皮肤科靶向药的 PK 终点被断定为血液病补体抑制指标，构成跨适应症的重大科学性硬伤。",
+      "evidence": "policies/endpoint-families/registry-v7.yaml 第 141-147 行 rule_id: endpoint-pnh-complement-inhibition-v1，match_pattern 包含 plasma concentration；对 AD 载荷执行分类器测试，8 条包含 plasma concentration 的行全部命中 endpoint-pnh-complement-inhibition-v1 并带上「补体抑制药效学指标」标签。",
+      "impact": "在皮肤病竞争情报报告中出现血液罕见病的特异性生物标志物判定，属于典型且不可容忍的模型与规则泛化缺陷。"
+    },
+    {
+      "id": "F3",
+      "category": "数据完整性",
+      "severity": "blocking",
+      "description": "A 门户「疗效与安全性矩阵」永久空态，三维控制完全失效。Report A 的 matrix.html 呈现固定空态提示：“当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。”、“当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。”。前端切换气泡大小、安全性轴、疗效轴 3 个下拉框均无任何气泡点生成，表格 32 行全空。根因与 PNH 首验完全一致：前端矩阵脚本硬编码要求疗效行 unit==='%' 且安全行 unit==='%'，而 AD 真实数据的单位是 score、percent、percentage of change、points、例、Participants，unit==='%' 的行数为 0。然而数据本身充分：dupilumab、amlitelimab、risankizumab 等成熟品种均具备完整的疗效、安全性及样本量数值。",
+      "evidence": "浏览器交互测试记录 matrix_status: chartText=\"当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。\", pointsCount=0, hasPoints=False；切换 select 控件后 pointsCount 仍为 0；state/derived/report-a-data.json 中含有大量疗效与安全性重合产品，但 unit 均非精确的 '%' 符号。",
+      "impact": "A 类门户中最核心的横向比较与决策视图「疗效—安全性定位矩阵」整体处于瘫痪状态，且自动验收矩阵（sweep 856 组合全 pass）无法识别此类空态缺陷。"
+    },
+    {
+      "id": "F4",
+      "category": "科学正确性",
+      "severity": "blocking",
+      "description": "B 门户静默剔除 99% 的疗效结果行，仅保留 1% 且不做任何披露。Report B 输入载荷包含 4882 条真实登记结果行，但在 B 构建与门槛过滤过程中静默丢弃了 4833 条：3279 条被判为 unclassified（包括关键 EASI 终点）、1042 条被判为 no_timepoint（复合时间点或多时点）、62 条被判为 safety_domain。最终 B 门户仅保留 49 条结果行，仅覆盖 5 个试验。而在交付给读者的 B 门户整站、来源区以及数据说明中，完全没有任何关于“未纳入/剔除/政策缺口”的说明，读者会将 49 行误认为该疾病领域的全部公开结果。",
+      "evidence": "build_ad_b_audit.py 统计：dropped: {'unclassified': 3279, 'no_timepoint': 1042, 'safety_domain': 62}，保留 49 行（49/4882 = 1.00%）；runs/test-ad/reports/B/v1/html/ 中全文检索 未纳入/剔除/未分类/dropped/排除 均为 0 命中。",
+      "impact": "B 类以「临床试验结果比较」为名，却将 99% 的结果行在未作任何告知的情况下隐匿，严重破坏了调研交付物的完整性与证据透明度。"
+    },
+    {
+      "id": "F5",
+      "category": "科学正确性",
+      "severity": "major",
+      "description": "EASI 核心终点识别模式过于狭窄，导致大量关键 EASI 百分比变化终点被直接漏检。policies/endpoint-families/registry-v7.yaml 中的 endpoint-easi-total-change-v1 仅定义了 easi total|easi score。然而特应性皮炎临床试验中最核心、最标准的终点形式之一为 Percentage Change in EASI (Eczema Area and Severity Index) From Baseline to Week ...。由于正则未包含对 change.*easi 或 easi.*change 的支持，导致此类最关键的 EASI 终点全部落入 UNCLASSIFIED 被 B 报告静默抛弃。",
+      "evidence": "registry-v7.yaml 第 255-257 行 match_pattern: easi total|easi score；AD 原始数据中数百条 Percentage Change in EASI (Eczema Area and Severity Index) From Baseline... 行在分类器中全部分类为 None（UNCLASSIFIED）。",
+      "impact": "EASI 较基线百分比变化是皮炎临床试验评估皮损改善的最核心黄金终点，分类器的模式缺陷直接导致该领域关键对比数据在精细化结果中大面积蒸发。"
+    },
+    {
+      "id": "F6",
+      "category": "数据完整性",
+      "severity": "major",
+      "description": "基础工具 tools/build_a_payload.py 参数穿透失效且存在多处 PNH 硬编码遗留污染。通用 A 载荷构建器虽然添加了 --cutoff 与 --indication-id 参数，但：1. 第 408 行硬编码 data_cutoff: '2026-09-06T23:59:59.999999+08:00'，完全忽略传入的截止日参数，导致下游 FreshAResearchContent 校验直接报数据截止不一致崩溃；2. 第 474 行硬编码 sidecar 输出名为 pnh-a-payload.derivation.json；3. 第 442、452、456 行硬编码了 PNH 历史文案与文献描述（如“CT.gov 当前记录 189 条”、“PNH 当前记录检索”、“PNH 治疗文献真实获取”），将 PNH 遗留文案直接注入到 AD 项目中。",
+      "evidence": "tools/build_a_payload.py 第 408 行与第 474 行代码；runs/test-ad/ad-a-payload.json 中 history 字段写着“CT.gov 当前记录 189 条”（实际本轮为 40 条），sources 字段写着“PNH 当前记录检索（189 条，两页原始响应 SHA-256 绑定）”。",
+      "impact": "基础构建工具未达到可复用标准，硬编码的跨适应症文案会直接穿透并呈现在最终 HTML 报告的来源区和历史页中。"
+    },
+    {
+      "id": "F7",
+      "category": "科学正确性",
+      "severity": "major",
+      "description": "Report A 门户 39.5% 的疗效终点标签坍缩为「其他临床疗效指标…」，且原文不可追溯。4882 条疗效行中有 1927 行被坍缩为「其他临床疗效指标疗效评价」（1363行）、「其他临床疗效指标较基线百分比变化」（452行）、「其他临床疗效指标浓度」（112行）。在整站 HTML 及数据依据抽屉中，原始英文终点名称被完全抹除，医学读者无法从表格或抽屉中获知该数值具体对应何种测定指标。",
+      "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 中统计：其他临床疗效指标* 合计 1927/4882 = 39.47%；表格列及数据依据抽屉均不呈现原始英文终点定义。",
+      "impact": "大面积同质化坍缩标签使近四成结果行失去判读价值，严重妨碍医学专业人员对具体疗效维度的核查。"
+    },
+    {
+      "id": "F8",
+      "category": "科学正确性",
+      "severity": "major",
+      "description": "CT.gov 游离 outcomeGroup（OG...）未与 protocolSection 臂结构对齐，导致安全与基线数据分配错位。在 CT.gov API v2 中，部分试验的 outcomeMeasures 包含游离亚组或汇总代码（如 OG005-OG008），并非方案正式定义的臂。若直接将其作为 trial arms，会导致大量无基线、无不良事件记录的虚假臂产生；此外，在安全事件按臂名归并时，由于名称存在微小排版差异（如 250 mg (500 mg LD) KY1005 (Part 1) 对比 250mg (500mg Loading Dose) KY1005），粗暴的回退逻辑导致所有治疗组安全事件被错误合并到第一个治疗臂，造成其他治疗臂安全数据全部为 0。",
+      "evidence": "NCT05131477 在 CT.gov 协议中仅 5 个标准臂，但 outcomeMeasures 产生了 OG005-OG008 4 个多余臂；安全数据归并时，由于 LD 与 Loading Dose 的差异，原始逻辑将所有 AE 全部分配给 250mg Loading Dose 臂，导致 125mg、62.5mg、250mg No LD 臂的安全数据全部归零并触发门槛阻断。",
+      "impact": "扭曲各剂量组的安全性比较事实，使高剂量/常规剂量组呈现出完全无不良事件的假象。"
+    },
+    {
+      "id": "F9",
+      "category": "中文原生",
+      "severity": "minor",
+      "description": "A 门户数据依据抽屉暴露底层工程空值「治疗组样本量：null」。在任意页面打开查看数据依据侧边抽屉时，涉及试验列表中的样本量展示出现未格式化的编程语言空值 null，直接暴露工程痕迹。",
+      "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 点击数据依据后，抽屉文本显示：pf-08049820 I期临床研究（NCT07284173）｜I期｜总样本量：18｜治疗组样本量：null。",
+      "impact": "损害面向高管汇报的高端专业中文界面质感。"
+    },
+    {
+      "id": "F10",
+      "category": "视觉",
+      "severity": "minor",
+      "description": "A 门户表格数值与英文单位未留空格生硬粘连。Report A 疗效表格的“观察值”列中，数值与原始英文单位字符串直接粘连，如 -61.5percentage of change，没有空格分隔且未做中文翻译，排版不美观且影响可读性。",
+      "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 首行第 5 列：<td>-61.5percentage of change</td>。",
+      "impact": "违反中文与西文混排排版规范，阅读体验生硬。"
+    },
+    {
+      "id": "F11",
+      "category": "中文原生",
+      "severity": "minor",
+      "description": "终点标签存在中英文词性重复混搭：「Percentage of IGA 0/1应答率」。Report A 的终点筛选器与表格中出现了中英文混合标签，如 Percentage of IGA 0/1应答率。英文 Percentage of 本身已表示比例，后缀强行拼接中文“应答率”，形成语义冗余和生硬机翻感。",
+      "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 中包含 125 处 data-endpoint=\"Percentage of IGA 0/1应答率\"，206 处 data-endpoint=\"Number of IGA 0/1应答率\"。",
+      "impact": "语言表达不够地道纯粹，未能达到高质量中文医学报告标准。"
+    }
+  ],
+  "positives": [
+    "全流程闭环打通：从 2 页 CT.gov COMPLETED 原始 CAS 记录出发，成功构建 A/B/C 三类科学研究包、通过严格来源绑定与证据门槛，并完整渲染出 107 个物理 HTML 页面（A 43页、B 47页、C 17页）。",
+    "浏览器与视口全矩阵零崩溃：在 Chromium 和 WebKit 两大现代浏览器引擎以及 4 种典型视口（桌面 1440x900、平板 1024x1366、移动端 390x844、小屏 320x568）下，全部 856 个测试组合通过率为 100%（856/856 Passed），无任何 Console 错误或 Page 崩溃。",
+    "Report B 动态交互与筛选灵敏：Report B 门户采用客户端数据驱动，快速筛选产品按钮（如 dupilumab、montelukast、risankizumab）能精确响应点击并即时联动切换表格可见行（从 49 行过滤至 2 行），交互平滑无卡顿。",
+    "Report C 设计图谱与候选路径结构完整：Report C 精准提取了 6 项核心 AD 试验的设计要素，归纳出 3 条具有唯一签名的候选设计路径，入排标准逐条拆解清晰，在不同设备视口下排版规整无溢出。",
+    "AD 核心终点体系部分跑通：成功在 B 类报告中识别并呈现了 EASI、IGA、PP-NRS、BSA、DLQI、POEM 六大特应性皮炎核心终点族，覆盖了皮损面积、严重度分级、瘙痒程度及患者报告结局（PRO）等多维度评价。"
+  ],
+  "overall": "partial",
+  "verdict_reason": "链路与多门户渲染全量打通（107 页 HTML，856/856 视口/引擎组合全量通过，0 页面/控制台报错），但在科学正确性与数据完整性上存在 4 项阻塞阻断级缺陷与 4 项重要缺陷：1. 润肤剂、溶媒及PK对照等非药物干预未按排除清单执行，被误升格为独立竞品并生成 8 个物理虚假产品页面（F1）；2. 终点分类器政策存在跨适应症污染，将 AD 药物浓度终点判定为血液病「补体抑制药效学指标」（F2）；3. Report A 核心视图「疗效与安全性矩阵」因硬编码要求单位必须为百分比而永久全空且交互无效（F3）；4. Report B 静默剔除 99% 结果行且完全未作任何披露（F4）；此外存在 EASI 较基线百分比变化正则漏检（F5）、通用构建工具参数硬编码遗留（F6）、近四成终点标签同质化坍缩（F7）以及臂结构分配错位（F8）。综合判定为 partial，不建议在上述阻塞缺陷修复前直接用于医学总监高管决策交付。",
+  "notes": [
+    "测试节点：omp/google-antigravity/gemini-3.8-flash(high)。",
+    "数据范围：CT.gov API v2 atopic dermatitis COMPLETED 状态共 40 项研究（2 页各 20 项）。",
+    "测试原则：严格遵循独立测试者规范，从零构建独立项目 runs/test-ad，不依赖既有 runs 产物，真实执行全量浏览器点击与视口渲染，所有缺陷只如实记录不擅自修饰代码。"
+  ]
+}

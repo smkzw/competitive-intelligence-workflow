@@ -1,0 +1,234 @@
+[
+ {
+  "id": "F1",
+  "category": "数据完整性",
+  "severity": "blocking",
+  "description": "A 门户「疗效与安全性矩阵」永久空态，三维控制全部无效。矩阵 JS 要求疗效行 unit==='%' 且安全行 unit==='%' 才生成气泡点，而 A 载荷的真实单位是 Participants / percent / g/L / 例，渲染后 unit==='%' 的行数为 0，任何切换都不产出点；表格 45 行的 6 列全部被 JS 置空，占位文案「未纳入当前矩阵」也被清掉。数据本身充足：16 个产品同时具备疗效+安全性+样本量，50 个试验三类数据齐全。",
+  "evidence": "matrix.html：chartText=\"当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。\"、data-matrix-coverage=\"当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。\"；切换 bubble-size=total / safety-axis=sae / efficacy-axis=difference 后三者均无变化、无报错；data/report.js：efficacy unit=='%'=0（4141 行）、safety unit=='%'=0（136 行全为 例）；state/derived/report-a-data.json 同；逐页矩阵 acceptance 组合 A matrix.html 在 8 个视口/引擎组合下均通过（空态不触发 overflow/空图判据，故矩阵失效未被自动验收捕获）。",
+  "impact": "A 类「疗效—安全性位置」这一核心比较视图对用户完全不可用，且自动验收矩阵无法发现此类空态。"
+ },
+ {
+  "id": "F2",
+  "category": "科学正确性",
+  "severity": "blocking",
+  "description": "A 门户 76% 的疗效终点标签被坍缩为「其他临床疗效指标…」，原始终点名在整站不可见。renderers/portal/report_a.py::_native_endpoint_zh 只识别 AD 量表与「药物浓度/不良事件」，PNH 真实终点（Hb 稳定化应答人数、LDH 绝对值、游离血红蛋白、克隆大小、输血负担）全部落入兜底 measure=\"其他临床疗效指标\"，再拼上「疗效评价/较基线变化/浓度/应答率」，形成 97 类同质标签。原始英文终点名（如 \"Number of Subjects Who Achieved Hemoglobin (Hb) Stabilization\"）在 A 全部 56 页、data/report.js、data/search-index.js 中出现 0 次，数据依据抽屉亦不含原文。",
+  "evidence": "rendered endpoints 计数：\"其他临床疗效指标疗效评价\"=2338、\"其他临床疗效指标较基线变化\"=330、\"其他临床疗效指标浓度\"=234、「其他临床疗效指标」前缀合计 3154/4141=76%；grep -rl \"Achieved Hemoglobin\" runs/test-pnh/reports/ → 0 命中；efficacy.html 首行 data-endpoint=\"其他临床疗效指标疗效评价\"，对应输入载荷为 \"Number of Subjects Who Achieved Hemoglobin (Hb) Stabilization\"。",
+  "impact": "医学读者无法判断每一行数值测的是什么终点（Hb 30 与 LDH 2338 行同名），终点级比较与核查不可执行；同时构成对来源原文的不可回溯。"
+ },
+ {
+  "id": "F3",
+  "category": "科学正确性",
+  "severity": "blocking",
+  "description": "B 门户静默剔除 80% 的结果行且不做任何披露。B 只覆盖 6 个试验，从 A 载荷对应试验的 391 条疗效行中仅保留 77 条：248 条判为 unclassified、44 条 no_timepoint、22 条 safety_domain 被丢弃；被丢弃的包含 PNH 关键终点（\"Change In Clinical Manifestations Of PNH…\" 120 行、QOQ 生活质量 45 行、FACIT-Fatigue 11 行、C5 浓度 16 行、胆红素/网织红细胞/D-二聚体/触珠蛋白各若干）。B 门户与包的 sources/history 均不出现任何「未纳入/剔除/排除」说明。",
+  "evidence": "B builder 输出 dropped={'unclassified': 2242, 'no_timepoint': 1032, 'safety_domain': 246}（全载荷口径）；对 6 个 B 试验重放判据得 kept=77 / unclassified=248 / no_timepoint=44 / safety_domain=22；state/derived/report-b-data.json 全文 grep 未纳入/剔除/未分类/dropped/排除 = 0；B efficacy 视图仅 4 个产品有数据（alxn2050/danicopan/eculizumab/ravulizumab）。",
+  "impact": "B 类以「临床试验结果比较」为题，用户会把 77 行当作全部可得结果；实际的分类覆盖缺口（政策 policies/endpoint-families/registry-v7.yaml 缺 PNH 生活质量/血液学、时间窗解析拒收多时点）未在交付物中暴露。"
+ },
+ {
+  "id": "F4",
+  "category": "科学正确性",
+  "severity": "blocking",
+  "description": "C 门户把成人试验标为「儿童受试者」。NCT02591862（Coversin in PNH）登记人群为 18–80 岁成人、实际入组 1 人，因排除标准原文含单词 \"childbearing\" 命中 _target_population_text 的子串判断，被渲染为「儿童受试者」，并出现在 overview / design-map / design-patterns / trial-profile / population-disease-definition / trials/nct02591862 共 6 页。",
+  "evidence": "CT.gov 原始记录：stdAges=[ADULT, OLDER_ADULT]，minimumAge=\"18 Years\"，maximumAge=\"80 Years\"，enrollment 1；eligibilityCriteria 中 \"child\" 仅出现于 \"childbearing\"（child 1 次 / pediatric 0 次 / adult 0 次，因原文用 \"Patients\"）；渲染文本 grep 儿童受试者 → trials/nct02591862.html 6 处 + 汇总页各 4–6 处；代码 src/ci_workflow/renderers/portal/report_c.py:312 `if \"child\" in folded or \"pediatric\" in folded: return \"儿童受试者\"`。",
+  "impact": "C 类的核心价值是设计/人群事实对比；人群标注与登记事实相反会把读者引向错误的人群适用性判断（成人适应症被读成儿科设计）。"
+ },
+ {
+  "id": "F5",
+  "category": "数据完整性",
+  "severity": "major",
+  "description": "A 门户历史与来源声明中的记录数与本轮真实抓取不一致：渲染文本与 sources 写「CT.gov 当前记录 189 条」，而本轮连接器回执为 total_count=190、records=190（10 页分页闭合）。该数字来自 tools/build_a_payload.py 的硬编码文案，不是本轮派生值；B 门户 sources 继承同一错误。",
+  "evidence": "historical-edge.html / products/pegcetacoplan.html / data/report.js / B data/report.js 均含\"CT.gov 当前记录 189 条\"；A 载荷来源区同时声明\"两页原始响应 SHA-256 绑定\"而本轮为 10 页；runs/test-pnh/evidence/raw/sha256/ec/ecd6…bin（fetch 回执）：\"total_count\": 190、records 190、pagination_complete true；report-a-data.json history[0].observation 同 189。",
+  "impact": "交付物中的来源计数不可信（差 1 条），并直接削弱「全量闭包」的可核查性。"
+ },
+ {
+  "id": "F6",
+  "category": "中文原生",
+  "severity": "major",
+  "description": "A 门户面向用户的文案外泄内部工程术语与状态名：G10-1、G11-1、派生 sidecar、access_blocked、G7-2、P2 来源接入。历史页正文成段出现，监管页/专利页/产品页以「未公开披露（监管路线待 P2 来源接入）」「专利路线待 P2 来源接入」作为对外结论。",
+  "evidence": "historical-edge.html 正文含「5 条因未披露样本量未入试验表（G10-1，NCT 明细见派生 sidecar：NCT00112983…）；49 条无独立药物干预未产出实体（明细见 sidecar）；联合治疗关系受载荷单产品字段限制（G11-1）…中国路线 access_blocked 如实记录；监管/专利来源待接入」；regulatory.html、patents-protection.html、products/pegcetacoplan.html（A/B）同源文案。",
+  "impact": "面向资深医学读者的交付物出现内部代号与英文状态名，既不可读也暴露未完成的工具缺口表述方式。"
+ },
+ {
+  "id": "F7",
+  "category": "数据完整性",
+  "severity": "major",
+  "description": "A 门户监管页与历史页的日期停留在 2026-09-06，与同一页面页头「观察截止：2026-09-20」及本轮采集日矛盾。该日期是载荷里兜底占位行（监管状态「未公开披露」，非真实监管事件日期）与历史条目日期，均由构建器硬编码。",
+  "evidence": "regulatory.html 出现 2026-09-06 ×2 / 2026-09-20 ×10；historical-edge.html <time>2026-09-06</time>；state/derived/report-a-data.json regulatory[0].date=\"2026-09-06\"、history[0].date=\"2026-09-06\"、data_cutoff=2026-09-20T23:59:59.999999+08:00。",
+  "impact": "同一交付物内两个截止日期并存，读者无法确定监管/历史章节的时点口径。"
+ },
+ {
+  "id": "F8",
+  "category": "交互",
+  "severity": "major",
+  "description": "A 门户「数据依据」抽屉存在两处缺陷：(1) 直接渲染 Python None 为字面量，136 行「治疗组样本量：null」；(2) 抽屉的「涉及试验」清单是整站 136 个试验全集，与触发它的章节/筛选无关——在疗效页点开也只列全部试验，用户无法据此定位当前行级来源。",
+  "evidence": "点击 efficacy.html 的 [data-open-evidence] 后 body innerText 由 5812 增至 13586，新增行含「pegcetacoplan II期临床研究（NCT04901936）｜II期｜总样本量：12｜治疗组样本量：null」共 136 条；未点击时全站 grep \\bnull\\b = 0，点击后 = 136。",
+  "impact": "行级证据链在 UI 层失效，并出现面向用户的英文空值字面量。"
+ },
+ {
+  "id": "F9",
+  "category": "科学正确性",
+  "severity": "major",
+  "description": "A 门户把联合/背景治疗与边界方案当作独立产品建页并参与竞争格局：levamisole+cyclosporin a+glucocorticoids（登记为联合方案，2 个试验、0 条结果）、sirolimus 均为构建器自身标注的 borderline 方案，却与 iptacopan/danicopan 等在同一产品列表与漏斗图中并列；另 alxn1103 作为无任何试验绑定的孤立产品页存在（其唯一试验 NCT01335165 被归给 alxn1102）。",
+  "evidence": "state/derived/report-a-data.json：products=45，其中 alxn1103 trials=0/eff=0/safe=0；pnh-a-payload.derivation.json borderline_repositioning=[\"Levamisole+cyclosporin A+Glucocorticoids\", \"sirolimus\"]；渲染 product 页 levamisole-cyclosporin-a-glucocorticoids.html 与 sirolimus.html 均列出但 0 结果；A 门户无「联合方案/待纳排审查」标注。",
+  "impact": "竞争格局并列关系失真（联合方案冒充竞争者），孤立产品页浪费读者注意力且暗示存在未披露资产。"
+ },
+ {
+  "id": "F10",
+  "category": "中文原生",
+  "severity": "major",
+  "description": "A 门户疗效/安全表的「组别」列整体为未翻译英文原始标签（153 个组别名 100% 无中文），其中 30 个被 40 字符截断成半词（如 \"Primary Evaluation Period (26 Weeks) Rav\"、\"ALN-CC5 50mg (Japanese) - Single Ascendi\"），另有 4 个不透明代号 OG000–OG003 直接呈现给读者，共 693 行。",
+  "evidence": "report-a-data.json 去重组别名 153 个，含中文者 0，长度≥38 者 30，正则 ^OG\\d+$ 者 4（OG000–OG003）；efficacy.html 表行「<td>OG000</td>」；safety 行 arm=\"Primary Evaluation Period (26 Weeks) Rav\"。",
+  "impact": "组别是判读数据的前提（治疗组/对照组/剂量组），半词截断与不透明代号使读者无法分辨分组。"
+ },
+ {
+  "id": "F11",
+  "category": "交互",
+  "severity": "major",
+  "description": "能力声明的 CLI/运行时两处不一致，按 tester 提示的执行顺序会中断：capability preflight 接受 --independent-context yes 并写入项目内 preflight.json（显示 ready），但 project run 会重新探测运行环境，只认环境变量 CI_WORKFLOW_INDEPENDENT_CONTEXT=1，未导出时退出码 5 并「安全暂停」。tester-prompt 的步骤列表未含该变量，需查 packets/2026-09-11-pnh-vertical/runbook.md 才能发现。",
+  "evidence": "capability preflight --independent-context yes → PREFLIGHT_COMPLETE，preflight.json 中该能力为 blocked（宿主未声明）；project run --resume → 退出码 5「当前执行环境缺少本次研究或 HTML 交付所需能力」；加 CI_WORKFLOW_INDEPENDENT_CONTEXT=1 → RESUME 成功（run_1bc4d15891c926015b708c17）。SKILL.md/CLI --help 均未写明需同时设置环境变量。",
+  "impact": "独立测试者/宿主按提示操作必然在第一轮 run 卡住，且错误信息不指出缺失项与补救方式。"
+ },
+ {
+  "id": "F12",
+  "category": "交互",
+  "severity": "major",
+  "description": "复用型构建工具不可复用，独立测试者必须自行 fork+打补丁才能产出载荷。(1) tools/build_a_payload.py 的 CAS 页面发现用 rglob('*.bin') 全量扫描，会把 fetch-ctgov 自己写入的 190 个逐记录派生正文与 1 个回执 blob 当成 CT.gov 检索页，导致 derivation.pages 与页数/页序错乱；(2) 参考 builder 的外部依赖为进程外文件 /tmp/pnh-proj-path.txt、硬编码 CAS 根 .artifacts/source-cas/ctgov-live-20260906（本轮为空）、硬编码采集/截止/复核时间；(3) tools/build_a_payload.py 接受 --cutoff 但完全忽略，data_cutoff 恒为 2026-09-06，直接触发 research submit 的「研究包与报告数据的数据截止不一致」拒收；(4) research submit 在 A,B,C 项目上要求同时提供三个 --*-package，--help 未说明。",
+  "evidence": "tools/build_a_payload.py 第 22-25 行 CAS=sorted((Path(_args.cas_dir)/'evidence'/'raw').rglob('*.bin'))，而 CAS 实际含 201 个 blob（190 记录 + 10 页 + 1 回执）；首次 build 产出 pages=201 条目；patch 前 submit 报 CONTRACT_ERROR「提交的报告集合与项目合同不一致」（未传三包）；build_pnh_audit.py 首次运行报 ValidationError「研究包与报告数据的数据截止不一致」；所有补丁记录于 packets/2026-09-20-test-round-1/builders/patch_builders.py。",
+  "impact": "真实第三方用户无法按文档从零产出，必须复制参考 packet 并逐项修补；工具链的契约参数（--cutoff）与实现不一致会产生误导性的保真假设。"
+ },
+ {
+  "id": "F13",
+  "category": "视觉",
+  "severity": "minor",
+  "description": "A 门户单页在 320×568 视口水平溢出 35px（Chromium 与 WebKit 一致）：products/levamisole-cyclosporin-a-glucocorticoids.html 的 H1 长不可断词「levamisole+cyclosporin a+glucocorticoids」不换行（H1 内容宽 331px > 容器 272px），把文档 scrollWidth 撑到 355px。内容仍完整可读，无交互遮挡。",
+  "evidence": "acceptance.json 唯一失败两项（chromium/webkit @320x568，overflowX=35）；元素级诊断：HTML/BODY/MAIN scrollWidth=355、HEADER=331、H1 内容宽 331 容器 272，white-space:normal 但无 overflow-wrap 断词；对照页 products/pegcetacoplan.html 同结构 320px 下 overflowX=0。",
+  "impact": "极窄屏出现横向滚动；已知同类债务（runbook 记录前次为 14px），根因是标题缺少长拉丁词断行规则。"
+ },
+ {
+  "id": "F14",
+  "category": "中文原生",
+  "severity": "minor",
+  "description": "A/B 门户存在中英混排与未本地化拼接：A 疗效行 2004/4141 的「时间点」为中英混排（\"From 基线 (第1天) up 至 第26周\"、\"Through 第28周\"），171 行以分隔符「、」截断结尾（\"基线 至 第253天 (Cohorts 1 至 4) 、\"）；435 行终点为中英混排（\"较基线变化： Hb Concentration （第26周）\"）；B 门户 122 处时间点显示「第36.1429周」（由 Day 253 换算的十进制周，精度失真）。",
+  "evidence": "report.js/report-a-data.json 统计：timepoint 混排 2004、截断尾 171、endpoint 混排 435；B overview/efficacy/longitudinal 各出现「第36.1429周」122/122/117 次。",
+  "impact": "中文门户的读数可读性下降；十进制周与截断文本会造成数值时点的误读风险。"
+ },
+ {
+  "id": "F15",
+  "category": "中文原生",
+  "severity": "minor",
+  "description": "B 门户在 10 个图表模块上重复同一句免责文案「语义信息未完整，按试验列示」（overview 56 次、efficacy 页 40 次），既稀释版面也未指向具体缺口；B 历史页正文为内部口径表述「历史派生决策已完整记录于派生文件；本页仅呈现面向读者的结论」，对读者无信息量。",
+  "evidence": "B overview.html innerText 中该短语出现 56 次、efficacy.html 40 次；report-b-data.json history[0].observation 即上述文案。",
+  "impact": "免责声明退化为噪声，读者无法判断哪一部分语义确实未完整。"
+ },
+ {
+  "id": "F16",
+  "category": "数据完整性",
+  "severity": "minor",
+  "description": "报告状态在提交—渲染后仍为待验收且三类不一致：A/C 为 generated、B 为 quality_check，三者 render_verdict 均为 rejected，锚点文案「尚待独立浏览器验收」；本轮已真实完成 1144 个浏览器组合的独立验收，但流程状态未随之外置，测试者无法从交付物判断三份报告的相对完成度。",
+  "evidence": "reports/{A,B,C}/v1/html.manifest.json：status=A/C generated、B quality_check；render_verdict.status=rejected、anchor_ids=[\"尚待独立浏览器验收\"]、accepted_by=null；验收证据在 output/playwright/test-round-1/。",
+  "impact": "状态语义与真实验收进度脱节，独立测试者无法据交付物判断可交付性。"
+ },
+ {
+  "id": "F17",
+  "category": "交互",
+  "severity": "minor",
+  "description": "交互面可用但控件不可发现：A 门户的三维筛选与疗效/安全/时间点筛选均为默认折叠的 <details>（默认文案「默认显示全部 45 项」），实测折叠状态下 Playwright 默认点击全部超时（element is not visible），展开后筛选与分页均正常工作（产品 chip 选中后行数 4141→274、再叠加终点 chip→72、翻页→第2/2页）。全局搜索可用（输入 iptacopan 立即返回结果项）。下钻可用（landscape → products/pegcetacoplan.html）。",
+  "evidence": "interaction.json：A efficacy 首次 select 探测 no-control（页面无 select），chip 折叠不可点；展开后 pressed=1→2、visibleRows=274→72、分页状态\"第1/5页，共274条观察\"→\"第2/2页，共72条观察\"；#global-search-results 返回 1 条 iptacopan 结果；B/C 首页输入过滤后可见文本与链接数变化（B 11619→20244 / links 492）。",
+  "impact": "功能存在但需先猜测展开；自动化与人工都易误判为「无筛选能力」。"
+ },
+ {
+  "id": "F18",
+  "category": "数据完整性",
+  "severity": "major",
+  "description": "A 交付数据的来源清单声明了本项目从未执行的获取：A 载荷 sources 第二条为「PubMed｜PNH 治疗文献真实获取（878 条记录 + 14 分类属性）｜complete_with_attrition」，而本轮只执行了 CT.gov 获取，项目 CAS 中不存在任何 PubMed 记录（含搜索页与 efetch 正文）。该条为参考 builder 的历史硬编码文案，随载荷进入交付物；当前 A 页面渲染的是 capture_sources（10 页 CT.gov），故尚未出现在可见 HTML，但已存在于随门户发布的数据层 data/report.js，一旦渲染器接入报告级 sources 即成为对外虚假来源声明。",
+  "evidence": "state/derived/report-a-data.json sources[1]={\"source\":\"PubMed\",\"scope\":\"PNH 治疗文献真实获取（878 条记录 + 14 分类属性）\",\"maturity\":\"complete_with_attrition\"}；runs/test-pnh/reports/A/v1/html/data/report.js 出现 1 次（B 为 0）；项目 CAS 内 pubmed 相关 blob 0 个（evidence/raw/sha256 全量扫描），本轮命令序列只含 research fetch-ctgov；packets/2026-09-11-pnh-vertical/build_pnh_a_payload.py 中该 sources 块为字面量。",
+  "impact": "来源真实性是该产品的核心契约；未执行的来源被写成已获取事实（含具体条数 878 与 14 个分类属性），属不可接受的可信度风险。"
+ },
+ {
+  "id": "F1",
+  "category": "科学正确性",
+  "severity": "blocking",
+  "description": "非药物干预、溶媒及PK对照条件未被排除，被误升格为独立竞品实体。别名表 ad-alias-map-v1.json 中明确声明了 excluded_interventions（包含 Emollient、Vehicle of 0416 test product、Vehicle ointment、Rabeprazole 及 PK 状态条件），但 tools/build_a_payload.py 完全未应用该排除清单，将 emollient（润肤剂）、vehicle of 0416 test product（0416溶媒）、vehicle ointment（溶媒软膏）、rabeprazole（胃酸抑制剂对照）以及进食/禁食PK状态（comm-fast、comm-fed、p3-fast、vari-fast）全部建为独立竞品。Report A 甚至为其渲染了 8 个独立的物理产品档案页面（如 products/emollient.html），在产品全景中与成熟临床药物并列展示，产生虚假竞品并严重误导医学读者。",
+  "evidence": "ad-alias-map-v1.json 声明 excluded_interventions 列表；runs/test-ad/state/derived/report-a-data.json products 中包含 8 个非药物/状态实体（占全部 32 个产品的 25%）；runs/test-ad/reports/A/v1/html/products/emollient.html、vehicle-of-0416-test-product.html、vehicle-ointment.html、rabeprazole.html 等 8 个页面实际存在且被渲染。",
+  "impact": "竞品宇宙遭到严重污染，医学专业读者查阅时会看到润肤剂、溶媒软膏和胃酸药被当作 AD 临床研发管线产品展示，直接摧毁调研报告的科学可信度。"
+ },
+ {
+  "id": "F2",
+  "category": "科学正确性",
+  "severity": "blocking",
+  "description": "终点族分类器政策存在跨适应症规则污染：AD 药物浓度终点被误标为血液罕见病 PNH 的「补体抑制药效学指标」。policies/endpoint-families/registry-v7.yaml 中的 endpoint-pnh-complement-inhibition-v1 规则包含了泛匹配词 plasma concentration，且未限定适应症上下文。当处理特应性皮炎小分子 JAK 抑制剂（PF-04965842 / abrocitinib）临床试验时，其血浆药物浓度终点 Plasma Concentration Versus Time Summary of PF-04965842 被直接错误分类为补体抑制终点，中文标签渲染为「补体抑制药效学指标」。皮肤科靶向药的 PK 终点被断定为血液病补体抑制指标，构成跨适应症的重大科学性硬伤。",
+  "evidence": "policies/endpoint-families/registry-v7.yaml 第 141-147 行 rule_id: endpoint-pnh-complement-inhibition-v1，match_pattern 包含 plasma concentration；对 AD 载荷执行分类器测试，8 条包含 plasma concentration 的行全部命中 endpoint-pnh-complement-inhibition-v1 并带上「补体抑制药效学指标」标签。",
+  "impact": "在皮肤病竞争情报报告中出现血液罕见病的特异性生物标志物判定，属于典型且不可容忍的模型与规则泛化缺陷。"
+ },
+ {
+  "id": "F3",
+  "category": "数据完整性",
+  "severity": "blocking",
+  "description": "A 门户「疗效与安全性矩阵」永久空态，三维控制完全失效。Report A 的 matrix.html 呈现固定空态提示：“当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。”、“当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。”。前端切换气泡大小、安全性轴、疗效轴 3 个下拉框均无任何气泡点生成，表格 32 行全空。根因与 PNH 首验完全一致：前端矩阵脚本硬编码要求疗效行 unit==='%' 且安全行 unit==='%'，而 AD 真实数据的单位是 score、percent、percentage of change、points、例、Participants，unit==='%' 的行数为 0。然而数据本身充分：dupilumab、amlitelimab、risankizumab 等成熟品种均具备完整的疗效、安全性及样本量数值。",
+  "evidence": "浏览器交互测试记录 matrix_status: chartText=\"当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。\", pointsCount=0, hasPoints=False；切换 select 控件后 pointsCount 仍为 0；state/derived/report-a-data.json 中含有大量疗效与安全性重合产品，但 unit 均非精确的 '%' 符号。",
+  "impact": "A 类门户中最核心的横向比较与决策视图「疗效—安全性定位矩阵」整体处于瘫痪状态，且自动验收矩阵（sweep 856 组合全 pass）无法识别此类空态缺陷。"
+ },
+ {
+  "id": "F4",
+  "category": "科学正确性",
+  "severity": "blocking",
+  "description": "B 门户静默剔除 99% 的疗效结果行，仅保留 1% 且不做任何披露。Report B 输入载荷包含 4882 条真实登记结果行，但在 B 构建与门槛过滤过程中静默丢弃了 4833 条：3279 条被判为 unclassified（包括关键 EASI 终点）、1042 条被判为 no_timepoint（复合时间点或多时点）、62 条被判为 safety_domain。最终 B 门户仅保留 49 条结果行，仅覆盖 5 个试验。而在交付给读者的 B 门户整站、来源区以及数据说明中，完全没有任何关于“未纳入/剔除/政策缺口”的说明，读者会将 49 行误认为该疾病领域的全部公开结果。",
+  "evidence": "build_ad_b_audit.py 统计：dropped: {'unclassified': 3279, 'no_timepoint': 1042, 'safety_domain': 62}，保留 49 行（49/4882 = 1.00%）；runs/test-ad/reports/B/v1/html/ 中全文检索 未纳入/剔除/未分类/dropped/排除 均为 0 命中。",
+  "impact": "B 类以「临床试验结果比较」为名，却将 99% 的结果行在未作任何告知的情况下隐匿，严重破坏了调研交付物的完整性与证据透明度。"
+ },
+ {
+  "id": "F5",
+  "category": "科学正确性",
+  "severity": "major",
+  "description": "EASI 核心终点识别模式过于狭窄，导致大量关键 EASI 百分比变化终点被直接漏检。policies/endpoint-families/registry-v7.yaml 中的 endpoint-easi-total-change-v1 仅定义了 easi total|easi score。然而特应性皮炎临床试验中最核心、最标准的终点形式之一为 Percentage Change in EASI (Eczema Area and Severity Index) From Baseline to Week ...。由于正则未包含对 change.*easi 或 easi.*change 的支持，导致此类最关键的 EASI 终点全部落入 UNCLASSIFIED 被 B 报告静默抛弃。",
+  "evidence": "registry-v7.yaml 第 255-257 行 match_pattern: easi total|easi score；AD 原始数据中数百条 Percentage Change in EASI (Eczema Area and Severity Index) From Baseline... 行在分类器中全部分类为 None（UNCLASSIFIED）。",
+  "impact": "EASI 较基线百分比变化是皮炎临床试验评估皮损改善的最核心黄金终点，分类器的模式缺陷直接导致该领域关键对比数据在精细化结果中大面积蒸发。"
+ },
+ {
+  "id": "F6",
+  "category": "数据完整性",
+  "severity": "major",
+  "description": "基础工具 tools/build_a_payload.py 参数穿透失效且存在多处 PNH 硬编码遗留污染。通用 A 载荷构建器虽然添加了 --cutoff 与 --indication-id 参数，但：1. 第 408 行硬编码 data_cutoff: '2026-09-06T23:59:59.999999+08:00'，完全忽略传入的截止日参数，导致下游 FreshAResearchContent 校验直接报数据截止不一致崩溃；2. 第 474 行硬编码 sidecar 输出名为 pnh-a-payload.derivation.json；3. 第 442、452、456 行硬编码了 PNH 历史文案与文献描述（如“CT.gov 当前记录 189 条”、“PNH 当前记录检索”、“PNH 治疗文献真实获取”），将 PNH 遗留文案直接注入到 AD 项目中。",
+  "evidence": "tools/build_a_payload.py 第 408 行与第 474 行代码；runs/test-ad/ad-a-payload.json 中 history 字段写着“CT.gov 当前记录 189 条”（实际本轮为 40 条），sources 字段写着“PNH 当前记录检索（189 条，两页原始响应 SHA-256 绑定）”。",
+  "impact": "基础构建工具未达到可复用标准，硬编码的跨适应症文案会直接穿透并呈现在最终 HTML 报告的来源区和历史页中。"
+ },
+ {
+  "id": "F7",
+  "category": "科学正确性",
+  "severity": "major",
+  "description": "Report A 门户 39.5% 的疗效终点标签坍缩为「其他临床疗效指标…」，且原文不可追溯。4882 条疗效行中有 1927 行被坍缩为「其他临床疗效指标疗效评价」（1363行）、「其他临床疗效指标较基线百分比变化」（452行）、「其他临床疗效指标浓度」（112行）。在整站 HTML 及数据依据抽屉中，原始英文终点名称被完全抹除，医学读者无法从表格或抽屉中获知该数值具体对应何种测定指标。",
+  "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 中统计：其他临床疗效指标* 合计 1927/4882 = 39.47%；表格列及数据依据抽屉均不呈现原始英文终点定义。",
+  "impact": "大面积同质化坍缩标签使近四成结果行失去判读价值，严重妨碍医学专业人员对具体疗效维度的核查。"
+ },
+ {
+  "id": "F8",
+  "category": "科学正确性",
+  "severity": "major",
+  "description": "CT.gov 游离 outcomeGroup（OG...）未与 protocolSection 臂结构对齐，导致安全与基线数据分配错位。在 CT.gov API v2 中，部分试验的 outcomeMeasures 包含游离亚组或汇总代码（如 OG005-OG008），并非方案正式定义的臂。若直接将其作为 trial arms，会导致大量无基线、无不良事件记录的虚假臂产生；此外，在安全事件按臂名归并时，由于名称存在微小排版差异（如 250 mg (500 mg LD) KY1005 (Part 1) 对比 250mg (500mg Loading Dose) KY1005），粗暴的回退逻辑导致所有治疗组安全事件被错误合并到第一个治疗臂，造成其他治疗臂安全数据全部为 0。",
+  "evidence": "NCT05131477 在 CT.gov 协议中仅 5 个标准臂，但 outcomeMeasures 产生了 OG005-OG008 4 个多余臂；安全数据归并时，由于 LD 与 Loading Dose 的差异，原始逻辑将所有 AE 全部分配给 250mg Loading Dose 臂，导致 125mg、62.5mg、250mg No LD 臂的安全数据全部归零并触发门槛阻断。",
+  "impact": "扭曲各剂量组的安全性比较事实，使高剂量/常规剂量组呈现出完全无不良事件的假象。"
+ },
+ {
+  "id": "F9",
+  "category": "中文原生",
+  "severity": "minor",
+  "description": "A 门户数据依据抽屉暴露底层工程空值「治疗组样本量：null」。在任意页面打开查看数据依据侧边抽屉时，涉及试验列表中的样本量展示出现未格式化的编程语言空值 null，直接暴露工程痕迹。",
+  "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 点击数据依据后，抽屉文本显示：pf-08049820 I期临床研究（NCT07284173）｜I期｜总样本量：18｜治疗组样本量：null。",
+  "impact": "损害面向高管汇报的高端专业中文界面质感。"
+ },
+ {
+  "id": "F10",
+  "category": "视觉",
+  "severity": "minor",
+  "description": "A 门户表格数值与英文单位未留空格生硬粘连。Report A 疗效表格的“观察值”列中，数值与原始英文单位字符串直接粘连，如 -61.5percentage of change，没有空格分隔且未做中文翻译，排版不美观且影响可读性。",
+  "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 首行第 5 列：<td>-61.5percentage of change</td>。",
+  "impact": "违反中文与西文混排排版规范，阅读体验生硬。"
+ },
+ {
+  "id": "F11",
+  "category": "中文原生",
+  "severity": "minor",
+  "description": "终点标签存在中英文词性重复混搭：「Percentage of IGA 0/1应答率」。Report A 的终点筛选器与表格中出现了中英文混合标签，如 Percentage of IGA 0/1应答率。英文 Percentage of 本身已表示比例，后缀强行拼接中文“应答率”，形成语义冗余和生硬机翻感。",
+  "evidence": "runs/test-ad/reports/A/v1/html/efficacy.html 中包含 125 处 data-endpoint=\"Percentage of IGA 0/1应答率\"，206 处 data-endpoint=\"Number of IGA 0/1应答率\"。",
+  "impact": "语言表达不够地道纯粹，未能达到高质量中文医学报告标准。"
+ }
+]
