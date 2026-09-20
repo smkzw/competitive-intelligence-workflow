@@ -1317,3 +1317,9 @@ verdict 无效作废。已修正三份提示词（abc-v42→abc-v47）并全部�
 ## 视觉 A 全域通过（v47 正确绑定）
 A（cursor/default）：**accepted，7/7 域**——copy_zh 残留经 v43+ 渲染修复后清零确认。
 B/C（gemini/deepseek）后台运行中，verdict 落盘后若全 accepted 即 accept-visual。
+
+## 视觉 B 全域通过（v47 正确绑定）
+B（gemini）：**accepted，7/7 域**——从连续五轮 6 域被拒到全域通过。结论层、
+四科室色令牌、系列命名、copy_zh 修复全部经独立复核确认。注意：存在一份
+stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以更正后重派会话
+（exec_1567bfde，c2 verdict_id）的落盘为准。
