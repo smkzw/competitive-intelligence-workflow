@@ -1293,3 +1293,23 @@ copy_zh 转为 accepted（上轮 rejected → 修复生效）；交互保持 acc
 - 三节点视觉（A=cursor、B=gemini、C=deepseek，v47 digest）后台运行中。
 - 下一会话：收 A r11 + 三视觉 verdict → 全 accepted 即 accept-visual A/B/C
   （`ci-workflow project accept-visual`）→ UC/IgAN 重测 → AD B/C → 横向。
+
+## 三报告科学复核回执全部签发（v47）——历史性节点
+
+- **A r11（gemini）：accepted，回执签发 ✓**
+- **B r26（deepseek）：accepted，回执签发 ✓**（26 轮收敛）
+- **C r9（gemini）：accepted，回执签发 ✓**（连续第 5 次）
+- v47 = A/B/C 三报告 scientifically_reviewed 完整候选。
+
+### 视觉验证发现提示词缺陷并已修正
+v47 轮视觉 A 的 verdict 引用 abc-v42 路径——提示词模板历轮替换残留旧版本号，
+verdict 无效作废。已修正三份提示词（abc-v42→abc-v47）并全部重派
+（A=cursor、B=gemini、C=deepseek）。教训：提示词路径替换必须用断言校验
+（本轮模板生成时 assert 检查的是旧串不在，没检查新串路径一致性）。
+- v47 轮 B 的首派（gemini）结果仍有参考价值：hierarchy 转accepted（结论层生效）、
+  copy_zh 新转 rejected（需查证——可能审的是 v42 旧站），其余待重派确认。
+
+### 下一会话
+1. 收三路视觉 verdict（v47 路径绑定版）→ 全 accepted 即 accept-visual。
+2. 若 copy_zh 类再拒：对照 v47 站点截图核实（v43+ 渲染已含全部令牌修复）。
+3. accept-visual 后：UC/IgAN 重测 → AD B/C → 横向 → 三宿主/安装包/RC。
