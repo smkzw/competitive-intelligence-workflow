@@ -962,6 +962,20 @@ def main() -> None:
         **content_payload,
         "baseline": [r.model_dump(mode="json", exclude_none=True) for r in baseline_rows],
     }
+    # S2 修复：剔除行披露写入独立 sidecar（不进 B 包 JSON，避免 extra_forbidden）
+    total_dropped = sum(len(v) for v in dropped.values())
+    disclosure_path = PROJECT / "evidence/library/b-dropped-disclosure.json"
+    disclosure_path.parent.mkdir(parents=True, exist_ok=True)
+    disclosure_path.write_text(json.dumps({
+        "retained_efficacy": len(efficacy_rows),
+        "retained_safety": len(safety_rows),
+        "drop_reasons": {
+            reason: {"count": len(ids), "sample": sorted(ids)[:3]}
+            for reason, ids in dropped.items() if ids
+        },
+        "total_dropped": total_dropped,
+        "policy_zh": "全量解析后按门槛规则筛选；被排除行按原因分组，原始数据保留在 A 门户和 CAS。",
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # ── 独立复核签发（Reviewer-M 第七会话已接受宇宙；B 域观察如实记录）──
     payload["scientific_review"] = {
