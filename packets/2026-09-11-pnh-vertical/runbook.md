@@ -1779,3 +1779,11 @@ removeAttribute("style")/cssText=""），在其执行后重跑 applyState 行显
   none）——存在 removeAttribute("style")/cssText="" 的清空路径，或两处
   display="" 写入。下一步：对 style 属性变更打印调用栈（Error().stack
   在 MutationObserver 回调内捕获），定位清空点后修复。
+
+### C 交互根因最终定位（style 写入栈捕获实证）
+- applyState 正确写入 display="none"（调用栈确认来自 applyState 234 行）；
+- 但随后表格被**整体重建**（重建行不带筛选状态），130 行全部恢复可见——
+  重建路径未应用当前筛选状态。
+- 修复方向（下一会话）：定位表格重建入口（renderTable/整表重渲染路径），
+  重建时应用当前 state 过滤行集；或重建后重跑 applyState。
+- 顺带：format 双引擎换行差异判非缺陷（水平溢出 0，属引擎字形断点差异）。
