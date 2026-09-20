@@ -1787,3 +1787,13 @@ removeAttribute("style")/cssText=""），在其执行后重跑 applyState 行显
 - 修复方向（下一会话）：定位表格重建入口（renderTable/整表重渲染路径），
   重建时应用当前 state 过滤行集；或重建后重跑 applyState。
 - 顺带：format 双引擎换行差异判非缺陷（水平溢出 0，属引擎字形断点差异）。
+
+### C 交互追踪补记（本轮最终状态）
+- applyState 正确写入 display="none"（栈捕获确认）；
+- 随后行被改回可见——re-show 来源未定位（portal.js 的 filterVisibleRows 只触
+  [data-filter-row-id] 合成行；collapseCompleteTables 仅包 details）；
+- 下一会话：用 MutationObserver + 记录每次 display 写入后的调用栈（上一轮
+  的 defineProperty 拦截只捕到一次写入即被清——说明清空发生在另一写入点，
+  需要对 .style.cssText setter 同样挂钩）定位 re-show 来源后统一。
+- v60 = 当前候选（366 疗效行、三报告科学回执齐备、字号归刻度、CSS 132 条修复、
+  时间筛选本地化、聚合计数标注、响应式 grid 全部承载）。
