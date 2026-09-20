@@ -1626,3 +1626,16 @@ report-b.css + overview——v56 新增行（基线/窗口比例终点）的标�
 - 下一会话处置：先人工查看本轮 screenshots/C/chromium/1440__overview 截图仲裁
   （若页面正常则判定复核会话无效并重派；若页面确有问题则修页）。
 - 仲裁前不据该 verdict 做修复，避免被异常会话误导。
+
+## 系统性 CSS 缺冒号缺陷修复（132 条）+ v57 = 当前候选
+
+- 举一反三扫描全部 report-*.css + portal.css：**report-b.css 109 条、
+  report-c.css 17 条残留、portal.css 6 条**缺冒号声明全部修复（此前只修了
+  report-c 的第一批）。这正是 B typography 域被拒与快速筛选栏裸文本的
+  系统性根因——CSS 生成器/手工编写时冒号缺失导致整条声明被浏览器丢弃。
+- 修复后四文件 0 残留（正则复核）。
+- **v57 = 当前候选**：submit ACCEPTED、A/B gates 过、366 疗效行 + 32 安全行。
+- 后台运行中：B r35（deepseek）、A r20 + 视觉文档重算（gemini 链）、C r18。
+- 下一会话：收三路 verdict → 生成 v57 视觉提示词（/tmp/gen_visual_prompts_v53.py
+  sed abc-v53→abc-v57）→ 三节点视觉 → 全 accepted → resume →
+  accept-visual ×3 → PNH 竖向收口。

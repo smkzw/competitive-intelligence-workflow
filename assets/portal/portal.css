@@ -521,7 +521,7 @@ input:focus-visible {
   white-space: nowrap;
   position: relative;
   transition: background var(--dur-fast) var(--ease-out),
-              color var(--dur-fast) var(--ease-out);
+              color: var(--dur-fast) var(--ease-out);
 }
 
 .site-nav-group__label {
@@ -624,7 +624,7 @@ input:focus-visible {
   background: var(--bg);
   color: var(--text-2);
   transition: border-color var(--dur-fast) var(--ease-out),
-              width var(--dur) var(--ease-out);
+              width: var(--dur) var(--ease-out);
 }
 
 .site-header__search-input:focus {
@@ -1075,7 +1075,7 @@ input:focus-visible {
   border-radius: 999px;
   cursor: pointer;
   transition: color var(--dur-fast) var(--ease-out),
-              background var(--dur-fast) var(--ease-out);
+              background: var(--dur-fast) var(--ease-out);
 }
 
 .kz-filter-chip__remove:hover {
@@ -1213,7 +1213,7 @@ input:focus-visible {
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: color var(--dur-fast) var(--ease-out),
-              background var(--dur-fast) var(--ease-out);
+              background: var(--dur-fast) var(--ease-out);
 }
 
 .kz-filter-panel__close:hover {
@@ -1314,7 +1314,7 @@ input:focus-visible {
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-out),
               border-color var(--dur-fast) var(--ease-out),
-              color var(--dur-fast) var(--ease-out);
+              color: var(--dur-fast) var(--ease-out);
 }
 
 .kz-filter-item:hover {
@@ -1364,7 +1364,7 @@ input:focus-visible {
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-out),
-              color var(--dur-fast) var(--ease-out);
+              color: var(--dur-fast) var(--ease-out);
 }
 
 .kz-filter-reset-btn:hover {
