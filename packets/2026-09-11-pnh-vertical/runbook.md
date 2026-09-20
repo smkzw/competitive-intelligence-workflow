@@ -1223,3 +1223,8 @@ veto——修完组别口径，B 复核有望通过。
 2. B 设计专修（四科室色令牌 + 总览结论层 + 标题排版 + 系列命名）→ 与 B r25
   （审 v43，验组别修复）并行推进。
 3. accept-visual → UC/IgAN 重测 → AD B/C → 横向。
+
+### 视觉 A 第二轮（v42，cursor）：rejected 但仅剩 copy_zh 1 域
+hierarchy/typography/color/charts/interaction/format 六域全部 accepted——A 距通过
+一步之遥。copy_zh 遗留项为 A 页面残留内部令牌（见 verdict evidence_refs），
+属小批量修复。下一会话：修 A copy_zh 残留 → 与 B 设计专修同批进 v44 → 视觉重测。
