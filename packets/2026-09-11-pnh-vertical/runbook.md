@@ -1592,3 +1592,13 @@ accept-visual ×3 → AD B/C → 横向。
 - 下一会话：收三路 verdict → 生成 v55 视觉提示词（/tmp/gen_visual_prompts_v53.py
   sed abc-v53→abc-v55 复用）→ 三节点视觉 → 全 accepted → resume →
   accept-visual ×3 → PNH 竖向收口 → AD B/C → 横向。
+
+### v56 = 当前候选（B r33 单项修复承载）
+- 政策 v7.4：LDH Normalization 应答族（"achieving LDH normalization"不再落入
+  LDH 水平绝对值族）；builder 受试者比例覆盖扩展 achieving/who 变体。
+- v55 因 pointer 顺序失误作废（B/C 写错工作区），v56 全链完成：submit ACCEPTED、
+  A/B gates 过、366 疗效行。
+- 后台运行中：B r34（deepseek）、A r19（gemini）、C r17（gemini）+ 视觉文档已按
+  v56 重算（7016b80b/4422a9a0/0de3b8c4）。verdict 齐后：生成三份 v56 视觉提示词
+  （contract digest 断言）→ 三节点视觉 → resume → accept-visual ×3。
+- 教训：多步链中指针切换必须立即验证（cat）再进下一步。
