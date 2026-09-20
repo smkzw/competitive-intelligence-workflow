@@ -1392,3 +1392,13 @@ stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以
 3. 筛选 time_window_band 直出 "longtermextensionperiod52w"：补 band 键
    中文映射（长期扩展期（52周）），同 r25 的 day_N 修法。
 修复后 → v50 → B r29 + 三节点视觉（v49→v50 digest 重算）→ accept-visual。
+
+### 视觉 A（v49）copy_zh 再拒根因 + r29 修复清单（合并 B r28 三项）
+- A 抽屉 135 处"治疗组样本量：null"：A 包 trials 的 treatment_sample_size 是
+  字符串 'None'、sample_size 是字符串 '86'（构建链某处 str 化；textOr 只防
+  JS null 不防字符串 "None"/"null"）。修复：(1) 源头——build 链禁止 str(None)
+  /str(count)，保持 int|None；(2) 渲染端 textOr 增加 value in ("null","None")
+  防御。v47 曾 7/7 过是因当时载荷尚无此类行/值。
+- B r28 三项（见上节）：absolute 误标排查、纯 Baseline→第0周、
+  longtermextensionperiod52w band 键中文映射。
+- 全部修复后 → v50 → A r14/B r29/C r12 + 三节点视觉 → accept-visual ×3。
