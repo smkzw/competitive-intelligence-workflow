@@ -1813,3 +1813,19 @@ v61 的 B 包残余"units/liter (U/L)"和"millimole(s)/litre"已归一。
   或排查 gemini 提供者可用性后重试。
 - v62 当前状态：B 回执未签（r39 veto 1 项单位混排已修复待重测），
   A/C 复核待重派。
+
+## 无损暂停点（当前完整状态记档）
+
+### v62 = 当前候选
+- 366 疗效行 + 32 安全行，A/B gates 过，143 页三门户
+- 视觉 A/B/C 全部 accepted 7/7 ✓（contract digest 绑定核验通过）
+- 科学复核：B r39 veto 1 项（单位列混排——builder 修复已落码但 v62 B 包
+  需重提交确认）；A/C 复核 dispatch 因 omp 子进程退出码 1 失败（原因待查）
+
+### 下一会话工作清单（按优先级）
+1. v62 上重派 A/C 科学复核（排查 omp 失败原因后用 deepseek-flash 重试）
+2. B r40 → 确认单位归一修复后 accepted → 签发回执
+3. resume + accept-visual ×3 → PNH 竖向完整收口
+4. 重派 UC/IgAN（载荷已修复重建，截断/污染/分类器全清）
+5. AD B/C 竖向 → 横向 6 适应症（重度哮喘/CRSwNP/结节性痒疹/类风湿/UC/IgAN）
+6. 三宿主 fresh-install → 安装包重建 → 恢复链验证 → RC 冻结
