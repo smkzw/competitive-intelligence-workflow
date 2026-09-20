@@ -455,8 +455,8 @@
     var product = String(row.product_zh || "");
     var name = String(row.trial_zh || "");
     if (name.indexOf("奈莫利珠单抗") !== -1) name = "奈莫利珠单抗研究";
-    if (product.length > 14) product = product.slice(0, 13) + "…";
-    if (name.length > 12) name = name.slice(0, 11) + "…";
+    if (product.length > 18) product = product.slice(0, 17) + "…";
+    if (name.length > 14) name = name.slice(0, 13) + "…";
     var identity = product && product !== name ? product + "\n" + id : id;
     return name && name !== id ? identity + "\n" + name : identity;
   }
@@ -598,7 +598,7 @@
           // 独立视觉复核（typography/charts）：单元格长文本限宽截断，
           // 完整内容保留在 tooltip 与同源数据表
           width: compactTrialAxis ? 86 : Math.min(150, Math.max(72, Math.round(640 / Math.max(1, trialIds.length)))),
-          overflow: "truncate",
+          overflow: "break",
           formatter: function (p) {
             return p.data.value[2] ? matrixLabel(p.data.row) : "未公开";
           }

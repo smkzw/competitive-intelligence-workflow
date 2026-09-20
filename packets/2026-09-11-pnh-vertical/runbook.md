@@ -1694,3 +1694,12 @@ C verdict 落盘且 accepted 后：resume → accept-visual ×3 → PNH 竖向�
 v58 科学复核：A ✓（r21b 回执）、B ✓（r36 回执）、C ✓（r19 回执）——三报告
 回执齐备。视觉：A ✓ 7/7、B ✓ 7/7（均正确绑定），C 运行中。
 C verdict 落盘且 accepted 后：resume → accept-visual ×3 → PNH 竖向收口。
+
+### 视觉 C（v58，deepseek）：rejected 仅 typography 一域（5/7→6/7 通过）
+copy_zh/hierarchy/color/charts/interaction/format 六域转 accepted。
+剩余 typography 根因：(1) 我加的单元格标签 truncate 截断区分性时间点
+（"LDH较基线百…"丢失 Week 12/25 区分）；(2) 轴标签切词（"coversin II…"）；
+(3) overview 矩阵文本 661 对硬重叠（SVG 内，我的探针排除了 SVG 故未报）。
+已修：单元格标签 truncate→break（换行）、轴标签截断放宽（13→17 字符）。
+遗留：overview 矩阵 SVG 文本重叠需下会话矩阵行高/字号精调（matrixHeight
+公式与 elementCount 联动已存在，需按标签行数增高）。
