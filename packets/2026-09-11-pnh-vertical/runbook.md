@@ -1010,3 +1010,36 @@ S1(S2) → S3 → S4(S5) → S6(S7)：先修共性（矩阵+披露），再修�
 3. legend 移至底部；grid bottom 加宽
 4. 全部 axisLabel rotate 25 + hideOverlap + overflow break
 5. 双副本同步 + manifest sha 更新（契约测试 306 绿）
+
+## 第十九~二十轮 B 复核（abc-v35）
+
+### 第二十轮发现（2 项收窄至元数据层）
+1. NCT04170023 输血 MEAN 值单位标 Participants → 应标实际计量单位
+2. NCT05886244 7 条 fact 页码 page-2 vs page-1 → 深层页码赋值路径问题
+
+### 第十九轮（gemini B 首次）
+- gemini 首次做 B 复核——结果待查
+
+### 模式总结
+deepseek 每轮均产出 schema 级 pydantic 错误（verdict 格式不严格）；gemini 的 verdict 格式一直正确。
+建议后续 B 复核固定用 gemini。
+
+### C 复核
+mtplx 连续 4 次崩溃（exit 1）→ 换 gemini 或 deepseek 重试
+
+### abc-v35 状态
+- A 回执签发 ✓（gemini 第 10 次）
+- B pydantic schema 错误（deepseek 第 7 次 verdict 格式问题）
+- C mtplx 崩溃（第 4 次）
+- 视觉验证 3 会话运行中
+
+### 视觉验证 abc-v35 结果
+- vis-a (mtplx): 连接超时（已知网络问题）
+- vis-b (gemini): rejected — copy_zh/hierarchy/typography/color/charts/format 6 域
+- vis-c (deepseek): rejected — hierarchy/typography/charts/format 4 域
+- 视觉验证持续发现设计系统差距——需要系统性 CSS/设计修复轮次而非逐项修补
+
+### 当前精确状态
+- **科学复核**: A ✓ B（gemini 通过待签）/ C（gemini accepted 待重派）
+- **视觉验证**: 设计系统对齐是当前核心阻塞——需 CSS 专项修复批次
+- **下一步优先级**: 设计系统 CSS 修复 > 视觉重测 > accept-visual > AD B/C > 横向

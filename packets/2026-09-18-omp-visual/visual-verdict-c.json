@@ -1,10 +1,10 @@
 {
  "schema_version": "1.0",
- "verdict_id": "verdict-omp-deepseek-vis-abc34-c",
+ "verdict_id": "verdict-omp-deepseek-vis-abc35-c",
  "format": "html",
- "visual_plan_digest": "f143f102b1aec6ebc52c8c18ae3b4f30d274f1d5a481399b175c4dabef97fa0b",
- "candidate_artifact_digest": "b7b6a1cc86f81e3ecff93046ce206cdbb4a0ef036f376d09c6ee7c4aad8ea581",
- "render_evidence_digest": "0b69d7d085e8b416b54689c514abd4906fac077911dc548a3ec7562142e1aa93",
+ "visual_plan_digest": "edeac368c3c22d045d6a17510f24757590da03dfe6bf4465eec6774bc281ec27",
+ "candidate_artifact_digest": "40e9875976b236c443d22020d509950ad190b8a9d362b7950f398d65d02bb7cb",
+ "render_evidence_digest": "c718f848ae927cdd6994447d14b3e77bb02f162f6857fd53197ed3963f098cd9",
  "producer_identity": "zcode-main-thread-glm53",
  "verifier_identity": "omp-cms-router-deepseekflash-max",
  "verdict": "rejected",
@@ -17,10 +17,11 @@
     "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
    ],
    "evidence_refs": [
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/treatment-arms.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/trials/nct04469465.html",
-    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview"
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/trials/nct04469465.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/sample-analysis-statistics.html",
+    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview",
+    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
    ]
   },
   {
@@ -31,8 +32,9 @@
     "同一数据在图、表、抽屉三投影中保持同源一致"
    ],
    "evidence_refs": [
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/inclusion-criteria.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/design-map.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/inclusion-criteria.html",
     "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
    ]
   },
@@ -44,9 +46,11 @@
     "长药品名/试验名换行不截断关键标识"
    ],
    "evidence_refs": [
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/endpoint-timepoint-matrix.html",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__endpoint-timepoint-matrix.html.png"
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/trial-profile.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/endpoint-timepoint-matrix.html",
+    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__endpoint-timepoint-matrix.html.png",
+    "packets/2026-09-18-omp-visual/screenshots/C/chromium/320__overview.html.png"
    ]
   },
   {
@@ -57,8 +61,9 @@
     "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
    ],
    "evidence_refs": [
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/assets/portal.css",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/assets/evidence-drawer.css",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/assets/portal.css",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/sample-analysis-statistics.html",
     "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
    ]
   },
@@ -70,10 +75,11 @@
     "图表与对应表格数值一致（同源投影）"
    ],
    "evidence_refs": [
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/population-disease-definition.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/inclusion-criteria.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/exclusion-criteria.html",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__endpoint-timepoint-matrix.html.png"
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/inclusion-criteria.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/exclusion-criteria.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/assets/report-c.js",
+    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-endpoint-timepoint-matrix"
    ]
   },
   {
@@ -84,10 +90,11 @@
     "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
    ],
    "evidence_refs": [
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/trials/nct04469465.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/design-patterns.html",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/assets/evidence-drawer.js"
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/visit-duration-followup.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/trials/nct04469465.html",
+    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview",
+    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
    ]
   },
   {
@@ -98,12 +105,13 @@
     "四类视口下导航、表格与图表保持可用"
    ],
    "evidence_refs": [
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/320__endpoint-timepoint-matrix.html.png",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v35/reports/C/v1/html/endpoint-timepoint-matrix.html",
     "packets/2026-09-18-omp-visual/screenshots/C/webkit/320__overview.html.png",
-    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-webkit-320-trials__nct04469465",
-    "runs/pnh-vertical/abc-v34/reports/C/v1/html/overview.html"
+    "packets/2026-09-18-omp-visual/screenshots/C/chromium/390__overview.html.png",
+    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview"
    ]
   }
  ],
- "created_at": "2026-09-20T06:13:48.207419Z"
+ "created_at": "2026-09-20T06:55:05Z"
 }

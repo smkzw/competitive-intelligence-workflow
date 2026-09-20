@@ -4,12 +4,12 @@
 
 ## 工作目录（必须在此目录内操作）
 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow`（仓库根）。
-被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v34/reports/C/v1/html`
+被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v35/reports/C/v1/html`
 
 ## 材料（均相对项目根）
 1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-c.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
 2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-c.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
-3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v34/reports/C/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
+3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v35/reports/C/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
 4. 截图可自行用浏览器或读图复核；至少亲自检查 3 个页面（可结合读 HTML）
 
 ## 审阅域（七域，逐域独立判断）
@@ -22,11 +22,11 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 ```json
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-deepseek-vis-abc34-c",
+  "verdict_id": "verdict-omp-deepseek-vis-abc35-c",
   "format": "html",
-  "visual_plan_digest": "f143f102b1aec6ebc52c8c18ae3b4f30d274f1d5a481399b175c4dabef97fa0b",
-  "candidate_artifact_digest": "b7b6a1cc86f81e3ecff93046ce206cdbb4a0ef036f376d09c6ee7c4aad8ea581",
-  "render_evidence_digest": "0b69d7d085e8b416b54689c514abd4906fac077911dc548a3ec7562142e1aa93",
+  "visual_plan_digest": "edeac368c3c22d045d6a17510f24757590da03dfe6bf4465eec6774bc281ec27",
+  "candidate_artifact_digest": "40e9875976b236c443d22020d509950ad190b8a9d362b7950f398d65d02bb7cb",
+  "render_evidence_digest": "c718f848ae927cdd6994447d14b3e77bb02f162f6857fd53197ed3963f098cd9",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-cms-router-deepseekflash-max",
   "verdict": "accepted 或 rejected",
