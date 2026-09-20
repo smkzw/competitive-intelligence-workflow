@@ -156,7 +156,7 @@ body {
   border-radius: 10px;
   color: var(--b-muted);
   background: #fffdf9;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .kz-b-bubble-presets__label {
@@ -247,7 +247,7 @@ body {
 
 .kz-b-filter-heading h2 {
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.35;
 }
 
@@ -512,7 +512,7 @@ body {
 
 .kz-b-profile-card strong {
   overflow-wrap: anywhere;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.35;
 }
 

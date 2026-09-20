@@ -262,7 +262,25 @@
     ) {
       window.__CHART_SYNC__.syncWithFilter();
     }
+    updateChartFromState(state);
     updateStatus(state);
+  }
+
+  // 独立视觉复核（v57 charts_tables）：筛选变化后按状态重绘 ECharts——
+  // 此前只过滤表格行，图表 series 恒不更新
+  function updateChartFromState(state) {
+    if (!cChart || !chartState.rows.length) return;
+    var visible = chartState.rows.filter(function (row) {
+      return matches(String(row.row_id), state);
+    });
+    if (!visible.length) visible = chartState.rows.slice();
+    var kind = chartState.kind;
+    var option = kind === "sample-size-bar" ? sampleOption(visible)
+      : kind === "criteria-comparison" ? criteriaCountOption(visible)
+      : kind === "visit-timeline" ? timelineOption(visible)
+      : kind === "evidence-coverage" ? evidenceOption(visible)
+      : matrixOption(visible, kind);
+    cChart.setOption(option, true);
   }
 
   function writeFilterUrl(state) {
@@ -376,6 +394,7 @@
   }
 
   var cChart = null;
+  var chartState = {rows: [], kind: "", chart: null};
 
   function uniqueValues(rows, key) {
     var values = [];
@@ -787,6 +806,9 @@
       ? rows.length * 36 + 88
       : elementCount * (elementCount <= 4 ? 58 : 66) + 150;
     chart.style.height = Math.max(360, Math.min(1800, matrixHeight)) + "px";
+    chartState.rows = rows.slice();
+    chartState.kind = kind;
+    chartState.chart = chart;
     cChart = window.echarts.init(chart, null, {renderer: "svg"});
     var option = kind === "sample-size-bar"
         ? sampleOption(rows)
