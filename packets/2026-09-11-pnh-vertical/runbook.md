@@ -1608,3 +1608,8 @@ accept-visual ×3 → AD B/C → 横向。
 - v56 视觉提示词已按 v56 digest 生成（contract digest + 路径断言），三节点
   （A=cursor、B=gemini、C=deepseek）后台运行中；A r19 复核同步运行。
 - verdict 落盘后全 accepted → resume → accept-visual ×3 → PNH 竖向收口。
+
+### 视觉 A（v56，cursor）：rejected 3/7
+copy_zh（类标题残余英文）、typography_spacing、charts_tables 三域被拒；
+hierarchy/color/interaction/format 通过。refs 指向 efficacy.html 与
+overview.html——下一会话对照 refs 逐项修（转写残余 + 卡片排版 + 图表标注）。
