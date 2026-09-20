@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc32-b",
+  "verdict_id": "verdict-omp-gemini38-vis-abc33-b",
   "format": "html",
-  "visual_plan_digest": "d1a99ce77b560a89b3de7ba8d79447565b7cdc1b679c46cd3f7aef286834307a",
-  "candidate_artifact_digest": "b3d2c87505b9774f94ec7f29d8fc28af13fe23612b4f4a921cfa3b046108422e",
-  "render_evidence_digest": "8d83bcde0b30c114677df9332def910d44c1489c622b311e2da02b818b923c9d",
+  "visual_plan_digest": "36da223867bdee3e778995bcad0e6e17e6e6d1e712e1b1ad0102135983cff0dd",
+  "candidate_artifact_digest": "f983236a2d2b42519ea85c84dcb38fa09011a676e5deb9769fa26d79b4b638b9",
+  "render_evidence_digest": "8954f25f90f35a1466cbd2da1cf439822a71c062679fc90ccb817b01b7baaf33",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-google-antigravity-gemini38flash-high",
   "verdict": "rejected",
@@ -17,9 +17,9 @@
         "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/baseline-overview.html 与 baseline-demographics.html: 基线指标筛选按钮直接向用户暴露英文系统术语与内部变量名，如「age」、「sex」、「baseline_pnh_clone_size」、「baseline_free_hemoglobin」；efficacy-safety-matrix.html 筛选按钮直接向用户渲染无空格内部拼接字符串「eculizumabinadultparticipantswithparoxysmalnocturnalhemoglobinuriapnhinchina的相关记录」",
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/safety.html 与 overview.html: 筛选面板中大量按钮暴露未剥离的英文内部概念标识（如「danicopantp1」、「placebotp1」、「danicopandanicopantp2」、「placebodanicopantp2」、「danicopandanicopanlte」、「group1treatmentnaive」等）；且 overview.html 筛选折叠面板中 19 处维度标题全部硬编码显示为「观察指标」，存在严重语义失真",
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/overview.html 与 efficacy.html: 关键结果图表卡片标题直接泄漏内部管道占位说明「语义信息未完整，按试验列示」，且快速筛选区按钮暴露「eculizumab」、「danicopan」、「ravulizumab」等原始英文标识并挤叠在单行输入框样式容器中"
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/baseline-overview.html 与 baseline-demographics.html: 基线指标筛选按钮直接向用户暴露英文内部变量名，如「age」、「sex」、「baseline_pnh_clone_size」、「baseline_free_hemoglobin」；efficacy-safety-matrix.html 筛选按钮直接向用户渲染无空格内部拼接字符串「eculizumabinadultparticipantswithparoxysmalnocturnalhemoglobinuriapnhinchina的相关记录」",
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html: 筛选面板中时间维度按钮暴露未翻译英文期名，如「Primary Treatment Period (12 Weeks)」、「Long-Term Extension Period (52 Weeks)」、「Treatment Period 1 (TP1)」、「Long-Term Extension (LTE)」等；且折叠面板中 trial、group、time 维度的 headings 全部硬编码为「观察指标」",
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html 与 efficacy.html: 关键结果图表卡片标题直接泄漏内部管道占位说明「语义信息未完整，按试验列示」（如「LDH 水平变化 · 较基线变化 · 约第12周 · 登记结果人群 · 语义信息未完整，按试验列示」），且快速筛选区按钮暴露「eculizumab」、「danicopan」、「ravulizumab」等原始英文标识并挤叠在单行输入框样式容器中"
       ]
     },
     {
@@ -30,7 +30,7 @@
         "同一数据在图、表、抽屉三投影中保持同源一致"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/overview.html: 总览页首屏完全缺失医学经理结论层、核心发现与执行摘要，页面从标题和筛选表单直接进入平铺图表容器 #kz-chart-module，未优先呈现结论性信息",
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html: 总览页首屏完全缺失医学经理结论层、核心发现与执行摘要，页面从标题和筛选表单直接进入平铺图表容器 #kz-chart-module，未优先呈现结论性信息",
         "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 视觉实测确认页面直接由快速筛选跳转至平铺图表卡片，且同一试验（NCT04170023）的多组别数据图表平铺堆叠，图例浮动覆盖在正向数据柱上方，信息密度与层级失衡，未实现逐项细节的有效下沉"
       ]
     },
@@ -42,8 +42,8 @@
         "长药品名/试验名换行不截断关键标识"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/trials/nct04469465.html 与 nct02605993.html: 试验标题在英文词中被生硬截断（如 NCT04469465 截断为「...Who Have Clinica」，丢失 -lly Evident Extravascular Hemolysis；NCT02605993 截断为「...Paroxysmal Nocturnal Hemoglobin」，丢失 -uria）",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__trials__nct04469465.html.png: 截断后的英文试验标题与中文「试验档案」及「基本信息」直接拼接无空格（如「...Who Have Clinica试验档案」及「...Who Have Clinica基本信息」）；overview.html 中元数据亦粘连为「阵发性睡眠性血红蛋白尿症观察截止：2026-09-06」；且 portal.css 中存在 13px, 15px, 22px, 28px 等非康哲刻度字号与偏离 4/8 基线的间距"
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/trials/nct04469465.html 与 nct02605993.html: 试验标题在英文词中被生硬截断（如 NCT04469465 截断为「...Who Have Clinica」，丢失 -lly Evident Extravascular Hemolysis；NCT02605993 截断为「...Paroxysmal Nocturnal Hemoglobin」，丢失 -uria）",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__trials__nct04469465.html.png: 截断后的英文试验标题与中文「试验档案」及「基本信息」直接拼接无空格（如「...Who Have Clinica试验档案」及「...Who Have Clinica基本信息」）；overview.html 中元数据亦粘连为「阵发性睡眠性血红蛋白尿症观察截止: 2026-09-06」；且 portal.css 中存在 13px, 15px, 22px, 28px 等非康哲刻度字号与偏离 4/8 基线的间距"
       ]
     },
     {
@@ -54,8 +54,8 @@
         "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/ 全部页面与 assets/portal.css、assets/report-b.css: 策划书声明的四科室令牌中，DMST（统计绿）与 PV（警戒紫）在报告 B 的页面中完全无对应落地元素；portal.css 中仅存在从 A 类遗留的 --kz-dmst 样式，且 --kz-pv 被错误定义为褐色 #A85F34（非紫色）且未在 B 中使用，无法满足四科室跨页面语义一致",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 关键结果右侧卡片中，三个不同治疗组（治疗组、Group 2: Eculizumab Switch、Group 3: Danicopan Rollover）在图例与数据柱中全部使用完全相同的橙色色块（#ee7200），完全丧失色彩区分度，导致用户无法通过视觉区分不同分组"
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/ 全部页面与 assets/portal.css、assets/report-b.css: 策划书声明的四科室令牌中，DMST（统计绿）与 PV（警戒紫）在报告 B 的页面中完全无对应落地元素；portal.css 中仅存在从 A 类遗留的 --kz-dmst 样式，且 --kz-pv 被错误定义为褐色 #A85F34（非紫色）且未在 B 中使用，无法满足四科室跨页面语义一致",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 关键结果右侧卡片中，三个不同治疗组（治疗组、Group 2: Eculizumab Switch、Group 3: Danicopan Rollover）在图例与数据柱中全部使用完全相同的橙色色块（#ee7200 / #FF9900），完全丧失色彩区分度，导致用户无法通过视觉区分不同分组"
       ]
     },
     {
@@ -79,7 +79,7 @@
       ],
       "evidence_refs": [
         "packets/2026-09-18-omp-visual/render-evidence-b.json: 全部 30 个渲染目标（Chromium 与 WebKit 各 15 个）在 page_load、filter_change、drill_down、search、keyboard、reduced_motion 六类交互探测中全部通过（passed=true），无交互失败项",
-        "runs/pnh-vertical/abc-v32/reports/B/v1/html/overview.html 与 assets/portal.js: 实测纯键盘导航支持 Tab 键顺序聚焦 logo、导航菜单、搜索输入框、筛选展开按钮、快捷筛选按钮及表格折叠按钮；Enter 键可展开折叠明细并打开数据依据抽屉，抽屉内支持关闭操作及焦点捕获；assets/portal.css 配置 prefers-reduced-motion 在减弱动效模式下统一禁用过渡与动画"
+        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html 与 assets/portal.js: 实测纯键盘导航支持 Tab 键顺序聚焦 logo、导航菜单、搜索输入框、筛选展开按钮、快捷筛选按钮及表格折叠按钮；Enter 键可展开折叠明细并打开数据依据抽屉，抽屉内支持关闭操作及焦点捕获；assets/portal.css 配置 prefers-reduced-motion 在减弱动效模式下统一禁用过渡与动画"
       ]
     },
     {
@@ -95,5 +95,5 @@
       ]
     }
   ],
-  "created_at": "2026-09-20T04:38:47Z"
+  "created_at": "2026-09-20T05:14:00Z"
 }

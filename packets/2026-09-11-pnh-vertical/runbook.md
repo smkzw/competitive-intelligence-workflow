@@ -949,3 +949,34 @@ S1(S2) → S3 → S4(S5) → S6(S7)：先修共性（矩阵+披露），再修�
 1. 设计系统 CSS 对齐（间距/对比度/字号/排版系统性修复）→ abc-v33
 2. 视觉验证重测 → 全部通过 → accept-visual A/B/C
 3. AD B/C 竖向
+
+## 视觉验证第四轮（abc-v33）— 详细设计域发现
+
+### B 门户 6 域拒绝详情
+1. **copy_zh**: 筛选按钮英文变量名（age/sex/baseline_pnh_clone_size）；期间名未翻译
+2. **hierarchy_density**: 首屏缺结论层/摘要；图表平铺堆叠；图例浮盖数据柱
+3. **typography_spacing**: 英文试验名生硬截断；中英文拼接无空格
+4. **color_legibility**: DMST/PV 令牌零落地；三组别全部同橙色色块
+5. **charts_tables**: 图例压叠数据柱（label_overlap 10566-60892 次）；坐标轴截断
+6. **format_rendering**: 320px 顶栏截断+按钮挤压；英文标题断裂 7 行
+
+### C 门户 6 域拒绝详情
+1. **hierarchy_density**: 首屏缺结论层；矩阵 838px 未折叠直接展示
+2. **typography_spacing**: 字号/行高不在康哲刻度
+3. **color_legibility**: 绿/紫令牌零命中；仅蓝/橙在用
+4. **charts_tables**: source_claim_ids 未绑定 DOM；坐标量纲声明不成立
+5. **interaction_consistency**: 筛选后图表联动但表格未联动；reduced-motion 未实现
+6. **format_rendering**: SVG 文本重叠 662-1763 对（1440px）/ 1763 对（390px）
+
+### 判断
+这些是**设计系统级**问题，不是单行 CSS 修复能解决的。需要：
+1. 每页添加结论摘要层（医学经理核心发现）
+2. ECharts 图表配置优化（label rotate/interval/legend position）
+3. 四科室令牌全面落地（绿/紫/褐补充使用场景）
+4. CSS 间距/字号全面审计
+5. C 渲染器添加 reduced-motion 和筛选-表格联动
+6. 320px 移动端布局优化
+
+### 下一步
+这是 kangzhe v5.2.6 设计合同的完整设计域对齐工作，需要专项 CSS/JS/模板修复轮次。
+建议将视觉验证域拒绝作为设计 backlog 逐项修复，每修复一批重测一次。
