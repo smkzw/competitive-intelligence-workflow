@@ -97,6 +97,11 @@
     var u = String(unit || "").trim().toLowerCase().replace("％", "%");
     return u === "%" || u.indexOf("percent") !== -1 || u.indexOf("%") !== -1;
   }
+  // 独立视觉复核（copy_zh）：数值与单位直接拼接（"92.2Percentage of
+  // responders"）不可读；百分率单位显示 %，其余单位前加空格
+  function unitSuffix(unit) {
+    return isPercentUnit(unit) ? "%" : " " + String(unit || "").trim();
+  }
   function isEasi75(value) {
     var text = String(value || "").toLowerCase();
     return /easi\s*[- ]?\s*75/.test(text)
@@ -818,13 +823,13 @@
         var bar = el("div", "kz-a-bar" + (item.arm === "对照组" ? " kz-a-bar--control" : ""));
         bar.style.left = ((Math.min(0, item.value) - minimum) / span * 100) + "%";
         bar.style.width = (Math.abs(item.value) / span * 100) + "%";
-        bar.title = (item.arm_detail || item.arm) + " " + item.value + item.unit;
+        bar.title = (item.arm_detail || item.arm) + " " + item.value + unitSuffix(item.unit);
         track.appendChild(bar);
         lane.appendChild(track);
-        lane.appendChild(el("strong", "kz-a-observation-value", item.value + item.unit));
+        lane.appendChild(el("strong", "kz-a-observation-value", item.value + unitSuffix(item.unit)));
         bars.appendChild(lane);
       });
-      bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + "至" + maximum + first.unit));
+      bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(first.unit)));
       row.appendChild(bars); host.appendChild(row);
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");

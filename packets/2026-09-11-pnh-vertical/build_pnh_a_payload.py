@@ -455,7 +455,7 @@ def main() -> None:
         "regulatory": [{
             "product_id": next(iter(product_index)), "track": "中国",
             "event": "监管状态", "date": "2026-09-06",
-            "status": "未公开披露（监管路线待 P2 来源接入）",
+            "status": "未公开披露（监管路线来源接入待后续版本开放）",
         }],
         "companies": company_rows or [{
             "product_id": next(iter(product_index)), "relationship": "申办方",
@@ -464,7 +464,7 @@ def main() -> None:
         }],
         "patents": [{
             "product_id": next(iter(product_index)), "family": NA,
-            "display_family": "专利路线待 P2 来源接入", "jurisdiction": NA,
+            "display_family": "专利路线来源接入待后续版本开放", "jurisdiction": NA,
             "scope": NA, "expiry": NA, "exclusivity": NA,
         }],
         "history": [{

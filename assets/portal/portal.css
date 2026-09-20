@@ -7,6 +7,7 @@
 
 :root {
   --kz-orange: #FF9900;
+  --kz-orange-text: #8F5400;
   --kz-orange-mid: #F5A000;
   --kz-yellow: #FFCC00;
   --kz-gold: #E69500;
@@ -19,6 +20,10 @@
   --kz-dmst-soft: #DCE9C8;
   --kz-pv: #A85F34;
   --kz-pv-soft: #FCF5E6;
+  /* kangzhe 策划书令牌别名（visual palette_tokens 字面名） */
+  --kz-med-blue: #407AAA;
+  --kz-stats-green: #587B3B;
+  --kz-pv-brown: #A85F34;
   --bg: #F8F9FA;
   --surface: #FFFFFF;
   --bg-warm: #FCF5E6;
@@ -26,7 +31,7 @@
   --border-strong: #D1D5DB;
   --text-1: #0F1115;
   --text-2: #404040;
-  --text-3: #808080;
+  --text-3: #666666;
   --shadow-sm: 0 1px 2px rgba(15, 17, 21, 0.05);
   --shadow-1: 0 1px 2px rgba(15, 17, 21, 0.06),
               0 6px 18px rgba(15, 17, 21, 0.08);
@@ -545,7 +550,7 @@ input:focus-visible {
 
 .site-header__nav-item--active,
 .site-nav-group__trigger--current {
-  color: var(--kz-orange);
+  color: var(--kz-orange-text);
   font-weight: 700;
 }
 
@@ -1568,3 +1573,58 @@ input:focus-visible {
 .kz-a-product-grid { grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
 .kz-chart { max-width: 100%; min-width: 0; }
 .kz-a-panel :is(h1, h2, h3, td, th, .kz-filter-chip, a) { overflow-wrap: anywhere; }
+
+
+/* === 320px 移动端修复（独立复核）=== */
+@media (max-width: 480px) {
+  .site-header__title {
+    font-size: 18px !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+  .site-header__subtitle,
+  .portal-page-kicker {
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+  .kz-b-filter-quick__button,
+  .kz-b-filter-button {
+    font-size: 12px !important;
+    padding: 5px 8px !important;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .kz-b-filter-quick__label {
+    font-size: 13px;
+  }
+  .kz-a-filter-options {
+    max-height: 160px;
+  }
+  .portal-main {
+    padding: 12px 8px;
+  }
+  .kz-a-panel, .kz-a-summary {
+    padding: 12px;
+    margin: 0 0 16px;
+  }
+  table {
+    font-size: 13px;
+  }
+  th, td {
+    padding: 6px 4px;
+  }
+}
+
+
+/* ── 四科室令牌落地（kangzhe 设计合同）：DMST 生统绿＝基线/统计域，
+   PV 棕＝安全性域，医学蓝＝对照/比较数据；orange 保留为医学主色 ── */
+.kz-b-site--baseline-overview .kz-chart,
+.kz-b-site--baseline-overview .kz-a-panel,
+.kz-b-site--disposition-overview .kz-chart { border-top: 3px solid var(--kz-stats-green); }
+.kz-b-site--safety .kz-chart,
+.kz-b-site--safety .kz-a-panel { border-top: 3px solid var(--kz-pv); }
+.kz-b-site--safety .kz-chart-table th { color: var(--kz-pv-brown); }
+.kz-c-site .kz-chart { border-top: 3px solid var(--kz-med-blue); }
+.kz-c-site--design-map .kz-chart { border-top-color: var(--kz-stats-green); }

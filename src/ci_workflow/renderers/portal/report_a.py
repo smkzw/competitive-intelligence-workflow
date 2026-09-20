@@ -607,6 +607,21 @@ def _native_endpoint_zh(value: str) -> str:
         (r"euroquality of life|eq-5d", lambda _m: "欧洲五维健康量表（EQ-5D）"),
         (r"body surface area|\bbsa\b", lambda _m: "受累体表面积（BSA）"),
         (r"trough.*concentration|plasma concentration|serum concentration", lambda _m: "药物浓度"),
+        # 跨适应症通用生物医学终点（独立视觉复核：通用族标签不得顶替终点身份）
+        (r"\bldh\b|lactate dehydrogenase", lambda _m: "乳酸脱氢酶（LDH）"),
+        (r"hemoglobin|\bhgb\b", lambda _m: "血红蛋白"),
+        (r"platelet", lambda _m: "血小板"),
+        (r"absolute neutrophil|\banc\b", lambda _m: "中性粒细胞"),
+        (r"reticulocyte", lambda _m: "网织红细胞"),
+        (r"transfusion", lambda _m: "输血"),
+        (r"\bfatigue\b", lambda _m: "疲乏"),
+        (r"abdominal pain", lambda _m: "腹痛"),
+        (r"dyspnea|dyspnoea", lambda _m: "呼吸困难"),
+        (r"dysphagia", lambda _m: "吞咽困难"),
+        (r"chest pain", lambda _m: "胸痛"),
+        (r"erectile", lambda _m: "勃起功能"),
+        (r"calprotectin", lambda _m: "粪便钙卫蛋白"),
+        (r"mayo", lambda _m: "Mayo 评分"),
         (r"adverse event", lambda _m: "不良事件"),
     )
     if not measure:

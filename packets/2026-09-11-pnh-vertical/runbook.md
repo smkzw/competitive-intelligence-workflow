@@ -1235,3 +1235,24 @@ copy_zh 转为 accepted（上轮 rejected → 修复生效）；交互保持 acc
 （C 站点 assets/report-c.css/js + overview 首屏 + population 页）。
 视觉收敛格局（v42 轮）：A 差 1 域（copy_zh）、B 差 6 域（设计专修）、C 差 5 域
 （设计专修）。copy_zh 已全站通过——中文原生层面收口。
+
+## 设计专修批次（进行中，v44 前置）
+
+### 已完成
+1. **A copy_zh 根因修复**（截图实证）：监管页"监管路线待 P2 来源接入"——PNH 专属
+   A 构建器（build_pnh_a_payload.py 458/467 行）漏清洗，已同 tools 版一并清理。
+2. **A 疗效页数值单位拼接**："92.2Percentage of responders"→report-a.js 新增
+   unitSuffix()（百分率→%、其余加空格），柱标签/title/本组刻度三处应用。
+3. **A 通用终点标签**：report_a.py scale_patterns 补跨适应症生物医学模式
+   （LDH/血红蛋白/输血/疲乏等 14 项），"其他临床疗效指标"顶替终点身份消除。
+4. **四科室色令牌落地 portal.css**：策划书字面令牌别名（--kz-med-blue/
+   --kz-stats-green/--kz-pv-brown）+ 按页面 body 类应用科室强调
+   （baseline/disposition=生统绿、safety=PV 棕、C 设计域=医学蓝）。双副本已同步。
+
+### 待完成（v44 前置，下会话首批）
+1. B 总览页结论层：医学经理结论/核心发现置于导航下方，19 卡片收敛分组
+   （renderers 侧 B overview 模板）。
+2. 试验标题排版：trials/*.html 标题截断修复。
+3. 图表系列命名：数据系列标题的底层回退文案（"语义信息未完整，按试验列示"）
+   改为读者语言。
+4. 完成后一次进 v44（勿再中间版本）→ B r25 + C r8 + 三节点视觉 → accept-visual。
