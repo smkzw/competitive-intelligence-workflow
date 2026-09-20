@@ -1313,3 +1313,7 @@ verdict 无效作废。已修正三份提示词（abc-v42→abc-v47）并全部�
 1. 收三路视觉 verdict（v47 路径绑定版）→ 全 accepted 即 accept-visual。
 2. 若 copy_zh 类再拒：对照 v47 站点截图核实（v43+ 渲染已含全部令牌修复）。
 3. accept-visual 后：UC/IgAN 重测 → AD B/C → 横向 → 三宿主/安装包/RC。
+
+## 视觉 A 全域通过（v47 正确绑定）
+A（cursor/default）：**accepted，7/7 域**——copy_zh 残留经 v43+ 渲染修复后清零确认。
+B/C（gemini/deepseek）后台运行中，verdict 落盘后若全 accepted 即 accept-visual。
