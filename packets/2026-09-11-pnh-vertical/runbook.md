@@ -1488,3 +1488,12 @@ C 设计迭代下一会话按 refs 逐域修 → v53 → 视觉重测。
 _CLASS_TITLE_TOKENS 词汇表 + 时间归一（Day N→第N天等），转写失败（剩余裸英文
 ≥4 词）保留登记原文。v53 前置完成。C 四域（typography/charts/interaction/
 format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
+
+### r29 单项修复 + C 交互修复 + v53 = 当前候选（收束点）
+- B r29 单项（disclosure_state 筛选键）已进 v52→v53；C interaction 修复：
+  核心比较页快速筛选栏服务端不渲染（CSS 隐藏的不可交互元素根除，实测点击
+  超时根因）；C 矩阵热力图单元格标签限宽截断（typography/charts）。
+- v51 复核：A r14 ✓回执、C r12 ✓回执、B r29 veto 1 项已修。
+- **v53 = 当前候选**（gates 过、362 疗效行）。后台：B r31/A r16/C r14。
+- 视觉文档重算与三份 v53 提示词生成脚本：/tmp/gen_visual_prompts_v53.py
+  （digest 用 visual_contract_digest + 断言）。A/C 视觉重测 → accept-visual ×3。

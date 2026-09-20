@@ -1542,6 +1542,10 @@ def _render_page_context(
     filter_rows, dimensions = _filter_dimensions_for_rows(data, observations)
     filter_groups = _filter_groups(data, filter_rows)
     page_filter_groups = tuple(group for group in filter_groups if group["scope"] == "page")
+    # 独立视觉复核（interaction）：核心比较页 CSS 隐藏快速筛选栏（优先展示
+    # 比较图），服务端同步不渲染——隐藏的可交互元素会造成探测与键盘路径失败
+    if catalog_page_id in {"design-map", "endpoint-timepoint-matrix", "overview"} and trial is None:
+        page_filter_groups = ()
     module_filter_groups = tuple(group for group in filter_groups if group["scope"] == "module")
     paths = _candidate_design_paths(data) if catalog_page_id == "design-patterns" else ()
     table_rows = _table_rows(
