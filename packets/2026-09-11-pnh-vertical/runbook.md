@@ -1467,3 +1467,12 @@ verdict evidence_refs 逐域修）。
 B（gemini）：accepted 7/7 域（v52 绑定核验通过）。B = 科学复核回执（r30）+
 视觉验收 ✓ 完整闭合。A/C 视觉后台运行中，verdict 落盘后全 accepted 即
 resume + accept-visual ×3。
+
+### 视觉 A（v52）：仅剩 copy_zh 一项，根因已截图定位
+- 已确认修复生效：数值单位"92.2%"、"本组刻度：0 至 100%"。
+- 剩余：疗效卡片小标签把登记 class 原文（如 "hemoglobin between Day 126、
+  Day 168、absence of transfusions between Day 14、Day 168"）嵌在中文
+  population 行内，中英混排。修复方向：A 构建器 population 装配时对类标题
+  做确定性转写（复用 C 的 _registry_timeframe_zh 思路 + 术语表），或渲染层
+  类标签走 zh 概念映射、原文留证据抽屉。→ v53 → A 视觉重测。
+- C 视觉（v52，deepseek）仍在后台。
