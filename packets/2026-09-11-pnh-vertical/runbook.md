@@ -1732,3 +1732,17 @@ C 落盘后同法处理）→ resume → accept-visual ×3 → PNH 竖向收口�
   保留策略与 zh 标签并列呈现的方式需与复核者口径对齐（或对 endpoint 列
   增加 zh 概念列，原文留抽屉）——属呈现策略决策，非缺陷修复。
 - v60 计分：B ✓ 7/7（contract digest 绑定通过）、C 运行中、A 差 2 域。
+
+### 视觉 C（v60，deepseek）：rejected 4/7——收敛持续
+copy_zh/hierarchy/color ✓（累计三域修复生效）。剩余 4 域（refs 精确）：
+1. typography：设计矩阵 SVG 文本 25 对严格重叠（3 对跨格）——matrixLabel
+   多行折行与行高仍需联动精调。
+2. charts_tables：inclusion-criteria 图表聚合数（1/5/1/15/1/1）vs 表格行数
+   （10/5/2/21/7/2）不一致——聚合口径（图表数 data 行 vs 表数 criteria
+   明细行）需统一：图表应数表格同一行集。
+3. interaction：quick-filter 只作用于图、不隐藏表行——与 trial-profile 页
+   行为不一致，需统一（决定：quick-filter 也驱动表行显隐）。
+4. format：双引擎 SVG 换行点差异（Haemoglobinur|ia vs Haemoglobinuri|a）
+   ——外观级差异，水平溢出 0；建议 CSS word-break CJK 一致化或判定为
+   非缺陷（引擎渲染差异不属布局断裂）。
+修复 → v61 → C 视觉重测 → accept-visual ×3 → PNH 收口 → AD B/C → 横向。
