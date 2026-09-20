@@ -1187,7 +1187,7 @@
     content.appendChild(el("h3", "", "涉及试验"));
     var trialList = el("ul", "kz-a-evidence-list");
     trials.filter(function (trial) { return !productScope || trial.product_id === productScope; }).forEach(function (trial) {
-      trialList.appendChild(el("li", "", trial.name + "（" + trial.display_id + "）｜" + trial.phase + "｜总样本量：" + trial.sample_size + "｜治疗组样本量：" + trial.treatment_sample_size));
+      trialList.appendChild(el("li", "", trial.name + "（" + trial.display_id + "）｜" + trial.phase + "｜总样本量：" + textOr(trial.sample_size, "未公开") + "｜治疗组样本量：" + textOr(trial.treatment_sample_size, "未公开")));
     });
     content.appendChild(trialList);
     content.appendChild(el("h3", "", "资料来源"));

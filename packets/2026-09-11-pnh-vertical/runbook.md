@@ -1418,3 +1418,25 @@ copy_zh 转 accepted（时间本地化生效）、交互 accepted。剩余 hiera
 color/charts/format 五域——CSS 冒号修复与聚合图已生效但设计基线仍有差距
 （间距 4/8 基线、颜色语义、图表细节）。C 设计迭代下一会话继续（对照
 verdict evidence_refs 逐域修）。
+
+## r28 三项修复 + v51 = 当前候选（本轮收束点）
+
+### 已落码（706 绿）
+1. `_weeks`：纯 Baseline 判第 0 周；A 构建器 class="Baseline" 行 timepoint
+   取"Baseline"——**登记基线值 8.2 mmol/L 恢复**（no_timepoint 818，eff 362）。
+2. form 优先级重排：population 子类标记（change from baseline/absolute）先于
+   测量级题名——Coversin Hb 7.8 (absolute) 现为 absolute_value（包内验证）。
+3. band 键中文映射补全（longtermextensionperiod52weeks→长期扩展期（52周）、
+   longtermextensionlte/extensionperiod/treatment_period/study_period 等）。
+4. A 试验列表 null 拼接修复（textOr 防御，根因=135 个 treatment_sample_size
+   为 JS null——之前误判为字符串 'None'，实际载荷类型正确）。
+5. 上轮已含：LDH/ULN 比值别名、抽屉 scale 误标移除。
+
+### v51 状态与派发
+- submit ACCEPTED、143 页、A/B gates 过、states=rendered_unreviewed（待回执晋级）。
+- 后台运行中：B r29（deepseek）、A r14 + 视觉文档重算（gemini 链）、C r12（gemini）。
+- 下一会话：收三路复核 verdict → 视觉文档按 v51 重算后重写三份提示词
+  （**visual_contract_digest + 断言**，勿用文件 sha）→ 三节点视觉派发 →
+  全 accepted → resume → accept-visual ×3（三件套先拷入项目 state/visual/）。
+- 教训：builder 链顺序敏感——指针切换后必须验证产物落在目标工作区再进下一步
+  （本轮 v51 首次构建曾写入 v50 导致身份不一致，分步验证后解决）。

@@ -48,6 +48,10 @@ OBSERVATIONS = [
 
 def _weeks(time_frame: str) -> tuple[float | None, str]:
     text = (time_frame or "").lower()
+    # 独立复核第二十八轮：登记明示的纯 Baseline 值（如基线血红蛋白 8.2）
+    # 是真实观察，判为第 0 周，不得作 no_timepoint 丢弃
+    if re.fullmatch(r"baseline|\u57fa\u7ebf", text.strip()):
+        return 0.0, "week"
     # 治疗窗语义（through/until/completion）：数值非单点随访，拒绝单时间点标注
     if re.search(r"through|until|to study completion|throughout", text):
         return None, "week"
@@ -257,26 +261,26 @@ def main() -> None:
         # 独立复核修复（第九轮）：登记原文含变化语义时，统计形式一律为
         # change_from_baseline，族默认绝对值不得覆盖来源口径
         _text_cf = str(fact.get("endpoint_text") or "").casefold()
-        if re.search(r"change\s+from\s+baseline|change\s+in\s+|percent\s+change", _text_cf):
+        # 独立复核第二十八轮：登记子类标注（class 级）优先于测量级题名——
+        # 同一 measure 的 absolute/change 分档由 class 决定，题名不代表行口径
+        _pop_cf = str(fact.get("population") or "").casefold()
+        if "change from baseline" in _pop_cf:
+            meta["form"] = "change_from_baseline"
+        elif "absolute" in _pop_cf:
+            meta["form"] = "absolute_value"
+        elif re.search(r"change\s+from\s+baseline|change\s+in\s+|percent\s+change", _text_cf):
+            # 第九轮：登记原文含变化语义时以变化为准
             meta["form"] = "change_from_baseline"
         elif re.search(r"percentage\s+of\s+participants\s+with", _text_cf):
-            # 参与者比例是人群应答口径，不是较基线变化量（第九轮 veto）
             meta["form"] = "response_rate"
         elif re.search(r"number\s+of\s+participants\s+who", _text_cf):
-            # 人数计数口径（第十五轮 veto）：不是应答率
             meta["form"] = "absolute_value"
-        else:
-            # 独立复核第二十二轮 veto：登记子类标注或"Measurement of … at Day"
-            # 题名声明绝对值口径时，族默认的较基线变化必须回正为绝对值
-            _pop_cf = str(fact.get("population") or "").casefold()
-            if "change from baseline" in _pop_cf:
-                meta["form"] = "change_from_baseline"
-            elif "absolute" in _pop_cf or (
-                meta.get("form") == "change_from_baseline"
-                and "change" not in _text_cf
-                and re.search(r"measurement of|\bat day\b|\bat week\b|\bat baseline\b", _text_cf)
-            ):
-                meta["form"] = "absolute_value"
+        elif (
+            meta.get("form") == "change_from_baseline"
+            and "change" not in _text_cf
+            and re.search(r"measurement of|\bat day\b|\bat week\b|\bat baseline\b", _text_cf)
+        ):
+            meta["form"] = "absolute_value"
         efficacy_rows.append({
             "row_id": fact["row_id"],
             "source_row_id": fact["row_id"],

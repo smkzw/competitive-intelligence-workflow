@@ -337,6 +337,9 @@ def main() -> None:
                     )
                     if len(_cls_days) == 1:
                         row_time_frame = cls_title
+                    elif not _cls_days and "baseline" in cls_title.casefold():
+                        # 登记明示的基线类行（class="Baseline"）是真实观察
+                        row_time_frame = "Baseline"
                     base_population = (
                         f"登记结果人群（{cls_title}）" if cls_title
                         else "登记结果人群"
