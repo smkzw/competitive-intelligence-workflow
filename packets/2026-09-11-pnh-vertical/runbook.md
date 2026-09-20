@@ -1381,3 +1381,14 @@ stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以
 1. 收 B r28 + 三节点视觉 verdict → 全 accepted → resume → accept-visual ×3
   （三件套拷贝进项目 state/visual/；digest 用 visual_contract_digest）。
 2. 收 UC/IgAN findings → 会商 → AD B/C 竖向 → 横向 6 适应症 → 三宿主/安装包/RC。
+
+### B r28（v49）：veto 3 项——下一会话首批修复（位置明确）
+1. Coversin Hb 绝对浓度误标"较基线变化"：class "Day 28 (absolute)"=7.8 仍标
+   change。排查点：A 载荷 population 是否含 "(absolute)" 字样（类标题合并后
+   population 变体），builder 的 `_pop_cf` "absolute" 分支为何未命中。
+2. 登记基线值缺失：class "Baseline"=8.2 mmol/L 因 `_weeks("Baseline")=None`
+   被当 no_timepoint 丢弃。修复：`_weeks` 把纯 Baseline 判为第 0 周
+   （或基线行改走 baseline 域）——登记明示的基线值不得丢。
+3. 筛选 time_window_band 直出 "longtermextensionperiod52w"：补 band 键
+   中文映射（长期扩展期（52周）），同 r25 的 day_N 修法。
+修复后 → v50 → B r29 + 三节点视觉（v49→v50 digest 重算）→ accept-visual。
