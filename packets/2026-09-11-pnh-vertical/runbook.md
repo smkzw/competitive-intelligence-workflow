@@ -1462,3 +1462,8 @@ verdict evidence_refs 逐域修）。
   三节点视觉（A=cursor、B=gemini、C=deepseek）后台运行中。
 - verdict 落盘后：全 accepted → resume → accept-visual ×3（三件套拷入
   state/visual/，digest 用 visual_contract_digest）→ PNH 竖向完整收口。
+
+## 视觉 B 全域通过（v52 正确绑定）——B 报告完整签收链达成
+B（gemini）：accepted 7/7 域（v52 绑定核验通过）。B = 科学复核回执（r30）+
+视觉验收 ✓ 完整闭合。A/C 视觉后台运行中，verdict 落盘后全 accepted 即
+resume + accept-visual ×3。
