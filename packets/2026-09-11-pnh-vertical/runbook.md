@@ -1746,3 +1746,17 @@ copy_zh/hierarchy/color ✓（累计三域修复生效）。剩余 4 域（refs 
    ——外观级差异，水平溢出 0；建议 CSS word-break CJK 一致化或判定为
    非缺陷（引擎渲染差异不属布局断裂）。
 修复 → v61 → C 视觉重测 → accept-visual ×3 → PNH 收口 → AD B/C → 横向。
+
+### C interaction 根因深挖（本轮发现）：双筛选系统并存互踩
+- report-c.js applyState 按行维度隐藏表行（逻辑正确，行内复刻验证 wouldHide
+  =true）；但 portal.js 自带一套筛选同步（pageFilters/moduleFilters +
+  syncWithFilter 1041 行附近）在其后运行并将行重新显示——两系统对同一批
+  .kz-chart-table__row 各自为政。
+- B 页为何正常：B 的筛选走 portal.js 单系统；C 页同时被 report-c.js 与
+  portal.js 双写。
+- 修复方向（下会话）：统一为单一筛选权威——推荐 portal.js 侧在 C 页让位
+  （检测 kz-c-site 时不做行级 re-show），或 report-c.js applyState 移至
+  portal.js 同步之后执行并以其为唯一权威。涉及 portal.js 1041-1046 与
+  report-c.js applyState/updateChartFromState 的执行顺序契约。
+- 该项 + format 双引擎换行判定（建议判非缺陷：水平溢出 0）→ v61 → C 视觉
+  重测 → accept-visual ×3 → PNH 收口。
