@@ -1532,3 +1532,8 @@ format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
 - 下一会话：收三路 verdict → 生成 v54 视觉提示词（visual_contract_digest +
   断言，脚本 /tmp/gen_visual_prompts_v53.py 改 v54）→ 三节点视觉 →
   全 accepted → resume → accept-visual ×3 → PNH 竖向收口 → AD B/C → 横向。
+
+### v54 三节点视觉已派发（contract digest + 断言）
+A=cursor、B=gemini、C=deepseek，提示词 digest 用 visual_contract_digest 且
+断言校验通过（v54 路径 + 三 digest 逐字在文）。verdict 落盘后：全 accepted →
+resume → accept-visual ×3（三件套拷入 state/visual/）→ PNH 竖向收口。
