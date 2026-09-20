@@ -1,0 +1,336 @@
+{
+  "tester": "cursor/composer",
+  "indication": "UC",
+  "indication_zh": "溃疡性结肠炎",
+  "test_date": "2026-09-20",
+  "project": "runs/test-uc",
+  "test_prompt": "packets/2026-09-20-test-round-2/tester-v2-uc.md",
+  "overall": "partial",
+  "assumptions": [
+    "按 tester-v2-igan.md 同构五步立即执行，不创建 Trellis 任务、不跑 research submit 端到端。",
+    "以当前磁盘 packets/2026-09-20-test-round-2/uc-a-payload.json 为唯一 A 载荷真值（schema 1.0 / 12 产品 / 12 试验 / 163 疗效 / 26 安全）。",
+    "policies/endpoint-families/registry-v7.yaml 实际 version 7.3、41 条规则（含 10 条 UC 族 + generic 兜底）；提示词「25 条」视为过时。",
+    "classifier_coverage.matched = classify_registry_endpoint 首条命中属于 UC 族（mayo_response/mayo_score/clinical_remission/endoscopic_improvement/bleeding/steroid_free_remission/histologic_improvement/fecal_calprotectin/bowel_urgency/ibdq）的疗效行数。unmatched 含 generic_unclassified 与疗效表内 SAFETY_DOMAIN 拒判行。",
+    "10 条分类样本按消化科核心指标与已知失败模式选取 unique endpoint 全文，而非随机前 10 行。",
+    "A 门户：runs/test-uc/reports/A/v1 已有 html.manifest.json；本轮用 render_report_a_site 写入 runs/test-uc/evidence/html-independent（23 HTML），再 Playwright Chromium 双视口截图。",
+    "B 载荷只评估 build_pnh_b_audit.py 复用差距，并实跑未改 PNH 构建器记录失败；不强制产出可 submit 的 UC B 包。",
+    "浏览器验收以 Chromium × 2 视口（1280x720、1440x900）关键页全页截图为充分证据；未跑 WebKit。"
+  ],
+  "steps_completed": [
+    "step1 A 载荷质检：packets/2026-09-20-test-round-2/uc-a-payload.json（12 产品/12 试验/163 疗效/26 安全）",
+    "step2 分类器泛化：registry-v7.yaml v7.3 / 41 rules，对 163 疗效行 + 13 条 GI 重点样本跑 classify_registry_endpoint",
+    "step3 A 门户：load_report_a_data 通过；render_report_a_site → evidence/html-independent（23 HTML）；Playwright Chromium 2 视口 30 次打开 + 关键页全页截图",
+    "step4 未改 PNH B 构建器对 runs/test-uc 实跑 FileNotFoundError（exit 1）",
+    "step5 写入 runs/test-uc/findings.json"
+  ],
+  "steps_failed": [
+    {
+      "step": "matrix_chart",
+      "error": "疗效—安全性气泡图空态：「当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据」；canvas/svg=0"
+    },
+    {
+      "step": "b_payload_build",
+      "error": "packets/2026-09-20-test-round-1/builders/build_pnh_b_audit.py 读取 PNH CAS sha256 5e055f4c…，在 runs/test-uc/evidence/raw/sha256 下 FileNotFoundError；未产出 UC B 包"
+    }
+  ],
+  "run_facts": {
+    "payload_path": "packets/2026-09-20-test-round-2/uc-a-payload.json",
+    "alias_map": "packets/2026-09-20-test-round-2/uc-alias-map.json",
+    "derivation": "packets/2026-09-20-test-round-2/uc-a-payload.derivation.json",
+    "classifier_version": "registry-endpoint-family-7.3",
+    "policy_version": "7.3",
+    "rules_total": 41,
+    "products": 12,
+    "trials": 12,
+    "efficacy_rows": 163,
+    "safety_rows": 26,
+    "safety_by_category": {
+      "严重不良事件（登记）": 26
+    },
+    "unique_endpoint_texts": 54,
+    "endpoint_truncated_at_80_chars": 9,
+    "endpoint_truncated_unique": 1,
+    "endpoint_truncated_note": "9 行同一 MAdCAM 受体饱和终点恰好 len=80，语义完整，不像截断；72 行 >80，最长 161",
+    "endpoint_longer_than_80": 72,
+    "max_endpoint_len": 161,
+    "efficacy_rows_by_product": {
+      "vedolizumab": 62,
+      "adalimumab": 34,
+      "upadacitinib": 24,
+      "mirikizumab-sc": 21,
+      "abx464": 12,
+      "advanced-therapy-only-without-dietary-intervention": 10
+    },
+    "products_without_efficacy": [
+      "curcumin",
+      "mesalazine",
+      "mirikizumab-iv",
+      "mesalazine-enema",
+      "gsk3050002",
+      "ath-063"
+    ],
+    "trials_without_efficacy": [
+      "nct00889161",
+      "nct05538026",
+      "nct02862132",
+      "nct02368717",
+      "nct01984047",
+      "nct05807971"
+    ],
+    "products_without_trial": [
+      "mirikizumab-iv"
+    ],
+    "placebo_in_product_list": false,
+    "placebo_arm_efficacy_rows": 33,
+    "result_status": {
+      "已有部分公开结果": 6,
+      "暂无公开关键结果": 6
+    },
+    "gi_endpoint_keyword_hits_unique": {
+      "mayo": 13,
+      "clinical_remission": 9,
+      "endoscopic_or_mucosal": 10,
+      "bleeding_or_stool": 2,
+      "histologic": 3,
+      "calprotectin": 2,
+      "ibdq": 4,
+      "urgency": 2,
+      "steroid_free": 0
+    },
+    "missing_expected_uc_drugs": [
+      "infliximab",
+      "ustekinumab",
+      "etrasimod",
+      "golimumab",
+      "tofacitinib",
+      "ozanimod",
+      "filgotinib",
+      "risankizumab",
+      "guselkumab",
+      "etrolizumab"
+    ],
+    "html_pages_a": 23,
+    "site": "runs/test-uc/evidence/html-independent",
+    "screenshots_dir": "runs/test-uc/evidence/screenshots-independent",
+    "render_smoke": "runs/test-uc/evidence/render_smoke_independent.json",
+    "playwright": {
+      "engine": "chromium",
+      "viewports": ["1280x720", "1440x900"],
+      "opens": 30,
+      "page_errors": {},
+      "console_errors": {},
+      "has_uc_on_all_pages": true,
+      "has_pnh_leak_in_body": false,
+      "matrix_empty": true,
+      "visible_placeholder_endpoint_pages": [
+        "overview.html",
+        "efficacy.html",
+        "products/abx464.html",
+        "products/adalimumab.html",
+        "products/advanced-therapy-only-without-dietary-intervention.html"
+      ]
+    },
+    "efficacy_units_top": {
+      "Percentage of Participants / percentage of participants": 68,
+      "participants / Participants": 48,
+      "% ACT1 binding / percent MADCAM binding": 18
+    }
+  },
+  "classifier_coverage": {
+    "policy": "policies/endpoint-families/registry-v7.yaml",
+    "policy_version": "7.3",
+    "classifier_version": "registry-endpoint-family-7.3",
+    "rules_total": 41,
+    "matched": 81,
+    "unmatched": 82,
+    "matched_definition": "首条命中属于 UC 族 mayo_response/mayo_score/clinical_remission/endoscopic_improvement/bleeding/steroid_free_remission/histologic_improvement/fecal_calprotectin/bowel_urgency/ibdq",
+    "unmatched_definition": "generic_unclassified(66) + SAFETY_REJECT TEAE/AE(16)",
+    "uc_family_present": {
+      "endpoint-uc-mayo-response-v1": true,
+      "endpoint-uc-steroid-free-v1": true,
+      "endpoint-uc-histologic-v1": true,
+      "endpoint-uc-calprotectin-v1": true,
+      "endpoint-uc-urgency-v1": true,
+      "endpoint-uc-ibdq-v1": true,
+      "endpoint-uc-endoscopic-v1": true,
+      "endpoint-uc-remission-v1": true,
+      "endpoint-uc-mayo-v1": true,
+      "endpoint-uc-bleeding-v1": true
+    },
+    "rule_hit_counts": {
+      "mayo_response": 18,
+      "endoscopic_improvement": 19,
+      "clinical_remission": 9,
+      "histologic_improvement": 9,
+      "ibdq": 8,
+      "fecal_calprotectin": 6,
+      "mayo_score": 4,
+      "bleeding": 4,
+      "bowel_urgency": 4,
+      "generic_unclassified": 66,
+      "SAFETY_REJECT": 16,
+      "steroid_free_remission": 0
+    },
+    "sample_unmatched": [
+      "Proportion of Participants With Physician's Global Assessment Subscore Indicative of Mild Disease (a Score of 0 or 1) at Week 8",
+      "Percentage of Participants Who Reported No Abdominal Pain at Week 8",
+      "Change From Baseline in Functional Assessment of Chronic Illness Therapy-Fatigue (FACIT-F) Score at Week 8",
+      "Percentage of Participants in Clinical Response at Week 40 (Mirikizumab Induction Responders)",
+      "Percentage of Participants Hospitalized for Ulcerative Colitis (UC) (Mirikizumab Induction Responders)",
+      "Pharmacokinetics (PK): Clearance of Mirikizumab",
+      "Proportion of Subjects Who Achieve Clinical Response Per MMS at Week 8",
+      "Percentage of Patients Who Achieved Clinical Response",
+      "CRP Levels Measured in mg/dl",
+      "Number of Participants With Human Anti-human Antibodies (HAHA)",
+      "Serum Concentration of Vedolizumab Before Dosing",
+      "Saturation of Receptors by Vedolizumab Before Dosing Using the MAdCAM-1-Fc Assay"
+    ],
+    "sample_10_gi_focus": [
+      {
+        "endpoint": "Percentage of Participants Who Achieved Clinical Remission Per Adapted Mayo Score at Week 8",
+        "first_hit": "endpoint-uc-remission-v1 / clinical_remission",
+        "note": "弱正确：命中临床缓解，但未进 mayo_response——规则要求 remission/response 与 mayo 之间只能有 per/based on/by/(partial)，中间的 Adapted 打断匹配，落到更宽的 clinical remission|remission"
+      },
+      {
+        "endpoint": "Percentage of Participants Who Achieved Clinical Response Per Adapted Mayo Score at Week 8",
+        "first_hit": "endpoint-uc-mayo-v1 / mayo_score",
+        "note": "错桶：Adapted 打断 mayo_response 后，因无 remission 词，落到裸 mayo → mayo_score，而不是 mayo_response"
+      },
+      {
+        "endpoint": "Percentage of Participants With Endoscopic Improvement at Week 8",
+        "first_hit": "endpoint-uc-endoscopic-v1 / endoscopic_improvement",
+        "note": "正确：内镜改善族"
+      },
+      {
+        "endpoint": "Percentage of Participants With Endoscopic Remission at Week 8",
+        "first_hit": "endpoint-uc-endoscopic-v1 / endoscopic_improvement",
+        "note": "可接受：内镜缓解并入 endoscopic_improvement；显示层却收敛成「其他临床疗效指标应答率」"
+      },
+      {
+        "endpoint": "Percentage of Participants Who Achieved Mucosal Healing at Week 8",
+        "first_hit": "endpoint-uc-endoscopic-v1 / endoscopic_improvement",
+        "note": "正确：mucosal healing 在 endoscopic 规则中"
+      },
+      {
+        "endpoint": "Proportion of Participants With Rectal Bleeding Subscore Indicative of Mild Disease (a Score of 0 or 1) at Week 8",
+        "first_hit": "endpoint-uc-bleeding-v1 / bleeding",
+        "note": "正确：直肠出血"
+      },
+      {
+        "endpoint": "Proportion of Participants With Stool Frequency Subscore Indicative of Mild Disease (a Score of 0 or 1) at Week 8",
+        "first_hit": "endpoint-uc-bleeding-v1 / bleeding",
+        "note": "设计合并：便频与出血共用 bleeding 族；缺少独立 stool_frequency 族"
+      },
+      {
+        "endpoint": "Percentage of Participants Who Achieved Histologic Improvement at Week 8",
+        "first_hit": "endpoint-uc-histologic-v1 / histologic_improvement",
+        "note": "正确：组织学改善"
+      },
+      {
+        "endpoint": "Change From Baseline to Week 40 in Fecal Calprotectin (Mirikizumab Induction Responders)",
+        "first_hit": "endpoint-uc-calprotectin-v1 / fecal_calprotectin",
+        "note": "正确：粪便钙卫蛋白"
+      },
+      {
+        "endpoint": "Percentage of Participants in Clinical Remission at Week 40 (Mirikizumab Induction Responders)",
+        "first_hit": "endpoint-uc-remission-v1 / clinical_remission",
+        "note": "正确：无 Mayo 限定的临床缓解"
+      },
+      {
+        "endpoint": "Proportion of Subjects Who Achieve Clinical Response Per MMS at Week 8",
+        "first_hit": "endpoint-generic-unclassified-v1 / generic_unclassified",
+        "note": "缺口：MMS（Modified Mayo Score）缩写未识别；完整 Mayo 标题可命中"
+      },
+      {
+        "endpoint": "Percentage of Participants in Clinical Response at Week 40 (Mirikizumab Induction Responders)",
+        "first_hit": "endpoint-generic-unclassified-v1 / generic_unclassified",
+        "note": "缺口：裸 clinical response（无 mayo/remission）无规则；同批 Clinical Remission 能命中"
+      },
+      {
+        "endpoint": "Number of Participants With Adverse Events (AEs)",
+        "first_hit": "SAFETY_DOMAIN (classify returns None)",
+        "note": "安全域拒判正确，但该行仍坐在 A 疗效表（16 行 AE）"
+      }
+    ],
+    "latent_false_positive": {
+      "rule": "endpoint-uc-remission-v1",
+      "pattern": "clinical remission|remission",
+      "probe": "Sustained Remissions up to 1 Year After Discontinuing Therapy（IgAN 载荷）→ clinical_remission",
+      "triggered_in_current_payload": false,
+      "note": "裸 remission 无适应症门闩，可跨适应症误匹配；本 UC 载荷未出现肾脏 remission 串台"
+    }
+  },
+  "findings": [
+    {
+      "category": "payload_quality",
+      "severity": "medium",
+      "description": "A 载荷规模可用：12 产品 / 12 试验 / 163 疗效 / 26 安全。安慰剂未混入产品列表（Placebo/Matching Placebo 在 alias-map excluded_interventions）。消化科核心终点文本齐全：Mayo、clinical remission、endoscopic improvement/remission、mucosal healing、rectal bleeding、stool frequency、histologic、calprotectin、IBDQ、bowel urgency 均在疗效表。终点全文基本保留（最长 161；仅 1 个 unique 标题恰好 80 字符且语义完整）。适应症标签为溃疡性结肠炎，正文无 PNH 泄漏。",
+      "evidence": "uc-a-payload.json；gi_endpoint_keyword_hits_unique；placebo_in_product_list=false；playwright.has_pnh_leak_in_body=false"
+    },
+    {
+      "category": "payload_quality",
+      "severity": "high",
+      "description": "竞品覆盖严重偏页：page-1 自动 alias 产物缺 infliximab/ustekinumab/etrasimod/golimumab/tofacitinib/ozanimod 等 UC 标准生物/小分子；却收入 curcumin、GSK3050002、ATH-063、advanced therapy only without dietary intervention、mesalazine enema。疗效行仅 6/12 产品有数据（vedolizumab 62 行独占 38%）。mirikizumab-iv 有产品无 trials[]。儿科 IBD、FMT add-on 试验进入宇宙。全部产品 target/modality/mechanism 多为「未公开披露」。",
+      "evidence": "products[].name；efficacy Counter；trials nct00889161/nct05538026/nct02862132；alias-map map_id=uc-alias-auto"
+    },
+    {
+      "category": "payload_quality",
+      "severity": "medium",
+      "description": "PubMed scope 仍写「878 条记录 + 14 分类属性」，与 PNH/IgAN 载荷同款模板数字。监管/专利仍是「来源接入待后续版本开放」占位。16 行 AE 写入疗效表。安全表只有 SAE 组别汇总计数（例），无 TEAE/AESI/常见 AE 发生率分解，也无死亡汇总。",
+      "evidence": "sources[].scope；safety category/term Counter；endpoint AE ×16"
+    },
+    {
+      "category": "classifier",
+      "severity": "medium",
+      "description": "registry-v7 已有 10 条 UC 族且对全文终点部分工作：UC 族合计 81/163（49.7%）。提示词「25 条规则」过时，实际 41 条 / v7.3。Endoscopic improvement/remission、mucosal healing、rectal bleeding、histologic、calprotectin、IBDQ、urgency、多数 Mayo 相关标题能被命中。steroid_free 规则存在但本载荷无 steroid-free 终点文本（0 命中）。",
+      "evidence": "classify_registry_endpoint 行计数；registry-v7.yaml endpoint-uc-*-v1"
+    },
+    {
+      "category": "classifier",
+      "severity": "high",
+      "description": "UC 规则仍粗：①mayo_response 不容 Adapted/Modified Mayo 插入，导致 Clinical Remission Per Adapted Mayo → clinical_remission、Clinical Response Per Adapted Mayo → mayo_score；②MMS 缩写与裸 clinical response 落入 generic；③便频并入 bleeding；④Histologic-Endoscopic 被 histologic 先吃掉；⑤endpoint-uc-remission-v1 裸 remission 无适应症门闩（IgAN 探针可复现跨适应症误匹配）。PNH/AD/IgAN 规则排在 UC 之前，本载荷未触发跨适应症误匹配，但架构风险仍在。",
+      "evidence": "sample_10_gi_focus；registry 规则顺序 index 28–37；IgAN findings latent remission probe"
+    },
+    {
+      "category": "renderer",
+      "severity": "high",
+      "description": "A 门户可渲染：load_report_a_data 通过，render_report_a_site 产出 23 页，标题「溃疡性结肠炎竞品全景」，Chromium 30 次打开无 pageerror/console error，无 PNH 正文泄漏。但 _native_endpoint_zh 对 UC 仅有 mayo/calprotectin/abdominal pain/fatigue 等少数标签；endoscopic/bleeding/histologic/urgency/IBDQ 大量收敛为「其他临床疗效指标*」（report.js 中「其他临床疗效指标」98 次）。产品名保持小写登记码/方案名。矩阵气泡图永久空态（安全侧仅有 SAE 计数「例」，缺可配对的 TEAE/SAE 发生率与矩阵所需同时量化条件）。旧轮「unit==='%' 硬编码」对本轮 assets/report-a.js 不再成立（已有 isPercentUnit，识别 Percentage of Participants）。",
+      "evidence": "report_a.py _native_endpoint_zh scale_patterns；html-independent/assets/report-a.js isPercentUnit；matrix.html 文案；screenshots-independent/chromium-*-matrix.png、efficacy.png"
+    },
+    {
+      "category": "safety_coverage",
+      "severity": "medium",
+      "description": "26 条安全行 = 全部「严重不良事件组别汇总计数」（例），覆盖 adalimumab/upadacitinib/mirikizumab-sc/abx464/advanced-therapy/vedolizumab。安全页可打开但信息密度低。疗效页把 16 行 AE 显示为疗效观察。矩阵纵轴需要 TEAE/SAE 发生率，当前安全形态无法喂饱气泡图。",
+      "evidence": "safety Counter；matrix empty_text；efficacy AE rows"
+    },
+    {
+      "category": "b_builder",
+      "severity": "high",
+      "description": "未改的 PNH B 审计构建器不能在 UC 项目上运行。可直接复用的是骨架：_weeks、arm/control 识别、classify_registry_endpoint、FreshBResearchContent、digest、门户投影。必须适应症化的硬编码包括：pnh-a-payload.json 与 derivation、CAS sha256 路径、source_id ctgov-pnh-page-*、query.cond=paroxysmal nocturnal hemoglobinuria、target_population_zh=PNH 登记人群、indication=阵发性睡眠性血红蛋白尿症、severity_anchor_concepts=ldh/hemoglobin/pnh_clone_size、基线启发式、research_role_set_id、indication_rule_set_id、claim_id、reviewer_id、pnh-b-payload.json。对 runs/test-uc 实跑 FileNotFoundError（5e055f4c… PNH blob）。AD 同构移植可参考（severity → easi/iga）；UC 需换成 mayo/endoscopic/bleeding/histologic/calprotectin。",
+      "evidence": "build_pnh_b_audit.py lines 28,94-99,114,221,567-590,820-840；subprocess exit 1；runs/test-ad/builders/build_ad_b_audit.py"
+    }
+  ],
+  "generalization_gaps": [
+    "policies/endpoint-families/registry-v7.yaml：放宽 endpoint-uc-mayo-response-v1 以容纳 Adapted/Modified Mayo；为 MMS 与裸 clinical response 补规则；拆分 stool_frequency；给 remission 加适应症门闩或收紧裸 remission；避免 histologic 抢先吃掉 histologic-endoscopic 双标签",
+    "src/ci_workflow/renderers/portal/report_a.py _native_endpoint_zh：缺少 endoscopic/mucosal healing、rectal bleeding、stool frequency、histologic、bowel urgency、IBDQ、clinical remission 中文收敛；_PRODUCT_DISPLAY_NAMES_ZH 无 UC 产品（vedolizumab/upadacitinib/mirikizumab 等）",
+    "src/ci_workflow/renderers/portal 矩阵气泡图：依赖可同时量化的疗效应答率 + TEAE/SAE 发生率 + 样本量；当前 UC 安全表仅 SAE 计数「例」→ 永久空态",
+    "A 载荷构建/别名：page-1 自动 alias 需 UC 实体门闩与标准药清单（infliximab/ustekinumab/etrasimod 等）；方案名/膳食对照不应提升为产品；儿科 IBD/FMT 需适应症过滤；TEAE/AE 不得入疗效表；安全需发生率形态",
+    "payload.sources PubMed「878 条记录」跨适应症复制，需按 UC 重计",
+    "packets/2026-09-20-test-round-1/builders/build_pnh_b_audit.py：payload 文件名、CAS 路径、source_id、CT.gov query、target_population_zh、indication、severity_anchor_concepts（ldh/hemoglobin/pnh_clone_size → mayo/endoscopic/bleeding/histologic/calprotectin）、基线启发式、research_role_set_id、indication_rule_set_id、claim_id、reviewer_id、pnh-b-payload.json",
+    "runs/test-ad/builders/build_ad_b_audit.py 是可复用骨架，但基线启发式与 severity_anchor_concepts 必须换成消化科指标才能用于 UC"
+  ],
+  "positives": [
+    "UC 专用分类族已进入 registry-v7.3（10 条），对 Mayo/内镜/出血/组织学/钙卫蛋白/IBDQ/urgency 有真实命中",
+    "A 门户可不经 research submit 直接从载荷渲染，标题与正文适应症正确，无 PNH 文案污染",
+    "百分率单位识别已泛化（isPercentUnit），疗效页能把 Percentage of Participants 显示为 %",
+    "安慰剂排除与 placebo 臂分行基本正确"
+  ],
+  "verdict_reason": "门户骨架与部分 UC 分类规则可泛化，A 站点可渲染且无 PNH 泄漏；但存在阻断级缺陷：①竞品宇宙缺标准 UC 药物且混入方案/探索药；②分类器对 Adapted Mayo/MMS/裸 clinical response 分桶错误或落入 generic；③显示层大量内镜/出血/组织学终点变成「其他临床疗效指标」；④矩阵因安全形态不匹配永久空态；⑤B 构建仍需适应症专项移植。不建议以当前产物作为医学决策交付。",
+  "artifacts": {
+    "findings": "runs/test-uc/findings.json",
+    "payload": "packets/2026-09-20-test-round-2/uc-a-payload.json",
+    "site": "runs/test-uc/evidence/html-independent",
+    "screenshots": "runs/test-uc/evidence/screenshots-independent",
+    "render_smoke": "runs/test-uc/evidence/render_smoke_independent.json"
+  }
+}

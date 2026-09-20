@@ -1402,3 +1402,13 @@ stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以
 - B r28 三项（见上节）：absolute 误标排查、纯 Baseline→第0周、
   longtermextensionperiod52w band 键中文映射。
 - 全部修复后 → v50 → A r14/B r29/C r12 + 三节点视觉 → accept-visual ×3。
+
+### UC/IgAN 重派（第三轮）结果摘要
+- UC（cursor）：**PNH 泄漏清零 ✓、分类器 81/163（50→81，v7.3 UC 族生效）✓、
+  A 门户 23 页渲染正常 ✓**。遗留：标准药覆盖缺口（infliximab 等不在单页 CAS——
+  数据面）、Adapted Mayo/MMS 分桶、矩阵空态（数据充分性）、大量"其他临床疗效
+  指标"标签（report_a.py 需补 GI 终点模式：mayo response/endoscopic/bleeding/
+  urgency/IBDQ 已有族，显示模式需对齐）。
+- IgAN（grok 4.6）：overall partial（findings.json 已更新）。
+- 会商结论：两位测试者共同确认的泛化 blocker 已清；剩余为数据覆盖与
+  适应症特有终点的显示层映射——记入横向铺开的前置清单。

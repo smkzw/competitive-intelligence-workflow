@@ -1,0 +1,260 @@
+{
+  "tester": "grok-4.6/high",
+  "indication": "IgAN",
+  "indication_zh": "IgA肾病",
+  "test_date": "2026-09-20",
+  "project": "runs/test-igan",
+  "test_prompt": "packets/2026-09-20-test-round-2/tester-v2-igan.md",
+  "overall": "partial",
+  "assumptions": [
+    "按 tester-v2-igan.md 五步立即执行，不创建 Trellis 任务、不跑 research submit 端到端。",
+    "以当前磁盘上的 packets/2026-09-20-test-round-2/igan-a-payload.json 为唯一 A 载荷真值（schema 1.0 / 16 产品 / 14 试验 / 260 疗效 / 49 安全）。提示词写「26 安全行」按 SAE 类别计数理解，本报告用全表 49 行（26 SAE + 23 死亡）。",
+    "policies/endpoint-families/registry-v7.yaml 实际 version 7.3、41 条规则（含 endpoint-generic-unclassified-v1 兜底）；提示词「25 条」视为过时。",
+    "classifier_coverage.matched = 官方 classify_registry_endpoint 首条命中属于 IgAN 专用族 proteinuria/egfr/hematuria/kidney_function 的疗效行数。unmatched 含 generic_unclassified、跨适应症误匹配（PNH/UC）、以及疗效表内被安全域拒判的 TEAE 行。",
+    "10 条分类样本按肾脏学核心指标与已知失败模式选取 unique endpoint 全文，而非随机前 10 行（前 10 行几乎全是 LNP023 剂量组重复）。",
+    "A 门户：build_report_a_artifact 因 runs/test-igan/reports/A/v1 已有 html.manifest.json 拒绝覆盖；recover_committed 因输入/源码绑定不一致失败。本轮改用 render_report_a_site 写入 runs/test-igan/evidence/html-independent（27 HTML），再 Playwright Chromium 截图。",
+    "B 载荷只评估 build_pnh_b_audit.py 复用差距，并实跑未改 PNH 构建器记录失败；不强制产出可 submit 的 IgAN B 包。"
+  ],
+  "steps_completed": [
+    "step1 A 载荷质检：packets/2026-09-20-test-round-2/igan-a-payload.json",
+    "step2 分类器泛化：registry-v7.yaml v7.3 / 41 rules，对 260 疗效行 + 10 条肾脏学重点样本跑 classify_registry_endpoint",
+    "step3 A 门户：load_report_a_data 通过；render_report_a_site → evidence/html-independent（27 HTML）；Playwright Chromium 2 视口 22 次打开 + 关键页全页截图",
+    "step4 未改 PNH B 构建器对 runs/test-igan 实跑 FileNotFoundError（exit 1）",
+    "step5 写入 runs/test-igan/findings.json"
+  ],
+  "steps_failed": [
+    {
+      "step": "build_report_a_artifact",
+      "error": "版本目录已存在产物清单，拒绝覆盖完成绑定：html.manifest.json；recover_committed 报「已提交渲染缺少一致的输入/源码绑定」"
+    },
+    {
+      "step": "matrix_chart",
+      "error": "疗效与安全性矩阵气泡图空态（当前筛选条件下暂无矩阵点）"
+    },
+    {
+      "step": "b_payload_build",
+      "error": "packets/2026-09-20-test-round-1/builders/build_pnh_b_audit.py 读取 PNH CAS sha256 5e055f4c…，在 runs/test-igan/evidence/raw/sha256 下 FileNotFoundError；未产出 IgAN B 包"
+    }
+  ],
+  "run_facts": {
+    "payload_path": "packets/2026-09-20-test-round-2/igan-a-payload.json",
+    "alias_map": "packets/2026-09-20-test-round-2/igan-alias-map.json",
+    "derivation": "packets/2026-09-20-test-round-2/igan-a-payload.derivation.json",
+    "classifier_version": "registry-endpoint-family-7.3",
+    "policy_version": "7.3",
+    "rules_total": 41,
+    "products": 16,
+    "trials": 14,
+    "efficacy_rows": 260,
+    "safety_rows": 49,
+    "safety_by_category": {
+      "严重不良事件（登记）": 26,
+      "死亡病例（登记）": 23
+    },
+    "unique_endpoint_texts": 27,
+    "endpoint_truncated_at_80_chars": 0,
+    "endpoint_longer_than_80": 137,
+    "max_endpoint_len": 191,
+    "efficacy_rows_by_product": {
+      "lnp023": 199,
+      "atrasentan": 55,
+      "acthar-gel": 6
+    },
+    "products_without_efficacy": 13,
+    "trials_without_efficacy": 11,
+    "products_without_trial": [
+      "ras-inhibitor",
+      "sirolimus-study-drug-ace-inhibitor-statin"
+    ],
+    "placebo_in_product_list": false,
+    "placebo_arm_efficacy_rows": 42,
+    "result_status": {
+      "暂无公开关键结果": 13,
+      "已有部分公开结果": 3
+    },
+    "html_pages_a": 27,
+    "site": "runs/test-igan/evidence/html-independent",
+    "screenshots_dir": "runs/test-igan/evidence/screenshots-independent",
+    "render_smoke": "runs/test-igan/evidence/render_smoke_independent.json",
+    "playwright": {
+      "engine": "chromium",
+      "viewports": ["1280x720", "1440x900"],
+      "opens": 22,
+      "page_errors": {},
+      "has_igan_on_all_pages": true,
+      "has_pnh_leak_in_body": false,
+      "visible_placeholder_endpoint_pages": [
+        "overview.html",
+        "efficacy.html",
+        "products/lnp023.html",
+        "products/atrasentan.html"
+      ]
+    }
+  },
+  "classifier_coverage": {
+    "policy": "policies/endpoint-families/registry-v7.yaml",
+    "policy_version": "7.3",
+    "classifier_version": "registry-endpoint-family-7.3",
+    "rules_total": 41,
+    "matched": 119,
+    "unmatched": 141,
+    "matched_definition": "首条命中属于 IgAN 专用族 proteinuria/egfr/hematuria/kidney_function",
+    "unmatched_definition": "generic_unclassified(37) + PNH complement_inhibition 误匹配(57) + UC clinical_remission 误匹配(3) + 疗效表内 SAFETY_DOMAIN TEAE(44)",
+    "igan_family_present": {
+      "endpoint-igan-proteinuria-v1": true,
+      "endpoint-igan-egfr-v1": true,
+      "endpoint-igan-hematuria-v1": true,
+      "endpoint-igan-kidney-function-v1": true
+    },
+    "rule_hit_counts": {
+      "proteinuria": 37,
+      "hematuria": 57,
+      "kidney_function": 15,
+      "egfr": 10,
+      "complement_inhibition": 57,
+      "generic_unclassified": 37,
+      "clinical_remission": 3,
+      "SAFETY_REJECT": 44
+    },
+    "kidney_core_in_payload": {
+      "proteinuria_or_UPCR_unique": 9,
+      "eGFR_unique": 2,
+      "hematuria_unique": 2,
+      "serum_creatinine_unique": 1,
+      "UACR_unique": 2,
+      "urine_albumin_UA_unique": 1
+    },
+    "sample_unmatched": [
+      "Mixed Model of Repeated Measures (MMRM) of the Ratio to Baseline of 24 Hour Urine Albumin (UA) - Parts 1 and 2 to Day 90",
+      "Renal Clearance From Plasma at Steady State (CLr,ss) at Day 30",
+      "Plasma Pharmacokinetics (PK) of Area Under the Curve at Steady State (AUCtau,ss and AUClast,ss) at Day 30",
+      "Change From Baseline in Plasma Levels of Circulating Fragment of Factor B (Bb) and Soluble Terminal Complement Complex (sC5b-9) Biomarkers for Parts 1 and 2 to Day 90",
+      "Plasma Concentration of Atrasentan",
+      "Sustained Remissions up to 1 Year After Discontinuing Therapy",
+      "Number of Subjects With TEAE and TEAESI"
+    ],
+    "sample_10_kidney_focus": [
+      {
+        "endpoint": "MCP-Mod Estimates of the Ratio to Baseline of Urine Protein to Creatinine Ratio (UPCR) (g/Mol) - Parts 1 and 2 at Day 90",
+        "first_hit": "endpoint-igan-proteinuria-v1 / proteinuria",
+        "note": "正确：UPCR 命中蛋白尿族"
+      },
+      {
+        "endpoint": "Mixed Model of Repeated Measures (MMRM) of the Change From Baseline for Estimated Glomerular Filtration Rate (eGFR) - Parts 1 and 2 at Day 90",
+        "first_hit": "endpoint-igan-egfr-v1 / egfr",
+        "note": "正确：全文含 eGFR，不再被 80 字符截断"
+      },
+      {
+        "endpoint": "Mixed Model of Repeated Measures (MMRM) of the Change From Baseline for Serum Creatinine - Parts 1 and 2 at Day 90",
+        "first_hit": "endpoint-igan-kidney-function-v1 / kidney_function",
+        "note": "正确：血肌酐命中肾功能族"
+      },
+      {
+        "endpoint": "Shift Table From Baseline for Hematuria Levels - Parts 1 and 2 at Day 90",
+        "first_hit": "endpoint-igan-hematuria-v1 / hematuria",
+        "note": "正确：血尿族命中。英式拼写 haematuria 单独探测会落入 generic_unclassified"
+      },
+      {
+        "endpoint": "Mixed Model of Repeated Measures (MMRM) of the Ratio to Baseline in 24 Hour Urine Albumin to Creatinine (UACR) - Parts 1 and 2 to Day 90",
+        "first_hit": "endpoint-igan-kidney-function-v1 / kidney_function",
+        "note": "错误分桶：UACR 是白蛋白尿，因标题含 creatinine 被肾功能族先于（且 proteinuria 规则不含 albumin/UACR）吃掉"
+      },
+      {
+        "endpoint": "Mixed Model of Repeated Measures (MMRM) of the Ratio to Baseline of 24 Hour Urine Albumin (UA) - Parts 1 and 2 to Day 90",
+        "first_hit": "endpoint-generic-unclassified-v1 / generic_unclassified",
+        "note": "缺口：无 albuminuria/UACR/urine albumin 族"
+      },
+      {
+        "endpoint": "Change From Baseline in Plasma Levels of Circulating Fragment of Factor B (Bb) and Soluble Terminal Complement Complex (sC5b-9) Biomarkers for Parts 1 and 2 to Day 90",
+        "first_hit": "endpoint-pnh-complement-inhibition-v1 / complement_inhibition",
+        "note": "跨适应症误匹配：PNH 规则 complement|… 排在 IgAN 规则之前；IgAN 补体通路药效学无本适应症族（50 行）"
+      },
+      {
+        "endpoint": "Plasma Concentration of Atrasentan",
+        "first_hit": "endpoint-pnh-complement-inhibition-v1 / complement_inhibition",
+        "note": "跨适应症误匹配：PNH 规则含 plasma concentration（7 行 PK 被标成补体抑制）"
+      },
+      {
+        "endpoint": "Sustained Remissions up to 1 Year After Discontinuing Therapy",
+        "first_hit": "endpoint-uc-remission-v1 / clinical_remission",
+        "note": "跨适应症误匹配：UC 规则裸 remission（3 行）。同试验的 proteinuria-to-remission 标题因先含 proteinuria 而正确入蛋白尿族"
+      },
+      {
+        "endpoint": "Number of Subjects With TEAE and TEAESI",
+        "first_hit": "SAFETY_DOMAIN (classify returns None)",
+        "note": "安全域拒判正确，但该行仍坐在 A 疗效表（44 行）"
+      }
+    ],
+    "latent_false_positive": {
+      "rule": "endpoint-ad-iga-v1",
+      "pattern": "\\biga\\b|investigator.*global.*assessment",
+      "probe": "IgA nephropathy proteinuria reduction → iga（皮炎 IGA），不是 proteinuria",
+      "triggered_in_current_payload": false
+    }
+  },
+  "findings": [
+    {
+      "category": "payload_quality",
+      "severity": "medium",
+      "description": "A 载荷规模可用：16 产品 / 14 试验 / 260 疗效 / 49 安全。安慰剂未混入产品列表（Placebo 仅作为疗效臂，alias-map excluded_interventions 含 Placebo/Matching Placebo）。终点全文不再 80 字符截断（0 行 len==80，137 行 >80，最长 191），肾脏核心指标齐全：蛋白尿/UPCR、eGFR、血尿、血肌酐均在疗效表中。",
+      "evidence": "igan-a-payload.json products[].name；efficacy unique 27；placebo_in_product_list=false；len(endpoint)==80 → 0"
+    },
+    {
+      "category": "payload_quality",
+      "severity": "high",
+      "description": "结果覆盖极偏：仅 3/16 产品、3/14 试验有疗效行（lnp023 199、atrasentan 55、acthar-gel 6）。已上市 IgAN 药物 Nefecon/Tarpeyo/budesonide 零疗效零安全。13 个产品 result_status=暂无公开关键结果。产品列表把 SoC/联合方案提升为独立产品（ras inhibitor、ace inhibitor + statin、sirolimus+ACE+statin），且 budesonide / nefecon / tarpeyo / hr19042-tarpeyo-budenofalk 未归并。ras-inhibitor 与 sirolimus-study-drug-ace-inhibitor-statin 无对应 trials[]。全部产品 target/modality/mechanism/route 为「未公开披露」。",
+      "evidence": "efficacy product_id Counter；products without trials；alias-map 原样提升登记干预"
+    },
+    {
+      "category": "payload_quality",
+      "severity": "high",
+      "description": "试验宇宙被 IgA 关键词污染：lipitor NCT01305317 是血液透析患者 IgG/IgA/IgM 水平，不是 IgAN；acthar-gel NCT01129284 是耐药肾病综合征；aro-c3 NCT05083364 含健康志愿者与补体介导肾病；hr19042 NCT06922305 是健康受试者相对生物利用度。",
+      "evidence": "trials[].name：nct01305317 / nct01129284 / nct05083364 / nct06922305"
+    },
+    {
+      "category": "payload_quality",
+      "severity": "medium",
+      "description": "来源/历史字段适应症标签已改为 IgA肾病，不再出现 PNH 字样。但 PubMed scope 计数「878 条记录 + 14 分类属性」与 PNH、UC 载荷逐字相同，属模板数字串台。监管/专利仍是「来源接入待后续版本开放」占位。44 行 TEAE/TEAESI 被写入疗效表。安全表只有 SAE 汇总与死亡汇总，无 TEAE/AESI/常见 AE 分解。",
+      "evidence": "payload.sources 与 packets/.../pnh-a-payload.json、uc-a-payload.json 的 878；safety category Counter；endpoint TEAE ×44"
+    },
+    {
+      "category": "classifier",
+      "severity": "medium",
+      "description": "registry-v7 已有 IgAN 四族且对全文终点基本工作：proteinuria 37、hematuria 57、kidney_function 15、egfr 10，合计 119/260（45.8%）。提示词「25 条规则」过时，实际 41 条 / v7.3。血尿、蛋白尿、eGFR、血肌酐在当前载荷上能被正确命中——上一轮「截断导致 eGFR 0 命中」对当前文件不再成立。",
+      "evidence": "classify_registry_endpoint 行计数；registry-v7.yaml endpoint-igan-*-v1"
+    },
+    {
+      "category": "classifier",
+      "severity": "high",
+      "description": "跨适应症误匹配仍在：PNH complement_inhibition（complement|plasma concentration，且排在 IgAN 规则之前）把 Factor B/sC5b-9（50 行）和 Atrasentan 血药浓度（7 行）标成补体抑制；UC clinical_remission 的裸 remission 把「Sustained Remissions…」（3 行）标成临床缓解。UACR 因 creatinine 落入 kidney_function 而非白蛋白尿。urine albumin / albuminuria / UACR / haematuria 无专用或别名规则。潜伏坑：endpoint-ad-iga-v1 的 \\biga\\b 会把「IgA nephropathy …」标成皮炎 IGA（本载荷终点文本未触发，探针可复现）。",
+      "evidence": "registry-v7.yaml 规则顺序；探针 'IgA nephropathy proteinuria reduction' → endpoint-ad-iga-v1"
+    },
+    {
+      "category": "renderer",
+      "severity": "high",
+      "description": "A 门户可渲染：load_report_a_data 通过，render_report_a_site 产出 27 页，标题为「IgA肾病竞品全景」，Chromium 22 次打开无 pageerror，无 PNH 正文泄漏。但 _native_endpoint_zh / _display_efficacy_rows 只有 AD/EASI/IGA/PK 规则，把 260 行肾脏终点收敛成 6 个占位标签（222 行「其他临床疗效指标疗效评价」）。显示层丢掉原文：report.js 中 eGFR/Hematuria/proteinuria 计数为 0。产品名保持小写登记码（lnp023，非 iptacopan）。矩阵气泡图空态。",
+      "evidence": "src/ci_workflow/renderers/portal/report_a.py _native_endpoint_zh 与 _display_efficacy_rows；screenshots-independent/chromium-1280x720-efficacy.png、matrix.png、overview.png"
+    },
+    {
+      "category": "safety_coverage",
+      "severity": "medium",
+      "description": "49 条安全行 = 26 SAE 组别汇总 + 23 死亡组别汇总，仅覆盖 lnp023/atrasentan/acthar-gel。安全页可打开，信息密度低（多组 0/n）。疗效页把 44 行 TEAE 显示为「其他临床疗效指标疗效评价」。",
+      "evidence": "safety category/term Counter；chromium-1280x720-safety.png；efficacy 页 TEAE 行"
+    },
+    {
+      "category": "b_builder",
+      "severity": "high",
+      "description": "未改的 PNH B 审计构建器不能在 IgAN 项目上运行。可直接复用的是骨架：_weeks、arm/control 识别、classify_registry_endpoint、FreshBResearchContent、digest、门户投影。必须适应症化的硬编码包括：pnh-a-payload.json 与 derivation、CAS sha256 路径、source_id ctgov-pnh-page-*、query.cond=paroxysmal nocturnal hemoglobinuria、target_population_zh=PNH 登记人群、indication=阵发性睡眠性血红蛋白尿症、severity_anchor_concepts=ldh/hemoglobin/pnh_clone_size、基线启发式（clone/ldh/free hemoglobin）、research_role_set_id、indication_rule_set_id、claim_id、reviewer_id、pnh-b-payload.json。对 runs/test-igan 实跑 FileNotFoundError（5e055f4c… PNH blob）。AD 已有同构移植（severity → easi/iga），IgAN 需要把锚点换成 proteinuria/egfr/hematuria。",
+      "evidence": "packets/2026-09-20-test-round-1/builders/build_pnh_b_audit.py lines 28,94-99,114,221,568-590,820-840；subprocess exit 1；runs/test-ad/builders/build_ad_b_audit.py severity_concepts"
+    }
+  ],
+  "generalization_gaps": [
+    "policies/endpoint-families/registry-v7.yaml：PNH/AD/UC 规则排在 IgAN 之前且无适应症门闩；应收紧 endpoint-pnh-complement-inhibition-v1 的 plasma concentration/complement、endpoint-uc-remission-v1 的裸 remission、endpoint-ad-iga-v1 的 \\biga\\b；补 albuminuria/UACR/urine albumin 与 haematuria 别名；避免 UACR 因 creatinine 落入 kidney_function",
+    "src/ci_workflow/renderers/portal/report_a.py _native_endpoint_zh 与 _display_efficacy_rows：缺少 proteinuria/UPCR/eGFR/hematuria/serum creatinine/UACR 中文收敛，显示层覆盖原文；_PRODUCT_DISPLAY_NAMES_ZH 无 IgAN 产品（lnp023/iptacopan、nefecon/tarpeyo）",
+    "src/ci_workflow/renderers/portal/report_a.py 矩阵气泡图：筛选后永久空态",
+    "A 载荷构建/别名：联合方案与 SoC（RAS inhibitor、ACE inhibitor + statin）及 IgA 关键词假阳性（lipitor 血透、健康受试者 BA）需要适应症实体门闩；Nefecon 家族应归并；TEAE 不得入疗效表",
+    "payload.sources PubMed「878 条记录」跨 PNH/UC/IgAN 复制，需按适应症重计",
+    "packets/2026-09-20-test-round-1/builders/build_pnh_b_audit.py：payload 文件名、CAS 路径、source_id、CT.gov query、target_population_zh、indication、severity_anchor_concepts（ldh/hemoglobin/pnh_clone_size → proteinuria/egfr/hematuria）、基线启发式、research_role_set_id、indication_rule_set_id、claim_id、reviewer_id、pnh-b-payload.json",
+    "runs/test-ad/builders/build_ad_b_audit.py 是可复用骨架，但基线启发式与 severity_anchor_concepts 必须换成肾脏指标才能用于 IgAN"
+  ]
+}
