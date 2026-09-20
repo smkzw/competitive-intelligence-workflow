@@ -4,12 +4,12 @@
 
 ## 工作目录（必须在此目录内操作）
 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow`（仓库根）。
-被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v35/reports/B/v1/html`
+被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v37/reports/B/v1/html`
 
 ## 材料（均相对项目根）
 1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-b.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
 2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-b.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
-3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v35/reports/B/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
+3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v37/reports/B/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
 4. 截图可自行用浏览器或读图复核；至少亲自检查 3 个页面（可结合读 HTML）
 
 ## 审阅域（七域，逐域独立判断）
@@ -22,11 +22,11 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 ```json
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc35-b",
+  "verdict_id": "verdict-omp-gemini38-vis-abc37-b",
   "format": "html",
-  "visual_plan_digest": "e9da12dd6ad19325721aeef8e642f36e2888ef006d81ddae437f9dd3a961ffc8",
-  "candidate_artifact_digest": "07acda6e945ee35bec3e328eeff64fbe752265180835f45883cb7380adaaecb7",
-  "render_evidence_digest": "1b8a4c7909eeca8e9bec26004f437876cbef8e0d092049544443db4986519d88",
+  "visual_plan_digest": "f7b969b05e48443dadd46c12f86200e467b28100703fd75e7712a5c9362e58ba",
+  "candidate_artifact_digest": "630b5095f885557493b206b7ed454517decb09c8ad8e281cc3e5e9178f2735d1",
+  "render_evidence_digest": "62522b2070515607111bf6c6c958af54366a2c53fd3cc7a618fb7ed25f99bb34",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-google-antigravity-gemini38flash-high",
   "verdict": "accepted 或 rejected",

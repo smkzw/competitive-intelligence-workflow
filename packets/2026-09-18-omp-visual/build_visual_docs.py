@@ -289,11 +289,18 @@ async def _probe_page(page, site: Path, rel: str, engine: str, width: int,
         if (r.right > vw + 2 && cs.overflowX === 'visible' && !cs.position) clipped++;
         const fs = parseFloat(cs.fontSize);
         if (fs < 10 && el.textContent.trim()) unreadable++;
-        if (el.textContent.trim().length >= 2) rects.push(r);
+        // 仅统计元素自身直接文本（textContent 会继承子元素文本，父容器
+        // 与子文本矩形必然相交，属结构性伪重叠）
+        let own = '';
+        for (const node of el.childNodes) {
+          if (node.nodeType === 3) own += node.textContent;
+        }
+        if (own.trim().length >= 2) rects.push({r, el});
       }
       for (let i = 0; i < rects.length; i++)
         for (let j = i + 1; j < rects.length; j++) {
-          const a = rects[i], b = rects[j];
+          if (rects[i].el.contains(rects[j].el) || rects[j].el.contains(rects[i].el)) continue;
+          const a = rects[i].r, b = rects[j].r;
           const ix = Math.min(a.right, b.right) - Math.max(a.left, b.left);
           const iy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
           if (ix > 4 && iy > 4) overlap++;

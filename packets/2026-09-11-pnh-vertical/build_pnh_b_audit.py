@@ -330,7 +330,7 @@ def main() -> None:
             "raw_value": str(fact["value"]),
             "normalized_value": str(fact["value"]),
             "disclosure_state": "reported_value",
-            "source_id": _trial_source(fact.get("trial_id") or row.get("trial_id") or trial["id"]),
+            "source_id": _trial_source(fact["trial_id"]),
             "locator": {
                 "document_role": "registry-search-page",
                 "field_path": "studies[]",
@@ -395,7 +395,7 @@ def main() -> None:
             "raw_value": str(row["value"]),
             "normalized_value": str(row["value"]),
             "disclosure_state": "reported_zero" if value == 0 else "reported_value",
-            "source_id": _trial_source(fact.get("trial_id") or row.get("trial_id") or trial["id"]),
+            "source_id": _trial_source(row["trial_id"]),
             "locator": {
                 "document_role": "registry-search-page",
                 "field_path": "studies[]",
@@ -613,7 +613,7 @@ def main() -> None:
                         is_age_bin = False
                         definition = f"{title}（{cat_title}）" if (
                             (concept == "age" or is_sex) and cat_title) else title
-                        row_unit = unit
+                        row_unit = _display_unit(unit) or unit
                         if is_sex or is_age_bin:
                             row_unit = "人"
                         elif concept == "pnh_clone_size":
@@ -693,7 +693,7 @@ def main() -> None:
             "raw_value": str(r.raw_value or r.value),
             "normalized_value": str(r.value),
             "disclosure_state": "reported_value",
-            "source_id": _trial_source(fact.get("trial_id") or row.get("trial_id") or trial["id"]),
+            "source_id": _trial_source(r.trial_id),
             "locator": {
                 "document_role": "registry-search-page",
                 "field_path": "studies[]",
@@ -850,7 +850,7 @@ def main() -> None:
             "raw_value": trial["display_id"],
             "normalized_value": trial["display_id"],
             "disclosure_state": "reported_value",
-            "source_id": _trial_source(fact.get("trial_id") or row.get("trial_id") or trial["id"]),
+            "source_id": _trial_source(trial["id"]),
             "locator": {
                 "document_role": "registry-search-page",
                 "field_path": f"studies[]/{trial['display_id']}",
@@ -910,8 +910,23 @@ def main() -> None:
         for _old, _zh in _HISTORY_REWRITES:
             _new = _new.replace(_old, _zh)
         if any(_t in _new for _t in _HISTORY_TOKENS):
-            _new = "历史派生决策已完整记录于派生文件；本页仅呈现面向读者的结论。"
+            _new = "该产品公开进展信息有限，以临床试验登记来源为准。"
         _h["observation"] = _new
+    # 独立复核第二十轮 veto：监管/专利行的状态文案同样不得直出内部流程令牌（P2 等）
+    for _item in (b_portal.get("regulatory") or []) + (b_portal.get("patents") or []):
+        if not isinstance(_item, dict):
+            continue
+        for _field in ("status", "display_family", "note", "notes", "limitation"):
+            _val = _item.get(_field)
+            if not isinstance(_val, str) or not _val:
+                continue
+            _new = _val.replace("监管路线待 P2 来源接入", "监管路线来源接入待后续版本开放")
+            _new = _new.replace("专利路线待 P2 来源接入", "专利路线来源接入待后续版本开放")
+            if "P2" in _new:
+                _new = _new.replace("（P2 来源接入待后续版本开放）", "").replace(
+                    "P2 来源接入", "来源接入"
+                )
+            _item[_field] = _new
     # 独立复核修复：门户来源区只保留本运行证据库真实绑定的来源
     # （静态载荷的 sources 为 {source, scope, maturity, limitation} 形态）
     b_portal["sources"] = [
@@ -1041,30 +1056,92 @@ def _family_meta_for(family: str) -> dict:
 FAMILY_META = {}  # 延迟从政策加载
 
 
+# 登记单位词表 → 中文规范呈现（独立复核第二十轮 veto：单位列必须与登记口径逐条闭合）
 _UNIT_ALIAS = {
+    # 人群/计数
+    "participants": "人", "participant": "人", "events": "例", "instances": "次",
     "rbc transfusion instances": "次", "transfusion instances": "次",
-    "rbc units": "单位", "transfused blood units": "单位",
-    "instances": "次", "participants": "人",
-    "percentage of participants": "percent",
+    "rbc units": "单位", "transfused blood units": "单位", "units": "单位",
+    "years": "岁", "months": "月",
+    # 百分比口径
+    "percentage of participants": "%", "percent": "%", "percentage": "%",
+    "percent change": "%", "percentage reduction": "%",
+    "percentage of activity": "%", "percentage of subjects": "%",
+    "percentage of pnh rbc": "%", "percentage of pnh red blood cells": "%",
+    "percentage of type iii erythrocytes": "%",
+    "percent lysis of sheep erythrocytes": "%",
+    "percent of lln for all ch50 values": "%",
+    "percentage of the total cell population": "%",
+    "%change in hb value compare to screening": "%",
+    # 质量/体积浓度
+    "grams per litre (g/l)": "g/L", "grams/liter (g)/liter (l)": "g/L",
+    "grams (g)/liter (l)": "g/L", "grams/liter": "g/L", "gram (g)/l": "g/L",
+    "g/l": "g/L",
+    "grams per deciliter (g/dl)": "g/dL", "g/dl": "g/dL",
+    "milligrams per decilitre (mg/dl)": "mg/dL", "mg/deciliter (dl)": "mg/dL",
+    "mg/dl": "mg/dL",
+    "milligrams per liter (mg/l)": "mg/L", "milligram per litre (mg)/l": "mg/L",
+    "milligram/liter (mg/l)": "mg/L", "mg/l": "mg/L",
+    "micrograms per litre (ug/l)": "μg/L", "ug/l": "μg/L",
+    "micrograms per milliliter (ug/ml)": "μg/mL", "ug/ml": "μg/mL",
+    "µg/ml": "μg/mL", "μg/ml": "μg/mL",
+    "nanograms per milliliter (ng/ml)": "ng/mL", "ng/ml": "ng/mL",
+    "micromole per litre (umol/l)": "μmol/L", "micromol/l": "μmol/L",
+    "umol/l": "μmol/L", "µmol/l": "μmol/L",
+    "micromoles/l": "μmol/L", "micromoles (μmol)/liter": "μmol/L",
+    "micromoles (µmol)/liter": "μmol/L",
+    "units/l": "U/L", "units/liter": "U/L", "units per litre": "U/L",
+    "10^3 cells/microliter (μl)": "×10^3/μL", "10^3 cells/microliter (µl)": "×10^3/μL",
+    "facit-f scale (change from baseline)": "分",
+    "facit-f scale": "分",
+    "units (u)/liter (l)": "U/L", "units per liter (u/l)": "U/L",
+    "units per litre (u/l)": "U/L", "u/l": "U/L",
+    "h*ng/ml": "h·ng/mL",
+    "mg fibrinogen-equivalent unit (feu)/l": "mg FEU/L",
+    # 细胞计数
+    "10^9 cells/l": "×10^9/L", "10^9 cells/liter (l)": "×10^9/L", "10*9/l": "×10^9/L",
+    "10^12 cells/l": "×10^12/L", "10^12 cells/l (si units)": "×10^12/L",
+    "10^12 reticulocytes (cells)/l": "×10^12/L",
+    "10^6 cells per microliter (μl)": "×10^6/μL", "10^6 cells per microliter (µl)": "×10^6/μL",
+    # 标尺分值
+    "score on a scale": "分", "scores on a scale": "分",
+    "score on a scale (change from baseline)": "分",
+    "scores on a scale (change from baseline)": "分",
+    "units on a scale": "分",
+    # 时间
+    "seconds": "秒", "second": "秒", "hr": "小时", "hours": "小时", "hour": "小时",
 }
 
 
+def _display_unit(raw_unit: str) -> str:
+    """登记单位 → 展示单位：词表归一；未收录时忠实保留登记原文，绝不用占位符。"""
+    raw = (raw_unit or "").strip()
+    if not raw:
+        return ""
+    return _UNIT_ALIAS.get(raw.casefold(), raw)
+
+
 def _normalize_unit(raw_unit: str, allowed: list[str]) -> str:
-    text = _UNIT_ALIAS.get((raw_unit or "").strip().casefold(),
-                           (raw_unit or "").strip().casefold())
+    text = _display_unit(raw_unit)
+    if not text:
+        return allowed[0] if allowed else "值"
     # 精确匹配优先：mg/dL 不得折算为 g/dL（千倍误述，独立复核 veto 修复）
     for candidate in allowed:
-        if candidate.casefold() == text:
+        if candidate == text:
             return candidate
     # 百分比口径优先：如 "percentage of participants" 不得匹配为 Participants
-    if "percent" in text or "%" in text:
+    if "percent" in text.casefold() or "%" in text:
         for candidate in allowed:
-            if "percent" in candidate.casefold() or candidate == "%":
+            if candidate == "%":
+                return candidate
+        for candidate in allowed:
+            if "percent" in candidate.casefold():
                 return candidate
     for candidate in allowed:
-        if candidate.casefold() in text or text in candidate.casefold():
+        if candidate.casefold() in text.casefold() or text.casefold() in candidate.casefold():
             return candidate
-    return allowed[0]
+    # 独立复核第二十轮 veto：登记单位优先于族占位——单位列必须忠实呈现登记口径
+    return text
 
 
 def sys_exit() -> int:

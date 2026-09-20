@@ -1043,3 +1043,46 @@ mtplx 连续 4 次崩溃（exit 1）→ 换 gemini 或 deepseek 重试
 - **科学复核**: A ✓ B（gemini 通过待签）/ C（gemini accepted 待重派）
 - **视觉验证**: 设计系统对齐是当前核心阻塞——需 CSS 专项修复批次
 - **下一步优先级**: 设计系统 CSS 修复 > 视觉重测 > accept-visual > AD B/C > 横向
+
+## 第二十轮 B 复核与 abc-v36/v37（会话暂停点 2026-09-20 傍晚）
+
+### 本轮代码修复（全部已落码、706 项测试绿）
+1. **单位口径闭合（第二十轮 veto 核心）**：`policies/endpoint-families/registry-v7.yaml`（v7.1）
+   新增输血例次独立族 endpoint-pnh-transfusion-instances-v2（units 次）；输血回避/通用族
+   units 改 ['%','人','次','单位']。`build_pnh_b_audit.py` `_UNIT_ALIAS` 扩到 60+ 登记单位
+   词表；`_normalize_unit` 兜底从"族占位 allowed[0]"改为"忠实保留登记原文"，'值' 占位符
+   从 222 行 → 0；基线 'years' 12 行 → '岁'；输血例次 MEAN 行 'Participants' → '次'。
+2. **事实层页面绑定（veto 指控属实）**：builder 四处 source_id 用了陈旧循环变量
+   `fact.get(...) or row.get(...) or trial["id"]`（行级绑定正确但 fact 层错绑 page-2）。
+   分别改为各自的循环变量（333/398/696/853 行）。deepseek 指控经全量核查属实。
+3. **中文原生四项泄漏**：渲染器基线概念别名补 'ldh'/'hemoglobin' 裸键；筛选静态映射补
+   baseline_pnh_clone_size 等 6 个令牌；`_label_for` 基线分支 snake_case 概念键映射中文；
+   图表标题统计口径/单位去重（占位口径不与具体口径并列、单位真子串去重）。builder 监管/
+   专利行 P2 令牌清洗 + 历史兜底文案改读者语言。
+4. **3 个既有失败测试清零**：d6cb6d5 已把 b_treatment_control_identity /
+   b_effect_difference_support 定为 extension 级，测试断言 BLOCKED → EXTENSION_MISSING
+   （意图保留：缺失必须失败，只是不硬阻断）。
+5. **视觉量测探针修正**：旧探针把所有含文本元素两两算交集，父子矩形必然相交，指标
+   结构性虚高（v37 B 页最高 56839，任何页面都不可能过）。改为仅统计自身直接文本节点、
+   跳过祖先-后代对。这是视觉收敛长期无进展的一个根因。
+
+### abc-v36 / abc-v37 状态
+- abc-v36：单位修复前提交 + 渲染（143 页，gates 过），保留作审计轨迹；不可重交。
+- abc-v37：单位修复后全链完成（submit ACCEPTED → 143 页 → A/B gates 过）。
+  - C 复核第 3 轮（gemini）：**accepted, issues 0，回执已签发** ✓
+  - B 复核第 20 轮（deepseek）：verdict=veto（2 项：页面绑定指控属实、中文原生 4 项泄漏），
+    回执因 fragment 绑定校验失败未签发——两项均已在代码修复，待 abc-v38 承载重审。
+  - 视觉第六轮：B（gemini）rejected（charts_tables/format_rendering，引用旧探针虚高指标）；
+    C（deepseek）rejected（typography/charts/format，自建 Playwright 170 次加载实测）；
+    A（mtplx）连接失败（连续第 3 轮，节点不可达）。verdict JSON 未签发，作废。
+
+### 下一会话首项（从 abc-v38 开始）
+1. 建议把 /tmp/pnh-proj-path.txt 指到 abc-v38 → create → 三 builder → submit A,B,C → run。
+   （提示词已在 v37 state/scientific_review/{B,C}/reviewer-prompt.md，verdict_id 改 abc38。）
+2. 视觉文档用修正后探针重算 → 新 digest → 三份 verifier-prompt 重写（mtplx 换
+   cursor/default 或 gemini）→ 三节点重测。
+3. B 复核 21 轮（deepseek，页面绑定+中文泄漏已修）→ accept-visual → AD B/C 竖向。
+4. test-round-2 v2（IgAN/grok-build + UC/cursor）已派出，v2 提示词含防卡死执行纪律；
+   结果查 runs/test-igan、runs/test-uc 的 findings.json。
+5. 遗留：test_report_b_real 契约失败为 Task 10.2 密封证据 vs 当前 HEAD 的漂移失败
+  （设计上 fail-closed），非产品回归，不改密封证据。

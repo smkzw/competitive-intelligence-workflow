@@ -17,7 +17,14 @@ def test_classifier_maps_real_registry_sentences_to_families() -> None:
     ) == "endpoint-pnh-hemoglobin-v1"
     assert classify_registry_endpoint(
         "Part 1: Number of Participants Who Were Transfusion-free"
-    ) == "endpoint-pnh-transfusion-avoidance-v1"
+    ) == "endpoint-pnh-transfusion-avoidance-v2"
+    # 输血例次 MEAN 行必须落入独立例次族（第二十轮 veto：不得标 Participants）
+    assert classify_registry_endpoint(
+        "Number of Transfusion Instances During 12 Weeks of Treatment"
+    ) == "endpoint-pnh-transfusion-instances-v2"
+    assert classify_registry_endpoint(
+        "Number of RBC Transfusion Instances"
+    ) == "endpoint-pnh-transfusion-instances-v2"
     assert classify_registry_endpoint(
         "Percentage of Participants With Breakthrough Hemolysis (BTH)"
     ) == "endpoint-pnh-breakthrough-hemolysis-v1"

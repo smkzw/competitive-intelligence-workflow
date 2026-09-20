@@ -1019,7 +1019,10 @@ def test_b_treatment_control_scope_is_explicit() -> None:
         r for r in result.unit_results if r.unit_id == "b_treatment_control_identity"
     ]
     assert len(tc_results) >= 1
-    assert all(r.outcome is GateUnitOutcome.BLOCKED for r in tc_results)
+    # B-v1 政策将该单元定为 extension 级（d6cb6d5 泛化决策）：缺失
+    # treatment/control 绑定不硬阻断，但必须失败（extension_missing），
+    # 不得静默满足。
+    assert all(r.outcome is GateUnitOutcome.EXTENSION_MISSING for r in tc_results)
 
 
 def test_b_single_arm_does_not_fabricate_control() -> None:
@@ -1691,7 +1694,8 @@ def test_b_multitrial_requires_per_trial_comparator_or_single_arm_proof() -> Non
     ]
     eff_by_object = {r.object_id: r for r in eff_support}
     assert set(eff_by_object) == {"comparison-1", "trial-2"}
-    assert eff_by_object["comparison-1"].outcome is GateUnitOutcome.BLOCKED
+    # extension 级单元（B-v1 泛化决策）：缺失证据必须失败但不硬阻断
+    assert eff_by_object["comparison-1"].outcome is GateUnitOutcome.EXTENSION_MISSING
     assert eff_by_object["trial-2"].outcome is GateUnitOutcome.NOT_APPLICABLE
 
     # 单臂试验终点按自身明确关联组评估，不借用比较试验的组别
@@ -1846,7 +1850,8 @@ def test_b_effect_support_requires_explicit_comparison_endpoint_association_when
     ]
     assert len(eff_omitted) == 1
     assert eff_omitted[0].object_id == "comparison-1"
-    assert eff_omitted[0].outcome is GateUnitOutcome.BLOCKED
+    # extension 级单元（B-v1 泛化决策）：终点省略必须失败但不硬阻断
+    assert eff_omitted[0].outcome is GateUnitOutcome.EXTENSION_MISSING
     assert eff_omitted[0].satisfied_count == 0
 
     # 显式终点且存在 comparison→endpoint 关联边 → 满足

@@ -1,6 +1,6 @@
 schema_version: '1.0'
 policy_id: registry-endpoint-family
-version: '7.0'
+version: '7.1'
 description: 适应症无关的登记终点族分类规则（per-indication 配置块）
 safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|serious
   adverse|number of participants with adverse
@@ -94,7 +94,16 @@ rules:
     form: absolute_value
     units:
     - 单位
-- rule_id: endpoint-pnh-transfusion-avoidance-v1
+- rule_id: endpoint-pnh-transfusion-instances-v2
+  match_pattern: number of (rbc )?transfusion instances
+  family_meta:
+    canonical_id: transfusion_instances
+    label_zh: 输血例次
+    direction: lower_is_better
+    form: absolute_value
+    units:
+    - 次
+- rule_id: endpoint-pnh-transfusion-avoidance-v2
   match_pattern: transfusion avoidance|transfusion[- ]free
   family_meta:
     canonical_id: transfusion_avoidance
@@ -102,10 +111,9 @@ rules:
     direction: higher_is_better
     form: response_rate
     units:
-    - Participants
-    - percent
     - '%'
-- rule_id: endpoint-pnh-transfusion-v1
+    - 人
+- rule_id: endpoint-pnh-transfusion-v2
   match_pattern: transfusion|prbc|packed red blood
   family_meta:
     canonical_id: transfusion
@@ -113,9 +121,10 @@ rules:
     direction: higher_is_better
     form: response_rate
     units:
-    - Participants
-    - percent
     - '%'
+    - 人
+    - 次
+    - 单位
 - rule_id: endpoint-pnh-breakthrough-hemolysis-v1
   match_pattern: breakthrough|hemolysis
   family_meta:

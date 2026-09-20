@@ -437,6 +437,8 @@ _CLINICAL_CONCEPT_GROUPS: dict[str, dict[str, tuple[str, ...]]] = {
         "baseline_hemoglobin": (
             "baseline hemoglobin",
             "hemoglobin at baseline",
+            "hemoglobin",
+            "hgb",
             "baseline_hgb",
             "baseline_hgb_actual",
             "血红蛋白",
@@ -459,6 +461,8 @@ _CLINICAL_CONCEPT_GROUPS: dict[str, dict[str, tuple[str, ...]]] = {
         "baseline_ldh": (
             "baseline ldh",
             "baseline lactate dehydrogenase",
+            "ldh",
+            "lactate dehydrogenase",
             "乳酸脱氢酶",
             "基线乳酸脱氢酶",
         ),
@@ -1549,7 +1553,12 @@ def _label_for(value: Any, domain: str) -> str:
             "variable_domain",
             default=None,
         )
-        return _native_text(candidate, "基线变量")
+        text = _native_text(candidate, "基线变量")
+        # 独立复核第二十轮 veto：内部概念键（pnh_clone_size 等）不得直出为
+        # 图表类别标签；snake_case 令牌映射为中文概念名
+        if re.fullmatch(r"[a-z0-9_]+", text):
+            text = _BASELINE_CONCEPT_TOKEN_ZH.get(text, text)
+        return text
     if domain == "disposition":
         candidate = _first(
             value,
@@ -3215,6 +3224,13 @@ def _groups_for_page(
                     for row, _source in bucket
                 )
             )
+            # 独立复核第二十轮 veto：同图多统计口径时不再把"未注明"占位与
+            # 具体口径并列入标题；单位同理做包含去重，登记原串与规范串不重复展示
+            if len(statistic_labels) > 1:
+                statistic_labels = tuple(
+                    label for label in statistic_labels
+                    if label not in ("报告未注明统计口径", "其他统计形式")
+                ) or ("报告未注明统计口径",)
             title = _group_title(
                 first,
                 domain="baseline",
@@ -3226,6 +3242,16 @@ def _groups_for_page(
             unit_labels = tuple(
                 dict.fromkeys(_text(row.get("unit"), "单位未列示") for row, _source in bucket)
             )
+            if len(unit_labels) > 1:
+                folded = [u.casefold() for u in unit_labels]
+                # 保留更短（更规范）的写法：若另一单位是本单位的真子串，本单位为冗长原串
+                unit_labels = tuple(
+                    u for i, u in enumerate(unit_labels)
+                    if not any(
+                        folded[i] != folded[j] and folded[j] in folded[i]
+                        for j in range(len(unit_labels))
+                    )
+                )
             if len(unit_labels) > 1:
                 title += " · 单位：" + "/".join(unit_labels)
             group = _group(
@@ -3339,6 +3365,20 @@ def _filter_dimensions(
 
 _FILTER_WEEK_BAND_RE = re.compile(r"^week_([0-9]+(?:\.[0-9]+)?)$")
 _FILTER_COHORT_RE = re.compile(r"^cohort\s*(\d+)$")
+# 独立复核第二十轮 veto：基线概念内部键 → 中文概念名（图表类别/筛选直出兜底）
+_BASELINE_CONCEPT_TOKEN_ZH = {
+    "pnh_clone_size": "PNH 克隆大小",
+    "free_hemoglobin": "游离血红蛋白",
+    "free_hemoglobin_pct": "游离血红蛋白变化（%）",
+    "hemoglobin": "血红蛋白",
+    "ldh": "乳酸脱氢酶",
+    "ldh_uln_ratio": "LDH/ULN 比值",
+    "sample_size": "样本量",
+    "age": "年龄",
+    "sex": "性别",
+    "easi": "EASI",
+    "baseline_easi": "基线EASI",
+}
 _FILTER_STATIC_LABELS = {
     "treatment": "治疗组",
     "control": "对照组",
@@ -3353,6 +3393,12 @@ _FILTER_STATIC_LABELS = {
     "participant_flow": "受试者流转",
     "baseline_sample_size": "基线样本量",
     "sample_size": "样本量",
+    "baseline_pnh_clone_size": "PNH 克隆大小",
+    "baseline_free_hemoglobin": "游离血红蛋白",
+    "baseline_hemoglobin": "基线血红蛋白",
+    "baseline_ldh": "基线乳酸脱氢酶",
+    "baseline_easi": "基线EASI",
+    "baseline_age": "基线年龄",
     "pnh_clone_size": "PNH 克隆大小",
     "free_hemoglobin": "游离血红蛋白",
     "free_hemoglobin_pct": "游离血红蛋白变化（%）",
