@@ -1689,3 +1689,8 @@ A 科学回执重派运行中（r21 accepted 因时间窗失败后重取时间�
 B（gemini）：accepted 7/7。v58 计分：视觉 A ✓ 7/7、视觉 B ✓ 7/7、
 C（deepseek）运行中；科学复核 A r21（重派中）/B r36+回执 ✓/C r19+回执 ✓。
 C verdict 落盘且 accepted 后：resume → accept-visual ×3 → PNH 竖向收口。
+
+## A r21b accepted + 回执签发（重派取得新时间戳）
+v58 科学复核：A ✓（r21b 回执）、B ✓（r36 回执）、C ✓（r19 回执）——三报告
+回执齐备。视觉：A ✓ 7/7、B ✓ 7/7（均正确绑定），C 运行中。
+C verdict 落盘且 accepted 后：resume → accept-visual ×3 → PNH 竖向收口。
