@@ -1340,3 +1340,27 @@ stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以
   站点核实（B/A 均已 accepted，C 的 assets/report-c.css/js 待同批设计修）。
 - 下一会话：C 设计专修批次（同 B 批次打法）→ 视觉重测 → C accept-visual →
   PNH 竖向完整收口 → UC/IgAN 重测 → AD B/C → 横向 → 三宿主/安装包/RC。
+
+## C 设计批次完成 + v48（本轮第四收束点）
+
+### C 设计专修已落码（690 绿）
+1. report-c.css **48 条缺冒号声明修复**（排版崩坏根因）。
+2. C 科室强调改指真实类（kz-chart-module 按页面语义 蓝/绿/棕）+ 页头科室语义
+   meta（"比较视角：试验设计（医学）｜统计口径｜安全性设计"）。
+3. criteriaCountOption 按试验聚合公开条目数（修空墙 + 图表/表格不一致——
+   文本行不再伪造成 0 值柱）。
+4. 表格时间本地化（_registry_timeframe_zh 应用到行 time 字段；补多队列/
+   三访视模式）——"Day 0 and Day 28"→"第0天与第28天"。
+5. C 总览结论层（kz-b-conclusions 模板复用，3 条数据级结论）。
+   v48 渲染验证：结论层 2 处、科室 meta 1 处、本地化时间可见。
+
+### v48 = 当前候选；三报告复核已派发并回收
+- A r12：accepted + 回执 ✓；C r10：accepted + 回执 ✓。
+- B r27：veto 2 项（收敛持续）：①单位列中英混用（'Ratio of LDH:ULN (250 U/L)'
+  与规范串并列）——加别名 'ratio of ldh:uln (250 u/l)'→'LDH/ULN 比值'；
+  ②evidence-drawer.js GENERAL_FIELDS 把 scale 字段标"量表"渲染 unitOfMeasure
+  原文——抽屉需过滤/改标。
+- 视觉文档已重算（v48 digest），下一会话按 digest 重写三份提示词并派发
+  （注意 digest 断言校验，勿用文件 sha——用 visual_contract_digest）。
+- UC/IgAN 载荷已用修复后构建器重建（截断 0/9、PNH 污染无），测试待重派
+  （dispatch-v2.sh 改用 v48 后重建载荷路径不变）。

@@ -1626,7 +1626,11 @@ input:focus-visible {
 .kz-b-site--safety .kz-chart,
 .kz-b-site--safety .kz-a-panel { border-top: 3px solid var(--kz-pv); }
 .kz-b-site--safety .kz-chart-table th { color: var(--kz-pv-brown); }
-.kz-c-site .kz-chart { border-top: 3px solid var(--kz-med-blue); }
+.kz-c-site .kz-chart-module { border-top: 3px solid var(--kz-med-blue); }
+.kz-c-site--population-disease-definition .kz-chart-module,
+.kz-c-site--inclusion-criteria .kz-chart-module { border-top-color: var(--kz-stats-green); }
+.kz-c-site--endpoint-timepoint-matrix .kz-chart-module,
+.kz-c-site--design-patterns .kz-chart-module { border-top-color: var(--kz-pv); }
 .kz-c-site--design-map .kz-chart { border-top-color: var(--kz-stats-green); }
 
 /* ── B 总览结论层（设计专修：首屏先给结论再铺卡片）── */

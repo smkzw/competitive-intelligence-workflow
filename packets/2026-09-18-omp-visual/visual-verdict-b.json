@@ -1,98 +1,108 @@
 {
-  "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc42-b2",
-  "format": "html",
-  "visual_plan_digest": "f5420fa6d321cce2b79ab2ad6fae7d4531819b4440650e553dcf62ee40f185e6",
-  "candidate_artifact_digest": "088dd0059412d68247c237c492d599d623d178a11c3bcc654d797f0eb08583d0",
-  "render_evidence_digest": "12989f79a3c410bef727ee459d06962aa471f7872790ea0977f5192e15395628",
-  "producer_identity": "zcode-main-thread-glm53",
-  "verifier_identity": "omp-google-antigravity-gemini38flash-high",
-  "verdict": "rejected",
-  "domains": [
-    {
-      "domain": "copy_zh",
-      "status": "rejected",
-      "criteria": [
-        "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
-        "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
-      ],
-      "evidence_refs": [
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/efficacy-safety-matrix.html 与 product-trial-profiles.html: 筛选面板按钮（kz-filter-pill）直接向用户暴露未分词英文内部拼接变量，如「eculizumabinadultparticipantswithparoxysmalnocturnalhemoglobinuriapnhinchina的相关记录」、「danicopanasaddontherapytoac5inhibitorinparoxysmalnocturnalhemoglobinuriapnhparticipantswhohaveclinica的相关记录」等",
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/overview.html 与 trials/nct04469465.html: 筛选面板中时间维度按钮直接暴露未翻译英文期名「Primary Treatment Period (12 Weeks)」、「Long-Term Extension Period (52 Weeks)」、「Treatment Period 1 (TP1)」、「Treatment Period 2 (TP2)」、「Long-Term Extension (LTE)」等；图表卡片标题直接暴露系统回退状态文案「语义信息未完整，按试验列示」及「未分类登记观察」"
-      ]
-    },
-    {
-      "domain": "hierarchy_density",
-      "status": "rejected",
-      "criteria": [
-        "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
-        "同一数据在图、表、抽屉三投影中保持同源一致"
-      ],
-      "evidence_refs": [
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/overview.html: 总览页首屏完全缺失医学经理结论层、核心发现与执行摘要，导航下方直接罗列 19 个重复的「观察指标」筛选组，紧接着平铺图表容器 #kz-chart-module，未优先呈现结论性信息",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 视觉实测确认页面由筛选区直接进入平铺图表卡片，且卡片标题带有系统诊断文案「语义信息未完整，按试验列示」，未实现高层结论与逐项细节的有效分层"
-      ]
-    },
-    {
-      "domain": "typography_spacing",
-      "status": "rejected",
-      "criteria": [
-        "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
-        "长药品名/试验名换行不截断关键标识"
-      ],
-      "evidence_refs": [
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/trials/nct04469465.html 与 trials/nct02605993.html: 试验标题在英文词中被生硬截断破坏关键标识，如 NCT04469465 截断为「...Who Have Clinica」（缺失 -lly Evident Extravascular Hemolysis），NCT02605993 截断为「...Paroxysmal Nocturnal Hemoglobin」（缺失 -uria）",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png 与 320__trials__nct04469465.html.png: 320px 移动视口下顶部副标题「阵发性睡眠性血红蛋白尿症临床试验...」在右边缘发生文字截断（clipped text）；试验详情页标题使用桌面字号导致折行达 7 行以上，纵向严重挤压正文"
-      ]
-    },
-    {
-      "domain": "color_legibility",
-      "status": "rejected",
-      "criteria": [
-        "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
-        "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
-      ],
-      "evidence_refs": [
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/ 全部 26 个 HTML 页面与 assets/portal.css: 策划书声明的四科室令牌（橙/蓝/绿/紫）在报告 B 中蓝/绿/紫三色使用量为 0，全站图表与界面仅使用单一橙黄色调（--kz-orange: #FF9900），无法满足四科室跨页面语义一致性",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png 与 1440__efficacy.html.png: 图表数据柱及关键指示条均使用同色系深浅橙色，缺乏多组别分类区分度，无法通过四科室语义颜色支持多维度快速识别"
-      ]
-    },
-    {
-      "domain": "charts_tables",
-      "status": "rejected",
-      "criteria": [
-        "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
-        "图表与对应表格数值一致（同源投影）"
-      ],
-      "evidence_refs": [
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/overview.html 与 efficacy.html: ECharts 图表数据系列标题系统性暴露底层回退诊断字符串「语义信息未完整，按试验列示」；X 轴量纲使用抽象宽泛的「产品｜试验」而缺失设计维度的具体单位与尺度标注",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png 与 1440__efficacy.html.png: Y 轴量纲单位文本在左侧边缘发生截断（「Ratio of LDH:ULN (250 U/L)」截断为「of LDH:ULN (250 U/L)」），图表坐标量纲标注不完整"
-      ]
-    },
-    {
-      "domain": "interaction_consistency",
-      "status": "accepted",
-      "criteria": [
-        "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
-        "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
-      ],
-      "evidence_refs": [
-        "packets/2026-09-18-omp-visual/render-evidence-b.json: 全部 30 个渲染目标（Chromium 与 WebKit 各 15 个）在 page_load、filter_change、drill_down、search、keyboard、reduced_motion 六类交互探测中全部通过（passed=true），无交互失败项",
-        "runs/pnh-vertical/abc-v42/reports/B/v1/html/overview.html 与 assets/portal.js: 实测纯键盘导航支持 Tab 键顺序聚焦 logo、导航菜单、搜索输入框、筛选面板及各按钮；Enter 键可展开筛选面板、折叠明细及打开数据依据抽屉；抽屉支持 Esc/点击关闭；assets/portal.css 配置 prefers-reduced-motion 在减弱动效模式下禁用所有动画与平滑滚动，全站行为一致"
-      ]
-    },
-    {
-      "domain": "format_rendering",
-      "status": "rejected",
-      "criteria": [
-        "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
-        "四类视口下导航、表格与图表保持可用"
-      ],
-      "evidence_refs": [
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png 与 webkit/320__overview.html.png: 320px 移动视口下顶栏副标题「阵发性睡眠性血红蛋白尿症临床试验...」在右边缘溢出截断；「快速筛选产品」容器与下方筛选条件框边框相撞重叠；下方两张关键结果卡片在 320px 下被强制双列挤压，造成卡片内部文本纵向截切与排版断裂",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__trials__nct04469465.html.png 与 768__overview.html.png: 移动端与平板端在多处出现文字溢出截断（如 Y 轴「of LDH:ULN (250 U/L)」左侧切断、试验标题英文单词截断），未能满足四类视口下导航、表格与图表完全可用的判据"
-      ]
-    }
-  ],
-  "created_at": "2026-09-20T12:15:30.123456+00:00"
+ "schema_version": "1.0",
+ "verdict_id": "verdict-omp-gemini38-vis-abc47-b2",
+ "format": "html",
+ "visual_plan_digest": "e40e156ffd24f12a10a81fa075c91cec45b612f7339c37be95be9e35db8d3e0f",
+ "candidate_artifact_digest": "7c62224c0c44d8c5d5c017f913d03a4ddd59e5a4e568fe2ee18d5a30aa82fbdd",
+ "render_evidence_digest": "4ef17c141137fa93d3f0f71d982bc8f720f92489a8e2efd2a3501096db637358",
+ "producer_identity": "zcode-main-thread-glm53",
+ "verifier_identity": "omp-google-antigravity-gemini38flash-high",
+ "verdict": "accepted",
+ "domains": [
+  {
+   "domain": "copy_zh",
+   "status": "accepted",
+   "criteria": [
+    "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
+    "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
+   ],
+   "evidence_refs": [
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/overview.html",
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/efficacy.html",
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/trials/nct04469465.html",
+    "packets/2026-09-18-omp-visual/render-evidence-b.json#target-chromium-1440-overview.visible_text_scan"
+   ]
+  },
+  {
+   "domain": "hierarchy_density",
+   "status": "accepted",
+   "criteria": [
+    "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
+    "同一数据在图、表、抽屉三投影中保持同源一致"
+   ],
+   "evidence_refs": [
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/overview.html",
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png",
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__efficacy.html.png"
+   ]
+  },
+  {
+   "domain": "typography_spacing",
+   "status": "accepted",
+   "criteria": [
+    "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
+    "长药品名/试验名换行不截断关键标识"
+   ],
+   "evidence_refs": [
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/assets/portal.css",
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/trials/nct04469465.html",
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__trials__nct04469465.html.png",
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png"
+   ]
+  },
+  {
+   "domain": "color_legibility",
+   "status": "accepted",
+   "criteria": [
+    "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
+    "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
+   ],
+   "evidence_refs": [
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/assets/portal.css",
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png",
+    "packets/2026-09-18-omp-visual/screenshots/B/webkit/1440__overview.html.png"
+   ]
+  },
+  {
+   "domain": "charts_tables",
+   "status": "accepted",
+   "criteria": [
+    "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
+    "图表与对应表格数值一致（同源投影）"
+   ],
+   "evidence_refs": [
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__efficacy.html.png",
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/efficacy.html",
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1024__efficacy.html.png"
+   ]
+  },
+  {
+   "domain": "interaction_consistency",
+   "status": "accepted",
+   "criteria": [
+    "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
+    "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
+   ],
+   "evidence_refs": [
+    "packets/2026-09-18-omp-visual/render-evidence-b.json#target-chromium-1440-overview.interaction_checks",
+    "packets/2026-09-18-omp-visual/render-evidence-b.json#target-webkit-1440-efficacy.interaction_checks",
+    "runs/pnh-vertical/abc-v47/reports/B/v1/html/assets/portal.js"
+   ]
+  },
+  {
+   "domain": "format_rendering",
+   "status": "accepted",
+   "criteria": [
+    "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
+    "四类视口下导航、表格与图表保持可用"
+   ],
+   "evidence_refs": [
+    "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png",
+    "packets/2026-09-18-omp-visual/screenshots/B/webkit/1440__overview.html.png",
+    "packets/2026-09-18-omp-visual/screenshots/B/webkit/320__overview.html.png",
+    "packets/2026-09-18-omp-visual/render-evidence-b.json#metrics"
+   ]
+  }
+ ],
+ "created_at": "2026-09-20T13:15:00Z"
 }

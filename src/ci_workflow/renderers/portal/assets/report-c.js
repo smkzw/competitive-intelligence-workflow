@@ -611,11 +611,30 @@
   }
 
   function criteriaCountOption(rows) {
+    // 独立视觉复核（copy_zh/charts_tables）：本图语义是"每试验公开条目数"。
+    // 文本型行（如入选标准原文）没有数值，此前被 Number(...)||0 伪造成 0 值柱，
+    // 造成图表与同源数据表行数不一致且出现空墙；现按试验聚合公开条目计数。
     function conciseTrialLabel(row) {
       var product = String(row.product_zh || "产品未列示").split("（")[0];
       var trial = String(row.trial_display_id || row.trial_zh || "试验未列示");
       return product + "｜" + trial;
     }
+    var byTrial = {};
+    var trialOrder = [];
+    rows.forEach(function (row) {
+      var label = conciseTrialLabel(row);
+      if (!byTrial.hasOwnProperty(label)) {
+        byTrial[label] = {label: label, count: 0, sample: row};
+        trialOrder.push(label);
+      }
+      byTrial[label].count += 1;
+    });
+    var aggregated = trialOrder.map(function (label) { return byTrial[label]; });
+    rows = aggregated.map(function (item) {
+      var row = Object.assign({}, item.sample, {value: item.count, numeric_value: item.count});
+      row.__entry_count = item.count;
+      return row;
+    });
     return {
       animationDuration: 300,
       grid: {left: 250, right: 58, top: 22, bottom: 38, containLabel: false},
@@ -623,7 +642,8 @@
         trigger: "item",
         confine: true,
         formatter: function (p) {
-          return tooltipHtml(p.data.row) + "<br>公开条目：" + String(p.data.value) + "条";
+          var cnt = p.data.row && p.data.row.__entry_count;
+          return tooltipHtml(p.data.row) + "<br>公开条目：" + String(p.data.value) + "条" + (cnt ? "（按试验聚合）" : "");
         }
       },
       xAxis: {
@@ -655,7 +675,7 @@
           return {
             value: Number(row.numeric_value || row.value || 0),
             row: row,
-            rowId: row.row_id,
+            rowId: row.row_id || "trial-aggregate",
             itemStyle: {
               color: index % 2 ? "#F5B64D" : "#F59E0B",
               borderRadius: [0, 5, 5, 0]

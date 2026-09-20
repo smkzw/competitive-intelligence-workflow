@@ -730,6 +730,12 @@ def _registry_timeframe_zh(text: str) -> str | None:
     m = re.fullmatch(r"[Dd]ay (\d+) and [Dd]ay (\d+)", value)
     if m:
         return f"第{m.group(1)}天与第{m.group(2)}天"
+    m = re.fullmatch(r"[Bb]aseline, [Dd]ay (\d+)[^(]*\(.*\) and [Dd]ay (\d+).*", value)
+    if m:
+        return f"第{m.group(1)}天与第{m.group(2)}天（多队列）"
+    m = re.fullmatch(r"[Dd]ays (\d+), (\d+), and [Dd]ay (\d+)", value)
+    if m:
+        return f"第{m.group(1)}、{m.group(2)}与{m.group(3)}天"
     return None
 
 
@@ -909,7 +915,8 @@ def _chart_row(
         "arm": "组别未细分",
         "group": "组别未细分",
         "category": "设计事实",
-        "time": _text(observation.assessment_timepoint)
+        "time": _registry_timeframe_zh(_text(observation.assessment_timepoint))
+        or _text(observation.assessment_timepoint)
         or (
             "不适用"
             if observation.field
@@ -1550,10 +1557,24 @@ def _render_page_context(
         )
     else:
         design_matrix_rows, design_matrix_groups, design_matrix_trials = (), (), ()
+    overview_conclusions = None
+    if catalog_page_id == "overview" and trial is None:
+        n_trials = len({obs.trial_id for obs in observations if obs.trial_id})
+        overview_conclusions = [
+            {"label": "比较范围", "text": (
+                f"围绕 {n_trials} 项注册试验，从试验设计、人群定义、入选标准、"
+                "终点与随访时间窗等维度并列呈现登记事实。")},
+            {"label": "设计证据", "text": (
+                "全部设计事实来自登记来源并绑定观察定位；模式与权衡并列展示，不作排名。")},
+            {"label": "阅读边界", "text": (
+                "设计要素差异反映各试验的科学问题不同，不构成优劣判断；"
+                "入排与人群定义以登记原文为准。")},
+        ]
     return {
         "report": data,
         "report_title": f"{data.indication}临床试验设计比较",
         "page_title": title,
+        "overview_conclusions": overview_conclusions,
         "page_id": page_id if trial is None else f"trial-{trial.id}",
         "catalog_page_id": catalog_page_id,
         "page": page,

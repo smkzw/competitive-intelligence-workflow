@@ -6,9 +6,21 @@
     <div class="kz-c-page-meta" aria-label="页面范围">
       <span>适应症：{{ report.indication }}</span>
       <span>观察截止：{{ cutoff_text }}</span>
+      <span>比较视角：试验设计（医学）｜统计口径（生物统计）｜安全性设计（药物警戒）</span>
     </div>
     <p class="kz-c-page-lead">{{ lead }}</p>
   </header>
+
+  {% if overview_conclusions %}
+  <section class="kz-b-conclusions" aria-label="核心结论">
+    <h2 class="kz-b-conclusions__title">核心结论</h2>
+    <ul class="kz-b-conclusions__list">
+      {% for item in overview_conclusions %}
+      <li class="kz-b-conclusions__item"><strong>{{ item.label }}</strong><span>{{ item.text }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
 
   {% if show_trial_index %}
   <section class="kz-c-profile-index kz-c-profile-index--primary" aria-labelledby="profile-index-heading">
