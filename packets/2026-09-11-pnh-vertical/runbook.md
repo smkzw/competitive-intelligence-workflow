@@ -1553,3 +1553,8 @@ resume → accept-visual ×3（三件套拷入 state/visual/）→ PNH 竖向收
 第253天"）。下一会话：扩充 _CLASS_TITLE_TOKENS（dysfunction→障碍、at→（、
 scale/symptom/total score 等术语）+ 收紧残余英文判据（≥2 词即再处理），
 对照 verdict refs 中具体页面验证。
+
+### 视觉 B（v54）：typography_spacing 一域回拒（新增行引入新标签内容）
+B v52 曾 7/7；v54 新增 366 行（窗口比例终点+基线行）带来新标签文本，
+typography 单域回拒。refs 指向具体页面——下一会话对照修复（同 A 转写批次）。
+C 视觉（deepseek）运行中。
