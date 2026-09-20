@@ -18,6 +18,57 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 NA = "未公开披露"
 
+
+_CLASS_TITLE_TOKENS = (
+    ("proportion of subjects with", "受试者"),
+    ("haemolytic event free status", "无溶血事件"),
+    ("thrombotic event free status", "无血栓事件"),
+    ("absence of transfusions", "无输血"),
+    ("hemoglobin between", "血红蛋白"),
+    ("neutralizing antibody positive postbaseline", "基线后中和抗体阳性"),
+    ("binding antibody positive postbaseline", "基线后结合抗体阳性"),
+    ("with negative/no result at baseline", "且基线阴性/无结果"),
+    ("fatigue", "疲乏"),
+    ("abdominal pain", "腹痛"),
+    ("dyspnea", "呼吸困难"),
+    ("dysphagia", "吞咽困难"),
+    ("chest pain", "胸痛"),
+    ("erectile", "勃起功能"),
+    ("transfusion avoidance", "输血回避"),
+)
+
+
+def _transcribe_class_title(title: str) -> str:
+    """登记 class 标题的确定性中文转写：词汇级替换 + 时间归一。
+
+    未命中词汇的保留登记原文（不做机器翻译式臆造）。
+    """
+    text = " ".join(str(title or "").split())
+    if not text:
+        return text
+    low = text.casefold()
+    out = text
+    hit = False
+    for en, zh in _CLASS_TITLE_TOKENS:
+        if en in low:
+            hit = True
+            idx = low.find(en)
+            out = out[:idx] + zh + out[idx + len(en):]
+            low = out.casefold()
+    if not hit:
+        return text
+    # 时间归一：Day N / Week N / N Months
+    out = re.sub(r"[Dd]ay\s+(\d+)", r"第\1天", out)
+    out = re.sub(r"[Ww]eek\s+(\d+)", r"第\1周", out)
+    out = re.sub(r"(\d+)\s*[Mm]onths?", r"\1个月", out)
+    out = out.replace(" between ", "").replace("、", "、")
+    out = re.sub(r"\s{2,}", " ", out).strip()
+    # 归一后剩余裸英文词 ≥4 个则视为未转写成功，保留原文
+    if len(re.findall(r"[A-Za-z]{4,}", out)) >= 4:
+        return text
+    return out
+
+
 # 登记结果测量的互斥子类 → 中文行标签（独立复核第二十一轮 veto）
 _REGISTRY_CATEGORY_ZH = {
     "improved from baseline": "较基线改善",
@@ -358,6 +409,9 @@ def main() -> None:
                     elif not _cls_days and "baseline" in cls_title.casefold():
                         # 登记明示的基线类行（class="Baseline"）是真实观察
                         row_time_frame = "Baseline"
+                    # 独立视觉复核（A copy_zh）：class 原文英文不得嵌入
+                    # 中文 population 行；词汇级确定性转写，未命中保留原文
+                    cls_title = _transcribe_class_title(cls_title)
                     base_population = (
                         f"登记结果人群（{cls_title}）" if cls_title
                         else "登记结果人群"
