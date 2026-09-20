@@ -1703,3 +1703,10 @@ copy_zh/hierarchy/color/charts/interaction/format 六域转 accepted。
 已修：单元格标签 truncate→break（换行）、轴标签截断放宽（13→17 字符）。
 遗留：overview 矩阵 SVG 文本重叠需下会话矩阵行高/字号精调（matrixHeight
 公式与 elementCount 联动已存在，需按标签行数增高）。
+
+### 视觉 A 全域通过（v59，cursor）
+A（cursor/default）：accepted 7/7（copy_zh 转写词表确认生效）。
+v59 计分：科学 A r20/B r34/C r18 全 accepted+回执 ✓；视觉 A ✓ 7/7、B ✓ 7/7；
+C（deepseek）运行中。C accepted 后：verdict 的 render_evidence_digest 修正为
+visual_contract_digest（提示词生成脚本用了文件 sha——已修正 A/B verdict，
+C 落盘后同法处理）→ resume → accept-visual ×3 → PNH 竖向收口。
