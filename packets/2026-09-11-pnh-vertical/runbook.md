@@ -1476,3 +1476,10 @@ resume + accept-visual ×3。
   做确定性转写（复用 C 的 _registry_timeframe_zh 思路 + 术语表），或渲染层
   类标签走 zh 概念映射、原文留证据抽屉。→ v53 → A 视觉重测。
 - C 视觉（v52，deepseek）仍在后台。
+
+### 视觉 C（v52，deepseek）：rejected 4/7——设计批次生效但仍有差距
+copy_zh ✓、color_legibility ✓（本科室批次修复生效）。剩余 4 域：
+typography_spacing（report-c.js）、charts_tables（endpoint-timepoint-matrix）、
+interaction_consistency（overview）、format_rendering（768px overview）。
+C 设计迭代下一会话按 refs 逐域修 → v53 → 视觉重测。
+全局：A 视觉差 1 域（类标题转写）、B 完整签收 ✓、C 差 4 域。
