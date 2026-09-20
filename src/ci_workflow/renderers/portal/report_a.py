@@ -100,8 +100,16 @@ class EfficacyRow(BaseModel):
     arm: str
     arm_detail: str | None = None
     value: float | None = Field(default=None, allow_inf_nan=False)
-    # G10-2：登记/来源存在该终点但未披露数值时保留状态行；禁止伪装数值。
+    # F01 修复：REPORTED_ZERO 携带 0 是合法科学事实；REPORTED_VALUE 必须有值
     disclosure_state: FactDisclosureState = FactDisclosureState.REPORTED_VALUE
+
+    @model_validator(mode="after")
+    def _value_disclosure_consistency(self) -> "EfficacyRow":
+        if self.disclosure_state == FactDisclosureState.REPORTED_VALUE and self.value is None:
+            raise ValueError("REPORTED_VALUE 必须携带数值")
+        if self.disclosure_state == FactDisclosureState.REPORTED_ZERO and self.value is not None and self.value != 0:
+            raise ValueError("REPORTED_ZERO 数值必须为 0")
+        return self
     numerator: int | None = Field(default=None, ge=0)
     denominator: int | None = Field(default=None, gt=0)
     unit: str

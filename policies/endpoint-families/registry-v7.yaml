@@ -149,6 +149,86 @@ rules:
     units:
     - percent
     - '%'
+- rule_id: endpoint-ad-pp-nrs-v1
+  match_pattern: pp[- ]?nrs|peak pruritus|pruritus nrs|瘙痒.*nrs
+  family_meta:
+    canonical_id: pp_nrs
+    label_zh: 峰值瘙痒 NRS
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - points
+- rule_id: endpoint-ad-iga-v1
+  match_pattern: \biga\b|investigator.*global.*assessment
+  family_meta:
+    canonical_id: iga
+    label_zh: IGA 评分
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - points
+- rule_id: endpoint-ad-easi50-v1
+  match_pattern: easi[ -]?50|easi_50
+  family_meta:
+    canonical_id: easi50
+    label_zh: EASI-50
+    direction: lower_is_better
+    form: response_rate
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-ad-easi90-v1
+  match_pattern: easi[ -]?90|easi_90
+  family_meta:
+    canonical_id: easi90
+    label_zh: EASI-90
+    direction: lower_is_better
+    form: response_rate
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-ad-bsa-v1
+  match_pattern: \bbsa\b|body surface area|受累体表面积
+  family_meta:
+    canonical_id: bsa
+    label_zh: BSA 受累面积
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-ad-dlqi-v1
+  match_pattern: \bdlqi\b|dermatology life quality
+  family_meta:
+    canonical_id: dlqi
+    label_zh: DLQI 生活质量指数
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - points
+- rule_id: endpoint-ad-poit-v1
+  match_pattern: poem|patient.*orient.*eczema
+  family_meta:
+    canonical_id: poem
+    label_zh: POEM 评分
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - points
+- rule_id: endpoint-ad-wpai-v1
+  match_pattern: \bwpai\b|work productivity.*activity
+  family_meta:
+    canonical_id: wpai
+    label_zh: WPAI 工作/活动效率
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - percent
+    - '%'
 - rule_id: endpoint-pnh-registry-generic-v1
   match_pattern: safety|death|infection|events\b|event rate
   family_meta:

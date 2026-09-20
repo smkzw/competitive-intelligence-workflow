@@ -116,14 +116,14 @@ def _split_eligibility(text: str) -> tuple[list[str], list[str]]:
         items = [
             part.strip(" \n-–;；")
             for part in re.split(r"\n\s*(?:[-–•]|\(\d+\)|\d+\.)\s*\n?", chunk)
-            if len(part.strip(" \n-–;；")) >= 8
+            if part.strip(" \n-–;；")
         ]
         if not items:
             joined = " ".join(chunk.split())
             return [joined] if joined else []
         return items
 
-    return bullets(inc_text)[:10], bullets(exc_text)[:10]
+    return bullets(inc_text), bullets(exc_text)
 
 
 def _endpoint_form(measure: str) -> str:
@@ -205,12 +205,15 @@ def main() -> None:
         stage = phase_zh.get(phase_raw.upper(), "未标注")
         model = info.get("interventionModel") or ""
         allocation = info.get("allocation") or ""
-        masking = ((info.get("maskingInfo") or {}).get("masking")) or "NONE"
+        masking_raw = ((info.get("maskingInfo") or {}).get("masking")) or None
+        # F11 修复：缺失 ≠ NONE；未知如实标注
+        masking = masking_raw if masking_raw else None
         eligibility = (protocol.get("eligibilityModule", {}).get("eligibilityCriteria")) or ""
         arms = (protocol.get("armsInterventionsModule", {}).get("armGroups")) or []
         interventions = (protocol.get("armsInterventionsModule", {}).get("interventions")) or []
         outcomes = protocol.get("outcomesModule", {})
-        primary = (outcomes.get("primaryOutcomes") or [{}])[0]
+        primary_outcomes = outcomes.get("primaryOutcomes") or []
+        primary = primary_outcomes[0] if primary_outcomes else {}
         enrollment = design.get("enrollmentInfo") or {}
 
         # 身份与开发阶段
@@ -253,7 +256,10 @@ def main() -> None:
                 tokens.append(f"allocation={allocation}")
             if model:
                 tokens.append(f"interventionModel={model}")
-        tokens.append(f"masking={masking}")
+        if masking:
+            tokens.append(f"masking={masking}")
+        else:
+            tokens.append("masking=未公开")
         observations.append(_row(
             trial_id, product_id, nct, page, "grouping", "arm_randomization_blinding",
             ";".join(tokens), seq="", source_name="registry.design",

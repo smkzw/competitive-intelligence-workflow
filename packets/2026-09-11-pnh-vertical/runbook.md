@@ -849,3 +849,35 @@ deepseek 第十八轮确认数值溯源可靠，2 项收窄至元数据层：
 - 5741 文件 / 3.4M 行 / 71+ 提交
 - ARCHITECTURE.md 架构关联图谱已入库
 - 未来构建同步：`git add -A && git commit && git push origin main`
+
+## 资深产品专家审阅包接收与基线建立
+
+**审阅包**: packets/2026-09-20-execution-pack/（21 文件）
+**基线**: d6cb6d51e1b5a5e2abdacea485ea84b5268dc7ca
+**探针结果**: 8 项不变量 7 项失败 / 1 项 SAE 正向通过
+
+### 五项用户决策（禁止重复询问）
+1. B 保留全部相关研究 + 分面表达异质性（非严格共轴前置）
+2. 实际事实修订 + 跨 A/B/C 原子同步（非医学批注）
+3. C 深度设计先例库（非候选路径生成）
+4. 个人使用 + 静态分享（非多人协作）
+5. A=B=C 同等验收（非 B-first）
+
+### 架构变更方向
+- 从"逐报告独立事实"→"共享 AtomicFactVersion + 三投影"
+- 从"compatible 布尔值"→"WorkspaceMembership / FacetPlan / NumericFrameEligibility 三层"
+- 从"C 候选路径生成"→"C 全量 DesignClause 先例库"
+- 从"建议不生效"→"typed 修订 → 原子切换 → 全报告同步"
+- 从"不做编辑"→"本地 loopback 编辑 + 静态分享包"
+
+### 新规格
+- v2.0 草案: docs/specs/competitive-intelligence-workflow-design-v2.0-draft.md
+- 替代 v1.3 中与五项决策冲突的条款
+
+### 工作包依赖
+WP00(基线/规格/红测试) → WP01(科学值) + WP02(共享事实) + WP03(视图) → WP04(修订同步) + WP05A/B/C(门户) → WP06(分享) + WP07(多Skill) → WP08(整体验收)
+
+### 与既有 16 轮复核环的关系
+- 前 16 轮复核修复的是呈现层症状（单位/标签/分组/口径）
+- 审阅包揭示的 F01-F20 是**架构层根因**（事实身份/摄取/修订/影响图）
+- 两者互补：呈现层修复仍有效，但根因需通过 WP01-WP04 解决
