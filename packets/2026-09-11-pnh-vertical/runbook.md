@@ -1483,3 +1483,8 @@ typography_spacing（report-c.js）、charts_tables（endpoint-timepoint-matrix�
 interaction_consistency（overview）、format_rendering（768px overview）。
 C 设计迭代下一会话按 refs 逐域修 → v53 → 视觉重测。
 全局：A 视觉差 1 域（类标题转写）、B 完整签收 ✓、C 差 4 域。
+
+### A 类标题转写已落码（本轮）
+_CLASS_TITLE_TOKENS 词汇表 + 时间归一（Day N→第N天等），转写失败（剩余裸英文
+≥4 词）保留登记原文。v53 前置完成。C 四域（typography/charts/interaction/
+format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
