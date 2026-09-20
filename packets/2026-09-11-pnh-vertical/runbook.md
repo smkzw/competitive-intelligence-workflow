@@ -1558,3 +1558,12 @@ scale/symptom/total score 等术语）+ 收紧残余英文判据（≥2 词即�
 B v52 曾 7/7；v54 新增 366 行（窗口比例终点+基线行）带来新标签文本，
 typography 单域回拒。refs 指向具体页面——下一会话对照修复（同 A 转写批次）。
 C 视觉（deepseek）运行中。
+
+### 视觉 C（v54，deepseek）：rejected 6/7——overview 为重灾区
+6 域中 4 域 refs 指向 overview.html（hierarchy/typography/interaction/format），
+exclusion-criteria 占 color/charts 两域。deepseek 口径严于 gemini（B v52 同期
+7/7）。C overview 的设计迭代（结论层已有但密度/间距/交互可达性仍欠）是下一
+会话 C 主攻点；exclusion-criteria 的图表与颜色语义随批修。
+收束清单（下一会话）：A 转写词表扩充、B typography refs、C overview 四域 +
+exclusion-criteria 两域、B r32 EOT 误标 → v55 → 全线复核与视觉 →
+accept-visual ×3 → AD B/C → 横向。
