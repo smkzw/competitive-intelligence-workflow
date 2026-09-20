@@ -276,6 +276,9 @@ def main() -> None:
             meta["form"] = "change_from_baseline"
         elif "absolute" in _pop_cf:
             meta["form"] = "absolute_value"
+        elif re.search(r"percentage\s+of\s+participants\s+(achieving|with|who)\b", _text_cf):
+            # 独立复核第三十三轮：受试者应答比例口径（含 Achieving 变体）
+            meta["form"] = "response_rate"
         elif re.search(r"change\s+from\s+baseline|change\s+in\s+|percent\s+change", _text_cf):
             # 第九轮：登记原文含变化语义时以变化为准
             meta["form"] = "change_from_baseline"

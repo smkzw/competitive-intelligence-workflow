@@ -4385,7 +4385,7 @@
    "arm": "Eculizumab",
    "value": -672.0,
    "unit": "U/L",
-   "population": "登记结果人群（Change from 基线 at 第1周）"
+   "population": "登记结果人群（Change from 基线（第1周））"
   },
   {
    "row_id": "eff-190",
@@ -4396,7 +4396,7 @@
    "arm": "Eculizumab",
    "value": -763.0,
    "unit": "U/L",
-   "population": "登记结果人群（Change from 基线 at 第2周）"
+   "population": "登记结果人群（Change from 基线（第2周））"
   },
   {
    "row_id": "eff-191",
@@ -4407,7 +4407,7 @@
    "arm": "Eculizumab",
    "value": -752.0,
    "unit": "U/L",
-   "population": "登记结果人群（Change from 基线 at 第3周）"
+   "population": "登记结果人群（Change from 基线（第3周））"
   },
   {
    "row_id": "eff-192",
@@ -4418,7 +4418,7 @@
    "arm": "Eculizumab",
    "value": -761.0,
    "unit": "U/L",
-   "population": "登记结果人群（Change from 基线 at 第4周）"
+   "population": "登记结果人群（Change from 基线（第4周））"
   },
   {
    "row_id": "eff-193",
@@ -4429,7 +4429,7 @@
    "arm": "Eculizumab",
    "value": -747.0,
    "unit": "U/L",
-   "population": "登记结果人群（Change from 基线 at 第8周）"
+   "population": "登记结果人群（Change from 基线（第8周））"
   },
   {
    "row_id": "eff-194",
@@ -4440,7 +4440,7 @@
    "arm": "Eculizumab",
    "value": -771.0,
    "unit": "U/L",
-   "population": "登记结果人群（Change from 基线 at 第12周）"
+   "population": "登记结果人群（Change from 基线（第12周））"
   },
   {
    "row_id": "eff-195",
@@ -12140,7 +12140,7 @@
    "arm": "Crovalimab",
    "value": 6.67,
    "unit": "score on a scale",
-   "population": "登记结果人群（Change from 基线 at 第2周）"
+   "population": "登记结果人群（Change from 基线（第2周））"
   },
   {
    "row_id": "eff-895",
@@ -12151,7 +12151,7 @@
    "arm": "Crovalimab",
    "value": 8.08,
    "unit": "score on a scale",
-   "population": "登记结果人群（Change from 基线 at 第5周）"
+   "population": "登记结果人群（Change from 基线（第5周））"
   },
   {
    "row_id": "eff-896",
@@ -12162,7 +12162,7 @@
    "arm": "Crovalimab",
    "value": 8.15,
    "unit": "score on a scale",
-   "population": "登记结果人群（Change from 基线 at 第9周）"
+   "population": "登记结果人群（Change from 基线（第9周））"
   },
   {
    "row_id": "eff-897",
@@ -12173,7 +12173,7 @@
    "arm": "Crovalimab",
    "value": 8.77,
    "unit": "score on a scale",
-   "population": "登记结果人群（Change from 基线 at 第17周）"
+   "population": "登记结果人群（Change from 基线（第17周））"
   },
   {
    "row_id": "eff-898",
@@ -13372,7 +13372,7 @@
    "arm": "LNP023 25 mg Bid/100 mg Bid",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第2周）"
+   "population": "登记结果人群（Responders（第2周））"
   },
   {
    "row_id": "eff-1007",
@@ -13383,7 +13383,7 @@
    "arm": "LNP023 50 mg Bid/200 mg Bid",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第2周）"
+   "population": "登记结果人群（Responders（第2周））"
   },
   {
    "row_id": "eff-1008",
@@ -13394,7 +13394,7 @@
    "arm": "LNP023 25 mg Bid/100 mg Bid",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第4周）"
+   "population": "登记结果人群（Responders（第4周））"
   },
   {
    "row_id": "eff-1009",
@@ -13405,7 +13405,7 @@
    "arm": "LNP023 50 mg Bid/200 mg Bid",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第4周）"
+   "population": "登记结果人群（Responders（第4周））"
   },
   {
    "row_id": "eff-1010",
@@ -13416,7 +13416,7 @@
    "arm": "LNP023 25 mg Bid/100 mg Bid",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第8周）"
+   "population": "登记结果人群（Responders（第8周））"
   },
   {
    "row_id": "eff-1011",
@@ -13427,7 +13427,7 @@
    "arm": "LNP023 50 mg Bid/200 mg Bid",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第8周）"
+   "population": "登记结果人群（Responders（第8周））"
   },
   {
    "row_id": "eff-1012",
@@ -13438,7 +13438,7 @@
    "arm": "LNP023 25 mg Bid/100 mg Bid",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第12周）"
+   "population": "登记结果人群（Responders（第12周））"
   },
   {
    "row_id": "eff-1013",
@@ -13449,7 +13449,7 @@
    "arm": "LNP023 50 mg Bid/200 mg Bid",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（Responders at 第12周）"
+   "population": "登记结果人群（Responders（第12周））"
   },
   {
    "row_id": "eff-1014",
@@ -32776,7 +32776,7 @@
    "arm": "Cohort 1",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线改善）"
+   "population": "登记结果人群（疲乏（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2771",
@@ -32787,7 +32787,7 @@
    "arm": "Cohort 2",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线改善）"
+   "population": "登记结果人群（疲乏（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2772",
@@ -32798,7 +32798,7 @@
    "arm": "Cohort 3",
    "value": 3.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线改善）"
+   "population": "登记结果人群（疲乏（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2773",
@@ -32809,7 +32809,7 @@
    "arm": "Cohort 4",
    "value": 3.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线改善）"
+   "population": "登记结果人群（疲乏（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2774",
@@ -32820,7 +32820,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线恶化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2775",
@@ -32831,7 +32831,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线恶化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2776",
@@ -32842,7 +32842,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线恶化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2777",
@@ -32853,7 +32853,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线恶化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2778",
@@ -32864,7 +32864,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线无变化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2779",
@@ -32875,7 +32875,7 @@
    "arm": "Cohort 2",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线无变化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2780",
@@ -32886,7 +32886,7 @@
    "arm": "Cohort 3",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线无变化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2781",
@@ -32897,7 +32897,7 @@
    "arm": "Cohort 4",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；较基线无变化）"
+   "population": "登记结果人群（疲乏（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2782",
@@ -32908,7 +32908,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；不适用）"
+   "population": "登记结果人群（疲乏（第253天）；不适用）"
   },
   {
    "row_id": "eff-2783",
@@ -32919,7 +32919,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；不适用）"
+   "population": "登记结果人群（疲乏（第253天）；不适用）"
   },
   {
    "row_id": "eff-2784",
@@ -32930,7 +32930,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；不适用）"
+   "population": "登记结果人群（疲乏（第253天）；不适用）"
   },
   {
    "row_id": "eff-2785",
@@ -32941,7 +32941,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第253天；不适用）"
+   "population": "登记结果人群（疲乏（第253天）；不适用）"
   },
   {
    "row_id": "eff-2786",
@@ -32952,7 +32952,7 @@
    "arm": "Cohort 4",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第281天；较基线改善）"
+   "population": "登记结果人群（疲乏（第281天）；较基线改善）"
   },
   {
    "row_id": "eff-2787",
@@ -32963,7 +32963,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第281天；较基线恶化）"
+   "population": "登记结果人群（疲乏（第281天）；较基线恶化）"
   },
   {
    "row_id": "eff-2788",
@@ -32974,7 +32974,7 @@
    "arm": "Cohort 4",
    "value": 3.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第281天；较基线无变化）"
+   "population": "登记结果人群（疲乏（第281天）；较基线无变化）"
   },
   {
    "row_id": "eff-2789",
@@ -32985,7 +32985,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（疲乏 at 第281天；不适用）"
+   "population": "登记结果人群（疲乏（第281天）；不适用）"
   },
   {
    "row_id": "eff-2790",
@@ -32996,7 +32996,7 @@
    "arm": "Cohort 1",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（腹痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2791",
@@ -33007,7 +33007,7 @@
    "arm": "Cohort 2",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（腹痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2792",
@@ -33018,7 +33018,7 @@
    "arm": "Cohort 3",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（腹痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2793",
@@ -33029,7 +33029,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（腹痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2794",
@@ -33040,7 +33040,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2795",
@@ -33051,7 +33051,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2796",
@@ -33062,7 +33062,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2797",
@@ -33073,7 +33073,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2798",
@@ -33084,7 +33084,7 @@
    "arm": "Cohort 1",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2799",
@@ -33095,7 +33095,7 @@
    "arm": "Cohort 2",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2800",
@@ -33106,7 +33106,7 @@
    "arm": "Cohort 3",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2801",
@@ -33117,7 +33117,7 @@
    "arm": "Cohort 4",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（腹痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2802",
@@ -33128,7 +33128,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；不适用）"
+   "population": "登记结果人群（腹痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2803",
@@ -33139,7 +33139,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；不适用）"
+   "population": "登记结果人群（腹痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2804",
@@ -33150,7 +33150,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；不适用）"
+   "population": "登记结果人群（腹痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2805",
@@ -33161,7 +33161,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第253天；不适用）"
+   "population": "登记结果人群（腹痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2806",
@@ -33172,7 +33172,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第281天；较基线改善）"
+   "population": "登记结果人群（腹痛（第281天）；较基线改善）"
   },
   {
    "row_id": "eff-2807",
@@ -33183,7 +33183,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第281天；较基线恶化）"
+   "population": "登记结果人群（腹痛（第281天）；较基线恶化）"
   },
   {
    "row_id": "eff-2808",
@@ -33194,7 +33194,7 @@
    "arm": "Cohort 4",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第281天；较基线无变化）"
+   "population": "登记结果人群（腹痛（第281天）；较基线无变化）"
   },
   {
    "row_id": "eff-2809",
@@ -33205,7 +33205,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（腹痛 at 第281天；不适用）"
+   "population": "登记结果人群（腹痛（第281天）；不适用）"
   },
   {
    "row_id": "eff-2810",
@@ -33216,7 +33216,7 @@
    "arm": "Cohort 1",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2811",
@@ -33227,7 +33227,7 @@
    "arm": "Cohort 2",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2812",
@@ -33238,7 +33238,7 @@
    "arm": "Cohort 3",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2813",
@@ -33249,7 +33249,7 @@
    "arm": "Cohort 4",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2814",
@@ -33260,7 +33260,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2815",
@@ -33271,7 +33271,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2816",
@@ -33282,7 +33282,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2817",
@@ -33293,7 +33293,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2818",
@@ -33304,7 +33304,7 @@
    "arm": "Cohort 1",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2819",
@@ -33315,7 +33315,7 @@
    "arm": "Cohort 2",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2820",
@@ -33326,7 +33326,7 @@
    "arm": "Cohort 3",
    "value": 3.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2821",
@@ -33337,7 +33337,7 @@
    "arm": "Cohort 4",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（呼吸困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2822",
@@ -33348,7 +33348,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；不适用）"
+   "population": "登记结果人群（呼吸困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2823",
@@ -33359,7 +33359,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；不适用）"
+   "population": "登记结果人群（呼吸困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2824",
@@ -33370,7 +33370,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；不适用）"
+   "population": "登记结果人群（呼吸困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2825",
@@ -33381,7 +33381,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第253天；不适用）"
+   "population": "登记结果人群（呼吸困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2826",
@@ -33392,7 +33392,7 @@
    "arm": "Cohort 4",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第281天；较基线改善）"
+   "population": "登记结果人群（呼吸困难（第281天）；较基线改善）"
   },
   {
    "row_id": "eff-2827",
@@ -33403,7 +33403,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第281天；较基线恶化）"
+   "population": "登记结果人群（呼吸困难（第281天）；较基线恶化）"
   },
   {
    "row_id": "eff-2828",
@@ -33414,7 +33414,7 @@
    "arm": "Cohort 4",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第281天；较基线无变化）"
+   "population": "登记结果人群（呼吸困难（第281天）；较基线无变化）"
   },
   {
    "row_id": "eff-2829",
@@ -33425,7 +33425,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（呼吸困难 at 第281天；不适用）"
+   "population": "登记结果人群（呼吸困难（第281天）；不适用）"
   },
   {
    "row_id": "eff-2830",
@@ -33436,7 +33436,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2831",
@@ -33447,7 +33447,7 @@
    "arm": "Cohort 2",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2832",
@@ -33458,7 +33458,7 @@
    "arm": "Cohort 3",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2833",
@@ -33469,7 +33469,7 @@
    "arm": "Cohort 4",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线改善）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2834",
@@ -33480,7 +33480,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2835",
@@ -33491,7 +33491,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2836",
@@ -33502,7 +33502,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2837",
@@ -33513,7 +33513,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线恶化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2838",
@@ -33524,7 +33524,7 @@
    "arm": "Cohort 1",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2839",
@@ -33535,7 +33535,7 @@
    "arm": "Cohort 2",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2840",
@@ -33546,7 +33546,7 @@
    "arm": "Cohort 3",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2841",
@@ -33557,7 +33557,7 @@
    "arm": "Cohort 4",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；较基线无变化）"
+   "population": "登记结果人群（吞咽困难（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2842",
@@ -33568,7 +33568,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；不适用）"
+   "population": "登记结果人群（吞咽困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2843",
@@ -33579,7 +33579,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；不适用）"
+   "population": "登记结果人群（吞咽困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2844",
@@ -33590,7 +33590,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；不适用）"
+   "population": "登记结果人群（吞咽困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2845",
@@ -33601,7 +33601,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第253天；不适用）"
+   "population": "登记结果人群（吞咽困难（第253天）；不适用）"
   },
   {
    "row_id": "eff-2846",
@@ -33612,7 +33612,7 @@
    "arm": "Cohort 4",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第281天；较基线改善）"
+   "population": "登记结果人群（吞咽困难（第281天）；较基线改善）"
   },
   {
    "row_id": "eff-2847",
@@ -33623,7 +33623,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第281天；较基线恶化）"
+   "population": "登记结果人群（吞咽困难（第281天）；较基线恶化）"
   },
   {
    "row_id": "eff-2848",
@@ -33634,7 +33634,7 @@
    "arm": "Cohort 4",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第281天；较基线无变化）"
+   "population": "登记结果人群（吞咽困难（第281天）；较基线无变化）"
   },
   {
    "row_id": "eff-2849",
@@ -33645,7 +33645,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（吞咽困难 at 第281天；不适用）"
+   "population": "登记结果人群（吞咽困难（第281天）；不适用）"
   },
   {
    "row_id": "eff-2850",
@@ -33656,7 +33656,7 @@
    "arm": "Cohort 1",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（胸痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2851",
@@ -33667,7 +33667,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（胸痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2852",
@@ -33678,7 +33678,7 @@
    "arm": "Cohort 3",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（胸痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2853",
@@ -33689,7 +33689,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线改善）"
+   "population": "登记结果人群（胸痛（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2854",
@@ -33700,7 +33700,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2855",
@@ -33711,7 +33711,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2856",
@@ -33722,7 +33722,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2857",
@@ -33733,7 +33733,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线恶化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2858",
@@ -33744,7 +33744,7 @@
    "arm": "Cohort 1",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2859",
@@ -33755,7 +33755,7 @@
    "arm": "Cohort 2",
    "value": 6.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2860",
@@ -33766,7 +33766,7 @@
    "arm": "Cohort 3",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2861",
@@ -33777,7 +33777,7 @@
    "arm": "Cohort 4",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；较基线无变化）"
+   "population": "登记结果人群（胸痛（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2862",
@@ -33788,7 +33788,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；不适用）"
+   "population": "登记结果人群（胸痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2863",
@@ -33799,7 +33799,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；不适用）"
+   "population": "登记结果人群（胸痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2864",
@@ -33810,7 +33810,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；不适用）"
+   "population": "登记结果人群（胸痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2865",
@@ -33821,7 +33821,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第253天；不适用）"
+   "population": "登记结果人群（胸痛（第253天）；不适用）"
   },
   {
    "row_id": "eff-2866",
@@ -33832,7 +33832,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第281天；较基线改善）"
+   "population": "登记结果人群（胸痛（第281天）；较基线改善）"
   },
   {
    "row_id": "eff-2867",
@@ -33843,7 +33843,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第281天；较基线恶化）"
+   "population": "登记结果人群（胸痛（第281天）；较基线恶化）"
   },
   {
    "row_id": "eff-2868",
@@ -33854,7 +33854,7 @@
    "arm": "Cohort 4",
    "value": 7.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第281天；较基线无变化）"
+   "population": "登记结果人群（胸痛（第281天）；较基线无变化）"
   },
   {
    "row_id": "eff-2869",
@@ -33865,7 +33865,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（胸痛 at 第281天；不适用）"
+   "population": "登记结果人群（胸痛（第281天）；不适用）"
   },
   {
    "row_id": "eff-2870",
@@ -33876,7 +33876,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2871",
@@ -33887,7 +33887,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2872",
@@ -33898,7 +33898,7 @@
    "arm": "Cohort 3",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2873",
@@ -33909,7 +33909,7 @@
    "arm": "Cohort 4",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线改善）"
   },
   {
    "row_id": "eff-2874",
@@ -33920,7 +33920,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2875",
@@ -33931,7 +33931,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2876",
@@ -33942,7 +33942,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2877",
@@ -33953,7 +33953,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线恶化）"
   },
   {
    "row_id": "eff-2878",
@@ -33964,7 +33964,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2879",
@@ -33975,7 +33975,7 @@
    "arm": "Cohort 2",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2880",
@@ -33986,7 +33986,7 @@
    "arm": "Cohort 3",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2881",
@@ -33997,7 +33997,7 @@
    "arm": "Cohort 4",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；较基线无变化）"
   },
   {
    "row_id": "eff-2882",
@@ -34008,7 +34008,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；不适用）"
   },
   {
    "row_id": "eff-2883",
@@ -34019,7 +34019,7 @@
    "arm": "Cohort 2",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；不适用）"
   },
   {
    "row_id": "eff-2884",
@@ -34030,7 +34030,7 @@
    "arm": "Cohort 3",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；不适用）"
   },
   {
    "row_id": "eff-2885",
@@ -34041,7 +34041,7 @@
    "arm": "Cohort 4",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍（第253天）；不适用）"
   },
   {
    "row_id": "eff-2886",
@@ -34052,7 +34052,7 @@
    "arm": "Cohort 4",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第281天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍（第281天）；较基线改善）"
   },
   {
    "row_id": "eff-2887",
@@ -34063,7 +34063,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第281天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍（第281天）；较基线恶化）"
   },
   {
    "row_id": "eff-2888",
@@ -34074,7 +34074,7 @@
    "arm": "Cohort 4",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第281天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍（第281天）；较基线无变化）"
   },
   {
    "row_id": "eff-2889",
@@ -34085,7 +34085,7 @@
    "arm": "Cohort 4",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能障碍 at 第281天；不适用）"
+   "population": "登记结果人群（勃起功能障碍（第281天）；不适用）"
   },
   {
    "row_id": "eff-2890",
@@ -44227,7 +44227,7 @@
    "arm": "Eculizumab",
    "value": -1446.4,
    "unit": "Units/Liter",
-   "population": "登记结果人群（Change from 基线 at 第12周）"
+   "population": "登记结果人群（Change from 基线（第12周））"
   },
   {
    "row_id": "eff-3812",
@@ -44249,7 +44249,7 @@
    "arm": "Eculizumab",
    "value": 4.1,
    "unit": "units on a scale",
-   "population": "登记结果人群（Change from 基线 at 第12周）"
+   "population": "登记结果人群（Change from 基线（第12周））"
   },
   {
    "row_id": "eff-3814",
@@ -44282,7 +44282,7 @@
    "arm": "Eculizumab",
    "value": 0.5,
    "unit": "cells x 10^12/L",
-   "population": "登记结果人群（Change from 基线 at 第12周）"
+   "population": "登记结果人群（Change from 基线（第12周））"
   },
   {
    "row_id": "eff-3817",
@@ -44348,7 +44348,7 @@
    "arm": "Eculizumab",
    "value": -19.8,
    "unit": "mg/dL",
-   "population": "登记结果人群（Change from 基线 at 第12周）"
+   "population": "登记结果人群（Change from 基线（第12周））"
   },
   {
    "row_id": "eff-3823",
