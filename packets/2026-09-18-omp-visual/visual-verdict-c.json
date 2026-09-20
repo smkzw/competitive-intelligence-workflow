@@ -1,117 +1,115 @@
 {
- "schema_version": "1.0",
- "verdict_id": "verdict-omp-deepseek-vis-abc35-c",
- "format": "html",
- "visual_plan_digest": "edeac368c3c22d045d6a17510f24757590da03dfe6bf4465eec6774bc281ec27",
- "candidate_artifact_digest": "40e9875976b236c443d22020d509950ad190b8a9d362b7950f398d65d02bb7cb",
- "render_evidence_digest": "c718f848ae927cdd6994447d14b3e77bb02f162f6857fd53197ed3963f098cd9",
- "producer_identity": "zcode-main-thread-glm53",
- "verifier_identity": "omp-cms-router-deepseekflash-max",
- "verdict": "rejected",
- "domains": [
-  {
-   "domain": "copy_zh",
-   "status": "accepted",
-   "criteria": [
-    "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
-    "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/trials/nct04469465.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/sample-analysis-statistics.html",
-    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
-   ]
-  },
-  {
-   "domain": "hierarchy_density",
-   "status": "rejected",
-   "criteria": [
-    "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
-    "同一数据在图、表、抽屉三投影中保持同源一致"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/design-map.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/inclusion-criteria.html",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
-   ]
-  },
-  {
-   "domain": "typography_spacing",
-   "status": "rejected",
-   "criteria": [
-    "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
-    "长药品名/试验名换行不截断关键标识"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/trial-profile.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/endpoint-timepoint-matrix.html",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__endpoint-timepoint-matrix.html.png",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/320__overview.html.png"
-   ]
-  },
-  {
-   "domain": "color_legibility",
-   "status": "accepted",
-   "criteria": [
-    "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
-    "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/assets/portal.css",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/sample-analysis-statistics.html",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
-   ]
-  },
-  {
-   "domain": "charts_tables",
-   "status": "rejected",
-   "criteria": [
-    "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
-    "图表与对应表格数值一致（同源投影）"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/inclusion-criteria.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/exclusion-criteria.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/assets/report-c.js",
-    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-endpoint-timepoint-matrix"
-   ]
-  },
-  {
-   "domain": "interaction_consistency",
-   "status": "accepted",
-   "criteria": [
-    "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
-    "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/visit-duration-followup.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/trials/nct04469465.html",
-    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
-   ]
-  },
-  {
-   "domain": "format_rendering",
-   "status": "rejected",
-   "criteria": [
-    "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
-    "四类视口下导航、表格与图表保持可用"
-   ],
-   "evidence_refs": [
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/overview.html",
-    "runs/pnh-vertical/abc-v35/reports/C/v1/html/endpoint-timepoint-matrix.html",
-    "packets/2026-09-18-omp-visual/screenshots/C/webkit/320__overview.html.png",
-    "packets/2026-09-18-omp-visual/screenshots/C/chromium/390__overview.html.png",
-    "packets/2026-09-18-omp-visual/render-evidence-c.json#target-chromium-1440-overview"
-   ]
-  }
- ],
- "created_at": "2026-09-20T06:55:05Z"
+  "schema_version": "1.0",
+  "verdict_id": "verdict-omp-deepseek-vis-abc42-c2",
+  "format": "html",
+  "visual_plan_digest": "afd906204281f979ad6eee75e3fabf77ddade9d21713c6e057a79e8d91c582b1",
+  "candidate_artifact_digest": "22c3f1518086b0abf24221877b6b31b6b254336773d83e99335119f757ed6b59",
+  "render_evidence_digest": "b1dd0aa6800c74ab57c209a9eccdcb41393c174d97fb94660c6067ec41c99cad",
+  "producer_identity": "zcode-main-thread-glm53",
+  "verifier_identity": "omp-cms-router-deepseekflash-max",
+  "verdict": "rejected",
+  "domains": [
+    {
+      "domain": "copy_zh",
+      "status": "accepted",
+      "criteria": [
+        "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
+        "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/overview.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/design-map.html",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/webkit/390__overview.html.png"
+      ]
+    },
+    {
+      "domain": "hierarchy_density",
+      "status": "rejected",
+      "criteria": [
+        "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
+        "同一数据在图、表、抽屉三投影中保持同源一致"
+      ],
+      "evidence_refs": [
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/768__overview.html.png",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/overview.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/design-map.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/trial-profile.html"
+      ]
+    },
+    {
+      "domain": "typography_spacing",
+      "status": "rejected",
+      "criteria": [
+        "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
+        "长药品名/试验名换行不截断关键标识"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/assets/report-c.js",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/webkit/1440__endpoint-timepoint-matrix.html.png"
+      ]
+    },
+    {
+      "domain": "color_legibility",
+      "status": "rejected",
+      "criteria": [
+        "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
+        "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/assets/report-c.css",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/assets/portal.css",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/assets/report-c.js",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__trials__nct04469465.html.png"
+      ]
+    },
+    {
+      "domain": "charts_tables",
+      "status": "rejected",
+      "criteria": [
+        "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
+        "图表与对应表格数值一致（同源投影）"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/population-disease-definition.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/visit-duration-followup.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/assets/report-c.js",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/webkit/1440__overview.html.png"
+      ]
+    },
+    {
+      "domain": "interaction_consistency",
+      "status": "accepted",
+      "criteria": [
+        "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
+        "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/overview.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/design-patterns.html",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/endpoint-timepoint-matrix.html",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png"
+      ]
+    },
+    {
+      "domain": "format_rendering",
+      "status": "rejected",
+      "criteria": [
+        "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
+        "四类视口下导航、表格与图表保持可用"
+      ],
+      "evidence_refs": [
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/320__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/webkit/390__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png",
+        "packets/2026-09-18-omp-visual/screenshots/C/webkit/1440__overview.html.png",
+        "runs/pnh-vertical/abc-v42/reports/C/v1/html/overview.html"
+      ]
+    }
+  ],
+  "created_at": "2026-09-20T12:24:32.525329+00:00"
 }

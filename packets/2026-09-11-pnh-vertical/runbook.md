@@ -1228,3 +1228,10 @@ veto——修完组别口径，B 复核有望通过。
 hierarchy/typography/color/charts/interaction/format 六域全部 accepted——A 距通过
 一步之遥。copy_zh 遗留项为 A 页面残留内部令牌（见 verdict evidence_refs），
 属小批量修复。下一会话：修 A copy_zh 残留 → 与 B 设计专修同批进 v44 → 视觉重测。
+
+### 视觉 C 第二轮（v42，deepseek）：rejected 5/7
+copy_zh 转为 accepted（上轮 rejected → 修复生效）；交互保持 accepted。
+剩余 hierarchy/typography/color/charts/format 五域，与 B 同属设计专修范围
+（C 站点 assets/report-c.css/js + overview 首屏 + population 页）。
+视觉收敛格局（v42 轮）：A 差 1 域（copy_zh）、B 差 6 域（设计专修）、C 差 5 域
+（设计专修）。copy_zh 已全站通过——中文原生层面收口。
