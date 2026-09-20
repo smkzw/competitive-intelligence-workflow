@@ -1679,3 +1679,8 @@ B 报告在 v57 = 科学回执（r35）+ 视觉验收双全。A/C 视觉后台�
 - report-c.js：chartState 保存全量行 + updateChartFromState 在 applyState 尾部
   按状态重绘 ECharts（语法验证通过；深度交互验证下轮进行）。
 - 下一会话从 v58 全链开始（当前 HEAD 已含全部修复）。
+
+## 视觉 A 全域通过（v58，cursor，正确绑定）
+A（cursor/default）：accepted 7/7——copy_zh 转写、字号归刻度、层级修复全部
+经独立复核确认。B 视觉 v58（gemini）与 C 视觉 v58（deepseek）运行中。
+A 科学回执重派运行中（r21 accepted 因时间窗失败后重取时间戳）。
