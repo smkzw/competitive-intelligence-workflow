@@ -1672,3 +1672,10 @@ B 报告在 v57 = 科学回执（r35）+ 视觉验收双全。A/C 视觉后台�
 2. B：overview 排版细节（refs=report-b.css）。
 3. C：overview 四域 + exclusion-criteria 两域 + 筛选联动图表重绘（最小补丁）。
 4. v58 全链 → 全线复核与视觉 → accept-visual ×3。
+
+### 字号归刻度 + C 筛选重绘接线（推送见 git log）
+- 四份 CSS font-size 全部归一到策划书刻度（portal 13/15/17/18/21/22/26/28→
+  12/14/16/20/24；report-b 15/17→14/16）。
+- report-c.js：chartState 保存全量行 + updateChartFromState 在 applyState 尾部
+  按状态重绘 ECharts（语法验证通过；深度交互验证下轮进行）。
+- 下一会话从 v58 全链开始（当前 HEAD 已含全部修复）。
