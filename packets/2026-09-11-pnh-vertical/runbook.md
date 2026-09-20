@@ -1282,3 +1282,14 @@ copy_zh 转为 accepted（上轮 rejected → 修复生效）；交互保持 acc
    用 render-evidence-{a,b,c}.json 的 digest 重写后派）。
 2. verdict 全 accepted → A 回执重签 → accept-visual A/B/C。
 3. UC/IgAN 重测 → AD B/C → 横向 → 三宿主/安装包/RC。
+
+## 里程碑：B 复核第 26 轮 accepted，回执已签发（v47）
+
+- **B r26（deepseek）：accepted, issues 0，回执正式签发**——26 轮迭代收敛完成。
+  veto 轨迹：r20 两项（单位/页面绑定）→ r21 子类合并 → r22 Coversin 两项 →
+  r23 四项呈现语义 → r24 三项组别身份 → r25 两项截断/令牌 → r26 通过。
+- **C r8/r9 均已 accepted**（v46/v47）；B/C 回执均绑 v47。
+- A r11（gemini）已在 v47 后台派发（verdict_id abc47-a-r11，含 schema 禁令与守卫）。
+- 三节点视觉（A=cursor、B=gemini、C=deepseek，v47 digest）后台运行中。
+- 下一会话：收 A r11 + 三视觉 verdict → 全 accepted 即 accept-visual A/B/C
+  （`ci-workflow project accept-visual`）→ UC/IgAN 重测 → AD B/C → 横向。
