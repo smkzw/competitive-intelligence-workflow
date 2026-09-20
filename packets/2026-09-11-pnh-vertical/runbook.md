@@ -1618,3 +1618,11 @@ overview.html——下一会话对照 refs 逐项修（转写残余 + 卡片排�
 copy_zh/hierarchy/color/charts/interaction/format 六域 accepted。refs=
 report-b.css + overview——v56 新增行（基线/窗口比例终点）的标签排版细节。
 与视觉 A 的 typography 同批修（下一会话）。
+
+### 视觉 C（v56，deepseek）：7/7 全拒且全部只指 overview.html——疑似复核侧会话异常
+- 与 v54 轮（deepseek，6/7、copy_zh accepted）矛盾；且 7 域 refs 全部唯一指向
+  overview.html 单页——单页全域失败模式更像页面加载/服务异常而非 7 个独立域
+  同时劣化（gemini v52 轮同页 copy_zh/color 均曾 accepted）。
+- 下一会话处置：先人工查看本轮 screenshots/C/chromium/1440__overview 截图仲裁
+  （若页面正常则判定复核会话无效并重派；若页面确有问题则修页）。
+- 仲裁前不据该 verdict 做修复，避免被异常会话误导。
