@@ -1547,3 +1547,9 @@ resume → accept-visual ×3（三件套拷入 state/visual/）→ PNH 竖向收
   暴露上限为参考周并明确标注"最长暴露参考"），或与时间政策对齐后入表。
   同步检查 A 载荷 time_frame 转写不把 EOT 行写死为周数。
 - v54 视觉三节点已派发（contract digest 断言），verdict 落盘按既定流程走。
+
+### 视觉 A（v54）：仍仅 copy_zh——转写需加强
+首版词汇表已生效但残余英文仍被指（部分转写如"勃起功能 Dysfunction at
+第253天"）。下一会话：扩充 _CLASS_TITLE_TOKENS（dysfunction→障碍、at→（、
+scale/symptom/total score 等术语）+ 收紧残余英文判据（≥2 词即再处理），
+对照 verdict refs 中具体页面验证。
