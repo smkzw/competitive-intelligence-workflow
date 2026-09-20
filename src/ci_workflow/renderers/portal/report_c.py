@@ -727,13 +727,13 @@ def _registry_timeframe_zh(text: str) -> str | None:
     m = re.fullmatch(r"[Bb]aseline(?:,| to)? [Dd]ay (\d+)", value)
     if m:
         return f"基线至第{m.group(1)}天"
-    m = re.fullmatch(r"[Dd]ay (\d+) and [Dd]ay (\d+)", value)
+    m = re.fullmatch(r"[Dd]ay (\d+) [Aa][Nn][Dd] [Dd]ay (\d+)", value)
     if m:
         return f"第{m.group(1)}天与第{m.group(2)}天"
-    m = re.fullmatch(r"[Bb]aseline, [Dd]ay (\d+)[^(]*\(.*\) and [Dd]ay (\d+).*", value)
+    m = re.fullmatch(r"[Bb]aseline, [Dd]ay (\d+)[^(]*\(.*\) [Aa][Nn][Dd] [Dd]ay (\d+).*", value)
     if m:
         return f"第{m.group(1)}天与第{m.group(2)}天（多队列）"
-    m = re.fullmatch(r"[Dd]ays (\d+), (\d+), and [Dd]ay (\d+)", value)
+    m = re.fullmatch(r"[Dd]ays (\d+), (\d+), [Aa][Nn][Dd] [Dd]ay (\d+)", value)
     if m:
         return f"第{m.group(1)}、{m.group(2)}与{m.group(3)}天"
     return None

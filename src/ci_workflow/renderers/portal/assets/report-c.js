@@ -546,7 +546,7 @@
           rotate: compactTrialAxis && trialIds.length > 8
             ? 48
             : (trialIds.length > 3 ? 24 : 0),
-          fontSize: 11,
+          fontSize: 12,
           width: compactTrialAxis ? 90 : 160,
           overflow: "break",
           lineHeight: 15,
@@ -561,7 +561,7 @@
         axisLabel: {
           color: "#243650",
           fontWeight: 600,
-          fontSize: 11,
+          fontSize: 12,
           width: 150,
           overflow: "break",
           lineHeight: 15
@@ -574,7 +574,7 @@
         label: {
           show: true,
           color: "#243650",
-          fontSize: elements.length <= 4 ? 11 : 10,
+          fontSize: 12,
           lineHeight: 14,
           // 独立视觉复核（typography/charts）：单元格长文本限宽截断，
           // 完整内容保留在 tooltip 与同源数据表
