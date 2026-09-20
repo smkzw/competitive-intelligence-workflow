@@ -1112,6 +1112,8 @@ _UNIT_ALIAS = {
     "micromoles/l": "μmol/L", "micromoles (μmol)/liter": "μmol/L",
     "micromoles (µmol)/liter": "μmol/L",
     "units/l": "U/L", "units/liter": "U/L", "units per litre": "U/L",
+    "ratio of ldh:uln (250 u/l)": "LDH/ULN 比值",
+    "ratio of ldh:uln": "LDH/ULN 比值",
     "10^3 cells/microliter (μl)": "×10^3/μL", "10^3 cells/microliter (µl)": "×10^3/μL",
     "facit-f scale (change from baseline)": "分",
     "facit-f scale": "分",

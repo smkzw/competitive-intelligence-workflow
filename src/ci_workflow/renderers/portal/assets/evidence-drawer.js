@@ -81,7 +81,9 @@
     ["trial_zh", "试验"],
     ["group_zh", "组别"],
     ["element_zh", "终点/事件/设计要素"],
-    ["scale", "量表"],
+    // 独立复核第二十七轮 veto：scale 字段在登记行里承载的是计量口径
+    // 原文（如 unitOfMeasure），标"量表"且直出原文属误标——不再展示，
+    // 计量口径由"单位"字段承载
     ["timepoint", "时间点"],
     ["value", "值"],
     ["threshold", "阈值"],

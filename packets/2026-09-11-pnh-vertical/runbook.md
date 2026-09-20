@@ -1364,3 +1364,20 @@ stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以
   （注意 digest 断言校验，勿用文件 sha——用 visual_contract_digest）。
 - UC/IgAN 载荷已用修复后构建器重建（截断 0/9、PNH 污染无），测试待重派
   （dispatch-v2.sh 改用 v48 后重建载荷路径不变）。
+
+## v49（B r27 两项修复）+ 全线并行派发（本轮收束点）
+
+### 已完成
+1. B r27 修复落码：'ratio of ldh:uln (250 u/l)'→'LDH/ULN 比值' 别名（单位列
+   原文串清零）；evidence-drawer 移除 scale"量表"字段（误标根除）。
+2. **v49 = 当前候选**（submit ACCEPTED、run 完成、A/B gates 过、
+   单位列 nct02591862 全部规范呈现）。
+3. v49 复核：**A r13 accepted+回执 ✓、C r11 accepted+回执 ✓**；B r28 运行中。
+4. 三节点视觉已按 v49 派发（提示词首次用 **visual_contract_digest** 并断言校验
+   ——此前用文件 sha 导致 A/B accept-visual 绑定失败的根因已从工具链修正）。
+5. UC/IgAN 独立测试重派（修复后构建器重建载荷：截断清零、PNH 污染清零）。
+
+### 下一会话
+1. 收 B r28 + 三节点视觉 verdict → 全 accepted → resume → accept-visual ×3
+  （三件套拷贝进项目 state/visual/；digest 用 visual_contract_digest）。
+2. 收 UC/IgAN findings → 会商 → AD B/C 竖向 → 横向 6 适应症 → 三宿主/安装包/RC。
