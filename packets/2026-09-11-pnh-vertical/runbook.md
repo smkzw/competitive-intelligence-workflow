@@ -1655,3 +1655,20 @@ B 报告在 v57 = 科学回执（r35）+ 视觉验收双全。A/C 视觉后台�
   下会话审计 css 内全部 font-size 归一到策划书刻度（脚本扫描已给出 off-scale 清单）。
 - hierarchy refs = A overview（首屏层级）。
 - C 视觉（v57，deepseek）运行中。
+
+### 本轮追加修复（推送 5696378）
+- report-c.js 图表字号下限归 12px（typography 域）——已提交。
+- report_c.py 时间窗本地化模式大小写无关（"Day 253 And Day 281"可转写）——已提交。
+- report-c.js 曾因 updateChart 插入损坏，已从最近提交恢复（语法验证通过）；
+  "筛选联动图表重绘"功能实现未完成、需下一会话以最小补丁 + 逐段验证重做
+  （当前状态：筛选联动表格有效，图表重绘待实现——deepseek v57 verdict 的
+  charts_tables 域即指此）。
+### v57 视觉 verdict 计分（有效绑定）
+- A（cursor）：3/7 拒（copy_zh 转写残余 + hierarchy + typography 字号刻度）
+- B（gemini）：accepted 7/7 ✓（完整签收链：r35 回执 + 视觉）
+- C（deepseek）：v53 陈旧 verdict 已作废；干净重派待做
+### 下一会话
+1. A：字号归刻度（8 值）+ overview 层级 + 转写残余复核。
+2. B：overview 排版细节（refs=report-b.css）。
+3. C：overview 四域 + exclusion-criteria 两域 + 筛选联动图表重绘（最小补丁）。
+4. v58 全链 → 全线复核与视觉 → accept-visual ×3。
