@@ -1770,3 +1770,12 @@ inflow 切换逻辑）在 click 处理后运行。行显隐被该清空路径覆
 MutationObserver + 对 removeAttribute("style") 打断点，或全文 grep
 removeAttribute("style")/cssText=""），在其执行后重跑 applyState 行显隐，
 或将 C 页筛选显隐统一改由单一权威（report-c.js）写入。
+
+### C 交互深挖（续）：portal.js 非元凶，需 DevTools 断点调试
+- portal.js 的 filterVisibleRows 只写 [data-filter-row-id]/#filter-row-*（筛选
+  面板合成行），不触碰 .kz-chart-table__row 数据行——portal.js"让位"方案
+  不成立，元凶另有其人。
+- MutationObserver 实证：点击后目标行 style 被**两次整体清空**（非设为
+  none）——存在 removeAttribute("style")/cssText="" 的清空路径，或两处
+  display="" 写入。下一步：对 style 属性变更打印调用栈（Error().stack
+  在 MutationObserver 回调内捕获），定位清空点后修复。
