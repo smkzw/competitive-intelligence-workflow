@@ -82,7 +82,10 @@ def _transcribe_class_title(title: str) -> str:
     if not changed:
         return text
     out = out.replace(" between ", "").replace("、", "、")
+    out = re.sub(r"\s+at\s+", "（", out)
     out = re.sub(r"\s{2,}", " ", out).strip()
+    if out.count("（") > out.count("）"):
+        out += "）"
     # 归一后剩余裸英文词 ≥3 个则视为未转写成功，保留原文
     if len(re.findall(r"[A-Za-z]{4,}", out)) >= 3:
         return text

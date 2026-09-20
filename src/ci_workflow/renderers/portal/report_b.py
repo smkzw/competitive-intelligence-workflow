@@ -887,6 +887,10 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
     if value is None or not _text(value):
         return "time_not_reported", _TIME_BAND_LABELS["time_not_reported"]
     text = _text(value)
+    # 独立复核第三十二轮：EOT 访视（最长暴露 N 周）不是固定评价时点，
+    # 不得折算为"第213.4周"
+    if "eot" in text.casefold() or "最大暴露" in text:
+        return "eot_visit", "治疗结束访视（EOT）"
     token = _semantic_token(text)
     if any(marker in token for marker in ("baseline", "基线", "screening", "筛选期")):
         return "baseline", _TIME_BAND_LABELS["baseline"]
@@ -1668,7 +1672,7 @@ def _category_for(value: Any, domain: str, arm: str) -> str:
 
 
 def _time_label(value: Any) -> str:
-    candidate = _first(
+    raw_time_text = _text(_first(
         value,
         "timepoint",
         "actual_timepoint",
@@ -1677,7 +1681,12 @@ def _time_label(value: Any) -> str:
         "time_window_zh",
         "time_window",
         default=None,
-    )
+    ))
+    # 独立复核第三十二轮：登记原文含 EOT 访视语义时显示访视名，
+    # 不把"最长暴露 213.4 周"折算为固定周数
+    if "eot" in raw_time_text.casefold():
+        return "治疗结束访视（EOT）"
+    candidate = raw_time_text
     if candidate is None:
         return "时间点未列示"
     unit = _first(value, "actual_timepoint_unit", "time_unit", "timepoint_unit", default=None)

@@ -1184,6 +1184,10 @@ def _filter_groups(
                 option_label = _field_label(value)
             elif dimension == "disclosure_state":
                 option_label = _state_label(value)
+            elif dimension == "time":
+                # 独立视觉复核（v59 copy_zh）：时间点筛选标签与行单元格
+                # 同源转写（第0天与第28天），不再直出登记英文原文
+                option_label = _registry_timeframe_zh(value) or value
             else:
                 option_label = value
             options.append({"value": value, "label": option_label})

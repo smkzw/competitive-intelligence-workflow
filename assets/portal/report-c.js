@@ -279,7 +279,7 @@
       : kind === "criteria-comparison" ? criteriaCountOption(visible)
       : kind === "visit-timeline" ? timelineOption(visible)
       : kind === "evidence-coverage" ? evidenceOption(visible)
-      : matrixOption(visible, kind);
+      : matrixOption(visible, kind, chartState.chart && chartState.chart.clientWidth ? chartState.chart.clientWidth : 900);
     cChart.setOption(option, true);
   }
 
@@ -514,7 +514,7 @@
     return wrapped.join("\n");
   }
 
-  function matrixOption(rows, kind) {
+  function matrixOption(rows, kind, containerWidth) {
     var trialIds = uniqueValues(rows, "trial_display_id");
     var compactTrialAxis = kind === "core-design-matrix";
     var trialLabels = trialIds.map(function (trialId) {
@@ -522,19 +522,34 @@
       return compactTrialAxis ? trialId : trialLabel(row || {trial_display_id: trialId});
     });
     var elements = uniqueValues(rows, "element_zh");
-    var data = rows.map(function (row) {
-      var reported = row.disclosure_state === "reported_value" || row.disclosure_state === "reported_zero";
+    // 独立视觉复核（v59 hierarchy/charts）：同坐标多行聚合为一个单元格并
+    // 标注"共N条明细"，tooltip 展开全部 rowId——图表与同源数据表行数可对应
+    var cellMap = {};
+    var cellOrder = [];
+    rows.forEach(function (row) {
+      var x = trialIds.indexOf(String(row.trial_display_id || "未列示"));
+      var y = elements.indexOf(String(row.element_zh || "未列示"));
+      var key = x + ":" + y;
+      if (!cellMap[key]) {
+        cellMap[key] = { x: x, y: y, rows: [] };
+        cellOrder.push(cellMap[key]);
+      }
+      cellMap[key].rows.push(row);
+    });
+    var data = cellOrder.map(function (cell) {
+      var primary = cell.rows[0];
+      var reported = cell.rows.some(function (row) {
+        return row.disclosure_state === "reported_value" || row.disclosure_state === "reported_zero";
+      });
       return {
-        value: [
-          trialIds.indexOf(String(row.trial_display_id || "未列示")),
-          elements.indexOf(String(row.element_zh || "未列示")),
-          reported ? 1 : 0
-        ],
-        rowId: row.row_id,
-        row: row,
+        value: [cell.x, cell.y, reported ? 1 : 0],
+        rowId: primary.row_id,
+        row: primary,
+        rowCount: cell.rows.length,
+        rowIds: cell.rows.map(function (row) { return row.row_id; }),
         itemStyle: {
           color: reported
-            ? (elements.indexOf(String(row.element_zh || "")) % 2 ? "#FFF8EC" : "#FFF1D6")
+            ? (cell.y % 2 ? "#FFF8EC" : "#FFF1D6")
             : "#EEF1F5",
           borderColor: "#FFFFFF",
           borderWidth: 3
@@ -544,7 +559,9 @@
     return {
       animationDuration: 280,
       grid: {
-        left: 178,
+        // 独立视觉复核（v59 format）：左边距按容器宽响应式，窄视口不再
+        // 挤压绘图区至不可读
+        left: Math.min(178, Math.max(96, Math.round(containerWidth * 0.32))),
         right: 18,
         top: 28,
         bottom: compactTrialAxis ? 88 : (trialIds.length > 3 ? 104 : 72)
@@ -600,7 +617,9 @@
           width: compactTrialAxis ? 86 : Math.min(150, Math.max(72, Math.round(640 / Math.max(1, trialIds.length)))),
           overflow: "break",
           formatter: function (p) {
-            return p.data.value[2] ? matrixLabel(p.data.row) : "未公开";
+            if (!p.data.value[2]) return "未公开";
+            var base = matrixLabel(p.data.row);
+            return p.data.rowCount > 1 ? base + "\n共" + p.data.rowCount + "条明细" : base;
           }
         },
         emphasis: {itemStyle: {shadowBlur: 12, shadowColor: "rgba(36,54,80,.25)"}}
@@ -818,7 +837,7 @@
         ? timelineOption(rows)
         : kind === "evidence-coverage"
             ? evidenceOption(rows)
-            : matrixOption(rows, kind);
+            : matrixOption(rows, kind, chart && chart.clientWidth ? chart.clientWidth : 900);
     cChart.setOption(option);
     cChart.on("click", function (params) {
       var rowId = params.data && params.data.rowId;

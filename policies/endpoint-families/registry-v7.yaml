@@ -1,6 +1,6 @@
 schema_version: '1.0'
 policy_id: registry-endpoint-family
-version: '7.3'
+version: '7.4'
 description: 适应症无关的登记终点族分类规则（per-indication 配置块）
 safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|serious
   adverse|number of participants with adverse
@@ -55,6 +55,16 @@ rules:
     - U/L
     - percent
     - '%'
+- rule_id: endpoint-pnh-ldh-normalization-v2
+  match_pattern: (achieving|with)[^;]{0,30}ldh normalization|ldh normalization
+  family_meta:
+    canonical_id: ldh_normalization
+    label_zh: LDH 正常化
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - '%'
+    - percent
 - rule_id: endpoint-pnh-ldh-levels-v1
   match_pattern: ldh|lactate dehydrogenase
   family_meta:
