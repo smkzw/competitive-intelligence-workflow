@@ -1138,3 +1138,31 @@ mtplx 连续 4 次崩溃（exit 1）→ 换 gemini 或 deepseek 重试
 1. B r23 结果 → 若 accepted 则 A 需重签（A 回执在 v35，绑旧摘要）→ 视觉三节点
   verdict → accept-visual A/B/C。
 2. UC/IgAN 重测（重建载荷后）→ AD B/C 竖向 → 横向 6 适应症。
+
+## B r23 + 视觉第七轮结果与下一工作包（本轮收束点）
+
+### B r23（deepseek，v41）：veto 4 项——呈现语义深层债（下一会话的修复批次）
+1. 通用族标签顶替终点身份：generic 族行（如 NCT05886244 Serum Concentration…24 行）
+   显示"未分类登记观察"且无恢复入口。修复方向：generic 族行的显示标签回退用
+   登记原文 original_definition/endpoint_text（表格、图表、抽屉三处）。
+2. 安全性列把组别名当事件名 + 遗漏登记死亡：eventGroups 只取 seriousNumAffected；
+   需补 deathsNumAffected 等并区分"组别列/事件列"。修复位置：builder safety 段。
+3. 时间轴分数周（第36.1429周）：Day 源时间点显示应为"第N天"或一位小数周。
+   修复位置：渲染器时间标签格式化（_weeks 返回原始单位一并透出）。
+4. 筛选令牌 "danicopantp1"：arm-group slug 直出筛选按钮。修复：group/period 维度
+   筛选值映射到臂显示标签（_filter_value_label_zh 增加 group 维度登记标签查表）。
+
+### 视觉第七轮（v41 提示词 + 修正探针）
+- B（gemini）：rejected 6/7（copy_zh/hierarchy/typography/color/charts/format），
+  interaction accepted（30/30 交互探测过）。结论与第五轮一致：B 门户需要系统性
+  设计专修（信息层级/密度/移动端排版/图表量纲标注），不是逐点可修。
+- A（cursor/default 首派卡 Trellis 已加守卫重派）、C（deepseek）：仍在后台。
+- 修正探针下 B 站点 leaf-text 重叠 671–7491（320px 最高）——密度型重叠是真实的，
+  需要布局/图表密度决策（如窄视口图表转同源表格）。
+
+### 下一会话工作包（建议顺序）
+1. B 呈现语义修复批次（上述 4 项，全部有明确位置）→ abc-v42 → B r24。
+2. B 设计系统专修：以 v41 站点为对象做一轮 CSS/图表密度专项（窄视口图表转表格、
+   卡片层级、量纲标注），然后视觉重测 A/B/C（verdict 模板已含执行纪律守卫）。
+3. 视觉通过后：A 回执重签（绑 v4x 摘要）→ accept-visual A/B/C。
+4. UC/IgAN 用修复后构建器重测；AD B/C 竖向；横向 6 适应症。
