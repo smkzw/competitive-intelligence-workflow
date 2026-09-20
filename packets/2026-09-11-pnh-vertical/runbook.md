@@ -1537,3 +1537,13 @@ format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
 A=cursor、B=gemini、C=deepseek，提示词 digest 用 visual_contract_digest 且
 断言校验通过（v54 路径 + 三 digest 逐字在文）。verdict 落盘后：全 accepted →
 resume → accept-visual ×3（三件套拷入 state/visual/）→ PNH 竖向收口。
+
+### B r32（v54）：veto 1 项——EOT 最大暴露周误标（下一会话首批）
+- NCT04170023 LTE 期三项度量的 timeFrame="Baseline, EOT visit (Maximum
+  exposure: 213.4 weeks)"——213.4 周是组内最长暴露上限，非固定访视点；
+  9 条观察被渲染为"第213.4周"（overview/efficacy/longitudinal）。
+- 修复方向：`_weeks` 对含 "eot visit"/"maximum exposure" 的文本不取数字周；
+  行时间显示"治疗结束访视（EOT）"，实际_timepoint 承载可用口径（如取
+  暴露上限为参考周并明确标注"最长暴露参考"），或与时间政策对齐后入表。
+  同步检查 A 载荷 time_frame 转写不把 EOT 行写死为周数。
+- v54 视觉三节点已派发（contract digest 断言），verdict 落盘按既定流程走。
