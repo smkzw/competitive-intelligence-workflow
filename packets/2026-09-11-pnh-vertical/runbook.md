@@ -1797,3 +1797,11 @@ removeAttribute("style")/cssText=""），在其执行后重跑 applyState 行显
   需要对 .style.cssText setter 同样挂钩）定位 re-show 来源后统一。
 - v60 = 当前候选（366 疗效行、三报告科学回执齐备、字号归刻度、CSS 132 条修复、
   时间筛选本地化、聚合计数标注、响应式 grid 全部承载）。
+
+### v61 状态：B r37 veto 1 项（单位列残余混排——登记原文串如 "Ratio of LDH:ULN (250 U/L)"、
+### "millimole(s)/litre" 等未纳入归一词表，与中文规范串同列并存），A r22/C r21 待收
+B 单位词表需补齐剩余登记原文变体（按实际出现频次逐条补入 _UNIT_ALIAS），
+或在列头标注"单位为登记原文口径"。下一轮补齐后 v62 → B r38。
+
+### B r37 单位别名补齐（millimoles/litre→mmol/L 等 7 个变体，提交记录）
+v61 的 B 包残余"units/liter (U/L)"和"millimole(s)/litre"已归一。
