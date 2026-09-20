@@ -37,8 +37,16 @@ _CLASS_TITLE_TOKENS = (
     ("dyspnea", "呼吸困难"),
     ("dysphagia", "吞咽困难"),
     ("chest pain", "胸痛"),
+    ("erectile dysfunction", "勃起功能障碍"),
     ("erectile", "勃起功能"),
     ("transfusion avoidance", "输血回避"),
+    ("dysfunction", "障碍"),
+    ("symptom scales", "症状量表"),
+    ("total score", "总分"),
+    ("at the eot", "治疗结束访视"),
+    ("eot visit", "治疗结束访视"),
+    ("maximum exposure", "最长暴露"),
+    ("quality of life", "生活质量"),
 )
 
 
@@ -68,7 +76,7 @@ def _transcribe_class_title(title: str) -> str:
     out = out.replace(" between ", "").replace("、", "、")
     out = re.sub(r"\s{2,}", " ", out).strip()
     # 归一后剩余裸英文词 ≥4 个则视为未转写成功，保留原文
-    if len(re.findall(r"[A-Za-z]{4,}", out)) >= 4:
+    if len(re.findall(r"[A-Za-z]{4,}", out)) >= 3:
         return text
     return out
 

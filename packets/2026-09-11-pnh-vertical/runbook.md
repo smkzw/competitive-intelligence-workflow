@@ -1567,3 +1567,16 @@ exclusion-criteria 占 color/charts 两域。deepseek 口径严于 gemini（B v5
 收束清单（下一会话）：A 转写词表扩充、B typography refs、C overview 四域 +
 exclusion-criteria 两域、B r32 EOT 误标 → v55 → 全线复核与视觉 →
 accept-visual ×3 → AD B/C → 横向。
+
+### A 转写词表第一轮扩充完成；完整方案记档（下一会话继续）
+- 新增 tokens：dysfunction/障碍、symptom scales/症状量表、total score/总分、
+  at the eot/治疗结束访视、maximum exposure/最长暴露、quality of life/生活质量等；
+  残余判据 ≥4→≥3 词。
+- 实测：仍 3243/4141 行 population 残留英文——678 个不同类标题的词典化是
+  迭代工作。下一会话方案：按频次排序提取 top-50 类标题逐条补词表 +
+  结构性模式（"X between Day A and Day B"→"X（第A天至第B天）"）；
+  量表名（EORTC QLQ-C30/FACIT-F/EQ-5D-5L）按惯例保留原文。
+- 其余 v55 前置：B typography refs（report-b.css/overview）、
+  C overview 四域 + exclusion-criteria 两域、B r32 EOT 修复
+  （_weeks EOT 锚点 + 渲染层 _time_label/_time_band EOT 守卫已落码——
+  注意 v55 构建时确认 A 载荷 EOT 行 timepoint 原文含 "EOT" 触发守卫）。

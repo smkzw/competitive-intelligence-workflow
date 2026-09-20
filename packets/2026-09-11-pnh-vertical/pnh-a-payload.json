@@ -15660,7 +15660,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -22.93,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - 疲乏）"
+   "population": "登记结果人群（症状量表 - 疲乏）"
   },
   {
    "row_id": "eff-1215",
@@ -15671,7 +15671,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -2.18,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - 疲乏）"
+   "population": "登记结果人群（症状量表 - 疲乏）"
   },
   {
    "row_id": "eff-1216",
@@ -15682,7 +15682,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -0.34,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Nausea and vomiting）"
+   "population": "登记结果人群（症状量表 - Nausea and vomiting）"
   },
   {
    "row_id": "eff-1217",
@@ -15693,7 +15693,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -0.33,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Nausea and vomiting）"
+   "population": "登记结果人群（症状量表 - Nausea and vomiting）"
   },
   {
    "row_id": "eff-1218",
@@ -15704,7 +15704,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -0.74,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Pain）"
+   "population": "登记结果人群（症状量表 - Pain）"
   },
   {
    "row_id": "eff-1219",
@@ -15715,7 +15715,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 2.01,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Pain）"
+   "population": "登记结果人群（症状量表 - Pain）"
   },
   {
    "row_id": "eff-1220",
@@ -15726,7 +15726,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -20.12,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Dyspnoea）"
+   "population": "登记结果人群（症状量表 - Dyspnoea）"
   },
   {
    "row_id": "eff-1221",
@@ -15737,7 +15737,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -5.55,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Dyspnoea）"
+   "population": "登记结果人群（症状量表 - Dyspnoea）"
   },
   {
    "row_id": "eff-1222",
@@ -15748,7 +15748,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -9.18,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Insomnia）"
+   "population": "登记结果人群（症状量表 - Insomnia）"
   },
   {
    "row_id": "eff-1223",
@@ -15759,7 +15759,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -9.5,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Insomnia）"
+   "population": "登记结果人群（症状量表 - Insomnia）"
   },
   {
    "row_id": "eff-1224",
@@ -15770,7 +15770,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -3.76,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Appetite loss）"
+   "population": "登记结果人群（症状量表 - Appetite loss）"
   },
   {
    "row_id": "eff-1225",
@@ -15781,7 +15781,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 4.19,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Appetite loss）"
+   "population": "登记结果人群（症状量表 - Appetite loss）"
   },
   {
    "row_id": "eff-1226",
@@ -15792,7 +15792,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": 2.98,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Constipation）"
+   "population": "登记结果人群（症状量表 - Constipation）"
   },
   {
    "row_id": "eff-1227",
@@ -15803,7 +15803,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 1.19,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Constipation）"
+   "population": "登记结果人群（症状量表 - Constipation）"
   },
   {
    "row_id": "eff-1228",
@@ -15814,7 +15814,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": 0.31,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Diarrhoea）"
+   "population": "登记结果人群（症状量表 - Diarrhoea）"
   },
   {
    "row_id": "eff-1229",
@@ -15825,7 +15825,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 1.68,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Diarrhoea）"
+   "population": "登记结果人群（症状量表 - Diarrhoea）"
   },
   {
    "row_id": "eff-1230",
@@ -15836,7 +15836,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -6.82,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Financial difficulties）"
+   "population": "登记结果人群（症状量表 - Financial difficulties）"
   },
   {
    "row_id": "eff-1231",
@@ -15847,7 +15847,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 0.58,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Financial difficulties）"
+   "population": "登记结果人群（症状量表 - Financial difficulties）"
   },
   {
    "row_id": "eff-1232",
@@ -16232,7 +16232,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -21.48,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - 疲乏）"
+   "population": "登记结果人群（症状量表 - 疲乏）"
   },
   {
    "row_id": "eff-1267",
@@ -16243,7 +16243,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -23.75,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - 疲乏）"
+   "population": "登记结果人群（症状量表 - 疲乏）"
   },
   {
    "row_id": "eff-1268",
@@ -16254,7 +16254,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -2.22,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Nausea and vomiting）"
+   "population": "登记结果人群（症状量表 - Nausea and vomiting）"
   },
   {
    "row_id": "eff-1269",
@@ -16265,7 +16265,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 0.0,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Nausea and vomiting）"
+   "population": "登记结果人群（症状量表 - Nausea and vomiting）"
   },
   {
    "row_id": "eff-1270",
@@ -16276,7 +16276,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": 0.56,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Pain）"
+   "population": "登记结果人群（症状量表 - Pain）"
   },
   {
    "row_id": "eff-1271",
@@ -16287,7 +16287,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 3.45,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Pain）"
+   "population": "登记结果人群（症状量表 - Pain）"
   },
   {
    "row_id": "eff-1272",
@@ -16298,7 +16298,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -17.78,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Dyspnoea）"
+   "population": "登记结果人群（症状量表 - Dyspnoea）"
   },
   {
    "row_id": "eff-1273",
@@ -16309,7 +16309,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -27.59,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Dyspnoea）"
+   "population": "登记结果人群（症状量表 - Dyspnoea）"
   },
   {
    "row_id": "eff-1274",
@@ -16320,7 +16320,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -6.67,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Insomnia）"
+   "population": "登记结果人群（症状量表 - Insomnia）"
   },
   {
    "row_id": "eff-1275",
@@ -16331,7 +16331,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 0.0,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Insomnia）"
+   "population": "登记结果人群（症状量表 - Insomnia）"
   },
   {
    "row_id": "eff-1276",
@@ -16342,7 +16342,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -7.78,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Appetite loss）"
+   "population": "登记结果人群（症状量表 - Appetite loss）"
   },
   {
    "row_id": "eff-1277",
@@ -16353,7 +16353,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -3.45,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Appetite loss）"
+   "population": "登记结果人群（症状量表 - Appetite loss）"
   },
   {
    "row_id": "eff-1278",
@@ -16364,7 +16364,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -1.11,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Constipation）"
+   "population": "登记结果人群（症状量表 - Constipation）"
   },
   {
    "row_id": "eff-1279",
@@ -16375,7 +16375,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -2.38,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Constipation）"
+   "population": "登记结果人群（症状量表 - Constipation）"
   },
   {
    "row_id": "eff-1280",
@@ -16386,7 +16386,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": 1.11,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Diarrhoea）"
+   "population": "登记结果人群（症状量表 - Diarrhoea）"
   },
   {
    "row_id": "eff-1281",
@@ -16397,7 +16397,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 5.95,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Diarrhoea）"
+   "population": "登记结果人群（症状量表 - Diarrhoea）"
   },
   {
    "row_id": "eff-1282",
@@ -16408,7 +16408,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -15.56,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Financial difficulties）"
+   "population": "登记结果人群（症状量表 - Financial difficulties）"
   },
   {
    "row_id": "eff-1283",
@@ -16419,7 +16419,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -8.33,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Financial difficulties）"
+   "population": "登记结果人群（症状量表 - Financial difficulties）"
   },
   {
    "row_id": "eff-1284",
@@ -16562,7 +16562,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -2.96,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - 疲乏）"
+   "population": "登记结果人群（症状量表 - 疲乏）"
   },
   {
    "row_id": "eff-1297",
@@ -16573,7 +16573,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -23.08,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - 疲乏）"
+   "population": "登记结果人群（症状量表 - 疲乏）"
   },
   {
    "row_id": "eff-1298",
@@ -16584,7 +16584,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -2.22,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Nausea and vomiting）"
+   "population": "登记结果人群（症状量表 - Nausea and vomiting）"
   },
   {
    "row_id": "eff-1299",
@@ -16595,7 +16595,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -4.49,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Nausea and vomiting）"
+   "population": "登记结果人群（症状量表 - Nausea and vomiting）"
   },
   {
    "row_id": "eff-1300",
@@ -16606,7 +16606,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -2.78,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Pain）"
+   "population": "登记结果人群（症状量表 - Pain）"
   },
   {
    "row_id": "eff-1301",
@@ -16617,7 +16617,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -5.77,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Pain）"
+   "population": "登记结果人群（症状量表 - Pain）"
   },
   {
    "row_id": "eff-1302",
@@ -16628,7 +16628,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": 3.33,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Dyspnoea）"
+   "population": "登记结果人群（症状量表 - Dyspnoea）"
   },
   {
    "row_id": "eff-1303",
@@ -16639,7 +16639,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -19.23,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Dyspnoea）"
+   "population": "登记结果人群（症状量表 - Dyspnoea）"
   },
   {
    "row_id": "eff-1304",
@@ -16650,7 +16650,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": 8.89,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Insomnia）"
+   "population": "登记结果人群（症状量表 - Insomnia）"
   },
   {
    "row_id": "eff-1305",
@@ -16661,7 +16661,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -5.13,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Insomnia）"
+   "population": "登记结果人群（症状量表 - Insomnia）"
   },
   {
    "row_id": "eff-1306",
@@ -16672,7 +16672,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -8.89,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Appetite loss）"
+   "population": "登记结果人群（症状量表 - Appetite loss）"
   },
   {
    "row_id": "eff-1307",
@@ -16683,7 +16683,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -5.13,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Appetite loss）"
+   "population": "登记结果人群（症状量表 - Appetite loss）"
   },
   {
    "row_id": "eff-1308",
@@ -16694,7 +16694,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -1.11,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Constipation）"
+   "population": "登记结果人群（症状量表 - Constipation）"
   },
   {
    "row_id": "eff-1309",
@@ -16705,7 +16705,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -1.28,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Constipation）"
+   "population": "登记结果人群（症状量表 - Constipation）"
   },
   {
    "row_id": "eff-1310",
@@ -16716,7 +16716,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -4.44,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Diarrhoea）"
+   "population": "登记结果人群（症状量表 - Diarrhoea）"
   },
   {
    "row_id": "eff-1311",
@@ -16727,7 +16727,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": 3.85,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Diarrhoea）"
+   "population": "登记结果人群（症状量表 - Diarrhoea）"
   },
   {
    "row_id": "eff-1312",
@@ -16738,7 +16738,7 @@
    "arm": "Pegcetacoplan to Pegcetacoplan",
    "value": -2.22,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Financial difficulties）"
+   "population": "登记结果人群（症状量表 - Financial difficulties）"
   },
   {
    "row_id": "eff-1313",
@@ -16749,7 +16749,7 @@
    "arm": "Eculizumab to Pegcetacoplan",
    "value": -2.56,
    "unit": "Score on a scale",
-   "population": "登记结果人群（Symptom Scales - Financial difficulties）"
+   "population": "登记结果人群（症状量表 - Financial difficulties）"
   },
   {
    "row_id": "eff-1314",
@@ -33876,7 +33876,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
   },
   {
    "row_id": "eff-2871",
@@ -33887,7 +33887,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
   },
   {
    "row_id": "eff-2872",
@@ -33898,7 +33898,7 @@
    "arm": "Cohort 3",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
   },
   {
    "row_id": "eff-2873",
@@ -33909,7 +33909,7 @@
    "arm": "Cohort 4",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线改善）"
   },
   {
    "row_id": "eff-2874",
@@ -33920,7 +33920,7 @@
    "arm": "Cohort 1",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
   },
   {
    "row_id": "eff-2875",
@@ -33931,7 +33931,7 @@
    "arm": "Cohort 2",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
   },
   {
    "row_id": "eff-2876",
@@ -33942,7 +33942,7 @@
    "arm": "Cohort 3",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
   },
   {
    "row_id": "eff-2877",
@@ -33953,7 +33953,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线恶化）"
   },
   {
    "row_id": "eff-2878",
@@ -33964,7 +33964,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
   },
   {
    "row_id": "eff-2879",
@@ -33975,7 +33975,7 @@
    "arm": "Cohort 2",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
   },
   {
    "row_id": "eff-2880",
@@ -33986,7 +33986,7 @@
    "arm": "Cohort 3",
    "value": 5.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
   },
   {
    "row_id": "eff-2881",
@@ -33997,7 +33997,7 @@
    "arm": "Cohort 4",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；较基线无变化）"
   },
   {
    "row_id": "eff-2882",
@@ -34008,7 +34008,7 @@
    "arm": "Cohort 1",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
   },
   {
    "row_id": "eff-2883",
@@ -34019,7 +34019,7 @@
    "arm": "Cohort 2",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
   },
   {
    "row_id": "eff-2884",
@@ -34030,7 +34030,7 @@
    "arm": "Cohort 3",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
   },
   {
    "row_id": "eff-2885",
@@ -34041,7 +34041,7 @@
    "arm": "Cohort 4",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第253天；不适用）"
+   "population": "登记结果人群（勃起功能障碍 at 第253天；不适用）"
   },
   {
    "row_id": "eff-2886",
@@ -34052,7 +34052,7 @@
    "arm": "Cohort 4",
    "value": 1.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第281天；较基线改善）"
+   "population": "登记结果人群（勃起功能障碍 at 第281天；较基线改善）"
   },
   {
    "row_id": "eff-2887",
@@ -34063,7 +34063,7 @@
    "arm": "Cohort 4",
    "value": 0.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第281天；较基线恶化）"
+   "population": "登记结果人群（勃起功能障碍 at 第281天；较基线恶化）"
   },
   {
    "row_id": "eff-2888",
@@ -34074,7 +34074,7 @@
    "arm": "Cohort 4",
    "value": 4.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第281天；较基线无变化）"
+   "population": "登记结果人群（勃起功能障碍 at 第281天；较基线无变化）"
   },
   {
    "row_id": "eff-2889",
@@ -34085,7 +34085,7 @@
    "arm": "Cohort 4",
    "value": 2.0,
    "unit": "Participants",
-   "population": "登记结果人群（勃起功能 Dysfunction at 第281天；不适用）"
+   "population": "登记结果人群（勃起功能障碍 at 第281天；不适用）"
   },
   {
    "row_id": "eff-2890",
