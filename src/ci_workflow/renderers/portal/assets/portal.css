@@ -1569,3 +1569,46 @@ input:focus-visible {
 .kz-a-product-grid { grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
 .kz-chart { max-width: 100%; min-width: 0; }
 .kz-a-panel :is(h1, h2, h3, td, th, .kz-filter-chip, a) { overflow-wrap: anywhere; }
+
+
+/* === 320px 移动端修复（独立复核）=== */
+@media (max-width: 480px) {
+  .site-header__title {
+    font-size: 18px !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+  .site-header__subtitle,
+  .portal-page-kicker {
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+  .kz-b-filter-quick__button,
+  .kz-b-filter-button {
+    font-size: 12px !important;
+    padding: 5px 8px !important;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .kz-b-filter-quick__label {
+    font-size: 13px;
+  }
+  .kz-a-filter-options {
+    max-height: 160px;
+  }
+  .portal-main {
+    padding: 12px 8px;
+  }
+  .kz-a-panel, .kz-a-summary {
+    padding: 12px;
+    margin: 0 0 16px;
+  }
+  table {
+    font-size: 13px;
+  }
+  th, td {
+    padding: 6px 4px;
+  }
+}

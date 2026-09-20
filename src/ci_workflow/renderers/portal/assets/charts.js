@@ -279,10 +279,10 @@
         legend: {
           show: series.length > 1,
           data: series.map(function (item) { return item.name; }),
-          top: 0,
-          textStyle: { fontSize: 14 }
+          bottom: 0,
+          textStyle: { fontSize: 13 }
         },
-        grid: { left: 56, right: 24, top: series.length > 1 ? 58 : 36, bottom: 62, containLabel: true },
+        grid: { left: 56, right: 40, top: series.length > 1 ? 66 : 44, bottom: 78, containLabel: true },
         xAxis: {
           type: "category",
           data: categories,
@@ -294,7 +294,7 @@
         yAxis: {
           type: "value",
           name: unitLabel,
-          axisLabel: { fontSize: 16 },
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           scale: false,
           min: function (extent) {
             if (typeof group.y_axis_min === "number") return group.y_axis_min;
@@ -354,7 +354,7 @@
     return withMeta(
       {
         tooltip: { trigger: "item", show: false },
-        grid: { left: 56, right: 24, top: 36, bottom: 48, containLabel: true },
+        grid: { left: 56, right: 40, top: 36, bottom: 48, containLabel: true },
         xAxis: {
           type: "category",
           data: categories,
@@ -363,7 +363,7 @@
         yAxis: {
           type: "value",
           name: unitLabel,
-          axisLabel: { fontSize: 16 },
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           scale: false,
           min: function (extent) {
             if (typeof group.y_axis_min === "number") return group.y_axis_min;
@@ -470,7 +470,7 @@
           top: 0,
           textStyle: { fontSize: 13 }
         },
-        grid: { left: 56, right: 24, top: series.length > 1 ? 58 : 40, bottom: 54, containLabel: true },
+        grid: { left: 56, right: 40, top: series.length > 1 ? 58 : 40, bottom: 54, containLabel: true },
         xAxis: {
           type: "category",
           data: times.map(function (key) { return timeLabels[key]; }),
@@ -478,12 +478,12 @@
           nameLocation: "middle",
           nameGap: 36,
           boundaryGap: false,
-          axisLabel: { fontSize: 14 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "value",
           scale: true,
-          axisLabel: { fontSize: 16 },
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
           max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
         },
@@ -510,17 +510,17 @@
     return withMeta(
       {
         tooltip: { trigger: "axis" },
-        grid: { left: 56, right: 24, top: 40, bottom: 40, containLabel: true },
+        grid: { left: 56, right: 40, top: 40, bottom: 40, containLabel: true },
         xAxis: {
           type: "category",
           data: times,
           boundaryGap: false,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "value",
           scale: true,
-          axisLabel: { fontSize: 16 },
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
           max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
         },
@@ -554,12 +554,12 @@
       {
         tooltip: { trigger: "item" },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "value", name: "效应值", axisLabel: { fontSize: 16 } },
+        xAxis: { type: "value", name: "效应值", axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
         yAxis: {
           type: "category",
           data: categories,
           inverse: true,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         series: [
           {
@@ -683,13 +683,13 @@
         xAxis: {
           type: "category",
           data: arms,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "category",
           data: events,
           inverse: true,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         visualMap: {
           min: 0,
@@ -779,7 +779,7 @@
           name: group.x_axis_label_zh || "疗效",
           nameLocation: "middle",
           nameGap: 42,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "value",
@@ -789,7 +789,7 @@
           min: 0,
           max: 100,
           inverse: true,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         series: [
           {
@@ -851,12 +851,12 @@
       {
         tooltip: { trigger: "item" },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "value", name: "估计值", axisLabel: { fontSize: 16 } },
+        xAxis: { type: "value", name: "估计值", axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
         yAxis: {
           type: "category",
           data: categories,
           inverse: true,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         series: [
           {
@@ -913,7 +913,7 @@
       {
         tooltip: { trigger: "axis" },
         grid: { left: 40, right: 24, top: 48, bottom: 40, containLabel: true },
-        xAxis: { type: "category", data: times, axisLabel: { fontSize: 16 } },
+        xAxis: { type: "category", data: times, axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
         yAxis: { type: "value", show: false, min: 0, max: group.rows.length + 1 },
         series: [
           {
@@ -969,13 +969,13 @@
         xAxis: {
           type: "category",
           data: ["状态"],
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "category",
           data: labels,
           inverse: true,
-          axisLabel: { fontSize: 16 }
+          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         visualMap: {
           min: 0,
