@@ -1805,3 +1805,11 @@ B 单位词表需补齐剩余登记原文变体（按实际出现频次逐条补
 
 ### B r37 单位别名补齐（millimoles/litre→mmol/L 等 7 个变体，提交记录）
 v61 的 B 包残余"units/liter (U/L)"和"millimole(s)/litre"已归一。
+
+### v62 A/C 科学复核失败（omp 退出码 1）
+- A r28 和 C r23 均 failed：omp 子进程退出码 1。可能原因：gemini 提供者
+  暂不可用或网络问题。
+- 下一会话：用 deepseek-flash（cms-router）替代 gemini 重试 A/C 复核，
+  或排查 gemini 提供者可用性后重试。
+- v62 当前状态：B 回执未签（r39 veto 1 项单位混排已修复待重测），
+  A/C 复核待重派。
