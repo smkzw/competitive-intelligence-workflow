@@ -1518,3 +1518,17 @@ format，refs 见视觉 C v52 verdict）为 v53 另一半前置。
 2. 结论层"全部公开疗效观察"改为"按登记终点族与观察窗分组呈现"+ 例外口径声明。
 3. v54 → B r32 + A/C 视觉（v53 digest 生成脚本在 /tmp/gen_visual_prompts_v53.py，
    改 abc-v54 后复用）→ accept-visual ×3。
+
+## B r31 修复 + v54 = 当前候选（收束点）
+
+- `_weeks`：through 窗口取窗口末端周（"Baseline through Week 12"→第12周、
+  "Week 4 through Week 16"→第16周）；"up to" 维持原有接受语义（曾被复核接受，
+  不改）；until/completion/throughout 维持拒绝。
+- 结论层措辞精确化："全部公开疗效观察"→"公开疗效观察…；特殊观察窗按窗口
+  口径标注，排除口径见数据依据"。
+- **v54 = 当前候选**：submit ACCEPTED、A/B gates 过、**eff 366**（NCT05886244
+  输血回避 96.0 等四个窗口比例终点恢复入库，no_timepoint 818→762）。
+- 后台运行中：B r32（deepseek）、A r17 + 视觉文档重算、C r15（gemini）。
+- 下一会话：收三路 verdict → 生成 v54 视觉提示词（visual_contract_digest +
+  断言，脚本 /tmp/gen_visual_prompts_v53.py 改 v54）→ 三节点视觉 →
+  全 accepted → resume → accept-visual ×3 → PNH 竖向收口 → AD B/C → 横向。

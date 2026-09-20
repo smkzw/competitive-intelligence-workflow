@@ -52,8 +52,16 @@ def _weeks(time_frame: str) -> tuple[float | None, str]:
     # 是真实观察，判为第 0 周，不得作 no_timepoint 丢弃
     if re.fullmatch(r"baseline|\u57fa\u7ebf", text.strip()):
         return 0.0, "week"
-    # 治疗窗语义（through/until/completion）：数值非单点随访，拒绝单时间点标注
-    if re.search(r"through|until|to study completion|throughout", text):
+    # 治疗窗语义：through/until 窗口取窗口末端周——登记按窗口汇总的比例型
+    # 终点（如 "Baseline through Week 12" 的输血回避率）据此入表，窗口语义
+    # 由行的时间窗标签与抽屉原文承载（独立复核第三十一轮）
+    m = re.search(r"baseline through week (\d+)", text)
+    if m:
+        return float(m.group(1)), "week"
+    m = re.search(r"week (\d+) through week (\d+)", text)
+    if m:
+        return float(m.group(2)), "week"
+    if re.search(r"until|to study completion|throughout", text):
         return None, "week"
     nums = re.findall(r"(?:day|week)\s+(\d+)", text)
     if nums:
