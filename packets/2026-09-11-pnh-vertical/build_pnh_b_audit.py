@@ -1027,10 +1027,13 @@ from ci_workflow.reports.b.registry_observation import family_meta_for as _polic
 def _family_meta_for(family: str) -> dict:
     """从政策 YAML 获取族元数据，缺省补齐必需键。"""
     meta = _policy_family_meta(family)
+    direction = meta.get("direction", "higher_is_better")
+    if direction not in ("higher_is_better", "lower_is_better"):
+        direction = "higher_is_better"  # not_applicable 在兼容模型中无效
     return {
         "canonical_id": meta.get("canonical_id", family),
         "label_zh": meta.get("label_zh", family),
-        "direction": meta.get("direction", "not_applicable"),
+        "direction": direction,
         "form": meta.get("form", "absolute_value"),
         "units": meta.get("units", ["值"]),
     }

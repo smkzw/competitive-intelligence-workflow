@@ -229,6 +229,88 @@ rules:
     units:
     - percent
     - '%'
+- rule_id: endpoint-igan-proteinuria-v1
+  match_pattern: proteinuria|upcr|urine protein|protein.*urine|urinary protein
+  family_meta:
+    canonical_id: proteinuria
+    label_zh: 蛋白尿
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - g/g
+    - mg/mmol
+    - g/day
+    - ratio
+- rule_id: endpoint-igan-egfr-v1
+  match_pattern: egfr|estimated.*filtration|gfr|glomerular
+  family_meta:
+    canonical_id: egfr
+    label_zh: eGFR 肾功能
+    direction: higher_is_better
+    form: change_from_baseline
+    units:
+    - mL/min
+    - ml/min
+- rule_id: endpoint-igan-hematuria-v1
+  match_pattern: hematuria|blood.*urine|red.*blood.*cell.*urine
+  family_meta:
+    canonical_id: hematuria
+    label_zh: 血尿
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - ratio
+    - count
+- rule_id: endpoint-igan-kidney-function-v1
+  match_pattern: kidney|renal.*function|creatinine|serum creatinine|urine.*creatinine
+  family_meta:
+    canonical_id: kidney_function
+    label_zh: 肾功能指标
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - mg/dL
+    - umol/L
+- rule_id: endpoint-uc-mayo-v1
+  match_pattern: mayo|partial mayo|mayo score
+  family_meta:
+    canonical_id: mayo_score
+    label_zh: Mayo 评分
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - points
+- rule_id: endpoint-uc-remission-v1
+  match_pattern: clinical remission|remission
+  family_meta:
+    canonical_id: clinical_remission
+    label_zh: 临床缓解
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-uc-endoscopic-v1
+  match_pattern: endoscopic|mucosal healing|colonoscopy
+  family_meta:
+    canonical_id: endoscopic_improvement
+    label_zh: 内镜改善
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-uc-bleeding-v1
+  match_pattern: bleeding|rectal bleeding|stool frequency
+  family_meta:
+    canonical_id: bleeding
+    label_zh: 出血/排便症状
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - score
+    - count
 - rule_id: endpoint-pnh-registry-generic-v1
   match_pattern: safety|death|infection|events\b|event rate
   family_meta:
@@ -262,3 +344,12 @@ rules:
     units:
     - points
     - score
+- rule_id: endpoint-generic-unclassified-v1
+  match_pattern: .+
+  family_meta:
+    canonical_id: generic_unclassified
+    label_zh: 未分类登记观察
+    direction: not_applicable
+    form: absolute_value
+    units:
+    - 值

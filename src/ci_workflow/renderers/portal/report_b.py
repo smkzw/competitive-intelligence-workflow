@@ -2704,7 +2704,11 @@ def _group_title(
     if include_population and population and population != "分析人群未列示":
         parts.append(population)
     if domain == "safety":
-        parts.insert(0, "安全性")
+        family = _text(row.get("family", row.get("event_family", "")))
+        if "sae" in family.casefold() or "严重" in family:
+            parts.insert(0, "严重不良事件")
+        else:
+            parts.insert(0, "安全性")
     elif domain == "baseline":
         parts.insert(0, "基线")
     elif domain == "disposition":
@@ -3344,6 +3348,8 @@ _FILTER_STATIC_LABELS = {
     "all": "登记全队列",
     "received_treatment": "接受治疗",
     "completed_treatment": "完成治疗",
+    "received_treatment": "接受治疗",
+    "completed_treatment": "完成治疗",
     "participant_flow": "受试者流转",
     "baseline_sample_size": "基线样本量",
     "sample_size": "样本量",
@@ -3392,6 +3398,9 @@ def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
         return f"第{int(cohort.group(1))}队列"
     if text.startswith("nct") and text.endswith("-all"):
         return "登记全队列"
+    period_match = re.match(r"^(nct[0-9]+)-p(\d+)$", text)
+    if period_match:
+        return f"第{int(period_match.group(2))}治疗期"
     if text == "not_reported":
         return "未列示"
     zh_trim = re.sub(r"[A-Za-z0-9_.\-]+$", "", text)

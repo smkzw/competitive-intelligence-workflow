@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-deepseek-vis-abc21-c",
+  "verdict_id": "verdict-omp-deepseek-vis-abc32-c",
   "format": "html",
-  "visual_plan_digest": "568b634ea90253d834c3e6615df6e6be7de2bd51bf710906969767feab3e62ea",
-  "candidate_artifact_digest": "6f849bea98b5f0daed180004c3f539992a01b0b8d5a6d1c17b95181f70942d8a",
-  "render_evidence_digest": "511ccd19dee75dfb8af727a66d3d376e7682d64f5b5be875448335c71a417297",
+  "visual_plan_digest": "6bd3d5f12a1f65caa83f300e1f91f61beb723135052297ef5b7d9758d2feb614",
+  "candidate_artifact_digest": "7d0a8f8be42fb65c737f4e90d81443302a0bb247f9e2f1479a478da7f50495d5",
+  "render_evidence_digest": "2c619b3e522c2170e85a5faf5b3e8b4ca466ad53982f9761383548bb72abe2fe",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-cms-router-deepseekflash-max",
   "verdict": "rejected",
@@ -17,10 +17,9 @@
         "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html、endpoint-timepoint-matrix.html、trials/nct04469465.html（自建 Chromium 1440×900 实测，逐页扫描 document.body.innerText）：对 snapshot/report-snapshot/reported_value/not_reported/cohort-/src-/row-/claim-/coverage-set/evidence-snapshot/__/.html/.json/runs//undefined/null/TODO/placeholder/NaN 逐项检索命中数为 0；页面 H1/导航/筛选摘要（未设置筛选／已选 1 项／显示全部可用记录（12 条））与按钮（查看依据、展开完整数据表）均为中文",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html 数据依据抽屉（Chromium 1440×900 实开「计划或实际样本量」行）：量表／时间点缺项呈现中文「来源未列示」，单位呈现「例」，披露状态呈现「已报告值」，来源版本呈现「ClinicalTrials.gov」，原文定位呈现「章节：登记结果；打开原文」——均系显式中文声明，非空白占位",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html 与 trials/nct04469465.html 完整数据表（折叠展开后逐行读取）：未取到值的单元格呈现中文「未公开」，未取到来源的字段呈现「来源未列示」，无空字符串单元格或空白墙",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/assets/portal.js 站点搜索（三页实测，输入 zzzqqq）：返回中文空态「未找到匹配页面或数据」，非空白结果区"
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/overview.html、design-map.html、trial-profile.html、treatment-arms.html、inclusion-criteria.html、exclusion-criteria.html、population-disease-definition.html、design-patterns.html、endpoint-timepoint-matrix.html、visit-duration-followup.html、sample-analysis-statistics.html 与 trials/ 下 6 个试验页：本人逐页(17/17)对可见文本分块去重后扫描 snake_case、camelCase、内部 id、文件路径、claim/evidence/snapshot 标识，命中数为 0；页面中出现的 coversin、danicopan、ravulizumab、alxn2050、eculizumab 为药物通用名，NCT 号为试验登记号，英文长句均带「登记入选标准原文／登记排除标准原文」中文前缀，属原文引用而非系统术语",
+        "packets/2026-09-18-omp-visual/render-evidence-c.json 全部 30 个呈现目标（Chromium/WebKit × 5 视口 × 3 代表页）visible_text_scan.passed=true，engineering_tokens_found=[]、untranslated_tokens_found=[]，本人复核该字段与页面实测一致",
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/visit-duration-followup.html 与 overview.html 数据依据抽屉（点击矩阵单元格打开）：缺失证据以「未公开」「未公开披露」「来源未列示」「不适用」显式中文声明，全站未出现占位符、TODO/TBD、空字符串或空白模拟（正则扫描「暂无|未公开|未披露|无公开记录|未检索到」在对应页命中，仅 visit-duration-followup 与 sample-analysis-statistics 触发空态声明）"
       ]
     },
     {
@@ -31,10 +30,9 @@
         "同一数据在图、表、抽屉三投影中保持同源一致"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html（Chromium 1440×900 实测结构顺序）：MAIN 直接子节点为 页头（H1 首页＋适应症／观察截止＋一句说明）→ 折叠筛选项 → 唯一内容区 .kz-c-visual-section（实测高度 15403px）；全页可见标题枚举仅为 首页／研究 × 设计要素横向矩阵／外部来源／数据依据，对 conclusion/insight/pattern/callout/takeoff/tradeoff 类名检索仅命中筛选摘要与「展开完整数据表」，即总览页无任何结论、要点或判断区块",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html（同法实测）：图投影 SVG 的 10 个行标签（试验标识／目标人群／入选标准／排除标准／随机与盲法／试验组干预／给药方案／主要终点定义／主要终点时间点／计划或实际样本量）与下方横向矩阵表 10 个行键逐字相同，且两者同时以展开形态呈现原始入选／排除标准全文（SVG 内含「登记排除标准原文：Body weight <50kg」等，矩阵单元格 aria-label 含同一原文），逐项细节未下沉而重复展开两次；结论性内容存在于另一页 design-patterns.html（H1 设计模式、权衡与可选路径／关键设计选择），总览页既无该结论层也无任何指向它的正文链接（.portal-main 内 a 元素数为 0）",
-        "判据二实测不成立：runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html 点选「量表＝血红蛋白」（该分组自标「图表及明细 · 可多选」）后，图投影 SVG 文本仍为 230 条（6 个试验列全部保留）、完整数据表仍为 122 行可见，而横向矩阵仅余 2 个可见单元格；再叠加「试验＝NCT02591862」后矩阵可见单元格归零而图与表仍为 29／22 条——三投影在同一筛选状态下互不一致",
-        "旁证：packets/2026-09-18-omp-visual/render-evidence-c.json 的 30 个目标只探测 filter_change「passed」（文本长度变化）而未区分筛选维度，无法反映上述不一致；三类投影的分歧由本轮逐投影实测确认"
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/overview.html：首屏结构实测为 页面头(首页／适应症／观察截止) → 快速筛选(5 个产品钮) → 筛选条件折叠 → 「核心设计事实比较」矩阵，可见文本中「结论|摘要|关键发现|要点|建议|洞察|小结」零匹配，未满足本策划书 page_responsibilities.overview.information_hierarchy[0]=「结论优先」；同页标题层级中 h2 均为 visually-hidden 空标题（真实 h2 仅「首页」「外部来源」）",
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/overview.html 与 design-map.html：两页主体内容等同（main innerHTML 391950 vs 391953 字节，去空白可见文本长度仅差 1 字符；图表标题同为「核心设计事实比较」、data-chart-type 同为 core-design-matrix、筛选按钮同为 45 个、折叠明细同为 130 行、图表标题与 aria-label 完全相同），首页未承担索引页的结论层与细节下沉职责，两个策划书独立 page_id 实为重复页",
+        "同源一致一项本人实测成立：overview.html 图表 series[0] 的 91 条行数据与「展开完整数据表」130 行逐项比对，「计划或实际样本量」为 NCT02591862=1／NCT02605993=26／NCT03181633=8／NCT04170023=29／NCT04469465=86／NCT05886244=25，与表格完全一致；「随机与盲法」「主要终点时间点」亦逐项一致；抽屉显示 danicopan 样本量 8，与图表、表格三投影一致"
       ]
     },
     {
@@ -45,10 +43,9 @@
         "长药品名/试验名换行不截断关键标识"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/assets/report-c.js:577-578（图表事实标签 fontSize: elements.length <= 4 ? 11 : 10、lineHeight: 14）：承载事实正文的图表标签被硬编码为 10px／11px，低于策划书 visual_variables.font_sizes_px 刻度 [12,14,16,20,24,32] 与「正文不小于 12px」，行高 14px 与 18.15px 亦不落在 4/8 基线",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html（自建 Chromium 1440×900 逐节点实测字号直方图）：overview.html 低于 12px 的可见文本节点 230 个（10px × 214、11px × 16，最小 10px）；endpoint-timepoint-matrix.html 37 个（11px × 37）；trials/nct04469465.html 32 个（10px × 19、11px × 13）",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/assets/report-c.js:469-493（lineLength=18、maxLines=5，超限后追加「…」）：endpoint-timepoint-matrix.html 与 trials/nct04469465.html 图内试验名被省略号截断，实测文本为「coversin II…」「ravulizumab…」「danicopan I…」「alxn2050 II…」「eculizumab …」，关键标识（期别）被截去",
-        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png 与 packets/2026-09-18-omp-visual/screenshots/C/chromium/768__overview.html.png（亲自读图复核）：排除标准／入选标准行的 10px 级原文标签在单元格内纵向挤叠，行距明显不足 4/8 基线"
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/overview.html、design-map.html、trial-profile.html：实测 DOM 文本字号 989 个元素不在本策划书 font_sizes_px=[12,14,16,20,24,32] 刻度上——28.8px(H1.portal-page-title)、18px(H2)、17px(kz-evidence-drawer__title)、15.2px×788、14.08px×147(矩阵表头)、13.76px、13.6px、12.8px、12.48px；图内数据标签为 10px（overview 231 个 text 节点）与 11px（endpoint-timepoint-matrix、treatment-arms 等 37/45 个），低于「正文不小于 12px」下限",
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/overview.html、trials/nct04469465.html：非 4/8 基线间距实测存在——padT/padB:10px×11（A.site-nav-group__link）、gap:6px×5、gap:2px×5、marB:10px×3（H2）、marT:14px×3、padT:14px×2（kz-evidence-drawer__header）、gap:10px×2",
+        "packets/2026-09-18-omp-visual/screenshots/C/chromium/1440__overview.html.png 与 1440__endpoint-timepoint-matrix.html.png：轴标签以省略号截断并丢失关键标识（「alxn2050 II…」「coversin II…」「ravulizumab…」「eculizumab …」），试验期别信息不可辨；同截图与 320__overview.html.png 中热图单元格内英文原文按字符折行产生断裂词（如「Documente d」「Participa tion」），未满足「长药品名/试验名换行不截断关键标识」"
       ]
     },
     {
@@ -59,9 +56,9 @@
         "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html、endpoint-timepoint-matrix.html、trials/nct04469465.html（自建 Chromium 1440×900 全元素计算色值统计）：策划书 visual_variables.department_tokens 声明的四科室色中，绿 #587B3B（--kz-dmst）与紫 #A85F34（--kz-pv）在三个页面落地元素数为 0；橙 #FF9900 仅落在 site-header__logo 与 IMG（每页 2~4 个装饰元素），蓝 #407AAA 仅落在页脚外部来源链接（1~6 个 A），均未承载任何科室语义",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/assets/report-c.css:3-10（C 自持令牌 --kz-c-ink/#1f2937、--kz-c-muted/#4b5563、--kz-c-line/#e5e7eb、--kz-c-soft/#f8fafc、--kz-c-accent/#f59e0b、--kz-c-focus/#2563eb）与 report-c.css:140-142（选中态使用 --kz-c-accent-soft）：报告主强调色 #f59e0b 不在策划书 palette_tokens（kz-orange/kz-med-blue/kz-stats-green/kz-pv/kz-text-1..3/kz-border）之内；策划书声明的 kz-med-blue、kz-stats-green 名称在产物中不存在，产物改用 --kz-med/--kz-co/--kz-dmst/--kz-pv，且 --kz-pv 在 assets/portal.css:21-22 定义后全站无引用",
-        "判据二实测成立并已逐节点核对：runs/pnh-vertical/abc-v21/reports/C/v1/html 三代表页全部可见文本节点按自身最近不透明背景计算 WCAG 对比度，低于 4.5:1 者为 0；披露状态、未公开、来源未列示等结论均以中文文字标注（抽屉内 dt/dd 成对呈现），非仅靠颜色区分——故本域不通过仅由判据一的科室令牌缺失与令牌层不一致导致"
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/assets/portal.css（第 9-22 行）仅定义 --kz-med:#FF9900、--kz-co:#407AAA、--kz-dmst:#587B3B、--kz-pv:#A85F34；本策划书 palette_tokens 声明的 kz-med-blue、kz-stats-green、kz-text-1、kz-text-2、kz-text-3、kz-bg、kz-white、kz-surface-warm 在 portal.css、report-c.css、evidence-drawer.css、report-c.js、evidence-drawer.js 中一概未定义（kz-border 仅在样式对象键名出现 2 次），department_tokens 的 MED/CO/DMST/PV 映射无完整落地",
+        "17/17 页计算样式逐元素扫描：绿令牌 rgb(88,123,59) 命中 0 次、紫令牌 rgb(168,95,52)（--kz-pv 实为褐色，非紫色）命中 0 次，仅橙 rgb(255,153,0) 命中 3-4 处、蓝 --kz-co rgb(64,122,170) 命中 1-6 处，故「橙/蓝/绿/紫四科室令牌跨页面语义一致」不成立；runs/pnh-vertical/abc-v32/reports/C/v1/html/assets/report-c.js(517-518 行) 热图单元格颜色为按行序号交替的装饰色 #FFF1D6/#FFF8EC，与科室语义无关",
+        "对比度一项本人实测成立：17 页 DOM 文本中低于 4.5:1 的元素为 0（含背景逐级回溯计算），图表标签 #243650 在 #FFF1D6／#FFF8EC 底上对比度为 10.94／11.57，标题与正文色 #1f2937 于白底充分可读"
       ]
     },
     {
@@ -72,10 +69,10 @@
         "图表与对应表格数值一致（同源投影）"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html、endpoint-timepoint-matrix.html、trials/nct04469465.html（Chromium 1440×900 实测 .kz-chart-module 文本与交互）：图表容器 .kz-c-chart-canvas 仅含 role=\"img\" aria-label=\"核心设计事实比较\" 与一个 SVG，图内既无来源声明行亦无单位／坐标量纲标注（对「单位／例／条／量纲／坐标」逐项检索，三页图表区均为 0 命中；「例」仅存在于数据依据抽屉的 dd 字段）；对图表内 189／33／34 个 SVG path 派发真实 click 后数据依据抽屉宽度仍为 0，图表侧无任何来源绑定",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html（Chromium 1440×900 实测空态）：点选「量表＝血红蛋白」后横向矩阵表由 78 个可见单元格降至 2 个，再叠加「试验＝NCT02591862」后可见单元格归零，矩阵区呈现为空网格且全页无任何「暂无／无匹配／未找到」显式声明（对 .kz-c-visual-section 文本检索命中 0），即空态未显式声明",
-        "判据二在无筛选与产品筛选下实测成立：runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html 图表样本量行数值 1／26／8／29／86／25 与完整数据表逐试验值（NCT02591862=1、NCT02605993=26、NCT03181633=8、NCT04170023=29、NCT04469465=86、NCT05886244=25）及抽屉「值 25／单位 例」一致；点选产品 danicopan 后图表试验列 6→2，横向矩阵与完整数据表中非命中试验单元格可见数均为 0，同源联动成立——故本域不通过仅由判据一的来源绑定、量纲标注与空态声明缺失导致",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/assets/report-c.js:446-459 之外，图表单元格无 data-evidence-open 或 aria-label 绑定（实测 path 的 getAttribute('aria-label') 为 null、无 click 处理器），来源与依据仅能在下方表格行「查看依据」与页脚「外部来源」获得"
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/ 全部 17 页：图表宿主仅带 data-chart-type（如 core-design-matrix、visit-timeline、sample-size-bar），页面内 data-source／data-claim-id／data-evidence 属性计数为 0、claim-* 标识零出现，未实现本策划书 chart_syntax.source_claim_ids=claim-pnh-a 的来源声明绑定；treatment-arms、endpoint-timepoint-matrix、visit-duration-followup、sample-analysis-statistics 的图表模块内不存在任何来源／量纲／口径声明文本（notes=[]），图表 option 中 graphic=0、tooltip 未配置 formatter",
+        "12/17 页图表两个坐标轴 name 均为空（overview、design-map、trial-profile、design-patterns、endpoint-timepoint-matrix、visit-duration-followup 及 6 个试验页的 trial-design-summary），仅 inclusion-criteria／exclusion-criteria／population-disease-definition 的横轴「公开条目（条）」与 sample-analysis-statistics 的横轴「计划或实际样本量（例）」带量纲，未满足「坐标量纲标注」",
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/visit-duration-followup.html：标题为「关键评估与随访时间」的图表 x 轴唯一类目为「未公开」，6 个散点全部堆叠于该单一类目，展开表 6 行均为「设计要素=给药方案、时间点=未公开」，图表实为零信息点阵而非显式空态声明；同页 overview.html 热图 247 个 SVG 文本在 320px 视口产生 2050 对标签压叠，packets/2026-09-18-omp-visual/render-evidence-c.json 亦自记 overview 全视口 label_overlap_count 2888/2841/2869/2855/2877 而 defects=[]",
+        "同源投影一项本人实测成立：图表 series[0] 行数据与「展开完整数据表」130 行在「计划或实际样本量」「主要终点时间点」「随机与盲法」三个维度上逐项完全一致，抽屉值（danicopan 样本量 8、LDH/正常上限比值）与前两者一致"
       ]
     },
     {
@@ -86,9 +83,9 @@
         "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
       ],
       "evidence_refs": [
-        "判据一实测不成立（筛选一类触发行为在同一站点内不一致）：runs/pnh-vertical/abc-v21/reports/C/v1/html/endpoint-timepoint-matrix.html（Chromium 1440×900）点选「量表＝LDH」与「设计要素＝主要终点定义」（两分组均自标「图表及明细 · 可多选」）后，图表 SVG 文本逐条相同（37 条不变）、完整数据表可见行相同（12 行不变），状态栏仅显示「已选 1 项，显示 12 条记录」；而同页「试验／产品」维度筛选联动有效（试验＝NCT02591862 时可见行 12→2、产品＝danicopan 时图表 37→12、行 12→4）；runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html 上同一「量表」维度却只作用于横向矩阵（78→2 单元格）而不作用于图表与完整数据表（仍 230 条／122 行）",
-        "判据一其余五类实测一致：三页（overview.html、endpoint-timepoint-matrix.html、trials/nct04469465.html）自建 Chromium 1440×900 实测下钻（kz-complete-table 经 summary/Enter 展开，overview 122 行、endpoint 12 行、trial 26 行，未改动其他区块）、抽屉（matrix 单元格按钮与表格「查看依据」按钮均可打开，宽度 527px，Escape 关闭后宽度归 0）、搜索（输入 danicopan 出现命中高亮 site-header__search-result-mark，无命中返回中文空态）、减弱动效（三页内容区 transition/animation duration 均为 0s，终态直接呈现）行为一致",
-        "判据二实测成立：runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html 折叠表展开后 Tab 序为 BUTTON.kz-c-evidence-button 与 TR.kz-chart-table__row(tabindex=0) 交替，聚焦「查看依据」按钮后按 Enter 抽屉打开（宽度 527px）；矩阵单元格为原生 BUTTON，聚焦后 Enter 同样打开抽屉；三页均如此，故本域不通过仅由判据一的筛选触发不一致导致"
+        "六类中五类实测成立（Chromium 实测 17 页）：筛选——overview 正文 12295→4025 字、图表文本 247→49，endpoint-timepoint-matrix 868→566，恢复后回到 12295；下钻——details 切换正确，展开后文档高 3097→17229、130 行明细可见并回收；抽屉——17/17 页点击矩阵单元格或「查看依据」均可打开，焦点进入抽屉，Escape 关闭；搜索——header 输入后结果列表渲染 25 条可见项，Escape 清空并隐藏面板、重复输入可再次展开，点击结果跳转 trial-profile.html；键盘——Tab 顺序可达 details summary 与矩阵单元格按钮（outline 3px 可见焦点环），Space/Enter 切换折叠表与打开抽屉",
+        "减弱动效一项实测不成立：在 matchMedia('(prefers-reduced-motion: reduce)').matches=true 的页面上下文中，sample-analysis-statistics.html 的样本量条形图仍发生完整过渡动画——rAF 采样 40 帧得 18 组中间几何，样例帧 1ms=0 → 124ms=197.2 → 274ms=857.7 → 440ms=868（px）；对照 no-preference 同为 19-20 组中间几何；runs/pnh-vertical/abc-v32/reports/C/v1/html/assets/report-c.js 固定设置 animationDuration 280/300/320 且全文无 matchMedia 判断，assets/portal.css(941-949) 的 reduced-motion 规则仅覆盖 CSS transition/animation，故「全站过渡禁用／跳过过渡直接呈现终态」未达成",
+        "runs/pnh-vertical/abc-v32/reports/C/v1/html/design-patterns.html：抽屉 Escape 关闭后焦点停留在 kz-evidence-drawer__close 按钮而非触发按钮，与 overview.html、trials/nct02605993.html 的「焦点回归触发钮」行为不一致"
       ]
     },
     {
@@ -99,12 +96,11 @@
         "四类视口下导航、表格与图表保持可用"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/overview.html（自建 Chromium 实测，5 类视口）：图表 SVG 可见标签 230 个，标签两两压叠对数为 1440px 409、1024px 417、768px 489、390px 1350、320px 1608；endpoint-timepoint-matrix.html（37 个标签）为 19／22／26／141／203；trials/nct04469465.html（32 个标签）为 1／1／1／1／10——图表文本相互压叠，构成内容层面的断裂（页面级水平溢出在全部 15 组组合中为 0，documentElement.scrollWidth 恒等于 clientWidth）",
-        "runs/pnh-vertical/abc-v21/reports/C/v1/html/assets/report-c.js:469-493 与 570-582：图表标签直接输出最多 5 行 × 18 字的事实全文且未设置 width/overflow 约束（对照 report-c.js:543-568 的画布轴标签另设约束），字号同时降至 10px，导致标签溢出单元格互相压叠",
-        "packets/2026-09-18-omp-visual/screenshots/C/chromium/768__overview.html.png 与 packets/2026-09-18-omp-visual/screenshots/C/webkit/768__overview.html.png（亲自读图复核）：排除标准／入选标准／主要终点定义行标签与相邻文本互相插叠成不可读黑块，两引擎呈现同一断裂形态；packets/2026-09-18-omp-visual/screenshots/C/chromium/320__overview.html.png（亲自读图复核）：图表被压至 270px 宽仍绘 230 个标签，样本量行数值挤成「1 26 8 298625」，图表在 320px 视口不可用",
-        "旁证：packets/2026-09-18-omp-visual/render-evidence-c.json 生产者自测 metrics.label_overlap_count 在全部 30 个目标上为 670~2922（label_overlap_count＞0 视为其自身已探测到压叠），而 defects 为空数组且未记入任何域"
+        "双引擎一致性一项本人实测成立：对同一 run 的 packets/2026-09-18-omp-visual/screenshots/C/chromium 与 webkit 同页同视口截图做像素比对，差异像素占比 1.48%-7.35%（>64/255 强差异 0.54%-3.52%），属字体栅格差异量级；独立双引擎探测（Chromium 与 WebKit 各跑 320/390/768/1024/1440）水平溢出均为 0px、文档宽度恒等于视口宽度，未发现布局断裂或引擎性溢出差异",
+        "四类视口可用性不成立：runs/pnh-vertical/abc-v32/reports/C/v1/html/overview.html 图表宿主宽度随视口为 270/340/718/974/1130px，而 SVG 文本恒为 247 个、最小字号 10px，压叠对数在 320/390/768/1024/1440 分别为 2050/1783/758/672/662，320px 与 390px 另有 8 与 4 个文本越出视口；packets/2026-09-18-omp-visual/screenshots/C/chromium/320__overview.html.png 与 webkit/320__overview.html.png 实测热图挤为不可读斑块（样本量数值呈「1 26 8 298625」无分隔），1024__endpoint-timepoint-matrix.html.png 亦见同一单元格内「LDH较基线百分比变化（Day…」与相邻文本相互压盖",
+        "packets/2026-09-18-omp-visual/render-evidence-c.json 自身声明 label_overlap_count 在 overview 全视口为 2888/2841/2869/2855/2877、endpoint-timepoint-matrix 为 727/670/723/820/860，却同时声明 defects=[]、responsive_alternatives=[]、unavailable_required_fields=[]，即生产方未把窄视口图表不可用识别为缺陷，也无响应式替代"
       ]
     }
   ],
-  "created_at": "2026-09-19T11:03:00Z"
+  "created_at": "2026-09-20T04:54:28Z"
 }

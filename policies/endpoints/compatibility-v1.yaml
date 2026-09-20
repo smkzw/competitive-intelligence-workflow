@@ -1,117 +1,212 @@
-schema_version: "1.0"
+schema_version: '1.0'
 policy_id: endpoint-compatibility-v1
-version: "1.0"
+version: '1.0'
 rules:
-  # ── PNH 登记终点族（v1.2，2026-09-12）：源自 CT.gov PNH 189 条记录 132 个真实登记
-  # 终点的族级归并（LDH/血红蛋白/输血回避/突破性溶血/生存/TEAE 计数等）；
-  # 单位与分析形式按登记实际多值声明，方向为族内主导方向。
-  - rule_id: endpoint-pnh-ldh-change-v1
-    construct_id: pnh_ldh_change
-    label_zh: LDH 水平变化
-    endpoint_ids: [ldh, "lactate dehydrogenase", "ldh level", "ldh change"]
-    direction: lower_is_better
-    allowed_units: [U/L, percent, "%", "percent change", units/L]
-    analysis_forms: [change_from_baseline]
-    difference_label_zh: LDH 终点的方向、单位或分析形式不一致
-  - rule_id: endpoint-pnh-hemoglobin-v1
-    construct_id: pnh_hemoglobin_response
-    label_zh: 血红蛋白水平/应答
-    endpoint_ids: [hemoglobin, hgb, "hemoglobin level", "hgb change", "change from baseline in hgb", "hemoglobin response"]
-    direction: higher_is_better
-    allowed_units: [g/L, g/dL, percent, "%"]
-    analysis_forms: [change_from_baseline, response_rate]
-    difference_label_zh: 血红蛋白终点的方向、单位或分析形式不一致
-  - rule_id: endpoint-pnh-transfusion-v1
-    construct_id: pnh_transfusion_avoidance
-    label_zh: 输血回避/输血量
-    endpoint_ids: [transfusion, transfusion-free, "transfusion avoidance", "prbc transfused", "units of prbcs transfused", "transfusion-free participants"]
-    direction: higher_is_better
-    allowed_units: [Participants, "units of pRBCs", percent, "%"]
-    analysis_forms: [response_rate, event_rate]
-    difference_label_zh: 输血终点的方向、单位或分析形式不一致
-  - rule_id: endpoint-pnh-breakthrough-hemolysis-v1
-    construct_id: pnh_breakthrough_hemolysis
-    label_zh: 突破性溶血
-    endpoint_ids: ["breakthrough hemolysis", bth]
-    direction: lower_is_better
-    allowed_units: [Participants, percent, "%"]
-    analysis_forms: [response_rate, event_rate]
-    difference_label_zh: 突破性溶血终点的方向、单位或分析形式不一致
-  - rule_id: endpoint-pnh-survival-v1
-    construct_id: pnh_overall_survival
-    label_zh: 总生存/无事件生存
-    endpoint_ids: ["overall survival", os, "event-free survival", efs, dfs, "disease-free survival", "two-year overall survival", "overall survival (os)"]
-    direction: higher_is_better
-    allowed_units: ["percentage of participants", percent, "%", Participants, months, days]
-    analysis_forms: [response_rate, event_rate]
-    difference_label_zh: 生存终点的方向、单位或分析形式不一致
-  - rule_id: endpoint-pnh-complement-inhibition-v1
-    construct_id: pnh_complement_inhibition_pd
-    label_zh: 补体抑制药效学指标
-    endpoint_ids: [complement, c5, ch50, "complement inhibition", "pharmacodynamic effect", "pd effect", "free c5", "ach-0144471 plasma concentration"]
-    direction: higher_is_better
-    allowed_units: ["percentage reduction from baseline", percent, "%", ug/ml, mcg/ml, mg/L]
-    analysis_forms: [change_from_baseline, response_rate, absolute_value]
-    difference_label_zh: 补体药效终点的方向、单位或分析形式不一致
-  - rule_id: endpoint-pnh-registry-generic-v1
-    construct_id: pnh_registry_other_observations
-    label_zh: PNH 登记其他观察（通用族）
-    endpoint_ids: ["adverse events", teae, ae, safety, other, "registry observation"]
-    direction: higher_is_better
-    allowed_units: [Participants, percent, "%", event_rate, days, events]
-    analysis_forms: [response_rate, event_rate]
-    difference_label_zh: 通用登记观察的方向、单位或分析形式不一致
-
-  - rule_id: endpoint-easi75-response-v1
-    construct_id: easi75_response
-    label_zh: EASI-75 应答
-    endpoint_ids:
-      - easi75
-      - easi_75_response
-      - easi75_response
-    direction: higher_is_better
-    allowed_units:
-      - "%"
-    analysis_forms:
-      - response_rate
-    difference_label_zh: 终点方向、单位或分析形式不一致
-  - rule_id: endpoint-easi-total-change-v1
-    construct_id: easi_total_score
-    label_zh: EASI 总分变化
-    endpoint_ids:
-      - easi_total_score
-      - easi_total_score_change
-      - easi_total_change
-    direction: lower_is_better
-    allowed_units:
-      - points
-      - score
-    analysis_forms:
-      - change_from_baseline
-    difference_label_zh: EASI 总分的方向、单位或分析形式不一致
-  - rule_id: endpoint-easi-total-absolute-v1
-    construct_id: easi_total_score
-    label_zh: EASI 总分绝对值
-    endpoint_ids:
-      - easi_total_score
-    direction: lower_is_better
-    allowed_units:
-      - points
-      - score
-    analysis_forms:
-      - absolute_value
-    difference_label_zh: EASI 总分绝对值与变化值不得混合
-  - rule_id: endpoint-nps-change-v1
-    construct_id: nasal_polyp_score
-    label_zh: 鼻息肉评分变化
-    endpoint_ids:
-      - nps
-      - nasal_polyp_score
-      - nps_change
-    direction: lower_is_better
-    allowed_units:
-      - points
-      - score
-    analysis_forms:
-      - change_from_baseline
-    difference_label_zh: 鼻息肉评分的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-ldh-change-v1
+  construct_id: pnh_ldh_change
+  label_zh: LDH 水平变化
+  endpoint_ids:
+  - ldh
+  - lactate dehydrogenase
+  - ldh level
+  - ldh change
+  direction: lower_is_better
+  allowed_units:
+  - U/L
+  - percent
+  - '%'
+  - percent change
+  - units/L
+  analysis_forms:
+  - change_from_baseline
+  difference_label_zh: LDH 终点的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-hemoglobin-v1
+  construct_id: pnh_hemoglobin_response
+  label_zh: 血红蛋白水平/应答
+  endpoint_ids:
+  - hemoglobin
+  - hgb
+  - hemoglobin level
+  - hgb change
+  - change from baseline in hgb
+  - hemoglobin response
+  direction: higher_is_better
+  allowed_units:
+  - g/L
+  - g/dL
+  - percent
+  - '%'
+  analysis_forms:
+  - change_from_baseline
+  - response_rate
+  difference_label_zh: 血红蛋白终点的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-transfusion-v1
+  construct_id: pnh_transfusion_avoidance
+  label_zh: 输血回避/输血量
+  endpoint_ids:
+  - transfusion
+  - transfusion-free
+  - transfusion avoidance
+  - prbc transfused
+  - units of prbcs transfused
+  - transfusion-free participants
+  direction: higher_is_better
+  allowed_units:
+  - Participants
+  - units of pRBCs
+  - percent
+  - '%'
+  analysis_forms:
+  - response_rate
+  - event_rate
+  difference_label_zh: 输血终点的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-breakthrough-hemolysis-v1
+  construct_id: pnh_breakthrough_hemolysis
+  label_zh: 突破性溶血
+  endpoint_ids:
+  - breakthrough hemolysis
+  - bth
+  direction: lower_is_better
+  allowed_units:
+  - Participants
+  - percent
+  - '%'
+  analysis_forms:
+  - response_rate
+  - event_rate
+  difference_label_zh: 突破性溶血终点的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-survival-v1
+  construct_id: pnh_overall_survival
+  label_zh: 总生存/无事件生存
+  endpoint_ids:
+  - overall survival
+  - os
+  - event-free survival
+  - efs
+  - dfs
+  - disease-free survival
+  - two-year overall survival
+  - overall survival (os)
+  direction: higher_is_better
+  allowed_units:
+  - percentage of participants
+  - percent
+  - '%'
+  - Participants
+  - months
+  - days
+  analysis_forms:
+  - response_rate
+  - event_rate
+  difference_label_zh: 生存终点的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-complement-inhibition-v1
+  construct_id: pnh_complement_inhibition_pd
+  label_zh: 补体抑制药效学指标
+  endpoint_ids:
+  - complement
+  - c5
+  - ch50
+  - complement inhibition
+  - pharmacodynamic effect
+  - pd effect
+  - free c5
+  - ach-0144471 plasma concentration
+  direction: higher_is_better
+  allowed_units:
+  - percentage reduction from baseline
+  - percent
+  - '%'
+  - ug/ml
+  - mcg/ml
+  - mg/L
+  analysis_forms:
+  - change_from_baseline
+  - response_rate
+  - absolute_value
+  difference_label_zh: 补体药效终点的方向、单位或分析形式不一致
+- rule_id: endpoint-pnh-registry-generic-v1
+  construct_id: pnh_registry_other_observations
+  label_zh: PNH 登记其他观察（通用族）
+  endpoint_ids:
+  - adverse events
+  - teae
+  - ae
+  - safety
+  - other
+  - registry observation
+  direction: higher_is_better
+  allowed_units:
+  - Participants
+  - percent
+  - '%'
+  - event_rate
+  - days
+  - events
+  analysis_forms:
+  - response_rate
+  - event_rate
+  difference_label_zh: 通用登记观察的方向、单位或分析形式不一致
+- rule_id: endpoint-easi75-response-v1
+  construct_id: easi75_response
+  label_zh: EASI-75 应答
+  endpoint_ids:
+  - easi75
+  - easi_75_response
+  - easi75_response
+  direction: higher_is_better
+  allowed_units:
+  - '%'
+  analysis_forms:
+  - response_rate
+  difference_label_zh: 终点方向、单位或分析形式不一致
+- rule_id: endpoint-easi-total-change-v1
+  construct_id: easi_total_score
+  label_zh: EASI 总分变化
+  endpoint_ids:
+  - easi_total_score
+  - easi_total_score_change
+  - easi_total_change
+  direction: lower_is_better
+  allowed_units:
+  - points
+  - score
+  analysis_forms:
+  - change_from_baseline
+  difference_label_zh: EASI 总分的方向、单位或分析形式不一致
+- rule_id: endpoint-easi-total-absolute-v1
+  construct_id: easi_total_score
+  label_zh: EASI 总分绝对值
+  endpoint_ids:
+  - easi_total_score
+  direction: lower_is_better
+  allowed_units:
+  - points
+  - score
+  analysis_forms:
+  - absolute_value
+  difference_label_zh: EASI 总分绝对值与变化值不得混合
+- rule_id: endpoint-nps-change-v1
+  construct_id: nasal_polyp_score
+  label_zh: 鼻息肉评分变化
+  endpoint_ids:
+  - nps
+  - nasal_polyp_score
+  - nps_change
+  direction: lower_is_better
+  allowed_units:
+  - points
+  - score
+  analysis_forms:
+  - change_from_baseline
+  difference_label_zh: 鼻息肉评分的方向、单位或分析形式不一致
+- rule_id: endpoint-generic-unclassified-v1
+  construct_id: generic_unclassified
+  label_zh: 未分类登记观察
+  endpoint_ids:
+  - generic_unclassified
+  direction: higher_is_better
+  allowed_units:
+  - 值
+  analysis_forms:
+  - absolute_value
+  difference_label_zh: 未分类登记观察的口径差异

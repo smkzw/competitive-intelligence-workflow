@@ -898,3 +898,54 @@ WP00(基线/规格/红测试) → WP01(科学值) + WP02(共享事实) + WP03(�
 
 ### 修复优先级
 S1(S2) → S3 → S4(S5) → S6(S7)：先修共性（矩阵+披露），再修分类器作用域，最后修适应症特有
+
+### 泛化测试结论
+- **IgAN/UC 分类器覆盖率从 0% → 100%**（fallback 兜底族 + IgAN/UC 专属性族）
+- **B 兼容基础设施需适配 generic 族**：generic 兜底族的 EndpointCompatibilityResult 校验需扩展 compatibility-v1.yaml（已追加规则但可能需进一步适配 units/form 校验链）
+- **两轮独立测试确认的共性模式**已全部识别并记档
+- 下一会话从 generic 族兼容性适配 + abc-v30 → 复核 → accept-visual 开始
+
+### 当前最终状态
+- **abc-v29** = 最新已提交工作区（143 页三门户、gate 全过、S1 矩阵修复 + S2 剔除披露 sidecar）
+- **abc-v23** = A 回执签发 ✓（gemini 确认）
+- **GitHub**: https://github.com/smkzw/competitive-intelligence-workflow (aa0450b)
+- **B 分类器**: v7 政策驱动，34 条规则（PNH 17 + AD 8 + IgAN 4 + UC 4 + fallback 1）
+- **测试**: 305 绿（B 套件）
+
+## abc-v30 复核结果
+- **A**: 回执签发 ✓（gemini，第 9 次连续通过）
+- **B**: deepseek 第 19 轮 veto — 2 项呈现细节（输血回避 MEAN 标题 + 筛选期间 ID 令牌）
+- **C**: gemini 首次审查 = **accepted, issues: 0** ✓ — 仅时间戳验签失败（reviewed_at 不在进程窗口内）
+  - 修复：重派 C（gemini 新会话将获得当前时间戳）
+
+### B 包突破性改善
+- 疗效行：77 → **299**（4 倍提升，generic 兜底族完全生效）
+- unclassified：2242 → **0**（泛化分类器完全覆盖）
+- no_timepoint：1032 → 2403（更多行被分类但因时间点问题被诚实排除）
+
+### 下一轮首项
+1. C 重派（gemini，--no-session，获取当前时间戳）
+2. B 渲染器修输血回避人数标题 + 筛选期间 ID zh
+3. abc-v31 → B 复核第 20 轮 → 全部通过 → accept-visual A/B/C
+4. AD B/C 竖向（泛化管线验证）
+
+## abc-v32 视觉验证第三轮
+
+### 状态
+- **科学复核**: A ✓ / B ✓ / C ✓ — 三回执全部签发
+- **状态推进**: 三报告全部 `scientifically_reviewed_rendered_candidate`
+- **视觉验证**: B 拒绝 6 域 / C 拒绝 6 域 / A 会话无 verdict（mtplx 连接超时）
+
+### 拒绝原因分析
+视觉验证器的拒绝是真实的——设计域间距、对比度、排版、图表质量等需要系统性 CSS 对齐：
+- B: copy_zh + hierarchy + typography + color + charts + format（6/7 域）
+- C: hierarchy + typography + color + charts + interaction + format（6/7 域）
+- 这些是 kangzhe v5.2.6 设计合同的完整设计域审查，不是假阳性
+
+### 判断
+科学复核已完成（三回执 ✓），视觉验证发现的是设计系统级别的排版/颜色/间距问题，需要专项 CSS 修复轮次。这不是"再跑一轮验证"能解决的——需要先修 CSS，再重渲染，再重测。
+
+### 下一轮首项
+1. 设计系统 CSS 对齐（间距/对比度/字号/排版系统性修复）→ abc-v33
+2. 视觉验证重测 → 全部通过 → accept-visual A/B/C
+3. AD B/C 竖向

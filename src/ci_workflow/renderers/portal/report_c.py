@@ -309,7 +309,7 @@ def _target_population_text(text: str) -> str:
         return "特应性皮炎病程至少3年"
     if "adult" in folded and "adolescent" in folded:
         return "成人及青少年受试者"
-    if "child" in folded or "pediatric" in folded:
+    if re.search(r"\bchildren?\b|\bpediatric\b", folded):
         return "儿童受试者"
     if text:
         return "登记目标人群已记录（原文见来源）"

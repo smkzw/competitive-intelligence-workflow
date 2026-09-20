@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "map_id": "uc-alias-auto",
+ "canonical_by_alias": {
+  "ABX464": "ABX464",
+  "ATH-063": "ATH-063",
+  "Advanced therapy only without dietary intervention": "Advanced therapy only without dietary intervention",
+  "Curcumin": "Curcumin",
+  "Fecal transplantation": "Fecal transplantation",
+  "GSK3050002": "GSK3050002",
+  "Mesalazine": "Mesalazine",
+  "Mesalazine Enema": "Mesalazine Enema",
+  "Mirikizumab IV": "Mirikizumab IV",
+  "Mirikizumab SC": "Mirikizumab SC",
+  "Placebo Enema": "Placebo Enema",
+  "Placebo SC": "Placebo SC",
+  "Upadacitinib": "Upadacitinib",
+  "Vedolizumab": "Vedolizumab",
+  "adalimumab": "adalimumab",
+  "corticosteroids only": "corticosteroids only",
+  "oral 5-ASA+/-topical 5-ASA+IV corticosteroids / PO Methylprednisolone": "oral 5-ASA+/-topical 5-ASA+IV corticosteroids / PO Methylprednisolone",
+  "vedolizumab": "vedolizumab"
+ },
+ "excluded_interventions": [
+  "Placebo",
+  "Matching Placebo"
+ ],
+ "notes": [
+  "auto-generated from CT.gov page 1"
+ ]
+}

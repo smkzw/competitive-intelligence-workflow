@@ -1,0 +1,35 @@
+{
+ "schema_version": "1.0",
+ "map_id": "igan-alias-auto",
+ "canonical_by_alias": {
+  "ACE inhibitor + statin": "ACE inhibitor + statin",
+  "ACTHAR gel": "ACTHAR gel",
+  "ARO-C3": "ARO-C3",
+  "Atrasentan": "Atrasentan",
+  "Budesonide": "Budesonide",
+  "Calcitriol": "Calcitriol",
+  "HR19042 Capsule, Tarpeyo®, Budenofalk®": "HR19042 Capsule, Tarpeyo®, Budenofalk®",
+  "LNP023": "LNP023",
+  "Lipitor": "Lipitor",
+  "Methylprednisolone pulses plus prednisone versus Cyclosporine A": "Methylprednisolone pulses plus prednisone versus Cyclosporine A",
+  "NEFECON": "NEFECON",
+  "RAS inhibitor": "RAS inhibitor",
+  "RC18 160mg": "RC18 160mg",
+  "RC18 240mg": "RC18 240mg",
+  "Ramipril": "Ramipril",
+  "Sirolimus (study drug)+ACE inhibitor + statin": "Sirolimus (study drug)+ACE inhibitor + statin",
+  "TARPEYO 4 MG Delayed Release Oral Capsule": "TARPEYO 4 MG Delayed Release Oral Capsule",
+  "Tacrolimus": "Tacrolimus",
+  "azathioprine": "azathioprine",
+  "infusion of ADR-001 (Mesenchymal stem cell)": "infusion of ADR-001 (Mesenchymal stem cell)",
+  "methylprednisolone": "methylprednisolone",
+  "prednisone": "prednisone"
+ },
+ "excluded_interventions": [
+  "Placebo",
+  "Matching Placebo"
+ ],
+ "notes": [
+  "auto-generated from CT.gov page 1"
+ ]
+}

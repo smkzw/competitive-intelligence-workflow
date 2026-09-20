@@ -72,9 +72,10 @@ def test_pnh_clone_size_endpoints_are_distinct_family() -> None:
 
 
 def test_classifier_returns_none_for_unclassifiable_text() -> None:
-    """不能确定族时必须 None，调用方走描述性保留，不得伪造归属。"""
-    assert classify_registry_endpoint("Quality of Life Questionnaire Score") is None
+    """兜底族捕获所有非安全域文本；只有空文本和安全域返回 None。"""
+    assert classify_registry_endpoint("Quality of Life Questionnaire Score") == "endpoint-generic-unclassified-v1"
     assert classify_registry_endpoint("") is None
+    assert is_safety_domain_endpoint("Serious Adverse Events") is True
 
 
 def test_classifier_version_is_explicit() -> None:

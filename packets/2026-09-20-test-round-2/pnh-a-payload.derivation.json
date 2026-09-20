@@ -1,0 +1,97 @@
+{
+ "pages": [
+  {
+   "page": 1,
+   "sha256": "c6098be9be0315b81f3b2d37c9c80a5a576c81f27f316bb0d01e3dc6735af0e7"
+  }
+ ],
+ "built_at": "2026-09-20T03:11:07.384894+00:00",
+ "skipped_trials_no_sample_size": [],
+ "records_without_drug_intervention": [
+  "NCT03549988",
+  "NCT07784114",
+  "NCT04207008",
+  "NCT00409396",
+  "NCT01941589",
+  "NCT02742597",
+  "NCT05495178",
+  "NCT03143517"
+ ],
+ "combo_regimens": [
+  {
+   "nct_id": "NCT00408629",
+   "canonical_drugs": [
+    "adalimumab"
+   ]
+  },
+  {
+   "nct_id": "NCT00889161",
+   "canonical_drugs": [
+    "curcumin"
+   ]
+  },
+  {
+   "nct_id": "NCT03653026",
+   "canonical_drugs": [
+    "upadacitinib"
+   ]
+  },
+  {
+   "nct_id": "NCT05538026",
+   "canonical_drugs": [
+    "mesalazine"
+   ]
+  },
+  {
+   "nct_id": "NCT02862132",
+   "canonical_drugs": [
+    "vedolizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03524092",
+   "canonical_drugs": [
+    "mirikizumab iv",
+    "mirikizumab sc"
+   ]
+  },
+  {
+   "nct_id": "NCT05507203",
+   "canonical_drugs": [
+    "abx464"
+   ]
+  },
+  {
+   "nct_id": "NCT04505410",
+   "canonical_drugs": [
+    "advanced therapy only without dietary intervention"
+   ]
+  },
+  {
+   "nct_id": "NCT00619489",
+   "canonical_drugs": [
+    "vedolizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT02368717",
+   "canonical_drugs": [
+    "mesalazine enema"
+   ]
+  },
+  {
+   "nct_id": "NCT01984047",
+   "canonical_drugs": [
+    "gsk3050002"
+   ]
+  },
+  {
+   "nct_id": "NCT05807971",
+   "canonical_drugs": [
+    "ath-063"
+   ]
+  }
+ ],
+ "alias_map_id": "uc-alias-auto",
+ "borderline_repositioning": []
+}

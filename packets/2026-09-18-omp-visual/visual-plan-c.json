@@ -6,14 +6,14 @@
  "report_version": "v1",
  "format": "html",
  "route_id": "portal",
- "report_snapshot_sha256": "6d13fedaf4c6f7658a4b6d2f102728fae4196cbf710578e4a8269aa9467dfec8",
+ "report_snapshot_sha256": "d23789405566205cf19e1bc394434daf27d516caa7b410bc1f483b12eb9de0ab",
  "report_snapshot": {
-  "snapshot_id": "report-snapshot_8cf92c4863bec22626d4ce93",
+  "snapshot_id": "report-snapshot_1982b02839848a50fc1238fb",
   "report": "C",
   "report_version": "v1",
-  "evidence_snapshot_id": "evidence-snapshot_a6b062f9a2e80889edb5850b",
-  "claim_snapshot_id": "claim-snapshot_b9f649dfaa5c975192c2d3c7",
-  "coverage_set_id": "coverage-set_7d82680bdfe9c29cfe1275e1"
+  "evidence_snapshot_id": "evidence-snapshot_d0fcf52b85d1b68302ebba6b",
+  "claim_snapshot_id": "claim-snapshot_5b264ab16a01e5e13113a661",
+  "coverage_set_id": "coverage-set_b2679324ed829042d78d6300"
  },
  "design_contract_sha256": "facdc54cb92fba350b4e519ff7db6e7e7a3a5499d4dd74a53bd43bcfd677434d",
  "design_contract": {
@@ -476,5 +476,5 @@
  ],
  "planner_identity": "zcode-main-thread-glm53",
  "planner_role": "visual-design-director",
- "created_at": "2026-09-19T10:30:08.129419+00:00"
+ "created_at": "2026-09-20T04:26:17.613962+00:00"
 }
