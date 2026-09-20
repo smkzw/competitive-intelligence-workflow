@@ -1639,3 +1639,8 @@ report-b.css + overview——v56 新增行（基线/窗口比例终点）的标�
 - 下一会话：收三路 verdict → 生成 v57 视觉提示词（/tmp/gen_visual_prompts_v53.py
   sed abc-v53→abc-v57）→ 三节点视觉 → 全 accepted → resume →
   accept-visual ×3 → PNH 竖向收口。
+
+## v57：三报告科学复核全部 accepted + 回执（A r20/B r35/C r18）
+- B r35 accepted（CSS 132 条修复经复审确认）；A r20 ✓；C r18 ✓。
+- 三节点视觉（v57 digest，contract digest + 断言）后台运行中。
+- verdict 落盘后全 accepted → resume → accept-visual ×3 → PNH 竖向收口。
