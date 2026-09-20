@@ -1710,3 +1710,17 @@ v59 计分：科学 A r20/B r34/C r18 全 accepted+回执 ✓；视觉 A ✓ 7/7
 C（deepseek）运行中。C accepted 后：verdict 的 render_evidence_digest 修正为
 visual_contract_digest（提示词生成脚本用了文件 sha——已修正 A/B verdict，
 C 落盘后同法处理）→ resume → accept-visual ×3 → PNH 竖向收口。
+
+### 视觉 C（v59，deepseek）：rejected 5/7——typography ✓（标签换行生效），剩 5 域结构性问题
+1. copy_zh：时间点筛选按钮仍显示英文原文（"Day 0 and Day 28"），而行单元格
+   已是中文——筛选标签装配未应用 _registry_timeframe_zh。修：filter 组装时
+   对 time 维度套用同一转写（report_c.py page_filter_groups 附近）。
+2. hierarchy/charts_tables：矩阵图 91 series 折叠为 60 唯一坐标（15 条入选
+   标准共用 1 格），图与 130 行表无法对应。修：按行投影（每行一独立格）或
+   聚合格标注"含 N 条明细"并在 tooltip 展开明细行号。
+3. interaction：overview 筛选后图表 91→6 但表格 130 行 0 隐藏（而
+   trial-profile 页同操作隐藏 108 行）——两页 applyState 行为不一致。
+   修：统一 overview 的表格行显隐语义与 trial-profile 一致。
+4. format：320px 热力图 grid left 178px 固定导致绘图区仅 58px。修：
+   grid.left 按容器宽响应式（min(178, w*0.32)）。
+全部为 report_c.py/report-c.js 的明确点位，下一会话逐项实施 → v60 → 重测。
