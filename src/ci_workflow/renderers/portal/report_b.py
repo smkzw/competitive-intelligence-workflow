@@ -1597,14 +1597,28 @@ def _label_for(value: Any, domain: str) -> str:
     return _native_text(candidate, "研究记录")
 
 
+def _is_pure_role_label(raw: str) -> bool:
+    """登记组名本身即纯角色词（Placebo/Treatment/…）才允许角色归一。
+
+    复合登记名（Placebo-Danicopan、Group 1: Treatment Naive、Cohort 1）
+    含药物/队列身份，归一会抹平登记组别（第二十四轮 veto）。
+    """
+    tokens = {t for t in re.split(r"[^a-z0-9]+", raw.casefold()) if t}
+    role_tokens = tokens & {
+        "placebo", "active", "control", "comparator", "treatment",
+        "treated", "experimental", "arm", "group", "cohort", "therapy",
+    }
+    return bool(role_tokens) and tokens <= role_tokens | {"matching", "dose", "a", "b", "c", "1", "2", "3", "4"}
+
+
 def _arm_label(value: Any) -> str:
     candidate = _first(value, "arm_label", "group_label", "group_label_zh", "arm", default=None)
     if candidate is not None:
         raw = _text(_enum_value(candidate))
         canonical, canonical_label = _canonical_arm_role(raw)
-        # 角色别名（active/placebo 等）归一为中文角色；登记专名（如
-        # Danicopan-Danicopan、Cohort 1）保留原文（第十五轮复核修复）
-        if canonical != "unknown":
+        # 角色归一仅当登记名本身是纯角色词（第二十四轮 veto：复合登记名
+        # 中的 placebo/treat 子串不得触发归一）；登记专名一律保留原文
+        if canonical != "unknown" and _is_pure_role_label(raw):
             return canonical_label
         if raw:
             return raw
@@ -1612,13 +1626,15 @@ def _arm_label(value: Any) -> str:
     canonical, canonical_label = _canonical_arm_role(role)
     if canonical != "unknown":
         return canonical_label
-    identifier = _text(_first(value, "group_id", "arm_id", "cohort_id", default="")).casefold()
-    if "control" in identifier or "placebo" in identifier:
-        return "对照组"
-    if "treatment" in identifier or "treated" in identifier:
-        return "治疗组"
-    if "cohort" in identifier:
-        return "全研究人群"
+    identifier = _text(_first(value, "group_id", "arm_id", "cohort_id", default=""))
+    # 第二十四轮 veto：无登记名时回退解码组标识本身（cohort-1→"cohort 1"），
+    # 不得折叠为"全研究人群/对照组"等泛化角色
+    human = re.sub(r"^nct[0-9]+-arm-", "", identifier.casefold()).replace("-", " ").strip()
+    if human:
+        canonical, canonical_label = _canonical_arm_role(human)
+        if canonical != "unknown" and _is_pure_role_label(human):
+            return canonical_label
+        return human
     return "组别未列示"
 
 
