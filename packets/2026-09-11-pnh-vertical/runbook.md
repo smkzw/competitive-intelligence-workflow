@@ -1613,3 +1613,8 @@ accept-visual ×3 → AD B/C → 横向。
 copy_zh（类标题残余英文）、typography_spacing、charts_tables 三域被拒；
 hierarchy/color/interaction/format 通过。refs 指向 efficacy.html 与
 overview.html——下一会话对照 refs 逐项修（转写残余 + 卡片排版 + 图表标注）。
+
+### 视觉 B（v56，gemini）：typography_spacing 一域回拒
+copy_zh/hierarchy/color/charts/interaction/format 六域 accepted。refs=
+report-b.css + overview——v56 新增行（基线/窗口比例终点）的标签排版细节。
+与视觉 A 的 typography 同批修（下一会话）。
