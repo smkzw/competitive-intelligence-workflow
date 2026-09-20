@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc33-b",
+  "verdict_id": "verdict-omp-gemini38-vis-abc34-b",
   "format": "html",
-  "visual_plan_digest": "36da223867bdee3e778995bcad0e6e17e6e6d1e712e1b1ad0102135983cff0dd",
-  "candidate_artifact_digest": "f983236a2d2b42519ea85c84dcb38fa09011a676e5deb9769fa26d79b4b638b9",
-  "render_evidence_digest": "8954f25f90f35a1466cbd2da1cf439822a71c062679fc90ccb817b01b7baaf33",
+  "visual_plan_digest": "13286e917761a430f1b46ca37cabcddaf2541592380f109fd1cb84f365f1559c",
+  "candidate_artifact_digest": "07e572c1d352df977475e42ca8a2dcb0819512bac7ca9d1c7766e2f044a44929",
+  "render_evidence_digest": "f3d2ee8447aa133d07c93073f51340b1a406deff81b5e71d2f392ad01ecd64e9",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-google-antigravity-gemini38flash-high",
   "verdict": "rejected",
@@ -17,9 +17,8 @@
         "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/baseline-overview.html 与 baseline-demographics.html: 基线指标筛选按钮直接向用户暴露英文内部变量名，如「age」、「sex」、「baseline_pnh_clone_size」、「baseline_free_hemoglobin」；efficacy-safety-matrix.html 筛选按钮直接向用户渲染无空格内部拼接字符串「eculizumabinadultparticipantswithparoxysmalnocturnalhemoglobinuriapnhinchina的相关记录」",
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html: 筛选面板中时间维度按钮暴露未翻译英文期名，如「Primary Treatment Period (12 Weeks)」、「Long-Term Extension Period (52 Weeks)」、「Treatment Period 1 (TP1)」、「Long-Term Extension (LTE)」等；且折叠面板中 trial、group、time 维度的 headings 全部硬编码为「观察指标」",
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html 与 efficacy.html: 关键结果图表卡片标题直接泄漏内部管道占位说明「语义信息未完整，按试验列示」（如「LDH 水平变化 · 较基线变化 · 约第12周 · 登记结果人群 · 语义信息未完整，按试验列示」），且快速筛选区按钮暴露「eculizumab」、「danicopan」、「ravulizumab」等原始英文标识并挤叠在单行输入框样式容器中"
+        "runs/pnh-vertical/abc-v34/reports/B/v1/html/efficacy-safety-matrix.html 与 product-trial-profiles.html: 筛选面板按钮直接向用户暴露无空格长串英文与中文拼接变量，如「eculizumabinadultparticipantswithparoxysmalnocturnalhemoglobinuriapnhinchina的相关记录」、「danicopanasaddontherapytoac5inhibitorinparoxysmalnocturnalhemoglobinuriapnhparticipantswhohaveclinica的相关记录」等",
+        "runs/pnh-vertical/abc-v34/reports/B/v1/html/overview.html 与 packets/2026-09-18-omp-visual/screenshots/B/chromium/768__overview.html.png: 筛选面板中时间维度按钮直接暴露未翻译英文期名「Primary Treatment Period (12 Weeks)」、「Long-Term Extension Period (52 Weeks)」、「Treatment Period 1 (TP1)」、「Long-Term Extension (LTE)」等；折叠面板中各维度 headings 仍全部硬编码为「观察指标」；且图表卡片标题直接暴露系统内部状态文案「语义信息未完整，按试验列示」"
       ]
     },
     {
@@ -30,8 +29,8 @@
         "同一数据在图、表、抽屉三投影中保持同源一致"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html: 总览页首屏完全缺失医学经理结论层、核心发现与执行摘要，页面从标题和筛选表单直接进入平铺图表容器 #kz-chart-module，未优先呈现结论性信息",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 视觉实测确认页面直接由快速筛选跳转至平铺图表卡片，且同一试验（NCT04170023）的多组别数据图表平铺堆叠，图例浮动覆盖在正向数据柱上方，信息密度与层级失衡，未实现逐项细节的有效下沉"
+        "runs/pnh-vertical/abc-v34/reports/B/v1/html/overview.html: 总览页首屏完全缺失医学经理结论层、核心发现与执行摘要，页面从标题和筛选表单直接进入平铺图表容器 #kz-chart-module，未优先呈现结论性信息",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 视觉实测确认页面由筛选表单直接跳转至平铺图表卡片，右侧卡片图例文字水平重叠截断（「治疗组 (Group 2: Eculizumab S...」与「治疗组 (Group 3: Danicopan Roll...」直接相撞），信息密度与层级失衡，未实现逐项细节的有效下沉"
       ]
     },
     {
@@ -42,8 +41,8 @@
         "长药品名/试验名换行不截断关键标识"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/trials/nct04469465.html 与 nct02605993.html: 试验标题在英文词中被生硬截断（如 NCT04469465 截断为「...Who Have Clinica」，丢失 -lly Evident Extravascular Hemolysis；NCT02605993 截断为「...Paroxysmal Nocturnal Hemoglobin」，丢失 -uria）",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__trials__nct04469465.html.png: 截断后的英文试验标题与中文「试验档案」及「基本信息」直接拼接无空格（如「...Who Have Clinica试验档案」及「...Who Have Clinica基本信息」）；overview.html 中元数据亦粘连为「阵发性睡眠性血红蛋白尿症观察截止: 2026-09-06」；且 portal.css 中存在 13px, 15px, 22px, 28px 等非康哲刻度字号与偏离 4/8 基线的间距"
+        "runs/pnh-vertical/abc-v34/reports/B/v1/html/trials/nct04469465.html 与 packets/2026-09-18-omp-visual/screenshots/B/chromium/320__trials__nct04469465.html.png: 试验标题在英文词中被生硬截断，如 NCT04469465 截断为「...Who Have Clinica」（缺失 -lly Evident Extravascular Hemolysis）；nct02605993.html 截断为「...Paroxysmal Nocturnal Hemoglobin」（缺失 -uria），换行截断关键标识",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png 与 webkit/320__overview.html.png: 320px 移动视口下顶部副标题「阵发性睡眠性血红蛋白尿症临床试验...」在右边缘发生文字截断（clipped text）；下方关键结果指标卡片在 320px 下被强制并列挤压，第三行中文字符被横向截半"
       ]
     },
     {
@@ -54,8 +53,8 @@
         "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
       ],
       "evidence_refs": [
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/ 全部页面与 assets/portal.css、assets/report-b.css: 策划书声明的四科室令牌中，DMST（统计绿）与 PV（警戒紫）在报告 B 的页面中完全无对应落地元素；portal.css 中仅存在从 A 类遗留的 --kz-dmst 样式，且 --kz-pv 被错误定义为褐色 #A85F34（非紫色）且未在 B 中使用，无法满足四科室跨页面语义一致",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 关键结果右侧卡片中，三个不同治疗组（治疗组、Group 2: Eculizumab Switch、Group 3: Danicopan Rollover）在图例与数据柱中全部使用完全相同的橙色色块（#ee7200 / #FF9900），完全丧失色彩区分度，导致用户无法通过视觉区分不同分组"
+        "runs/pnh-vertical/abc-v34/reports/B/v1/html/ 全部页面与 assets/portal.css: 策划书声明的四科室令牌（橙/蓝/绿/紫）在报告 B 的数据图表与关键界面中未被用于区分业务语义，数据可视化仅使用单色调橙黄暖色系，无法支撑四科室跨页面语义一致性",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 关键结果右侧卡片中，负值柱使用深橙色，正值柱使用浅黄色，图例与数据柱配色缺乏多分组区分度；负值数据标签（-1310.8 与 -683.29）直接置于深色数据柱内部并穿过水平网格线，导致前景色与背景及网格线对比度受损、可读性下降"
       ]
     },
     {
@@ -66,8 +65,8 @@
         "图表与对应表格数值一致（同源投影）"
       ],
       "evidence_refs": [
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png 与 768__overview.html.png: 关键结果右侧卡片（NCT04170023 LDH变化）图例直接漂移并压叠在绘图区正上方，与柱顶数值标签 160.2 及 88.7 发生直接重叠遮挡，坐标轴顶部刻度亦被图例文本遮盖；X 轴标签显示为通用「产品 | 试验」而缺失试验设计维度的明确量纲标注",
-        "packets/2026-09-18-omp-visual/render-evidence-b.json: 30 个呈现目标中普遍存在极大规模的标签压叠（overview.html 在全视口下 label_overlap_count 在 10566 至 17005 之间，trials/nct04469465.html 高达 26057 至 60892），图表文字重叠严重失真；且卡片标题存在泄漏「语义信息未完整，按试验列示」的问题"
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png 与 768__overview.html.png: 关键结果图表卡片标题直接暴露系统回退文案「语义信息未完整，按试验列示」；右侧图表图例在 768px 及 1440px 下出现条目横向截断与文字重叠，数据标签直接压在水平网格线上；X 轴标签显示为通用「产品｜试验」而缺失具体设计维度量纲",
+        "packets/2026-09-18-omp-visual/render-evidence-b.json: 30 个呈现目标中普遍存在极大规模的标签压叠（overview.html 在全视口下 label_overlap_count 在 10579 至 18218 之间，trials/nct04469465.html 高达 25375 至 58001），图表文字重叠严重，未达到设计验收标准"
       ]
     },
     {
@@ -79,7 +78,7 @@
       ],
       "evidence_refs": [
         "packets/2026-09-18-omp-visual/render-evidence-b.json: 全部 30 个渲染目标（Chromium 与 WebKit 各 15 个）在 page_load、filter_change、drill_down、search、keyboard、reduced_motion 六类交互探测中全部通过（passed=true），无交互失败项",
-        "runs/pnh-vertical/abc-v33/reports/B/v1/html/overview.html 与 assets/portal.js: 实测纯键盘导航支持 Tab 键顺序聚焦 logo、导航菜单、搜索输入框、筛选展开按钮、快捷筛选按钮及表格折叠按钮；Enter 键可展开折叠明细并打开数据依据抽屉，抽屉内支持关闭操作及焦点捕获；assets/portal.css 配置 prefers-reduced-motion 在减弱动效模式下统一禁用过渡与动画"
+        "runs/pnh-vertical/abc-v34/reports/B/v1/html/overview.html 与 assets/portal.js: 实测纯键盘导航支持 Tab 键顺序聚焦 logo、导航菜单、搜索输入框、筛选面板及各按钮；Enter 键可展开筛选面板、折叠明细及打开数据依据抽屉；抽屉支持 Esc/点击关闭；assets/portal.css 配置 prefers-reduced-motion 在减弱动效模式下禁用所有动画与平滑滚动，全站行为一致"
       ]
     },
     {
@@ -90,10 +89,10 @@
         "四类视口下导航、表格与图表保持可用"
       ],
       "evidence_refs": [
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png 与 webkit/320__overview.html.png: 320px 移动视口下顶栏副标题「阵发性睡眠性血红蛋白尿症临床试验结果比」在右侧被生硬截断；「快速筛选产品」胶囊按钮发生横向与纵向紧密挤压叠盖；「关键结果」卡片被强制挤压为双列，导致文本挤压成单字折行（如「LDH 水」换行「平变化 ·」），第二张卡片超出视口截断",
-        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__trials__nct04469465.html.png 与 768__overview.html.png: 320px 移动视口下大字号英文标题断裂为 7 行以上残缺单行（如「Danicopan as Add-」、「on Therapy to a C5」、「Inhibitor in」、「Paroxysmal」、「Nocturnal」等）；768px 平板视口下强制两列卡片网格导致右侧图表图例与正向数据柱及数据标签严重相撞重叠；render-evidence-b.json 显示全视口 label_overlap_count 在 3291 至 60892 之间"
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png 与 webkit/320__overview.html.png: 320px 移动视口下顶栏副标题「阵发性睡眠性血红蛋白尿症临床试验...」在右边缘溢出截断；「关键结果」卡片被强制挤压为双列，导致卡片内文字纵向切断；768px 平板视口下（768__overview.html.png）图例条目截断（「Swi...」、「Rollc...」）",
+        "packets/2026-09-18-omp-visual/render-evidence-b.json: 真实探测显示 Chromium 与 WebKit 在 320/390/768/1024/1440 五类视口下的 label_overlap_count 均达数千至数万（最高达 58001），在紧凑视口下多处文本与图表元素严重挤压碰撞，无法满足四类视口下布局与图表保持完全可用的判据"
       ]
     }
   ],
-  "created_at": "2026-09-20T05:14:00Z"
+  "created_at": "2026-09-20T05:44:07Z"
 }

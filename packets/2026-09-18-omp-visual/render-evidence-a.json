@@ -5,9 +5,9 @@
  "report_kind": "A",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_662f71c21e2d862f99207cd8",
- "visual_plan_digest": "ffc5c693cb837a2d3618ea1426bcd2bfafb843ca80e1e636dcb0f34018ca5d91",
- "candidate_artifact_digest": "973dba47aaf92ac4beb00a4b9dd5866e72fdd061b80b297e6673a7a38ace9291",
+ "run_id": "run_866ab4e713bce654cfe64e61",
+ "visual_plan_digest": "7ad40eafb8dfe49a7479650a40b2f66dbd914c5b3ec86cbae1ee4d3eafeed38f",
+ "candidate_artifact_digest": "1545f0b168347b46685a0a06ccf4512bd769835cda04a23e5502b65bc24ad58c",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -523,11 +523,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/A/chromium/390__efficacy.html.png",
-   "screenshot_sha256": "e231ed32e0c85efea296683f1eb9012009e3414d5cea664fde8d12b917d0d61a",
+   "screenshot_sha256": "22d996b6f1e759903e21076dfa91a7a4578c0ca5100637956519f1f427e35dca",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 941,
+    "label_overlap_count": 966,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -579,11 +579,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/A/chromium/390__safety.html.png",
-   "screenshot_sha256": "8303c5509ef5b8060ffa46a34516f486939abd904a36539b15c4098fc109b59a",
+   "screenshot_sha256": "bd269fb95e0023bc4eaae18507d9ff095ee64ce755bb6ef2b07576dbd27627eb",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 734,
+    "label_overlap_count": 704,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -635,11 +635,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/A/chromium/390__regulatory.html.png",
-   "screenshot_sha256": "ab9eca21beaee7e4ff1a6a3acfb106a3ff02fd82bf910db6d28c5118118f031d",
+   "screenshot_sha256": "6f31a6f94785a9ff01da95cefeef9059081fcb300cf8b1ee98fbcbf2c980a813",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 442,
+    "label_overlap_count": 455,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -691,11 +691,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/A/chromium/320__efficacy.html.png",
-   "screenshot_sha256": "270644febf1a8be8fcaa13ad01949be9774f40c064d53f399180b06d09ed058f",
+   "screenshot_sha256": "6c497bea8917709d8793f4d5a43c377f4af3545bcc090d6315a4280c6f1a4257",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 975,
+    "label_overlap_count": 942,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -747,11 +747,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/A/chromium/320__safety.html.png",
-   "screenshot_sha256": "071e5c04c19cb906d2edb96c231f77f89011f3fa2b254c14346c16e620f1d788",
+   "screenshot_sha256": "aa79e188e76f187c7242eef629e7d922875a85cad6c21e64d10a2f05439e4407",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 744,
+    "label_overlap_count": 717,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -803,11 +803,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/A/chromium/320__regulatory.html.png",
-   "screenshot_sha256": "afedc0687f117e94611c0c168b5b52e73f8f919d2dd1412acfac273fd8ba0f19",
+   "screenshot_sha256": "66d5389e7149eb31f4c20379bbc756478bce94e8e43db656152833fbf5c75b53",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 455,
+    "label_overlap_count": 463,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1363,11 +1363,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/A/webkit/390__efficacy.html.png",
-   "screenshot_sha256": "79fb0ddf6da38187f03f9866e67380fb357d3e5e56b2b48b642d19bcab34e303",
+   "screenshot_sha256": "ef725ee8882b81152f3a4858f6c99ae91d9a45523df01b640252ced03a1be829",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 941,
+    "label_overlap_count": 966,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1419,11 +1419,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/A/webkit/390__safety.html.png",
-   "screenshot_sha256": "53f5ab8c2454ab47c45bcde3255b964fdd0d5d30218d6cdc1ca13d991e25e266",
+   "screenshot_sha256": "3a22489c238eb776359f9ce2f1c0eac04cfef5d3e0f436796d9ed48b3f5c7b98",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 734,
+    "label_overlap_count": 704,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1475,11 +1475,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/A/webkit/390__regulatory.html.png",
-   "screenshot_sha256": "ec3555ec9d63858e5a7da6797a802c470ec6d80e5d783910aec19e6abb34ebbe",
+   "screenshot_sha256": "970607df20cb0b3f50c620756f54713c580dd48695ed47f645aa2f90a58fafe3",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 442,
+    "label_overlap_count": 455,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1531,11 +1531,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/A/webkit/320__efficacy.html.png",
-   "screenshot_sha256": "d624bde4ab35be23277a72dcf3759dbc26d2435b69c2aab6a403c5e18e60adf7",
+   "screenshot_sha256": "822d237208aed338286d53ea13e1b9c664c344f9ffe65120470369fa1bdf99a5",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 974,
+    "label_overlap_count": 942,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1587,11 +1587,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/A/webkit/320__safety.html.png",
-   "screenshot_sha256": "ce7311c898a6f48fd93a48b1205d2884a01569975154e4f579e2d9b6c6f0a257",
+   "screenshot_sha256": "2a13f7c79215f45a15df058b398be2aa8a4e81bb8c27c8b61e470f10f2492985",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 744,
+    "label_overlap_count": 717,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1643,11 +1643,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/A/webkit/320__regulatory.html.png",
-   "screenshot_sha256": "204ec40aeefe6910a08bb66da63e5d3d6fb46a7bfc507c0be11362b6ca6fb3ec",
+   "screenshot_sha256": "07282473b3d2e0c990522f9de8fb9673eccc47ef1e73e052dbab98db1e9f30db",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 455,
+    "label_overlap_count": 463,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-20T05:02:34.130622+00:00"
+ "created_at": "2026-09-20T05:31:57.482461+00:00"
 }

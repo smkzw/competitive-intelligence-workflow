@@ -980,3 +980,26 @@ S1(S2) → S3 → S4(S5) → S6(S7)：先修共性（矩阵+披露），再修�
 ### 下一步
 这是 kangzhe v5.2.6 设计合同的完整设计域对齐工作，需要专项 CSS/JS/模板修复轮次。
 建议将视觉验证域拒绝作为设计 backlog 逐项修复，每修复一批重测一次。
+
+## 视觉验证第五轮（abc-v34）+ 会话暂停状态
+
+### 结果
+- vis-a (mtplx): 连接超时（mtplx 网络不稳定，已知问题）
+- vis-b (gemini): 全视口大规模文字重叠与碰撞（ECharts SVG 标签重叠是深层问题，需要 ECharts 配置深度调整）
+- vis-c (deepseek): zsh 错误（会话中断）
+
+### 诊断
+视觉验证的核心阻塞是 **ECharts SVG 渲染的标签重叠**——这不是 CSS 层面能解决的，需要 ECharts option 层面的深度配置（grid 调整、series label 配置、dataZoom 等）。这需要前端可视化专业知识和多轮浏览器实测迭代。
+
+### 当前交付状态总结
+- **科学复核**: A ✓ B ✓ C ✓ — 三回执全部签发
+- **状态**: 三报告 scientifically_reviewed_rendered_candidate
+- **数据质量**: B 299 疗效行（4 倍提升）、unclassified=0、处置行有期间标签
+- **分类器**: v7 政策驱动（34 条规则），IgAN/UC 覆盖率 0%→100%
+- **视觉验证**: 仍在收敛（ECharts 标签重叠是核心阻塞，需前端可视化专业迭代）
+
+### 下一轮首项
+1. ECharts SVG 标签重叠修复（需专业前端可视化迭代）
+2. 视觉验证重测 → accept-visual
+3. AD B/C 竖向
+4. 横向其余 6 适应症

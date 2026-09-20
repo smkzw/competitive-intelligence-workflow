@@ -5,9 +5,9 @@
  "report_kind": "C",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_662f71c21e2d862f99207cd8",
- "visual_plan_digest": "ba60b2cee932d38ef3e41d3c53951855c80d1c202dd6b5332e20582bdcf5e783",
- "candidate_artifact_digest": "683b031b8db74cbf35705f7371c65f26c57bec22b46f951da39946a8884616f7",
+ "run_id": "run_866ab4e713bce654cfe64e61",
+ "visual_plan_digest": "f143f102b1aec6ebc52c8c18ae3b4f30d274f1d5a481399b175c4dabef97fa0b",
+ "candidate_artifact_digest": "b7b6a1cc86f81e3ecff93046ce206cdbb4a0ef036f376d09c6ee7c4aad8ea581",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -523,11 +523,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/C/chromium/390__overview.html.png",
-   "screenshot_sha256": "10c508029f8ba8b665afb07fe1313dcff1ed55602a68cb49e11de4f24233b297",
+   "screenshot_sha256": "0d525573d5f83fb5e86aad7e9f07221301bbed509386ac941bfcf0b81ed7e5e2",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2855,
+    "label_overlap_count": 2871,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -579,11 +579,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/C/chromium/390__endpoint-timepoint-matrix.html.png",
-   "screenshot_sha256": "24124c44455dcc2e1410c3493724a57218a13f6a9de856fa9ffce5e8fa893507",
+   "screenshot_sha256": "ab9cb426091e654e7adcf600a0d1974370d5027d60dbb21b09f9f7d2a87c50b3",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 820,
+    "label_overlap_count": 854,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -635,11 +635,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/C/chromium/390__trials__nct04469465.html.png",
-   "screenshot_sha256": "c6102bd06cba84aff9a6f6d2731fea1c51731c63ba379d703208381a0a0d00d1",
+   "screenshot_sha256": "fd34703003316dcb882cf6986e15526b3e157f935b195ab942bfc8e8e28dfd2e",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1883,
+    "label_overlap_count": 1858,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -691,11 +691,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/C/chromium/320__overview.html.png",
-   "screenshot_sha256": "f3eb1773004f0fe93dd9b6b59bd1d3b4472a14e47c99af8925c147962fff0db0",
+   "screenshot_sha256": "f553d13fdb3b881136bfe2a78a22f5691951ce3a3faeddc958c5c5c0c910eb54",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2877,
+    "label_overlap_count": 2881,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -747,11 +747,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/C/chromium/320__endpoint-timepoint-matrix.html.png",
-   "screenshot_sha256": "8820aa7b67c899976e32a64940928f985400ec7efdb15d56c1fabc4d29e5515f",
+   "screenshot_sha256": "eca31becf81c4df273f29fb46edfb0a7aead10249e34194effec6e3a136976bf",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 860,
+    "label_overlap_count": 830,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -803,7 +803,7 @@
     "height": 568
    },
    "screenshot_path": "screenshots/C/chromium/320__trials__nct04469465.html.png",
-   "screenshot_sha256": "63300851e504dc81f09a45e53b0561ad625bbdedb2a4361c76ffab88c7836abc",
+   "screenshot_sha256": "0394257664436ff31f3e01a5ea089df5e5001f8cde8d8bbb4ec9f98a456fa061",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
@@ -1363,11 +1363,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/C/webkit/390__overview.html.png",
-   "screenshot_sha256": "51bb45b7133004d39b60a1282e1585e407801dffd30ef90b7e5019f2a5d99284",
+   "screenshot_sha256": "1692b9e9c5e208cf9e9070df2cbc4441202a37c933fa28b4e2afd8d2076ae621",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2855,
+    "label_overlap_count": 2871,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1419,11 +1419,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/C/webkit/390__endpoint-timepoint-matrix.html.png",
-   "screenshot_sha256": "148d67d1a39be0d8c8e1965f64c1dfeff90031ec3798f7310e52376773068ab9",
+   "screenshot_sha256": "99c13e6d182f2b4a0a6fe685b7d02bb2d587efba4498a747db8a28c22743aaa2",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 820,
+    "label_overlap_count": 854,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1475,11 +1475,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/C/webkit/390__trials__nct04469465.html.png",
-   "screenshot_sha256": "ba60f5c7b3fcd46e162008bf82c877917d44cbb3cfb69f104df9ea33b2c9c217",
+   "screenshot_sha256": "24c52242a70174fe7b32c53eee9029fee953eb5e22cdc5c648d26b96901888ea",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1883,
+    "label_overlap_count": 1858,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1531,11 +1531,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/C/webkit/320__overview.html.png",
-   "screenshot_sha256": "538b957cce1d9ed3017d86b17218df28c83821d4f98931cb8259626ad496cfed",
+   "screenshot_sha256": "7fc0b1bb7ae989b055e951419c7c95bf54ce0b9dc5c185bfda3237c56f5a695f",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2877,
+    "label_overlap_count": 2881,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1587,11 +1587,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/C/webkit/320__endpoint-timepoint-matrix.html.png",
-   "screenshot_sha256": "794f1c5e7bf4f4ba5f098b41079e216e20bda981ee026a63f896268af1def7fe",
+   "screenshot_sha256": "1af2e8aa62fe54af21c1929010e245b759955f3de28305c64b858056aad2d736",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 860,
+    "label_overlap_count": 830,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1643,7 +1643,7 @@
     "height": 568
    },
    "screenshot_path": "screenshots/C/webkit/320__trials__nct04469465.html.png",
-   "screenshot_sha256": "6733e0adce7d48672b7eaa2c955f1130ab01cfeace8d14d8d1aed9512bc94ec8",
+   "screenshot_sha256": "0b2e5ad3996820fa0e8f5e170355f9d4373a0552806dd88d4324bbc43fbf209f",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-20T05:05:04.937456+00:00"
+ "created_at": "2026-09-20T05:34:43.417292+00:00"
 }

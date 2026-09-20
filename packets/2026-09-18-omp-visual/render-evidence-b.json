@@ -5,9 +5,9 @@
  "report_kind": "B",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_662f71c21e2d862f99207cd8",
- "visual_plan_digest": "36da223867bdee3e778995bcad0e6e17e6e6d1e712e1b1ad0102135983cff0dd",
- "candidate_artifact_digest": "f983236a2d2b42519ea85c84dcb38fa09011a676e5deb9769fa26d79b4b638b9",
+ "run_id": "run_866ab4e713bce654cfe64e61",
+ "visual_plan_digest": "13286e917761a430f1b46ca37cabcddaf2541592380f109fd1cb84f365f1559c",
+ "candidate_artifact_digest": "07e572c1d352df977475e42ca8a2dcb0819512bac7ca9d1c7766e2f044a44929",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -19,11 +19,11 @@
     "height": 900
    },
    "screenshot_path": "screenshots/B/chromium/1440__overview.html.png",
-   "screenshot_sha256": "a2b21c6248343df138999b5de007785b7e27c6cf0dbe1da931c07cb9bc257262",
+   "screenshot_sha256": "a8f82f74c568f95aa155f5d2bbead83d094a2a6eea6210e9502f72a0b274dfb2",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 10575,
+    "label_overlap_count": 10611,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -37,7 +37,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 66152→2504）"
+     "evidence": "筛选控件真实点击（文本长度 65950→2504）"
     },
     {
      "trigger": "drill_down",
@@ -47,7 +47,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24169→66031）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 23967→65829）"
     },
     {
      "trigger": "keyboard",
@@ -75,11 +75,11 @@
     "height": 900
    },
    "screenshot_path": "screenshots/B/chromium/1440__efficacy.html.png",
-   "screenshot_sha256": "68458d2703fd9a734226bb27980d71ff12df624d705faed8e37c13b265b5a165",
+   "screenshot_sha256": "183d6d57c8367b5cf7913f9404bc0b93b73ab2666365d99d41e0c48a13f3dacf",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3427,
+    "label_overlap_count": 3429,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -93,7 +93,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 60215→1438）"
+     "evidence": "筛选控件真实点击（文本长度 60052→1438）"
     },
     {
      "trigger": "drill_down",
@@ -103,7 +103,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18232→60094）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18069→59931）"
     },
     {
      "trigger": "keyboard",
@@ -135,7 +135,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 26106,
+    "label_overlap_count": 25389,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -149,7 +149,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 50744→8764）"
+     "evidence": "筛选控件真实点击（文本长度 50652→8672）"
     },
     {
      "trigger": "drill_down",
@@ -159,7 +159,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8761→50623）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8669→50531）"
     },
     {
      "trigger": "keyboard",
@@ -187,11 +187,11 @@
     "height": 1366
    },
    "screenshot_path": "screenshots/B/chromium/1024__overview.html.png",
-   "screenshot_sha256": "9c65444702932d39c38c05b1b6c61679a73732f3fc61560ee861a99741064bba",
+   "screenshot_sha256": "ac6715016ff95410df61fe59d72eb412c8b938e4835a3109dcfb4ba31f7aadbb",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 10941,
+    "label_overlap_count": 10967,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -205,7 +205,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24290→2482）"
+     "evidence": "筛选控件真实点击（文本长度 24114→2481）"
     },
     {
      "trigger": "drill_down",
@@ -215,7 +215,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24290→24290）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24114→24114）"
     },
     {
      "trigger": "keyboard",
@@ -243,11 +243,11 @@
     "height": 1366
    },
    "screenshot_path": "screenshots/B/chromium/1024__efficacy.html.png",
-   "screenshot_sha256": "55624efcce932ae1f10f477f407971e55548bbe4468a893bcbfc44f270edcf10",
+   "screenshot_sha256": "a08989aad5c7c73d0544805f499b155a5a871451c676c2c1f68d8e3afab2e2f5",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3822,
+    "label_overlap_count": 3829,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -261,7 +261,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18201→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18038→1407）"
     },
     {
      "trigger": "drill_down",
@@ -271,7 +271,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18201→18201）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18038→18038）"
     },
     {
      "trigger": "keyboard",
@@ -299,11 +299,11 @@
     "height": 1366
    },
    "screenshot_path": "screenshots/B/chromium/1024__trials__nct04469465.html.png",
-   "screenshot_sha256": "5a8facea5ce2b24056f38df9a4e8f3caa2a95f6a84af1847cd7c4d118355d0b8",
+   "screenshot_sha256": "ca8c6d698304026d78a75dd25e3538abc21cfd9667ffb5ad1ea324abaeb685c5",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 34770,
+    "label_overlap_count": 34743,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -317,7 +317,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8730→8733）"
+     "evidence": "筛选控件真实点击（文本长度 8638→8641）"
     },
     {
      "trigger": "drill_down",
@@ -327,7 +327,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8730→8730）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8638→8638）"
     },
     {
      "trigger": "keyboard",
@@ -355,11 +355,11 @@
     "height": 1024
    },
    "screenshot_path": "screenshots/B/chromium/768__overview.html.png",
-   "screenshot_sha256": "84b20a4621d179bbaaeabd9141f75e458c5dcdc26de4a2d280db5da0391f4474",
+   "screenshot_sha256": "f16d30b4de4f9248cbafdbea58725eb3b915538fc902b168f092c9b78ce502b9",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 10875,
+    "label_overlap_count": 10892,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -373,7 +373,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24298→2482）"
+     "evidence": "筛选控件真实点击（文本长度 24131→2481）"
     },
     {
      "trigger": "drill_down",
@@ -383,7 +383,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24298→24298）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24131→24131）"
     },
     {
      "trigger": "keyboard",
@@ -411,11 +411,11 @@
     "height": 1024
    },
    "screenshot_path": "screenshots/B/chromium/768__efficacy.html.png",
-   "screenshot_sha256": "b709c78537a57f50c2cb4f3f66dae4fb5874219b8ae9608a9d4356bfb62867c7",
+   "screenshot_sha256": "d19e8ec1aac01d3cc73bef41f3fb2339c3983cba273ed281f99af8096440993c",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3889,
+    "label_overlap_count": 3884,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -429,7 +429,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18201→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18038→1407）"
     },
     {
      "trigger": "drill_down",
@@ -439,7 +439,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18201→18201）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18038→18038）"
     },
     {
      "trigger": "keyboard",
@@ -471,7 +471,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 39198,
+    "label_overlap_count": 38549,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -485,7 +485,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8730→8733）"
+     "evidence": "筛选控件真实点击（文本长度 8638→8641）"
     },
     {
      "trigger": "drill_down",
@@ -495,7 +495,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8730→8730）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8638→8638）"
     },
     {
      "trigger": "keyboard",
@@ -523,11 +523,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/B/chromium/390__overview.html.png",
-   "screenshot_sha256": "f8fab7f37a24714d7100464d1b2455624fa21feb3a3fa89b757ca29592e5a12f",
+   "screenshot_sha256": "9c3b5895de87f75bd480f1668efaff596fc32e665dd63ff3e9c199a2f79676a5",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 16493,
+    "label_overlap_count": 15882,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -541,7 +541,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24648→2501）"
+     "evidence": "筛选控件真实点击（文本长度 24518→2490）"
     },
     {
      "trigger": "drill_down",
@@ -551,7 +551,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24648→24648）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24518→24518）"
     },
     {
      "trigger": "keyboard",
@@ -579,11 +579,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/B/chromium/390__efficacy.html.png",
-   "screenshot_sha256": "18d2357cc5bfd1cf6d52862f70dbfcff4e76e9351d235c2c23f6977f8a71aa61",
+   "screenshot_sha256": "a6b7c7251320ee46dc5619f48aa4704fdc119e11d91bbd5bd7535e88f64baf12",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3291,
+    "label_overlap_count": 3393,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -597,7 +597,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18201→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18038→1407）"
     },
     {
      "trigger": "drill_down",
@@ -607,7 +607,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18201→18201）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18038→18038）"
     },
     {
      "trigger": "keyboard",
@@ -635,11 +635,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/B/chromium/390__trials__nct04469465.html.png",
-   "screenshot_sha256": "f2d192bf313ae45033a8133aecf76206a0f1050b41a761be45c9b3c4a2da4e52",
+   "screenshot_sha256": "c3f3dd7ad2311f7e1e0ec108887b675776042f8d078a5b2360592204b3e3e00f",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 56081,
+    "label_overlap_count": 46423,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -653,7 +653,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8801→8804）"
+     "evidence": "筛选控件真实点击（文本长度 8712→8715）"
     },
     {
      "trigger": "drill_down",
@@ -663,7 +663,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8801→8801）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8712→8712）"
     },
     {
      "trigger": "keyboard",
@@ -691,11 +691,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/B/chromium/320__overview.html.png",
-   "screenshot_sha256": "59e01f8381d42b55fe96649724166b912dc933665ff6a4d5e2143709ddb983d6",
+   "screenshot_sha256": "269f5a264d87b07e318201d74a167c257664d1e9b9ab0ac0528f3e943dea474f",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 17005,
+    "label_overlap_count": 18218,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -709,7 +709,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24598→2501）"
+     "evidence": "筛选控件真实点击（文本长度 24581→2500）"
     },
     {
      "trigger": "drill_down",
@@ -719,7 +719,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24598→24598）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24581→24581）"
     },
     {
      "trigger": "keyboard",
@@ -747,11 +747,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/B/chromium/320__efficacy.html.png",
-   "screenshot_sha256": "442d21cd6b29ee473555dafe61a408e0f75218a20cba74182a9ff7b208aebcdd",
+   "screenshot_sha256": "38c3c88b2b2db904b064b80a9ab2d8b1fc5a0272850dee6f36d8c7b11ab01345",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3413,
+    "label_overlap_count": 3469,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -765,7 +765,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18234→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18005→1407）"
     },
     {
      "trigger": "drill_down",
@@ -775,7 +775,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18234→18234）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18005→18005）"
     },
     {
      "trigger": "keyboard",
@@ -803,11 +803,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/B/chromium/320__trials__nct04469465.html.png",
-   "screenshot_sha256": "f8bb0e9541d2ff1824794c5eb7622eeef919957861e40db45c7514d5c56b0429",
+   "screenshot_sha256": "58990bea7b746b2269926a64cbb3549bbc636fbfb4ccb97a91241f3b037519a6",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 60892,
+    "label_overlap_count": 57995,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -821,7 +821,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8812→8815）"
+     "evidence": "筛选控件真实点击（文本长度 8712→8715）"
     },
     {
      "trigger": "drill_down",
@@ -831,7 +831,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8812→8812）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8712→8712）"
     },
     {
      "trigger": "keyboard",
@@ -859,11 +859,11 @@
     "height": 900
    },
    "screenshot_path": "screenshots/B/webkit/1440__overview.html.png",
-   "screenshot_sha256": "285b31ecb679319faeb42e712e0a50b7ab8753ad4d8246655b081807e02c54db",
+   "screenshot_sha256": "d9eb0e5cb6fe5d7829d48b6cd55c811ef948829aaef8d87c1979d2d0a7b3818e",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 10566,
+    "label_overlap_count": 10579,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -877,7 +877,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 66156→2508）"
+     "evidence": "筛选控件真实点击（文本长度 65954→2508）"
     },
     {
      "trigger": "drill_down",
@@ -887,7 +887,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24173→66035）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 23971→65833）"
     },
     {
      "trigger": "keyboard",
@@ -915,11 +915,11 @@
     "height": 900
    },
    "screenshot_path": "screenshots/B/webkit/1440__efficacy.html.png",
-   "screenshot_sha256": "807aaa4a114a6ecdb34708b2f59354ed9b810a29c6a9eb95745b5bc72ba5000a",
+   "screenshot_sha256": "c3e1f756167e0eae263566b1cc4c4baf9246b6817c157e889e3f456d5ebbc381",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3423,
+    "label_overlap_count": 3425,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -933,7 +933,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 60219→1442）"
+     "evidence": "筛选控件真实点击（文本长度 60056→1442）"
     },
     {
      "trigger": "drill_down",
@@ -943,7 +943,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18236→60098）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18073→59935）"
     },
     {
      "trigger": "keyboard",
@@ -975,7 +975,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 26057,
+    "label_overlap_count": 25375,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -989,7 +989,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 50748→8768）"
+     "evidence": "筛选控件真实点击（文本长度 50656→8676）"
     },
     {
      "trigger": "drill_down",
@@ -999,7 +999,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8765→50627）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8673→50535）"
     },
     {
      "trigger": "keyboard",
@@ -1027,11 +1027,11 @@
     "height": 1366
    },
    "screenshot_path": "screenshots/B/webkit/1024__overview.html.png",
-   "screenshot_sha256": "919a773b23d92adad5b4e95d87417dd796407b59fcc83d61d5467cadd0bc289d",
+   "screenshot_sha256": "68ed9a15dd9b6c21a2dbfa224d423459d0be447e25f6b52eddd32d23dca036b0",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 10963,
+    "label_overlap_count": 10968,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1045,7 +1045,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24290→2482）"
+     "evidence": "筛选控件真实点击（文本长度 24114→2481）"
     },
     {
      "trigger": "drill_down",
@@ -1055,7 +1055,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24290→24290）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24114→24114）"
     },
     {
      "trigger": "keyboard",
@@ -1083,11 +1083,11 @@
     "height": 1366
    },
    "screenshot_path": "screenshots/B/webkit/1024__efficacy.html.png",
-   "screenshot_sha256": "72acb82f6b383692fc363ded470a0505df44323164ba83436c5869b8ae2add25",
+   "screenshot_sha256": "f5ac4dc3f6b34c3de1f457ab5d89fe1b03219bf49b228130f372d2e6d0eca85c",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3823,
+    "label_overlap_count": 3829,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1101,7 +1101,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18201→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18038→1407）"
     },
     {
      "trigger": "drill_down",
@@ -1111,7 +1111,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18201→18201）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18038→18038）"
     },
     {
      "trigger": "keyboard",
@@ -1139,11 +1139,11 @@
     "height": 1366
    },
    "screenshot_path": "screenshots/B/webkit/1024__trials__nct04469465.html.png",
-   "screenshot_sha256": "c317b4ba7f071f6606c9a76c8f540a14315d954f139500e485e3b2eb83bbcdc3",
+   "screenshot_sha256": "ac0ead4665de06822b6240eaaf518e9a9ef8380578af4f142adf6e8f9b5d3061",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 34722,
+    "label_overlap_count": 34740,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1157,7 +1157,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8730→8733）"
+     "evidence": "筛选控件真实点击（文本长度 8638→8641）"
     },
     {
      "trigger": "drill_down",
@@ -1167,7 +1167,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8730→8730）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8638→8638）"
     },
     {
      "trigger": "keyboard",
@@ -1195,11 +1195,11 @@
     "height": 1024
    },
    "screenshot_path": "screenshots/B/webkit/768__overview.html.png",
-   "screenshot_sha256": "5b120bff208ae9ace4d6b4c3bbc9f1b1e900d7d8efbf91b6df18d29696086dbb",
+   "screenshot_sha256": "1398cf9274d539c5725e2ffab8c4b66fc17f8e0369d7f87c44ec2b3e50076533",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 10894,
+    "label_overlap_count": 10891,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1213,7 +1213,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24298→2482）"
+     "evidence": "筛选控件真实点击（文本长度 24131→2481）"
     },
     {
      "trigger": "drill_down",
@@ -1223,7 +1223,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24298→24298）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24131→24131）"
     },
     {
      "trigger": "keyboard",
@@ -1251,11 +1251,11 @@
     "height": 1024
    },
    "screenshot_path": "screenshots/B/webkit/768__efficacy.html.png",
-   "screenshot_sha256": "321b5d729d5d81cd06482839a12d0502bdbeaddabd0216bb7f13e03dadb5ffa0",
+   "screenshot_sha256": "0b1a59b502e50ebe5b5d940a34de99d608d4bc41ba4861b2bb33e90344e0aff7",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3888,
+    "label_overlap_count": 3883,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1269,7 +1269,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18201→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18038→1407）"
     },
     {
      "trigger": "drill_down",
@@ -1279,7 +1279,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18201→18201）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18038→18038）"
     },
     {
      "trigger": "keyboard",
@@ -1311,7 +1311,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 39205,
+    "label_overlap_count": 38549,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1325,7 +1325,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8730→8733）"
+     "evidence": "筛选控件真实点击（文本长度 8638→8641）"
     },
     {
      "trigger": "drill_down",
@@ -1335,7 +1335,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8730→8730）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8638→8638）"
     },
     {
      "trigger": "keyboard",
@@ -1363,11 +1363,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/B/webkit/390__overview.html.png",
-   "screenshot_sha256": "b5960289adef9759fdb959f3c922631f5f06931d85ed316a3bd190be77b5a705",
+   "screenshot_sha256": "37673eb4774c3d2a4c23fa50345c5bb09b67bfc1eb175dd03ba2372cae13562c",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 16494,
+    "label_overlap_count": 15861,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1381,7 +1381,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24648→2501）"
+     "evidence": "筛选控件真实点击（文本长度 24518→2490）"
     },
     {
      "trigger": "drill_down",
@@ -1391,7 +1391,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24648→24648）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24518→24518）"
     },
     {
      "trigger": "keyboard",
@@ -1419,11 +1419,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/B/webkit/390__efficacy.html.png",
-   "screenshot_sha256": "5a0e8931b9ca0fbd532be4512c8f45cd91708e6e3ff82e576df697f11b0a169f",
+   "screenshot_sha256": "aa5ba121b6c097133e9b2ba26857df01620357bee86de60c37e164d363b7d7c7",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3291,
+    "label_overlap_count": 3393,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1437,7 +1437,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18201→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18038→1407）"
     },
     {
      "trigger": "drill_down",
@@ -1447,7 +1447,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18201→18201）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18038→18038）"
     },
     {
      "trigger": "keyboard",
@@ -1475,11 +1475,11 @@
     "height": 844
    },
    "screenshot_path": "screenshots/B/webkit/390__trials__nct04469465.html.png",
-   "screenshot_sha256": "93d418322c93b8f418c0f29587d0dfe4d3a9b17e8563111b3243364129612999",
+   "screenshot_sha256": "cf801a230de08f1148a18ee100c72ae9a45789845007da59a9fcc14a85e89b5f",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 56079,
+    "label_overlap_count": 46421,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1493,7 +1493,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8801→8804）"
+     "evidence": "筛选控件真实点击（文本长度 8712→8715）"
     },
     {
      "trigger": "drill_down",
@@ -1503,7 +1503,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8801→8801）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8712→8712）"
     },
     {
      "trigger": "keyboard",
@@ -1531,11 +1531,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/B/webkit/320__overview.html.png",
-   "screenshot_sha256": "691480fc226f3464f7dc389cfa5f4b1adbd14ac97da9c62162940b088e8faa2c",
+   "screenshot_sha256": "f63192aa05a0a1691599af8f64cbf204a0e3fc0ba3772ac892edcdf7eb142b54",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 16986,
+    "label_overlap_count": 18150,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1549,7 +1549,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 24598→2501）"
+     "evidence": "筛选控件真实点击（文本长度 24581→2500）"
     },
     {
      "trigger": "drill_down",
@@ -1559,7 +1559,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24598→24598）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 24581→24581）"
     },
     {
      "trigger": "keyboard",
@@ -1587,11 +1587,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/B/webkit/320__efficacy.html.png",
-   "screenshot_sha256": "fffed53223802bd0c2aa9babe1c4dcba7646d7e88255b58ba832ffeae862b85c",
+   "screenshot_sha256": "223c562532e0f045843a4c385560718bed143adfeb0de7a8b92994588eb90164",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 3413,
+    "label_overlap_count": 3459,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1605,7 +1605,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 18234→1407）"
+     "evidence": "筛选控件真实点击（文本长度 18005→1407）"
     },
     {
      "trigger": "drill_down",
@@ -1615,7 +1615,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18234→18234）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 18005→18005）"
     },
     {
      "trigger": "keyboard",
@@ -1643,11 +1643,11 @@
     "height": 568
    },
    "screenshot_path": "screenshots/B/webkit/320__trials__nct04469465.html.png",
-   "screenshot_sha256": "954141b58f3ba3cbf233070ac5407ad1e4b7a8460aaeb7672546f7e8f22087b7",
+   "screenshot_sha256": "83b68ea0902921be343d86099d527c7f8e4b31a5254454354ebc91a6496cad08",
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 60891,
+    "label_overlap_count": 58001,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1661,7 +1661,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8812→8815）"
+     "evidence": "筛选控件真实点击（文本长度 8712→8715）"
     },
     {
      "trigger": "drill_down",
@@ -1671,7 +1671,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8812→8812）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8712→8712）"
     },
     {
      "trigger": "keyboard",
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-20T05:04:08.032263+00:00"
+ "created_at": "2026-09-20T05:33:46.642334+00:00"
 }
