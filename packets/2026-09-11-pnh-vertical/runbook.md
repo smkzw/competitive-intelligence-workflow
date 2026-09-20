@@ -1580,3 +1580,15 @@ accept-visual ×3 → AD B/C → 横向。
   C overview 四域 + exclusion-criteria 两域、B r32 EOT 修复
   （_weeks EOT 锚点 + 渲染层 _time_label/_time_band EOT 守卫已落码——
   注意 v55 构建时确认 A 载荷 EOT 行 timepoint 原文含 "EOT" 触发守卫）。
+
+## v55 = 当前候选（EOT 守卫 + A 转写第三轮 + 全部承载）
+
+- A 转写第三轮：时间归一无条件执行（Week/Month N→第N周/个月）+ 严重度分级
+  （none/mild/moderate/severe→无/轻度/中度/重度）+ Change at 剥离。
+  残余 1402→798 行（余为安全域行与量表名，均不入 efficacy 门户或属惯例保留）。
+- B r32 EOT：`_weeks` 数字锚保留 + 渲染层 EOT 守卫已落码（v55 渲染即生效）。
+- **v55 = 当前候选**：submit ACCEPTED、A/B gates 过、eff 366。
+- 后台运行中：B r33（deepseek）、A r18 + 视觉文档重算（gemini 链）、C r16（gemini）。
+- 下一会话：收三路 verdict → 生成 v55 视觉提示词（/tmp/gen_visual_prompts_v53.py
+  sed abc-v53→abc-v55 复用）→ 三节点视觉 → 全 accepted → resume →
+  accept-visual ×3 → PNH 竖向收口 → AD B/C → 横向。

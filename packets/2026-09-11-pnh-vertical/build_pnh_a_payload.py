@@ -47,6 +47,17 @@ _CLASS_TITLE_TOKENS = (
     ("eot visit", "治疗结束访视"),
     ("maximum exposure", "最长暴露"),
     ("quality of life", "生活质量"),
+    ("final study visit", "末次研究访视"),
+    ("interim efficacy analysis", "期中疗效分析"),
+    ("full analysis", "全分析集"),
+    ("change at week", "第X周变化占位"),
+    ("end of treatment", "治疗结束"),
+    ("baseline", "基线"),
+    ("moderate", "中度"),
+    ("severe", "重度"),
+    ("mild", "轻度"),
+    ("none", "无"),
+    ("change at", "变化"),
 )
 
 
@@ -58,24 +69,25 @@ def _transcribe_class_title(title: str) -> str:
     text = " ".join(str(title or "").split())
     if not text:
         return text
-    low = text.casefold()
-    out = text
-    hit = False
+    # 时间归一无条件执行：Day/Week/Month N → 第N天/周/个月
+    out = re.sub(r"[Dd]ay\s+(\d+)", r"第\1天", text)
+    out = re.sub(r"[Ww]eek\s+(\d+)", r"第\1周", out)
+    out = re.sub(r"[Mm]onth\s+(\d+)", r"第\1个月", out)
+    out = re.sub(r"(\d+)\s*[Mm]onths?", r"\1个月", out)
+    out = re.sub(r"[Cc]hange at\s+", "", out)
+    low = out.casefold()
+    changed = out != text
     for en, zh in _CLASS_TITLE_TOKENS:
         if en in low:
-            hit = True
+            changed = True
             idx = low.find(en)
             out = out[:idx] + zh + out[idx + len(en):]
             low = out.casefold()
-    if not hit:
+    if not changed:
         return text
-    # 时间归一：Day N / Week N / N Months
-    out = re.sub(r"[Dd]ay\s+(\d+)", r"第\1天", out)
-    out = re.sub(r"[Ww]eek\s+(\d+)", r"第\1周", out)
-    out = re.sub(r"(\d+)\s*[Mm]onths?", r"\1个月", out)
     out = out.replace(" between ", "").replace("、", "、")
     out = re.sub(r"\s{2,}", " ", out).strip()
-    # 归一后剩余裸英文词 ≥4 个则视为未转写成功，保留原文
+    # 归一后剩余裸英文词 ≥3 个则视为未转写成功，保留原文
     if len(re.findall(r"[A-Za-z]{4,}", out)) >= 3:
         return text
     return out
