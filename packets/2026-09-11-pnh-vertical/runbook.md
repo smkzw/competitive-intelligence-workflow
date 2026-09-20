@@ -1648,3 +1648,10 @@ report-b.css + overview——v56 新增行（基线/窗口比例终点）的标�
 ## 视觉 B 全域通过（v57，contract digest 绑定核验通过）
 B（gemini）：accepted 7/7——typography 修复（132 条 CSS 声明）确认生效。
 B 报告在 v57 = 科学回执（r35）+ 视觉验收双全。A/C 视觉后台运行中。
+
+### 视觉 A（v57，cursor）：copy_zh 转 accepted ✓；新拒 hierarchy/typography 两域
+- copy_zh 通过 = 转写词表工作生效确认。
+- typography refs = portal.css vs 策划书 font_sizes_px [12,14,16,20,24,32]：
+  下会话审计 css 内全部 font-size 归一到策划书刻度（脚本扫描已给出 off-scale 清单）。
+- hierarchy refs = A overview（首屏层级）。
+- C 视觉（v57，deepseek）运行中。
