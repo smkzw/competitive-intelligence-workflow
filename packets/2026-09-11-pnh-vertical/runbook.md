@@ -1453,3 +1453,12 @@ verdict evidence_refs 逐域修）。
   （visual_contract_digest + 断言）→ 三节点视觉 → 全 accepted →
   resume → accept-visual ×3（三件套拷入项目 state/visual/）。
 - B veto 轨迹：29 轮 1 项——距通过一步。
+
+## v52 三报告科学复核全部 accepted + 回执齐备；三节点视觉已派发
+
+- A r15 ✓（回执）、**B r30 ✓ accepted issues 0（回执）**、C r13 ✓（回执）——
+  B 第 2 次通过（r26 后），v52 载荷承载全部 30 轮修复成果。
+- 视觉文档已按 v52 重算；三份提示词以 visual_contract_digest + 路径断言生成，
+  三节点视觉（A=cursor、B=gemini、C=deepseek）后台运行中。
+- verdict 落盘后：全 accepted → resume → accept-visual ×3（三件套拷入
+  state/visual/，digest 用 visual_contract_digest）→ PNH 竖向完整收口。
