@@ -116,6 +116,17 @@ class MissingStrategy(StrEnum):
     PRESERVE_DISCLOSURE_STATE = "preserve_disclosure_state"
 
 
+class GateRecoveryRoute(StrEnum):
+    """GateSpec 可声明的恢复策略族；具体查询仍由来源规划器版本化。"""
+
+    ALIAS_VARIANT = "alias_variant"
+    LANGUAGE_VARIANT = "language_variant"
+    IDENTIFIER_CROSS_REFERENCE = "identifier_cross_reference"
+    CITATION_TRAVERSAL = "citation_traversal"
+    ALTERNATE_ACCESS = "alternate_access"
+    ALTERNATE_SOURCE = "alternate_source"
+
+
 class GateBlockingLevel(StrEnum):
     """关键/扩展级别：阻断与建模但非阻断分层。"""
 
@@ -327,6 +338,8 @@ class GateUnitSpec(BaseModel):
     accepted_fact_states: tuple[FactDisclosureState, ...] = Field(min_length=1)
     missing_strategy: MissingStrategy
     conflict_strategy: ConflictStrategy
+    failure_code: str
+    recovery_route_ids: tuple[GateRecoveryRoute, ...] = Field(min_length=1)
     threshold: int = Field(default=1, ge=1)
     user_label_zh: str
     missing_impact_zh: str
@@ -335,6 +348,7 @@ class GateUnitSpec(BaseModel):
     @field_validator(
         "unit_id",
         "applicability_predicate_id",
+        "failure_code",
         "user_label_zh",
         "missing_impact_zh",
         "user_next_step_zh",
@@ -348,6 +362,7 @@ class GateUnitSpec(BaseModel):
         "allowed_source_roles",
         "allowed_fact_domains",
         "allowed_observation_kinds",
+        "recovery_route_ids",
     )
     @classmethod
     def _unit_lists_are_unique(cls, values: tuple[object, ...]) -> tuple[object, ...]:
@@ -366,8 +381,12 @@ class GateUnitSpec(BaseModel):
                 raise ValueError("关键单元缺失策略必须为阻断")
             if self.conflict_strategy is not ConflictStrategy.RESOLVED_ONLY:
                 raise ValueError("关键单元只能接受已解决冲突")
+            if self.failure_code != "missing_required_evidence":
+                raise ValueError("关键单元失败代码必须为 missing_required_evidence")
         elif self.missing_strategy is not MissingStrategy.PRESERVE_DISCLOSURE_STATE:
             raise ValueError("扩展单元缺失策略必须保留披露状态")
+        elif self.failure_code != "missing_extension_evidence":
+            raise ValueError("扩展单元失败代码必须为 missing_extension_evidence")
         return self
 
 
@@ -734,6 +753,7 @@ class GateUnitResult(BaseModel):
     blocking: bool
     threshold: int = Field(ge=1)
     satisfied_count: int = Field(ge=0)
+    coverage_complete: bool = True
     fact_version_ids: tuple[str, ...] = Field(default=())
     source_locations: tuple[str, ...] = Field(default=())
     disclosure_state: FactDisclosureState | None = None
@@ -747,6 +767,7 @@ class GateUnitResult(BaseModel):
         if self.outcome is GateUnitOutcome.SATISFIED and not (
             self.applicable
             and not self.blocking
+            and self.coverage_complete
             and self.satisfied_count >= self.threshold
             and self.satisfied_count == len(self.fact_version_ids)
         ):
@@ -757,9 +778,9 @@ class GateUnitResult(BaseModel):
         if self.outcome is GateUnitOutcome.BLOCKED and not (
             self.applicable
             and self.blocking
-            and self.satisfied_count < self.threshold
+            and (self.satisfied_count < self.threshold or not self.coverage_complete)
         ):
-            raise ValueError("阻断结果必须适用、阻断且达标数量低于阈值")
+            raise ValueError("阻断结果必须适用、阻断且数量不足或覆盖不完整")
         if self.outcome is GateUnitOutcome.NOT_APPLICABLE and not (
             not self.applicable
             and not self.blocking
@@ -770,9 +791,9 @@ class GateUnitResult(BaseModel):
         if self.outcome is GateUnitOutcome.EXTENSION_MISSING and not (
             self.applicable
             and not self.blocking
-            and self.satisfied_count < self.threshold
+            and (self.satisfied_count < self.threshold or not self.coverage_complete)
         ):
-            raise ValueError("扩展缺失结果必须适用、非阻断且达标数量低于阈值")
+            raise ValueError("扩展缺失结果必须适用、非阻断且数量不足或覆盖不完整")
         if (
             self.outcome
             in (GateUnitOutcome.BLOCKED, GateUnitOutcome.EXTENSION_MISSING)
@@ -1624,10 +1645,23 @@ def evaluate_unit_decision(
         for binding in bindings
         if binding.object_id == object_id and binding.unit_id == unit.unit_id
     )
-    qualifying = tuple(
-        binding
-        for binding in scope_bindings
-        if evidence_binding_qualifies(binding, unit, snapshot=snapshot)
+    has_open_critical_conflict = (
+        unit.blocking_level is GateBlockingLevel.CRITICAL
+        and unit.conflict_strategy is ConflictStrategy.RESOLVED_ONLY
+        and any(
+            binding.disclosure_state is FactDisclosureState.CONFLICTING
+            or binding.conflict_disposition is ConflictDisposition.OPEN_CONFLICT_PRESERVED
+            for binding in scope_bindings
+        )
+    )
+    qualifying = (
+        ()
+        if has_open_critical_conflict
+        else tuple(
+            binding
+            for binding in scope_bindings
+            if evidence_binding_qualifies(binding, unit, snapshot=snapshot)
+        )
     )
     # 阈值按不同不可变事实版本计数：同一事实版本的重复绑定只计一次。
     distinct_fact_version_ids = frozenset(
@@ -1642,7 +1676,7 @@ def evaluate_unit_decision(
     elif unit.blocking_level is GateBlockingLevel.CRITICAL:
         outcome = GateUnitOutcome.BLOCKED
         blocking = True
-        failure_code = "missing_required_evidence"
+        failure_code = unit.failure_code
         user_note_zh = (
             f"{unit.user_label_zh}缺失：{unit.missing_impact_zh}。"
             f"{unit.user_next_step_zh}"
@@ -1650,7 +1684,7 @@ def evaluate_unit_decision(
     else:
         outcome = GateUnitOutcome.EXTENSION_MISSING
         blocking = False
-        failure_code = "missing_extension_evidence"
+        failure_code = unit.failure_code
         user_note_zh = None
     return GateUnitResult(
         unit_id=unit.unit_id,
@@ -1672,7 +1706,11 @@ def evaluate_unit_decision(
         disclosure_state=(
             None
             if outcome is GateUnitOutcome.NOT_APPLICABLE
-            else _best_disclosure_state(scope_bindings)
+            else (
+                FactDisclosureState.CONFLICTING
+                if has_open_critical_conflict
+                else _best_disclosure_state(scope_bindings)
+            )
         ),
         failure_code=failure_code,
         user_note_zh=user_note_zh,

@@ -1,0 +1,20 @@
+{
+  "report_snapshot_id": "snapshot-three-report-complete-001",
+  "report_version": "v-fixture-001",
+  "indication": "特应性皮炎",
+  "reports": {
+    "A": {
+      "page_responsibility_count": 12,
+      "coverage_set_id_prefix": "coverage-set"
+    },
+    "B": {
+      "page_responsibility_count": 21,
+      "coverage_set_id_prefix": "coverage-set"
+    },
+    "C": {
+      "page_responsibility_count": 12,
+      "coverage_set_id_prefix": "coverage-set"
+    }
+  },
+  "note_zh": "覆盖集合在当次 fixture run 生成后按报告分别绑定同一 snapshot；本文件锁定责任页计数预期。"
+}

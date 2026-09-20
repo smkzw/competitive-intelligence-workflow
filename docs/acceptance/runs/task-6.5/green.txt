@@ -1,0 +1,6 @@
+Task 6.5 GREEN（2026-08-29）
+
+- 目标测试：19 passed。
+- Ruff、strict mypy、schema 与 package manifest 检查通过。
+- 拒绝负样本量/计数、越界比例、未获适应症规则认可的严重度指标及同一事实版本跨组复用。
+- 继续复用 B-v1 GateSpec 和现有 evaluator，逐试验逐组失败关闭。

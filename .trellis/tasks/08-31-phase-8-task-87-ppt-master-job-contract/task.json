@@ -1,0 +1,33 @@
+{
+  "id": "phase-8-task-87-ppt-master-job-contract",
+  "name": "phase-8-task-87-ppt-master-job-contract",
+  "title": "Phase 8 Task 8.7：PPT Master 作业合同与可恢复中断",
+  "description": "为 A/B/C 可编辑 PPTX 固化 PPT Master 作业状态、阶段收据、锁定报告快照、严格串行、暂停恢复和失败关闭合同。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 8.7 only：作业合同、阶段收据、锁定快照、串行约束、恢复指针、过期/错序/跨报告拒绝、中文操作指引和代表性合同向量；不接受 A/B/C PPTX 成片、PowerPoint 实机视觉或四格式覆盖。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": "2026-08-31",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-31-phase-8-cross-format",
+  "relatedFiles": [
+    "docs/architecture/format-contracts/pptx.yaml",
+    "docs/architecture/format-contracts/pptx-master-job.yaml",
+    "docs/acceptance/runs/8.7/ppt-master-job-operator-guide.md",
+    "tests/contract/test_ppt_master_job_contract_vectors.py",
+    "tests/fixtures/pptx-master-job/contract-vectors.json",
+    "schemas/ppt-master-job.schema.json"
+  ],
+  "notes": "Task 8.7 已完成：类型化作业合同、JSON Schema、九阶段收据链、原子持久化、暂停恢复、前置产物校验和 A/B/C 全局串行锁均已实跑；20 项任务测试及 45 项相关回归通过。PPTX 成片与 PowerPoint 视觉验收仍属于 Task 8.8–8.9。",
+  "meta": {"phase": 8, "task": "8.7"}
+}

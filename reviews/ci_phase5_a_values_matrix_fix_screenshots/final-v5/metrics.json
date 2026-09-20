@@ -1,0 +1,378 @@
+{
+  "chromium-overview-768": {
+    "viewport": 768,
+    "documentWidth": 768,
+    "bodyWidth": 768,
+    "chartClientWidth": 718,
+    "chartScrollWidth": 718,
+    "heatmaps": [
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      },
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-safety-768": {
+    "viewport": 768,
+    "documentWidth": 768,
+    "bodyWidth": 768,
+    "chartClientWidth": 668,
+    "chartScrollWidth": 668,
+    "heatmaps": [
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      },
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 668,
+    "tableScrollWidth": 668,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "none",
+    "countColumnDisplay": "none",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-overview-1024": {
+    "viewport": 1024,
+    "documentWidth": 1024,
+    "bodyWidth": 1024,
+    "chartClientWidth": 974,
+    "chartScrollWidth": 974,
+    "heatmaps": [
+      {
+        "clientWidth": 924,
+        "scrollWidth": 924,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-safety-1024": {
+    "viewport": 1024,
+    "documentWidth": 1024,
+    "bodyWidth": 1024,
+    "chartClientWidth": 924,
+    "chartScrollWidth": 924,
+    "heatmaps": [
+      {
+        "clientWidth": 924,
+        "scrollWidth": 924,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 924,
+    "tableScrollWidth": 924,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "table-cell",
+    "countColumnDisplay": "table-cell",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-overview-1280": {
+    "viewport": 1280,
+    "documentWidth": 1280,
+    "bodyWidth": 1280,
+    "chartClientWidth": 1150,
+    "chartScrollWidth": 1150,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-safety-1280": {
+    "viewport": 1280,
+    "documentWidth": 1280,
+    "bodyWidth": 1280,
+    "chartClientWidth": 1100,
+    "chartScrollWidth": 1100,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 1100,
+    "tableScrollWidth": 1100,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "table-cell",
+    "countColumnDisplay": "table-cell",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-overview-1440": {
+    "viewport": 1440,
+    "documentWidth": 1440,
+    "bodyWidth": 1440,
+    "chartClientWidth": 1150,
+    "chartScrollWidth": 1150,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "chromium-safety-1440": {
+    "viewport": 1440,
+    "documentWidth": 1440,
+    "bodyWidth": 1440,
+    "chartClientWidth": 1100,
+    "chartScrollWidth": 1100,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 1100,
+    "tableScrollWidth": 1100,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "table-cell",
+    "countColumnDisplay": "table-cell",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-overview-768": {
+    "viewport": 768,
+    "documentWidth": 768,
+    "bodyWidth": 768,
+    "chartClientWidth": 718,
+    "chartScrollWidth": 718,
+    "heatmaps": [
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      },
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-safety-768": {
+    "viewport": 768,
+    "documentWidth": 768,
+    "bodyWidth": 768,
+    "chartClientWidth": 668,
+    "chartScrollWidth": 668,
+    "heatmaps": [
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      },
+      {
+        "clientWidth": 668,
+        "scrollWidth": 668,
+        "eventCount": 2,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 668,
+    "tableScrollWidth": 668,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "none",
+    "countColumnDisplay": "none",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-overview-1024": {
+    "viewport": 1024,
+    "documentWidth": 1024,
+    "bodyWidth": 1024,
+    "chartClientWidth": 974,
+    "chartScrollWidth": 974,
+    "heatmaps": [
+      {
+        "clientWidth": 924,
+        "scrollWidth": 924,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-safety-1024": {
+    "viewport": 1024,
+    "documentWidth": 1024,
+    "bodyWidth": 1024,
+    "chartClientWidth": 924,
+    "chartScrollWidth": 924,
+    "heatmaps": [
+      {
+        "clientWidth": 924,
+        "scrollWidth": 924,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 924,
+    "tableScrollWidth": 924,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "table-cell",
+    "countColumnDisplay": "table-cell",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-overview-1280": {
+    "viewport": 1280,
+    "documentWidth": 1280,
+    "bodyWidth": 1280,
+    "chartClientWidth": 1150,
+    "chartScrollWidth": 1150,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-safety-1280": {
+    "viewport": 1280,
+    "documentWidth": 1280,
+    "bodyWidth": 1280,
+    "chartClientWidth": 1100,
+    "chartScrollWidth": 1100,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 1100,
+    "tableScrollWidth": 1100,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "table-cell",
+    "countColumnDisplay": "table-cell",
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-overview-1440": {
+    "viewport": 1440,
+    "documentWidth": 1440,
+    "bodyWidth": 1440,
+    "chartClientWidth": 1150,
+    "chartScrollWidth": 1150,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 0,
+    "tableScrollWidth": 0,
+    "stickyTop": null,
+    "trialColumnDisplay": null,
+    "countColumnDisplay": null,
+    "splitUnpublished": false,
+    "pageErrors": []
+  },
+  "webkit-safety-1440": {
+    "viewport": 1440,
+    "documentWidth": 1440,
+    "bodyWidth": 1440,
+    "chartClientWidth": 1100,
+    "chartScrollWidth": 1100,
+    "heatmaps": [
+      {
+        "clientWidth": 1100,
+        "scrollWidth": 1100,
+        "eventCount": 4,
+        "productCount": 38
+      }
+    ],
+    "tableClientWidth": 1100,
+    "tableScrollWidth": 1100,
+    "stickyTop": "68px",
+    "trialColumnDisplay": "table-cell",
+    "countColumnDisplay": "table-cell",
+    "splitUnpublished": false,
+    "pageErrors": []
+  }
+}

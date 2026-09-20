@@ -1,31 +1,87 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://local.cms/ci-workflow/migration/legacy-manifest.schema.json",
-  "title": "旧工程迁移候选登记",
+  "title": "旧工程最终迁移处置记录",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "item_id",
-    "category",
-    "source_path",
-    "source_sha256",
-    "target_path",
-    "status",
-    "runtime_dependency",
-    "decision_basis"
+    "item_id", "category", "old_path", "old_realpath", "item_type",
+    "hash_basis", "source_sha256", "source_permission", "retention_reason",
+    "new_path", "target_sha256", "transformation", "redaction",
+    "validation_evidence", "final_disposition", "runtime_dependency"
   ],
   "properties": {
     "item_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
     "category": {
-      "enum": ["approved_spec", "decision_context", "design_contract_candidate"]
+      "enum": [
+        "approved_spec", "decision_context", "design_contract",
+        "verified_logo", "authorized_fixture", "regression_assertion",
+        "legacy_code", "legacy_schema", "legacy_template", "legacy_qc", "legacy_document",
+        "global_fact_base", "session_state", "cache_state",
+        "plaintext_credentials", "absolute_path_dependency",
+        "compatibility_wrapper"
+      ]
     },
-    "source_path": {"type": "string", "minLength": 1},
+    "old_path": {"type": "string", "minLength": 1},
+    "old_realpath": {"type": "string", "minLength": 1},
+    "item_type": {"enum": ["file", "directory", "collection", "sensitive_class"]},
+    "hash_basis": {"enum": ["file_bytes", "collection_manifest", "source_set", "redacted_sentinel"]},
     "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "target_path": {"type": ["string", "null"]},
-    "status": {
-      "enum": ["registered", "copied_verified", "pending_user_confirmation", "rejected"]
+    "source_permission": {"type": "string", "minLength": 1},
+    "retention_reason": {"type": "string", "minLength": 1},
+    "new_path": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"}
+      ]
     },
-    "runtime_dependency": {"const": false},
-    "decision_basis": {"type": "string", "minLength": 1}
-  }
+    "target_sha256": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    },
+    "transformation": {
+      "enum": ["verbatim_copy", "project_internalization", "deidentified_excerpt", "rewritten_assertion", "historical_reference_only", "none"]
+    },
+    "redaction": {"type": "string", "minLength": 1},
+    "validation_evidence": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "final_disposition": {"enum": ["migrated", "retained_as_history", "not_migrated"]},
+    "runtime_dependency": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"final_disposition": {"const": "migrated"}}},
+      "then": {
+        "properties": {
+          "new_path": {"type": "string", "minLength": 1},
+          "target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "not": {"properties": {"transformation": {"const": "none"}}}
+      }
+    },
+    {
+      "if": {"properties": {"final_disposition": {"const": "not_migrated"}}},
+      "then": {
+        "properties": {
+          "new_path": {"type": "null"},
+          "target_sha256": {"type": "null"},
+          "transformation": {"const": "none"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"category": {"enum": ["session_state", "cache_state", "plaintext_credentials"]}}},
+      "then": {
+        "properties": {
+          "item_type": {"const": "sensitive_class"},
+          "hash_basis": {"const": "redacted_sentinel"},
+          "final_disposition": {"const": "not_migrated"}
+        }
+      }
+    }
+  ]
 }

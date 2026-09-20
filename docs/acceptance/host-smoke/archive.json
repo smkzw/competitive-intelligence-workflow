@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "archive_kind": "candidate-bundle-host-smoke",
+  "generated_at": "2026-09-01T09:57:38+08:00",
+  "bundle": {
+    "path": "dist/competitive-intelligence-workflow.tar.zst",
+    "sha256": "50a91aac3e0050887ae48e29e921a45cf540d986b418eaac8d4af068f6a3e8c3",
+    "package_manifest_sha256": "d1672be7c45d64c6fef99e23ec076e135e9b8430e0ec522ec4d5465c59377ed0"
+  },
+  "fixture": {
+    "case_id": "host-smoke-v1",
+    "case_digest": "8847165702fcfd65fcd4fcafe611fff6f3557d844eecb95759bb7031aca0cdf1"
+  },
+  "receipts": {
+    "codex": "codex.json",
+    "hermes": "hermes.json",
+    "omp": "omp.json"
+  },
+  "checks": {
+    "bundle_verified": true,
+    "receipts_schema_valid": true,
+    "receipts_current": true,
+    "path_resolved": true,
+    "package_digest_consistent": true,
+    "case_digest_consistent": true,
+    "semantic_state_consistent": true,
+    "process_session_run_distinct": true,
+    "no_draft_assertion": true,
+    "html_only": true
+  },
+  "real_host_pass": true,
+  "acceptance_status": "accepted",
+  "summary_zh": "候选 Skill 包已通过隔离安装、内容校验和 Codex、Hermes、OMP 三宿主真实调用验收；初始关键证据不足时未生成草稿，接受固定补件并显式重开后均完成站点式 HTML 生成和项目复核。"
+}

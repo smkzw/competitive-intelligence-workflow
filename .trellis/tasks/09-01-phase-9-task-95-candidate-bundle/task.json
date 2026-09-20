@@ -1,0 +1,30 @@
+{
+  "id": "phase-9-task-95-candidate-bundle",
+  "name": "phase-9-task-95-candidate-bundle",
+  "title": "Phase 9 Task 9.5：构建并安装候选 Skill 包",
+  "description": "构建完整可移植 Skill bundle，隔离安装并以 Codex、Hermes、OMP 三个真实入口验证同一包、同一最小输入和同一宿主语义。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 9.5 only：bundle 构建/校验、fresh-install、三真实宿主回执、安装说明；首版真实输出仍仅站点式 HTML。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-01",
+  "completedAt": "2026-09-01T10:09:22+08:00",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [],
+  "notes": "Task 9.5 已验收：374 文件候选 bundle、内容寻址 fresh-install、规范 .cc-switch 安装、Codex/Hermes/OMP 三 PATH 真实宿主完整阻断—补件恢复—站点式 HTML、中文安装说明、当前摘要归档、独立同会话复审及治理审计均通过。候选包 SHA-256：50a91aac3e0050887ae48e29e921a45cf540d986b418eaac8d4af068f6a3e8c3。",
+  "meta": {
+    "phase": 9,
+    "task": "9.5",
+    "release_scope": "site_html_v1"
+  }
+}

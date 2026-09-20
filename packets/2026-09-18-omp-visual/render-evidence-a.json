@@ -1,0 +1,1696 @@
+{
+ "$schema": "schemas/visual-render-evidence.schema.json",
+ "schema_version": "1.0",
+ "evidence_id": "render-evidence-abc1-a",
+ "report_kind": "A",
+ "report_version": "v1",
+ "format": "html",
+ "run_id": "run_a8223c1e223645fa93ae8d6e",
+ "visual_plan_digest": "bf74c5b708ec4450f13c10ca90bb55c399d0047bc1d0b7ae6398f2337ec99a4d",
+ "candidate_artifact_digest": "145f35e18716d9d2cc810b19c338ce7cae48777b90e70ab997d9f78e08b804e7",
+ "producer_identity": "zcode-main-thread-glm53",
+ "render_targets": [
+  {
+   "target_id": "target-chromium-1440-efficacy",
+   "engine": "chromium",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "screenshot_path": "screenshots/A/chromium/1440__efficacy.html.png",
+   "screenshot_sha256": "8501f1f338ff068e6d5a3abff6f281dfb3e8bef0eb0a6b3fef4f585628ac1867",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 887,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 7065→1038）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6612→6904）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-1440-safety",
+   "engine": "chromium",
+   "page_id": "safety",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "screenshot_path": "screenshots/A/chromium/1440__safety.html.png",
+   "screenshot_sha256": "3c72644dac330da2d7e0b09a3b33d61da0ca226c5087c6a57913aa9f0b64c678",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 769,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6792→1089）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6339→6631）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-1440-regulatory",
+   "engine": "chromium",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "screenshot_path": "screenshots/A/chromium/1440__regulatory.html.png",
+   "screenshot_sha256": "e97f86c4530cb88622ea7ec5f47c11705e9d3a2746f9818d416637e8ca2308e7",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 457,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 1043→1040）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 590→882）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-1024-efficacy",
+   "engine": "chromium",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 1024,
+    "height": 1366
+   },
+   "screenshot_path": "screenshots/A/chromium/1024__efficacy.html.png",
+   "screenshot_sha256": "b6cc3763baa3c544505d59dadb44cbe0bd5bece0f6c93815a8b175960d82fae2",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 773,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-1024-safety",
+   "engine": "chromium",
+   "page_id": "safety",
+   "viewport": {
+    "width": 1024,
+    "height": 1366
+   },
+   "screenshot_path": "screenshots/A/chromium/1024__safety.html.png",
+   "screenshot_sha256": "24ffe9d940a53d2a76a842675dadf11c21c29d9f1de610d7b645983b963d6061",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 674,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-1024-regulatory",
+   "engine": "chromium",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 1024,
+    "height": 1366
+   },
+   "screenshot_path": "screenshots/A/chromium/1024__regulatory.html.png",
+   "screenshot_sha256": "57a2d39ea9b96b97e067c47718df7d4b9d60957bd55dd7c908801d9f5038092e",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 405,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-768-efficacy",
+   "engine": "chromium",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "screenshot_path": "screenshots/A/chromium/768__efficacy.html.png",
+   "screenshot_sha256": "3d01716248af73b90b83ff315dfa04851b36c9c52f58b275f9d318076be977c1",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 1198,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-768-safety",
+   "engine": "chromium",
+   "page_id": "safety",
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "screenshot_path": "screenshots/A/chromium/768__safety.html.png",
+   "screenshot_sha256": "43be52fa815f33ebee1b617712d3f35d650cd584aebb44297b371910edee6ad6",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 779,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-768-regulatory",
+   "engine": "chromium",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "screenshot_path": "screenshots/A/chromium/768__regulatory.html.png",
+   "screenshot_sha256": "84dd2e9575736ddafa109a15b22047670bd48af54341501fb195867a5a79b6e1",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 408,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-390-efficacy",
+   "engine": "chromium",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "screenshot_path": "screenshots/A/chromium/390__efficacy.html.png",
+   "screenshot_sha256": "1ee8192852e1790eee48cc70a31f6086bda522fb039a6e4de28254b40d3eea9e",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 919,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-390-safety",
+   "engine": "chromium",
+   "page_id": "safety",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "screenshot_path": "screenshots/A/chromium/390__safety.html.png",
+   "screenshot_sha256": "23461990f964541c4d975e77b99f41ca31b74debfe089d52ccf28470cae57d74",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 735,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-390-regulatory",
+   "engine": "chromium",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "screenshot_path": "screenshots/A/chromium/390__regulatory.html.png",
+   "screenshot_sha256": "8e8459541fd024b7a355482519d24f3af9a7e887343f869a80f82a354081ec96",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 442,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-320-efficacy",
+   "engine": "chromium",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 320,
+    "height": 568
+   },
+   "screenshot_path": "screenshots/A/chromium/320__efficacy.html.png",
+   "screenshot_sha256": "11fb180c41cfdba1f61e4ef2af75da01831edfe60b00b34dba907813fa010a0a",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 970,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-320-safety",
+   "engine": "chromium",
+   "page_id": "safety",
+   "viewport": {
+    "width": 320,
+    "height": 568
+   },
+   "screenshot_path": "screenshots/A/chromium/320__safety.html.png",
+   "screenshot_sha256": "054a2bc4841486de01f91424d30b78ca215bdff8cfd009ae323ba788bbe3c2b4",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 734,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-chromium-320-regulatory",
+   "engine": "chromium",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 320,
+    "height": 568
+   },
+   "screenshot_path": "screenshots/A/chromium/320__regulatory.html.png",
+   "screenshot_sha256": "3b3883ae1af05c1fbb93741820421ddbe46f4da5cd53abeb6423febad38718b5",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 451,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 A"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-1440-efficacy",
+   "engine": "webkit",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "screenshot_path": "screenshots/A/webkit/1440__efficacy.html.png",
+   "screenshot_sha256": "3f1f4cb805537e8f0f07b2e15238dfbbc1d1661d70aa7c640c5414874aade20d",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 887,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 7065→1038）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6612→6904）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-1440-safety",
+   "engine": "webkit",
+   "page_id": "safety",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "screenshot_path": "screenshots/A/webkit/1440__safety.html.png",
+   "screenshot_sha256": "34bd2fdf7c5ba62491503f817bd5b92171c01cf9fa081f7dc7c9c87dc9dfeade",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 769,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6792→1089）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6339→6631）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-1440-regulatory",
+   "engine": "webkit",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "screenshot_path": "screenshots/A/webkit/1440__regulatory.html.png",
+   "screenshot_sha256": "2754dbea82911b1d2e9b57bc15f8940e6c4ddb2d4207ecd9e75eb8b18be25cb1",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 457,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 1043→1040）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 590→882）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-1024-efficacy",
+   "engine": "webkit",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 1024,
+    "height": 1366
+   },
+   "screenshot_path": "screenshots/A/webkit/1024__efficacy.html.png",
+   "screenshot_sha256": "8ddb51e592e0cc1cf37f9d96b57fd4063aee3a04c7c5b566ed460d9138035b69",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 771,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-1024-safety",
+   "engine": "webkit",
+   "page_id": "safety",
+   "viewport": {
+    "width": 1024,
+    "height": 1366
+   },
+   "screenshot_path": "screenshots/A/webkit/1024__safety.html.png",
+   "screenshot_sha256": "9d70b10da7d63e85a6e633e4a34bb2ff6f870fc5fb320e9fbbd6ed1b00e81195",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 672,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-1024-regulatory",
+   "engine": "webkit",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 1024,
+    "height": 1366
+   },
+   "screenshot_path": "screenshots/A/webkit/1024__regulatory.html.png",
+   "screenshot_sha256": "ce8fa9679345d058137153b0eac3dc63b4e6de26ad49e10be826873a84e83626",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 405,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-768-efficacy",
+   "engine": "webkit",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "screenshot_path": "screenshots/A/webkit/768__efficacy.html.png",
+   "screenshot_sha256": "a5a17cb374e14562941dc444fa85fddbe139359cefd1dedd86b0984dc00c694c",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 1193,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-768-safety",
+   "engine": "webkit",
+   "page_id": "safety",
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "screenshot_path": "screenshots/A/webkit/768__safety.html.png",
+   "screenshot_sha256": "e4b48860be512766b20a125648452be1f5b2f66a0d9ace4d689cc4d67b06abdc",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 779,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-768-regulatory",
+   "engine": "webkit",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "screenshot_path": "screenshots/A/webkit/768__regulatory.html.png",
+   "screenshot_sha256": "4f8d5448fe037fae4243c971a205c9af1976e60a32437ee65f6b8df164accbee",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 408,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-390-efficacy",
+   "engine": "webkit",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "screenshot_path": "screenshots/A/webkit/390__efficacy.html.png",
+   "screenshot_sha256": "27565137b98beae6d98bc270e7c32de415ffec022aa569763f0e301b5eadb1e0",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 928,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-390-safety",
+   "engine": "webkit",
+   "page_id": "safety",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "screenshot_path": "screenshots/A/webkit/390__safety.html.png",
+   "screenshot_sha256": "c79e65f29f75247cb36ca5f52257eaca7a2578fab04b478c9791ee3c8df8279b",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 735,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-390-regulatory",
+   "engine": "webkit",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "screenshot_path": "screenshots/A/webkit/390__regulatory.html.png",
+   "screenshot_sha256": "a6f27138239a6da99f6c7377334d7a1634cd7ac63f4aa5e662dc371f14a81ef1",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 442,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-320-efficacy",
+   "engine": "webkit",
+   "page_id": "efficacy",
+   "viewport": {
+    "width": 320,
+    "height": 568
+   },
+   "screenshot_path": "screenshots/A/webkit/320__efficacy.html.png",
+   "screenshot_sha256": "d7724f351b03a6ba40a4a812a477d78fa0f5e2d98aa19e94545f27516d504ada",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 974,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6996→969）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6543→6543）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-320-safety",
+   "engine": "webkit",
+   "page_id": "safety",
+   "viewport": {
+    "width": 320,
+    "height": 568
+   },
+   "screenshot_path": "screenshots/A/webkit/320__safety.html.png",
+   "screenshot_sha256": "5fe0d8d6ccf8f1f4c05f9391164977a1bbbc5d7df469cc3001ca7c75545b6e80",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 734,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 6723→1020）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 6270→6270）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  },
+  {
+   "target_id": "target-webkit-320-regulatory",
+   "engine": "webkit",
+   "page_id": "regulatory",
+   "viewport": {
+    "width": 320,
+    "height": 568
+   },
+   "screenshot_path": "screenshots/A/webkit/320__regulatory.html.png",
+   "screenshot_sha256": "776a3d34a370cc97c0d6e5301043a75ff08ff55487bfd6ad46ee1ba58c4ef861",
+   "metrics": {
+    "horizontal_overflow_px": 0,
+    "clipped_text_count": 0,
+    "label_overlap_count": 451,
+    "unreadable_label_count": 0
+   },
+   "unavailable_required_fields": [],
+   "responsive_alternatives": [],
+   "interaction_checks": [
+    {
+     "trigger": "page_load",
+     "passed": true,
+     "evidence": "加载完成且无页面错误（networkidle 到达）"
+    },
+    {
+     "trigger": "filter_change",
+     "passed": true,
+     "evidence": "筛选控件真实点击（文本长度 974→971）"
+    },
+    {
+     "trigger": "drill_down",
+     "passed": true,
+     "evidence": "折叠表真实展开"
+    },
+    {
+     "trigger": "search",
+     "passed": true,
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 521→521）"
+    },
+    {
+     "trigger": "keyboard",
+     "passed": true,
+     "evidence": "Tab 1 次后焦点位于 SUMMARY"
+    },
+    {
+     "trigger": "reduced_motion",
+     "passed": true,
+     "evidence": "减弱动效模拟下正文完整可见"
+    }
+   ],
+   "visible_text_scan": {
+    "passed": true,
+    "engineering_tokens_found": [],
+    "untranslated_tokens_found": []
+   }
+  }
+ ],
+ "defects": [],
+ "created_at": "2026-09-19T10:31:23.770483+00:00"
+}

@@ -1,0 +1,95 @@
+{
+  "policy": "execution-used-provider-model-nodes-are-excluded-from-conference",
+  "linked_execution_task_id": "ci-phase10-task104-migration-manifest",
+  "linked": true,
+  "execution_evidence": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase10-task104-migration-manifest/worker_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase10-task104-migration-manifest/worker_02_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase10-task104-migration-manifest/worker_03_stdout.txt"
+  ],
+  "excluded_route_nodes": [
+    {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase10-task104-migration-manifest/worker_01_stdout.txt",
+      "reason": "effective execution route"
+    }
+  ],
+  "effective_conference_roles": {
+    "general_single_object": {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4-flash",
+      "effort": "max",
+      "default_provider": "zcode",
+      "default_model": "GLM-5.3-Flash",
+      "default_effort": "max",
+      "escalate_provider": "zcode",
+      "escalate_model": "GLM-5.3-Flash",
+      "escalate_effort": "max",
+      "primary": {
+        "agent": "codebuddy",
+        "provider": "codebuddy-cli",
+        "model": "deepseek-v4-flash",
+        "effort": "max"
+      },
+      "fallbacks": [
+        {
+          "agent": "grok",
+          "provider": "grok-build",
+          "model": "grok-4.6",
+          "effort": "medium"
+        },
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "cursor-grok-4.6",
+          "effort": "medium"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-5.6-luna",
+          "effort": "max"
+        }
+      ],
+      "execution_route": "Complex/logic/evidence/artifact-heavy object: zcode/GLM-5.3-Flash max -> CodeBuddy/deepseek-v4-flash max -> Grok Build/grok-4.6 medium -> Pi/Cursor/cursor-grok-4.6 medium -> Pi/openai-codex/gpt-5.6-luna max",
+      "role": "single complex-task conference object; Codex chairs directly with no sub-venue chair",
+      "schedule": {
+        "policy": "beijing-peak-off-peak-v1",
+        "timezone": "Asia/Shanghai",
+        "period": "off_peak",
+        "period_label": "非高峰",
+        "peak_start": "12:00",
+        "peak_end": "18:00",
+        "evaluated_at": "2026-09-02T10:14:09.871308+08:00"
+      },
+      "schedule_constraints": {
+        "policy": "beijing-provider-window-v1",
+        "evaluated_at": "2026-09-02T10:14:09.871308+08:00",
+        "cms_router_minimax_blocked": false,
+        "explicit_route": false,
+        "events": [],
+        "route_rewritten": false
+      },
+      "route_contract_frozen": true,
+      "deduplicated_against_execution": [
+        {
+          "provider": "zcode",
+          "model": "glm-5.3-flash"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "policy": "beijing-peak-off-peak-v1",
+    "timezone": "Asia/Shanghai",
+    "period": "off_peak",
+    "period_label": "非高峰",
+    "peak_start": "12:00",
+    "peak_end": "18:00",
+    "evaluated_at": "2026-09-02T10:14:09.871308+08:00"
+  },
+  "generated_at": "2026-09-02 10:14:09 CST"
+}

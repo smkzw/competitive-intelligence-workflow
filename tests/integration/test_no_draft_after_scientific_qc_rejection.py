@@ -71,9 +71,9 @@ def _rejection(
     (
         (ReportKind.A, True, False, "recovering"),
         (ReportKind.B, True, False, "recovering"),
-        (ReportKind.C, False, True, "evidence_blocked"),
+        (ReportKind.C, True, False, "recovering"),
     ),
-    ids=("A-recoverable", "B-recoverable", "C-exhausted"),
+    ids=("A-recoverable", "B-recoverable", "C-recoverable"),
 )
 def test_scientific_qc_rejection_requires_passed_gate_result(
     report_kind: ReportKind,
@@ -82,7 +82,7 @@ def test_scientific_qc_rejection_requires_passed_gate_result(
     expected: str,
     tmp_path: Path,
 ) -> None:
-    """GateSpec 通过后质控否决：可修复回 recovering，已穷尽进 evidence_blocked。"""
+    """旧最小入口只保留可修复回 recovering；不得签发终态。"""
     workspace_root = prepare_workspace(tmp_path)
     gate_result = _passed_gate_result(report_kind)
     snapshot = snapshot_for(report_kind)
@@ -96,7 +96,7 @@ def test_scientific_qc_rejection_requires_passed_gate_result(
         snapshot=snapshot,
         workspace_root=workspace_root,
         database_path=workspace_root / "project.sqlite",
-        exhaustion=None if recoverable else _exhausted_record(report_kind),
+        exhaustion=None,
     )
     assert next_state == expected
 
@@ -108,6 +108,29 @@ def test_scientific_qc_rejection_requires_passed_gate_result(
     )
     assert (workspace_root / "blockers" / report_kind.value / "v1").exists() is False
     assert (workspace_root / "reports" / report_kind.value / "v1").exists() is False
+
+
+def test_legacy_minimal_qc_rejection_cannot_issue_exhausted_terminal(
+    tmp_path: Path,
+) -> None:
+    """缺少完整审查上下文的兼容入口不能生成无审计包的阻断终态。"""
+    workspace_root = prepare_workspace(tmp_path)
+    gate_result = _passed_gate_result(ReportKind.C)
+    snapshot = snapshot_for(ReportKind.C)
+    rejection = _rejection(
+        ReportKind.C, gate_result, recoverable=False, exhausted=True
+    )
+
+    with pytest.raises(ValueError, match="完整科学质控边界"):
+        apply_scientific_qc_rejection(
+            rejection,
+            gate_result=gate_result,
+            snapshot=snapshot,
+            workspace_root=workspace_root,
+            database_path=workspace_root / "project.sqlite",
+            exhaustion=_exhausted_record(ReportKind.C),
+        )
+    assert (workspace_root / "blockers").exists() is False
 
 
 def _exhausted_record(report_kind: ReportKind) -> DoubleExhaustionRecord:

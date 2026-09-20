@@ -1,0 +1,37 @@
+{
+  "case_id": "b-disposition",
+  "source_fixture": "fixtures/synthetic/b-d70-disposition-missing-pass/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "B 完成与处置页在字段完整性、披露状态、分母和测量对象之间保持独立闭合。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "fully-undisclosed-nonblocking",
+      "description_zh": "全部未公开仍生成完整状态页，不升级为必要下载阻断。"
+    },
+    {
+      "id": "partially-undisclosed-nonblocking",
+      "description_zh": "部分未公开保留字段级状态并继续交付。"
+    },
+    {
+      "id": "different-denominators",
+      "description_zh": "筛选、随机化、治疗和安全性分母分别保留。"
+    },
+    {
+      "id": "completion-withdrawal",
+      "description_zh": "试验完成、治疗完成和退出节点不合并。"
+    },
+    {
+      "id": "pd-subject-event-counts",
+      "description_zh": "PD 人数与事件数为不同测量对象。"
+    },
+    {
+      "id": "non-mutually-exclusive-reasons",
+      "description_zh": "非互斥处置原因不误算为互斥比例或重复总数。"
+    }
+  ]
+}

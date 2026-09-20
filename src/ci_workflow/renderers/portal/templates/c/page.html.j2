@@ -1,0 +1,198 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+  <header class="portal-page-head kz-c-page-head">
+    <h1 class="portal-page-title">{{ page_title }}</h1>
+    <div class="kz-c-page-meta" aria-label="页面范围">
+      <span>适应症：{{ report.indication }}</span>
+      <span>观察截止：{{ cutoff_text }}</span>
+    </div>
+    <p class="kz-c-page-lead">{{ lead }}</p>
+  </header>
+
+  {% if show_trial_index %}
+  <section class="kz-c-profile-index kz-c-profile-index--primary" aria-labelledby="profile-index-heading">
+    <h2 id="profile-index-heading">选择试验查看完整档案</h2>
+    <div class="kz-c-profile-grid">
+      {% for item in filter_trials %}
+      <a class="kz-c-profile-card" href="trials/{{ item.id }}.html">
+        <span class="kz-c-profile-card__type">试验档案</span>
+        <strong>{{ item.display_id }}</strong>
+        <span>{{ item.name }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page_filter_groups %}
+  <div class="kz-c-filter-quick" aria-label="页面筛选">
+    <span class="kz-c-filter-quick__label">快速筛选</span>
+    {% for group in page_filter_groups %}
+    {% if group.dimension == "product" %}
+    <div class="kz-c-filter-quick__group" data-filter-dimension="{{ group.dimension }}" data-filter-scope="page">
+      {% for option in group.options %}
+      <button type="button" class="kz-c-filter-button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" data-filter-scope="page" aria-pressed="false">{{ option.label }}</button>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <details id="kz-filter-panel" class="kz-c-filter-panel">
+    <summary class="kz-c-filter-summary">
+      <span>筛选条件</span>
+      <span class="kz-c-filter-summary__selected" data-filter-summary>未设置筛选</span>
+    </summary>
+    <div class="kz-c-filters" aria-label="筛选条件">
+      <p class="kz-c-filter-note">快速筛选作用于整页；以下选项可进一步限定图表和明细。</p>
+      {% for group in page_filter_groups %}
+      <div class="kz-c-filter-group" data-filter-dimension="{{ group.dimension }}" data-filter-scope="page">
+        <div class="kz-c-filter-heading">
+          <h2>{{ group.label }}</h2>
+          <span>作用于全页 · 可多选</span>
+        </div>
+        <div class="kz-c-filter-options">
+          {% for option in group.options %}
+          <button type="button" class="kz-c-filter-button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" data-filter-scope="page" aria-pressed="false">{{ option.label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      {% if module_filter_groups %}
+      <div class="kz-c-filter-module" aria-label="进一步筛选">
+        <h2 class="kz-c-filter-module__title">进一步筛选</h2>
+        {% for group in module_filter_groups %}
+        <div class="kz-c-filter-group" data-filter-dimension="{{ group.dimension }}" data-filter-scope="module">
+          <div class="kz-c-filter-heading">
+            <h3>{{ group.label }}</h3>
+            <span>图表及明细 · 可多选</span>
+          </div>
+          <div class="kz-c-filter-options">
+            {% for option in group.options %}
+            <button type="button" class="kz-c-filter-button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" data-filter-scope="module" aria-pressed="false">{{ option.label }}</button>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="kz-c-filter-actions">
+        <button type="button" class="kz-c-filter-reset" data-filter-reset>清除筛选</button>
+        <span class="kz-c-filter-status" data-filter-status aria-live="polite">显示全部可用记录</span>
+      </div>
+    </div>
+  </details>
+
+  <section class="kz-c-visual-section" aria-labelledby="visual-heading">
+    <div class="kz-c-section-heading">
+      <h2 id="visual-heading" class="visually-hidden">{{ section_title }}</h2>
+      <p class="kz-c-evidence-hint">点击数值或表格单元格查看数据依据。</p>
+    </div>
+    <div id="kz-chart-module" class="kz-chart-module" aria-live="polite">
+      <div id="kz-c-chart-visuals" class="kz-c-chart-visuals"></div>
+      {% if show_design_matrix %}
+      <section class="kz-c-design-matrix-section" aria-labelledby="design-matrix-heading">
+        <div class="kz-c-design-matrix-heading">
+          <div>
+            <h3 id="design-matrix-heading">研究 × 设计要素横向矩阵</h3>
+            <p class="kz-c-design-matrix-note">行是设计领域与字段，列是研究；点击单元格内事实可查看完整原文与来源定位。</p>
+          </div>
+          <span class="kz-c-design-matrix-scroll-hint">矩阵可横向滚动；首列与表头固定</span>
+        </div>
+        <div class="kz-c-design-matrix-wrap" data-design-matrix-wrap tabindex="0" role="region" aria-label="研究与设计要素横向比较矩阵">
+          <table id="kz-c-design-matrix" class="kz-c-design-matrix">
+            <thead>
+              <tr>
+                <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__field-th">设计领域 / 设计要素</th>
+                {% for trial in design_matrix_trials %}
+                <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__trial-th" data-matrix-trial="{{ trial.id }}" data-matrix-product="{{ trial.product_id }}">
+                  <span class="kz-c-design-matrix__trial-id">{{ trial.display_id }}</span>
+                  <span class="kz-c-design-matrix__trial-product">{{ trial.product_zh }}</span>
+                  <span class="kz-c-design-matrix__trial-meta">{{ trial.phase }} · {{ trial.status }}</span>
+                  <span class="kz-c-design-matrix__trial-region">{{ trial.region }}</span>
+                  <span class="kz-c-design-matrix__trial-role">{{ trial.role }}</span>
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            {% for family in design_matrix_groups %}
+            <tbody id="kz-c-matrix-group-{{ family.id }}" class="kz-c-design-matrix__body" data-matrix-group="{{ family.id }}">
+              <tr class="kz-c-design-matrix__group-row" data-matrix-group-row="{{ family.id }}">
+                <th scope="rowgroup" colspan="{{ design_matrix_column_count }}">
+                  <button type="button" class="kz-c-matrix-group-toggle" data-matrix-group-toggle="{{ family.id }}" aria-expanded="true" aria-controls="kz-c-matrix-group-{{ family.id }}">{{ family.label }}<span aria-hidden="true">⌄</span></button>
+                </th>
+              </tr>
+              {% for row in family.rows %}
+              <tr class="kz-c-design-matrix__row" id="kz-c-matrix-group-{{ family.id }}-{{ loop.index }}" data-matrix-field-row data-matrix-field="{{ row.field }}" data-matrix-family="{{ row.family_id }}">
+                <th scope="row" class="kz-c-design-matrix__field-cell">
+                  <span class="kz-c-design-matrix__field-label">{{ row.label }}</span>
+                  <span class="kz-c-design-matrix__field-family">{{ row.family_label }}</span>
+                </th>
+                {% for cell in row.cells %}
+                <td class="kz-c-design-matrix__cell{% if cell.empty %} kz-c-design-matrix__cell--empty{% endif %}" data-matrix-cell data-matrix-field="{{ row.field }}" data-matrix-family="{{ row.family_id }}" data-matrix-trial="{{ cell.trial_id }}" data-matrix-product="{{ cell.product_id }}" data-row-ids="{{ cell.row_ids | join(' ') }}">
+                  {% if cell["items"] %}
+                  <ul class="kz-c-design-matrix__items">
+                    {% for item in cell["items"] %}
+                    <li>
+                      <button type="button" class="kz-c-matrix-cell-trigger" data-evidence-open="{{ item.row_id }}" data-row-id="{{ item.row_id }}" aria-label="{{ row.label }}，{{ cell.trial_label }}：{{ item.summary }}">{{ item.summary }}</button>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  {% else %}
+                  <span class="kz-c-design-matrix__empty" aria-label="该研究未提取此设计要素">未提取</span>
+                  {% endif %}
+                </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% endfor %}
+          </table>
+        </div>
+      </section>
+      {% endif %}
+      <table class="kz-chart-table" aria-label="{{ section_title }}完整表格">
+        <thead>
+          <tr>
+            {% for key, label in table_columns %}
+            <th scope="col" class="kz-chart-table__th">{{ label }}</th>
+            {% endfor %}
+            <th scope="col" class="kz-chart-table__th">数据依据</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in table_rows %}
+          <tr class="kz-chart-table__row" data-row-id="{{ row.row_id }}" data-table-item-id="{{ row.table_item_id }}" data-trial-id="{{ row.trial_id }}" data-product-id="{{ row.product_id }}" tabindex="0">
+            {% for key, label in table_columns %}
+            <td class="kz-chart-table__cell" data-evidence-open="{{ row.row_id }}" data-row-id="{{ row.row_id }}">{{ row[key] }}</td>
+            {% endfor %}
+            <td class="kz-chart-table__cell">
+              <button type="button" class="kz-c-evidence-button" data-evidence-open="{{ row.row_id }}" data-row-id="{{ row.row_id }}">查看依据</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {% if catalog_page_id == "design-patterns" and candidate_paths %}
+  <section class="kz-c-path-section" id="kz-design-paths" aria-labelledby="path-heading">
+    <h2 id="path-heading">可选设计路径</h2>
+    <p class="kz-c-path-note">以下路径均有登记来源支撑，并列呈现适用前提与取舍，不作排名。</p>
+    <div class="kz-c-path-grid">
+      {% for path in candidate_paths %}
+      <article class="kz-c-path-card" data-path-id="{{ path.path_id }}">
+        <h3>{{ path.summary_zh }}</h3>
+        <p><strong>适用前提：</strong>{{ path.assumptions_zh }}</p>
+        <p><strong>主要取舍：</strong>{{ path.tradeoffs_zh }}</p>
+        <p><strong>相关试验：</strong>{{ path.trial_labels | join('、') }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+{% endblock %}

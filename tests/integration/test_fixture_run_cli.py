@@ -3,9 +3,8 @@
 - FX01：`no-draft-a-empty` 案例创建隔离项目、经真实图执行 A 空宇宙路径，以
   evidence_blocked/exit 4 结束，只产生 blockers/A/v1/audit.json 与中文 audit.md；
   实际运行结果必须与 catalog 预期 outcome 一致，否则 FixtureCaseError。
-- FX02：完整 catalog/案例摘要/逐输入校验必须先通过，期望 outcome=rendered 的
-  案例在没有任何注册渲染器时才失败关闭（RendererUnavailableError），且不创建
-  伪项目/产物或收据。
+- FX02：未来输出格式在 fixture-case schema 边界失败关闭，且不创建伪项目、
+  产物或收据。
 """
 
 from __future__ import annotations
@@ -18,8 +17,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from ci_workflow.application.fixture_runner import run_fixture_case
-from ci_workflow.application.run_service import RendererUnavailableError
+from ci_workflow.application.fixture_runner import FixtureCaseError, run_fixture_case
 
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 
@@ -64,12 +62,11 @@ def test_fixture_run_creates_project_and_dispatches_registered_graph(
     assert "证据不足" in markdown
 
 
-def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
+def test_fixture_run_rejects_deferred_output_before_project_creation(
     tmp_path: Path,
 ) -> None:
-    """FX02：完整 catalog/摘要/输入校验通过后，期望 rendered 的案例在无注册
-    渲染器时以 RendererUnavailableError 失败关闭，不创建伪项目/产物/收据。"""
-    case_id = "rendered-pptx"
+    """FX02：未来输出格式在 catalog/schema 边界失败关闭，不创建项目。"""
+    case_id = "rendered-deferred-format"
     cases_dir = tmp_path / "cases"
     case_root = cases_dir / case_id
     inputs_dir = case_root / "inputs"
@@ -80,7 +77,7 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
     case_sha = _sha256_bytes(universe.read_bytes())
     case_fields = {
         "id": case_id,
-        "description_zh": "渲染通过案例：无渲染器时必须失败关闭",
+        "description_zh": "首版拒绝未来输出格式",
         "indication": "非小细胞肺癌",
         "timezone": "Asia/Shanghai",
         "data_cutoff": "2026-07-31",
@@ -116,7 +113,7 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
     )
 
     project_root = tmp_path / "项目"
-    with pytest.raises(RendererUnavailableError):
+    with pytest.raises(FixtureCaseError, match="fixture-case schema"):
         run_fixture_case(
             case_id,
             project_root=project_root,
@@ -125,13 +122,8 @@ def test_fixture_run_exits_nonzero_when_requested_renderer_is_not_registered(
             catalog_path=catalog_path,
         )
 
-    # 未创建伪项目/产物/收据：无 project.yaml、运行清单、阻断包，事件流为空
-    assert not (project_root / "project.yaml").exists()
-    assert not (project_root / "manifests" / "current_run.json").exists()
-    assert not (project_root / "blockers").exists()
-    events_path = project_root / "events" / "events.jsonl"
-    if events_path.exists():
-        assert not events_path.read_text(encoding="utf-8").strip()
+    # schema 边界拒绝发生在建项目之前：没有项目、清单、阻断包或事件流。
+    assert not project_root.exists()
 
 
 def test_fixture_run_rejects_outcome_mismatch_against_catalog_expectation(

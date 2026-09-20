@@ -1,0 +1,31 @@
+{
+  "id": "phase-7-task-75-report-c-portal",
+  "name": "phase-7-task-75-report-c-portal",
+  "title": "Phase 7 Task 7.5：C 类完整多页面门户",
+  "description": "以真实设计事实生成并验收 C 类十二类页面责任、逐试验详情、筛选联动、证据下钻和视觉表现。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "仅 C 类站点式 HTML、真实正负例、功能与视觉验收；不实施 PDF/PPT 或系统安全测试",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-30",
+  "completedAt": "2026-08-31",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-30-phase-7-report-c",
+  "relatedFiles": [
+    "src/ci_workflow/renderers/portal/report_c.py",
+    "src/ci_workflow/renderers/portal/templates/c/",
+    "tests/integration/reports/test_c_report_portal.py",
+    "tests/browser/test_c_portal.py"
+  ],
+  "notes": "Task 7.5 已完成：12 个 C 类物理页面、4 个试验档案、真实正负例、筛选/网址/证据下钻和双内核四视口验收通过。最终摘要 bcf4fb22...；197 项 C 测试、120 页面攻击、740 检查、32 截图及同会话独立视觉会商通过。下一步 Phase 8 跨格式产物。",
+  "meta": {"phase": 7, "task": "7.5"}
+}

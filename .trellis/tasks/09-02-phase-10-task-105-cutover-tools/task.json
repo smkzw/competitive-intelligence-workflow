@@ -1,0 +1,31 @@
+{
+  "id": "phase-10-task-105-cutover-tools",
+  "name": "phase-10-task-105-cutover-tools",
+  "title": "Phase 10 Task 10.5：精准切换工具与发布回执闭环",
+  "description": "实现可冻结的精准旧工程切换工具和 required-v12 owner-stage 回执聚合合同，仅在临时 fixture 根验证。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 10.5 only：inventory/validate/apply/absence-check、授权摘要、恢复包门、release receipt schema 与闭环测试；不对真实旧根执行 inventory/apply，不删除真实数据，不冻结 RC。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-02",
+  "completedAt": "2026-09-02",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "tools/legacy_cutover.py",
+    "tools/verify_release_receipts.py",
+    "schemas/release-case-receipt.schema.json",
+    "tests/migration/test_legacy_cutover.py",
+    "tests/acceptance/test_required_receipt_closure.py"
+  ],
+  "notes": "已完成并封存：26 项聚焦测试、166 项扩展回归、Ruff、mypy、LEGACY_REF_OK、独立会商 P0/P1/P2=0、review-gate 与同 ID audit 均通过。全部写入性测试只使用 tmp_path；真实旧根未读取、未执行、未修改、未删除。"
+}

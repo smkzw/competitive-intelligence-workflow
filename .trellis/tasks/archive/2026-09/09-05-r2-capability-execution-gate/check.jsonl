@@ -1,0 +1,3 @@
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"Verify fail-closed persistence and tamper cases"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"Verify all run and host consumers receive the same semantics"}
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.3.md","reason":"Verify product-visible blocking and recovery behavior"}

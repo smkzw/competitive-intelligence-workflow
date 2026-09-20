@@ -1,0 +1,32 @@
+{
+  "id": "phase-6-task-62-efficacy-longitudinal",
+  "name": "phase-6-task-62-efficacy-longitudinal",
+  "title": "Task 6.2 疗效和纵向结果",
+  "description": "建立 B 类指南与竞品终点依据、单时间点和纵向疗效视图及可逆排序合同",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 6.2 only：疗效依据和视图模型；不创建 B 页面，不实现安全性、基线、处置或气泡矩阵",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-29",
+  "completedAt": "2026-08-29",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-27-phase-6-report-b",
+  "relatedFiles": [
+    "src/ci_workflow/reports/b/efficacy.py",
+    "tests/reports/b/test_guideline_endpoint_basis.py",
+    "tests/reports/b/test_efficacy_views.py",
+    "tests/reports/b/test_user_sorting.py",
+    "docs/acceptance/runs/task-6.2/verdict.md"
+  ],
+  "notes": "19 项定向测试与 1005 项相关回归通过；MiniMax 独立医学经理探针通过。Grok Build 因额度耗尽未形成内容审阅结论，技术失败记录已保留。",
+  "meta": {}
+}

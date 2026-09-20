@@ -1,0 +1,201 @@
+{
+  "agent": "zcode",
+  "requested_agent": "zcode",
+  "role_id": "r13e_connectivity_zcode",
+  "requested_provider": "zcode",
+  "requested_model": "glm-5.3-flash",
+  "requested_effort": "max",
+  "explicit_route": true,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": null,
+  "schedule_reconciliation": {
+    "enabled": false,
+    "packet_period": null,
+    "active_period": null,
+    "dispatch_period": "night",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "no scheduled route manifest"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "zcode",
+  "effective_provider": "zcode",
+  "effective_model": "glm-5.3-flash",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": true,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 192,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "连通性测试完成，全部步骤通过。以下为最终报告（供 runner 持久化到 `runs/tests/r13e-connectivity/zcode.md`）：\n\n## 连通性测试报告（r13e-connectivity / zcode）\n\n**1. 身份**\n- 代理：ZCode（当前 harness 为 ZCode，符合预期身份中的 agent 名）\n- Provider：无法确认（会话内系统提示仅标注模型标识 `anthropic/GLM-5.3-Flash`，无法从内部确认 runner 侧 provider 节点标签是否为 `zcode`）\n- Model：GLM-5.3-Flash（系统提示标注为 `anthropic/GLM-5.3-Flash`，与预期身份 `glm-5.3-flash` 一致）\n- Effort：无法确认（会话内无法读取 effort 参数；预期为 `max`）\n\n**2. ego(lite) 是否可调用**：是。`ego-browser nodejs` heredoc 两次均正常执行，无环境错误。\n\n**3. 页面标题**：`首页 - 阵发性睡眠性血红蛋白尿临床试验结果比较`\n\n**4. 页面 URL**：`http://127.0.0.1:8770/b-real/reports/B/v1/html/overview.html`（实际加载 URL 与请求一致，未发生重定向）\n\n**5. 是否完成清理**：是。任务空间 `ci-r13e-connectivity-zcode`（id=4）已在独立的最终 heredoc 中执行 `completeTaskSpace(4, { keep: false })`，返回 `{\"done\": true}`。\n\n**6. 明确错误**：无。\n\n过程说明：仅读取了指定上下文文件 `context/ci-phase10-task102-r13e-visual-review_conference_context.md` 与 ego-browser 技能文档；未修改任何文件、未联网检索、未启动其他代理。页面视口 1280×649、页面总高约 30318px，仅作连通性观察，不对 B 报告内容作任何评审结论，不宣称产品通过。",
+      "stderr": "",
+      "duration_seconds": 77.685,
+      "timed_out": false,
+      "session_id": "sess_3077f822-2468-4f67-ae81-eab80eb17ff1",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 3089,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 4,
+      "tool_result_count": 0,
+      "reasoning_event_count": 2187,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 16,
+      "usage": {
+        "inputTokens": 29040,
+        "outputTokens": 989,
+        "totalTokens": 30029,
+        "cacheReadTokens": 28672,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_a81785c8-6884-4cf4-b0d2-63a246fc8b40",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 4,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 4,
+        "tool_names": [
+          "Read",
+          "Read",
+          "Bash",
+          "Bash"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 766,
+      "estimated_input_tokens": 192,
+      "output_chars": 956,
+      "estimated_output_tokens": 239,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "explicit_route": true,
+      "health": {
+        "agent": "zcode",
+        "provider": "zcode",
+        "model": "glm-5.3-flash",
+        "checked_at": 1788279409.526581,
+        "cached": false,
+        "healthy": true,
+        "preflight_kind": "diagnostic_catalog_or_auth_probe",
+        "health_command": [
+          "/Users/smkzw/.local/bin/zcode",
+          "--version"
+        ],
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 0.472,
+        "stdout_tail": "0.16.5",
+        "stderr_tail": "",
+        "requested_model": "GLM-5.3-Flash",
+        "requested_effort": "max",
+        "observation": "Z Code is installed; the live app-server round will pin and verify the exact model and thought level."
+      }
+    }
+  ],
+  "health_check": true,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": false,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "plan",
+    "adjusted_for_execution_manager": false
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 16,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788279409.526145
+}

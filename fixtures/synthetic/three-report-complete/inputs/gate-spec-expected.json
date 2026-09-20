@@ -1,0 +1,26 @@
+{
+  "report_snapshot_id": "snapshot-three-report-complete-001",
+  "report_version": "v-fixture-001",
+  "indication": "特应性皮炎",
+  "specs": {
+    "A": {
+      "spec_id": "gate-spec-a-v1",
+      "spec_path": "policies/gates/A-v1.yaml",
+      "expected_result": "passed",
+      "blocking_units": []
+    },
+    "B": {
+      "spec_id": "gate-spec-b-v1",
+      "spec_path": "policies/gates/B-v1.yaml",
+      "expected_result": "passed",
+      "blocking_units": [],
+      "baseline_gate_failures": []
+    },
+    "C": {
+      "spec_id": "gate-spec-c-v1",
+      "spec_path": "policies/gates/C-v1.yaml",
+      "expected_result": "passed",
+      "blocking_units": []
+    }
+  }
+}

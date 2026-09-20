@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_05fb42a7eae47765f015a39b",
+  "project_id": "project_32e4e63345df008c3965f36d",
+  "contract_version": 1,
+  "started_at": "2026-09-18T16:05:04.776368+00:00",
+  "finished_at": "2026-09-18T16:05:06.416581+00:00",
+  "resume": true,
+  "case_id": null,
+  "case_digest": null,
+  "input_hashes": {},
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "universe": "awaiting_source_research",
+    "gate:B": "skipped"
+  },
+  "reused": [],
+  "outputs": [],
+  "reused_artifacts": [],
+  "event_count": 4,
+  "event_stream_digest": "7c6f3b4c991b801abb94a6224179db7294ed4b19c9951a2e9121c0bc55cce492",
+  "checkpoint_id": "checkpoint_aee798020d69ec7efe565495",
+  "outcome": "running",
+  "capability_preflight": {
+    "matrix_id": "capability-matrix_6aab9e64d7fb7f8690a56260",
+    "matrix_sha256": "12407c9cefd01ddcbe18eb63b7ab98dda9791799cf3314ae965be6fa4b1c839f",
+    "receipt_relative_path": "capabilities/preflight.json",
+    "overall_state": "ready"
+  },
+  "manifest_digest": "847aae5f89b21fd05ad75d4a5fdbe871fceb5fcab19e4d2442fa9acedd55b645"
+}

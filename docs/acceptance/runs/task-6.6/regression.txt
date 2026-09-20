@@ -1,0 +1,40 @@
+Task 6.6 回归记录（worker_03）
+
+目标与相关测试：
+- `uv run pytest tests/reports/b/test_baseline_views.py tests/reports/b/test_baseline_view_interactions.py`：1 failed、16 passed（完整目标集合实际为 17 项；失败发生在收集后测试运行阶段）。失败不是视图断言，而是 `tests/reports/b/test_baseline_views.py:210-228` 的 `_severity()` 对 `_observation()` 重复传入 `theoretical_range`（该调用还会重复 `source_name`、`source_definition`），触发 `TypeError: got multiple values for keyword argument 'theoretical_range'`。
+- `uv run pytest -q tests/reports/b/test_baseline_views.py -k 'not incompatible_severity_scales_and_statistics_form_separate_small_multiples' tests/reports/b/test_baseline_view_interactions.py`：16 passed、1 deselected；仅为绕过上述夹具阻断，不是完整目标通过。
+- 在内存中以合并默认值/override 的等价夹具执行被阻断的严重程度拆分测试及默认顺序测试：两项均通过；该结果不能替代修正文件后的正式 pytest 结果。
+- `uv run pytest -q tests/reports`（排除同一夹具测试）：371 passed、1 deselected、1 Pydantic serializer warning。
+- `uv run pytest -q tests/reports/b tests/reports/test_study_role_policy.py tests/reports/test_gate_override_strictness.py tests/reports/test_report_specific_gates.py tests/unit/test_gate_evaluator.py`：282 passed、1 failed；唯一失败为同一 `_severity()` 夹具 TypeError。
+- `uv run pytest -q tests/reports/a`：144 passed。
+- `uv run pytest -q tests/reports/test_study_role_policy.py tests/reports/b/test_efficacy_views.py tests/reports/b/test_safety_heatmap.py tests/reports/b/test_ae_state_semantics.py tests/reports/b/test_bubble_area.py tests/reports/b/test_matrix_states.py tests/reports/b/test_baseline_observation_contract.py tests/reports/b/test_baseline_group_gate.py`：97 passed。
+- `uv run pytest -q tests/reports/b/test_baseline_observation_contract.py tests/reports/b/test_baseline_group_gate.py`：19 passed。
+- `uv run pytest -q tests/unit/reports tests/unit/test_gate_evaluator.py`：438 passed。
+- `uv run pytest -q tests/contract tests/integration/sources tests/integration/test_ctgov_result_coverage_audit.py tests/integration/reports`：202 passed。
+
+静态/Schema：
+- `uv run ruff check src tests`：All checks passed。
+- `uv run mypy --strict src/ci_workflow`：Success，100 source files，无 issues。
+- `MYPYPATH=src uv run mypy --strict --explicit-package-bases src/ci_workflow/reports/b/baseline_views.py tests/reports/b/test_baseline_views.py tests/reports/b/test_baseline_view_interactions.py`：视图源文件无报错；两份目标夹具共 18 个 strict-mypy 报错（`**overrides: dict[str, object]` 向强类型 helper 展开、`None` 传入 `_proportion` 的 int 参数、interaction 测试对可空 `reason_zh` 使用 `in`）。
+- `uv run python -m py_compile src/ci_workflow/reports/b/baseline_views.py tests/reports/b/test_baseline_views.py tests/reports/b/test_baseline_view_interactions.py`：通过。
+- BaselineObservation Schema 通过 19 项合同回归；本任务没有新增视图 Schema。
+
+独立对抗性语义复核（内存探针，未修改生产文件）：
+1. 连续统计形式、无坐标披露状态、已报告零值、分母要求、目标/地区不适用筛选、无结果不放宽、证据焦点和标准库重复参数 URL 往返均按合同运行；正式非阻断目标和相关回归覆盖上述正例。
+2. 发现严重程度差异标签污染：`_build_panels()` 将完整 `facts` 传给 `_auto_difference_labels()`，未限制 `other.standardized_concept == fact.standardized_concept`。EASI 与 pruritus NRS 并存时，EASI 面板被标记“理论范围不同”，pruritus 面板被标记“量表版本不同”等跨变量差异；这些不是同一规范变量的兼容差异。建议仅在同一规范概念（必要时同一数据类型）内生成差异标签。
+3. 发现状态边界重验证缺口：`BaselineViewState.assert_synchronized()` 直接返回 `self`；`BaselineViewState.model_copy(update={"facts": (...)})` 可注入修改过 value/source_name 的 BaselineObservation，随后 `with_selection({})` 会把伪造事实带入新状态（例如 value=999/source_name=`forged internal pending`），没有重新调用 `validate_baseline_observation()`。这违反 model_copy 对抗边界的失败关闭要求。建议所有公开状态操作先重验证当前 facts/选择，或禁止把可绕过验证的状态作为权威输入。
+4. 发现浅不可变风险：`evidence_links_by_row_id`、`filter_applicability`、`url_state` 使用普通 dict；`frozen=True` 不能阻止调用方原地清空/修改，且 `assert_synchronized()` 不会发现该破坏。建议使用不可变映射/重建校验，或在公开断言中验证完整一致性。
+5. 发现未知规范概念文案风险：未知 concept 且 source_name=`pending_status` 时，`variable_label_zh` 和筛选项标签原样暴露 `pending_status`；工程化/内部状态词会进入用户可见标签。建议未知概念必须有中文临床显示名，或明确回退到安全的中文“其他基线变量”并把来源原名仅放证据/表格。
+6. 观察到兼容性边界：显式来源分箱（例如同一 age_band 的 0–17、18–65、66–120）各自生成一个 `proportion_bar` 面板，而不是一个包含多个来源类别的分组柱状图。当前设计以完整 compatibility key 拆分可解释，但需 Codex/设计确认这是否符合“分类变量分组比例柱状图”；不能在视图层自行重分箱。
+7. `selection_from_url('/b/baseline?product=a%2Cb')` 解析为单值 `('a,b',)`，而 `to_url_params()` 将多选压缩为逗号字符串。规范 `to_url_query()` 使用重复参数并可往返；若仍支持旧参数字典，需要决定是否让 URL 解析器也拆分逗号或明确不支持该兼容表示。
+
+本任务无物理 HTML/PDF/PPT 产物，未作视觉验收声明。上述夹具、strict-mypy（目标测试）及语义问题阻止 worker_03 当时无条件接受，供 Codex 集成修复后重跑完整目标与最终验收。
+
+## Codex 集成修订（2026-08-29）
+
+- 修复夹具重复关键字并完成正式目标测试：19 passed。
+- 差异标签只在同一规范变量内比较，EASI 不再吸收 NRS 差异。
+- 所有公开选择操作先从原始事实重建并核对视图；三个索引映射只读且可无警告序列化。
+- 未知内部英文变量不再原样进入筛选标签，统一显示“其他基线变量”；来源原名仍保留在完整表和证据中。
+- 明确分箱继续按完整兼容键拆分，不自动重分箱；正式 URL 只接受重复查询参数。
+- broad 回归：1112 passed in 53.66s；Ruff 全通过；strict mypy 100 source files 及目标 3 files 通过；`git diff --check` 通过。

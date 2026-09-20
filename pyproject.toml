@@ -7,7 +7,6 @@ requires-python = ">=3.12,<3.14"
 dependencies = [
   "pydantic==2.13.4",
   "Jinja2==3.1.6",
-  "reportlab==5.0.0",
   "pypdf==6.15.0",
   "pdfplumber==0.11.10",
   "playwright==1.61.0",
@@ -41,6 +40,9 @@ module-name = "ci_workflow"
 addopts = "--strict-config --strict-markers"
 testpaths = ["tests"]
 pythonpath = ["."]
+markers = [
+  "retained_legacy_format: 非 HTML 格式保留回归轨；源码与基础回归保留，不算作 v1 release gate",
+]
 
 [tool.ruff]
 target-version = "py312"
@@ -63,14 +65,9 @@ source = "https://pypi.org/project/pydantic/2.13.4/"
 [tool.ci-workflow.dependencies.jinja2]
 version = "3.1.6"
 license = "BSD-3-Clause"
-purpose = "站点式 HTML 与格式原生模板渲染"
+purpose = "站点式 HTML 门户与报告模板渲染"
 source = "https://pypi.org/project/Jinja2/3.1.6/"
 
-[tool.ci-workflow.dependencies.reportlab]
-version = "5.0.0"
-license = "BSD-3-Clause"
-purpose = "原生 PDF 排版与绘制"
-source = "https://docs.reportlab.com/releases/notes/whats-new-50/"
 
 [tool.ci-workflow.dependencies.pypdf]
 version = "6.15.0"

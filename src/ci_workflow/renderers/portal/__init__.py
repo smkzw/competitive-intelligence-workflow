@@ -58,6 +58,16 @@ from ci_workflow.renderers.portal.page_shell import (
     render_page_html,
     render_search_index_json,
 )
+from ci_workflow.renderers.portal.report_b import (
+    ReportBPortalData,
+    ReportBPortalError,
+    render_report_b_site,
+)
+from ci_workflow.renderers.portal.report_c import (
+    ReportCPortalData,
+    ReportCPortalError,
+    render_report_c_site,
+)
 from ci_workflow.renderers.portal.url_state import (
     SAVE_LOCAL_VIEW_HINT_ZH,
     URL_SIZE_LIMIT,
@@ -116,5 +126,11 @@ __all__ = [
     "resolve_portal_asset",
     "select_view_rows",
     "serialize_evidence_views",
+    "ReportBPortalData",
+    "ReportBPortalError",
+    "ReportCPortalData",
+    "ReportCPortalError",
+    "render_report_b_site",
+    "render_report_c_site",
     "serialize_filter_state",
 ]

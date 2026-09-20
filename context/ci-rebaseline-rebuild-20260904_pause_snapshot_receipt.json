@@ -1,0 +1,72 @@
+{
+  "backup": {
+    "copy_mode": "apfs_clone_cp_cR_P",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-pause-20260904T083838Z",
+    "read_only": true,
+    "writable_nodes": 0
+  },
+  "backup_manifest": {
+    "canonical_manifest_sha256": "6a3bd6aca8a237959308ff18ac30b86a8cf9e5b3b3cbd83409bbda607eca1647",
+    "file_sha256": "8f1f6c13f6fba0e58a6109a4baf2dc7f7e711740aad8687d95d16a495430535e",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-pause-20260904T083838Z-backup-manifest.json",
+    "read_only": true
+  },
+  "captured_at": "2026-09-04T08:39:46.985876+00:00",
+  "counts": {
+    "bytes": 5892368069,
+    "content_class": {
+      "cache": 4418,
+      "git_metadata": 3443,
+      "normative_evidence": 2896,
+      "other": 274,
+      "raw_run_artifact": 7295,
+      "source": 687
+    },
+    "files": 19013,
+    "git_state": {
+      "git_metadata": 3443,
+      "ignored": 7163,
+      "tracked_modified": 71,
+      "tracked_unchanged": 1753,
+      "untracked": 6583
+    },
+    "node_type": {
+      "regular": 19010,
+      "symlink": 3
+    }
+  },
+  "git": {
+    "branch": "main",
+    "head": "bb27ec9d750cf02fb64da5dfe665b2f4b262922d",
+    "status_sha256": "c8d887318f77c2e41ec2528daaf6bd40cec7676f4495896729e921642fb531e9"
+  },
+  "limitations": [
+    "This snapshot records the no-loss pause after SIGINT and includes regenerated diagnostic caches by design.",
+    "The pause snapshot receipt and final post-snapshot receipt linkage were created after the snapshot.",
+    "The external OMP session JSONL is preserved separately and is bound by path, byte count and SHA-256 in the pause handoff.",
+    "This dirty-tree recovery snapshot is not an HTML-only release source set or any R2-R4 acceptance claim."
+  ],
+  "previous_recovery_point": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-m1-20260904T082040Z",
+  "receipt_kind": "ci-rebaseline-recovery-snapshot-receipt",
+  "schema_version": "1.0",
+  "source_manifest": {
+    "canonical_manifest_sha256": "762736c793ef141244fc5e80c975ccbdbaecac21181fcd7b7a20be9678c1fe40",
+    "file_sha256": "920fcef91551a266ef8e790ca8af9727bcff8b061a3bfaee8184a34082b8df18",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-pause-20260904T083838Z-source-manifest.json",
+    "read_only": true
+  },
+  "status": "verified_read_only_no_loss_pause_snapshot",
+  "verification": {
+    "backup_manifest_validation": "passed",
+    "live_backup_node_rehash": "passed",
+    "source_backup_exact_node_comparison": "passed",
+    "source_manifest_validation": "passed"
+  },
+  "worker_session": {
+    "bytes": 3423126,
+    "id": "01a06b86-e2ea-7000-89b2-64ea7a838e91",
+    "path": "/Users/smkzw/.omp/agent/sessions/-Documents-AI Products-competitive-intelligence-workflow/2026-09-04T08-26-37-162Z_01a06b86-e2ea-7000-89b2-64ea7a838e91.jsonl",
+    "sha256": "0165c2919e54697fb0d50ebd878e77a0904b0402327880a41938482c948aa0ba",
+    "terminal_event": "session_exit reason=sigint kind=signal"
+  }
+}

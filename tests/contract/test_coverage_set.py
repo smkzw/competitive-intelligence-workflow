@@ -24,7 +24,6 @@ from ci_workflow.reports.common.coverage import (
     CoverageBoundaryError,
     CoverageExceptionKind,
     CoverageItemKind,
-    CoverageProjection,
     CoverageSet,
     compute_coverage_projection_content_digest,
     compute_coverage_set_content_digest,
@@ -92,8 +91,8 @@ def set_items() -> list[dict[str, Any]]:
             (ROW_SET_DIGEST, "fact-01"),
             "疗效完整数值表",
         ),
-        item("evidence", "evidence-limitations", ("fragment-01",), "证据引用"),
-        item("appendix", "evidence-limitations", ("appendix-a",), "附录甲"),
+        item("evidence", "overview", ("fragment-01",), "证据引用"),
+        item("appendix", "historical-edge", ("appendix-a",), "附录甲"),
     ]
 
 
@@ -435,32 +434,28 @@ def test_coverage_projection_binds_one_set_snapshot_and_format(
     coverage_set: CoverageSet,
 ) -> None:
     items = set_items()
-    covered = [str(i["item_id"]) for i in items if i["kind"] != "table"]
-    exceptions = [exception_payload(omitted_item_id=str(items[6]["item_id"]))]
+    covered = [str(i["item_id"]) for i in items]
     projection = validate_coverage_projection_payload(
-        projection_payload(format_id="pptx", covered=covered, exceptions=exceptions),
+        projection_payload(format_id="html", covered=covered, exceptions=[]),
         coverage_set,
     )
     assert projection.coverage_set_id == coverage_set.coverage_set_id
     assert projection.coverage_set_digest == coverage_set.content_digest
-    assert projection.format is OutputFormat.PPTX
+    assert projection.format is OutputFormat.HTML
     assert projection.evidence_snapshot_id == coverage_set.evidence_snapshot_id
     assert projection.claim_snapshot_id == coverage_set.claim_snapshot_id
-    assert set(projection.covered_item_ids) | {
-        e.omitted_item_id for e in projection.exceptions
-    } == {i.item_id for i in coverage_set.items}
+    assert set(projection.covered_item_ids) == {i.item_id for i in coverage_set.items}
 
 
 def test_coverage_projection_identity_and_digest_are_deterministic(
     coverage_set: CoverageSet,
 ) -> None:
     items = set_items()
-    covered = [str(i["item_id"]) for i in items if i["kind"] != "table"]
-    exceptions = [exception_payload(omitted_item_id=str(items[6]["item_id"]))]
-    base = projection_payload(format_id="pptx", covered=covered, exceptions=exceptions)
+    covered = [str(i["item_id"]) for i in items]
+    base = projection_payload(format_id="html", covered=covered, exceptions=[])
     first = validate_coverage_projection_payload(base, coverage_set)
     shuffled = projection_payload(
-        format_id="pptx", covered=list(reversed(covered)), exceptions=exceptions
+        format_id="html", covered=list(reversed(covered)), exceptions=[]
     )
     second = validate_coverage_projection_payload(shuffled, coverage_set)
     assert first.coverage_projection_id == second.coverage_projection_id
@@ -478,7 +473,7 @@ def test_coverage_projection_rejects_new_or_unknown_items(
     with pytest.raises(CoverageBoundaryError, match="集合外"):
         validate_coverage_projection_payload(payload, coverage_set)
     payload = projection_payload(
-        format_id="pptx",
+        format_id="html",
         covered=covered,
         exceptions=[exception_payload(omitted_item_id="coverage-item_不存在")],
     )
@@ -507,7 +502,7 @@ def test_coverage_projection_rejects_duplicate_coverage_and_exception(
         dup2["replacement_expression"], ROW_SET_DIGEST,
     )
     payload = projection_payload(
-        format_id="pptx", covered=covered, exceptions=[dup, dup2]
+        format_id="html", covered=covered, exceptions=[dup, dup2]
     )
     with pytest.raises(CoverageBoundaryError, match="重复"):
         validate_coverage_projection_payload(payload, coverage_set)
@@ -519,7 +514,7 @@ def test_coverage_projection_rejects_covered_excepted_overlap(
     items = set_items()
     table_id = str(items[6]["item_id"])
     payload = projection_payload(
-        format_id="pptx",
+        format_id="html",
         covered=[str(i["item_id"]) for i in items],
         exceptions=[exception_payload(omitted_item_id=table_id)],
     )
@@ -550,12 +545,12 @@ def test_coverage_projection_rejects_exception_without_replacement_or_evidence(
     table_id = str(items[6]["item_id"])
     exception = exception_payload(omitted_item_id=table_id)
     exception.pop("replacement_expression")
-    payload = projection_payload(format_id="pptx", covered=covered, exceptions=[exception])
+    payload = projection_payload(format_id="html", covered=covered, exceptions=[exception])
     with pytest.raises(CoverageBoundaryError, match="打包 Schema"):
         validate_coverage_projection_payload(payload, coverage_set)
     exception = exception_payload(omitted_item_id=table_id)
     exception.pop("equivalence_evidence")
-    payload = projection_payload(format_id="pptx", covered=covered, exceptions=[exception])
+    payload = projection_payload(format_id="html", covered=covered, exceptions=[exception])
     with pytest.raises(CoverageBoundaryError, match="打包 Schema"):
         validate_coverage_projection_payload(payload, coverage_set)
 
@@ -580,75 +575,45 @@ def test_coverage_projection_rejects_tampered_exception_id(
         exception = dict(base)
         exception["exception_id"] = tampered
         payload = projection_payload(
-            format_id="pptx", covered=covered, exceptions=[exception]
+            format_id="html", covered=covered, exceptions=[exception]
         )
         with pytest.raises(CoverageBoundaryError, match="例外身份"):
             validate_coverage_projection_payload(payload, coverage_set)
 
 
-def test_html_and_pdf_cannot_omit_required_complete_tables(
+def test_html_cannot_omit_required_complete_tables(
     coverage_set: CoverageSet,
 ) -> None:
-    """负例：HTML/PDF 冻结合同禁止省略完整表；任何例外都失败关闭。"""
+    """负例：HTML 冻结合同禁止省略完整表；任何例外都失败关闭。"""
     items = set_items()
     covered = [str(i["item_id"]) for i in items if i["kind"] != "table"]
     exceptions = [exception_payload(omitted_item_id=str(items[6]["item_id"]))]
-    for format_id in ("html", "pdf"):
-        payload = projection_payload(
-            format_id=format_id, covered=covered, exceptions=exceptions
-        )
-        with pytest.raises(CoverageBoundaryError, match="完整表"):
-            validate_coverage_projection_payload(payload, coverage_set)
+    payload = projection_payload(
+        format_id="html", covered=covered, exceptions=exceptions
+    )
+    with pytest.raises(CoverageBoundaryError, match="完整表"):
+        validate_coverage_projection_payload(payload, coverage_set)
 
 
-def test_presentations_allow_only_approved_chart_equivalence(
+def test_html_only_projection_rejects_non_html_and_any_exception(
     coverage_set: CoverageSet,
 ) -> None:
     items = set_items()
-    covered = [str(i["item_id"]) for i in items if i["kind"] != "table"]
-    table_id = str(items[6]["item_id"])
-    chart_id = str(items[5]["item_id"])
-    # 只允许 chart_equivalence：未知例外类型在 Schema 层拒绝。
-    other_kind = exception_payload(omitted_item_id=table_id)
-    other_kind["exception_kind"] = "other"
-    payload = projection_payload(
-        format_id="pptx", covered=covered, exceptions=[other_kind]
-    )
+    covered = [str(i["item_id"]) for i in items]
+
+    non_html = projection_payload(format_id="html", covered=covered, exceptions=[])
+    non_html["format"] = "pdf"
     with pytest.raises(CoverageBoundaryError, match="打包 Schema"):
-        validate_coverage_projection_payload(payload, coverage_set)
-    # 例外只能省略完整表项；省略图表项拒绝。
-    payload = projection_payload(
-        format_id="pptx",
-        covered=[i for i in covered if i != chart_id],
-        exceptions=[exception_payload(omitted_item_id=chart_id)],
+        validate_coverage_projection_payload(non_html, coverage_set)
+
+    table_id = str(items[6]["item_id"])
+    with_exception = projection_payload(
+        format_id="html",
+        covered=[i for i in covered if i != table_id],
+        exceptions=[exception_payload(omitted_item_id=table_id)],
     )
-    with pytest.raises(CoverageBoundaryError, match="表格"):
-        validate_coverage_projection_payload(payload, coverage_set)
-    # 等价证据的图表必须仍在覆盖集合内。
-    payload = projection_payload(
-        format_id="pptx",
-        covered=[i for i in covered if i != chart_id],
-        exceptions=[
-            exception_payload(
-                omitted_item_id=table_id, equivalent_item_id="coverage-item_其他图表"
-            )
-        ],
-    )
-    with pytest.raises(CoverageBoundaryError, match="等价"):
-        validate_coverage_projection_payload(payload, coverage_set)
-    # 等价行集摘要必须同时出现在被省略表格项与等价图表项引用中。
-    payload = projection_payload(
-        format_id="pptx",
-        covered=covered,
-        exceptions=[
-            exception_payload(
-                omitted_item_id=table_id,
-                row_set_digest="0" * 64,
-            )
-        ],
-    )
-    with pytest.raises(CoverageBoundaryError, match="行集"):
-        validate_coverage_projection_payload(payload, coverage_set)
+    with pytest.raises(CoverageBoundaryError, match="完整表"):
+        validate_coverage_projection_payload(with_exception, coverage_set)
 
 
 def test_coverage_projection_rejects_mixed_snapshot_binding(
@@ -666,7 +631,7 @@ def test_coverage_projection_rejects_mixed_snapshot_binding(
         validate_coverage_projection_payload(payload, coverage_set)
 
 
-def test_projection_equivalence_is_anchored_in_chart_table_row_set(
+def test_projection_row_set_equivalence_cannot_omit_html_table(
     coverage_set: CoverageSet,
 ) -> None:
     """等价证据锚定同一行集：与 ChartTableModule 的行集摘要构成完整链。"""
@@ -753,11 +718,11 @@ def test_projection_equivalence_is_anchored_in_chart_table_row_set(
             equivalent_item_id=chart_item["item_id"],
         )
     ]
-    projection = validate_coverage_projection_payload(
-        projection_payload(
-            format_id="pptx", covered=covered, exceptions=exceptions,
-            set_payload_=payload,
-        ),
-        set_,
-    )
-    assert isinstance(projection, CoverageProjection)
+    with pytest.raises(CoverageBoundaryError, match="完整表"):
+        validate_coverage_projection_payload(
+            projection_payload(
+                format_id="html", covered=covered, exceptions=exceptions,
+                set_payload_=payload,
+            ),
+            set_,
+        )

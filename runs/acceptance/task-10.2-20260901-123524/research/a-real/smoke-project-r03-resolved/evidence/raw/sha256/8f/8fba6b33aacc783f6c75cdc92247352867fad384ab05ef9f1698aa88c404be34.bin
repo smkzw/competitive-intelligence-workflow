@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0" /><meta name="format-detection" content="telephone=no" /><title>
+	Simcere Pharmaceutical Group Limited
+</title><link type="text/css" rel="stylesheet" href="../css/base.css" /><link type="text/css" rel="stylesheet" href="../css/ne.css" /><link type="text/css" rel="stylesheet" href="../css/animate.css" />
+    <script src="../js/jquery-1.11.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/jquery.SuperSlide.2.1.1.js"></script>
+</head>
+<body style="background: #fff;">
+    <form name="form1" method="post" action="./detail.aspx?mtt=1587" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="" />
+
+        
+
+<script type="text/javascript">
+    function topnewssearch() {
+        if (document.getElementById("newsintro").value == "" || document.getElementById("newsintro").value == "Please enter key words") {
+            window.alert("Please enter key words");
+            document.getElementById("newsintro").focus();
+        }
+        else {
+            var posturl = "../news/news.aspx?so=" + document.getElementById("newsintro").value;
+            location.href = posturl;
+        }
+    }
+</script>
+
+<div id="search-bar">
+    <div class="se-xi">
+        <input class=" " id="newsintro" name="newsintro" type="text" value="" size="60" maxlength="128" placeholder="Please enter key words">
+        <div class="button" value="search" onclick="topnewssearch()"></div>
+    </div>
+</div>
+<header id="xl01">
+    <div class="wrap clearfixed">
+        <a href="../index.asp" class="logo mobile-logo fl">
+            <img src="../images/logo.png"></a>
+        <div class="t-ri fr">
+            <div class="yy fl"><a href="/index.aspx">中</a> | <a href="/en/index.aspx" style="color: #00b140">EN</a></div>
+            <div class="sou fr">
+                <img src="../images/search.png">
+            </div>
+        </div>
+        <div class="mobile-inner-header">
+            <div class="mobile-inner-header-icon mobile-inner-header-icon-out"><span></span><span></span><span></span></div>
+        </div>
+    </div>
+</header>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".sou").click(function () {
+            $("#search-bar").slideToggle();
+            const LL = document.getElementById('xl01');
+            var sds = hasClass(LL, 't-pa');
+            if (sds == true) {
+
+                $("#xl01").removeClass("t-pa");
+            }
+            else
+                $("#xl01").addClass("t-pa");
+        });
+    });
+
+    function hasClass(element, className) {
+        const regExp = new RegExp("\\b" + className + "\\b", "gi");
+        return regExp.test(element.className);
+    }
+</script>
+<div class="t-cd clearfixed">
+    <div class="wrap">
+        <a href="../index.aspx" class="logo pc-logo fl">
+            <img src="../images/logo.png"></a>
+        <nav class="fr">
+            <ul class="clearfixed">
+                <li ><a href="../about/about.aspx" class="subnav">About</a>
+                    <ul class="tttt">
+                        <li><a href="../about/about.aspx#ab01">Company Profile</a></li>
+                        <li><a href="../about/about.aspx#ab02">Milestones</a></li>
+                        <li><a href="../about/about.aspx#ab03">Management Team</a></li>
+                        <li><a href="../about/about.aspx#ab04">Company Culture</a></li>
+                    </ul>
+                </li>
+                <li ><a href="../pro/pro.aspx" class="subnav">Products</a>
+                    <ul class="tttt pro-ttt">
+
+                        
+                                <li><a href="../pro/pro.aspx#pro01">Oncology</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro02">Neuroscience</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro03">Autoimmune</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro04">Cardiovascular</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro05">Anti-infection</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro06">Other Fields</a></li>
+                            
+
+                    </ul>
+                </li>
+                <li ><a href="../kxcx/kxcx.aspx" class="subnav">R&D</a>
+                    <ul class="tttt pro-ttt">
+                        <li><a href="../kxcx/kxcx.aspx#cx01">Global R&D Center Layout</a></li>
+                        <li><a href="../kxcx/kxcx.aspx#cx02">State Key Laboratory</a></li>
+                        <li><a href="../kxcx/kxcx.aspx#cx03">Boston R&D Center </a></li>
+                        <li><a href="../kxcx/yfgx.aspx">R&D Pipeline</a></li>
+                    </ul>
+                </li>
+                <li ><a href="../zyyw/zyyw.aspx" class="subnav">Manufacturing</a>
+                    <ul class="tttt pro-ttt">
+                        <li><a href="../zyyw/zyyw.aspx#zy01">Manufacturing Bases</a></li>
+                                <li><a href="../zyyw/zyyw.aspx#zy03">EHS</a></li>
+                    </ul>
+                </li>
+                <li ><a href="../kfhz/kfhz.aspx" class="subnav">Partnering </a>
+                <ul class="tttt pro-ttt">
+                                <li><a href="../kfhz/kfhz.aspx#hz01">Partnering with Simcere</a></li>
+                                <li><a href="../kfhz/kfhz.aspx#hz02">Key Therapeutic Areas and Focus</a></li>
+                                <li><a href="../kfhz/kfhz.aspx#hz03">Our Partners</a></li>
+                            </ul>
+                </li>
+                <li class="on"><a href="../news/news.aspx" class="subnav">News</a>
+                    <ul class="tttt">
+
+                        
+                                <li><a href="../news/news.aspx?mtt=17">Simcere</a></li>
+                            
+
+                    </ul>
+                </li>
+                <li ><a href="../shzr/shzr.aspx" class="subnav">Sustainability</a></li>
+                <li ><a href="../jrwm/jrwm.aspx" class="subnav">Join us</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+
+<!--手机导航-->
+<div class="xs-top">
+    <div class="mobile">
+        <div class="mobile-inner">
+
+            <div class="mobile-inner-nav">
+                <div class="subNavBox1">
+                    <div class="subNav1" style="background: url(../images/link_ico.png) no-repeat 96% center;"><a href="../index.aspx" style="color: #fff;">Home</a></div>
+                    <div class="subNav1">About</div>
+                    <ul class="navContent1 clearfixed">
+                        <li><a href="../about/about.aspx#ab01" target="_blank">Company Profile</a></li>
+                        <li><a href="../about/about.aspx#ab02" target="_blank">Milestones</a></li>
+                        <li><a href="../about/about.aspx#ab03" target="_blank">Management Team</a></li>
+                        <li><a href="../about/about.aspx#ab04" target="_blank">Company Culture</a></li>
+                    </ul>
+
+                    <div class="subNav1">Products</div>
+                    <ul class="navContent1">
+
+                        
+                                <li><a href="../pro/pro.aspx#pro01">Oncology</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro02">Neuroscience</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro03">Autoimmune</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro04">Cardiovascular</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro05">Anti-infection</a></li>
+                            
+                                <li><a href="../pro/pro.aspx#pro06">Other Fields</a></li>
+                            
+
+                    </ul>
+                    <div class="subNav1">R&D</div>
+                    <ul class="navContent1">
+                        <li><a href="../kxcx/kxcx.aspx#cx01" target="_blank">Global R&D Center Layout</a></li>
+                        <li><a href="../kxcx/kxcx.aspx#cx02" target="_blank">State Key Laboratory</a></li>
+                        <li><a href="../kxcx/kxcx.aspx#cx03" target="_blank">Boston R&D Center </a></li>
+                        <li><a href="../kxcx/kxcx.aspx#gx01" target="_blank">R&D Pipeline</a></li>
+                    </ul>
+                    <div class="subNav1">Manufacturing</div>
+                    <ul class="navContent1">
+                        <li><a href="../zyyw/zyyw.aspx#zy01" target="_blank">Manufacturing Bases</a></li>
+                        <li><a href="../zyyw/zyyw.aspx#zy03" target="_blank">EHS</a></li>
+                    </ul>
+                    <div class="subNav1">Partnering</div>
+                     <ul class="navContent1">
+                                 <li><a href="../kfhz/kfhz.aspx#hz01" target="_blank">Partnering with Simcere</a></li>
+                                <li><a href="../kfhz/kfhz.aspx#hz02" target="_blank">Key Therapeutic Areas and Focus</a></li>
+                                <li><a href="../kfhz/kfhz.aspx#hz03" target="_blank">Our Partners</a></li>
+                            </ul>
+                    <div class="subNav1">News</div>
+                    <ul class="navContent1">
+
+                        
+                                <li><a href="../news/news.aspx?mtt=17">Simcere</a></li>
+                            
+
+                    </ul>
+                    <div class="subNav1" style="background: url(../images/link_ico.png) no-repeat 96% center;"><a href="../shzr/shzr.aspx" style="color: #fff;">Sustainability</a></div>
+                    <div class="subNav1" style="background: url(../images/link_ico.png) no-repeat 96% center;"><a href="../jrwm/jrwm.aspx" style="color: #fff;">Join us</a></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(window).load(function () {
+            $(".mobile-inner-header-icon").click(function () {
+                $(this).toggleClass("mobile-inner-header-icon-click mobile-inner-header-icon-out");
+                $(".mobile-inner-nav").slideToggle(250);
+            });
+        });
+        var show = 0;
+        $('.mobile-inner-header-icon').click(function () {
+            if (show == 0) {
+                $(this).addClass('active_mobile');
+                show = 1;
+            } else {
+                $(this).removeClass('active_mobile');
+                show = 0;
+            }
+
+        })
+        $(".subNav1").click(function () {
+            $(this).toggleClass("currentDd1").siblings(".subNav1").removeClass("currentDd1")
+            $(this).toggleClass("currentDt1").siblings(".subNav1").removeClass("currentDt1")
+
+            // 修改数字控制速度， slideUp(500)控制卷起速度
+            $(this).next(".navContent1").slideToggle(500).siblings(".navContent1").slideUp(500);
+        })
+    })
+</script>
+<!--手机导航-->
+
+
+        <div class="ne-banner">
+            <img src="../images/ne-banner5.jpg" class="pc-banner">
+            <img src="../images/mobile-ne-banner5.jpg" class="mobile-banner">
+        </div>
+        <div class="ne-new-xi wrap">
+
+
+            
+                    <div class="new-nr-ti">
+                        <h1>    Rademikibart Phase III Data Presented as Late-Breaking Oral at AAD Annual Meeting</h1>
+                        <p>Release time：2026-03-30</p>
+                    </div>
+                    <div class="new-nr-zi"><p><span style="font-size: 20px;">March 30, 2026 — Simcere Pharmaceutical Group Limited (2096.HK) announced that Phase III results from the RADIANT-AD study of rademikibart, an investigational monoclonal antibody developed in collaboration with Connect Biopharma, were presented as a Late-Breaking Abstract (LBA) oral presentation at the 84th Annual Meeting of the American Academy of Dermatology (AAD) in Denver, United States.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">The study, led by co-principal investigators Professor Zhang Jianzhong and Professor Zhou Cheng of Peking University People’s Hospital, evaluated rademikibart in adults and adolescents with moderate-to-severe atopic dermatitis (AD). Results showed that rademikibart provided rapid relief of itch and improvement in skin inflammation within two weeks, along with high levels of skin clearance that were sustained through 52 weeks. The findings were presented by Professor Zhou Cheng on behalf of the research team on March 28.</span></p><p><br/></p><p style="text-align: center;"><img src="https://www.simcere.com/attached/upload/image/20260330/6391046622404632308165209.jpg" title="91da8495-d731-45a0-8498-71bd89595322.jpg" alt="91da8495-d731-45a0-8498-71bd89595322.jpg" width="500" height="700" border="0" vspace="0" style="text-align: center; text-wrap-mode: wrap; width: 500px; height: 700px;"/></p><p style="text-align: center;">Dr Zhou Cheng giving oral presnetation at the 84th AAD Annual Meeting</p><p><br/></p><p><span style="font-size: 20px;">Atopic dermatitis is a chronic, relapsing inflammatory skin disease characterized by recurrent eczematous lesions, severe dryness, and intense pruritus. It is estimated that approximately 70 million people in China are affected, with nearly half experiencing moderate-to-severe disease. Despite the availability of biologic therapies, disease management remains challenging, and there is a continued need for more effective and durable treatment options.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">The randomized, double-blind, placebo-controlled Phase III trial (NCT06477835) enrolled 259 adult and adolescent patients with moderate-to-severe AD. Participants were randomized in a 1:1 ratio to receive rademikibart or placebo for 16 weeks, followed by a 36-week open-label extension during which all patients received rademikibart.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Efficacy Results</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">At Week 16, a significantly greater proportion of patients treated with rademikibart achieved key endpoints compared with placebo (p&lt;0.0001), including:</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Investigator’s Global Assessment (IGA) score of 0 or 1 with a ≥2-point reduction from baseline (47.7% vs. 17.6%)</span></p><p><span style="font-size: 20px;">≥75% improvement in Eczema Area and Severity Index (EASI-75) (74.2% vs. 34.4%)</span></p><p><span style="font-size: 20px;">≥90% improvement in Eczema Area and Severity Index (EASI-90) (43.0% vs. 14.5%)</span></p><p><span style="font-size: 20px;">≥3-point reduction in Peak Pruritus Numerical Rating Scale (PP-NRS) (54.7% vs. 27.5%)</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Efficacy was sustained and further improved through Week 52, with response rates reaching 87.1%, 96.6%, 85.3%, and 91.2% for the respective endpoints.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Safety</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Rademikibart demonstrated a favorable safety profile over 52 weeks, consistent with other anti–IL-4Rα therapies.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">At Week 16, the incidence of treatment-emergent adverse events (TEAEs) was 60.9% in the rademikibart group and 64.9% in the placebo group. By Week 52, the overall incidence of TEAEs was 82.2%. Rates of serious adverse events (SAEs) and treatment discontinuations due to adverse events remained low throughout the study period.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Professor Zhang Jianzhong commented:</span></p><p><span style="font-size: 20px;">“Rademikibart demonstrates the dual advantages of strong efficacy and a favorable safety profile, with its long-term safety further strengthening clinical confidence. From a clinical perspective, its significance extends beyond providing a new treatment option; it has the potential to help raise treatment goals for moderate-to-severe atopic dermatitis and support standardized, long-term disease management.”</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Professor Zhou Cheng added:</span></p><p><span style="font-size: 20px;">“Rademikibart showed the ability to deliver deep and sustained disease control in atopic dermatitis, with rapid onset and continuously improving efficacy over one year of treatment, without an apparent plateau. These findings address key challenges in long-term disease management and suggest that rademikibart may offer an effective and well-tolerated biologic option for patients.”</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">Rademikibart is a fully human monoclonal antibody targeting IL-4Rα. In preclinical studies, it has demonstrated high binding affinity and inhibits the signaling of both IL-4 and IL-13, key drivers of type 2 inflammation. By targeting this pathway, rademikibart is being developed for the treatment of inflammatory diseases including atopic dermatitis and asthma.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">In November 2023, Simcere entered into an exclusive licensing and collaboration agreement with Connect Biopharma, obtaining rights to develop, manufacture, and commercialize rademikibart for all indications in China. The Phase III study was conducted across 59 clinical centers in China and successfully met its primary endpoint.</span></p><p><span style="font-size: 20px;">&nbsp;</span></p><p><span style="font-size: 20px;">The Phase III results provide supportive evidence of rademikibart’s clinical profile. In July 2025, the New Drug Application (NDA) for rademikibart was accepted for review by China’s National Medical Products Administration (NMPA), potentially expanding treatment options for patients with atopic dermatitis in China.</span></p><p><br/></p></div>
+                
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="footer">
+    <div class="f-lx wrap clearfixed">
+        <div class="f-le fl">
+            <img src="../images/logo7.png" class="f-logo">
+            <ul>
+                <li><a href="../about/about.aspx">About </a></li>
+                         <li><a href="../pro/pro.aspx">Products  </a></li>
+                         <li><a href="../kxcx/kxcx.aspx">R&D </a></li>
+                         <li><a href="../zyyw/zyyw.aspx">Manufacturing   </a></li>
+                        <li><a href="../kfhz/kfhz.aspx">Partnering  </a></li>
+                       
+                        <li><a href="../news/news.aspx">News </a></li>
+                        
+                        <li><a href="../shzr/shzr.aspx">Sustainability </a></li>
+                        
+                        <li><a href="../jrwm/jrwm.aspx">Join us</a></li>
+            </ul>
+        </div>
+        <div class="f-ri fr">
+            <ul>
+                <li><a href="https://www.linkedin.com/company/simcere-pharmaceutical-group" target="_blank">
+                            <img src="../images/f-7.png"></a></li>
+                        <li><a href="https://twitter.com/SimcerePharm" target="_blank">
+                            <img src="../images/f-9.png"></a></li>
+                        <li><a href="https://www.facebook.com/Simcere" target="_blank">
+                            <img src="../images/f-8.png"></a></li>
+                         <li><a href="http://www.simcerebic.com/" target="_blank">
+                            </a></li>
+            </ul>
+            <p>Telephone: 025-85566666   <span> Fax：025-85262330</span></p>
+            <p>Address: 699-18 Xuanwu Avenue Nanjing China</p>
+            <p>Zipcode：210042</p>
+            <p>Fax：025-85471729</p>
+        </div>
+    </div>
+    <div class="banquan">
+        <div class="wrap">
+             <p><a href="http://www.beian.miit.gov.cn/" target="_blank">Su ICP Bei No. 10205883</a> <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32010202010345" target="_blank"><img src="../images/footer.png" style="position:relative; top:2px">Su Gong Wang An Bei No. 32010202010345</a>   <br />  Su ICP Bei No. 08104641-3 | <a href="../images/zheng.jpg" target="_blank">(Su)–Non-business–2018-0092 (Internet Drug Information Service Qualification Certificate)</a><br />
+© Copyright 2016 Jiangsu Simcere Pharmaceutical Co., Ltd. 版权所有 All Rights Reserved.
+</p>
+        </div>
+    </div>
+</div>
+
+<script src="../js/wow.min.js"></script>
+<script>
+    if (!(/msie [6|7|8|9]/i.test(navigator.userAgent))) {
+        new WOW().init();
+    };
+
+    $(".subnav").hover(function () {
+        $(this).next(".tttt").show()
+    }, function () {
+        $(this).next(".tttt").hide()
+    })
+    $(".tttt").hover(function () {
+        $(this).show()
+        $(".subnav").addClass("ts")
+    }, function () {
+        $(this).hide()
+        $(".subnav").removeClass("ts")
+    })
+</script></form>
+</body>
+</html>

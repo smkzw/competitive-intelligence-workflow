@@ -15,6 +15,9 @@ scientific_qc 后仍被守卫拒绝；伪造迁移证据可审计但不能改状
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pytest
 from pydantic import ValidationError
 
@@ -402,12 +405,59 @@ def test_recoverable_veto_routes_to_recovering_and_exhausted_veto_blocks_without
     )
     assert next_state_exhausted == "evidence_blocked"
     assert executor.state()["report_evidence"][blocked_id] == "evidence_blocked"
+    blocker_dir = workspace_root / "blockers" / report_kind.value / "v1"
+    assert sorted(path.name for path in blocker_dir.iterdir()) == [
+        "audit.json",
+        "audit.md",
+    ]
+    from ci_workflow.gates.blocker_audit import (
+        ScientificQcExhaustedBlockerAudit,
+        validate_existing_blocker_package,
+    )
+
+    audit = validate_existing_blocker_package(
+        blocker_dir,
+        project_id=PROJECT_ID,
+        report_kind=report_kind,
+        report_version="v1",
+    )
+    assert isinstance(audit, ScientificQcExhaustedBlockerAudit)
+    assert audit.verdict_id == verdict_exhausted["verdict_id"]
+    assert audit.exhaustion.record_digest == exhaustion.record_digest
+    from jsonschema import Draft202012Validator, FormatChecker
+
+    schema = json.loads(
+        (
+            Path(__file__).resolve().parents[2]
+            / "schemas/scientific-qc-blocker-audit.schema.json"
+        ).read_text(encoding="utf-8")
+    )
+    Draft202012Validator.check_schema(schema)
+    Draft202012Validator(schema, format_checker=FormatChecker()).validate(
+        json.loads((blocker_dir / "audit.json").read_text(encoding="utf-8"))
+    )
     assert_no_downstream_artifacts(
         workspace_root,
         project_id=PROJECT_ID,
         report_kind=report_kind,
         report_version=report_version,
     )
+
+    # 恢复时缺少科学穷尽正文必须转为类型化完整性错误，不能泄漏裸 KeyError。
+    from ci_workflow.gates.blocker_audit import BlockerPackageIntegrityError
+
+    malformed = json.loads((blocker_dir / "audit.json").read_text(encoding="utf-8"))
+    malformed.pop("exhaustion")
+    (blocker_dir / "audit.json").write_text(
+        json.dumps(malformed, ensure_ascii=False), encoding="utf-8"
+    )
+    with pytest.raises(BlockerPackageIntegrityError, match="不符合阻断审计合同"):
+        validate_existing_blocker_package(
+            blocker_dir,
+            project_id=PROJECT_ID,
+            report_kind=report_kind,
+            report_version="v1",
+        )
 
     # 2b) 已穷尽否决缺记录 → 拒绝
     _drive_to_scientific_qc(

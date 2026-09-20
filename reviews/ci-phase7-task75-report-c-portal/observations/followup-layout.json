@@ -1,0 +1,214 @@
+[
+  [
+    "design-patterns",
+    {
+      "pathCount": 2,
+      "paths": [
+        {
+          "id": "path-easi",
+          "top": 4133,
+          "text": "以 EASI 改善作为主要终点路径 |  | 前提：前提：登记披露了 EASI 相关主要终点定义与评估时间。 |  | 权衡：权衡：强调皮损面积与严重度综合改善，可能与仅看总体评估的路径不同。 |  | 相关试验：NCT05149313（ADvantage）"
+        },
+        {
+          "id": "path-iga",
+          "top": 4133,
+          "text": "以 IGA 达到清除或几乎清除作为主要终点路径 |  | 前提：前提：登记披露了 IGA 相关主要终点定义与评估时间。 |  | 权衡：权衡：强调总体评估阈值达标，可能与面积严重度综合评分路径不同。 |  | 相关试验：NCT02260986（CHRONOS）、N"
+        }
+      ],
+      "chartTop": 1302,
+      "tableTop": 1658,
+      "chartLabel": "多项可比指标｜设计模式、权衡与可选路径 图形",
+      "groupTitle": "多项可比指标｜设计模式、权衡与可选路径",
+      "docH": 4510
+    }
+  ],
+  [
+    "drawer_links",
+    [
+      {
+        "href": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+        "text": "打开原文",
+        "target": "_blank",
+        "rel": "noopener noreferrer"
+      }
+    ]
+  ],
+  [
+    "layout_by_width",
+    {
+      "1024": {
+        "header": 68,
+        "filter": 818,
+        "quick": 159,
+        "chartTop": 1288,
+        "chartVizTop": 1348,
+        "chartVizVisible": {
+          "top": 1347.578125,
+          "vis": -447.578125,
+          "ok": false
+        }
+      },
+      "1280": {
+        "header": 68,
+        "filter": 772,
+        "quick": 113,
+        "chartTop": 1198,
+        "chartVizTop": 1258,
+        "chartVizVisible": {
+          "top": 1257.71875,
+          "vis": -357.71875,
+          "ok": false
+        }
+      },
+      "1440": {
+        "header": 68,
+        "filter": 772,
+        "quick": 113,
+        "chartTop": 1202,
+        "chartVizTop": 1262,
+        "chartVizVisible": {
+          "top": 1261.875,
+          "vis": -361.875,
+          "ok": false
+        }
+      },
+      "1920": {
+        "header": 68,
+        "filter": 772,
+        "quick": 113,
+        "chartTop": 1204,
+        "chartVizTop": 1263,
+        "chartVizVisible": {
+          "top": 1263.453125,
+          "vis": -363.453125,
+          "ok": false
+        }
+      }
+    }
+  ],
+  [
+    "treatment_arms_sample",
+    {
+      "heads": [
+        "试验",
+        "组别",
+        "试验状态",
+        "单位",
+        "披露状态"
+      ],
+      "rows": [
+        [
+          "CHRONOS",
+          "设计事实",
+          "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=TRIPLE",
+          "",
+          "已披露"
+        ],
+        [
+          "CHRONOS",
+          "设计事实",
+          "Dupilumab 300 mg q2w",
+          "",
+          "已披露"
+        ],
+        [
+          "CHRONOS",
+          "设计事实",
+          "Placebo qw",
+          "",
+          "已披露"
+        ]
+      ],
+      "lead": "比较随机与盲法、治疗组、对照、背景和救援治疗、剂量、给药、疗程与延伸设计。",
+      "title": "分组、干预与对照"
+    }
+  ],
+  [
+    "chart_titles",
+    {
+      "overview": {
+        "groupTitle": "多项可比指标｜首页",
+        "chartType": "status_matrix",
+        "aria": "多项可比指标｜首页 图形"
+      },
+      "design-map": {
+        "groupTitle": "多项可比指标｜设计图谱",
+        "chartType": "status_matrix",
+        "aria": "多项可比指标｜设计图谱 图形"
+      },
+      "inclusion-criteria": {
+        "groupTitle": "入选标准｜入选标准",
+        "chartType": "status_matrix",
+        "aria": "入选标准｜入选标准 图形"
+      },
+      "endpoint-timepoint-matrix": {
+        "groupTitle": "多项可比指标｜终点、定义与时间点",
+        "chartType": "status_matrix",
+        "aria": "多项可比指标｜终点、定义与时间点 图形"
+      },
+      "visit-duration-followup": {
+        "groupTitle": "多项可比指标｜访视、疗程与随访",
+        "chartType": "timeline",
+        "aria": "多项可比指标｜访视、疗程与随访 图形"
+      },
+      "sample-analysis-statistics": {
+        "groupTitle": "计划或实际样本量｜计划或实际样本量",
+        "chartType": "bubble",
+        "aria": "计划或实际样本量｜计划或实际样本量 图形"
+      }
+    }
+  ],
+  [
+    "nav",
+    [
+      {
+        "text": "首页",
+        "href": "overview.html"
+      },
+      {
+        "text": "设计图谱",
+        "href": "design-map.html"
+      },
+      {
+        "text": "试验档案",
+        "href": "trial-profile.html"
+      },
+      {
+        "text": "人群与疾病定义",
+        "href": "population-disease-definition.html"
+      },
+      {
+        "text": "入选标准",
+        "href": "inclusion-criteria.html"
+      },
+      {
+        "text": "排除标准",
+        "href": "exclusion-criteria.html"
+      },
+      {
+        "text": "分组、干预与对照",
+        "href": "treatment-arms.html"
+      },
+      {
+        "text": "终点、定义与时间点",
+        "href": "endpoint-timepoint-matrix.html"
+      },
+      {
+        "text": "访视、疗程与随访",
+        "href": "visit-duration-followup.html"
+      },
+      {
+        "text": "样本量、分析集与统计设计",
+        "href": "sample-analysis-statistics.html"
+      },
+      {
+        "text": "设计模式、权衡与可选路径",
+        "href": "design-patterns.html"
+      },
+      {
+        "text": "资料版本与局限",
+        "href": "evidence-versions-limitations.html"
+      }
+    ]
+  ]
+]

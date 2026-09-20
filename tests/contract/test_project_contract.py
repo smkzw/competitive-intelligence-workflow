@@ -35,7 +35,7 @@ def test_contract_has_version_timezone_and_optional_historical_cutoff() -> None:
     contract = create_project_contract(
         indication="慢性鼻窦炎伴鼻息肉",
         reports=["A", "C"],
-        outputs=["pdf", "pptx"],
+        outputs=["html"],
         created_at=created_at,
     )
     assert contract.schema_version == "1.0"
@@ -43,13 +43,13 @@ def test_contract_has_version_timezone_and_optional_historical_cutoff() -> None:
     assert contract.timezone == "Asia/Shanghai"
     assert contract.data_cutoff.isoformat() == "2026-08-11T23:59:59.999999+08:00"
     assert [item.value for item in contract.reports] == ["A", "C"]
-    assert [item.value for item in contract.outputs] == ["html", "pdf", "pptx"]
+    assert [item.value for item in contract.outputs] == ["html"]
     assert contract.cutoff_was_user_supplied is False
 
     historical = create_project_contract(
         indication="慢性鼻窦炎伴鼻息肉",
         reports=["B"],
-        outputs=[],
+        outputs=["html"],
         timezone="America/New_York",
         cutoff="2024-02-29",
         created_at=created_at,
@@ -70,7 +70,7 @@ def test_contract_has_version_timezone_and_optional_historical_cutoff() -> None:
         create_project_contract(
             indication="慢性鼻窦炎伴鼻息肉",
             reports=["A"],
-            outputs=[],
+            outputs=["html"],
             timezone="Shanghai",
             created_at=created_at,
         )
@@ -103,7 +103,7 @@ def test_default_cutoff_is_fixed_at_creation_and_resume_next_day_does_not_move_i
     contract = create_project_contract(
         indication="慢性鼻窦炎伴鼻息肉",
         reports=["A", "B", "C"],
-        outputs=["html-ppt"],
+        outputs=["html"],
         created_at=datetime(2026, 8, 11, 23, 59, tzinfo=zone),
     )
     resumed = resume_project_contract(
@@ -128,7 +128,7 @@ def test_default_cutoff_is_fixed_at_creation_and_resume_next_day_does_not_move_i
     dst_contract = create_project_contract(
         indication="哮喘",
         reports=["B"],
-        outputs=[],
+        outputs=["html"],
         timezone="America/New_York",
         cutoff="2026-03-08",
         created_at=datetime(2026, 3, 8, 12, 0, tzinfo=ZoneInfo("America/New_York")),

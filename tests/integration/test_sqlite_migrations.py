@@ -36,6 +36,7 @@ EXPECTED_MIGRATIONS = (
     "0007_evidence_audit_chain.sql",
     "0008_project_lineage_guards.sql",
     "0009_source_date_precision.sql",
+    "0010_source_text_derivations.sql",
 )
 
 EXPECTED_TABLES = {
@@ -65,6 +66,7 @@ EXPECTED_TABLES = {
     "idempotency_keys",
     "content_blobs",
     "source_date_assertions",
+    "source_text_derivations",
 }
 
 
@@ -127,7 +129,7 @@ def test_project_creation_migrates_database_and_persists_contract_version(
     contract = create_project_contract(
         indication="类风湿关节炎",
         reports=["A", "C"],
-        outputs=["pptx"],
+        outputs=["html"],
         timezone="Asia/Shanghai",
         cutoff="2026-08-10",
     )

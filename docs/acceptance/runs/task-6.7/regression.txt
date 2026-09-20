@@ -1,0 +1,8 @@
+Task 6.7 REGRESSION
+
+- B/A/Gate/contract 相关回归：645 passed。
+- Ruff：src 与 tests 全部通过。
+- strict mypy：101 个源文件通过。
+- git diff --check：通过。
+- 全量回归：1753 passed，1 failed。
+- 唯一失败：test_packaged_assets_match_repo_and_official_logo；两份 portal.css 资产字节不一致，属于既存且不在 Task 6.7 授权写入范围内的问题。

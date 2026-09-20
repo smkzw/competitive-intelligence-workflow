@@ -1,0 +1,62 @@
+{
+  "backup": {
+    "copy_mode": "apfs_clone_cp_cR_P",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-r0-20260904T074503Z",
+    "read_only": true,
+    "writable_nodes": 0
+  },
+  "backup_manifest": {
+    "canonical_manifest_sha256": "ace8cad651eacdfc934ba580e5026a7642043fd40c1d1b9b13e0e06db78d03c3",
+    "file_sha256": "f91d2840346b041c607e6bca8822335f70ff35d39eff0266aa535aafe55ef5d6",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-r0-20260904T074503Z-backup-manifest.json",
+    "read_only": true
+  },
+  "captured_at": "2026-09-04T07:45:50.899176+00:00",
+  "counts": {
+    "bytes": 5910548662,
+    "content_class": {
+      "cache": 4923,
+      "git_metadata": 3443,
+      "normative_evidence": 2881,
+      "other": 274,
+      "raw_run_artifact": 7290,
+      "source": 687
+    },
+    "files": 19498,
+    "git_state": {
+      "git_metadata": 3443,
+      "ignored": 7666,
+      "tracked_modified": 71,
+      "tracked_unchanged": 1753,
+      "untracked": 6565
+    },
+    "node_type": {
+      "regular": 19495,
+      "symlink": 3
+    }
+  },
+  "git": {
+    "branch": "main",
+    "head": "bb27ec9d750cf02fb64da5dfe665b2f4b262922d",
+    "status_sha256": "0133c7f52325f7492bd756f63f8650d7794f6034c94b39c5d8eb8f30343bda38"
+  },
+  "limitations": [
+    "This is the post-R0-remediation state, not a pre-worker recovery point.",
+    "The receipt and all later R2-R6 changes were created after this snapshot.",
+    "This full recovery snapshot is not the HTML-only release source set."
+  ],
+  "receipt_kind": "ci-rebaseline-recovery-snapshot-receipt",
+  "schema_version": "1.0",
+  "source_manifest": {
+    "canonical_manifest_sha256": "74971303c2b0c7179948647ad8e98d021657c9c54c7b0a81e6d7371aeaf5c65e",
+    "file_sha256": "ee8242d7b0afb6df8bd406091e3bd0e8ec786adbc551a149cd17f3231bd8e42f",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-r0-20260904T074503Z-source-manifest.json",
+    "read_only": true
+  },
+  "status": "verified_read_only_recovery_snapshot",
+  "verification": {
+    "backup_manifest_validation": "passed",
+    "source_backup_exact_node_comparison": "passed",
+    "source_manifest_validation": "passed"
+  }
+}

@@ -1,0 +1,34 @@
+Task 6.5 回归记录（执行 worker_03，2026-08-29）
+
+定向合同与逐组 Gate：
+- `.venv/bin/python -m pytest -q tests/reports/b/test_baseline_observation_contract.py tests/reports/b/test_baseline_group_gate.py`：17 passed。
+- 目标测试夹具仅作可执行性修正：补齐 `evaluate_report(..., contract_version="1")`、为多试验比较快照建立每项试验两个组的闭合关系图、为缺失严重度场景显式截断 unit ids，并使用 `GateObjectType` 枚举；未改 GateSpec 或 evaluator。
+
+静态与 schema：
+- `.venv/bin/ruff check src tests`：All checks passed。
+- `MYPYPATH=src .venv/bin/mypy --strict --explicit-package-bases src/ci_workflow/reports/b/baseline.py tests/reports/b/test_baseline_observation_contract.py tests/reports/b/test_baseline_group_gate.py`：Success，3 files，无 issues。
+- `.venv/bin/mypy --strict src/ci_workflow`：Success，99 source files，无 issues。
+- `.venv/bin/python -c '...Draft202012Validator.check_schema(...)...'`：`baseline schema OK`。
+- `git diff --check`：通过。
+- `py_compile`：baseline 实现与两份目标测试通过。
+
+相关回归：
+- `.venv/bin/python -m pytest -q tests/reports`：353 passed。
+- `.venv/bin/python -m pytest -q tests/unit/reports tests/unit/test_gate_evaluator.py`：438 passed。
+- Task 6.1–6.4 相关报告测试（B roles/efficacy/safety/AE/bubble/matrix 与 reports/a）：207 passed。
+- `.venv/bin/python -m pytest -q tests/integration/sources tests/integration/test_ctgov_result_coverage_audit.py`：23 passed。
+- `.venv/bin/python -m pytest -q tests/integration/reports`：8 passed。
+- 双重穷尽、无草稿阻断、冲突和路线恢复：98 passed。
+- broad 命令 `tests/reports tests/unit tests/contract tests/integration/sources tests/integration/test_ctgov_result_coverage_audit.py`：1082 passed，1 failed；唯一失败为 `tests/contract/test_package_manifest.py` 未在 `package-manifest.json` 的 `components.schemas` 声明新文件 `schemas/baseline-observation.schema.json`。该清单不在本执行项授权写集，需由 Codex 集成修正。
+
+对抗性语义核对：
+- `not_publicly_disclosed`：BaselineObservation/Binding 均无 numeric value 与 denominator，逐组年龄 Gate 为 BLOCKED，结果保留 `not_publicly_disclosed`。
+- `unresolved_due_to_route`：均无 numeric value 与 denominator，必须带 `route_receipt_id`，逐组年龄 Gate 为 BLOCKED，结果保留 `unresolved_due_to_route`；未被重分类为科学未报告/未公开。
+- 把年龄观察绑定到 `b_baseline_sample_size` 被拒绝（规范概念不匹配）。
+- 发现未决风险（未改 evaluator，按授权边界上报）：通过 `GateEvidenceBinding.model_copy` 伪造相同 `fact_version_id` 到另一组时，现有 generic evaluator 让两组四项 baseline unit 均 SATISFIED；直接 GateBinding 路径缺少跨组 fact-version 全局去重。正常 BaselineObservation 转换的 row id 含 group scope，但不能替代入口防伪校验。
+- 发现合同边界风险：负数 sample size/count、负数或 >100 的 proportion 当前可被 BaselineObservation 接受；负数 sample size 甚至可满足 baseline sample-size Gate。需在 baseline 模型/schema 决定性拒绝。
+- 发现医学语义风险：任意非空 `baseline_severity` standardized concept（具备量表/版本/方向/理论范围）当前可满足 severity anchor；未见 GateSpec/适应症认可指标 allowlist 在本转换函数中生效。需由 Codex 决定是否补充版本化适应症/GateSpec 规则。
+
+范围边界：本任务无 HTML/PDF/PPT 输出，未作视觉验收声明；未修改现有 GateSpec、generic evaluator 或 package manifest。上述缺口阻止“全回归/最终医学语义”无条件通过，供 Codex 集成与最终验收。
+
+Codex 集成修订：上述四项缺口已修复；目标测试 19 passed，package manifest 1 passed，broad 回归 1085 passed in 48.87s。

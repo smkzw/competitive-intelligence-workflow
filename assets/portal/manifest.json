@@ -1,36 +1,36 @@
 {
-  "schema_version": "1.0",
-  "name": "竞品调研门户壳层静态资源",
-  "purpose": "康哲站点式 HTML 门户共享样式与交互脚本；随包复制，零远程依赖。含离线图表联动、数据依据面板与包内 ECharts。",
-  "files": {
-    "portal.css": {
-      "sha256": "60b2700ecd01b0043939246ce261f179b7741580cfdbe9c94379ce54959c0bdd",
-      "bytes": 40428
-    },
-    "portal.js": {
-      "sha256": "2c08b7a2beaf28cba466f127f50aaa1077cbd485691b0ccc02f213793cc365b3",
-      "bytes": 38080
-    },
-    "charts.js": {
-      "sha256": "69d3bf92a6f083f3aba1ec7efc0170d4a9095ff07ff171f3aa4d3dc382a97491",
-      "bytes": 39683
-    },
-    "evidence-drawer.js": {
-      "sha256": "df3c8fdd9834dd5ad22f0f1a72a1dbcdbaf8aa91979c4c8a835d5750cddc8e1a",
-      "bytes": 27715
-    },
-    "evidence-drawer.css": {
-      "sha256": "d6d946528b7ce833ae09f493899cc5c27315e828f043ff22a18074841f446e92",
-      "bytes": 9524
-    },
-    "echarts.min.js": {
-      "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
-      "bytes": 1121883
-    }
+ "schema_version": "1.0",
+ "name": "竞品调研门户壳层静态资源",
+ "purpose": "康哲站点式 HTML 门户共享样式与交互脚本；随包复制，零远程依赖。含离线图表联动、数据依据面板与包内 ECharts。",
+ "files": {
+  "portal.css": {
+   "sha256": "71935b9b3476fe0ef94e568c53a7debc7743cd9a515c010ff5a82ac60ce5c8be",
+   "bytes": 49960
   },
-  "packaged_module_assets": "src/ci_workflow/renderers/portal/assets/",
-  "logo_source": "assets/brand/cms-logo.svg",
-  "logo_sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
-  "echarts_source": "assets/third-party/echarts/echarts.min.js",
-  "echarts_version": "6.1.0"
+  "portal.js": {
+   "sha256": "8ede241d7b3d3cf03569286c2b28a3398b4024d46e44f54e14d79ba5c512f505",
+   "bytes": 40204
+  },
+  "charts.js": {
+   "sha256": "e0ffbdbe6e8398ee391854af629a124285bf1cbb8165ebbcf61c009abdbaf8d1",
+   "bytes": 63109
+  },
+  "evidence-drawer.js": {
+   "sha256": "d74406c6e52641d86aff2bd8b85bf45daf06de1ddd5a089df43d61d2a7933d50",
+   "bytes": 28555
+  },
+  "evidence-drawer.css": {
+   "sha256": "d6d946528b7ce833ae09f493899cc5c27315e828f043ff22a18074841f446e92",
+   "bytes": 9524
+  },
+  "echarts.min.js": {
+   "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+   "bytes": 1121883
+  }
+ },
+ "packaged_module_assets": "src/ci_workflow/renderers/portal/assets/",
+ "logo_source": "assets/brand/cms-logo.svg",
+ "logo_sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
+ "echarts_source": "assets/third-party/echarts/echarts.min.js",
+ "echarts_version": "6.1.0"
 }

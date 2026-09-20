@@ -1,4 +1,4 @@
-"""Task 4.4 浏览器验收：Python 权威分组、离线 ECharts 九类、真实 pointer 联动。"""
+"""Task 4.4 浏览器验收：Python 权威分组、离线 ECharts 八类、真实 pointer 联动。"""
 
 from __future__ import annotations
 
@@ -65,7 +65,7 @@ FORBIDDEN_VOCAB = re.compile(
 )
 
 ECHARTS_SHA256 = "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0"
-NINE_TYPES: tuple[str, ...] = (
+CHART_TYPES: tuple[str, ...] = (
     "bar",
     "line",
     "forest",
@@ -73,7 +73,6 @@ NINE_TYPES: tuple[str, ...] = (
     "bubble",
     "scatter_interval",
     "timeline",
-    "radar",
     "status_matrix",
 )
 
@@ -105,6 +104,18 @@ def _start_server(directory: Path) -> tuple[http.server.HTTPServer, int]:
 
 def _launch(playwright: Playwright, browser_name: str) -> Browser:
     return cast(Browser, getattr(playwright, browser_name).launch())
+
+
+def _expand_complete_tables(page: Page) -> None:
+    """完整表默认折叠；行级交互前显式展开。"""
+    page.evaluate(
+        """() => {
+          document.querySelectorAll('details.kz-complete-table').forEach(node => {
+            node.open = true;
+          });
+        }"""
+    )
+    page.wait_for_timeout(50)
 
 
 def _attach_collectors(page: Page) -> tuple[list[str], list[str], list[str]]:
@@ -326,6 +337,7 @@ def test_table_keyboard_selects_chart(browser_name: str, fixture_site: Path) -> 
             page = browser.new_page(viewport={"width": 1280, "height": 900})
             page.goto(f"http://127.0.0.1:{port}/index.html")
             page.wait_for_function("window.__CHART_SYNC__ !== undefined", timeout=15000)
+            _expand_complete_tables(page)
             row = page.locator(f'.kz-chart-table__row[data-row-id="{ALL_ROW_IDS[0]}"]')
             row.click()
             assert page.evaluate("window.__CHART_SYNC__.getSelectedRowId()") == ALL_ROW_IDS[0]
@@ -358,6 +370,7 @@ def test_row_id_equality_and_null_series(browser_name: str, fixture_site: Path) 
             page = browser.new_page(viewport={"width": 1280, "height": 900})
             page.goto(f"http://127.0.0.1:{port}/index.html")
             page.wait_for_function("window.__CHART_SYNC__ !== undefined", timeout=15000)
+            _expand_complete_tables(page)
 
             chart_ids = page.evaluate("() => window.__CHART_SYNC__.getChartRowIds().slice().sort()")
             table_ids = page.evaluate(
@@ -763,7 +776,7 @@ def test_undisclosed_group_no_empty_axes(browser_name: str, fixture_site: Path) 
         server.shutdown()
 
 
-def _nine_type_rows(chart_type: str) -> list[dict[str, Any]]:
+def _chart_type_rows(chart_type: str) -> list[dict[str, Any]]:
     base = {
         "unit": "mg/dL",
         "scale": "原始",
@@ -810,9 +823,6 @@ def _nine_type_rows(chart_type: str) -> list[dict[str, Any]]:
     elif chart_type == "timeline":
         disclosed.update({"time": "2024-01", "status": "进行中"})
         missing.update({"time": "2024-02", "status": None})
-    elif chart_type == "radar":
-        disclosed.update({"dimensions": ["疗效", "安全", "便利"], "scores": [70, 80, 60]})
-        missing.update({"dimensions": ["疗效", "安全", "便利"], "scores": None})
     elif chart_type == "status_matrix":
         disclosed.update({"status": "已完成", "coverage": 0.9})
         missing.update({"status": None, "coverage": None})
@@ -821,8 +831,8 @@ def _nine_type_rows(chart_type: str) -> list[dict[str, Any]]:
     return [disclosed, missing]
 
 
-def _write_nine_type_page(site: Path, chart_type: str) -> Path:
-    rows = resolve_chart_type(_nine_type_rows(chart_type), ChartType(chart_type))
+def _write_chart_type_page(site: Path, chart_type: str) -> Path:
+    rows = resolve_chart_type(_chart_type_rows(chart_type), ChartType(chart_type))
     payload = {
         "snapshot_id": "snap-nine",
         "row_set_digest": "digest-nine",
@@ -860,11 +870,11 @@ def _write_nine_type_page(site: Path, chart_type: str) -> Path:
 
 
 @pytest.mark.parametrize("browser_name", BROWSERS)
-@pytest.mark.parametrize("chart_type", NINE_TYPES)
-def test_nine_chart_types_real_echarts_smoke(
+@pytest.mark.parametrize("chart_type", CHART_TYPES)
+def test_chart_types_real_echarts_smoke(
     browser_name: str, chart_type: str, tmp_path: Path
 ) -> None:
-    page_path = _write_nine_type_page(tmp_path, chart_type)
+    page_path = _write_chart_type_page(tmp_path, chart_type)
     server, port = _start_server(tmp_path)
     try:
         with sync_playwright() as pw:
@@ -897,7 +907,7 @@ def test_nine_chart_types_real_echarts_smoke(
             assert len(ok["ids"]) == 2
             assert ok["missValue"] is None
             assert chart_type in ok["types"]
-            assert set(ok["types"]) == set(NINE_TYPES)
+            assert set(ok["types"]) == set(CHART_TYPES)
             _assert_offline(requests, port)
             assert not page_errors, page_errors
             browser.close()

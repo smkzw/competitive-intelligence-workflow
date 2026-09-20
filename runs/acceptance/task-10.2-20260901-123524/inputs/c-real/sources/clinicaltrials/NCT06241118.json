@@ -1,0 +1,2215 @@
+{
+  "hasResults": false,
+  "protocolSection": {
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Amlitelimab",
+            "Drug: Topical corticosteroids",
+            "Drug: Topical tacrolimus or pimecrolimus"
+          ],
+          "label": "Amlitelimab dose 1",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Amlitelimab",
+            "Drug: Topical corticosteroids",
+            "Drug: Topical tacrolimus or pimecrolimus"
+          ],
+          "label": "Amlitelimab dose 2",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Placebo",
+            "Drug: Topical corticosteroids",
+            "Drug: Topical tacrolimus or pimecrolimus"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2"
+          ],
+          "description": "Pharmaceutical form: Injection solution Route of administration: Subcutaneous",
+          "name": "Amlitelimab",
+          "otherNames": [
+            "SAR445229"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo"
+          ],
+          "description": "Pharmaceutical form: Injection solution Route of administration: Subcutaneous",
+          "name": "Placebo",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2",
+            "Placebo"
+          ],
+          "description": "Pharmaceutical form: Various Topical formulation Route of administration: Topical",
+          "name": "Topical corticosteroids",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2",
+            "Placebo"
+          ],
+          "description": "Pharmaceutical form: Various Topical formulation Route of administration: Topical",
+          "name": "Topical tacrolimus or pimecrolimus",
+          "type": "DRUG"
+        }
+      ]
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Dermatitis Atopic"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "email": "Contact-US@sanofi.com",
+          "name": "Trial Transparency email recommended (Toll free for US &amp; Canada)",
+          "phone": "800-633-1610",
+          "phoneExt": "option 6",
+          "role": "CONTACT"
+        }
+      ],
+      "locations": [
+        {
+          "city": "Birmingham",
+          "country": "United States",
+          "facility": "University of Alabama at Birmingham- Site Number : 8401267",
+          "geoPoint": {
+            "lat": 33.52066,
+            "lon": -86.80249
+          },
+          "state": "Alabama",
+          "status": "RECRUITING",
+          "zip": "35233"
+        },
+        {
+          "city": "Scottsdale",
+          "country": "United States",
+          "facility": "Center for Dermatology and Plastic Surgery- Site Number : 8401119",
+          "geoPoint": {
+            "lat": 33.50921,
+            "lon": -111.89903
+          },
+          "state": "Arizona",
+          "status": "RECRUITING",
+          "zip": "85260"
+        },
+        {
+          "city": "North Little Rock",
+          "country": "United States",
+          "facility": "Arkansas Dermatology - North Little Rock- Site Number : 8401244",
+          "geoPoint": {
+            "lat": 34.76954,
+            "lon": -92.26709
+          },
+          "state": "Arkansas",
+          "status": "RECRUITING",
+          "zip": "72117"
+        },
+        {
+          "city": "Encino",
+          "country": "United States",
+          "facility": "Encino Research Center- Site Number : 8401042",
+          "geoPoint": {
+            "lat": 34.15917,
+            "lon": -118.50119
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "91436"
+        },
+        {
+          "city": "Fremont",
+          "country": "United States",
+          "facility": "Center for Dermatology Clinical Research- Site Number : 8401018",
+          "geoPoint": {
+            "lat": 37.54827,
+            "lon": -121.98857
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "94538"
+        },
+        {
+          "city": "Long Beach",
+          "country": "United States",
+          "facility": "Long Beach Clinical Trials- Site Number : 8401188",
+          "geoPoint": {
+            "lat": 33.76696,
+            "lon": -118.18923
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "90806"
+        },
+        {
+          "city": "Los Angeles",
+          "country": "United States",
+          "facility": "Dermatology Research Associates - Los Angeles- Site Number : 8401092",
+          "geoPoint": {
+            "lat": 34.05223,
+            "lon": -118.24368
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "90045"
+        },
+        {
+          "city": "Los Angeles",
+          "country": "United States",
+          "facility": "LA Universal Research Center- Site Number : 8401064",
+          "geoPoint": {
+            "lat": 34.05223,
+            "lon": -118.24368
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "90057"
+        },
+        {
+          "city": "Newport Beach",
+          "country": "United States",
+          "facility": "University Dermatology Trials- Site Number : 8401339",
+          "geoPoint": {
+            "lat": 33.61891,
+            "lon": -117.92895
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "92660"
+        },
+        {
+          "city": "San Diego",
+          "country": "United States",
+          "facility": "Rady Children&#x27;s Hospital- Site Number : 8401291",
+          "geoPoint": {
+            "lat": 32.71571,
+            "lon": -117.16472
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "92123"
+        },
+        {
+          "city": "San Diego",
+          "country": "United States",
+          "facility": "Therapeutics Clinical Research- Site Number : 8401283",
+          "geoPoint": {
+            "lat": 32.71571,
+            "lon": -117.16472
+          },
+          "state": "California",
+          "status": "RECRUITING",
+          "zip": "92123"
+        },
+        {
+          "city": "Wheat Ridge",
+          "country": "United States",
+          "facility": "Paradigm Clinical Research - Wheat Ridge- Site Number : 8401245",
+          "geoPoint": {
+            "lat": 39.7661,
+            "lon": -105.07721
+          },
+          "state": "Colorado",
+          "status": "RECRUITING",
+          "zip": "80033"
+        },
+        {
+          "city": "Boynton Beach",
+          "country": "United States",
+          "facility": "Encore Medical Research of Boynton Beach- Site Number : 8401030",
+          "geoPoint": {
+            "lat": 26.52535,
+            "lon": -80.06643
+          },
+          "state": "Florida",
+          "status": "RECRUITING",
+          "zip": "33436"
+        },
+        {
+          "city": "Doral",
+          "country": "United States",
+          "facility": "St. Jude Clinical Research- Site Number : 8401287",
+          "geoPoint": {
+            "lat": 25.81954,
+            "lon": -80.35533
+          },
+          "state": "Florida",
+          "status": "RECRUITING",
+          "zip": "33172"
+        },
+        {
+          "city": "Jacksonville",
+          "country": "United States",
+          "facility": "Apex Clinical Research - Jacksonville- Site Number : 8401332",
+          "geoPoint": {
+            "lat": 30.33218,
+            "lon": -81.65565
+          },
+          "state": "Florida",
+          "status": "RECRUITING",
+          "zip": "32256"
+        },
+        {
+          "city": "Miami",
+          "country": "United States",
+          "facility": "Clever Medical Research- Site Number : 8401160",
+          "geoPoint": {
+            "lat": 25.77427,
+            "lon": -80.19366
+          },
+          "state": "Florida",
+          "status": "RECRUITING",
+          "zip": "33126"
+        },
+        {
+          "city": "St. Petersburg",
+          "country": "United States",
+          "facility": "Global Clinical Professionals (GCP)- Site Number : 8401045",
+          "geoPoint": {
+            "lat": 27.77086,
+            "lon": -82.67927
+          },
+          "state": "Florida",
+          "status": "RECRUITING",
+          "zip": "33714"
+        },
+        {
+          "city": "Tampa",
+          "country": "United States",
+          "facility": "Avita Clinical Research- Site Number : 8401073",
+          "geoPoint": {
+            "lat": 27.94752,
+            "lon": -82.45843
+          },
+          "state": "Florida",
+          "status": "RECRUITING",
+          "zip": "33613"
+        },
+        {
+          "city": "Chicago",
+          "country": "United States",
+          "facility": "Northwestern University- Site Number : 8401285",
+          "geoPoint": {
+            "lat": 41.85003,
+            "lon": -87.65005
+          },
+          "state": "Illinois",
+          "status": "RECRUITING",
+          "zip": "60611"
+        },
+        {
+          "city": "Skokie",
+          "country": "United States",
+          "facility": "NorthShore University Health System - Endeavor Health Medical Group - Skokie - Woods Drive- Site Number : 8401038",
+          "geoPoint": {
+            "lat": 42.03336,
+            "lon": -87.73339
+          },
+          "state": "Illinois",
+          "status": "RECRUITING",
+          "zip": "60077"
+        },
+        {
+          "city": "Indianapolis",
+          "country": "United States",
+          "facility": "Dawes Fretzin Clinical Research- Site Number : 8401015",
+          "geoPoint": {
+            "lat": 39.76838,
+            "lon": -86.15804
+          },
+          "state": "Indiana",
+          "status": "RECRUITING",
+          "zip": "46256"
+        },
+        {
+          "city": "Bowling Green",
+          "country": "United States",
+          "facility": "Equity Medical - Bowling Green- Site Number : 8401296",
+          "geoPoint": {
+            "lat": 36.99032,
+            "lon": -86.4436
+          },
+          "state": "Kentucky",
+          "status": "RECRUITING",
+          "zip": "42104"
+        },
+        {
+          "city": "Metairie",
+          "country": "United States",
+          "facility": "Tandem Clinical Research - Metairie- Site Number : 8401187",
+          "geoPoint": {
+            "lat": 29.98409,
+            "lon": -90.15285
+          },
+          "state": "Louisiana",
+          "status": "RECRUITING",
+          "zip": "70006"
+        },
+        {
+          "city": "Ann Arbor",
+          "country": "United States",
+          "facility": "University of Michigan Health System - Ann Arbor- Site Number : 8401290",
+          "geoPoint": {
+            "lat": 42.27756,
+            "lon": -83.74088
+          },
+          "state": "Michigan",
+          "status": "RECRUITING",
+          "zip": "48109"
+        },
+        {
+          "city": "Northville",
+          "country": "United States",
+          "facility": "MI Skin Center- Site Number : 8401307",
+          "geoPoint": {
+            "lat": 42.43115,
+            "lon": -83.48327
+          },
+          "state": "Michigan",
+          "status": "RECRUITING",
+          "zip": "48167"
+        },
+        {
+          "city": "Omaha",
+          "country": "United States",
+          "facility": "Skin Specialists- Site Number : 8401068",
+          "geoPoint": {
+            "lat": 41.25626,
+            "lon": -95.94043
+          },
+          "state": "Nebraska",
+          "status": "RECRUITING",
+          "zip": "68144"
+        },
+        {
+          "city": "East Windsor",
+          "country": "United States",
+          "facility": "Schweiger Dermatology Group - East Windsor- Site Number : 8401338",
+          "geoPoint": {
+            "lat": 40.268,
+            "lon": -74.54043
+          },
+          "state": "New Jersey",
+          "status": "RECRUITING",
+          "zip": "08520"
+        },
+        {
+          "city": "Albuquerque",
+          "country": "United States",
+          "facility": "The University of New Mexico- Site Number : 8401263",
+          "geoPoint": {
+            "lat": 35.08449,
+            "lon": -106.65114
+          },
+          "state": "New Mexico",
+          "status": "RECRUITING",
+          "zip": "87106"
+        },
+        {
+          "city": "New York",
+          "country": "United States",
+          "facility": "Equity Medical- Site Number : 8401239",
+          "geoPoint": {
+            "lat": 40.71427,
+            "lon": -74.00597
+          },
+          "state": "New York",
+          "status": "RECRUITING",
+          "zip": "10023"
+        },
+        {
+          "city": "New York",
+          "country": "United States",
+          "facility": "Sadick Research Group - New York - Park Avenue- Site Number : 8401050",
+          "geoPoint": {
+            "lat": 40.71427,
+            "lon": -74.00597
+          },
+          "state": "New York",
+          "status": "RECRUITING",
+          "zip": "10075"
+        },
+        {
+          "city": "Cincinnati",
+          "country": "United States",
+          "facility": "Cincinnati Children&#x27;s Hospital Medical Center- Site Number : 8401279",
+          "geoPoint": {
+            "lat": 39.12711,
+            "lon": -84.51439
+          },
+          "state": "Ohio",
+          "status": "RECRUITING",
+          "zip": "45229"
+        },
+        {
+          "city": "Portland",
+          "country": "United States",
+          "facility": "Oregon Health &amp; Science University (OHSU)- Site Number : 8401247",
+          "geoPoint": {
+            "lat": 45.52345,
+            "lon": -122.67621
+          },
+          "state": "Oregon",
+          "status": "RECRUITING",
+          "zip": "97239"
+        },
+        {
+          "city": "Philadelphia",
+          "country": "United States",
+          "facility": "Paddington Testing Company- Site Number : 8401041",
+          "geoPoint": {
+            "lat": 39.95238,
+            "lon": -75.16362
+          },
+          "state": "Pennsylvania",
+          "status": "RECRUITING",
+          "zip": "19103"
+        },
+        {
+          "city": "Philadelphia",
+          "country": "United States",
+          "facility": "Clinical Research of Philadelphia- Site Number : 8401193",
+          "geoPoint": {
+            "lat": 39.95238,
+            "lon": -75.16362
+          },
+          "state": "Pennsylvania",
+          "status": "RECRUITING",
+          "zip": "19114"
+        },
+        {
+          "city": "Charleston",
+          "country": "United States",
+          "facility": "Medical University of South Carolina - Charleston - Jonathan Lucas Street- Site Number : 8401282",
+          "geoPoint": {
+            "lat": 32.77632,
+            "lon": -79.93275
+          },
+          "state": "South Carolina",
+          "status": "RECRUITING",
+          "zip": "29425"
+        },
+        {
+          "city": "Arlington",
+          "country": "United States",
+          "facility": "Arlington Research Center- Site Number : 8401248",
+          "geoPoint": {
+            "lat": 32.73569,
+            "lon": -97.10807
+          },
+          "state": "Texas",
+          "status": "RECRUITING",
+          "zip": "76011"
+        },
+        {
+          "city": "Bellaire",
+          "country": "United States",
+          "facility": "McGovern Medical School - UT Physicians Dermatology - Bellaire Station- Site Number : 8401288",
+          "geoPoint": {
+            "lat": 29.70579,
+            "lon": -95.45883
+          },
+          "state": "Texas",
+          "status": "RECRUITING",
+          "zip": "77401"
+        },
+        {
+          "city": "Dallas",
+          "country": "United States",
+          "facility": "Reveal Research Institute - Dallas- Site Number : 8401219",
+          "geoPoint": {
+            "lat": 32.78306,
+            "lon": -96.80667
+          },
+          "state": "Texas",
+          "status": "RECRUITING",
+          "zip": "75235"
+        },
+        {
+          "city": "Ogden",
+          "country": "United States",
+          "facility": "Advanced Research Institute - Odgen (ARI - Ogden)- Site Number : 8401057",
+          "geoPoint": {
+            "lat": 41.223,
+            "lon": -111.97383
+          },
+          "state": "Utah",
+          "status": "RECRUITING",
+          "zip": "84405"
+        },
+        {
+          "city": "Norfolk",
+          "country": "United States",
+          "facility": "Virginia Dermatology &amp; Skin Cancer Center- Site Number : 8401047",
+          "geoPoint": {
+            "lat": 36.84681,
+            "lon": -76.28522
+          },
+          "state": "Virginia",
+          "status": "RECRUITING",
+          "zip": "23502"
+        },
+        {
+          "city": "Mill Creek",
+          "country": "United States",
+          "facility": "North Sound Dermatology- Site Number : 8401280",
+          "geoPoint": {
+            "lat": 47.8601,
+            "lon": -122.2043
+          },
+          "state": "Washington",
+          "status": "RECRUITING",
+          "zip": "98012"
+        },
+        {
+          "city": "Milwaukee",
+          "country": "United States",
+          "facility": "Children&#x27;s Wisconsin- Site Number : 8401246",
+          "geoPoint": {
+            "lat": 43.0389,
+            "lon": -87.90647
+          },
+          "state": "Wisconsin",
+          "status": "RECRUITING",
+          "zip": "53226"
+        },
+        {
+          "city": "Cheyenne",
+          "country": "United States",
+          "facility": "Cheyenne Skin Clinic- Site Number : 8401234",
+          "geoPoint": {
+            "lat": 41.13998,
+            "lon": -104.82025
+          },
+          "state": "Wyoming",
+          "status": "RECRUITING",
+          "zip": "82009"
+        },
+        {
+          "city": "Rosario",
+          "country": "Argentina",
+          "facility": "Investigational Site Number : 0320007",
+          "geoPoint": {
+            "lat": -32.94682,
+            "lon": -60.63932
+          },
+          "state": "Santa Fe Province",
+          "status": "RECRUITING",
+          "zip": "2000"
+        },
+        {
+          "city": "Buenos Aires",
+          "country": "Argentina",
+          "facility": "Investigational Site Number : 0320011",
+          "geoPoint": {
+            "lat": -34.61315,
+            "lon": -58.37723
+          },
+          "status": "RECRUITING",
+          "zip": "1035"
+        },
+        {
+          "city": "Buenos Aires",
+          "country": "Argentina",
+          "facility": "Investigational Site Number : 0320019",
+          "geoPoint": {
+            "lat": -34.61315,
+            "lon": -58.37723
+          },
+          "status": "RECRUITING",
+          "zip": "1426"
+        },
+        {
+          "city": "Córdoba",
+          "country": "Argentina",
+          "facility": "Investigational Site Number : 0320014",
+          "geoPoint": {
+            "lat": -31.40648,
+            "lon": -64.18853
+          },
+          "status": "RECRUITING",
+          "zip": "5000"
+        },
+        {
+          "city": "Melbourne",
+          "country": "Australia",
+          "facility": "Investigational Site Number : 0360008",
+          "geoPoint": {
+            "lat": -37.814,
+            "lon": 144.96332
+          },
+          "state": "Victoria",
+          "status": "RECRUITING",
+          "zip": "3002"
+        },
+        {
+          "city": "Melbourne",
+          "country": "Australia",
+          "facility": "Investigational Site Number : 0360006",
+          "geoPoint": {
+            "lat": -37.814,
+            "lon": 144.96332
+          },
+          "state": "Victoria",
+          "status": "RECRUITING",
+          "zip": "3004"
+        },
+        {
+          "city": "Salvador",
+          "country": "Brazil",
+          "facility": "Centro de Pesquisas da Clínica IBIS- Site Number : 0760002",
+          "geoPoint": {
+            "lat": -12.97563,
+            "lon": -38.49096
+          },
+          "state": "Estado de Bahia",
+          "status": "RECRUITING",
+          "zip": "41820-020"
+        },
+        {
+          "city": "Porto Alegre",
+          "country": "Brazil",
+          "facility": "Irmandade da Santa Casa de Misericórdia de Porto Alegre- Site Number : 0760005",
+          "geoPoint": {
+            "lat": -30.03283,
+            "lon": -51.23019
+          },
+          "state": "Rio Grande do Sul",
+          "status": "RECRUITING",
+          "zip": "90020-090"
+        },
+        {
+          "city": "Santo André",
+          "country": "Brazil",
+          "facility": "Faculdade de Medicina do ABC- Site Number : 0760001",
+          "geoPoint": {
+            "lat": -23.66389,
+            "lon": -46.53833
+          },
+          "state": "São Paulo",
+          "status": "RECRUITING",
+          "zip": "09060-650"
+        },
+        {
+          "city": "Sorocaba",
+          "country": "Brazil",
+          "facility": "Clinica de Alergia Martti Antila- Site Number : 0760006",
+          "geoPoint": {
+            "lat": -23.50167,
+            "lon": -47.45806
+          },
+          "state": "São Paulo",
+          "status": "COMPLETED",
+          "zip": "18040-425"
+        },
+        {
+          "city": "São Paulo",
+          "country": "Brazil",
+          "facility": "Hospital Alemao Oswaldo Cruz - São Paulo- Site Number : 0760010",
+          "geoPoint": {
+            "lat": -23.5475,
+            "lon": -46.63611
+          },
+          "status": "RECRUITING",
+          "zip": "01323-020"
+        },
+        {
+          "city": "São Paulo",
+          "country": "Brazil",
+          "facility": "Centro de Desenvolvimento em Estudos ClÌnicos Brasil- Site Number : 0760014",
+          "geoPoint": {
+            "lat": -23.5475,
+            "lon": -46.63611
+          },
+          "status": "RECRUITING",
+          "zip": "04020-060"
+        },
+        {
+          "city": "Calgary",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240019",
+          "geoPoint": {
+            "lat": 51.05011,
+            "lon": -114.08529
+          },
+          "state": "Alberta",
+          "status": "RECRUITING",
+          "zip": "T2W 4X9"
+        },
+        {
+          "city": "Edmonton",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240016",
+          "geoPoint": {
+            "lat": 53.55014,
+            "lon": -113.46871
+          },
+          "state": "Alberta",
+          "status": "RECRUITING",
+          "zip": "T5J 3S9"
+        },
+        {
+          "city": "Burlington",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240058",
+          "geoPoint": {
+            "lat": 43.38621,
+            "lon": -79.83713
+          },
+          "state": "Ontario",
+          "status": "RECRUITING",
+          "zip": "L7L 6W6"
+        },
+        {
+          "city": "Hamilton",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240020",
+          "geoPoint": {
+            "lat": 43.25011,
+            "lon": -79.84963
+          },
+          "state": "Ontario",
+          "status": "RECRUITING",
+          "zip": "L8L 3C3"
+        },
+        {
+          "city": "London",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240053",
+          "geoPoint": {
+            "lat": 42.98339,
+            "lon": -81.23304
+          },
+          "state": "Ontario",
+          "status": "RECRUITING",
+          "zip": "N6A 5R9"
+        },
+        {
+          "city": "Toronto",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240035",
+          "geoPoint": {
+            "lat": 43.70643,
+            "lon": -79.39864
+          },
+          "state": "Ontario",
+          "status": "RECRUITING",
+          "zip": "M5A 3R6"
+        },
+        {
+          "city": "Toronto",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240054",
+          "geoPoint": {
+            "lat": 43.70643,
+            "lon": -79.39864
+          },
+          "state": "Ontario",
+          "status": "RECRUITING",
+          "zip": "M5m 3z8"
+        },
+        {
+          "city": "Regina",
+          "country": "Canada",
+          "facility": "Investigational Site Number : 1240028",
+          "geoPoint": {
+            "lat": 50.45008,
+            "lon": -104.6178
+          },
+          "state": "Saskatchewan",
+          "status": "RECRUITING",
+          "zip": "S4V 1R9"
+        },
+        {
+          "city": "Santiago",
+          "country": "Chile",
+          "facility": "Investigational Site Number : 1520002",
+          "geoPoint": {
+            "lat": -33.45694,
+            "lon": -70.64827
+          },
+          "state": "Reg Metropolitana de Santiago",
+          "status": "RECRUITING",
+          "zip": "7580206"
+        },
+        {
+          "city": "Santiago",
+          "country": "Chile",
+          "facility": "Investigational Site Number : 1520003",
+          "geoPoint": {
+            "lat": -33.45694,
+            "lon": -70.64827
+          },
+          "state": "Reg Metropolitana de Santiago",
+          "status": "RECRUITING",
+          "zip": "7640881"
+        },
+        {
+          "city": "Santiago",
+          "country": "Chile",
+          "facility": "Investigational Site Number : 1520010",
+          "geoPoint": {
+            "lat": -33.45694,
+            "lon": -70.64827
+          },
+          "state": "Reg Metropolitana de Santiago",
+          "status": "RECRUITING",
+          "zip": "8330034"
+        },
+        {
+          "city": "Santiago",
+          "country": "Chile",
+          "facility": "Investigational Site Number : 1520005",
+          "geoPoint": {
+            "lat": -33.45694,
+            "lon": -70.64827
+          },
+          "state": "Reg Metropolitana de Santiago",
+          "status": "RECRUITING",
+          "zip": "8380465"
+        },
+        {
+          "city": "Santiago",
+          "country": "Chile",
+          "facility": "Investigational Site Number : 1520001",
+          "geoPoint": {
+            "lat": -33.45694,
+            "lon": -70.64827
+          },
+          "state": "Reg Metropolitana de Santiago",
+          "status": "RECRUITING",
+          "zip": "8420383"
+        },
+        {
+          "city": "Changchun",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560031",
+          "geoPoint": {
+            "lat": 43.88,
+            "lon": 125.32278
+          },
+          "status": "RECRUITING",
+          "zip": "130021"
+        },
+        {
+          "city": "Chongqing",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560057",
+          "geoPoint": {
+            "lat": 29.56026,
+            "lon": 106.55771
+          },
+          "status": "RECRUITING",
+          "zip": "400016"
+        },
+        {
+          "city": "Guangzhou",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560021",
+          "geoPoint": {
+            "lat": 23.11667,
+            "lon": 113.25
+          },
+          "status": "RECRUITING",
+          "zip": "510018"
+        },
+        {
+          "city": "Guangzhou",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560036",
+          "geoPoint": {
+            "lat": 23.11667,
+            "lon": 113.25
+          },
+          "status": "RECRUITING",
+          "zip": "510100"
+        },
+        {
+          "city": "Hangzhou",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560044",
+          "geoPoint": {
+            "lat": 30.29365,
+            "lon": 120.16142
+          },
+          "status": "RECRUITING",
+          "zip": "310003"
+        },
+        {
+          "city": "Hangzhou",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560002",
+          "geoPoint": {
+            "lat": 30.29365,
+            "lon": 120.16142
+          },
+          "status": "RECRUITING",
+          "zip": "310006"
+        },
+        {
+          "city": "Hangzhou",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560009",
+          "geoPoint": {
+            "lat": 30.29365,
+            "lon": 120.16142
+          },
+          "status": "RECRUITING",
+          "zip": "310009"
+        },
+        {
+          "city": "Nanyang",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560034",
+          "geoPoint": {
+            "lat": 33.00524,
+            "lon": 112.54659
+          },
+          "status": "RECRUITING",
+          "zip": "473014"
+        },
+        {
+          "city": "Ningbo",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560024",
+          "geoPoint": {
+            "lat": 29.87819,
+            "lon": 121.54945
+          },
+          "status": "RECRUITING",
+          "zip": "315010"
+        },
+        {
+          "city": "Ningbo",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560035",
+          "geoPoint": {
+            "lat": 29.87819,
+            "lon": 121.54945
+          },
+          "status": "RECRUITING",
+          "zip": "315010"
+        },
+        {
+          "city": "Shanghai",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560001",
+          "geoPoint": {
+            "lat": 31.22222,
+            "lon": 121.45806
+          },
+          "status": "RECRUITING",
+          "zip": "200040"
+        },
+        {
+          "city": "Shanghai",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560005",
+          "geoPoint": {
+            "lat": 31.22222,
+            "lon": 121.45806
+          },
+          "status": "RECRUITING",
+          "zip": "200443"
+        },
+        {
+          "city": "Shenyang",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560041",
+          "geoPoint": {
+            "lat": 41.79222,
+            "lon": 123.43278
+          },
+          "status": "RECRUITING",
+          "zip": "110001"
+        },
+        {
+          "city": "Wuhan",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560038",
+          "geoPoint": {
+            "lat": 30.58333,
+            "lon": 114.26667
+          },
+          "status": "RECRUITING",
+          "zip": "430030"
+        },
+        {
+          "city": "Xi'an",
+          "country": "China",
+          "facility": "Investigational Site Number : 1560032",
+          "geoPoint": {
+            "lat": 34.25833,
+            "lon": 108.92861
+          },
+          "status": "RECRUITING",
+          "zip": "710004"
+        },
+        {
+          "city": "Bordeaux",
+          "country": "France",
+          "facility": "Investigational Site Number : 2500011",
+          "geoPoint": {
+            "lat": 44.84124,
+            "lon": -0.58046
+          },
+          "status": "RECRUITING",
+          "zip": "33000"
+        },
+        {
+          "city": "Clermont-Ferrand",
+          "country": "France",
+          "facility": "Investigational Site Number : 2500014",
+          "geoPoint": {
+            "lat": 45.77969,
+            "lon": 3.08682
+          },
+          "status": "ACTIVE_NOT_RECRUITING",
+          "zip": "63100"
+        },
+        {
+          "city": "Créteil",
+          "country": "France",
+          "facility": "Investigational Site Number : 2500004",
+          "geoPoint": {
+            "lat": 48.79266,
+            "lon": 2.46569
+          },
+          "status": "RECRUITING",
+          "zip": "94010"
+        },
+        {
+          "city": "Lille",
+          "country": "France",
+          "facility": "Investigational Site Number : 2500001",
+          "geoPoint": {
+            "lat": 50.63391,
+            "lon": 3.05512
+          },
+          "status": "RECRUITING",
+          "zip": "59037"
+        },
+        {
+          "city": "Paris",
+          "country": "France",
+          "facility": "Investigational Site Number : 2500017",
+          "geoPoint": {
+            "lat": 48.85341,
+            "lon": 2.3488
+          },
+          "status": "RECRUITING",
+          "zip": "75010"
+        },
+        {
+          "city": "Rouen",
+          "country": "France",
+          "facility": "Investigational Site Number : 2500012",
+          "geoPoint": {
+            "lat": 49.44313,
+            "lon": 1.09932
+          },
+          "status": "RECRUITING",
+          "zip": "76031"
+        },
+        {
+          "city": "Berlin",
+          "country": "Germany",
+          "facility": "Investigational Site Number : 2762203",
+          "geoPoint": {
+            "lat": 52.52437,
+            "lon": 13.41053
+          },
+          "status": "RECRUITING",
+          "zip": "10117"
+        },
+        {
+          "city": "Blankenfelde-Mahlow",
+          "country": "Germany",
+          "facility": "Investigational Site Number : 2762202",
+          "geoPoint": {
+            "lat": 52.33645,
+            "lon": 13.41316
+          },
+          "status": "RECRUITING",
+          "zip": "15831"
+        },
+        {
+          "city": "Dresden",
+          "country": "Germany",
+          "facility": "Investigational Site Number : 2761001",
+          "geoPoint": {
+            "lat": 51.05089,
+            "lon": 13.73832
+          },
+          "status": "RECRUITING",
+          "zip": "01307"
+        },
+        {
+          "city": "Frankfurt",
+          "country": "Germany",
+          "facility": "Investigational Site Number : 2760022",
+          "geoPoint": {
+            "lat": 49.68333,
+            "lon": 10.53333
+          },
+          "status": "RECRUITING",
+          "zip": "60590"
+        },
+        {
+          "city": "Lübeck",
+          "country": "Germany",
+          "facility": "Investigational Site Number : 2761002",
+          "geoPoint": {
+            "lat": 53.86893,
+            "lon": 10.68729
+          },
+          "status": "RECRUITING",
+          "zip": "23562"
+        },
+        {
+          "city": "Witten",
+          "country": "Germany",
+          "facility": "Investigational Site Number : 2760019",
+          "geoPoint": {
+            "lat": 51.44362,
+            "lon": 7.35258
+          },
+          "status": "RECRUITING",
+          "zip": "58453"
+        },
+        {
+          "city": "Athens",
+          "country": "Greece",
+          "facility": "Investigational Site Number : 3000004",
+          "geoPoint": {
+            "lat": 37.98376,
+            "lon": 23.72784
+          },
+          "status": "RECRUITING",
+          "zip": "124 62"
+        },
+        {
+          "city": "Athens",
+          "country": "Greece",
+          "facility": "Investigational Site Number : 3000001",
+          "geoPoint": {
+            "lat": 37.98376,
+            "lon": 23.72784
+          },
+          "status": "RECRUITING",
+          "zip": "16121"
+        },
+        {
+          "city": "Athens",
+          "country": "Greece",
+          "facility": "Investigational Site Number : 3000005",
+          "geoPoint": {
+            "lat": 37.98376,
+            "lon": 23.72784
+          },
+          "status": "RECRUITING",
+          "zip": "16121"
+        },
+        {
+          "city": "Thessaloniki",
+          "country": "Greece",
+          "facility": "Investigational Site Number : 3000002",
+          "geoPoint": {
+            "lat": 40.64072,
+            "lon": 22.93493
+          },
+          "status": "RECRUITING",
+          "zip": "54643"
+        },
+        {
+          "city": "Beersheba",
+          "country": "Israel",
+          "facility": "Investigational Site Number : 3760005",
+          "geoPoint": {
+            "lat": 31.25181,
+            "lon": 34.7913
+          },
+          "status": "RECRUITING",
+          "zip": "8457108"
+        },
+        {
+          "city": "Ramat Gan",
+          "country": "Israel",
+          "facility": "Investigational Site Number : 3760008",
+          "geoPoint": {
+            "lat": 32.08227,
+            "lon": 34.81065
+          },
+          "status": "RECRUITING",
+          "zip": "5262100"
+        },
+        {
+          "city": "Tel Aviv",
+          "country": "Israel",
+          "facility": "Investigational Site Number : 3760007",
+          "geoPoint": {
+            "lat": 32.08088,
+            "lon": 34.78057
+          },
+          "status": "RECRUITING",
+          "zip": "6423906"
+        },
+        {
+          "city": "Turin",
+          "country": "Italy",
+          "facility": "Investigational Site Number : 3800020",
+          "geoPoint": {
+            "lat": 45.07049,
+            "lon": 7.68682
+          },
+          "state": "Torino",
+          "status": "RECRUITING",
+          "zip": "10126"
+        },
+        {
+          "city": "Chieti",
+          "contacts": [
+            {
+              "email": "crcsperimentazioni@unich.it",
+              "name": "Camilla Federici",
+              "phone": "0871541374",
+              "role": "CONTACT"
+            },
+            {
+              "name": "Paolo Amerio",
+              "role": "PRINCIPAL_INVESTIGATOR"
+            }
+          ],
+          "country": "Italy",
+          "facility": "Center for Advanced Studies and Technology-Site Number: 3800016",
+          "geoPoint": {
+            "lat": 42.34827,
+            "lon": 14.16494
+          },
+          "status": "RECRUITING",
+          "zip": "66100"
+        },
+        {
+          "city": "Modena",
+          "contacts": [
+            {
+              "email": "marioguanti@hotmail.it",
+              "name": "Mario Guanti",
+              "role": "CONTACT"
+            },
+            {
+              "name": "Caterina Longo",
+              "role": "PRINCIPAL_INVESTIGATOR"
+            }
+          ],
+          "country": "Italy",
+          "facility": "A.O.U. di Modena -Site Number: 3800021",
+          "geoPoint": {
+            "lat": 44.64783,
+            "lon": 10.92539
+          },
+          "status": "RECRUITING",
+          "zip": "41125"
+        },
+        {
+          "city": "Naples",
+          "contacts": [
+            {
+              "email": "infodermostudi@gmail.com",
+              "name": "Margherita Auriemma",
+              "phone": "+39 081 566 6669",
+              "role": "CONTACT"
+            },
+            {
+              "name": "Anna Balato",
+              "role": "PRINCIPAL_INVESTIGATOR"
+            }
+          ],
+          "country": "Italy",
+          "facility": "UOC Clinica Dermatologica - AOU &quot;Luigi Vanvitelli&quot;-Site Number : 3800017",
+          "geoPoint": {
+            "lat": 40.85216,
+            "lon": 14.26811
+          },
+          "status": "RECRUITING",
+          "zip": "80131"
+        },
+        {
+          "city": "Perugia",
+          "contacts": [
+            {
+              "email": "clinica.dermatologicaperugia@unipg.it",
+              "name": "Luca Stingeni",
+              "role": "CONTACT"
+            },
+            {
+              "name": "Luca Stingeni",
+              "role": "PRINCIPAL_INVESTIGATOR"
+            }
+          ],
+          "country": "Italy",
+          "facility": "Azienda ospedaliera di Perugia - Ospedale &quot;Santa Maria della Misericordia&quot;-Site Number: 3800015",
+          "geoPoint": {
+            "lat": 43.1122,
+            "lon": 12.38878
+          },
+          "status": "RECRUITING",
+          "zip": "06129"
+        },
+        {
+          "city": "Yokohama",
+          "country": "Japan",
+          "facility": "Investigational Site Number : 3923113",
+          "geoPoint": {
+            "lat": 35.43333,
+            "lon": 139.65
+          },
+          "state": "Kanagawa",
+          "status": "RECRUITING",
+          "zip": "221-0825"
+        },
+        {
+          "city": "Habikino",
+          "country": "Japan",
+          "facility": "Investigational Site Number : 3923109",
+          "geoPoint": {
+            "lat": 34.55276,
+            "lon": 135.59097
+          },
+          "state": "Osaka",
+          "status": "RECRUITING",
+          "zip": "583-8588"
+        },
+        {
+          "city": "Sakai",
+          "country": "Japan",
+          "facility": "Investigational Site Number : 3923110",
+          "geoPoint": {
+            "lat": 34.58216,
+            "lon": 135.46653
+          },
+          "state": "Osaka",
+          "status": "RECRUITING",
+          "zip": "593-8324"
+        },
+        {
+          "city": "Mibu",
+          "country": "Japan",
+          "facility": "Investigational Site Number : 3923106",
+          "geoPoint": {
+            "lat": 36.41667,
+            "lon": 139.8
+          },
+          "state": "Tochigi",
+          "status": "RECRUITING",
+          "zip": "321-0293"
+        },
+        {
+          "city": "Tachikawa",
+          "country": "Japan",
+          "facility": "Investigational Site Number : 3920001",
+          "geoPoint": {
+            "lat": 35.7091,
+            "lon": 139.41891
+          },
+          "state": "Tokyo",
+          "status": "RECRUITING",
+          "zip": "190-0023"
+        },
+        {
+          "city": "Hiroshima",
+          "country": "Japan",
+          "facility": "Investigational Site Number : 3920007",
+          "geoPoint": {
+            "lat": 34.4,
+            "lon": 132.45
+          },
+          "status": "RECRUITING",
+          "zip": "734-8551"
+        },
+        {
+          "city": "Monterrey",
+          "country": "Mexico",
+          "facility": "Investigational Site Number : 4840011",
+          "geoPoint": {
+            "lat": 25.68435,
+            "lon": -100.31721
+          },
+          "state": "Nuevo León",
+          "status": "RECRUITING",
+          "zip": "64460"
+        },
+        {
+          "city": "Veracruz",
+          "country": "Mexico",
+          "facility": "Investigational Site Number : 4840003",
+          "geoPoint": {
+            "lat": 19.18095,
+            "lon": -96.1429
+          },
+          "status": "RECRUITING",
+          "zip": "91900"
+        },
+        {
+          "city": "Wroclaw",
+          "country": "Poland",
+          "facility": "Investigational Site Number : 6162417",
+          "geoPoint": {
+            "lat": 51.10286,
+            "lon": 17.03006
+          },
+          "state": "Lower Silesian Voivodeship",
+          "status": "RECRUITING",
+          "zip": "51-685"
+        },
+        {
+          "city": "Lublin",
+          "country": "Poland",
+          "facility": "Investigational Site Number : 6160002",
+          "geoPoint": {
+            "lat": 51.25058,
+            "lon": 22.57009
+          },
+          "state": "Lublin Voivodeship",
+          "status": "RECRUITING",
+          "zip": "20-363"
+        },
+        {
+          "city": "Warsaw",
+          "country": "Poland",
+          "facility": "Investigational Site Number : 6162411",
+          "geoPoint": {
+            "lat": 52.22977,
+            "lon": 21.01178
+          },
+          "state": "Masovian Voivodeship",
+          "status": "RECRUITING",
+          "zip": "01-142"
+        },
+        {
+          "city": "Warsaw",
+          "country": "Poland",
+          "facility": "Investigational Site Number : 6160001",
+          "geoPoint": {
+            "lat": 52.22977,
+            "lon": 21.01178
+          },
+          "state": "Masovian Voivodeship",
+          "status": "RECRUITING",
+          "zip": "02-507"
+        },
+        {
+          "city": "Gdansk",
+          "country": "Poland",
+          "facility": "Investigational Site Number : 6160006",
+          "geoPoint": {
+            "lat": 54.35227,
+            "lon": 18.64912
+          },
+          "state": "Pomeranian Voivodeship",
+          "status": "RECRUITING",
+          "zip": "80-546"
+        },
+        {
+          "city": "Saint-Pierre",
+          "country": "Reunion",
+          "facility": "Investigational Site Number : 2500016",
+          "geoPoint": {
+            "lat": -21.3393,
+            "lon": 55.47811
+          },
+          "status": "RECRUITING",
+          "zip": "97448"
+        },
+        {
+          "city": "Riyadh",
+          "country": "Saudi Arabia",
+          "facility": "Investigational Site Number : 6820001",
+          "geoPoint": {
+            "lat": 24.68773,
+            "lon": 46.72185
+          },
+          "status": "RECRUITING",
+          "zip": "12713"
+        },
+        {
+          "city": "Ansan-si",
+          "country": "South Korea",
+          "facility": "Investigational Site Number : 4100002",
+          "geoPoint": {
+            "lat": 37.32361,
+            "lon": 126.82194
+          },
+          "state": "Gyeonggi-do",
+          "status": "RECRUITING",
+          "zip": "15355"
+        },
+        {
+          "city": "Seongnam-si",
+          "country": "South Korea",
+          "facility": "Investigational Site Number : 4100014",
+          "geoPoint": {
+            "lat": 37.43861,
+            "lon": 127.13778
+          },
+          "state": "Gyeonggi-do",
+          "status": "RECRUITING",
+          "zip": "13620"
+        },
+        {
+          "city": "Bupyeong-Gu",
+          "country": "South Korea",
+          "facility": "Investigational Site Number : 4100015",
+          "state": "Incheon-gwangyeoksi",
+          "status": "RECRUITING",
+          "zip": "21431"
+        },
+        {
+          "city": "Seoul",
+          "country": "South Korea",
+          "facility": "Investigational Site Number : 4100007",
+          "geoPoint": {
+            "lat": 37.566,
+            "lon": 126.9784
+          },
+          "state": "Seoul-teukbyeolsi",
+          "status": "RECRUITING",
+          "zip": "03722"
+        },
+        {
+          "city": "Seoul",
+          "country": "South Korea",
+          "facility": "Investigational Site Number : 4100001",
+          "geoPoint": {
+            "lat": 37.566,
+            "lon": 126.9784
+          },
+          "state": "Seoul-teukbyeolsi",
+          "status": "RECRUITING",
+          "zip": "07441"
+        },
+        {
+          "city": "Badalona",
+          "country": "Spain",
+          "facility": "Investigational Site Number : 7240002",
+          "geoPoint": {
+            "lat": 41.45004,
+            "lon": 2.24741
+          },
+          "state": "Barcelona [Barcelona]",
+          "status": "RECRUITING",
+          "zip": "08916"
+        },
+        {
+          "city": "Majadahonda",
+          "country": "Spain",
+          "facility": "Investigational Site Number : 7240017",
+          "geoPoint": {
+            "lat": 40.47353,
+            "lon": -3.87182
+          },
+          "state": "Madrid",
+          "status": "RECRUITING",
+          "zip": "28222"
+        },
+        {
+          "city": "Seville",
+          "country": "Spain",
+          "facility": "Investigational Site Number : 7240020",
+          "geoPoint": {
+            "lat": 37.38283,
+            "lon": -5.97317
+          },
+          "state": "Sevilla",
+          "status": "RECRUITING",
+          "zip": "41013"
+        },
+        {
+          "city": "Alicante",
+          "country": "Spain",
+          "facility": "Investigational Site Number : 7242505",
+          "geoPoint": {
+            "lat": 38.34517,
+            "lon": -0.48149
+          },
+          "status": "RECRUITING",
+          "zip": "03010"
+        },
+        {
+          "city": "Madrid",
+          "country": "Spain",
+          "facility": "Investigational Site Number : 7242503",
+          "geoPoint": {
+            "lat": 40.4165,
+            "lon": -3.70256
+          },
+          "status": "RECRUITING",
+          "zip": "28046"
+        },
+        {
+          "city": "Kaohsiung City",
+          "country": "Taiwan",
+          "facility": "Investigational Site Number : 1583201",
+          "geoPoint": {
+            "lat": 22.61626,
+            "lon": 120.31333
+          },
+          "status": "ACTIVE_NOT_RECRUITING",
+          "zip": "833"
+        },
+        {
+          "city": "Taipei",
+          "country": "Taiwan",
+          "facility": "Investigational Site Number : 1580001",
+          "geoPoint": {
+            "lat": 25.05306,
+            "lon": 121.52639
+          },
+          "status": "RECRUITING",
+          "zip": "100"
+        },
+        {
+          "city": "Taipei",
+          "country": "Taiwan",
+          "facility": "Investigational Site Number : 1580003",
+          "geoPoint": {
+            "lat": 25.05306,
+            "lon": 121.52639
+          },
+          "status": "RECRUITING"
+        },
+        {
+          "city": "Taoyuan City",
+          "country": "Taiwan",
+          "facility": "Investigational Site Number : 1583203",
+          "geoPoint": {
+            "lat": 24.99368,
+            "lon": 121.29696
+          },
+          "status": "RECRUITING",
+          "zip": "333"
+        },
+        {
+          "city": "Gaziantep",
+          "country": "Turkey (Türkiye)",
+          "facility": "Investigational Site Number : 7920008",
+          "geoPoint": {
+            "lat": 37.05944,
+            "lon": 37.3825
+          },
+          "status": "RECRUITING",
+          "zip": "27310"
+        },
+        {
+          "city": "Istanbul",
+          "country": "Turkey (Türkiye)",
+          "facility": "Investigational Site Number : 7920005",
+          "geoPoint": {
+            "lat": 41.01384,
+            "lon": 28.94966
+          },
+          "status": "RECRUITING",
+          "zip": "34093"
+        },
+        {
+          "city": "Istanbul",
+          "country": "Turkey (Türkiye)",
+          "facility": "Investigational Site Number : 7920002",
+          "geoPoint": {
+            "lat": 41.01384,
+            "lon": 28.94966
+          },
+          "status": "RECRUITING",
+          "zip": "34098"
+        },
+        {
+          "city": "Abu Dhabi",
+          "country": "United Arab Emirates",
+          "facility": "Investigational Site Number : 7841002",
+          "geoPoint": {
+            "lat": 24.45118,
+            "lon": 54.39696
+          },
+          "status": "RECRUITING",
+          "zip": "51900"
+        },
+        {
+          "city": "Abu Dhabi",
+          "country": "United Arab Emirates",
+          "facility": "Investigational Site Number : 7840001",
+          "geoPoint": {
+            "lat": 24.45118,
+            "lon": 54.39696
+          },
+          "status": "RECRUITING",
+          "zip": "6222"
+        },
+        {
+          "city": "Abu Dhabi",
+          "country": "United Arab Emirates",
+          "facility": "Investigational Site Number : 7840002",
+          "geoPoint": {
+            "lat": 24.45118,
+            "lon": 54.39696
+          },
+          "status": "RECRUITING"
+        },
+        {
+          "city": "Bristol",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260013",
+          "geoPoint": {
+            "lat": 51.45523,
+            "lon": -2.59665
+          },
+          "state": "Bristol, City of",
+          "status": "RECRUITING",
+          "zip": "BS2 8HW"
+        },
+        {
+          "city": "Plymouth",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260012",
+          "geoPoint": {
+            "lat": 50.37153,
+            "lon": -4.14305
+          },
+          "state": "Devon",
+          "status": "RECRUITING",
+          "zip": "PL6 8DH"
+        },
+        {
+          "city": "London",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8262603",
+          "geoPoint": {
+            "lat": 51.50853,
+            "lon": -0.12574
+          },
+          "state": "England",
+          "status": "RECRUITING",
+          "zip": "E11 1NR"
+        },
+        {
+          "city": "London",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260015",
+          "geoPoint": {
+            "lat": 51.50853,
+            "lon": -0.12574
+          },
+          "state": "England",
+          "status": "RECRUITING",
+          "zip": "SW10 9NH"
+        },
+        {
+          "city": "Portsmouth",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260003",
+          "geoPoint": {
+            "lat": 50.79899,
+            "lon": -1.09125
+          },
+          "state": "Hampshire",
+          "status": "RECRUITING",
+          "zip": "PO3 6DW"
+        },
+        {
+          "city": "Leeds",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260009",
+          "geoPoint": {
+            "lat": 53.79648,
+            "lon": -1.54785
+          },
+          "state": "North Yorkshire",
+          "status": "RECRUITING",
+          "zip": "Ls7 4sa"
+        },
+        {
+          "city": "Nottingham",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260010",
+          "geoPoint": {
+            "lat": 52.9536,
+            "lon": -1.15047
+          },
+          "state": "Nottinghamshire",
+          "status": "RECRUITING",
+          "zip": "NG17 4JL"
+        },
+        {
+          "city": "Liverpool",
+          "country": "United Kingdom",
+          "facility": "Investigational Site Number : 8260008",
+          "geoPoint": {
+            "lat": 53.41058,
+            "lon": -2.97794
+          },
+          "status": "RECRUITING",
+          "zip": "L7 8XP"
+        }
+      ]
+    },
+    "descriptionModule": {
+      "briefSummary": "<p>This is a parallel group, Phase 3, multinational, multicenter, randomized, double-blind, placebo-controlled, 3-arm study for treatment of participants diagnosed with moderate-to-severe AD on background TCS who have had inadequate response to prior biologic or oral JAKi therapy.</p><p>The purpose of this study is to measure the efficacy and safety of treatment with amlitelimab solution for subcutaneous (SC) injection compared with placebo in participants with moderate-to-severe AD aged 12 years and older on background TCS and have had an inadequate response to prior biologic or an oral JAKi therapy.</p><p>Study details include:</p><p>At the end of the treatment period, participants will have the option to enter the Long-Term Safety Study LTS17367 (RIVER-AD).</p><p>The study duration will be up to 56 weeks for participants not entering the long-term safety study (LTS17367 [RIVER-AD]) including a 2 to 4-week screening, a 36-week randomized double-blind period, and a 16-week safety follow-up.</p><p>The study duration will be up to 40 weeks for participants entering the long-term safety study (LTS17367 [RIVER-AD]) including a 2 to 4-week screening and a 36-week randomized double-blind period.</p><p>The total treatment duration will be up to 36 weeks.\nThe total number of visits will be up to 13 visits (or 12 visits for those entering the long-term safety study LTS17367 [RIVER-AD] study).</p>"
+    },
+    "designModule": {
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "enrollmentInfo": {
+        "count": 636,
+        "type": "ESTIMATED"
+      },
+      "phases": [
+        "PHASE3"
+      ],
+      "studyType": "INTERVENTIONAL"
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "<p>Inclusion Criteria:</p><ul><li>Participants must be 12 years of age (when signing informed consent form)</li><li>Diagnosis of AD for at least 1 year (defined by the American Academy of Dermatology Consensus Criteria)</li><li>Documented history prior to screening visit of inadequate response to a biologic AD medication or an oral JAKi therapy.</li><li>v-IGA-AD of 3 or 4 at baseline visit</li><li>EASI score of 16 or higher at baseline</li><li>AD involvement of 10% or more of BSA at baseline</li><li>Weekly average of daily PP-NRS of ≥ 4 at baseline visit.</li><li>Able and willing to comply with requested study visits and procedures</li><li>Body weight ≥25 kg</li></ul><p>Exclusion Criteria:</p><p>Participants are excluded from the study if any of the following criteria apply:</p><ul><li>Skin co-morbidity that would adversely affect the ability to undertake AD assessments</li><li>Known history of or suspected significant current immunosuppression</li><li>Any malignancies or history of malignancies prior to baseline (with the exception of non-melanoma skin cancer excised and cured &gt;5 years prior to baseline)</li><li>History of solid organ or stem cell transplant</li><li>Any active or chronic infection including helminthic infection requiring systemic treatment within 4 weeks prior to baseline</li><li>Positive for human immunodeficiency virus (HIV), Hepatitis B or hepatitis C at screening visit</li><li>Having active tuberculosis (TB), latent TB, a history of incompletely treated TB, suspected extrapulmonary TB infection, or who are at high risk of contracting TB</li><li>Having received any of the specified therapy within the specified timeframe(s) prior to the baseline visit</li><li>In the Investigator&#x27;s opinion, any clinically significant laboratory results or protocol specified laboratory abnormalities at screening</li><li>History of hypersensitivity or allergy to any of the excipients or investigational medicinal product (IMP)</li></ul><p>The above information is not intended to contain all considerations relevant to a potential participation in a clinical trial</p>",
+      "healthyVolunteers": false,
+      "minimumAge": "12 Years",
+      "sex": "ALL",
+      "stdAges": [
+        "CHILD",
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "identificationModule": {
+      "acronym": "AQUA",
+      "briefTitle": "A Study to Evaluate the Efficacy and Safety of Subcutaneous Amlitelimab on Background Topical Corticosteroids Therapy in Participants Aged 12 Years and Older With Moderate-to-severe AD Who Have Had an Inadequate Response to Prior Biologic Therapy or an Oral JAK Inhibitor",
+      "nctId": "NCT06241118",
+      "officialTitle": "A Phase 3, Randomized, Double-blind, Placebo-controlled, Parallel-group, 3-arm, Multinational, Multicenter Study to Evaluate the Efficacy and Safety of Amlitelimab by Subcutaneous Injection in Participants Aged 12 Years and Older With Moderate-to-severe Atopic Dermatitis (AD) Who Are on Background Topical Corticosteroids and Have Had an Inadequate Response to Prior Biologic Therapy or Oral Janus Kinase (JAK) Inhibitor Treatment",
+      "orgStudyIdInfo": {
+        "id": "EFC17599"
+      },
+      "organization": {
+        "class": "INDUSTRY",
+        "fullName": "Sanofi"
+      },
+      "secondaryIdInfos": [
+        {
+          "domain": "CTIS",
+          "id": "2023-508099-12",
+          "type": "REGISTRY"
+        },
+        {
+          "domain": "ICTRP",
+          "id": "U1111-1295-3059",
+          "type": "REGISTRY"
+        },
+        {
+          "id": "2023",
+          "link": "https:&#x2F;&#x2F;reporter.nih.gov&#x2F;quickSearch&#x2F;2023",
+          "type": "NIH"
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "description": "Qualified researchers may request access to patient level data and related study documents including the clinical study report, study protocol with any amendments, blank case report form, statistical analysis plan, and dataset specifications.\nPatient level data will be anonymized and study documents will be redacted to protect the privacy of trial participants.\nFurther details on Sanofi&#x27;s data sharing criteria, eligible studies, and process for requesting access can be found at: https:&#x2F;&#x2F;vivli.org",
+      "ipdSharing": "YES"
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "EU, EU reference countries, and Japan: Proportion of participants with Validated Investigator Global Assessment scale for Atopic Dermatitis (vIGA-AD) of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points at Week 36",
+          "timeFrame": "Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.",
+          "measure": "EU, EU reference countries, and Japan: Proportion of participants reaching 75% reduction from baseline in Eczema Area and Severity Index (EASI) score (EASI75) at Week 36",
+          "timeFrame": "Week 36"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "US and US reference countries: Proportion of participants with vIGA-AD of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points at Week 36",
+          "timeFrame": "Week 36"
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.\nEASI-75 is 75% reduction from baseline in EASI score.",
+          "measure": "Proportion of participants reaching EASI-75 at Week 36 (for US and US reference countries only)",
+          "timeFrame": "Week 36"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "Proportion of participants with vIGA-AD 0 (clear) or 1 (almost clear) with presence of only barely perceptible erythema (no induration&#x2F;papulation, no lichenification, no oozing or crusting and a reduction from baseline of ≥2 points)",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The PP-NRS is a validated single item 0-10 numeric rating scale assessing peak pruritus (itch) associated with AD with 0 = no itch and 10 = worst itch imaginable.",
+          "measure": "Proportion of participants with ≥4-point reduction in weekly average of daily Peak Pruritus-Numerical Rating Scale (PP-NRS) from baseline in participants with baseline weekly average of daily PP-NRS ≥4",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.\nEASI-75 is 75% reduction from baseline in EASI score.",
+          "measure": "Proportion of participants reaching EASI-75",
+          "timeFrame": "Baseline to Week 24"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "Proportion of participants with vIGA-AD of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points",
+          "timeFrame": "Baseline to Week 24"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.\nEASI-90 is 90% reduction from baseline in EASI score.",
+          "measure": "Proportion of participants reaching EASI-90",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.\nEASI-100 is 100% reduction from baseline in EASI score.",
+          "measure": "Proportion of participants reaching EASI-100",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The PP-NRS is a validated single item 0-10 numeric rating scale assessing peak pruritus (itch) associated with AD with 0 = no itch and 10 = worst itch imaginable.",
+          "measure": "Proportion of participants with PP-NRS ≤1",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The DLQI is a validated 10-item questionnaire to measure dermatology-specific quality of life (QoL) in adult patients.\nOverall scoring ranges from 0 to 30, with a higher score indicating a poorer QoL.",
+          "measure": "Change in Dermatology Life Quality Index (DLQI) from baseline in participants with age ≥16 years old",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The DLQI is a validated 10-item questionnaire to measure dermatology-specific quality of life (QoL) in adult patients.\nOverall scoring ranges from 0 to 30, with a higher score indicating a poorer QoL.",
+          "measure": "Proportion of participants with a reduction in DLQI ≥4 from baseline in participants with age ≥16 years old and with DLQI baseline ≥4",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The CDLQI is a validated 10-item questionnaire to measure dermatology-specific quality of life (QoL) in children aged 4-&lt;16 years.\nOverall scoring ranges from 0 to 30, with a higher score indicating a poorer QoL.",
+          "measure": "Change in Children Dermatology Life Quality Index (CDLQI) from baseline in participants with age ≥12 to &lt;16 years",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The CDLQI is a validated 10-item questionnaire to measure dermatology-specific quality of life (QoL) in children aged 4-&lt;16 years.\nOverall scoring ranges from 0 to 30, with a higher score indicating a poorer QoL.",
+          "measure": "Proportion of participants with a reduction in CDLQI ≥6 from baseline in participants with age ≥12 to &lt;16 years old and with CDLQI baseline ≥6",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The HADS is 14-item questionnaire with two subscales: anxiety &amp; depression.\nEach subscale (anxiety &amp; depression) ranges 0-21.\nThe total HADS score ranges 0-42 with higher score indicating a poorer state.",
+          "measure": "Change in Hospital Anxiety Depression Scale (HADS) from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "HADS-A score ranges 0-21 with higher score indicating a poorer state.",
+          "measure": "Proportion of participants with HADS subscale Anxiety (HADS-A) &lt;8 in participants with baseline HADS-A ≥8",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "HADS-D score ranges 0-21 with higher score indicating a poorer state.",
+          "measure": "Proportion of participants with HADS subscale Depression (HADS-D) &lt;8 in participants with HADS-D baseline ≥8",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SP-NRS is a single item 0-10 numeric rating scale assessing skin pain associated with AD with 0 = no pain and 10 = worst possible pain imaginable.",
+          "measure": "Absolute change in weekly average of daily Skin Pain-Numerical Rating Scale (SP-NRS) from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SP-NRS is a single item 0-10 numeric rating scale assessing skin pain associated with AD with 0 = no pain and 10 = worst possible pain imaginable.",
+          "measure": "Proportion of participants with a reduction in weekly average of daily SP-NRS ≥4 from baseline in participants with baseline weekly average of daily SP-NRS ≥4",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SP-NRS is a single item 0-10 numeric rating scale assessing skin pain associated with AD with 0 = no pain and 10 = worst possible pain imaginable.",
+          "measure": "Percent change in weekly average of daily SP-NRS from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "Proportion of participants with vIGA-AD 0 (clear)",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SD-NRS is a single item 0-10 numeric rating scale assessing sleep disturbance associated with AD with 0 = no sleep loss and 10 = did not sleep at all.",
+          "measure": "Absolute change in weekly average of daily Sleep Disturbance-Numerical Rating Scale (SD-NRS) from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SD-NRS is a single item 0-10 numeric rating scale assessing sleep disturbance associated with AD with 0 = no sleep loss and 10 = did not sleep at all.",
+          "measure": "Proportion of participants with a reduction in weekly average of daily SD-NRS ≥3 from baseline in participants with Baseline weekly average of daily SD-NRS ≥3",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SD-NRS is a single item 0-10 numeric rating scale assessing sleep disturbance associated with AD with 0 = no sleep loss and 10 = did not sleep at all.",
+          "measure": "Percent change in weekly average of daily SD-NRS",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.",
+          "measure": "Percent change in EASI score from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The PP-NRS is a validated single item 0-10 numeric rating scale assessing peak pruritus (itch) associated with AD with 0 = no itch and 10 = worst itch imaginable.",
+          "measure": "Percent change in weekly average of daily PP-NRS from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The PP-NRS is a validated single item 0-10 numeric rating scale assessing peak pruritus (itch) associated with AD with 0 = no itch and 10 = worst itch imaginable.",
+          "measure": "Absolute change in weekly average of daily PP-NRS from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.\nEASI-50 is 50% reduction from baseline in EASI score.",
+          "measure": "Proportion of participants reaching EASI-50",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.",
+          "measure": "Proportion of participants with EASI ≤7",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "measure": "Change in percent Body Surface Area (BSA) affected by AD from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SCORAD index is a clinical tool to evaluate the extent and severity of AD.\nTotal score ranges from 0 (absent disease) to 103 (severe disease).",
+          "measure": "Percent change in Scoring Atopic Dermatitis (SCORAD) index from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SCORAD index is a clinical tool to evaluate the extent and severity of AD.\nTotal score ranges from 0 (absent disease) to 103 (severe disease).",
+          "measure": "Absolute change in SCORAD index from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The SCORAD index is a clinical tool to evaluate the extent and severity of AD.\nTotal score ranges from 0 (absent disease) to 103 (severe disease).",
+          "measure": "Proportion of participants with a reduction in SCORAD ≥ 8.7 points from baseline in participants with baseline SCORAD score ≥ 8.7",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The POEM is a 7-item self-assessment questionnaire that assesses disease symptoms on a 5-point scale; 0 (no days) to 4 (every day in the last week).\nThe sum of the 7 items gives the total POEM score of 0 (absent disease) to 28 (very severe).\nHigher scores indicated more severe disease and poor quality of life.",
+          "measure": "Proportion of participants with a reduction in Patient Oriented Eczema Measure (POEM) ≥4 from baseline in participants with POEM Baseline ≥4",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The POEM is a 7-item self-assessment questionnaire that assesses disease symptoms on a 5-point scale; 0 (no days) to 4 (every day in the last week).\nThe sum of the 7 items gives the total POEM score of 0 (absent disease) to 28 (very severe).\nHigher scores indicated more severe disease and poor quality of life.",
+          "measure": "Change in POEM from baseline",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "measure": "Proportion of participants with rescue medication use",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The PP-NRS is a validated single item 0-10 numeric rating scale assessing peak pruritus (itch) associated with AD with 0 = no itch and 10 = worst itch imaginable.",
+          "measure": "Time to onset of effect on PP-NRS as measured by proportion of participants with an improvement (reduction) in PP-NRS by ≥4",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "measure": "Percentage of TCS&#x2F;TCI free days",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "measure": "Percentage of participants who experienced Treatment-Emergent Adverse Events (TEAEs), experienced Treatment-Emergent Serious Adverse Events (TESAEs) and&#x2F;or Treatment-Emergent Adverse Events of Special Interest (AESI)",
+          "timeFrame": "Baseline to Week 52"
+        },
+        {
+          "measure": "Serum amlitelimab concentrations",
+          "timeFrame": "Baseline to Week 52"
+        },
+        {
+          "measure": "Incidence of antidrug antibodies (ADAs) of amlitelimab",
+          "timeFrame": "Baseline to Week 52"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "Time to onset of effect on vIGA-AD as measured by proportion of participants with vIGA-AD 0 (clear) or 1 (almost clear) and a reduction from baseline ≥2 during the 36-week treatment period",
+          "timeFrame": "Baseline to Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.\nEASI-75 is 75% reduction from baseline in EASI score.",
+          "measure": "Time to onset of effect on EASI as measured by proportion of participants reaching a 75% reduction from baseline in EASI score during the 36-week treatment period",
+          "timeFrame": "Baseline to Week 36"
+        }
+      ]
+    },
+    "oversightModule": {
+      "isFdaRegulatedDevice": false,
+      "isFdaRegulatedDrug": true,
+      "oversightHasDmc": true
+    },
+    "sponsorCollaboratorsModule": {
+      "leadSponsor": {
+        "class": "INDUSTRY",
+        "name": "Sanofi"
+      },
+      "responsibleParty": {
+        "type": "SPONSOR"
+      }
+    },
+    "statusModule": {
+      "completionDateStruct": {
+        "date": "2028-09-29",
+        "type": "ESTIMATED"
+      },
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "lastUpdatePostDateStruct": {
+        "date": "2026-07-02",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2026-07-01",
+      "overallStatus": "RECRUITING",
+      "primaryCompletionDateStruct": {
+        "date": "2027-09-30",
+        "type": "ESTIMATED"
+      },
+      "startDateStruct": {
+        "date": "2024-02-29",
+        "type": "ACTUAL"
+      },
+      "statusVerifiedDate": "2026-07",
+      "studyFirstPostDateStruct": {
+        "date": "2024-02-05",
+        "type": "ACTUAL"
+      },
+      "studyFirstSubmitDate": "2024-01-26",
+      "studyFirstSubmitQcDate": "2024-01-26"
+    }
+  }
+}

@@ -71,6 +71,14 @@ def _is_within(path: Path, root: Path) -> bool:
     return True
 
 
+def _lexical_symlink_target(path: Path) -> Path:
+    """Return an absolute target from link text without following the target."""
+
+    raw_target = Path(os.readlink(path))
+    candidate = raw_target if raw_target.is_absolute() else path.parent / raw_target
+    return Path(os.path.abspath(os.fspath(candidate)))
+
+
 def _iter_paths(root: Path) -> Iterator[Path]:
     for directory, names, filenames in os.walk(root, followlinks=False):
         names[:] = sorted(name for name in names if name not in SKIPPED_DIRECTORY_NAMES)
@@ -100,7 +108,11 @@ def _read_text(path: Path) -> str | None:
 
 def scan(root: Path, legacy_root: Path) -> list[Finding]:
     root = root.resolve()
-    legacy_text = str(legacy_root.resolve())
+    # The legacy workspace is a forbidden filesystem boundary until a future,
+    # separately authorized retirement task.  Build its marker lexically:
+    # Path.resolve(), exists(), stat(), globbing, or directory walking would
+    # themselves probe that root and violate the zero-contact contract.
+    legacy_text = os.path.abspath(os.path.expanduser(os.fspath(legacy_root)))
     legacy_name = legacy_root.name
     legacy_markers = (
         legacy_text,
@@ -119,7 +131,7 @@ def scan(root: Path, legacy_root: Path) -> list[Finding]:
             continue
 
         if path.is_symlink():
-            target = path.resolve(strict=False)
+            target = _lexical_symlink_target(path)
             if not _is_within(target, root):
                 findings.append(
                     Finding("EXTERNAL_RUNTIME_SYMLINK", relative, f"target={target}")

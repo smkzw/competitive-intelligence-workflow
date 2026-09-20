@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "case_id": "historical-cutoff-unknown-first-disclosure",
+  "materialized_cutoff": "2026-08-09T23:59:59.999999+08:00",
+  "first_disclosed_at": null,
+  "acquired_at": "2026-08-11T14:00:00+08:00",
+  "assessment": "blocked_unknown_disclosure",
+  "can_enter_snapshot": false,
+  "refresh_candidate": false,
+  "recovery_required": true,
+  "invariants": [
+    "首次披露时间未知的关键证据不得进入历史快照",
+    "未知披露时间不得被获取时间或默认值填充",
+    "关键证据阻断时不生成报告草稿"
+  ]
+}

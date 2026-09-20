@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/reports/c-design-observation.schema.json",
+  "title": "C 类设计观察事实",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "row_id",
+    "source_row_id",
+    "observation_id",
+    "product_id",
+    "trial_id",
+    "cohort_id",
+    "group_id",
+    "field_family",
+    "field",
+    "source_field_name",
+    "source_field_definition",
+    "source_text",
+    "source_version_id",
+    "source_locator",
+    "source_role",
+    "disclosure_maturity",
+    "review_state",
+    "disclosure_state",
+    "conflict_disposition",
+    "compatibility_rule"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "row_id": {"type": "string", "minLength": 1},
+    "source_row_id": {"type": "string", "minLength": 1},
+    "observation_id": {"type": "string", "minLength": 1},
+    "product_id": {"type": "string", "minLength": 1},
+    "trial_id": {"type": "string", "minLength": 1},
+    "cohort_id": {"type": "string", "minLength": 1},
+    "group_id": {"type": "string", "minLength": 1},
+    "field_family": {
+      "enum": [
+        "trial_identity",
+        "population",
+        "grouping",
+        "intervention",
+        "dose_schedule",
+        "endpoint",
+        "timepoint",
+        "sample_size",
+        "operational",
+        "statistical"
+      ]
+    },
+    "field": {"type": "string", "minLength": 1},
+    "endpoint_key": {"type": ["string", "null"], "minLength": 1},
+    "source_field_name": {"type": "string", "minLength": 1},
+    "source_field_definition": {"type": "string", "minLength": 1},
+    "source_text": {"type": "string", "minLength": 1},
+    "scale": {"type": ["string", "null"], "minLength": 1},
+    "scale_version": {"type": ["string", "null"], "minLength": 1},
+    "operator": {"type": ["string", "null"], "minLength": 1},
+    "threshold_value": {"type": ["string", "null"], "minLength": 1},
+    "threshold_unit": {"type": ["string", "null"], "minLength": 1},
+    "assessment_timepoint": {"type": ["string", "null"], "minLength": 1},
+    "stage": {"type": ["string", "null"], "minLength": 1},
+    "development_role": {"type": ["string", "null"], "minLength": 1},
+    "randomization": {"type": ["string", "null"], "minLength": 1},
+    "blinding": {"type": ["string", "null"], "minLength": 1},
+    "source_version_id": {"type": "string", "minLength": 1},
+    "source_locator": {"$ref": "#/$defs/evidence_locator"},
+    "source_role": {
+      "enum": [
+        "clinical_trial_registry",
+        "regulatory_material",
+        "primary_trial_report",
+        "protocol_sap",
+        "conference_disclosure",
+        "company_disclosure",
+        "designated_industry_source"
+      ]
+    },
+    "disclosure_maturity": {
+      "enum": [
+        "attributable_numeric_disclosure",
+        "conference_complete_numerics",
+        "registry_result_or_primary_report",
+        "final_regulatory_conclusion"
+      ]
+    },
+    "review_state": {"enum": ["candidate", "accepted", "rejected", "superseded"]},
+    "disclosure_state": {
+      "enum": [
+        "reported_value",
+        "reported_zero",
+        "not_reported",
+        "below_reporting_threshold",
+        "not_publicly_disclosed",
+        "not_applicable",
+        "conflicting",
+        "unresolved_due_to_route"
+      ]
+    },
+    "conflict_disposition": {
+      "enum": ["resolved_selected_accepted_fact", "open_conflict_preserved"]
+    },
+    "reported_zero_text": {"type": ["string", "null"], "minLength": 1},
+    "route_receipt_id": {"type": ["string", "null"], "minLength": 1},
+    "applicability_predicate_id": {"type": ["string", "null"], "minLength": 1},
+    "compatibility_rule": {"type": "string", "minLength": 1},
+    "difference_labels_zh": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "evidence_locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_role"],
+      "properties": {
+        "document_role": {"type": "string", "minLength": 1},
+        "field_path": {"type": ["string", "null"], "minLength": 1},
+        "heading": {"type": ["string", "null"], "minLength": 1},
+        "page": {"type": ["integer", "null"], "minimum": 1},
+        "table": {"type": ["string", "null"], "minLength": 1},
+        "row": {"type": ["string", "null"], "minLength": 1},
+        "column": {"type": ["string", "null"], "minLength": 1},
+        "paragraph": {"type": ["string", "null"], "minLength": 1},
+        "url": {"type": ["string", "null"], "minLength": 1}
+      },
+      "anyOf": [
+        {"required": ["field_path"], "properties": {"field_path": {"type": "string"}}},
+        {"required": ["heading"], "properties": {"heading": {"type": "string"}}},
+        {"required": ["page"], "properties": {"page": {"type": "integer"}}},
+        {"required": ["table"], "properties": {"table": {"type": "string"}}},
+        {"required": ["row"], "properties": {"row": {"type": "string"}}},
+        {"required": ["column"], "properties": {"column": {"type": "string"}}},
+        {"required": ["paragraph"], "properties": {"paragraph": {"type": "string"}}},
+        {"required": ["url"], "properties": {"url": {"type": "string"}}}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"disclosure_state": {"const": "not_applicable"}}},
+      "then": {
+        "required": ["applicability_predicate_id"],
+        "properties": {
+          "applicability_predicate_id": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"disclosure_state": {"const": "reported_zero"}}},
+      "then": {
+        "required": ["reported_zero_text"],
+        "properties": {
+          "reported_zero_text": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["scale_version"],
+        "properties": {"scale_version": {"type": "string"}}
+      },
+      "then": {
+        "required": ["scale"],
+        "properties": {"scale": {"type": "string", "minLength": 1}}
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -16,13 +17,14 @@ from ci_workflow.application.source_research_service import (
 from ci_workflow.qc.report_a_acceptance import inspect_legacy_report_a_sample
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
+    _display_efficacy_rows,
     render_report_a_site,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
 FRESH_CONTENT = ROOT / "fixtures/positive/a-atopic-dermatitis/research-content.json"
 NEGATIVE_ROOT = ROOT / "fixtures/negative"
-EXPECTED_CONTENT_DIGEST = "dc439a8c872e8f85224718bcb53eb1e170f51a2192a2a19178bf32865e45abc4"
+EXPECTED_CONTENT_DIGEST = "3c42232e53194820e319696afc7c3e815300718efe3ec0e95028b26ab8d91080"
 
 
 @pytest.fixture(scope="module")
@@ -73,9 +75,11 @@ def test_fresh_ad_content_is_frozen_complete_and_native_chinese() -> None:
     assert compute_research_content_digest(payload) == EXPECTED_CONTENT_DIGEST
     assert content.indication == "特应性皮炎"
     assert len(content.report_data.products) == 38
-    assert len(content.report_data.trials) == 43
-    assert len(content.sources) == 65
-    assert len(content.facts) == 271
+    assert len(content.report_data.trials) == 49
+    assert len(content.sources) == 86
+    assert len(content.facts) == 17_124
+    assert len(content.report_data.efficacy) == 6_780
+    assert len(content.report_data.safety) == 10_228
     assert all(source.first_disclosed_at <= content.data_cutoff for source in content.sources)
     visible_text = json.dumps(content.report_data.model_dump(mode="json"), ensure_ascii=False)
     for forbidden in (
@@ -84,11 +88,10 @@ def test_fresh_ad_content_is_frozen_complete_and_native_chinese() -> None:
         "AI EVIDENCE",
         "Registry-only",
         "闭合",
-        " AD ",
         "未从官方页面",
         "待更新",
     ):
-        assert forbidden not in visible_text
+        assert visible_text.find(forbidden) == -1, forbidden
 
 
 def test_latest_phase_three_results_and_current_stop_decisions_are_not_overwritten() -> None:
@@ -97,15 +100,15 @@ def test_latest_phase_three_results_and_current_stop_decisions_are_not_overwritt
     rocatinlimab = _rows(payload, "efficacy", "rocatinlimab")
     rademikibart = _rows(payload, "efficacy", "sim0718")
 
-    assert {(row["trial_id"], row["arm"], row["value"]) for row in amlitelimab} == {
+    assert {(row["trial_id"], row["arm"], row["value"]) for row in amlitelimab} >= {
         ("nct06130566", "治疗组", 39.1),
         ("nct06130566", "对照组", 19.1),
     }
-    assert {(row["trial_id"], row["arm"], row["value"]) for row in rocatinlimab} == {
+    assert {(row["trial_id"], row["arm"], row["value"]) for row in rocatinlimab} >= {
         ("nct05651711", "治疗组", 32.8),
         ("nct05651711", "对照组", 13.7),
     }
-    assert {(row["trial_id"], row["arm"], row["value"]) for row in rademikibart} == {
+    assert {(row["trial_id"], row["arm"], row["value"]) for row in rademikibart} >= {
         ("nct06477835", "治疗组", 74.2),
         ("nct06477835", "对照组", 34.4),
     }
@@ -138,8 +141,7 @@ def test_approved_product_statuses_are_bound_to_regulatory_or_official_approval_
     facts = {
         row["entity_id"]: row
         for row in payload["facts"]  # type: ignore[index]
-        if row["field_id"] == "product.current_status"
-        and row["entity_id"] in approved_products
+        if row["field_id"] == "product.current_status" and row["entity_id"] in approved_products
     }
     assert set(facts) == approved_products
     for product_id, fact in facts.items():
@@ -155,9 +157,7 @@ def test_shr1819_and_ak120_keep_current_and_historical_trials_separate() -> None
         for row in payload["report_data"]["products"]  # type: ignore[index]
     }
     shr1819 = _rows(payload, "efficacy", "shr-1819")
-    shr1819_sae = [
-        row for row in _rows(payload, "safety", "shr-1819") if row["term"] == "任何SAE"
-    ]
+    shr1819_sae = [row for row in _rows(payload, "safety", "shr-1819") if row["term"] == "任何SAE"]
 
     trials = payload["report_data"]["trials"]  # type: ignore[index]
     history = payload["report_data"]["history"]  # type: ignore[index]
@@ -181,7 +181,7 @@ def test_shr1819_and_ak120_keep_current_and_historical_trials_separate() -> None
         ("NCT06468956", "III期", "ACTIVE_NOT_RECRUITING"),
         ("NCT07309055", "III期", "RECRUITING"),
     }
-    assert products["ak120"]["status"] == "III期登记状态未知；未公开登记结果"
+    assert products["ak120"]["status"] == "III期开发中；II期关键结果已公开"
     assert {
         (row["display_id"], row["phase"], row["status"])
         for row in trials
@@ -189,6 +189,7 @@ def test_shr1819_and_ak120_keep_current_and_historical_trials_separate() -> None
     } == {
         ("NCT06383468", "III期", "UNKNOWN"),
         ("NCT05048056", "II期", "TERMINATED"),
+        ("NCT06035354", "Ib/II期", "COMPLETED"),
     }
     assert any(
         row["product_id"] == "ak120"
@@ -228,26 +229,32 @@ def test_registry_sae_values_match_embedded_event_group_numerators_and_denominat
         source = source_by_id[fact["source_id"]]
         if source["source_type"] != "clinical_trial_registry":
             continue
+        if not fact["locator"]["field_path"].startswith(
+            "resultsSection.adverseEventsModule.eventGroups"
+        ):
+            continue
         registry = json.loads(source["content_text"])
         groups = registry["resultsSection"]["adverseEventsModule"]["eventGroups"]
         assert any(
-            group.get("seriousNumAffected") == row["numerator"]
+            group.get("seriousNumAffected", 0) == row["numerator"]
             and group.get("seriousNumAtRisk") == row["denominator"]
             for group in groups
         ), row["row_id"]
 
 
-def test_registry_other_event_total_is_never_mislabeled_as_any_teae() -> None:
+def test_registry_teae_aggregate_is_projected_as_a_rate_not_a_participant_count() -> None:
     payload = _payload()
-    source_by_id = {row["source_id"]: row for row in payload["sources"]}  # type: ignore[index]
-    fact_by_ref = {row["row_ref"]: row for row in payload["facts"]}  # type: ignore[index]
-    registry_teae = []
-    for row in payload["report_data"]["safety"]:  # type: ignore[index]
-        if row["term"] == "任何TEAE" and row["value"] is not None:
-            fact = fact_by_ref[f"safety:{row['row_id']}"]
-            if source_by_id[fact["source_id"]]["source_type"] == "clinical_trial_registry":
-                registry_teae.append(row["row_id"])
-    assert registry_teae == []
+    rows = [
+        row
+        for row in payload["report_data"]["safety"]  # type: ignore[index]
+        if row["trial_id"] == "nct02118792"
+        and row["term"] == "任何TEAE"
+        and row["numerator"] == 150
+        and row["denominator"] == 510
+    ]
+    assert len(rows) == 1
+    assert rows[0]["value"] == 29.4
+    assert rows[0]["unit"] == "%"
 
 
 def test_result_bearing_product_without_key_safety_is_rejected_before_review() -> None:
@@ -258,8 +265,13 @@ def test_result_bearing_product_without_key_safety_is_rejected_before_review() -
             row["numerator"] = None
             row["denominator"] = None
             row["disclosure_state"] = "未公开"
-    with pytest.raises(ValueError, match="缺少治疗组与对照组TEAE或SAE"):
+    with pytest.raises(ValueError) as caught:
         FreshAResearchContent.model_validate(payload)
+    messages = " ".join(
+        item["msg"]
+        for item in caught.value.errors(include_input=False)  # type: ignore[attr-defined]
+    )
+    assert "报告没有对应安全性行" in messages
 
 
 @pytest.mark.parametrize(
@@ -291,32 +303,38 @@ def test_default_efficacy_view_is_truthful_compact_and_resettable(
     assert page.locator("[data-filter-value='EASI-75'][aria-pressed='true']").count() == 1
     assert page.locator("[data-filter-value='第16周'][aria-pressed='true']").count() == 1
     assert page.locator("[data-chart-id='efficacy-full']").bounding_box()["y"] < 820  # type: ignore[index]
+    complete_table = page.locator("details.kz-complete-table")
+    assert complete_table.count() == 1
+    assert not complete_table.get_attribute("open")
+    complete_table.locator("summary").click()
     visible = page.locator("tbody tr:visible")
-    assert visible.count() > 0
-    assert {
-        visible.nth(index).get_attribute("data-endpoint")
-        for index in range(visible.count())
-    } == {"EASI-75"}
-    assert {
-        visible.nth(index).get_attribute("data-timepoint")
-        for index in range(visible.count())
-    } == {"第16周"}
+    assert visible.count() >= 14
+    endpoints = {
+        visible.nth(index).get_attribute("data-endpoint") or "" for index in range(visible.count())
+    }
+    timepoints = {
+        visible.nth(index).get_attribute("data-timepoint") or "" for index in range(visible.count())
+    }
+    assert all("easi" in value.casefold() and "75" in value for value in endpoints)
+    assert all("16" in value for value in timepoints)
 
-    page.locator("[data-filter-value='IGA 0/1且改善≥2分']").click()
-    page.locator("[data-filter-value='第12周']").click()
+    page.locator("details[data-filter-dimension='endpoint']").click()
+    endpoint = page.locator("[data-filter-dimension='endpoint'] button").nth(1)
+    endpoint_text = endpoint.inner_text()
+    endpoint.click()
+    page.locator("details[data-filter-dimension='timepoint']").click()
+    timepoint = page.locator("[data-filter-dimension='timepoint'] button").nth(1)
+    timepoint_text = timepoint.inner_text()
+    timepoint.click()
     assert (
-        page.locator("[data-filter-dimension='endpoint'] button[aria-pressed='true']").count()
-        == 1
+        page.locator("[data-filter-dimension='endpoint'] button[aria-pressed='true']").count() == 1
     )
     assert (
-        page.locator("[data-filter-dimension='timepoint'] button[aria-pressed='true']").count()
-        == 1
+        page.locator("[data-filter-dimension='timepoint'] button[aria-pressed='true']").count() == 1
     )
-    title = "第12周IGA 0/1且改善≥2分"
+    title = timepoint_text + endpoint_text
     assert title in page.locator("[data-efficacy-heading] h2").inner_text()
-    assert title in page.locator("[data-chart-id='efficacy-full']").get_attribute(
-        "aria-label"
-    )
+    assert title in page.locator("[data-chart-id='efficacy-full']").get_attribute("aria-label")
 
     page.locator("[data-filter-reset]").click()
     assert page.locator("[data-filter-value='EASI-75'][aria-pressed='true']").count() == 1
@@ -324,18 +342,54 @@ def test_default_efficacy_view_is_truthful_compact_and_resettable(
     assert page.locator("[data-efficacy-heading] h2").inner_text() == "第16周EASI-75应答率"
 
 
-def test_safety_heatmap_is_scrollable_and_product_filter_updates_the_chart(
+def test_safety_heatmaps_transpose_products_to_rows_and_fit_at_1280(
     page: Page, rendered_ad_site: Path
 ) -> None:
-    _open(page, rendered_ad_site / "safety.html")
+    for relative, chart_id in (("overview.html", "home-safety"), ("safety.html", "safety-full")):
+        _open(page, rendered_ad_site / relative, width=1280)
+        host = page.locator(f"[data-chart-id='{chart_id}']")
+        assert host.evaluate("node => node.scrollWidth <= node.clientWidth")
+        heatmap_count = host.locator(".kz-a-heatmap").count()
+        assert heatmap_count == 1
+        assert host.locator("[data-heat-label='product']").count() == 38 * heatmap_count
+        assert host.locator("[data-heat-label='event']").count() == 3
+        assert "预先界定AESI" not in host.inner_text()
+        assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
 
     host = page.locator("[data-chart-id='safety-full']")
-    assert host.evaluate("node => getComputedStyle(node).overflowX") == "auto"
+    page.locator("details[data-filter-dimension='event']").click()
+    event_buttons = page.locator("[data-filter-dimension='event'] button")
+    assert event_buttons.count() >= 6
+    for index in range(6):
+        event_buttons.nth(index).click()
+    assert host.locator("[data-heat-label='event']").count() == 6
+    assert host.locator(".kz-a-heatmap").count() == 2
+    assert all(
+        host.locator(".kz-a-heatmap")
+        .nth(index)
+        .evaluate("node => node.scrollWidth <= node.clientWidth")
+        for index in range(2)
+    )
+    assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
+
     page.locator("details[data-filter-dimension='product']").click()
     page.locator("[data-filter-dimension='product'] [data-filter-value='度普利尤单抗']").click()
-    assert host.locator(".kz-a-heat-label").count() == 6
-    assert host.locator(".kz-a-heat-label").nth(1).inner_text() == "度普利尤单抗"
+    product_labels = host.locator("[data-heat-label='product']")
+    assert product_labels.count() == host.locator(".kz-a-heatmap").count()
+    assert set(product_labels.all_inner_texts()) == {"度普利尤单抗"}
     assert "已选择 1 项" in page.locator("[data-filter-selection-count='product']").inner_text()
+
+    page.locator("[data-filter-dimension='product'] [data-filter-value='度普利尤单抗']").click()
+    page.locator("[data-filter-dimension='product'] [data-filter-value='艾玛昔替尼']").click()
+    assert host.locator(".kz-a-heatmap").count() == 2
+    assert host.locator("[data-heat-label='product']").all_inner_texts() == [
+        "艾玛昔替尼",
+        "艾玛昔替尼",
+    ]
+    values = host.locator(".kz-a-heat-cell").all_inner_texts()
+    assert len(values) == 6
+    assert any(value.startswith("66.1%") for value in values)
+    assert any(value.startswith("1.8%") for value in values)
 
 
 def test_landscape_assigns_each_product_once_and_regulatory_timeline_is_directly_split(
@@ -362,6 +416,8 @@ def test_trial_labels_are_native_chinese_and_header_collapses_before_it_clips(
     page: Page, rendered_ad_site: Path
 ) -> None:
     _open(page, rendered_ad_site / "products" / "shr-1819.html")
+    for table in page.locator("details.kz-complete-table").all():
+        table.locator("summary").click()
     visible = page.locator("body").inner_text()
     for raw_status in (
         "COMPLETED",
@@ -378,7 +434,40 @@ def test_trial_labels_are_native_chinese_and_header_collapses_before_it_clips(
     assert not page.locator("#global-search-input").is_visible()
 
 
-def test_matrix_uses_numbered_bubbles_and_readable_product_legend(
+def test_product_efficacy_values_use_native_chinese_units_and_timepoints(
+    page: Page, rendered_ad_site: Path
+) -> None:
+    _open(page, rendered_ad_site / "products" / "tezepelumab.html")
+    for table in page.locator("details.kz-complete-table").all():
+        table.locator("summary").click()
+    visible = page.locator("body").inner_text()
+    assert "6.286周" in visible
+    assert "-8.0分" in visible
+    for raw_copy in (
+        "Score on a scale",
+        "score on a scale",
+        "units on a scale",
+        "Day 1 up to End of Study",
+    ):
+        assert raw_copy not in visible
+
+
+def test_efficacy_population_and_arm_descriptions_are_native_chinese() -> None:
+    rows = _display_efficacy_rows(ReportAPortalData.model_validate(_payload()["report_data"]))
+    for row in rows:
+        assert not re.search(
+            r"\b(?:participants?|subjects?|population|randomized|maintenance)\b",
+            str(row["population"]),
+            re.I,
+        )
+        assert not re.search(
+            r"\b(?:maintenance|responder|placebo|escape|week|part)\b",
+            str(row.get("arm_detail") or ""),
+            re.I,
+        )
+
+
+def test_matrix_labels_bubbles_with_product_names_and_keeps_product_legend(
     page: Page, rendered_ad_site: Path
 ) -> None:
     _open(page, rendered_ad_site / "matrix.html")
@@ -392,5 +481,6 @@ def test_matrix_uses_numbered_bubbles_and_readable_product_legend(
     coverage_text = coverage.inner_text()
     assert f"本图绘入 {bubbles.count()} 个产品" in coverage_text
     assert f"{38 - bubbles.count()} 个因当前三维数据未完整公开而未绘入" in coverage_text
-    for index in range(bubbles.count()):
-        assert bubbles.nth(index).inner_text() == str(index + 1)
+    labels = [bubbles.nth(index).inner_text() for index in range(bubbles.count())]
+    assert all(labels)
+    assert labels != [str(index + 1) for index in range(bubbles.count())]

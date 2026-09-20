@@ -1,0 +1,25 @@
+{
+  "case_id": "optional-adapter-recovery",
+  "source_fixture": "fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "可选适配器不属于首版默认路径；合同选择时验证缓存丢失恢复，未选择时只记录明确不适用原因。",
+  "owner_stage": "E1",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "selected-adapter-cache-loss",
+      "description_zh": "项目合同明确选择可选适配器后删除其私有缓存。"
+    },
+    {
+      "id": "event-checkpoint-recovery",
+      "description_zh": "仅凭规范事件和应用检查点恢复，不改变核心事实或报告真源。"
+    },
+    {
+      "id": "unselected-not-applicable",
+      "description_zh": "项目合同未选择时必须有带合同摘要的 not_applicable 回执。"
+    }
+  ]
+}

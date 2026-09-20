@@ -1,0 +1,19 @@
+Task 6.4 回归记录（2026-08-29）
+
+相关回归命令：
+uv run pytest -q tests/reports tests/unit tests/contract tests/integration/sources/test_pubmed_cross_reference.py tests/integration/sources/test_ctgov.py tests/integration/test_ctgov_result_coverage_audit.py
+
+最终结果：1056 passed in 49.01s。
+
+静态检查：
+- Ruff：All checks passed。
+- strict mypy：pages.py 与两份 Task 6.4 测试无问题。
+- git diff --check：通过。
+
+独立挑战：
+- pi/cms-router/minimax-m3：三轮同 session 审评；实际运行目标测试和定向反例，最终确认当时两项 P1 已关闭。
+- pi/cursor/cursor-grok-4.6:medium：三轮同 session 审评；实际运行目标测试和真实医学经理边界反例，从不通过推进到有条件通过。
+- codebuddy/codebuddy-cli/hy3-x:max：三轮同 session 静态反证；其终端权限持续被拒，因此未把静态审查写成机械通过。
+- 两条实际运行路线共同指出安全性分母不应无声作为治疗组 N；Codex 最终移除该回退并增加明确反例，目标 29 项及相关 1056 项回归通过。
+
+视觉边界：本任务没有 HTML、PDF、PPT 或浏览器渲染物，未声称完成视觉验收。倒序轴、气泡面积、待核实占位、悬浮提示和中文视觉层级留待 Task 6.9/6.10 的真实渲染闭环。

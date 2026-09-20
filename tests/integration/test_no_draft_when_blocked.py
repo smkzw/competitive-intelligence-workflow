@@ -362,6 +362,8 @@ def omission_review(
     return GapOmissionReview(
         gap_id=gap_id,
         reviewer_role_id=reviewer_role_id,
+        producer_context_digest="a" * 64,
+        reviewer_context_digest="b" * 64,
         conclusion=conclusion,
         review_notes_zh=(
             "已按缺口逐项复核，未发现可归因遗漏。"
@@ -1652,7 +1654,7 @@ def test_empty_evidence_rejects_mismatch_or_nonempty(
 
     # 适格集合非空 → 拒绝（A 适格产品；B/C 适格试验）
     if report_kind is ReportKind.A:
-        with pytest.raises(ValidationError):
+        with pytest.raises(ValueError):
             EmptyUniverseEvidence.model_validate(
                 {
                     **empty_evidence_for(
@@ -1928,80 +1930,18 @@ def real_blocked_audit(
     )
 
 
-def test_omission_conclusion_must_match_gap_type(tmp_path: Path) -> None:
-    """遗漏复核结论与缺口类型相容：科学只接受无实质遗漏；技术必须技术未解决。"""
-    report_kind = ReportKind.A
-    spec = spec_yaml("A")
-    snapshot = snapshot_for(report_kind)
-    unit_id = applicable_critical_units(spec, snapshot)[0]
-    gate_result = real_blocked_result_for(spec, snapshot, unit_id)
-    blocked_pairs = [
-        (r.unit_id, r.object_id)
-        for r in gate_result.unit_results
-        if r.outcome is GateUnitOutcome.BLOCKED
-    ]
-    failed = tuple(
-        failed_gate_unit(spec, u, o, current_state="not_reported")
-        for u, o in blocked_pairs
-    )
-    workspace_root = prepare_workspace(tmp_path)
-
-    # 科学缺口 + TECHNICAL_ACCESS_UNRESOLVED 复核结论 → 拒绝
-    record_wrong = DoubleExhaustionRecord(
-        project_id="project_000000000000000000000001",
-        report_kind=report_kind,
-        gaps=tuple(
+def test_omission_conclusion_must_match_gap_type() -> None:
+    """不相容的遗漏结论在终态缺口模型入口即失败，不等到写包阶段。"""
+    for conclusion in (
+        OmissionReviewConclusion.TECHNICAL_ACCESS_UNRESOLVED,
+        OmissionReviewConclusion.MATERIAL_OMISSION_FOUND,
+    ):
+        with pytest.raises(ValueError):
             gap_exhaustion(
-                gap_id=f"gap-{i}",
-                gate_unit_id=u,
-                object_id=o,
-                object_type=next(x for x in spec.units if x.unit_id == u).object_type.value,
+                gap_id=f"gap-invalid-{conclusion.value}",
                 current_state="not_reported",
-                omission_conclusion=OmissionReviewConclusion.TECHNICAL_ACCESS_UNRESOLVED,
+                omission_conclusion=conclusion,
             )
-            for i, (u, o) in enumerate(blocked_pairs, start=1)
-        ),
-        created_at=now(),
-    )
-    with pytest.raises(ValueError):
-        public_write_blocker_package(
-            report_kind=report_kind,
-            spec=spec,
-            snapshot=snapshot,
-            gate_result=gate_result,
-            failed_units=failed,
-            record=record_wrong,
-            workspace_root=workspace_root,
-        )
-
-    # MATERIAL_OMISSION_FOUND → 一律拒绝（回恢复）
-    record_material = DoubleExhaustionRecord(
-        project_id="project_000000000000000000000001",
-        report_kind=report_kind,
-        gaps=tuple(
-            gap_exhaustion(
-                gap_id=f"gap-{i}",
-                gate_unit_id=u,
-                object_id=o,
-                object_type=next(x for x in spec.units if x.unit_id == u).object_type.value,
-                current_state="not_reported",
-                omission_conclusion=OmissionReviewConclusion.MATERIAL_OMISSION_FOUND,
-            )
-            for i, (u, o) in enumerate(blocked_pairs, start=1)
-        ),
-        created_at=now(),
-    )
-    with pytest.raises(ValueError):
-        public_write_blocker_package(
-            report_kind=report_kind,
-            spec=spec,
-            snapshot=snapshot,
-            gate_result=gate_result,
-            failed_units=failed,
-            record=record_material,
-            workspace_root=workspace_root,
-        )
-    assert (workspace_root / "blockers").exists() is False
 
 
 def test_mixed_gaps_via_full_production_path(tmp_path: Path) -> None:
@@ -2452,6 +2392,64 @@ def test_blocker_directory_path_is_file_fails_typed(tmp_path: Path) -> None:
             failed_units=failed,
             record=_make_record(report_kind, failed),
             workspace_root=workspace_root,
+        )
+
+
+def test_blocker_directory_and_files_reject_symlinks(tmp_path: Path) -> None:
+    """阻断包不得沿符号链接写出工作区或在恢复时信任链接文件。"""
+    from ci_workflow.gates.blocker_audit import (
+        BlockerPackageIntegrityError,
+        validate_existing_blocker_package,
+    )
+
+    report_kind = ReportKind.A
+    spec = spec_yaml("A")
+    snapshot = snapshot_for(report_kind)
+    unit_id = applicable_critical_units(spec, snapshot)[0]
+    gate_result = real_blocked_result_for(spec, snapshot, unit_id)
+    failed = tuple(
+        failed_gate_unit(spec, result.unit_id, result.object_id, current_state="not_reported")
+        for result in gate_result.unit_results
+        if result.outcome is GateUnitOutcome.BLOCKED
+    )
+    workspace_root = prepare_workspace(tmp_path)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    blocker_dir = workspace_root / "blockers" / "A" / "v1"
+    blocker_dir.parent.mkdir(parents=True)
+    blocker_dir.symlink_to(outside, target_is_directory=True)
+    with pytest.raises(BlockerPackageIntegrityError):
+        public_write_blocker_package(
+            report_kind=report_kind,
+            spec=spec,
+            snapshot=snapshot,
+            gate_result=gate_result,
+            failed_units=failed,
+            record=_make_record(report_kind, failed),
+            workspace_root=workspace_root,
+        )
+
+    blocker_dir.unlink()
+    json_path, _ = public_write_blocker_package(
+        report_kind=report_kind,
+        spec=spec,
+        snapshot=snapshot,
+        gate_result=gate_result,
+        failed_units=failed,
+        record=_make_record(report_kind, failed),
+        workspace_root=workspace_root,
+    )
+    json_bytes = json_path.read_bytes()
+    json_path.unlink()
+    outside_json = outside / "audit.json"
+    outside_json.write_bytes(json_bytes)
+    json_path.symlink_to(outside_json)
+    with pytest.raises(BlockerPackageIntegrityError):
+        validate_existing_blocker_package(
+            blocker_dir,
+            project_id="project-test",
+            report_kind=report_kind,
+            report_version="v1",
         )
 
 

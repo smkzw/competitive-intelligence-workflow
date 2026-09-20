@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/ci-workflow/yaozh-session-observation.schema.json",
+  "title": "药智宿主会话观察",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "project_id", "answer_digest", "observed_at", "host",
+    "observer_id", "origin", "technical_state", "page_marker_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "project_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:-]{1,160}$"},
+    "answer_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "host": {"enum": ["local", "codex", "hermes", "omp"]},
+    "observer_id": {"type": "string", "minLength": 1},
+    "origin": {"const": "https://vip.yaozh.com"},
+    "technical_state": {
+      "enum": [
+        "ready", "session_expired", "captcha_required", "permission_denied",
+        "tool_unavailable", "parser_error"
+      ]
+    },
+    "page_marker_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

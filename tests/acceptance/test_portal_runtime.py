@@ -319,7 +319,7 @@ def test_site_route_enumeration_and_full_acceptance(tmp_path: Path) -> None:
 
 
 def _reachability_contract() -> SitemapContract:
-    """可达性测试合同：A 报告 + 1 产品（12 个静态页 + 1 个详情页）。"""
+    """可达性测试合同：A 报告 + 1 产品（11 个静态页 + 1 个详情页）。"""
     return derive_sitemap_contract(
         PageRegistry.load(),
         ReportKind.A,

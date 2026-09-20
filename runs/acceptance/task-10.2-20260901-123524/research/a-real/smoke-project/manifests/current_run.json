@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_0733f50ee6e26e2832ec5bd0",
+  "project_id": "project_19b6c7572a2d86ddb9bb884b",
+  "contract_version": 1,
+  "started_at": "2026-09-01T04:52:32.898392+00:00",
+  "finished_at": "2026-09-01T04:52:48.652683+00:00",
+  "resume": false,
+  "case_id": null,
+  "case_digest": null,
+  "input_hashes": {
+    "evidence/library/a-research-package.json": "4ff4cf0485ad8ff5029cfbff7920b605b5ab782b3e054bcdcebdc27366f0dde9",
+    "state/derived/report-a-data.json": "cfb3bd1a3711eb75bc66b91b77888b82b6fb2f4f259e31d2fa41b0271db85d5f"
+  },
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "universe": "completed",
+    "route": "completed",
+    "ingest": "completed",
+    "extract": "completed",
+    "resolve": "completed",
+    "gate:A": "completed",
+    "snapshot:A": "completed",
+    "scientific_qc:A": "completed",
+    "analyze:A": "completed",
+    "format:A": "completed"
+  },
+  "reused": [],
+  "outputs": [
+    {
+      "relative_path": "reports/A/v1/html.manifest.json",
+      "sha256": "764a63e35fc0a326379f54d0f92b47962a127b67c1ee5b326cc2d0ba29b55d2a",
+      "byte_size": 13486,
+      "modified_at": "2026-09-01T04:52:48.639622+00:00",
+      "mtime_ns": 1788238368639621773,
+      "media_type": "application/json"
+    }
+  ],
+  "reused_artifacts": [],
+  "event_count": 12,
+  "event_stream_digest": "78f1b50a0b4f6871a06f9edbb4ec5a60a284c7efeaa88c868aa9cd1205842475",
+  "checkpoint_id": "checkpoint_8911cc7646612279b29e38b3",
+  "outcome": "completed",
+  "manifest_digest": "1faaf81b277217fd50dd316f7b0bc4715d81f10b48b072b03fe5830668d4ce2f"
+}

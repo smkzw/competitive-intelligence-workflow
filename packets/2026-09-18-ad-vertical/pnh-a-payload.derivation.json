@@ -1,0 +1,195 @@
+{
+ "pages": [
+  {
+   "page": 1,
+   "sha256": "0c80647d42157dc8803fe9bec02a7cf4e18d1faead4db2e0ada0b8b531918365"
+  },
+  {
+   "page": 2,
+   "sha256": "891efdf31a8d8b9176751ba533529d9aa785287210f8e98704598dc34d3113a7"
+  }
+ ],
+ "built_at": "2026-09-18T21:53:57.034781+00:00",
+ "skipped_trials_no_sample_size": [],
+ "records_without_drug_intervention": [
+  "NCT07577921",
+  "NCT00419406",
+  "NCT07016087",
+  "NCT03397979",
+  "NCT05214326",
+  "NCT03093597",
+  "NCT01254240",
+  "NCT01202149",
+  "NCT00277433",
+  "NCT03610386",
+  "NCT05451316",
+  "NCT02401178",
+  "NCT01714245",
+  "NCT05029895",
+  "NCT05471934"
+ ],
+ "combo_regimens": [
+  {
+   "nct_id": "NCT07284173",
+   "canonical_drugs": [
+    "pf-08049820",
+    "rabeprazole"
+   ]
+  },
+  {
+   "nct_id": "NCT05131477",
+   "canonical_drugs": [
+    "amlitelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT01945086",
+   "canonical_drugs": [
+    "ustekinumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05034822",
+   "canonical_drugs": [
+    "ruxolitinib-cream"
+   ]
+  },
+  {
+   "nct_id": "NCT02324972",
+   "canonical_drugs": [
+    "aqx-1125"
+   ]
+  },
+  {
+   "nct_id": "NCT03920852",
+   "canonical_drugs": [
+    "ruxolitinib-cream"
+   ]
+  },
+  {
+   "nct_id": "NCT03345914",
+   "canonical_drugs": [
+    "dupilumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04008784",
+   "canonical_drugs": [
+    "crisaborole",
+    "triamcinolone"
+   ]
+  },
+  {
+   "nct_id": "NCT00557284",
+   "canonical_drugs": [
+    "montelukast"
+   ]
+  },
+  {
+   "nct_id": "NCT03912259",
+   "canonical_drugs": [
+    "dupilumab",
+    "emollient"
+   ]
+  },
+  {
+   "nct_id": "NCT00404196",
+   "canonical_drugs": [
+    "calcipotriol and leo80122"
+   ]
+  },
+  {
+   "nct_id": "NCT01568489",
+   "canonical_drugs": [
+    "hl-009 liposomal gel"
+   ]
+  },
+  {
+   "nct_id": "NCT00460083",
+   "canonical_drugs": [
+    "elidel"
+   ]
+  },
+  {
+   "nct_id": "NCT06921759",
+   "canonical_drugs": [
+    "lebrikizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03585296",
+   "canonical_drugs": [
+    "ati-502"
+   ]
+  },
+  {
+   "nct_id": "NCT01053247",
+   "canonical_drugs": [
+    "0416",
+    "vehicle of 0416 test product"
+   ]
+  },
+  {
+   "nct_id": "NCT02148744",
+   "canonical_drugs": [
+    "xmab7195"
+   ]
+  },
+  {
+   "nct_id": "NCT04065633",
+   "canonical_drugs": [
+    "comm-fast",
+    "comm-fed",
+    "p3-fast",
+    "vari-fast"
+   ]
+  },
+  {
+   "nct_id": "NCT03018275",
+   "canonical_drugs": [
+    "roseomonas mucosa"
+   ]
+  },
+  {
+   "nct_id": "NCT02345928",
+   "canonical_drugs": [
+    "cnto 7160"
+   ]
+  },
+  {
+   "nct_id": "NCT03349060",
+   "canonical_drugs": [
+    "pf-04965842"
+   ]
+  },
+  {
+   "nct_id": "NCT05149313",
+   "canonical_drugs": [
+    "lebrikizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05375955",
+   "canonical_drugs": [
+    "pf-07038124 ointment 0.01%",
+    "pf-07038124 ointment 0.03%",
+    "pf-07038124 ointment 0.06%",
+    "vehicle ointment"
+   ]
+  },
+  {
+   "nct_id": "NCT05633355",
+   "canonical_drugs": [
+    "rocatinlimab"
+   ]
+  },
+  {
+   "nct_id": "NCT03706040",
+   "canonical_drugs": [
+    "risankizumab"
+   ]
+  }
+ ],
+ "alias_map_id": "ad-alias-map-v1",
+ "borderline_repositioning": []
+}

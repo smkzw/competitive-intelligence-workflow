@@ -1,0 +1,212 @@
+{
+  "schema_version": "8.7-contract-vectors-v1",
+  "evaluated_at": "2026-08-31T12:00:00Z",
+  "cases": [
+    {
+      "id": "positive-a-paused-after-design-lock",
+      "kind": "positive",
+      "description_zh": "A 报告在内容策略与设计锁定后暂停，可从逐页 SVG 恢复",
+      "job": {
+        "job_id": "job-a-001",
+        "project_id": "project-demo",
+        "report": "A",
+        "report_version": "a-v1",
+        "snapshot_id": "snapshot-a-001",
+        "snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "claim_snapshot_id": "claims-a-001",
+        "evidence_snapshot_id": "evidence-a-001",
+        "coverage_set_id": "coverage-a-001",
+        "contract_version": "8.7",
+        "state": "paused",
+        "next_stage": "page_svg",
+        "expires_at": "2026-08-31T13:00:00Z"
+      },
+      "receipts": [
+        {
+          "receipt_id": "receipt-a-001",
+          "job_id": "job-a-001",
+          "project_id": "project-demo",
+          "report": "A",
+          "snapshot_id": "snapshot-a-001",
+          "snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "stage_id": "initialize",
+          "stage_order": 1,
+          "attempt": 1,
+          "input_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+          "output_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "predecessor_receipt_id": null,
+          "status": "committed",
+          "committed_at": "2026-08-31T11:00:00Z"
+        },
+        {
+          "receipt_id": "receipt-a-002",
+          "job_id": "job-a-001",
+          "project_id": "project-demo",
+          "report": "A",
+          "snapshot_id": "snapshot-a-001",
+          "snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "stage_id": "content_design_lock",
+          "stage_order": 2,
+          "attempt": 1,
+          "input_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "output_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+          "predecessor_receipt_id": "receipt-a-001",
+          "status": "committed",
+          "committed_at": "2026-08-31T11:10:00Z"
+        }
+      ],
+      "expected": {"decision": "accept", "next_stage": "page_svg"}
+    },
+    {
+      "id": "positive-b-running-at-quality-check",
+      "kind": "positive",
+      "description_zh": "B 报告已完成前三阶段，下一阶段为质量检查",
+      "job": {
+        "job_id": "job-b-001",
+        "project_id": "project-demo",
+        "report": "B",
+        "report_version": "b-v1",
+        "snapshot_id": "snapshot-b-001",
+        "snapshot_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "claim_snapshot_id": "claims-b-001",
+        "evidence_snapshot_id": "evidence-b-001",
+        "coverage_set_id": "coverage-b-001",
+        "contract_version": "8.7",
+        "state": "snapshot_locked",
+        "next_stage": "quality_check",
+        "expires_at": "2026-08-31T13:00:00Z"
+      },
+      "receipts": [
+        {"receipt_id": "receipt-b-001", "job_id": "job-b-001", "project_id": "project-demo", "report": "B", "snapshot_id": "snapshot-b-001", "snapshot_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "stage_id": "initialize", "stage_order": 1, "attempt": 1, "input_digest": "1111111111111111111111111111111111111111111111111111111111111111", "output_digest": "2222222222222222222222222222222222222222222222222222222222222222", "predecessor_receipt_id": null, "status": "committed", "committed_at": "2026-08-31T11:00:00Z"},
+        {"receipt_id": "receipt-b-002", "job_id": "job-b-001", "project_id": "project-demo", "report": "B", "snapshot_id": "snapshot-b-001", "snapshot_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "stage_id": "content_design_lock", "stage_order": 2, "attempt": 1, "input_digest": "2222222222222222222222222222222222222222222222222222222222222222", "output_digest": "3333333333333333333333333333333333333333333333333333333333333333", "predecessor_receipt_id": "receipt-b-001", "status": "committed", "committed_at": "2026-08-31T11:10:00Z"},
+        {"receipt_id": "receipt-b-003", "job_id": "job-b-001", "project_id": "project-demo", "report": "B", "snapshot_id": "snapshot-b-001", "snapshot_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "stage_id": "page_svg", "stage_order": 3, "attempt": 1, "input_digest": "3333333333333333333333333333333333333333333333333333333333333333", "output_digest": "4444444444444444444444444444444444444444444444444444444444444444", "predecessor_receipt_id": "receipt-b-002", "status": "committed", "committed_at": "2026-08-31T11:20:00Z"}
+      ],
+      "expected": {"decision": "accept", "next_stage": "quality_check"}
+    },
+    {
+      "id": "positive-c-ready-for-independent-acceptance",
+      "kind": "positive",
+      "description_zh": "C 报告九个阶段全部提交，进入独立验收而非生成器自签",
+      "job": {
+        "job_id": "job-c-001",
+        "project_id": "project-demo",
+        "report": "C",
+        "report_version": "c-v1",
+        "snapshot_id": "snapshot-c-001",
+        "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "claim_snapshot_id": "claims-c-001",
+        "evidence_snapshot_id": "evidence-c-001",
+        "coverage_set_id": "coverage-c-001",
+        "contract_version": "8.7",
+        "state": "ready_for_acceptance",
+        "next_stage": null,
+        "expires_at": "2026-08-31T13:00:00Z"
+      },
+      "receipts": [
+        {"receipt_id": "receipt-c-001", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "initialize", "stage_order": 1, "attempt": 1, "input_digest": "1111111111111111111111111111111111111111111111111111111111111111", "output_digest": "2222222222222222222222222222222222222222222222222222222222222222", "predecessor_receipt_id": null, "status": "committed", "committed_at": "2026-08-31T11:00:00Z"},
+        {"receipt_id": "receipt-c-002", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "content_design_lock", "stage_order": 2, "attempt": 1, "input_digest": "2222222222222222222222222222222222222222222222222222222222222222", "output_digest": "3333333333333333333333333333333333333333333333333333333333333333", "predecessor_receipt_id": "receipt-c-001", "status": "committed", "committed_at": "2026-08-31T11:10:00Z"},
+        {"receipt_id": "receipt-c-003", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "page_svg", "stage_order": 3, "attempt": 1, "input_digest": "3333333333333333333333333333333333333333333333333333333333333333", "output_digest": "4444444444444444444444444444444444444444444444444444444444444444", "predecessor_receipt_id": "receipt-c-002", "status": "committed", "committed_at": "2026-08-31T11:20:00Z"},
+        {"receipt_id": "receipt-c-004", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "quality_check", "stage_order": 4, "attempt": 1, "input_digest": "4444444444444444444444444444444444444444444444444444444444444444", "output_digest": "5555555555555555555555555555555555555555555555555555555555555555", "predecessor_receipt_id": "receipt-c-003", "status": "committed", "committed_at": "2026-08-31T11:30:00Z"},
+        {"receipt_id": "receipt-c-005", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "speaker_notes", "stage_order": 5, "attempt": 1, "input_digest": "5555555555555555555555555555555555555555555555555555555555555555", "output_digest": "6666666666666666666666666666666666666666666666666666666666666666", "predecessor_receipt_id": "receipt-c-004", "status": "committed", "committed_at": "2026-08-31T11:40:00Z"},
+        {"receipt_id": "receipt-c-006", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "closeout", "stage_order": 6, "attempt": 1, "input_digest": "6666666666666666666666666666666666666666666666666666666666666666", "output_digest": "7777777777777777777777777777777777777777777777777777777777777777", "predecessor_receipt_id": "receipt-c-005", "status": "committed", "committed_at": "2026-08-31T11:50:00Z"},
+        {"receipt_id": "receipt-c-007", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "native_export", "stage_order": 7, "attempt": 1, "input_digest": "7777777777777777777777777777777777777777777777777777777777777777", "output_digest": "8888888888888888888888888888888888888888888888888888888888888888", "predecessor_receipt_id": "receipt-c-006", "status": "committed", "committed_at": "2026-08-31T12:00:00Z"},
+        {"receipt_id": "receipt-c-008", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "editability_check", "stage_order": 8, "attempt": 1, "input_digest": "8888888888888888888888888888888888888888888888888888888888888888", "output_digest": "9999999999999999999999999999999999999999999999999999999999999999", "predecessor_receipt_id": "receipt-c-007", "status": "committed", "committed_at": "2026-08-31T12:10:00Z"},
+        {"receipt_id": "receipt-c-009", "job_id": "job-c-001", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-001", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "visual_check", "stage_order": 9, "attempt": 1, "input_digest": "9999999999999999999999999999999999999999999999999999999999999999", "output_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "predecessor_receipt_id": "receipt-c-008", "status": "committed", "committed_at": "2026-08-31T12:20:00Z"}
+      ],
+      "expected": {"decision": "accept", "next_stage": null, "requires_independent_acceptance": true}
+    },
+    {
+      "id": "negative-expired-resume",
+      "kind": "negative",
+      "description_zh": "恢复租约已过期，不得产生新的阶段副作用",
+      "job": {
+        "job_id": "job-a-expired",
+        "project_id": "project-demo",
+        "report": "A",
+        "report_version": "a-v1",
+        "snapshot_id": "snapshot-a-expired",
+        "snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "claim_snapshot_id": "claims-a-expired",
+        "evidence_snapshot_id": "evidence-a-expired",
+        "coverage_set_id": "coverage-a-expired",
+        "contract_version": "8.7",
+        "state": "paused",
+        "next_stage": "page_svg",
+        "expires_at": "2026-08-30T13:00:00Z"
+      },
+      "receipts": [],
+      "expected": {"decision": "reject", "code": "RECEIPT_EXPIRED"}
+    },
+    {
+      "id": "negative-out-of-order-stage",
+      "kind": "negative",
+      "description_zh": "下一阶段跳过逐页 SVG，拒绝错序推进",
+      "job": {
+        "job_id": "job-b-order",
+        "project_id": "project-demo",
+        "report": "B",
+        "report_version": "b-v1",
+        "snapshot_id": "snapshot-b-order",
+        "snapshot_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "claim_snapshot_id": "claims-b-order",
+        "evidence_snapshot_id": "evidence-b-order",
+        "coverage_set_id": "coverage-b-order",
+        "contract_version": "8.7",
+        "state": "snapshot_locked",
+        "next_stage": "quality_check",
+        "expires_at": "2026-08-31T13:00:00Z"
+      },
+      "receipts": [
+        {"receipt_id": "receipt-b-order-001", "job_id": "job-b-order", "project_id": "project-demo", "report": "B", "snapshot_id": "snapshot-b-order", "snapshot_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "stage_id": "initialize", "stage_order": 1, "attempt": 1, "input_digest": "1111111111111111111111111111111111111111111111111111111111111111", "output_digest": "2222222222222222222222222222222222222222222222222222222222222222", "predecessor_receipt_id": null, "status": "committed", "committed_at": "2026-08-31T11:00:00Z"}
+      ],
+      "expected": {"decision": "reject", "code": "RECEIPT_OUT_OF_ORDER"}
+    },
+    {
+      "id": "negative-cross-report-contamination",
+      "kind": "negative",
+      "description_zh": "B 作业携带 C 报告快照，拒绝跨报告污染",
+      "job": {
+        "job_id": "job-b-cross-report",
+        "project_id": "project-demo",
+        "report": "B",
+        "report_version": "b-v1",
+        "snapshot_id": "snapshot-c-001",
+        "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "claim_snapshot_id": "claims-c-001",
+        "evidence_snapshot_id": "evidence-c-001",
+        "coverage_set_id": "coverage-c-001",
+        "contract_version": "8.7",
+        "state": "paused",
+        "next_stage": "page_svg",
+        "expires_at": "2026-08-31T13:00:00Z"
+      },
+      "receipts": [],
+      "expected": {"decision": "reject", "code": "REPORT_MISMATCH"}
+    },
+    {
+      "id": "negative-predecessor-digest-drift",
+      "kind": "negative",
+      "description_zh": "前置阶段产物摘要漂移，拒绝恢复",
+      "job": {
+        "job_id": "job-c-digest",
+        "project_id": "project-demo",
+        "report": "C",
+        "report_version": "c-v1",
+        "snapshot_id": "snapshot-c-digest",
+        "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "claim_snapshot_id": "claims-c-digest",
+        "evidence_snapshot_id": "evidence-c-digest",
+        "coverage_set_id": "coverage-c-digest",
+        "contract_version": "8.7",
+        "state": "failed",
+        "next_stage": "page_svg",
+        "expires_at": "2026-08-31T13:00:00Z"
+      },
+      "receipts": [
+        {"receipt_id": "receipt-c-digest-001", "job_id": "job-c-digest", "project_id": "project-demo", "report": "C", "snapshot_id": "snapshot-c-digest", "snapshot_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "stage_id": "initialize", "stage_order": 1, "attempt": 1, "input_digest": "1111111111111111111111111111111111111111111111111111111111111111", "output_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "predecessor_receipt_id": null, "status": "committed", "committed_at": "2026-08-31T11:00:00Z"}
+      ],
+      "actual_predecessor_output_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "expected": {"decision": "reject", "code": "ARTIFACT_DIGEST_MISMATCH"}
+    }
+  ]
+}

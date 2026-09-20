@@ -26,3 +26,4 @@ runtime:
   presentation_objects: 图表、文字、图形与必要表格均须可编辑
 forbidden_shortcuts: [整页图片, 网页截图, 将 HTML 直接改名, 以不可编辑图形冒充图表, 并行调用 PPT Master]
 verification: [在 PowerPoint 中逐项编辑抽检, 原分辨率逐页视觉检查, 备注与目录检查, 与同一报告快照的覆盖投影核对]
+job_control_contract: docs/architecture/format-contracts/pptx-master-job.yaml

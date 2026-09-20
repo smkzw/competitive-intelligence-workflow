@@ -20,6 +20,7 @@ from typing import Any, cast
 
 import pytest
 
+from ci_workflow.application.capability_preflight import StaticCapabilityProbe
 from ci_workflow.application.fixture_runner import run_fixture_case
 from ci_workflow.application.project_service import (
     create_project_workspace,
@@ -89,9 +90,6 @@ def test_fixture_outputs_only_use_artifact_path_service(tmp_path: Path) -> None:
         "blockers/B/v1/audit.md",
         "blockers/C/v1.2-beta/audit.json",
         "reports/A/v1/html",
-        "reports/B/v1/report.pdf",
-        "reports/C/v1/html-ppt",
-        "reports/A/v1/report.pptx",
         "reports/A/v1/html.manifest.json",
         "reports/A/v1/html.coverage-projection.json",
     ]
@@ -117,6 +115,9 @@ def test_fixture_outputs_only_use_artifact_path_service(tmp_path: Path) -> None:
         "arbitrary/namespace/file.json",
         "blockers/A/v1/audit.json/extra",
         "blockers\\A\\v1\\audit.json",
+        "reports/B/v1/report.pdf",
+        "reports/C/v1/html-ppt",
+        "reports/A/v1/report.pptx",
     ]
     for rel in invalid_paths:
         with pytest.raises(RunError):
@@ -200,7 +201,11 @@ def test_fixture_manifest_does_not_adopt_pre_existing_unchanged_outputs(
             "inputs/universe.json": _sha256_file(fixture_universe),
         },
     )
-    result = run_project(second_root, run_context=run_context)
+    result = run_project(
+        second_root,
+        run_context=run_context,
+        capability_probe=StaticCapabilityProbe(),
+    )
     assert result.outcome == "evidence_blocked"
     assert result.exit_code == 4
 
@@ -263,4 +268,8 @@ def test_fixture_blocker_drift_write_fails_closed_with_chinese_guidance(
         },
     )
     with pytest.raises(ContractConfigError, match="拒绝覆盖|阻断说明写入失败"):
-        run_project(project_root, run_context=run_context)
+        run_project(
+            project_root,
+            run_context=run_context,
+            capability_probe=StaticCapabilityProbe(),
+        )

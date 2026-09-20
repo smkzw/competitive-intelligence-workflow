@@ -1,0 +1,4 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"已批准的 B 疗效—安全性气泡图、矩阵状态和交互同步合同"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"权威 Pydantic 边界失败关闭与 model_copy 对抗要求"}
+{"file":".trellis/spec/guides/code-reuse-thinking-guide.md","reason":"复用 Task 6.2 疗效和 Task 6.3 安全性事实，避免复制科学逻辑"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"固定选择状态到图、表、提示、证据和 URL 的一致数据流"}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.local/schemas/ppt-master-job.schema.json",
+  "title": "PPT Master 可恢复作业",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_version", "job_id", "snapshot", "state", "next_stage", "receipts", "expires_at", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "contract_version": {"const": "8.7"},
+    "job_id": {"type": "string", "minLength": 1},
+    "snapshot": {"$ref": "#/$defs/snapshot"},
+    "state": {"enum": ["created", "snapshot_locked", "running", "paused", "failed", "ready_for_acceptance", "accepted", "rejected", "cancelled"]},
+    "next_stage": {"anyOf": [{"enum": ["initialize", "content_design_lock", "page_svg", "quality_check", "speaker_notes", "closeout", "native_export", "editability_check", "visual_check"]}, {"type": "null"}]},
+    "active_stage": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+    "receipts": {"type": "array", "items": {"$ref": "#/$defs/receipt"}},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "report", "report_version", "snapshot_id", "snapshot_sha256", "claim_snapshot_id", "evidence_snapshot_id", "coverage_set_id", "locked_at"],
+      "properties": {
+        "project_id": {"type": "string", "minLength": 1},
+        "report": {"enum": ["A", "B", "C"]},
+        "report_version": {"type": "string", "minLength": 1},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "claim_snapshot_id": {"type": "string", "minLength": 1},
+        "evidence_snapshot_id": {"type": "string", "minLength": 1},
+        "coverage_set_id": {"type": "string", "minLength": 1},
+        "locked_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256", "byte_size"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_size": {"type": "integer", "minimum": 1}
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_id", "job_id", "project_id", "report", "snapshot_id", "snapshot_sha256", "stage_id", "stage_order", "attempt", "input_digest", "output_digest", "predecessor_receipt_id", "artifacts", "status", "committed_at", "receipt_sha256", "failure_reason"],
+      "properties": {
+        "receipt_id": {"type": "string", "minLength": 1},
+        "job_id": {"type": "string", "minLength": 1},
+        "project_id": {"type": "string", "minLength": 1},
+        "report": {"enum": ["A", "B", "C"]},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "stage_id": {"enum": ["initialize", "content_design_lock", "page_svg", "quality_check", "speaker_notes", "closeout", "native_export", "editability_check", "visual_check"]},
+        "stage_order": {"type": "integer", "minimum": 1, "maximum": 9},
+        "attempt": {"type": "integer", "minimum": 1},
+        "input_digest": {"$ref": "#/$defs/sha256"},
+        "output_digest": {"$ref": "#/$defs/sha256"},
+        "predecessor_receipt_id": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+        "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+        "status": {"enum": ["committed", "failed"]},
+        "committed_at": {"type": "string", "format": "date-time"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "failure_reason": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "committed"}}},
+          "then": {"properties": {"artifacts": {"minItems": 1}, "failure_reason": {"type": "null"}}},
+          "else": {"properties": {"failure_reason": {"type": "string", "minLength": 1}}}
+        }
+      ]
+    }
+  }
+}

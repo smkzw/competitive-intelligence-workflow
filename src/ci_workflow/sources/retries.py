@@ -152,6 +152,21 @@ class RecoveryRound(BaseModel):
         )
 
     @property
+    def retrieval_signature(self) -> tuple[tuple[str, str], ...]:
+        """实际查询/标识符与访问方式；改策略标签不能伪造一条新路径。"""
+        return tuple(
+            sorted(
+                {
+                    (
+                        receipt.query_or_identifier.casefold(),
+                        receipt.access_method.casefold(),
+                    )
+                    for receipt in self.source_receipts
+                }
+            )
+        )
+
+    @property
     def is_saturated(self) -> bool:
         applicable_units = tuple(item for item in self.strategy_units if item.applicable)
         if not applicable_units or any(not item.completed for item in applicable_units):
@@ -188,6 +203,27 @@ class RecoveryHistory(BaseModel):
     gap_id: str = Field(min_length=1)
     rounds: tuple[RecoveryRound, ...] = ()
 
+    @model_validator(mode="after")
+    def _rounds_are_one_contiguous_distinct_history(self) -> RecoveryHistory:
+        if tuple(item.round_index for item in self.rounds) != tuple(
+            range(1, len(self.rounds) + 1)
+        ):
+            raise ValueError("恢复历史轮次必须从一开始连续递增")
+        if any(item.gap_id != self.gap_id for item in self.rounds):
+            raise ValueError("恢复历史中的轮次必须绑定同一证据缺口")
+        strategy_signatures = tuple(item.strategy_signature for item in self.rounds)
+        if len(set(strategy_signatures)) != len(strategy_signatures):
+            raise ValueError("重复策略不能形成新的恢复轮次")
+        retrieval_signatures = tuple(item.retrieval_signature for item in self.rounds)
+        if len(set(retrieval_signatures)) != len(retrieval_signatures):
+            raise ValueError("重复查询或标识符及访问方式不能形成新的恢复轮次")
+        if self.rounds and any(
+            item.execution_context != self.rounds[0].execution_context
+            for item in self.rounds[1:]
+        ):
+            raise ValueError("恢复历史中的轮次必须绑定同一路线、实体、缺口和声明域")
+        return self
+
     @property
     def can_declare_information_saturated(self) -> bool:
         if len(self.rounds) < 2:
@@ -197,6 +233,7 @@ class RecoveryHistory(BaseModel):
             previous.is_saturated
             and current.is_saturated
             and previous.strategy_signature != current.strategy_signature
+            and previous.retrieval_signature != current.retrieval_signature
         )
 
     def add_round(self, recovery_round: RecoveryRound) -> RecoveryHistory:
@@ -209,6 +246,10 @@ class RecoveryHistory(BaseModel):
             item.strategy_signature for item in self.rounds
         }:
             raise ValueError("重复策略不能形成新的恢复轮次")
+        if recovery_round.retrieval_signature in {
+            item.retrieval_signature for item in self.rounds
+        }:
+            raise ValueError("重复查询或标识符及访问方式不能形成新的恢复轮次")
         if self.rounds and recovery_round.execution_context != self.rounds[0].execution_context:
             raise ValueError("恢复历史中的轮次必须绑定同一路线、实体、缺口和声明域")
         return self.model_copy(update={"rounds": (*self.rounds, recovery_round)})

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_3ebb46320b259609bce769bf",
+  "project_id": "project_c337b1d8836ad714616a7756",
+  "contract_version": 1,
+  "started_at": "2026-08-30T05:40:36.553004+00:00",
+  "finished_at": "2026-08-30T05:40:37.880832+00:00",
+  "resume": false,
+  "case_id": "b-d70-baseline-recovered",
+  "case_digest": "4f5f505d4b9328292f8a11f422dd1f5edaf653c140fdca75d3a86c803ef6309b",
+  "input_hashes": {
+    "inputs/report-data.json": "13ca4d57178420eced06c3da0afa84cf2e8cd4de39b5101c33809168c4b54c01"
+  },
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "gate:B": "completed",
+    "format:B": "completed"
+  },
+  "reused": [],
+  "outputs": [
+    {
+      "relative_path": "reports/B/v-fixture-b-d70-002/html.manifest.json",
+      "sha256": "3eb7d3e39f8b93b53b25756922df9edfbcc5bbf5a3308116850e3eb3d71b69d5",
+      "byte_size": 5513,
+      "modified_at": "2026-08-30T05:40:37.878674+00:00",
+      "mtime_ns": 1788068437878673567,
+      "media_type": "application/json"
+    }
+  ],
+  "reused_artifacts": [],
+  "event_count": 4,
+  "event_stream_digest": "0dadeed15b25ad24f1d193c9fb43d8ad58946d296fe6e5e32e53fece9ab1aa8a",
+  "checkpoint_id": "checkpoint_e8dcf81baf78f55cd2495aab",
+  "outcome": "completed",
+  "report_states": {
+    "B": "snapshot_locked"
+  },
+  "format_states": {
+    "B": {
+      "html": "quality_check"
+    }
+  },
+  "snapshot_ids": {
+    "B": "report-snapshot_d3a21323fbd4e5de041966df"
+  },
+  "artifact_manifest_sha256": {
+    "B": {
+      "html": "3eb7d3e39f8b93b53b25756922df9edfbcc5bbf5a3308116850e3eb3d71b69d5"
+    }
+  },
+  "gate_failures": [],
+  "manifest_digest": "4aa6a32fcdc6d0ee3ac49063704a7728286453a6149df4e5243ecef70e5dcb0e"
+}

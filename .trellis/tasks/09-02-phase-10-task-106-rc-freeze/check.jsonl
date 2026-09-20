@@ -1,0 +1,10 @@
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"复核 Ruff、strict mypy、确定性测试和后端合同质量。"}
+{"file":".trellis/spec/frontend/quality-guidelines.md","reason":"复核真实浏览器、交互、响应式与用户可见页面质量。"}
+{"file":".trellis/spec/backend/manual-inbox-recovery.md","reason":"检查补件处理未复制、移动、改字节或破坏恢复语义。"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"检查 schema、服务、门户、bundle 和宿主边界的一致性。"}
+{"file":"reviews/codex_v13_implementation_gap_matrix_20260904.md","reason":"逐项核对 G01-G20 及其负向验收；任务文档要求检查者另从磁盘完整读取 canonical v1.3。"}
+{"file":"reviews/codex_conference_ci-rebaseline-r0-provenance-review-20260904_review.md","reason":"核对 R0 首轮 VETO、修复、同会话 PASS 与 Codex 外部恢复锚终审。"}
+{"file":"metrics/ci-rebaseline-r0-provenance-review-20260904_conference_metrics.md","reason":"核对 R0 会商路线身份、持续时间、同会话续审及无 fallback 证据。"}
+{"file":"metrics/ci-rebaseline-m1-disk-hygiene-20260904.md","reason":"核对里程碑清理目标、保留边界、回收字节和恢复语义。"}
+{"file":"context/ci-rebaseline-rebuild-20260904_m1_recovery_snapshot_receipt.json","reason":"核对当前 M1 恢复点的节点、字节、manifest 哈希和只读重锚结果。"}
+{"file":"context/ci-rebaseline-rebuild-20260904_pause_snapshot_receipt.json","reason":"核对 SIGINT 后无损暂停快照、外部 session 绑定、逐节点重哈希和零可写节点。"}

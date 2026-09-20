@@ -4,15 +4,26 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
+import re
+from collections.abc import Mapping
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
-from typing import Literal, Self
+from typing import Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from ci_workflow.domain.evidence import DateEvidence, EvidenceLocator, SourceReceipt
+from ci_workflow.domain.evidence import (
+    DateEvidence,
+    DatePrecision,
+    EvidenceLocator,
+    SourceReceipt,
+    SourceTextDerivation,
+    source_version_identity,
+)
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
 from ci_workflow.storage.manifest_store import ArtifactManifest
@@ -39,6 +50,13 @@ def _digest(value: object) -> str:
     return hashlib.sha256(_canonical_json(value)).hexdigest()
 
 
+class CaptureDatePrecisions(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    published_at: DatePrecision = "instant"
+    effective_at: DatePrecision = "instant"
+    first_disclosed_at: DatePrecision = "instant"
+
+
 class SourceCapture(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -52,11 +70,33 @@ class SourceCapture(BaseModel):
     access_method: str
     media_type: str = "application/json"
     content_text: str
+    text_derivation: SourceTextDerivation | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     acquired_at: datetime
     published_at: datetime | None
     effective_at: datetime | None
     first_disclosed_at: datetime
+    date_precisions: CaptureDatePrecisions | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     locator: EvidenceLocator
+
+    def date_evidence(self, role: str) -> DateEvidence:
+        if role not in ("published_at", "effective_at", "first_disclosed_at"):
+            raise ValueError("未知来源日期角色")
+        value = getattr(self, role)
+        return DateEvidence(
+            state="reported" if value is not None else "not_publicly_disclosed",
+            value=value, locator=self.locator,
+            precision=getattr(self.date_precisions, role) if self.date_precisions else "instant",
+        )
+
+    @model_validator(mode="after")
+    def _date_precision_matches_values(self) -> Self:
+        for role in ("published_at", "effective_at", "first_disclosed_at"):
+            self.date_evidence(role)
+        return self
 
     @field_validator(
         "source_id", "route_id", "source_type", "title", "url",
@@ -74,6 +114,19 @@ class SourceCapture(BaseModel):
         if value is not None and (value.tzinfo is None or value.utcoffset() is None):
             raise ValueError("来源日期必须包含明确时区")
         return value
+
+    @model_validator(mode="after")
+    def _derived_text_matches_receipt(self) -> Self:
+        if self.text_derivation is not None:
+            if hashlib.sha256(self.content_text.encode("utf-8")).hexdigest() != (
+                self.text_derivation.text_sha256
+            ):
+                raise ValueError("来源规范文本摘要与原始资产派生回执不一致")
+            if self.media_type != self.text_derivation.raw_asset.media_type:
+                raise ValueError("来源媒体类型与原始资产不一致")
+        elif self.media_type == "application/pdf":
+            raise ValueError("PDF提取文本必须绑定原始资产及派生回执")
+        return self
 
 
 class ResearchFact(BaseModel):
@@ -188,6 +241,1298 @@ class ScientificReview(BaseModel):
         return value
 
 
+ClinicalTrialsResultCategory = Literal[
+    "outcome", "teae", "sae", "aesi", "common_ae", "parse_failure"
+]
+ClinicalTrialsResultIssueStatus = Literal["missing", "misclassified", "parse_failure"]
+_ParsedOutcomeCategory = Literal["outcome", "teae", "sae", "aesi"]
+ClinicalTrialsTrialCoverageStatus = Literal[
+    "registry_results_projected",
+    "reported_by_secondary_source",
+    "reported_not_projected",
+    "registry_results_not_posted",
+    "source_parse_failure",
+    "source_not_captured",
+]
+
+
+@dataclass(frozen=True)
+class ClinicalTrialsTrialCoverage:
+    """一个报告试验在来源、解析和报告投影各层的数值覆盖状态。"""
+
+    trial_id: str
+    product_id: str
+    registry_source_ids: tuple[str, ...]
+    registry_sources_with_results: tuple[str, ...]
+    result_source_ids: tuple[str, ...]
+    projected_efficacy_rows: int
+    projected_safety_rows: int
+    status: ClinicalTrialsTrialCoverageStatus
+
+
+@dataclass(frozen=True)
+class ClinicalTrialsProductCoverage:
+    """产品级结果状态与实际可比较试验的确定性摘要。"""
+
+    product_id: str
+    result_status: Literal[
+        "有公开关键结果",
+        "已有部分公开结果",
+        "暂无公开关键结果",
+        "临床前",
+    ]
+    trial_ids: tuple[str, ...]
+    numeric_result_trial_ids: tuple[str, ...]
+    comparable_result_trial_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ClinicalTrialsResultCoverageIssue:
+    """一个登记结果未被报告投影或无法安全解析的可审计问题。"""
+
+    category: ClinicalTrialsResultCategory
+    status: ClinicalTrialsResultIssueStatus
+    trial_id: str
+    source_id: str
+    source_path: str
+    result_key: str
+    reason_zh: str
+    report_row_ids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class ClinicalTrialsResultCoverageAudit:
+    """ClinicalTrials.gov 结果模块与 A 类报告行之间的确定性覆盖审计。"""
+
+    audited_trial_ids: tuple[str, ...]
+    inventory_counts: Mapping[str, int]
+    issues: tuple[ClinicalTrialsResultCoverageIssue, ...]
+    trial_coverage: tuple[ClinicalTrialsTrialCoverage, ...] = ()
+    product_coverage: tuple[ClinicalTrialsProductCoverage, ...] = ()
+    product_status_mismatches: tuple[str, ...] = ()
+
+    @property
+    def passed(self) -> bool:
+        return not self.issues and not self.product_status_mismatches
+
+    @property
+    def error_message_zh(self) -> str:
+        if self.passed:
+            return "ClinicalTrials.gov 结果覆盖审计通过"
+        details_list = [issue.reason_zh for issue in self.issues[:8]]
+        if self.product_status_mismatches:
+            details_list.append(
+                "报告产品结果状态与实际可比较结果不一致："
+                + "、".join(self.product_status_mismatches[:8])
+            )
+        details = "；".join(details_list)
+        issue_count = len(self.issues) + len(self.product_status_mismatches)
+        suffix = "" if issue_count <= 8 else f"；另有 {issue_count - 8} 项"
+        return f"ClinicalTrials.gov 结果覆盖审计失败：{details}{suffix}"
+
+
+@dataclass(frozen=True)
+class _RegistryResult:
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
+    trial_id: str
+    source_id: str
+    source_path: str
+    result_key: str
+    term: str
+    group_id: str
+    arm: str
+    value: float | None
+    numerator: int | None
+    denominator: int | None
+    endpoint: str = ""
+    timepoint: str = ""
+    unit: str = ""
+
+
+_RESULT_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
+_NUMERIC_RESULT = re.compile(r"^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$")
+_TIME_NUMBER = re.compile(r"\d+(?:\.\d+)?")
+_TEXT_TOKEN = re.compile(r"[a-z]+|\d+(?:\.\d+)?|[\u4e00-\u9fff]+")
+_COMMON_AE_AGGREGATE_TERMS = frozenset(
+    {"其他AE汇总", "其他不良事件汇总", "常见AE汇总", "常见AE谱"}
+)
+_TEAE_TERMS = frozenset({"任何TEAE", "TEAE", "anyteae", "treatmentemergentadverseevents"})
+_AESI_TERMS = frozenset({"AESI", "预先界定AESI", "特别关注不良事件"})
+_RESULT_CATEGORY_ZH = {
+    "teae": "治疗期间不良事件",
+    "sae": "严重不良事件",
+    "aesi": "特别关注不良事件",
+    "common_ae": "常见不良事件",
+}
+
+
+def _result_text(value: object) -> str:
+    return " ".join(str(value or "").split()).strip()
+
+
+def _result_nct_id(value: object) -> str | None:
+    match = _RESULT_NCT_ID.search(_result_text(value))
+    return None if match is None else match.group(0).upper()
+
+
+def _result_number(value: object, *, integer: bool = False) -> float:
+    if isinstance(value, bool) or value is None:
+        raise ValueError("缺少数值")
+    if isinstance(value, (int, float)):
+        number = float(value)
+    else:
+        text = _result_text(value).replace(",", "")
+        if _NUMERIC_RESULT.fullmatch(text) is None:
+            raise ValueError(f"不支持的数值表达：{text}")
+        number = float(text)
+    if not math.isfinite(number) or (integer and not number.is_integer()):
+        raise ValueError("数值不是有限整数")
+    return number
+
+
+def _result_int(value: object) -> int:
+    return int(_result_number(value, integer=True))
+
+
+def _result_tokens(value: object) -> set[str]:
+    text = _result_text(value).casefold()
+    for old, new in (
+        ("investigator's global assessment", " iga "),
+        ("investigator global assessment", " iga "),
+        ("eczema area and severity index", " easi "),
+        ("numerical rating scale", " nrs "),
+        ("pruritus nrs", " nrs "),
+        ("body surface area", " bsa "),
+        ("dermatology life quality index", " dlqi "),
+        ("patient oriented eczema measure", " poem "),
+        ("scoring atopic dermatitis", " scorad "),
+        ("global individual signs score", " giss "),
+        ("percentage of participants", " "),
+        ("participants with", " "),
+        ("from baseline", " "),
+        ("at baseline", " "),
+    ):
+        text = text.replace(old, new)
+    return {
+        token
+        for token in _TEXT_TOKEN.findall(text)
+        if token not in {"the", "of", "and", "with", "to", "in", "at", "from"}
+    }
+
+
+def _result_time_tokens(value: object) -> set[str]:
+    text = _result_text(value).casefold().replace("周", " week ").replace("天", " day ")
+    return set(_TIME_NUMBER.findall(text)) | {
+        token for token in ("baseline", "week", "day", "month") if token in text
+    }
+
+
+def _result_time_matches(source: str, report: str) -> bool:
+    source_tokens = _result_time_tokens(source)
+    report_tokens = _result_time_tokens(report)
+    if not source_tokens or not report_tokens:
+        return _result_text(source).casefold() == _result_text(report).casefold()
+    source_numbers = {token for token in source_tokens if token[0].isdigit()}
+    report_numbers = {token for token in report_tokens if token[0].isdigit()}
+    if source_numbers and source_numbers != report_numbers:
+        return False
+    return (
+        source_tokens <= report_tokens
+        or report_tokens <= source_tokens
+        or bool(source_numbers & report_numbers)
+    )
+
+
+def _result_arm(group_title: object) -> str:
+    text = _result_text(group_title).casefold()
+    if "placebo- " in text:
+        current = text.rsplit("placebo- ", 1)[-1]
+        if not any(token in current for token in ("placebo", "vehicle", "control", "对照")):
+            return "治疗组"
+    for separator in (" then ", " to ", "/"):
+        if separator in text:
+            current = text.rsplit(separator, 1)[-1]
+            if not any(token in current for token in ("placebo", "vehicle", "control", "对照")):
+                return "治疗组"
+    if any(token in text for token in ("placebo", "vehicle", "control", "对照")):
+        return "对照组"
+    return "治疗组"
+
+
+def _result_arm_matches(source_arm: str, report_arm: str) -> bool:
+    normalized = _result_text(report_arm)
+    return normalized == source_arm or source_arm in normalized
+
+
+def _result_category_zh(category: str) -> str:
+    return _RESULT_CATEGORY_ZH.get(category, "安全性结果")
+
+
+def _result_key(*parts: object) -> str:
+    return stable_id("clinicaltrials-result", *(str(part) for part in parts))
+
+
+def _result_issue(
+    *,
+    issues: list[ClinicalTrialsResultCoverageIssue],
+    category: ClinicalTrialsResultCategory,
+    status: ClinicalTrialsResultIssueStatus,
+    trial_id: str,
+    source_id: str,
+    source_path: str,
+    result_key: str,
+    reason_zh: str,
+    report_row_ids: tuple[str, ...] = (),
+) -> None:
+    issues.append(
+        ClinicalTrialsResultCoverageIssue(
+            category=category,
+            status=status,
+            trial_id=trial_id,
+            source_id=source_id,
+            source_path=source_path,
+            result_key=result_key,
+            reason_zh=reason_zh,
+            report_row_ids=report_row_ids,
+        )
+    )
+
+
+def _parse_failure(
+    *,
+    issues: list[ClinicalTrialsResultCoverageIssue],
+    trial_id: str,
+    source_id: str,
+    source_path: str,
+    detail: str,
+) -> None:
+    _result_issue(
+        issues=issues,
+        category="parse_failure",
+        status="parse_failure",
+        trial_id=trial_id,
+        source_id=source_id,
+        source_path=source_path,
+        result_key=_result_key(trial_id, source_id, source_path),
+        reason_zh=(
+            f"{trial_id} 的 ClinicalTrials.gov 来源结构暂未支持（{source_path}）：{detail}；"
+            "不得降级为未公开"
+        ),
+    )
+
+
+def _mapping_at(value: object, path: str) -> Mapping[str, Any]:
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{path} 必须是对象")
+    return value
+
+
+def _list_at(value: object, path: str) -> list[Any]:
+    if not isinstance(value, list):
+        raise ValueError(f"{path} 必须是列表")
+    return value
+
+
+def _explicit_aesi(value: Mapping[str, Any]) -> bool:
+    for key in (
+        "isAESI", "isAesi", "aesi", "AESI", "specialInterest", "eventCategory",
+        "classification", "eventType", "category",
+    ):
+        marker = value.get(key)
+        if marker is True:
+            return True
+        if isinstance(marker, str) and _result_text(marker).casefold() in {
+            "aesi", "aes", "adverse events of special interest", "特别关注不良事件",
+        }:
+            return True
+    return False
+
+
+def _outcome_category(
+    title: str, class_title: str = ""
+) -> _ParsedOutcomeCategory | None:
+    normalized = title.casefold()
+    class_name = class_title.casefold()
+    combined = f"{normalized} {class_name}"
+    if class_name:
+        if "aesi" in class_name or "adverse event of special interest" in class_name:
+            return "aesi"
+        if "serious" in class_name or class_name.strip() in {"sae", "saes", "serious aes"}:
+            return "sae"
+        if "teae" in class_name or "treatment emergent adverse event" in class_name:
+            return "teae"
+        if class_name.strip() in {"ae", "aes", "any ae", "any aes", "adverse events"}:
+            return "teae"
+    has_teae = "teae" in combined or "treatment-emergent adverse event" in combined
+    has_sae = (
+        "sae" in combined
+        or "serious adverse event" in combined
+        or "treatment-emergent serious" in combined
+    )
+    if "aesi" in combined or "adverse event of special interest" in combined:
+        return "aesi"
+    if has_teae and has_sae:
+        class_is_sae = "sae" in class_name or "serious" in class_name
+        class_is_teae = "teae" in class_name or (
+            "adverse event" in class_name and not class_is_sae
+        )
+        if class_is_sae:
+            return "sae"
+        if class_is_teae or class_name.strip() in {"aes", "any aes"}:
+            return "teae"
+        return None
+    if has_sae:
+        return "sae"
+    if has_teae:
+        return "teae"
+    return "outcome"
+
+
+def _outcome_report_term(category: str, title: str, class_title: str) -> str:
+    if category == "sae":
+        return "任何SAE"
+    if category == "aesi":
+        return "预先界定AESI"
+    if category != "teae":
+        return title
+    class_name = class_title.casefold().strip()
+    if "any treatment emergent" in class_name or "any teae" in class_name:
+        return "任何TEAE"
+    if (
+        class_name in {"ae", "aes", "any ae", "any aes", "adverse events"}
+        and re.search(
+            r"(?:number|percentage) of participants with treatment[- ]emergent adverse events",
+            title.casefold(),
+        )
+    ):
+        return "任何TEAE"
+    if class_name in {"ae", "aes", "any ae", "any aes", "adverse events"}:
+        return "任何AE"
+    return title
+
+
+def _source_bound_row_ids(
+    row: object,
+    *,
+    prefix: str,
+    source_id: str,
+    fact_sources: Mapping[str, str] | None,
+) -> bool:
+    if fact_sources is None:
+        return True
+    row_id = getattr(row, "row_id", "")
+    return fact_sources.get(f"{prefix}:{row_id}") == source_id
+
+
+def _report_outcome_match(
+    row: object,
+    expected: _RegistryResult,
+    *,
+    source_title: str,
+) -> bool:
+    endpoint = str(getattr(row, "endpoint", ""))
+    if not _result_time_matches(expected.timepoint, str(getattr(row, "timepoint", ""))):
+        return False
+    source_tokens = _result_tokens(source_title)
+    report_tokens = _result_tokens(endpoint)
+    overlap = source_tokens & report_tokens
+    if not (
+        _result_text(source_title).casefold() == _result_text(endpoint).casefold()
+        or source_tokens <= report_tokens
+        or report_tokens <= source_tokens
+        or len(overlap) >= 2
+    ):
+        return False
+    report_arm = str(getattr(row, "arm", ""))
+    if not _result_arm_matches(expected.arm, report_arm):
+        return False
+    report_value = getattr(row, "value", None)
+    if expected.unit and str(getattr(row, "unit", "")) != expected.unit:
+        return False
+    if expected.value is None:
+        return False
+    return (
+        isinstance(report_value, (int, float))
+        and not isinstance(report_value, bool)
+        and math.isclose(
+            float(report_value), float(expected.value), rel_tol=0.0, abs_tol=0.11
+        )
+    )
+
+
+def _report_safety_match(row: object, expected: _RegistryResult) -> bool:
+    if getattr(row, "trial_id", None) is None:
+        return False
+    if not _result_arm_matches(expected.arm, str(getattr(row, "arm", ""))):
+        return False
+    value = getattr(row, "value", None)
+    numerator = getattr(row, "numerator", None)
+    denominator = getattr(row, "denominator", None)
+    if expected.value is None or not isinstance(value, (int, float)):
+        return False
+    if expected.unit and str(getattr(row, "unit", "")) != expected.unit:
+        return False
+    if expected.numerator is not None and numerator != expected.numerator:
+        return False
+    if expected.denominator is not None and denominator != expected.denominator:
+        return False
+    return (
+        getattr(row, "disclosure_state", "已公开") == "已公开"
+        and math.isclose(float(value), expected.value, rel_tol=0.0, abs_tol=0.11)
+    )
+
+
+def _report_safety_term_matches(row: object, expected: _RegistryResult) -> bool:
+    category = str(getattr(row, "category", ""))
+    term = _result_text(getattr(row, "term", ""))
+    if expected.category == "sae":
+        if category != "严重不良事件":
+            return False
+        return term == expected.term or (expected.term == "任何SAE" and term == "任何SAE")
+    if expected.category == "teae":
+        return category == "治疗期间不良事件" and (
+            term == expected.term
+            or (expected.term == "任何TEAE" and term in _TEAE_TERMS)
+        )
+    if expected.category == "aesi":
+        return category == "特别关注不良事件" and term in _AESI_TERMS | {expected.term}
+    if expected.category == "common_ae":
+        return category == "常见不良事件" and (
+            term == expected.term or term in _COMMON_AE_AGGREGATE_TERMS
+        )
+    return False
+
+
+def _iter_outcome_results(
+    *,
+    record: Mapping[str, Any],
+    trial_id: str,
+    source_id: str,
+    issues: list[ClinicalTrialsResultCoverageIssue],
+) -> list[_RegistryResult]:
+    results: list[_RegistryResult] = []
+    results_section = _mapping_at(record.get("resultsSection"), "resultsSection")
+    module = results_section.get("outcomeMeasuresModule")
+    if module is None:
+        return results
+    module_mapping = _mapping_at(module, "resultsSection.outcomeMeasuresModule")
+    measures = module_mapping.get("outcomeMeasures")
+    if measures is None:
+        return results
+    for index, raw_measure in enumerate(
+        _list_at(measures, "resultsSection.outcomeMeasuresModule.outcomeMeasures")
+    ):
+        path = f"resultsSection.outcomeMeasuresModule.outcomeMeasures[{index}]"
+        try:
+            measure = _mapping_at(raw_measure, path)
+            title = _result_text(measure.get("title"))
+            timeframe = _result_text(measure.get("timeFrame"))
+            if not title or not timeframe:
+                raise ValueError("缺少结局标题或时间窗")
+            groups = {
+                str(_mapping_at(item, f"{path}.groups[{group_index}]")["id"]): _result_text(
+                    _mapping_at(item, f"{path}.groups[{group_index}]").get("title")
+                )
+                for group_index, item in enumerate(
+                    _list_at(measure.get("groups", []), f"{path}.groups")
+                )
+            }
+            if any(not title for title in groups.values()):
+                raise ValueError("结果组别缺少标题")
+            denominator_by_group: dict[str, int] = {}
+            for denom_index, raw_denom in enumerate(measure.get("denoms", [])):
+                denom = _mapping_at(raw_denom, f"{path}.denoms[{denom_index}]")
+                for count_index, raw_count in enumerate(denom.get("counts", [])):
+                    count = _mapping_at(
+                        raw_count, f"{path}.denoms[{denom_index}].counts[{count_index}]"
+                    )
+                    group_id = _result_text(count.get("groupId"))
+                    denominator_by_group[group_id] = _result_int(count.get("value"))
+            unit_raw = _result_text(measure.get("unitOfMeasure"))
+            unit = unit_raw.casefold()
+            param_type = _result_text(measure.get("paramType")).casefold()
+            is_percentage = any(
+                token in unit for token in ("percent", "percentage", "%", "百分比")
+            ) or (not unit and any(
+                token in _result_text(measure.get("title")).casefold()
+                for token in ("percent", "percentage", "%", "百分比")
+            ))
+            is_participant_count = not is_percentage and (
+                any(token in unit for token in ("participant", "subject", "person", "人"))
+                or "count_of_participants" in param_type
+            )
+            classes = _list_at(measure.get("classes", []), f"{path}.classes")
+            measurements: list[tuple[str, float, str, _ParsedOutcomeCategory, str]] = []
+            saw_not_reported = False
+            for class_index, raw_class in enumerate(classes):
+                class_mapping = _mapping_at(raw_class, f"{path}.classes[{class_index}]")
+                class_title = _result_text(class_mapping.get("title"))
+                result_category = _outcome_category(title, class_title)
+                if result_category is None:
+                    _parse_failure(
+                        issues=issues,
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=f"{path}.classes[{class_index}]",
+                        detail="同一结局同时包含 TEAE 与 SAE，且类别标题不足以拆分",
+                    )
+                    continue
+                categories = _list_at(
+                    class_mapping.get("categories", []),
+                    f"{path}.classes[{class_index}].categories",
+                )
+                for category_index, raw_category in enumerate(categories):
+                    category_mapping = _mapping_at(
+                        raw_category,
+                        f"{path}.classes[{class_index}].categories[{category_index}]",
+                    )
+                    for measurement_index, raw_measurement in enumerate(
+                        _list_at(
+                            category_mapping.get("measurements", []),
+                            f"{path}.classes[{class_index}].categories[{category_index}].measurements",
+                        )
+                    ):
+                        measurement_path = (
+                            f"{path}.classes[{class_index}].categories[{category_index}]"
+                            f".measurements[{measurement_index}]"
+                        )
+                        try:
+                            measurement = _mapping_at(raw_measurement, measurement_path)
+                            group_id = str(measurement.get("groupId", "")).strip()
+                            if not group_id or group_id not in groups:
+                                raise ValueError(f"结果组别未定义：{group_id or '空值'}")
+                            raw_value = measurement.get("value")
+                            if _result_text(raw_value).casefold() in {
+                                "na", "n/a", "nr", "not available", "not reported"
+                            }:
+                                saw_not_reported = True
+                                continue
+                            measurements.append(
+                                (
+                                    group_id,
+                                    _result_number(raw_value, integer=is_participant_count),
+                                    measurement_path,
+                                    result_category,
+                                    class_title,
+                                )
+                            )
+                        except (TypeError, ValueError, KeyError) as exc:
+                            _parse_failure(
+                                issues=issues,
+                                trial_id=trial_id,
+                                source_id=source_id,
+                                source_path=measurement_path,
+                                detail=str(exc),
+                            )
+            if not measurements:
+                if saw_not_reported:
+                    continue
+                detail = "结局没有可解析的组别数值"
+                _parse_failure(
+                    issues=issues,
+                    trial_id=trial_id,
+                    source_id=source_id,
+                    source_path=path,
+                    detail=detail,
+                )
+                continue
+            for group_id, value, measurement_path, result_category, class_title in measurements:
+                report_term = _outcome_report_term(result_category, title, class_title)
+                numerator = None
+                denominator = None
+                normalized_value = value
+                normalized_unit = "%" if is_percentage else (
+                    "人" if is_participant_count else unit_raw
+                )
+                if is_participant_count:
+                    denominator = denominator_by_group.get(group_id)
+                    if denominator is None:
+                        raise ValueError(f"受试者人数缺少分母：{group_id}")
+                    numerator = int(value)
+                    if numerator < 0 or numerator > denominator:
+                        raise ValueError("受试者人数超出来源分母")
+                    normalized_value = round(numerator * 100 / denominator, 1)
+                    normalized_unit = "%"
+                results.append(
+                    _RegistryResult(
+                        category=result_category,
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=measurement_path,
+                        result_key=_result_key(
+                            result_category,
+                            trial_id,
+                            title,
+                            timeframe,
+                            group_id,
+                            measurement_path,
+                        ),
+                        term=report_term,
+                        group_id=group_id,
+                        arm=_result_arm(groups[group_id]),
+                        value=normalized_value,
+                        numerator=numerator,
+                        denominator=denominator,
+                        endpoint=title,
+                        timepoint=timeframe,
+                        unit=normalized_unit,
+                    )
+                )
+        except (TypeError, ValueError, KeyError) as exc:
+            _parse_failure(
+                issues=issues,
+                trial_id=trial_id,
+                source_id=source_id,
+                source_path=path,
+                detail=str(exc),
+            )
+    return results
+
+
+def _iter_adverse_event_results(
+    *,
+    record: Mapping[str, Any],
+    trial_id: str,
+    source_id: str,
+    issues: list[ClinicalTrialsResultCoverageIssue],
+) -> list[_RegistryResult]:
+    results: list[_RegistryResult] = []
+    results_section = _mapping_at(record.get("resultsSection"), "resultsSection")
+    raw_module = results_section.get("adverseEventsModule")
+    if raw_module is None:
+        return results
+    module = _mapping_at(raw_module, "resultsSection.adverseEventsModule")
+    raw_groups = module.get("eventGroups", [])
+    groups = _list_at(raw_groups, "resultsSection.adverseEventsModule.eventGroups")
+    group_info: dict[str, tuple[str, str]] = {}
+    for index, raw_group in enumerate(groups):
+        path = f"resultsSection.adverseEventsModule.eventGroups[{index}]"
+        try:
+            group = _mapping_at(raw_group, path)
+            group_id = str(group.get("id", "")).strip()
+            if not group_id:
+                raise ValueError("缺少事件组标识")
+            group_info[group_id] = (
+                _result_text(group.get("title")),
+                _result_arm(group.get("title")),
+            )
+            for category, term, affected_key, at_risk_key in (
+                ("sae", "任何SAE", "seriousNumAffected", "seriousNumAtRisk"),
+                ("common_ae", "其他AE汇总", "otherNumAffected", "otherNumAtRisk"),
+                ("teae", "任何TEAE", "teaeNumAffected", "teaeNumAtRisk"),
+                ("teae", "任何TEAE", "anyTeaeNumAffected", "anyTeaeNumAtRisk"),
+                ("teae", "任何TEAE", "anyTEAENumAffected", "anyTEAENumAtRisk"),
+            ):
+                affected = group.get(affected_key)
+                at_risk = group.get(at_risk_key)
+                if affected is None and at_risk is None:
+                    continue
+                if affected is None or at_risk is None:
+                    raise ValueError(f"{affected_key} 与 {at_risk_key} 必须同时存在")
+                numerator = _result_int(affected)
+                denominator = _result_int(at_risk)
+                if denominator <= 0 or numerator < 0 or numerator > denominator:
+                    raise ValueError("事件组分子/分母不符合范围")
+                results.append(
+                    _RegistryResult(
+                        category=category,  # type: ignore[arg-type]
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=f"{path}.{affected_key}",
+                        result_key=_result_key(category, trial_id, group_id, path),
+                        term=term,
+                        group_id=group_id,
+                        arm=group_info[group_id][1],
+                        value=round(numerator * 100 / denominator, 1),
+                        numerator=numerator,
+                        denominator=denominator,
+                    )
+                )
+        except (TypeError, ValueError, KeyError) as exc:
+            _parse_failure(
+                issues=issues,
+                trial_id=trial_id,
+                source_id=source_id,
+                source_path=path,
+                detail=str(exc),
+            )
+
+    for event_field, category, _term_label in (
+        ("seriousEvents", "sae", "严重不良事件"),
+        ("otherEvents", "common_ae", "常见不良事件"),
+    ):
+        raw_events = module.get(event_field, [])
+        try:
+            events = _list_at(raw_events, f"resultsSection.adverseEventsModule.{event_field}")
+        except ValueError as exc:
+            _parse_failure(
+                issues=issues,
+                trial_id=trial_id,
+                source_id=source_id,
+                source_path=f"resultsSection.adverseEventsModule.{event_field}",
+                detail=str(exc),
+            )
+            continue
+        for event_index, raw_event in enumerate(events):
+            path = f"resultsSection.adverseEventsModule.{event_field}[{event_index}]"
+            try:
+                event = _mapping_at(raw_event, path)
+                term = _result_text(event.get("term"))
+                if not term:
+                    raise ValueError("缺少 AE 术语")
+                stats = _list_at(event.get("stats", []), f"{path}.stats")
+                if not stats:
+                    raise ValueError("缺少 AE 逐组统计")
+                explicit_aesi = _explicit_aesi(event)
+            except (TypeError, ValueError, KeyError) as exc:
+                _parse_failure(
+                    issues=issues,
+                    trial_id=trial_id,
+                    source_id=source_id,
+                    source_path=path,
+                    detail=str(exc),
+                )
+                continue
+            for stat_index, raw_stat in enumerate(stats):
+                stat_path = f"{path}.stats[{stat_index}]"
+                try:
+                    stat = _mapping_at(raw_stat, stat_path)
+                    group_id = _result_text(stat.get("groupId"))
+                    if group_id not in group_info:
+                        raise ValueError(f"事件组未定义：{group_id or '空值'}")
+                    # ClinicalTrials.gov 的 JSON 会省略值为 0 的整数标量。
+                    numerator = _result_int(stat.get("numAffected", 0))
+                    denominator = _result_int(stat.get("numAtRisk"))
+                    if denominator == 0 and numerator == 0:
+                        continue
+                    if denominator <= 0 or numerator < 0 or numerator > denominator:
+                        raise ValueError("AE 分子/分母不符合范围")
+                    result = _RegistryResult(
+                        category=category,  # type: ignore[arg-type]
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=stat_path,
+                        result_key=_result_key(category, trial_id, term, group_id, stat_path),
+                        term=term,
+                        group_id=group_id,
+                        arm=group_info[group_id][1],
+                        value=round(numerator * 100 / denominator, 1),
+                        numerator=numerator,
+                        denominator=denominator,
+                    )
+                    results.append(result)
+                    if explicit_aesi:
+                        results.append(
+                            _RegistryResult(
+                                category="aesi",
+                                trial_id=trial_id,
+                                source_id=source_id,
+                                source_path=stat_path,
+                                result_key=_result_key(
+                                    "aesi", trial_id, term, group_id, stat_path
+                                ),
+                                term=term,
+                                group_id=group_id,
+                                arm=group_info[group_id][1],
+                                value=result.value,
+                                numerator=numerator,
+                                denominator=denominator,
+                            )
+                        )
+                except (TypeError, ValueError, KeyError) as exc:
+                    _parse_failure(
+                        issues=issues,
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=stat_path,
+                        detail=str(exc),
+                    )
+    return results
+
+
+def _audit_source_record(
+    *,
+    source: SourceCapture,
+    trial_id: str,
+    record: Mapping[str, Any],
+    report_data: ReportAPortalData,
+    fact_sources: Mapping[str, str] | None,
+    fact_paths: Mapping[str, str] | None,
+    issues: list[ClinicalTrialsResultCoverageIssue],
+    used_efficacy_rows: set[str],
+) -> dict[str, int]:
+    inventory = {category: 0 for category in ("outcome", "teae", "sae", "aesi", "common_ae")}
+    registry_results: list[_RegistryResult] = []
+    for parser, path in (
+        (_iter_outcome_results, "resultsSection.outcomeMeasuresModule"),
+        (_iter_adverse_event_results, "resultsSection.adverseEventsModule"),
+    ):
+        try:
+            registry_results.extend(
+                parser(
+                    record=record,
+                    trial_id=trial_id,
+                    source_id=source.source_id,
+                    issues=issues,
+                )
+            )
+        except (TypeError, ValueError, KeyError) as exc:
+            _parse_failure(
+                issues=issues,
+                trial_id=trial_id,
+                source_id=source.source_id,
+                source_path=path,
+                detail=str(exc),
+            )
+    efficacy_rows = [
+        row
+        for row in report_data.efficacy
+        if row.trial_id.casefold() == trial_id.casefold()
+        and _source_bound_row_ids(
+            row, prefix="efficacy", source_id=source.source_id, fact_sources=fact_sources
+        )
+    ]
+    safety_rows = [
+        row
+        for row in report_data.safety
+        if row.trial_id is not None
+        and row.trial_id.casefold() == trial_id.casefold()
+        and _source_bound_row_ids(
+            row, prefix="safety", source_id=source.source_id, fact_sources=fact_sources
+        )
+    ]
+    efficacy_by_source_path: dict[str, list[Any]] = {}
+    safety_by_source_path: dict[str, list[Any]] = {}
+    if fact_paths is not None:
+        for efficacy_row in efficacy_rows:
+            source_path = fact_paths.get(f"efficacy:{efficacy_row.row_id}")
+            if source_path:
+                efficacy_by_source_path.setdefault(source_path, []).append(efficacy_row)
+        for safety_row in safety_rows:
+            source_path = fact_paths.get(f"safety:{safety_row.row_id}")
+            if source_path:
+                safety_by_source_path.setdefault(source_path, []).append(safety_row)
+    outcome_titles = {
+        result.result_key: result.term
+        for result in registry_results
+        if result.category == "outcome"
+    }
+    for result in registry_results:
+        inventory[result.category] += 1
+        if result.category == "outcome":
+            exact = [
+                row
+                for row in efficacy_by_source_path.get(result.source_path, [])
+                if _report_outcome_match(
+                    row, result, source_title=outcome_titles[result.result_key]
+                )
+            ]
+            candidates = [] if fact_paths is not None else [
+                row
+                for row in efficacy_rows
+                if row.row_id not in used_efficacy_rows
+                and _report_outcome_match(
+                    row, result, source_title=outcome_titles[result.result_key]
+                )
+            ]
+            matched = exact or candidates
+            if matched:
+                used_efficacy_rows.add(matched[0].row_id)
+                continue
+            _result_issue(
+                issues=issues,
+                category="outcome",
+                status="missing",
+                trial_id=trial_id,
+                source_id=source.source_id,
+                source_path=result.source_path,
+                result_key=result.result_key,
+                reason_zh=(
+                    f"{trial_id} 的登记结局“{result.term}”组别 {result.group_id} 已有数值，"
+                    "但报告没有对应疗效行"
+                ),
+            )
+            continue
+        exact_safety = [
+            row for row in safety_by_source_path.get(result.source_path, [])
+            if _report_safety_term_matches(row, result)
+            and _report_safety_match(row, result)
+        ]
+        matches = exact_safety or ([] if fact_paths is not None else [
+            row
+            for row in safety_rows
+            if _report_safety_term_matches(row, result) and _report_safety_match(row, result)
+        ])
+        if not matches:
+            _result_issue(
+                issues=issues,
+                category=result.category,
+                status="missing",
+                trial_id=trial_id,
+                source_id=source.source_id,
+                source_path=result.source_path,
+                result_key=result.result_key,
+                reason_zh=(
+                    f"{trial_id} 的登记{_result_category_zh(result.category)}"
+                    f"“{result.term}”组别 {result.group_id} 已有数值，"
+                    "但报告没有对应安全性行"
+                ),
+            )
+    registry_has_explicit_teae = any(result.category == "teae" for result in registry_results)
+    registry_has_explicit_aesi = any(result.category == "aesi" for result in registry_results)
+    other_ae_aggregates = [
+        result
+        for result in registry_results
+        if result.category == "common_ae" and result.term == "其他AE汇总"
+    ]
+    for safety_row in safety_rows:
+        term = _result_text(safety_row.term)
+        if safety_row.value is None:
+            continue
+        other_aggregate = next(
+            (
+                result
+                for result in other_ae_aggregates
+                if _report_safety_match(safety_row, result)
+            ),
+            None,
+        )
+        if (
+            safety_row.category == "治疗期间不良事件"
+            and term in _TEAE_TERMS
+            and (not registry_has_explicit_teae or other_aggregate is not None)
+        ):
+            _result_issue(
+                issues=issues,
+                category="teae",
+                status="misclassified",
+                trial_id=trial_id,
+                source_id=source.source_id,
+                source_path=(
+                    other_aggregate.source_path
+                    if other_aggregate is not None
+                    else "resultsSection.adverseEventsModule.eventGroups.otherNumAffected"
+                ),
+                result_key=_result_key("teae", trial_id, safety_row.arm),
+                reason_zh=(
+                    f"{trial_id} 的报告行“{term}”不能由 ClinicalTrials.gov "
+                    "otherNumAffected 充当 TEAE；登记来源未提供明确 TEAE 聚合值"
+                ),
+                report_row_ids=(safety_row.row_id,),
+            )
+        if (
+            safety_row.category == "特别关注不良事件"
+            and term in _AESI_TERMS
+            and not registry_has_explicit_aesi
+        ):
+            _result_issue(
+                issues=issues,
+                category="aesi",
+                status="misclassified",
+                trial_id=trial_id,
+                source_id=source.source_id,
+                source_path="resultsSection.adverseEventsModule",
+                result_key=_result_key("aesi", trial_id, safety_row.arm),
+                reason_zh=(
+                    f"{trial_id} 的报告行“{term}”没有登记来源明确 AESI 标记；"
+                    "不得从普通 AE 术语自行推断 AESI"
+                ),
+                report_row_ids=(safety_row.row_id,),
+            )
+    return inventory
+
+
+def _numeric_rows_for_trial(
+    report_data: ReportAPortalData,
+    trial_id: str,
+) -> tuple[tuple[Any, ...], tuple[Any, ...]]:
+    normalized_trial_id = trial_id.casefold()
+    efficacy_rows = tuple(
+        efficacy_row
+        for row in report_data.efficacy
+        for efficacy_row in (row,)
+        if efficacy_row.trial_id.casefold() == normalized_trial_id
+        and efficacy_row.value is not None
+    )
+    safety_rows = tuple(
+        safety_row
+        for row in report_data.safety
+        for safety_row in (row,)
+        if safety_row.trial_id is not None
+        and safety_row.trial_id.casefold() == normalized_trial_id
+        and safety_row.value is not None
+    )
+    return efficacy_rows, safety_rows
+
+
+def _comparable_result_trial_ids(
+    report_data: ReportAPortalData,
+    product_id: str,
+) -> set[str]:
+    """只把同一试验内成对的疗效与关键安全性记录算作产品结果。"""
+
+    efficacy_contexts: dict[tuple[str, tuple[str, ...]], set[str]] = {}
+    safety_contexts: dict[tuple[str, tuple[str, ...]], set[str]] = {}
+    for efficacy_row in report_data.efficacy:
+        if efficacy_row.product_id != product_id or efficacy_row.value is None:
+            continue
+        context = (
+            efficacy_row.trial_id.casefold(),
+            (
+                efficacy_row.endpoint,
+                efficacy_row.timepoint,
+                efficacy_row.unit,
+                efficacy_row.population,
+            ),
+        )
+        efficacy_contexts.setdefault(context, set()).add(efficacy_row.arm)
+    for safety_row in report_data.safety:
+        if (
+            safety_row.product_id != product_id
+            or safety_row.value is None
+            or safety_row.term not in {"任何TEAE", "任何SAE"}
+        ):
+            continue
+        context = (
+            safety_row.trial_id.casefold() if safety_row.trial_id is not None else "",
+            (
+                safety_row.category,
+                safety_row.term,
+                safety_row.time_window,
+                safety_row.unit,
+            ),
+        )
+        safety_contexts.setdefault(context, set()).add(safety_row.arm)
+    efficacy_trials = {
+        trial_id for (trial_id, _context), arms in efficacy_contexts.items()
+        if {"治疗组", "对照组"} <= arms
+    }
+    safety_trials = {
+        trial_id for (trial_id, _context), arms in safety_contexts.items()
+        if trial_id and {"治疗组", "对照组"} <= arms
+    }
+    return efficacy_trials & safety_trials
+
+
+def _row_source_ids(
+    rows: tuple[Any, ...],
+    *,
+    prefix: str,
+    fact_sources: Mapping[str, str] | None,
+) -> set[str]:
+    if fact_sources is None:
+        return set()
+    return {
+        source_id
+        for row in rows
+        if (source_id := fact_sources.get(f"{prefix}:{row.row_id}")) is not None
+    }
+
+
+def audit_clinicaltrials_result_coverage(
+    report_data: ReportAPortalData,
+    sources: tuple[SourceCapture, ...],
+    *,
+    facts: tuple[ResearchFact, ...] | None = None,
+) -> ClinicalTrialsResultCoverageAudit:
+    """审计登记结果模块是否完整投影到报告行；不联网、不修改来源。
+
+    审计对象覆盖报告中的每一项试验。登记没有 ``resultsSection`` 时只标记为
+    ``registry_results_not_posted``，不得据此推断其他公开渠道也没有结果；若报告行
+    由论文、会议或其他允许来源承载，则标记为 ``reported_by_secondary_source``。
+    """
+    report_trial_ids: dict[str, str] = {}
+    for trial in report_data.trials:
+        for identifier in (trial.id, trial.display_id):
+            nct = _result_nct_id(identifier)
+            if nct is not None:
+                report_trial_ids[nct.casefold()] = trial.id
+    fact_sources = None if facts is None else {fact.row_ref: fact.source_id for fact in facts}
+    fact_paths = None if facts is None else {
+        fact.row_ref: fact.locator.field_path or "" for fact in facts
+    }
+    issues: list[ClinicalTrialsResultCoverageIssue] = []
+    registry_source_ids_by_trial: dict[str, set[str]] = {}
+    registry_results_by_trial: dict[str, set[str]] = {}
+    registry_parse_failures_by_trial: dict[str, set[str]] = {}
+    registry_projection_issues_by_trial: dict[str, set[str]] = {}
+    inventory_counts = {
+        category: 0 for category in ("outcome", "teae", "sae", "aesi", "common_ae", "parse_failure")
+    }
+    used_efficacy_rows: set[str] = set()
+    for source in sources:
+        if source.source_type != "clinical_trial_registry":
+            continue
+        query_nct = _result_nct_id(source.query_or_identifier)
+        try:
+            decoded = json.loads(source.content_text)
+            record = _mapping_at(decoded, "ClinicalTrials.gov 记录")
+            content_nct = _result_nct_id(
+                _mapping_at(
+                    _mapping_at(record.get("protocolSection"), "protocolSection").get(
+                        "identificationModule"
+                    ),
+                    "protocolSection.identificationModule",
+                ).get("nctId")
+            )
+            nct = content_nct or query_nct
+        except (TypeError, ValueError, KeyError, json.JSONDecodeError) as exc:
+            nct = query_nct
+            if nct is not None and nct.casefold() in report_trial_ids:
+                trial_id = report_trial_ids[nct.casefold()]
+                registry_source_ids_by_trial.setdefault(trial_id, set()).add(source.source_id)
+                registry_parse_failures_by_trial.setdefault(trial_id, set()).add(source.source_id)
+                _parse_failure(
+                    issues=issues,
+                    trial_id=trial_id,
+                    source_id=source.source_id,
+                    source_path="content_text",
+                    detail=str(exc),
+                )
+            continue
+        if nct is None or nct.casefold() not in report_trial_ids:
+            continue
+        trial_id = report_trial_ids[nct.casefold()]
+        registry_source_ids_by_trial.setdefault(trial_id, set()).add(source.source_id)
+        if "resultsSection" not in record:
+            continue
+        registry_results_by_trial.setdefault(trial_id, set()).add(source.source_id)
+        issue_count_before = len(issues)
+        counts = _audit_source_record(
+            source=source,
+            trial_id=trial_id,
+            record=record,
+            report_data=report_data,
+            fact_sources=fact_sources,
+            fact_paths=fact_paths,
+            issues=issues,
+            used_efficacy_rows=used_efficacy_rows,
+        )
+        new_issues = issues[issue_count_before:]
+        if new_issues:
+            registry_projection_issues_by_trial.setdefault(trial_id, set()).add(source.source_id)
+        if any(issue.status == "parse_failure" for issue in new_issues):
+            registry_parse_failures_by_trial.setdefault(trial_id, set()).add(source.source_id)
+        for category, count in counts.items():
+            inventory_counts[category] += count
+    inventory_counts["parse_failure"] = sum(
+        1 for issue in issues if issue.category == "parse_failure"
+    )
+
+    trial_coverage: list[ClinicalTrialsTrialCoverage] = []
+    for trial in report_data.trials:
+        efficacy_rows, safety_rows = _numeric_rows_for_trial(report_data, trial.id)
+        result_source_ids = _row_source_ids(
+            efficacy_rows,
+            prefix="efficacy",
+            fact_sources=fact_sources,
+        ) | _row_source_ids(
+            safety_rows,
+            prefix="safety",
+            fact_sources=fact_sources,
+        )
+        registry_ids = registry_source_ids_by_trial.get(trial.id, set())
+        result_module_ids = registry_results_by_trial.get(trial.id, set())
+        if registry_parse_failures_by_trial.get(trial.id):
+            status: ClinicalTrialsTrialCoverageStatus = "source_parse_failure"
+        elif result_module_ids:
+            status = (
+                "registry_results_projected"
+                if not any(
+                    source_id in registry_projection_issues_by_trial.get(trial.id, set())
+                    for source_id in result_module_ids
+                )
+                and (efficacy_rows or safety_rows)
+                else "reported_not_projected"
+            )
+        elif efficacy_rows or safety_rows:
+            status = "reported_by_secondary_source"
+        elif registry_ids:
+            status = "registry_results_not_posted"
+        else:
+            status = "source_not_captured"
+        trial_coverage.append(
+            ClinicalTrialsTrialCoverage(
+                trial_id=trial.id,
+                product_id=trial.product_id,
+                registry_source_ids=tuple(sorted(registry_ids)),
+                registry_sources_with_results=tuple(sorted(result_module_ids)),
+                result_source_ids=tuple(sorted(result_source_ids)),
+                projected_efficacy_rows=len(efficacy_rows),
+                projected_safety_rows=len(safety_rows),
+                status=status,
+            )
+        )
+
+    product_coverage: list[ClinicalTrialsProductCoverage] = []
+    product_status_mismatches: list[str] = []
+    comparable_by_product = {
+        product.id: _comparable_result_trial_ids(report_data, product.id)
+        for product in report_data.products
+    }
+    for product in report_data.products:
+        product_trials = tuple(
+            trial.id for trial in report_data.trials if trial.product_id == product.id
+        )
+        numeric_trial_ids = tuple(
+            coverage.trial_id
+            for coverage in trial_coverage
+            if coverage.product_id == product.id
+            and (coverage.projected_efficacy_rows or coverage.projected_safety_rows)
+        )
+        comparable_trial_ids = tuple(
+            trial_id for trial_id in product_trials if trial_id.casefold() in {
+                item.casefold() for item in comparable_by_product[product.id]
+            }
+        )
+        product_coverage.append(
+            ClinicalTrialsProductCoverage(
+                product_id=product.id,
+                result_status=product.result_status,
+                trial_ids=product_trials,
+                numeric_result_trial_ids=numeric_trial_ids,
+                comparable_result_trial_ids=comparable_trial_ids,
+            )
+        )
+        observed = bool(numeric_trial_ids) or any(
+            coverage.product_id == product.id and coverage.registry_sources_with_results
+            for coverage in trial_coverage
+        )
+        status_mismatch = (
+            product.result_status == "有公开关键结果" and not comparable_trial_ids
+        ) or (
+            product.result_status == "已有部分公开结果"
+            and (not observed or bool(comparable_trial_ids))
+        ) or (
+            product.result_status == "暂无公开关键结果" and observed
+        ) or (
+            product.result_status == "临床前" and observed
+        )
+        if status_mismatch:
+            product_status_mismatches.append(product.id)
+    return ClinicalTrialsResultCoverageAudit(
+        audited_trial_ids=tuple(sorted(registry_source_ids_by_trial)),
+        inventory_counts=inventory_counts,
+        issues=tuple(issues),
+        trial_coverage=tuple(trial_coverage),
+        product_coverage=tuple(product_coverage),
+        product_status_mismatches=tuple(sorted(product_status_mismatches)),
+    )
+
+
+def validate_clinicaltrials_result_coverage(
+    report_data: ReportAPortalData,
+    sources: tuple[SourceCapture, ...],
+    *,
+    facts: tuple[ResearchFact, ...] | None = None,
+) -> ClinicalTrialsResultCoverageAudit:
+    """执行结果覆盖审计并在有漏投影时失败关闭。"""
+    audit = audit_clinicaltrials_result_coverage(report_data, sources, facts=facts)
+    if not audit.passed:
+        raise ResearchPackageError(audit.error_message_zh)
+    return audit
+
+
 class FreshAResearchContent(BaseModel):
     """独立复核前可规范化、可摘要的 A 类科学内容。"""
 
@@ -219,8 +1564,9 @@ class FreshAResearchContent(BaseModel):
         source_ids = [item.source_id for item in self.sources]
         if len(source_ids) != len(set(source_ids)):
             raise ValueError("来源标识重复")
-        if any(item.first_disclosed_at > self.data_cutoff for item in self.sources):
-            raise ValueError("截止日之后首次披露的来源不得进入当前快照")
+        if any(not item.date_evidence("first_disclosed_at").is_known_by(self.data_cutoff)
+               for item in self.sources):
+            raise ValueError("截止日之后或无法证明截止时点前首次披露的来源不得进入当前快照")
         source_set = set(source_ids)
         if any(fact.source_id not in source_set for fact in self.facts):
             raise ValueError("事实引用了研究包外来源")
@@ -240,6 +1586,11 @@ class FreshAResearchContent(BaseModel):
         missing = sorted(required_refs - available_refs)
         if missing:
             raise ValueError("核心受众事实缺少来源绑定：" + "、".join(missing[:5]))
+        validate_clinicaltrials_result_coverage(
+            self.report_data,
+            self.sources,
+            facts=self.facts,
+        )
         incomplete_safety = [
             item.row_id
             for item in self.report_data.safety
@@ -289,6 +1640,30 @@ class FreshAResearchContent(BaseModel):
             raise ValueError(
                 "已有关键结果的竞品缺少治疗组与对照组TEAE或SAE："
                 + "、".join(safety_incomplete[:5])
+            )
+        marketed_product_ids = {
+            item.id for item in self.report_data.products if "获批" in item.status
+        }
+        marketed_teae_arms: dict[str, set[str]] = {}
+        for safety_row in self.report_data.safety:
+            if (
+                safety_row.value is not None
+                and safety_row.term.startswith("任何TEAE")
+                and safety_row.disclosure_state == "已公开"
+            ):
+                marketed_teae_arms.setdefault(safety_row.product_id, set()).add(
+                    safety_row.arm
+                )
+        marketed_teae_incomplete = sorted(
+            product_id
+            for product_id in marketed_product_ids
+            if not {"治疗组", "对照组"}
+            <= marketed_teae_arms.get(product_id, set())
+        )
+        if marketed_teae_incomplete:
+            raise ValueError(
+                "已获批竞品缺少治疗组与对照组总体TEAE："
+                + "、".join(marketed_teae_incomplete[:5])
             )
         return self
 
@@ -349,11 +1724,48 @@ def load_fresh_a_research_package(path: Path) -> FreshAResearchPackage:
         raise ResearchPackageError(f"A 类新鲜来源研究包不符合合同：{exc}") from exc
 
 
-def _date(value: datetime | None, locator: EvidenceLocator) -> DateEvidence:
-    return DateEvidence(
-        state="reported" if value is not None else "not_publicly_disclosed",
-        value=value,
-        locator=locator,
+def project_a_public_provenance(
+    package: FreshAResearchPackage, lineage: ResearchLineage,
+) -> PublicProvenance:
+    """Join by computed version identity, never by sorted-list position."""
+    package = FreshAResearchPackage.model_validate(package.model_dump(mode="json"))
+    if package.research_content_digest != lineage.package_digest:
+        raise ResearchPackageError("公共来源与已锁定研究内容不一致")
+    sources = []
+    for capture in package.sources:
+        version_id = source_version_identity(
+            capture.source_id, hashlib.sha256(capture.content_text.encode("utf-8")).hexdigest(),
+            published_at=capture.date_evidence("published_at"),
+            effective_at=capture.date_evidence("effective_at"),
+            first_disclosed_at=capture.date_evidence("first_disclosed_at"),
+            text_derivation=capture.text_derivation,
+        )
+        sources.append(PublicSource(
+            source_version_id=version_id, label=capture.title,
+            url=capture.url, source_type={
+                "clinical_trial_registry": "临床试验登记",
+                "regulatory_document": "监管文件",
+                "primary_trial_report": "主要试验报告",
+                "peer_reviewed_primary_report": "同行评议主要研究论文",
+                "peer_reviewed_publication": "同行评议文献",
+                "company_disclosure": "企业披露",
+                "conference_abstract": "会议摘要",
+            }.get(capture.source_type, capture.source_type),
+            published_at=(
+                capture.published_at.date().isoformat()
+                if capture.published_at is not None else "未知（来源未明确公开）"
+            ),
+            data_cutoff=package.data_cutoff.date().isoformat(),
+            limitation="报告级来源清单；具体行级支持关系尚未在此展开。",
+        ))
+    if sorted(item.source_version_id for item in sources) != sorted(lineage.source_version_ids):
+        raise ResearchPackageError("公共来源与已锁定来源版本不一致")
+    return PublicProvenance(
+        evidence_snapshot_id=lineage.evidence_snapshot.snapshot_id,
+        report_data_digest=hashlib.sha256(
+            package.report_data.model_dump_json().encode("utf-8")
+        ).hexdigest(),
+        sources=tuple(sources),
     )
 
 
@@ -364,19 +1776,29 @@ def ingest_fresh_a_research_package(
     """幂等摄取来源、事实、声明和真实锁定证据快照。"""
     database_path = project_root / "state/project.sqlite"
     repository = EvidenceRepository(database_path, ContentAddressedStore(project_root))
-    timestamp = datetime.now(UTC)
+    timestamp = package.scientific_review.reviewed_at
     versions: dict[str, str] = {}
     fragments: dict[str, str] = {}
     receipts: list[SourceReceipt] = []
+    from ci_workflow.storage.source_derivation import verify_source_text_derivation
+
+    for capture in package.sources:
+        if capture.text_derivation is not None:
+            verify_source_text_derivation(
+                project_root, capture.text_derivation, capture.content_text
+            )
     for capture in package.sources:
         version = repository.add_source_version(
             source_id=capture.source_id,
             content=capture.content_text.encode("utf-8"),
-            media_type=capture.media_type,
+            media_type=(
+                "text/plain" if capture.media_type == "application/pdf" else capture.media_type
+            ),
+            text_derivation=capture.text_derivation,
             acquired_at=capture.acquired_at,
-            published_at=_date(capture.published_at, capture.locator),
-            effective_at=_date(capture.effective_at, capture.locator),
-            first_disclosed_at=_date(capture.first_disclosed_at, capture.locator),
+            published_at=capture.date_evidence("published_at"),
+            effective_at=capture.date_evidence("effective_at"),
+            first_disclosed_at=capture.date_evidence("first_disclosed_at"),
         )
         fragment = repository.add_fragment(
             source_version_id=version.source_version_id,

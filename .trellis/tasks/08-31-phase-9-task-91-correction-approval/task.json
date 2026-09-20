@@ -1,0 +1,35 @@
+{
+  "id": "phase-9-task-91-correction-approval",
+  "name": "phase-9-task-91-correction-approval",
+  "title": "Phase 9 Task 9.1：来源关联修订与明确批准",
+  "description": "实现站点报告发起的来源关联修订包、追加式验证状态、用户明确批准和受影响内容通过独立质控后的幂等发布。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 9.1 only：修订建议 schema、应用服务、修订控制图和集成测试；不实现增量刷新、监测、宿主安装或任何 PDF/PPT 导出。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": "2026-09-01",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "schemas/correction-proposal.schema.json",
+    "src/ci_workflow/application/correction_service.py",
+    "src/ci_workflow/graph/definitions/correction.py",
+    "tests/integration/test_correction_flow.py"
+  ],
+  "notes": "Task 9.1 已验收：修订合同、追加式服务、六态图绑定、批准与幂等发布完成；31 项任务测试、16 项共享回归、Ruff、mypy 通过，独立会商修订后无阻断。站点/宿主修订包生产者与报告负责人身份绑定归 Phase 9.4。",
+  "meta": {
+    "phase": 9,
+    "task": "9.1",
+    "release_scope": "site_html_v1"
+  }
+}

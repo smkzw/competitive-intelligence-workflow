@@ -1,0 +1,57 @@
+{
+  "$schema": "schemas/visual-verification-reference.schema.json",
+  "schema_version": "1.0",
+  "verdict_id": "visual-verdict-B-html-pnh-responsive-20260830",
+  "format": "html",
+  "visual_plan_digest": "8b920c69639545a06c2094c56e7b2d6e421ddacdf6eb400ea676b52d7e0e7afa",
+  "candidate_artifact_digest": "f1b37ba4745997df319485fb6e929e24ed1153d0304376f6740c45fda3800381",
+  "render_evidence_digest": "448b02f63c6da907f89080cc92b7fb8342ce93d1d72bfb21ea0331eca81b7e19",
+  "producer_identity": "openai-codex/gpt-5.6-luna:worker_03",
+  "verifier_identity": "pi/kimi-code/k3-256k:visual_single_object",
+  "verdict": "accepted",
+  "domains": [
+    {
+      "domain": "copy_zh",
+      "status": "accepted",
+      "criteria": ["医学经理可直接理解页面标题、状态和数据依据，不出现工程化标签或翻译腔"],
+      "evidence_refs": ["runs/conference/ci-phase6-final-visual-review/visual_single_object.md#中文原生表达"]
+    },
+    {
+      "domain": "hierarchy_density",
+      "status": "accepted",
+      "criteria": ["门户首页与各下钻页的信息层级清晰，默认视野内可识别主要比较结果"],
+      "evidence_refs": ["screenshots/chromium/overview-768.png", "screenshots/chromium/baseline-overview-1440.png"]
+    },
+    {
+      "domain": "typography_spacing",
+      "status": "accepted",
+      "criteria": ["三档视口文字不截断且最小可见字号不低于十六像素，卡片和段落间距一致"],
+      "evidence_refs": ["browser-metrics.json#minimum_observed_visible_font_size", "screenshots/webkit/overview-1024.png"]
+    },
+    {
+      "domain": "color_legibility",
+      "status": "accepted",
+      "criteria": ["治疗组、对照组、披露状态和安全性热图色阶保持一致并能被清晰区分"],
+      "evidence_refs": ["screenshots/chromium/safety-768.png", "screenshots/webkit/efficacy-safety-matrix-1024.png"]
+    },
+    {
+      "domain": "charts_tables",
+      "status": "accepted",
+      "criteria": ["图表先于表格呈现，七百六十八像素下表格改为完整堆叠卡片且不隐藏末列"],
+      "evidence_refs": ["browser-metrics.json#table_container_checks", "screenshots/chromium/safety-768.png", "screenshots/chromium/disposition-overview-768.png"]
+    },
+    {
+      "domain": "interaction_consistency",
+      "status": "accepted",
+      "criteria": ["菜单展开聚焦搜索，一次退出键关闭结果并保留查询，证据单元格回车与空格均可打开详情"],
+      "evidence_refs": ["browser-metrics.json#interaction_checks", "screenshots/chromium/responsive-search-768.png", "screenshots/webkit/interaction-drawer-1440.png"]
+    },
+    {
+      "domain": "format_rendering",
+      "status": "accepted",
+      "criteria": ["二十四个页面在两种浏览器和三档视口均无页面错误、控制台错误或横向溢出"],
+      "evidence_refs": ["render-evidence.json#render_targets", "browser-metrics.json#records"]
+    }
+  ],
+  "created_at": "2026-08-30T11:38:33Z"
+}

@@ -1,0 +1,48 @@
+{
+  "case_id": "kangzhe-and-large-project-runtime",
+  "source_fixture": "fixtures/synthetic/three-report-complete/inputs/entity-counts.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "康哲站点式 HTML 必须在大型项目规模下保持全路由、全页面和交互下钻可达，不能只验首页。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "logo-navigation-no-collision",
+      "description_zh": "Logo、中文导航和页面布局不碰撞。"
+    },
+    {
+      "id": "global-search",
+      "description_zh": "全局搜索可定位实体并对无结果给出清晰中文反馈。"
+    },
+    {
+      "id": "full-pages",
+      "description_zh": "A/B/C 全部静态页面和实体详情页均可达。"
+    },
+    {
+      "id": "filters",
+      "description_zh": "页面筛选保持事实集合、URL 和焦点状态一致。"
+    },
+    {
+      "id": "evidence-drilldown",
+      "description_zh": "图表/表格可下钻至证据定位而不丢实体。"
+    },
+    {
+      "id": "large-project-browser",
+      "description_zh": "大项目规模下浏览器页面无严重加载、脚本和布局错误。"
+    },
+    {
+      "id": "adr-0013-html-only",
+      "description_zh": "首版只验收站点式 HTML；HTML-PPT presenter、逐字稿和页型规则延后。"
+    }
+  ],
+  "deferred_formats": [
+    "pdf",
+    "html-ppt",
+    "pptx",
+    "powerpoint-confirmation"
+  ],
+  "adr_0013_narrowing": "大型项目首版只验收站点式 HTML；HTML-PPT presenter/逐字稿/页型延后。"
+}

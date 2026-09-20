@@ -1,11 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cms.example/schemas/package-manifest.schema.json",
-  "title": "竞品调研工作流安装包清单",
+  "title": "竞品调研工作流 HTML-only 安装包清单",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
+    "public_trigger",
     "package",
     "public_skill",
     "internal_skills",
@@ -15,15 +16,33 @@
   "properties": {
     "$schema": {"type": "string", "const": "schemas/package-manifest.schema.json"},
     "schema_version": {"type": "string", "const": "1.0"},
+    "public_trigger": {"type": "string", "const": "竞品调研"},
     "package": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "version", "cli_version", "build_stage", "python", "hosts"],
+      "required": [
+        "name",
+        "version",
+        "cli_version",
+        "build_stage",
+        "release_scope",
+        "formats",
+        "python",
+        "hosts"
+      ],
       "properties": {
         "name": {"type": "string", "const": "competitive-intelligence-workflow"},
         "version": {"type": "string", "minLength": 1},
         "cli_version": {"type": "string", "minLength": 1},
-        "build_stage": {"type": "string", "const": "phase-2-accepted"},
+        "build_stage": {"type": "string", "const": "development-candidate"},
+        "release_scope": {"type": "string", "const": "site_html_v1"},
+        "formats": {
+          "type": "array",
+          "prefixItems": [{"const": "html"}],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
         "python": {"type": "string", "minLength": 1},
         "hosts": {
           "type": "array",
@@ -76,15 +95,24 @@
         "catalog": {
           "type": "array",
           "uniqueItems": true,
-          "minItems": 6,
-          "maxItems": 6,
+          "minItems": 15,
+          "maxItems": 15,
           "prefixItems": [
             {"const": "package verify"},
             {"const": "project create"},
             {"const": "project verify"},
             {"const": "project run"},
+            {"const": "project accept-visual"},
             {"const": "capability preflight"},
-            {"const": "fixture run"}
+            {"const": "fixture run"},
+            {"const": "review issue"},
+            {"const": "research submit"},
+            {"const": "research capture"},
+            {"const": "research fetch-ctgov"},
+            {"const": "publication unavailable"},
+            {"const": "yaozh answer"},
+            {"const": "yaozh observe"},
+            {"const": "yaozh check"}
           ],
           "items": false
         }

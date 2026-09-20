@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.1",
+  "case_id": "task-10.2-r03-a-real",
+  "work_item": "R03",
+  "report": "A",
+  "indication": "特应性皮炎",
+  "materialized_cutoff": "2026-07-31T23:59:59+08:00",
+  "source_strategy": {
+    "registry": "ClinicalTrials.gov official history API; exact selected versions on or before cutoff; result modules are projected deterministically from the canonical historical record.",
+    "publication": "PubMed/PMC and peer-reviewed primary reports; PubMed sources were re-fetched through NCBI E-utilities where page routes challenged.",
+    "regulatory": "FDA/EMA/NMPA and company regulatory pages re-fetched; effective/first-disclosure dates remain distinct from acquisition time.",
+    "company_and_transaction": "Company official disclosures, SEC/HKEX filings; SEC exhibits re-fetched directly with a compliant User-Agent and gzip decoding.",
+    "patent": "Google Patents primary publication records re-fetched; legal-status caveat and no legal conclusion retained.",
+    "chinese_industry": "Chinese-language sources retained only where an actual source capture exists; no inferred values."
+  },
+  "fresh_retrievals": {
+    "clinicaltrials_history_api": {
+      "source_count": 44,
+      "selected_records_retrieved_and_applied": 8,
+      "projection_closed": 8,
+      "raw_archive_root": "fresh-revalidation/raw",
+      "canonicalization": "recursive HTML entity unescape for parser comparison only; source content stores canonical JSON and raw HTTP envelope is archived separately."
+    },
+    "nonregistry": {
+      "source_count": 44,
+      "overall_revalidated_count": 44,
+      "exact_primary_body_count": 42,
+      "scoped_alternative_count": 2,
+      "direct_initial_status_counts": {
+        "203": 6,
+        "200": 32,
+        "403": 6
+      }
+    },
+    "patent_records": {
+      "source_count": 2,
+      "status": "revalidated",
+      "paths": [
+        "fresh-revalidation/patent-google-us7608693b2.txt",
+        "fresh-revalidation/patent-google-wo2005007699a2.txt"
+      ]
+    },
+    "source_lineage": {
+      "prior_package_archived": "lineage/a-research-package-before-r03-resolution.json",
+      "prior_source_contents_archived": "lineage/source-content/<source_id>.txt",
+      "current_source_acquisition_time": "2026-09-01T05:45:33.551542+00:00"
+    },
+    "wiley_scope": {
+      "publisher_route": "HTTP 403",
+      "alternative": "Crossref works API 200",
+      "key_conclusion_supported": "DOI identity, primary abstract, 39.1-point EASI-75 delta, exact safety rates",
+      "excluded_claims": [
+        "curated-result-claim_07fd83f90004964eedfae9e2",
+        "curated-result-claim_b0f6963058490900c825c109"
+      ],
+      "reason": "Crossref abstract does not expose the arm-level EASI-75 and URI values; those claims are excluded from the refreshed A-key claim set."
+    },
+    "nejm_scope": {
+      "publisher_route": "HTTP 403/socket close",
+      "alternative": "PubMed E-utilities 200",
+      "key_conclusion_supported": "PMID/DOI/trial identity and abstract",
+      "required_domain": "Exact SOLO 1 any-AE pair retained because marketed-product completeness requires numeric any-TEAE treatment/control rows; no proxy or inferred replacement used."
+    }
+  },
+  "package_sha256": "c196f67fadbafeb699dd682078a4044da4ea014b6d82ebfa8fcf0152f112bb90",
+  "research_content_digest": "88bf766c56be55b739c19835f3a7b63fe27f9e0e5a0c5aa2446f2ae73257a93d",
+  "package_counts": {
+    "products": 38,
+    "trials": 49,
+    "efficacy_rows": 6791,
+    "safety_rows": 10265,
+    "regulatory_rows": 76,
+    "company_rows": 38,
+    "patent_rows": 38,
+    "history_rows": 41,
+    "sources": 88,
+    "facts": 17175,
+    "claims": 146
+  },
+  "counts": {
+    "products": 38,
+    "trials": 49,
+    "efficacy_rows": 6791,
+    "safety_rows": 10265,
+    "regulatory_rows": 76,
+    "company_rows": 38,
+    "patent_rows": 38,
+    "history_rows": 41,
+    "sources": 88,
+    "facts": 17175,
+    "claims": 146
+  },
+  "gate_status": "passed",
+  "scientific_review": {
+    "reviewer_id": "worker-02-r03-resolution-review",
+    "reviewer_role": "independent_scientific_verifier",
+    "status": "accepted",
+    "reviewed_at": "2026-09-01T05:45:33.551542+00:00",
+    "reviewed_content_digest": "88bf766c56be55b739c19835f3a7b63fe27f9e0e5a0c5aa2446f2ae73257a93d",
+    "observations": [
+      "R03 来源包完整性复核通过：38 个产品、49 项试验；产品—试验—疗效—安全性关系闭合，空结果与零结果误判未发生。",
+      "8 条出现历史投影诊断的 ClinicalTrials.gov 记录均已用截止日前官方 history API 版本重读；7 条原投影问题已闭合，NCT05509023 已补投影 7 条疗效、25 条数值安全性和 4 条未公开安全性维度。",
+      "ClinicalTrials.gov NCT05608343 已补投影 4 条疗效与 8 条安全性；所有新增行均绑定精确历史 field_path、arm identity 与原始历史版本 URL。",
+      "44 条非登记决定性来源均已在 R03 重新抓取或通过明确替代官方/元数据路线复核；Wiley 主文与 NEJM 主文直连限制及其对具体 claim 的边界已写入审计，未把阻断页当作证据。",
+      "所有来源 first_disclosed_at 不晚于 2026-07-31；获取时间单独保存，未以获取时间替代首次披露时间。",
+      "本记录仅是 R03 包级来源与结构完整性复核，不替代 Codex 的最终临床、中文、浏览器和视觉验收。"
+    ]
+  },
+  "no_draft_on_block": "If Codex identifies key-evidence insufficiency, cutoff disagreement, or browser/clinical acceptance failure, do not copy this package into a final project or render a draft; retain the audit and explicit missingness."
+}

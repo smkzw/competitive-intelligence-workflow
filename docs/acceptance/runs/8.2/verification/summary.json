@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-08-30T21:35:14.612507+00:00",
+  "tools": {
+    "pdftotext": "/Users/smkzw/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/poppler/bin/pdftotext",
+    "pdftoppm": "/Users/smkzw/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+    "pypdf": true
+  },
+  "reports": [
+    {
+      "report": "A",
+      "pdf": ".artifacts/pdf-complete/reports/A/v-fixture-001/report.pdf",
+      "sha256": "4aa62ade74d2055a40ef740b58fb6006591f49d4209433aa15527dd8821eb1a6",
+      "page_count": 10,
+      "bookmark_count": 14,
+      "coverage_ok": true,
+      "missing_page_ids": [],
+      "defect_count": 0,
+      "ok": true
+    },
+    {
+      "report": "B",
+      "pdf": ".artifacts/pdf-complete/reports/B/v-fixture-001/report.pdf",
+      "sha256": "783485c697ab967a10e9487b6476c748da4381ba3997c66bc66b1218f9a7eb93",
+      "page_count": 24,
+      "bookmark_count": 23,
+      "coverage_ok": true,
+      "missing_page_ids": [],
+      "defect_count": 0,
+      "ok": true
+    },
+    {
+      "report": "C",
+      "pdf": ".artifacts/pdf-complete/report-c.pdf",
+      "sha256": "6954dfa92f05767ad92660b6e660c4baf0246cf35b6a45486b27f60487ce7b95",
+      "page_count": 20,
+      "bookmark_count": 18,
+      "coverage_ok": true,
+      "missing_page_ids": [],
+      "defect_count": 0,
+      "ok": true
+    }
+  ],
+  "defects": [],
+  "ok": true
+}

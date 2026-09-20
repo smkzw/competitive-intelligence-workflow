@@ -1,8 +1,8 @@
-"""Task 4.4 兼容性合同：九类图形、可比性拆分、锁定快照入口与全行恰好一次。
+"""Task 4.4 兼容性合同：八类 v1 图形、可比性拆分、锁定快照入口与全行恰好一次。
 
 反例冻结以下合同（假绿修复后必须 GREEN）：
 
-1. **九类图形注册**：字段要求与中文显示合同。
+1. **八类图形注册**：字段要求与中文显示合同；v1 不注册雷达图。
 2. **未知类型拒绝**：不在注册表中的类型失败关闭。
 3. **缺失状态非零**：缺失类披露保留非数值状态，不得转 0。
 4. **兼容组关键维度**：单位、量表、统计形式、方向、时间窗、分析人群触发拆图；
@@ -10,7 +10,7 @@
 5. **稳定小多图拆分**：确定性、顺序无关、最小拆分。
 6. **所有输入行恰好一次**：覆盖校验；原始重复 row_id 失败；组内不得改写内容。
 7. **必需字段与可渲染性**：已披露行缺字段失败关闭；缺失行 ``renderable=False``；
-   完整行 ``renderable=True``；森林上下限、气泡 size、雷达长度最小校验。
+   完整行 ``renderable=True``；森林上下限与气泡 size 最小校验。
 8. **锁定快照入口**：row_id 唯一非空、快照一致、disclosure 已知集合。
 9. **小多图中文标题**：拆图标题不得泄漏 ASCII snake_case / 英枚举内部键；
    方向展示值冻结为「越高越有利」「越低越有利」（内部键仍可 higher_better/
@@ -65,7 +65,7 @@ _REQUIRED_API: tuple[str, ...] = (
     "validate_chart_input_rows",
 )
 
-NINE_CHART_TYPE_VALUES: tuple[str, ...] = (
+V1_CHART_TYPE_VALUES: tuple[str, ...] = (
     "bar",
     "line",
     "forest",
@@ -73,7 +73,6 @@ NINE_CHART_TYPE_VALUES: tuple[str, ...] = (
     "bubble",
     "scatter_interval",
     "timeline",
-    "radar",
     "status_matrix",
 )
 
@@ -86,7 +85,6 @@ _COMPLETE_FIELDS: dict[str, dict[str, Any]] = {
     "bubble": {"x_value": 0.5, "y_value": 0.2, "size": 120},
     "scatter_interval": {"center": 1.0, "ci_lower": 0.8},
     "timeline": {"time": "2024-01", "status": "进行中"},
-    "radar": {"dimensions": ["疗效", "安全性"], "scores": [0.8, 0.6]},
     "status_matrix": {"status": "已披露", "coverage": "完整"},
 }
 
@@ -160,14 +158,14 @@ def _complete_row(chart_type: str, **overrides: Any) -> dict[str, Any]:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 1. 九类图形注册
+# 1. 八类 v1 图形注册
 # ══════════════════════════════════════════════════════════════════════════════
 
 
 class TestChartTypeRegistration:
-    """九类图形必须全部注册，每类有明确字段要求与中文显示合同。"""
+    """八类 v1 图形必须全部注册，每类有明确字段要求与中文显示合同。"""
 
-    @pytest.mark.parametrize("chart_type_value", NINE_CHART_TYPE_VALUES)
+    @pytest.mark.parametrize("chart_type_value", V1_CHART_TYPE_VALUES)
     def test_each_chart_type_has_registered_spec(self, chart_type_value: str) -> None:
         api = _api()
         chart_type = api.ChartType(chart_type_value)
@@ -178,17 +176,17 @@ class TestChartTypeRegistration:
         assert len(spec.required_fields) > 0, f"{chart_type_value} 的 required_fields 不得为空"
         assert spec.display_contract_zh, f"{chart_type_value} 缺少中文显示合同"
 
-    def test_chart_type_enum_has_exactly_nine_members(self) -> None:
+    def test_chart_type_enum_has_exactly_eight_members(self) -> None:
         api = _api()
         members = list(api.ChartType)
-        assert len(members) == 9
-        assert {m.value for m in members} == set(NINE_CHART_TYPE_VALUES)
+        assert len(members) == 8
+        assert {m.value for m in members} == set(V1_CHART_TYPE_VALUES)
 
-    def test_all_nine_specs_are_distinct(self) -> None:
+    def test_all_eight_specs_are_distinct(self) -> None:
         api = _api()
         specs = [api.ChartSpec.for_type(t) for t in api.ChartType]
         field_sets = [frozenset(s.required_fields) for s in specs]
-        assert len(set(field_sets)) == 9, "存在图形类型的 required_fields 重复"
+        assert len(set(field_sets)) == 8, "存在图形类型的 required_fields 重复"
 
     def test_bar_spec_requires_category_and_value(self) -> None:
         api = _api()
@@ -236,12 +234,6 @@ class TestChartTypeRegistration:
         spec = api.ChartSpec.for_type(api.ChartType.TIMELINE)
         assert "time" in spec.required_fields
         assert "status" in spec.required_fields
-
-    def test_radar_spec_requires_dimensions_and_scores(self) -> None:
-        api = _api()
-        spec = api.ChartSpec.for_type(api.ChartType.RADAR)
-        assert "dimensions" in spec.required_fields
-        assert "scores" in spec.required_fields
 
     def test_status_matrix_spec_requires_status_and_coverage(self) -> None:
         api = _api()
@@ -787,7 +779,7 @@ class TestAllRowsExactlyOnce:
 
 
 class TestRequiredFieldsAndRenderability:
-    @pytest.mark.parametrize("chart_type_value", NINE_CHART_TYPE_VALUES)
+    @pytest.mark.parametrize("chart_type_value", V1_CHART_TYPE_VALUES)
     def test_complete_disclosed_row_is_renderable(self, chart_type_value: str) -> None:
         api = _api()
         row = _complete_row(chart_type_value)
@@ -795,7 +787,7 @@ class TestRequiredFieldsAndRenderability:
         assert result[0]["renderable"] is True
         assert result[0]["_chart_type"] == chart_type_value
 
-    @pytest.mark.parametrize("chart_type_value", NINE_CHART_TYPE_VALUES)
+    @pytest.mark.parametrize("chart_type_value", V1_CHART_TYPE_VALUES)
     def test_disclosed_row_missing_required_field_fails(self, chart_type_value: str) -> None:
         api = _api()
         spec = api.ChartSpec.for_type(api.ChartType(chart_type_value))
@@ -805,7 +797,7 @@ class TestRequiredFieldsAndRenderability:
         with pytest.raises(ValueError, match="必需|必填|缺少|缺失"):
             api.resolve_chart_type([row], chart_type_value)
 
-    @pytest.mark.parametrize("chart_type_value", NINE_CHART_TYPE_VALUES)
+    @pytest.mark.parametrize("chart_type_value", V1_CHART_TYPE_VALUES)
     def test_missing_disclosure_row_not_renderable_without_fail(
         self, chart_type_value: str
     ) -> None:
@@ -831,17 +823,6 @@ class TestRequiredFieldsAndRenderability:
         row = _complete_row("bubble", size=0)
         with pytest.raises(ValueError, match="size|气泡"):
             api.resolve_chart_type([row], api.ChartType.BUBBLE)
-
-    def test_radar_dimensions_scores_length_must_match(self) -> None:
-        api = _api()
-        row = _complete_row(
-            "radar",
-            dimensions=["疗效", "安全性", "依从性"],
-            scores=[0.8, 0.6],
-        )
-        with pytest.raises(ValueError, match="长度|dimensions|scores"):
-            api.resolve_chart_type([row], api.ChartType.RADAR)
-
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 8. 锁定快照统一入口校验

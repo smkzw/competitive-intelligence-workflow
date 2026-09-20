@@ -1,0 +1,39 @@
+{
+  "id": "phase-6-task-69-report-b-portal",
+  "name": "phase-6-task-69-report-b-portal",
+  "title": "Task 6.9 B 类完整门户与交互",
+  "description": "构建 B 类全部物理页面、产品/试验档案、同源筛选、网址状态、数据依据面板及真实浏览器视觉闭环",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-30",
+  "completedAt": "2026-08-30",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-27-phase-6-report-b",
+  "relatedFiles": [
+    "src/ci_workflow/renderers/portal/report_b.py",
+    "src/ci_workflow/renderers/portal/templates/b",
+    "src/ci_workflow/renderers/portal/assets/report-b.css",
+    "src/ci_workflow/renderers/portal/assets/report-b.js",
+    "tests/browser/test_b_portal.py",
+    "docs/acceptance/runs/task-6.9/verdict.md"
+  ],
+  "notes": "Task 6.9 已完成并通过执行审计、双浏览器自动化、真实浏览器四视口与独立视觉复核；Task 6.10 尚未启动。",
+  "meta": {
+    "routes": 29,
+    "final_browser_tests": 63,
+    "final_focused_regression": 321,
+    "remaining_p0_p1": 0,
+    "next_safe_action": "启动 Task 6.10 前重新读取本任务 checkpoint.md 与 Phase 6 计划"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "phase-6-task-61-study-role-compatibility",
+  "name": "phase-6-task-61-study-role-compatibility",
+  "title": "Task 6.1 研究角色与终点时间窗兼容规则",
+  "description": "建立 B/C 共用研究角色和 B 类终点、时间窗版本化兼容合同",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 6.1 only：B/C 研究角色与 B 终点、时间窗兼容合同；不创建页面或修改证据门槛",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-27",
+  "completedAt": "2026-08-29",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-27-phase-6-report-b",
+  "relatedFiles": [
+    "src/ci_workflow/reports/common/study_roles.py",
+    "src/ci_workflow/reports/b/contracts.py",
+    "policies/studies/study-role-v1.yaml",
+    "docs/acceptance/runs/task-6.1/verdict.md"
+  ],
+  "notes": "",
+  "meta": {}
+}

@@ -1,4 +1,4 @@
 interface:
-  display_name: "竞品调研工作流"
-  short_description: "按适应症生成可审计的竞品调研门户与多格式报告，供医学人员直接使用"
-  default_prompt: "使用 $competitive-intelligence-workflow，按适应症和所选报告启动竞品调研。"
+  display_name: "竞品调研"
+  short_description: "用一句话启动临床竞品自主研究并生成独立 A/B/C HTML 门户"
+  default_prompt: "使用 $competitive-intelligence-workflow；根据适应症自主研究，未指定报告类型时先用宿主原生 Ask 说明并让用户选择 A、B 或 C。"

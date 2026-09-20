@@ -1,0 +1,1394 @@
+{
+ "schema_version": "1.3",
+ "package_id": "pnh-vertical-audit-001",
+ "contract_identity": {
+  "project_id": "project_c53c47d2c2a09996fe854a85",
+  "indication": "阵发性睡眠性血红蛋白尿症",
+  "contract_version": "1.3"
+ },
+ "reports": [
+  "A",
+  "B",
+  "C"
+ ],
+ "data_cutoff": "2026-09-06",
+ "source_policy_id": "source-policy-v1",
+ "source_policy_version": "1.1",
+ "producer_id": "zcode-main-thread",
+ "producer_context": "producer-context-pnh-vertical",
+ "entities": [
+  {
+   "entity_id": "my008211a",
+   "entity_type": "product",
+   "name": "my008211a",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "eculizumab",
+   "entity_type": "product",
+   "name": "eculizumab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "hsk39297",
+   "entity_type": "product",
+   "name": "hsk39297",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "cms-d017",
+   "entity_type": "product",
+   "name": "cms-d017",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "xh-s003",
+   "entity_type": "product",
+   "name": "xh-s003",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "iptacopan",
+   "entity_type": "product",
+   "name": "iptacopan",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "lfg316",
+   "entity_type": "product",
+   "name": "lfg316",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "hrs-5965",
+   "entity_type": "product",
+   "name": "hrs-5965",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "cemdisiran",
+   "entity_type": "product",
+   "name": "cemdisiran",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "pozelimab",
+   "entity_type": "product",
+   "name": "pozelimab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "ravulizumab",
+   "entity_type": "product",
+   "name": "ravulizumab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "bcx9930",
+   "entity_type": "product",
+   "name": "bcx9930",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "sb12",
+   "entity_type": "product",
+   "name": "sb12",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "ntq5082",
+   "entity_type": "product",
+   "name": "ntq5082",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "sirolimus",
+   "entity_type": "product",
+   "name": "sirolimus",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "nm8074",
+   "entity_type": "product",
+   "name": "nm8074",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "danicopan",
+   "entity_type": "product",
+   "name": "danicopan",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "coversin",
+   "entity_type": "product",
+   "name": "coversin",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "pegcetacoplan",
+   "entity_type": "product",
+   "name": "pegcetacoplan",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "ea5",
+   "entity_type": "product",
+   "name": "ea5",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "levamisole-cyclosporin-a-glucocorticoids",
+   "entity_type": "product",
+   "name": "levamisole+cyclosporin a+glucocorticoids",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "amy-101",
+   "entity_type": "product",
+   "name": "amy-101",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "crovalimab",
+   "entity_type": "product",
+   "name": "crovalimab",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "fxs6837",
+   "entity_type": "product",
+   "name": "fxs6837",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "elizaria",
+   "entity_type": "product",
+   "name": "elizaria®",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "zilucoplan",
+   "entity_type": "product",
+   "name": "zilucoplan",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "vsa012",
+   "entity_type": "product",
+   "name": "vsa012",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "sar443809",
+   "entity_type": "product",
+   "name": "sar443809",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "lp-005",
+   "entity_type": "product",
+   "name": "lp-005",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "abp-959",
+   "entity_type": "product",
+   "name": "abp 959",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "lanoracopan-hydrochloride",
+   "entity_type": "product",
+   "name": "lanoracopan hydrochloride",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "bcd-148",
+   "entity_type": "product",
+   "name": "bcd-148",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "sgb-9768",
+   "entity_type": "product",
+   "name": "sgb-9768",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "zaltenibart",
+   "entity_type": "product",
+   "name": "zaltenibart",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "kp104",
+   "entity_type": "product",
+   "name": "kp104",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "hs-10542",
+   "entity_type": "product",
+   "name": "hs-10542",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "alxn1102",
+   "entity_type": "product",
+   "name": "alxn1102",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "alxn1103",
+   "entity_type": "product",
+   "name": "alxn1103",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "tul321",
+   "entity_type": "product",
+   "name": "tul321",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "bryostatin-1",
+   "entity_type": "product",
+   "name": "bryostatin 1",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "aln-cfb",
+   "entity_type": "product",
+   "name": "aln-cfb",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "sln12140",
+   "entity_type": "product",
+   "name": "sln12140",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "adx-038",
+   "entity_type": "product",
+   "name": "adx-038",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "bcx10013",
+   "entity_type": "product",
+   "name": "bcx10013",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  },
+  {
+   "entity_id": "alxn2050",
+   "entity_type": "product",
+   "name": "alxn2050",
+   "identity_status": "resolved",
+   "disposition": "included",
+   "ontology_rule_id": "innovation-therapy-v1",
+   "identity_evidence_ids": [
+    "ctgov-pnh-page-1"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "source_id": "ctgov-pnh-page-1",
+   "title": "ClinicalTrials.gov PNH 当前记录检索第 1 页",
+   "source_role": "official_registry",
+   "source_type": "registry",
+   "url": "https://clinicaltrials.gov/api/v2/studies?query.cond=paroxysmal+nocturnal+hemoglobinuria",
+   "locator": "studies[]",
+   "locator_detail": {
+    "document_role": "registry-search-page",
+    "field_path": "studies[]",
+    "url": "https://clinicaltrials.gov/"
+   },
+   "content_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+   "retrieved_at": "2026-09-06T00:00:00+08:00",
+   "published_at": null,
+   "effective_at": null,
+   "publication_classification": "not_applicable",
+   "access_state": "available"
+  },
+  {
+   "source_id": "ctgov-pnh-page-2",
+   "title": "ClinicalTrials.gov PNH 当前记录检索第 2 页",
+   "source_role": "official_registry",
+   "source_type": "registry",
+   "url": "https://clinicaltrials.gov/api/v2/studies?query.cond=paroxysmal+nocturnal+hemoglobinuria",
+   "locator": "studies[]",
+   "locator_detail": {
+    "document_role": "registry-search-page",
+    "field_path": "studies[]",
+    "url": "https://clinicaltrials.gov/"
+   },
+   "content_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+   "retrieved_at": "2026-09-06T00:00:00+08:00",
+   "published_at": null,
+   "effective_at": null,
+   "publication_classification": "not_applicable",
+   "access_state": "available"
+  }
+ ],
+ "routes": [
+  {
+   "route_id": "global-baseline",
+   "region": "global",
+   "strategy_id": "global-ctgov-baseline",
+   "result_class": "completed",
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "source_ids": [
+    "ctgov-pnh-page-1",
+    "ctgov-pnh-page-2"
+   ]
+  },
+  {
+   "route_id": "china-baseline",
+   "region": "china",
+   "strategy_id": "china-cde-baseline",
+   "result_class": "access_blocked",
+   "attempt_ids": [
+    "attempt-china-1"
+   ],
+   "source_ids": [],
+   "query_or_identifier": "CDE/中国药物临床试验登记平台 PNH",
+   "diagnostic": "中国路线连接器尚未部署（G7-2 工具能力缺口）；本首验如实记录为访问受阻而非无数据，待 CDE 执行器实施后重新检索"
+  }
+ ],
+ "expansion_receipts": [
+  {
+   "receipt_id": "pnh-alias-1",
+   "dimension": "alias",
+   "round_id": "0",
+   "strategy_id": "alias-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "source_ids": [
+    "ctgov-pnh-page-1"
+   ],
+   "query_sha256": "1a0a6a36ca0a3953b997ddaeb722cb31e9e421b038f6a67ef55593f21dcf92b1",
+   "result_class": "success_with_evidence",
+   "diagnostic": "基线宇宙经别名维度入表"
+  },
+  {
+   "receipt_id": "pnh-target-1",
+   "dimension": "target",
+   "round_id": "0",
+   "strategy_id": "target-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "34a04005bcaf206eec990bd9637d9fdb6725e0a0c0d4aebf003f17f4c956eb5c",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "pnh-company-1",
+   "dimension": "company",
+   "round_id": "0",
+   "strategy_id": "company-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "f168ccdd91548c5a8c871bd4b9b757c5e889a1672e774bddef4a2714759a7a8f",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "pnh-trial-1",
+   "dimension": "trial",
+   "round_id": "0",
+   "strategy_id": "trial-reverse-current-records",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "79891e980747ffbd21e690297394efe764fa56d7e37750f800879fbb2d34571a",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "pnh-company-r1",
+   "dimension": "company",
+   "round_id": "1",
+   "strategy_id": "company-reverse-r1",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "f168ccdd91548c5a8c871bd4b9b757c5e889a1672e774bddef4a2714759a7a8f",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "pnh-trial-r1",
+   "dimension": "trial",
+   "round_id": "1",
+   "strategy_id": "trial-reverse-r1",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "79891e980747ffbd21e690297394efe764fa56d7e37750f800879fbb2d34571a",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "pnh-alias-r2",
+   "dimension": "alias",
+   "round_id": "2",
+   "strategy_id": "alias-reverse-r2",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "1a0a6a36ca0a3953b997ddaeb722cb31e9e421b038f6a67ef55593f21dcf92b1",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  },
+  {
+   "receipt_id": "pnh-target-r2",
+   "dimension": "target",
+   "round_id": "2",
+   "strategy_id": "target-reverse-r2",
+   "route_ids": [
+    "global-baseline"
+   ],
+   "attempt_ids": [
+    "attempt-global-1"
+   ],
+   "input_entity_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "discovered_entity_ids": [],
+   "source_ids": [],
+   "query_sha256": "34a04005bcaf206eec990bd9637d9fdb6725e0a0c0d4aebf003f17f4c956eb5c",
+   "result_class": "searched_no_evidence",
+   "diagnostic": "基于已获取 CT.gov 当前记录全量字段反向扩展，无新增实体"
+  }
+ ],
+ "closure": {
+  "closed": true,
+  "global_route_ids": [
+   "global-baseline"
+  ],
+  "china_route_ids": [
+   "china-baseline"
+  ],
+  "alias_expansion_receipts": [
+   "pnh-alias-1",
+   "pnh-alias-r2"
+  ],
+  "target_expansion_receipts": [
+   "pnh-target-1",
+   "pnh-target-r2"
+  ],
+  "company_expansion_receipts": [
+   "pnh-company-1",
+   "pnh-company-r1"
+  ],
+  "trial_expansion_receipts": [
+   "pnh-trial-1",
+   "pnh-trial-r1"
+  ],
+  "independent_review_id": "pnh-universe-review-1",
+  "independent_reviewer_id": "independent-reviewer-pnh",
+  "independent_context": "clean-context-pnh-vertical",
+  "candidate_entity_ids": [
+   "my008211a",
+   "eculizumab",
+   "hsk39297",
+   "cms-d017",
+   "xh-s003",
+   "iptacopan",
+   "lfg316",
+   "hrs-5965",
+   "cemdisiran",
+   "pozelimab",
+   "ravulizumab",
+   "bcx9930",
+   "sb12",
+   "ntq5082",
+   "sirolimus",
+   "nm8074",
+   "danicopan",
+   "coversin",
+   "pegcetacoplan",
+   "ea5",
+   "levamisole-cyclosporin-a-glucocorticoids",
+   "amy-101",
+   "crovalimab",
+   "fxs6837",
+   "elizaria",
+   "zilucoplan",
+   "vsa012",
+   "sar443809",
+   "lp-005",
+   "abp-959",
+   "lanoracopan-hydrochloride",
+   "bcd-148",
+   "sgb-9768",
+   "zaltenibart",
+   "kp104",
+   "hs-10542",
+   "alxn1102",
+   "alxn1103",
+   "tul321",
+   "bryostatin-1",
+   "aln-cfb",
+   "sln12140",
+   "adx-038",
+   "bcx10013",
+   "alxn2050"
+  ],
+  "new_entity_ids_by_round": {
+   "0": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ],
+   "1": [],
+   "2": []
+  },
+  "convergence_round_ids": [
+   "1",
+   "2"
+  ],
+  "review_digest_version": "2",
+  "reviewed_universe_sha256": "c6d2006486ae45be15faa3d6a642e4073e33dafb81f84911d90a54fc6bf0193c"
+ },
+ "report_payloads": [
+  {
+   "report": "A",
+   "relative_path": "evidence/library/a-research-package.json",
+   "content_sha256": "ed1395b8f936d6470349539746e40ede1836c62a8ef617deb43256225270c0d1",
+   "universe_product_ids": [
+    "my008211a",
+    "eculizumab",
+    "hsk39297",
+    "cms-d017",
+    "xh-s003",
+    "iptacopan",
+    "lfg316",
+    "hrs-5965",
+    "cemdisiran",
+    "pozelimab",
+    "ravulizumab",
+    "bcx9930",
+    "sb12",
+    "ntq5082",
+    "sirolimus",
+    "nm8074",
+    "danicopan",
+    "coversin",
+    "pegcetacoplan",
+    "ea5",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "amy-101",
+    "crovalimab",
+    "fxs6837",
+    "elizaria",
+    "zilucoplan",
+    "vsa012",
+    "sar443809",
+    "lp-005",
+    "abp-959",
+    "lanoracopan-hydrochloride",
+    "bcd-148",
+    "sgb-9768",
+    "zaltenibart",
+    "kp104",
+    "hs-10542",
+    "alxn1102",
+    "alxn1103",
+    "tul321",
+    "bryostatin-1",
+    "aln-cfb",
+    "sln12140",
+    "adx-038",
+    "bcx10013",
+    "alxn2050"
+   ]
+  },
+  {
+   "report": "B",
+   "relative_path": "evidence/library/b-research-package.json",
+   "content_sha256": "68e7de5ac8193bf8b447df526224b9e8aecfb58b55900229f337769707169f4a",
+   "universe_product_ids": [
+    "abp-959",
+    "adx-038",
+    "aln-cfb",
+    "alxn1102",
+    "alxn2050",
+    "amy-101",
+    "bcd-148",
+    "bcx10013",
+    "bcx9930",
+    "bryostatin-1",
+    "cemdisiran",
+    "cms-d017",
+    "coversin",
+    "crovalimab",
+    "danicopan",
+    "ea5",
+    "eculizumab",
+    "elizaria",
+    "fxs6837",
+    "hrs-5965",
+    "hs-10542",
+    "hsk39297",
+    "iptacopan",
+    "kp104",
+    "lanoracopan-hydrochloride",
+    "levamisole-cyclosporin-a-glucocorticoids",
+    "lfg316",
+    "lp-005",
+    "my008211a",
+    "nm8074",
+    "ntq5082",
+    "pegcetacoplan",
+    "pozelimab",
+    "ravulizumab",
+    "sar443809",
+    "sb12",
+    "sgb-9768",
+    "sirolimus",
+    "sln12140",
+    "tul321",
+    "vsa012",
+    "xh-s003",
+    "zaltenibart",
+    "zilucoplan"
+   ]
+  },
+  {
+   "report": "C",
+   "relative_path": "evidence/library/c-research-package.json",
+   "content_sha256": "e83cf46ecc41f2b75108a41b7a235319ffbaa4600317862a2ac521110abfc08c",
+   "universe_product_ids": [
+    "eculizumab",
+    "ravulizumab",
+    "danicopan",
+    "coversin",
+    "alxn2050"
+   ]
+  }
+ ]
+}

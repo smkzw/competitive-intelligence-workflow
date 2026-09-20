@@ -1,0 +1,208 @@
+{
+  "agent": "zcode",
+  "requested_agent": "zcode",
+  "role_id": "r13h_visual_zcode",
+  "requested_provider": "zcode",
+  "requested_model": "glm-5.3-flash",
+  "requested_effort": "max",
+  "explicit_route": true,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": null,
+  "schedule_reconciliation": {
+    "enabled": false,
+    "packet_period": null,
+    "active_period": null,
+    "dispatch_period": "night",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "no scheduled route manifest"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "zcode",
+  "effective_provider": "zcode",
+  "effective_model": "glm-5.3-flash",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": true,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 88,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "# R13h 独立视觉复审（zcode 续接会话，仅 ego(lite) 实测）\n\n## 一、结论\n\n**R13h 在交互与数据严谨性上较前两轮有明显提升：历次确认的缺陷（B 图例配色错位、热区互相抢占、突破性溶血“应答率”误标、A 气泡“产品611”标签、C 标准页每试验仅 1 条、C 抽屉机器字段与英文章节名）已全部修复或按合同要求落实（入选 148 条、排除 276 条逐条展开）。本轮新发现 2 个重要缺陷，集中在 B 新增的安全性页：6 个面板标题与 10 余行表格直接使用英文事件名（如 Breakthrough haemolysis、Headache），以及热图色彩语义全页无任何说明。另确认 1 项上轮遗留（A 抽屉期别/时间点口径混乱）未修。无阻断级缺陷。** 本复审不构成最终验收。\n\n审查方法说明（涉及两条结论的可信度）：① 宽度抽查中曾出现“C 试验页 1024 宽度溢出 113px”读数，经以 1024 视口直接加载并稳定 2.5 秒后复测证伪——四档宽度均无溢出，为切换视口后布局未稳定的测量伪影，非页面缺陷；② B 安全性页图例曾计数为 15 组异常，经逐组解析实为其热图单元格使用 SVG 渐变填充被我的探针误配对，稳定态复测该页并无传统图例错位问题，属探针误判而非页面缺陷。ego 深滚动截图出现一次整幅空白（B 安全性长页），已按合同以 DOM 取证+回顶截图替代，记为 ego 技术问题。\n\n## 二、实际复现路径（候选包 task-10.2-20260902-043000-r13h，端口 8773）\n\n1. **A**：matrix.html 真实点击“阿姆特利单抗”“SSGJ-611”两个气泡 → 核对抽屉（role/aria-modal、四页签、试验身份卡）→ 切“安全性”页签 → Escape（URL 清除、焦点回气泡）→ 全文扫描 overview/safety/matrix 三页 AESI 字样。\n2. **B**：efficacy.html 滚动全页枚举 13 个面板标题与图例配对 → 真实点击治疗值\"10.4\"与对照值\"10.7\"热区，比对抽屉组别/数值/时间点/URL → 量取突破性溶血面板 4 个热区矩形两两相交 → baseline-overview、safety、disposition-overview 三页同法扫描；安全性页另做热图单元格渐变解析、色彩说明文案检索、英文事件名表格行枚举。\n3. **C**：inclusion-criteria.html（行数计数、首屏截图、图序检查、真实点击条形）、exclusion-criteria.html（行数计数）、overview.html（真实点击 CHRONOS 矩阵单元格）、trials/nct02260986.html（身份核对、点击“查看依据”入口）、design-map.html（组件与字段覆盖核对）。\n4. **视觉**：A overview/matrix、B efficacy/safety、C overview/trial 六页 × 1024/1280/1440/1920 四档 `scrollWidth vs clientWidth`；异常读数按档重新加载复测；截取 A 首页、B 安全页、C 入选页首屏目视。\n5. 任务空间 id 18 已按惯例 `completeTaskSpace(..., {keep:false})` 关闭。\n\n## 三、已通过项\n\n- **A 交互闭环**：两个气泡均打开 `role=dialog`+`aria-modal=true` 抽屉，身份正确（阿姆特利单抗（Amlitelimab）/611（SSGJ-611），含靶点、单克隆抗体、期别），疗效/安全性/产品档案/数据依据四页签齐全可切换，网址定位分别写入 `?focus=amlitelimab`、`?focus=ssgj-611`，Escape 关闭、URL 清除、焦点回到原气泡。\n- **A 气泡标签修复**：“产品611”已改为“SSGJ-611”，“Etokim…”截断已改为全名“Etokimab”。\n- **A AESI 隐藏**：A 三页全文无 AESI/特别关注不良事件字样，无占位图表或筛选项。\n- **B 跨试验比较与身份**：疗效页 13 个面板按临床概念+时间窗分组（突破性溶血：可伐利 COMMODORE 2 与拉武利尤 Study 301 同图并列，治疗/对照柱同时可见，横轴“产品｜试验”）；图例 13/13 组橙=治疗组、蓝=对照组；基线页 6 组、完成情况页 13 组图例同样全部正确，图在表前。\n- **B 治疗值/对照值点击身份一致**：点\"10.4\"→抽屉“治疗组·可伐利单抗·突破性溶血比例·第24周”、URL `…crov-treatment-breakthrough_hemolysis`；点\"10.7\"→“对照组·拉武利尤单抗·第26周”、URL `…rav-control-…`。\n- **B 突破性溶血方向标注**：面板标题已改为“突破性溶血 · 事件发生率（越低越好）”。\n- **B 热区不再抢占**：突破性面板 4 个数值热区（28×28px）两两零重叠，鼠标中心点击与身份一致（上轮 19px 重叠缺陷已修复）。\n- **B 未公开/零值区分**：安全性页“未公开”20 处、“已报告零值”7 处；完成情况页 58/10 处，无把未公开补成 0。\n- **C 标准页按合同展开**：入选标准表 148 行、排除标准表 276 行，逐条列示（产品/试验编号/内容/时间点/披露状态/查看依据）；图在前表后（svg 顶部 599px < 表格 1469px），“人群标准结构比较”按试验比较公开条目数（度普利尤 2、奈莫利珠 8、曲罗芦 17…，行身份“产品｜NCT”齐全）；条形点击打开对应证据抽屉（鲁索利替尼·入选标准）。\n- **C 原文标注规范**：英文原文以“登记入选标准原文：”“登记排除标准原文：”前缀明确标注后呈现，符合“英文仅作标注来源原文”的合同要求。\n- **C 矩阵与试验详情页**：概览矩阵点击 CHRONOS 单元格打开“度普利尤单抗·试验标识”抽屉；trials/nct02260986.html 试验档案含 NCT/度普利尤单抗/CHRONOS 完整身份，内嵌“研究×设计要素横向矩阵”；“查看依据”入口可用；“官方登记记录未列示统计分析人群”等“未列示”字样经上下文核实为规范的披露表述，非工程字段泄漏；design-map 页覆盖概览与矩阵组件。\n- **视觉**：六页 × 四档宽度稳定态均无页面级横向溢出；C 试验页 1742px 宽矩阵被约束在 `.kz-c-design-matrix-wrap`（overflowX auto，1742/998）内局部滚动；A 首页（治疗/对照成对条形+终点+时间点）、B 安全页、C 入选页首屏一眼可读、图先表后。\n\n## 四、阻断或重要缺陷\n\n1. **【重要】B 安全性页 6 个面板标题与 ≥10 行表格直接以英文事件名为标签，未附中文、未标注“来源原文”**\n   - 页面/操作：`b-real/reports/B/v1/html/safety.html`，滚动浏览全部 26 个面板并读取表格“安全性事件”列。\n   - 观察：面板标题“安全性 · Breakthrough haemolysis · 事件发生率…”（×2）、“安全性 · Discontinuation due to adverse event…”，“安全性 · Headache…”，“安全性 · Serious adverse reactions…”，“安全性 · Treatment discontinuations due to TEAE…”；表格同名字段 ≥10 行英文（如“伊普可泮（iptacopan）｜APPLY-PNH｜治疗组｜Breakthrough haemolysis｜最长48周｜2.5”）。同站疗效页同一概念的中文名“突破性溶血”已存在，可见并非无中文可译。\n   - 影响：面板标题是中文审阅者扫读导航的首要锚点，英文标题迫使其逐个翻译，且与合同“英文只可作为明确标注的来源原文出现，不能替代中文临床结论”直接冲突；同一页面内中英文事件名混用（“特别关注不良事件”vs\"Breakthrough haemolysis\"）还会让读者误以为是两个不同事件。\n   - 最小修复建议：标题与表格字段统一用中文标准名（突破性溶血、因不良事件停药、头痛、严重不良反应、因治疗期不良事件停治疗），如需保留原始措辞放“查看依据”抽屉内作标注原文。\n2. **【重要】B 安全性页热图色彩语义零说明**\n   - 页面/操作：同页任一面板（如首面板“特别关注不良事件”），观察色块与底部色条。\n   - 观察：单元格颜色深浅编码发生率数值（首面板色条 0%→31.4%，每面板独立标尺），治疗组/对照组仅以列标签区分；全页检索“颜色只表示/色深/发生率高低/不形成安全性排名”等说明 0 命中。对照 A 报告安全性页同类热图明确标注“颜色只表示同一事件行内的发生率高低，不形成安全性排名”。\n   - 影响：全站其余图表均为“橙=治疗组、蓝=对照组”的固定语义，此处突然变为“色深=数值”，无说明时读者可能把颜色当组别编码，或跨面板比较色深（各面板标尺不同，色深不可比），得出错误的安全性横向结论。\n   - 最小修复建议：复用 A 页的说明句并在页首统一标注一次（“颜色深浅仅表示同一面板内发生率高低，跨面板不可比，不构成安全性排名”）。\n3. **【重要·遗留未修】A 抽屉期别与时间点口径混乱**\n   - 页面/操作：A matrix.html 点击阿姆特利单抗气泡，读抽屉摘要卡与“疗效”页签。\n   - 观察：副标题“III期（已终止）”，试验身份卡“II期（安全性补充）临床研究（NCT05131477）”；“疗效时间点：多时间点（含第16周）”与关键疗效表“终点：EASI-75疗效评价；第24周”并存，头条数值 42.9% 的归属时间点需读者自行推断。\n   - 影响：药物阶段与证据试验期别、数值时间点是医学经理下钻的第一层判断，口径互相矛盾会动摇对整份抽屉数据的信任（上轮已报，本轮确认未改）。\n   - 最小修复建议：抽屉头部一句话固定“本数值来自 NCT05131477（II期安全性补充）”，项目阶段（III期已终止）与证据试验分期分开表述；疗效时间点收敛为单一确定表述。\n\n## 五、一般优化项\n\n1. A 抽屉“安全性观察窗：观察期见明细”仍无实际窗口值（如“至第X周”），三处重复出现（遗留）。\n2. B 产品括注风格不一：“伊普可泮（iptacopan）”与“pegcetacoplan（C3抑制剂）”两种注记并存（遗留）。\n3. B 完成情况页部分面板标题前缀词序不一（“失访｜完成情况 · …”与“完成情况 · 已随机 · …”混用）（遗留）。\n4. B 安全性页首面板仅含 1 个研究（伊普可泮 APPLY-PNH），“比较”从第二面板才开始，作为安全性页首图比较力度偏弱，可考虑默认选跨研究更多的事件面板（判断）。\n\n## 六、尚未验证\n\n- B 安全性页\"Discontinuation due to adverse event …0”行的“披露状态”单元格未逐格点开核对（页面级已见 7 处“已报告零值”标注，推断其零值处理合规，属推断）。\n- C 排除标准图中条目数为 0 的试验在表格中是否有对应“未公开”行未逐条核对。\n- C 概览/矩阵多选筛选与筛选后网址恢复、证据抽屉“冲突/历史版本”页签本轮未测。\n- A 其余页面（竞争格局、产品总览、中国与全球监管等）与 B 疗效页全部 13 个面板的逐一面板身份未逐一人工复核（采用抽样+程序枚举）。\n- ego 深滚动截图一次整幅空白（B 安全页）与一次“溢出 113px”瞬态读数均已按上述方法说明排除，如后续审阅者复现类似读数，建议先以“按档加载+稳定 2.5 秒”复测再定性。\n\n（只读独立复审产出；未修改文件、未读取其他审阅者输出、不宣称最终验收。）",
+      "stderr": "",
+      "duration_seconds": 838.168,
+      "timed_out": false,
+      "session_id": "sess_ed57a277-45bb-468d-9a56-0e86956c4c3a",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 17796,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 10,
+      "tool_result_count": 0,
+      "reasoning_event_count": 11541,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 30,
+      "usage": {
+        "inputTokens": 218219,
+        "outputTokens": 3072,
+        "totalTokens": 221291,
+        "cacheReadTokens": 216512,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_8b8a2f9c-0cd6-4427-844b-c35f5bcdfa75",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 11,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 10,
+        "tool_names": [
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Read",
+          "Read",
+          "Bash"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 349,
+      "estimated_input_tokens": 88,
+      "output_chars": 5068,
+      "estimated_output_tokens": 1267,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "explicit_route": true,
+      "resumed": true
+    }
+  ],
+  "health_check": false,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": false,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "plan",
+    "adjusted_for_execution_manager": false
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 30,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788285147.5284941
+}

@@ -1,0 +1,8 @@
+{"file":".trellis/spec/backend/index.md","reason":"加载后端类型化合同、存储、错误处理与质量入口。"}
+{"file":".trellis/spec/frontend/index.md","reason":"加载三类 HTML 门户的组件、状态、可访问性与质量入口。"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"实现研究图、渲染、包和宿主适配的跨层变更时保持合同闭合。"}
+{"file":".trellis/spec/backend/manual-inbox-recovery.md","reason":"补件文件原地重命名、幂等、碰撞和字节完整性重构的既有工程约束。"}
+{"file":"reviews/codex_v13_implementation_gap_matrix_20260904.md","reason":"R2-R4 的已核验差距、最小修复和决定性负向测试清单；任务文档要求执行者另从磁盘完整读取 canonical v1.3。"}
+{"file":"context/ci-rebaseline-rebuild-20260904_execution_context.md","reason":"M0/M1 收口状态、执行角色边界、当前/上一恢复点和 worker_03 放行条件。"}
+{"file":".trellis/tasks/09-02-phase-10-task-106-rc-freeze/checkpoint_20260904_m0_m1_closed.md","reason":"M0/M1 的确定性证据、独立会商结论、恢复锚和下一安全动作。"}
+{"file":".trellis/tasks/09-02-phase-10-task-106-rc-freeze/PAUSE_HANDOFF_20260904_163838.md","reason":"用户无损暂停后的 worker_03 会话、字节状态、恢复锚与下一安全动作。"}

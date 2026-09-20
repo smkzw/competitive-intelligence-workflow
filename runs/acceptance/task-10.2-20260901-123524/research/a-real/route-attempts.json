@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "case_id": "task-10.2-r03-a-real",
+  "attempts": [
+    {
+      "attempt_id": "cde-access-1",
+      "route_id": "china-drug-trials-public-site",
+      "strategy_unit_id": "chinadrugtrials-js-challenge",
+      "gap_id": "china-registry-union",
+      "query_or_identifier": "特应性皮炎 创新药",
+      "language": "zh-CN",
+      "access_method": "public_http",
+      "attempt_index": 1,
+      "started_at": "2026-08-18T09:00:00+08:00",
+      "ended_at": "2026-08-18T09:00:05+08:00",
+      "result_class": "captcha_required",
+      "error_class": "HTTP 202 / FSS JavaScript anti-automation challenge",
+      "alternative_paths": [
+        "ClinicalTrials.gov 境外/中国登记并集",
+        "PubMed、企业公告与授权中文行业来源交叉核验"
+      ],
+      "diagnostic_confidence": "high",
+      "parent_attempt_id": null,
+      "recovery_round": 0
+    },
+    {
+      "attempt_id": "cde-access-2",
+      "route_id": "china-drug-trials-public-site",
+      "strategy_unit_id": "chinadrugtrials-js-challenge",
+      "gap_id": "china-registry-union",
+      "query_or_identifier": "特应性皮炎 创新药",
+      "language": "zh-CN",
+      "access_method": "public_http",
+      "attempt_index": 2,
+      "started_at": "2026-08-18T10:00:00+08:00",
+      "ended_at": "2026-08-18T10:00:05+08:00",
+      "result_class": "captcha_required",
+      "error_class": "HTTP 202 / FSS JavaScript anti-automation challenge",
+      "alternative_paths": [
+        "ClinicalTrials.gov 境外/中国登记并集",
+        "PubMed、企业公告与授权中文行业来源交叉核验"
+      ],
+      "diagnostic_confidence": "high",
+      "parent_attempt_id": "cde-access-1",
+      "recovery_round": 1
+    },
+    {
+      "attempt_id": "cde-access-3",
+      "route_id": "china-drug-trials-public-site",
+      "strategy_unit_id": "chinadrugtrials-js-challenge",
+      "gap_id": "china-registry-union",
+      "query_or_identifier": "特应性皮炎 创新药",
+      "language": "zh-CN",
+      "access_method": "public_http",
+      "attempt_index": 3,
+      "started_at": "2026-08-18T11:00:00+08:00",
+      "ended_at": "2026-08-18T11:00:05+08:00",
+      "result_class": "captcha_required",
+      "error_class": "HTTP 202 / FSS JavaScript anti-automation challenge",
+      "alternative_paths": [
+        "ClinicalTrials.gov 境外/中国登记并集",
+        "PubMed、企业公告与授权中文行业来源交叉核验"
+      ],
+      "diagnostic_confidence": "high",
+      "parent_attempt_id": "cde-access-2",
+      "recovery_round": 2
+    }
+  ]
+}

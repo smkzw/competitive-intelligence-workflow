@@ -1,0 +1,261 @@
+{
+  "agent": "zcode",
+  "requested_agent": "zcode",
+  "role_id": "evidence_research_executor",
+  "requested_provider": "zcode",
+  "requested_model": "GLM-5.3-Flash",
+  "requested_effort": "max",
+  "explicit_route": false,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": "context/ci-r25-yaozh-browser-adapter-20260906_execution_route_manifest.json",
+  "schedule_reconciliation": {
+    "enabled": true,
+    "packet_period": "off_peak",
+    "active_period": "off_peak",
+    "dispatch_period": "off_peak",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "from_period": "off_peak",
+    "to_period": "off_peak",
+    "reason": "new session rechecked the current peak/off-peak provider window",
+    "schedule_constraints": {
+      "policy": "beijing-provider-window-v1",
+      "evaluated_at": "2026-09-05T21:01:48.880727+08:00",
+      "cms_router_minimax_blocked": false,
+      "explicit_route": false,
+      "events": [],
+      "route_rewritten": false
+    },
+    "selected_route": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max"
+    }
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "zcode",
+  "effective_provider": "zcode",
+  "effective_model": "GLM-5.3-Flash",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": false,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "schedule": {
+      "policy": "beijing-provider-window-v1",
+      "evaluated_at": "2026-09-05T21:01:48.880778+08:00",
+      "cms_router_minimax_blocked": false,
+      "explicit_route": false,
+      "events": [],
+      "route_rewritten": false
+    },
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max",
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "default",
+          "effort": ""
+        },
+        {
+          "agent": "codex-subagent",
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "effort": "low"
+        }
+      ]
+    },
+    "effective_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 1242,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [
+    {
+      "agent": "pi",
+      "provider": "cursor",
+      "model": "default",
+      "effort": ""
+    },
+    {
+      "agent": "codex-subagent",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "effort": "low"
+    }
+  ],
+  "fallback_candidates": [
+    {
+      "agent": "pi",
+      "provider": "cursor",
+      "model": "default",
+      "effort": ""
+    },
+    {
+      "agent": "codex-subagent",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "effort": "low"
+    }
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "# Execution Output: ci-r25-yaozh-browser-adapter-20260906 - worker_02\n\n## Boundary And Context Check\n\n- Role `worker_02`, work item 2: *Design the smallest typed session-observation and credential-free access-receipt contract, including expired/captcha/permission/tool states, idempotency and secret/path rejection.* Manager: none; Codex reviews directly.\n- Honored boundaries: read-only analysis pass — I created/edited **no** workspace files (runner persists this report). No production writes, no legacy-workspace access, no real Yaozh/browser session opened, no credentials/tokens/cookies/screenshots inspected or emitted, no package installation, no git state changes. Tools used: Read, Bash (rg/grep/sed/wc/stat/date/git status), one non-destructive pytest run of an existing test file. No conference started, no peer workers reviewed.\n- Read set: the two assigned packet files, then `docs/specs/competitive-intelligence-workflow-design-v1.3.md` (§2.2 source boundaries L145–166, §5.3 L276–285, §5.4 L287–306, negative matrix L498), `src/ci_workflow/application/yaozh_access.py`, `intake.py`, `capability_preflight.py`, `autonomous_research.py`, `source_research_service.py` (partial), `cli.py` (partial), `policies/sources/source-policy-v1.yaml` (partial), `schemas/research-package.schema.json` (grep), `schemas/package-manifest.schema.json` (grep), `tests/integration/test_yaozh_access_cli.py`, `.trellis/tasks/09-05-r24-gatespec-blocker-closure/` (grep). The installed Skill was not consulted (context declares it non-authoritative).\n- **Material mid-session event:** the contract under design landed on disk *during* this pass. `src/ci_workflow/application/yaozh_access.py` grew 205 → 297 lines and the test file 315 → 391 lines; both files are **untracked** (`?? ` in `git status --porcelain`). MTimes: tests written 2026-09-05 21:04:45 CST, source 21:05:52 CST (packet context created 21:00:54; my first read of the 205-line version preceded the write). TDD order held (tests first, then source). Since none of the three assigned workers is scoped to implement, this was written by Codex or a parallel session. All findings below are audited against the **current on-disk state** (297-line source, 391-line test), which is green.\n\n## Work Performed\n\n1. Extracted the v1.3 contract clauses that bind this design: answer/runtime separation (L155–162: three once-only answer states; `session_expired` is a typed route receipt, never a fourth Ask answer; host-browser-launchable ≠ session-valid — session validity is only decidable at actual route access), credential prohibition across research-package/files/logs/receipts/snapshots/bundles/audits/screenshots (L165–166, L285), authority ceiling (policy `lead_only` for clinical values, `cross_check` max elsewhere — `policies/sources/source-policy-v1.yaml:70-83`), non-blocking semantics (L159–160), and fine-grained source receipts for missing access that must not be written as “没有证据” (L285).\n2. Audited the emergent implementation (`YaozhSessionObservation`, extended `YaozhRouteAccessReceipt`, `build_yaozh_route_access_receipt(record, observation)`) against every assigned dimension: state coverage, idempotency, secret/path rejection, false-readiness prevention, authority non-escalation, and binding integrity.\n3. Ran the focused suite: **24 passed** (`.venv/bin/python -m pytest tests/integration/test_yaozh_access_cli.py -q`).\n4. Produced: (a) the contract specification as it now stands with binding-chain and state-machine clauses, (b) seven gap findings with file:line evidence, (c) minimal contract deltas, and (d) a TDD-ready negative test matrix. Recommendations are separated by layer: contract / application+session probe / research-package & source-policy integration / later real-host smoke.\n\n## Artifacts And Evidence\n\nNo files were created or modified by this worker. The deliverable is the contract audit and design below; the runner persists it.\n\n### A. Contract specification (current on-disk state, audited)\n\n**A.1 Typed session observation — `YaozhSessionObservation`** (`src/ci_workflow/application/yaozh_access.py:91-138`)\n\nClosed, frozen, `extra=\"forbid\"` model. Fields: `schema_version: Literal[\"1.0\"]`, `project_id`, `answer_digest` (64-hex), `observed_at` (offset-aware datetime enforced by validator, L115-116), `host: Literal[\"local\",\"codex\",\"hermes\",\"omp\"]` (matches `HostName` at `capability_preflight.py:23`), `observer_id`, `origin`, `technical_state`, `page_marker_sha256` (64-hex). State vocabulary (observation and receipt share it):\n\n| `technical_state` | receipt `result_class` | closed `user_action_zh` (builder L263-270) | semantics |\n|---|---|---|---|\n| `ready` | `ready` | 无需处理；药智仍只用于线索与交叉核验。 | session observed active; authority prose reasserted |\n| `session_expired` | `access_blocked` | 请在浏览器中自行登录药智网后继续该辅助路线。 | login page observed; user logs in themselves |\n| `captcha_required` | `access_blocked` | 请在浏览器中自行完成药智网验证后继续；系统不会绕过验证码。 | challenge observed; never bypassed |\n| `permission_denied` | `access_blocked` | 请核对药智企业版访问权限；其他适格来源将继续研究。 | subscription/permission wall; non-blocking |\n| `tool_unavailable` | `tool_unavailable`→`access_blocked` | 请启用可操作已登录浏览器的宿主能力后继续该辅助路线。 | host tool failure; never mis-blamed on session |\n| `parser_error` | `parser_error` | 药智页面已访问但未能安全解析；请更换解析策略后重试该辅助路线。 | page reached, unsafe to parse |\n\nThe six-way distinctness satisfies the assigned “expired/captcha/permission/tool states” requirement and keeps technical blame honest (a broken tool is not reported as an expired session and vice versa). All blocked states carry `blocks_core_research: Literal[False]` and `credential_fields_allowed: Literal[False]` (`yaozh_access.py:71-72`), matching v1.3 L159-160.\n\nRejection validators on the observation (L113-138): naive datetimes rejected; `origin` must canonicalize to exactly `https://vip.yaozh.com` with empty path, no query, no fragment, no userinfo (L117-127) — this rejects credential-carrying URLs and arbitrary redirect targets at the type level; `project_id`/`observer_id` must be non-blank and free of `/` and `\\` (path rejection) and of casefolded tokens `password|cookie|token|authorization|secret|\"bearer \"` (secret rejection, L128-137). Content is structurally impossible: the only page evidence field is `page_marker_sha256` — an opaque digest, never content, never a screenshot.\n\n**A.2 Credential-free access receipt — `YaozhRouteAccessReceipt`** (`yaozh_access.py:51-88`)\n\nClosed receipt binding: `project_id` + `answer_digest` (sha256 of canonical answer-record bytes) + `observation_digest` (sha256 of canonical JSON of the full observation, `_observation_digest` L141-148) + the 6-state `technical_state`/`result_class` pair + derived `user_action_zh` + the two `Literal[False]` guards. The receipt is produced only by `build_yaozh_route_access_receipt(record, observation)` (L250-284), which fails closed on: route not enabled (L256-257), project-identity mismatch (L259-260), and answer-digest mismatch (L261-262) — the observation must be cryptographically bound to the *current* once-only answer bytes.\n\n**A.3 Binding chain and idempotency clauses**\n\n1. Answer record (`state/yaozh-access.json`, written once via `answer_yaozh_access` L200-236; identical replay is byte- and mtime-stable — pinned by `test_yaozh_identical_replay_is_idempotent_and_byte_stable`, test L136-149 incl. `st_mtime_ns`, satisfying v1.3 L281).\n2. Observation binds `project_id` + `answer_digest` → invalid unless it names the current record bytes.\n3. Receipt derivation is a **pure function with no I/O**: same (record, observation) → byte-identical receipt; receipt generation never touches the record file (test L327 pins byte stability; mtime stability is structural since the builder performs no writes).\n4. `session_expired` is rejected as an Ask answer (test L167-170 parametrizes `session_expired` among rejected values) — the answer/runtime separation clause of v1.3 L283 holds.\n5. Authority non-escalation: the observation carries zero content fields; the receipt cannot be converted into a `ResearchFact`/`SourceCapture` (no content field exists to convert); the ready-state action string and the route spec completion text (“不得作为关键结论的唯一依据”， `autonomous_research.py:227-229`) restate the lead/cross-check ceiling; the enforceable ceiling lives in `source-policy-v1.yaml:70-83` (`efficacy_safety_results: lead_only`, all others ≤ `cross_check`, `required_*: false`).\n\n### B. Gap findings (evidence-backed; ordered by contract weight)\n\n- **G1 — Receipt has no temporal binding; future timestamps not rejected (contract gap, false-readiness window).** The receipt carries `observation_digest` (which cryptographically covers `observed_at`) but not `observed_at` itself, so a consumer holding only a receipt cannot see how old the \"ready\" claim is; and nothing rejects a future-dated observation (`observed_at` validator checks timezone only, L115-116). v1.3 L161-162 makes session validity a point-in-time fact decidable only at access time; a stale or back/future-dated `ready` receipt is exactly the “虚假会话就绪” the objective forbids. *Recommended smallest delta:* add `observed_at` (offset-aware) to the receipt, copied from the observation with equality enforced; reject `observed_at > now()` (small clock-skew tolerance, e.g. 60s) in the observation validator; state the consumer rule \"a receipt is valid only within the run that produced its observation; every run must re-observe before asserting ready\". No persistence-based TTL — that would re-introduce stale readiness.\n- **G2 — Model-level secret-token list is narrower than the test-level list (hardening gap).** The observation validator rejects `password|cookie|token|authorization|secret|\"bearer \"` (L133-137), but the suite's `CREDENTIAL_TOKENS` (test L45-56) also covers `username`, `sessionid`, `api-key`, `api_key`. Today `observer_id=\"my-sessionid-collector\"` passes model validation, and `observer_id` never reaches the receipt — but a host adapter serializing/persisting observations would emit it. *Recommended delta:* align the model's rejected-token tuple with the full test list (add `username`, `sessionid`, `api-key`/`api_key`; optionally `passwd`, `credentials`). One-line change plus a parametrized rejection test.\n- **G3 — Four fail-closed builder paths and three validator paths are untested (test gap).** Untested: project-identity mismatch (L259-260), answer-digest mismatch (L261-262), route-not-enabled (L256-257), naive `observed_at` (L115-116); origin variants beyond wrong-host — path-bearing, query-bearing, userinfo, http-scheme (L117-127; only `https://example.com` is tested, test L386). All are exactly the fail-closed behaviors the contract sells.\n- **G4 — Determinism not pinned (idempotency test gap).** No test asserts that building the receipt twice from the same (record, observation) yields byte-identical JSON, nor that `observation_digest` is stable under key-order permutation of inputs (it is, by `sort_keys=True` canonicalization, L141-148 — but nothing pins it). Also belt-and-braces: assert answer-file `st_mtime_ns` unchanged across receipt generation (structural today; the assertion documents the no-write clause).\n- **G5 — Duplicated vocabularies invite drift (refactor, not behavior).** (a) `host` Literal is re-declared inline instead of importing `HostName` (`yaozh_access.py:100` vs `capability_preflight.py:23`); (b) the state→result-class mapping exists twice — receipt validator dict (L76-83) and builder conditional (L276-282); (c) the 6-state Literal is declared twice (observation L103-110, receipt L61-68). *Recommended delta:* one module-level `YAOZH_TECHNICAL_STATES` tuple and one `_RESULT_CLASS_BY_STATE` mapping used by the validator and builder (pydantic Literals stay statically declared; add a module-import consistency test so any drift fails a test, not a review).\n- **G6 — Zero runtime consumers; capability-matrix messaging still probe-keyed (boundary note → worker_03's item).** `build_yaozh_route_access_receipt` is referenced only by its tests. The preflight user message “药智网可选路线暂不可用…请在浏览器中自行登录” is keyed off the `login_browser` capability probe being blocked (`capability_preflight.py:503-512`), i.e. pre-answer, pre-observation; selection does add `authenticated-browser` only when the answer enables the route (`capability_preflight.py:633-642`), but the *message* cannot yet reflect observation-level states (captcha/permission). Integration must keep the receipt non-blocking, answer-aware, and observation-current — that is work item 3's surface, flagged here so the contract boundary is explicit.\n- **G7 — Shape-vs-truthfulness trust boundary (residual, document don't code).** The contract can validate that `page_marker_sha256` is 64-hex, not that the host hashed a genuine logged-in marker; a buggy or careless adapter could claim `ready` over an arbitrary marker. Smallest mitigation: pin the marker derivation convention (e.g. sha256 over a specific logged-in-only DOM marker string defined in the host-adapter spec) in the adapter documentation and verify it in the later real-host smoke stage — not in this runtime contract, which correctly stays content-free.\n\n### C. Negative test matrix (TDD-ready, for Codex's implementation pass)\n\n| # | Test | Asserts | Contract clause |\n|---|---|---|---|\n| N1 | `ready` receipt requires a current observation | builder rejects \"ready\" claims not backed by an observation object; probe success (`login_browser` available) alone produces no ready receipt | false browser-readiness (context Completion Evidence; v1.3 L161-162) |\n| N2 | future `observed_at` rejected | observation with `observed_at = now + 1h` raises `ValidationError` (closed Chinese message) | G1 |\n| N3 | receipt echoes `observed_at` | receipt `observed_at == observation.observed_at`; naive datetime rejected on receipt too | G1 |\n| N4 | parametrized secret tokens in `observer_id`/`project_id` | `username`, `sessionid`, `api_key`, `api-key`, `passwd`, `credentials`, `bearer` each rejected | G2 |\n| N5 | builder fail-closed quartet | wrong `project_id`; wrong `answer_digest`; `route_enabled=False`; each raises `YaozhAccessError` with closed Chinese message, no file writes | A.2, G3 |\n| N6 | origin canonicalization quartet | `http://`, `https://vip.yaozh.com/member`, `?query`, userinfo — each rejected | G3 |\n| N7 | naive `observed_at` rejected | tz-less datetime raises | G3 |\n| N8 | receipt determinism | two builds from same inputs → identical `model_dump_json()`; `observation_digest` invariant to dict insertion order | G4, idempotency clause |\n| N9 | record immutability under receipt generation | answer bytes **and** `st_mtime_ns` unchanged after every receipt state | G4; v1.3 L281 |\n| N10 | six-state distinctness (extends existing parametrize) | each blocked state yields its exact `result_class` mapping and its own `user_action_zh`; no two states share an action string | A.1 table |\n| N11 | receipt JSON hygiene for all six states | `model_dump_json().lower()` free of `CREDENTIAL_TOKENS` for every state (current test covers only `session_expired`) | secret-rejection clause |\n| N12 | `session_expired` never an Ask answer (existing, keep) | L169-170 stays green after any signature changes | v1.3 L283 |\n| N13 | receipt is not package-ingestible | feeding a receipt JSON into research-package submission/ingest fails closed (receipts are not sources) | authority non-escalation |\n| N14 | vocabulary drift guard | `YaozhSessionObservation.host` values == `HostName` values; observation/receipt state Literals identical | G5 |\n\n### D. Layer separation of recommendations\n\n- **Contract (this item):** G1, G2 — small typed deltas to `yaozh_access.py`; N1–N5, N7–N12, N14 tests. G5 refactor is optional but cheap.\n- **Application / session probe (item 1/3 surface):** G6 — capability-matrix message wiring must become receipt-aware while staying non-blocking and answer-aware; the `login_browser` probe remains a *tool* check and must never assert session state (already structurally true: the probe renders a neutral set_content page, `capability_preflight.py:249-258`, and never touches Yaozh).\n- **Research-package / source-policy integration (item 3):** blocked observations must surface as fine-grained route/attempt receipts (`RouteAttempt.result_class` already has `captcha_required`/`permission_denied`/`tool_unavailable`, `source_research_service.py:136-148`; schema enums already carry `anti_bot_or_captcha`/`access_or_permission_blocked`/`tool_capability_gap`) — no new evidence vocabulary needed; authority ceiling stays enforced by `source-policy-v1.yaml:70-83`.\n- **Later real-host smoke (deferred, separately authorized):** G7 marker-convention verification against the real `vip.yaozh.com` — explicitly out of this pass (no real session opened here).\n\n## Commands And Observations\n\n- `rg -n \"yaozh|Yaozh\" docs/specs/competitive-intelligence-workflow-design-v1.3.md` → contract clauses at L157, L278, L285, L498; full sections read at L145-194, L270-309.\n- Reads: `yaozh_access.py` (both the pre-write 205-line and current 297-line versions), `intake.py` L175-283 (`YaozhAccessRecord`/`YaozhRouteDecision`), `capability_preflight.py` L220-345, L495-520, L625-642, `autonomous_research.py` L60-270, `source_research_service.py` L122-207 (`RouteAttempt`), `cli.py` L507-524, L812-824, `source-policy-v1.yaml` L55-114, `tests/integration/test_yaozh_access_cli.py` (full current 391 lines), `schemas/research-package.schema.json` (result_class enums at L94, L109, L196).\n- `grep -c \"YaozhSessionObservation\"` → 4 hits in source, 6 in test; `rg -ln \"YaozhRouteAccessReceipt|build_yaozh_route_access_receipt\"` → only source + its test (zero runtime consumers, G6).\n- `stat` + `date -r`: test mtime 2026-09-05 21:04:45 CST, source mtime 21:05:52 CST; both files `??` untracked. Observation (inference, flagged): a parallel writer implemented the TDD pair during this session; disk is authoritative and green.\n- `.venv/bin/python -m pytest tests/integration/test_yaozh_access_cli.py -q` → **24 passed in 9.29s**. System python3.14 has no pytest; the project `.venv` was used (already present — nothing installed). The run left no tracked-tree changes (checked `git status --porcelain`).\n\n## Blockers Or Missing Environment\n\n- No hard blocker. The assigned design work is complete against the current on-disk implementation.\n- Note 1 (concurrent writer): `yaozh_access.py` and its test changed during this pass and may change again; Codex should reconcile this audit against the file state at acceptance time. All citations are to the 297-line/391-line versions.\n- Note 2: pytest is absent from the system interpreter; the repo's `.venv` was used. No remediation needed; recording per boundary rules.\n\n## Rerun Requests Or Next Step\n\n- No rerun of this role needed. Handoff: (1) Codex TDD pass on G1+G2 with tests N2–N9, N11, N14 (smallest deltas, all inside `yaozh_access.py`); (2) worker_03 consumes G6/N13 for the receipt→capability-matrix/research-package integration design; (3) G7 verification deferred to the separately authorized real-host smoke stage.\n- One precise question for Codex (decision, not blocker): should observations be persisted at all in v1? My recommendation is **no** (ephemeral run-scoped observations; freshness re-observed each run; blocked outcomes already persist as route/attempt receipts in the research package) — a persisted \"ready\" would recreate the false-readiness hazard G1 closes.",
+      "stderr": "",
+      "duration_seconds": 940.173,
+      "timed_out": false,
+      "session_id": "sess_277578e2-013a-46da-9e85-9ce8bfe96eca",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 27439,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 2,
+      "tool_result_count": 0,
+      "reasoning_event_count": 18345,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 128,
+      "usage": {
+        "inputTokens": 70453,
+        "outputTokens": 4996,
+        "totalTokens": 75449,
+        "cacheReadTokens": 69120,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_3d3887d3-4aad-4340-845b-c57994ff2122",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 3,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 2,
+        "tool_names": [
+          "Bash",
+          "TodoWrite"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 4967,
+      "estimated_input_tokens": 1242,
+      "output_chars": 19451,
+      "estimated_output_tokens": 4863,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "explicit_route": false,
+      "health": {
+        "agent": "zcode",
+        "provider": "zcode",
+        "model": "GLM-5.3-Flash",
+        "checked_at": 1788613308.880954,
+        "cached": false,
+        "healthy": true,
+        "preflight_kind": "diagnostic_catalog_or_auth_probe",
+        "health_command": [
+          "/Users/smkzw/.local/bin/zcode",
+          "--version"
+        ],
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 0.521,
+        "stdout_tail": "0.16.5",
+        "stderr_tail": "",
+        "requested_model": "GLM-5.3-Flash",
+        "requested_effort": "max",
+        "observation": "Z Code is installed; the live app-server round will pin and verify the exact model and thought level."
+      }
+    }
+  ],
+  "health_check": true,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": true,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "bypassPermissions",
+    "adjusted_for_execution_manager": true
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 128,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788613308.880811,
+  "receipt_version": 2,
+  "output_sha256": "7d8f8d38b2cc2535e239123b8dffc5b9fbf7fe994d4e20a1cfa388406ffc62a1"
+}

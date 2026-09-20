@@ -1,0 +1,52 @@
+{
+  "report": "C",
+  "output": "report-c.html",
+  "input_sha256": "a59d7f88b3d8a2e163422c01f0d0981aa64bf2610cc6bb41852c58e9561ed2e6",
+  "assets": {
+    "runtime_js": "affadf9e344ec9da62cdd27942a41218983d2cb88a377eca540b7da622a990f7",
+    "runtime_css": "09df452da708ac80a9660bb49ff8603cfac85aec7e607852c99ca09a209517d0",
+    "gx_fx_css": "7e2ba09538f2e9c59c07f2ad2c8f708828c71f5f8e71771c5aa337da6bb5a572",
+    "gx_fx_js": "92cdb59102b888db0d046caeae34700cc29c97275dba626a652560603cb9c86b",
+    "logo": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae"
+  },
+  "slide_ids": [
+    "c-cover",
+    "c-toc",
+    "c-summary",
+    "c-design-map",
+    "c-population",
+    "c-inclusion",
+    "c-exclusion",
+    "c-arms",
+    "c-endpoints",
+    "c-visits",
+    "c-stats",
+    "c-dossiers",
+    "c-identity",
+    "c-patterns",
+    "c-path-1",
+    "c-path-2",
+    "c-limitations",
+    "c-ending"
+  ],
+  "notes_han": {
+    "c-cover": 156,
+    "c-toc": 155,
+    "c-summary": 156,
+    "c-design-map": 157,
+    "c-population": 153,
+    "c-inclusion": 161,
+    "c-exclusion": 150,
+    "c-arms": 172,
+    "c-endpoints": 174,
+    "c-visits": 154,
+    "c-stats": 166,
+    "c-dossiers": 154,
+    "c-identity": 163,
+    "c-patterns": 154,
+    "c-path-1": 153,
+    "c-path-2": 161,
+    "c-limitations": 163,
+    "c-ending": 160
+  }
+}

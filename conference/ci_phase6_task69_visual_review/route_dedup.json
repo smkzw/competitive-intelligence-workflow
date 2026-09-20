@@ -1,0 +1,87 @@
+{
+  "policy": "execution-used-provider-model-nodes-are-excluded-from-conference",
+  "linked_execution_task_id": "ci_phase6_task69_execution",
+  "linked": true,
+  "execution_evidence": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_02_followup_2_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_02_followup_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_02_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_03_followup_2_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_03_followup_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_03_stdout.txt"
+  ],
+  "excluded_route_nodes": [
+    {
+      "agent": "pi",
+      "provider": "openai-codex",
+      "model": "gpt-5.6-luna",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci_phase6_task69_execution/worker_01_stdout.txt",
+      "reason": "effective execution route"
+    }
+  ],
+  "effective_conference_roles": {
+    "visual_single_object": {
+      "agent": "grok",
+      "provider": "grok-build",
+      "model": "grok-4.6",
+      "effort": "high",
+      "default_provider": "grok-build",
+      "default_model": "grok-4.6",
+      "default_effort": "high",
+      "escalate_provider": "grok-build",
+      "escalate_model": "grok-4.6",
+      "escalate_effort": "high",
+      "primary": {
+        "agent": "grok",
+        "provider": "grok-build",
+        "model": "grok-4.6",
+        "effort": "high"
+      },
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "cursor-grok-4.6",
+          "effort": "high"
+        },
+        {
+          "agent": "codebuddy",
+          "provider": "codebuddy-cli",
+          "model": "glm-5.3-flash",
+          "effort": "max"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-5.6-terra",
+          "effort": "medium"
+        }
+      ],
+      "execution_route": "Visual/HTML/PPT/visual-QC object: Grok Build/grok-4.6 high -> Pi/Cursor/cursor-grok-4.6 high -> CodeBuddy/glm-5.3-flash max -> Pi/openai-codex/gpt-5.6-terra medium",
+      "role": "single visual/design conference object; Codex chairs directly with no sub-venue chair",
+      "skills_enabled": true,
+      "tools_enabled": true,
+      "schedule": {
+        "policy": "beijing-day-night-v1",
+        "timezone": "Asia/Shanghai",
+        "period": "night",
+        "evaluated_at": "2026-08-30T06:54:40.920684+08:00"
+      },
+      "route_contract_frozen": true,
+      "deduplicated_against_execution": [
+        {
+          "provider": "openai-codex",
+          "model": "gpt-5.6-luna"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "policy": "beijing-day-night-v1",
+    "timezone": "Asia/Shanghai",
+    "period": "night",
+    "evaluated_at": "2026-08-30T06:54:40.920684+08:00"
+  },
+  "generated_at": "2026-08-30 06:54:40 CST"
+}

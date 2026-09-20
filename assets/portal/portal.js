@@ -11,6 +11,8 @@
   var searchResults = document.getElementById("global-search-results");
   var searchIndex = window.__SEARCH_INDEX__ || [];
   var focusedIdx = -1;
+  var escapedSearchValue = null;
+  var escapedSearchTimer = null;
 
   function getQuery() {
     return ((searchInput && searchInput.value) || "").trim().toLowerCase();
@@ -141,13 +143,58 @@
     }
   }
 
+  function hideSearchResults() {
+    if (!searchResults) {
+      return;
+    }
+    searchResults.hidden = true;
+    focusedIdx = -1;
+  }
+
+  function closeSearchResults(event) {
+    event.preventDefault();
+    escapedSearchValue = searchInput ? searchInput.value : null;
+    if (escapedSearchTimer !== null) {
+      window.clearTimeout(escapedSearchTimer);
+    }
+    escapedSearchTimer = window.setTimeout(function () {
+      escapedSearchValue = null;
+      escapedSearchTimer = null;
+    }, 0);
+    hideSearchResults();
+  }
+
+  function consumeEscapedSearchInput() {
+    if (escapedSearchValue === null) {
+      return false;
+    }
+    var preservedValue = escapedSearchValue;
+    escapedSearchValue = null;
+    if (escapedSearchTimer !== null) {
+      window.clearTimeout(escapedSearchTimer);
+      escapedSearchTimer = null;
+    }
+    if (searchInput.value !== preservedValue) {
+      searchInput.value = preservedValue;
+    }
+    hideSearchResults();
+    return true;
+  }
+
   if (searchInput) {
     searchInput.addEventListener("input", function () {
+      if (consumeEscapedSearchInput()) {
+        return;
+      }
       var query = getQuery();
       showResults(search(query), query);
     });
 
     searchInput.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeSearchResults(event);
+        return;
+      }
       if (!searchResults || searchResults.hidden) {
         if (event.key === "Enter") {
           var query = getQuery();
@@ -168,9 +215,6 @@
       } else if (event.key === "Enter") {
         event.preventDefault();
         activateFocused();
-      } else if (event.key === "Escape") {
-        searchResults.hidden = true;
-        focusedIdx = -1;
       }
     });
   }
@@ -266,6 +310,9 @@
       );
       if (searchWrap) {
         searchWrap.classList.toggle("is-open", isOpen);
+      }
+      if (isOpen && searchInput) {
+        searchInput.focus();
       }
     });
   }
@@ -1138,6 +1185,28 @@
       });
     })(emptyResetModules[ermi]);
   }
+
+  function collapseCompleteTables(root) {
+    var scope = root || document;
+    var tables = scope.querySelectorAll(".kz-a-table-wrap table, table.kz-chart-table");
+    for (var i = 0; i < tables.length; i += 1) {
+      var table = tables[i];
+      if (table.closest && table.closest(".kz-complete-table")) continue;
+      if (table.getAttribute("data-kz-complete-table") === "true") continue;
+      table.setAttribute("data-kz-complete-table", "true");
+      var details = document.createElement("details");
+      details.className = "kz-complete-table";
+      var summary = document.createElement("summary");
+      summary.className = "kz-complete-table__summary";
+      summary.textContent = "展开完整数据表";
+      details.appendChild(summary);
+      table.parentNode.insertBefore(details, table);
+      details.appendChild(table);
+    }
+  }
+
+  window.__COLLAPSE_COMPLETE_TABLES__ = collapseCompleteTables;
+  collapseCompleteTables(document);
 
   document.addEventListener("kz-evidence-drawer-change", function (ev) {
     if (applyingFromUrl || syncingFilter) return;

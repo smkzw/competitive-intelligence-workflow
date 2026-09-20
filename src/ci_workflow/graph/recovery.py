@@ -57,7 +57,7 @@ from ci_workflow.storage.event_store import (
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 _REPORT_KINDS: frozenset[str] = frozenset({"A", "B", "C"})
-_OPTIONAL_FORMATS: frozenset[str] = frozenset({"pdf", "html-ppt", "pptx"})
+_OPTIONAL_FORMATS: frozenset[str] = frozenset()
 MANDATORY_HTML: str = "html"
 
 # 各运行族的终态阻断状态：进入后只能由显式 reopen 退出
@@ -213,12 +213,11 @@ class ReportTarget:
 
 @dataclass(frozen=True)
 class DeliveryContract:
-    """不可变输出选择合同：报告类型 + 可选格式；改变选择必须用更高的新合同版本。
+    """不可变站点式 HTML 输出选择合同：报告类型与唯一 HTML 格式。
 
     ``contract_version`` 与规范项目合同一致：正整数。``reports`` 是用户输出
-    选择的报告类型（A/B/C 排序且不重复），格式亦排序且不重复——重复输入
-    直接失败关闭。版本化运行目标（对象 ID）不在此处表达，由显式重绑操作
-    持久化并解析。
+    选择的报告类型（A/B/C 排序且不重复）。``optional_formats`` 保留为空元组，
+    让旧事件载荷在归约时可被明确拒绝，而不是把未来格式重新引入运行时。
     """
 
     contract_id: str
@@ -247,12 +246,12 @@ class DeliveryContract:
             raise ValueError("合同报告必须按 A/B/C 排序")
         if not isinstance(self.optional_formats, tuple):
             raise ValueError("可选格式必须是元组")
-        if any(fmt not in _OPTIONAL_FORMATS for fmt in self.optional_formats):
-            raise ValueError(f"非法可选格式: {self.optional_formats}")
+        if self.optional_formats:
+            raise ValueError("当前合同只支持站点式 HTML，不允许其他输出格式")
         if len(set(self.optional_formats)) != len(self.optional_formats):
             raise ValueError("可选格式重复")
         if self.optional_formats != tuple(sorted(self.optional_formats)):
-            raise ValueError("可选格式必须排序")
+            raise ValueError("格式选择必须排序")
 
 
 def report_target(kind: str) -> ReportTarget:
@@ -277,12 +276,8 @@ def format_object_id(report_object_id: str, fmt: str) -> str:
 
 
 def matrix_targets(contract: DeliveryContract) -> tuple[tuple[str, str], ...]:
-    """完整选择矩阵：每个选定报告 ×（强制 HTML + 每个选定可选格式）。"""
-    return tuple(
-        (kind, fmt)
-        for kind in contract.reports
-        for fmt in (MANDATORY_HTML, *contract.optional_formats)
-    )
+    """完整选择矩阵：每个选定报告仅对应站点式 HTML。"""
+    return tuple((kind, MANDATORY_HTML) for kind in contract.reports)
 
 
 @dataclass(frozen=True)

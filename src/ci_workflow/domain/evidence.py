@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import re
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from ci_workflow.domain.ids import stable_id
 
 _SHA256 = re.compile(r"[0-9a-f]{64}")
 DateEvidenceState = Literal["reported", "not_publicly_disclosed", "not_applicable"]
@@ -77,6 +81,14 @@ class DateEvidence(BaseModel):
     precision: DatePrecision = "instant"
     locator: EvidenceLocator
 
+    def is_known_by(self, cutoff: datetime) -> bool:
+        _offset_datetime(cutoff)
+        if self.state != "reported" or self.value is None:
+            return False
+        if self.precision == "calendar_day":
+            return cutoff >= self.value + timedelta(days=1) - timedelta(microseconds=1)
+        return self.value <= cutoff
+
     @field_validator("value")
     @classmethod
     def _value_has_offset(cls, value: datetime | None) -> datetime | None:
@@ -107,6 +119,34 @@ class DateEvidence(BaseModel):
         return self
 
 
+def source_version_identity(
+    source_id: str, content_sha256: str, *,
+    published_at: DateEvidence, effective_at: DateEvidence, first_disclosed_at: DateEvidence,
+    text_derivation: SourceTextDerivation | None = None,
+) -> str:
+    """V2 identity binds immutable date evidence; repeated downloads deduplicate.
+
+    Old content-only IDs remain stored history. Re-ingestion uses this versioned
+    identity and therefore requires fresh dependent review, never record edits.
+    """
+    dates = {}
+    for role, evidence in (
+        ("published_at", published_at), ("effective_at", effective_at),
+        ("first_disclosed_at", first_disclosed_at),
+    ):
+        material = evidence.model_dump(mode="json")
+        if evidence.value is not None and evidence.precision == "instant":
+            material["value"] = evidence.value.astimezone(UTC).isoformat()
+        dates[role] = material
+    if text_derivation is not None:
+        dates["text_derivation"] = text_derivation.model_dump(mode="json")
+    encoded = json.dumps(dates, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return stable_id(
+        "source-version", "date-identity-v2", source_id, content_sha256,
+        hashlib.sha256(encoded.encode("utf-8")).hexdigest(),
+    )
+
+
 class ContentBlob(BaseModel):
     """内容寻址原文的相对路径记录。"""
 
@@ -130,6 +170,42 @@ class ContentBlob(BaseModel):
         return _not_blank(value)
 
 
+class CtgovRecordSelector(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    study_index: int = Field(ge=0, strict=True)
+    nct_id: str = Field(pattern=r"^NCT[0-9]{8}$")
+
+
+class SourceTextDerivation(BaseModel):
+    """Explicit raw-asset to text derivation, never a PDF hash relabelled as text."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_version: Literal["1.0"] = "1.0"
+    raw_asset: ContentBlob
+    text_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    method: Literal["utf8-strip-v1", "pypdf-text-v1", "ctgov-study-json-v1"]
+    extractor_version: str = Field(min_length=1)
+    record_selector: CtgovRecordSelector | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+
+    @model_validator(mode="after")
+    def _raw_path_and_method_are_bound(self) -> SourceTextDerivation:
+        if self.raw_asset.byte_size < 1:
+            raise ValueError("原始资产不得为空")
+        digest = self.raw_asset.sha256
+        if self.raw_asset.relative_path != f"evidence/raw/sha256/{digest[:2]}/{digest}.bin":
+            raise ValueError("原始资产路径必须与摘要绑定")
+        if (self.method == "pypdf-text-v1") != (self.raw_asset.media_type == "application/pdf"):
+            raise ValueError("原始资产媒体类型与提取方法不一致")
+        if (self.method == "ctgov-study-json-v1") != (self.record_selector is not None):
+            raise ValueError("登记记录提取必须且只能绑定明确的记录选择器")
+        if self.record_selector is not None and self.raw_asset.media_type != "application/json":
+            raise ValueError("登记记录提取仅适用于原始JSON响应")
+        return self
+
+
 class SourceVersionRecord(BaseModel):
     """不可变来源版本；四类日期不得相互冒充。"""
 
@@ -141,6 +217,9 @@ class SourceVersionRecord(BaseModel):
     content_sha256: str
     content_relative_path: str
     media_type: str
+    text_derivation: SourceTextDerivation | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     acquired_at: datetime
     acquired_locator: EvidenceLocator
     published_at: DateEvidence
@@ -167,6 +246,10 @@ class SourceVersionRecord(BaseModel):
 
     @model_validator(mode="after")
     def _content_path_matches_digest(self) -> SourceVersionRecord:
+        if self.text_derivation is not None and (
+            self.text_derivation.text_sha256 != self.content_sha256
+        ):
+            raise ValueError("来源版本正文与原始资产派生摘要不一致")
         expected_path = (
             f"evidence/raw/sha256/{self.content_sha256[:2]}/"
             f"{self.content_sha256}.bin"
@@ -313,6 +396,25 @@ class InformationGainDiff(BaseModel):
     round: int = Field(ge=1)
     new_fields: tuple[str, ...]
     new_source_versions: tuple[str, ...]
+    new_evidence_fragment_ids: tuple[str, ...] = ()
+    changed_gate_unit_ids: tuple[str, ...] = ()
+    reduced_conflict_set_ids: tuple[str, ...] = ()
+
+    @field_validator(
+        "new_fields",
+        "new_source_versions",
+        "new_evidence_fragment_ids",
+        "changed_gate_unit_ids",
+        "reduced_conflict_set_ids",
+    )
+    @classmethod
+    def _gain_ids_are_unique_and_nonblank(
+        cls, values: tuple[str, ...]
+    ) -> tuple[str, ...]:
+        normalized = tuple(_not_blank(value) for value in values)
+        if len(normalized) != len(set(normalized)):
+            raise ValueError("信息增益标识不得重复")
+        return normalized
 
 
 class EvidenceGap(BaseModel):

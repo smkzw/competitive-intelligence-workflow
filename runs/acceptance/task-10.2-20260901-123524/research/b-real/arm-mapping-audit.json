@@ -1,0 +1,248 @@
+{
+  "checks": {
+    "all_arm_ids_nonempty": true,
+    "all_efficacy_safety_arm_ids_resolve": true,
+    "controls_preserved": true,
+    "drug_name_not_required": true,
+    "single_arm_trial_not_given_synthetic_control": true
+  },
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "indication": "阵发性睡眠性血红蛋白尿",
+  "mapping_policy": [
+    "arm_id must resolve from registry group/interventionNames or explicit source arm label",
+    "drug_name为空、不存在或只作为显示名时不得丢弃结果",
+    "控制臂保留为试验事实但不作为独立创新药产品",
+    "不跨试验复用组别身份"
+  ],
+  "mappings": [
+    {
+      "arm_identity_rule": "registry group/interventionNames when surfaced, otherwise explicit source arm label normalized to nonempty arm_id; drug_name is not a required identity field",
+      "arms": [
+        {
+          "arm_label": "对照组",
+          "arm_role": "control",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "对照组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "apply-control",
+          "registry_group_id": null,
+          "source_arm_label": "对照组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-cadth-table18-202507",
+            "src-ctgov-apply-20241009"
+          ]
+        },
+        {
+          "arm_label": "治疗组",
+          "arm_role": "treatment",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "治疗组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "apply-treatment",
+          "registry_group_id": null,
+          "source_arm_label": "治疗组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-cadth-table18-202507",
+            "src-ctgov-apply-20241009"
+          ]
+        }
+      ],
+      "design": "randomized comparator",
+      "display_id": "NCT04558918",
+      "product_id": "iptacopan",
+      "registry_source_version_id": "src-ctgov-apply-20241009",
+      "trial_id": "nct04558918",
+      "trial_name": "APPLY-PNH"
+    },
+    {
+      "arm_identity_rule": "registry group/interventionNames when surfaced, otherwise explicit source arm label normalized to nonempty arm_id; drug_name is not a required identity field",
+      "arms": [
+        {
+          "arm_label": "治疗组",
+          "arm_role": "treatment",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "治疗组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "appoint-treatment",
+          "registry_group_id": null,
+          "source_arm_label": "治疗组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-ctgov-appoint-20241009",
+            "src-dailymed-fabhalta-20260716",
+            "src-pubmed-final-20250530"
+          ]
+        }
+      ],
+      "design": "single group",
+      "display_id": "NCT04820530",
+      "product_id": "iptacopan",
+      "registry_source_version_id": "src-ctgov-appoint-20241009",
+      "trial_id": "nct04820530",
+      "trial_name": "APPOINT-PNH"
+    },
+    {
+      "arm_identity_rule": "registry group/interventionNames when surfaced, otherwise explicit source arm label normalized to nonempty arm_id; drug_name is not a required identity field",
+      "arms": [
+        {
+          "arm_label": "对照组",
+          "arm_role": "control",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "对照组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "peg-control",
+          "registry_group_id": null,
+          "source_arm_label": "对照组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514",
+            "src-pubmed-pegasus-20210311"
+          ]
+        },
+        {
+          "arm_label": "治疗组",
+          "arm_role": "treatment",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "治疗组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "peg-treatment",
+          "registry_group_id": null,
+          "source_arm_label": "治疗组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514",
+            "src-pubmed-pegasus-20210311"
+          ]
+        }
+      ],
+      "design": "randomized comparator",
+      "display_id": "NCT03500549",
+      "product_id": "pegcetacoplan",
+      "registry_source_version_id": "src-ctgov-pegasus-20260731",
+      "trial_id": "nct03500549",
+      "trial_name": "PEGASUS（APL2-302）"
+    },
+    {
+      "arm_identity_rule": "registry group/interventionNames when surfaced, otherwise explicit source arm label normalized to nonempty arm_id; drug_name is not a required identity field",
+      "arms": [
+        {
+          "arm_label": "对照组",
+          "arm_role": "control",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "对照组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "dani-control",
+          "registry_group_id": null,
+          "source_arm_label": "对照组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        },
+        {
+          "arm_label": "治疗组",
+          "arm_role": "treatment",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "治疗组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "dani-treatment",
+          "registry_group_id": null,
+          "source_arm_label": "治疗组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        }
+      ],
+      "design": "randomized comparator",
+      "display_id": "NCT04469465",
+      "product_id": "danicopan",
+      "registry_source_version_id": "src-ctgov-alpha-20260731",
+      "trial_id": "nct04469465",
+      "trial_name": "ALPHA（ALXN2040-PNH-301）"
+    },
+    {
+      "arm_identity_rule": "registry group/interventionNames when surfaced, otherwise explicit source arm label normalized to nonempty arm_id; drug_name is not a required identity field",
+      "arms": [
+        {
+          "arm_label": "对照组",
+          "arm_role": "control",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "对照组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "rav-control",
+          "registry_group_id": null,
+          "source_arm_label": "对照组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-pubmed-champion301-20181206"
+          ]
+        },
+        {
+          "arm_label": "治疗组",
+          "arm_role": "treatment",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "治疗组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "rav-treatment",
+          "registry_group_id": null,
+          "source_arm_label": "治疗组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-pubmed-champion301-20181206"
+          ]
+        }
+      ],
+      "design": "randomized comparator",
+      "display_id": "NCT02946463",
+      "product_id": "ravulizumab",
+      "registry_source_version_id": "src-ctgov-champion301-20260731",
+      "trial_id": "nct02946463",
+      "trial_name": "Study 301（CHAMPION-301）"
+    },
+    {
+      "arm_identity_rule": "registry group/interventionNames when surfaced, otherwise explicit source arm label normalized to nonempty arm_id; drug_name is not a required identity field",
+      "arms": [
+        {
+          "arm_label": "对照组",
+          "arm_role": "control",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "对照组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "crov-control",
+          "registry_group_id": null,
+          "source_arm_label": "对照组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        },
+        {
+          "arm_label": "治疗组",
+          "arm_role": "treatment",
+          "drug_name_dependency": false,
+          "intervention_or_control_label": "治疗组",
+          "mapping_basis": "explicit source arm label; registry group ID not surfaced in the official extract",
+          "normalized_arm_id": "crov-treatment",
+          "registry_group_id": null,
+          "source_arm_label": "治疗组",
+          "source_group_id": null,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        }
+      ],
+      "design": "randomized comparator",
+      "display_id": "NCT04434092",
+      "product_id": "crovalimab",
+      "registry_source_version_id": "src-ctgov-commodore2-20260731",
+      "trial_id": "nct04434092",
+      "trial_name": "COMMODORE 2"
+    }
+  ],
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0"
+}

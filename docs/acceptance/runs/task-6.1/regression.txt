@@ -1,0 +1,11 @@
+Task 6.1 回归记录（2026-08-29）
+
+命令：
+uv run pytest -q tests/reports tests/unit tests/contract tests/integration/sources/test_pubmed_cross_reference.py tests/integration/sources/test_ctgov.py tests/integration/test_ctgov_result_coverage_audit.py
+
+结果：986 passed in 49.35s。
+
+静态检查：
+- Ruff：All checks passed。
+- strict mypy：study_roles.py 与 reports/b 无问题。
+- git diff --check：通过。

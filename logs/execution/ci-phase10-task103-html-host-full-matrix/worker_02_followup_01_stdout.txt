@@ -1,0 +1,189 @@
+{
+  "agent": "zcode",
+  "requested_agent": "zcode",
+  "role_id": "worker_02",
+  "requested_provider": "zcode",
+  "requested_model": "GLM-5.3-Flash",
+  "requested_effort": "max",
+  "explicit_route": true,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": null,
+  "schedule_reconciliation": {
+    "enabled": false,
+    "packet_period": null,
+    "active_period": null,
+    "dispatch_period": "off_peak",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "no scheduled route manifest"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "zcode",
+  "effective_provider": "zcode",
+  "effective_model": "GLM-5.3-Flash",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": true,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "schedule": {
+      "policy": "beijing-provider-window-v1",
+      "skipped": true,
+      "reason": "existing session is being resumed without route switching"
+    },
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 452,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "核查完成，全部证据在案。输出报告：\n\n# Execution Output: ci-phase10-task103-html-host-full-matrix - worker_02_followup_01\n\n## Boundary And Context Check\n\n- 续接核查模式：仅检查原授权三文件，未做任何修改（本轮未发现需要我修正的回归）。未读取其他 worker 报告、未启动代理、未宣称最终验收；无任何浏览器安装/调用/建议。\n\n## Work Performed\n\n对三文件做了以下核查（只读）：\n\n1. **共享文件已被后续 worker 演化**：`acceptance_runner.py` 1478→3026 行、`tools/run_acceptance.py` 216→353 行、`tests/acceptance/test_full_matrix.py` 796→2136 行。新增内容是 worker_03/04 的场景 rehearsal 与宿主阶段（`subprocess_verifier_runner`、`--pipeline full`、场景回执构建等）。\n2. **新增的 `subprocess_verifier_runner` 不构成浏览器回退**：其 docstring 与实现一致——只执行 catalog 逐字声明的 `uv run pytest …` verifier 命令（catalog 中 `verifiers` 字段为 pytest 节点 id），输出不落盘，超时/失败按失败处理；全文件无 `verify_portal`、无 Playwright/Chromium/WebKit 调用。\n3. **我的阶段 3 修正逐项在位**：`EGO_LITE_TOOL_IDENTITY = \"ego-lite\"`、`PRESCRIBED_VIEWPORTS`、`EgoReceiptPendingError`、`run_ego_receipt_stage`、`_load_and_bind_ego_receipt`、`bind_ego_receipts_pipeline`、`run_html_pipeline`、`run_pre_rc_rehearsal` 均存在；全部失败关闭检查逐字保留——非 ego 工具（`不是 ego(lite) 产物`）、当前 run id（`未绑定当前运行标识`）、pre-RC 身份、manifest id（`未绑定当前产物清单标识`）、snapshot id（`未绑定当前报告快照标识`）、site digest（`站点摘要与当前产物不一致`）、精确路由集合（`路由集合与当前站点地图不一致`）、规定视口（`逐项声明规定视口`）、逐页结论（`页面未通过`）、运行时间与文件 mtime（两处 `早于当前运行，疑似复用旧回执`）。\n4. **CLI 语义保留且无浏览器回退**：`--pipeline html` 回执缺失退出 3 并指引 Codex 使用 ego(lite)；`--bind-ego-receipts` 续跑绑定；新增的 `--pipeline full`（其他 worker）同样在 ego(lite) 回执阶段暂停（退出码 3），文档与实现无任何其他浏览器分支。\n5. **我的 F03 测试全部在位**（6 个核心测试 + 参数化故障矩阵），F02 段原样保留。\n\n## Commands And Observations\n\n- `uv run pytest tests/acceptance/test_full_matrix.py -k \"(orders or binds_three_html or fails_closed_on_any_missing or requests_ego or prompts_for_ego or bind_ego or bind_flag or preflight or requires_html_only or cli_catalog_stage)\" -q` → **20 passed in 8.58s**（我的 17 个 F03 测试全过 + 3 个 F02 抽查：阶段 1 真值核验与 CLI catalog 行为不受演化影响）。全程零浏览器进程。\n- `uv run ruff check`（三文件）→ **All checks passed**。\n- 结论：**无需修改**——三项核查点（严格绑定合同、失败关闭与无浏览器回退、测试不启动浏览器）全部保持完整。\n\n## Blockers Or Missing Environment\n\n- 无阻塞。提示两点存档事项（非本轮回归）：其一，`~/Library/Caches/ms-playwright`（约 829MB，前一轮误装）仍在本机待 Codex 决定回收；其二，C 类 `content_occlusion` 检测器误判的结论仍记录在案（原始探针产物已按指令删除）。\n\n## Rerun Requests Or Next Step\n\n- 无需重跑本角色工作。ego(lite) 真实回执生成与最终绑定验收仍由 Codex 在集成阶段执行（`--pipeline full` 首跑会暂停在回执阶段并给出逐路径指引，`--bind-ego-receipts` 续跑绑定）。Codex 仍为渲染与最终验收的唯一权威。",
+      "stderr": "",
+      "duration_seconds": 179.86,
+      "timed_out": false,
+      "session_id": "sess_d984766f-1ee9-48ec-8f1c-a04b4dc565a7",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 3673,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 4,
+      "tool_result_count": 0,
+      "reasoning_event_count": 2030,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 128,
+      "usage": {
+        "inputTokens": 245963,
+        "outputTokens": 1220,
+        "totalTokens": 247183,
+        "cacheReadTokens": 245312,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_576d9675-b6cd-471b-81bf-663c02bb6908",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 5,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 4,
+        "tool_names": [
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 1805,
+      "estimated_input_tokens": 452,
+      "output_chars": 2272,
+      "estimated_output_tokens": 568,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "explicit_route": true,
+      "resumed": true
+    }
+  ],
+  "health_check": false,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": true,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "bypassPermissions",
+    "adjusted_for_execution_manager": true
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 128,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788312603.444502
+}

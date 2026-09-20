@@ -7,6 +7,8 @@ units:
   - unit_id: b_trial_identity_role
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -26,6 +28,8 @@ units:
   - unit_id: b_target_population_groups
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -44,7 +48,9 @@ units:
     user_next_step_zh: 请提供官方登记或主要试验报告中的目标人群与组别信息
   - unit_id: b_treatment_control_identity
     report_kind: B
-    blocking_level: critical
+    blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: comparison
     scope_parent: trial
     applicability_predicate_id: has_comparator
@@ -57,7 +63,7 @@ units:
       - protocol_sap
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
-    missing_strategy: block
+    missing_strategy: preserve_disclosure_state
     conflict_strategy: resolved_only
     threshold: 1
     user_label_zh: 治疗与对照身份
@@ -66,6 +72,8 @@ units:
   - unit_id: b_baseline_sample_size
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -81,6 +89,7 @@ units:
     allowed_source_roles:
       - primary_trial_report
       - clinical_trial_registry
+      - regulatory_material
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero]
     missing_strategy: block
@@ -92,6 +101,8 @@ units:
   - unit_id: b_baseline_age
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -107,6 +118,7 @@ units:
     allowed_source_roles:
       - primary_trial_report
       - clinical_trial_registry
+      - regulatory_material
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero]
     missing_strategy: block
@@ -118,6 +130,8 @@ units:
   - unit_id: b_baseline_sex
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -132,6 +146,7 @@ units:
     allowed_source_roles:
       - primary_trial_report
       - clinical_trial_registry
+      - regulatory_material
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero]
     missing_strategy: block
@@ -143,6 +158,8 @@ units:
   - unit_id: b_baseline_severity_anchor
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -159,6 +176,7 @@ units:
     allowed_source_roles:
       - primary_trial_report
       - clinical_trial_registry
+      - regulatory_material
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero]
     missing_strategy: block
@@ -170,6 +188,8 @@ units:
   - unit_id: b_core_efficacy_endpoint
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: endpoint
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -180,7 +200,6 @@ units:
       - unit
       - timepoint
       - analysis_population
-      - denominator
       - source_location
     allowed_fact_domains:
       - efficacy
@@ -203,7 +222,9 @@ units:
     user_next_step_zh: 请提供主要试验报告或官方登记结果中的核心疗效终点记录
   - unit_id: b_effect_difference_support
     report_kind: B
-    blocking_level: critical
+    blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: comparison
     scope_parent: trial
     applicability_predicate_id: has_comparator
@@ -226,7 +247,7 @@ units:
       - company_disclosure
     minimum_disclosure_maturity: attributable_numeric_disclosure
     accepted_fact_states: [reported_value, reported_zero]
-    missing_strategy: block
+    missing_strategy: preserve_disclosure_state
     conflict_strategy: resolved_only
     threshold: 1
     user_label_zh: 组间差值或效应量来源
@@ -235,6 +256,8 @@ units:
   - unit_id: b_safety_minimum_record
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -243,7 +266,6 @@ units:
       - event_definition
       - time_window
       - treatment_group
-      - control_group
       - denominator
     allowed_fact_domains:
       - safety
@@ -267,6 +289,8 @@ units:
   - unit_id: b_source_role_maturity_location
     report_kind: B
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -290,6 +314,8 @@ units:
   - unit_id: b_trial_disposition
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -309,6 +335,8 @@ units:
   - unit_id: b_safety_event_teae
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -339,6 +367,8 @@ units:
   - unit_id: b_safety_event_sae
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -369,6 +399,8 @@ units:
   - unit_id: b_safety_event_aesi
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -397,6 +429,8 @@ units:
   - unit_id: b_safety_event_death
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -425,6 +459,8 @@ units:
   - unit_id: b_safety_event_grade3plus
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -453,6 +489,8 @@ units:
   - unit_id: b_safety_event_discontinuation
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable
@@ -481,6 +519,8 @@ units:
   - unit_id: b_safety_event_common
     report_kind: B
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: group
     scope_parent: trial
     applicability_predicate_id: always_applicable

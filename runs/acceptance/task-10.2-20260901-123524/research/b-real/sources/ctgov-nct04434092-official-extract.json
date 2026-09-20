@@ -1,0 +1,34 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "Phase 3 COMMODORE 2; adult primary randomized comparator 204",
+    "crovalimab 135 and eculizumab 69; primary completion 2022-11-16",
+    "registry history last updated 2026-04-28, before the frozen cutoff"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "arm_values": {
+        "crovalimab": 135,
+        "eculizumab": 69
+      },
+      "field": "trial_design",
+      "value": "Phase 3 active-controlled randomized study; adult primary comparator"
+    },
+    {
+      "field": "completion",
+      "value": "Primary completion 2022-11-16; registry record current through 2026-04-28"
+    }
+  ],
+  "first_disclosed_at": "2022-11-16",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-ctgov-commodore2",
+  "source_title": "ClinicalTrials.gov NCT04434092 COMMODORE 2 results",
+  "source_url": "https://clinicaltrials.gov/study/NCT04434092?tab=results",
+  "source_version_id": "src-ctgov-commodore2-20260731"
+}

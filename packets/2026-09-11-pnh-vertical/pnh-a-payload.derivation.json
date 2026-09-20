@@ -1,0 +1,954 @@
+{
+ "pages": [
+  {
+   "page": 1,
+   "sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98"
+  },
+  {
+   "page": 2,
+   "sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
+  }
+ ],
+ "built_at": "2026-09-19T14:11:55.440147+00:00",
+ "skipped_trials_no_sample_size": [
+  "NCT06028594",
+  "NCT05982938",
+  "NCT05222412",
+  "NCT00438789",
+  "NCT00112983"
+ ],
+ "records_without_drug_intervention": [
+  "NCT06852092",
+  "NCT01174108",
+  "NCT01412047",
+  "NCT01224483",
+  "NCT04079257",
+  "NCT07416162",
+  "NCT00397813",
+  "NCT06412497",
+  "NCT00039923",
+  "NCT02179359",
+  "NCT03047746",
+  "NCT00856388",
+  "NCT01192425",
+  "NCT01529827",
+  "NCT00721864",
+  "NCT07457151",
+  "NCT06606314",
+  "NCT03333486",
+  "NCT07036718",
+  "NCT01364363",
+  "NCT04645199",
+  "NCT00186823",
+  "NCT01020188",
+  "NCT05125341",
+  "NCT06524726",
+  "NCT06411626",
+  "NCT07229235",
+  "NCT05337683",
+  "NCT00145613",
+  "NCT04128943",
+  "NCT00566696",
+  "NCT06154512",
+  "NCT00587054",
+  "NCT07108023",
+  "NCT07102849",
+  "NCT00315419",
+  "NCT00975975",
+  "NCT03520647",
+  "NCT05755867",
+  "NCT01294891",
+  "NCT00004464",
+  "NCT00004143",
+  "NCT04965597",
+  "NCT01272817",
+  "NCT00731328",
+  "NCT05842486",
+  "NCT00143559",
+  "NCT01374360",
+  "NCT03329365"
+ ],
+ "combo_regimens": [
+  {
+   "nct_id": "NCT05828485",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT06799546",
+   "canonical_drugs": [
+    "eculizumab",
+    "hsk39297"
+   ]
+  },
+  {
+   "nct_id": "NCT07462780",
+   "canonical_drugs": [
+    "cms-d017"
+   ]
+  },
+  {
+   "nct_id": "NCT06978699",
+   "canonical_drugs": [
+    "xh-s003"
+   ]
+  },
+  {
+   "nct_id": "NCT06561841",
+   "canonical_drugs": [
+    "hsk39297"
+   ]
+  },
+  {
+   "nct_id": "NCT04820530",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT02534909",
+   "canonical_drugs": [
+    "iptacopan",
+    "lfg316"
+   ]
+  },
+  {
+   "nct_id": "NCT06051357",
+   "canonical_drugs": [
+    "hrs-5965"
+   ]
+  },
+  {
+   "nct_id": "NCT04888507",
+   "canonical_drugs": [
+    "cemdisiran",
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT00867932",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT06932744",
+   "canonical_drugs": [
+    "eculizumab",
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT04558918",
+   "canonical_drugs": [
+    "eculizumab",
+    "iptacopan",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT06050226",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT04702568",
+   "canonical_drugs": [
+    "bcx9930",
+    "eculizumab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04058158",
+   "canonical_drugs": [
+    "eculizumab",
+    "sb12"
+   ]
+  },
+  {
+   "nct_id": "NCT07177872",
+   "canonical_drugs": [
+    "ntq5082"
+   ]
+  },
+  {
+   "nct_id": "NCT04747613",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT03866681",
+   "canonical_drugs": [
+    "sirolimus"
+   ]
+  },
+  {
+   "nct_id": "NCT05646563",
+   "canonical_drugs": [
+    "eculizumab",
+    "nm8074"
+   ]
+  },
+  {
+   "nct_id": "NCT07413250",
+   "canonical_drugs": [
+    "danicopan",
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03588026",
+   "canonical_drugs": [
+    "coversin"
+   ]
+  },
+  {
+   "nct_id": "NCT04085601",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT07256301",
+   "canonical_drugs": [
+    "ea5"
+   ]
+  },
+  {
+   "nct_id": "NCT03946748",
+   "canonical_drugs": [
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT01642979",
+   "canonical_drugs": [
+    "levamisole+cyclosporin a+glucocorticoids"
+   ]
+  },
+  {
+   "nct_id": "NCT06028594",
+   "canonical_drugs": [
+    "cemdisiran",
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT03316521",
+   "canonical_drugs": [
+    "amy-101"
+   ]
+  },
+  {
+   "nct_id": "NCT07657052",
+   "canonical_drugs": [
+    "xh-s003"
+   ]
+  },
+  {
+   "nct_id": "NCT05630001",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT00130000",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04901936",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT03406507",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04654468",
+   "canonical_drugs": [
+    "crovalimab"
+   ]
+  },
+  {
+   "nct_id": "NCT06931691",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT07747090",
+   "canonical_drugs": [
+    "fxs6837"
+   ]
+  },
+  {
+   "nct_id": "NCT05741346",
+   "canonical_drugs": [
+    "bcx9930"
+   ]
+  },
+  {
+   "nct_id": "NCT04463056",
+   "canonical_drugs": [
+    "eculizumab",
+    "elizaria®"
+   ]
+  },
+  {
+   "nct_id": "NCT07413679",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT00122304",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03030183",
+   "canonical_drugs": [
+    "zilucoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT05133531",
+   "canonical_drugs": [
+    "cemdisiran",
+    "eculizumab",
+    "pozelimab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT06633536",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT02264639",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT06848296",
+   "canonical_drugs": [
+    "vsa012"
+   ]
+  },
+  {
+   "nct_id": "NCT03896152",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT05389449",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT06312644",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03500549",
+   "canonical_drugs": [
+    "eculizumab",
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT06326814",
+   "canonical_drugs": [
+    "sar443809"
+   ]
+  },
+  {
+   "nct_id": "NCT07212426",
+   "canonical_drugs": [
+    "lp-005"
+   ]
+  },
+  {
+   "nct_id": "NCT03818607",
+   "canonical_drugs": [
+    "abp 959",
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT07788105",
+   "canonical_drugs": [
+    "lanoracopan hydrochloride"
+   ]
+  },
+  {
+   "nct_id": "NCT03427060",
+   "canonical_drugs": [
+    "coversin"
+   ]
+  },
+  {
+   "nct_id": "NCT00098280",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05646524",
+   "canonical_drugs": [
+    "nm8074"
+   ]
+  },
+  {
+   "nct_id": "NCT06238544",
+   "canonical_drugs": [
+    "hrs-5965"
+   ]
+  },
+  {
+   "nct_id": "NCT05274633",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04330534",
+   "canonical_drugs": [
+    "bcx9930"
+   ]
+  },
+  {
+   "nct_id": "NCT02352493",
+   "canonical_drugs": [
+    "cemdisiran"
+   ]
+  },
+  {
+   "nct_id": "NCT00544115",
+   "canonical_drugs": [
+    "sirolimus"
+   ]
+  },
+  {
+   "nct_id": "NCT06490991",
+   "canonical_drugs": [
+    "hrs-5965"
+   ]
+  },
+  {
+   "nct_id": "NCT02588833",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT03531255",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT07052838",
+   "canonical_drugs": [
+    "hsk39297"
+   ]
+  },
+  {
+   "nct_id": "NCT04060264",
+   "canonical_drugs": [
+    "bcd-148",
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT07177859",
+   "canonical_drugs": [
+    "eculizumab",
+    "ntq5082"
+   ]
+  },
+  {
+   "nct_id": "NCT05886244",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04434092",
+   "canonical_drugs": [
+    "crovalimab",
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT07796256",
+   "canonical_drugs": [
+    "sgb-9768"
+   ]
+  },
+  {
+   "nct_id": "NCT07266155",
+   "canonical_drugs": [
+    "lp-005"
+   ]
+  },
+  {
+   "nct_id": "NCT02946463",
+   "canonical_drugs": [
+    "eculizumab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05889299",
+   "canonical_drugs": [
+    "zaltenibart"
+   ]
+  },
+  {
+   "nct_id": "NCT03439839",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT02598583",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05982938",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT05490017",
+   "canonical_drugs": [
+    "kp104"
+   ]
+  },
+  {
+   "nct_id": "NCT01760096",
+   "canonical_drugs": [
+    "levamisole+cyclosporin a+glucocorticoids"
+   ]
+  },
+  {
+   "nct_id": "NCT06593938",
+   "canonical_drugs": [
+    "eculizumab",
+    "hrs-5965"
+   ]
+  },
+  {
+   "nct_id": "NCT03157635",
+   "canonical_drugs": [
+    "crovalimab"
+   ]
+  },
+  {
+   "nct_id": "NCT07154745",
+   "canonical_drugs": [
+    "cemdisiran",
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT05972967",
+   "canonical_drugs": [
+    "zaltenibart"
+   ]
+  },
+  {
+   "nct_id": "NCT04469465",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT04671810",
+   "canonical_drugs": [
+    "elizaria®"
+   ]
+  },
+  {
+   "nct_id": "NCT02605993",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT07470762",
+   "canonical_drugs": [
+    "hs-10542"
+   ]
+  },
+  {
+   "nct_id": "NCT03472885",
+   "canonical_drugs": [
+    "danicopan",
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03748823",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04432584",
+   "canonical_drugs": [
+    "crovalimab",
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT06298955",
+   "canonical_drugs": [
+    "zaltenibart"
+   ]
+  },
+  {
+   "nct_id": "NCT04811716",
+   "canonical_drugs": [
+    "cemdisiran",
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT01335165",
+   "canonical_drugs": [
+    "alxn1102",
+    "alxn1103"
+   ]
+  },
+  {
+   "nct_id": "NCT07035665",
+   "canonical_drugs": [
+    "hrs-5965"
+   ]
+  },
+  {
+   "nct_id": "NCT04679103",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03593200",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT06294301",
+   "canonical_drugs": [
+    "lp-005"
+   ]
+  },
+  {
+   "nct_id": "NCT06764303",
+   "canonical_drugs": [
+    "ntq5082"
+   ]
+  },
+  {
+   "nct_id": "NCT05116774",
+   "canonical_drugs": [
+    "bcx9930",
+    "eculizumab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05731050",
+   "canonical_drugs": [
+    "nm8074"
+   ]
+  },
+  {
+   "nct_id": "NCT03225287",
+   "canonical_drugs": [
+    "zilucoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT06932471",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT07760467",
+   "canonical_drugs": [
+    "tul321"
+   ]
+  },
+  {
+   "nct_id": "NCT05744921",
+   "canonical_drugs": [
+    "cemdisiran",
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT05131204",
+   "canonical_drugs": [
+    "cemdisiran",
+    "eculizumab",
+    "pozelimab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT00012376",
+   "canonical_drugs": [
+    "bryostatin 1"
+   ]
+  },
+  {
+   "nct_id": "NCT03056040",
+   "canonical_drugs": [
+    "eculizumab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT03181633",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT06745622",
+   "canonical_drugs": [
+    "hsk39297"
+   ]
+  },
+  {
+   "nct_id": "NCT04320602",
+   "canonical_drugs": [
+    "eculizumab",
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05222412",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT06934967",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT06449001",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT03078582",
+   "canonical_drugs": [
+    "zilucoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT06715943",
+   "canonical_drugs": [
+    "hrs-5965"
+   ]
+  },
+  {
+   "nct_id": "NCT06134414",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT05642585",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT06578949",
+   "canonical_drugs": [
+    "ravulizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05116787",
+   "canonical_drugs": [
+    "bcx9930"
+   ]
+  },
+  {
+   "nct_id": "NCT05776472",
+   "canonical_drugs": [
+    "pegcetacoplan"
+   ]
+  },
+  {
+   "nct_id": "NCT07187401",
+   "canonical_drugs": [
+    "aln-cfb"
+   ]
+  },
+  {
+   "nct_id": "NCT01192399",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05828472",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT06903234",
+   "canonical_drugs": [
+    "iptacopan"
+   ]
+  },
+  {
+   "nct_id": "NCT06987864",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05476887",
+   "canonical_drugs": [
+    "kp104"
+   ]
+  },
+  {
+   "nct_id": "NCT07387302",
+   "canonical_drugs": [
+    "sln12140"
+   ]
+  },
+  {
+   "nct_id": "NCT03053102",
+   "canonical_drugs": [
+    "danicopan"
+   ]
+  },
+  {
+   "nct_id": "NCT02591862",
+   "canonical_drugs": [
+    "coversin"
+   ]
+  },
+  {
+   "nct_id": "NCT06543459",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT00122330",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT04162470",
+   "canonical_drugs": [
+    "pozelimab"
+   ]
+  },
+  {
+   "nct_id": "NCT00438789",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT00122317",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT06933914",
+   "canonical_drugs": [
+    "my008211a"
+   ]
+  },
+  {
+   "nct_id": "NCT00112983",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  },
+  {
+   "nct_id": "NCT05876312",
+   "canonical_drugs": [
+    "adx-038"
+   ]
+  },
+  {
+   "nct_id": "NCT06100900",
+   "canonical_drugs": [
+    "bcx10013"
+   ]
+  },
+  {
+   "nct_id": "NCT03829449",
+   "canonical_drugs": [
+    "coversin"
+   ]
+  },
+  {
+   "nct_id": "NCT04170023",
+   "canonical_drugs": [
+    "alxn2050"
+   ]
+  },
+  {
+   "nct_id": "NCT07152288",
+   "canonical_drugs": [
+    "hsk39297"
+   ]
+  },
+  {
+   "nct_id": "NCT01194804",
+   "canonical_drugs": [
+    "eculizumab"
+   ]
+  }
+ ],
+ "alias_map_id": "pnha-alias-v2",
+ "borderline_repositioning": [
+  "Levamisole+cyclosporin A+Glucocorticoids",
+  "sirolimus"
+ ]
+}

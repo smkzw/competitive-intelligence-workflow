@@ -1,0 +1,188 @@
+{
+  "agent": "zcode",
+  "requested_agent": "zcode",
+  "role_id": "named_zcode",
+  "requested_provider": "zcode",
+  "requested_model": "glm-5.3-flash",
+  "requested_effort": "max",
+  "explicit_route": true,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": null,
+  "schedule_reconciliation": {
+    "enabled": false,
+    "packet_period": null,
+    "active_period": null,
+    "dispatch_period": "night",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "no scheduled route manifest"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "zcode",
+  "effective_provider": "zcode",
+  "effective_model": "glm-5.3-flash",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": true,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 259,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "# R13j 视觉终审·更正版（zcode 续接会话，ego(lite) 复核，任务空间 id 28 已关闭）\n\n## 一、更正说明：原 P1-1 撤销，Codex 复核正确\n\n我在同一 ego(lite) 会话重新打开 `design-map.html?product=lebrikizumab` 并逐列取证：\n\n- **计算样式证据**：NCT02260986（度普利尤单抗）与 NCT03985943（奈莫利珠单抗）列 `display: none`、宽 0、0 个可见单元格；NCT04178967 与 NCT05149313（均来布利珠单抗）`display: table-cell`、各 12 个可见单元格。\n- **截图证据**：矩阵仅呈现两个来布利珠试验列 + 固定首列，筛选面板显示“已选 1 项”。\n- **两条路径均正确**：`overview.html?product=lebrikizumab` 直接加载后可见列 = [NCT04178967, NCT05149313]；在 overview 实时点击“来布利珠单抗（Lebrikizumab）”芯片后，可见列由 4 列即时收敛为同 2 列。\n\n原判的根因：我的探针用 `innerText` 枚举全部 `.kz-c-design-matrix__trial-th`，而 `display:none` 元素的 `innerText` 回退为 `textContent`，把隐藏列误计为可见。**P1-1（筛选不作用于矩阵）撤销；康哲合同“筛选状态在图、表、矩阵和 URL 中一致”在 C 报告实测成立。** 隐藏列以 `display:none` 保留于 DOM，不进入无障碍树、无用户可见影响，不构成缺陷。\n\n## 二、P2-2 复核：B 基线四页为可见层真实重复，维持原判\n\n对四个 URL 逐一做可见性感知比对（计算样式过滤后）：\n\n- 四页可见面板完全相同：`基线 · 年龄 · 均值｜基线 · 基线EASI · 均值｜基线 · 基线样本量 · 例数｜性别 · 比例`，无任何隐藏面板（hiddenPanels 均为空）——重复发生在**可见层**，不是共享隐藏数据/筛选 DOM 造成的假象。\n- 四页可见表格均为 4 张，表头一致（产品｜试验｜组别｜基线变量｜统计形式｜数值｜单位｜披露状态），首行一致（安澜双抗｜HORIZON-AD｜治疗组｜年龄｜均值｜未公开｜岁｜未公开）。\n- 而四个页面的页题/H1/导航高亮各不相同：**人口学 / 基线疾病严重程度 / 疾病语境 / 基线与人群总览**。\n\n**维持 P2**：用户点“基线疾病严重程度”看到的是年龄与性别人口学面板，页题承诺与内容不符；除“基线EASI”外无疾病语境专有内容。最小修复不变：按页主题拆分可见面板（人口学=年龄/性别/样本量；严重程度=基线EASI/IGA；疾病语境=病程/既往治疗背景），或导航层合并为单页。\n\n## 三、其余结论复核\n\n本轮仅针对 P1-1 与 P2-2 重开页面取证；原报告其余部分（A 抽屉口径拆分与交互闭环、B 跨试验比较与数值身份、C 矩阵进首屏与单元格下钻、宽度与局部滚动、语言与规范核对、reduced-motion、指针目标尺寸）所依据的证据未受本次复核影响，结论维持：\n\n- **P0：无。**\n- **P1：无（原 P1-1 撤销）。**\n- **P2：两项**——① B 基线四页可见层重复（本节，证据升级）；② B 完成情况面板标题前缀词序不一（“完成研究｜完成情况 · …”与“完成情况 · 已随机 · …”混用）。\n- 观察（不计缺陷）：C 使用真实试验而 A/B 使用标注“示例登记号”的 fixture 数据，属宿主任务数据策略，建议在“研究依据与局限”页向用户说明。\n\n## 四、更新后裁定\n\n- **A：通过。**\n- **B：通过（附 P2 两项，建议随批修复，不阻断）。**\n- **C：通过**（原 P1 撤销；筛选在 URL 恢复与实时切换两条路径上均正确驱动矩阵可见列）。\n- **整体：通过（放行）。** 无 P0/P1 遗留；两项 P2 作为交付后第一批优化建议，其中基线四页拆分建议优先，因其涉及页题与内容的对应关系。\n\n方法备注（供后续审阅者复用）：对带筛选/分页/懒加载的矩阵类组件，判定“未生效”前必须以 `getComputedStyle().display` + 可见单元格计数 + 截图三重取证，`innerText` 枚举会把 `display:none` 的 DOM 误计为可见——本次误判即源于此。`PRE_RC_REHEARSAL_OK` 仅作辅助证据；最终验收权在 Codex。\n\n（只读审评产出；未修改任何文件；未读取其他审阅者结论性报告，本更正仅基于 Codex 提供的复核事实与我方独立再取证。）",
+      "stderr": "",
+      "duration_seconds": 178.827,
+      "timed_out": false,
+      "session_id": "sess_ed57a277-45bb-468d-9a56-0e86956c4c3a",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 4138,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 5,
+      "tool_result_count": 0,
+      "reasoning_event_count": 2226,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 128,
+      "usage": {
+        "inputTokens": 290573,
+        "outputTokens": 1429,
+        "totalTokens": 292002,
+        "cacheReadTokens": 289664,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_f35484c8-7046-4bc1-9360-494e29ddadb7",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 6,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 5,
+        "tool_names": [
+          "Bash",
+          "Read",
+          "Bash",
+          "Bash",
+          "Bash"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 1036,
+      "estimated_input_tokens": 259,
+      "output_chars": 2029,
+      "estimated_output_tokens": 508,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "glm-5.3-flash",
+      "explicit_route": true,
+      "resumed": true
+    }
+  ],
+  "health_check": false,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": false,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "plan",
+    "adjusted_for_execution_manager": false
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 128,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788301219.521419
+}

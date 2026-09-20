@@ -1,0 +1,4076 @@
+{
+  "schema_version": "1.1",
+  "case_id": "task-10.2-r03-a-real",
+  "report": "A",
+  "indication": "特应性皮炎",
+  "materialized_cutoff": "2026-07-31T23:59:59+08:00",
+  "package_sha256": "c196f67fadbafeb699dd682078a4044da4ea014b6d82ebfa8fcf0152f112bb90",
+  "research_content_digest": "88bf766c56be55b739c19835f3a7b63fe27f9e0e5a0c5aa2446f2ae73257a93d",
+  "universe": {
+    "closed": true,
+    "product_count": 38,
+    "product_ids": [
+      "dupilumab",
+      "tralokinumab",
+      "lebrikizumab",
+      "nemolizumab",
+      "abrocitinib",
+      "upadacitinib",
+      "baricitinib",
+      "ruxolitinib-cream",
+      "crisaborole",
+      "tapinarof",
+      "roflumilast-cream",
+      "amlitelimab",
+      "rocatinlimab",
+      "tezepelumab",
+      "etokimab",
+      "bermekimab",
+      "stapokibart",
+      "sim0718",
+      "shr-1819",
+      "ivarmacitinib",
+      "jaktinib",
+      "ak120",
+      "gr1802",
+      "ssgj-611",
+      "rezpegaldesleukin",
+      "difamilast",
+      "eblasakimab",
+      "apg777",
+      "bempikibart",
+      "barzolvolimab",
+      "lutikizumab",
+      "icp-332",
+      "cm326",
+      "ibi356",
+      "shr1905",
+      "tqh2722",
+      "skb575",
+      "anb032"
+    ],
+    "global_china_status_rows": 76,
+    "expected_status_rows_per_product": 2
+  },
+  "clinical_results": {
+    "trial_count": 49,
+    "efficacy_row_count": 6791,
+    "safety_row_count": 10265,
+    "products_by_result_status": {
+      "有公开关键结果": 26,
+      "暂无公开关键结果": 9,
+      "已有部分公开结果": 3
+    },
+    "products_with_efficacy_rows": [
+      "abrocitinib",
+      "ak120",
+      "amlitelimab",
+      "apg777",
+      "baricitinib",
+      "bempikibart",
+      "bermekimab",
+      "crisaborole",
+      "difamilast",
+      "dupilumab",
+      "eblasakimab",
+      "etokimab",
+      "gr1802",
+      "icp-332",
+      "ivarmacitinib",
+      "lebrikizumab",
+      "nemolizumab",
+      "rezpegaldesleukin",
+      "rocatinlimab",
+      "roflumilast-cream",
+      "ruxolitinib-cream",
+      "shr-1819",
+      "sim0718",
+      "ssgj-611",
+      "stapokibart",
+      "tapinarof",
+      "tezepelumab",
+      "tralokinumab",
+      "upadacitinib"
+    ],
+    "products_with_safety_rows": [
+      "abrocitinib",
+      "ak120",
+      "amlitelimab",
+      "apg777",
+      "baricitinib",
+      "bempikibart",
+      "bermekimab",
+      "crisaborole",
+      "difamilast",
+      "dupilumab",
+      "eblasakimab",
+      "etokimab",
+      "gr1802",
+      "icp-332",
+      "ivarmacitinib",
+      "lebrikizumab",
+      "nemolizumab",
+      "rezpegaldesleukin",
+      "rocatinlimab",
+      "roflumilast-cream",
+      "ruxolitinib-cream",
+      "shr-1819",
+      "sim0718",
+      "ssgj-611",
+      "stapokibart",
+      "tapinarof",
+      "tezepelumab",
+      "tralokinumab",
+      "upadacitinib"
+    ],
+    "registry_audit": {
+      "passed": true,
+      "issues": 0,
+      "inventory_counts": {
+        "outcome": 6756,
+        "teae": 36,
+        "sae": 3969,
+        "aesi": 0,
+        "common_ae": 6123,
+        "parse_failure": 0
+      },
+      "trial_coverage": [
+        {
+          "trial_id": "nct02277743",
+          "product_id": "dupilumab",
+          "registry_source_ids": [
+            "ctgov-nct02277743"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct02277743"
+          ],
+          "result_source_ids": [
+            "ctgov-nct02277743",
+            "nejm-dupilumab-nct02277743-20160930"
+          ],
+          "projected_efficacy_rows": 54,
+          "projected_safety_rows": 101,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03131648",
+          "product_id": "tralokinumab",
+          "registry_source_ids": [
+            "ctgov-nct03131648"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03131648"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03131648",
+            "pmc-tralokinumab-nct03131648-20200930"
+          ],
+          "projected_efficacy_rows": 46,
+          "projected_safety_rows": 662,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct04146363",
+          "product_id": "lebrikizumab",
+          "registry_source_ids": [
+            "ctgov-nct04146363"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct04146363"
+          ],
+          "result_source_ids": [
+            "ctgov-nct04146363",
+            "nice-ta986-lebrikizumab-nct04146363"
+          ],
+          "projected_efficacy_rows": 87,
+          "projected_safety_rows": 3335,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03985943",
+          "product_id": "nemolizumab",
+          "registry_source_ids": [
+            "ctgov-nct03985943"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03985943"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03985943",
+            "pubmed-nemolizumab-nct03985943-20240725"
+          ],
+          "projected_efficacy_rows": 36,
+          "projected_safety_rows": 152,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03349060",
+          "product_id": "abrocitinib",
+          "registry_source_ids": [
+            "ctgov-nct03349060"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03349060"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03349060",
+            "pubmed-abrocitinib-nct03349060-20200727"
+          ],
+          "projected_efficacy_rows": 455,
+          "projected_safety_rows": 56,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03569293",
+          "product_id": "upadacitinib",
+          "registry_source_ids": [
+            "ctgov-nct03569293"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03569293"
+          ],
+          "result_source_ids": [
+            "cadth-upadacitinib-nct03569293",
+            "ctgov-nct03569293"
+          ],
+          "projected_efficacy_rows": 136,
+          "projected_safety_rows": 2914,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03334396",
+          "product_id": "baricitinib",
+          "registry_source_ids": [
+            "ctgov-nct03334396"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03334396"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03334396",
+            "pmc-baricitinib-nct03334396-review"
+          ],
+          "projected_efficacy_rows": 113,
+          "projected_safety_rows": 225,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03745638",
+          "product_id": "ruxolitinib-cream",
+          "registry_source_ids": [
+            "ctgov-nct03745638"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03745638"
+          ],
+          "result_source_ids": [
+            "cadth-ruxolitinib-nct03745638",
+            "ctgov-nct03745638"
+          ],
+          "projected_efficacy_rows": 562,
+          "projected_safety_rows": 103,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct02118792",
+          "product_id": "crisaborole",
+          "registry_source_ids": [
+            "ctgov-nct02118792"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct02118792"
+          ],
+          "result_source_ids": [
+            "ctgov-nct02118792"
+          ],
+          "projected_efficacy_rows": 92,
+          "projected_safety_rows": 44,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct05014568",
+          "product_id": "tapinarof",
+          "registry_source_ids": [
+            "ctgov-nct05014568"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct05014568"
+          ],
+          "result_source_ids": [
+            "ctgov-nct05014568",
+            "review-tapinarof-nct05014568-adoring1"
+          ],
+          "projected_efficacy_rows": 10,
+          "projected_safety_rows": 64,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct04773587",
+          "product_id": "roflumilast-cream",
+          "registry_source_ids": [
+            "ctgov-nct04773587"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct04773587"
+          ],
+          "result_source_ids": [
+            "ctgov-nct04773587",
+            "pmc-roflumilast-nct04773587-20240918"
+          ],
+          "projected_efficacy_rows": 22,
+          "projected_safety_rows": 14,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct06130566",
+          "product_id": "amlitelimab",
+          "registry_source_ids": [
+            "ctgov-nct06130566"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "sanofi-amlitelimab-20260328"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 0,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05131477",
+          "product_id": "amlitelimab",
+          "registry_source_ids": [
+            "ctgov-nct05131477"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct05131477"
+          ],
+          "result_source_ids": [
+            "ctgov-nct05131477"
+          ],
+          "projected_efficacy_rows": 2886,
+          "projected_safety_rows": 1002,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct05651711",
+          "product_id": "rocatinlimab",
+          "registry_source_ids": [
+            "ctgov-nct05651711"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct05651711"
+          ],
+          "result_source_ids": [
+            "ctgov-nct05651711",
+            "pubmed-41314226"
+          ],
+          "projected_efficacy_rows": 62,
+          "projected_safety_rows": 52,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03703102",
+          "product_id": "rocatinlimab",
+          "registry_source_ids": [
+            "ctgov-nct03703102"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03703102"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03703102"
+          ],
+          "projected_efficacy_rows": 1845,
+          "projected_safety_rows": 255,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03809663",
+          "product_id": "tezepelumab",
+          "registry_source_ids": [
+            "ctgov-nct03809663"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03809663"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03809663"
+          ],
+          "projected_efficacy_rows": 107,
+          "projected_safety_rows": 948,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct03533751",
+          "product_id": "etokimab",
+          "registry_source_ids": [
+            "ctgov-nct03533751"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct03533751"
+          ],
+          "result_source_ids": [
+            "ctgov-nct03533751"
+          ],
+          "projected_efficacy_rows": 50,
+          "projected_safety_rows": 110,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct04021862",
+          "product_id": "bermekimab",
+          "registry_source_ids": [
+            "ctgov-nct04021862"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct04021862"
+          ],
+          "result_source_ids": [
+            "ctgov-nct04021862"
+          ],
+          "projected_efficacy_rows": 184,
+          "projected_safety_rows": 78,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct05265923",
+          "product_id": "stapokibart",
+          "registry_source_ids": [
+            "ctgov-nct05265923"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "pubmed-39450683",
+            "stapokibart-first-approval-40095376"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 2,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct06477835",
+          "product_id": "sim0718",
+          "registry_source_ids": [
+            "ctgov-nct06477835"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "simcere-rademikibart-20260330"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 2,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05549947",
+          "product_id": "shr-1819",
+          "registry_source_ids": [
+            "ctgov-nct05549947"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "springer-shr1819-20260528"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 2,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct06468956",
+          "product_id": "shr-1819",
+          "registry_source_ids": [
+            "ctgov-nct06468956"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct07309055",
+          "product_id": "shr-1819",
+          "registry_source_ids": [
+            "ctgov-nct07309055"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct04875169",
+          "product_id": "ivarmacitinib",
+          "registry_source_ids": [
+            "ctgov-nct04875169"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "pmc-ivarmacitinib-nct04875169-20250430"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 4,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05526222",
+          "product_id": "jaktinib",
+          "registry_source_ids": [
+            "ctgov-nct05526222"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06383468",
+          "product_id": "ak120",
+          "registry_source_ids": [
+            "ctgov-nct06383468"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct05048056",
+          "product_id": "ak120",
+          "registry_source_ids": [
+            "ctgov-nct05048056"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06216392",
+          "product_id": "gr1802",
+          "registry_source_ids": [
+            "ctgov-nct06216392"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06554847",
+          "product_id": "ssgj-611",
+          "registry_source_ids": [
+            "ctgov-nct06554847"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06136741",
+          "product_id": "rezpegaldesleukin",
+          "registry_source_ids": [
+            "ctgov-nct06136741"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "sec-rezpeg-nct06136741-20250918"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 8,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05608343",
+          "product_id": "difamilast",
+          "registry_source_ids": [
+            "ctgov-nct05608343"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct05608343"
+          ],
+          "result_source_ids": [
+            "ctgov-nct05608343"
+          ],
+          "projected_efficacy_rows": 4,
+          "projected_safety_rows": 8,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct05158023",
+          "product_id": "eblasakimab",
+          "registry_source_ids": [
+            "ctgov-nct05158023"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "sec-eblasakimab-nct05158023-2023"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 0,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct06395948",
+          "product_id": "apg777",
+          "registry_source_ids": [
+            "ctgov-nct06395948"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "sec-apg777-nct06395948-20250811"
+          ],
+          "projected_efficacy_rows": 8,
+          "projected_safety_rows": 0,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05509023",
+          "product_id": "bempikibart",
+          "registry_source_ids": [
+            "ctgov-nct05509023"
+          ],
+          "registry_sources_with_results": [
+            "ctgov-nct05509023"
+          ],
+          "result_source_ids": [
+            "ctgov-nct05509023"
+          ],
+          "projected_efficacy_rows": 7,
+          "projected_safety_rows": 25,
+          "status": "registry_results_projected"
+        },
+        {
+          "trial_id": "nct06727552",
+          "product_id": "barzolvolimab",
+          "registry_source_ids": [
+            "ctgov-nct06727552"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06524635",
+          "product_id": "lutikizumab",
+          "registry_source_ids": [
+            "ctgov-nct06524635"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct05702268",
+          "product_id": "icp-332",
+          "registry_source_ids": [
+            "ctgov-nct05702268"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "innocare-icp332-nct05702268-20240311",
+            "pubmed-icp332-nct05702268-20260114"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 3,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05671432",
+          "product_id": "cm326",
+          "registry_source_ids": [
+            "ctgov-nct05671432"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06193434",
+          "product_id": "ibi356",
+          "registry_source_ids": [
+            "ctgov-nct06193434"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct07211542",
+          "product_id": "shr1905",
+          "registry_source_ids": [
+            "ctgov-nct07211542"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct06552520",
+          "product_id": "tqh2722",
+          "registry_source_ids": [
+            "ctgov-nct06552520"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct07488065",
+          "product_id": "skb575",
+          "registry_source_ids": [
+            "ctgov-nct07488065"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "nct05935085",
+          "product_id": "anb032",
+          "registry_source_ids": [
+            "ctgov-nct05935085"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        },
+        {
+          "trial_id": "chictr2100051917",
+          "product_id": "gr1802",
+          "registry_source_ids": [],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "wiley-gr1802-chictr2100051917-20250312"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 5,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05544591",
+          "product_id": "ssgj-611",
+          "registry_source_ids": [],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "pmc-ssgj611-nct05544591-20250304"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 6,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct06035354",
+          "product_id": "ak120",
+          "registry_source_ids": [],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "eadv-ak120-nct06035354-2025"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 3,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "pmid34710557",
+          "product_id": "difamilast",
+          "registry_source_ids": [],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "pubmed-difamilast-phase3"
+          ],
+          "projected_efficacy_rows": 2,
+          "projected_safety_rows": 0,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct03961529",
+          "product_id": "difamilast",
+          "registry_source_ids": [],
+          "registry_sources_with_results": [],
+          "result_source_ids": [
+            "pubmed-difamilast-phase3"
+          ],
+          "projected_efficacy_rows": 1,
+          "projected_safety_rows": 2,
+          "status": "reported_by_secondary_source"
+        },
+        {
+          "trial_id": "nct05970432",
+          "product_id": "tqh2722",
+          "registry_source_ids": [
+            "ctgov-nct05970432"
+          ],
+          "registry_sources_with_results": [],
+          "result_source_ids": [],
+          "projected_efficacy_rows": 0,
+          "projected_safety_rows": 0,
+          "status": "registry_results_not_posted"
+        }
+      ],
+      "product_coverage": [
+        {
+          "product_id": "dupilumab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct02277743"
+          ],
+          "numeric_result_trial_ids": [
+            "nct02277743"
+          ],
+          "comparable_result_trial_ids": [
+            "nct02277743"
+          ]
+        },
+        {
+          "product_id": "tralokinumab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03131648"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03131648"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03131648"
+          ]
+        },
+        {
+          "product_id": "lebrikizumab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct04146363"
+          ],
+          "numeric_result_trial_ids": [
+            "nct04146363"
+          ],
+          "comparable_result_trial_ids": [
+            "nct04146363"
+          ]
+        },
+        {
+          "product_id": "nemolizumab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03985943"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03985943"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03985943"
+          ]
+        },
+        {
+          "product_id": "abrocitinib",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03349060"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03349060"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03349060"
+          ]
+        },
+        {
+          "product_id": "upadacitinib",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03569293"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03569293"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03569293"
+          ]
+        },
+        {
+          "product_id": "baricitinib",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03334396"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03334396"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03334396"
+          ]
+        },
+        {
+          "product_id": "ruxolitinib-cream",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03745638"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03745638"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03745638"
+          ]
+        },
+        {
+          "product_id": "crisaborole",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct02118792"
+          ],
+          "numeric_result_trial_ids": [
+            "nct02118792"
+          ],
+          "comparable_result_trial_ids": [
+            "nct02118792"
+          ]
+        },
+        {
+          "product_id": "tapinarof",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05014568"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05014568"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05014568"
+          ]
+        },
+        {
+          "product_id": "roflumilast-cream",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct04773587"
+          ],
+          "numeric_result_trial_ids": [
+            "nct04773587"
+          ],
+          "comparable_result_trial_ids": [
+            "nct04773587"
+          ]
+        },
+        {
+          "product_id": "amlitelimab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct06130566",
+            "nct05131477"
+          ],
+          "numeric_result_trial_ids": [
+            "nct06130566",
+            "nct05131477"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05131477"
+          ]
+        },
+        {
+          "product_id": "rocatinlimab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05651711",
+            "nct03703102"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05651711",
+            "nct03703102"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05651711"
+          ]
+        },
+        {
+          "product_id": "tezepelumab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03809663"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03809663"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03809663"
+          ]
+        },
+        {
+          "product_id": "etokimab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct03533751"
+          ],
+          "numeric_result_trial_ids": [
+            "nct03533751"
+          ],
+          "comparable_result_trial_ids": [
+            "nct03533751"
+          ]
+        },
+        {
+          "product_id": "bermekimab",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct04021862"
+          ],
+          "numeric_result_trial_ids": [
+            "nct04021862"
+          ],
+          "comparable_result_trial_ids": [
+            "nct04021862"
+          ]
+        },
+        {
+          "product_id": "stapokibart",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05265923"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05265923"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05265923"
+          ]
+        },
+        {
+          "product_id": "sim0718",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct06477835"
+          ],
+          "numeric_result_trial_ids": [
+            "nct06477835"
+          ],
+          "comparable_result_trial_ids": [
+            "nct06477835"
+          ]
+        },
+        {
+          "product_id": "shr-1819",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05549947",
+            "nct06468956",
+            "nct07309055"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05549947"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05549947"
+          ]
+        },
+        {
+          "product_id": "ivarmacitinib",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct04875169"
+          ],
+          "numeric_result_trial_ids": [
+            "nct04875169"
+          ],
+          "comparable_result_trial_ids": [
+            "nct04875169"
+          ]
+        },
+        {
+          "product_id": "jaktinib",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct05526222"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "ak120",
+          "result_status": "已有部分公开结果",
+          "trial_ids": [
+            "nct06383468",
+            "nct05048056",
+            "nct06035354"
+          ],
+          "numeric_result_trial_ids": [
+            "nct06035354"
+          ],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "gr1802",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct06216392",
+            "chictr2100051917"
+          ],
+          "numeric_result_trial_ids": [
+            "chictr2100051917"
+          ],
+          "comparable_result_trial_ids": [
+            "chictr2100051917"
+          ]
+        },
+        {
+          "product_id": "ssgj-611",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct06554847",
+            "nct05544591"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05544591"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05544591"
+          ]
+        },
+        {
+          "product_id": "rezpegaldesleukin",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct06136741"
+          ],
+          "numeric_result_trial_ids": [
+            "nct06136741"
+          ],
+          "comparable_result_trial_ids": [
+            "nct06136741"
+          ]
+        },
+        {
+          "product_id": "difamilast",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05608343",
+            "pmid34710557",
+            "nct03961529"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05608343",
+            "pmid34710557",
+            "nct03961529"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05608343"
+          ]
+        },
+        {
+          "product_id": "eblasakimab",
+          "result_status": "已有部分公开结果",
+          "trial_ids": [
+            "nct05158023"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05158023"
+          ],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "apg777",
+          "result_status": "已有部分公开结果",
+          "trial_ids": [
+            "nct06395948"
+          ],
+          "numeric_result_trial_ids": [
+            "nct06395948"
+          ],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "bempikibart",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05509023"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05509023"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05509023"
+          ]
+        },
+        {
+          "product_id": "barzolvolimab",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct06727552"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "lutikizumab",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct06524635"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "icp-332",
+          "result_status": "有公开关键结果",
+          "trial_ids": [
+            "nct05702268"
+          ],
+          "numeric_result_trial_ids": [
+            "nct05702268"
+          ],
+          "comparable_result_trial_ids": [
+            "nct05702268"
+          ]
+        },
+        {
+          "product_id": "cm326",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct05671432"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "ibi356",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct06193434"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "shr1905",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct07211542"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "tqh2722",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct06552520",
+            "nct05970432"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "skb575",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct07488065"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        },
+        {
+          "product_id": "anb032",
+          "result_status": "暂无公开关键结果",
+          "trial_ids": [
+            "nct05935085"
+          ],
+          "numeric_result_trial_ids": [],
+          "comparable_result_trial_ids": []
+        }
+      ]
+    }
+  },
+  "numerical_coverage": {
+    "domain_order": [
+      "efficacy",
+      "safety_serious",
+      "safety_common",
+      "safety_teae",
+      "safety_aesi"
+    ],
+    "by_product": [
+      {
+        "product_id": "dupilumab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 54,
+        "safety_rows": 103,
+        "numeric_efficacy_rows": 54,
+        "numeric_safety_rows": 101,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "tralokinumab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 46,
+        "safety_rows": 664,
+        "numeric_efficacy_rows": 46,
+        "numeric_safety_rows": 662,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "lebrikizumab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 87,
+        "safety_rows": 3337,
+        "numeric_efficacy_rows": 87,
+        "numeric_safety_rows": 3335,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "nemolizumab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 36,
+        "safety_rows": 154,
+        "numeric_efficacy_rows": 36,
+        "numeric_safety_rows": 152,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "abrocitinib",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 455,
+        "safety_rows": 58,
+        "numeric_efficacy_rows": 455,
+        "numeric_safety_rows": 56,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "upadacitinib",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 136,
+        "safety_rows": 2916,
+        "numeric_efficacy_rows": 136,
+        "numeric_safety_rows": 2914,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "baricitinib",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 113,
+        "safety_rows": 227,
+        "numeric_efficacy_rows": 113,
+        "numeric_safety_rows": 225,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "ruxolitinib-cream",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 562,
+        "safety_rows": 105,
+        "numeric_efficacy_rows": 562,
+        "numeric_safety_rows": 103,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "crisaborole",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 92,
+        "safety_rows": 46,
+        "numeric_efficacy_rows": 92,
+        "numeric_safety_rows": 44,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "tapinarof",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 10,
+        "safety_rows": 66,
+        "numeric_efficacy_rows": 10,
+        "numeric_safety_rows": 64,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "roflumilast-cream",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 22,
+        "safety_rows": 16,
+        "numeric_efficacy_rows": 22,
+        "numeric_safety_rows": 14,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "amlitelimab",
+        "result_status": "有公开关键结果",
+        "trial_count": 2,
+        "efficacy_rows": 2888,
+        "safety_rows": 1004,
+        "numeric_efficacy_rows": 2888,
+        "numeric_safety_rows": 1002,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "rocatinlimab",
+        "result_status": "有公开关键结果",
+        "trial_count": 2,
+        "efficacy_rows": 1907,
+        "safety_rows": 311,
+        "numeric_efficacy_rows": 1907,
+        "numeric_safety_rows": 307,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "tezepelumab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 107,
+        "safety_rows": 952,
+        "numeric_efficacy_rows": 107,
+        "numeric_safety_rows": 948,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "etokimab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 50,
+        "safety_rows": 112,
+        "numeric_efficacy_rows": 50,
+        "numeric_safety_rows": 110,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "bermekimab",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 184,
+        "safety_rows": 82,
+        "numeric_efficacy_rows": 184,
+        "numeric_safety_rows": 78,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "stapokibart",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 2,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 2,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "sim0718",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 2,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 2,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "shr-1819",
+        "result_status": "有公开关键结果",
+        "trial_count": 3,
+        "efficacy_rows": 2,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 2,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious"
+        ],
+        "missing_domains": [
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "ivarmacitinib",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 2,
+        "safety_rows": 6,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 4,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_common",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "jaktinib",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "ak120",
+        "result_status": "已有部分公开结果",
+        "trial_count": 3,
+        "efficacy_rows": 2,
+        "safety_rows": 5,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 3,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [],
+        "domains_present": [
+          "efficacy",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "gr1802",
+        "result_status": "有公开关键结果",
+        "trial_count": 2,
+        "efficacy_rows": 2,
+        "safety_rows": 6,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 5,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "ssgj-611",
+        "result_status": "有公开关键结果",
+        "trial_count": 2,
+        "efficacy_rows": 2,
+        "safety_rows": 7,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 6,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "rezpegaldesleukin",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 2,
+        "safety_rows": 9,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 8,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "difamilast",
+        "result_status": "有公开关键结果",
+        "trial_count": 3,
+        "efficacy_rows": 7,
+        "safety_rows": 13,
+        "numeric_efficacy_rows": 7,
+        "numeric_safety_rows": 10,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "eblasakimab",
+        "result_status": "已有部分公开结果",
+        "trial_count": 1,
+        "efficacy_rows": 2,
+        "safety_rows": 4,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [],
+        "domains_present": [
+          "efficacy"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "apg777",
+        "result_status": "已有部分公开结果",
+        "trial_count": 1,
+        "efficacy_rows": 8,
+        "safety_rows": 4,
+        "numeric_efficacy_rows": 8,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [],
+        "domains_present": [
+          "efficacy"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "bempikibart",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 7,
+        "safety_rows": 29,
+        "numeric_efficacy_rows": 7,
+        "numeric_safety_rows": 25,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "barzolvolimab",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "lutikizumab",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "icp-332",
+        "result_status": "有公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 2,
+        "safety_rows": 5,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 3,
+        "efficacy_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "safety_key_arms": [
+          "对照组",
+          "治疗组"
+        ],
+        "domains_present": [
+          "efficacy",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_aesi"
+        ],
+        "no_public_key_result": false,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "cm326",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "ibi356",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "shr1905",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "tqh2722",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 2,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "skb575",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      },
+      {
+        "product_id": "anb032",
+        "result_status": "暂无公开关键结果",
+        "trial_count": 1,
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "efficacy_arms": [],
+        "safety_key_arms": [],
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "no_public_key_result": true,
+        "all_rows_source_bound": true
+      }
+    ],
+    "by_trial": [
+      {
+        "trial_id": "nct02277743",
+        "product_id": "dupilumab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct02277743"
+        ],
+        "efficacy_rows": 54,
+        "safety_rows": 103,
+        "numeric_efficacy_rows": 54,
+        "numeric_safety_rows": 101,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03131648",
+        "product_id": "tralokinumab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03131648"
+        ],
+        "efficacy_rows": 46,
+        "safety_rows": 664,
+        "numeric_efficacy_rows": 46,
+        "numeric_safety_rows": 662,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct04146363",
+        "product_id": "lebrikizumab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct04146363"
+        ],
+        "efficacy_rows": 87,
+        "safety_rows": 3337,
+        "numeric_efficacy_rows": 87,
+        "numeric_safety_rows": 3335,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03985943",
+        "product_id": "nemolizumab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03985943"
+        ],
+        "efficacy_rows": 36,
+        "safety_rows": 154,
+        "numeric_efficacy_rows": 36,
+        "numeric_safety_rows": 152,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03349060",
+        "product_id": "abrocitinib",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03349060"
+        ],
+        "efficacy_rows": 455,
+        "safety_rows": 58,
+        "numeric_efficacy_rows": 455,
+        "numeric_safety_rows": 56,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03569293",
+        "product_id": "upadacitinib",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03569293"
+        ],
+        "efficacy_rows": 136,
+        "safety_rows": 2916,
+        "numeric_efficacy_rows": 136,
+        "numeric_safety_rows": 2914,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03334396",
+        "product_id": "baricitinib",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03334396"
+        ],
+        "efficacy_rows": 113,
+        "safety_rows": 227,
+        "numeric_efficacy_rows": 113,
+        "numeric_safety_rows": 225,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03745638",
+        "product_id": "ruxolitinib-cream",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03745638"
+        ],
+        "efficacy_rows": 562,
+        "safety_rows": 105,
+        "numeric_efficacy_rows": 562,
+        "numeric_safety_rows": 103,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct02118792",
+        "product_id": "crisaborole",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct02118792"
+        ],
+        "efficacy_rows": 92,
+        "safety_rows": 46,
+        "numeric_efficacy_rows": 92,
+        "numeric_safety_rows": 44,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05014568",
+        "product_id": "tapinarof",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05014568"
+        ],
+        "efficacy_rows": 10,
+        "safety_rows": 66,
+        "numeric_efficacy_rows": 10,
+        "numeric_safety_rows": 64,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct04773587",
+        "product_id": "roflumilast-cream",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct04773587"
+        ],
+        "efficacy_rows": 22,
+        "safety_rows": 16,
+        "numeric_efficacy_rows": 22,
+        "numeric_safety_rows": 14,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06130566",
+        "product_id": "amlitelimab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06130566"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 0,
+        "domains_present": [
+          "efficacy"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05131477",
+        "product_id": "amlitelimab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05131477"
+        ],
+        "efficacy_rows": 2886,
+        "safety_rows": 1004,
+        "numeric_efficacy_rows": 2886,
+        "numeric_safety_rows": 1002,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05651711",
+        "product_id": "rocatinlimab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05651711"
+        ],
+        "efficacy_rows": 62,
+        "safety_rows": 52,
+        "numeric_efficacy_rows": 62,
+        "numeric_safety_rows": 52,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03703102",
+        "product_id": "rocatinlimab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03703102"
+        ],
+        "efficacy_rows": 1845,
+        "safety_rows": 259,
+        "numeric_efficacy_rows": 1845,
+        "numeric_safety_rows": 255,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03809663",
+        "product_id": "tezepelumab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03809663"
+        ],
+        "efficacy_rows": 107,
+        "safety_rows": 952,
+        "numeric_efficacy_rows": 107,
+        "numeric_safety_rows": 948,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03533751",
+        "product_id": "etokimab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct03533751"
+        ],
+        "efficacy_rows": 50,
+        "safety_rows": 112,
+        "numeric_efficacy_rows": 50,
+        "numeric_safety_rows": 110,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct04021862",
+        "product_id": "bermekimab",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct04021862"
+        ],
+        "efficacy_rows": 184,
+        "safety_rows": 82,
+        "numeric_efficacy_rows": 184,
+        "numeric_safety_rows": 78,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05265923",
+        "product_id": "stapokibart",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05265923"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 2,
+        "domains_present": [
+          "efficacy",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06477835",
+        "product_id": "sim0718",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06477835"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 2,
+        "domains_present": [
+          "efficacy",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05549947",
+        "product_id": "shr-1819",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05549947"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 2,
+        "domains_present": [
+          "efficacy",
+          "safety_serious"
+        ],
+        "missing_domains": [
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06468956",
+        "product_id": "shr-1819",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06468956"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct07309055",
+        "product_id": "shr-1819",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct07309055"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct04875169",
+        "product_id": "ivarmacitinib",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct04875169"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 6,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 4,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_common",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05526222",
+        "product_id": "jaktinib",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05526222"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06383468",
+        "product_id": "ak120",
+        "result_status": "已有部分公开结果",
+        "registry_source_ids": [
+          "ctgov-nct06383468"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05048056",
+        "product_id": "ak120",
+        "result_status": "已有部分公开结果",
+        "registry_source_ids": [
+          "ctgov-nct05048056"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06216392",
+        "product_id": "gr1802",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06216392"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06554847",
+        "product_id": "ssgj-611",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06554847"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06136741",
+        "product_id": "rezpegaldesleukin",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06136741"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 9,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 8,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05608343",
+        "product_id": "difamilast",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05608343"
+        ],
+        "efficacy_rows": 4,
+        "safety_rows": 8,
+        "numeric_efficacy_rows": 4,
+        "numeric_safety_rows": 8,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05158023",
+        "product_id": "eblasakimab",
+        "result_status": "已有部分公开结果",
+        "registry_source_ids": [
+          "ctgov-nct05158023"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 4,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 0,
+        "domains_present": [
+          "efficacy"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06395948",
+        "product_id": "apg777",
+        "result_status": "已有部分公开结果",
+        "registry_source_ids": [
+          "ctgov-nct06395948"
+        ],
+        "efficacy_rows": 8,
+        "safety_rows": 4,
+        "numeric_efficacy_rows": 8,
+        "numeric_safety_rows": 0,
+        "domains_present": [
+          "efficacy"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05509023",
+        "product_id": "bempikibart",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05509023"
+        ],
+        "efficacy_rows": 7,
+        "safety_rows": 29,
+        "numeric_efficacy_rows": 7,
+        "numeric_safety_rows": 25,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common"
+        ],
+        "missing_domains": [
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06727552",
+        "product_id": "barzolvolimab",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06727552"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06524635",
+        "product_id": "lutikizumab",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06524635"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05702268",
+        "product_id": "icp-332",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05702268"
+        ],
+        "efficacy_rows": 2,
+        "safety_rows": 5,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 3,
+        "domains_present": [
+          "efficacy",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05671432",
+        "product_id": "cm326",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05671432"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06193434",
+        "product_id": "ibi356",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06193434"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct07211542",
+        "product_id": "shr1905",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct07211542"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06552520",
+        "product_id": "tqh2722",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct06552520"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct07488065",
+        "product_id": "skb575",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct07488065"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05935085",
+        "product_id": "anb032",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [
+          "ctgov-nct05935085"
+        ],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "chictr2100051917",
+        "product_id": "gr1802",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [],
+        "efficacy_rows": 2,
+        "safety_rows": 6,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 5,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05544591",
+        "product_id": "ssgj-611",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [],
+        "efficacy_rows": 2,
+        "safety_rows": 7,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 6,
+        "domains_present": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct06035354",
+        "product_id": "ak120",
+        "result_status": "已有部分公开结果",
+        "registry_source_ids": [],
+        "efficacy_rows": 2,
+        "safety_rows": 5,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 3,
+        "domains_present": [
+          "efficacy",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "pmid34710557",
+        "product_id": "difamilast",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [],
+        "efficacy_rows": 2,
+        "safety_rows": 1,
+        "numeric_efficacy_rows": 2,
+        "numeric_safety_rows": 0,
+        "domains_present": [
+          "efficacy"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct03961529",
+        "product_id": "difamilast",
+        "result_status": "有公开关键结果",
+        "registry_source_ids": [],
+        "efficacy_rows": 1,
+        "safety_rows": 4,
+        "numeric_efficacy_rows": 1,
+        "numeric_safety_rows": 2,
+        "domains_present": [
+          "efficacy",
+          "safety_common",
+          "safety_teae"
+        ],
+        "missing_domains": [
+          "safety_serious",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      },
+      {
+        "trial_id": "nct05970432",
+        "product_id": "tqh2722",
+        "result_status": "暂无公开关键结果",
+        "registry_source_ids": [],
+        "efficacy_rows": 0,
+        "safety_rows": 0,
+        "numeric_efficacy_rows": 0,
+        "numeric_safety_rows": 0,
+        "domains_present": [],
+        "missing_domains": [
+          "efficacy",
+          "safety_serious",
+          "safety_common",
+          "safety_teae",
+          "safety_aesi"
+        ],
+        "source_bound": true
+      }
+    ],
+    "by_domain": {
+      "efficacy": {
+        "total_rows": 6791,
+        "numeric_rows": 6791,
+        "products_with_numeric_rows": 29,
+        "trials_with_numeric_rows": 33,
+        "missing_product_ids": [
+          "jaktinib",
+          "barzolvolimab",
+          "lutikizumab",
+          "cm326",
+          "ibi356",
+          "shr1905",
+          "tqh2722",
+          "skb575",
+          "anb032"
+        ],
+        "missingness_policy": "numeric absence remains explicit; 未公开 sentinel is not counted as numeric."
+      },
+      "safety_serious": {
+        "total_rows": 3988,
+        "numeric_rows": 3979,
+        "products_with_numeric_rows": 23,
+        "trials_with_numeric_rows": 24,
+        "missing_product_ids": [
+          "stapokibart",
+          "sim0718",
+          "jaktinib",
+          "ak120",
+          "eblasakimab",
+          "apg777",
+          "barzolvolimab",
+          "lutikizumab",
+          "icp-332",
+          "cm326",
+          "ibi356",
+          "shr1905",
+          "tqh2722",
+          "skb575",
+          "anb032"
+        ],
+        "missingness_policy": "numeric absence remains explicit; 未公开 sentinel is not counted as numeric."
+      },
+      "safety_common": {
+        "total_rows": 6142,
+        "numeric_rows": 6133,
+        "products_with_numeric_rows": 23,
+        "trials_with_numeric_rows": 25,
+        "missing_product_ids": [
+          "stapokibart",
+          "sim0718",
+          "shr-1819",
+          "ivarmacitinib",
+          "jaktinib",
+          "eblasakimab",
+          "apg777",
+          "barzolvolimab",
+          "lutikizumab",
+          "cm326",
+          "ibi356",
+          "shr1905",
+          "tqh2722",
+          "skb575",
+          "anb032"
+        ],
+        "missingness_policy": "numeric absence remains explicit; 未公开 sentinel is not counted as numeric."
+      },
+      "safety_teae": {
+        "total_rows": 86,
+        "numeric_rows": 73,
+        "products_with_numeric_rows": 22,
+        "trials_with_numeric_rows": 22,
+        "missing_product_ids": [
+          "rocatinlimab",
+          "tezepelumab",
+          "bermekimab",
+          "shr-1819",
+          "jaktinib",
+          "eblasakimab",
+          "apg777",
+          "bempikibart",
+          "barzolvolimab",
+          "lutikizumab",
+          "cm326",
+          "ibi356",
+          "shr1905",
+          "tqh2722",
+          "skb575",
+          "anb032"
+        ],
+        "missingness_policy": "numeric absence remains explicit; 未公开 sentinel is not counted as numeric."
+      },
+      "safety_aesi": {
+        "total_rows": 49,
+        "numeric_rows": 0,
+        "products_with_numeric_rows": 0,
+        "trials_with_numeric_rows": 0,
+        "missing_product_ids": [
+          "dupilumab",
+          "tralokinumab",
+          "lebrikizumab",
+          "nemolizumab",
+          "abrocitinib",
+          "upadacitinib",
+          "baricitinib",
+          "ruxolitinib-cream",
+          "crisaborole",
+          "tapinarof",
+          "roflumilast-cream",
+          "amlitelimab",
+          "rocatinlimab",
+          "tezepelumab",
+          "etokimab",
+          "bermekimab",
+          "stapokibart",
+          "sim0718",
+          "shr-1819",
+          "ivarmacitinib",
+          "jaktinib",
+          "ak120",
+          "gr1802",
+          "ssgj-611",
+          "rezpegaldesleukin",
+          "difamilast",
+          "eblasakimab",
+          "apg777",
+          "bempikibart",
+          "barzolvolimab",
+          "lutikizumab",
+          "icp-332",
+          "cm326",
+          "ibi356",
+          "shr1905",
+          "tqh2722",
+          "skb575",
+          "anb032"
+        ],
+        "missingness_policy": "numeric absence remains explicit; 未公开 sentinel is not counted as numeric."
+      }
+    }
+  },
+  "relationships_transactions": {
+    "company_row_count": 38,
+    "source_types": [
+      "company_official_disclosure",
+      "company_official_result_disclosure",
+      "company_regulatory_disclosure",
+      "peer_reviewed_regulatory_milestone_review",
+      "regulatory_label_or_approval",
+      "regulatory_review"
+    ],
+    "explicit_unresolved_policy": "未公开条款不推测; product rows retain source-bound current relationship text."
+  },
+  "patents": {
+    "row_count": 38,
+    "explicitly_sourced_rows": [
+      "dupilumab",
+      "tralokinumab",
+      "lebrikizumab",
+      "nemolizumab",
+      "abrocitinib",
+      "upadacitinib",
+      "baricitinib",
+      "ruxolitinib-cream",
+      "crisaborole",
+      "tapinarof",
+      "roflumilast-cream",
+      "amlitelimab",
+      "rocatinlimab",
+      "tezepelumab",
+      "etokimab",
+      "bermekimab",
+      "stapokibart",
+      "sim0718",
+      "shr-1819",
+      "ivarmacitinib",
+      "jaktinib",
+      "ak120",
+      "gr1802",
+      "ssgj-611",
+      "rezpegaldesleukin",
+      "difamilast",
+      "eblasakimab",
+      "apg777",
+      "bempikibart",
+      "barzolvolimab",
+      "lutikizumab",
+      "icp-332",
+      "cm326",
+      "ibi356",
+      "shr1905",
+      "tqh2722",
+      "skb575",
+      "anb032"
+    ],
+    "unresolved_rows": [
+      "lebrikizumab",
+      "nemolizumab",
+      "abrocitinib",
+      "upadacitinib",
+      "baricitinib",
+      "ruxolitinib-cream",
+      "crisaborole",
+      "tapinarof",
+      "roflumilast-cream",
+      "amlitelimab",
+      "rocatinlimab",
+      "tezepelumab",
+      "etokimab",
+      "bermekimab",
+      "stapokibart",
+      "sim0718",
+      "shr-1819",
+      "ivarmacitinib",
+      "jaktinib",
+      "ak120",
+      "gr1802",
+      "ssgj-611",
+      "rezpegaldesleukin",
+      "difamilast",
+      "eblasakimab",
+      "apg777",
+      "bempikibart",
+      "barzolvolimab",
+      "lutikizumab",
+      "icp-332",
+      "cm326",
+      "ibi356",
+      "shr1905",
+      "tqh2722",
+      "skb575",
+      "anb032"
+    ],
+    "unresolved_policy": "未完成逐法域检索不得填充专利号、到期日或独占期。"
+  },
+  "source_route_coverage": {
+    "source_count": 88,
+    "route_ids": [
+      "blocked-primary-page-recovered-index",
+      "clinicaltrials-gov-api-v2",
+      "clinicaltrials-gov-study-page",
+      "company-official-china-approval",
+      "company-official-result-disclosure",
+      "company-official-site",
+      "google-patents-primary",
+      "hkex-official-disclosure",
+      "official-conference-abstract",
+      "peer-reviewed-evidence-review",
+      "peer-reviewed-full-text",
+      "peer-reviewed-primary-report",
+      "pubmed-eutils",
+      "regulator-official-source",
+      "regulatory-hta-review",
+      "sec-official-annual-report",
+      "sec-official-exhibit"
+    ],
+    "source_types": [
+      "clinical_trial_registry",
+      "company_official_disclosure",
+      "company_official_result_disclosure",
+      "company_regulatory_disclosure",
+      "conference_result_official_disclosure",
+      "official_conference_primary_result",
+      "patent_registry",
+      "peer_reviewed_evidence_review",
+      "peer_reviewed_primary_report",
+      "peer_reviewed_primary_report_recovered",
+      "peer_reviewed_publication",
+      "peer_reviewed_regulatory_milestone_review",
+      "regulatory_label_or_approval",
+      "regulatory_review"
+    ],
+    "fresh_nonregistry_revalidated": {
+      "source_count": 44,
+      "overall_revalidated_count": 44,
+      "exact_primary_body_count": 42,
+      "scoped_alternative_count": 2,
+      "direct_initial_status_counts": {
+        "203": 6,
+        "200": 32,
+        "403": 6
+      }
+    }
+  },
+  "integrity_checks": {
+    "loader": "passed",
+    "clinicaltrials_result_coverage": "passed",
+    "scientific_review_digest": "matched",
+    "first_disclosed_after_cutoff": 0,
+    "draft_on_block": "false",
+    "key_evidence_insufficiency": "not_detected_after_explicit_Wiley_and_NEJM_scope_notes"
+  },
+  "missingness_summary": {
+    "products_with_no_public_key_results": [
+      "jaktinib",
+      "barzolvolimab",
+      "lutikizumab",
+      "cm326",
+      "ibi356",
+      "shr1905",
+      "tqh2722",
+      "skb575",
+      "anb032"
+    ],
+    "product_domain_missingness": {
+      "dupilumab": [
+        "safety_aesi"
+      ],
+      "tralokinumab": [
+        "safety_aesi"
+      ],
+      "lebrikizumab": [
+        "safety_aesi"
+      ],
+      "nemolizumab": [
+        "safety_aesi"
+      ],
+      "abrocitinib": [
+        "safety_aesi"
+      ],
+      "upadacitinib": [
+        "safety_aesi"
+      ],
+      "baricitinib": [
+        "safety_aesi"
+      ],
+      "ruxolitinib-cream": [
+        "safety_aesi"
+      ],
+      "crisaborole": [
+        "safety_aesi"
+      ],
+      "tapinarof": [
+        "safety_aesi"
+      ],
+      "roflumilast-cream": [
+        "safety_aesi"
+      ],
+      "amlitelimab": [
+        "safety_aesi"
+      ],
+      "rocatinlimab": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "tezepelumab": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "etokimab": [
+        "safety_aesi"
+      ],
+      "bermekimab": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "stapokibart": [
+        "safety_serious",
+        "safety_common",
+        "safety_aesi"
+      ],
+      "sim0718": [
+        "safety_serious",
+        "safety_common",
+        "safety_aesi"
+      ],
+      "shr-1819": [
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "ivarmacitinib": [
+        "safety_common",
+        "safety_aesi"
+      ],
+      "jaktinib": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "ak120": [
+        "safety_serious",
+        "safety_aesi"
+      ],
+      "gr1802": [
+        "safety_aesi"
+      ],
+      "ssgj-611": [
+        "safety_aesi"
+      ],
+      "rezpegaldesleukin": [
+        "safety_aesi"
+      ],
+      "difamilast": [
+        "safety_aesi"
+      ],
+      "eblasakimab": [
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "apg777": [
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "bempikibart": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "barzolvolimab": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "lutikizumab": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "icp-332": [
+        "safety_serious",
+        "safety_aesi"
+      ],
+      "cm326": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "ibi356": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "shr1905": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "tqh2722": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "skb575": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "anb032": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ]
+    },
+    "trial_domain_missingness": {
+      "nct02277743": [
+        "safety_aesi"
+      ],
+      "nct03131648": [
+        "safety_aesi"
+      ],
+      "nct04146363": [
+        "safety_aesi"
+      ],
+      "nct03985943": [
+        "safety_aesi"
+      ],
+      "nct03349060": [
+        "safety_aesi"
+      ],
+      "nct03569293": [
+        "safety_aesi"
+      ],
+      "nct03334396": [
+        "safety_aesi"
+      ],
+      "nct03745638": [
+        "safety_aesi"
+      ],
+      "nct02118792": [
+        "safety_aesi"
+      ],
+      "nct05014568": [
+        "safety_aesi"
+      ],
+      "nct04773587": [
+        "safety_aesi"
+      ],
+      "nct06130566": [
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05131477": [
+        "safety_aesi"
+      ],
+      "nct05651711": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct03703102": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct03809663": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct03533751": [
+        "safety_aesi"
+      ],
+      "nct04021862": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05265923": [
+        "safety_serious",
+        "safety_common",
+        "safety_aesi"
+      ],
+      "nct06477835": [
+        "safety_serious",
+        "safety_common",
+        "safety_aesi"
+      ],
+      "nct05549947": [
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06468956": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct07309055": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct04875169": [
+        "safety_common",
+        "safety_aesi"
+      ],
+      "nct05526222": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06383468": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05048056": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06216392": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06554847": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06136741": [
+        "safety_aesi"
+      ],
+      "nct05608343": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05158023": [
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06395948": [
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05509023": [
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06727552": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06524635": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05702268": [
+        "safety_serious",
+        "safety_aesi"
+      ],
+      "nct05671432": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06193434": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct07211542": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct06552520": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct07488065": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct05935085": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "chictr2100051917": [
+        "safety_aesi"
+      ],
+      "nct05544591": [
+        "safety_aesi"
+      ],
+      "nct06035354": [
+        "safety_serious",
+        "safety_aesi"
+      ],
+      "pmid34710557": [
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ],
+      "nct03961529": [
+        "safety_serious",
+        "safety_aesi"
+      ],
+      "nct05970432": [
+        "efficacy",
+        "safety_serious",
+        "safety_common",
+        "safety_teae",
+        "safety_aesi"
+      ]
+    }
+  }
+}

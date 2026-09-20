@@ -33,7 +33,10 @@
         "properties": {
           "round": {"type": "integer", "minimum": 1},
           "new_fields": {"type": "array", "items": {"type": "string"}},
-          "new_source_versions": {"type": "array", "items": {"type": "string"}}
+          "new_source_versions": {"type": "array", "items": {"type": "string"}},
+          "new_evidence_fragment_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+          "changed_gate_unit_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+          "reduced_conflict_set_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
         },
         "required": ["round", "new_fields", "new_source_versions"]
       }

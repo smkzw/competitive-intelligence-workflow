@@ -20,7 +20,6 @@ EXPECTED_PAGES = {
         "companies-transactions",
         "patents-protection",
         "historical-edge",
-        "evidence-limitations",
     },
     "B": {
         "overview",
@@ -43,7 +42,6 @@ EXPECTED_PAGES = {
         "subgroups-supporting-evidence",
         "product-trial-profiles",
         "efficacy-safety-matrix",
-        "evidence-limitations",
     },
     "C": {
         "overview",
@@ -57,7 +55,6 @@ EXPECTED_PAGES = {
         "visit-duration-followup",
         "sample-analysis-statistics",
         "design-patterns",
-        "evidence-versions-limitations",
     },
 }
 FORBIDDEN_COPY = {

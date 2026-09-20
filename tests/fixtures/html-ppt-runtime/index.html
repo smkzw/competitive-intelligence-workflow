@@ -11,6 +11,7 @@
       .slide h1 { margin: 0; font-size: 50px; }
       .slide p { max-width: 920px; font-size: 26px; line-height: 1.55; }
       .slide-number { position: absolute; right: 52px; bottom: 34px; font-size: 18px; }
+      #efficacy-chart { width: 720px; height: 280px; margin-top: 28px; }
     </style>
   </head>
   <body>
@@ -24,6 +25,7 @@
       <section class="slide" data-title="主要疗效">
         <h1>主要疗效</h1>
         <p>先呈现图形，再提供可核对的数据表。</p>
+        <div id="efficacy-chart" role="img" aria-label="主要疗效比较"></div>
         <span class="slide-number"></span>
         <aside class="notes"><p>本页说明主要终点及对照组效应，提醒跨试验比较需结合研究差异理解。</p></aside>
       </section>
@@ -35,5 +37,20 @@
       </section>
     </main>
     <script src="../../../assets/html-ppt/runtime.js"></script>
+    <script src="../../../assets/third-party/echarts/echarts.min.js"></script>
+    <script>
+      (function () {
+        const host = document.querySelector("#efficacy-chart");
+        if (!host || typeof echarts === "undefined") return;
+        const chart = echarts.init(host, null, { renderer: "svg" });
+        chart.setOption({
+          animation: false,
+          xAxis: { type: "category", data: ["竞品甲", "竞品乙", "竞品丙"] },
+          yAxis: { type: "value", name: "主要终点变化值" },
+          series: [{ name: "治疗组", type: "bar", data: [5.2, 3.8, 4.6] }]
+        });
+        window.__deck_chart_ready__ = true;
+      })();
+    </script>
   </body>
 </html>

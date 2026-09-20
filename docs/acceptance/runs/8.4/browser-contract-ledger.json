@@ -1,0 +1,89 @@
+{
+  "task": "8.4",
+  "worker": "worker_03",
+  "not_acceptance": true,
+  "recorded_at": "2026-09-05T07:30:41.338775+00:00",
+  "fixture_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/tests/fixtures/html-ppt-runtime/index.html",
+  "echarts_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/tests/fixtures/offline-echarts/index.html",
+  "runtime_js_sha256": "affadf9e344ec9da62cdd27942a41218983d2cb88a377eca540b7da622a990f7",
+  "runtime_css_sha256": "09df452da708ac80a9660bb49ff8603cfac85aec7e607852c99ca09a209517d0",
+  "echarts_bundle_sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+  "viewports": [
+    "1280x720",
+    "1600x900",
+    "1920x1080",
+    "2048x1024"
+  ],
+  "browsers": [
+    "chromium",
+    "webkit"
+  ],
+  "cases": [
+    {
+      "browser": "chromium",
+      "fixture_href": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/tests/fixtures/html-ppt-runtime/index.html#/2",
+      "protocol": "file:",
+      "remote_requests": [],
+      "page_errors": [],
+      "console_errors": []
+    },
+    {
+      "browser": "webkit",
+      "fixture_href": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/tests/fixtures/html-ppt-runtime/index.html#/2",
+      "protocol": "file:",
+      "remote_requests": [],
+      "page_errors": [],
+      "console_errors": []
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "chromium-1280x720-slide-2",
+      "path": "docs/acceptance/runs/8.4/screenshots/chromium-1280x720-slide-2.png",
+      "sha256": "bdda1b1c023b938b73e1b240ad523375f8e1c995151a3da6b893e023f31b61b4",
+      "bytes": 28065
+    },
+    {
+      "name": "chromium-1280x720-notes",
+      "path": "docs/acceptance/runs/8.4/screenshots/chromium-1280x720-notes.png",
+      "sha256": "188d73e1cd9899152ce7490ff1f55e033244f7ca817a00844c4179cb1eab51aa",
+      "bytes": 41037
+    },
+    {
+      "name": "chromium-1440x900-presenter",
+      "path": "docs/acceptance/runs/8.4/screenshots/chromium-1440x900-presenter.png",
+      "sha256": "5d42c7441fca32cdac9dfd5e262510a8c231aa3e3c8ec22fd79a94cc7f0df334",
+      "bytes": 60097
+    },
+    {
+      "name": "chromium-echarts-svg",
+      "path": "docs/acceptance/runs/8.4/screenshots/chromium-echarts-svg.png",
+      "sha256": "0369154a1313dccfa4ba5361f5fd171570c7e3f0cfb93c09020f5e97f150e05c",
+      "bytes": 10340
+    },
+    {
+      "name": "webkit-1280x720-slide-2",
+      "path": "docs/acceptance/runs/8.4/screenshots/webkit-1280x720-slide-2.png",
+      "sha256": "0c3748da69ade92f6532a867f13f7060b0a2783faf93d45c49f0cf4a14e7850f",
+      "bytes": 46420
+    },
+    {
+      "name": "webkit-1280x720-notes",
+      "path": "docs/acceptance/runs/8.4/screenshots/webkit-1280x720-notes.png",
+      "sha256": "b8d2907324b8ed2dfbb1be43abd0199ca6024ca9fa8b1f99e4bd69b5ecba9ae1",
+      "bytes": 60969
+    },
+    {
+      "name": "webkit-1440x900-presenter",
+      "path": "docs/acceptance/runs/8.4/screenshots/webkit-1440x900-presenter.png",
+      "sha256": "d418f672fef3b6c279714802540520bdd8b9367ed2187f434f067ac3dd2d065f",
+      "bytes": 84618
+    },
+    {
+      "name": "webkit-echarts-svg",
+      "path": "docs/acceptance/runs/8.4/screenshots/webkit-echarts-svg.png",
+      "sha256": "9d2bf24286c79009d0cb760f7c2b580b7c676ff3a7b08deba452bd7ea5dea71b",
+      "bytes": 26155
+    }
+  ]
+}

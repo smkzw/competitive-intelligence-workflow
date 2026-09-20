@@ -1,0 +1,107 @@
+# Execution Output: ci-phase10-task106-rc-freeze - worker_03
+
+## Boundary And Context Check
+
+- 角色边界确认：worker_03 为**只读审计**（execution context 明确 "Worker 03 is audit-only and must not modify source because its contracts overlap later integration"）。本次未修改任何源码、测试、schema 或 catalog；未创建 commit/tag；未触碰真实旧根；未写 acceptance root。全部操作为工作区内只读（Read/grep/ls/python 只读解析）。
+- 已读 initial read set 两份文件（execution context + Codex plan）。扩展阅读均在授权范围内：assigned surfaces（`tools/run_acceptance.py`、`tools/verify_release_receipts.py`、required-v12 catalog/schemas/tests、host receipt 合同、Task 10.3/10.5 checkpoint）及直接关联面（`acceptance_runner.py`、`bundle_contract.py`、`test_full_matrix.py`、`test_real_host_smoke.py`、`test_fresh_install.py`、Task 10.5 worker_02 报告中 release-case-v1 相关段落）。
+- 当前环境事实：HEAD=`bb27ec9`，工作树 842 项 dirty（全部保留未动），无 tag；`docs/acceptance/receipts/` 不存在（release 回执从未生产过）。
+
+## Work Performed
+
+对 full-matrix / required-v12 / host receipts / final freeze 四个面完成实现边界审计，产出：7 项缺口（含证据行号）、10.6A 必须补齐的测试规格（T1-T12）、2 项需 Codex 决策的合同问题（Q1/Q2）、10.6C-D 可执行交接。核心结论：
+
+**已存在且可靠的边界**（10.6 可继承）：
+1. pre-RC 六阶段流水线（`acceptance_runner.py`）逐阶段失败关闭：catalog 真值锁定（case/输入/expected 逐文件 SHA-256）、空项目根门、ego(lite) 回执互异核验、三宿主真实冒烟绑定（`_bind_host_smoke_batch`，acceptance_runner.py:1667-1948：session/pid/run/project_root 三宿主两两互异 + 同包摘要等于磁盘重算值 + 落盘回执逐字节一致 + 批次绑定 bundle_digest）、执行时安装根防漂移（构建时 vs 执行时 bundle/manifest/入口摘要比对，:2027-2056）、`PRE_RC_REHEARSAL_OK` 信号门（:2906-2985：formats 严格 html、hosts=3、release_cases_closed=0）。
+2. `--suite full` 对 16 个 `execution_scope=full-matrix` 案例逐条执行 catalog 声明 verifier（命令必须逐字 `uv run pytest` 开头，:2468-2509），子场景从 scenario.json 枚举核验，未来责任（recovery/legacy-cutover）永不关闭。
+3. `verify_release_receipts.py` 已具备 18 个 required-v12 案例的结构层闭环：严格 schema（状态敏感 allOf）、receipt_digest 自摘要、8 项回绑（case_id/release_scope/owner_task/catalog_sha256/case_digest/package_manifest_sha256/release_candidate_sha256/input_sha256）、not_applicable 门、符号链接拒读。
+
+**缺口（10.6A 必须补齐）**——按严重度排序：
+
+| # | 缺口 | 证据 | 后果 |
+|---|---|---|---|
+| W3-1 | `release_candidate_sha256` 无定义、无绑定 | 全仓无 `RC_FROZEN`/`release_candidate` 语义定义（docs/specs 零命中）；verifier 仅校验小写 hex64 格式（verify_release_receipts.py:108-111）；测试用占位符 `"c"*64`（test_required_receipt_closure.py:26） | 任何 64-hex 字符串都能通过闭环校验，RC 摘要可被任意值冒充 |
+| W3-2 | release-case-v1 回执**无生产者** | `release-case-v1` 仅出现在 schema、closure 测试、10.5 审计文档；`docs/acceptance/receipts/` 不存在 | 10.6C/D 无 owner-stage 回执产生路径，闭环工具只能校验测试伪造的回执 |
+| W3-3 | run/session/artifact/verdict 摘要为**不透明字符串**，旧证据无法机械拒绝 | verifier 对 run_id/session_id 仅 minLength 检查（schema:27-28）；artifact/verdict_sha256 无任何外部比对；R13k pre-RC run `pre-rc-run_557186bed2e4368b296bda17`、旧 bundle `d703b770…`、旧 host batch（docs/acceptance/host-smoke/batch.json，bundle `50a91aac…`）填入任一绑定槽都能通过 | 违反 PRD「旧 run/job/receipt 禁止复用」，旧摘要冒充当次证据不会被闭环层拦截 |
+| W3-4 | catalog `receipt.schema` 指针脱钩 + `relative_path` 被忽略 | 18 个案例 `receipt.schema` 均指 `schemas/host-receipt.schema.json`，verifier 只比较该常量后按固定 `DEFAULT_SCHEMA`（release-case-receipt）校验且不读 `relative_path`（verify_release_receipts.py:23,158-160）；回执落盘路径是 `<receipts_root>/<case_id>.json` 平铺，与 catalog 声明的 `docs/acceptance/receipts/required-v12/<id>.json` 无关 | 与 10.5 审计 Gap-1 独立收敛（advisory），指针未失败关闭 |
+| W3-5 | **过早关闭门缺失**：verifier 允许 `legacy-absence` 被接受 | verifier 允许 `pending_future_owner` 状态的案例在 owner 阶段 accepted（:197-203）；现有测试甚至断言 `assert "legacy-absence" in result["accepted_case_ids"]`（test_required_receipt_closure.py:180）；全仓无 freeze gate、无 freeze record schema、无 `RC_FROZEN` 发射器 | 当前闭环合同会祝福「legacy-absence 已 accepted」的冻结，直接违反 PRD `pending_future=1` 不变量；Task 10.8 未执行也能全绿 |
+| W3-6 | 10.6C 使能缺口：安装包不含验收命令 | `DEFAULT_ALLOWLIST` 不含 `tests/` 与 `tools/run_acceptance.py`（bundle_contract.py:324-349）；`subprocess_verifier_runner` 硬编码仓库根 `uv run pytest`（:2338-2343） | 「所有后续命令从安装入口解析」（design 10.6C）按现状不可实现：安装包内既无 pytest 套件也无验收 CLI |
+| W3-7 | `RC_FROZEN` 信号中 `formats=4` 语义未定义 | catalog/回执合同全部 html-only；4 格式计数无任何权威来源 | 冻结信号无法机械化校验，存在口径漂移风险 |
+
+## Artifacts And Evidence
+
+（本节即交付物；worker_03 无文件产物，全部结论在此。）
+
+### A. 10.6A 必须补齐的测试规格（按 implement.md A02「先写负向测试」原则）
+
+**T1 组：RC digest 绑定（针对 W3-1）** — 前置：Codex 先裁决 Q1 的 RC digest 规范定义。建议最小定义：`release_candidate_sha256 := sha256(canonical_json{source_commit, bundle_sha256, package_manifest_sha256, catalog_sha256, release_scope, schema_version})`，由独立 `rc-identity` 工具/函数计算并写入 freeze record。
+- T1.1 digest 格式：非 hex64、大写、短长度 → 拒绝（现有 :108-111 已覆盖，保留）。
+- T1.2 **重算绑定**：closure verifier 新增可选参数 `rc_identity_path`（freeze record）；提供时必须逐字段重算 RC digest 并与回执比对；字段任一漂移（commit/bundle/manifest/catalog 变更）→ 失败关闭。
+- T1.3 **旧 bundle 拒绝**：用 R13k bundle `d703b770b34a05dc1512bdac407947325b30158da4d476130d24bc933ba669af` 构造的 RC 身份 → 必须失败（非当次 commit 产物）。
+- T1.4 一致性：同一 RC 身份下 18 份回执的 `release_candidate_sha256` 必须全等；混入任一旧值 → 失败。
+
+**T2 组：owner-stage 关闭门（针对 W3-5）** — 落点 `tests/acceptance/test_required_receipt_closure.py` 扩展 + verifier 增加 freeze 模式：
+- T2.1 **修掉现有错误断言**：`assert "legacy-absence" in result["accepted_case_ids"]`（:180）必须改为 freeze 模式下 `legacy-absence` 必须 `pending_future_owner`；普通（非 freeze）模式语义需 Codex 裁决（见 Q2）。
+- T2.2 freeze 模式终态分布门：`accepted == 15 rehearsed + recovery-rehearsal`（16 个）、`not_applicable == {optional-adapter-recovery}`、`pending_future_owner == {legacy-absence}`（恰好 1）；任何多关/少关 → 失败。
+- T2.3 **owner 授权绑定**：`accepted` 回执必须携带 owner 阶段证据绑定（rehearsal outcome digest / host batch digest / recovery receipt digest 三选一，按 case 类别），缺失或不匹配 → 失败关闭。这是把「谁关闭的」从自由字符串变成可核验证据的最小改动。
+- T2.4 premature closure 负例：recovery-rehearsal 在恢复演练回执产生前 accepted → 失败；legacy-absence 在 Task 10.8 前任何 accepted/rejected 值 → 失败。
+
+**T3 组：旧证据拒绝（针对 W3-3）** — 落点同 T2 + producer 侧测试：
+- T3.1 run_id/session_id 必须绑定当次 release root：closure verifier 新增 `--release-run` 上下文（release 运行清单路径或 batch 路径），回执 run/session 必须来自当次证据根；填入 `pre-rc-run_557186bed2e4368b296bda17` 或 R13k run `run_a90a2500314fafd8ec4885fd` → 失败。
+- T3.2 host-smoke-v1 案例回执必须绑定当次 batch：`verdict_sha256` 重算 = 当次 batch.json 规范摘要；填入 docs/acceptance/host-smoke/batch.json（旧 `50a91aac…`）→ 失败。
+- T3.3 artifact_sha256 绑定当次产物：对有产物的案例，digest 必须能在 release root 产物清单中命中；自造 hash → 失败。
+- T3.4 receipt 落盘路径改用 catalog `relative_path`（或明确声明平铺并为 catalog 增字段，二选一随 Q2），越路径 → 失败。
+
+**T4 组：catalog 指针失败关闭（针对 W3-4）**：
+- T4.1 verifier 校验 `receipt_contract["schema"]` 与实际使用的 schema 一致（结尾为 `release-case-receipt.schema.json`），否则失败关闭（10.5 建议 (b) 的最小实现）；或采用 (a) 改 18 案例 schema 指针并重算全部 case_digest（机械但波及 fixture 双份闭合，需要 Codex 选择）。
+- T4.2 负例：schema 指针改回 host-receipt.schema.json 后 closure 必须失败（当前不会失败——这是回归测试锚点）。
+
+**T5 组：freeze 信号门（针对 W3-5/W3-7）** — 仿照 `format_pre_rc_rehearsal_ok`（acceptance_runner.py:2906）的固定格式拒绝式实现：
+- T5.1 `RC_FROZEN reports=3 formats=4 hosts=3 recovery=passed pending_future=1` 只能由 closure aggregator 在全部输入齐备时渲染；阶段/计数/终态分布任一不符 → 拒绝渲染。
+- T5.2 信号必须携带 RC 身份（commit/bundle/manifest digest）且与 freeze record 一致。
+- T5.3 `formats=4` 的计数来源由 Q2 裁决后在测试中固定（在来源定义前不得实现该信号的通过路径——当前无实现，属正确默认）。
+
+**生产者规格（W3-2，供 10.6A A03 实现参考，归属与 worker_01/02 协调）**：最小路径是给 `run_acceptance.py` 增加 release 模式或在 10.6C 编排层新增发射器：输入 = catalog + 当次 suite rehearsal 摘要（ScenarioVerifierOutcome 已含逐 verifier output_sha256，acceptance_runner.py:2308-2332）+ 当次 host batch + 当次项目 run + RC 身份 + 恢复回执；输出 = 18 份 release-case-v1 回执写入 release root（不写 frozen source commit，遵守 design「运行回执写到 acceptance root」）。 stdlib-first，canonical JSON 与 `receipt_digest` 复用 verifier 现有函数。
+
+### B. 需 Codex 决策的合同问题
+
+- **Q1（阻塞 T1/T5）**：`release_candidate_sha256` 的规范定义。我的建议：RC digest = RC commit SHA-256 本身（git commit hash 天然满足不可伪造 + 可复核），freeze record 另行捆绑 bundle/package/catalog 摘要；或者采用上文 A 节的复合 canonical 定义。前者更简单（「RC commit」即身份），后者把四个摘要收进一个数。二者都可机械化，请 Codex 定一个。
+- **Q2（阻塞 T2/T4）**：(a) catalog 18 案例 `receipt.schema` 指针是否改指 release-case-receipt schema（代价：18 个 case_digest 全部重算，双份 fixture 闭合同步）；(b) closure verifier 的非 freeze 模式是否保留「pending_future_owner 案例也可 accepted」语义（10.5 建议仅加指针检查）；(c) `formats=4` 的权威计数来源（推测为 bundle 内容合同的四格式交付物，需明确到具体清单文件）。
+
+### C. 10.6C-D 可执行交接
+
+C 阶段（final package rerun）：
+1. 前置决策 Q1/Q2 + 10.6A A03 实现 producer/closure 增强/T1-T5 测试全绿。
+2. 从 RC commit 构建 bundle → `verify_bundle` → fresh install 到**全新**安装根（不复用 R13k `candidate-install/`）。
+3. 安装入口解析问题（W3-6）必须先解：推荐最小改动 = 把 `tools/run_acceptance.py` 加入 `DEFAULT_ALLOWLIST`（CLI 薄壳；业务逻辑已在 `src/ci_workflow` 内，随包分发），项目/宿主/ego 证据从安装入口跑；catalog verifier 类案例的 pytest 从 RC worktree 跑并在回执中同时绑定 RC commit 与安装包摘要。**若 Codex 要求 verifier 也从安装入口跑，则必须把 required-v12 verifier 测试子集纳入 bundle——与 bundle 合同「tests excluded」注释冲突，需明确扩大 allowlist 授权。**
+4. 重跑 `--pipeline full` + `--suite full` 于全新 release root（全新 pre-RC/release run id）；旧证据拒绝由 T3 组测试背书。
+5. 用 producer 发射 18 份 release-case-v1 回执 → `verify_required_receipts`（freeze 模式）。
+
+D 阶段（recovery、独立验收、冻结）：
+1. worker_02 的 recovery-package-v1 producer + 隔离演练 → recovery 回执（含 10.5 消费合同要求的 kind/passed/recovery_package_sha256/issued_at 四字段）→ recovery-rehearsal 案例 owner 关闭。
+2. closure aggregator 汇集 18 回执 + 恢复回执 → freeze record（绑定 Q1 定义的 RC 身份 + 全部回执 digest + 恢复包 digest）→ 渲染 `RC_FROZEN … pending_future=1`。
+3. 科学/视觉/包/恢复独立会商与 Codex 实际产物验收后，才允许 legacy-absence 移交 Task 10.8。
+4. D 阶段任何失败 → 无损暂停；frozen commit 后不回写运行回执（运行回执全部落 acceptance root）。
+
+## Commands And Observations
+
+- `git log --oneline -3 && git tag && git status --porcelain | wc -l` → HEAD `bb27ec9`；无 tag；842 dirty（全部未动）。证明 10.6A「不创建 RC commit」边界当前满足。
+- `grep -rn "RC_FROZEN"` → 仅命中 task 文档（implement.md D04、prd.md），无代码实现。
+- `grep -rn "release-case-v1" -l` → 仅 schema、closure 测试、10.5 审计文档；无生产者。
+- `grep -n "source_commit|dirty|clean" tools/bundle_contract.py build_bundle.py verify_bundle.py` → 零命中（bundle 工具尚无 commit/clean-tree 概念，属 worker_01 补齐面）。
+- `python3` 只读解析：`fixtures/acceptance/required-v12/landscape-global-china-maturity/inputs/scenario.json` SHA-256 = `2691a4f1f3d5…`，与 catalog 声明一致；catalog 案例计数 23 = 16 rehearsed + 2 pending + 1 not_applicable + 4 outside_suite，与 R13k 信号完全吻合；required-v12 家族共 18 案例。
+- `python3 -c` 解析 `schemas/acceptance-catalog.schema.json` → `owner_status` 枚举含 `verified`/`host_unavailable`（catalog schema 允许集比 runner 的 `_CATALOG_OWNER_STATUSES` 宽，非阻断但记录在案）。
+- 读 `docs/acceptance/host-smoke/batch.json` → 旧 pre-RC batch（bundle `50a91aac…`，real_host_pass=true），确认旧宿主证据存在于仓库内，是 T3.2 必须拒绝的实物。
+- 读 Task 10.3 checkpoint `checkpoint_20260902_r13k_completed.md` 与 Task 10.5 `task.json`（completed；26 聚焦 + 166 回归通过）。
+- 未运行任何 pytest/uv（本审计为只读，且避免在 842 dirty 树上产生新状态）；本报告全部结论基于静态读取与只读解析，行为级验证留给 10.6A 实现后的定向测试。
+
+## Blockers Or Missing Environment
+
+- 无环境缺失；无工具故障；未触发任何权限边界。
+- 阻塞级依赖：T1/T5 组测试依赖 Q1（RC digest 定义）裁决；T2/T4 组依赖 Q2（指针修法 + closure 语义 + formats=4 来源）裁决。这两个是合同决策，非本 worker 权限，已按规则上报。
+- 非阻塞观察：catalog schema `owner_status` 枚举含 runner 未使用的 `verified`/`host_unavailable`（runner 侧 `_CATALOG_OWNER_STATUSES` 缺 `verified`，而 closure verifier 接受 `verified`）——两处集合不一致，建议 10.6A 实现时统一枚举来源，避免 owner gate 双标准。
+
+## Rerun Requests Or Next Step
+
+- 本任务无 rerun 需求：assigned work item（审计 + 缺口 + 测试规格 + 交接）已完整交付，无残留步骤。
+- 建议下一步（Codex 裁决后执行）：(1) 回答 Q1/Q2；(2) 将 A 节 T1-T5 规格派发给 10.6A A02/A03 实现（T4.2 可与 worker_01 的 catalog case_digest 重算协调）；(3) W3-6 的 allowlist 决策在 10.6C 前落定。
+- resume point：若需扩展审计，可从 `src/ci_workflow/application/host_smoke_runner.py`（安装入口真实批次执行器，本次仅读其接口）与 `docs/acceptance/host-smoke/archive-contract.schema.json`（旧回执归档合同，T3.2 负例素材）继续。

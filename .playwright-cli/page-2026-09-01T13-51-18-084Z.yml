@@ -1,0 +1,1244 @@
+- generic [active] [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - link "康哲药业" [ref=f2e4] [cursor=pointer]:
+        - /url: overview.html
+        - img "康哲药业" [ref=f2e5]
+      - generic [ref=f2e6]: 阵发性睡眠性血红蛋白尿临床试验结果比较
+      - navigation "主导航" [ref=f2e7]:
+        - link "首页" [ref=f2e9] [cursor=pointer]:
+          - /url: overview.html
+        - button "疗效与安全性" [ref=f2e11] [cursor=pointer]
+        - button "基线与人群" [ref=f2e15] [cursor=pointer]
+        - button "试验完成情况" [ref=f2e19] [cursor=pointer]
+        - button "试验与证据" [ref=f2e23] [cursor=pointer]
+      - generic [ref=f2e26]:
+        - generic [ref=f2e27]: 全局搜索
+        - searchbox "全局搜索" [ref=f2e28]
+  - main [ref=f2e30]:
+    - generic [ref=f2e31]:
+      - heading "疗效" [level=1] [ref=f2e32]
+      - generic "页面范围" [ref=f2e33]:
+        - generic [ref=f2e34]: 适应症：阵发性睡眠性血红蛋白尿
+        - generic [ref=f2e35]: 观察截止：2026-07-31
+    - generic "快速筛选产品" [ref=f2e36]:
+      - generic [ref=f2e38]:
+        - button "伊普可泮（iptacopan）" [ref=f2e39] [cursor=pointer]
+        - button "pegcetacoplan（C3抑制剂）" [ref=f2e40] [cursor=pointer]
+        - button "达尼可泮（danicopan）" [ref=f2e41] [cursor=pointer]
+        - button "拉武利尤单抗（ravulizumab）" [ref=f2e42] [cursor=pointer]
+        - button "可伐利单抗（crovalimab）" [ref=f2e43] [cursor=pointer]
+    - group [ref=f2e44]:
+      - generic "筛选条件 未设置筛选 +" [ref=f2e45] [cursor=pointer]:
+        - generic [ref=f2e46]: 筛选条件
+        - generic [ref=f2e47]: 未设置筛选
+        - text: +
+    - region [ref=f2e48]:
+      - heading "疗效结果" [level=2] [ref=f2e51]
+      - paragraph [ref=f2e52]: 点击数值查看数据依据。
+      - generic [ref=f2e53]:
+        - generic [ref=f2e54]:
+          - heading "血红蛋白应答率｜伊普可泮（iptacopan） · APPLY-PNH" [level=3] [ref=f2e55]
+          - generic "组别图例" [ref=f2e56]:
+            - generic [ref=f2e57]: 治疗组
+            - generic [ref=f2e59]: 对照组
+          - img "血红蛋白应答率｜伊普可泮（iptacopan） · APPLY-PNH 图形" [ref=f2e61]:
+            - img [ref=f2e63]:
+              - generic [ref=f2e65]:
+                - generic [ref=f2e66]: "%"
+                - generic [ref=f2e67]: "0"
+                - generic [ref=f2e68]: "20"
+                - generic [ref=f2e69]: "40"
+                - generic [ref=f2e70]: "60"
+                - generic [ref=f2e71]: "80"
+                - generic [ref=f2e72]: "100"
+                - generic [ref=f2e73]: 治疗组
+                - generic [ref=f2e74]: 对照组
+                - generic [ref=f2e77]: "82.3"
+                - generic [ref=f2e78]: "2"
+            - button "查看数值 82.3 的数据依据" [ref=f2e79] [cursor=pointer]
+            - button "查看数值 2 的数据依据" [ref=f2e80] [cursor=pointer]
+          - table [ref=f2e82]:
+            - caption [ref=f2e83]: 疗效数据表
+            - rowgroup [ref=f2e84]:
+              - row [ref=f2e85]:
+                - columnheader "产品" [ref=f2e86]
+                - columnheader "试验" [ref=f2e87]
+                - columnheader "终点/事件" [ref=f2e88]
+                - columnheader "组别" [ref=f2e89]
+                - columnheader "时间点" [ref=f2e90]
+                - columnheader "分析人群" [ref=f2e91]
+                - columnheader "分子" [ref=f2e92]
+                - columnheader "分母" [ref=f2e93]
+                - columnheader "比较值" [ref=f2e94]
+                - columnheader "单位" [ref=f2e95]
+                - columnheader "口径提示" [ref=f2e96]
+                - columnheader "披露状态" [ref=f2e97]
+            - rowgroup [ref=f2e98]:
+              - row [ref=f2e99]:
+                - cell [ref=f2e100]:
+                  - link "伊普可泮（iptacopan）" [ref=f2e101] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f2e102]:
+                  - link "APPLY-PNH" [ref=f2e103] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "血红蛋白应答率" [ref=f2e104] [cursor=pointer]
+                - button "治疗组" [ref=f2e105] [cursor=pointer]
+                - button "第24周" [ref=f2e106] [cursor=pointer]
+                - button "全分析集；模型估计与观察计数分开保留" [ref=f2e107] [cursor=pointer]
+                - button "51" [ref=f2e108] [cursor=pointer]
+                - button "60" [ref=f2e109] [cursor=pointer]
+                - button "82.3" [ref=f2e110] [cursor=pointer]
+                - button "%" [ref=f2e111] [cursor=pointer]
+                - button "登记结果报告边际模型估计82.3%；主要论文观察计数为51/60，不用于直接复算模型比例" [ref=f2e112] [cursor=pointer]
+                - button "已报告值" [ref=f2e113] [cursor=pointer]
+              - row [ref=f2e114]:
+                - cell [ref=f2e115]:
+                  - link "伊普可泮（iptacopan）" [ref=f2e116] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f2e117]:
+                  - link "APPLY-PNH" [ref=f2e118] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "血红蛋白应答率" [ref=f2e119] [cursor=pointer]
+                - button "对照组" [ref=f2e120] [cursor=pointer]
+                - button "第24周" [ref=f2e121] [cursor=pointer]
+                - button "全分析集；模型估计与观察计数分开保留" [ref=f2e122] [cursor=pointer]
+                - button "0" [ref=f2e123] [cursor=pointer]
+                - button "35" [ref=f2e124] [cursor=pointer]
+                - button "2" [ref=f2e125] [cursor=pointer]
+                - button "%" [ref=f2e126] [cursor=pointer]
+                - button "登记结果报告边际模型估计2.0%；主要论文观察计数为0/35，不用于直接复算模型比例" [ref=f2e127] [cursor=pointer]
+                - button "已报告值" [ref=f2e128] [cursor=pointer]
+        - generic [ref=f2e129]:
+          - heading "血红蛋白应答率｜伊普可泮（iptacopan） · APPOINT-PNH" [level=3] [ref=f2e130]
+          - generic "组别图例" [ref=f2e131]: 治疗组
+          - img "血红蛋白应答率｜伊普可泮（iptacopan） · APPOINT-PNH 图形" [ref=f2e134]:
+            - img [ref=f2e136]:
+              - generic [ref=f2e138]:
+                - generic [ref=f2e139]: "%"
+                - generic [ref=f2e140]: "0"
+                - generic [ref=f2e141]: "20"
+                - generic [ref=f2e142]: "40"
+                - generic [ref=f2e143]: "60"
+                - generic [ref=f2e144]: "80"
+                - generic [ref=f2e145]: "100"
+                - generic [ref=f2e146]: 治疗组
+                - generic [ref=f2e148]: "92.2"
+            - button "查看数值 92.2 的数据依据" [ref=f2e149] [cursor=pointer]
+          - table [ref=f2e151]:
+            - caption [ref=f2e152]: 疗效数据表
+            - rowgroup [ref=f2e153]:
+              - row [ref=f2e154]:
+                - columnheader "产品" [ref=f2e155]
+                - columnheader "试验" [ref=f2e156]
+                - columnheader "终点/事件" [ref=f2e157]
+                - columnheader "组别" [ref=f2e158]
+                - columnheader "时间点" [ref=f2e159]
+                - columnheader "分析人群" [ref=f2e160]
+                - columnheader "分子" [ref=f2e161]
+                - columnheader "分母" [ref=f2e162]
+                - columnheader "比较值" [ref=f2e163]
+                - columnheader "单位" [ref=f2e164]
+                - columnheader "口径提示" [ref=f2e165]
+                - columnheader "披露状态" [ref=f2e166]
+            - rowgroup [ref=f2e167]:
+              - row [ref=f2e168]:
+                - cell [ref=f2e169]:
+                  - link "伊普可泮（iptacopan）" [ref=f2e170] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f2e171]:
+                  - link "APPOINT-PNH" [ref=f2e172] [cursor=pointer]:
+                    - /url: trials/nct04820530.html
+                - button "血红蛋白应答率" [ref=f2e173] [cursor=pointer]
+                - button "治疗组" [ref=f2e174] [cursor=pointer]
+                - button "第24周" [ref=f2e175] [cursor=pointer]
+                - button "全分析集；模型估计与观察计数分开保留" [ref=f2e176] [cursor=pointer]
+                - button "31" [ref=f2e177] [cursor=pointer]
+                - button "40" [ref=f2e178] [cursor=pointer]
+                - button "92.2" [ref=f2e179] [cursor=pointer]
+                - button "%" [ref=f2e180] [cursor=pointer]
+                - button "登记结果报告边际模型估计92.2%；HCP结果页全入组观察计数31/40（77.5%），不用于直接复算模型比例；NEJM摘要报告分析集观察计数31/33；与HCP的40人分母口径不同，按来源分别保留，不混算" [ref=f2e181] [cursor=pointer]
+                - button "已报告值" [ref=f2e182] [cursor=pointer]
+        - generic [ref=f2e183]:
+          - heading "第16周血红蛋白较基线变化｜pegcetacoplan（C3抑制剂） · PEGASUS（APL2-302）" [level=3] [ref=f2e184]
+          - generic "组别图例" [ref=f2e185]:
+            - generic [ref=f2e186]: 治疗组
+            - generic [ref=f2e188]: 对照组
+          - img "第16周血红蛋白较基线变化｜pegcetacoplan（C3抑制剂） · PEGASUS（APL2-302） 图形" [ref=f2e190]:
+            - img [ref=f2e192]:
+              - generic [ref=f2e194]:
+                - generic [ref=f2e195]: g/dL
+                - generic [ref=f2e196]: "-1.47"
+                - generic [ref=f2e197]: "0"
+                - generic [ref=f2e198]: "2"
+                - generic [ref=f2e199]: "4"
+                - generic [ref=f2e200]: "6"
+                - generic [ref=f2e201]: "8"
+                - generic [ref=f2e202]: "10"
+                - generic [ref=f2e203]: 治疗组
+                - generic [ref=f2e204]: 对照组
+                - generic [ref=f2e207]: "2.37"
+                - generic [ref=f2e208]: "-1.47"
+            - button "查看数值 2.37 的数据依据" [ref=f2e209] [cursor=pointer]
+            - button "查看数值 -1.47 的数据依据" [ref=f2e210] [cursor=pointer]
+          - table [ref=f2e212]:
+            - caption [ref=f2e213]: 疗效数据表
+            - rowgroup [ref=f2e214]:
+              - row [ref=f2e215]:
+                - columnheader "产品" [ref=f2e216]
+                - columnheader "试验" [ref=f2e217]
+                - columnheader "终点/事件" [ref=f2e218]
+                - columnheader "组别" [ref=f2e219]
+                - columnheader "时间点" [ref=f2e220]
+                - columnheader "分析人群" [ref=f2e221]
+                - columnheader "分子" [ref=f2e222]
+                - columnheader "分母" [ref=f2e223]
+                - columnheader "比较值" [ref=f2e224]
+                - columnheader "单位" [ref=f2e225]
+                - columnheader "口径提示" [ref=f2e226]
+                - columnheader "披露状态" [ref=f2e227]
+            - rowgroup [ref=f2e228]:
+              - row [ref=f2e229]:
+                - cell [ref=f2e230]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f2e231] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f2e232]:
+                  - link "PEGASUS（APL2-302）" [ref=f2e233] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "第16周血红蛋白较基线变化" [ref=f2e234] [cursor=pointer]
+                - button "治疗组" [ref=f2e235] [cursor=pointer]
+                - button "第16周" [ref=f2e236] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e237] [cursor=pointer]
+                - button "未列示" [ref=f2e238] [cursor=pointer]
+                - button "未列示" [ref=f2e239] [cursor=pointer]
+                - button "2.37" [ref=f2e240] [cursor=pointer]
+                - button "g/dL" [ref=f2e241] [cursor=pointer]
+                - button "FDA审评表与主要报告的第16周均值变化；两臂原值分别保留，不在浏览器端重算差值" [ref=f2e242] [cursor=pointer]
+                - button "已报告值" [ref=f2e243] [cursor=pointer]
+              - row [ref=f2e244]:
+                - cell [ref=f2e245]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f2e246] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f2e247]:
+                  - link "PEGASUS（APL2-302）" [ref=f2e248] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "第16周血红蛋白较基线变化" [ref=f2e249] [cursor=pointer]
+                - button "对照组" [ref=f2e250] [cursor=pointer]
+                - button "第16周" [ref=f2e251] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e252] [cursor=pointer]
+                - button "未列示" [ref=f2e253] [cursor=pointer]
+                - button "未列示" [ref=f2e254] [cursor=pointer]
+                - button "-1.47" [ref=f2e255] [cursor=pointer]
+                - button "g/dL" [ref=f2e256] [cursor=pointer]
+                - button "FDA审评表与主要报告的第16周均值变化；两臂原值分别保留，不在浏览器端重算差值" [ref=f2e257] [cursor=pointer]
+                - button "已报告值" [ref=f2e258] [cursor=pointer]
+        - generic [ref=f2e259]:
+          - heading "治疗期无输血比例｜pegcetacoplan（C3抑制剂） · PEGASUS（APL2-302）" [level=3] [ref=f2e260]
+          - generic "组别图例" [ref=f2e261]:
+            - generic [ref=f2e262]: 治疗组
+            - generic [ref=f2e264]: 对照组
+          - img "治疗期无输血比例｜pegcetacoplan（C3抑制剂） · PEGASUS（APL2-302） 图形" [ref=f2e266]:
+            - img [ref=f2e268]:
+              - generic [ref=f2e270]:
+                - generic [ref=f2e271]: "%"
+                - generic [ref=f2e272]: "0"
+                - generic [ref=f2e273]: "20"
+                - generic [ref=f2e274]: "40"
+                - generic [ref=f2e275]: "60"
+                - generic [ref=f2e276]: "80"
+                - generic [ref=f2e277]: "100"
+                - generic [ref=f2e278]: 治疗组
+                - generic [ref=f2e279]: 对照组
+                - generic [ref=f2e282]: "85"
+                - generic [ref=f2e283]: "15"
+            - button "查看数值 85 的数据依据" [ref=f2e284] [cursor=pointer]
+            - button "查看数值 15 的数据依据" [ref=f2e285] [cursor=pointer]
+          - table [ref=f2e287]:
+            - caption [ref=f2e288]: 疗效数据表
+            - rowgroup [ref=f2e289]:
+              - row [ref=f2e290]:
+                - columnheader "产品" [ref=f2e291]
+                - columnheader "试验" [ref=f2e292]
+                - columnheader "终点/事件" [ref=f2e293]
+                - columnheader "组别" [ref=f2e294]
+                - columnheader "时间点" [ref=f2e295]
+                - columnheader "分析人群" [ref=f2e296]
+                - columnheader "分子" [ref=f2e297]
+                - columnheader "分母" [ref=f2e298]
+                - columnheader "比较值" [ref=f2e299]
+                - columnheader "单位" [ref=f2e300]
+                - columnheader "口径提示" [ref=f2e301]
+                - columnheader "披露状态" [ref=f2e302]
+            - rowgroup [ref=f2e303]:
+              - row [ref=f2e304]:
+                - cell [ref=f2e305]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f2e306] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f2e307]:
+                  - link "PEGASUS（APL2-302）" [ref=f2e308] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "治疗期无输血比例" [ref=f2e309] [cursor=pointer]
+                - button "治疗组" [ref=f2e310] [cursor=pointer]
+                - button "第16周" [ref=f2e311] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e312] [cursor=pointer]
+                - button "35" [ref=f2e313] [cursor=pointer]
+                - button "41" [ref=f2e314] [cursor=pointer]
+                - button "85" [ref=f2e315] [cursor=pointer]
+                - button "%" [ref=f2e316] [cursor=pointer]
+                - button "主要报告直接列示治疗期无输血计数与比例；保留治疗/对照分母" [ref=f2e317] [cursor=pointer]
+                - button "已报告值" [ref=f2e318] [cursor=pointer]
+              - row [ref=f2e319]:
+                - cell [ref=f2e320]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f2e321] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f2e322]:
+                  - link "PEGASUS（APL2-302）" [ref=f2e323] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "治疗期无输血比例" [ref=f2e324] [cursor=pointer]
+                - button "对照组" [ref=f2e325] [cursor=pointer]
+                - button "第16周" [ref=f2e326] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e327] [cursor=pointer]
+                - button "6" [ref=f2e328] [cursor=pointer]
+                - button "39" [ref=f2e329] [cursor=pointer]
+                - button "15" [ref=f2e330] [cursor=pointer]
+                - button "%" [ref=f2e331] [cursor=pointer]
+                - button "主要报告直接列示治疗期无输血计数与比例；保留治疗/对照分母" [ref=f2e332] [cursor=pointer]
+                - button "已报告值" [ref=f2e333] [cursor=pointer]
+        - generic [ref=f2e334]:
+          - heading "第12周血红蛋白较基线变化｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301）" [level=3] [ref=f2e335]
+          - generic "组别图例" [ref=f2e336]:
+            - generic [ref=f2e337]: 治疗组
+            - generic [ref=f2e339]: 对照组
+          - img "第12周血红蛋白较基线变化｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301） 图形" [ref=f2e341]:
+            - img [ref=f2e343]:
+              - generic [ref=f2e345]:
+                - generic [ref=f2e346]: g/dL
+                - generic [ref=f2e347]: "0"
+                - generic [ref=f2e348]: "2"
+                - generic [ref=f2e349]: "4"
+                - generic [ref=f2e350]: "6"
+                - generic [ref=f2e351]: "8"
+                - generic [ref=f2e352]: "10"
+                - generic [ref=f2e353]: 治疗组
+                - generic [ref=f2e354]: 对照组
+                - generic [ref=f2e357]: "2.94"
+                - generic [ref=f2e358]: "0.5"
+            - button "查看数值 2.94 的数据依据" [ref=f2e359] [cursor=pointer]
+            - button "查看数值 0.5 的数据依据" [ref=f2e360] [cursor=pointer]
+          - table [ref=f2e362]:
+            - caption [ref=f2e363]: 疗效数据表
+            - rowgroup [ref=f2e364]:
+              - row [ref=f2e365]:
+                - columnheader "产品" [ref=f2e366]
+                - columnheader "试验" [ref=f2e367]
+                - columnheader "终点/事件" [ref=f2e368]
+                - columnheader "组别" [ref=f2e369]
+                - columnheader "时间点" [ref=f2e370]
+                - columnheader "分析人群" [ref=f2e371]
+                - columnheader "分子" [ref=f2e372]
+                - columnheader "分母" [ref=f2e373]
+                - columnheader "比较值" [ref=f2e374]
+                - columnheader "单位" [ref=f2e375]
+                - columnheader "口径提示" [ref=f2e376]
+                - columnheader "披露状态" [ref=f2e377]
+            - rowgroup [ref=f2e378]:
+              - row [ref=f2e379]:
+                - cell [ref=f2e380]:
+                  - link "达尼可泮（danicopan）" [ref=f2e381] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e382]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e383] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "第12周血红蛋白较基线变化" [ref=f2e384] [cursor=pointer]
+                - button "治疗组" [ref=f2e385] [cursor=pointer]
+                - button "第12周" [ref=f2e386] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e387] [cursor=pointer]
+                - button "未列示" [ref=f2e388] [cursor=pointer]
+                - button "未列示" [ref=f2e389] [cursor=pointer]
+                - button "2.94" [ref=f2e390] [cursor=pointer]
+                - button "g/dL" [ref=f2e391] [cursor=pointer]
+                - button "疗效中期分析集N=42/21；不与安全性N=57/29混用" [ref=f2e392] [cursor=pointer]
+                - button "已报告值" [ref=f2e393] [cursor=pointer]
+              - row [ref=f2e394]:
+                - cell [ref=f2e395]:
+                  - link "达尼可泮（danicopan）" [ref=f2e396] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e397]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e398] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "第12周血红蛋白较基线变化" [ref=f2e399] [cursor=pointer]
+                - button "对照组" [ref=f2e400] [cursor=pointer]
+                - button "第12周" [ref=f2e401] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e402] [cursor=pointer]
+                - button "未列示" [ref=f2e403] [cursor=pointer]
+                - button "未列示" [ref=f2e404] [cursor=pointer]
+                - button "0.5" [ref=f2e405] [cursor=pointer]
+                - button "g/dL" [ref=f2e406] [cursor=pointer]
+                - button "疗效中期分析集N=42/21；不与安全性N=57/29混用" [ref=f2e407] [cursor=pointer]
+                - button "已报告值" [ref=f2e408] [cursor=pointer]
+        - generic [ref=f2e409]:
+          - heading "血红蛋白升高至少2 g/dL且无输血｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301）" [level=3] [ref=f2e410]
+          - generic "组别图例" [ref=f2e411]:
+            - generic [ref=f2e412]: 治疗组
+            - generic [ref=f2e414]: 对照组
+          - img "血红蛋白升高至少2 g/dL且无输血｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301） 图形" [ref=f2e416]:
+            - img [ref=f2e418]:
+              - generic [ref=f2e420]:
+                - generic [ref=f2e421]: "%"
+                - generic [ref=f2e422]: "0"
+                - generic [ref=f2e423]: "20"
+                - generic [ref=f2e424]: "40"
+                - generic [ref=f2e425]: "60"
+                - generic [ref=f2e426]: "80"
+                - generic [ref=f2e427]: "100"
+                - generic [ref=f2e428]: 治疗组
+                - generic [ref=f2e429]: 对照组
+                - generic [ref=f2e431]: "59.5"
+                - generic [ref=f2e432]: "0"
+            - button "查看数值 59.5 的数据依据" [ref=f2e433] [cursor=pointer]
+            - button "查看数值 0 的数据依据" [ref=f2e434] [cursor=pointer]
+          - table [ref=f2e436]:
+            - caption [ref=f2e437]: 疗效数据表
+            - rowgroup [ref=f2e438]:
+              - row [ref=f2e439]:
+                - columnheader "产品" [ref=f2e440]
+                - columnheader "试验" [ref=f2e441]
+                - columnheader "终点/事件" [ref=f2e442]
+                - columnheader "组别" [ref=f2e443]
+                - columnheader "时间点" [ref=f2e444]
+                - columnheader "分析人群" [ref=f2e445]
+                - columnheader "分子" [ref=f2e446]
+                - columnheader "分母" [ref=f2e447]
+                - columnheader "比较值" [ref=f2e448]
+                - columnheader "单位" [ref=f2e449]
+                - columnheader "口径提示" [ref=f2e450]
+                - columnheader "披露状态" [ref=f2e451]
+            - rowgroup [ref=f2e452]:
+              - row [ref=f2e453]:
+                - cell [ref=f2e454]:
+                  - link "达尼可泮（danicopan）" [ref=f2e455] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e456]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e457] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "血红蛋白升高至少2 g/dL且无输血" [ref=f2e458] [cursor=pointer]
+                - button "治疗组" [ref=f2e459] [cursor=pointer]
+                - button "第12周" [ref=f2e460] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e461] [cursor=pointer]
+                - button "未列示" [ref=f2e462] [cursor=pointer]
+                - button "未列示" [ref=f2e463] [cursor=pointer]
+                - button "59.5" [ref=f2e464] [cursor=pointer]
+                - button "%" [ref=f2e465] [cursor=pointer]
+                - button "对照组为来源明确报告的零值，使用reported_zero语义而非推断" [ref=f2e466] [cursor=pointer]
+                - button "已报告值" [ref=f2e467] [cursor=pointer]
+              - row [ref=f2e468]:
+                - cell [ref=f2e469]:
+                  - link "达尼可泮（danicopan）" [ref=f2e470] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e471]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e472] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "血红蛋白升高至少2 g/dL且无输血" [ref=f2e473] [cursor=pointer]
+                - button "对照组" [ref=f2e474] [cursor=pointer]
+                - button "第12周" [ref=f2e475] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e476] [cursor=pointer]
+                - button "0" [ref=f2e477] [cursor=pointer]
+                - button "21" [ref=f2e478] [cursor=pointer]
+                - button "0" [ref=f2e479] [cursor=pointer]
+                - button "%" [ref=f2e480] [cursor=pointer]
+                - button "对照组为来源明确报告的零值，使用reported_zero语义而非推断" [ref=f2e481] [cursor=pointer]
+                - button "已报告零值" [ref=f2e482] [cursor=pointer]
+        - generic [ref=f2e483]:
+          - heading "第12周输血避免比例｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301）" [level=3] [ref=f2e484]
+          - generic "组别图例" [ref=f2e485]:
+            - generic [ref=f2e486]: 治疗组
+            - generic [ref=f2e488]: 对照组
+          - img "第12周输血避免比例｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301） 图形" [ref=f2e490]:
+            - img [ref=f2e492]:
+              - generic [ref=f2e494]:
+                - generic [ref=f2e495]: "%"
+                - generic [ref=f2e496]: "0"
+                - generic [ref=f2e497]: "20"
+                - generic [ref=f2e498]: "40"
+                - generic [ref=f2e499]: "60"
+                - generic [ref=f2e500]: "80"
+                - generic [ref=f2e501]: "100"
+                - generic [ref=f2e502]: 治疗组
+                - generic [ref=f2e503]: 对照组
+                - generic [ref=f2e506]: "83.3"
+                - generic [ref=f2e507]: "38.1"
+            - button "查看数值 83.3 的数据依据" [ref=f2e508] [cursor=pointer]
+            - button "查看数值 38.1 的数据依据" [ref=f2e509] [cursor=pointer]
+          - table [ref=f2e511]:
+            - caption [ref=f2e512]: 疗效数据表
+            - rowgroup [ref=f2e513]:
+              - row [ref=f2e514]:
+                - columnheader "产品" [ref=f2e515]
+                - columnheader "试验" [ref=f2e516]
+                - columnheader "终点/事件" [ref=f2e517]
+                - columnheader "组别" [ref=f2e518]
+                - columnheader "时间点" [ref=f2e519]
+                - columnheader "分析人群" [ref=f2e520]
+                - columnheader "分子" [ref=f2e521]
+                - columnheader "分母" [ref=f2e522]
+                - columnheader "比较值" [ref=f2e523]
+                - columnheader "单位" [ref=f2e524]
+                - columnheader "口径提示" [ref=f2e525]
+                - columnheader "披露状态" [ref=f2e526]
+            - rowgroup [ref=f2e527]:
+              - row [ref=f2e528]:
+                - cell [ref=f2e529]:
+                  - link "达尼可泮（danicopan）" [ref=f2e530] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e531]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e532] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "第12周输血避免比例" [ref=f2e533] [cursor=pointer]
+                - button "治疗组" [ref=f2e534] [cursor=pointer]
+                - button "第12周" [ref=f2e535] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e536] [cursor=pointer]
+                - button "未列示" [ref=f2e537] [cursor=pointer]
+                - button "未列示" [ref=f2e538] [cursor=pointer]
+                - button "83.3" [ref=f2e539] [cursor=pointer]
+                - button "%" [ref=f2e540] [cursor=pointer]
+                - button "FDA快照直接报告的第12周比例；不从其他终点换算" [ref=f2e541] [cursor=pointer]
+                - button "已报告值" [ref=f2e542] [cursor=pointer]
+              - row [ref=f2e543]:
+                - cell [ref=f2e544]:
+                  - link "达尼可泮（danicopan）" [ref=f2e545] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e546]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e547] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "第12周输血避免比例" [ref=f2e548] [cursor=pointer]
+                - button "对照组" [ref=f2e549] [cursor=pointer]
+                - button "第12周" [ref=f2e550] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e551] [cursor=pointer]
+                - button "未列示" [ref=f2e552] [cursor=pointer]
+                - button "未列示" [ref=f2e553] [cursor=pointer]
+                - button "38.1" [ref=f2e554] [cursor=pointer]
+                - button "%" [ref=f2e555] [cursor=pointer]
+                - button "FDA快照直接报告的第12周比例；不从其他终点换算" [ref=f2e556] [cursor=pointer]
+                - button "已报告值" [ref=f2e557] [cursor=pointer]
+        - generic [ref=f2e558]:
+          - heading "第12周FACIT疲劳量表变化｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301）" [level=3] [ref=f2e559]
+          - generic "组别图例" [ref=f2e560]:
+            - generic [ref=f2e561]: 治疗组
+            - generic [ref=f2e563]: 对照组
+          - img "第12周FACIT疲劳量表变化｜达尼可泮（danicopan） · ALPHA（ALXN2040-PNH-301） 图形" [ref=f2e565]:
+            - img [ref=f2e567]:
+              - generic [ref=f2e569]:
+                - generic [ref=f2e570]: 分
+                - generic [ref=f2e571]: "0"
+                - generic [ref=f2e572]: "2"
+                - generic [ref=f2e573]: "4"
+                - generic [ref=f2e574]: "6"
+                - generic [ref=f2e575]: "8"
+                - generic [ref=f2e576]: "10"
+                - generic [ref=f2e577]: 治疗组
+                - generic [ref=f2e578]: 对照组
+                - generic [ref=f2e581]: "8"
+                - generic [ref=f2e582]: "1.9"
+            - button "查看数值 8 的数据依据" [ref=f2e583] [cursor=pointer]
+            - button "查看数值 1.9 的数据依据" [ref=f2e584] [cursor=pointer]
+          - table [ref=f2e586]:
+            - caption [ref=f2e587]: 疗效数据表
+            - rowgroup [ref=f2e588]:
+              - row [ref=f2e589]:
+                - columnheader "产品" [ref=f2e590]
+                - columnheader "试验" [ref=f2e591]
+                - columnheader "终点/事件" [ref=f2e592]
+                - columnheader "组别" [ref=f2e593]
+                - columnheader "时间点" [ref=f2e594]
+                - columnheader "分析人群" [ref=f2e595]
+                - columnheader "分子" [ref=f2e596]
+                - columnheader "分母" [ref=f2e597]
+                - columnheader "比较值" [ref=f2e598]
+                - columnheader "单位" [ref=f2e599]
+                - columnheader "口径提示" [ref=f2e600]
+                - columnheader "披露状态" [ref=f2e601]
+            - rowgroup [ref=f2e602]:
+              - row [ref=f2e603]:
+                - cell [ref=f2e604]:
+                  - link "达尼可泮（danicopan）" [ref=f2e605] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e606]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e607] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "第12周FACIT疲劳量表变化" [ref=f2e608] [cursor=pointer]
+                - button "治疗组" [ref=f2e609] [cursor=pointer]
+                - button "第12周" [ref=f2e610] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e611] [cursor=pointer]
+                - button "未列示" [ref=f2e612] [cursor=pointer]
+                - button "未列示" [ref=f2e613] [cursor=pointer]
+                - button "8" [ref=f2e614] [cursor=pointer]
+                - button "分" [ref=f2e615] [cursor=pointer]
+                - button "FDA快照直接报告的FACIT变化值" [ref=f2e616] [cursor=pointer]
+                - button "已报告值" [ref=f2e617] [cursor=pointer]
+              - row [ref=f2e618]:
+                - cell [ref=f2e619]:
+                  - link "达尼可泮（danicopan）" [ref=f2e620] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f2e621]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f2e622] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "第12周FACIT疲劳量表变化" [ref=f2e623] [cursor=pointer]
+                - button "对照组" [ref=f2e624] [cursor=pointer]
+                - button "第12周" [ref=f2e625] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e626] [cursor=pointer]
+                - button "未列示" [ref=f2e627] [cursor=pointer]
+                - button "未列示" [ref=f2e628] [cursor=pointer]
+                - button "1.9" [ref=f2e629] [cursor=pointer]
+                - button "分" [ref=f2e630] [cursor=pointer]
+                - button "FDA快照直接报告的FACIT变化值" [ref=f2e631] [cursor=pointer]
+                - button "已报告值" [ref=f2e632] [cursor=pointer]
+        - generic [ref=f2e633]:
+          - heading "输血避免比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301）" [level=3] [ref=f2e634]
+          - generic "组别图例" [ref=f2e635]:
+            - generic [ref=f2e636]: 治疗组
+            - generic [ref=f2e638]: 对照组
+          - img "输血避免比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301） 图形" [ref=f2e640]:
+            - img [ref=f2e642]:
+              - generic [ref=f2e644]:
+                - generic [ref=f2e645]: "%"
+                - generic [ref=f2e646]: "0"
+                - generic [ref=f2e647]: "20"
+                - generic [ref=f2e648]: "40"
+                - generic [ref=f2e649]: "60"
+                - generic [ref=f2e650]: "80"
+                - generic [ref=f2e651]: "100"
+                - generic [ref=f2e652]: 治疗组
+                - generic [ref=f2e653]: 对照组
+                - generic [ref=f2e656]: "73.6"
+                - generic [ref=f2e657]: "66.1"
+            - button "查看数值 73.6 的数据依据" [ref=f2e658] [cursor=pointer]
+            - button "查看数值 66.1 的数据依据" [ref=f2e659] [cursor=pointer]
+          - table [ref=f2e661]:
+            - caption [ref=f2e662]: 疗效数据表
+            - rowgroup [ref=f2e663]:
+              - row [ref=f2e664]:
+                - columnheader "产品" [ref=f2e665]
+                - columnheader "试验" [ref=f2e666]
+                - columnheader "终点/事件" [ref=f2e667]
+                - columnheader "组别" [ref=f2e668]
+                - columnheader "时间点" [ref=f2e669]
+                - columnheader "分析人群" [ref=f2e670]
+                - columnheader "分子" [ref=f2e671]
+                - columnheader "分母" [ref=f2e672]
+                - columnheader "比较值" [ref=f2e673]
+                - columnheader "单位" [ref=f2e674]
+                - columnheader "口径提示" [ref=f2e675]
+                - columnheader "披露状态" [ref=f2e676]
+            - rowgroup [ref=f2e677]:
+              - row [ref=f2e678]:
+                - cell [ref=f2e679]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e680] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e681]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e682] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "输血避免比例" [ref=f2e683] [cursor=pointer]
+                - button "治疗组" [ref=f2e684] [cursor=pointer]
+                - button "第26周" [ref=f2e685] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e686] [cursor=pointer]
+                - button "未列示" [ref=f2e687] [cursor=pointer]
+                - button "未列示" [ref=f2e688] [cursor=pointer]
+                - button "73.6" [ref=f2e689] [cursor=pointer]
+                - button "%" [ref=f2e690] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e691] [cursor=pointer]
+                - button "已报告值" [ref=f2e692] [cursor=pointer]
+              - row [ref=f2e693]:
+                - cell [ref=f2e694]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e695] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e696]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e697] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "输血避免比例" [ref=f2e698] [cursor=pointer]
+                - button "对照组" [ref=f2e699] [cursor=pointer]
+                - button "第26周" [ref=f2e700] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e701] [cursor=pointer]
+                - button "未列示" [ref=f2e702] [cursor=pointer]
+                - button "未列示" [ref=f2e703] [cursor=pointer]
+                - button "66.1" [ref=f2e704] [cursor=pointer]
+                - button "%" [ref=f2e705] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e706] [cursor=pointer]
+                - button "已报告值" [ref=f2e707] [cursor=pointer]
+        - generic [ref=f2e708]:
+          - heading "LDH正常化比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301）" [level=3] [ref=f2e709]
+          - generic "组别图例" [ref=f2e710]:
+            - generic [ref=f2e711]: 治疗组
+            - generic [ref=f2e713]: 对照组
+          - img "LDH正常化比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301） 图形" [ref=f2e715]:
+            - img [ref=f2e717]:
+              - generic [ref=f2e719]:
+                - generic [ref=f2e720]: "%"
+                - generic [ref=f2e721]: "0"
+                - generic [ref=f2e722]: "20"
+                - generic [ref=f2e723]: "40"
+                - generic [ref=f2e724]: "60"
+                - generic [ref=f2e725]: "80"
+                - generic [ref=f2e726]: "100"
+                - generic [ref=f2e727]: 治疗组
+                - generic [ref=f2e728]: 对照组
+                - generic [ref=f2e731]: "53.6"
+                - generic [ref=f2e732]: "49.4"
+            - button "查看数值 53.6 的数据依据" [ref=f2e733] [cursor=pointer]
+            - button "查看数值 49.4 的数据依据" [ref=f2e734] [cursor=pointer]
+          - table [ref=f2e736]:
+            - caption [ref=f2e737]: 疗效数据表
+            - rowgroup [ref=f2e738]:
+              - row [ref=f2e739]:
+                - columnheader "产品" [ref=f2e740]
+                - columnheader "试验" [ref=f2e741]
+                - columnheader "终点/事件" [ref=f2e742]
+                - columnheader "组别" [ref=f2e743]
+                - columnheader "时间点" [ref=f2e744]
+                - columnheader "分析人群" [ref=f2e745]
+                - columnheader "分子" [ref=f2e746]
+                - columnheader "分母" [ref=f2e747]
+                - columnheader "比较值" [ref=f2e748]
+                - columnheader "单位" [ref=f2e749]
+                - columnheader "口径提示" [ref=f2e750]
+                - columnheader "披露状态" [ref=f2e751]
+            - rowgroup [ref=f2e752]:
+              - row [ref=f2e753]:
+                - cell [ref=f2e754]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e755] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e756]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e757] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "LDH正常化比例" [ref=f2e758] [cursor=pointer]
+                - button "治疗组" [ref=f2e759] [cursor=pointer]
+                - button "第26周" [ref=f2e760] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e761] [cursor=pointer]
+                - button "未列示" [ref=f2e762] [cursor=pointer]
+                - button "未列示" [ref=f2e763] [cursor=pointer]
+                - button "53.6" [ref=f2e764] [cursor=pointer]
+                - button "%" [ref=f2e765] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e766] [cursor=pointer]
+                - button "已报告值" [ref=f2e767] [cursor=pointer]
+              - row [ref=f2e768]:
+                - cell [ref=f2e769]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e770] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e771]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e772] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "LDH正常化比例" [ref=f2e773] [cursor=pointer]
+                - button "对照组" [ref=f2e774] [cursor=pointer]
+                - button "第26周" [ref=f2e775] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e776] [cursor=pointer]
+                - button "未列示" [ref=f2e777] [cursor=pointer]
+                - button "未列示" [ref=f2e778] [cursor=pointer]
+                - button "49.4" [ref=f2e779] [cursor=pointer]
+                - button "%" [ref=f2e780] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e781] [cursor=pointer]
+                - button "已报告值" [ref=f2e782] [cursor=pointer]
+        - generic [ref=f2e783]:
+          - heading "突破性溶血比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301）" [level=3] [ref=f2e784]
+          - generic "组别图例" [ref=f2e785]:
+            - generic [ref=f2e786]: 治疗组
+            - generic [ref=f2e788]: 对照组
+          - img "突破性溶血比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301） 图形" [ref=f2e790]:
+            - img [ref=f2e792]:
+              - generic [ref=f2e794]:
+                - generic [ref=f2e795]: "%"
+                - generic [ref=f2e796]: "0"
+                - generic [ref=f2e797]: "20"
+                - generic [ref=f2e798]: "40"
+                - generic [ref=f2e799]: "60"
+                - generic [ref=f2e800]: "80"
+                - generic [ref=f2e801]: "100"
+                - generic [ref=f2e802]: 治疗组
+                - generic [ref=f2e803]: 对照组
+                - generic [ref=f2e806]: "4"
+                - generic [ref=f2e807]: "10.7"
+            - button "查看数值 4 的数据依据" [ref=f2e808] [cursor=pointer]
+            - button "查看数值 10.7 的数据依据" [ref=f2e809] [cursor=pointer]
+          - table [ref=f2e811]:
+            - caption [ref=f2e812]: 疗效数据表
+            - rowgroup [ref=f2e813]:
+              - row [ref=f2e814]:
+                - columnheader "产品" [ref=f2e815]
+                - columnheader "试验" [ref=f2e816]
+                - columnheader "终点/事件" [ref=f2e817]
+                - columnheader "组别" [ref=f2e818]
+                - columnheader "时间点" [ref=f2e819]
+                - columnheader "分析人群" [ref=f2e820]
+                - columnheader "分子" [ref=f2e821]
+                - columnheader "分母" [ref=f2e822]
+                - columnheader "比较值" [ref=f2e823]
+                - columnheader "单位" [ref=f2e824]
+                - columnheader "口径提示" [ref=f2e825]
+                - columnheader "披露状态" [ref=f2e826]
+            - rowgroup [ref=f2e827]:
+              - row [ref=f2e828]:
+                - cell [ref=f2e829]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e830] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e831]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e832] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "突破性溶血比例" [ref=f2e833] [cursor=pointer]
+                - button "治疗组" [ref=f2e834] [cursor=pointer]
+                - button "第26周" [ref=f2e835] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e836] [cursor=pointer]
+                - button "未列示" [ref=f2e837] [cursor=pointer]
+                - button "未列示" [ref=f2e838] [cursor=pointer]
+                - button "4" [ref=f2e839] [cursor=pointer]
+                - button "%" [ref=f2e840] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e841] [cursor=pointer]
+                - button "已报告值" [ref=f2e842] [cursor=pointer]
+              - row [ref=f2e843]:
+                - cell [ref=f2e844]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e845] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e846]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e847] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "突破性溶血比例" [ref=f2e848] [cursor=pointer]
+                - button "对照组" [ref=f2e849] [cursor=pointer]
+                - button "第26周" [ref=f2e850] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e851] [cursor=pointer]
+                - button "未列示" [ref=f2e852] [cursor=pointer]
+                - button "未列示" [ref=f2e853] [cursor=pointer]
+                - button "10.7" [ref=f2e854] [cursor=pointer]
+                - button "%" [ref=f2e855] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e856] [cursor=pointer]
+                - button "已报告值" [ref=f2e857] [cursor=pointer]
+        - generic [ref=f2e858]:
+          - heading "血红蛋白稳定比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301）" [level=3] [ref=f2e859]
+          - generic "组别图例" [ref=f2e860]:
+            - generic [ref=f2e861]: 治疗组
+            - generic [ref=f2e863]: 对照组
+          - img "血红蛋白稳定比例｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301） 图形" [ref=f2e865]:
+            - img [ref=f2e867]:
+              - generic [ref=f2e869]:
+                - generic [ref=f2e870]: "%"
+                - generic [ref=f2e871]: "0"
+                - generic [ref=f2e872]: "20"
+                - generic [ref=f2e873]: "40"
+                - generic [ref=f2e874]: "60"
+                - generic [ref=f2e875]: "80"
+                - generic [ref=f2e876]: "100"
+                - generic [ref=f2e877]: 治疗组
+                - generic [ref=f2e878]: 对照组
+                - generic [ref=f2e881]: "68"
+                - generic [ref=f2e882]: "64.5"
+            - button "查看数值 68 的数据依据" [ref=f2e883] [cursor=pointer]
+            - button "查看数值 64.5 的数据依据" [ref=f2e884] [cursor=pointer]
+          - table [ref=f2e886]:
+            - caption [ref=f2e887]: 疗效数据表
+            - rowgroup [ref=f2e888]:
+              - row [ref=f2e889]:
+                - columnheader "产品" [ref=f2e890]
+                - columnheader "试验" [ref=f2e891]
+                - columnheader "终点/事件" [ref=f2e892]
+                - columnheader "组别" [ref=f2e893]
+                - columnheader "时间点" [ref=f2e894]
+                - columnheader "分析人群" [ref=f2e895]
+                - columnheader "分子" [ref=f2e896]
+                - columnheader "分母" [ref=f2e897]
+                - columnheader "比较值" [ref=f2e898]
+                - columnheader "单位" [ref=f2e899]
+                - columnheader "口径提示" [ref=f2e900]
+                - columnheader "披露状态" [ref=f2e901]
+            - rowgroup [ref=f2e902]:
+              - row [ref=f2e903]:
+                - cell [ref=f2e904]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e905] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e906]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e907] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "血红蛋白稳定比例" [ref=f2e908] [cursor=pointer]
+                - button "治疗组" [ref=f2e909] [cursor=pointer]
+                - button "第26周" [ref=f2e910] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e911] [cursor=pointer]
+                - button "未列示" [ref=f2e912] [cursor=pointer]
+                - button "未列示" [ref=f2e913] [cursor=pointer]
+                - button "68" [ref=f2e914] [cursor=pointer]
+                - button "%" [ref=f2e915] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e916] [cursor=pointer]
+                - button "已报告值" [ref=f2e917] [cursor=pointer]
+              - row [ref=f2e918]:
+                - cell [ref=f2e919]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e920] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e921]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e922] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "血红蛋白稳定比例" [ref=f2e923] [cursor=pointer]
+                - button "对照组" [ref=f2e924] [cursor=pointer]
+                - button "第26周" [ref=f2e925] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e926] [cursor=pointer]
+                - button "未列示" [ref=f2e927] [cursor=pointer]
+                - button "未列示" [ref=f2e928] [cursor=pointer]
+                - button "64.5" [ref=f2e929] [cursor=pointer]
+                - button "%" [ref=f2e930] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e931] [cursor=pointer]
+                - button "已报告值" [ref=f2e932] [cursor=pointer]
+        - generic [ref=f2e933]:
+          - heading "FACIT疲劳量表变化｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301）" [level=3] [ref=f2e934]
+          - generic "组别图例" [ref=f2e935]:
+            - generic [ref=f2e936]: 治疗组
+            - generic [ref=f2e938]: 对照组
+          - img "FACIT疲劳量表变化｜拉武利尤单抗（ravulizumab） · Study 301（CHAMPION-301） 图形" [ref=f2e940]:
+            - img [ref=f2e942]:
+              - generic [ref=f2e944]:
+                - generic [ref=f2e945]: 分
+                - generic [ref=f2e946]: "0"
+                - generic [ref=f2e947]: "2"
+                - generic [ref=f2e948]: "4"
+                - generic [ref=f2e949]: "6"
+                - generic [ref=f2e950]: "8"
+                - generic [ref=f2e951]: "10"
+                - generic [ref=f2e952]: 治疗组
+                - generic [ref=f2e953]: 对照组
+                - generic [ref=f2e956]: "7.07"
+                - generic [ref=f2e957]: "6.4"
+            - button "查看数值 7.07 的数据依据" [ref=f2e958] [cursor=pointer]
+            - button "查看数值 6.4 的数据依据" [ref=f2e959] [cursor=pointer]
+          - table [ref=f2e961]:
+            - caption [ref=f2e962]: 疗效数据表
+            - rowgroup [ref=f2e963]:
+              - row [ref=f2e964]:
+                - columnheader "产品" [ref=f2e965]
+                - columnheader "试验" [ref=f2e966]
+                - columnheader "终点/事件" [ref=f2e967]
+                - columnheader "组别" [ref=f2e968]
+                - columnheader "时间点" [ref=f2e969]
+                - columnheader "分析人群" [ref=f2e970]
+                - columnheader "分子" [ref=f2e971]
+                - columnheader "分母" [ref=f2e972]
+                - columnheader "比较值" [ref=f2e973]
+                - columnheader "单位" [ref=f2e974]
+                - columnheader "口径提示" [ref=f2e975]
+                - columnheader "披露状态" [ref=f2e976]
+            - rowgroup [ref=f2e977]:
+              - row [ref=f2e978]:
+                - cell [ref=f2e979]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e980] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e981]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e982] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "FACIT疲劳量表变化" [ref=f2e983] [cursor=pointer]
+                - button "治疗组" [ref=f2e984] [cursor=pointer]
+                - button "第26周" [ref=f2e985] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e986] [cursor=pointer]
+                - button "未列示" [ref=f2e987] [cursor=pointer]
+                - button "未列示" [ref=f2e988] [cursor=pointer]
+                - button "7.07" [ref=f2e989] [cursor=pointer]
+                - button "分" [ref=f2e990] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e991] [cursor=pointer]
+                - button "已报告值" [ref=f2e992] [cursor=pointer]
+              - row [ref=f2e993]:
+                - cell [ref=f2e994]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f2e995] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f2e996]:
+                  - link "Study 301（CHAMPION-301）" [ref=f2e997] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "FACIT疲劳量表变化" [ref=f2e998] [cursor=pointer]
+                - button "对照组" [ref=f2e999] [cursor=pointer]
+                - button "第26周" [ref=f2e1000] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1001] [cursor=pointer]
+                - button "未列示" [ref=f2e1002] [cursor=pointer]
+                - button "未列示" [ref=f2e1003] [cursor=pointer]
+                - button "6.4" [ref=f2e1004] [cursor=pointer]
+                - button "分" [ref=f2e1005] [cursor=pointer]
+                - button "CHAMPION-301主要报告直接列示的两臂值；不跨试验比较分母" [ref=f2e1006] [cursor=pointer]
+                - button "已报告值" [ref=f2e1007] [cursor=pointer]
+        - generic [ref=f2e1008]:
+          - heading "输血避免比例｜可伐利单抗（crovalimab） · COMMODORE 2" [level=3] [ref=f2e1009]
+          - generic "组别图例" [ref=f2e1010]:
+            - generic [ref=f2e1011]: 治疗组
+            - generic [ref=f2e1013]: 对照组
+          - img "输血避免比例｜可伐利单抗（crovalimab） · COMMODORE 2 图形" [ref=f2e1015]:
+            - img [ref=f2e1017]:
+              - generic [ref=f2e1019]:
+                - generic [ref=f2e1020]: "%"
+                - generic [ref=f2e1021]: "0"
+                - generic [ref=f2e1022]: "20"
+                - generic [ref=f2e1023]: "40"
+                - generic [ref=f2e1024]: "60"
+                - generic [ref=f2e1025]: "80"
+                - generic [ref=f2e1026]: "100"
+                - generic [ref=f2e1027]: 治疗组
+                - generic [ref=f2e1028]: 对照组
+                - generic [ref=f2e1031]: "65.7"
+                - generic [ref=f2e1032]: "68.1"
+            - button "查看数值 65.7 的数据依据" [ref=f2e1033] [cursor=pointer]
+            - button "查看数值 68.1 的数据依据" [ref=f2e1034] [cursor=pointer]
+          - table [ref=f2e1036]:
+            - caption [ref=f2e1037]: 疗效数据表
+            - rowgroup [ref=f2e1038]:
+              - row [ref=f2e1039]:
+                - columnheader "产品" [ref=f2e1040]
+                - columnheader "试验" [ref=f2e1041]
+                - columnheader "终点/事件" [ref=f2e1042]
+                - columnheader "组别" [ref=f2e1043]
+                - columnheader "时间点" [ref=f2e1044]
+                - columnheader "分析人群" [ref=f2e1045]
+                - columnheader "分子" [ref=f2e1046]
+                - columnheader "分母" [ref=f2e1047]
+                - columnheader "比较值" [ref=f2e1048]
+                - columnheader "单位" [ref=f2e1049]
+                - columnheader "口径提示" [ref=f2e1050]
+                - columnheader "披露状态" [ref=f2e1051]
+            - rowgroup [ref=f2e1052]:
+              - row [ref=f2e1053]:
+                - cell [ref=f2e1054]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1055] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1056]:
+                  - link "COMMODORE 2" [ref=f2e1057] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "输血避免比例" [ref=f2e1058] [cursor=pointer]
+                - button "治疗组" [ref=f2e1059] [cursor=pointer]
+                - button "第24周" [ref=f2e1060] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1061] [cursor=pointer]
+                - button "88" [ref=f2e1062] [cursor=pointer]
+                - button "134" [ref=f2e1063] [cursor=pointer]
+                - button "65.7" [ref=f2e1064] [cursor=pointer]
+                - button "%" [ref=f2e1065] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1066] [cursor=pointer]
+                - button "已报告值" [ref=f2e1067] [cursor=pointer]
+              - row [ref=f2e1068]:
+                - cell [ref=f2e1069]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1070] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1071]:
+                  - link "COMMODORE 2" [ref=f2e1072] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "输血避免比例" [ref=f2e1073] [cursor=pointer]
+                - button "对照组" [ref=f2e1074] [cursor=pointer]
+                - button "第24周" [ref=f2e1075] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1076] [cursor=pointer]
+                - button "47" [ref=f2e1077] [cursor=pointer]
+                - button "69" [ref=f2e1078] [cursor=pointer]
+                - button "68.1" [ref=f2e1079] [cursor=pointer]
+                - button "%" [ref=f2e1080] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1081] [cursor=pointer]
+                - button "已报告值" [ref=f2e1082] [cursor=pointer]
+        - generic [ref=f2e1083]:
+          - heading "溶血控制比例｜可伐利单抗（crovalimab） · COMMODORE 2" [level=3] [ref=f2e1084]
+          - generic "组别图例" [ref=f2e1085]:
+            - generic [ref=f2e1086]: 治疗组
+            - generic [ref=f2e1088]: 对照组
+          - img "溶血控制比例｜可伐利单抗（crovalimab） · COMMODORE 2 图形" [ref=f2e1090]:
+            - img [ref=f2e1092]:
+              - generic [ref=f2e1094]:
+                - generic [ref=f2e1095]: "%"
+                - generic [ref=f2e1096]: "0"
+                - generic [ref=f2e1097]: "20"
+                - generic [ref=f2e1098]: "40"
+                - generic [ref=f2e1099]: "60"
+                - generic [ref=f2e1100]: "80"
+                - generic [ref=f2e1101]: "100"
+                - generic [ref=f2e1102]: 治疗组
+                - generic [ref=f2e1103]: 对照组
+                - generic [ref=f2e1106]: "79.3"
+                - generic [ref=f2e1107]: "79"
+            - button "查看数值 79.3 的数据依据" [ref=f2e1108] [cursor=pointer]
+            - button "查看数值 79 的数据依据" [ref=f2e1109] [cursor=pointer]
+          - table [ref=f2e1111]:
+            - caption [ref=f2e1112]: 疗效数据表
+            - rowgroup [ref=f2e1113]:
+              - row [ref=f2e1114]:
+                - columnheader "产品" [ref=f2e1115]
+                - columnheader "试验" [ref=f2e1116]
+                - columnheader "终点/事件" [ref=f2e1117]
+                - columnheader "组别" [ref=f2e1118]
+                - columnheader "时间点" [ref=f2e1119]
+                - columnheader "分析人群" [ref=f2e1120]
+                - columnheader "分子" [ref=f2e1121]
+                - columnheader "分母" [ref=f2e1122]
+                - columnheader "比较值" [ref=f2e1123]
+                - columnheader "单位" [ref=f2e1124]
+                - columnheader "口径提示" [ref=f2e1125]
+                - columnheader "披露状态" [ref=f2e1126]
+            - rowgroup [ref=f2e1127]:
+              - row [ref=f2e1128]:
+                - cell [ref=f2e1129]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1130] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1131]:
+                  - link "COMMODORE 2" [ref=f2e1132] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "溶血控制比例" [ref=f2e1133] [cursor=pointer]
+                - button "治疗组" [ref=f2e1134] [cursor=pointer]
+                - button "第24周" [ref=f2e1135] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1136] [cursor=pointer]
+                - button "未列示" [ref=f2e1137] [cursor=pointer]
+                - button "未列示" [ref=f2e1138] [cursor=pointer]
+                - button "79.3" [ref=f2e1139] [cursor=pointer]
+                - button "%" [ref=f2e1140] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1141] [cursor=pointer]
+                - button "已报告值" [ref=f2e1142] [cursor=pointer]
+              - row [ref=f2e1143]:
+                - cell [ref=f2e1144]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1145] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1146]:
+                  - link "COMMODORE 2" [ref=f2e1147] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "溶血控制比例" [ref=f2e1148] [cursor=pointer]
+                - button "对照组" [ref=f2e1149] [cursor=pointer]
+                - button "第24周" [ref=f2e1150] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1151] [cursor=pointer]
+                - button "未列示" [ref=f2e1152] [cursor=pointer]
+                - button "未列示" [ref=f2e1153] [cursor=pointer]
+                - button "79" [ref=f2e1154] [cursor=pointer]
+                - button "%" [ref=f2e1155] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1156] [cursor=pointer]
+                - button "已报告值" [ref=f2e1157] [cursor=pointer]
+        - generic [ref=f2e1158]:
+          - heading "突破性溶血比例｜可伐利单抗（crovalimab） · COMMODORE 2" [level=3] [ref=f2e1159]
+          - generic "组别图例" [ref=f2e1160]:
+            - generic [ref=f2e1161]: 治疗组
+            - generic [ref=f2e1163]: 对照组
+          - img "突破性溶血比例｜可伐利单抗（crovalimab） · COMMODORE 2 图形" [ref=f2e1165]:
+            - img [ref=f2e1167]:
+              - generic [ref=f2e1169]:
+                - generic [ref=f2e1170]: "%"
+                - generic [ref=f2e1171]: "0"
+                - generic [ref=f2e1172]: "20"
+                - generic [ref=f2e1173]: "40"
+                - generic [ref=f2e1174]: "60"
+                - generic [ref=f2e1175]: "80"
+                - generic [ref=f2e1176]: "100"
+                - generic [ref=f2e1177]: 治疗组
+                - generic [ref=f2e1178]: 对照组
+                - generic [ref=f2e1181]: "10.4"
+                - generic [ref=f2e1182]: "14.5"
+            - button "查看数值 10.4 的数据依据" [ref=f2e1183] [cursor=pointer]
+            - button "查看数值 14.5 的数据依据" [ref=f2e1184] [cursor=pointer]
+          - table [ref=f2e1186]:
+            - caption [ref=f2e1187]: 疗效数据表
+            - rowgroup [ref=f2e1188]:
+              - row [ref=f2e1189]:
+                - columnheader "产品" [ref=f2e1190]
+                - columnheader "试验" [ref=f2e1191]
+                - columnheader "终点/事件" [ref=f2e1192]
+                - columnheader "组别" [ref=f2e1193]
+                - columnheader "时间点" [ref=f2e1194]
+                - columnheader "分析人群" [ref=f2e1195]
+                - columnheader "分子" [ref=f2e1196]
+                - columnheader "分母" [ref=f2e1197]
+                - columnheader "比较值" [ref=f2e1198]
+                - columnheader "单位" [ref=f2e1199]
+                - columnheader "口径提示" [ref=f2e1200]
+                - columnheader "披露状态" [ref=f2e1201]
+            - rowgroup [ref=f2e1202]:
+              - row [ref=f2e1203]:
+                - cell [ref=f2e1204]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1205] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1206]:
+                  - link "COMMODORE 2" [ref=f2e1207] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "突破性溶血比例" [ref=f2e1208] [cursor=pointer]
+                - button "治疗组" [ref=f2e1209] [cursor=pointer]
+                - button "第24周" [ref=f2e1210] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1211] [cursor=pointer]
+                - button "14" [ref=f2e1212] [cursor=pointer]
+                - button "134" [ref=f2e1213] [cursor=pointer]
+                - button "10.4" [ref=f2e1214] [cursor=pointer]
+                - button "%" [ref=f2e1215] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1216] [cursor=pointer]
+                - button "已报告值" [ref=f2e1217] [cursor=pointer]
+              - row [ref=f2e1218]:
+                - cell [ref=f2e1219]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1220] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1221]:
+                  - link "COMMODORE 2" [ref=f2e1222] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "突破性溶血比例" [ref=f2e1223] [cursor=pointer]
+                - button "对照组" [ref=f2e1224] [cursor=pointer]
+                - button "第24周" [ref=f2e1225] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1226] [cursor=pointer]
+                - button "10" [ref=f2e1227] [cursor=pointer]
+                - button "69" [ref=f2e1228] [cursor=pointer]
+                - button "14.5" [ref=f2e1229] [cursor=pointer]
+                - button "%" [ref=f2e1230] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1231] [cursor=pointer]
+                - button "已报告值" [ref=f2e1232] [cursor=pointer]
+        - generic [ref=f2e1233]:
+          - heading "血红蛋白稳定比例｜可伐利单抗（crovalimab） · COMMODORE 2" [level=3] [ref=f2e1234]
+          - generic "组别图例" [ref=f2e1235]:
+            - generic [ref=f2e1236]: 治疗组
+            - generic [ref=f2e1238]: 对照组
+          - img "血红蛋白稳定比例｜可伐利单抗（crovalimab） · COMMODORE 2 图形" [ref=f2e1240]:
+            - img [ref=f2e1242]:
+              - generic [ref=f2e1244]:
+                - generic [ref=f2e1245]: "%"
+                - generic [ref=f2e1246]: "0"
+                - generic [ref=f2e1247]: "20"
+                - generic [ref=f2e1248]: "40"
+                - generic [ref=f2e1249]: "60"
+                - generic [ref=f2e1250]: "80"
+                - generic [ref=f2e1251]: "100"
+                - generic [ref=f2e1252]: 治疗组
+                - generic [ref=f2e1253]: 对照组
+                - generic [ref=f2e1256]: "63.4"
+                - generic [ref=f2e1257]: "60.9"
+            - button "查看数值 63.4 的数据依据" [ref=f2e1258] [cursor=pointer]
+            - button "查看数值 60.9 的数据依据" [ref=f2e1259] [cursor=pointer]
+          - table [ref=f2e1261]:
+            - caption [ref=f2e1262]: 疗效数据表
+            - rowgroup [ref=f2e1263]:
+              - row [ref=f2e1264]:
+                - columnheader "产品" [ref=f2e1265]
+                - columnheader "试验" [ref=f2e1266]
+                - columnheader "终点/事件" [ref=f2e1267]
+                - columnheader "组别" [ref=f2e1268]
+                - columnheader "时间点" [ref=f2e1269]
+                - columnheader "分析人群" [ref=f2e1270]
+                - columnheader "分子" [ref=f2e1271]
+                - columnheader "分母" [ref=f2e1272]
+                - columnheader "比较值" [ref=f2e1273]
+                - columnheader "单位" [ref=f2e1274]
+                - columnheader "口径提示" [ref=f2e1275]
+                - columnheader "披露状态" [ref=f2e1276]
+            - rowgroup [ref=f2e1277]:
+              - row [ref=f2e1278]:
+                - cell [ref=f2e1279]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1280] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1281]:
+                  - link "COMMODORE 2" [ref=f2e1282] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "血红蛋白稳定比例" [ref=f2e1283] [cursor=pointer]
+                - button "治疗组" [ref=f2e1284] [cursor=pointer]
+                - button "第24周" [ref=f2e1285] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1286] [cursor=pointer]
+                - button "85" [ref=f2e1287] [cursor=pointer]
+                - button "134" [ref=f2e1288] [cursor=pointer]
+                - button "63.4" [ref=f2e1289] [cursor=pointer]
+                - button "%" [ref=f2e1290] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1291] [cursor=pointer]
+                - button "已报告值" [ref=f2e1292] [cursor=pointer]
+              - row [ref=f2e1293]:
+                - cell [ref=f2e1294]:
+                  - link "可伐利单抗（crovalimab）" [ref=f2e1295] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f2e1296]:
+                  - link "COMMODORE 2" [ref=f2e1297] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "血红蛋白稳定比例" [ref=f2e1298] [cursor=pointer]
+                - button "对照组" [ref=f2e1299] [cursor=pointer]
+                - button "第24周" [ref=f2e1300] [cursor=pointer]
+                - button "来源报告分析集；治疗与对照分母按来源分别保留" [ref=f2e1301] [cursor=pointer]
+                - button "42" [ref=f2e1302] [cursor=pointer]
+                - button "69" [ref=f2e1303] [cursor=pointer]
+                - button "60.9" [ref=f2e1304] [cursor=pointer]
+                - button "%" [ref=f2e1305] [cursor=pointer]
+                - button "FDA COMMODORE 2审评表直接列示；主要疗效分母134/69与随机化人数135/69按来源口径分开" [ref=f2e1306] [cursor=pointer]
+                - button "已报告值" [ref=f2e1307] [cursor=pointer]
+  - contentinfo [ref=f2e1308]:
+    - generic [ref=f2e1309]: 康哲药业临床试验结果比较；数据截止 2026-07-31。

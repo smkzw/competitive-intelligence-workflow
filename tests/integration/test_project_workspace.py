@@ -66,7 +66,7 @@ EXPECTED_FILES = {
 }
 
 
-def test_project_create_builds_the_complete_v12_workspace(tmp_path: Path) -> None:
+def test_project_create_builds_the_complete_v13_workspace(tmp_path: Path) -> None:
     project_root = tmp_path / "慢性鼻窦炎竞品项目"
     result = _run(
         "project",
@@ -78,7 +78,7 @@ def test_project_create_builds_the_complete_v12_workspace(tmp_path: Path) -> Non
         "--reports",
         "A,B,C",
         "--outputs",
-        "html,pdf,html-ppt,pptx",
+        "html",
         "--timezone",
         "Asia/Shanghai",
         "--cutoff",
@@ -113,7 +113,7 @@ def test_project_create_persists_timezone_and_cutoff_without_guessing(
         "--reports",
         "B",
         "--outputs",
-        "pdf",
+        "html",
         "--timezone",
         "America/New_York",
         "--cutoff",
@@ -128,7 +128,7 @@ def test_project_create_persists_timezone_and_cutoff_without_guessing(
     contract = project["project_contract_versions"][0]
     assert contract["timezone"] == "America/New_York"
     assert contract["data_cutoff"] == "2024-02-29T23:59:59.999999-05:00"
-    assert contract["outputs"] == ["html", "pdf"]
+    assert contract["outputs"] == ["html"]
     assert "root" not in project
     assert str(project_root) not in json.dumps(project, ensure_ascii=False)
 
@@ -143,7 +143,7 @@ def test_project_verify_rejects_missing_structure_absolute_data_and_broken_datab
     contract = create_project_contract(
         indication="特应性皮炎",
         reports=["A"],
-        outputs=[],
+        outputs=["html"],
         cutoff="2026-08-10",
     )
 

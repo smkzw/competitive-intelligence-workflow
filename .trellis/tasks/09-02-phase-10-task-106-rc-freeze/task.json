@@ -1,0 +1,42 @@
+{
+  "id": "phase-10-task-106-rc-freeze",
+  "name": "phase-10-task-106-rc-freeze",
+  "title": "Phase 10 Task 10.6：v1.3 重基线、三门户重构与 HTML-only RC",
+  "description": "按批准的 v1.3 合同完成 R0-R6：受控重基线、研究与证据图重构、A/B/C 三门户、统一 Skill 包与三宿主、24 个真实门户、恢复演练及最终 HTML-only RC。",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "Task 10.6 only：R0 provenance 与真实全仓质量门；R1 canonical v1.3；R2 入口、来源、publication、补件、宇宙闭包、双恢复、独立复核和语义归并；R3 三个独立 HTML 门户；R4 单一公共 Skill、HTML-only bundle 与 Codex/Hermes/OMP 适配；R5 八适应症乘 A/B/C 的 24 门户；R6 source closure、恢复、独立验收和 RC freeze。真实旧根在再次授权前保持零接触。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-02",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "09-05-r2-capability-execution-gate",
+    "09-05-r22-universe-closure-runtime",
+    "09-05-r23-publication-manual-product-gate"
+  ],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "docs/specs/competitive-intelligence-workflow-design-v1.3.md",
+    "plans/competitive-intelligence-workflow-roadmap-v1.3.md",
+    "plans/codex_execution_ci-rebaseline-rebuild-v3.md",
+    "reviews/codex_v13_implementation_gap_matrix_20260904.md",
+    "tools/build_bundle.py",
+    "tools/verify_bundle.py",
+    "tools/build_recovery_package.py",
+    "tools/run_acceptance.py",
+    "tests/hosts/test_fresh_install.py",
+    "tests/hosts/test_real_host_smoke.py",
+    "tests/migration/test_recovery_rehearsal.py",
+    "docs/acceptance/final-report.md"
+  ],
+  "notes": "2026-09-02 11:46 CST 无损暂停；2026-09-04 经用户批准按 v1.3 与执行计划 v3 重基线，不从旧计划原位续跑。既有 Skill 和 ZCode 文档仅为待核验输入。当前先完成 R0/R1，未创建 RC commit/tag，未写最终 acceptance root，未触碰真实旧根；任何情况下不得提前写 RC_FROZEN。"
+}

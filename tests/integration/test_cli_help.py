@@ -38,7 +38,13 @@ def test_cli_help_is_chinese_native_and_exposes_only_the_frozen_catalog() -> Non
 
     expected_help = {
         ("package", "--help"): ("verify", "核验安装包"),
-        ("project", "--help"): ("create", "verify", "run", "创建竞品调研项目"),
+        ("project", "--help"): (
+            "create",
+            "verify",
+            "run",
+            "accept-visual",
+            "创建竞品调研项目",
+        ),
         ("capability", "--help"): ("preflight", "检查所选任务所需能力"),
         ("fixture", "--help"): ("run", "运行固定验收案例"),
     }

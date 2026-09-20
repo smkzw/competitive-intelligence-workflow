@@ -1,0 +1,6 @@
+interface:
+  display_name: "视觉策划"
+  short_description: "为 HTML 门户生成绑定康哲合同与锁定快照的视觉策划书，供工作流自动调用"
+  default_prompt: "运行 $visual-design-director 的受控内部能力。"
+policy:
+  allow_implicit_invocation: false

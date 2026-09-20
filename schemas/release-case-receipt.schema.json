@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/release-case-receipt.schema.json",
+  "title": "required-v12 发布案例 owner-stage 回执",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_kind", "case_id", "release_scope", "status",
+    "owner_task", "catalog_sha256", "case_digest", "package_manifest_sha256",
+    "release_candidate_sha256", "run_id", "session_id", "input_sha256",
+    "artifact_sha256", "verdict_sha256", "project_contract_sha256",
+    "not_applicable_reason_zh", "issued_at", "receipt_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_kind": {"const": "release-case-v1"},
+    "case_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "release_scope": {"const": "site_html_v1"},
+    "status": {
+      "enum": ["accepted", "pending_future_owner", "not_applicable", "rejected"]
+    },
+    "owner_task": {"type": "string", "minLength": 1},
+    "catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "case_digest": {"$ref": "#/$defs/sha256"},
+    "package_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "release_candidate_sha256": {"$ref": "#/$defs/sha256"},
+    "run_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "input_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_sha256": {
+      "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "verdict_sha256": {"$ref": "#/$defs/sha256"},
+    "project_contract_sha256": {
+      "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "not_applicable_reason_zh": {
+      "oneOf": [{"type": "string", "minLength": 1}, {"type": "null"}]
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "receipt_digest": {"$ref": "#/$defs/sha256"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "accepted"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "artifact_sha256": {"$ref": "#/$defs/sha256"},
+          "not_applicable_reason_zh": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "not_applicable"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "artifact_sha256": {"type": "null"},
+          "project_contract_sha256": {"$ref": "#/$defs/sha256"},
+          "not_applicable_reason_zh": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

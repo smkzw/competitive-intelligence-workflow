@@ -1,0 +1,11 @@
+Task 6.9 REGRESSION
+
+- 最终 B 类 Chromium/WebKit 浏览器验收：63 passed。
+- 最终 B 门户、共享图表、报告集成与设计清单定向回归：321 passed。
+- 本轮前的广泛回归基线：1855 passed；最终改动限定为 B 排版、共享坐标轴字号和纵轴范围，并由上述定向回归覆盖。
+- Ruff：B 渲染器、门户入口与最终浏览器测试通过。
+- strict mypy：`report_b.py` 通过。
+- Node 语法检查：共享 `charts.js` 与 B 交互脚本通过。
+- 静态资源清单 SHA-256/字节数与打包资源一致。
+- `hermes_workflow_guard.py audit-execution`：通过。
+- `hermes_workflow_guard.py validate-conference`：通过。

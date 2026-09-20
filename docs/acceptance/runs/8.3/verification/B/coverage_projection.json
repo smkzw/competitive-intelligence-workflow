@@ -1,0 +1,246 @@
+{
+  "report": "B",
+  "expected_page_count": 21,
+  "registry_page_count": 21,
+  "covered_page_ids": [
+    "overview",
+    "efficacy",
+    "longitudinal-results",
+    "safety",
+    "baseline-overview",
+    "baseline-demographics",
+    "baseline-disease-context",
+    "baseline-severity",
+    "disposition-overview",
+    "participant-flow",
+    "adherence",
+    "loss-exit",
+    "screen-failure",
+    "rescue-treatment",
+    "prohibited-medication",
+    "plan-deviation",
+    "trial-exposure-context",
+    "subgroups-supporting-evidence",
+    "product-trial-profiles",
+    "efficacy-safety-matrix",
+    "evidence-limitations"
+  ],
+  "missing_page_ids": [],
+  "unexpected_bookmark_titles": [],
+  "pages": [
+    {
+      "page_responsibility_id": "overview",
+      "title_zh": "首页",
+      "covered": true,
+      "evidence": [
+        "bookmark:overview",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "efficacy",
+      "title_zh": "疗效",
+      "covered": true,
+      "evidence": [
+        "bookmark:efficacy",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "longitudinal-results",
+      "title_zh": "纵向结果",
+      "covered": true,
+      "evidence": [
+        "bookmark:longitudinal-results",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "safety",
+      "title_zh": "安全性",
+      "covered": true,
+      "evidence": [
+        "bookmark:safety",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "baseline-overview",
+      "title_zh": "基线与人群总览",
+      "covered": true,
+      "evidence": [
+        "bookmark:baseline-overview",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "baseline-demographics",
+      "title_zh": "人口学",
+      "covered": true,
+      "evidence": [
+        "bookmark:baseline-demographics",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "baseline-disease-context",
+      "title_zh": "疾病语境",
+      "covered": true,
+      "evidence": [
+        "bookmark:baseline-disease-context",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "baseline-severity",
+      "title_zh": "基线疾病严重程度",
+      "covered": true,
+      "evidence": [
+        "bookmark:baseline-severity",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "disposition-overview",
+      "title_zh": "试验完成情况总览",
+      "covered": true,
+      "evidence": [
+        "bookmark:disposition-overview",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "participant-flow",
+      "title_zh": "受试者流转",
+      "covered": true,
+      "evidence": [
+        "bookmark:participant-flow",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "adherence",
+      "title_zh": "依从性",
+      "covered": true,
+      "evidence": [
+        "bookmark:adherence",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "loss-exit",
+      "title_zh": "失访与退出",
+      "covered": true,
+      "evidence": [
+        "bookmark:loss-exit",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "screen-failure",
+      "title_zh": "筛败与原因",
+      "covered": true,
+      "evidence": [
+        "bookmark:screen-failure",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "rescue-treatment",
+      "title_zh": "补救治疗",
+      "covered": true,
+      "evidence": [
+        "bookmark:rescue-treatment",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "prohibited-medication",
+      "title_zh": "禁用药使用",
+      "covered": true,
+      "evidence": [
+        "bookmark:prohibited-medication",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "plan-deviation",
+      "title_zh": "方案偏离",
+      "covered": true,
+      "evidence": [
+        "bookmark:plan-deviation",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "trial-exposure-context",
+      "title_zh": "试验与暴露语境",
+      "covered": true,
+      "evidence": [
+        "bookmark:trial-exposure-context",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "subgroups-supporting-evidence",
+      "title_zh": "亚组与支持证据",
+      "covered": true,
+      "evidence": [
+        "bookmark:subgroups-supporting-evidence",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "product-trial-profiles",
+      "title_zh": "产品与试验档案",
+      "covered": true,
+      "evidence": [
+        "bookmark:product-trial-profiles",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "efficacy-safety-matrix",
+      "title_zh": "疗效与安全性矩阵",
+      "covered": true,
+      "evidence": [
+        "bookmark:efficacy-safety-matrix",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "evidence-limitations",
+      "title_zh": "研究依据与局限",
+      "covered": true,
+      "evidence": [
+        "bookmark:evidence-limitations",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    }
+  ],
+  "forbidden_markers_found": [],
+  "has_continued_table_marker": true,
+  "differences_approved": false,
+  "ok": true
+}

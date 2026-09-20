@@ -7,8 +7,9 @@ from pathlib import Path
 
 import pytest
 
+from ci_workflow.application.capability_preflight import StaticCapabilityProbe
 from ci_workflow.application.project_service import create_project_workspace
-from ci_workflow.application.run_service import run_project
+from ci_workflow.application.run_service import MANIFEST_RELATIVE_PATH, run_project
 from ci_workflow.application.source_research_service import (
     ResearchPackageError,
     compute_research_content_digest,
@@ -148,7 +149,7 @@ def test_fresh_a_package_builds_real_source_fact_claim_snapshot_lineage(
         encoding="utf-8",
     )
 
-    result = run_project(project)
+    result = run_project(project, capability_probe=StaticCapabilityProbe())
 
     assert result.outcome == "completed"
     assert {
@@ -159,10 +160,15 @@ def test_fresh_a_package_builds_real_source_fact_claim_snapshot_lineage(
         "resolve",
         "gate:A",
         "snapshot:A",
-        "scientific_qc:A",
         "analyze:A",
         "format:A",
     } <= set(result.node_summary)
+    assert "scientific_qc:A" not in result.node_summary
+    run_manifest = json.loads(
+        (project / MANIFEST_RELATIVE_PATH).read_text(encoding="utf-8")
+    )
+    assert run_manifest["report_states"] == {"A": "rendered_unreviewed"}
+    assert run_manifest["scientific_review_portal_bindings"]["A"]["site_total_bytes"] > 0
     manifest = json.loads(
         (project / "reports/A/v1/html.manifest.json").read_text(encoding="utf-8")
     )

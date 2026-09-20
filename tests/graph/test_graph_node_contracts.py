@@ -76,8 +76,20 @@ _TYPED_OUTPUT_FIXTURES: dict[str, dict[str, object]] = {
         }
     },
     "analyze": {"pages": ["page_1"]},
-    "format": {"format": "html", "artifact_id": "art_1"},
-    "acceptance": {"acceptance_verdict": "passed"},
+    "format": {
+        "format": "html",
+        "artifact_id": "art_1",
+        "site_relative_path": "reports/A/v1/html",
+        "manifest_relative_path": "reports/A/v1/html.manifest.json",
+        "candidate_artifact_digest": "b" * 64,
+        "visual_plan_digest": "a" * 64,
+    },
+    "acceptance": {
+        "acceptance_verdict": "passed",
+        "render_evidence": {"rendered": True},
+        "beautification_loop": {"round": 1},
+        "visual_verdict": {"verdict": "accepted"},
+    },
 }
 
 # 每个声明输出类型的非法翻转值（字面）
@@ -286,7 +298,14 @@ def test_ingest_extract_resolve_and_gate_nodes_declare_complete_contracts(
     with pytest.raises(ValueError, match="输出类型"):
         executor_a.complete_node(
             "format",
-            outputs={"format": "unknown_format", "artifact_id": "art_1"},
+            outputs={
+                "format": "unknown_format",
+                "artifact_id": "art_1",
+                "site_relative_path": "reports/A/v1/html",
+                "manifest_relative_path": "reports/A/v1/html.manifest.json",
+                "candidate_artifact_digest": "b" * 64,
+                "visual_plan_digest": "a" * 64,
+            },
             input_digest="format:A:1",
             report_kind="A",
             project_id="p_gt08",
@@ -565,12 +584,26 @@ def test_report_branches_share_evidence_without_sharing_gate_state(
     )
     complete(
         "format", report_kind="A",
-        outputs={"format": "html", "artifact_id": "art_A_html"},
+        outputs={
+            "format": "html",
+            "artifact_id": "art_A_html",
+            "site_relative_path": "reports/A/v1/html",
+            "manifest_relative_path": "reports/A/v1/html.manifest.json",
+            "candidate_artifact_digest": "b" * 64,
+            "visual_plan_digest": "a" * 64,
+        },
         input_digest="format:A:html:1",
     )
     complete(
         "format", report_kind="B",
-        outputs={"format": "html", "artifact_id": "art_B_html"},
+        outputs={
+            "format": "html",
+            "artifact_id": "art_B_html",
+            "site_relative_path": "reports/B/v1/html",
+            "manifest_relative_path": "reports/B/v1/html.manifest.json",
+            "candidate_artifact_digest": "d" * 64,
+            "visual_plan_digest": "c" * 64,
+        },
         input_digest="format:B:html:1",
     )
     state = executor.state()

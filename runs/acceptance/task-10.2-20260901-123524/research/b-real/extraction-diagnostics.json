@@ -1,0 +1,49 @@
+{
+  "cutoff": "2026-07-31T23:59:59+08:00",
+  "numeric_missingness": {
+    "automated_checks": {
+      "all_efficacy_safety_arms_map_to_registry_or_source_arm_identity": true,
+      "all_view_rows_have_nonnull_source_url": true,
+      "missing_numeric_rows_fail_closed_without_invented_values": true,
+      "missing_raw_values_not_numeric_only": true,
+      "per_product_audits_nonempty": true,
+      "per_trial_audits_nonempty": true,
+      "view_row_ids_unique": true,
+      "zero_values_use_reported_zero_state": true
+    },
+    "missing_rows": 79,
+    "nonconcrete_rows_with_numeric_fields": 0,
+    "rows_examined": 275
+  },
+  "post_extraction_assertions": {
+    "drug_name_not_required": true,
+    "no_cross_trial_composite": true,
+    "no_fake_links": true,
+    "no_fake_zero_for_missing": true,
+    "post_cutoff_facts_not_admitted": true,
+    "source_ids_reference_inventory_after_rebuild": true
+  },
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "semantic_checks": [
+    {
+      "action": "retain source-reported arm values",
+      "meaning": "efficacy and safety values are direct source values",
+      "not_equivalent_to": "browser-side derived comparison",
+      "source_field": "official review or primary report table"
+    },
+    {
+      "action": "keep danicopan efficacy and safety populations separate",
+      "meaning": "efficacy interim N=42/21 versus safety N=57/29",
+      "not_equivalent_to": "one common denominator",
+      "source_field": "FDA Voydeya snapshot"
+    },
+    {
+      "action": "keep crovalimab efficacy denominator 134/69 separate from randomized 135/69",
+      "meaning": "FDA table analysis population",
+      "not_equivalent_to": "randomized denominator substitution",
+      "source_field": "FDA Piasky integrated review"
+    }
+  ]
+}

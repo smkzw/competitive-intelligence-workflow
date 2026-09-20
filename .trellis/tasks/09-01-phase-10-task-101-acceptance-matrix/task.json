@@ -1,0 +1,38 @@
+{
+  "id": "phase-10-task-101-acceptance-matrix",
+  "name": "phase-10-task-101-acceptance-matrix",
+  "title": "Phase 10 Task 10.1：固定正负基准矩阵",
+  "description": "建立内容寻址的首版全量验收 catalog、full-matrix-v1 和 required-v12 正负场景，作为后续真实验收、RC、恢复和切换的唯一机器入口。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 10.1 only：验收 catalog、脱敏输入包、场景不变量、owner/scope/receipt 合同、确定性测试与中文矩阵说明；首版只要求站点式 HTML。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-01",
+  "completedAt": "2026-09-01T12:20:07+08:00",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "schemas/acceptance-catalog.schema.json",
+    "fixtures/acceptance/catalog.yaml",
+    "fixtures/acceptance/full-matrix-v1",
+    "fixtures/acceptance/required-v12",
+    "tests/acceptance/test_fixture_catalog.py",
+    "docs/acceptance/matrix.md"
+  ],
+  "notes": "ADR 0013 已批准首版站点式 HTML 为唯一必选格式；原计划的 PDF、HTML-PPT、PPTX 八项确认和四格式矩阵无损延后，不得成为 Task 10.1 阻断项。",
+  "meta": {
+    "phase": 10,
+    "task": "10.1",
+    "release_scope": "site_html_v1",
+    "superseding_decision": "docs/decisions/0013-site-first-v1-delivery-scope.md"
+  }
+}

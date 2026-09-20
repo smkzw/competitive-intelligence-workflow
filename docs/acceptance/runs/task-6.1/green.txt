@@ -1,0 +1,8 @@
+Task 6.1 GREEN 记录（2026-08-29）
+
+命令：
+uv run pytest -q tests/reports/test_study_role_policy.py tests/reports/b/test_trial_roles.py tests/reports/b/test_endpoint_compatibility.py
+
+结果：34 passed in 0.30s。
+
+最终增加的对抗边界包括：非 NCT 论文角色失败关闭、未知终点不得借构念并桶、邻近时间点保留差异标签、Pydantic model_copy 未知字段失败关闭、B 早期与四类支持证据不丢失、关键 III 期延伸/亚组/事后/RWE 不得进入核心、相同适用范围的冲突角色规则拒绝加载。

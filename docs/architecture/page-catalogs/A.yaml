@@ -123,12 +123,3 @@ pages:
     complete_table: true
     filter_profiles: [a-history]
     evidence_drawer_profile: common-clinical
-  - id: evidence-limitations
-    route: /a/evidence-limitations
-    title: 研究依据与局限
-    navigation_group: 观察与依据
-    responsibility: "只呈现影响医学解释的来源、方法与简洁局限；检索尝试和技术诊断留在项目记录。"
-    visuals: [来源构成图, 披露状态矩阵]
-    complete_table: true
-    filter_profiles: [a-evidence]
-    evidence_drawer_profile: common-clinical

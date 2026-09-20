@@ -1,0 +1,147 @@
+{
+  "report": "A",
+  "expected_page_count": 12,
+  "registry_page_count": 12,
+  "covered_page_ids": [
+    "overview",
+    "landscape",
+    "product-overview",
+    "clinical-portfolio",
+    "efficacy",
+    "safety",
+    "matrix",
+    "regulatory",
+    "companies-transactions",
+    "patents-protection",
+    "historical-edge",
+    "evidence-limitations"
+  ],
+  "missing_page_ids": [],
+  "unexpected_bookmark_titles": [],
+  "pages": [
+    {
+      "page_responsibility_id": "overview",
+      "title_zh": "首页",
+      "covered": true,
+      "evidence": [
+        "bookmark:overview",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "landscape",
+      "title_zh": "竞争格局",
+      "covered": true,
+      "evidence": [
+        "bookmark:landscape",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "product-overview",
+      "title_zh": "产品总览",
+      "covered": true,
+      "evidence": [
+        "bookmark:product-overview",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "clinical-portfolio",
+      "title_zh": "临床开发组合",
+      "covered": true,
+      "evidence": [
+        "bookmark:clinical-portfolio",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "efficacy",
+      "title_zh": "疗效",
+      "covered": true,
+      "evidence": [
+        "bookmark:efficacy",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "safety",
+      "title_zh": "安全性",
+      "covered": true,
+      "evidence": [
+        "bookmark:safety",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "matrix",
+      "title_zh": "疗效与安全性矩阵",
+      "covered": true,
+      "evidence": [
+        "bookmark:matrix",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "regulatory",
+      "title_zh": "中国与全球监管",
+      "covered": true,
+      "evidence": [
+        "bookmark:regulatory",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "companies-transactions",
+      "title_zh": "企业与交易",
+      "covered": true,
+      "evidence": [
+        "bookmark:companies-transactions",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "patents-protection",
+      "title_zh": "专利与保护",
+      "covered": true,
+      "evidence": [
+        "bookmark:patents-protection",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "historical-edge",
+      "title_zh": "历史与边缘观察",
+      "covered": true,
+      "evidence": [
+        "bookmark:historical-edge",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "evidence-limitations",
+      "title_zh": "研究依据与局限",
+      "covered": true,
+      "evidence": [
+        "bookmark:evidence-limitations",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    }
+  ],
+  "forbidden_markers_found": [],
+  "has_continued_table_marker": true,
+  "differences_approved": false,
+  "ok": true
+}

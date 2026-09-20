@@ -1,0 +1,755 @@
+{
+  "acquired_at": "2026-09-01T14:30:00+08:00",
+  "cutoff": "2026-07-31T23:59:59+08:00",
+  "diagnoses": [
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "safety",
+      "field": "teae",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "safety",
+      "field": "aesi",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "safety",
+      "field": "sae",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "safety",
+      "field": "aesi",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "safety",
+      "field": "aesi",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "baseline",
+      "field": "baseline_hgb_actual",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "baseline",
+      "field": "baseline_hgb_actual",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "major_protocol_deviation",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation_leading_to_exclusion",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "source_other",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "major_protocol_deviation",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "protocol_deviation_leading_to_exclusion",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "source_other",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-treatment",
+      "domain": "disposition",
+      "field": "study_withdrawal_reason",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": "apply-control",
+      "domain": "disposition",
+      "field": "study_withdrawal_reason",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04558918"
+    },
+    {
+      "arm_id": null,
+      "domain": "disposition",
+      "field": "screened",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": null,
+      "domain": "disposition",
+      "field": "screen_failure",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "major_protocol_deviation",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation_leading_to_exclusion",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "source_other",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "treatment_discontinuation_reason",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "study_withdrawal_reason",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "appoint-treatment",
+      "domain": "disposition",
+      "field": "adherence",
+      "product_id": "iptacopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04820530"
+    },
+    {
+      "arm_id": "peg-treatment",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "peg-control",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "completed_treatment",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "completed_study",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "treatment_discontinued",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "study_withdrawal",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "completed_treatment",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "completed_study",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "treatment_discontinued",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "study_withdrawal",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "rav-treatment",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "rav-control",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "crov-treatment",
+      "domain": "disposition",
+      "field": "completed_study",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-treatment",
+      "domain": "disposition",
+      "field": "study_withdrawal",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-treatment",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-control",
+      "domain": "disposition",
+      "field": "completed_study",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-control",
+      "domain": "disposition",
+      "field": "study_withdrawal",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-control",
+      "domain": "disposition",
+      "field": "lost_to_follow_up",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "peg-treatment",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "peg-treatment",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "peg-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "peg-control",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "peg-control",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "peg-control",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "pegcetacoplan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct03500549"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "dani-control",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "danicopan",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04469465"
+    },
+    {
+      "arm_id": "rav-treatment",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "rav-treatment",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "rav-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "rav-control",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "rav-control",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "rav-control",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "ravulizumab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct02946463"
+    },
+    {
+      "arm_id": "crov-treatment",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-treatment",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-treatment",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-control",
+      "domain": "disposition",
+      "field": "rescue_treatment",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-control",
+      "domain": "disposition",
+      "field": "prohibited_medication",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "arm_id": "crov-control",
+      "domain": "disposition",
+      "field": "protocol_deviation",
+      "product_id": "crovalimab",
+      "reason": "官方路线成功访问但公开材料未列可核验数值；不推断为零",
+      "state": "not_publicly_disclosed",
+      "trial_id": "nct04434092"
+    },
+    {
+      "field": "universe",
+      "issue_id": "excluded-access2",
+      "not_technical_failure": true,
+      "reason": "NCT05131204 terminated; insufficient complete comparable key evidence by cutoff",
+      "resolution_state": "blocked_excluded"
+    },
+    {
+      "field": "universe",
+      "issue_id": "excluded-bcx9930",
+      "not_technical_failure": true,
+      "reason": "NCT05116787 phase 2 halted/terminated; no pivotal late-stage comparator evidence by cutoff",
+      "resolution_state": "blocked_excluded"
+    }
+  ],
+  "global_checks": {
+    "missing_numeric_rows_fail_closed_without_invented_values": true,
+    "missing_raw_values_not_numeric_only": true,
+    "per_product_and_trial_audit_present": true,
+    "technical_failures_separate_from_public_missingness": true,
+    "zero_values_use_reported_zero_state": true
+  },
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "state_vocabulary": {
+    "not_publicly_disclosed": "官方公开材料未提供可核验数值",
+    "parser_or_schema_failure": "来源已访问但解析/结构化失败，不等于来源无结果",
+    "reported_zero": "仅来源明确报告0时使用",
+    "technical_route_failed": "目标路线技术失败，不等于来源无结果"
+  },
+  "technical_route_failures": [
+    {
+      "diagnostic": "Configured proxy 127.0.0.1:7897 refused; direct no-proxy DNS also failed. This is route failure, not evidence absence.",
+      "route_id": "shell-curl-clinicaltrials-proxy",
+      "status": "technical_route_failed",
+      "used_for": []
+    }
+  ]
+}

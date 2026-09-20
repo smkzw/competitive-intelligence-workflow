@@ -1,0 +1,34 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "PEGASUS phase 3 APL2-302: 102 screened and 80 randomized",
+    "pegcetacoplan 41 and eculizumab 39; 79 of 80 completed the trial",
+    "Tables 8, 9, 23, 24 and 26 provide baseline and safety numerics"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "field": "baseline",
+      "value": "Age mean 50.2 versus 47.3; male 14/41 versus 17/39; Hb mean 8.69 versus 8.68 g/dL"
+    },
+    {
+      "field": "disposition",
+      "value": "102 screened; 80 randomized; peg drug discontinuation 3/41 and study discontinuation 1/41; eculizumab 0"
+    },
+    {
+      "field": "safety",
+      "value": "TEAE 36/41 versus 34/39; SAE 7/41 versus 6/39; grade 3/4 AE 8/41 versus 5/39"
+    }
+  ],
+  "first_disclosed_at": "2021-05-14",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-fda-empaveli-review",
+  "source_title": "FDA Integrated Review: Empaveli (pegcetacoplan)",
+  "source_url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2021/215014Orig1s000IntegratedR.pdf",
+  "source_version_id": "src-fda-empaveli-20210514"
+}

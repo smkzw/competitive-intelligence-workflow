@@ -14,7 +14,7 @@ _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 # 封闭输出类型词表用到的序列化枚举值
 _REPORT_KIND_VALUES = frozenset({"A", "B", "C"})
-_OUTPUT_FORMAT_VALUES = frozenset({"html", "pdf", "html-ppt", "pptx"})
+_OUTPUT_FORMAT_VALUES = frozenset({"html"})
 
 
 @dataclass(frozen=True)

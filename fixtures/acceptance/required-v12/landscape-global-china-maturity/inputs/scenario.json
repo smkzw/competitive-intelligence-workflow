@@ -1,0 +1,29 @@
+{
+  "case_id": "landscape-global-china-maturity",
+  "source_fixture": "fixtures/synthetic/a-complete/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "A 项目宇宙必须同时保留全球/中国、本地/境外和成熟度/结果承载维度。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "global-mature-result-bearing",
+      "description_zh": "全球成熟且有结果项目进入结果承载范围。"
+    },
+    {
+      "id": "china-mature-result-bearing",
+      "description_zh": "中国成熟且有结果项目独立保留区域证据。"
+    },
+    {
+      "id": "local-early-no-result",
+      "description_zh": "本地早期无结果项目保留为早期无结果，不得伪造结果。"
+    },
+    {
+      "id": "overseas-early-no-result",
+      "description_zh": "境外早期无结果项目保留为早期无结果，不得因区域缺口删除。"
+    }
+  ]
+}

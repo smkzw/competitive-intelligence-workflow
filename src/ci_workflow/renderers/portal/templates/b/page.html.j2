@@ -1,0 +1,119 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+  <header class="portal-page-head kz-b-page-head">
+    <h1 class="portal-page-title">{{ page_title }}</h1>
+    <div class="kz-b-page-meta" aria-label="页面范围">
+      <span>适应症：{{ report.indication }}</span>
+      <span>观察截止：{{ report.data_cutoff.strftime('%Y-%m-%d') }}</span>
+    </div>
+  </header>
+
+  {% if quick_filter_groups %}
+  <div class="kz-b-filter-quick" aria-label="快速筛选产品">
+    <span class="kz-b-filter-quick__label">快速筛选产品</span>
+    {% for group in quick_filter_groups %}
+    <div class="kz-b-filter-quick__group" data-filter-dimension="{{ group.dimension }}">
+      {% for option in group.options %}
+      <button type="button" class="kz-b-filter-button kz-b-filter-quick__button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" aria-pressed="false">{{ option.label }}</button>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <details id="kz-filter-panel" class="kz-b-filter-panel">
+    <summary class="kz-b-filter-summary">
+      <span>筛选条件</span>
+      <span class="kz-b-filter-summary__selected" data-filter-summary>未设置筛选</span>
+    </summary>
+    <div class="kz-b-filters" aria-label="筛选条件">
+      <p class="kz-b-filter-note">{{ filter_note }}</p>
+      {% for group in filter_groups if group.dimension in essential_filter_dimensions %}
+      <div class="kz-b-filter-group" data-filter-dimension="{{ group.dimension }}">
+        <div class="kz-b-filter-heading">
+          <h2>{{ group.label }}</h2>
+          <span>可多选</span>
+        </div>
+        <div class="kz-b-filter-options">
+          {% for option in group.options %}
+          <button type="button" class="kz-b-filter-button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" aria-pressed="false">{{ option.label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      <details class="kz-b-filter-more">
+        <summary>更多筛选</summary>
+        <div class="kz-b-filter-more__grid">
+          {% for group in filter_groups if group.dimension != "product" and group.dimension not in essential_filter_dimensions %}
+          <div class="kz-b-filter-group" data-filter-dimension="{{ group.dimension }}">
+            <div class="kz-b-filter-heading">
+              <h2>{{ group.label }}</h2>
+              <span>可多选</span>
+            </div>
+            <div class="kz-b-filter-options">
+              {% for option in group.options %}
+              <button type="button" class="kz-b-filter-button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" aria-pressed="false">{{ option.label }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+      <div class="kz-b-filter-actions">
+        <button type="button" class="kz-b-filter-reset" data-filter-reset>清除筛选</button>
+        <span class="kz-b-filter-status" data-filter-status aria-live="polite">显示全部可用记录</span>
+      </div>
+    </div>
+  </details>
+
+  <section class="kz-b-visual-section" aria-labelledby="visual-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <h2 id="visual-heading">{{ section_title }}</h2>
+      </div>
+    </div>
+    <p class="kz-b-evidence-hint">点击数值查看数据依据。</p>
+    {% if page.id == "safety" %}
+    <p class="kz-b-evidence-hint">颜色深浅仅表示同一图内发生率高低；不同图的色阶不可直接比较，也不构成安全性排序。</p>
+    {% endif %}
+    <div id="kz-chart-module" class="kz-chart-module" aria-live="polite"></div>
+    {% if page.id == "efficacy-safety-matrix" %}
+    <div class="kz-b-bubble-presets" data-bubble-presets aria-label="固定临床气泡预设">
+      <span class="kz-b-bubble-presets__label">固定临床预设</span>
+      {% for preset in bubble_presets %}
+      <span class="kz-b-bubble-preset" data-preset-id="{{ preset.preset_id }}">{{ preset.label_zh }}｜{{ preset.size_semantics_zh }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if not records or has_domain_empty_state %}
+    <p class="kz-b-page-empty" role="status">{{ empty_state_title }}。本页没有可接受的专属记录，未以其他结果页替代。</p>
+    {% endif %}
+  </section>
+  {% if page.id == "product-trial-profiles" %}
+  <section class="kz-b-profile-index" aria-labelledby="profile-index-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">档案索引</p>
+        <h2 id="profile-index-heading">逐产品、逐试验查看</h2>
+      </div>
+      <p class="kz-b-section-note">每个档案均保留疗效、安全性与来源入口。</p>
+    </div>
+    <div class="kz-b-profile-grid">
+      {% for item in filter_products %}
+      <a class="kz-b-profile-card" href="products/{{ item.id }}.html">
+        <span class="kz-b-profile-card__type">产品档案</span>
+        <strong>{{ item.name }}</strong>
+        <span>查看疗效与安全性</span>
+      </a>
+      {% endfor %}
+      {% for item in filter_trials %}
+      <a class="kz-b-profile-card" href="trials/{{ item.id }}.html">
+        <span class="kz-b-profile-card__type">试验档案</span>
+        <strong>{{ item.name }}</strong>
+        <span>查看疗效与安全性</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+{% endblock %}

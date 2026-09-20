@@ -1,6 +1,6 @@
 interface:
   display_name: "报告生成"
-  short_description: "生成站点式网页、原生PDF及演示文稿交付物的内部能力，供工作流自动调用"
+  short_description: "生成 A/B/C 站点式 HTML 门户交付物的内部能力，供工作流自动调用"
   default_prompt: "运行 $render-deliver 的受控内部能力。"
 policy:
   allow_implicit_invocation: false

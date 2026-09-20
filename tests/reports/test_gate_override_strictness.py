@@ -265,6 +265,12 @@ def _spec_with_unit(spec: GateSpec, unit_id: str, **updates: object) -> GateSpec
     for unit in units:
         if unit["unit_id"] == unit_id:
             unit = {**unit, **updates}
+            if "blocking_level" in updates and "failure_code" not in updates:
+                unit["failure_code"] = (
+                    "missing_required_evidence"
+                    if unit["blocking_level"] == "critical"
+                    else "missing_extension_evidence"
+                )
             found = True
         new_units.append(unit)
     if not found:
@@ -591,6 +597,7 @@ def test_override_rejects_missing_or_conflict_policy_relaxation(kind: str) -> No
         "missing_strategy",
         "fact_domains",
         "observation_kinds",
+        "recovery_routes",
         "required_context_fields",
         "applicability",
         "object_type",
@@ -678,6 +685,18 @@ def test_override_compares_each_monotonic_field(kind: str) -> None:
             ],
         )
         marker = "允许观察类型放宽"
+    elif kind == "recovery_routes":
+        child = _spec_with_unit(
+            parent,
+            "a_product_identity",
+            recovery_route_ids=[
+                "alternate_source",
+                "alternate_access",
+                "identifier_cross_reference",
+                "citation_traversal",
+            ],
+        )
+        marker = "恢复路线放宽"
     elif kind == "missing_strategy":
         child = _spec_with_unit(
             parent,

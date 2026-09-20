@@ -1,0 +1,2987 @@
+{
+  "schema_version": "browser-metrics.v1",
+  "candidate": {
+    "project_relative_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh",
+    "html_relative_path": "reports/B/v-fixture-b-pnh-001/html",
+    "manifest_relative_path": "reports/B/v-fixture-b-pnh-001/html.manifest.json",
+    "manifest_artifact_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+    "exact_content_digest": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+    "snapshot_ids": [
+      "snapshot-b-pnh-fixture-001"
+    ]
+  },
+  "capture": {
+    "engines_requested": [
+      "chromium",
+      "webkit"
+    ],
+    "engines_completed": [
+      "chromium",
+      "webkit"
+    ],
+    "pages": [
+      "overview",
+      "efficacy",
+      "safety",
+      "baseline-overview",
+      "disposition-overview",
+      "efficacy-safety-matrix"
+    ],
+    "viewports": [
+      1024,
+      1440
+    ],
+    "viewport_height": 900,
+    "full_page": true,
+    "reduced_motion_context": "reduce",
+    "captured_at_utc": "2026-08-30T06:34:54Z",
+    "engine_launch_errors": {},
+    "layout_metric_definition": {
+      "clipped_count": "Visible non-empty text-bearing labels with horizontal out-of-bounds geometry or CSS clipping plus intrinsic overflow",
+      "overlap_count": "Pairs of visible non-empty SVG chart labels with horizontal intersection >1px and vertical intersection >8px; intentional multiline axis labels at <=8px are excluded",
+      "unreadable_label_count": "Visible non-empty labels with computed font size <16px or zero geometry; visually-hidden and empty controls excluded"
+    },
+    "route_scoped_runtime_error_replay": true,
+    "playwright_python": "1.61.0",
+    "browser_versions": {
+      "chromium": "149.0.7827.55",
+      "webkit": "26.5"
+    }
+  },
+  "records": [
+    {
+      "engine": "chromium",
+      "page": "overview",
+      "route": "overview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/overview-1024.png",
+      "sha256": "57d5d417af7a46aef7542d254eaaaed79830ea394292143d26379002b15f5f31",
+      "image": {
+        "width": 1024,
+        "height": 34344
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "APPLY-PNH": true,
+          "APPOINT-PNH": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 7439,
+        "visible_text_sha256": "f8839beb17dc9185af9bf474d22811ba2fd8416aaee8a3cdaaf07d290e90a143",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 首页 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 关键结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 首页数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原始应答计数，不用于直接复算 已报告值 伊普可泮 APPLY-P"
+      },
+      "dom_summary": {
+        "page_id": "overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "55b87436cbf93930ee95044cdeff0f83d9d14ed70cbfb2dfbda2b5b5ecaeb420",
+        "chart_count": 13,
+        "table_count": 13,
+        "label_count": 1668,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 34344,
+        "body_scroll_height": 34344
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html",
+          "visible_rows_before": 87,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 87,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 1251,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "efficacy",
+      "route": "efficacy.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/efficacy-1024.png",
+      "sha256": "c9fc655d3721fe4413bb5a970e8c7fec9f794d4b0b8f8aca77a3d57134dd9f88",
+      "image": {
+        "width": 1024,
+        "height": 2751
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "血红蛋白应答率": true,
+          "治疗组": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 624,
+        "visible_text_sha256": "697d4e07802a1fb94d0fb56ebee552901729694384ea074ac06750e31dea9a02",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 疗效 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 疗效数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原始应答计数，不用于直接复算 已报告值 伊普可泮 APPLY-P"
+      },
+      "dom_summary": {
+        "page_id": "efficacy",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "f864bd3e1949daad6f58984af37d8ee195a2670d82a724252e0578856dea0b2f",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 115,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 2751,
+        "body_scroll_height": 2751
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html",
+          "visible_rows_before": 3,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 3,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 86,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "safety",
+      "route": "safety.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/safety-1024.png",
+      "sha256": "98d31a292c6ad434175cbd62c5ccb029d031b8ced2987353d13f9d1ea0eb7183",
+      "image": {
+        "width": 1024,
+        "height": 7367
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "任何TEAE": true,
+          "治疗组": true,
+          "治疗期间": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1624,
+        "visible_text_sha256": "406a9097fef8fd6ebdbdd48bcefc61ee63f02dfa187d09ad5d500707202ee36b",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 安全性 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 安全性结果 点击数值查看数据依据。 任何TEAE｜安全性：治疗期间不良事件 APPOINT-PNH：单臂设计，无同期对照组 伊普可泮 · APPLY-PNH 伊普可泮 · APPOINT-PNH 治疗组 对照组 54.8 60 60 不适用 0% 60% 安全性数据表 产品 试验 安全性事件 组别 时间窗 分析人群 分子 分母 发生率/数值 单位 披露状态 伊普可泮 APPLY-PNH 任何TEAE 治疗组 治疗期间 安全性分析集 34 62 54.8 % 已报告值 伊普"
+      },
+      "dom_summary": {
+        "page_id": "safety",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "01108f38cbb6bc0e3c0650472f81bdc0873014da1d5074afe2eabf5c388d9903",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 332,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 7367,
+        "body_scroll_height": 7367
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html",
+          "visible_rows_before": 16,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 16,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "safe-apply-t-1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "safe-apply-t-1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 242,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "safe-apply-t-1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "baseline-overview",
+      "route": "baseline-overview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/baseline-overview-1024.png",
+      "sha256": "e65b1a1dd2eeb300359d6aa0713051ab4a71256c1bb0411919c954b17b0418cb",
+      "image": {
+        "width": 1024,
+        "height": 6496
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "基线样本量": true,
+          "基线血红蛋白": true,
+          "治疗组": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1331,
+        "visible_text_sha256": "00aa2a98aeb33778b5379ea7367389096f112bc364804992e57707c6206425f4",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 基线与人群总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 基线特征 点击数值查看数据依据。 基线样本量｜基线变量（人） 治疗组 对照组 人 0 10 20 30 40 50 60 基线样本量 治疗组 基线样本量 对照组 基线样本量 治疗组 62 35 40 基线与人群总览数据表 产品 试验 基线变量 组别 时间点 分析人群 统计形式 分子 分母 数值 单位 披露状态 伊普可泮 APPLY-PNH 基线样本量 治疗组 基线 全分析集 样本量 未列示 62 62 人 已报告值 伊普可泮 APPLY-PNH 基线样本量 对照组"
+      },
+      "dom_summary": {
+        "page_id": "baseline-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "ce0d755eadea2d3ab4fb1fd46c1d21f34747ecce4832d82ff6da2709fb6892e7",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 329,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 6496,
+        "body_scroll_height": 6496
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html",
+          "visible_rows_before": 12,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 12,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 223,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "disposition-overview",
+      "route": "disposition-overview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/disposition-overview-1024.png",
+      "sha256": "24322f1f950e7524854d1294ab9087d3fcf6a7ba2abf0e4fc0c78175f60d667e",
+      "image": {
+        "width": 1024,
+        "height": 18071
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "已筛选": true,
+          "完成治疗": true,
+          "完成研究": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 3926,
+        "visible_text_sha256": "46db7d9da14ea47a693814bf44cfc8cac837c1b50779449fd388f756afddf9c4",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 试验完成情况总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 试验完成情况 点击数值查看数据依据。 多项可比指标｜APPLY-PNH · 试验完成情况 全研究人群 治疗组 对照组 0 20 40 60 80 100 120 已筛选 全研究人群 已随机 治疗组 已随机 对照组 已接受治疗 治疗组 完成治疗 治疗组 完成治疗 对照组 完成研究 治疗组 完成研究 对照组 120 62 35 62 35 61 35 62 35 试验完成情况总览数据表 产品 试验 完成情况字段 组别 时间点/期间 分析人群 状态 分子 分母 数值 "
+      },
+      "dom_summary": {
+        "page_id": "disposition-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "603a919563fda15a6d753308fa027dd47c5184ee449c08fb46db3dd377ebf3e4",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 906,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 18071,
+        "body_scroll_height": 18071
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html",
+          "visible_rows_before": 54,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 54,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 797,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "efficacy-safety-matrix",
+      "route": "efficacy-safety-matrix.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/efficacy-safety-matrix-1024.png",
+      "sha256": "0b530b1b983473fef2b248b7de5238ac13053557a30643bc64608ee5cdc806bc",
+      "image": {
+        "width": 1024,
+        "height": 1936
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "试验内疗效差": true,
+          "治疗期间不良事件": true,
+          "80.5": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 511,
+        "visible_text_sha256": "1d78239c342ac9e0db22af089cc90950ff85b567c30410962421e23a0d87a5c7",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 疗效与安全性矩阵 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效与安全性观察位置 点击数值查看数据依据。 第24周血红蛋白应答率与治疗期间不良事件｜疗效与安全性观察位置 气泡大小：治疗组样本量 APPOINT-PNH：单臂研究没有试验内对照组，不计算治疗—对照疗效差 治疗组治疗期间不良事件发生率（%） 试验内疗效差（百分点） 0 20 40 60 80 100 0 20 40 60 80 100 APPLY-PNH 疗效与安全性矩阵数据表 产品 试验 指标 组别 疗效位置 安全性位置 比较规模 比较状态 口径提示 披露状"
+      },
+      "dom_summary": {
+        "page_id": "efficacy-safety-matrix",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "7fed43541d6c968abbf6d2d69a2cac7d8396e3ece6db78d3e42018008de923e1",
+        "chart_count": 1,
+        "table_count": 1,
+        "label_count": 77,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 1936,
+        "body_scroll_height": 1936
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html",
+          "visible_rows_before": 2,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 2,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "matrix-apply-teae",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "matrix-apply-teae",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 66,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "matrix-apply-teae",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "overview",
+      "route": "overview.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/overview-1440.png",
+      "sha256": "205c43098f999cee1e1e1ffb96f22acc722245dabb6330a6468ac6bd40a51d8f",
+      "image": {
+        "width": 1440,
+        "height": 12425
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "APPLY-PNH": true,
+          "APPOINT-PNH": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 7480,
+        "visible_text_sha256": "2c16bcdad85158d6a222c133e725a4c5d74240f681065c6f5f65e5b2d7e10018",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 首页 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 关键结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 首页数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原"
+      },
+      "dom_summary": {
+        "page_id": "overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "55b87436cbf93930ee95044cdeff0f83d9d14ed70cbfb2dfbda2b5b5ecaeb420",
+        "chart_count": 13,
+        "table_count": 13,
+        "label_count": 1674,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 12425,
+        "body_scroll_height": 12425
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html",
+          "visible_rows_before": 87,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 87,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": false,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": false,
+          "observation": "Chromium native input[type=search] Escape clears the query after the portal handler hides results; the resulting input event reopens the results list. WebKit remained hidden."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 1251,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "efficacy",
+      "route": "efficacy.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/efficacy-1440.png",
+      "sha256": "a1f2d46ecef1cebc090775efb46988533cc4cf095f0788f3f73a06524eab0f65",
+      "image": {
+        "width": 1440,
+        "height": 2072
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "血红蛋白应答率": true,
+          "治疗组": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 655,
+        "visible_text_sha256": "b791dfdb29ffb3cf7ab5f29362019b252765f2bce09f1594b99321a9470c30cc",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 疗效 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 疗效数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原"
+      },
+      "dom_summary": {
+        "page_id": "efficacy",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "f864bd3e1949daad6f58984af37d8ee195a2670d82a724252e0578856dea0b2f",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 119,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 2072,
+        "body_scroll_height": 2072
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html",
+          "visible_rows_before": 3,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 3,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": false,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": false,
+          "observation": "Chromium native input[type=search] Escape clears the query after the portal handler hides results; the resulting input event reopens the results list. WebKit remained hidden."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 86,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "safety",
+      "route": "safety.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/safety-1440.png",
+      "sha256": "ba71611e145a1e45795a8a998e7c20c82b91ff8b4f342f9664c392765c18957f",
+      "image": {
+        "width": 1440,
+        "height": 3414
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "任何TEAE": true,
+          "治疗组": true,
+          "治疗期间": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1655,
+        "visible_text_sha256": "69f71b6ecbe642480a93a76cc58341dd544fd1b8b7308a643abf234cd1cae3d2",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 安全性 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 安全性结果 点击数值查看数据依据。 任何TEAE｜安全性：治疗期间不良事件 APPOINT-PNH：单臂设计，无同期对照组 伊普可泮 · APPLY-PNH 伊普可泮 · APPOINT-PNH 治疗组 对照组 54.8 60 60 不适用 0% 60% 安全性数据表 产品 试验 安全性事件 组别 时间窗 分析人群 分子 分母 发生率/数值 单位 披露状态 伊普可泮 APPLY-PNH 任何TEAE 治疗组 治"
+      },
+      "dom_summary": {
+        "page_id": "safety",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "01108f38cbb6bc0e3c0650472f81bdc0873014da1d5074afe2eabf5c388d9903",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 336,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 3414,
+        "body_scroll_height": 3414
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html",
+          "visible_rows_before": 16,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 16,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "safe-apply-t-1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "safe-apply-t-1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": false,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": false,
+          "observation": "Chromium native input[type=search] Escape clears the query after the portal handler hides results; the resulting input event reopens the results list. WebKit remained hidden."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 242,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "safe-apply-t-1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "baseline-overview",
+      "route": "baseline-overview.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/baseline-overview-1440.png",
+      "sha256": "bef72525673d4a3e12fdefb9750a6ca9738f95be7d7d9103035cff1eb0464958",
+      "image": {
+        "width": 1440,
+        "height": 3577
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "基线样本量": true,
+          "基线血红蛋白": true,
+          "治疗组": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1362,
+        "visible_text_sha256": "c80efc6fb6a74670db9c7e3565f790a571bf0111147f0e9a6918ad8ee983f8d8",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 基线与人群总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 基线特征 点击数值查看数据依据。 基线样本量｜基线变量（人） 治疗组 对照组 人 0 10 20 30 40 50 60 基线样本量 治疗组 基线样本量 对照组 基线样本量 治疗组 62 35 40 基线与人群总览数据表 产品 试验 基线变量 组别 时间点 分析人群 统计形式 分子 分母 数值 单位 披露状态 伊普可泮 APPLY-PNH 基线样本量 治疗组 基线 全分析集 样本量 未列示 62 62 "
+      },
+      "dom_summary": {
+        "page_id": "baseline-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "ce0d755eadea2d3ab4fb1fd46c1d21f34747ecce4832d82ff6da2709fb6892e7",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 333,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 3577,
+        "body_scroll_height": 3577
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html",
+          "visible_rows_before": 12,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 12,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": false,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": false,
+          "observation": "Chromium native input[type=search] Escape clears the query after the portal handler hides results; the resulting input event reopens the results list. WebKit remained hidden."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 223,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "disposition-overview",
+      "route": "disposition-overview.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/disposition-overview-1440.png",
+      "sha256": "09f658b7efa8b37ded5c7c907bad8e4c8d2637c0cc9c9c4e72bff367685fa956",
+      "image": {
+        "width": 1440,
+        "height": 4206
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "已筛选": true,
+          "完成治疗": true,
+          "完成研究": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 3967,
+        "visible_text_sha256": "8813f666917f0f8cb9f1ef86242deb8261596ea232f982820ae1ec04300240ff",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 试验完成情况总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 试验完成情况 点击数值查看数据依据。 多项可比指标｜APPLY-PNH · 试验完成情况 全研究人群 治疗组 对照组 0 20 40 60 80 100 120 已筛选 全研究人群 已随机 治疗组 已随机 对照组 已接受治疗 治疗组 已接受治疗 对照组 完成治疗 治疗组 完成治疗 对照组 完成研究 治疗组 完成研究 对照组 120 62 35 62 35 61 35 62 35 试验完成情况总览数据表"
+      },
+      "dom_summary": {
+        "page_id": "disposition-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "603a919563fda15a6d753308fa027dd47c5184ee449c08fb46db3dd377ebf3e4",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 912,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 4206,
+        "body_scroll_height": 4206
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html",
+          "visible_rows_before": 54,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 54,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": false,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": false,
+          "observation": "Chromium native input[type=search] Escape clears the query after the portal handler hides results; the resulting input event reopens the results list. WebKit remained hidden."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 797,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "chromium",
+      "page": "efficacy-safety-matrix",
+      "route": "efficacy-safety-matrix.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 200,
+      "relative_path": "reviews/visual-finalization/screenshots/chromium/efficacy-safety-matrix-1440.png",
+      "sha256": "1026711cf9cbc0bc6ea17f05fe1687882d6613e615ececc19bf0cc0b265f6e20",
+      "image": {
+        "width": 1440,
+        "height": 1473
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "试验内疗效差": true,
+          "治疗期间不良事件": true,
+          "80.5": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 542,
+        "visible_text_sha256": "4fd9d3f6e8419d72be705a1b1c5d3d6d6acbdff141d73e4c9dd3e050ca79b6d3",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 疗效与安全性矩阵 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效与安全性观察位置 点击数值查看数据依据。 第24周血红蛋白应答率与治疗期间不良事件｜疗效与安全性观察位置 气泡大小：治疗组样本量 APPOINT-PNH：单臂研究没有试验内对照组，不计算治疗—对照疗效差 治疗组治疗期间不良事件发生率（%） 试验内疗效差（百分点） 0 20 40 60 80 100 0 20 40 60 80 100 APPLY-PNH 疗效与安全性矩阵数据表 产品 试验 指标 组"
+      },
+      "dom_summary": {
+        "page_id": "efficacy-safety-matrix",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "7fed43541d6c968abbf6d2d69a2cac7d8396e3ece6db78d3e42018008de923e1",
+        "chart_count": 1,
+        "table_count": 1,
+        "label_count": 81,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 1473,
+        "body_scroll_height": 1473
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html",
+          "visible_rows_before": 2,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 2,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "matrix-apply-teae",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "matrix-apply-teae",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": false,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": false,
+          "observation": "Chromium native input[type=search] Escape clears the query after the portal handler hides results; the resulting input event reopens the results list. WebKit remained hidden."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 66,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "matrix-apply-teae",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "activateRow is not defined"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "activateRow is not defined"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "overview",
+      "route": "overview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/overview-1024.png",
+      "sha256": "6cad47217c8b58ea1721b1e607351496b971bdefc9a34f0c13f85deb51e19c8f",
+      "image": {
+        "width": 1024,
+        "height": 34344
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "APPLY-PNH": true,
+          "APPOINT-PNH": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 7439,
+        "visible_text_sha256": "f8839beb17dc9185af9bf474d22811ba2fd8416aaee8a3cdaaf07d290e90a143",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 首页 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 关键结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 首页数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原始应答计数，不用于直接复算 已报告值 伊普可泮 APPLY-P"
+      },
+      "dom_summary": {
+        "page_id": "overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "55b87436cbf93930ee95044cdeff0f83d9d14ed70cbfb2dfbda2b5b5ecaeb420",
+        "chart_count": 13,
+        "table_count": 13,
+        "label_count": 1668,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 34344,
+        "body_scroll_height": 34344
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html",
+          "visible_rows_before": 87,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 87,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 1251,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "efficacy",
+      "route": "efficacy.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/efficacy-1024.png",
+      "sha256": "df8f095a2ea9907b4eb4e5ce6a152acb05a34c14bc8257254a72837c3cef7946",
+      "image": {
+        "width": 1024,
+        "height": 2751
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "血红蛋白应答率": true,
+          "治疗组": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 624,
+        "visible_text_sha256": "697d4e07802a1fb94d0fb56ebee552901729694384ea074ac06750e31dea9a02",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 疗效 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 疗效数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原始应答计数，不用于直接复算 已报告值 伊普可泮 APPLY-P"
+      },
+      "dom_summary": {
+        "page_id": "efficacy",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "f864bd3e1949daad6f58984af37d8ee195a2670d82a724252e0578856dea0b2f",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 115,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 2751,
+        "body_scroll_height": 2751
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html",
+          "visible_rows_before": 3,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 3,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 86,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "safety",
+      "route": "safety.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/safety-1024.png",
+      "sha256": "7f2fc0b8cfe0ef6f6004cc57c80cf72cd6fbb1d26e3f12f8d8e39afb23a9984e",
+      "image": {
+        "width": 1024,
+        "height": 7367
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "任何TEAE": true,
+          "治疗组": true,
+          "治疗期间": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1624,
+        "visible_text_sha256": "406a9097fef8fd6ebdbdd48bcefc61ee63f02dfa187d09ad5d500707202ee36b",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 安全性 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 安全性结果 点击数值查看数据依据。 任何TEAE｜安全性：治疗期间不良事件 APPOINT-PNH：单臂设计，无同期对照组 伊普可泮 · APPLY-PNH 伊普可泮 · APPOINT-PNH 治疗组 对照组 54.8 60 60 不适用 0% 60% 安全性数据表 产品 试验 安全性事件 组别 时间窗 分析人群 分子 分母 发生率/数值 单位 披露状态 伊普可泮 APPLY-PNH 任何TEAE 治疗组 治疗期间 安全性分析集 34 62 54.8 % 已报告值 伊普"
+      },
+      "dom_summary": {
+        "page_id": "safety",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "01108f38cbb6bc0e3c0650472f81bdc0873014da1d5074afe2eabf5c388d9903",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 332,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 7367,
+        "body_scroll_height": 7367
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html",
+          "visible_rows_before": 16,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 16,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "safe-apply-t-1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "safe-apply-t-1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 242,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "safe-apply-t-1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "baseline-overview",
+      "route": "baseline-overview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/baseline-overview-1024.png",
+      "sha256": "3983e1d22bc58bfff5de68f3225a064c433f8b411b2fd94f091d6cbe690b8d46",
+      "image": {
+        "width": 1024,
+        "height": 6496
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "基线样本量": true,
+          "基线血红蛋白": true,
+          "治疗组": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1331,
+        "visible_text_sha256": "00aa2a98aeb33778b5379ea7367389096f112bc364804992e57707c6206425f4",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 基线与人群总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 基线特征 点击数值查看数据依据。 基线样本量｜基线变量（人） 治疗组 对照组 人 0 10 20 30 40 50 60 基线样本量 治疗组 基线样本量 对照组 基线样本量 治疗组 62 35 40 基线与人群总览数据表 产品 试验 基线变量 组别 时间点 分析人群 统计形式 分子 分母 数值 单位 披露状态 伊普可泮 APPLY-PNH 基线样本量 治疗组 基线 全分析集 样本量 未列示 62 62 人 已报告值 伊普可泮 APPLY-PNH 基线样本量 对照组"
+      },
+      "dom_summary": {
+        "page_id": "baseline-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "ce0d755eadea2d3ab4fb1fd46c1d21f34747ecce4832d82ff6da2709fb6892e7",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 329,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 6496,
+        "body_scroll_height": 6496
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html",
+          "visible_rows_before": 12,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 12,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 223,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "disposition-overview",
+      "route": "disposition-overview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/disposition-overview-1024.png",
+      "sha256": "f975f8c2a8fdb6e007ea1c483c088b921ec248ecaf5d35b16f9a00d77f5d7e7f",
+      "image": {
+        "width": 1024,
+        "height": 18071
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "已筛选": true,
+          "完成治疗": true,
+          "完成研究": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 3926,
+        "visible_text_sha256": "46db7d9da14ea47a693814bf44cfc8cac837c1b50779449fd388f756afddf9c4",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 试验完成情况总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 试验完成情况 点击数值查看数据依据。 多项可比指标｜APPLY-PNH · 试验完成情况 全研究人群 治疗组 对照组 0 20 40 60 80 100 120 已筛选 全研究人群 已随机 治疗组 已随机 对照组 已接受治疗 治疗组 完成治疗 治疗组 完成治疗 对照组 完成研究 治疗组 完成研究 对照组 120 62 35 62 35 61 35 62 35 试验完成情况总览数据表 产品 试验 完成情况字段 组别 时间点/期间 分析人群 状态 分子 分母 数值 "
+      },
+      "dom_summary": {
+        "page_id": "disposition-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "603a919563fda15a6d753308fa027dd47c5184ee449c08fb46db3dd377ebf3e4",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 906,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 18071,
+        "body_scroll_height": 18071
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html",
+          "visible_rows_before": 54,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 54,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 797,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "efficacy-safety-matrix",
+      "route": "efficacy-safety-matrix.html",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/efficacy-safety-matrix-1024.png",
+      "sha256": "96b1db454b250f96c0d44f8efb7b4f2d50c17e729ce8ad14273c6caccef3c094",
+      "image": {
+        "width": 1024,
+        "height": 1936
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1024,
+        "document_scroll_width": 1024,
+        "body_scroll_width": 1024,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "试验内疗效差": true,
+          "治疗期间不良事件": true,
+          "80.5": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 511,
+        "visible_text_sha256": "1d78239c342ac9e0db22af089cc90950ff85b567c30410962421e23a0d87a5c7",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 菜单 疗效与安全性矩阵 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效与安全性观察位置 点击数值查看数据依据。 第24周血红蛋白应答率与治疗期间不良事件｜疗效与安全性观察位置 气泡大小：治疗组样本量 APPOINT-PNH：单臂研究没有试验内对照组，不计算治疗—对照疗效差 治疗组治疗期间不良事件发生率（%） 试验内疗效差（百分点） 0 20 40 60 80 100 0 20 40 60 80 100 APPLY-PNH 疗效与安全性矩阵数据表 产品 试验 指标 组别 疗效位置 安全性位置 比较规模 比较状态 口径提示 披露状"
+      },
+      "dom_summary": {
+        "page_id": "efficacy-safety-matrix",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "7fed43541d6c968abbf6d2d69a2cac7d8396e3ece6db78d3e42018008de923e1",
+        "chart_count": 1,
+        "table_count": 1,
+        "label_count": 77,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 1936,
+        "body_scroll_height": 1936
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html",
+          "visible_rows_before": 2,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 2,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "matrix-apply-teae",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "matrix-apply-teae",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": false,
+          "passed": false,
+          "status": "not_applicable",
+          "reason": "Search input is not visible at this responsive width; recorded as not_applicable."
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 66,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "matrix-apply-teae",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "overview",
+      "route": "overview.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/overview-1440.png",
+      "sha256": "1587e117a625e35516a1c3dad2fc4990c6f01ddd9b81505ec5167b6f0fe88b2f",
+      "image": {
+        "width": 1440,
+        "height": 12425
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "APPLY-PNH": true,
+          "APPOINT-PNH": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 7480,
+        "visible_text_sha256": "2c16bcdad85158d6a222c133e725a4c5d74240f681065c6f5f65e5b2d7e10018",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 首页 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 关键结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 首页数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原"
+      },
+      "dom_summary": {
+        "page_id": "overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "55b87436cbf93930ee95044cdeff0f83d9d14ed70cbfb2dfbda2b5b5ecaeb420",
+        "chart_count": 13,
+        "table_count": 13,
+        "label_count": 1674,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 12425,
+        "body_scroll_height": 12425
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html",
+          "visible_rows_before": 87,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 87,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": true,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": true
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 1251,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "efficacy",
+      "route": "efficacy.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/efficacy-1440.png",
+      "sha256": "10f5ec515b5d462a9a102ccee9c49efa5b02730104f9b32b65f04d0b5110663e",
+      "image": {
+        "width": 1440,
+        "height": 2072
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "血红蛋白应答率": true,
+          "治疗组": true,
+          "第24周": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 655,
+        "visible_text_sha256": "b791dfdb29ffb3cf7ab5f29362019b252765f2bce09f1594b99321a9470c30cc",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 疗效 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效结果 点击数值查看数据依据。 血红蛋白应答率｜伊普可泮 · APPLY-PNH 治疗组 对照组 % 0 20 40 60 80 100 治疗组 对照组 82.3 1.8 疗效数据表 产品 试验 终点/事件 组别 时间点 分析人群 分子 分母 比较值 单位 口径提示 披露状态 伊普可泮 APPLY-PNH 血红蛋白应答率 治疗组 第24周 全分析集 51 60 82.3 % 比较值为模型估计比例；分子与分母为原"
+      },
+      "dom_summary": {
+        "page_id": "efficacy",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "f864bd3e1949daad6f58984af37d8ee195a2670d82a724252e0578856dea0b2f",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 119,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 2072,
+        "body_scroll_height": 2072
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html",
+          "visible_rows_before": 3,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 3,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "eff-row-nct04558918-apply-treatment",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "eff-row-nct04558918-apply-treatment",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": true,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": true
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 86,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "eff-row-nct04558918-apply-treatment",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "safety",
+      "route": "safety.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/safety-1440.png",
+      "sha256": "2063c29efe44f4dde16869142b1b4124e9074638712ada3ca20bc8ad58d30745",
+      "image": {
+        "width": 1440,
+        "height": 3414
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "任何TEAE": true,
+          "治疗组": true,
+          "治疗期间": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1655,
+        "visible_text_sha256": "69f71b6ecbe642480a93a76cc58341dd544fd1b8b7308a643abf234cd1cae3d2",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 安全性 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 安全性结果 点击数值查看数据依据。 任何TEAE｜安全性：治疗期间不良事件 APPOINT-PNH：单臂设计，无同期对照组 伊普可泮 · APPLY-PNH 伊普可泮 · APPOINT-PNH 治疗组 对照组 54.8 60 60 不适用 0% 60% 安全性数据表 产品 试验 安全性事件 组别 时间窗 分析人群 分子 分母 发生率/数值 单位 披露状态 伊普可泮 APPLY-PNH 任何TEAE 治疗组 治"
+      },
+      "dom_summary": {
+        "page_id": "safety",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "01108f38cbb6bc0e3c0650472f81bdc0873014da1d5074afe2eabf5c388d9903",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 336,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 3414,
+        "body_scroll_height": 3414
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html",
+          "visible_rows_before": 16,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/safety.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 16,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "safe-apply-t-1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "safe-apply-t-1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": true,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": true
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 242,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "safe-apply-t-1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "baseline-overview",
+      "route": "baseline-overview.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/baseline-overview-1440.png",
+      "sha256": "781e2993a6ee685c29b9ddeb83b1166b8a8a63ed875d83d37103b14d69e4dfb8",
+      "image": {
+        "width": 1440,
+        "height": 3577
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "基线样本量": true,
+          "基线血红蛋白": true,
+          "治疗组": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 1362,
+        "visible_text_sha256": "c80efc6fb6a74670db9c7e3565f790a571bf0111147f0e9a6918ad8ee983f8d8",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 基线与人群总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 基线特征 点击数值查看数据依据。 基线样本量｜基线变量（人） 治疗组 对照组 人 0 10 20 30 40 50 60 基线样本量 治疗组 基线样本量 对照组 基线样本量 治疗组 62 35 40 基线与人群总览数据表 产品 试验 基线变量 组别 时间点 分析人群 统计形式 分子 分母 数值 单位 披露状态 伊普可泮 APPLY-PNH 基线样本量 治疗组 基线 全分析集 样本量 未列示 62 62 "
+      },
+      "dom_summary": {
+        "page_id": "baseline-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "ce0d755eadea2d3ab4fb1fd46c1d21f34747ecce4832d82ff6da2709fb6892e7",
+        "chart_count": 4,
+        "table_count": 4,
+        "label_count": 333,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 3577,
+        "body_scroll_height": 3577
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html",
+          "visible_rows_before": 12,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/baseline-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 12,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": true,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": true
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 223,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "baseline-row_4e3fe2cb21d41c73545a2dfc",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "disposition-overview",
+      "route": "disposition-overview.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/disposition-overview-1440.png",
+      "sha256": "8d6c68957790715af7e52ae5ba87f99746608a3a1f1e3da5f5dc3ddf9a90ed90",
+      "image": {
+        "width": 1440,
+        "height": 4206
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "已筛选": true,
+          "完成治疗": true,
+          "完成研究": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 3967,
+        "visible_text_sha256": "8813f666917f0f8cb9f1ef86242deb8261596ea232f982820ae1ec04300240ff",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 试验完成情况总览 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 试验完成情况 点击数值查看数据依据。 多项可比指标｜APPLY-PNH · 试验完成情况 全研究人群 治疗组 对照组 0 20 40 60 80 100 120 已筛选 全研究人群 已随机 治疗组 已随机 对照组 已接受治疗 治疗组 已接受治疗 对照组 完成治疗 治疗组 完成治疗 对照组 完成研究 治疗组 完成研究 对照组 120 62 35 62 35 61 35 62 35 试验完成情况总览数据表"
+      },
+      "dom_summary": {
+        "page_id": "disposition-overview",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "603a919563fda15a6d753308fa027dd47c5184ee449c08fb46db3dd377ebf3e4",
+        "chart_count": 2,
+        "table_count": 2,
+        "label_count": 912,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 4206,
+        "body_scroll_height": 4206
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html",
+          "visible_rows_before": 54,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/disposition-overview.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 54,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": true,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": true
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 797,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "trial-disposition-row_bc97f19c9b79a3bc488fbea1",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    },
+    {
+      "engine": "webkit",
+      "page": "efficacy-safety-matrix",
+      "route": "efficacy-safety-matrix.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "device_scale_factor": 1
+      },
+      "candidate_manifest_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+      "page_load_response_status": 0,
+      "relative_path": "reviews/visual-finalization/screenshots/webkit/efficacy-safety-matrix-1440.png",
+      "sha256": "819a90e8c56b0d6db3f1d5b6b31b77734cfbfff141b2c844a55b24fab971c026",
+      "image": {
+        "width": 1440,
+        "height": 1473
+      },
+      "horizontal_overflow": {
+        "viewport_width": 1440,
+        "document_scroll_width": 1440,
+        "body_scroll_width": 1440,
+        "max_scroll_width_delta": 0,
+        "visible_out_of_bounds_count": 0,
+        "visible_out_of_bounds_samples": []
+      },
+      "clipped_count": 0,
+      "clipped_samples": [],
+      "overlap_count": 0,
+      "overlap_samples": [],
+      "unreadable_label_count": 0,
+      "unreadable_label_samples": [],
+      "visible_text_scan": {
+        "required_terms": {
+          "试验内疗效差": true,
+          "治疗期间不良事件": true,
+          "80.5": true
+        },
+        "missing_required_terms": [],
+        "engineering_labels_found": [],
+        "visible_text_characters": 542,
+        "visible_text_sha256": "4fd9d3f6e8419d72be705a1b1c5d3d6d6acbdff141d73e4c9dd3e050ca79b6d3",
+        "visible_text_sample": "阵发性睡眠性血红蛋白尿临床试验结果比较 首页 疗效与安全性 基线与人群 试验完成情况 试验与证据 全局搜索 疗效与安全性矩阵 适应症：阵发性睡眠性血红蛋白尿 观察截止：2026-07-31 快速筛选产品 伊普可泮 筛选条件 未设置筛选 疗效与安全性观察位置 点击数值查看数据依据。 第24周血红蛋白应答率与治疗期间不良事件｜疗效与安全性观察位置 气泡大小：治疗组样本量 APPOINT-PNH：单臂研究没有试验内对照组，不计算治疗—对照疗效差 治疗组治疗期间不良事件发生率（%） 试验内疗效差（百分点） 0 20 40 60 80 100 0 20 40 60 80 100 APPLY-PNH 疗效与安全性矩阵数据表 产品 试验 指标 组"
+      },
+      "dom_summary": {
+        "page_id": "efficacy-safety-matrix",
+        "snapshot_id": "snapshot-b-pnh-fixture-001",
+        "row_set_digest": "7fed43541d6c968abbf6d2d69a2cac7d8396e3ece6db78d3e42018008de923e1",
+        "chart_count": 1,
+        "table_count": 1,
+        "label_count": 81,
+        "min_visible_label_font_size": 16,
+        "document_scroll_height": 1473,
+        "body_scroll_height": 1473
+      },
+      "interaction_checks": {
+        "page_load": {
+          "passed": true,
+          "main_h1_count": 1,
+          "footer_count": 1,
+          "lang_zh_cn_count": 1,
+          "response_status_accepted": true
+        },
+        "filtering": {
+          "available": true,
+          "passed": true,
+          "dimension": "product",
+          "value": "iptacopan",
+          "before_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html",
+          "visible_rows_before": 2,
+          "after_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html/efficacy-safety-matrix.html?product=iptacopan",
+          "selected": true,
+          "visible_rows_after": 2,
+          "url_changed": true
+        },
+        "drilldown_evidence_drawer": {
+          "available": true,
+          "passed": true,
+          "trigger_index": 0,
+          "row_id": "matrix-apply-teae",
+          "panel_visible": true,
+          "panel_has_data_basis_label": true,
+          "panel_has_source_label": true,
+          "focus_query": "matrix-apply-teae",
+          "close_available": true,
+          "closed_after_close": true,
+          "focus_returned": true
+        },
+        "search": {
+          "available": true,
+          "passed": true,
+          "query": "疗效",
+          "result_count": 10,
+          "focused_result_count": 1,
+          "results_hidden_after_escape": true
+        },
+        "keyboard_access": {
+          "passed": false,
+          "focusable_count": 66,
+          "filter_available": true,
+          "filter_enter_selected": true,
+          "drawer_available": true,
+          "drawer_row_id": "matrix-apply-teae",
+          "drawer_enter_open": true,
+          "drawer_escape_closed": true,
+          "runtime_errors_during_keyboard_probe": [
+            "Can't find variable: activateRow"
+          ],
+          "observation": "Observed missing activateRow handler on evidence-cell Enter; drawer_visible=true and Escape closed it, but the keyboard path emitted the recorded page error."
+        },
+        "reduced_motion_static_state": {
+          "media_query_matches": true,
+          "active_animations_after_wait": 0,
+          "passed": true
+        }
+      },
+      "status": "captured",
+      "page_errors": [
+        "Can't find variable: activateRow"
+      ],
+      "console_errors": [],
+      "remote_requests": [],
+      "request_failures": []
+    }
+  ]
+}

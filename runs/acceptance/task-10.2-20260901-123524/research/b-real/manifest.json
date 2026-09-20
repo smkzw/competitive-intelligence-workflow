@@ -1,0 +1,688 @@
+{
+  "acquired_at": "2026-09-01T14:30:00+08:00",
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "files": [
+    {
+      "bytes": 787895,
+      "kind": "report_input",
+      "mtime_ns": 1788245891253844450,
+      "mtime_utc": "2026-09-01T06:58:11.253844+00:00",
+      "relative_path": "inputs/b-real/report-data.json",
+      "sha256": "299ab004568983cb3fac1d1a2a54b813f0970fd1e4ce85144be85ae7baeee984"
+    },
+    {
+      "bytes": 9883,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891264472854,
+      "mtime_utc": "2026-09-01T06:58:11.264473+00:00",
+      "relative_path": "research/b-real/arm-mapping-audit.json",
+      "sha256": "0ca998f95bf81af6d0e7158dacb7aa0fa0d6b42f9da37be023c94f655dec9e05"
+    },
+    {
+      "bytes": 40576,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891265319898,
+      "mtime_utc": "2026-09-01T06:58:11.265320+00:00",
+      "relative_path": "research/b-real/coverage-audit.json",
+      "sha256": "37792a3a29cafaaef8f0d9bf175c7d39fac78c729b2cf62bb425ff372294828e"
+    },
+    {
+      "bytes": 1814,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891266008191,
+      "mtime_utc": "2026-09-01T06:58:11.266008+00:00",
+      "relative_path": "research/b-real/extraction-diagnostics.json",
+      "sha256": "8016aba1a494c267edcb10e14e0d8003e39bb57af6d82aa650c6e9805d1b4eb9"
+    },
+    {
+      "bytes": 708340,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891264152853,
+      "mtime_utc": "2026-09-01T06:58:11.264153+00:00",
+      "relative_path": "research/b-real/facts.json",
+      "sha256": "e8ad346241e08e7d5212914dca6987cf82527759cf7816dadc94e3f751ba1991"
+    },
+    {
+      "bytes": 26853,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891265808482,
+      "mtime_utc": "2026-09-01T06:58:11.265809+00:00",
+      "relative_path": "research/b-real/missingness-diagnosis.json",
+      "sha256": "a811a9dd270525d80d78d7924e9df46b6bb2ad7c047445a59f1a6ce2d1117ab5"
+    },
+    {
+      "bytes": 19090,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891254349660,
+      "mtime_utc": "2026-09-01T06:58:11.254350+00:00",
+      "relative_path": "research/b-real/route-attempts.json",
+      "sha256": "64075f7006806412411513abbbb97395865fd1c59f0e93f0afed78a11aeb72c8"
+    },
+    {
+      "bytes": 2710,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891266111817,
+      "mtime_utc": "2026-09-01T06:58:11.266112+00:00",
+      "relative_path": "research/b-real/run-evidence.json",
+      "sha256": "4df7c2e0e8471bc77b01e7c1131f7afc4dc5c677ba29f92fbd9f21792ca2eb82"
+    },
+    {
+      "bytes": 35779,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891255236704,
+      "mtime_utc": "2026-09-01T06:58:11.255237+00:00",
+      "relative_path": "research/b-real/source-inventory.json",
+      "sha256": "1ef329a450b8cfd260d90a4fd7ec56515404f2c37ee75d01972839909ca15fab"
+    },
+    {
+      "bytes": 63840,
+      "kind": "raw_source",
+      "mtime_ns": 1788237910592576344,
+      "mtime_utc": "2026-09-01T04:45:10.592576+00:00",
+      "relative_path": "research/b-real/sources/cadth-table11-apply-disposition.html",
+      "sha256": "ed33c59ac994415bf9e08a8117f6b09709889de2bc667297b6c568ee065de24e"
+    },
+    {
+      "bytes": 52079,
+      "kind": "raw_source",
+      "mtime_ns": 1788237912459224288,
+      "mtime_utc": "2026-09-01T04:45:12.459224+00:00",
+      "relative_path": "research/b-real/sources/cadth-table13-apply-exposure.html",
+      "sha256": "589bde8c147d1c670234e5e52f9f9540c43cd63c21ff548dff5094bc598cc75d"
+    },
+    {
+      "bytes": 83836,
+      "kind": "raw_source",
+      "mtime_ns": 1788237914276876012,
+      "mtime_utc": "2026-09-01T04:45:14.276876+00:00",
+      "relative_path": "research/b-real/sources/cadth-table18-apply-safety.html",
+      "sha256": "9c651507270f1d9583361d9a7b448b25a6bb3a2ad375745b9502457c10b2efc4"
+    },
+    {
+      "bytes": 1282,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237879824,
+      "mtime_utc": "2026-09-01T06:58:11.237880+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct02946463-official-extract.json",
+      "sha256": "4e1ed1bfdfcbccd59e881451894fb8e1ef5030016bd13c054a5cc7335c97e53f"
+    },
+    {
+      "bytes": 1053,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237514823,
+      "mtime_utc": "2026-09-01T06:58:11.237515+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct03500549-official-extract.json",
+      "sha256": "91d3ec993293eeb7077e72622a178de539da5e9d39505806713a4ccb517e8f6f"
+    },
+    {
+      "bytes": 1351,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237167822,
+      "mtime_utc": "2026-09-01T06:58:11.237168+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct04434092-official-extract.json",
+      "sha256": "c8b0ccff9cf4deaa23b9f00ff8a91045bbe215d1eccddb2a9cb53b6ef7cc7539"
+    },
+    {
+      "bytes": 1217,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237638240,
+      "mtime_utc": "2026-09-01T06:58:11.237638+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct04469465-official-extract.json",
+      "sha256": "e3b4c325c00f4e633f44ee1f538b7f11b89657e172ebf8026535879a8567c6f7"
+    },
+    {
+      "bytes": 97227,
+      "kind": "raw_source",
+      "mtime_ns": 1788237899064593479,
+      "mtime_utc": "2026-09-01T04:44:59.064594+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct04558918.json",
+      "sha256": "5585618d655599fdae6695596df957291248becad2a01b0e24d6c0269ad57ec0"
+    },
+    {
+      "bytes": 50529,
+      "kind": "raw_source",
+      "mtime_ns": 1788237900083219162,
+      "mtime_utc": "2026-09-01T04:45:00.083219+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct04820530.json",
+      "sha256": "b6acbd3d7de99f92008bd03a20861e932f9bf9f56aa1b6f5ca5d4d68186172ab"
+    },
+    {
+      "bytes": 1030,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891238164658,
+      "mtime_utc": "2026-09-01T06:58:11.238165+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct05116787-exclusion-extract.json",
+      "sha256": "d8743fbdea8700e54b6a95e934ff7d376eb8775d31a61c89104cd7470bd2faa5"
+    },
+    {
+      "bytes": 1028,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891238109241,
+      "mtime_utc": "2026-09-01T06:58:11.238109+00:00",
+      "relative_path": "research/b-real/sources/ctgov-nct05131204-exclusion-extract.json",
+      "sha256": "2477a8ac1892abd361e87ce3e7703339a1482377409b99a376946e18532c23fe"
+    },
+    {
+      "bytes": 219279,
+      "kind": "raw_source",
+      "mtime_ns": 1788237903997834963,
+      "mtime_utc": "2026-09-01T04:45:03.997835+00:00",
+      "relative_path": "research/b-real/sources/dailymed-fabhalta-20260716.html",
+      "sha256": "e024297fffbb12f446e4256c9d4f7170b255ab071715987f450a3e4663000c02"
+    },
+    {
+      "bytes": 1124,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237759865,
+      "mtime_utc": "2026-09-01T06:58:11.237760+00:00",
+      "relative_path": "research/b-real/sources/dailymed-voydeya-official-extract.json",
+      "sha256": "4d68d53764ae03c2b6e9a6f3e69364c484d93488dfcc18d3780b26e644e9c3d0"
+    },
+    {
+      "bytes": 1060,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891238053699,
+      "mtime_utc": "2026-09-01T06:58:11.238054+00:00",
+      "relative_path": "research/b-real/sources/ema-ultomiris-epar-official-extract.json",
+      "sha256": "816cb404b1ca4190fb8e126ef14dca00972066168120f28e878de49656415b76"
+    },
+    {
+      "bytes": 276367,
+      "kind": "raw_source",
+      "mtime_ns": 1788237908772139092,
+      "mtime_utc": "2026-09-01T04:45:08.772139+00:00",
+      "relative_path": "research/b-real/sources/fabhalta-hcp-appoint.html",
+      "sha256": "0380b740a642568a32e2326a2b157897cd6caf983a9789a423122b12c7518823"
+    },
+    {
+      "bytes": 362163,
+      "kind": "raw_source",
+      "mtime_ns": 1788237905550315139,
+      "mtime_utc": "2026-09-01T04:45:05.550315+00:00",
+      "relative_path": "research/b-real/sources/fabhalta-hcp-trial-designs.html",
+      "sha256": "7252cce0ba05ceecf13ccd93fe92e8bc8dc2e38f7c7e705df5f8291d81b21220"
+    },
+    {
+      "bytes": 1460,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237448406,
+      "mtime_utc": "2026-09-01T06:58:11.237448+00:00",
+      "relative_path": "research/b-real/sources/fda-empaveli-review-official-extract.json",
+      "sha256": "3dc4f7f2f9bea1a1e9179e46356d4d932bd96795d0b89113c90038f4638202f7"
+    },
+    {
+      "bytes": 1637,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237308531,
+      "mtime_utc": "2026-09-01T06:58:11.237309+00:00",
+      "relative_path": "research/b-real/sources/fda-piasky-official-extract.json",
+      "sha256": "06aa5b651f7fcabef7868413ff1b91e15dcf3eb6132a87a13cc01700156d4001"
+    },
+    {
+      "bytes": 1249,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237939782,
+      "mtime_utc": "2026-09-01T06:58:11.237940+00:00",
+      "relative_path": "research/b-real/sources/fda-ultomiris-review-official-extract.json",
+      "sha256": "ed0c998b3eed0c839dd9cab8998aaaae9ee568fcf8b39baebae47fe71f02b371"
+    },
+    {
+      "bytes": 1457,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237697490,
+      "mtime_utc": "2026-09-01T06:58:11.237698+00:00",
+      "relative_path": "research/b-real/sources/fda-voydeya-official-extract.json",
+      "sha256": "538f7f62c2a40503d717acd18d7b6cfb3fc03b874a829aad7a4dde31ec376d6f"
+    },
+    {
+      "bytes": 224379,
+      "kind": "raw_source",
+      "mtime_ns": 1788239884699986910,
+      "mtime_utc": "2026-09-01T05:18:04.699987+00:00",
+      "relative_path": "research/b-real/sources/novartis-appoint-20230426.html",
+      "sha256": "da54159c968208a147ca858c28b93e3246e32ca824695d36014fb5b4f1fd3a20"
+    },
+    {
+      "bytes": 1336,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237995907,
+      "mtime_utc": "2026-09-01T06:58:11.237996+00:00",
+      "relative_path": "research/b-real/sources/pubmed-30510080-official-extract.json",
+      "sha256": "94146002afabb26876a49cb94ccb07f2d5c2f09281a7de5f9192b78f0c5d8907"
+    },
+    {
+      "bytes": 1216,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237578156,
+      "mtime_utc": "2026-09-01T06:58:11.237578+00:00",
+      "relative_path": "research/b-real/sources/pubmed-33730455-official-extract.json",
+      "sha256": "1f6d22e9ac8cbe89f44c963cb066edb2ff38e1572466f0191c47820239f81988"
+    },
+    {
+      "bytes": 1007,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237818782,
+      "mtime_utc": "2026-09-01T06:58:11.237819+00:00",
+      "relative_path": "research/b-real/sources/pubmed-38030318-official-extract.json",
+      "sha256": "e8b0d6383b5df26970e78899e4f9c39c0bbc5dd4437e82e782d680fb2cf9cfa2"
+    },
+    {
+      "bytes": 246065,
+      "kind": "raw_source",
+      "mtime_ns": 1788237901465440957,
+      "mtime_utc": "2026-09-01T04:45:01.465441+00:00",
+      "relative_path": "research/b-real/sources/pubmed-38477987.xml",
+      "sha256": "afbc745d7347d241b0e029de5d9d2fe82515618fe1f55c4547d1039004b0b0c4"
+    },
+    {
+      "bytes": 1020,
+      "kind": "raw_source",
+      "mtime_ns": 1788245891237379156,
+      "mtime_utc": "2026-09-01T06:58:11.237379+00:00",
+      "relative_path": "research/b-real/sources/pubmed-38884175-official-extract.json",
+      "sha256": "18db1234ca2d8141bfd69b8301f35b645cff6c02038c8684248e8900e313ab8d"
+    },
+    {
+      "bytes": 38330,
+      "kind": "raw_source",
+      "mtime_ns": 1788237902527099389,
+      "mtime_utc": "2026-09-01T04:45:02.527099+00:00",
+      "relative_path": "research/b-real/sources/pubmed-40447351.xml",
+      "sha256": "a32516690163f93e53fffbf7e43559783cc8bb1dc8aa13d9b196a64925e64523"
+    },
+    {
+      "bytes": 702823,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890909714021,
+      "mtime_utc": "2026-09-01T06:58:10.909714+00:00",
+      "relative_path": "research/b-real/static-render-smoke/adherence.html",
+      "sha256": "f8e38d6dc077cac6917502dd90009ff1dc654b61878bd8708a41b97a4805cc0c"
+    },
+    {
+      "bytes": 46663,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788209877177500471,
+      "mtime_utc": "2026-08-31T20:57:57.177500+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/charts.js",
+      "sha256": "624eca4f325a055632224987c76587d5b7a8a60bf4f985eed3092884853990bc"
+    },
+    {
+      "bytes": 1121883,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1786658313722878679,
+      "mtime_utc": "2026-08-13T21:58:33.722879+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/echarts.min.js",
+      "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0"
+    },
+    {
+      "bytes": 9524,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1786680506898003210,
+      "mtime_utc": "2026-08-14T04:08:26.898003+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/evidence-drawer.css",
+      "sha256": "d6d946528b7ce833ae09f493899cc5c27315e828f043ff22a18074841f446e92"
+    },
+    {
+      "bytes": 27712,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788209877177636806,
+      "mtime_utc": "2026-08-31T20:57:57.177637+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/evidence-drawer.js",
+      "sha256": "906ad72405476d1409ed4b8ea9f3c2723a3e134da43a9d7231d422402ac8f301"
+    },
+    {
+      "bytes": 9542,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1786640059959153252,
+      "mtime_utc": "2026-08-13T16:54:19.959153+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/logo.svg",
+      "sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae"
+    },
+    {
+      "bytes": 44162,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788209877177816309,
+      "mtime_utc": "2026-08-31T20:57:57.177816+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/portal.css",
+      "sha256": "d2fe576b6670e328f0ddbbe6a172604a60b29b619aba2fb78391d50e5b7e9a66"
+    },
+    {
+      "bytes": 39249,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788209877178052936,
+      "mtime_utc": "2026-08-31T20:57:57.178053+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/portal.js",
+      "sha256": "8be4dd738f39ce0e0cbfa56387d8de236fec922f60aa399f25a755892aa0bf22"
+    },
+    {
+      "bytes": 17184,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788080423495229599,
+      "mtime_utc": "2026-08-30T09:00:23.495229+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/report-b.css",
+      "sha256": "a644864397ff0eac75f4c663cc428e090f7a790fdd83307ea19dafa2e2f5d2ad"
+    },
+    {
+      "bytes": 30495,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788072651721511316,
+      "mtime_utc": "2026-08-30T06:50:51.721511+00:00",
+      "relative_path": "research/b-real/static-render-smoke/assets/report-b.js",
+      "sha256": "d9f66d3794f866692565a64b0ce7e0290e89c60d56432c8ebc26c70e1efb6296"
+    },
+    {
+      "bytes": 230949,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890856326961,
+      "mtime_utc": "2026-09-01T06:58:10.856327+00:00",
+      "relative_path": "research/b-real/static-render-smoke/baseline-demographics.html",
+      "sha256": "2010c7f6d4c037f268b3ba81fa67162f4de52cb658afeaaeb190b69b5ccabbe6"
+    },
+    {
+      "bytes": 231102,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890860942723,
+      "mtime_utc": "2026-09-01T06:58:10.860943+00:00",
+      "relative_path": "research/b-real/static-render-smoke/baseline-disease-context.html",
+      "sha256": "9ec3457a83d5d6d01b11bf01facf8e4b036a20a19f0d57a1b1dcd0cdd0d50748"
+    },
+    {
+      "bytes": 230802,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890851635781,
+      "mtime_utc": "2026-09-01T06:58:10.851636+00:00",
+      "relative_path": "research/b-real/static-render-smoke/baseline-overview.html",
+      "sha256": "cdd99230218b89aeadd2d0926c0a65d57f9951d94710bd22148454d21f5d2c41"
+    },
+    {
+      "bytes": 230826,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890865606152,
+      "mtime_utc": "2026-09-01T06:58:10.865606+00:00",
+      "relative_path": "research/b-real/static-render-smoke/baseline-severity.html",
+      "sha256": "ec43885f16c46eebcaf6028748e37fb9dc78015ac311bb57ee4a32221e4c4a90"
+    },
+    {
+      "bytes": 39859,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890799616766,
+      "mtime_utc": "2026-09-01T06:58:10.799617+00:00",
+      "relative_path": "research/b-real/static-render-smoke/data/report.js",
+      "sha256": "de1c2774ce017201f0e37de87fc4a6fe55707a2af3883cf3f58470470f545001"
+    },
+    {
+      "bytes": 43902,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891036737489,
+      "mtime_utc": "2026-09-01T06:58:11.036737+00:00",
+      "relative_path": "research/b-real/static-render-smoke/data/search-index.js",
+      "sha256": "a7cf61fd34e6025088a763c22c99e32e022e197a46c955f233a460bf62a2c63a"
+    },
+    {
+      "bytes": 2238,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891036047112,
+      "mtime_utc": "2026-09-01T06:58:11.036047+00:00",
+      "relative_path": "research/b-real/static-render-smoke/data/sitemap.json",
+      "sha256": "69a26767381c1915be342144c974c43d53d7c50f76acde3ccbf2e8e887fae022"
+    },
+    {
+      "bytes": 704509,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890880109650,
+      "mtime_utc": "2026-09-01T06:58:10.880110+00:00",
+      "relative_path": "research/b-real/static-render-smoke/disposition-overview.html",
+      "sha256": "d1d35c953332092e0ad4a340e08fdb356536f6a879550cd95b2a87bd97ebada9"
+    },
+    {
+      "bytes": 44524,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890989722529,
+      "mtime_utc": "2026-09-01T06:58:10.989722+00:00",
+      "relative_path": "research/b-real/static-render-smoke/efficacy-safety-matrix.html",
+      "sha256": "8863a9c7037d194e78bb6e7b249e4a7bae09153cc0494137d2c2d37075d7e3c3"
+    },
+    {
+      "bytes": 159302,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890841603713,
+      "mtime_utc": "2026-09-01T06:58:10.841604+00:00",
+      "relative_path": "research/b-real/static-render-smoke/efficacy.html",
+      "sha256": "26605e0ba83f1260931b3fbf62f162013e21de116d2c5586538d8b4427b49eab"
+    },
+    {
+      "bytes": 22829,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890990273947,
+      "mtime_utc": "2026-09-01T06:58:10.990274+00:00",
+      "relative_path": "research/b-real/static-render-smoke/evidence-limitations.html",
+      "sha256": "a32a6cb630f30fff33cac64ba78c8b9d3e54f391239fa21ee05323331c55a4c8"
+    },
+    {
+      "bytes": 162634,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890843742260,
+      "mtime_utc": "2026-09-01T06:58:10.843742+00:00",
+      "relative_path": "research/b-real/static-render-smoke/longitudinal-results.html",
+      "sha256": "d26be211e55e8c6db5868dd71d4d1d42c2403294961ea201beb839dcf082cb97"
+    },
+    {
+      "bytes": 702853,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890929472908,
+      "mtime_utc": "2026-09-01T06:58:10.929473+00:00",
+      "relative_path": "research/b-real/static-render-smoke/loss-exit.html",
+      "sha256": "2243b9ac3101900ec888caf2adf9737b37f5a1a8a75b6c47164751f76252e52e"
+    },
+    {
+      "bytes": 1303156,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890839161498,
+      "mtime_utc": "2026-09-01T06:58:10.839161+00:00",
+      "relative_path": "research/b-real/static-render-smoke/overview.html",
+      "sha256": "23a1f13df38718a2570dfff40d4736682e2bca18dfb477c7f88ab474f4e272ca"
+    },
+    {
+      "bytes": 703882,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890895075940,
+      "mtime_utc": "2026-09-01T06:58:10.895076+00:00",
+      "relative_path": "research/b-real/static-render-smoke/participant-flow.html",
+      "sha256": "cff3436513ce8149fe9e8e08439e1c57f610297d0ef7b0bd3890faed8ac488ec"
+    },
+    {
+      "bytes": 703573,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890986336228,
+      "mtime_utc": "2026-09-01T06:58:10.986336+00:00",
+      "relative_path": "research/b-real/static-render-smoke/plan-deviation.html",
+      "sha256": "ddfb42d8fd54b6792d91f4d3963c10135c10b2d1fa7ddc593148aa440d9af4c4"
+    },
+    {
+      "bytes": 66044,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890988708734,
+      "mtime_utc": "2026-09-01T06:58:10.988709+00:00",
+      "relative_path": "research/b-real/static-render-smoke/product-trial-profiles.html",
+      "sha256": "19aa7cd7cfebda6ca635cfc0dee4f03cd4ac52d171ffe3a4315e075a17b33abf"
+    },
+    {
+      "bytes": 231598,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891010460085,
+      "mtime_utc": "2026-09-01T06:58:11.010460+00:00",
+      "relative_path": "research/b-real/static-render-smoke/products/crovalimab.html",
+      "sha256": "7c7504ba7b15ddce3afb602461f59eb7f05cecba8ef9eed3cdb936fafa2dee1f"
+    },
+    {
+      "bytes": 243719,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891003938234,
+      "mtime_utc": "2026-09-01T06:58:11.003938+00:00",
+      "relative_path": "research/b-real/static-render-smoke/products/danicopan.html",
+      "sha256": "85af326616eb27f2be8cf562c18abc3b562ef7d9fc12391cd5219bcb6e027596"
+    },
+    {
+      "bytes": 479900,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890997345966,
+      "mtime_utc": "2026-09-01T06:58:10.997346+00:00",
+      "relative_path": "research/b-real/static-render-smoke/products/iptacopan.html",
+      "sha256": "70595b2b0cd83ae9ea0de7f9be66dd97ebdd2511466b2e582babffe5b534042b"
+    },
+    {
+      "bytes": 225406,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891000476183,
+      "mtime_utc": "2026-09-01T06:58:11.000476+00:00",
+      "relative_path": "research/b-real/static-render-smoke/products/pegcetacoplan.html",
+      "sha256": "db4a16cd7cbb35ae25dd8d24be892dc5c6149bd97fc0f93ac71032f190c34dca"
+    },
+    {
+      "bytes": 245099,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891007328368,
+      "mtime_utc": "2026-09-01T06:58:11.007328+00:00",
+      "relative_path": "research/b-real/static-render-smoke/products/ravulizumab.html",
+      "sha256": "96342fcc1dd3118fea432a29ab9770e6233e8e0105c9f160ea6fd397b2e16001"
+    },
+    {
+      "bytes": 704617,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890972194898,
+      "mtime_utc": "2026-09-01T06:58:10.972195+00:00",
+      "relative_path": "research/b-real/static-render-smoke/prohibited-medication.html",
+      "sha256": "1e2fee7fce790ea314c1fa12fe424edb8ed95f02bdbb7bbb581fb6fdfeee5f53"
+    },
+    {
+      "bytes": 703867,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890958160194,
+      "mtime_utc": "2026-09-01T06:58:10.958160+00:00",
+      "relative_path": "research/b-real/static-render-smoke/rescue-treatment.html",
+      "sha256": "32e3ba25f190c60a201ec27fd421c3a1f0348d4a4e2c65eebabcfe09fbc5c061"
+    },
+    {
+      "bytes": 240327,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890846812602,
+      "mtime_utc": "2026-09-01T06:58:10.846812+00:00",
+      "relative_path": "research/b-real/static-render-smoke/safety.html",
+      "sha256": "89b97b2ab3980fca8212c775f10b3a4b6688d09f514fb26f2ec35c10bdd633cb"
+    },
+    {
+      "bytes": 703588,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890943968906,
+      "mtime_utc": "2026-09-01T06:58:10.943969+00:00",
+      "relative_path": "research/b-real/static-render-smoke/screen-failure.html",
+      "sha256": "3820632c7cb87d90a82f3435fa8c67ffb249d249bd264de0d8c317fb2bfad91d"
+    },
+    {
+      "bytes": 12651,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890987532981,
+      "mtime_utc": "2026-09-01T06:58:10.987533+00:00",
+      "relative_path": "research/b-real/static-render-smoke/subgroups-supporting-evidence.html",
+      "sha256": "cc749ab75457d5c3046a15dc095658c95b0690211b5d83a885075bfcc06cd161"
+    },
+    {
+      "bytes": 41439,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245890987247856,
+      "mtime_utc": "2026-09-01T06:58:10.987248+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trial-exposure-context.html",
+      "sha256": "5deb79be6d1e6aea61936c54b9d5d263f9f4d0d16824a0f556774903273ef8c7"
+    },
+    {
+      "bytes": 244279,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891032712937,
+      "mtime_utc": "2026-09-01T06:58:11.032713+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trials/nct02946463.html",
+      "sha256": "a8f82092bcc3f1c6aa3828da82195c0d7e87749fcba94bd840489fbd017b4d75"
+    },
+    {
+      "bytes": 224596,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891025949960,
+      "mtime_utc": "2026-09-01T06:58:11.025950+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trials/nct03500549.html",
+      "sha256": "22e7600f4451a7cd4333ca3675f800ca55e88b4d73c73dd1c0d3ba56f329ea2e"
+    },
+    {
+      "bytes": 230662,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891035834528,
+      "mtime_utc": "2026-09-01T06:58:11.035835+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trials/nct04434092.html",
+      "sha256": "b27c5b7183782c4311f36c5b9a792a673deba777ddc178e1af0df98389f3674c"
+    },
+    {
+      "bytes": 242805,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891029287136,
+      "mtime_utc": "2026-09-01T06:58:11.029287+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trials/nct04469465.html",
+      "sha256": "a08779e491a9a2e1a0e62dc009da2c9201ea7fa7b612b7c2bb5650ff77e49fb2"
+    },
+    {
+      "bytes": 325988,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891015097889,
+      "mtime_utc": "2026-09-01T06:58:11.015098+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trials/nct04558918.html",
+      "sha256": "99380606b1180d53261c981bdba847e073f499a31074bf9b403d006ca6c268b1"
+    },
+    {
+      "bytes": 185335,
+      "kind": "static_render_smoke",
+      "mtime_ns": 1788245891017654563,
+      "mtime_utc": "2026-09-01T06:58:11.017655+00:00",
+      "relative_path": "research/b-real/static-render-smoke/trials/nct04820530.html",
+      "sha256": "0e8545f1946f30836aa5964f3a63338da1951fca626f22d94046f33cd1ffbb91"
+    },
+    {
+      "bytes": 3247,
+      "kind": "research_audit",
+      "mtime_ns": 1788245891254026451,
+      "mtime_utc": "2026-09-01T06:58:11.254026+00:00",
+      "relative_path": "research/b-real/universe-decision.json",
+      "sha256": "08eb827c8d636bc3d77c0dde18a06be97c913ae72888dcb4948513544f18364d"
+    }
+  ],
+  "forbidden_formats": [
+    "pdf",
+    "ppt",
+    "pptx"
+  ],
+  "formats": [
+    "html"
+  ],
+  "html_generated": false,
+  "indication": "阵发性睡眠性血红蛋白尿",
+  "input_digest": "299ab004568983cb3fac1d1a2a54b813f0970fd1e4ce85144be85ae7baeee984",
+  "manifest_self_hash_excluded": true,
+  "next_owner": "Codex",
+  "next_step": "Run controller-owned B static render, bind immutable report snapshot, then perform final browser and clinical acceptance.",
+  "package_digest": "1538348f03c3962806e44cf02a8f4e1e04eeb6c72e368d81f19020ee4e2d5635",
+  "quality_gates": {
+    "arm_mapping_audit": "passed",
+    "baseline": "covered_gate_passed",
+    "baseline_gate": "passed",
+    "disposition": "covered_with_explicit_missingness",
+    "efficacy": "covered",
+    "numeric_missingness_audit": "passed",
+    "safety": "covered_with_explicit_missingness",
+    "universe": "included_5_with_explicit_exclusions"
+  },
+  "report": "B",
+  "report_snapshot_id": "snapshot-b-real-pnh-20260901",
+  "report_version": "v-real-b-pnh-20260901",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "source_commit": "bb27ec9d750cf02fb64da5dfe665b2f4b262922d",
+  "source_commit_binding": "worker fallback rebuilt against current source commit; final controller acceptance remains required",
+  "source_digest": "a4e0cb7fc7702230ad6c410dc73a36d355768a2330a40bdd98a5eb414a6e0e00",
+  "state": "research_ready_html_pending"
+}

@@ -1,0 +1,45 @@
+{
+  "case_id": "technical-and-manual-recovery",
+  "source_fixture": "fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "技术失败先分类并保留回执；自动路径穷尽后，用户原文件按原名匹配、规范归档并幂等恢复。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "network-failure",
+      "description_zh": "网络不可用与科学资料未公开分开记录。"
+    },
+    {
+      "id": "rate-limit",
+      "description_zh": "限流保留路由诊断，不写成未公开。"
+    },
+    {
+      "id": "captcha",
+      "description_zh": "验证码/反爬阻断保留技术状态和用户动作。"
+    },
+    {
+      "id": "page-change",
+      "description_zh": "页面结构变更进入解析/路由故障分类。"
+    },
+    {
+      "id": "parser-failure",
+      "description_zh": "解析失败保留原始路由回执和失败下游范围。"
+    },
+    {
+      "id": "tool-capability-failure",
+      "description_zh": "工具能力缺失只重排受影响能力及下游节点。"
+    },
+    {
+      "id": "manual-original-name-match",
+      "description_zh": "用户按原文件名投递后按摘要、标题和试验身份自动匹配。"
+    },
+    {
+      "id": "rename-archive-recover",
+      "description_zh": "人工文件规范命名、归档并从同一阻断版本幂等恢复。"
+    }
+  ]
+}

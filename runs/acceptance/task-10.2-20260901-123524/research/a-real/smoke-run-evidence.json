@@ -1,0 +1,790 @@
+{
+  "schema_version": "1.0",
+  "case_id": "task-10.2-r03-a-real",
+  "run_id": "run_d1f9233fcfdb40441d6041a8",
+  "project_id": "project_b114ffc25ea65b49f61f5fb6",
+  "report": "A",
+  "indication": "特应性皮炎",
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "research_package_sha256": "c196f67fadbafeb699dd682078a4044da4ea014b6d82ebfa8fcf0152f112bb90",
+  "research_content_digest": "88bf766c56be55b739c19835f3a7b63fe27f9e0e5a0c5aa2446f2ae73257a93d",
+  "run_manifest_path": "reports/A/v1/html.manifest.json",
+  "run_manifest_sha256": "5b3dbbacb7d5eeb0292c06d67f8781bef68deb69d0dccea8d5e8f3f1c3149a1e",
+  "manifest_package_digest": "c0fd57aa1108512ee7cc8643403303145c3e7a433b2b03613c6adeb40bc7d944",
+  "artifact": {
+    "byte_size": 30129241,
+    "media_type": "directory",
+    "modified_at": "2026-09-01T06:02:55.159499Z",
+    "relative_path": "reports/A/v1/html",
+    "sha256": "efd16dc1524af0cfc7994c80ddbfb03d5d81ab0aee0b297bdd11473d9fc498f1"
+  },
+  "producer_run_id": "run_d1f9233fcfdb40441d6041a8",
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "universe": "completed",
+    "route": "completed",
+    "ingest": "completed",
+    "extract": "completed",
+    "resolve": "completed",
+    "gate:A": "completed",
+    "snapshot:A": "completed",
+    "scientific_qc:A": "completed",
+    "analyze:A": "completed",
+    "format:A": "completed"
+  },
+  "html_route_audit": {
+    "route_count": 50,
+    "top_level_count": 12,
+    "product_detail_count": 38,
+    "all_nonempty": true,
+    "all_have_title": true,
+    "route_rows": [
+      {
+        "relative_path": "clinical-portfolio.html",
+        "bytes": 36090,
+        "sha256": "86eb2a9062e0c490c6a8d72484c67b433ebff6780eb2b886d36ae94e3ec5b6e5",
+        "title": "临床开发组合｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "companies-transactions.html",
+        "bytes": 18074,
+        "sha256": "b442e09fbb5938946dc61f46760dbbebf349f4bc2f3d794a29b566d7706269b6",
+        "title": "企业与交易｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "efficacy.html",
+        "bytes": 5685372,
+        "sha256": "55a1295e7a4d7c1c2918ea48b3843cd41461fd8a9aadf5789cbaa414076cc9ce",
+        "title": "疗效｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "evidence-limitations.html",
+        "bytes": 8296,
+        "sha256": "806838b1861a33dad72113bfa0683614fc4f0fa907b289786b08da0dd92d2070",
+        "title": "研究依据与局限｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "historical-edge.html",
+        "bytes": 32115,
+        "sha256": "70b2ba96fcf38f971960a12a91a201df0a34e9aec05b770233c19d488d28ff42",
+        "title": "历史与边缘观察｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "landscape.html",
+        "bytes": 20013,
+        "sha256": "5f1e55e4ad8458a73e95eda0d9df70e2ebf337ce148cb9ec13981f3b6dff7eb8",
+        "title": "竞争格局｜特应性皮炎竞品全景",
+        "anchor_count": 47
+      },
+      {
+        "relative_path": "matrix.html",
+        "bytes": 21869,
+        "sha256": "07baeac9b00d162aadd2dcb3da03da4a333d980744258ec4e583e3072b8b6728",
+        "title": "疗效与安全性矩阵｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "overview.html",
+        "bytes": 8663,
+        "sha256": "c5966fcfdd54ae202e6b5052ab85d3061c546af2996a2b234e58fd816a27b816",
+        "title": "首页｜特应性皮炎竞品全景",
+        "anchor_count": 12
+      },
+      {
+        "relative_path": "patents-protection.html",
+        "bytes": 17721,
+        "sha256": "528f904418bdc3492bbd010c1b10d9b86bb570a251fb2bca5c9d6e9ba05fc8da",
+        "title": "专利与保护｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "product-overview.html",
+        "bytes": 41638,
+        "sha256": "a0b73140d7d3e6f422f285b1f3d87cafb71bc1b85f26e34312cc5ff441835cb7",
+        "title": "产品总览｜特应性皮炎竞品全景",
+        "anchor_count": 85
+      },
+      {
+        "relative_path": "products/abrocitinib.html",
+        "bytes": 250576,
+        "sha256": "5d1ad3a9406d6f41fd03a57b051a3cb58c8f05b810a9e38752f9ad35db33e1d4",
+        "title": "阿布昔替尼｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/ak120.html",
+        "bytes": 10120,
+        "sha256": "158a897d676bcb117f29d3e577ccc95499848aeb3551449d88be79b89cef053b",
+        "title": "AK120｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/amlitelimab.html",
+        "bytes": 1695253,
+        "sha256": "1453e80cf131e3ad939cdc1ea0058e999a0e315ac2e988ca0340edcca893421c",
+        "title": "Amlitelimab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/anb032.html",
+        "bytes": 7786,
+        "sha256": "f89b17fd636d8ff6d6cc21ccd34bfc6395c7c694dcf0da16d32402a344b245c7",
+        "title": "ANB032｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/apg777.html",
+        "bytes": 9706,
+        "sha256": "0a01cfc7ea409bb3f61cc3d10836194a20e389d98c18cc5b9de6bc0b91dce421",
+        "title": "APG777｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/baricitinib.html",
+        "bytes": 117671,
+        "sha256": "55d76d8b12cfb915065c4539b4c08ca4a612b80a66ca8a851990790c3098dcfe",
+        "title": "巴瑞替尼｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/barzolvolimab.html",
+        "bytes": 7643,
+        "sha256": "9d8eb08c608ada2d2440caaa85e780c4bd32e57ca7f948bd9be7b8f5e46a319d",
+        "title": "Barzolvolimab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/bempikibart.html",
+        "bytes": 17338,
+        "sha256": "60fccf49e59815feb801048f04848a3ce252e2c9233469ae6df3ab55d75af59b",
+        "title": "Bempikibart｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/bermekimab.html",
+        "bytes": 163316,
+        "sha256": "01eccb981ac3403590717b659b654d67727c7638719ca76b6867f720b3e5187b",
+        "title": "Bermekimab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/cm326.html",
+        "bytes": 7573,
+        "sha256": "4b6a10ef4e29cb814b4f2dddcfffdcb8dc8dd5c7256abdd171b4e61e4c7ce120",
+        "title": "CM326｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/crisaborole.html",
+        "bytes": 60662,
+        "sha256": "22ff137494ddd3260166702069f92e5812776740e973db3f2ad6bfcf2603a00e",
+        "title": "克立硼罗｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/difamilast.html",
+        "bytes": 13569,
+        "sha256": "742a40069cc1570c61187ce18047783dcf510aca46f9be32da2a07baa136a3c7",
+        "title": "Difamilast｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/dupilumab.html",
+        "bytes": 58190,
+        "sha256": "7ef39790c3e582b2375f7c84423f97592cb4d80706e5539a2d6cfecc07e2e806",
+        "title": "度普利尤单抗｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/eblasakimab.html",
+        "bytes": 9193,
+        "sha256": "3e0386af15b567d556676912a7c87a6ad255d498ba775ba76eb8b179d269115a",
+        "title": "Eblasakimab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/etokimab.html",
+        "bytes": 54869,
+        "sha256": "70f8317f06de721e3c0d46478422498b99d6265a24c4c8e6bc2d04eceb3cd507",
+        "title": "Etokimab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/gr1802.html",
+        "bytes": 9787,
+        "sha256": "6f69fadf41b7fc7d37581fdafe6cee0d7bedc99ff126643cc075575720578c50",
+        "title": "GR1802｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/ibi356.html",
+        "bytes": 7599,
+        "sha256": "4cd4f5f7fcb4e3e5d1e2836dcfa2c97536ed697fdbc60a98342c1d94219726f4",
+        "title": "IBI356｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/icp-332.html",
+        "bytes": 9351,
+        "sha256": "71b79685dd7e069a98be98a7b059e764a47156571b07a344542458b8334cf382",
+        "title": "ICP-332｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/ivarmacitinib.html",
+        "bytes": 9570,
+        "sha256": "157306de9af06ea87038862f09d79b1b2debfe1ef90aed9e0ac08b644581960b",
+        "title": "艾玛昔替尼｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/jaktinib.html",
+        "bytes": 7730,
+        "sha256": "21392b7fb113708e4a6bb26bb973d08e8851c9720b29a8179fc2699b988153a0",
+        "title": "杰克替尼｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/lebrikizumab.html",
+        "bytes": 1004483,
+        "sha256": "6f8dbd732adfec2361f70e0c234c9e1b52b4ac02137360a9badf83395e025209",
+        "title": "来布利珠单抗｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/lutikizumab.html",
+        "bytes": 7675,
+        "sha256": "69927d7b426ce80be10108eebf96d3d4a0a74d21bf7f0bcd273a88ce6ee5639c",
+        "title": "Lutikizumab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/nemolizumab.html",
+        "bytes": 65799,
+        "sha256": "df2481fdd73c06f7c50769f24d4544de061db97fecaffb38b4ca2f9b85085d6d",
+        "title": "奈莫利珠单抗｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/rezpegaldesleukin.html",
+        "bytes": 10539,
+        "sha256": "cc446ab1cf0066c7de7d0adc993c20df990c9b0b1c870fbae4321e66c40b6dd7",
+        "title": "Rezpegaldesleukin｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/rocatinlimab.html",
+        "bytes": 821403,
+        "sha256": "cf73f9a19fe100129beb1ff667d88e42687f12d1bf381829ced52cc34d3b8fe0",
+        "title": "Rocatinlimab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/roflumilast-cream.html",
+        "bytes": 17712,
+        "sha256": "57c03519d5146b74097fd89dae0a6d2739c4ee142eec6599f1db7b2a681bcc57",
+        "title": "罗氟司特乳膏｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/ruxolitinib-cream.html",
+        "bytes": 310957,
+        "sha256": "8676f066c01268985f316a0260df5ca3f60998a6910d9abcdc3c1655b8be4e9b",
+        "title": "芦可替尼乳膏｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/shr-1819.html",
+        "bytes": 10508,
+        "sha256": "b9c2671579822149105c5ff4566a0d7bb4ea24069152314c057c212b51e08a61",
+        "title": "SHR-1819｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/shr1905.html",
+        "bytes": 7612,
+        "sha256": "63def9ee906e732be32b001b3b3c516ab231badc6186fba150a5eab6881920af",
+        "title": "SHR-1905｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/sim0718.html",
+        "bytes": 10224,
+        "sha256": "f676aa8ed69c1c0923d97d83fe14dcf3dd5ba6a21dec2407118c27442dfeb6bc",
+        "title": "乐德奇拜单抗（Rademikibart / SIM0718）｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/skb575.html",
+        "bytes": 7671,
+        "sha256": "ce64c599c6a3ca757c3164a7b7239e065fcce24935decfdbe7a97d84044c52ac",
+        "title": "SKB575 / HBM7575｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/ssgj-611.html",
+        "bytes": 10393,
+        "sha256": "eda9602d0a39bea31273aa0b108fb9ab87a9015c0fdb7c912409f6ee4058812d",
+        "title": "611（SSGJ-611）｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/stapokibart.html",
+        "bytes": 9905,
+        "sha256": "416e912fe296f671b72826dd8fee6d89928cf58b5ca86ee70bc0380ee01d9926",
+        "title": "司普奇拜单抗｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/tapinarof.html",
+        "bytes": 28982,
+        "sha256": "95110db9600ffea90eedb8b0f28256927057835437970bfca09bb59a8418c924",
+        "title": "他匹那罗夫｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/tezepelumab.html",
+        "bytes": 327341,
+        "sha256": "39aca1255362bcf35d97ed6a05382cea405926bbfc3a83b573ecb5475a0dea1d",
+        "title": "Tezepelumab｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/tqh2722.html",
+        "bytes": 8006,
+        "sha256": "b93696901f8e607d6be2f75c115f7436bf75a068cf8ccf566704d4a28f7aeded",
+        "title": "TQH2722｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/tralokinumab.html",
+        "bytes": 214349,
+        "sha256": "76c1b07830390da525ef35415b520ba668b4df11168a5380a158a302039bc44c",
+        "title": "曲罗芦单抗｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "products/upadacitinib.html",
+        "bytes": 928926,
+        "sha256": "eabfa75cf2712e1e5418cfa9344937f05cb224f80a53117d4fc853ec6499da33",
+        "title": "乌帕替尼｜特应性皮炎竞品全景",
+        "anchor_count": 10
+      },
+      {
+        "relative_path": "regulatory.html",
+        "bytes": 35024,
+        "sha256": "7165dbf399cc24839b1c3b8ac33b4b9c47cea498d8e78923b7913c750db5bfcb",
+        "title": "中国与全球监管｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      },
+      {
+        "relative_path": "safety.html",
+        "bytes": 7026001,
+        "sha256": "16048a1d07b8b0ef771835921f5e4ec9ccdba71a94ab7653020f70f3648acfb3",
+        "title": "安全性｜特应性皮炎竞品全景",
+        "anchor_count": 9
+      }
+    ],
+    "static_html_link_count": 855,
+    "missing_static_html_links": []
+  },
+  "render_verdict": {
+    "anchor_ids": [
+      "尚待独立浏览器验收"
+    ],
+    "status": "rejected",
+    "verdict_id": "render-verdict_60761d826e631948b6616951",
+    "verified_at": "2026-09-01T06:02:55.159499Z"
+  },
+  "browser_acceptance": "not_run_by_worker_02; current-run render manifests remain rejected until Codex completes current-run Chromium/WebKit routes",
+  "format_scope": {
+    "html": "rendered in smoke project",
+    "pdf": "not generated",
+    "html-ppt": "not generated",
+    "pptx": "not generated"
+  },
+  "cli_smoke": {
+    "project_relative_path": "research/a-real/cli-smoke-project-r03-resolved",
+    "run_id": "run_515e9a1836b8946f99997141",
+    "manifest_sha256": "88767579ef2b4509ec7a2296ea98d057a17185f0462766158e9b7a956df73b04",
+    "manifest_status": "generated",
+    "html_route_count": 50,
+    "all_nonempty": true,
+    "input_sha256": "c196f67fadbafeb699dd682078a4044da4ea014b6d82ebfa8fcf0152f112bb90",
+    "browser_verdict": {
+      "anchor_ids": [
+        "尚待独立浏览器验收"
+      ],
+      "status": "rejected",
+      "verdict_id": "render-verdict_6b75216c35d15593dc3773bc",
+      "verified_at": "2026-09-01T06:03:33.039776Z"
+    },
+    "html_route_audit": {
+      "route_count": 50,
+      "top_level_count": 12,
+      "product_detail_count": 38,
+      "all_nonempty": true,
+      "all_have_title": true,
+      "route_rows": [
+        {
+          "relative_path": "clinical-portfolio.html",
+          "bytes": 36090,
+          "sha256": "86eb2a9062e0c490c6a8d72484c67b433ebff6780eb2b886d36ae94e3ec5b6e5",
+          "title": "临床开发组合｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "companies-transactions.html",
+          "bytes": 18074,
+          "sha256": "b442e09fbb5938946dc61f46760dbbebf349f4bc2f3d794a29b566d7706269b6",
+          "title": "企业与交易｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "efficacy.html",
+          "bytes": 5685372,
+          "sha256": "55a1295e7a4d7c1c2918ea48b3843cd41461fd8a9aadf5789cbaa414076cc9ce",
+          "title": "疗效｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "evidence-limitations.html",
+          "bytes": 8296,
+          "sha256": "806838b1861a33dad72113bfa0683614fc4f0fa907b289786b08da0dd92d2070",
+          "title": "研究依据与局限｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "historical-edge.html",
+          "bytes": 32115,
+          "sha256": "70b2ba96fcf38f971960a12a91a201df0a34e9aec05b770233c19d488d28ff42",
+          "title": "历史与边缘观察｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "landscape.html",
+          "bytes": 20013,
+          "sha256": "5f1e55e4ad8458a73e95eda0d9df70e2ebf337ce148cb9ec13981f3b6dff7eb8",
+          "title": "竞争格局｜特应性皮炎竞品全景",
+          "anchor_count": 47
+        },
+        {
+          "relative_path": "matrix.html",
+          "bytes": 21869,
+          "sha256": "07baeac9b00d162aadd2dcb3da03da4a333d980744258ec4e583e3072b8b6728",
+          "title": "疗效与安全性矩阵｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "overview.html",
+          "bytes": 8663,
+          "sha256": "c5966fcfdd54ae202e6b5052ab85d3061c546af2996a2b234e58fd816a27b816",
+          "title": "首页｜特应性皮炎竞品全景",
+          "anchor_count": 12
+        },
+        {
+          "relative_path": "patents-protection.html",
+          "bytes": 17721,
+          "sha256": "528f904418bdc3492bbd010c1b10d9b86bb570a251fb2bca5c9d6e9ba05fc8da",
+          "title": "专利与保护｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "product-overview.html",
+          "bytes": 41638,
+          "sha256": "a0b73140d7d3e6f422f285b1f3d87cafb71bc1b85f26e34312cc5ff441835cb7",
+          "title": "产品总览｜特应性皮炎竞品全景",
+          "anchor_count": 85
+        },
+        {
+          "relative_path": "products/abrocitinib.html",
+          "bytes": 250576,
+          "sha256": "5d1ad3a9406d6f41fd03a57b051a3cb58c8f05b810a9e38752f9ad35db33e1d4",
+          "title": "阿布昔替尼｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/ak120.html",
+          "bytes": 10120,
+          "sha256": "158a897d676bcb117f29d3e577ccc95499848aeb3551449d88be79b89cef053b",
+          "title": "AK120｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/amlitelimab.html",
+          "bytes": 1695253,
+          "sha256": "1453e80cf131e3ad939cdc1ea0058e999a0e315ac2e988ca0340edcca893421c",
+          "title": "Amlitelimab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/anb032.html",
+          "bytes": 7786,
+          "sha256": "f89b17fd636d8ff6d6cc21ccd34bfc6395c7c694dcf0da16d32402a344b245c7",
+          "title": "ANB032｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/apg777.html",
+          "bytes": 9706,
+          "sha256": "0a01cfc7ea409bb3f61cc3d10836194a20e389d98c18cc5b9de6bc0b91dce421",
+          "title": "APG777｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/baricitinib.html",
+          "bytes": 117671,
+          "sha256": "55d76d8b12cfb915065c4539b4c08ca4a612b80a66ca8a851990790c3098dcfe",
+          "title": "巴瑞替尼｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/barzolvolimab.html",
+          "bytes": 7643,
+          "sha256": "9d8eb08c608ada2d2440caaa85e780c4bd32e57ca7f948bd9be7b8f5e46a319d",
+          "title": "Barzolvolimab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/bempikibart.html",
+          "bytes": 17338,
+          "sha256": "60fccf49e59815feb801048f04848a3ce252e2c9233469ae6df3ab55d75af59b",
+          "title": "Bempikibart｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/bermekimab.html",
+          "bytes": 163316,
+          "sha256": "01eccb981ac3403590717b659b654d67727c7638719ca76b6867f720b3e5187b",
+          "title": "Bermekimab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/cm326.html",
+          "bytes": 7573,
+          "sha256": "4b6a10ef4e29cb814b4f2dddcfffdcb8dc8dd5c7256abdd171b4e61e4c7ce120",
+          "title": "CM326｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/crisaborole.html",
+          "bytes": 60662,
+          "sha256": "22ff137494ddd3260166702069f92e5812776740e973db3f2ad6bfcf2603a00e",
+          "title": "克立硼罗｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/difamilast.html",
+          "bytes": 13569,
+          "sha256": "742a40069cc1570c61187ce18047783dcf510aca46f9be32da2a07baa136a3c7",
+          "title": "Difamilast｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/dupilumab.html",
+          "bytes": 58190,
+          "sha256": "7ef39790c3e582b2375f7c84423f97592cb4d80706e5539a2d6cfecc07e2e806",
+          "title": "度普利尤单抗｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/eblasakimab.html",
+          "bytes": 9193,
+          "sha256": "3e0386af15b567d556676912a7c87a6ad255d498ba775ba76eb8b179d269115a",
+          "title": "Eblasakimab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/etokimab.html",
+          "bytes": 54869,
+          "sha256": "70f8317f06de721e3c0d46478422498b99d6265a24c4c8e6bc2d04eceb3cd507",
+          "title": "Etokimab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/gr1802.html",
+          "bytes": 9787,
+          "sha256": "6f69fadf41b7fc7d37581fdafe6cee0d7bedc99ff126643cc075575720578c50",
+          "title": "GR1802｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/ibi356.html",
+          "bytes": 7599,
+          "sha256": "4cd4f5f7fcb4e3e5d1e2836dcfa2c97536ed697fdbc60a98342c1d94219726f4",
+          "title": "IBI356｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/icp-332.html",
+          "bytes": 9351,
+          "sha256": "71b79685dd7e069a98be98a7b059e764a47156571b07a344542458b8334cf382",
+          "title": "ICP-332｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/ivarmacitinib.html",
+          "bytes": 9570,
+          "sha256": "157306de9af06ea87038862f09d79b1b2debfe1ef90aed9e0ac08b644581960b",
+          "title": "艾玛昔替尼｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/jaktinib.html",
+          "bytes": 7730,
+          "sha256": "21392b7fb113708e4a6bb26bb973d08e8851c9720b29a8179fc2699b988153a0",
+          "title": "杰克替尼｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/lebrikizumab.html",
+          "bytes": 1004483,
+          "sha256": "6f8dbd732adfec2361f70e0c234c9e1b52b4ac02137360a9badf83395e025209",
+          "title": "来布利珠单抗｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/lutikizumab.html",
+          "bytes": 7675,
+          "sha256": "69927d7b426ce80be10108eebf96d3d4a0a74d21bf7f0bcd273a88ce6ee5639c",
+          "title": "Lutikizumab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/nemolizumab.html",
+          "bytes": 65799,
+          "sha256": "df2481fdd73c06f7c50769f24d4544de061db97fecaffb38b4ca2f9b85085d6d",
+          "title": "奈莫利珠单抗｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/rezpegaldesleukin.html",
+          "bytes": 10539,
+          "sha256": "cc446ab1cf0066c7de7d0adc993c20df990c9b0b1c870fbae4321e66c40b6dd7",
+          "title": "Rezpegaldesleukin｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/rocatinlimab.html",
+          "bytes": 821403,
+          "sha256": "cf73f9a19fe100129beb1ff667d88e42687f12d1bf381829ced52cc34d3b8fe0",
+          "title": "Rocatinlimab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/roflumilast-cream.html",
+          "bytes": 17712,
+          "sha256": "57c03519d5146b74097fd89dae0a6d2739c4ee142eec6599f1db7b2a681bcc57",
+          "title": "罗氟司特乳膏｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/ruxolitinib-cream.html",
+          "bytes": 310957,
+          "sha256": "8676f066c01268985f316a0260df5ca3f60998a6910d9abcdc3c1655b8be4e9b",
+          "title": "芦可替尼乳膏｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/shr-1819.html",
+          "bytes": 10508,
+          "sha256": "b9c2671579822149105c5ff4566a0d7bb4ea24069152314c057c212b51e08a61",
+          "title": "SHR-1819｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/shr1905.html",
+          "bytes": 7612,
+          "sha256": "63def9ee906e732be32b001b3b3c516ab231badc6186fba150a5eab6881920af",
+          "title": "SHR-1905｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/sim0718.html",
+          "bytes": 10224,
+          "sha256": "f676aa8ed69c1c0923d97d83fe14dcf3dd5ba6a21dec2407118c27442dfeb6bc",
+          "title": "乐德奇拜单抗（Rademikibart / SIM0718）｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/skb575.html",
+          "bytes": 7671,
+          "sha256": "ce64c599c6a3ca757c3164a7b7239e065fcce24935decfdbe7a97d84044c52ac",
+          "title": "SKB575 / HBM7575｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/ssgj-611.html",
+          "bytes": 10393,
+          "sha256": "eda9602d0a39bea31273aa0b108fb9ab87a9015c0fdb7c912409f6ee4058812d",
+          "title": "611（SSGJ-611）｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/stapokibart.html",
+          "bytes": 9905,
+          "sha256": "416e912fe296f671b72826dd8fee6d89928cf58b5ca86ee70bc0380ee01d9926",
+          "title": "司普奇拜单抗｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/tapinarof.html",
+          "bytes": 28982,
+          "sha256": "95110db9600ffea90eedb8b0f28256927057835437970bfca09bb59a8418c924",
+          "title": "他匹那罗夫｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/tezepelumab.html",
+          "bytes": 327341,
+          "sha256": "39aca1255362bcf35d97ed6a05382cea405926bbfc3a83b573ecb5475a0dea1d",
+          "title": "Tezepelumab｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/tqh2722.html",
+          "bytes": 8006,
+          "sha256": "b93696901f8e607d6be2f75c115f7436bf75a068cf8ccf566704d4a28f7aeded",
+          "title": "TQH2722｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/tralokinumab.html",
+          "bytes": 214349,
+          "sha256": "76c1b07830390da525ef35415b520ba668b4df11168a5380a158a302039bc44c",
+          "title": "曲罗芦单抗｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "products/upadacitinib.html",
+          "bytes": 928926,
+          "sha256": "eabfa75cf2712e1e5418cfa9344937f05cb224f80a53117d4fc853ec6499da33",
+          "title": "乌帕替尼｜特应性皮炎竞品全景",
+          "anchor_count": 10
+        },
+        {
+          "relative_path": "regulatory.html",
+          "bytes": 35024,
+          "sha256": "7165dbf399cc24839b1c3b8ac33b4b9c47cea498d8e78923b7913c750db5bfcb",
+          "title": "中国与全球监管｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        },
+        {
+          "relative_path": "safety.html",
+          "bytes": 7026001,
+          "sha256": "16048a1d07b8b0ef771835921f5e4ec9ccdba71a94ab7653020f70f3648acfb3",
+          "title": "安全性｜特应性皮炎竞品全景",
+          "anchor_count": 9
+        }
+      ],
+      "static_html_link_count": 855,
+      "missing_static_html_links": []
+    }
+  }
+}

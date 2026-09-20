@@ -205,12 +205,3 @@ pages:
     complete_table: true
     filter_profiles: [b-matrix]
     evidence_drawer_profile: common-clinical
-  - id: evidence-limitations
-    route: /b/evidence-limitations
-    title: 研究依据与局限
-    navigation_group: 试验与证据
-    responsibility: "呈现影响比较解释的来源成熟度、可比性差异和局限，完整检索过程留在项目记录。"
-    visuals: [来源成熟度矩阵, 可比性状态图]
-    complete_table: true
-    filter_profiles: [b-evidence]
-    evidence_drawer_profile: common-clinical

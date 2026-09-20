@@ -1,0 +1,150 @@
+{
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "policy": "live official registry bytes are retained; fixture comparisons are diagnostics only",
+  "records": [
+    {
+      "fixture_path": "sources/clinicaltrials/NCT02260986.json",
+      "fixture_sha256": "315f0b023bbb3de2f2d779fa08151241dcf82fe9686f8ebf71ae01079a33e544",
+      "live_sha256": "0ecc13b6624228aa5c2e8ab154640143f7a8bc79b85eb621c9040ab0fc661bdd",
+      "record_id": "NCT02260986",
+      "status": "live_record_differs_from_fixture"
+    },
+    {
+      "fixture_path": "sources/clinicaltrials/NCT04178967.json",
+      "fixture_sha256": "a8b0b7bbcaf2d903a8182b92b5f7c1b91380c1e370bd010279c5eedaada807c9",
+      "live_sha256": "2985a5c699089365e3bda5f13d4e62aac44186242e8622d00b5469acd2e9ffe3",
+      "record_id": "NCT04178967",
+      "status": "live_record_differs_from_fixture"
+    },
+    {
+      "fixture_path": "sources/clinicaltrials/NCT03985943.json",
+      "fixture_sha256": "5a3c1febd39a3e659cd9d639c8974029daa44edd8d74e1a47977689a21f31fc7",
+      "live_sha256": "0137d160e62e59adc7a5a24df9adada324c849119a5ccf86d0b0a18960506cf7",
+      "record_id": "NCT03985943",
+      "status": "live_record_differs_from_fixture"
+    },
+    {
+      "fixture_path": "sources/clinicaltrials/NCT05149313.json",
+      "fixture_sha256": "02b9f4fdecc8cf9c1ceb2400592434468422301c90258f0265fe218dc7d8da57",
+      "live_sha256": "2dca024f2ff3b7492a44192bde0decd00f7092d690b79b47059f2544cd48decc",
+      "record_id": "NCT05149313",
+      "status": "live_record_differs_from_fixture"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "dc203d7a2420433ee5e37532b675d43d44544bd1556b700c8796adc69826500c",
+      "record_id": "NCT03131648",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "c72fcf005a59e90e5d9e8a83637b1efaa5e495a0b0d05a97d365ec58b01fca91",
+      "record_id": "NCT03761537",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "a7e6d0e7180a0cfd2ca185a34c37bcb0498cf5c034b44bd35d579cfd42666797",
+      "record_id": "NCT04146363",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "c4a8fa331a578ec0d7a160c4eb43e707a1b4fc748477ad35711791e94ab7bd9e",
+      "record_id": "NCT03569293",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "957d1f0dfcec00982bca0e57f8ce5d2073c2633e2804f8272734e8cc3833b293",
+      "record_id": "NCT03607422",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "a6bd448f96fdd502c3e0b7b36a31e97a50fb291320a33f2cd76da2e93e809ebd",
+      "record_id": "NCT03334396",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "b7ce1187fd10f5bc5dc50ad19558bd99f7106a20d1617a4e4b89b0c1535a60bd",
+      "record_id": "NCT03745651",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "fedb0856c985a24de77f4cc87064b885ee09dad2497e001ef04e00fffa3fd069",
+      "record_id": "NCT04921969",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "d60e96578c757ff1ab82a061d2b536489f403011fa99f5292fdebd25420bb90c",
+      "record_id": "NCT04773587",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "ea56c2891f79cc81b8575f849cc8c9d72bd575a0c5f23df35bf60d34c0d07759",
+      "record_id": "NCT04773600",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "36ff60070f895fd27ac5e4b15666cf6814c88590e657e99f5cc7b0f5aed5d584",
+      "record_id": "NCT05032859",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "604ce550796686a07288e26d2f1a9ac5d7b638b83d37e3b5556290d98dc23f7d",
+      "record_id": "NCT05608343",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "78ead594f5baec250ee3f2bddc878e2c6252503247b3c4efd43723ba57bb5d21",
+      "record_id": "NCT05398445",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "594ceeed901ab007497574db7df9775f4b07d4411d8789ff15db1499149920ca",
+      "record_id": "NCT05651711",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "21f0df3dc53a4fc5dc167027ce5d136aa6b467c22521f0c3949c7de97e68bddb",
+      "record_id": "NCT06130566",
+      "status": "new_record_without_fixture_counterpart"
+    },
+    {
+      "fixture_path": null,
+      "fixture_sha256": null,
+      "live_sha256": "99daba1a71aa45f8de9904193b7196c235fcbbf0ec1b264d51900313b5542089",
+      "record_id": "NCT06241118",
+      "status": "new_record_without_fixture_counterpart"
+    }
+  ],
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0"
+}

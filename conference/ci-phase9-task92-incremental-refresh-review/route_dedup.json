@@ -1,0 +1,81 @@
+{
+  "policy": "execution-used-provider-model-nodes-are-excluded-from-conference",
+  "linked_execution_task_id": "ci-phase9-task92-incremental-refresh",
+  "linked": true,
+  "execution_evidence": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase9-task92-incremental-refresh/worker_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase9-task92-incremental-refresh/worker_02_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase9-task92-incremental-refresh/worker_03_stdout.txt"
+  ],
+  "excluded_route_nodes": [
+    {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase9-task92-incremental-refresh/worker_01_stdout.txt",
+      "reason": "effective execution route"
+    }
+  ],
+  "effective_conference_roles": {
+    "general_single_object": {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4-flash",
+      "effort": "max",
+      "default_provider": "codebuddy-cli",
+      "default_model": "deepseek-v4-flash",
+      "default_effort": "max",
+      "escalate_provider": "codebuddy-cli",
+      "escalate_model": "deepseek-v4-flash",
+      "escalate_effort": "max",
+      "primary": {
+        "agent": "codebuddy",
+        "provider": "codebuddy-cli",
+        "model": "deepseek-v4-flash",
+        "effort": "max"
+      },
+      "fallbacks": [
+        {
+          "agent": "grok",
+          "provider": "grok-build",
+          "model": "grok-4.6",
+          "effort": "medium"
+        },
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "cursor-grok-4.6",
+          "effort": "medium"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-5.6-luna",
+          "effort": "max"
+        }
+      ],
+      "execution_route": "Complex/logic/evidence/artifact-heavy object: CodeBuddy/deepseek-v4-flash max -> zcode/GLM-5.3-Flash max -> Grok Build/grok-4.6 medium -> Pi/Cursor/cursor-grok-4.6 medium -> Pi/openai-codex/gpt-5.6-luna max",
+      "role": "single complex-task conference object; Codex chairs directly with no sub-venue chair",
+      "schedule": {
+        "policy": "beijing-day-night-v1",
+        "timezone": "Asia/Shanghai",
+        "period": "night",
+        "evaluated_at": "2026-09-01T02:17:04.493577+08:00"
+      },
+      "route_contract_frozen": true,
+      "deduplicated_against_execution": [
+        {
+          "provider": "zcode",
+          "model": "glm-5.3-flash"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "policy": "beijing-day-night-v1",
+    "timezone": "Asia/Shanghai",
+    "period": "night",
+    "evaluated_at": "2026-09-01T02:17:04.493577+08:00"
+  },
+  "generated_at": "2026-09-01 02:17:04 CST"
+}

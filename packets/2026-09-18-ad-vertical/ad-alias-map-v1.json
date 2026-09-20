@@ -1,0 +1,34 @@
+{
+ "schema_version": "1.0",
+ "map_id": "ad-alias-map-v1",
+ "description": "特应性皮炎竖向别名映射种子（自 ctgov-live-20260918-ad 两页真实记录提取）",
+ "canonical_by_alias": {
+  "dupilumab": "dupilumab",
+  "tralokinumab": "tralokinumab",
+  "lebrikizumab": "lebrikizumab",
+  "ustekinumab": "ustekinumab",
+  "amlitelimab": "amlitelimab",
+  "ruxolitinib cream": "ruxolitinib-cream",
+  "ruxolitinib": "ruxolitinib-cream",
+  "crisaborole 2% topical application ointment [eucrisa": "crisaborole",
+  "crisaborole": "crisaborole",
+  "elidel(r) (pimecrolimus 1%)": "pimecrolimus",
+  "pimecrolimus": "pimecrolimus",
+  "tacrolimus ointment 0.1%": "tacrolimus",
+  "tacrolimus": "tacrolimus",
+  "triamcinolone acetonide 0.1% ointment": "triamcinolone",
+  "triamcinolone acetonide": "triamcinolone"
+ },
+ "excluded_interventions": [
+  "Placebo",
+  "Matching Placebo",
+  "Emollient (moisturizer)",
+  "Vehicle of 0416 test product",
+  "Rabeprazole（PK 交互研究对照药）",
+  "Montelukast（合并用药对照）"
+ ],
+ "notes": [
+  "v1 种子：仅收录明确皮肤靶向/AD 系统治疗药物；健康新药 PK 交互研究（如 PF-08049820+Rabeprazole，healthyVolunteers=true 共 10 项）在宇宙甄别阶段按合同排除或如实标注，不冒充 AD 疗效证据。",
+  "品种代码（0416、P3-Fast、CNTO 7160、ATI-502、AQX-1125、HL-009、LEO80122）待下一轮逐条核对登记原文后升为规范产品。"
+ ]
+}

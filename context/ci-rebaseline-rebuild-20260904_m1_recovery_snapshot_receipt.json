@@ -1,0 +1,65 @@
+{
+  "backup": {
+    "copy_mode": "apfs_clone_cp_cR_P",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-m1-20260904T082040Z",
+    "read_only": true,
+    "writable_nodes": 0
+  },
+  "backup_manifest": {
+    "canonical_manifest_sha256": "ad496281d4785240e322400b0b0c86ebfb0d574058d4afe7d26c51e38754679c",
+    "file_sha256": "d10c56e5e586d6300ae538a1733057dff8c4a186f27adc84bab5d7f18d7b3739",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-m1-20260904T082040Z-backup-manifest.json",
+    "read_only": true
+  },
+  "captured_at": "2026-09-04T08:21:35.912826+00:00",
+  "counts": {
+    "bytes": 5888661178,
+    "content_class": {
+      "cache": 4287,
+      "git_metadata": 3443,
+      "normative_evidence": 2892,
+      "other": 274,
+      "raw_run_artifact": 7295,
+      "source": 687
+    },
+    "files": 18878,
+    "git_state": {
+      "git_metadata": 3443,
+      "ignored": 7031,
+      "tracked_modified": 71,
+      "tracked_unchanged": 1753,
+      "untracked": 6580
+    },
+    "node_type": {
+      "regular": 18875,
+      "symlink": 3
+    }
+  },
+  "disk_hygiene_receipt": "metrics/ci-rebaseline-m1-disk-hygiene-20260904.md",
+  "git": {
+    "branch": "main",
+    "head": "bb27ec9d750cf02fb64da5dfe665b2f4b262922d",
+    "status_sha256": "3b047f0d63ae0ee3468e6ba58633c3d994c754d107f1e35694847b0df5508188"
+  },
+  "limitations": [
+    "This is the current M0/M1 closure recovery point, captured after R0/R1 conference closure and milestone cache hygiene.",
+    "The receipt, milestone checkpoint and subsequent R2-R6 changes were created after this snapshot.",
+    "This full dirty-tree recovery snapshot is not the future HTML-only release source set."
+  ],
+  "previous_recovery_point": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-r0-20260904T074503Z",
+  "receipt_kind": "ci-rebaseline-recovery-snapshot-receipt",
+  "schema_version": "1.0",
+  "source_manifest": {
+    "canonical_manifest_sha256": "1e7e3aeeb031d0391a7fb333fb9825869047835cc54aff46b268fee7575b9d22",
+    "file_sha256": "982fe56970a69a66f13fb68d3d533173ce10995056f3e9e8192d48cb2086a8c2",
+    "path": "/Users/smkzw/Documents/AI Products/.ci-rebaseline-backups/ci-workflow-m1-20260904T082040Z-source-manifest.json",
+    "read_only": true
+  },
+  "status": "verified_read_only_recovery_snapshot",
+  "verification": {
+    "backup_manifest_validation": "passed",
+    "live_backup_node_rehash": "passed",
+    "source_backup_exact_node_comparison": "passed",
+    "source_manifest_validation": "passed"
+  }
+}

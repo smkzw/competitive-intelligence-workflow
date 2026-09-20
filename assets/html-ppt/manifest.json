@@ -9,8 +9,8 @@
   "license_sha256": "a5ed4059e25a3ec35e439abd2623753d1f42d4aa4989ffb5c6b7a97b61f6a949",
   "derivation": "保留固定画布、翻页、页码、逐字稿、演讲者视图、计时、预览和窗口同步；删除通用主题切换、演示动画和缩略总览，视觉全部交由项目康哲设计合同定义。",
   "derived_files": {
-    "runtime.css": "7613a3884d7f502a0313cfa8c716707d6fe3579345fbb4f898d3ea4b144bb15e",
-    "runtime.js": "ab31d115026ce6ef57292c95a022962b054d7ec1d9e85bdd09ba0515997cbcc4"
+    "runtime.css": "09df452da708ac80a9660bb49ff8603cfac85aec7e607852c99ca09a209517d0",
+    "runtime.js": "affadf9e344ec9da62cdd27942a41218983d2cb88a377eca540b7da622a990f7"
   },
   "required_features": [
     "1280×720 固定画布",

@@ -1,0 +1,1 @@
+{"ok": true, "agent": "pi", "model": "k3-256k", "rounds_completed": 1, "round_count": 1, "fallback": null, "failure": null}

@@ -19,12 +19,13 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from ci_workflow.application.project_service import verify_project_workspace
 
 ReportName = Literal["A", "B", "C"]
-OutputName = Literal["html", "pdf", "html-ppt", "pptx"]
+OutputName = Literal["html"]
 HostName = Literal["local", "codex", "hermes", "omp"]
 CapabilityState = Literal["ready", "blocked", "not_applicable"]
 MatrixState = Literal["ready", "partially_available", "blocked"]
+CAPABILITY_MATRIX_RELATIVE_PATH = "capabilities/preflight.json"
 
-CAPABILITY_IDS = (
+V1_CAPABILITY_IDS = (
     "project_file_io",
     "script_runtime",
     "http_network",
@@ -33,11 +34,9 @@ CAPABILITY_IDS = (
     "document_ingestion",
     "ocr",
     "browser_validation",
-    "native_pdf",
-    "html_ppt_runtime",
-    "ppt_master",
-    "office_renderer",
+    "independent_context",
 )
+CAPABILITY_IDS = V1_CAPABILITY_IDS
 
 CAPABILITY_LABELS = {
     "project_file_io": "项目文件读写",
@@ -48,10 +47,7 @@ CAPABILITY_LABELS = {
     "document_ingestion": "PDF 与文档读取",
     "ocr": "扫描件文字识别",
     "browser_validation": "真实浏览器验收",
-    "native_pdf": "原生 PDF 生成与检查",
-    "html_ppt_runtime": "HTML 演示稿运行组件",
-    "ppt_master": "可编辑 PPTX 生成组件",
-    "office_renderer": "PowerPoint 或指定 Office 验收",
+    "independent_context": "独立上下文审阅",
 }
 
 CAPABILITY_ACTIONS = {
@@ -63,15 +59,16 @@ CAPABILITY_ACTIONS = {
     "document_ingestion": "请恢复 PDF/文档读取组件，或把无法读取的原文交给 Agent。",
     "ocr": "请恢复扫描件文字识别能力；可正常读取的文本资料不受影响。",
     "browser_validation": "请恢复真实浏览器后再验收网页产物。",
-    "native_pdf": "请恢复原生 PDF 生成与阅读检查组件。",
-    "html_ppt_runtime": "请恢复 HTML 演示稿运行组件后再生成该格式。",
-    "ppt_master": "请安装或恢复 PPT Master，再继续生成可编辑 PPTX。",
-    "office_renderer": "请安装或恢复 PowerPoint/指定 Office，再进行可编辑性和视觉检查。",
+    "independent_context": "请提供独立上下文审阅者；主 Agent 不能自证首份宇宙闭包。",
 }
 
 
 class CapabilityProbeFailure(RuntimeError):
     """已经完成适用的轻量重试，但能力仍不可用。"""
+
+
+class CapabilityPersistenceError(RuntimeError):
+    """能力矩阵不能在项目边界内安全保存或重新打开。"""
 
 
 class CapabilitySelection(BaseModel):
@@ -81,9 +78,9 @@ class CapabilitySelection(BaseModel):
 
     reports: tuple[ReportName, ...] = Field(min_length=1)
     outputs: tuple[OutputName, ...] = Field(min_length=1)
-    source_routes: tuple[
-        Literal["public-http", "public-browser", "authenticated-browser"], ...
-    ] = Field(min_length=1)
+    source_routes: tuple[Literal["public-http", "public-browser", "authenticated-browser"], ...] = (
+        Field(min_length=1)
+    )
     needs_document_ingestion: bool
     needs_ocr: bool
 
@@ -166,6 +163,10 @@ class RuntimeCapabilityProbe:
             self.overrides = {}
         self.cache: dict[str, ProbeOutcome] = {}
 
+    def reset(self) -> None:
+        """Discard observations from a previous preflight flight."""
+        self.cache.clear()
+
     def check(self, capability_id: str, *, project_root: Path) -> ProbeOutcome:
         if capability_id in self.overrides:
             available = self.overrides[capability_id]
@@ -196,8 +197,12 @@ class RuntimeCapabilityProbe:
             if isinstance(error, TimeoutError):
                 return "连接 ClinicalTrials.gov 超时"
             return "无法连接 ClinicalTrials.gov"
-        if capability_id in {"search_browser", "login_browser", "browser_validation"}:
+        if capability_id == "login_browser":
+            return "宿主未提供可验证的已登录浏览器会话观察"
+        if capability_id in {"search_browser", "browser_validation"}:
             return "Chromium 无法启动或完成页面渲染"
+        if capability_id == "independent_context":
+            return "宿主未声明独立上下文审阅者"
         if capability_id == "project_file_io":
             return "项目目录无法完成临时文件读写"
         if capability_id == "script_runtime":
@@ -243,7 +248,9 @@ class RuntimeCapabilityProbe:
             raise CapabilityProbeFailure(
                 "连续 3 次无法连接 ClinicalTrials.gov；已完成短间隔重试"
             ) from last_error
-        if capability_id in {"search_browser", "login_browser", "browser_validation"}:
+        if capability_id == "login_browser":
+            return False, "宿主未提供可验证的已登录浏览器会话观察"
+        if capability_id in {"search_browser", "browser_validation"}:
             from playwright.sync_api import sync_playwright
 
             with sync_playwright() as playwright:
@@ -255,36 +262,20 @@ class RuntimeCapabilityProbe:
             return ready, "真实 Chromium 页面已完成渲染"
         if capability_id == "document_ingestion":
             available = all(
-                importlib.util.find_spec(module) is not None
-                for module in ("pypdf", "pdfplumber")
+                importlib.util.find_spec(module) is not None for module in ("pypdf", "pdfplumber")
             )
             return available, "PDF 与文档读取组件已发现"
         if capability_id == "ocr":
             gate = os.environ.get("CI_WORKFLOW_OCR_GATE")
             available = bool(gate and Path(gate).is_file()) or shutil.which("omlx") is not None
             return available, "扫描件文字识别入口已发现" if available else "未发现文字识别入口"
-        if capability_id == "native_pdf":
-            modules = importlib.util.find_spec("reportlab") is not None
-            poppler = shutil.which("pdftoppm") or shutil.which("pdftocairo")
-            return bool(modules and poppler), "原生 PDF 与页面渲染组件已发现"
-        if capability_id == "html_ppt_runtime":
-            package_root = Path(__file__).resolve().parents[3]
-            manifest = package_root / "assets/html-ppt/manifest.json"
-            return manifest.is_file(), "HTML 演示稿运行组件已发现"
-        if capability_id == "ppt_master":
-            configured = os.environ.get("CI_WORKFLOW_PPT_MASTER_PATH")
-            candidates = (
-                Path(configured) if configured else Path("/__not_configured__"),
-                Path.home() / ".cc-switch/skills/ppt-master/SKILL.md",
-                Path.home() / ".codex/skills/ppt-master/SKILL.md",
-            )
-            return any(path.is_file() for path in candidates), "PPT Master 已发现"
-        if capability_id == "office_renderer":
-            configured = os.environ.get("CI_WORKFLOW_OFFICE_COMMAND")
-            available = bool(configured and shutil.which(configured)) or Path(
-                "/Applications/Microsoft PowerPoint.app"
-            ).exists()
-            return available, "PowerPoint 或指定 Office 已发现"
+        if capability_id == "independent_context":
+            declaration = os.environ.get("CI_WORKFLOW_INDEPENDENT_CONTEXT")
+            if declaration == "1":
+                return True, "宿主已声明独立上下文审阅者"
+            if declaration == "0":
+                return False, "宿主明确声明没有独立上下文审阅者"
+            return False, "宿主未声明独立上下文审阅者"
         raise ValueError(f"未知能力：{capability_id}")
 
 
@@ -316,6 +307,11 @@ class DeliveryReadiness(BaseModel):
     blocked_by: tuple[str, ...]
 
 
+def _capability_ids_for_selection(selection: CapabilitySelection) -> tuple[str, ...]:
+    del selection
+    return CAPABILITY_IDS
+
+
 class CapabilityMatrix(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -326,12 +322,12 @@ class CapabilityMatrix(BaseModel):
     research: tuple[ResearchReadiness, ...]
     deliveries: tuple[DeliveryReadiness, ...]
     overall_state: MatrixState
-    user_messages: tuple[str, ...] = Field(min_length=1)
+    user_messages: tuple[str, ...]
 
     @model_validator(mode="after")
     def _matrix_is_complete_and_internally_consistent(self) -> CapabilityMatrix:
         capability_ids = tuple(item.capability_id for item in self.capabilities)
-        if capability_ids != CAPABILITY_IDS:
+        if capability_ids != _capability_ids_for_selection(self.selection):
             raise ValueError("能力矩阵必须按冻结清单完整且唯一")
         records = {item.capability_id: item for item in self.capabilities}
         if tuple(item.report for item in self.research) != self.selection.reports:
@@ -362,9 +358,7 @@ class CapabilityMatrix(BaseModel):
                 for blocker in delivery_item.blocked_by
             ):
                 raise ValueError("阻断状态引用了未阻断或不存在的能力")
-        states = [item.state for item in self.research] + [
-            item.state for item in self.deliveries
-        ]
+        states = [item.state for item in self.research] + [item.state for item in self.deliveries]
         expected_state: MatrixState
         if all(state == "ready" for state in states):
             expected_state = "ready"
@@ -383,6 +377,65 @@ class CapabilityMatrix(BaseModel):
         raise KeyError(capability_id)
 
 
+def _capability_matrix_path(project_root: Path, *, create_directory: bool) -> Path:
+    root = verify_project_workspace(project_root).project_root
+    directory = root / "capabilities"
+    if directory.is_symlink():
+        raise CapabilityPersistenceError("能力回执目录不能是软链接")
+    if directory.exists() and not directory.is_dir():
+        raise CapabilityPersistenceError("能力回执目录必须是普通目录")
+    if create_directory:
+        directory.mkdir(parents=True, exist_ok=True)
+    path = directory / "preflight.json"
+    if path.is_symlink():
+        raise CapabilityPersistenceError("能力回执文件不能是软链接")
+    if path.exists() and not path.is_file():
+        raise CapabilityPersistenceError("能力回执目标必须是普通文件")
+    return path
+
+
+def persist_capability_matrix(project_root: Path, matrix: CapabilityMatrix) -> Path:
+    """原子保存当前能力回执；它是易变运行事实，不是第二状态库。"""
+    path = _capability_matrix_path(project_root, create_directory=True)
+    encoded = (
+        json.dumps(
+            matrix.model_dump(mode="json"),
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+        + "\n"
+    ).encode("utf-8")
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as stream:
+            stream.write(encoded)
+            stream.flush()
+            os.fsync(stream.fileno())
+        if path.is_symlink() or (path.exists() and not path.is_file()):
+            raise CapabilityPersistenceError("能力回执目标在写入期间发生变化")
+        os.replace(temporary, path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+    return path
+
+
+def load_persisted_capability_matrix(project_root: Path) -> CapabilityMatrix:
+    """重新打开当前能力回执并执行完整类型校验。"""
+    path = _capability_matrix_path(project_root, create_directory=False)
+    if not path.is_file():
+        raise CapabilityPersistenceError("能力回执尚未生成")
+    try:
+        return CapabilityMatrix.model_validate_json(path.read_bytes())
+    except (OSError, ValueError) as error:
+        raise CapabilityPersistenceError("能力回执损坏或不符合合同") from error
+
+
 class RecoveryPlan(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -391,7 +444,12 @@ class RecoveryPlan(BaseModel):
 
 
 def _applicable_capabilities(selection: CapabilitySelection) -> set[str]:
-    applicable = {"project_file_io", "script_runtime", "browser_validation"}
+    applicable = {
+        "project_file_io",
+        "script_runtime",
+        "browser_validation",
+        "independent_context",
+    }
     if "public-http" in selection.source_routes:
         applicable.add("http_network")
     if "public-browser" in selection.source_routes:
@@ -402,12 +460,6 @@ def _applicable_capabilities(selection: CapabilitySelection) -> set[str]:
         applicable.add("document_ingestion")
     if selection.needs_ocr:
         applicable.add("ocr")
-    if "pdf" in selection.outputs:
-        applicable.add("native_pdf")
-    if "html-ppt" in selection.outputs:
-        applicable.add("html_ppt_runtime")
-    if "pptx" in selection.outputs:
-        applicable.update(("ppt_master", "office_renderer"))
     return applicable
 
 
@@ -417,26 +469,24 @@ def _research_dependencies(selection: CapabilitySelection) -> tuple[str, ...]:
         "script_runtime",
         "http_network",
         "search_browser",
-        "login_browser",
         "document_ingestion",
         "ocr",
+        "independent_context",
     )
     applicable = _applicable_capabilities(selection)
     return tuple(item for item in candidates if item in applicable)
 
 
 def _delivery_dependencies(output: OutputName) -> tuple[str, ...]:
-    if output == "html":
-        return ("browser_validation",)
-    if output == "pdf":
-        return ("native_pdf",)
-    if output == "html-ppt":
-        return ("browser_validation", "html_ppt_runtime")
-    return ("ppt_master", "office_renderer")
+    if output != "html":
+        raise ValueError("首版交付格式必须是 html")
+    return ("browser_validation",)
 
 
 def _required_by(selection: CapabilitySelection) -> dict[str, tuple[str, ...]]:
-    values: dict[str, list[str]] = {capability_id: [] for capability_id in CAPABILITY_IDS}
+    values: dict[str, list[str]] = {
+        capability_id: [] for capability_id in _capability_ids_for_selection(selection)
+    }
     research_dependencies = _research_dependencies(selection)
     for report in selection.reports:
         for capability_id in research_dependencies:
@@ -454,39 +504,31 @@ def _user_messages(
     records: Mapping[str, CapabilityRecord],
     overall_state: MatrixState,
 ) -> tuple[str, ...]:
-    if overall_state == "ready":
-        return ("所选报告和交付格式所需能力均可用，可以开始调研。",)
-    blocked = [record for record in records.values() if record.state == "blocked"]
+    optional_login_blocked = (
+        "authenticated-browser" in selection.source_routes
+        and records["login_browser"].state == "blocked"
+    )
     messages: list[str] = []
-    ppt_blocked = [
-        record
-        for record in blocked
-        if record.capability_id in {"ppt_master", "office_renderer"}
-    ]
-    if ppt_blocked:
-        unaffected = [
-            {"html": "HTML", "pdf": "PDF", "html-ppt": "HTML 演示稿"}[output]
-            for output in selection.outputs
-            if output != "pptx"
-        ]
-        reasons = "；".join(dict.fromkeys(item.detail.rstrip("。") for item in ppt_blocked))
-        actions = "；".join(
-            dict.fromkeys(item.user_action.rstrip("。") for item in ppt_blocked)
+    if overall_state == "ready":
+        messages.append("所选报告和 HTML 门户交付所需核心能力均可用，可以开始调研。")
+    if optional_login_blocked:
+        record = records["login_browser"]
+        messages.append(
+            "药智网可选路线暂不可用："
+            f"{record.detail.rstrip('。')}。请在浏览器中自行登录后继续该辅助路线；"
+            "其他适格来源与核心研究不受阻断。"
         )
-        suffix = f"；{'、'.join(unaffected)} 不受影响。" if unaffected else "。"
-        messages.append(f"可编辑 PPTX 暂时无法生成：{reasons}。{actions}{suffix}")
+    if overall_state == "ready":
+        return tuple(messages)
+    blocked = [record for record in records.values() if record.state == "blocked"]
     for record in blocked:
-        capability_id = record.capability_id
-        if capability_id in {"project_file_io", "script_runtime"}:
-            messages.append(
-                f"{record.label}暂时不可用，所选报告尚不能启动。{record.user_action}"
-            )
-        elif capability_id in {"ppt_master", "office_renderer"}:
+        if record.capability_id == "login_browser" and not record.required_by:
             continue
+        if record.capability_id in {"project_file_io", "script_runtime"}:
+            messages.append(f"{record.label}暂时不可用，所选报告尚不能启动。{record.user_action}")
         else:
             messages.append(
-                f"{record.label}暂时不可用：{record.detail.rstrip('。')}。"
-                f"{record.user_action}"
+                f"{record.label}暂时不可用：{record.detail.rstrip('。')}。{record.user_action}"
             )
     return tuple(dict.fromkeys(messages))
 
@@ -498,10 +540,13 @@ def run_capability_preflight(
     probe: CapabilityProbe,
     project_root: Path,
 ) -> CapabilityMatrix:
+    if isinstance(probe, RuntimeCapabilityProbe):
+        probe.reset()
     applicable = _applicable_capabilities(selection)
+    capability_ids = _capability_ids_for_selection(selection)
     required_by = _required_by(selection)
     records: dict[str, CapabilityRecord] = {}
-    for capability_id in CAPABILITY_IDS:
+    for capability_id in capability_ids:
         if capability_id not in applicable:
             records[capability_id] = CapabilityRecord(
                 capability_id=capability_id,
@@ -581,17 +626,28 @@ def run_capability_preflight(
 def selection_from_project(
     project_root: Path,
     *,
-    source_routes: tuple[
-        Literal["public-http", "public-browser", "authenticated-browser"], ...
-    ] = ("public-http", "public-browser"),
+    source_routes: tuple[Literal["public-http", "public-browser", "authenticated-browser"], ...] = (
+        "public-http",
+        "public-browser",
+    ),
     needs_document_ingestion: bool = True,
     needs_ocr: bool = False,
 ) -> CapabilitySelection:
     contract = verify_project_workspace(project_root).contract
+    from ci_workflow.application.yaozh_access import load_yaozh_access_record
+
+    yaozh_record = load_yaozh_access_record(project_root)
+    resolved_routes = source_routes
+    if (
+        yaozh_record is not None
+        and yaozh_record.route_enabled
+        and "authenticated-browser" not in resolved_routes
+    ):
+        resolved_routes = (*resolved_routes, "authenticated-browser")
     return CapabilitySelection(
         reports=tuple(report.value for report in contract.reports),
         outputs=tuple(output.value for output in contract.outputs),
-        source_routes=source_routes,
+        source_routes=resolved_routes,
         needs_document_ingestion=needs_document_ingestion,
         needs_ocr=needs_ocr,
     )
@@ -602,9 +658,10 @@ def plan_environment_recovery(
 ) -> RecoveryPlan:
     if previous.host != current.host or previous.selection != current.selection:
         raise ValueError("环境恢复比较必须使用同一宿主和用户选择")
+    capability_ids = tuple(item.capability_id for item in previous.capabilities)
     repaired = tuple(
         capability_id
-        for capability_id in CAPABILITY_IDS
+        for capability_id in capability_ids
         if previous.capability(capability_id).state == "blocked"
         and current.capability(capability_id).state == "ready"
     )
@@ -614,9 +671,7 @@ def plan_environment_recovery(
             parts = requirement.split(":")
             if parts[0] == "research":
                 report = cast(ReportName, parts[1])
-                current_research = next(
-                    item for item in current.research if item.report == report
-                )
+                current_research = next(item for item in current.research if item.report == report)
                 if current_research.state != "ready":
                     continue
                 nodes.extend(
@@ -633,9 +688,7 @@ def plan_environment_recovery(
                         if item.report == report and item.output == output
                     )
                     if current_delivery.state == "ready":
-                        nodes.extend(
-                            (f"render:{report}:{output}", f"verify:{report}:{output}")
-                        )
+                        nodes.extend((f"render:{report}:{output}", f"verify:{report}:{output}"))
             else:
                 _, raw_report, raw_output = parts
                 delivery_report = cast(ReportName, raw_report)
@@ -643,8 +696,7 @@ def plan_environment_recovery(
                 current_delivery = next(
                     item
                     for item in current.deliveries
-                    if item.report == delivery_report
-                    and item.output == delivery_output
+                    if item.report == delivery_report and item.output == delivery_output
                 )
                 if current_delivery.state == "ready":
                     nodes.extend(

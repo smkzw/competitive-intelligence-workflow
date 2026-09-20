@@ -1,0 +1,37 @@
+{
+  "case_id": "evidence-guidance-conflicts",
+  "source_fixture": "fixtures/synthetic/a-complete/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "冲突证据和指南版本必须保留来源角色、成熟度、监管轨与采用规则，未决关键冲突阻断草稿。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "paper-registry-regulatory-industry-conflict",
+      "description_zh": "论文、登记、监管和指定行业来源对同一事实冲突时逐源保留。"
+    },
+    {
+      "id": "final-draft-superseded-guidance",
+      "description_zh": "final、draft 和废止/被替代指南状态分开处理。"
+    },
+    {
+      "id": "cde-fda-aligned",
+      "description_zh": "CDE 与 FDA 对齐时保留各自监管轨和原始定位。"
+    },
+    {
+      "id": "cde-fda-divergent",
+      "description_zh": "CDE 与 FDA 分歧时并列呈现，不强行统一。"
+    },
+    {
+      "id": "strict-majority",
+      "description_zh": "严格多数只在锁定核心分母和合资格来源内计算。"
+    },
+    {
+      "id": "most-commonly-adopted",
+      "description_zh": "无严格多数时仅描述最常采用族，不升级成真理或推荐。"
+    }
+  ]
+}

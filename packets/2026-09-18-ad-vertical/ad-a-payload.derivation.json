@@ -1,0 +1,22 @@
+{
+ "indication": "特应性皮炎",
+ "indication_id": "atopic-dermatitis",
+ "query": "query.cond=atopic+dermatitis&filter.overallStatus=COMPLETED",
+ "retrieved_at": "2026-09-18",
+ "pages": [
+  {
+   "page": 1,
+   "sha256": "0c80647d42157dc8803fe9bec02a7cf4e18d1faead4db2e0ada0b8b531918365",
+   "bytes": 1111746,
+   "source_url": "https://clinicaltrials.gov/api/v2/studies?query.cond=atopic+dermatitis&filter.overallStatus=COMPLETED&pageSize=20",
+   "retrieved_at": "2026-09-18"
+  },
+  {
+   "page": 2,
+   "sha256": "891efdf31a8d8b9176751ba533529d9aa785287210f8e98704598dc34d3113a7",
+   "bytes": 1082861,
+   "source_url": "https://clinicaltrials.gov/api/v2/studies?query.cond=atopic+dermatitis&filter.overallStatus=COMPLETED&pageSize=20",
+   "retrieved_at": "2026-09-18"
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+Task 6.5 真实 RED 证据（2026-08-29）
+
+范围：仅新增两份目标测试；未修改 GateSpec、gate evaluator 或生产路径。
+
+命令：
+```
+.venv/bin/python -m pytest -q tests/reports/b/test_baseline_observation_contract.py tests/reports/b/test_baseline_group_gate.py
+```
+
+结果：退出码 2，pytest 收集阶段 2 errors。
+
+确定性错误：
+- `tests/reports/b/test_baseline_observation_contract.py:19`
+  `ModuleNotFoundError: No module named 'ci_workflow.reports.b.baseline'`
+- `tests/reports/b/test_baseline_group_gate.py:27`
+  `ModuleNotFoundError: No module named 'ci_workflow.reports.b.baseline'`
+
+这是真实实现缺口而非将已通过测试伪装为失败：当前授权实现路径尚无 `src/ci_workflow/reports/b/baseline.py`，因此字段全集、兼容键、稳定身份和 B-v1 转换测试无法收集。测试文件已通过：
+```
+.venv/bin/python -m py_compile tests/reports/b/test_baseline_observation_contract.py tests/reports/b/test_baseline_group_gate.py
+```
+无输出，退出码 0。

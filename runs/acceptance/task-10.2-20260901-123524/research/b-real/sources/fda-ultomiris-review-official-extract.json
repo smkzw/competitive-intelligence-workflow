@@ -1,0 +1,29 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "Tables 11 and 12 provide age, sex, baseline LDH and transfusion-history values",
+    "FDA review confirms the pivotal Study 301 analysis population"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "field": "baseline",
+      "value": "Age mean 44.8 versus 46.2; male 65/125 versus 69/121; LDH mean 1633.5 versus 1578.3"
+    },
+    {
+      "field": "population",
+      "value": "Primary randomized comparator 125 ravulizumab and 121 eculizumab"
+    }
+  ],
+  "first_disclosed_at": "2018-12-21",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-fda-ultomiris-review",
+  "source_title": "FDA Multidiscipline Review: Ultomiris (ravulizumab)",
+  "source_url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2018/761108Orig1s000MultidisciplineR.pdf",
+  "source_version_id": "src-fda-ultomiris-20181221"
+}

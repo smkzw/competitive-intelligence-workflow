@@ -1,11 +1,14 @@
 {
   "$schema": "schemas/package-manifest.schema.json",
   "schema_version": "1.0",
+  "public_trigger": "竞品调研",
   "package": {
     "name": "competitive-intelligence-workflow",
     "version": "0.1.0a0",
     "cli_version": "0.1.0a0",
-    "build_stage": "phase-2-accepted",
+    "build_stage": "development-candidate",
+    "release_scope": "site_html_v1",
+    "formats": ["html"],
     "python": ">=3.12,<3.14",
     "hosts": ["codex", "hermes", "omp"]
   },
@@ -22,14 +25,15 @@
     {"id": "analysis-b", "path": "skills/_internal/analysis-b/SKILL.md", "contract_version": "1.0"},
     {"id": "analysis-c", "path": "skills/_internal/analysis-c/SKILL.md", "contract_version": "1.0"},
     {"id": "scientific-qc", "path": "skills/_internal/scientific-qc/SKILL.md", "contract_version": "1.0"},
+    {"id": "visual-design-director", "path": "skills/_internal/visual-design-director/SKILL.md", "contract_version": "1.0"},
     {"id": "render-deliver", "path": "skills/_internal/render-deliver/SKILL.md", "contract_version": "1.0"},
     {"id": "visual-package-qc", "path": "skills/_internal/visual-package-qc/SKILL.md", "contract_version": "1.0"},
-    {"id": "correction-refresh", "path": "skills/_internal/correction-refresh/SKILL.md", "contract_version": "1.0"},
-    {"id": "monitoring", "path": "skills/_internal/monitoring/SKILL.md", "contract_version": "1.0"}
+    {"id": "correction-refresh", "path": "skills/_internal/correction-refresh/SKILL.md", "contract_version": "1.0"}
   ],
   "components": {
     "schemas": [
       "schemas/package-manifest.schema.json",
+      "schemas/research-package.schema.json",
       "schemas/project-contract.schema.json",
       "schemas/source-version.schema.json",
       "schemas/guideline-basis.schema.json",
@@ -39,6 +43,8 @@
       "schemas/evidence-fragment.schema.json",
       "schemas/download-request.schema.json",
       "schemas/blocker-audit.schema.json",
+      "schemas/publication-blocker-audit.schema.json",
+      "schemas/scientific-qc-blocker-audit.schema.json",
       "schemas/fact.schema.json",
       "schemas/gate-override.schema.json",
       "schemas/gate-result.schema.json",
@@ -50,10 +56,23 @@
       "schemas/report-snapshot-manifest.schema.json",
       "schemas/artifact-manifest.schema.json",
       "schemas/capability-matrix.schema.json",
+      "schemas/yaozh-session-observation.schema.json",
+      "schemas/yaozh-route-access-receipt.schema.json",
       "schemas/fixture-case.schema.json",
+      "schemas/acceptance-catalog.schema.json",
       "schemas/scientific-qc-verdict.schema.json",
+      "schemas/scientific-review-receipt.schema.json",
       "schemas/coverage-set.schema.json",
       "schemas/coverage-projection.schema.json",
+      "schemas/baseline-observation.schema.json",
+      "schemas/correction-proposal.schema.json",
+      "schemas/trial-disposition-observation.schema.json",
+      "schemas/reports/c-design-observation.schema.json",
+      "schemas/visual-finalization-plan.schema.json",
+      "schemas/visual-render-evidence.schema.json",
+      "schemas/visual-verification-reference.schema.json",
+      "schemas/host-receipt.schema.json",
+      "schemas/release-case-receipt.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-run-manifest.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-source-pack.schema.json",
       "contracts/kangzhe/design_specs/schemas/design-verdict.schema.json"
@@ -74,7 +93,6 @@
     ],
     "assets": [
       "assets/brand/manifest.json",
-      "assets/html-ppt/manifest.json",
       "assets/portal/manifest.json",
       "assets/third-party/echarts/manifest.json"
     ],
@@ -87,7 +105,8 @@
       "migrations/0006_append_only_guards.sql",
       "migrations/0007_evidence_audit_chain.sql",
       "migrations/0008_project_lineage_guards.sql",
-      "migrations/0009_source_date_precision.sql"
+      "migrations/0009_source_date_precision.sql",
+      "migrations/0010_source_text_derivations.sql"
     ]
   },
   "cli": {
@@ -97,8 +116,17 @@
       "project create",
       "project verify",
       "project run",
+      "project accept-visual",
       "capability preflight",
-      "fixture run"
+      "fixture run",
+      "review issue",
+      "research submit",
+      "research capture",
+      "research fetch-ctgov",
+      "publication unavailable",
+      "yaozh answer",
+      "yaozh observe",
+      "yaozh check"
     ]
   }
 }

@@ -1,0 +1,62 @@
+{
+  "policy": "execution-used-provider-model-nodes-are-excluded-from-conference",
+  "linked_execution_task_id": "ci_phase5_a_result_visual_review",
+  "linked": false,
+  "execution_evidence": [],
+  "excluded_route_nodes": [],
+  "effective_conference_roles": {
+    "visual_pi_k3_256k": {
+      "agent": "kimi",
+      "provider": "kimi-code",
+      "model": "kimi-code/k3-256k",
+      "effort": "medium",
+      "default_provider": "kimi-code",
+      "default_model": "kimi-code/k3-256k",
+      "default_effort": "medium",
+      "escalate_provider": "kimi-code",
+      "escalate_model": "kimi-code/k3-256k",
+      "escalate_effort": "medium",
+      "primary": {
+        "agent": "kimi",
+        "provider": "kimi-code",
+        "model": "kimi-code/k3-256k",
+        "effort": "medium"
+      },
+      "fallbacks": [
+        {
+          "agent": "grok",
+          "provider": "grok-build",
+          "model": "grok-4.6",
+          "effort": "high"
+        },
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "cursor-grok-4.6",
+          "effort": "high"
+        },
+        {
+          "agent": "pi",
+          "provider": "google-antigravity",
+          "model": "gemini-3.7-flash",
+          "effort": "high"
+        },
+        {
+          "agent": "pi",
+          "provider": "opencode-go",
+          "model": "muse-spark-1.2-contributor",
+          "effort": "xhigh"
+        },
+        {
+          "agent": "codex-subagent",
+          "provider": "codex",
+          "model": "gpt-5.6-luna",
+          "effort": "max"
+        }
+      ],
+      "role": "visual/HTML/PPT/visual-QC participant; Codex chairs directly with no sub-venue chair; skills remain enabled",
+      "skills_enabled": true
+    }
+  },
+  "generated_at": "2026-08-28 00:29:05"
+}

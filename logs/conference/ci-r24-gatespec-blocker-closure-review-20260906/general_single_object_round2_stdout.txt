@@ -1,0 +1,353 @@
+{
+  "agent": "zcode",
+  "requested_agent": "zcode",
+  "role_id": "general_single_object",
+  "requested_provider": "zcode",
+  "requested_model": "GLM-5.3-Flash",
+  "requested_effort": "max",
+  "explicit_route": false,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": "context/ci-r24-gatespec-blocker-closure-review-20260906_general_single_object_route_manifest.json",
+  "schedule_reconciliation": {
+    "enabled": true,
+    "packet_period": "off_peak",
+    "active_period": "off_peak",
+    "dispatch_period": "off_peak",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "existing session is resumed without route switching"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "zcode",
+  "effective_provider": "zcode",
+  "effective_model": "GLM-5.3-Flash",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": false,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "schedule": {
+      "policy": "beijing-provider-window-v1",
+      "skipped": true,
+      "reason": "existing session is being resumed without route switching"
+    },
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max"
+    }
+  },
+  "round_count": 2,
+  "estimated_input_context_tokens": 1978,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "修复已在当前字节上完成验证，且 228 个测试的焦点测试集全部通过。我正在输出最终报告。\n\n# 会议参与者输出：ci-r24-gatespec-blocker-closure-review-20260906 - general_single_object\n\n## 边界检查\n\n- 角色：`general_single_object`（独立代码设计审阅），serial 模式，未查看其他参与者本次输出；三个执行期 worker 报告仅作审计输入，逐项对照当前字节独立复核。\n- 工作目录为 runner 绑定授权工作区；只读审阅 + 运行焦点 pytest（仅写 `.pytest_cache`/`__pycache__` 可再生缓存）；未写 runner 管理的报告路径，完整报告随本消息返回。\n- 未读取生产路径、旧中文工作区、凭据材料；未修改仓库；不宣称最终接受权。\n- **会话内事件**：本 pass 期间（两次输出之间）`run_service.py` 与 `exhaustion.py` 被修改（mtime 比对本轮晚约 5 分钟），Codex 在会话间应用了一次定向修复。我已对新字节重验全部受影响结论；本报告反映的是**当前字节**状态，并标注了会话内闭合项。\n\n## 独立工作成果\n\n结论先行：**在当前字节中，我未找到新的、可达的 P0/P1 绕过**——即能造成科学假绿、候选删减、终态无机器审计或阻断后下游残留的实现/测试缺陷。唯一 P1 级开口是新鲜度缺失，属 checkpoint 已声明、待用户原生 Ask 裁决的事项（按任务要求只列风险）。执行 review 声称\"除新鲜度外 worker 发现已修复\"与字节实况相符；我上轮提出的 7 项 P2 中 3 项（P2-c/d/e）已在本会话内被修复并有负向测试锁定，其余 3 项（P2-a/b/f）仍开放。\n\n### 一、worker 历史发现逐项闭合核验（对照当前字节）\n\n**worker_01（GateSpec/evaluator）**\n\n| 原发现 | 当前字节核验 | 状态 |\n|---|---|---|\n| 失败码/恢复路线缺失 | `GateUnitSpec.failure_code` + `recovery_route_ids`（类型化枚举，`gates/models.py:341-342`）；关键/扩展失败码锁定（`models.py:384-389`）；override 单调性覆盖恢复路线（`gates/coverage.py:106-107`） | 已闭合 |\n| 候选删减绕过 | evaluator 层仍接受缩小宇宙（`tests/reports/test_report_specific_gates.py:770` 后半段注释\"这是合法操作（新宇宙）\"）。**产品层闭合**：`ReportPayloadBinding.universe_product_ids` 参与 `reviewed_universe_sha256`（`domain/research_package.py:82-140, 899-914`）；submission 全等校验（`research_package_submission.py:125`）；`universe_product_ids == report_data.product_ids`（`source_research_service.py:1512`）；A/C `product_ids` 为实际数据行 computed property（`report_a.py:270`、`report_c.py:205`）；payload 另有 `content_sha256` 绑定。删产品行 → 三处一致性与摘要同时破裂 | 已闭合（产品层，evaluator 层为已文档化边界） |\n| C 关键单元域过宽 | C 全部 8 个关键单元 `allowed_fact_domains: [trial_design]`（`policies/gates/C-v1.yaml:21-170`）；observation kinds 全缺省对设计单元语义正确 | 已闭合 |\n| 关键冲突绕过 | `evaluate_unit_decision`/`_evaluate_endpoint_unit` 检测作用域内任一 CONFLICTING/OPEN_CONFLICT_PRESERVED 即整单元阻断（`models.py:1646-1663`、`evaluator.py:393-407`）；A/B/C 负向测试在案 | 已闭合 |\n| 成熟度启发式 | `derive_product_maturity`（`evaluator.py:126-164`）未变；数据信任边界，列风险 | 开放（风险级） |\n\n**worker_02（恢复/信息增益）**\n\n| 原发现 | 当前字节核验 | 状态 |\n|---|---|---|\n| C1 MATERIAL_OMISSION 可坐缺口 | `_gap_type_binds_compatible_evidence`：科学缺口只接受 `NO_MATERIAL_OMISSION`、技术只接受 `TECHNICAL_ACCESS_UNRESOLVED`（`exhaustion.py:592-611`）；blocker builder 独立复检（`blocker_audit.py:1577-1590`）；负向测试在案 | 已闭合 |\n| C2 技术伪造增益 | 技术缺口任一非空增益字段即拒（`exhaustion.py:612-620`）；伪造字段负向测试在案 | 已闭合 |\n| C3 增益只比布尔值 | 三身份元组（fragments/units/conflicts）逐轮精确对齐（`exhaustion.py:754-773`）+ diff 全等绑定（`:538-539`）。**残余**：`new_fields`/`new_source_versions` 仍自由（P2-a） | 大部分闭合 |\n| C4 同查询换标签 | `retrieval_signature`（query+access）派生自回执，历史构造与 `add_round` 双处拒重，饱和需双签名不同（`retries.py:155-167, 206-255, 227-237`）；负向测试在案 | 已闭合 |\n| C5 复核无干净上下文 | producer/reviewer 64-hex 摘要 + 不等校验（`exhaustion.py:244-269`）。**残余**：摘要调用方自报（P2-b） | 模型级闭合 |\n\n**worker_03（blocker/no-draft 产品链）**\n\n| 原发现 | 当前字节核验 | 状态 |\n|---|---|---|\n| 平行写包器 | `write_report_b_blocker` 全 src 零命中；publication 走类型化 `build_and_write_publication_blocker_package`（`blocker_audit.py:1874`，绑定 ManualSupplyGate 字节 SHA）；B 基线不全返回 `recovery_required` 拒绝出 HTML（`run_service.py:2905-2925`）；产品级测试验证 `blocker_kind==\"publication_unavailable\"`（`test_multi_report_product_run.py:840`） | 已闭合 |\n| QC 穷尽无机器包 | 已穷尽否决迁移前强制 `build_and_write_scientific_qc_blocker_package`（`scientific_qc.py:463-484`），12 组身份一致性 + 嵌入穷尽记录 | 已闭合 |\n| resume 只看存在性 | `validate_existing_blocker_package` 全量重验 + audit.md 再生成比对 + 无下游断言（`run_service.py:3157-3192`、`blocker_audit.py:2166+`）；pre-drifted CLI 负向测试在案 | 已闭合 |\n| symlink/多余文件 | 目录与文件拒 symlink、恰好两文件、字节精确漂移（`blocker_audit.py:2106-2193`）；负向测试在案 | 已闭合 |\n| no-draft/resume_node 机器字段 | 三个审计变体均含 `no_draft: Literal[True]` + `resume_node: Literal[\"recovery\"]`，schema 根 required 含两字段 | 已闭合 |\n| 空宇宙假链接（本会话新发现） | **上轮 P2-d，本会话内已修复**：`_drive_blocker_write` 现为 `source_links=()`（`run_service.py:3483`），产品路径 NCT01234567 零命中（测试 fixture 内保留属正常） | 本会话内已闭合 |\n\n### 二、当前仍开放的发现\n\n**P1（已声明待用户裁决，只列不裁）**\n- **新鲜度缺失**：`GateUnitSpec`、A/B/C YAML、`gate-spec.schema.json`、gates 全目录对新鲜度零字段零校验（rg 零命中，本轮重验）。v1.3 §6 将\"新鲜度\"列为规则必备内容；当前陈旧事实可无限期满足关键单元，是唯一通向科学假绿的合同级开口。checkpoint 已声明须用户原生 Ask 裁决模型/窗口/截止日语义后方可 RED→修复。\n\n**P2（残余；标注会话内状态）**\n- **(a) 开放**：`InformationGainDiff.new_fields/new_source_versions`（`domain/evidence.py:310-323`）未与 `RecoveryRound.source_versions` 绑定；`_information_gain_rounds_align_with_history` 本轮重验仍只对齐三个身份元组。机器审计可携带历史不存在的字段/版本标签（不影响饱和判定，影响审计保真）。补救：派生或删字段。\n- **(b) 开放**：遗漏复核 `producer_context_digest`/`reviewer_context_digest` 为调用方自报 64-hex（`exhaustion.py:244-269`），仅约束不等；对比 QC 上下文摘要由内容计算。补救：host 边界由规范化上下文包派生。\n- **(c) 本会话内已闭合**：evaluator 现拒绝引用未知门槛单元的绑定（`evaluator.py:504-510` \"证据绑定引用未知门槛单元\"），负向测试已入 `tests/unit/test_gate_evaluator.py`。\n- **(d) 本会话内已闭合**（见上表）。\n- **(e) 本会话内已闭合**：`_drive_blocker_write` 现在缺宇宙证据时显式 `raise ContractConfigError`（`run_service.py:3457-3458`），不再静默 return。\n- **(f) 开放**：`schemas/blocker-audit.schema.json` defs 仍仅含 canonical 变体（本轮重验：`double_exhaustion/empty_evidence/failed_unit/gap/gap_audit/gap_route/omission_review/route_summary`，无 publication/QC defs）；`PublicationUnavailableBlockerAudit` 无 rule_spec_id/指纹、无路线回执清单、无两轮增益、无遗漏结论、无 residual_uncertainty 字段（`blocker_audit.py:772-810`）。机器审计存在（类型化、摘要绑定），§6 字面合规属合同解释，待 Codex 裁决（问题 1）。\n- **(g) 开放（风险级）**：成熟度启发式无对抗性误标负向测试；现有测试覆盖矩阵正例。\n\n**独立验证证据**：更新后字节上重跑焦点套件 `test_double_exhaustion + test_route_recovery + test_no_draft_on_unresolved_key_conflict + test_no_draft_when_blocked + test_no_draft_after_scientific_qc_rejection + test_gate_evaluator + test_report_specific_gates` = **228 passed**（本会话第二次运行，覆盖修复后状态）。\n\n## 风险、缺口与验证需求\n\n**风险清单（只列不裁决）**\n1. 新鲜度模型三选一（as-of 下限 / 按来源角色 max-age / 来源版本时效）未定 → P1 开口。\n2. 阈值语义：终点级 `threshold = max(unit.threshold, len(required))`（`evaluator.py:432`）已防稀释；其他 threshold>1 单元的临床语义上限未见用户裁决记录。\n3. 历史截止日：产品路径仅单向拒绝 `data_cutoff > contract.data_cutoff`（`run_service.py:2820-2822` 附近），无最低新鲜度或截止日重算语义。\n4. render 先行、`rendered_unreviewed` 预览字节复核前落盘（`run_service.py:2113-2133`）：R2 既定合同（晋级复用字节），与 no-draft 合同并行；建议一条显式回归测试锁住\"未晋级预览不得被当作可交付门户\"。\n5. 会话内修复（P2-c/d/e）发生在我两轮输出之间，其 diff 未经我逐行全文比对——我验证了修复点本身、负向测试与 228 项焦点通过；修复是否顺带改动其他行为，建议 Codex 以全量 gate 复核（其 review 记录显示此前已跑过全量，修复后应再跑一次）。\n\n**未验证部分**\n- 未重跑全量 gate（944 unit/contract、bundle/fresh-install、分层审计）；以 Codex 记录 + 我方 228 项抽测为据。\n- 未实机跑 `no-draft-a-empty`/publication/B-baseline 三条产品链到磁盘核对 audit.json 字节；静态审阅 + 测试证据为主。\n- `test_v13_closure_recovery.py`（10 测试）未逐条审阅；B/C `recovery_required → evidence_blocked` 接线的测试覆盖面未穷尽确认。\n\n## 给 Codex 的有限定问题\n\n1. **publication 变体 §6 口径**：`PublicationUnavailableBlockerAudit` 缺 rule_spec_id/路线回执/两轮增益/遗漏结论。裁定\"ManualSupplyGate 字节绑定 + attempted_paths + blocking_fields 视为满足 §6\"，还是要求补齐？这决定 P2-f 是关闭还是转修复任务。\n2. **evaluator 层缩小宇宙**：接受 `test_report_specific_gates.py:770` 现状（产品层闭合 + 注释文档化），还是给 `evaluate_report` 加可选 locked-universe digest 参数在库层也失败关闭？\n3. **P2-a/b** 是否授权最小修复（增益自由字段派生或删除；遗漏复核上下文摘要由内容派生）+ 各一条 RED？\n4. **会话内修复确认**：P2-c/d/e 的修复 diff 是否已过全量 gate？若未，建议修复后补跑全量再进入 P6。\n\n## 建议的下一步\n\n1. Codex 答复上述 4 个有限定问题（同会话即可，均不影响\"无新 P0/P1\"结论）。\n2. 若采纳 P2-a/b 修复：先 RED 后最小实现，落点 `domain/evidence.py` + `gates/exhaustion.py`（±host 派生边界），不触碰已闭合面；修复后重跑焦点 + 全量 gate。\n3. 新鲜度三项（模型/阈值/历史截止日）按 checkpoint 既定路线走用户原生 Ask；裁决前不得以默认语义关闭 P2。\n4. 随后按任务计划推进 P2 收口与 P6 治理门（独立会商、分层 gate、bundle/fresh-install、checkpoint、归档）；Codex 保留最终接受权。\n\n**恢复点**：若需同会话续跑，从\"4 个有限定问题答复 + P2-a/b 授权与否\"继续；本轮证据链（锚点 + 228 项抽测 + 会话内修复重验）均在报告中，无需重探。",
+      "stderr": "",
+      "duration_seconds": 208.856,
+      "timed_out": false,
+      "session_id": "sess_2ab41ec8-9cd8-49b8-8c28-c21d4e4898e7",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 6581,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 5,
+      "tool_result_count": 0,
+      "reasoning_event_count": 2289,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 128,
+      "usage": {
+        "inputTokens": 162325,
+        "outputTokens": 3712,
+        "totalTokens": 166037,
+        "cacheReadTokens": 161728,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_be84a0d5-8a04-40fb-bc5c-abf6b8a074c3",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 6,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 5,
+        "tool_names": [
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 4784,
+      "estimated_input_tokens": 1196,
+      "output_chars": 7273,
+      "estimated_output_tokens": 1819,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "explicit_route": false,
+      "resumed": true
+    },
+    {
+      "round": 2,
+      "command": [
+        "/Users/smkzw/.local/bin/zcode",
+        "app-server"
+      ],
+      "returncode": 0,
+      "output": "所有验证已完成。正在编译差异报告。\n\n# 会议参与者输出：ci-r24-gatespec-blocker-closure-review-20260906 - general_single_object (第2轮)\n\n## 边界检查\n\n- 同会话续轮（round 2），只读复核；未改任何源码/测试/任务记录/日志；未读生产路径、凭据、旧工作区、其他参与者输出。\n- 本次仅读取指定文件集：`gates/evaluator.py`、`gates/exhaustion.py`、`application/run_service.py`、`gates/blocker_audit.py`、`package-manifest.json`、`tests/unit/test_gate_evaluator.py`、`tests/integration/test_double_exhaustion.py`、`tests/integration/test_fixture_case_contracts.py`；两个专用 schema 文件仅做了存在性检查与程序化字段约束抽查（未通读内容），并运行了上述三个测试文件。\n- 未写 runner 报告路径 `runs/conference/.../general_single_object_round2.md`；本报告随消息返回由 runner 持久化。进程内探针只构造内存对象或写系统临时目录。\n- 新鲜度按指示保持用户裁决事项；父模式无原生 Ask 控件一事未计为代码缺陷。\n\n## 绕过探针与结果\n\n**修复 1 — `evaluate_report` 拒绝未知单元绑定**（`evaluator.py:504-510`，RED/GREEN：`test_gate_evaluator.py:547`）\n- 字节核验：`spec_units` 差集非空即 `GateEvaluationError(\"证据绑定引用未知门槛单元\")`，置于矩阵展开之前。\n- 探针 1a：跨报告单元（A 评估中绑定 `b_trial_identity_role`）→ 拒绝 ✓。\n- 探针 1b：大小写改写（`A_PRODUCT_IDENTITY`）→ 拒绝 ✓（无 casefold 宽容，安全方向）。\n- 探针 1c：伪单元携带 CONFLICTING 事实（压制尝试）→ 绑定模型层即拒（ValidationError）✓。\n- 结论：修复成立；\"有效单元+错误对象\"的残余路径仍由 `assert_bindings_in_universe` + 矩阵全等覆盖，无新开口。\n\n**修复 2 — 终态科学穷尽拒绝自由 `new_fields`/`new_source_versions`**（`exhaustion.py:597-603`，参数化 RED/GREEN：`test_double_exhaustion.py:194-216`）\n- 字节核验：科学分支新增 `any(item.new_fields or item.new_source_versions ...)` 即拒；类型化身份（fragments/units/conflicts）仍由 `_information_gain_rounds_align_with_history` 逐轮精确绑定；测试先重算 reviewer inputs digest，保证拒绝确实来自新检查而非摘要错配。\n- 探针 2a：双列表同时注入自由字段 + 重算摘要（真实伪造路径）→ 以\"自由字段或来源版本\"拒绝 ✓。\n- 探针 2b：只注入内嵌 `evidence_gap.information_gain_diff` → 以全等绑定（\"完全一致\"）拒绝 ✓。\n- 探针 2c：轮次重编号 + 自由字段 → 拒绝 ✓。\n- 残余说明：独立（非终态）`EvidenceGap` 仍可携带自由字段，但所有终态/blocker 消费路径都经 `GapDoubleExhaustion`，内嵌时受全等约束——可接受。\n\n**修复 3 — 空宇宙阻断缺证据即 raise + 移除假 NCT 链接**（`run_service.py:3457`、`:3483`）\n- 字节核验：`ctx.universe_evidence is None` → `ContractConfigError(\"空宇宙阻断写入缺少已绑定的宇宙证据\")`；`source_links=()`。\n- 相邻失败模式排查：canonical `BlockerAudit.source_links` 默认空元组且注册 schema 的 `source_links` 无 minItems → 模型与 schema 双向接受空集，不会使空宇宙路径构造崩溃；publication 变体保持 `min_length=1`（其语义本就须真实论文链接）——正确的不对称。\n- 实盘断言：`test_fixture_case_contracts.py:293-294` 在真实 fixture 运行中断言 `audit.source_links == ()` 且 `\"NCT01234567\" not in audit_json`，另断言无 `reports/A` 版本目录与占位文件 ✓。\n\n**schema 注册与变体分发**\n- `package-manifest.json` components/schemas 注册三个条目：`blocker-audit.schema.json`、`publication-blocker-audit.schema.json`、`scientific-qc-blocker-audit.schema.json`；两专用文件存在于磁盘（本轮存在性核对）。\n- `validate_existing_blocker_package`（`blocker_audit.py:2190-2267`）：symlink/两文件/普通文件 → 按 `blocker_kind` 三路分发（QC 分支对内嵌 `exhaustion` strip-computed 后全模型重验证）→ `audit_digest` 重算比对 → 身份四元组校验 → publication 专属补件门文件字节 SHA/终态/响应重验 → `audit.md` 再生成字节比对。共享基线（身份、原子两文件、`no_draft`/`resume_node` 字面量、漂移拒绝、resume）对三变体统一生效；publication 变体不含 GateSpec/穷尽/失败单元字段，未伪造任何未发生的科学恢复轮次——独立机制定位正确。\n- 探针 4a：canonical 载荷伪装 `blocker_kind=\"publication_unavailable\"` → `BlockerPackageIntegrityError` ✓（变体 extra=forbid）。\n- 探针 4b：**`blocker_kind=\"scientific_qc_exhausted\"` 但缺 `exhaustion` 键 → 裸 `KeyError` 逃出** try 的 `except (OSError, ValueError, TypeError)`，也逃出 run_service 的类型化捕获——仍失败关闭（绝不接受），但 resume 会以未类型化崩溃代替中文合同错误。**新 P2**：`scientific_raw.get(\"exhaustion\")` + 显式 ValueError（或把 KeyError 纳入 except），一行修复。\n- 探针 4c：无 kind 垃圾载荷 → canonical 分支拒绝 ✓。\n\n**回归证据**：三个指定测试文件在当前字节上 `83 passed`；Codex 侧 233 项受影响矩阵与全量门（Ruff、strict-mypy 211 文件、945 active、20 retained、7 layer、legacy-path）为 runner 记录，本轮未重跑全量。\n\n## 剩余 P0/P1\n\n- **P0：无。P1：无新增。** 唯一 P1 仍是新鲜度缺失——用户产品裁决事项，本轮按指示不裁、不计 Ask UI 限制为缺陷。本轮复核范围内未发现新的可造成科学假绿、候选删减、终态无机器审计或下游残留的可达缺陷。\n\n## 首轮 P2 处置\n\n| 首轮编号 | 内容 | 处置 |\n|---|---|---|\n| P2-a | 增益自由字段未绑定 | **已闭合**（修复 2，以\"删除\"而非\"派生\"方式，强于建议；探针 2a-2c 证伪失败） |\n| P2-b | 遗漏复核上下文摘要调用方自报 | **开放**（本轮范围外；仍为 P2） |\n| P2-c | 未知 unit_id 绑定被静默忽略 | **已闭合**（修复 1 + 探针 1a-1c + 专用测试） |\n| P2-d | 空宇宙假 NCT 链接 | **已闭合**（修复 3 + fixture 实盘断言） |\n| P2-e | `_drive_blocker_write` 静默 return | **已闭合**（`run_service.py:3457` 显式 raise） |\n| P2-f | 专用 schema 注册/分发 | **基本闭合**：注册、存在、分发、重验、共享基线全部核实；publication §6 字面口径由\"独立失败机制\"定位解决。残余：专用 schema 文件内容未通读（读集限制），仅抽查 `source_links` 约束一致 |\n| P2-g | 成熟度启发式对抗性误标测试 | **开放**（风险级，本轮范围外） |\n| **新 P2（本轮）** | `validate_existing_blocker_package` QC 分支缺 `exhaustion` 键时裸 `KeyError` 逃出类型化错误合同（探针 4b） | 开放，一行加固 |\n\n## 精确残余风险\n\n1. 新鲜度模型/阈值/历史截止日语义未定（用户所有）；裁决前不得以默认语义关闭 P2。\n2. `KeyError` 逃逸（新 P2）：方向失败关闭，仅错误合同破损；被篡改 `audit.json` 触发 resume 时表现为未类型化崩溃。\n3. P2-b：遗漏复核独立性证明强度仍依赖恢复阶段纪律（摘要自报、仅约束不等）。\n4. P2-g：监管事实误标可移动成熟度适用性边界，无对抗性负向测试锁定。\n5. 本轮未重跑全量门与三变体 blocker 的实盘 resume 全链（读集与范围限制）；以代码核验、探针、83 项指定测试与 runner 记录的 233+全量门为据。\n\n## 建议的任务状态\n\n**R2.4 P3–P5 维持闭合，无需回开**：三项修复在字节、测试、探针三层均验证成立，且各自带真实 RED/GREEN；专用 schema 注册与变体分发达标。建议：\n1. 采纳新 P2（`KeyError` 一行加固 + 一条 RED：缺 exhaustion 键的 audit.json → 类型化 `BlockerPackageIntegrityError`）。\n2. P2-b、P2-g 记入任务跟踪，随 P6 治理门或后续最小修复处理，不阻断 P3–P5 状态。\n3. 新鲜度三项继续走用户原生 Ask（父模式控件恢复后）；裁决前 P2 不得关闭。\n4. P6 按计划推进（独立会商、分层 gate、bundle/fresh-install、checkpoint、归档）；修复后建议由 Codex 再跑一次全量门作为 P6 输入。Codex 保留最终接受权。",
+      "stderr": "",
+      "duration_seconds": 561.927,
+      "timed_out": false,
+      "session_id": "sess_2ab41ec8-9cd8-49b8-8c28-c21d4e4898e7",
+      "session_established": true,
+      "stop_reason": "stop",
+      "zcode_model_requested": "GLM-5.3-Flash",
+      "zcode_effort_requested": "max",
+      "zcode_mode": "yolo",
+      "zcode_protocol": "ZCode Protocol",
+      "zcode_runtime_provider": "anthropic",
+      "zcode_client_requests": [
+        "session/requestRuntimePreferences",
+        "interaction/requestOfficialMcpAuthHeaders",
+        "session/requestRuntimePreferences"
+      ],
+      "zcode_protocol_event_count": 12666,
+      "zcode_protocol_errors": [],
+      "tool_call_count": 18,
+      "tool_result_count": 0,
+      "reasoning_event_count": 8301,
+      "zcode_internal_loop": "app-server runtime-managed; no artificial --max-turns flag",
+      "requested_internal_turns": 128,
+      "usage": {
+        "inputTokens": 183285,
+        "outputTokens": 3532,
+        "totalTokens": 186817,
+        "cacheReadTokens": 183104,
+        "cacheWriteTokens": 0
+      },
+      "zcode_model_io": {
+        "turn_id": "turn_19dd33c1-5e18-467e-a240-e141b1fcb83c",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "observed_effort": "max",
+        "request_count": 19,
+        "request_models": [
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash",
+          "GLM-5.3-Flash"
+        ],
+        "response_models": [
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash",
+          "glm-5.3-flash"
+        ],
+        "observed_efforts": [
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max",
+          "max"
+        ],
+        "reasoning_text_present": true,
+        "tool_call_count": 18,
+        "tool_names": [
+          "Bash",
+          "TodoWrite",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "TodoWrite",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash"
+        ]
+      },
+      "zcode_runtime_identity": {
+        "route_provider": "zcode",
+        "runtime_provider": "anthropic",
+        "requested_model": "GLM-5.3-Flash",
+        "request_model": "GLM-5.3-Flash",
+        "response_model": "glm-5.3-flash",
+        "requested_effort": "max",
+        "observed_effort": "max",
+        "verified": true
+      },
+      "input_chars": 3127,
+      "estimated_input_tokens": 782,
+      "output_chars": 4872,
+      "estimated_output_tokens": 1218,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "explicit_route": false
+    }
+  ],
+  "health_check": false,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": false,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "plan",
+    "adjusted_for_execution_manager": false
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 128,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788611455.625257,
+  "receipt_version": 2,
+  "output_sha256": "5793416a984189f9fae192ca24511548d5366f71c52070c69c0da77c0aea7e67"
+}

@@ -256,6 +256,55 @@ def test_two_distinct_saturated_rounds_are_required_before_exhaustion() -> None:
     assert history.can_declare_information_saturated is True
 
 
+def test_strategy_labels_cannot_hide_repeated_query_and_access_path() -> None:
+    """改策略名称但复用同一查询/标识符和访问方式，不构成第二条恢复策略。"""
+    from ci_workflow.sources.retries import RecoveryHistory
+    from tests.integration.test_no_draft_when_blocked import gap_exhaustion
+
+    proof = gap_exhaustion(
+        gap_id="gap-repeated-retrieval-path"
+    ).recovery_exhaustion_proofs[0]
+    payload = proof.recovery_history.model_dump(mode="json")
+    first_receipt = payload["rounds"][0]["source_receipts"][0]
+    for receipt in payload["rounds"][1]["source_receipts"]:
+        receipt["query_or_identifier"] = first_receipt["query_or_identifier"]
+        receipt["access_method"] = first_receipt["access_method"]
+    with pytest.raises(ValueError):
+        RecoveryHistory.model_validate(payload)
+
+
+def test_recovery_history_direct_validation_enforces_sequence_and_identity() -> None:
+    """调用方不得绕过 add_round 直接构造跳轮、错缺口或重复策略的历史。"""
+    from ci_workflow.sources.retries import RecoveryHistory
+    from tests.integration.test_no_draft_when_blocked import gap_exhaustion
+
+    proof = gap_exhaustion(
+        gap_id="gap-history-direct-validation"
+    ).recovery_exhaustion_proofs[0]
+    base = proof.recovery_history.model_dump(mode="json")
+    for mutate in ("skip_round", "wrong_gap", "duplicate_strategy"):
+        payload = {
+            **base,
+            "rounds": [dict(item) for item in base["rounds"]],
+        }
+        if mutate == "skip_round":
+            payload["rounds"][1]["round_index"] = 3
+        elif mutate == "wrong_gap":
+            payload["rounds"][1]["gap_id"] = "gap-other"
+            for receipt in payload["rounds"][1]["source_receipts"]:
+                receipt["gap_id"] = "gap-other"
+        else:
+            payload["rounds"][1]["strategy_units"] = payload["rounds"][0][
+                "strategy_units"
+            ]
+            for receipt in payload["rounds"][1]["source_receipts"]:
+                receipt["strategy_unit_id"] = payload["rounds"][0][
+                    "strategy_units"
+                ][0]["strategy_unit_id"]
+        with pytest.raises(ValueError):
+            RecoveryHistory.model_validate(payload)
+
+
 def test_retryable_failure_requires_three_timed_same_path_attempts_with_backoff_before_route_exhaustion() -> None:  # noqa: E501
     from ci_workflow.domain.evidence import SourceReceipt
     from ci_workflow.sources.retries import RecoveryPolicy, SamePathRetryAudit

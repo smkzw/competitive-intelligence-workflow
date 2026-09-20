@@ -150,6 +150,12 @@
       "type": "string",
       "minLength": 1
     },
+    "no_draft": {
+      "const": true
+    },
+    "resume_node": {
+      "const": "recovery"
+    },
     "resume_instruction_zh": {
       "type": "string",
       "minLength": 1
@@ -487,6 +493,21 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "new_evidence_fragment_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "changed_gate_unit_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "reduced_conflict_set_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
               }
             },
             "required": [
@@ -587,6 +608,21 @@
                     "items": {
                       "type": "string"
                     }
+                  },
+                  "new_evidence_fragment_ids": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1},
+                    "uniqueItems": true
+                  },
+                  "changed_gate_unit_ids": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1},
+                    "uniqueItems": true
+                  },
+                  "reduced_conflict_set_ids": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1},
+                    "uniqueItems": true
                   }
                 },
                 "required": [
@@ -704,6 +740,14 @@
           "type": "string",
           "minLength": 1
         },
+        "producer_context_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reviewer_context_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
         "conclusion": {
           "enum": [
             "no_material_omission",
@@ -727,6 +771,8 @@
       "required": [
         "gap_id",
         "reviewer_role_id",
+        "producer_context_digest",
+        "reviewer_context_digest",
         "conclusion",
         "review_notes_zh",
         "reviewed_inputs_digest",
@@ -933,6 +979,21 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "new_evidence_fragment_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "changed_gate_unit_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "reduced_conflict_set_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
               }
             },
             "required": [
@@ -1010,6 +1071,8 @@
     "minimal_user_action_zh",
     "source_links",
     "audit_directory",
+    "no_draft",
+    "resume_node",
     "resume_instruction_zh",
     "record_digest",
     "gap_digests",

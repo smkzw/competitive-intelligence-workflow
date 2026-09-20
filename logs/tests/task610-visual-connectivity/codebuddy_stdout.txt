@@ -1,0 +1,161 @@
+{
+  "agent": "codebuddy",
+  "requested_agent": "codebuddy",
+  "role_id": "connectivity_codebuddy",
+  "requested_provider": "codebuddy-cli",
+  "requested_model": "hy3-x",
+  "requested_effort": "max",
+  "explicit_route": true,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": null,
+  "schedule_reconciliation": {
+    "enabled": false,
+    "packet_period": null,
+    "active_period": null,
+    "dispatch_period": "day",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "no scheduled route manifest"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "codebuddy",
+  "effective_provider": "codebuddy-cli",
+  "effective_model": "hy3-x",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": true,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "hy3-x",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "hy3-x",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 99,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/codebuddy",
+        "-p",
+        "--model",
+        "hy3-x",
+        "--effort",
+        "max",
+        "--max-turns",
+        "128",
+        "--output-format",
+        "stream-json",
+        "--permission-mode",
+        "plan",
+        "Delegated mode. This is a connectivity-only probe for an explicitly requested route. Do not edit or create workspace files, do not start other agents, and do not perform the substantive review yet. Return exactly four short Chinese lines: `连通结果`、`实际提供方`、`实际模型`、`可用的真实浏览器或视觉能力`. If browser or visual capability is unavailable, state that directly. Do not claim capabilities you did not inspect.\n"
+      ],
+      "returncode": 0,
+      "stdout": "{\"type\":\"system\",\"subtype\":\"init\",\"uuid\":\"c2890eed-9e02-4b36-af41-a6e4b070a58e\",\"session_id\":\"c2890eed-9e02-4b36-af41-a6e4b070a58e\",\"apiKeySource\":\"copilot.tencent.com\",\"cwd\":\"/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow\",\"tools\":[\"mcp__kimi-cu__click\",\"mcp__kimi-cu__drag\",\"mcp__kimi-cu__get_app_state\",\"mcp__kimi-cu__list_apps\",\"mcp__kimi-cu__perform_secondary_action\",\"mcp__kimi-cu__press_key\",\"mcp__kimi-cu__scroll\",\"mcp__kimi-cu__select_text\",\"mcp__kimi-cu__set_value\",\"mcp__kimi-cu__type_text\",\"mcp__camofox__camofox_click\",\"mcp__camofox__camofox_close_tab\",\"mcp__camofox__camofox_create_tab\",\"mcp__camofox__camofox_evaluate\",\"mcp__camofox__camofox_import_cookies\",\"mcp__camofox__camofox_list_tabs\",\"mcp__camofox__camofox_navigate\",\"mcp__camofox__camofox_screenshot\",\"mcp__camofox__camofox_scroll\",\"mcp__camofox__camofox_snapshot\",\"mcp__camofox__camofox_type\",\"Agent\",\"Read\",\"Write\",\"Edit\",\"Bash\",\"PowerShell\",\"Glob\",\"Grep\",\"EnterPlanMode\",\"ExitPlanMode\",\"TaskCreate\",\"TaskGet\",\"TaskUpdate\",\"TaskList\",\"WebFetch\",\"WebSearch\",\"TaskStop\",\"TaskOutput\",\"Skill\",\"SkillManage\",\"AskUserQuestion\",\"AskUserForStructuredInput\",\"StructuredOutput\",\"ToolSearch\",\"DeferExecuteTool\",\"SendMessage\",\"SendUserMessage\",\"TeamCreate\",\"TeamDelete\",\"NotebookEdit\",\"LSP\",\"ImageGen\",\"VideoGen\",\"Artifact\",\"ArtifactControl\",\"EnterWorktree\",\"LeaveWorktree\",\"CronCreate\",\"CronDelete\",\"CronList\",\"WeChatReply\",\"WeComReply\",\"PushNotification\",\"ReportFindings\",\"ComputerUse\",\"ListMcpResources\",\"ReadMcpResource\",\"WaitForMcpServers\",\"Workflow\",\"Monitor\",\"REPL\",\"MessageColleague\",\"SpeakInChannel\"],\"mcp_servers\":[{\"name\":\"kimi-cu\",\"status\":\"connected\"},{\"name\":\"camofox\",\"status\":\"connected\"}],\"model\":\"hy3-x\",\"permissionMode\":\"plan\",\"slash_commands\":[\"add-dir\",\"agents\",\"background\",\"bg\",\"branch\",\"btw\",\"clear\",\"config\",\"autocompact\",\"context\",\"cost\",\"doctor\",\"exit\",\"export\",\"feedback\",\"fork\",\"fork-bg\",\"gateway\",\"goal\",\"remote-control\",\"help\",\"hooks\",\"keybindings\",\"ide\",\"install-github-app\",\"login\",\"logout\",\"mcp\",\"memory\",\"migrate-installer\",\"model\",\"model:lite\",\"model:reasoning\",\"permissions\",\"plan\",\"pr-comments\",\"release-notes\",\"rename\",\"resume\",\"review\",\"rewind\",\"sandbox\",\"skills\",\"status\",\"terminal-setup\",\"upgrade\",\"vim\",\"tasks\",\"todos\",\"plugin\",\"reload-plugins\",\"plugin-validate\",\"theme\",\"output-style\",\"stats\",\"workflows\",\"effort\",\"deep-research\",\"simplify\",\"code-review\",\"verify\",\"copy\",\"debug\",\"model:text-to-image\",\"model:text-to-video\",\"model:image-to-video\",\"init\",\"compact\",\"_compact\",\"statusline\",\"security-review\",\"commit\",\"commit-push-pr\",\"insights\",\"trellis:continue\",\"trellis:finish-work\"],\"output_style\":\"default\",\"__timestamp\":\"2026-08-30T03:11:49.114Z\",\"_requestId\":\"ba937c3cb3944823e7a4a3dd9f1ea996\"}\n{\"type\":\"system\",\"subtype\":\"status\",\"status\":null,\"uuid\":\"b18ca76e-6940-458d-a004-3487f9f76c9f\",\"session_id\":\"c2890eed-9e02-4b36-af41-a6e4b070a58e\",\"__timestamp\":\"2026-08-30T03:11:49.118Z\",\"_requestId\":\"ba937c3cb3944823e7a4a3dd9f1ea996\"}\n{\"type\":\"file-history-snapshot\",\"id\":\"c84d254f-1652-4b9f-9e75-c3d78af3b4b2\",\"timestamp\":1788059508444,\"isSnapshotUpdate\":false,\"snapshot\":{\"messageId\":\"01a050a6-dea7-7a68-a22d-3f1956e1d22c\",\"trackedFileBackups\":{}},\"__timestamp\":\"2026-08-30T03:11:49.119Z\",\"_requestId\":\"ba937c3cb3944823e7a4a3dd9f1ea996\"}\n{\"type\":\"assistant\",\"uuid\":\"01a050a6-f110-7cb2-9c2b-aa1b6fb31d75\",\"session_id\":\"c2890eed-9e02-4b36-af41-a6e4b070a58e\",\"message\":{\"id\":\"01a050a6-f110-7cb2-9c2b-aa1b6fb31d75\",\"content\":[{\"type\":\"text\",\"text\":\"连通结果：已建立委托会话通道，但本次为纯连通探针，未执行实质性验收。\\n实际提供方：CodeBuddy Code（hy3-x 模型）。\\n实际模型：hy3-x。\\n可用的真实浏览器或视觉能力：未在本探针中启用或验证真实浏览器/视觉能力，无法确认可用性。\"}],\"model\":\"hy3-x\",\"role\":\"assistant\",\"stop_reason\":null,\"stop_sequence\":null,\"type\":\"message\",\"usage\":{\"input_tokens\":31272,\"output_tokens\":69,\"cache_creation_input_tokens\":30760,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null}},\"parent_tool_use_id\":null,\"__timestamp\":\"2026-08-30T03:11:53.107Z\",\"_requestId\":\"ba937c3cb3944823e7a4a3dd9f1ea996\"}\n{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"result\":\"连通结果：已建立委托会话通道，但本次为纯连通探针，未执行实质性验收。\\n实际提供方：CodeBuddy Code（hy3-x 模型）。\\n实际模型：hy3-x。\\n可用的真实浏览器或视觉能力：未在本探针中启用或验证真实浏览器/视觉能力，无法确认可用性。\",\"uuid\":\"01a050a6-f198-7a83-98df-6b45f383d022\",\"session_id\":\"c2890eed-9e02-4b36-af41-a6e4b070a58e\",\"duration_ms\":4132,\"duration_api_ms\":4132,\"num_turns\":2,\"total_cost_usd\":0,\"usage\":{\"input_tokens\":31272,\"output_tokens\":69,\"cache_creation_input_tokens\":30760,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null},\"permission_denials\":[],\"modelUsage\":{\"hy3-x\":{\"inputTokens\":0,\"outputTokens\":69,\"cacheReadInputTokens\":512,\"cacheCreationInputTokens\":30760,\"contextWindow\":192000,\"maxOutputTokens\":64000}},\"_meta\":{\"codebuddy.ai/contextUsed\":31272,\"codebuddy.ai/usageByCategory\":{\"systemPrompt\":1914,\"conversation\":5132,\"tools\":23416,\"mcp\":92,\"skills\":718,\"version\":1}},\"__timestamp\":\"2026-08-30T03:11:53.247Z\",\"_requestId\":\"ba937c3cb3944823e7a4a3dd9f1ea996\"}\n",
+      "output": "连通结果：已建立委托会话通道，但本次为纯连通探针，未执行实质性验收。\n实际提供方：CodeBuddy Code（hy3-x 模型）。\n实际模型：hy3-x。\n可用的真实浏览器或视觉能力：未在本探针中启用或验证真实浏览器/视觉能力，无法确认可用性。",
+      "stderr": "",
+      "duration_seconds": 5.681,
+      "timed_out": false,
+      "session_id": "c2890eed-9e02-4b36-af41-a6e4b070a58e",
+      "tool_call_count": 0,
+      "tool_result_count": 0,
+      "parsed_event_count": 5,
+      "codebuddy_effort": "max",
+      "requested_max_turns": 128,
+      "requested_internal_turns": 128,
+      "input_chars": 394,
+      "estimated_input_tokens": 99,
+      "output_chars": 123,
+      "estimated_output_tokens": 31,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "hy3-x",
+      "explicit_route": true,
+      "health": {
+        "agent": "codebuddy",
+        "provider": "codebuddy-cli",
+        "model": "hy3-x",
+        "checked_at": 1788059502.562092,
+        "cached": false,
+        "healthy": true,
+        "preflight_kind": "diagnostic_catalog_or_auth_probe",
+        "health_command": [
+          "/Users/smkzw/.local/bin/codebuddy",
+          "-p",
+          "--model",
+          "hy3-x",
+          "--effort",
+          "max",
+          "--max-turns",
+          "2",
+          "--output-format",
+          "stream-json",
+          "--permission-mode",
+          "plan",
+          "Reply exactly CODEX_CODEBUDDY_HEALTH_OK. Do not modify files; tools remain available if the CLI requires them."
+        ],
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 5.014,
+        "stdout_tail": "mestamp\":\"2026-08-30T03:11:43.853Z\",\"_requestId\":\"5bc333e90cb227bb3d361ed4715c5681\"} {\"type\":\"assistant\",\"uuid\":\"01a050a6-dae3-7b85-a39d-0f7c645842e3\",\"session_id\":\"fe47ba45-8cf5-43a4-965e-5b8eea8dd94a\",\"message\":{\"id\":\"01a050a6-dae3-7b85-a39d-0f7c645842e3\",\"content\":[{\"type\":\"text\",\"text\":\"CODEX_CODEBUDDY_HEALTH_OK\"}],\"model\":\"hy3-x\",\"role\":\"assistant\",\"stop_reason\":null,\"stop_sequence\":null,\"type\":\"message\",\"usage\":{\"input_tokens\":25519,\"output_tokens\":10,\"cache_creation_input_tokens\":25007,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null}},\"parent_tool_use_id\":null,\"__timestamp\":\"2026-08-30T03:11:47.430Z\",\"_requestId\":\"5bc333e90cb227bb3d361ed4715c5681\"} {\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"result\":\"CODEX_CODEBUDDY_HEALTH_OK\",\"uuid\":\"01a050a6-db67-7a70-a5b8-7a81e3cc5acb\",\"session_id\":\"fe47ba45-8cf5-43a4-965e-5b8eea8dd94a\",\"duration_ms\":3714,\"duration_api_ms\":3714,\"num_turns\":2,\"total_cost_usd\":0,\"usage\":{\"input_tokens\":25519,\"output_tokens\":10,\"cache_creation_input_tokens\":25007,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null},\"permission_denials\":[],\"modelUsage\":{\"hy3-x\":{\"inputTokens\":0,\"outputTokens\":10,\"cacheReadInputTokens\":512,\"cacheCreationInputTokens\":25007,\"contextWindow\":192000,\"maxOutputTokens\":64000}},\"_meta\":{\"codebuddy.ai/contextUsed\":25519,\"codebuddy.ai/usageByCategory\":{\"systemPrompt\":1777,\"conversation\":2086,\"tools\":21235,\"mcp\":85,\"skills\":336,\"version\":1}},\"__timestamp\":\"2026-08-30T03:11:47.566Z\",\"_requestId\":\"5bc333e90cb227bb3d361ed4715c5681\"}",
+        "stderr_tail": "",
+        "tool_call_count": 0,
+        "session_id": "fe47ba45-8cf5-43a4-965e-5b8eea8dd94a",
+        "observation": "CodeBuddy returned the authenticated health marker."
+      }
+    }
+  ],
+  "health_check": true,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": false,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "plan",
+    "adjusted_for_execution_manager": false
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 7200,
+    "requested_internal_turns": 128,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 7200,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788059502.561768
+}

@@ -1,0 +1,7 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "证据到报告的失真边界与失败测试"}
+{"file": "contracts/kangzhe/design_specs/project_profile.md", "reason": "站点信息架构与图表显示合同"}
+{"file": "docs/specs/competitive-intelligence-workflow-design-v1.2.md", "reason": "已批准的报告内容和来源合同"}
+{"file": "src/ci_workflow/application/source_research_service.py", "reason": "来源到报告数据链路"}
+{"file": "src/ci_workflow/renderers/portal/assets/report-a.js", "reason": "默认图表与热图渲染"}
+{"file": "src/ci_workflow/renderers/portal/assets/portal.css", "reason": "矩阵与页面响应式布局"}

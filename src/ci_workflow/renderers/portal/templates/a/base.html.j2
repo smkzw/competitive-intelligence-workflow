@@ -7,6 +7,7 @@
   <link rel="icon" href="data:,">
   <title>{% block title %}{% endblock %}｜{{ report.indication }}竞品全景</title>
   <link rel="stylesheet" href="{{ asset_prefix }}/portal.css">
+  <link rel="stylesheet" href="{{ asset_prefix }}/report-a.css">
 </head>
 <body data-page-id="{{ current }}">
   <header class="site-header" role="banner">
@@ -22,7 +23,7 @@
            {% if item.id == current %}aria-current="page"{% endif %}>{{ item.title }}</a>
         {% endfor %}
         <details class="kz-a-more-nav">
-          <summary{% if current in ['regulatory','companies-transactions','patents-protection','historical-edge','evidence-limitations'] %} class="kz-a-more-nav__current"{% endif %}>更多</summary>
+          <summary{% if current in ['regulatory','companies-transactions','patents-protection','historical-edge'] %} class="kz-a-more-nav__current"{% endif %}>更多</summary>
           <div class="kz-a-more-nav__panel">
             {% for item in navigation[7:] %}
             <a href="{{ root_prefix }}{{ item.id }}.html"
@@ -44,6 +45,13 @@
     <div class="site-header__brand-line" aria-hidden="true"></div>
   </header>
 
+  {% if publication_limitation_zh %}
+  <aside class="publication-limitation" role="note" aria-label="证据限制">
+    <strong>证据限制</strong>
+    <p>{{ publication_limitation_zh }}</p>
+  </aside>
+  {% endif %}
+
   <main class="portal-main kz-a-main" id="main">
     <header class="portal-page-head kz-a-page-head">
       <span class="kz-a-page-ambient" aria-hidden="true"></span>
@@ -54,6 +62,26 @@
     {% block content %}{% endblock %}
   </main>
 
+  <section class="portal-source-section" id="external-sources" aria-labelledby="external-sources-title">
+    <div class="portal-source-section__inner">
+      <h2 id="external-sources-title">外部来源</h2>
+      {% if external_sources %}
+      <ul class="portal-source-section__list">
+        {% for source in external_sources %}
+        <li>
+          <span>[{{ loop.index }}]</span>
+          {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}<span>{{ source.label }}（未提供可安全公开的链接）</span>{% endif %}
+          <span>｜来源类型：{{ source.source_type }}｜发布日期：{{ source.published_at }}｜数据截止：{{ source.data_cutoff }}</span>
+          {% if source.limitation %}<span>｜限制：{{ source.limitation }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>此报告未绑定可核验的公共来源谱系；来源类别说明不代表具体出处。</p>
+      {% endif %}
+    </div>
+  </section>
+
   <aside class="kz-evidence-panel" id="data-basis-panel" hidden aria-labelledby="data-basis-title">
     <div class="kz-evidence-panel__head">
       <h2 id="data-basis-title">数据依据</h2>
@@ -61,6 +89,48 @@
     </div>
     <div data-evidence-content>
       <p>选择图形或表格中的“查看数据依据”，可核对定义、时间点、分母与来源范围。</p>
+    </div>
+  </aside>
+
+  <aside class="kz-a-insight-drawer" id="a-product-insight-drawer"
+         role="dialog" aria-modal="true" aria-labelledby="a-product-insight-title" hidden>
+    <div class="kz-a-insight-drawer__panel">
+      <header class="kz-a-insight-drawer__header">
+        <div>
+          <span class="kz-a-insight-drawer__eyebrow">产品洞察</span>
+          <h2 id="a-product-insight-title"></h2>
+          <p id="a-product-insight-subtitle"></p>
+        </div>
+        <button type="button" class="kz-a-insight-drawer__close"
+                id="a-product-insight-close" aria-label="关闭产品洞察">×</button>
+      </header>
+      <div class="kz-a-insight-drawer__summary" id="a-product-insight-summary"></div>
+      <div class="kz-a-insight-drawer__tabs" role="tablist" aria-label="产品洞察内容">
+        <button type="button" role="tab" id="a-product-tab-efficacy"
+                aria-controls="a-product-panel-efficacy" aria-selected="true"
+                data-product-tab="efficacy">疗效</button>
+        <button type="button" role="tab" id="a-product-tab-safety"
+                aria-controls="a-product-panel-safety" aria-selected="false"
+                data-product-tab="safety" tabindex="-1">安全性</button>
+        <button type="button" role="tab" id="a-product-tab-profile"
+                aria-controls="a-product-panel-profile" aria-selected="false"
+                data-product-tab="profile" tabindex="-1">产品档案</button>
+        <button type="button" role="tab" id="a-product-tab-evidence"
+                aria-controls="a-product-panel-evidence" aria-selected="false"
+                data-product-tab="evidence" tabindex="-1">数据依据</button>
+      </div>
+      <section class="kz-a-insight-drawer__body" role="tabpanel"
+               id="a-product-panel-efficacy" aria-labelledby="a-product-tab-efficacy"
+               data-product-panel="efficacy"></section>
+      <section class="kz-a-insight-drawer__body" role="tabpanel"
+               id="a-product-panel-safety" aria-labelledby="a-product-tab-safety"
+               data-product-panel="safety" hidden></section>
+      <section class="kz-a-insight-drawer__body" role="tabpanel"
+               id="a-product-panel-profile" aria-labelledby="a-product-tab-profile"
+               data-product-panel="profile" hidden></section>
+      <section class="kz-a-insight-drawer__body" role="tabpanel"
+               id="a-product-panel-evidence" aria-labelledby="a-product-tab-evidence"
+               data-product-panel="evidence" hidden></section>
     </div>
   </aside>
 

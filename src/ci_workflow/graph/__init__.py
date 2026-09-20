@@ -15,6 +15,14 @@ from ci_workflow.graph.executor import (
 from ci_workflow.graph.reducer import graph_reducer
 from ci_workflow.graph.registry import TRANSITION_REGISTRY, TransitionRegistry
 from ci_workflow.graph.state import initial_state
+from ci_workflow.graph.typed_skills import (
+    V13_SKILL_EDGES,
+    V13_SKILL_GRAPH,
+    V13_SKILL_NODES,
+    SkillEdge,
+    SkillNodeContract,
+    TypedSkillGraph,
+)
 from ci_workflow.graph.types import (
     DeclaredEdge,
     GuardResult,
@@ -23,12 +31,26 @@ from ci_workflow.graph.types import (
     TransitionRequest,
     TypedField,
 )
+from ci_workflow.graph.visual_finalization import (
+    VisualFinalizationError,
+    validate_visual_finalization_plan,
+    validate_visual_plan,
+    validate_visual_render_evidence,
+    validate_visual_verification_reference,
+    visual_contract_digest,
+)
 
 __all__ = [
     "DeclaredEdge",
     "GraphExecutor",
     "GuardResult",
     "IdempotentSideEffects",
+    "SkillEdge",
+    "SkillNodeContract",
+    "TypedSkillGraph",
+    "V13_SKILL_EDGES",
+    "V13_SKILL_GRAPH",
+    "V13_SKILL_NODES",
     "NEW_REPORT_NODES",
     "NodeContract",
     "RetryPolicy",
@@ -37,6 +59,12 @@ __all__ = [
     "TRANSITION_REGISTRY",
     "TransitionRegistry",
     "TransitionRequest",
+    "VisualFinalizationError",
+    "validate_visual_finalization_plan",
+    "validate_visual_plan",
+    "validate_visual_render_evidence",
+    "validate_visual_verification_reference",
+    "visual_contract_digest",
     "TypedField",
     "graph_reducer",
     "initial_state",

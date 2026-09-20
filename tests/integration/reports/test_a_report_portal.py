@@ -91,14 +91,14 @@ def test_a_history_edge_page_keeps_suspended_terminated_and_withdrawn_programs(
     assert "历史与边缘观察" in html
 
 
-def test_a_site_contains_exactly_twelve_static_pages_plus_every_product(
+def test_a_site_contains_exactly_eleven_static_pages_plus_every_product(
     a_project: Path,
 ) -> None:
     routes = enumerate_site_routes(_site(a_project), ReportKind.A)
     manifest = _manifest(a_project)
     products = manifest["product_ids"]
     assert isinstance(products, list)
-    assert len(routes) == 12 + len(products)
+    assert len(routes) == 11 + len(products)
     assert not any("/trials/" in route for route in routes)
 
 

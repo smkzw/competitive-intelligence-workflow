@@ -10,6 +10,7 @@ import pytest
 from jsonschema import Draft202012Validator, FormatChecker
 
 from ci_workflow.domain.evidence import DateEvidence, EvidenceLocator
+from ci_workflow.domain.ids import stable_id
 from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
 from ci_workflow.storage.migrations import apply_migrations
 from ci_workflow.storage.sqlite import open_database
@@ -19,6 +20,75 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def _reported(value: str, locator: EvidenceLocator) -> DateEvidence:
     return DateEvidence(state="reported", value=value, locator=locator)
+
+
+@pytest.mark.parametrize("field", ["published_at", "effective_at", "first_disclosed_at"])
+def test_same_content_revised_date_creates_immutable_source_version(
+    tmp_path: Path, field: str,
+) -> None:
+    database_path = tmp_path / "state/project.sqlite"
+    apply_migrations(database_path)
+    repository = EvidenceRepository(database_path, ContentAddressedStore(tmp_path))
+    locator = EvidenceLocator(document_role="registry", field_path="date")
+    dates = {
+        key: _reported("2025-01-01T00:00:00+00:00", locator)
+        for key in ("published_at", "effective_at", "first_disclosed_at")
+    }
+    first = repository.add_source_version(
+        source_id="same-source", content=b"unchanged body", media_type="text/plain",
+        acquired_at=datetime.fromisoformat("2026-01-01T00:00:00+00:00"), **dates,
+    )
+    dates[field] = _reported("2025-02-01T00:00:00+00:00", locator)
+    changed = repository.add_source_version(
+        source_id="same-source", content=b"unchanged body", media_type="text/plain",
+        acquired_at=datetime.fromisoformat("2026-01-02T00:00:00+00:00"), **dates,
+    )
+    assert changed.source_version_id != first.source_version_id
+    assert changed.content_sha256 == first.content_sha256
+    assert getattr(changed, field) == dates[field]
+    with open_database(database_path) as database:
+        assert repository._read_source_version(database, first.source_version_id) == first
+        assert database.execute("SELECT count(*) FROM content_blobs").fetchone()[0] == 1
+
+
+def test_legacy_source_identity_remains_history_after_versioned_reingestion(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import ci_workflow.storage.content_store as module
+
+    database_path = tmp_path / "state/project.sqlite"
+    apply_migrations(database_path)
+    repository = EvidenceRepository(database_path, ContentAddressedStore(tmp_path))
+    locator = EvidenceLocator(document_role="registry", field_path="date")
+    dates = {
+        key: _reported("2025-01-01T00:00:00+00:00", locator)
+        for key in ("published_at", "effective_at", "first_disclosed_at")
+    }
+
+    def legacy_key(source_id: str, content_sha256: str, **dates: DateEvidence) -> str:
+        return stable_id("source-version", source_id, content_sha256)
+
+    def ingest() -> object:
+        return repository.add_source_version(
+            source_id="legacy-source", content=b"legacy body", media_type="text/plain",
+            acquired_at=datetime.fromisoformat("2026-01-01T00:00:00+00:00"), **dates,
+        )
+
+    # Seed the former key format in an isolated database, never rewrite an
+    # actual historical checkpoint or disable append-only database guards.
+    with monkeypatch.context() as patch:
+        patch.setattr(module, "source_version_identity", legacy_key)
+        legacy = ingest()
+    upgraded = ingest()
+    assert upgraded != legacy
+    assert ingest() == upgraded
+    dates["effective_at"] = DateEvidence(
+        state="not_publicly_disclosed", value=None, locator=locator,
+    )
+    changed = ingest()
+    assert changed != legacy
+    with open_database(database_path) as database:
+        assert database.execute("SELECT count(*) FROM source_versions").fetchone()[0] == 3
 
 
 def test_source_version_separates_acquired_published_effective_and_first_disclosed_dates(

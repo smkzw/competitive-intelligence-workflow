@@ -1,0 +1,31 @@
+{
+  "id": "phase-8-task-82-complete-native-pdf",
+  "name": "phase-8-task-82-complete-native-pdf",
+  "title": "Phase 8 Task 8.2：A/B/C 完整原生 PDF",
+  "description": "以同一 three-report-complete 基准快照生成并验收 A/B/C 三份完整原生 PDF。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 8.2 only：三报告基准 fixture、PDF01–PDF09、完整内容覆盖与逐页原生 PDF 验收；不实施 HTML-PPT/PPTX 或安全测试",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": "2026-08-31",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-31-phase-8-cross-format",
+  "relatedFiles": [
+    "src/ci_workflow/renderers/pdf_native/",
+    "fixtures/synthetic/three-report-complete/",
+    "tests/pdf/",
+    "tests/integration/test_fixture_case_contracts.py"
+  ],
+  "notes": "已锁定 three-report-complete 基准并完成 A/B/C 原生 PDF。最终页数 A10/B24/C20；当前 PDF 直接消费锁定 ReportViewModel，不经 HTML/Chromium。自动核验、三条点名视觉复验、正式同会话视觉终审和治理审计均通过。",
+  "meta": {"phase": 8, "task": "8.2"}
+}

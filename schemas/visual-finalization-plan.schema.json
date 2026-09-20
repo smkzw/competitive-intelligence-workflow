@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.local/schemas/visual-finalization-plan-v1.json",
+  "title": "站点式 HTML 定稿前视觉策划书",
+  "description": "绑定锁定报告快照与项目康哲设计合同的 HTML 门户视觉策划；不承载或改写科学事实。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "report_kind",
+    "report_version",
+    "format",
+    "route_id",
+    "report_snapshot_sha256",
+    "report_snapshot",
+    "design_contract_sha256",
+    "design_contract",
+    "scientific_snapshot_immutable",
+    "audience",
+    "page_responsibilities",
+    "visual_variables",
+    "chart_syntax",
+    "table_syntax",
+    "interaction_states",
+    "acceptance_matrix",
+    "planner_identity",
+    "planner_role",
+    "created_at"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "const": "schemas/visual-finalization-plan.schema.json"},
+    "schema_version": {"type": "string", "const": "1.0"},
+    "plan_id": {"$ref": "#/$defs/id"},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "report_version": {"type": "string", "minLength": 1},
+    "format": {"type": "string", "const": "html"},
+    "route_id": {"type": "string", "const": "portal"},
+    "report_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "report_snapshot": {"$ref": "#/$defs/reportSnapshot"},
+    "design_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "design_contract": {"$ref": "#/$defs/designContract"},
+    "scientific_snapshot_immutable": {"type": "boolean", "const": true},
+    "audience": {"$ref": "#/$defs/audience"},
+    "page_responsibilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/pageResponsibility"}
+    },
+    "visual_variables": {"$ref": "#/$defs/visualVariables"},
+    "chart_syntax": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/chartSyntax"}
+    },
+    "table_syntax": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/tableSyntax"}
+    },
+    "interaction_states": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/interactionState"}
+    },
+    "acceptance_matrix": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/acceptanceDomain"}
+    },
+    "planner_identity": {"type": "string", "minLength": 1},
+    "planner_role": {"type": "string", "const": "visual-design-director"},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reportSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_id",
+        "report",
+        "report_version",
+        "evidence_snapshot_id",
+        "claim_snapshot_id",
+        "coverage_set_id"
+      ],
+      "properties": {
+        "snapshot_id": {"$ref": "#/$defs/id"},
+        "report": {"enum": ["A", "B", "C"]},
+        "report_version": {"type": "string", "minLength": 1},
+        "evidence_snapshot_id": {"$ref": "#/$defs/id"},
+        "claim_snapshot_id": {"$ref": "#/$defs/id"},
+        "coverage_set_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "designContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "contract_version", "route_id", "loaded_files"],
+      "properties": {
+        "manifest": {
+          "type": "string",
+          "const": "contracts/kangzhe/manifest.json"
+        },
+        "contract_version": {"type": "string", "minLength": 1},
+        "route_id": {"type": "string", "const": "portal"},
+        "loaded_files": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "audience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_role",
+        "language",
+        "reading_tasks",
+        "visible_program_state"
+      ],
+      "properties": {
+        "primary_role": {"type": "string", "minLength": 1},
+        "language": {"type": "string", "const": "zh-CN"},
+        "reading_tasks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "visible_program_state": {"type": "boolean", "const": false}
+      }
+    },
+    "pageResponsibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "page_id",
+        "page_type",
+        "primary_question",
+        "purpose",
+        "information_hierarchy",
+        "claim_ids",
+        "source_facts_preserved"
+      ],
+      "properties": {
+        "page_id": {"$ref": "#/$defs/id"},
+        "page_type": {"type": "string", "minLength": 1},
+        "primary_question": {"type": "string", "minLength": 1},
+        "purpose": {"type": "string", "minLength": 1},
+        "information_hierarchy": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "source_facts_preserved": {"type": "boolean", "const": true}
+      }
+    },
+    "visualVariables": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "theme",
+        "palette_tokens",
+        "department_tokens",
+        "surface_tokens",
+        "font_stack",
+        "font_sizes_px",
+        "spacing_tokens_px",
+        "motion_tokens",
+        "reduced_motion_supported",
+        "export_freeze_supported"
+      ],
+      "properties": {
+        "theme": {"type": "string", "const": "kangzhe"},
+        "palette_tokens": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/paletteToken"}
+        },
+        "department_tokens": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["MED", "CO", "DMST", "PV"],
+          "properties": {
+            "MED": {"type": "string", "const": "kz-orange"},
+            "CO": {"type": "string", "const": "kz-med-blue"},
+            "DMST": {"type": "string", "const": "kz-stats-green"},
+            "PV": {"type": "string", "const": "kz-pv"}
+          }
+        },
+        "surface_tokens": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/surfaceToken"}
+        },
+        "font_stack": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/fontToken"}
+        },
+        "font_sizes_px": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "number",
+            "enum": [10.67, 11, 12, 13, 14, 16, 18, 19, 20, 22, 24, 28, 30, 32, 36, 40, 48, 52, 56, 59, 68, 117]
+          }
+        },
+        "spacing_tokens_px": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": [4, 8, 12, 16, 24, 32, 40, 56]}
+        },
+        "motion_tokens": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["none", "dur-fast", "dur", "dur-slow", "ease-out", "ease-spring"]}
+        },
+        "reduced_motion_supported": {"type": "boolean", "const": true},
+        "export_freeze_supported": {"type": "boolean", "const": true}
+      }
+    },
+    "paletteToken": {
+      "enum": [
+        "kz-orange",
+        "kz-orange-mid",
+        "kz-yellow",
+        "kz-number",
+        "kz-risk",
+        "kz-med-blue",
+        "kz-blue-soft",
+        "kz-stats-green",
+        "kz-stats-soft",
+        "kz-pv",
+        "kz-pv-soft",
+        "kz-table-head",
+        "kz-table-soft",
+        "kz-table-line",
+        "kz-check-green",
+        "kz-border",
+        "kz-border-weak",
+        "kz-text-1",
+        "kz-text-2",
+        "kz-text-3"
+      ]
+    },
+    "surfaceToken": {
+      "enum": ["kz-white", "kz-bg", "kz-surface-warm", "kz-table-soft", "kz-blue-soft", "kz-stats-soft", "kz-pv-soft"]
+    },
+    "fontToken": {
+      "enum": ["Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", "Helvetica Neue", "Arial", "sans-serif"]
+    },
+    "chartSyntax": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chart_id", "question", "mark", "dimensions", "source_claim_ids"],
+      "properties": {
+        "chart_id": {"$ref": "#/$defs/id"},
+        "question": {"type": "string", "minLength": 1},
+        "mark": {"enum": ["bar", "line", "forest", "heatmap", "bubble", "scatter", "timeline", "flow", "table_like"]},
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "x": {"type": "string", "minLength": 1},
+            "y": {"type": "string", "minLength": 1},
+            "size": {"type": "string", "minLength": 1},
+            "color": {"type": "string", "minLength": 1},
+            "shape": {"type": "string", "minLength": 1},
+            "texture": {"type": "string", "minLength": 1},
+            "label": {"type": "string", "minLength": 1},
+            "time": {"type": "string", "minLength": 1}
+          }
+        },
+        "redundant_encoding": {"enum": ["direct_label", "shape", "texture", "line_style", "position", "none"]},
+        "source_claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "tableSyntax": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["table_id", "purpose", "columns", "completeness", "after_chart", "source_claim_ids"],
+      "properties": {
+        "table_id": {"$ref": "#/$defs/id"},
+        "purpose": {"type": "string", "minLength": 1},
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "completeness": {"enum": ["complete", "summary"]},
+        "after_chart": {"type": "boolean"},
+        "source_claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "interactionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state_id",
+        "trigger",
+        "expected_behavior",
+        "keyboard_accessible",
+        "reduced_motion_behavior",
+        "frozen_behavior"
+      ],
+      "properties": {
+        "state_id": {"$ref": "#/$defs/id"},
+        "trigger": {
+          "enum": ["page_load", "filter_change", "drill_down", "drawer_open", "keyboard", "page_turn", "search", "tab_switch", "print", "export", "reduced_motion", "error"]
+        },
+        "expected_behavior": {"type": "string", "minLength": 1},
+        "keyboard_accessible": {"type": "boolean", "const": true},
+        "reduced_motion_behavior": {"type": "string", "minLength": 1},
+        "frozen_behavior": {"type": "string", "minLength": 1}
+      }
+    },
+    "acceptanceDomain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain", "criteria", "required"],
+      "properties": {
+        "domain": {
+          "enum": ["copy_zh", "hierarchy_density", "typography_spacing", "color_legibility", "charts_tables", "interaction_consistency", "format_rendering"]
+        },
+        "criteria": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "required": {"type": "boolean", "const": true}
+      }
+    }
+  }
+}

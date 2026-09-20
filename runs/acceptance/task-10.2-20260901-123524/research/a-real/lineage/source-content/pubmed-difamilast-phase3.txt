@@ -1,0 +1,24 @@
+# Difamilast 特应性皮炎 III 期结果摘录
+
+## 随机双盲成人 III 期（PMID 34710557）
+
+- 题名：Difamilast ointment in adult patients with atopic dermatitis: A phase 3 randomized, double-blind, vehicle-controlled trial。
+- PubMed：https://pubmed.ncbi.nlm.nih.gov/34710557/
+- 设计：日本成人，15—70 岁，IGA 2或3；Difamilast 1%软膏 182例，基质对照182例，每日2次，共4周。
+- 第4周 IGA成功率（IGA 0/1且改善至少2级）：Difamilast 38.46%，基质对照12.64%（p<0.0001）。
+- 摘要说明 TEAE 多为轻中度，且 Difamilast 组发生率低于基质对照；未给出精确分组发生率。
+
+## 52周开放标签 III 期（NCT03961529，PMID 35716332）
+
+- PubMed：https://pubmed.ncbi.nlm.nih.gov/35716332/
+- 成人166例使用 Difamilast 1%；儿童使用0.3%（144例）或1%（56例），每日2次，治疗52周。
+- TEAE：成人120/166（72.3%）；儿童178/200（89.0%）；多数为轻度或中度。
+- 因TEAE停药：成人13/166（7.8%）；儿童7/200（3.5%）。
+- 治疗相关AE：成人14/166（8.4%）；儿童16/200（8.0%）。
+- 第52周累积 EASI-75成功率：成人55.4%；儿童73.5%。
+
+## 结构化边界
+
+- 第4周随机对照疗效与52周开放标签安全性来自不同试验，分别绑定各自试验，不作同试验疗效—安全性矩阵配对。
+- 随机对照试验摘要没有精确TEAE/SAE发生率，不从“更少”或“耐受良好”推断数值。
+- 52周开放标签试验没有对照组，不将其成人TEAE 72.3%与第4周基质对照混配。

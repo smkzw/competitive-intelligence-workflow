@@ -1,0 +1,25 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "US label indication and factor D add-on mechanism",
+    "label safety warnings and adverse reactions retained as regulatory context"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "field": "label_context",
+      "value": "Oral factor D inhibitor for adults with PNH who have residual hemolytic anemia while receiving a C5 inhibitor"
+    }
+  ],
+  "first_disclosed_at": "2024-03-29",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-dailymed-voydeya",
+  "source_title": "DailyMed VOYDEYA (danicopan) label",
+  "source_url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab8d1cbd-a28b-4d49-82ab-5c7460719ac7",
+  "source_version_id": "src-dailymed-voydeya-20240329"
+}

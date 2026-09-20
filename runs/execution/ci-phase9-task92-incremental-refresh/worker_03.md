@@ -1,0 +1,48 @@
+所有工作均已完成并经验证。正在撰写最终报告。
+
+# 执行输出: ci-phase9-task92-incremental-refresh - worker_03
+
+## 边界与上下文检查
+
+- 仅在指定工作区内活动。唯一创建/修改的工件：`tests/integration/test_incremental_refresh.py`（新增，git 状态 `??`）。未触碰 `worker_01` / `worker_02` 的实现文件、生产路径或回归测试文件（`git status` 确认 `tests/reports/test_gate_override_strictness.py` 未被修改）。
+- 已读取初始读取集（执行上下文、执行计划）；随后按上下文授权补充读取了源真源：`.trellis/tasks/09-01-phase-9-task-92-incremental-refresh/{prd,design,implement}.md`、`task.json`、设计 v1.2 §17.2、ADR 0013、批准计划 Task 9.2（只读）、`domain/contracts.py`、`domain/evidence.py`（`DateEvidence` / `EvidenceLocator` 部分）、`domain/ids.py`、`gates/coverage.py`、`gates/models.py`（`GateSpec` / `GateOverride` / 摘要函数部分）、`storage/{snapshot_store,event_store,migrations,sqlite}.py`、`application/project_service.py`、`graph/{types,state,definitions/correction,definitions/new_report,guards}.py`、`sources/planner.py`（`assess_historical_source` 签名）、`policies/gates/{A,B}-v1.yaml`、`fixtures/synthetic/historical-cutoff/*.json`、`tests/integration/test_historical_cutoff.py`、`tests/reports/test_gate_override_strictness.py`。
+- 重要时序事实：三个 worker 并行。我先按设计文档写了 RED 契约测试；期间 `worker_01` / `worker_02` 的实现文件分三次落盘（`impact.py` 01:20、`definitions/refresh.py` 01:21、`refresh_service.py` 01:28→01:38），接口与我的初始提案不同（如 `RefreshService` vs `IncrementalRefreshService`、`ImpactGraph` 类 vs 自由函数、`impact_edges`/`impact_nodes` vs `DependencyEdge`）。我将测试文件整体重绑定到已落盘的真实接口，六个断言簇全部保留。
+- 本会话未禁用任何工具；未安装软件包；未进行生产环境写入；未召开会议，也未评审同行工件（仅读取其落盘源码以绑定接口）。
+
+## 已执行的工作
+
+新增 `tests/integration/test_incremental_refresh.py`，12 个集成测试，完整覆盖指派的六个断言簇：
+
+1. **两个批准节点**：`test_refresh_graph_declares_seven_stage_pipeline_with_exactly_two_approval_nodes` 断言 `REFRESH_NODES` 恰为七个流水节点（`refresh_parent`/`refresh_candidates`/`refresh_reevaluate`/`refresh_gate`/`refresh_rebuild`/`refresh_qc`/`refresh_accept_version`），重建之后只有 `refresh_qc` 与 `refresh_accept_version` 两个批准节点；接受节点 `side_effect_class="move"`、必须绑定 `rebuild_receipt_id` + `qc_verdict_digest`（不能绕过质控）、声明 `IncompleteRebuildError`；`refresh_parent` 显式声明 `RebaselineRequiredError` 分支。另断言全部节点带稳定幂等材料。
+2. **父版本不变**：父合同行（sqlite `project_contract_versions` v1 行 JSON）、`project.yaml` v1 条目、`snapshots/` 既有文件字节摘要，在计划、执行、接受各阶段逐一比对不变；接受后现行版本才翻转到 v2；父快照经 `SnapshotStore.read` 仍可读（三个场景均覆盖）。
+3. **错误截止日**：等于父截止日、早于父截止日、晚于刷新请求日三种输入全部 `RefreshServiceError` 失败关闭且不产生子合同行；并钉死合同层回归：`refresh_project_contract` 对相同/更晚（超过请求日）截止日抛 `ValueError`。
+4. **重大合同变化**：`child_baseline` 的证据合同/本体维度漂移与 `requested_contract` 的项目身份/适应症字段漂移均抛 `RefreshRebaselineRequired` 且消息含"重新建立基线"和变化维度名；空变化请求失败关闭；图层分支由 `test_classify_refresh_branch_requires_rebaseline_on_major_contract_change` 按维度逐一钉死。
+5. **影响范围**：影响闭包确定性（边乱序+重复输入同图摘要/同计划摘要）、排序稳定、去重、影响/复用不相交、种子⊆影响；纯图测试覆盖事实→声明→页面→格式逐层传播与 `impact_for_report_kinds`（受影响报告页面入闭包、事实/声明按摘要复用、未登记页面报告失败关闭）；非法反向边/未登记种子/空种子/越层报告类型全部 `ImpactGraphError`。服务级断言截止日扩展的影响/复用集合与闭包精确相等，门槛收紧只影响 A 报告页面 + html 格式、B 链全部复用、格式级仅 `html`（ADR 0013）。
+6. **中断恢复**：`resume_status` 缺口视图；接受前未完成重建/缺门槛决定/缺新快照/晋级缺证据快照逐项 `RefreshIncompleteError` 失败关闭；阻断决定不得登记为已接受（"阻断"语义，不生成草稿）；计划精确重放同对象、重建动作重放同 `action_id`、回执 JSONL 追加且不重复、重复接受幂等返回同一 `RefreshCompletion`；同一受影响报告登记不同门槛决定抛 `RefreshConflictError`。
+
+两个批准计划点名的测试节点按原精确保留：`test_expanding_cutoff_creates_new_contract_version_and_promotes_only_now_eligible_candidates`（含披露时间边界：父截止日当刻不晋级、新截止日当刻晋级、获取晚于披露按披露晋级、已适格来源不重评、未知披露继续阻断）与 `test_stricter_gate_override_recomputes_only_affected_gates_claims_pages_and_formats`（真实 `policies/gates/A-v1.yaml` 阈值收紧 1→2，复用 `gates.coverage` 反向依赖计算与声明一致性校验，放松/声明不一致/零变化三个负例）。
+
+## 工件与证据
+
+- `tests/integration/test_incremental_refresh.py` — 12 个测试，全部通过；ruff 无违规；`MYPYPATH=src mypy --strict --explicit-package-bases` 对本文件零错误。
+- 绑定的已落盘接口（证据，供 Codex 对照 worker 报告）：`RefreshService(project_root)` 的 `plan_refresh(requested_cutoff, requested_at, actor_id, requested_contract, evidence_contract_version, gate_specs, declared_affected_report_kinds, child_baseline, impact_edges, impact_nodes, sources)`、`record_rebuild_action`、`record_gate_decision`、`register_report_snapshot`、`accept_refresh(evidence_snapshot_manifest=...)`、`load_plan`、`resume_status`；`graph.impact` 的 `ImpactGraph`/`ImpactNode`/`ImpactEdge`/`ImpactLayer`/`ImpactPlan`；`graph.definitions.refresh` 的 `REFRESH_NODES`、`classify_refresh_branch`、`RefreshBaselineIdentity`、分支常量与 `REBASELINE_REQUIRED_MESSAGE_ZH`。
+- 观察到的环境证据：`worker_01`/`worker_02` 的三个源文件 `mypy --strict` 单独检查通过（"Success: no issues found in 3 source files"）；计划 GREEN 命令 49/49 通过（12 新增 + 4 历史截止日回归 + 33 门槛严格性回归）。
+
+## 命令与观察
+
+- `uv run pytest tests/integration/test_incremental_refresh.py -q` → `12 passed`（最终态；中间迭代曾出现接口重绑定期的 `ImportError` 与一处 `RefreshIncompleteError`，均为重绑定过程而非产品缺陷）。
+- `uv run pytest tests/integration/test_incremental_refresh.py tests/integration/test_historical_cutoff.py tests/reports/test_gate_override_strictness.py -q` → `49 passed`（计划规定的验证组合）。
+- `uv run ruff check tests/integration/test_incremental_refresh.py` → "All checks passed"（修复了导入排序、一处 E501、一处 F841）。
+- `MYPYPATH=src uv run mypy --strict --explicit-package-bases tests/integration/test_incremental_refresh.py` → 本文件零错误；同命令对三个实现源文件 → Success。
+- `uv run pytest tests/integration -q` → `1 failed, 282 passed`。唯一失败 `test_cli_command_catalog.py::test_frozen_command_catalog_...`：`package verify` 报 `CONTRACT_ERROR 文件摘要不一致：contracts/kangzhe/design_specs/project_profile.md`。判定与我的工件无关（证据：该文件在本会话开始前的 git status 快照中已是 `M` 修改态；我的改动仅为新增测试文件；该测试不导入我的文件）。同目录下 `src/ci_workflow/cli.py` 也有非我产生的修改态。
+- 观察一处设计取舍，供 Codex 审阅：门槛收紧路径的门槛"重算"结果以调用方 `record_gate_decision` 回执为准，`plan_refresh` 的 `gate_specs` 材料只做只收紧偏序与受影响集合校验；本测试按该合同断言。若 Codex 要求服务内部持有绑定重算（`recompute_report_result` 语义），需在 `worker_02` 范围补材料传递。
+
+## 阻碍或缺失的环境
+
+- 无阻碍。无缺失工具；未进行任何静默安装。
+- 非我范围的遗留问题（证据已录，供 Codex 处置）：(1) `tests/reports/test_gate_override_strictness.py` 在 `--explicit-package-bases` 全文件检查下有 14 个既有 mypy 错误（`var-annotated`/`unused-ignore` 等；该文件未被我修改）；(2) 上述 `test_cli_command_catalog` 的包摘要失败，源于工作区中 `contracts/kangzhe/design_specs/project_profile.md` 的未提交修改。
+
+## 重新运行请求或下一步
+
+- 无需重新运行。若 `worker_02` 在我报告后继续修改 `refresh_service.py` 的 `plan_refresh` 签名或接受前置条件，请对本会话发起同会话续跑请求，我只需按新签名重绑调用点（结构性改动小，断言簇不变）。
+- 建议 Codex 验收顺序：先核对三个 worker 的接口一致性（已由本测试文件固化并通过），再处置上述两个非我范围的遗留问题；GREEN 后按实施计划跑目标 Ruff/mypy 与治理审计收口。

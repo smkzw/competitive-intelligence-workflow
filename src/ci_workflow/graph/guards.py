@@ -1,6 +1,7 @@
 """Task 3.4 结构化守卫：从证据字段确定性求值，缺失/矛盾/跨对象一律拒绝。
 
-每个守卫是 GuardSpec：必需真键、任一组真键、必需字段、字面矛盾对。
+每个守卫是 GuardSpec：必需真键、任一组真键、必需字段、摘要字段、
+对象绑定、字段关系、数值界限、禁字段和字面矛盾对。
 求值顺序固定，理由确定性（missing_evidence / guard_not_satisfied /
 contradictory_evidence / scope_mismatch），绝无 allowed=True 绕过。
 """
@@ -8,10 +9,17 @@ contradictory_evidence / scope_mismatch），绝无 allowed=True 绕过。
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 from ci_workflow.graph.types import GuardResult
+from ci_workflow.graph.visual_finalization import (
+    VisualFinalizationError,
+    validate_visual_render_evidence,
+    validate_visual_verification_reference,
+    visual_contract_digest,
+)
 
 
 @dataclass(frozen=True)
@@ -19,8 +27,10 @@ class GuardSpec:
     """声明式结构化守卫：全部字段为字面常量。
 
     ``required_fields`` 非空字符串；``sha256_fields`` 必须为小写 SHA-256；
-    ``object_bound_fields`` 必须等于请求目标对象标识；``forbidden_fields``
-    出现即拒绝（如可修复否决不得携带穷尽记录摘要）。
+    ``object_bound_fields`` 必须等于请求目标对象标识；``equal_fields`` /
+    ``distinct_fields`` 检查证据中的字段关系；``min_int_fields`` /
+    ``max_int_fields`` 检查整数界限；``forbidden_fields`` 出现即拒绝
+    （如可修复否决不得携带穷尽记录摘要）。
     """
 
     guard_id: str
@@ -31,6 +41,11 @@ class GuardSpec:
     object_bound_fields: tuple[str, ...] = ()
     forbidden_fields: tuple[str, ...] = ()
     contradictions: tuple[tuple[str, str], ...] = ()
+    equal_fields: tuple[tuple[str, str], ...] = ()
+    distinct_fields: tuple[tuple[str, str], ...] = ()
+    min_int_fields: tuple[tuple[str, int], ...] = ()
+    max_int_fields: tuple[tuple[str, int], ...] = ()
+    validate_visual_release: bool = False
     description: str = ""
 
 
@@ -44,8 +59,8 @@ def evaluate_spec(
     target_family: str,
     target_object_id: str,
 ) -> GuardResult:
-    """按固定顺序求值：作用域 → 必需字段 → SHA-256 → 对象绑定 → 必需真键 →
-    任一组 → 禁字段 → 矛盾对。"""
+    """按固定顺序求值：作用域 → 必需字段 → SHA-256 → 对象绑定 →
+    字段关系/数值界限 → 必需真键 → 任一组 → 禁字段 → 矛盾对。"""
     # 跨对象/跨族证据失败关闭：证据可声明 target_family/target_object_id，
     # 一旦声明就必须与请求目标一致
     declared_family = evidence.get("target_family")
@@ -71,6 +86,39 @@ def evaluate_spec(
         value = evidence.get(key)
         if value is None or value != target_object_id:
             return GuardResult(False, f"scope_mismatch:object:{key}")
+    for first, second in spec.equal_fields:
+        if first not in evidence:
+            return GuardResult(False, f"missing_evidence:{first}")
+        if second not in evidence:
+            return GuardResult(False, f"missing_evidence:{second}")
+        if evidence[first] != evidence[second]:
+            return GuardResult(False, f"guard_not_satisfied:{first}=={second}")
+
+    for first, second in spec.distinct_fields:
+        if first not in evidence:
+            return GuardResult(False, f"missing_evidence:{first}")
+        if second not in evidence:
+            return GuardResult(False, f"missing_evidence:{second}")
+        if evidence[first] == evidence[second]:
+            return GuardResult(False, f"guard_not_satisfied:{first}!={second}")
+
+    for key, minimum in spec.min_int_fields:
+        value = evidence.get(key)
+        if key not in evidence:
+            return GuardResult(False, f"missing_evidence:{key}")
+        if isinstance(value, bool) or not isinstance(value, int):
+            return GuardResult(False, f"guard_not_satisfied:{key}")
+        if value < minimum:
+            return GuardResult(False, f"guard_not_satisfied:{key}")
+
+    for key, maximum in spec.max_int_fields:
+        value = evidence.get(key)
+        if key not in evidence:
+            return GuardResult(False, f"missing_evidence:{key}")
+        if isinstance(value, bool) or not isinstance(value, int):
+            return GuardResult(False, f"guard_not_satisfied:{key}")
+        if value < 0 or value > maximum:
+            return GuardResult(False, f"guard_not_satisfied:{key}")
 
     for key in spec.required_true:
         if key not in evidence:
@@ -94,6 +142,39 @@ def evaluate_spec(
     for first, second in spec.contradictions:
         if evidence.get(first) and evidence.get(second):
             return GuardResult(False, f"contradictory_evidence:{first}/{second}")
+
+    if spec.validate_visual_release:
+        render_evidence = evidence.get("render_evidence")
+        visual_verdict = evidence.get("visual_verdict")
+        if not isinstance(render_evidence, Mapping):
+            return GuardResult(False, "guard_not_satisfied:render_evidence")
+        if not isinstance(visual_verdict, Mapping):
+            return GuardResult(False, "guard_not_satisfied:visual_verdict")
+        try:
+            validate_visual_render_evidence(
+                render_evidence,
+                expected_artifact_digest=evidence.get("candidate_artifact_digest"),
+                expected_plan_digest=evidence.get("visual_plan_digest"),
+            )
+            validate_visual_verification_reference(
+                visual_verdict,
+                expected_artifact_digest=evidence.get("candidate_artifact_digest"),
+                expected_render_digest=evidence.get("render_evidence_digest"),
+                expected_plan_digest=evidence.get("visual_plan_digest"),
+            )
+        except VisualFinalizationError:
+            return GuardResult(False, "guard_not_satisfied:structured_visual_release")
+        if visual_contract_digest(render_evidence) != evidence.get("render_evidence_digest"):
+            return GuardResult(False, "guard_not_satisfied:render_evidence_digest")
+        if visual_contract_digest(visual_verdict) != evidence.get("visual_verdict_digest"):
+            return GuardResult(False, "guard_not_satisfied:visual_verdict_digest")
+        bindings = {
+            "format": evidence.get("format"),
+            "producer_identity": evidence.get("producer_identity"),
+            "verifier_identity": evidence.get("verifier_identity"),
+        }
+        if any(visual_verdict.get(key) != value for key, value in bindings.items()):
+            return GuardResult(False, "guard_not_satisfied:visual_verdict_bindings")
 
     return GuardResult(True, "guard_satisfied")
 
@@ -336,6 +417,7 @@ GUARD_SPECS: dict[str, GuardSpec] = {
                 "required_file_accepted",
                 "permission_or_environment_restored",
                 "user_provided_verifiable_lead",
+                "user_confirmed_material_unavailable",
             ),
         ),
         description="所需文件已接受、权限/环境已恢复或用户提供可核验新线索",
@@ -348,13 +430,113 @@ GUARD_SPECS: dict[str, GuardSpec] = {
     # ── 格式产物族守卫 ─────────────────────────────────────────────────────
     "g_format_queued_generating": GuardSpec(
         guard_id="g_format_queued_generating",
-        required_true=("report_snapshot_locked",),
-        description="具有锁定报告快照",
+        required_true=(
+            "report_snapshot_locked",
+            "visual_plan_bound",
+            "visual_plan_snapshot_matches",
+            "visual_plan_format_matches",
+            "visual_plan_design_contract_matches",
+        ),
+        required_fields=(
+            "snapshot_id",
+            "format",
+            "visual_plan_id",
+            "visual_plan_digest",
+            "visual_plan_snapshot_id",
+            "visual_plan_format",
+            "design_contract_digest",
+        ),
+        sha256_fields=("visual_plan_digest", "design_contract_digest"),
+        equal_fields=(
+            ("visual_plan_snapshot_id", "snapshot_id"),
+            ("visual_plan_format", "format"),
+        ),
+        description=(
+            "格式生成必须绑定当前锁定快照、格式和项目康哲设计合同的"
+            "视觉策划书；策划书摘要不可漂移"
+        ),
     ),
     "g_format_generating_quality_check": GuardSpec(
         guard_id="g_format_generating_quality_check",
-        required_true=("artifact_built",),
-        description="构建产物",
+        required_true=(
+            "artifact_built",
+            "visual_plan_bound",
+            "candidate_current",
+            "candidate_snapshot_matches",
+            "candidate_visual_plan_matches",
+        ),
+        required_fields=(
+            "snapshot_id",
+            "format",
+            "visual_plan_digest",
+            "artifact_id",
+            "candidate_artifact_digest",
+            "candidate_snapshot_id",
+            "candidate_visual_plan_digest",
+            "candidate_format",
+        ),
+        sha256_fields=(
+            "candidate_artifact_digest",
+            "candidate_visual_plan_digest",
+        ),
+        equal_fields=(
+            ("candidate_snapshot_id", "snapshot_id"),
+            ("candidate_visual_plan_digest", "visual_plan_digest"),
+            ("candidate_format", "format"),
+        ),
+        description=(
+            "只把当前候选产物送入真实渲染与诊断；候选必须仍绑定"
+            "同一快照和视觉策划书"
+        ),
+    ),
+    "g_format_quality_check_generating": GuardSpec(
+        guard_id="g_format_quality_check_generating",
+        required_true=(
+            "visual_plan_bound",
+            "candidate_current",
+            "real_render_check_recorded",
+            "render_evidence_current",
+            "beautification_round_available",
+            "beautification_retest_recorded",
+            "visual_defects_remain",
+        ),
+        required_fields=(
+            "snapshot_id",
+            "format",
+            "visual_plan_digest",
+            "candidate_artifact_digest",
+            "candidate_snapshot_id",
+            "candidate_visual_plan_digest",
+            "candidate_format",
+            "render_evidence_id",
+            "render_evidence_digest",
+            "rendered_artifact_digest",
+            "rendered_format",
+            "beautification_round",
+            "beautification_record_id",
+            "beautification_record_digest",
+        ),
+        sha256_fields=(
+            "visual_plan_digest",
+            "candidate_artifact_digest",
+            "candidate_visual_plan_digest",
+            "render_evidence_digest",
+            "rendered_artifact_digest",
+            "beautification_record_digest",
+        ),
+        equal_fields=(
+            ("candidate_snapshot_id", "snapshot_id"),
+            ("candidate_visual_plan_digest", "visual_plan_digest"),
+            ("candidate_format", "format"),
+            ("rendered_format", "format"),
+            ("rendered_artifact_digest", "candidate_artifact_digest"),
+        ),
+        min_int_fields=(("beautification_round", 1),),
+        max_int_fields=(("beautification_round", 3),),
+        description=(
+            "真实渲染诊断发现缺陷时，只能在三轮美化上限内回到生成；"
+            "回环记录当前候选、渲染和修订回执"
+        ),
     ),
     "g_format_quality_check_passed": GuardSpec(
         guard_id="g_format_quality_check_passed",
@@ -362,13 +544,152 @@ GUARD_SPECS: dict[str, GuardSpec] = {
             "deterministic_check_recorded",
             "coverage_check_recorded",
             "real_render_check_recorded",
+            "visual_plan_bound",
+            "candidate_current",
+            "render_evidence_current",
+            "current_run",
+            "real_artifact",
+            "real_render",
+            "receipts_current",
+            "independent_visual_review_recorded",
+            "independent_visual_verifier",
+            "visual_verdict_accepted",
+            "visual_verdict_current",
+            "render_evidence_validated",
+            "visual_verdict_validated",
+            "required_render_targets_complete",
+            "required_interactions_complete",
+            "visible_text_scan_passed",
+            "responsive_content_complete",
+            "beautification_loop_complete",
+            "no_visual_defects_remain",
+            "visual_copy_check_passed",
+            "visual_hierarchy_check_passed",
+            "visual_layout_check_passed",
+            "visual_color_check_passed",
+            "visual_chart_table_check_passed",
+            "visual_interaction_check_passed",
+            "visual_format_render_check_passed",
         ),
-        description="确定性/覆盖/真实渲染接受记录",
+        required_fields=(
+            "snapshot_id",
+            "format",
+            "visual_plan_digest",
+            "artifact_id",
+            "candidate_artifact_digest",
+            "candidate_snapshot_id",
+            "candidate_visual_plan_digest",
+            "candidate_format",
+            "render_evidence_id",
+            "render_evidence_digest",
+            "rendered_artifact_digest",
+            "rendered_format",
+            "beautification_round",
+            "beautification_record_digest",
+            "visual_verdict_id",
+            "visual_verdict_digest",
+            "visual_verdict_artifact_digest",
+            "visual_verdict_render_digest",
+            "visual_verdict_plan_digest",
+            "visual_verdict_format",
+            "producer_identity",
+            "verifier_identity",
+            "open_blocking_visual_defects",
+            "render_evidence",
+            "visual_verdict",
+        ),
+        sha256_fields=(
+            "visual_plan_digest",
+            "candidate_artifact_digest",
+            "candidate_visual_plan_digest",
+            "render_evidence_digest",
+            "rendered_artifact_digest",
+            "beautification_record_digest",
+            "visual_verdict_digest",
+            "visual_verdict_artifact_digest",
+            "visual_verdict_render_digest",
+            "visual_verdict_plan_digest",
+        ),
+        equal_fields=(
+            ("candidate_snapshot_id", "snapshot_id"),
+            ("candidate_visual_plan_digest", "visual_plan_digest"),
+            ("candidate_format", "format"),
+            ("rendered_format", "format"),
+            ("rendered_artifact_digest", "candidate_artifact_digest"),
+            ("visual_verdict_artifact_digest", "candidate_artifact_digest"),
+            ("visual_verdict_render_digest", "render_evidence_digest"),
+            ("visual_verdict_plan_digest", "visual_plan_digest"),
+            ("visual_verdict_format", "format"),
+        ),
+        distinct_fields=(("producer_identity", "verifier_identity"),),
+        min_int_fields=(("beautification_round", 1),),
+        max_int_fields=(("beautification_round", 3), ("open_blocking_visual_defects", 0)),
+        validate_visual_release=True,
+        description=(
+            "只有当前候选的真实渲染、最多三轮美化闭环和逐域视觉检查"
+            "均完成，且独立审阅者接受，格式才可通过"
+        ),
     ),
     "g_format_passed_delivery_ready": GuardSpec(
         guard_id="g_format_passed_delivery_ready",
-        required_true=("atomic_publish_complete", "manifest_digest_recorded"),
-        description="原子发布及清单摘要",
+        required_true=(
+            "atomic_publish_complete",
+            "manifest_digest_recorded",
+            "independent_visual_verdict_accepted",
+            "visual_verdict_current",
+        ),
+        required_fields=(
+            "artifact_id",
+            "candidate_artifact_digest",
+            "visual_verdict_id",
+            "visual_verdict_digest",
+            "visual_verdict_artifact_digest",
+            "snapshot_id",
+            "format",
+            "visual_plan_digest",
+            "candidate_snapshot_id",
+            "candidate_visual_plan_digest",
+            "candidate_format",
+            "render_evidence_id",
+            "render_evidence_digest",
+            "rendered_artifact_digest",
+            "rendered_format",
+            "visual_verdict_render_digest",
+            "visual_verdict_plan_digest",
+            "visual_verdict_format",
+            "producer_identity",
+            "verifier_identity",
+            "render_evidence",
+            "visual_verdict",
+        ),
+        sha256_fields=(
+            "candidate_artifact_digest",
+            "visual_verdict_digest",
+            "visual_verdict_artifact_digest",
+            "visual_plan_digest",
+            "candidate_visual_plan_digest",
+            "render_evidence_digest",
+            "rendered_artifact_digest",
+            "visual_verdict_render_digest",
+            "visual_verdict_plan_digest",
+        ),
+        equal_fields=(
+            ("candidate_snapshot_id", "snapshot_id"),
+            ("candidate_visual_plan_digest", "visual_plan_digest"),
+            ("candidate_format", "format"),
+            ("rendered_format", "format"),
+            ("rendered_artifact_digest", "candidate_artifact_digest"),
+            ("visual_verdict_artifact_digest", "candidate_artifact_digest"),
+            ("visual_verdict_render_digest", "render_evidence_digest"),
+            ("visual_verdict_plan_digest", "visual_plan_digest"),
+            ("visual_verdict_format", "format"),
+        ),
+        distinct_fields=(("producer_identity", "verifier_identity"),),
+        validate_visual_release=True,
+        description=(
+            "独立视觉结论必须通过当前候选、视觉策划书和真实呈现证据的"
+            "结构化复核并绑定后，才允许原子发布及建立交付清单"
+        ),
     ),
     "g_format_generating_blocked": GuardSpec(
         guard_id="g_format_generating_blocked",
@@ -378,7 +699,13 @@ GUARD_SPECS: dict[str, GuardSpec] = {
     "g_format_quality_check_blocked": GuardSpec(
         guard_id="g_format_quality_check_blocked",
         required_true=("format_recovery_exhausted", "failure_evidence_saved"),
-        description="格式特定技术/内容/视觉恢复已穷尽并保存失败证据",
+        required_any=(
+            ("beautification_round_limit_reached", "non_visual_failure_recorded"),
+        ),
+        description=(
+            "格式特定恢复已穷尽并保存失败证据；视觉缺陷必须达到三轮"
+            "上限后阻断，非视觉故障可直接阻断"
+        ),
     ),
     "g_format_blocked_queued": GuardSpec(
         guard_id="g_format_blocked_queued",

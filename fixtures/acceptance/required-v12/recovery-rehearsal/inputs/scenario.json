@@ -1,0 +1,33 @@
+{
+  "case_id": "recovery-rehearsal",
+  "source_fixture": "fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "最终 RC 恢复包必须在隔离目录完成 fresh install、项目恢复、一次刷新和代表性站点 HTML 重建。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "isolated-install",
+      "description_zh": "最终恢复包在一次性隔离目录安装并校验 bundle/package/RC 摘要。"
+    },
+    {
+      "id": "project-rehydrate",
+      "description_zh": "恢复一个项目、事件链、快照和输入绑定。"
+    },
+    {
+      "id": "incremental-refresh",
+      "description_zh": "在恢复项目上继续一次刷新并保留 cutoff/血统。"
+    },
+    {
+      "id": "representative-html-rebuild",
+      "description_zh": "重建一个代表性站点式 HTML 并绑定当前快照摘要。"
+    },
+    {
+      "id": "pre-rc-cannot-close",
+      "description_zh": "Task 10.3/full-matrix runner 只能记录 pending_future_owner，不能提前关单。"
+    }
+  ]
+}

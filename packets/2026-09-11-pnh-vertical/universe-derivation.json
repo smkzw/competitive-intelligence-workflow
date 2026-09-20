@@ -1,0 +1,4109 @@
+{
+ "schema_version": "1.0",
+ "derived_at": "2026-09-11T14:52:28.623204+00:00",
+ "derivation": "ctgov-study-json-v1 材料级派生（候选实体与定位；非最终研究包）",
+ "condition": "paroxysmal nocturnal hemoglobinuria",
+ "pages": [
+  {
+   "page_number": 1,
+   "sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+   "byte_count": 2811140,
+   "study_count": 89,
+   "total_count_header": null
+  },
+  {
+   "page_number": 2,
+   "sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+   "byte_count": 2871697,
+   "study_count": 100,
+   "total_count_header": 189
+  }
+ ],
+ "record_count": 189,
+ "records": [
+  {
+   "nct_id": "NCT06852092",
+   "brief_title": "Study on Mass Balance of [14C]HSK39297 in Healthy Chinese Adult Male Subjects",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 7,
+   "start_year": "",
+   "lead_sponsor": "Haisco Pharmaceutical Group Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "Carbon-14 labeled HSK39297"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 0,
+    "nct_id": "NCT06852092"
+   }
+  },
+  {
+   "nct_id": "NCT01174108",
+   "brief_title": "Allogeneic Hematopoietic Stem Cell Transplantation for Severe Aplastic Anemia and Other Bone Marrow Failure Syndromes Using G-CSF Mobilized CD34+ Selected Hematopoietic Precursor Cells Co-Infused With a Reduced Dose of Non-Mobilized Donor T-cells",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 120,
+   "start_year": "",
+   "lead_sponsor": "National Heart, Lung, and Blood Institute (NHLBI)",
+   "collaborators": [],
+   "interventions": [
+    "Donor derived G-CSF mobilized PBC",
+    "Miltenyi CD34 Reagent System"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 1,
+    "nct_id": "NCT01174108"
+   }
+  },
+  {
+   "nct_id": "NCT01412047",
+   "brief_title": "Paroxysmal Nocturnal Hemoglobinuria Human Anti-Human Antibodies Study",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 75,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 2,
+    "nct_id": "NCT01412047"
+   }
+  },
+  {
+   "nct_id": "NCT05828485",
+   "brief_title": "Effect of Food on Pharmacokinetics of MY008211A Tablets in Healthy Adult Subjects",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 3,
+    "nct_id": "NCT05828485"
+   }
+  },
+  {
+   "nct_id": "NCT06799546",
+   "brief_title": "A Phase III Study to Evaluate the Efficacy and Safety of HSK39297 in Patients With Paroxysmal Nocturnal Hemoglobinuria Who Are Naive to Complement Inhibitor Therapy",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 73,
+   "start_year": "",
+   "lead_sponsor": "Haisco Pharmaceutical Group Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab Injection",
+    "HSK39297 tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 4,
+    "nct_id": "NCT06799546"
+   }
+  },
+  {
+   "nct_id": "NCT01224483",
+   "brief_title": "Multicenter Retrospective Analysis About the Clinical Characteristics of Korean Paroxysmal Nocturnal Hemoglobinuria (PNH) Patients",
+   "phase": [],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 350,
+   "start_year": "",
+   "lead_sponsor": "Samsung Medical Center",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 5,
+    "nct_id": "NCT01224483"
+   }
+  },
+  {
+   "nct_id": "NCT07462780",
+   "brief_title": "A Phase I Clinical Trial to Evaluate CMS-D017 Following Single and Multiple Doses in Healthy Participants",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 88,
+   "start_year": "",
+   "lead_sponsor": "Shenzhen Kangzhe Biotechnology Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "CMS-D017 Capsule",
+    "CMS-D017 Placebo Capsule"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 6,
+    "nct_id": "NCT07462780"
+   }
+  },
+  {
+   "nct_id": "NCT06978699",
+   "brief_title": "A Phase II Study Evaluating the Efficacy and Safety of XH-S003 Capsules in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "S-INFINITY Pharmaceuticals Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "XH-S003 Capsule"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 7,
+    "nct_id": "NCT06978699"
+   }
+  },
+  {
+   "nct_id": "NCT04079257",
+   "brief_title": "The Pharmacokinetics and Pharmacodynamics of Eculizumab in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 27,
+   "start_year": "",
+   "lead_sponsor": "Radboud University Medical Center",
+   "collaborators": [],
+   "interventions": [
+    "Blood collection for measurement of eculizumab peak concentrations"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 8,
+    "nct_id": "NCT04079257"
+   }
+  },
+  {
+   "nct_id": "NCT07416162",
+   "brief_title": "A Study of Iptacopan in Korean Patients With Paroxysmal Nocturnal Hemoglobinuria or C3 Glomerulopathy",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 21,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 9,
+    "nct_id": "NCT07416162"
+   }
+  },
+  {
+   "nct_id": "NCT00397813",
+   "brief_title": "Fludarabine Phosphate and Total Body Irradiation Followed by a Donor Peripheral Stem Cell Transplant in Treating Patients With Myelodysplastic Syndromes or Myeloproliferative Disorders",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 77,
+   "start_year": "",
+   "lead_sponsor": "Fred Hutchinson Cancer Center",
+   "collaborators": [
+    "National Cancer Institute (NCI)",
+    "National Heart, Lung, and Blood Institute (NHLBI)"
+   ],
+   "interventions": [
+    "Cyclosporine",
+    "Fludarabine Phosphate",
+    "Laboratory Biomarker Analysis",
+    "Mycophenolate Mofetil",
+    "Nonmyeloablative Allogeneic Hematopoietic Stem Cell Transplantation",
+    "Peripheral Blood Stem Cell Transplantation",
+    "Total-Body Irradiation"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 10,
+    "nct_id": "NCT00397813"
+   }
+  },
+  {
+   "nct_id": "NCT06561841",
+   "brief_title": "A Study to Evaluate the Efficacy and Safety of HSK39297 in Patients With Paroxysmal Nocturnal Hemoglobinuria（PNH）",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 47,
+   "start_year": "",
+   "lead_sponsor": "Haisco Pharmaceutical Group Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HSK39297"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 11,
+    "nct_id": "NCT06561841"
+   }
+  },
+  {
+   "nct_id": "NCT04820530",
+   "brief_title": "Study of Efficacy and Safety of Twice Daily Oral Iptacopan (LNP023) in Adult PNH Patients Who Are Naive to Complement Inhibitor Therapy",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 40,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Iptacopan (LNP023)"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 12,
+    "nct_id": "NCT04820530"
+   }
+  },
+  {
+   "nct_id": "NCT02534909",
+   "brief_title": "Proof of Concept Study to Assess the Efficacy, Safety and Pharmacokinetics of LFG316 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 10,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "LFG316",
+    "LNP023"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 13,
+    "nct_id": "NCT02534909"
+   }
+  },
+  {
+   "nct_id": "NCT06051357",
+   "brief_title": "Proof of Concept Study to Assess the Efficacy, Safety of HRS-5965 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 26,
+   "start_year": "",
+   "lead_sponsor": "Chengdu Suncadia Medicine Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HRS-5965 tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 14,
+    "nct_id": "NCT06051357"
+   }
+  },
+  {
+   "nct_id": "NCT04888507",
+   "brief_title": "Pozelimab and Cemdisiran Combination Therapy in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria Who Switch From Eculizumab Therapy",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 6,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Pozelimab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 15,
+    "nct_id": "NCT04888507"
+   }
+  },
+  {
+   "nct_id": "NCT00867932",
+   "brief_title": "Eculizumab Pharmacokinetics/Pharmacodynamics Study in Pediatric/Adolescent Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE4"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 7,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 16,
+    "nct_id": "NCT00867932"
+   }
+  },
+  {
+   "nct_id": "NCT06932744",
+   "brief_title": "Study of Safety and Efficacy of MY008211A in Paroxysmal Nocturnal Hemoglobinuria (PNH) Patients Who Are Naive to Complement Inhibitor Therapy",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 66,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab Injection",
+    "MY008211A tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 17,
+    "nct_id": "NCT06932744"
+   }
+  },
+  {
+   "nct_id": "NCT06412497",
+   "brief_title": "MT2023-20: Hematopoietic Cell Transplant With Reduced Intensity Conditioning and Post-transplant Cyclophosphamide for Severe Aplastic Anemia and Other Forms of Acquired Bone Marrow Failure.",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 60,
+   "start_year": "",
+   "lead_sponsor": "Masonic Cancer Center, University of Minnesota",
+   "collaborators": [],
+   "interventions": [
+    "Cell Infusion",
+    "Cyclophosphamide",
+    "Fludarabine",
+    "Mycophenolate Mofetil",
+    "Post-Transplant G-CSF",
+    "Rabbit ATG",
+    "Rituximab",
+    "Tacrolimus",
+    "Total Body Irradiation"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 18,
+    "nct_id": "NCT06412497"
+   }
+  },
+  {
+   "nct_id": "NCT04558918",
+   "brief_title": "Study of Efficacy and Safety of Twice Daily Oral LNP023 in Adult PNH Patients With Residual Anemia Despite Anti-C5 Antibody Treatment",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 97,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab",
+    "LNP023",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 19,
+    "nct_id": "NCT04558918"
+   }
+  },
+  {
+   "nct_id": "NCT00039923",
+   "brief_title": "Transfer of GPI-Linked Proteins to Transfused Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 7,
+   "start_year": "",
+   "lead_sponsor": "National Heart, Lung, and Blood Institute (NHLBI)",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 20,
+    "nct_id": "NCT00039923"
+   }
+  },
+  {
+   "nct_id": "NCT06050226",
+   "brief_title": "A Study of MY008211A in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 34,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 21,
+    "nct_id": "NCT06050226"
+   }
+  },
+  {
+   "nct_id": "NCT04702568",
+   "brief_title": "A Long-Term Safety Study of BCX9930 in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 19,
+   "start_year": "",
+   "lead_sponsor": "BioCryst Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "BCX9930",
+    "Eculizumab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 22,
+    "nct_id": "NCT04702568"
+   }
+  },
+  {
+   "nct_id": "NCT02179359",
+   "brief_title": "Hematopoietic Stem Cell Transplant for High Risk Hemoglobinopathies",
+   "phase": [
+    "NA"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 38,
+   "start_year": "",
+   "lead_sponsor": "Masonic Cancer Center, University of Minnesota",
+   "collaborators": [],
+   "interventions": [
+    "Myeloablative Preparative Regimen",
+    "Reduced Intensity Preparative Regimen",
+    "Reduced Toxicity Ablative Regimen"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 23,
+    "nct_id": "NCT02179359"
+   }
+  },
+  {
+   "nct_id": "NCT04058158",
+   "brief_title": "A Study to Compare SB12 (Proposed Eculizumab Biosimilar) to Soliris in Subjects With Paroxysmal Nocturnal Haemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Samsung Bioepis Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "SB12 (proposed eculizumab biosimilar)",
+    "Soliris (eculizumab)"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 24,
+    "nct_id": "NCT04058158"
+   }
+  },
+  {
+   "nct_id": "NCT07177872",
+   "brief_title": "A Long-term Efficacy and Safety of NTQ5082 Capsules",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 78,
+   "start_year": "",
+   "lead_sponsor": "Nanjing Chia-tai Tianqing Pharmaceutical",
+   "collaborators": [],
+   "interventions": [
+    "NTQ5082 capsules 200 mg"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 25,
+    "nct_id": "NCT07177872"
+   }
+  },
+  {
+   "nct_id": "NCT03047746",
+   "brief_title": "Unrelated And Partially Matched Related Donor PSCT w/ T Cell Receptor (TCR) αβ Depletion for Patients With BMF",
+   "phase": [
+    "NA"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Children's Hospital of Philadelphia",
+   "collaborators": [],
+   "interventions": [
+    "CliniMACs"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 26,
+    "nct_id": "NCT03047746"
+   }
+  },
+  {
+   "nct_id": "NCT00856388",
+   "brief_title": "Fludarabine Phosphate, Melphalan, Total-Body Irradiation, Donor Stem Cell Transplant in Treating Patients With Hematologic Cancer or Bone Marrow Failure Disorders",
+   "phase": [
+    "NA"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 62,
+   "start_year": "",
+   "lead_sponsor": "Roswell Park Cancer Institute",
+   "collaborators": [
+    "National Cancer Institute (NCI)"
+   ],
+   "interventions": [
+    "allogeneic hematopoietic stem cell transplantation",
+    "anti-thymocyte globulin",
+    "fludarabine phosphate",
+    "melphalan",
+    "total-body irradiation"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 27,
+    "nct_id": "NCT00856388"
+   }
+  },
+  {
+   "nct_id": "NCT01192425",
+   "brief_title": "Paroxysmal Nocturnal Hemoglobinuria (PNH), Level of CD59 on Red and White Blood Cells in Bone Marrow Failure Syndromes",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 5580,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 28,
+    "nct_id": "NCT01192425"
+   }
+  },
+  {
+   "nct_id": "NCT04747613",
+   "brief_title": "Long-term Safety and Tolerability of Iptacopan in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 208,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Iptacopan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 29,
+    "nct_id": "NCT04747613"
+   }
+  },
+  {
+   "nct_id": "NCT03866681",
+   "brief_title": "Sirolimus Combined With Low-dose Warfarin for the Treatment of Refractory PNH",
+   "phase": [
+    "PHASE4"
+   ],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 40,
+   "start_year": "",
+   "lead_sponsor": "Peking Union Medical College Hospital",
+   "collaborators": [],
+   "interventions": [
+    "sirolimus"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 30,
+    "nct_id": "NCT03866681"
+   }
+  },
+  {
+   "nct_id": "NCT05646563",
+   "brief_title": "Study of NM8074 in Adult PNH Patients With Inadequate Response to Soliris",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "NovelMed Therapeutics",
+   "collaborators": [],
+   "interventions": [
+    "NM8074",
+    "Soliris"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 31,
+    "nct_id": "NCT05646563"
+   }
+  },
+  {
+   "nct_id": "NCT07413250",
+   "brief_title": "Assess Long-Term Safety of Danicopan Add-on Therapy in Participants With Paroxysmal Nocturnal Hemoglobinuria: Analysis of IPIG-Registry Data",
+   "phase": [],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Danicopan",
+    "Soliris/Ultomiris"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 32,
+    "nct_id": "NCT07413250"
+   }
+  },
+  {
+   "nct_id": "NCT01529827",
+   "brief_title": "Fludarabine Phosphate, Melphalan, and Low-Dose Total-Body Irradiation Followed by Donor Peripheral Blood Stem Cell Transplant in Treating Patients With Hematologic Malignancies",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 94,
+   "start_year": "",
+   "lead_sponsor": "Roswell Park Cancer Institute",
+   "collaborators": [],
+   "interventions": [
+    "allogeneic hematopoietic stem cell transplantation",
+    "fludarabine phosphate",
+    "laboratory biomarker analysis",
+    "melphalan",
+    "methotrexate",
+    "mycophenolate mofetil",
+    "peripheral blood stem cell transplantation",
+    "tacrolimus",
+    "total-body irradiation"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 33,
+    "nct_id": "NCT01529827"
+   }
+  },
+  {
+   "nct_id": "NCT03588026",
+   "brief_title": "Treating Paroxysmal Nocturnal Haemoglobinuria Patients With rVA576",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 9,
+   "start_year": "",
+   "lead_sponsor": "AKARI Therapeutics",
+   "collaborators": [],
+   "interventions": [
+    "Standard of care (SOC)",
+    "rVA576"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 34,
+    "nct_id": "NCT03588026"
+   }
+  },
+  {
+   "nct_id": "NCT04085601",
+   "brief_title": "A Study to Evaluate the Efficacy and Safety of Pegcetacoplan in Patients With PNH",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 53,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "APL-2"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 35,
+    "nct_id": "NCT04085601"
+   }
+  },
+  {
+   "nct_id": "NCT07256301",
+   "brief_title": "A Phase Ib, Multicenter, Open-Label Study of Multiple-Dose EA5 in Adults With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Shanghai Lanyi Therapeutics Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "EA5"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 36,
+    "nct_id": "NCT07256301"
+   }
+  },
+  {
+   "nct_id": "NCT03946748",
+   "brief_title": "Study to Evaluate the Efficacy and Safety of REGN3918 in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "REGN3918"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 37,
+    "nct_id": "NCT03946748"
+   }
+  },
+  {
+   "nct_id": "NCT01642979",
+   "brief_title": "Safety and Efficacy of Levamisole Combined With Cyclosporine A in Patients With Classic Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 120,
+   "start_year": "",
+   "lead_sponsor": "Institute of Hematology & Blood Diseases Hospital, China",
+   "collaborators": [],
+   "interventions": [
+    "Glucocorticoids",
+    "Levamisole+cyclosporin A+Glucocorticoids",
+    "cyclosporin A+Glucocorticoids"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 38,
+    "nct_id": "NCT01642979"
+   }
+  },
+  {
+   "nct_id": "NCT06028594",
+   "brief_title": "Compassionate Use of Pozelimab and Cemdisiran Combination Therapy in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [],
+   "overall_status": "NO_LONGER_AVAILABLE",
+   "study_type": "",
+   "enrollment": null,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Pozelimab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 39,
+    "nct_id": "NCT06028594"
+   }
+  },
+  {
+   "nct_id": "NCT03316521",
+   "brief_title": "First-In-Human Clinical Study of the C3 Complement Inhibitor AMY- 101 in Healthy Male Volunteers",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Amyndas Pharmaceuticals S.A.",
+   "collaborators": [],
+   "interventions": [
+    "AMY-101"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 40,
+    "nct_id": "NCT03316521"
+   }
+  },
+  {
+   "nct_id": "NCT07657052",
+   "brief_title": "A Multicenter, Open-label Study Evaluating the Long-term Safety and Efficacy of XH-S003 Capsules in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "NA"
+   ],
+   "overall_status": "ENROLLING_BY_INVITATION",
+   "study_type": "",
+   "enrollment": 26,
+   "start_year": "",
+   "lead_sponsor": "S-INFINITY Pharmaceuticals Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "XH-S003 Capsule"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 41,
+    "nct_id": "NCT07657052"
+   }
+  },
+  {
+   "nct_id": "NCT05630001",
+   "brief_title": "Single Arm, Open Label Trial With Iptacopan Treatment for 24 Weeks, in Patients on Stable Regimen of Anti-C5 Who Switch to Iptacopan.",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 52,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Iptacopan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 42,
+    "nct_id": "NCT05630001"
+   }
+  },
+  {
+   "nct_id": "NCT00721864",
+   "brief_title": "The Molecular Biology of Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 10,
+   "start_year": "",
+   "lead_sponsor": "University of Utah",
+   "collaborators": [
+    "National Institutes of Health (NIH)"
+   ],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 43,
+    "nct_id": "NCT00721864"
+   }
+  },
+  {
+   "nct_id": "NCT00130000",
+   "brief_title": "Eculizumab to Treat Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 87,
+   "start_year": "",
+   "lead_sponsor": "National Heart, Lung, and Blood Institute (NHLBI)",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 44,
+    "nct_id": "NCT00130000"
+   }
+  },
+  {
+   "nct_id": "NCT04901936",
+   "brief_title": "A Study of Pegcetacoplan in Pediatric Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Pegcetacoplan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 45,
+    "nct_id": "NCT04901936"
+   }
+  },
+  {
+   "nct_id": "NCT03406507",
+   "brief_title": "A Study of Ravulizumab (ALXN1210) in Children and Adolescents With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 13,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 46,
+    "nct_id": "NCT03406507"
+   }
+  },
+  {
+   "nct_id": "NCT04654468",
+   "brief_title": "A Study Evaluating the Efficacy, Safety, Pharmacokinetics and Pharmacodynamics of Crovalimab in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH) Not Previously Treated With Complement Inhibition",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 51,
+   "start_year": "",
+   "lead_sponsor": "Hoffmann-La Roche",
+   "collaborators": [],
+   "interventions": [
+    "Crovalimab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 47,
+    "nct_id": "NCT04654468"
+   }
+  },
+  {
+   "nct_id": "NCT06931691",
+   "brief_title": "A Multi-center, Ambispective Cohort Study to Evaluate the Impact of Iptacopan for Adult Patients With PNH in China",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 80,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "LNP023"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 48,
+    "nct_id": "NCT06931691"
+   }
+  },
+  {
+   "nct_id": "NCT07747090",
+   "brief_title": "A Study of the Efficacy and Safety of FXS6837 Capsules Compared to Eculizumab for 24 Weeks in Patients With PNH.",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 90,
+   "start_year": "",
+   "lead_sponsor": "Shanghai Fosun Pharmaceutical Industrial Development Co. Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab infusion",
+    "FXS6837 Capsule"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 49,
+    "nct_id": "NCT07747090"
+   }
+  },
+  {
+   "nct_id": "NCT05741346",
+   "brief_title": "Long-term Safety of BCX9930 in Participants With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 28,
+   "start_year": "",
+   "lead_sponsor": "BioCryst Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "BCX9930"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 50,
+    "nct_id": "NCT05741346"
+   }
+  },
+  {
+   "nct_id": "NCT04463056",
+   "brief_title": "Efficacy and Safety of Elizaria® vs. Soliris® in Patients With PNH",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 32,
+   "start_year": "",
+   "lead_sponsor": "AO GENERIUM",
+   "collaborators": [],
+   "interventions": [
+    "Elizaria®",
+    "Soliris®"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 51,
+    "nct_id": "NCT04463056"
+   }
+  },
+  {
+   "nct_id": "NCT07413679",
+   "brief_title": "Long-term Safety of Danicopan: IPIG Registry-based Cohort Study",
+   "phase": [],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Danicopan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 52,
+    "nct_id": "NCT07413679"
+   }
+  },
+  {
+   "nct_id": "NCT00122304",
+   "brief_title": "Study of Safety in Hemolytic Paroxysmal Nocturnal Hemoglobinuria (PNH) Patients Treated With Eculizumab",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 85,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 53,
+    "nct_id": "NCT00122304"
+   }
+  },
+  {
+   "nct_id": "NCT03030183",
+   "brief_title": "Phase 2 Safety and Efficacy Study of Zilucoplan (RA101495) to Treat PNH Patients Who Have an Inadequate Response to Eculizumab",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 3,
+   "start_year": "",
+   "lead_sponsor": "Ra Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Zilucoplan (RA101495)"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 54,
+    "nct_id": "NCT03030183"
+   }
+  },
+  {
+   "nct_id": "NCT05133531",
+   "brief_title": "A Study to Evaluate How Safe Pozelimab + Cemdisiran Combination Therapy is and How Well it Works in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH) Who Have Not Recently Received or Have Not Received Complement Inhibitor Treatment",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 202,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Eculizumab",
+    "Pozelimab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 55,
+    "nct_id": "NCT05133531"
+   }
+  },
+  {
+   "nct_id": "NCT06633536",
+   "brief_title": "Real-life Treatment Outcomes of Ravulizumab in PNH",
+   "phase": [],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 64,
+   "start_year": "",
+   "lead_sponsor": "AstraZeneca",
+   "collaborators": [],
+   "interventions": [
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 56,
+    "nct_id": "NCT06633536"
+   }
+  },
+  {
+   "nct_id": "NCT02264639",
+   "brief_title": "A Phase I Study to Assess the Safety of Pegcetacoplan (APL-2) as an Add-On to Standard of Care in Subjects With PNH",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 9,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Pegcetacoplan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 57,
+    "nct_id": "NCT02264639"
+   }
+  },
+  {
+   "nct_id": "NCT07457151",
+   "brief_title": "Danicopan PMS in Korea",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 27,
+   "start_year": "",
+   "lead_sponsor": "AstraZeneca",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 58,
+    "nct_id": "NCT07457151"
+   }
+  },
+  {
+   "nct_id": "NCT06606314",
+   "brief_title": "Specified Drug-use Surveillance of Fabhalta Capsules",
+   "phase": [],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 132,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 59,
+    "nct_id": "NCT06606314"
+   }
+  },
+  {
+   "nct_id": "NCT06848296",
+   "brief_title": "Phase Ib Clinical Study to Evaluate the Safety and Tolerability of VSA012 Injection in Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Bisirna Therapeutics Pte. Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "VSA012"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 60,
+    "nct_id": "NCT06848296"
+   }
+  },
+  {
+   "nct_id": "NCT03896152",
+   "brief_title": "Efficacy, Safety, Pharmacokinetics and Pharmacodynamics Study, Assessing Multiple LNP023 Doses in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 13,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "LNP023"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 61,
+    "nct_id": "NCT03896152"
+   }
+  },
+  {
+   "nct_id": "NCT05389449",
+   "brief_title": "A Long-term Safety and Efficacy Study of Danicopan as an Add-on Therapy to Complement Component 5 Inhibitor (C5i) in Participants With PNH",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 80,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Danicopan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 62,
+    "nct_id": "NCT05389449"
+   }
+  },
+  {
+   "nct_id": "NCT03333486",
+   "brief_title": "Fludarabine Phosphate, Cyclophosphamide, Total Body Irradiation, and Donor Stem Cell Transplant in Treating Patients With Blood Cancer",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 31,
+   "start_year": "",
+   "lead_sponsor": "Roswell Park Cancer Institute",
+   "collaborators": [],
+   "interventions": [
+    "Cyclophosphamide",
+    "Fludarabine Phosphate",
+    "Laboratory Biomarker Analysis",
+    "Peripheral Blood Stem Cell Transplantation",
+    "Total-Body Irradiation"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 63,
+    "nct_id": "NCT03333486"
+   }
+  },
+  {
+   "nct_id": "NCT06312644",
+   "brief_title": "Study of Ultomiris® (Ravulizumab) Safety in Pregnancy",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 75,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Ultomiris"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 64,
+    "nct_id": "NCT06312644"
+   }
+  },
+  {
+   "nct_id": "NCT03500549",
+   "brief_title": "Study to Evaluate the Efficacy and Safety of APL-2 in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 80,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Pegcetacoplan",
+    "Soliris"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 65,
+    "nct_id": "NCT03500549"
+   }
+  },
+  {
+   "nct_id": "NCT06326814",
+   "brief_title": "A Study to Test if SAR443809 is Tolerated and Safe When Taken as a Single Dose in Healthy Adults",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 54,
+   "start_year": "",
+   "lead_sponsor": "Sanofi",
+   "collaborators": [],
+   "interventions": [
+    "Humanized anti-Factor Bb monoclonal antibody",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 66,
+    "nct_id": "NCT06326814"
+   }
+  },
+  {
+   "nct_id": "NCT07212426",
+   "brief_title": "Efficacy, Safety, and Pharmacokinetics of LP-005 Injection in PNH Patients.",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 30,
+   "start_year": "",
+   "lead_sponsor": "Longbio Pharma",
+   "collaborators": [],
+   "interventions": [
+    "LP-005 Injection"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 67,
+    "nct_id": "NCT07212426"
+   }
+  },
+  {
+   "nct_id": "NCT03818607",
+   "brief_title": "A Study Evaluating the Efficacy and Safety of ABP 959 Compared With Eculizumab in Adult Participants With PNH",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 42,
+   "start_year": "",
+   "lead_sponsor": "Amgen",
+   "collaborators": [],
+   "interventions": [
+    "ABP 959",
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 68,
+    "nct_id": "NCT03818607"
+   }
+  },
+  {
+   "nct_id": "NCT07788105",
+   "brief_title": "Efficacy and Safety of Lanoracopan in the Treatment of PNH",
+   "phase": [],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 90,
+   "start_year": "",
+   "lead_sponsor": "Peking Union Medical College Hospital",
+   "collaborators": [],
+   "interventions": [
+    "Lanoracopan Hydrochloride"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 69,
+    "nct_id": "NCT07788105"
+   }
+  },
+  {
+   "nct_id": "NCT03427060",
+   "brief_title": "Coversin in PNH in Patients With Resistance to Eculizumab Due to Complement C5 Polymorphisms",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 1,
+   "start_year": "",
+   "lead_sponsor": "AKARI Therapeutics",
+   "collaborators": [],
+   "interventions": [
+    "Coversin"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 70,
+    "nct_id": "NCT03427060"
+   }
+  },
+  {
+   "nct_id": "NCT00098280",
+   "brief_title": "Eculizumab to Treat Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 75,
+   "start_year": "",
+   "lead_sponsor": "National Heart, Lung, and Blood Institute (NHLBI)",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 71,
+    "nct_id": "NCT00098280"
+   }
+  },
+  {
+   "nct_id": "NCT05646524",
+   "brief_title": "Study of Efficacy and Safety of NM8074 in Adult PNH Patients Who Are Naive to Complement Inhibitor Therapy",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "NovelMed Therapeutics",
+   "collaborators": [],
+   "interventions": [
+    "NM8074"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 72,
+    "nct_id": "NCT05646524"
+   }
+  },
+  {
+   "nct_id": "NCT06238544",
+   "brief_title": "Long-term Safety and Tolerability of HRS-5965 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 132,
+   "start_year": "",
+   "lead_sponsor": "Chengdu Suncadia Medicine Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HRS-5965 Capsules",
+    "HRS-5965 tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 73,
+    "nct_id": "NCT06238544"
+   }
+  },
+  {
+   "nct_id": "NCT05274633",
+   "brief_title": "Real Life Use of Ravulizumab in Italian Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 120,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 74,
+    "nct_id": "NCT05274633"
+   }
+  },
+  {
+   "nct_id": "NCT04330534",
+   "brief_title": "First-in-Human Study of BCX9930 in Healthy Volunteers and Patients With PNH",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 168,
+   "start_year": "",
+   "lead_sponsor": "BioCryst Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "BCX9930",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 75,
+    "nct_id": "NCT04330534"
+   }
+  },
+  {
+   "nct_id": "NCT02352493",
+   "brief_title": "A Phase 1/2 Study of an Investigational Drug, ALN-CC5, in Healthy Adult Volunteers and Patients With PNH",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 62,
+   "start_year": "",
+   "lead_sponsor": "Alnylam Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "ALN-CC5",
+    "Sterile Normal Saline (0.9% NaCl)"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 76,
+    "nct_id": "NCT02352493"
+   }
+  },
+  {
+   "nct_id": "NCT00544115",
+   "brief_title": "Donor Peripheral Stem Cell Transplant in Treating Patients With Advanced Hematologic Cancer or Other Disorders",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 260,
+   "start_year": "",
+   "lead_sponsor": "City of Hope Medical Center",
+   "collaborators": [
+    "National Cancer Institute (NCI)"
+   ],
+   "interventions": [
+    "allogeneic hematopoietic stem cell transplantation",
+    "busulfan",
+    "cyclophosphamide",
+    "cyclosporine",
+    "etoposide",
+    "fludarabine phosphate",
+    "melphalan",
+    "methotrexate",
+    "mycophenolate mofetil",
+    "peripheral blood stem cell transplantation",
+    "sirolimus",
+    "tacrolimus"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 77,
+    "nct_id": "NCT00544115"
+   }
+  },
+  {
+   "nct_id": "NCT06490991",
+   "brief_title": "Comparison of HRS-5965 Capsules and Tablets in Healthy Subjects",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 16,
+   "start_year": "",
+   "lead_sponsor": "Chengdu Suncadia Medicine Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HRS-5965 tablets；HRS-5965 capsules"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 78,
+    "nct_id": "NCT06490991"
+   }
+  },
+  {
+   "nct_id": "NCT02588833",
+   "brief_title": "Pilot Study to Assess Safety, Preliminary Efficacy and Pharmacokinetics of S.C. Pegcetacoplan (APL-2) in PNH Subjects.",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 23,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Pegcetacoplan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 79,
+    "nct_id": "NCT02588833"
+   }
+  },
+  {
+   "nct_id": "NCT03531255",
+   "brief_title": "Pegcetacoplan Long Term Safety and Efficacy Extension Study",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 137,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Pegcetacoplan"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 80,
+    "nct_id": "NCT03531255"
+   }
+  },
+  {
+   "nct_id": "NCT07052838",
+   "brief_title": "Efficacy and Safety of HSK39297 in Anti-C5 Treated PNH Patients With Anemia",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 36,
+   "start_year": "",
+   "lead_sponsor": "Haisco Pharmaceutical Group Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HSK39297 tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 81,
+    "nct_id": "NCT07052838"
+   }
+  },
+  {
+   "nct_id": "NCT04060264",
+   "brief_title": "Clinical Trial of BCD-148 and Soliris® for the Treatment of Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 28,
+   "start_year": "",
+   "lead_sponsor": "Biocad",
+   "collaborators": [],
+   "interventions": [
+    "BCD-148",
+    "Soliris"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 82,
+    "nct_id": "NCT04060264"
+   }
+  },
+  {
+   "nct_id": "NCT07036718",
+   "brief_title": "NIS PDC the Efficacy and Safety of Iptacopan in Adults in Routine Clinical Practice",
+   "phase": [],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 6,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 83,
+    "nct_id": "NCT07036718"
+   }
+  },
+  {
+   "nct_id": "NCT07177859",
+   "brief_title": "A Phase III Study of NTQ5082 Capsules in the Treatment of Paroxysmal Nocturnal Hemoglobinuria Patients",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 78,
+   "start_year": "",
+   "lead_sponsor": "Nanjing Chia-tai Tianqing Pharmaceutical",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab Injection",
+    "NTQ5082 capsules 200 mg"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 84,
+    "nct_id": "NCT07177859"
+   }
+  },
+  {
+   "nct_id": "NCT05886244",
+   "brief_title": "Eculizumab in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH) in China",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 25,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [
+    "AstraZeneca"
+   ],
+   "interventions": [
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 85,
+    "nct_id": "NCT05886244"
+   }
+  },
+  {
+   "nct_id": "NCT01364363",
+   "brief_title": "Unrelated Donor Stem Cell Transplantation",
+   "phase": [
+    "NA"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 64,
+   "start_year": "",
+   "lead_sponsor": "Scripps Health",
+   "collaborators": [],
+   "interventions": [
+    "Allogeneic transplantation"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 86,
+    "nct_id": "NCT01364363"
+   }
+  },
+  {
+   "nct_id": "NCT04434092",
+   "brief_title": "A Study Evaluating the Efficacy and Safety of Crovalimab Versus Eculizumab in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH) Not Previously Treated With Complement Inhibitors",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 210,
+   "start_year": "",
+   "lead_sponsor": "Hoffmann-La Roche",
+   "collaborators": [
+    "Chugai Pharmaceutical"
+   ],
+   "interventions": [
+    "Crovalimab",
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 87,
+    "nct_id": "NCT04434092"
+   }
+  },
+  {
+   "nct_id": "NCT07796256",
+   "brief_title": "Study of SGB-9768 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Suzhou Sanegene Bio Inc.",
+   "collaborators": [],
+   "interventions": [
+    "SGB-9768"
+   ],
+   "source_locator": {
+    "page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "array_index": 88,
+    "nct_id": "NCT07796256"
+   }
+  },
+  {
+   "nct_id": "NCT07266155",
+   "brief_title": "Efficacy, Safety, and Pharmacokinetics of LP-005 Injection in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 30,
+   "start_year": "",
+   "lead_sponsor": "Longbio Pharma",
+   "collaborators": [],
+   "interventions": [
+    "LP-005 Injection"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 0,
+    "nct_id": "NCT07266155"
+   }
+  },
+  {
+   "nct_id": "NCT04645199",
+   "brief_title": "National Longitudinal Cohort of Hematological Diseases",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 2300,
+   "start_year": "",
+   "lead_sponsor": "Institute of Hematology & Blood Diseases Hospital, China",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 1,
+    "nct_id": "NCT04645199"
+   }
+  },
+  {
+   "nct_id": "NCT02946463",
+   "brief_title": "ALXN1210 (Ravulizumab) Versus Eculizumab in Complement Inhibitor Treatment-Naïve Adult Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 272,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 2,
+    "nct_id": "NCT02946463"
+   }
+  },
+  {
+   "nct_id": "NCT00186823",
+   "brief_title": "Haploidentical Stem Cell Transplantation for Patients With Hematologic Malignancies",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 57,
+   "start_year": "",
+   "lead_sponsor": "St. Jude Children's Research Hospital",
+   "collaborators": [],
+   "interventions": [
+    "Miltenyi Biotec CliniMACS",
+    "Stem Cell Transplantation",
+    "TBI, systemic chemotherapy and antibodies as follows:"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 3,
+    "nct_id": "NCT00186823"
+   }
+  },
+  {
+   "nct_id": "NCT05889299",
+   "brief_title": "Study of the Safety and Efficacy of OMS906 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 15,
+   "start_year": "",
+   "lead_sponsor": "Omeros Corporation",
+   "collaborators": [],
+   "interventions": [
+    "OMS906"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 4,
+    "nct_id": "NCT05889299"
+   }
+  },
+  {
+   "nct_id": "NCT03439839",
+   "brief_title": "Study of Safety, Efficacy, Tolerability, Pharmacokinetics and Pharmacodynamics of LNP023 in in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 16,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Standard of Care",
+    "iptacopan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 5,
+    "nct_id": "NCT03439839"
+   }
+  },
+  {
+   "nct_id": "NCT02598583",
+   "brief_title": "Dose-Escalation Study of ALXN1210 IV in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 13,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "ALXN1210"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 6,
+    "nct_id": "NCT02598583"
+   }
+  },
+  {
+   "nct_id": "NCT05982938",
+   "brief_title": "Danicopan Early Access Program",
+   "phase": [],
+   "overall_status": "AVAILABLE",
+   "study_type": "",
+   "enrollment": null,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Danicopan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 7,
+    "nct_id": "NCT05982938"
+   }
+  },
+  {
+   "nct_id": "NCT05490017",
+   "brief_title": "To Evaluate the Safety, Tolerability, Pharmacokinetics, and Pharmacodynamics of Escalating Single and Multiple Doses of KP104",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 80,
+   "start_year": "",
+   "lead_sponsor": "Kira Pharmacenticals (US), LLC.",
+   "collaborators": [],
+   "interventions": [
+    "KP104",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 8,
+    "nct_id": "NCT05490017"
+   }
+  },
+  {
+   "nct_id": "NCT01020188",
+   "brief_title": "Study of Global Coagulation Tests in Patients With Paroxysmal Nocturnal Haemoglobinuria",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 60,
+   "start_year": "",
+   "lead_sponsor": "King's College Hospital NHS Trust",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 9,
+    "nct_id": "NCT01020188"
+   }
+  },
+  {
+   "nct_id": "NCT05125341",
+   "brief_title": "Natural History Study of Adult Patients With Paroxysmal Nocturnal Hemoglobinuria of High-risk Hemolysis in China",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 67,
+   "start_year": "",
+   "lead_sponsor": "CARE Pharma Shanghai Ltd.",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 10,
+    "nct_id": "NCT05125341"
+   }
+  },
+  {
+   "nct_id": "NCT01760096",
+   "brief_title": "Safety and Efficacy of Levamisole Combined With Cyclosporine A in Patients With Subclinical Paroxysmal Nocturnal Hemoglobinuria and PNH in the Setting of Another Bone Marrow Failure Syndromes(PNH-2013)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Institute of Hematology & Blood Diseases Hospital, China",
+   "collaborators": [],
+   "interventions": [
+    "Glucocorticoids",
+    "Levamisole+cyclosporin A+Glucocorticoids",
+    "cyclosporin A+Glucocorticoids"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 11,
+    "nct_id": "NCT01760096"
+   }
+  },
+  {
+   "nct_id": "NCT06593938",
+   "brief_title": "A Study to Evaluate the Efficacy and Safety of Oral HRS-5965 in Adult Paroxysmal Nocturnal Hemoglobinuria (PNH) Patients Who Are Naive to Complement Inhibitor Therapy",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 76,
+   "start_year": "",
+   "lead_sponsor": "Chengdu Suncadia Medicine Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab Injection",
+    "HRS-5965 capsule"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 12,
+    "nct_id": "NCT06593938"
+   }
+  },
+  {
+   "nct_id": "NCT03157635",
+   "brief_title": "Study to Assess Safety, Efficacy, Pharmacokinetics, and Pharmacodynamics of Crovalimab in Healthy Volunteers and Participants With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 59,
+   "start_year": "",
+   "lead_sponsor": "Hoffmann-La Roche",
+   "collaborators": [
+    "Chugai Pharmaceutical"
+   ],
+   "interventions": [
+    "Crovalimab",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 13,
+    "nct_id": "NCT03157635"
+   }
+  },
+  {
+   "nct_id": "NCT07154745",
+   "brief_title": "A Study to Evaluate How Pozelimab + Cemdisiran Combination Therapy Works in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH) Whose Current Treatment is Not Working Efficiently",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 35,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Pozelimab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 14,
+    "nct_id": "NCT07154745"
+   }
+  },
+  {
+   "nct_id": "NCT05972967",
+   "brief_title": "Safety and Efficacy of OMS906 in Paroxysmal Nocturnal Hemoglobinuria Patients With a Sub-optimal Response to Ravulizumab",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "Omeros Corporation",
+   "collaborators": [],
+   "interventions": [
+    "OMS906"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 15,
+    "nct_id": "NCT05972967"
+   }
+  },
+  {
+   "nct_id": "NCT04469465",
+   "brief_title": "Danicopan as Add-on Therapy to a C5 Inhibitor in Paroxysmal Nocturnal Hemoglobinuria (PNH) Participants Who Have Clinically Evident Extravascular Hemolysis (EVH)(ALPHA)",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 86,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "C5 Inhibitor",
+    "Danicopan",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 16,
+    "nct_id": "NCT04469465"
+   }
+  },
+  {
+   "nct_id": "NCT06524726",
+   "brief_title": "The International PNH Interest Group PNH Registry",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 2000,
+   "start_year": "",
+   "lead_sponsor": "International PNH Interest Group",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 17,
+    "nct_id": "NCT06524726"
+   }
+  },
+  {
+   "nct_id": "NCT04671810",
+   "brief_title": "Prospective Observational Study of Long-term Pathogenic Treatment of Elizaria®",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 44,
+   "start_year": "",
+   "lead_sponsor": "AO GENERIUM",
+   "collaborators": [],
+   "interventions": [
+    "Elizaria®"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 18,
+    "nct_id": "NCT04671810"
+   }
+  },
+  {
+   "nct_id": "NCT02605993",
+   "brief_title": "Open-label, Multiple Ascending Dose Study of Ravulizumab (ALXN1210) in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 26,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 19,
+    "nct_id": "NCT02605993"
+   }
+  },
+  {
+   "nct_id": "NCT07470762",
+   "brief_title": "Study of Safety and Efficacy of HS-10542 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Jiangsu Hansoh Pharmaceutical Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HS-10542"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 20,
+    "nct_id": "NCT07470762"
+   }
+  },
+  {
+   "nct_id": "NCT06411626",
+   "brief_title": "Home Reported Outcomes in PNH",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 128,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "PNH-relevant therapies"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 21,
+    "nct_id": "NCT06411626"
+   }
+  },
+  {
+   "nct_id": "NCT07229235",
+   "brief_title": "REAL-CARE: Real-world Effectiveness of Iptacopan in Italian Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 22,
+    "nct_id": "NCT07229235"
+   }
+  },
+  {
+   "nct_id": "NCT03472885",
+   "brief_title": "Study of Danicopan in Participants With Paroxysmal Nocturnal Hemoglobinuria With Inadequate Response to Eculizumab",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [
+    "Achillion, a wholly owned subsidiary of Alexion"
+   ],
+   "interventions": [
+    "Danicopan",
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 23,
+    "nct_id": "NCT03472885"
+   }
+  },
+  {
+   "nct_id": "NCT03748823",
+   "brief_title": "Ravulizumab Subcutaneous (SC) Versus Ravulizumab Intravenous (IV) in Adults With Paroxysmal Nocturnal Hemoglobinuria (PNH) Currently Treated With Eculizumab",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 139,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Ravulizumab",
+    "Ravulizumab OBDS"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 24,
+    "nct_id": "NCT03748823"
+   }
+  },
+  {
+   "nct_id": "NCT05337683",
+   "brief_title": "A Retrospective Non-Interventional Study to Evaluate the Impact of Eculizumab in Korean PNH Patients",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 80,
+   "start_year": "",
+   "lead_sponsor": "Handok Inc.",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 25,
+    "nct_id": "NCT05337683"
+   }
+  },
+  {
+   "nct_id": "NCT04432584",
+   "brief_title": "A Study Evaluating the Safety, Pharmacokinetics, and Efficacy of Crovalimab Versus Eculizumab in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH) Currently Treated With Complement Inhibitors",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 190,
+   "start_year": "",
+   "lead_sponsor": "Hoffmann-La Roche",
+   "collaborators": [
+    "Chugai Pharmaceutical"
+   ],
+   "interventions": [
+    "Crovalimab",
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 26,
+    "nct_id": "NCT04432584"
+   }
+  },
+  {
+   "nct_id": "NCT06298955",
+   "brief_title": "Long-Term Safety, Tolerability and Efficacy of OMS906 in Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 25,
+   "start_year": "",
+   "lead_sponsor": "Omeros Corporation",
+   "collaborators": [],
+   "interventions": [
+    "OMS906 study drug"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 27,
+    "nct_id": "NCT06298955"
+   }
+  },
+  {
+   "nct_id": "NCT04811716",
+   "brief_title": "Pozelimab and Cemdisiran Combination Treatment in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria Who Have Received Pozelimab Monotherapy",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Pozelimab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 28,
+    "nct_id": "NCT04811716"
+   }
+  },
+  {
+   "nct_id": "NCT01335165",
+   "brief_title": "Safety and Pharmacokinetics of TT30 in Subjects With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 10,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "ALXN1102",
+    "ALXN1103"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 29,
+    "nct_id": "NCT01335165"
+   }
+  },
+  {
+   "nct_id": "NCT07035665",
+   "brief_title": "A Clinical Study to Evaluate the Effect of Food on the Pharmacokinetic Profiles of HRS-5965 Capsules in Healthy Subjects",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 16,
+   "start_year": "",
+   "lead_sponsor": "Chengdu Suncadia Medicine Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HRS-5965 Capsules"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 30,
+    "nct_id": "NCT07035665"
+   }
+  },
+  {
+   "nct_id": "NCT00145613",
+   "brief_title": "Haploidentical Stem Cell Transplant for Treatment Refractory Hematological Malignancies",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 25,
+   "start_year": "",
+   "lead_sponsor": "St. Jude Children's Research Hospital",
+   "collaborators": [],
+   "interventions": [
+    "Miltenyi Biotec CliniMACS",
+    "Stem Cell Transplantation",
+    "Systemic chemotherapy and antibodies"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 31,
+    "nct_id": "NCT00145613"
+   }
+  },
+  {
+   "nct_id": "NCT04679103",
+   "brief_title": "A Safety and Immunogenicity Study in Long-term Treatment of Eculizumab (JSC \"GENERIUM\", Russian Federation)",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "AO GENERIUM",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab (JSC GENERIUM, Russia)"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 32,
+    "nct_id": "NCT04679103"
+   }
+  },
+  {
+   "nct_id": "NCT03593200",
+   "brief_title": "A Phase IIa Study to Assess the Safety, Efficacy, and Pharmacokinetics of Subcutaneously Administered Pegcetacoplan (APL-2) in Subjects With PNH",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 4,
+   "start_year": "",
+   "lead_sponsor": "Apellis Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Pegcetacoplan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 33,
+    "nct_id": "NCT03593200"
+   }
+  },
+  {
+   "nct_id": "NCT06294301",
+   "brief_title": "A Study of Single and Multiple Doses of LP-005 in Healthy Adult Participants",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 68,
+   "start_year": "",
+   "lead_sponsor": "Longbio Pharma",
+   "collaborators": [],
+   "interventions": [
+    "LP-005 Dose 1 (Single)",
+    "LP-005 Dose 2 (Single)",
+    "LP-005 Dose 3 (Single)",
+    "LP-005 Dose 4 (Single)",
+    "LP-005 Dose 5 (Single)",
+    "LP-005 Dose 6 (Single)",
+    "LP-005 Dose 7 (Multiple)",
+    "LP-005 Dose 8 (Multiple)",
+    "LP-005 Dose 9 (Multiple)",
+    "Placebo (Multiple)",
+    "Placebo (Single)"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 34,
+    "nct_id": "NCT06294301"
+   }
+  },
+  {
+   "nct_id": "NCT04128943",
+   "brief_title": "Electronic Patient-reported Outcome Monitoring in Aplastic Anemia and Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 9,
+   "start_year": "",
+   "lead_sponsor": "University Hospital, Basel, Switzerland",
+   "collaborators": [
+    "ProPatient foundation of the University Hospital Basel",
+    "Novartis"
+   ],
+   "interventions": [
+    "European Organisation for Research and Treatment of Cancer (EORTC) quality of life questionnaire (QLQ)-C30 questionnaire",
+    "interview",
+    "recording of vital signs",
+    "symptom questionnaire"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 35,
+    "nct_id": "NCT04128943"
+   }
+  },
+  {
+   "nct_id": "NCT06764303",
+   "brief_title": "A Study of NTQ5082 Capsules in the Treatment of Paroxysmal Nocturnal Hemoglobinuria Patients",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Nanjing Chia-tai Tianqing Pharmaceutical",
+   "collaborators": [],
+   "interventions": [
+    "NTQ5082 100mg qd",
+    "NTQ5082 200mg qd"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 36,
+    "nct_id": "NCT06764303"
+   }
+  },
+  {
+   "nct_id": "NCT05116774",
+   "brief_title": "BCX9930 for the Treatment of Paroxysmal Nocturnal Hemoglobinuria (PNH) in Participants With Inadequate Response to C5 Inhibitor Therapy",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "BioCryst Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "BCX9930",
+    "Eculizumab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 37,
+    "nct_id": "NCT05116774"
+   }
+  },
+  {
+   "nct_id": "NCT05731050",
+   "brief_title": "Study of NM8074 in Soliris-Treated Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 6,
+   "start_year": "",
+   "lead_sponsor": "NovelMed Therapeutics",
+   "collaborators": [],
+   "interventions": [
+    "NM8074"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 38,
+    "nct_id": "NCT05731050"
+   }
+  },
+  {
+   "nct_id": "NCT03225287",
+   "brief_title": "Extension Study of RA101495 for Patients With PNH Who Have Completed a Zilucoplan (RA101495) Clinical Study",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 19,
+   "start_year": "",
+   "lead_sponsor": "Ra Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Zilucoplan (RA101495)"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 39,
+    "nct_id": "NCT03225287"
+   }
+  },
+  {
+   "nct_id": "NCT06932471",
+   "brief_title": "Study of Safety and Efficacy of MY008211A in Patients With Residual Anemia Despite Anti-C5 Antibody Treatment",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 20,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 40,
+    "nct_id": "NCT06932471"
+   }
+  },
+  {
+   "nct_id": "NCT00566696",
+   "brief_title": "Mismatched Family Member Donor Transplantation for Children and Young Adults With High Risk Hematological Malignancies",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 73,
+   "start_year": "",
+   "lead_sponsor": "St. Jude Children's Research Hospital",
+   "collaborators": [],
+   "interventions": [
+    "Alemtuzumab",
+    "Anti-thymocyte globulin (Rabbit)",
+    "CliniMACS",
+    "Cyclophosphamide",
+    "Fludarabine",
+    "G-CSF",
+    "L-phenylalanine mustard",
+    "Muromonab",
+    "Mycophenolate mofetil",
+    "Rituxan™",
+    "Stem cell transplantation",
+    "Thioplex®"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 41,
+    "nct_id": "NCT00566696"
+   }
+  },
+  {
+   "nct_id": "NCT07760467",
+   "brief_title": "To Evaluate Safety, Tolerability, PK/PD & Food Effect of Single/Multiple Oral TUL321 Capsules in Healthy Participants.",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 94,
+   "start_year": "",
+   "lead_sponsor": "Zhuhai United Laboratories Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "Part1: Placebo",
+    "Part1: TUL321",
+    "Part2: Placebo",
+    "Part2: TUL321"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 42,
+    "nct_id": "NCT07760467"
+   }
+  },
+  {
+   "nct_id": "NCT06154512",
+   "brief_title": "A Real-world, Multi-center, Prospective, Observational Study for PNH in China",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 724,
+   "start_year": "",
+   "lead_sponsor": "AstraZeneca",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 43,
+    "nct_id": "NCT06154512"
+   }
+  },
+  {
+   "nct_id": "NCT05744921",
+   "brief_title": "A Study in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH) to Evaluate How Safe Long-term Treatment With Pozelimab + Cemdisiran Combination Therapy is and How Well it Works",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 202,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Pozelimab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 44,
+    "nct_id": "NCT05744921"
+   }
+  },
+  {
+   "nct_id": "NCT00587054",
+   "brief_title": "Trial of Allogeneic Stem Cell Transplants From HLA Compatible, Related and Unrelated Donors After a Myeloablative Preparative Regimen With Hyperfractionated TBI, Thiotepa and Fludarabine For Adult Patients With Lymphohematopoietic Disorders",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 129,
+   "start_year": "",
+   "lead_sponsor": "Memorial Sloan Kettering Cancer Center",
+   "collaborators": [
+    "National Cancer Institute (NCI)"
+   ],
+   "interventions": [
+    "cytoreductive regimen followed by a CD34+E- selected allogeneic stem cell transplant"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 45,
+    "nct_id": "NCT00587054"
+   }
+  },
+  {
+   "nct_id": "NCT05131204",
+   "brief_title": "Efficacy and Safety of the Combination of Pozelimab and Cemdisiran Versus Continued Eculizumab or Ravulizumab Treatment in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 3,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Cemdisiran",
+    "Eculizumab",
+    "Pozelimab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 46,
+    "nct_id": "NCT05131204"
+   }
+  },
+  {
+   "nct_id": "NCT00012376",
+   "brief_title": "Chemotherapy Plus Sargramostim in Treating Patients With Refractory Myeloid Cancer",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 35,
+   "start_year": "",
+   "lead_sponsor": "National Cancer Institute (NCI)",
+   "collaborators": [],
+   "interventions": [
+    "bryostatin 1",
+    "laboratory biomarker analysis",
+    "pharmacological study",
+    "sargramostim"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 47,
+    "nct_id": "NCT00012376"
+   }
+  },
+  {
+   "nct_id": "NCT07108023",
+   "brief_title": "Hematological Disorders in EHPVO Patients",
+   "phase": [],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 115,
+   "start_year": "",
+   "lead_sponsor": "Rahab Nady",
+   "collaborators": [],
+   "interventions": [
+    "No intervention (Observational Study)"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 48,
+    "nct_id": "NCT07108023"
+   }
+  },
+  {
+   "nct_id": "NCT07102849",
+   "brief_title": "Molecular and Clinical Analysis of Bone Marrow Failure: A Secondary Research Study",
+   "phase": [],
+   "overall_status": "ENROLLING_BY_INVITATION",
+   "study_type": "",
+   "enrollment": 1400,
+   "start_year": "",
+   "lead_sponsor": "National Heart, Lung, and Blood Institute (NHLBI)",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 49,
+    "nct_id": "NCT07102849"
+   }
+  },
+  {
+   "nct_id": "NCT03056040",
+   "brief_title": "ALXN1210 Versus Eculizumab in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH) Currently Treated With Eculizumab",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 202,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 50,
+    "nct_id": "NCT03056040"
+   }
+  },
+  {
+   "nct_id": "NCT03181633",
+   "brief_title": "A Long-Term Treatment Study of ACH-0144471 in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 8,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [
+    "Achillion, a wholly owned subsidiary of Alexion"
+   ],
+   "interventions": [
+    "ACH-0144471"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 51,
+    "nct_id": "NCT03181633"
+   }
+  },
+  {
+   "nct_id": "NCT00315419",
+   "brief_title": "Identifying Characteristics of Bone Marrow Failure Syndromes",
+   "phase": [],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 450,
+   "start_year": "",
+   "lead_sponsor": "Office of Rare Diseases (ORD)",
+   "collaborators": [
+    "Rare Diseases Clinical Research Network"
+   ],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 52,
+    "nct_id": "NCT00315419"
+   }
+  },
+  {
+   "nct_id": "NCT06745622",
+   "brief_title": "Long-term Safety and Tolerability of HSK39297 in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 47,
+   "start_year": "",
+   "lead_sponsor": "Haisco Pharmaceutical Group Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HSK39297 tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 53,
+    "nct_id": "NCT06745622"
+   }
+  },
+  {
+   "nct_id": "NCT04320602",
+   "brief_title": "Ravulizumab in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria Currently Treated With High-Dose Eculizumab",
+   "phase": [
+    "PHASE4"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 18,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab",
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 54,
+    "nct_id": "NCT04320602"
+   }
+  },
+  {
+   "nct_id": "NCT05222412",
+   "brief_title": "Managed Access Programs for LNP023, Iptacopan",
+   "phase": [],
+   "overall_status": "AVAILABLE",
+   "study_type": "",
+   "enrollment": null,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Iptacopan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 55,
+    "nct_id": "NCT05222412"
+   }
+  },
+  {
+   "nct_id": "NCT06934967",
+   "brief_title": "Study to Assess the Pharmacokinetics, Safety, and Tolerability of Iptacopan in Pediatric PNH Patients",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "LNP023"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 56,
+    "nct_id": "NCT06934967"
+   }
+  },
+  {
+   "nct_id": "NCT06449001",
+   "brief_title": "Study of Danicopan as Add-on Treatment to Ravulizumab or Eculizumab in Pediatric Participants With PNH Who Have Clinically Significant Extravascular Hemolysis",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 6,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [
+    "AstraZeneca"
+   ],
+   "interventions": [
+    "Danicopan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 57,
+    "nct_id": "NCT06449001"
+   }
+  },
+  {
+   "nct_id": "NCT03078582",
+   "brief_title": "Phase 2 Safety and Efficacy Study of Zilucoplan (RA101495) to Treat PNH Patients",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 26,
+   "start_year": "",
+   "lead_sponsor": "Ra Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Zilucoplan (RA101495)"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 58,
+    "nct_id": "NCT03078582"
+   }
+  },
+  {
+   "nct_id": "NCT00975975",
+   "brief_title": "Basiliximab #2: In-Vivo Activated T-Cell Depletion to Prevent Graft-Versus_Host Disease (GVHD) After Nonmyeloablative Allotransplantation for the Treatment of Blood Cancer",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 17,
+   "start_year": "",
+   "lead_sponsor": "Indiana University",
+   "collaborators": [],
+   "interventions": [
+    "Basiliximab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 59,
+    "nct_id": "NCT00975975"
+   }
+  },
+  {
+   "nct_id": "NCT03520647",
+   "brief_title": "Haplo-identical Transplantation for Severe Aplastic Anemia, Hypo-plastic MDS and PNH Using Peripheral Blood Stem Cells and Post-transplant Cyclophosphamide for GVHD Prophylaxis",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 56,
+   "start_year": "",
+   "lead_sponsor": "National Heart, Lung, and Blood Institute (NHLBI)",
+   "collaborators": [],
+   "interventions": [
+    "Cyclophosphamide",
+    "Peripheral Blood Stem Cells"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 60,
+    "nct_id": "NCT03520647"
+   }
+  },
+  {
+   "nct_id": "NCT06715943",
+   "brief_title": "Efficacy and Safety of HRS-5965 in Patients With PNH Who Are Still Anemia After Anti-C5 Antibody Treatment",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 39,
+   "start_year": "",
+   "lead_sponsor": "Chengdu Suncadia Medicine Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HRS-5965 capsule"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 61,
+    "nct_id": "NCT06715943"
+   }
+  },
+  {
+   "nct_id": "NCT06134414",
+   "brief_title": "Study of Safety and Efficacy of MY008211A in in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 40,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 62,
+    "nct_id": "NCT06134414"
+   }
+  },
+  {
+   "nct_id": "NCT05642585",
+   "brief_title": "A Study of Single-dose MY008211A in Healthy Adults",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 63,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 63,
+    "nct_id": "NCT05642585"
+   }
+  },
+  {
+   "nct_id": "NCT06578949",
+   "brief_title": "Efficacy, Safety, Pharmacokinetics, Pharmacodynamics, and Immunogenicity of Ravulizumab in Chinese Adults Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 18,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Ravulizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 64,
+    "nct_id": "NCT06578949"
+   }
+  },
+  {
+   "nct_id": "NCT05116787",
+   "brief_title": "BCX9930 for the Treatment of Paroxysmal Nocturnal Hemoglobinuria (PNH) in Participants Not Receiving Other Complement Inhibitor Therapy",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 12,
+   "start_year": "",
+   "lead_sponsor": "BioCryst Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "BCX9930 monotherapy",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 65,
+    "nct_id": "NCT05116787"
+   }
+  },
+  {
+   "nct_id": "NCT05776472",
+   "brief_title": "A Real World Effectiveness Study of Pegcetacoplan in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 165,
+   "start_year": "",
+   "lead_sponsor": "Swedish Orphan Biovitrum",
+   "collaborators": [
+    "IQVIA Pty Ltd"
+   ],
+   "interventions": [
+    "Pegcetacoplan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 66,
+    "nct_id": "NCT05776472"
+   }
+  },
+  {
+   "nct_id": "NCT07187401",
+   "brief_title": "A First-in-Human Safety and Efficacy Study of ALN-CFB, a Small Interfering RNA (siRNA) Targeting Complement Factor B, in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria With Persistent Anemia on a C5 Inhibitor",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "ALN-CFB",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 67,
+    "nct_id": "NCT07187401"
+   }
+  },
+  {
+   "nct_id": "NCT01192399",
+   "brief_title": "Safety and Efficacy Study of Eculizumab in Paroxysmal Nocturnal Hemoglobinuria Patients",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 29,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 68,
+    "nct_id": "NCT01192399"
+   }
+  },
+  {
+   "nct_id": "NCT05755867",
+   "brief_title": "Global PNH Patient Registry",
+   "phase": [],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 500,
+   "start_year": "",
+   "lead_sponsor": "Aplastic Anemia and MDS International Foundation",
+   "collaborators": [
+    "National Organization for Rare Disorders"
+   ],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 69,
+    "nct_id": "NCT05755867"
+   }
+  },
+  {
+   "nct_id": "NCT01294891",
+   "brief_title": "Microvascular and Cardiac Dysfunction in Paroxysmal Nocturnal Hemoglobinuria and Sickle Cell Disease",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 6,
+   "start_year": "",
+   "lead_sponsor": "Oregon Health and Science University",
+   "collaborators": [],
+   "interventions": [
+    "Imaging"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 70,
+    "nct_id": "NCT01294891"
+   }
+  },
+  {
+   "nct_id": "NCT05828472",
+   "brief_title": "A Study of Multiple Ascending Doses MY008211A in Healthy Adults",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 40,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets",
+    "MY008211A tablets matched placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 71,
+    "nct_id": "NCT05828472"
+   }
+  },
+  {
+   "nct_id": "NCT06903234",
+   "brief_title": "Post-authorization Safety Study of Iptacopan in Adult Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH) Using Data From the IPIG PNH Registry",
+   "phase": [],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 200,
+   "start_year": "",
+   "lead_sponsor": "Novartis Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "Iptacopan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 72,
+    "nct_id": "NCT06903234"
+   }
+  },
+  {
+   "nct_id": "NCT00004464",
+   "brief_title": "Study of High Dose Cyclophosphamide in Patients With Severe Aplastic Anemia and Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 69,
+   "start_year": "",
+   "lead_sponsor": "Sidney Kimmel Comprehensive Cancer Center at Johns Hopkins",
+   "collaborators": [],
+   "interventions": [
+    "cyclophosphamide",
+    "filgrastim"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 73,
+    "nct_id": "NCT00004464"
+   }
+  },
+  {
+   "nct_id": "NCT00004143",
+   "brief_title": "Allogeneic Mixed Chimerism Stem Cell Transplant Using Campath for Hemoglobinopathies & Bone Marrow Failure Syndromes",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 2,
+   "start_year": "",
+   "lead_sponsor": "David Rizzieri, MD",
+   "collaborators": [],
+   "interventions": [
+    "Campath, Chemo and/or TBI Allo SCT"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 74,
+    "nct_id": "NCT00004143"
+   }
+  },
+  {
+   "nct_id": "NCT04965597",
+   "brief_title": "Treosulfan-Based Conditioning Regimen Before a Blood or Bone Marrow Transplant for the Treatment of Bone Marrow Failure Diseases (BMT CTN 1904)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 40,
+   "start_year": "",
+   "lead_sponsor": "Fred Hutchinson Cancer Center",
+   "collaborators": [
+    "Blood and Marrow Transplant Clinical Trials Network",
+    "National Cancer Institute (NCI)",
+    "National Marrow Donor Program",
+    "National Heart, Lung, and Blood Institute (NHLBI)"
+   ],
+   "interventions": [
+    "Allogeneic Bone Marrow Transplantation",
+    "Biospecimen Collection",
+    "Bone Marrow Aspiration",
+    "Bone Marrow Biopsy",
+    "Computed Tomography",
+    "Echocardiography",
+    "Fludarabine Phosphate",
+    "Lapine T-Lymphocyte Immune Globulin",
+    "Methotrexate",
+    "Multigated Acquisition Scan",
+    "Peripheral Blood Stem Cell Transplantation",
+    "Quality-of-Life Assessment"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 75,
+    "nct_id": "NCT04965597"
+   }
+  },
+  {
+   "nct_id": "NCT01272817",
+   "brief_title": "Nonmyeloablative Allogeneic Transplant",
+   "phase": [
+    "NA"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 36,
+   "start_year": "",
+   "lead_sponsor": "Scripps Health",
+   "collaborators": [],
+   "interventions": [
+    "Nonmyeloablative Allogeneic Transplant"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 76,
+    "nct_id": "NCT01272817"
+   }
+  },
+  {
+   "nct_id": "NCT06987864",
+   "brief_title": "An Extension Clinical Study of BCD-148 for the Treatment of Patients With PNH Previously Treated in Clinical Study No. BCD-148-2/NOCTURN",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Biocad",
+   "collaborators": [],
+   "interventions": [
+    "eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 77,
+    "nct_id": "NCT06987864"
+   }
+  },
+  {
+   "nct_id": "NCT05476887",
+   "brief_title": "To Evaluate the Safety, Tolerability, Pharmacokinetics, Pharmacodynamics, and Efficacy of KP104",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "ACTIVE_NOT_RECRUITING",
+   "study_type": "",
+   "enrollment": 35,
+   "start_year": "",
+   "lead_sponsor": "Kira Pharmacenticals (US), LLC.",
+   "collaborators": [],
+   "interventions": [
+    "KP104"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 78,
+    "nct_id": "NCT05476887"
+   }
+  },
+  {
+   "nct_id": "NCT00731328",
+   "brief_title": "Donor Stem Cell Transplant After Busulfan, Fludarabine, Methylprednisolone, and Antithymocyte Globulin in Treating Patients With Bone Marrow Failure Syndrome",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 15,
+   "start_year": "",
+   "lead_sponsor": "Asan Medical Center",
+   "collaborators": [],
+   "interventions": [
+    "nonmyeloablative allogeneic hematopoietic stem cell transplantation"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 79,
+    "nct_id": "NCT00731328"
+   }
+  },
+  {
+   "nct_id": "NCT07387302",
+   "brief_title": "SLN12140 in Adult Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH) in China",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "NOT_YET_RECRUITING",
+   "study_type": "",
+   "enrollment": 10,
+   "start_year": "",
+   "lead_sponsor": "Linno Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "SLN12140"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 80,
+    "nct_id": "NCT07387302"
+   }
+  },
+  {
+   "nct_id": "NCT03053102",
+   "brief_title": "Study of Danicopan in Participants With Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 10,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [
+    "Achillion, a wholly owned subsidiary of Alexion"
+   ],
+   "interventions": [
+    "Danicopan"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 81,
+    "nct_id": "NCT03053102"
+   }
+  },
+  {
+   "nct_id": "NCT02591862",
+   "brief_title": "Coversin in Paroxysmal Nocturnal Haemoglobinuria (PNH)",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 1,
+   "start_year": "",
+   "lead_sponsor": "AKARI Therapeutics",
+   "collaborators": [
+    "Radboud University Medical Center"
+   ],
+   "interventions": [
+    "Coversin"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 82,
+    "nct_id": "NCT02591862"
+   }
+  },
+  {
+   "nct_id": "NCT06543459",
+   "brief_title": "To Evaluate the Effect of Single Oral Dose of MY008211A Tablets on QTc Interval in Healthy Subjects",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 16,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 83,
+    "nct_id": "NCT06543459"
+   }
+  },
+  {
+   "nct_id": "NCT00122330",
+   "brief_title": "Study Using Eculizumab in Transfusion Dependent Paroxysmal Nocturnal Hemoglobinuria (PNH) Patients",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 75,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 84,
+    "nct_id": "NCT00122330"
+   }
+  },
+  {
+   "nct_id": "NCT04162470",
+   "brief_title": "REGN3918 in Patients With Paroxysmal Nocturnal Hemoglobinuria (PNH) to Evaluate Its Long Term Safety, Efficacy and Tolerability.",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Regeneron Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "REGN3918"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 85,
+    "nct_id": "NCT04162470"
+   }
+  },
+  {
+   "nct_id": "NCT00438789",
+   "brief_title": "The Paroxysmal Nocturnal Hemoglobinuria Early Access Treatment Protocol",
+   "phase": [],
+   "overall_status": "APPROVED_FOR_MARKETING",
+   "study_type": "",
+   "enrollment": null,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 86,
+    "nct_id": "NCT00438789"
+   }
+  },
+  {
+   "nct_id": "NCT00122317",
+   "brief_title": "Extension Study of Eculizumab in Patients With Transfusion Dependent Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 187,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 87,
+    "nct_id": "NCT00122317"
+   }
+  },
+  {
+   "nct_id": "NCT06933914",
+   "brief_title": "Long-term Safety and Tolerability of MY008211A Tablets in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE2",
+    "PHASE3"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 120,
+   "start_year": "",
+   "lead_sponsor": "Wuhan Createrna Science and Technology Co., Ltd",
+   "collaborators": [],
+   "interventions": [
+    "MY008211A tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 88,
+    "nct_id": "NCT06933914"
+   }
+  },
+  {
+   "nct_id": "NCT00112983",
+   "brief_title": "Eculizumab in Treating Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": null,
+   "start_year": "",
+   "lead_sponsor": "Jonsson Comprehensive Cancer Center",
+   "collaborators": [],
+   "interventions": [
+    "eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 89,
+    "nct_id": "NCT00112983"
+   }
+  },
+  {
+   "nct_id": "NCT05876312",
+   "brief_title": "Safety, Tolerability, PK and PD of ADX-038 in Healthy Participants and Paroxysmal Nocturnal Hemoglobinuria (PNH) Patients",
+   "phase": [
+    "PHASE1",
+    "PHASE2"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 50,
+   "start_year": "",
+   "lead_sponsor": "ADARx Pharmaceuticals, Inc.",
+   "collaborators": [
+    "ADARx Australia Pty Ltd",
+    "Novotech (Australia) Pty Limited"
+   ],
+   "interventions": [
+    "ADX-038",
+    "Placebo"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 90,
+    "nct_id": "NCT05876312"
+   }
+  },
+  {
+   "nct_id": "NCT06100900",
+   "brief_title": "Dose Escalation of BCX10013 in Participants with Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 8,
+   "start_year": "",
+   "lead_sponsor": "BioCryst Pharmaceuticals",
+   "collaborators": [],
+   "interventions": [
+    "BCX10013"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 91,
+    "nct_id": "NCT06100900"
+   }
+  },
+  {
+   "nct_id": "NCT05842486",
+   "brief_title": "Hematological Response in Patients With Paroxysmal Nocturnal Hemoglobinuria Treated With Anti-C5 Antibody: an External Control Arm Study for Iptacopan Use in Anti-C5 naïve Patients",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 92,
+   "start_year": "",
+   "lead_sponsor": "Assistance Publique - Hôpitaux de Paris",
+   "collaborators": [
+    "Leeds Cancer Centre at St. James's University Hospital"
+   ],
+   "interventions": [
+    "Anti-C5 antibody treatment"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 92,
+    "nct_id": "NCT05842486"
+   }
+  },
+  {
+   "nct_id": "NCT00143559",
+   "brief_title": "Stem Cell Transplantation as Immunotherapy for Hematologic Malignancies",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 17,
+   "start_year": "",
+   "lead_sponsor": "St. Jude Children's Research Hospital",
+   "collaborators": [],
+   "interventions": [
+    "Allogeneic stem cell transplantation",
+    "Miltenyi CliniMACS",
+    "Systematic chemotherapy and antibodies"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 93,
+    "nct_id": "NCT00143559"
+   }
+  },
+  {
+   "nct_id": "NCT01374360",
+   "brief_title": "Paroxysmal Nocturnal Hemoglobinuria (PNH) Registry",
+   "phase": [],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 6061,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 94,
+    "nct_id": "NCT01374360"
+   }
+  },
+  {
+   "nct_id": "NCT03829449",
+   "brief_title": "rVA576 (Coversin) Long Term Safety and Efficacy Surveillance Study",
+   "phase": [
+    "PHASE3"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 15,
+   "start_year": "",
+   "lead_sponsor": "AKARI Therapeutics",
+   "collaborators": [],
+   "interventions": [
+    "rVA576"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 95,
+    "nct_id": "NCT03829449"
+   }
+  },
+  {
+   "nct_id": "NCT04170023",
+   "brief_title": "Study of the Oral Factor D (FD) Inhibitor ALXN2050 in PNH Patients as Monotherapy",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "TERMINATED",
+   "study_type": "",
+   "enrollment": 29,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [],
+   "interventions": [
+    "ALXN2050"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 96,
+    "nct_id": "NCT04170023"
+   }
+  },
+  {
+   "nct_id": "NCT07152288",
+   "brief_title": "Investigation of Pharmacokinetics,Safety,and Pharmacodynamics of HSK39297 in Subjects With Hepatic Impairment",
+   "phase": [
+    "PHASE1"
+   ],
+   "overall_status": "RECRUITING",
+   "study_type": "",
+   "enrollment": 24,
+   "start_year": "",
+   "lead_sponsor": "Haisco Pharmaceutical Group Co., Ltd.",
+   "collaborators": [],
+   "interventions": [
+    "HSK39297 tablets"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 97,
+    "nct_id": "NCT07152288"
+   }
+  },
+  {
+   "nct_id": "NCT01194804",
+   "brief_title": "E07-001: Safety and Efficacy Extension Study of Eculizumab in Paroxysmal Nocturnal Hemoglobinuria Patients",
+   "phase": [
+    "PHASE2"
+   ],
+   "overall_status": "COMPLETED",
+   "study_type": "",
+   "enrollment": 27,
+   "start_year": "",
+   "lead_sponsor": "Alexion Pharmaceuticals, Inc.",
+   "collaborators": [
+    "CMIC Co, Ltd. Japan"
+   ],
+   "interventions": [
+    "Eculizumab"
+   ],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 98,
+    "nct_id": "NCT01194804"
+   }
+  },
+  {
+   "nct_id": "NCT03329365",
+   "brief_title": "Paroxysmal Nocturnal Hemoglobinuria in ESUS & ETUS",
+   "phase": [],
+   "overall_status": "UNKNOWN",
+   "study_type": "",
+   "enrollment": 200,
+   "start_year": "",
+   "lead_sponsor": "London Health Sciences Centre Research Institute OR Lawson Research Institute of St. Joseph's",
+   "collaborators": [
+    "Alexion Pharmaceuticals, Inc."
+   ],
+   "interventions": [],
+   "source_locator": {
+    "page_sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "array_index": 99,
+    "nct_id": "NCT03329365"
+   }
+  }
+ ],
+ "summary": {
+  "unique_interventions": 177,
+  "unique_sponsors": 67,
+  "status_counts": {
+   "COMPLETED": 102,
+   "RECRUITING": 29,
+   "ACTIVE_NOT_RECRUITING": 20,
+   "TERMINATED": 13,
+   "NOT_YET_RECRUITING": 12,
+   "UNKNOWN": 7,
+   "ENROLLING_BY_INVITATION": 2,
+   "AVAILABLE": 2,
+   "NO_LONGER_AVAILABLE": 1,
+   "APPROVED_FOR_MARKETING": 1
+  },
+  "phase_counts": {
+   "PHASE2": 60,
+   "PHASE3": 49,
+   "未标注": 41,
+   "PHASE1": 22,
+   "PHASE1/PHASE2": 7,
+   "NA": 6,
+   "PHASE4": 3,
+   "PHASE2/PHASE3": 1
+  }
+ }
+}

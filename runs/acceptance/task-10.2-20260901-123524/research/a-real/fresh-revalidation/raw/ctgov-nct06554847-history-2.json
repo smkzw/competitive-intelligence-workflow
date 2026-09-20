@@ -1,0 +1,178 @@
+{
+  "studyVersion" : 2,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT06554847",
+        "orgStudyIdInfo" : {
+          "id" : "SSGJ-611-AD-III-02"
+        },
+        "organization" : {
+          "fullName" : "Sunshine Guojian Pharmaceutical (Shanghai) Co., Ltd.",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "Evaluation of 611 in Combination With Topical Corticosteroid in Participants With Moderate to Severe Atopic Dermatitis",
+        "officialTitle" : "A Multi-Centered, Randomized, Double-Blinded, Placebo-Controlled Phase Ⅲ Clinical Trial to Evaluate the Efficacy and Safety of 611(Recombinant Humanized Anti-interleukin-4 Receptor Alpha IgG4 Monoclonal Antibody) When Used In Combination With Topical Corticosteroid Treatment (TCS) in Participants With Moderate to Severe Atopic Dermatitis."
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2025-07",
+        "overallStatus" : "ACTIVE_NOT_RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2024-09-23",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2025-10-12",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2026-08-16",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2024-08-12",
+        "studyFirstSubmitQcDate" : "2024-08-12",
+        "studyFirstPostDateStruct" : {
+          "date" : "2024-08-15",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2025-07-11",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2025-07-14",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Sunshine Guojian Pharmaceutical (Shanghai) Co., Ltd.",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false,
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This is a randomized, double-blind, placebo-controlled, parallel-group study to evaluate the safety and efficacy of 611 when used in combination with topical corticosteroid (TCS) treatment compared with placebo in combination with TCS treatment for moderate-to-severe atopic dermatitis."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Dermatitis, Atopic", "Eczema, Atopic" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE3" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 400,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "611 interval 1+Topical Corticosteroid",
+          "type" : "EXPERIMENTAL",
+          "description" : "Participants will receive 611 according to established dosing interval 1. TCS will be initiated at Baseline in all patients and may be tapered or stopped, as needed, based on treatment response.",
+          "interventionNames" : [ "Drug: 611", "Drug: Topical corticosteroid" ]
+        }, {
+          "label" : "611 interval 2+Topical Corticosteroid",
+          "type" : "EXPERIMENTAL",
+          "description" : "Participants will receive 611 according to established dosing interval 2. TCS will be initiated at Baseline in all patients and may be tapered or stopped, as needed, based on treatment response.",
+          "interventionNames" : [ "Drug: 611", "Drug: Topical corticosteroid" ]
+        }, {
+          "label" : "Placebo+Topical Corticosteroid",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Participants will receive Placebo according to according to established dosing intervals.\nTCS will be initiated at Baseline in all patients and may be tapered or stopped, as needed, based on treatment response.",
+          "interventionNames" : [ "Drug: Placebo", "Drug: Topical corticosteroid" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "611",
+          "description" : "subcutaneous injection",
+          "armGroupLabels" : [ "611 interval 1+Topical Corticosteroid", "611 interval 2+Topical Corticosteroid" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Placebo",
+          "description" : "subcutaneous injection",
+          "armGroupLabels" : [ "Placebo+Topical Corticosteroid" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Topical corticosteroid",
+          "description" : "Topical",
+          "armGroupLabels" : [ "611 interval 1+Topical Corticosteroid", "611 interval 2+Topical Corticosteroid", "Placebo+Topical Corticosteroid" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Percentage of participants achieving EASI-75 (≥75% reduction from Baseline in EASI score)",
+          "timeFrame" : "Baseline to Week 16"
+        }, {
+          "measure" : "Percentage of patients with an IGA score of 0 or 1 and a reduction ≥2-points from Baseline to Week 16.",
+          "timeFrame" : "Baseline to Week 16"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Percentage change in Pruritus Numerical Rating Scale (NRS) score from Baseline to Week 16",
+          "timeFrame" : "Baseline to Week 16"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ul><li>Male or female adults ages 18 to 75 years old when signing the informed consent.</li><li>AD (according to Hanifin-Rajka Criteria) that had been present for at least 1 years before the screening visit.</li><li>Moderate to Severe Atopic Dermatitis.</li><li>Recent history of inadequate response to treatment with topical medications.</li></ul><p>Exclusion Criteria:</p><ul><li>Participation in a prior 611 clinical study.</li><li>Treatment with the following prior to the baseline visit: 1) Systemic corticosteroid or Immunosuppressants &#x2F; Immunomodulators within 4 weeks or within 5 half-lives (if known), whichever is longer.\n2) Monoclonal antibody within 5 half-lives (if known) or 4 months, whichever is longer.\n3) Cell-depleting within 6 months.</li><li>Treatment with a live (attenuated) vaccine within 2 months of the baseline visit or planned during the study.</li><li>Serious or Uncontrolled diseases that may affect the safety of participants during the study period or hinder their completion of the study.</li><li>Evidence of active acute or chronic hepatitis.</li><li>History of malignancy within 5 years before the screening visit or currently.</li><li>Pregnant or breastfeeding women, or women planning to become pregnant.</li><li>Any history of vernal keratoconjunctivitis (VKC) and atopic keratoconjunctivitis (AKC).</li></ul>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "locations" : [ {
+          "facility" : "Shanghai Dermatology Hospital",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "zip" : "200050",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          }
+        }, {
+          "facility" : "Hangzhou First People&amp;#39;s Hospital",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "zip" : "31003",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Ningbo University",
+          "city" : "Ningbo",
+          "state" : "Zhejiang",
+          "zip" : "315010",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 29.87819,
+            "lon" : 121.54945
+          }
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "phase-9-task-94-host-adapters",
+  "name": "phase-9-task-94-host-adapters",
+  "title": "Phase 9 Task 9.4：Codex/Hermes/OMP 宿主适配一致性",
+  "description": "三个宿主使用同一最小输入、能力预检、状态、中断、恢复、失败与产物语义；适配器只做调用和映射，不改变科学真源或验收标准。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 9.4 only：薄宿主适配器、宿主回执合同、host-smoke-v1 合同与三宿主一致性测试；首版真实输出仅站点式 HTML，不构建 PDF/HTML-PPT/PPTX。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-01",
+  "completedAt": "2026-09-01",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [],
+  "notes": "Task 9.4 已验收：三宿主薄适配、统一回执、HA01–HA10、真实源码级宿主调用及 runner/verifier 词汇对齐完成；115 项聚焦、347 项 integration、Ruff、strict mypy、双 Schema、包校验、双 review-gate 与 audit-execution 通过。CodeBuddy 同会话最终复审无剩余 P0/P1/P2。真实 fresh-install、完整 bundle 摘要与三份 path_resolved 回执由 Task 9.5 复验。",
+  "meta": {
+    "phase": 9,
+    "task": "9.4",
+    "release_scope": "site_html_v1"
+  }
+}

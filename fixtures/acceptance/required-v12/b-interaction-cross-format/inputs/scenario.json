@@ -1,0 +1,40 @@
+{
+  "case_id": "b-interaction-cross-format",
+  "source_fixture": "fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "B 基线和完成页的交互只在首版站点式 HTML 内验证；原计划四格式扩展不构成本版阻断。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "baseline-chart-table-drawer",
+      "description_zh": "基线图、完整表和证据抽屉共享同一事实行集。"
+    },
+    {
+      "id": "disposition-chart-table-drawer",
+      "description_zh": "完成/处置图、完整表和证据抽屉共享同一事实行集。"
+    },
+    {
+      "id": "filter-round-trip",
+      "description_zh": "筛选变更后图、表、抽屉同步，状态可恢复。"
+    },
+    {
+      "id": "url-round-trip",
+      "description_zh": "URL 参数可往返恢复筛选、焦点和当前事实行。"
+    },
+    {
+      "id": "adr-0013-html-only",
+      "description_zh": "首版仅接受站点式 HTML，PDF、HTML-PPT、PPTX 和 PowerPoint 确认明确延后。"
+    }
+  ],
+  "deferred_formats": [
+    "pdf",
+    "html-ppt",
+    "pptx",
+    "powerpoint-confirmation"
+  ],
+  "adr_0013_narrowing": "首版只验收站点式 HTML；四格式交互覆盖保留为后续扩展，不得阻断 HTML。"
+}

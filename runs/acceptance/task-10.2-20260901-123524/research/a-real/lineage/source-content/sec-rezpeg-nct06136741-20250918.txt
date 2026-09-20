@@ -1,0 +1,50 @@
+# Rezpegaldesleukin（REZOLVE-AD，NCT06136741）官方披露摘录
+
+## 来源与取得方式
+
+- 来源：Nektar Therapeutics 向美国证券交易委员会提交的 Exhibit 99.1/99.2。
+- 正式披露日期：2025-09-18。
+- Exhibit 99.1（研究者演示材料）：https://www.sec.gov/Archives/edgar/data/906709/000121390025088792/ea025784201ex99-1_nektar.htm
+- Exhibit 99.2（公司新闻稿及结果表）：https://www.sec.gov/Archives/edgar/data/906709/000121390025088792/ea025784201ex99-2_nektar.htm
+- 取得日期：2026-08-28。
+- 说明：以下内容逐项摘录自美国证券交易委员会存档页面，用于固定可复核的试验身份、疗效与安全性数值；英文术语及数字按原表保留，中文仅说明字段含义。
+
+## 试验身份
+
+- Global Phase 2b REZOLVE-AD study；登记号 NCT06136741。
+- 393 名中重度特应性皮炎患者随机接受 24 µg/kg q2w、18 µg/kg q2w、24 µg/kg q4w 或安慰剂 q2w。
+- 主要及关键次要终点在第 16 周评价。
+- 安全性分析例数：24 µg/kg q2w 组 N=104；18 µg/kg q2w 组 N=106；24 µg/kg q4w 组 N=110；合并治疗组 N=320；安慰剂组 N=73。
+
+## 第 16 周疗效
+
+Exhibit 99.1 的第 10 页图示给出第 16 周应答率：
+
+- EASI-75：24 µg/kg q2w 组 42%；18 µg/kg q2w 组 46%；24 µg/kg q4w 组 34%；安慰剂组 17%。
+- EASI-50：24 µg/kg q2w 组 66%；18 µg/kg q2w 组 66%；24 µg/kg q4w 组 55%；安慰剂组 34%。
+- EASI-90：24 µg/kg q2w 组 25%；18 µg/kg q2w 组 18%；24 µg/kg q4w 组 17%；安慰剂组 9%。
+
+本候选报告采用拟进入后续开发的高剂量 24 µg/kg q2w 与安慰剂作同试验横向比较，即 EASI-75 42% 对 17%。百分比来源未同时给出精确事件人数，因此不反推分子。
+
+## 16 周诱导期安全性
+
+Exhibit 99.2 的 “Safety Over 16-Week Induction Period” 表：
+
+| 安全性字段 | 24 µg/kg q2w（N=104） | 18 µg/kg q2w（N=106） | 24 µg/kg q4w（N=110） | 合并治疗组（N=320） | 安慰剂（N=73） |
+|---|---:|---:|---:|---:|---:|
+| Patients with any TEAE, excluding ISRs | 69（66.3%） | 60（56.6%） | 64（58.2%） | 193（60.3%） | 42（57.5%） |
+| Patients with any Serious AE | 1（1.0%） | 4（3.8%） | 0 | 5（1.6%） | 0 |
+| Patients with Severe AE | 3（2.9%） | 6（5.7%） | 1（0.9%） | 10（3.1%） | 1（1.4%） |
+| TEAEs leading to study drug discontinuation | 8（7.7%） | 5（4.7%） | 5（4.5%） | 18（5.6%） | 0 |
+
+Exhibit 99.1 第 19 页还列示任一治疗组发生率至少 5% 的事件。用于本候选报告的同一高剂量组与安慰剂对照包括：
+
+- Nasopharyngitis：24 µg/kg q2w 组 10/104（9.6%）；安慰剂组 10/73（13.7%）。
+- Upper respiratory tract infection：24 µg/kg q2w 组 7/104（6.7%）；安慰剂组 4/73（5.5%）。
+- Headache：24 µg/kg q2w 组 8/104（7.7%）；安慰剂组 3/73（4.1%）。
+
+## 结构化边界
+
+- “任何 TEAE”仅指排除注射部位反应后的 TEAE，不得与包含注射部位反应的总体 TEAE 混写。
+- 预先界定 AESI 的总体发生率未在本次官方表中单列，保持“未公开”，不推断为 0。
+- 试验分组百分比未给出精确人数时不反推分子；安全性表已给出人数及百分比的字段可同时结构化。

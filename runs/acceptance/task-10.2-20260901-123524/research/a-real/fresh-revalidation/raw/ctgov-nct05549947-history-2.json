@@ -1,0 +1,210 @@
+{
+  "studyVersion" : 2,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT05549947",
+        "orgStudyIdInfo" : {
+          "id" : "SHR-1819-201"
+        },
+        "organization" : {
+          "fullName" : "Shanghai Hengrui Pharmaceutical Co., Ltd.",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "Efficacy and Safety Study of SHR-1819 Injection in Adult Patients With Severe Atopic Dermatitis",
+        "officialTitle" : "A Multicenter, Randomized, Double-blind, Placebo-controlled Phase II Clinical Study Evaluating the Efficacy, Safety, Pharmacokinetics and Pharmacokinetics of SHR-1819 Injection in Adults With Moderate to Severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2026-04",
+        "overallStatus" : "COMPLETED",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2022-10-08",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2023-09-15",
+          "type" : "ACTUAL"
+        },
+        "completionDateStruct" : {
+          "date" : "2023-11-23",
+          "type" : "ACTUAL"
+        },
+        "studyFirstSubmitDate" : "2022-09-19",
+        "studyFirstSubmitQcDate" : "2022-09-21",
+        "studyFirstPostDateStruct" : {
+          "date" : "2022-09-22",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2026-04-23",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2026-04-29",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Shanghai Hengrui Pharmaceutical Co., Ltd.",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This trial was designed to evaluate the efficacy and safety of SHR-1819 injection in patients with atopic dermatitis."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Moderate to Severe Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE2" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "SINGLE",
+            "whoMasked" : [ "PARTICIPANT" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 158,
+          "type" : "ACTUAL"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "Treatment group A: SHR-1819",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SHR-1819" ]
+        }, {
+          "label" : "Treatment group B: SHR-1819",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SHR-1819" ]
+        }, {
+          "label" : "Treatment group C: SHR-1819",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SHR-1819" ]
+        }, {
+          "label" : "Treatment group D: placebo",
+          "type" : "PLACEBO_COMPARATOR",
+          "interventionNames" : [ "Drug: Placebo" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "SHR-1819",
+          "description" : "Treatment group A: SHR-1819 injection dose 1; Treatment group B: SHR-1819 injection dose 2; Treatment group C：SHR-1819 injection dose 3.",
+          "armGroupLabels" : [ "Treatment group A: SHR-1819", "Treatment group B: SHR-1819", "Treatment group C: SHR-1819" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Placebo",
+          "description" : "Treatment group D: placebo",
+          "armGroupLabels" : [ "Treatment group D: placebo" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "At 16 weeks, the proportion of subjects who achieved eczema area and severity index (EASI) -75 (EASI score decreased ≥ 75% from baseline)",
+          "description" : "EASI sore use EASI scale",
+          "timeFrame" : "Up to 16 weeks"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "At week 16, the proportion of participants with an overall investigator assessment (IGA) score of 0 or 1 (0-4 scale) and a decrease of ≥ 2 points from baseline",
+          "description" : "The overall degree of improvement was assessed using the IGA scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, the proportion of subjects whose IGA score decreased from baseline by ≥ 2 points",
+          "description" : "The overall degree of improvement was assessed using the IGA scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, the proportion of subjects who achieved EASI-90 (EASI score ≥ 90% lower than baseline)",
+          "description" : "The extent of area is assessed using the EASI scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, the percentage of subjects who achieved EASI-50 (EASI score ≥ 50% lower than baseline)",
+          "description" : "The extent of area is assessed using the EASI scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, the weekly average of the daily peak itching (itch) digital evaluation scale (P-NRS) decreased from baseline by ≥ 4 points",
+          "description" : "The extent of pruritus is assessed using the P-NRS scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, EASI is the percentage change from baseline and change",
+          "description" : "The extent of area is assessed using the EASI scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, the atopic dermatitis score (SCORAD) was the percentage change from baseline and change",
+          "description" : "The extent of lesions and pruritus is assessed using the SCORAD scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, atopic dermatitis affects the body surface area (BSA) as a percentage of the baseline change and change",
+          "description" : "The BSA scale was used to assess improvement in lesion area",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "At week 16, the Dermatological Quality of Life Scale (DLQI) score was a percentage change from baseline and change",
+          "description" : "The quality of Life is assessed using the DLQI scale",
+          "timeFrame" : "Up to 16 weeks"
+        }, {
+          "measure" : "The incidence of adverse events ranged from the first dose to 24 weeks",
+          "description" : "Assess the post-medication safety of subjects from the first dose to the time they exit the group",
+          "timeFrame" : "From the beginning of administration to the 24th week"
+        }, {
+          "measure" : "Concentration of SHR-1819 in serum",
+          "timeFrame" : "From the beginning of administration to the 24th week"
+        }, {
+          "measure" : "Changes of TARC&#x2F;CCL17 in the serum",
+          "timeFrame" : "From the beginning of administration to the 24th week"
+        }, {
+          "measure" : "Changes of IgE in the serum",
+          "timeFrame" : "From the beginning of administration to the 24th week"
+        }, {
+          "measure" : "Changes of eotaxin-3 in the serum",
+          "timeFrame" : "From the beginning of administration to the 24th week"
+        }, {
+          "measure" : "Immunogenicity of SHR-1819",
+          "timeFrame" : "From the beginning of administration to the 24th week"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ol><li>Subjects voluntarily sign informed consent forms prior to the commencement of any proceedings related to the study, are able to communicate smoothly with the investigator, understand and are willing to complete the study in strict compliance with the requirements of this clinical research protocol;</li><li>Age 18 to 75 years old (inclusive) at the time of signing the informed consent form, regardless of gender;</li><li>Have atopic dermatitis at the time of screening (according to the 2014 American College of Dermatology Guidelines) and have a course of at least 1 year before screening;</li><li>At the screening and baseline periods, EASI ≥ 16, IGA ≥ 3, BSA ≥ 10%;</li><li>The average daily peak pruritus (itch) numerical evaluation scale (P-NRS) score for the first 7 days of randomization ≥ 4 points (at least 4 days of daily peak pruritus P-NRS scores need to be collected);</li><li>According to the investigators, topical TCS treatment was poor or intolerant within 6 months prior to screening.</li></ol><p>Exclusion Criteria:</p><ol><li>Pregnant or lactating women;</li><li>Major surgeries are planned for the duration of the study;</li><li>History of previous atopic corneal conjunctivitis involving the cornea;</li><li>History of clinically significant diseases (e.g., circulatory system abnormalities, endocrine system abnormalities, neurological disorders, hematologic disorders, immune system disorders, psychiatric disorders, and metabolic instability) that the researcher believes that participation in the study poses a risk to the safety of the subject or that the disease&#x2F;illness worsens during the study period will affect the effectiveness or safety analysis;</li><li>Subjects have had or are currently clinically significant diseases or abnormalities;</li><li>Screening for people with a history of heavy alcohol consumption or substance abuse in the 3 months prior to screening;</li><li>The drug has been used in the previous 6 months;</li><li>Screening of subjects with malignancy within the first 5 years (except completely cured cervical cancer in situ and non-metastatic cutaneous squamous cell carcinoma or basal cell carcinoma);</li><li>Other comorbid (or co-occurring) skin disorders may be affected in the study evaluation;</li><li>Any cause that the researchers believe would prevent the participants from participating in the study.</li></ol>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "locations" : [ {
+          "facility" : "Huashan Sub-Hospital of Fudan University",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "zip" : "200040",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          }
+        } ]
+      },
+      "referencesModule" : {
+        "references" : [ {
+          "pmid" : "42210243",
+          "type" : "DERIVED",
+          "citation" : "Gu C, Yin H, Yang B, Ji S, Bian K, Man X, Lu J, Sui D, Zhou Y, Cheng F, Xu A, Li X, Jiang M, Diao Q, Ji C, Shi T, Ding Y, Ren H, Li Y, Liu H, Meng Z, Feng P, Zhang S, Bai X, Li P, Dong Y, Liu S, Zhang C, Xu J. Anti-IL-4Ralpha antibody SHR-1819 for moderate-to-severe atopic dermatitis: a randomized phase 2 study. BMC Med. 2026 May 28. doi: 10.1186&#x2F;s12916-026-04952-3. Online ahead of print."
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "UNDECIDED"
+      }
+    },
+    "hasResults" : false
+  }
+}

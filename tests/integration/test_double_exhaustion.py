@@ -40,6 +40,15 @@ def test_per_gap_omission_review_is_required() -> None:
     assert other.conclusion_digest != review.conclusion_digest
 
 
+def test_terminal_exhaustion_rejects_material_omission_conclusion() -> None:
+    """仍发现实质遗漏时不得把缺口包装为已穷尽终态。"""
+    gap = gap_exhaustion(gap_id="gap-material-omission")
+    mutated = _gap_content_dump(gap)
+    mutated["omission_review"]["conclusion"] = "material_omission_found"
+    with pytest.raises(ValidationError):
+        GapDoubleExhaustion.model_validate(mutated)
+
+
 def test_two_saturated_recovery_rounds_are_required() -> None:
     """连续两轮饱和、无关键信息增益的科学穷尽证据是阻断前提。"""
     gap = gap_exhaustion(gap_id="gap-two-rounds")
@@ -116,6 +125,95 @@ def test_access_blocked_conclusion_requires_technical_diagnosis() -> None:
     broken["technical_diagnosis"] = None
     with pytest.raises(ValidationError):
         GapDoubleExhaustion.model_validate(broken)
+
+
+def test_technical_gap_rejects_unbound_information_gain_claims() -> None:
+    """技术访问未解决时不得自由声称发现了新字段或新来源版本。"""
+    from ci_workflow.domain.evidence import InformationGainDiff
+    from ci_workflow.gates.exhaustion import compute_reviewer_inputs_digest
+
+    gap = gap_exhaustion(
+        gap_id="gap-technical-fake-gain",
+        current_state="unresolved_due_to_route",
+        route_completion="route_access_blocked",
+        final_result_class="rate_limited",
+        technical=True,
+    )
+    rounds = (
+        InformationGainDiff(round=1, new_fields=("伪造字段",), new_source_versions=()),
+        InformationGainDiff(round=2, new_fields=(), new_source_versions=("fake-v1",)),
+    )
+    forged = gap.model_copy(
+        update={
+            "information_gain_rounds": rounds,
+            "evidence_gap": gap.evidence_gap.model_copy(
+                update={"information_gain_diff": rounds}
+            ),
+        }
+    )
+    payload = _gap_content_dump(forged)
+    payload["omission_review"]["reviewed_inputs_digest"] = (
+        compute_reviewer_inputs_digest(forged)
+    )
+    with pytest.raises(ValidationError):
+        GapDoubleExhaustion.model_validate(payload)
+
+
+def test_scientific_gap_rejects_unbound_information_gain_identities() -> None:
+    """布尔值相同仍不足；片段、单元和冲突集合必须逐轮精确绑定历史。"""
+    from ci_workflow.gates.exhaustion import compute_reviewer_inputs_digest
+
+    gap = gap_exhaustion(gap_id="gap-fake-gain-identities")
+    rounds = list(gap.information_gain_rounds)
+    rounds[0] = rounds[0].model_copy(
+        update={"new_evidence_fragment_ids": ("fragment-not-in-history",)}
+    )
+    forged = gap.model_copy(
+        update={
+            "information_gain_rounds": tuple(rounds),
+            "evidence_gap": gap.evidence_gap.model_copy(
+                update={"information_gain_diff": tuple(rounds)}
+            ),
+        }
+    )
+    payload = _gap_content_dump(forged)
+    payload["omission_review"]["reviewed_inputs_digest"] = (
+        compute_reviewer_inputs_digest(forged)
+    )
+    with pytest.raises(ValidationError, match="逐轮完全一致"):
+        GapDoubleExhaustion.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("new_fields", ("未绑定字段",)),
+        ("new_source_versions", ("unbound-source-version",)),
+    ],
+)
+def test_terminal_scientific_gap_rejects_legacy_free_form_gain(
+    field: str, value: tuple[str, ...]
+) -> None:
+    """终态饱和只接受历史中的类型化增益身份，不接受自由字段或版本标签。"""
+    from ci_workflow.gates.exhaustion import compute_reviewer_inputs_digest
+
+    gap = gap_exhaustion(gap_id=f"gap-free-gain-{field}")
+    rounds = list(gap.information_gain_rounds)
+    rounds[0] = rounds[0].model_copy(update={field: value})
+    forged = gap.model_copy(
+        update={
+            "information_gain_rounds": tuple(rounds),
+            "evidence_gap": gap.evidence_gap.model_copy(
+                update={"information_gain_diff": tuple(rounds)}
+            ),
+        }
+    )
+    payload = _gap_content_dump(forged)
+    payload["omission_review"]["reviewed_inputs_digest"] = (
+        compute_reviewer_inputs_digest(forged)
+    )
+    with pytest.raises(ValidationError, match="自由字段或来源版本"):
+        GapDoubleExhaustion.model_validate(payload)
 
 
 def test_diagnosis_requires_completed_retries_and_alternatives() -> None:
@@ -276,6 +374,18 @@ def test_reviewer_inputs_digest_binds_route_and_rounds() -> None:
     recomputed = compute_reviewer_inputs_digest(gap)
     assert recomputed == gap.reviewer_inputs_digest
     assert gap.omission_review.reviewed_inputs_digest == digest_before
+
+
+def test_omission_review_requires_clean_context_distinct_from_producer() -> None:
+    """角色名不同不足以证明独立复核；生产与审查上下文摘要必须不同。"""
+    gap = gap_exhaustion(gap_id="gap-same-context")
+    digest_before = gap.reviewer_inputs_digest
+    payload = _gap_content_dump(gap)
+    payload["omission_review"]["reviewer_context_digest"] = (
+        payload["omission_review"]["producer_context_digest"]
+    )
+    with pytest.raises(ValidationError, match="独立干净上下文"):
+        GapDoubleExhaustion.model_validate(payload)
 
     # 缺口状态变化（仍是科学缺失）→ 纯函数输入摘要变化
     from ci_workflow.gates.exhaustion import (

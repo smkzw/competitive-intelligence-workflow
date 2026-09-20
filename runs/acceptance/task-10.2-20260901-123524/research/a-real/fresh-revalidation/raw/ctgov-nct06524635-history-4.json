@@ -1,0 +1,182 @@
+{
+  "studyVersion" : 4,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT06524635",
+        "orgStudyIdInfo" : {
+          "id" : "M24-922"
+        },
+        "organization" : {
+          "fullName" : "AbbVie",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Study to Assess Molecular Changes in Adult Participants With Moderate to Severe Hidradenitis Suppurativa or With Moderate to Severe Atopic Dermatitis Receiving Subcutaneous Injections of Lutikizumab",
+        "officialTitle" : "A Multicenter Open-Label Interventional Biomarker Study of Lutikizumab in Adult Subjects With Moderate-to-Severe Hidradenitis Suppurativa or Adult Subjects With Moderate-to-Severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2025-01",
+        "overallStatus" : "RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2024-08-14",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2027-02",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2027-02",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2024-07-24",
+        "studyFirstSubmitQcDate" : "2024-07-24",
+        "studyFirstPostDateStruct" : {
+          "date" : "2024-07-29",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2025-01-22",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2025-01-24",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "AbbVie",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false,
+        "isFdaRegulatedDrug" : true,
+        "isFdaRegulatedDevice" : false,
+        "isUsExport" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "<p>Hidradenitis suppurativa (HS) and atopic dermatitis (AD) are chronic inflammatory skin diseases that lead to the development of skin lesions and symptoms such as pain and discomfort.\nThe purpose of this study is to assess molecular changes in adult participants with moderate to severe HS or with moderate to severe AD.</p><p>Lutikizumab (ABT-981) is an investigational drug being developed for the treatment of HS and AD.\nThis study will consist of 2 sub-studies: Sub-Study 1 moderate to severe hidradenitis suppurativa and Sub-Study 2 moderate to severe atopic dermatitis.\nApproximate 60 participants will be enrolled in the study at approximately 2 sites in the US.</p><p>In Sub-Study 1 HS participants will receive subcutaneous (SC) injections of lutikizumab for up to week 15 with a 70-day follow-up period.\nIn Sub-Study 2 AD, participants will receive subcutaneous (SC) injections of lutikizumab for up to week 14 with a 70-day follow-up period.\nThe study duration for Sub-Studies 1 and 2 is expected to last up to 30 weeks.</p><p>Participants in Sub-Study 1 (HS) who complete Week 16 and showed a therapeutic benefit to lutikizumab, as confirmed by the investigator, will have the option to enter an open-label long-term extension (LTE) to continue to receive lutikizumab for up to an additional 140 weeks, followed by a 70-day follow-up period.</p><p>There may be higher treatment burden for participants in this trial compared to their standard of care.\nParticipants will attend regular visits during the study at a hospital or clinic and may require frequent medical assessments, blood tests, and biomarker collections.</p>"
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Hidradenitis Suppurativa", "Atopic Dermatitis" ],
+        "keywords" : [ "Hidradenitis Suppurativa (HS)", "Atopic Dermatitis (AD)", "Lutikizumab", "ABT-981" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE2" ],
+        "designInfo" : {
+          "allocation" : "NON_RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "BASIC_SCIENCE",
+          "maskingInfo" : {
+            "masking" : "NONE"
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 60,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "SS 1: Lutikizumab Hidradenitis Suppurativa (HS) Bio-Naïve",
+          "type" : "EXPERIMENTAL",
+          "description" : "HS Bio-naïve participants will receive Lutikizumab Dose A followed by Dose B as part of the 16 week treatment duration, with the option to enter an open-label LTE to continue to receive Lutikizumab Dose B at Week 16 and every week thereafter.",
+          "interventionNames" : [ "Drug: Lutikizumab" ]
+        }, {
+          "label" : "SS 1: Lutikizumab HS Tumor Necrosis Factor-Inadequate Response",
+          "type" : "EXPERIMENTAL",
+          "description" : "Tumor Necrosis Factor-Inadequate Response (TNF-IR) participants will receive Lutikizumab Dose A followed by Dose B as part of the 16 week treatment duration.",
+          "interventionNames" : [ "Drug: Lutikizumab" ]
+        }, {
+          "label" : "SS 2: Lutikizumab Atopic Dermatitis (AD) Bio-naïve",
+          "type" : "EXPERIMENTAL",
+          "description" : "AD Bio-naïve participants will receive Lutikizumab Dose C followed by Dose D as part of the 16 week treatment duration.",
+          "interventionNames" : [ "Drug: Lutikizumab" ]
+        }, {
+          "label" : "SS 2: Lutikizumab AD Dupilumab-Inadequate Response (IR)",
+          "type" : "EXPERIMENTAL",
+          "description" : "AD Dupilumab-IR participants will receive Lutikizumab Dose C followed by Dose D as part of the 16 week treatment duration.",
+          "interventionNames" : [ "Drug: Lutikizumab" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "Lutikizumab",
+          "description" : "Subcutaneous (SC) Injection",
+          "armGroupLabels" : [ "SS 1: Lutikizumab HS Tumor Necrosis Factor-Inadequate Response", "SS 1: Lutikizumab Hidradenitis Suppurativa (HS) Bio-Naïve", "SS 2: Lutikizumab AD Dupilumab-Inadequate Response (IR)", "SS 2: Lutikizumab Atopic Dermatitis (AD) Bio-naïve" ],
+          "otherNames" : [ "ABT-981" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Number of Participants With Adverse Events (AEs)",
+          "description" : "An AE is defined as any untoward medical occurrence in a patient or clinical investigation participant administered a pharmaceutical product which does not necessarily have a causal relationship with this treatment.",
+          "timeFrame" : "Up to Approximately 30 weeks"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ul><li>Sub-Study 1 hidradenitis suppurativa (HS):</li><li>Participants with a diagnosis of moderate-to-severe HS for at least 6 months prior to Baseline as determined by the investigator</li><li>Participants naïve to biologic treatment for HS or must have a prior inadequate response or loss of response to anti-TNF therapy for HS (&gt;= 12 weeks of therapy).</li><li>Sub-Study 2 atopic dermatitis (AD):</li><li>Participants with a diagnosis of moderate-to-severe AD with onset of symptoms at least 1 year prior to Baseline.</li><li>Participants naïve to biologic treatment for AD or must have a prior inadequate response or loss of response to dupilumab for AD (defined as &gt;= 8 weeks of therapy with dupilumab).</li></ul><p>Exclusion Criteria:</p><ul><li>History of any malignancy within the last 5 years except for successfully treated nonmelanoma skin cancer (NMSC) or localized carcinoma in situ of the cervix.</li><li>History of active skin disease (other than HS for Sub-Study 1 or AD for Sub-Study 2) that could interfere with the assessment of HS (for Sub-Study 1) or AD (for Sub-Study 2), including skin infections (e.g., bacterial, fungal, or viral) requiring systemic treatment within 4 weeks of the Baseline.</li></ul>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "ABBVIE CALL CENTER",
+          "role" : "CONTACT",
+          "phone" : "844-663-3742",
+          "email" : "abbvieclinicaltrials@abbvie.com"
+        } ],
+        "overallOfficials" : [ {
+          "name" : "ABBVIE INC.",
+          "affiliation" : "AbbVie",
+          "role" : "STUDY_DIRECTOR"
+        } ],
+        "locations" : [ {
+          "facility" : "Physioseq, LLC &#x2F;ID# 267266",
+          "status" : "RECRUITING",
+          "city" : "Sacramento",
+          "state" : "California",
+          "zip" : "95825",
+          "country" : "United States",
+          "contacts" : [ {
+            "name" : "Site Coordinator",
+            "role" : "CONTACT",
+            "phone" : "916-603-2157 ext.2"
+          } ],
+          "geoPoint" : {
+            "lat" : 38.58157,
+            "lon" : -121.4944
+          }
+        }, {
+          "facility" : "University of Michigan Health System - Ann Arbor &#x2F;ID# 267275",
+          "status" : "RECRUITING",
+          "city" : "Ann Arbor",
+          "state" : "Michigan",
+          "zip" : "48109",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 42.27756,
+            "lon" : -83.74088
+          }
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "YES",
+        "description" : "AbbVie is committed to responsible clinical trial data sharing.\nThis includes access to anonymized, individual and trial-level data (analysis data sets), as well as other information.",
+        "infoTypes" : [ "STUDY_PROTOCOL", "SAP" ],
+        "timeFrame" : "For details on when studies are available for sharing visit https:&#x2F;&#x2F;vivli.org&#x2F;ourmember&#x2F;abbvie&#x2F;",
+        "accessCriteria" : "To learn more about the process, or to submit a request, visit the following link https:&#x2F;&#x2F;www.abbvieclinicaltrials.com&#x2F;hcp&#x2F;data-sharing&#x2F;",
+        "url" : "https:&#x2F;&#x2F;vivli.org&#x2F;ourmember&#x2F;abbvie&#x2F;"
+      }
+    },
+    "hasResults" : false
+  }
+}

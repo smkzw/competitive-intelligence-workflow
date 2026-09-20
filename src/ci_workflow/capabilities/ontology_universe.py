@@ -261,9 +261,7 @@ class InnovationOntology:
             rule_version=self.policy.version,
             component_results=component_results,
             competitor_component_ids=tuple(item.component_id for item in included),
-            competitor_profile_component_names=tuple(
-                item.component_name for item in included
-            ),
+            competitor_profile_component_names=tuple(item.component_name for item in included),
             innovation_component_count=len(included),
             regimen_count=regimen_count,
             reason_zh=reason,
@@ -277,9 +275,7 @@ def close_competitor_universe(
 ) -> CompetitorUniverseDecision:
     verified_fragment_ids = evidence_registry.verified_fragment_ids
     referenced_fragments = {
-        fragment_id
-        for item in component_results
-        for fragment_id in item.evidence_fragment_ids
+        fragment_id for item in component_results for fragment_id in item.evidence_fragment_ids
     }
     if not referenced_fragments <= verified_fragment_ids:
         raise ValueError("创新药宇宙引用了尚未登记并重开的证据片段")

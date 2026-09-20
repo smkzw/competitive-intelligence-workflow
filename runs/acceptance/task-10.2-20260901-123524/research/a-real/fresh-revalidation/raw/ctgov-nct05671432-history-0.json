@@ -1,0 +1,161 @@
+{
+  "studyVersion" : 0,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT05671432",
+        "orgStudyIdInfo" : {
+          "id" : "CM326-101102"
+        },
+        "organization" : {
+          "fullName" : "Keymed Biosciences Co.Ltd",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "The Study of CM326 in Moderate-to-severe Atopic Dermatitis",
+        "officialTitle" : "A Randomized, Double-blind, Placebo-controlled Phase II Clinical Study to Evaluate the Efficacy and Safety of CM326 Injection in the Treatment of Adult Patients With Moderate-to-severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2022-12",
+        "overallStatus" : "UNKNOWN",
+        "lastKnownStatus" : "RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2022-12-27",
+          "type" : "ESTIMATED"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2023-12-30",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2024-12-30",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2022-12-26",
+        "studyFirstSubmitQcDate" : "2022-12-31",
+        "studyFirstPostDateStruct" : {
+          "date" : "2023-01-04",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2022-12-31",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2023-01-04",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Keymed Biosciences Co.Ltd",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This is a multi-center, randomized, double blind, placebo-controlled study to evaluate the efficacy, safety, tolerance, pharmacokinetics, pharmacodynamics, and immunogenicity of CM326 in moderate-severe atopic dermatitis subjects.",
+        "detailedDescription" : "The study consists of 3 periods, a up-to-4-week Screening Period, a 52-week Treatment Period and a 8-week Safety Follow-up Period."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Moderate-to-severe Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE2" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 240,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "Group A",
+          "type" : "EXPERIMENTAL",
+          "description" : "Group A: CM326, subcutaneous (SC)",
+          "interventionNames" : [ "Biological: CM326" ]
+        }, {
+          "label" : "Group B",
+          "type" : "EXPERIMENTAL",
+          "description" : "Group A: CM326, subcutaneous (SC)",
+          "interventionNames" : [ "Biological: CM326" ]
+        }, {
+          "label" : "Group C",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Group C: placebo, subcutaneous (SC)",
+          "interventionNames" : [ "Other: Placebo" ]
+        } ],
+        "interventions" : [ {
+          "type" : "BIOLOGICAL",
+          "name" : "CM326",
+          "description" : "CM326 injection",
+          "armGroupLabels" : [ "Group A", "Group B" ]
+        }, {
+          "type" : "OTHER",
+          "name" : "Placebo",
+          "description" : "Placebo",
+          "armGroupLabels" : [ "Group C" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Proportion of patients with Eczema Area and Severity Index (EASI)-75 (≥75 percent reduction in EASI scores from baseline) at visit 16",
+          "description" : "The EASI score was used to measure the severity and extent of atopic dermatitis (AD) and measures erythema, infiltration, excoriation and lichenification on 4 anatomic regions of the body: head, trunk, upper and lower extremities.\nThe total EASI score ranges from 0 to 72 points, with the higher scores reflecting the worse severity of AD",
+          "timeFrame" : "at week 16"
+        }, {
+          "measure" : "Proportion of patients with Investigator&#x27;s Global Assessment (IGA) score = 0-1 and reduction from baseline of ≥2 points at Visit 16",
+          "description" : "IGA is a 5-point scale ranging from 0 (clear) to 4 (very severe)",
+          "timeFrame" : "at week 16"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ul><li>With confirmed Atopic Dermatitis (AD) at the screening.</li><li>Age ≥ 18 years and ≤ 75 years, male or female.</li><li>Have the ability to understand the nature of the study and voluntarily sign the informed consent.</li><li>Be able to communicate well with investigators and follow up protocol requirements.</li></ul><p>Exclusion Criteria:</p><ul><li>Not enough washing-out period for previous therapy.</li><li>Received allergen specific immunotherapy (desensitization) within 6 months prior to baseline.</li><li>Major surgery is planned during the study period.</li><li>Women who are pregnant or breastfeeding, or who plan to become pregnant during the study.</li></ul>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "Qian Jia",
+          "role" : "CONTACT",
+          "phone" : "+862888610620",
+          "email" : "qianjia@keymedbio.com"
+        } ],
+        "locations" : [ {
+          "facility" : "Peking University People&#x27;s hospital",
+          "status" : "RECRUITING",
+          "city" : "Beijing",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Jianzhong Zhang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          }
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

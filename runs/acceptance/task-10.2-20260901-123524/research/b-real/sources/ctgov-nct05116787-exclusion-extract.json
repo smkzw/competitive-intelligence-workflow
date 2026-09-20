@@ -1,0 +1,25 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "BCX9930 record is phase 2 and halted/terminated",
+    "no pivotal late-stage comparator set identified by the frozen cutoff"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "field": "exclusion",
+      "value": "Phase 2 halted/terminated; no pivotal late-stage comparator evidence set by cutoff"
+    }
+  ],
+  "first_disclosed_at": "2024-01-01",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-ctgov-bcx9930",
+  "source_title": "ClinicalTrials.gov NCT05116787 BCX9930",
+  "source_url": "https://clinicaltrials.gov/study/NCT05116787",
+  "source_version_id": "src-ctgov-bcx9930-2024"
+}

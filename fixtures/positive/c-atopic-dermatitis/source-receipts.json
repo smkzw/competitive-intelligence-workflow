@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "retrieved_on": "2026-08-30",
+  "access_method": "ClinicalTrials.gov API v2",
+  "records": [
+    {
+      "source_id": "clinicaltrials-nct02260986",
+      "record_id": "NCT02260986",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+      "relative_path": "sources/clinicaltrials/NCT02260986.json",
+      "content_type": "application/json",
+      "http_status": 200,
+      "sha256": "315f0b023bbb3de2f2d779fa08151241dcf82fe9686f8ebf71ae01079a33e544",
+      "byte_size": 208043
+    },
+    {
+      "source_id": "clinicaltrials-nct04178967",
+      "record_id": "NCT04178967",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+      "relative_path": "sources/clinicaltrials/NCT04178967.json",
+      "content_type": "application/json",
+      "http_status": 200,
+      "sha256": "a8b0b7bbcaf2d903a8182b92b5f7c1b91380c1e370bd010279c5eedaada807c9",
+      "byte_size": 518726
+    },
+    {
+      "source_id": "clinicaltrials-nct03985943",
+      "record_id": "NCT03985943",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+      "relative_path": "sources/clinicaltrials/NCT03985943.json",
+      "content_type": "application/json",
+      "http_status": 200,
+      "sha256": "5a3c1febd39a3e659cd9d639c8974029daa44edd8d74e1a47977689a21f31fc7",
+      "byte_size": 128997
+    },
+    {
+      "source_id": "clinicaltrials-nct05149313",
+      "record_id": "NCT05149313",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+      "relative_path": "sources/clinicaltrials/NCT05149313.json",
+      "content_type": "application/json",
+      "http_status": 200,
+      "sha256": "02b9f4fdecc8cf9c1ceb2400592434468422301c90258f0265fe218dc7d8da57",
+      "byte_size": 107577
+    }
+  ]
+}

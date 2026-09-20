@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://local.cms/ci-workflow/coverage-projection.schema.json",
   "title": "格式覆盖投影",
-  "description": "绑定恰好一个规范覆盖集合、快照与输出格式的不可变投影，记录已覆盖项与版本化\n结构化例外。Draft 2020-12 无法表达的跨数组语义（集合闭合、覆盖/例外重叠、\n等价行集绑定、HTML/PDF 完整表不可省略、演示稿只允许图表等价例外、确定性\n身份/摘要重算）由生产验证器语义层强制执行。",
+  "description": "绑定恰好一个规范覆盖集合、快照与站点式 HTML 输出的不可变投影，完整表不可省略；跨数组语义由生产验证器强制执行。",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -29,7 +29,7 @@
     "report_version": {"type": "string", "minLength": 1},
     "evidence_snapshot_id": {"type": "string", "minLength": 1},
     "claim_snapshot_id": {"type": "string", "minLength": 1},
-    "format": {"enum": ["html", "pdf", "html-ppt", "pptx"]},
+    "format": {"const": "html"},
     "covered_item_ids": {
       "type": "array",
       "uniqueItems": true,

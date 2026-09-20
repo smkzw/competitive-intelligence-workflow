@@ -42,7 +42,7 @@
   "runtime": {
     "entrypoint": "design.md",
     "authority": "design_specs",
-    "collection_sha256": "d5ed65ac73ed07725ca7e1969eb3f77d7ed90a4c54f27f4e8a075365903123fa",
+    "collection_sha256": "17db5c3bd9df882649072b4a40b56f9ed8479d4b06b6b0503bc4c699de933d93",
     "latest_site_refresh": {
       "refreshed_at": "2026-08-17T23:27:00+08:00",
       "upstream_track_sha256": "29961fc88c252bdbadf217e2a77717bce4cb94bf576ec40f7c58c8b165da1d1f",
@@ -60,7 +60,7 @@
       "design_specs/core.md": "43a820323808dcbf6061226b9aaac82f64be31c0ceccc5514c929e2faf5edc5f",
       "design_specs/htmlppt_fx.md": "0c3dbbe693f2cb39d463f360376b4c6237458734f1f9d677e04a271ee3a0496a",
       "design_specs/local_map.md": "f8ced5b8de8de74267fcd48f74b07a69279f5190ab9ff05db5501cfd07798512",
-      "design_specs/project_profile.md": "dbaa60995ba7c47c381d117b242636880d0a0580958bd0c94caab88587b7bf95",
+      "design_specs/project_profile.md": "72afc46b324edbe6a5d5e4608640c808ca87123a13b430e93ce5dacffc5ea744",
       "design_specs/schemas/design-run-manifest.schema.json": "c66b1e7f41f4937dccbd450f269320db757c4070adbe955437fe44669fc12440",
       "design_specs/schemas/design-source-pack.schema.json": "d468d5c1dce0039be60c2610c5fc528ddc15087d8981a77ce44f9848198484d6",
       "design_specs/schemas/design-verdict.schema.json": "c32bdf184b7f308b645fe6107c0e35f5fc9ecf9c685eb926c55eeadea8764996",

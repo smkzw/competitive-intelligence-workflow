@@ -1,0 +1,31 @@
+{
+  "id": "phase-8-task-84-html-ppt-runtime",
+  "name": "phase-8-task-84-html-ppt-runtime",
+  "title": "Phase 8 Task 8.4：独立 HTML-PPT 运行时",
+  "description": "构建并验收独立、离线、固定 1280×720 逻辑画布的 HTML-PPT 运行时，保留讲者视图与中文交互，不复用门户或 PDF 页面。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 8.4 only：固定画布、等比居中、键盘与深链导航、页码与进度、笔记、讲者双窗、计时、离线预览及浏览器合同；不生成 A/B/C 正式幻灯片，不启动 PPTX，不实施安全测试",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": "2026-08-31",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-31-phase-8-cross-format",
+  "relatedFiles": [
+    "assets/html-ppt/",
+    "tests/fixtures/html-ppt-runtime/",
+    "tests/acceptance/test_html_ppt_runtime_smoke.py",
+    "docs/acceptance/runs/8.4/"
+  ],
+  "notes": "已通过真实 file:// Chromium/WebKit 验收；18 项合同测试和八张原始截图均已由 Codex 复核。下一任务为 Task 8.5 正式 A/B/C HTML-PPT 视觉叙事。",
+  "meta": {"phase": 8, "task": "8.4"}
+}

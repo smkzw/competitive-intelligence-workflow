@@ -1,0 +1,212 @@
+{
+  "studyVersion" : 4,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT07211542",
+        "orgStudyIdInfo" : {
+          "id" : "SHR-1905-205"
+        },
+        "organization" : {
+          "fullName" : "Guangdong Hengrui Pharmaceutical Co., Ltd",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Study to Investigate the Efficacy and Safety of SHR-1905 in Patients With Moderate-to-severe Atopic Dermatitis",
+        "officialTitle" : "A Randomized, Double-blind, Placebo-controlled Phase IIa Study to Evaluate the Efficacy and Safety of SHR-1905 Injection in Patients With Moderate to Severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2026-04",
+        "overallStatus" : "RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2025-11-07",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2026-09",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2027-02",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2025-09-30",
+        "studyFirstSubmitQcDate" : "2025-09-30",
+        "studyFirstPostDateStruct" : {
+          "date" : "2025-10-08",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2026-04-02",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2026-04-08",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Guangdong Hengrui Pharmaceutical Co., Ltd",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This trial was designed to evaluate the efficacy and safety of SHR-1905 in patients with moderate-to-severe atopic dermatitis."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Moderate-to-severe Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE2" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 75,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "SHR-1905 Injection Group - Dose 1",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SHR-1905 Injection" ],
+          "description" : "Dose 1."
+        }, {
+          "label" : "SHR-1905 Injection Placebo Group",
+          "type" : "PLACEBO_COMPARATOR",
+          "interventionNames" : [ "Drug: SHR-1905 Injection Blank Preparation" ]
+        }, {
+          "label" : "SHR-1905 Injection Group - Dose 2",
+          "type" : "EXPERIMENTAL",
+          "description" : "Dose 2.",
+          "interventionNames" : [ "Drug: SHR-1905 Injection" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "SHR-1905 Injection",
+          "description" : "SHR-1905 injection.",
+          "armGroupLabels" : [ "SHR-1905 Injection Group - Dose 1", "SHR-1905 Injection Group - Dose 2" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "SHR-1905 Injection Blank Preparation",
+          "description" : "SHR-1905 injection blank preparation.",
+          "armGroupLabels" : [ "SHR-1905 Injection Placebo Group" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "The proportion of subjects whose Eczema Area and Severity Index (EASI) score decreased ≥ 75% compared to the baseline.",
+          "description" : "Eczema Area and Severity Index (EASI) score using the Eczema Area and Severity Index scale.",
+          "timeFrame" : "Week 16."
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "The proportion of subjects with Investigator&#x27;s Global Assessment (IGA) score of 0 or 1 (on a 0-4 scale) and a decrease of ≥2 points from the baseline.",
+          "description" : "Investigator&#x27;s Global Assessment (IGA) score using the Investigator Global Assessment (IGA) scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The proportion of subjects whose Investigator&#x27;s Global Assessment (IGA) score decreased ≥ 2 points compared to the baseline.",
+          "description" : "Investigator&#x27;s Global Assessment (IGA) score using the Investigator Global Assessment (IGA) scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The change value of change in the Itch Numeric Rating Scale (Itch-NRS) score from the baseline.",
+          "description" : "The Itch Numeric Rating Scale (Itch-NRS) score using the the Worst Itch Numeric Rating Scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The percentage of change in the Itch Numeric Rating Scale (Itch-NRS) score from the baseline.",
+          "description" : "The Itch Numeric Rating Scale (Itch-NRS) score using the the Worst Itch Numeric Rating Scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The proportion of subjects whose EASI score decreased ≥ 75% compared to the baseline.",
+          "description" : "EASI score using the EASI scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The proportion of subjects whose EASI score decreased ≥ 90% compared to the baseline.",
+          "description" : "EASI score using the EASI scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The proportion of subjects whose EASI score decreased ≥ 50% compared to the baseline.",
+          "description" : "EASI score using the EASI scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The change value in EASI score from the baseline.",
+          "description" : "EASI score using the EASI scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The percentage of change in EASI score from the baseline.",
+          "description" : "EASI score using the EASI scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The change in Body Surface Area Involvement of Atopic Dermatitis (BSA) from the baseline.",
+          "description" : "BSA score using the BSA scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "The percentage of change in Body Surface Area Involvement of Atopic Dermatitis (BSA) from the baseline.",
+          "description" : "BSA score using the BSA scale.",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        }, {
+          "measure" : "Adverse events (AEs).",
+          "timeFrame" : "At Day14、Day28、Day56、Day84、Day112、Day140、Day168、Day210、Day252."
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ol><li>The subjects have voluntarily signed the informed consent form prior to the start of any procedures related to the study, are able to communicate smoothly with the researcher, understand and are willing to strictly abide by the requirements of this clinical research protocol to complete the study.</li><li>At the time of signing the informed consent, the subjects are ≥ 18 years old and ≤ 75 years old, male or female.</li><li>Have atopic dermatitis at screening.</li></ol><p>Exclusion Criteria:</p><ol><li>Hypersensitivity to the study drug or any ingredient in the study drug.</li><li>Have other active skin disease or skin complications due to other conditions that may affect the evaluation of Atopic Dermatitis (AD).</li><li>Has malignancy or has a history of malignancy.</li><li>Have serious concomitant diseases and other conditions that the investigator considers inappropriate to participate in this trial.</li><li>Females who are pregnant or lactating.</li></ol>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "Ran Li",
+          "role" : "CONTACT",
+          "phone" : "+86-0518-82342973",
+          "email" : "ran.li@hengrui.com"
+        } ],
+        "locations" : [ {
+          "facility" : "Dermatology Hospital of Southern Medical University",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "zip" : "510091",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Bin Yang",
+            "role" : "CONTACT",
+            "phone" : "+86-13922207231",
+            "email" : "yangbin101@hotmail.com"
+          }, {
+            "name" : "Bin Yang",
+            "role" : "PRINCIPAL_INVESTIGATOR"
+          }, {
+            "name" : "Suyun Ji",
+            "role" : "PRINCIPAL_INVESTIGATOR"
+          } ],
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          },
+          "status" : "RECRUITING"
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "UNDECIDED"
+      }
+    },
+    "hasResults" : false
+  }
+}

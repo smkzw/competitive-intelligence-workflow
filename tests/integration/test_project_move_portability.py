@@ -17,7 +17,7 @@ def test_project_remains_verifiable_after_move_and_contains_no_machine_path(
     contract = create_project_contract(
         indication="阵发性睡眠性血红蛋白尿症",
         reports=["A", "B"],
-        outputs=["pdf"],
+        outputs=["html"],
         timezone="Asia/Shanghai",
         cutoff="2026-08-10",
     )

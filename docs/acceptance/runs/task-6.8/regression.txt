@@ -1,0 +1,7 @@
+Task 6.8 REGRESSION
+
+- B/A/Gate/contract 相关回归：680 passed。
+- Ruff：src 与 tests 全部通过。
+- strict mypy：102 个源文件通过。
+- git diff --check：通过。
+- 本任务不创建 HTML、PDF 或 PPT；真实浏览器和视觉验收留待 Task 6.9。

@@ -1,0 +1,5 @@
+{"file": "docs/specs/competitive-intelligence-workflow-design-v1.2.md", "reason": "增量刷新、不可变版本、影响传播与草稿阻断的批准产品合同"}
+{"file": "docs/decisions/0013-site-first-v1-delivery-scope.md", "reason": "首版只重建站点式 HTML 的当前范围"}
+{"file": ".trellis/tasks/09-01-phase-9-task-92-incremental-refresh/design.md", "reason": "Task 9.2 影响图、刷新服务与恢复边界"}
+{"file": "tests/integration/test_historical_cutoff.py", "reason": "首次披露时间与截止日候选晋级的现有基线"}
+{"file": "tests/reports/test_gate_override_strictness.py", "reason": "GateSpec 只收紧与受影响报告重算的现有基线"}

@@ -123,6 +123,7 @@
         "blocking": {"type": "boolean"},
         "threshold": {"type": "integer", "minimum": 1},
         "satisfied_count": {"type": "integer", "minimum": 0},
+        "coverage_complete": {"type": "boolean", "default": true},
         "fact_version_ids": {
           "type": "array",
           "uniqueItems": true,
@@ -153,6 +154,7 @@
             "properties": {
               "applicable": {"const": true},
               "blocking": {"const": false},
+              "coverage_complete": {"const": true},
               "satisfied_count": {"minimum": 1}
             }
           }

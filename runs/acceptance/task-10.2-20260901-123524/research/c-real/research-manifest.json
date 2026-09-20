@@ -1,0 +1,517 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 555688,
+      "path": "inputs/c-real/report-c-data.json",
+      "sha256": "b4c14b62e5b4800f643a08c5fc33eb03d388ac078d5289f8c1582bc9e36ca98c"
+    },
+    {
+      "byte_size": 554174,
+      "path": "inputs/c-real/initial/report-c-data.json",
+      "sha256": "913e1ca8d3d60778e28b351315571756f8292b4ce5f42af26d22c112d7b159ed"
+    },
+    {
+      "byte_size": 555688,
+      "path": "inputs/c-real/recovery/report-c-data.json",
+      "sha256": "b4c14b62e5b4800f643a08c5fc33eb03d388ac078d5289f8c1582bc9e36ca98c"
+    },
+    {
+      "byte_size": 19690,
+      "path": "inputs/c-real/source-receipts.json",
+      "sha256": "f2d6efb2f08ab960c17ff5378bf89ff4e288cef9ef5e4593aedd9df8e779b6ad"
+    },
+    {
+      "byte_size": 18503,
+      "path": "research/c-real/product-metadata.json",
+      "sha256": "8f733b6cce0b1ae55078c87fbbbffc4e24b3a43c2b495dcbb0884f3d0162d33a"
+    },
+    {
+      "byte_size": 96347,
+      "path": "research/c-real/coverage.json",
+      "sha256": "94e466eed56d2d6dee849db69e7ef012c37babf9982e4cdf64e79240b597a886"
+    },
+    {
+      "byte_size": 157679,
+      "path": "research/c-real/registry-extracts.json",
+      "sha256": "a09cbb2aaaffb585726362dda4ad1aa555d63ad4ef3d679f7dca04528672b4c6"
+    },
+    {
+      "byte_size": 5718,
+      "path": "research/c-real/source-freshness.json",
+      "sha256": "fc761a9ac3f11a4b3b017e9595dfbd9dfca37efc85600e7ebe8e71dc9099f9b3"
+    },
+    {
+      "byte_size": 41286,
+      "path": "research/c-real/gate-initial.json",
+      "sha256": "dd27f2e0cb6398043b88415a16cbd1a8d61aa8f2e9ef1c82161fa1c0e5b46994"
+    },
+    {
+      "byte_size": 40855,
+      "path": "research/c-real/gate-recovery.json",
+      "sha256": "63aa1983d89279080db907ab0341e59ca363f1bbbe7852738bbd09b1263d1c74"
+    },
+    {
+      "byte_size": 1273,
+      "path": "research/c-real/recovery-request.json",
+      "sha256": "cbf2a0f2e0ce263887029367300e23f44d485d397e255a36e145d4745ece4412"
+    },
+    {
+      "byte_size": 956,
+      "path": "research/c-real/supplement/recovery-manifest.json",
+      "sha256": "d0b3b25481c33febb484085d5f4af564b589fa1a97b1f22e8b831b501a8fa060"
+    },
+    {
+      "byte_size": 12767,
+      "path": "research/c-real/render-check.json",
+      "sha256": "c0e4bf91c5aaeae16ff334669d9d18dddd033e146156d655a3d5d5bb5fd0e348"
+    },
+    {
+      "byte_size": 208043,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT02260986.json",
+      "sha256": "0ecc13b6624228aa5c2e8ab154640143f7a8bc79b85eb621c9040ab0fc661bdd"
+    },
+    {
+      "byte_size": 184556,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03131648.json",
+      "sha256": "dc203d7a2420433ee5e37532b675d43d44544bd1556b700c8796adc69826500c"
+    },
+    {
+      "byte_size": 158001,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03334396.json",
+      "sha256": "a6bd448f96fdd502c3e0b7b36a31e97a50fb291320a33f2cd76da2e93e809ebd"
+    },
+    {
+      "byte_size": 503921,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03569293.json",
+      "sha256": "c4a8fa331a578ec0d7a160c4eb43e707a1b4fc748477ad35711791e94ab7bd9e"
+    },
+    {
+      "byte_size": 496322,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03607422.json",
+      "sha256": "957d1f0dfcec00982bca0e57f8ce5d2073c2633e2804f8272734e8cc3833b293"
+    },
+    {
+      "byte_size": 278198,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03745651.json",
+      "sha256": "b7ce1187fd10f5bc5dc50ad19558bd99f7106a20d1617a4e4b89b0c1535a60bd"
+    },
+    {
+      "byte_size": 97577,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03761537.json",
+      "sha256": "c72fcf005a59e90e5d9e8a83637b1efaa5e495a0b0d05a97d365ec58b01fca91"
+    },
+    {
+      "byte_size": 128997,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT03985943.json",
+      "sha256": "0137d160e62e59adc7a5a24df9adada324c849119a5ccf86d0b0a18960506cf7"
+    },
+    {
+      "byte_size": 450310,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT04146363.json",
+      "sha256": "a7e6d0e7180a0cfd2ca185a34c37bcb0498cf5c034b44bd35d579cfd42666797"
+    },
+    {
+      "byte_size": 518726,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT04178967.json",
+      "sha256": "2985a5c699089365e3bda5f13d4e62aac44186242e8622d00b5469acd2e9ffe3"
+    },
+    {
+      "byte_size": 52577,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT04773587.json",
+      "sha256": "d60e96578c757ff1ab82a061d2b536489f403011fa99f5292fdebd25420bb90c"
+    },
+    {
+      "byte_size": 53019,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT04773600.json",
+      "sha256": "ea56c2891f79cc81b8575f849cc8c9d72bd575a0c5f23df35bf60d34c0d07759"
+    },
+    {
+      "byte_size": 86370,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT04921969.json",
+      "sha256": "fedb0856c985a24de77f4cc87064b885ee09dad2497e001ef04e00fffa3fd069"
+    },
+    {
+      "byte_size": 48089,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT05032859.json",
+      "sha256": "36ff60070f895fd27ac5e4b15666cf6814c88590e657e99f5cc7b0f5aed5d584"
+    },
+    {
+      "byte_size": 107577,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT05149313.json",
+      "sha256": "2dca024f2ff3b7492a44192bde0decd00f7092d690b79b47059f2544cd48decc"
+    },
+    {
+      "byte_size": 176168,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT05398445.json",
+      "sha256": "78ead594f5baec250ee3f2bddc878e2c6252503247b3c4efd43723ba57bb5d21"
+    },
+    {
+      "byte_size": 13522,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT05608343.json",
+      "sha256": "604ce550796686a07288e26d2f1a9ac5d7b638b83d37e3b5556290d98dc23f7d"
+    },
+    {
+      "byte_size": 140481,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT05651711.json",
+      "sha256": "594ceeed901ab007497574db7df9775f4b07d4411d8789ff15db1499149920ca"
+    },
+    {
+      "byte_size": 46580,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT06130566.json",
+      "sha256": "21f0df3dc53a4fc5dc167027ce5d136aa6b467c22521f0c3949c7de97e68bddb"
+    },
+    {
+      "byte_size": 78277,
+      "path": "inputs/c-real/sources/clinicaltrials/NCT06241118.json",
+      "sha256": "99daba1a71aa45f8de9904193b7196c235fcbbf0ec1b264d51900313b5542089"
+    }
+  ],
+  "coverage": {
+    "artifact": "research/c-real/coverage.json",
+    "per_product": true,
+    "per_trial": true,
+    "required_fields": [
+      "target_population",
+      "arm_randomization_blinding",
+      "primary_endpoint_definition",
+      "primary_endpoint_timepoint"
+    ],
+    "sparse_trials_visible_in_totals": true
+  },
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "indication": "中重度特应性皮炎",
+  "indication_id": "atopic-dermatitis",
+  "manifest_id": "research-c-real-expanded-20260901",
+  "product_metadata_binding": {
+    "artifact": "research/c-real/product-metadata.json",
+    "binding_requirement": "each product has one or more official registry intervention identity records with source URL, source version, source field path, and raw intervention description",
+    "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+    "per_product_rows": 12
+  },
+  "quality": {
+    "browser_or_clinical_acceptance_not_run": true,
+    "initial_failure_codes": [
+      "c_missing_timepoint"
+    ],
+    "initial_gate_decision": "blocked",
+    "recovery_failure_count": 0,
+    "recovery_gate_decision": "passed",
+    "recovery_nonblocking_gap_count": 100,
+    "render_artifact": "research/c-real/render-check.json"
+  },
+  "recovery": {
+    "initial_gate": "research/c-real/gate-initial.json",
+    "initial_variant": "inputs/c-real/initial/report-c-data.json",
+    "missing_trial_id": "nct06241118",
+    "recovered_field": "primary_endpoint_timepoint",
+    "recovered_variant": "inputs/c-real/recovery/report-c-data.json",
+    "recovery_manifest": "research/c-real/supplement/recovery-manifest.json",
+    "recovery_request": "research/c-real/recovery-request.json",
+    "same_trial_source_only": true
+  },
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "search_strategy": {
+    "discovery_endpoint": "https://clinicaltrials.gov/api/v2/studies",
+    "excluded_candidate_examples": [
+      {
+        "reason": "active-comparator record binds abrocitinib and dupilumab in one trial; omitted from one-product-per-trial C universe to avoid ambiguous product ownership",
+        "trial_id": "NCT04345367"
+      }
+    ],
+    "follow_up": "Each included record was fetched independently from the official study detail endpoint; NCT06241118 additionally uses official history version 27 because the current version was posted after cutoff",
+    "inclusion_rule": "randomized Phase III pivotal or late-stage innovative-drug atopic-dermatitis trial first posted by cutoff, with registry-backed population/grouping/intervention/endpoint/timepoint extraction",
+    "query_parameters": {
+      "pageSize": 1000,
+      "query.cond": "Atopic Dermatitis"
+    }
+  },
+  "source_freshness": {
+    "artifact": "research/c-real/source-freshness.json",
+    "fixture_comparison_only": true,
+    "live_record_count": 20,
+    "new_or_changed_live_sources": 20
+  },
+  "source_policy": {
+    "authoritative_source": "ClinicalTrials.gov official registry API detail records",
+    "critical_design_rule": "population, grouping, primary endpoint definition, and primary endpoint timepoint are accepted only from official registry observations",
+    "detail_endpoint": "https://clinicaltrials.gov/api/v2/studies/{NCT_ID}",
+    "historical_endpoint": "https://clinicaltrials.gov/api/int/studies/{NCT_ID}/history/{version}",
+    "identity_rule": "stable product/trial IDs; product identity is bound to intervention name in each official registry record; no display-name joins or cross-trial substitutions",
+    "protocol_sap_rule": "Protocol/SAP optional when registry fields cover critical design; no Protocol/SAP was required for this recovered set",
+    "selection_cutoff_rule": "studyFirstPostDateStruct.date must be on or before 2026-07-31; use the latest official history version on or before cutoff when current version is later",
+    "statistical_rule": "unreported statistical details remain not_publicly_disclosed and are nonblocking"
+  },
+  "source_receipts": {
+    "all_first_posted_on_or_before_cutoff": true,
+    "artifact": "inputs/c-real/source-receipts.json",
+    "historical_version_used_for_postcutoff_current_record": [
+      "NCT06241118"
+    ],
+    "raw_files_are_individual_detail_records": true,
+    "record_count": 20
+  },
+  "universe": {
+    "mechanism_classes": [
+      "AhR通路",
+      "JAK通路",
+      "PDE4通路",
+      "T细胞共刺激通路",
+      "细胞因子通路"
+    ],
+    "routes": [
+      "口服",
+      "外用",
+      "皮下注射"
+    ],
+    "selected_product_count": 12,
+    "selected_trial_count": 20,
+    "selected_trial_ids": [
+      "NCT02260986",
+      "NCT04178967",
+      "NCT03985943",
+      "NCT05149313",
+      "NCT03131648",
+      "NCT03761537",
+      "NCT04146363",
+      "NCT03569293",
+      "NCT03607422",
+      "NCT03334396",
+      "NCT03745651",
+      "NCT04921969",
+      "NCT04773587",
+      "NCT04773600",
+      "NCT05032859",
+      "NCT05608343",
+      "NCT05398445",
+      "NCT05651711",
+      "NCT06130566",
+      "NCT06241118"
+    ],
+    "selected_trials": [
+      {
+        "first_posted": "2014-10-09",
+        "name": "CHRONOS",
+        "phase": "III期",
+        "product_id": "dupilumab",
+        "sample_size": 740,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+        "source_version_id": "ctgov-nct02260986-0ecc13b6624228aa",
+        "status": "已完成",
+        "trial_id": "NCT02260986"
+      },
+      {
+        "first_posted": "2019-11-26",
+        "name": "ADvocate2",
+        "phase": "III期",
+        "product_id": "lebrikizumab",
+        "sample_size": 445,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+        "source_version_id": "ctgov-nct04178967-2985a5c699089365",
+        "status": "已完成",
+        "trial_id": "NCT04178967"
+      },
+      {
+        "first_posted": "2019-06-14",
+        "name": "Efficacy and Safety of Nemolizumab in Subjects With Moderate-to-Severe Atopic Dermatitis",
+        "phase": "III期",
+        "product_id": "nemolizumab",
+        "sample_size": 941,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+        "source_version_id": "ctgov-nct03985943-0137d160e62e59ad",
+        "status": "已完成",
+        "trial_id": "NCT03985943"
+      },
+      {
+        "first_posted": "2021-12-08",
+        "name": "ADvantage",
+        "phase": "III期",
+        "product_id": "lebrikizumab",
+        "sample_size": 331,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+        "source_version_id": "ctgov-nct05149313-2dca024f2ff3b749",
+        "status": "已完成",
+        "trial_id": "NCT05149313"
+      },
+      {
+        "first_posted": "2017-04-27",
+        "name": "ECZTRA 1",
+        "phase": "III期",
+        "product_id": "tralokinumab",
+        "sample_size": 802,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648",
+        "source_version_id": "ctgov-nct03131648-dc203d7a2420433e",
+        "status": "已完成",
+        "trial_id": "NCT03131648"
+      },
+      {
+        "first_posted": "2018-12-03",
+        "name": "ECZTRA 7",
+        "phase": "III期",
+        "product_id": "tralokinumab",
+        "sample_size": 277,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537",
+        "source_version_id": "ctgov-nct03761537-c72fcf005a59e90e",
+        "status": "已完成",
+        "trial_id": "NCT03761537"
+      },
+      {
+        "first_posted": "2019-10-31",
+        "name": "Evaluation of the Efficacy and Safety of Lebrikizumab (LY3650150) in Moderate to Severe Atopic Dermatitis (ADvocate1)",
+        "phase": "III期",
+        "product_id": "lebrikizumab",
+        "sample_size": 424,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363",
+        "source_version_id": "ctgov-nct04146363-a7e6d0e7180a0cfd",
+        "status": "已完成",
+        "trial_id": "NCT04146363"
+      },
+      {
+        "first_posted": "2018-06-26",
+        "name": "Measure Up 1",
+        "phase": "III期",
+        "product_id": "upadacitinib",
+        "sample_size": 912,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293",
+        "source_version_id": "ctgov-nct03569293-c4a8fa331a578ec0",
+        "status": "已完成",
+        "trial_id": "NCT03569293"
+      },
+      {
+        "first_posted": "2018-07-31",
+        "name": "A Study to Evaluate Upadacitinib in Adolescents and Adults With Moderate to Severe Atopic Dermatitis (Measure Up 2)",
+        "phase": "III期",
+        "product_id": "upadacitinib",
+        "sample_size": 912,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422",
+        "source_version_id": "ctgov-nct03607422-957d1f0dfcec0098",
+        "status": "已完成",
+        "trial_id": "NCT03607422"
+      },
+      {
+        "first_posted": "2017-11-07",
+        "name": "BREEZE-AD1",
+        "phase": "III期",
+        "product_id": "baricitinib",
+        "sample_size": 660,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396",
+        "source_version_id": "ctgov-nct03334396-a6bd448f96fdd502",
+        "status": "已完成",
+        "trial_id": "NCT03334396"
+      },
+      {
+        "first_posted": "2018-11-19",
+        "name": "TRuE AD2 - An Efficacy and Safety Study of Ruxolitinib Cream in Adolescents and Adults With Atopic Dermatitis",
+        "phase": "III期",
+        "product_id": "ruxolitinib",
+        "sample_size": 618,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651",
+        "source_version_id": "ctgov-nct03745651-b7ce1187fd10f5bc",
+        "status": "已完成",
+        "trial_id": "NCT03745651"
+      },
+      {
+        "first_posted": "2021-06-10",
+        "name": "A Study to Assess the Efficacy and Safety of Ruxolitinib Cream in Children With Atopic Dermatitis (TRuE-AD3)",
+        "phase": "III期",
+        "product_id": "ruxolitinib",
+        "sample_size": 330,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969",
+        "source_version_id": "ctgov-nct04921969-fedb0856c985a24d",
+        "status": "已完成",
+        "trial_id": "NCT04921969"
+      },
+      {
+        "first_posted": "2021-02-26",
+        "name": "INTEGUMENT-I",
+        "phase": "III期",
+        "product_id": "roflumilast",
+        "sample_size": 654,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587",
+        "source_version_id": "ctgov-nct04773587-d60e96578c757ff1",
+        "status": "已完成",
+        "trial_id": "NCT04773587"
+      },
+      {
+        "first_posted": "2021-02-26",
+        "name": "Trial of PDE4 Inhibition With Roflumilast for the Management of Atopic Dermatitis (INTEGUMENT-II)",
+        "phase": "III期",
+        "product_id": "roflumilast",
+        "sample_size": 683,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600",
+        "source_version_id": "ctgov-nct04773600-ea56c2891f79cc81",
+        "status": "已完成",
+        "trial_id": "NCT04773600"
+      },
+      {
+        "first_posted": "2021-09-02",
+        "name": "Tapinarof for the Treatment of Atopic Dermatitis in Children and Adults (DMVT-505-3102)",
+        "phase": "III期",
+        "product_id": "tapinarof",
+        "sample_size": 406,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859",
+        "source_version_id": "ctgov-nct05032859-36ff60070f895fd2",
+        "status": "已完成",
+        "trial_id": "NCT05032859"
+      },
+      {
+        "first_posted": "2022-11-08",
+        "name": "This Study is to Assess the Efficacy of Difamilast Ointment in Mild to Moderate Atopic Dermatitis(AD)",
+        "phase": "III期",
+        "product_id": "difamilast",
+        "sample_size": 153,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343",
+        "source_version_id": "ctgov-nct05608343-604ce550796686a0",
+        "status": "已完成",
+        "trial_id": "NCT05608343"
+      },
+      {
+        "first_posted": "2022-06-01",
+        "name": "ROCKET-Ignite",
+        "phase": "III期",
+        "product_id": "rocatinlimab",
+        "sample_size": 769,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445",
+        "source_version_id": "ctgov-nct05398445-78ead594f5baec25",
+        "status": "已完成",
+        "trial_id": "NCT05398445"
+      },
+      {
+        "first_posted": "2022-12-15",
+        "name": "ROCKET-Horizon",
+        "phase": "III期",
+        "product_id": "rocatinlimab",
+        "sample_size": 726,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711",
+        "source_version_id": "ctgov-nct05651711-594ceeed901ab007",
+        "status": "已完成",
+        "trial_id": "NCT05651711"
+      },
+      {
+        "first_posted": "2023-11-14",
+        "name": "COAST 1",
+        "phase": "III期",
+        "product_id": "amlitelimab",
+        "sample_size": 601,
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566",
+        "source_version_id": "ctgov-nct06130566-21f0df3dc53a4fc5",
+        "status": "已完成",
+        "trial_id": "NCT06130566"
+      },
+      {
+        "first_posted": "2024-02-05",
+        "name": "AQUA",
+        "phase": "III期",
+        "product_id": "amlitelimab",
+        "sample_size": 636,
+        "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+        "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+        "status": "招募中",
+        "trial_id": "NCT06241118"
+      }
+    ]
+  },
+  "worker_id": "worker_04"
+}

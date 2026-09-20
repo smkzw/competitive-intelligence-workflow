@@ -1,0 +1,35 @@
+{
+  "id": "phase-9-task-92-incremental-refresh",
+  "name": "phase-9-task-92-incremental-refresh",
+  "title": "Phase 9 Task 9.2：增量刷新与影响传播",
+  "description": "从最近已接受快照、来源回执、截止日后候选和缺口账本出发，只重评新适格来源并局部重建受影响声明、页面和站点产物。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 9.2 only：刷新服务、影响图、刷新图定义和集成测试；不实现监测、宿主适配或 PDF/PPT。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-01",
+  "completedAt": "2026-09-01",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "src/ci_workflow/application/refresh_service.py",
+    "src/ci_workflow/graph/impact.py",
+    "src/ci_workflow/graph/definitions/refresh.py",
+    "tests/integration/test_incremental_refresh.py"
+  ],
+  "notes": "Task 9.2 已验收：增量刷新、影响传播、六类变化台账、规则/证据/报告/质控强绑定、并行计划冲突与恢复完成；58 项聚焦验收、290 项完整集成、Ruff、mypy、包完整性通过，独立会商最终 Pass。首版只重建站点式 HTML。",
+  "meta": {
+    "phase": 9,
+    "task": "9.2",
+    "release_scope": "site_html_v1"
+  }
+}

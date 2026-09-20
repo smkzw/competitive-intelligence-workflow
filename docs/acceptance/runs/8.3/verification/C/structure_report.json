@@ -1,0 +1,3347 @@
+{
+  "report": "C",
+  "pdf": ".artifacts/pdf-complete/report-c.pdf",
+  "sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+  "pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+  "bytes": 261662,
+  "source": {
+    "path": ".artifacts/pdf-complete/report-c.pdf",
+    "sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+    "bytes": 261662,
+    "locked_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+    "locked_page_count": 20
+  },
+  "locked_input": {
+    "sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+    "page_count": 20,
+    "hash_ok": true,
+    "page_count_ok": true
+  },
+  "page_count": 20,
+  "bookmarks": [
+    "封面",
+    "目录",
+    "首页摘要",
+    "设计图谱",
+    "人群与疾病定义",
+    "入选标准",
+    "排除标准",
+    "分组、干预与对照",
+    "终点、定义与时间点",
+    "访视、疗程与随访",
+    "样本量、分析集与统计设计",
+    "逐试验详情",
+    "NCT02260986 试验档案",
+    "NCT04178967 试验档案",
+    "NCT03985943 试验档案",
+    "NCT05149313 试验档案",
+    "设计模式、权衡与可选路径",
+    "资料版本与局限"
+  ],
+  "page_sizes": [
+    [
+      595.2756,
+      841.8898
+    ],
+    [
+      595.2756,
+      841.8898
+    ],
+    [
+      595.2756,
+      841.8898
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      841.8898,
+      595.2756
+    ],
+    [
+      595.2756,
+      841.8898
+    ]
+  ],
+  "text_engine": "pdftotext",
+  "page_text_engine": "pdftotext",
+  "page_checks": {
+    "all_page_numbers": true,
+    "all_header_footer": true,
+    "all_a4": true,
+    "continued_table_pages": [
+      5,
+      6,
+      7,
+      10,
+      14
+    ]
+  },
+  "full_text": {
+    "path": "docs/acceptance/runs/8.3/verification/C/pdftotext_full.txt",
+    "sha256": "a98b376dc3ec484c6f45dbe3f4b99e419731f7674f7bbae38de95a9abc01b0d7",
+    "bytes": 53448
+  },
+  "render_dpi": 120,
+  "render_engine": "pdftoppm",
+  "coverage": {
+    "report": "C",
+    "expected_page_count": 12,
+    "registry_page_count": 12,
+    "covered_page_ids": [
+      "overview",
+      "design-map",
+      "trial-profile",
+      "population-disease-definition",
+      "inclusion-criteria",
+      "exclusion-criteria",
+      "treatment-arms",
+      "endpoint-timepoint-matrix",
+      "visit-duration-followup",
+      "sample-analysis-statistics",
+      "design-patterns",
+      "evidence-versions-limitations"
+    ],
+    "missing_page_ids": [],
+    "unexpected_bookmark_titles": [],
+    "pages": [
+      {
+        "page_responsibility_id": "overview",
+        "title_zh": "首页",
+        "covered": true,
+        "evidence": [
+          "bookmark:overview",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "design-map",
+        "title_zh": "设计图谱",
+        "covered": true,
+        "evidence": [
+          "bookmark:design-map",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "trial-profile",
+        "title_zh": "试验档案",
+        "covered": true,
+        "evidence": [
+          "bookmark:trial-profile",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "population-disease-definition",
+        "title_zh": "人群与疾病定义",
+        "covered": true,
+        "evidence": [
+          "bookmark:population-disease-definition",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "inclusion-criteria",
+        "title_zh": "入选标准",
+        "covered": true,
+        "evidence": [
+          "bookmark:inclusion-criteria",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "exclusion-criteria",
+        "title_zh": "排除标准",
+        "covered": true,
+        "evidence": [
+          "bookmark:exclusion-criteria",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "treatment-arms",
+        "title_zh": "分组、干预与对照",
+        "covered": true,
+        "evidence": [
+          "bookmark:treatment-arms",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "endpoint-timepoint-matrix",
+        "title_zh": "终点、定义与时间点",
+        "covered": true,
+        "evidence": [
+          "bookmark:endpoint-timepoint-matrix",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "visit-duration-followup",
+        "title_zh": "访视、疗程与随访",
+        "covered": true,
+        "evidence": [
+          "bookmark:visit-duration-followup",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "sample-analysis-statistics",
+        "title_zh": "样本量、分析集与统计设计",
+        "covered": true,
+        "evidence": [
+          "bookmark:sample-analysis-statistics",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "design-patterns",
+        "title_zh": "设计模式、权衡与可选路径",
+        "covered": true,
+        "evidence": [
+          "bookmark:design-patterns",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "evidence-versions-limitations",
+        "title_zh": "资料版本与局限",
+        "covered": true,
+        "evidence": [
+          "bookmark:evidence-versions-limitations",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      }
+    ],
+    "forbidden_markers_found": [],
+    "has_continued_table_marker": true,
+    "differences_approved": false,
+    "ok": true
+  },
+  "renders": [
+    "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+    "docs/acceptance/runs/8.3/verification/C/renders/page-20.png"
+  ],
+  "render_evidence": [
+    {
+      "page": 1,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+      "sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+      "bytes": 45528,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 2,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+      "sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+      "bytes": 68819,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 3,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+      "sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+      "bytes": 181817,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 4,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+      "sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+      "bytes": 192724,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 5,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+      "sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+      "bytes": 185907,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 6,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+      "sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+      "bytes": 176029,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 7,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+      "sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+      "bytes": 189993,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 8,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+      "sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+      "bytes": 234577,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 9,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+      "sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+      "bytes": 155848,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 10,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+      "sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+      "bytes": 150975,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 11,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+      "sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+      "bytes": 126326,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 12,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+      "sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+      "bytes": 120489,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 13,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+      "sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+      "bytes": 160689,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 14,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+      "sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+      "bytes": 151555,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 15,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+      "sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+      "bytes": 191206,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 16,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+      "sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+      "bytes": 180510,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 17,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+      "sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+      "bytes": 160419,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 18,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+      "sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+      "bytes": 145027,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 19,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+      "sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+      "bytes": 158728,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 20,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+      "sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+      "bytes": 422666,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    }
+  ],
+  "raw_page_images": [
+    {
+      "page": 1,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+      "sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+      "bytes": 45528,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 2,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+      "sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+      "bytes": 68819,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 3,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+      "sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+      "bytes": 181817,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 4,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+      "sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+      "bytes": 192724,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 5,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+      "sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+      "bytes": 185907,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 6,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+      "sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+      "bytes": 176029,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 7,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+      "sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+      "bytes": 189993,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 8,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+      "sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+      "bytes": 234577,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 9,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+      "sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+      "bytes": 155848,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 10,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+      "sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+      "bytes": 150975,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 11,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+      "sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+      "bytes": 126326,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 12,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+      "sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+      "bytes": 120489,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 13,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+      "sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+      "bytes": 160689,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 14,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+      "sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+      "bytes": 151555,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 15,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+      "sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+      "bytes": 191206,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 16,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+      "sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+      "bytes": 180510,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 17,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+      "sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+      "bytes": 160419,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 18,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+      "sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+      "bytes": 145027,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 19,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+      "sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+      "bytes": 158728,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    },
+    {
+      "page": 20,
+      "path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+      "sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+      "bytes": 422666,
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+    }
+  ],
+  "page_evidence": [
+    {
+      "page": 1,
+      "page_number": 1,
+      "page_number_marker": 1,
+      "expected_page_number": 1,
+      "page_number_ok": true,
+      "page_markers": [
+        1
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 1 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 1
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 118,
+      "text": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-01.txt",
+        "sha256": "156e40526d2e419f8105b1f72fde438d58174c1d89df9964728e535f8a966c18",
+        "bytes": 251
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+        "sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+        "bytes": 45528,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+        "sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+        "bytes": 45528,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-01.txt",
+      "text_sha256": "156e40526d2e419f8105b1f72fde438d58174c1d89df9964728e535f8a966c18",
+      "text_bytes": 251,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+      "render_sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+      "image_sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+      "image_bytes": 45528,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 2,
+      "page_number": 2,
+      "page_number_marker": 2,
+      "expected_page_number": 2,
+      "page_number_ok": true,
+      "page_markers": [
+        2
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 2 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 2
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 222,
+      "text": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-02.txt",
+        "sha256": "461d0fee5e3e3322e6394ee50ad2544372c7acd8c804ce530dd7568a4a3af105",
+        "bytes": 531
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+        "sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+        "bytes": 68819,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+        "sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+        "bytes": 68819,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-02.txt",
+      "text_sha256": "461d0fee5e3e3322e6394ee50ad2544372c7acd8c804ce530dd7568a4a3af105",
+      "text_bytes": 531,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+      "render_sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+      "image_sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+      "image_bytes": 68819,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 3,
+      "page_number": 3,
+      "page_number_marker": 3,
+      "expected_page_number": 3,
+      "page_number_ok": true,
+      "page_markers": [
+        3
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 3 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 3
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 837,
+      "text": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-03.txt",
+        "sha256": "3e1d590768a575b9d61f6f726017f02c6eeedb4fd59144c6d61e9a9eb2d64874",
+        "bytes": 1638
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+        "sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+        "bytes": 181817,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+        "sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+        "bytes": 181817,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-03.txt",
+      "text_sha256": "3e1d590768a575b9d61f6f726017f02c6eeedb4fd59144c6d61e9a9eb2d64874",
+      "text_bytes": 1638,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+      "render_sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+      "image_sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+      "image_bytes": 181817,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 4,
+      "page_number": 4,
+      "page_number_marker": 4,
+      "expected_page_number": 4,
+      "page_number_ok": true,
+      "page_markers": [
+        4
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 4 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 4
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2927,
+      "text": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-04.txt",
+        "sha256": "db06b55cefbab8e11a62c8341bd1a817d5fdfa5fec84032f345156a59c5934b0",
+        "bytes": 3756
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+        "sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+        "bytes": 192724,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+        "sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+        "bytes": 192724,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-04.txt",
+      "text_sha256": "db06b55cefbab8e11a62c8341bd1a817d5fdfa5fec84032f345156a59c5934b0",
+      "text_bytes": 3756,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+      "render_sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+      "image_sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+      "image_bytes": 192724,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 5,
+      "page_number": 5,
+      "page_number_marker": 5,
+      "expected_page_number": 5,
+      "page_number_ok": true,
+      "page_markers": [
+        5
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 5 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 5
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 3159,
+      "text": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-05.txt",
+        "sha256": "e16702a01bafeb613b484cd924245456b21962b26a79470834cdd0f04d9b6fb3",
+        "bytes": 3849
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+        "sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+        "bytes": 185907,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+        "sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+        "bytes": 185907,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-05.txt",
+      "text_sha256": "e16702a01bafeb613b484cd924245456b21962b26a79470834cdd0f04d9b6fb3",
+      "text_bytes": 3849,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+      "render_sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+      "image_sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+      "image_bytes": 185907,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 6,
+      "page_number": 6,
+      "page_number_marker": 6,
+      "expected_page_number": 6,
+      "page_number_ok": true,
+      "page_markers": [
+        6
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 6 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 6
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 3243,
+      "text": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-06.txt",
+        "sha256": "b387e47e336db893db9a1e7e50ef072aafa36efcb4a9a3e262caec3dc139f254",
+        "bytes": 3839
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+        "sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+        "bytes": 176029,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+        "sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+        "bytes": 176029,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-06.txt",
+      "text_sha256": "b387e47e336db893db9a1e7e50ef072aafa36efcb4a9a3e262caec3dc139f254",
+      "text_bytes": 3839,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+      "render_sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+      "image_sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+      "image_bytes": 176029,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 7,
+      "page_number": 7,
+      "page_number_marker": 7,
+      "expected_page_number": 7,
+      "page_number_ok": true,
+      "page_markers": [
+        7
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 7 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 7
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 3234,
+      "text": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-07.txt",
+        "sha256": "76b206c62f8316f4dfea0f1de75486b0bdee82d4c03ad27dc3be6c04989df36d",
+        "bytes": 4088
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+        "sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+        "bytes": 189993,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+        "sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+        "bytes": 189993,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-07.txt",
+      "text_sha256": "76b206c62f8316f4dfea0f1de75486b0bdee82d4c03ad27dc3be6c04989df36d",
+      "text_bytes": 4088,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+      "render_sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+      "image_sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+      "image_bytes": 189993,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 8,
+      "page_number": 8,
+      "page_number_marker": 8,
+      "expected_page_number": 8,
+      "page_number_ok": true,
+      "page_markers": [
+        8
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 8 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 8
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 3093,
+      "text": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-08.txt",
+        "sha256": "a794db9d303df5a00f9d89ac5605434debe215d8686f8b71a7154af66c3aae61",
+        "bytes": 4111
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+        "sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+        "bytes": 234577,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+        "sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+        "bytes": 234577,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-08.txt",
+      "text_sha256": "a794db9d303df5a00f9d89ac5605434debe215d8686f8b71a7154af66c3aae61",
+      "text_bytes": 4111,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+      "render_sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+      "image_sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+      "image_bytes": 234577,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 9,
+      "page_number": 9,
+      "page_number_marker": 9,
+      "expected_page_number": 9,
+      "page_number_ok": true,
+      "page_markers": [
+        9
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 9 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 9
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2405,
+      "text": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-09.txt",
+        "sha256": "03b7d8437a2d8c8e9a646c95e85c4daa95158744d15a9779e1cd1320a2542884",
+        "bytes": 3018
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+        "sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+        "bytes": 155848,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+        "sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+        "bytes": 155848,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-09.txt",
+      "text_sha256": "03b7d8437a2d8c8e9a646c95e85c4daa95158744d15a9779e1cd1320a2542884",
+      "text_bytes": 3018,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+      "render_sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+      "image_sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+      "image_bytes": 155848,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 10,
+      "page_number": 10,
+      "page_number_marker": 10,
+      "expected_page_number": 10,
+      "page_number_ok": true,
+      "page_markers": [
+        10
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 10 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 10
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 2685,
+      "text": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-10.txt",
+        "sha256": "ce949618f404f4ecde617727aab339fa199e63277b7b6daae4f2cb48b2fce300",
+        "bytes": 3299
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+        "sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+        "bytes": 150975,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+        "sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+        "bytes": 150975,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-10.txt",
+      "text_sha256": "ce949618f404f4ecde617727aab339fa199e63277b7b6daae4f2cb48b2fce300",
+      "text_bytes": 3299,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+      "render_sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+      "image_sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+      "image_bytes": 150975,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 11,
+      "page_number": 11,
+      "page_number_marker": 11,
+      "expected_page_number": 11,
+      "page_number_ok": true,
+      "page_markers": [
+        11
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 11 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 11
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 780,
+      "text": {
+        "page": 11,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-11.txt",
+        "sha256": "6fa73f8586d36d6a02240564aaac2777c35f2a8e047f95ccdf0b83e40b34a955",
+        "bytes": 1311
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 11,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+        "sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+        "bytes": 126326,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 11,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+        "sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+        "bytes": 126326,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-11.txt",
+      "text_sha256": "6fa73f8586d36d6a02240564aaac2777c35f2a8e047f95ccdf0b83e40b34a955",
+      "text_bytes": 1311,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+      "render_sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+      "image_sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+      "image_bytes": 126326,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 12,
+      "page_number": 12,
+      "page_number_marker": 12,
+      "expected_page_number": 12,
+      "page_number_ok": true,
+      "page_markers": [
+        12
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 12 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 12
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1226,
+      "text": {
+        "page": 12,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-12.txt",
+        "sha256": "c735ec59aa26e5a8d3279f250a8d30ab2fa65c574e67c62211eb93f2e42a55ae",
+        "bytes": 1697
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 12,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+        "sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+        "bytes": 120489,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 12,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+        "sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+        "bytes": 120489,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-12.txt",
+      "text_sha256": "c735ec59aa26e5a8d3279f250a8d30ab2fa65c574e67c62211eb93f2e42a55ae",
+      "text_bytes": 1697,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+      "render_sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+      "image_sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+      "image_bytes": 120489,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 13,
+      "page_number": 13,
+      "page_number_marker": 13,
+      "expected_page_number": 13,
+      "page_number_ok": true,
+      "page_markers": [
+        13
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 13 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 13
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2441,
+      "text": {
+        "page": 13,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-13.txt",
+        "sha256": "a0e9b39f3f5e1dceb50a5e2dd85ba07d82bf90e8135fb1526c2c672decf508ce",
+        "bytes": 3024
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 13,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+        "sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+        "bytes": 160689,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 13,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+        "sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+        "bytes": 160689,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-13.txt",
+      "text_sha256": "a0e9b39f3f5e1dceb50a5e2dd85ba07d82bf90e8135fb1526c2c672decf508ce",
+      "text_bytes": 3024,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+      "render_sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+      "image_sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+      "image_bytes": 160689,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 14,
+      "page_number": 14,
+      "page_number_marker": 14,
+      "expected_page_number": 14,
+      "page_number_ok": true,
+      "page_markers": [
+        14
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 14 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 14
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 2443,
+      "text": {
+        "page": 14,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-14.txt",
+        "sha256": "eac90ecfd4b7109058d4e703becc1400b91e9104f518c2357ef390b2ce8ebeeb",
+        "bytes": 3033
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 14,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+        "sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+        "bytes": 151555,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 14,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+        "sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+        "bytes": 151555,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-14.txt",
+      "text_sha256": "eac90ecfd4b7109058d4e703becc1400b91e9104f518c2357ef390b2ce8ebeeb",
+      "text_bytes": 3033,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+      "render_sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+      "image_sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+      "image_bytes": 151555,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 15,
+      "page_number": 15,
+      "page_number_marker": 15,
+      "expected_page_number": 15,
+      "page_number_ok": true,
+      "page_markers": [
+        15
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 15 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 15
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2235,
+      "text": {
+        "page": 15,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-15.txt",
+        "sha256": "eab32d897ef93e85d997d9b2dd2722d43470356a173d88779992ad4fc3d15a46",
+        "bytes": 2970
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 15,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+        "sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+        "bytes": 191206,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 15,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+        "sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+        "bytes": 191206,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-15.txt",
+      "text_sha256": "eab32d897ef93e85d997d9b2dd2722d43470356a173d88779992ad4fc3d15a46",
+      "text_bytes": 2970,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+      "render_sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+      "image_sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+      "image_bytes": 191206,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 16,
+      "page_number": 16,
+      "page_number_marker": 16,
+      "expected_page_number": 16,
+      "page_number_ok": true,
+      "page_markers": [
+        16
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 16 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 16
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1336,
+      "text": {
+        "page": 16,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-16.txt",
+        "sha256": "41e3645cd5dbbcbb01e056fecaf4b166ba423978f4b9f505330e8e5304862cc5",
+        "bytes": 2204
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 16,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+        "sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+        "bytes": 180510,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 16,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+        "sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+        "bytes": 180510,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-16.txt",
+      "text_sha256": "41e3645cd5dbbcbb01e056fecaf4b166ba423978f4b9f505330e8e5304862cc5",
+      "text_bytes": 2204,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+      "render_sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+      "image_sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+      "image_bytes": 180510,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 17,
+      "page_number": 17,
+      "page_number_marker": 17,
+      "expected_page_number": 17,
+      "page_number_ok": true,
+      "page_markers": [
+        17
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 17 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 17
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1416,
+      "text": {
+        "page": 17,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-17.txt",
+        "sha256": "cff9412bfb54ddc4da348d967fb71cdf9d382952d80c829f892c6203927583f9",
+        "bytes": 2178
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 17,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+        "sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+        "bytes": 160419,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 17,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+        "sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+        "bytes": 160419,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-17.txt",
+      "text_sha256": "cff9412bfb54ddc4da348d967fb71cdf9d382952d80c829f892c6203927583f9",
+      "text_bytes": 2178,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+      "render_sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+      "image_sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+      "image_bytes": 160419,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 18,
+      "page_number": 18,
+      "page_number_marker": 18,
+      "expected_page_number": 18,
+      "page_number_ok": true,
+      "page_markers": [
+        18
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 18 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 18
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1124,
+      "text": {
+        "page": 18,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-18.txt",
+        "sha256": "73cfd8bb70289fe8baeadf35f4c60209408407c961824cab718d4a32541d92ed",
+        "bytes": 1806
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 18,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+        "sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+        "bytes": 145027,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 18,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+        "sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+        "bytes": 145027,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-18.txt",
+      "text_sha256": "73cfd8bb70289fe8baeadf35f4c60209408407c961824cab718d4a32541d92ed",
+      "text_bytes": 1806,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+      "render_sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+      "image_sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+      "image_bytes": 145027,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 19,
+      "page_number": 19,
+      "page_number_marker": 19,
+      "expected_page_number": 19,
+      "page_number_ok": true,
+      "page_markers": [
+        19
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 19 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 19
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1476,
+      "text": {
+        "page": 19,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-19.txt",
+        "sha256": "a2e9d15c5fb4bcf75add85057da027350ef70ee013f3ed25d5991dfb751c86bf",
+        "bytes": 2192
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 19,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+        "sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+        "bytes": 158728,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 19,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+        "sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+        "bytes": 158728,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-19.txt",
+      "text_sha256": "a2e9d15c5fb4bcf75add85057da027350ef70ee013f3ed25d5991dfb751c86bf",
+      "text_bytes": 2192,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+      "render_sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+      "image_sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+      "image_bytes": 158728,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 20,
+      "page_number": 20,
+      "page_number_marker": 20,
+      "expected_page_number": 20,
+      "page_number_ok": true,
+      "page_markers": [
+        20
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 20 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 20
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2810,
+      "text": {
+        "page": 20,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-20.txt",
+        "sha256": "8b409ad4733ee8d77f8e3ca067359da41e680e95b27eab31d2c3d489cd4c6a02",
+        "bytes": 4633
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 20,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+        "sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+        "bytes": 422666,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 20,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+        "sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+        "bytes": 422666,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-20.txt",
+      "text_sha256": "8b409ad4733ee8d77f8e3ca067359da41e680e95b27eab31d2c3d489cd4c6a02",
+      "text_bytes": 4633,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+      "render_sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+      "image_sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+      "image_bytes": 422666,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    }
+  ],
+  "pages": [
+    {
+      "page": 1,
+      "page_number": 1,
+      "page_number_marker": 1,
+      "expected_page_number": 1,
+      "page_number_ok": true,
+      "page_markers": [
+        1
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 1 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 1
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 118,
+      "text": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-01.txt",
+        "sha256": "156e40526d2e419f8105b1f72fde438d58174c1d89df9964728e535f8a966c18",
+        "bytes": 251
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+        "sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+        "bytes": 45528,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+        "sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+        "bytes": 45528,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-01.txt",
+      "text_sha256": "156e40526d2e419f8105b1f72fde438d58174c1d89df9964728e535f8a966c18",
+      "text_bytes": 251,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+      "render_sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+      "image_sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+      "image_bytes": 45528,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 2,
+      "page_number": 2,
+      "page_number_marker": 2,
+      "expected_page_number": 2,
+      "page_number_ok": true,
+      "page_markers": [
+        2
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 2 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 2
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 222,
+      "text": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-02.txt",
+        "sha256": "461d0fee5e3e3322e6394ee50ad2544372c7acd8c804ce530dd7568a4a3af105",
+        "bytes": 531
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+        "sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+        "bytes": 68819,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+        "sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+        "bytes": 68819,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-02.txt",
+      "text_sha256": "461d0fee5e3e3322e6394ee50ad2544372c7acd8c804ce530dd7568a4a3af105",
+      "text_bytes": 531,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+      "render_sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+      "image_sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+      "image_bytes": 68819,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 3,
+      "page_number": 3,
+      "page_number_marker": 3,
+      "expected_page_number": 3,
+      "page_number_ok": true,
+      "page_markers": [
+        3
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 3 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 3
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 837,
+      "text": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-03.txt",
+        "sha256": "3e1d590768a575b9d61f6f726017f02c6eeedb4fd59144c6d61e9a9eb2d64874",
+        "bytes": 1638
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+        "sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+        "bytes": 181817,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+        "sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+        "bytes": 181817,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-03.txt",
+      "text_sha256": "3e1d590768a575b9d61f6f726017f02c6eeedb4fd59144c6d61e9a9eb2d64874",
+      "text_bytes": 1638,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+      "render_sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+      "image_sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+      "image_bytes": 181817,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 4,
+      "page_number": 4,
+      "page_number_marker": 4,
+      "expected_page_number": 4,
+      "page_number_ok": true,
+      "page_markers": [
+        4
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 4 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 4
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2927,
+      "text": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-04.txt",
+        "sha256": "db06b55cefbab8e11a62c8341bd1a817d5fdfa5fec84032f345156a59c5934b0",
+        "bytes": 3756
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+        "sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+        "bytes": 192724,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+        "sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+        "bytes": 192724,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-04.txt",
+      "text_sha256": "db06b55cefbab8e11a62c8341bd1a817d5fdfa5fec84032f345156a59c5934b0",
+      "text_bytes": 3756,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+      "render_sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+      "image_sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+      "image_bytes": 192724,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 5,
+      "page_number": 5,
+      "page_number_marker": 5,
+      "expected_page_number": 5,
+      "page_number_ok": true,
+      "page_markers": [
+        5
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 5 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 5
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 3159,
+      "text": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-05.txt",
+        "sha256": "e16702a01bafeb613b484cd924245456b21962b26a79470834cdd0f04d9b6fb3",
+        "bytes": 3849
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+        "sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+        "bytes": 185907,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+        "sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+        "bytes": 185907,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-05.txt",
+      "text_sha256": "e16702a01bafeb613b484cd924245456b21962b26a79470834cdd0f04d9b6fb3",
+      "text_bytes": 3849,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+      "render_sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+      "image_sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+      "image_bytes": 185907,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 6,
+      "page_number": 6,
+      "page_number_marker": 6,
+      "expected_page_number": 6,
+      "page_number_ok": true,
+      "page_markers": [
+        6
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 6 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 6
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 3243,
+      "text": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-06.txt",
+        "sha256": "b387e47e336db893db9a1e7e50ef072aafa36efcb4a9a3e262caec3dc139f254",
+        "bytes": 3839
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+        "sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+        "bytes": 176029,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+        "sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+        "bytes": 176029,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-06.txt",
+      "text_sha256": "b387e47e336db893db9a1e7e50ef072aafa36efcb4a9a3e262caec3dc139f254",
+      "text_bytes": 3839,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+      "render_sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+      "image_sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+      "image_bytes": 176029,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 7,
+      "page_number": 7,
+      "page_number_marker": 7,
+      "expected_page_number": 7,
+      "page_number_ok": true,
+      "page_markers": [
+        7
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 7 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 7
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 3234,
+      "text": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-07.txt",
+        "sha256": "76b206c62f8316f4dfea0f1de75486b0bdee82d4c03ad27dc3be6c04989df36d",
+        "bytes": 4088
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+        "sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+        "bytes": 189993,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+        "sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+        "bytes": 189993,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-07.txt",
+      "text_sha256": "76b206c62f8316f4dfea0f1de75486b0bdee82d4c03ad27dc3be6c04989df36d",
+      "text_bytes": 4088,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+      "render_sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+      "image_sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+      "image_bytes": 189993,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 8,
+      "page_number": 8,
+      "page_number_marker": 8,
+      "expected_page_number": 8,
+      "page_number_ok": true,
+      "page_markers": [
+        8
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 8 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 8
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 3093,
+      "text": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-08.txt",
+        "sha256": "a794db9d303df5a00f9d89ac5605434debe215d8686f8b71a7154af66c3aae61",
+        "bytes": 4111
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+        "sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+        "bytes": 234577,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+        "sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+        "bytes": 234577,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-08.txt",
+      "text_sha256": "a794db9d303df5a00f9d89ac5605434debe215d8686f8b71a7154af66c3aae61",
+      "text_bytes": 4111,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+      "render_sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+      "image_sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+      "image_bytes": 234577,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 9,
+      "page_number": 9,
+      "page_number_marker": 9,
+      "expected_page_number": 9,
+      "page_number_ok": true,
+      "page_markers": [
+        9
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 9 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 9
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2405,
+      "text": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-09.txt",
+        "sha256": "03b7d8437a2d8c8e9a646c95e85c4daa95158744d15a9779e1cd1320a2542884",
+        "bytes": 3018
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+        "sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+        "bytes": 155848,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+        "sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+        "bytes": 155848,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-09.txt",
+      "text_sha256": "03b7d8437a2d8c8e9a646c95e85c4daa95158744d15a9779e1cd1320a2542884",
+      "text_bytes": 3018,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+      "render_sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+      "image_sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+      "image_bytes": 155848,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 10,
+      "page_number": 10,
+      "page_number_marker": 10,
+      "expected_page_number": 10,
+      "page_number_ok": true,
+      "page_markers": [
+        10
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 10 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 10
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 2685,
+      "text": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-10.txt",
+        "sha256": "ce949618f404f4ecde617727aab339fa199e63277b7b6daae4f2cb48b2fce300",
+        "bytes": 3299
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+        "sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+        "bytes": 150975,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+        "sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+        "bytes": 150975,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-10.txt",
+      "text_sha256": "ce949618f404f4ecde617727aab339fa199e63277b7b6daae4f2cb48b2fce300",
+      "text_bytes": 3299,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+      "render_sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+      "image_sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+      "image_bytes": 150975,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 11,
+      "page_number": 11,
+      "page_number_marker": 11,
+      "expected_page_number": 11,
+      "page_number_ok": true,
+      "page_markers": [
+        11
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 11 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 11
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 780,
+      "text": {
+        "page": 11,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-11.txt",
+        "sha256": "6fa73f8586d36d6a02240564aaac2777c35f2a8e047f95ccdf0b83e40b34a955",
+        "bytes": 1311
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 11,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+        "sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+        "bytes": 126326,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 11,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+        "sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+        "bytes": 126326,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-11.txt",
+      "text_sha256": "6fa73f8586d36d6a02240564aaac2777c35f2a8e047f95ccdf0b83e40b34a955",
+      "text_bytes": 1311,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+      "render_sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+      "image_sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+      "image_bytes": 126326,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 12,
+      "page_number": 12,
+      "page_number_marker": 12,
+      "expected_page_number": 12,
+      "page_number_ok": true,
+      "page_markers": [
+        12
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 12 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 12
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1226,
+      "text": {
+        "page": 12,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-12.txt",
+        "sha256": "c735ec59aa26e5a8d3279f250a8d30ab2fa65c574e67c62211eb93f2e42a55ae",
+        "bytes": 1697
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 12,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+        "sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+        "bytes": 120489,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 12,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+        "sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+        "bytes": 120489,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-12.txt",
+      "text_sha256": "c735ec59aa26e5a8d3279f250a8d30ab2fa65c574e67c62211eb93f2e42a55ae",
+      "text_bytes": 1697,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+      "render_sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+      "image_sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+      "image_bytes": 120489,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 13,
+      "page_number": 13,
+      "page_number_marker": 13,
+      "expected_page_number": 13,
+      "page_number_ok": true,
+      "page_markers": [
+        13
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 13 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 13
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2441,
+      "text": {
+        "page": 13,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-13.txt",
+        "sha256": "a0e9b39f3f5e1dceb50a5e2dd85ba07d82bf90e8135fb1526c2c672decf508ce",
+        "bytes": 3024
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 13,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+        "sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+        "bytes": 160689,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 13,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+        "sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+        "bytes": 160689,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-13.txt",
+      "text_sha256": "a0e9b39f3f5e1dceb50a5e2dd85ba07d82bf90e8135fb1526c2c672decf508ce",
+      "text_bytes": 3024,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+      "render_sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+      "image_sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+      "image_bytes": 160689,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 14,
+      "page_number": 14,
+      "page_number_marker": 14,
+      "expected_page_number": 14,
+      "page_number_ok": true,
+      "page_markers": [
+        14
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 14 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 14
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 2443,
+      "text": {
+        "page": 14,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-14.txt",
+        "sha256": "eac90ecfd4b7109058d4e703becc1400b91e9104f518c2357ef390b2ce8ebeeb",
+        "bytes": 3033
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 14,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+        "sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+        "bytes": 151555,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 14,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+        "sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+        "bytes": 151555,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-14.txt",
+      "text_sha256": "eac90ecfd4b7109058d4e703becc1400b91e9104f518c2357ef390b2ce8ebeeb",
+      "text_bytes": 3033,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+      "render_sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+      "image_sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+      "image_bytes": 151555,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 15,
+      "page_number": 15,
+      "page_number_marker": 15,
+      "expected_page_number": 15,
+      "page_number_ok": true,
+      "page_markers": [
+        15
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 15 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 15
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2235,
+      "text": {
+        "page": 15,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-15.txt",
+        "sha256": "eab32d897ef93e85d997d9b2dd2722d43470356a173d88779992ad4fc3d15a46",
+        "bytes": 2970
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 15,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+        "sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+        "bytes": 191206,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 15,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+        "sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+        "bytes": 191206,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-15.txt",
+      "text_sha256": "eab32d897ef93e85d997d9b2dd2722d43470356a173d88779992ad4fc3d15a46",
+      "text_bytes": 2970,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+      "render_sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+      "image_sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+      "image_bytes": 191206,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 16,
+      "page_number": 16,
+      "page_number_marker": 16,
+      "expected_page_number": 16,
+      "page_number_ok": true,
+      "page_markers": [
+        16
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 16 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 16
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1336,
+      "text": {
+        "page": 16,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-16.txt",
+        "sha256": "41e3645cd5dbbcbb01e056fecaf4b166ba423978f4b9f505330e8e5304862cc5",
+        "bytes": 2204
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 16,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+        "sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+        "bytes": 180510,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 16,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+        "sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+        "bytes": 180510,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-16.txt",
+      "text_sha256": "41e3645cd5dbbcbb01e056fecaf4b166ba423978f4b9f505330e8e5304862cc5",
+      "text_bytes": 2204,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+      "render_sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+      "image_sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+      "image_bytes": 180510,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 17,
+      "page_number": 17,
+      "page_number_marker": 17,
+      "expected_page_number": 17,
+      "page_number_ok": true,
+      "page_markers": [
+        17
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 17 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 17
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1416,
+      "text": {
+        "page": 17,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-17.txt",
+        "sha256": "cff9412bfb54ddc4da348d967fb71cdf9d382952d80c829f892c6203927583f9",
+        "bytes": 2178
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 17,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+        "sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+        "bytes": 160419,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 17,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+        "sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+        "bytes": 160419,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-17.txt",
+      "text_sha256": "cff9412bfb54ddc4da348d967fb71cdf9d382952d80c829f892c6203927583f9",
+      "text_bytes": 2178,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+      "render_sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+      "image_sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+      "image_bytes": 160419,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 18,
+      "page_number": 18,
+      "page_number_marker": 18,
+      "expected_page_number": 18,
+      "page_number_ok": true,
+      "page_markers": [
+        18
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 18 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 18
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1124,
+      "text": {
+        "page": 18,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-18.txt",
+        "sha256": "73cfd8bb70289fe8baeadf35f4c60209408407c961824cab718d4a32541d92ed",
+        "bytes": 1806
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 18,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+        "sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+        "bytes": 145027,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 18,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+        "sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+        "bytes": 145027,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-18.txt",
+      "text_sha256": "73cfd8bb70289fe8baeadf35f4c60209408407c961824cab718d4a32541d92ed",
+      "text_bytes": 1806,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+      "render_sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+      "image_sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+      "image_bytes": 145027,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 19,
+      "page_number": 19,
+      "page_number_marker": 19,
+      "expected_page_number": 19,
+      "page_number_ok": true,
+      "page_markers": [
+        19
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 19 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 19
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1476,
+      "text": {
+        "page": 19,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-19.txt",
+        "sha256": "a2e9d15c5fb4bcf75add85057da027350ef70ee013f3ed25d5991dfb751c86bf",
+        "bytes": 2192
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 19,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+        "sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+        "bytes": 158728,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 19,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+        "sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+        "bytes": 158728,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-19.txt",
+      "text_sha256": "a2e9d15c5fb4bcf75add85057da027350ef70ee013f3ed25d5991dfb751c86bf",
+      "text_bytes": 2192,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+      "render_sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+      "image_sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+      "image_bytes": 158728,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    },
+    {
+      "page": 20,
+      "page_number": 20,
+      "page_number_marker": 20,
+      "expected_page_number": 20,
+      "page_number_ok": true,
+      "page_markers": [
+        20
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎临床试验设计比较 · 第 20 页",
+        "title": "特应性皮炎临床试验设计比较",
+        "page_number": 20
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2810,
+      "text": {
+        "page": 20,
+        "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-20.txt",
+        "sha256": "8b409ad4733ee8d77f8e3ca067359da41e680e95b27eab31d2c3d489cd4c6a02",
+        "bytes": 4633
+      },
+      "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "render": {
+        "page": 20,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+        "sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+        "bytes": 422666,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "raw_page_image": {
+        "page": 20,
+        "path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+        "sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+        "bytes": 422666,
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-20.txt",
+      "text_sha256": "8b409ad4733ee8d77f8e3ca067359da41e680e95b27eab31d2c3d489cd4c6a02",
+      "text_bytes": 4633,
+      "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+      "render_sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+      "image_path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+      "image_sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+      "image_bytes": 422666,
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+    }
+  ],
+  "page_text_count": 20,
+  "raw_page_image_count": 20,
+  "page_texts": [
+    {
+      "page": 1,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-01.txt",
+      "sha256": "156e40526d2e419f8105b1f72fde438d58174c1d89df9964728e535f8a966c18",
+      "bytes": 251
+    },
+    {
+      "page": 2,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-02.txt",
+      "sha256": "461d0fee5e3e3322e6394ee50ad2544372c7acd8c804ce530dd7568a4a3af105",
+      "bytes": 531
+    },
+    {
+      "page": 3,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-03.txt",
+      "sha256": "3e1d590768a575b9d61f6f726017f02c6eeedb4fd59144c6d61e9a9eb2d64874",
+      "bytes": 1638
+    },
+    {
+      "page": 4,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-04.txt",
+      "sha256": "db06b55cefbab8e11a62c8341bd1a817d5fdfa5fec84032f345156a59c5934b0",
+      "bytes": 3756
+    },
+    {
+      "page": 5,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-05.txt",
+      "sha256": "e16702a01bafeb613b484cd924245456b21962b26a79470834cdd0f04d9b6fb3",
+      "bytes": 3849
+    },
+    {
+      "page": 6,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-06.txt",
+      "sha256": "b387e47e336db893db9a1e7e50ef072aafa36efcb4a9a3e262caec3dc139f254",
+      "bytes": 3839
+    },
+    {
+      "page": 7,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-07.txt",
+      "sha256": "76b206c62f8316f4dfea0f1de75486b0bdee82d4c03ad27dc3be6c04989df36d",
+      "bytes": 4088
+    },
+    {
+      "page": 8,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-08.txt",
+      "sha256": "a794db9d303df5a00f9d89ac5605434debe215d8686f8b71a7154af66c3aae61",
+      "bytes": 4111
+    },
+    {
+      "page": 9,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-09.txt",
+      "sha256": "03b7d8437a2d8c8e9a646c95e85c4daa95158744d15a9779e1cd1320a2542884",
+      "bytes": 3018
+    },
+    {
+      "page": 10,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-10.txt",
+      "sha256": "ce949618f404f4ecde617727aab339fa199e63277b7b6daae4f2cb48b2fce300",
+      "bytes": 3299
+    },
+    {
+      "page": 11,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-11.txt",
+      "sha256": "6fa73f8586d36d6a02240564aaac2777c35f2a8e047f95ccdf0b83e40b34a955",
+      "bytes": 1311
+    },
+    {
+      "page": 12,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-12.txt",
+      "sha256": "c735ec59aa26e5a8d3279f250a8d30ab2fa65c574e67c62211eb93f2e42a55ae",
+      "bytes": 1697
+    },
+    {
+      "page": 13,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-13.txt",
+      "sha256": "a0e9b39f3f5e1dceb50a5e2dd85ba07d82bf90e8135fb1526c2c672decf508ce",
+      "bytes": 3024
+    },
+    {
+      "page": 14,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-14.txt",
+      "sha256": "eac90ecfd4b7109058d4e703becc1400b91e9104f518c2357ef390b2ce8ebeeb",
+      "bytes": 3033
+    },
+    {
+      "page": 15,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-15.txt",
+      "sha256": "eab32d897ef93e85d997d9b2dd2722d43470356a173d88779992ad4fc3d15a46",
+      "bytes": 2970
+    },
+    {
+      "page": 16,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-16.txt",
+      "sha256": "41e3645cd5dbbcbb01e056fecaf4b166ba423978f4b9f505330e8e5304862cc5",
+      "bytes": 2204
+    },
+    {
+      "page": 17,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-17.txt",
+      "sha256": "cff9412bfb54ddc4da348d967fb71cdf9d382952d80c829f892c6203927583f9",
+      "bytes": 2178
+    },
+    {
+      "page": 18,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-18.txt",
+      "sha256": "73cfd8bb70289fe8baeadf35f4c60209408407c961824cab718d4a32541d92ed",
+      "bytes": 1806
+    },
+    {
+      "page": 19,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-19.txt",
+      "sha256": "a2e9d15c5fb4bcf75add85057da027350ef70ee013f3ed25d5991dfb751c86bf",
+      "bytes": 2192
+    },
+    {
+      "page": 20,
+      "path": "docs/acceptance/runs/8.3/verification/C/page-text/page-20.txt",
+      "sha256": "8b409ad4733ee8d77f8e3ca067359da41e680e95b27eab31d2c3d489cd4c6a02",
+      "bytes": 4633
+    }
+  ],
+  "contact_sheet": {
+    "path": "docs/acceptance/runs/8.3/verification/C/contact-sheet.png",
+    "sha256": "37719eae2b29fc43d919f1c9041806b2ed94405caa1b16a18fe2800d53748daa",
+    "bytes": 197276,
+    "page_count": 20,
+    "columns": 4,
+    "rows": 5,
+    "tile_size": [
+      320,
+      420
+    ],
+    "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+    "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+  },
+  "contact_sheet_path": "docs/acceptance/runs/8.3/verification/C/contact-sheet.png",
+  "contact_sheet_sha256": "37719eae2b29fc43d919f1c9041806b2ed94405caa1b16a18fe2800d53748daa",
+  "evidence": {
+    "path": "docs/acceptance/runs/8.3/verification/C/evidence.json",
+    "sha256": "2e352ad9f205c785e43e70c491b02d9111355da37fc142ec172c7f78acb02024",
+    "bytes": 72794
+  },
+  "hash_binding": {
+    "source_pdf": {
+      "path": ".artifacts/pdf-complete/report-c.pdf",
+      "sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "bytes": 261662,
+      "locked_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "locked_page_count": 20
+    },
+    "page_count": 20,
+    "full_text": {
+      "path": "docs/acceptance/runs/8.3/verification/C/pdftotext_full.txt",
+      "sha256": "a98b376dc3ec484c6f45dbe3f4b99e419731f7674f7bbae38de95a9abc01b0d7",
+      "bytes": 53448
+    },
+    "pages": [
+      {
+        "page": 1,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-01.txt",
+        "text_sha256": "156e40526d2e419f8105b1f72fde438d58174c1d89df9964728e535f8a966c18",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-01.png",
+        "render_sha256": "8bb21e0bd2460b640d00975fe178d4f05ac840ae0694aa2591215bda7346defa",
+        "page_number": 1,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 2,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-02.txt",
+        "text_sha256": "461d0fee5e3e3322e6394ee50ad2544372c7acd8c804ce530dd7568a4a3af105",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-02.png",
+        "render_sha256": "87a8d5369f9f2bf9b9c493ccb0a5f725535af505515ba290ee6095fbf15b5f50",
+        "page_number": 2,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 3,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-03.txt",
+        "text_sha256": "3e1d590768a575b9d61f6f726017f02c6eeedb4fd59144c6d61e9a9eb2d64874",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-03.png",
+        "render_sha256": "c694e0df8d8959cfc60eabc17c1df95bd7dce45bf138a850a03bc1e095a01b33",
+        "page_number": 3,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 4,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-04.txt",
+        "text_sha256": "db06b55cefbab8e11a62c8341bd1a817d5fdfa5fec84032f345156a59c5934b0",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-04.png",
+        "render_sha256": "0a5eb14ede7df965f81acccff09a939fa0a303a255193e31116d3b4eeb099b40",
+        "page_number": 4,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 5,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-05.txt",
+        "text_sha256": "e16702a01bafeb613b484cd924245456b21962b26a79470834cdd0f04d9b6fb3",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-05.png",
+        "render_sha256": "f9267851884ae8989d9d4d8fee7b5a4aa5ac565b3a10a367452857b2b7a2aaba",
+        "page_number": 5,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": true
+      },
+      {
+        "page": 6,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-06.txt",
+        "text_sha256": "b387e47e336db893db9a1e7e50ef072aafa36efcb4a9a3e262caec3dc139f254",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-06.png",
+        "render_sha256": "836658ed1d5ca5812452b2109c0d486aa6075a17bc49d10b7ae71d3c11b97ac7",
+        "page_number": 6,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": true
+      },
+      {
+        "page": 7,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-07.txt",
+        "text_sha256": "76b206c62f8316f4dfea0f1de75486b0bdee82d4c03ad27dc3be6c04989df36d",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-07.png",
+        "render_sha256": "bb51cf50488efba5c235ad92e2ef9183a3f35410953cab0216641613ccbd4990",
+        "page_number": 7,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": true
+      },
+      {
+        "page": 8,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-08.txt",
+        "text_sha256": "a794db9d303df5a00f9d89ac5605434debe215d8686f8b71a7154af66c3aae61",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-08.png",
+        "render_sha256": "a1d1301f62a615b69173e494f30506e42ac3ba7a6ae2b7f2f7cf19aae5707c6c",
+        "page_number": 8,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 9,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-09.txt",
+        "text_sha256": "03b7d8437a2d8c8e9a646c95e85c4daa95158744d15a9779e1cd1320a2542884",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-09.png",
+        "render_sha256": "e11f6d39e53b82ea33c33c56a07a588bb268d1c0220ae7875de78db5b5ddc3fb",
+        "page_number": 9,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 10,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-10.txt",
+        "text_sha256": "ce949618f404f4ecde617727aab339fa199e63277b7b6daae4f2cb48b2fce300",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-10.png",
+        "render_sha256": "e28091d1c2bf1e9075f840caa04a3ae51fcea7b4fc4d0c500093c61a82feecb3",
+        "page_number": 10,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": true
+      },
+      {
+        "page": 11,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-11.txt",
+        "text_sha256": "6fa73f8586d36d6a02240564aaac2777c35f2a8e047f95ccdf0b83e40b34a955",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-11.png",
+        "render_sha256": "6be5f6a9d8685a1635ffdca56694c9c912d322a154ef5f338d989535efc9cd5e",
+        "page_number": 11,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 12,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-12.txt",
+        "text_sha256": "c735ec59aa26e5a8d3279f250a8d30ab2fa65c574e67c62211eb93f2e42a55ae",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-12.png",
+        "render_sha256": "d898b52562e1b0074d25ca70f65af90e69ff0dacd3c15f2b4d40a902c8d59c26",
+        "page_number": 12,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 13,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-13.txt",
+        "text_sha256": "a0e9b39f3f5e1dceb50a5e2dd85ba07d82bf90e8135fb1526c2c672decf508ce",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-13.png",
+        "render_sha256": "4066ad25e6e2f6abfff3d21a5e82f57beacd615918a406fd7e81195a9a0c66f8",
+        "page_number": 13,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 14,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-14.txt",
+        "text_sha256": "eac90ecfd4b7109058d4e703becc1400b91e9104f518c2357ef390b2ce8ebeeb",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-14.png",
+        "render_sha256": "d522389b4e3d0cf20f1b39528a4ff01d2a50bc3f251b741e3323510aba319cd4",
+        "page_number": 14,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": true
+      },
+      {
+        "page": 15,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-15.txt",
+        "text_sha256": "eab32d897ef93e85d997d9b2dd2722d43470356a173d88779992ad4fc3d15a46",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-15.png",
+        "render_sha256": "2536ac917326bfb4179fa241772da596ab1361e1b356a617a31dc62937e6ad4a",
+        "page_number": 15,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 16,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-16.txt",
+        "text_sha256": "41e3645cd5dbbcbb01e056fecaf4b166ba423978f4b9f505330e8e5304862cc5",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-16.png",
+        "render_sha256": "526aae5c697e0038a062c54b4c9b789a580e01393d4b830d20fc1eb434e74ee1",
+        "page_number": 16,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 17,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-17.txt",
+        "text_sha256": "cff9412bfb54ddc4da348d967fb71cdf9d382952d80c829f892c6203927583f9",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-17.png",
+        "render_sha256": "5b1af0e3307c3404307f26713858a20a080a95aaf1ec482d45569662c4430084",
+        "page_number": 17,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 18,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-18.txt",
+        "text_sha256": "73cfd8bb70289fe8baeadf35f4c60209408407c961824cab718d4a32541d92ed",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-18.png",
+        "render_sha256": "3bb2bf3aca7600178d5b2cd9b1f7430cb3513bf77bc54e8e120bb7a2ef2fd9d0",
+        "page_number": 18,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 19,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-19.txt",
+        "text_sha256": "a2e9d15c5fb4bcf75add85057da027350ef70ee013f3ed25d5991dfb751c86bf",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-19.png",
+        "render_sha256": "9c965717f062ca057792e98b4d2c1162e023687a67d7509c5d907ce446d3fd6c",
+        "page_number": 19,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 20,
+        "text_path": "docs/acceptance/runs/8.3/verification/C/page-text/page-20.txt",
+        "text_sha256": "8b409ad4733ee8d77f8e3ca067359da41e680e95b27eab31d2c3d489cd4c6a02",
+        "render_path": "docs/acceptance/runs/8.3/verification/C/renders/page-20.png",
+        "render_sha256": "b20dbf34a27465552539fdbde2c72e89f8dfe15ea9083829747dcf6df5ce8216",
+        "page_number": 20,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      }
+    ],
+    "contact_sheet_sha256": "37719eae2b29fc43d919f1c9041806b2ed94405caa1b16a18fe2800d53748daa",
+    "digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+  },
+  "defects": [],
+  "ok": true
+}

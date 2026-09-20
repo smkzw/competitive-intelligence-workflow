@@ -478,6 +478,23 @@ class TestPortalShell:
             == manifest["files"]["portal.js"]["sha256"]
         )
 
+    def test_all_shared_portal_assets_match_repo_and_manifest(self) -> None:
+        """F8：全部共享资产双副本字节相等，manifest 摘要按模块内发货副本校验。"""
+        module_assets = ROOT / "src" / "ci_workflow" / "renderers" / "portal" / "assets"
+        repo_portal = ROOT / "assets" / "portal"
+        manifest = json.loads((repo_portal / "manifest.json").read_text(encoding="utf-8"))
+
+        shared = ("charts.js", "portal.css", "portal.js",
+                  "evidence-drawer.css", "evidence-drawer.js")
+        for name in shared:
+            repo_copy = repo_portal / name
+            module_copy = module_assets / name
+            assert module_copy.read_bytes() == repo_copy.read_bytes(), name
+            entry = manifest["files"].get(name)
+            assert entry is not None, f"manifest 缺少共享资产：{name}"
+            # 运行期消费的是模块内副本；摘要必须绑定发货字节本身。
+            assert hashlib.sha256(module_copy.read_bytes()).hexdigest() == entry["sha256"], name
+
     def test_wheel_install_can_build_portal(self, tmp_path: Path) -> None:
         dist_dir = tmp_path / "dist"
         venv_dir = tmp_path / "wheel-venv"

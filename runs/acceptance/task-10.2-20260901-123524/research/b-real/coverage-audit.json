@@ -1,0 +1,1567 @@
+{
+  "aggregate": {
+    "empty_included_products": [],
+    "product_count": 5,
+    "rows_by_domain": {
+      "baseline": 46,
+      "disposition": 145,
+      "efficacy": 33,
+      "safety": 51
+    },
+    "trial_count": 6
+  },
+  "coverage": [
+    {
+      "domain": "efficacy",
+      "evidence": [
+        "src-ctgov-apply-20241009",
+        "src-ctgov-appoint-20241009",
+        "src-fda-empaveli-20210514",
+        "src-fda-piasky-20240620",
+        "src-fda-voydeya-20240329",
+        "src-pubmed-champion301-20181206",
+        "src-pubmed-pegasus-20210311"
+      ],
+      "facts": 33,
+      "notes": [
+        "数字值来自来源直接报告；未公开字段不以零或其他字段替代"
+      ],
+      "required": [
+        "来源定位",
+        "产品/试验/组别闭合",
+        "披露状态"
+      ],
+      "status": "covered"
+    },
+    {
+      "domain": "safety",
+      "evidence": [
+        "src-cadth-table18-202507",
+        "src-ctgov-appoint-20241009",
+        "src-dailymed-fabhalta-20260716",
+        "src-fda-empaveli-20210514",
+        "src-fda-piasky-20240620",
+        "src-fda-voydeya-20240329",
+        "src-pubmed-champion301-20181206",
+        "src-pubmed-final-20250530"
+      ],
+      "facts": 51,
+      "notes": [
+        "数字值来自来源直接报告；未公开字段不以零或其他字段替代"
+      ],
+      "required": [
+        "来源定位",
+        "产品/试验/组别闭合",
+        "披露状态"
+      ],
+      "status": "covered_with_explicit_missingness"
+    },
+    {
+      "domain": "baseline",
+      "evidence": [
+        "src-ctgov-apply-20241009",
+        "src-ctgov-appoint-20241009",
+        "src-fda-empaveli-20210514",
+        "src-fda-piasky-20240620",
+        "src-fda-ultomiris-20181221",
+        "src-fda-voydeya-20240329",
+        "src-hcp-design-202506"
+      ],
+      "facts": 46,
+      "notes": [
+        "数字值来自来源直接报告；未公开字段不以零或其他字段替代"
+      ],
+      "required": [
+        "来源定位",
+        "产品/试验/组别闭合",
+        "披露状态"
+      ],
+      "status": "covered_with_explicit_missingness"
+    },
+    {
+      "domain": "disposition",
+      "evidence": [
+        "src-cadth-table11-202507",
+        "src-cadth-table13-202507",
+        "src-ctgov-alpha-20260731",
+        "src-ctgov-apply-20241009",
+        "src-ctgov-appoint-20241009",
+        "src-ctgov-champion301-20260731",
+        "src-ctgov-commodore2-20260731",
+        "src-fda-empaveli-20210514",
+        "src-pubmed-champion301-20181206"
+      ],
+      "facts": 145,
+      "notes": [
+        "数字值来自来源直接报告；未公开字段不以零或其他字段替代"
+      ],
+      "required": [
+        "来源定位",
+        "产品/试验/组别闭合",
+        "披露状态"
+      ],
+      "status": "covered_with_explicit_missingness"
+    }
+  ],
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "gate": {
+    "baseline_gate_failures": [],
+    "gate_passed": true,
+    "required_concepts_by_trial_group": "see report_b_baseline_gate_failures output"
+  },
+  "indication": "阵发性睡眠性血红蛋白尿",
+  "limitations": [
+    "本包来源获取晚于历史cutoff；所有进入快照的事实按first_disclosed_at筛选。",
+    "未执行最终浏览器或临床接受。"
+  ],
+  "missingness_audit": [
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 3
+      },
+      "numeric_rows": 3,
+      "product_id": "iptacopan",
+      "rows": 3,
+      "source_version_ids": [
+        "src-ctgov-apply-20241009",
+        "src-ctgov-appoint-20241009"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 2,
+      "missing_states": {
+        "not_publicly_disclosed": 2,
+        "reported_value": 14,
+        "reported_zero": 3
+      },
+      "numeric_rows": 17,
+      "product_id": "iptacopan",
+      "rows": 19,
+      "source_version_ids": [
+        "src-cadth-table18-202507",
+        "src-ctgov-appoint-20241009",
+        "src-dailymed-fabhalta-20260716",
+        "src-pubmed-final-20250530"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 12
+      },
+      "numeric_rows": 12,
+      "product_id": "iptacopan",
+      "rows": 12,
+      "source_version_ids": [
+        "src-ctgov-apply-20241009",
+        "src-ctgov-appoint-20241009",
+        "src-hcp-design-202506"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 28,
+      "missing_states": {
+        "not_publicly_disclosed": 28,
+        "reported_value": 28,
+        "reported_zero": 6
+      },
+      "numeric_rows": 34,
+      "product_id": "iptacopan",
+      "rows": 62,
+      "source_version_ids": [
+        "src-cadth-table11-202507",
+        "src-cadth-table13-202507",
+        "src-ctgov-apply-20241009",
+        "src-ctgov-appoint-20241009"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 4
+      },
+      "numeric_rows": 4,
+      "product_id": "pegcetacoplan",
+      "rows": 4,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514",
+        "src-pubmed-pegasus-20210311"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 6,
+        "reported_zero": 2
+      },
+      "numeric_rows": 8,
+      "product_id": "pegcetacoplan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "pegcetacoplan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 8,
+      "missing_states": {
+        "not_publicly_disclosed": 8,
+        "reported_value": 12,
+        "reported_zero": 2
+      },
+      "numeric_rows": 14,
+      "product_id": "pegcetacoplan",
+      "rows": 22,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 7,
+        "reported_zero": 1
+      },
+      "numeric_rows": 8,
+      "product_id": "danicopan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-voydeya-20240329"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 3,
+      "missing_states": {
+        "not_publicly_disclosed": 3,
+        "reported_value": 5
+      },
+      "numeric_rows": 5,
+      "product_id": "danicopan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-voydeya-20240329"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 2,
+      "missing_states": {
+        "not_publicly_disclosed": 2,
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "danicopan",
+      "rows": 10,
+      "source_version_ids": [
+        "src-fda-voydeya-20240329"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 16,
+      "missing_states": {
+        "not_publicly_disclosed": 16,
+        "reported_value": 4
+      },
+      "numeric_rows": 4,
+      "product_id": "danicopan",
+      "rows": 20,
+      "source_version_ids": [
+        "src-ctgov-alpha-20260731"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 10
+      },
+      "numeric_rows": 10,
+      "product_id": "ravulizumab",
+      "rows": 10,
+      "source_version_ids": [
+        "src-pubmed-champion301-20181206"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 6,
+        "reported_zero": 2
+      },
+      "numeric_rows": 8,
+      "product_id": "ravulizumab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-pubmed-champion301-20181206"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "ravulizumab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-ultomiris-20181221"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 8,
+      "missing_states": {
+        "not_publicly_disclosed": 8,
+        "reported_value": 11,
+        "reported_zero": 2
+      },
+      "numeric_rows": 13,
+      "product_id": "ravulizumab",
+      "rows": 21,
+      "source_version_ids": [
+        "src-ctgov-champion301-20260731",
+        "src-pubmed-champion301-20181206"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-piasky-20240620"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-piasky-20240620"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-piasky-20240620"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 12,
+      "missing_states": {
+        "not_publicly_disclosed": 12,
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 20,
+      "source_version_ids": [
+        "src-ctgov-commodore2-20260731"
+      ],
+      "trial_id": null
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 2
+      },
+      "numeric_rows": 2,
+      "product_id": "iptacopan",
+      "rows": 2,
+      "source_version_ids": [
+        "src-ctgov-apply-20241009"
+      ],
+      "trial_id": "nct04558918"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 10,
+        "reported_zero": 2
+      },
+      "numeric_rows": 12,
+      "product_id": "iptacopan",
+      "rows": 12,
+      "source_version_ids": [
+        "src-cadth-table18-202507"
+      ],
+      "trial_id": "nct04558918"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "iptacopan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-ctgov-apply-20241009",
+        "src-hcp-design-202506"
+      ],
+      "trial_id": "nct04558918"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 16,
+      "missing_states": {
+        "not_publicly_disclosed": 16,
+        "reported_value": 23,
+        "reported_zero": 4
+      },
+      "numeric_rows": 27,
+      "product_id": "iptacopan",
+      "rows": 43,
+      "source_version_ids": [
+        "src-cadth-table11-202507",
+        "src-cadth-table13-202507",
+        "src-ctgov-apply-20241009"
+      ],
+      "trial_id": "nct04558918"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 1
+      },
+      "numeric_rows": 1,
+      "product_id": "iptacopan",
+      "rows": 1,
+      "source_version_ids": [
+        "src-ctgov-appoint-20241009"
+      ],
+      "trial_id": "nct04820530"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 2,
+      "missing_states": {
+        "not_publicly_disclosed": 2,
+        "reported_value": 4,
+        "reported_zero": 1
+      },
+      "numeric_rows": 5,
+      "product_id": "iptacopan",
+      "rows": 7,
+      "source_version_ids": [
+        "src-ctgov-appoint-20241009",
+        "src-dailymed-fabhalta-20260716",
+        "src-pubmed-final-20250530"
+      ],
+      "trial_id": "nct04820530"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 4
+      },
+      "numeric_rows": 4,
+      "product_id": "iptacopan",
+      "rows": 4,
+      "source_version_ids": [
+        "src-ctgov-appoint-20241009",
+        "src-hcp-design-202506"
+      ],
+      "trial_id": "nct04820530"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 12,
+      "missing_states": {
+        "not_publicly_disclosed": 12,
+        "reported_value": 5,
+        "reported_zero": 2
+      },
+      "numeric_rows": 7,
+      "product_id": "iptacopan",
+      "rows": 19,
+      "source_version_ids": [
+        "src-ctgov-appoint-20241009"
+      ],
+      "trial_id": "nct04820530"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 4
+      },
+      "numeric_rows": 4,
+      "product_id": "pegcetacoplan",
+      "rows": 4,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514",
+        "src-pubmed-pegasus-20210311"
+      ],
+      "trial_id": "nct03500549"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 6,
+        "reported_zero": 2
+      },
+      "numeric_rows": 8,
+      "product_id": "pegcetacoplan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514"
+      ],
+      "trial_id": "nct03500549"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "pegcetacoplan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514"
+      ],
+      "trial_id": "nct03500549"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 8,
+      "missing_states": {
+        "not_publicly_disclosed": 8,
+        "reported_value": 12,
+        "reported_zero": 2
+      },
+      "numeric_rows": 14,
+      "product_id": "pegcetacoplan",
+      "rows": 22,
+      "source_version_ids": [
+        "src-fda-empaveli-20210514"
+      ],
+      "trial_id": "nct03500549"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 7,
+        "reported_zero": 1
+      },
+      "numeric_rows": 8,
+      "product_id": "danicopan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-voydeya-20240329"
+      ],
+      "trial_id": "nct04469465"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 3,
+      "missing_states": {
+        "not_publicly_disclosed": 3,
+        "reported_value": 5
+      },
+      "numeric_rows": 5,
+      "product_id": "danicopan",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-voydeya-20240329"
+      ],
+      "trial_id": "nct04469465"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 2,
+      "missing_states": {
+        "not_publicly_disclosed": 2,
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "danicopan",
+      "rows": 10,
+      "source_version_ids": [
+        "src-fda-voydeya-20240329"
+      ],
+      "trial_id": "nct04469465"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 16,
+      "missing_states": {
+        "not_publicly_disclosed": 16,
+        "reported_value": 4
+      },
+      "numeric_rows": 4,
+      "product_id": "danicopan",
+      "rows": 20,
+      "source_version_ids": [
+        "src-ctgov-alpha-20260731"
+      ],
+      "trial_id": "nct04469465"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 10
+      },
+      "numeric_rows": 10,
+      "product_id": "ravulizumab",
+      "rows": 10,
+      "source_version_ids": [
+        "src-pubmed-champion301-20181206"
+      ],
+      "trial_id": "nct02946463"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 6,
+        "reported_zero": 2
+      },
+      "numeric_rows": 8,
+      "product_id": "ravulizumab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-pubmed-champion301-20181206"
+      ],
+      "trial_id": "nct02946463"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "ravulizumab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-ultomiris-20181221"
+      ],
+      "trial_id": "nct02946463"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 8,
+      "missing_states": {
+        "not_publicly_disclosed": 8,
+        "reported_value": 11,
+        "reported_zero": 2
+      },
+      "numeric_rows": 13,
+      "product_id": "ravulizumab",
+      "rows": 21,
+      "source_version_ids": [
+        "src-ctgov-champion301-20260731",
+        "src-pubmed-champion301-20181206"
+      ],
+      "trial_id": "nct02946463"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "efficacy",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-piasky-20240620"
+      ],
+      "trial_id": "nct04434092"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "safety",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-piasky-20240620"
+      ],
+      "trial_id": "nct04434092"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "baseline",
+      "missing_rows": 0,
+      "missing_states": {
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 8,
+      "source_version_ids": [
+        "src-fda-piasky-20240620"
+      ],
+      "trial_id": "nct04434092"
+    },
+    {
+      "diagnosis": "source_route_success_with_explicit_public_disclosure_state",
+      "domain": "disposition",
+      "missing_rows": 12,
+      "missing_states": {
+        "not_publicly_disclosed": 12,
+        "reported_value": 8
+      },
+      "numeric_rows": 8,
+      "product_id": "crovalimab",
+      "rows": 20,
+      "source_version_ids": [
+        "src-ctgov-commodore2-20260731"
+      ],
+      "trial_id": "nct04434092"
+    }
+  ],
+  "per_product": [
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 12
+          },
+          "numeric_rows": 12,
+          "rows": 12,
+          "source_version_ids": [
+            "src-ctgov-apply-20241009",
+            "src-ctgov-appoint-20241009",
+            "src-hcp-design-202506"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 28,
+          "missing_states": {
+            "not_publicly_disclosed": 28,
+            "reported_value": 28,
+            "reported_zero": 6
+          },
+          "numeric_rows": 34,
+          "rows": 62,
+          "source_version_ids": [
+            "src-cadth-table11-202507",
+            "src-cadth-table13-202507",
+            "src-ctgov-apply-20241009",
+            "src-ctgov-appoint-20241009"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 3
+          },
+          "numeric_rows": 3,
+          "rows": 3,
+          "source_version_ids": [
+            "src-ctgov-apply-20241009",
+            "src-ctgov-appoint-20241009"
+          ]
+        },
+        "safety": {
+          "missing_rows": 2,
+          "missing_states": {
+            "not_publicly_disclosed": 2,
+            "reported_value": 14,
+            "reported_zero": 3
+          },
+          "numeric_rows": 17,
+          "rows": 19,
+          "source_version_ids": [
+            "src-cadth-table18-202507",
+            "src-ctgov-appoint-20241009",
+            "src-dailymed-fabhalta-20260716",
+            "src-pubmed-final-20250530"
+          ]
+        }
+      },
+      "empty_competitor": false,
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "mechanism": "因子B",
+      "product_id": "iptacopan",
+      "state": "included",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct04558918",
+        "nct04820530"
+      ]
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 8,
+          "missing_states": {
+            "not_publicly_disclosed": 8,
+            "reported_value": 12,
+            "reported_zero": 2
+          },
+          "numeric_rows": 14,
+          "rows": 22,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 4
+          },
+          "numeric_rows": 4,
+          "rows": 4,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514",
+            "src-pubmed-pegasus-20210311"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 6,
+            "reported_zero": 2
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514"
+          ]
+        }
+      },
+      "empty_competitor": false,
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "mechanism": "C3",
+      "product_id": "pegcetacoplan",
+      "state": "included",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct03500549"
+      ]
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 2,
+          "missing_states": {
+            "not_publicly_disclosed": 2,
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 10,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 16,
+          "missing_states": {
+            "not_publicly_disclosed": 16,
+            "reported_value": 4
+          },
+          "numeric_rows": 4,
+          "rows": 20,
+          "source_version_ids": [
+            "src-ctgov-alpha-20260731"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 7,
+            "reported_zero": 1
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        },
+        "safety": {
+          "missing_rows": 3,
+          "missing_states": {
+            "not_publicly_disclosed": 3,
+            "reported_value": 5
+          },
+          "numeric_rows": 5,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        }
+      },
+      "empty_competitor": false,
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "mechanism": "因子D",
+      "product_id": "danicopan",
+      "state": "included",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct04469465"
+      ]
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-ultomiris-20181221"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 8,
+          "missing_states": {
+            "not_publicly_disclosed": 8,
+            "reported_value": 11,
+            "reported_zero": 2
+          },
+          "numeric_rows": 13,
+          "rows": 21,
+          "source_version_ids": [
+            "src-ctgov-champion301-20260731",
+            "src-pubmed-champion301-20181206"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 10
+          },
+          "numeric_rows": 10,
+          "rows": 10,
+          "source_version_ids": [
+            "src-pubmed-champion301-20181206"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 6,
+            "reported_zero": 2
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-pubmed-champion301-20181206"
+          ]
+        }
+      },
+      "empty_competitor": false,
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "mechanism": "C5",
+      "product_id": "ravulizumab",
+      "state": "included",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct02946463"
+      ]
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 12,
+          "missing_states": {
+            "not_publicly_disclosed": 12,
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 20,
+          "source_version_ids": [
+            "src-ctgov-commodore2-20260731"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        }
+      },
+      "empty_competitor": false,
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "mechanism": "C5",
+      "product_id": "crovalimab",
+      "state": "included",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct04434092"
+      ]
+    }
+  ],
+  "per_trial": [
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-ctgov-apply-20241009",
+            "src-hcp-design-202506"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 16,
+          "missing_states": {
+            "not_publicly_disclosed": 16,
+            "reported_value": 23,
+            "reported_zero": 4
+          },
+          "numeric_rows": 27,
+          "rows": 43,
+          "source_version_ids": [
+            "src-cadth-table11-202507",
+            "src-cadth-table13-202507",
+            "src-ctgov-apply-20241009"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 2
+          },
+          "numeric_rows": 2,
+          "rows": 2,
+          "source_version_ids": [
+            "src-ctgov-apply-20241009"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 10,
+            "reported_zero": 2
+          },
+          "numeric_rows": 12,
+          "rows": 12,
+          "source_version_ids": [
+            "src-cadth-table18-202507"
+          ]
+        }
+      },
+      "group_ids": [
+        "apply-control",
+        "apply-treatment"
+      ],
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "product_id": "iptacopan",
+      "state": "included",
+      "trial_id": "nct04558918"
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 4
+          },
+          "numeric_rows": 4,
+          "rows": 4,
+          "source_version_ids": [
+            "src-ctgov-appoint-20241009",
+            "src-hcp-design-202506"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 12,
+          "missing_states": {
+            "not_publicly_disclosed": 12,
+            "reported_value": 5,
+            "reported_zero": 2
+          },
+          "numeric_rows": 7,
+          "rows": 19,
+          "source_version_ids": [
+            "src-ctgov-appoint-20241009"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 1
+          },
+          "numeric_rows": 1,
+          "rows": 1,
+          "source_version_ids": [
+            "src-ctgov-appoint-20241009"
+          ]
+        },
+        "safety": {
+          "missing_rows": 2,
+          "missing_states": {
+            "not_publicly_disclosed": 2,
+            "reported_value": 4,
+            "reported_zero": 1
+          },
+          "numeric_rows": 5,
+          "rows": 7,
+          "source_version_ids": [
+            "src-ctgov-appoint-20241009",
+            "src-dailymed-fabhalta-20260716",
+            "src-pubmed-final-20250530"
+          ]
+        }
+      },
+      "group_ids": [
+        "appoint-treatment"
+      ],
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "product_id": "iptacopan",
+      "state": "included",
+      "trial_id": "nct04820530"
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 8,
+          "missing_states": {
+            "not_publicly_disclosed": 8,
+            "reported_value": 12,
+            "reported_zero": 2
+          },
+          "numeric_rows": 14,
+          "rows": 22,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 4
+          },
+          "numeric_rows": 4,
+          "rows": 4,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514",
+            "src-pubmed-pegasus-20210311"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 6,
+            "reported_zero": 2
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-empaveli-20210514"
+          ]
+        }
+      },
+      "group_ids": [
+        "peg-control",
+        "peg-treatment"
+      ],
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "product_id": "pegcetacoplan",
+      "state": "included",
+      "trial_id": "nct03500549"
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 2,
+          "missing_states": {
+            "not_publicly_disclosed": 2,
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 10,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 16,
+          "missing_states": {
+            "not_publicly_disclosed": 16,
+            "reported_value": 4
+          },
+          "numeric_rows": 4,
+          "rows": 20,
+          "source_version_ids": [
+            "src-ctgov-alpha-20260731"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 7,
+            "reported_zero": 1
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        },
+        "safety": {
+          "missing_rows": 3,
+          "missing_states": {
+            "not_publicly_disclosed": 3,
+            "reported_value": 5
+          },
+          "numeric_rows": 5,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-voydeya-20240329"
+          ]
+        }
+      },
+      "group_ids": [
+        "dani-control",
+        "dani-treatment"
+      ],
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "product_id": "danicopan",
+      "state": "included",
+      "trial_id": "nct04469465"
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-ultomiris-20181221"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 8,
+          "missing_states": {
+            "not_publicly_disclosed": 8,
+            "reported_value": 11,
+            "reported_zero": 2
+          },
+          "numeric_rows": 13,
+          "rows": 21,
+          "source_version_ids": [
+            "src-ctgov-champion301-20260731",
+            "src-pubmed-champion301-20181206"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 10
+          },
+          "numeric_rows": 10,
+          "rows": 10,
+          "source_version_ids": [
+            "src-pubmed-champion301-20181206"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 6,
+            "reported_zero": 2
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-pubmed-champion301-20181206"
+          ]
+        }
+      },
+      "group_ids": [
+        "rav-control",
+        "rav-treatment"
+      ],
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "product_id": "ravulizumab",
+      "state": "included",
+      "trial_id": "nct02946463"
+    },
+    {
+      "domains": {
+        "baseline": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        },
+        "disposition": {
+          "missing_rows": 12,
+          "missing_states": {
+            "not_publicly_disclosed": 12,
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 20,
+          "source_version_ids": [
+            "src-ctgov-commodore2-20260731"
+          ]
+        },
+        "efficacy": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        },
+        "safety": {
+          "missing_rows": 0,
+          "missing_states": {
+            "reported_value": 8
+          },
+          "numeric_rows": 8,
+          "rows": 8,
+          "source_version_ids": [
+            "src-fda-piasky-20240620"
+          ]
+        }
+      },
+      "group_ids": [
+        "crov-control",
+        "crov-treatment"
+      ],
+      "key_evidence": {
+        "baseline": true,
+        "disposition": true,
+        "efficacy": true,
+        "safety": true
+      },
+      "product_id": "crovalimab",
+      "state": "included",
+      "trial_id": "nct04434092"
+    }
+  ],
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "state": "research_ready_html_pending"
+}

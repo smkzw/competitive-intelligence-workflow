@@ -1,0 +1,952 @@
+schema_version: '1.0'
+cases:
+- id: landscape-global-china-maturity
+  name_zh: 全球中国成熟度范围
+  description_zh: 固定全球/中国与本地/境外项目范围，并同时覆盖成熟有结果和早期无结果项目。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 2691a4f1f3d5c383890037696e404c02389477293fbdef2b371e26a5ae551a9a
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 全球/中国与本地/境外作为独立范围维度保留，成熟有结果与早期无结果项目均不被删除。
+    - 成熟度和结果承载状态由已核验证据推导，早期无结果不得补成零值或结果。
+    prohibited_outcomes:
+    - 不得折叠中国与境外、全球与本地的来源范围，也不得借用另一地域事实。
+    - 不得把早期无结果项目伪造为成熟结果项目，或以区域缺口静默删除项目。
+  verifiers:
+  - kind: pytest
+    target: tests/reports/a/test_maturity_gate.py::test_l1_region_requires_stage_status_date_together_or_uniform_not_applicable
+    command: uv run pytest tests/reports/a/test_maturity_gate.py::test_l1_region_requires_stage_status_date_together_or_uniform_not_applicable
+      -q
+  - kind: pytest
+    target: tests/reports/a/test_maturity_gate.py::test_result_bearing_project_with_complete_records_passes
+    command: uv run pytest tests/reports/a/test_maturity_gate.py::test_result_bearing_project_with_complete_records_passes
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/landscape-global-china-maturity.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 4af6c564f95befebd279b7716c0e0b206247acc8a13e3f79f9ff13f24546bbfe
+- id: ontology-regimen-boundaries
+  name_zh: 本体与治疗方案边界
+  description_zh: 固定 ADC、融合蛋白、创新药与传统背景及改良方案的创新药宇宙边界。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 3938f46200396f442da1b3aec08e946bb6ba905ccf057ee0374f5bf9f41e8687
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - ADC 与融合蛋白按创新治疗模态纳入，创新药与传统治疗并列时保留传统治疗的背景或对照角色。
+    - 纯传统治疗不因同适应症自动进入创新药主集合，改良、重定位和固定复方保持待审。
+    prohibited_outcomes:
+    - 不得把传统治疗、改良、重定位或固定复方未经核验标成创新药。
+    - 不得因展示需要发明靶点、机制、治疗谱系或纳入理由。
+  verifiers:
+  - kind: pytest
+    target: tests/unit/test_innovation_eligibility.py::test_innovation_modalities_include_adc_and_fusion_protein
+    command: uv run pytest tests/unit/test_innovation_eligibility.py::test_innovation_modalities_include_adc_and_fusion_protein
+      -q
+  - kind: pytest
+    target: tests/unit/test_innovation_eligibility.py::test_unmatched_reformulation_repositioning_or_fixed_combination_stays_review_pending
+    command: uv run pytest tests/unit/test_innovation_eligibility.py::test_unmatched_reformulation_repositioning_or_fixed_combination_stays_review_pending
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/ontology-regimen-boundaries.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 8ba51a495df273f5c7f0086e4946acf5bcb6509c8fe1ed98198858162c7411a9
+- id: study-role-boundaries
+  name_zh: 研究角色边界
+  description_zh: 固定默认排除、支持层、特殊早期核心及 study/publication role 分离规则。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: a1771e6fb4e1835a2a5e4b57a0022fa23837c9cf4ce047af96adf92ebc8802ed
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 健康志愿者、纯 PK/BE、非目标适应症、观察性和扩大/同情使用五类默认排除规则逐条生效。
+    - 支持层和特殊早期核心必须有命名问题、适用语境、决策域及不可替代证据；study role 与 publication role 分字段独立推导。
+    prohibited_outcomes:
+    - 不得把默认排除研究、出版物角色或模型猜测直接提升为核心研究。
+    - 不得用 publication role 覆盖 study role，或在缺少不可替代性依据时纳入支持/特殊核心层。
+  verifiers:
+  - kind: pytest
+    target: tests/reports/test_study_role_policy.py::test_default_exclusion_rules_mechanically_exclude_five_study_classes
+    command: uv run pytest tests/reports/test_study_role_policy.py::test_default_exclusion_rules_mechanically_exclude_five_study_classes
+      -q
+  - kind: pytest
+    target: tests/reports/test_study_role_policy.py::test_supporting_layer_requires_named_problem_and_irreplaceable_evidence
+    command: uv run pytest tests/reports/test_study_role_policy.py::test_supporting_layer_requires_named_problem_and_irreplaceable_evidence
+      -q
+  - kind: pytest
+    target: tests/reports/test_study_role_policy.py::test_special_core_requires_named_context_and_irreplaceable_evidence
+    command: uv run pytest tests/reports/test_study_role_policy.py::test_special_core_requires_named_context_and_irreplaceable_evidence
+      -q
+  - kind: pytest
+    target: tests/reports/b/test_trial_roles.py::test_b_output_keeps_study_and_publication_roles_in_separate_fields
+    command: uv run pytest tests/reports/b/test_trial_roles.py::test_b_output_keeps_study_and_publication_roles_in_separate_fields
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/study-role-boundaries.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 3c221dcb463ea8dd6cbcf3bd5e0815d482f6b493a4a49bb17fc6143ec005e831
+- id: c-protocol-registry-paths
+  name_zh: C 登记与 Protocol/SAP 路径
+  description_zh: 合并 C 登记充分性、Protocol/SAP 补件恢复、统计细节缺失及多设计路径门槛。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/report-c-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: ef4e3bf2fcb87b38d410d689ddcf86f2c42db826b1e47893b9e1d8aa04088ae4
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/report-c-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - Protocol/SAP 完整、登记已足够和仅统计细节缺失分别保留来源路径；仅统计缺失不阻断核心设计门槛。
+    - 临床设计核心缺失先阻断，用户补件后从同一项目恢复并锁定；多候选设计路径并列展示，不产生唯一推荐或隐性排名。
+    prohibited_outcomes:
+    - 不得用 Protocol/SAP 单独替代官方登记覆盖临床设计核心，也不得把统计缺失写成核心设计通过依据。
+    - 不得在关键设计缺失时生成草稿、跨试验借值，或从多路径综合推导唯一推荐。
+  verifiers:
+  - kind: pytest
+    target: tests/reports/c/test_design_gate.py::test_registry_sufficient_design_passes_without_protocol_or_sap
+    command: uv run pytest tests/reports/c/test_design_gate.py::test_registry_sufficient_design_passes_without_protocol_or_sap
+      -q
+  - kind: pytest
+    target: tests/reports/c/test_design_gate.py::test_missing_statistical_details_are_nonblocking_with_preserved_disclosure
+    command: uv run pytest tests/reports/c/test_design_gate.py::test_missing_statistical_details_are_nonblocking_with_preserved_disclosure
+      -q
+  - kind: pytest
+    target: tests/reports/c/test_design_gate.py::test_each_critical_design_family_blocks_independently
+    command: uv run pytest tests/reports/c/test_design_gate.py::test_each_critical_design_family_blocks_independently
+      -q
+  - kind: pytest
+    target: tests/reports/c/test_multiple_design_paths.py::test_successful_synthesis_yields_at_least_two_evidence_backed_paths
+    command: uv run pytest tests/reports/c/test_multiple_design_paths.py::test_successful_synthesis_yields_at_least_two_evidence_backed_paths
+      -q
+  - kind: pytest
+    target: tests/reports/c/test_multiple_design_paths.py::test_result_has_no_ranking_or_unique_recommendation_semantics
+    command: uv run pytest tests/reports/c/test_multiple_design_paths.py::test_result_has_no_ranking_or_unique_recommendation_semantics
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/c-protocol-registry-paths.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: cbab13a0ef29ed04fb6f830d9510baf34592bdd9734e8f2e674c36f127654239
+- id: evidence-guidance-conflicts
+  name_zh: 证据与指南冲突
+  description_zh: 固定论文、登记、监管、指定行业来源及指南版本冲突的失败关闭和解释边界。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 3a9c8376cbaeea44b72992f18a076c96efb0c15575f08c38a6e98baeeef15d9c
+    source_fixture: fixtures/synthetic/a-complete/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: evidence_blocked
+    state: evidence_blocked
+    invariants:
+    - 论文、登记、监管和指定行业来源逐源保留身份、版本、角色与冲突，不把冲突折叠成未公开或零值。
+    - final、draft、废止/被替代指南及 CDE/FDA 对齐或分歧分别建模；严格多数和最常采用只在合资格分母内描述。
+    prohibited_outcomes:
+    - 不得以 draft 或废止指南覆盖 final 证据，不得把 CDE/FDA 分歧强行统一。
+    - 未解决关键冲突不得生成草稿或被严格多数/最常采用标签伪装为确定结论。
+  verifiers:
+  - kind: pytest
+    target: tests/integration/test_no_draft_on_unresolved_key_conflict.py::test_unresolved_key_conflict_never_becomes_not_publicly_disclosed_or_zero
+    command: uv run pytest tests/integration/test_no_draft_on_unresolved_key_conflict.py::test_unresolved_key_conflict_never_becomes_not_publicly_disclosed_or_zero
+      -q
+  - kind: pytest
+    target: tests/reports/b/test_guideline_endpoint_basis.py::test_superseded_guidance_never_drives_default_and_draft_is_never_presented_as_final
+    command: uv run pytest tests/reports/b/test_guideline_endpoint_basis.py::test_superseded_guidance_never_drives_default_and_draft_is_never_presented_as_final
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/evidence-guidance-conflicts.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 0ca3dbb11fbda274caa6cd3cae3da3581cb3012086a50951c0c011accbc817f0
+- id: supplement-requiredness
+  name_zh: 补充材料必要性
+  description_zh: 区分补充材料不可得但不必要、关键阻断及用户文件恢复三条路径。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/report-c-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 6904b1c46aefbe0e24bd18b4e102003a7e0f78959f9d128a6711e49aff9085c5
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/report-c-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 补充材料不可得但不承载关键门槛时保留缺失说明并继续；确为关键证据时保持阻断。
+    - 用户文件按来源身份和摘要匹配、归档后从原阻断版本恢复，未用补充材料替代登记核心事实。
+    prohibited_outcomes:
+    - 不得把非必要补充材料缺失升级为无理由的全报告阻断，也不得把关键补充材料缺失降级为已通过。
+    - 不得接受未匹配或未核验的用户文件，不得覆盖原阻断快照或伪造补充数据。
+  verifiers:
+  - kind: pytest
+    target: tests/integration/sources/test_pubmed_cross_reference.py::test_publication_never_replaces_registry_design_fields_and_supplement_can_be_not_required
+    command: uv run pytest tests/integration/sources/test_pubmed_cross_reference.py::test_publication_never_replaces_registry_design_fields_and_supplement_can_be_not_required
+      -q
+  - kind: pytest
+    target: tests/reports/c/test_design_gate.py::test_missing_statistical_details_are_nonblocking_with_preserved_disclosure
+    command: uv run pytest tests/reports/c/test_design_gate.py::test_missing_statistical_details_are_nonblocking_with_preserved_disclosure
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/supplement-requiredness.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 0a951c0a41a14750fa2562db27583f7413d3e56f176809aeba8b49c3f0ffa247
+- id: b-baseline-d70
+  name_zh: B 基线 D70
+  description_zh: 固定 B 组别基线阻断/恢复和年龄、人口学、严重度兼容拆图规则。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - B
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: cf9cb482c3bdaf52c744d6c4199892136a88a11bfb4c1d4b9e2a76a5044858a5
+    source_fixture: fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 年龄、性别和严重度按试验—组别独立阻断并在补件后恢复；均值/中位数、年龄分箱/人口学类别分别保留。
+    - 量表版本与方向、基线时间或定义不兼容时拆图并保留原值、分母和来源定位，不跨组或跨试验借值。
+    prohibited_outcomes:
+    - 不得用总体值、其他组、其他试验或其他时间点填补缺失基线。
+    - 不得混合不兼容统计形式、人口学类别、量表版本/方向或基线时间，也不得把缺失值写成零。
+  verifiers:
+  - kind: pytest
+    target: tests/reports/b/test_baseline_group_gate.py::test_each_core_trial_group_requires_all_four_independent_baseline_observations
+    command: uv run pytest tests/reports/b/test_baseline_group_gate.py::test_each_core_trial_group_requires_all_four_independent_baseline_observations
+      -q
+  - kind: pytest
+    target: tests/reports/b/test_baseline_views.py::test_incompatible_severity_scales_and_statistics_form_separate_small_multiples
+    command: uv run pytest tests/reports/b/test_baseline_views.py::test_incompatible_severity_scales_and_statistics_form_separate_small_multiples
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/b-baseline-d70.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 1c12ec09c278c99214fb12b7ea5ce41ef69e8093eee04cdfa3517a788531c31a
+- id: b-disposition
+  name_zh: B 试验完成与处置
+  description_zh: 固定 B 完成/处置页的未公开状态、分母、完成退出、PD 和非互斥原因语义。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - B
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/b-d70-disposition-missing-pass/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 192ac33facd3db620d4b9808065ff0915fdf30d8d08f53f2beb5501f61b12b6f
+    source_fixture: fixtures/synthetic/b-d70-disposition-missing-pass/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 全部或部分未公开仍生成完整的状态页和证据说明，不单独升级为必要下载阻断；筛选、随机化、治疗和安全性分母分别保留。
+    - 完成、治疗完成和退出节点不合并，PD 人数与事件数分开，非互斥原因不误算为互斥比例或重复总数。
+    prohibited_outcomes:
+    - 不得把未公开、路由未解析或不适用写成数值零，也不得因缺少处置数字删除完整状态页。
+    - 不得混用分母、把人数当事件数、把非互斥原因堆叠成互斥比例，或借用其他试验数据。
+  verifiers:
+  - kind: pytest
+    target: tests/reports/b/test_trial_disposition_nonblocking.py::test_missing_disposition_numbers_are_structured_nonblocking_and_not_zero
+    command: uv run pytest tests/reports/b/test_trial_disposition_nonblocking.py::test_missing_disposition_numbers_are_structured_nonblocking_and_not_zero
+      -q
+  - kind: pytest
+    target: tests/reports/b/test_disposition_views.py::test_cross_trial_panels_split_denominator_roles_and_never_merge_trials
+    command: uv run pytest tests/reports/b/test_disposition_views.py::test_cross_trial_panels_split_denominator_roles_and_never_merge_trials
+      -q
+  - kind: pytest
+    target: tests/reports/b/test_disposition_views.py::test_subject_count_units_do_not_merge_or_qualify_reason_stack
+    command: uv run pytest tests/reports/b/test_disposition_views.py::test_subject_count_units_do_not_merge_or_qualify_reason_stack
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/b-disposition.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: e1e7ada7e643b6fb849cab2866f9627b26f58044b3474d0aafd5fe854f1843dc
+- id: b-interaction-cross-format
+  name_zh: B 交互与格式边界
+  description_zh: 首版固定 B 基线/处置图表、表格、证据抽屉、筛选和 URL 恢复，并明确延后四格式扩展。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - B
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 81ecce8d80a7ef375de5a1a66122aba80270dd98922d397418756a1bfcce739f
+    source_fixture: fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 基线和完成/处置图、完整表和证据抽屉消费同一事实行集，筛选和 URL 恢复后仍指向同一行身份。
+    - 首版格式严格为 html；PDF、HTML-PPT、PPTX 和 PowerPoint 确认属于后续扩展，不进入本案例验收门。
+    prohibited_outcomes:
+    - 不得要求 PDF、HTML-PPT、PPTX 或 PowerPoint 确认才能接受首版 HTML。
+    - 不得让图、表、抽屉或筛选各自维护脱离事实行集的副本，或用 URL 状态伪造事实。
+  verifiers:
+  - kind: pytest
+    target: tests/reports/b/test_baseline_view_interactions.py::test_all_required_selection_dimensions_round_trip_through_standard_library_url
+    command: uv run pytest tests/reports/b/test_baseline_view_interactions.py::test_all_required_selection_dimensions_round_trip_through_standard_library_url
+      -q
+  - kind: pytest
+    target: tests/reports/b/test_disposition_view_interactions.py::test_repeated_url_parameters_round_trip_every_disposition_dimension
+    command: uv run pytest tests/reports/b/test_disposition_view_interactions.py::test_repeated_url_parameters_round_trip_every_disposition_dimension
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/b-interaction-cross-format.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 54054f06d34f574b2d2bf3eb8d292969d4c53fa6d8f99186b555847fe6845213
+- id: technical-and-manual-recovery
+  name_zh: 技术与人工恢复
+  description_zh: 合并网络、限流、验证码、页面变更、解析/工具故障及人工文件恢复。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 99980e3b42da75dd5b012712a8fe48cba2e9440aa16eda55d932e18eb7cad0f9
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 网络、限流、验证码、页面变更、解析和工具故障保持独立诊断，恢复只重排失败能力及其下游。
+    - 原文件名投递按摘要、标题和试验身份匹配，规范命名与归档不改变原文摘要，并可幂等恢复。
+    prohibited_outcomes:
+    - 不得把技术故障写成未公开、穷尽未找到或数值零，也不得因恢复失败覆盖既有阻断证据。
+    - 不得接受未匹配、未核验或跨项目的人工文件，不得将一次恢复重复生成副作用。
+  verifiers:
+  - kind: pytest
+    target: tests/integration/test_host_adapters.py::test_environment_recovery_requeues_only_failed_capability_downstream
+    command: uv run pytest tests/integration/test_host_adapters.py::test_environment_recovery_requeues_only_failed_capability_downstream
+      -q
+  - kind: pytest
+    target: tests/integration/test_manual_inbox_recovery.py::test_manual_inbox_recovery
+    command: uv run pytest tests/integration/test_manual_inbox_recovery.py::test_manual_inbox_recovery
+      -q
+  - kind: pytest
+    target: tests/hosts/test_conformance.py::test_environment_recovery_requeues_same_failed_nodes_on_each_host
+    command: uv run pytest tests/hosts/test_conformance.py::test_environment_recovery_requeues_same_failed_nodes_on_each_host
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/technical-and-manual-recovery.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 8d45ba1cfb25728e388add6cef71cc89b4cd559ebce94c24765c5106ad3fad72
+- id: multi-report-partial-delivery
+  name_zh: 多报告部分交付
+  description_zh: 固定 A/B/C 共享证据但 Gate、快照和 HTML 交付独立，并按 ADR 0013 排除 PPTX 模拟。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/run-binding-contract.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: e817c3d34749b5a1f3df7dc9aa848a0cadbf7215abd9c17bbb52fbce3e99e4df
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/run-binding-contract.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - A、B、C 共享科学输入但报告 Gate、版本和 HTML 交付状态相互隔离；一个报告阻断不撤销其他报告。
+    - 首版部分交付只能由报告自身证据状态解释，不模拟 PPTX 能力缺失，也不把可选格式带入 HTML 阻断。
+    prohibited_outcomes:
+    - 不得以一个报告的阻断撤销其他报告已接受快照或站点式 HTML。
+    - 不得把 PDF、HTML-PPT、PPTX 或 PowerPoint 确认缺失作为首版 partial-delivery 的必要前提。
+  verifiers:
+  - kind: pytest
+    target: tests/graph/test_partial_delivery.py::test_reports_and_formats_progress_independently_with_partial_delivery
+    command: uv run pytest tests/graph/test_partial_delivery.py::test_reports_and_formats_progress_independently_with_partial_delivery
+      -q
+  - kind: pytest
+    target: tests/hosts/test_conformance.py::test_manual_inbox_and_partial_delivery_are_equivalent_on_each_host
+    command: uv run pytest tests/hosts/test_conformance.py::test_manual_inbox_and_partial_delivery_are_equivalent_on_each_host
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/multi-report-partial-delivery.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 4030f0abdb60d37f4483173db601348243c4230bf466641062d8f00796ab1df5
+- id: state-replay-and-reopen
+  name_zh: 状态重放与显式重开
+  description_zh: 固定非法迁移、幂等重放、剩余对象终态阻断和显式 reopen。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: 6bc662ee5fa76808baa6f7dca586cc8495abe456004d0026b088d249ed45776a
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 非法迁移确定性拒绝并写事件；检查点重放对每类副作用至多执行一次且保留原事件血统。
+    - 仍有剩余对象时终态阻断保持不变；只有显式 reopen、目标重绑和版本证明通过后才可恢复并锁定。
+    prohibited_outcomes:
+    - 不得通过未声明迁移、重放重复副作用或把剩余对象忽略来伪造完成状态。
+    - 不得从终态阻断隐式续跑、无目标 reopen 或覆盖旧版本/旧快照。
+  verifiers:
+  - kind: pytest
+    target: tests/graph/test_transition_matrix.py::test_every_undeclared_transition_is_rejected_and_logged
+    command: uv run pytest tests/graph/test_transition_matrix.py::test_every_undeclared_transition_is_rejected_and_logged
+      -q
+  - kind: pytest
+    target: tests/graph/test_checkpoint_replay.py::test_replay_never_duplicates_publish_move_approve_or_delete
+    command: uv run pytest tests/graph/test_checkpoint_replay.py::test_replay_never_duplicates_publish_move_approve_or_delete
+      -q
+  - kind: pytest
+    target: tests/graph/test_partial_delivery_blocked.py::test_terminal_partial_delivery_requires_explicit_reopen_before_resume
+    command: uv run pytest tests/graph/test_partial_delivery_blocked.py::test_terminal_partial_delivery_requires_explicit_reopen_before_resume
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/state-replay-and-reopen.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: f01315f8db463a10cb1a0ebd29a69b73ce0ba33e311e6fb82ccdb4214277091c
+- id: kangzhe-and-large-project-runtime
+  name_zh: 康哲大型项目站点运行
+  description_zh: 固定康哲大型 A/B/C 站点的 Logo、导航、搜索、全页面、筛选和证据下钻，并按 ADR 0013 排除演示稿运行时。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/entity-counts.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: ce95299699bebcd3a30ffd06f142026badb85d8fe399aba46bffcbbdf4236a67
+    source_fixture: fixtures/synthetic/three-report-complete/inputs/entity-counts.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - 全量静态页、产品/试验详情页、搜索、筛选和证据下钻均可达且不丢实体身份。
+    - 首版只验证站点式 HTML；HTML-PPT presenter、逐字稿、页码和固定幻灯片页型不进入本案例。
+    prohibited_outcomes:
+    - 不得只验证首页或少量样例就宣称大型项目全页面和下钻通过。
+    - 不得把 HTML-PPT presenter、逐字稿或固定幻灯片规则叠加到首版站点验收。
+  verifiers:
+  - kind: pytest
+    target: tests/integration/reports/test_a_report_portal.py::test_a_site_contains_exactly_twelve_static_pages_plus_every_product
+    command: uv run pytest tests/integration/reports/test_a_report_portal.py::test_a_site_contains_exactly_twelve_static_pages_plus_every_product
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/kangzhe-and-large-project-runtime.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: cd04e38d779a0a356b58d8e5ad1f9018bcd34a6e3fb31b20995e28f43eb7e171
+- id: host-smoke-v1
+  name_zh: 三宿主站点冒烟
+  description_zh: 固定 Codex、Hermes、OMP 从独立安装入口执行同一公共 Skill 的 HTML 语义一致性。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/universe.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: cfdc5eca09b6557b4647e13f75b73fd4037f9e09563847fb7b86f3d393fd1a4b
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/universe.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rendered
+    state: snapshot_locked
+    invariants:
+    - Codex、Hermes、OMP 从各自安装入口发现并执行同一公共 Skill，科学状态、失败分类和 HTML 产物语义一致。
+    - 入口、会话、运行和外部进程互异，三份宿主回执绑定同一案例/输入摘要而非同进程伪造。
+    prohibited_outcomes:
+    - 不得用同一进程、adapter-only JSON 或旧回执冒充三宿主真实执行。
+    - 不得因宿主差异改写科学事实、门槛状态或 HTML-only 发布范围。
+  verifiers:
+  - kind: pytest
+    target: tests/hosts/test_conformance.py::test_three_hosts_emit_identical_semantic_state_for_same_fixture
+    command: uv run pytest tests/hosts/test_conformance.py::test_three_hosts_emit_identical_semantic_state_for_same_fixture
+      -q
+  - kind: pytest
+    target: tests/hosts/test_real_host_smoke.py::test_three_receipts_bind_distinct_real_host_entries_sessions_runs_package_and_events
+    command: uv run pytest tests/hosts/test_real_host_smoke.py::test_three_receipts_bind_distinct_real_host_entries_sessions_runs_package_and_events
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/host-smoke-v1.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 98996b1b89dd000030800a8a02350c4216243240f5cfe9fcfabafa980388bbc7
+- id: optional-adapter-recovery
+  name_zh: 可选适配器恢复
+  description_zh: E1 条件扩展：仅在项目合同选择可选适配器时验证私有缓存删除后的事件/检查点恢复。
+  family: required-v12
+  not_applicable: 当前首版项目合同未选择可选适配器；E1 仅保留带合同摘要的 not_applicable 回执，不进入 HTML 发布阻断。
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: conditional-extension
+  owner_task: extension-e1-optional-adapter-recovery
+  provenance:
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: b3108ccd02afee7140df029dbcfce68ca4f11dd904c1113c7f6a4cd4e6f0622f
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: pending
+    state: not_applicable
+    invariants:
+    - 默认首版不执行可选适配器；未选择时 receipt.owner_status 为 not_applicable 且原因明确绑定项目合同摘要。
+    - 合同选择时，删除私有缓存后只能由规范事件/检查点恢复，核心事实、门槛、快照和报告状态不由适配器写入。
+    prohibited_outcomes:
+    - 不得在未选择适配器时以空泛 not_applicable 绕过合同摘要，也不得把 E1 提前算入首版发布通过。
+    - 不得让可选适配器成为科学真源、自动接纳事实或覆盖默认执行器状态。
+  verifiers:
+  - kind: pytest
+    target: tests/hosts/test_optional_adapter_resume.py::test_optional_adapter_resumes_after_private_cache_deletion
+    command: uv run pytest tests/hosts/test_optional_adapter_resume.py::test_optional_adapter_resumes_after_private_cache_deletion
+      -q
+  - kind: pytest
+    target: tests/hosts/test_fresh_install.py::test_fresh_install_preflight_is_conformant_and_html_only
+    command: uv run pytest tests/hosts/test_fresh_install.py::test_fresh_install_preflight_is_conformant_and_html_only
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/optional-adapter-recovery.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: not_applicable
+  case_digest: 5a6d94afc3d164a2992474d8233024600bbb1dff74c66dc3e3013d8a9df1f982
+- id: recovery-rehearsal
+  name_zh: 最终恢复演练
+  description_zh: 固定最终 RC 恢复包的隔离安装、项目恢复、刷新和代表性 HTML 重建；当前保持未来 owner。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: recovery
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: dacc53a329d1d90781cb6e99f21bdaa738b8b2980ee7bf696142017f22a1a0dc
+    source_fixture: fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: pending
+    state: pending_future_owner
+    invariants:
+    - 恢复包只含最终 RC、批准迁移资料、清单和验收记录，不含可运行旧流水线；安装和恢复均在隔离目录完成。
+    - 恢复、刷新和代表性 HTML 重建绑定同一 bundle/package/RC、输入、快照和事件摘要，Task 10.3 不得提前关闭。
+    prohibited_outcomes:
+    - 不得复用旧候选包、旧项目/运行/回执或覆盖现有入口来伪造恢复通过。
+    - 不得在真实 recovery receipt 产生前把本案例标记 accepted、verified 或 not_applicable。
+  verifiers:
+  - kind: pytest
+    target: tests/migration/test_recovery_rehearsal.py::test_final_recovery_package_installs_rehydrates_refreshes_and_rebuilds_representative_html
+    command: uv run pytest tests/migration/test_recovery_rehearsal.py::test_final_recovery_package_installs_rehydrates_refreshes_and_rebuilds_representative_html
+      -q
+  - kind: pytest
+    target: tests/hosts/test_fresh_install.py::test_fresh_install_host_smoke_recovers_and_verifies_html
+    command: uv run pytest tests/hosts/test_fresh_install.py::test_fresh_install_host_smoke_recovers_and_verifies_html
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/recovery-rehearsal.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 4c68e8cd3335b0b47ce429f9997b01ee6b7ebb63f49a0d103db568bf1e1c5e6a
+- id: legacy-absence
+  name_zh: 旧根无残留
+  description_zh: 固定最终授权后旧工程影子、链接、入口、引用、缓存和备份的精确清单核验；当前保持未来 owner。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: legacy-cutover
+  owner_task: phase-10-task-108-legacy-absence
+  provenance:
+    source_fixture: fixtures/negative/legacy-a-ad-shell/sample.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: dfa41ed25711cd32dcb61aa8c278ecf1888c50ab7f17c10df81b81f520cc22d4
+    source_fixture: fixtures/negative/legacy-a-ad-shell/sample.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: pending
+    state: pending_future_owner
+    invariants:
+    - 旧根处置前必须完成最终恢复演练、迁移清单、用户明确授权和独立验证者回执。
+    - 影子副本、符号链接、旧入口、消费者引用、缓存和备份登记按精确清单逐项核验，无残留才可关闭。
+    prohibited_outcomes:
+    - 未经授权不得删除旧根、入口、影子副本、链接、缓存或备份，也不得扩大精确清单。
+    - 不得在 Task 10.6 recovery 或 Task 10.3 rehearsal 阶段提前写 accepted/absent。
+  verifiers:
+  - kind: pytest
+    target: tests/migration/test_legacy_cutover.py::test_absence_check_fails_on_any_registered_legacy_runtime_or_reference
+    command: uv run pytest tests/migration/test_legacy_cutover.py::test_absence_check_fails_on_any_registered_legacy_runtime_or_reference
+      -q
+  - kind: pytest
+    target: tests/hosts/test_fresh_install.py::test_fresh_install_refuses_existing_root_without_mutation
+    command: uv run pytest tests/hosts/test_fresh_install.py::test_fresh_install_refuses_existing_root_without_mutation
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/legacy-absence.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 8d35d7f6806ffe6de5988fb6a7d755574ae7898b89c6085f97b69d07ea825c45
+- id: legacy-negative-regressions
+  name_zh: 旧版六类负向回归
+  description_zh: 固定旧 CSU A、PNH B、AD A、样式崩塌、伪截图和 false-green QC 六个失败子案例。
+  family: required-v12
+  indication: 特应性皮炎
+  timezone: Asia/Shanghai
+  data_cutoff: '2026-07-31T23:59:59+08:00'
+  created_at: '2026-09-01T10:00:00+08:00'
+  reports:
+  - A
+  - B
+  - C
+  formats:
+  - html
+  execution_scope: full-matrix
+  owner_task: phase-10-task-106-rc-freeze
+  provenance:
+    source_fixture: fixtures/negative/legacy-a-five-products-zero-trials/sample.json
+    deidentified: true
+    identity_verified: true
+    note_zh: 仅使用仓库内脱敏或合成输入；不含凭据、真实受试者数据或生产路径。
+  inputs:
+  - path: inputs/scenario.json
+    purpose_zh: 脱敏场景定义、子场景闭合和既有 fixture 来源绑定。
+    role: expected_contract
+    sha256: ac4d39a6f6cf7a76ec5ac7f5147c8d288f4ff97ad8fd6103067cc0d8f51257e4
+    source_fixture: fixtures/negative/legacy-a-five-products-zero-trials/sample.json
+    deidentified: true
+    identity_verified: true
+  expected:
+    outcome: rejected
+    state: evidence_blocked
+    invariants:
+    - 旧 CSU A、PNH B、AD A、样式崩塌、伪截图和 false-green QC 六个子案例均确定性拒绝并保留失败原因。
+    - 负向输入仅保留脱敏失败摘要和预期问题，不迁移旧报告、旧模板、旧视觉或未锚定数据。
+    prohibited_outcomes:
+    - 不得将六类旧失败样本中的任一项作为正向 fixture、模板、视觉参考或 accepted 证据。
+    - 不得以文件存在、产品数量、截图存在或旧 QC 退出 0 掩盖无试验、样式、链接和科学锚定缺陷。
+  verifiers:
+  - kind: pytest
+    target: tests/acceptance/test_report_a.py::test_legacy_report_a_failures_are_rejected
+    command: uv run pytest tests/acceptance/test_report_a.py::test_legacy_report_a_failures_are_rejected
+      -q
+  - kind: pytest
+    target: tests/acceptance/test_legacy_negative_regressions.py::test_all_six_negative_subclasses_are_rejected
+    command: uv run pytest tests/acceptance/test_legacy_negative_regressions.py::test_all_six_negative_subclasses_are_rejected
+      -q
+  receipt:
+    relative_path: docs/acceptance/receipts/required-v12/legacy-negative-regressions.json
+    schema: schemas/host-receipt.schema.json
+    owner_status: pending_future_owner
+  case_digest: 8fb9c99a2359419ea0f45241269ca8d40e476456efaa532a49a9cc7faa7279e5

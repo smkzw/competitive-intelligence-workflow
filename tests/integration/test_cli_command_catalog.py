@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -10,12 +11,28 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def _run(*args: str) -> subprocess.CompletedProcess[str]:
+    environment = os.environ.copy()
+    environment["CI_WORKFLOW_TEST_MODE"] = "1"
+    environment["CI_WORKFLOW_CAPABILITY_OVERRIDES"] = json.dumps(
+        {
+            "project_file_io": True,
+            "script_runtime": True,
+            "http_network": True,
+            "search_browser": True,
+            "login_browser": True,
+            "document_ingestion": True,
+            "ocr": True,
+            "browser_validation": True,
+            "independent_context": True,
+        }
+    )
     return subprocess.run(
         [sys.executable, "-m", "ci_workflow", *args],
         cwd=ROOT,
         text=True,
         capture_output=True,
         check=False,
+        env=environment,
     )
 
 
@@ -23,7 +40,14 @@ def _copy_verifiable_package(target: Path) -> None:
     target.mkdir()
     for file_name in ("package-manifest.json", "pyproject.toml"):
         shutil.copy2(ROOT / file_name, target / file_name)
-    for directory in ("schemas", "contracts", "assets", "skills", "migrations"):
+    for directory in (
+        "schemas",
+        "contracts",
+        "assets",
+        "skills",
+        "migrations",
+        "policies",
+    ):
         shutil.copytree(ROOT / directory, target / directory)
 
 
@@ -33,7 +57,7 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
     package = _run("package", "verify", "--root", str(ROOT))
     assert package.returncode == 0, package.stderr
     assert package.stdout.strip() == (
-        "PACKAGE_OK version=0.1.0a0 stage=phase-2-accepted"
+        "PACKAGE_OK version=0.1.0a0 stage=development-candidate"
     )
 
     project_root = tmp_path / "呼吸疾病竞品项目"
@@ -47,7 +71,7 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
         "--reports",
         "A,B,C",
         "--outputs",
-        "html,pdf,html-ppt",
+        "html",
     )
     assert created.returncode == 0, created.stderr
     assert "PROJECT_CREATED" in created.stdout
@@ -57,7 +81,7 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
     contract = stub["project_contract_versions"][0]
     assert contract["indication"] == "慢性鼻窦炎伴鼻息肉"
     assert contract["reports"] == ["A", "B", "C"]
-    assert contract["outputs"] == ["html", "pdf", "html-ppt"]
+    assert contract["outputs"] == ["html"]
 
     verified = _run("project", "verify", "--root", str(project_root))
     assert verified.returncode == 0, verified.stderr
@@ -136,11 +160,13 @@ def test_cli_project_run_resume_rebinds_canonical_input_and_preserves_blocked_de
         and e.run_id == second_manifest["run_id"]
         for e in events
     )
-    assert not any(
-        e.run_id == second_manifest["run_id"]
-        and e.event_type == "graph.node.completed"
+    completed = [
+        e.payload["node_id"]
         for e in events
-    )
+        if e.run_id == second_manifest["run_id"]
+        and e.event_type == "graph.node.completed"
+    ]
+    assert completed == ["preflight"]
 
     # 删除规范宇宙输入后 resume → 失败关闭，不宣称“已启动”
     (fixture_root / "evidence" / "library" / "universe.json").unlink()
@@ -243,9 +269,11 @@ def test_package_verify_rejects_cli_catalog_and_skill_prompt_drift(tmp_path: Pat
 
     prompt_root = tmp_path / "prompt-drift"
     _copy_verifiable_package(prompt_root)
-    agent_path = prompt_root / "skills/_internal/monitoring/agents/openai.yaml"
+    agent_path = prompt_root / "skills/competitive-intelligence-workflow/agents/openai.yaml"
     agent_path.write_text(
-        agent_path.read_text(encoding="utf-8").replace("$monitoring", "monitoring"),
+        agent_path.read_text(encoding="utf-8").replace(
+            "$competitive-intelligence-workflow", "competitive-intelligence-workflow"
+        ),
         encoding="utf-8",
     )
     prompt_drift = _run("package", "verify", "--root", str(prompt_root))

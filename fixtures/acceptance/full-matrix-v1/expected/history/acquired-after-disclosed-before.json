@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "case_id": "historical-cutoff-acquired-after-disclosed-before",
+  "materialized_cutoff": "2026-08-09T23:59:59.999999+08:00",
+  "first_disclosed_at": "2026-08-08T09:00:00+08:00",
+  "acquired_at": "2026-08-10T12:00:00+08:00",
+  "assessment": "snapshot_eligible",
+  "can_enter_snapshot": true,
+  "refresh_candidate": false,
+  "recovery_required": false,
+  "invariants": [
+    "获取时间晚于截止不否定截止前已披露事实",
+    "首次披露时间和获取时间分别保存，不得相互替代",
+    "快照使用已物化 cutoff，不随恢复执行时钟移动"
+  ]
+}

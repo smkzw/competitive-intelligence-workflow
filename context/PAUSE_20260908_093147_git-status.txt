@@ -1,0 +1,1216 @@
+# Git status --porcelain=v1 --untracked-files=normal; untracked directories are collapsed.
+ M .trellis/spec/backend/manual-inbox-recovery.md
+ M .trellis/tasks/08-10-ci-workflow-rebuild/implement.md
+ M .trellis/tasks/08-10-ci-workflow-rebuild/task.json
+ M AGENTS.md
+ M assets/html-ppt/manifest.json
+ M assets/html-ppt/runtime.css
+ M assets/html-ppt/runtime.js
+ M assets/portal/charts.js
+ M assets/portal/evidence-drawer.js
+ M assets/portal/manifest.json
+ M assets/portal/portal.css
+ M assets/portal/portal.js
+ M contracts/kangzhe/design_specs/project_profile.md
+ M contracts/kangzhe/manifest.json
+ M docs/architecture/format-contracts/pptx.yaml
+ M docs/architecture/page-catalogs/A.yaml
+ M docs/architecture/page-catalogs/B.yaml
+ M docs/architecture/page-catalogs/C.yaml
+ M fixtures/catalog.yaml
+ M fixtures/positive/a-atopic-dermatitis/research-content.json
+ M fixtures/positive/a-atopic-dermatitis/research-package.json
+ M fixtures/synthetic/a-complete/inputs/report-data.json
+ M fixtures/synthetic/no-draft-a-empty/inputs/universe.json
+ M logs/agent_health/grok-grok-build-grok-4.6.json
+ M logs/agent_health/pi-cms-router-minimax-m3.json
+ M migration/legacy_manifest.jsonl
+ M migration/legacy_manifest.schema.json
+ M package-manifest.json
+ M policies/gates/A-v1.yaml
+ M policies/gates/B-v1.yaml
+ M policies/gates/C-v1.yaml
+ M policies/sources/source-policy-v1.yaml
+ M pyproject.toml
+ M schemas/blocker-audit.schema.json
+ M schemas/capability-matrix.schema.json
+ M schemas/coverage-projection.schema.json
+ M schemas/evidence-gap.schema.json
+ M schemas/fixture-case.schema.json
+ M schemas/gate-result.schema.json
+ M schemas/gate-spec.schema.json
+ M schemas/package-manifest.schema.json
+ M schemas/project-contract.schema.json
+ M schemas/source-version.schema.json
+ M skills/_internal/analysis-c/SKILL.md
+ M skills/_internal/intake-preflight/SKILL.md
+ M skills/_internal/monitoring/SKILL.md
+ M skills/_internal/render-deliver/SKILL.md
+ M skills/_internal/render-deliver/agents/openai.yaml
+ M skills/_internal/source-routing/SKILL.md
+ M skills/_internal/visual-package-qc/SKILL.md
+ M skills/competitive-intelligence-workflow/SKILL.md
+ M skills/competitive-intelligence-workflow/agents/openai.yaml
+ M src/ci_workflow/application/capability_preflight.py
+ M src/ci_workflow/application/fixture_runner.py
+ M src/ci_workflow/application/run_service.py
+ M src/ci_workflow/application/source_research_service.py
+ M src/ci_workflow/capabilities/ontology_universe.py
+ M src/ci_workflow/capabilities/scientific_qc.py
+ M src/ci_workflow/cli.py
+ M src/ci_workflow/domain/contracts.py
+ M src/ci_workflow/domain/enums.py
+ M src/ci_workflow/domain/evidence.py
+ M src/ci_workflow/gates/blocker_audit.py
+ M src/ci_workflow/gates/coverage.py
+ M src/ci_workflow/gates/evaluator.py
+ M src/ci_workflow/gates/exhaustion.py
+ M src/ci_workflow/gates/models.py
+ M src/ci_workflow/graph/__init__.py
+ M src/ci_workflow/graph/definitions/new_report.py
+ M src/ci_workflow/graph/guards.py
+ M src/ci_workflow/graph/recovery.py
+ M src/ci_workflow/graph/transitions.py
+ M src/ci_workflow/graph/types.py
+ M src/ci_workflow/ingestion/manual_inbox.py
+ M src/ci_workflow/qc/browser.py
+ M src/ci_workflow/renderers/portal/__init__.py
+ M src/ci_workflow/renderers/portal/assets/charts.js
+ M src/ci_workflow/renderers/portal/assets/evidence-drawer.js
+ M src/ci_workflow/renderers/portal/assets/portal.css
+ M src/ci_workflow/renderers/portal/assets/portal.js
+ M src/ci_workflow/renderers/portal/assets/report-a.js
+ M src/ci_workflow/renderers/portal/evidence_drawer.py
+ M src/ci_workflow/renderers/portal/report_a.py
+ M src/ci_workflow/renderers/portal/templates/a/_macros.html.j2
+ M src/ci_workflow/renderers/portal/templates/a/base.html.j2
+ M src/ci_workflow/renderers/portal/templates/a/efficacy.html.j2
+ D src/ci_workflow/renderers/portal/templates/a/evidence_limitations.html.j2
+ M src/ci_workflow/renderers/portal/templates/a/index.html.j2
+ M src/ci_workflow/renderers/portal/templates/a/matrix.html.j2
+ M src/ci_workflow/renderers/portal/templates/a/product.html.j2
+ M src/ci_workflow/renderers/portal/templates/a/safety.html.j2
+ M src/ci_workflow/reports/common/chart_specs.py
+ M src/ci_workflow/reports/common/coverage.py
+ M src/ci_workflow/reports/common/page-catalogs/A.yaml
+ M src/ci_workflow/reports/common/page-catalogs/B.yaml
+ M src/ci_workflow/reports/common/page-catalogs/C.yaml
+ M src/ci_workflow/schemas/coverage-projection.schema.json
+ M src/ci_workflow/sources/retries.py
+ M src/ci_workflow/storage/content_store.py
+ M src/ci_workflow/storage/manifest_store.py
+ M src/ci_workflow/storage/paths.py
+ M tests/acceptance/test_html_ppt_runtime_smoke.py
+ M tests/acceptance/test_portal_runtime.py
+ M tests/acceptance/test_report_a.py
+ M tests/browser/test_a_portal.py
+ M tests/browser/test_chart_table_sync.py
+ M tests/browser/test_evidence_drawer.py
+ M tests/contract/test_capability_matrix.py
+ M tests/contract/test_coverage_set.py
+ M tests/contract/test_dependency_manifest.py
+ M tests/contract/test_design_contract_hashes.py
+ M tests/contract/test_offline_assets.py
+ M tests/contract/test_package_manifest.py
+ M tests/contract/test_page_catalogs.py
+ M tests/contract/test_project_contract.py
+ M tests/fixtures/html-ppt-runtime/index.html
+ M tests/graph/test_graph_node_contracts.py
+ M tests/graph/test_partial_delivery.py
+ M tests/graph/test_partial_delivery_blocked.py
+ M tests/graph/test_scientific_qc_isolated_veto.py
+ M tests/graph/test_transition_matrix.py
+ M tests/integration/reports/test_a_report_portal.py
+ M tests/integration/test_artifact_paths.py
+ M tests/integration/test_capability_preflight.py
+ M tests/integration/test_cli_command_catalog.py
+ M tests/integration/test_cli_help.py
+ M tests/integration/test_double_exhaustion.py
+ M tests/integration/test_download_request_transitions.py
+ M tests/integration/test_fixture_artifact_paths.py
+ M tests/integration/test_fixture_case_contracts.py
+ M tests/integration/test_fixture_run_cli.py
+ M tests/integration/test_fresh_a_research_package.py
+ M tests/integration/test_manual_inbox_recovery.py
+ M tests/integration/test_no_draft_after_scientific_qc_rejection.py
+ M tests/integration/test_no_draft_when_blocked.py
+ M tests/integration/test_project_move_portability.py
+ M tests/integration/test_project_run_cli.py
+ M tests/integration/test_project_workspace.py
+ M tests/integration/test_route_recovery.py
+ M tests/integration/test_selective_capability_blocking.py
+ M tests/integration/test_source_version_chain.py
+ M tests/integration/test_sqlite_migrations.py
+ M tests/migration/test_legacy_manifest_contract.py
+ M tests/migration/test_no_legacy_runtime_dependency.py
+ M tests/reports/test_gate_override_strictness.py
+ M tests/reports/test_report_specific_gates.py
+ M tests/unit/reports/test_chart_compatibility.py
+ M tests/unit/reports/test_view_model.py
+ M tests/unit/test_gate_evaluator.py
+ M tests/unit/test_source_policy.py
+ M tools/check_no_legacy_refs.py
+ M uv.lock
+?? .playwright-cli/
+?? .trellis/tasks/08-27-phase-5-report-a-result-completeness-visibility/
+?? .trellis/tasks/08-27-phase-6-report-b/
+?? .trellis/tasks/08-27-phase-6-task-61-study-role-compatibility/
+?? .trellis/tasks/08-28-phase-5-a-values-safety-matrix-fix/
+?? .trellis/tasks/08-28-phase-5-report-a-data-matrix-recheck/
+?? .trellis/tasks/08-29-cross-format-visual-finalization/
+?? .trellis/tasks/08-29-phase-6-task-62-efficacy-longitudinal/
+?? .trellis/tasks/08-29-phase-6-task-63-safety-heatmap/
+?? .trellis/tasks/08-29-phase-6-task-64-efficacy-safety-matrix/
+?? .trellis/tasks/08-29-phase-6-task-65-baseline-observation/
+?? .trellis/tasks/08-29-phase-6-task-66-baseline-views/
+?? .trellis/tasks/08-29-phase-6-task-67-trial-disposition/
+?? .trellis/tasks/08-30-phase-6-task-610-b-d70-acceptance/
+?? .trellis/tasks/08-30-phase-6-task-68-disposition-views/
+?? .trellis/tasks/08-30-phase-6-task-69-report-b-portal/
+?? .trellis/tasks/08-30-phase-7-report-c/
+?? .trellis/tasks/08-30-phase-7-task-71-design-contract/
+?? .trellis/tasks/08-30-phase-7-task-72-eligibility-drilldown/
+?? .trellis/tasks/08-30-phase-7-task-73-design-views/
+?? .trellis/tasks/08-30-phase-7-task-74-multiple-design-paths/
+?? .trellis/tasks/08-30-phase-7-task-75-report-c-portal/
+?? .trellis/tasks/08-31-phase-8-cross-format/
+?? .trellis/tasks/08-31-phase-8-task-81-native-pdf-slice/
+?? .trellis/tasks/08-31-phase-8-task-82-complete-native-pdf/
+?? .trellis/tasks/08-31-phase-8-task-83-pdf-reader-acceptance/
+?? .trellis/tasks/08-31-phase-8-task-84-html-ppt-runtime/
+?? .trellis/tasks/08-31-phase-8-task-85-html-ppt-projections/
+?? .trellis/tasks/08-31-phase-8-task-86-html-ppt-visual-acceptance/
+?? .trellis/tasks/08-31-phase-8-task-87-ppt-master-job-contract/
+?? .trellis/tasks/08-31-phase-8-task-87b-pptx-confirmation-interrupt/
+?? .trellis/tasks/08-31-phase-9-task-91-correction-approval/
+?? .trellis/tasks/09-01-phase-10-task-101-acceptance-matrix/
+?? .trellis/tasks/09-01-phase-10-task-102-r13-product-rebuild/
+?? .trellis/tasks/09-01-phase-10-task-102-real-source-acceptance/
+?? .trellis/tasks/09-01-phase-10-task-103-html-host-full-matrix/
+?? .trellis/tasks/09-01-phase-9-task-92-incremental-refresh/
+?? .trellis/tasks/09-01-phase-9-task-93-optional-monitoring/
+?? .trellis/tasks/09-01-phase-9-task-94-host-adapters/
+?? .trellis/tasks/09-01-phase-9-task-95-candidate-bundle/
+?? .trellis/tasks/09-02-phase-10-task-104-migration-manifest/
+?? .trellis/tasks/09-02-phase-10-task-105-cutover-tools/
+?? .trellis/tasks/09-02-phase-10-task-106-rc-freeze/
+?? .trellis/tasks/09-05-r24-gatespec-blocker-closure/
+?? .trellis/tasks/09-06-r25-yaozh-browser-adapter/
+?? .trellis/tasks/archive/2026-09/
+?? archives/acceptance/
+?? archives/cache/
+?? archives/decision-context/
+?? archives/execution/ci-phase10-task101-acceptance-matrix/
+?? archives/execution/ci-phase10-task104-migration-manifest/
+?? archives/execution/ci-phase6-closeout-integrity/
+?? archives/execution/ci-phase6-interaction-repair/
+?? archives/execution/ci-phase6-responsive-visual-repair/
+?? archives/execution/ci-phase6-task610-visual-execution/
+?? archives/execution/ci-phase7-task71-design-contract/
+?? archives/execution/ci-phase7-task72-eligibility-drilldown/
+?? archives/execution/ci-phase7-task73-design-views/
+?? archives/execution/ci-phase7-task74-multiple-design-paths/
+?? archives/execution/ci-phase7-task75-report-c-portal/
+?? archives/execution/ci-phase8-task81-native-pdf-slice/
+?? archives/execution/ci-phase8-task82-complete-native-pdf/
+?? archives/execution/ci-phase8-task83-pdf-reader-acceptance/
+?? archives/execution/ci-phase8-task83-visual-repair-loop1/
+?? archives/execution/ci-phase8-task84-html-ppt-runtime/
+?? archives/execution/ci-phase8-task87-ppt-master-job-contract/
+?? archives/execution/ci-phase9-task94-host-adapters/
+?? archives/execution/ci-phase9-task95-candidate-bundle/
+?? archives/execution/ci-r2-autonomous-research-contract-20260905/
+?? archives/execution/ci-r2-bc-research-package-wiring-20260905/
+?? archives/execution/ci-r2-capability-execution-gate-20260905/
+?? archives/execution/ci-r2-independent-review-hardening-20260905/
+?? archives/execution/ci-r2-multireport-yaozh-20260905/
+?? archives/execution/ci-r2-r3-html-browser-repair-20260905/
+?? archives/execution/ci-r2-render-transaction-recovery-20260905/
+?? archives/execution/ci-r2-review-runtime-fixture-rebaseline-20260905/
+?? archives/execution/ci-r2-terminal-recovery-review-boundary-20260905/
+?? archives/execution/ci-r2-yaozh-routing-20260905/
+?? archives/execution/ci-r22-universe-closure-runtime-20260905/
+?? archives/execution/ci-r23-publication-manual-product-gate-20260905/
+?? archives/execution/ci_phase5_a_result_visibility_repair/
+?? archives/execution/ci_phase6_task61_execution/
+?? archives/execution/ci_phase6_task62_execution/
+?? archives/execution/ci_phase6_task63_execution/
+?? archives/execution/ci_phase6_task64_execution/
+?? archives/execution/ci_phase6_task65_execution/
+?? archives/execution/ci_phase6_task66_execution/
+?? archives/execution/ci_phase6_task67_execution/
+?? archives/execution/ci_phase6_task68_execution/
+?? archives/execution/ci_phase6_task69_execution/
+?? archives/execution/ci_visual_finalization_loop_20260829/
+?? archives/hermes_sessions/
+?? conference/
+?? context/ci-governance-revision-20260904_context.md
+?? context/ci-gpt6-takeover-20260905.md
+?? context/ci-phase10-task101-acceptance-matrix-review_conference_context.md
+?? context/ci-phase10-task101-acceptance-matrix-review_general_single_object_route_manifest.json
+?? context/ci-phase10-task101-acceptance-matrix_conference_context.md
+?? context/ci-phase10-task101-acceptance-matrix_execution_context.md
+?? context/ci-phase10-task101-acceptance-matrix_execution_route_manifest.json
+?? context/ci-phase10-task101-acceptance-matrix_general_single_object_route_manifest.json
+?? context/ci-phase10-task102-r13-product-rebuild_execution_context.md
+?? context/ci-phase10-task102-r13-product-rebuild_execution_route_manifest.json
+?? context/ci-phase10-task102-r13e-visual-review_conference_context.md
+?? context/ci-phase10-task102-r13e-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase10-task102-real-source-acceptance_execution_context.md
+?? context/ci-phase10-task102-real-source-acceptance_execution_route_manifest.json
+?? context/ci-phase10-task102-visual-review-r6_conference_context.md
+?? context/ci-phase10-task102-visual-review-r6_visual_single_object_route_manifest.json
+?? context/ci-phase10-task102-visual-review_conference_context.md
+?? context/ci-phase10-task102-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase10-task103-html-host-full-matrix_conference_context.md
+?? context/ci-phase10-task103-html-host-full-matrix_execution_context.md
+?? context/ci-phase10-task103-html-host-full-matrix_execution_route_manifest.json
+?? context/ci-phase10-task103-html-host-full-matrix_visual_single_object_route_manifest.json
+?? context/ci-phase10-task103-r13j-visual-review_conference_context.md
+?? context/ci-phase10-task103-r13j-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase10-task104-migration-manifest-review_conference_context.md
+?? context/ci-phase10-task104-migration-manifest-review_general_single_object_route_manifest.json
+?? context/ci-phase10-task104-migration-manifest_conference_context.md
+?? context/ci-phase10-task104-migration-manifest_execution_context.md
+?? context/ci-phase10-task104-migration-manifest_execution_route_manifest.json
+?? context/ci-phase10-task104-migration-manifest_general_single_object_route_manifest.json
+?? context/ci-phase10-task105-cutover-tools_conference_context.md
+?? context/ci-phase10-task105-cutover-tools_execution_context.md
+?? context/ci-phase10-task105-cutover-tools_execution_route_manifest.json
+?? context/ci-phase10-task105-cutover-tools_general_single_object_route_manifest.json
+?? context/ci-phase10-task106-rc-freeze_context.md
+?? context/ci-phase10-task106-rc-freeze_execution_context.md
+?? context/ci-phase10-task106-rc-freeze_execution_route_manifest.json
+?? context/ci-phase6-closeout-integrity_execution_context.md
+?? context/ci-phase6-final-render-evidence_execution_context.md
+?? context/ci-phase6-final-render-evidence_execution_route_manifest.json
+?? context/ci-phase6-final-visual-review_conference_context.md
+?? context/ci-phase6-final-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase6-interaction-repair_execution_context.md
+?? context/ci-phase6-interaction-repair_execution_route_manifest.json
+?? context/ci-phase6-responsive-visual-repair_execution_context.md
+?? context/ci-phase6-responsive-visual-repair_execution_route_manifest.json
+?? context/ci-phase6-task610-visual-execution_execution_context.md
+?? context/ci-phase6-task610-visual-execution_execution_route_manifest.json
+?? context/ci-phase6-task610-visual-review_conference_context.md
+?? context/ci-phase6-task610-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase6-task610_execution_context.md
+?? context/ci-phase7-task71-design-contract_execution_context.md
+?? context/ci-phase7-task71-design-contract_execution_route_manifest.json
+?? context/ci-phase7-task72-eligibility-drilldown_execution_context.md
+?? context/ci-phase7-task72-eligibility-drilldown_execution_route_manifest.json
+?? context/ci-phase7-task73-design-views_execution_context.md
+?? context/ci-phase7-task73-design-views_execution_route_manifest.json
+?? context/ci-phase7-task74-multiple-design-paths_execution_context.md
+?? context/ci-phase7-task74-multiple-design-paths_execution_route_manifest.json
+?? context/ci-phase7-task75-named-visual-testers_conference_context.md
+?? context/ci-phase7-task75-named-visual-testers_visual_single_object_route_manifest.json
+?? context/ci-phase7-task75-report-c-portal_execution_context.md
+?? context/ci-phase7-task75-report-c-portal_execution_route_manifest.json
+?? context/ci-phase7-task75-visual-review_conference_context.md
+?? context/ci-phase7-task75-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase8-task81-native-pdf-slice_execution_context.md
+?? context/ci-phase8-task81-native-pdf-slice_execution_route_manifest.json
+?? context/ci-phase8-task81-native-pdf-visual-review_conference_context.md
+?? context/ci-phase8-task81-native-pdf-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase8-task82-complete-native-pdf_execution_context.md
+?? context/ci-phase8-task82-complete-native-pdf_execution_route_manifest.json
+?? context/ci-phase8-task82-final-visual-review_conference_context.md
+?? context/ci-phase8-task82-final-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase8-task82-named-visual-testers_conference_context.md
+?? context/ci-phase8-task83-named-visual-testers_conference_context.md
+?? context/ci-phase8-task83-named-visual-testers_visual_single_object_route_manifest.json
+?? context/ci-phase8-task83-pdf-reader-acceptance_execution_context.md
+?? context/ci-phase8-task83-visual-repair-loop1_execution_context.md
+?? context/ci-phase8-task83-visual-repair-loop1_execution_route_manifest.json
+?? context/ci-phase8-task84-html-ppt-runtime_execution_context.md
+?? context/ci-phase8-task84-html-ppt-runtime_execution_route_manifest.json
+?? context/ci-phase8-task84-runtime-visual-review_conference_context.md
+?? context/ci-phase8-task84-runtime-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase8-task85-html-ppt-closure_execution_context.md
+?? context/ci-phase8-task85-html-ppt-closure_execution_route_manifest.json
+?? context/ci-phase8-task85-html-ppt-projections_execution_context.md
+?? context/ci-phase8-task85-html-ppt-projections_execution_route_manifest.json
+?? context/ci-phase8-task85-html-ppt-visual-review_conference_context.md
+?? context/ci-phase8-task85-html-ppt-visual-review_visual_single_object_route_manifest.json
+?? context/ci-phase8-task86-visual-baseline_execution_context.md
+?? context/ci-phase8-task86-visual-baseline_execution_route_manifest.json
+?? context/ci-phase8-task86-visual-final_conference_context.md
+?? context/ci-phase8-task86-visual-final_visual_single_object_route_manifest.json
+?? context/ci-phase8-task87-ppt-master-job-contract_execution_context.md
+?? context/ci-phase8-task87b-pptx-confirmation-interrupt_execution_context.md
+?? context/ci-phase9-task91-correction-approval-review_conference_context.md
+?? context/ci-phase9-task91-correction-approval-review_general_single_object_route_manifest.json
+?? context/ci-phase9-task91-correction-approval_execution_context.md
+?? context/ci-phase9-task91-correction-approval_execution_route_manifest.json
+?? context/ci-phase9-task92-incremental-refresh-review_conference_context.md
+?? context/ci-phase9-task92-incremental-refresh-review_general_single_object_route_manifest.json
+?? context/ci-phase9-task92-incremental-refresh_execution_context.md
+?? context/ci-phase9-task92-incremental-refresh_execution_route_manifest.json
+?? context/ci-phase9-task93-optional-monitoring-review_conference_context.md
+?? context/ci-phase9-task93-optional-monitoring-review_general_single_object_route_manifest.json
+?? context/ci-phase9-task93-optional-monitoring_conference_context.md
+?? context/ci-phase9-task93-optional-monitoring_execution_context.md
+?? context/ci-phase9-task93-optional-monitoring_execution_route_manifest.json
+?? context/ci-phase9-task94-host-adapters_conference_context.md
+?? context/ci-phase9-task94-host-adapters_execution_context.md
+?? context/ci-phase9-task94-host-adapters_execution_route_manifest.json
+?? context/ci-phase9-task94-host-adapters_general_single_object_route_manifest.json
+?? context/ci-phase9-task95-candidate-bundle-review_conference_context.md
+?? context/ci-phase9-task95-candidate-bundle-review_general_single_object_route_manifest.json
+?? context/ci-phase9-task95-candidate-bundle_conference_context.md
+?? context/ci-phase9-task95-candidate-bundle_execution_context.md
+?? context/ci-phase9-task95-candidate-bundle_execution_route_manifest.json
+?? context/ci-phase9-task95-candidate-bundle_general_single_object_route_manifest.json
+?? context/ci-r2-autonomous-research-contract-20260905_execution_context.md
+?? context/ci-r2-autonomous-research-contract-20260905_execution_route_manifest.json
+?? context/ci-r2-bc-research-package-wiring-20260905_execution_context.md
+?? context/ci-r2-bc-research-package-wiring-20260905_execution_route_manifest.json
+?? context/ci-r2-bc-science-acceptance-20260905_conference_context.md
+?? context/ci-r2-bc-science-acceptance-20260905_general_single_object_route_manifest.json
+?? context/ci-r2-capability-execution-gate-20260905_execution_context.md
+?? context/ci-r2-capability-execution-gate-20260905_execution_route_manifest.json
+?? context/ci-r2-independent-review-hardening-20260905_execution_context.md
+?? context/ci-r2-independent-review-hardening-20260905_execution_route_manifest.json
+?? context/ci-r2-multireport-yaozh-20260905_execution_context.md
+?? context/ci-r2-multireport-yaozh-20260905_execution_route_manifest.json
+?? context/ci-r2-r3-html-browser-repair-20260905_execution_context.md
+?? context/ci-r2-r3-html-browser-repair-20260905_execution_route_manifest.json
+?? context/ci-r2-render-transaction-recovery-20260905_execution_context.md
+?? context/ci-r2-render-transaction-recovery-20260905_execution_route_manifest.json
+?? context/ci-r2-review-runtime-fixture-acceptance-20260905_conference_context.md
+?? context/ci-r2-review-runtime-fixture-acceptance-20260905_general_single_object_route_manifest.json
+?? context/ci-r2-review-runtime-fixture-rebaseline-20260905_execution_context.md
+?? context/ci-r2-review-runtime-fixture-rebaseline-20260905_execution_route_manifest.json
+?? context/ci-r2-terminal-recovery-review-boundary-20260905_execution_context.md
+?? context/ci-r2-terminal-recovery-review-boundary-20260905_execution_route_manifest.json
+?? context/ci-r2-yaozh-routing-20260905_execution_context.md
+?? context/ci-r2-yaozh-routing-20260905_execution_route_manifest.json
+?? context/ci-r22-universe-closure-runtime-20260905_execution_context.md
+?? context/ci-r22-universe-closure-runtime-20260905_execution_route_manifest.json
+?? context/ci-r23-publication-manual-product-gate-20260905_execution_context.md
+?? context/ci-r23-publication-manual-product-gate-20260905_execution_route_manifest.json
+?? context/ci-r23-publication-manual-product-gate-review-20260905_conference_context.md
+?? context/ci-r23-publication-manual-product-gate-review-20260905_evidence_single_object_route_manifest.json
+?? context/ci-r24-gatespec-blocker-closure-20260905_context.md
+?? context/ci-r24-gatespec-blocker-closure-20260905_execution_context.md
+?? context/ci-r24-gatespec-blocker-closure-20260905_execution_route_manifest.json
+?? context/ci-r24-gatespec-blocker-closure-review-20260906_conference_context.md
+?? context/ci-r24-gatespec-blocker-closure-review-20260906_general_single_object_route_manifest.json
+?? context/ci-r25-yaozh-browser-adapter-20260906-conference_conference_context.md
+?? context/ci-r25-yaozh-browser-adapter-20260906-conference_general_single_object_route_manifest.json
+?? context/ci-r25-yaozh-browser-adapter-20260906_execution_context.md
+?? context/ci-r25-yaozh-browser-adapter-20260906_execution_route_manifest.json
+?? context/ci-rebaseline-r0-provenance-review-20260904_conference_context.md
+?? context/ci-rebaseline-r0-provenance-review-20260904_general_single_object_route_manifest.json
+?? context/ci-rebaseline-r1-contract-review-20260904_conference_context.md
+?? context/ci-rebaseline-r1-contract-review-20260904_general_single_object_route_manifest.json
+?? context/ci-rebaseline-r2-science-review-20260905_conference_context.md
+?? context/ci-rebaseline-r2-science-review-20260905_general_single_object_route_manifest.json
+?? context/ci-rebaseline-rebuild-20260904_execution_context.md
+?? context/ci-rebaseline-rebuild-20260904_execution_route_manifest.json
+?? context/ci-rebaseline-rebuild-20260904_m1_recovery_snapshot_receipt.json
+?? context/ci-rebaseline-rebuild-20260904_pause_snapshot_receipt.json
+?? context/ci-rebaseline-rebuild-20260904_prechange_inventory.json
+?? context/ci-rebaseline-rebuild-20260904_recovery_snapshot_receipt.json
+?? context/ci_phase5_a_data_matrix_recheck_execution_context.md
+?? context/ci_phase5_a_data_matrix_science_review_v2_conference_context.md
+?? context/ci_phase5_a_data_matrix_visual_review_v2_conference_context.md
+?? context/ci_phase5_a_result_scientific_review_conference_context.md
+?? context/ci_phase5_a_result_visibility_repair_execution_context.md
+?? context/ci_phase5_a_result_visual_review_conference_context.md
+?? context/ci_phase5_a_values_matrix_fix_execution_context.md
+?? context/ci_phase5_a_values_matrix_visual_execution_context.md
+?? context/ci_phase5_a_values_matrix_visual_review_v4_conference_context.md
+?? context/ci_phase5_a_values_science_review_v3_conference_context.md
+?? context/ci_phase5_a_zero_result_evidence_refresh_context.md
+?? context/ci_phase6_task61_execution_execution_context.md
+?? context/ci_phase6_task61_independent_review_conference_context.md
+?? context/ci_phase6_task62_execution_execution_context.md
+?? context/ci_phase6_task63_execution_execution_context.md
+?? context/ci_phase6_task64_execution_execution_context.md
+?? context/ci_phase6_task65_execution_execution_context.md
+?? context/ci_phase6_task66_execution_execution_context.md
+?? context/ci_phase6_task67_execution_execution_context.md
+?? context/ci_phase6_task68_execution_execution_context.md
+?? context/ci_phase6_task69_execution_execution_context.md
+?? context/ci_phase6_task69_visual_review_conference_context.md
+?? context/ci_phase6_task69_visual_review_visual_single_object_route_manifest.json
+?? context/ci_visual_finalization_explicit_review_context.md
+?? context/ci_visual_finalization_loop_20260829_completion.md
+?? context/ci_visual_finalization_loop_20260829_execution_context.md
+?? docs/acceptance/host-smoke/
+?? docs/acceptance/legacy-cutover-tooling.md
+?? docs/acceptance/matrix.md
+?? docs/acceptance/migration.md
+?? docs/acceptance/report-b.md
+?? docs/acceptance/runs/8.2/
+?? docs/acceptance/runs/8.3/
+?? docs/acceptance/runs/8.4/
+?? docs/acceptance/runs/8.5/
+?? docs/acceptance/runs/8.6/
+?? docs/acceptance/runs/8.7/
+?? docs/acceptance/runs/task-6.1/
+?? docs/acceptance/runs/task-6.10/
+?? docs/acceptance/runs/task-6.2/
+?? docs/acceptance/runs/task-6.3/
+?? docs/acceptance/runs/task-6.4/
+?? docs/acceptance/runs/task-6.5/
+?? docs/acceptance/runs/task-6.6/
+?? docs/acceptance/runs/task-6.7/
+?? docs/acceptance/runs/task-6.8/
+?? docs/acceptance/runs/task-6.9/
+?? docs/acceptance/visual-finalization-a-compatibility.md
+?? docs/architecture/format-contracts/pptx-master-job.yaml
+?? docs/decisions/0012-pre-delivery-visual-finalization-loop.md
+?? docs/decisions/0013-site-first-v1-delivery-scope.md
+?? docs/governance/
+?? docs/specs/README.md
+?? docs/specs/competitive-intelligence-workflow-design-v1.3-draft.md
+?? docs/specs/competitive-intelligence-workflow-design-v1.3.md
+?? docs/specs/competitive-intelligence-workflow-design-v1.4-review.md
+?? docs/user-guide/
+?? fixtures/acceptance/
+?? fixtures/positive/a-atopic-dermatitis/curated-result-evidence.json
+?? fixtures/positive/a-atopic-dermatitis/sources/
+?? fixtures/positive/b-pnh/
+?? fixtures/positive/c-atopic-dermatitis/
+?? fixtures/synthetic/b-d70-baseline-blocked/
+?? fixtures/synthetic/b-d70-baseline-recovered/
+?? fixtures/synthetic/b-d70-disposition-missing-pass/
+?? fixtures/synthetic/host-smoke-v1/
+?? fixtures/synthetic/pdf-native-slice/
+?? fixtures/synthetic/three-report-complete/
+?? logs/agent_health/codebuddy-codebuddy-cli-deepseek-v4-flash.json
+?? logs/agent_health/codebuddy-codebuddy-cli-hy3-x.json
+?? logs/agent_health/cursor-cursor-cli-cursor-grok-4.6.json
+?? logs/agent_health/kimi-kimi-code-kimi-code_k3-256k.json
+?? logs/agent_health/pi-cursor-cursor-grok-4.6.json
+?? logs/agent_health/pi-cursor-default.json
+?? logs/agent_health/pi-google-antigravity-gemini-3.7-flash.json
+?? logs/agent_health/pi-kimi-code-k3-256k.json
+?? logs/agent_health/pi-openai-codex-gpt-5.6-luna.json
+?? logs/agent_health/pi-opencode-go-muse-spark-1.3-contributor.json
+?? logs/agent_health/zcode-zcode-GLM-5.3-Flash.json
+?? logs/agent_health/zcode-zcode-GLM-5.3.json
+?? logs/conference/
+?? logs/execution/
+?? logs/tests/
+?? metrics/ci-governance-revision-20260904_metrics.md
+?? metrics/ci-phase10-task101-acceptance-matrix-review_conference_metrics.md
+?? metrics/ci-phase10-task101-acceptance-matrix_conference_metrics.md
+?? metrics/ci-phase10-task101-acceptance-matrix_execution_metrics.md
+?? metrics/ci-phase10-task102-r13-product-rebuild_execution_metrics.md
+?? metrics/ci-phase10-task102-r13e-visual-review_conference_metrics.md
+?? metrics/ci-phase10-task102-real-source-acceptance_execution_metrics.md
+?? metrics/ci-phase10-task102-visual-review-r6_conference_metrics.md
+?? metrics/ci-phase10-task102-visual-review_conference_metrics.md
+?? metrics/ci-phase10-task103-html-host-full-matrix_conference_metrics.md
+?? metrics/ci-phase10-task103-html-host-full-matrix_execution_metrics.md
+?? metrics/ci-phase10-task103-r13j-visual-review_conference_metrics.md
+?? metrics/ci-phase10-task104-migration-manifest-review_conference_metrics.md
+?? metrics/ci-phase10-task104-migration-manifest_conference_metrics.md
+?? metrics/ci-phase10-task104-migration-manifest_execution_metrics.md
+?? metrics/ci-phase10-task105-cutover-tools_conference_metrics.md
+?? metrics/ci-phase10-task105-cutover-tools_execution_metrics.md
+?? metrics/ci-phase10-task106-rc-freeze_execution_metrics.md
+?? metrics/ci-phase10-task106-rc-freeze_metrics.md
+?? metrics/ci-phase6-closeout-integrity_execution_metrics.md
+?? metrics/ci-phase6-final-render-evidence_execution_metrics.md
+?? metrics/ci-phase6-final-visual-review_conference_metrics.md
+?? metrics/ci-phase6-interaction-repair_execution_metrics.md
+?? metrics/ci-phase6-responsive-visual-repair_execution_metrics.md
+?? metrics/ci-phase6-task610-visual-execution_execution_metrics.md
+?? metrics/ci-phase6-task610-visual-review_conference_metrics.md
+?? metrics/ci-phase6-task610_execution_metrics.md
+?? metrics/ci-phase7-task71-design-contract_execution_metrics.md
+?? metrics/ci-phase7-task72-eligibility-drilldown_execution_metrics.md
+?? metrics/ci-phase7-task73-design-views_execution_metrics.md
+?? metrics/ci-phase7-task74-multiple-design-paths_execution_metrics.md
+?? metrics/ci-phase7-task75-named-visual-testers_conference_metrics.md
+?? metrics/ci-phase7-task75-report-c-portal_execution_metrics.md
+?? metrics/ci-phase7-task75-visual-review_conference_metrics.md
+?? metrics/ci-phase8-task81-native-pdf-slice_execution_metrics.md
+?? metrics/ci-phase8-task81-native-pdf-visual-review_conference_metrics.md
+?? metrics/ci-phase8-task82-complete-native-pdf_execution_metrics.md
+?? metrics/ci-phase8-task82-final-visual-review_conference_metrics.md
+?? metrics/ci-phase8-task83-named-visual-testers_conference_metrics.md
+?? metrics/ci-phase8-task83-pdf-reader-acceptance_execution_metrics.md
+?? metrics/ci-phase8-task83-visual-repair-loop1_execution_metrics.md
+?? metrics/ci-phase8-task84-html-ppt-runtime_execution_metrics.md
+?? metrics/ci-phase8-task84-runtime-visual-review_conference_metrics.md
+?? metrics/ci-phase8-task85-html-ppt-closure_execution_metrics.md
+?? metrics/ci-phase8-task85-html-ppt-projections_execution_metrics.md
+?? metrics/ci-phase8-task85-html-ppt-visual-review_conference_metrics.md
+?? metrics/ci-phase8-task86-visual-baseline_execution_metrics.md
+?? metrics/ci-phase8-task86-visual-final_conference_metrics.md
+?? metrics/ci-phase8-task87-ppt-master-job-contract_execution_metrics.md
+?? metrics/ci-phase8-task87b-pptx-confirmation-interrupt_execution_metrics.md
+?? metrics/ci-phase9-task91-correction-approval-review_conference_metrics.md
+?? metrics/ci-phase9-task91-correction-approval_execution_metrics.md
+?? metrics/ci-phase9-task92-incremental-refresh-review_conference_metrics.md
+?? metrics/ci-phase9-task92-incremental-refresh_execution_metrics.md
+?? metrics/ci-phase9-task93-optional-monitoring-review_conference_metrics.md
+?? metrics/ci-phase9-task93-optional-monitoring_execution_metrics.md
+?? metrics/ci-phase9-task94-host-adapters_conference_metrics.md
+?? metrics/ci-phase9-task94-host-adapters_execution_metrics.md
+?? metrics/ci-phase9-task95-candidate-bundle-review_conference_metrics.md
+?? metrics/ci-phase9-task95-candidate-bundle_conference_metrics.md
+?? metrics/ci-phase9-task95-candidate-bundle_execution_metrics.md
+?? metrics/ci-r2-autonomous-research-contract-20260905_execution_metrics.md
+?? metrics/ci-r2-bc-research-package-wiring-20260905_execution_metrics.md
+?? metrics/ci-r2-bc-science-acceptance-20260905_conference_metrics.md
+?? metrics/ci-r2-capability-execution-gate-20260905_execution_metrics.md
+?? metrics/ci-r2-independent-review-hardening-20260905_execution_metrics.md
+?? metrics/ci-r2-multireport-yaozh-20260905_execution_metrics.md
+?? metrics/ci-r2-r3-html-browser-repair-20260905_execution_metrics.md
+?? metrics/ci-r2-render-transaction-recovery-20260905_execution_metrics.md
+?? metrics/ci-r2-review-runtime-fixture-acceptance-20260905_conference_metrics.md
+?? metrics/ci-r2-review-runtime-fixture-rebaseline-20260905_execution_metrics.md
+?? metrics/ci-r2-terminal-recovery-review-boundary-20260905_execution_metrics.md
+?? metrics/ci-r2-yaozh-routing-20260905_execution_metrics.md
+?? metrics/ci-r22-universe-closure-runtime-20260905_execution_metrics.md
+?? metrics/ci-r23-publication-manual-product-gate-20260905_execution_metrics.md
+?? metrics/ci-r23-publication-manual-product-gate-review-20260905_conference_metrics.md
+?? metrics/ci-r24-gatespec-blocker-closure-20260905_execution_metrics.md
+?? metrics/ci-r24-gatespec-blocker-closure-20260905_metrics.md
+?? metrics/ci-r24-gatespec-blocker-closure-review-20260906_conference_metrics.md
+?? metrics/ci-r25-yaozh-browser-adapter-20260906-conference_conference_metrics.md
+?? metrics/ci-r25-yaozh-browser-adapter-20260906_execution_metrics.md
+?? metrics/ci-rebaseline-m1-disk-hygiene-20260904.md
+?? metrics/ci-rebaseline-r0-provenance-review-20260904_conference_metrics.md
+?? metrics/ci-rebaseline-r1-contract-review-20260904_conference_metrics.md
+?? metrics/ci-rebaseline-r2-science-review-20260905_conference_metrics.md
+?? metrics/ci-rebaseline-rebuild-20260904_execution_metrics.md
+?? metrics/ci_phase5_a_data_matrix_recheck_execution_metrics.md
+?? metrics/ci_phase5_a_data_matrix_science_review_v2_conference_metrics.md
+?? metrics/ci_phase5_a_data_matrix_visual_review_v2_conference_metrics.md
+?? metrics/ci_phase5_a_result_scientific_review_conference_metrics.md
+?? metrics/ci_phase5_a_result_visibility_repair_execution_metrics.md
+?? metrics/ci_phase5_a_result_visual_review_conference_metrics.md
+?? metrics/ci_phase5_a_values_matrix_fix_execution_metrics.md
+?? metrics/ci_phase5_a_values_matrix_visual_execution_metrics.md
+?? metrics/ci_phase5_a_values_matrix_visual_review_v4_conference_metrics.md
+?? metrics/ci_phase5_a_values_science_review_v3_conference_metrics.md
+?? metrics/ci_phase5_a_zero_result_evidence_refresh_metrics.md
+?? metrics/ci_phase6_task61_execution_execution_metrics.md
+?? metrics/ci_phase6_task61_independent_review_conference_metrics.md
+?? metrics/ci_phase6_task62_execution_execution_metrics.md
+?? metrics/ci_phase6_task63_execution_execution_metrics.md
+?? metrics/ci_phase6_task64_execution_execution_metrics.md
+?? metrics/ci_phase6_task65_execution_execution_metrics.md
+?? metrics/ci_phase6_task66_execution_execution_metrics.md
+?? metrics/ci_phase6_task67_execution_execution_metrics.md
+?? metrics/ci_phase6_task68_execution_execution_metrics.md
+?? metrics/ci_phase6_task69_execution_execution_metrics.md
+?? metrics/ci_phase6_task69_visual_review_conference_metrics.md
+?? metrics/ci_visual_finalization_explicit_review_conference_metrics.md
+?? metrics/ci_visual_finalization_loop_20260829_execution_metrics.md
+?? migration/recovery_package.schema.json
+?? migration/recovery_package_receipt.schema.json
+?? migrations/0010_source_text_derivations.sql
+?? output/
+?? plans/codex_execution_ci-phase10-task101-acceptance-matrix.md
+?? plans/codex_execution_ci-phase10-task102-r13-product-rebuild.md
+?? plans/codex_execution_ci-phase10-task102-real-source-acceptance.md
+?? plans/codex_execution_ci-phase10-task103-html-host-full-matrix.md
+?? plans/codex_execution_ci-phase10-task104-migration-manifest.md
+?? plans/codex_execution_ci-phase10-task105-cutover-tools.md
+?? plans/codex_execution_ci-phase10-task106-rc-freeze.md
+?? plans/codex_execution_ci-phase6-closeout-integrity.md
+?? plans/codex_execution_ci-phase6-final-render-evidence.md
+?? plans/codex_execution_ci-phase6-interaction-repair.md
+?? plans/codex_execution_ci-phase6-responsive-visual-repair.md
+?? plans/codex_execution_ci-phase6-task610-visual-execution.md
+?? plans/codex_execution_ci-phase6-task610.md
+?? plans/codex_execution_ci-phase7-task71-design-contract.md
+?? plans/codex_execution_ci-phase7-task72-eligibility-drilldown.md
+?? plans/codex_execution_ci-phase7-task73-design-views.md
+?? plans/codex_execution_ci-phase7-task74-multiple-design-paths.md
+?? plans/codex_execution_ci-phase7-task75-report-c-portal.md
+?? plans/codex_execution_ci-phase8-task81-native-pdf-slice.md
+?? plans/codex_execution_ci-phase8-task82-complete-native-pdf.md
+?? plans/codex_execution_ci-phase8-task83-pdf-reader-acceptance.md
+?? plans/codex_execution_ci-phase8-task83-visual-repair-loop1.md
+?? plans/codex_execution_ci-phase8-task84-html-ppt-runtime.md
+?? plans/codex_execution_ci-phase8-task85-html-ppt-closure.md
+?? plans/codex_execution_ci-phase8-task85-html-ppt-projections.md
+?? plans/codex_execution_ci-phase8-task86-visual-baseline.md
+?? plans/codex_execution_ci-phase8-task87-ppt-master-job-contract.md
+?? plans/codex_execution_ci-phase8-task87b-pptx-confirmation-interrupt.md
+?? plans/codex_execution_ci-phase9-task91-correction-approval.md
+?? plans/codex_execution_ci-phase9-task92-incremental-refresh.md
+?? plans/codex_execution_ci-phase9-task93-optional-monitoring.md
+?? plans/codex_execution_ci-phase9-task94-host-adapters.md
+?? plans/codex_execution_ci-phase9-task95-candidate-bundle.md
+?? plans/codex_execution_ci-r2-autonomous-research-contract-20260905.md
+?? plans/codex_execution_ci-r2-bc-research-package-wiring-20260905.md
+?? plans/codex_execution_ci-r2-capability-execution-gate-20260905.md
+?? plans/codex_execution_ci-r2-independent-review-hardening-20260905.md
+?? plans/codex_execution_ci-r2-multireport-yaozh-20260905.md
+?? plans/codex_execution_ci-r2-r3-html-browser-repair-20260905.md
+?? plans/codex_execution_ci-r2-render-transaction-recovery-20260905.md
+?? plans/codex_execution_ci-r2-review-runtime-fixture-rebaseline-20260905.md
+?? plans/codex_execution_ci-r2-terminal-recovery-review-boundary-20260905.md
+?? plans/codex_execution_ci-r2-yaozh-routing-20260905.md
+?? plans/codex_execution_ci-r22-universe-closure-runtime-20260905.md
+?? plans/codex_execution_ci-r23-publication-manual-product-gate-20260905.md
+?? plans/codex_execution_ci-r24-gatespec-blocker-closure-20260905.md
+?? plans/codex_execution_ci-r25-yaozh-browser-adapter-20260906.md
+?? plans/codex_execution_ci-rebaseline-rebuild-20260904.md
+?? plans/codex_execution_ci-rebaseline-rebuild-v3.md
+?? plans/codex_execution_ci_phase5_a_data_matrix_recheck.md
+?? plans/codex_execution_ci_phase5_a_result_visibility_repair.md
+?? plans/codex_execution_ci_phase5_a_values_matrix_fix.md
+?? plans/codex_execution_ci_phase5_a_values_matrix_visual.md
+?? plans/codex_execution_ci_phase6_task61_execution.md
+?? plans/codex_execution_ci_phase6_task62_execution.md
+?? plans/codex_execution_ci_phase6_task63_execution.md
+?? plans/codex_execution_ci_phase6_task64_execution.md
+?? plans/codex_execution_ci_phase6_task65_execution.md
+?? plans/codex_execution_ci_phase6_task66_execution.md
+?? plans/codex_execution_ci_phase6_task67_execution.md
+?? plans/codex_execution_ci_phase6_task68_execution.md
+?? plans/codex_execution_ci_phase6_task69_execution.md
+?? plans/codex_execution_ci_visual_finalization_loop_20260829.md
+?? plans/codex_main_venue_ci-phase10-task101-acceptance-matrix-review.md
+?? plans/codex_main_venue_ci-phase10-task101-acceptance-matrix.md
+?? plans/codex_main_venue_ci-phase10-task102-r13e-visual-review.md
+?? plans/codex_main_venue_ci-phase10-task102-visual-review-r6.md
+?? plans/codex_main_venue_ci-phase10-task102-visual-review.md
+?? plans/codex_main_venue_ci-phase10-task103-html-host-full-matrix.md
+?? plans/codex_main_venue_ci-phase10-task103-r13j-visual-review.md
+?? plans/codex_main_venue_ci-phase10-task104-migration-manifest-review.md
+?? plans/codex_main_venue_ci-phase10-task104-migration-manifest.md
+?? plans/codex_main_venue_ci-phase10-task105-cutover-tools.md
+?? plans/codex_main_venue_ci-phase6-final-visual-review.md
+?? plans/codex_main_venue_ci-phase6-task610-visual-review.md
+?? plans/codex_main_venue_ci-phase7-task75-named-visual-testers.md
+?? plans/codex_main_venue_ci-phase7-task75-visual-review.md
+?? plans/codex_main_venue_ci-phase8-task81-native-pdf-visual-review.md
+?? plans/codex_main_venue_ci-phase8-task82-final-visual-review.md
+?? plans/codex_main_venue_ci-phase8-task82-named-visual-testers.md
+?? plans/codex_main_venue_ci-phase8-task83-named-visual-testers.md
+?? plans/codex_main_venue_ci-phase8-task84-runtime-visual-review.md
+?? plans/codex_main_venue_ci-phase8-task85-html-ppt-visual-review.md
+?? plans/codex_main_venue_ci-phase8-task86-visual-final.md
+?? plans/codex_main_venue_ci-phase9-task91-correction-approval-review.md
+?? plans/codex_main_venue_ci-phase9-task92-incremental-refresh-review.md
+?? plans/codex_main_venue_ci-phase9-task93-optional-monitoring-review.md
+?? plans/codex_main_venue_ci-phase9-task94-host-adapters.md
+?? plans/codex_main_venue_ci-phase9-task95-candidate-bundle-review.md
+?? plans/codex_main_venue_ci-phase9-task95-candidate-bundle.md
+?? plans/codex_main_venue_ci-r2-bc-science-acceptance-20260905.md
+?? plans/codex_main_venue_ci-r2-review-runtime-fixture-acceptance-20260905.md
+?? plans/codex_main_venue_ci-r23-publication-manual-product-gate-review-20260905.md
+?? plans/codex_main_venue_ci-r24-gatespec-blocker-closure-review-20260906.md
+?? plans/codex_main_venue_ci-r25-yaozh-browser-adapter-20260906-conference.md
+?? plans/codex_main_venue_ci-rebaseline-r0-provenance-review-20260904.md
+?? plans/codex_main_venue_ci-rebaseline-r1-contract-review-20260904.md
+?? plans/codex_main_venue_ci-rebaseline-r2-science-review-20260905.md
+?? plans/codex_main_venue_ci_phase5_a_data_matrix_science_review_v2.md
+?? plans/codex_main_venue_ci_phase5_a_data_matrix_visual_review_v2.md
+?? plans/codex_main_venue_ci_phase5_a_result_scientific_review.md
+?? plans/codex_main_venue_ci_phase5_a_result_visual_review.md
+?? plans/codex_main_venue_ci_phase5_a_values_matrix_visual_review_v4.md
+?? plans/codex_main_venue_ci_phase5_a_values_science_review_v3.md
+?? plans/codex_main_venue_ci_phase6_task61_independent_review.md
+?? plans/codex_main_venue_ci_phase6_task69_visual_review.md
+?? plans/competitive-intelligence-workflow-roadmap-v1.3.md
+?? plans/gpt6-execution-plan-v4-20260905.md
+?? plans/gpt6-execution-plan-v5-20260905.md
+?? plans/gpt6-goal-prompt-v5-20260905.md
+?? plans/zcode_codex_handoff_prompt_20260902.md
+?? plans/zcode_execution_plan_v2_20260902.md
+?? plans/zcode_revised_roadmap_20260902.md
+?? policies/endpoints/
+?? policies/studies/
+?? policies/timepoints/
+?? prompts/ci-phase10-task102-visual-r5-canonical.md
+?? prompts/ci-phase10-task102-visual-r5-codebuddy.md
+?? prompts/ci-phase10-task102-visual-r5-cursor.md
+?? prompts/ci-phase10-task102-visual-r5-followup.md
+?? prompts/ci-phase10-task102-visual-r5-minimax.md
+?? prompts/ci-r2-yaozh-stage-review-astra-high.md
+?? prompts/codex-subagent_ci-governance-revision-20260904.md
+?? prompts/codex_ci_phase5_a_zero_result_evidence_refresh.md
+?? prompts/conference/ci-phase10-task101-acceptance-matrix-review/
+?? prompts/conference/ci-phase10-task101-acceptance-matrix/
+?? prompts/conference/ci-phase10-task102-r13e-visual-review/
+?? prompts/conference/ci-phase10-task102-visual-review-r6/
+?? prompts/conference/ci-phase10-task102-visual-review/
+?? prompts/conference/ci-phase10-task103-html-host-full-matrix/
+?? prompts/conference/ci-phase10-task103-r13j-visual-review/
+?? prompts/conference/ci-phase10-task104-migration-manifest-review/
+?? prompts/conference/ci-phase10-task104-migration-manifest/
+?? prompts/conference/ci-phase10-task105-cutover-tools/
+?? prompts/conference/ci-phase6-final-visual-review/
+?? prompts/conference/ci-phase6-task610-visual-review/
+?? prompts/conference/ci-phase7-task75-named-visual-testers/
+?? prompts/conference/ci-phase7-task75-visual-review/
+?? prompts/conference/ci-phase8-task81-native-pdf-visual-review/
+?? prompts/conference/ci-phase8-task82-final-visual-review/
+?? prompts/conference/ci-phase8-task83-named-visual-testers/
+?? prompts/conference/ci-phase8-task84-runtime-visual-review/
+?? prompts/conference/ci-phase8-task85-html-ppt-visual-review/
+?? prompts/conference/ci-phase8-task86-connectivity/
+?? prompts/conference/ci-phase8-task86-visual-final/
+?? prompts/conference/ci-phase9-task91-correction-approval-review/
+?? prompts/conference/ci-phase9-task92-incremental-refresh-review/
+?? prompts/conference/ci-phase9-task93-optional-monitoring-review/
+?? prompts/conference/ci-phase9-task94-host-adapters/
+?? prompts/conference/ci-phase9-task95-candidate-bundle-review/
+?? prompts/conference/ci-phase9-task95-candidate-bundle/
+?? prompts/conference/ci-r2-bc-science-acceptance-20260905/
+?? prompts/conference/ci-r2-review-runtime-fixture-acceptance-20260905/
+?? prompts/conference/ci-r2-stage-review-astra-20260905/
+?? prompts/conference/ci-r23-publication-manual-product-gate-review-20260905/
+?? prompts/conference/ci-r24-gatespec-blocker-closure-review-20260906/
+?? prompts/conference/ci-r25-yaozh-browser-adapter-20260906-conference/
+?? prompts/conference/ci-rebaseline-r0-provenance-review-20260904/
+?? prompts/conference/ci-rebaseline-r1-contract-review-20260904/
+?? prompts/conference/ci-rebaseline-r2-science-review-20260905/
+?? prompts/conference/ci_phase5_a_data_matrix_science_review_v2/
+?? prompts/conference/ci_phase5_a_data_matrix_visual_review_v2/
+?? prompts/conference/ci_phase5_a_result_scientific_review/
+?? prompts/conference/ci_phase5_a_result_visual_review/
+?? prompts/conference/ci_phase5_a_values_matrix_visual_review_v4/
+?? prompts/conference/ci_phase5_a_values_science_review_v3/
+?? prompts/conference/ci_phase6_task61_independent_review/
+?? prompts/conference/ci_phase6_task69_visual_review/
+?? prompts/conference/ci_visual_finalization_explicit_review/
+?? prompts/execution/ci-phase10-task102-r13-product-rebuild/
+?? prompts/execution/ci-phase10-task102-real-source-acceptance/
+?? prompts/execution/ci-phase10-task103-html-host-full-matrix/
+?? prompts/execution/ci-phase10-task105-cutover-tools/
+?? prompts/execution/ci-phase10-task106-rc-freeze/
+?? prompts/execution/ci-phase6-final-render-evidence/
+?? prompts/execution/ci-phase6-task610/
+?? prompts/execution/ci-phase8-task82-complete-native-pdf/
+?? prompts/execution/ci-phase8-task85-html-ppt-closure/
+?? prompts/execution/ci-phase8-task85-html-ppt-projections/
+?? prompts/execution/ci-phase8-task86-visual-baseline/
+?? prompts/execution/ci-phase8-task87b-pptx-confirmation-interrupt/
+?? prompts/execution/ci-phase9-task91-correction-approval/
+?? prompts/execution/ci-phase9-task92-incremental-refresh/
+?? prompts/execution/ci-phase9-task93-optional-monitoring/
+?? prompts/execution/ci-r24-gatespec-blocker-closure-20260905/
+?? prompts/execution/ci-r25-yaozh-browser-adapter-20260906/
+?? prompts/execution/ci-rebaseline-rebuild-20260904/
+?? prompts/execution/ci_phase5_a_data_matrix_recheck/
+?? prompts/execution/ci_phase5_a_values_matrix_fix/
+?? prompts/execution/ci_phase5_a_values_matrix_visual/
+?? prompts/pi_ci-r24-gatespec-blocker-closure-20260905.md
+?? prompts/reviews/ci-stage-review-gpt6-astra-high-20260906.md
+?? prompts/tests/
+?? prompts/zcode_ci-phase10-task106-rc-freeze.md
+?? reviews/ci-phase7-task75-report-c-portal/
+?? reviews/ci-phase8-task81-native-pdf-slice/
+?? reviews/ci-phase9-task93-optional-monitoring/
+?? reviews/ci-phase9-task94-host-adapters/
+?? reviews/ci_phase5_a_values_matrix_fix_data_audit.md
+?? reviews/ci_phase5_a_values_matrix_fix_screenshots/
+?? reviews/codex_ci-governance-revision-20260904_review.md
+?? reviews/codex_ci-phase10-task106-rc-freeze_review.md
+?? reviews/codex_ci-r24-gatespec-blocker-closure-20260905_review.md
+?? reviews/codex_ci_phase5_a_zero_result_evidence_refresh_review.md
+?? reviews/codex_conference_ci-phase10-task101-acceptance-matrix-review_review.md
+?? reviews/codex_conference_ci-phase10-task101-acceptance-matrix_review.md
+?? reviews/codex_conference_ci-phase10-task102-r13e-visual-review_review.md
+?? reviews/codex_conference_ci-phase10-task102-visual-review-r6_review.md
+?? reviews/codex_conference_ci-phase10-task102-visual-review_review.md
+?? reviews/codex_conference_ci-phase10-task103-html-host-full-matrix_review.md
+?? reviews/codex_conference_ci-phase10-task103-r13j-visual-review_review.md
+?? reviews/codex_conference_ci-phase10-task104-migration-manifest-review_review.md
+?? reviews/codex_conference_ci-phase10-task104-migration-manifest_review.md
+?? reviews/codex_conference_ci-phase10-task105-cutover-tools_review.md
+?? reviews/codex_conference_ci-phase6-final-visual-review_review.md
+?? reviews/codex_conference_ci-phase6-task610-visual-review_review.md
+?? reviews/codex_conference_ci-phase7-task75-named-visual-testers_review.md
+?? reviews/codex_conference_ci-phase7-task75-visual-review_review.md
+?? reviews/codex_conference_ci-phase8-task81-native-pdf-visual-review_review.md
+?? reviews/codex_conference_ci-phase8-task82-final-visual-review_review.md
+?? reviews/codex_conference_ci-phase8-task83-named-visual-testers_review.md
+?? reviews/codex_conference_ci-phase8-task84-runtime-visual-review_review.md
+?? reviews/codex_conference_ci-phase8-task85-html-ppt-visual-review_review.md
+?? reviews/codex_conference_ci-phase8-task86-visual-final_review.md
+?? reviews/codex_conference_ci-phase9-task91-correction-approval-review_review.md
+?? reviews/codex_conference_ci-phase9-task92-incremental-refresh-review_review.md
+?? reviews/codex_conference_ci-phase9-task93-optional-monitoring-review_review.md
+?? reviews/codex_conference_ci-phase9-task94-host-adapters_review.md
+?? reviews/codex_conference_ci-phase9-task95-candidate-bundle-review_review.md
+?? reviews/codex_conference_ci-phase9-task95-candidate-bundle_review.md
+?? reviews/codex_conference_ci-r2-bc-science-acceptance-20260905_review.md
+?? reviews/codex_conference_ci-r2-review-runtime-fixture-acceptance-20260905_review.md
+?? reviews/codex_conference_ci-r23-publication-manual-product-gate-review-20260905_review.md
+?? reviews/codex_conference_ci-r24-gatespec-blocker-closure-review-20260906_review.md
+?? reviews/codex_conference_ci-r25-yaozh-browser-adapter-20260906-conference_review.md
+?? reviews/codex_conference_ci-rebaseline-r0-provenance-review-20260904_review.md
+?? reviews/codex_conference_ci-rebaseline-r1-contract-review-20260904_review.md
+?? reviews/codex_conference_ci-rebaseline-r2-science-review-20260905_review.md
+?? reviews/codex_conference_ci_phase5_a_data_matrix_science_review_v2_review.md
+?? reviews/codex_conference_ci_phase5_a_data_matrix_visual_review_v2_review.md
+?? reviews/codex_conference_ci_phase5_a_result_scientific_review_review.md
+?? reviews/codex_conference_ci_phase5_a_result_visual_review_review.md
+?? reviews/codex_conference_ci_phase5_a_values_matrix_visual_review_v4_review.md
+?? reviews/codex_conference_ci_phase5_a_values_science_review_v3_review.md
+?? reviews/codex_conference_ci_phase6_task61_independent_review_review.md
+?? reviews/codex_conference_ci_phase6_task69_visual_review_review.md
+?? reviews/codex_conference_ci_visual_finalization_explicit_review_review.md
+?? reviews/codex_execution_ci-phase10-task101-acceptance-matrix_review.md
+?? reviews/codex_execution_ci-phase10-task102-r13-product-rebuild_review.md
+?? reviews/codex_execution_ci-phase10-task102-real-source-acceptance_review.md
+?? reviews/codex_execution_ci-phase10-task103-html-host-full-matrix_review.md
+?? reviews/codex_execution_ci-phase10-task104-migration-manifest_review.md
+?? reviews/codex_execution_ci-phase10-task105-cutover-tools_review.md
+?? reviews/codex_execution_ci-phase10-task106-rc-freeze_review.md
+?? reviews/codex_execution_ci-phase6-closeout-integrity_review.md
+?? reviews/codex_execution_ci-phase6-final-render-evidence_review.md
+?? reviews/codex_execution_ci-phase6-interaction-repair_review.md
+?? reviews/codex_execution_ci-phase6-responsive-visual-repair_review.md
+?? reviews/codex_execution_ci-phase6-task610-visual-execution_review.md
+?? reviews/codex_execution_ci-phase6-task610_review.md
+?? reviews/codex_execution_ci-phase7-task71-design-contract_review.md
+?? reviews/codex_execution_ci-phase7-task72-eligibility-drilldown_review.md
+?? reviews/codex_execution_ci-phase7-task73-design-views_review.md
+?? reviews/codex_execution_ci-phase7-task74-multiple-design-paths_review.md
+?? reviews/codex_execution_ci-phase7-task75-report-c-portal_review.md
+?? reviews/codex_execution_ci-phase8-task81-native-pdf-slice_review.md
+?? reviews/codex_execution_ci-phase8-task82-complete-native-pdf_review.md
+?? reviews/codex_execution_ci-phase8-task83-pdf-reader-acceptance_review.md
+?? reviews/codex_execution_ci-phase8-task83-visual-repair-loop1_review.md
+?? reviews/codex_execution_ci-phase8-task84-html-ppt-runtime_review.md
+?? reviews/codex_execution_ci-phase8-task85-html-ppt-closure_review.md
+?? reviews/codex_execution_ci-phase8-task85-html-ppt-projections_review.md
+?? reviews/codex_execution_ci-phase8-task86-visual-baseline_review.md
+?? reviews/codex_execution_ci-phase8-task87-ppt-master-job-contract_review.md
+?? reviews/codex_execution_ci-phase8-task87b-pptx-confirmation-interrupt_review.md
+?? reviews/codex_execution_ci-phase9-task91-correction-approval_review.md
+?? reviews/codex_execution_ci-phase9-task92-incremental-refresh_review.md
+?? reviews/codex_execution_ci-phase9-task93-optional-monitoring_review.md
+?? reviews/codex_execution_ci-phase9-task94-host-adapters_review.md
+?? reviews/codex_execution_ci-phase9-task95-candidate-bundle_review.md
+?? reviews/codex_execution_ci-r2-autonomous-research-contract-20260905_review.md
+?? reviews/codex_execution_ci-r2-bc-research-package-wiring-20260905_review.md
+?? reviews/codex_execution_ci-r2-capability-execution-gate-20260905_review.md
+?? reviews/codex_execution_ci-r2-independent-review-hardening-20260905_review.md
+?? reviews/codex_execution_ci-r2-multireport-yaozh-20260905_review.md
+?? reviews/codex_execution_ci-r2-r3-html-browser-repair-20260905_review.md
+?? reviews/codex_execution_ci-r2-render-transaction-recovery-20260905_review.md
+?? reviews/codex_execution_ci-r2-review-runtime-fixture-rebaseline-20260905_review.md
+?? reviews/codex_execution_ci-r2-terminal-recovery-review-boundary-20260905_review.md
+?? reviews/codex_execution_ci-r2-yaozh-routing-20260905_review.md
+?? reviews/codex_execution_ci-r22-universe-closure-runtime-20260905_review.md
+?? reviews/codex_execution_ci-r23-publication-manual-product-gate-20260905_review.md
+?? reviews/codex_execution_ci-r24-gatespec-blocker-closure-20260905_review.md
+?? reviews/codex_execution_ci-r25-yaozh-browser-adapter-20260906_review.md
+?? reviews/codex_execution_ci-rebaseline-rebuild-20260904_review.md
+?? reviews/codex_execution_ci_phase5_a_data_matrix_recheck_review.md
+?? reviews/codex_execution_ci_phase5_a_result_visibility_repair_review.md
+?? reviews/codex_execution_ci_phase5_a_values_matrix_fix_review.md
+?? reviews/codex_execution_ci_phase5_a_values_matrix_visual_review.md
+?? reviews/codex_execution_ci_phase6_task61_execution_review.md
+?? reviews/codex_execution_ci_phase6_task62_execution_review.md
+?? reviews/codex_execution_ci_phase6_task63_execution_review.md
+?? reviews/codex_execution_ci_phase6_task64_execution_review.md
+?? reviews/codex_execution_ci_phase6_task65_execution_review.md
+?? reviews/codex_execution_ci_phase6_task66_execution_review.md
+?? reviews/codex_execution_ci_phase6_task67_execution_review.md
+?? reviews/codex_execution_ci_phase6_task68_execution_review.md
+?? reviews/codex_execution_ci_phase6_task69_execution_review.md
+?? reviews/codex_execution_ci_visual_finalization_loop_20260829_review.md
+?? reviews/codex_v13_implementation_gap_matrix_20260904.md
+?? reviews/conference/
+?? reviews/ctgov-live-acquisition-20260906.json
+?? reviews/gpt6-engineering-review-20260905.md
+?? reviews/p3-native-semantic-review-20260908.md
+?? reviews/p52-native-install-audit-20260906.md
+?? reviews/p52-native-recovery-review-20260906.md
+?? reviews/worker03_v1_html_active_layer_debt_20260905.md
+?? reviews/worker04_r2_bundle_trust_root_smoke_semantics_20260905.md
+?? reviews/zcode_ci_engineering_audit_20260902.md
+?? reviews/zcode_disposition_ci-rebaseline-rebuild_20260904.md
+?? runs/acceptance/
+?? runs/codex_ci_phase5_a_zero_result_evidence_refresh.md
+?? runs/conference/astra_high_ci_r2_yaozh_stage_review_20260905.md
+?? runs/conference/ci-phase10-task101-acceptance-matrix-review/
+?? runs/conference/ci-phase10-task101-acceptance-matrix/
+?? runs/conference/ci-phase10-task102-r13e-visual-review/
+?? runs/conference/ci-phase10-task102-visual-review-r6/
+?? runs/conference/ci-phase10-task102-visual-review/
+?? runs/conference/ci-phase10-task103-html-host-full-matrix/
+?? runs/conference/ci-phase10-task103-r13j-visual-review/
+?? runs/conference/ci-phase10-task104-migration-manifest-review/
+?? runs/conference/ci-phase10-task104-migration-manifest/
+?? runs/conference/ci-phase10-task105-cutover-tools/
+?? runs/conference/ci-phase6-final-visual-review/
+?? runs/conference/ci-phase6-task610-visual-review/
+?? runs/conference/ci-phase7-task75-named-visual-testers/
+?? runs/conference/ci-phase7-task75-visual-review/
+?? runs/conference/ci-phase8-task81-native-pdf-visual-review/
+?? runs/conference/ci-phase8-task82-final-visual-review/
+?? runs/conference/ci-phase8-task82-named-visual-testers/
+?? runs/conference/ci-phase8-task83-named-visual-testers/
+?? runs/conference/ci-phase8-task84-runtime-visual-review/
+?? runs/conference/ci-phase8-task85-html-ppt-visual-review/
+?? runs/conference/ci-phase8-task86-connectivity/
+?? runs/conference/ci-phase8-task86-visual-final/
+?? runs/conference/ci-phase9-task91-correction-approval-review/
+?? runs/conference/ci-phase9-task92-incremental-refresh-review/
+?? runs/conference/ci-phase9-task93-optional-monitoring-review/
+?? runs/conference/ci-phase9-task94-host-adapters/
+?? runs/conference/ci-phase9-task95-candidate-bundle-review/
+?? runs/conference/ci-phase9-task95-candidate-bundle/
+?? runs/conference/ci-r2-bc-science-acceptance-20260905/
+?? runs/conference/ci-r2-review-runtime-fixture-acceptance-20260905/
+?? runs/conference/ci-r2-stage-review-astra-20260905/
+?? runs/conference/ci-r23-publication-manual-product-gate-review-20260905/
+?? runs/conference/ci-r24-gatespec-blocker-closure-review-20260906/
+?? runs/conference/ci-r25-yaozh-browser-adapter-20260906-conference/
+?? runs/conference/ci-rebaseline-r0-provenance-review-20260904/
+?? runs/conference/ci-rebaseline-r1-contract-review-20260904/
+?? runs/conference/ci-rebaseline-r2-science-review-20260905/
+?? runs/conference/ci_phase5_a_data_matrix_science_review_v2/
+?? runs/conference/ci_phase5_a_data_matrix_visual_review_v2/
+?? runs/conference/ci_phase5_a_result_scientific_review/
+?? runs/conference/ci_phase5_a_result_visual_review/
+?? runs/conference/ci_phase5_a_values_matrix_visual_review_v4/
+?? runs/conference/ci_phase5_a_values_science_review_v3/
+?? runs/conference/ci_phase6_task61_independent_review/
+?? runs/conference/ci_phase6_task69_visual_review/
+?? runs/conference/ci_visual_finalization_explicit_review/
+?? runs/execution/ci-phase10-task102-r13-product-rebuild/
+?? runs/execution/ci-phase10-task102-real-source-acceptance/
+?? runs/execution/ci-phase10-task103-html-host-full-matrix/
+?? runs/execution/ci-phase10-task105-cutover-tools/
+?? runs/execution/ci-phase10-task106-rc-freeze/
+?? runs/execution/ci-phase6-final-render-evidence/
+?? runs/execution/ci-phase6-task610/
+?? runs/execution/ci-phase8-task82-complete-native-pdf/
+?? runs/execution/ci-phase8-task85-html-ppt-closure/
+?? runs/execution/ci-phase8-task85-html-ppt-projections/
+?? runs/execution/ci-phase8-task86-visual-baseline/
+?? runs/execution/ci-phase8-task87b-pptx-confirmation-interrupt/
+?? runs/execution/ci-phase9-task91-correction-approval/
+?? runs/execution/ci-phase9-task92-incremental-refresh/
+?? runs/execution/ci-phase9-task93-optional-monitoring/
+?? runs/execution/ci-r24-gatespec-blocker-closure-20260905/
+?? runs/execution/ci-r25-yaozh-browser-adapter-20260906/
+?? runs/execution/ci-rebaseline-rebuild-20260904/
+?? runs/execution/ci_phase5_a_data_matrix_recheck/
+?? runs/execution/ci_phase5_a_values_matrix_fix/
+?? runs/execution/ci_phase5_a_values_matrix_visual/
+?? runs/subagents/
+?? runs/tests/
+?? schemas/acceptance-catalog.schema.json
+?? schemas/baseline-observation.schema.json
+?? schemas/correction-proposal.schema.json
+?? schemas/host-receipt.schema.json
+?? schemas/monitoring-change-candidate.schema.json
+?? schemas/ppt-master-job.schema.json
+?? schemas/pptx-confirmation.schema.json
+?? schemas/pptx-source-pack.schema.json
+?? schemas/publication-blocker-audit.schema.json
+?? schemas/release-case-receipt.schema.json
+?? schemas/reports/
+?? schemas/research-package.schema.json
+?? schemas/scientific-qc-blocker-audit.schema.json
+?? schemas/scientific-review-receipt.schema.json
+?? schemas/trial-disposition-observation.schema.json
+?? schemas/visual-finalization-plan.schema.json
+?? schemas/visual-render-evidence.schema.json
+?? schemas/visual-verification-reference.schema.json
+?? schemas/yaozh-route-access-receipt.schema.json
+?? schemas/yaozh-session-observation.schema.json
+?? skills/_internal/visual-design-director/
+?? spikes/
+?? src/ci_workflow/application/acceptance_boundary.py
+?? src/ci_workflow/application/acceptance_catalog.py
+?? src/ci_workflow/application/acceptance_runner.py
+?? src/ci_workflow/application/autonomous_research.py
+?? src/ci_workflow/application/correction_service.py
+?? src/ci_workflow/application/delivered_artifacts.py
+?? src/ci_workflow/application/fresh_b_research_package.py
+?? src/ci_workflow/application/fresh_c_research_package.py
+?? src/ci_workflow/application/fresh_install.py
+?? src/ci_workflow/application/fresh_research_ingestion.py
+?? src/ci_workflow/application/fresh_research_primitives.py
+?? src/ci_workflow/application/host_smoke.py
+?? src/ci_workflow/application/host_smoke_runner.py
+?? src/ci_workflow/application/host_smoke_scenario.py
+?? src/ci_workflow/application/intake.py
+?? src/ci_workflow/application/latest_delivery.py
+?? src/ci_workflow/application/monitoring_service.py
+?? src/ci_workflow/application/ppt_master_job.py
+?? src/ci_workflow/application/publication_manual_gate.py
+?? src/ci_workflow/application/real_source_acceptance.py
+?? src/ci_workflow/application/refresh_service.py
+?? src/ci_workflow/application/research_package_submission.py
+?? src/ci_workflow/application/review_issuer.py
+?? src/ci_workflow/application/scientific_review_transition.py
+?? src/ci_workflow/application/terminal_recovery.py
+?? src/ci_workflow/application/visual_acceptance.py
+?? src/ci_workflow/application/yaozh_access.py
+?? src/ci_workflow/domain/monitoring.py
+?? src/ci_workflow/domain/public_provenance.py
+?? src/ci_workflow/domain/publication.py
+?? src/ci_workflow/domain/research_package.py
+?? src/ci_workflow/graph/definitions/correction.py
+?? src/ci_workflow/graph/definitions/monitoring.py
+?? src/ci_workflow/graph/definitions/refresh.py
+?? src/ci_workflow/graph/impact.py
+?? src/ci_workflow/graph/typed_skills.py
+?? src/ci_workflow/graph/visual_finalization.py
+?? src/ci_workflow/hosts/
+?? src/ci_workflow/ingestion/publication_gate.py
+?? src/ci_workflow/qc/pdf.py
+?? src/ci_workflow/qc/review_receipt.py
+?? src/ci_workflow/renderers/html_ppt/
+?? src/ci_workflow/renderers/pdf/
+?? src/ci_workflow/renderers/pdf_native/
+?? src/ci_workflow/renderers/portal/assets/report-a.css
+?? src/ci_workflow/renderers/portal/assets/report-b.css
+?? src/ci_workflow/renderers/portal/assets/report-b.js
+?? src/ci_workflow/renderers/portal/assets/report-c.css
+?? src/ci_workflow/renderers/portal/assets/report-c.js
+?? src/ci_workflow/renderers/portal/report_b.py
+?? src/ci_workflow/renderers/portal/report_c.py
+?? src/ci_workflow/renderers/portal/templates/b/
+?? src/ci_workflow/renderers/portal/templates/c/
+?? src/ci_workflow/renderers/pptx_master/
+?? src/ci_workflow/reports/b/
+?? src/ci_workflow/reports/c/
+?? src/ci_workflow/reports/common/study_roles.py
+?? src/ci_workflow/schemas/correction-proposal.schema.json
+?? src/ci_workflow/schemas/host-receipt.schema.json
+?? src/ci_workflow/schemas/monitoring-change-candidate.schema.json
+?? src/ci_workflow/schemas/ppt-master-job.schema.json
+?? src/ci_workflow/schemas/pptx-confirmation.schema.json
+?? src/ci_workflow/schemas/pptx-source-pack.schema.json
+?? src/ci_workflow/schemas/scientific-review-receipt.schema.json
+?? src/ci_workflow/schemas/visual-finalization-plan.schema.json
+?? src/ci_workflow/schemas/visual-render-evidence.schema.json
+?? src/ci_workflow/schemas/visual-verification-reference.schema.json
+?? src/ci_workflow/sources/connectors/ctgov_fetch.py
+?? src/ci_workflow/storage/render_transaction.py
+?? src/ci_workflow/storage/source_derivation.py
+?? tests/acceptance/test_abc_visual_acceptance.py
+?? tests/acceptance/test_fixture_catalog.py
+?? tests/acceptance/test_full_matrix.py
+?? tests/acceptance/test_legacy_negative_regressions.py
+?? tests/acceptance/test_native_pdf_slice.py
+?? tests/acceptance/test_pdf_outputs.py
+?? tests/acceptance/test_preview_report_snapshot_contract.py
+?? tests/acceptance/test_r13_visual_contract_static.py
+?? tests/acceptance/test_release_acceptance_boundary.py
+?? tests/acceptance/test_report_a_real.py
+?? tests/acceptance/test_report_b.py
+?? tests/acceptance/test_report_b_real.py
+?? tests/acceptance/test_report_c.py
+?? tests/acceptance/test_report_c_real.py
+?? tests/acceptance/test_required_receipt_closure.py
+?? tests/acceptance/test_visual_acceptance.py
+?? tests/application/
+?? tests/browser/test_a_complete_observations.py
+?? tests/browser/test_a_public_source_drawer.py
+?? tests/browser/test_b_portal.py
+?? tests/browser/test_b_semantic_proposals.py
+?? tests/browser/test_c_portal.py
+?? tests/browser/test_portal_autoescape.py
+?? tests/contract/test_artifact_symlink_boundary.py
+?? tests/contract/test_bundle_packaging.py
+?? tests/contract/test_bundle_provenance.py
+?? tests/contract/test_bundle_scientific_closure.py
+?? tests/contract/test_correction_proposal_contract.py
+?? tests/contract/test_host_boundary.py
+?? tests/contract/test_host_receipt_contract.py
+?? tests/contract/test_monitoring_change_candidate_contract.py
+?? tests/contract/test_ppt_master_job.py
+?? tests/contract/test_ppt_master_job_contract_vectors.py
+?? tests/contract/test_rebaseline_governance.py
+?? tests/contract/test_rebaseline_snapshot.py
+?? tests/contract/test_scientific_review_receipt_contract.py
+?? tests/contract/test_source_review_digest.py
+?? tests/contract/test_v13_intake_package.py
+?? tests/contract/test_v1_test_layering.py
+?? tests/contract/test_visual_finalization_negative.py
+?? tests/contract/test_visual_finalization_plan.py
+?? tests/contract/test_visual_render_evidence.py
+?? tests/fixtures/pptx-master-job/
+?? tests/graph/test_monitoring_nodes.py
+?? tests/graph/test_monitoring_uninstallable.py
+?? tests/graph/test_pptx_confirmation_interrupt.py
+?? tests/graph/test_visual_finalization_graph_negative.py
+?? tests/hosts/
+?? tests/html_ppt/
+?? tests/integration/reports/test_b_report_portal.py
+?? tests/integration/reports/test_c_report_portal.py
+?? tests/integration/sources/test_ctgov_fetch.py
+?? tests/integration/test_a_public_provenance.py
+?? tests/integration/test_atopic_dermatitis_package_rebuild.py
+?? tests/integration/test_autonomous_research_work_item.py
+?? tests/integration/test_committed_a_render_recovery.py
+?? tests/integration/test_correction_flow.py
+?? tests/integration/test_correction_service.py
+?? tests/integration/test_ctgov_fetch_cli.py
+?? tests/integration/test_ctgov_record_derivation.py
+?? tests/integration/test_ctgov_result_coverage_audit.py
+?? tests/integration/test_curated_result_evidence_merge.py
+?? tests/integration/test_fresh_a_scientific_review.py
+?? tests/integration/test_fresh_c_research_package.py
+?? tests/integration/test_host_adapters.py
+?? tests/integration/test_host_smoke_receipts.py
+?? tests/integration/test_host_smoke_scenario_resume.py
+?? tests/integration/test_incremental_refresh.py
+?? tests/integration/test_latest_delivery.py
+?? tests/integration/test_manual_inbox_in_place.py
+?? tests/integration/test_monitoring_service.py
+?? tests/integration/test_multi_report_product_run.py
+?? tests/integration/test_recovery_artifact_validation.py
+?? tests/integration/test_report_a_render_transaction.py
+?? tests/integration/test_report_b_render_transaction.py
+?? tests/integration/test_report_c_render_transaction.py
+?? tests/integration/test_research_package_submission.py
+?? tests/integration/test_research_source_binding.py
+?? tests/integration/test_review_issuer.py
+?? tests/integration/test_run_capability_execution_gate.py
+?? tests/integration/test_scientific_review_transition.py
+?? tests/integration/test_source_capture_precision_ingestion.py
+?? tests/integration/test_source_text_derivation.py
+?? tests/integration/test_v13_closure_recovery.py
+?? tests/integration/test_v13_publication_gate.py
+?? tests/integration/test_yaozh_access_cli.py
+?? tests/integration/test_yaozh_runtime_reuse.py
+?? tests/migration/test_legacy_cutover.py
+?? tests/migration/test_manifest_closure.py
+?? tests/migration/test_recovery_rehearsal.py
+?? tests/pdf/
+?? tests/renderers/
+?? tests/reports/b/
+?? tests/reports/c/
+?? tests/reports/test_study_role_policy.py
+?? tests/unit/reports/b/
+?? tests/unit/test_a_observation_numeric_contract.py
+?? tests/unit/test_render_transaction.py
+?? tests/unit/test_report_a_safety_projection.py
+?? tests/unit/test_site_digest_path_boundary.py
+?? tests/unit/test_source_capture_date_precision.py
+?? tmp/
+?? tools/build_bundle.py
+?? tools/build_recovery_package.py
+?? tools/bundle_contract.py
+?? tools/check_clean_tree.py
+?? tools/collect_html_ppt_visual_baseline.py
+?? tools/gate.sh
+?? tools/install_bundle.py
+?? tools/legacy_cutover.py
+?? tools/merge_curated_result_evidence.py
+?? tools/rebaseline_snapshot.py
+?? tools/rebuild_atopic_dermatitis_package.py
+?? tools/render_html_ppt.py
+?? tools/run_acceptance.py
+?? tools/run_host_smoke.py
+?? tools/verify_bundle.py
+?? tools/verify_pdf.py
+?? tools/verify_rebaseline_source_set.py
+?? tools/verify_release_receipts.py

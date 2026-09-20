@@ -1,0 +1,13 @@
+Task 6.2 GREEN 记录（2026-08-29）
+
+命令：
+uv run pytest -q tests/reports/b/test_guideline_endpoint_basis.py tests/reports/b/test_efficacy_views.py tests/reports/b/test_user_sorting.py
+
+结果：19 passed in 0.26s。
+
+最终实现并验证：
+- CDE 与 FDA 现行指南平行呈现，草案和历史版本不驱动默认依据；不同适用人群或研发语境分列。
+- 锁定核心试验分母，只计算主要/共同主要终点；严格多数不足时才采用“最常采用”。
+- 单时间点视图不跨时间窗，纵向视图可在同一终点族内连接多个真实时间点。
+- 治疗组与对照组并列；森林图只使用来源直接报告的效应量，不自行推导。
+- 默认不按疗效排名；用户排序只在兼容范围内进行，未知值不当作零，重置可恢复稳定默认顺序。

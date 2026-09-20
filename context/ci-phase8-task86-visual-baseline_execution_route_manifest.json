@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "policy": "beijing-day-night-v1",
+  "timezone": "Asia/Shanghai",
+  "day_start": "08:00",
+  "night_start": "22:00",
+  "packet_period": "day",
+  "packet_evaluated_at": "2026-08-31T12:40:17.103642+08:00",
+  "variants": {
+    "day": {
+      "agent": "grok",
+      "provider": "grok-build",
+      "model": "grok-4.6",
+      "effort": "medium",
+      "default_provider": "grok-build",
+      "default_model": "grok-4.6",
+      "default_effort": "medium",
+      "escalate_provider": "grok-build",
+      "escalate_model": "grok-4.6",
+      "escalate_effort": "medium",
+      "primary": {
+        "agent": "grok",
+        "provider": "grok-build",
+        "model": "grok-4.6",
+        "effort": "medium"
+      },
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "cursor-grok-4.6",
+          "effort": "medium"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-5.6-luna",
+          "effort": "max"
+        }
+      ],
+      "execution_route": "HTML/PPT/visual/browser: Grok Build/grok-4.6 medium -> Pi/Cursor/cursor-grok-4.6 medium -> Pi/openai-codex/gpt-5.6-luna max"
+    },
+    "night": {
+      "agent": "pi",
+      "provider": "cursor",
+      "model": "default",
+      "effort": "",
+      "default_provider": "cursor",
+      "default_model": "default",
+      "default_effort": "",
+      "escalate_provider": "cursor",
+      "escalate_model": "default",
+      "escalate_effort": "",
+      "primary": {
+        "agent": "pi",
+        "provider": "cursor",
+        "model": "default",
+        "effort": ""
+      },
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "opencode-go",
+          "model": "muse-spark-1.2-contributor",
+          "effort": "xhigh"
+        },
+        {
+          "agent": "codebuddy",
+          "provider": "codebuddy-cli",
+          "model": "glm-5.3-flash",
+          "effort": "max"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-5.6-luna",
+          "effort": "max"
+        }
+      ],
+      "execution_route": "HTML/PPT/visual/browser: Pi/Cursor/default -> Pi/OpenCode Go/Muse xhigh -> CodeBuddy/glm-5.3-flash max -> Pi/openai-codex/gpt-5.6-luna max"
+    }
+  }
+}

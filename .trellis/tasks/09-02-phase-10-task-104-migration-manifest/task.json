@@ -1,0 +1,30 @@
+{
+  "id": "phase-10-task-104-migration-manifest",
+  "name": "phase-10-task-104-migration-manifest",
+  "title": "Phase 10 Task 10.4：批准迁移清单闭环",
+  "description": "把旧工程可保留资产与明确排除资产登记为可验证、失败关闭的最终迁移处置表。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 10.4 only：迁移清单、schema、闭环测试与中文验收说明；不执行旧根 inventory/apply、删除、切换、RC 冻结或生产安装。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-02",
+  "completedAt": "2026-09-02",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "migration/legacy_manifest.jsonl",
+    "migration/legacy_manifest.schema.json",
+    "tests/migration/test_manifest_closure.py",
+    "docs/acceptance/migration.md"
+  ],
+  "notes": "已闭环 28 条处置记录：10 条批准迁移、18 条不迁移并覆盖 11 类排除。59 项组合回归、Ruff、LEGACY_REF_OK、独立同号会商和 audit-execution 均通过；未执行真实旧根 inventory/apply、删除、切换或 RC 接受。"
+}

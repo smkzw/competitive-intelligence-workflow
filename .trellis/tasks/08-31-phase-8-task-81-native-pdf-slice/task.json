@@ -1,0 +1,31 @@
+{
+  "id": "phase-8-task-81-native-pdf-slice",
+  "name": "phase-8-task-81-native-pdf-slice",
+  "title": "Phase 8 Task 8.1：原生 PDF 垂直样例",
+  "description": "用中文 ReportViewModel 证明 ReportLab 原生 PDF 的结构、文字、矢量图与跨页表格合同。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "仅原生 PDF 垂直样例与真实逐页验收；不扩展 A/B/C 完整模板，不使用 HTML、Chromium 或网页截图",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": "2026-08-31",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-31-phase-8-cross-format",
+  "relatedFiles": [
+    "spikes/native_pdf/",
+    "src/ci_workflow/renderers/pdf_native/builder.py",
+    "src/ci_workflow/renderers/pdf_native/flowables.py",
+    "tests/renderers/test_pdf_vertical_slice.py"
+  ],
+  "notes": "Task 8.1 已完成：最终 PDF 为 4 页原生 ReportLab 文档，tmp/output 摘要一致；8 项测试、Ruff、结构/文字/逐页渲染、三条点名测试路线及独立视觉会商均通过。最终 SHA-256 b32d7c39...。留白记录为小型垂直 fixture 的非阻断残余，不代表完整 A/B/C PDF 信息密度已验收。",
+  "meta": {"phase": 8, "task": "8.1"}
+}

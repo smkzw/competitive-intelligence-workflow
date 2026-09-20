@@ -1,0 +1,40 @@
+{
+ "schema_version": "1.0",
+ "map_id": "pnha-alias-v2",
+ "description": "PNH 首验资产身份统一映射（Reviewer-G 2026-09-11 清单 + 领域常识确定项）。别名与规范名均按小写归一匹配。不确定的对应关系不硬编码。",
+ "canonical_by_alias": {
+  "iptacopan": "iptacopan",
+  "lnp023": "iptacopan",
+  "pegcetacoplan": "pegcetacoplan",
+  "apl-2": "pegcetacoplan",
+  "apl2": "pegcetacoplan",
+  "ravulizumab": "ravulizumab",
+  "alxn1210": "ravulizumab",
+  "ultomiris": "ravulizumab",
+  "eculizumab": "eculizumab",
+  "soliris": "eculizumab",
+  "pozelimab": "pozelimab",
+  "regn3918": "pozelimab",
+  "coversin": "coversin",
+  "rva576": "coversin",
+  "crovalimab": "crovalimab",
+  "ro7112689": "crovalimab",
+  "danicopan": "danicopan",
+  "alxn2050": "alxn2050",
+  "cemdisiran": "cemdisiran",
+  "aln-cc5": "cemdisiran",
+  "ach-0144471": "danicopan",
+  "ach0144471": "danicopan",
+  "oms906": "zaltenibart",
+  "humanized anti-factor bb monoclonal antibody": "sar443809",
+  "humanized anti-factor b monoclonal antibody": "sar443809",
+  "ach-0145228": "alxn2050",
+  "ach0145228": "alxn2050"
+ },
+ "notes": [
+  "canonical 取 INN 为规范名；商品名/研发代号归并入 INN。",
+  "crovalimab=RO7112689、danicopan=ALXN2050 按公开登记常识登记；如后续来源证明不符，版本化修订本表并重跑派生。",
+  "v2（Reviewer-L）：ach-0144471=danicopan（NCT03053102 别名佐证）；OMS906=zaltenibart（INN）；泛称抗因子 B 单抗→SAR443809。",
+  "v3（omp 独立复核 veto 修复）：NCT04170023 登记原文 interventions.otherNames=ACH-0145228，证明 ALXN2050 为独立分子（非 danicopan/ALXN2040）；alxn2050 升为独立规范产品并重跑派生。"
+ ]
+}

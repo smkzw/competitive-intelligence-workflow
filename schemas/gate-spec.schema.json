@@ -61,6 +61,16 @@
     "missing-strategy": {
       "enum": ["block", "preserve_disclosure_state"]
     },
+    "gate-recovery-route": {
+      "enum": [
+        "alias_variant",
+        "language_variant",
+        "identifier_cross_reference",
+        "citation_traversal",
+        "alternate_access",
+        "alternate_source"
+      ]
+    },
     "blocking-level": {
       "enum": ["critical", "extension"]
     },
@@ -180,6 +190,8 @@
         "accepted_fact_states",
         "missing_strategy",
         "conflict_strategy",
+        "failure_code",
+        "recovery_route_ids",
         "user_label_zh",
         "missing_impact_zh",
         "user_next_step_zh"
@@ -227,6 +239,15 @@
         },
         "missing_strategy": {"$ref": "#/$defs/missing-strategy"},
         "conflict_strategy": {"$ref": "#/$defs/conflict-strategy"},
+        "failure_code": {
+          "enum": ["missing_required_evidence", "missing_extension_evidence"]
+        },
+        "recovery_route_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/gate-recovery-route"}
+        },
         "threshold": {"type": "integer", "minimum": 1},
         "user_label_zh": {"type": "string", "minLength": 1},
         "missing_impact_zh": {"type": "string", "minLength": 1},

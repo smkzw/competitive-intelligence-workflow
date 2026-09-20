@@ -1,0 +1,22 @@
+{
+  "recovered_fields": [
+    {
+      "assessment_timepoint": "第36周",
+      "field": "primary_endpoint_timepoint",
+      "observation_id": "obs-nct06241118-primary_endpoint_timepoint",
+      "raw_source_text": "Week 36",
+      "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+      "source_sha256": "99daba1a71aa45f8de9904193b7196c235fcbbf0ec1b264d51900313b5542089",
+      "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+      "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+      "trial_id": "nct06241118"
+    }
+  ],
+  "recovery_request_id": "c-real-expanded-recovery-request-20260901",
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "result": "recovered",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "substitution_policy": "same-trial official registry source only; no cross-trial substitution"
+}

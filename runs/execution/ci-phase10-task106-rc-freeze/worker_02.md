@@ -1,0 +1,58 @@
+相邻闭包测试 10/10 通过。改动边界确认：仅新增 4 个授权文件（`git status` 中 `package-manifest.json`/`schemas/package-manifest.schema.json` 的 M 状态是会话开始前已存在的脏改动，`tools/legacy_cutover.py` 为 Task 10.5 未提交产物，我均未触碰）。全部工作完成，输出最终报告。
+
+# Execution Output: ci-phase10-task106-rc-freeze - worker_02
+
+## Boundary And Context Check
+
+- 已读初始指定文件：`context/ci-phase10-task106-rc-freeze_execution_context.md`、`plans/codex_execution_ci-phase10-task106-rc-freeze.md`。只执行工作项 2（recovery consumer 审计 + recovery-package-v1 schema/构建器/隔离演练/负向测试），未读取真实旧根 `/Users/smkzw/Documents/AI Products/竞品调研工作流` 的任何路径，未将其传给任何工具。
+- 额外读取（为对齐合同所必需）：`.trellis/tasks/09-02-phase-10-task-106-rc-freeze/{prd.md,design.md,implement.md,task.json}`、`tools/legacy_cutover.py`（只读）、`tests/migration/{test_legacy_cutover.py,test_manifest_closure.py,test_no_legacy_runtime_dependency.py}`（只读）、`tests/contract/test_package_manifest.py`（只读）、`schemas/release-case-receipt.schema.json`（只读）、`pyproject.toml`。
+- 边界遵守：未修改 `tools/legacy_cutover.py`、`package-manifest.json`、`schemas/package-manifest.schema.json`（git status 中这些文件的 M 状态为会话开始前已存在的脏改动）；无 commit/tag、无安装、无真实宿主调用；测试只写 pytest tmp 目录。
+
+## Work Performed
+
+**审计结论（证据，非推断）：**
+
+1. Task 10.5 消费者合同（`tools/legacy_cutover.py:421-449`）：`_verify_recovery` 经 `_require_keys`（optional 为空集）要求回执**恰好** 5 个字段——`schema_version="1.0"`、`receipt_kind="recovery-package-v1"`、`status="passed"`、`recovery_package_sha256`（64 位小写 hex）、`issued_at`（必须带时区）；未知字段一律拒绝。`validate_inventory`（:478-509）用 `canonical_digest(recovery)` 把回执绑定进预授权链，`validate_cutover` 再绑定进 authorization。结论：**生产者回执必须是消费者的逐字段超集为空集的精确形状**，无任何扩展余地。
+2. 现状缺口：Task 10.5 测试的回执（`test_legacy_cutover.py:104-111`）是手工合成的假对象（`"a"*64`）；仓库内不存在 `tools/build_recovery_package.py`、`tests/migration/test_recovery_rehearsal.py`，也没有任何 recovery-package schema。即 **10.6A 前 recovery 回执没有真实生产者，恢复演练 gate 由假回执通过**——这正是本工作项要闭合的失败关闭缺口。
+3. 布局约束（关键发现）：`tests/contract/test_package_manifest.py:131-139` 对 `schemas/**/*.schema.json`（含 `contracts/`）与 `package-manifest.json` `components.schemas` 做**双向闭包**断言；`package-manifest.json` 是 worker_01 授权文件。因此我把 recovery schema 放在 `migration/`（先例：`migration/legacy_manifest.schema.json` 也在该 glob 之外），避免跨 worker 越界且不破坏闭包回归（已实测通过）。
+
+**设计与实现：**
+
+- **Manifest schema**（`recovery-package-manifest-v1`，Draft 2020-12，`additionalProperties: false`）：绑定 `source_commit`（7-64 位小写 hex）、`bundle`/`bundle_manifest`（name+sha256+bytes）、`payload`（allowlist：`kind` 仅 `approved_material`/`acceptance_record`，schema 层 `contains` 强制两类各至少一条）、`created_at`（带时区）、`manifest_sha256`（规范 JSON 自摘要）。member/origin 路径模式拒绝绝对路径、`..` 逃逸与反斜杠。
+- **Receipt schema**（`recovery-package-v1`）：与消费者 `_verify_recovery` 逐字段锁定，恰好 5 字段。
+- **构建器**（stdlib-only：argparse/hashlib/json/gzip/tarfile/io/os）：确定性 `.tar.gz`（成员排序、`mtime=0`、uid/gid=0、gzip `mtime=0`、PAX），同一输入+`created_at` 逐字节可复现；`verify` 逐成员摘要核验＋成员集合双向相等＋未知成员/非普通文件成员拒绝＋`expect_*` 绑定核验；`extract_payload` 仅允许写入一次性空隔离根并回读核验字节一致；`issue_receipt` 仅在整包验证通过后出具；`confirm_receipt` 把回执摘要绑定到当前实际包字节。**"不得包含可运行旧流水线”由结构保证**：payload 只能收录显式 allowlist 两类输入，kind 篡改（如 `runtime_script`）在 schema 与 verify 两层都被拒绝。
+- **分层完整性模型**（测试中显式断言）：成员级 verify 覆盖归档逻辑内容；归档逻辑结束后的杂散字节由回执的整包字节摘要绑定捕获——两层组合无静默接受路径。
+- **隔离演练**（测试）：构建→verify→receipt→恢复到第二隔离根逐字节比对→重复恢复/非空根拒绝→真实回执接入 Task 10.5 消费链（`registry_for_legacy_root(tmp fixture)`→`build_inventory`→`validate_inventory` 通过，含 tmp fixture 旧根，非真实旧根）。
+- **负向测试 19 例**：包字节损坏、有效但不同的包 vs 回执摘要不匹配、payload 字节篡改、注入未登记成员、缺失登记成员、kind 篡换为 `runtime_script`、`expect_source_commit`/`expect_bundle_sha256` 不匹配、非 hex commit、缺材料/缺验收记录、无时区时间、缺失/符号链接输入（bundle 与 material 两种）、manifest/receipt schema 级漂移各 4 例、消费者对未知字段拒绝（证明生产者无法向消费者走私额外字段）、CLI 错误信号 `RECOVERY_PACKAGE_FAIL` 退出码 1。
+
+## Artifacts And Evidence
+
+新增 4 个文件（均为本工作项授权范围）：
+
+| 文件 | 内容 |
+|---|---|
+| `migration/recovery_package.schema.json` | recovery-package-manifest-v1 清单 schema |
+| `migration/recovery_package_receipt.schema.json` | recovery-package-v1 严格回执 schema（5 字段锁定） |
+| `tools/build_recovery_package.py` | stdlib-only 生产者：build/verify/restore/receipt CLI 与库函数 |
+| `tests/migration/test_recovery_rehearsal.py` | 隔离恢复演练 + 负向测试，11 个测试函数/参数化展开 19 例 |
+
+验证证据：`pytest tests/migration/ -q` → **42 passed**（本工作项 19 例 + Task 10.5/10.6 既有迁移回归，含仓库级 legacy 扫描 `test_current_repository_has_no_legacy_runtime_dependency`）；`ruff check` + `ruff format --check` → 通过；`mypy --strict`（两文件）→ 零问题；`pytest tests/contract/test_package_manifest.py tests/migration/test_manifest_closure.py -q` → 10 passed（新增 schema 未破坏任何闭包）。
+
+## Commands And Observations
+
+- `Read`：初始上下文、Task 10.6 trellis 文件、`legacy_cutover.py`、相邻测试与 schema、`pyproject.toml`（确认 py3.12、ruff line-length 100 E/F/I/UP/B/SIM、mypy strict、pytest `pythonpath=["."]`）。
+- `Bash` grep：确认 `recovery-package-v1` 在仓库内唯一消费者是 `legacy_cutover.py`；`test_manifest_closure.py` 不枚举 `schemas/`。
+- 开发迭代观察：初版 17 例中 1 例失败——追加到 tar 归档逻辑结束后的杂散字节不会被成员级校验发现（tar 在结束标记处停止读取）。这是设计澄清而非缺陷：字节层漂移由 `confirm_receipt` 整包摘要绑定失败关闭，测试改为断言该分层行为（`verify == manifest` 且 `confirm_receipt` 拒绝）。
+- `Bash` git status：确认改动仅限 4 个新文件（均为 `??` untracked）；另观察到 `tools/legacy_cutover.py` 与 `tests/migration/test_legacy_cutover.py` 目前是**未提交的 untracked 状态**（Task 10.5 产物），10.6B source closure 时必须进入 RC commit。
+
+## Blockers Or Missing Environment
+
+无阻塞。环境完整（.venv、pytest/ruff/mypy 均可用）。
+
+## Rerun Requests Or Next Step
+
+给 Codex 的两个决策点（非阻塞）与 10.6C-D 交接：
+
+1. **Schema 位置**：recovery schema 现位于 `migration/`。若 Codex 裁定应放 `schemas/`，需协调修改 `package-manifest.json` `components.schemas`（worker_01 文件）以维持双向闭包——建议维持现状，与 `migration/legacy_manifest.schema.json` 先例一致。
+2. **10.6D 交接**：真实恢复演练顺序应为 `build_recovery_package`（真实 RC commit、最终 bundle、批准迁移资料、本次验收记录）→ `verify_recovery_package`（绑定 RC commit 与 bundle sha256）→ 隔离根 `extract_payload` → `confirm_receipt` → 出具回执 → 再进入 `legacy_cutover validate/apply` 链；`confirm_receipt` 是包字节绑定的收口点，消费端 `validate_inventory` 本身不接触磁盘包文件。CLI `--created-at` 省略时取当前时间，RC 复现构建应显式传入以获得逐字节确定性。
+3. 未验证项：全仓库回归套件、Ruff/mypy 全仓扫描、以及真实 bundle/宿主上的演练均超出本 pass 授权，留待 Codex 验收与 10.6C-D 执行。

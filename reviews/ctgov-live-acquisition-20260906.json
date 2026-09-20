@@ -1,0 +1,44 @@
+{
+  "scope": "public CT.gov current-record query acquisition only",
+  "observed_date": "2026-09-06",
+  "condition": "paroxysmal nocturnal hemoglobinuria",
+  "endpoint": "https://clinicaltrials.gov/api/v2/studies",
+  "source_documentation": "https://clinicaltrials.gov/data-api/api",
+  "official_current_record_scope_reference": "https://www.nlm.nih.gov/oet/ed/api/2024_drive-thru-data-api_508c.pdf",
+  "fetcher_sha256_at_live_run": "8f7edcc2aa560d0a0de272b35f102f03d66874cdd3ffe0aeb8ee2c719cd822d2",
+  "status": "complete",
+  "pagination_complete": true,
+  "universe_closed": false,
+  "reports_accepted": 0,
+  "declared_total": 189,
+  "unique_studies": 189,
+  "pages": 2,
+  "raw_bytes": 5682837,
+  "private_capture_root": ".artifacts/source-cas/ctgov-live-20260906",
+  "storage_note": "Moved without byte changes from the temporary capture root; both SHA-256 digests rechecked. Raw assets are excluded from git and bundles.",
+  "offline_replay": {
+    "pagination_complete": true,
+    "records_derived_and_reopened": 189,
+    "unique_nct_ids": 189,
+    "raw_assets": 2,
+    "record_date_precision": "calendar_day",
+    "universe_closed": false
+  },
+  "raw_sha256": [
+    "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3",
+    "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98"
+  ],
+  "diagnostic_history": [
+    "First live attempt retained page 1 and rejected page 2 because totalCount was absent.",
+    "Direct diagnostic confirmed page 1 has totalCount/studies/nextPageToken and page 2 only studies.",
+    "Contract now carries the first-page count across subsequent cursor pages; an explicitly conflicting count still fails.",
+    "Platform-holder drift guard was added after the live run and then passed hash-pinned raw-response replay; all 189 exact record slices were subsequently reopened and verified."
+  ],
+  "not_proven": [
+    "global/China competitor universe closure",
+    "independent medical review",
+    "historical as-of reconstruction",
+    "public workflow CLI integration",
+    "real report or release acceptance"
+  ]
+}

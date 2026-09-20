@@ -1,0 +1,6 @@
+Task 6.7 RED
+
+命令：uv run pytest tests/reports/b/test_trial_disposition_contract.py tests/reports/b/test_trial_disposition_nonblocking.py -q
+结果：收集阶段 2 errors。
+预期原因：ci_workflow.reports.b.disposition 尚不存在，两个测试模块均触发 ModuleNotFoundError。
+判定：真实 RED，未用占位实现伪造通过。

@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-31T01:16:34.917682+00:00",
+  "tools": {
+    "pdftotext": "/Users/smkzw/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/poppler/bin/pdftotext",
+    "pdftoppm": "/Users/smkzw/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+    "pypdf": true
+  },
+  "hash_lock": "task-8.2-final-pdfs",
+  "total_pages": 54,
+  "expected_total_pages": 54,
+  "reports": [
+    {
+      "report": "A",
+      "pdf": ".artifacts/pdf-complete/reports/A/v-fixture-001/report.pdf",
+      "sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "locked_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "hash_ok": true,
+      "page_count": 10,
+      "expected_page_count": 10,
+      "page_count_ok": true,
+      "bookmark_count": 14,
+      "coverage_ok": true,
+      "missing_page_ids": [],
+      "page_checks": {
+        "all_page_numbers": true,
+        "all_header_footer": true,
+        "all_a4": true,
+        "continued_table_pages": [
+          8
+        ]
+      },
+      "page_evidence_count": 10,
+      "page_text_count": 10,
+      "render_count": 10,
+      "render_dpi": 120,
+      "contact_sheet": {
+        "path": "docs/acceptance/runs/8.3/verification/A/contact-sheet.png",
+        "sha256": "32a66a2fa15206a92c2719e6ad8d6b6587735dd6876686e51cd0e31d104b6046",
+        "bytes": 95252,
+        "page_count": 10,
+        "columns": 4,
+        "rows": 3,
+        "tile_size": [
+          320,
+          420
+        ],
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+        "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+      },
+      "contact_sheet_path": "docs/acceptance/runs/8.3/verification/A/contact-sheet.png",
+      "contact_sheet_sha256": "32a66a2fa15206a92c2719e6ad8d6b6587735dd6876686e51cd0e31d104b6046",
+      "evidence": {
+        "path": "docs/acceptance/runs/8.3/verification/A/evidence.json",
+        "sha256": "937f90af8edaf0754da7b69083ad98a4235d60b236d4272da63612cf9a80836f",
+        "bytes": 39147
+      },
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b",
+      "defect_count": 0,
+      "ok": true
+    },
+    {
+      "report": "B",
+      "pdf": ".artifacts/pdf-complete/reports/B/v-fixture-001/report.pdf",
+      "sha256": "83bec909d39a8bfe22a1c35ee42072ac9d9cdfac7b4908d16c14d5876276d716",
+      "pdf_sha256": "83bec909d39a8bfe22a1c35ee42072ac9d9cdfac7b4908d16c14d5876276d716",
+      "locked_sha256": "83bec909d39a8bfe22a1c35ee42072ac9d9cdfac7b4908d16c14d5876276d716",
+      "hash_ok": true,
+      "page_count": 24,
+      "expected_page_count": 24,
+      "page_count_ok": true,
+      "bookmark_count": 23,
+      "coverage_ok": true,
+      "missing_page_ids": [],
+      "page_checks": {
+        "all_page_numbers": true,
+        "all_header_footer": true,
+        "all_a4": true,
+        "continued_table_pages": [
+          9,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          20
+        ]
+      },
+      "page_evidence_count": 24,
+      "page_text_count": 24,
+      "render_count": 24,
+      "render_dpi": 120,
+      "contact_sheet": {
+        "path": "docs/acceptance/runs/8.3/verification/B/contact-sheet.png",
+        "sha256": "6e56c4909ec2fb038a4739da679a1a81649baec2c95d5730dafd361cf71d9e31",
+        "bytes": 175737,
+        "page_count": 24,
+        "columns": 4,
+        "rows": 6,
+        "tile_size": [
+          320,
+          420
+        ],
+        "source_pdf_sha256": "83bec909d39a8bfe22a1c35ee42072ac9d9cdfac7b4908d16c14d5876276d716",
+        "binding_digest": "c5c255a6ba50c84bdfc58f3a1e2bfc6ab7d7c60a96fc20648418e5b278b04b2b"
+      },
+      "contact_sheet_path": "docs/acceptance/runs/8.3/verification/B/contact-sheet.png",
+      "contact_sheet_sha256": "6e56c4909ec2fb038a4739da679a1a81649baec2c95d5730dafd361cf71d9e31",
+      "evidence": {
+        "path": "docs/acceptance/runs/8.3/verification/B/evidence.json",
+        "sha256": "ed472f8ceb10a48a5c059d6b681580c0c40189c16c84ca8d710a5471950b4c28",
+        "bytes": 88546
+      },
+      "binding_digest": "c5c255a6ba50c84bdfc58f3a1e2bfc6ab7d7c60a96fc20648418e5b278b04b2b",
+      "defect_count": 0,
+      "ok": true
+    },
+    {
+      "report": "C",
+      "pdf": ".artifacts/pdf-complete/report-c.pdf",
+      "sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "locked_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+      "hash_ok": true,
+      "page_count": 20,
+      "expected_page_count": 20,
+      "page_count_ok": true,
+      "bookmark_count": 18,
+      "coverage_ok": true,
+      "missing_page_ids": [],
+      "page_checks": {
+        "all_page_numbers": true,
+        "all_header_footer": true,
+        "all_a4": true,
+        "continued_table_pages": [
+          5,
+          6,
+          7,
+          10,
+          14
+        ]
+      },
+      "page_evidence_count": 20,
+      "page_text_count": 20,
+      "render_count": 20,
+      "render_dpi": 120,
+      "contact_sheet": {
+        "path": "docs/acceptance/runs/8.3/verification/C/contact-sheet.png",
+        "sha256": "37719eae2b29fc43d919f1c9041806b2ed94405caa1b16a18fe2800d53748daa",
+        "bytes": 197276,
+        "page_count": 20,
+        "columns": 4,
+        "rows": 5,
+        "tile_size": [
+          320,
+          420
+        ],
+        "source_pdf_sha256": "9cfa1a6323fcddac0a3d83df32ab351ebab03c12e84f0984f59d746a87628a68",
+        "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8"
+      },
+      "contact_sheet_path": "docs/acceptance/runs/8.3/verification/C/contact-sheet.png",
+      "contact_sheet_sha256": "37719eae2b29fc43d919f1c9041806b2ed94405caa1b16a18fe2800d53748daa",
+      "evidence": {
+        "path": "docs/acceptance/runs/8.3/verification/C/evidence.json",
+        "sha256": "2e352ad9f205c785e43e70c491b02d9111355da37fc142ec172c7f78acb02024",
+        "bytes": 72794
+      },
+      "binding_digest": "c946ad4442aa903214f5f5573a9f90a97cc2078b1a475d90bb9277f588f1f4f8",
+      "defect_count": 0,
+      "ok": true
+    }
+  ],
+  "defects": [],
+  "ok": true
+}

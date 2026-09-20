@@ -1,0 +1,1 @@
+{"ok": true, "agent": "pi", "model": "cursor-grok-4.6", "rounds_completed": 1, "round_count": 1, "fallback": null, "failure": null}

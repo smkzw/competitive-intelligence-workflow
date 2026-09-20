@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/schemas/research-package.schema.json",
+  "title": "v1.3 typed research package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "package_id", "contract_identity", "reports", "data_cutoff",
+    "source_policy_id", "source_policy_version", "producer_id", "producer_context", "entities", "sources", "routes",
+    "expansion_receipts", "closure"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.3"},
+    "package_id": {"type": "string", "minLength": 1},
+    "contract_identity": {"$ref": "#/$defs/contract_identity"},
+    "reports": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["A", "B", "C"]}},
+    "data_cutoff": {"type": "string", "format": "date"},
+    "source_policy_id": {"type": "string", "minLength": 1},
+    "source_policy_version": {"type": "string", "minLength": 1},
+    "producer_id": {"type": "string", "minLength": 1},
+    "producer_context": {"type": "string", "minLength": 1},
+    "entities": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entity"}},
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}},
+    "publication_records": {"type": "array", "items": {"$ref": "#/$defs/publication_record"}},
+    "publication_search_receipts": {"type": "array", "items": {"$ref": "#/$defs/publication_search_receipt"}},
+    "routes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/route"}},
+    "expansion_receipts": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/expansion_receipt"}},
+    "closure": {"$ref": "#/$defs/closure"},
+    "extraction_candidates": {"type": "array", "items": {"$ref": "#/$defs/extraction"}},
+    "recovery_rounds": {"type": "array", "items": {"$ref": "#/$defs/recovery"}},
+    "gap_strategies": {"type": "array", "items": {"$ref": "#/$defs/gap"}},
+    "report_payloads": {"type": "array", "items": {"$ref": "#/$defs/report_payload"}},
+    "metadata": {"type": "object"}
+  },
+  "$defs": {
+    "source_text_derivation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["raw_asset", "text_sha256", "method", "extractor_version"],
+      "allOf": [{
+        "if": {"properties": {"method": {"const": "ctgov-study-json-v1"}}},
+        "then": {
+          "required": ["record_selector"],
+          "properties": {
+            "record_selector": {"type": "object"},
+            "raw_asset": {"properties": {"media_type": {"const": "application/json"}}}
+          }
+        },
+        "else": {"properties": {"record_selector": {"type": "null"}}}
+      }],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "text_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "method": {"enum": ["utf8-strip-v1", "pypdf-text-v1", "ctgov-study-json-v1"]},
+        "record_selector": {
+          "type": ["object", "null"], "additionalProperties": false,
+          "required": ["study_index", "nct_id"],
+          "properties": {
+            "study_index": {"type": "integer", "minimum": 0},
+            "nct_id": {"type": "string", "pattern": "^NCT[0-9]{8}$"}
+          }
+        },
+        "extractor_version": {"type": "string", "minLength": 1},
+        "raw_asset": {
+          "type": "object", "additionalProperties": false,
+          "required": ["sha256", "relative_path", "byte_size", "media_type"],
+          "properties": {
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "relative_path": {"type": "string", "pattern": "^evidence/raw/sha256/[0-9a-f]{2}/[0-9a-f]{64}\\.bin$"},
+            "byte_size": {"type": "integer", "minimum": 1},
+            "media_type": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "non_empty_strings": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "contract_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["project_id", "indication", "contract_version"],
+      "properties": {
+        "project_id": {"type": "string", "minLength": 1},
+        "indication": {"type": "string", "minLength": 1},
+        "contract_version": {"const": "1.3"}
+      }
+    },
+    "entity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["entity_id", "entity_type", "name", "identity_status", "disposition", "ontology_rule_id"],
+      "properties": {
+        "entity_id": {"type": "string", "minLength": 1},
+        "entity_type": {"enum": ["product", "target", "company", "trial", "regimen"]},
+        "name": {"type": "string", "minLength": 1},
+        "aliases": {"$ref": "#/$defs/non_empty_strings"},
+        "identity_status": {"enum": ["resolved", "excluded"]},
+        "disposition": {"enum": ["included", "excluded"]},
+        "ontology_rule_id": {"type": "string", "minLength": 1},
+        "identity_evidence_ids": {"$ref": "#/$defs/non_empty_strings"}
+      }
+    },
+    "source_locator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["document_role"],
+      "properties": {
+        "document_role": {"type": "string", "minLength": 1},
+        "field_path": {"type": ["string", "null"], "minLength": 1},
+        "heading": {"type": ["string", "null"], "minLength": 1},
+        "page": {"type": ["integer", "null"], "minimum": 1},
+        "table": {"type": ["string", "null"], "minLength": 1},
+        "row": {"type": ["string", "null"], "minLength": 1},
+        "column": {"type": ["string", "null"], "minLength": 1},
+        "paragraph": {"type": ["string", "null"], "minLength": 1},
+        "url": {"type": ["string", "null"], "minLength": 1}
+      },
+      "anyOf": [
+        {"required": ["field_path"], "properties": {"field_path": {"type": "string"}}},
+        {"required": ["heading"], "properties": {"heading": {"type": "string"}}},
+        {"required": ["page"], "properties": {"page": {"type": "integer"}}},
+        {"required": ["table"], "properties": {"table": {"type": "string"}}},
+        {"required": ["row"], "properties": {"row": {"type": "string"}}},
+        {"required": ["column"], "properties": {"column": {"type": "string"}}},
+        {"required": ["paragraph"], "properties": {"paragraph": {"type": "string"}}},
+        {"required": ["url"], "properties": {"url": {"type": "string"}}}
+      ]
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "title", "source_role", "source_type", "url", "locator", "content_sha256", "retrieved_at", "publication_classification", "access_state"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "source_role": {"enum": ["official_registry", "registry_history", "registry_attachment", "regulatory", "primary_publication", "extension_publication", "safety_publication", "long_term_publication", "conference", "company_disclosure", "design_document", "specified_secondary", "commercial_database"]},
+        "source_type": {"enum": ["registry", "regulatory", "publication", "attachment", "company", "conference", "secondary"]},
+        "url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+        "locator": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "locator_detail": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/source_locator"}]},
+        "text_derivation": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/source_text_derivation"}]},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "published_at": {"type": ["string", "null"], "format": "date"},
+        "effective_at": {"type": ["string", "null"], "format": "date"},
+        "linked_trial_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "publication_classification": {"enum": ["primary_result", "extension_primary_result", "key_safety_or_long_term", "review", "ad_hoc", "irrelevant_exploratory", "not_applicable"]},
+        "access_state": {"enum": ["available", "not_accessible", "not_applicable"]},
+        "limitations": {"$ref": "#/$defs/non_empty_strings"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"source_type": {"const": "publication"}}},
+          "then": {"properties": {"publication_classification": {"not": {"const": "not_applicable"}}}},
+          "else": {"properties": {"publication_classification": {"const": "not_applicable"}}}
+        }
+      ]
+    },
+    "route": {
+      "type": "object", "additionalProperties": false,
+      "required": ["route_id", "region", "strategy_id", "result_class", "attempt_ids"],
+      "properties": {
+        "route_id": {"type": "string", "minLength": 1},
+        "region": {"enum": ["global", "china", "other"]},
+        "strategy_id": {"type": "string", "minLength": 1},
+        "result_class": {"enum": ["completed", "success_with_evidence", "not_applicable", "success_irrelevant_only", "searched_no_evidence", "not_publicly_disclosed", "access_blocked", "access_or_permission_blocked", "not_found", "network_error", "transient_network_failure", "rate_limited", "captcha_required", "anti_bot_or_captcha", "permission_denied", "source_unavailable", "parser_error", "parser_or_schema_failure", "tool_capability_gap", "content_truncated", "network_failure"]},
+        "attempt_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "source_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "query_or_identifier": {"type": ["string", "null"], "minLength": 1},
+        "diagnostic": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "publication_fetch_attempt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["attempt_id", "strategy_id", "route_family", "attempted_at", "result_class"],
+      "properties": {
+        "attempt_id": {"type": "string", "minLength": 1},
+        "strategy_id": {"type": "string", "minLength": 1},
+        "route_family": {"enum": ["publisher", "bibliographic_index", "open_repository", "registry_attachment", "regulatory_repository"]},
+        "attempted_at": {"type": "string", "format": "date-time"},
+        "result_class": {"enum": ["acquired", "searched_no_evidence", "not_publicly_disclosed", "access_or_permission_blocked", "transient_network_failure", "rate_limited", "anti_bot_or_captcha", "source_unavailable", "parser_or_schema_failure", "tool_capability_gap", "content_truncated"]},
+        "source_id": {"type": ["string", "null"], "minLength": 1},
+        "diagnostic": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "publication_search_receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["search_id", "trial_id", "registry_identifiers", "route_families", "attempt_ids", "query_sha256", "result", "discovered_publication_ids"],
+      "properties": {
+        "search_id": {"type": "string", "minLength": 1},
+        "trial_id": {"type": "string", "minLength": 1},
+        "registry_identifiers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "route_families": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"enum": ["publisher", "bibliographic_index", "open_repository", "registry_attachment", "regulatory_repository"]}},
+        "attempt_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "query_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "result": {"enum": ["publications_classified", "searched_no_linked_publication"]},
+        "discovered_publication_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "diagnostic": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "publication_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["publication_id", "source_id", "product_id", "linked_trial_ids", "registry_identifiers", "title", "source_url", "publication_class", "model_suggestion", "classification_reason", "producer_id", "producer_context", "fetch_attempts", "acquisition_disposition", "blocking_fields", "affected_reports"],
+      "properties": {
+        "schema_version": {"const": "1.3"},
+        "publication_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "product_id": {"type": "string", "minLength": 1},
+        "linked_trial_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "registry_identifiers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "title": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+        "publication_class": {"enum": ["primary_result", "extension_primary_result", "key_safety_or_long_term", "review", "ad_hoc", "irrelevant_exploratory"]},
+        "rule_version": {"const": "1.3"},
+        "model_suggestion": {"enum": ["primary_result", "extension_primary_result", "key_safety_or_long_term", "review", "ad_hoc", "irrelevant_exploratory"]},
+        "classification_reason": {"type": "string", "minLength": 1},
+        "review_state": {"enum": ["accepted", "boundary", "rejected"]},
+        "producer_id": {"type": "string", "minLength": 1},
+        "producer_context": {"type": "string", "minLength": 1},
+        "independent_review_id": {"type": ["string", "null"], "minLength": 1},
+        "independent_reviewer_id": {"type": ["string", "null"], "minLength": 1},
+        "independent_context": {"type": ["string", "null"], "minLength": 1},
+        "reviewed_candidate_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "doi": {"type": ["string", "null"], "minLength": 1},
+        "pmid": {"type": ["string", "null"], "minLength": 1},
+        "fetch_attempts": {"type": "array", "items": {"$ref": "#/$defs/publication_fetch_attempt"}},
+        "acquisition_disposition": {"enum": ["acquired", "manual_required", "excluded"]},
+        "blocking_fields": {"$ref": "#/$defs/non_empty_strings"},
+        "affected_reports": {"type": "array", "uniqueItems": true, "items": {"enum": ["A", "B", "C"]}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"publication_class": {"enum": ["primary_result", "extension_primary_result", "key_safety_or_long_term"]}}},
+          "then": {
+            "properties": {
+              "fetch_attempts": {"minItems": 1},
+              "affected_reports": {"minItems": 1},
+              "acquisition_disposition": {"not": {"const": "excluded"}}
+            }
+          },
+          "else": {
+            "properties": {
+              "fetch_attempts": {"maxItems": 0},
+              "acquisition_disposition": {"const": "excluded"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"acquisition_disposition": {"const": "manual_required"}}},
+          "then": {"properties": {"fetch_attempts": {"minItems": 2}}}
+        }
+      ]
+    },
+    "expansion_receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["receipt_id", "dimension", "round_id", "strategy_id", "route_ids", "attempt_ids", "input_entity_ids", "discovered_entity_ids", "source_ids", "query_sha256", "result_class"],
+      "properties": {
+        "receipt_id": {"type": "string", "minLength": 1},
+        "dimension": {"enum": ["alias", "target", "company", "trial"]},
+        "round_id": {"type": "string", "minLength": 1},
+        "strategy_id": {"type": "string", "minLength": 1},
+        "route_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "attempt_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "input_entity_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "discovered_entity_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "source_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "query_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "result_class": {"enum": ["success_with_evidence", "searched_no_evidence", "not_applicable", "access_or_permission_blocked", "transient_network_failure", "rate_limited", "anti_bot_or_captcha", "source_unavailable", "parser_or_schema_failure", "tool_capability_gap", "content_truncated", "network_error"]},
+        "diagnostic": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "closure": {
+      "type": "object", "additionalProperties": false,
+      "required": ["closed", "global_route_ids", "china_route_ids", "alias_expansion_receipts", "target_expansion_receipts", "company_expansion_receipts", "trial_expansion_receipts", "candidate_entity_ids", "new_entity_ids_by_round", "convergence_round_ids"],
+      "properties": {
+        "closed": {"type": "boolean"},
+        "global_route_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "china_route_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "alias_expansion_receipts": {"$ref": "#/$defs/non_empty_strings"},
+        "target_expansion_receipts": {"$ref": "#/$defs/non_empty_strings"},
+        "company_expansion_receipts": {"$ref": "#/$defs/non_empty_strings"},
+        "trial_expansion_receipts": {"$ref": "#/$defs/non_empty_strings"},
+        "independent_review_id": {"type": ["string", "null"], "minLength": 1},
+        "independent_reviewer_id": {"type": ["string", "null"], "minLength": 1},
+        "independent_context": {"type": ["string", "null"], "minLength": 1},
+        "reviewed_universe_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "review_digest_version": {"enum": ["1", "2"], "default": "1"},
+        "candidate_entity_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "excluded_entity_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "new_entity_ids_by_round": {"type": "object", "additionalProperties": {"$ref": "#/$defs/non_empty_strings"}},
+        "convergence_round_ids": {"$ref": "#/$defs/non_empty_strings"}
+      }
+    },
+    "extraction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "source_id", "locator", "field", "value"],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "field": {"type": "string", "minLength": 1},
+        "value": {},
+        "normalized_value": {},
+        "unit": {"type": ["string", "null"], "minLength": 1},
+        "claim_domain": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "recovery": {
+      "type": "object", "additionalProperties": false,
+      "required": ["round_number", "strategy_id", "strategy_kind", "target_gap_ids", "route_ids", "information_gain"],
+      "properties": {
+        "round_number": {"type": "integer", "minimum": 1},
+        "strategy_id": {"type": "string", "minLength": 1},
+        "strategy_kind": {"type": "string", "minLength": 1},
+        "target_gap_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "route_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "source_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "information_gain": {"enum": ["new_evidence", "reduced_conflict", "changed_applicability", "no-new-evidence", "not_applicable"]},
+        "query_or_identifier": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "gap": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gap_id", "required", "status", "strategy_ids"],
+      "properties": {
+        "gap_id": {"type": "string", "minLength": 1},
+        "required": {"type": "boolean"},
+        "status": {"enum": ["open", "resolved", "not_reported", "not_publicly_disclosed", "blocked", "anomalous_reported_zero"]},
+        "recovery_required": {"type": "boolean"},
+        "strategy_ids": {"$ref": "#/$defs/non_empty_strings"},
+        "reason": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "report_payload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["report", "relative_path", "content_sha256", "content_schema_version", "universe_product_ids"],
+      "properties": {
+        "report": {"enum": ["A", "B", "C"]},
+        "relative_path": {"enum": ["evidence/library/a-research-package.json", "evidence/library/b-research-package.json", "evidence/library/c-research-package.json"]},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "content_schema_version": {"const": "1.0"},
+        "universe_product_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

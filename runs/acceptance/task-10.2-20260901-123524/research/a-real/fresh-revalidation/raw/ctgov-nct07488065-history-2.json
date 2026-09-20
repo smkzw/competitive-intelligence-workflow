@@ -1,0 +1,220 @@
+{
+  "studyVersion" : 2,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT07488065",
+        "orgStudyIdInfo" : {
+          "id" : "SKB575-I-01"
+        },
+        "organization" : {
+          "fullName" : "Sichuan Kelun-Biotech Biopharmaceutical Co., Ltd.",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Study of SKB575 (HBM7575) Injection in Healthy Participants and Atopic Dermatitis Participants",
+        "officialTitle" : "A Randomized, Double-blind, Placebo-controlled Phase I Study to Evaluate the Safety, Tolerability, Pharmacokinetics, and Pharmacodynamics of SKB575 (HBM7575) Injection in Healthy Participants and Atopic Dermatitis Participants"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2026-05",
+        "overallStatus" : "RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2026-03-31",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2027-12-31",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2028-06-30",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2026-03-11",
+        "studyFirstSubmitQcDate" : "2026-03-17",
+        "studyFirstPostDateStruct" : {
+          "date" : "2026-03-23",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2026-05-05",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2026-05-08",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Sichuan Kelun-Biotech Biopharmaceutical Co., Ltd.",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false,
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This is a randomized, double-blind, placebo-controlled phase I study evaluating the safety, tolerability, pharmacokinetics, pharmacodynamics, and immunogenicity of SKB575.\nThis study consists of two parts.\nPhase Ia is a single ascending dose study in healthy subjects and Phase Ib is a proof-of-concept study in patients with moderate to severe atopic dermatitis."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE1" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 90,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "A1",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "A2",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "A3",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "A4",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "A5",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "B1",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "B2",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        }, {
+          "label" : "B3",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: SKB575 Injection&#x2F;SKB575 Placebo" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "SKB575 Injection&#x2F;SKB575 Placebo",
+          "description" : "Pharmaceutical form: Solution for injection in vial Route of administration: Subcutaneous injection",
+          "armGroupLabels" : [ "A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Number of participants with adverse events (AEs) &#x2F;TEAEs",
+          "description" : "Incidence of adverse events (AEs) and treatment-emergent adverse events (TEAEs)",
+          "timeFrame" : "From Baseline to Day 225"
+        }, {
+          "measure" : "Proportion of participants achieving EASI-75 at Week 16",
+          "description" : "EASI 75 is defined by reduction of EASI score by ≥75% from baseline",
+          "timeFrame" : "From Baseline throughout the study, up to Week 16"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Pharmacokinetic (PK) assessment: Cmax",
+          "description" : "Maximum plasma concentration",
+          "timeFrame" : "From baseline to Day 225"
+        }, {
+          "measure" : "Pharmacokinetic (PK) assessment: Tmax",
+          "description" : "Time to reach Cmax",
+          "timeFrame" : "From baseline to Day 225"
+        }, {
+          "measure" : "Pharmacokinetic (PK) assessment: AUClast",
+          "description" : "Area under the concentration-time curve from time 0 to the time of the last quantifiable concentration",
+          "timeFrame" : "From baseline to Day 225"
+        }, {
+          "measure" : "Presence of Anti-SKB575 Antibodies (ADA)",
+          "description" : "Positive rate of participant with SKB575 antibodies",
+          "timeFrame" : "From baseline to Day 225"
+        }, {
+          "measure" : "Pharmacodynamic (PD) Characteristics: Eosinophil",
+          "description" : "Change from baseline in total serum target concentrations of eosinophil",
+          "timeFrame" : "From baseline to Day 225"
+        }, {
+          "measure" : "Pharmacodynamic (PD) Characteristics: IgE",
+          "description" : "Change from baseline in total serum target concentrations of IgE",
+          "timeFrame" : "From baseline to Day 225"
+        }, {
+          "measure" : "Pharmacodynamic (PD) Characteristics: TARC",
+          "description" : "Change from baseline in total serum target concentrations of TARC",
+          "timeFrame" : "From baseline to Day 225"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><p>Phase Ia healthy participants must meet all of the following inclusion criteria to be enrolled:</p><ol><li>The participant is able to understand and comply with the requirements of the study and voluntarily signs the informed consent form.</li><li>Age at the time of signing the informed consent form is 18-55 years (inclusive), any gender.</li><li>Male participants weigh ≥ 50.0 kg, female participants weigh ≥ 45.0 kg; body mass index [BMI] is 18.0-28.0\nkg&#x2F;m² (inclusive).</li><li>No clinically significant abnormalities.</li></ol><p>Phase Ib participants with moderate to severe AD must meet all of the following inclusion criteria to be enrolled:</p><ol><li>The participant is able to understand and comply with the requirements of the study and voluntarily signs the informed consent form.</li><li>Age at the time of signing the informed consent form is 18-70 years (inclusive), any gender.</li><li>Participant weight must be ≥ 45.0 kg.</li><li><p>At screening, the diagnosis of AD meets the American Dermatology Consensus Criteria (2014) (see Appendix 4) and disease duration is ≥ 1 year; and at both screening and randomization, all of the following conditions are satisfied:</p><ol><li>EASI ≥ 16 at screening and baseline visits;</li><li>IGA ≥ 3 (on a 0 4 IGA scale, where 3 = moderate, 4 = severe) at screening and baseline visits;</li><li>Body surface area (BSA) of lesions ≥ 10% at screening and baseline visits.</li></ol></li><li>Prior to screening, the participant has received at least 4 weeks of potent or 2 weeks of super potent topical corticosteroids (or systemic corticosteroids), or topical calcineurin inhibitor.</li></ol><p>Exclusion Criteria:</p><ol><li>History of any clinically significant disease of the cardiovascular, hematological, hepatic, renal, digestive, neurological, respiratory, or psychiatric systems, or metabolic disorders, or any other disease or physiological condition that may interfere with the trial results.</li><li>History of malignancy, regardless of whether treated, and regardless of the presence or absence of signs of local recurrence or metastasis.</li><li>Presence of skin scars, induration, inflammation, edema, ulceration, infection, bleeding, or other conditions at the intended injection site that are unsuitable for subcutaneous injection.</li><li>Clinical signs of active infection within 4 weeks prior to randomization, including but not limited to urogenital infection, pulmonary infection, acute sinusitis, appendicitis, bloodstream infection, etc.</li><li>History of tuberculosis or complications of tuberculosis, or positive&#x2F;abnormal findings of clinical significance based on chest X-ray&#x2F;chest CT, physical examination, and T-cell interferon-gamma release assay (TIGRA) (e.g., T-Spot or Quanti-FERON®-TB Gold™).</li><li>Subjects positive for Hepatitis B (HBsAg, HBeAg, HBeAb, or HBcAb), positive for Hepatitis C antibody, positive for HIV antibody, or positive for syphilis serology.</li></ol><p>NOTE: The above information is not intended to contain all considerations relevant to a patient&#x27;s potential participation in a clinical trial.</p>",
+        "healthyVolunteers" : true,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "70 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "Xin Li, PhD",
+          "role" : "CONTACT",
+          "phone" : "86-028-67255165",
+          "email" : "lixin@kelun.com"
+        } ],
+        "locations" : [ {
+          "facility" : "Huashan Hospital Affiliated to Fudan University",
+          "city" : "Shanghai",
+          "zip" : "200040",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Jing Zhang, PhD",
+            "role" : "CONTACT",
+            "phone" : "86-021-52887926",
+            "email" : "Zhangj_fudan@163.com"
+          } ],
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Huashan Hospital Affiliated to Fudan University",
+          "city" : "Shanghai",
+          "zip" : "200040",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          },
+          "status" : "RECRUITING",
+          "contacts" : [ {
+            "name" : "Jinhua Xu, PhD",
+            "role" : "CONTACT",
+            "phone" : "86-021-52887783",
+            "email" : "xjhhsyy@163.com"
+          } ]
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

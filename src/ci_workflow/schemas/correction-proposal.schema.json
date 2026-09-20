@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/correction-proposal.schema.json",
+  "title": "来源关联修订建议包",
+  "description": "自包含修订建议合同（v1.2 §17.1）：绑定项目、报告、快照、稳定目标 ID、旧值、建议值、理由、来源与影响集合。机器状态只保存在合同字段中，由 Agent 转译为中文指引；所有用户可见文本字段不得出现内部工程化标签。导出的修订包必须整体通过本 Schema。",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "HexDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "StableId": {
+      "type": "string",
+      "description": "项目稳定标识约定：小写类型前缀 + 24 位十六进制内容摘要（ci_workflow.domain.ids.stable_id）。",
+      "pattern": "^[a-z][a-z0-9-]*_[0-9a-f]{24}$"
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "InternalLabelGuard": {
+      "description": "内部工程化标签词表：修订状态、验证处置、所有者决定、目标类型、附件种类与质控结论。用户可见字段一律不得取这些值。",
+      "not": {
+        "enum": [
+          "accepted",
+          "approve",
+          "approved",
+          "chart_point",
+          "claim",
+          "fact",
+          "file",
+          "link",
+          "matrix_cell",
+          "needs_evidence",
+          "published",
+          "rejected",
+          "reject",
+          "submitted",
+          "validated_pending_user_approval"
+        ]
+      }
+    },
+    "VisibleValue": {
+      "description": "用户可见的报告显示值：原样呈现（可为数字、拉丁文或中文），但不得是内部工程化标签。",
+      "allOf": [
+        {"type": "string", "minLength": 1},
+        {"$ref": "#/$defs/InternalLabelGuard"}
+      ]
+    },
+    "ProseZh": {
+      "description": "用户可读中文文本：必须包含汉字，且不得是内部工程化标签。",
+      "allOf": [
+        {"type": "string", "minLength": 1},
+        {"pattern": "[\\u4e00-\\u9fff]"},
+        {"$ref": "#/$defs/InternalLabelGuard"}
+      ]
+    },
+    "Target": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "修订目标：事实、声明、图点或矩阵单元，绑定稳定 ID 与用户可读名称。",
+      "properties": {
+        "target_type": {"enum": ["fact", "claim", "chart_point", "matrix_cell"]},
+        "target_id": {"$ref": "#/$defs/StableId"},
+        "target_label_zh": {"$ref": "#/$defs/ProseZh"},
+        "locator": {
+          "anyOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "page": {"type": "integer", "minimum": 1},
+                "figure_zh": {"type": "string", "minLength": 1},
+                "table_zh": {"type": "string", "minLength": 1},
+                "section_zh": {"type": "string", "minLength": 1},
+                "anchor_hint": {"type": "string", "minLength": 1}
+              }
+            }
+          ]
+        }
+      },
+      "required": ["target_type", "target_id", "target_label_zh"]
+    },
+    "Attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "用户随建议附上的链接或文件。",
+      "properties": {
+        "attachment_id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["link", "file"]},
+        "url": {"type": "string", "minLength": 1},
+        "file_name": {"type": "string", "minLength": 1},
+        "title_zh": {"$ref": "#/$defs/ProseZh"}
+      },
+      "required": ["attachment_id", "kind"],
+      "allOf": [
+        {
+          "if": {"properties": {"kind": {"const": "link"}}, "required": ["kind"]},
+          "then": {"required": ["url"]}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "file"}}, "required": ["kind"]},
+          "then": {"required": ["file_name"]}
+        }
+      ]
+    },
+    "EvidenceItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "补充来源：追加到同一建议，不覆盖原提交；至少给出一个可检索锚点。",
+      "properties": {
+        "evidence_id": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "minLength": 1},
+        "source_version_id": {"type": "string", "minLength": 1},
+        "description_zh": {"$ref": "#/$defs/ProseZh"}
+      },
+      "required": ["evidence_id", "description_zh"],
+      "anyOf": [
+        {"required": ["source_url"]},
+        {"required": ["source_version_id"]}
+      ]
+    },
+    "Conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "与现行证据或声明的冲突记录，只追加不覆盖。",
+      "properties": {
+        "conflict_id": {"type": "string", "minLength": 1},
+        "description_zh": {"$ref": "#/$defs/ProseZh"},
+        "related_target_id": {"$ref": "#/$defs/StableId"}
+      },
+      "required": ["conflict_id", "description_zh"]
+    },
+    "ImpactSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "影响集合：提交时可为空，由 Agent 在验证阶段生成；发布前必须覆盖受影响内容。",
+      "properties": {
+        "affected_fact_ids": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/StableId"},
+          "uniqueItems": true
+        },
+        "affected_claim_ids": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/StableId"},
+          "uniqueItems": true
+        },
+        "affected_view_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "impact_summary_zh": {"$ref": "#/$defs/ProseZh"}
+      }
+    },
+    "ValidationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Agent 核验记录：来源身份、上下文、定位、冲突与影响核验。处置只能是需补证据、拒绝或等待用户批准；核验本身不能写入批准。",
+      "properties": {
+        "validation_id": {"type": "string", "minLength": 1},
+        "validated_at": {"$ref": "#/$defs/DateTime"},
+        "validator_id": {"type": "string", "minLength": 1},
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "identity_verified": {"type": "boolean"},
+            "context_verified": {"type": "boolean"},
+            "locator_verified": {"type": "boolean"},
+            "conflict_check_done": {"type": "boolean"},
+            "impact_check_done": {"type": "boolean"}
+          },
+          "required": [
+            "identity_verified",
+            "context_verified",
+            "locator_verified",
+            "conflict_check_done",
+            "impact_check_done"
+          ]
+        },
+        "disposition": {
+          "enum": ["needs_evidence", "rejected", "validated_pending_user_approval"]
+        },
+        "disposition_reason_zh": {"$ref": "#/$defs/ProseZh"}
+      },
+      "required": [
+        "validation_id",
+        "validated_at",
+        "validator_id",
+        "checks",
+        "disposition",
+        "disposition_reason_zh"
+      ]
+    },
+    "OwnerDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "报告所有者显式决定：批准、拒绝或要求补证据。验证动作不能代替本决定；批准时必须登记批准 ID 供发布幂等。",
+      "properties": {
+        "decision": {"enum": ["approve", "reject", "needs_evidence"]},
+        "decided_by": {"type": "string", "minLength": 1},
+        "decided_at": {"$ref": "#/$defs/DateTime"},
+        "reason_zh": {"$ref": "#/$defs/ProseZh"},
+        "approval_id": {"type": "string", "minLength": 1}
+      },
+      "required": ["decision", "decided_by", "decided_at", "reason_zh"],
+      "allOf": [
+        {
+          "if": {"properties": {"decision": {"const": "approve"}}, "required": ["decision"]},
+          "then": {"required": ["approval_id"]}
+        }
+      ]
+    },
+    "RebuildReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "受影响内容重建回执：发布前置条件之一；至少重建一个受影响视图。",
+      "properties": {
+        "views_rebuilt": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "rebuilt_at": {"$ref": "#/$defs/DateTime"}
+      },
+      "required": ["views_rebuilt", "rebuilt_at"]
+    },
+    "IndependentQc": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "独立质控结论：只有接受才允许发布。",
+      "properties": {
+        "qc_verdict_id": {"type": "string", "minLength": 1},
+        "qc_result": {"const": "accepted"},
+        "reviewer_id": {"type": "string", "minLength": 1},
+        "qc_checked_at": {"$ref": "#/$defs/DateTime"},
+        "reviewed_snapshot_id": {"type": "string", "minLength": 1},
+        "reviewed_snapshot_content_digest": {"$ref": "#/$defs/HexDigest"}
+      },
+      "required": [
+        "qc_verdict_id",
+        "qc_result",
+        "reviewer_id",
+        "qc_checked_at",
+        "reviewed_snapshot_id",
+        "reviewed_snapshot_content_digest"
+      ]
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "proposal_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "report_version": {"type": "string", "minLength": 1},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "snapshot_content_digest": {"$ref": "#/$defs/HexDigest"},
+    "state": {
+      "default": "submitted",
+      "description": "机器状态合同字段：与既有修订审批族六态逐字一致；不得出现在用户可见文案中。",
+      "enum": [
+        "submitted",
+        "needs_evidence",
+        "rejected",
+        "validated_pending_user_approval",
+        "approved",
+        "published"
+      ]
+    },
+    "target": {"$ref": "#/$defs/Target"},
+    "current_visible_value": {"$ref": "#/$defs/VisibleValue"},
+    "proposed_value": {"$ref": "#/$defs/VisibleValue"},
+    "proposed_explanation_zh": {"$ref": "#/$defs/ProseZh"},
+    "user_reason_zh": {"$ref": "#/$defs/ProseZh"},
+    "submitted_at": {"$ref": "#/$defs/DateTime"},
+    "publish_idempotency_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "确定性发布幂等键：抵抗检查点重放，同一批准只登记一个新版本。"
+    },
+    "prior_proposal_id": {"type": "string", "minLength": 1},
+    "attachments": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Attachment"},
+      "uniqueItems": true
+    },
+    "evidence_items": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/EvidenceItem"},
+      "uniqueItems": true
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Conflict"},
+      "uniqueItems": true
+    },
+    "validation": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/ValidationRecord"}
+      ]
+    },
+    "owner_decision": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/OwnerDecision"}
+      ]
+    },
+    "impact_set": {"$ref": "#/$defs/ImpactSet"},
+    "new_snapshot_id": {"type": "string", "minLength": 1},
+    "new_snapshot_content_digest": {"$ref": "#/$defs/HexDigest"},
+    "rebuild_receipt": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/RebuildReceipt"}
+      ]
+    },
+    "independent_qc": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/IndependentQc"}
+      ]
+    },
+    "published_report_version_id": {"type": "string", "minLength": 1},
+    "published_at": {"$ref": "#/$defs/DateTime"}
+  },
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "project_id",
+    "report_kind",
+    "report_version",
+    "snapshot_id",
+    "snapshot_content_digest",
+    "state",
+    "target",
+    "current_visible_value",
+    "user_reason_zh",
+    "submitted_at",
+    "impact_set"
+  ],
+  "anyOf": [
+    {"required": ["proposed_value"]},
+    {"required": ["proposed_explanation_zh"]}
+  ],
+  "allOf": [
+    {
+      "if": {"properties": {"state": {"const": "published"}}, "required": ["state"]},
+      "then": {
+        "description": "发布前置条件缺一不可：新快照、受影响内容重建、独立质控接受、新版本登记。",
+        "required": [
+          "new_snapshot_id",
+          "new_snapshot_content_digest",
+          "rebuild_receipt",
+          "independent_qc",
+          "published_report_version_id",
+          "published_at"
+        ],
+        "properties": {
+          "rebuild_receipt": {"type": "object"},
+          "independent_qc": {"type": "object"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"state": {"enum": ["approved", "published"]}},
+        "required": ["state"]
+      },
+      "then": {
+        "description": "批准只能来自报告所有者显式决定；验证本身不能批准。",
+        "required": ["owner_decision", "publish_idempotency_key"],
+        "properties": {
+          "owner_decision": {
+            "type": "object",
+            "properties": {"decision": {"const": "approve"}},
+            "required": ["decision"]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "validated_pending_user_approval"}}, "required": ["state"]},
+      "then": {
+        "description": "等待用户批准状态只能由验证通过建立。",
+        "required": ["validation"],
+        "properties": {
+          "validation": {
+            "type": "object",
+            "properties": {"disposition": {"const": "validated_pending_user_approval"}},
+            "required": ["disposition"]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "rejected"}}, "required": ["state"]},
+      "then": {
+        "description": "拒绝只能来自验证拒绝或报告所有者显式拒绝。",
+        "anyOf": [
+          {
+            "required": ["validation"],
+            "properties": {
+              "validation": {
+                "type": "object",
+                "properties": {"disposition": {"const": "rejected"}},
+                "required": ["disposition"]
+              }
+            }
+          },
+          {
+            "required": ["owner_decision"],
+            "properties": {
+              "owner_decision": {
+                "type": "object",
+                "properties": {"decision": {"const": "reject"}},
+                "required": ["decision"]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

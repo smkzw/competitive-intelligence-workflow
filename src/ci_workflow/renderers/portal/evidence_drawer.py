@@ -105,9 +105,10 @@ def render_evidence_drawer_embed(views: Sequence[EvidenceView]) -> str:
 
 def render_evidence_drawer_host() -> str:
     """面板宿主标记：静态结构，内容全部由 evidence-drawer.js 渲染。"""
-    return """<aside class="kz-evidence-drawer" id="kz-evidence-drawer"
-               aria-label="数据依据" hidden>
-  <div class="kz-evidence-drawer__panel" id="kz-evidence-drawer-panel">
+    return """<aside class="kz-evidence-drawer" id="kz-evidence-drawer" hidden>
+  <div class="kz-evidence-drawer__panel" id="kz-evidence-drawer-panel"
+       role="dialog" aria-modal="true" aria-labelledby="kz-evidence-drawer-title"
+       tabindex="-1">
     <header class="kz-evidence-drawer__header">
       <h2 class="kz-evidence-drawer__title" id="kz-evidence-drawer-title">数据依据</h2>
       <button type="button" class="kz-evidence-drawer__close"

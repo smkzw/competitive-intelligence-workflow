@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/monitoring-change-candidate.schema.json",
+  "title": "监测变更候选",
+  "description": "可选监测的去重变更候选合同（v1.2 §17.3）：绑定项目、来源身份/版本/定位、发现历史、实体与声明域、变化类型、当前值与候选值、稳定去重摘要、可能影响的报告/页面、获取与诊断状态和用户处置。候选不能直接成为事实；用户明确选择启动正常刷新时只生成只读刷新交接单，由 Task 9.2 正常刷新重新核验。机器状态只保存在合同字段中，用户可见文本不得出现内部工程化标签。",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "HexDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "StableId": {
+      "type": "string",
+      "description": "项目稳定标识约定：小写类型前缀 + 24 位十六进制内容摘要（ci_workflow.domain.ids.stable_id）。",
+      "pattern": "^[a-z][a-z0-9-]*_[0-9a-f]{24}$"
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "InternalLabelGuard": {
+      "description": "内部工程化标签词表：观察结果、变化类型、获取/诊断状态、用户处置与失败类别。用户可见字段一律不得取这些值。",
+      "not": {
+        "enum": [
+          "acquired",
+          "acquired_with_user_assistance",
+          "captcha_or_login",
+          "change_found",
+          "change_type",
+          "confirmed_not_public",
+          "deferred",
+          "healthy",
+          "needs_user_assistance",
+          "network",
+          "newly_disclosed",
+          "no_change",
+          "page_structure_changed",
+          "parse_failure",
+          "pending",
+          "rate_limit",
+          "recovered",
+          "start_normal_refresh",
+          "status_changed",
+          "technical_failure_recoverable",
+          "tool_capability_missing",
+          "unknown",
+          "value_corrected",
+          "value_updated",
+          "value_withdrawn"
+        ]
+      }
+    },
+    "ProseZh": {
+      "description": "用户可读中文文本：必须包含汉字，且不得是内部工程化标签。",
+      "allOf": [
+        {"type": "string", "minLength": 1},
+        {"pattern": "[\\u4e00-\\u9fff]"},
+        {"$ref": "#/$defs/InternalLabelGuard"}
+      ]
+    },
+    "VisibleValue": {
+      "description": "报告显示值：原样呈现（可为数字、拉丁文或中文），但不得是内部工程化标签。",
+      "allOf": [
+        {"type": "string", "minLength": 1},
+        {"$ref": "#/$defs/InternalLabelGuard"}
+      ]
+    },
+    "SourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "来源身份：稳定来源 ID、不可变的来源内容版本、可复现定位与原始链接。相同内容在不同日期再次获取时复用同一版本标识；不得使用抓取日期、运行编号或临时快照标签。去重摘要只取稳定 ID、版本与定位；不同链接形态不产生新候选。",
+      "properties": {
+        "source_stable_id": {"$ref": "#/$defs/StableId"},
+        "source_version_id": {"type": "string", "minLength": 1, "description": "不可变的来源内容版本标识；相同内容重复获取时保持不变，不得使用抓取日期、运行编号或临时快照标签。"},
+        "locator": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "minLength": 1}
+      },
+      "required": ["source_stable_id", "source_version_id", "locator", "source_url"]
+    },
+    "DiscoveryRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "一次发现记录：只登记实际看到该变化的观察；无变化、未公开与技术失败由事件流承载，不写入候选发现列表。",
+      "properties": {
+        "observed_at": {"$ref": "#/$defs/DateTime"},
+        "observer": {"type": "string", "minLength": 1},
+        "outcome": {"const": "change_found"},
+        "note_zh": {"$ref": "#/$defs/ProseZh"}
+      },
+      "required": ["observed_at", "observer", "outcome", "note_zh"]
+    },
+    "DiagnosticRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "追加式技术诊断：失败类别、尝试轮次、已尝试方法与下一步。需要用户协助时必须提供已尝试方法；恢复轮次阈值由服务层按恢复策略判定。recovered 是恢复记录，使候选诊断状态回到健康，历史失败记录不删除。",
+      "properties": {
+        "diagnostic_id": {"type": "string", "minLength": 1},
+        "status": {
+          "enum": [
+            "technical_failure_recoverable",
+            "needs_user_assistance",
+            "recovered"
+          ]
+        },
+        "failure_category": {
+          "enum": [
+            "network",
+            "rate_limit",
+            "captcha_or_login",
+            "page_structure_changed",
+            "parse_failure",
+            "tool_capability_missing",
+            "unknown"
+          ]
+        },
+        "attempts": {"type": "integer", "minimum": 1},
+        "methods_tried_zh": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ProseZh"},
+          "uniqueItems": true
+        },
+        "next_step_zh": {"$ref": "#/$defs/ProseZh"},
+        "user_guidance_zh": {"$ref": "#/$defs/ProseZh"},
+        "recorded_at": {"$ref": "#/$defs/DateTime"}
+      },
+      "required": [
+        "diagnostic_id",
+        "status",
+        "failure_category",
+        "attempts",
+        "methods_tried_zh",
+        "next_step_zh",
+        "user_guidance_zh",
+        "recorded_at"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "needs_user_assistance"}},
+            "required": ["status"]
+          },
+          "then": {
+            "description": "未提供已尝试方法时不得标为需要用户协助。",
+            "properties": {
+              "methods_tried_zh": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "DispositionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "一次用户处置决定：启动正常刷新或暂不处理；只追加不覆盖，处置重放幂等。",
+      "properties": {
+        "disposition": {"enum": ["start_normal_refresh", "deferred"]},
+        "decided_by": {"type": "string", "minLength": 1},
+        "decided_at": {"$ref": "#/$defs/DateTime"},
+        "reason_zh": {"$ref": "#/$defs/ProseZh"}
+      },
+      "required": ["disposition", "decided_by", "decided_at", "reason_zh"]
+    },
+    "RefreshHandoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "只读刷新交接单：内容寻址绑定候选、去重摘要、项目与当前项目合同版本、来源身份和建议复核范围。交接单只是正常刷新的输入，不触发刷新接受、快照锁定或报告发布。",
+      "properties": {
+        "handoff_id": {"$ref": "#/$defs/StableId"},
+        "candidate_id": {"$ref": "#/$defs/StableId"},
+        "dedupe_digest": {"$ref": "#/$defs/HexDigest"},
+        "project_id": {"type": "string", "minLength": 1},
+        "project_contract_version": {"type": "integer", "minimum": 1},
+        "source_identity": {"$ref": "#/$defs/SourceIdentity"},
+        "suggested_review_scope_zh": {"$ref": "#/$defs/ProseZh"},
+        "created_at": {"$ref": "#/$defs/DateTime"}
+      },
+      "required": [
+        "handoff_id",
+        "candidate_id",
+        "dedupe_digest",
+        "project_id",
+        "project_contract_version",
+        "source_identity",
+        "suggested_review_scope_zh",
+        "created_at"
+      ]
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "contract_version": {
+      "const": "1.0",
+      "description": "监测能力合同版本；区别于交接单绑定的项目合同版本。"
+    },
+    "candidate_id": {"$ref": "#/$defs/StableId"},
+    "project_id": {"type": "string", "minLength": 1},
+    "source_identity": {"$ref": "#/$defs/SourceIdentity"},
+    "discovered_at": {"$ref": "#/$defs/DateTime"},
+    "discoveries": {
+      "type": "array",
+      "minItems": 1,
+      "description": "追加式发现历史：同一变化重复发现只保留一个候选身份并追加记录。",
+      "items": {"$ref": "#/$defs/DiscoveryRecord"},
+      "uniqueItems": true
+    },
+    "entity_id": {"$ref": "#/$defs/StableId"},
+    "claim_domain": {"type": "string", "minLength": 1},
+    "change_type": {
+      "enum": [
+        "value_updated",
+        "newly_disclosed",
+        "status_changed",
+        "value_corrected",
+        "value_withdrawn"
+      ]
+    },
+    "current_value": {"$ref": "#/$defs/VisibleValue"},
+    "candidate_value": {"$ref": "#/$defs/VisibleValue"},
+    "dedupe_digest": {
+      "$ref": "#/$defs/HexDigest",
+      "description": "由项目、来源稳定身份/版本/定位、实体、声明域、变化类型、当前值与候选值的规范 JSON 计算的稳定去重摘要；候选 ID 由该摘要派生。"
+    },
+    "possibly_affected_reports": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["A", "B", "C"]}
+    },
+    "possibly_affected_page_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "acquisition_status": {
+      "enum": ["acquired", "acquired_with_user_assistance"]
+    },
+    "diagnostic_status": {
+      "enum": ["healthy", "technical_failure_recoverable", "needs_user_assistance"]
+    },
+    "diagnostics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/DiagnosticRecord"}
+    },
+    "user_disposition": {
+      "default": "pending",
+      "enum": ["pending", "start_normal_refresh", "deferred"]
+    },
+    "disposition_records": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/DispositionRecord"}
+    },
+    "refresh_handoff": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/RefreshHandoff"}
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "contract_version",
+    "candidate_id",
+    "project_id",
+    "source_identity",
+    "discovered_at",
+    "discoveries",
+    "entity_id",
+    "claim_domain",
+    "change_type",
+    "current_value",
+    "candidate_value",
+    "dedupe_digest",
+    "possibly_affected_reports",
+    "possibly_affected_page_ids",
+    "acquisition_status",
+    "diagnostic_status",
+    "user_disposition"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {"user_disposition": {"const": "start_normal_refresh"}},
+        "required": ["user_disposition"]
+      },
+      "then": {
+        "description": "启动正常刷新必须携带内容寻址的只读刷新交接单。",
+        "required": ["refresh_handoff"],
+        "properties": {
+          "refresh_handoff": {"$ref": "#/$defs/RefreshHandoff"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"refresh_handoff": {"type": "object"}},
+        "required": ["refresh_handoff"]
+      },
+      "then": {
+        "description": "交接单只能来自启动正常刷新的用户决定。",
+        "properties": {
+          "user_disposition": {"const": "start_normal_refresh"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "user_disposition": {"enum": ["start_normal_refresh", "deferred"]}
+        },
+        "required": ["user_disposition"]
+      },
+      "then": {
+        "description": "当前处置必须由用户决定记录支撑。",
+        "properties": {
+          "disposition_records": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {
+            "properties": {"diagnostic_status": {"const": "healthy"}},
+            "required": ["diagnostic_status"]
+          },
+          {
+            "properties": {"diagnostics": {"minItems": 1}},
+            "required": ["diagnostics"]
+          }
+        ]
+      },
+      "then": {
+        "description": "健康状态下保留诊断历史时必须包含恢复记录；最新记录与当前状态的一致性由 Python 合同在构造边界 fail-closed。",
+        "properties": {
+          "diagnostics": {
+            "contains": {
+              "type": "object",
+              "properties": {"status": {"const": "recovered"}}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "diagnostic_status": {
+            "enum": ["technical_failure_recoverable", "needs_user_assistance"]
+          }
+        },
+        "required": ["diagnostic_status"]
+      },
+      "then": {
+        "description": "技术失败状态必须由诊断记录支撑。",
+        "properties": {
+          "diagnostics": {"minItems": 1}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,2066 @@
+{
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "records": [
+    {
+      "arm_groups": [
+        {
+          "description": "Two subcutaneous injections of Placebo (for Dupilumab) as a loading dose on Day 1 followed by a single injection weekly (qw) from Week 1 to Week 51.",
+          "interventionNames": [
+            "Drug: Placebo (for Dupilumab)",
+            "Other: Topical Corticosteroid (TCS)"
+          ],
+          "label": "Placebo qw",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Two subcutaneous injections of Dupilumab 300 mg (for a total of 600 mg) as a loading dose on Day 1, followed by placebo (for Dupilumab) alternating with single 300 mg injection of Dupilumab every 2 weeks (q2w) from Week 1 to Week 51. During weeks in which Dupilumab was not administered, participants received placebo.",
+          "interventionNames": [
+            "Drug: Dupilumab",
+            "Drug: Placebo (for Dupilumab)",
+            "Other: Topical Corticosteroid (TCS)"
+          ],
+          "label": "Dupilumab 300 mg q2w",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Two subcutaneous injections of Dupilumab 300 mg (for a total of 600 mg) as a loading dose on Day 1, followed by a single 300 mg injection of Dupilumab qw from Week 1 to Week 51.",
+          "interventionNames": [
+            "Drug: Dupilumab",
+            "Other: Topical Corticosteroid (TCS)"
+          ],
+          "label": "Dupilumab 300 mg qw",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "TRIPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Key Inclusion Criteria:\n\n1. Chronic AD that had been present for at least 3 years before the screening visit;\n2. Documented recent history (within 6 months before the screening visit) of inadequate response to a sufficient course of out-patient treatment with topical AD medication(s).\n\nKey Exclusion Criteria:\n\n1. Participation in a prior Dupilumab clinical trial;\n2. Important side effects of topical medication (e.g. intolerance to treatment, hypersensitivity reactions, significant skin atrophy, systemic effects), as assessed by the investigator or treating physician;\n3. Having used any of the following treatments within 4 weeks before the baseline visit, or any condition that, in the opinion of the investigator, was likely to require such treatment(s) during the first 2 weeks of study treatment:\n\n   1. Immunosuppressive/immunomodulating drugs (e.g, systemic steroids, cyclosporine, mycophenolate-mofetil, Janus kinase inhibitors, interferon-gamma \\[IFN-γ\\], azathioprine, methotrexate, etc.);\n   2. Phototherapy for AD;\n4. Treatment with a live (attenuated) vaccine within 12 weeks before the baseline visit;\n5. History of human immunodeficiency virus (HIV) infection or positive HIV serology at screening;\n6. Positive hepatitis B surface antigen (HBsAg), hepatitis B core antibody (HBcAb), or hepatitis C antibody at the screening visit;\n7. Active or acute infection requiring systemic treatment within 2 weeks before baseline visit;\n8. Known or suspected history of immunosuppression;\n9. Pregnant or breastfeeding women, or planning to become pregnant or breastfeed during the participant's participation in this study.\n\nNote: The eligibility criteria listed above is not intended to contain all considerations relevant to a participant's potential participation in a clinical trial therefore not all inclusion/ exclusion criteria are listed.",
+      "enrollment": {
+        "count": 740,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2014-10-09",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Dupilumab 300 mg q2w",
+            "Dupilumab 300 mg qw"
+          ],
+          "description": "Subcutaneous injection in the different quadrants of the abdomen (avoiding navel and waist areas) and upper thighs",
+          "name": "Dupilumab",
+          "otherNames": [
+            "REGN668",
+            "SAR231893",
+            "Dupixent"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Dupilumab 300 mg q2w",
+            "Placebo qw"
+          ],
+          "description": "Subcutaneous injection in the different quadrants of the abdomen (avoiding navel and waist areas) and upper thighs",
+          "name": "Placebo (for Dupilumab)",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Dupilumab 300 mg q2w",
+            "Dupilumab 300 mg qw",
+            "Placebo qw"
+          ],
+          "description": "All participants were required to treatment with a (TCS) using a standardized regimen. It was recommended that participants use triamcinolone acetonide 0.1% cream or fluocinolone acetonide 0.025% ointment for medium potency, and hydrocortisone 1% cream for low potency.",
+          "name": "Topical Corticosteroid (TCS)",
+          "type": "OTHER"
+        }
+      ],
+      "last_update": "2017-10-17",
+      "official_title": "Study to Assess the Efficacy and Long-term Safety of Dupilumab (REGN668/SAR231893) in Adult Participants With Moderate-to-Severe Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "IGA is an assessment scale used to determine severity of AD and clinical response to treatment on a 5-point scale (0 = clear; 1 = almost clear; 2 = mild; 3 = moderate; 4 = severe) based on erythema and papulation/infiltration. Therapeutic response is an IGA score of 0 (clear) or 1 (almost clear). Participants with IGA score \"0\" or \"1\" and a reduction from baseline of ≥2 points at Week 16 were reported.",
+          "measure": "Percentage of Participants With Investigator's Global Assessment (IGA) Score of \"0\" or \"1\" and Reduction From Baseline of ≥2 Points at Week 16",
+          "timeFrame": "Baseline to Week 16"
+        }
+      ],
+      "product_id": "dupilumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+      "source_version_id": "ctgov-nct02260986-0ecc13b6624228aa",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "IL-4Rα受体阻断，抑制IL-4/IL-13信号",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+        "source_version_id": "ctgov-nct02260986-0ecc13b6624228aa",
+        "target": "IL-4Rα"
+      },
+      "trial_id": "NCT02260986"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Induction Period (Baseline-Week 16):\n\nTwo subcutaneous (SC) injections of Placebo as a loading dose at Baseline and Week 2 followed by a single injection every 2 weeks (Q2W) from Week 4 until Week 14.\n\nMaintenance Period (Week 16-Week 52):\n\nTwo placebo SC injections as loading dose on Week 16 and Week 18. One placebo SC injection Q2W until Week 50.",
+          "interventionNames": [
+            "Other: Placebo"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Induction Period (Baseline-Week 16):\n\n500 milligram (mg) Lebrikizumab (2 x 250 mg) SC injections as a loading dose at Baseline and Week 2 visits followed by a single 250 mg Lebrikizumab injection Q2W from Week 4 until Week 14.\n\nMaintenance Period (Week 16-Week 52):\n\nOne 250 mg Lebrikizumab SC injection and one placebo SC injection as maintenance loading dose on Week 16 and Week 18.\n\nOne 250 mg Lebrikizumab SC injection Q2W until Week 50.",
+          "interventionNames": [
+            "Biological: Lebrikizumab"
+          ],
+          "label": "Lebrikizumab Q2W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Maintenance Period (Week 16-Week 52):\n\nOne 250 mg Lebrikizumab SC injection and one placebo SC injection as maintenance loading dose on Week 16 and two placebo SC injections on Week 18.\n\nOne 250 mg Lebrikizumab SC injection Every 4 weeks (Q4W) on Weeks 20, 24, 28, 32, 36, 40, 44, and 48.\n\nOne placebo SC injection Q4W on Weeks 22, 26, 30, 34, 38, 42, 46, and 50.",
+          "interventionNames": [
+            "Biological: Lebrikizumab",
+            "Other: Placebo"
+          ],
+          "label": "Lebrikizumab Q4W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Maintenance Period (Week 16-Week 52):\n\nParticipants who require topical or systemic rescue treatment for atopic dermatitis during the Induction Period, or are non-responders at Week 16, will be eligible for treatment in an Escape Arm where participants will receive open-label lebrikizumab Q2W from Week 16 through Week 52. In addition, participants who do not maintain an acceptable response during the Maintenance Period (have an EASI score \\<50% of baseline), will be eligible for the Escape Arm.",
+          "interventionNames": [
+            "Biological: Lebrikizumab"
+          ],
+          "label": "Escape Arm (Lebrikizumab Q2W)",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "interventionModelDescription": "Randomized, double-blind, parallel group, placebo controlled",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "maskingDescription": "Double-blind",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Male or female adults and adolescents (≥12 years and ≥40 kg)\n* Chronic atopic dermatitis (according to American Academy of Dermatology Consensus Criteria) that has been present for ≥1 year before the screening visit\n* Eczema Area and Severity Index (EASI) score ≥16 at the baseline visit\n* Investigator Global Assessment (IGA) score ≥3 (scale of 0 to 4) at the baseline visit\n* ≥10% body surface area (BSA) of atopic dermatitis involvement at the baseline visit\n* History of inadequate response to treatment with topical medications; or determination that topical treatments are otherwise medically inadvisable\n\nExclusion Criteria:\n\n* Prior treatment with dupilumab or tralokinumab\n* Treatment with topical corticosteroids, calcineurin inhibitors or phosphodiesterase-4 inhibitors such as crisaborole within 1 week prior to the baseline visit\n* Treatment with any of the following agents within 4 weeks prior to the baseline visit:\n\n  * Immunosuppressive/immunomodulating drugs (e.g., systemic corticosteroids, cyclosporine, mycophenolate-mofetil, IFN-γ, Janus kinase inhibitors, azathioprine, methotrexate, etc.)\n  * Phototherapy and photochemotherapy (PUVA) for AD\n* Treatment with the following prior to the baseline visit:\n\n  * An investigational drug within 8 weeks or within 5 half-lives (if known) of baseline, whichever is longer\n  * Cell-depleting biologics, including to rituximab, within 6 months of baseline\n  * Other biologics within 5 half-lives (if known) or 16 weeks of baseline, whichever is longer\n* Treatment with a live (attenuated) vaccine within 12 weeks of the baseline visit or planned during the study\n* Uncontrolled chronic disease that might require bursts of oral corticosteroids, e.g., co-morbid severe uncontrolled asthma\n* Evidence of active acute or chronic hepatitis\n* History of human immunodeficiency virus (HIV) infection or positive HIV serology\n* History of malignancy, including mycosis fungoides, within 5 years before the screening visit, except completely treated in situ carcinoma of the cervix, completely treated and resolved non-metastatic squamous or basal cell carcinoma of the skin\n* Pregnant or breastfeeding women, or women planning to become pregnant or breastfeed during the study",
+      "enrollment": {
+        "count": 445,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2019-11-26",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Escape Arm (Lebrikizumab Q2W)",
+            "Lebrikizumab Q2W",
+            "Lebrikizumab Q4W"
+          ],
+          "description": "Subcutaneous injection",
+          "name": "Lebrikizumab",
+          "otherNames": [
+            "LY3650150",
+            "DRM06"
+          ],
+          "type": "BIOLOGICAL"
+        },
+        {
+          "armGroupLabels": [
+            "Lebrikizumab Q4W",
+            "Placebo"
+          ],
+          "description": "Subcutaneous Injection",
+          "name": "Placebo",
+          "type": "OTHER"
+        }
+      ],
+      "last_update": "2023-05-24",
+      "official_title": "Evaluation of the Efficacy and Safety of Lebrikizumab (LY3650150) in Moderate to Severe Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "The IGA measures the investigator's global assessment of the participant's overall severity of their atopic dermatitis (AD), based on a static, numeric 5-point scale from 0 (clear skin) to 4 (severe disease). The score is based on an overall assessment of the degree of erythema, papulation/induration, oozing/crusting, and lichenification.",
+          "measure": "Percentage of Participants With an Investigator Global Assessment (IGA) Score of 0 or 1 and a Reduction ≥2 Points From Baseline to Week 16",
+          "timeFrame": "Baseline to Week 16"
+        },
+        {
+          "description": "The EASI assesses objective physician estimates of 2 dimensions of AD - disease extent and clinical signs affected: 0 = 0%; 1 = 1-9%; 2 = 10-29%; 3 = 30-49%; 4 = 50-69%; 5 = 70-89%; 6 = 90-100% and the severity of 4 clinical signs: (1) erythema, (2) edema/papulation, (3) excoriation, and (4) lichenification each on a scale of 0 to 3 (0 = none, absent; 1 = mild; 2 = moderate; 3 = severe) at 4 body sites (head/neck, trunk, upper limbs, and lower limbs). Half scores are allowed between severities 1, 2, and 3. The final EASI score was obtained by weight-averaging these 4 scores and will range from 0 to 72 (severe).\n\nThe EASI-75 responder is defined as a participant who achieves a ≥ 75% reduction from baseline in the EASI score.",
+          "measure": "Percentage of Participants Achieving Eczema Area And Severity Index (EASI-75) (≥75% Reduction in EASI Score) From Baseline to Week 16",
+          "timeFrame": "Baseline to Week 16"
+        }
+      ],
+      "product_id": "lebrikizumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+      "source_version_id": "ctgov-nct04178967-2985a5c699089365",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向IL-13信号通路",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+        "source_version_id": "ctgov-nct04178967-2985a5c699089365",
+        "target": "IL-13"
+      },
+      "trial_id": "NCT04178967"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Placebo",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Nemolizumab Active",
+          "interventionNames": [
+            "Drug: Nemolizumab"
+          ],
+          "label": "Nemolizumab",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "maskingDescription": "Treatment",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Key Inclusion Criteria:\n\n* Male or female subjects aged greater than and equal to (\\>=) 12 years at the screening visit.\n* Chronic atopic dermatitis (according to American Academy of Dermatology Consensus Criteria) that has been present for at least 2 years before the screening visit.\n* Eczema Area and Severity Index (EASI) score \\>=16 at the screening and baseline visits.\n* Investigator Global Assessment (IGA) score \\>= 3 (scale of 0 to 4) at the screening and baseline visits.\n* AD involvement \\>= 10 percent (%) of body surface area (BSA) at screening and baseline visits.\n* Peak Pruritus Numerical Rating Scale (PPNRS) score of at least 4.0 at the screening and baseline visit.\n* Documented recent history of inadequate response to topical medications (topical corticosteroids \\[TCS\\] with or without Topical calcineurin inhibitors \\[TCI\\]).\n* Female subjects of childbearing potential (that is, fertile, following menarche and until becoming postmenopausal unless permanently sterile) must agree either to be strictly abstinent throughout the study and for 12 weeks after the last study drug injection, or to use an adequate and approved method of contraception throughout the study and for 12 weeks after the last study drug injection.\n\nKey Exclusion Criteria:\n\n* Body weight (\\<) 30 kilograms (kg).\n* Exacerbation of asthma requiring hospitalization in the preceding 12 months. Uncontrolled asthma in the preceding 3 months.\n* Cutaneous infection within 1 week before the baseline visit, any infection requiring treatment with oral or parenteral antibiotics, antivirals, antiparasitics or antifungals within 2 weeks before the baseline visit, or any confirmed or suspected coronavirus disease (COVID)-19 infection within 2 weeks before the screening or baseline visit.\n* Pregnant women, breastfeeding women, or women planning a pregnancy during the clinical study.\n\nNote: Subjects with chronic, stable use of prophylactic treatment for recurrent herpes viral infection can be included in this clinical study.\n\n* History of hypersensitivity (including anaphylaxis) to an immunoglobulin product (plasma-derived or recombinant, example, monoclonal antibody) or to any of the study drug excipients.\n* Any clinically significant issue, based on investigator judgement.",
+      "enrollment": {
+        "count": 941,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2019-06-14",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Placebo"
+          ],
+          "description": "Placebo",
+          "name": "Placebo",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Nemolizumab"
+          ],
+          "description": "Nemolizumab",
+          "name": "Nemolizumab",
+          "otherNames": [
+            "CD14152"
+          ],
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2024-08-14",
+      "official_title": "Efficacy and Safety of Nemolizumab in Subjects With Moderate-to-Severe Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "IGA success was defined as an IGA score of 0 (clear) or 1 (almost clear) and at least a 2-grade improvement from baseline to Week 16. The IGA is a 5-point scale ranging from 0 (clear) to 4 (severe) used by the Investigator or trained designee to evaluate the global severity of atopic dermatitis (AD) and the clinical response to treatment. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders.",
+          "measure": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a More Than Equal to [>=] 2-point Reduction): Intent-To-Treat (ITT) Population",
+          "timeFrame": "Week 16"
+        },
+        {
+          "description": "IGA success was defined as an IGA score of 0 (clear) or 1 (almost clear) and at least a 2-grade improvement from baseline to Week 16. The IGA is a 5-point scale ranging from 0 (clear) to 4 (severe) used by the Investigator or trained designee to evaluate the global severity of AD and the clinical response to treatment. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered a treatment failure. Participants with missing data at Week 16 were considered non-responders.",
+          "measure": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a >= 2-point Reduction): Severe Pruritus Population",
+          "timeFrame": "Week 16"
+        },
+        {
+          "description": "EASI-75 was defined as \\>=75 percent(%) improvement in EASI from baseline to Week 16. EASI evaluates severity of participants AD based on severity of AD clinical signs and % of body surface area (BSA) affected. Severity of clinical signs of AD(erythema, induration/papulation, excoriation and lichenification)scored separately for each of 4 body regions (head \\& neck, upper limbs, trunk \\& lower limbs on 4-point scale: 0= absent; 1= mild; 2= moderate; 3= severe. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders. EASI total score is composite score ranging from 0 to 72. Higher scores represent greater severity of AD.",
+          "measure": "Percentage of Participants With >=75% Improvement in Eczema Area and Severity Index (EASI-75) at Week 16: ITT Population",
+          "timeFrame": "Week 16"
+        },
+        {
+          "description": "EASI-75 was defined as \\>=75 percent(%) improvement in EASI from baseline to Week 16. EASI evaluates severity of participants AD based on severity of AD clinical signs and % of body surface area (BSA) affected. Severity of clinical signs of AD (erythema, induration/papulation, excoriation and lichenification)scored separately for each of 4 body regions (head \\& neck, upper limbs, trunk \\& lower limbs on 4-point scale: 0= absent; 1= mild; 2= moderate; 3= severe. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders. EASI total score is composite score ranging from 0 to 72. Higher scores represent greater severity of AD.",
+          "measure": "Percentage of Participants With >=75% Improvement in Eczema Area and Severity Index (EASI-75) at 16: Severe Pruritus Population",
+          "timeFrame": "Week 16"
+        }
+      ],
+      "product_id": "nemolizumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+      "source_version_id": "ctgov-nct03985943-0137d160e62e59ad",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "阻断IL-31受体A相关信号",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+        "source_version_id": "ctgov-nct03985943-0137d160e62e59ad",
+        "target": "IL-31RA"
+      },
+      "trial_id": "NCT03985943"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Lebrikizumab administered subcutaneously (SC), participants will receive 2 injections of lebrikizumab 250 mg at Baseline and Week 2, followed by 1 injection of lebrikizumab 250 milligram (mg) once every two weeks (Q2W) in the induction period up to week 16. Participants who received lebrikizumab 250 mg Q2W during the Induction Period will continue to receive lebrikizumab 250 mg Q2W during the Maintenance Period. In order to maintain the double blind, participants from the lebrikizumab 250 mg Q2W arm will be administered a second injection of blinded placebo during Week 16 and Week 18. From Week 20 up to Week 52, all participants will receive 1 injection of lebrikizumab 250 mg Q2W in Open-label maintenance period.",
+          "interventionNames": [
+            "Biological: Lebrikizumab"
+          ],
+          "label": "Lebrikizumab",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Lebrikizumab-matching Placebo administered SC, 250 mg dose, Q2W in the induction period for 16 weeks. Participants will receive 2 injections of lebrikizumab 250 mg at Week 16 and Week 18 followed by 1 injection of lebrikizumab 250 mg Q2W from Week 20 up to Week 52 in Open-label maintenance period.",
+          "interventionNames": [
+            "Drug: Lebrikizumab-matching Placebo"
+          ],
+          "label": "Lebrikizumab-matching Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Adults and adolescents (aged greater than or equal to (\\>=) 12 to \\<18 years at the time of Informed Consent Form (ICF)/Informed Assent Form (IAF) and weighing \\>=40 kilograms).\n* Chronic AD that has been present for \\>=1 year before the Screening visit.\n* EASI score \\>=16 at the Baseline Visit.\n* IGA score \\>=3 (moderate) (scale of 0 \\[clear\\] to 4 \\[severe\\]) at the Baseline visit.\n* \\>=10% BSA of AD involvement at the Baseline visit.\n* Inadequate response to existing topical medications\n* Failure to cyclosporine or non-medically advisable to receive/continue receiving cyclosporine\n* Signed ICF (and informed assent for adolescents as required)\n\nExclusion Criteria:\n\n* Treatment with TCS within 1 week before the Baseline visit.\n* Treatment with topical calcineurin inhibitors, phosphodiesterase-4 inhibitors such as crisaborole, or cannabinoids within 2 week before the Baseline visit.\n* Treatment with interleukin 4 (IL-4) or interleukin 13 (IL-13) antagonists biological therapies before the Baseline visit. Exception: previous treatment with dupilumab will be allowed in a subset of patients\n* Treatment with immunosuppressive/immunomodulating drugs, phototherapy and photochemotherapy within 4 weeks before the Baseline visit\n* Uncontrolled chronic disease that might require bursts of oral corticosteroids\n* Serious, opportunistic, chronic or recurring infections within 3 months of Screening or before randomization\n* Current or chronic infection with hepatitis B virus, current infection with hepatitis C virus, known liver cirrhosis and/or chronic hepatitis of any etiology\n* Known or suspected history of immunosuppression, history of HIV infection or positive HIV serology at Screening\n* Any clinically significant laboratory test results obtained at the Screening visit\n* Presence of skin comorbidities that may interfere with study assessments\n* Have had an important side effect to TCS that would prevent further use.",
+      "enrollment": {
+        "count": 331,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2021-12-08",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Lebrikizumab"
+          ],
+          "description": "Lebrikizumab solution for injection administered subcutaneously.",
+          "name": "Lebrikizumab",
+          "type": "BIOLOGICAL"
+        },
+        {
+          "armGroupLabels": [
+            "Lebrikizumab-matching Placebo"
+          ],
+          "description": "Matching Placebo solution for injection administered subcutaneously.",
+          "name": "Lebrikizumab-matching Placebo",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2025-05-20",
+      "official_title": "A Study of Lebrikizumab in Combination With Topical Corticosteroids in Patients With Atopic Dermatitis (AD) That Are Not Adequately Controlled With or Are Non-eligible for Cyclosporine",
+      "primary_outcomes": [
+        {
+          "description": "The EASI score is used to measure the severity and extent of atopic dermatitis (AD) and measures erythema, infiltration, excoriation and lichenification on 4 anatomic regions of the body: head, trunk, upper limbs, and lower limbs. The severity of the clinical signs of AD for each of 4 body regions was scored on a 4-point scale: 0=absent, 1=mild, 2=moderate and 3=severe. The area of AD involvement on each of the 4 anatomic regions was assessed as a percentage by body area: 0=no eruption, 1=1% to 9%, 2=10% to 29%, 3=30% to 49%, 4=50% to 60%, 5=70% to 80% and 6=90% to 100%. The composite index with total score ranged from 0 to 72, where higher scores indicates more severe and or extensive disease.",
+          "measure": "Double-blind Induction Period: Percentage of Participants Who Achieved Eczema Area and Severity Index (EASI) 75 (>=75% Reduction From Baseline in EASI Score) at Week 16",
+          "timeFrame": "At Week 16"
+        }
+      ],
+      "product_id": "lebrikizumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+      "source_version_id": "ctgov-nct05149313-2dca024f2ff3b749",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向IL-13信号通路",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+        "source_version_id": "ctgov-nct05149313-2dca024f2ff3b749",
+        "target": "IL-13"
+      },
+      "trial_id": "NCT05149313"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Week 0 to Week 16:\n\nTwo subcutaneous (SC) injections of tralokinumab as a loading dose on Day 0, followed by a SC injection of tralokinumab Q2W regimen for 16 weeks.",
+          "interventionNames": [
+            "Drug: Tralokinumab"
+          ],
+          "label": "Initial treatment period - Tralokinumab Q2W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Week 0 to Week 16:\n\nTwo subcutaneous (SC) injections of placebo as a loading dose on Day 0 followed by a SC injection of placebo Q2W regimen for 16 weeks.",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Initial treatment period - Placebo Q2W",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Week 16 to Week 52:\n\nTralokinumab responders from the initial treatment period re-randomised at Week 16 and administered tralokinumab maintenance subcutaneous injection regimen Q2W for 36 weeks.",
+          "interventionNames": [
+            "Drug: Tralokinumab"
+          ],
+          "label": "Maintenance treatment period - Tralokinumab Q2W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Week 16 to Week 52:\n\nTralokinumab responders from the initial treatment period re-randomised at Week 16 and administered tralokinumab maintenance subcutaneous injection regimen Q4W for 36 weeks.\n\nSubjects in this group receive alternating doses of tralokinumab SC injection and placebo SC injection every 2 weeks.",
+          "interventionNames": [
+            "Drug: Tralokinumab",
+            "Drug: Placebo"
+          ],
+          "label": "Maintenance treatment period - Tralokinumab Q4W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Week 16 to Week 52:\n\nTralokinumab responders from initial treatment period randomised at Week 16 and administered placebo subcutaneous maintenance injection for 36 weeks.",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Maintenance treatment period - Placebo Q2W",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Week 16 to Week 52:\n\nPlacebo responders from the initial treatment period re-assigned at Week 16 and administered placebo maintenance subcutaneous injection regimen Q2W for 36 weeks.",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Maintenance treatment period - Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Week 16 to Week 52:\n\nSubjects receiving initial treatment with tralokinumab Q2W or placebo Q2W assigned to open-label treatment at Week 16 and administered Tralokinumab subcutaneous (SC) injection + optional TCS\\* regimen Q2W.\n\nOR\n\nSubjects receiving maintenance treatment with tralokinumab Q2W/Q4W or placebo assigned to open-label treatment after Week 16 and administered tralokinumab SC injection + optional TCS\\* regimen Q2W.\n\n\\*TCS = topical corticosteroids.",
+          "interventionNames": [
+            "Drug: Tralokinumab"
+          ],
+          "label": "Open-label treatment - Tralokinumab + optional TCS",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Week 52 to Week 68 \\[Short term extension (Japan only)\\] :\n\nJapanese subjects who were transferred to the open-label tralokinumab Q2W arm at Week 16 continued an additional 16 weeks (Week 52 to Week 66) of open-label treatment to receive 52 weeks of active therapy.",
+          "interventionNames": [
+            "Drug: Tralokinumab"
+          ],
+          "label": "Open-label short-term- Tralokinumab + optional TCS",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "DOUBLE",
+          "maskingDescription": "Neither the subject nor any of the investigator or LEO staff who are involved in the treatment or clinical evaluation and monitoring of the subjects will be aware of the treatment received. The packaging and labelling of the IMPs will contain no evidence of their identity.\n\nSince tralokinumab and placebo are visually distinct and not matched for viscosity, IMP will be handled and administered by a qualified, unblinded HCP at the site who will not be involved in the management of trial subjects and who will not perform any of the assessments.",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n1. Written informed consent and any locally required authorisation obtained from the subject prior to performing any protocol-related procedures, including screening evaluations.\n2. Age 18 and above.\n3. Diagnosis of AD as defined by the Hanifin and Rajka (1980) criteria for AD (34; Appendix 5).\n4. Diagnosis of AD for ≥1 year.\n5. Subjects who have a recent history (within 1 year before the screening visit) of inadequate response to treatment with topical medications or for whom topical treatments are otherwise medically inadvisable (e.g., due to important side effects or safety risks).\n\n   Inadequate response is defined as failure to achieve and maintain remission or a low disease activity state (comparable to IGA 0=clear to 2=mild) despite treatment with a daily regimen of TCS of medium to higher potency (±TCI as appropriate), applied for at least 28 days or for the maximum duration recommended by the product prescribing information (e.g., 14 days for super potent TCS), whichever is shorter.\n\n   Subjects with documented systemic treatment for AD in the past year are also considered as inadequate responders to topical treatments and are potentially eligible for treatment with tralokinumab after appropriate washout.\n\n   Important side effects or safety risks are those that outweigh the potential treatment benefits and include intolerance to treatment, hypersensitivity reactions, significant skin atrophy, and systemic effects, as assessed by the investigator or by the subject's treating physician.\n6. AD involvement of ≥10% body surface area at screening and baseline (visit 3).\n7. An EASI score of ≥12 at screening and 16 at baseline.\n8. An IGA score of ≥3 at screening and at baseline.\n9. A Worst Daily Pruritus numeric rating scale (NRS) average score of ≥4 during the week prior to baseline.\n\n   Worst Daily Pruritus NRS at baseline will be calculated from daily assessments of worst itch severity (Worst Daily Pruritus NRS) during the 7 days immediately preceding randomisation (Day 6 to 0). A minimum of 4 Worst Daily Pruritus NRS scores out of the 7 days is required to calculate the baseline average score. For subjects who do not have at least 4 scores reported during the 7 days immediately preceding the planned randomisation date, randomisation should be postponed until this requirement is met, but without exceeding the 6 weeks maximum duration for screening.\n10. Subjects must have applied a stable dose of emollient twice daily (or more, as needed) for at least 14 days before randomisation (refer to exclusion criterion no. 8 for limitations regarding emollients).\n11. Women of childbearing potential must use a highly effective\\* form of birth control (confirmed by the investigator) throughout the trial and at least for 16 weeks (5 half lives) after last administration of IMP.\n\n    * A highly effective method of birth control is defined as one which results in a low failure rate (less than 1% per year) such as bilateral tubal occlusion, intrauterine device (IUD), intrauterine hormone-releasing system (IUS), combined (oestrogen and progestogen containing) hormonal contraception associated with inhibition of ovulation (oral, intravaginal, transdermal), progestogen-only hormonal contraception associated with inhibition of ovulation (oral, injectable, implantable), sexual abstinence (when this is in line with the preferred and usual life style of the subject), vasectomised partner (given that the subject is monogamous). The subjects must have used the contraceptive method continuously for at least 1 month prior to the pregnancy test at baseline. A female is defined as not being of child-bearing potential if she is postmenopausal (at least 12 months with no menses without an alternative medical cause prior to screening), or surgically sterile (hysterectomy, bilateral salpingectomy or bilateral oophorectomy).\n\nExclusion Criteria:\n\n1. Concurrent enrolment in another clinical trial where the subject is receiving an IMP.\n2. Previous randomisation in tralokinumab trials.\n3. Active dermatologic conditions that may confound the diagnosis of AD or would interfere with assessment of treatment, such as scabies, cutaneous lymphoma, or psoriasis.\n4. Known active allergic or irritant contact dermatitis that is likely to interfere with the assessment of severity of AD.\n5. Use of tanning beds or phototherapy (narrow band ultraviolet B \\[NBUVB\\], ultraviolet B \\[UVB\\], ultraviolet A1 \\[UVA1\\], psoralen + ultraviolet A \\[PUVA\\]), within 6 weeks prior to randomisation.\n6. Treatment with the following medications within 4 weeks prior to randomisation:\n\n   * Systemic immunosuppressive/immunomodulating drugs (e.g. methotrexate, cyclosporine, azathioprine, mycophenolate mofetil, Janus kinase inhibitors etc.).\n   * Systemic corticosteroid use (excludes topical, inhaled, or intranasal delivery).\n   * Three or more bleach baths during any week within the 4 weeks.\n7. Treatment with the following medications within 2 weeks prior to randomisation\n\n   * TCS.\n   * TCI.\n   * Topical PDE 4 inhibitor.\n8. Initiation of treatment of AD with prescription emollients or emollients containing additives such as ceramide, hyaluronic acid, urea, or filaggrin degradation products during the screening period (subjects may continue using stable doses of such emollients if initiated before the screening visit).\n9. Receipt of live attenuated vaccines 30 days prior to the date of randomisation and during the trial including the safety follow-up period.\n\n   • Receipt of inactive/killed vaccinations (e.g. inactive influenza) are allowed, provided they are not administered within 5 days before/after any study visit.\n10. Receipt of any marketed (i.e. immunoglobulin, anti-IgE) or investigational biologic agent, including dupilumab:\n\n    * Any cell-depleting agents including but not limited to rituximab: within 6 months prior to randomisation, or until lymphocyte count returns to normal, whichever is longer.\n    * Other biologics: within 3 months or 5 half-lives, whichever is longer, prior to randomisation.\n11. Receipt of any investigational non-biologic agent within 5 half-lives prior to randomisation.\n12. Receipt of blood products within 4 weeks prior to screening.\n13. Major surgery within 8 weeks prior to screening, or planned in-patient surgery or hospitalisation during the trial period.\n14. Known or suspected allergy or reaction to any component of the IMP formulation.\n15. History of any active skin infection within 1 week prior to randomisation.\n16. History of a clinically significant infection within 4 weeks prior to randomisation which, in the opinion of the investigator or sponsor's medical expert, may compromise the safety of the subject in the trial, interfere with evaluation of the IMP, or reduce the subject's ability to participate in the trial. Clinically significant infections are defined as:\n\n    * a systemic infection.\n    * a serious skin infection requiring parenteral (intravenous or intramuscular) antibiotics, antiviral, or antifungal medication.\n17. A helminth parasitic infection within 6 months prior to the date informed consent is obtained that has not been treated with, or has failed to respond to, standard of care therapy.\n18. History of anaphylaxis following any biologic therapy.\n19. History of immune complex disease.\n20. History of cancer:\n\n    * Subjects who have had basal cell carcinoma, localised squamous cell carcinoma of the skin or in situ carcinoma of the cervix are eligible provided that the subject is in remission and curative therapy was completed at least 12 months prior to the date informed consent was obtained.\n    * Subjects who have had other malignancies are eligible provided that the subject is in remission and curative therapy was completed at least 5 years prior to the date informed consent was obtained.\n21. Tuberculosis requiring treatment within the 12 months prior to screening. Evaluation will be according to local guidelines as per local standard of care.\n22. History of any known primary immunodeficiency disorder including a positive human immunodeficiency virus (HIV) test at screening, or the subject taking antiretroviral medications as determined by medical history and/or subject's verbal report.\n23. History of chronic alcohol or drug abuse within 12 months prior to screening, or any condition associated with poor compliance as judged by the investigator.\n24. History of attempted suicide or is at significant risk of suicide (either in the opinion of the investigator or defined as a \"yes\" to suicidal ideation questions no. 4 or 5 or answering \"yes\" to suicidal behaviour on the Columbia-Suicide Severity Rating Scale \\[C-SSRS\\] Screening version).\n25. Any disorder, including but not limited to, cardiovascular, gastrointestinal, hepatic, renal, neurological, musculoskeletal, infectious, endocrine, metabolic, haematological, immunological, psychiatric, or major physical impairment that is not stable, in the opinion of the investigator, and could:\n\n    * Affect the safety of the subject throughout the trial.\n    * Influence the findings of the trial or their interpretations.\n    * Impede the subject's ability to complete the entire duration of trial.\n26. Any clinically significant abnormal findings in physical examination, vital signs, electrocardiogram (ECG), haematology, clinical chemistry, or urinalysis during the screening period, which in the opinion of the investigator, may put the subject at risk because of his/her participation in the trial, or may influence the results of the trial, or the subject's ability to complete entire duration of the trial.\n27. Alanine aminotransferase (ALT) or aspartate aminotransferase (AST) level ≥2.0 times the ULN (upper limit of normal) at screening.\n28. Positive hepatitis B surface antigen (HBsAg), hepatitis B surface antibody (HBsAb), hepatitis B core antibody (HBcAb) or hepatitis C virus antibody (anti-HCV) serology at screening. Subjects with positive HBsAb may be randomised provided they are hepatitis B vaccinated and have negative HBsAg and HBcAb.\n29. Subjects who are not willing to abstain from donating blood and/or plasma from the time of informed consent and for 16 weeks (5 half-lives) after last dose of IMP.\n30. Subjects who are legally institutionalised.\n31. Pregnant, breastfeeding, or lactating women.\n32. Employees of the trial site or any other individuals directly involved with the planning or conduct of the trial, or immediate family members of such individuals.",
+      "enrollment": {
+        "count": 802,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2017-04-27",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Initial treatment period - Tralokinumab Q2W",
+            "Maintenance treatment period - Tralokinumab Q2W",
+            "Maintenance treatment period - Tralokinumab Q4W",
+            "Open-label short-term- Tralokinumab + optional TCS",
+            "Open-label treatment - Tralokinumab + optional TCS"
+          ],
+          "description": "Tralokinumab is a human recombinant monoclonal antibody of the IgG4 subclass that specifically binds to human IL-13 and blocks interaction with the IL-13 receptors. It is presented as a liquid formulation for subcutaneous (SC) administration",
+          "name": "Tralokinumab",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Initial treatment period - Placebo Q2W",
+            "Maintenance treatment period - Placebo",
+            "Maintenance treatment period - Placebo Q2W",
+            "Maintenance treatment period - Tralokinumab Q4W"
+          ],
+          "description": "Placebo contains the same excipients, in the same concentration only lacking tralokinumab",
+          "name": "Placebo",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2025-03-11",
+      "official_title": "Tralokinumab Monotherapy for Moderate to Severe Atopic Dermatitis - ECZTRA 1 (ECZema TRAlokinumab Trial no. 1)",
+      "primary_outcomes": [
+        {
+          "description": "The IGA is an instrument used in clinical trials to rate the severity of the subject's global AD and is based on a 5-point scale ranging from 0 (clear) to 4 (severe).",
+          "measure": "Subjects With Investigator's Global Assessment (IGA) Score of 0 (Clear) or 1 (Almost Clear) at Week 16",
+          "timeFrame": "At Week 16"
+        },
+        {
+          "description": "The EASI is a validated measure used in clinical practice and clinical trials to assess the severity and extent of AD. The EASI is a composite index with scores ranging from 0 to 72, with higher values indicating more severe and/or more extensive condition.",
+          "measure": "Subjects Achieving at Least 75% Reduction in Eczema Area and Severity Index [EASI] at Week 16",
+          "timeFrame": "At Week 16"
+        }
+      ],
+      "product_id": "tralokinumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648",
+      "source_version_id": "ctgov-nct03131648-dc203d7a2420433e",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "中和IL-13并阻断其受体相互作用",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648",
+        "source_version_id": "ctgov-nct03131648-dc203d7a2420433e",
+        "target": "IL-13"
+      },
+      "trial_id": "NCT03131648"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "4 subcutaneous (SC) injections of tralokinumab 150 mg as a loading dose on Day 0, followed by 2 SC injections of tralokinumab 150 mg every 2 weeks (Q2W) regimen for 26 weeks. The last administration of the Investigational Medicinal Product (IMP) occurred at Week 24. From Day 0 to Week 24, a Topical corticosteroid (TCS) cream was dispensed to the participants at each IMP dosing visit (e.g., Q2W). Participants were instructed to treat active lesions as needed and to discontinue the TCS treatment when control was achieved.",
+          "interventionNames": [
+            "Drug: Tralokinumab"
+          ],
+          "label": "Tralokinumab + TCS",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "4 subcutaneous (SC) injections of placebo as a loading dose on Day 0, followed by 2 SC injections of placebo every 2 weeks (Q2W) regimen for 26 weeks. The last administration of the Investigational Medicinal Product (IMP) occurred at Week 24. From Day 0 to Week 24, a Topical corticosteroid (TCS) cream was dispensed to the participants at each IMP dosing visit (e.g., Q2W). Participants were instructed to treat active lesions as needed and to discontinue the TCS treatment when control was achieved.",
+          "interventionNames": [
+            "Other: Placebo"
+          ],
+          "label": "Placebo + TCS",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "DOUBLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Key Inclusion Criteria:\n\n* Age 18 and above\n* Diagnosis of AD as defined by the Hanifin and Rajka (1980) criteria for AD\n* History of AD for 1 year or more\n* Subjects with a history within 1 year prior to screening of inadequate response to treatment with topical medications or subjects for whom topical treatments are otherwise medically inadvisable\n* AD involvement of 10% (or more) body surface area at screening and baseline (visit 3) according to component A of SCORAD\n* Documented history of either no previous CSA exposure and not currently a candidate for CSA treatment OR previous exposure to CSA in which case CSA treatment should not be continued or restarted\n* Subjects must have applied a stable dose of emollient twice daily (or more, as needed) for at least 14 days before randomisation\n\nKey Exclusion Criteria:\n\n* Subjects for whom TCSs are medically inadvisable in the opinion of the investigator\n* Use of tanning beds or phototherapy (NBUVB, UVB, UVA1, PUVA), within 6 weeks prior to randomisation\n* Treatment with immunomodulatory medications or bleach baths within 4 weeks prior to randomisation\n* Treatment with topical phosphodiesterase-4 (PDE-4) inhibitor within 2 weeks prior to randomisation\n* Receipt of any marketed or investigational biologic agent (e.g. cell-depleting agents or dupilumab) within 6 months prior to randomisation or until cell counts return to normal, whichever is longer\n* History of any active skin infection within 1 week prior to randomisation\n* History of a clinically significant infection (systemic infection or serious skin infection requiring parenteral treatment) within 4 weeks prior to randomisation\n* A helminth parasitic infection within 6 months prior to the date informed consent is obtained that has not been treated with, or has failed to respond to, standard of care therapy\n* Tuberculosis requiring treatment within the 12 months prior to screening. Evaluation will be according to local guidelines as per local standard of care\n* History of any known primary immunodeficiency disorder including a positive HIV test at screening, or the subject taking antiretroviral medications",
+      "enrollment": {
+        "count": 277,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2018-12-03",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Tralokinumab + TCS"
+          ],
+          "description": "Tralokinumab is a human recombinant monoclonal antibody of the IgG4 subclass that specifically binds to human IL-13 and blocks interaction with the IL-13 receptors. It is presented as a liquid formulation for subcutaneous (SC) administration.",
+          "name": "Tralokinumab",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo + TCS"
+          ],
+          "description": "Placebo contains the same excipients in the same concentration only lacking tralokinumab.",
+          "name": "Placebo",
+          "type": "OTHER"
+        }
+      ],
+      "last_update": "2025-03-11",
+      "official_title": "Tralokinumab in Combination With Topical Corticosteroids in Subjects With Severe Atopic Dermatitis - ECZTRA 7",
+      "primary_outcomes": [
+        {
+          "description": "EASI (Eczema Area and Severity Index) is a validated measure used in clinical practice and clinical trials to assess the severity and extent of AD. The EASI is a composite index with scores ranging from 0 to 72, with higher values indicating more severe and/or more extensive condition.",
+          "measure": "At Least 75% Reduction in Eczema Area and Severity Index (EASI75) From Week 0 to Week 16",
+          "timeFrame": "Week 0 to Week 16"
+        }
+      ],
+      "product_id": "tralokinumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537",
+      "source_version_id": "ctgov-nct03761537-c72fcf005a59e90e",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "中和IL-13并阻断其受体相互作用",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537",
+        "source_version_id": "ctgov-nct03761537-c72fcf005a59e90e",
+        "target": "IL-13"
+      },
+      "trial_id": "NCT03761537"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Induction Period (Baseline-Week 16):\n\nTwo subcutaneous (SC) injections of Placebo as a loading dose at Baseline and Week 2 followed by a single injection every 2 weeks (Q2W) from Week 4 until Week 14.\n\nMaintenance Period (Week 16-Week 52):\n\nTwo placebo SC injections as loading dose on Week 16 and Week 18. One placebo SC injection Q2W until Week 50.",
+          "interventionNames": [
+            "Other: Placebo"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Induction Period (Baseline-Week 16):\n\n500 milligram (mg) Lebrikizumab (2 x 250 mg) SC injections as a loading dose at Baseline and Week 2 visits followed by a single 250 mg Lebrikizumab injection Q2W from Week 4 until Week 14.\n\nMaintenance Period (Week 16-Week 52):\n\nOne 250 mg Lebrikizumab SC injection Q2W until Week 50.\n\nFor participants who received placebo in the Induction Period, the maintenance loading dose is:\n\nTwo 250 mg Lebrikizumab SC injections on Week 16.\n\nTwo 250 mg Lebrikizumab SC injections on Week 18.\n\nTo maintain the blind, for participants who received Lebrikizumab in the Induction Period, the maintenance loading dose is:\n\nOne 250 mg Lebrikizumab SC injection and one placebo SC injection on Week 16.\n\nOne 250 mg Lebrikizumab SC injection and one placebo SC injection on Week 18.",
+          "interventionNames": [
+            "Biological: Lebrikizumab",
+            "Other: Placebo"
+          ],
+          "label": "Lebrikizumab 250 Q2W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Maintenance Period (Week 16-Week 52):\n\nOne 250 mg Lebrikizumab SC injection every 4 weeks (Q4W) on Weeks 20, 24, 28, 32, 36, 40, 44, and 48.\n\nOne placebo SC injection Q4W on Weeks 22, 26, 30, 34, 38, 42, 46, and 50.\n\nFor participants who received placebo in the Induction Period, the maintenance loading dose is:\n\nTwo 250 mg Lebrikizumab SC injections on Week 16.\n\nTwo placebo injections on Week 18.\n\nTo maintain the blind, for participants who received Lebrikizumab in the Induction Period, the maintenance loading dose is:\n\nOne 250 mg Lebrikizumab SC injection and one placebo SC injection on Week 16.\n\nTwo placebo injections on Week 18",
+          "interventionNames": [
+            "Biological: Lebrikizumab",
+            "Other: Placebo"
+          ],
+          "label": "Lebrikizumab 250 Q4W",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Maintenance Period (Week 16-Week 52):\n\nBlinded loading doses based on prior treatment assignment will be administered, followed by one 250 mg Lebrikizumab SC injection Q2W until Week 50 in an open-label fashion.\n\nFor participants who received placebo in the Induction Period, the loading dose is:\n\nTwo 250 mg Lebrikizumab SC injections on Week 16.\n\nTwo 250 mg Lebrikizumab SC injections on Week 18.\n\nTo maintain the loading dose blind, for participants who received Lebrikizumab in the Induction Period, the loading dose is:\n\nOne 250 mg Lebrikizumab SC injection and one placebo SC injection on Week 16. One 250 mg Lebrikizumab SC injection and one placebo SC injection on Week 18.\n\nFor participants who do not maintain an acceptable response during the Maintenance Period and entered the Escape Arm, the loading doses will be administrated at entry and 2 weeks after entry based on the treatment assignment prior to entering escape arm.",
+          "interventionNames": [
+            "Biological: Lebrikizumab",
+            "Other: Placebo"
+          ],
+          "label": "Escape Arm (Lebrikizumab Q2W)",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "interventionModelDescription": "Randomized, double-blind, parallel group, placebo controlled",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "maskingDescription": "Double-blind",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Male or female adults and adolescents (≥12 years and ≥40 kg)\n* Chronic atopic dermatitis (according to American Academy of Dermatology Consensus Criteria) that has been present for ≥1 year before the screening visit\n* Eczema Area and Severity Index (EASI) score ≥16 at the baseline visit\n* Investigator Global Assessment (IGA) score ≥3 (scale of 0 to 4) at the baseline visit\n* ≥10% body surface area (BSA) of atopic dermatitis involvement at the baseline visit\n* History of inadequate response to treatment with topical medications; or determination that topical treatments are otherwise medically inadvisable\n\nExclusion Criteria:\n\n* Prior treatment with dupilumab or tralokinumab\n* Treatment with topical corticosteroids, calcineurin inhibitors or phosphodiesterase-4 inhibitors such as crisaborole within 1 week prior to the baseline visit\n* Treatment with any of the following agents within 4 weeks prior to the baseline visit:\n\n  * Immunosuppressive/immunomodulating drugs (e.g., systemic corticosteroids, cyclosporine, mycophenolate-mofetil, IFN-γ, Janus kinase inhibitors, azathioprine, methotrexate, etc.)\n  * Phototherapy and photochemotherapy (PUVA) for AD\n* Treatment with the following prior to the baseline visit:\n\n  * An investigational drug within 8 weeks or within 5 half-lives (if known) of baseline, whichever is longer\n  * Cell-depleting biologics, including to rituximab, within 6 months of baseline\n  * Other biologics within 5 half-lives (if known) or 16 weeks of baseline, whichever is longer\n* Treatment with a live (attenuated) vaccine within 12 weeks of the baseline visit or planned during the study\n* Uncontrolled chronic disease that might require bursts of oral corticosteroids, e.g., co-morbid severe uncontrolled asthma\n* Evidence of active acute or chronic hepatitis\n* History of human immunodeficiency virus (HIV) infection or positive HIV serology\n* History of malignancy, including mycosis fungoides, within 5 years before the screening visit, except completely treated in situ carcinoma of the cervix, completely treated and resolved non-metastatic squamous or basal cell carcinoma of the skin\n* Pregnant or breastfeeding women, or women planning to become pregnant or breastfeed during the study",
+      "enrollment": {
+        "count": 424,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2019-10-31",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Escape Arm (Lebrikizumab Q2W)",
+            "Lebrikizumab 250 Q2W",
+            "Lebrikizumab 250 Q4W"
+          ],
+          "description": "Subcutaneous injection",
+          "name": "Lebrikizumab",
+          "otherNames": [
+            "LY3650150",
+            "DRM06"
+          ],
+          "type": "BIOLOGICAL"
+        },
+        {
+          "armGroupLabels": [
+            "Escape Arm (Lebrikizumab Q2W)",
+            "Lebrikizumab 250 Q2W",
+            "Lebrikizumab 250 Q4W",
+            "Placebo"
+          ],
+          "description": "Subcutaneous Injection",
+          "name": "Placebo",
+          "type": "OTHER"
+        }
+      ],
+      "last_update": "2022-11-30",
+      "official_title": "Evaluation of the Efficacy and Safety of Lebrikizumab (LY3650150) in Moderate to Severe Atopic Dermatitis (ADvocate1)",
+      "primary_outcomes": [
+        {
+          "description": "The IGA measures the investigator's global assessment of the participant's overall severity of their Atopic Dermatitis (AD), based on a static, numeric 5-point scale from 0 (clear skin) to 4 (severe disease). The score is based on an overall assessment of the degree of erythema, papulation/induration, oozing/crusting, and lichenification.",
+          "measure": "Percentage of Participants With an Investigator Global Assessment (IGA) Score of 0 or 1 and a Reduction ≥2 Points From Baseline to Week 16",
+          "timeFrame": "Baseline to Week 16"
+        },
+        {
+          "description": "The EASI assesses objective physician estimates of 2 dimensions of atopic dermatitis - disease extent, i.e., percentage of skin affected: 0 = 0%; 1 = 1-9%; 2 = 10-29%; 3 = 30-49%; 4 = 50-69%; 5 = 70-89%; 6 = 90-100% and the severity of 4 clinical signs: (1) erythema, (2) edema/papulation, (3) excoriation, and (4) lichenification each on a scale of 0 to 3 (0 = none, absent; 1 = mild; 2 = moderate; 3 = severe) at 4 body sites (head/neck, trunk, upper limbs, and lower limbs). Half scores are allowed between severities 1, 2, and 3. The final EASI-75 score was obtained by weight-averaging these 4 scores and will range from 0 (none) to 72 (severe).\n\nThe EASI-75 responder is defined as a participant who achieves a ≥ 75% improvement from baseline in the EASI score.",
+          "measure": "Percentage of Participants Achieving Eczema Area And Severity Index (EASI-75) (≥75% Reduction in EASI Score) From Baseline to Week 16",
+          "timeFrame": "Baseline to Week 16"
+        }
+      ],
+      "product_id": "lebrikizumab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363",
+      "source_version_id": "ctgov-nct04146363-a7e6d0e7180a0cfd",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向IL-13信号通路",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363",
+        "source_version_id": "ctgov-nct04146363-a7e6d0e7180a0cfd",
+        "target": "IL-13"
+      },
+      "trial_id": "NCT04146363"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Participants will receive placebo orally once a day (QD) for 16 weeks in the double-blind treatment period. At Week 16 participants will be re-randomized to receive either upadacitinib 15 mg or upadacitinib 30 mg QD up to Week 260.",
+          "interventionNames": [
+            "Drug: Placebo for Upadacitinib",
+            "Drug: Upadacitinib"
+          ],
+          "label": "Placebo / Upadacitinib",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Participants will receive upadacitinib 15 mg orally once a day for up to 260 weeks.",
+          "interventionNames": [
+            "Drug: Upadacitinib"
+          ],
+          "label": "Upadacitinib 15 mg QD",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants will receive upadacitinib 30 mg orally once a day for up to 260 weeks.",
+          "interventionNames": [
+            "Drug: Upadacitinib"
+          ],
+          "label": "Upadacitinib 30 mg QD",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Body weight of ≥ 40 kg at Baseline Visit for participants between ≥ 12 and \\< 18 years of age\n* Chronic atopic dermatitis (AD) with onset of symptoms at least 3 years before Baseline Visit and subject meets Hanifin and Rajka criteria.\n* Active moderate to severe AD defined by:\n\n  * Eczema Area and Severity Index (EASI) score ≥ 16 at the Screening and Baseline Visits;\n  * Validated Investigator's Global Assessment (vIGA) score ≥ 3 at the Screening and Baseline Visits;\n  * ≥ 10% Body surface area (BSA) of AD involvement at the Screening and Baseline Visits;\n  * Baseline weekly average of daily Worst Pruritus NRS ≥ 4.\n* Candidate for systemic therapy or have recently required systemic therapy for AD\n* Subject has applied a topical emollient (moisturizer) twice daily for at least 7 days before the Baseline Visit.\n* Documented history of inadequate response to topical corticosteroids (TCS) or topical calcineurin inhibitor (TCI) or documented systemic treatment for AD within 6 months before Baseline Visit\n\nExclusion Criteria:\n\n* Prior exposure to any Janus kinase (JAK) inhibitor\n* Unable or unwilling to discontinue current atopic dermatitis treatments prior to the study\n* Requirement of prohibited medications during the study\n* Other active skin diseases or skin infections requiring systemic treatment or would interfere with appropriate assessment of atopic dermatitis lesions\n* Female subject who is pregnant, breastfeeding, or considering pregnancy during the study",
+      "enrollment": {
+        "count": 912,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2018-06-26",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Placebo / Upadacitinib"
+          ],
+          "description": "Tablets taken orally once a day",
+          "name": "Placebo for Upadacitinib",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo / Upadacitinib",
+            "Upadacitinib 15 mg QD",
+            "Upadacitinib 30 mg QD"
+          ],
+          "description": "Tablets taken orally once a day",
+          "name": "Upadacitinib",
+          "otherNames": [
+            "ABT-494",
+            "RINVOQ™"
+          ],
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2026-06-17",
+      "official_title": "Evaluation of Upadacitinib in Adolescent and Adult Patients With Moderate to Severe Atopic Dermatitis (Eczema)",
+      "primary_outcomes": [
+        {
+          "description": "EASI is a tool used to measure the extent (area) and severity of atopic eczema based on assessments of the head/neck, trunk, upper limbs and lower limbs. For each region the area score is recorded as the percentage of skin affected by eczema. For each region, the severity score is calculated as the sum of the intensity scores (scored as none \\[0\\], mild \\[1\\], moderate \\[2\\], or severe \\[3\\]) for redness (erythema, inflammation), thickness (induration, papulation, swelling - acute eczema), scratching (excoriation), and lichenification (lined skin, prurigo nodules - chronic eczema).\n\nThe total EASI score for each region is calculated by multiplying the severity score by the area score, with adjustment for the proportion of the body region to the whole body. The final EASI score is the sum of the 4 region scores and ranges from 0 to 72 where higher scores represent worse disease.",
+          "measure": "Main Study: Percentage of Participants Achieving at Least a 75% Reduction in Eczema Area and Severity Index Score (EASI 75) From Baseline at Week 16",
+          "timeFrame": "Baseline and Week 16"
+        },
+        {
+          "description": "The vIGA-AD is a validated assessment instrument to rate the severity of atopic dermatitis globally, based on the following scale:\n\n* 0 - Clear: No inflammatory signs of AD;\n* 1 - Almost clear: Barely perceptible erythema, induration/papulation and/or lichenification;\n* 2 - Mild: Slight but definite erythema, induration/papulation and/or minimal lichenification. No oozing or crusting;\n* 3 - Moderate: Clearly perceptible erythema, induration/papulation and/or lichenification, oozing or crusting may be present;\n* 4 - Severe: Marked erythema, induration/papulation and/or lichenification; Oozing or crusting may be present.",
+          "measure": "Main Study: Percentage of Participants Achieving Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) of 0 or 1 With a Reduction From Baseline of ≥ 2 Points at Week 16",
+          "timeFrame": "Baseline and Week 16"
+        }
+      ],
+      "product_id": "upadacitinib",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293",
+      "source_version_id": "ctgov-nct03569293-c4a8fa331a578ec0",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "选择性JAK1抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293",
+        "source_version_id": "ctgov-nct03569293-c4a8fa331a578ec0",
+        "target": "JAK1"
+      },
+      "trial_id": "NCT03569293"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Participants will receive placebo orally once a day (QD) for 16 weeks in the double-blind treatment period. At Week 16, participants will be re-randomized to receive either upadacitinib 15 mg or upadacitinib 30 mg QD up to Week 260.",
+          "interventionNames": [
+            "Drug: Placebo for Upadacitinib",
+            "Drug: Upadacitinib"
+          ],
+          "label": "Placebo / Upadacitinib",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Participants will receive upadacitinib 15 mg orally once a day for up to 260 weeks.",
+          "interventionNames": [
+            "Drug: Upadacitinib"
+          ],
+          "label": "Upadacitinib 15 mg QD",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants will receive upadacitinib 30 mg orally once a day for up to 260 weeks.",
+          "interventionNames": [
+            "Drug: Upadacitinib"
+          ],
+          "label": "Upadacitinib 30 mg QD",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Body weight of ≥ 40 kg at Baseline Visit for participants ≥ 12 and \\< 18 years of age\n* Chronic atopic dermatitis (AD) with onset of symptoms at least 3 years prior to Baseline and subject meets Hanifin and Rajka criteria\n* Active moderate to severe AD defined by Eczema Area and Severity Index (EASI) ≥ 16, validated Investigator's Global Assessment (vIGA) ≥ 3, body surface area (BSA) affected by AD ≥ 10%, and weekly average of daily Worst Pruritus numerical rating scale (NRS) score ≥ 4.\n* Candidate for systemic therapy or have recently required systemic therapy for AD\n* Documented history (within 6 months prior to Baseline) of inadequate response to topical corticosteroid (TCS) or topical calcineurin inhibitor (TCI) or documented systemic treatment for AD or for whom topical treatments are otherwise medically inadvisable due to side effects or safety risks\n\nExclusion Criteria:\n\n* Prior exposure to any Janus kinase (JAK) inhibitor\n* Unable or unwilling to discontinue current AD treatments prior to the study\n* Requirement of prohibited medications during the study\n* Other active skin diseases or skin infections requiring systemic treatment or would interfere with appropriate assessment of atopic dermatitis lesions\n* Female subject who is pregnant, breastfeeding, or considering pregnancy during the study",
+      "enrollment": {
+        "count": 912,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2018-07-31",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Placebo / Upadacitinib"
+          ],
+          "description": "Tablets taken orally once a day",
+          "name": "Placebo for Upadacitinib",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo / Upadacitinib",
+            "Upadacitinib 15 mg QD",
+            "Upadacitinib 30 mg QD"
+          ],
+          "description": "Tablets taken orally once a day",
+          "name": "Upadacitinib",
+          "otherNames": [
+            "ABT-494",
+            "RINVOQ®"
+          ],
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2026-06-02",
+      "official_title": "A Study to Evaluate Upadacitinib in Adolescents and Adults With Moderate to Severe Atopic Dermatitis (Measure Up 2)",
+      "primary_outcomes": [
+        {
+          "description": "EASI is a tool used to measure the extent (area) and severity of atopic eczema based on assessments of the head/ neck, trunk, upper limbs and lower limbs. For each region the area score is recorded as the percentage of skin affected by eczema. For each region, the severity score is calculated as the sum of the intensity scores (scored as none \\[0\\], mild \\[1\\], moderate \\[2\\], or severe \\[3\\]) for redness (erythema, inflammation), thickness (induration, papulation, swelling - acute eczema), scratching (excoriation), and lichenification (lined skin, prurigo nodules - chronic eczema).\n\nThe total EASI score for each region is calculated by multiplying the severity score by the area score, with adjustment for the proportion of the body region to the whole body. The final EASI score is the sum of the 4 region scores and ranges from 0 to 72 where higher scores represent worse disease.",
+          "measure": "Main Study: Percentage of Participants Achieving at Least a 75% Reduction in Eczema Area and Severity Index Score (EASI 75) From Baseline at Week 16",
+          "timeFrame": "Baseline and Week 16"
+        },
+        {
+          "description": "The vIGA-AD is a validated assessment instrument to rate the severity of atopic dermatitis globally, based on the following scale:\n\n* 0 - Clear: No inflammatory signs of AD;\n* 1 - Almost clear: Barely perceptible erythema, induration/papulation and/or lichenification, no oozing or crusting;\n* 2 - Mild: Slight but definite erythema, induration/papulation and/or minimal lichenification, no oozing or crusting;\n* 3 - Moderate: Clearly perceptible erythema, induration/papulation and/or lichenification, oozing or crusting may be present;\n* 4 - Severe: Marked erythema, induration/papulation and/or lichenification; Oozing or crusting may be present.",
+          "measure": "Main Study: Percentage of Participants Achieving Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) of 0 or 1 With a Reduction From Baseline of ≥ 2 Points at Week 16",
+          "timeFrame": "Baseline and Week 16"
+        }
+      ],
+      "product_id": "upadacitinib",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422",
+      "source_version_id": "ctgov-nct03607422-957d1f0dfcec0098",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "选择性JAK1抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422",
+        "source_version_id": "ctgov-nct03607422-957d1f0dfcec0098",
+        "target": "JAK1"
+      },
+      "trial_id": "NCT03607422"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "4 mg Baricitinib administered orally once daily. Placebo 1 mg and 2 mg administered orally every day to match.",
+          "interventionNames": [
+            "Drug: Baricitinib",
+            "Drug: Placebo"
+          ],
+          "label": "4 milligram (mg) Baricitinib",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "2 mg Baricitinib administered orally once daily. Placebo 1 mg and 4 mg administered orally every day to match.",
+          "interventionNames": [
+            "Drug: Baricitinib",
+            "Drug: Placebo"
+          ],
+          "label": "2 mg Baricitinib",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "1 mg Baricitinib administered orally once daily. Placebo 2 mg and 4 mg administered orally every day to match.",
+          "interventionNames": [
+            "Drug: Baricitinib",
+            "Drug: Placebo"
+          ],
+          "label": "1 mg Baricitinib",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Placebo administered orally once daily.",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "4 mg Baricitinib administered orally once daily. Placebo 1 mg, and 2 mg administered orally every day to match.",
+          "interventionNames": [
+            "Drug: Baricitinib",
+            "Drug: Placebo"
+          ],
+          "label": "4 mg Baricitinib Maximum Extended Enrollment Cohort",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "2 mg Baricitinib administered orally once daily. Placebo 1 mg and 4 mg administered orally every day to match.",
+          "interventionNames": [
+            "Drug: Baricitinib",
+            "Drug: Placebo"
+          ],
+          "label": "2 mg Baricitinib Maximum Extended Enrollment Cohort",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "1 mg Baricitinib administered orally once daily. Placebo 2 mg and 4 mg administered orally every day to match.",
+          "interventionNames": [
+            "Drug: Baricitinib",
+            "Drug: Placebo"
+          ],
+          "label": "1 mg Baricitinib Maximum Extended Enrollment Cohort",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Placebo administered orally once daily.",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Placebo Maximum Extended Enrollment Cohort",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "DOUBLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Have been diagnosed with moderate to severe Atopic Dermatitis for at least 12 months.\n* Have had inadequate response or intolerance to existing topical (applied to the skin) medications within 6 months preceding screening.\n* Are willing to discontinue certain treatments for eczema (such as systemic and topical treatments during a washout period).\n* Agree to use emollients daily.\n\nExclusion Criteria:\n\n* Are currently experiencing or have a history of other concomitant skin conditions (e.g., psoriasis or lupus erythematosus), or a history of erythrodermic, refractory, or unstable skin disease that requires frequent hospitalizations and/or intravenous treatment for skin infections.\n* A history of eczema herpeticum within 12 months, and/or a history of 2 or more episode of eczema herpeticum in the past.\n* Participants who are currently experiencing a skin infection that requires treatment, or is currently being treated, with topical or systemic antibiotics.\n* Have any serious illness that is anticipated to require the use of systemic corticosteroids or otherwise interfere with study participation or require active frequent monitoring (e.g., unstable chronic asthma).\n* Have been treated with the following therapies:\n\n  * Monoclonal antibody for less than 5 half-lives prior to randomization.\n  * Received prior treatment with any oral Janus kinase (JAK) inhibitor.\n  * Received any parenteral corticosteroids administered by intramuscular or intravenous (IV) injection within 2 weeks prior to study entry or within 6 weeks prior to planned randomization or are anticipated to require parenteral injection of corticosteroids during the study.\n  * Have had an intra-articular corticosteroid injection within 2 weeks prior to study entry or within 6 weeks prior to planned randomization.\n* Have high blood pressure characterized by a repeated systolic blood pressure \\>160 millimeters of mercury (mm Hg) or diastolic blood pressure \\>100 mm Hg.\n* Have had major surgery within the past eight weeks or are planning major surgery during the study.\n* Have experienced any of the following within 12 weeks of screening: venous thromboembolic event (VTE), myocardial infarction (MI), unstable ischemic heart disease, stroke, or New York Heart Association Stage III/IV heart failure.\n* Have a history of recurrent (≥ 2) VTE or are considered at high risk of VTE as deemed by the investigator.\n* Have a history or presence of cardiovascular, respiratory, hepatic, chronic liver disease gastrointestinal, endocrine, hematological, neurological, lymphoproliferative disease or neuropsychiatric disorders or any other serious and/or unstable illness.\n* Have a current or recent clinically serious viral, bacterial, fungal, or parasitic infection including herpes zoster, tuberculosis.\n* Have specific laboratory abnormalities.\n* Have received certain treatments that are contraindicated.\n* Pregnant or breastfeeding.",
+      "enrollment": {
+        "count": 660,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2017-11-07",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "1 mg Baricitinib",
+            "1 mg Baricitinib Maximum Extended Enrollment Cohort",
+            "2 mg Baricitinib",
+            "2 mg Baricitinib Maximum Extended Enrollment Cohort",
+            "4 mg Baricitinib Maximum Extended Enrollment Cohort",
+            "4 milligram (mg) Baricitinib"
+          ],
+          "description": "Administered orally.",
+          "name": "Baricitinib",
+          "otherNames": [
+            "LY3009104"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "1 mg Baricitinib",
+            "1 mg Baricitinib Maximum Extended Enrollment Cohort",
+            "2 mg Baricitinib",
+            "2 mg Baricitinib Maximum Extended Enrollment Cohort",
+            "4 mg Baricitinib Maximum Extended Enrollment Cohort",
+            "4 milligram (mg) Baricitinib",
+            "Placebo",
+            "Placebo Maximum Extended Enrollment Cohort"
+          ],
+          "description": "Administered orally.",
+          "name": "Placebo",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2020-08-18",
+      "official_title": "A Study of Baricitinib (LY3009104) in Patients With Moderate to Severe Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "The IGA measures the investigator's global assessment of the participant's overall severity of their atopic dermatitis (AD), based on a static, numeric 5-point scale from 0 (clear skin) to 4 (severe disease). The score is based on an overall assessment of the degree of erythema, papulation/induration, oozing/crusting, and lichenification.",
+          "measure": "Percentage of Participants Achieving Investigator's Global Assessment (IGA) of 0 or 1 With a ≥ 2 Point Improvement (Placebo, 2 mg, or 4 mg Baricitinib)",
+          "timeFrame": "16 Weeks"
+        }
+      ],
+      "product_id": "baricitinib",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396",
+      "source_version_id": "ctgov-nct03334396-a6bd448f96fdd502",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "JAK1/JAK2抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396",
+        "source_version_id": "ctgov-nct03334396-a6bd448f96fdd502",
+        "target": "JAK1/JAK2"
+      },
+      "trial_id": "NCT03334396"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Participants received ruxolitinib matching vehicle cream, applied topically to the affected areas as a thin film twice daily (BID) 8 hours apart from Day 1 up to Week 8. Participants applied cream BID to areas identified at Baseline even if the areas improved.",
+          "interventionNames": [
+            "Drug: Vehicle cream"
+          ],
+          "label": "Vehicle Control (VC) Period: Vehicle Cream BID",
+          "type": "PLACEBO_COMPARATOR"
+        },
+        {
+          "description": "Participants received ruxolitinib 0.75% cream, applied topically to the affected areas as a thin film BID 8 hours apart from Day 1 up to Week 8. Participants applied cream BID to areas identified at Baseline even if the areas improved.",
+          "interventionNames": [
+            "Drug: Ruxolitinib cream"
+          ],
+          "label": "VC Period: Ruxolitinib 0.75% Cream BID",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants received ruxolitinib 1.5% cream, applied topically to the affected areas as a thin film BID 8 hours apart from Day 1 up to Week 8. Participants applied cream BID to areas identified at Baseline even if the areas improved.",
+          "interventionNames": [
+            "Drug: Ruxolitinib cream"
+          ],
+          "label": "VC Period: Ruxolitinib 1.5% Cream BID",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants who applied vehicle cream during the VC Period were randomized at Week 8 to apply ruxolitinib 0.75% cream, topically to the affected areas as a thin film BID as needed from Week 8 up to Week 52. Participants stopped treatment 3 days after lesions disappeared and restarted at the first sign of recurrence.",
+          "interventionNames": [
+            "Drug: Ruxolitinib cream"
+          ],
+          "label": "Long-Term Safety (LTS) Period: Vehicle Cream to Ruxolitinib 0.75% Cream BID",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants who applied vehicle cream during the VC Period were randomized at Week 8 to apply ruxolitinib 1.5% cream, topically to the affected areas as a thin film BID as needed from Week 8 up to Week 52. Participants stopped treatment 3 days after lesions disappeared and restarted at the first sign of recurrence.",
+          "interventionNames": [
+            "Drug: Ruxolitinib cream"
+          ],
+          "label": "LTS Period: Vehicle Cream to Ruxolitinib 1.5% Cream BID",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants who applied ruxolitinib 0.75% cream during the VC Period, continued applying ruxolitinib 0.75% cream, topically to the affected areas as a thin film BID as needed from Week 8 up to Week 52. Participants stopped treatment 3 days after lesions disappeared and restarted at the first sign of recurrence.",
+          "interventionNames": [
+            "Drug: Ruxolitinib cream"
+          ],
+          "label": "LTS Period: Ruxolitinib 0.75% Cream BID",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants who applied ruxolitinib 1.5% cream during the VC Period, continued applying ruxolitinib 1.5% cream, topically to the affected areas as a thin film BID as needed from Week 8 up to Week 52. Participants stopped treatment 3 days after lesions disappeared and restarted at the first sign of recurrence.",
+          "interventionNames": [
+            "Drug: Ruxolitinib cream"
+          ],
+          "label": "LTS Period: Ruxolitinib 1.5% Cream BID",
+          "type": "EXPERIMENTAL"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Adolescents aged ≥ 12 to 17 years, inclusive, and men and women aged ≥ 18 years.\n* Participants diagnosed with atopic dermatitis (AD) as defined by the Hanifin and Rajka criteria.\n* AD duration of at least 2 years.\n* Participants with an Investigator's Global Assessment (IGA) score of 2 to 3 at Screening and Baseline (VC Period) and 0 to 4 at Week 8 (LTS Period).\n* Participants with percentage body surface area (%BSA) (excluding scalp) of AD involvement of 3% to 20% at Screening and Baseline (VC Period) and 0% to 20% at Week 8 (LTS Period).\n* Participants who agree to discontinue all agents used to treat AD from Screening through the final follow-up visit.\n* Participants who have at least 1 \"target lesion\" that measures approximately 10 cm\\^2 or more at Screening and Baseline. Lesion must be representative of the participant's disease state and not be located on the hands, feet, or genitalia.\n* Willingness to avoid pregnancy or fathering of children.\n\nExclusion Criteria:\n\n* Unstable course of AD (spontaneously improving or rapidly deteriorating) as determined by the investigator in the 4 weeks prior to Baseline.\n* Concurrent conditions and history of other diseases:\n\n  * Immunocompromised.\n  * Chronic or acute infection requiring treatment with systemic antibiotics, antivirals, antiparasitics, antiprotozoals, or antifungals within 2 weeks before Baseline.\n  * Active acute bacterial, fungal, or viral skin infection within 1 week before Baseline.\n  * Any other concomitant skin disorder, pigmentation, or extensive scarring that, in the opinion of the investigator, may interfere with the evaluation of AD lesions or compromise participant safety.\n  * Presence of AD lesions only on the hands or feet without prior history of involvement of other classical areas of involvement such as the face or the folds.\n  * Other types of eczema.\n* Any serious illness or medical, physical, or psychiatric condition(s) that, in the investigator's opinion, would interfere with full participation in the study, including administration of study drug and attending required study visits; pose a significant risk to the participant; or interfere with interpretation of study data.\n* Use of any of the following treatments within the indicated washout period before Baseline:\n\n  * 5 half-lives or 12 weeks, whichever is longer - biologic agents (e.g. dupilumab).\n  * 4 weeks - systemic corticosteroids or adrenocorticotropic hormone analogs, cyclosporin, methotrexate, azathioprine, or other systemic immunosuppressive or immunomodulating agents (e.g. mycophenolate or tacrolimus).\n  * 2 weeks - immunizations and sedating antihistamines, unless on long-term stable regimen (nonsedating antihistamines are permitted).\n  * 1 week - use of other topical treatments for AD (other than bland emollients). Diluted sodium hypochlorite \"bleach\" baths are allowed as long as they do not exceed 2 baths per week and their frequency remains the same throughout the study.\n* Participants who have previously received Janus kinase (JAK) inhibitors, systemic or topical.\n* Ultraviolet (UV) light therapy or prolonged exposure to natural or artificial sources of UV radiation within 2 weeks prior to Baseline and/or intention to have such exposure during the study, which is thought by the investigator to potentially impact the participant's AD.\n* Positive serology test results at screening for human immunodeficiency virus (HIV) antibody.\n* Liver function tests: aspartate aminotransferase (AST) or alanine aminotransferase (ALT) ≥ 2 × upper limit of normal (ULN); alkaline phosphatase and/or bilirubin \\> 1.5 × ULN (isolated bilirubin \\> 1.5 × ULN is acceptable if bilirubin is fractionated and direct bilirubin \\< 35%).\n* Pregnant or lactating participants, or those considering pregnancy.\n* History of alcoholism or drug addiction within 1 year before screening or current alcohol or drug use that, in the opinion of the investigator, will interfere with the participant's ability to comply with the administration schedule and study assessments.\n* Current treatment or treatment within 30 days or 5 half-lives (whichever is longer) before Baseline with another investigational medication or current enrollment in another investigational drug protocol.",
+      "enrollment": {
+        "count": 618,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2018-11-19",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "LTS Period: Ruxolitinib 0.75% Cream BID",
+            "LTS Period: Ruxolitinib 1.5% Cream BID",
+            "LTS Period: Vehicle Cream to Ruxolitinib 1.5% Cream BID",
+            "Long-Term Safety (LTS) Period: Vehicle Cream to Ruxolitinib 0.75% Cream BID",
+            "VC Period: Ruxolitinib 0.75% Cream BID",
+            "VC Period: Ruxolitinib 1.5% Cream BID"
+          ],
+          "description": "Ruxolitinib 0.75% or 1.5% cream.",
+          "name": "Ruxolitinib cream",
+          "otherNames": [
+            "INCB018424 phosphate cream"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Vehicle Control (VC) Period: Vehicle Cream BID"
+          ],
+          "description": "Ruxolitinib matching vehicle cream.",
+          "name": "Vehicle cream",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2023-09-28",
+      "official_title": "TRuE AD2 - An Efficacy and Safety Study of Ruxolitinib Cream in Adolescents and Adults With Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "The IGA is an overall eczema severity rating on a 5-point scale ranging from 0 (clear skin) to 4 (severe disease). The score is based on an overall assessment of the degree of erythema, induration/papulation, and oozing/crusting. The IGA-TS is defined as an IGA score of 0 (clear skin) or 1 (almost clear skin) with ≥ 2 grade improvement from Baseline.",
+          "measure": "VC Period: Percentage of Participants Who Achieved Investigator's Global Assessment - Treatment Success (IGA-TS) at Week 8",
+          "timeFrame": "Baseline to Week 8"
+        }
+      ],
+      "product_id": "ruxolitinib",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651",
+      "source_version_id": "ctgov-nct03745651-b7ce1187fd10f5bc",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "局部JAK1/JAK2抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651",
+        "source_version_id": "ctgov-nct03745651-b7ce1187fd10f5bc",
+        "target": "JAK1/JAK2"
+      },
+      "trial_id": "NCT03745651"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Study drug will be administered twice daiily.",
+          "interventionNames": [
+            "Drug: Ruxolitinib"
+          ],
+          "label": "Ruxolitinib (1.5% Cream)",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Study drug will be administered twice daily.",
+          "interventionNames": [
+            "Drug: Ruxolitinib"
+          ],
+          "label": "Ruxolitinib (0.75% cream)",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Vehicle cream will be administered twice daily.",
+          "interventionNames": [
+            "Drug: Vehicle Cream"
+          ],
+          "label": "Vehicle Cream",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "TRIPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Participants diagnosed with Atopic Dermatitis (AD) as defined by the Hanifin and Rajka criteria.\n* Participants with AD duration of at least 3 months (participant/parent/guardian may verbally report signs and symptoms of AD with onset at least 3 months prior).\n* Participants with IGA score of 2 to 3 at the screening and baseline visits.\n* Participants with %BSA (excluding scalp) of AD involvement of 3% to 20% at screening and baseline visits.\n* For children aged 6 years to \\< 12 years, baseline itch NRS score ≥ 4.\n* Participants/guardians who agree to discontinue all agents used by the participant to treat AD from the screening visit through the final safety follow-up visit.\n* Participants with at least 1 target lesion that measures at least 5 cm2 at the screening and baseline visits. The target lesion must be representative of the participant's disease state but not located on the hands, feet, or genitalia.\n* Willingness to avoid pregnancy or fathering a child for the duration of study participation.\n\nExclusion Criteria:\n\n* An unstable course of AD (spontaneously improving or rapidly deteriorating) as determined by the investigator over the previous 4 weeks before the baseline visit.\n* Concurrent conditions and history of other diseases as follows:\n\n  1. Immunocompromised\n  2. Chronic or acute infection requiring treatment with systemic antibiotics, antivirals, antiparasitics, antiprotozoals, or antifungals within 2 weeks before the baseline visit.\n  3. Active acute bacterial, fungal, or viral skin infection within 1 week before the baseline visit.\n  4. Any other concomitant skin disorder, pigmentation, or extensive scarring that in the opinion of the investigator may interfere with the evaluation of AD lesions or compromise participant safety.\n  5. Presence of AD lesions only on the hands or feet without prior history of involvement of other classic areas of involvement such as the face or the flexural folds.\n  6. Other types of eczema.\n  7. Chronic asthma requiring more than 880 µg of inhaled budesonide or equivalent high dose of other inhaled corticosteroids.\n* Any serious illness or medical, physical, or psychiatric condition(s) that, in the investigator's opinion, would interfere with full participation in the study, including administration of study drug and attending required study visits; pose a significant risk to the participant; or interfere with interpretation of study data.\n* Use of any of the following treatments within the indicated washout period before the baseline visit:\n\n  1. 5 half-lives or 12 weeks, whichever is longer - biologic agents (eg, dupilumab).\n  2. 4 weeks - systemic corticosteroids or adrenocorticotropic hormone analogues, cyclosporin, methotrexate, azathioprine, or other systemic immunosuppressive or immunomodulating agents (eg, mycophenolate or tacrolimus).\n  3. 2 weeks - immunizations with activated vaccines; sedating antihistamines unless on a long-term stable regimen (nonsedating antihistamines are permitted). Note: Live vaccines are not recommended during the VC period.\n  4. 1 week - use of topical treatments for AD (other than bland emollients, eg, Aveeno® creams, ointments, sprays, soap substitutes), such as corticosteroids, calcineurin inhibitors, PDE4 inhibitors, coal tar (shampoo), topical antibiotics, or antibacterial cleansing body wash/soap. Note: Diluted sodium hypochlorite \"bleach\" baths are allowed as long as they do not exceed 2 baths per week.\n* Participants who have previously received JAK inhibitors, systemic or topical. -Ultraviolet light therapy or prolonged exposure to natural or artificial sources of UV radiation (eg, sunlight or tanning booth) within 2 weeks prior to the baseline visit and/or intention to have such exposure during the study, which is thought by the investigator to potentially impact the participant's AD.-\n* Positive serology test results at screening for HIV antibody.\n* Current treatment or treatment within 30 days or 5 half-lives (whichever is longer) before the baseline visit with another investigational medication or current enrollment in another investigational drug protocol.\n* In the opinion of the investigator, unable or unlikely to comply with the administration schedule and study evaluations.\n* Employees of the sponsor or investigator or otherwise dependents of them.",
+      "enrollment": {
+        "count": 330,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2021-06-10",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Ruxolitinib (0.75% cream)",
+            "Ruxolitinib (1.5% Cream)"
+          ],
+          "description": "The study cream will be applied topically twice a day for up to 52 weeks.",
+          "name": "Ruxolitinib",
+          "otherNames": [
+            "Jakafi"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Vehicle Cream"
+          ],
+          "description": "Matching vehicle cream will be applied topically twice a day for up to 8 weeks.",
+          "name": "Vehicle Cream",
+          "otherNames": [
+            "Placebo"
+          ],
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2025-03-28",
+      "official_title": "A Study to Assess the Efficacy and Safety of Ruxolitinib Cream in Children With Atopic Dermatitis (TRuE-AD3)",
+      "primary_outcomes": [
+        {
+          "description": "The IGA is an overall eczema severity rating on a 5-point scale ranging from 0 (clear skin) to 4 (severe disease). The score is based on an overall assessment of the degree of erythema, induration/papulation, and oozing/crusting. The IGA-TS is defined as an IGA score of 0 (clear skin) or 1 (almost clear skin) with ≥2 grade improvement from Baseline.",
+          "measure": "VC Period: Percentage of Participants Who Achieved Investigator's Global Assessment - Treatment Success (IGA-TS) at Week 8",
+          "timeFrame": "Baseline to Week 8"
+        }
+      ],
+      "product_id": "ruxolitinib",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969",
+      "source_version_id": "ctgov-nct04921969-fedb0856c985a24d",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "局部JAK1/JAK2抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969",
+        "source_version_id": "ctgov-nct04921969-fedb0856c985a24d",
+        "target": "JAK1/JAK2"
+      },
+      "trial_id": "NCT04921969"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Participants with mild to moderate AD apply roflumilast cream 0.15% QD for 4 weeks.",
+          "interventionNames": [
+            "Drug: Roflumilast Cream 0.15%"
+          ],
+          "label": "Roflumilast Cream 0.15%",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants with mild to moderate AD applied vehicle cream QD for 4 weeks.",
+          "interventionNames": [
+            "Drug: Vehicle Cream"
+          ],
+          "label": "Vehicle Cream",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "TRIPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n1. Participants legally competent to sign and give informed consent and, if appropriate, assent as required by local laws.\n2. Males and females, ages 6 years and older at time of signing Informed Consent (Screening). Only subjects 18 years and older will be enrolled at sites located in the province of Québec in Canada.\n3. Diagnosed with atopic dermatitis 6 months duration (3 months for children), as determined by the Investigator. Stable disease for the past 4 weeks with no significant flares in atopic dermatitis before screening.\n4. Females of childbearing potential (FOCBP) must have a negative serum pregnancy test at Screening and a negative urine pregnancy test at Baseline/Day 1. In addition, sexually active FOCBP must agree to use at least one form of a highly effective or barrier method of contraception throughout the trial.\n5. In good health as judged by the Investigator.\n6. Subjects considered reliable and capable of adhering to the Protocol and visit schedule, according to the judgment of the Investigator.\n\nExclusion Criteria:\n\n1. Subjects with any serious medical condition or clinically significant abnormality that would prevent study participation or place the subject at significant risk, as judged by the Investigator\n2. Has unstable AD or any consistent requirement for high potency topical steroids.\n3. Subjects who are unwilling to refrain from prolonged sun exposure and from using a tanning bed or other artificial light emitting devices (LEDs) for 4 weeks prior to Baseline/Day 1 and during the study.\n4. Females who are pregnant, wishing to become pregnant during the study, or are breast-feeding.\n5. Previous treatment with ARQ-151.\n6. Subjects with a history of chronic alcohol or drug abuse within 6 months prior to Screening.\n7. Parent(s)/legal guardian(s) who are unable to communicate, read, or understand the local language(s). Subjects who are unable to communicate, read or understand the local language, or who display another condition, which in the Investigator's opinion, makes them unsuitable for clinical study participation.\n8. Subjects who are family members of the clinical study site, clinical study staff, or sponsor, or family members of enrolled subjects living in the same house.",
+      "enrollment": {
+        "count": 654,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2021-02-26",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Roflumilast Cream 0.15%"
+          ],
+          "description": "Roflumilast Cream 0.15% - Active",
+          "name": "Roflumilast Cream 0.15%",
+          "otherNames": [
+            "ARQ-151"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Vehicle Cream"
+          ],
+          "description": "Cream - Vehicle",
+          "name": "Vehicle Cream",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2024-10-09",
+      "official_title": "Trial of PDE4 Inhibition With Roflumilast for the Management of Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "The percentage of participants achieving vIGA-AD \"success\" is presented with multiple imputation of missing observations. vIGA-AD \"success\" is defined as a vIGA-AD score of 'clear' or 'almost clear' PLUS a 2-grade improvement from Baseline. The vIGA-AD is a static evaluation of qualitative overall AD severity. This global assessment scale is an ordinal scale with five severity grades (reported only in integers of 0 to 4 where 0 is clear), with higher scores indicative of greater symptom severity.",
+          "measure": "Achievement of Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) Success at Week 4",
+          "timeFrame": "Week 4"
+        }
+      ],
+      "product_id": "roflumilast",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587",
+      "source_version_id": "ctgov-nct04773587-d60e96578c757ff1",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "PDE4抑制剂",
+        "mechanism_class": "PDE4通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587",
+        "source_version_id": "ctgov-nct04773587-d60e96578c757ff1",
+        "target": "PDE4"
+      },
+      "trial_id": "NCT04773587"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Participants apply roflumilast cream 0.15% once daily (qd) for 4 weeks.",
+          "interventionNames": [
+            "Drug: Roflumilast Cream"
+          ],
+          "label": "Roflumilast Cream 0.15%",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Participants apply vehicle cream qd for 4 weeks.",
+          "interventionNames": [
+            "Drug: Vehicle cream"
+          ],
+          "label": "Vehicle Cream",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "TRIPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n1. Participants legally competent to sign and give informed consent and, if appropriate, assent as required by local laws.\n2. Males and females, ages 6 years and older at time of signing Informed Consent (Screening). Only subjects 18 years and older will be enrolled at sites located in the province of Québec in Canada.\n3. Diagnosed with atopic dermatitis 6 months duration (3 months for children), as determined by the Investigator. Stable disease for the past 4 weeks with no significant flares in atopic dermatitis before screening.\n4. Females of childbearing potential (FOCBP) must have a negative serum pregnancy test at Screening and a negative urine pregnancy test at Baseline/Day 1. In addition, sexually active FOCBP must agree to use at least one form of a highly effective or barrier method of contraception throughout the trial.\n5. In good health as judged by the Investigator.\n6. Subjects considered reliable and capable of adhering to the Protocol and visit schedule, according to the judgment of the Investigator.\n\nExclusion Criteria:\n\n1. Subjects with any serious medical condition or clinically significant abnormality that would prevent study participation or place the subject at significant risk, as judged by the Investigator\n2. Has unstable AD or any consistent requirement for high potency topical steroids.\n3. Subjects who are unwilling to refrain from prolonged sun exposure and from using a tanning bed or other artificial light emitting devices (LEDs) for 4 weeks prior to Baseline/Day 1 and during the study.\n4. Females who are pregnant, wishing to become pregnant during the study, or are breast-feeding.\n5. Previous treatment with ARQ-151.\n6. Subjects with a history of chronic alcohol or drug abuse within 6 months prior to Screening.\n7. Parent(s)/legal guardian(s) who are unable to communicate, read, or understand the local language(s). Subjects who are unable to communicate, read or understand the local language, or who display another condition, which in the Investigator's opinion, makes them unsuitable for clinical study participation.\n8. Subjects who are family members of the clinical study site, clinical study staff, or sponsor, or family members of enrolled subjects living in the same house.",
+      "enrollment": {
+        "count": 683,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2021-02-26",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Roflumilast Cream 0.15%"
+          ],
+          "description": "Roflumilast cream 0.15% for topical application",
+          "name": "Roflumilast Cream",
+          "otherNames": [
+            "ARQ-151"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Vehicle Cream"
+          ],
+          "description": "Vehicle cream for topical application",
+          "name": "Vehicle cream",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2024-10-04",
+      "official_title": "Trial of PDE4 Inhibition With Roflumilast for the Management of Atopic Dermatitis (INTEGUMENT-II)",
+      "primary_outcomes": [
+        {
+          "description": "The percentage of participants achieving viGA-AD \"success\" is presented with multiple imputation of missing observations. viGA-AD \"success\" is defined as a viGA-AD score of 'clear' or 'almost clear' PLUS a 2-grade improvement from Baseline. The viGA-AD is a static evaluation of qualitative overall AD severity. This global assessment scale is an ordinal scale with five severity grades (reported only in integers of 0 to 4 where 0 is clear), with higher scores indicative of greater symptom severity.",
+          "measure": "Achievement of Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) Success at Week 4",
+          "timeFrame": "Week 4"
+        }
+      ],
+      "product_id": "roflumilast",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600",
+      "source_version_id": "ctgov-nct04773600-ea56c2891f79cc81",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "PDE4抑制剂",
+        "mechanism_class": "PDE4通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600",
+        "source_version_id": "ctgov-nct04773600-ea56c2891f79cc81",
+        "target": "PDE4"
+      },
+      "trial_id": "NCT04773600"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "tapinarof cream, 1%, applied topically once daily",
+          "interventionNames": [
+            "Drug: tapinarof cream, 1%"
+          ],
+          "label": "tapinarof cream",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "vehicle cream, applied topically once daily",
+          "interventionNames": [
+            "Drug: vehicle cream"
+          ],
+          "label": "vehicle cream",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "interventionModelDescription": "Following a 30-day screening period, eligible subjects will be randomized at a 2:1 ratio to receive once daily treatment with tapinarof cream, 1% or vehicle cream.",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "maskingDescription": "The investigator, study center staff, subject, and sponsor will be blinded to treatment assignment.",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Male and female subjects ages 2 and above with clinical diagnosis of AD\n* Subject with atopic dermatitis covering ≥5% and ≤ 35% of the BSA\n* A vIGA-AD score of ≥3 at screening and baseline\n* An EASI score of ≥6 at screening and baseline\n* Atopic dermatitis present for at least 6 months for ages 6 years old and above or 3 months for ages 2 to 5 years old\n* Female subjects of childbearing potential who are engaging in sexual activity that could lead to pregnancy should use acceptable birth control methods\n* Must not be pregnant\n* Subject, subject's parent, or legal representative must be capable of giving written informed consent/assent\n\nExclusion Criteria:\n\n* Immunocompromised at screening\n* Chronic or acute systemic or superficial infection requiring treatment with systemic antibacterials or antifungals within one week prior to baseline visit\n* Significant dermatological or inflammatory condition other than AD that, in the Investigator's opinion, would make it difficult to interpret data or assessments during the study\n* Alanine aminotransferase (ALT) or aspartate aminotransferase (AST) ≥2.0x the upper limit of normal (ULN).\n* Screening total bilirubin \\> 1.5x ULN\n* Current or chronic history of liver disease\n* Current or history of cancer within 5 years except for adequately treated cutaneous basal cell carcinoma, squamous cell carcinoma or carcinoma in situ of the cervix\n* Subjects who would not be considered suitable for topical therapy\n* Use of any prohibited medication or procedure within the indicated period before the baseline visit including other investigational product within 30 days or 5 half-lives of the investigational product (whichever is longer)\n* History of or ongoing serious illness or medical, physical, or psychiatric condition(s) that, in the Investigator's opinion, may interfere with the subject's participation in the study, interpretation of results, or ability to understand and give informed consent.\n* Pregnant or lactating females\n* History of sensitivity to the study medications, or components thereof or a history of drug or other allergy that, in the opinion of the -Investigator or Medical Monitor, contraindicates their participation\n* Previous known participation in a clinical study with tapinarof (previously known as GSK2894512 and WBI-1001)",
+      "enrollment": {
+        "count": 406,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2021-09-02",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "tapinarof cream"
+          ],
+          "description": "applied topically once daily",
+          "name": "tapinarof cream, 1%",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "vehicle cream"
+          ],
+          "description": "applied topically once daily",
+          "name": "vehicle cream",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2025-09-02",
+      "official_title": "Tapinarof for the Treatment of Atopic Dermatitis in Children and Adults (DMVT-505-3102)",
+      "primary_outcomes": [
+        {
+          "description": "The vIGA-AD is a global assessment of the current state of the disease. It is a static 5-point scale used to grade overall disease severity (scalp excluded), as determined by the investigator, using the clinical characteristics of erythema, induration/papulation, lichenification, oozing/crusting. The vIGA-AD ranges from 0 to 4 and is calculated as Clear (0), Almost clear (1), Mild (2), Moderate (3), and Severe (4). Higher vIGA-AD scores represent more severe disease.\n\nStatistics are based on 100 imputed datasets.",
+          "measure": "Percent of Subjects Who Have a Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) Score of Clear or Almost Clear (0 or 1) With a Minimum 2-grade Improvement From Baseline to Week 8. Analyses Were Done Using Multiple Imputation.",
+          "timeFrame": "Baseline to Week 8"
+        }
+      ],
+      "product_id": "tapinarof",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859",
+      "source_version_id": "ctgov-nct05032859-36ff60070f895fd2",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "芳香烃受体（AhR）激动剂",
+        "mechanism_class": "AhR通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859",
+        "source_version_id": "ctgov-nct05032859-36ff60070f895fd2",
+        "target": "AhR"
+      },
+      "trial_id": "NCT05032859"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "1% Difamilast Ointment",
+          "interventionNames": [
+            "Drug: Difamilast"
+          ],
+          "label": "Difamilast Ointment",
+          "type": "ACTIVE_COMPARATOR"
+        },
+        {
+          "description": "Matching placebo",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Vehicle Controlled",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "SEQUENTIAL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Important Inclusion Criteria:\n\n1. Subjects who are male or female ≥2 years of age\n2. Subjects and/or their parent(s)/legal guardian(s) (if subject is under the legal age of consent) provide written informed consent in accordance with federal and/or local laws prior to the conduct of any study-related procedures.\n3. Subjects who have a diagnosis of AD based on the American Academy of Dermatology AD diagnostic criteria\n4. Subjects who have had a diagnosis of AD for at least 6 months prior to Screening visit\n5. Subjects who have AD involvement ≥5% to ≤40% of treatable Body Surface Area (BSA) excluding scalp\n6. Subjects who have an AD Severity of mild (2) or moderate (3) as measured by the IGA of AD Severity score at screening and baseline visit\n\nImportant Exclusion Criteria:\n\n1. Female subjects who are pregnant or breastfeeding or who plan to become pregnant during the study and through 90 days after the last dose of study drug\n2. Subjects who have evidence of spontaneous clearance of AD between screening and baseline visits\n3. Subjects who have a history of unstable AD as assessed by the Investigator. Unstable AD is defined as disease flares occurring within 4 weeks prior to baseline visit\n4. Subjects who have an active or acute skin infection (eg, herpes simplex, herpes zoster, and chicken pox) and/or clinically infected AD\n5. Subject with greater than mild depression and suicidal ideation prior to screening or between screening and baseline visits\n6. Subjects who have a known history of alcohol abuse or illicit drugs within 6 months prior to screening\n\nEtc.,",
+      "enrollment": {
+        "count": 153,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2022-11-08",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Difamilast Ointment"
+          ],
+          "description": "Off-white ointment containing active ingredient, petrolatum and other ingredients",
+          "name": "Difamilast",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Vehicle Controlled"
+          ],
+          "description": "Matching Difamilast (Study drug) ointment without active ingradient",
+          "name": "Placebo",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2024-08-15",
+      "official_title": "This Study is to Assess the Efficacy of Difamilast Ointment in Mild to Moderate Atopic Dermatitis(AD)",
+      "primary_outcomes": [
+        {
+          "description": "The proportion of subjects achieving success on the the 5-point Investigator Global Assessment (IGA) of AD Severity score at Day 29, and the success is defined as as a score of Clear (0) or Almost clear (1), with at least a 2-grade improvement from Baseline on the 5-point IGA of AD Severity score at Day 29",
+          "measure": "To evaluate the efficacy of twice-daily topical application of Difamilast ointment 1% compared to vehicle control in subjects ≥2 years of age with mild to moderate AD",
+          "timeFrame": "Baseline, Day 29"
+        }
+      ],
+      "product_id": "difamilast",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343",
+      "source_version_id": "ctgov-nct05608343-604ce550796686a0",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "PDE4抑制剂",
+        "mechanism_class": "PDE4通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343",
+        "source_version_id": "ctgov-nct05608343-604ce550796686a0",
+        "target": "PDE4"
+      },
+      "trial_id": "NCT05608343"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Rocatinlimab Dose 1 every 4 weeks (Q4W) + loading dose at Week 2",
+          "interventionNames": [
+            "Drug: Rocatinlimab"
+          ],
+          "label": "Arm A",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Rocatinlimab Dose 2 Q4W + loading dose at Week 2",
+          "interventionNames": [
+            "Drug: Rocatinlimab"
+          ],
+          "label": "Arm B",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Placebo Q4W+ loading dose at Week 2",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Arm C",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "DOUBLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Age ≥ 18 years with a diagnosis of AD according to the AAD Consensus Criteria (2014) present for at least 12 months\n* History of inadequate response to TCS (Topical Corticosteroid) of medium to higher potency (with or without topical calcineurin inhibitors \\[TCI\\]).\n* EASI score ≥16\n* vIGA-AD score ≥3\n* ≥10% body surface area (BSA) of AD involvement\n* Worst pruritus numerical rating scale ≥ 4\n\nExclusion Criteria:\n\n* Treatment with a biological product within 12 weeks or 5 half-lives, whichever is longer, prior to Day 1\n* Treatment with any of the following medications or therapies within 4 weeks or 5 half-lives, whichever is longer, prior to Day 1:\n\n  * Systemic corticosteroids\n  * Systemic immunosuppressants\n  * Phototherapy\n  * Janus kinase inhibitors\n* Treatment with any of the following medications or therapies within 1 week, prior to Day 1:\n\n  * TCS of any potency\n  * TCI\n  * Topical phosphodiesterase type 4 inhibitors\n  * Other topical immunosuppressive agents\n  * Combination topical agents including TCS of any potency, TCI, PDE4 inhibitors, or other topical immunosuppressive agents",
+      "enrollment": {
+        "count": 769,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2022-06-01",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Arm A",
+            "Arm B"
+          ],
+          "description": "Participants will receive Rocatinlimab subcutaneously.",
+          "name": "Rocatinlimab",
+          "otherNames": [
+            "AMG 451"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Arm C"
+          ],
+          "description": "Participants will receive a placebo subcutaneously.",
+          "name": "Placebo",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2026-07-23",
+      "official_title": "A Study Evaluating Rocatinlimab in Moderate-to-severe Atopic Dermatitis (ROCKET-IGNITE)",
+      "primary_outcomes": [
+        {
+          "description": "vIGA-AD was a validated instrument rating AD severity on a 5-point scale (0 = Clear; 1 = Almost clear; 2 = Mild; 3 = Moderate; 4 = Severe), with higher scores indicating greater severity. Participants achieving a score of 0 or 1 with ≥2-point reduction from baseline were considered 'Clear' or 'Almost clear'. For rIGA 0/1, when vIGA-AD = 1, investigators answered: \"Did participant have barely perceptible erythema, no induration/papulation, no lichenification, and no oozing/crusting?\" If \"Yes,\" the participant met rIGA 0/1; if \"No,\" they did not. If vIGA-AD = 0, the participant met rIGA 0/1. Participants initiating rescue therapy for AD were classified as nonresponders at all subsequent time points.",
+          "measure": "Number of Participants Who Achieved Validated Investigator's Global Assessment for AD (vIGA-AD) 1 Response With Presence of Only Barely Perceptible Erythema or vIGA-AD 0 Response (Revised Investigator's Global Assessment [rIGA] 0/1) at Week 24",
+          "timeFrame": "Baseline and Week 24"
+        },
+        {
+          "description": "EASI was designed and widely used to assess the severity and extent of AD across four anatomical regions. It evaluated key signs of inflammation, including erythema, induration/papulation, excoriation, and lichenification. The total EASI score ranged from 0 to 72, with higher scores indicating more severe disease. EASI 75 was defined as a ≥ 75% reduction from baseline in the total EASI score. Participants initiating rescue therapy for AD were classified as nonresponders at all subsequent time points.",
+          "measure": "Number of Participants Who Achieved ≥ 75% Reduction From Baseline in Eczema Area and Severity Index Score (EASI 75) at Week 24",
+          "timeFrame": "Baseline and Week 24"
+        }
+      ],
+      "product_id": "rocatinlimab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445",
+      "source_version_id": "ctgov-nct05398445-78ead594f5baec25",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445",
+        "source_version_id": "ctgov-nct05398445-78ead594f5baec25",
+        "target": "OX40"
+      },
+      "trial_id": "NCT05398445"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Rocatinlimab Dose 1 every 4 weeks (Q4W) for 24 weeks with a loading dose at Week 2.",
+          "interventionNames": [
+            "Drug: Rocatinlimab"
+          ],
+          "label": "Rocatinlimab",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Placebo Q4W for 24 weeks with a loading dose at Week 2.",
+          "interventionNames": [
+            "Other: Placebo"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "DOUBLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Age ≥ 18 years (or ≥ legal adult age within the country if it is older than 18 years at signing of informed consent) with a diagnosis of AD according to the AAD Consensus Criteria (2014) present for at least 12 months\n* History of inadequate response to TCS (Topical Corticosteroid) of medium or higher potency (with or without topical calcineurin inhibitors \\[TCI\\]) as appropriate or for whom topical treatments are otherwise medically inadvisable (eg, because of important side effects or safety risks).\n* EASI score ≥16\n* vIGA-AD score ≥3\n* ≥10% body surface area (BSA) of AD involvement\n* Worst pruritus numerical rating scale ≥ 4\n\nExclusion Criteria:\n\n* Treatment with a biological product within 12 weeks or 5 half-lives, whichever is longer, prior to Day 1\n* Treatment with any of the following medications or therapies within 4 weeks or 5 half-lives, whichever is longer, prior to Day 1:\n\n  * Systemic corticosteroids\n  * Systemic immunosuppressants\n  * Phototherapy\n  * Oral or topical Janus kinase inhibitors\n* Treatment with any of the following medications or therapies within 1 week, prior to Day 1:\n\n  * TCS of any potency\n  * TCI\n  * Topical phosphodiesterase type 4 (PDE4) inhibitors\n  * Other topical immunosuppressive agents\n  * Combination agents including TCS of any potency or TCI, PDE4 inhibitors, or other immunosuppressive agents",
+      "enrollment": {
+        "count": 726,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2022-12-15",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Rocatinlimab"
+          ],
+          "description": "Rocatinlimab will be administered through a subcutaneous (SC) injection.",
+          "name": "Rocatinlimab",
+          "otherNames": [
+            "AMG 451",
+            "KHK 4083"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo"
+          ],
+          "description": "The matching placebo will be administered through a SC injection.",
+          "name": "Placebo",
+          "type": "OTHER"
+        }
+      ],
+      "last_update": "2026-06-26",
+      "official_title": "A Study Assessing Rocatinlimab (AMG 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) (ROCKET-Horizon)",
+      "primary_outcomes": [
+        {
+          "description": "vIGA-AD was a validated instrument rating AD severity on a 5-point scale (0 = Clear; 1 = Almost clear; 2 = Mild; 3 = Moderate; 4 = Severe), with higher scores indicating greater severity. Participants achieving a score of 0 or 1 with ≥2-point reduction from baseline were considered 'Clear' or 'Almost clear'. For rIGA 0/1, when vIGA-AD = 1, investigators answered: \"Did participant have barely perceptible erythema, no induration/papulation, no lichenification, and no oozing/crusting?\" If \"Yes,\" the participant met rIGA 0/1; if \"No,\" they did not. If vIGA-AD = 0, the participant met rIGA 0/1. Participants initiating rescue therapy for AD were classified as nonresponders at all subsequent time points.",
+          "measure": "Number of Participants Who Achieved Validated Investigator's Global Assessment for AD (vIGA-AD) 1 Response With Presence of Only Barely Perceptible Erythema or vIGA-AD 0 Response (Revised Investigator's Global Assessment [rIGA] 0/1) at Week 24",
+          "timeFrame": "Baseline and Week 24"
+        },
+        {
+          "description": "EASI was designed and widely used to assess the severity and extent of AD across four anatomical regions. It evaluated key signs of inflammation, including erythema, induration/papulation, excoriation, and lichenification. The total EASI score ranged from 0 to 72, with higher scores indicating more severe disease. EASI 75 was defined as a ≥ 75% reduction from baseline in the total EASI score. Participants initiating rescue therapy for AD were classified as nonresponders at all subsequent time points.",
+          "measure": "Number of Participants Who Achieved ≥ 75% Reduction From Baseline in Eczema Area and Severity Index Score (EASI 75) at Week 24",
+          "timeFrame": "Baseline and Week 24"
+        }
+      ],
+      "product_id": "rocatinlimab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711",
+      "source_version_id": "ctgov-nct05651711-594ceeed901ab007",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711",
+        "source_version_id": "ctgov-nct05651711-594ceeed901ab007",
+        "target": "OX40"
+      },
+      "trial_id": "NCT05651711"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Amlitelimab"
+          ],
+          "label": "Amlitelimab dose 1",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Amlitelimab"
+          ],
+          "label": "Amlitelimab dose 2",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Placebo"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "Inclusion Criteria:\n\n* Participants must be 12 years of age (when signing informed consent form)\n* Diagnosis of AD for at least 1 year (defined by the American Academy of Dermatology Consensus Criteria)\n* Documented history (within 6 months before screening) of either inadequate response or inadvisability to topical treatments, and/or inadequate response to systemic therapies (within 12 months before screening)\n* v-IGA-AD of 3 or 4 at baseline visit\n* EASI score of 16 or higher at baseline\n* AD involvement of 10% or more of BSA at baseline\n* Weekly average of daily PP-NRS of ≥ 4 at baseline visit.\n* Able and willing to comply with requested study visits and procedures\n* Body weight ≥25 kg\n\nExclusion Criteria:\n\n* Skin co-morbidity that would adversely affect the ability to undertake AD assessments\n* Known history of or suspected significant current immunosuppression\n* Any malignancies or history of malignancies prior to baseline (with the exception of non-melanoma skin cancer excised and cured \\>5 years prior to baseline)\n* History of solid organ or stem cell transplant\n* Any active or chronic infection including helminthic infection requiring systemic treatment within 4 weeks prior to baseline (1 week in the event of superficial skin infections)\n* Positive for human immunodeficiency virus (HIV), Hepatitis B or hepatitis C at screening visit\n* Having active tuberculosis (TB), latent TB, a history of incompletely treated TB, suspected extrapulmonary TB infection, or who are at high risk of contracting TB\n* Having received any of the specified therapy within the specified timeframe(s) prior to the baseline visit\n* In the Investigator's opinion, any clinically significant laboratory results or protocol specified laboratory abnormalities at screening\n* History of hypersensitivity or allergy to any of the excipients or investigational medicinal product (IMP)\n\nThe above information is not intended to contain all considerations relevant to a potential participation in a clinical trial",
+      "enrollment": {
+        "count": 601,
+        "type": "ACTUAL"
+      },
+      "first_posted": "2023-11-14",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2"
+          ],
+          "description": "Injection solution SC injection",
+          "name": "Amlitelimab",
+          "otherNames": [
+            "SAR445229"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo"
+          ],
+          "description": "Injection solution SC injection",
+          "name": "Placebo",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2026-07-22",
+      "official_title": "A Study to Evaluate the Efficacy and Safety of Subcutaneous Amlitelimab Monotherapy Compared With Placebo in Participants Aged 12 Years and Older With Moderate-to-severe Atopic Dermatitis",
+      "primary_outcomes": [
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment. It is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "EU, EU reference countries, and Japan: Proportion of participants with Validated Investigator Global Assessment scale for Atopic Dermatitis (vIGA-AD) of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points at Week 24",
+          "timeFrame": "Week 24"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD. Total score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.",
+          "measure": "EU, EU reference countries, and Japan: Proportion of participants reaching 75% reduction from baseline in Eczema Area and Severity Index (EASI) score (EASI-75) at Week 24",
+          "timeFrame": "Week 24"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment. It is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "US and US reference countries: Proportion of participants with vIGA-AD of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points at Week 24",
+          "timeFrame": "Week 24"
+        }
+      ],
+      "product_id": "amlitelimab",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566",
+      "source_version_id": "ctgov-nct06130566-21f0df3dc53a4fc5",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40L的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566",
+        "source_version_id": "ctgov-nct06130566-21f0df3dc53a4fc5",
+        "target": "OX40L"
+      },
+      "trial_id": "NCT06130566"
+    },
+    {
+      "arm_groups": [
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Amlitelimab",
+            "Drug: Topical corticosteroids",
+            "Drug: Topical tacrolimus or pimecrolimus"
+          ],
+          "label": "Amlitelimab dose 1",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Amlitelimab",
+            "Drug: Topical corticosteroids",
+            "Drug: Topical tacrolimus or pimecrolimus"
+          ],
+          "label": "Amlitelimab dose 2",
+          "type": "EXPERIMENTAL"
+        },
+        {
+          "description": "Subcutaneous injection as per protocol",
+          "interventionNames": [
+            "Drug: Placebo",
+            "Drug: Topical corticosteroids",
+            "Drug: Topical tacrolimus or pimecrolimus"
+          ],
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR"
+        }
+      ],
+      "design_info": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        },
+        "primaryPurpose": "TREATMENT"
+      },
+      "eligibility_criteria": "<p>Inclusion Criteria:</p><ul><li>Participants must be 12 years of age (when signing informed consent form)</li><li>Diagnosis of AD for at least 1 year (defined by the American Academy of Dermatology Consensus Criteria)</li><li>Documented history prior to screening visit of inadequate response to a biologic AD medication or an oral JAKi therapy.</li><li>v-IGA-AD of 3 or 4 at baseline visit</li><li>EASI score of 16 or higher at baseline</li><li>AD involvement of 10% or more of BSA at baseline</li><li>Weekly average of daily PP-NRS of ≥ 4 at baseline visit.</li><li>Able and willing to comply with requested study visits and procedures</li><li>Body weight ≥25 kg</li></ul><p>Exclusion Criteria:</p><p>Participants are excluded from the study if any of the following criteria apply:</p><ul><li>Skin co-morbidity that would adversely affect the ability to undertake AD assessments</li><li>Known history of or suspected significant current immunosuppression</li><li>Any malignancies or history of malignancies prior to baseline (with the exception of non-melanoma skin cancer excised and cured &gt;5 years prior to baseline)</li><li>History of solid organ or stem cell transplant</li><li>Any active or chronic infection including helminthic infection requiring systemic treatment within 4 weeks prior to baseline</li><li>Positive for human immunodeficiency virus (HIV), Hepatitis B or hepatitis C at screening visit</li><li>Having active tuberculosis (TB), latent TB, a history of incompletely treated TB, suspected extrapulmonary TB infection, or who are at high risk of contracting TB</li><li>Having received any of the specified therapy within the specified timeframe(s) prior to the baseline visit</li><li>In the Investigator&#x27;s opinion, any clinically significant laboratory results or protocol specified laboratory abnormalities at screening</li><li>History of hypersensitivity or allergy to any of the excipients or investigational medicinal product (IMP)</li></ul><p>The above information is not intended to contain all considerations relevant to a potential participation in a clinical trial</p>",
+      "enrollment": {
+        "count": 636,
+        "type": "ESTIMATED"
+      },
+      "first_posted": "2024-02-05",
+      "interventions": [
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2"
+          ],
+          "description": "Pharmaceutical form: Injection solution Route of administration: Subcutaneous",
+          "name": "Amlitelimab",
+          "otherNames": [
+            "SAR445229"
+          ],
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Placebo"
+          ],
+          "description": "Pharmaceutical form: Injection solution Route of administration: Subcutaneous",
+          "name": "Placebo",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2",
+            "Placebo"
+          ],
+          "description": "Pharmaceutical form: Various Topical formulation Route of administration: Topical",
+          "name": "Topical corticosteroids",
+          "type": "DRUG"
+        },
+        {
+          "armGroupLabels": [
+            "Amlitelimab dose 1",
+            "Amlitelimab dose 2",
+            "Placebo"
+          ],
+          "description": "Pharmaceutical form: Various Topical formulation Route of administration: Topical",
+          "name": "Topical tacrolimus or pimecrolimus",
+          "type": "DRUG"
+        }
+      ],
+      "last_update": "2026-07-02",
+      "official_title": "A Study to Evaluate the Efficacy and Safety of Subcutaneous Amlitelimab on Background Topical Corticosteroids Therapy in Participants Aged 12 Years and Older With Moderate-to-severe AD Who Have Had an Inadequate Response to Prior Biologic Therapy or an Oral JAK Inhibitor",
+      "primary_outcomes": [
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "EU, EU reference countries, and Japan: Proportion of participants with Validated Investigator Global Assessment scale for Atopic Dermatitis (vIGA-AD) of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points at Week 36",
+          "timeFrame": "Week 36"
+        },
+        {
+          "description": "The EASI is an Investigator-assessed validated tool used to measure the extent (area) and severity of AD.\nTotal score ranges from 0 to 72 with a higher score indicating increased extent and severity of AD.",
+          "measure": "EU, EU reference countries, and Japan: Proportion of participants reaching 75% reduction from baseline in Eczema Area and Severity Index (EASI) score (EASI75) at Week 36",
+          "timeFrame": "Week 36"
+        },
+        {
+          "description": "The vIGA-AD is an Investigator-completed assessment scale used to determine severity of AD and clinical response to treatment.\nIt is based on a 5-point scale, ranging from 0 (clear) to 4 (severe).",
+          "measure": "US and US reference countries: Proportion of participants with vIGA-AD of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 points at Week 36",
+          "timeFrame": "Week 36"
+        }
+      ],
+      "product_id": "amlitelimab",
+      "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+      "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40L的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+        "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+        "target": "OX40L"
+      },
+      "trial_id": "NCT06241118"
+    }
+  ],
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "schema_version": "1.0",
+  "source_version_policy": "latest official registry history version with history date on or before cutoff when current version exceeded cutoff"
+}

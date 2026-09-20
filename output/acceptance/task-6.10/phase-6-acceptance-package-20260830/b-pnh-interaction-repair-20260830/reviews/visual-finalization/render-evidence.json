@@ -1,0 +1,2224 @@
+{
+  "$schema": "schemas/visual-render-evidence.schema.json",
+  "schema_version": "1.0",
+  "evidence_id": "render-evidence-B-html-v1",
+  "report_kind": "B",
+  "report_version": "v-fixture-b-pnh-001",
+  "format": "html",
+  "run_id": "render-run-B-html-v9-pnh-20260830-followup-01",
+  "visual_plan_digest": "29d32a55edfd673ba5123dd4fa8a5d35764fd2815132f6b2b4377be87c107e7d",
+  "candidate_artifact_digest": "f094848b41cf9c66ae8c3ecfb58e0305d5a531f477e6e6cdaa5e05ea3694060e",
+  "producer_identity": "openai-codex/gpt-5.6-luna:worker_03",
+  "render_targets": [
+    {
+      "target_id": "chromium-overview-1024",
+      "engine": "chromium",
+      "page_id": "overview",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/overview-1024.png",
+      "screenshot_sha256": "57d5d417af7a46aef7542d254eaaaed79830ea394292143d26379002b15f5f31",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256 18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=87。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256=18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-efficacy-1024",
+      "engine": "chromium",
+      "page_id": "efficacy",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/efficacy-1024.png",
+      "screenshot_sha256": "c9fc655d3721fe4413bb5a970e8c7fec9f794d4b0b8f8aca77a3d57134dd9f88",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256 18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=3。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256=18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-safety-1024",
+      "engine": "chromium",
+      "page_id": "safety",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/safety-1024.png",
+      "screenshot_sha256": "b489889c56f265b92e9ad5b3900f0ad67d198488793a05237c24667f8181a1d7",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256 18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=16。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=safe-apply-t-1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256=18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-baseline-overview-1024",
+      "engine": "chromium",
+      "page_id": "baseline-overview",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/baseline-overview-1024.png",
+      "screenshot_sha256": "e65b1a1dd2eeb300359d6aa0713051ab4a71256c1bb0411919c954b17b0418cb",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256 18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=12。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=baseline-row_4e3fe2cb21d41c73545a2dfc，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256=18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-disposition-overview-1024",
+      "engine": "chromium",
+      "page_id": "disposition-overview",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/disposition-overview-1024.png",
+      "screenshot_sha256": "24322f1f950e7524854d1294ab9087d3fcf6a7ba2abf0e4fc0c78175f60d667e",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256 18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=54。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=trial-disposition-row_bc97f19c9b79a3bc488fbea1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256=18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-efficacy-safety-matrix-1024",
+      "engine": "chromium",
+      "page_id": "efficacy-safety-matrix",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/efficacy-safety-matrix-1024.png",
+      "screenshot_sha256": "0b530b1b983473fef2b248b7de5238ac13053557a30643bc64608ee5cdc806bc",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256 18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=2。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=matrix-apply-teae，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-1024.png，SHA-256=18d8796a63ad06dfaa155713ecfea68c0ae2ec4cc4e9ec2cf9a785d3a6223495。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-overview-1440",
+      "engine": "chromium",
+      "page_id": "overview",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/overview-1440.png",
+      "screenshot_sha256": "205c43098f999cee1e1e1ffb96f22acc722245dabb6330a6468ac6bd40a51d8f",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=87。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-efficacy-1440",
+      "engine": "chromium",
+      "page_id": "efficacy",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/efficacy-1440.png",
+      "screenshot_sha256": "a1f2d46ecef1cebc090775efb46988533cc4cf095f0788f3f73a06524eab0f65",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=3。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-safety-1440",
+      "engine": "chromium",
+      "page_id": "safety",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/safety-1440.png",
+      "screenshot_sha256": "af73665e775e0459bc1555bb06e7736d54ffb2281f9f13e8d19712da8bbbbf68",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=16。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=safe-apply-t-1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-baseline-overview-1440",
+      "engine": "chromium",
+      "page_id": "baseline-overview",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/baseline-overview-1440.png",
+      "screenshot_sha256": "bef72525673d4a3e12fdefb9750a6ca9738f95be7d7d9103035cff1eb0464958",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=12。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=baseline-row_4e3fe2cb21d41c73545a2dfc，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-disposition-overview-1440",
+      "engine": "chromium",
+      "page_id": "disposition-overview",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/disposition-overview-1440.png",
+      "screenshot_sha256": "09f658b7efa8b37ded5c7c907bad8e4c8d2637c0cc9c9c4e72bff367685fa956",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=54。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=trial-disposition-row_bc97f19c9b79a3bc488fbea1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-efficacy-safety-matrix-1440",
+      "engine": "chromium",
+      "page_id": "efficacy-safety-matrix",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/efficacy-safety-matrix-1440.png",
+      "screenshot_sha256": "1026711cf9cbc0bc6ea17f05fe1687882d6613e615ececc19bf0cc0b265f6e20",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=2。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=matrix-apply-teae，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-overview-1024",
+      "engine": "webkit",
+      "page_id": "overview",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/overview-1024.png",
+      "screenshot_sha256": "6cad47217c8b58ea1721b1e607351496b971bdefc9a34f0c13f85deb51e19c8f",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256 55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=87。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256=55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-efficacy-1024",
+      "engine": "webkit",
+      "page_id": "efficacy",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/efficacy-1024.png",
+      "screenshot_sha256": "df8f095a2ea9907b4eb4e5ce6a152acb05a34c14bc8257254a72837c3cef7946",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256 55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=3。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256=55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-safety-1024",
+      "engine": "webkit",
+      "page_id": "safety",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/safety-1024.png",
+      "screenshot_sha256": "7f2fc0b8cfe0ef6f6004cc57c80cf72cd6fbb1d26e3f12f8d8e39afb23a9984e",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256 55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=16。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=safe-apply-t-1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256=55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-baseline-overview-1024",
+      "engine": "webkit",
+      "page_id": "baseline-overview",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/baseline-overview-1024.png",
+      "screenshot_sha256": "3983e1d22bc58bfff5de68f3225a064c433f8b411b2fd94f091d6cbe690b8d46",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256 55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=12。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=baseline-row_4e3fe2cb21d41c73545a2dfc，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256=55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-disposition-overview-1024",
+      "engine": "webkit",
+      "page_id": "disposition-overview",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/disposition-overview-1024.png",
+      "screenshot_sha256": "f975f8c2a8fdb6e007ea1c483c088b921ec248ecaf5d35b16f9a00d77f5d7e7f",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256 55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=54。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=trial-disposition-row_bc97f19c9b79a3bc488fbea1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256=55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-efficacy-safety-matrix-1024",
+      "engine": "webkit",
+      "page_id": "efficacy-safety-matrix",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/efficacy-safety-matrix-1024.png",
+      "screenshot_sha256": "96b1db454b250f96c0d44f8efb7b4f2d50c17e729ce8ad14273c6caccef3c094",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256 55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=2。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=matrix-apply-teae，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-1024.png，SHA-256=55e84186dd746d4dd13131290d9b1458b0beb2f0ca26be349e5512354336ecc0。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-overview-1440",
+      "engine": "webkit",
+      "page_id": "overview",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/overview-1440.png",
+      "screenshot_sha256": "1587e117a625e35516a1c3dad2fc4990c6f01ddd9b81505ec5167b6f0fe88b2f",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=87。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-efficacy-1440",
+      "engine": "webkit",
+      "page_id": "efficacy",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/efficacy-1440.png",
+      "screenshot_sha256": "10f5ec515b5d462a9a102ccee9c49efa5b02730104f9b32b65f04d0b5110663e",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=3。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-safety-1440",
+      "engine": "webkit",
+      "page_id": "safety",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/safety-1440.png",
+      "screenshot_sha256": "2063c29efe44f4dde16869142b1b4124e9074638712ada3ca20bc8ad58d30745",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=16。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=safe-apply-t-1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-baseline-overview-1440",
+      "engine": "webkit",
+      "page_id": "baseline-overview",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/baseline-overview-1440.png",
+      "screenshot_sha256": "781e2993a6ee685c29b9ddeb83b1166b8a8a63ed875d83d37103b14d69e4dfb8",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=12。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=baseline-row_4e3fe2cb21d41c73545a2dfc，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-disposition-overview-1440",
+      "engine": "webkit",
+      "page_id": "disposition-overview",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/disposition-overview-1440.png",
+      "screenshot_sha256": "8d6c68957790715af7e52ae5ba87f99746608a3a1f1e3da5f5dc3ddf9a90ed90",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=54。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=trial-disposition-row_bc97f19c9b79a3bc488fbea1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-efficacy-safety-matrix-1440",
+      "engine": "webkit",
+      "page_id": "efficacy-safety-matrix",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/efficacy-safety-matrix-1440.png",
+      "screenshot_sha256": "819a90e8c56b0d6db3f1d5b6b31b77734cfbfff141b2c844a55b24fab971c026",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [],
+      "responsive_alternatives": [],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=2。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=matrix-apply-teae，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=True，查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-overview-768",
+      "engine": "chromium",
+      "page_id": "overview",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/overview-768.png",
+      "screenshot_sha256": "44606229f314cb896feaf2f22df511c6fa0d6116d97b1bee2ce6e8f98d3ec097",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256 7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=87。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256=7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-efficacy-768",
+      "engine": "chromium",
+      "page_id": "efficacy",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/efficacy-768.png",
+      "screenshot_sha256": "70e4c98c935435d1b301a01b9da2f2dc611f4c9838d6104fb4387bc0dff9850f",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256 7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=3。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256=7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-safety-768",
+      "engine": "chromium",
+      "page_id": "safety",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/safety-768.png",
+      "screenshot_sha256": "df33f891fd5feea41ed1f27595af2c821bf7e7b0e767c14114569f3da0de84f5",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256 7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=16。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=safe-apply-t-1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256=7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-baseline-overview-768",
+      "engine": "chromium",
+      "page_id": "baseline-overview",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/baseline-overview-768.png",
+      "screenshot_sha256": "607d356c03eb19056f20f48bd0311eae90e94018532b3db3e63f0aaad1d081b0",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256 7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=12。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=baseline-row_4e3fe2cb21d41c73545a2dfc，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256=7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-disposition-overview-768",
+      "engine": "chromium",
+      "page_id": "disposition-overview",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/disposition-overview-768.png",
+      "screenshot_sha256": "86978fc3e58b5e2b451841302020ccdfdf4947718cab27a05fe2538b0963af4c",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256 7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=54。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=trial-disposition-row_bc97f19c9b79a3bc488fbea1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256=7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "chromium-efficacy-safety-matrix-768",
+      "engine": "chromium",
+      "page_id": "efficacy-safety-matrix",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/chromium/efficacy-safety-matrix-768.png",
+      "screenshot_sha256": "b6469b33fa5e822ff573b4de608a1b217c4b6d0e51342de9e60eb022838beae1",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256 7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=200。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=2。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=matrix-apply-teae，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/chromium/responsive-search-768.png，SHA-256=7b7783beb2b33023c5321a210cb6c5f31c4891cbc7f3b410c3ea3c467eb1e728。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-overview-768",
+      "engine": "webkit",
+      "page_id": "overview",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/overview-768.png",
+      "screenshot_sha256": "d70f61638ae80581e15508bbd1f15f5d40b27e8556fd44791b1a013d020f75c5",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256 6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=87。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256=6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-efficacy-768",
+      "engine": "webkit",
+      "page_id": "efficacy",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/efficacy-768.png",
+      "screenshot_sha256": "abfc52c4fc09db548d0276c40836da9e7c1afdfca7be287d2be83233c20aac18",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256 6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=3。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=eff-row-nct04558918-apply-treatment，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256=6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-safety-768",
+      "engine": "webkit",
+      "page_id": "safety",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/safety-768.png",
+      "screenshot_sha256": "400ac32a45cf26fe7e000b1db656d884c01ca0f122586769ee10aeef76df094f",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256 6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=16。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=safe-apply-t-1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256=6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-baseline-overview-768",
+      "engine": "webkit",
+      "page_id": "baseline-overview",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/baseline-overview-768.png",
+      "screenshot_sha256": "7df0cbac9b33438f4a1447b5166974323be9aa79de66df45c3cbad187d752dc7",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256 6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=12。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=baseline-row_4e3fe2cb21d41c73545a2dfc，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256=6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-disposition-overview-768",
+      "engine": "webkit",
+      "page_id": "disposition-overview",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/disposition-overview-768.png",
+      "screenshot_sha256": "9f0236d657ebfd5c03973c24b1802853ab8f3edef1aa4c19242821a24d5dde07",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256 6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=54。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=trial-disposition-row_bc97f19c9b79a3bc488fbea1，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256=6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    },
+    {
+      "target_id": "webkit-efficacy-safety-matrix-768",
+      "engine": "webkit",
+      "page_id": "efficacy-safety-matrix",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "screenshot_path": "reviews/visual-finalization/screenshots/webkit/efficacy-safety-matrix-768.png",
+      "screenshot_sha256": "f822ece3fbafb0c6b86a31ef38414e9b866e5007b51ec591e8522f59c20e99e9",
+      "metrics": {
+        "horizontal_overflow_px": 0,
+        "clipped_text_count": 0,
+        "label_overlap_count": 0,
+        "unreadable_label_count": 0
+      },
+      "unavailable_required_fields": [
+        "全局搜索"
+      ],
+      "responsive_alternatives": [
+        {
+          "field": "全局搜索",
+          "access_method": "点击菜单后使用全局搜索；点击“菜单”后搜索框可见并获得焦点；使用查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果并保留查询；响应式截图 reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256 6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。",
+          "verified": true
+        }
+      ],
+      "interaction_checks": [
+        {
+          "trigger": "page_load",
+          "passed": true,
+          "evidence": "页面加载 passed=True，响应状态=0。"
+        },
+        {
+          "trigger": "filter_change",
+          "passed": true,
+          "evidence": "筛选 passed=True，条件=product=iptacopan，URL变化=True，可见行数=2。"
+        },
+        {
+          "trigger": "drill_down",
+          "passed": true,
+          "evidence": "证据抽屉 passed=True，行=matrix-apply-teae，数据依据标签=True，来源标签=True，关闭后焦点返回=True。"
+        },
+        {
+          "trigger": "search",
+          "passed": true,
+          "evidence": "搜索 passed=True，默认搜索框可见=False；点击菜单后搜索框可见=True、获得焦点=True；查询“疗效”返回10项，键盘聚焦=True，Escape关闭结果=True且保留查询=疗效；响应式截图=reviews/visual-finalization/screenshots/webkit/responsive-search-768.png，SHA-256=6c5db8f925a7d33980463e597d591d59318c08a5f1c295da0561ce1b8aa80e04。"
+        },
+        {
+          "trigger": "keyboard",
+          "passed": true,
+          "evidence": "键盘 passed=True，筛选Enter=True，抽屉Enter=True，Escape关闭=True。"
+        },
+        {
+          "trigger": "reduced_motion",
+          "passed": true,
+          "evidence": "减少动态效果 passed=True，媒体查询匹配=True，活动动画=0。"
+        }
+      ],
+      "visible_text_scan": {
+        "passed": true,
+        "engineering_tokens_found": [],
+        "untranslated_tokens_found": []
+      }
+    }
+  ],
+  "defects": [],
+  "created_at": "2026-08-30T08:09:07Z"
+}

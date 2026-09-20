@@ -1,0 +1,96 @@
+{
+  "acquired_at": "2026-09-01T14:30:00+08:00",
+  "control_scope": [
+    {
+      "included_as_product": false,
+      "name": "eculizumab",
+      "role": "关键试验对照/主动对照"
+    },
+    {
+      "included_as_product": false,
+      "name": "placebo",
+      "role": "ALPHA背景治疗加用对照"
+    },
+    {
+      "included_as_product": false,
+      "name": "抗C5背景治疗",
+      "role": "APPLY对照背景治疗"
+    }
+  ],
+  "cutoff": "2026-07-31T23:59:59+08:00",
+  "decision_notes": [
+    "只有first_disclosed_at不晚于2026-07-31T23:59:59+08:00的事实进入冻结历史快照。",
+    "2026-09-01来源获取时间仅作为post-cutoff acquisition metadata，不把获取日期当作事实披露日期。",
+    "控制臂保留于相应产品的试验事实中，但不另列为创新药产品。",
+    "组别身份由registry group/interventionNames/来源arm label和规范arm_id建立，不依赖非空drug_name。",
+    "未公开字段保持空值和not_publicly_disclosed，不推断为零；技术路径失败单列，不转化为科学缺失。"
+  ],
+  "excluded_candidates": [
+    {
+      "candidate": "pozelimab + cemdisiran",
+      "decision": "blocked_excluded",
+      "reason": "ClinicalTrials.gov官方记录为Phase 3但已终止，记录理由为发起方决定且与疗效或安全性无关；截至cutoff无法形成完整可比较B类关键证据集。",
+      "reason_code": "terminated_before_complete_comparable_key_evidence",
+      "source_url": "https://clinicaltrials.gov/study/NCT05131204",
+      "source_version_id": "src-ctgov-access2-20240919",
+      "trial_id": "nct05131204"
+    },
+    {
+      "candidate": "BCX9930",
+      "decision": "blocked_excluded",
+      "reason": "ClinicalTrials.gov官方记录显示可用记录为Phase 2且已暂停/终止；截至cutoff未形成纳入标准所需的关键晚期比较证据。",
+      "reason_code": "no_pivotal_late_stage_comparator_evidence",
+      "source_url": "https://clinicaltrials.gov/study/NCT05116787",
+      "source_version_id": "src-ctgov-bcx9930-2024",
+      "trial_id": "nct05116787"
+    }
+  ],
+  "included_products": [
+    {
+      "key_evidence_status": "included",
+      "mechanism": "因子B",
+      "product_id": "iptacopan",
+      "trial_ids": [
+        "nct04558918",
+        "nct04820530"
+      ]
+    },
+    {
+      "key_evidence_status": "included",
+      "mechanism": "C3",
+      "product_id": "pegcetacoplan",
+      "trial_ids": [
+        "nct03500549"
+      ]
+    },
+    {
+      "key_evidence_status": "included",
+      "mechanism": "因子D",
+      "product_id": "danicopan",
+      "trial_ids": [
+        "nct04469465"
+      ]
+    },
+    {
+      "key_evidence_status": "included",
+      "mechanism": "C5",
+      "product_id": "ravulizumab",
+      "trial_ids": [
+        "nct02946463"
+      ]
+    },
+    {
+      "key_evidence_status": "included",
+      "mechanism": "C5",
+      "product_id": "crovalimab",
+      "trial_ids": [
+        "nct04434092"
+      ]
+    }
+  ],
+  "indication": "阵发性睡眠性血红蛋白尿",
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "scope": "创新药比较宇宙；按补体C5、C3、因子B、因子D机制纳入晚期/关键试验证据"
+}

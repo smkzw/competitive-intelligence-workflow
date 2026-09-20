@@ -24,7 +24,7 @@ pages:
     title: 首页
     navigation_group: 总览
     responsibility: "呈现核心设计格局、关键模式和差异，不只凭适应症给出唯一或最佳设计。"
-    visuals: [设计结构图, 关键差异矩阵, 设计模式雷达图]
+    visuals: [设计结构图, 关键差异矩阵, 设计模式矩阵]
     complete_table: true
     filter_profiles: [c-overview]
     evidence_drawer_profile: design-fact
@@ -105,7 +105,7 @@ pages:
     title: 样本量、分析集与统计设计
     navigation_group: 分析与判断
     responsibility: "呈现计划或实际样本量以及公开的分析集、主要比较、模型、效应量、多重性和缺失数据处理；未公开不推断。"
-    visuals: [样本量气泡图, 分析集矩阵, 统计设计雷达图]
+    visuals: [样本量气泡图, 分析集矩阵, 统计设计矩阵]
     complete_table: true
     filter_profiles: [c-analysis]
     evidence_drawer_profile: design-fact
@@ -114,16 +114,7 @@ pages:
     title: 设计模式、权衡与可选路径
     navigation_group: 分析与判断
     responsibility: "在事实之上呈现模式、异常点、权衡、风险和至少两条有依据的可选设计路径，不输出唯一最佳方案。"
-    visuals: [设计模式雷达图, 权衡矩阵, 多路径图]
+    visuals: [设计模式矩阵, 权衡矩阵, 多路径图]
     complete_table: true
     filter_profiles: [c-patterns]
-    evidence_drawer_profile: design-fact
-  - id: evidence-versions-limitations
-    route: /c/evidence-versions-limitations
-    title: 资料版本与局限
-    navigation_group: 分析与判断
-    responsibility: "呈现登记版本、附件可用性、设计事实来源范围和影响解释的局限；技术过程留在项目记录。"
-    visuals: [版本时间线, 来源覆盖矩阵]
-    complete_table: true
-    filter_profiles: [c-evidence]
     evidence_drawer_profile: design-fact

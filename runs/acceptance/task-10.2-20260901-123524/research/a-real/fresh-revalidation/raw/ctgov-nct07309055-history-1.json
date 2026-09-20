@@ -1,0 +1,236 @@
+{
+  "studyVersion" : 1,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT07309055",
+        "orgStudyIdInfo" : {
+          "id" : "SHR-1819-305"
+        },
+        "organization" : {
+          "fullName" : "Guangdong Hengrui Pharmaceutical Co., Ltd",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Study of SHR-1819 Injection in Adolescents With Severe Atopic Dermatitis",
+        "officialTitle" : "A Multicenter, Randomized, Double-blind, Placebo-controlled Phase III Study Evaluating the Efficacy and Safety of SHR-1819 Injection in Adolescents With Severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2026-04",
+        "overallStatus" : "RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2026-03-21",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2027-11",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2027-12",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2025-12-15",
+        "studyFirstSubmitQcDate" : "2025-12-15",
+        "studyFirstPostDateStruct" : {
+          "date" : "2025-12-30",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2026-04-01",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2026-04-07",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Guangdong Hengrui Pharmaceutical Co., Ltd",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This trial was designed to evaluate the efficacy and safety of SHR-1819 in adolescents with moderate-to-severe atopic dermatitis."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Adolescents With Moderate-to-severe Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE3" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 201,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "SHR-1819 Injection Group with Dose 1",
+          "type" : "EXPERIMENTAL",
+          "description" : "Dose 1.",
+          "interventionNames" : [ "Drug: SHR-1819 Injection" ]
+        }, {
+          "label" : "SHR-1819 Injection Placebo Group with Dose 1",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Dose 1.",
+          "interventionNames" : [ "Drug: SHR-1819 Injection Placebo" ]
+        }, {
+          "label" : "SHR-1819 Injection Group with Dose 2",
+          "type" : "EXPERIMENTAL",
+          "description" : "Dose 2.",
+          "interventionNames" : [ "Drug: SHR-1819 Injection" ]
+        }, {
+          "label" : "SHR-1819 Injection Placebo Group with Dose 2",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Dose 2.",
+          "interventionNames" : [ "Drug: SHR-1819 Injection Placebo" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "SHR-1819 Injection",
+          "description" : "SHR-1819 injection.",
+          "armGroupLabels" : [ "SHR-1819 Injection Group with Dose 1", "SHR-1819 Injection Group with Dose 2" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "SHR-1819 Injection Placebo",
+          "description" : "SHR-1819 injection placebo.",
+          "armGroupLabels" : [ "SHR-1819 Injection Placebo Group with Dose 1", "SHR-1819 Injection Placebo Group with Dose 2" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Proportion of patients with Eczema Area and Severity (EASI)-75.",
+          "description" : "EASI-75: ≥ 75% improvement from baseline.",
+          "timeFrame" : "At week 16."
+        }, {
+          "measure" : "Proportion of patients with an Investigator&#x27;s Global Assessment (IGA) score of either 0 or 1.",
+          "description" : "On a 5-point scale.",
+          "timeFrame" : "At week 16."
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Proportion of patients with improvement (reduction) of weekly average of daily peak Pruritus Numerical Rating Scale (NRS) ≥ 4 from baseline to week 16.",
+          "timeFrame" : "From baseline up to week 16."
+        }, {
+          "measure" : "Proportion of patients with Eczema Area and Severity (EASI)-90.",
+          "description" : "EASI-90: ≥ 90% improvement from baseline.",
+          "timeFrame" : "At week 16."
+        }, {
+          "measure" : "Proportion of patients with Eczema Area and Severity (EASI)-75.",
+          "description" : "EASI-75: ≥ 75% improvement from baseline.",
+          "timeFrame" : "At Week 1, 2, 4, 8 and 12."
+        }, {
+          "measure" : "Proportion of patients with an Investigator&#x27;s Global Assessment (IGA) score of either 0 or 1.",
+          "timeFrame" : "At Week 1, 2, 4, 8 and 12."
+        }, {
+          "measure" : "Proportion of patients with an Investigator&#x27;s Global Assessment (IGA) score of a ≥ 2-point reduction from baseline.",
+          "timeFrame" : "At Week 1, 2, 4, 8 and 12."
+        }, {
+          "measure" : "The time from baseline to first achievement of EASI-75 by Week 16.",
+          "timeFrame" : "By Week 16."
+        }, {
+          "measure" : "The time from baseline to first achievement of EASI-50 by Week 16.",
+          "timeFrame" : "By Week 16."
+        }, {
+          "measure" : "The time from baseline to first achievement of EASI-90 by Week 16.",
+          "timeFrame" : "By Week 16."
+        }, {
+          "measure" : "Proportion of participants achieving EASI-50.",
+          "timeFrame" : "At Week 1, 2, 4, 8, 12 and 16."
+        }, {
+          "measure" : "Proportion of participants achieving EASI-90.",
+          "timeFrame" : "At Week 1, 2, 4, 8, 12 and 16."
+        }, {
+          "measure" : "Change and percentage change in atopic dermatitis (AD)-affected body surface area (BSA) from baseline.",
+          "timeFrame" : "At Week 1, 2, 4, 8, 12 and 16."
+        }, {
+          "measure" : "Change and percentage change in Children&#x27;s Dermatology Life Quality Index (CDLQI) score from baseline.",
+          "timeFrame" : "At Week 1, 2, 4, 8, 12 and 16."
+        }, {
+          "measure" : "Change and percentage change in Patient-Oriented Eczema Measure (POEM) score from baseline.",
+          "timeFrame" : "At Week 1, 2, 4, 8, 12 and 16."
+        }, {
+          "measure" : "Proportion of participants with a ≥ 2-point reduction in Investigator&#x27;s Global Assessment (IGA) score from baseline.",
+          "timeFrame" : "At Week 1, 2, 4, 8, 12 and 16."
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ol><li>Male or female ≥12 to ≤17 years of age at time of screening visit, body weight ≥30kg;</li><li>Diagnosis of Atopic Dermatitis (AD) at least 6 months prior to the screening visit according to the American Academy of Dermatology consensus criteria (Eichenfield 2014);</li><li>Diagnosis of moderate to severe AD at the screening visit and baseline visits meet all of the following 3 criteria simultaneously: EASI ≥16, IGA ≥3, BSA≥10%;</li><li>Baseline Pruritus Numerical Rating Scale (NRS) average score for maximum itch intensity ≥4 (A minimum of 5 daily scores out of the 7 days is required to calculate the baseline average score);</li><li>With documented recent history (within 6 months before the screening visit) of inadequate response to topical AD medication(s) or for whom topical treatments is medically inadvisable (eg, intolerance, because of important side effects or safety risks).\nPatients with documented systemic treatment (systemic immunosuppressant drugs like cyclosporine, methotrexate, corticosteroids etc.) for AD in the past 6 months are also considered as inadequate responders to topical treatments;</li><li>Has applied a stable dose of topical emollient (moisturizer) twice daily for at least the 7 consecutive days immediately before the baseline visit;</li><li>Participants and their parents&#x2F;legal guardians voluntarily sign the informed consent form prior to the initiation of any study-related procedures, are able to communicate smoothly with the investigators, and understand and agree to strictly comply with the requirements of this clinical study protocol to complete the study.</li></ol><p>Exclusion Criteria:</p><ol><li>Has other active skin diseases (e.g., psoriasis or systemic lupus erythematosus) that may affect AD assessment, or skin complications caused by other diseases at screening visit;</li><li>Has a history of vernal keratoconjunctivitis (VKC) and&#x2F;or atopic keratoconjunctivitis (AKC) within 6 months prior to screening visit;</li><li>Has received any of the following medications within 1 week prior to randomization: a) Topical corticosteroids (TCS) or topical calcineurin inhibitors (TCI); b) Topical traditional Chinese medicine (TCM) for atopic dermatitis; c) Other topical medications with therapeutic effects on AD (including but not limited to topical phosphodiesterase-4 [PDE-4] inhibitors, topical JAK inhibitors, etc.); d) Emollients containing active ingredients (e.g., ceramide, hyaluronic acid, urea, or filaggrin breakdown products); e) Leukotriene inhibitors (Note: If the participant is not taking such medications orally at randomization, they must have been off oral administration for at least 1 week prior to randomization; if the participant is taking such medications orally at randomization, they must have received stable-dose treatment for ≥2 weeks prior to randomization and continue stable use throughout the study period);</li><li>Has received ≥2 bleach baths within 2 weeks prior to randomization;</li><li>Has received any of the following treatments within 4 weeks prior to randomization: a) systemic glucocorticoids, immunosuppressants (including but not limited to cyclosporine, azathioprine, methotrexate, etc.), or JAK inhibitors; b) Systemic traditional Chinese medicine (TCM) for atopic dermatitis (including but not limited to Tripterygium Glycosides Tablets, Compound Glycyrrhizin Tablets, etc.); c) Phototherapy (including but not limited to narrowband ultraviolet B [NB-UVB] and ultraviolet A1 [UVA1]) or regular use of tanning booths&#x2F;room;</li><li>Has received investigational drugs or medical devices within 8 weeks prior to randomization or within 5 half-lives (if the half-life is known), whichever is longer;</li><li>Has used biological products (including but not limited to anti-IL-4Rα monoclonal antibodies, anti-IgE monoclonal antibodies, anti-TSLP monoclonal antibodies, etc.) within 10 weeks prior to randomization or within 5 half-lives (if the half-life is known), whichever is longer;</li><li>Has received or been exposed to other live vaccines or attenuated live vaccines within 3 months prior to randomization, or participated in a vaccine clinical trial within 3 months prior to the first dose;</li><li>Has received any cell-depleting agents (including but not limited to rituximab) within 6 months prior to randomization;</li><li>Has received allergen-specific immunotherapy within 6 months prior to randomization;</li><li>Has a current malignant tumor or history of malignant tumor at screening;</li><li>Has undergone major surgery within 3 months prior to the first dose before randomization, or plans to undergo major surgery during the study period;</li><li>Has severe comorbid diseases or other conditions deemed inappropriate for participation in the study by the investigator, including but not limited to endocrine diseases;</li><li>Has been diagnosed with or deemed by the investigator to have suspected immunosuppressive diseases within 6 months prior to screening, including but not limited to non-tuberculous mycobacterial infection, history of opportunistic infections;</li><li>Has a history of infection treated with systemic antimicrobials (for viral, bacterial, fungal, or parasitic infections) within 2 weeks prior to randomization, or has superficial skin infections (e.g., impetigo);</li><li>Has a history of recurrent herpes zoster or Kaposi varicelliform eruption (≥ 2 episodes), disseminated herpes zoster, or disseminated herpes simplex within 1 year prior to screening;</li><li>Suspected or confirmed active tuberculosis (TB);</li><li>Positive results for human immunodeficiency virus (HIV) antibody, syphilis antibody, or hepatitis C virus (HCV) antibody;</li><li>Presence of any of the following abnormalities in laboratory tests (including but not limited to HGB\\WBC\\Neutrophil\\ALT\\AST\\T-BIL\\eGFR) and&#x2F;or 12-lead electrocardiogram (ECG) within 4 weeks prior to randomization;</li><li>Known hypersensitivity to the study drug or any of its components.</li></ol>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "12 Years",
+        "maximumAge" : "17 Years",
+        "stdAges" : [ "CHILD" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "Xiaoyan Bai",
+          "role" : "CONTACT",
+          "phone" : "+86-0518-82342973",
+          "email" : "xiaoyan.bai.xb1@hengrui.com"
+        } ],
+        "locations" : [ {
+          "facility" : "The First Affiliated Hospital of China Medical University",
+          "city" : "Shenyang",
+          "state" : "Liaoning",
+          "zip" : "110002",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Xinghua Gao",
+            "role" : "CONTACT",
+            "phone" : "+86-13940152467",
+            "email" : "gaobarry@hotmail.com"
+          }, {
+            "name" : "Xinghua Gao",
+            "role" : "PRINCIPAL_INVESTIGATOR"
+          } ],
+          "geoPoint" : {
+            "lat" : 41.79222,
+            "lon" : 123.43278
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Xinhua Hospital Affiliated to Shanghai JiaoTong University School of Medicine",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "zip" : "200092",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          },
+          "status" : "RECRUITING",
+          "contacts" : [ {
+            "name" : "Zhirong Yao",
+            "role" : "CONTACT",
+            "phone" : "+86-021-25076428",
+            "email" : "zryaoxh@sina.com"
+          }, {
+            "name" : "Zhirong Yao",
+            "role" : "PRINCIPAL_INVESTIGATOR"
+          } ]
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "UNDECIDED"
+      }
+    },
+    "hasResults" : false
+  }
+}

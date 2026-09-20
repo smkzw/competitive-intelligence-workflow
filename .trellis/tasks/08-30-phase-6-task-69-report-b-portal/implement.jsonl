@@ -1,0 +1,5 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"B 类完整页面、图表、筛选、证据和中文用户合同"}
+{"file":"src/ci_workflow/reports/common/page-catalogs/B.yaml","reason":"B 类静态页面目录与页面职责真源"}
+{"file":"contracts/kangzhe/design_specs/core.md","reason":"项目内康哲品牌、排版、证据与验收硬合同"}
+{"file":"contracts/kangzhe/design_specs/track_interactive.md","reason":"交互式报告的布局、筛选、下钻与验收合同"}
+{"file":"docs/decisions/0012-pre-delivery-visual-finalization-loop.md","reason":"交付前视觉定稿和多路线复核机制"}

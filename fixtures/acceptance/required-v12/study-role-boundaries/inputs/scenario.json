@@ -1,0 +1,45 @@
+{
+  "case_id": "study-role-boundaries",
+  "source_fixture": "fixtures/synthetic/a-complete/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "研究候选的研究设计角色、证据层级和 publication role 必须独立推导，不由报告显示字段覆盖。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "exclude-healthy-volunteer",
+      "description_zh": "健康志愿者研究默认排除。"
+    },
+    {
+      "id": "exclude-pure-pk-or-be",
+      "description_zh": "纯 PK/BE 研究默认排除。"
+    },
+    {
+      "id": "exclude-unrelated-indication",
+      "description_zh": "非目标适应症研究默认排除。"
+    },
+    {
+      "id": "exclude-observational",
+      "description_zh": "观察性研究默认排除。"
+    },
+    {
+      "id": "exclude-eap-compassionate-use",
+      "description_zh": "扩大使用/同情使用研究默认排除。"
+    },
+    {
+      "id": "supporting-layer",
+      "description_zh": "支持层必须有命名问题和不可替代证据。"
+    },
+    {
+      "id": "special-early-core",
+      "description_zh": "特殊早期核心必须有明确语境、决策域和不可替代证据。"
+    },
+    {
+      "id": "study-publication-role-separation",
+      "description_zh": "study role 与 publication role 分字段保留并分别推导。"
+    }
+  ]
+}

@@ -1,0 +1,584 @@
+{
+  "studyVersion" : 2,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT05702268",
+        "orgStudyIdInfo" : {
+          "id" : "ICP-CL-00602"
+        },
+        "organization" : {
+          "fullName" : "Beijing InnoCare Pharma Tech Co., Ltd.",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "Pharmacodynamic Blood Characteristics of ICP-332 in Patients With Moderate to Severe Atopic Dermatitis",
+        "officialTitle" : "A Randomized, Double-blind, Placebo-controlled Phase II Trial Evaluating the Safety, Efficacy, Pharmacokinetics, and Pharmacodynamics of ICP-332 in Moderate-to-severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2023-05",
+        "overallStatus" : "UNKNOWN",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2023-03-18",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2023-07-30",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2023-12-30",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2023-01-10",
+        "studyFirstSubmitQcDate" : "2023-01-18",
+        "studyFirstPostDateStruct" : {
+          "date" : "2023-01-27",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2023-05-18",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2023-05-22",
+          "type" : "ACTUAL"
+        },
+        "lastKnownStatus" : "RECRUITING"
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Beijing InnoCare Pharma Tech Co., Ltd.",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false,
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "The investigator, the subject, and the sponsor&#x27;s project team will remain blind throughout the study.\nSubjects will be randomly assigned to one of the three treatment groups at a ratio of 1:1:1 to be given the drug once a day for 4 weeks."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Moderate to Severe Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE2" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 75,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "High-dose",
+          "type" : "EXPERIMENTAL",
+          "description" : "40 mg ICP-332 tablet 3 tablets, once a day",
+          "interventionNames" : [ "Drug: ICP-332" ]
+        }, {
+          "label" : "Low-dose",
+          "type" : "EXPERIMENTAL",
+          "description" : "40 mg ICP-332 2 tablets + 1 placebo tablet once daily",
+          "interventionNames" : [ "Drug: ICP-332", "Drug: ICP-332 Placebo" ]
+        }, {
+          "label" : "Blank control",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Placebo 3 tablets once daily",
+          "interventionNames" : [ "Drug: ICP-332 Placebo" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "ICP-332",
+          "description" : "Tablet, 40 mg",
+          "armGroupLabels" : [ "High-dose", "Low-dose" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "ICP-332 Placebo",
+          "description" : "Tablets, in appearance, size, color, dosage form, packaging, instructions, labels and other aspects of the corresponding specifications of ICP-332.",
+          "armGroupLabels" : [ "Blank control", "Low-dose" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Adverse events (AEs)",
+          "timeFrame" : "Up to 24 weeks"
+        }, {
+          "measure" : "Systolic and Diastolic Blood Pressure",
+          "timeFrame" : "Up to 24 weeks"
+        }, {
+          "measure" : "Pulse Rate",
+          "timeFrame" : "Up to 24 weeks"
+        }, {
+          "measure" : "Electrocardiogram (ECG) QT Interval",
+          "timeFrame" : "Up to 24 weeks"
+        }, {
+          "measure" : "Number of participants with treatmentrelated adverse events as assessed by CTCAE v4.0",
+          "timeFrame" : "Up to 24 weeks"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Percentage change of EASI score from baseline in week 4",
+          "timeFrame" : "4 weeks"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ol><li>Male or female subjects aged ≥18 years and ≤75 years.</li><li>A clinical diagnosis of atopic dermatitis or eczema was made at least 1 year prior to D1, and atopic dermatitis was identified at screening visit (according to Williams criteria).</li><li>During screening and baseline, were defined as meeting the moderate and severe AD criteria as assessed by the researchers.</li><li>Documented history of inadequate response to topical corticosteroids (TCS) or topical calcineurin inhibitors (TCI) , or other medically unrecommended topical therapy.</li><li>Able and willing to use an additive free mild emollient twice a day for at least 7 days prior to baseline and for the duration of the study.</li><li>The serum pregnancy test of all female subjects at screening visit was negative, and the urine pregnancy test of all fertile female subjects at baseline visit was negative before first dosing.</li><li>Subjects must voluntarily sign and date informed consent prior to the commencement of any screening or study specific procedures.</li><li>Subject is willing and able to comply with scheduled visits, treatment plans, laboratory tests, and other study procedures.</li><li>Fertile women (WOCBP) menstruation must occur during the screening period and consent to use a supplementary screen contraceptive method in combination with a highly effective contraceptive method during the study period and for 90 days after the last use of the study drug .Male subjects must be willing not to donate sperm during this period.</li></ol><p>Exclusion Criteria:</p><ol><li>Pregnant female subjects and nursing female subjects.</li><li>Subjects who had an active skin disease or skin infection that required systemic treatment or would interfere with the proper assessment of AD.</li><li>Current or previous infection history, including a history of herpes; Known history of invasive infection; Chronic recurrent infection and&#x2F;or active invasive infection.\nKnown immunodeficiency syndrome; Subjects with tuberculosis; Non skin related active infection.</li><li>Active HBV, HCV or HIV, syphilis infection.</li><li>Potential medical diseases or problems, including but not limited to the following: clinically relevant or significant ECG abnormalities; History of moderate to severe congestive heart failure, recent cerebrovascular accident, myocardial infarction or coronary stent implantation, or uncontrolled hypertension; Have received organ transplantation; A history of gastrointestinal perforation, diverticulitis, or a significant increased risk of gastrointestinal perforation according to the investigator&#x27;s judgment; Diseases that may interfere with drug absorption; Subjects suffering from any malignant tumor before screening.</li><li>Except for atopic dermatitis, he has any clinically significant disease history or other clinically significant systemic diseases.</li><li>Received the specified treatment plan within the specified time frame.</li><li>The time from the last use of powerful CYP3A inhibitor or inducer to the first trial medication is less than 5 clearance half-life, or it is planned to take powerful CYP3A inhibitor or inducer at the same time during this study.</li><li>Those with a history of drug or alcohol abuse in the 6 months prior to baseline visit (as determined by the investigator).</li><li>During the screening period before the first administration of the study drug (baseline visit), the abnormal laboratory values met at least one of the specified standards.</li><li>The investigator considers for any reason that the subject is not suitable for participation in the study to receive ICP-332.</li></ol>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "Pengcheng Lei",
+          "role" : "CONTACT",
+          "phone" : "+86 18501252185",
+          "email" : "pengcheng.lei@innocarepharma.com"
+        } ],
+        "locations" : [ {
+          "facility" : "Beijing Hospital",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "zip" : "100006",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Zhonghong Xie",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          },
+          "status" : "NOT_YET_RECRUITING"
+        }, {
+          "facility" : "Beijing Friendship Hospital, Capital Medical University",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "zip" : "100050",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Linfeng Li",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Peking University Third Hospital",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "zip" : "100191",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Chunlei Zhang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Second Hospital of the Army Medical University",
+          "city" : "Chongqing",
+          "state" : "Chongqing Municipality",
+          "zip" : "400037",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Rupeng Wang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 29.56026,
+            "lon" : 106.55771
+          },
+          "status" : "NOT_YET_RECRUITING"
+        }, {
+          "facility" : "The First Affiliated Hospital of Fujian Medical University",
+          "city" : "Fuzhou",
+          "state" : "Fujian",
+          "zip" : "350004",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Chao Ji",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 26.06139,
+            "lon" : 119.30611
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Dermatology Hospital of Southern Medical University",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "zip" : "510091",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Yunsheng Liang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "The Second Affiliated Hospital of Guangzhou Medical University",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "zip" : "510260",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Wenlin Yang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "The Affiliated Hospital of Chengde Medical College",
+          "city" : "Chengde",
+          "state" : "Hebei",
+          "zip" : "067020",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Xinsuo Duan",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 40.9519,
+            "lon" : 117.95883
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "The First Hospital of Hebei Medical University",
+          "city" : "Shijiazhuang",
+          "state" : "Hebei",
+          "zip" : "050023",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Guoqiang Zhang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 38.04139,
+            "lon" : 114.47861
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Nanyang First People&#x27;s Hospital",
+          "city" : "Nanyang",
+          "state" : "Henan",
+          "zip" : "473004",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Rixin Chen",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 33.00524,
+            "lon" : 112.54659
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Shiyan City People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Shiyan",
+          "state" : "Hubei",
+          "zip" : "442099",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Zudong Meng",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 32.6475,
+            "lon" : 110.77806
+          }
+        }, {
+          "facility" : "Wuhan University People&#x27;s Hospital",
+          "city" : "Wuhan",
+          "state" : "Hubei",
+          "zip" : "430060",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Tiechi Lei",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 30.58333,
+            "lon" : 114.26667
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Changzhou First People&#x27;s Hospital",
+          "city" : "Changzhou",
+          "state" : "Jiangsu",
+          "zip" : "213004",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Ruzhi Zhang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 31.77359,
+            "lon" : 119.95401
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Wuxi Second People&#x27;s Hospital",
+          "city" : "Wuxi",
+          "state" : "Jiangsu",
+          "zip" : "214001",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Hui Sun",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 31.56887,
+            "lon" : 120.28857
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Affiliated Hospital of Jiangsu University",
+          "city" : "Zhenjiang",
+          "state" : "Jiangsu",
+          "zip" : "210031",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Yumei Li",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 32.21086,
+            "lon" : 119.45508
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "The First Affiliated Hospital of China Medical University",
+          "city" : "Shenyang",
+          "state" : "Liaoning",
+          "zip" : "110002",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Li Zhang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 41.79222,
+            "lon" : 123.43278
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Ruijin Hospital, Shanghai Jiao Tong University School of Medicine",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Jie Zheng",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          },
+          "status" : "RECRUITING",
+          "zip" : "200025"
+        }, {
+          "facility" : "Shanghai Dermatology Hospital",
+          "status" : "RECRUITING",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "zip" : "220443",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Yangfeng Ding",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          }
+        }, {
+          "facility" : "Huashan Hospital Affiliated to Fudan University",
+          "status" : "RECRUITING",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Jinhua Xu",
+            "role" : "CONTACT",
+            "phone" : "+86 13818978539",
+            "email" : "xjhlcsy@163.com"
+          } ],
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          }
+        }, {
+          "facility" : "The Second Hospital of Shanxi Medical University",
+          "city" : "Taiyuan",
+          "state" : "Shanxi",
+          "zip" : "030001",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Wenli Feng",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 37.86944,
+            "lon" : 112.56028
+          },
+          "status" : "NOT_YET_RECRUITING"
+        }, {
+          "facility" : "Suining Central Hospital",
+          "city" : "Suining",
+          "state" : "Sichuan",
+          "zip" : "629099",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Chunshui Yu",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 30.50802,
+            "lon" : 105.57332
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Affiliated Hospital of Tianjin Academy of Traditional Chinese Medicine",
+          "city" : "Tianjin",
+          "state" : "Tianjin Municipality",
+          "zip" : "300120",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Litao Zhang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 39.14222,
+            "lon" : 117.17667
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "The Second Affiliated Hospital of Kunming Medical University",
+          "city" : "Kunming",
+          "state" : "Yunnan",
+          "zip" : "650106",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Danqi Deng",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 25.03889,
+            "lon" : 102.71833
+          },
+          "status" : "NOT_YET_RECRUITING"
+        }, {
+          "facility" : "The First Affiliated Hospital of Zhejiang University School of Medicine",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "zip" : "310003",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Hong Fang",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          },
+          "status" : "RECRUITING"
+        }, {
+          "facility" : "Hangzhou Third People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "zip" : "310009",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Aie Xu",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          }
+        }, {
+          "facility" : "Zhejiang Provincial People&#x27;s Hospital",
+          "status" : "NOT_YET_RECRUITING",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "zip" : "314408",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Xiaohua Tao",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          }
+        }, {
+          "facility" : "Jiaxing First Hospital",
+          "status" : "RECRUITING",
+          "city" : "Jiaxing",
+          "state" : "Zhejiang",
+          "zip" : "314001",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Wenhao Yin",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 30.7522,
+            "lon" : 120.75
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Wenzhou Medical University",
+          "city" : "Wenzhou",
+          "state" : "Zhejiang",
+          "zip" : "325015",
+          "country" : "China",
+          "contacts" : [ {
+            "name" : "Zhiming Li",
+            "role" : "CONTACT"
+          } ],
+          "geoPoint" : {
+            "lat" : 27.99942,
+            "lon" : 120.66682
+          },
+          "status" : "NOT_YET_RECRUITING"
+        } ]
+      },
+      "referencesModule" : {
+        "references" : [ {
+          "pmid" : "41533373",
+          "type" : "DERIVED",
+          "citation" : "Xu J, Zhang L, Liang Y, Ji C, Xu A, Li Z, Li L, Lei T, Zhang C, Chen R, Tao X, Zhang R, Fang H, Zheng J, Yang W, Zhang G, Duan X, Ding Y, Yin W, Zhou W, Fan D, Du Y. Safety and Efficacy of ICP-332 for Moderate to Severe Atopic Dermatitis: A Phase 2 Randomized Clinical Trial. JAMA Dermatol. 2026 Mar 1;162(3):227-235. doi: 10.1001&#x2F;jamadermatol.2025.5295."
+        } ]
+      }
+    },
+    "hasResults" : false
+  }
+}

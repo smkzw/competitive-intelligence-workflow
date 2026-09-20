@@ -1,0 +1,480 @@
+{
+ "$schema": "schemas/visual-finalization-plan.schema.json",
+ "schema_version": "1.0",
+ "plan_id": "visual-plan-abc1-c",
+ "report_kind": "C",
+ "report_version": "v1",
+ "format": "html",
+ "route_id": "portal",
+ "report_snapshot_sha256": "6d13fedaf4c6f7658a4b6d2f102728fae4196cbf710578e4a8269aa9467dfec8",
+ "report_snapshot": {
+  "snapshot_id": "report-snapshot_8cf92c4863bec22626d4ce93",
+  "report": "C",
+  "report_version": "v1",
+  "evidence_snapshot_id": "evidence-snapshot_a6b062f9a2e80889edb5850b",
+  "claim_snapshot_id": "claim-snapshot_b9f649dfaa5c975192c2d3c7",
+  "coverage_set_id": "coverage-set_7d82680bdfe9c29cfe1275e1"
+ },
+ "design_contract_sha256": "facdc54cb92fba350b4e519ff7db6e7e7a3a5499d4dd74a53bd43bcfd677434d",
+ "design_contract": {
+  "manifest": "contracts/kangzhe/manifest.json",
+  "contract_version": "1.0",
+  "route_id": "portal",
+  "loaded_files": [
+   "contracts/kangzhe/design_specs/ROUTER.md",
+   "contracts/kangzhe/design_specs/core.md",
+   "contracts/kangzhe/design_specs/project_profile.md",
+   "contracts/kangzhe/design_specs/track_site.md"
+  ]
+ },
+ "scientific_snapshot_immutable": true,
+ "audience": {
+  "primary_role": "临床试验医学经理（资深临床专业读者）",
+  "language": "zh-CN",
+  "reading_tasks": [
+   "快速掌握 PNH 竞品格局与关键试验结果",
+   "核对每项结论的登记来源与披露边界"
+  ],
+  "visible_program_state": false
+ },
+ "page_responsibilities": [
+  {
+   "page_id": "design-map",
+   "page_type": "detail",
+   "primary_question": "读者在design-map页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载design-map主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "design-patterns",
+   "page_type": "detail",
+   "primary_question": "读者在design-patterns页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载design-patterns主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "endpoint-timepoint-matrix",
+   "page_type": "detail",
+   "primary_question": "读者在endpoint-timepoint-matrix页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载endpoint-timepoint-matrix主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "exclusion-criteria",
+   "page_type": "detail",
+   "primary_question": "读者在exclusion-criteria页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载exclusion-criteria主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "inclusion-criteria",
+   "page_type": "detail",
+   "primary_question": "读者在inclusion-criteria页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载inclusion-criteria主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "overview",
+   "page_type": "index",
+   "primary_question": "读者在overview页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载overview主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "population-disease-definition",
+   "page_type": "detail",
+   "primary_question": "读者在population-disease-definition页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载population-disease-definition主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "sample-analysis-statistics",
+   "page_type": "detail",
+   "primary_question": "读者在sample-analysis-statistics页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载sample-analysis-statistics主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "treatment-arms",
+   "page_type": "detail",
+   "primary_question": "读者在treatment-arms页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载treatment-arms主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trial-profile",
+   "page_type": "detail",
+   "primary_question": "读者在trial-profile页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载trial-profile主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trials__nct02591862",
+   "page_type": "detail",
+   "primary_question": "读者在nct02591862页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nct02591862主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trials__nct02605993",
+   "page_type": "detail",
+   "primary_question": "读者在nct02605993页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nct02605993主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trials__nct03181633",
+   "page_type": "detail",
+   "primary_question": "读者在nct03181633页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nct03181633主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trials__nct04170023",
+   "page_type": "detail",
+   "primary_question": "读者在nct04170023页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nct04170023主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trials__nct04469465",
+   "page_type": "detail",
+   "primary_question": "读者在nct04469465页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nct04469465主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "trials__nct05886244",
+   "page_type": "detail",
+   "primary_question": "读者在nct05886244页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nct05886244主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "visit-duration-followup",
+   "page_type": "detail",
+   "primary_question": "读者在visit-duration-followup页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载visit-duration-followup主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  }
+ ],
+ "visual_variables": {
+  "theme": "kangzhe",
+  "palette_tokens": [
+   "kz-orange",
+   "kz-med-blue",
+   "kz-stats-green",
+   "kz-pv",
+   "kz-text-1",
+   "kz-text-2",
+   "kz-text-3",
+   "kz-border"
+  ],
+  "department_tokens": {
+   "MED": "kz-orange",
+   "CO": "kz-med-blue",
+   "DMST": "kz-stats-green",
+   "PV": "kz-pv"
+  },
+  "surface_tokens": [
+   "kz-white",
+   "kz-bg",
+   "kz-surface-warm"
+  ],
+  "font_stack": [
+   "PingFang SC",
+   "Microsoft YaHei",
+   "sans-serif"
+  ],
+  "font_sizes_px": [
+   12,
+   14,
+   16,
+   20,
+   24,
+   32
+  ],
+  "spacing_tokens_px": [
+   4,
+   8,
+   12,
+   16,
+   24,
+   32,
+   40
+  ],
+  "motion_tokens": [
+   "none",
+   "dur-fast",
+   "dur",
+   "ease-out"
+  ],
+  "reduced_motion_supported": true,
+  "export_freeze_supported": true
+ },
+ "chart_syntax": [
+  {
+   "chart_id": "charts-c",
+   "question": "该主题下各比较组的关键数值差异是否一图可读？",
+   "mark": "bar",
+   "dimensions": {
+    "x": "比较项",
+    "y": "数值",
+    "color": "产品",
+    "label": "数值标签"
+   },
+   "redundant_encoding": "direct_label",
+   "source_claim_ids": [
+    "claim-pnh-a"
+   ]
+  }
+ ],
+ "table_syntax": [
+  {
+   "table_id": "tables-c",
+   "purpose": "承载图表之外的全量明细与来源限定，折叠展开",
+   "columns": [
+    "产品",
+    "试验",
+    "关键数值",
+    "时间窗",
+    "披露状态"
+   ],
+   "completeness": "complete",
+   "after_chart": true,
+   "source_claim_ids": [
+    "claim-pnh-a"
+   ]
+  }
+ ],
+ "interaction_states": [
+  {
+   "state_id": "ix-page-load",
+   "trigger": "page_load",
+   "expected_behavior": "首屏渲染关键结论与图表，无布局抖动",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "跳过过渡动画直接呈现终态",
+   "frozen_behavior": "冻结静态快照版式"
+  },
+  {
+   "state_id": "ix-filter-change",
+   "trigger": "filter_change",
+   "expected_behavior": "筛选控件改变后图表与表格联动更新",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "联动更新无过渡动画",
+   "frozen_behavior": "筛选结果冻结"
+  },
+  {
+   "state_id": "ix-drill-down",
+   "trigger": "drill_down",
+   "expected_behavior": "折叠表展开明细且不改变其他区块",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "展开无动画",
+   "frozen_behavior": "展开态冻结"
+  },
+  {
+   "state_id": "ix-search",
+   "trigger": "search",
+   "expected_behavior": "检索输入后命中项即时高亮或过滤",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "命中高亮无过渡动画",
+   "frozen_behavior": "检索结果冻结"
+  },
+  {
+   "state_id": "ix-keyboard",
+   "trigger": "keyboard",
+   "expected_behavior": "Tab 顺序到达全部交互控件，Enter 触发展开",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "焦点环无动画",
+   "frozen_behavior": "焦点顺序冻结"
+  },
+  {
+   "state_id": "ix-reduced-motion",
+   "trigger": "reduced_motion",
+   "expected_behavior": "系统减弱动效时跳过过渡直接呈现终态",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "全站过渡禁用",
+   "frozen_behavior": "终态冻结"
+  }
+ ],
+ "acceptance_matrix": [
+  {
+   "domain": "copy_zh",
+   "criteria": [
+    "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
+    "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
+   ],
+   "required": true
+  },
+  {
+   "domain": "hierarchy_density",
+   "criteria": [
+    "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
+    "同一数据在图、表、抽屉三投影中保持同源一致"
+   ],
+   "required": true
+  },
+  {
+   "domain": "typography_spacing",
+   "criteria": [
+    "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
+    "长药品名/试验名换行不截断关键标识"
+   ],
+   "required": true
+  },
+  {
+   "domain": "color_legibility",
+   "criteria": [
+    "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
+    "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
+   ],
+   "required": true
+  },
+  {
+   "domain": "charts_tables",
+   "criteria": [
+    "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
+    "图表与对应表格数值一致（同源投影）"
+   ],
+   "required": true
+  },
+  {
+   "domain": "interaction_consistency",
+   "criteria": [
+    "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
+    "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
+   ],
+   "required": true
+  },
+  {
+   "domain": "format_rendering",
+   "criteria": [
+    "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
+    "四类视口下导航、表格与图表保持可用"
+   ],
+   "required": true
+  }
+ ],
+ "planner_identity": "zcode-main-thread-glm53",
+ "planner_role": "visual-design-director",
+ "created_at": "2026-09-19T10:30:08.129419+00:00"
+}

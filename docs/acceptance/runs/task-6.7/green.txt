@@ -1,0 +1,5 @@
+Task 6.7 GREEN
+
+目标合同与非阻断测试：37 passed。
+目标测试加 package manifest：38 passed。
+实现：TrialDispositionObservation、六组封闭枚举、公共重校验、只读比例复算、中文差异标记、JSON Schema、package manifest 登记。

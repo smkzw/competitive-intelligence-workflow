@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/ci-workflow/yaozh-route-access-receipt.schema.json",
+  "title": "药智可选路线访问回执",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "project_id", "route_id", "answer_digest",
+    "observation_digest", "observed_at", "host", "technical_state", "result_class", "user_action_zh",
+    "blocks_core_research", "credential_fields_allowed"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "project_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:-]{1,160}$"},
+    "route_id": {"const": "yaozh-optional-browser"},
+    "answer_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observation_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "host": {"enum": ["local", "codex", "hermes", "omp"]},
+    "technical_state": {
+      "enum": [
+        "ready", "session_expired", "captcha_required", "permission_denied",
+        "tool_unavailable", "parser_error"
+      ]
+    },
+    "result_class": {"enum": ["ready", "access_blocked", "parser_error"]},
+    "user_action_zh": {"type": "string", "minLength": 1},
+    "blocks_core_research": {"const": false},
+    "credential_fields_allowed": {"const": false}
+  },
+  "allOf": [
+    {"if": {"properties": {"technical_state": {"const": "ready"}}}, "then": {"properties": {"result_class": {"const": "ready"}}}},
+    {"if": {"properties": {"technical_state": {"const": "parser_error"}}}, "then": {"properties": {"result_class": {"const": "parser_error"}}}},
+    {"if": {"properties": {"technical_state": {"enum": ["session_expired", "captcha_required", "permission_denied", "tool_unavailable"]}}}, "then": {"properties": {"result_class": {"const": "access_blocked"}}}}
+  ]
+}

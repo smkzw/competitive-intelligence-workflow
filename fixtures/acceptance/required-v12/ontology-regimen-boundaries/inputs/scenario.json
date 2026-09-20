@@ -1,0 +1,33 @@
+{
+  "case_id": "ontology-regimen-boundaries",
+  "source_fixture": "fixtures/synthetic/a-complete/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "创新药本体与治疗方案边界必须按可核验机制和谱系规则闭合，传统治疗只保留规定语境。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "adc",
+      "description_zh": "ADC 作为创新治疗模态纳入创新药宇宙。"
+    },
+    {
+      "id": "fusion-protein",
+      "description_zh": "融合蛋白作为创新治疗模态纳入创新药宇宙。"
+    },
+    {
+      "id": "innovative-with-traditional-background",
+      "description_zh": "创新药与传统治疗并列时，传统治疗仅作背景或对照。"
+    },
+    {
+      "id": "pure-traditional",
+      "description_zh": "纯传统治疗不因同适应症自动进入创新药主集合。"
+    },
+    {
+      "id": "reformulation-repositioning-fixed-combination-review",
+      "description_zh": "改良、重定位和固定复方保留待审，不得未经核验纳入。"
+    }
+  ]
+}

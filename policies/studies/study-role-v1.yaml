@@ -1,0 +1,144 @@
+schema_version: "1.0"
+policy_id: study-role-v1
+version: "1.0"
+rules:
+  - rule_id: special_core_early
+    role: special_core
+    priority: 100
+    report_kinds: [B]
+    indication_relations: [target]
+    phases: [phase_i, phase_i_ii, early]
+    design_categories: [interventional]
+    evidence_types: [standard]
+    development_contexts: [rare_disease, oncology, accelerated_development]
+    requires_results: true
+    requires_irreplaceable_evidence: true
+    requires_decision_domain: true
+    required_decision_domains:
+      - dose
+      - endpoint
+      - adaptive_design
+      - population
+      - estimand
+      - registration_logic
+    requires_specific_rationale: true
+    rationale_zh: 罕见病、肿瘤或加速开发中的早期试验，只有承担不可替代的具体决策证据时进入特殊核心。
+  - rule_id: special_core_early_c
+    role: special_core
+    priority: 100
+    report_kinds: [C]
+    indication_relations: [target]
+    phases: [phase_i, phase_i_ii, early]
+    design_categories: [interventional]
+    evidence_types: [standard]
+    development_contexts: [rare_disease, oncology, accelerated_development]
+    requires_irreplaceable_evidence: true
+    requires_decision_domain: true
+    required_decision_domains:
+      - dose
+      - endpoint
+      - adaptive_design
+      - population
+      - estimand
+      - registration_logic
+    requires_specific_rationale: true
+    rationale_zh: C 类罕见病、肿瘤或加速开发早期试验须承担不可替代的具体设计决策证据。
+  - rule_id: core_b_phase_ii_iii
+    role: core
+    priority: 80
+    report_kinds: [B]
+    indication_relations: [target]
+    phases: [phase_ii, phase_ii_iii, phase_iii]
+    design_categories: [interventional]
+    evidence_types: [standard]
+    requires_results: true
+    requires_key_or_registration: true
+    rationale_zh: 目标适应症中有结果的 II/III 期关键或注册相关干预性试验进入核心层。
+  - rule_id: core_c_phase_ii_iii
+    role: core
+    priority: 80
+    report_kinds: [C]
+    indication_relations: [target]
+    phases: [phase_ii, phase_ii_iii, phase_iii]
+    design_categories: [interventional]
+    evidence_types: [standard]
+    requires_key_or_registration: true
+    rationale_zh: 目标适应症中关键或注册相关的 II/III 期干预性试验进入设计核心层。
+  - rule_id: c_early_decision_domain
+    role: core
+    priority: 80
+    report_kinds: [C]
+    indication_relations: [target]
+    phases: [phase_i, phase_i_ii, early]
+    design_categories: [interventional]
+    evidence_types: [standard]
+    excluded_development_contexts: [rare_disease, oncology, accelerated_development]
+    requires_decision_domain: true
+    required_decision_domains:
+      - dose
+      - endpoint
+      - adaptive_design
+      - population
+      - estimand
+      - registration_logic
+    requires_specific_rationale: true
+    rationale_zh: C 类早期试验只有明确关联剂量、终点、适应性设计、人群、estimand 或注册逻辑时进入设计核心层。
+  - rule_id: support_b_early_result
+    role: supporting
+    priority: 60
+    report_kinds: [B]
+    indication_relations: [target]
+    phases: [phase_i, phase_i_ii, early]
+    design_categories: [interventional]
+    evidence_types: [standard]
+    requires_results: true
+    requires_specific_rationale: true
+    rationale_zh: 目标适应症中已有结果的早期研究作为补充证据，不与 II/III 期核心试验等权比较。
+  - rule_id: support_b_contextual_evidence
+    role: supporting
+    priority: 60
+    report_kinds: [B]
+    indication_relations: [target]
+    evidence_types: [extension, subgroup, post_hoc, real_world]
+    requires_results: true
+    requires_specific_rationale: true
+    rationale_zh: 延伸、亚组、事后或真实世界结果进入支持层，并保留其具体证据类型。
+  - rule_id: support_named_problem
+    role: supporting
+    priority: 60
+    report_kinds: [B, C]
+    requires_named_issue: true
+    required_problem_domains: [safety, regulatory, special_population]
+    requires_irreplaceable_evidence: true
+    requires_specific_rationale: true
+    rationale_zh: 仅在已命名安全性、监管或特殊人群问题且核心层无法替代时进入支持层。
+  - rule_id: exclude_healthy_volunteer
+    role: excluded
+    priority: 10
+    report_kinds: [B, C]
+    design_categories: [healthy_volunteer]
+    rationale_zh: 健康志愿者研究默认排除。
+  - rule_id: exclude_pure_pk_or_be
+    role: excluded
+    priority: 10
+    report_kinds: [B, C]
+    design_categories: [pure_pk_or_be]
+    rationale_zh: 纯 PK 或生物等效性研究默认排除。
+  - rule_id: exclude_unrelated_indication
+    role: excluded
+    priority: 10
+    report_kinds: [B, C]
+    indication_relations: [unrelated]
+    rationale_zh: 与目标适应症无关的研究默认排除。
+  - rule_id: exclude_observational
+    role: excluded
+    priority: 10
+    report_kinds: [B, C]
+    design_categories: [observational]
+    rationale_zh: 一般观察性研究默认排除。
+  - rule_id: exclude_eap_compassionate_use
+    role: excluded
+    priority: 10
+    report_kinds: [B, C]
+    design_categories: [eap_or_compassionate_use]
+    rationale_zh: EAP 或同情使用研究默认排除。

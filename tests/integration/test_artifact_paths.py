@@ -17,28 +17,23 @@ def test_artifact_path_service_is_the_only_versioned_report_path_generator(
     service = ArtifactPathService()
     version = "v1.0"
     version_root = PurePosixPath("reports", report.value, version)
-    expected = {
-        OutputFormat.HTML: version_root / "html",
-        OutputFormat.PDF: version_root / "report.pdf",
-        OutputFormat.HTML_PPT: version_root / "html-ppt",
-        OutputFormat.PPTX: version_root / "report.pptx",
-    }
+    assert output is OutputFormat.HTML
+    expected = version_root / "html"
 
-    assert service.artifact(report, version, output) == expected[output]
+    assert service.artifact(report, version, output) == expected
     assert service.manifest(report, version, output) == version_root / (
-        f"{output.value}.manifest.json"
+        "html.manifest.json"
     )
     assert service.coverage_projection(report, version, output) == version_root / (
-        f"{output.value}.coverage-projection.json"
+        "html.coverage-projection.json"
     )
     for path in (
-        expected[output],
+        expected,
         service.manifest(report, version, output),
         service.coverage_projection(report, version, output),
     ):
         assert not path.is_absolute()
         assert service.validate_persisted_path(path) == path
-
 
 @pytest.mark.parametrize(
     "path",

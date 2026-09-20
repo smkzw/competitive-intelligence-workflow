@@ -1,0 +1,4533 @@
+"""Task 6.9: build the complete static B-class comparison portal.
+
+The renderer is deliberately an adapter.  It accepts the compact fixture contract
+used by the existing portal tests and, when supplied, consumes the immutable B
+view sets produced by Tasks 6.1--6.8.  It does not calculate comparisons,
+proportions, denominators, or disclosure states in the browser; those values are
+projected into the offline chart payload here.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+import re
+import shutil
+from collections import defaultdict
+from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Literal, Self, cast
+
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from pydantic import ConfigDict, Field, model_validator
+
+from ci_workflow.domain.enums import FactDisclosureState, ReportKind
+from ci_workflow.domain.evidence import EvidenceLocator
+from ci_workflow.domain.ids import stable_id
+from ci_workflow.qc.browser import route_to_site_path, site_directory_digest
+from ci_workflow.reports.b.portal_science import (
+    adjudicate_comparable_membership,
+    efficacy_science_partition,
+    validate_full_pool_inputs,
+)
+from ci_workflow.reports.b.semantic_contract import (
+    BUBBLE_PRESETS,
+    semantic_value_is_unknown,
+)
+from ci_workflow.reports.b.semantic_grouping import (
+    ApprovedSemanticMerge,
+    SemanticGroupingProposal,
+    proposed_semantic_buckets,
+    semantic_row_digest,
+    semantic_source_digest,
+)
+from ci_workflow.reports.common.evidence_view import (
+    EvidenceField,
+    EvidenceFieldState,
+    EvidenceObservationKind,
+    EvidenceView,
+    OriginalTextStatus,
+)
+from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
+from ci_workflow.reports.common.view_state import ReportRow
+from ci_workflow.storage.manifest_store import (
+    ArtifactFileBinding,
+    ArtifactManifest,
+    DesignContractBinding,
+    DeterministicCheck,
+    RendererBinding,
+    RenderVerdict,
+)
+from ci_workflow.storage.render_transaction import (
+    RenderTransactionError,
+    UnpublishedRenderTransaction,
+)
+from ci_workflow.storage.snapshot_store import (
+    LockedSnapshot,
+    ReportSnapshotManifest,
+    SnapshotIntegrityError,
+    SnapshotStore,
+    compute_locked_snapshot,
+)
+
+from .builder import resolve_echarts_bundle, resolve_logo_src, resolve_portal_asset
+from .evidence_drawer import render_evidence_drawer_embed, render_evidence_drawer_host
+from .report_a import EfficacyRow, ReportAPortalData, SafetyRow, TrialRow, _git_commit
+
+_TEMPLATE_DIR = Path(__file__).resolve().parent / "templates" / "b"
+_ASSET_DIR = Path(__file__).resolve().parent / "assets"
+
+# B's static route authority is the frozen catalog.  The tuple below is only a
+# dispatch map for page data; it intentionally contains no route strings.
+_BASELINE_PAGE_IDS = frozenset(
+    {
+        "baseline-overview",
+        "baseline-demographics",
+        "baseline-disease-context",
+        "baseline-severity",
+    }
+)
+_BASELINE_PAGE_CONCEPTS: dict[str, frozenset[str]] = {
+    "baseline-demographics": frozenset({"age", "sex"}),
+    "baseline-disease-context": frozenset({"disease_duration"}),
+    "baseline-severity": frozenset({"baseline_easi", "baseline_hemoglobin", "baseline_ldh"}),
+}
+_BASELINE_STAT_FAMILY = {
+    "mean": "central", "median": "central", "other": "central",
+    "not_reported": "central",
+    "standard_deviation": "spread", "quartiles": "spread", "range": "spread",
+    "count": "count", "sample_size": "count", "proportion": "proportion",
+}
+
+_DISPOSITION_PAGE_IDS = frozenset(
+    {
+        "disposition-overview",
+        "participant-flow",
+        "adherence",
+        "loss-exit",
+        "screen-failure",
+        "rescue-treatment",
+        "prohibited-medication",
+        "plan-deviation",
+    }
+)
+
+_DISPOSITION_PAGE_ELEMENTS: dict[str, frozenset[str]] = {
+    "disposition-overview": frozenset(
+        {
+            "已筛选",
+            "筛选失败",
+            "已随机",
+            "已接受治疗",
+            "完成治疗",
+            "完成研究",
+            "停止治疗",
+            "退出研究",
+            "失访",
+            "停止治疗原因",
+            "退出研究原因",
+        }
+    ),
+    "participant-flow": frozenset(
+        {
+            "已筛选",
+            "筛选失败",
+            "已随机",
+            "已接受治疗",
+            "完成治疗",
+            "完成研究",
+            "停止治疗",
+            "退出研究",
+            "失访",
+        }
+    ),
+    "adherence": frozenset({"依从性"}),
+    "loss-exit": frozenset({"停止治疗", "停止治疗原因", "退出研究", "退出研究原因", "失访"}),
+    "screen-failure": frozenset({"筛选失败", "筛选失败原因"}),
+    "rescue-treatment": frozenset({"补救治疗"}),
+    "prohibited-medication": frozenset({"禁用药物"}),
+    "plan-deviation": frozenset({"方案偏离", "重要方案偏离", "导致分析集排除的方案偏离"}),
+}
+
+_MISSING_STATE_LABELS = {
+    "not_reported": "未报告",
+    "not_publicly_disclosed": "未公开",
+    "not_applicable": "不适用",
+    "below_reporting_threshold": "低于报告阈值",
+    "unresolved_due_to_route": "路径未解析",
+    "conflicting": "来源冲突",
+    "conflicting_sources": "来源冲突",
+}
+_STATE_ALIASES = {
+    "已公开": "reported_value",
+    "已报告": "reported_value",
+    "已报告值": "reported_value",
+    "已报告零值": "reported_zero",
+    "已报告为零": "reported_zero",
+    "未公开": "not_publicly_disclosed",
+    "尚未公开": "not_publicly_disclosed",
+    "未报告": "not_reported",
+    "原文未报告": "not_reported",
+    "不适用": "not_applicable",
+    "低于报告阈值": "below_reporting_threshold",
+    "路径未解析": "unresolved_due_to_route",
+    "来源冲突": "conflicting",
+}
+_CONCRETE_STATES = frozenset({"reported_value", "reported_zero"})
+_FILTER_DIMENSION_LABELS = {
+    "product": "产品",
+    "target": "靶点/机制",
+    "trial": "试验",
+    "group": "组别",
+    "cohort": "队列",
+    "period": "阶段/期间",
+    "element": "终点/事件/字段",
+    "clinical_concept": "标准临床概念",
+    "time_window_band": "标准时间窗",
+    "population_context": "标准分析人群",
+    "statistical_form_family": "标准统计形式",
+    "arm_role": "标准组别角色",
+    "time": "时间点",
+    "time_window": "时间窗",
+    "population": "分析人群",
+    "field_family": "指标类别",
+    "reason": "原因",
+    "denominator_role": "分母口径",
+    "measure_object": "统计对象",
+    "statistic_form": "统计形式",
+    "disclosure_state": "披露状态",
+}
+
+_NATIVE_LABELS = {
+    "c3": "补体C3",
+    "c5": "补体C5",
+    "factor-d": "补体因子D",
+    "factor-b": "因子B",
+    "apply-cohort": "APPLY-PNH队列",
+    "alpha-safety-cohort": "ALPHA安全性分析队列",
+    "appoint-cohort": "APPOINT-PNH队列",
+    "pegasus-cohort": "PEGASUS队列",
+    "extension-through-week-48": "延长期至第48周",
+    "nct03500549-primary-period": "NCT03500549主要研究期",
+    "nct04469465-primary-period": "NCT04469465主要研究期",
+    "baseline_ldh": "基线乳酸脱氢酶",
+    "baseline_hgb_eligibility_threshold": "基线血红蛋白入组阈值",
+    "treated": "已治疗",
+    "period_start": "研究期开始",
+    "analysis": "分析",
+    "other": "其他",
+    "median": "中位数",
+    "adherence_summary": "依从性概览",
+    "screening-through-week-24": "筛选期至第24周",
+    "randomized-through-week-24": "随机至第24周",
+    "treatment-through-week-24": "治疗期至第24周",
+    "study-through-week-24": "研究期至第24周",
+    "received_treatment": "接受治疗",
+    "completed_treatment": "完成治疗",
+    "participant_flow": "受试者流转",
+    "baseline_sample_size": "基线样本量",
+    "sample_size": "样本量",
+    "age": "年龄",
+    "sex": "性别",
+    "baseline_hemoglobin": "基线血红蛋白",
+    "baseline_pnh_clone_size": "PNH 克隆大小",
+    "baseline_free_hemoglobin": "游离血红蛋白",
+    "baseline_ldh": "基线 LDH",
+    "screened": "已筛选",
+    "screen_failure": "筛选失败",
+    "randomized": "已随机",
+    "received_treatment": "已接受治疗",
+    "completed_treatment": "完成治疗",
+    "completed_study": "完成研究",
+    "treatment_discontinued": "停止治疗",
+    "study_withdrawal": "退出研究",
+    "lost_to_follow_up": "失访",
+    "screen_failure_reason": "筛选失败原因",
+    "treatment_discontinuation_reason": "停止治疗原因",
+    "study_withdrawal_reason": "退出研究原因",
+    "adherence": "依从性",
+    "rescue_treatment": "补救治疗",
+    "prohibited_medication": "禁用药物",
+    "protocol_deviation": "方案偏离",
+    "major_protocol_deviation": "重要方案偏离",
+    "protocol_deviation_leading_to_exclusion": "导致分析集排除的方案偏离",
+    "Any treatment-emergent adverse event": "治疗期间出现的任何不良事件",
+    "Adverse events of special interest": "特别关注不良事件",
+    "Breakthrough haemolysis": "突破性溶血",
+    "Discontinuation due to adverse event": "因不良事件停药",
+    "Headache": "头痛",
+    "Serious adverse reactions": "严重不良反应",
+    "Treatment discontinuations due to TEAE": "因治疗期间不良事件停止治疗",
+    "source_other": "其他来源",
+    "demographics": "人口学特征",
+    "baseline_severity": "基线疾病严重程度",
+    "participant_flow": "受试者流转",
+    "reason": "原因",
+    "subject": "受试者",
+    "mean": "均值",
+    "proportion": "比例",
+    "count": "例数",
+    "response_rate": "应答率",
+    "comparable": "可比较",
+    "unplottable": "暂不形成坐标",
+    "accepted": "已核定",
+    "registry_result_or_primary_report": "登记结果或主要试验报告",
+    "reported_value": "已报告值",
+    "reported_zero": "已报告零值",
+    **_MISSING_STATE_LABELS,
+}
+# ---------------------------------------------------------------------------
+# Controlled clinical semantics for cross-trial presentation
+# ---------------------------------------------------------------------------
+
+# Presentation grouping is deliberately controlled.  These aliases are not a
+# general-purpose similarity matcher: an observation only joins a clinical
+# family when its normalized token is explicitly listed here.
+_SEMANTIC_TOKEN_RE = re.compile(r"[^0-9a-z\u3400-\u9fff]+")
+
+
+def _semantic_token(value: Any) -> str:
+    if isinstance(value, Enum):
+        value = value.value
+    if value is None:
+        return ""
+    text = str(value).strip().casefold()
+    text = text.replace("≥", "ge").replace("≤", "le").replace("％", "%")
+    return _SEMANTIC_TOKEN_RE.sub("", text)
+
+
+def _concept_family(*concepts: str) -> frozenset[str]:
+    return frozenset(_semantic_token(concept) for concept in concepts)
+
+
+_BASELINE_CONCEPT_FAMILY_ORDER: tuple[frozenset[str], ...] = (
+    _concept_family("baseline_sample_size", "sample_size", "baseline_n", "n"),
+    _concept_family("age", "baseline_age", "age_at_baseline"),
+    _concept_family("sex", "gender", "baseline_sex", "baseline_gender"),
+    _concept_family("disease_duration"),
+    _concept_family("baseline_easi", "baseline_hemoglobin", "baseline_ldh"),
+)
+
+
+def _alias_lookup(groups: Mapping[str, Sequence[str]]) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for canonical, aliases in groups.items():
+        for alias in (canonical, *aliases):
+            token = _semantic_token(alias)
+            if not token:
+                continue
+            existing = result.get(token)
+            if existing is not None and existing != canonical:
+                raise RuntimeError(f"B 类临床别名冲突：{token}")
+            result[token] = canonical
+    return result
+
+
+_CLINICAL_CONCEPT_GROUPS: dict[str, dict[str, tuple[str, ...]]] = {
+    "efficacy": {
+        "easi75_response": (
+            "easi75",
+            "easi_75",
+            "easi-75",
+            "easi75_response",
+            "easi 75 response",
+            "easi-75 response",
+            "easi-75 responder rate",
+            "easi75 responder rate",
+            "easi-75 应答",
+            "easi-75应答者比例",
+            "easi75应答率",
+            "easi-75 responder proportion",
+            "easi75 responder proportion",
+            "easi-75应答比例",
+            "easi-75 response rate",
+            "easi 75 response rate",
+            "easi75 response rate",
+            "easi-75 responders",
+        ),
+        "easi90_response": (
+            "easi90",
+            "easi_90",
+            "easi-90",
+            "easi90_response",
+            "easi-90 response",
+            "easi-90 responder rate",
+            "easi-90应答",
+            "easi-90 response rate",
+            "easi 90 response rate",
+            "easi90 response rate",
+        ),
+        "iga_0_1_response": (
+            "iga01",
+            "iga_0_1",
+            "iga 0/1",
+            "iga 0 or 1",
+            "viga 0/1",
+            "viga01",
+            "investigator global assessment 0 or 1",
+            "iga 0/1 response",
+            "viga 0/1 response",
+            "viga 0/1 response rate",
+            "iga 0/1 response rate",
+        ),
+        "hemoglobin_response_without_transfusion": (
+            "hemoglobin sustained increase without transfusion",
+            "hemoglobin increase without transfusion",
+            "hemoglobin sustained increase >=2 g/dl without transfusion",
+            "hemoglobin sustained increase ge2 g/dl without transfusion",
+            "血红蛋白较基线持续升高≥2 g/dL且无需输血",
+            "血红蛋白较基线持续升高2g/dl且无需输血",
+            "血红蛋白持续升高且无需输血",
+            "hemoglobin_response",
+            "hemoglobin response",
+            "hemoglobin response rate",
+            "血红蛋白应答率",
+            "hb response",
+            "hgb response",
+            "hemoglobin response rate without transfusion",
+        ),
+        "easi_total_score": (
+            "easi_total_score",
+            "easi total score",
+            "easi_total_score_change",
+            "easi_total_change",
+            "easi total score change",
+            "easi总分",
+            "easi总分变化",
+        ),
+        "itch_score": (
+            "itch",
+            "itch score",
+            "peak pruritus nrs",
+            "pruritus nrs",
+            "瘙痒评分",
+            "峰值瘙痒数字评分",
+        ),
+        "ldh_change": (
+            "ldh",
+            "ldh change",
+            "lactate dehydrogenase",
+            "乳酸脱氢酶",
+            "乳酸脱氢酶变化",
+        ),
+        "breakthrough_hemolysis_rate": (
+            "breakthrough_hemolysis",
+            "breakthrough hemolysis",
+            "breakthrough hemolysis rate",
+            "突破性溶血",
+            "突破性溶血比例",
+            "突破性溶血发生率",
+        ),
+    },
+    "baseline": {
+        "baseline_sample_size": (
+            "sample_size",
+            "baseline_n",
+            "n",
+            "number randomized",
+            "基线样本量",
+            "样本量",
+            "入组人数",
+        ),
+        "age": ("age", "baseline_age", "age_at_baseline", "年龄", "基线年龄"),
+        "sex": ("sex", "gender", "baseline_sex", "baseline_gender", "性别"),
+        "baseline_hemoglobin": (
+            "baseline hemoglobin",
+            "hemoglobin at baseline",
+            "baseline_hgb",
+            "baseline_hgb_actual",
+            "血红蛋白",
+            "基线血红蛋白",
+            "基线血红蛋白实测均值",
+        ),
+        "baseline_pnh_clone_size": (
+            "pnh_clone_size",
+            "pnh clone size",
+            "clone size",
+            "克隆大小",
+            "pnh 克隆大小",
+        ),
+        "baseline_free_hemoglobin": (
+            "free_hemoglobin",
+            "free hemoglobin",
+            "free hgb",
+            "游离血红蛋白",
+        ),
+        "baseline_ldh": (
+            "baseline ldh",
+            "baseline lactate dehydrogenase",
+            "乳酸脱氢酶",
+            "基线乳酸脱氢酶",
+        ),
+        "baseline_easi": (
+            "baseline easi",
+            "easi at baseline",
+            "基线easi",
+            "基线easi评分",
+        ),
+        "disease_duration": (
+            "disease duration",
+            "duration of disease",
+            "病程",
+            "疾病持续时间",
+        ),
+    },
+    "safety": {
+        "any_teae": (
+            "teae",
+            "any teae",
+            "any treatment emergent adverse event",
+            "any treatment-emergent adverse event",
+            "any treatment emergent adverse events",
+            "any treatment-emergent adverse events",
+            "治疗期间不良事件",
+            "任何teae",
+            "治疗期间出现的任何不良事件",
+        ),
+        "any_sae": (
+            "sae",
+            "any sae",
+            "saes",
+            "serious adverse event",
+            "serious adverse events",
+            "any serious adverse event",
+            "any serious adverse events",
+            "严重不良事件",
+            "任何sae",
+        ),
+        "aesi": (
+            "aesi",
+            "adverse event of special interest",
+            "adverse events of special interest",
+            "特别关注不良事件",
+            "特殊关注不良事件",
+        ),
+        "common_adverse_event": (
+            "common ae",
+            "common adverse event",
+            "common adverse events",
+            "常见不良事件",
+        ),
+        "treatment_related_teae": (
+            "treatment related teae",
+            "treatment-related teae",
+            "treatment related adverse event",
+            "treatment related adverse events",
+            "treatment-related adverse events",
+            "治疗相关不良事件",
+        ),
+        "discontinuation_adverse_event": (
+            "discontinuation ae",
+            "adverse event leading to discontinuation",
+            "adverse events leading to discontinuation",
+            "discontinuation due to ae",
+            "导致停药不良事件",
+        ),
+        "death": ("death", "deaths", "死亡"),
+        "grade_3_or_higher": (
+            "grade 3 or higher",
+            "grade 3+",
+            "grade_3_plus",
+            "3级及以上不良事件",
+        ),
+    },
+    "disposition": {
+        "screened": ("screened", "screening", "已筛选"),
+        "screen_failure": ("screen failure", "screen failures", "筛选失败"),
+        "randomized": ("randomized", "randomised", "已随机"),
+        "received_treatment": ("received treatment", "treated", "已接受治疗", "已治疗"),
+        "completed_treatment": ("completed treatment", "完成治疗"),
+        "completed_study": ("completed study", "study completion", "完成研究"),
+        "treatment_discontinued": (
+            "treatment discontinued",
+            "discontinued treatment",
+            "停止治疗",
+        ),
+        "study_withdrawal": ("study withdrawal", "withdrawal", "退出研究"),
+        "lost_to_follow_up": ("lost to follow-up", "lost to follow up", "失访"),
+        "screen_failure_reason": ("screen failure reason", "筛选失败原因"),
+        "treatment_discontinuation_reason": ("treatment discontinuation reason", "停止治疗原因"),
+        "study_withdrawal_reason": ("study withdrawal reason", "退出研究原因"),
+        "adherence": ("adherence", "treatment adherence", "依从性"),
+        "rescue_treatment": ("rescue treatment", "补救治疗"),
+        "prohibited_medication": ("prohibited medication", "禁用药", "禁用药物"),
+        "protocol_deviation": ("protocol deviation", "方案偏离"),
+        "major_protocol_deviation": ("major protocol deviation", "重要方案偏离"),
+        "protocol_deviation_leading_to_exclusion": (
+            "protocol deviation leading to exclusion",
+            "导致分析集排除的方案偏离",
+        ),
+    },
+}
+_CLINICAL_CONCEPT_LOOKUPS = {
+    domain: _alias_lookup(groups) for domain, groups in _CLINICAL_CONCEPT_GROUPS.items()
+}
+_CLINICAL_CONCEPT_LABELS = {
+    "easi75_response": "EASI-75应答",
+    "easi90_response": "EASI-90应答",
+    "iga_0_1_response": "IGA 0/1应答",
+    "hemoglobin_response_without_transfusion": "血红蛋白持续升高且无需输血",
+    "easi_total_score": "EASI总分",
+    "itch_score": "瘙痒评分",
+    "ldh_change": "乳酸脱氢酶变化",
+    "breakthrough_hemolysis_rate": "突破性溶血",
+    "received_treatment": "接受治疗",
+    "completed_treatment": "完成治疗",
+    "participant_flow": "受试者流转",
+    "baseline_sample_size": "基线样本量",
+    "age": "年龄",
+    "sex": "性别",
+    "baseline_hemoglobin": "基线血红蛋白",
+    "baseline_pnh_clone_size": "PNH 克隆大小",
+    "baseline_free_hemoglobin": "游离血红蛋白",
+    "baseline_ldh": "基线 LDH",
+    "baseline_ldh": "基线乳酸脱氢酶",
+    "baseline_easi": "基线EASI",
+    "disease_duration": "病程",
+    "any_teae": "任何治疗期间不良事件",
+    "any_sae": "任何严重不良事件",
+    "aesi": "特别关注不良事件",
+    "common_adverse_event": "常见不良事件",
+    "treatment_related_teae": "治疗相关不良事件",
+    "discontinuation_adverse_event": "导致停药不良事件",
+    "death": "死亡",
+    "grade_3_or_higher": "3级及以上不良事件",
+    "screened": "已筛选",
+    "screen_failure": "筛选失败",
+    "randomized": "已随机",
+    "received_treatment": "已接受治疗",
+    "completed_treatment": "完成治疗",
+    "completed_study": "完成研究",
+    "treatment_discontinued": "停止治疗",
+    "study_withdrawal": "退出研究",
+    "lost_to_follow_up": "失访",
+    "screen_failure_reason": "筛选失败原因",
+    "treatment_discontinuation_reason": "停止治疗原因",
+    "study_withdrawal_reason": "退出研究原因",
+    "adherence": "依从性",
+    "rescue_treatment": "补救治疗",
+    "prohibited_medication": "禁用药物",
+    "protocol_deviation": "方案偏离",
+    "major_protocol_deviation": "重要方案偏离",
+    "protocol_deviation_leading_to_exclusion": "导致分析集排除的方案偏离",
+}
+
+_STATISTICAL_FORM_GROUPS = {
+    "response_rate": (
+        "response",
+        "response rate",
+        "responder rate",
+        "responder proportion",
+        "response proportion",
+        "应答率",
+        "应答比例",
+    ),
+    "change_from_baseline": (
+        "change",
+        "change from baseline",
+        "change_from_baseline",
+        "baseline change",
+        "较基线变化",
+        "基线变化值",
+        "变化值",
+    ),
+    "absolute_value": (
+        "absolute",
+        "absolute value",
+        "absolute_value",
+        "绝对值",
+    ),
+    "event_rate": (
+        "event rate",
+        "incidence",
+        "incidence rate",
+        "发生率",
+        "事件发生率",
+    ),
+    "time_to_event": ("time to event", "time_to_event", "事件发生时间"),
+    "hazard_ratio": ("hazard ratio", "hazard_ratio", "风险比"),
+    "mean_difference": ("mean difference", "均值差", "平均值差"),
+    "median_difference": ("median difference", "中位数差"),
+    "mean": ("mean", "average", "均值", "平均值"),
+    "median": ("median", "中位数"),
+    "proportion": ("proportion", "percentage", "percent", "比例", "百分比"),
+    "count": ("count", "number", "n", "例数", "人数", "数量"),
+    "event_count": ("event count", "event_count", "events", "事件数", "事件计数", "件数"),
+    "adherence_summary": ("adherence summary", "adherence_summary", "依从性概览"),
+    "other": ("other", "other statistic", "其他统计形式"),
+    "range": ("range", "interval", "范围", "区间"),
+}
+_STATISTICAL_FORM_LOOKUP = _alias_lookup(_STATISTICAL_FORM_GROUPS)
+_STATISTICAL_FORM_LABELS = {
+    "response_rate": "应答率",
+    "change_from_baseline": "较基线变化",
+    "absolute_value": "绝对值",
+    "event_rate": "事件发生率",
+    "time_to_event": "事件发生时间",
+    "hazard_ratio": "风险比",
+    "mean_difference": "均值差",
+    "median_difference": "中位数差",
+    "mean": "均值",
+    "median": "中位数",
+    "proportion": "比例",
+    "count": "例数",
+    "event_count": "事件数",
+    "adherence_summary": "依从性概览",
+    "other": "其他统计形式",
+    "range": "区间",
+    "not_reported": "报告未注明统计口径",
+}
+
+_POPULATION_GROUPS = {
+    "full_analysis_set": (
+        "full analysis set",
+        "full analysis population",
+        "fas",
+        "全分析集",
+        "全分析人群",
+    ),
+    "intention_to_treat": ("itt", "intention to treat", "意向性分析集", "意向治疗集"),
+    "per_protocol": ("pp", "per protocol", "符合方案集", "方案符合集"),
+    "safety_set": ("safety set", "safety population", "安全性分析集", "安全性人群"),
+    "randomized_set": ("randomized set", "randomised set", "随机集", "随机人群"),
+    "treated_set": ("treated set", "treated population", "治疗集", "接受治疗人群"),
+    "all_participants": ("all participants", "all subjects", "全部受试者", "全体受试者"),
+}
+_POPULATION_LOOKUP = _alias_lookup(_POPULATION_GROUPS)
+_POPULATION_LABELS = {
+    "full_analysis_set": "全分析集",
+    "intention_to_treat": "意向性分析集",
+    "per_protocol": "符合方案集",
+    "safety_set": "安全性分析集",
+    "randomized_set": "随机集",
+    "treated_set": "治疗集",
+    "all_participants": "全部受试者",
+    "not_reported": "分析人群未列示",
+}
+
+_ARM_ROLE_ALIASES = {
+    "treatment": "treatment",
+    "treated": "treatment",
+    "intervention": "treatment",
+    "active": "treatment",
+    "treatmentarm": "treatment",
+    "治疗组": "treatment",
+    "治疗臂": "treatment",
+    "干预组": "treatment",
+    "control": "control",
+    "placebo": "control",
+    "comparator": "control",
+    "controlarm": "control",
+    "placeboarm": "control",
+    "comparatorarm": "control",
+    "对照组": "control",
+    "对照臂": "control",
+    "安慰剂": "control",
+    "单臂": "single_arm",
+    "singlearm": "single_arm",
+    "singlearmstudy": "single_arm",
+    "singlearmtrial": "single_arm",
+    "single": "single_arm",
+}
+
+_TIME_UNIT_CANONICAL = {
+    "d": "day",
+    "day": "day",
+    "days": "day",
+    "日": "day",
+    "天": "day",
+    "w": "week",
+    "wk": "week",
+    "week": "week",
+    "weeks": "week",
+    "周": "week",
+    "mo": "month",
+    "month": "month",
+    "months": "month",
+    "月": "month",
+    "y": "year",
+    "yr": "year",
+    "year": "year",
+    "years": "year",
+    "年": "year",
+}
+_TIMEPOINT_PATTERN = re.compile(
+    r"^(?:约|around|approximately|approx\.?|about|at)?\s*第?\s*(?P<low>[0-9]+(?:\.[0-9]+)?)"
+    r"(?:\s*(?:至|-|–|—)\s*(?P<high>[0-9]+(?:\.[0-9]+)?))?"
+    r"\s*(?P<unit>日|天|d|day|days|周|w|wk|week|weeks|月|mo|month|months|年|y|yr|year|years)?$",
+    re.IGNORECASE,
+)
+_TIMEPOINT_PREFIX_PATTERN = re.compile(
+    r"^(?:约|around|approximately|approx\.?|about|at)?\s*"
+    r"(?P<unit>日|天|d|day|days|周|w|wk|week|weeks|月|mo|month|months|年|y|yr|year|years)"
+    r"\s*第?\s*(?P<low>[0-9]+(?:\.[0-9]+)?)"
+    r"(?:\s*(?:至|-|–|—)\s*(?P<high>[0-9]+(?:\.[0-9]+)?))?$",
+    re.IGNORECASE,
+)
+_TIME_BAND_LABELS = {
+    "around_day_28": "约第28天",
+    "around_week_12": "约第12周",
+    "around_month_6": "约6个月",
+    "around_year_1": "约1年",
+    "baseline": "基线",
+    "treatment_period": "治疗期间",
+    "follow_up": "随访期",
+    "study_period": "研究期间",
+    "time_not_reported": "时间点未列示",
+}
+
+
+def _unknown_semantic_key(prefix: str, value: Any) -> str:
+    token = _semantic_token(value)
+    return f"{prefix}:{token or 'not_reported'}"
+
+
+def _controlled_concept(
+    value: Any,
+    *,
+    domain: str,
+    fallback: Any = None,
+) -> tuple[str, str]:
+    lookup = _CLINICAL_CONCEPT_LOOKUPS.get(domain, {})
+    candidates = (value, fallback)
+    first_text = ""
+    for candidate in candidates:
+        if candidate is None:
+            continue
+        if not first_text:
+            first_text = _text(candidate)
+        canonical = lookup.get(_semantic_token(candidate))
+        if canonical is not None:
+            return canonical, _CLINICAL_CONCEPT_LABELS.get(canonical, _native_text(candidate))
+    canonical = _unknown_semantic_key(domain, first_text)
+    return canonical, _native_text(first_text, "临床概念未列示")
+
+
+def _canonical_statistical_form(
+    value: Any,
+    *,
+    domain: str,
+    concept: str,
+    unit: Any = None,
+    numerator: Any = None,
+    denominator: Any = None,
+) -> tuple[str, str]:
+    if domain == "efficacy" and concept == "breakthrough_hemolysis_rate":
+        return "event_rate", "事件发生率（越低越好）"
+    canonical = _STATISTICAL_FORM_LOOKUP.get(_semantic_token(value))
+    if canonical is not None:
+        return canonical, _STATISTICAL_FORM_LABELS[canonical]
+    unit_token = _text(unit).strip().casefold().replace("％", "%")
+    if domain == "safety":
+        return "event_rate", _STATISTICAL_FORM_LABELS["event_rate"]
+    if domain == "efficacy":
+        if concept.endswith("_response") or concept == "hemoglobin_response_without_transfusion":
+            return "response_rate", _STATISTICAL_FORM_LABELS["response_rate"]
+        if unit_token in {"%", "percent", "percentage"}:
+            return "proportion", _STATISTICAL_FORM_LABELS["proportion"]
+    if domain == "baseline":
+        if concept == "baseline_sample_size":
+            return "count", _STATISTICAL_FORM_LABELS["count"]
+        if numerator is not None and denominator is not None:
+            return "proportion", _STATISTICAL_FORM_LABELS["proportion"]
+    if domain == "disposition":
+        if unit_token in {"%", "percent", "percentage"}:
+            return "proportion", _STATISTICAL_FORM_LABELS["proportion"]
+        if unit_token in {"人", "例", "subjects", "participants"}:
+            return "count", _STATISTICAL_FORM_LABELS["count"]
+    return "not_reported", _STATISTICAL_FORM_LABELS["not_reported"]
+
+
+def _canonical_population(value: Any) -> tuple[str, str]:
+    if value is None or not _text(value):
+        return "not_reported", _POPULATION_LABELS["not_reported"]
+    canonical = _POPULATION_LOOKUP.get(_semantic_token(value))
+    if canonical is not None:
+        return canonical, _POPULATION_LABELS[canonical]
+    return _unknown_semantic_key("population", value), _native_text(value)
+
+
+def _canonical_arm_role(value: Any) -> tuple[str, str]:
+    candidates = (value,)
+    for candidate in candidates:
+        token = _semantic_token(candidate)
+        canonical = _ARM_ROLE_ALIASES.get(token)
+        if canonical is not None:
+            return canonical, {
+                "treatment": "治疗组",
+                "control": "对照组",
+                "single_arm": "单臂",
+            }[canonical]
+        if any(
+            marker in token for marker in ("control", "placebo", "comparator", "对照", "安慰剂")
+        ):
+            return "control", "对照组"
+        if any(marker in token for marker in ("treat", "intervention", "active", "治疗", "干预")):
+            return "treatment", "治疗组"
+    return "unknown", "组别未列示"
+
+
+def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
+    if value is None or not _text(value):
+        return "time_not_reported", _TIME_BAND_LABELS["time_not_reported"]
+    text = _text(value)
+    token = _semantic_token(text)
+    if any(marker in token for marker in ("baseline", "基线", "screening", "筛选期")):
+        return "baseline", _TIME_BAND_LABELS["baseline"]
+    if any(marker in token for marker in ("treatmentperiod", "treatment", "治疗期间", "治疗期")):
+        return "treatment_period", _TIME_BAND_LABELS["treatment_period"]
+    if any(marker in token for marker in ("followup", "follow", "随访")):
+        return "follow_up", _TIME_BAND_LABELS["follow_up"]
+    if any(marker in token for marker in ("studyperiod", "study", "研究期间")):
+        return "study_period", _TIME_BAND_LABELS["study_period"]
+    candidate_text = text.replace("months", "month").replace("weeks", "week").replace("days", "day")
+    match = _TIMEPOINT_PATTERN.fullmatch(candidate_text)
+    if match is None:
+        match = _TIMEPOINT_PREFIX_PATTERN.fullmatch(candidate_text)
+    if match is None:
+        return _unknown_semantic_key("time", text), text
+    low = float(match.group("low"))
+    high = float(match.group("high") or match.group("low"))
+    value_num = (low + high) / 2.0
+    raw_unit = match.group("unit") or _text(explicit_unit)
+    unit = _TIME_UNIT_CANONICAL.get(raw_unit.casefold()) if raw_unit else None
+    if unit is None:
+        return _unknown_semantic_key("time", text), text
+    weeks = {
+        "day": value_num / 7.0,
+        "week": value_num,
+        "month": value_num * 4.34524,
+        "year": value_num * 52.1429,
+    }[unit]
+    if unit == "day" and 26 <= value_num <= 30:
+        return "around_day_28", _TIME_BAND_LABELS["around_day_28"]
+    if 10 <= weeks <= 14:
+        return "around_week_12", _TIME_BAND_LABELS["around_week_12"]
+    if 22 <= weeks <= 26.5:
+        return "around_month_6", _TIME_BAND_LABELS["around_month_6"]
+    if 48 <= weeks <= 56:
+        return "around_year_1", _TIME_BAND_LABELS["around_year_1"]
+    unit_label = {"day": "天", "week": "周", "month": "个月", "year": "年"}[unit]
+    shown = f"{value_num:g}"
+    if low != high:
+        shown = f"{low:g}–{high:g}"
+    return f"{unit}_{shown}", f"第{shown}{unit_label}"
+
+
+def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, str]:
+    if domain == "efficacy":
+        concept_value = _first(
+            value,
+            "clinical_concept",
+            "construct_id",
+            "endpoint_family_label_zh",
+            "endpoint_family_id",
+            "original_endpoint",
+            "original_definition",
+            "endpoint_id",
+            "endpoint",
+            default=None,
+        )
+        fallback_concept = _first(
+            source,
+            "clinical_concept",
+            "construct_id",
+            "endpoint_family_label_zh",
+            "endpoint_family_id",
+            "original_endpoint",
+            "original_definition",
+            "endpoint",
+            default=None,
+        )
+    elif domain == "baseline":
+        concept_value = _first(
+            value,
+            "clinical_concept",
+            "standardized_concept",
+            "variable_label_zh",
+            "variable",
+            "source_name",
+            "variable_domain",
+            default=None,
+        )
+        fallback_concept = _first(
+            source,
+            "clinical_concept",
+            "standardized_concept",
+            "source_name",
+            "variable_domain",
+            default=None,
+        )
+    elif domain == "safety":
+        concept_value = _first(
+            value,
+            "clinical_concept",
+            "standardized_concept",
+            "standard_term",
+            "source_term",
+            "original_term",
+            "term",
+            "event_term",
+            "event",
+            "category",
+            "family",
+            "safety_family",
+            default=None,
+        )
+        fallback_concept = _first(
+            source,
+            "clinical_concept",
+            "standardized_concept",
+            "standard_term",
+            "source_term",
+            "original_term",
+            "term",
+            "event_term",
+            "event",
+            "category",
+            "family",
+            "safety_family",
+            default=None,
+        )
+    elif domain == "disposition":
+        concept_value = _first(
+            value,
+            "clinical_concept",
+            "standardized_concept",
+            "field_label_zh",
+            "field",
+            "source_field_name",
+            "field_family",
+            default=None,
+        )
+        fallback_concept = _first(
+            source,
+            "clinical_concept",
+            "standardized_concept",
+            "field",
+            "source_field_name",
+            "field_family",
+            default=None,
+        )
+    else:
+        concept_value = _first(
+            value,
+            "clinical_concept",
+            "standardized_concept",
+            "label_zh",
+            default=None,
+        )
+        fallback_concept = _first(
+            source,
+            "clinical_concept",
+            "standardized_concept",
+            "label_zh",
+            default=None,
+        )
+    concept, concept_label = _controlled_concept(
+        concept_value if concept_value is not None else fallback_concept,
+        domain=domain if domain in _CLINICAL_CONCEPT_LOOKUPS else "efficacy",
+        fallback=fallback_concept,
+    )
+    raw_time = _first(
+        value,
+        "time_window",
+        "time_window_zh",
+        "timepoint",
+        "actual_timepoint",
+        "observed_timepoint",
+        "timepoint_value",
+        "baseline_timepoint",
+        "time",
+        default=None,
+    )
+    if raw_time is None:
+        raw_time = _first(
+            source,
+            "time_window",
+            "time_window_zh",
+            "timepoint",
+            "actual_timepoint",
+            "observed_timepoint",
+            "timepoint_value",
+            "baseline_timepoint",
+            "time",
+            default=None,
+        )
+    raw_time_unit = _first(
+        value,
+        "actual_timepoint_unit",
+        "time_unit",
+        "observed_time_unit",
+        "timepoint_unit",
+        default=None,
+    )
+    if raw_time_unit is None:
+        raw_time_unit = _first(
+            source,
+            "actual_timepoint_unit",
+            "time_unit",
+            "observed_time_unit",
+            "timepoint_unit",
+            default=None,
+        )
+    time_band, time_band_label = _time_band(raw_time, raw_time_unit)
+    raw_statistic = _first(
+        value,
+        "statistical_form_family",
+        "statistic_form",
+        "statistic_label_zh",
+        "analysis_form",
+        "effect_measure",
+        "measure_object",
+        "statistical_form",
+        default=None,
+    )
+    if raw_statistic is None:
+        raw_statistic = _first(
+            source,
+            "statistical_form_family",
+            "statistic_form",
+            "statistic_label_zh",
+            "analysis_form",
+            "effect_measure",
+            "measure_object",
+            "statistical_form",
+            default=None,
+        )
+    statistic, statistic_label = _canonical_statistical_form(
+        raw_statistic,
+        domain=domain,
+        concept=concept,
+        unit=_source_first(
+            value,
+            source,
+            "unit",
+            "measurement_unit",
+            "measure_unit",
+            "effect_unit",
+            default=None,
+        ),
+        numerator=_source_first(value, source, "numerator", default=None),
+        denominator=_source_first(value, source, "denominator", default=None),
+    )
+    raw_population = _first(
+        value,
+        "population_context",
+        "analysis_population",
+        "analysis_population_zh",
+        "population",
+        default=None,
+    )
+    if raw_population is None:
+        raw_population = _first(
+            source,
+            "population_context",
+            "analysis_population",
+            "analysis_population_zh",
+            "population",
+            default=None,
+        )
+    population, population_label = _canonical_population(raw_population)
+    raw_arm = _first(
+        value,
+        "arm_role",
+        "group_role",
+        "arm_type",
+        "arm_label",
+        "group_label",
+        "group_label_zh",
+        "arm",
+        "group",
+        "arm_id",
+        "group_id",
+        default=None,
+    )
+    if raw_arm is None:
+        raw_arm = _first(
+            source,
+            "arm_role",
+            "group_role",
+            "arm_type",
+            "arm_label",
+            "group_label",
+            "group_label_zh",
+            "arm",
+            "group",
+            "arm_id",
+            "group_id",
+            default=None,
+        )
+    arm_role, arm_label = _canonical_arm_role(raw_arm)
+    return {
+        "clinical_concept": concept,
+        "clinical_concept_label_zh": concept_label,
+        "time_window_band": time_band,
+        "time_window_band_label_zh": time_band_label,
+        "statistical_form_family": statistic,
+        "statistical_form_family_label_zh": statistic_label,
+        "population_context": population,
+        "population_context_label_zh": population_label,
+        "arm_role": arm_role,
+        "arm_role_label_zh": arm_label,
+    }
+
+
+class ReportBPortalError(ValueError):
+    """B 类门户输入、视图适配或物理站点构建失败。"""
+
+
+class ReportBSafetyRow(SafetyRow):
+    """B 类安全性行允许显式保存非数值披露状态及其医学原因。"""
+
+    disclosure_state: Literal["已公开", "未公开", "不适用"] = "已公开"
+    reason_zh: str | None = None
+
+
+class ReportBPortalData(ReportAPortalData):
+    """B 类门户输入合同。
+
+    The legacy report-data rows remain the minimum fixture contract.  Optional
+    immutable view sets are accepted under their Task 6.1--6.8 names so a real
+    B snapshot can be rendered without moving scientific projection into this
+    module's templates or JavaScript.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True, arbitrary_types_allowed=True)
+
+    safety: tuple[ReportBSafetyRow, ...] = Field(min_length=1)
+    report_snapshot_id: str | None = None
+    # 视图容器按结构化映射接收；任意对象（字符串/列表/模型实例）在边界被拒，
+    # 使 schema 漂移在此暴露而不是深入渲染后才失败。
+    efficacy_views: Mapping[str, Any] | None = None
+    safety_views: Mapping[str, Any] | None = None
+    baseline_views: Mapping[str, Any] | None = None
+    disposition_views: Mapping[str, Any] | None = None
+    supporting_evidence_views: Mapping[str, Any] | None = None
+    supporting_views: Mapping[str, Any] | None = None
+    subgroup_views: Mapping[str, Any] | None = None
+    subgroups_views: Mapping[str, Any] | None = None
+    matrix_view: Mapping[str, Any] | None = None
+    matrix_views: Mapping[str, Any] | None = None
+    views: Mapping[str, Any] | None = None
+    view_states: Mapping[str, Any] | None = None
+    semantic_proposals: tuple[SemanticGroupingProposal, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
+    semantic_adjudications: tuple[ApprovedSemanticMerge, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
+
+    @model_validator(mode="after")
+    def _snapshot_is_not_blank(self) -> Self:
+        if self.report_snapshot_id is not None and not self.report_snapshot_id.strip():
+            raise ValueError("B 类报告锁定快照标识不得为空")
+        return self
+
+
+def load_report_b_data(path: Path) -> ReportBPortalData:
+    """读取并校验 B 类门户数据包。"""
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ReportBPortalError(f"无法读取 B 类报告数据：{path}") from exc
+    try:
+        return ReportBPortalData.model_validate(payload)
+    except ValueError as exc:
+        raise ReportBPortalError(f"B 类报告数据不符合合同：{exc}") from exc
+
+
+_BASELINE_REQUIREMENTS = {
+    "baseline_sample_size": ("b_baseline_sample_size", "样本量"),
+    "age": ("b_baseline_age", "年龄"),
+    "sex": ("b_baseline_sex", "性别"),
+    "baseline_severity": ("b_baseline_severity_anchor", "疾病严重程度"),
+}
+
+
+def report_b_baseline_gate_failures(data: ReportBPortalData) -> tuple[dict[str, str], ...]:
+    """逐核心试验逐组检查 D70 四类基线事实，不跨组借值。"""
+    baseline_source = _get(data.baseline_views, "facts", ())
+    disposition_source = _get(data.disposition_views, "facts", ())
+    baseline_facts = tuple(item for item in baseline_source if isinstance(item, Mapping))
+    disposition_facts = tuple(item for item in disposition_source if isinstance(item, Mapping))
+    core_trials = {
+        trial.id: trial
+        for trial in data.trials
+        if "支持" not in trial.role and "事后" not in trial.role
+    }
+    groups_by_trial: dict[str, set[str]] = defaultdict(set)
+    for fact in (*baseline_facts, *disposition_facts):
+        trial_id = _text(fact.get("trial_id"))
+        group_id = _text(fact.get("group_id"))
+        if trial_id in core_trials and group_id:
+            groups_by_trial[trial_id].add(group_id)
+
+    concepts: dict[tuple[str, str], set[str]] = defaultdict(set)
+    for fact in baseline_facts:
+        trial_id = _text(fact.get("trial_id"))
+        group_id = _text(fact.get("group_id"))
+        if trial_id not in core_trials or not group_id:
+            continue
+        concept = _text(fact.get("standardized_concept"))
+        if _text(fact.get("variable_domain")) == "baseline_severity":
+            concepts[(trial_id, group_id)].add("baseline_severity")
+        if concept in {"baseline_sample_size", "sample_size", "baseline_n", "n"}:
+            concepts[(trial_id, group_id)].add("baseline_sample_size")
+        elif concept in {"age", "baseline_age", "age_at_baseline"}:
+            concepts[(trial_id, group_id)].add("age")
+        elif concept in {"sex", "gender", "baseline_sex", "baseline_gender"}:
+            concepts[(trial_id, group_id)].add("sex")
+
+    failures: list[dict[str, str]] = []
+    for trial_id, trial in sorted(core_trials.items()):
+        groups = sorted(groups_by_trial.get(trial_id) or {"未识别组别"})
+        for group_id in groups:
+            present = concepts.get((trial_id, group_id), set())
+            for concept, (failure_code, label) in _BASELINE_REQUIREMENTS.items():
+                if concept in present:
+                    continue
+                failures.append(
+                    {
+                        "failure_code": failure_code,
+                        "trial_id": trial_id,
+                        "trial": trial.display_id,
+                        "group_id": group_id,
+                        "field": concept,
+                        "field_zh": label,
+                    }
+                )
+    return tuple(failures)
+
+
+# ---------------------------------------------------------------------------
+# Small deterministic adaptation helpers
+# ---------------------------------------------------------------------------
+
+_MISSING = object()
+
+
+def _get(value: Any, name: str, default: Any = None) -> Any:
+    if value is None:
+        return default
+    if isinstance(value, Mapping):
+        return value.get(name, default)
+    try:
+        return getattr(value, name)
+    except (AttributeError, TypeError):
+        return default
+
+
+def _first(value: Any, *names: str, default: Any = None) -> Any:
+    for name in names:
+        candidate = _get(value, name, _MISSING)
+        if candidate is not _MISSING and candidate is not None:
+            return candidate
+    return default
+
+
+def _enum_value(value: Any) -> Any:
+    return value.value if isinstance(value, Enum) else value
+
+
+def _text(value: Any, default: str = "") -> str:
+    value = _enum_value(value)
+    if value is None:
+        return default
+    result = " ".join(str(value).split())
+    return result or default
+
+
+def _native_text(value: Any, default: str = "") -> str:
+    text = _text(value, default)
+    text = _NATIVE_LABELS.get(text, text)
+    return text.replace("Other events", "其他不良事件")
+
+
+def _iter_values(value: Any) -> tuple[Any, ...]:
+    if value is None:
+        return ()
+    if isinstance(value, (str, bytes)):
+        return (value,)
+    if isinstance(value, Mapping):
+        return (value,)
+    try:
+        return tuple(value)
+    except TypeError:
+        return (value,)
+
+
+def _collection(source: Any, *names: str) -> tuple[Any, ...]:
+    if source is None:
+        return ()
+    if isinstance(source, (list, tuple, set, frozenset)):
+        return tuple(source)
+    for name in names:
+        candidate = _get(source, name, _MISSING)
+        if candidate is not _MISSING and candidate is not None:
+            return _iter_values(candidate)
+    return ()
+
+
+def _flatten_view_rows(values: Sequence[Any]) -> tuple[Any, ...]:
+    result: list[Any] = []
+    nested_names = (
+        "complete_table",
+        "table_rows",
+        "fact_rows",
+        "selected_facts",
+        "facts",
+        "effect_rows",
+        "rows",
+    )
+    for value in values:
+        nested = _collection(value, *nested_names)
+        if nested:
+            result.extend(nested)
+        else:
+            result.append(value)
+    return tuple(result)
+
+
+def _number(value: Any) -> int | float | None:
+    value = _enum_value(value)
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        if isinstance(value, float) and not math.isfinite(value):
+            return None
+        return value
+    if isinstance(value, Mapping):
+        for key in ("value", "numeric_value", "number"):
+            if key in value:
+                return _number(value[key])
+    nested = _get(value, "value", _MISSING)
+    if nested is not _MISSING and nested is not value:
+        return _number(nested)
+    return None
+
+
+def _state(value: Any, numeric: int | float | None) -> str:
+    value = _enum_value(value)
+    if value is not None:
+        state = _STATE_ALIASES.get(str(value), str(value))
+    else:
+        state = "reported_value" if numeric is not None else "not_reported"
+    if numeric is None and state in _CONCRETE_STATES:
+        return "not_reported"
+    return state
+
+
+def _state_label(state: str) -> str:
+    return {
+        "reported_value": "已报告值",
+        "reported_zero": "已报告零值",
+        **_MISSING_STATE_LABELS,
+    }.get(state, "已报告")
+
+
+def _json(value: Any) -> str:
+    """Encode inline JSON safely for a file:// script block."""
+    return (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+    )
+
+
+def _canonical_json(value: Any) -> bytes:
+    payload = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return f"{payload}\n".encode()
+
+
+def _view_source(data: ReportBPortalData, name: str) -> Any:
+    candidates = [name]
+    aliases = {
+        "supporting_evidence_views": (
+            "supporting_views",
+            "subgroup_views",
+            "subgroups_views",
+            "supporting_evidence",
+            "subgroups",
+        ),
+    }
+    candidates.extend(aliases.get(name, ()))
+    if name.endswith("_views"):
+        candidates.append(name.removesuffix("_views"))
+    if name == "matrix_view":
+        candidates.append("matrix_views")
+    for candidate_name in candidates:
+        candidate = _get(data, candidate_name, None)
+        if candidate is not None:
+            return candidate
+    for container_name in ("views", "view_states"):
+        container = _get(data, container_name, None)
+        if isinstance(container, Mapping):
+            for candidate_name in candidates:
+                if candidate_name in container and container[candidate_name] is not None:
+                    return container[candidate_name]
+    return None
+
+
+def _unwrap_fact(value: Any) -> Any:
+    for name in ("fact", "observation", "original_observation"):
+        nested = _get(value, name, _MISSING)
+        if nested is not _MISSING and nested is not None:
+            return nested
+    return value
+
+
+def _stable_row_id(value: Any, fallback: str) -> str:
+    candidate = _first(
+        value,
+        "row_id",
+        "fact_row_id",
+        "fact_version_id",
+        "comparison_row_id",
+        "source_row_id",
+        "id",
+        default=None,
+    )
+    return _text(candidate, fallback)
+
+
+def _source_row_id(value: Any, fallback: str) -> str:
+    return _text(
+        _first(value, "source_row_id", "source_row", "source_line_id", "row_ref", default=None),
+        fallback,
+    )
+
+
+def _product_id(value: Any) -> str:
+    return _text(_first(value, "product_id", "project_id", default=""))
+
+
+def _trial_id(value: Any) -> str:
+    return _text(_first(value, "trial_id", "study_id", default=""))
+
+
+def _label_for(value: Any, domain: str) -> str:
+    if domain == "efficacy":
+        candidate = _first(
+            value,
+            "endpoint_family_label_zh",
+            "endpoint_label_zh",
+            "family_label_zh",
+            "original_endpoint",
+            "endpoint",
+            "endpoint_family_id",
+            default=None,
+        )
+        return _native_text(candidate, "疗效指标")
+    if domain == "safety":
+        candidate = _first(
+            value,
+            "standard_term",
+            "source_term",
+            "term",
+            "event_term",
+            "category",
+            "family",
+            default=None,
+        )
+        return _native_text(candidate, "安全性事件")
+    if domain == "baseline":
+        candidate = _first(
+            value,
+            "variable_label_zh",
+            "standardized_concept",
+            "source_name",
+            "variable_domain",
+            default=None,
+        )
+        return _native_text(candidate, "基线变量")
+    if domain == "disposition":
+        candidate = _first(
+            value,
+            "field_label_zh",
+            "field",
+            "source_field_name",
+            "field_family",
+            default=None,
+        )
+        return _native_text(candidate, "试验完成情况")
+    candidate = _first(value, "display_label_zh", "name", "label_zh", default=None)
+    return _native_text(candidate, "研究记录")
+
+
+def _arm_label(value: Any) -> str:
+    candidate = _first(value, "arm_label", "group_label", "group_label_zh", "arm", default=None)
+    if candidate is not None:
+        raw = _text(_enum_value(candidate))
+        canonical, canonical_label = _canonical_arm_role(raw)
+        # 角色别名（active/placebo 等）归一为中文角色；登记专名（如
+        # Danicopan-Danicopan、Cohort 1）保留原文（第十五轮复核修复）
+        if canonical != "unknown":
+            return canonical_label
+        if raw:
+            return raw
+    role = _text(_first(value, "arm_role", "group_role", "arm_type", default=""))
+    canonical, canonical_label = _canonical_arm_role(role)
+    if canonical != "unknown":
+        return canonical_label
+    identifier = _text(_first(value, "group_id", "arm_id", "cohort_id", default="")).casefold()
+    if "control" in identifier or "placebo" in identifier:
+        return "对照组"
+    if "treatment" in identifier or "treated" in identifier:
+        return "治疗组"
+    if "cohort" in identifier:
+        return "全研究人群"
+    return "组别未列示"
+
+
+def _category_for(value: Any, domain: str, arm: str) -> str:
+    if domain != "safety":
+        return arm
+    category = _text(
+        _first(value, "category", "family", "event_family", "safety_family", default=""),
+        "安全性事件",
+    )
+    aliases = {
+        "teae": "治疗期间不良事件",
+        "sae": "严重不良事件",
+        "aesi": "特别关注不良事件",
+        "common_ae": "常见不良事件",
+        "death": "死亡",
+        "grade_3_plus": "3级及以上不良事件",
+        "discontinuation_ae": "导致停药不良事件",
+        "treatment_related_teae": "治疗相关不良事件",
+    }
+    return aliases.get(category.casefold(), category)
+
+
+def _time_label(value: Any) -> str:
+    candidate = _first(
+        value,
+        "timepoint",
+        "actual_timepoint",
+        "observed_timepoint",
+        "timepoint_value",
+        "time_window_zh",
+        "time_window",
+        default=None,
+    )
+    if candidate is None:
+        return "时间点未列示"
+    unit = _first(value, "actual_timepoint_unit", "time_unit", "timepoint_unit", default=None)
+    if unit and isinstance(candidate, (int, float)):
+        unit_zh = {
+            "day": "天",
+            "days": "天",
+            "week": "周",
+            "weeks": "周",
+            "month": "个月",
+            "months": "个月",
+            "year": "年",
+            "years": "年",
+        }.get(_text(unit).casefold(), _text(unit))
+        return f"第{candidate:g}{unit_zh}"
+    return _text(candidate, "时间点未列示")
+
+
+def _value_for(value: Any) -> int | float | None:
+    candidate = _first(
+        value,
+        "numeric_value",
+        "observed_value",
+        "value",
+        "reported_proportion",
+        "effect_value",
+        "raw_numeric_value",
+        default=None,
+    )
+    return _number(candidate)
+
+
+def _unit_for(value: Any, default: str = "") -> str:
+    return _text(
+        _first(
+            value,
+            "unit",
+            "measurement_unit",
+            "measure_unit",
+            "effect_unit",
+            default=default,
+        )
+    )
+
+
+def _source_version(value: Any) -> str:
+    return _text(
+        _first(
+            value,
+            "source_version_id",
+            "source_version",
+            "captured_version",
+            default="ctgov-fixture",
+        ),
+        "ctgov-fixture",
+    )
+
+
+def _source_locator(value: Any, row_id: str) -> EvidenceLocator:
+    candidate = _first(value, "source_locator", "locator", "source_location", default=None)
+    if isinstance(candidate, EvidenceLocator):
+        return candidate
+    if isinstance(candidate, Mapping):
+        try:
+            return EvidenceLocator.model_validate(candidate)
+        except (TypeError, ValueError):
+            pass
+    return EvidenceLocator(document_role="registry", heading="登记结果")
+
+
+def _display_locator(value: Any, row_id: str) -> EvidenceLocator:
+    """Hide storage keys while keeping a useful source-facing anchor."""
+    locator = _source_locator(value, row_id)
+    visible = {
+        "document_role": locator.document_role,
+        "heading": locator.heading,
+        "page": locator.page,
+        "table": locator.table,
+        "column": locator.column,
+        "paragraph": locator.paragraph,
+        "url": locator.url,
+    }
+    if not any(value for key, value in visible.items() if key != "document_role"):
+        visible["heading"] = "登记结果"
+    return EvidenceLocator.model_validate(visible)
+
+
+def _source_first(value: Any, source: Any, *names: str, default: Any = None) -> Any:
+    candidate = _first(value, *names, default=_MISSING)
+    if candidate is not _MISSING and candidate is not None:
+        return candidate
+    return _first(source, *names, default=default)
+
+
+def _project_record(
+    value: Any,
+    *,
+    domain: str,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    fallback: str,
+) -> dict[str, Any]:
+    source = _unwrap_fact(value)
+    row_id = _stable_row_id(value, fallback)
+    product_id = _product_id(value) or _product_id(source)
+    trial_id = _trial_id(value) or _trial_id(source)
+    numeric = _value_for(value)
+    raw_state = _first(value, "disclosure_state", default=None)
+    state = _state(raw_state, numeric)
+    renderable = numeric is not None and state in _CONCRETE_STATES
+    product_name = names.get(product_id, "未列示产品")
+    trial_name = trial_names.get(trial_id, "未列示试验")
+    label = _label_for(value, domain)
+    arm = _arm_label(value)
+    category = _category_for(value, domain, arm)
+    unit = _text(
+        _source_first(
+            value,
+            source,
+            "unit",
+            "measurement_unit",
+            "measure_unit",
+            "effect_unit",
+            default="%" if domain in {"efficacy", "safety"} else "",
+        )
+    )
+    cohort = _native_text(_source_first(value, source, "cohort_id", "cohort", default=""))
+    period = _native_text(_source_first(value, source, "period_id", "period", "phase", default=""))
+    reason = _native_text(
+        _source_first(value, source, "canonical_reason", "reason_zh", "reason", default="")
+    )
+    target = _native_text(_source_first(value, source, "target_id", "target", default=""))
+    group_id = _text(_source_first(value, source, "group_id", "arm_id", "group", default=""))
+    population = _text(
+        _source_first(
+            value,
+            source,
+            "analysis_population_zh",
+            "analysis_population",
+            "population",
+            default="",
+        ),
+    )
+    field_family = _native_text(
+        _source_first(value, source, "field_family", "variable_domain", default="")
+    )
+    statistic_form = _native_text(
+        _source_first(
+            value,
+            source,
+            "statistic_form",
+            "statistic_label_zh",
+            "statistical_form",
+            default="",
+        )
+    )
+    denominator_role = _native_text(_source_first(value, source, "denominator_role", default=""))
+    measure_object = _native_text(_source_first(value, source, "measure_object", default=""))
+    time_label = _time_label(value)
+    time_window = _text(
+        _source_first(
+            value,
+            source,
+            "time_window_zh",
+            "time_window",
+            "baseline_timepoint",
+            default=time_label,
+        ),
+        time_label,
+    )
+    numerator = _number(_source_first(value, source, "numerator", default=None))
+    denominator = _number(_source_first(value, source, "denominator", default=None))
+    semantics = _semantic_projection(value, source, domain=domain)
+    actual_timepoint = _source_first(
+        value,
+        source,
+        "actual_timepoint",
+        "timepoint",
+        "observed_timepoint",
+        "timepoint_value",
+        default=None,
+    )
+    actual_timepoint_unit = _text(
+        _source_first(
+            value,
+            source,
+            "actual_timepoint_unit",
+            "time_unit",
+            "observed_time_unit",
+            "timepoint_unit",
+            default="",
+        )
+    )
+    original_endpoint = _text(
+        _source_first(
+            value,
+            source,
+            "original_endpoint",
+            "endpoint_id",
+            "raw_endpoint",
+            "endpoint",
+            "original_event",
+            "original_term",
+            "standard_term",
+            "source_term",
+            "term",
+            "event_term",
+            "event",
+            default="",
+        )
+    )
+    original_definition = _text(
+        _source_first(
+            value,
+            source,
+            "original_definition",
+            "endpoint_definition",
+            "endpoint_definition_zh",
+            "source_field_definition",
+            "event_definition_zh",
+            "event_definition",
+            "raw_definition",
+            "definition",
+            "source_definition",
+            "baseline_definition",
+        )
+    )
+    original_variable = _text(
+        _source_first(
+            value,
+            source,
+            "original_variable",
+            "variable_label_zh",
+            "variable",
+            "variable_name",
+            "source_field_name",
+            "source_field",
+            "source_name",
+            "standardized_concept",
+            "source_definition",
+            default="",
+        )
+    )
+    study_identity = "｜".join(item for item in (product_name, trial_name) if item)
+    source_name = _text(_source_first(value, source, "source_name", "source", default=""))
+    scope = _text(_source_first(value, source, "scope", default=""))
+    maturity = _text(_source_first(value, source, "maturity", default=""))
+    limitation = _text(_source_first(value, source, "limitation", default=""))
+    status_value = _native_text(
+        _source_first(value, source, "status", "status_label_zh", default="")
+    )
+    role = _text(_source_first(value, source, "role", default=""))
+    phase = _text(_source_first(value, source, "phase", default=""))
+    sample_size = _number(_source_first(value, source, "sample_size", default=None))
+    treatment_sample_size = _number(
+        _source_first(value, source, "treatment_sample_size", default=None)
+    )
+    modality = _text(_source_first(value, source, "modality", default=""))
+    developer = _text(_source_first(value, source, "developer", default=""))
+    mechanism = _text(_source_first(value, source, "mechanism", default=""))
+    route = _text(_source_first(value, source, "route", default=""))
+    result_status = _text(_source_first(value, source, "result_status", default=""))
+    regions = _first(value, "regions", default=None)
+    if regions is None:
+        regions = _first(source, "regions", default=None)
+    coverage = _number(_source_first(value, source, "coverage", default=None))
+    result: dict[str, Any] = {
+        "row_id": row_id,
+        "_domain": domain,
+        "product_id": product_id,
+        "trial_id": trial_id,
+        "target": target,
+        "target_id": target,
+        "display_label_zh": label,
+        "element": label,
+        "product_zh": product_name,
+        "trial_zh": trial_name,
+        "study_identity": study_identity,
+        "identity_label_zh": study_identity or "产品与试验未列示",
+        "arm": arm,
+        "group": arm,
+        "group_id": group_id,
+        "arm_role": semantics["arm_role"],
+        "arm_role_label_zh": semantics["arm_role_label_zh"],
+        "arm_detail": _native_text(
+            _source_first(value, source, "arm_detail", "arm_name", "group_name", default="")
+        ),
+        "cohort": cohort,
+        "period": period,
+        "category": category,
+        "event": label,
+        "time": time_label,
+        "actual_timepoint": actual_timepoint,
+        "actual_timepoint_unit": actual_timepoint_unit,
+        "time_window": time_window,
+        "time_window_band": semantics["time_window_band"],
+        "time_window_band_label_zh": semantics["time_window_band_label_zh"],
+        "population": population,
+        "population_context": semantics["population_context"],
+        "population_context_label_zh": semantics["population_context_label_zh"],
+        "field_family": field_family,
+        "reason": reason,
+        "statistic_form": statistic_form,
+        "statistical_form_family": semantics["statistical_form_family"],
+        "statistical_form_family_label_zh": semantics["statistical_form_family_label_zh"],
+        "clinical_concept": semantics["clinical_concept"],
+        "clinical_concept_label_zh": semantics["clinical_concept_label_zh"],
+        "semantic_definition": original_definition,
+        "semantic_direction": _text(
+            _source_first(value, source, "direction", "endpoint_direction", default=""),
+            "direction-not-reported",
+        ),
+        "semantic_estimand": _text(
+            _source_first(value, source, "estimand", "estimand_label", default=""),
+            "estimand-not-reported",
+        ),
+        "semantic_denominator": _text(
+            _source_first(
+                value,
+                source,
+                "denominator_semantics",
+                "denominator_definition",
+                "denominator_role",
+                default="",
+            ),
+            "denominator-not-reported",
+        ),
+        "semantic_analysis_set": semantics["population_context"],
+        "semantic_analysis_form": semantics["statistical_form_family"],
+        "semantic_instrument_or_scale": _text(
+            _source_first(
+                value,
+                source,
+                "instrument_or_scale",
+                "scale_version",
+                "scale",
+                "instrument",
+                default="",
+            ),
+            "instrument-or-scale-not-reported",
+        ),
+        "original_endpoint": original_endpoint,
+        "original_definition": original_definition,
+        "original_variable": original_variable,
+        "original_variable_label_zh": _native_text(original_variable, "原始变量未列示"),
+        "status": status_value or _state_label(state),
+        "source_version_id": _source_version(value),
+        "source_name": source_name,
+        "scope": scope,
+        "maturity": maturity,
+        "limitation": limitation,
+        "role": role,
+        "phase": phase,
+        "sample_size": sample_size,
+        "treatment_sample_size": treatment_sample_size,
+        "modality": modality,
+        "developer": developer,
+        "mechanism": mechanism,
+        "route": route,
+        "result_status": result_status,
+        "regions": regions,
+        "coverage": coverage,
+        "denominator_role": denominator_role,
+        "measure_object": measure_object,
+        "unit": unit,
+        "numerator": numerator,
+        "denominator": denominator,
+        "value": numeric,
+        "numeric_value": numeric,
+        "renderable": renderable,
+        "disclosure_state": state,
+        "difference_note": "；".join(
+            dict.fromkeys(
+                _native_text(item)
+                for item in (
+                    *_iter_values(
+                        _source_first(
+                            value,
+                            source,
+                            "compatibility_difference_labels_zh",
+                            "difference_labels_zh",
+                            default=(),
+                        )
+                    ),
+                    _source_first(value, source, "reason_zh", "reason", default=""),
+                )
+                if _text(item)
+            )
+        ),
+    }
+    result["_source_binding"] = semantic_source_digest(value)
+    if domain == "safety":
+        result["value_matrix"] = numeric
+    if domain == "baseline":
+        result["variable"] = label
+        result["statistic"] = (
+            _native_text(
+                _source_first(
+                    value,
+                    source,
+                    "statistic_label_zh",
+                    "statistic_form",
+                    "statistical_form",
+                    default="",
+                )
+            )
+            or semantics["statistical_form_family_label_zh"]
+        )
+        result["time"] = _text(
+            _source_first(
+                value,
+                source,
+                "baseline_timepoint",
+                "time_window",
+                "timepoint",
+                default=result["time"],
+            ),
+            result["time"],
+        )
+        result["actual_timepoint"] = _source_first(
+            value,
+            source,
+            "baseline_timepoint",
+            "actual_timepoint",
+            "timepoint",
+            default=result["actual_timepoint"],
+        )
+    if domain == "disposition":
+        result["field"] = label
+        result["status"] = (
+            _native_text(
+                _first(value, "display_value_zh", "status_label_zh", default="已报告"),
+                "已报告",
+            )
+            if renderable
+            else _state_label(state)
+        )
+    if domain == "matrix":
+        point = _first(value, "point", default=None)
+        result["x_value"] = _number(_first(point, "x_value", "x", default=None))
+        result["y_value"] = _number(_first(point, "y_value", "y", default=None))
+        result["size"] = _number(_first(point, "radius", "area", "size", default=None))
+        result["renderable"] = all(
+            result[key] is not None for key in ("x_value", "y_value", "size")
+        )
+        result["value"] = result["x_value"]
+        result["numeric_value"] = result["x_value"]
+        if result["renderable"]:
+            result["arm"] = "试验内治疗组与对照组"
+            result["group"] = result["arm"]
+            result["status"] = "可比较"
+            result["disclosure_state"] = "reported_value"
+        elif result["status"] == "不适用":
+            result["arm"] = "不适用"
+            result["group"] = result["arm"]
+            result["disclosure_state"] = "not_applicable"
+    return result
+
+
+def _dedupe_records(
+    records: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    seen: dict[str, tuple[str, str]] = {}
+    result: list[tuple[dict[str, Any], Any]] = []
+    for row, source in records:
+        row_id = _text(row.get("row_id"))
+        if not row_id:
+            raise ValueError("科学视图观察缺少标识")
+        identity = (_text(row.get("_domain")), semantic_row_digest(row))
+        if row_id in seen:
+            if seen[row_id] != identity:
+                raise ValueError("科学视图同一观察标识存在域或事实冲突")
+            continue
+        seen[row_id] = identity
+        result.append((row, source))
+    return tuple(result)
+
+
+def _legacy_or_view_rows(
+    data: ReportBPortalData,
+    *,
+    view_name: str,
+    legacy_name: str,
+    view_fields: tuple[str, ...],
+    table_fields: tuple[str, ...] = (),
+) -> tuple[Any, ...]:
+    source = _view_source(data, view_name)
+    if source is not None:
+        fields = (
+            *view_fields,
+            "single_timepoint_views",
+            "longitudinal_views",
+            "source_effect_size_views",
+            "heatmap_views",
+            "chart_panels",
+        )
+        if isinstance(source, Mapping):
+            for field in fields:
+                candidate = _get(source, field, _MISSING)
+                if candidate is not _MISSING and candidate is not None:
+                    rows = _flatten_view_rows(_iter_values(candidate))
+                    if rows:
+                        return rows
+        rows = _flatten_view_rows(_collection(source, *view_fields))
+        if rows:
+            # A view state complete table is already a projection; its nested
+            # fact is unwrapped by the record adapter without recomputation.
+            return rows
+    return tuple(_get(data, legacy_name, ()) or ())
+
+
+def _efficacy_records(
+    data: ReportBPortalData,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    values = _legacy_or_view_rows(
+        data,
+        view_name="efficacy_views",
+        legacy_name="efficacy",
+        view_fields=("fact_rows", "facts", "rows"),
+    )
+    records: list[tuple[dict[str, Any], Any]] = []
+    for index, value in enumerate(values):
+        row = _project_record(
+            value,
+            domain="efficacy",
+            names=names,
+            trial_names=trial_names,
+            fallback=f"efficacy-{index + 1}",
+        )
+        records.append((row, value))
+    return _dedupe_records(records)
+
+
+def _safety_records(
+    data: ReportBPortalData,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    values = _legacy_or_view_rows(
+        data,
+        view_name="safety_views",
+        legacy_name="safety",
+        view_fields=("fact_rows", "facts", "rows"),
+    )
+    records = [
+        (
+            _project_record(
+                value,
+                domain="safety",
+                names=names,
+                trial_names=trial_names,
+                fallback=f"safety-{index + 1}",
+            ),
+            value,
+        )
+        for index, value in enumerate(values)
+    ]
+    row_ids = {row["row_id"] for row, _source in records}
+    for legacy in data.safety:
+        if legacy.row_id in row_ids or legacy.disclosure_state == "已公开":
+            continue
+        records.append(
+            (
+                _project_record(
+                    legacy,
+                    domain="safety",
+                    names=names,
+                    trial_names=trial_names,
+                    fallback=legacy.row_id,
+                ),
+                legacy,
+            )
+        )
+    return _dedupe_records(records)
+
+
+def _state_rows_from_view(
+    data: ReportBPortalData,
+    *,
+    view_name: str,
+    page_id: str,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    domain: str,
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    source = _view_source(data, view_name)
+    if source is None:
+        return ()
+    if isinstance(source, Mapping):
+        page_source = _get(source, page_id, _MISSING)
+        if page_source is not _MISSING and page_source is not None:
+            source = page_source
+    values = _flatten_view_rows(
+        _collection(
+            source,
+            "complete_table",
+            "selected_facts",
+            "facts",
+            "table_rows",
+            "rows",
+        )
+    )
+    records_list: list[tuple[dict[str, Any], Any]] = []
+    for index, value in enumerate(values):
+        row = _project_record(
+            value,
+            domain=domain,
+            names=names,
+            trial_names=trial_names,
+            fallback=f"{domain}-{index + 1}",
+        )
+        row["_domain"] = domain
+        records_list.append((row, value))
+    records = tuple(records_list)
+    return _dedupe_records(records)
+
+
+def _synthetic_status_records(
+    data: ReportBPortalData,
+    *,
+    page_id: str,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    include_products: bool = False,
+    domain: str = "generic",
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    records: list[tuple[dict[str, Any], Any]] = []
+    if include_products:
+        for product in data.products:
+            row_id = f"{page_id}-product-{product.id}"
+            source: dict[str, Any] = {
+                "row_id": row_id,
+                "product_id": product.id,
+                "label_zh": product.name,
+                "target": product.target,
+                "modality": product.modality,
+                "phase": product.phase,
+                "status": product.status,
+                "result_status": product.result_status,
+                "regions": product.regions,
+                "route": product.route,
+                "developer": product.developer,
+                "mechanism": product.mechanism,
+                "disclosure_state": "reported_value",
+            }
+            synthetic_row = _project_record(
+                source,
+                domain=domain,
+                names=names,
+                trial_names=trial_names,
+                fallback=row_id,
+            )
+            synthetic_row["_synthetic"] = True
+            records.append((synthetic_row, source))
+    else:
+        for trial in data.trials:
+            row_id = f"{page_id}-{trial.id}"
+            source = {
+                "row_id": row_id,
+                "product_id": trial.product_id,
+                "trial_id": trial.id,
+                "label_zh": f"{trial_names.get(trial.id, trial.name)}的相关记录",
+                "unit": "人",
+                "phase": trial.phase,
+                "status": trial.status,
+                "role": trial.role,
+                "sample_size": trial.sample_size,
+                "treatment_sample_size": trial.treatment_sample_size,
+                "disclosure_state": "reported_value",
+            }
+            synthetic_row = _project_record(
+                source,
+                domain=domain,
+                names=names,
+                trial_names=trial_names,
+                fallback=row_id,
+            )
+            synthetic_row["_synthetic"] = True
+            records.append((synthetic_row, source))
+    return tuple(records)
+
+
+def _domain_empty_records(
+    data: ReportBPortalData,
+    *,
+    page_id: str,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    domain: str,
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    records: list[tuple[dict[str, Any], Any]] = []
+    for trial in data.trials:
+        row_id = f"{page_id}-{trial.id}-empty"
+        label_key = "variable_label_zh" if domain == "baseline" else "field_label_zh"
+        source: dict[str, Any] = {
+            "row_id": row_id,
+            "product_id": trial.product_id,
+            "trial_id": trial.id,
+            label_key: "暂无公开记录",
+            "disclosure_state": "not_reported",
+            "_empty_state": True,
+        }
+        row = _project_record(
+            source,
+            domain=domain,
+            names=names,
+            trial_names=trial_names,
+            fallback=row_id,
+        )
+        row["_empty_state"] = True
+        row["status"] = "暂无公开记录"
+        records.append((row, source))
+    return tuple(records)
+
+
+def _trial_context_records(
+    data: ReportBPortalData,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    records: list[tuple[dict[str, Any], Any]] = []
+    for trial in data.trials:
+        row_id = f"trial-context-{trial.id}"
+        source = {
+            "row_id": row_id,
+            "product_id": trial.product_id,
+            "trial_id": trial.id,
+            "display_label_zh": f"{trial_names.get(trial.id, trial.name)}样本量",
+            "value": trial.sample_size,
+            "unit": "人",
+            "disclosure_state": "reported_value",
+            "status": trial.status,
+            "role": trial.role,
+            "phase": trial.phase,
+            "sample_size": trial.sample_size,
+            "treatment_sample_size": trial.treatment_sample_size,
+            "time": trial.phase,
+        }
+        records.append(
+            (
+                _project_record(
+                    source,
+                    domain="generic",
+                    names=names,
+                    trial_names=trial_names,
+                    fallback=row_id,
+                ),
+                source,
+            )
+        )
+    return tuple(records)
+
+
+def _matrix_records(
+    data: ReportBPortalData,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    source = _view_source(data, "matrix_view")
+    if source is None:
+        return ()
+    if isinstance(source, Mapping):
+        source = _get(source, "efficacy-safety-matrix", source)
+    values = _flatten_view_rows(
+        _collection(source, "complete_table", "comparison_rows", "rows", "matrix_rows")
+    )
+    point_by_id: dict[str, Any] = {}
+    for point_source in (source, _get(source, "chart", None)):
+        for point in _collection(point_source, "points", "bubble_points"):
+            point_id = _text(
+                _first(point, "comparison_row_id", "row_id", "comparison_id", default="")
+            )
+            if point_id:
+                point_by_id[point_id] = point
+    result: list[tuple[dict[str, Any], Any]] = []
+    for index, value in enumerate(values):
+        comparison = _get(value, "comparison_row", None) or value
+        original = _first(
+            comparison,
+            "efficacy_treatment",
+            "efficacy_control",
+            "safety_treatment",
+            "safety_control",
+            default=comparison,
+        )
+        point = _first(value, "point", default=None)
+        if point is None:
+            point = point_by_id.get(_stable_row_id(value, ""))
+        projected_value = value
+        if point is not None and _get(value, "point", None) is None:
+            projected_value = {
+                "row_id": _stable_row_id(value, f"matrix-{index + 1}"),
+                "product_id": _product_id(value) or _product_id(comparison),
+                "trial_id": _trial_id(value) or _trial_id(comparison),
+                "target_id": _first(comparison, "target_id", "target", default=""),
+                "display_label_zh": _label_for(comparison, "efficacy"),
+                "difference_labels_zh": _first(
+                    comparison,
+                    "compatibility_difference_labels_zh",
+                    "difference_labels_zh",
+                    default=(),
+                ),
+                "comparison_row": comparison,
+                "point": point,
+            }
+        row = _project_record(
+            projected_value,
+            domain="matrix",
+            names=names,
+            trial_names=trial_names,
+            fallback=f"matrix-{index + 1}",
+        )
+        if not row["product_id"]:
+            row["product_id"] = _product_id(comparison)
+            row["product_zh"] = names.get(row["product_id"], "未列示产品")
+        if not row["trial_id"]:
+            row["trial_id"] = _trial_id(comparison)
+            row["trial_zh"] = trial_names.get(row["trial_id"], "未列示试验")
+        result.append((row, original))
+    return _dedupe_records(result)
+
+
+# ---------------------------------------------------------------------------
+# Evidence projection and chart payloads
+# ---------------------------------------------------------------------------
+
+
+def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
+    if value is not None and _text(value):
+        return EvidenceField(value=_text(value))
+    state_map = {
+        "not_applicable": EvidenceFieldState.NOT_APPLICABLE,
+        "not_reported": EvidenceFieldState.SOURCE_NOT_LISTED,
+        "not_publicly_disclosed": EvidenceFieldState.NOT_YET_DISCLOSED,
+        "below_reporting_threshold": EvidenceFieldState.NOT_YET_DISCLOSED,
+        "unresolved_due_to_route": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
+        "conflicting": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
+    }
+    return EvidenceField(state=state_map.get(state or "", EvidenceFieldState.SOURCE_NOT_LISTED))
+
+
+def _disclosure_enum(state: str) -> FactDisclosureState:
+    try:
+        return FactDisclosureState(state)
+    except ValueError:
+        return FactDisclosureState.NOT_REPORTED
+
+
+def _extension_field(source: Any, row: Mapping[str, Any], *names: str) -> EvidenceField:
+    value = _first(source, *names, default=None)
+    if value is None and names:
+        value = row.get(names[0])
+    if isinstance(value, (list, tuple)):
+        value = "、".join(_text(item) for item in value if _text(item)) or None
+    return _evidence_field(value, str(row.get("disclosure_state", "not_reported")))
+
+
+def _evidence_view(
+    data: ReportBPortalData,
+    *,
+    row: Mapping[str, Any],
+    source: Any,
+    page_id: str,
+    observation_kind: EvidenceObservationKind,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+) -> EvidenceView:
+    row_id = _text(row.get("row_id"), "unknown-row")
+    state = _text(row.get("disclosure_state"), "not_reported")
+    product_id = _text(row.get("product_id"))
+    trial_id = _text(row.get("trial_id"))
+    snapshot = _text(
+        data.report_snapshot_id
+        or _first(source, "report_snapshot_id", "snapshot_id", default=None),
+        f"b-{data.report_version}",
+    )
+    product = names.get(product_id, "未列示产品")
+    trial = trial_names.get(trial_id, "未列示试验")
+    if page_id == "evidence-limitations" and not product_id and not trial_id:
+        product = ""
+        trial = ""
+    label = _text(row.get("display_label_zh"), "研究记录")
+    numeric = _number(row.get("numeric_value"))
+    value_field = _evidence_field(None, state) if numeric is None else _evidence_field(numeric)
+    group = _text(row.get("arm"), "组别未列示")
+    source_id = _source_version(source)
+    source_label = "ClinicalTrials.gov"
+    report_row = ReportRow.model_construct(
+        row_id=row_id,
+        fact_id=_source_row_id(source, row_id),
+        claim_id=None,
+        product_id=product_id or None,
+        trial_id=trial_id or None,
+        group_id=None,
+        endpoint_id=None,
+        event_id=None,
+        timepoint_id=None,
+        display_label_zh=label,
+        page_responsibility_id=page_id,
+        report_snapshot_id=snapshot,
+        disclosure_state=_disclosure_enum(state),
+    )
+    common = {
+        "report_kind": ReportKind.B,
+        "observation_kind": observation_kind,
+        "row": report_row,
+        "product_zh": product,
+        "trial_zh": trial,
+        "group_zh": _evidence_field(group),
+        "element_zh": label,
+        "scale": _extension_field(source, row, "scale", "scale_version"),
+        "timepoint": _evidence_field(row.get("time"), state),
+        "value": value_field,
+        "threshold": _extension_field(source, row, "threshold", "adherence_threshold"),
+        "unit": _evidence_field(row.get("unit"), state),
+        "numerator": _evidence_field(
+            _first(source, "numerator", default=row.get("numerator")), state
+        ),
+        "denominator": _evidence_field(
+            _first(source, "denominator", default=row.get("denominator")), state
+        ),
+        "source_version_id": source_id,
+        "source_version_label_zh": source_label,
+        "locator": _display_locator(source, row_id),
+        "explanation": _evidence_field(f"该记录保留来源披露状态：{_state_label(state)}。"),
+        "original_text": None,
+        "original_text_status": OriginalTextStatus.NOT_PROVIDED,
+        "conflicts": (),
+        "historical_versions": (),
+    }
+    if observation_kind in {
+        EvidenceObservationKind.BASELINE_OBSERVATION,
+        EvidenceObservationKind.TRIAL_DISPOSITION_OBSERVATION,
+    }:
+        common.update(
+            {
+                "canonical_variable_family": _extension_field(
+                    source, row, "canonical_variable_family", "variable_domain", "field_family"
+                ),
+                "source_field_name": _extension_field(
+                    source, row, "source_field_name", "source_name", "source_field_definition"
+                ),
+                "source_field_definition": _extension_field(
+                    source, row, "source_field_definition", "source_definition"
+                ),
+                "statistical_form_or_measurement_object": _extension_field(
+                    source, row, "statistical_form", "statistic_form", "measure_object"
+                ),
+                "scale_version_direction": _extension_field(
+                    source, row, "scale_version", "direction"
+                ),
+                "denominator_role": _extension_field(source, row, "denominator_role"),
+                "time_window_or_baseline_definition": _extension_field(
+                    source, row, "time_window", "baseline_definition", "baseline_timepoint"
+                ),
+                "reason_original_text": None,
+                "canonical_reason": _extension_field(source, row, "canonical_reason", "reason_zh"),
+                "mutual_exclusion_exhaustiveness": _extension_field(
+                    source, row, "mutual_exclusion_exhaustiveness"
+                ),
+                "compatibility_rule": _extension_field(source, row, "compatibility_rule"),
+                "difference_label": _extension_field(
+                    source, row, "difference_labels_zh", "difference_label"
+                ),
+            }
+        )
+    return EvidenceView.model_construct(None, **common)
+
+
+def _observation_kind(page_id: str) -> EvidenceObservationKind:
+    if page_id in _BASELINE_PAGE_IDS:
+        return EvidenceObservationKind.BASELINE_OBSERVATION
+    if page_id in _DISPOSITION_PAGE_IDS:
+        return EvidenceObservationKind.TRIAL_DISPOSITION_OBSERVATION
+    return EvidenceObservationKind.GENERAL
+
+
+def _observation_kind_for_row(
+    row: Mapping[str, Any],
+    page_id: str,
+) -> EvidenceObservationKind:
+    domain = _text(row.get("_domain"))
+    if domain == "baseline":
+        return EvidenceObservationKind.BASELINE_OBSERVATION
+    if domain == "disposition":
+        return EvidenceObservationKind.TRIAL_DISPOSITION_OBSERVATION
+    return _observation_kind(page_id)
+
+
+def _semantic_domain_for_page(page_id: str) -> str:
+    if page_id in {"efficacy", "longitudinal-results"}:
+        return "efficacy"
+    if page_id == "subgroups-supporting-evidence":
+        return "supporting"
+    if page_id == "safety":
+        return "safety"
+    if page_id in _BASELINE_PAGE_IDS:
+        return "baseline"
+    if page_id in _DISPOSITION_PAGE_IDS:
+        return "disposition"
+    return "generic"
+
+
+def _records_with_semantics(
+    records: Sequence[tuple[dict[str, Any], Any]],
+    *,
+    page_id: str,
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    """Ensure legacy adapters also expose the R13 comparison dimensions."""
+    domain = _semantic_domain_for_page(page_id)
+    result: list[tuple[dict[str, Any], Any]] = []
+    for row, source in records:
+        copied = dict(row)
+        existing = _text(copied.get("_domain"))
+        if domain != "generic":
+            if existing and existing != domain:
+                raise ValueError(
+                    f"观察域与页面域不一致，拒绝静默改写：{existing} → {domain}"
+                )
+            copied["_domain"] = domain
+        if domain in _CLINICAL_CONCEPT_LOOKUPS and not copied.get("clinical_concept"):
+            copied.update(_semantic_projection(copied, source, domain=domain))
+        elif domain in _CLINICAL_CONCEPT_LOOKUPS:
+            # A partially migrated row may carry only one normalized field.
+            semantics = _semantic_projection(copied, source, domain=domain)
+            for key, value in semantics.items():
+                if not copied.get(key):
+                    copied[key] = value
+        result.append((copied, source))
+    return tuple(result)
+
+
+def _chart_series_key(row: Mapping[str, Any]) -> str:
+    role = _text(row.get("arm_role"), "unknown")
+    group_id = _text(row.get("group_id"))
+    return role if role != "unknown" or not group_id else group_id
+
+
+def _chart_series_label(row: Mapping[str, Any], key: str) -> str:
+    role_label = _text(
+        row.get("arm_role_label_zh"),
+        _text(row.get("arm"), _text(row.get("group"), "组别未列示")),
+    )
+    if key.startswith("treatment:") or key.startswith("control:"):
+        for detail in (
+            _text(row.get("arm_detail")),
+            _text(row.get("group_label_zh")),
+            _text(row.get("group")),
+            _text(row.get("arm")),
+        ):
+            if detail and detail not in {role_label, "组别未列示"}:
+                return f"{role_label}（{detail}）"
+        return role_label
+    return role_label
+
+
+def _group_title(
+    row: Mapping[str, Any],
+    *,
+    domain: str,
+    include_time: bool = True,
+    include_population: bool = True,
+    include_statistic: bool = True,
+) -> str:
+    concept = _text(
+        row.get("clinical_concept_label_zh"),
+        _text(row.get("display_label_zh"), "临床指标"),
+    )
+    statistic = _text(
+        row.get("statistical_form_family_label_zh"),
+        _text(row.get("statistic_form"), "报告未注明统计口径"),
+    )
+    time_band = _text(row.get("time_window_band_label_zh"))
+    population = _text(row.get("population_context_label_zh"))
+    parts = [concept]
+    if include_statistic:
+        parts.append(statistic)
+    if include_time and time_band and time_band != "时间点未列示":
+        parts.append(time_band)
+    if include_population and population and population != "分析人群未列示":
+        parts.append(population)
+    if domain == "safety":
+        parts.insert(0, "安全性")
+    elif domain == "baseline":
+        parts.insert(0, "基线")
+    elif domain == "disposition":
+        parts.insert(0, "完成情况")
+    return " · ".join(dict.fromkeys(part for part in parts if part))
+
+
+def _group(
+    title: str,
+    records: Sequence[tuple[dict[str, Any], Any]],
+    *,
+    chart_type: str,
+    cross_trial: bool = False,
+    identity_series: bool = False,
+    x_axis_label_zh: str | None = None,
+    y_axis_label_zh: str | None = None,
+    size_label_zh: str | None = None,
+) -> dict[str, Any]:
+    series_variants: dict[tuple[str, str], set[str]] = defaultdict(set)
+    series_variant_by_row: dict[int, str] = {}
+    series_indexes: dict[tuple[str, str], list[int]] = defaultdict(list)
+    identity_aware = cross_trial or identity_series
+    if identity_aware:
+        for index, (row, _source) in enumerate(records):
+            identity_key = "::".join((_text(row.get("product_id")), _text(row.get("trial_id"))))
+            base_key = _chart_series_key(row)
+            variant_key = (identity_key, base_key)
+            variant = _semantic_token(_text(row.get("group_id"), _text(row.get("arm_detail"))))
+            series_variant_by_row[index] = variant
+            series_variants[variant_key].add(variant)
+            series_indexes[variant_key].append(index)
+    duplicate_series_keys: dict[int, str] = {}
+    for (_identity_key, base_key), variants in series_variants.items():
+        if len(variants) < 2:
+            continue
+        for index in series_indexes[(_identity_key, base_key)]:
+            row = records[index][0]
+            variant = series_variant_by_row[index]
+            suffix = variant or _semantic_token(_text(row.get("row_id"))) or f"group-{index + 1}"
+            duplicate_series_keys[index] = f"{base_key}:{suffix}"
+    rows: list[dict[str, Any]] = []
+    for index, (row, _source) in enumerate(records):
+        copied = dict(row)
+        copied["_chart_type"] = chart_type
+        if identity_aware:
+            copied["_chart_identity_key"] = "::".join(
+                (_text(copied.get("product_id")), _text(copied.get("trial_id")))
+            )
+            copied["_chart_identity_label"] = _text(
+                copied.get("identity_label_zh"),
+                "｜".join(
+                    item
+                    for item in (
+                        _text(copied.get("product_zh"), "未列示产品"),
+                        _text(copied.get("trial_zh"), "未列示试验"),
+                    )
+                    if item
+                ),
+            )
+            base_series_key = _chart_series_key(copied)
+            series_key = duplicate_series_keys.get(index, base_series_key)
+            copied["_chart_series_key"] = series_key
+            copied["_chart_series_label"] = _chart_series_label(copied, series_key)
+            copied["_chart_time_key"] = _text(
+                copied.get("time_window_band"),
+                _text(copied.get("time"), "时间点未列示"),
+            )
+        rows.append(copied)
+    result: dict[str, Any] = {
+        "title_zh": title,
+        "title_complete": cross_trial,
+        "cross_trial": cross_trial,
+        "identity_series": identity_aware,
+        "rows": rows,
+        "scientific_group_id": "b-group-" + hashlib.sha256(_canonical_json(sorted(
+            (str(row["row_id"]), semantic_row_digest(row)) for row, _source in records
+        ))).hexdigest(),
+    }
+    if x_axis_label_zh:
+        result["x_axis_label_zh"] = x_axis_label_zh
+    if y_axis_label_zh:
+        result["y_axis_label_zh"] = y_axis_label_zh
+    if size_label_zh:
+        result["size_label_zh"] = size_label_zh
+    return result
+
+
+def _project_scientific_groups(
+    groups: Sequence[dict[str, Any]],
+    records: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[dict[str, Any], ...]:
+    """Select already-adjudicated observations without recomputing membership."""
+    selected = {str(row["row_id"]): row for row, _source in _dedupe_records(records)}
+    available = {str(row["row_id"]): row for group in groups for row in group["rows"]}
+    for row_id, row in selected.items():
+        original = available.get(row_id)
+        if original is None:
+            raise ValueError("页面观察不属于完整科学视图")
+        if (row.get("_domain") != original.get("_domain") or
+                semantic_row_digest(row) != semantic_row_digest(original)):
+            raise ValueError("页面观察域或事实摘要与完整科学视图不一致")
+    result: list[dict[str, Any]] = []
+    for group in groups:
+        rows = [dict(row) for row in group["rows"] if str(row["row_id"]) in selected]
+        if rows:
+            result.append({**group, "rows": rows,
+                           "cross_trial": _bucket_spans_trials([(row, None) for row in rows])})
+    return tuple(result)
+
+
+def _semantic_group_key(
+    row: Mapping[str, Any],
+    *,
+    include_time: bool,
+    include_domain: bool = False,
+    include_population: bool = True,
+    include_statistic: bool = True,
+    include_unit: bool = True,
+) -> tuple[str, ...]:
+    values = [
+        _text(row.get("clinical_concept"), _text(row.get("display_label_zh"), "clinical-concept")),
+    ]
+    if include_statistic:
+        values.append(
+            _text(
+                row.get("statistical_form_family"),
+                _text(row.get("statistic_form"), "statistic-not-reported"),
+            )
+        )
+    if include_unit:
+        values.append(_text(row.get("unit"), "unit-not-reported"))
+    if include_population:
+        values.append(
+            _text(
+                row.get("population_context"),
+                _text(row.get("population"), "population-not-reported"),
+            )
+        )
+    if include_domain:
+        values.append(_text(row.get("field_family"), "field-not-reported"))
+    if include_time:
+        values.append(
+            _text(row.get("time_window_band"), _text(row.get("time"), "time-not-reported"))
+        )
+    if row.get("_domain") in {"efficacy", "safety"}:
+        values.extend(
+            (
+                _text(
+                    row.get("semantic_definition"),
+                    _text(row.get("original_definition"), "definition-not-reported"),
+                ),
+                _text(row.get("semantic_direction"), "direction-not-reported"),
+                _text(row.get("semantic_estimand"), "estimand-not-reported"),
+                _text(
+                    row.get("semantic_denominator"),
+                    _text(row.get("denominator_role"), "denominator-not-reported"),
+                ),
+                _text(
+                    row.get("semantic_analysis_set"),
+                    _text(row.get("population_context"), "analysis-set-not-reported"),
+                ),
+                _text(
+                    row.get("semantic_analysis_form"),
+                    _text(row.get("statistical_form_family"), "analysis-form-not-reported"),
+                ),
+                _text(
+                    row.get("semantic_instrument_or_scale"),
+                    "instrument-or-scale-not-reported",
+                ),
+            )
+        )
+    return tuple(values)
+
+
+def _sorted_bucket(
+    bucket: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    def key(item: tuple[dict[str, Any], Any]) -> tuple[str, ...]:
+        row = item[0]
+        arm_role = _text(row.get("arm_role"), "unknown")
+        arm_priority = {
+            "treatment": "0",
+            "control": "1",
+            "single_arm": "2",
+            "unknown": "3",
+        }.get(arm_role, "9")
+        return (
+            _text(row.get("product_id")),
+            _text(row.get("trial_id")),
+            arm_priority,
+            arm_role,
+            _text(row.get("group_id")),
+            _text(row.get("time_window_band"), _text(row.get("time"))),
+            _text(row.get("actual_timepoint")),
+            _text(row.get("row_id")),
+        )
+
+    return tuple(sorted(bucket, key=key))
+
+
+def _cross_trial_groups(
+    records: Sequence[tuple[dict[str, Any], Any]],
+    *,
+    page_id: str,
+    domain: str,
+    include_time: bool,
+    chart_type: str | None = None,
+    semantic_proposals: Sequence[SemanticGroupingProposal] = (),
+    semantic_adjudications: Sequence[ApprovedSemanticMerge] = (),
+) -> tuple[dict[str, Any], ...]:
+    buckets: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+    if domain in {"efficacy", "safety"}:
+        # 跨试验可比域的成员裁决唯一真源在科学层；渲染器只做展示组装。
+        membership = adjudicate_comparable_membership(
+            domain, tuple(records),
+            bucket_key_fn=lambda row: _semantic_group_key(row, include_time=include_time),
+            semantic_proposals=semantic_proposals,
+            semantic_adjudications=semantic_adjudications,
+        )
+        for index, group in enumerate(membership):
+            buckets[("__membership__", str(index))] = list(group)
+        return _dress_membership_groups(
+            membership, page_id=page_id, domain=domain, include_time=include_time,
+            chart_type=chart_type, semantic_proposals=semantic_proposals,
+        )
+    for item in records:
+        row = item[0]
+        key = _semantic_group_key(row, include_time=include_time)
+        if any(semantic_value_is_unknown(value) for value in key):
+            # Retain source observations, but unknown axes cannot license cross-trial comparison.
+            # Without a trial identity even a within-trial descriptive grouping is unproven.
+            key += (
+                "source-specific",
+                _text(row.get("product_id")),
+                _text(row.get("trial_id"), _text(row.get("row_id"))),
+            )
+        buckets[key].append(item)
+    merged = proposed_semantic_buckets(
+        tuple(buckets.values()), semantic_proposals,
+        approved_merges=semantic_adjudications,
+    )
+    return _dress_membership_groups(
+        tuple(tuple(bucket) for bucket in merged),
+        page_id=page_id, domain=domain, include_time=include_time,
+        chart_type=chart_type, semantic_proposals=semantic_proposals,
+    )
+
+
+def _dress_membership_groups(
+    membership: Sequence[Sequence[tuple[dict[str, Any], Any]]],
+    *,
+    page_id: str,
+    domain: str,
+    include_time: bool,
+    chart_type: str | None,
+    semantic_proposals: Sequence[SemanticGroupingProposal],
+) -> tuple[dict[str, Any], ...]:
+    """把科学层成员组组装为门户图表组（标题/排序/图形类型，不裁决成员）。"""
+    buckets = {
+        (*_semantic_group_key(bucket[0][0], include_time=include_time), str(index)):
+        list(bucket)
+        for index, bucket in enumerate(membership)
+    }
+    groups: list[dict[str, Any]] = []
+    bucket_keys = sorted(
+        buckets,
+        key=lambda key: (
+            not any(item[0].get("renderable") for item in buckets[key]),
+            key,
+        ),
+    )
+    for key in bucket_keys:
+        bucket = _sorted_bucket(buckets[key])
+        first = bucket[0][0]
+        times = {
+            _text(row.get("time_window_band"), _text(row.get("time")))
+            for row, _source in bucket
+            if _text(row.get("time_window_band"), _text(row.get("time")))
+        }
+        resolved_chart_type = chart_type or (
+            "line" if page_id == "longitudinal-results" and len(times) > 1 else "bar"
+        )
+        title = _group_title(first, domain=domain, include_time=include_time)
+        ids = {str(row["row_id"]) for row, _source in bucket}
+        if any(set(proposal.row_ids).issubset(ids) for proposal in semantic_proposals):
+            actual_times = tuple(dict.fromkeys(
+                f'{row.get("actual_timepoint")} '
+                + {"week": "周", "day": "天", "month": "个月", "year": "年"}.get(
+                    str(row.get("actual_timepoint_unit")), str(row.get("actual_timepoint_unit")),
+                )
+                for row, _source in bucket
+            ))
+            title += " · 实际观察时间：" + " / ".join(actual_times)
+        if any(semantic_value_is_unknown(value) for value in key):
+            title += " · 语义信息未完整，按试验列示"
+        group = _group(
+            title,
+            bucket,
+            chart_type=resolved_chart_type,
+            cross_trial=_bucket_spans_trials(bucket),
+            identity_series=True,
+            x_axis_label_zh="产品｜试验",
+        )
+        group["title_complete"] = True
+        if page_id == "longitudinal-results":
+            values = [
+                float(row["numeric_value"])
+                for row, _source in bucket
+                if isinstance(row.get("numeric_value"), (int, float))
+                and not isinstance(row.get("numeric_value"), bool)
+            ]
+            if values:
+                group["y_axis_min"] = min(0.0, min(values))
+                group["y_axis_max"] = max(0.0, max(values))
+        groups.append(group)
+    return tuple(groups)
+
+
+def _baseline_bucket_sort_key(key: tuple[str, ...]) -> tuple[int, tuple[str, ...]]:
+    concept = key[0] if key else ""
+    for rank, family in enumerate(_BASELINE_CONCEPT_FAMILY_ORDER):
+        if _semantic_token(concept) in family:
+            return (rank, key)
+    return (len(_BASELINE_CONCEPT_FAMILY_ORDER), key)
+
+
+def _bucket_spans_trials(bucket: Sequence[tuple[dict[str, Any], Any]]) -> bool:
+    trial_ids = {
+        _text(row.get("trial_id"))
+        for row, _source in bucket
+        if _text(row.get("trial_id"))
+    }
+    return len(trial_ids) > 1
+
+
+_POOL_ADJUDICATION_DOMAINS: dict[str, str] = {
+    "efficacy": "efficacy",
+    "safety": "safety",
+    "baseline": "baseline-overview",
+    "disposition": "disposition-overview",
+    "matrix": "efficacy-safety-matrix",
+    "supporting": "subgroups-supporting-evidence",
+}
+
+
+def _adjudicate_full_pool(
+    records: Sequence[tuple[dict[str, Any], Any]],
+    *,
+    semantic_proposals: Sequence[SemanticGroupingProposal],
+    semantic_adjudications: Sequence[ApprovedSemanticMerge] = (),
+) -> tuple[dict[str, Any], ...]:
+    """完整观察池一次裁决的唯一入口；详情子集不得进入。
+
+    全池语境下，引用不存在观察的提案是陈旧或错误输入，必须拒绝；
+    跨域提案在分域前拒绝；未知域记录失败关闭。
+    """
+    pool = _dedupe_records(records)
+    # 池级校验唯一真源在科学层（域白名单/孤儿/跨域/摘要/外层重验）。
+    validate_full_pool_inputs(
+        pool,
+        semantic_proposals=semantic_proposals,
+        semantic_adjudications=semantic_adjudications,
+    )
+    groups: list[dict[str, Any]] = []
+    for domain, domain_page in _POOL_ADJUDICATION_DOMAINS.items():
+        selected = [item for item in pool if item[0].get("_domain") == domain]
+        if selected:
+            groups.extend(_groups_for_page(
+                domain_page, selected, semantic_proposals=semantic_proposals,
+                semantic_adjudications=semantic_adjudications,
+            ))
+    return tuple(groups)
+
+
+def _assert_page_fallback_only_uncovered(
+    uncovered: Sequence[tuple[dict[str, Any], Any]],
+) -> None:
+    """页面回退分组只允许显式合成/空态记录，真实域观察必须经全池裁决。"""
+    for row, _source in uncovered:
+        domain = _text(row.get("_domain"))
+        if (domain in _POOL_ADJUDICATION_DOMAINS
+                and not row.get("_synthetic") and not row.get("_empty_state")):
+            raise ValueError(
+                f"真实域观察（{domain}）未经完整观察池裁决，禁止页面回退重分组"
+            )
+
+
+def _groups_for_page(
+    page_id: str,
+    records: Sequence[tuple[dict[str, Any], Any]],
+    *, semantic_proposals: Sequence[SemanticGroupingProposal] = (),
+    semantic_adjudications: Sequence[ApprovedSemanticMerge] = (),
+) -> tuple[dict[str, Any], ...]:
+    if not records:
+        return ()
+    records = _records_with_semantics(records, page_id=page_id)
+    if page_id in {"overview", "product-trial-profiles"}:
+        by_id = {str(row["row_id"]): row for row, _source in _dedupe_records(records)}
+        for proposal in semantic_proposals:
+            present = [by_id[row_id] for row_id in proposal.row_ids if row_id in by_id]
+            if len(present) == 2 and present[0].get("_domain") != present[1].get("_domain"):
+                raise ValueError("跨域语义提案不受支持，必须拆分研究问题")
+    if page_id in {"efficacy", "longitudinal-results", "subgroups-supporting-evidence"}:
+        return _cross_trial_groups(
+            records,
+            page_id=page_id,
+            domain="efficacy",
+            include_time=page_id != "longitudinal-results",
+            semantic_proposals=semantic_proposals,
+            semantic_adjudications=semantic_adjudications,
+        )
+    if page_id == "safety":
+        return _cross_trial_groups(
+            records,
+            page_id=page_id,
+            domain="safety",
+            include_time=True,
+            chart_type="heatmap",
+            semantic_proposals=semantic_proposals,
+            semantic_adjudications=semantic_adjudications,
+        )
+    if page_id == "overview":
+        efficacy = [item for item in records if item[0].get("_domain") == "efficacy"]
+        safety = [item for item in records if item[0].get("_domain") == "safety"]
+        matrix = [item for item in records if item[0].get("_domain") == "matrix"]
+        baseline = [item for item in records if item[0].get("_domain") == "baseline"]
+        disposition = [item for item in records if item[0].get("_domain") == "disposition"]
+        overview_groups: list[dict[str, Any]] = []
+        if efficacy:
+            overview_groups.extend(_groups_for_page(
+                "efficacy", efficacy, semantic_proposals=semantic_proposals,
+                semantic_adjudications=semantic_adjudications,
+            ))
+        if safety:
+            overview_groups.extend(_groups_for_page(
+                "safety", safety, semantic_proposals=semantic_proposals,
+                semantic_adjudications=semantic_adjudications,
+            ))
+        for related_page_id, related_records in (
+            ("efficacy-safety-matrix", matrix),
+            ("baseline-overview", baseline),
+            ("disposition-overview", disposition),
+        ):
+            if related_records:
+                overview_groups.extend(_groups_for_page(
+                    related_page_id, related_records, semantic_proposals=semantic_proposals,
+                    semantic_adjudications=semantic_adjudications,
+                ))
+        return tuple(overview_groups)
+    if page_id == "efficacy-safety-matrix":
+        chart_type = (
+            "bubble" if any(item[0].get("renderable") for item in records) else "status_matrix"
+        )
+        matrix_groups = []
+        for bucket in proposed_semantic_buckets(
+            (records,), semantic_proposals, descriptive_only=True,
+            approved_merges=semantic_adjudications,
+        ):
+            group = _group("疗效与安全性观察位置", bucket, chart_type=chart_type)
+            group.update(
+                x_axis_label_zh="试验内疗效差（百分点）",
+                y_axis_label_zh="治疗组治疗期间不良事件发生率（%）",
+                size_label_zh="气泡大小：治疗组样本量",
+            )
+            matrix_groups.append(group)
+        return tuple(matrix_groups)
+    if page_id in _BASELINE_PAGE_IDS:
+        buckets: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+        for item in records:
+            buckets[
+                _semantic_group_key(
+                    item[0],
+                    include_time=True,
+                    include_domain=True,
+                    include_population=True,
+                    include_statistic=False,
+                    include_unit=False,
+                )
+                + (
+                    # 第十三轮复核修复：粗粒度统计族参与分组——
+                    # 均值/中位数等中心趋势可并图，计数/比例不得与连续量混轴
+                    _BASELINE_STAT_FAMILY.get(
+                        _text(item[0].get("statistic_form"), "other"), "central"),
+                )
+            ].append(item)
+        groups: list[dict[str, Any]] = []
+        baseline_buckets = proposed_semantic_buckets(
+            tuple(buckets[key] for key in sorted(buckets, key=_baseline_bucket_sort_key)),
+            semantic_proposals, descriptive_only=True,
+            approved_merges=semantic_adjudications,
+        )
+        for raw_bucket in baseline_buckets:
+            bucket = _sorted_bucket(raw_bucket)
+            first = bucket[0][0]
+            chart_type = (
+                "bar" if any(item[0].get("renderable") for item in bucket) else "status_matrix"
+            )
+            statistic_labels = tuple(
+                dict.fromkeys(
+                    _text(
+                        row.get("statistical_form_family_label_zh"),
+                        _text(row.get("statistic_form"), "报告未注明统计口径"),
+                    )
+                    for row, _source in bucket
+                )
+            )
+            title = _group_title(
+                first,
+                domain="baseline",
+                include_population=True,
+                include_statistic=len(statistic_labels) == 1,
+            )
+            if len(statistic_labels) > 1:
+                title += " · 统计形式：" + "/".join(statistic_labels)
+            unit_labels = tuple(
+                dict.fromkeys(_text(row.get("unit"), "单位未列示") for row, _source in bucket)
+            )
+            if len(unit_labels) > 1:
+                title += " · 单位：" + "/".join(unit_labels)
+            group = _group(
+                title,
+                bucket,
+                chart_type=chart_type,
+                cross_trial=_bucket_spans_trials(bucket),
+                x_axis_label_zh="产品｜试验",
+            )
+            group["title_complete"] = True
+            groups.append(group)
+        return tuple(groups)
+    if page_id in _DISPOSITION_PAGE_IDS:
+        disposition_buckets: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(
+            list
+        )
+        for item in records:
+            disposition_buckets[
+                _semantic_group_key(item[0], include_time=True, include_domain=False)
+            ].append(item)
+        groups = []
+        for raw_bucket in proposed_semantic_buckets(
+            tuple(disposition_buckets[key] for key in sorted(disposition_buckets)),
+            semantic_proposals, descriptive_only=True,
+            approved_merges=semantic_adjudications,
+        ):
+            bucket = _sorted_bucket(raw_bucket)
+            first = bucket[0][0]
+            chart_type = (
+                "bar" if any(item[0].get("renderable") for item in bucket) else "status_matrix"
+            )
+            group = _group(
+                _group_title(first, domain="disposition"),
+                bucket,
+                chart_type=chart_type,
+                cross_trial=_bucket_spans_trials(bucket),
+                x_axis_label_zh="产品｜试验",
+            )
+            group["title_complete"] = True
+            groups.append(group)
+        return tuple(groups)
+    if page_id == "trial-exposure-context":
+        return (_group("试验规模与研究角色", records, chart_type="bar"),)
+    if page_id == "product-trial-profiles":
+        # 页面入口只服务合成/覆盖状态展示；真实域观察的科学分组必须来自
+        # _adjudicate_full_pool 的投影，不得用筛选子集重新裁决。
+        real_domains = {
+            _text(item[0].get("_domain"))
+            for item in records
+        } - {"profile", "", "generic"}
+        if real_domains:
+            raise ValueError(
+                "产品/试验档案页收到真实域观察，必须走完整观察池裁决入口："
+                + ", ".join(sorted(real_domains))
+            )
+        if all(_text(item[0].get("_domain")) in {"profile", ""} for item in records):
+            return (_group("产品与试验覆盖", records, chart_type="status_matrix"),)
+        return ()
+    return (_group("当前页面记录", records, chart_type="bar"),)
+
+
+def _filter_dimensions(
+    records: Sequence[tuple[dict[str, Any], Any]],
+    targets: Mapping[str, str] | None = None,
+) -> tuple[dict[str, str], ...]:
+    target_by_product = targets or {}
+    result: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for row, _source in records:
+        row_id = _text(row.get("row_id"))
+        if not row_id or row_id in seen:
+            continue
+        seen.add(row_id)
+        product_id = _text(row.get("product_id"))
+        result.append(
+            {
+                "id": row_id,
+                "product": product_id,
+                "target": _text(row.get("target"), target_by_product.get(product_id, "")),
+                "trial": _text(row.get("trial_id")),
+                "group": re.sub(r"^nct[0-9]+-arm-", "", _text(
+                    row.get("group"), _text(row.get("arm"), "组别未列示")
+                )) or "组别未列示",
+                "arm_role": _text(row.get("arm_role")),
+                "element": _text(
+                    row.get("clinical_concept_label_zh"),
+                    _text(
+                        row.get("display_label_zh"),
+                        _text(row.get("element"), "研究记录"),
+                    ),
+                ),
+                "clinical_concept": _text(row.get("clinical_concept")).split(":")[-1],
+                "time": _text(row.get("time"), "时间点未列示"),
+                "time_window": _text(row.get("time_window")),
+                "time_window_band": _text(row.get("time_window_band")).split(":")[-1],
+                "population": _text(row.get("population")),
+                "population_context": _text(row.get("population_context")).split(":")[-1],
+                "field_family": _text(row.get("field_family")),
+                "reason": _text(row.get("reason")),
+                "denominator_role": _text(row.get("denominator_role")),
+                "measure_object": _text(row.get("measure_object")),
+                "statistic_form": _text(row.get("statistic_form")),
+                "statistical_form_family": _text(row.get("statistical_form_family")),
+                "cohort": _text(row.get("cohort")),
+                "period": _text(row.get("period")),
+                "disclosure_state": _text(row.get("disclosure_state"), "not_reported"),
+            }
+        )
+    return tuple(result)
+
+
+_FILTER_WEEK_BAND_RE = re.compile(r"^week_([0-9]+(?:\.[0-9]+)?)$")
+_FILTER_COHORT_RE = re.compile(r"^cohort\s*(\d+)$")
+_FILTER_STATIC_LABELS = {
+    "treatment": "治疗组",
+    "control": "对照组",
+    "single_arm": "单臂",
+    "unknown": "未列示",
+    "not_reported": "未列示",
+    "all": "登记全队列",
+    "received_treatment": "接受治疗",
+    "completed_treatment": "完成治疗",
+    "participant_flow": "受试者流转",
+    "baseline_sample_size": "基线样本量",
+    "sample_size": "样本量",
+    "pnh_clone_size": "PNH 克隆大小",
+    "free_hemoglobin": "游离血红蛋白",
+    "free_hemoglobin_pct": "游离血红蛋白变化（%）",
+    "hemoglobin": "血红蛋白",
+    "ldh": "LDH",
+    "ldh_uln_ratio": "LDH/ULN 比值",
+    "transfusion_burden": "输血负担",
+    "transfusion_burden_change": "输血次数变化",
+    "rbc_units_burden": "红细胞单位输注数",
+    "rbc_units_change": "红细胞单位输注变化",
+    "adherence_summary": "依从性概览",
+    **_STATISTICAL_FORM_LABELS,
+    **_TIME_BAND_LABELS,
+}
+
+
+def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
+    """筛选按钮文本中文兜底：剥前缀键、清洗拼接尾、映射已知令牌。
+
+    独立复核第八轮：label 字段本身可能已被上游写入内部键
+    （如 population:登记结果人群fullanalysis），不得因其含中文而照抄。
+    """
+    for candidate in (label, value):
+        text = str(candidate or "").strip()
+        if not text:
+            continue
+        if ":" in text:
+            tail = text.split(":", 1)[1].strip()
+            if tail and re.search(r"[\u4e00-\u9fff]", tail):
+                return tail
+        zh_trim = re.sub(r"[A-Za-z0-9_.\-]+$", "", text)
+        if zh_trim and re.search(r"[\u4e00-\u9fff]", zh_trim):
+            return zh_trim
+        mapped = _FILTER_STATIC_LABELS.get(text)
+        if mapped:
+            return mapped
+    text = str(value or "")
+    week = _FILTER_WEEK_BAND_RE.match(text)
+    if week:
+        return f"第{float(week.group(1)):g}周"
+    cohort = _FILTER_COHORT_RE.match(text.casefold())
+    if cohort:
+        return f"第{int(cohort.group(1))}队列"
+    if text.startswith("nct") and text.endswith("-all"):
+        return "登记全队列"
+    if text == "not_reported":
+        return "未列示"
+    zh_trim = re.sub(r"[A-Za-z0-9_.\-]+$", "", text)
+    if re.search(r"[\u4e00-\u9fff]", zh_trim):
+        return zh_trim
+    if isinstance(label, str) and re.search(r"[\u4e00-\u9fff]", label):
+        return label
+    mapped = _FILTER_STATIC_LABELS.get(text.casefold())
+    if mapped:
+        return mapped
+    return label if isinstance(label, str) and label else text
+
+
+def _filter_groups(
+    filter_rows: Sequence[Any],
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    *,
+    page_id: str,
+) -> tuple[dict[str, Any], ...]:
+    """筛选面板分组：维度 → 候选值（含中文标签），组名按页面语境命名。"""
+    dimensions = (
+        "product", "target", "trial", "group", "arm_role", "element",
+        "clinical_concept", "time", "time_window", "time_window_band",
+        "population", "population_context", "field_family", "reason",
+        "denominator_role", "measure_object", "statistic_form",
+        "statistical_form_family", "cohort", "period", "disclosure_state",
+    )
+    collected: dict[str, list[str]] = {dimension: [] for dimension in dimensions}
+
+    def _row_field(row: Any, key: str) -> Any:
+        if isinstance(row, Mapping):
+            return row.get(key)
+        return getattr(row, key, None)
+
+    def _row_values(row: Any, key: str) -> tuple[Any, ...]:
+        value = _row_field(row, key)
+        if value is None:
+            return ()
+        if isinstance(value, (str, bytes)):
+            return (value,)
+        if isinstance(value, (list, tuple, set, frozenset)):
+            return tuple(value)
+        return (value,)
+
+    for row in filter_rows:
+        for dimension in dimensions:
+            for value in _row_values(row, dimension):
+                text = str(value)
+                if text and text not in collected[dimension]:
+                    collected[dimension].append(text)
+    groups: list[dict[str, Any]] = []
+    for dimension in dimensions:
+        values = collected.get(dimension) or []
+        if not values:
+            continue
+        if page_id in {"baseline-overview", "baseline-severity", "baseline-demographics",
+                       "baseline-disease-context"}:
+            label = "基线指标"
+        elif page_id in _DISPOSITION_PAGE_IDS:
+            label = "完成情况指标"
+        elif page_id == "safety":
+            label = "安全性事件"
+        elif page_id in {"efficacy", "longitudinal-results", "subgroups-supporting-evidence"}:
+            label = "疗效指标"
+        elif page_id == "efficacy-safety-matrix":
+            label = "比较指标"
+        else:
+            label = "观察指标"
+        options = []
+        label_fields = {
+            "clinical_concept": "clinical_concept_label_zh",
+            "time_window_band": "time_window_band_label_zh",
+            "population_context": "population_context_label_zh",
+            "statistical_form_family": "statistical_form_family_label_zh",
+            "arm_role": "arm_role_label_zh",
+        }
+        for value in values:
+            option_label = None
+            if dimension == "product":
+                option_label = names.get(value, value)
+            elif dimension == "trial":
+                option_label = trial_names.get(value, value)
+            elif dimension == "disclosure_state":
+                option_label = _state_label(value)
+            elif dimension in label_fields:
+                option_label = next(
+                    (
+                        _text(_row_field(row, label_fields[dimension]))
+                        for row in filter_rows
+                        if _text(_row_field(row, dimension)) == value
+                        and _text(_row_field(row, label_fields[dimension]))
+                    ),
+                    value,
+                )
+            else:
+                option_label = value
+            # 中文原生兜底：canonical 令牌/合成键不得直接作为按钮文本
+            option_label = _filter_value_label_zh(dimension, value, option_label)
+            options.append({"value": value, "label": option_label})
+        groups.append({"dimension": dimension, "label": label, "options": tuple(options)})
+    return tuple(groups)
+
+
+def _display_trial_name(trial: TrialRow, product_name: str) -> str:
+    del product_name
+    return trial.name
+
+
+def _nav_groups(catalog: ReportCatalog, *, prefix: str, current: str) -> tuple[dict[str, Any], ...]:
+    groups: list[dict[str, Any]] = []
+    by_group: dict[str, dict[str, Any]] = {}
+    for page in catalog.pages:
+        group = by_group.get(page.navigation_group_zh)
+        if group is None:
+            group = {"label": page.navigation_group_zh, "pages": []}
+            by_group[page.navigation_group_zh] = group
+            groups.append(group)
+        group["pages"].append(
+            {
+                "id": page.id,
+                "title": page.title_zh,
+                "href": f"{prefix}{page.id}.html",
+                "active": page.id == current,
+            }
+        )
+    return tuple(groups)
+
+
+def _copy_assets(site_root: Path) -> None:
+    assets = site_root / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(resolve_logo_src(), assets / "logo.svg")
+    for name in (
+        "portal.css",
+        "portal.js",
+        "charts.js",
+        "evidence-drawer.css",
+        "evidence-drawer.js",
+    ):
+        shutil.copy2(resolve_portal_asset(name), assets / name)
+    shutil.copy2(_ASSET_DIR / "report-b.css", assets / "report-b.css")
+    shutil.copy2(_ASSET_DIR / "report-b.js", assets / "report-b.js")
+    shutil.copy2(resolve_echarts_bundle(), assets / "echarts.min.js")
+
+
+def _tag_records(
+    values: Sequence[tuple[dict[str, Any], Any]],
+    domain: str,
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    return tuple(({**row, "_domain": domain}, source) for row, source in values)
+
+
+def _page_records(
+    data: ReportBPortalData,
+    *,
+    page_id: str,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    efficacy: Sequence[tuple[dict[str, Any], Any]],
+    safety: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    def tagged(
+        values: Sequence[tuple[dict[str, Any], Any]],
+        domain: str,
+    ) -> list[tuple[dict[str, Any], Any]]:
+        result: list[tuple[dict[str, Any], Any]] = []
+        for row, source in values:
+            copied = dict(row)
+            copied["_domain"] = domain
+            result.append((copied, source))
+        return result
+
+    if page_id == "overview":
+        baseline = _page_records(
+            data,
+            page_id="baseline-overview",
+            names=names,
+            trial_names=trial_names,
+            efficacy=efficacy,
+            safety=safety,
+        )
+        disposition = _page_records(
+            data,
+            page_id="disposition-overview",
+            names=names,
+            trial_names=trial_names,
+            efficacy=efficacy,
+            safety=safety,
+        )
+        matrix = _matrix_records(data, names, trial_names)
+        return _dedupe_records(
+            (
+                *tagged(efficacy, "efficacy"),
+                *tagged(safety, "safety"),
+                *tagged(matrix, "matrix"),
+                *tagged(baseline, "baseline"),
+                *tagged(disposition, "disposition"),
+            )
+        )
+    if page_id in {"efficacy", "longitudinal-results"}:
+        return tuple(tagged(efficacy, "efficacy"))
+    if page_id == "subgroups-supporting-evidence":
+        return _state_rows_from_view(
+            data,
+            view_name="supporting_evidence_views",
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            domain="supporting",
+        )
+    if page_id == "safety":
+        return tuple(tagged(safety, "safety"))
+    if page_id in _BASELINE_PAGE_IDS:
+        values = _state_rows_from_view(
+            data,
+            view_name="baseline_views",
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            domain="baseline",
+        )
+        allowed = _BASELINE_PAGE_CONCEPTS.get(page_id)
+        if allowed is not None:
+            values = tuple(
+                item for item in values if _text(item[0].get("clinical_concept")) in allowed
+            )
+        if values or _view_source(data, "baseline_views") is not None:
+            return values
+        return _domain_empty_records(
+            data,
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            domain="baseline",
+        )
+    if page_id in _DISPOSITION_PAGE_IDS:
+        values = _state_rows_from_view(
+            data,
+            view_name="disposition_views",
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            domain="disposition",
+        )
+        allowed = _DISPOSITION_PAGE_ELEMENTS[page_id]
+        values = tuple(
+            item
+            for item in values
+            if _text(item[0].get("element"), _text(item[0].get("display_label_zh"))) in allowed
+        )
+        if values or _view_source(data, "disposition_views") is not None:
+            return values
+        return _domain_empty_records(
+            data,
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            domain="disposition",
+        )
+    if page_id == "efficacy-safety-matrix":
+        values = _matrix_records(data, names, trial_names)
+        if values:
+            return values
+        if _view_source(data, "matrix_view") is not None:
+            return ()
+        return _synthetic_status_records(
+            data,
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            domain="matrix",
+        )
+    if page_id == "trial-exposure-context":
+        return _trial_context_records(data, names, trial_names)
+    if page_id == "product-trial-profiles":
+        return _synthetic_status_records(
+            data,
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            include_products=True,
+            domain="profile",
+        ) + _synthetic_status_records(
+            data,
+            page_id=page_id + "-trial",
+            names=names,
+            trial_names=trial_names,
+            domain="profile",
+        )
+    return tuple(efficacy) or tuple(safety)
+
+
+def _external_source_entries(data: ReportBPortalData) -> tuple[dict[str, str | None], ...]:
+    entries: list[dict[str, str | None]] = []
+    seen: set[str] = set()
+    for source in data.sources:
+        label = _text(getattr(source, "source", None))
+        if not label or label in seen:
+            continue
+        seen.add(label)
+        url_match = re.search(r"https?://[^\s<>\"']+", label, flags=re.IGNORECASE)
+        entries.append(
+            {
+                "label": label,
+                "url": None if url_match is None else url_match.group(0).rstrip(".,;"),
+                "scope": _text(getattr(source, "scope", None)),
+                "limitation": _text(getattr(source, "limitation", None)),
+            }
+        )
+    return tuple(entries)
+
+
+def _disposition_pool_records(
+    data: ReportBPortalData,
+    *,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    """完整观察池消费全量处置记录；各处置子页只是其元素级投影。
+
+    子页（adherence/participant-flow 等）按元素过滤，若池只收集
+    disposition-overview 的过滤结果，子页记录将绕过全池裁决。
+    """
+    values = _state_rows_from_view(
+        data,
+        view_name="disposition_views",
+        page_id="disposition-overview",
+        names=names,
+        trial_names=trial_names,
+        domain="disposition",
+    )
+    if values or _view_source(data, "disposition_views") is not None:
+        return values
+    return _domain_empty_records(
+        data,
+        page_id="disposition-overview",
+        names=names,
+        trial_names=trial_names,
+        domain="disposition",
+    )
+
+
+def semantic_review_domain_inputs(
+    data: ReportBPortalData,
+) -> dict[str, tuple[tuple[dict[str, Any], Any], ...]]:
+    """导出发射语义复核工作项所需的 (域, 观察池)。
+
+    观察池与渲染端全池裁决使用同一构造；初始分桶由
+    :func:`semantic_review_buckets_for` 按域给出，保证宿主裁决的
+    对选择与渲染端合并语义一致。
+    """
+    names = {product.id: product.name for product in data.products}
+    trial_names = {
+        trial.id: _display_trial_name(trial, names.get(trial.product_id, "未列示产品"))
+        for trial in data.trials
+    }
+    efficacy = _tag_records(
+        _efficacy_records(data, names, trial_names), "efficacy",
+    )
+    safety = _tag_records(_safety_records(data, names, trial_names), "safety")
+    return {"efficacy": efficacy, "safety": safety}
+
+
+def semantic_review_buckets_for(
+    domain: str,
+    records: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[tuple[tuple[dict[str, Any], Any], ...], ...]:
+    """按域给出与渲染端一致的初始分桶（科学分区/文本键）。"""
+    if domain == "efficacy":
+        partition = efficacy_science_partition(records)
+        buckets = tuple(tuple(bucket) for bucket in partition.buckets)
+        buckets += tuple((record,) for record in partition.unmatched)
+        return buckets
+    grouped: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+    for item in records:
+        grouped[_semantic_group_key(item[0], include_time=True)].append(item)
+    return tuple(tuple(grouped[key]) for key in sorted(grouped))
+
+
+def _render_page_context(
+    data: ReportBPortalData,
+    *,
+    page: StaticPage,
+    catalog: ReportCatalog,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    efficacy: Sequence[tuple[dict[str, Any], Any]],
+    safety: Sequence[tuple[dict[str, Any], Any]],
+    scientific_groups: Sequence[dict[str, Any]] = (),
+    longitudinal_groups: Sequence[dict[str, Any]] = (),
+    prefix: str = "",
+    current: str | None = None,
+    semantic_adjudications: Sequence[ApprovedSemanticMerge] = (),
+    detail_records: Sequence[tuple[dict[str, Any], Any]] | None = None,
+    detail_kind: str | None = None,
+    detail_id: str | None = None,
+    publication_limitation_zh: str | None = None,
+) -> dict[str, Any]:
+    page_id = current or page.id
+    records = (
+        tuple(detail_records)
+        if detail_records is not None
+        else _page_records(
+            data,
+            page_id=page_id,
+            names=names,
+            trial_names=trial_names,
+            efficacy=efficacy,
+            safety=safety,
+        )
+    )
+    if page_id == "longitudinal-results":
+        scientific_groups = longitudinal_groups
+    covered_ids = {str(row["row_id"]) for group in scientific_groups for row in group["rows"]}
+    covered = [item for item in records if str(item[0]["row_id"]) in covered_ids]
+    uncovered = [item for item in records if str(item[0]["row_id"]) not in covered_ids]
+    _assert_page_fallback_only_uncovered(uncovered)
+    groups = (
+        *_project_scientific_groups(scientific_groups, covered),
+        *_groups_for_page(
+            page_id, uncovered,
+            semantic_proposals=data.semantic_proposals,
+            semantic_adjudications=semantic_adjudications,
+        ),
+    )
+    has_domain_empty_state = bool(records) and all(
+        row.get("_empty_state") is True for row, _source in records
+    )
+    has_drawable_data = any(row.get("renderable") is True for row, _source in records)
+    views = tuple(
+        _evidence_view(
+            data,
+            row=row,
+            source=source,
+            page_id=page.id,
+            observation_kind=_observation_kind_for_row(row, page.id),
+            names=names,
+            trial_names=trial_names,
+        )
+        for row, source in records
+    )
+    chart_groups_json = _json(groups)
+    target_by_product = {product.id: product.target for product in data.products}
+    filter_rows = _filter_dimensions(records, target_by_product)
+    dimensions = {
+        item["id"]: {key: value for key, value in item.items() if key != "id"}
+        for item in filter_rows
+    }
+    filter_groups = _filter_groups(filter_rows, names, trial_names, page_id=page_id)
+    essential_filter_dimensions = (
+        ("target", "trial", "group", "time")
+        if page_id == "overview"
+        else ("target", "trial", "group", "element", "time")
+    )
+    quick_filter_groups = tuple(group for group in filter_groups if group["dimension"] == "product")
+    title = page.title_zh
+    if detail_kind == "product":
+        title = f"{names.get(detail_id or '', '产品')}产品档案"
+    elif detail_kind == "trial":
+        title = f"{trial_names.get(detail_id or '', '试验')}试验档案"
+    if page_id in _BASELINE_PAGE_IDS:
+        empty_state_title = "暂无公开记录（基线）"
+    elif page_id in _DISPOSITION_PAGE_IDS:
+        empty_state_title = "暂无公开记录（试验完成情况）"
+    else:
+        empty_state_title = "当前选择下暂无可比较数据"
+    filter_note = "可同时选择多个条件。"
+    if page_id == "efficacy-safety-matrix":
+        lead = "暂无可绘制的真实疗效—安全性覆盖值，完整比较状态见表。"
+    elif page_id in _BASELINE_PAGE_IDS:
+        lead = "暂无公开基线记录，完整字段与披露状态见表。"
+    elif page_id in _DISPOSITION_PAGE_IDS:
+        lead = "暂无公开试验完成情况记录，完整字段与披露状态见表。"
+    elif not has_drawable_data:
+        lead = "当前没有可绘制的真实数值，完整数据表保留原始披露状态。"
+    else:
+        lead = page.responsibility_zh
+    section_titles = {
+        "overview": "关键结果",
+        "efficacy": "疗效结果",
+        "longitudinal-results": "疗效随访变化",
+        "safety": "安全性结果",
+        "efficacy-safety-matrix": "疗效与安全性观察位置",
+        "baseline-overview": "基线特征",
+        "baseline-demographics": "人口学特征",
+        "baseline-disease-context": "疾病特征",
+        "baseline-severity": "基线疾病严重程度",
+        "disposition-overview": "试验完成情况",
+        "participant-flow": "受试者流转",
+        "adherence": "依从性",
+        "loss-exit": "失访与退出",
+        "screen-failure": "筛败与原因",
+        "rescue-treatment": "补救治疗",
+        "prohibited-medication": "禁用药使用",
+        "plan-deviation": "方案偏离",
+        "trial-exposure-context": "试验与暴露情况",
+        "subgroups-supporting-evidence": "亚组与支持证据",
+    }
+    return {
+        "report": data,
+        "report_version": data.report_version,
+        "report_title": f"{data.indication}临床试验结果比较",
+        "page_title": title,
+        "page_id": page.id,
+        "page": page,
+        "catalog": catalog,
+        "site_prefix": prefix,
+        "empty_state_title": empty_state_title,
+        "has_domain_empty_state": has_domain_empty_state,
+        "has_drawable_data": has_drawable_data,
+        "filter_note": filter_note,
+        "nav_groups": _nav_groups(catalog, prefix=prefix, current=current or page.id),
+        "home_href": f"{prefix}{catalog.pages[0].id}.html",
+        "data_prefix": f"{prefix}data",
+        "asset_prefix": f"{prefix}assets",
+        "snapshot_id": _text(data.report_snapshot_id, f"b-{data.report_version}"),
+        "row_set_digest": hashlib.sha256(
+            _canonical_json([row["row_id"] for row, _source in records])
+        ).hexdigest(),
+        "lead": lead,
+        "section_title": section_titles.get(page_id, title),
+        "visuals": page.visuals,
+        "records": records,
+        "external_sources": _external_source_entries(data),
+        "bubble_presets": tuple(item.model_dump(mode="json") for item in BUBBLE_PRESETS),
+        "chart_groups_json": chart_groups_json,
+        "filter_rows_json": _json(filter_rows),
+        "row_dimensions_json": _json(dimensions),
+        "filter_groups": filter_groups,
+        "essential_filter_dimensions": essential_filter_dimensions,
+        "filter_dimensions_json": _json(tuple(_FILTER_DIMENSION_LABELS)),
+        "evidence_embed": render_evidence_drawer_embed(views),
+        "quick_filter_groups": quick_filter_groups,
+        "evidence_host": render_evidence_drawer_host(),
+        "filter_products": tuple({"id": p.id, "name": p.name} for p in data.products),
+        "filter_trials": tuple(
+            {"id": t.id, "name": trial_names.get(t.id, t.name)} for t in data.trials
+        ),
+        "detail_kind": detail_kind or "",
+        "detail_id": detail_id or "",
+        "detail_product": names.get(detail_id or "", "") if detail_kind == "product" else "",
+        "detail_trial": trial_names.get(detail_id or "", "") if detail_kind == "trial" else "",
+        "detail_data_attribute": (
+            "data-product-id"
+            if detail_kind == "product"
+            else "data-trial-id"
+            if detail_kind == "trial"
+            else ""
+        ),
+        "publication_limitation_zh": publication_limitation_zh,
+    }
+
+
+def _reset_site_root(site_root: Path) -> None:
+    if site_root.exists() and not site_root.is_dir():
+        raise ReportBPortalError(f"站点目标不是目录：{site_root}")
+    if site_root.exists():
+        for child in site_root.iterdir():
+            if child.is_dir():
+                shutil.rmtree(child)
+            else:
+                child.unlink()
+    site_root.mkdir(parents=True, exist_ok=True)
+
+
+def render_report_b_site(
+    data: ReportBPortalData,
+    site_root: Path,
+    *,
+    publication_limitation_zh: str | None = None,
+) -> tuple[Path, ...]:
+    """Render all B catalog pages plus every product and trial dossier."""
+    site_root = Path(site_root)
+
+    registry = PageRegistry.load()
+    catalog = registry.catalog(ReportKind.B)
+    names = {product.id: product.name for product in data.products}
+    trial_names = {
+        trial.id: _display_trial_name(trial, names.get(trial.product_id, "未列示产品"))
+        for trial in data.trials
+    }
+    efficacy = _efficacy_records(data, names, trial_names)
+    safety = _safety_records(data, names, trial_names)
+    baseline = _page_records(
+        data,
+        page_id="baseline-overview",
+        names=names,
+        trial_names=trial_names,
+        efficacy=efficacy,
+        safety=safety,
+    )
+    disposition = _disposition_pool_records(data, names=names, trial_names=trial_names)
+    supporting = _page_records(
+        data,
+        page_id="subgroups-supporting-evidence",
+        names=names,
+        trial_names=trial_names,
+        efficacy=efficacy,
+        safety=safety,
+    )
+    matrix = _matrix_records(data, names, trial_names)
+    detail_pool = _dedupe_records(
+        (
+            *_tag_records(efficacy, "efficacy"),
+            *_tag_records(safety, "safety"),
+            *_tag_records(baseline, "baseline"),
+            *_tag_records(matrix, "matrix"),
+            *_tag_records(disposition, "disposition"),
+            *_tag_records(supporting, "supporting"),
+        )
+    )
+    # Adjudicate against the full observation universe once. Every physical page
+    # (including dossiers) consumes a projection of these same group identities.
+    scientific_groups = _adjudicate_full_pool(
+        detail_pool, semantic_proposals=data.semantic_proposals,
+        semantic_adjudications=data.semantic_adjudications,
+    )
+    # Longitudinal description is a separate full-view projection purpose, not a
+    # fresh cross-trial comparability decision made from a filtered page.
+    trial_series: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+    for row, source in efficacy:
+        trial_series[(_text(row.get("product_id")), _text(row.get("trial_id")),
+                      _text(row.get("group_id")), _text(row.get("arm_role")))].append((row, source))
+    longitudinal_groups = tuple(
+        {**group, "scientific_group_kind": "within_trial_longitudinal"}
+        for key in sorted(trial_series)
+        for group in _groups_for_page("longitudinal-results", trial_series[key],
+                                       semantic_proposals=data.semantic_proposals)
+    )
+    _reset_site_root(site_root)
+    _copy_assets(site_root)
+    (site_root / "data").mkdir(parents=True, exist_ok=True)
+
+    # The standalone report literal intentionally contains only source rows and
+    # metadata.  The optional B view objects are implementation inputs, not a
+    # second mutable browser data store.
+    report_payload = data.model_dump(
+        mode="json",
+        exclude={
+            "report_snapshot_id",
+            "efficacy_views",
+            "safety_views",
+            "baseline_views",
+            "disposition_views",
+            "supporting_evidence_views",
+            "supporting_views",
+            "subgroup_views",
+            "subgroups_views",
+            "matrix_view",
+            "matrix_views",
+            "views",
+            "view_states",
+            "semantic_proposals",
+        },
+    )
+    (site_root / "data" / "report.js").write_text(
+        "window.REPORT_B=" + _json(report_payload) + ";\n", encoding="utf-8"
+    )
+
+    env = Environment(
+        loader=FileSystemLoader(_TEMPLATE_DIR),
+        autoescape=True,
+        undefined=StrictUndefined,
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    page_template = env.get_template("page.html.j2")
+    dossier_template = env.get_template("dossier.html.j2")
+    generated: list[Path] = []
+
+    for page in catalog.pages:
+        context = _render_page_context(
+            data,
+            page=page,
+            catalog=catalog,
+            names=names,
+            trial_names=trial_names,
+            efficacy=efficacy,
+            safety=safety,
+            scientific_groups=scientific_groups,
+            longitudinal_groups=longitudinal_groups,
+            publication_limitation_zh=publication_limitation_zh,
+            semantic_adjudications=data.semantic_adjudications,
+        )
+        output = site_root / f"{page.id}.html"
+        output.write_text(page_template.render(**context), encoding="utf-8")
+        generated.append(output)
+
+    products_dir = site_root / "products"
+    trials_dir = site_root / "trials"
+    products_dir.mkdir(exist_ok=True)
+    trials_dir.mkdir(exist_ok=True)
+    profile_page = next(page for page in catalog.pages if page.id == "product-trial-profiles")
+
+    for product in data.products:
+        records = tuple(item for item in detail_pool if item[0].get("product_id") == product.id)
+        context = _render_page_context(
+            data,
+            page=profile_page,
+            catalog=catalog,
+            names=names,
+            trial_names=trial_names,
+            efficacy=efficacy,
+            safety=safety,
+            scientific_groups=scientific_groups,
+            prefix="../",
+            current=profile_page.id,
+            semantic_adjudications=data.semantic_adjudications,
+            detail_records=records
+            or tuple(
+                item
+                for item in _synthetic_status_records(
+                    data,
+                    page_id=f"product-{product.id}",
+                    names=names,
+                    trial_names=trial_names,
+                    include_products=True,
+                )
+                if item[0].get("product_id") == product.id
+            ),
+            detail_kind="product",
+            detail_id=product.id,
+            publication_limitation_zh=publication_limitation_zh,
+        )
+        context["detail_product_obj"] = product
+        context["detail_product_trials"] = tuple(
+            {
+                "id": trial.id,
+                "name": trial_names.get(trial.id, trial.name),
+                "display_id": trial.display_id,
+                "phase": trial.phase,
+                "region": trial.region,
+                "status": trial.status,
+                "sample_size": trial.sample_size,
+            }
+            for trial in data.trials
+            if trial.product_id == product.id
+        )
+        context["detail_product_regulatory"] = tuple(
+            item for item in data.regulatory if item.product_id == product.id
+        )
+        context["detail_product_companies"] = tuple(
+            item for item in data.companies if item.product_id == product.id
+        )
+        context["detail_product_patents"] = tuple(
+            item for item in data.patents if item.product_id == product.id
+        )
+        context["detail_product_history"] = tuple(
+            item for item in data.history if item.product_id == product.id
+        )
+        output = products_dir / f"{product.id}.html"
+        output.write_text(dossier_template.render(**context), encoding="utf-8")
+        generated.append(output)
+
+    for trial in data.trials:
+        records = tuple(item for item in detail_pool if item[0].get("trial_id") == trial.id)
+        context = _render_page_context(
+            data,
+            page=profile_page,
+            catalog=catalog,
+            names=names,
+            trial_names=trial_names,
+            efficacy=efficacy,
+            safety=safety,
+            scientific_groups=scientific_groups,
+            prefix="../",
+            current=profile_page.id,
+            semantic_adjudications=data.semantic_adjudications,
+            detail_records=records
+            or tuple(
+                item
+                for item in _synthetic_status_records(
+                    data,
+                    page_id=f"trial-{trial.id}",
+                    names=names,
+                    trial_names=trial_names,
+                )
+                if item[0].get("trial_id") == trial.id
+            ),
+            detail_kind="trial",
+            detail_id=trial.id,
+            publication_limitation_zh=publication_limitation_zh,
+        )
+        context["detail_trial_product_obj"] = next(
+            product for product in data.products if product.id == trial.product_id
+        )
+        context["detail_trial_obj"] = trial
+        output = trials_dir / f"{trial.id}.html"
+        output.write_text(dossier_template.render(**context), encoding="utf-8")
+        generated.append(output)
+
+    expected_routes = registry.sitemap(
+        ReportKind.B,
+        product_ids=data.product_ids,
+        trial_ids=data.trial_ids,
+    )
+    routes = [
+        {"route": route, "path": route_to_site_path(route).as_posix()} for route in expected_routes
+    ]
+    sitemap_payload = {
+        "report": "B",
+        "catalog_version": catalog.contract_version,
+        "routes": routes,
+        "digest": hashlib.sha256(_canonical_json(routes)).hexdigest(),
+    }
+    (site_root / "data" / "sitemap.json").write_bytes(_canonical_json(sitemap_payload))
+    search: list[dict[str, Any]] = []
+
+    def add_search_entry(title: str, slug: str, *keywords: Any) -> None:
+        values: list[str] = []
+        seen: set[str] = set()
+        for candidate in (title, *keywords):
+            candidates = (
+                candidate
+                if isinstance(candidate, Sequence) and not isinstance(candidate, (str, bytes))
+                else (candidate,)
+            )
+            for item in candidates:
+                text = _text(item)
+                if text and text not in seen:
+                    seen.add(text)
+                    values.append(text)
+        search.append({"title": title, "slug": slug, "keywords": values})
+
+    for page in catalog.pages:
+        add_search_entry(
+            page.title_zh,
+            page.id,
+            page.navigation_group_zh,
+            page.responsibility_zh,
+        )
+    for product in data.products:
+        add_search_entry(
+            f"{product.name}产品档案",
+            f"products/{product.id}",
+            "产品档案",
+            product.name,
+            product.target,
+            product.modality,
+            product.phase,
+            product.status,
+            product.regions,
+            product.developer,
+            product.mechanism,
+        )
+    for trial in data.trials:
+        product_name = names.get(trial.product_id, "未列示产品")
+        display_name = trial_names.get(trial.id, trial.name)
+        add_search_entry(
+            f"{display_name}试验档案",
+            f"trials/{trial.id}",
+            "试验档案",
+            "试验登记",
+            "登记结果",
+            "注册研究",
+            product_name,
+            display_name,
+            trial.name,
+            trial.display_id,
+            trial.phase,
+            trial.region,
+            trial.status,
+            trial.role,
+        )
+    for row, _source in efficacy:
+        product_name = _text(row.get("product_zh"), "未列示产品")
+        trial_name = _text(row.get("trial_zh"), "未列示试验")
+        label = _text(row.get("display_label_zh"), "疗效指标")
+        add_search_entry(
+            f"{label} · {product_name} · {trial_name}",
+            "efficacy",
+            "疗效",
+            label,
+            row.get("element"),
+            product_name,
+            trial_name,
+            row.get("target"),
+            row.get("time"),
+            row.get("arm"),
+            row.get("population"),
+            row.get("unit"),
+        )
+    for row, _source in safety:
+        product_name = _text(row.get("product_zh"), "未列示产品")
+        trial_name = _text(row.get("trial_zh"), "未列示试验")
+        event = _text(row.get("display_label_zh"), "安全性事件")
+        add_search_entry(
+            f"{event} · {product_name} · {trial_name}",
+            "safety",
+            "安全性",
+            event,
+            row.get("category"),
+            product_name,
+            trial_name,
+            row.get("arm"),
+            row.get("time_window"),
+            row.get("population"),
+            row.get("unit"),
+        )
+    search_json = _json(search)
+    (site_root / "data" / "search-index.js").write_text(
+        "window.__SEARCH_INDEX__=" + search_json + ";\n",
+        encoding="utf-8",
+    )
+    return tuple(generated)
+
+
+def _report_b_claim_ids(data: ReportBPortalData) -> tuple[str, ...]:
+    """为门户中实际呈现的结果与事实生成稳定声明标识。"""
+    result_rows = cast(
+        tuple[EfficacyRow | SafetyRow, ...],
+        (*data.efficacy, *data.safety),
+    )
+    row_ids = [row.row_id for row in result_rows]
+    for view_name in (
+        "efficacy_views",
+        "safety_views",
+        "baseline_views",
+        "disposition_views",
+        "supporting_evidence_views",
+    ):
+        source = _view_source(data, view_name)
+        for index, row in enumerate(_collection(source, "facts", "rows")):
+            row_ids.append(_stable_row_id(row, f"{view_name}-{index + 1}"))
+    return tuple(dict.fromkeys(stable_id("claim", row_id) for row_id in row_ids))
+
+
+def build_report_b_artifact(
+    *,
+    project_root: Path,
+    data_path: Path,
+    project_id: str,
+    contract_version: int,
+    run_id: str,
+    publication_limitation_zh: str | None = None,
+    extra_adjudications: Sequence[ApprovedSemanticMerge] = (),
+) -> tuple[Path, Path, str]:
+    """生成 B 类站点、锁定报告快照并写入当前运行产物清单。
+
+    站点先写入未发布事务的 staging 目录；只有清单原子写入成功后，最终
+    ``html/`` 目录才出现。中断只留下可证明未发布的残留，重跑自动恢复；
+    任何已有清单或完成绑定一律拒绝覆盖。
+    """
+    data = load_report_b_data(data_path)
+    if extra_adjudications:
+        if data.semantic_adjudications:
+            raise ReportBPortalError(
+                "载荷已自带语义裁决，拒绝再注入项目级裁决（双来源）"
+            )
+        payload = data.model_dump(mode="json")
+        payload["semantic_adjudications"] = [
+            merge.model_dump(mode="json") for merge in extra_adjudications
+        ]
+        data = ReportBPortalData.model_validate(payload)
+    started_at = datetime.now(UTC)
+    transaction = UnpublishedRenderTransaction(
+        project_root,
+        report="B",
+        report_version=data.report_version,
+        run_id=run_id,
+    )
+    try:
+        staging_root = transaction.begin()
+    except RenderTransactionError as error:
+        raise ReportBPortalError(str(error)) from error
+    render_report_b_site(
+        data,
+        staging_root,
+        publication_limitation_zh=publication_limitation_zh,
+    )
+
+    data_digest = hashlib.sha256(_canonical_json(data.model_dump(mode="json"))).hexdigest()
+    coverage_projection_id = stable_id("coverage-projection", project_id, "B", data.report_version)
+    declared_snapshot: ReportSnapshotManifest | None = None
+    locked: LockedSnapshot | None = None
+    if data.report_snapshot_id is not None:
+        snapshot_path = (
+            project_root
+            / "snapshots"
+            / "reports"
+            / "B"
+            / f"{data.report_snapshot_id}.json"
+        )
+        if snapshot_path.is_file():
+            try:
+                declared_snapshot = ReportSnapshotManifest.model_validate_json(
+                    snapshot_path.read_bytes()
+                )
+                locked = compute_locked_snapshot(
+                    kind="report",
+                    report="B",
+                    manifest=declared_snapshot.model_dump(mode="json"),
+                )
+            except (OSError, ValueError, SnapshotIntegrityError) as error:
+                raise ReportBPortalError(
+                    "B 类门户引用的报告快照存在但不可信"
+                ) from error
+            if (
+                locked.snapshot_id != data.report_snapshot_id
+                or declared_snapshot.project_id != project_id
+                or declared_snapshot.contract_version != contract_version
+                or declared_snapshot.report_version != data.report_version
+                or declared_snapshot.data_cutoff != data.data_cutoff
+            ):
+                raise ReportBPortalError("B 类门户与已锁定报告快照身份不一致")
+        # 声明的快照不在项目内：调用方声明不被信任，预览路径按数据字节
+        # 确定性自锁定快照，运行保持 rendered_unreviewed，不进入任何接受。
+    if declared_snapshot is None or locked is None:
+        claim_ids = _report_b_claim_ids(data)
+        if not claim_ids:
+            raise ReportBPortalError("B 类报告没有可锁定的结果或基线事实")
+        evidence_snapshot_id = stable_id("evidence-snapshot", project_id, data_digest)
+        claim_snapshot_id = stable_id("claim-snapshot", project_id, data_digest)
+        coverage_set_id = stable_id("coverage-set", project_id, "B", data_digest)
+        declared_snapshot = ReportSnapshotManifest(
+            schema_version="1.0",
+            project_id=project_id,
+            contract_version=contract_version,
+            report="B",
+            report_version=data.report_version,
+            data_cutoff=data.data_cutoff,
+            evidence_snapshot_id=evidence_snapshot_id,
+            claim_snapshot_id=claim_snapshot_id,
+            coverage_set_id=coverage_set_id,
+            claim_ids=claim_ids,
+            created_at=started_at,
+        )
+        locked = SnapshotStore(project_root).lock_report_snapshot(
+            report="B", manifest=declared_snapshot.model_dump(mode="json")
+        )
+    snapshot = declared_snapshot
+    assert snapshot is not None and locked is not None
+    claim_ids = snapshot.claim_ids
+    evidence_snapshot_id = snapshot.evidence_snapshot_id
+    claim_snapshot_id = snapshot.claim_snapshot_id
+    coverage_set_id = snapshot.coverage_set_id
+    site_digest, site_bytes = site_directory_digest(staging_root)
+    modified_at = datetime.fromtimestamp(
+        max(path.stat().st_mtime for path in staging_root.rglob("*") if path.is_file()),
+        tz=UTC,
+    )
+    package_digest = hashlib.sha256(
+        (Path(__file__).resolve().parents[4] / "package-manifest.json").read_bytes()
+    ).hexdigest()
+    catalog = PageRegistry.load().catalog(ReportKind.B)
+    manifest = ArtifactManifest(
+        schema_version="1.0",
+        manifest_id=stable_id("artifact-manifest", project_id, run_id, "B", data.report_version),
+        project_id=project_id,
+        contract_version=contract_version,
+        report="B",
+        report_version=data.report_version,
+        data_cutoff=data.data_cutoff,
+        producer_run_id=run_id,
+        source_commit=_git_commit(),
+        package_digest=package_digest,
+        evidence_snapshot_id=evidence_snapshot_id,
+        claim_snapshot_id=claim_snapshot_id,
+        report_snapshot_id=locked.snapshot_id,
+        coverage_set_id=coverage_set_id,
+        coverage_projection_id=coverage_projection_id,
+        structured_exceptions=(),
+        pages_or_sections=tuple(page.id for page in catalog.pages),
+        product_ids=data.product_ids,
+        trial_ids=data.trial_ids,
+        claim_ids=claim_ids,
+        chart_ids=(
+            "efficacy-comparison",
+            "safety-heatmap",
+            "efficacy-safety-matrix",
+            "baseline-comparison",
+            "trial-disposition",
+        ),
+        table_ids=(
+            "efficacy",
+            "safety",
+            "baseline",
+            "trial-disposition",
+            "products",
+            "trials",
+        ),
+        evidence_reference_ids=tuple(
+            dict.fromkeys(stable_id("source", row.source) for row in data.sources)
+        ),
+        design_contract=DesignContractBinding(
+            roles=("report-portal",),
+            digest=package_digest,
+            applicable_sections=("项目设计合同", "站点式门户"),
+        ),
+        renderer=RendererBinding(name="report-b-portal", version="1.0"),
+        filter_state={},
+        generated_at=started_at,
+        deterministic_checks=(
+            DeterministicCheck(
+                check_id="baseline-required-fields-complete",
+                status="passed",
+                receipt=data_digest,
+            ),
+            DeterministicCheck(
+                check_id="catalog-routes-rendered",
+                status="passed",
+                receipt=site_digest,
+            ),
+        ),
+        render_verdict=RenderVerdict(
+            verdict_id=stable_id("render-verdict", run_id, "awaiting-independent-review"),
+            status="rejected",
+            verified_at=modified_at,
+            anchor_ids=("尚待独立浏览器验收",),
+        ),
+        accepted_by=None,
+        artifact=ArtifactFileBinding(
+            relative_path=f"reports/B/{data.report_version}/html",
+            sha256=site_digest,
+            byte_size=site_bytes,
+            modified_at=modified_at,
+            media_type="directory",
+        ),
+        status="quality_check",
+        supersedes_manifest_id=None,
+    )
+    try:
+        site_root, manifest_path = transaction.commit(
+            _canonical_json(manifest.model_dump(mode="json"))
+        )
+    except RenderTransactionError as error:
+        raise ReportBPortalError(str(error)) from error
+    return site_root, manifest_path, locked.snapshot_id
+
+
+__all__ = [
+    "ReportBPortalData",
+    "ReportBPortalError",
+    "build_report_b_artifact",
+    "load_report_b_data",
+    "render_report_b_site",
+    "report_b_baseline_gate_failures",
+]

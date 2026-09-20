@@ -1,0 +1,80 @@
+{
+  "report_kind": "A",
+  "page_responsibility_id": "efficacy",
+  "report_snapshot_id": "snapshot-pdf-native-slice-001",
+  "report_version": "v-pdf-slice-001",
+  "rows": [
+    {
+      "row_id": "report-row_08e335c505e7bf4c90925300",
+      "product_id": "tezepelumab",
+      "trial_id": "synthetic-trial-01",
+      "group_id": "treatment",
+      "endpoint_id": "easi75",
+      "timepoint_id": "week16",
+      "display_label_zh": "泰瑞奇单抗治疗组第16周 EASI-75 应答率",
+      "page_responsibility_id": "efficacy",
+      "report_snapshot_id": "snapshot-pdf-native-slice-001",
+      "disclosure_state": "reported_value"
+    },
+    {
+      "row_id": "report-row_2221707e15e444b1a7a81788",
+      "product_id": "tezepelumab",
+      "trial_id": "synthetic-trial-01",
+      "group_id": "placebo",
+      "endpoint_id": "easi75",
+      "timepoint_id": "week16",
+      "display_label_zh": "泰瑞奇单抗安慰剂组第16周 EASI-75 应答率",
+      "page_responsibility_id": "efficacy",
+      "report_snapshot_id": "snapshot-pdf-native-slice-001",
+      "disclosure_state": "reported_value"
+    },
+    {
+      "row_id": "report-row_300f820415ac957047a9727a",
+      "product_id": "dupilumab",
+      "trial_id": "synthetic-trial-02",
+      "group_id": "treatment",
+      "endpoint_id": "easi75",
+      "timepoint_id": "week16",
+      "display_label_zh": "度普利尤单抗治疗组第16周 EASI-75 应答率",
+      "page_responsibility_id": "efficacy",
+      "report_snapshot_id": "snapshot-pdf-native-slice-001",
+      "disclosure_state": "reported_value"
+    },
+    {
+      "row_id": "report-row_ceac172d8895e68210d92c1f",
+      "product_id": "dupilumab",
+      "trial_id": "synthetic-trial-02",
+      "group_id": "placebo",
+      "endpoint_id": "easi75",
+      "timepoint_id": "week16",
+      "display_label_zh": "度普利尤单抗安慰剂组第16周 EASI-75 应答率",
+      "page_responsibility_id": "efficacy",
+      "report_snapshot_id": "snapshot-pdf-native-slice-001",
+      "disclosure_state": "reported_value"
+    },
+    {
+      "row_id": "report-row_f3400cb5dfb18c32725b1ac2",
+      "product_id": "lebrikizumab",
+      "trial_id": "synthetic-trial-03",
+      "group_id": "treatment",
+      "endpoint_id": "easi75",
+      "timepoint_id": "week16",
+      "display_label_zh": "来瑞珠单抗治疗组第16周 EASI-75 应答率",
+      "page_responsibility_id": "efficacy",
+      "report_snapshot_id": "snapshot-pdf-native-slice-001",
+      "disclosure_state": "reported_value"
+    },
+    {
+      "row_id": "report-row_4364c1839bea0a20c0ba1802",
+      "product_id": "lebrikizumab",
+      "trial_id": "synthetic-trial-03",
+      "group_id": "placebo",
+      "endpoint_id": "easi75",
+      "timepoint_id": "week16",
+      "display_label_zh": "来瑞珠单抗安慰剂组第16周 EASI-75 应答率",
+      "page_responsibility_id": "efficacy",
+      "report_snapshot_id": "snapshot-pdf-native-slice-001",
+      "disclosure_state": "reported_value"
+    }
+  ]
+}

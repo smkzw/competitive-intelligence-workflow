@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/recovery-package.schema.json",
+  "title": "recovery-package-v1 恢复包清单",
+  "description": "只允许绑定本 RC、批准迁移资料和本次验收记录；payload 采用 allowlist，结构上排除可运行旧流水线。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package_kind",
+    "source_commit",
+    "bundle",
+    "bundle_manifest",
+    "payload",
+    "created_at",
+    "manifest_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "package_kind": {"const": "recovery-package-manifest-v1"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"},
+    "bundle": {"$ref": "#/$defs/binding"},
+    "bundle_manifest": {"$ref": "#/$defs/binding"},
+    "payload": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/payloadItem"},
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {"kind": {"const": "approved_material"}}
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {"kind": {"const": "acceptance_record"}}
+          }
+        }
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "manifest_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "sha256", "bytes"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "payloadItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member", "kind", "origin", "sha256", "bytes"],
+      "properties": {
+        "member": {
+          "type": "string",
+          "allOf": [
+            {"pattern": "^recovery-package-v1/payload/(materials|acceptance)/.+"},
+            {"not": {"pattern": "(^|/)\\.\\.(/|$)"}}
+          ]
+        },
+        "kind": {"enum": ["approved_material", "acceptance_record"]},
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "anyOf": [
+              {"pattern": "^/"},
+              {"pattern": "(^|/)\\.\\.(/|$)"},
+              {"pattern": "\\\\"}
+            ]
+          }
+        },
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

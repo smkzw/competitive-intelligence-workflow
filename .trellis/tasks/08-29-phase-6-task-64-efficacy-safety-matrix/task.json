@@ -1,0 +1,31 @@
+{
+  "id": "phase-6-task-64-efficacy-safety-matrix",
+  "name": "phase-6-task-64-efficacy-safety-matrix",
+  "title": "Task 6.4 疗效—安全性气泡图和比较矩阵",
+  "description": "建立 B 类可配置疗效—安全性气泡图、比较矩阵状态和同步交互合同",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 6.4 only：疗效—安全性气泡图、比较矩阵与同步交互视图合同；不创建 HTML，不实现基线/处置或综合排名",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-29",
+  "completedAt": "2026-08-29",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-27-phase-6-report-b",
+  "relatedFiles": [
+    "src/ci_workflow/reports/b/pages.py",
+    "tests/reports/b/test_bubble_area.py",
+    "tests/reports/b/test_matrix_states.py",
+    "docs/acceptance/runs/task-6.4/"
+  ],
+  "notes": "29 项目标测试、1056 项相关回归及三路线多轮医学经理反证完成；本任务无物理页面，视觉验收留待 Task 6.9/6.10。",
+  "meta": {}
+}

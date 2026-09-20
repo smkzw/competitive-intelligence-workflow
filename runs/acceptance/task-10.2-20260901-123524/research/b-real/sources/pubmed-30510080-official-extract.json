@@ -1,0 +1,30 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "transfusion avoidance 73.6% versus 66.1%; breakthrough hemolysis 4.0% versus 10.7%",
+    "TEAE 88.0% versus 86.8%; SAE 8.8% versus 7.4%; deaths 0 versus 1",
+    "26-week treatment completion and trial-specific safety table values"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "field": "efficacy",
+      "value": "Transfusion avoidance 73.6% versus 66.1%; LDH normalization 53.6% versus 49.4%; breakthrough hemolysis 4.0% versus 10.7%"
+    },
+    {
+      "field": "safety",
+      "value": "Any AE 110/125 versus 105/121; SAE 11/125 versus 9/121; death 0 versus 1"
+    }
+  ],
+  "first_disclosed_at": "2018-12-06",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-pubmed-champion301",
+  "source_title": "PubMed PMID 30510080 / PMC6367644: CHAMPION-301 primary report",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/30510080/",
+  "source_version_id": "src-pubmed-champion301-20181206"
+}

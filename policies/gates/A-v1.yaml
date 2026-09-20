@@ -30,6 +30,8 @@ units:
   - unit_id: a_product_identity
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -53,6 +55,8 @@ units:
   - unit_id: a_innovation_eligibility
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -73,6 +77,8 @@ units:
   - unit_id: a_target_mechanism
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -95,6 +101,8 @@ units:
   - unit_id: a_modality
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -117,6 +125,8 @@ units:
   - unit_id: a_developer_originator
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -138,6 +148,8 @@ units:
   - unit_id: a_indication_relationship
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -158,6 +170,8 @@ units:
   - unit_id: a_china_max_phase_status
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -178,6 +192,8 @@ units:
   - unit_id: a_global_max_phase_status
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -197,6 +213,8 @@ units:
   - unit_id: a_core_trial_identity
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: maturity_ge_clinical
@@ -216,6 +234,8 @@ units:
   - unit_id: a_regulatory_events
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: maturity_ge_submission
@@ -236,6 +256,8 @@ units:
   - unit_id: a_efficacy_summary
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: result_bearing
@@ -271,6 +293,8 @@ units:
   - unit_id: a_safety_summary
     report_kind: A
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: result_bearing
@@ -303,6 +327,8 @@ units:
   - unit_id: a_molecular_parameters
     report_kind: A
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -323,6 +349,8 @@ units:
   - unit_id: a_formulation_detail
     report_kind: A
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -343,6 +371,8 @@ units:
   - unit_id: a_transaction_amounts
     report_kind: A
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -362,6 +392,8 @@ units:
   - unit_id: a_patent_family
     report_kind: A
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable
@@ -382,6 +414,8 @@ units:
   - unit_id: a_inferred_development_strategy
     report_kind: A
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: product
     scope_parent: null
     applicability_predicate_id: always_applicable

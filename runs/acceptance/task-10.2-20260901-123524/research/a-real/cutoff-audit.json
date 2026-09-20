@@ -1,0 +1,1984 @@
+{
+  "schema_version": "1.1",
+  "case_id": "task-10.2-r03-a-real",
+  "report": "A",
+  "indication": "特应性皮炎",
+  "materialized_cutoff": "2026-07-31T23:59:59+08:00",
+  "cutoff_timezone": "Asia/Shanghai",
+  "first_disclosure_rule": "Only first_disclosed_at <= cutoff sources enter the snapshot; acquired_at never substitutes for first disclosure.",
+  "source_counts": {
+    "eligible_count": 88,
+    "after_cutoff_count": 0,
+    "acquired_after_cutoff_count": 88,
+    "rule": "first_disclosed_at determines historical snapshot eligibility; acquired_at is separately retained."
+  },
+  "registry_history_source_count": 44,
+  "registry_history_snapshots": [
+    {
+      "source_id": "ctgov-nct02118792",
+      "nct_id": "NCT02118792",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT02118792/history",
+      "selected_history_version": 7,
+      "selected_history_date": "2017-01-12",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT02118792/history/7"
+    },
+    {
+      "source_id": "ctgov-nct02277743",
+      "nct_id": "NCT02277743",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT02277743/history",
+      "selected_history_version": 18,
+      "selected_history_date": "2017-11-17",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT02277743/history/18"
+    },
+    {
+      "source_id": "ctgov-nct03131648",
+      "nct_id": "NCT03131648",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03131648/history",
+      "selected_history_version": 31,
+      "selected_history_date": "2025-02-21",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03131648/history/31"
+    },
+    {
+      "source_id": "ctgov-nct03334396",
+      "nct_id": "NCT03334396",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03334396/history",
+      "selected_history_version": 34,
+      "selected_history_date": "2020-08-07",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03334396/history/34"
+    },
+    {
+      "source_id": "ctgov-nct03349060",
+      "nct_id": "NCT03349060",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03349060/history",
+      "selected_history_version": 47,
+      "selected_history_date": "2019-11-20",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03349060/history/47",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 571197,
+        "raw_sha256": "4ea52caab5e3f331d1fac168abfb1b265f68b28f10835cc07484e20d8987ba8c",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03349060-history-47.json",
+        "canonical_sha256": "1b9f153c0a377679181e4eedb8c3ae1ce4f9cac193c2498a6c58f04c2f91467d",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 455,
+        "safety": 54,
+        "parse_issues": 0
+      }
+    },
+    {
+      "source_id": "ctgov-nct03533751",
+      "nct_id": "NCT03533751",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03533751/history",
+      "selected_history_version": 8,
+      "selected_history_date": "2023-04-26",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03533751/history/8"
+    },
+    {
+      "source_id": "ctgov-nct03569293",
+      "nct_id": "NCT03569293",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03569293/history",
+      "selected_history_version": 40,
+      "selected_history_date": "2026-05-21",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03569293/history/40"
+    },
+    {
+      "source_id": "ctgov-nct03703102",
+      "nct_id": "NCT03703102",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03703102/history",
+      "selected_history_version": 10,
+      "selected_history_date": "2024-04-24",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03703102/history/10",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 653663,
+        "raw_sha256": "dc97b0016ac9057202c47498bc83188b5042d96d5b6c0def0bd9bc6036303fec",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03703102-history-10.json",
+        "canonical_sha256": "c43d98d02bec07cf2363f92acf3ccacd46950524f4ff5476a0cdc87b6e525744",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 1845,
+        "safety": 255,
+        "parse_issues": 0
+      }
+    },
+    {
+      "source_id": "ctgov-nct03745638",
+      "nct_id": "NCT03745638",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03745638/history",
+      "selected_history_version": 8,
+      "selected_history_date": "2023-09-21",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03745638/history/8"
+    },
+    {
+      "source_id": "ctgov-nct03809663",
+      "nct_id": "NCT03809663",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03809663/history",
+      "selected_history_version": 34,
+      "selected_history_date": "2022-03-09",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03809663/history/34",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 251312,
+        "raw_sha256": "72bda614e79a7b467589f7f3bda2c11dd1ff3f3f9cb1ba13af3975059838906c",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03809663-history-34.json",
+        "canonical_sha256": "537ec0f788f2d0a3f78d6bc083c18b8d8a95f5f0e234f7ca448fabb47b93dc9a",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 107,
+        "safety": 948,
+        "parse_issues": 0
+      }
+    },
+    {
+      "source_id": "ctgov-nct03985943",
+      "nct_id": "NCT03985943",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT03985943/history",
+      "selected_history_version": 39,
+      "selected_history_date": "2024-08-09",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT03985943/history/39",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 190282,
+        "raw_sha256": "cf7df0199b2ec1adb6846cb92b73b6a3573bf8824fb25cf9ccfa3f54a2e1ddb4",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03985943-history-39.json",
+        "canonical_sha256": "c7820c9ba3a25efe37dad4b26b3a3e0bd42982ca6625ab5ac3953c1ceca013c4",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 36,
+        "safety": 150,
+        "parse_issues": 0
+      }
+    },
+    {
+      "source_id": "ctgov-nct04021862",
+      "nct_id": "NCT04021862",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT04021862/history",
+      "selected_history_version": 9,
+      "selected_history_date": "2025-01-31",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT04021862/history/9"
+    },
+    {
+      "source_id": "ctgov-nct04146363",
+      "nct_id": "NCT04146363",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT04146363/history",
+      "selected_history_version": 31,
+      "selected_history_date": "2022-11-02",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT04146363/history/31",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 791548,
+        "raw_sha256": "f79fa7e5849e2e01c75ebf8a5544df4053432a5949e3d01af74e2275d055883b",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct04146363-history-31.json",
+        "canonical_sha256": "e963b7a08ba0f865331f5147a1e195f6cd4b03f48b90b7fb5c91884800277e29",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 87,
+        "safety": 3333,
+        "parse_issues": 0
+      }
+    },
+    {
+      "source_id": "ctgov-nct04773587",
+      "nct_id": "NCT04773587",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT04773587/history",
+      "selected_history_version": 8,
+      "selected_history_date": "2024-09-13",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT04773587/history/8"
+    },
+    {
+      "source_id": "ctgov-nct04875169",
+      "nct_id": "NCT04875169",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT04875169/history",
+      "selected_history_version": 6,
+      "selected_history_date": "2023-05-31",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT04875169/history/6"
+    },
+    {
+      "source_id": "ctgov-nct05014568",
+      "nct_id": "NCT05014568",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05014568/history",
+      "selected_history_version": 9,
+      "selected_history_date": "2025-08-19",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05014568/history/9"
+    },
+    {
+      "source_id": "ctgov-nct05048056",
+      "nct_id": "NCT05048056",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05048056/history",
+      "selected_history_version": 2,
+      "selected_history_date": "2025-02-24",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05048056/history/2"
+    },
+    {
+      "source_id": "ctgov-nct05131477",
+      "nct_id": "NCT05131477",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05131477/history",
+      "selected_history_version": 23,
+      "selected_history_date": "2025-06-17",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05131477/history/23",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 1115519,
+        "raw_sha256": "5159cc5e81284bbf47f97430ee6b972453fd71d3bca149e83036e57db6f0f584",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct05131477-history-23.json",
+        "canonical_sha256": "8ee13df1a40bc4e2aace1a10819eb1e3d1c57e28a4fb49dbb39af0f27e9e0eed",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 2914,
+        "safety": 974,
+        "parse_issues": 0
+      }
+    },
+    {
+      "source_id": "ctgov-nct05158023",
+      "nct_id": "NCT05158023",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05158023/history",
+      "selected_history_version": 15,
+      "selected_history_date": "2024-04-24",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05158023/history/15"
+    },
+    {
+      "source_id": "ctgov-nct05265923",
+      "nct_id": "NCT05265923",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05265923/history",
+      "selected_history_version": 3,
+      "selected_history_date": "2024-11-06",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05265923/history/3"
+    },
+    {
+      "source_id": "ctgov-nct05509023",
+      "nct_id": "NCT05509023",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05509023/history",
+      "selected_history_version": 10,
+      "selected_history_date": "2026-04-17",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05509023/history/10",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 37446,
+        "raw_sha256": "36adf3bc2644f3d31c32fb5c87e04d234896732c4c8aac7bd0dd329cc26618c9",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct05509023-history-10.json",
+        "canonical_sha256": "c8b6164b72c42daa3d03cdb64a4fb834c14b53291e268e103972457d0eaf3250",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 10,
+        "safety": 22,
+        "parse_issues": 0
+      },
+      "anomaly_resolution": "Historical v10 result module projected: 7 efficacy rows, 25 numeric safety rows, 4 explicit unreported safety sentinels; prior retained-current anomaly closed."
+    },
+    {
+      "source_id": "ctgov-nct05526222",
+      "nct_id": "NCT05526222",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05526222/history",
+      "selected_history_version": 3,
+      "selected_history_date": "2025-12-30",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05526222/history/3"
+    },
+    {
+      "source_id": "ctgov-nct05549947",
+      "nct_id": "NCT05549947",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05549947/history",
+      "selected_history_version": 2,
+      "selected_history_date": "2026-04-23",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05549947/history/2"
+    },
+    {
+      "source_id": "ctgov-nct05608343",
+      "nct_id": "NCT05608343",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05608343/history",
+      "selected_history_version": 12,
+      "selected_history_date": "2026-06-11",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05608343/history/12",
+      "fresh_refetch": {
+        "status": 200,
+        "bytes": 36441,
+        "raw_sha256": "e3b59afb687e7a4630daca84fa4a6de5d927421b613edd173a8612c15dbf0ea6",
+        "raw_archive_path": "fresh-revalidation/raw/ctgov-nct05608343-history-12.json",
+        "canonical_sha256": "191e8c8296830efbecdf990575dbf9cd9f34531e6df89a614adfc5a2116ffc77",
+        "canonicalization": "recursive HTML entity unescape for parser normalization"
+      },
+      "resolved_inventory": {
+        "outcome": 4,
+        "safety": 8,
+        "parse_issues": 0
+      },
+      "anomaly_resolution": "Historical v12 result module projected: 4 efficacy rows and 8 safety rows; prior retained-current no-results gap closed."
+    },
+    {
+      "source_id": "ctgov-nct05651711",
+      "nct_id": "NCT05651711",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05651711/history",
+      "selected_history_version": 40,
+      "selected_history_date": "2026-06-02",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05651711/history/40"
+    },
+    {
+      "source_id": "ctgov-nct05671432",
+      "nct_id": "NCT05671432",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05671432/history",
+      "selected_history_version": 0,
+      "selected_history_date": "2022-12-31",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05671432/history/0"
+    },
+    {
+      "source_id": "ctgov-nct05702268",
+      "nct_id": "NCT05702268",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05702268/history",
+      "selected_history_version": 2,
+      "selected_history_date": "2023-05-18",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05702268/history/2"
+    },
+    {
+      "source_id": "ctgov-nct05935085",
+      "nct_id": "NCT05935085",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05935085/history",
+      "selected_history_version": 8,
+      "selected_history_date": "2025-02-12",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05935085/history/8"
+    },
+    {
+      "source_id": "ctgov-nct05970432",
+      "nct_id": "NCT05970432",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT05970432/history",
+      "selected_history_version": 0,
+      "selected_history_date": "2023-07-31",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT05970432/history/0"
+    },
+    {
+      "source_id": "ctgov-nct06130566",
+      "nct_id": "NCT06130566",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06130566/history",
+      "selected_history_version": 25,
+      "selected_history_date": "2026-07-20",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06130566/history/25"
+    },
+    {
+      "source_id": "ctgov-nct06136741",
+      "nct_id": "NCT06136741",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06136741/history",
+      "selected_history_version": 16,
+      "selected_history_date": "2026-07-31",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06136741/history/16"
+    },
+    {
+      "source_id": "ctgov-nct06193434",
+      "nct_id": "NCT06193434",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06193434/history",
+      "selected_history_version": 3,
+      "selected_history_date": "2025-08-29",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06193434/history/3"
+    },
+    {
+      "source_id": "ctgov-nct06216392",
+      "nct_id": "NCT06216392",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06216392/history",
+      "selected_history_version": 0,
+      "selected_history_date": "2024-01-11",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06216392/history/0"
+    },
+    {
+      "source_id": "ctgov-nct06383468",
+      "nct_id": "NCT06383468",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06383468/history",
+      "selected_history_version": 0,
+      "selected_history_date": "2024-04-21",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06383468/history/0"
+    },
+    {
+      "source_id": "ctgov-nct06395948",
+      "nct_id": "NCT06395948",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06395948/history",
+      "selected_history_version": 31,
+      "selected_history_date": "2026-07-21",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06395948/history/31"
+    },
+    {
+      "source_id": "ctgov-nct06468956",
+      "nct_id": "NCT06468956",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06468956/history",
+      "selected_history_version": 2,
+      "selected_history_date": "2025-09-10",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06468956/history/2"
+    },
+    {
+      "source_id": "ctgov-nct06477835",
+      "nct_id": "NCT06477835",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06477835/history",
+      "selected_history_version": 1,
+      "selected_history_date": "2026-03-29",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06477835/history/1"
+    },
+    {
+      "source_id": "ctgov-nct06524635",
+      "nct_id": "NCT06524635",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06524635/history",
+      "selected_history_version": 4,
+      "selected_history_date": "2025-01-22",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06524635/history/4"
+    },
+    {
+      "source_id": "ctgov-nct06552520",
+      "nct_id": "NCT06552520",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06552520/history",
+      "selected_history_version": 1,
+      "selected_history_date": "2026-04-17",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06552520/history/1"
+    },
+    {
+      "source_id": "ctgov-nct06554847",
+      "nct_id": "NCT06554847",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06554847/history",
+      "selected_history_version": 2,
+      "selected_history_date": "2025-07-11",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06554847/history/2"
+    },
+    {
+      "source_id": "ctgov-nct06727552",
+      "nct_id": "NCT06727552",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT06727552/history",
+      "selected_history_version": 11,
+      "selected_history_date": "2026-05-01",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT06727552/history/11"
+    },
+    {
+      "source_id": "ctgov-nct07211542",
+      "nct_id": "NCT07211542",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT07211542/history",
+      "selected_history_version": 4,
+      "selected_history_date": "2026-04-02",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT07211542/history/4"
+    },
+    {
+      "source_id": "ctgov-nct07309055",
+      "nct_id": "NCT07309055",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT07309055/history",
+      "selected_history_version": 1,
+      "selected_history_date": "2026-04-01",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT07309055/history/1"
+    },
+    {
+      "source_id": "ctgov-nct07488065",
+      "nct_id": "NCT07488065",
+      "history_endpoint": "https://clinicaltrials.gov/api/int/studies/NCT07488065/history",
+      "selected_history_version": 2,
+      "selected_history_date": "2026-05-05",
+      "historical_version_used": true,
+      "replacement_projection_issues_if_used": 0,
+      "current_capture_retained_reason": null,
+      "selected_record_url": "https://clinicaltrials.gov/api/int/studies/NCT07488065/history/2"
+    }
+  ],
+  "registry_result_resolution": [
+    {
+      "source_id": "ctgov-nct03349060",
+      "nct_id": "NCT03349060",
+      "history_version": 47,
+      "history_date": "2019-11-20",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT03349060/history/47",
+      "raw_sha256": "4ea52caab5e3f331d1fac168abfb1b265f68b28f10835cc07484e20d8987ba8c",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03349060-history-47.json",
+      "canonical_sha256": "1b9f153c0a377679181e4eedb8c3ae1ce4f9cac193c2498a6c58f04c2f91467d",
+      "parsed_counts": {
+        "outcome": 455,
+        "teae": 0,
+        "sae": 36,
+        "aesi": 0,
+        "common_ae": 18,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct03703102",
+      "nct_id": "NCT03703102",
+      "history_version": 10,
+      "history_date": "2024-04-24",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT03703102/history/10",
+      "raw_sha256": "dc97b0016ac9057202c47498bc83188b5042d96d5b6c0def0bd9bc6036303fec",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03703102-history-10.json",
+      "canonical_sha256": "c43d98d02bec07cf2363f92acf3ccacd46950524f4ff5476a0cdc87b6e525744",
+      "parsed_counts": {
+        "outcome": 1845,
+        "teae": 0,
+        "sae": 100,
+        "aesi": 0,
+        "common_ae": 155,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct03809663",
+      "nct_id": "NCT03809663",
+      "history_version": 34,
+      "history_date": "2022-03-09",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT03809663/history/34",
+      "raw_sha256": "72bda614e79a7b467589f7f3bda2c11dd1ff3f3f9cb1ba13af3975059838906c",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03809663-history-34.json",
+      "canonical_sha256": "537ec0f788f2d0a3f78d6bc083c18b8d8a95f5f0e234f7ca448fabb47b93dc9a",
+      "parsed_counts": {
+        "outcome": 107,
+        "teae": 0,
+        "sae": 168,
+        "aesi": 0,
+        "common_ae": 780,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct03985943",
+      "nct_id": "NCT03985943",
+      "history_version": 39,
+      "history_date": "2024-08-09",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT03985943/history/39",
+      "raw_sha256": "cf7df0199b2ec1adb6846cb92b73b6a3573bf8824fb25cf9ccfa3f54a2e1ddb4",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct03985943-history-39.json",
+      "canonical_sha256": "c7820c9ba3a25efe37dad4b26b3a3e0bd42982ca6625ab5ac3953c1ceca013c4",
+      "parsed_counts": {
+        "outcome": 36,
+        "teae": 0,
+        "sae": 108,
+        "aesi": 0,
+        "common_ae": 42,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct04146363",
+      "nct_id": "NCT04146363",
+      "history_version": 31,
+      "history_date": "2022-11-02",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT04146363/history/31",
+      "raw_sha256": "f79fa7e5849e2e01c75ebf8a5544df4053432a5949e3d01af74e2275d055883b",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct04146363-history-31.json",
+      "canonical_sha256": "e963b7a08ba0f865331f5147a1e195f6cd4b03f48b90b7fb5c91884800277e29",
+      "parsed_counts": {
+        "outcome": 87,
+        "teae": 0,
+        "sae": 187,
+        "aesi": 0,
+        "common_ae": 3146,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct05131477",
+      "nct_id": "NCT05131477",
+      "history_version": 23,
+      "history_date": "2025-06-17",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT05131477/history/23",
+      "raw_sha256": "5159cc5e81284bbf47f97430ee6b972453fd71d3bca149e83036e57db6f0f584",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct05131477-history-23.json",
+      "canonical_sha256": "8ee13df1a40bc4e2aace1a10819eb1e3d1c57e28a4fb49dbb39af0f27e9e0eed",
+      "parsed_counts": {
+        "outcome": 2886,
+        "teae": 14,
+        "sae": 260,
+        "aesi": 0,
+        "common_ae": 728,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct05608343",
+      "nct_id": "NCT05608343",
+      "history_version": 12,
+      "history_date": "2026-06-11",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT05608343/history/12",
+      "raw_sha256": "e3b59afb687e7a4630daca84fa4a6de5d927421b613edd173a8612c15dbf0ea6",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct05608343-history-12.json",
+      "canonical_sha256": "191e8c8296830efbecdf990575dbf9cd9f34531e6df89a614adfc5a2116ffc77",
+      "parsed_counts": {
+        "outcome": 4,
+        "teae": 0,
+        "sae": 4,
+        "aesi": 0,
+        "common_ae": 4,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    },
+    {
+      "source_id": "ctgov-nct05509023",
+      "nct_id": "NCT05509023",
+      "history_version": 10,
+      "history_date": "2026-04-17",
+      "history_url": "https://clinicaltrials.gov/api/int/studies/NCT05509023/history/10",
+      "raw_sha256": "36adf3bc2644f3d31c32fb5c87e04d234896732c4c8aac7bd0dd329cc26618c9",
+      "raw_archive_path": "fresh-revalidation/raw/ctgov-nct05509023-history-10.json",
+      "canonical_sha256": "c8b6164b72c42daa3d03cdb64a4fb834c14b53291e268e103972457d0eaf3250",
+      "parsed_counts": {
+        "outcome": 7,
+        "teae": 0,
+        "sae": 11,
+        "aesi": 0,
+        "common_ae": 14,
+        "parse_failure": 0
+      },
+      "projection_status": "closed"
+    }
+  ],
+  "post_cutoff_content_risk": {
+    "status": "closed_for_current_package",
+    "retained_current_registry_records": [],
+    "reason": "The eight previously retained current registry records were replaced by exact official pre-cutoff history versions after deterministic projection closed; raw envelopes and canonical parser bodies are archived.",
+    "prior_diagnostic": "The prior package retained eight current records because historical replacement was reported to create projection gaps; this was re-tested after recursive HTML-entity normalization and is now closed.",
+    "required_codex_review": "Confirm the final project uses this package digest and retains the explicit NCT055 TEAE/AESI unreported sentinels; do not infer unreported safety as zero."
+  },
+  "projection_gap_resolution": {
+    "prior_affected_records": [
+      "ctgov-nct03349060",
+      "ctgov-nct03703102",
+      "ctgov-nct03809663",
+      "ctgov-nct03985943",
+      "ctgov-nct04146363",
+      "ctgov-nct05131477",
+      "ctgov-nct05509023",
+      "ctgov-nct05608343"
+    ],
+    "resolved_records": [
+      "ctgov-nct03349060",
+      "ctgov-nct03703102",
+      "ctgov-nct03809663",
+      "ctgov-nct03985943",
+      "ctgov-nct04146363",
+      "ctgov-nct05131477",
+      "ctgov-nct05509023",
+      "ctgov-nct05608343"
+    ],
+    "remaining_projection_issue_count": 0,
+    "remaining_parse_failure_count": 0,
+    "remaining_product_status_mismatch_count": 0,
+    "audit_passed": true,
+    "trial_coverage": [
+      {
+        "trial_id": "nct02277743",
+        "product_id": "dupilumab",
+        "registry_source_ids": [
+          "ctgov-nct02277743"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct02277743"
+        ],
+        "result_source_ids": [
+          "ctgov-nct02277743",
+          "nejm-dupilumab-nct02277743-20160930"
+        ],
+        "projected_efficacy_rows": 54,
+        "projected_safety_rows": 101,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03131648",
+        "product_id": "tralokinumab",
+        "registry_source_ids": [
+          "ctgov-nct03131648"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03131648"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03131648",
+          "pmc-tralokinumab-nct03131648-20200930"
+        ],
+        "projected_efficacy_rows": 46,
+        "projected_safety_rows": 662,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct04146363",
+        "product_id": "lebrikizumab",
+        "registry_source_ids": [
+          "ctgov-nct04146363"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct04146363"
+        ],
+        "result_source_ids": [
+          "ctgov-nct04146363",
+          "nice-ta986-lebrikizumab-nct04146363"
+        ],
+        "projected_efficacy_rows": 87,
+        "projected_safety_rows": 3335,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03985943",
+        "product_id": "nemolizumab",
+        "registry_source_ids": [
+          "ctgov-nct03985943"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03985943"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03985943",
+          "pubmed-nemolizumab-nct03985943-20240725"
+        ],
+        "projected_efficacy_rows": 36,
+        "projected_safety_rows": 152,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03349060",
+        "product_id": "abrocitinib",
+        "registry_source_ids": [
+          "ctgov-nct03349060"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03349060"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03349060",
+          "pubmed-abrocitinib-nct03349060-20200727"
+        ],
+        "projected_efficacy_rows": 455,
+        "projected_safety_rows": 56,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03569293",
+        "product_id": "upadacitinib",
+        "registry_source_ids": [
+          "ctgov-nct03569293"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03569293"
+        ],
+        "result_source_ids": [
+          "cadth-upadacitinib-nct03569293",
+          "ctgov-nct03569293"
+        ],
+        "projected_efficacy_rows": 136,
+        "projected_safety_rows": 2914,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03334396",
+        "product_id": "baricitinib",
+        "registry_source_ids": [
+          "ctgov-nct03334396"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03334396"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03334396",
+          "pmc-baricitinib-nct03334396-review"
+        ],
+        "projected_efficacy_rows": 113,
+        "projected_safety_rows": 225,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03745638",
+        "product_id": "ruxolitinib-cream",
+        "registry_source_ids": [
+          "ctgov-nct03745638"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03745638"
+        ],
+        "result_source_ids": [
+          "cadth-ruxolitinib-nct03745638",
+          "ctgov-nct03745638"
+        ],
+        "projected_efficacy_rows": 562,
+        "projected_safety_rows": 103,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct02118792",
+        "product_id": "crisaborole",
+        "registry_source_ids": [
+          "ctgov-nct02118792"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct02118792"
+        ],
+        "result_source_ids": [
+          "ctgov-nct02118792"
+        ],
+        "projected_efficacy_rows": 92,
+        "projected_safety_rows": 44,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct05014568",
+        "product_id": "tapinarof",
+        "registry_source_ids": [
+          "ctgov-nct05014568"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct05014568"
+        ],
+        "result_source_ids": [
+          "ctgov-nct05014568",
+          "review-tapinarof-nct05014568-adoring1"
+        ],
+        "projected_efficacy_rows": 10,
+        "projected_safety_rows": 64,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct04773587",
+        "product_id": "roflumilast-cream",
+        "registry_source_ids": [
+          "ctgov-nct04773587"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct04773587"
+        ],
+        "result_source_ids": [
+          "ctgov-nct04773587",
+          "pmc-roflumilast-nct04773587-20240918"
+        ],
+        "projected_efficacy_rows": 22,
+        "projected_safety_rows": 14,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct06130566",
+        "product_id": "amlitelimab",
+        "registry_source_ids": [
+          "ctgov-nct06130566"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "sanofi-amlitelimab-20260328"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 0,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05131477",
+        "product_id": "amlitelimab",
+        "registry_source_ids": [
+          "ctgov-nct05131477"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct05131477"
+        ],
+        "result_source_ids": [
+          "ctgov-nct05131477"
+        ],
+        "projected_efficacy_rows": 2886,
+        "projected_safety_rows": 1002,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct05651711",
+        "product_id": "rocatinlimab",
+        "registry_source_ids": [
+          "ctgov-nct05651711"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct05651711"
+        ],
+        "result_source_ids": [
+          "ctgov-nct05651711",
+          "pubmed-41314226"
+        ],
+        "projected_efficacy_rows": 62,
+        "projected_safety_rows": 52,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03703102",
+        "product_id": "rocatinlimab",
+        "registry_source_ids": [
+          "ctgov-nct03703102"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03703102"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03703102"
+        ],
+        "projected_efficacy_rows": 1845,
+        "projected_safety_rows": 255,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03809663",
+        "product_id": "tezepelumab",
+        "registry_source_ids": [
+          "ctgov-nct03809663"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03809663"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03809663"
+        ],
+        "projected_efficacy_rows": 107,
+        "projected_safety_rows": 948,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct03533751",
+        "product_id": "etokimab",
+        "registry_source_ids": [
+          "ctgov-nct03533751"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct03533751"
+        ],
+        "result_source_ids": [
+          "ctgov-nct03533751"
+        ],
+        "projected_efficacy_rows": 50,
+        "projected_safety_rows": 110,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct04021862",
+        "product_id": "bermekimab",
+        "registry_source_ids": [
+          "ctgov-nct04021862"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct04021862"
+        ],
+        "result_source_ids": [
+          "ctgov-nct04021862"
+        ],
+        "projected_efficacy_rows": 184,
+        "projected_safety_rows": 78,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct05265923",
+        "product_id": "stapokibart",
+        "registry_source_ids": [
+          "ctgov-nct05265923"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "pubmed-39450683",
+          "stapokibart-first-approval-40095376"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 2,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct06477835",
+        "product_id": "sim0718",
+        "registry_source_ids": [
+          "ctgov-nct06477835"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "simcere-rademikibart-20260330"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 2,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05549947",
+        "product_id": "shr-1819",
+        "registry_source_ids": [
+          "ctgov-nct05549947"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "springer-shr1819-20260528"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 2,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct06468956",
+        "product_id": "shr-1819",
+        "registry_source_ids": [
+          "ctgov-nct06468956"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct07309055",
+        "product_id": "shr-1819",
+        "registry_source_ids": [
+          "ctgov-nct07309055"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct04875169",
+        "product_id": "ivarmacitinib",
+        "registry_source_ids": [
+          "ctgov-nct04875169"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "pmc-ivarmacitinib-nct04875169-20250430"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 4,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05526222",
+        "product_id": "jaktinib",
+        "registry_source_ids": [
+          "ctgov-nct05526222"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06383468",
+        "product_id": "ak120",
+        "registry_source_ids": [
+          "ctgov-nct06383468"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct05048056",
+        "product_id": "ak120",
+        "registry_source_ids": [
+          "ctgov-nct05048056"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06216392",
+        "product_id": "gr1802",
+        "registry_source_ids": [
+          "ctgov-nct06216392"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06554847",
+        "product_id": "ssgj-611",
+        "registry_source_ids": [
+          "ctgov-nct06554847"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06136741",
+        "product_id": "rezpegaldesleukin",
+        "registry_source_ids": [
+          "ctgov-nct06136741"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "sec-rezpeg-nct06136741-20250918"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 8,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05608343",
+        "product_id": "difamilast",
+        "registry_source_ids": [
+          "ctgov-nct05608343"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct05608343"
+        ],
+        "result_source_ids": [
+          "ctgov-nct05608343"
+        ],
+        "projected_efficacy_rows": 4,
+        "projected_safety_rows": 8,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct05158023",
+        "product_id": "eblasakimab",
+        "registry_source_ids": [
+          "ctgov-nct05158023"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "sec-eblasakimab-nct05158023-2023"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 0,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct06395948",
+        "product_id": "apg777",
+        "registry_source_ids": [
+          "ctgov-nct06395948"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "sec-apg777-nct06395948-20250811"
+        ],
+        "projected_efficacy_rows": 8,
+        "projected_safety_rows": 0,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05509023",
+        "product_id": "bempikibart",
+        "registry_source_ids": [
+          "ctgov-nct05509023"
+        ],
+        "registry_sources_with_results": [
+          "ctgov-nct05509023"
+        ],
+        "result_source_ids": [
+          "ctgov-nct05509023"
+        ],
+        "projected_efficacy_rows": 7,
+        "projected_safety_rows": 25,
+        "status": "registry_results_projected"
+      },
+      {
+        "trial_id": "nct06727552",
+        "product_id": "barzolvolimab",
+        "registry_source_ids": [
+          "ctgov-nct06727552"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06524635",
+        "product_id": "lutikizumab",
+        "registry_source_ids": [
+          "ctgov-nct06524635"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct05702268",
+        "product_id": "icp-332",
+        "registry_source_ids": [
+          "ctgov-nct05702268"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "innocare-icp332-nct05702268-20240311",
+          "pubmed-icp332-nct05702268-20260114"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 3,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05671432",
+        "product_id": "cm326",
+        "registry_source_ids": [
+          "ctgov-nct05671432"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06193434",
+        "product_id": "ibi356",
+        "registry_source_ids": [
+          "ctgov-nct06193434"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct07211542",
+        "product_id": "shr1905",
+        "registry_source_ids": [
+          "ctgov-nct07211542"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct06552520",
+        "product_id": "tqh2722",
+        "registry_source_ids": [
+          "ctgov-nct06552520"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct07488065",
+        "product_id": "skb575",
+        "registry_source_ids": [
+          "ctgov-nct07488065"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "nct05935085",
+        "product_id": "anb032",
+        "registry_source_ids": [
+          "ctgov-nct05935085"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      },
+      {
+        "trial_id": "chictr2100051917",
+        "product_id": "gr1802",
+        "registry_source_ids": [],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "wiley-gr1802-chictr2100051917-20250312"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 5,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05544591",
+        "product_id": "ssgj-611",
+        "registry_source_ids": [],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "pmc-ssgj611-nct05544591-20250304"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 6,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct06035354",
+        "product_id": "ak120",
+        "registry_source_ids": [],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "eadv-ak120-nct06035354-2025"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 3,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "pmid34710557",
+        "product_id": "difamilast",
+        "registry_source_ids": [],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "pubmed-difamilast-phase3"
+        ],
+        "projected_efficacy_rows": 2,
+        "projected_safety_rows": 0,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct03961529",
+        "product_id": "difamilast",
+        "registry_source_ids": [],
+        "registry_sources_with_results": [],
+        "result_source_ids": [
+          "pubmed-difamilast-phase3"
+        ],
+        "projected_efficacy_rows": 1,
+        "projected_safety_rows": 2,
+        "status": "reported_by_secondary_source"
+      },
+      {
+        "trial_id": "nct05970432",
+        "product_id": "tqh2722",
+        "registry_source_ids": [
+          "ctgov-nct05970432"
+        ],
+        "registry_sources_with_results": [],
+        "result_source_ids": [],
+        "projected_efficacy_rows": 0,
+        "projected_safety_rows": 0,
+        "status": "registry_results_not_posted"
+      }
+    ],
+    "product_coverage": [
+      {
+        "product_id": "dupilumab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct02277743"
+        ],
+        "numeric_result_trial_ids": [
+          "nct02277743"
+        ],
+        "comparable_result_trial_ids": [
+          "nct02277743"
+        ]
+      },
+      {
+        "product_id": "tralokinumab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03131648"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03131648"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03131648"
+        ]
+      },
+      {
+        "product_id": "lebrikizumab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct04146363"
+        ],
+        "numeric_result_trial_ids": [
+          "nct04146363"
+        ],
+        "comparable_result_trial_ids": [
+          "nct04146363"
+        ]
+      },
+      {
+        "product_id": "nemolizumab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03985943"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03985943"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03985943"
+        ]
+      },
+      {
+        "product_id": "abrocitinib",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03349060"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03349060"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03349060"
+        ]
+      },
+      {
+        "product_id": "upadacitinib",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03569293"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03569293"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03569293"
+        ]
+      },
+      {
+        "product_id": "baricitinib",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03334396"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03334396"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03334396"
+        ]
+      },
+      {
+        "product_id": "ruxolitinib-cream",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03745638"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03745638"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03745638"
+        ]
+      },
+      {
+        "product_id": "crisaborole",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct02118792"
+        ],
+        "numeric_result_trial_ids": [
+          "nct02118792"
+        ],
+        "comparable_result_trial_ids": [
+          "nct02118792"
+        ]
+      },
+      {
+        "product_id": "tapinarof",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05014568"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05014568"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05014568"
+        ]
+      },
+      {
+        "product_id": "roflumilast-cream",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct04773587"
+        ],
+        "numeric_result_trial_ids": [
+          "nct04773587"
+        ],
+        "comparable_result_trial_ids": [
+          "nct04773587"
+        ]
+      },
+      {
+        "product_id": "amlitelimab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct06130566",
+          "nct05131477"
+        ],
+        "numeric_result_trial_ids": [
+          "nct06130566",
+          "nct05131477"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05131477"
+        ]
+      },
+      {
+        "product_id": "rocatinlimab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05651711",
+          "nct03703102"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05651711",
+          "nct03703102"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05651711"
+        ]
+      },
+      {
+        "product_id": "tezepelumab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03809663"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03809663"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03809663"
+        ]
+      },
+      {
+        "product_id": "etokimab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct03533751"
+        ],
+        "numeric_result_trial_ids": [
+          "nct03533751"
+        ],
+        "comparable_result_trial_ids": [
+          "nct03533751"
+        ]
+      },
+      {
+        "product_id": "bermekimab",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct04021862"
+        ],
+        "numeric_result_trial_ids": [
+          "nct04021862"
+        ],
+        "comparable_result_trial_ids": [
+          "nct04021862"
+        ]
+      },
+      {
+        "product_id": "stapokibart",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05265923"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05265923"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05265923"
+        ]
+      },
+      {
+        "product_id": "sim0718",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct06477835"
+        ],
+        "numeric_result_trial_ids": [
+          "nct06477835"
+        ],
+        "comparable_result_trial_ids": [
+          "nct06477835"
+        ]
+      },
+      {
+        "product_id": "shr-1819",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05549947",
+          "nct06468956",
+          "nct07309055"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05549947"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05549947"
+        ]
+      },
+      {
+        "product_id": "ivarmacitinib",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct04875169"
+        ],
+        "numeric_result_trial_ids": [
+          "nct04875169"
+        ],
+        "comparable_result_trial_ids": [
+          "nct04875169"
+        ]
+      },
+      {
+        "product_id": "jaktinib",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct05526222"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "ak120",
+        "result_status": "已有部分公开结果",
+        "trial_ids": [
+          "nct06383468",
+          "nct05048056",
+          "nct06035354"
+        ],
+        "numeric_result_trial_ids": [
+          "nct06035354"
+        ],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "gr1802",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct06216392",
+          "chictr2100051917"
+        ],
+        "numeric_result_trial_ids": [
+          "chictr2100051917"
+        ],
+        "comparable_result_trial_ids": [
+          "chictr2100051917"
+        ]
+      },
+      {
+        "product_id": "ssgj-611",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct06554847",
+          "nct05544591"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05544591"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05544591"
+        ]
+      },
+      {
+        "product_id": "rezpegaldesleukin",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct06136741"
+        ],
+        "numeric_result_trial_ids": [
+          "nct06136741"
+        ],
+        "comparable_result_trial_ids": [
+          "nct06136741"
+        ]
+      },
+      {
+        "product_id": "difamilast",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05608343",
+          "pmid34710557",
+          "nct03961529"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05608343",
+          "pmid34710557",
+          "nct03961529"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05608343"
+        ]
+      },
+      {
+        "product_id": "eblasakimab",
+        "result_status": "已有部分公开结果",
+        "trial_ids": [
+          "nct05158023"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05158023"
+        ],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "apg777",
+        "result_status": "已有部分公开结果",
+        "trial_ids": [
+          "nct06395948"
+        ],
+        "numeric_result_trial_ids": [
+          "nct06395948"
+        ],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "bempikibart",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05509023"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05509023"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05509023"
+        ]
+      },
+      {
+        "product_id": "barzolvolimab",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct06727552"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "lutikizumab",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct06524635"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "icp-332",
+        "result_status": "有公开关键结果",
+        "trial_ids": [
+          "nct05702268"
+        ],
+        "numeric_result_trial_ids": [
+          "nct05702268"
+        ],
+        "comparable_result_trial_ids": [
+          "nct05702268"
+        ]
+      },
+      {
+        "product_id": "cm326",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct05671432"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "ibi356",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct06193434"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "shr1905",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct07211542"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "tqh2722",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct06552520",
+          "nct05970432"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "skb575",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct07488065"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      },
+      {
+        "product_id": "anb032",
+        "result_status": "暂无公开关键结果",
+        "trial_ids": [
+          "nct05935085"
+        ],
+        "numeric_result_trial_ids": [],
+        "comparable_result_trial_ids": []
+      }
+    ]
+  },
+  "patent_evidence": [
+    {
+      "product_id": "dupilumab",
+      "source_id": "patent-google-us7608693b2",
+      "disclosure_date": "2009-10-27",
+      "decision": "explicit patent family row; Google legal status caveat preserved"
+    },
+    {
+      "product_id": "tralokinumab",
+      "source_id": "patent-google-wo2005007699a2",
+      "disclosure_date": "2005-01-27",
+      "decision": "PCT family lead only; national-phase status not inferred"
+    }
+  ],
+  "zero_result_and_missingness_diagnostic": {
+    "empty_universe": false,
+    "empty_trials": false,
+    "efficacy_rows": 6791,
+    "safety_rows": 10265,
+    "products_with_no_public_key_results": 9,
+    "registry_trials_with_results_but_zero_projected_rows": [],
+    "classification": "not a zero-result failure; explicit no-public-result statuses remain distinct from numeric zero and all registry result modules selected for this resolution are projected."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "phase-6-task-63-safety-heatmap",
+  "name": "phase-6-task-63-safety-heatmap",
+  "title": "Task 6.3 安全性热图和完整 AE 视图",
+  "description": "建立 B 类多维安全性热图、完整 AE 视图、披露状态与可比语境合同",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 6.3 only：安全性事实、披露状态、多维热图与完整 AE 视图模型；不创建 HTML，不实现气泡矩阵或安全性排名",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-29",
+  "completedAt": "2026-08-29",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-27-phase-6-report-b",
+  "relatedFiles": [
+    "src/ci_workflow/reports/b/safety.py",
+    "tests/reports/b/test_safety_heatmap.py",
+    "tests/reports/b/test_ae_state_semantics.py",
+    "docs/acceptance/runs/task-6.3/verdict.md"
+  ],
+  "notes": "22 项定向测试与 1027 项相关回归通过；MiniMax 独立医学经理执行 28 组反例探针后通过。Grok Build 因额度耗尽未形成内容审阅结论。",
+  "meta": {}
+}

@@ -20,8 +20,8 @@
     "selection": {"$ref": "#/$defs/selection"},
     "capabilities": {
       "type": "array",
-      "minItems": 12,
-      "maxItems": 12,
+      "minItems": 9,
+      "maxItems": 9,
       "uniqueItems": true,
       "items": {"$ref": "#/$defs/capability"}
     },
@@ -65,9 +65,10 @@
         "outputs": {
           "type": "array",
           "minItems": 1,
+          "maxItems": 1,
           "uniqueItems": true,
           "prefixItems": [{"const": "html"}],
-          "items": {"enum": ["html", "pdf", "html-ppt", "pptx"]}
+          "items": false
         },
         "source_routes": {
           "type": "array",
@@ -87,7 +88,7 @@
         "capability_id": {"enum": [
           "project_file_io", "script_runtime", "http_network", "search_browser",
           "login_browser", "document_ingestion", "ocr", "browser_validation",
-          "native_pdf", "html_ppt_runtime", "ppt_master", "office_renderer"
+          "independent_context"
         ]},
         "label": {"type": "string", "minLength": 1},
         "state": {"enum": ["ready", "blocked", "not_applicable"]},
@@ -112,7 +113,7 @@
       "required": ["report", "output", "state", "blocked_by"],
       "properties": {
         "report": {"enum": ["A", "B", "C"]},
-        "output": {"enum": ["html", "pdf", "html-ppt", "pptx"]},
+        "output": {"const": "html"},
         "state": {"enum": ["ready", "blocked"]},
         "blocked_by": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
       }

@@ -1,0 +1,261 @@
+{
+  "schema_version": "1.0",
+  "package_id": "phase-6-b-acceptance-package-20260830",
+  "purpose": "Phase 6 B 类确定性运行验收包；供 Codex 绑定最终视觉裁定前审计。",
+  "generated_at": "2026-08-30T05:45:13.294397+00:00",
+  "status": "pending_codex_visual_verdict",
+  "phase_6_release": "not_released",
+  "phase_7": "not_started",
+  "visual_acceptance": "not_performed_by_worker_03",
+  "cases": [
+    {
+      "fixture_id": "b-pnh",
+      "fixture_description_zh": "B 报告：PNH 关键 III 期试验结果、基线与完成情况验收案例",
+      "fixture_input": {
+        "path": "fixtures/positive/b-pnh/inputs/report-data.json",
+        "role": "report_data",
+        "sha256": "eeae14ce581aeacc6c098cde5f45571e4d0f88d2cc5877cba5429654448381d1"
+      },
+      "run_id": "run_70569970b9101bbc70c261cf",
+      "project_id": "project_c337b1d8836ad714616a7756",
+      "case_digest": "26c8eab4a77c26b0f6260808d339889c49b9b1f830ed8c5728a7980875164ad2",
+      "started_at": "2026-08-30T05:40:23.963648+00:00",
+      "finished_at": "2026-08-30T05:40:25.413935+00:00",
+      "modified_at": "2026-08-30T05:40:25.411580+00:00",
+      "actual": {
+        "outcome": "completed",
+        "report_state": "snapshot_locked",
+        "format_state": "quality_check"
+      },
+      "snapshot_id": "report-snapshot_9a5fb715c9158d58e0dbe7cb",
+      "blocker": null,
+      "output_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html",
+      "run_manifest": {
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/manifests/current_run.json",
+        "sha256": "1d80442b632cdd55115bf127de56ab3d37861b04b652ee7400c726b67476c57c",
+        "manifest_digest": "b9fd234da15c1c6f7efdb2f2a1968d22d51f2ede124f13d829d0600ba467642f"
+      },
+      "snapshot": {
+        "id": "report-snapshot_9a5fb715c9158d58e0dbe7cb",
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/snapshots/reports/B/report-snapshot_9a5fb715c9158d58e0dbe7cb.json",
+        "sha256": "82103765b2d3a8627f524b7ff229b862fe99042991122082966ad148d06e05bd",
+        "byte_size": 3337
+      },
+      "artifact": {
+        "manifest_id": "artifact-manifest_98e13d823996468b74caae72",
+        "manifest_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html.manifest.json",
+        "manifest_sha256": "f2fe3c2f1d75578f3cd7c62c24182cb133d83b2ebfc4f92892bd51a24e866847",
+        "manifest_row_sha256": "f2fe3c2f1d75578f3cd7c62c24182cb133d83b2ebfc4f92892bd51a24e866847",
+        "site_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-pnh/reports/B/v-fixture-b-pnh-001/html",
+        "site_sha256": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075",
+        "site_byte_size": 5241396,
+        "site_modified_at": "2026-08-30T05:40:25.383433+00:00",
+        "package_digest": "b6c075c75f3b54d9afbfaeb732a6b51419a20e9136aafc17a8481288de300daf",
+        "status": "quality_check",
+        "deterministic_checks": [
+          {
+            "check_id": "baseline-required-fields-complete",
+            "status": "passed",
+            "receipt": "c5f8a49ce4622dc5088009e9cc26704c52dc7617a30741e9badac26e735483c9"
+          },
+          {
+            "check_id": "catalog-routes-rendered",
+            "status": "passed",
+            "receipt": "f52daa3448845d41b3a2067fb5a660f292887b5b32300f6006df1407e5863075"
+          }
+        ]
+      },
+      "deterministic_digest": "18cd8eb006494dfdfbddd4cb126b55945b60de4bf9e169bef4945f07f0ef7da2"
+    },
+    {
+      "fixture_id": "b-d70-baseline-blocked",
+      "fixture_description_zh": "B 报告 D70：核心试验组别基线缺失导致阻断",
+      "fixture_input": {
+        "path": "fixtures/synthetic/b-d70-baseline-blocked/inputs/report-data.json",
+        "role": "report_data",
+        "sha256": "84d7fb369bd4aa508ef6ea4b0fdb4647d728c44f0a9eeac90db4cdd4441f66e0"
+      },
+      "run_id": "run_ad17d0e431d17232a32bd86b",
+      "project_id": "project_c337b1d8836ad714616a7756",
+      "case_digest": "df7a678453bf37ba0caf042c50e636636052f06b08ee569f0a8bd98b4cda3d6c",
+      "started_at": "2026-08-30T05:40:29.796758+00:00",
+      "finished_at": "2026-08-30T05:40:31.091509+00:00",
+      "modified_at": "2026-08-30T05:40:31.089645+00:00",
+      "actual": {
+        "outcome": "evidence_blocked",
+        "report_state": "evidence_blocked",
+        "format_state": "not_generated"
+      },
+      "snapshot_id": null,
+      "blocker": {
+        "state": "evidence_blocked",
+        "gate_failures": [
+          {
+            "failure_code": "b_baseline_age",
+            "field": "age",
+            "field_zh": "年龄",
+            "group_id": "apply-treatment",
+            "trial": "NCT04558918",
+            "trial_id": "nct04558918"
+          }
+        ],
+        "paths": [
+          {
+            "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-blocked/blockers/B/v-fixture-b-d70-001/audit.json",
+            "sha256": "dae716090476d7e2ea8e06d3331fc4e33c85e672755492a3529e69f405bf64ed",
+            "byte_size": 570,
+            "modified_at": "2026-08-30T05:40:31.089568+00:00"
+          },
+          {
+            "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-blocked/blockers/B/v-fixture-b-d70-001/audit.md",
+            "sha256": "441a77676f05e6ba26262be77b65e622262d0385f110620ae5be8d1fa113c03b",
+            "byte_size": 384,
+            "modified_at": "2026-08-30T05:40:31.089645+00:00"
+          }
+        ],
+        "audit_json_sha256": "dae716090476d7e2ea8e06d3331fc4e33c85e672755492a3529e69f405bf64ed"
+      },
+      "output_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-blocked/blockers/B/v-fixture-b-d70-001",
+      "run_manifest": {
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-blocked/manifests/current_run.json",
+        "sha256": "73e30f36dad267c6c1c4a9044633ec3a3d73cae90b1e97e8efc688165bd73e98",
+        "manifest_digest": "12a5d9eba2a399808d80abe78b149d2605198c3add1905ddff933f1ec97c09da"
+      },
+      "snapshot": null,
+      "artifact": null,
+      "deterministic_digest": "c87bd675a4aedd4238c15766c28d3627da3f39db4aba9e5ccedf480e1b6dca19"
+    },
+    {
+      "fixture_id": "b-d70-baseline-recovered",
+      "fixture_description_zh": "B 报告 D70：补齐核心基线后锁定快照",
+      "fixture_input": {
+        "path": "fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json",
+        "role": "report_data",
+        "sha256": "13ca4d57178420eced06c3da0afa84cf2e8cd4de39b5101c33809168c4b54c01"
+      },
+      "run_id": "run_3ebb46320b259609bce769bf",
+      "project_id": "project_c337b1d8836ad714616a7756",
+      "case_digest": "4f5f505d4b9328292f8a11f422dd1f5edaf653c140fdca75d3a86c803ef6309b",
+      "started_at": "2026-08-30T05:40:36.553004+00:00",
+      "finished_at": "2026-08-30T05:40:37.880832+00:00",
+      "modified_at": "2026-08-30T05:40:37.878674+00:00",
+      "actual": {
+        "outcome": "completed",
+        "report_state": "snapshot_locked",
+        "format_state": "quality_check"
+      },
+      "snapshot_id": "report-snapshot_d3a21323fbd4e5de041966df",
+      "blocker": null,
+      "output_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-recovered/reports/B/v-fixture-b-d70-002/html",
+      "run_manifest": {
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-recovered/manifests/current_run.json",
+        "sha256": "c2679d749d193afa294bb64fe196743c7ab987576fabf96e181c0d5f08cd0db1",
+        "manifest_digest": "4aa6a32fcdc6d0ee3ac49063704a7728286453a6149df4e5243ecef70e5dcb0e"
+      },
+      "snapshot": {
+        "id": "report-snapshot_d3a21323fbd4e5de041966df",
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-recovered/snapshots/reports/B/report-snapshot_d3a21323fbd4e5de041966df.json",
+        "sha256": "b079073b7ceb4e95e0b8fa23df5633a580008a09cb323743eeb7261e4bcba9f3",
+        "byte_size": 3205
+      },
+      "artifact": {
+        "manifest_id": "artifact-manifest_d6a5cb880b194f6f25e379f1",
+        "manifest_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-recovered/reports/B/v-fixture-b-d70-002/html.manifest.json",
+        "manifest_sha256": "3eb7d3e39f8b93b53b25756922df9edfbcc5bbf5a3308116850e3eb3d71b69d5",
+        "manifest_row_sha256": "3eb7d3e39f8b93b53b25756922df9edfbcc5bbf5a3308116850e3eb3d71b69d5",
+        "site_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-baseline-recovered/reports/B/v-fixture-b-d70-002/html",
+        "site_sha256": "24acfa297c0fffc806c7b03abf9b17b5c6a7a3dddd3e9cd5bbbcfad72c7c8255",
+        "site_byte_size": 5171038,
+        "site_modified_at": "2026-08-30T05:40:37.850868+00:00",
+        "package_digest": "b6c075c75f3b54d9afbfaeb732a6b51419a20e9136aafc17a8481288de300daf",
+        "status": "quality_check",
+        "deterministic_checks": [
+          {
+            "check_id": "baseline-required-fields-complete",
+            "status": "passed",
+            "receipt": "64632c032de18701ad5ecdea2c5c9d89da5fa892403d8acd727439e8b2249e4a"
+          },
+          {
+            "check_id": "catalog-routes-rendered",
+            "status": "passed",
+            "receipt": "24acfa297c0fffc806c7b03abf9b17b5c6a7a3dddd3e9cd5bbbcfad72c7c8255"
+          }
+        ]
+      },
+      "deterministic_digest": "db54d1b4a5f41680e80950c62e55745160dfa00d793eb25063210a1a34245c1a"
+    },
+    {
+      "fixture_id": "b-d70-disposition-missing-pass",
+      "fixture_description_zh": "B 报告 D70：处置字段未公开但可交付",
+      "fixture_input": {
+        "path": "fixtures/synthetic/b-d70-disposition-missing-pass/inputs/report-data.json",
+        "role": "report_data",
+        "sha256": "078b520bf72f36ff85003c222b97ceca555f36436b960bb6d9a410a83eda75da"
+      },
+      "run_id": "run_eb0c8c94578410b2a94269ca",
+      "project_id": "project_c337b1d8836ad714616a7756",
+      "case_digest": "cd9cf1b7ba76acec73d63fba6775f152cfe1954a6c9839a4d00ff0b046de0e54",
+      "started_at": "2026-08-30T05:40:41.720784+00:00",
+      "finished_at": "2026-08-30T05:40:43.047666+00:00",
+      "modified_at": "2026-08-30T05:40:43.045317+00:00",
+      "actual": {
+        "outcome": "completed",
+        "report_state": "snapshot_locked",
+        "format_state": "quality_check"
+      },
+      "snapshot_id": "report-snapshot_03ec154a227cada4a65de0de",
+      "blocker": null,
+      "output_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-disposition-missing-pass/reports/B/v-fixture-b-d70-003/html",
+      "run_manifest": {
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-disposition-missing-pass/manifests/current_run.json",
+        "sha256": "c1ce46fe13281794b0ae2ef286a0d2b6b005252f9a34913fd51c96fe5f7382d8",
+        "manifest_digest": "fb56ae37381e84547baab4916aa490906a9fce48672a813a71eb0a7e475606ae"
+      },
+      "snapshot": {
+        "id": "report-snapshot_03ec154a227cada4a65de0de",
+        "path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-disposition-missing-pass/snapshots/reports/B/report-snapshot_03ec154a227cada4a65de0de.json",
+        "sha256": "d430ca830f7924f30cd428b4afaa511174605b6d1a2cffa01006f2c8728c79e7",
+        "byte_size": 3205
+      },
+      "artifact": {
+        "manifest_id": "artifact-manifest_83ee4c6e7e1d6637df67594a",
+        "manifest_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-disposition-missing-pass/reports/B/v-fixture-b-d70-003/html.manifest.json",
+        "manifest_sha256": "897999ce2f6d63a5ef3a2b76be6cbf4151c5356434ddc34c6c1b58322bb38f44",
+        "manifest_row_sha256": "897999ce2f6d63a5ef3a2b76be6cbf4151c5356434ddc34c6c1b58322bb38f44",
+        "site_path": "output/acceptance/task-6.10/phase-6-acceptance-package-20260830/b-d70-disposition-missing-pass/reports/B/v-fixture-b-d70-003/html",
+        "site_sha256": "fc59108198250cd05e9409bd5efb574edf3b53d46df6dcef9db51f65611b86b1",
+        "site_byte_size": 5175688,
+        "site_modified_at": "2026-08-30T05:40:43.015193+00:00",
+        "package_digest": "b6c075c75f3b54d9afbfaeb732a6b51419a20e9136aafc17a8481288de300daf",
+        "status": "quality_check",
+        "deterministic_checks": [
+          {
+            "check_id": "baseline-required-fields-complete",
+            "status": "passed",
+            "receipt": "f6d0323e70f93bebcfb337fb71a98bd83856e395a3d4cf244e3d7d0fac5a96b3"
+          },
+          {
+            "check_id": "catalog-routes-rendered",
+            "status": "passed",
+            "receipt": "fc59108198250cd05e9409bd5efb574edf3b53d46df6dcef9db51f65611b86b1"
+          }
+        ]
+      },
+      "deterministic_digest": "1b8854adb6088e1ebc30958edb4e4314328b550305a63573c2c5573dcf5c4ff7"
+    }
+  ],
+  "filename_to_contract": {
+    "catalog": "fixtures/catalog.yaml",
+    "fixture_input_contract": "inputs/report-data.json (role=report_data)",
+    "project_input_copy": "<case>/evidence/library/report-data.json",
+    "current_run_manifest": "<case>/manifests/current_run.json",
+    "completed_artifact_manifest": "<case>/reports/B/<report_version>/html.manifest.json",
+    "completed_site_output": "<case>/reports/B/<report_version>/html/",
+    "report_snapshot": "<case>/snapshots/reports/B/<snapshot_id>.json",
+    "blocked_audit_json": "<case>/blockers/B/<report_version>/audit.json",
+    "blocked_audit_markdown": "<case>/blockers/B/<report_version>/audit.md",
+    "mapping_note": "当前注册表和运行器均使用 inputs/report-data.json；运行器按文件名复制到 evidence/library/report-data.json，并按 report_version 生成报告或 blockers/B/<version>/ 审计包。旧候选目录未被引用。"
+  },
+  "deterministic_digest_algorithm": "SHA-256 over UTF-8 canonical JSON (ensure_ascii=false, sort_keys=true, separators=(\",\", \":\")); each case digest excludes its own deterministic_digest field.",
+  "package_digest": "1e00bb8b8d091366c25e4b2309b9dca21f6fcb1efac1c17d9a13f6cba6c87e13"
+}

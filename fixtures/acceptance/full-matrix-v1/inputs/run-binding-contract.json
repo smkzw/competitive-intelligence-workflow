@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "case_id": "full-matrix-v1",
+  "report_snapshot_id": "snapshot-full-matrix-v1-001",
+  "report_version": "v-fixture-001",
+  "indication": "特应性皮炎",
+  "timezone": "Asia/Shanghai",
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "reports": ["A", "B", "C"],
+  "formats": ["html"],
+  "input_hashes": {
+    "inputs/report-a-data.json": "8460ff9a1931d9527d18921bbefa1a714df905651d8928a8af3a6ab881b503b3",
+    "inputs/report-b-data.json": "1b18921b6584e37bf8da40b965a1cde9c9b738c0237b76ba2fab58ac5ed16eb9",
+    "inputs/report-c-data.json": "317f02d768f158fbb414e6cdf67f524201eb33decf7a9b9152ab2c699cf7689b",
+    "inputs/entity-counts.json": "0af2a3decce4930e0188fe17a80758495e76a42f81dfb4a71c030f51f536fb74",
+    "inputs/gate-spec-expected.json": "09b96d5493436efb86574367fada6246fa34a8aeb68f6934b8d19d6a24707ed9",
+    "inputs/coverage-set-expected.json": "5c8d82552880664121f2be5fbe02deedb0c7db724437699a4193796485fd539a"
+  },
+  "entity_counts_path": "inputs/entity-counts.json",
+  "gate_spec_expected_path": "inputs/gate-spec-expected.json",
+  "coverage_set_expected_path": "inputs/coverage-set-expected.json",
+  "binding_rules_zh": [
+    "当次站点式 HTML run_manifest.case_id 必须等于 full-matrix-v1",
+    "当次 run_manifest.case_digest 必须等于 catalog 锁定值",
+    "当次 run_manifest.input_hashes 必须与本文件 input_hashes 逐路径一致",
+    "A/B/C 三类站点页面必须绑定同一 report_version、同一适应症和同一物化 cutoff",
+    "首版不检查、不生成或要求 PDF、HTML-PPT、PPTX"
+  ],
+  "case_digest": null
+}

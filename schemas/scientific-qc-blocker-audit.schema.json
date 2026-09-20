@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/scientific-qc-blocker-audit.schema.json",
+  "title": "Scientific QC Exhausted Blocker Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "blocker_kind", "audit_id", "project_id", "report_kind",
+    "contract_version", "report_version", "state", "reason", "report_object_id",
+    "candidate_snapshot_id", "candidate_content_digest", "universe_summary",
+    "gate_result_key", "criteria_version", "coverage_set_id", "coverage_digest",
+    "context_id", "context_digest", "producer_id", "reviewer_id",
+    "review_input_digest", "verdict_id", "verdict_digest", "issues", "source_refs",
+    "locators", "exhaustion", "audit_directory", "no_draft", "resume_node",
+    "reviewed_at", "valid_until", "created_at", "audit_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "blocker_kind": {"const": "scientific_qc_exhausted"},
+    "audit_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "contract_version": {"type": "string", "minLength": 1},
+    "report_version": {"type": "string", "pattern": "^v[0-9]+(?:\\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?$"},
+    "state": {"const": "evidence_blocked"},
+    "reason": {"const": "scientific_qc_veto_exhausted"},
+    "report_object_id": {"type": "string", "minLength": 1},
+    "candidate_snapshot_id": {"type": "string", "minLength": 1},
+    "candidate_content_digest": {"$ref": "#/$defs/sha256"},
+    "universe_summary": {"type": "string", "minLength": 1},
+    "gate_result_key": {"type": "string", "minLength": 1},
+    "criteria_version": {"type": "string", "minLength": 1},
+    "coverage_set_id": {"type": "string", "minLength": 1},
+    "coverage_digest": {"$ref": "#/$defs/sha256"},
+    "context_id": {"type": "string", "minLength": 1},
+    "context_digest": {"$ref": "#/$defs/sha256"},
+    "producer_id": {"type": "string", "minLength": 1},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "review_input_digest": {"$ref": "#/$defs/sha256"},
+    "verdict_id": {"type": "string", "minLength": 1},
+    "verdict_digest": {"$ref": "#/$defs/sha256"},
+    "issues": {
+      "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/scientific_issue"}
+    },
+    "source_refs": {
+      "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source_ref"}
+    },
+    "locators": {
+      "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/locator_ref"}
+    },
+    "exhaustion": {"type": "object"},
+    "audit_directory": {"type": "string", "pattern": "^blockers/[ABC]/v"},
+    "no_draft": {"const": true},
+    "resume_node": {"const": "recovery"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "valid_until": {"type": "string", "format": "date-time"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "audit_digest": {"type": "string", "pattern": "^blocker-audit_[0-9a-f]+$"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scientific_issue": {
+      "type": "object", "additionalProperties": false,
+      "required": ["issue_id", "severity", "category", "description_zh", "source_version_id", "fragment_ids"],
+      "properties": {
+        "issue_id": {"type": "string", "minLength": 1},
+        "severity": {"enum": ["blocking", "non_blocking"]},
+        "category": {"type": "string", "minLength": 1},
+        "description_zh": {"type": "string", "minLength": 1},
+        "source_version_id": {"type": "string", "minLength": 1},
+        "fragment_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    },
+    "source_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_version_id", "fragment_ids", "claim_ids", "fact_version_ids", "locators"],
+      "properties": {
+        "source_version_id": {"type": "string", "minLength": 1},
+        "fragment_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "claim_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "fact_version_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "locators": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/locator_ref"}}
+      }
+    },
+    "locator_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fragment_id", "locator"],
+      "properties": {
+        "fragment_id": {"type": "string", "minLength": 1},
+        "locator": {"$ref": "#/$defs/locator"}
+      }
+    },
+    "locator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["document_role", "field_path", "heading", "page", "table", "row", "column", "paragraph", "url"],
+      "properties": {
+        "document_role": {"type": "string", "minLength": 1},
+        "field_path": {"type": ["string", "null"]},
+        "heading": {"type": ["string", "null"]},
+        "page": {"type": ["integer", "null"], "minimum": 1},
+        "table": {"type": ["string", "null"]},
+        "row": {"type": ["string", "null"]},
+        "column": {"type": ["string", "null"]},
+        "paragraph": {"type": ["string", "null"]},
+        "url": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

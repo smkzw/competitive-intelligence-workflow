@@ -11,14 +11,14 @@ cases:
     inputs:
       - path: inputs/report-data.json
         role: report_data
-        sha256: "295a6dff36f4523dcb48b71d4144befc169cdfcbd643ee9d0b9a838b62245738"
+        sha256: "2aa14424da788b68a84558b45d25a13f33423c50475f3782d4483e2743168771"
     expected:
       report: A
       report_version: v-fixture-001
       outcome: rendered
       product_count: 4
-      static_route_count: 12
-    case_digest: "e21d441325fe230feefd11b1e29c634cc2ae38c9c2dc4789af4462038a6c4062"
+      static_route_count: 11
+    case_digest: "ab8af1589e0e6ca1e5ff8bbc6f330d3b590c52ca97be41adbad619c8d2ebbe79"
   - id: no-draft-a-empty
     description_zh: "A 报告：空创新药宇宙，只生成中文证据不足说明"
     indication: "非小细胞肺癌"
@@ -30,9 +30,141 @@ cases:
     inputs:
       - path: inputs/universe.json
         role: universe_closure
-        sha256: "1cb90ce0133412374281b5c112fac4c3e2768a7f2c2cddf0649e8e5fbecff64c"
+        sha256: "25da1aec2b193e2fe03ec1d120b3422627ccaa236d6cebc078cddec48b6cd328"
     expected:
       report: A
       report_version: v1
       outcome: evidence_blocked
-    case_digest: "7d37a12eccf537c7c49d7fdc1f0a1630c86cf3add72bd1b8557450f0d3ee50fc"
+    case_digest: "d0eff20a343fd20b3adf6a4152f9b3303971bcb313dca0145553cc7a632b5d28"
+  - id: b-pnh
+    description_zh: "B 报告：PNH 关键 III 期试验结果、基线与完成情况验收案例"
+    indication: "阵发性睡眠性血红蛋白尿"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-30T09:00:00+08:00"
+    reports: ["B"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/report-data.json
+        role: report_data
+        sha256: "eeae14ce581aeacc6c098cde5f45571e4d0f88d2cc5877cba5429654448381d1"
+    expected:
+      report: B
+      report_version: v-fixture-b-pnh-001
+      outcome: rendered
+      state: rendered_unreviewed
+      product_count: 1
+      static_route_count: 24
+    case_digest: "f908d4f269b3b169315000016de10c809fa9783d20610c4a43530332fa9ec33a"
+  - id: b-d70-baseline-blocked
+    description_zh: "B 报告 D70：核心试验组别基线缺失导致阻断"
+    indication: "阵发性睡眠性血红蛋白尿"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-30T09:00:00+08:00"
+    reports: ["B"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/report-data.json
+        role: report_data
+        sha256: "84d7fb369bd4aa508ef6ea4b0fdb4647d728c44f0a9eeac90db4cdd4441f66e0"
+    expected:
+      report: B
+      report_version: v-fixture-b-d70-001
+      outcome: recovery_required
+      state: recovery_required
+    case_digest: "7bf53ef63d6904da78d3402b693c14e97abdcdda571ccf46b8d7b7f9df662795"
+  - id: b-d70-baseline-recovered
+    description_zh: "B 报告 D70：补齐核心基线后完成待复核渲染"
+    indication: "阵发性睡眠性血红蛋白尿"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-30T09:00:00+08:00"
+    reports: ["B"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/report-data.json
+        role: report_data
+        sha256: "13ca4d57178420eced06c3da0afa84cf2e8cd4de39b5101c33809168c4b54c01"
+    expected:
+      report: B
+      report_version: v-fixture-b-d70-002
+      outcome: rendered
+      state: rendered_unreviewed
+    case_digest: "040d9d315b7914ae5ad1cdee197a3abf5ac7e49085b4564787656f963ba58f69"
+  - id: b-d70-disposition-missing-pass
+    description_zh: "B 报告 D70：处置字段未公开但可交付"
+    indication: "阵发性睡眠性血红蛋白尿"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-30T09:00:00+08:00"
+    reports: ["B"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/report-data.json
+        role: report_data
+        sha256: "078b520bf72f36ff85003c222b97ceca555f36436b960bb6d9a410a83eda75da"
+    expected:
+      report: B
+      report_version: v-fixture-b-d70-003
+      outcome: rendered
+      state: rendered_unreviewed
+    case_digest: "77dfd3cae7c9d1a26aaa359e4ab7445e872b5a4bcb1d6a04423880724dadadcf"
+  - id: host-smoke-v1
+    description_zh: "宿主冒烟：三宿主真实入口执行最小 A 证据阻断、无草稿、补件恢复与站点式 HTML 验证"
+    indication: "多发性骨髓瘤"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-09-01T05:00:00+08:00"
+    reports: ["A"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/universe.json
+        role: universe_closure
+        sha256: "6ef8ab3619a06bc9dd1e809c7c38d4c3cc526208a4e00320ef5b5c176a7d7f53"
+      - path: inputs/recovery-report-data.json
+        role: recovery_report_data
+        sha256: "2d2fa7d2056c4fb31d723de9cf9b66882576834e9badff7219def3f2c2f43bd5"
+    expected:
+      report: A
+      report_version: v1
+      outcome: evidence_blocked
+    case_digest: "1b28dfa0c8988edb7db968cade8c749aa46069b88c70c3be00d8a4e55168a269"
+  - id: three-report-complete
+    description_zh: "同一适应症下 A/B/C 完整 HTML 门户基准快照：锁定输入摘要、实体计数、GateSpec 预期与覆盖责任"
+    indication: "特应性皮炎"
+    timezone: "Asia/Shanghai"
+    data_cutoff: "2026-07-31"
+    created_at: "2026-08-31T12:00:00+08:00"
+    reports: ["A", "B", "C"]
+    outputs: ["html"]
+    inputs:
+      - path: inputs/report-a-data.json
+        role: report_data
+        sha256: "8460ff9a1931d9527d18921bbefa1a714df905651d8928a8af3a6ab881b503b3"
+      - path: inputs/report-b-data.json
+        role: report_data
+        sha256: "b8a25df59bce07452f2a06cdc5205ac7b7ea6eb60b0ca64c366ddcb82583ebb8"
+      - path: inputs/report-c-data.json
+        role: report_data
+        sha256: "317f02d768f158fbb414e6cdf67f524201eb33decf7a9b9152ab2c699cf7689b"
+      - path: inputs/entity-counts.json
+        role: report_data
+        sha256: "04c0084e62a102c0ad09475d476bada7f4e48db90520c5b8f69b8e7267452b48"
+      - path: inputs/gate-spec-expected.json
+        role: report_data
+        sha256: "09b96d5493436efb86574367fada6246fa34a8aeb68f6934b8d19d6a24707ed9"
+      - path: inputs/coverage-set-expected.json
+        role: report_data
+        sha256: "877aa87a281f4c5c0e6bcf74f3fdd07f5f91c332622b5fb12f9c5a5d213add43"
+      - path: inputs/run-binding-contract.json
+        role: report_data
+        sha256: "3991212a76097b6119f5ed9bf0db8fb37ce098e21d611846ac79b8765c028536"
+    expected:
+      report: A
+      report_version: v-fixture-001
+      outcome: rendered
+      state: rendered_unreviewed
+      product_count: 4
+      static_route_count: 11
+    case_digest: "66ca7a36cc38701ae54ad2c84d2c898e4fca0abeb97d9c015b4b349b620d55aa"

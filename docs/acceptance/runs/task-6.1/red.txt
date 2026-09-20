@@ -1,0 +1,5 @@
+Task 6.1 RED 记录（2026-08-27）
+
+受控执行者在实现前原样运行三份目标测试：研究角色与 B 角色模块缺失，分别在收集阶段出现 ModuleNotFoundError / ImportError；这证明 RED 来自目标实现尚不存在，而不是环境依赖缺失。系统 `python` 别名不可用后，执行者改用项目既有 `.venv`，未安装依赖。
+
+证据来源：runs/execution/ci_phase6_task61_execution/worker_01.md、worker_02.md、worker_03.md。

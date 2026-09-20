@@ -1,0 +1,1131 @@
+{
+  "studyVersion" : 31,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT06395948",
+        "orgStudyIdInfo" : {
+          "id" : "APG777-201"
+        },
+        "organization" : {
+          "fullName" : "Apogee Therapeutics, Inc.",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Study Evaluating APG777 in Atopic Dermatitis",
+        "officialTitle" : "A Two-part, Multicenter, Randomized, Double-blind, Placebo-controlled Study to Evaluate the Safety and Efficacy of APG777 in Patients With Moderate-to-severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2026-07",
+        "overallStatus" : "ACTIVE_NOT_RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2024-04-29",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2026-11",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2028-06",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2024-04-29",
+        "studyFirstSubmitQcDate" : "2024-04-29",
+        "studyFirstPostDateStruct" : {
+          "date" : "2024-05-02",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2026-07-21",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2026-07-22",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Apogee Therapeutics, Inc.",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : true,
+        "isFdaRegulatedDrug" : true,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This is a two-part study that will evaluate the safety and efficacy of APG777 in participants with moderate-to-severe Atopic Dermatitis (AD).\nPart A (Proof-of-concept) and Part B (Dose-regimen Finding) will evaluate the safety and efficacy of various induction and maintenance dose regimens of APG777 compared to placebo.\nThe study duration for any individual participant will be up to 106 weeks which includes: screening, induction, maintenance, and post-treatment follow-up periods.\nParticipants randomized in Part A are not permitted to participate in Part B."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Atopic Dermatitis" ],
+        "keywords" : [ "Atopic Dermatitis", "APG777", "Safety", "Efficacy" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE2" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "maskingDescription" : "The Sponsor&#x27;s study staff will also be blinded in the study.",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 470,
+          "type" : "ACTUAL"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "Part A: Induction Period: APG777",
+          "type" : "EXPERIMENTAL",
+          "description" : "Participants will receive APG777 per protocol defined dosing regimen",
+          "interventionNames" : [ "Drug: APG777" ]
+        }, {
+          "label" : "Part A: Induction Period: Placebo",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Participants will receive matching Placebo injections per protocol defined dosing regimen",
+          "interventionNames" : [ "Drug: Placebo" ]
+        }, {
+          "label" : "Part A: Maintenance Period: APG777",
+          "type" : "EXPERIMENTAL",
+          "description" : "Participants will receive 1 of 2 maintenance regimens of APG777 per protocol defined dosing regimen",
+          "interventionNames" : [ "Drug: APG777" ]
+        }, {
+          "label" : "Part B: Induction Period: APG777",
+          "type" : "EXPERIMENTAL",
+          "description" : "Participants will receive APG777 in 1 of 3 regimens per protocol defined dosing regimen",
+          "interventionNames" : [ "Drug: APG777" ]
+        }, {
+          "label" : "Part B: Induction Period: Placebo",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Participants will receive matching placebo injections per protocol defined dosing regimen",
+          "interventionNames" : [ "Drug: Placebo" ]
+        }, {
+          "label" : "Part B: Maintenance Period: APG777",
+          "type" : "EXPERIMENTAL",
+          "description" : "Participants will receive APG777 per protocol defined dosing regimen",
+          "interventionNames" : [ "Drug: APG777" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "APG777",
+          "description" : "APG777 subcutaneous injection",
+          "armGroupLabels" : [ "Part A: Induction Period: APG777", "Part A: Maintenance Period: APG777", "Part B: Induction Period: APG777", "Part B: Maintenance Period: APG777" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Placebo",
+          "description" : "Matching placebo subcutaneous injection",
+          "armGroupLabels" : [ "Part A: Induction Period: Placebo", "Part B: Induction Period: Placebo" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Part A: Percent Change From Baseline in Eczema Area and Severity Index (EASI)",
+          "timeFrame" : "Baseline and at Week 16"
+        }, {
+          "measure" : "Part B: Proportion of participants who achieve EASI 75 at Week 16",
+          "timeFrame" : "At Week 16"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Part A and B: Number of Participants with Treatment Emergent Adverse Events (TEAEs)",
+          "timeFrame" : "Up to 106 Weeks"
+        }, {
+          "measure" : "Part A and B: Change from Baseline in EASI",
+          "timeFrame" : "Baseline, through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Percent Change from Baseline in EASI",
+          "timeFrame" : "Baseline through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Proportion of Participants Achieving EASI 50, 75, 90, and 100 Score",
+          "timeFrame" : "Baseline through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Proportion of Participants Achieving a Validated Investigator Global Assessment (vIGA-AD) Score of 0 (clear) or 1 (almost clear) and a &gt;= 2-Point Reduction",
+          "timeFrame" : "Baseline through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Change from Baseline in Body Surface Area (BSA) Involvement",
+          "timeFrame" : "Baseline through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Proportion of Participants Achieving a &gt;= 4 Point Improvement in the Weekly Mean of the Daily Itch Numeric Rating Scale (I-NRS)",
+          "timeFrame" : "Baseline through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Percent Change from Baseline in the Weekly Mean of the Daily I-NRS",
+          "timeFrame" : "Baseline through Week 16 and at Week 52"
+        }, {
+          "measure" : "Part A and B: Serum Concentrations of APG777 Over Time",
+          "timeFrame" : "Up to 106 Weeks"
+        }, {
+          "measure" : "Part A and B: Predose Serum Concentrations of APG777 (Ctrough)",
+          "timeFrame" : "Up to 106 Weeks"
+        }, {
+          "measure" : "Part A and B: Maximum concentration (Cmax) of APG777",
+          "timeFrame" : "Up to 106 Weeks"
+        }, {
+          "measure" : "Part A and B: Time to reach Cmax (tmax)",
+          "timeFrame" : "Up to 106 Weeks"
+        }, {
+          "measure" : "Part A and B: Area Under the Concentration-Time Curve (AUC) from Time 0 to Time t (AUC0-t) in the Induction Period",
+          "timeFrame" : "Baseline to 16 Weeks"
+        }, {
+          "measure" : "Part A and B: AUC Over the Dosing Interval (AUC0-tau) in the Maintenance Period",
+          "timeFrame" : "16 Weeks to 52 Weeks"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ul><li>Have a diagnosis of AD that has been present for &gt;=1 year prior to the Screening visit</li><li>Moderate-to-severe AD at Screening and Baseline visits</li><li>History of inadequate response to treatment with topical medications, or medical determination that topical therapies are inadvisable</li><li>Applied a stable dose of non-medicated over-the-counter emollient&#x2F;moisturizer of their choice on their skin for &gt;=14 days prior to Baseline visit and agrees to continue using the same moisturizer throughout the study except the day of the study visits.</li><li>Have completed itch questionnaires in the electronic diary for &gt;=4 of 7 days prior to Baseline visit</li></ul><p>Exclusion Criteria:</p><ul><li>Participation in a prior study with APG777.</li><li>Prior treatment with protocol-specified monoclonal antibodies (mAbs)</li><li>Has used any AD-related topical medications within 7 days prior to Baseline visit.</li><li>Has used systemic treatments (other than biologics) and&#x2F;or phototherapies and&#x2F;or laser therapy that could affect AD within 4 weeks prior to Baseline visit</li></ul><p>Note: Other protocol defined inclusion&#x2F;exclusion criteria may apply.</p>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "locations" : [ {
+          "facility" : "Investigational Site",
+          "city" : "Fountain Valley",
+          "state" : "California",
+          "zip" : "92708",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 33.70918,
+            "lon" : -117.95367
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Los Angeles",
+          "state" : "California",
+          "zip" : "90024",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 34.05223,
+            "lon" : -118.24368
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "San Diego",
+          "state" : "California",
+          "zip" : "92123",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 32.71571,
+            "lon" : -117.16472
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "New Haven",
+          "state" : "Connecticut",
+          "zip" : "06519",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 41.30815,
+            "lon" : -72.92816
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Coral Gables",
+          "state" : "Florida",
+          "zip" : "33134",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 25.72149,
+            "lon" : -80.26838
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Jacksonville",
+          "state" : "Florida",
+          "zip" : "32256",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 30.33218,
+            "lon" : -81.65565
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Margate",
+          "state" : "Florida",
+          "zip" : "33063",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 26.24453,
+            "lon" : -80.20644
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Douglasville",
+          "state" : "Georgia",
+          "zip" : "30135",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 33.7515,
+            "lon" : -84.74771
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Chicago",
+          "state" : "Illinois",
+          "zip" : "60657",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 41.85003,
+            "lon" : -87.65005
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Skokie",
+          "state" : "Illinois",
+          "zip" : "60077",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 42.03336,
+            "lon" : -87.73339
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "West Lafayette",
+          "state" : "Indiana",
+          "zip" : "47906",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 40.42587,
+            "lon" : -86.90807
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Bowling Green",
+          "state" : "Kentucky",
+          "zip" : "42104",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 36.99032,
+            "lon" : -86.4436
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Rockville",
+          "state" : "Maryland",
+          "zip" : "20850",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 39.084,
+            "lon" : -77.15276
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Detroit",
+          "state" : "Michigan",
+          "zip" : "48202",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 42.33143,
+            "lon" : -83.04575
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Troy",
+          "state" : "Michigan",
+          "zip" : "48084",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 42.60559,
+            "lon" : -83.14993
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Portsmouth",
+          "state" : "New Hampshire",
+          "zip" : "13801",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 43.07704,
+            "lon" : -70.75766
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "New York",
+          "state" : "New York",
+          "zip" : "10023",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 40.71427,
+            "lon" : -74.00597
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Wilmington",
+          "state" : "North Carolina",
+          "zip" : "28403",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 34.23556,
+            "lon" : -77.94604
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Boardman",
+          "state" : "Ohio",
+          "zip" : "44512",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 41.02423,
+            "lon" : -80.66285
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Mason",
+          "state" : "Ohio",
+          "zip" : "45040",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 39.36006,
+            "lon" : -84.30994
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Portland",
+          "state" : "Oregon",
+          "zip" : "97201",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 45.52345,
+            "lon" : -122.67621
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Pittsburgh",
+          "state" : "Pennsylvania",
+          "zip" : "15213",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 40.44062,
+            "lon" : -79.99589
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Charleston",
+          "state" : "South Carolina",
+          "zip" : "29425",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 32.77632,
+            "lon" : -79.93275
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Nashville",
+          "state" : "Tennessee",
+          "zip" : "37215",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 36.16589,
+            "lon" : -86.78444
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Dallas",
+          "state" : "Texas",
+          "zip" : "75230",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 32.78306,
+            "lon" : -96.80667
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Dallas",
+          "state" : "Texas",
+          "zip" : "75235",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 32.78306,
+            "lon" : -96.80667
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "San Antonio",
+          "state" : "Texas",
+          "zip" : "78213",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 29.42412,
+            "lon" : -98.49363
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Norfolk",
+          "state" : "Virginia",
+          "zip" : "23502",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 36.84681,
+            "lon" : -76.28522
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Mill Creek",
+          "state" : "Washington",
+          "zip" : "98012",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 47.8601,
+            "lon" : -122.2043
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Calgary",
+          "state" : "Alberta",
+          "zip" : "T2J 7E1",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 51.05011,
+            "lon" : -114.08529
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Calgary",
+          "state" : "Alberta",
+          "zip" : "T3E 0B2",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 51.05011,
+            "lon" : -114.08529
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Edmonton",
+          "state" : "Alberta",
+          "zip" : "T5J 3S9",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 53.55014,
+            "lon" : -113.46871
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Vancouver",
+          "state" : "British Columbia",
+          "zip" : "V5Z 4E8",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 49.24966,
+            "lon" : -123.11934
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Winnipeg",
+          "state" : "Manitoba",
+          "zip" : "R3M 3Z4",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 49.8844,
+            "lon" : -97.14704
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Fredericton",
+          "state" : "New Brunswick",
+          "zip" : "E3B 1G9",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 45.94541,
+            "lon" : -66.66558
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Ajax",
+          "state" : "Ontario",
+          "zip" : "L1S 7K8",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 43.85012,
+            "lon" : -79.03288
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Markham",
+          "state" : "Ontario",
+          "zip" : "L3P 1X3",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 43.86682,
+            "lon" : -79.2663
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Mississauga",
+          "state" : "Ontario",
+          "zip" : "L4Y 4C5",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 43.5789,
+            "lon" : -79.6583
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Ottawa",
+          "state" : "Ontario",
+          "zip" : "K1K 4L2",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 45.41117,
+            "lon" : -75.69812
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Peterborough",
+          "state" : "Ontario",
+          "zip" : "K9J 5K2",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 44.30012,
+            "lon" : -78.31623
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Toronto",
+          "state" : "Ontario",
+          "zip" : "M3B 0A7",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 43.70643,
+            "lon" : -79.39864
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Toronto",
+          "state" : "Ontario",
+          "zip" : "M4E 2Y9",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 43.70643,
+            "lon" : -79.39864
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Toronto",
+          "state" : "Ontario",
+          "zip" : "M4W 2N4",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 43.70643,
+            "lon" : -79.39864
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Montreal",
+          "state" : "Quebec",
+          "zip" : "H2X 2V1",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 45.50884,
+            "lon" : -73.58781
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Québec",
+          "state" : "Quebec",
+          "zip" : "G1V4X7",
+          "country" : "Canada",
+          "geoPoint" : {
+            "lat" : 46.81228,
+            "lon" : -71.21454
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Prague",
+          "zip" : "10000",
+          "country" : "Czechia",
+          "geoPoint" : {
+            "lat" : 50.08804,
+            "lon" : 14.42076
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Prague",
+          "zip" : "10034",
+          "country" : "Czechia",
+          "geoPoint" : {
+            "lat" : 50.08804,
+            "lon" : 14.42076
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Prague",
+          "zip" : "11000",
+          "country" : "Czechia",
+          "geoPoint" : {
+            "lat" : 50.08804,
+            "lon" : 14.42076
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Prague",
+          "zip" : "15006",
+          "country" : "Czechia",
+          "geoPoint" : {
+            "lat" : 50.08804,
+            "lon" : 14.42076
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Prague",
+          "zip" : "16000",
+          "country" : "Czechia",
+          "geoPoint" : {
+            "lat" : 50.08804,
+            "lon" : 14.42076
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Rouen",
+          "state" : "Normandy",
+          "zip" : "76031",
+          "country" : "France",
+          "geoPoint" : {
+            "lat" : 49.44313,
+            "lon" : 1.09932
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Martigues",
+          "zip" : "13500",
+          "country" : "France",
+          "geoPoint" : {
+            "lat" : 43.40735,
+            "lon" : 5.05526
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Nantes",
+          "zip" : "44093",
+          "country" : "France",
+          "geoPoint" : {
+            "lat" : 47.21725,
+            "lon" : -1.55336
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Freiburg im Breisgau",
+          "state" : "Baden-Wurttemberg",
+          "zip" : "79104",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 47.9959,
+            "lon" : 7.85222
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Heidelberg",
+          "state" : "Baden-Wurttemberg",
+          "zip" : "69120",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 49.40768,
+            "lon" : 8.69079
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Tübingen",
+          "state" : "Baden-Wurttemberg",
+          "zip" : "72076",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 48.52266,
+            "lon" : 9.05222
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Augsburg",
+          "state" : "Bavaria",
+          "zip" : "86179",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 48.37154,
+            "lon" : 10.89851
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "München",
+          "state" : "Bavaria",
+          "zip" : "81377",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 48.69668,
+            "lon" : 13.46314
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Blankenfelde-Mahlow",
+          "state" : "Brandenburg",
+          "zip" : "15831",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 52.33645,
+            "lon" : 13.41316
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Darmstadt",
+          "state" : "Hesse",
+          "zip" : "64283",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 49.87167,
+            "lon" : 8.65027
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Frankfurt am Main",
+          "state" : "Hesse",
+          "zip" : "60590",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 50.11552,
+            "lon" : 8.68417
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Bad Bentheim",
+          "state" : "Lower Saxony",
+          "zip" : "48455",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 52.30066,
+            "lon" : 7.15763
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Münster",
+          "state" : "North Rhine Westfalia",
+          "zip" : "48149",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 51.96236,
+            "lon" : 7.62571
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Dresden",
+          "state" : "Saxony",
+          "zip" : "01307",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 51.05089,
+            "lon" : 13.73832
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Kiel",
+          "state" : "Schleswig-Holstein",
+          "zip" : "24105",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 54.32133,
+            "lon" : 10.13489
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Lübeck",
+          "zip" : "23538",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 53.86893,
+            "lon" : 10.68729
+          },
+          "state" : "Schleswig-Holstein"
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Berlin",
+          "zip" : "10117",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 52.52437,
+            "lon" : 13.41053
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Hamburg",
+          "zip" : "20246",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 53.55073,
+            "lon" : 9.99302
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Hamburg",
+          "zip" : "20354",
+          "country" : "Germany",
+          "geoPoint" : {
+            "lat" : 53.55073,
+            "lon" : 9.99302
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Debrecen",
+          "state" : "Hajdú-Bihar",
+          "zip" : "4032",
+          "country" : "Hungary",
+          "geoPoint" : {
+            "lat" : 47.53167,
+            "lon" : 21.62444
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Budapest",
+          "zip" : "1085",
+          "country" : "Hungary",
+          "geoPoint" : {
+            "lat" : 47.49835,
+            "lon" : 19.04045
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Szeged",
+          "zip" : "6720",
+          "country" : "Hungary",
+          "geoPoint" : {
+            "lat" : 46.253,
+            "lon" : 20.14824
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Wroclaw",
+          "state" : "Lower Silesian Voivodeship",
+          "zip" : "50-450",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 51.10286,
+            "lon" : 17.03006
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Wroclaw",
+          "state" : "Lower Silesian Voivodeship",
+          "zip" : "51-503",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 51.10286,
+            "lon" : 17.03006
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Lublin",
+          "state" : "Lublin Voivodeship",
+          "zip" : "20-573",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 51.25058,
+            "lon" : 22.57009
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Warsaw",
+          "state" : "Masovian Voivodeship",
+          "zip" : "01-595",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 52.22977,
+            "lon" : 21.01178
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Warsaw",
+          "state" : "Masovian Voivodeship",
+          "zip" : "02-482",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 52.22977,
+            "lon" : 21.01178
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Gdansk",
+          "state" : "Pomeranian Voivodeship",
+          "zip" : "80-546",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 54.35227,
+            "lon" : 18.64912
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Katowice",
+          "state" : "Silesian Voivodeship",
+          "zip" : "40-600",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 50.2597,
+            "lon" : 19.02173
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Sosnowiec",
+          "state" : "Silesian Voivodeship",
+          "zip" : "41-218",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 50.28682,
+            "lon" : 19.10385
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Szczecin",
+          "state" : "West Pomeranian Voivodeship",
+          "zip" : "71-500",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 53.42894,
+            "lon" : 14.55302
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Krakow",
+          "state" : "Woj. Małopolskie",
+          "zip" : "30-727",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 50.06143,
+            "lon" : 19.93658
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Lodz",
+          "state" : "Łódź Voivodeship",
+          "zip" : "90-338",
+          "country" : "Poland",
+          "geoPoint" : {
+            "lat" : 51.77058,
+            "lon" : 19.47395
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Santiago de Compostela",
+          "state" : "A Coruña",
+          "zip" : "15706",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 42.88052,
+            "lon" : -8.54569
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Badalona",
+          "zip" : "08916",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 41.45004,
+            "lon" : 2.24741
+          },
+          "state" : "Barcelona"
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Las Palmas de Gran Canaria",
+          "zip" : "35010",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 28.10178,
+            "lon" : -15.41573
+          },
+          "state" : "Canary Islands"
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Alicante",
+          "zip" : "03010",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 38.34517,
+            "lon" : -0.48149
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Barcelona",
+          "zip" : "08041",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 41.38879,
+            "lon" : 2.15899
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Madrid",
+          "zip" : "28006",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 40.4165,
+            "lon" : -3.70256
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Madrid",
+          "zip" : "28040",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 40.4165,
+            "lon" : -3.70256
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Zaragoza",
+          "zip" : "50009",
+          "country" : "Spain",
+          "geoPoint" : {
+            "lat" : 41.65606,
+            "lon" : -0.87734
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Salford",
+          "state" : "Greater Manchester",
+          "zip" : "M6 8HD",
+          "country" : "United Kingdom",
+          "geoPoint" : {
+            "lat" : 53.48771,
+            "lon" : -2.29042
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "Dudley",
+          "state" : "West Midlands",
+          "zip" : "DY1 2HQ",
+          "country" : "United Kingdom",
+          "geoPoint" : {
+            "lat" : 52.5,
+            "lon" : -2.08333
+          }
+        }, {
+          "facility" : "Investigational Site",
+          "city" : "London",
+          "zip" : "SE1 9RT",
+          "country" : "United Kingdom",
+          "geoPoint" : {
+            "lat" : 51.50853,
+            "lon" : -0.12574
+          }
+        } ]
+      },
+      "referencesModule" : {
+        "references" : [ {
+          "pmid" : "41422501",
+          "type" : "DERIVED",
+          "citation" : "Lim XQ, Winter E, Nograles K, Xu J, Zhang ZQ, Thankamony S, Dillinger L, Dambkowski CL. A First-in-Human, Single- and Multiple-Dose Study of APG777, a Half-Life-Extended Anti-IL-13 Monoclonal Antibody, in Healthy Volunteers. Clin Transl Sci. 2025 Dec;18(12):e70456. doi: 10.1111&#x2F;cts.70456."
+        }, {
+          "pmid" : "40739793",
+          "type" : "DERIVED",
+          "citation" : "Rubio D, Zhu E, Thurston A, Funk KA, York KA, Dambkowski CL, Badger D. Preclinical Safety of APG777, A Novel Extended Half-Life Anti-Interleukin-13 Monoclonal Antibody, in Cynomolgus Monkeys. Int J Toxicol. 2025 Nov-Dec;44(6):443-450. doi: 10.1177&#x2F;10915818251355584. Epub 2025 Jul 30."
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

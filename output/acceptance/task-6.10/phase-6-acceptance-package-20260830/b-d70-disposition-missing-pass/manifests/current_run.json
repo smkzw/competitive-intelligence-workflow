@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_eb0c8c94578410b2a94269ca",
+  "project_id": "project_c337b1d8836ad714616a7756",
+  "contract_version": 1,
+  "started_at": "2026-08-30T05:40:41.720784+00:00",
+  "finished_at": "2026-08-30T05:40:43.047666+00:00",
+  "resume": false,
+  "case_id": "b-d70-disposition-missing-pass",
+  "case_digest": "cd9cf1b7ba76acec73d63fba6775f152cfe1954a6c9839a4d00ff0b046de0e54",
+  "input_hashes": {
+    "inputs/report-data.json": "078b520bf72f36ff85003c222b97ceca555f36436b960bb6d9a410a83eda75da"
+  },
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "gate:B": "completed",
+    "format:B": "completed"
+  },
+  "reused": [],
+  "outputs": [
+    {
+      "relative_path": "reports/B/v-fixture-b-d70-003/html.manifest.json",
+      "sha256": "897999ce2f6d63a5ef3a2b76be6cbf4151c5356434ddc34c6c1b58322bb38f44",
+      "byte_size": 5513,
+      "modified_at": "2026-08-30T05:40:43.045317+00:00",
+      "mtime_ns": 1788068443045316686,
+      "media_type": "application/json"
+    }
+  ],
+  "reused_artifacts": [],
+  "event_count": 4,
+  "event_stream_digest": "8cdd92ed51fdf5f7fca107e4d1dbcc1e30d8aafffcdc03f3321be184e5cf5667",
+  "checkpoint_id": "checkpoint_2365e663c310c5391b05c5f8",
+  "outcome": "completed",
+  "report_states": {
+    "B": "snapshot_locked"
+  },
+  "format_states": {
+    "B": {
+      "html": "quality_check"
+    }
+  },
+  "snapshot_ids": {
+    "B": "report-snapshot_03ec154a227cada4a65de0de"
+  },
+  "artifact_manifest_sha256": {
+    "B": {
+      "html": "897999ce2f6d63a5ef3a2b76be6cbf4151c5356434ddc34c6c1b58322bb38f44"
+    }
+  },
+  "gate_failures": [],
+  "manifest_digest": "fb56ae37381e84547baab4916aa490906a9fce48672a813a71eb0a7e475606ae"
+}

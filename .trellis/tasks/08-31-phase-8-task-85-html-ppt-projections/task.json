@@ -1,0 +1,33 @@
+{
+  "id": "phase-8-task-85-html-ppt-projections",
+  "name": "phase-8-task-85-html-ppt-projections",
+  "title": "Phase 8 Task 8.5：A/B/C HTML-PPT 视觉叙事投影",
+  "description": "基于锁定报告快照生成三份独立、单文件、离线的康哲 HTML-PPT，使用 Task 8.4 固定运行时并注入项目 FX 母版。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 8.5 only：A/B/C 幻灯片内容投影、视觉叙事、康哲 HTML-PPT 母版/FX、逐字稿、单文件离线交付及基础合同测试；Task 8.6 才负责最大化窗口逐页视觉终验和点名多模型测试；不实施安全测试",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": "2026-08-31",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-31-phase-8-cross-format",
+  "relatedFiles": [
+    "src/ci_workflow/renderers/html_ppt/",
+    "assets/html-ppt/",
+    "contracts/kangzhe/design_specs/",
+    "tests/html_ppt/",
+    "output/html-ppt/",
+    "docs/acceptance/runs/8.5/"
+  ],
+  "notes": "A/B/C 已从锁定结构化数据生成 20/24/18 页单文件 HTML-PPT；22 项测试、Ruff、独立视觉会商三轮及只读收口执行审计均通过。Task 8.6 继续全 62 页最大化与非 16:9 视觉终验。",
+  "meta": {"phase": 8, "task": "8.5"}
+}

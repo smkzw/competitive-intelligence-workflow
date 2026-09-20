@@ -1,0 +1,34 @@
+{
+  "report_snapshot_id": "snapshot-three-report-complete-001",
+  "report_version": "v-fixture-001",
+  "indication": "特应性皮炎",
+  "A": {
+    "products": 4,
+    "trials": 4,
+    "efficacy_rows": 8,
+    "safety_rows": 16,
+    "regulatory_rows": 5,
+    "companies_rows": 4,
+    "patents_rows": 4,
+    "history_rows": 4,
+    "page_responsibilities": 12
+  },
+  "B": {
+    "products": 2,
+    "trials": 2,
+    "efficacy_rows": 4,
+    "safety_rows": 8,
+    "baseline_facts": 16,
+    "disposition_facts": 70,
+    "efficacy_view_facts": 0,
+    "safety_view_facts": 0,
+    "matrix_rows": 4,
+    "page_responsibilities": 21
+  },
+  "C": {
+    "products": 3,
+    "trials": 4,
+    "observations": 48,
+    "page_responsibilities": 12
+  }
+}

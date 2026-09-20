@@ -1,0 +1,28 @@
+{
+  "blocking_items": [
+    {
+      "failure_code": "c_missing_timepoint",
+      "field": "primary_endpoint_timepoint",
+      "source_record_id": "NCT06241118",
+      "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+      "trial_id": "nct06241118"
+    }
+  ],
+  "initial_variant": "initial-blocked",
+  "reason": "初始提取变体故意未带入一项试验的主要终点评估时间点，以验证关键时间点缺失必须先阻断。",
+  "recovery_result": "已恢复；恢复门槛通过",
+  "recovery_route": {
+    "observed_source_text": "Week 36",
+    "recovered_without_cross_trial_substitution": true,
+    "route_id": "clinicaltrials-registry-reextract",
+    "source_sha256": "99daba1a71aa45f8de9904193b7196c235fcbbf0ec1b264d51900313b5542089",
+    "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+    "strategy": "重新读取同一官方 ClinicalTrials.gov API 登记记录的 outcomesModule.primaryOutcomes[0].timeFrame；该记录使用截止日官方历史版本"
+  },
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "request_id": "c-real-expanded-recovery-request-20260901",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "state": "recovered"
+}

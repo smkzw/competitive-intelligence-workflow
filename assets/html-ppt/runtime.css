@@ -1,7 +1,14 @@
 /*
  * 竞品调研 HTML-PPT 结构运行层。
  * 本文件只负责固定画布、页面显隐、进度与逐字稿抽屉；品牌视觉由康哲合同 CSS 提供。
+ * --deck-scale 由 runtime.js 写在 :root；容器负责居中，画布只承担一次等比缩放。
  */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 html,
 body {
@@ -12,18 +19,17 @@ body {
 }
 
 body {
-  position: relative;
+  display: grid;
+  place-items: center;
 }
 
 .deck {
   --deck-scale: 1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
   width: 1280px;
   height: 720px;
   overflow: hidden;
-  transform: translate(-50%, -50%) scale(var(--deck-scale));
+  transform: scale(var(--deck-scale));
   transform-origin: center center;
 }
 
@@ -102,26 +108,28 @@ body {
   line-height: 1.6;
 }
 
-aside.notes {
+aside.notes,
+.notes,
+.speaker-notes {
   display: none !important;
 }
 
 html[data-preview="true"] .deck-progress,
-html[data-preview="true"] .deck-notes-drawer {
+html[data-preview="true"] .progress-bar,
+html[data-preview="true"] .deck-notes-drawer,
+html[data-preview="true"] .notes-overlay {
   display: none !important;
 }
 
 html[data-preview="true"] .deck {
   --deck-scale: 1;
-  top: 0;
-  left: 0;
-  transform: none;
-  transform-origin: top left;
+  transform: scale(1);
 }
 
 @media print {
   html,
   body {
+    display: block;
     width: auto;
     height: auto;
     overflow: visible;
@@ -144,7 +152,9 @@ html[data-preview="true"] .deck {
   }
 
   .deck-progress,
-  .deck-notes-drawer {
+  .progress-bar,
+  .deck-notes-drawer,
+  .notes-overlay {
     display: none !important;
   }
 }

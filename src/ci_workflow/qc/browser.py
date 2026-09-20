@@ -1282,9 +1282,13 @@ def site_directory_digest(site_root: Path) -> tuple[str, int]:
     摘要 = 按路径排序后，对每个文件依次更新 POSIX 相对路径、NUL 与字节
     内容的整体 SHA-256；字节数 = 全部文件字节之和。只读，不修改站点。
     """
+    if site_root.is_symlink() or not site_root.is_dir():
+        raise LockedSitemapSourceError("站点摘要必须绑定真实目录，不得使用链接")
     digest = hashlib.sha256()
     total = 0
     for path in sorted(site_root.rglob("*")):
+        if path.is_symlink():
+            raise LockedSitemapSourceError("站点摘要不得包含符号链接")
         if not path.is_file():
             continue
         content = path.read_bytes()
@@ -1293,6 +1297,18 @@ def site_directory_digest(site_root: Path) -> tuple[str, int]:
         digest.update(content)
         total += len(content)
     return digest.hexdigest(), total
+
+
+def _guard_locked_source_path(root: Path, path: Path) -> None:
+    if not path.is_relative_to(root) or ".." in path.relative_to(root).parts:
+        raise LockedSitemapSourceError("锁定来源路径越界")
+    for component in (path, *path.parents):
+        if component == root:
+            break
+        if component.is_symlink():
+            raise LockedSitemapSourceError("锁定来源不得使用符号链接")
+    if not path.resolve().is_relative_to(root):
+        raise LockedSitemapSourceError("锁定来源路径越界")
 
 
 def load_locked_sitemap_source(
@@ -1322,6 +1338,7 @@ def load_locked_sitemap_source(
     project_root = project_root.expanduser().resolve()
     expected_rel = f"reports/{report_value}/{version}/html"
     manifest_path = project_root / "reports" / report_value / version / "html.manifest.json"
+    _guard_locked_source_path(project_root, manifest_path)
 
     # 1. 产物清单：存在、解析、报告/版本匹配、状态可用、路径正是站点目录。
     if not manifest_path.is_file():
@@ -1368,6 +1385,7 @@ def load_locked_sitemap_source(
         / report_value
         / f"{manifest.report_snapshot_id}.json"
     )
+    _guard_locked_source_path(project_root, snapshot_path)
     if not snapshot_path.is_file():
         raise LockedSitemapSourceError(
             f"报告快照文件不存在：{snapshot_path}。请确认项目内存在清单引用的"
@@ -1431,6 +1449,7 @@ def load_locked_sitemap_source(
 
     # 5. 站点目录当前摘要与字节数必须与清单一致（启动浏览器前失败关闭）。
     site_root = project_root.joinpath(*expected_rel.split("/"))
+    _guard_locked_source_path(project_root, site_root)
     if not site_root.is_dir():
         raise LockedSitemapSourceError(f"报告站点目录不存在：{site_root}。请确认产物已生成。")
     actual_digest, actual_bytes = site_directory_digest(site_root)

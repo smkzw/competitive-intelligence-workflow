@@ -1,0 +1,1872 @@
+{
+  "studyVersion" : 7,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT02118792",
+        "orgStudyIdInfo" : {
+          "id" : "AN2728-AD-302"
+        },
+        "organization" : {
+          "fullName" : "Pfizer",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "Safety and Efficacy of AN2728 Topical Ointment, 2% in Children, Adolescents, and Adults (Aged 2 Years and Older) With Atopic Dermatitis",
+        "officialTitle" : "A Multicenter, Randomized, Double-Blind, Vehicle-Controlled Study of the Safety and Efficacy of AN2728 Topical Ointment, 2% in Children, Adolescents, and Adults (Ages 2 Years and Older) With Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2017-01",
+        "overallStatus" : "COMPLETED",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2014-03"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2015-04",
+          "type" : "ACTUAL"
+        },
+        "studyFirstSubmitDate" : "2014-04-15",
+        "studyFirstSubmitQcDate" : "2014-04-17",
+        "studyFirstPostDateStruct" : {
+          "date" : "2014-04-21",
+          "type" : "ESTIMATED"
+        },
+        "dispFirstSubmitDate" : "2016-02-16",
+        "lastUpdateSubmitDate" : "2017-01-12",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2017-03-06",
+          "type" : "ACTUAL"
+        },
+        "completionDateStruct" : {
+          "date" : "2015-04",
+          "type" : "ACTUAL"
+        },
+        "dispFirstSubmitQcDate" : "2016-03-14",
+        "dispFirstPostDateStruct" : {
+          "date" : "2016-04-13",
+          "type" : "ESTIMATED"
+        },
+        "resultsFirstSubmitDate" : "2017-01-05",
+        "resultsFirstSubmitQcDate" : "2017-01-12",
+        "resultsFirstPostDateStruct" : {
+          "date" : "2017-03-06",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Pfizer",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "The purpose of this study is to investigate the safety and efficacy of AN2728 Topical Ointment, 2% in children, adolescents, and adults (ages 2 years and older) with atopic dermatitis."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Dermatitis, Atopic" ],
+        "keywords" : [ "atopic dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE3" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 764,
+          "type" : "ACTUAL"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "AN2728 Topical Ointment, 2%",
+          "type" : "EXPERIMENTAL",
+          "description" : "AN2728 Topical Ointment, 2%, applied twice daily for up to 28 days",
+          "interventionNames" : [ "Drug: AN2728 Topical Ointment, 2%" ]
+        }, {
+          "label" : "Matching vehicle control",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Matching vehicle control, applied twice daily for up to 28 days",
+          "interventionNames" : [ "Drug: Matching vehicle control" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "AN2728 Topical Ointment, 2%",
+          "armGroupLabels" : [ "AN2728 Topical Ointment, 2%" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Matching vehicle control",
+          "armGroupLabels" : [ "Matching vehicle control" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Percentage of Participants Who Achieved Success in Investigator&#x27;s Static Global Assessment (ISGA) Score at Day 29",
+          "timeFrame" : "Day 29",
+          "description" : "ISGA assessed the severity of AD (except scalp) on a 5-point scale ranged from 0 (clear) to 4 (maximum severe), where higher scores indicate higher degree of AD.\nGrades for classification of severity: 0= clear (minor residual hypo&#x2F;hyper pigmentation, no erythema or induration or papulation, no oozing or crusting), 1= almost clear (trace faint pink erythema, with barely perceptible induration or papulation and no oozing or crusting), 2= mild (faint pink erythema with mild induration or papulation and no oozing or crusting), 3= moderate (pink-red erythema with moderate induration or papulation with or without oozing or crusting) and 4= severe (deep or bright red erythema with severe induration or papulation and with oozing or crusting).\nTreatment success was defined as an ISGA score of Clear (0) or Almost Clear (1) with at least a 2-grade improvement from baseline."
+        }, {
+          "measure" : "Number of Participants With Treatment-Emergent Adverse Events (AEs) And Serious Adverse Events (SAEs)",
+          "description" : "An AE was any untoward medical occurrence attributed to a participant who received study drug without regard to possibility of causal relationship.\nAn SAE was an AE resulting in any of the following outcomes or deemed significant for any other reason: death; Initial or prolonged inpatient hospitalization; life threatening experience (immediate risk of dying); persistent or significant disability&#x2F;incapacity; congenital anomaly.\nTreatment-emergent were events between first dose of study drug to the end of study, that were absent before treatment or that worsened relative to pre-treatment state.",
+          "timeFrame" : "AEs: Baseline (Day 1) up to Day 29, SAEs: Baseline (Day 1) up to Day 36"
+        }, {
+          "measure" : "Number of Participants With Clinically Significant Change From Baseline in Electrocardiogram (ECG) Findings at Day 8",
+          "description" : "ECG parameters that were analyzed: PR interval, QRS interval, QT interval and corrected QT interval based on Fridericia&#x27;s formula (QTcF).\nClinical significance of change from baseline in ECG findings was determined by investigator.",
+          "timeFrame" : "Baseline, Day 8"
+        }, {
+          "measure" : "Number of Participants With Clinically Significant Change From Baseline in Vital Signs at Day 36",
+          "description" : "Following parameters were analyzed for examination of vital signs: systolic and diastolic blood pressure, pulse, respiratory rate and body temperature.\nVital sign measurements were performed with the participant in the seated or supine position and after the participant had been calmly sitting or lying face up for a minimum of 5 minutes.\nClinical significance of change from baseline value was determined by investigator.",
+          "timeFrame" : "Baseline (Day 1), Day 36"
+        }, {
+          "measure" : "Number of Participants With Clinically Significant Laboratory Values",
+          "description" : "Laboratory values included: Alkaline Phosphatase, Alanine Aminotransferase, Aspartate Aminotransferase, Albumin, Bilirubin, Blood Urea Nitrogen, Glucose, Hematocrit, Hemoglobin, Leukocytes, Lymphocytes, Monocytes, Neutrophils, Platelets, Basophils, Eosinophils, Erythrocytes, Potassium, Protein, Sodium.\nClinically significant laboratory abnormalities were defined as abnormal laboratory test values that have clinical manifestations or require medical intervention, as per investigator&#x27;s discretion.",
+          "timeFrame" : "Baseline up to Day 36"
+        }, {
+          "measure" : "Percentage of Participants With Local Tolerability Symptoms at Baseline",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale ranging from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicated more severe symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "timeFrame" : "Baseline (Day 1)"
+        }, {
+          "measure" : "Percentage of Participants With Local Tolerability Symptoms at Day 8",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale ranging from 0 to 3, where 0= none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicated more severe symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "timeFrame" : "Day 8"
+        }, {
+          "measure" : "Percentage of Participants With Local Tolerability Symptoms at Day 15",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale ranging from 0 to 3, where 0= none (no stinging&#x2F;burning), 1= mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicated more severe symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "timeFrame" : "Day 15"
+        }, {
+          "measure" : "Percentage of Participants With Local Tolerability Symptoms at Day 22",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale which ranges from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicate high severity of symptoms.\nIn this outcome, percentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "timeFrame" : "Day 22"
+        }, {
+          "measure" : "Percentage of Participants With Local Tolerability Symptoms at Day 29",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale which ranges from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicate high severity of symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "timeFrame" : "Day 29"
+        }, {
+          "measure" : "Percentage of Participants With Local Tolerability Symptoms at Day 36",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale which ranges from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicate high severity of symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "timeFrame" : "Day 36"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Percentage of Participants With an Investigator&#x27;s Static Global Assessment (ISGA) Score of Clear (0) or Almost Clear (1) at Day 29",
+          "timeFrame" : "Day 29",
+          "description" : "ISGA assessed the severity of AD (except scalp and venous access area) on a 5-point scale ranged from 0 (clear) to 4 (maximum severe), where higher scores indicate higher degree of AD.\nGrades for classification of severity: 0= clear (minor residual discoloration, no erythema or induration or papulation, no oozing or crusting), 1= almost clear (trace faint pink erythema, with barely perceptible induration or papulation and no oozing or crusting), 2= mild (faint pink erythema with mild induration or papulation and no oozing or crusting), 3= moderate (pink-red erythema with moderate induration or papulation with or without oozing or crusting) and 4= severe (deep or bright red erythema with severe induration or papulation and with oozing or crusting).\nPercentage of participants with an ISGA score of 0 or 1 were reported."
+        }, {
+          "measure" : "Time to Achieve Treatment Success Based on Investigator&#x27;s Static Global Assessment (ISGA)",
+          "timeFrame" : "Baseline up to Day 29",
+          "description" : "Time to achieve treatment success based on ISGA was defined as the time interval between the administrations of first dose of study drug until first documentation of success in ISGA.\nSuccess in ISGA was defined as an ISGA score of clear (0) or almost clear (1) with at least 2-grade improvement from baseline.\nIt was analyzed using Kaplan-Meier method."
+        }, {
+          "measure" : "Change From Baseline in Signs of Atopic Dermatitis at Day 29",
+          "timeFrame" : "Baseline, Day 29",
+          "description" : "Signs of AD included erythema, induration&#x2F;papulation, exudation, excoriation and lichenification.\nEach sign was assessed on a 4- point scale ranges from 0 to 3, where 0= none, 1= mild, 2= moderate to 3= severe.\nHigher score indicates severe signs and symptoms of AD."
+        } ],
+        "otherOutcomes" : [ {
+          "measure" : "Time to Improvement in Pruritus",
+          "timeFrame" : "Baseline (Day 1) up to Day 29",
+          "description" : "Time to improvement in pruritus was defined as the time interval between the administration of first dose of study drug till the first documentation of improvement in pruritus.\nImprovement in pruritus was defined as achieving none (0) or mild (1) score with at least a 1- grade improvement from baseline.\nSeverity of pruritus was assessed on 4-point numeric scale ranges from 0 to 3, where 0= none (no itching), 1= mild (occasional, slight itching&#x2F;scratching), 2= moderate (constant or intermittent itching&#x2F;scratching which is not disturbing sleep) and 3= severe (bothersome itching&#x2F;scratching which is disturbing sleep).\nHigher scores indicated more severe condition.\nIt was analyzed using Kaplan-Meier method."
+        }, {
+          "measure" : "Change From Baseline in Children&#x27;s Dermatology Life Quality Index (CDLQI) Score at Day 29",
+          "timeFrame" : "Baseline (Day 1), Day 29",
+          "description" : "The CDLQI was a 10-item questionnaire that measures the impact of skin disease on children&#x27;s (aged 2-15 years) quality of life.\nEach question was evaluated on a 4-point scale ranging from 0 (not at all) to 3 (very much); where higher scores indicate more impact on quality of life.\nThe CDLQI total score was the sum of individual scores of question 1-10 and ranges from 0 (not at all) to 30 (very much): 0-1 = no effect at all on the children&#x27;s life; 2-6 = small effect on the children&#x27;s life; 7-12 = moderate effect on the children&#x27;s life; 13-18 = very large effect on the children&#x27;s life; 19-30 = extremely large effect on the children&#x27;s life.\nHigher scores indicate more impact on quality of life of children."
+        }, {
+          "measure" : "Change From Baseline in Dermatology Life Quality Index (DLQI) Score at Day 29",
+          "description" : "The DLQI was a 10-item questionnaire that measures the impact of skin disease on participant&#x27;s quality of life.\nEach question was evaluated on a 4-point scale ranging from 0 (not at all) to 3 (very much); where higher scores indicate more impact on quality of life.\nThe DLQI total score ranges from 0 (not at all) to 30 (very much): 0-1 = no effect at all on the participant&#x27;s life; 2-6 = small effect on the participant&#x27;s life; 7-12 = moderate effect on the participant&#x27;s life; 13-18 = very large effect on the participant&#x27;s life; 19-30 = extremely large effect on the participant&#x27;s life.\nHigher scores indicate more impact on quality of life of participants.",
+          "timeFrame" : "Baseline (Day 1), Day 29"
+        }, {
+          "measure" : "Change From Baseline in Dermatitis Family Impact Questionnaire (DFI) Score at Day 29",
+          "description" : "The DFI was a 10-item disease questionnaire that measures the impact of having a child with AD on family quality of life.\nIt was completed by parent&#x2F;legal guardian of the child (affected by AD), based on recall over the past week.\nEach question was scored on a 4-point scale ranging from 0 (good) to 3 (worst), where higher scores indicated worst quality of life of family.\nThe DFI total score was the sum of individual scores of the 10 questions and ranges from 0 (good) to 30 (worst), where higher DFI scores indicated worst quality of life of family.",
+          "timeFrame" : "Baseline (Day 1), Day 29"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ul><li>Males or females 2 years and older</li><li>Has a clinical diagnosis of Atopic Dermatitis (AD) according to the criteria of Hanifin and Rajka</li><li>Has AD involvement ≥ 5% Treatable %BSA (excluding the scalp)</li><li>Has an ISGA score of Mild (2) or Moderate (3) at Baseline&#x2F;Day 1</li><li>All female subjects of childbearing potential must use acceptable methods of contraception from the Screening Visit continuously until 30 days after stopping study drug</li></ul><p>Exclusion Criteria:</p><ul><li>As determined by the study doctor, a medical history that may interfere with study objectives</li><li>Unstable AD or any consistent requirement for high potency topical corticosteroids</li><li>History of use of biologic therapy (including intravenous immunoglobulin)</li><li>Recent or anticipated concomitant use of systemic or topical therapies that might alter the course of AD</li><li>Recent or current participation in another research study</li><li>Females who are breastfeeding, pregnant, or with plans to get pregnant during the participation in the study</li><li>Participation in a previous AN2728 clinical trial</li></ul>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "2 Years",
+        "stdAges" : [ "CHILD", "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "overallOfficials" : [ {
+          "name" : "Pfizer CT.gov Call Center",
+          "affiliation" : "Pfizer",
+          "role" : "STUDY_DIRECTOR"
+        } ],
+        "locations" : [ {
+          "facility" : "Anacor Investigational Site",
+          "city" : "Henrico",
+          "state" : "Virginia",
+          "country" : "United States",
+          "geoPoint" : {
+            "lat" : 36.59264,
+            "lon" : -78.61611
+          }
+        } ]
+      },
+      "referencesModule" : {
+        "references" : [ {
+          "pmid" : "38206678",
+          "type" : "DERIVED",
+          "citation" : "Stein Gold LF, Tom WL, Shi V, Sanders P, Zang C, Vlahos B, Cha A. Impact of Crisaborole in Treatment-Experienced Patients With Mild-to-Moderate Atopic Dermatitis. Dermatitis. 2024 Jan-Feb;35(1):84-91. doi: 10.1089&#x2F;derm.2023.0112. Epub 2024 Jan 11."
+        }, {
+          "pmid" : "35292919",
+          "type" : "DERIVED",
+          "citation" : "Luger TA, Hebert AA, Zaenglein AL, Silverberg JI, Tan H, Ports WC, Zielinski MA. Subgroup Analysis of Crisaborole for Mild-to-Moderate Atopic Dermatitis in Children Aged 2 to &lt; 18 Years. Paediatr Drugs. 2022 Mar;24(2):175-183. doi: 10.1007&#x2F;s40272-021-00490-y. Epub 2022 Mar 16."
+        }, {
+          "pmid" : "34379285",
+          "type" : "DERIVED",
+          "citation" : "Geng B, Hebert AA, Takiya L, Miller L, Werth JL, Zang C, Sanders P, Lebwohl MG. Efficacy and Safety Trends with Continuous, Long-Term Crisaborole Use in Patients Aged &gt;&#x2F;= 2 Years with Mild-to-Moderate Atopic Dermatitis. Dermatol Ther (Heidelb). 2021 Oct;11(5):1667-1678. doi: 10.1007&#x2F;s13555-021-00584-y. Epub 2021 Aug 11."
+        }, {
+          "pmid" : "33728583",
+          "type" : "DERIVED",
+          "citation" : "Thyssen JP, Zang C, Neary MP, Bushmakin AG, Cappelleri JC, Cha A, Russo C, Luger TA. Translating the Investigator&#x27;s Static Global Assessment to the Eczema Area and Severity Index in Studies of Crisaborole for Atopic Dermatitis. Dermatol Ther (Heidelb). 2021 Jun;11(3):845-853. doi: 10.1007&#x2F;s13555-021-00509-9. Epub 2021 Mar 13."
+        }, {
+          "pmid" : "32574023",
+          "type" : "DERIVED",
+          "citation" : "Stein Gold LF, Takiya L, Zang C, Sanders P, Feldman SR. Demographics and Baseline Disease Characteristics of Early Responders to Crisaborole for Atopic Dermatitis. J Drugs Dermatol. 2020 Jun 1;19(6):619-624."
+        }, {
+          "pmid" : "32318744",
+          "type" : "DERIVED",
+          "citation" : "Silverberg JI, Tallman AM, Ports WC, Gerber RA, Tan H, Zielinski MA. Evaluating the Efficacy of Crisaborole Using the Atopic Dermatitis Severity Index and Percentage of Affected Body Surface Area. Acta Derm Venereol. 2020 Jun 11;100(13):adv00170. doi: 10.2340&#x2F;00015555-3489."
+        }, {
+          "pmid" : "30345457",
+          "type" : "DERIVED",
+          "citation" : "Simpson EL, Paller AS, Boguniewicz M, Eichenfield LF, Feldman SR, Silverberg JI, Chamlin SL, Zane LT. Crisaborole Ointment Improves Quality of Life of Patients with Mild to Moderate Atopic Dermatitis and Their Families. Dermatol Ther (Heidelb). 2018 Dec;8(4):605-619. doi: 10.1007&#x2F;s13555-018-0263-0. Epub 2018 Oct 22."
+        }, {
+          "pmid" : "27417017",
+          "type" : "DERIVED",
+          "citation" : "Paller AS, Tom WL, Lebwohl MG, Blumenthal RL, Boguniewicz M, Call RS, Eichenfield LF, Forsha DW, Rees WC, Simpson EL, Spellman MC, Stein Gold LF, Zaenglein AL, Hughes MH, Zane LT, Hebert AA. Efficacy and safety of crisaborole ointment, a novel, nonsteroidal phosphodiesterase 4 (PDE4) inhibitor for the topical treatment of atopic dermatitis (AD) in children and adults. J Am Acad Dermatol. 2016 Sep;75(3):494-503.e6. doi: 10.1016&#x2F;j.jaad.2016.05.046. Epub 2016 Jul 11."
+        } ]
+      }
+    },
+    "hasResults" : true,
+    "resultsSection" : {
+      "participantFlowModule" : {
+        "groups" : [ {
+          "id" : "FG000",
+          "title" : "AN2728 Ointment, 2 Percent (%)",
+          "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable atopic dermatitis (AD)-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+        }, {
+          "id" : "FG001",
+          "title" : "AN2728 Ointment, Vehicle",
+          "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+        } ],
+        "periods" : [ {
+          "title" : "Overall Study",
+          "milestones" : [ {
+            "type" : "STARTED",
+            "achievements" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "514"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "250"
+            } ]
+          }, {
+            "type" : "Treated",
+            "achievements" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "513"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "250"
+            } ]
+          }, {
+            "type" : "COMPLETED",
+            "achievements" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "483"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "213"
+            } ]
+          }, {
+            "type" : "NOT COMPLETED",
+            "achievements" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "31"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "37"
+            } ]
+          } ],
+          "dropWithdraws" : [ {
+            "type" : "Withdrawal by Subject",
+            "reasons" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "6"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "3"
+            } ]
+          }, {
+            "type" : "Lost to Follow-up",
+            "reasons" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "4"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "4"
+            } ]
+          }, {
+            "type" : "Adverse Event",
+            "reasons" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "5"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "4"
+            } ]
+          }, {
+            "type" : "Withdrawal by parent&#x2F;guardian",
+            "reasons" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "14"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "20"
+            } ]
+          }, {
+            "type" : "Other",
+            "reasons" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "1"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "6"
+            } ]
+          }, {
+            "type" : "Randomised but not treated",
+            "reasons" : [ {
+              "groupId" : "FG000",
+              "numSubjects" : "1"
+            }, {
+              "groupId" : "FG001",
+              "numSubjects" : "0"
+            } ]
+          } ]
+        } ]
+      },
+      "baselineCharacteristicsModule" : {
+        "populationDescription" : "Intent to Treat (ITT) population included all participants who were randomized and received study drug.",
+        "groups" : [ {
+          "id" : "BG000",
+          "title" : "AN2728 Ointment, 2 Percent (%)",
+          "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+        }, {
+          "id" : "BG001",
+          "title" : "AN2728 Ointment, Vehicle",
+          "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+        }, {
+          "id" : "BG002",
+          "title" : "Total",
+          "description" : "Total of all reporting groups"
+        } ],
+        "denoms" : [ {
+          "units" : "Participants",
+          "counts" : [ {
+            "groupId" : "BG000",
+            "value" : "513"
+          }, {
+            "groupId" : "BG001",
+            "value" : "250"
+          }, {
+            "groupId" : "BG002",
+            "value" : "763"
+          } ]
+        } ],
+        "measures" : [ {
+          "title" : "Age, Customized",
+          "paramType" : "COUNT_OF_PARTICIPANTS",
+          "unitOfMeasure" : "Participants",
+          "classes" : [ {
+            "title" : "2 -11 years",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "BG000",
+                "value" : "310"
+              }, {
+                "groupId" : "BG001",
+                "value" : "164"
+              }, {
+                "groupId" : "BG002",
+                "value" : "474"
+              } ]
+            } ]
+          }, {
+            "title" : "12 -17 years",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "BG000",
+                "value" : "126"
+              }, {
+                "groupId" : "BG001",
+                "value" : "57"
+              }, {
+                "groupId" : "BG002",
+                "value" : "183"
+              } ]
+            } ]
+          }, {
+            "title" : "&gt;=18 years",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "BG000",
+                "value" : "77"
+              }, {
+                "groupId" : "BG001",
+                "value" : "29"
+              }, {
+                "groupId" : "BG002",
+                "value" : "106"
+              } ]
+            } ]
+          } ]
+        }, {
+          "title" : "Gender",
+          "paramType" : "COUNT_OF_PARTICIPANTS",
+          "unitOfMeasure" : "Participants",
+          "classes" : [ {
+            "categories" : [ {
+              "title" : "Female",
+              "measurements" : [ {
+                "groupId" : "BG000",
+                "value" : "282"
+              }, {
+                "groupId" : "BG001",
+                "value" : "138"
+              }, {
+                "groupId" : "BG002",
+                "value" : "420"
+              } ]
+            }, {
+              "title" : "Male",
+              "measurements" : [ {
+                "groupId" : "BG000",
+                "value" : "231"
+              }, {
+                "groupId" : "BG001",
+                "value" : "112"
+              }, {
+                "groupId" : "BG002",
+                "value" : "343"
+              } ]
+            } ]
+          } ]
+        } ]
+      },
+      "outcomeMeasuresModule" : {
+        "outcomeMeasures" : [ {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants Who Achieved Success in Investigator&#x27;s Static Global Assessment (ISGA) Score at Day 29",
+          "description" : "ISGA assessed the severity of AD (except scalp) on a 5-point scale ranged from 0 (clear) to 4 (maximum severe), where higher scores indicate higher degree of AD.\nGrades for classification of severity: 0= clear (minor residual hypo&#x2F;hyper pigmentation, no erythema or induration or papulation, no oozing or crusting), 1= almost clear (trace faint pink erythema, with barely perceptible induration or papulation and no oozing or crusting), 2= mild (faint pink erythema with mild induration or papulation and no oozing or crusting), 3= moderate (pink-red erythema with moderate induration or papulation with or without oozing or crusting) and 4= severe (deep or bright red erythema with severe induration or papulation and with oozing or crusting).\nTreatment success was defined as an ISGA score of Clear (0) or Almost Clear (1) with at least a 2-grade improvement from baseline.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "513"
+            }, {
+              "groupId" : "OG001",
+              "value" : "250"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "31.4"
+              }, {
+                "groupId" : "OG001",
+                "value" : "18.0"
+              } ]
+            } ]
+          } ],
+          "analyses" : [ {
+            "groupIds" : [ "OG000", "OG001" ],
+            "testedNonInferiority" : false,
+            "nonInferiorityType" : "SUPERIORITY_OR_OTHER",
+            "pValue" : "&lt;0.001",
+            "statisticalMethod" : "Regression, Logistic"
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Number of Participants With Treatment-Emergent Adverse Events (AEs) And Serious Adverse Events (SAEs)",
+          "description" : "An AE was any untoward medical occurrence attributed to a participant who received study drug without regard to possibility of causal relationship.\nAn SAE was an AE resulting in any of the following outcomes or deemed significant for any other reason: death; Initial or prolonged inpatient hospitalization; life threatening experience (immediate risk of dying); persistent or significant disability&#x2F;incapacity; congenital anomaly.\nTreatment-emergent were events between first dose of study drug to the end of study, that were absent before treatment or that worsened relative to pre-treatment state.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "participants",
+          "timeFrame" : "AEs: Baseline (Day 1) up to Day 29, SAEs: Baseline (Day 1) up to Day 36",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "510"
+            }, {
+              "groupId" : "OG001",
+              "value" : "247"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "AEs",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "150"
+              }, {
+                "groupId" : "OG001",
+                "value" : "79"
+              } ]
+            } ]
+          }, {
+            "title" : "SAEs",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "3"
+              }, {
+                "groupId" : "OG001",
+                "value" : "0"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Number of Participants With Clinically Significant Change From Baseline in Electrocardiogram (ECG) Findings at Day 8",
+          "description" : "ECG parameters that were analyzed: PR interval, QRS interval, QT interval and corrected QT interval based on Fridericia&#x27;s formula (QTcF).\nClinical significance of change from baseline in ECG findings was determined by investigator.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "participants",
+          "timeFrame" : "Baseline, Day 8",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "510"
+            }, {
+              "groupId" : "OG001",
+              "value" : "247"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "0"
+              }, {
+                "groupId" : "OG001",
+                "value" : "0"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Number of Participants With Clinically Significant Change From Baseline in Vital Signs at Day 36",
+          "description" : "Following parameters were analyzed for examination of vital signs: systolic and diastolic blood pressure, pulse, respiratory rate and body temperature.\nVital sign measurements were performed with the participant in the seated or supine position and after the participant had been calmly sitting or lying face up for a minimum of 5 minutes.\nClinical significance of change from baseline value was determined by investigator.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "participants",
+          "timeFrame" : "Baseline (Day 1), Day 36",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "510"
+            }, {
+              "groupId" : "OG001",
+              "value" : "247"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "0"
+              }, {
+                "groupId" : "OG001",
+                "value" : "0"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Number of Participants With Clinically Significant Laboratory Values",
+          "description" : "Laboratory values included: Alkaline Phosphatase, Alanine Aminotransferase, Aspartate Aminotransferase, Albumin, Bilirubin, Blood Urea Nitrogen, Glucose, Hematocrit, Hemoglobin, Leukocytes, Lymphocytes, Monocytes, Neutrophils, Platelets, Basophils, Eosinophils, Erythrocytes, Potassium, Protein, Sodium.\nClinically significant laboratory abnormalities were defined as abnormal laboratory test values that have clinical manifestations or require medical intervention, as per investigator&#x27;s discretion.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "participants",
+          "timeFrame" : "Baseline up to Day 36",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "510"
+            }, {
+              "groupId" : "OG001",
+              "value" : "247"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "4"
+              }, {
+                "groupId" : "OG001",
+                "value" : "4"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants With Local Tolerability Symptoms at Baseline",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale ranging from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicated more severe symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.\nHere, number of participants analyzed (N) signifies those participants who were evaluable for this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Baseline (Day 1)",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "509"
+            }, {
+              "groupId" : "OG001",
+              "value" : "247"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "None",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "48.7"
+              }, {
+                "groupId" : "OG001",
+                "value" : "56.3"
+              } ]
+            } ]
+          }, {
+            "title" : "Mild",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "23.8"
+              }, {
+                "groupId" : "OG001",
+                "value" : "21.9"
+              } ]
+            } ]
+          }, {
+            "title" : "Moderate",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "19.6"
+              }, {
+                "groupId" : "OG001",
+                "value" : "16.6"
+              } ]
+            } ]
+          }, {
+            "title" : "Severe",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "7.9"
+              }, {
+                "groupId" : "OG001",
+                "value" : "5.3"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "SECONDARY",
+          "title" : "Percentage of Participants With an Investigator&#x27;s Static Global Assessment (ISGA) Score of Clear (0) or Almost Clear (1) at Day 29",
+          "description" : "ISGA assessed the severity of AD (except scalp and venous access area) on a 5-point scale ranged from 0 (clear) to 4 (maximum severe), where higher scores indicate higher degree of AD.\nGrades for classification of severity: 0= clear (minor residual discoloration, no erythema or induration or papulation, no oozing or crusting), 1= almost clear (trace faint pink erythema, with barely perceptible induration or papulation and no oozing or crusting), 2= mild (faint pink erythema with mild induration or papulation and no oozing or crusting), 3= moderate (pink-red erythema with moderate induration or papulation with or without oozing or crusting) and 4= severe (deep or bright red erythema with severe induration or papulation and with oozing or crusting).\nPercentage of participants with an ISGA score of 0 or 1 were reported.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "513"
+            }, {
+              "groupId" : "OG001",
+              "value" : "250"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "48.5"
+              }, {
+                "groupId" : "OG001",
+                "value" : "29.7"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "SECONDARY",
+          "title" : "Time to Achieve Treatment Success Based on Investigator&#x27;s Static Global Assessment (ISGA)",
+          "description" : "Time to achieve treatment success based on ISGA was defined as the time interval between the administrations of first dose of study drug until first documentation of success in ISGA.\nSuccess in ISGA was defined as an ISGA score of clear (0) or almost clear (1) with at least 2-grade improvement from baseline.\nIt was analyzed using Kaplan-Meier method.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "MEDIAN",
+          "dispersionType" : "95% Confidence Interval",
+          "unitOfMeasure" : "days",
+          "timeFrame" : "Baseline up to Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "513"
+            }, {
+              "groupId" : "OG001",
+              "value" : "250"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "NA",
+                "lowerLimit" : "NA",
+                "upperLimit" : "NA",
+                "comment" : "The median time to achieve success in ISGA and its 95% confidence interval (CI) were not estimable, as fewer participants (less than 50 percent) reached success in ISGA."
+              }, {
+                "groupId" : "OG001",
+                "value" : "NA",
+                "lowerLimit" : "NA",
+                "upperLimit" : "NA",
+                "comment" : "The median time to achieve success in ISGA and its 95% CI were not estimable, as fewer participants (less than 50 percent) reached success in ISGA."
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "SECONDARY",
+          "title" : "Change From Baseline in Signs of Atopic Dermatitis at Day 29",
+          "description" : "Signs of AD included erythema, induration&#x2F;papulation, exudation, excoriation and lichenification.\nEach sign was assessed on a 4- point scale ranges from 0 to 3, where 0= none, 1= mild, 2= moderate to 3= severe.\nHigher score indicates severe signs and symptoms of AD.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.\nHere, &#x27;n&#x27; signifies those participants who were evaluable at specific time point for each arm.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "MEAN",
+          "dispersionType" : "Standard Deviation",
+          "unitOfMeasure" : "units on a scale",
+          "timeFrame" : "Baseline, Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "513"
+            }, {
+              "groupId" : "OG001",
+              "value" : "250"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "Erythema: Baseline (n =513, 250)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "1.7",
+                "spread" : "0.59"
+              }, {
+                "groupId" : "OG001",
+                "value" : "1.6",
+                "spread" : "0.59"
+              } ]
+            } ]
+          }, {
+            "title" : "Erythema: Change at Day 29 (n =486, 224)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-0.7",
+                "spread" : "0.79"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-0.3",
+                "spread" : "0.81"
+              } ]
+            } ]
+          }, {
+            "title" : "Induration: Baseline (n =513, 250)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "1.8",
+                "spread" : "0.61"
+              }, {
+                "groupId" : "OG001",
+                "value" : "1.8",
+                "spread" : "0.56"
+              } ]
+            } ]
+          }, {
+            "title" : "Induration: Change at Day 29 (n =486, 224)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-0.7",
+                "spread" : "0.83"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-0.4",
+                "spread" : "0.76"
+              } ]
+            } ]
+          }, {
+            "title" : "Exudation: Baseline (n =513, 250)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "0.7",
+                "spread" : "0.78"
+              }, {
+                "groupId" : "OG001",
+                "value" : "0.6",
+                "spread" : "0.81"
+              } ]
+            } ]
+          }, {
+            "title" : "Exudation: Change at Day 29 (n =486, 224)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-0.4",
+                "spread" : "0.80"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-0.1",
+                "spread" : "0.84"
+              } ]
+            } ]
+          }, {
+            "title" : "Excoriation: Baseline (n =513, 250)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "1.5",
+                "spread" : "0.72"
+              }, {
+                "groupId" : "OG001",
+                "value" : "1.5",
+                "spread" : "0.68"
+              } ]
+            } ]
+          }, {
+            "title" : "Excoriation: Change at Day 29 (n =486, 224)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-0.7",
+                "spread" : "0.89"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-0.5",
+                "spread" : "0.93"
+              } ]
+            } ]
+          }, {
+            "title" : "Lichenification: Baseline (n =513, 250)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "1.5",
+                "spread" : "0.68"
+              }, {
+                "groupId" : "OG001",
+                "value" : "1.5",
+                "spread" : "0.76"
+              } ]
+            } ]
+          }, {
+            "title" : "Lichenification: Change at Day 29 (n =486, 224)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-0.6",
+                "spread" : "0.80"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-0.3",
+                "spread" : "0.76"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "OTHER_PRE_SPECIFIED",
+          "title" : "Time to Improvement in Pruritus",
+          "description" : "Time to improvement in pruritus was defined as the time interval between the administration of first dose of study drug till the first documentation of improvement in pruritus.\nImprovement in pruritus was defined as achieving none (0) or mild (1) score with at least a 1- grade improvement from baseline.\nSeverity of pruritus was assessed on 4-point numeric scale ranges from 0 to 3, where 0= none (no itching), 1= mild (occasional, slight itching&#x2F;scratching), 2= moderate (constant or intermittent itching&#x2F;scratching which is not disturbing sleep) and 3= severe (bothersome itching&#x2F;scratching which is disturbing sleep).\nHigher scores indicated more severe condition.\nIt was analyzed using Kaplan-Meier method.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.\nHere, &quot;N&#x27;&#x27; signifies those participants who were evaluable for this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "MEDIAN",
+          "dispersionType" : "95% Confidence Interval",
+          "unitOfMeasure" : "days",
+          "timeFrame" : "Baseline (Day 1) up to Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "439"
+            }, {
+              "groupId" : "OG001",
+              "value" : "211"
+            } ]
+          } ],
+          "classes" : [ {
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "1.41",
+                "lowerLimit" : "1.23",
+                "upperLimit" : "1.66"
+              }, {
+                "groupId" : "OG001",
+                "value" : "1.54",
+                "lowerLimit" : "1.20",
+                "upperLimit" : "1.93"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "OTHER_PRE_SPECIFIED",
+          "title" : "Change From Baseline in Children&#x27;s Dermatology Life Quality Index (CDLQI) Score at Day 29",
+          "description" : "The CDLQI was a 10-item questionnaire that measures the impact of skin disease on children&#x27;s (aged 2-15 years) quality of life.\nEach question was evaluated on a 4-point scale ranging from 0 (not at all) to 3 (very much); where higher scores indicate more impact on quality of life.\nThe CDLQI total score was the sum of individual scores of question 1-10 and ranges from 0 (not at all) to 30 (very much): 0-1 = no effect at all on the children&#x27;s life; 2-6 = small effect on the children&#x27;s life; 7-12 = moderate effect on the children&#x27;s life; 13-18 = very large effect on the children&#x27;s life; 19-30 = extremely large effect on the children&#x27;s life.\nHigher scores indicate more impact on quality of life of children.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.\nHere, Number of participants analyzed (N) signifies those participants who were evaluable for this outcome measure and &#x27;n&#x27; signifies those participants who were evaluable at specified time point for each arm, respectively.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "MEAN",
+          "dispersionType" : "Standard Deviation",
+          "unitOfMeasure" : "units on a scale",
+          "timeFrame" : "Baseline (Day 1), Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "404"
+            }, {
+              "groupId" : "OG001",
+              "value" : "204"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "Baseline (n =404, 204)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "9.0",
+                "spread" : "5.77"
+              }, {
+                "groupId" : "OG001",
+                "value" : "8.9",
+                "spread" : "5.48"
+              } ]
+            } ]
+          }, {
+            "title" : "Change at Day 29 (n =376,180)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-4.0",
+                "spread" : "4.92"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-2.9",
+                "spread" : "5.01"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "OTHER_PRE_SPECIFIED",
+          "title" : "Change From Baseline in Dermatology Life Quality Index (DLQI) Score at Day 29",
+          "description" : "The DLQI was a 10-item questionnaire that measures the impact of skin disease on participant&#x27;s quality of life.\nEach question was evaluated on a 4-point scale ranging from 0 (not at all) to 3 (very much); where higher scores indicate more impact on quality of life.\nThe DLQI total score ranges from 0 (not at all) to 30 (very much): 0-1 = no effect at all on the participant&#x27;s life; 2-6 = small effect on the participant&#x27;s life; 7-12 = moderate effect on the participant&#x27;s life; 13-18 = very large effect on the participant&#x27;s life; 19-30 = extremely large effect on the participant&#x27;s life.\nHigher scores indicate more impact on quality of life of participants.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.\nHere, &#x27;&#x27;N&#x27;&#x27; signifies those participants who were evaluable for this outcome measure and &#x27;n&#x27; signifies those participants who were evaluable at specified time point for each arm, respectively.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "MEAN",
+          "dispersionType" : "Standard Deviation",
+          "unitOfMeasure" : "units on a scale",
+          "timeFrame" : "Baseline (Day 1), Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "97"
+            }, {
+              "groupId" : "OG001",
+              "value" : "40"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "Baseline (n =97, 40)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "9.7",
+                "spread" : "6.24"
+              }, {
+                "groupId" : "OG001",
+                "value" : "9.1",
+                "spread" : "6.67"
+              } ]
+            } ]
+          }, {
+            "title" : "Change at Day 29 (n =93, 38)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-5.0",
+                "spread" : "5.49"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-3.4",
+                "spread" : "4.75"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "OTHER_PRE_SPECIFIED",
+          "title" : "Change From Baseline in Dermatitis Family Impact Questionnaire (DFI) Score at Day 29",
+          "description" : "The DFI was a 10-item disease questionnaire that measures the impact of having a child with AD on family quality of life.\nIt was completed by parent&#x2F;legal guardian of the child (affected by AD), based on recall over the past week.\nEach question was scored on a 4-point scale ranging from 0 (good) to 3 (worst), where higher scores indicated worst quality of life of family.\nThe DFI total score was the sum of individual scores of the 10 questions and ranges from 0 (good) to 30 (worst), where higher DFI scores indicated worst quality of life of family.",
+          "populationDescription" : "ITT population included all participants who were randomized and received study drug.\nHere, &#x27;&#x27;N&#x27;&#x27; signifies those participants who were evaluable for this outcome measure and &#x27;n&#x27; signifies those participants who were evaluable at specified time point for each arm, respectively.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "MEAN",
+          "dispersionType" : "Standard Deviation",
+          "unitOfMeasure" : "units on a scale",
+          "timeFrame" : "Baseline (Day 1), Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "431"
+            }, {
+              "groupId" : "OG001",
+              "value" : "217"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "Baseline (n =431, 217)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "7.7",
+                "spread" : "6.57"
+              }, {
+                "groupId" : "OG001",
+                "value" : "8.0",
+                "spread" : "5.65"
+              } ]
+            } ]
+          }, {
+            "title" : "Change at Day 29 (n =404, 190)",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "-3.6",
+                "spread" : "5.18"
+              }, {
+                "groupId" : "OG001",
+                "value" : "-2.8",
+                "spread" : "4.75"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants With Local Tolerability Symptoms at Day 8",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale ranging from 0 to 3, where 0= none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicated more severe symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.\nHere, &quot;N&quot; signifies those participants who were evaluable for this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 8",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "508"
+            }, {
+              "groupId" : "OG001",
+              "value" : "244"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "None",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "63.8"
+              }, {
+                "groupId" : "OG001",
+                "value" : "73.0"
+              } ]
+            } ]
+          }, {
+            "title" : "Mild",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "24.0"
+              }, {
+                "groupId" : "OG001",
+                "value" : "14.8"
+              } ]
+            } ]
+          }, {
+            "title" : "Moderate",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "9.1"
+              }, {
+                "groupId" : "OG001",
+                "value" : "11.5"
+              } ]
+            } ]
+          }, {
+            "title" : "Severe",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "3.1"
+              }, {
+                "groupId" : "OG001",
+                "value" : "0.8"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants With Local Tolerability Symptoms at Day 15",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale ranging from 0 to 3, where 0= none (no stinging&#x2F;burning), 1= mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicated more severe symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.\nHere, &quot;N&quot; signifies those participants who were analyzed in this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 15",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "488"
+            }, {
+              "groupId" : "OG001",
+              "value" : "239"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "None",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "68.0"
+              }, {
+                "groupId" : "OG001",
+                "value" : "70.7"
+              } ]
+            } ]
+          }, {
+            "title" : "Mild",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "20.9"
+              }, {
+                "groupId" : "OG001",
+                "value" : "15.5"
+              } ]
+            } ]
+          }, {
+            "title" : "Moderate",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "7.4"
+              }, {
+                "groupId" : "OG001",
+                "value" : "9.6"
+              } ]
+            } ]
+          }, {
+            "title" : "Severe",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "3.7"
+              }, {
+                "groupId" : "OG001",
+                "value" : "4.2"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants With Local Tolerability Symptoms at Day 22",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale which ranges from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicate high severity of symptoms.\nIn this outcome, percentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.\nHere, number of participants analyzed &quot;N&quot; signifies those participants who were analyzed in this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 22",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "487"
+            }, {
+              "groupId" : "OG001",
+              "value" : "227"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "None",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "69.0"
+              }, {
+                "groupId" : "OG001",
+                "value" : "71.4"
+              } ]
+            } ]
+          }, {
+            "title" : "Mild",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "21.8"
+              }, {
+                "groupId" : "OG001",
+                "value" : "16.7"
+              } ]
+            } ]
+          }, {
+            "title" : "Moderate",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "6.8"
+              }, {
+                "groupId" : "OG001",
+                "value" : "8.4"
+              } ]
+            } ]
+          }, {
+            "title" : "Severe",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "2.5"
+              }, {
+                "groupId" : "OG001",
+                "value" : "3.5"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants With Local Tolerability Symptoms at Day 29",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale which ranges from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicate high severity of symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.\nHere, &quot;N&quot; signifies those participants who were evaluable for this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 29",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "486"
+            }, {
+              "groupId" : "OG001",
+              "value" : "222"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "None",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "70.4"
+              }, {
+                "groupId" : "OG001",
+                "value" : "73.9"
+              } ]
+            } ]
+          }, {
+            "title" : "Mild",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "17.3"
+              }, {
+                "groupId" : "OG001",
+                "value" : "13.5"
+              } ]
+            } ]
+          }, {
+            "title" : "Moderate",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "10.1"
+              }, {
+                "groupId" : "OG001",
+                "value" : "10.8"
+              } ]
+            } ]
+          }, {
+            "title" : "Severe",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "2.3"
+              }, {
+                "groupId" : "OG001",
+                "value" : "1.8"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "PRIMARY",
+          "title" : "Percentage of Participants With Local Tolerability Symptoms at Day 36",
+          "description" : "Local tolerability symptoms (burning&#x2F;stinging) were assessed in participants at sites of study drug application.\nSymptoms were assessed on 4-point scale which ranges from 0 to 3, where 0 = none (no stinging&#x2F;burning), 1 = mild (slight warm, tingling sensation); 2= moderate (definite warm; tingling&#x2F;stinging sensation that is somewhat bothersome and severe); 3= severe (hot, tingling&#x2F;stinging sensation that caused definite discomfort).\nHigher scores indicate high severity of symptoms.\nPercentage of participants with each level of local tolerability (none, mild, moderate, severe) symptoms were reported.",
+          "populationDescription" : "Safety population included all randomized participants who had at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.\nHere, &quot;N&quot; signifies those participants who were evaluable for this outcome measure.",
+          "reportingStatus" : "POSTED",
+          "paramType" : "NUMBER",
+          "unitOfMeasure" : "percentage of participants",
+          "timeFrame" : "Day 36",
+          "groups" : [ {
+            "id" : "OG000",
+            "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+            "description" : "AN2728 ointment, 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          }, {
+            "id" : "OG001",
+            "title" : "AN2728 Topical Ointment, Vehicle",
+            "description" : "AN2728 ointment, vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator."
+          } ],
+          "denoms" : [ {
+            "units" : "Participants",
+            "counts" : [ {
+              "groupId" : "OG000",
+              "value" : "474"
+            }, {
+              "groupId" : "OG001",
+              "value" : "213"
+            } ]
+          } ],
+          "classes" : [ {
+            "title" : "None",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "71.1"
+              }, {
+                "groupId" : "OG001",
+                "value" : "77.5"
+              } ]
+            } ]
+          }, {
+            "title" : "Mild",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "14.3"
+              }, {
+                "groupId" : "OG001",
+                "value" : "9.9"
+              } ]
+            } ]
+          }, {
+            "title" : "Moderate",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "9.1"
+              }, {
+                "groupId" : "OG001",
+                "value" : "10.3"
+              } ]
+            } ]
+          }, {
+            "title" : "Severe",
+            "categories" : [ {
+              "measurements" : [ {
+                "groupId" : "OG000",
+                "value" : "5.5"
+              }, {
+                "groupId" : "OG001",
+                "value" : "2.3"
+              } ]
+            } ]
+          } ]
+        } ]
+      },
+      "adverseEventsModule" : {
+        "frequencyThreshold" : "1",
+        "description" : "The same event may appear as both an AE and a SAE.\nHowever, what is presented are distinct events.\nAn event may be categorized as serious in one participant and as non-serious in another participant, or one participant may have experienced both a serious and non-serious event during the study.\nAEs and SAEs were analyzed for safety population which included all randomized participants who received at least 1 confirmed dose of study drug, and had at least 1 post-baseline assessment.",
+        "eventGroups" : [ {
+          "id" : "EG000",
+          "title" : "AN2728 Topical Ointment, 2 Percent (%)",
+          "description" : "AN2728 ointment 2% was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator.",
+          "seriousNumAffected" : 3,
+          "seriousNumAtRisk" : 510,
+          "otherNumAffected" : 92,
+          "otherNumAtRisk" : 510
+        }, {
+          "id" : "EG001",
+          "title" : "AN2728 Topical Ointment, Vehicle",
+          "description" : "AN2728 ointment vehicle was applied topically twice daily, to all treatable AD-involved areas (excluding scalp), from Day 1 up to Day 28 in each participant.\nTreatable AD-involved areas were identified at Baseline (Day 1) by investigator.",
+          "seriousNumAffected" : 0,
+          "seriousNumAtRisk" : 247,
+          "otherNumAffected" : 54,
+          "otherNumAtRisk" : 247
+        } ],
+        "seriousEvents" : [ {
+          "term" : "Application site infection",
+          "organSystem" : "Infections and infestations",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 1,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 0,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Laceration",
+          "organSystem" : "Injury, poisoning and procedural complications",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 1,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 0,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Suicidal ideation",
+          "organSystem" : "Psychiatric disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 1,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 0,
+            "numAtRisk" : 247
+          } ]
+        } ],
+        "otherEvents" : [ {
+          "term" : "Diarrhoea",
+          "organSystem" : "Gastrointestinal disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 6,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 2,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Vomiting",
+          "organSystem" : "Gastrointestinal disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 7,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 2,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Application site pain",
+          "organSystem" : "General disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 14,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 3,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Application site pruritus",
+          "organSystem" : "General disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 1,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 3,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Application site urticaria",
+          "organSystem" : "General disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 0,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 3,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Pyrexia",
+          "organSystem" : "General disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 7,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 4,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Nasopharyngitis",
+          "organSystem" : "Infections and infestations",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 9,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 6,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Staphylococcal skin infection",
+          "organSystem" : "Infections and infestations",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 1,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 4,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Upper respiratory tract infection",
+          "organSystem" : "Infections and infestations",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 16,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 5,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Headache",
+          "organSystem" : "Nervous system disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 6,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 1,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Cough",
+          "organSystem" : "Respiratory, thoracic and mediastinal disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 7,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 7,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Oropharyngeal pain",
+          "organSystem" : "Respiratory, thoracic and mediastinal disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 7,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 2,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Dermatitis atopic",
+          "organSystem" : "Skin and subcutaneous tissue disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 4,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 6,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Eczema",
+          "organSystem" : "Skin and subcutaneous tissue disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 3,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 3,
+            "numAtRisk" : 247
+          } ]
+        }, {
+          "term" : "Pruritus",
+          "organSystem" : "Skin and subcutaneous tissue disorders",
+          "sourceVocabulary" : "MedDRA 16.1",
+          "assessmentType" : "NON_SYSTEMATIC_ASSESSMENT",
+          "stats" : [ {
+            "groupId" : "EG000",
+            "numAffected" : 4,
+            "numAtRisk" : 510
+          }, {
+            "groupId" : "EG001",
+            "numAffected" : 3,
+            "numAtRisk" : 247
+          } ]
+        } ]
+      },
+      "moreInfoModule" : {
+        "certainAgreement" : {
+          "piSponsorEmployee" : false,
+          "restrictionType" : "OTHER",
+          "restrictiveAgreement" : true,
+          "otherDetails" : "Pfizer has the right to review disclosures, requesting a delay of less than 60 days.\nInvestigator will postpone single center publications until after disclosure of pooled data (all sites), less than 12 months from study completion&#x2F;termination at all participating sites.\nInvestigator may not disclose previously undisclosed confidential information other than study results."
+        },
+        "pointOfContact" : {
+          "title" : "Pfizer ClinicalTrials.gov Call Center",
+          "organization" : "Pfizer, Inc.",
+          "email" : "ClinicalTrials.gov_Inquiries@pfizer.com",
+          "phone" : "1-800-718-1021"
+        }
+      }
+    }
+  }
+}

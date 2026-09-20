@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_2fca53132beeac4623b20216",
+  "project_id": "project_c35e3f770435abd0f56598bd",
+  "contract_version": 1,
+  "started_at": "2026-09-01T07:01:34.301486+00:00",
+  "finished_at": "2026-09-01T07:01:36.406360+00:00",
+  "resume": false,
+  "case_id": null,
+  "case_digest": null,
+  "input_hashes": {
+    "evidence/library/report-data.json": "299ab004568983cb3fac1d1a2a54b813f0970fd1e4ce85144be85ae7baeee984"
+  },
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "gate:B": "completed",
+    "format:B": "completed"
+  },
+  "reused": [],
+  "outputs": [],
+  "reused_artifacts": [],
+  "event_count": 4,
+  "event_stream_digest": "e4b83df36b3873e0a15f3b748b8f911aa8cd315743bceef763ddc07cc20998b8",
+  "checkpoint_id": "checkpoint_b5b2bf9f5766bda822435ed6",
+  "outcome": "completed",
+  "report_states": {
+    "B": "snapshot_locked"
+  },
+  "format_states": {
+    "B": {
+      "html": "quality_check"
+    }
+  },
+  "snapshot_ids": {
+    "B": "report-snapshot_82968123dcd7a2febfcb9c8b"
+  },
+  "artifact_manifest_sha256": {
+    "B": {
+      "html": "e1b14da45269228f9a8b9e8c1f6d603e7cd7bd0a2d5ba268858092a12e1b7ed6"
+    }
+  },
+  "gate_failures": [],
+  "manifest_digest": "5d37e8385001e54391b6a092f9ae3db7ccd70bc450b6c9ce46d057d793742108"
+}

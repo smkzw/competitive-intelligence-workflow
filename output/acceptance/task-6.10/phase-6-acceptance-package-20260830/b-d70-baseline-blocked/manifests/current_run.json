@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_ad17d0e431d17232a32bd86b",
+  "project_id": "project_c337b1d8836ad714616a7756",
+  "contract_version": 1,
+  "started_at": "2026-08-30T05:40:29.796758+00:00",
+  "finished_at": "2026-08-30T05:40:31.091509+00:00",
+  "resume": false,
+  "case_id": "b-d70-baseline-blocked",
+  "case_digest": "df7a678453bf37ba0caf042c50e636636052f06b08ee569f0a8bd98b4cda3d6c",
+  "input_hashes": {
+    "inputs/report-data.json": "84d7fb369bd4aa508ef6ea4b0fdb4647d728c44f0a9eeac90db4cdd4441f66e0"
+  },
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "gate:B": "completed"
+  },
+  "reused": [],
+  "outputs": [
+    {
+      "relative_path": "blockers/B/v-fixture-b-d70-001/audit.json",
+      "sha256": "dae716090476d7e2ea8e06d3331fc4e33c85e672755492a3529e69f405bf64ed",
+      "byte_size": 570,
+      "modified_at": "2026-08-30T05:40:31.089568+00:00",
+      "mtime_ns": 1788068431089568185,
+      "media_type": "application/json"
+    },
+    {
+      "relative_path": "blockers/B/v-fixture-b-d70-001/audit.md",
+      "sha256": "441a77676f05e6ba26262be77b65e622262d0385f110620ae5be8d1fa113c03b",
+      "byte_size": 384,
+      "modified_at": "2026-08-30T05:40:31.089645+00:00",
+      "mtime_ns": 1788068431089645310,
+      "media_type": "text/markdown"
+    }
+  ],
+  "reused_artifacts": [],
+  "event_count": 6,
+  "event_stream_digest": "274a6a354912c8542017f69c300c9c98a42ca6a00a8e94690c2a03b459a5b9b6",
+  "checkpoint_id": "checkpoint_6a0460e2f667d94d867c41fc",
+  "outcome": "evidence_blocked",
+  "report_states": {
+    "B": "evidence_blocked"
+  },
+  "format_states": {
+    "B": {
+      "html": "not_generated"
+    }
+  },
+  "gate_failures": [
+    {
+      "failure_code": "b_baseline_age",
+      "trial_id": "nct04558918",
+      "trial": "NCT04558918",
+      "group_id": "apply-treatment",
+      "field": "age",
+      "field_zh": "年龄"
+    }
+  ],
+  "manifest_digest": "12a5d9eba2a399808d80abe78b149d2605198c3add1905ddff933f1ec97c09da"
+}

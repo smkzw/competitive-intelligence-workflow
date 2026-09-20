@@ -1,0 +1,6 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": "docs/specs/competitive-intelligence-workflow-design-v1.2.md", "reason": "修订状态、来源关联修订和不可变版本的批准产品合同"}
+{"file": "docs/decisions/0013-site-first-v1-delivery-scope.md", "reason": "首版只要求站点式 HTML 的当前用户范围修订"}
+{"file": "migrations/0005_corrections_idempotency.sql", "reason": "现有修订状态投影与幂等表"}
+{"file": "src/ci_workflow/graph/transitions.py", "reason": "现有修订状态迁移合同，必须复用"}
+{"file": "src/ci_workflow/graph/guards.py", "reason": "现有修订守卫合同，必须复用"}

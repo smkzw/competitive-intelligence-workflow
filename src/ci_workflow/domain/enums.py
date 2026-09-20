@@ -11,9 +11,6 @@ class ReportKind(Enum):
 
 class OutputFormat(Enum):
     HTML = "html"
-    PDF = "pdf"
-    HTML_PPT = "html-ppt"
-    PPTX = "pptx"
 
 
 class RouteAttemptResult(Enum):

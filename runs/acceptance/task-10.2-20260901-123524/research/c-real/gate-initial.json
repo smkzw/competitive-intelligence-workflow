@@ -1,0 +1,924 @@
+{
+  "allows_draft": false,
+  "decision": "blocked",
+  "evidence_scope": "registry_only",
+  "failures": [
+    {
+      "failure_code": "c_missing_timepoint",
+      "field_family": "timepoint",
+      "field_id": "primary_endpoint_timepoint",
+      "group_id": "group-nct06241118-all",
+      "trial_id": "nct06241118",
+      "user_note_zh": "该项试验（nct06241118）缺少时间点相关的主要终点评估时间点信息，请补充官方登记平台中的对应设计字段。"
+    }
+  ],
+  "missing_trial_id": "nct06241118",
+  "nonblocking_gaps": [
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct02260986-all",
+      "trial_id": "nct02260986",
+      "user_note_zh": "该项试验（nct02260986）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct02260986-all",
+      "trial_id": "nct02260986",
+      "user_note_zh": "该项试验（nct02260986）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct02260986-all",
+      "trial_id": "nct02260986",
+      "user_note_zh": "该项试验（nct02260986）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct02260986-all",
+      "trial_id": "nct02260986",
+      "user_note_zh": "该项试验（nct02260986）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct02260986-all",
+      "trial_id": "nct02260986",
+      "user_note_zh": "该项试验（nct02260986）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct04178967-all",
+      "trial_id": "nct04178967",
+      "user_note_zh": "该项试验（nct04178967）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct04178967-all",
+      "trial_id": "nct04178967",
+      "user_note_zh": "该项试验（nct04178967）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct04178967-all",
+      "trial_id": "nct04178967",
+      "user_note_zh": "该项试验（nct04178967）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct04178967-all",
+      "trial_id": "nct04178967",
+      "user_note_zh": "该项试验（nct04178967）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct04178967-all",
+      "trial_id": "nct04178967",
+      "user_note_zh": "该项试验（nct04178967）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03985943-all",
+      "trial_id": "nct03985943",
+      "user_note_zh": "该项试验（nct03985943）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03985943-all",
+      "trial_id": "nct03985943",
+      "user_note_zh": "该项试验（nct03985943）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03985943-all",
+      "trial_id": "nct03985943",
+      "user_note_zh": "该项试验（nct03985943）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03985943-all",
+      "trial_id": "nct03985943",
+      "user_note_zh": "该项试验（nct03985943）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03985943-all",
+      "trial_id": "nct03985943",
+      "user_note_zh": "该项试验（nct03985943）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct05149313-all",
+      "trial_id": "nct05149313",
+      "user_note_zh": "该项试验（nct05149313）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct05149313-all",
+      "trial_id": "nct05149313",
+      "user_note_zh": "该项试验（nct05149313）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct05149313-all",
+      "trial_id": "nct05149313",
+      "user_note_zh": "该项试验（nct05149313）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct05149313-all",
+      "trial_id": "nct05149313",
+      "user_note_zh": "该项试验（nct05149313）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct05149313-all",
+      "trial_id": "nct05149313",
+      "user_note_zh": "该项试验（nct05149313）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03131648-all",
+      "trial_id": "nct03131648",
+      "user_note_zh": "该项试验（nct03131648）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03131648-all",
+      "trial_id": "nct03131648",
+      "user_note_zh": "该项试验（nct03131648）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03131648-all",
+      "trial_id": "nct03131648",
+      "user_note_zh": "该项试验（nct03131648）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03131648-all",
+      "trial_id": "nct03131648",
+      "user_note_zh": "该项试验（nct03131648）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03131648-all",
+      "trial_id": "nct03131648",
+      "user_note_zh": "该项试验（nct03131648）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03761537-all",
+      "trial_id": "nct03761537",
+      "user_note_zh": "该项试验（nct03761537）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03761537-all",
+      "trial_id": "nct03761537",
+      "user_note_zh": "该项试验（nct03761537）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03761537-all",
+      "trial_id": "nct03761537",
+      "user_note_zh": "该项试验（nct03761537）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03761537-all",
+      "trial_id": "nct03761537",
+      "user_note_zh": "该项试验（nct03761537）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03761537-all",
+      "trial_id": "nct03761537",
+      "user_note_zh": "该项试验（nct03761537）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct04146363-all",
+      "trial_id": "nct04146363",
+      "user_note_zh": "该项试验（nct04146363）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct04146363-all",
+      "trial_id": "nct04146363",
+      "user_note_zh": "该项试验（nct04146363）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct04146363-all",
+      "trial_id": "nct04146363",
+      "user_note_zh": "该项试验（nct04146363）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct04146363-all",
+      "trial_id": "nct04146363",
+      "user_note_zh": "该项试验（nct04146363）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct04146363-all",
+      "trial_id": "nct04146363",
+      "user_note_zh": "该项试验（nct04146363）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03569293-all",
+      "trial_id": "nct03569293",
+      "user_note_zh": "该项试验（nct03569293）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03569293-all",
+      "trial_id": "nct03569293",
+      "user_note_zh": "该项试验（nct03569293）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03569293-all",
+      "trial_id": "nct03569293",
+      "user_note_zh": "该项试验（nct03569293）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03569293-all",
+      "trial_id": "nct03569293",
+      "user_note_zh": "该项试验（nct03569293）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03569293-all",
+      "trial_id": "nct03569293",
+      "user_note_zh": "该项试验（nct03569293）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03607422-all",
+      "trial_id": "nct03607422",
+      "user_note_zh": "该项试验（nct03607422）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03607422-all",
+      "trial_id": "nct03607422",
+      "user_note_zh": "该项试验（nct03607422）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03607422-all",
+      "trial_id": "nct03607422",
+      "user_note_zh": "该项试验（nct03607422）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03607422-all",
+      "trial_id": "nct03607422",
+      "user_note_zh": "该项试验（nct03607422）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03607422-all",
+      "trial_id": "nct03607422",
+      "user_note_zh": "该项试验（nct03607422）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03334396-all",
+      "trial_id": "nct03334396",
+      "user_note_zh": "该项试验（nct03334396）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03334396-all",
+      "trial_id": "nct03334396",
+      "user_note_zh": "该项试验（nct03334396）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03334396-all",
+      "trial_id": "nct03334396",
+      "user_note_zh": "该项试验（nct03334396）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03334396-all",
+      "trial_id": "nct03334396",
+      "user_note_zh": "该项试验（nct03334396）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03334396-all",
+      "trial_id": "nct03334396",
+      "user_note_zh": "该项试验（nct03334396）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct03745651-all",
+      "trial_id": "nct03745651",
+      "user_note_zh": "该项试验（nct03745651）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct03745651-all",
+      "trial_id": "nct03745651",
+      "user_note_zh": "该项试验（nct03745651）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct03745651-all",
+      "trial_id": "nct03745651",
+      "user_note_zh": "该项试验（nct03745651）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct03745651-all",
+      "trial_id": "nct03745651",
+      "user_note_zh": "该项试验（nct03745651）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct03745651-all",
+      "trial_id": "nct03745651",
+      "user_note_zh": "该项试验（nct03745651）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct04921969-all",
+      "trial_id": "nct04921969",
+      "user_note_zh": "该项试验（nct04921969）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct04921969-all",
+      "trial_id": "nct04921969",
+      "user_note_zh": "该项试验（nct04921969）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct04921969-all",
+      "trial_id": "nct04921969",
+      "user_note_zh": "该项试验（nct04921969）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct04921969-all",
+      "trial_id": "nct04921969",
+      "user_note_zh": "该项试验（nct04921969）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct04921969-all",
+      "trial_id": "nct04921969",
+      "user_note_zh": "该项试验（nct04921969）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct04773587-all",
+      "trial_id": "nct04773587",
+      "user_note_zh": "该项试验（nct04773587）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct04773587-all",
+      "trial_id": "nct04773587",
+      "user_note_zh": "该项试验（nct04773587）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct04773587-all",
+      "trial_id": "nct04773587",
+      "user_note_zh": "该项试验（nct04773587）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct04773587-all",
+      "trial_id": "nct04773587",
+      "user_note_zh": "该项试验（nct04773587）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct04773587-all",
+      "trial_id": "nct04773587",
+      "user_note_zh": "该项试验（nct04773587）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct04773600-all",
+      "trial_id": "nct04773600",
+      "user_note_zh": "该项试验（nct04773600）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct04773600-all",
+      "trial_id": "nct04773600",
+      "user_note_zh": "该项试验（nct04773600）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct04773600-all",
+      "trial_id": "nct04773600",
+      "user_note_zh": "该项试验（nct04773600）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct04773600-all",
+      "trial_id": "nct04773600",
+      "user_note_zh": "该项试验（nct04773600）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct04773600-all",
+      "trial_id": "nct04773600",
+      "user_note_zh": "该项试验（nct04773600）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct05032859-all",
+      "trial_id": "nct05032859",
+      "user_note_zh": "该项试验（nct05032859）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct05032859-all",
+      "trial_id": "nct05032859",
+      "user_note_zh": "该项试验（nct05032859）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct05032859-all",
+      "trial_id": "nct05032859",
+      "user_note_zh": "该项试验（nct05032859）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct05032859-all",
+      "trial_id": "nct05032859",
+      "user_note_zh": "该项试验（nct05032859）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct05032859-all",
+      "trial_id": "nct05032859",
+      "user_note_zh": "该项试验（nct05032859）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct05608343-all",
+      "trial_id": "nct05608343",
+      "user_note_zh": "该项试验（nct05608343）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct05608343-all",
+      "trial_id": "nct05608343",
+      "user_note_zh": "该项试验（nct05608343）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct05608343-all",
+      "trial_id": "nct05608343",
+      "user_note_zh": "该项试验（nct05608343）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct05608343-all",
+      "trial_id": "nct05608343",
+      "user_note_zh": "该项试验（nct05608343）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct05608343-all",
+      "trial_id": "nct05608343",
+      "user_note_zh": "该项试验（nct05608343）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct05398445-all",
+      "trial_id": "nct05398445",
+      "user_note_zh": "该项试验（nct05398445）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct05398445-all",
+      "trial_id": "nct05398445",
+      "user_note_zh": "该项试验（nct05398445）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct05398445-all",
+      "trial_id": "nct05398445",
+      "user_note_zh": "该项试验（nct05398445）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct05398445-all",
+      "trial_id": "nct05398445",
+      "user_note_zh": "该项试验（nct05398445）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct05398445-all",
+      "trial_id": "nct05398445",
+      "user_note_zh": "该项试验（nct05398445）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct05651711-all",
+      "trial_id": "nct05651711",
+      "user_note_zh": "该项试验（nct05651711）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct05651711-all",
+      "trial_id": "nct05651711",
+      "user_note_zh": "该项试验（nct05651711）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct05651711-all",
+      "trial_id": "nct05651711",
+      "user_note_zh": "该项试验（nct05651711）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct05651711-all",
+      "trial_id": "nct05651711",
+      "user_note_zh": "该项试验（nct05651711）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct05651711-all",
+      "trial_id": "nct05651711",
+      "user_note_zh": "该项试验（nct05651711）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct06130566-all",
+      "trial_id": "nct06130566",
+      "user_note_zh": "该项试验（nct06130566）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct06130566-all",
+      "trial_id": "nct06130566",
+      "user_note_zh": "该项试验（nct06130566）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct06130566-all",
+      "trial_id": "nct06130566",
+      "user_note_zh": "该项试验（nct06130566）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct06130566-all",
+      "trial_id": "nct06130566",
+      "user_note_zh": "该项试验（nct06130566）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct06130566-all",
+      "trial_id": "nct06130566",
+      "user_note_zh": "该项试验（nct06130566）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "analysis_population",
+      "group_id": "group-nct06241118-all",
+      "trial_id": "nct06241118",
+      "user_note_zh": "该项试验（nct06241118）的分析人群尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "comparison_logic",
+      "group_id": "group-nct06241118-all",
+      "trial_id": "nct06241118",
+      "user_note_zh": "该项试验（nct06241118）的主要比较逻辑尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "statistical_model",
+      "group_id": "group-nct06241118-all",
+      "trial_id": "nct06241118",
+      "user_note_zh": "该项试验（nct06241118）的统计模型与检验尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "effect_size",
+      "group_id": "group-nct06241118-all",
+      "trial_id": "nct06241118",
+      "user_note_zh": "该项试验（nct06241118）的效应量尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    },
+    {
+      "blocking": false,
+      "disclosure_state": "not_publicly_disclosed",
+      "field_family": "statistical",
+      "field_id": "multiplicity",
+      "group_id": "group-nct06241118-all",
+      "trial_id": "nct06241118",
+      "user_note_zh": "该项试验（nct06241118）的多重性控制尚未公开；统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
+    }
+  ],
+  "protocol_sap_available": false,
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "variant": "initial-blocked"
+}

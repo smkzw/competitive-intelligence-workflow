@@ -1,0 +1,43 @@
+{
+  "id": "phase-10-task-102-real-source-acceptance",
+  "name": "phase-10-task-102-real-source-acceptance",
+  "title": "Phase 10 Task 10.2：A/B/C 真实新鲜来源验收",
+  "description": "在全新隔离项目中分别完成 A 特应性皮炎、B 阵发性睡眠性血红蛋白尿、C 特应性皮炎的真实来源研究、证据门槛、站点式 HTML 与当前运行绑定验收。",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "Task 10.2 only：真实来源 A/B/C、当前运行/快照/产物/浏览器绑定、技术故障深挖和中文验收记录；不生成 PDF/PPT，不冻结 RC，不迁移或删除旧工程。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-01",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "09-01-phase-10-task-102-r13-product-rebuild"
+  ],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [],
+  "notes": "R12 的技术回归与既有视觉检查曾通过，但 2026-09-01 用户在真实使用中否决产品验收：A 缺少图表下钻且全空 AESI 仍展示；B 缺少真正的跨试验图表、终点/基线语义匹配过严且数值身份混乱；C 未展开全部研究设计细节。Task 10.2 已重新打开，由 R13 产品重构子任务修复。PDF/PPT 仍不纳入首版。",
+  "meta": {
+    "phase": 10,
+    "task": "10.2",
+    "release_scope": "site_html_v1",
+    "acceptance_root": "/Users/smkzw/Documents/AI Products/competitive-intelligence-acceptance",
+    "source_catalog": "fixtures/acceptance/catalog.yaml",
+    "revoked_candidate": "/Users/smkzw/Documents/AI Products/competitive-intelligence-acceptance/task-10.2-20260901-211500-r12",
+    "revoked_runs": {
+      "A": "run_f6533ccac67dc56c963b8218",
+      "B": "run_47a408a4393f942e86083b4e",
+      "C": "run_f58efea586d578c0a6b19462"
+    },
+    "acceptance_revoked_at": "2026-09-01",
+    "acceptance_revoked_reason": "真实医学经理使用反馈表明 A/B/C 的交互、横向比较和设计细节展开未达到产品要求",
+    "checkpoint": ".trellis/tasks/09-01-phase-10-task-102-real-source-acceptance/checkpoint_20260901_r12_acceptance_revoked.md"
+  }
+}

@@ -89,7 +89,7 @@
     ["numerator", "分子"],
     ["denominator", "分母"],
     ["_disclosure", "披露状态"],
-    ["explanation", "规范化说明"],
+    ["explanation", "数据说明"],
     ["source_version_label_zh", "来源版本"],
     ["_locator", "原文定位"],
     ["_original_text", "简短原文"]
@@ -417,7 +417,7 @@
     if (!pinBtn) return;
     var pinned = openRowId !== null && pinnedSet[openRowId] === true;
     pinBtn.setAttribute("aria-pressed", pinned ? "true" : "false");
-    pinBtn.textContent = pinned ? "取消固定" : "固定此条";
+    pinBtn.textContent = pinned ? "移出对照" : "加入对照";
   }
 
   function updatePinnedSection() {
@@ -634,6 +634,7 @@
       host.hidden = false;
       panel.classList.add("kz-evidence-drawer__panel--in");
       showStatus("此条数据依据在当前页面数据中不存在或已失效，无法展示。");
+      if (closeBtn) closeBtn.focus();
       emitChange();
       return false;
     }
@@ -655,6 +656,7 @@
     panel.classList.add("kz-evidence-drawer__panel--in");
     showStatus("");
     updatePinnedSection();
+    if (closeBtn) closeBtn.focus();
     emitChange();
     return true;
   }
@@ -757,11 +759,33 @@
   document.addEventListener(
     "keydown",
     function (e) {
-      if (e.key !== "Escape" && e.key !== "Esc") return;
       if (host.hidden) return;
-      e.preventDefault();
-      if (e.stopPropagation) e.stopPropagation();
-      close();
+      if (e.key === "Escape" || e.key === "Esc") {
+        e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+        close();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      var focusable = Array.prototype.slice.call(panel.querySelectorAll(
+        'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+      )).filter(function (node) {
+        return !node.hidden && !node.closest("[hidden]") && node.getClientRects().length > 0;
+      });
+      if (!focusable.length) {
+        e.preventDefault();
+        panel.focus();
+        return;
+      }
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     },
     true
   );

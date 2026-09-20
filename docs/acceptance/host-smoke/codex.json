@@ -1,0 +1,112 @@
+{
+  "entry": {
+    "command": [
+      "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/bin/ci-workflow"
+    ],
+    "kind": "console_script",
+    "resolved_path": "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/bin/ci-workflow",
+    "sha256": "6b227210f63ebc73ba7fb14a680730aab83b1e9a09a46b196a6f346e2eed45a0"
+  },
+  "event_chain": {
+    "event_count": 18,
+    "stream_digest": "5c08670bca15f5e79fa893e58bd43ae89928e10552910e4b8fa82148f275a5d8"
+  },
+  "fixture": {
+    "case_digest": "8847165702fcfd65fcd4fcafe611fff6f3557d844eecb95759bb7031aca0cdf1",
+    "case_id": "host-smoke-v1",
+    "inputs": {
+      "inputs/recovery-report-data.json": "2d2fa7d2056c4fb31d723de9cf9b66882576834e9badff7219def3f2c2f43bd5",
+      "inputs/universe.json": "b86ed91fac08a30feba9c24e4ae38c2523bdcdc29d0a4ca9b6dba288d66be9bb"
+    }
+  },
+  "host": "codex",
+  "host_executable": {
+    "path": "/Users/smkzw/.local/bin/codex",
+    "provenance": "path_resolved",
+    "resolved_realpath": "/Users/smkzw/.local/lib/node_modules/@openai/codex/bin/codex.js",
+    "version": "codex-cli 0.147.0"
+  },
+  "interruption": {
+    "event_count": 12,
+    "event_stream_digest": "ceea27e7373e794c701d31d45121df45e5040dd5d418f431da46c4f5b9c13f5f",
+    "exit_code": 4,
+    "manifest_digest": "2dc2356d26a5ae8689f75f92310e57f93ce5ccc7a3501f6a96c1e4b96547d220",
+    "manifest_relative_path": "state/host-smoke-v1-initial-manifest.json",
+    "manifest_sha256": "be61fffe4da8ae83d59f43c42b6cf3c0885b9ed680112d1d56d0eb324749d7e6",
+    "no_draft": true,
+    "outcome": "evidence_blocked",
+    "project_id": "project_f68ba57f9c2eaec784e3e9ad",
+    "report_file_count": 0,
+    "run_id": "run_0a73510f8a37a55e6f592a2f"
+  },
+  "issued_at": "2026-09-01T01:54:49.346866Z",
+  "manifest": {
+    "manifest_digest": "78b907062257e1c55b2363dbb80104c56aef31f07cecc3d2fe17be472c436d46",
+    "outcome": "rendered",
+    "path": "manifests/current_run.json",
+    "run_id": "run_df6d0664879af0a9f96b300f",
+    "sha256": "2b92e0a33e1f791de5caa8eba3cd4f366beab6c173b7e421d6b052c2b5311461"
+  },
+  "package": {
+    "name": "competitive-intelligence-workflow",
+    "package_digest": "d1672be7c45d64c6fef99e23ec076e135e9b8430e0ec522ec4d5465c59377ed0",
+    "version": "0.1.0a0"
+  },
+  "process": {
+    "argv": [
+      "/Users/smkzw/.local/bin/codex",
+      "exec",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "danger-full-access",
+      "-C",
+      "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/versions/50a91aac3e0050887ae48e29e921a45cf540d986b418eaac8d4af068f6a3e8c3",
+      "这是候选包真实宿主验收。请完整读取已安装公共 Skill：/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/versions/50a91aac3e0050887ae48e29e921a45cf540d986b418eaac8d4af068f6a3e8c3/skills/competitive-intelligence-workflow/SKILL.md。不要使用源码工程的内部说明，也不要等待额外指令。请按该 Skill 的「候选包宿主验收」步骤，自行发现并运行已安装入口，候选运行入口位于 /Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/bin/ci-workflow。对案例 host-smoke-v1 和项目目录 /Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/projects/codex 完成能力预检、关键证据不足时不生成草稿、补件恢复、站点式 HTML 生成和项目验证。全部成功后最终只回复：HOST_SMOKE_DONE exit=0"
+    ],
+    "cwd": "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow",
+    "finished_at": "2026-09-01T01:54:47.934107Z",
+    "kind": "external_subprocess",
+    "pid": 41892,
+    "returncode": 0,
+    "started_at": "2026-09-01T01:52:35.484960Z",
+    "stderr_tail": "kflow/projects/codex；合同版本 1\n\n2026-09-01T01:54:24.563366Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_parallel_tool_calls` at line 97 column 5\ncodex\nHOST_SMOKE_DONE exit=0\n2026-09-01T01:54:45.111479Z  WARN codex_mcp::rmcp_client: failed to initialize MCP client during shutdown: MCP startup failed: MCP client startup timed out after 30s\ntokens used\n30,497\n",
+    "stdout_tail": "HOST_SMOKE_DONE exit=0\n"
+  },
+  "receipt_digest": "aad980c83c12ce954222515024af26dbedd5c16391b09aa8f4a90364d2e2e4f7",
+  "receipt_kind": "host-smoke-v1",
+  "recovery": {
+    "input_relative_path": "evidence/library/report-data.json",
+    "input_sha256": "2d2fa7d2056c4fb31d723de9cf9b66882576834e9badff7219def3f2c2f43bd5",
+    "reason": "user_material_accepted",
+    "rebind_event_digest": "87e900b7246aa169d44ef8d03f29e80215cccfa96a1265e9281f133c478cb0b3",
+    "rebind_event_id": "coordinator-rebind_7983a0dac386d3bb7cd9eb80",
+    "reopen_event_digest": "0562683726f655d025a82447dc3b973963a6fae14e146dd70bd0d2c61b0ce9e3",
+    "reopen_event_id": "graph-transition_3aee9668577c9f4e3771d6dd"
+  },
+  "run": {
+    "artifacts": [
+      {
+        "entry_relative_path": "reports/A/v-fixture-001/html/overview.html",
+        "entry_sha256": "ec9c83dbd053c8ea3154a62b5bb994791f118b75a72b854578e6e3d58723cfa7",
+        "output": "html",
+        "report": "A"
+      }
+    ],
+    "exit_code": 0,
+    "no_draft": false,
+    "outcome": "rendered",
+    "project_id": "project_f68ba57f9c2eaec784e3e9ad",
+    "project_root": "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/projects/codex",
+    "run_id": "run_df6d0664879af0a9f96b300f",
+    "semantic_receipt_digest": "be83ce5bff9f9042dbef281b890a2e1ff327cfe33aca8e029604d2dc868a5624",
+    "state": "complete"
+  },
+  "schema_version": "1.0",
+  "session": {
+    "launcher_parent_pid": 41887,
+    "launcher_pid": 41889,
+    "session_id": "host-smoke-session_13f0690cec0bea4ac12aad34"
+  },
+  "status": "verified",
+  "unavailable_reason_zh": null
+}

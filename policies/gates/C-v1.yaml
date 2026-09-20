@@ -7,6 +7,8 @@ units:
   - unit_id: c_trial_identity_stage_role
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -16,6 +18,7 @@ units:
       - protocol_sap
       - regulatory_material
       - primary_trial_report
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -27,6 +30,8 @@ units:
   - unit_id: c_target_population_criteria
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -34,6 +39,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -45,6 +51,8 @@ units:
   - unit_id: c_arm_randomization_blinding
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -52,6 +60,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -63,6 +72,8 @@ units:
   - unit_id: c_intervention_control_rescue
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -70,6 +81,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -81,6 +93,8 @@ units:
   - unit_id: c_dose_schedule_followup
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -88,6 +102,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -99,6 +114,8 @@ units:
   - unit_id: c_endpoint_definitions_timepoints
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -106,6 +123,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -117,6 +135,8 @@ units:
   - unit_id: c_planned_or_actual_sample_size
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -126,6 +146,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero]
     missing_strategy: block
@@ -137,6 +158,8 @@ units:
   - unit_id: c_region_visit_operational
     report_kind: C
     blocking_level: critical
+    failure_code: missing_required_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: region_visit_operational_key
@@ -144,6 +167,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: block
@@ -155,6 +179,8 @@ units:
   - unit_id: c_analysis_population
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -162,6 +188,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -173,6 +200,8 @@ units:
   - unit_id: c_comparison_logic
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -180,6 +209,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -191,6 +221,8 @@ units:
   - unit_id: c_statistical_model
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -198,6 +230,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -209,6 +242,8 @@ units:
   - unit_id: c_effect_size
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -216,6 +251,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -227,6 +263,8 @@ units:
   - unit_id: c_multiplicity
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -234,6 +272,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -245,6 +284,8 @@ units:
   - unit_id: c_sample_size_assumptions
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -252,6 +293,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -263,6 +305,8 @@ units:
   - unit_id: c_estimand_intercurrent
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -270,6 +314,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state
@@ -281,6 +326,8 @@ units:
   - unit_id: c_missing_data_sensitivity
     report_kind: C
     blocking_level: extension
+    failure_code: missing_extension_evidence
+    recovery_route_ids: [alternate_source, alternate_access, identifier_cross_reference]
     object_type: trial
     scope_parent: product
     applicability_predicate_id: always_applicable
@@ -288,6 +335,7 @@ units:
     allowed_source_roles:
       - clinical_trial_registry
       - protocol_sap
+    allowed_fact_domains: [trial_design]
     minimum_disclosure_maturity: registry_result_or_primary_report
     accepted_fact_states: [reported_value, reported_zero, not_applicable]
     missing_strategy: preserve_disclosure_state

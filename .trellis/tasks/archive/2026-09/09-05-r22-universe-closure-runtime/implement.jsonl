@@ -1,0 +1,3 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.3.md","reason":"canonical source; read complete file from workspace, not truncated injection"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"fail-closed contracts and adversarial verification rules"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"cross-layer storage, run-state and consumer impact method"}

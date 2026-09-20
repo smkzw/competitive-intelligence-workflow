@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "case_id": "full-matrix-v1",
+  "indication": "特应性皮炎",
+  "timezone": "Asia/Shanghai",
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "reports": ["A", "B", "C"],
+  "formats": ["html"],
+  "outcome": "rendered",
+  "state": "snapshot_locked",
+  "invariants": [
+    "A、B、C 绑定同一脱敏项目、同一报告版本和同一物化数据截止",
+    "每一份输入文件的实际 SHA-256 与 catalog 逐文件摘要一致",
+    "三类报告均生成站点式 HTML 首页和真实物理详情页",
+    "关键证据门槛通过后才允许锁定报告快照"
+  ],
+  "prohibited_outcomes": [
+    "以未声明输入、猜测值或摘要漂移锁定快照",
+    "把历史截止后的首次披露纳入本次物化快照",
+    "以非站点式导出能力缺失阻断首版 HTML 交付"
+  ]
+}

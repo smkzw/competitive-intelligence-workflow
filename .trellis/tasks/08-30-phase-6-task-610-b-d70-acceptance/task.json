@@ -1,0 +1,43 @@
+{
+  "id": "phase-6-task-610-b-d70-acceptance",
+  "name": "phase-6-task-610-b-d70-acceptance",
+  "title": "Phase 6 Task 6.10：B/D70 独立验收",
+  "description": "以全新 PNH 纵切与三个独立 D70 案例完成 B 类报告科学、数据、浏览器和视觉独立验收，关闭 Phase 6。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-30",
+  "completedAt": "2026-08-30",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-27-phase-6-report-b",
+  "relatedFiles": [
+    "fixtures/positive/b-pnh",
+    "fixtures/synthetic/b-d70-baseline-blocked",
+    "fixtures/synthetic/b-d70-baseline-recovered",
+    "fixtures/synthetic/b-d70-disposition-missing-pass",
+    "fixtures/catalog.yaml",
+    "tests/integration/test_fixture_case_contracts.py",
+    "tests/acceptance/test_report_b.py",
+    "docs/acceptance/report-b.md"
+  ],
+  "notes": "Task 6.10 以最终接受候选 f1b37ba4745997df319485fb6e929e24ed1153d0304376f6740c45fda3800381 收口。第一轮独立会商检出 768 表格与搜索交互三项阻断，修复后同一 session 第二轮七域接受；接受清单不可变继承原 quality_check 清单。最终包 acceptance-package-final.json SHA-256 为 af4d79e9c1ec9161a951ba736f5ecefda34d3018ab85b07024cc9535eaf98806；Phase 6 已完成内部验收，Phase 7 尚未启动。",
+  "meta": {
+    "phase": 6,
+    "task": "6.10",
+    "required_visual_reviewers": [
+      "pi/cms-router/minimax-m3",
+      "pi/cursor/cursor-grok-4.6:medium",
+      "codebuddy/hy3-x"
+    ]
+  }
+}

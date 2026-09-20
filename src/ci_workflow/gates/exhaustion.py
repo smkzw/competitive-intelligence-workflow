@@ -222,6 +222,8 @@ def compute_omission_review_digest(review: GapOmissionReview) -> str:  # noqa: F
         "omission-review",
         review.gap_id,
         review.reviewer_role_id,
+        review.producer_context_digest,
+        review.reviewer_context_digest,
         review.conclusion.value,
         review.review_notes_zh,
         review.reviewed_inputs_digest,
@@ -239,6 +241,8 @@ class GapOmissionReview(BaseModel):
 
     gap_id: str = Field(min_length=1)
     reviewer_role_id: str = Field(min_length=1)
+    producer_context_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    reviewer_context_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
     conclusion: OmissionReviewConclusion
     review_notes_zh: str = Field(min_length=1)
     reviewed_inputs_digest: str = Field(min_length=1)
@@ -257,6 +261,12 @@ class GapOmissionReview(BaseModel):
     @classmethod
     def _digest_is_not_blank(cls, value: str) -> str:
         return _not_blank(value)
+
+    @model_validator(mode="after")
+    def _review_context_is_independent(self) -> GapOmissionReview:
+        if self.producer_context_digest == self.reviewer_context_digest:
+            raise ValueError("遗漏复核必须来自独立干净上下文，不能复用生产者上下文")
+        return self
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -579,6 +589,18 @@ class GapDoubleExhaustion(BaseModel):
                 raise ValueError("科学缺口不得携带技术重试/替代策略审计")
             if self.technical_diagnosis is not None:
                 raise ValueError("科学缺口不得携带技术诊断")
+            if (
+                self.omission_review.conclusion
+                is not OmissionReviewConclusion.NO_MATERIAL_OMISSION
+            ):
+                raise ValueError("仍发现实质遗漏时不得声明科学证据已穷尽")
+            if any(
+                item.new_fields or item.new_source_versions
+                for item in self.information_gain_rounds
+            ):
+                raise ValueError(
+                    "终态科学穷尽不得携带未由恢复历史绑定的自由字段或来源版本"
+                )
         elif is_technical_state:
             # 技术缺口：不得复用科学 not_found 证明，必须绑定技术证据
             if self.recovery_exhaustion_proofs:
@@ -589,6 +611,20 @@ class GapDoubleExhaustion(BaseModel):
                 raise ValueError("访问阻断结论必须绑定独立技术诊断")
             if not has_technical and not access_blocked:
                 raise ValueError("技术缺口必须包含技术失败或访问阻断路线")
+            if (
+                self.omission_review.conclusion
+                is not OmissionReviewConclusion.TECHNICAL_ACCESS_UNRESOLVED
+            ):
+                raise ValueError("技术缺口必须保留访问未解决的独立复核结论")
+            if any(
+                item.new_fields
+                or item.new_source_versions
+                or item.new_evidence_fragment_ids
+                or item.changed_gate_unit_ids
+                or item.reduced_conflict_set_ids
+                for item in self.information_gain_rounds
+            ):
+                raise ValueError("技术访问未解决不得携带未由恢复历史证明的信息增益")
         return self
 
     @model_validator(mode="after")
@@ -721,12 +757,17 @@ class GapDoubleExhaustion(BaseModel):
                 for gain_diff, history_round in zip(
                     self.information_gain_rounds, history_rounds, strict=True
                 ):
-                    declared_gain = bool(
-                        gain_diff.new_fields or gain_diff.new_source_versions
-                    )
-                    if declared_gain != history_round.information_gain.has_gate_relevant_gain:
+                    gain = history_round.information_gain
+                    if (
+                        tuple(gain_diff.new_evidence_fragment_ids)
+                        != tuple(gain.new_evidence_fragment_ids)
+                        or tuple(gain_diff.changed_gate_unit_ids)
+                        != tuple(gain.changed_gate_unit_ids)
+                        or tuple(gain_diff.reduced_conflict_set_ids)
+                        != tuple(gain.reduced_conflict_set_ids)
+                    ):
                         raise ValueError(
-                            "信息增益摘要必须与恢复历史逐轮对齐，不得自报增益"
+                            "信息增益证据标识必须与恢复历史逐轮完全一致"
                         )
         return self
 

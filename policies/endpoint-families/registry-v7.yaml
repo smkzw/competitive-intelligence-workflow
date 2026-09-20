@@ -1,0 +1,184 @@
+schema_version: '1.0'
+policy_id: registry-endpoint-family
+version: '7.0'
+description: 适应症无关的登记终点族分类规则（per-indication 配置块）
+safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|serious
+  adverse|number of participants with adverse
+rules:
+- rule_id: endpoint-pnh-clone-pct-v1
+  match_pattern: clone size|pnh clone
+  family_meta:
+    canonical_id: pnh_clone_pct
+    label_zh: PNH 克隆大小变化
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-ldh-ratio-v1
+  match_pattern: ratio of ldh|ldh[:/ ]*uln|ldh ratio
+  family_meta:
+    canonical_id: ldh_uln_ratio
+    label_zh: LDH/ULN 比值
+    direction: lower_is_better
+    form: absolute_value
+    units:
+    - ratio
+    - 比值
+- rule_id: endpoint-pnh-free-hemoglobin-pct-v1
+  match_pattern: percent change in free (hgb|hemoglobin)
+  family_meta:
+    canonical_id: free_hemoglobin_pct
+    label_zh: 游离血红蛋白变化（%）
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-free-hemoglobin-v1
+  match_pattern: free (hgb|hemoglobin)
+  family_meta:
+    canonical_id: free_hemoglobin
+    label_zh: 游离血红蛋白
+    direction: lower_is_better
+    form: absolute_value
+    units:
+    - mg/dL
+- rule_id: endpoint-pnh-ldh-change-v1
+  match_pattern: ldh|lactate dehydrogenase
+  family_meta:
+    canonical_id: ldh
+    label_zh: LDH 水平变化
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - U/L
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-hemoglobin-v1
+  match_pattern: hemoglobin|\bhgb\b
+  family_meta:
+    canonical_id: hemoglobin
+    label_zh: 血红蛋白水平/应答
+    direction: higher_is_better
+    form: change_from_baseline
+    units:
+    - g/L
+    - g/dL
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-transfusion-burden-change-units-v1
+  match_pattern: change in (the )?number of rbc units
+  family_meta:
+    canonical_id: rbc_units_change
+    label_zh: 红细胞单位输注变化
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - 单位
+- rule_id: endpoint-pnh-transfusion-burden-change-v1
+  match_pattern: change in (the )?number of (rbc )?transfusion
+  family_meta:
+    canonical_id: transfusion_burden_change
+    label_zh: 输血次数变化
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - 次
+- rule_id: endpoint-pnh-transfusion-burden-units-v1
+  match_pattern: number of rbc units|rbc units transfused
+  family_meta:
+    canonical_id: rbc_units_burden
+    label_zh: 红细胞单位输注数
+    direction: lower_is_better
+    form: absolute_value
+    units:
+    - 单位
+- rule_id: endpoint-pnh-transfusion-avoidance-v1
+  match_pattern: transfusion avoidance|transfusion[- ]free
+  family_meta:
+    canonical_id: transfusion_avoidance
+    label_zh: 输血回避
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - Participants
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-transfusion-v1
+  match_pattern: transfusion|prbc|packed red blood
+  family_meta:
+    canonical_id: transfusion
+    label_zh: 输血回避/输血量
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - Participants
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-breakthrough-hemolysis-v1
+  match_pattern: breakthrough|hemolysis
+  family_meta:
+    canonical_id: breakthrough_hemolysis
+    label_zh: 突破性溶血
+    direction: lower_is_better
+    form: event_rate
+    units:
+    - Participants
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-survival-v1
+  match_pattern: survival|\befs\b|\bdfs\b|engraftment|\banc\b|neutrophil
+  family_meta:
+    canonical_id: survival
+    label_zh: 总生存/植入
+    direction: higher_is_better
+    form: event_rate
+    units:
+    - Participants
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-complement-inhibition-v1
+  match_pattern: complement|\bc5\b|ch50|pd effect|pharmacodynamic|plasma concentration|free
+    c5
+  family_meta:
+    canonical_id: complement_inhibition
+    label_zh: 补体抑制药效学指标
+    direction: higher_is_better
+    form: absolute_value
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-pnh-registry-generic-v1
+  match_pattern: safety|death|infection|events\b|event rate
+  family_meta:
+    canonical_id: generic
+    label_zh: 登记通用观察
+    direction: higher_is_better
+    form: event_rate
+    units:
+    - Participants
+    - percent
+    - '%'
+    - count
+    - days
+- rule_id: endpoint-easi75-response-v1
+  match_pattern: easi[ -]?75|easi_75
+  family_meta:
+    canonical_id: easi75
+    label_zh: EASI-75应答
+    direction: higher_is_better
+    form: response_rate
+    units:
+    - percent
+    - '%'
+- rule_id: endpoint-easi-total-change-v1
+  match_pattern: easi total|easi score
+  family_meta:
+    canonical_id: easi_total
+    label_zh: EASI总分变化
+    direction: lower_is_better
+    form: change_from_baseline
+    units:
+    - points
+    - score

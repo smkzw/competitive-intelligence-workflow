@@ -103,6 +103,12 @@ def compare_unit_strictness(
     if extra_kinds:
         names = "、".join(sorted(kind.value for kind in extra_kinds))
         violations.append(f"{parent.unit_id} 允许观察类型放宽：新增 {names}")
+    extra_recovery_routes = set(child.recovery_route_ids) - set(
+        parent.recovery_route_ids
+    )
+    if extra_recovery_routes:
+        names = "、".join(sorted(route.value for route in extra_recovery_routes))
+        violations.append(f"{parent.unit_id} 恢复路线放宽：新增 {names}")
     if (
         parent.conflict_strategy is ConflictStrategy.RESOLVED_ONLY
         and child.conflict_strategy is not ConflictStrategy.RESOLVED_ONLY

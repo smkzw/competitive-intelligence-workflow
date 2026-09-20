@@ -22,6 +22,7 @@ from typing import Any, cast
 
 import pytest
 
+from ci_workflow.application.capability_preflight import StaticCapabilityProbe
 from ci_workflow.application.project_service import (
     create_project_workspace,
     verify_project_workspace,
@@ -33,8 +34,18 @@ from ci_workflow.application.run_service import (
     run_project,
     validate_run_manifest,
 )
+from ci_workflow.application.yaozh_access import answer_yaozh_access
 from ci_workflow.domain.contracts import ProjectContract, create_project_contract
 from ci_workflow.storage.event_store import EventStore
+
+
+def _run_ready_project(project_root: Path, **kwargs: Any) -> Any:
+    """Project-run tests declare their deterministic host capabilities explicitly."""
+    return run_project(
+        project_root,
+        capability_probe=StaticCapabilityProbe(),
+        **kwargs,
+    )
 
 
 def _sha256_file(path: Path) -> str:
@@ -63,7 +74,7 @@ def test_project_run_dispatches_typed_graph_from_saved_project_contract(
     """EX01：正常项目从最小输入合同启动真实图并持久化本次运行身份。"""
     project_root, contract = _create_minimal_project(tmp_path)
 
-    result = run_project(project_root)
+    result = _run_ready_project(project_root)
 
     # RunResult 字段：新 run 身份 + 已保存合同绑定
     assert result.run_id
@@ -75,12 +86,22 @@ def test_project_run_dispatches_typed_graph_from_saved_project_contract(
     assert result.node_summary.get("preflight") == "completed"
     assert result.node_summary.get("universe") == "awaiting_source_research"
     work_item = json.loads(
-        (project_root / "state/work-items/source-research.json").read_text(
-            encoding="utf-8"
-        )
+        (project_root / "state/work-items/source-research.json").read_text(encoding="utf-8")
     )
-    assert work_item["state"] == "等待宿主完成来源调研"
-    assert work_item["expected_input"] == "evidence/library/a-research-package.json"
+    assert work_item["state"] == "awaiting_host_research"
+    assert work_item["package_target"]["audit_path"] == ("evidence/library/research-package.json")
+    assert work_item["package_target"]["report_payload_paths"] == {
+        "A": "evidence/library/a-research-package.json"
+    }
+    assert {route["route_id"] for route in work_item["routes"]} >= {
+        "global-baseline",
+        "china-baseline",
+        "reverse-alias",
+        "reverse-target",
+        "reverse-company",
+        "reverse-trial",
+        "report-a-evidence",
+    }
 
     # 事件流非空且全部属于本次新运行身份
     events = EventStore(project_root).read_all()
@@ -110,16 +131,39 @@ def test_project_run_dispatches_typed_graph_from_saved_project_contract(
     assert validated.get("run_id") == result.run_id
 
 
+def test_source_research_work_item_refreshes_after_once_only_yaozh_answer(
+    tmp_path: Path,
+) -> None:
+    project_root, _contract = _create_minimal_project(tmp_path)
+
+    first = _run_ready_project(project_root)
+    assert first.outcome == "running"
+    before = json.loads(
+        (project_root / "state/work-items/source-research.json").read_text(encoding="utf-8")
+    )
+    assert before["yaozh_access"]["state"] == "answer_required_once"
+
+    answer_yaozh_access(project_root, "available")
+    resumed = _run_ready_project(project_root, resume=True)
+    assert resumed.outcome == "running"
+    after = json.loads(
+        (project_root / "state/work-items/source-research.json").read_text(encoding="utf-8")
+    )
+    assert after["yaozh_access"]["state"] == "route_enabled"
+    yaozh_route = next(
+        route for route in after["routes"] if route["route_id"] == "yaozh-optional-browser"
+    )
+    assert yaozh_route["required"] is False
+
+
 def test_project_resume_discovers_agent_prepared_report_data_and_binds_current_input(
     tmp_path: Path,
 ) -> None:
     """宿主 Agent 完成来源研究后把规范数据包放入项目，默认执行器可恢复生成。"""
-    contract = create_project_contract(
-        indication="特应性皮炎", reports=["A"], outputs=["html"]
-    )
+    contract = create_project_contract(indication="特应性皮炎", reports=["A"], outputs=["html"])
     project_root = create_project_workspace(tmp_path / "项目", contract)
 
-    first = run_project(project_root)
+    first = _run_ready_project(project_root)
     assert first.outcome == "running"
 
     source = (
@@ -130,11 +174,9 @@ def test_project_resume_discovers_agent_prepared_report_data_and_binds_current_i
     payload["report_version"] = "v1"
     canonical = project_root / "evidence/library/report-data.json"
     canonical.parent.mkdir(parents=True, exist_ok=True)
-    canonical.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    canonical.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    second = run_project(project_root, resume=True)
+    second = _run_ready_project(project_root, resume=True)
     assert second.outcome == "completed"
     manifest = _load_manifest(project_root)
     assert manifest["run_id"] == second.run_id
@@ -177,27 +219,23 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
     )
 
     # 运行 1：universe 节点因缺少规范输入失败（exit 2），检查点与清单已持久化
-    first = run_project(project_root, run_context=run_context)
+    first = _run_ready_project(project_root, run_context=run_context)
     assert first.run_id
     assert first.outcome == "failed"
     assert first.exit_code == 2
     assert first.node_summary.get("universe") == "failed"
-    first_manifest_bytes = (
-        project_root / "manifests" / "current_run.json"
-    ).read_bytes()
-    assert list(
-        (project_root / "state" / "checkpoints").glob(f"{first.run_id}--*.json")
-    )
+    first_manifest_bytes = (project_root / "manifests" / "current_run.json").read_bytes()
+    assert list((project_root / "state" / "checkpoints").glob(f"{first.run_id}--*.json"))
 
     # 运行 2（resume）：规范路径创建有效输入；无调用方路径 → 自动发现并绑定
     canonical_input.parent.mkdir(parents=True, exist_ok=True)
     canonical_input.write_bytes(_FIXTURE_UNIVERSE.read_bytes())
-    resumed = run_project(project_root, resume=True)
+    resumed = _run_ready_project(project_root, resume=True)
     assert resumed.run_id != first.run_id
     assert resumed.outcome == "evidence_blocked"
     assert resumed.exit_code == 4
     assert resumed.node_summary.get("intake") == "reused"
-    assert resumed.node_summary.get("preflight") == "reused"
+    assert resumed.node_summary.get("preflight") == "completed"
     assert resumed.node_summary.get("universe") == "completed"
     assert resumed.node_summary.get("gate:A") == "completed"
     assert resumed.node_summary.get("recovery:A") == "completed"
@@ -206,34 +244,30 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
     universe_runs = {
         event.run_id
         for event in events
-        if event.event_type == "graph.node.completed"
-        and event.payload["node_id"] == "universe"
+        if event.event_type == "graph.node.completed" and event.payload["node_id"] == "universe"
     }
     assert universe_runs == {resumed.run_id}
     gate_runs = {
         event.run_id
         for event in events
-        if event.event_type == "graph.node.completed"
-        and event.payload["node_id"] == "gate"
+        if event.event_type == "graph.node.completed" and event.payload["node_id"] == "gate"
     }
     assert gate_runs == {resumed.run_id}
     intake_runs = {
         event.run_id
         for event in events
-        if event.event_type == "graph.node.completed"
-        and event.payload["node_id"] == "intake"
+        if event.event_type == "graph.node.completed" and event.payload["node_id"] == "intake"
     }
     preflight_runs = {
         event.run_id
         for event in events
-        if event.event_type == "graph.node.completed"
-        and event.payload["node_id"] == "preflight"
+        if event.event_type == "graph.node.completed" and event.payload["node_id"] == "preflight"
     }
     assert intake_runs == {first.run_id}
-    assert preflight_runs == {first.run_id}
+    assert preflight_runs == {first.run_id, resumed.run_id}
     # 复用记录携带运行 1 的 run_id
     reused_by_node = {item["node_id"]: item for item in resumed.reused}
-    assert {"intake", "preflight"} <= set(reused_by_node)
+    assert set(reused_by_node) == {"intake"}
     assert reused_by_node["intake"]["run_id"] == first.run_id
     # 项目族一致性：运行 1 bootstrap 后运行 2 在当前运行内重新确立项目对象，
     # 并经声明迁移 running -> blocked（不依赖 bootstrap 与阻断同运行）
@@ -245,9 +279,7 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
         and event.payload.get("to_state") == "running"
     ]
     assert len(project_running_transitions) == 2
-    assert len(
-        [e for e in project_running_transitions if e.run_id == resumed.run_id]
-    ) == 1
+    assert len([e for e in project_running_transitions if e.run_id == resumed.run_id]) == 1
     project_blocked = [
         event
         for event in events
@@ -281,34 +313,33 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
         contract=contract,
         universe_input_path=canonical_input,
     )
-    resumed3 = run_project(project_root, resume=True, run_context=ctx3)
+    resumed3 = _run_ready_project(project_root, resume=True, run_context=ctx3)
     assert resumed3.run_id not in {first.run_id, resumed.run_id}
     assert resumed3.outcome == "evidence_blocked"
     assert resumed3.exit_code == 4
-    for key in ("intake", "preflight", "universe", "gate:A", "recovery:A"):
+    for key in ("intake", "universe", "gate:A", "recovery:A"):
         assert resumed3.node_summary.get(key) == "reused"
+    assert resumed3.node_summary.get("preflight") == "completed"
     events3 = EventStore(project_root).read_all()
-    # 节点复用事件：5 个节点各一条当前运行事件，绑定原运行/事件/摘要
+    # 易变 preflight 重检，其余 4 个节点各一条当前运行复用事件
     reuse_events = [
         event
         for event in events3
         if event.event_type == "run.node.reused" and event.run_id == resumed3.run_id
     ]
-    assert len(reuse_events) == 5
-    universe_reuse = next(
-        event for event in reuse_events if event.payload["node_id"] == "universe"
-    )
+    assert len(reuse_events) == 4
+    universe_reuse = next(event for event in reuse_events if event.payload["node_id"] == "universe")
     assert universe_reuse.payload["source_run_id"] == resumed.run_id
     assert universe_reuse.payload["source_event_id"]
     assert universe_reuse.payload["source_input_digest"]
     assert universe_reuse.payload["source_completion_digest"]
     assert universe_reuse.payload["input_digest"]
-    # 运行 3 没有任何新的节点完成事件
-    assert not any(
-        event.run_id == resumed3.run_id
-        and event.event_type == "graph.node.completed"
+    completed_run3 = [
+        event.payload["node_id"]
         for event in events3
-    )
+        if event.run_id == resumed3.run_id and event.event_type == "graph.node.completed"
+    ]
+    assert completed_run3 == ["preflight"]
     # 终态未变化 resume 不重复项目迁移（不隐式重新打开）
     assert not any(
         event.run_id == resumed3.run_id
@@ -320,8 +351,7 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
     terminal_events = [
         event
         for event in events3
-        if event.event_type == "run.terminal_decision.recorded"
-        and event.run_id == resumed3.run_id
+        if event.event_type == "run.terminal_decision.recorded" and event.run_id == resumed3.run_id
     ]
     assert len(terminal_events) == 1
     terminal_payload = terminal_events[0].payload
@@ -350,9 +380,7 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
     # 本次运行有当前检查点与事件计数（不靠旧状态冒充）
     assert manifest3["event_count"] > 0
     assert manifest3["checkpoint_id"]
-    assert list(
-        (project_root / "state" / "checkpoints").glob(f"{resumed3.run_id}--*.json")
-    )
+    assert list((project_root / "state" / "checkpoints").glob(f"{resumed3.run_id}--*.json"))
     assert validate_run_manifest(project_root).get("run_id") == resumed3.run_id
 
     # 篡改复用阻断文件 → 重开校验失败关闭；恢复内容与精确 mtime 后可再校验
@@ -374,10 +402,8 @@ def test_project_run_resume_requeues_only_interrupted_or_failed_nodes_and_downst
     # 必须重新从文件字节水合并在派发前失败关闭给出显式重新打开指引
     changed = json.loads(_FIXTURE_UNIVERSE.read_text(encoding="utf-8"))
     changed["evidence_id"] = "empty-a-no-draft-v2"
-    canonical_input.write_text(
-        json.dumps(changed, ensure_ascii=False), encoding="utf-8"
-    )
+    canonical_input.write_text(json.dumps(changed, ensure_ascii=False), encoding="utf-8")
     events_before_run4 = len(EventStore(project_root).read_all())
     with pytest.raises(ContractConfigError, match="重新打开"):
-        run_project(project_root, resume=True, run_context=ctx3)
+        _run_ready_project(project_root, resume=True, run_context=ctx3)
     assert len(EventStore(project_root).read_all()) == events_before_run4

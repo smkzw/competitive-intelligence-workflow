@@ -1,0 +1,339 @@
+{
+  "authority": "ClinicalTrials.gov official registry API including official history version for any record updated after cutoff",
+  "classification_policy": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "products": [
+    {
+      "display_name": "度普利尤单抗（Dupilumab）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "IL-4Rα受体阻断，抑制IL-4/IL-13信号",
+      "mechanism_class": "细胞因子通路",
+      "modality": "生物制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Subcutaneous injection in the different quadrants of the abdomen (avoiding navel and waist areas) and upper thighs",
+          "registry_product_name": "Dupilumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+          "source_version_id": "ctgov-nct02260986-0ecc13b6624228aa",
+          "trial_id": "NCT02260986"
+        }
+      ],
+      "product_id": "dupilumab",
+      "route": "皮下注射",
+      "target": "IL-4Rα",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "曲罗芦单抗（Tralokinumab）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "中和IL-13并阻断其受体相互作用",
+      "mechanism_class": "细胞因子通路",
+      "modality": "生物制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Tralokinumab is a human recombinant monoclonal antibody of the IgG4 subclass that specifically binds to human IL-13 and blocks interaction with the IL-13 receptors. It is presented as a liquid formulation for subcutaneous (SC) administration",
+          "registry_product_name": "Tralokinumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648",
+          "source_version_id": "ctgov-nct03131648-dc203d7a2420433e",
+          "trial_id": "NCT03131648"
+        },
+        {
+          "intervention_description": "Tralokinumab is a human recombinant monoclonal antibody of the IgG4 subclass that specifically binds to human IL-13 and blocks interaction with the IL-13 receptors. It is presented as a liquid formulation for subcutaneous (SC) administration.",
+          "registry_product_name": "Tralokinumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537",
+          "source_version_id": "ctgov-nct03761537-c72fcf005a59e90e",
+          "trial_id": "NCT03761537"
+        }
+      ],
+      "product_id": "tralokinumab",
+      "route": "皮下注射",
+      "target": "IL-13",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "来布利珠单抗（Lebrikizumab）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "靶向IL-13信号通路",
+      "mechanism_class": "细胞因子通路",
+      "modality": "生物制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Subcutaneous injection",
+          "registry_product_name": "Lebrikizumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+          "source_version_id": "ctgov-nct04178967-2985a5c699089365",
+          "trial_id": "NCT04178967"
+        },
+        {
+          "intervention_description": "Lebrikizumab solution for injection administered subcutaneously.",
+          "registry_product_name": "Lebrikizumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+          "source_version_id": "ctgov-nct05149313-2dca024f2ff3b749",
+          "trial_id": "NCT05149313"
+        },
+        {
+          "intervention_description": "Subcutaneous injection",
+          "registry_product_name": "Lebrikizumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363",
+          "source_version_id": "ctgov-nct04146363-a7e6d0e7180a0cfd",
+          "trial_id": "NCT04146363"
+        }
+      ],
+      "product_id": "lebrikizumab",
+      "route": "皮下注射",
+      "target": "IL-13",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "奈莫利珠单抗（Nemolizumab）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "阻断IL-31受体A相关信号",
+      "mechanism_class": "细胞因子通路",
+      "modality": "生物制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Nemolizumab",
+          "registry_product_name": "Nemolizumab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+          "source_version_id": "ctgov-nct03985943-0137d160e62e59ad",
+          "trial_id": "NCT03985943"
+        }
+      ],
+      "product_id": "nemolizumab",
+      "route": "皮下注射",
+      "target": "IL-31RA",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "乌帕替尼（Upadacitinib）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "选择性JAK1抑制剂",
+      "mechanism_class": "JAK通路",
+      "modality": "小分子",
+      "official_source_records": [
+        {
+          "intervention_description": "Tablets taken orally once a day",
+          "registry_product_name": "Upadacitinib",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293",
+          "source_version_id": "ctgov-nct03569293-c4a8fa331a578ec0",
+          "trial_id": "NCT03569293"
+        },
+        {
+          "intervention_description": "Tablets taken orally once a day",
+          "registry_product_name": "Upadacitinib",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422",
+          "source_version_id": "ctgov-nct03607422-957d1f0dfcec0098",
+          "trial_id": "NCT03607422"
+        }
+      ],
+      "product_id": "upadacitinib",
+      "route": "口服",
+      "target": "JAK1",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "巴瑞替尼（Baricitinib）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "JAK1/JAK2抑制剂",
+      "mechanism_class": "JAK通路",
+      "modality": "小分子",
+      "official_source_records": [
+        {
+          "intervention_description": "Administered orally.",
+          "registry_product_name": "Baricitinib",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396",
+          "source_version_id": "ctgov-nct03334396-a6bd448f96fdd502",
+          "trial_id": "NCT03334396"
+        }
+      ],
+      "product_id": "baricitinib",
+      "route": "口服",
+      "target": "JAK1/JAK2",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "鲁索利替尼（Ruxolitinib）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "局部JAK1/JAK2抑制剂",
+      "mechanism_class": "JAK通路",
+      "modality": "小分子外用制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Ruxolitinib 0.75% or 1.5% cream.",
+          "registry_product_name": "Ruxolitinib cream",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651",
+          "source_version_id": "ctgov-nct03745651-b7ce1187fd10f5bc",
+          "trial_id": "NCT03745651"
+        },
+        {
+          "intervention_description": "The study cream will be applied topically twice a day for up to 52 weeks.",
+          "registry_product_name": "Ruxolitinib",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969",
+          "source_version_id": "ctgov-nct04921969-fedb0856c985a24d",
+          "trial_id": "NCT04921969"
+        }
+      ],
+      "product_id": "ruxolitinib",
+      "route": "外用",
+      "target": "JAK1/JAK2",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "罗氟司特（Roflumilast）",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "PDE4抑制剂",
+      "mechanism_class": "PDE4通路",
+      "modality": "小分子外用制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Roflumilast Cream 0.15% - Active",
+          "registry_product_name": "Roflumilast Cream 0.15%",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587",
+          "source_version_id": "ctgov-nct04773587-d60e96578c757ff1",
+          "trial_id": "NCT04773587"
+        },
+        {
+          "intervention_description": "Roflumilast cream 0.15% for topical application",
+          "registry_product_name": "Roflumilast Cream",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600",
+          "source_version_id": "ctgov-nct04773600-ea56c2891f79cc81",
+          "trial_id": "NCT04773600"
+        }
+      ],
+      "product_id": "roflumilast",
+      "route": "外用",
+      "target": "PDE4",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "Tapinarof",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "芳香烃受体（AhR）激动剂",
+      "mechanism_class": "AhR通路",
+      "modality": "小分子外用制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "applied topically once daily",
+          "registry_product_name": "tapinarof cream, 1%",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859",
+          "source_version_id": "ctgov-nct05032859-36ff60070f895fd2",
+          "trial_id": "NCT05032859"
+        }
+      ],
+      "product_id": "tapinarof",
+      "route": "外用",
+      "target": "AhR",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "Difamilast",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "PDE4抑制剂",
+      "mechanism_class": "PDE4通路",
+      "modality": "小分子外用制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Off-white ointment containing active ingredient, petrolatum and other ingredients",
+          "registry_product_name": "Difamilast",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343",
+          "source_version_id": "ctgov-nct05608343-604ce550796686a0",
+          "trial_id": "NCT05608343"
+        }
+      ],
+      "product_id": "difamilast",
+      "route": "外用",
+      "target": "PDE4",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "Rocatinlimab",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "靶向OX40的抗体，调节T细胞共刺激",
+      "mechanism_class": "T细胞共刺激通路",
+      "modality": "生物制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Participants will receive Rocatinlimab subcutaneously.",
+          "registry_product_name": "Rocatinlimab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445",
+          "source_version_id": "ctgov-nct05398445-78ead594f5baec25",
+          "trial_id": "NCT05398445"
+        },
+        {
+          "intervention_description": "Rocatinlimab will be administered through a subcutaneous (SC) injection.",
+          "registry_product_name": "Rocatinlimab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711",
+          "source_version_id": "ctgov-nct05651711-594ceeed901ab007",
+          "trial_id": "NCT05651711"
+        }
+      ],
+      "product_id": "rocatinlimab",
+      "route": "皮下注射",
+      "target": "OX40",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    },
+    {
+      "display_name": "Amlitelimab",
+      "identity_binding_type": "official_clinicaltrials_registry_intervention_identity",
+      "mechanism": "靶向OX40L的抗体，调节T细胞共刺激",
+      "mechanism_class": "T细胞共刺激通路",
+      "modality": "生物制剂",
+      "official_source_records": [
+        {
+          "intervention_description": "Injection solution SC injection",
+          "registry_product_name": "Amlitelimab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566",
+          "source_version_id": "ctgov-nct06130566-21f0df3dc53a4fc5",
+          "trial_id": "NCT06130566"
+        },
+        {
+          "intervention_description": "Pharmaceutical form: Injection solution Route of administration: Subcutaneous",
+          "registry_product_name": "Amlitelimab",
+          "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+          "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+          "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+          "trial_id": "NCT06241118"
+        }
+      ],
+      "product_id": "amlitelimab",
+      "route": "皮下注射",
+      "target": "OX40L",
+      "target_mechanism_binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+      "target_mechanism_source_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。"
+    }
+  ],
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0"
+}

@@ -219,7 +219,7 @@ REPORT_EVIDENCE_TRANSITIONS: frozenset[DeclaredEdge] = frozenset(
     }
 )
 
-# ── 格式产物族：顺序链、独立阻断/重开、交付后取代 ──────────────────────────
+# ── 格式产物族：候选生成、真实渲染、美化回环、独立放行与阻断 ─────────────
 FORMAT_ARTIFACT_TRANSITIONS: frozenset[DeclaredEdge] = frozenset(
     {
         _edge(
@@ -231,6 +231,12 @@ FORMAT_ARTIFACT_TRANSITIONS: frozenset[DeclaredEdge] = frozenset(
             "format_artifact", _FA.GENERATING, _FA.QUALITY_CHECK,
             "artifact_built",
             "g_format_generating_quality_check",
+        ),
+        # 真实渲染诊断后的定向美化：未超过三轮时回到候选生成
+        _edge(
+            "format_artifact", _FA.QUALITY_CHECK, _FA.GENERATING,
+            "beautification_round_requested",
+            "g_format_quality_check_generating",
         ),
         _edge(
             "format_artifact", _FA.QUALITY_CHECK, _FA.PASSED,

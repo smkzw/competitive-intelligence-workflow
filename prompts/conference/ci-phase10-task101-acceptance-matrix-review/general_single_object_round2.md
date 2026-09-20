@@ -1,0 +1,9 @@
+Same-session follow-up. Re-evaluate your verdict using these bounded clarifications and new evidence; remain read-only.
+
+1. The approved plan is readable from the workspace as `../.hermes/plans/2026-08-10_160047-competitive-intelligence-workflow-rebuild.md`. Inspect Task 10.1 lines 1646–1686 and compare its exact 18 IDs/subscenarios to `_APPROVED_REQUIRED_V12_IDS` and `_APPROVED_SUBSCENARIO_IDS`. The hard-coded test oracle is intentionally independent of both catalog and fragment; determine whether this still constitutes a self-proof after direct plan comparison.
+2. All 17 non-E1 required cases now have `receipt.owner_status: pending_future_owner`; E1 alone is `not_applicable`. `expected.state` is the declared scientific target, while receipt status is current ownership. `recovery-rehearsal` and `legacy-absence` also retain pending expected states.
+3. Four verifier targets are deliberately future-owner nodes for Tasks E1/10.6/10.8; no catalog case claims they currently ran. Judge whether future exact verifier declarations are acceptable for Task 10.1 matrix freezing, given pending receipt ownership, rather than requiring skipped stubs that could create false-green evidence.
+4. The package allowlist now includes `fixtures/acceptance` and `docs/acceptance/matrix.md`; `tests/hosts/test_fresh_install.py::test_fresh_bundle_contains_required_paths_and_no_project_outputs` explicitly checks their presence. The focused bundle/acceptance suite passed 46 tests.
+5. Trellis status is intentionally still in progress until this review and governance closeout complete; do not treat that procedural state as an implementation defect.
+
+Check the actual files and tests again. Return a final advisory verdict for Task 10.1 itself: accept, accept with nonblocking future notes, or reject with a concrete current-scope defect. Distinguish current Task 10.1 contract completeness from future Task 10.2/10.6/10.8 execution evidence.

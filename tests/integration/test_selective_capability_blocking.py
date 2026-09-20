@@ -18,10 +18,7 @@ ALL_READY = {
         "document_ingestion",
         "ocr",
         "browser_validation",
-        "native_pdf",
-        "html_ppt_runtime",
-        "ppt_master",
-        "office_renderer",
+        "independent_context",
     )
 }
 
@@ -56,7 +53,7 @@ def test_cli_project_and_inline_selection_produce_the_same_capability_summary(
         "--reports",
         "A,C",
         "--outputs",
-        "html,pdf",
+        "html",
     )
     assert created.returncode == 0, created.stderr
 
@@ -70,7 +67,7 @@ def test_cli_project_and_inline_selection_produce_the_same_capability_summary(
         "--reports",
         "A,C",
         "--outputs",
-        "html,pdf",
+        "html",
         "--json",
         str(inline_path),
     )
@@ -93,7 +90,30 @@ def test_cli_project_and_inline_selection_produce_the_same_capability_summary(
         assert inline_payload[field] == project_payload[field]
 
 
-def test_missing_pptx_capability_blocks_only_pptx_and_gives_plain_chinese_guidance(
+def test_cli_preflight_returns_distinct_nonzero_status_for_required_blocker(
+    tmp_path: Path,
+) -> None:
+    receipt = tmp_path / "blocked.json"
+    result = _run(
+        "capability",
+        "preflight",
+        "--host",
+        "codex",
+        "--reports",
+        "A",
+        "--outputs",
+        "html",
+        "--json",
+        str(receipt),
+        overrides={"independent_context": False},
+    )
+
+    assert result.returncode == 5
+    assert "独立上下文" in result.stdout
+    assert json.loads(receipt.read_text(encoding="utf-8"))["overall_state"] == "blocked"
+
+
+def test_cli_rejects_non_html_release_outputs(
     tmp_path: Path,
 ) -> None:
     result_path = tmp_path / "preflight.json"
@@ -110,29 +130,6 @@ def test_missing_pptx_capability_blocks_only_pptx_and_gives_plain_chinese_guidan
         str(result_path),
         overrides={"ppt_master": False, "office_renderer": True},
     )
-    assert result.returncode == 0, result.stderr
-    assert "可编辑 PPTX 暂时无法生成" in result.stdout
-    assert "HTML、PDF 不受影响" in result.stdout
-    assert "gate" not in result.stdout.lower()
-    assert "signal" not in result.stdout.lower()
-    payload = json.loads(result_path.read_text(encoding="utf-8"))
-    states = {(item["report"], item["output"]): item["state"] for item in payload["deliveries"]}
-    assert all(states[(report, "pptx")] == "blocked" for report in ("A", "B", "C"))
-    assert all(states[(report, "html")] == "ready" for report in ("A", "B", "C"))
-    assert all(states[(report, "pdf")] == "ready" for report in ("A", "B", "C"))
-
-    both_missing = _run(
-        "capability",
-        "preflight",
-        "--host",
-        "omp",
-        "--reports",
-        "A",
-        "--outputs",
-        "html,pptx",
-        "--json",
-        str(tmp_path / "both-missing.json"),
-        overrides={"ppt_master": False, "office_renderer": False},
-    )
-    assert both_missing.returncode == 0
-    assert both_missing.stdout.count("可编辑 PPTX 暂时无法生成") == 1
+    assert result.returncode == 2
+    assert "不支持的交付格式" in result.stderr
+    assert not result_path.exists()

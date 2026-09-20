@@ -1,0 +1,155 @@
+{
+  "studyVersion" : 3,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT05526222",
+        "orgStudyIdInfo" : {
+          "id" : "ZGJAK025"
+        },
+        "organization" : {
+          "fullName" : "Suzhou Zelgen Biopharmaceuticals Co.,Ltd",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Phase III Study of Jaktinib in Adults With Moderate and Severe Atopic Dermatitis",
+        "officialTitle" : "A Multicenter, Randomized, Double-blind, Placebo-controlled Phase III Clinical Study of Jaktinib Hydrochloride Tablets in the Treatment of Adult Patients With Moderate and Severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2025-12",
+        "overallStatus" : "ACTIVE_NOT_RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2022-07-14",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2026-06",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2026-09",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2022-08-25",
+        "studyFirstSubmitQcDate" : "2022-09-01",
+        "studyFirstPostDateStruct" : {
+          "date" : "2022-09-02",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2025-12-30",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2026-01-05",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Suzhou Zelgen Biopharmaceuticals Co.,Ltd",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false,
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "A multicenter, randomized, double-blind, placebo-controlled phase III clinical study of jaktinib hydrochloride tablets in the treatment of adult patients with moderate and severe atopic dermatitis"
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE3" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "TRIPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 443,
+          "type" : "ACTUAL"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "Jaktinib low dose",
+          "type" : "EXPERIMENTAL",
+          "description" : "Low dose",
+          "interventionNames" : [ "Drug: Jaktinib Hydrochloride Tablet" ]
+        }, {
+          "label" : "Jaktinib high dose",
+          "type" : "EXPERIMENTAL",
+          "description" : "High dose",
+          "interventionNames" : [ "Drug: Jaktinib Hydrochloride Tablet" ]
+        }, {
+          "label" : "Placebo",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "Placebo",
+          "interventionNames" : [ "Drug: Jaktinib Hydrochloride Tablet" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "Jaktinib Hydrochloride Tablet",
+          "description" : "Orally administered, twice a day",
+          "armGroupLabels" : [ "Jaktinib high dose", "Jaktinib low dose", "Placebo" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "The efficacy in the treatment of moderate and severe atopic dermatitis",
+          "description" : "The proportion of subjects whose Eczema Area and Severity Index (EASI) total score decreased by ≥ 75% from baseline",
+          "timeFrame" : "16 weeks"
+        }, {
+          "measure" : "The efficacy in the treatment of moderate and severe atopic dermatitis",
+          "description" : "The proportion of subjects with a systemic Investigator&#x27;s Global Assessment (IGA) score of 0 or 1 and a decrease of ≥ 2 points from baseline",
+          "timeFrame" : "16 weeks"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "The abnormal laboratory values and&#x2F;or adverse events in the treatment of moderate and severe atopic dermatitis",
+          "description" : "Number of Participants With Abnormal Laboratory Values and&#x2F;or Adverse Events That Are Related to Treatment",
+          "timeFrame" : "up to 1 year"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ul><li>Have fully understood the test and voluntarily signed the informed consent;</li><li>When signing the informed consent form, the age of male or female subjects must be ≥ 18 years old;</li><li>The onset time of atopic dermatitis was at least 1 year at the time of screening, and the subjects met the Hanifin and Rajka criteria for atopic dermatitis at the time of screening;</li><li>For women with reproductive ability and all male subjects, during the trial period and within 6 months after the discontinuation of the trial drug, they must maintain abstinence or contraception, including but not limited to physical and drug contraception.</li><li>The subjects were able to communicate well and agreed to follow the study and follow-up procedures.</li></ul><p>Exclusion Criteria:</p><ul><li>The investigator considers that any subjects are not suitable to participate in the trial.</li></ul>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "overallOfficials" : [ {
+          "name" : "Jason Wu",
+          "affiliation" : "Suzhou Zelgen Biopharmaceuticals Co.,Ltd",
+          "role" : "STUDY_DIRECTOR"
+        } ],
+        "locations" : [ {
+          "facility" : "139 People&#x27;s Middle Road",
+          "city" : "Changsha",
+          "state" : "Hunan",
+          "zip" : "410008",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 28.19874,
+            "lon" : 112.97087
+          }
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

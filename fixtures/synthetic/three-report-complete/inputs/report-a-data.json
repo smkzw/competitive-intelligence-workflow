@@ -1,0 +1,545 @@
+{
+  "schema_version": "1.0",
+  "report_version": "v-fixture-001",
+  "indication": "特应性皮炎",
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "products": [
+    {
+      "id": "fixture-product",
+      "name": "泰瑞奇单抗",
+      "target": "TSLP",
+      "modality": "单克隆抗体",
+      "phase": "III期",
+      "status": "开展中",
+      "regions": [
+        "中国",
+        "境外"
+      ],
+      "route": "皮下注射",
+      "developer": "示例生物医药",
+      "mechanism": "阻断胸腺基质淋巴细胞生成素介导的上游炎症信号"
+    },
+    {
+      "id": "competitor-biologic",
+      "name": "安澜双抗",
+      "target": "TSLP",
+      "modality": "双特异性抗体",
+      "phase": "II期",
+      "status": "开展中",
+      "regions": [
+        "境外"
+      ],
+      "route": "皮下注射",
+      "developer": "远景治疗",
+      "mechanism": "同时调节TSLP及另一条2型炎症相关通路"
+    },
+    {
+      "id": "oral-small-molecule",
+      "name": "瑞格替尼",
+      "target": "JAK1",
+      "modality": "小分子",
+      "phase": "III期",
+      "status": "开展中",
+      "regions": [
+        "中国",
+        "境外"
+      ],
+      "route": "口服",
+      "developer": "华辰制药",
+      "mechanism": "选择性抑制JAK1相关细胞因子信号"
+    },
+    {
+      "id": "historical-product",
+      "name": "诺维单抗",
+      "target": "IL-13",
+      "modality": "单克隆抗体",
+      "phase": "II期",
+      "status": "终止",
+      "regions": [
+        "境外"
+      ],
+      "route": "皮下注射",
+      "developer": "北辰研发",
+      "mechanism": "中和IL-13并降低2型炎症下游信号"
+    }
+  ],
+  "trials": [
+    {
+      "id": "nct-fixture-301",
+      "display_id": "示例登记号301",
+      "product_id": "fixture-product",
+      "name": "澄明-3",
+      "phase": "III期",
+      "region": "中国",
+      "status": "招募中",
+      "sample_size": 420,
+      "treatment_sample_size": 210,
+      "role": "关键确证研究"
+    },
+    {
+      "id": "nct-competitor-201",
+      "display_id": "示例登记号201",
+      "product_id": "competitor-biologic",
+      "name": "HORIZON-AD",
+      "phase": "II期",
+      "region": "境外",
+      "status": "已完成",
+      "sample_size": 188,
+      "treatment_sample_size": 94,
+      "role": "剂量探索研究"
+    },
+    {
+      "id": "nct-oral-302",
+      "display_id": "示例登记号302",
+      "product_id": "oral-small-molecule",
+      "name": "RADIANT-2",
+      "phase": "III期",
+      "region": "境外",
+      "status": "已完成",
+      "sample_size": 612,
+      "treatment_sample_size": 306,
+      "role": "关键确证研究"
+    },
+    {
+      "id": "nct-history-202",
+      "display_id": "示例登记号202",
+      "product_id": "historical-product",
+      "name": "NOVA-AD",
+      "phase": "II期",
+      "region": "境外",
+      "status": "提前终止",
+      "sample_size": 156,
+      "treatment_sample_size": 78,
+      "role": "概念验证研究"
+    }
+  ],
+  "efficacy": [
+    {
+      "row_id": "eff-fixture-t",
+      "product_id": "fixture-product",
+      "trial_id": "nct-fixture-301",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "治疗组",
+      "value": 68.4,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-fixture-c",
+      "product_id": "fixture-product",
+      "trial_id": "nct-fixture-301",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "对照组",
+      "value": 31.2,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-competitor-t",
+      "product_id": "competitor-biologic",
+      "trial_id": "nct-competitor-201",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "治疗组",
+      "value": 64.1,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-competitor-c",
+      "product_id": "competitor-biologic",
+      "trial_id": "nct-competitor-201",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "对照组",
+      "value": 28.9,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-oral-t",
+      "product_id": "oral-small-molecule",
+      "trial_id": "nct-oral-302",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "治疗组",
+      "value": 72.8,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-oral-c",
+      "product_id": "oral-small-molecule",
+      "trial_id": "nct-oral-302",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "对照组",
+      "value": 34.5,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-history-t",
+      "product_id": "historical-product",
+      "trial_id": "nct-history-202",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "治疗组",
+      "value": 45.2,
+      "unit": "%",
+      "population": "全分析集"
+    },
+    {
+      "row_id": "eff-history-c",
+      "product_id": "historical-product",
+      "trial_id": "nct-history-202",
+      "endpoint": "EASI-75应答率",
+      "timepoint": "第16周",
+      "arm": "对照组",
+      "value": 29.7,
+      "unit": "%",
+      "population": "全分析集"
+    }
+  ],
+  "safety": [
+    {
+      "row_id": "safe-fixture-teae",
+      "product_id": "fixture-product",
+      "trial_id": "nct-fixture-301",
+      "arm": "治疗组",
+      "category": "治疗期间不良事件",
+      "term": "任何TEAE",
+      "value": 66.2,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-fixture-sae",
+      "product_id": "fixture-product",
+      "trial_id": "nct-fixture-301",
+      "arm": "治疗组",
+      "category": "严重不良事件",
+      "term": "任何SAE",
+      "value": 2.1,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-fixture-aesi",
+      "product_id": "fixture-product",
+      "trial_id": "nct-fixture-301",
+      "arm": "治疗组",
+      "category": "特别关注不良事件",
+      "term": "超敏反应",
+      "value": 1.4,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-fixture-common",
+      "product_id": "fixture-product",
+      "trial_id": "nct-fixture-301",
+      "arm": "治疗组",
+      "category": "常见不良事件",
+      "term": "鼻咽炎",
+      "value": 8.8,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-competitor-teae",
+      "product_id": "competitor-biologic",
+      "trial_id": "nct-competitor-201",
+      "arm": "治疗组",
+      "category": "治疗期间不良事件",
+      "term": "任何TEAE",
+      "value": 70.5,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-competitor-sae",
+      "product_id": "competitor-biologic",
+      "trial_id": "nct-competitor-201",
+      "arm": "治疗组",
+      "category": "严重不良事件",
+      "term": "任何SAE",
+      "value": 3.7,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-competitor-aesi",
+      "product_id": "competitor-biologic",
+      "trial_id": "nct-competitor-201",
+      "arm": "治疗组",
+      "category": "特别关注不良事件",
+      "term": "注射部位反应",
+      "value": 6.4,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-competitor-common",
+      "product_id": "competitor-biologic",
+      "trial_id": "nct-competitor-201",
+      "arm": "治疗组",
+      "category": "常见不良事件",
+      "term": "鼻咽炎",
+      "value": 10.2,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-oral-teae",
+      "product_id": "oral-small-molecule",
+      "trial_id": "nct-oral-302",
+      "arm": "治疗组",
+      "category": "治疗期间不良事件",
+      "term": "任何TEAE",
+      "value": 74.8,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-oral-sae",
+      "product_id": "oral-small-molecule",
+      "trial_id": "nct-oral-302",
+      "arm": "治疗组",
+      "category": "严重不良事件",
+      "term": "任何SAE",
+      "value": 2.9,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-oral-aesi",
+      "product_id": "oral-small-molecule",
+      "trial_id": "nct-oral-302",
+      "arm": "治疗组",
+      "category": "特别关注不良事件",
+      "term": "带状疱疹",
+      "value": 2.6,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-oral-common",
+      "product_id": "oral-small-molecule",
+      "trial_id": "nct-oral-302",
+      "arm": "治疗组",
+      "category": "常见不良事件",
+      "term": "上呼吸道感染",
+      "value": 12.1,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-history-teae",
+      "product_id": "historical-product",
+      "trial_id": "nct-history-202",
+      "arm": "治疗组",
+      "category": "治疗期间不良事件",
+      "term": "任何TEAE",
+      "value": 69.3,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-history-sae",
+      "product_id": "historical-product",
+      "trial_id": "nct-history-202",
+      "arm": "治疗组",
+      "category": "严重不良事件",
+      "term": "任何SAE",
+      "value": 5.1,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-history-aesi",
+      "product_id": "historical-product",
+      "trial_id": "nct-history-202",
+      "arm": "治疗组",
+      "category": "特别关注不良事件",
+      "term": "超敏反应",
+      "value": 2.2,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    },
+    {
+      "row_id": "safe-history-common",
+      "product_id": "historical-product",
+      "trial_id": "nct-history-202",
+      "arm": "治疗组",
+      "category": "常见不良事件",
+      "term": "鼻咽炎",
+      "value": 9.7,
+      "unit": "%",
+      "time_window": "16周治疗期"
+    }
+  ],
+  "regulatory": [
+    {
+      "product_id": "fixture-product",
+      "track": "中国",
+      "event": "III期临床试验许可",
+      "date": "2025-11-18",
+      "status": "开展中"
+    },
+    {
+      "product_id": "fixture-product",
+      "track": "境外",
+      "event": "突破性治疗认定",
+      "date": "2025-06-03",
+      "status": "有效"
+    },
+    {
+      "product_id": "oral-small-molecule",
+      "track": "中国",
+      "event": "上市申请受理",
+      "date": "2026-04-12",
+      "status": "审评中"
+    },
+    {
+      "product_id": "competitor-biologic",
+      "track": "境外",
+      "event": "II期研究完成",
+      "date": "2026-02-28",
+      "status": "已完成"
+    },
+    {
+      "product_id": "historical-product",
+      "track": "境外",
+      "event": "开发终止",
+      "date": "2024-09-16",
+      "status": "终止"
+    }
+  ],
+  "companies": [
+    {
+      "product_id": "fixture-product",
+      "relationship": "原研及全球开发",
+      "licensor": "示例生物医药",
+      "licensee": "康宁药业",
+      "territory": "大中华区",
+      "transaction": "独家许可；首付款及里程碑金额未公开"
+    },
+    {
+      "product_id": "competitor-biologic",
+      "relationship": "共同开发",
+      "licensor": "远景治疗",
+      "licensee": "北美伙伴公司",
+      "territory": "北美",
+      "transaction": "共同开发及商业化"
+    },
+    {
+      "product_id": "oral-small-molecule",
+      "relationship": "自主研发",
+      "licensor": "不适用",
+      "licensee": "华辰制药",
+      "territory": "全球",
+      "transaction": "尚未公开对外交易"
+    },
+    {
+      "product_id": "historical-product",
+      "relationship": "原研",
+      "licensor": "北辰研发",
+      "licensee": "未公开",
+      "territory": "境外",
+      "transaction": "历史合作已终止"
+    }
+  ],
+  "patents": [
+    {
+      "product_id": "fixture-product",
+      "family": "WO-FIXTURE-001",
+      "display_family": "示例抗体专利族A",
+      "jurisdiction": "中国/美国/欧洲",
+      "scope": "抗体序列及适应症用途",
+      "expiry": "预计2042年（以法域状态为准）",
+      "exclusivity": "尚未形成监管独占"
+    },
+    {
+      "product_id": "competitor-biologic",
+      "family": "WO-COMP-002",
+      "display_family": "示例双抗专利族B",
+      "jurisdiction": "美国/欧洲",
+      "scope": "双抗结构及组合用途",
+      "expiry": "预计2041年（以法域状态为准）",
+      "exclusivity": "尚未形成监管独占"
+    },
+    {
+      "product_id": "oral-small-molecule",
+      "family": "WO-ORAL-003",
+      "display_family": "示例小分子专利族C",
+      "jurisdiction": "中国/美国/日本",
+      "scope": "化合物及晶型",
+      "expiry": "预计2039年（以法域状态为准）",
+      "exclusivity": "审评阶段，未公开"
+    },
+    {
+      "product_id": "historical-product",
+      "family": "WO-HISTORY-004",
+      "display_family": "示例历史专利族D",
+      "jurisdiction": "美国/欧洲",
+      "scope": "抗体序列",
+      "expiry": "预计2037年（以法域状态为准）",
+      "exclusivity": "不适用"
+    }
+  ],
+  "history": [
+    {
+      "product_id": "fixture-product",
+      "status": "开展中",
+      "date": "2026-07-31",
+      "observation": "中国与境外开发均持续推进"
+    },
+    {
+      "product_id": "competitor-biologic",
+      "status": "暂停",
+      "date": "2025-08-14",
+      "observation": "曾短暂停止入组，后恢复"
+    },
+    {
+      "product_id": "oral-small-molecule",
+      "status": "撤回",
+      "date": "2024-12-06",
+      "observation": "一个境外早期方案撤回，不影响现有III期项目"
+    },
+    {
+      "product_id": "historical-product",
+      "status": "终止",
+      "date": "2024-09-16",
+      "observation": "核心II期研究提前终止，项目保留于历史观察层"
+    }
+  ],
+  "sources": [
+    {
+      "source": "ClinicalTrials.gov",
+      "scope": "试验设计、状态与结果登记",
+      "maturity": "登记记录与结果记录交叉核对",
+      "limitation": "部分结果字段尚未更新"
+    },
+    {
+      "source": "药物临床试验登记与信息公示平台",
+      "scope": "中国试验与申办方信息",
+      "maturity": "登记记录",
+      "limitation": "部分历史变更原因未公开"
+    },
+    {
+      "source": "主要论文与监管公开材料",
+      "scope": "关键疗效、安全性与监管状态",
+      "maturity": "主要报告优先",
+      "limitation": "跨试验比较仅作观察性判断"
+    },
+    {
+      "source": "企业公告及指定行业来源",
+      "scope": "交易、权益、重要开发变化",
+      "maturity": "公开披露",
+      "limitation": "未公开金额和条款不作推断"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "entry": {
+    "command": [
+      "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/bin/ci-workflow"
+    ],
+    "kind": "console_script",
+    "resolved_path": "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/bin/ci-workflow",
+    "sha256": "6b227210f63ebc73ba7fb14a680730aab83b1e9a09a46b196a6f346e2eed45a0"
+  },
+  "event_chain": {
+    "event_count": 18,
+    "stream_digest": "8692e9f2f99eda6dcfd2eb17d34a56bb0807348dd6c281521c7e238216f77e28"
+  },
+  "fixture": {
+    "case_digest": "8847165702fcfd65fcd4fcafe611fff6f3557d844eecb95759bb7031aca0cdf1",
+    "case_id": "host-smoke-v1",
+    "inputs": {
+      "inputs/recovery-report-data.json": "2d2fa7d2056c4fb31d723de9cf9b66882576834e9badff7219def3f2c2f43bd5",
+      "inputs/universe.json": "b86ed91fac08a30feba9c24e4ae38c2523bdcdc29d0a4ca9b6dba288d66be9bb"
+    }
+  },
+  "host": "omp",
+  "host_executable": {
+    "path": "/Users/smkzw/.local/bin/omp",
+    "provenance": "path_resolved",
+    "resolved_realpath": "/Users/smkzw/.bun/install/global/node_modules/@oh-my-pi/pi-coding-agent/dist/cli.js",
+    "version": "omp/18.0.11"
+  },
+  "interruption": {
+    "event_count": 12,
+    "event_stream_digest": "ba5f2d35c9f92aafe0c482d3692ed07d22d4735bcf99f16f452832c07af0b483",
+    "exit_code": 4,
+    "manifest_digest": "74d57a804b4f5f3a6b93fcf614dcf56777f54ffbc0ccecd724d0133474cd183a",
+    "manifest_relative_path": "state/host-smoke-v1-initial-manifest.json",
+    "manifest_sha256": "989cb0ca21f7a33e41592ee4a5ab618419fb4f0ee618440f1a782ecc96a69ed4",
+    "no_draft": true,
+    "outcome": "evidence_blocked",
+    "project_id": "project_f68ba57f9c2eaec784e3e9ad",
+    "report_file_count": 0,
+    "run_id": "run_3d562353b3103aaa27734961"
+  },
+  "issued_at": "2026-09-01T01:57:20.246304Z",
+  "manifest": {
+    "manifest_digest": "1a47a8885e0ce5241befeda01afe8aaadb23aca86bf8cdca8ff1bb41621f22d4",
+    "outcome": "rendered",
+    "path": "manifests/current_run.json",
+    "run_id": "run_4f5d4d86f1f0cf8d6d93192b",
+    "sha256": "23d49e98cf34686746c9e810e00f5a2abd4d51ce9a72d680f68b429c28d4febd"
+  },
+  "package": {
+    "name": "competitive-intelligence-workflow",
+    "package_digest": "d1672be7c45d64c6fef99e23ec076e135e9b8430e0ec522ec4d5465c59377ed0",
+    "version": "0.1.0a0"
+  },
+  "process": {
+    "argv": [
+      "/Users/smkzw/.local/bin/omp",
+      "--print",
+      "--no-session",
+      "--cwd",
+      "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/versions/50a91aac3e0050887ae48e29e921a45cf540d986b418eaac8d4af068f6a3e8c3",
+      "--max-time",
+      "120m",
+      "--approval-mode",
+      "yolo",
+      "这是候选包真实宿主验收。请完整读取已安装公共 Skill：/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/versions/50a91aac3e0050887ae48e29e921a45cf540d986b418eaac8d4af068f6a3e8c3/skills/competitive-intelligence-workflow/SKILL.md。不要使用源码工程的内部说明，也不要等待额外指令。请按该 Skill 的「候选包宿主验收」步骤，自行发现并运行已安装入口，候选运行入口位于 /Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/bin/ci-workflow。对案例 host-smoke-v1 和项目目录 /Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/projects/omp 完成能力预检、关键证据不足时不生成草稿、补件恢复、站点式 HTML 生成和项目验证。全部成功后最终只回复：HOST_SMOKE_DONE exit=0"
+    ],
+    "cwd": "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow",
+    "finished_at": "2026-09-01T01:57:18.803247Z",
+    "kind": "external_subprocess",
+    "pid": 44231,
+    "returncode": 0,
+    "started_at": "2026-09-01T01:56:31.603085Z",
+    "stderr_tail": "Working...\n",
+    "stdout_tail": "HOST_SMOKE_DONE exit=0\n"
+  },
+  "receipt_digest": "9ffe476c4a3834744bd3d7c83d5e31869e963493c9bda07c1e75a7d2df1c8e79",
+  "receipt_kind": "host-smoke-v1",
+  "recovery": {
+    "input_relative_path": "evidence/library/report-data.json",
+    "input_sha256": "2d2fa7d2056c4fb31d723de9cf9b66882576834e9badff7219def3f2c2f43bd5",
+    "reason": "user_material_accepted",
+    "rebind_event_digest": "25426b07d33d35eeb0b381c5b95aeddf905db4582642c518751f757ef3924078",
+    "rebind_event_id": "coordinator-rebind_eae6b4e721d43ac024709c5e",
+    "reopen_event_digest": "94ff68845c58b31e84398dd0dfc5558e5b65c3a1c5ee796247922b99ea72b75c",
+    "reopen_event_id": "graph-transition_b2a601fd6eea96e25dfa8d7c"
+  },
+  "run": {
+    "artifacts": [
+      {
+        "entry_relative_path": "reports/A/v-fixture-001/html/overview.html",
+        "entry_sha256": "ec9c83dbd053c8ea3154a62b5bb994791f118b75a72b854578e6e3d58723cfa7",
+        "output": "html",
+        "report": "A"
+      }
+    ],
+    "exit_code": 0,
+    "no_draft": false,
+    "outcome": "rendered",
+    "project_id": "project_f68ba57f9c2eaec784e3e9ad",
+    "project_root": "/Users/smkzw/.cc-switch/skills/clinical-research/competitive-intelligence-workflow/projects/omp",
+    "run_id": "run_4f5d4d86f1f0cf8d6d93192b",
+    "semantic_receipt_digest": "be83ce5bff9f9042dbef281b890a2e1ff327cfe33aca8e029604d2dc868a5624",
+    "state": "complete"
+  },
+  "schema_version": "1.0",
+  "session": {
+    "launcher_parent_pid": 41887,
+    "launcher_pid": 41889,
+    "session_id": "host-smoke-session_e89eda3a7c8df97bf4904b6a"
+  },
+  "status": "verified",
+  "unavailable_reason_zh": null
+}

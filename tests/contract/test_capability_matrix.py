@@ -22,7 +22,7 @@ def test_capability_matrix_schema_matches_the_typed_runtime_contract(tmp_path: P
     matrix = run_capability_preflight(
         CapabilitySelection(
             reports=("A", "B", "C"),
-            outputs=("html", "pdf", "html-ppt", "pptx"),
+            outputs=("html",),
             source_routes=("public-http", "public-browser"),
             needs_document_ingestion=True,
             needs_ocr=False,

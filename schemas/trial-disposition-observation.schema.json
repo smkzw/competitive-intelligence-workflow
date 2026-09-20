@@ -1,0 +1,610 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/trial-disposition-observation.schema.json",
+  "title": "B 类试验完成情况与受试者处置事实",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "row_id",
+    "source_row_id",
+    "observation_id",
+    "product_id",
+    "trial_id",
+    "period_id",
+    "cohort_id",
+    "scope_level",
+    "group_id",
+    "analysis_population",
+    "field_family",
+    "field",
+    "source_field_name",
+    "source_field_definition",
+    "measure_object",
+    "statistic_form",
+    "denominator_role",
+    "time_window",
+    "source_version_id",
+    "source_locator",
+    "source_role",
+    "disclosure_maturity",
+    "review_state",
+    "disclosure_state",
+    "conflict_disposition",
+    "compatibility_rule"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "row_id": {"type": "string", "minLength": 1},
+    "source_row_id": {"type": "string", "minLength": 1},
+    "observation_id": {"type": "string", "minLength": 1},
+    "product_id": {"type": "string", "minLength": 1},
+    "trial_id": {"type": "string", "minLength": 1},
+    "period_id": {"type": "string", "minLength": 1},
+    "cohort_id": {"type": ["string", "null"], "minLength": 1},
+    "scope_level": {"enum": ["overall", "cohort", "group"]},
+    "group_id": {"type": ["string", "null"], "minLength": 1},
+    "analysis_population": {"type": "string", "minLength": 1},
+    "field_family": {
+      "enum": [
+        "participant_flow",
+        "reason",
+        "adherence",
+        "rescue_treatment",
+        "prohibited_medication",
+        "protocol_deviation"
+      ]
+    },
+    "field": {
+      "enum": [
+        "screened",
+        "screen_failure",
+        "randomized",
+        "received_treatment",
+        "completed_treatment",
+        "completed_study",
+        "treatment_discontinued",
+        "study_withdrawal",
+        "lost_to_follow_up",
+        "screen_failure_reason",
+        "treatment_discontinuation_reason",
+        "study_withdrawal_reason",
+        "adherence",
+        "rescue_treatment",
+        "prohibited_medication",
+        "protocol_deviation",
+        "major_protocol_deviation",
+        "protocol_deviation_leading_to_exclusion",
+        "source_other"
+      ]
+    },
+    "source_field_name": {"type": "string", "minLength": 1},
+    "source_field_definition": {"type": "string", "minLength": 1},
+    "measure_object": {"enum": ["subject", "event"]},
+    "statistic_form": {
+      "enum": ["count", "event_count", "proportion", "adherence_summary", "other"]
+    },
+    "value": {"type": ["number", "null"]},
+    "raw_value": {"type": ["string", "number", "null"], "minLength": 1},
+    "unit": {"type": ["string", "null"], "minLength": 1},
+    "numerator": {"type": ["integer", "null"], "minimum": 0},
+    "denominator": {"type": ["integer", "null"], "minimum": 1},
+    "denominator_role": {
+      "enum": ["screened", "randomized", "treated", "safety", "analysis", "period_start", "other"]
+    },
+    "time_window": {"type": "string", "minLength": 1},
+    "reason_original_text": {"type": ["string", "null"], "minLength": 1},
+    "canonical_reason": {"type": ["string", "null"], "minLength": 1},
+    "reason_is_mutually_exclusive": {"type": ["boolean", "null"]},
+    "reason_is_exhaustive": {"type": ["boolean", "null"]},
+    "adherence_definition": {"type": ["string", "null"], "minLength": 1},
+    "adherence_threshold": {"type": ["string", "null"], "minLength": 1},
+    "protocol_deviation_level": {"type": ["string", "null"], "minLength": 1},
+    "source_version_id": {"type": "string", "minLength": 1},
+    "source_locator": {"$ref": "#/$defs/evidence_locator"},
+    "source_role": {
+      "enum": [
+        "clinical_trial_registry",
+        "regulatory_material",
+        "primary_trial_report",
+        "protocol_sap",
+        "conference_disclosure",
+        "company_disclosure",
+        "designated_industry_source"
+      ]
+    },
+    "disclosure_maturity": {
+      "enum": [
+        "attributable_numeric_disclosure",
+        "conference_complete_numerics",
+        "registry_result_or_primary_report",
+        "final_regulatory_conclusion"
+      ]
+    },
+    "review_state": {"enum": ["candidate", "accepted", "rejected", "superseded"]},
+    "disclosure_state": {
+      "enum": [
+        "reported_value",
+        "reported_zero",
+        "not_reported",
+        "below_reporting_threshold",
+        "not_publicly_disclosed",
+        "not_applicable",
+        "conflicting",
+        "unresolved_due_to_route"
+      ]
+    },
+    "conflict_disposition": {
+      "enum": ["resolved_selected_accepted_fact", "open_conflict_preserved"]
+    },
+    "reported_zero_text": {"type": ["string", "null"], "minLength": 1},
+    "route_receipt_id": {"type": ["string", "null"], "minLength": 1},
+    "applicability_predicate_id": {"type": ["string", "null"], "minLength": 1},
+    "compatibility_rule": {"type": "string", "minLength": 1},
+    "difference_labels_zh": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "evidence_locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_role"],
+      "properties": {
+        "document_role": {"type": "string", "minLength": 1},
+        "field_path": {"type": ["string", "null"], "minLength": 1},
+        "heading": {"type": ["string", "null"], "minLength": 1},
+        "page": {"type": ["integer", "null"], "minimum": 1},
+        "table": {"type": ["string", "null"], "minLength": 1},
+        "row": {"type": ["string", "null"], "minLength": 1},
+        "column": {"type": ["string", "null"], "minLength": 1},
+        "paragraph": {"type": ["string", "null"], "minLength": 1},
+        "url": {"type": ["string", "null"], "minLength": 1}
+      },
+      "anyOf": [
+        {"required": ["field_path"], "properties": {"field_path": {"type": "string"}}},
+        {"required": ["heading"], "properties": {"heading": {"type": "string"}}},
+        {"required": ["page"], "properties": {"page": {"type": "integer"}}},
+        {"required": ["table"], "properties": {"table": {"type": "string"}}},
+        {"required": ["row"], "properties": {"row": {"type": "string"}}},
+        {"required": ["column"], "properties": {"column": {"type": "string"}}},
+        {"required": ["paragraph"], "properties": {"paragraph": {"type": "string"}}},
+        {"required": ["url"], "properties": {"url": {"type": "string"}}}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "disclosure_state": {
+            "enum": [
+              "not_reported",
+              "below_reporting_threshold",
+              "not_publicly_disclosed",
+              "not_applicable",
+              "conflicting",
+              "unresolved_due_to_route"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "value": {"type": "null"},
+          "numerator": {"type": "null"},
+          "denominator": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"disclosure_state": {"const": "not_applicable"}}},
+      "then": {
+        "required": ["applicability_predicate_id"],
+        "properties": {
+          "value": {"type": "null"},
+          "numerator": {"type": "null"},
+          "denominator": {"type": "null"},
+          "applicability_predicate_id": {"type": "string", "minLength": 1}
+        }
+      },
+      "else": {"properties": {"applicability_predicate_id": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"disclosure_state": {"const": "unresolved_due_to_route"}}},
+      "then": {
+        "required": ["route_receipt_id"],
+        "properties": {"route_receipt_id": {"type": "string", "minLength": 1}}
+      },
+      "else": {"properties": {"route_receipt_id": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"disclosure_state": {"const": "conflicting"}}},
+      "then": {"properties": {"conflict_disposition": {"const": "open_conflict_preserved"}}},
+      "else": {"properties": {"conflict_disposition": {"const": "resolved_selected_accepted_fact"}}}
+    },
+    {
+      "if": {"properties": {"disclosure_state": {"const": "reported_zero"}}},
+      "then": {
+        "required": ["reported_zero_text", "raw_value"],
+        "properties": {
+          "value": {"type": "number", "const": 0},
+          "raw_value": {"type": ["string", "number"]},
+          "reported_zero_text": {"type": "string", "minLength": 1}
+        }
+      },
+      "else": {"properties": {"reported_zero_text": {"type": "null"}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "disclosure_state": {"enum": ["reported_value", "reported_zero"]}
+        }
+      },
+      "then": {"required": ["raw_value"], "properties": {"raw_value": {"type": ["string", "number"]}}}
+    },
+    {
+      "if": {"properties": {"disclosure_state": {"const": "reported_value"}}},
+      "then": {
+        "required": ["value"],
+        "properties": {
+          "value": {"type": "number", "not": {"const": 0}}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "disclosure_state": {"enum": ["not_reported", "not_publicly_disclosed"]}
+        }
+      },
+      "then": {
+        "properties": {
+          "raw_value": {
+            "anyOf": [
+              {"type": "null"},
+              {
+                "type": "string",
+                "not": {
+                  "pattern": "\\d"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "numerator": {"type": "null"},
+            "denominator": {"type": "null"}
+          }
+        },
+        {
+          "required": ["numerator", "denominator"],
+          "properties": {
+            "numerator": {"type": "integer", "minimum": 0},
+            "denominator": {"type": "integer", "minimum": 1}
+          }
+        }
+      ]
+    },
+    {
+      "if": {"properties": {"statistic_form": {"const": "count"}}},
+      "then": {
+        "properties": {"measure_object": {"const": "subject"}},
+        "if": {"properties": {"disclosure_state": {"enum": ["reported_value", "reported_zero"]}}},
+        "then": {"properties": {"value": {"type": "integer", "minimum": 0}}}
+      }
+    },
+    {
+      "if": {"properties": {"statistic_form": {"const": "event_count"}}},
+      "then": {
+        "properties": {"measure_object": {"const": "event"}},
+        "if": {"properties": {"disclosure_state": {"enum": ["reported_value", "reported_zero"]}}},
+        "then": {"properties": {"value": {"type": "integer", "minimum": 0}}}
+      }
+    },
+    {
+      "if": {"properties": {"statistic_form": {"const": "proportion"}}},
+      "then": {
+        "if": {"properties": {"disclosure_state": {"enum": ["reported_value", "reported_zero"]}}},
+        "then": {
+          "required": ["value", "unit"],
+          "properties": {
+            "value": {"type": "number", "minimum": 0},
+            "unit": {"type": "string", "minLength": 1}
+          },
+          "anyOf": [
+            {
+              "properties": {
+                "unit": {"pattern": "[%％]|百分|^[Pp][Ee][Rr][Cc][Ee][Nn][Tt](?:[Aa][Gg][Ee])?$"},
+                "value": {"maximum": 100}
+              }
+            },
+            {
+              "properties": {
+                "unit": {"enum": ["ratio", "fraction", "proportion", "rate", "比例", "比率", "率"]},
+                "value": {"maximum": 1}
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {"properties": {"statistic_form": {"const": "adherence_summary"}}},
+      "then": {
+        "properties": {"measure_object": {"const": "subject"}},
+        "if": {"properties": {"disclosure_state": {"enum": ["reported_value", "reported_zero"]}}},
+        "then": {
+          "required": ["value", "raw_value"],
+          "properties": {"value": {"type": "number", "minimum": 0}},
+          "allOf": [
+            {
+              "if": {"properties": {"unit": {"pattern": "[%％]|百分|^[Pp][Ee][Rr][Cc][Ee][Nn][Tt](?:[Aa][Gg][Ee])?$"}}},
+              "then": {"properties": {"value": {"maximum": 100}}}
+            },
+            {
+              "if": {
+                "properties": {
+                  "unit": {"enum": ["ratio", "fraction", "proportion", "rate", "比例", "比率", "率"]}
+                }
+              },
+              "then": {"properties": {"value": {"maximum": 1}}}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "statistic_form": {"const": "other"},
+          "disclosure_state": {"enum": ["reported_value", "reported_zero"]}
+        }
+      },
+      "then": {"properties": {"value": {"minimum": 0}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "field_family": {"enum": ["participant_flow", "reason"]}
+        }
+      },
+      "then": {
+        "properties": {
+          "measure_object": {"const": "subject"},
+          "statistic_form": {"not": {"const": "event_count"}}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "field_family": {"const": "participant_flow"}
+        }
+      },
+      "then": {
+        "properties": {
+          "field": {
+            "enum": [
+              "screened",
+              "screen_failure",
+              "randomized",
+              "received_treatment",
+              "completed_treatment",
+              "completed_study",
+              "treatment_discontinued",
+              "study_withdrawal",
+              "lost_to_follow_up",
+              "source_other"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field_family": {"const": "reason"}}},
+      "then": {
+        "properties": {
+          "field": {"enum": ["screen_failure_reason", "treatment_discontinuation_reason", "study_withdrawal_reason", "source_other"]}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field_family": {"const": "adherence"}}},
+      "then": {
+        "properties": {
+          "field": {"enum": ["adherence", "source_other"]}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "disclosure_state": {"enum": ["reported_value", "reported_zero"]}
+              }
+            },
+            "then": {
+              "required": ["adherence_definition", "adherence_threshold"],
+              "properties": {
+                "adherence_definition": {"type": "string", "minLength": 1},
+                "adherence_threshold": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "adherence_definition": {"type": "null"},
+                  "adherence_threshold": {"type": "null"}
+                }
+              },
+              {
+                "required": ["adherence_definition", "adherence_threshold"],
+                "properties": {
+                  "adherence_definition": {"type": "string", "minLength": 1},
+                  "adherence_threshold": {"type": "string", "minLength": 1}
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "if": {"properties": {"field_family": {"const": "rescue_treatment"}}},
+      "then": {"properties": {"field": {"enum": ["rescue_treatment", "source_other"]}}}
+    },
+    {
+      "if": {"properties": {"field_family": {"const": "prohibited_medication"}}},
+      "then": {"properties": {"field": {"enum": ["prohibited_medication", "source_other"]}}}
+    },
+    {
+      "if": {"properties": {"field_family": {"const": "protocol_deviation"}}},
+      "then": {
+        "properties": {
+          "field": {
+            "enum": [
+              "protocol_deviation",
+              "major_protocol_deviation",
+              "protocol_deviation_leading_to_exclusion",
+              "source_other"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field": {"const": "source_other"}}},
+      "then": {}
+    },
+    {
+      "if": {"properties": {"field": {"enum": ["screened", "screen_failure", "screen_failure_reason"]}}},
+      "then": {
+        "properties": {
+          "scope_level": {"enum": ["overall", "cohort"]},
+          "group_id": {"type": "null"},
+          "denominator_role": {"const": "screened"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field": {"enum": ["screen_failure_reason", "treatment_discontinuation_reason", "study_withdrawal_reason"]}}},
+      "then": {
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "disclosure_state": {"enum": ["reported_value", "reported_zero"]}
+              }
+            },
+            "then": {
+              "required": ["reason_original_text", "canonical_reason"],
+              "properties": {
+                "reason_original_text": {"type": "string", "minLength": 1},
+                "canonical_reason": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "reason_original_text": {"type": "null"},
+                  "canonical_reason": {"type": "null"}
+                }
+              },
+              {
+                "required": ["reason_original_text", "canonical_reason"],
+                "properties": {
+                  "reason_original_text": {"type": "string", "minLength": 1},
+                  "canonical_reason": {"type": "string", "minLength": 1}
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "else": {
+        "properties": {
+          "reason_original_text": {"type": "null"},
+          "canonical_reason": {"type": "null"},
+          "reason_is_mutually_exclusive": {"type": "null"},
+          "reason_is_exhaustive": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field": {"enum": ["protocol_deviation", "major_protocol_deviation", "protocol_deviation_leading_to_exclusion"]}}},
+      "then": {
+        "if": {
+          "properties": {
+            "disclosure_state": {"enum": ["reported_value", "reported_zero"]}
+          }
+        },
+        "then": {
+          "required": ["protocol_deviation_level"],
+          "properties": {"protocol_deviation_level": {"type": "string", "minLength": 1}}
+        }
+      },
+      "else": {"properties": {"protocol_deviation_level": {"type": "null"}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "field": {"const": "major_protocol_deviation"},
+          "protocol_deviation_level": {"type": "string"}
+        },
+        "required": ["protocol_deviation_level"]
+      },
+      "then": {"properties": {"protocol_deviation_level": {"const": "major"}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "field": {"const": "protocol_deviation_leading_to_exclusion"},
+          "protocol_deviation_level": {"type": "string"}
+        },
+        "required": ["protocol_deviation_level"]
+      },
+      "then": {"properties": {"protocol_deviation_level": {"enum": ["leading_to_exclusion", "exclusion"]}}}
+    },
+    {
+      "if": {"properties": {"field_family": {"const": "adherence"}}},
+      "then": {"properties": {"field": {"enum": ["adherence", "source_other"]}}},
+      "else": {
+        "properties": {
+          "adherence_definition": {"type": "null"},
+          "adherence_threshold": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"scope_level": {"const": "overall"}}},
+      "then": {
+        "properties": {"cohort_id": {"type": "null"}, "group_id": {"type": "null"}}
+      }
+    },
+    {
+      "if": {"properties": {"scope_level": {"const": "cohort"}}},
+      "then": {
+        "properties": {"cohort_id": {"type": "string", "minLength": 1}, "group_id": {"type": "null"}}
+      }
+    },
+    {
+      "if": {"properties": {"scope_level": {"const": "group"}}},
+      "then": {
+        "properties": {
+          "cohort_id": {"type": "string", "minLength": 1},
+          "group_id": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  ]
+}

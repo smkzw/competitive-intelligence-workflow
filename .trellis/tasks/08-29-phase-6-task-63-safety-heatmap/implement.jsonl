@@ -1,0 +1,4 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"已批准的 B 类安全性门槛、热图、默认事件和术语映射合同"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"权威 Pydantic 边界失败关闭与 model_copy 对抗要求"}
+{"file":".trellis/spec/guides/code-reuse-thinking-guide.md","reason":"复用披露状态、研究角色与 A 类安全性单位语义"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"固定事实行到后续图表、表格、筛选和证据抽屉的数据流"}

@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0",
+  "criteria_version": "1.0",
+  "verdict_id": "verdict-omp-deepseek-abc1-b",
+  "verdict": "veto",
+  "veto_disposition": "recoverable",
+  "project_id": "project_bbbd448d104ad9c447c52511",
+  "contract_version": "1",
+  "report_kind": "B",
+  "report_version": "v1",
+  "report_object_id": "report_B",
+  "candidate_snapshot_id": "report-snapshot_aff7a7993f02d1552d37046b",
+  "candidate_content_digest": "ad6ef9b5af4663eca037a349e63c36323a4d54b7a9d0e9956f13071cbdc31aca",
+  "gate_result_key": "gate-result_9ee106d0630f80d4411f9a91",
+  "coverage_set_id": "coverage-set_8d30767d34d1b82576285601",
+  "coverage_digest": "6b63d94e050ce6cbaf63e04270d89debcbea5a8ba12be6b83b54a37331c1ce9d",
+  "source_refs": [
+    {
+      "claim_ids": [
+        "claim-pnh-b"
+      ],
+      "fact_version_ids": [
+        "fact-version_f0cccf1d1d5510c3b1ecc7d4",
+        "fact-version_1ae47d4409bf8bbf3a0cd9f3",
+        "fact-version_465ee76898780674a8e584b5",
+        "fact-version_0b89483992e98caffd7c2863",
+        "fact-version_51e16407fcb6bf9e5a9deaca",
+        "fact-version_e036004fca4669e45f3f6a59",
+        "fact-version_69120e9e540b4bfe082e8a77",
+        "fact-version_512ca463693774e3976cc590",
+        "fact-version_6be808522b34fde15caf36fa",
+        "fact-version_ea5047395ae94dd2f73a980f",
+        "fact-version_a5630a765b6765c61c02d0fd",
+        "fact-version_d48ebeda48a148cbb2ca9580",
+        "fact-version_38a6efa24fc4eb8c29ac17ed",
+        "fact-version_2f1dc83d2008d0f1ffddf233",
+        "fact-version_f04aa358d5566705bb3987b5",
+        "fact-version_83b2d16a33be70d6b337169b",
+        "fact-version_f27b58fdfde0a432e47a09d7",
+        "fact-version_9cf5d450dc980d4b52f31754",
+        "fact-version_bacfd2047c23ea5c8ab421d9",
+        "fact-version_3af507cc33488eac256f0484",
+        "fact-version_7ddbc940d70bd93958197a58",
+        "fact-version_80fa5ccaf73a1f5af2023476",
+        "fact-version_1fe87c36838daf13c70ecfd9",
+        "fact-version_50703c90513900af167903b7",
+        "fact-version_cf2d8735c7bdb00f1d87c8a5",
+        "fact-version_74c212b9e67988ae5496792a",
+        "fact-version_eb4ac4684c853203d0e3e5db",
+        "fact-version_a84187cb3e3f4deaa89a90ea",
+        "fact-version_da39103a64f9075cc8f1002b",
+        "fact-version_62b3143c9e520b9d098f3099",
+        "fact-version_7a0c151955c630de6300c58d",
+        "fact-version_0be136ab710e5d8b8455da3f",
+        "fact-version_6c78f8e5a3a68fc9463b2a77",
+        "fact-version_a3839941c87388b696e1c22e",
+        "fact-version_89d1649e8bf9b4f7f422e1fb",
+        "fact-version_481c7cd702a66002358eb599",
+        "fact-version_1bb82059a679f445c9484c14",
+        "fact-version_5ff86c74d85a55c0d694631e",
+        "fact-version_f5660be27818915d95eeeb68",
+        "fact-version_0a1cbf7d38ebfd24e53f3365",
+        "fact-version_40ef7b0059df3b66ffd225ad",
+        "fact-version_760fdfb4e6f2ee4d1b54037f",
+        "fact-version_213da13702c8867959a30a0f",
+        "fact-version_d59a835b48502c592bc108ce",
+        "fact-version_6e78a58ac7b3719883ba295b",
+        "fact-version_4cfb7d4180d7de581a2329d5",
+        "fact-version_ab7dc5d9244b53ffc718c688",
+        "fact-version_64966034458843989c37c09b",
+        "fact-version_a1660dbac52166aaccbc76c0",
+        "fact-version_31451e0140edfb27cde55d4f",
+        "fact-version_6f8832af0746a771bc5ebf46",
+        "fact-version_825434a31a12b50c8fb78a0d",
+        "fact-version_b9ec83b4841e0003991abcd2",
+        "fact-version_335ef16474cb983057085a8c",
+        "fact-version_8d10ee89f053235efb1e8e5f",
+        "fact-version_28bd26f8995b85554c27700b",
+        "fact-version_e5b67fe018de7993c9bf55b4",
+        "fact-version_2cbba01b2e1d12d220315fc1",
+        "fact-version_d9860463fc9f5623bd360038",
+        "fact-version_a14e2e80bd8b2b8295226bff",
+        "fact-version_1c8b257c166c67a999b7affa",
+        "fact-version_26a7cc6ee5d9184e164b8212",
+        "fact-version_bb4c90b8bb2c814cbd0203f0",
+        "fact-version_c824bca9364f77ff2f9befa7",
+        "fact-version_fc58701ef6748bc325c8fc97",
+        "fact-version_9ef8bc86bb2c4ba89d2f9032",
+        "fact-version_37755e473953e2393aca3b82"
+      ],
+      "fragment_ids": [
+        "evidence-fragment_403cdbea3b549b7ee454e3d2"
+      ],
+      "locators": [
+        {
+          "fragment_id": "evidence-fragment_403cdbea3b549b7ee454e3d2",
+          "locator": {
+            "column": null,
+            "document_role": "registry-search-page",
+            "field_path": "studies[]",
+            "heading": null,
+            "page": null,
+            "paragraph": null,
+            "row": null,
+            "table": null,
+            "url": "https://clinicaltrials.gov/"
+          }
+        }
+      ],
+      "source_version_id": "source-version_722a6707f3e108dbe168b50e"
+    }
+  ],
+  "locators": [
+    {
+      "fragment_id": "evidence-fragment_403cdbea3b549b7ee454e3d2",
+      "locator": {
+        "column": null,
+        "document_role": "registry-search-page",
+        "field_path": "studies[]",
+        "heading": null,
+        "page": null,
+        "paragraph": null,
+        "row": null,
+        "table": null,
+        "url": "https://clinicaltrials.gov/"
+      }
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "issue-b-001",
+      "axis": "事实可溯源/科学语义",
+      "severity": "high",
+      "title": "coversin 的 LDH:ULN 比值被渲染为「LDH 水平变化（U/L，较基线）」",
+      "portal_displayed": "疗效结果与纵向结果页：卡片「LDH 水平变化 · 较基线变化 · 第2周 · 登记结果人群 · 语义信息未完整，按试验列示」，单位 U/L，coversin · Coversin in Paroxysmal Nocturnal Haemoglobinuria (PNH)，数值 5.6（行 b-eff-216）。",
+      "source_fact": "CT.gov NCT02591862 结果段终点原文为「Measurement of Ratio of LDH to the Upper Limit of Normal (ULN)」，unitOfMeasure=「Ratio of LDH:ULN (250 U/L)」，paramType=NUMBER，timeFrame=「Day 0 and Day 28」，组内数值 5.6（Day 0）与 1.9；另一终点「Measurement of Lactate Dehydrogenase (LDH) at Baseline, Day 90 and Day 180」同为比值口径（5.6/1.6/1.5）。比值不是 U/L 计的绝对变化量。",
+      "evidence": "evidence/library/b-research-package.json efficacy row b-eff-216: original_definition='Measurement of Ratio of LDH to the Upper Limit of Normal (ULN)', endpoint_family_label_zh='LDH 水平变化', unit='U/L', analysis_form='change_from_baseline', actual_timepoint=2.0 week; 对照 https://clinicaltrials.gov/api/v2/studies/NCT02591862 resultsSection.outcomeMeasuresModule",
+      "impact": "医学读者会把 5.6 读成「LDH 较基线下降 5.6 U/L」，与登记来源的比值口径不符；同时时间点由 Day 0 被改写为第2周。",
+      "required_fix": "按来源口径重定终点族与单位（比值不得标 U/L），或将该行降级为「语义未定」并在门户内展示来源终点原文与真实时间点。"
+    },
+    {
+      "issue_id": "issue-b-002",
+      "axis": "事实可溯源/科学语义",
+      "severity": "high",
+      "title": "coversin 的不良事件终点被渲染为疗效页上的「事件发生率」",
+      "portal_displayed": "疗效结果与纵向结果页：卡片「PNH 登记通用观察 · 事件发生率 · 第104.286周 · 登记结果人群」，单位 Participants，数值 2（行 b-eff-217），direction=higher_is_better。",
+      "source_fact": "CT.gov NCT02591862 终点原文为「Number and Type of Adverse Events (AE)」，类型 PRIMARY，unitOfMeasure=「Events」，timeFrame=「2 years」，按 AE 类型分别计数（2/20/13/1/1/18），并非单一事件发生率，也不是疗效指标。",
+      "evidence": "evidence/library/b-research-package.json efficacy row b-eff-217: original_definition='Number and Type of Adverse Events (AE)', analysis_form='event_rate', unit='Participants', value=2.0; 对照 CT.gov NCT02591862 outcomeMeasuresModule 同名终点",
+      "impact": "安全性计数被置于「疗效结果」页并冠以「事件发生率」，属跨域错置；单一数值 2 亦丢失了「按类型分列」的来源语义。",
+      "required_fix": "把 AE 类终点移出疗效域（或明确标注为安全性口径），并保留「按类型分列」的来源结构。"
+    },
+    {
+      "issue_id": "issue-b-003",
+      "axis": "事实可溯源/诚实边界",
+      "severity": "high",
+      "title": "eculizumab 的 TEAE 计数被渲染为「PNH 登记通用观察 · 事件发生率」，且证据抽屉隐藏来源终点原文",
+      "portal_displayed": "疗效结果与纵向结果页：卡片「PNH 登记通用观察 · 事件发生率 · 第64周」，单位 Participants，数值 23；证据抽屉「终点/事件/设计要素：PNH 登记通用观察」「单位：Participants」「简短原文：原文未提供」「原文定位 → 打开原文（https://clinicaltrials.gov/）」。",
+      "source_fact": "CT.gov NCT05886244 终点原文为「Number of Participants With Treatment-emergent Adverse Events (TEAEs)」（SECONDARY，unitOfMeasure=Participants，paramType=COUNT_OF_PARTICIPANTS，timeFrame=「Baseline through Week 64」），数值 23，分母 25。",
+      "evidence": "evidence/library/b-research-package.json efficacy row b-eff-107: original_definition='Number of Participants With Treatment-emergent Adverse Events (TEAEs)', value=23.0, unit='Participants', analysis_form='event_rate'; 抽屉文本取自浏览器渲染 reports/B/v1/html/efficacy.html（tab.evaluate 读取 body.innerText，data-evidence-open=\"b-eff-107\"）",
+      "impact": "同一试验的真实安全性终点（TEAE 23/25）在疗效页仅以「登记通用观察」出现，且抽屉不展示来源终点原文、短原文缺席，医学读者在门户内无法判断该数值实为安全性计数。",
+      "required_fix": "门户证据抽屉须展示来源终点原文（包内 original_definition 已具备）与逐记录来源链接；不得以「通用观察」标签替代可获取的终点语义。"
+    },
+    {
+      "issue_id": "issue-b-004",
+      "axis": "事实可溯源/单位口径",
+      "severity": "medium",
+      "title": "danicopan 的输血回避百分比被标注为「Participants」单位",
+      "portal_displayed": "疗效结果页：卡片「输血回避/输血量 · 应答率 · 约第12周」，纵轴单位「Participants」，数值 83.3 与 38.1（行 b-eff-139/b-eff-140，NCT04469465，Danicopan (TP1) 组与 Placebo (TP1) 组）。",
+      "source_fact": "CT.gov NCT04469465 同名终点为「Percentage of Participants With Transfusion Avoidance Through Week 12」，unitOfMeasure=「percentage of participants」，数值 83.3 与 38.1。",
+      "evidence": "evidence/library/b-research-package.json: b-eff-139 unit='Participants'（analysis_form='response_rate'），对照 CT.gov NCT04469465 outcomeMeasuresModule 同名终点 unitOfMeasure；同一试验的 b-eff-137（59.5）单位被标为 percent，单位口径自相矛盾",
+      "impact": "百分数被读作「83.3 名受试者」，且与同试验另一应答率行的单位标注不一致。",
+      "required_fix": "按来源 unitOfMeasure 归一（percentage of participants → percent），并复核全部 unit 传播路径，使同试验同口径行的单位一致。"
+    },
+    {
+      "issue_id": "issue-b-005",
+      "axis": "科学诚实性/渲染口径",
+      "severity": "medium",
+      "title": "计数型（例）安全性热图使用硬编码百分号刻度图例",
+      "portal_displayed": "安全性页热图卡片：数值标签为计数（如 9、7、3、1），可视映射图例文本为「<最大值>%」与「0%」，页首说明亦称「颜色深浅仅表示同一图内发生率高低」。",
+      "source_fact": "该页承载的行为安全结果计数，unit=「例」（分子 9/分母 25、3/26、3/8、1/1、3/86、7/29），并非百分率。",
+      "evidence": "reports/B/v1/html/assets/charts.js:670 visualMap.text = [String(maxAbs)+\"%\", \"0%\"]（与 unit 无关硬编码）；浏览器渲染安全性页 svg 文本出现「3」「0%」「3%」；数据见 evidence/library/b-research-package.json safety rows bsafe-safe-38/47/49/66/75/79",
+      "impact": "计数被百分号刻度标注，读者会按百分比理解图中深浅与图例，属口径误述而非披露缺口。",
+      "required_fix": "热图图例随 unit 渲染（计数用「例」，比率用「%」），或在无分母一致口径时禁用百分比刻度。"
+    }
+  ],
+  "reviewer_id": "omp-cms-router-deepseekflash-max",
+  "review_input_digest": "24d84ffb2eb5a6a4c64c28af6f9bc58fca6e69d3a831a3684193560b6d9fef55",
+  "reviewed_at": "2026-09-18T18:41:20.167634+00:00",
+  "valid_until": "2026-10-18T18:41:20.167634+00:00",
+  "verified_checks": [
+    "数值层可溯源：evidence/library/b-research-package.json 的 26 条疗效行与 6 条安全行数值全部在对应 CT.gov 记录结果段中命中（本次对 NCT05886244/NCT04469465/NCT02605993/NCT03181633/NCT02591862/NCT04170023 逐条比对 resultsSection）；抽查示例：-76.5（NCT05886244 LDH 第12周百分比变化）、23/25（TEAE）、29.40 g/L 与 4.96 g/L（NCT04469465 第12周 Hgb 变化，Interim Efficacy Analysis）、9/25（NCT05886244 SAE）、-72.85（NCT02605993 LDH 第253天）。",
+    "声明绑定：claims[claim-pnh-b].fact_ids 共 61 项，全部解析到包内 facts；review_request.scientific_context.source_refs 的 67 个 fact_version_ids 亦均在包内核验。",
+    "诚实边界：adherence/loss-exit/screen-failure/plan-deviation/prohibited-medication/rescue-treatment/participant-flow/disposition-overview 及 baseline-disease-context/supporting-evidence 页均渲染「暂无公开记录（…）本页没有可接受的专属记录，未以其他结果页替代」，无空图表墙、无占位符、无零值墙；疗效与安全性矩阵页渲染「该指标结果尚未公开」。",
+    "中文原生：门户导航、卡片标题、抽屉字段标签、披露状态措辞均为中文；未在用户可见文本中发现内部标识（claim-pnh-b、fact-*、ctgov-pnh-page-*、registry-endpoint-family-*、schema_version 仅存在于页面内嵌 JSON 负载，未经渲染）。",
+    "已知限制确认：B 报告宇宙为 6 项基线完整试验（complete_set），中国路线访问受阻（G7-2）已在包内 scientific_review.observations 与门户来源脚注如实记档；该等边界本身不构成否决理由。",
+    "门户绑定：reports/B/v1/html.manifest.json 实际 sha256 与 review_request.portal_binding.manifest_sha256 一致（ddc68389156ca82a8b6ce7527ef45ea546dc1bca197b3b15ee0d001acb970dd1）。"
+  ],
+  "verdict_summary": "抽查 5 类判据中，数值溯源、声明绑定、诚实边界、中文原生四项通过；但用户可见的疗效/安全性渲染存在 5 处与 CT.gov 来源口径不符的语义与单位错误（含安全性计数置于疗效页、LDH:ULN 比值标为 U/L 变化、百分数标为 Participants、计数热图使用 % 图例），且证据抽屉隐藏来源终点原文，故否决。缺陷局限于端点族分类、单位传播、时间点与分析形式映射与图表注解，包内事实与来源原文齐备，可在不新增证据获取的前提下修复并重渲染，故判为可恢复。"
+}

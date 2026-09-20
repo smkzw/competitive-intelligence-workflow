@@ -1,0 +1,1018 @@
+{
+  "schema_version": "1.0",
+  "report": "A",
+  "pdf": ".artifacts/pdf-complete/reports/A/v-fixture-001/report.pdf",
+  "pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+  "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+  "expected_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+  "page_count": 10,
+  "expected_page_count": 10,
+  "source_pdf": {
+    "path": ".artifacts/pdf-complete/reports/A/v-fixture-001/report.pdf",
+    "sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+    "bytes": 257509,
+    "locked_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+    "locked_page_count": 10
+  },
+  "binding": {
+    "source_pdf": {
+      "path": ".artifacts/pdf-complete/reports/A/v-fixture-001/report.pdf",
+      "sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "bytes": 257509,
+      "locked_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "locked_page_count": 10
+    },
+    "page_count": 10,
+    "full_text": {
+      "path": "docs/acceptance/runs/8.3/verification/A/pdftotext_full.txt",
+      "sha256": "f9f688c790020198f8bf70fa65eaa4a5a774588ffb2ff2d229f35d72f3c34fe7",
+      "bytes": 17470
+    },
+    "pages": [
+      {
+        "page": 1,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-01.txt",
+        "text_sha256": "f9e4504b907a400cb4a0c14306444f2147659dcaa03895d0c56a571e9f7d1305",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-01.png",
+        "render_sha256": "b63b0321c53eb6924df5d0ebcd0af8029235f8db1d698a37a58d2c0ac9d077f3",
+        "page_number": 1,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 2,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-02.txt",
+        "text_sha256": "c748612ecb1373af19c392268ac5c47f839af98b01c59751087817c13ce1f622",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-02.png",
+        "render_sha256": "167d27329f253511791c24d736b87de68c2c7985e5ee0737a25c577ba63f618f",
+        "page_number": 2,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 3,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-03.txt",
+        "text_sha256": "04a03fcbee8f40e50b8c21e4abfc50eba3f61e472fcb4f067877926ba6a3ded4",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-03.png",
+        "render_sha256": "6a7083b55a95acff48c84383e6ec252e0eaa41c4cedab726e8ea3d873fa17894",
+        "page_number": 3,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 4,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-04.txt",
+        "text_sha256": "a9bf47b599a7ccb511906a28df2612dc79be58f6e596060d81acbb9e4262277c",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-04.png",
+        "render_sha256": "41d9575bffb2427db4a7596ba3bed89d192542bfeb521216f3080935603d3fe9",
+        "page_number": 4,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 5,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-05.txt",
+        "text_sha256": "630b3246607e40a58424645c51cb7e7c76f32336a43456e1da7154a94de6070c",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-05.png",
+        "render_sha256": "ffe65090a852a1a7ae2d566e9cdb9115726aa2f2809ee45525eadd3070e5bfee",
+        "page_number": 5,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 6,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-06.txt",
+        "text_sha256": "f6e8aa2cc955bd3bebe295e67ea7474f1b33710506a7cc98623cb63c7939e663",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-06.png",
+        "render_sha256": "5d2c62541e9ff0ccbd473bb958b14f7d581a8bab11e3f341a8121d3d3a85656b",
+        "page_number": 6,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 7,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-07.txt",
+        "text_sha256": "6d35cf2727f7395115e22bcc08361976389209881406394b3946857e781e548d",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-07.png",
+        "render_sha256": "7ee754aee995ac6c7987783a48f6b943725f3e5533678b3dbf2cdc3dbf34ad80",
+        "page_number": 7,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 8,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-08.txt",
+        "text_sha256": "ac54e9e2f15149e94ca2f9e8dfee92b229fd82b586c266f64450989ae69e8e68",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-08.png",
+        "render_sha256": "78121c9e08e348f332bf5b500acb29eb384b3eb66d09f9f790a7f9cfa7ae7b73",
+        "page_number": 8,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": true
+      },
+      {
+        "page": 9,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-09.txt",
+        "text_sha256": "3a26501af4593af011e62ec526d71fba57bdb7ccf296456d62e59c16497afe0f",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-09.png",
+        "render_sha256": "9df53b7d1b3b67d73a990e7d1906b3e978d44835ab8e75f24ede39a40b7ccd8e",
+        "page_number": 9,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "landscape",
+        "is_a4": true,
+        "continued_table": false
+      },
+      {
+        "page": 10,
+        "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-10.txt",
+        "text_sha256": "8518d291d4912348c74e7df725361d98be52b95e87ca291716377ce5e20de8db",
+        "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-10.png",
+        "render_sha256": "40c215086028cf0cb881f53d802a9e822e13fd45f418fe66fe00864b8c5d7931",
+        "page_number": 10,
+        "page_number_ok": true,
+        "header_footer_ok": true,
+        "orientation": "portrait",
+        "is_a4": true,
+        "continued_table": false
+      }
+    ],
+    "contact_sheet_sha256": "32a66a2fa15206a92c2719e6ad8d6b6587735dd6876686e51cd0e31d104b6046",
+    "digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+  },
+  "text_engine": "pdftotext",
+  "page_text_engine": "pdftotext",
+  "full_text": {
+    "path": "docs/acceptance/runs/8.3/verification/A/pdftotext_full.txt",
+    "sha256": "f9f688c790020198f8bf70fa65eaa4a5a774588ffb2ff2d229f35d72f3c34fe7",
+    "bytes": 17470
+  },
+  "render": {
+    "engine": "pdftoppm",
+    "dpi": 120,
+    "pages": [
+      {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-01.png",
+        "sha256": "b63b0321c53eb6924df5d0ebcd0af8029235f8db1d698a37a58d2c0ac9d077f3",
+        "bytes": 37085,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-02.png",
+        "sha256": "167d27329f253511791c24d736b87de68c2c7985e5ee0737a25c577ba63f618f",
+        "bytes": 57896,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-03.png",
+        "sha256": "6a7083b55a95acff48c84383e6ec252e0eaa41c4cedab726e8ea3d873fa17894",
+        "bytes": 118896,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-04.png",
+        "sha256": "41d9575bffb2427db4a7596ba3bed89d192542bfeb521216f3080935603d3fe9",
+        "bytes": 183086,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-05.png",
+        "sha256": "ffe65090a852a1a7ae2d566e9cdb9115726aa2f2809ee45525eadd3070e5bfee",
+        "bytes": 189281,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-06.png",
+        "sha256": "5d2c62541e9ff0ccbd473bb958b14f7d581a8bab11e3f341a8121d3d3a85656b",
+        "bytes": 186532,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-07.png",
+        "sha256": "7ee754aee995ac6c7987783a48f6b943725f3e5533678b3dbf2cdc3dbf34ad80",
+        "bytes": 173269,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-08.png",
+        "sha256": "78121c9e08e348f332bf5b500acb29eb384b3eb66d09f9f790a7f9cfa7ae7b73",
+        "bytes": 112492,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-09.png",
+        "sha256": "9df53b7d1b3b67d73a990e7d1906b3e978d44835ab8e75f24ede39a40b7ccd8e",
+        "bytes": 122203,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-10.png",
+        "sha256": "40c215086028cf0cb881f53d802a9e822e13fd45f418fe66fe00864b8c5d7931",
+        "bytes": 156774,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      }
+    ]
+  },
+  "bookmarks": [
+    "封面",
+    "目录",
+    "首页摘要",
+    "竞争格局",
+    "产品总览",
+    "临床开发组合",
+    "中国与全球监管",
+    "企业与交易",
+    "专利与保护",
+    "疗效",
+    "安全性",
+    "疗效与安全性矩阵",
+    "历史与边缘观察",
+    "研究依据与局限"
+  ],
+  "pages": [
+    {
+      "page": 1,
+      "page_number": 1,
+      "page_number_marker": 1,
+      "expected_page_number": 1,
+      "page_number_ok": true,
+      "page_markers": [
+        1
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 1 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 1
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 106,
+      "text": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-01.txt",
+        "sha256": "f9e4504b907a400cb4a0c14306444f2147659dcaa03895d0c56a571e9f7d1305",
+        "bytes": 218
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-01.png",
+        "sha256": "b63b0321c53eb6924df5d0ebcd0af8029235f8db1d698a37a58d2c0ac9d077f3",
+        "bytes": 37085,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 1,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-01.png",
+        "sha256": "b63b0321c53eb6924df5d0ebcd0af8029235f8db1d698a37a58d2c0ac9d077f3",
+        "bytes": 37085,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-01.txt",
+      "text_sha256": "f9e4504b907a400cb4a0c14306444f2147659dcaa03895d0c56a571e9f7d1305",
+      "text_bytes": 218,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-01.png",
+      "render_sha256": "b63b0321c53eb6924df5d0ebcd0af8029235f8db1d698a37a58d2c0ac9d077f3",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-01.png",
+      "image_sha256": "b63b0321c53eb6924df5d0ebcd0af8029235f8db1d698a37a58d2c0ac9d077f3",
+      "image_bytes": 37085,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 2,
+      "page_number": 2,
+      "page_number_marker": 2,
+      "expected_page_number": 2,
+      "page_number_ok": true,
+      "page_markers": [
+        2
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 2 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 2
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 196,
+      "text": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-02.txt",
+        "sha256": "c748612ecb1373af19c392268ac5c47f839af98b01c59751087817c13ce1f622",
+        "bytes": 453
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-02.png",
+        "sha256": "167d27329f253511791c24d736b87de68c2c7985e5ee0737a25c577ba63f618f",
+        "bytes": 57896,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 2,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-02.png",
+        "sha256": "167d27329f253511791c24d736b87de68c2c7985e5ee0737a25c577ba63f618f",
+        "bytes": 57896,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-02.txt",
+      "text_sha256": "c748612ecb1373af19c392268ac5c47f839af98b01c59751087817c13ce1f622",
+      "text_bytes": 453,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-02.png",
+      "render_sha256": "167d27329f253511791c24d736b87de68c2c7985e5ee0737a25c577ba63f618f",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-02.png",
+      "image_sha256": "167d27329f253511791c24d736b87de68c2c7985e5ee0737a25c577ba63f618f",
+      "image_bytes": 57896,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 3,
+      "page_number": 3,
+      "page_number_marker": 3,
+      "expected_page_number": 3,
+      "page_number_ok": true,
+      "page_markers": [
+        3
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 3 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 3
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 587,
+      "text": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-03.txt",
+        "sha256": "04a03fcbee8f40e50b8c21e4abfc50eba3f61e472fcb4f067877926ba6a3ded4",
+        "bytes": 1064
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-03.png",
+        "sha256": "6a7083b55a95acff48c84383e6ec252e0eaa41c4cedab726e8ea3d873fa17894",
+        "bytes": 118896,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 3,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-03.png",
+        "sha256": "6a7083b55a95acff48c84383e6ec252e0eaa41c4cedab726e8ea3d873fa17894",
+        "bytes": 118896,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-03.txt",
+      "text_sha256": "04a03fcbee8f40e50b8c21e4abfc50eba3f61e472fcb4f067877926ba6a3ded4",
+      "text_bytes": 1064,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-03.png",
+      "render_sha256": "6a7083b55a95acff48c84383e6ec252e0eaa41c4cedab726e8ea3d873fa17894",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-03.png",
+      "image_sha256": "6a7083b55a95acff48c84383e6ec252e0eaa41c4cedab726e8ea3d873fa17894",
+      "image_bytes": 118896,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 4,
+      "page_number": 4,
+      "page_number_marker": 4,
+      "expected_page_number": 4,
+      "page_number_ok": true,
+      "page_markers": [
+        4
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 4 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 4
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1527,
+      "text": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-04.txt",
+        "sha256": "a9bf47b599a7ccb511906a28df2612dc79be58f6e596060d81acbb9e4262277c",
+        "bytes": 2360
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-04.png",
+        "sha256": "41d9575bffb2427db4a7596ba3bed89d192542bfeb521216f3080935603d3fe9",
+        "bytes": 183086,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 4,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-04.png",
+        "sha256": "41d9575bffb2427db4a7596ba3bed89d192542bfeb521216f3080935603d3fe9",
+        "bytes": 183086,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-04.txt",
+      "text_sha256": "a9bf47b599a7ccb511906a28df2612dc79be58f6e596060d81acbb9e4262277c",
+      "text_bytes": 2360,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-04.png",
+      "render_sha256": "41d9575bffb2427db4a7596ba3bed89d192542bfeb521216f3080935603d3fe9",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-04.png",
+      "image_sha256": "41d9575bffb2427db4a7596ba3bed89d192542bfeb521216f3080935603d3fe9",
+      "image_bytes": 183086,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 5,
+      "page_number": 5,
+      "page_number_marker": 5,
+      "expected_page_number": 5,
+      "page_number_ok": true,
+      "page_markers": [
+        5
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 5 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 5
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2032,
+      "text": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-05.txt",
+        "sha256": "630b3246607e40a58424645c51cb7e7c76f32336a43456e1da7154a94de6070c",
+        "bytes": 2951
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-05.png",
+        "sha256": "ffe65090a852a1a7ae2d566e9cdb9115726aa2f2809ee45525eadd3070e5bfee",
+        "bytes": 189281,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 5,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-05.png",
+        "sha256": "ffe65090a852a1a7ae2d566e9cdb9115726aa2f2809ee45525eadd3070e5bfee",
+        "bytes": 189281,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-05.txt",
+      "text_sha256": "630b3246607e40a58424645c51cb7e7c76f32336a43456e1da7154a94de6070c",
+      "text_bytes": 2951,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-05.png",
+      "render_sha256": "ffe65090a852a1a7ae2d566e9cdb9115726aa2f2809ee45525eadd3070e5bfee",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-05.png",
+      "image_sha256": "ffe65090a852a1a7ae2d566e9cdb9115726aa2f2809ee45525eadd3070e5bfee",
+      "image_bytes": 189281,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 6,
+      "page_number": 6,
+      "page_number_marker": 6,
+      "expected_page_number": 6,
+      "page_number_ok": true,
+      "page_markers": [
+        6
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 6 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 6
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 2571,
+      "text": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-06.txt",
+        "sha256": "f6e8aa2cc955bd3bebe295e67ea7474f1b33710506a7cc98623cb63c7939e663",
+        "bytes": 3278
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-06.png",
+        "sha256": "5d2c62541e9ff0ccbd473bb958b14f7d581a8bab11e3f341a8121d3d3a85656b",
+        "bytes": 186532,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 6,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-06.png",
+        "sha256": "5d2c62541e9ff0ccbd473bb958b14f7d581a8bab11e3f341a8121d3d3a85656b",
+        "bytes": 186532,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-06.txt",
+      "text_sha256": "f6e8aa2cc955bd3bebe295e67ea7474f1b33710506a7cc98623cb63c7939e663",
+      "text_bytes": 3278,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-06.png",
+      "render_sha256": "5d2c62541e9ff0ccbd473bb958b14f7d581a8bab11e3f341a8121d3d3a85656b",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-06.png",
+      "image_sha256": "5d2c62541e9ff0ccbd473bb958b14f7d581a8bab11e3f341a8121d3d3a85656b",
+      "image_bytes": 186532,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 7,
+      "page_number": 7,
+      "page_number_marker": 7,
+      "expected_page_number": 7,
+      "page_number_ok": true,
+      "page_markers": [
+        7
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 7 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 7
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1424,
+      "text": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-07.txt",
+        "sha256": "6d35cf2727f7395115e22bcc08361976389209881406394b3946857e781e548d",
+        "bytes": 2217
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-07.png",
+        "sha256": "7ee754aee995ac6c7987783a48f6b943725f3e5533678b3dbf2cdc3dbf34ad80",
+        "bytes": 173269,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 7,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-07.png",
+        "sha256": "7ee754aee995ac6c7987783a48f6b943725f3e5533678b3dbf2cdc3dbf34ad80",
+        "bytes": 173269,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-07.txt",
+      "text_sha256": "6d35cf2727f7395115e22bcc08361976389209881406394b3946857e781e548d",
+      "text_bytes": 2217,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-07.png",
+      "render_sha256": "7ee754aee995ac6c7987783a48f6b943725f3e5533678b3dbf2cdc3dbf34ad80",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-07.png",
+      "image_sha256": "7ee754aee995ac6c7987783a48f6b943725f3e5533678b3dbf2cdc3dbf34ad80",
+      "image_bytes": 173269,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 8,
+      "page_number": 8,
+      "page_number_marker": 8,
+      "expected_page_number": 8,
+      "page_number_ok": true,
+      "page_markers": [
+        8
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 8 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 8
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": true,
+      "is_continued_table": true,
+      "has_chinese_text": true,
+      "text_chars": 752,
+      "text": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-08.txt",
+        "sha256": "ac54e9e2f15149e94ca2f9e8dfee92b229fd82b586c266f64450989ae69e8e68",
+        "bytes": 1266
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-08.png",
+        "sha256": "78121c9e08e348f332bf5b500acb29eb384b3eb66d09f9f790a7f9cfa7ae7b73",
+        "bytes": 112492,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 8,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-08.png",
+        "sha256": "78121c9e08e348f332bf5b500acb29eb384b3eb66d09f9f790a7f9cfa7ae7b73",
+        "bytes": 112492,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-08.txt",
+      "text_sha256": "ac54e9e2f15149e94ca2f9e8dfee92b229fd82b586c266f64450989ae69e8e68",
+      "text_bytes": 1266,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-08.png",
+      "render_sha256": "78121c9e08e348f332bf5b500acb29eb384b3eb66d09f9f790a7f9cfa7ae7b73",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-08.png",
+      "image_sha256": "78121c9e08e348f332bf5b500acb29eb384b3eb66d09f9f790a7f9cfa7ae7b73",
+      "image_bytes": 112492,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 9,
+      "page_number": 9,
+      "page_number_marker": 9,
+      "expected_page_number": 9,
+      "page_number_ok": true,
+      "page_markers": [
+        9
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 9 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 9
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        841.8898,
+        595.2756
+      ],
+      "is_a4": true,
+      "orientation": "landscape",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 1489,
+      "text": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-09.txt",
+        "sha256": "3a26501af4593af011e62ec526d71fba57bdb7ccf296456d62e59c16497afe0f",
+        "bytes": 1938
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-09.png",
+        "sha256": "9df53b7d1b3b67d73a990e7d1906b3e978d44835ab8e75f24ede39a40b7ccd8e",
+        "bytes": 122203,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 9,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-09.png",
+        "sha256": "9df53b7d1b3b67d73a990e7d1906b3e978d44835ab8e75f24ede39a40b7ccd8e",
+        "bytes": 122203,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-09.txt",
+      "text_sha256": "3a26501af4593af011e62ec526d71fba57bdb7ccf296456d62e59c16497afe0f",
+      "text_bytes": 1938,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-09.png",
+      "render_sha256": "9df53b7d1b3b67d73a990e7d1906b3e978d44835ab8e75f24ede39a40b7ccd8e",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-09.png",
+      "image_sha256": "9df53b7d1b3b67d73a990e7d1906b3e978d44835ab8e75f24ede39a40b7ccd8e",
+      "image_bytes": 122203,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    },
+    {
+      "page": 10,
+      "page_number": 10,
+      "page_number_marker": 10,
+      "expected_page_number": 10,
+      "page_number_ok": true,
+      "page_markers": [
+        10
+      ],
+      "header_footer": {
+        "present": true,
+        "text": "特应性皮炎竞品全景 · 第 10 页",
+        "title": "特应性皮炎竞品全景",
+        "page_number": 10
+      },
+      "has_header_footer": true,
+      "header_footer_ok": true,
+      "size_points": [
+        595.2756,
+        841.8898
+      ],
+      "is_a4": true,
+      "orientation": "portrait",
+      "continued_table": false,
+      "is_continued_table": false,
+      "has_chinese_text": true,
+      "text_chars": 954,
+      "text": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/A/page-text/page-10.txt",
+        "sha256": "8518d291d4912348c74e7df725361d98be52b95e87ca291716377ce5e20de8db",
+        "bytes": 1715
+      },
+      "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+      "render": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-10.png",
+        "sha256": "40c215086028cf0cb881f53d802a9e822e13fd45f418fe66fe00864b8c5d7931",
+        "bytes": 156774,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "raw_page_image": {
+        "page": 10,
+        "path": "docs/acceptance/runs/8.3/verification/A/renders/page-10.png",
+        "sha256": "40c215086028cf0cb881f53d802a9e822e13fd45f418fe66fe00864b8c5d7931",
+        "bytes": 156774,
+        "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7"
+      },
+      "text_path": "docs/acceptance/runs/8.3/verification/A/page-text/page-10.txt",
+      "text_sha256": "8518d291d4912348c74e7df725361d98be52b95e87ca291716377ce5e20de8db",
+      "text_bytes": 1715,
+      "render_path": "docs/acceptance/runs/8.3/verification/A/renders/page-10.png",
+      "render_sha256": "40c215086028cf0cb881f53d802a9e822e13fd45f418fe66fe00864b8c5d7931",
+      "image_path": "docs/acceptance/runs/8.3/verification/A/renders/page-10.png",
+      "image_sha256": "40c215086028cf0cb881f53d802a9e822e13fd45f418fe66fe00864b8c5d7931",
+      "image_bytes": 156774,
+      "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+    }
+  ],
+  "page_checks": {
+    "all_page_numbers": true,
+    "all_header_footer": true,
+    "all_a4": true,
+    "continued_table_pages": [
+      8
+    ]
+  },
+  "contact_sheet": {
+    "path": "docs/acceptance/runs/8.3/verification/A/contact-sheet.png",
+    "sha256": "32a66a2fa15206a92c2719e6ad8d6b6587735dd6876686e51cd0e31d104b6046",
+    "bytes": 95252,
+    "page_count": 10,
+    "columns": 4,
+    "rows": 3,
+    "tile_size": [
+      320,
+      420
+    ],
+    "source_pdf_sha256": "b5e224cf2a558154a024c8b43e5211353abd5dead77455c541a4e84d20f53bf7",
+    "binding_digest": "b50889a5ba9d5b3daef88884ccfcfaafe82745b715e1bddbf199a581e7d1468b"
+  },
+  "coverage": {
+    "report": "A",
+    "expected_page_count": 12,
+    "registry_page_count": 12,
+    "covered_page_ids": [
+      "overview",
+      "landscape",
+      "product-overview",
+      "clinical-portfolio",
+      "efficacy",
+      "safety",
+      "matrix",
+      "regulatory",
+      "companies-transactions",
+      "patents-protection",
+      "historical-edge",
+      "evidence-limitations"
+    ],
+    "missing_page_ids": [],
+    "unexpected_bookmark_titles": [],
+    "pages": [
+      {
+        "page_responsibility_id": "overview",
+        "title_zh": "首页",
+        "covered": true,
+        "evidence": [
+          "bookmark:overview",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "landscape",
+        "title_zh": "竞争格局",
+        "covered": true,
+        "evidence": [
+          "bookmark:landscape",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "product-overview",
+        "title_zh": "产品总览",
+        "covered": true,
+        "evidence": [
+          "bookmark:product-overview",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "clinical-portfolio",
+        "title_zh": "临床开发组合",
+        "covered": true,
+        "evidence": [
+          "bookmark:clinical-portfolio",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "efficacy",
+        "title_zh": "疗效",
+        "covered": true,
+        "evidence": [
+          "bookmark:efficacy",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "safety",
+        "title_zh": "安全性",
+        "covered": true,
+        "evidence": [
+          "bookmark:safety",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "matrix",
+        "title_zh": "疗效与安全性矩阵",
+        "covered": true,
+        "evidence": [
+          "bookmark:matrix",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "regulatory",
+        "title_zh": "中国与全球监管",
+        "covered": true,
+        "evidence": [
+          "bookmark:regulatory",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "companies-transactions",
+        "title_zh": "企业与交易",
+        "covered": true,
+        "evidence": [
+          "bookmark:companies-transactions",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "patents-protection",
+        "title_zh": "专利与保护",
+        "covered": true,
+        "evidence": [
+          "bookmark:patents-protection",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "historical-edge",
+        "title_zh": "历史与边缘观察",
+        "covered": true,
+        "evidence": [
+          "bookmark:historical-edge",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      },
+      {
+        "page_responsibility_id": "evidence-limitations",
+        "title_zh": "研究依据与局限",
+        "covered": true,
+        "evidence": [
+          "bookmark:evidence-limitations",
+          "text_needle"
+        ],
+        "missing_reasons": []
+      }
+    ],
+    "forbidden_markers_found": [],
+    "has_continued_table_marker": true,
+    "differences_approved": false,
+    "ok": true
+  },
+  "defects": [],
+  "ok": true
+}

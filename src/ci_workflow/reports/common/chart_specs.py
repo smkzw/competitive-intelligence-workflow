@@ -5,7 +5,7 @@ Task 4.1 合同：一个模块只能接收一个不可变筛选行集，并确�
 空筛选保持为空，不扩宽作用域；行集摘要是格式覆盖投影中"图表等价"例外
 证据的锚点。
 
-Task 4.4 合同：九类图形类型化注册、可比性维度分组、稳定小多图拆分。
+Task 4.4 合同：八类图形类型化注册、可比性维度分组、稳定小多图拆分。
 行只携带稳定科学身份，消费方只能经 ``report_snapshot_id`` 的锁定快照
 取值，且任何层都无法替换行内容。披露缺失状态（not_reported 等）以非数值
 状态保留，不得转 0。治疗/对照角色与分母为组内展示语境，不触发拆图。
@@ -170,7 +170,7 @@ _CHART_ANNOTATION_KEYS: frozenset[str] = frozenset({"_chart_type", "renderable"}
 
 
 class ChartType(StrEnum):
-    """九类临床数据图形类型。"""
+    """八类临床数据图形类型。"""
 
     BAR = "bar"
     LINE = "line"
@@ -179,7 +179,6 @@ class ChartType(StrEnum):
     BUBBLE = "bubble"
     SCATTER_INTERVAL = "scatter_interval"
     TIMELINE = "timeline"
-    RADAR = "radar"
     STATUS_MATRIX = "status_matrix"
 
 
@@ -250,11 +249,6 @@ def _register_defaults() -> None:
             chart_type="timeline",
             required_fields=("time", "status"),
             display_contract_zh="时间线",
-        ),
-        ChartSpec(
-            chart_type="radar",
-            required_fields=("dimensions", "scores"),
-            display_contract_zh="雷达图",
         ),
         ChartSpec(
             chart_type="status_matrix",
@@ -415,13 +409,6 @@ def _validate_renderable_fields(row: dict[str, Any], chart_type: ChartType) -> N
         if size <= 0:
             raise ValueError("气泡图 size 必须 > 0")
 
-    if chart_type is ChartType.RADAR:
-        dimensions = row["dimensions"]
-        scores = row["scores"]
-        if not isinstance(dimensions, (list, tuple)) or not isinstance(scores, (list, tuple)):
-            raise ValueError("雷达图 dimensions 与 scores 必须为序列")
-        if len(dimensions) != len(scores):
-            raise ValueError("雷达图 dimensions 与 scores 长度不一致")
 
 
 def resolve_chart_type(

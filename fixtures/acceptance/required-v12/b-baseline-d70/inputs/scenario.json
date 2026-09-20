@@ -1,0 +1,41 @@
+{
+  "case_id": "b-baseline-d70",
+  "source_fixture": "fixtures/synthetic/b-d70-baseline-recovered/inputs/report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "B 基线观察按试验、组别、变量、统计形式、量表语境和基线时间独立闭合。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "baseline-age-block-recover",
+      "description_zh": "组别年龄缺失先阻断，补件后恢复。"
+    },
+    {
+      "id": "baseline-sex-block-recover",
+      "description_zh": "组别性别缺失独立阻断并在补件后恢复。"
+    },
+    {
+      "id": "baseline-severity-block-recover",
+      "description_zh": "疾病严重度锚定缺失独立阻断并在补件后恢复。"
+    },
+    {
+      "id": "mean-median-split",
+      "description_zh": "均值与中位数为不同统计形式，不合并。"
+    },
+    {
+      "id": "age-bin-demographic-category-split",
+      "description_zh": "年龄分箱与人口学类别分开建模和展示。"
+    },
+    {
+      "id": "scale-version-direction-split",
+      "description_zh": "量表版本或方向不兼容时拆分，不改写原值。"
+    },
+    {
+      "id": "baseline-time-split",
+      "description_zh": "基线时间定义不兼容时拆分，不借用其他时间点。"
+    }
+  ]
+}

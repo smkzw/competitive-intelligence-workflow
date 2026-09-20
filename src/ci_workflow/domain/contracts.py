@@ -59,13 +59,11 @@ class ProjectContract(BaseModel):
 
     @field_validator("outputs")
     @classmethod
-    def _outputs_start_with_html_and_are_unique(
+    def _outputs_are_html_only(
         cls, value: tuple[OutputFormat, ...]
     ) -> tuple[OutputFormat, ...]:
-        if not value or value[0] is not OutputFormat.HTML:
-            raise ValueError("站点式 HTML 必须是默认交付物")
-        if len(value) != len(set(value)):
-            raise ValueError("交付格式不能重复")
+        if value != (OutputFormat.HTML,):
+            raise ValueError("首版交付格式必须严格为 html")
         return value
 
     @field_validator("data_cutoff", "created_at")
@@ -117,13 +115,9 @@ def _parse_reports(values: list[str]) -> tuple[ReportKind, ...]:
 
 
 def _parse_outputs(values: list[str]) -> tuple[OutputFormat, ...]:
-    try:
-        requested = tuple(OutputFormat(value) for value in values)
-    except ValueError as exc:
-        raise ValueError("交付格式只允许 html、pdf、html-ppt、pptx") from exc
-    if len(requested) != len(set(requested)):
-        raise ValueError("交付格式不能重复")
-    return (OutputFormat.HTML, *(item for item in requested if item is not OutputFormat.HTML))
+    if values != ["html"]:
+        raise ValueError("首版交付格式必须严格为 html")
+    return (OutputFormat.HTML,)
 
 
 def _local_date(value: str | date | datetime, timezone: ZoneInfo) -> date:

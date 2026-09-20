@@ -390,15 +390,21 @@ def _evaluate_endpoint_unit(
         for binding in bindings
         if binding.object_id == endpoint_id and binding.unit_id == unit.unit_id
     )
-    qualifying = tuple(
-        binding
-        for binding in scope_bindings
-        if evidence_binding_qualifies(binding, unit, snapshot=snapshot)
+    has_open_critical_conflict = (
+        unit.blocking_level is GateBlockingLevel.CRITICAL
+        and any(
+            binding.disclosure_state is FactDisclosureState.CONFLICTING
+            for binding in scope_bindings
+        )
     )
-    covered = frozenset(
-        binding.group_id
-        for binding in qualifying
-        if binding.group_id is not None and binding.group_id in required
+    qualifying = (
+        ()
+        if has_open_critical_conflict
+        else tuple(
+            binding
+            for binding in scope_bindings
+            if evidence_binding_qualifies(binding, unit, snapshot=snapshot)
+        )
     )
     fact_groups: dict[str, set[str]] = {}
     for binding in qualifying:
@@ -409,17 +415,20 @@ def _evaluate_endpoint_unit(
         )
     # 一个不可变事实版本只能证明一个组别；跨组引用不计数。
     # 谱系只保留实际计数的不同事实版本，跨组复用不得放大计数或结果谱系。
-    contributing = tuple(
-        sorted(
-            fact_version_id
-            for fact_version_id, groups in fact_groups.items()
-            if len(groups) == 1 and next(iter(groups)) in required
-        )
-    )
+    contributing_groups = {
+        fact_version_id: next(iter(groups))
+        for fact_version_id, groups in fact_groups.items()
+        if len(groups) == 1 and next(iter(groups)) in required
+    }
+    contributing = tuple(sorted(contributing_groups))
+    covered = frozenset(contributing_groups.values())
+    # 事实阈值和组别覆盖是两个独立条件：保留全部合法谱系，不能用事实数量
+    # 替代完整覆盖，也不能因一组具有多个合法事实而违反结果模型的计数合同。
     satisfied_count = len(contributing)
+    coverage_complete = bool(required) and covered == required
     # 有效阈值取规格阈值与适用组别数的较大者：覆盖收紧不得被组别数稀释。
     threshold = max(unit.threshold, len(required))
-    if required and covered == required and satisfied_count >= threshold:
+    if coverage_complete and satisfied_count >= threshold:
         outcome = GateUnitOutcome.SATISFIED
         blocking = False
         failure_code = None
@@ -427,7 +436,7 @@ def _evaluate_endpoint_unit(
     elif unit.blocking_level is GateBlockingLevel.CRITICAL:
         outcome = GateUnitOutcome.BLOCKED
         blocking = True
-        failure_code = "missing_required_evidence"
+        failure_code = unit.failure_code
         user_note_zh = (
             f"{unit.user_label_zh}缺失：{unit.missing_impact_zh}。"
             f"{unit.user_next_step_zh}"
@@ -435,7 +444,7 @@ def _evaluate_endpoint_unit(
     else:
         outcome = GateUnitOutcome.EXTENSION_MISSING
         blocking = False
-        failure_code = "missing_extension_evidence"
+        failure_code = unit.failure_code
         user_note_zh = None
     return GateUnitResult(
         unit_id=unit.unit_id,
@@ -446,15 +455,21 @@ def _evaluate_endpoint_unit(
         blocking=blocking,
         threshold=threshold,
         satisfied_count=satisfied_count,
+        coverage_complete=coverage_complete,
         fact_version_ids=contributing,
         source_locations=tuple(
             sorted(
                 binding.source_location
                 for binding in qualifying
-                if binding.source_location is not None
+                if binding.fact_version_id in contributing_groups
+                and binding.source_location is not None
             )
         ),
-        disclosure_state=_best_disclosure_state(scope_bindings),
+        disclosure_state=(
+            FactDisclosureState.CONFLICTING
+            if has_open_critical_conflict
+            else _best_disclosure_state(scope_bindings)
+        ),
         failure_code=failure_code,
         user_note_zh=user_note_zh,
     )
@@ -487,6 +502,13 @@ def evaluate_report(
 
     index = _UniverseIndex(snapshot)
     spec_units = {unit.unit_id: unit for unit in spec.units}
+    unknown_unit_ids = sorted(
+        {binding.unit_id for binding in bindings}.difference(spec_units)
+    )
+    if unknown_unit_ids:
+        raise GateEvaluationError(
+            "证据绑定引用未知门槛单元：" + "、".join(unknown_unit_ids)
+        )
     unit_results: list[GateUnitResult] = []
 
     for unit_id, object_id in derive_expected_unit_object_pairs(spec, snapshot):

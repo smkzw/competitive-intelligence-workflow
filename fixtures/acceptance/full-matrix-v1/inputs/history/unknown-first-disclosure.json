@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "source_version_id": "synthetic-source-unknown-disclosure",
+  "source_id": "synthetic-conference-disclosure",
+  "content_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "content_relative_path": "evidence/raw/sha256/cc/cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.bin",
+  "media_type": "application/json",
+  "acquired_at": "2026-08-11T14:00:00+08:00",
+  "acquired_locator": {
+    "document_role": "会议摘要",
+    "paragraph": "摘要正文",
+    "url": null
+  },
+  "published_at": {
+    "state": "not_publicly_disclosed",
+    "value": null,
+    "precision": "instant",
+    "locator": {
+      "document_role": "会议摘要",
+      "paragraph": "文件未提供发布日期",
+      "url": null
+    }
+  },
+  "effective_at": {
+    "state": "not_applicable",
+    "value": null,
+    "precision": "instant",
+    "locator": {
+      "document_role": "会议摘要",
+      "paragraph": "该来源不适用监管生效日期",
+      "url": null
+    }
+  },
+  "first_disclosed_at": {
+    "state": "not_publicly_disclosed",
+    "value": null,
+    "precision": "instant",
+    "locator": {
+      "document_role": "会议摘要",
+      "paragraph": "尚未解决首次公开时间",
+      "url": null
+    }
+  },
+  "created_at": "2026-08-11T14:00:01+08:00"
+}

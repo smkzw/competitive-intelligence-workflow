@@ -1,0 +1,40 @@
+{
+  "id": "phase-9-task-93-optional-monitoring",
+  "name": "phase-9-task-93-optional-monitoring",
+  "title": "Phase 9 Task 9.3：可选监测与变更候选",
+  "description": "独立可卸载的监测能力只写入去重后的变更候选；用户明确决定后才交给正常刷新，不自动接纳事实、建立正式快照或发布报告。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "Task 9.3 only：可选监测候选、去重、技术诊断、用户处置、只读正常刷新交接与可卸载性；不实现宿主调度、事实接纳、正式快照、报告发布或 PDF/PPT。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-09-01",
+  "completedAt": "2026-09-01",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "src/ci_workflow/domain/monitoring.py",
+    "src/ci_workflow/application/monitoring_service.py",
+    "src/ci_workflow/graph/definitions/monitoring.py",
+    "schemas/monitoring-change-candidate.schema.json",
+    "skills/_internal/monitoring/SKILL.md",
+    "tests/contract/test_monitoring_change_candidate_contract.py",
+    "tests/integration/test_monitoring_service.py",
+    "tests/graph/test_monitoring_nodes.py",
+    "tests/graph/test_monitoring_uninstallable.py"
+  ],
+  "notes": "Task 9.3 已验收：监测仅写去重候选与只读正常刷新交接，不能自动接纳事实、建立正式快照或发布报告；66 项聚焦、320 项完整集成、50 项共享回归、Ruff、mypy、包完整性、双 review-gate 和执行治理审计通过；独立会商最终确认无剩余 P0/P1/P2。",
+  "meta": {
+    "phase": "9",
+    "task": "9.3",
+    "release_scope": "site_html_v1"
+  }
+}

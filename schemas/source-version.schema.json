@@ -5,6 +5,45 @@
   "type": "object",
   "additionalProperties": false,
   "$defs": {
+    "source_text_derivation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["raw_asset", "text_sha256", "method", "extractor_version"],
+      "allOf": [{
+        "if": {"properties": {"method": {"const": "ctgov-study-json-v1"}}},
+        "then": {
+          "required": ["record_selector"],
+          "properties": {
+            "record_selector": {"type": "object"},
+            "raw_asset": {"properties": {"media_type": {"const": "application/json"}}}
+          }
+        },
+        "else": {"properties": {"record_selector": {"type": "null"}}}
+      }],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "text_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "method": {"enum": ["utf8-strip-v1", "pypdf-text-v1", "ctgov-study-json-v1"]},
+        "record_selector": {
+          "type": ["object", "null"], "additionalProperties": false,
+          "required": ["study_index", "nct_id"],
+          "properties": {
+            "study_index": {"type": "integer", "minimum": 0},
+            "nct_id": {"type": "string", "pattern": "^NCT[0-9]{8}$"}
+          }
+        },
+        "extractor_version": {"type": "string", "minLength": 1},
+        "raw_asset": {
+          "type": "object", "additionalProperties": false,
+          "required": ["sha256", "relative_path", "byte_size", "media_type"],
+          "properties": {
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "relative_path": {"type": "string", "pattern": "^evidence/raw/sha256/[0-9a-f]{2}/[0-9a-f]{64}\\.bin$"},
+            "byte_size": {"type": "integer", "minimum": 1},
+            "media_type": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
     "locator": {
       "type": "object",
       "additionalProperties": false,
@@ -76,6 +115,7 @@
     }
   },
   "properties": {
+    "text_derivation": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/source_text_derivation"}]},
     "schema_version": {"const": "1.0"},
     "source_version_id": {"type": "string", "minLength": 1},
     "source_id": {"type": "string", "minLength": 1},

@@ -1,0 +1,234 @@
+contract_version: "8.7"
+contract_id: ppt-master-job
+format: pptx
+user_label: PPT Master 可编辑演示稿作业
+status: implemented_and_codex_accepted
+
+purpose: >-
+  让 A/B/C 可编辑 PPTX 从同一份锁定报告快照启动、暂停、恢复和验收。
+  本合同约束作业状态、阶段收据、快照锁、恢复指针和 PPT Master 串行执行；
+  不接受 HTML、截图或不可编辑图形作为 PPTX 替代物。
+
+references:
+  format_contract: docs/architecture/format-contracts/pptx.yaml
+  snapshot_contract: schemas/report-snapshot-manifest.schema.json
+  job_schema: schemas/ppt-master-job.schema.json
+  rendering_boundary: docs/decisions/0004-structured-report-rendering-boundary.md
+
+identity:
+  report_enum: [A, B, C]
+  job_key: [project_id, report, snapshot_id]
+  required_job_fields:
+    - schema_version
+    - contract_version
+    - job_id
+    - snapshot
+    - state
+    - next_stage
+    - active_stage
+    - receipts
+    - expires_at
+    - created_at
+    - updated_at
+  required_snapshot_fields:
+    - snapshot_id
+    - snapshot_sha256
+    - claim_snapshot_id
+    - evidence_snapshot_id
+    - coverage_set_id
+    - locked_at
+  digest_format: sha256_lowercase_hex_64
+  immutable_after_lock:
+    - report
+    - report_version
+    - snapshot_id
+    - snapshot_sha256
+    - claim_snapshot_id
+    - evidence_snapshot_id
+    - coverage_set_id
+    - contract_version
+
+state_machine:
+  initial: created
+  terminal: [accepted, rejected, cancelled]
+  states:
+    - created
+    - snapshot_locked
+    - running
+    - paused
+    - failed
+    - ready_for_acceptance
+    - accepted
+    - rejected
+    - cancelled
+  transitions:
+    - {from: created, event: lock_snapshot, to: snapshot_locked}
+    - {from: snapshot_locked, event: begin_stage, to: running}
+    - {from: running, event: commit_stage, to: snapshot_locked}
+    - {from: snapshot_locked, event: pause_at_boundary, to: paused}
+    - {from: running, event: fail_stage, to: failed}
+    - {from: paused, event: resume, to: snapshot_locked}
+    - {from: failed, event: resume, to: snapshot_locked}
+    - {from: snapshot_locked, event: all_stages_committed, to: ready_for_acceptance}
+    - {from: ready_for_acceptance, event: independent_acceptance, to: accepted}
+    - {from: ready_for_acceptance, event: independent_rejection, to: rejected}
+    - {from: [created, snapshot_locked, paused, failed], event: cancel, to: cancelled}
+  forbidden:
+    - skip_stage
+    - begin_stage_from_created
+    - mutate_locked_snapshot
+    - resume_after_expiry
+    - accept_from_running
+    - accept_from_failed
+    - accept_without_independent_verification
+    - reopen_terminal_job
+
+stages:
+  order:
+    - {order: 1, id: initialize, label_zh: 初始化}
+    - {order: 2, id: content_design_lock, label_zh: 内容策略与设计锁定}
+    - {order: 3, id: page_svg, label_zh: 逐页 SVG}
+    - {order: 4, id: quality_check, label_zh: 质量检查}
+    - {order: 5, id: speaker_notes, label_zh: 备注}
+    - {order: 6, id: closeout, label_zh: 收尾处理}
+    - {order: 7, id: native_export, label_zh: 原生导出}
+    - {order: 8, id: editability_check, label_zh: 可编辑性核验}
+    - {order: 9, id: visual_check, label_zh: 原分辨率逐页视觉检查}
+  next_stage_rule: last_committed_order_plus_one
+  commit_boundary: one_stage_one_receipt
+  receipt_required_for_every_committed_stage: true
+  receipt_fields:
+    - receipt_id
+    - job_id
+    - project_id
+    - report
+    - snapshot_id
+    - snapshot_sha256
+    - stage_id
+    - stage_order
+    - attempt
+    - input_digest
+    - output_digest
+    - predecessor_receipt_id
+    - artifacts
+    - status
+    - committed_at
+    - receipt_sha256
+    - failure_reason
+  receipt_status_enum: [committed, failed]
+  receipt_rules:
+    - stage_order_must_match_next_stage
+    - stage_id_must_match_stage_order
+    - predecessor_receipt_id_must_reference_the_latest_committed_receipt
+    - input_digest_must_match_locked_snapshot_and_predecessor_outputs
+    - output_digest_must_be_recomputed_from_current_artifacts
+    - failed_receipt_cannot_advance_next_stage
+    - duplicate_receipt_is_allowed_only_when_identity_and_digests_are_identical
+
+snapshot_lock:
+  lock_event_required_before_any_stage: true
+  lock_scope: [project_id, report, snapshot_id]
+  lock_payload_must_match_report_snapshot_manifest: true
+  lock_digest_must_cover:
+    - report
+    - report_version
+    - snapshot_id
+    - snapshot_sha256
+    - claim_snapshot_id
+    - evidence_snapshot_id
+    - coverage_set_id
+  mutation_policy: reject_any_identity_or_digest_change
+  artifact_policy: every_stage_artifact_must_record_snapshot_id_and_sha256
+  cross_format_policy: HTML_PPT_PDF_PPTX_must_reference_same_snapshot_and_coverage_set
+
+serial_execution:
+  master_invocation_lock: ppt_master_global
+  maximum_active_jobs: 1
+  maximum_active_stage_attempts: 1
+  active_job_states: [snapshot_locked, running]
+  paused_jobs_hold_snapshot_identity_but_not_execution_lock: true
+  lock_acquisition: compare_and_set
+  lock_release: only_after_stage_receipt_commit_or_explicit_failure_receipt
+  different_reports_still_serialize: true
+  parallel_master_invocation: false
+  parallel_stage_attempt_for_same_job: false
+  parallel_execution_policy: reject_before_side_effects
+  stale_lock_recovery: requires_owner_expiry_and_same_job_identity
+
+recovery:
+  recoverable_states: [paused, failed]
+  recovery_pointer:
+    source: latest_committed_receipt
+    next_stage: last_committed_order_plus_one
+    pointer_must_be_persisted: true
+    pointer_must_not_be_inferred_from_filesystem_mtime: true
+  resume_preflight:
+    - job_identity_matches_request
+    - report_matches_locked_snapshot
+    - snapshot_id_matches_locked_snapshot
+    - snapshot_sha256_matches_locked_snapshot
+    - contract_version_matches
+    - latest_receipt_identity_matches_pointer
+    - all_predecessor_receipts_are_committed
+    - all_predecessor_artifacts_exist
+    - all_predecessor_artifact_digests_match_receipts
+    - recovery_authorization_is_not_expired
+    - global_execution_lock_is_acquired_before_the_next_stage
+  resume_effect: continue_at_pointer_without_replaying_committed_stages
+  retry_policy: failed_stage_may_retry_only_as_new_attempt_after_failed_receipt
+  expiry_policy:
+    required_field: expires_at
+    comparison: reject_when_current_time_is_after_expires_at
+    expired_job: reject_without_mutating_job_or_artifacts
+  rejection_codes:
+    - JOB_NOT_FOUND
+    - SNAPSHOT_MISMATCH
+    - REPORT_MISMATCH
+    - RECEIPT_EXPIRED
+    - RECEIPT_OUT_OF_ORDER
+    - ARTIFACT_MISSING
+    - ARTIFACT_DIGEST_MISMATCH
+    - ACTIVE_LOCK_CONFLICT
+    - INVALID_STATE
+    - UNKNOWN_STAGE
+
+failure_closure:
+  reject_before_side_effects: true
+  reject_unknown_state_or_stage: true
+  reject_unknown_report: true
+  reject_snapshot_drift: true
+  reject_receipt_reuse_across_jobs: true
+  reject_receipt_reuse_across_reports: true
+  reject_receipt_reuse_across_snapshots: true
+  reject_filesystem_mtime_as_authority: true
+  preserve_failed_attempt_and_reason: true
+  no_silent_fallback_to_html_or_image_pptx: true
+
+editable_pptx:
+  native_powerpoint_required: true
+  editable_objects_required: true
+  forbidden_substitutes:
+    - full_slide_image
+    - web_page_screenshot
+    - renamed_html
+    - non_editable_chart_image
+  downstream_acceptance_required:
+    - ooxml_structure
+    - native_powerpoint_render
+    - original_resolution_page_visuals
+    - notes_and_toc
+  task_boundary: Task_8.7_freezes_job_contract_only
+  not_accepted_by_this_contract:
+    - A_B_C_complete_pptx_generation
+    - native_powerpoint_visual_acceptance
+    - cross_format_coverage_acceptance
+
+acceptance:
+  required_evidence:
+    - schema_validation
+    - positive_and_negative_contract_vectors
+    - persisted_lock_and_receipt_chain
+    - pause_and_resume_from_boundary
+    - stale_out_of_order_and_cross_report_rejections
+  independent_verifier: Codex
+  generator_must_not_write_accepted: true

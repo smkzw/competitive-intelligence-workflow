@@ -15,7 +15,7 @@ class ArtifactPathViolation(ValueError):
 
 
 class ArtifactPathService:
-    """A/B/C 四格式唯一的、可移动的产物路径生成器。"""
+    """A/B/C 站点式 HTML 唯一的、可移动的产物路径生成器。"""
 
     def version_root(
         self, report: ReportKind, report_version: str
@@ -29,14 +29,9 @@ class ArtifactPathService:
         report_version: str,
         output: OutputFormat,
     ) -> PurePosixPath:
-        root = self.version_root(report, report_version)
-        names = {
-            OutputFormat.HTML: "html",
-            OutputFormat.PDF: "report.pdf",
-            OutputFormat.HTML_PPT: "html-ppt",
-            OutputFormat.PPTX: "report.pptx",
-        }
-        return root / names[output]
+        if output is not OutputFormat.HTML:
+            raise ArtifactPathViolation("首版产物格式必须是 html")
+        return self.version_root(report, report_version) / "html"
 
     def manifest(
         self,
@@ -73,13 +68,13 @@ class ArtifactPathService:
             raise ArtifactPathViolation("报告目录只允许 A、B、C 大写标识") from exc
         version = path.parts[2]
         self._validate_version(version)
-        candidates: set[PurePosixPath] = set()
-        for output in OutputFormat:
-            candidates.add(self.artifact(report, version, output))
-            candidates.add(self.manifest(report, version, output))
-            candidates.add(self.coverage_projection(report, version, output))
+        candidates = {
+            self.artifact(report, version, OutputFormat.HTML),
+            self.manifest(report, version, OutputFormat.HTML),
+            self.coverage_projection(report, version, OutputFormat.HTML),
+        }
         if path not in candidates:
-            raise ArtifactPathViolation("产物路径不属于任一规范格式位置")
+            raise ArtifactPathViolation("产物路径不属于站点式 HTML 位置")
         return path
 
     @staticmethod

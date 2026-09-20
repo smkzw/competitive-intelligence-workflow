@@ -333,26 +333,78 @@ class ManifestStore:
 
     def _artifact_path(self, manifest: ArtifactManifest) -> Path:
         path = self.project_root.joinpath(*PurePosixPath(manifest.artifact.relative_path).parts)
+        for component in (path, *path.parents):
+            if component == self.project_root:
+                break
+            if component.is_symlink():
+                raise ManifestIntegrityError("产物路径不得包含符号链接")
         resolved = path.resolve()
         if not resolved.is_relative_to(self.project_root):
             raise ManifestIntegrityError("产物路径离开了项目目录")
         return resolved
 
+    @staticmethod
+    def _directory_digest(path: Path) -> tuple[str, int, float]:
+        """计算与门户验收一致的目录摘要、总字节数和最新文件时间。"""
+        if path.is_symlink():
+            raise ManifestIntegrityError("产物目录不得是符号链接")
+        digest = hashlib.sha256()
+        total = 0
+        latest_mtime: float | None = None
+        try:
+            paths = sorted(path.rglob("*"))
+        except OSError as error:
+            raise ManifestIntegrityError("产物目录不存在或不可读") from error
+        for child in paths:
+            if child.is_symlink():
+                raise ManifestIntegrityError("产物目录不得包含符号链接")
+            if not child.is_file():
+                continue
+            try:
+                content = child.read_bytes()
+                mtime = child.stat().st_mtime
+            except OSError as error:
+                raise ManifestIntegrityError("产物目录不存在或不可读") from error
+            digest.update(child.relative_to(path).as_posix().encode("utf-8"))
+            digest.update(b"\0")
+            digest.update(content)
+            total += len(content)
+            latest_mtime = mtime if latest_mtime is None else max(latest_mtime, mtime)
+        if latest_mtime is None:
+            raise ManifestIntegrityError("产物目录不包含可读文件")
+        return digest.hexdigest(), total, latest_mtime
+
     def _verify_artifact(self, manifest: ArtifactManifest) -> None:
         path = self._artifact_path(manifest)
-        try:
-            content = path.read_bytes()
+        if manifest.artifact.media_type == "directory":
+            if not path.is_dir():
+                raise ManifestIntegrityError("产物目录不存在或不可读")
+            actual_digest, actual_bytes, latest_mtime = self._directory_digest(path)
+            if actual_bytes != manifest.artifact.byte_size:
+                raise ManifestIntegrityError("产物字节数与清单不一致")
+            if actual_digest != manifest.artifact.sha256:
+                raise ManifestIntegrityError("产物摘要与清单不一致")
             modified_at = datetime.fromtimestamp(
-                path.stat().st_mtime, tz=manifest.artifact.modified_at.tzinfo
+                latest_mtime, tz=manifest.artifact.modified_at.tzinfo
             )
-        except OSError as error:
-            raise ManifestIntegrityError("产物不存在或不可读") from error
-        if len(content) != manifest.artifact.byte_size:
-            raise ManifestIntegrityError("产物字节数与清单不一致")
-        if hashlib.sha256(content).hexdigest() != manifest.artifact.sha256:
-            raise ManifestIntegrityError("产物摘要与清单不一致")
+        else:
+            try:
+                content = path.read_bytes()
+                modified_at = datetime.fromtimestamp(
+                    path.stat().st_mtime, tz=manifest.artifact.modified_at.tzinfo
+                )
+            except OSError as error:
+                raise ManifestIntegrityError("产物不存在或不可读") from error
+            if len(content) != manifest.artifact.byte_size:
+                raise ManifestIntegrityError("产物字节数与清单不一致")
+            if hashlib.sha256(content).hexdigest() != manifest.artifact.sha256:
+                raise ManifestIntegrityError("产物摘要与清单不一致")
         if abs((modified_at - manifest.artifact.modified_at).total_seconds()) > 1.0:
             raise ManifestIntegrityError("产物修改时间与清单不一致")
+
+    def verify_artifact(self, manifest: ArtifactManifest) -> None:
+        """只读校验清单引用的当前文件或目录产物。"""
+        self._verify_artifact(manifest)
 
     def _verify_current_context(
         self,

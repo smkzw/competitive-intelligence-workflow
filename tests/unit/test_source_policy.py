@@ -15,6 +15,7 @@ def test_source_domains_and_claim_authority_match_v12() -> None:
         ROOT / "policies" / "sources" / "source-policy-v1.yaml"
     )
 
+    assert policy.version == "1.1"
     assert set(policy.claim_domains) == set(ClaimDomain)
     assert policy.authority_for(
         "clinicaltrials_gov", ClaimDomain.TRIAL_IDENTITY_DESIGN_STATUS
@@ -66,6 +67,18 @@ def test_source_domains_and_claim_authority_match_v12() -> None:
     ) is SourceAuthority.CROSS_CHECK
     assert policy.authority_for(
         "conference_disclosure", ClaimDomain.PATENTS_PROTECTION
+    ) is SourceAuthority.LEAD_ONLY
+
+    yaozh = policy.source("yaozh_enterprise")
+    assert yaozh.required_global_baseline is False
+    assert yaozh.required_for_china is False
+    assert yaozh.authoritative_secondary is False
+    assert all(
+        policy.authority_for("yaozh_enterprise", domain) is not SourceAuthority.DIRECT
+        for domain in ClaimDomain
+    )
+    assert policy.authority_for(
+        "yaozh_enterprise", ClaimDomain.EFFICACY_SAFETY_RESULTS
     ) is SourceAuthority.LEAD_ONLY
 
 

@@ -9,6 +9,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -17,6 +18,7 @@ from collections.abc import Sequence
 from datetime import datetime
 from enum import StrEnum
 from pathlib import Path, PurePosixPath
+from typing import Literal
 
 from pydantic import (
     BaseModel,
@@ -42,6 +44,15 @@ from ci_workflow.gates.models import (
     GateUnitOutcome,
     ReportDecision,
     ReportGateResult,
+)
+from ci_workflow.qc.scientific import (
+    LocatorRef,
+    ScientificIssue,
+    ScientificQcCurrentContext,
+    ScientificQcReviewBundle,
+    ScientificQcVerdict,
+    SourceRef,
+    candidate_content_digest,
 )
 from ci_workflow.storage.sqlite import open_database
 
@@ -587,6 +598,8 @@ class BlockerAudit(BaseModel):
     minimal_user_action_zh: str = Field(min_length=1)
     source_links: tuple[str, ...] = ()
     audit_directory: str = Field(min_length=1)
+    no_draft: Literal[True] = True
+    resume_node: Literal["recovery"] = "recovery"
     resume_instruction_zh: str = Field(min_length=1)
     record_digest: str = Field(min_length=1)
     gap_digests: tuple[str, ...] = Field(min_length=1)
@@ -654,6 +667,7 @@ class BlockerAudit(BaseModel):
                 raise ValueError("来源链接必须是 http/https 原文或工作区相对附件路径")
         return self
 
+
     @model_validator(mode="after")
     def _audit_directory_is_blocker_dir(self) -> BlockerAudit:
         if self.audit_directory != blocker_directory(
@@ -661,6 +675,7 @@ class BlockerAudit(BaseModel):
         ).as_posix():
             raise ValueError("审计说明目录必须与阻断包目录一致")
         return self
+
 
     @model_validator(mode="after")
     def _empty_and_failed_units_are_exclusive(self) -> BlockerAudit:
@@ -735,6 +750,235 @@ class BlockerAudit(BaseModel):
                 assert_user_facing_zh_clean(gap.technical_diagnosis_zh)
                 assert_user_text_has_chinese_context(gap.technical_diagnosis_zh)
         return self
+
+
+class PublicationBlockerGuidance(BaseModel):
+    """Publication 不可取得后的三段用户说明。"""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    missing_zh: str = Field(min_length=1)
+    attempted_zh: str = Field(min_length=1)
+    outcome_zh: str = Field(min_length=1)
+
+    @field_validator("missing_zh", "attempted_zh", "outcome_zh")
+    @classmethod
+    def _guidance_is_clean_chinese(cls, value: str) -> str:
+        value = _not_blank(value)
+        assert_user_facing_zh_clean(value)
+        return assert_user_text_has_chinese_context(value)
+
+
+class PublicationUnavailableBlockerAudit(BaseModel):
+    """必需论文经两类自动获取及一次人工补件后仍不可得的终态审计。"""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_version: Literal["1.0"] = "1.0"
+    blocker_kind: Literal["publication_unavailable"] = "publication_unavailable"
+    audit_id: str = Field(min_length=1)
+    project_id: str = Field(min_length=1)
+    report_kind: ReportKind
+    contract_version: str = Field(min_length=1)
+    report_version: str
+    state: Literal["evidence_blocked"] = "evidence_blocked"
+    reason: Literal["required_publication_unavailable"] = (
+        "required_publication_unavailable"
+    )
+    evidence_snapshot_id: str = Field(min_length=1)
+    manual_gate_id: str = Field(min_length=1)
+    manual_gate_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    request_ids: tuple[str, ...] = Field(min_length=1)
+    publication_titles: tuple[str, ...] = Field(min_length=1)
+    blocking_fields: tuple[str, ...] = Field(min_length=1)
+    attempted_paths: tuple[str, ...] = Field(min_length=2)
+    source_links: tuple[str, ...] = Field(min_length=1)
+    user_response_id: str = Field(min_length=1)
+    responded_at: datetime
+    user_guidance: PublicationBlockerGuidance
+    audit_directory: str = Field(min_length=1)
+    no_draft: Literal[True] = True
+    resume_node: Literal["recovery"] = "recovery"
+    created_at: datetime
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def audit_digest(self) -> str:
+        return compute_audit_digest(
+            self.model_dump(mode="json", exclude={"audit_digest"})
+        )
+
+    @field_validator(
+        "audit_id",
+        "project_id",
+        "contract_version",
+        "evidence_snapshot_id",
+        "manual_gate_id",
+        "user_response_id",
+    )
+    @classmethod
+    def _identity_not_blank(cls, value: str) -> str:
+        return _not_blank(value)
+
+    @field_validator("report_version")
+    @classmethod
+    def _version_segment_is_safe(cls, value: str) -> str:
+        if _VERSION_PATTERN.fullmatch(value) is None:
+            raise ValueError("报告版本必须是单个小写 v 开头的安全路径段")
+        return value
+
+    @field_validator(
+        "request_ids",
+        "publication_titles",
+        "blocking_fields",
+        "attempted_paths",
+        "source_links",
+    )
+    @classmethod
+    def _items_are_unique_and_nonblank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        normalized = tuple(_not_blank(value) for value in values)
+        if len(normalized) != len(set(normalized)):
+            raise ValueError("Publication 阻断审计清单不得重复")
+        return normalized
+
+    @field_validator("responded_at", "created_at")
+    @classmethod
+    def _times_have_offset(cls, value: datetime) -> datetime:
+        return _offset_datetime(value)
+
+    @model_validator(mode="after")
+    def _paths_and_identity_are_closed(self) -> PublicationUnavailableBlockerAudit:
+        if self.audit_directory != blocker_directory(
+            self.report_kind, self.report_version
+        ).as_posix():
+            raise ValueError("审计说明目录必须与阻断包目录一致")
+        for link in self.source_links:
+            if _URL_PATTERN.fullmatch(link) is None:
+                raise ValueError("Publication 原文链接必须是 http/https 地址")
+        if self.created_at != self.responded_at:
+            raise ValueError("Publication 阻断创建时间必须绑定唯一用户响应时间")
+        expected_audit_id = stable_id(
+            "publication-blocker-audit",
+            self.project_id,
+            self.report_kind.value,
+            self.report_version,
+            self.manual_gate_sha256,
+        )
+        if self.audit_id != expected_audit_id:
+            raise ValueError("Publication 阻断审计标识与绑定内容不一致")
+        return self
+
+
+class ScientificQcExhaustedBlockerAudit(BaseModel):
+    """GateSpec 已通过、独立科学质控否决且恢复已穷尽的终态审计。"""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_version: Literal["1.0"] = "1.0"
+    blocker_kind: Literal["scientific_qc_exhausted"] = "scientific_qc_exhausted"
+    audit_id: str = Field(min_length=1)
+    project_id: str = Field(min_length=1)
+    report_kind: ReportKind
+    contract_version: str = Field(min_length=1)
+    report_version: str
+    state: Literal["evidence_blocked"] = "evidence_blocked"
+    reason: Literal["scientific_qc_veto_exhausted"] = "scientific_qc_veto_exhausted"
+    report_object_id: str = Field(min_length=1)
+    candidate_snapshot_id: str = Field(min_length=1)
+    candidate_content_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    universe_summary: str = Field(min_length=1)
+    gate_result_key: str = Field(min_length=1)
+    criteria_version: str = Field(min_length=1)
+    coverage_set_id: str = Field(min_length=1)
+    coverage_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    context_id: str = Field(min_length=1)
+    context_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    producer_id: str = Field(min_length=1)
+    reviewer_id: str = Field(min_length=1)
+    review_input_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    verdict_id: str = Field(min_length=1)
+    verdict_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    issues: tuple[ScientificIssue, ...] = Field(min_length=1)
+    source_refs: tuple[SourceRef, ...] = Field(min_length=1)
+    locators: tuple[LocatorRef, ...] = Field(min_length=1)
+    exhaustion: DoubleExhaustionRecord
+    audit_directory: str = Field(min_length=1)
+    no_draft: Literal[True] = True
+    resume_node: Literal["recovery"] = "recovery"
+    reviewed_at: datetime
+    valid_until: datetime
+    created_at: datetime
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def audit_digest(self) -> str:
+        return compute_audit_digest(
+            self.model_dump(mode="json", exclude={"audit_digest"})
+        )
+
+    @field_validator(
+        "audit_id",
+        "project_id",
+        "contract_version",
+        "report_object_id",
+        "candidate_snapshot_id",
+        "universe_summary",
+        "gate_result_key",
+        "criteria_version",
+        "coverage_set_id",
+        "context_id",
+        "producer_id",
+        "reviewer_id",
+        "verdict_id",
+    )
+    @classmethod
+    def _identity_not_blank(cls, value: str) -> str:
+        return _not_blank(value)
+
+    @field_validator("report_version")
+    @classmethod
+    def _version_segment_is_safe(cls, value: str) -> str:
+        if _VERSION_PATTERN.fullmatch(value) is None:
+            raise ValueError("报告版本必须是单个小写 v 开头的安全路径段")
+        return value
+
+    @field_validator("reviewed_at", "valid_until", "created_at")
+    @classmethod
+    def _times_have_offset(cls, value: datetime) -> datetime:
+        return _offset_datetime(value)
+
+    @model_validator(mode="after")
+    def _identity_is_closed(self) -> ScientificQcExhaustedBlockerAudit:
+        if self.audit_directory != blocker_directory(
+            self.report_kind, self.report_version
+        ).as_posix():
+            raise ValueError("审计说明目录必须与阻断包目录一致")
+        if self.producer_id == self.reviewer_id:
+            raise ValueError("独立科学质控审查者不得等于候选生产者")
+        if not any(issue.severity == "blocking" for issue in self.issues):
+            raise ValueError("科学质控终态阻断必须至少包含一个阻断性问题")
+        if self.exhaustion.project_id != self.project_id:
+            raise ValueError("双重穷尽记录必须绑定同一项目")
+        if self.exhaustion.report_kind is not self.report_kind:
+            raise ValueError("双重穷尽记录必须绑定同一报告类型")
+        expected = stable_id(
+            "scientific-qc-blocker-audit",
+            self.project_id,
+            self.report_kind.value,
+            self.report_version,
+            self.verdict_digest,
+            self.exhaustion.record_digest,
+        )
+        if self.audit_id != expected:
+            raise ValueError("科学质控阻断审计标识与绑定内容不一致")
+        return self
+
+
+BlockerAuditDocument = (
+    BlockerAudit
+    | PublicationUnavailableBlockerAudit
+    | ScientificQcExhaustedBlockerAudit
+)
 
 
 class BlockerAuditDriftError(RuntimeError):
@@ -910,9 +1154,89 @@ def _render_audit_markdown_zh(audit: BlockerAudit) -> str:
     return "\n".join(lines)
 
 
-def render_audit_markdown_zh(audit: BlockerAudit) -> str:
+def _render_publication_blocker_markdown_zh(
+    audit: PublicationUnavailableBlockerAudit,
+) -> str:
+    """必需论文不可取得的简洁用户页；机器身份与内部状态不外露。"""
+    lines = [
+        "# 证据不足说明",
+        "",
+        f"本说明针对「{_report_name_zh(audit.report_kind)}」版本 {audit.report_version}。",
+        audit.user_guidance.missing_zh,
+        "",
+        "## 已完成的核对",
+        "",
+        audit.user_guidance.attempted_zh,
+        "",
+        "## 结论",
+        "",
+        audit.user_guidance.outcome_zh,
+        "",
+        "## 尚缺的原文",
+        "",
+        *(f"- {title}" for title in audit.publication_titles),
+        "",
+        "## 原文链接",
+        "",
+        *(f"- {link}" for link in audit.source_links),
+        "",
+        "如后续取得上述原文，请重新运行该报告的证据核对。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def _render_scientific_qc_blocker_markdown_zh(
+    audit: ScientificQcExhaustedBlockerAudit,
+) -> str:
+    """独立科学质控穷尽否决的用户页；仅显示医学问题与证据锚点。"""
+    links = tuple(
+        dict.fromkeys(
+            locator.locator.url
+            for locator in audit.locators
+            if locator.locator.url is not None
+        )
+    )
+    lines = [
+        "# 证据不足说明",
+        "",
+        f"本说明针对「{_report_name_zh(audit.report_kind)}」版本 {audit.report_version}。",
+        "独立医学复核发现下列关键问题；经两轮不同策略补充核对后仍无法可靠消除，"
+        "因此不生成报告草稿。",
+        "",
+        "## 关键问题",
+        "",
+        *(
+            f"- {issue.description_zh}"
+            for issue in audit.issues
+            if issue.severity == "blocking"
+        ),
+        "",
+        "## 已完成的核对",
+        "",
+        "- 已对相关来源、原文定位和事实版本进行独立复核。",
+        "- 已完成两轮不同策略的恢复检索，并核对是否仍存在可归因遗漏。",
+        "",
+        "## 结论",
+        "",
+        "- 当前证据不足以形成科学上可靠的完整报告；后续取得新证据后可重新运行。",
+        "",
+    ]
+    if links:
+        lines.extend(
+            ["## 原文链接", "", *(f"- {link}" for link in links), ""]
+        )
+    return "\n".join(lines)
+
+
+def render_audit_markdown_zh(audit: BlockerAuditDocument) -> str:
     """渲染后整体执行清洁检查：内部标识/状态词/日志不得进入用户全文。"""
-    markdown = _render_audit_markdown_zh(audit)
+    if isinstance(audit, PublicationUnavailableBlockerAudit):
+        markdown = _render_publication_blocker_markdown_zh(audit)
+    elif isinstance(audit, ScientificQcExhaustedBlockerAudit):
+        markdown = _render_scientific_qc_blocker_markdown_zh(audit)
+    else:
+        markdown = _render_audit_markdown_zh(audit)
     assert_user_facing_zh_clean(markdown)
     return markdown
 
@@ -1472,6 +1796,9 @@ def apply_scientific_qc_rejection(
             raise ValueError("双重穷尽记录必须绑定同一项目")
         if exhaustion.report_kind is not rejection.report_kind:
             raise ValueError("双重穷尽记录必须绑定同一报告类型")
+        raise ValueError(
+            "已穷尽否决必须使用完整科学质控边界发布类型化阻断审计"
+        )
     assert_no_report_downstream_artifacts(
         database_path,
         project_id=rejection.project_id,
@@ -1544,8 +1871,240 @@ def build_and_write_blocker_package(
     )
 
 
+def build_and_write_publication_blocker_package(
+    *,
+    project_id: str,
+    report_kind: ReportKind,
+    contract_version: str,
+    report_version: str,
+    manual_gate: BaseModel,
+    workspace_root: Path,
+    database_path: Path,
+) -> tuple[Path, Path]:
+    """从已落盘的一次性补件门构造类型化终态 blocker；不伪造 GateSpec 穷尽。"""
+    from ci_workflow.ingestion.publication_gate import ManualSupplyGate
+
+    gate = ManualSupplyGate.model_validate(
+        _strip_computed(manual_gate.model_dump(mode="json"))
+    )
+    if (
+        gate.state != "unavailable"
+        or gate.user_response_count != 1
+        or gate.response is None
+        or gate.response.outcome != "file_unavailable"
+        or not gate.evidence_insufficiency_page
+    ):
+        raise ValueError("只有一次补件后确认不可取得且核心证据不足时才能发布阻断页")
+    if report_kind.value not in gate.affected_reports:
+        raise ValueError("Publication 补件门未声明影响当前报告")
+    requests = tuple(
+        request
+        for request in gate.requests
+        if report_kind.value in request.affected_reports
+    )
+    if not requests:
+        raise ValueError("Publication 阻断必须绑定当前报告的具体补件请求")
+    gate_bytes = (
+        json.dumps(
+            gate.model_dump(mode="json"),
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        + "\n"
+    ).encode()
+    gate_sha256 = hashlib.sha256(gate_bytes).hexdigest()
+
+    def unique(values: Sequence[str]) -> tuple[str, ...]:
+        return tuple(dict.fromkeys(values))
+
+    audit = PublicationUnavailableBlockerAudit(
+        audit_id=stable_id(
+            "publication-blocker-audit",
+            project_id,
+            report_kind.value,
+            report_version,
+            gate_sha256,
+        ),
+        project_id=project_id,
+        report_kind=report_kind,
+        contract_version=contract_version,
+        report_version=report_version,
+        evidence_snapshot_id=gate.snapshot_id,
+        manual_gate_id=gate.gate_id,
+        manual_gate_sha256=gate_sha256,
+        request_ids=unique(tuple(request.request_id for request in requests)),
+        publication_titles=unique(tuple(request.exact_title for request in requests)),
+        blocking_fields=unique(
+            tuple(field for request in requests for field in request.blocking_fields)
+        ),
+        attempted_paths=unique(
+            tuple(path for request in requests for path in request.attempted_paths)
+        ),
+        source_links=unique(
+            tuple(link for request in requests for link in request.source_links)
+        ),
+        user_response_id=gate.response.response_id,
+        responded_at=gate.response.responded_at,
+        user_guidance=PublicationBlockerGuidance(
+            missing_zh="关键主要结果、延长期结果或安全性论文无法取得。",
+            attempted_zh="系统已完成两类自动获取，并按一次性补件清单请求原文。",
+            outcome_zh=(
+                "您已确认无法取得；现有官方登记或监管来源不足以回答本报告的核心问题，"
+                "因此不生成伪完整报告。"
+            ),
+        ),
+        audit_directory=blocker_directory(report_kind, report_version).as_posix(),
+        created_at=gate.response.responded_at,
+    )
+    return _write_blocker_package(
+        audit,
+        workspace_root=workspace_root,
+        database_path=database_path,
+    )
+
+
+def build_and_write_scientific_qc_blocker_package(
+    *,
+    current_context: ScientificQcCurrentContext,
+    review_bundle: ScientificQcReviewBundle,
+    verdict: ScientificQcVerdict,
+    snapshot: ApplicableUniverseSnapshot,
+    gate_result: ReportGateResult,
+    exhaustion: DoubleExhaustionRecord,
+    workspace_root: Path,
+    database_path: Path,
+    created_at: datetime,
+) -> tuple[Path, Path]:
+    """完整重验科学质控终态证据并原子发布唯一 blocker 包。"""
+    context = ScientificQcCurrentContext.model_validate(
+        _strip_computed(
+            current_context.model_dump(mode="json", exclude={"context_digest"})
+        )
+    )
+    bundle = ScientificQcReviewBundle.model_validate(
+        _strip_computed(
+            review_bundle.model_dump(mode="json", exclude={"input_digest"})
+        )
+    )
+    verdict = ScientificQcVerdict.model_validate(
+        _strip_computed(
+            verdict.model_dump(mode="json", exclude={"verdict_digest"})
+        )
+    )
+    snapshot = ApplicableUniverseSnapshot.model_validate(
+        _strip_computed(snapshot.model_dump(mode="json"))
+    )
+    gate_result = ReportGateResult.model_validate(
+        _strip_computed(gate_result.model_dump(mode="json"))
+    )
+    exhaustion = DoubleExhaustionRecord.model_validate(
+        _strip_computed(exhaustion.model_dump(mode="json"))
+    )
+    if verdict.verdict != "veto" or verdict.veto_disposition != "exhausted":
+        raise ValueError("只有已穷尽的独立科学质控否决才能发布此阻断包")
+    if gate_result.decision is not ReportDecision.PASSED:
+        raise ValueError("科学质控阻断必须绑定已通过的 GateSpec 结果")
+    agreement = (
+        (context.project_id, bundle.project_id, verdict.project_id, "项目"),
+        (context.report_kind, bundle.report_kind, verdict.report_kind, "报告类型"),
+        (context.report_version, bundle.report_version, verdict.report_version, "报告版本"),
+        (context.report_object_id, bundle.report_object_id, verdict.report_object_id, "报告对象"),
+        (
+            context.candidate_snapshot_id,
+            bundle.candidate_snapshot_id,
+            verdict.candidate_snapshot_id,
+            "候选快照",
+        ),
+        (
+            context.candidate_content_digest,
+            bundle.candidate_content_digest,
+            verdict.candidate_content_digest,
+            "候选内容摘要",
+        ),
+        (context.gate_result_key, bundle.gate_result_key, verdict.gate_result_key, "门槛结果键"),
+        (context.coverage_set_id, bundle.coverage_set_id, verdict.coverage_set_id, "覆盖集"),
+        (context.coverage_digest, bundle.coverage_digest, verdict.coverage_digest, "覆盖摘要"),
+        (context.criteria_version, bundle.criteria_version, verdict.criteria_version, "标准版本"),
+        (context.source_refs, bundle.source_refs, verdict.source_refs, "来源引用"),
+        (context.locators, bundle.locators, verdict.locators, "来源定位"),
+    )
+    for context_value, bundle_value, verdict_value, label in agreement:
+        if context_value != bundle_value or context_value != verdict_value:
+            raise ValueError(f"科学质控阻断的{label}不一致")
+    if bundle.producer_id != context.producer_id:
+        raise ValueError("审查包生产者必须等于当前上下文生产者")
+    if verdict.reviewer_id == context.producer_id:
+        raise ValueError("独立科学质控审查者不得等于候选生产者")
+    if verdict.review_input_digest != bundle.input_digest:
+        raise ValueError("科学质控结论必须绑定审查输入摘要")
+    if snapshot.project_id != context.project_id:
+        raise ValueError("候选宇宙必须绑定同一项目")
+    if snapshot.evidence_snapshot_id != context.candidate_snapshot_id:
+        raise ValueError("候选宇宙与科学质控快照不一致")
+    if candidate_content_digest(snapshot) != context.candidate_content_digest:
+        raise ValueError("候选宇宙内容摘要与科学质控上下文不一致")
+    if (
+        gate_result.report_kind is not context.report_kind
+        or gate_result.evidence_snapshot_id != context.candidate_snapshot_id
+        or gate_result.universe_summary != snapshot.universe_summary
+        or gate_result.result_key != context.gate_result_key
+    ):
+        raise ValueError("GateSpec 结果与科学质控候选宇宙不一致")
+    if (
+        exhaustion.project_id != context.project_id
+        or exhaustion.report_kind is not context.report_kind
+    ):
+        raise ValueError("双重穷尽记录必须绑定同一项目与报告类型")
+
+    audit = ScientificQcExhaustedBlockerAudit(
+        audit_id=stable_id(
+            "scientific-qc-blocker-audit",
+            context.project_id,
+            context.report_kind.value,
+            context.report_version,
+            verdict.verdict_digest,
+            exhaustion.record_digest,
+        ),
+        project_id=context.project_id,
+        report_kind=context.report_kind,
+        contract_version=verdict.contract_version,
+        report_version=context.report_version,
+        report_object_id=context.report_object_id,
+        candidate_snapshot_id=context.candidate_snapshot_id,
+        candidate_content_digest=context.candidate_content_digest,
+        universe_summary=snapshot.universe_summary,
+        gate_result_key=context.gate_result_key,
+        criteria_version=context.criteria_version,
+        coverage_set_id=context.coverage_set_id,
+        coverage_digest=context.coverage_digest,
+        context_id=context.context_id,
+        context_digest=context.context_digest,
+        producer_id=context.producer_id,
+        reviewer_id=verdict.reviewer_id,
+        review_input_digest=verdict.review_input_digest,
+        verdict_id=verdict.verdict_id,
+        verdict_digest=verdict.verdict_digest,
+        issues=verdict.issues,
+        source_refs=verdict.source_refs,
+        locators=verdict.locators,
+        exhaustion=exhaustion,
+        audit_directory=blocker_directory(
+            context.report_kind, context.report_version
+        ).as_posix(),
+        reviewed_at=verdict.reviewed_at,
+        valid_until=verdict.valid_until,
+        created_at=created_at,
+    )
+    return _write_blocker_package(
+        audit,
+        workspace_root=workspace_root,
+        database_path=database_path,
+    )
+
+
 def _write_blocker_package(
-    audit: BlockerAudit,
+    audit: BlockerAuditDocument,
     *,
     workspace_root: Path,
     database_path: Path,
@@ -1565,6 +2124,8 @@ def _write_blocker_package(
         raise BlockerPackageIntegrityError(
             "阻断包路径必须是目录，现有路径为文件"
         )
+    if final_dir.is_symlink():
+        raise BlockerPackageIntegrityError("阻断包目录不得是符号链接")
     audit_json_content = audit.model_dump_json(indent=2) + "\n"
     audit_md_content = render_audit_markdown_zh(audit)
 
@@ -1608,14 +2169,114 @@ def _verify_existing_package(
     audit_md_content: str,
 ) -> None:
     """既有阻断目录必须恰好包含 audit.json 与 audit.md 且内容一致。"""
-    names = sorted(path.name for path in directory.iterdir())
+    if directory.is_symlink() or not directory.is_dir():
+        raise BlockerPackageIntegrityError("阻断包目录必须是真实目录且不得是符号链接")
+    entries = tuple(directory.iterdir())
+    names = sorted(path.name for path in entries)
     if names != ["audit.json", "audit.md"]:
         raise BlockerPackageIntegrityError(
             f"阻断目录必须恰好包含 audit.json 与 audit.md：{names}"
         )
     json_path = directory / "audit.json"
     md_path = directory / "audit.md"
+    if any(path.is_symlink() or not path.is_file() for path in (json_path, md_path)):
+        raise BlockerPackageIntegrityError("阻断包文件必须是普通文件且不得是符号链接")
     if json_path.read_text(encoding="utf-8") != audit_json_content:
         raise BlockerAuditDriftError("audit.json 内容漂移，拒绝覆盖已接受审计历史")
     if md_path.read_text(encoding="utf-8") != audit_md_content:
         raise BlockerAuditDriftError("audit.md 内容漂移，拒绝覆盖已接受审计历史")
+
+
+def validate_existing_blocker_package(
+    directory: Path,
+    *,
+    project_id: str,
+    report_kind: ReportKind,
+    report_version: str,
+) -> BlockerAuditDocument:
+    """恢复终态前重验既有阻断包的结构、模型、身份和用户说明字节。"""
+    if directory.is_symlink() or not directory.is_dir():
+        raise BlockerPackageIntegrityError("阻断包目录必须是真实目录且不得是符号链接")
+    entries = tuple(directory.iterdir())
+    if sorted(path.name for path in entries) != ["audit.json", "audit.md"]:
+        raise BlockerPackageIntegrityError("阻断目录必须恰好包含 audit.json 与 audit.md")
+    json_path = directory / "audit.json"
+    md_path = directory / "audit.md"
+    if any(path.is_symlink() or not path.is_file() for path in (json_path, md_path)):
+        raise BlockerPackageIntegrityError("阻断包文件必须是普通文件且不得是符号链接")
+    try:
+        raw = json.loads(json_path.read_bytes())
+        if not isinstance(raw, dict):
+            raise TypeError("阻断审计顶层必须是对象")
+        blocker_kind = raw.get("blocker_kind")
+        if blocker_kind == "publication_unavailable":
+            audit: BlockerAuditDocument = (
+                PublicationUnavailableBlockerAudit.model_validate(
+                    {key: value for key, value in raw.items() if key != "audit_digest"}
+                )
+            )
+        elif blocker_kind == "scientific_qc_exhausted":
+            scientific_raw = {
+                key: value for key, value in raw.items() if key != "audit_digest"
+            }
+            exhaustion_raw = scientific_raw.get("exhaustion")
+            if not isinstance(exhaustion_raw, dict):
+                raise ValueError("科学质控阻断审计缺少有效穷尽记录")
+            scientific_raw["exhaustion"] = _strip_computed(exhaustion_raw)
+            audit = ScientificQcExhaustedBlockerAudit.model_validate(
+                scientific_raw
+            )
+        else:
+            blocker_raw = {
+                key: value for key, value in raw.items() if key != "audit_digest"
+            }
+            empty_evidence = blocker_raw.get("empty_evidence")
+            if isinstance(empty_evidence, dict):
+                blocker_raw["empty_evidence"] = _strip_computed(empty_evidence)
+            audit = BlockerAudit.model_validate(blocker_raw)
+        if raw.get("audit_digest") != audit.audit_digest:
+            raise ValueError("阻断审计摘要与内容不一致")
+    except (OSError, ValueError, TypeError) as error:
+        raise BlockerPackageIntegrityError("audit.json 不符合阻断审计合同") from error
+    if (
+        audit.project_id != project_id
+        or audit.report_kind is not report_kind
+        or audit.report_version != report_version
+        or audit.audit_directory
+        != blocker_directory(report_kind, report_version).as_posix()
+    ):
+        raise BlockerPackageIntegrityError("阻断包身份与当前项目报告不一致")
+    if isinstance(audit, PublicationUnavailableBlockerAudit):
+        from ci_workflow.ingestion.publication_gate import ManualSupplyGate
+
+        gate_path = (
+            directory.parents[2]
+            / "state"
+            / "manual-supply-gates"
+            / f"{audit.evidence_snapshot_id}.json"
+        )
+        if gate_path.is_symlink() or not gate_path.is_file():
+            raise BlockerPackageIntegrityError("Publication 补件门文件缺失或不是普通文件")
+        gate_bytes = gate_path.read_bytes()
+        if hashlib.sha256(gate_bytes).hexdigest() != audit.manual_gate_sha256:
+            raise BlockerAuditDriftError("Publication 补件门字节与阻断审计绑定不一致")
+        try:
+            gate = ManualSupplyGate.model_validate_json(gate_bytes)
+        except ValueError as error:
+            raise BlockerPackageIntegrityError("Publication 补件门不符合合同") from error
+        if (
+            gate.gate_id != audit.manual_gate_id
+            or gate.snapshot_id != audit.evidence_snapshot_id
+            or gate.state != "unavailable"
+            or gate.response is None
+            or gate.response.response_id != audit.user_response_id
+            or not gate.evidence_insufficiency_page
+        ):
+            raise BlockerPackageIntegrityError("Publication 补件门终态与阻断审计不一致")
+    try:
+        markdown = md_path.read_text(encoding="utf-8")
+    except OSError as error:
+        raise BlockerPackageIntegrityError("无法读取阻断用户说明") from error
+    if markdown != render_audit_markdown_zh(audit):
+        raise BlockerAuditDriftError("audit.md 与机器审计内容不一致")
+    return audit

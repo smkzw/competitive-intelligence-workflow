@@ -1,0 +1,603 @@
+/* C 类设计比较门户：浅色站点轨、分层筛选与路径卡片。 */
+.kz-c-site {
+  --kz-c-ink: #1f2937;
+  --kz-c-muted: #4b5563;
+  --kz-c-line: #e5e7eb;
+  --kz-c-soft: #f8fafc;
+  --kz-c-accent: #f59e0b;
+  --kz-c-accent-soft: #fff7ed;
+  --kz-c-focus: #2563eb;
+  color: var(--kz-c-ink);
+}
+
+.kz-c-main {
+  max-width: 1180px;
+  margin 0 auto;
+  padding 1rem 1rem 3rem;
+}
+
+.kz-c-page-head {
+  margin-bottom 1rem;
+}
+
+.kz-c-page-title,
+.portal-page-title {
+  margin 0 0 0.5rem;
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  line-height: 1.3;
+}
+
+.kz-c-page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap 0.75rem 1rem;
+  color: var(--kz-c-muted);
+  font-size: 0.95rem;
+}
+
+.kz-c-page-lead {
+  margin 0.75rem 0 0;
+  color: var(--kz-c-muted);
+  max-width: 70ch;
+}
+
+.kz-c-filter-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap 0.5rem 0.75rem;
+  align-items: center;
+  margin 0 0 0.75rem;
+  padding 0.75rem;
+  background: var(--kz-c-soft);
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+}
+
+.kz-c-filter-quick__label {
+  font-weight: 600;
+  margin-right 0.25rem;
+}
+
+.kz-c-filter-quick__group,
+.kz-c-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap 0.5rem;
+}
+
+.kz-c-filter-panel {
+  margin 0 0 1rem;
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.kz-c-filter-summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap 1rem;
+  padding 0.75rem 1rem;
+  font-weight: 600;
+}
+
+.kz-c-filter-summary::-webkit-details-marker {
+  display: none;
+}
+
+.kz-c-filters {
+  padding 0 1rem 1rem;
+  border-top: 1px solid var(--kz-c-line);
+}
+
+.kz-c-filter-note {
+  color: var(--kz-c-muted);
+  margin 0.75rem 0;
+}
+
+.kz-c-filter-group {
+  margin 0.75rem 0;
+}
+
+.kz-c-filter-heading {
+  display: flex;
+  justify-content: space-between;
+  gap 1rem;
+  align-items: baseline;
+  margin-bottom 0.5rem;
+}
+
+.kz-c-filter-heading h2,
+.kz-c-filter-heading h3,
+.kz-c-filter-module__title {
+  margin 0;
+  font-size: 1rem;
+}
+
+.kz-c-filter-heading span {
+  color: var(--kz-c-muted);
+  font-size: 0.85rem;
+}
+
+.kz-c-filter-module {
+  margin-top 1rem;
+  padding-top 0.75rem;
+  border-top: 1px dashed var(--kz-c-line);
+}
+
+.kz-c-filter-button {
+  appearance: none;
+  border: 1px solid var(--kz-c-line);
+  background: #fff;
+  color: var(--kz-c-ink);
+  border-radius: 999px;
+  padding 0.25rem 0.75rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.kz-c-filter-button[aria-pressed="true"] {
+  border-color: #f59e0b;
+  background: var(--kz-c-accent-soft);
+}
+
+/* 核心比较页把筛选收进一行入口，优先让用户看到比较图。 */
+.kz-c-site--design-map .kz-c-filter-quick,
+.kz-c-site--endpoint-timepoint-matrix .kz-c-filter-quick,
+.kz-c-site--overview .kz-c-filter-quick {
+  display: none;
+}
+
+.kz-c-site--design-map .kz-c-page-head,
+.kz-c-site--endpoint-timepoint-matrix .kz-c-page-head,
+.kz-c-site--overview .kz-c-page-head {
+  margin-bottom 0.75rem;
+  padding-bottom 0.75rem;
+}
+
+.kz-c-site--design-map .kz-c-chart-visuals,
+.kz-c-site--endpoint-timepoint-matrix .kz-c-chart-visuals,
+.kz-c-site--overview .kz-c-chart-visuals {
+  overflow: hidden;
+}
+
+.kz-c-site--design-map .kz-chart-table,
+.kz-c-site--endpoint-timepoint-matrix .kz-chart-table,
+.kz-c-site--overview .kz-chart-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.kz-c-site--design-map .kz-chart-table__cell,
+.kz-c-site--endpoint-timepoint-matrix .kz-chart-table__cell,
+.kz-c-site--overview .kz-chart-table__cell {
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+
+.kz-c-filter-button:focus-visible,
+.kz-c-evidence-button:focus-visible,
+.kz-c-filter-reset:focus-visible {
+  outline: 3px solid var(--kz-c-focus);
+  outline-offset: 2px;
+}
+
+.kz-c-filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap 0.75rem;
+  align-items: center;
+  margin-top 0.75rem;
+}
+
+.kz-c-filter-reset {
+  appearance: none;
+  border: 1px solid var(--kz-c-line);
+  background: #fff;
+  border-radius: 8px;
+  padding 0.5rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.kz-c-filter-status {
+  color: var(--kz-c-muted);
+}
+
+.kz-c-visual-section,
+.kz-c-path-section,
+.kz-c-profile-index {
+  margin 1rem 0 1.5rem;
+}
+
+.kz-c-section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap 0.75rem;
+  align-items: baseline;
+  margin-bottom 0.75rem;
+}
+
+.kz-c-section-heading h2,
+.kz-c-path-section h2,
+.kz-c-profile-index h2 {
+  margin 0;
+}
+
+.kz-c-evidence-hint,
+.kz-c-path-note {
+  margin 0;
+  color: var(--kz-c-muted);
+}
+
+.kz-chart-module {
+  width: 100%;
+  overflow: visible;
+}
+
+.kz-c-chart-visuals {
+  margin-bottom 1rem;
+  padding 1rem 1rem 0.75rem;
+  border: 1px solid #e2e7ee;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(245, 158, 11, 0.12), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+  box-shadow: 0 12px 30px rgba(36, 54, 80, 0.08);
+}
+
+.kz-c-chart-title {
+  margin 0 0 0.25rem;
+  color: #243650;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.kz-c-chart-canvas {
+  width: 100%;
+  min-height: 300px;
+}
+.kz-c-design-matrix-section {
+  margin-top 1rem;
+}
+
+.kz-c-design-matrix-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap 1rem;
+  margin-bottom 0.75rem;
+}
+
+.kz-c-design-matrix-heading h3 {
+  margin 0;
+  color: #243650;
+  font-size: 1rem;
+}
+
+.kz-c-design-matrix-note,
+.kz-c-design-matrix-scroll-hint {
+  margin 0.25rem 0 0;
+  color: var(--kz-c-muted);
+  font-size: 0.86rem;
+}
+
+.kz-c-design-matrix-scroll-hint {
+  flex: 0 0 auto;
+  margin 0;
+}
+
+.kz-c-design-matrix-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(36, 54, 80, 0.05);
+  overscroll-behavior-inline: contain;
+}
+
+.kz-c-design-matrix-wrap:focus-visible {
+  outline: 3px solid var(--kz-c-focus);
+  outline-offset: 2px;
+}
+
+.kz-c-design-matrix {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+}
+
+.kz-c-design-matrix__th,
+.kz-c-design-matrix__field-cell,
+.kz-c-design-matrix__cell {
+  min-width: 212px;
+  border-right: 1px solid var(--kz-c-line);
+  border-bottom: 1px solid var(--kz-c-line);
+  padding 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.5;
+  font-size: 0.88rem;
+}
+
+.kz-c-design-matrix__th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  color: #243650;
+  background: #f4f6f9;
+  font-weight: 700;
+}
+
+.kz-c-design-matrix__field-th,
+.kz-c-design-matrix__field-cell {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  width: 190px;
+  min-width: 190px;
+  background: #fff;
+}
+
+.kz-c-design-matrix__field-th {
+  z-index: 6;
+  background: #e9edf3;
+}
+
+.kz-c-design-matrix__trial-th {
+  min-width: 212px;
+}
+
+.kz-c-design-matrix__trial-id,
+.kz-c-design-matrix__trial-product,
+.kz-c-design-matrix__trial-meta,
+.kz-c-design-matrix__trial-region,
+.kz-c-design-matrix__trial-role,
+.kz-c-design-matrix__field-label,
+.kz-c-design-matrix__field-family {
+  display: block;
+}
+
+.kz-c-design-matrix__trial-id,
+.kz-c-design-matrix__field-label {
+  color: #243650;
+  font-weight: 700;
+}
+
+.kz-c-design-matrix__trial-product,
+.kz-c-design-matrix__trial-meta,
+.kz-c-design-matrix__trial-region,
+.kz-c-design-matrix__trial-role,
+.kz-c-design-matrix__field-family {
+  margin-top 0.25rem;
+  color: var(--kz-c-muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.kz-c-design-matrix__group-row th {
+  padding 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--kz-c-line);
+  color: #92400e;
+  background: var(--kz-c-accent-soft);
+  text-align: left;
+}
+
+.kz-c-matrix-group-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap 0.5rem;
+  appearance: none;
+  border: 0;
+  padding 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.kz-c-matrix-group-toggle span {
+  font-size: 0.8rem;
+}
+
+.kz-c-design-matrix__cell {
+  background: #fff;
+}
+
+.kz-c-design-matrix__cell--empty {
+  color: var(--kz-c-muted);
+  background: #fafbfc;
+}
+
+.kz-c-design-matrix__items {
+  display: grid;
+  gap 0.25rem;
+  margin 0;
+  padding 0;
+  list-style: none;
+}
+
+.kz-c-matrix-cell-trigger {
+  display: block;
+  width: 100%;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding 0rem 0.25rem;
+  color: #243650;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.kz-c-matrix-cell-trigger:hover {
+  border-color: var(--kz-c-line);
+  background: #fff9ef;
+}
+
+.kz-c-matrix-cell-trigger:focus-visible,
+.kz-c-matrix-group-toggle:focus-visible {
+  outline: 3px solid var(--kz-c-focus);
+  outline-offset: 2px;
+}
+
+.kz-chart-module__group {
+  margin-bottom 1rem;
+}
+
+.kz-chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(36, 54, 80, 0.05);
+}
+
+.kz-chart-table__th,
+.kz-chart-table__cell {
+  border-bottom: 1px solid var(--kz-c-line);
+  padding 0.75rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+
+.kz-chart-table__th {
+  position: sticky;
+  top: 76px;
+  z-index: 1;
+  color: #243650;
+  background: #f4f6f9;
+  font-weight: 700;
+}
+
+.kz-chart-table__row:hover {
+  background: #fff9ef;
+}
+
+.kz-chart-table__row[tabindex="0"]:focus-visible {
+  outline: 3px solid var(--kz-c-focus);
+  outline-offset: -3px;
+}
+
+.kz-c-evidence-button {
+  appearance: none;
+  border: 1px solid var(--kz-c-line);
+  background: var(--kz-c-soft);
+  border-radius: 8px;
+  padding 0.25rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.kz-c-path-grid,
+.kz-c-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap 0.75rem;
+  margin-top 0.75rem;
+}
+
+.kz-c-path-card,
+.kz-c-profile-card {
+  display: block;
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+  background: #fff;
+  padding 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.kz-c-path-card h3,
+.kz-c-profile-card strong {
+  margin 0 0 0.5rem;
+}
+
+.kz-c-profile-card__type,
+.kz-c-dossier-marker {
+  display: inline-block;
+  margin-bottom 0.25rem;
+  color: #92400e;
+  background: var(--kz-c-accent-soft);
+  border-radius: 999px;
+  padding 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.kz-c-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap 0.5rem;
+  margin-bottom 0.75rem;
+  color: var(--kz-c-muted);
+}
+
+.kz-c-breadcrumb a {
+  color: inherit;
+}
+
+@media (max-width: 1024px) {
+  .kz-c-main {
+    padding-inline 0.75rem;
+  }
+
+  .kz-c-filter-panel:not([open]) .kz-c-filters {
+    display: none;
+  }
+
+  .kz-c-chart-visuals {
+    padding-inline 0.75rem;
+  }
+
+  .kz-chart-table__th,
+  .kz-chart-table__cell {
+    padding 0.5rem 0.5rem;
+    font-size: 0.86rem;
+  }
+  .kz-c-design-matrix-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap 0.25rem;
+  }
+
+  .kz-c-design-matrix-wrap {
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .kz-c-design-matrix__th,
+  .kz-c-design-matrix__field-cell,
+  .kz-c-design-matrix__cell {
+    min-width: 196px;
+    padding 0.5rem 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  .kz-c-design-matrix__field-th,
+  .kz-c-design-matrix__field-cell {
+    width: 170px;
+    min-width: 170px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kz-c-site * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,2134 @@
+{
+  "all_required_fields_present": true,
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "indication": "中重度特应性皮炎",
+  "indication_id": "atopic-dermatitis",
+  "mechanism_classes": [
+    "AhR通路",
+    "JAK通路",
+    "PDE4通路",
+    "T细胞共刺激通路",
+    "细胞因子通路"
+  ],
+  "no_cross_trial_substitution": true,
+  "per_product": [
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 1,
+        "primary_endpoint_definition": 1,
+        "primary_endpoint_timepoint": 1,
+        "target_population": 1
+      },
+      "display_name": "度普利尤单抗（Dupilumab）",
+      "mechanism": "IL-4Rα受体阻断，抑制IL-4/IL-13信号",
+      "mechanism_class": "细胞因子通路",
+      "observation_count": 17,
+      "product_id": "dupilumab",
+      "route": "皮下注射",
+      "source_record_ids": [
+        "NCT02260986"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "IL-4Rα",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct02260986"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 2,
+        "primary_endpoint_definition": 2,
+        "primary_endpoint_timepoint": 2,
+        "target_population": 2
+      },
+      "display_name": "曲罗芦单抗（Tralokinumab）",
+      "mechanism": "中和IL-13并阻断其受体相互作用",
+      "mechanism_class": "细胞因子通路",
+      "observation_count": 34,
+      "product_id": "tralokinumab",
+      "route": "皮下注射",
+      "source_record_ids": [
+        "NCT03131648",
+        "NCT03761537"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "IL-13",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct03131648",
+        "nct03761537"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 3,
+        "primary_endpoint_definition": 3,
+        "primary_endpoint_timepoint": 3,
+        "target_population": 3
+      },
+      "display_name": "来布利珠单抗（Lebrikizumab）",
+      "mechanism": "靶向IL-13信号通路",
+      "mechanism_class": "细胞因子通路",
+      "observation_count": 51,
+      "product_id": "lebrikizumab",
+      "route": "皮下注射",
+      "source_record_ids": [
+        "NCT04178967",
+        "NCT05149313",
+        "NCT04146363"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "IL-13",
+      "trial_count": 3,
+      "trial_ids": [
+        "nct04178967",
+        "nct05149313",
+        "nct04146363"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 1,
+        "primary_endpoint_definition": 1,
+        "primary_endpoint_timepoint": 1,
+        "target_population": 1
+      },
+      "display_name": "奈莫利珠单抗（Nemolizumab）",
+      "mechanism": "阻断IL-31受体A相关信号",
+      "mechanism_class": "细胞因子通路",
+      "observation_count": 17,
+      "product_id": "nemolizumab",
+      "route": "皮下注射",
+      "source_record_ids": [
+        "NCT03985943"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "IL-31RA",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct03985943"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 2,
+        "primary_endpoint_definition": 2,
+        "primary_endpoint_timepoint": 2,
+        "target_population": 2
+      },
+      "display_name": "乌帕替尼（Upadacitinib）",
+      "mechanism": "选择性JAK1抑制剂",
+      "mechanism_class": "JAK通路",
+      "observation_count": 34,
+      "product_id": "upadacitinib",
+      "route": "口服",
+      "source_record_ids": [
+        "NCT03569293",
+        "NCT03607422"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "JAK1",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct03569293",
+        "nct03607422"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 1,
+        "primary_endpoint_definition": 1,
+        "primary_endpoint_timepoint": 1,
+        "target_population": 1
+      },
+      "display_name": "巴瑞替尼（Baricitinib）",
+      "mechanism": "JAK1/JAK2抑制剂",
+      "mechanism_class": "JAK通路",
+      "observation_count": 17,
+      "product_id": "baricitinib",
+      "route": "口服",
+      "source_record_ids": [
+        "NCT03334396"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "JAK1/JAK2",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct03334396"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 2,
+        "primary_endpoint_definition": 2,
+        "primary_endpoint_timepoint": 2,
+        "target_population": 2
+      },
+      "display_name": "鲁索利替尼（Ruxolitinib）",
+      "mechanism": "局部JAK1/JAK2抑制剂",
+      "mechanism_class": "JAK通路",
+      "observation_count": 34,
+      "product_id": "ruxolitinib",
+      "route": "外用",
+      "source_record_ids": [
+        "NCT03745651",
+        "NCT04921969"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "JAK1/JAK2",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct03745651",
+        "nct04921969"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 2,
+        "primary_endpoint_definition": 2,
+        "primary_endpoint_timepoint": 2,
+        "target_population": 2
+      },
+      "display_name": "罗氟司特（Roflumilast）",
+      "mechanism": "PDE4抑制剂",
+      "mechanism_class": "PDE4通路",
+      "observation_count": 34,
+      "product_id": "roflumilast",
+      "route": "外用",
+      "source_record_ids": [
+        "NCT04773587",
+        "NCT04773600"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "PDE4",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct04773587",
+        "nct04773600"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 1,
+        "primary_endpoint_definition": 1,
+        "primary_endpoint_timepoint": 1,
+        "target_population": 1
+      },
+      "display_name": "Tapinarof",
+      "mechanism": "芳香烃受体（AhR）激动剂",
+      "mechanism_class": "AhR通路",
+      "observation_count": 17,
+      "product_id": "tapinarof",
+      "route": "外用",
+      "source_record_ids": [
+        "NCT05032859"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "AhR",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct05032859"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 1,
+        "primary_endpoint_definition": 1,
+        "primary_endpoint_timepoint": 1,
+        "target_population": 1
+      },
+      "display_name": "Difamilast",
+      "mechanism": "PDE4抑制剂",
+      "mechanism_class": "PDE4通路",
+      "observation_count": 17,
+      "product_id": "difamilast",
+      "route": "外用",
+      "source_record_ids": [
+        "NCT05608343"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "PDE4",
+      "trial_count": 1,
+      "trial_ids": [
+        "nct05608343"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 2,
+        "primary_endpoint_definition": 2,
+        "primary_endpoint_timepoint": 2,
+        "target_population": 2
+      },
+      "display_name": "Rocatinlimab",
+      "mechanism": "靶向OX40的抗体，调节T细胞共刺激",
+      "mechanism_class": "T细胞共刺激通路",
+      "observation_count": 34,
+      "product_id": "rocatinlimab",
+      "route": "皮下注射",
+      "source_record_ids": [
+        "NCT05398445",
+        "NCT05651711"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "OX40",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct05398445",
+        "nct05651711"
+      ]
+    },
+    {
+      "all_trials_have_all_required_fields": true,
+      "critical_field_trial_counts": {
+        "arm_randomization_blinding": 2,
+        "primary_endpoint_definition": 2,
+        "primary_endpoint_timepoint": 2,
+        "target_population": 2
+      },
+      "display_name": "Amlitelimab",
+      "mechanism": "靶向OX40L的抗体，调节T细胞共刺激",
+      "mechanism_class": "T细胞共刺激通路",
+      "observation_count": 34,
+      "product_id": "amlitelimab",
+      "route": "皮下注射",
+      "source_record_ids": [
+        "NCT06130566",
+        "NCT06241118"
+      ],
+      "sparse_coverage_is_explicit": true,
+      "target": "OX40L",
+      "trial_count": 2,
+      "trial_ids": [
+        "nct06130566",
+        "nct06241118"
+      ]
+    }
+  ],
+  "per_trial": [
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 19,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct02260986-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=TRIPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct02260986-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Percentage of Participants With Investigator's Global Assessment (IGA) Score of \"0\" or \"1\" and Reduction From Baseline of ≥2 Points at Week 16；IGA is an assessment scale used to determine severity of AD and clinical res…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct02260986-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline to Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986"
+        },
+        "target_population": {
+          "observation_id": "obs-nct02260986-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=18 Years; 1. Chronic AD that had been present for at least 3 years before the screening visit;",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT02260986",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "dupilumab",
+      "sample_size": 740,
+      "source_record_id": "NCT02260986",
+      "source_relative_path": "sources/clinicaltrials/NCT02260986.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+      "source_version_id": "ctgov-nct02260986-0ecc13b6624228aa",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "IL-4Rα受体阻断，抑制IL-4/IL-13信号",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02260986",
+        "source_version_id": "ctgov-nct02260986-0ecc13b6624228aa",
+        "target": "IL-4Rα"
+      },
+      "trial_id": "nct02260986"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 34,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct04178967-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct04178967-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Percentage of Participants With an Investigator Global Assessment (IGA) Score of 0 or 1 and a Reduction ≥2 Points From Baseline to Week 16；The IGA measures the investigator's global assessment of the participant's overa…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct04178967-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline to Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967"
+        },
+        "target_population": {
+          "observation_id": "obs-nct04178967-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Male or female adults and adolescents (≥12 years and ≥40 kg)；registry minimumAge=12 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT04178967",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "lebrikizumab",
+      "sample_size": 445,
+      "source_record_id": "NCT04178967",
+      "source_relative_path": "sources/clinicaltrials/NCT04178967.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+      "source_version_id": "ctgov-nct04178967-2985a5c699089365",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向IL-13信号通路",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04178967",
+        "source_version_id": "ctgov-nct04178967-2985a5c699089365",
+        "target": "IL-13"
+      },
+      "trial_id": "nct04178967"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 39,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03985943-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03985943-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a More Than Equal to [>=] 2-point Reduction): Intent-To-Treat (ITT) Population；IGA success was defined as an IGA score…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03985943-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03985943-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Male or female subjects aged greater than and equal to (\\>=) 12 years at the screening visit.；registry minimumAge=12 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03985943",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "nemolizumab",
+      "sample_size": 941,
+      "source_record_id": "NCT03985943",
+      "source_relative_path": "sources/clinicaltrials/NCT03985943.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+      "source_version_id": "ctgov-nct03985943-0137d160e62e59ad",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "阻断IL-31受体A相关信号",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03985943",
+        "source_version_id": "ctgov-nct03985943-0137d160e62e59ad",
+        "target": "IL-31RA"
+      },
+      "trial_id": "nct03985943"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 13,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct05149313-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct05149313-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Double-blind Induction Period: Percentage of Participants Who Achieved Eczema Area and Severity Index (EASI) 75 (>=75% Reduction From Baseline in EASI Score) at Week 16；The EASI score is used to measure the severity and…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct05149313-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "At Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313"
+        },
+        "target_population": {
+          "observation_id": "obs-nct05149313-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Adults and adolescents (aged greater than or equal to (\\>=) 12 to \\<18 years at the time of Informed Consent Form (ICF)/Informed Assent Form (IAF) and weighing \\>=40 kilograms).；registry minimumAge=12 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT05149313",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "lebrikizumab",
+      "sample_size": 331,
+      "source_record_id": "NCT05149313",
+      "source_relative_path": "sources/clinicaltrials/NCT05149313.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+      "source_version_id": "ctgov-nct05149313-2dca024f2ff3b749",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向IL-13信号通路",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05149313",
+        "source_version_id": "ctgov-nct05149313-2dca024f2ff3b749",
+        "target": "IL-13"
+      },
+      "trial_id": "nct05149313"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 31,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03131648-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=DOUBLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03131648-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Subjects With Investigator's Global Assessment (IGA) Score of 0 (Clear) or 1 (Almost Clear) at Week 16；The IGA is an instrument used in clinical trials to rate the severity of the subject's global AD and is based on a 5…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03131648-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "At Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03131648-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "2. Age 18 and above.；registry minimumAge=18 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03131648",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "tralokinumab",
+      "sample_size": 802,
+      "source_record_id": "NCT03131648",
+      "source_relative_path": "sources/clinicaltrials/NCT03131648.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648",
+      "source_version_id": "ctgov-nct03131648-dc203d7a2420433e",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "中和IL-13并阻断其受体相互作用",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03131648",
+        "source_version_id": "ctgov-nct03131648-dc203d7a2420433e",
+        "target": "IL-13"
+      },
+      "trial_id": "nct03131648"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 19,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03761537-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=DOUBLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03761537-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "At Least 75% Reduction in Eczema Area and Severity Index (EASI75) From Week 0 to Week 16；EASI (Eczema Area and Severity Index) is a validated measure used in clinical practice and clinical trials to assess the severity …",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03761537-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Week 0 to Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03761537-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Age 18 and above；registry minimumAge=18 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03761537",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "tralokinumab",
+      "sample_size": 277,
+      "source_record_id": "NCT03761537",
+      "source_relative_path": "sources/clinicaltrials/NCT03761537.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537",
+      "source_version_id": "ctgov-nct03761537-c72fcf005a59e90e",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "中和IL-13并阻断其受体相互作用",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03761537",
+        "source_version_id": "ctgov-nct03761537-c72fcf005a59e90e",
+        "target": "IL-13"
+      },
+      "trial_id": "nct03761537"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 31,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct04146363-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct04146363-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Percentage of Participants With an Investigator Global Assessment (IGA) Score of 0 or 1 and a Reduction ≥2 Points From Baseline to Week 16；The IGA measures the investigator's global assessment of the participant's overa…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct04146363-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline to Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363"
+        },
+        "target_population": {
+          "observation_id": "obs-nct04146363-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Male or female adults and adolescents (≥12 years and ≥40 kg)；registry minimumAge=12 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT04146363",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "lebrikizumab",
+      "sample_size": 424,
+      "source_record_id": "NCT04146363",
+      "source_relative_path": "sources/clinicaltrials/NCT04146363.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363",
+      "source_version_id": "ctgov-nct04146363-a7e6d0e7180a0cfd",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向IL-13信号通路",
+        "mechanism_class": "细胞因子通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04146363",
+        "source_version_id": "ctgov-nct04146363-a7e6d0e7180a0cfd",
+        "target": "IL-13"
+      },
+      "trial_id": "nct04146363"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 40,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03569293-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03569293-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Main Study: Percentage of Participants Achieving at Least a 75% Reduction in Eczema Area and Severity Index Score (EASI 75) From Baseline at Week 16；EASI is a tool used to measure the extent (area) and severity of atopi…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03569293-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline and Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03569293-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=12 Years; * Chronic atopic dermatitis (AD) with onset of symptoms at least 3 years before Baseline Visit and subject meets Hanifin and Rajka criteria.",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03569293",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "upadacitinib",
+      "sample_size": 912,
+      "source_record_id": "NCT03569293",
+      "source_relative_path": "sources/clinicaltrials/NCT03569293.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293",
+      "source_version_id": "ctgov-nct03569293-c4a8fa331a578ec0",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "选择性JAK1抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03569293",
+        "source_version_id": "ctgov-nct03569293-c4a8fa331a578ec0",
+        "target": "JAK1"
+      },
+      "trial_id": "nct03569293"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 37,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03607422-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03607422-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Main Study: Percentage of Participants Achieving at Least a 75% Reduction in Eczema Area and Severity Index Score (EASI 75) From Baseline at Week 16；EASI is a tool used to measure the extent (area) and severity of atopi…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03607422-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline and Week 16",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03607422-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=12 Years; * Chronic atopic dermatitis (AD) with onset of symptoms at least 3 years prior to Baseline and subject meets Hanifin and Rajka criteria",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03607422",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "upadacitinib",
+      "sample_size": 912,
+      "source_record_id": "NCT03607422",
+      "source_relative_path": "sources/clinicaltrials/NCT03607422.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422",
+      "source_version_id": "ctgov-nct03607422-957d1f0dfcec0098",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "选择性JAK1抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[1]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03607422",
+        "source_version_id": "ctgov-nct03607422-957d1f0dfcec0098",
+        "target": "JAK1"
+      },
+      "trial_id": "nct03607422"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 34,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03334396-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=DOUBLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03334396-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Percentage of Participants Achieving Investigator's Global Assessment (IGA) of 0 or 1 With a ≥ 2 Point Improvement (Placebo, 2 mg, or 4 mg Baricitinib)；The IGA measures the investigator's global assessment of the partic…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03334396-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "16 Weeks",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03334396-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=18 Years; * Have been diagnosed with moderate to severe Atopic Dermatitis for at least 12 months.",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03334396",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "baricitinib",
+      "sample_size": 660,
+      "source_record_id": "NCT03334396",
+      "source_relative_path": "sources/clinicaltrials/NCT03334396.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396",
+      "source_version_id": "ctgov-nct03334396-a6bd448f96fdd502",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "JAK1/JAK2抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03334396",
+        "source_version_id": "ctgov-nct03334396-a6bd448f96fdd502",
+        "target": "JAK1/JAK2"
+      },
+      "trial_id": "nct03334396"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 9,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct03745651-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct03745651-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "VC Period: Percentage of Participants Who Achieved Investigator's Global Assessment - Treatment Success (IGA-TS) at Week 8；The IGA is an overall eczema severity rating on a 5-point scale ranging from 0 (clear skin) to 4…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct03745651-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline to Week 8",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651"
+        },
+        "target_population": {
+          "observation_id": "obs-nct03745651-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=12 Years; * Participants diagnosed with atopic dermatitis (AD) as defined by the Hanifin and Rajka criteria.",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT03745651",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "ruxolitinib",
+      "sample_size": 618,
+      "source_record_id": "NCT03745651",
+      "source_relative_path": "sources/clinicaltrials/NCT03745651.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651",
+      "source_version_id": "ctgov-nct03745651-b7ce1187fd10f5bc",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "局部JAK1/JAK2抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT03745651",
+        "source_version_id": "ctgov-nct03745651-b7ce1187fd10f5bc",
+        "target": "JAK1/JAK2"
+      },
+      "trial_id": "nct03745651"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 18,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct04921969-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=TRIPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct04921969-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "VC Period: Percentage of Participants Who Achieved Investigator's Global Assessment - Treatment Success (IGA-TS) at Week 8；The IGA is an overall eczema severity rating on a 5-point scale ranging from 0 (clear skin) to 4…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct04921969-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline to Week 8",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969"
+        },
+        "target_population": {
+          "observation_id": "obs-nct04921969-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=2 Years; * Participants diagnosed with Atopic Dermatitis (AD) as defined by the Hanifin and Rajka criteria.",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT04921969",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "ruxolitinib",
+      "sample_size": 330,
+      "source_record_id": "NCT04921969",
+      "source_relative_path": "sources/clinicaltrials/NCT04921969.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969",
+      "source_version_id": "ctgov-nct04921969-fedb0856c985a24d",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "局部JAK1/JAK2抑制剂",
+        "mechanism_class": "JAK通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04921969",
+        "source_version_id": "ctgov-nct04921969-fedb0856c985a24d",
+        "target": "JAK1/JAK2"
+      },
+      "trial_id": "nct04921969"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 8,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct04773587-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=TRIPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct04773587-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Achievement of Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) Success at Week 4；The percentage of participants achieving vIGA-AD \"success\" is presented with multiple imputation of missing obser…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct04773587-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Week 4",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587"
+        },
+        "target_population": {
+          "observation_id": "obs-nct04773587-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "2. Males and females, ages 6 years and older at time of signing Informed Consent (Screening). Only subjects 18 years and older will be enrolled at sites located in the province of Québec in Canada.；registry minimumAge=6…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT04773587",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "roflumilast",
+      "sample_size": 654,
+      "source_record_id": "NCT04773587",
+      "source_relative_path": "sources/clinicaltrials/NCT04773587.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587",
+      "source_version_id": "ctgov-nct04773587-d60e96578c757ff1",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "PDE4抑制剂",
+        "mechanism_class": "PDE4通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773587",
+        "source_version_id": "ctgov-nct04773587-d60e96578c757ff1",
+        "target": "PDE4"
+      },
+      "trial_id": "nct04773587"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 10,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct04773600-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=TRIPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct04773600-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Achievement of Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) Success at Week 4；The percentage of participants achieving viGA-AD \"success\" is presented with multiple imputation of missing obser…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct04773600-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Week 4",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600"
+        },
+        "target_population": {
+          "observation_id": "obs-nct04773600-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "2. Males and females, ages 6 years and older at time of signing Informed Consent (Screening). Only subjects 18 years and older will be enrolled at sites located in the province of Québec in Canada.；registry minimumAge=6…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT04773600",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "roflumilast",
+      "sample_size": 683,
+      "source_record_id": "NCT04773600",
+      "source_relative_path": "sources/clinicaltrials/NCT04773600.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600",
+      "source_version_id": "ctgov-nct04773600-ea56c2891f79cc81",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "PDE4抑制剂",
+        "mechanism_class": "PDE4通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04773600",
+        "source_version_id": "ctgov-nct04773600-ea56c2891f79cc81",
+        "target": "PDE4"
+      },
+      "trial_id": "nct04773600"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 9,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct05032859-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct05032859-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Percent of Subjects Who Have a Validated Investigator Global Assessment for Atopic Dermatitis (vIGA-AD) Score of Clear or Almost Clear (0 or 1) With a Minimum 2-grade Improvement From Baseline to Week 8. Analyses Were D…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct05032859-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline to Week 8",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859"
+        },
+        "target_population": {
+          "observation_id": "obs-nct05032859-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Male and female subjects ages 2 and above with clinical diagnosis of AD；registry minimumAge=2 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT05032859",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "tapinarof",
+      "sample_size": 406,
+      "source_record_id": "NCT05032859",
+      "source_relative_path": "sources/clinicaltrials/NCT05032859.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859",
+      "source_version_id": "ctgov-nct05032859-36ff60070f895fd2",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "芳香烃受体（AhR）激动剂",
+        "mechanism_class": "AhR通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05032859",
+        "source_version_id": "ctgov-nct05032859-36ff60070f895fd2",
+        "target": "AhR"
+      },
+      "trial_id": "nct05032859"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 12,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct05608343-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=SEQUENTIAL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct05608343-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "To evaluate the efficacy of twice-daily topical application of Difamilast ointment 1% compared to vehicle control in subjects ≥2 years of age with mild to moderate AD；The proportion of subjects achieving success on the …",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct05608343-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline, Day 29",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343"
+        },
+        "target_population": {
+          "observation_id": "obs-nct05608343-target_population",
+          "registry_covered": true,
+          "source_field_path": "eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "Registry minimumAge=2 Years; 2. Subjects and/or their parent(s)/legal guardian(s) (if subject is under the legal age of consent) provide written informed consent in accordance with federal and/or local laws prior to the…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT05608343",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "difamilast",
+      "sample_size": 153,
+      "source_record_id": "NCT05608343",
+      "source_relative_path": "sources/clinicaltrials/NCT05608343.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343",
+      "source_version_id": "ctgov-nct05608343-604ce550796686a0",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "PDE4抑制剂",
+        "mechanism_class": "PDE4通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05608343",
+        "source_version_id": "ctgov-nct05608343-604ce550796686a0",
+        "target": "PDE4"
+      },
+      "trial_id": "nct05608343"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 48,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct05398445-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=DOUBLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct05398445-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Number of Participants Who Achieved Validated Investigator's Global Assessment for AD (vIGA-AD) 1 Response With Presence of Only Barely Perceptible Erythema or vIGA-AD 0 Response (Revised Investigator's Global Assessmen…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct05398445-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline and Week 24",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445"
+        },
+        "target_population": {
+          "observation_id": "obs-nct05398445-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Age ≥ 18 years with a diagnosis of AD according to the AAD Consensus Criteria (2014) present for at least 12 months；registry minimumAge=18 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT05398445",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "rocatinlimab",
+      "sample_size": 769,
+      "source_record_id": "NCT05398445",
+      "source_relative_path": "sources/clinicaltrials/NCT05398445.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445",
+      "source_version_id": "ctgov-nct05398445-78ead594f5baec25",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05398445",
+        "source_version_id": "ctgov-nct05398445-78ead594f5baec25",
+        "target": "OX40"
+      },
+      "trial_id": "nct05398445"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 40,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct05651711-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=DOUBLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct05651711-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "Number of Participants Who Achieved Validated Investigator's Global Assessment for AD (vIGA-AD) 1 Response With Presence of Only Barely Perceptible Erythema or vIGA-AD 0 Response (Revised Investigator's Global Assessmen…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct05651711-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Baseline and Week 24",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711"
+        },
+        "target_population": {
+          "observation_id": "obs-nct05651711-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Age ≥ 18 years (or ≥ legal adult age within the country if it is older than 18 years at signing of informed consent) with a diagnosis of AD according to the AAD Consensus Criteria (2014) present for at least 12 months…",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT05651711",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "rocatinlimab",
+      "sample_size": 726,
+      "source_record_id": "NCT05651711",
+      "source_relative_path": "sources/clinicaltrials/NCT05651711.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711",
+      "source_version_id": "ctgov-nct05651711-594ceeed901ab007",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT05651711",
+        "source_version_id": "ctgov-nct05651711-594ceeed901ab007",
+        "target": "OX40"
+      },
+      "trial_id": "nct05651711"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 25,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct06130566-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct06130566-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "EU, EU reference countries, and Japan: Proportion of participants with Validated Investigator Global Assessment scale for Atopic Dermatitis (vIGA-AD) of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 …",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct06130566-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Week 24",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566"
+        },
+        "target_population": {
+          "observation_id": "obs-nct06130566-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "* Participants must be 12 years of age (when signing informed consent form)；registry minimumAge=12 Years",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT06130566",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "amlitelimab",
+      "sample_size": 601,
+      "source_record_id": "NCT06130566",
+      "source_relative_path": "sources/clinicaltrials/NCT06130566.json",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566",
+      "source_version_id": "ctgov-nct06130566-21f0df3dc53a4fc5",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "已完成",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40L的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT06130566",
+        "source_version_id": "ctgov-nct06130566-21f0df3dc53a4fc5",
+        "target": "OX40L"
+      },
+      "trial_id": "nct06130566"
+    },
+    {
+      "all_required_fields_present": true,
+      "as_of_cutoff_version": 27,
+      "critical_field_coverage": {
+        "arm_randomization_blinding": {
+          "observation_id": "obs-nct06241118-arm_randomization_blinding",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.designModule.designInfo",
+          "source_text_excerpt": "allocation=RANDOMIZED; interventionModel=PARALLEL; masking=QUADRUPLE",
+          "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27"
+        },
+        "primary_endpoint_definition": {
+          "observation_id": "obs-nct06241118-primary_endpoint_definition",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].measure + protocolSection.outcomesModule.primaryOutcomes[0].description",
+          "source_text_excerpt": "EU, EU reference countries, and Japan: Proportion of participants with Validated Investigator Global Assessment scale for Atopic Dermatitis (vIGA-AD) of 0 (clear) or 1 (almost clear) and a reduction from baseline of ≥2 …",
+          "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27"
+        },
+        "primary_endpoint_timepoint": {
+          "observation_id": "obs-nct06241118-primary_endpoint_timepoint",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.outcomesModule.primaryOutcomes[0].timeFrame",
+          "source_text_excerpt": "Week 36",
+          "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27"
+        },
+        "target_population": {
+          "observation_id": "obs-nct06241118-target_population",
+          "registry_covered": true,
+          "source_field_path": "protocolSection.eligibilityModule.minimumAge + protocolSection.eligibilityModule.eligibilityCriteria",
+          "source_text_excerpt": "<p>Inclusion Criteria:</p><ul><li>Participants must be 12 years of age (when signing informed consent form)</li><li>Diagnosis of AD for at least 1 year (defined by the American Academy of Dermatology Consensus Criteria)…",
+          "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27"
+        }
+      },
+      "critical_fields_present": [
+        "arm_randomization_blinding",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "target_population"
+      ],
+      "display_id": "NCT06241118",
+      "field_names": [
+        "analysis_population",
+        "arm_randomization_blinding",
+        "comparison_logic",
+        "control_arm",
+        "dosing_regimen",
+        "effect_size",
+        "exclusion_criterion",
+        "experimental_arm",
+        "inclusion_criterion",
+        "multiplicity",
+        "planned_or_actual_sample_size",
+        "primary_endpoint_definition",
+        "primary_endpoint_timepoint",
+        "statistical_model",
+        "target_population",
+        "trial_identity",
+        "visit_schedule"
+      ],
+      "no_cross_trial_substitution": true,
+      "observation_count": 17,
+      "phase": "III期",
+      "product_id": "amlitelimab",
+      "sample_size": 636,
+      "source_record_id": "NCT06241118",
+      "source_relative_path": "sources/clinicaltrials/NCT06241118.json",
+      "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+      "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+      "statistical_fields_not_publicly_disclosed": [
+        "analysis_population",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity"
+      ],
+      "status": "招募中",
+      "target_mechanism_metadata": {
+        "binding_type": "official_registry_identity_plus_normalized_controlled_classification",
+        "classification_note": "官方登记字段直接绑定干预产品身份；靶点/机制为基于该官方干预身份的受控机制分类，未将分类当作试验关键设计事实。",
+        "mechanism": "靶向OX40L的抗体，调节T细胞共刺激",
+        "mechanism_class": "T细胞共刺激通路",
+        "source_field_path": "protocolSection.armsInterventionsModule.interventions[0]",
+        "source_url": "https://clinicaltrials.gov/api/int/studies/NCT06241118/history/27",
+        "source_version_id": "ctgov-nct06241118-99daba1a71aa45f8",
+        "target": "OX40L"
+      },
+      "trial_id": "nct06241118"
+    }
+  ],
+  "report": "C",
+  "report_snapshot_id": "c-real-expanded-snapshot-20260901-b80ce7118b14",
+  "required_trial_fields": [
+    "target_population",
+    "arm_randomization_blinding",
+    "primary_endpoint_definition",
+    "primary_endpoint_timepoint"
+  ],
+  "routes": [
+    "口服",
+    "外用",
+    "皮下注射"
+  ],
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "totals": {
+    "observation_count": 340,
+    "product_count": 12,
+    "registry_source_record_count": 20,
+    "trial_count": 20
+  },
+  "universe_selection": {
+    "excluded_candidate_examples": [
+      {
+        "reason": "active-comparator record contains both abrocitinib and dupilumab; omitted from one-product-per-trial C binding to avoid ambiguous trial/product ownership",
+        "trial_id": "NCT04345367"
+      }
+    ],
+    "included_trial_ids": [
+      "NCT02260986",
+      "NCT04178967",
+      "NCT03985943",
+      "NCT05149313",
+      "NCT03131648",
+      "NCT03761537",
+      "NCT04146363",
+      "NCT03569293",
+      "NCT03607422",
+      "NCT03334396",
+      "NCT03745651",
+      "NCT04921969",
+      "NCT04773587",
+      "NCT04773600",
+      "NCT05032859",
+      "NCT05608343",
+      "NCT05398445",
+      "NCT05651711",
+      "NCT06130566",
+      "NCT06241118"
+    ],
+    "rule": "include randomized Phase III pivotal or late-stage innovative-drug atopic-dermatitis trials first posted on or before frozen cutoff; retain registry records with critical population/grouping/intervention/endpoint/timepoint fields"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "package_id": "phase-6-b-acceptance-package-final-20260830",
+  "supersedes": "acceptance-package.json",
+  "status": "accepted",
+  "phase_6": "completed",
+  "phase_7": "not_started",
+  "accepted_at": "2026-08-30T11:38:33Z",
+  "release_candidate": {
+    "fixture_id": "b-pnh",
+    "project_path": "b-pnh-responsive-visual-evidence-20260830",
+    "run_id": "run_fa24d20b3e1fdbc4252b7596",
+    "report_snapshot_id": "report-snapshot_fb255c120a1da4f5aba550e7",
+    "report_version": "v-fixture-b-pnh-001",
+    "artifact_digest": "f1b37ba4745997df319485fb6e929e24ed1153d0304376f6740c45fda3800381",
+    "accepted_manifest": {
+      "path": "b-pnh-responsive-visual-evidence-20260830/manifests/artifacts/artifact-manifest-accepted_002bad11c24551a833c5ce39.json",
+      "sha256": "d3be39828b6eea1b6acc918cf8df5387030048248f842730be52d6f4d645dc85",
+      "status": "accepted",
+      "supersedes_manifest_id": "artifact-manifest_78a7377f0e927740225ba5ed"
+    },
+    "visual_plan_digest": "8b920c69639545a06c2094c56e7b2d6e421ddacdf6eb400ea676b52d7e0e7afa",
+    "render_evidence_digest": "448b02f63c6da907f89080cc92b7fb8342ce93d1d72bfb21ea0331eca81b7e19",
+    "visual_verdict": {
+      "path": "b-pnh-responsive-visual-evidence-20260830/reviews/visual-finalization/visual-verification-reference.json",
+      "sha256": "c79bb1cf6c0bc50f74dc26e059be9485984d8f8f2595d1577c14662c3a2fe680",
+      "verdict": "accepted",
+      "verifier_identity": "pi/kimi-code/k3-256k:visual_single_object"
+    }
+  },
+  "contract_cases": [
+    {
+      "fixture_id": "b-d70-baseline-blocked",
+      "expected": "evidence_blocked",
+      "observed": "evidence_blocked",
+      "evidence": "b-d70-baseline-blocked/blockers/B/v-fixture-b-d70-001/audit.json"
+    },
+    {
+      "fixture_id": "b-d70-baseline-recovered",
+      "expected": "completed",
+      "observed": "completed",
+      "evidence": "b-d70-baseline-recovered/reports/B/v-fixture-b-d70-002/html.manifest.json"
+    },
+    {
+      "fixture_id": "b-d70-disposition-missing-pass",
+      "expected": "completed",
+      "observed": "completed",
+      "evidence": "b-d70-disposition-missing-pass/reports/B/v-fixture-b-d70-003/html.manifest.json"
+    }
+  ],
+  "verification": {
+    "focused_phase_6_and_visual": "317 passed",
+    "phase_6_and_a_regression": "612 passed",
+    "browser_matrix": "24 routes x 2 engines x 3 widths",
+    "render_targets": 144,
+    "screenshots": 150,
+    "document_horizontal_overflow_px": 0,
+    "table_container_overflow_px": 0,
+    "page_errors": 0,
+    "console_errors": 0,
+    "open_visual_blockers": 0
+  },
+  "notes": "旧候选和旧清单保留为历史证据；本文件只将当前摘要与独立视觉结论绑定，不改写旧运行清单。"
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": "c-medical-manager-findings.v1",
+  "role": "worker_03",
+  "task": "ci-phase7-task75-report-c-portal",
+  "produced_at": "2026-08-30T22:35:00+08:00",
+  "engines": [
+    "chromium",
+    "webkit"
+  ],
+  "viewports": [
+    1024,
+    1280,
+    1440,
+    1920
+  ],
+  "site_candidate": "reviews/ci-phase7-task75-report-c-portal/site",
+  "not_final_acceptance": true,
+  "summary": {
+    "pages_matrix_checked": 120,
+    "baseline_functional_ok": [
+      "十二静态页 + 四试验详情物理存在",
+      "zh-CN / 康哲品牌",
+      "无横向溢出",
+      "无 console/page error",
+      "无页面加载期远程请求",
+      "筛选收窄与 URL 恢复",
+      "证据抽屉 Esc/焦点返回",
+      "设计路径 >=2 且无唯一最佳",
+      "核心图 DOM 存在（ECharts status_matrix/timeline/bubble）"
+    ],
+    "defect_clusters": [
+      {
+        "id": "D1",
+        "severity": "high",
+        "title": "核心图默认不在首屏",
+        "evidence": "Chromium/WebKit x 四宽度: [data-chart-type] top~1200-1350px, vh=900; #kz-filter-panel 默认 open 且高~772-818px。收起面板后 chartTop~482 且可见。",
+        "root_cause_inference": "templates/c/page.html.j2 中 details#kz-filter-panel 带 open，叠加快捷筛选，把视觉区压到首屏外。",
+        "proposed_fix": "默认关闭筛选 details；或图在筛选前；或折叠态只保留一行摘要。"
+      },
+      {
+        "id": "D2",
+        "severity": "high",
+        "title": "分组页泄露原始登记枚举拼串",
+        "evidence": "treatment-arms 完整表出现 allocation=RANDOMIZED; interventionModel=PARALLEL; masking=TRIPLE/QUADRUPLE；组别列显示“设计事实”。",
+        "proposed_fix": "映射为中文“随机、平行、三盲/四盲”；组别列用可理解分组名。"
+      },
+      {
+        "id": "D3",
+        "severity": "high",
+        "title": "设计路径卡片被完整表推到数千像素外",
+        "evidence": "design-patterns: chartTop~1212, tableTop~1568, pathTop~3641-4133；并出现“前提：前提：/权衡：权衡：”。",
+        "proposed_fix": "路径卡片紧挨核心图之后、完整表之前；去掉重复前缀。"
+      },
+      {
+        "id": "D4",
+        "severity": "medium",
+        "title": "图表标题偏工程泛化",
+        "evidence": "多数页 groupTitle=多项可比指标｜{页名}，与 C.yaml visuals 不一致。"
+      },
+      {
+        "id": "D5",
+        "severity": "medium",
+        "title": "证据抽屉打开原文指向远程 API",
+        "evidence": "href=https://clinicaltrials.gov/api/v2/studies/NCT...；加载期无远程请求，点击会外连。"
+      },
+      {
+        "id": "D6",
+        "severity": "low",
+        "title": "快捷筛选与展开筛选面板信息重复",
+        "evidence": "首屏同时出现 kz-c-filter-quick 与 open 的 kz-filter-panel。"
+      }
+    ]
+  },
+  "adversarial_tests_added": [
+    "tests/browser/test_c_portal.py::test_c_adversarial_core_chart_is_default_visible_without_scrolling",
+    "tests/browser/test_c_portal.py::test_c_adversarial_design_paths_are_near_chart_not_after_giant_table",
+    "tests/browser/test_c_portal.py::test_c_adversarial_treatment_arms_avoid_raw_registry_enums",
+    "tests/browser/test_c_portal.py::test_c_adversarial_filter_panel_does_not_consume_first_screen",
+    "tests/acceptance/test_report_c.py::test_adversarial_portal_visible_copy_avoids_raw_enums_and_label_doubling",
+    "tests/acceptance/test_report_c.py::test_adversarial_filter_panel_default_does_not_bury_chart_marker",
+    "tests/integration/reports/test_c_report_portal.py::test_adversarial_c_user_visible_pages_reject_raw_design_enums"
+  ],
+  "adversarial_tests_status": "RED as intended against current Worker 02 candidate",
+  "codex_questions": [
+    "D1 是否授权 Worker 02 修改 templates/c/page.html.j2（去 open 或重排图/筛选）？Worker 03 不得改渲染器。",
+    "D5 打开原文是否必须本地化快照，还是允许外链 ClinicalTrials.gov？"
+  ]
+}

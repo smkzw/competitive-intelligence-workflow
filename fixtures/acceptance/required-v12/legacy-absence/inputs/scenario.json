@@ -1,0 +1,37 @@
+{
+  "case_id": "legacy-absence",
+  "source_fixture": "fixtures/negative/legacy-a-ad-shell/sample.json",
+  "redaction": "negative-summary-only",
+  "scenario": "旧工程无残留只能在明确授权、最终 RC 与恢复回执闭合后按精确清单执行和验证。",
+  "owner_stage": "10.8",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "shadow-copy",
+      "description_zh": "扫描并核验旧代码和模板影子副本不存在。"
+    },
+    {
+      "id": "symbolic-link",
+      "description_zh": "扫描旧工程符号链接和单一入口引用。"
+    },
+    {
+      "id": "legacy-entry",
+      "description_zh": "扫描启动器、执行入口和安装入口无可运行残留。"
+    },
+    {
+      "id": "consumer-reference",
+      "description_zh": "扫描消费者、配置和包清单中的旧路径引用。"
+    },
+    {
+      "id": "cache-backup",
+      "description_zh": "扫描缓存、备份登记和可恢复旧运行时副本。"
+    },
+    {
+      "id": "authorized-exact-list",
+      "description_zh": "只按用户明确授权的精确清单执行并保存 absence 回执。"
+    }
+  ]
+}

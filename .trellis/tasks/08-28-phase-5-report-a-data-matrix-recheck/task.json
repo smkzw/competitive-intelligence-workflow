@@ -1,0 +1,32 @@
+{
+  "id": "phase-5-report-a-data-matrix-recheck",
+  "name": "phase-5-report-a-data-matrix-recheck",
+  "title": "A类报告数值完整性与安全矩阵适配复查",
+  "description": "复查上阶段 A 类报告中疗效与安全性数值的真实覆盖，并修复首页及安全性详情页矩阵在默认视口仍需横向拖动的问题",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "A 类特应性皮炎当前报告的数据覆盖、来源状态、默认图表投影、首页与安全性页热图适配及最新产物交付；不扩展 B/C 或其他输出格式",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-28",
+  "completedAt": "2026-08-28",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-10-ci-workflow-rebuild",
+  "relatedFiles": [
+    "fixtures/positive/a-atopic-dermatitis/research-package.json",
+    "src/ci_workflow/renderers/portal/templates/a/safety.html.j2",
+    "src/ci_workflow/renderers/portal/assets/report-a.js",
+    "src/ci_workflow/renderers/portal/assets/portal.css",
+    ".artifacts/a-data-matrix-recheck-final-v2/reports/A/v1/html/overview.html"
+  ],
+  "notes": "这是对 08-27 已完成修复的用户纠正性复查；旧完成记录保留为历史，不沿用其接受结论。",
+  "meta": {}
+}

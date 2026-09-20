@@ -1,0 +1,464 @@
+{
+  "acquired_at": "2026-09-01T14:30:00+08:00",
+  "attempts": [
+    {
+      "captured_file": "research/b-real/sources/ctgov-nct04558918.json",
+      "http_status": 200,
+      "route_id": "ctgov-api-v2-apply",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-apply-20241009",
+      "status": "success",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT04558918",
+      "used_for": [
+        "trial design",
+        "arm mapping",
+        "baseline",
+        "efficacy model",
+        "flow",
+        "safety"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/ctgov-nct04820530.json",
+      "http_status": 200,
+      "route_id": "ctgov-api-v2-appoint",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-appoint-20241009",
+      "status": "success",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT04820530",
+      "used_for": [
+        "trial design",
+        "arm mapping",
+        "baseline",
+        "efficacy model",
+        "flow",
+        "safety"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/pubmed-38477987.xml",
+      "http_status": 200,
+      "route_id": "pubmed-eutils-primary",
+      "source_kind": "publication",
+      "source_version_id": "src-pubmed-primary-20240314",
+      "status": "success",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38477987&retmode=xml",
+      "used_for": [
+        "24-week observed efficacy counts",
+        "transfusion-free result",
+        "common AE narrative"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/pubmed-40447351.xml",
+      "http_status": 200,
+      "route_id": "pubmed-eutils-final",
+      "source_kind": "publication",
+      "source_version_id": "src-pubmed-final-20250530",
+      "status": "success",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=40447351&retmode=xml",
+      "used_for": [
+        "48-week final efficacy",
+        "extension",
+        "safety/discontinuation/death narrative"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/dailymed-fabhalta-20260716.html",
+      "http_status": 200,
+      "route_id": "dailymed-label",
+      "source_kind": "regulatory_label",
+      "source_version_id": "src-dailymed-fabhalta-20260716",
+      "status": "success",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a76b5845-6e21-4d3b-ad07-cd8df1b60bee",
+      "used_for": [
+        "US approval/indication/dose",
+        "selected adverse reactions",
+        "APPOINT serious adverse reactions"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/fabhalta-hcp-trial-designs.html",
+      "http_status": 200,
+      "route_id": "hcp-trial-designs",
+      "source_kind": "designated_industry_source",
+      "source_version_id": "src-hcp-design-202506",
+      "status": "success",
+      "url": "https://www.fabhalta-hcp.com/pnh/trial-designs",
+      "used_for": [
+        "arm mapping cross-check",
+        "baseline Hb and trial design"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/fabhalta-hcp-appoint.html",
+      "http_status": 200,
+      "route_id": "hcp-appoint-efficacy",
+      "source_kind": "designated_industry_source",
+      "source_version_id": "src-hcp-appoint-202506",
+      "status": "success",
+      "url": "https://www.fabhalta-hcp.com/pnh/complement-inhibitor-naive-patients",
+      "used_for": [
+        "APPOINT 92.2% model and 31/40 observed",
+        "24-week endpoint context"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/cadth-table11-apply-disposition.html",
+      "http_status": 200,
+      "route_id": "cadth-apply-table11",
+      "source_kind": "htA_table",
+      "source_version_id": "src-cadth-table11-202507",
+      "status": "success",
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK617236/table/tr8269868382085182_ch01_t11/",
+      "used_for": [
+        "screening/disposition/reasons"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/cadth-table13-apply-exposure.html",
+      "http_status": 200,
+      "route_id": "cadth-apply-table13",
+      "source_kind": "htA_table",
+      "source_version_id": "src-cadth-table13-202507",
+      "status": "success",
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK617236/table/tr8269868382085182_ch01_t13/",
+      "used_for": [
+        "exposure/adherence summary"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/cadth-table18-apply-safety.html",
+      "http_status": 200,
+      "route_id": "cadth-apply-table18",
+      "source_kind": "htA_table",
+      "source_version_id": "src-cadth-table18-202507",
+      "status": "success",
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK617236/table/tr8269868382085182_ch01_t18/",
+      "used_for": [
+        "APPLY 24-week TEAE/SAE/AESI/BTH/headache/discontinuation"
+      ]
+    },
+    {
+      "captured_file": "research/b-real/sources/novartis-appoint-20230426.html",
+      "http_status": 200,
+      "route_id": "novartis-appoint-release",
+      "source_kind": "company_disclosure",
+      "source_version_id": "src-novartis-appoint-20230426",
+      "status": "success",
+      "url": "https://www.novartis.com/news/media-releases/novartis-phase-iii-appoint-pnh-trial-shows-investigational-oral-monotherapy-iptacopan-improves-hemoglobin-near-normal-levels-leading-transfusion-independence-all-treatment-naive-pnh-patients",
+      "used_for": [
+        "early APPOINT efficacy cross-check; not final safety/disposition"
+      ]
+    },
+    {
+      "captured_file": null,
+      "diagnostic": "Direct DOI HTML returned HTTP 403; this is a route/access issue, not an evidence absence. PubMed abstract, ClinicalTrials.gov results, CADTH tables and official HCP/label alternatives were captured and used.",
+      "http_status": 403,
+      "route_id": "nejm-doi-direct-html",
+      "source_kind": "publication_direct_html",
+      "source_version_id": null,
+      "status": "technical_route_failed",
+      "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa2308695",
+      "used_for": []
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ctgov-nct04434092-official-extract.json",
+      "first_disclosed_at": "2022-11-16",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ctgov-commodore2",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-commodore2-20260731",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://clinicaltrials.gov/study/NCT04434092?tab=results",
+      "used_for": [
+        "Phase 3 COMMODORE 2; adult primary randomized comparator 204",
+        "crovalimab 135 and eculizumab 69; primary completion 2022-11-16",
+        "registry history last updated 2026-04-28, before the frozen cutoff"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/fda-piasky-official-extract.json",
+      "first_disclosed_at": "2024-06-20",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-fda-piasky",
+      "source_kind": "regulatory_material",
+      "source_version_id": "src-fda-piasky-20240620",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2024/761388Orig1s000IntegratedR.pdf",
+      "used_for": [
+        "US approval date 2024-06-20",
+        "204 adults randomized: crovalimab 135 and eculizumab 69",
+        "co-primary hemolysis-control and transfusion-avoidance outcomes",
+        "Integrated Review Tables 12, 13, 15, 16 and 23 provide baseline, efficacy and safety numerics"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/pubmed-38884175-official-extract.json",
+      "first_disclosed_at": "2024-06-17",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-pubmed-commodore2",
+      "source_kind": "publication",
+      "source_version_id": "src-pubmed-commodore2-20240617",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38884175/",
+      "used_for": [
+        "primary randomized phase 3 report for crovalimab in PNH",
+        "crovalimab and eculizumab comparator arms preserved"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/fda-empaveli-review-official-extract.json",
+      "first_disclosed_at": "2021-05-14",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-fda-empaveli-review",
+      "source_kind": "regulatory_material",
+      "source_version_id": "src-fda-empaveli-20210514",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2021/215014Orig1s000IntegratedR.pdf",
+      "used_for": [
+        "PEGASUS phase 3 APL2-302: 102 screened and 80 randomized",
+        "pegcetacoplan 41 and eculizumab 39; 79 of 80 completed the trial",
+        "Tables 8, 9, 23, 24 and 26 provide baseline and safety numerics"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ctgov-nct03500549-official-extract.json",
+      "first_disclosed_at": "2021-03-11",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ctgov-pegasus",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-pegasus-20260731",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://clinicaltrials.gov/study/NCT03500549?tab=results",
+      "used_for": [
+        "phase 3 randomized active-control APL2-302/PEGASUS",
+        "screened, randomized and treatment arms identified in the registry"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/pubmed-33730455-official-extract.json",
+      "first_disclosed_at": "2021-03-11",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-pubmed-pegasus",
+      "source_kind": "publication",
+      "source_version_id": "src-pubmed-pegasus-20210311",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33730455/",
+      "used_for": [
+        "week-16 Hb change +2.37 versus -1.47 g/dL",
+        "transfusion-free 35/41 versus 6/39",
+        "injection-site reaction, diarrhea, breakthrough hemolysis, headache and fatigue frequencies"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ctgov-nct04469465-official-extract.json",
+      "first_disclosed_at": "2023-12-01",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ctgov-alpha",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-alpha-20260731",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://clinicaltrials.gov/study/NCT04469465?tab=results",
+      "used_for": [
+        "phase 3 ALXN2040-PNH-301/ALPHA, randomized 2:1 add-on trial",
+        "86 randomized: danicopan 57 and placebo 29",
+        "12-week randomized period followed by danicopan treatment to week 24"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/fda-voydeya-official-extract.json",
+      "first_disclosed_at": "2024-03-29",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-fda-voydeya",
+      "source_kind": "regulatory_material",
+      "source_version_id": "src-fda-voydeya-20240329",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://www.fda.gov/drugs/drug-trials-snapshots/drug-trials-snapshots-voydeya",
+      "used_for": [
+        "US approval 2024-03-29; oral factor D inhibitor added to anti-C5 therapy",
+        "week-12 efficacy table: Hb change 2.94 versus 0.50; transfusion avoidance 83.3% versus 38.1%",
+        "safety population 57 danicopan and 29 placebo; selected events listed by arm"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/dailymed-voydeya-official-extract.json",
+      "first_disclosed_at": "2024-03-29",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-dailymed-voydeya",
+      "source_kind": "regulatory_label",
+      "source_version_id": "src-dailymed-voydeya-20240329",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab8d1cbd-a28b-4d49-82ab-5c7460719ac7",
+      "used_for": [
+        "US label indication and factor D add-on mechanism",
+        "label safety warnings and adverse reactions retained as regulatory context"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/pubmed-38030318-official-extract.json",
+      "first_disclosed_at": "2023-12-01",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-pubmed-alpha",
+      "source_kind": "publication",
+      "source_version_id": "src-pubmed-alpha-20231201",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38030318/",
+      "used_for": [
+        "primary phase 3 ALPHA report for danicopan add-on therapy",
+        "factor D mechanism and randomized placebo-controlled evidence"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ctgov-nct02946463-official-extract.json",
+      "first_disclosed_at": "2018-12-06",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ctgov-champion301",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-champion301-20260731",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://clinicaltrials.gov/study/NCT02946463?tab=results",
+      "used_for": [
+        "pivotal phase 3 Study 301/CHAMPION-301 randomized active-control trial",
+        "primary randomized comparator 246: ravulizumab 125 and eculizumab 121",
+        "completed trial and 26-week treatment completion facts preserved"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/fda-ultomiris-review-official-extract.json",
+      "first_disclosed_at": "2018-12-21",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-fda-ultomiris-review",
+      "source_kind": "regulatory_material",
+      "source_version_id": "src-fda-ultomiris-20181221",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2018/761108Orig1s000MultidisciplineR.pdf",
+      "used_for": [
+        "Tables 11 and 12 provide age, sex, baseline LDH and transfusion-history values",
+        "FDA review confirms the pivotal Study 301 analysis population"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/pubmed-30510080-official-extract.json",
+      "first_disclosed_at": "2018-12-06",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-pubmed-champion301",
+      "source_kind": "publication",
+      "source_version_id": "src-pubmed-champion301-20181206",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30510080/",
+      "used_for": [
+        "transfusion avoidance 73.6% versus 66.1%; breakthrough hemolysis 4.0% versus 10.7%",
+        "TEAE 88.0% versus 86.8%; SAE 8.8% versus 7.4%; deaths 0 versus 1",
+        "26-week treatment completion and trial-specific safety table values"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ema-ultomiris-epar-official-extract.json",
+      "first_disclosed_at": "2019-05-24",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ema-ultomiris-epar",
+      "source_kind": "regulatory_material",
+      "source_version_id": "src-ema-ultomiris-20190524",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://www.ema.europa.eu/en/documents/assessment-report/ultomiris-epar-public-assessment-report_en.pdf",
+      "used_for": [
+        "European regulatory assessment of ravulizumab",
+        "supporting regulatory context for pivotal disposition and efficacy"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ctgov-nct05131204-exclusion-extract.json",
+      "first_disclosed_at": "2024-09-19",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ctgov-access2",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-access2-20240919",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://clinicaltrials.gov/study/NCT05131204",
+      "used_for": [
+        "pozelimab plus cemdisiran phase 3 record was terminated",
+        "registry reason states sponsor decision not related to efficacy or safety"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": "research/b-real/sources/ctgov-nct05116787-exclusion-extract.json",
+      "first_disclosed_at": "2024-01-01",
+      "http_status": 200,
+      "post_cutoff_acquisition": true,
+      "route_id": "official-web-source-ctgov-bcx9930",
+      "source_kind": "registry",
+      "source_version_id": "src-ctgov-bcx9930-2024",
+      "status": "success",
+      "technical_status": null,
+      "url": "https://clinicaltrials.gov/study/NCT05116787",
+      "used_for": [
+        "BCX9930 record is phase 2 and halted/terminated",
+        "no pivotal late-stage comparator set identified by the frozen cutoff"
+      ]
+    },
+    {
+      "accessed_at": "2026-09-01T14:30:00+08:00",
+      "captured_file": null,
+      "diagnostic": "Configured proxy 127.0.0.1:7897 refused; --noproxy direct DNS failed. This is route failure, not evidence absence.",
+      "http_status": null,
+      "post_cutoff_acquisition": true,
+      "route_id": "shell-curl-clinicaltrials-proxy",
+      "source_kind": "local_shell_network",
+      "source_version_id": null,
+      "status": "technical_route_failed",
+      "url": "https://clinicaltrials.gov/api/v2/studies/",
+      "used_for": []
+    }
+  ],
+  "cutoff": "2026-07-31T23:59:59+08:00",
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0"
+}

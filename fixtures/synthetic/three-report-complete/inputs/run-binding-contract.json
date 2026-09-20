@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "case_id": "three-report-complete",
+  "report_snapshot_id": "snapshot-three-report-complete-001",
+  "report_version": "v-fixture-001",
+  "indication": "特应性皮炎",
+  "reports": [
+    "A",
+    "B",
+    "C"
+  ],
+  "outputs": [
+    "html"
+  ],
+  "input_hashes": {
+    "inputs/report-a-data.json": "8460ff9a1931d9527d18921bbefa1a714df905651d8928a8af3a6ab881b503b3",
+    "inputs/report-b-data.json": "b8a25df59bce07452f2a06cdc5205ac7b7ea6eb60b0ca64c366ddcb82583ebb8",
+    "inputs/report-c-data.json": "317f02d768f158fbb414e6cdf67f524201eb33decf7a9b9152ab2c699cf7689b",
+    "inputs/entity-counts.json": "04c0084e62a102c0ad09475d476bada7f4e48db90520c5b8f69b8e7267452b48",
+    "inputs/gate-spec-expected.json": "09b96d5493436efb86574367fada6246fa34a8aeb68f6934b8d19d6a24707ed9",
+    "inputs/coverage-set-expected.json": "877aa87a281f4c5c0e6bcf74f3fdd07f5f91c332622b5fb12f9c5a5d213add43"
+  },
+  "entity_counts_path": "inputs/entity-counts.json",
+  "gate_spec_expected_path": "inputs/gate-spec-expected.json",
+  "coverage_set_expected_path": "inputs/coverage-set-expected.json",
+  "binding_rules_zh": [
+    "当次 run_manifest.case_id 必须等于 three-report-complete",
+    "当次 run_manifest.case_digest 必须等于 catalog 锁定值",
+    "当次 run_manifest.input_hashes 必须与本文件 input_hashes 逐路径一致",
+    "A/B/C 三份产物必须绑定同一 report_version 与同一适应症"
+  ],
+  "case_digest": null
+}

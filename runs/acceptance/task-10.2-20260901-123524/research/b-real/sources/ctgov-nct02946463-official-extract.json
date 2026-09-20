@@ -1,0 +1,30 @@
+{
+  "capture_mode": "official_web_extract",
+  "claims": [
+    "pivotal phase 3 Study 301/CHAMPION-301 randomized active-control trial",
+    "primary randomized comparator 246: ravulizumab 125 and eculizumab 121",
+    "completed trial and 26-week treatment completion facts preserved"
+  ],
+  "extract_note": "官方网页/官方审评材料的来源绑定摘要；不是对未抓取全文的替代。所有数值行均在report-data中保留直接来源定位。",
+  "facts": [
+    {
+      "field": "trial_design",
+      "value": "Phase 3 randomized active-controlled Study 301; ravulizumab 125, eculizumab 121"
+    },
+    {
+      "field": "disposition",
+      "value": "285 screened; 246 randomized; 244 completed 26-week treatment"
+    }
+  ],
+  "first_disclosed_at": "2018-12-06",
+  "frozen_cutoff": "2026-07-31T23:59:59+08:00",
+  "post_cutoff_acquisition": true,
+  "related_official_urls": [],
+  "retrieved_at": "2026-09-01T14:30:00+08:00",
+  "schema_version": "1.0",
+  "scope": "PNH innovative-drug comparator universe acceptance",
+  "source_id": "source-ctgov-champion301",
+  "source_title": "ClinicalTrials.gov NCT02946463 Study 301 results",
+  "source_url": "https://clinicaltrials.gov/study/NCT02946463?tab=results",
+  "source_version_id": "src-ctgov-champion301-20260731"
+}

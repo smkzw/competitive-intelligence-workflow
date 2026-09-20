@@ -1,0 +1,46 @@
+# Execution Output: ci-phase10-task103-html-host-full-matrix - worker_02
+
+## Boundary And Context Check
+
+- Delegated mode confirmed；仅读取了初始读取集（execution context、plan）与授权源文件（`.trellis/tasks/09-01-phase-10-task-103-html-host-full-matrix/{prd,design,implement}.md`、中断 checkpoint、ADR 0013、`fixtures/acceptance/`、`docs/acceptance/matrix.md`、相关 src/tools/tests）。未读取 `/Users/smkzw/.codex/AGENTS.md`、`/Users/smkzw/.hermes/SOUL.md`；未做会议、未复审 peer。
+- 授权写入的三个文件在我开始时均已存在但未跟踪（`??`）：`acceptance_runner.py`（563 行，仅 worker_01 的阶段 1）、`tools/run_acceptance.py`（131 行，仅阶段 1 入口）、`tests/acceptance/test_full_matrix.py`（329 行，仅 F02 测试）。我的工作（F03：项目运行、A/B/C HTML 当前产物与真实浏览器 verdict 顺序绑定）当时未开始。
+- 严格遵守边界：未写 acceptance 项目、pre-RC 回执、Trellis 状态、评审/指标文件或视觉 verdict；未触碰 legacy workspace 与无关的已修改文件（git status 中大量 `M` 条目是本会话之前已存在的改动，原样保留）；未提交 git。
+
+## Work Performed
+
+**1. `src/ci_workflow/application/acceptance_runner.py`（563→1371 行）新增：**
+- **阶段 2 `run_project_stage`**：复核项目根为空 → 解析并逐字节重验运行绑定合同 `inputs/run-binding-contract.json`（case_id/适应症/时区/截止/报告集合与 catalog 真值逐项对齐，`input_hashes` 与 catalog 逐路径一致，格式严格 `["html"]`）→ 以案例科学真值创建 HTML-only 项目合同 → 8 份声明输入逐文件入库（入库后重验摘要）→ 复用既有 `RunService.run_project` 真实运行 → `validate_run_manifest` 重开校验 → 绑定核对：清单 `case_id == full-matrix-v1`、`case_digest == catalog 锁定值`、`pre_rc_run_id` 写入并回读清单、逐文件输入摘要与 catalog/绑定合同一致、`resume is False`、无复用节点/复用产物。任何一步失败即抛 `AcceptanceRunnerError`。
+- **阶段 3 `run_html_browser_stage` + `verify_current_html_verdicts`**：从完整性校验过的当前运行清单发现 A/B/C 各恰一份 HTML 产物清单（复用 `real_source_acceptance._artifact_output`，运行产物中出现任何 PDF/PPTX/HTML-PPT 即失败关闭）；复用 `qc.browser` 锁定站点地图来源、站点地图一一对应与 `derive_sitemap_contract`（A=16、B=25、C=16 路由）；按 A→B→C 顺序逐报告执行 `tools/verify_portal.py` 真实子进程（Chromium+WebKit、1280/1440/1920、`--all-routes`），**运行即绑定**：每报告命令返回后立刻用 `real_source_acceptance._verify_browser_report` 把结论绑定到当前产物（manifest_id/report_snapshot_id/site 摘要/路由集合/双浏览器/截图真实 PNG 且不早于运行开始/trace 含 run+site 摘要），并额外强制三档桌面视口与 ADR 0013 一致；命令非零、结论缺失或结论不属于本次文件均失败关闭。发现阶段还会因站点文件篡改被 `load_locked_sitemap_source` 的目录摘要校验拒绝（旧运行/伪产物不可通过）。
+- **全流水线编排 `run_pre_rc_rehearsal` / `run_html_pipeline`**：固定阶段顺序 `PRE_RC_STAGE_ORDER = (catalog-and-input-verification → project-run → html-artifacts-browser-verdicts → host-smoke → project-verify → pre-rc-receipts)`；宿主冒烟、最终项目核验、回执聚合以注入处理器接入（worker_04/03 责任），缺处理器时预检即失败关闭、不执行任何阶段；`pre_rc_run_id` 由 catalog 摘要+案例摘要+时间+随机数派生并绑定进项目运行清单与各阶段摘要。未实现任何 `PRE_RC_REHEARSAL_OK` 成功信号输出。
+
+**2. `tools/run_acceptance.py`（131→166 行）**：新增 `--pipeline {catalog,html}`（默认 catalog 保持 worker_01 行为与既有测试不变）；`html` 走阶段 1-3 并输出阶段级信号 `HTML_PIPELINE_OK ... pre_rc_stages=3/6`；文档明确 `PRE_RC_REHEARSAL_OK` 只能由完整流水线输出、当前任何入口都不会打印。真值覆盖开关拒绝逻辑原样保留。
+
+**3. `tests/acceptance/test_full_matrix.py`（329→699 行）** 新增三个精确节点测试（与 implement.md 节点 2/3/4 同名对应）：
+- `test_runner_orders_project_render_browser_hosts_and_project_verify`：桩宿主/核验/回执处理器下断言六阶段顺序、A→B→C 命令与绑定顺序、处理器上下文携带 project_run/html_pipeline、回执桩按位进入总摘要。
+- `test_current_run_manifest_binds_three_html_artifacts_and_browser_verdicts`：真实项目运行 + 与 verify_portal 同构的合成结论，断言三产物（版本/站点摘要/清单摘要/生成时间/入口页/逐文件摘要）与三 verdict（site/manifest/run 摘要、双浏览器、三视口、路由数）逐项绑定；负向：截图回拨早于运行开始→拒、伪 site_digest→拒、篡改站点文件→拒。
+- `test_runner_fails_closed_on_any_missing_artifact_failed_verifier_or_nonzero_command`：非零命令、缺失 verdict（失败核验器）、缺失产物三参数化失败均失败关闭且不留通过信号。
+
+## Artifacts And Evidence
+
+- 修改文件（均未提交，由 Codex 集成审阅）：`src/ci_workflow/application/acceptance_runner.py`、`tools/run_acceptance.py`、`tests/acceptance/test_full_matrix.py`。
+- 真实浏览器端到端证据（`.artifacts/`，gitignored）：`.artifacts/task103_cli_probe/project/` 含完整隔离项目与 `verification/{A,B,C}/v-fixture-001/report.json` + 96×3 张原分辨率截图 + 每浏览器 trace。A `ok:true`（16 路由）、B `ok:true`（25 路由）、C `ok:false`（10/16 路由 `content_occlusion`）。
+- 探针脚本与日志：`.artifacts/task103_cli_stdout.txt`、`.artifacts/task103_cli_stderr.log`、`.artifacts/task103_probe/`（阶段 1+2 手工探针）。
+
+## Commands And Observations
+
+- `uv run pytest tests/acceptance/test_full_matrix.py -q` → **25 passed**（20 个既有 F02 测试无回归 + 5 个新 F03 测试；约 10s，内含 8 次真实三报告项目运行）。
+- `uv run pytest tests/acceptance/test_fixture_catalog.py tests/hosts/ -q` → **54 passed, 1 skipped**（无回归）。
+- `uv run ruff check <三个文件>` → All checks passed；`uv run mypy src/ci_workflow/application/acceptance_runner.py tools/run_acceptance.py` → no issues。测试文件单独跑 mypy 出现的 `import-untyped`/`no-any-return` 与既有已验收测试 `test_report_a_real.py` 单独运行时的报错模式完全一致（tests/ 不在严格 mypy 门槛内，属项目既有基线）。文件保持项目手工换行风格（worker_01 段落同样非 ruff-format 干净，未重排其代码）。
+- 真实浏览器 CLI：`uv run python tools/run_acceptance.py --pipeline html --project-root .artifacts/task103_cli_probe/project` → 阶段 1-2 通过（项目运行约 1.7s），A、B 真实浏览器全路由双浏览器三视口通过并逐报告绑定，C 在 `C_PORTAL_FAIL routes=16 browsers=2` 处被 runner 以 `AcceptanceRunnerError`（`verify_portal 命令非零退出（返回码 1）`）失败关闭，CLI 退出码 1，无任何通过信号——失败关闭行为按设计工作。
+- **重要产品发现（证据，供 Codex 裁决）**：C 类 10/16 路由在 Chromium 与 WebKit、全部三视口报同一组 `content_occlusion`：`kz-c-design-matrix__th`/`kz-c-design-matrix__field-cell` 遮挡「靶点/机制」「试验」「设计要素」「设计领域」「量表」「时间点」「披露状态」，`kz-chart-table__th` 遮挡「量表」。**事实**：违规文本逐字跨引擎、跨三视口完全一致；实拍截图（如 `c_design-map__chromium__1280x800.png`、`c_endpoint-timepoint-matrix__chromium__1280x800.png`）显示页面视觉完全正常、无任何遮挡，部分被“遮挡”文本（如「靶点/机制」）根本不在当前视口内。**推断**：`qc/browser.py` 的 `_RUNTIME_OCCLUSION_JS`（约 1084 行）用边界盒相交判定、仅跳过父子包含，未感知横向滚动容器的裁剪，粘性首列/表头与被裁剪内容的边界盒相交造成系统性误判。**不确定**：不排除个别路由存在真实遮挡；C 全字段设计矩阵是 R13 恢复条件的交付物，该检测语义变更会影响既有验收工具链，属 Codex 的渲染验收与 QC 合同裁决范围，我不修改 `qc/browser.py`。
+
+## Blockers Or Missing Environment
+
+- 本机 Playwright 浏览器缓存完全缺失（首次真实 CLI 运行以 `chromium_headless_shell` 缺失失败关闭）。已执行记录在案的补救（非静默）：`uv run python -m playwright install chromium webkit`——这是仓库工具 `verify_portal` 对该失败的官方指引命令，仅写入用户缓存 `~/Library/Caches/ms-playwright`（829MB），可逆（删除目录即回滚），不影响任何生产路径。安装后 A/B 真实浏览器验证完整通过。
+- C 类真实浏览器 `content_occlusion` 失败使 `--pipeline html` 当前无法整链退出 0（按设计失败关闭）。这阻塞的是 F06 完整 pre-RC 运行，不是我的工作项代码；需 Codex 裁决：修 C 站点 CSS、改进检测器滚动容器感知、或两者。
+
+## Rerun Requests Or Next Step
+
+- 我的分配工作项已完成并验证：三个精确节点测试绿、真实浏览器链路对 A/B 全通过、失败关闭路径在真实运行中被证实的确生效。无需重跑本工作项。
+- 请求 Codex 裁决 C 类 `content_occlusion`（附截图证据路径 `.artifacts/task103_cli_probe/project/verification/C/v-fixture-001/screenshots/`）；若判定为检测器误判，建议由被授权方细化 `_RUNTIME_OCCLUSION_JS`（滚动容器裁剪感知或 `document.elementFromPoint` 采样验证），再由 worker_04/Codex 重接完整流水线。
+- 后续集成点已就绪：worker_04 以 `host_smoke_stage`/`project_verify_stage`、worker_03 以 `receipts_stage` 注入 `run_pre_rc_rehearsal` 即可接入完整编排；缺失任一处理器时编排预检失败关闭。

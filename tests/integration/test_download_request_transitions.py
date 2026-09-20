@@ -177,6 +177,8 @@ def test_download_request_transitions():
                         occurred_at=_NOW)
         svc.match_file(rid2, filename="supp.html", content=content, media_type="text/html",
                        occurred_at=_NOW + timedelta(seconds=1))
+        inbox_file = svc.project_root / req2.inbox_directory / "supp.html"
+        inbox_file.write_bytes(content)
         accepted = svc.accept(rid2, filename="supp.html", content=content,
                               media_type="text/html",
                               occurred_at=_NOW + timedelta(seconds=2))

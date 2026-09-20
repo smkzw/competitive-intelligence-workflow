@@ -5,10 +5,10 @@
 快照与输出格式，记录已覆盖项与版本化结构化例外。
 
 合同边界（诚实声明）：Draft 2020-12 Schema 只表达可表示结构；跨数组的
-逐项身份唯一、集合闭合、覆盖/例外重叠、等价行集绑定、HTML/PDF 完整表
-不可省略、演示稿只允许已批准图表等价例外、页面责任目录权威（生产验证器
-始终加载冻结 PageRegistry，不接受调用方注入注册表），以及确定性身份/
-摘要重算，全部由生产验证器语义层强制执行（``validate_*_payload``）。
+逐项身份唯一、集合闭合、覆盖/例外重叠、等价行集绑定、HTML 完整表
+不可省略、页面责任目录权威（生产验证器始终加载冻结 PageRegistry，
+不接受调用方注入注册表），以及确定性身份/摘要重算，全部由生产验证器
+语义层强制执行（``validate_*_payload``）。
 """
 
 from __future__ import annotations
@@ -41,10 +41,8 @@ from ci_workflow.reports.common.page_registry import PageRegistry
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
-# HTML/PDF 冻结合同：完整表不可省略；HTML-PPT/PPTX 只允许图表等价例外。
-_TABLE_OMISSION_FORBIDDEN_FORMATS = frozenset(
-    {OutputFormat.HTML, OutputFormat.PDF}
-)
+# HTML 首版冻结合同：完整表不可省略，不支持格式例外。
+_TABLE_OMISSION_FORBIDDEN_FORMATS = frozenset({OutputFormat.HTML})
 
 
 class CoverageBoundaryError(ValueError):
@@ -530,42 +528,14 @@ def check_coverage_projection_semantics(
     )
     if model.content_digest != expected_digest:
         violations.append("投影内容摘要与规范内容不一致")
-    # 格式例外规则（冻结 format-contracts）。
-    by_id = {item.item_id: item for item in coverage_set.items}
-    if model.format in _TABLE_OMISSION_FORBIDDEN_FORMATS:
-        if model.exceptions:
-            violations.append(
-                f"{model.format.value} 禁止省略完整表格，例外必须为空"
-            )
+    # HTML-only 首版不接受省略完整表格或其他格式投影。
+    if model.format not in _TABLE_OMISSION_FORBIDDEN_FORMATS:
+        violations.append("覆盖投影格式必须是 html")
         return violations
-    # 其余格式（html-ppt/pptx）是视觉优先的演示轨，只允许图表等价例外。
-    for exception in model.exceptions:
-        item = by_id.get(exception.omitted_item_id)
-        if item is not None and item.kind is not CoverageItemKind.TABLE:
-            violations.append(
-                f"例外 {exception.exception_id} 只能省略完整表格项，"
-                f"被省略项类型为 {item.kind.value}"
-            )
-        evidence = exception.equivalence_evidence
-        if evidence.equivalent_item_id not in set(covered):
-            violations.append(
-                f"例外 {exception.exception_id} 的等价图表不在覆盖集合内"
-            )
-        if item is not None and evidence.row_set_digest not in set(item.referenced_ids):
-            violations.append(
-                f"例外 {exception.exception_id} 的等价行集摘要未出现在被省略"
-                f"表格引用中"
-            )
-        chart = by_id.get(evidence.equivalent_item_id)
-        if chart is None:
-            violations.append(
-                f"例外 {exception.exception_id} 的等价图表项不存在于覆盖集合"
-            )
-        elif evidence.row_set_digest not in set(chart.referenced_ids):
-            violations.append(
-                f"例外 {exception.exception_id} 的等价行集摘要未出现在等价"
-                f"图表引用中"
-            )
+    if model.exceptions:
+        violations.append(
+            f"{model.format.value} 禁止省略完整表格，例外必须为空"
+        )
     return violations
 
 

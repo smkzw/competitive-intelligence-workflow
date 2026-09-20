@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_eefcb9180978e68089c82b22",
+  "project_id": "project_c337b1d8836ad714616a7756",
+  "contract_version": 1,
+  "started_at": "2026-08-30T04:37:48.285862+00:00",
+  "finished_at": "2026-08-30T04:37:49.680579+00:00",
+  "resume": false,
+  "case_id": "b-pnh",
+  "case_digest": "26c8eab4a77c26b0f6260808d339889c49b9b1f830ed8c5728a7980875164ad2",
+  "input_hashes": {
+    "inputs/report-data.json": "eeae14ce581aeacc6c098cde5f45571e4d0f88d2cc5877cba5429654448381d1"
+  },
+  "node_summary": {
+    "intake": "completed",
+    "preflight": "completed",
+    "gate:B": "completed",
+    "format:B": "completed"
+  },
+  "reused": [],
+  "outputs": [
+    {
+      "relative_path": "reports/B/v-fixture-b-pnh-001/html.manifest.json",
+      "sha256": "ecd48df14c009fd2456b87c1978e4636dd4ede30c8e4927df3fd28edc177e460",
+      "byte_size": 5641,
+      "modified_at": "2026-08-30T04:37:49.678127+00:00",
+      "mtime_ns": 1788064669678127215,
+      "media_type": "application/json"
+    }
+  ],
+  "reused_artifacts": [],
+  "event_count": 4,
+  "event_stream_digest": "4c478e47bbe7dc8a528545c8a653c8d5b36818a03b1d52be5ca2a8f047368da9",
+  "checkpoint_id": "checkpoint_b1400841b0fa7f4652abace6",
+  "outcome": "completed",
+  "report_states": {
+    "B": "snapshot_locked"
+  },
+  "format_states": {
+    "B": {
+      "html": "delivery_ready"
+    }
+  },
+  "snapshot_ids": {
+    "B": "report-snapshot_5574a880225e22c0d85e6d72"
+  },
+  "artifact_manifest_sha256": {
+    "B": {
+      "html": "ecd48df14c009fd2456b87c1978e4636dd4ede30c8e4927df3fd28edc177e460"
+    }
+  },
+  "gate_failures": [],
+  "manifest_digest": "32ef94e209dc2a0e5f23613a4d641cd975d10ecc2872516bfc1043096ff2e9de"
+}

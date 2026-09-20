@@ -1,19 +1,71 @@
-.DS_Store
+# === Python 环境 ===
 .venv/
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
 htmlcov/
+
+# === Node ===
 node_modules/
 dist/
 build/
+
+# === 大型数据/二进制目录 ===
 .artifacts/
+
+# === 运行工作区（保留 manifests，排除 HTML/SQLite/截图）===
+runs/**/reports/*/v1/html/
+runs/**/reports/*/v1/html.manifest.json
+runs/**/reports/*/html/
+runs/**/state/project.sqlite
+runs/**/state/checkpoints/
+runs/**/state/derived/
+runs/**/state/work-items/
+runs/**/state/scientific_review/*/production_context.json
+runs/**/snapshots/
+runs/**/receipts/
+runs/**/events/
+runs/**/coverage/
+runs/**/corrections/
+runs/**/blockers/
+runs/**/capabilities/
+runs/**/monitoring/
+runs/**/evidence/library/*.json
+
+# === 输出/临时 ===
+output/playwright/
+output/pw-screenshots/
+tmp/
+*.tmp
+
+# === 日志（保留 .md 总结，排除原始数据）===
+logs/**/*.json
+logs/**/*.jsonl
+logs/**/diagnostics/
+
+# === Playwright ===
 playwright-report/
 test-results/
-*.log
 
-# Trellis runtime pointers are session-local; task/spec/workspace records remain tracked.
+# === 归档 ===
+archives/
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Trellis 运行时 ===
 .trellis/.runtime/
+
+# === html-ppt 构建产物 ===
+assets/html-ppt/.gitignore

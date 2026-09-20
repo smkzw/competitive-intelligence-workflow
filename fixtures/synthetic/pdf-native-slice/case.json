@@ -1,0 +1,7 @@
+{
+  "case_id": "pdf-native-slice",
+  "title_zh": "特应性皮炎创新药疗效与安全性比较",
+  "kind": "synthetic-format-slice",
+  "inputs_dir": "inputs",
+  "primary_contract": "ReportViewModel"
+}

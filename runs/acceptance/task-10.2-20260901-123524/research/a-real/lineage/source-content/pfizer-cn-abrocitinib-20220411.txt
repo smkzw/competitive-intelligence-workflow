@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta charset="utf-8">
+
+            <title>辉瑞重磅皮科创新药希必可®中国获批，加速惠及中重度特应性皮炎患者 | Pfizer China </title>
+    
+    
+            <link rel="icon" type="image/x-icon" href="https://www.pfizer.com.cn/favicon_19359743.ico" />
+    
+    
+    <script type="text/javascript">
+        window.wbOnDomLoaded = (() => {
+            const callbacks = [];
+            const runAllCallbacks = () => callbacks.forEach(callback => callback());
+            let isDomLoaded = false;
+
+            document.addEventListener('DOMContentLoaded', () => {
+                isDomLoaded = true;
+                runAllCallbacks();
+            });
+
+            return {
+                run: callback => isDomLoaded ? callback() : callbacks.push(callback)
+            };
+        })();
+    </script>
+
+            <link rel="canonical" href="https://www.pfizer.com.cn/zh-hans/news/press-release/688" />
+    
+                
+            <meta name="description" content="一家以科学为基础的、创新的、以患者为先的生物制药公司" />
+        <meta name="keywords" content="" />
+        <meta name="abstract" content="" />
+        <meta name="language" content="zh-hans" />
+
+        
+                    <meta name="robots" content="all" />
+        
+                    <meta name="website-brand" content="ABOVE 5" />
+        
+                    <meta name="brand" content="Above 5" />
+        
+                    <meta name="indication" content="Unspecified" />
+        
+                    <meta name="country" content="China" />
+        
+                            
+                    <meta property="dpl:page:pageType" content="">
+            <meta property="dpl:page:primaryMessageCategory" content="">
+            <meta property="dpl:page:pageSource" content="Pfizer">
+            <meta property="dpl:page:contentOrigin" content="original">
+            <meta property="dpl:page:GCMA-ID" content="">
+                                                <meta property="dpl:page:brand" content="Above 5">
+                                                                            <meta property="dpl:page:indication" content="Unspecified">
+                                    
+                    <meta name="page-analytics" content="pageType:null;referringUrl:;language:zh-hans;currencyCode:CNY;primaryMessageCategory:null;pageSource:null;contentOrigin:null;contentID:page/1b673443-8df0-4700-b6e0-b27fcab5eae9;country:China;GCMA-ID:Dummy GCMA;GCMA-page-ID:;trackingCode:;platform:Canvas;sessionID:;siteName:cdplite2022pfizercomcn;pageName:;pageURL:;onetag:;brand:Unbranded / Above Brand;indication:Unspecified;audienceType:General Public;audienceSpecialty:General Public;businessUnit:CROSS-BU;contentType:Website;therapeuticArea:Unspecified;region:Asia;pfizerRegion:APAC" />
+            
+    
+            <meta name="dynamic-pdf-enabled" content="false" />
+    
+            <meta property="og:title" content="辉瑞重磅皮科创新药希必可®中国获批，加速惠及中重度特应性皮炎患者 | Pfizer China " />
+        <meta property="og:description" content="一家以科学为基础的、创新的、以患者为先的生物制药公司" />
+        <meta property="og:url" content="https://www.pfizer.com.cn/zh-hans/news/press-release/688" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="" />
+    
+            <meta property="twitter:title" content="辉瑞重磅皮科创新药希必可®中国获批，加速惠及中重度特应性皮炎患者 | Pfizer China " />
+        <meta property="twitter:description" content="一家以科学为基础的、创新的、以患者为先的生物制药公司" />
+        <meta property="twitter:url" content="https://www.pfizer.com.cn/zh-hans/news/press-release/688" />
+        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:image" content="" />
+    
+    
+    
+                                        <link rel="preload" as="style" href="https://pkg-cdn.digitalpfizer.com/corporate/2.0.0/main.css" />
+                        
+                        <link rel="preload" as="script" href="https://pkg-cdn.digitalpfizer.com/corporate/2.0.0/main.js" />
+                                        
+    
+                        <link rel="stylesheet" href="https://pkg-cdn.digitalpfizer.com/corporate/2.0.0/main.css" media="print" onload="this.onload=null;this.media='all';">
+                                <script   type="text/javascript" src="/external_link.js"  ></script>
+                                <link rel="stylesheet" href="/external-link.css" media="print" onload="this.onload=null;this.media='all'">
+                                <link rel="stylesheet" href="/css/bd020c0fcee021aa9488685a737d8c15.css">
+                                <link rel="stylesheet" href="/assets/country-slector-removal.css" media="print" onload="this.onload=null;this.media='all'">
+                                <script   type="text/javascript" src="/assets/country-selector-hide.js"  ></script>
+                                <script   type="text/javascript" src="/assets/jquery-3-7-1-min.js" defer ></script>
+                                <script   type="text/javascript" src="/assets/pfizer-aspxurl-redirects.js" defer ></script>
+            
+    <style>
+        
+        
+        helix-grid, helix-mega-menu, helix-layout-container, helix-core-grid, helix-core-header, helix-core-page-break,
+helix-core-card-group, helix-core-footer, helix-core-band  {
+    visibility: hidden;
+}
+helix-grid.hydrated, helix-mega-menu.hydrated, helix-layout-container.hydrated, helix-core-grid.hydrated,
+helix-core-header.hydrated, helix-core-page-break.hydrated, helix-core-card-group.hydrated, helix-core-footer.hydrated,
+helix-core-band.hydrated {
+    visibility: inherit;
+}
+body > div[data-webbuilder-block-is-swe] {
+    display: contents;
+}
+
+            </style>
+
+    
+    </head>
+<body id="wb-body"  class="webbuilder-theme--Corporate" >
+
+<div protected="1" id="2396f6e2-2cd6-4f13-a69d-18e48c650eed" version="1.0.0" locked="1" async="1" uuid="2396f6e2-2cd6-4f13-a69d-18e48c650eed" data-webbuilder-block-is-swe="yes" data-swe-block-title="Chinese Menu" data-webbuilder-swe-id-toggled="1" class="custom-block-element custom-block-is-swe-yes no-index"><corporate-primary-menu uuid="primary-menu" data-menu='{"items":[{"name":"科学致胜","href":"/zh-hans/science","expandLabel":"Expand 科学致胜 Menu","items":[{"name":"重点领域","expandLabel":"Expand 重点领域 Menu","items":[{"name":"肿瘤","href":"/zh-hans/science/areas-of-focus/oncology","description":"科学致胜 共克癌症"},{"name":"疫苗","href":"/zh-hans/science/areas-of-focus/vaccines","description":"疫苗让健康触手可及"},{"name":"抗感染","href":"/zh-hans/science/areas-of-focus/anti-infectives","description":"全面出击 为AI而行"},{"name":"炎症与免疫","href":"/zh-hans/science/areas-of-focus/inflammation-immunology","description":"科学致胜 焕然新生"},{"name":"罕见病","href":"/zh-hans/science/areas-of-focus/rare-disease","description":"科学致胜 为爱护罕"}]},{"name":"辉瑞中国研发中心","href":"/zh-hans/science/crdc","expandLabel":"Expand 辉瑞中国研发中心 Menu","items":[{"name":"辉瑞中国研发中心 | 上海","href":"/zh-hans/science/crdc/crdc-sh","description":""},{"name":"辉瑞中国研发中心 | 武汉","href":"/zh-hans/science/crdc/crdc-wh","description":""}]},{"name":"产品管线","href":"/zh-hans/science/pipeline","description":""}]},{"name":"创新产品","href":"/zh-hans/products","expandLabel":"Expand 创新产品 Menu","items":[{"name":"产品列表","href":"/zh-hans/products/product-list","description":""},{"name":"产品咨询","href":"/zh-hans/products/information","description":""}]},{"name":"新闻中心","href":"/zh-hans/news","expandLabel":"Expand 新闻中心 Menu","items":[{"name":"公司新闻","href":"/zh-hans/news/press-release","description":""},{"name":"辉瑞年报","href":"/zh-hans/news/annual-report","description":""}]},{"name":"关于辉瑞","expandLabel":"Expand 关于辉瑞 Menu","items":[{"name":"辉瑞全球","expandLabel":"Expand 辉瑞全球 Menu","items":[{"name":"全球概览","href":"/zh-hans/about/pfizer-global/global-overview","description":"科学致胜"},{"name":"全球管理团队","href":"/zh-hans/about/pfizer-global/global-executives","description":"公司最高领导层"}]},{"name":"辉瑞中国","expandLabel":"Expand 辉瑞中国 Menu","items":[{"name":"辉瑞中国概览","href":"/zh-hans/about/pfizer-china/china-overview","description":"携⼿共创健康中国"},{"name":"总裁寄语","href":"/zh-hans/about/pfizer-china/president-letter","description":"聆听总裁之声"}]},{"name":"责任","expandLabel":"Expand 责任 Menu","items":[{"name":"环境、社会及公司治理","href":"/zh-hans/about/responsibility/esg","description":"可持续发展"},{"name":"企业社会责任","href":"/zh-hans/about/responsibility/csr","description":"优秀的企业公民"}]},{"name":"职业发展","href":"/zh-hans/careers-cn","expandLabel":"Expand 职业发展 Menu","items":[{"name":"校园招聘","href":"https://careersite.tupu360.com/pfizercampus/position/index?recruitmentType=MANAGEMENTRUITMENT","description":""},{"name":"社会招聘","href":"/zh-hans/about/careers/careers-professional","description":""}]}]}]}' expand-label="Expand Menu" close-label="Close Menu" skip-link-text="Skip to main content" default-location="China" location-selector-tooltip-text="Country Selector" default-language="中文" language-selector-tooltip-text="Language Selector" language-selector-src="https://pkg-cdn.digitalpfizer.com/corporate/language-selector/country-selector.json" enable-analytics-wrapper id="inqtu"><helix-core-data slot="data" data='{
+            "Close language selector": "",
+            "Close language selector icon": "",
+            "Open language selector": "",
+            "Open language selector icon": "",
+            "Current Location and Language": ""
+          }' data-hwc-version="4.0.172" id="iuwfx">
+      </helix-core-data><corporate-menu-item slot="contact-us" href="/zh-hans/contact-us" id="iltsf"><helix-core-content data-hwc-version="4.0.172" id="i0loi" class="block-5466638-cid block-5306794-cid block-5248672-cid block-5247073-cid block-5240724-cid block-5202502-cid block-4967579-cid block-4818252-cid block-4735825-cid block-4135557-cid block-4052614-cid helix-core-content">联系我们</helix-core-content></corporate-menu-item><corporate-search-modal slot="search" id="ib4r5"><corporate-search has-filters="true" config='{"domain": "https://next-gen-search-production.api.digitalpfizer.com.cn","endpoint": "/api/v3/search","index": ["6da73e13-521c-4c10-ab25-6f344d535d09_live"],"pageNumber": 1,"pageSize": 10,"fuzziness": 1, "allowedExposedFilters": [{"field": "type", "type": "include"}, { "field": "auth", "type": "include" },{ "field": "language", "type": "include" }], "aggregations": "type,auth","include": {  "language": "zh-hans"  }}' suggest='{"domain": "https://next-gen-search-production.api.digitalpfizer.com.cn", "endpoint": "/api/v1/suggest", "index": "6da73e13-521c-4c10-ab25-6f344d535d09_live", "size": 10, "fuzziness": 1}' placeholder="我们该怎样帮助你？" dropdown-headline="Suggestions within pfizer.com.cn" search-results-words=" 条搜索结果有关于 " show-more-words="查看更多" load-more-words="查看更多搜索结果" search-filter-tags-src="https://pkg-cdn.digitalpfizer.com/corporate/search-filter-tags.json" min-characters-number="3" error-message="最少 3 個字符" search-button-label="搜尋" clear-button-label="清除" enable-analytics-wrapper id="ip9cp" config-path="" class="block-5466638-cid block-5306794-cid hydrated"></corporate-search></corporate-search-modal><corporate-menu-item slot="utilities" href="http://investors.pfizer.com/" id="iask"><helix-core-content data-hwc-version="4.0.172">Investors</helix-core-content></corporate-menu-item><corporate-menu-item slot="utilities" href="/zh-hans/careers-cn" id="igdtj"><helix-core-content data-hwc-version="4.0.172" id="ikmid" class="block-5466638-cid block-5306794-cid helix-core-content">职业发展</helix-core-content></corporate-menu-item><corporate-menu-item slot="utilities" href="https://www.pfizer.com/news/media-resources" id="iioep"><helix-core-content data-hwc-version="4.0.172">Media</helix-core-content></corporate-menu-item><corporate-menu-item slot="utilities" href="/zh-hans/science" id="irm7a"><helix-core-content data-hwc-version="4.0.172" id="igmuq" class="block-5466638-cid block-5306794-cid helix-core-content">科学</helix-core-content></corporate-menu-item><corporate-menu-item slot="utilities" href="/zh-hans/contact-us" id="ii98b"><helix-core-content data-hwc-version="4.0.172" id="idn2i" class="block-5466638-cid block-5306794-cid block-5248672-cid block-5247073-cid block-5240724-cid block-5202502-cid helix-core-content">联系我们</helix-core-content></corporate-menu-item></corporate-primary-menu></div><helix-core-layout-container variant="1up-by-2up" data-hwc-version="4.0.189" id="im46j"><helix-core-grid variant="1up-by-2up" data-hwc-version="4.0.189"><helix-core-grid-item id="ivclh"><corporate-bread-crumb id="iyz0s"><corporate-bread-crumb-item id="iz8ud" href="/zh-hans"><helix-core-content data-hwc-version="4.0.189" id="iwltd" class="helix-core-content">首页</helix-core-content></corporate-bread-crumb-item><corporate-bread-crumb-item id="i6ho2" href="/zh-hans/news"><helix-core-content data-hwc-version="4.0.189" id="i4039" class="helix-core-content">新闻中心</helix-core-content></corporate-bread-crumb-item><corporate-bread-crumb-item href="/zh-hans/news/press-release" id="idqyn"><helix-core-content data-hwc-version="4.0.189" id="i72mw" class="helix-core-content">公司新闻</helix-core-content></corporate-bread-crumb-item><corporate-bread-crumb-item is-active="" id="icahj"><helix-core-content data-hwc-version="4.0.189" id="ibq5k" class="helix-core-content">辉瑞重磅皮科创新药希必可<sup>®</sup>中国获批，加速惠及中重度特应性皮炎患者</helix-core-content></corporate-bread-crumb-item></corporate-bread-crumb></helix-core-grid-item></helix-core-grid></helix-core-layout-container><helix-core-layout-container variant="1up-by-2up" data-hwc-version="4.0.124" id="ickry"><helix-core-grid variant="1up-by-2up" data-hwc-version="4.0.124"><helix-core-grid-item id="ie2bl"><helix-core-heading data-hwc-version="4.0.124" variant="h4" id="ibf0b" tag="h2" class="helix-core-heading">辉瑞重磅皮科创新药希必可<sup>®</sup>中国获批，加速惠及中重度特应性皮炎患者</helix-core-heading></helix-core-grid-item></helix-core-grid></helix-core-layout-container><helix-core-layout-container variant="1up-by-2up" data-hwc-version="4.0.124" id="iz8zf"><helix-core-grid variant="1up-by-2up" data-hwc-version="4.0.124" id="il6wj"><helix-core-grid-item id="ij2qh"><helix-core-content data-hwc-version="4.0.172" id="iunnd" class="helix-core-content"><p class="cdp-corp-body-copy-s">  2022年4月11日</p>
+</helix-core-content></helix-core-grid-item></helix-core-grid></helix-core-layout-container><helix-core-layout-container variant="1up-by-2up" data-hwc-version="4.0.137" id="ict9f"><helix-core-grid variant="1up-by-2up" data-hwc-version="4.0.137"><helix-core-grid-item id="imu27"><corporate-divider size="small" id="i89sy" class="helix-core-m-b-8x"></corporate-divider></helix-core-grid-item></helix-core-grid></helix-core-layout-container><helix-core-layout-container variant="1up-by-2up" data-hwc-version="4.0.137" id="iz6nnb"><helix-core-grid variant="1up-by-2up" data-hwc-version="4.0.137"><helix-core-grid-item id="i0i6sf"><helix-core-content data-hwc-version="4.0.137" id="i8ndgk" class="helix-core-content"><p class="cdp-corp-body-copy-s">2022年4月11日，中国——辉瑞公司今日宣布，创新皮科药物希必可<sup>®</sup>（CIBINQO<sup>®</sup>, 通用名称：阿布昔替尼片）获得中国国家药品监督管理局批准用于治疗成人中度至重度特应性皮炎（Atopic dermatitis，简称“AD”）。作为AD治疗的突破性疗法，希必可<sup>®</sup>是高选择性JAK1（Janus 激酶 1)抑制剂，每日仅需口服1次，将为中国患者提供新的治疗选择。<br>
+<br>
+<strong>辉瑞生物制药集团中国区总裁彭振科表示：</strong>“皮科创新药希必可<sup>®</sup>是辉瑞全球同步研发和注册的重磅产品，此次以加速度在中国获批是辉瑞炎症与免疫领域的重要里程碑。感谢中国政府鼓励创新与新药加速审评审批政策的实施，让中国特应性皮炎患者得以在第一时间获得与全球同步的突破性治疗；同时感谢积极参与希必可<sup>®</sup>国际临床研究的中国研究者及患者，为全球研究贡献了‘中国力量’。未来，辉瑞将继续秉承‘为患者带来改变其生活的突破创新’的承诺，依托全球强大的研发能力，为中国患者带来高品质的创新产品和治疗方案，助力实现‘健康中国2030’的宏伟目标。”</p>
+
+<h5><strong>高选择性JAK1抑制剂希必可<sup>®</sup>带来AD治疗里程碑式的突破</strong></h5>
+
+<p class="cdp-corp-body-copy-s">作为全球首个研发炎症免疫性疾病JAK通路的制药企业，辉瑞从上个世纪90年代初就着眼于JAK抑制剂的开发，创造了近千种化合物，并不断探索JAK抑制剂在特应性皮炎、银屑病、斑秃等免疫性皮肤疾病领域的临床应用价值。<br>
+<br>
+AD是一种以皮肤炎症和皮肤屏障缺陷为特征的常见慢性皮肤病，过去30年全球范围内AD患病率不断升高。该病以剧烈瘙痒、反复出现的皮损为特点，还可伴发哮喘、过敏性鼻炎等慢性疾病和失眠症状，极大地降低了患者生活质量<sup>1</sup>。<br>
+<br>
+<strong>希必可<sup>®</sup>全球临床研究项目中国的牵头研究者北京大学第一医院皮肤科主任李航教授表示：</strong>“特应性皮炎带来的剧烈瘙痒，严重影响患者的生活质量，但往往因患者对疾病认知不足导致病情延误和反复，增加疾病负担。对于中、重度特应性皮炎患者来说，最主要的诉求是快速缓解瘙痒症状。此次获批的针对AD治疗的高选择性JAK1抑制剂希必可<sup>®</sup>将在这方面带来突破创新，期待希必可<sup>®</sup>尽快登陆中国，惠及广大特应性皮炎患者。”<br>
+<br>
+<strong>希必可<sup>®</sup>全球临床研究项目中国的牵头研究者上海交通大学医学院附属新华医院皮肤科主任姚志荣教授表示：</strong>“特应性皮炎是一种难治性的炎症性免疫性疾病，剧烈瘙痒和皮疹影响广大患者的工作、学业和身心发展，如果出现在面部、手部等部位对其影响更大，因此中重度特应性皮炎需要尽快控制症状。此次希必可<sup>®</sup>的获批填补了中重度特应性皮炎患者临床常用治疗药物的不足，为中重度特应性皮炎患者的系统治疗带来新的获益。”<br>
+<br>
+2018年，美国食品药品监督管理局（FDA）授予了希必可<sup>®</sup>治疗中重度AD的突破性疗法认定。2020年，希必可<sup>®</sup>荣获英国药品和保健品管理局（MHRA）授予的“潜力创新药（PIM）”称号。自2021年9月以来，希必可<sup>®</sup>已获得英国、日本、欧盟、美国等全球多个地区的上市许可。 2021年4月，希必可<sup>®</sup>获得中国国家药品监督管理局优先审评审批资格的认定，并实现了全球同步研发和同步注册，中国成功参与多项希必可<sup>®</sup>国际多中心临床研究。</p>
+
+<h5><strong>关于希必可<sup>®</sup> （阿布昔替尼片）</strong></h5>
+
+<p class="cdp-corp-body-copy-s">希必可<sup>®</sup>是一种每日一次的口服Janus 激酶 1 (JAK1) 抑制剂，适用于对其他系统治疗（如激素或生物制剂）应答不佳或不适宜上述治疗的难治性、中重度特应性皮炎成人患者，使用剂量为 100mg 或 200mg。希必可<sup>®</sup> 于2022年4月11日获得中国国家药品监督管理局批准。</p>
+
+<h5><strong>关于特应性皮炎</strong></h5>
+
+<p class="cdp-corp-body-copy-s">特应性皮炎（简称AD）是临床上较常见皮肤科疾病之一，患病率高、病情往往慢性迁延、反复发作，对患者的生活、工作和学习影响极大。因其慢性、进行性特征，对患者持续造成不可低估的负担。特应性皮炎的病因目前尚未明确，包括遗传易感性、食物或吸入过敏源刺激、自身抗原、感染及皮肤功能障碍均可能诱发疾病。</p>
+
+<h5><strong>关于辉瑞：为患者带来改变其生活的突破创新</strong></h5>
+
+<p class="cdp-corp-body-copy-s">在辉瑞，我们通过科学和全球资源为人们提供治疗方案，以延长其生命，显著改善其生活。在医疗卫生产品的探索、研发和生产过程中，辉瑞始终致力于奉行严格的质量、安全和价值标准。我们在全球的产品组合包括创新药品和疫苗。每天，辉瑞在发达和新兴市场的员工都在推进人类健康，推动疾病的预防、治疗和治愈，以应对挑战我们这个时代的顽疾。辉瑞还与医疗卫生服务方、政府和社区合作，支持并促进世界各地的人们能够获得更为可靠和可承付的医疗卫生服务。这与辉瑞作为一家全球卓越的创新生物制药公司的责任是一致的。170余年来，辉瑞一直致力于为所有依赖我们的人带来改变。如需了解更多信息，请登录 <a href="/zh-hans">www.pfizer.com.cn</a>。<br>
+ </p>
+
+<ol>
+	<li class="cdp-corp-body-copy-s">
+	<p class="cdp-corp-body-copy-s">中华医学会皮肤性病学分会免疫学组  特应性皮炎协作研究中心. 中国特应性皮炎诊疗指南（2020版）[J]．中华皮肤科杂志，2020, 53（2）:81-88. doi：10.35541/cjd.20191000.</p>
+	</li>
+</ol>
+</helix-core-content></helix-core-grid-item></helix-core-grid></helix-core-layout-container><helix-core-layout-container variant="1up-by-2up" data-hwc-version="4.0.137" id="i9raa"><helix-core-grid variant="1up-by-2up" data-hwc-version="4.0.137"><helix-core-grid-item id="i1ywy"><div id="ij91f" class="gcma-block gcma-webpage-block"></div></helix-core-grid-item></helix-core-grid></helix-core-layout-container><div protected="1" id="a867590e-6bb7-4dee-9ad7-92384c8136ad" version="1.0.0" locked="1" async="1" uuid="a867590e-6bb7-4dee-9ad7-92384c8136ad" data-webbuilder-block-is-swe="yes" data-swe-block-title="Chinese Footer" data-webbuilder-swe-id-toggled="1" class="custom-block-element custom-block-is-swe-yes no-index"><corporate-footer copyright-length="short" enable-analytics-wrapper id="i4vos"><corporate-footer-list id="i53cf"><helix-core-logo theme="blue" alt="Pfizer: One of the world's premier biopharmaceutical companies" alt-text="Pfizer logo" size="default" data-hwc-version="4.0.772" id="i707" src="/images/9b08862f235a19554d3ac1adba05f4e7.svg"></helix-core-logo></corporate-footer-list><corporate-footer-list id="iklfj"><a href="/zh-hans/news/press-release" id="ihhzg"> 公司新闻 </a><a href="/zh-hans/careers-cn" id="i6k6l"> 职业发展 </a><a href="/zh-hans/science/pipeline" id="i2jel"> 产品管线 </a><a href="/zh-hans/science/vaccines-publicity" id="il0ql"> 疫苗信息公示 </a></corporate-footer-list><corporate-footer-list id="i896e"><a href="https://pharmareps.cpa.org.cn/reception/index" id="inkr1" target="_blank"> 医药代表备案公示 </a><a href="https://www.pfizermedicalinformation.cn/" id="ijog8" target="_blank"> 辉瑞医学信息网站 </a><a href="https://www.pfizerforprofessional.com/" id="idxgy" target="_blank"> 辉瑞医学平台 </a></corporate-footer-list><corporate-footer-list id="is448"><a href="/zh-hans/privacy" id="iw76b"> 隐私政策 </a><a href="/zh-hans/terms-of-use" id="ioksz"> 使用条款 </a><a href="/zh-hans/contact-us" id="i8vzg"> 联系我们 </a></corporate-footer-list><helix-core-content slot="cdp-footer-copyright" data-hwc-version="4.0.772" id="iko4h" class="block-4967580-cid helix-core-content">© 2025 Pfizer Inc. 保留所有权利。</helix-core-content><helix-core-content slot="cdp-footer-copyright" data-hwc-version="4.0.772" id="i9kr9" class="block-4967580-cid helix-core-content"> <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31010602006040">沪公网安备31010602006040</a> </helix-core-content><helix-core-content slot="cdp-footer-copyright" data-hwc-version="4.0.772" id="i26ba" class="block-4967580-cid helix-core-content"> <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">沪ICP备11000910号-2</a> </helix-core-content><helix-core-content slot="cdp-footer-copyright" data-hwc-version="4.0.772" id="izqyy" class="block-4967580-cid helix-core-content"> 药监批号（沪）-非经营性-2016-0003 </helix-core-content><corporate-social-link slot="icons" href="/social-media" icon-name="circle-wechat" label="Wechat" size="3" svg-image="facebook" id="igjug"></corporate-social-link><corporate-social-link slot="icons" href="/social-media" icon-name="circle-wechat-channel" label="Wechat Channel" size="3" svg-image="facebook" id="ip6dm"></corporate-social-link><corporate-social-link slot="icons" href="/social-media" icon-name="circle-ximalaya" label="Ximalaya" size="3" svg-image="linkedin" id="iuf8g"></corporate-social-link></corporate-footer></div>
+
+
+<!-- Footer scripts -->
+            <script   type="text/javascript" src="https://pkg-cdn.digitalpfizer.com/corporate/2.0.0/main.js" async ></script>
+                <link rel="stylesheet" href="/assets/ai-guide.css" media="print" onload="this.onload=null;this.media='all'">
+    
+<!-- External Link Popup scripts -->
+    <script type='text/javascript'  >
+window.externalLink.init({"popups":[{"id":"a5cabd74-6d75-4f95-b4c0-68e789440f56","body":"<p>\u60a8\u73b0\u5728\u5373\u5c06\u79bb\u5f00\u8f89\u745e\u7f51\u9875\u3002\u8f89\u745e\u5bf9\u4e8e\u7b2c\u4e09\u65b9\u7f51\u7ad9\u6216\u793e\u4ea4\u5a92\u4f53\u5e73\u53f0\u6240\u63d0\u4f9b\u7684\u5185\u5bb9\u6982\u4e0d\u8d1f\u8d23\u3002<\/p>","type":"primary","style":"default","title":"","cancel":"Cancel","continue":"Ok","language":"zh-hans","whitelist":"*.pfizer.com\n*.pfizerpro.com\n*.avature.cn\n*.wd1.myworkdayjobs.com\n*.weixin.qq.com\n*.pfizermedicalinformation.cn\n*.pfizerforprofessional.com\ncareersite.tupu360.com\/*\nplayers.brightcove.net\nbcove.video","language_name":"Chinese (Simplified)"},{"id":"8b64f09b-c390-4272-b915-466305b401ec","body":"<p>You are now leaving a Pfizer-operated website. Pfizer accepts no responsibility for the content of 3rd party sites and social media platforms that are not owned and operated by Pfizer.<\/p>","type":"primary","style":"default","title":"","cancel":"Cancel","continue":"Ok","language":"en","whitelist":"*.pfizer.com\n*.pfizerpro.com\n*.pfizermedicalinformation.cn\n*.pfizerforprofessional.com\ncareersite.tupu360.com\/*\nplayers.brightcove.net\nbcove.video","language_name":"English"}],"enabled":true});
+</script>
+
+
+
+
+
+
+<script type="text/javascript">
+    //onload
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const hash = window.location.hash;
+
+            if (! hash) {
+                return;
+            }
+
+            const element = document.querySelector(hash);
+
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+            }
+        }, 999);
+    });
+</script>
+</body>
+</html>

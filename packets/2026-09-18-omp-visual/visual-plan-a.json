@@ -1,0 +1,1026 @@
+{
+ "$schema": "schemas/visual-finalization-plan.schema.json",
+ "schema_version": "1.0",
+ "plan_id": "visual-plan-abc1-a",
+ "report_kind": "A",
+ "report_version": "v1",
+ "format": "html",
+ "route_id": "portal",
+ "report_snapshot_sha256": "f29b65cb73714b448d0717755263cea53e0470844024c10c64114333347620c3",
+ "report_snapshot": {
+  "snapshot_id": "report-snapshot_e4a7760858891d1adb647d0a",
+  "report": "A",
+  "report_version": "v1",
+  "evidence_snapshot_id": "evidence-snapshot_631dde2b632054f6cfa56a07",
+  "claim_snapshot_id": "claim-snapshot_b3d595d59298ea747861c0de",
+  "coverage_set_id": "coverage-set_470b32e946058c01bf4023a8"
+ },
+ "design_contract_sha256": "facdc54cb92fba350b4e519ff7db6e7e7a3a5499d4dd74a53bd43bcfd677434d",
+ "design_contract": {
+  "manifest": "contracts/kangzhe/manifest.json",
+  "contract_version": "1.0",
+  "route_id": "portal",
+  "loaded_files": [
+   "contracts/kangzhe/design_specs/ROUTER.md",
+   "contracts/kangzhe/design_specs/core.md",
+   "contracts/kangzhe/design_specs/project_profile.md",
+   "contracts/kangzhe/design_specs/track_site.md"
+  ]
+ },
+ "scientific_snapshot_immutable": true,
+ "audience": {
+  "primary_role": "临床试验医学经理（资深临床专业读者）",
+  "language": "zh-CN",
+  "reading_tasks": [
+   "快速掌握 PNH 竞品格局与关键试验结果",
+   "核对每项结论的登记来源与披露边界"
+  ],
+  "visible_program_state": false
+ },
+ "page_responsibilities": [
+  {
+   "page_id": "clinical-portfolio",
+   "page_type": "detail",
+   "primary_question": "读者在clinical-portfolio页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载clinical-portfolio主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "companies-transactions",
+   "page_type": "detail",
+   "primary_question": "读者在companies-transactions页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载companies-transactions主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "efficacy",
+   "page_type": "detail",
+   "primary_question": "读者在efficacy页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载efficacy主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "historical-edge",
+   "page_type": "detail",
+   "primary_question": "读者在historical-edge页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载historical-edge主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "landscape",
+   "page_type": "detail",
+   "primary_question": "读者在landscape页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载landscape主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "matrix",
+   "page_type": "detail",
+   "primary_question": "读者在matrix页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载matrix主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "overview",
+   "page_type": "index",
+   "primary_question": "读者在overview页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载overview主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "patents-protection",
+   "page_type": "detail",
+   "primary_question": "读者在patents-protection页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载patents-protection主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "product-overview",
+   "page_type": "detail",
+   "primary_question": "读者在product-overview页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载product-overview主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__abp-959",
+   "page_type": "detail",
+   "primary_question": "读者在abp-959页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载abp-959主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__adx-038",
+   "page_type": "detail",
+   "primary_question": "读者在adx-038页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载adx-038主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__aln-cfb",
+   "page_type": "detail",
+   "primary_question": "读者在aln-cfb页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载aln-cfb主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__alxn1102",
+   "page_type": "detail",
+   "primary_question": "读者在alxn1102页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载alxn1102主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__alxn1103",
+   "page_type": "detail",
+   "primary_question": "读者在alxn1103页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载alxn1103主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__alxn2050",
+   "page_type": "detail",
+   "primary_question": "读者在alxn2050页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载alxn2050主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__amy-101",
+   "page_type": "detail",
+   "primary_question": "读者在amy-101页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载amy-101主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__bcd-148",
+   "page_type": "detail",
+   "primary_question": "读者在bcd-148页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载bcd-148主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__bcx10013",
+   "page_type": "detail",
+   "primary_question": "读者在bcx10013页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载bcx10013主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__bcx9930",
+   "page_type": "detail",
+   "primary_question": "读者在bcx9930页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载bcx9930主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__bryostatin-1",
+   "page_type": "detail",
+   "primary_question": "读者在bryostatin-1页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载bryostatin-1主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__cemdisiran",
+   "page_type": "detail",
+   "primary_question": "读者在cemdisiran页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载cemdisiran主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__cms-d017",
+   "page_type": "detail",
+   "primary_question": "读者在cms-d017页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载cms-d017主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__coversin",
+   "page_type": "detail",
+   "primary_question": "读者在coversin页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载coversin主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__crovalimab",
+   "page_type": "detail",
+   "primary_question": "读者在crovalimab页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载crovalimab主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__danicopan",
+   "page_type": "detail",
+   "primary_question": "读者在danicopan页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载danicopan主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__ea5",
+   "page_type": "detail",
+   "primary_question": "读者在ea5页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载ea5主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__eculizumab",
+   "page_type": "detail",
+   "primary_question": "读者在eculizumab页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载eculizumab主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__elizaria",
+   "page_type": "detail",
+   "primary_question": "读者在elizaria页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载elizaria主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__fxs6837",
+   "page_type": "detail",
+   "primary_question": "读者在fxs6837页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载fxs6837主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__hrs-5965",
+   "page_type": "detail",
+   "primary_question": "读者在hrs-5965页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载hrs-5965主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__hs-10542",
+   "page_type": "detail",
+   "primary_question": "读者在hs-10542页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载hs-10542主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__hsk39297",
+   "page_type": "detail",
+   "primary_question": "读者在hsk39297页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载hsk39297主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__iptacopan",
+   "page_type": "detail",
+   "primary_question": "读者在iptacopan页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载iptacopan主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__kp104",
+   "page_type": "detail",
+   "primary_question": "读者在kp104页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载kp104主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__lanoracopan-hydrochloride",
+   "page_type": "detail",
+   "primary_question": "读者在lanoracopan-hydrochloride页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载lanoracopan-hydrochloride主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__levamisole-cyclosporin-a-glucocorticoids",
+   "page_type": "detail",
+   "primary_question": "读者在levamisole-cyclosporin-a-glucocorticoids页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载levamisole-cyclosporin-a-glucocorticoids主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__lfg316",
+   "page_type": "detail",
+   "primary_question": "读者在lfg316页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载lfg316主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__lp-005",
+   "page_type": "detail",
+   "primary_question": "读者在lp-005页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载lp-005主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__my008211a",
+   "page_type": "detail",
+   "primary_question": "读者在my008211a页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载my008211a主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__nm8074",
+   "page_type": "detail",
+   "primary_question": "读者在nm8074页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载nm8074主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__ntq5082",
+   "page_type": "detail",
+   "primary_question": "读者在ntq5082页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载ntq5082主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__pegcetacoplan",
+   "page_type": "detail",
+   "primary_question": "读者在pegcetacoplan页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载pegcetacoplan主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__pozelimab",
+   "page_type": "detail",
+   "primary_question": "读者在pozelimab页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载pozelimab主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__ravulizumab",
+   "page_type": "detail",
+   "primary_question": "读者在ravulizumab页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载ravulizumab主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__sar443809",
+   "page_type": "detail",
+   "primary_question": "读者在sar443809页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载sar443809主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__sb12",
+   "page_type": "detail",
+   "primary_question": "读者在sb12页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载sb12主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__sgb-9768",
+   "page_type": "detail",
+   "primary_question": "读者在sgb-9768页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载sgb-9768主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__sirolimus",
+   "page_type": "detail",
+   "primary_question": "读者在sirolimus页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载sirolimus主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__sln12140",
+   "page_type": "detail",
+   "primary_question": "读者在sln12140页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载sln12140主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__tul321",
+   "page_type": "detail",
+   "primary_question": "读者在tul321页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载tul321主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__vsa012",
+   "page_type": "detail",
+   "primary_question": "读者在vsa012页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载vsa012主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__xh-s003",
+   "page_type": "detail",
+   "primary_question": "读者在xh-s003页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载xh-s003主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__zaltenibart",
+   "page_type": "detail",
+   "primary_question": "读者在zaltenibart页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载zaltenibart主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "products__zilucoplan",
+   "page_type": "detail",
+   "primary_question": "读者在zilucoplan页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载zilucoplan主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "regulatory",
+   "page_type": "detail",
+   "primary_question": "读者在regulatory页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载regulatory主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  },
+  {
+   "page_id": "safety",
+   "page_type": "detail",
+   "primary_question": "读者在safety页能否直接得到该主题的关键结论与证据入口？",
+   "purpose": "承载safety主题的信息与证据下钻入口",
+   "information_hierarchy": [
+    "结论优先",
+    "图表概览",
+    "折叠明细表",
+    "证据抽屉"
+   ],
+   "claim_ids": [],
+   "source_facts_preserved": true
+  }
+ ],
+ "visual_variables": {
+  "theme": "kangzhe",
+  "palette_tokens": [
+   "kz-orange",
+   "kz-med-blue",
+   "kz-stats-green",
+   "kz-pv",
+   "kz-text-1",
+   "kz-text-2",
+   "kz-text-3",
+   "kz-border"
+  ],
+  "department_tokens": {
+   "MED": "kz-orange",
+   "CO": "kz-med-blue",
+   "DMST": "kz-stats-green",
+   "PV": "kz-pv"
+  },
+  "surface_tokens": [
+   "kz-white",
+   "kz-bg",
+   "kz-surface-warm"
+  ],
+  "font_stack": [
+   "PingFang SC",
+   "Microsoft YaHei",
+   "sans-serif"
+  ],
+  "font_sizes_px": [
+   12,
+   14,
+   16,
+   20,
+   24,
+   32
+  ],
+  "spacing_tokens_px": [
+   4,
+   8,
+   12,
+   16,
+   24,
+   32,
+   40
+  ],
+  "motion_tokens": [
+   "none",
+   "dur-fast",
+   "dur",
+   "ease-out"
+  ],
+  "reduced_motion_supported": true,
+  "export_freeze_supported": true
+ },
+ "chart_syntax": [
+  {
+   "chart_id": "charts-a",
+   "question": "该主题下各比较组的关键数值差异是否一图可读？",
+   "mark": "bar",
+   "dimensions": {
+    "x": "比较项",
+    "y": "数值",
+    "color": "产品",
+    "label": "数值标签"
+   },
+   "redundant_encoding": "direct_label",
+   "source_claim_ids": [
+    "claim-pnh-a"
+   ]
+  }
+ ],
+ "table_syntax": [
+  {
+   "table_id": "tables-a",
+   "purpose": "承载图表之外的全量明细与来源限定，折叠展开",
+   "columns": [
+    "产品",
+    "试验",
+    "关键数值",
+    "时间窗",
+    "披露状态"
+   ],
+   "completeness": "complete",
+   "after_chart": true,
+   "source_claim_ids": [
+    "claim-pnh-a"
+   ]
+  }
+ ],
+ "interaction_states": [
+  {
+   "state_id": "ix-page-load",
+   "trigger": "page_load",
+   "expected_behavior": "首屏渲染关键结论与图表，无布局抖动",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "跳过过渡动画直接呈现终态",
+   "frozen_behavior": "冻结静态快照版式"
+  },
+  {
+   "state_id": "ix-filter-change",
+   "trigger": "filter_change",
+   "expected_behavior": "筛选控件改变后图表与表格联动更新",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "联动更新无过渡动画",
+   "frozen_behavior": "筛选结果冻结"
+  },
+  {
+   "state_id": "ix-drill-down",
+   "trigger": "drill_down",
+   "expected_behavior": "折叠表展开明细且不改变其他区块",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "展开无动画",
+   "frozen_behavior": "展开态冻结"
+  },
+  {
+   "state_id": "ix-search",
+   "trigger": "search",
+   "expected_behavior": "检索输入后命中项即时高亮或过滤",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "命中高亮无过渡动画",
+   "frozen_behavior": "检索结果冻结"
+  },
+  {
+   "state_id": "ix-keyboard",
+   "trigger": "keyboard",
+   "expected_behavior": "Tab 顺序到达全部交互控件，Enter 触发展开",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "焦点环无动画",
+   "frozen_behavior": "焦点顺序冻结"
+  },
+  {
+   "state_id": "ix-reduced-motion",
+   "trigger": "reduced_motion",
+   "expected_behavior": "系统减弱动效时跳过过渡直接呈现终态",
+   "keyboard_accessible": true,
+   "reduced_motion_behavior": "全站过渡禁用",
+   "frozen_behavior": "终态冻结"
+  }
+ ],
+ "acceptance_matrix": [
+  {
+   "domain": "copy_zh",
+   "criteria": [
+    "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
+    "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
+   ],
+   "required": true
+  },
+  {
+   "domain": "hierarchy_density",
+   "criteria": [
+    "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
+    "同一数据在图、表、抽屉三投影中保持同源一致"
+   ],
+   "required": true
+  },
+  {
+   "domain": "typography_spacing",
+   "criteria": [
+    "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
+    "长药品名/试验名换行不截断关键标识"
+   ],
+   "required": true
+  },
+  {
+   "domain": "color_legibility",
+   "criteria": [
+    "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
+    "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
+   ],
+   "required": true
+  },
+  {
+   "domain": "charts_tables",
+   "criteria": [
+    "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
+    "图表与对应表格数值一致（同源投影）"
+   ],
+   "required": true
+  },
+  {
+   "domain": "interaction_consistency",
+   "criteria": [
+    "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
+    "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
+   ],
+   "required": true
+  },
+  {
+   "domain": "format_rendering",
+   "criteria": [
+    "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
+    "四类视口下导航、表格与图表保持可用"
+   ],
+   "required": true
+  }
+ ],
+ "planner_identity": "zcode-main-thread-glm53",
+ "planner_role": "visual-design-director",
+ "created_at": "2026-09-19T10:30:08.129419+00:00"
+}

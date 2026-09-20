@@ -1,0 +1,509 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "host-smoke-a-empty",
+  "project_id": "project_fixture_host_smoke_v1",
+  "report_kind": "A",
+  "contract_version": "1",
+  "report_version": "v1",
+  "evidence_snapshot_id": "snapshot-host-smoke-001",
+  "eligibility_rule_spec_id": "gate-spec-a-v1",
+  "eligibility_rule_version": "1.0",
+  "eligibility_policy_id": "a-eligibility-v1",
+  "discovery_summary": "候选产品 0 项、候选试验 0 项；适格产品 0 项、适格试验 0 项；全部候选均已处置（适格或排除）。",
+  "candidate_product_ids": [],
+  "eligible_product_ids": [],
+  "excluded_product_ids": [],
+  "candidate_trial_ids": [],
+  "eligible_trial_ids": [],
+  "excluded_trial_ids": [],
+  "search_scope_id": "scope-host-smoke-v1",
+  "exclusion_receipt_summary": [
+    "资格检索回执：已按资格规则逐项核对并排除"
+  ],
+  "exclusion_receipt_ids": [
+    "r1-alias-variant",
+    "r1-language-variant",
+    "r2-alternate-source",
+    "r2-identifier-cross-ref"
+  ],
+  "exhaustion": {
+    "schema_version": "1.0",
+    "project_id": "project_fixture_host_smoke_v1",
+    "report_kind": "A",
+    "gaps": [
+      {
+        "gap_id": "gap-eligibility-host-smoke",
+        "gate_unit_id": "a_innovation_eligibility",
+        "object_type": "product",
+        "object_id": "scope-host-smoke-v1",
+        "current_state": "not_publicly_disclosed",
+        "executor_role": "search_recovery_executor",
+        "reviewer_role": "independent_omission_reviewer",
+        "executor_role_id": "executor-search",
+        "reviewer_role_id": "reviewer-independent",
+        "applicable_route_ids": [
+          "clinicaltrials-global-baseline"
+        ],
+        "route_evidence": [
+          {
+            "route_id": "clinicaltrials-global-baseline",
+            "route_name_zh": "全球临床试验登记库",
+            "completion": "route_completed",
+            "final_result_class": "not_found",
+            "attempt_count": 4,
+            "receipt_ids": [
+              "r1-alias-variant",
+              "r1-language-variant",
+              "r2-alternate-source",
+              "r2-identifier-cross-ref"
+            ],
+            "access_methods": [
+              "交叉核对",
+              "公开检索"
+            ]
+          }
+        ],
+        "recovery_exhaustion_proofs": [
+          {
+            "alternative_paths": {
+              "strategy_units": [
+                {
+                  "strategy_unit_id": "round-1-alias-variant",
+                  "kind": "alias_variant",
+                  "value": "产品通用名与研发代号别名核对",
+                  "applicable": true,
+                  "completed": true
+                },
+                {
+                  "strategy_unit_id": "round-1-language-variant",
+                  "kind": "language_variant",
+                  "value": "中英文产品名称变体检索",
+                  "applicable": true,
+                  "completed": true
+                },
+                {
+                  "strategy_unit_id": "round-2-identifier-cross-ref",
+                  "kind": "identifier_cross_reference",
+                  "value": "NCT 编号与注册号交叉核对",
+                  "applicable": true,
+                  "completed": true
+                },
+                {
+                  "strategy_unit_id": "round-2-alternate-source",
+                  "kind": "alternate_source",
+                  "value": "监管审评信息库复核",
+                  "applicable": true,
+                  "completed": true
+                }
+              ],
+              "source_receipts": [
+                {
+                  "schema_version": "1.0",
+                  "receipt_id": "r1-alias-variant",
+                  "route_id": "clinicaltrials-global-baseline",
+                  "strategy_unit_id": "round-1-alias-variant",
+                  "entity_id": "scope-host-smoke-v1",
+                  "gap_id": "gap-eligibility-host-smoke",
+                  "claim_domain": "product_innovation_eligibility_claim",
+                  "query_or_identifier": "产品别名核对",
+                  "language": "zh",
+                  "access_method": "公开检索",
+                  "attempt_index": 1,
+                  "started_at": "2026-08-12T10:01:00+08:00",
+                  "ended_at": "2026-08-12T10:01:01+08:00",
+                  "scheduled_backoff_ms": 0,
+                  "actual_backoff_ms": 0,
+                  "result_class": "not_found",
+                  "error_class": "未找到适格内容",
+                  "completeness_checks": [
+                    "已核对返回内容"
+                  ],
+                  "alternative_paths": [
+                    "下一条恢复策略"
+                  ],
+                  "source_version_id": null,
+                  "content_sha256": null,
+                  "diagnostic_confidence": "high",
+                  "parent_attempt_id": "recovery-root",
+                  "recovery_round": 1
+                },
+                {
+                  "schema_version": "1.0",
+                  "receipt_id": "r1-language-variant",
+                  "route_id": "clinicaltrials-global-baseline",
+                  "strategy_unit_id": "round-1-language-variant",
+                  "entity_id": "scope-host-smoke-v1",
+                  "gap_id": "gap-eligibility-host-smoke",
+                  "claim_domain": "product_innovation_eligibility_claim",
+                  "query_or_identifier": "中英文名称变体检索",
+                  "language": "zh",
+                  "access_method": "公开检索",
+                  "attempt_index": 1,
+                  "started_at": "2026-08-12T10:02:00+08:00",
+                  "ended_at": "2026-08-12T10:02:01+08:00",
+                  "scheduled_backoff_ms": 0,
+                  "actual_backoff_ms": 0,
+                  "result_class": "not_found",
+                  "error_class": "未找到适格内容",
+                  "completeness_checks": [
+                    "已核对返回内容"
+                  ],
+                  "alternative_paths": [
+                    "下一条恢复策略"
+                  ],
+                  "source_version_id": null,
+                  "content_sha256": null,
+                  "diagnostic_confidence": "high",
+                  "parent_attempt_id": "recovery-root",
+                  "recovery_round": 1
+                },
+                {
+                  "schema_version": "1.0",
+                  "receipt_id": "r2-identifier-cross-ref",
+                  "route_id": "clinicaltrials-global-baseline",
+                  "strategy_unit_id": "round-2-identifier-cross-ref",
+                  "entity_id": "scope-host-smoke-v1",
+                  "gap_id": "gap-eligibility-host-smoke",
+                  "claim_domain": "product_innovation_eligibility_claim",
+                  "query_or_identifier": "NCT 编号交叉核对",
+                  "language": "zh",
+                  "access_method": "交叉核对",
+                  "attempt_index": 1,
+                  "started_at": "2026-08-12T10:03:00+08:00",
+                  "ended_at": "2026-08-12T10:03:01+08:00",
+                  "scheduled_backoff_ms": 0,
+                  "actual_backoff_ms": 0,
+                  "result_class": "not_found",
+                  "error_class": "未找到适格内容",
+                  "completeness_checks": [
+                    "已核对返回内容"
+                  ],
+                  "alternative_paths": [
+                    "下一条恢复策略"
+                  ],
+                  "source_version_id": null,
+                  "content_sha256": null,
+                  "diagnostic_confidence": "high",
+                  "parent_attempt_id": "recovery-root",
+                  "recovery_round": 2
+                },
+                {
+                  "schema_version": "1.0",
+                  "receipt_id": "r2-alternate-source",
+                  "route_id": "clinicaltrials-global-baseline",
+                  "strategy_unit_id": "round-2-alternate-source",
+                  "entity_id": "scope-host-smoke-v1",
+                  "gap_id": "gap-eligibility-host-smoke",
+                  "claim_domain": "product_innovation_eligibility_claim",
+                  "query_or_identifier": "监管审评信息复核",
+                  "language": "zh",
+                  "access_method": "交叉核对",
+                  "attempt_index": 1,
+                  "started_at": "2026-08-12T10:04:00+08:00",
+                  "ended_at": "2026-08-12T10:04:01+08:00",
+                  "scheduled_backoff_ms": 0,
+                  "actual_backoff_ms": 0,
+                  "result_class": "not_found",
+                  "error_class": "未找到适格内容",
+                  "completeness_checks": [
+                    "已核对返回内容"
+                  ],
+                  "alternative_paths": [
+                    "下一条恢复策略"
+                  ],
+                  "source_version_id": null,
+                  "content_sha256": null,
+                  "diagnostic_confidence": "high",
+                  "parent_attempt_id": "recovery-root",
+                  "recovery_round": 2
+                }
+              ],
+              "source_versions": [],
+              "policy": {
+                "schema_version": "1.0",
+                "policy_id": "source-strategies-v1",
+                "version": "1.0",
+                "minimum_same_path_attempts": 3,
+                "minimum_alternative_strategy_units": 2,
+                "saturation_rounds": 2,
+                "retryable_result_classes": [
+                  "network_error",
+                  "rate_limited",
+                  "proxy_error",
+                  "dns_error",
+                  "tls_error",
+                  "http_error",
+                  "parser_error",
+                  "tool_unavailable",
+                  "content_truncated"
+                ],
+                "alternative_strategy_kinds": [
+                  "alias_variant",
+                  "language_variant",
+                  "identifier_cross_reference",
+                  "citation_traversal",
+                  "alternate_access",
+                  "alternate_source"
+                ],
+                "diagnostic_branches": [
+                  "network_error",
+                  "rate_limited",
+                  "captcha_required",
+                  "permission_denied",
+                  "proxy_error",
+                  "dns_error",
+                  "tls_error",
+                  "http_error",
+                  "parser_error",
+                  "tool_unavailable",
+                  "content_truncated"
+                ]
+              }
+            },
+            "recovery_history": {
+              "gap_id": "gap-eligibility-host-smoke",
+              "rounds": [
+                {
+                  "round_index": 1,
+                  "gap_id": "gap-eligibility-host-smoke",
+                  "strategy_units": [
+                    {
+                      "strategy_unit_id": "round-1-alias-variant",
+                      "kind": "alias_variant",
+                      "value": "产品通用名与研发代号别名核对",
+                      "applicable": true,
+                      "completed": true
+                    },
+                    {
+                      "strategy_unit_id": "round-1-language-variant",
+                      "kind": "language_variant",
+                      "value": "中英文产品名称变体检索",
+                      "applicable": true,
+                      "completed": true
+                    }
+                  ],
+                  "source_receipts": [
+                    {
+                      "schema_version": "1.0",
+                      "receipt_id": "r1-alias-variant",
+                      "route_id": "clinicaltrials-global-baseline",
+                      "strategy_unit_id": "round-1-alias-variant",
+                      "entity_id": "scope-host-smoke-v1",
+                      "gap_id": "gap-eligibility-host-smoke",
+                      "claim_domain": "product_innovation_eligibility_claim",
+                      "query_or_identifier": "产品别名核对",
+                      "language": "zh",
+                      "access_method": "公开检索",
+                      "attempt_index": 1,
+                      "started_at": "2026-08-12T10:01:00+08:00",
+                      "ended_at": "2026-08-12T10:01:01+08:00",
+                      "scheduled_backoff_ms": 0,
+                      "actual_backoff_ms": 0,
+                      "result_class": "not_found",
+                      "error_class": "未找到适格内容",
+                      "completeness_checks": [
+                        "已核对返回内容"
+                      ],
+                      "alternative_paths": [
+                        "下一条恢复策略"
+                      ],
+                      "source_version_id": null,
+                      "content_sha256": null,
+                      "diagnostic_confidence": "high",
+                      "parent_attempt_id": "recovery-root",
+                      "recovery_round": 1
+                    },
+                    {
+                      "schema_version": "1.0",
+                      "receipt_id": "r1-language-variant",
+                      "route_id": "clinicaltrials-global-baseline",
+                      "strategy_unit_id": "round-1-language-variant",
+                      "entity_id": "scope-host-smoke-v1",
+                      "gap_id": "gap-eligibility-host-smoke",
+                      "claim_domain": "product_innovation_eligibility_claim",
+                      "query_or_identifier": "中英文名称变体检索",
+                      "language": "zh",
+                      "access_method": "公开检索",
+                      "attempt_index": 1,
+                      "started_at": "2026-08-12T10:02:00+08:00",
+                      "ended_at": "2026-08-12T10:02:01+08:00",
+                      "scheduled_backoff_ms": 0,
+                      "actual_backoff_ms": 0,
+                      "result_class": "not_found",
+                      "error_class": "未找到适格内容",
+                      "completeness_checks": [
+                        "已核对返回内容"
+                      ],
+                      "alternative_paths": [
+                        "下一条恢复策略"
+                      ],
+                      "source_version_id": null,
+                      "content_sha256": null,
+                      "diagnostic_confidence": "high",
+                      "parent_attempt_id": "recovery-root",
+                      "recovery_round": 1
+                    }
+                  ],
+                  "source_versions": [],
+                  "information_gain": {
+                    "new_evidence_fragment_ids": [],
+                    "changed_gate_unit_ids": [],
+                    "reduced_conflict_set_ids": []
+                  }
+                },
+                {
+                  "round_index": 2,
+                  "gap_id": "gap-eligibility-host-smoke",
+                  "strategy_units": [
+                    {
+                      "strategy_unit_id": "round-2-identifier-cross-ref",
+                      "kind": "identifier_cross_reference",
+                      "value": "NCT 编号与注册号交叉核对",
+                      "applicable": true,
+                      "completed": true
+                    },
+                    {
+                      "strategy_unit_id": "round-2-alternate-source",
+                      "kind": "alternate_source",
+                      "value": "监管审评信息库复核",
+                      "applicable": true,
+                      "completed": true
+                    }
+                  ],
+                  "source_receipts": [
+                    {
+                      "schema_version": "1.0",
+                      "receipt_id": "r2-identifier-cross-ref",
+                      "route_id": "clinicaltrials-global-baseline",
+                      "strategy_unit_id": "round-2-identifier-cross-ref",
+                      "entity_id": "scope-host-smoke-v1",
+                      "gap_id": "gap-eligibility-host-smoke",
+                      "claim_domain": "product_innovation_eligibility_claim",
+                      "query_or_identifier": "NCT 编号交叉核对",
+                      "language": "zh",
+                      "access_method": "交叉核对",
+                      "attempt_index": 1,
+                      "started_at": "2026-08-12T10:03:00+08:00",
+                      "ended_at": "2026-08-12T10:03:01+08:00",
+                      "scheduled_backoff_ms": 0,
+                      "actual_backoff_ms": 0,
+                      "result_class": "not_found",
+                      "error_class": "未找到适格内容",
+                      "completeness_checks": [
+                        "已核对返回内容"
+                      ],
+                      "alternative_paths": [
+                        "下一条恢复策略"
+                      ],
+                      "source_version_id": null,
+                      "content_sha256": null,
+                      "diagnostic_confidence": "high",
+                      "parent_attempt_id": "recovery-root",
+                      "recovery_round": 2
+                    },
+                    {
+                      "schema_version": "1.0",
+                      "receipt_id": "r2-alternate-source",
+                      "route_id": "clinicaltrials-global-baseline",
+                      "strategy_unit_id": "round-2-alternate-source",
+                      "entity_id": "scope-host-smoke-v1",
+                      "gap_id": "gap-eligibility-host-smoke",
+                      "claim_domain": "product_innovation_eligibility_claim",
+                      "query_or_identifier": "监管审评信息复核",
+                      "language": "zh",
+                      "access_method": "交叉核对",
+                      "attempt_index": 1,
+                      "started_at": "2026-08-12T10:04:00+08:00",
+                      "ended_at": "2026-08-12T10:04:01+08:00",
+                      "scheduled_backoff_ms": 0,
+                      "actual_backoff_ms": 0,
+                      "result_class": "not_found",
+                      "error_class": "未找到适格内容",
+                      "completeness_checks": [
+                        "已核对返回内容"
+                      ],
+                      "alternative_paths": [
+                        "下一条恢复策略"
+                      ],
+                      "source_version_id": null,
+                      "content_sha256": null,
+                      "diagnostic_confidence": "high",
+                      "parent_attempt_id": "recovery-root",
+                      "recovery_round": 2
+                    }
+                  ],
+                  "source_versions": [],
+                  "information_gain": {
+                    "new_evidence_fragment_ids": [],
+                    "changed_gate_unit_ids": [],
+                    "reduced_conflict_set_ids": []
+                  }
+                }
+              ]
+            },
+            "same_path_retries": []
+          }
+        ],
+        "same_path_retry_audit": null,
+        "alternative_path_audit": null,
+        "omission_review": {
+          "gap_id": "gap-eligibility-host-smoke",
+          "reviewer_role_id": "reviewer-independent",
+          "producer_context_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "reviewer_context_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "conclusion": "no_material_omission",
+          "review_notes_zh": "已按资格检索范围逐项复核，未发现可归因遗漏。",
+          "reviewed_inputs_digest": "omission-review-inputs_36ea9d4073d311ed2a6fd4a8"
+        },
+        "technical_diagnosis": null,
+        "information_gain_rounds": [
+          {
+            "round": 1,
+            "new_fields": [],
+            "new_source_versions": []
+          },
+          {
+            "round": 2,
+            "new_fields": [],
+            "new_source_versions": []
+          }
+        ],
+        "associated_entity_ids": [],
+        "evidence_gap": {
+          "schema_version": "1.0",
+          "gap_id": "gap-eligibility-host-smoke",
+          "gate_spec_id": "gate-spec-a-v1",
+          "object_type": "product",
+          "object_id": "scope-host-smoke-v1",
+          "field_id": "a_innovation_eligibility",
+          "current_state": "not_publicly_disclosed",
+          "required_context": "该字段缺少合格来源证据，需逐路线穷尽核对",
+          "candidate_sources": [
+            "clinicaltrials-global-baseline"
+          ],
+          "completed_strategies": [
+            "round-1-alias-variant",
+            "round-1-language-variant",
+            "round-2-alternate-source",
+            "round-2-identifier-cross-ref"
+          ],
+          "information_gain_diff": [
+            {
+              "round": 1,
+              "new_fields": [],
+              "new_source_versions": []
+            },
+            {
+              "round": 2,
+              "new_fields": [],
+              "new_source_versions": []
+            }
+          ],
+          "next_legal_action": "补充材料后重新运行本报告的证据核对"
+        }
+      }
+    ],
+    "created_at": "2026-08-12T10:00:00+08:00"
+  },
+  "created_at": "2026-09-01T05:00:00+08:00"
+}

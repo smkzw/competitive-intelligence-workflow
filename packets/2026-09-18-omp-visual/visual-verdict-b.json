@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "verdict_id": "verdict-omp-gemini38-vis-abc21-b",
+  "format": "html",
+  "visual_plan_digest": "a9ecc242bf4dd8f0536ca943cded346ef173cd6aa2c153db37a1de2090a80e80",
+  "candidate_artifact_digest": "d938dc88db83b373ec804883bbbe3fb0690185d551604c804c17f2e5976dd806",
+  "render_evidence_digest": "fe432f1bdda7342c20b5179030ce39a62dbc62a68ff2a115ca3e7f8de7e8ac54",
+  "producer_identity": "zcode-main-thread-glm53",
+  "verifier_identity": "omp-google-antigravity-gemini38flash-high",
+  "verdict": "rejected",
+  "domains": [
+    {
+      "domain": "copy_zh",
+      "status": "rejected",
+      "criteria": [
+        "用户可见文案为中文；无内部状态名、路径、定位符或英文系统术语泄漏",
+        "证据不足处使用显式中文声明（如暂无公开记录），不使用占位符或空白模拟"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/trial-exposure-context.html: 筛选按钮存在系统内部令牌泄漏，如 clinical_concept 维度直接向用户渲染「efficacy:not_reported」按钮文案",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/safety.html 与 overview.html: 筛选面板大量按钮渲染未剥离命名的内部概念键，如「safety:eculizumab」、「safety:danicopantp1」、「safety:group1treatmentnaive」、「baseline_pnh_clone_size」等，全站共检出 197 处按钮内部系统键泄漏",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/overview.html: 筛选折叠面板内 19 个维度分组标题全部硬编码为「观察指标」（包括试验、组别、时间点、人群等维度），存在语义分组标题失真"
+      ]
+    },
+    {
+      "domain": "hierarchy_density",
+      "status": "rejected",
+      "criteria": [
+        "总览页优先呈现结论性信息，逐项细节下沉到折叠表或详情页",
+        "同一数据在图、表、抽屉三投影中保持同源一致"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/overview.html: 总览页首屏完全缺失医学经理结论层与关键发现摘要，正文段落仅有「可同时选择多个条件。」与「点击数值查看数据依据。」两条操作提示，未优先呈现结论性信息",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/overview.html 与 assets/charts.js: 总览页未将逐项细节下沉，而是将 65 组完整测量图表及表格全部平铺渲染至 #kz-chart-module，造成首屏信息密度与层级严重失调",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 视觉实测确认页面直接由快速筛选与筛选条件跳转至平铺的图表卡片，无任何执行摘要或分析结论区块"
+      ]
+    },
+    {
+      "domain": "typography_spacing",
+      "status": "rejected",
+      "criteria": [
+        "字号使用康哲刻度（正文不小于 12px），行距与间距符合 4/8 基线",
+        "长药品名/试验名换行不截断关键标识"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/assets/portal.css 与 assets/evidence-drawer.css: 实测 portal.css 中 124 处间距（占比 39.1%）偏离 4/8 基线（出现 1px, 2px, 3px, 5px, 6px, 7px, 9px, 10px, 13px, 14px 等）；evidence-drawer.css 中 19 处间距（占比 44.2%）偏离 4/8 基线；且样式表包含 13px, 15px, 17px, 18px, 21px, 22px, 26px, 28px 等非康哲刻度字号",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/trials/nct04469465.html 与 overview.html: NCT04469465 试验名在英文词中被硬截断为「...Who Have Clinica」（丢弃末尾 -lly Evident 等字符）；NCT02605993 试验名在词中截断为「...Paroxysmal Nocturnal Hemoglobin」（丢弃 -uria）",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__trials__nct04469465.html.png: 截断后的试验标题与中文标签直接拼接无空格（如「...Who Have Clinica试验档案」及「...Who Have Clinica基本信息」）；overview.html 中元数据亦粘连为「阵发性睡眠性血红蛋白尿症观察截止：2026-09-06」"
+      ]
+    },
+    {
+      "domain": "color_legibility",
+      "status": "rejected",
+      "criteria": [
+        "四科室令牌（橙/蓝/绿/紫）跨页面语义一致",
+        "正文与背景对比度满足可读性；不单独依赖颜色区分结论"
+      ],
+      "evidence_refs": [
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html 全部 70 个页面与 assets/report-b.css: 策划书声明的四科室令牌（kz-orange / kz-med-blue / kz-stats-green / kz-pv）在报告 B 的 HTML 中出现次数均为 0；绿（DMST 统计）与紫（PV 药物警戒）两科室颜色令牌在报告 B 中完全无任何落地元素",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/assets/report-b.css: 报告 B 采用独立私有色值（--b-orange, --b-gold, --b-blue），未集成四科室统一语义色彩体系，无法满足跨页面科室语义一致判据",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png: 页面仅有橙色（品牌主色与柱状图）和蓝色线条，无统计绿与警戒紫的科室色彩映射"
+      ]
+    },
+    {
+      "domain": "charts_tables",
+      "status": "rejected",
+      "criteria": [
+        "图表均有来源声明绑定与坐标量纲标注；空态显式声明而非空墙",
+        "图表与对应表格数值一致（同源投影）"
+      ],
+      "evidence_refs": [
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/1440__overview.html.png 与 768__overview.html.png: 关键结果右侧卡片（NCT04170023 LDH变化）图例直接漂移并压叠在绘图区正上方，与柱顶数值标签 160.2 及 88.7 发生直接重叠遮挡，坐标轴顶部刻度亦被图例文本遮盖",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/overview.html 与 assets/charts.js: 图表卡片仅在标题展示通用字段，未在图表内渲染独立来源声明行（仅依赖卡片外全局提示「点击数值查看数据依据」）；X 轴标签显示为通用「产品 | 试验」而缺失试验设计维度的明确量纲标注",
+        "packets/2026-09-18-omp-visual/render-evidence-b.json: 30 个呈现目标中普遍存在极大规模的标签压叠（如 1440 overview label_overlap_count 为 6979，768 为 9070，trials/nct04469465 高达 19885 至 44576），图表文字重叠严重"
+      ]
+    },
+    {
+      "domain": "interaction_consistency",
+      "status": "accepted",
+      "criteria": [
+        "筛选、下钻、抽屉、搜索、键盘、减弱动效六类触发行为全站一致",
+        "键盘可达：折叠表与抽屉可用 Tab/Enter 操作"
+      ],
+      "evidence_refs": [
+        "packets/2026-09-18-omp-visual/render-evidence-b.json: 全部 30 个渲染目标（Chromium 与 WebKit 各 15 个）在 page_load、filter_change、drill_down、search、keyboard、reduced_motion 六类交互探测中全部通过（passed=true），无交互失败项",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/overview.html 与 assets/portal.js: 实测纯键盘导航支持 Tab 键顺序聚焦 logo、导航菜单、搜索输入框、筛选展开按钮、快捷筛选按钮及表格折叠按钮；Enter 键可展开折叠明细并打开数据依据抽屉，抽屉内支持关闭操作及焦点捕获",
+        "runs/pnh-vertical/abc-v21/reports/B/v1/html/assets/portal.css 与 assets/report-b.css: 均配置 prefers-reduced-motion 媒体查询，在减弱动效模式下禁用过渡与动画，行为在全站 20 个主页面保持一致"
+      ]
+    },
+    {
+      "domain": "format_rendering",
+      "status": "rejected",
+      "criteria": [
+        "Chromium 与 WebKit 渲染一致，无布局断裂或水平溢出",
+        "四类视口下导航、表格与图表保持可用"
+      ],
+      "evidence_refs": [
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__overview.html.png 与 webkit/320__overview.html.png: 320px 移动视口下顶栏副标题「阵发性睡眠性血红蛋白尿症临床试验结果比...」在右侧被生硬截断；「快速筛选产品」标签胶囊外边框发生横向与纵向紧密挤叠（无间距负边距重叠）；卡片文字被挤压成单字换行（如「LDH 水」换行「平变化 ·」），第二张卡片横向截断超出视口",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/320__trials__nct04469465.html.png: 320px 移动视口下大字号英文标题断裂为 7 行以上残缺单行（如「Danicopan as Add-」在连字符处换行，「Paroxysmal」、「Hemoglobinuria」单字独占一行），面包屑截断至「Clinica」无省略号",
+        "packets/2026-09-18-omp-visual/screenshots/B/chromium/768__overview.html.png: 768px 平板视口下强制两列卡片网格导致右侧图表图例与正向数据柱及数据标签严重相撞重叠；render-evidence-b.json 显示全视口 label_overlap_count 在 1582 至 44576 之间，多视口下图表标签严重碰撞不可读"
+      ]
+    }
+  ],
+  "created_at": "2026-09-19T10:48:30Z"
+}

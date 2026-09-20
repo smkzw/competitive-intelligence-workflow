@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.local/schemas/pptx-source-pack.schema.json",
+  "title": "PPT Master 中文来源包摘要",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "source_pack_id",
+    "project_id",
+    "report",
+    "report_version",
+    "indication",
+    "data_cutoff",
+    "snapshot_id",
+    "snapshot_sha256",
+    "claim_snapshot_id",
+    "evidence_snapshot_id",
+    "coverage_set_id",
+    "coverage_set_sha256",
+    "report_data_sha256",
+    "page_strategy_sha256",
+    "design_contract_sha256",
+    "source_pack_path",
+    "source_pack_sha256",
+    "source_pack_byte_size",
+    "summary_path",
+    "summary_sha256",
+    "page_count",
+    "pages",
+    "coverage",
+    "fact_counts",
+    "source_keys",
+    "design_contract",
+    "no_svg"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "contract_version": {"const": "8.7"},
+    "source_pack_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "report": {"enum": ["A", "B", "C"]},
+    "report_version": {"type": "string", "minLength": 1},
+    "indication": {"type": "string", "minLength": 1},
+    "data_cutoff": {"type": "string", "minLength": 1},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "claim_snapshot_id": {"type": "string", "minLength": 1},
+    "evidence_snapshot_id": {"type": "string", "minLength": 1},
+    "coverage_set_id": {"type": "string", "minLength": 1},
+    "coverage_set_sha256": {"$ref": "#/$defs/sha256"},
+    "report_data_sha256": {"$ref": "#/$defs/sha256"},
+    "page_strategy_sha256": {"$ref": "#/$defs/sha256"},
+    "design_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "source_pack_path": {"type": "string", "minLength": 1},
+    "source_pack_sha256": {"$ref": "#/$defs/sha256"},
+    "source_pack_byte_size": {"type": "integer", "minimum": 1},
+    "summary_path": {"type": "string", "minLength": 1},
+    "summary_sha256": {"$ref": "#/$defs/sha256"},
+    "page_count": {"type": "integer", "minimum": 1},
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/page"}
+    },
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "fact_counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "source_keys": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "design_contract": {"$ref": "#/$defs/designContract"},
+    "no_svg": {"const": true}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "page_id",
+        "route",
+        "title_zh",
+        "responsibility_zh",
+        "visuals",
+        "complete_table",
+        "filter_profiles",
+        "evidence_drawer_profile"
+      ],
+      "properties": {
+        "page_id": {"type": "string", "minLength": 1},
+        "route": {"type": "string", "minLength": 1},
+        "title_zh": {"type": "string", "minLength": 1},
+        "responsibility_zh": {"type": "string", "minLength": 1},
+        "visuals": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "complete_table": {"type": "boolean"},
+        "filter_profiles": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "evidence_drawer_profile": {"type": "string", "minLength": 1}
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage_set_id",
+        "content_sha256",
+        "item_count",
+        "item_ids",
+        "item_kind_counts"
+      ],
+      "properties": {
+        "coverage_set_id": {"type": "string", "minLength": 1},
+        "content_sha256": {"$ref": "#/$defs/sha256"},
+        "item_count": {"type": "integer", "minimum": 0},
+        "item_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "item_kind_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "contractFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "designContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_path", "route", "contract_version", "sha256", "files"],
+      "properties": {
+        "manifest_path": {"type": "string", "minLength": 1},
+        "route": {"const": "pptx"},
+        "contract_version": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "files": {"type": "array", "items": {"$ref": "#/$defs/contractFile"}}
+      }
+    }
+  }
+}

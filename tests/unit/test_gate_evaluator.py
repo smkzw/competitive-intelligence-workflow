@@ -246,12 +246,24 @@ def _unit(**overrides: object) -> GateUnitSpec:
         ),
         "missing_strategy": MissingStrategy.BLOCK,
         "conflict_strategy": ConflictStrategy.RESOLVED_ONLY,
+        "failure_code": "missing_required_evidence",
+        "recovery_route_ids": (
+            "alternate_source",
+            "alternate_access",
+            "identifier_cross_reference",
+        ),
         "threshold": 1,
         "user_label_zh": "安全性数值摘要",
         "missing_impact_zh": "无法判断该产品的关键安全性风险",
         "user_next_step_zh": "请提供官方登记结果或主要试验报告中的不良事件数值摘要",
     }
     payload.update(overrides)
+    if "failure_code" not in overrides:
+        payload["failure_code"] = (
+            "missing_required_evidence"
+            if payload["blocking_level"] == GateBlockingLevel.CRITICAL
+            else "missing_extension_evidence"
+        )
     return GateUnitSpec.model_validate(payload)
 
 
@@ -532,6 +544,16 @@ def test_gate_evaluator_fails_closed_on_unknown_binding_objects(
         )
 
 
+def test_report_evaluation_rejects_binding_for_unknown_gate_unit() -> None:
+    """GateSpec 是闭世界；拼写错误或过期 unit_id 不得被评估器静默丢弃。"""
+    spec = GateSpec.from_yaml(ROOT / "policies" / "gates" / "A-v1.yaml")
+    snapshot = _snapshot()
+    unknown = _binding(binding_id="binding-unknown-unit", unit_id="a_unknown_unit")
+
+    with pytest.raises(GateEvaluationError, match="未知门槛单元"):
+        evaluate_report(spec, snapshot, (unknown,), contract_version="1")
+
+
 def test_gate_evaluator_fails_closed_on_forged_universe_summary() -> None:
     with pytest.raises(PydanticValidationError, match="摘要与内容不一致"):
         _snapshot(universe_summary="forged-summary")
@@ -789,6 +811,17 @@ def test_required_unresolved_conflict_blocks() -> None:
     )
     assert satisfied.outcome is GateUnitOutcome.SATISFIED
 
+    # 同一关键对象/单元仍保留开放冲突时，另一条已选事实不得掩盖该冲突。
+    mixed = evaluate_unit_decision(
+        critical,
+        object_id="product-a",
+        applicable=True,
+        applicability_justified=True,
+        bindings=(unresolved, resolved),
+    )
+    assert mixed.outcome is GateUnitOutcome.BLOCKED
+    assert mixed.disclosure_state is FactDisclosureState.CONFLICTING
+
 
 @pytest.mark.parametrize(
     "state",
@@ -924,6 +957,44 @@ def test_a_b_c_gate_spec_yaml_files_validate_against_schema() -> None:
     vocabulary = a_spec.vocabulary
     assert vocabulary is not None
     assert set(vocabulary.development_maturity) == set(DevelopmentMaturity)
+
+
+def test_all_policy_units_declare_failure_and_recovery_contracts_in_yaml() -> None:
+    """正式 policy 不得靠模型默认值补造失败代码或恢复路线。"""
+    import yaml
+
+    for name in ("A-v1", "B-v1", "C-v1"):
+        document = yaml.safe_load(
+            (ROOT / "policies" / "gates" / f"{name}.yaml").read_text(
+                encoding="utf-8"
+            )
+        )
+        for unit in document["units"]:
+            expected_code = (
+                "missing_required_evidence"
+                if unit["blocking_level"] == "critical"
+                else "missing_extension_evidence"
+            )
+            assert unit.get("failure_code") == expected_code
+            assert unit.get("recovery_route_ids")
+
+
+def test_c_gate_units_explicitly_accept_only_trial_design_facts() -> None:
+    """C 门不得依赖模型默认值，也不得让疗效或安全事实误充设计证据。"""
+    import yaml
+
+    path = ROOT / "policies" / "gates" / "C-v1.yaml"
+    document = yaml.safe_load(path.read_text(encoding="utf-8"))
+    raw_units = document["units"]
+    assert raw_units
+    assert all(
+        unit.get("allowed_fact_domains") == ["trial_design"] for unit in raw_units
+    )
+
+    spec = GateSpec.from_yaml(path)
+    assert all(
+        unit.allowed_fact_domains == (FactDomain.TRIAL_DESIGN,) for unit in spec.units
+    )
 
 
 def test_gate_result_and_override_documents_validate_against_schemas() -> None:

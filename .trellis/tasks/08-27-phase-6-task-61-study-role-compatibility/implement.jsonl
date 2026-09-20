@@ -1,0 +1,4 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "权威 Pydantic 边界需重校验并防止 model_copy 旁路"}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "先复用既有 A 终点族与 PubMed 论文角色语义"}
+{"file": "docs/specs/competitive-intelligence-workflow-design-v1.2.md", "reason": "B/C 研究角色和 B 终点时间窗的批准产品合同"}

@@ -1,0 +1,4 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"复核关键疗效、安全性和对照组呈现责任"}
+{"file":"contracts/kangzhe/design_specs/core.md","reason":"复核字号、色彩、证据、文字裁切与真实渲染底线"}
+{"file":"contracts/kangzhe/design_specs/project_profile.md","reason":"复核真实医学经理视角与中文原生边界"}
+{"file":"contracts/kangzhe/design_specs/track_site.md","reason":"复核多页门户、响应式、file协议和浏览器验收"}

@@ -1,0 +1,553 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/schemas/acceptance-catalog.schema.json",
+  "title": "首版站点式 HTML 验收场景目录",
+  "description": "Task 10.1 的唯一机器可读验收目录。场景元数据、输入摘要、预期不变量、验证器和回执路径均须可重算、可追溯；首版输出格式固定为 html。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "catalog_id",
+    "release_scope",
+    "requirements",
+    "digest_algorithm",
+    "cases"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "schemas/acceptance-catalog.schema.json"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "catalog_id": {
+      "type": "string",
+      "const": "acceptance-matrix-v1"
+    },
+    "catalog_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "digest_algorithm": {
+      "type": "string",
+      "const": "sha256-canonical-json-v1",
+      "description": "排除 case_digest 后，对对象键排序并按稳定顺序规范化 reports、formats、inputs 后计算 UTF-8 JSON SHA-256"
+    },
+    "release_scope": {
+      "type": "string",
+      "const": "site_html_v1"
+    },
+    "requirements": {
+      "$ref": "#/$defs/requirements"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "小写 SHA-256 内容摘要"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000-\\u001f]+$",
+      "description": "相对于当前 case 包或仓库根的 POSIX 路径；禁止绝对路径、路径逃逸和反斜杠"
+    },
+    "offset_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:[+-][0-9]{2}:[0-9]{2})$",
+      "description": "带明确数字时区偏移的 ISO 8601 日期时间"
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approved_case_families",
+        "allowed_formats",
+        "extra_case_policy"
+      ],
+      "properties": {
+        "approved_case_families": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "allowed_formats": {
+          "type": "array",
+          "const": ["html"]
+        },
+        "extra_case_policy": {
+          "type": "string",
+          "const": "reject_unless_explicitly_registered"
+        },
+        "declared_case_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "purpose_zh", "sha256"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "purpose_zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "universe_closure",
+            "report_data",
+            "recovery_report_data",
+            "supporting_contract",
+            "historical_source",
+            "expected_contract"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_fixture": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "deidentified": {
+          "type": "boolean"
+        },
+        "identity_verified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "expected_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "purpose_zh"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "purpose_zh": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome", "state", "invariants", "prohibited_outcomes"],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "rendered",
+            "evidence_blocked",
+            "refresh_candidate",
+            "pending",
+            "rejected"
+          ]
+        },
+        "state": {
+          "enum": [
+            "snapshot_locked",
+            "evidence_blocked",
+            "refresh_candidate",
+            "pending_future_owner",
+            "not_applicable"
+          ]
+        },
+        "invariants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "prohibited_outcomes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "expected_files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/expected_file"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "report_states": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/report_expected_state"
+          },
+          "minProperties": 1
+        }
+      }
+    },
+    "report_expected_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome", "state"],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "rendered",
+            "evidence_blocked",
+            "refresh_candidate",
+            "pending",
+            "rejected"
+          ]
+        },
+        "state": {
+          "enum": [
+            "snapshot_locked",
+            "evidence_blocked",
+            "refresh_candidate",
+            "pending_future_owner",
+            "not_applicable"
+          ]
+        }
+      }
+    },
+    "verifier": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "target"],
+          "properties": {
+            "kind": {
+              "enum": ["pytest", "command", "script"]
+            },
+            "target": {
+              "type": "string",
+              "minLength": 1
+            },
+            "command": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "schema", "owner_status"],
+      "properties": {
+        "relative_path": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "schema": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "owner_status": {
+          "enum": [
+            "current_owner",
+            "pending_future_owner",
+            "verified",
+            "host_unavailable",
+            "not_applicable"
+          ]
+        },
+        "status": {
+          "enum": [
+            "current_owner",
+            "pending_future_owner",
+            "verified",
+            "host_unavailable",
+            "not_applicable"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_fixture", "deidentified", "identity_verified"],
+      "properties": {
+        "source_fixture": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "deidentified": {
+          "const": true
+        },
+        "identity_verified": {
+          "const": true
+        },
+        "note_zh": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "first_disclosed_at",
+        "acquired_at",
+        "materialized_cutoff",
+        "resume_cutoff",
+        "disclosure_state",
+        "expected_assessment"
+      ],
+      "properties": {
+        "disclosed_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/offset_datetime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "first_disclosed_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/offset_datetime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "acquired_at": {
+          "$ref": "#/$defs/offset_datetime"
+        },
+        "materialized_cutoff": {
+          "$ref": "#/$defs/offset_datetime"
+        },
+        "resume_cutoff": {
+          "$ref": "#/$defs/offset_datetime"
+        },
+        "resumed_at": {
+          "$ref": "#/$defs/offset_datetime"
+        },
+        "disclosure_precision": {
+          "enum": ["instant", "calendar_day", "unknown"]
+        },
+        "disclosure_state": {
+          "enum": ["reported", "not_publicly_disclosed"]
+        },
+        "expected_assessment": {
+          "enum": [
+            "snapshot_eligible",
+            "refresh_candidate",
+            "blocked_unknown_disclosure",
+            "blocked_ambiguous_disclosure_day"
+          ]
+        },
+        "cutoff_is_frozen": {
+          "const": true
+        },
+        "crossed_day": {
+          "type": "boolean"
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description_zh",
+        "family",
+        "timezone",
+        "data_cutoff",
+        "created_at",
+        "reports",
+        "formats",
+        "execution_scope",
+        "owner_task",
+        "inputs",
+        "expected",
+        "verifiers",
+        "receipt",
+        "case_digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "minLength": 1
+        },
+        "name_zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description_zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "minLength": 1
+        },
+        "indication": {
+          "type": "string",
+          "minLength": 1
+        },
+        "not_applicable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timezone": {
+          "type": "string",
+          "pattern": "^(?:Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/[A-Za-z0-9._+-]+$"
+        },
+        "data_cutoff": {
+          "$ref": "#/$defs/offset_datetime"
+        },
+        "created_at": {
+          "$ref": "#/$defs/offset_datetime"
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "enum": ["A", "B", "C"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "formats": {
+          "type": "array",
+          "const": ["html"]
+        },
+        "execution_scope": {
+          "enum": [
+            "full-matrix",
+            "recovery",
+            "legacy-cutover",
+            "conditional-extension"
+          ]
+        },
+        "owner_task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "history": {
+          "$ref": "#/$defs/history"
+        },
+        "expected": {
+          "$ref": "#/$defs/expected"
+        },
+        "verifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/verifier"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "receipt": {
+          "$ref": "#/$defs/receipt"
+        },
+        "case_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["indication"],
+          "not": {
+            "required": ["not_applicable"]
+          }
+        },
+        {
+          "required": ["not_applicable"],
+          "not": {
+            "required": ["indication"]
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "family": {
+                "const": "historical-cutoff"
+              }
+            },
+            "required": ["family"]
+          },
+          "then": {
+            "required": ["history"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "full-matrix-v1"
+              }
+            },
+            "required": ["id"]
+          },
+          "then": {
+            "required": ["provenance"]
+          }
+        }
+      ]
+    }
+  }
+}

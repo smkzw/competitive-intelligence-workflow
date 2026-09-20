@@ -1,0 +1,76 @@
+schema_version: "1.0"
+policy_id: timepoint-compatibility-v1
+version: "1.2"
+rules:
+  # ── PNH/登记观察窗族（v1.2，2026-09-12）：登记终点时间多为区间文本
+  # （Between Day X and Day Y）；派生链取区间中点周数归窗。窗外杂散时点
+  # 归入"登记杂散观察窗"族，描述性保留，不参与跨试验近窗归并。
+  - rule_id: timepoint-registry-early-v1
+    time_unit: week
+    minimum: 0
+    maximum: 9.99
+    canonical_value: null
+    label_zh: 登记早期观察（10 周内）
+    difference_label_zh: 登记早期观察窗之外
+  - rule_id: timepoint-registry-mid-v1
+    time_unit: week
+    minimum: 14.5
+    maximum: 21.9
+    canonical_value: null
+    label_zh: 登记中期观察（约 15-22 周）
+    difference_label_zh: 登记中期观察窗之外
+  - rule_id: timepoint-registry-late-v1
+    time_unit: week
+    minimum: 26.01
+    maximum: 47.9
+    canonical_value: null
+    label_zh: 登记晚期观察（约 27-48 周）
+    difference_label_zh: 登记晚期观察窗之外
+  - rule_id: timepoint-registry-extended-v1
+    time_unit: week
+    minimum: 56.5
+    maximum: 300
+    canonical_value: null
+    label_zh: 登记延长期观察（>56 周）
+    difference_label_zh: 登记延长期观察窗之外
+
+  - rule_id: timepoint-day-28-v1
+    time_unit: day
+    minimum: 26
+    maximum: 30
+    canonical_value: 28
+    comparison_tolerance_weeks: 2
+    label_zh: 第 28 天附近
+    difference_label_zh: 实际时间点不在第 28 天兼容窗内
+  - rule_id: timepoint-week-12-v1
+    time_unit: week
+    minimum: 10
+    maximum: 14
+    canonical_value: 12
+    comparison_tolerance_weeks: 2
+    label_zh: 第 12 周附近
+    difference_label_zh: 实际时间点不在第 12 周兼容窗内
+  - rule_id: timepoint-week-24-v1
+    time_unit: week
+    minimum: 22
+    maximum: 26
+    canonical_value: 24
+    comparison_tolerance_weeks: 2
+    label_zh: 第 24 周附近
+    difference_label_zh: 实际时间点不在第 24 周兼容窗内
+  - rule_id: timepoint-week-52-v1
+    time_unit: week
+    minimum: 48
+    maximum: 56
+    canonical_value: 52
+    comparison_tolerance_weeks: 2
+    label_zh: 第 52 周附近
+    difference_label_zh: 实际时间点不在第 52 周兼容窗内
+  - rule_id: timepoint-month-6-v1
+    time_unit: month
+    minimum: 5.5
+    maximum: 6.5
+    canonical_value: 6
+    comparison_tolerance_weeks: 2
+    label_zh: 第 6 个月附近
+    difference_label_zh: 实际时间点不在第 6 个月兼容窗内

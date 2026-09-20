@@ -251,6 +251,20 @@ def _c_spec() -> GateSpec:
     return GateSpec.from_yaml(ROOT / "policies" / "gates" / "C-v1.yaml")
 
 
+def test_b_baseline_units_accept_regulatory_material_as_approved_authority() -> None:
+    """B 基线可由监管材料承载，但不放宽到低权威来源。"""
+    units = {unit.unit_id: unit for unit in _b_spec().units}
+    for unit_id in (
+        "b_baseline_sample_size",
+        "b_baseline_age",
+        "b_baseline_sex",
+        "b_baseline_severity_anchor",
+    ):
+        roles = set(units[unit_id].allowed_source_roles)
+        assert SourceRole.REGULATORY_MATERIAL in roles
+        assert SourceRole.COMPANY_DISCLOSURE not in roles
+
+
 def _all_base_a_unit_ids() -> tuple[str, ...]:
     """A 报告中 always_applicable 关键单元标识。"""
     return (
@@ -1904,6 +1918,34 @@ def test_b_core_efficacy_respects_raised_unit_threshold() -> None:
     assert len(eff[0].fact_version_ids) == 2
     assert result.decision is ReportDecision.BLOCKED
 
+    # 一个共享事实跨两组引用时必须整体排除；同组的两个独立事实不能替另一组补足覆盖。
+    shared_and_one_sided = evaluate_report(
+        base_spec,
+        snapshot,
+        (
+            efficacy("group-1", "fact-shared"),
+            efficacy("group-2", "fact-shared").model_copy(
+                update={"binding_id": "binding-group-2-shared"}
+            ),
+            efficacy("group-1", "fact-g1-a").model_copy(
+                update={"binding_id": "binding-group-1-a"}
+            ),
+            efficacy("group-1", "fact-g1-b").model_copy(
+                update={"binding_id": "binding-group-1-b"}
+            ),
+        ),
+        contract_version="1",
+    )
+    shared_result = next(
+        item
+        for item in shared_and_one_sided.unit_results
+        if item.unit_id == "b_core_efficacy_endpoint"
+    )
+    assert shared_result.outcome is GateUnitOutcome.BLOCKED
+    assert shared_result.coverage_complete is False
+    assert shared_result.satisfied_count == 2
+    assert shared_result.fact_version_ids == ("fact-g1-a", "fact-g1-b")
+
     # 单臂唯一组在基础阈值 1 下保持满足（回归，不虚构对照）
     single_snapshot = _snapshot(
         comparison_ids=(),
@@ -1924,6 +1966,46 @@ def test_b_core_efficacy_respects_raised_unit_threshold() -> None:
     assert eff_single[0].threshold == 1
     assert eff_single[0].satisfied_count == 1
     assert eff_single[0].outcome is GateUnitOutcome.SATISFIED
+
+    # 同一组存在额外的合法事实时仍须可评估，不能因谱系数量多于组数崩溃。
+    extra_fact_result = evaluate_report(
+        base_spec,
+        snapshot,
+        (
+            efficacy("group-1", "fact-g1-a"),
+            efficacy("group-1", "fact-g1-b").model_copy(
+                update={"binding_id": "binding-group-1-extra"}
+            ),
+            efficacy("group-2", "fact-g2"),
+        ),
+        contract_version="1",
+    )
+    extra_fact_unit = next(
+        item for item in extra_fact_result.unit_results
+        if item.unit_id == "b_core_efficacy_endpoint"
+    )
+    assert extra_fact_unit.outcome is GateUnitOutcome.SATISFIED
+    assert extra_fact_unit.coverage_complete is True
+    assert extra_fact_unit.satisfied_count == 3
+    assert set(extra_fact_unit.fact_version_ids) == {
+        "fact-g1-a", "fact-g1-b", "fact-g2",
+    }
+    raised_with_enough_facts = evaluate_report(
+        spec,
+        snapshot,
+        (
+            efficacy("group-1", "fact-g1-a"),
+            efficacy("group-1", "fact-g1-b").model_copy(
+                update={"binding_id": "binding-group-1-extra"}
+            ),
+            efficacy("group-2", "fact-g2"),
+        ),
+        contract_version="1",
+    )
+    assert next(
+        item for item in raised_with_enough_facts.unit_results
+        if item.unit_id == "b_core_efficacy_endpoint"
+    ).outcome is GateUnitOutcome.SATISFIED
 
 
 def test_gate_evaluator_rejects_cross_product_trial_evidence_stitching() -> None:

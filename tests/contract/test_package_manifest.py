@@ -22,18 +22,27 @@ EXPECTED_INTERNAL_SKILLS = {
     "analysis-b",
     "analysis-c",
     "scientific-qc",
+    "visual-design-director",
     "render-deliver",
     "visual-package-qc",
     "correction-refresh",
-    "monitoring",
 }
 EXPECTED_CLI_CATALOG = [
     "package verify",
     "project create",
     "project verify",
     "project run",
+    "project accept-visual",
     "capability preflight",
     "fixture run",
+    "review issue",
+    "research submit",
+    "research capture",
+    "research fetch-ctgov",
+    "publication unavailable",
+    "yaozh answer",
+    "yaozh observe",
+    "yaozh check",
 ]
 
 
@@ -70,12 +79,14 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
     assert package["name"] == project["name"]
     assert package["version"] == project["version"]
     assert package["cli_version"] == project["version"]
-    assert package["build_stage"] == "phase-2-accepted"
+    assert package["build_stage"] == "development-candidate"
+    assert package["release_scope"] == "site_html_v1"
+    assert package["formats"] == ["html"]
     assert package["hosts"] == ["codex", "hermes", "omp"]
 
     public_path = ROOT / str(manifest["public_skill"])
     public_meta = _frontmatter(public_path)
-    assert public_meta["name"] == "competitive-intelligence-workflow"
+    assert public_meta["name"] == "竞品调研"
     assert set(public_meta) == {"name", "description"}
     assert "TODO" not in str(public_meta["description"])
     public_agent = _yaml_object(public_path.parent / "agents" / "openai.yaml")
@@ -116,6 +127,7 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
     ]
     assert "migrations/0008_project_lineage_guards.sql" in components["migrations"]
     assert "migrations/0009_source_date_precision.sql" in components["migrations"]
+    assert "migrations/0010_source_text_derivations.sql" in components["migrations"]
 
     cli = cast(dict[str, object], manifest["cli"])
     assert cli["catalog"] == EXPECTED_CLI_CATALOG
@@ -127,11 +139,13 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
     assert list(Draft202012Validator(schema).iter_errors(extra_command))
 
     declared_schema = set(components["schemas"])
-    actual_schema = {
-        path.relative_to(ROOT).as_posix()
-        for path in ROOT.glob("schemas/**/*.schema.json")
-    } | {
-        path.relative_to(ROOT).as_posix()
-        for path in ROOT.glob("contracts/**/*.schema.json")
+    actual_schema = (
+        {path.relative_to(ROOT).as_posix() for path in ROOT.glob("schemas/**/*.schema.json")}
+        | {path.relative_to(ROOT).as_posix() for path in ROOT.glob("contracts/**/*.schema.json")}
+    ) - {
+        "schemas/monitoring-change-candidate.schema.json",
+        "schemas/ppt-master-job.schema.json",
+        "schemas/pptx-confirmation.schema.json",
+        "schemas/pptx-source-pack.schema.json",
     }
     assert declared_schema == actual_schema

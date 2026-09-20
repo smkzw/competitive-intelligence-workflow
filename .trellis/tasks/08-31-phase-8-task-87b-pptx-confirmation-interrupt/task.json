@@ -1,0 +1,30 @@
+{
+  "id": "phase-8-task-87b-pptx-confirmation-interrupt",
+  "name": "phase-8-task-87b-pptx-confirmation-interrupt",
+  "title": "Phase 8 Task 8.7b：PPTX 来源包与八项确认中断",
+  "description": "补齐原实施计划 Task 8.7 的四格式同快照来源包、PPTX 八项确认、中断恢复与清单绑定。",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "只实现 PPTX source pack、八项推荐与确认结果、格式级中断/恢复及相应测试；不生成真实 PPTX，不进入 PowerPoint 视觉验收。",
+  "package": null,
+  "priority": "P0",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-08-31",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-31-phase-8-cross-format",
+  "relatedFiles": [
+    "src/ci_workflow/renderers/pptx_master/",
+    "tests/renderers/test_ppt_master_source_pack.py",
+    "tests/graph/test_pptx_confirmation_interrupt.py"
+  ],
+  "notes": "2026-08-31 无损暂停。worker_01 来源包与 worker_02 八项确认合同已完成；worker_03 已写入 adapter.py 与图测试但 runner 报告仍为 PENDING。用户随后批准首版只要求站点式 HTML，本任务作为首版后续能力原样冻结，不阻断 Phase 9；恢复时必须续用会话 01a056d3-c835-7000-816c-758c6673fc83，先核对 checkpoint 摘要，再完成测试、Codex 审阅与治理审计；不得提前进入 Task 8.8。",
+  "meta": {"phase": 8, "task": "8.7b", "release_scope": "deferred_after_site_v1"}
+}

@@ -1,6 +1,6 @@
 schema_version: "1.0"
 policy_id: source-policy-v1
-version: "1.0"
+version: "1.1"
 claim_domains:
   - drug_identity_mechanism
   - trial_identity_design_status
@@ -66,6 +66,20 @@ sources:
       regulatory_development_status: cross_check
       china_development_regulatory_status: cross_check
       company_relationships_transactions: lead_only
+      patents_protection: lead_only
+  - source_id: yaozh_enterprise
+    label_zh: 药智网企业版
+    required_global_baseline: false
+    required_for_china: false
+    authoritative_secondary: false
+    authorities:
+      drug_identity_mechanism: cross_check
+      trial_identity_design_status: cross_check
+      efficacy_safety_results: lead_only
+      baseline_disposition: lead_only
+      regulatory_development_status: cross_check
+      china_development_regulatory_status: cross_check
+      company_relationships_transactions: cross_check
       patents_protection: lead_only
   - source_id: pubmed
     label_zh: PubMed

@@ -1,0 +1,36 @@
+{
+  "case_id": "multi-report-partial-delivery",
+  "source_fixture": "fixtures/synthetic/three-report-complete/inputs/run-binding-contract.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "A/B/C 共享科学输入但分别评估 Gate 和站点式 HTML 交付；部分交付由报告状态产生而非可选格式缺失。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "shared-evidence-independent-gates",
+      "description_zh": "A/B/C 共享证据血统，但 Gate、快照和交付状态相互隔离。"
+    },
+    {
+      "id": "one-report-blocks",
+      "description_zh": "一个报告关键证据阻断时只阻断该报告。"
+    },
+    {
+      "id": "other-html-delivers",
+      "description_zh": "其他满足条件的报告继续交付站点式 HTML。"
+    },
+    {
+      "id": "adr-0013-no-pptx-simulation",
+      "description_zh": "首版不以 PPTX 能力缺失模拟部分交付，PDF/HTML-PPT/PPTX/确认均延后。"
+    }
+  ],
+  "deferred_formats": [
+    "pdf",
+    "html-ppt",
+    "pptx",
+    "powerpoint-confirmation"
+  ],
+  "adr_0013_narrowing": "首版 partial delivery 不模拟 PPTX 能力缺失；只记录报告级 Gate/HTML 独立状态。"
+}

@@ -1,5 +1,5 @@
 /**
- * Task 4.4 — 离线 ECharts 九类图形、小多图与图表-表格双向联动。
+ * Task 4.4 — 离线八类图形、小多图与图表-表格双向联动。
  * 仅使用打包 ECharts；缺失行 value=null + status，不得转 0。
  */
 (function () {
@@ -17,6 +17,7 @@
   var chartInstances = {};
   var chartRowMap = {};
   var chartRowIdsByGroup = {};
+  var allRowIdsByGroup = {};
   var chartTypeByGroup = {};
   var rowElementMap = {};
   var optionCache = {};
@@ -29,7 +30,6 @@
     bubble: true,
     scatter_interval: true,
     timeline: true,
-    radar: true,
     status_matrix: true
   };
 
@@ -84,7 +84,7 @@
         show: true,
         formatter: disclosureLabelZh(status),
         color: "#6B7280",
-        fontSize: 11
+        fontSize: 16
       }
     };
   }
@@ -92,6 +92,14 @@
   function collectRowIds(group) {
     var ids = [];
     for (var i = 0; i < group.rows.length; i++) ids.push(group.rows[i].row_id);
+    return ids;
+  }
+
+  function collectRenderableRowIds(group) {
+    var ids = [];
+    for (var i = 0; i < group.rows.length; i++) {
+      if (isRenderable(group.rows[i])) ids.push(group.rows[i].row_id);
+    }
     return ids;
   }
 
@@ -103,7 +111,212 @@
     return option;
   }
 
+  function usesIdentitySeries(group) {
+    return !!(group && (group.identity_series || group.cross_trial));
+  }
+
+  function groupedIdentity(row) {
+    if (row && row._chart_identity_key) return String(row._chart_identity_key);
+    return String(
+      (row && row.identity_label_zh) ||
+        ((row && row.product_zh) || "未列示产品") +
+          "｜" +
+          ((row && row.trial_zh) || "未列示试验")
+    );
+  }
+
+  function groupedIdentityLabel(row) {
+    if (row && row._chart_identity_label) {
+      var label = String(row._chart_identity_label);
+      // 独立复核修复：超长身份标签（全试验名）压缩为登记编号，
+      // 完整名称保留在同源数据表中，轴标签不再旋转穿插。
+      if (label.length > 26 && row._chart_identity_key) {
+        var trialId = String(row._chart_identity_key).split("::")[1] || "";
+        if (/^nct[0-9]+$/.test(trialId)) return trialId.toUpperCase();
+      }
+      return label;
+    }
+    return groupedIdentity(row);
+  }
+
+  function groupedSeriesKey(row) {
+    if (row && row._chart_series_key) return String(row._chart_series_key);
+    // 第十五轮复核修复：类别级行（如性别女/男）按类别分系列，避免同系列柱体重叠
+    if (row && row.category_level) {
+      var role = row.arm_role || "";
+      return String(role) + "·" + String(row.category_level);
+    }
+    if (row && row.arm_role) return String(row.arm_role);
+    return String(row && (row.arm || row.group) ? row.arm || row.group : "unknown");
+  }
+
+  function groupedSeriesLabel(row, key) {
+    if (row && row._chart_series_label) return String(row._chart_series_label);
+    if (key === "treatment" || key === "治疗组") return "治疗组";
+    if (key === "control" || key === "对照组" || key === "placebo") return "对照组";
+    return String((row && (row.arm || row.group)) || "组别未列示");
+  }
+
+  function groupedSeriesOrder(rows) {
+    var seen = {};
+    var keys = [];
+    for (var i = 0; i < rows.length; i++) {
+      var key = groupedSeriesKey(rows[i]);
+      if (!seen[key]) {
+        seen[key] = true;
+        keys.push(key);
+      }
+    }
+    keys.sort(function (left, right) {
+      var priority = { treatment: 0, control: 1, single_arm: 2, unknown: 3 };
+      var leftRoot = String(left).split(":")[0];
+      var rightRoot = String(right).split(":")[0];
+      var lp = priority[leftRoot] === undefined ? 4 : priority[leftRoot];
+      var rp = priority[rightRoot] === undefined ? 4 : priority[rightRoot];
+      return lp - rp || String(left).localeCompare(String(right));
+    });
+    return keys;
+  }
+
+  function groupedBarOption(group) {
+    var categories = [];
+    var categoryIndex = {};
+    var categoryKeys = [];
+    var rowsByCategory = {};
+    var seriesRows = {};
+    var seriesOrder = [];
+    var seriesLabels = {};
+    var rowIds = collectRowIds(group);
+    var unitLabel = "";
+    for (var i = 0; i < group.rows.length; i++) {
+      var row = group.rows[i];
+      var categoryKey = groupedIdentity(row);
+      if (!categoryIndex.hasOwnProperty(categoryKey)) {
+        categoryIndex[categoryKey] = categories.length;
+        categories.push(groupedIdentityLabel(row));
+        categoryKeys.push(categoryKey);
+        rowsByCategory[categoryKey] = {};
+      }
+      var seriesKey = groupedSeriesKey(row);
+      if (!seriesRows.hasOwnProperty(seriesKey)) {
+        seriesRows[seriesKey] = {};
+        seriesOrder.push(seriesKey);
+      }
+      if (!rowsByCategory[categoryKey].hasOwnProperty(seriesKey)) {
+        rowsByCategory[categoryKey][seriesKey] = row;
+      }
+      seriesRows[seriesKey][categoryKey] = rowsByCategory[categoryKey][seriesKey];
+      if (!seriesLabels[seriesKey]) {
+        seriesLabels[seriesKey] = groupedSeriesLabel(row, seriesKey);
+      }
+      if (!unitLabel && row.unit) unitLabel = String(row.unit);
+    }
+    seriesOrder = groupedSeriesOrder(group.rows);
+    var series = [];
+    for (var s = 0; s < seriesOrder.length; s++) {
+      var key = seriesOrder[s];
+      var seriesColor = String(key).split(":")[0] === "control" || key === "对照组"
+        ? "#407AAA"
+        : "#FF9900";
+      var data = [];
+      for (var c = 0; c < categories.length; c++) {
+        var category = categoryKeys[c];
+        var rowForCell = category ? seriesRows[key][category] : null;
+        if (!rowForCell || !isRenderable(rowForCell)) {
+          var missing = nullPoint(rowForCell || { disclosure_state: "not_reported" });
+          if (rowForCell && rowForCell.row_id) missing._row_id = String(rowForCell.row_id);
+          data.push(missing);
+          continue;
+        }
+        var value = rowForCell.numeric_value != null ? rowForCell.numeric_value : rowForCell.value;
+        data.push({
+          value: value,
+          _row_id: String(rowForCell.row_id),
+          status: null,
+          itemStyle: {
+            color: seriesColor
+          },
+          label: {
+            show: true,
+            position: value < 0 ? "insideBottom" : "top",
+            formatter: String(value),
+            color: value < 0 ? "#FFFFFF" : "#0F1115",
+            fontSize: 15,
+            fontWeight: 600,
+            padding: 3
+          }
+        });
+      }
+      series.push({
+        name: seriesLabels[key] || key,
+        type: "bar",
+        data: data,
+        itemStyle: { color: seriesColor },
+        barMaxWidth: 54,
+        labelLayout: { hideOverlap: true },
+        emphasis: {
+          focus: "series",
+          itemStyle: { borderColor: "#0F1115", borderWidth: 2 }
+        }
+      });
+    }
+    return withMeta(
+      {
+        tooltip: {
+          trigger: "axis",
+          formatter: function (params) {
+            var items = Array.isArray(params) ? params : [params];
+            var title = items.length && items[0].axisValue ? String(items[0].axisValue) : "";
+            var lines = [title];
+            for (var p = 0; p < items.length; p++) {
+              var item = items[p];
+              if (!item || !item.data || item.data.status) continue;
+              lines.push(String(item.seriesName) + "：" + String(item.data.value));
+            }
+            return lines.join("<br>");
+          }
+        },
+        legend: {
+          show: series.length > 1,
+          data: series.map(function (item) { return item.name; }),
+          top: 0,
+          textStyle: { fontSize: 14 }
+        },
+        grid: { left: 56, right: 24, top: series.length > 1 ? 58 : 36, bottom: 62, containLabel: true },
+        xAxis: {
+          type: "category",
+          data: categories,
+          name: group.x_axis_label_zh || "产品｜试验",
+          nameLocation: "middle",
+          nameGap: 40,
+          axisLabel: { interval: "auto", hideOverlap: true, fontSize: 14, rotate: 30, width: 110, overflow: "break" }
+        },
+        yAxis: {
+          type: "value",
+          name: unitLabel,
+          axisLabel: { fontSize: 16 },
+          scale: false,
+          min: function (extent) {
+            if (typeof group.y_axis_min === "number") return group.y_axis_min;
+            return Math.min(0, extent.min);
+          },
+          max: function (extent) {
+            if (typeof group.y_axis_max === "number") return group.y_axis_max;
+            if (unitLabel === "%") return 100;
+            var padded = Math.max(0, extent.max * 1.15);
+            return Math.ceil(padded / 10) * 10;
+          },
+          axisLine: { show: true, onZero: true },
+          splitLine: { show: true }
+        },
+        series: series
+      },
+      rowIds
+    );
+  }
+
   function buildBarOption(group) {
+    if (usesIdentitySeries(group)) return groupedBarOption(group);
     var categories = [];
     var seriesData = [];
     var rowIds = collectRowIds(group);
@@ -112,13 +325,18 @@
     var ctrlColor = "#407AAA";
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
+      if (!isRenderable(row)) continue;
       var arm = armLabel(row);
-      categories.push(arm || row.display_label_zh || "");
+      var domain = String(row._domain || "");
+      var category = arm || row.display_label_zh || "";
+      if (domain === "baseline" || domain === "disposition") {
+        category = String(row.display_label_zh || "");
+        if (arm && arm !== "组别未列示") category += "\n" + arm;
+      }
+      categories.push(category);
       if (!unitLabel && row.unit) unitLabel = row.unit;
-      if (!isRenderable(row)) seriesData.push(nullPoint(row));
-      else {
-        var v = row.numeric_value != null ? row.numeric_value : row.value;
-        seriesData.push({
+      var v = row.numeric_value != null ? row.numeric_value : row.value;
+      seriesData.push({
           value: v,
           status: null,
           itemStyle: { color: arm === "对照组" ? ctrlColor : treatColor },
@@ -127,11 +345,11 @@
             position: v < 0 ? "insideBottom" : "top",
             formatter: String(v),
             color: v < 0 ? "#FFFFFF" : "#0F1115",
-            fontSize: 12,
-            fontWeight: 600
+            fontSize: 16,
+            fontWeight: 600,
+            padding: 4
           }
-        });
-      }
+      });
     }
     return withMeta(
       {
@@ -140,17 +358,22 @@
         xAxis: {
           type: "category",
           data: categories,
-          axisLabel: { interval: 0, hideOverlap: true, fontSize: 12 }
+          axisLabel: { interval: "auto", hideOverlap: true, fontSize: 16, rotate: 30, width: 120, overflow: "break" }
         },
         yAxis: {
           type: "value",
           name: unitLabel,
+          axisLabel: { fontSize: 16 },
           scale: false,
           min: function (extent) {
+            if (typeof group.y_axis_min === "number") return group.y_axis_min;
             return Math.min(0, extent.min);
           },
           max: function (extent) {
-            return Math.max(0, extent.max);
+            if (typeof group.y_axis_max === "number") return group.y_axis_max;
+            if (unitLabel === "%") return 100;
+            var padded = Math.max(0, extent.max * 1.15);
+            return Math.ceil(padded / 10) * 10;
           },
           axisLine: { show: true, onZero: true },
           splitLine: { show: true }
@@ -161,6 +384,7 @@
             type: "bar",
             data: seriesData,
             barMaxWidth: 64,
+            labelLayout: { hideOverlap: true },
             emphasis: {
               focus: "self",
               itemStyle: {
@@ -173,11 +397,104 @@
           }
         ]
       },
+      collectRenderableRowIds(group)
+    );
+  }
+
+  function groupedLineOption(group) {
+    var timeLabels = {};
+    var timeOrder = {};
+    var seriesRows = {};
+    var seriesOrder = [];
+    var rowIds = collectRowIds(group);
+    for (var i = 0; i < group.rows.length; i++) {
+      var row = group.rows[i];
+      var timeKey = String(row._chart_time_key || row.time || row.display_label_zh || "");
+      if (!timeLabels.hasOwnProperty(timeKey)) {
+        timeLabels[timeKey] = String(
+          row.time_window_band_label_zh || row.time || row.display_label_zh || timeKey
+        );
+        var numericTime = Number(row.actual_timepoint);
+        timeOrder[timeKey] = isFinite(numericTime) ? numericTime : Object.keys(timeOrder).length;
+      }
+      var seriesKey =
+        groupedIdentity(row) + " · " + groupedSeriesKey(row);
+      if (!seriesRows.hasOwnProperty(seriesKey)) {
+        seriesRows[seriesKey] = {
+          label: groupedIdentityLabel(row) + " · " + groupedSeriesLabel(row, groupedSeriesKey(row)),
+          rows: {}
+        };
+        seriesOrder.push(seriesKey);
+      }
+      seriesRows[seriesKey].rows[timeKey] = row;
+    }
+    var times = Object.keys(timeLabels);
+    times.sort(function (left, right) {
+      return timeOrder[left] - timeOrder[right] || left.localeCompare(right);
+    });
+    seriesOrder.sort(function (left, right) { return left.localeCompare(right); });
+    var series = [];
+    for (var s = 0; s < seriesOrder.length; s++) {
+      var descriptor = seriesRows[seriesOrder[s]];
+      var data = [];
+      for (var t = 0; t < times.length; t++) {
+        var rowForPoint = descriptor.rows[times[t]];
+        if (!rowForPoint || !isRenderable(rowForPoint)) {
+          var missing = nullPoint(rowForPoint || { disclosure_state: "not_reported" });
+          if (rowForPoint && rowForPoint.row_id) missing._row_id = String(rowForPoint.row_id);
+          data.push(missing);
+          continue;
+        }
+        data.push({
+          value: rowForPoint.numeric_value != null ? rowForPoint.numeric_value : rowForPoint.value,
+          _row_id: String(rowForPoint.row_id),
+          status: null
+        });
+      }
+      series.push({
+        name: descriptor.label,
+        type: "line",
+        data: data,
+        connectNulls: false,
+        symbol: "circle",
+        symbolSize: 9,
+        emphasis: { focus: "series" }
+      });
+    }
+    return withMeta(
+      {
+        tooltip: { trigger: "axis" },
+        legend: {
+          show: series.length > 1,
+          data: series.map(function (item) { return item.name; }),
+          top: 0,
+          textStyle: { fontSize: 13 }
+        },
+        grid: { left: 56, right: 24, top: series.length > 1 ? 58 : 40, bottom: 54, containLabel: true },
+        xAxis: {
+          type: "category",
+          data: times.map(function (key) { return timeLabels[key]; }),
+          name: group.x_axis_label_zh || "时间窗",
+          nameLocation: "middle",
+          nameGap: 36,
+          boundaryGap: false,
+          axisLabel: { fontSize: 14 }
+        },
+        yAxis: {
+          type: "value",
+          scale: true,
+          axisLabel: { fontSize: 16 },
+          min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
+          max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
+        },
+        series: series
+      },
       rowIds
     );
   }
 
   function buildLineOption(group) {
+    if (usesIdentitySeries(group)) return groupedLineOption(group);
     var times = [];
     var seriesData = [];
     var rowIds = collectRowIds(group);
@@ -194,8 +511,19 @@
       {
         tooltip: { trigger: "axis" },
         grid: { left: 56, right: 24, top: 40, bottom: 40, containLabel: true },
-        xAxis: { type: "category", data: times, boundaryGap: false },
-        yAxis: { type: "value", scale: true },
+        xAxis: {
+          type: "category",
+          data: times,
+          boundaryGap: false,
+          axisLabel: { fontSize: 16 }
+        },
+        yAxis: {
+          type: "value",
+          scale: true,
+          axisLabel: { fontSize: 16 },
+          min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
+          max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
+        },
         series: [{ name: "趋势", type: "line", data: seriesData, connectNulls: false }]
       },
       rowIds
@@ -226,8 +554,13 @@
       {
         tooltip: { trigger: "item" },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "value", name: "效应值" },
-        yAxis: { type: "category", data: categories, inverse: true },
+        xAxis: { type: "value", name: "效应值", axisLabel: { fontSize: 16 } },
+        yAxis: {
+          type: "category",
+          data: categories,
+          inverse: true,
+          axisLabel: { fontSize: 16 }
+        },
         series: [
           {
             name: "置信区间",
@@ -278,39 +611,96 @@
     );
   }
 
+  function legendText(maxAbs, rowUnit, allInteger) {
+    // 图例单位随数据口径：计数（例/人）不带百分号，仅比率用 %
+    var suffix = "%";
+    if (rowUnit === "例" || rowUnit === "人" || rowUnit === "Participants") {
+      suffix = rowUnit === "Participants" ? "人" : rowUnit;
+    } else if (allInteger && rowUnit && !/%/.test(rowUnit) && !/percent/i.test(rowUnit)) {
+      suffix = rowUnit;
+    }
+    return [String(maxAbs) + suffix, "0" + (suffix === "%" ? "%" : "")];
+  }
+
   function buildHeatmapOption(group) {
     var events = [];
+    var arms = [];
     var seriesData = [];
     var rowIds = collectRowIds(group);
     var maxAbs = 1;
+    var allInteger = true;
+    var rowUnit = "";
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
-      events.push(row.event || row.display_label_zh || "");
+      if (!rowUnit && row.unit) rowUnit = String(row.unit);
+      if (rowUnit && row.unit && String(row.unit) !== rowUnit) rowUnit = "例";
+      var eventName = row.event || row.display_label_zh || "";
+      var armName = armLabel(row) || String(row.arm_detail || row.arm || "组别未列示");
+      var eventIndex = events.indexOf(eventName);
+      var armIndex = arms.indexOf(armName);
+      if (eventIndex === -1) {
+        events.push(eventName);
+        eventIndex = events.length - 1;
+      }
+      if (armIndex === -1) {
+        arms.push(armName);
+        armIndex = arms.length - 1;
+      }
       if (!isRenderable(row)) {
-        seriesData.push({ value: [0, i, null], status: row.disclosure_state });
+        seriesData.push({
+          value: [armIndex, eventIndex, 0],
+          rowIndex: i,
+          _row_id: String(row.row_id),
+          status: row.disclosure_state,
+          itemStyle: {
+            color: "#F4F1EC",
+            borderColor: "#8A8178",
+            borderWidth: 1,
+            decal: { symbol: "rect", dashArrayX: [1, 0], dashArrayY: [3, 3], color: "#D4CDC4" }
+          }
+        });
       } else {
         var matrix = row.value_matrix;
         var cell = Array.isArray(matrix) ? matrix[0] : matrix;
         var num = typeof cell === "number" ? cell : Number(cell);
         if (!isFinite(num)) num = null;
-        if (num != null && Math.abs(num) > maxAbs) maxAbs = Math.abs(num);
-        seriesData.push({ value: [0, i, num], status: null });
+        if (num != null) {
+          if (Math.abs(num) > maxAbs) maxAbs = Math.abs(num);
+          if (!Number.isInteger(num)) allInteger = false;
+        }
+        seriesData.push({
+          value: [armIndex, eventIndex, num],
+          rowIndex: i,
+          _row_id: String(row.row_id),
+          status: null
+        });
       }
     }
     return withMeta(
       {
         tooltip: { position: "top" },
         grid: { left: 100, right: 40, top: 24, bottom: 40, containLabel: true },
-        xAxis: { type: "category", data: ["比较"] },
-        yAxis: { type: "category", data: events, inverse: true },
+        xAxis: {
+          type: "category",
+          data: arms,
+          axisLabel: { fontSize: 16 }
+        },
+        yAxis: {
+          type: "category",
+          data: events,
+          inverse: true,
+          axisLabel: { fontSize: 16 }
+        },
         visualMap: {
-          min: -maxAbs,
+          min: 0,
           max: maxAbs,
           calculable: false,
           orient: "horizontal",
           left: "center",
           bottom: 0,
-          inRange: { color: ["#DBEAFE", "#FF9900"] },
+          inRange: { color: ["#FFF6E8", "#F5A623", "#A61B1B"] },
+          text: legendText(maxAbs, rowUnit, allInteger),
+          textGap: 8,
           show: true
         },
         series: [
@@ -321,9 +711,10 @@
             label: {
               show: true,
               formatter: function (p) {
-                return p.value[2] == null
+                var rowIndex = p.data && p.data.rowIndex;
+                return p.data && p.data.status
                   ? disclosureLabelZh(
-                      (group.rows[p.value[1]] && group.rows[p.value[1]].disclosure_state) ||
+                      (group.rows[rowIndex] && group.rows[rowIndex].disclosure_state) ||
                         "not_publicly_disclosed"
                     )
                   : String(p.value[2]);
@@ -339,6 +730,13 @@
   function buildBubbleOption(group) {
     var seriesData = [];
     var rowIds = collectRowIds(group);
+    var xUnitMatch = /（([^）]+)）/.exec(String(group.x_axis_label_zh || ""));
+    var yUnitMatch = /（([^）]+)）/.exec(String(group.y_axis_label_zh || ""));
+    var xUnit = xUnitMatch ? xUnitMatch[1] : "百分点";
+    var yUnit = yUnitMatch ? yUnitMatch[1] : "%";
+    var sizeTerm = String(group.size_label_zh || "治疗组样本量")
+      .replace(/^气泡大小[：:]/, "")
+      .trim();
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
       if (!isRenderable(row)) {
@@ -348,24 +746,77 @@
           statusLabel: disclosureLabelZh(row.disclosure_state)
         });
       } else {
+        var sampleSize = Number(row.size) || 0;
         seriesData.push({
           value: [row.x_value, row.y_value, row.size],
+          name: groupedIdentityLabel(row),
+          _row_id: String(row.row_id),
+          _status: row.status || "",
           status: null,
-          symbolSize: Math.max(8, Math.min(48, Number(row.size) || 8))
+          symbolSize: Math.max(18, Math.min(56, 4 * Math.sqrt(sampleSize / Math.PI))),
+          label: {
+            position: seriesData.length % 2 ? "bottom" : "top",
+            distance: 6,
+            offset: [0, (seriesData.length % 3 - 1) * 12],
+            backgroundColor: "rgba(255,255,255,.82)",
+            borderRadius: 3,
+            padding: [2, 4]
+          }
         });
       }
     }
     return withMeta(
       {
-        tooltip: { trigger: "item" },
-        grid: { left: 56, right: 24, top: 32, bottom: 40, containLabel: true },
-        xAxis: { type: "value", name: "横轴" },
-        yAxis: { type: "value", name: "纵轴", scale: true },
+        tooltip: {
+          trigger: "item",
+          formatter: function (p) {
+            return p.name + "<br>疗效差：" + p.value[0] + " " + xUnit + "<br>不良事件：" + p.value[1] + yUnit + "<br>" + sizeTerm + "：" + p.value[2];
+          }
+        },
+        grid: { left: 64, right: 40, top: 44, bottom: 68, containLabel: true },
+        xAxis: {
+          type: "value",
+          name: group.x_axis_label_zh || "疗效",
+          nameLocation: "middle",
+          nameGap: 42,
+          axisLabel: { fontSize: 16 }
+        },
+        yAxis: {
+          type: "value",
+          name: group.y_axis_label_zh || "安全性",
+          nameLocation: "middle",
+          nameGap: 48,
+          min: 0,
+          max: 100,
+          inverse: true,
+          axisLabel: { fontSize: 16 }
+        },
         series: [
           {
             name: "气泡",
             type: "scatter",
             data: seriesData,
+            label: {
+              show: true,
+              position: "top",
+              formatter: function (p) {
+                var v = p.value;
+                if (!Array.isArray(v) || v[0] == null) {
+                  return (p.data && p.data.statusLabel) || "";
+                }
+                var lines = [p.name];
+                if (p.data && p.data._status) lines.push("比较状态 " + p.data._status);
+                lines.push("疗效差 " + v[0] + " " + xUnit);
+                lines.push("不良事件 " + v[1] + yUnit);
+                lines.push(sizeTerm + " " + v[2]);
+                return lines.join("\n");
+              },
+              fontSize: 16,
+              lineHeight: 22,
+              color: "#0F1115",
+              overflow: "break"
+            },
+            labelLayout: {hideOverlap: true},
             itemStyle: { color: "#FF9900", opacity: 0.75 }
           }
         ]
@@ -400,8 +851,13 @@
       {
         tooltip: { trigger: "item" },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "value", name: "估计值" },
-        yAxis: { type: "category", data: categories, inverse: true },
+        xAxis: { type: "value", name: "估计值", axisLabel: { fontSize: 16 } },
+        yAxis: {
+          type: "category",
+          data: categories,
+          inverse: true,
+          axisLabel: { fontSize: 16 }
+        },
         series: [
           {
             name: "区间",
@@ -449,7 +905,7 @@
           value: i + 1,
           status: null,
           name: statusText,
-          label: { show: true, formatter: statusText, position: "top", fontSize: 11 }
+          label: { show: true, formatter: statusText, position: "top", fontSize: 16 }
         });
       }
     }
@@ -457,7 +913,7 @@
       {
         tooltip: { trigger: "axis" },
         grid: { left: 40, right: 24, top: 48, bottom: 40, containLabel: true },
-        xAxis: { type: "category", data: times },
+        xAxis: { type: "category", data: times, axisLabel: { fontSize: 16 } },
         yAxis: { type: "value", show: false, min: 0, max: group.rows.length + 1 },
         series: [
           {
@@ -475,47 +931,6 @@
     );
   }
 
-  function buildRadarOption(group) {
-    var rowIds = collectRowIds(group);
-    var indicators = [];
-    var seriesData = [];
-    var firstDims = null;
-    for (var i = 0; i < group.rows.length; i++) {
-      var row = group.rows[i];
-      if (isRenderable(row) && Array.isArray(row.dimensions) && !firstDims) {
-        firstDims = row.dimensions;
-      }
-    }
-    if (!firstDims) firstDims = ["维度甲", "维度乙", "维度丙"];
-    for (var d = 0; d < firstDims.length; d++) {
-      indicators.push({ name: String(firstDims[d]), max: 100 });
-    }
-    for (var j = 0; j < group.rows.length; j++) {
-      var r = group.rows[j];
-      if (!isRenderable(r)) {
-        seriesData.push({
-          value: null,
-          name: r.display_label_zh || "",
-          status: r.disclosure_state,
-          statusLabel: disclosureLabelZh(r.disclosure_state)
-        });
-      } else {
-        seriesData.push({
-          value: r.scores,
-          name: r.display_label_zh || "",
-          status: null
-        });
-      }
-    }
-    return withMeta(
-      {
-        tooltip: {},
-        radar: { indicator: indicators },
-        series: [{ name: "雷达", type: "radar", data: seriesData }]
-      },
-      rowIds
-    );
-  }
 
   function buildStatusMatrixOption(group) {
     var labels = [];
@@ -525,11 +940,19 @@
       var row = group.rows[i];
       labels.push(row.trial_zh || row.display_label_zh || "");
       if (!isRenderable(row)) {
-        seriesData.push({ value: [0, i, null], status: row.disclosure_state });
+        seriesData.push({
+          value: [0, i, null],
+          _row_id: String(row.row_id),
+          status: row.disclosure_state
+        });
       } else {
         var cov = row.coverage;
         var num = typeof cov === "number" ? cov : Number(cov);
-        seriesData.push({ value: [0, i, isFinite(num) ? num : null], status: null });
+        seriesData.push({
+          value: [0, i, isFinite(num) ? num : null],
+          _row_id: String(row.row_id),
+          status: null
+        });
       }
     }
     return withMeta(
@@ -543,8 +966,17 @@
           }
         },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "category", data: ["状态"] },
-        yAxis: { type: "category", data: labels, inverse: true },
+        xAxis: {
+          type: "category",
+          data: ["状态"],
+          axisLabel: { fontSize: 16 }
+        },
+        yAxis: {
+          type: "category",
+          data: labels,
+          inverse: true,
+          axisLabel: { fontSize: 16 }
+        },
         visualMap: {
           min: 0,
           max: 1,
@@ -602,8 +1034,6 @@
         return buildScatterIntervalOption(group);
       case "timeline":
         return buildTimelineOption(group);
-      case "radar":
-        return buildRadarOption(group);
       case "status_matrix":
         return buildStatusMatrixOption(group);
       default:
@@ -616,7 +1046,7 @@
     var arms = [];
     for (var i = 0; i < group.rows.length; i++) {
       var arm = armLabel(group.rows[i]);
-      if (arm && !seen[arm]) {
+      if (arm && arm !== "组别未列示" && !seen[arm]) {
         seen[arm] = true;
         arms.push(arm);
       }
@@ -638,7 +1068,19 @@
     container.appendChild(legend);
   }
 
-  function renderUndisclosedMessage(chartDiv) {
+  function undisclosedTitle(group) {
+    var rows = (group && group.rows) || [];
+    var total = 0;
+    var notApplicable = 0;
+    for (var i = 0; i < rows.length; i++) {
+      if (isRenderable(rows[i])) return "该指标结果尚未公开";
+      total += 1;
+      if (rows[i].disclosure_state === "not_applicable") notApplicable += 1;
+    }
+    return total > 0 && notApplicable === total ? "不适用" : "该指标结果尚未公开";
+  }
+
+  function renderUndisclosedMessage(chartDiv, group) {
     chartDiv.classList.add("kz-chart-group__chart--undisclosed");
     chartDiv.style.height = "auto";
     chartDiv.style.minHeight = "0";
@@ -647,7 +1089,7 @@
     status.setAttribute("role", "status");
     var p1 = document.createElement("p");
     p1.className = "kz-chart-undisclosed__title";
-    p1.textContent = "该指标结果尚未公开";
+    p1.textContent = undisclosedTitle(group);
     var p2 = document.createElement("p");
     p2.className = "kz-chart-undisclosed__hint";
     p2.textContent = "完整记录仍列于下方表格，便于核对来源与口径。";
@@ -672,13 +1114,49 @@
     }
     var indicatorTitle = indicatorNames.length === 1 ? indicatorNames[0] : "多项可比指标";
     var dimensionTitle = group.title_zh || "";
-    title.textContent =
-      dimensionTitle && dimensionTitle !== "全部指标"
+    var completeTitle = group.title_complete === true;
+    title.textContent = completeTitle
+      ? dimensionTitle || indicatorTitle
+      : dimensionTitle && dimensionTitle !== "全部指标"
         ? indicatorTitle + "｜" + dimensionTitle
         : indicatorTitle;
     container.appendChild(title);
-    if (groupHasRenderable(group) && resolveChartType(group) !== "status_matrix") {
+    var resolvedType = resolveChartType(group);
+    if (
+      groupHasRenderable(group) &&
+      resolvedType !== "status_matrix" &&
+      resolvedType !== "heatmap" &&
+      resolvedType !== "bubble" &&
+      !usesIdentitySeries(group)
+    ) {
       renderArmLegend(container, group);
+    }
+    if (resolvedType === "bubble" && group.size_label_zh) {
+      var encodingNote = document.createElement("p");
+      encodingNote.className = "kz-chart-group__encoding-note";
+      encodingNote.textContent = String(group.size_label_zh);
+      container.appendChild(encodingNote);
+    }
+    var statusNotes = [];
+    var seenNotes = {};
+    for (var n = 0; n < group.rows.length; n++) {
+      var noteRow = group.rows[n];
+      if (isRenderable(noteRow)) continue;
+      var reason = String(noteRow.difference_note || noteRow.reason || "").trim();
+      if (!reason) continue;
+      var trial = String(noteRow.trial_zh || noteRow.product_zh || "相关记录");
+      var noteText = trial + "：" + reason;
+      if (!seenNotes[noteText]) {
+        seenNotes[noteText] = true;
+        statusNotes.push(noteText);
+      }
+    }
+    if (statusNotes.length) {
+      var statusNote = document.createElement("div");
+      statusNote.className = "kz-chart-group__status-note";
+      statusNote.setAttribute("role", "note");
+      statusNote.textContent = statusNotes.join("；");
+      container.appendChild(statusNote);
     }
 
     var chartDiv = document.createElement("div");
@@ -689,12 +1167,28 @@
     chartDiv.setAttribute("role", "img");
     chartDiv.setAttribute("aria-label", title.textContent + " 图形");
     if (!groupHasRenderable(group)) {
-      renderUndisclosedMessage(chartDiv);
+      if (chartType === "heatmap") {
+        chartDiv.style.width = "100%";
+        chartDiv.style.height = "340px";
+      } else {
+        renderUndisclosedMessage(chartDiv, group);
+      }
     } else {
       chartDiv.style.width = "100%";
       chartDiv.style.height = "340px";
     }
-    container.appendChild(chartDiv);
+    var viewport = document.createElement("div");
+    viewport.style.maxWidth = "100%";
+    viewport.style.overflowX = "auto";
+    viewport.addEventListener("keydown", function (event) {
+      if (event.target !== viewport || viewport.scrollWidth <= viewport.clientWidth) return;
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      viewport.scrollLeft += event.key === "ArrowRight" ? 80 : -80;
+    });
+    viewport.appendChild(chartDiv);
+    container.appendChild(viewport);
     return chartDiv;
   }
 
@@ -788,7 +1282,14 @@
       rowElementMap[row.row_id] = tr;
     }
     table.appendChild(tbody);
-    container.appendChild(table);
+    var disclosure = document.createElement("details");
+    disclosure.className = "kz-complete-table";
+    var summary = document.createElement("summary");
+    summary.className = "kz-complete-table__summary";
+    summary.textContent = "展开完整数据表";
+    disclosure.appendChild(summary);
+    disclosure.appendChild(table);
+    container.appendChild(disclosure);
     return table;
   }
 
@@ -842,10 +1343,19 @@
       if (idxMap[rowId] !== undefined) {
         var inst = chartInstances[gIdx];
         if (inst && !inst.isDisposed()) {
+          var target = idxMap[rowId];
+          var seriesIndex = 0;
+          var dataIndex = target;
+          if (target && typeof target === "object") {
+            seriesIndex = target.seriesIndex || 0;
+            dataIndex = target.dataIndex;
+          } else if (inst.getOption().series.length > 1) {
+            seriesIndex = 1;
+          }
           inst.dispatchAction({
             type: "highlight",
-            seriesIndex: inst.getOption().series.length > 1 ? 1 : 0,
-            dataIndex: idxMap[rowId]
+            seriesIndex: seriesIndex,
+            dataIndex: dataIndex
           });
         }
         break;
@@ -892,15 +1402,92 @@
     inst.off("click");
     inst.on("click", function (params) {
       var rowIds = chartRowIdsByGroup[groupIndex] || [];
+      var directRowId =
+        params &&
+        params.data &&
+        (params.data._row_id || params.data.row_id || params.data.rowId);
       var idx = rowIndexFromClick(groupIndex, params);
-      if (typeof idx === "number" && idx >= 0 && idx < rowIds.length) {
-        var trigger = null;
-        if (params.event && params.event.event && params.event.event.target) {
-          trigger = params.event.event.target;
-        }
-        activateRow(rowIds[idx], trigger);
+      if (directRowId) idx = -1;
+      if (
+        !directRowId &&
+        (typeof idx !== "number" || idx < 0 || idx >= rowIds.length)
+      ) {
+        return;
       }
+      var trigger = null;
+      if (params.event && params.event.event && params.event.event.target) {
+        trigger = params.event.event.target;
+      }
+      activateRow(String(directRowId || rowIds[idx]), trigger);
     });
+  }
+
+  function positionBarEvidenceTargets(chartDiv, inst) {
+    var targets = chartDiv.querySelectorAll(".kz-chart-evidence-hit");
+    for (var i = 0; i < targets.length; i++) {
+      var index = Number(targets[i].getAttribute("data-chart-index"));
+      var value = Number(targets[i].getAttribute("data-chart-value"));
+      var point = inst.convertToPixel(
+        { xAxisIndex: 0, yAxisIndex: 0 },
+        [index, value]
+      );
+      if (!Array.isArray(point) || !isFinite(point[0]) || !isFinite(point[1])) {
+        targets[i].hidden = true;
+        continue;
+      }
+      var seriesIndex = Number(targets[i].getAttribute("data-chart-series-index") || 0);
+      var seriesCount = Number(targets[i].getAttribute("data-chart-series-count") || 1);
+      var seriesOffset = (seriesIndex - (seriesCount - 1) / 2) * 30;
+      targets[i].hidden = false;
+      targets[i].style.left = String(point[0] + seriesOffset - targets[i].offsetWidth / 2) + "px";
+      targets[i].style.top = String(point[1] - targets[i].offsetHeight / 2) + "px";
+    }
+  }
+
+  function renderBarEvidenceTargets(chartDiv, inst, groupIndex, group) {
+    if (chartTypeByGroup[groupIndex] !== "bar") return;
+    var old = chartDiv.querySelectorAll(".kz-chart-evidence-hit");
+    for (var o = 0; o < old.length; o++) old[o].remove();
+    var categoryKeys = [];
+    var categorySeen = {};
+    var seriesOrder = usesIdentitySeries(group) ? groupedSeriesOrder(group.rows) : [];
+    for (var c = 0; c < group.rows.length; c++) {
+      var categoryKey = groupedIdentity(group.rows[c]);
+      if (!categorySeen[categoryKey]) {
+        categorySeen[categoryKey] = true;
+        categoryKeys.push(categoryKey);
+      }
+    }
+    var chartIndex = 0;
+    for (var i = 0; i < group.rows.length; i++) {
+      var row = group.rows[i];
+      if (!isRenderable(row)) continue;
+      var value = row.numeric_value != null ? row.numeric_value : row.value;
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "kz-chart-evidence-hit";
+      var categoryIndex = usesIdentitySeries(group)
+        ? categoryKeys.indexOf(groupedIdentity(row))
+        : chartIndex;
+      button.setAttribute("data-chart-index", String(categoryIndex));
+      button.setAttribute("data-chart-value", String(value));
+      if (usesIdentitySeries(group)) {
+        button.setAttribute("data-chart-series-index", String(seriesOrder.indexOf(groupedSeriesKey(row))));
+        button.setAttribute("data-chart-series-count", String(seriesOrder.length));
+      }
+      button.setAttribute("data-chart-evidence-open", String(row.row_id));
+      button.setAttribute("aria-label", "查看数值 " + String(value) + " 的数据依据");
+      (function (rowId, target) {
+        target.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          activateRow(rowId, target);
+        });
+      })(String(row.row_id), button);
+      chartDiv.appendChild(button);
+      chartIndex += 1;
+    }
+    positionBarEvidenceTargets(chartDiv, inst);
   }
 
   function markEvidenceCell(td, rowId) {
@@ -951,11 +1538,11 @@
 
   function allChartRowIds() {
     var ids = [];
-    var keys = Object.keys(chartRowIdsByGroup).sort(function (a, b) {
+    var keys = Object.keys(allRowIdsByGroup).sort(function (a, b) {
       return Number(a) - Number(b);
     });
     for (var i = 0; i < keys.length; i++) {
-      var list = chartRowIdsByGroup[keys[i]] || [];
+      var list = allRowIdsByGroup[keys[i]] || [];
       for (var j = 0; j < list.length; j++) ids.push(list[j]);
     }
     return ids;
@@ -1046,27 +1633,68 @@
     }
   }
 
+  function fitHeatmapLabels(inst, chartDiv) {
+    if (chartDiv.getAttribute("data-chart-type") !== "heatmap") return;
+    var narrow = chartDiv.clientWidth <= 480;
+    inst.setOption({
+      grid: { left: narrow ? 120 : 100, right: narrow ? 0 : 40,
+        top: 24, bottom: narrow ? 90 : 40, containLabel: !narrow },
+      xAxis: { axisLabel: { interval: 0 } },
+      yAxis: { axisLabel: { width: narrow ? 104 : null,
+        overflow: narrow ? "break" : null, lineHeight: 20, margin: 8 } },
+      visualMap: { itemWidth: 12, itemHeight: narrow ? 110 : 140 }
+    });
+  }
+
+  function fitBarLabels(inst, chartDiv) {
+    if (chartDiv.getAttribute("data-chart-type") !== "bar") return;
+    var axis = inst.getOption().xAxis[0];
+    if (!axis || axis.type !== "category" || !axis.data.length) return;
+    var count = axis.data.length;
+    var viewport = chartDiv.parentElement;
+    var width = Math.max(viewport.clientWidth, count > 3 ? count * 120 + 100 : 0);
+    chartDiv.style.width = width + "px";
+    chartDiv.style.maxWidth = "none";
+    viewport.tabIndex = width > viewport.clientWidth ? 0 : -1;
+    viewport.setAttribute("aria-label", "完整图形，较宽时可左右滚动");
+    inst.resize();
+    inst.setOption({
+      grid: { left: 28, right: 8, bottom: 80 },
+      xAxis: { nameGap: 64, axisLabel: {
+        interval: 0, hideOverlap: false, fontSize: 14, lineHeight: 18,
+        width: Math.max(40, Math.min(180, (width - 64) / count - 8)),
+        overflow: "break",
+        formatter: function (value) { return String(value).replace(/｜/g, "\n"); }
+      } }
+    });
+  }
+
   function initGroupChart(chartDiv, groupIndex, group) {
-    var rowIds = collectRowIds(group);
-    chartRowIdsByGroup[groupIndex] = rowIds.slice();
     chartTypeByGroup[groupIndex] = resolveChartType(group);
+    allRowIdsByGroup[groupIndex] = collectRowIds(group);
+    var rowIds = chartTypeByGroup[groupIndex] === "bar"
+      ? collectRenderableRowIds(group)
+      : collectRowIds(group);
+    chartRowIdsByGroup[groupIndex] = rowIds.slice();
     var idxMap = {};
     for (var r = 0; r < rowIds.length; r++) idxMap[rowIds[r]] = r;
     chartRowMap[groupIndex] = idxMap;
 
     if (!groupHasRenderable(group)) {
-      if (!chartDiv.querySelector(".kz-chart-undisclosed")) {
-        renderUndisclosedMessage(chartDiv);
+      if (chartTypeByGroup[groupIndex] !== "heatmap") {
+        if (!chartDiv.querySelector(".kz-chart-undisclosed")) {
+          renderUndisclosedMessage(chartDiv, group);
+        }
+        var stubData = [];
+        for (var s = 0; s < group.rows.length; s++) {
+          stubData.push({
+            value: null,
+            status: group.rows[s].disclosure_state
+          });
+        }
+        optionCache[groupIndex] = withMeta({ series: [{ data: stubData }] }, rowIds);
+        return;
       }
-      var stubData = [];
-      for (var s = 0; s < group.rows.length; s++) {
-        stubData.push({
-          value: null,
-          status: group.rows[s].disclosure_state
-        });
-      }
-      optionCache[groupIndex] = withMeta({ series: [{ data: stubData }] }, rowIds);
-      return;
     }
 
     chartDiv.classList.remove("kz-chart-group__chart--undisclosed");
@@ -1079,11 +1707,29 @@
       chartDiv.textContent = "当前组暂无可绘制数值，完整表格仍保留全部记录";
       return;
     }
+    if (usesIdentitySeries(group) && option.series) {
+      var groupedMap = {};
+      for (var gs = 0; gs < option.series.length; gs++) {
+        var points = option.series[gs].data || [];
+        for (var gp = 0; gp < points.length; gp++) {
+          var pointRowId =
+            points[gp] &&
+            (points[gp]._row_id || points[gp].row_id || points[gp].rowId);
+          if (pointRowId) {
+            groupedMap[String(pointRowId)] = { seriesIndex: gs, dataIndex: gp };
+          }
+        }
+      }
+      chartRowMap[groupIndex] = groupedMap;
+    }
     var inst = window.echarts.init(chartDiv, null, { renderer: "svg" });
     inst.setOption(option);
+    fitHeatmapLabels(inst, chartDiv);
+    fitBarLabels(inst, chartDiv);
     chartInstances[groupIndex] = inst;
     optionCache[groupIndex] = option;
     wireChartClick(groupIndex);
+    renderBarEvidenceTargets(chartDiv, inst, groupIndex, group);
   }
 
   function init() {
@@ -1094,6 +1740,7 @@
     chartInstances = {};
     chartRowMap = {};
     chartRowIdsByGroup = {};
+    allRowIdsByGroup = {};
     chartTypeByGroup = {};
     rowElementMap = {};
     optionCache = {};
@@ -1146,7 +1793,15 @@
       var keys = Object.keys(chartInstances);
       for (var i = 0; i < keys.length; i++) {
         var inst = chartInstances[keys[i]];
-        if (inst && !inst.isDisposed()) inst.resize();
+        if (inst && !inst.isDisposed()) {
+          inst.resize();
+          var chartDiv = document.getElementById("kz-chart-" + keys[i]);
+          if (chartDiv) {
+            fitHeatmapLabels(inst, chartDiv);
+            fitBarLabels(inst, chartDiv);
+          }
+          if (chartDiv) positionBarEvidenceTargets(chartDiv, inst);
+        }
       }
     });
   }

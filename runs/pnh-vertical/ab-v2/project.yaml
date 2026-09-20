@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "workflow_version": "0.1.0a0",
+  "active_contract_version": 1,
+  "project_contract_versions": [
+    {
+      "schema_version": "1.0",
+      "contract_version": 1,
+      "project_id": "project_c68b03b01e591fb8445e70e5",
+      "indication": "阵发性睡眠性血红蛋白尿症",
+      "reports": [
+        "A",
+        "B"
+      ],
+      "outputs": [
+        "html"
+      ],
+      "timezone": "Asia/Shanghai",
+      "data_cutoff": "2026-09-06T23:59:59.999999+08:00",
+      "cutoff_was_user_supplied": true,
+      "created_at": "2026-09-18T20:37:34.624970+08:00"
+    }
+  ]
+}

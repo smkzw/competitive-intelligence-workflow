@@ -93,3 +93,42 @@ def test_current_repository_has_no_legacy_runtime_dependency() -> None:
     current_repository = _run_scanner(REPOSITORY_ROOT, LEGACY_REPOSITORY_ROOT)
     assert current_repository.returncode == 0, current_repository.stdout
     assert "LEGACY_REF_OK" in current_repository.stdout
+
+
+def test_legacy_marker_is_lexical_and_does_not_resolve_symlink(tmp_path: Path) -> None:
+    """The scanner must never probe or resolve the forbidden legacy root."""
+
+    actual_legacy = tmp_path / "actual-legacy"
+    actual_legacy.mkdir()
+    lexical_alias = tmp_path / "forbidden-legacy-alias"
+    lexical_alias.symlink_to(actual_legacy, target_is_directory=True)
+    candidate = tmp_path / "candidate"
+    (candidate / "src").mkdir(parents=True)
+    (candidate / "src" / "marker.py").write_text(
+        f"HISTORICAL_OTHER_PATH = {str(actual_legacy)!r}\n",
+        encoding="utf-8",
+    )
+
+    result = _run_scanner(candidate, lexical_alias)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "LEGACY_REF_OK" in result.stdout
+
+
+def test_external_runtime_symlink_is_classified_without_resolving_target(tmp_path: Path) -> None:
+    """Read the link payload, but never follow its external target or aliases."""
+
+    actual_target = tmp_path / "actual-target"
+    actual_target.mkdir()
+    external_alias = tmp_path / "external-alias"
+    external_alias.symlink_to(actual_target, target_is_directory=True)
+    candidate = tmp_path / "candidate"
+    (candidate / "src").mkdir(parents=True)
+    (candidate / "src" / "runtime-link").symlink_to(external_alias)
+
+    result = _run_scanner(candidate, tmp_path / "synthetic-legacy-marker")
+
+    assert result.returncode == 1
+    assert "EXTERNAL_RUNTIME_SYMLINK" in result.stdout
+    assert f"target={external_alias}" in result.stdout
+    assert f"target={actual_target}" not in result.stdout

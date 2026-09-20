@@ -310,7 +310,7 @@ def test_general_view_renders_all_fields_no_blanks(browser_name: str, fixture_si
                 "分子",
                 "分母",
                 "披露状态",
-                "规范化说明",
+                "数据说明",
                 "来源版本",
                 "原文定位",
                 "简短原文",
@@ -799,6 +799,18 @@ def _wait_charts(page: Page) -> None:
     page.wait_for_timeout(700)
 
 
+def _expand_complete_tables(page: Page) -> None:
+    """完整表默认折叠；单元格级交互前显式展开。"""
+    page.evaluate(
+        """() => {
+          document.querySelectorAll('details.kz-complete-table').forEach(node => {
+            node.open = true;
+          });
+        }"""
+    )
+    page.wait_for_timeout(50)
+
+
 def _pointer_meta_bar(page: Page) -> dict[str, Any]:
     return page.evaluate(
         """() => {
@@ -1030,6 +1042,7 @@ def test_matrix_tables_preserve_heatmap_values_and_status_semantics(
             page.goto(f"http://127.0.0.1:{port}/efficacy.html")
             page.wait_for_load_state("domcontentloaded")
             _wait_charts(page)
+            _expand_complete_tables(page)
             heatmap = page.locator('[data-chart-type="heatmap"]').locator("xpath=..")
             assert heatmap.locator("td.kz-chart-table__cell--value").all_inner_texts() == [
                 "-12.1",
@@ -1267,6 +1280,7 @@ def test_chart_table_cell_keyboard_and_pointer(browser_name: str, fixture_site: 
             page.goto(f"http://127.0.0.1:{port}/efficacy.html")
             page.wait_for_load_state("domcontentloaded")
             _wait_charts(page)
+            _expand_complete_tables(page)
             value_cell = page.locator(
                 f'td.kz-chart-table__cell--value[data-evidence-open="{ROW[LABEL_TREAT]}"]'
             ).first
@@ -1467,6 +1481,7 @@ def test_product_filter_keeps_compatible_charts_for_selected_product(
             page.locator("#kz-filter-entry").click()
             page.locator('.kz-filter-item[data-val="product-beta"]').click()
             page.wait_for_timeout(250)
+            _expand_complete_tables(page)
             bar_state = page.evaluate(
                 """() => {
                   const visible = (el) => !!(el && el.offsetParent !== null);

@@ -1,0 +1,71 @@
+{
+  "acquired_at": "2026-09-01T14:30:00+08:00",
+  "assignment": "R04 real-source B-class PNH comparator-universe fallback staging",
+  "commands": [
+    "official-source web extracts captured in research/b-real/sources",
+    "rich B facts normalized through the project models",
+    "per-product/per-trial coverage and missingness audits rebuilt",
+    "static render smoke completed in the worker-owned research tree",
+    "final browser/clinical acceptance not run"
+  ],
+  "data_cutoff": "2026-07-31T23:59:59+08:00",
+  "gate_failures": [],
+  "input_path": "runs/acceptance/task-10.2-20260901-123524/inputs/b-real/report-data.json",
+  "observations": [
+    {
+      "detail": "5 included products and 6 pivotal/late-stage trial records; official source extracts appended for comparator universe.",
+      "kind": "source",
+      "status": "pass"
+    },
+    {
+      "detail": "rich rows normalized through EfficacyFactRow/SafetyFactRow/BaselineObservation/TrialDispositionObservation; counts={'efficacy': 33, 'safety': 51, 'baseline': 46, 'disposition': 145}",
+      "kind": "contract",
+      "status": "pass"
+    },
+    {
+      "detail": "arm identities have nonempty normalized arm_id and mapping audit explicitly sets drug_name_dependency=false",
+      "kind": "arm_mapping",
+      "status": "pass"
+    },
+    {
+      "detail": "not_publicly_disclosed, reported_zero and technical_route_failed are distinct; no numeric placeholders for missing fields",
+      "kind": "missingness",
+      "status": "pass"
+    },
+    {
+      "detail": "Controller-owned static renderer produced the allowed research/b-real/static-render-smoke site and all enumerated B routes; no browser or clinical acceptance was run.",
+      "kind": "static_render_smoke",
+      "status": "pass"
+    }
+  ],
+  "out_of_scope": [
+    "final browser acceptance",
+    "clinical/regulatory sign-off",
+    "PDF/PPT/PPTX generation",
+    "shared source or test changes"
+  ],
+  "report": "B",
+  "run_id": "task-10.2-20260901-123524",
+  "schema_version": "1.0",
+  "source_version_ids": [
+    "src-cadth-table11-202507",
+    "src-cadth-table13-202507",
+    "src-cadth-table18-202507",
+    "src-ctgov-alpha-20260731",
+    "src-ctgov-apply-20241009",
+    "src-ctgov-appoint-20241009",
+    "src-ctgov-champion301-20260731",
+    "src-ctgov-commodore2-20260731",
+    "src-dailymed-fabhalta-20260716",
+    "src-fda-empaveli-20210514",
+    "src-fda-piasky-20240620",
+    "src-fda-ultomiris-20181221",
+    "src-fda-voydeya-20240329",
+    "src-hcp-design-202506",
+    "src-pubmed-champion301-20181206",
+    "src-pubmed-final-20250530",
+    "src-pubmed-pegasus-20210311"
+  ],
+  "stage": "worker-package-staging",
+  "worker_role": "worker_03_b_universe_fallback"
+}

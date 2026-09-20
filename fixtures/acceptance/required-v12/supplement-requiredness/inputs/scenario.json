@@ -1,0 +1,25 @@
+{
+  "case_id": "supplement-requiredness",
+  "source_fixture": "fixtures/synthetic/three-report-complete/inputs/report-c-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "补充材料的缺失状态必须由关键性规则决定，而不是默认阻断或默认放行。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "supplement-unavailable-not-required",
+      "description_zh": "补充材料不可得但不承载关键门槛时保留缺失说明并继续。"
+    },
+    {
+      "id": "supplement-required-block",
+      "description_zh": "补充材料确为关键设计或统计证据时保持阻断。"
+    },
+    {
+      "id": "user-file-recovery",
+      "description_zh": "用户提供原文件后按身份和摘要匹配、归档并从阻断恢复。"
+    }
+  ]
+}

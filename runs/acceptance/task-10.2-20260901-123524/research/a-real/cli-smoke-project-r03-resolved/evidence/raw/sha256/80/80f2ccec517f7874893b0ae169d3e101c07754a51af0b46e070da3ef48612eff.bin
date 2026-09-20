@@ -1,0 +1,3615 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link  rel="stylesheet" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/base_style-BxRs1iOp.css" />
+<script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/base_style-D-jH62-1.js"></script>
+
+  <link  rel="stylesheet" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/article_style-B67IZFds.css" />
+<link  rel="stylesheet" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/style-D77LS1kY.css" />
+<script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/article_style-CTAd1LmM.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Efficacy and Safety of Tapinarof for Atopic Dermatitis: A Systematic Review and Meta-Analysis of Randomized Controlled Trials - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="96394E5AA9660463014E5A00187D3715.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="cureus">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="Cureus">
+<meta name="citation_title" content="Efficacy and Safety of Tapinarof for Atopic Dermatitis: A Systematic Review and Meta-Analysis of Randomized Controlled Trials">
+<meta name="citation_author" content="Baraa A Saifi">
+<meta name="citation_author_institution" content="Department of Medicine, Lebanese American University (LAU) Gilbert and Rose-Marie Chagoury School of Medicine, Byblos, LBN">
+<meta name="citation_author" content="Zyad A Saifi">
+<meta name="citation_author_institution" content="Faculty of Medicine, American University of Beirut Medical Center, Beirut, LBN">
+<meta name="citation_author" content="Nancy Emmanuel">
+<meta name="citation_author_institution" content="Department of Dermatology, Faculty of Medicine, University of São Paulo, São Paulo, BRA">
+<meta name="citation_publication_date" content="2025 Sep 3">
+<meta name="citation_volume" content="17">
+<meta name="citation_issue" content="9">
+<meta name="citation_firstpage" content="e91549">
+<meta name="citation_doi" content="10.7759/cureus.91549">
+<meta name="citation_pmid" content="41050042">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/pdf/cureus-0017-00000091549.pdf">
+<meta name="description" content="This systematic review and meta-analysis evaluated the efficacy and safety of 1% tapinarof cream once daily (QD) in patients with mild-to-severe atopic dermatitis (AD). Adhering to Preferred Reporting Items for Systematic Reviews and Meta-Analyses ...">
+<meta name="og:title" content="Efficacy and Safety of Tapinarof for Atopic Dermatitis: A Systematic Review and Meta-Analysis of Randomized Controlled Trials">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="This systematic review and meta-analysis evaluated the efficacy and safety of 1% tapinarof cream once daily (QD) in patients with mild-to-severe atopic dermatitis (AD). Adhering to Preferred Reporting Items for Systematic Reviews and Meta-Analyses ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/search.svg"
+        class="usa-icon "
+        aria-hidden="true"
+        
+        
+    />
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/person.svg"
+        class="usa-icon "
+        aria-hidden="true"
+        
+        
+    />
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/expand_less.svg"
+        class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden"
+        aria-hidden="true"
+        data-login-dropdown-up-arrow
+        
+    />
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/expand_more.svg"
+        class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden"
+        aria-hidden="true"
+        data-login-dropdown-down-arrow
+        
+    />
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/search.svg" alt="PMC search open icon" aria-hidden="true" class="usa-icon usa-icon--size-4 pmc-icon__open" />
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/close.svg" alt="PMC search close ison" aria-hidden="true" class="usa-icon usa-icon--size-4 pmc-icon__close" />
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="12494503">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/more_vert.svg" alt="Open resources icon" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.7759/cureus.91549"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/launch.svg" alt="View on publisher site icon" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/cureus-0017-00000091549.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+
+                                 <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/file_download.svg" alt="Download PDF icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC12494503%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/action-bookmark-full.svg" alt="Collections icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link usa-icon--bookmark-full" />
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/action-bookmark-empty.svg" alt="Collections icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link usa-icon--bookmark-empty" />
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/12494503/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/12494503/export/"
+                        >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/format_quote.svg" alt="Cite icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/share.svg" alt="Show article permalink icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/content_copy.svg" alt="Copy icon" aria-hidden="true" class="usa-icon usa-icon--white" />
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/list.svg" alt="Open article navigation icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-cureus.png" alt="Cureus logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to Cureus" title="Link to Cureus" shape="default" href="http://www.cureus.com/" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">Cureus</button></div>. 2025 Sep 3;17(9):e91549. doi: <a href="https://doi.org/10.7759/cureus.91549" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.7759/cureus.91549</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href='https://pmc.ncbi.nlm.nih.gov/search/?term="Cureus"[jour]' class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href='https://pubmed.ncbi.nlm.nih.gov/?term="Cureus"[jour]' lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href='https://www.ncbi.nlm.nih.gov/nlmcatalog?term="Cureus"[Title%20Abbreviation]' class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href='?term="Cureus"[jour]' class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Efficacy and Safety of Tapinarof for Atopic Dermatitis: A Systematic Review and Meta-Analysis of Randomized Controlled Trials</h1></hgroup><div class="cg p">
+<a href='https://pubmed.ncbi.nlm.nih.gov/?term="Saifi%20BA"[Author]' class="usa-link" aria-describedby="id1"><span class="name western">Baraa A Saifi</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Baraa A Saifi</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Medicine, Lebanese American University (LAU) Gilbert and Rose-Marie Chagoury School of Medicine, Byblos, LBN </div>
+<div class="p">Find articles by <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Saifi%20BA"[Author]' class="usa-link"><span class="name western">Baraa A Saifi</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Saifi%20ZA"[Author]' class="usa-link" aria-describedby="id2"><span class="name western">Zyad A Saifi</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Zyad A Saifi</span></h3>
+<div class="p">
+<sup>2</sup>
+Faculty of Medicine, American University of Beirut Medical Center, Beirut, LBN </div>
+<div class="p">Find articles by <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Saifi%20ZA"[Author]' class="usa-link"><span class="name western">Zyad A Saifi</span></a>
+</div>
+</div>
+<sup>2</sup>, <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Emmanuel%20N"[Author]' class="usa-link" aria-describedby="id3"><span class="name western">Nancy Emmanuel</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Nancy Emmanuel</span></h3>
+<div class="p">
+<sup>3</sup>
+Department of Dermatology, Faculty of Medicine, University of São Paulo, São Paulo, BRA </div>
+<div class="p">Find articles by <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Emmanuel%20N"[Author]' class="usa-link"><span class="name western">Nancy Emmanuel</span></a>
+</div>
+</div>
+<sup>3,</sup><sup>✉</sup>
+</div>
+<div class="cg p">Editors: <span class="name western">Alexander Muacevic</span>, <span class="name western">John R Adler</span>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="aff-1">
+<sup>1</sup>
+Department of Medicine, Lebanese American University (LAU) Gilbert and Rose-Marie Chagoury School of Medicine, Byblos, LBN </div>
+<div id="aff-2">
+<sup>2</sup>
+Faculty of Medicine, American University of Beirut Medical Center, Beirut, LBN </div>
+<div id="aff-3">
+<sup>3</sup>
+Department of Dermatology, Faculty of Medicine, University of São Paulo, São Paulo, BRA </div>
+<div class="author-notes p">
+<div class="fn" id="cor1">
+<sup>✉</sup><p class="display-inline">
+Nancy Emmanuel <span>nancy.emmanuel@ijcrcentral.com</span>
+</p>
+</div>
+<div class="fn" id="_fncrsp93pmc__">
+<sup>✉</sup><p class="display-inline">Corresponding author.</p>
+</div>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Accepted 2025 Sep 3; Collection date 2025 Sep.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>Copyright © 2025, Saifi et al.</div>
+<p>This is an open access article distributed under the terms of the Creative Commons Attribution License CC-BY 4.0., which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC12494503  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/41050042/" class="usa-link">41050042</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<p>This systematic review and meta-analysis evaluated the efficacy and safety of 1% tapinarof cream once daily (QD) in patients with mild-to-severe atopic dermatitis (AD). Adhering to Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) guidelines, we systematically searched PubMed, Embase, Cochrane, and <a href="https://ClinicalTrials.gov" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">ClinicalTrials.gov</a> databases for placebo-controlled, randomized trials up to March 2025. Four studies reporting five randomized trials involving a total of 1191 patients met the inclusion criteria. Primary endpoints included Investigator Global Assessment (IGA) success and achievement of Eczema Area and Severity Index 75% (EASI-75) response. Secondary outcomes included improvement in Peak Pruritus Numeric Rating Scale (PP-NRS) scores and incidence of adverse events (AEs). After eight weeks, patients receiving tapinarof 1% QD were associated with significantly higher IGA success rates (risk ratio (RR) = 3.03, 95% CI: 1.94-4.74, p = 0.002), EASI-75 response rates (RR = 2.99, 95% CI: 1.94-4.60, p = 0.002), and clinically meaningful improvement in PP-NRS scores of ≥4 points (RR = 1.58, 95% CI: 1.10-2.26, p = 0.03) compared to placebo. Tapinarof also showed a modest but statistically significant increase in the overall incidence of adverse events (AEs) (RR = 1.39, 95% CI: 1.02-1.90, p = 0.04), while the rate of serious AEs was not significantly different between groups (RR = 1.98, 95% CI: 0.36-24.69, p = 0.31). In conclusion, tapinarof cream 1% QD demonstrated significant efficacy in treating mild-to-severe AD, with improvements in clinical signs and pruritus. It was generally well tolerated, supporting its use as a non-steroidal topical therapy in this patient population. Protocol registered in International Prospective Register of Systematic Reviews (PROSPERO) (CRD420251000807), with risk of bias assessed using the Cochrane risk-of-bias (RoB 2) tool and certainty of evidence appraised using the Grading of Recommendations Assessment, Development and Evaluation (GRADE) framework.</p>
+<section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> aryl hydrocarbon receptor, atopic dermatitis, systematic review, tapinarof, topical therapy</p></section></section><section id="sec1"><h2 class="pmc_sec_title">Introduction and background</h2>
+<p>Atopic dermatitis (AD) is a chronic, relapsing inflammatory skin disease characterized by recurrent episodes of eczematous lesions, intense pruritus, xerosis, erythematous papules, excoriations, and lichenification [<a href="#REF1" class="usa-link" aria-describedby="REF1">1</a>-<a href="#REF3" class="usa-link" aria-describedby="REF3">3</a>]. AD involves a disruption in the skin barrier, which contributes to repeated cycles of inflammation and increases the risk of skin infections [<a href="#REF4" class="usa-link" aria-describedby="REF4">4</a>-<a href="#REF6" class="usa-link" aria-describedby="REF6">6</a>]. AD profoundly impairs patient quality of life, sleep, psychological well-being, and social functioning, often necessitating continuous management due to its recurrent nature [<a href="#REF1" class="usa-link" aria-describedby="REF1">1</a>].</p>
+<p>Although AD is more common during childhood, the disease may persist into adulthood or even present later in life [<a href="#REF1" class="usa-link" aria-describedby="REF1">1</a>]. AD affects an estimated 15% to 20% of children and 1% to 3% of adults globally [<a href="#REF1" class="usa-link" aria-describedby="REF1">1</a>]. The steady rise in global prevalence makes AD an increasing public health concern [<a href="#REF1" class="usa-link" aria-describedby="REF1">1</a>]. </p>
+<p>There is no definitive cure for AD [<a href="#REF7" class="usa-link" aria-describedby="REF7">7</a>]. Current available treatments aim to reduce disease severity through pruritus control, infection prevention, and restoration of the skin barrier [<a href="#REF7" class="usa-link" aria-describedby="REF7">7</a>]. Because the disease tends to follow a remitting and relapsing course, long-term maintenance is essential. Newer systemic therapies and biologics have been designed to support prolonged disease control with favorable safety profiles, particularly in children [<a href="#REF7" class="usa-link" aria-describedby="REF7">7</a>].</p>
+<p>Topical therapies are the mainstay of treatment used for induction and maintenance of remission in patients with AD [<a href="#REF7" class="usa-link" aria-describedby="REF7">7</a>]. Corticosteroids are first-line due to their potent anti-inflammatory effects [<a href="#REF8" class="usa-link" aria-describedby="REF8">8</a>,<a href="#REF9" class="usa-link" aria-describedby="REF9">9</a>]; however, prolonged use may lead to dermal atrophy, striae, telangiectasia, hirsutism, dyspigmentation, and cause withdrawal phenomenon [<a href="#REF8" class="usa-link" aria-describedby="REF8">8</a>,<a href="#REF9" class="usa-link" aria-describedby="REF9">9</a>]. More recently, nonsteroidal topical agents have become available, such as topical phosphodiesterase-4 (PDE4) inhibitors (e.g., crisaborole), topical calcineurin inhibitors (TCIs) (e.g., tacrolimus and pimecrolimus), and Janus kinase (JAK) inhibitors (e.g., ruxolitinib) [<a href="#REF10" class="usa-link" aria-describedby="REF10">10</a>]. TCI and topical PDE4 can cause local tolerability issues, such as application site pain, stinging, or burning [<a href="#REF11" class="usa-link" aria-describedby="REF11">11</a>-<a href="#REF14" class="usa-link" aria-describedby="REF14">14</a>]. For the treatment of severe AD, only one topical agent (TCI) is approved, limited to second-line, short-term application in immunocompetent individuals [<a href="#REF12" class="usa-link" aria-describedby="REF12">12</a>]. The only topical JAK inhibitor approved for AD carries a boxed warning and is restricted to individuals aged 12 and above, with treatment limited to no more than 20% of the body surface area (BSA) [<a href="#REF14" class="usa-link" aria-describedby="REF14">14</a>]. All approved topical calcineurin, JAK, and PDE4 inhibitors for AD are prescribed for twice-daily (BID) use, which can reduce patient adherence [<a href="#REF11" class="usa-link" aria-describedby="REF11">11</a>-<a href="#REF14" class="usa-link" aria-describedby="REF14">14</a>]. Given these limitations, there is still a need for effective and safe topical agents for the treatment of patients with mild to severe AD [<a href="#REF10" class="usa-link" aria-describedby="REF10">10</a>,<a href="#REF15" class="usa-link" aria-describedby="REF15">15</a>].</p>
+<p>Tapinarof (VTAMA®, Dermavant Sciences, Inc., Morrisville, NC, GSK2894512, 5-[(E)-2-phenylethenyl] 2-(propan-2-yl) benzene-1,3-diol) is a topical nonsteroidal, aryl hydrocarbon receptor (AhR) agonist [<a href="#REF16" class="usa-link" aria-describedby="REF16">16</a>,<a href="#REF17" class="usa-link" aria-describedby="REF17">17</a>]. Tapinarof mainly works via ligand-dependent AhR activation, resulting in the downregulation of type 2 inflammatory cytokines (e.g., IL-4, IL-5, IL-13, IL-31), reducing skin inflammation [<a href="#REF18" class="usa-link" aria-describedby="REF18">18</a>]. Tapinarof increases the expression of important skin barrier proteins, including filaggrin, loricrin, involucrin, hornerin, and ceramides, promoting skin barrier recovery [<a href="#REF18" class="usa-link" aria-describedby="REF18">18</a>,<a href="#REF19" class="usa-link" aria-describedby="REF19">19</a>]. In addition, tapinarof was identified as a nuclear factor erythroid 2-related factor 2 pathway activator, which reduces oxidative stress and upregulates antioxidative enzymes expression [<a href="#REF19" class="usa-link" aria-describedby="REF19">19</a>]. In simple terms, tapinarof activates anti-inflammatory pathways and helps restore the skin barrier [<a href="#REF19" class="usa-link" aria-describedby="REF19">19</a>]. The FDA has already approved tapinarof cream (by Dermavant Sciences, Inc., in 2022) for the treatment of plaque psoriasis [<a href="#REF16" class="usa-link" aria-describedby="REF16">16</a>,<a href="#REF17" class="usa-link" aria-describedby="REF17">17</a>], a disease that shares key immunopathological features with AD, including Th2-mediated inflammation and compromised skin barrier integrity [<a href="#REF4" class="usa-link" aria-describedby="REF4">4</a>-<a href="#REF6" class="usa-link" aria-describedby="REF6">6</a>]. Phase 3 PSOARING clinical trials demonstrated that the drug was effective and well tolerated with sustained efficacy in patients with moderate to severe plaque psoriasis [<a href="#REF16" class="usa-link" aria-describedby="REF16">16</a>,<a href="#REF17" class="usa-link" aria-describedby="REF17">17</a>]. These findings suggest a potential role for tapinarof in the treatment of AD.</p>
+<p>Tapinarof’s role in AD has been recently assessed in several clinical trials. Phases 2 and 3 randomized controlled trials (RCTs) confirmed improvement in disease severity scores with few reported adverse events (AEs) [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]. However, no comprehensive meta-analysis has yet synthesized these trials. This meta-analysis aims to assess the available clinical trials on the efficacy and safety of tapinarof in the treatment of patients with mild-to-severe AD aged two years and older, providing evidence-based information to facilitate clinical decision-making. Efficacy was evaluated based on improvements in Investigator Global Assessment (IGA) score, defined as achievement of a “clear” or “almost clear” IGA score with a ≥2-point improvement from baseline, Eczema Area and Severity Index 75% (EASI-75( response, defined as a ≥75% reduction in the EASI from baseline and Peak Pruritus Numeric Rating Scale (PP-NRS) improvement, corresponding to a ≥4-point reduction in itch severity. Safety was assessed through the incidence of AEs and serious AEs (SAEs).</p></section><section id="sec2"><h2 class="pmc_sec_title">Review</h2>
+<p>Methods</p>
+<p>Protocol and Registration</p>
+<p>The prospective meta-analysis protocol has been registered in the International Prospective Register of Systematic Reviews (PROSPERO) under protocol CRD420251000807. The study was designed in compliance with the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) reporting guideline [<a href="#REF24" class="usa-link" aria-describedby="REF24">24</a>].</p>
+<p>Eligibility Criteria</p>
+<p>We included studies based on the following eligibility criteria: (1) RCTs; (2) comparing topical tapinarof with placebo; (3) patients with mild-to-severe AD, defined as an EASI score of ≥ 5, a validated IGA for Atopic Dermatitis (vIGA-AD) score of ≥ 2, and an AD involvement of ≥ 5% of BSA; pediatric (aged two to 11), adolescents (aged 12-17) and adults (aged ≥ 18) patients were included; and (4) reporting at least one of the clinical outcomes of interest. We excluded studies that (1) compared tapinarof to other active treatments; (2) had an overlapping patient populations; (3) did not report any of the predefined primary outcomes of interest (IGA success and EASI-75); (4) were written in a language other than English; however, no eligible non-English studies were found; and (5) conference abstracts and preprints were excluded from analysis unless full peer-reviewed data were available. </p>
+<p>Search Strategy and Study Selection </p>
+<p>PubMed, Embase, Cochrane Central Register of Controlled Trials, and <a href="https://ClinicalTrials.gov" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">ClinicalTrials.gov</a> databases were systematically searched from inception to March 2025 for studies published in English using the following terms: “tapinarof” or “gsk2894512” or “aryl hydrocarbon receptor agonist” and “atopic dermatitis.” References of included trials were evaluated for additional studies. Two reviewers (B.S. and Z.S.) independently screened studies using the inclusion and exclusion criteria and performed the data extraction. Discrepancies were resolved by discussion and consensus. Full search strings for each database are provided in the Appendices.</p>
+<p>Data Collection Process and Data Items </p>
+<p>The following information was extracted: authors, publication year, study design, patient characteristics, country, interventions, number of cases, outcome measures, and treatment duration. Primary outcomes included are as follows: proportion of patients achieving IGA score for AD of IGA=0 (clear) or IGA=1 (almost clear) with a reduction from baseline of ≥2 points at week 8; and proportion of patients achieving at least a 75% reduction in EASI from baseline at week 8 (EASI-75 response). Secondary outcomes included are as follows: proportion of patients achieving a reduction of at least four points from baseline in PP-NRS at week 8 (NRS ≥ 4); AEs; and SAEs. Efficacy was evaluated based on improvements in IGA score, EASI-75 response, and PP-NRS, while safety was assessed through the incidence of AEs and SAEs.</p>
+<p>Risk of Bias in Studies</p>
+<p>Quality assessment of the included randomized studies was performed independently by two authors (B.S. and Z.S.) using the Cochrane risk-of-bias tool (RoB 2) [<a href="#REF25" class="usa-link" aria-describedby="REF25">25</a>].</p>
+<p>Effect Measures</p>
+<p>For dichotomous outcomes (EASI-75%, IGA response, PP-NRS, and AE rates), the risk ratio (RR) with 95% CI was calculated.</p>
+<p>Synthesis Methods</p>
+<p>The statistical analysis was conducted using RevMan 5.4 (The Cochrane Collaboration, Oxford, UK). In accordance with recommendations from the Cochrane Handbook for Systematic Reviews of Interventions [<a href="#REF26" class="usa-link" aria-describedby="REF26">26</a>], a random-effects (RE) model (Restricted Maximum Likelihood; Hartung-Knapp small-sample adjustment applied) was employed for all outcomes to account for anticipated clinical and methodological heterogeneity across the included studies. For rare events (SAEs), we used Mantel-Haenszel RRs with a treatment-arm continuity correction; results were confirmed in sensitivity analyses using a Generalized Linear Mixed Model (GLMM). For multi-arm trials, we pre-specified inclusion of the 1% once-daily (QD) arm to avoid double-counting.</p>
+<p>When multiple outcome time-points were reported, we prioritized the eight-week endpoints common to all included trials. We extracted data using the intention-to-treat (ITT) population when available. Missing numerators or denominators were clarified by reviewing supplementary material.</p>
+<p>Heterogeneity</p>
+<p>The I² statistic, Cochrane’s Q test, and Tau-square were used to assess heterogeneity with I² thresholds of 25%, 50%, and 75% representing low, moderate, and high heterogeneity, respectively. </p>
+<p>Sensitivity and Subgroup Analyses</p>
+<p>We performed leave-one-out sensitivity analyses for all outcomes to assess the stability of our findings. In this approach, each study was removed one at a time, and the meta-analysis was re-run using the remaining studies. A study was considered influential if its removal changed the pooled effect estimate or altered the statistical significance of the result.</p>
+<p>Subgroup analyses by age, disease severity, anatomical site, and duration of therapy could not be performed due to insufficient stratified data.</p>
+<p>Reporting Bias Assessment </p>
+<p>Funnel plots were not generated to assess potential publication bias, as the Cochrane Handbook recommends a minimum of 10 studies to reliably detect asymmetry [<a href="#REF24" class="usa-link" aria-describedby="REF24">24</a>].</p>
+<p>Certainty of Evidence</p>
+<p>The certainty of evidence for each outcome was evaluated using the Grading of Recommendations Assessment, Development and Evaluation (GRADE) approach. This involves assessing risk of bias, inconsistency, indirectness, imprecision, and publication bias, assigning a certainty rating (high, moderate, low, or very low) for each outcome. GRADE assessments were conducted using the GRADEpro Guideline Development Tool (GDT) software (Evidence Prime, Hamilton, Canada) [<a href="#REF27" class="usa-link" aria-describedby="REF27">27</a>].</p>
+<p>Results</p>
+<p>Study Selection and Baseline Characteristics</p>
+<p>As detailed in Figure <a href="#FIG1" class="usa-link">1</a>, our systematic search identified 111 potential articles. After removal of duplicate records and exclusion of articles that did not meet the inclusion criteria based on title and abstract review, 11 studies remained and underwent full-text revision. Ultimately, four studies were included encompassing five RCTs [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>] with a total of 1191 patients diagnosed with mild to severe AD; 715 (60.0%) pediatric (aged 2-11), 260 (21.8%) adolescents (aged 12-17) and 216 (18.1%) adults (aged 18 and above), with an age range of 2 to 65 years old were included. From these, 767 (64.4%) patients were assigned to tapinarof 1% QD, and 424 (35.6%) patients were assigned to vehicle cream QD with a treatment period of 8 weeks. Based on baseline IGA scores, 89.8% of participants had moderate-to-severe disease, with only one small pediatric trial [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>] enrolling patients with mild AD. Detailed study characteristics are presented in Table <a href="#TAB1" class="usa-link">1</a>.</p>
+<section class="tw xbox font-sm" id="TAB1"><h3 class="obj_head">Table 1. Characteristics of studies included in meta-analysis.</h3>
+<div class="caption p"><p>BSA = body surface area, EASI = eczema area and severity index, IGA = investigator’s global assessment, NA = not applicable, NM = not mentioned, NRS = numeric rating scale, QD = quaque die (once daily)</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups"><tbody>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">Reference (N)</td>
+<td colspan="2" rowspan="1">Silverberg et al., 2024 (ADORING 1) (N = 407) [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>]</td>
+<td colspan="2" rowspan="1">Silverberg et al., 2024 (ADORING 2) (N = 406) [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>]</td>
+<td colspan="3" rowspan="1">Igarashi et al., 2025 (N = 121) [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>]</td>
+<td colspan="3" rowspan="1">Igarashi et al., 2024 (N = 214) [<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>]</td>
+<td colspan="5" rowspan="1">Paller et al., 2021 (N = 83) [<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]</td>
+</tr>
+<tr>
+<td rowspan="2" colspan="1">Intervention measures (n)</td>
+<td rowspan="1" colspan="1">Tapinarof 1% QD</td>
+<td rowspan="1" colspan="1">Vehicle QD</td>
+<td rowspan="1" colspan="1">Tapinarof 1% QD</td>
+<td rowspan="1" colspan="1">Vehicle QD</td>
+<td rowspan="1" colspan="1">Tapinarof 1% QD</td>
+<td rowspan="1" colspan="1">Tapinarof 0.5% QD</td>
+<td rowspan="1" colspan="1">Vehicle QD</td>
+<td rowspan="1" colspan="1">Tapinarof 1% QD</td>
+<td rowspan="1" colspan="1">Vehicle QD</td>
+<td rowspan="1" colspan="1">Tapinarof 1% BID</td>
+<td rowspan="1" colspan="1">Tapinarof 1% QD</td>
+<td rowspan="1" colspan="1">Tapinarof 0.5% BID</td>
+<td rowspan="1" colspan="1">Tapinarof 0.5% QD</td>
+<td rowspan="1" colspan="1">Vehicle BID</td>
+<td rowspan="1" colspan="1">Vehicle QD</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">(n = 270)</td>
+<td rowspan="1" colspan="1">(n = 137)</td>
+<td rowspan="1" colspan="1">(n = 271)</td>
+<td rowspan="1" colspan="1">(n = 135)</td>
+<td rowspan="1" colspan="1">(n = 41)</td>
+<td rowspan="1" colspan="1">(n=40)</td>
+<td rowspan="1" colspan="1">(n = 40)</td>
+<td rowspan="1" colspan="1">(n = 144)</td>
+<td rowspan="1" colspan="1">(n = 70)</td>
+<td rowspan="1" colspan="1">(n = 40)</td>
+<td rowspan="1" colspan="1">(n = 41)</td>
+<td rowspan="1" colspan="1">(n = 43)</td>
+<td rowspan="1" colspan="1">(n = 41)</td>
+<td rowspan="1" colspan="1">(n = 42 )</td>
+<td rowspan="1" colspan="1">(n = 40)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Study design</td>
+<td colspan="2" rowspan="1">Phase 3, randomized controlled trial</td>
+<td colspan="2" rowspan="1">Phase 3, randomized controlled trial</td>
+<td colspan="3" rowspan="1">Phase 2, randomized controlled trial</td>
+<td colspan="3" rowspan="1">Phase 3, randomized controlled trial</td>
+<td colspan="5" rowspan="1">Phase 2b, randomized controlled trial</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">Country</td>
+<td colspan="2" rowspan="1">USA, Canada</td>
+<td colspan="2" rowspan="1">USA, Canada</td>
+<td colspan="3" rowspan="1">Japan</td>
+<td colspan="3" rowspan="1">Japan</td>
+<td colspan="5" rowspan="1">USA, Canada, Japan</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Age range, years</td>
+<td colspan="2" rowspan="1">≥ 2</td>
+<td colspan="2" rowspan="1">≥ 2</td>
+<td colspan="3" rowspan="1">2-11</td>
+<td colspan="3" rowspan="1">≥12</td>
+<td colspan="5" rowspan="1">12-65</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">Follow-up duration (weeks)</td>
+<td colspan="2" rowspan="1">8</td>
+<td colspan="2" rowspan="1">8</td>
+<td colspan="3" rowspan="1">8</td>
+<td colspan="3" rowspan="1">8</td>
+<td colspan="5" rowspan="1">12</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Outcomes</td>
+<td colspan="2" rowspan="1">IGA success, EASI-75, pruritus NRS, safety outcomes</td>
+<td colspan="2" rowspan="1">IGA success, EASI-75, pruritus NRS, safety outcomes</td>
+<td colspan="3" rowspan="1">IGA success, EASI-75, EASI 50, EASI90, % BSA affected, pruritus NRS, safety outcomes</td>
+<td colspan="3" rowspan="1">IGA success, EASI-75, pruritus NRS, % BSA affected, Skindex-16 score, safety outcomes</td>
+<td colspan="5" rowspan="1">IGA success, EASI-75, pruritus NRS score, % BSA affected, EASI90, POEM (patient-reported outcomes), safety outcomes</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">Age, mean (SD), years</td>
+<td rowspan="1" colspan="1">15.6 (16.62)</td>
+<td rowspan="1" colspan="1">15.6  (16.49)</td>
+<td rowspan="1" colspan="1">16.4 (16.24)</td>
+<td rowspan="1" colspan="1">16.7 (16.05)</td>
+<td rowspan="1" colspan="1">7.1 (3.1)</td>
+<td rowspan="1" colspan="1">7.0 (2.6)</td>
+<td rowspan="1" colspan="1">6.4 (2.8)</td>
+<td rowspan="1" colspan="1">31.7 (12.3)</td>
+<td rowspan="1" colspan="1">35.4 (13.0)</td>
+<td rowspan="1" colspan="1">28.5 (13.9)</td>
+<td rowspan="1" colspan="1">31.6 (15.7)</td>
+<td rowspan="1" colspan="1">29.0 (15.9)</td>
+<td rowspan="1" colspan="1">29.3 (14.0)</td>
+<td rowspan="1" colspan="1">27.9 (14.7)</td>
+<td rowspan="1" colspan="1">29.4 (15.2)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Male, n (%)/female, n (%)</td>
+<td rowspan="1" colspan="1">130(48.1)/140(51.9)</td>
+<td rowspan="1" colspan="1">66 (48.2)/71 (51.8)</td>
+<td rowspan="1" colspan="1">117 (43.2)/154 (56.8)</td>
+<td rowspan="1" colspan="1">58 (43.0)/77 (57.0)</td>
+<td rowspan="1" colspan="1">23 (57.5)/18 (42.5)</td>
+<td rowspan="1" colspan="1">21 (52.5)/19 (47.5)</td>
+<td rowspan="1" colspan="1">22 (53.7)/18 (46.3)</td>
+<td rowspan="1" colspan="1">105 (72.9)/39 (27.1)</td>
+<td rowspan="1" colspan="1">46 (65.7)/24 (34.3)</td>
+<td rowspan="1" colspan="1">22 (55.0)/18 (45.0)</td>
+<td rowspan="1" colspan="1">17 (41.0)/24 (59.0)</td>
+<td rowspan="1" colspan="1">26 (60.0)/16 (40.0)</td>
+<td rowspan="1" colspan="1">19 (46.0)/22 (54.0)</td>
+<td rowspan="1" colspan="1">19 (45.0)/23 (55.0)</td>
+<td rowspan="1" colspan="1">23 (58.0)/17 (42.0)</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">Weight, mean (SD), kg</td>
+<td rowspan="1" colspan="1">46.7 (27.3)</td>
+<td rowspan="1" colspan="1">47.7  (27.7)</td>
+<td rowspan="1" colspan="1">51.5  (29.1)</td>
+<td rowspan="1" colspan="1">54.0 (32.0)</td>
+<td rowspan="1" colspan="1">26.3 (10.7)</td>
+<td rowspan="1" colspan="1">24.7 (8.3)</td>
+<td rowspan="1" colspan="1">23.1 (9.2)</td>
+<td rowspan="1" colspan="1">64.1 (13.4)</td>
+<td rowspan="1" colspan="1">64.0 (12.1)</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">BMI, mean (SD), kg/m<sup>2</sup>
+</td>
+<td rowspan="1" colspan="1">21.4 (6.3)</td>
+<td rowspan="1" colspan="1">22.1 (6.6)</td>
+<td rowspan="1" colspan="1">22.7 (7.5)</td>
+<td rowspan="1" colspan="1">23.3 (8.3)</td>
+<td rowspan="1" colspan="1">17.2 (2.5)</td>
+<td rowspan="1" colspan="1">16.7 (2.4)</td>
+<td rowspan="1" colspan="1">16.5 (2.1)</td>
+<td rowspan="1" colspan="1">23.0 (3.8)</td>
+<td rowspan="1" colspan="1">23.6 (3.5)</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">IGA-AD score, mean (SD)</td>
+<td rowspan="1" colspan="1">3.0 (0.3)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+<td rowspan="1" colspan="1">3.2 (0.4)</td>
+<td rowspan="1" colspan="1">3.2 (0.4)</td>
+<td rowspan="1" colspan="1">2.6 (0.6)</td>
+<td rowspan="1" colspan="1">2.6 (0.5)</td>
+<td rowspan="1" colspan="1">2.5 (0.5)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+<td rowspan="1" colspan="1">3.1 (0.2)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+<td rowspan="1" colspan="1">3.1 (0.4)</td>
+<td rowspan="1" colspan="1">3.1 (0.3)</td>
+</tr>
+<tr><td colspan="16" rowspan="1">IGA score, n (%)</td></tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">2 (Mild)</td>
+<td rowspan="1" colspan="1">NA</td>
+<td rowspan="1" colspan="1">NA</td>
+<td rowspan="1" colspan="1">NA</td>
+<td rowspan="1" colspan="1">NA</td>
+<td rowspan="1" colspan="1">19 (47.5)</td>
+<td rowspan="1" colspan="1">19 (47.5)</td>
+<td rowspan="1" colspan="1">20 (48.8)</td>
+<td rowspan="1" colspan="1">NA</td>
+<td rowspan="1" colspan="1">NA</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">3 (Moderate)</td>
+<td rowspan="1" colspan="1">244 (90.4)</td>
+<td rowspan="1" colspan="1">122 (89.1)</td>
+<td rowspan="1" colspan="1">228 (84.1)</td>
+<td rowspan="1" colspan="1">113 (83.7)</td>
+<td rowspan="1" colspan="1">20 (50.0)</td>
+<td rowspan="1" colspan="1">20 (50.0)</td>
+<td rowspan="1" colspan="1">19 (46.3)</td>
+<td rowspan="1" colspan="1">132 (91.7)</td>
+<td rowspan="1" colspan="1">64 (91.4)</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">4 (Severe)</td>
+<td rowspan="1" colspan="1">26 (9.6)</td>
+<td rowspan="1" colspan="1">15 (10.9)</td>
+<td rowspan="1" colspan="1">43 (15.9)</td>
+<td rowspan="1" colspan="1">22 (16.3)</td>
+<td rowspan="1" colspan="1">1 (2.5)</td>
+<td rowspan="1" colspan="1">1 (2.5)</td>
+<td rowspan="1" colspan="1">2 (4.9)</td>
+<td rowspan="1" colspan="1">12 (8.3)</td>
+<td rowspan="1" colspan="1">6 (8.6)</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+<td rowspan="1" colspan="1">NM</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">EASI score, mean (SD)</td>
+<td rowspan="1" colspan="1">12.2 (5.0)</td>
+<td rowspan="1" colspan="1">12.9 (5.6)</td>
+<td rowspan="1" colspan="1">13.5 (5.6)</td>
+<td rowspan="1" colspan="1">13.1 (4.7)</td>
+<td rowspan="1" colspan="1">11.7 (4.7)</td>
+<td rowspan="1" colspan="1">11.2 (4.1)</td>
+<td rowspan="1" colspan="1">11.8 (4.6)</td>
+<td rowspan="1" colspan="1">15.9 (4.3)</td>
+<td rowspan="1" colspan="1">15.3 (3.2)</td>
+<td rowspan="1" colspan="1">9.8 (5.2)</td>
+<td rowspan="1" colspan="1">10.9 (6.1)</td>
+<td rowspan="1" colspan="1">13.1 (6.7)</td>
+<td rowspan="1" colspan="1">11.4 (5.8)</td>
+<td rowspan="1" colspan="1">11.1 (5.9)</td>
+<td rowspan="1" colspan="1">11.1 (5.8)</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">BSA affected, mean (SD), %</td>
+<td rowspan="1" colspan="1">16.5 (8.7)</td>
+<td rowspan="1" colspan="1">17.7 (9.5)</td>
+<td rowspan="1" colspan="1">17.1 (8.7)</td>
+<td rowspan="1" colspan="1">15.8 (7.9)</td>
+<td rowspan="1" colspan="1">20.4 (6.7)</td>
+<td rowspan="1" colspan="1">20.2 (6.7)</td>
+<td rowspan="1" colspan="1">11.8 (4.6)</td>
+<td rowspan="1" colspan="1">21.3 (6.4)</td>
+<td rowspan="1" colspan="1">21.4 (6.1)</td>
+<td rowspan="1" colspan="1">14.8 (8.7)</td>
+<td rowspan="1" colspan="1">18.7 (11.0)</td>
+<td rowspan="1" colspan="1">19.7 (10.5)</td>
+<td rowspan="1" colspan="1">17.6 (9.9)</td>
+<td rowspan="1" colspan="1">14.5 (9.1)</td>
+<td rowspan="1" colspan="1">16.0 (10.3)</td>
+</tr>
+</tbody></table></div>
+<div class="p text-right font-secondary"><a href="table/TAB1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><figure class="fig xbox font-sm" id="FIG1"><h3 class="obj_head">Figure 1. Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) flow diagram of study screening and selection. </h3>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=12494503_cureus-0017-00000091549-i01.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a0f/12494503/21733f5fcf60/cureus-0017-00000091549-i01.jpg" loading="lazy" height="910" width="750" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/FIG1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Four studies comprising five randomized controlled trials were included in the final analysis.</p></figcaption></figure><p>Sensitivity Analyses</p>
+<p>Leave-one-out analyses confirmed the robustness of most outcomes. For IGA success, significance was lost only when both ADORING trials were excluded, which together contributed 82.7% of the total weight, explaining their strong influence on the pooled result. Similarly, for PP-NRS ≥4, removing both ADORING studies (59.3% weight) also led to a loss of significance. In contrast, EASI-75 remained statistically significant regardless of which study was removed, indicating a stable and consistent effect. For AEs, significance was lost with the removal of any study except Igarashi et al. [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>], likely due to small sample sizes and low event rates.</p>
+<p>Risk of Bias Within Studies</p>
+<p>For quality assessment, the Cochrane RoB 2 tool was used [<a href="#REF25" class="usa-link" aria-describedby="REF25">25</a>,<a href="#REF28" class="usa-link" aria-describedby="REF28">28</a>]. All five trials [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>] were randomized using random sequence generation, double-blinded, and provided detailed data for assessment. Each trial clearly reported methods for allocation concealment and randomization, addressed withdrawals and attrition, and demonstrated no concerns across the five bias domains: randomization process, deviations from intended interventions, missing outcome data, measurement of the outcome, and selection of the reported result. Overall, all studies were judged to be at low risk of bias (Figure <a href="#FIG2" class="usa-link">2</a>).</p>
+<figure class="fig xbox font-sm" id="FIG2"><h3 class="obj_head">Figure 2. Risk of bias (RoB 2) summary for randomized studies.</h3>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=12494503_cureus-0017-00000091549-i02.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a0f/12494503/13824207262b/cureus-0017-00000091549-i02.jpg" loading="lazy" height="345" width="750" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/FIG2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>All five trials demonstrated low risk of bias across all five domains: bias arising from the randomization process (D1), bias due to deviations from intended interventions (D2), bias due to missing outcome data (D3), bias in measurement of the outcome (D4), and bias in selection of the reported result (D5). Overall, all studies were judged to have a low risk of bias.</p></figcaption></figure><p>Efficacy</p>
+<p>In terms of efficacy, we analyzed efficiency measures, including EASI scores, IGA, EASI-75, and pruritus NRS scores, after eight weeks of treatment. In line with Cochrane guidelines, a RE model was applied to all outcome analyses [<a href="#REF26" class="usa-link" aria-describedby="REF26">26</a>].</p>
+<p>IGA success/investigator’s global assessment 0/1: All included trials [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>] provided data on the proportion of patients achieving IGA success, defined as an IGA score of 0 (clear) or 1 (almost clear) with at least a two-point improvement from baseline. The pooled analysis revealed that patients treated with tapinarof 1% cream QD achieved significantly higher IGA success rates at eight weeks compared to the placebo group, with a pooled RR of 3.03 (95% CI: 1.94-4.74; p = 0.002). Heterogeneity across studies was low (χ² = 5.79; df = 4; p = 0.22; I² = 0%; τ²= 0.00) (Figure <a href="#FIG3" class="usa-link">3</a>). This corresponds to an absolute risk difference of 28.6% (41.2% with tapinarof vs. 12.6% with vehicle), yielding a number needed to treat (NNT) of 3.5 to achieve one additional IGA success with tapinarof compared to placebo.</p>
+<figure class="fig xbox font-sm" id="FIG3"><h3 class="obj_head">Figure 3. Forest plots for primary and secondary outcomes after eight weeks of treatment.</h3>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=12494503_cureus-0017-00000091549-i03.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a0f/12494503/087593ac6202/cureus-0017-00000091549-i03.jpg" loading="lazy" height="1015" width="750" alt="Figure 3"></a></p>
+<div class="p text-right font-secondary"><a href="figure/FIG3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>a: Patients applying Tapinarof daily were three times more likely to achieve Investigator Global Assessment (IGA) success compared to vehicle. b: Tapinarof significantly increased the proportion of patients achieving Eczema Area and Severity Index 75% (EASI-75) compared to vehicle. c: Tapinarof significantly improved pruritus severity, with more patients achieving ≥4-point PP-NRS reduction compared to vehicle. d: The overall incidence of AEs was modestly but significantly higher in the Tapinarof group than in the vehicle group. Squares represent 95% confidence intervals (CIs), and diamonds represent pooled proportions.</p></figcaption></figure><p>EASI-75 response: All included trials [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>] provided data on the proportion of patients achieving EASI-75 response, defined as patients achieving at least a 75% reduction in EASI from baseline. The pooled analysis revealed that patients treated with tapinarof 1% QD were significantly more likely to achieve EASI-75 compared to placebo after eight weeks of treatment, with a pooled RR of 2.99 (95% CI: 1.94 to 4.60; p = 0.002). The heterogeneity among the studies was low (χ² = 6.76; df = 4; p = 0.15; I² = 15%; τ² = 0.01) (Figure <a href="#FIG3" class="usa-link">3</a>). Based on pooled event rates (54.5% with tapinarof vs. 17.8% with vehicle), this corresponds to an absolute risk reduction of 36.7% and an NNT of approximately 2.7.</p>
+<p>PP-NRS improvement/NRS ≥ 4: Four trials [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>] reported data on PP-NRS improvement, defined as the proportion of patients achieving a clinically meaningful reduction (≥4 points) from baseline, with a total of 909 patients included in the analysis. The pooled analysis revealed a significantly higher proportion of patients experiencing clinically meaningful improvement in pruritus at 8 weeks with tapinarof 1% QD compared to placebo, with a pooled RR of 1.58 (95% CI: 1.10 to 2.26; p = 0.03). Heterogeneity among the included trials was low (χ² = 6.76, df = 4; p = 0.15; I² = 15%; τ² = 0.00) (Figure <a href="#FIG3" class="usa-link">3</a>).</p>
+<p>Safety</p>
+<p>AEs: All included trials reported data on AE rates [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]. The pooled analysis indicated a moderately increased risk of the frequency of the total AEs at eight weeks in the tapinarof group compared to placebo, with a pooled RR of 1.39 (95% CI: 1.02 to 1.90; p = 0.04). Moderate heterogeneity was noted among studies (χ² = 8.92, df = 4; p = 0.06; I² = 55%; τ² = 0.04; prediction interval 0.75 to 2.56) (Figure <a href="#FIG3" class="usa-link">3</a>). A summary of all reported AEs can be found in Table <a href="#TAB2" class="usa-link">2</a>.</p>
+<section class="tw xbox font-sm" id="TAB2"><h3 class="obj_head">Table 2. Detailed adverse events of the included studies.</h3>
+<div class="caption p"><p>N/A = not applicable</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups"><tbody>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Reference (N)
+</td>
+<td colspan="2" rowspan="1">
+Silverberg et al., 2024 (ADORING 1) (N = 407) [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>]
+</td>
+<td colspan="2" rowspan="1">
+Silverberg et al., 2024 (ADORING 2) (N = 406) [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>]
+</td>
+<td colspan="2" rowspan="1">
+Igarashi et al., 2025 (N = 121) [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>]
+</td>
+<td colspan="2" rowspan="1">
+Igarashi et al., 2024 (N = 214) [<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>]
+</td>
+<td colspan="2" rowspan="1">
+Paller et al., 2021 (N = 83) [<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]
+</td>
+</tr>
+<tr>
+<td rowspan="2" colspan="1">
+Intervention measures (n)
+</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD
+</td>
+<td rowspan="1" colspan="1">
+Vehicle QD
+</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD
+</td>
+<td rowspan="1" colspan="1">
+Vehicle QD
+</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD
+</td>
+<td rowspan="1" colspan="1">
+Vehicle QD
+</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD
+</td>
+<td rowspan="1" colspan="1">
+Vehicle QD
+</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD
+</td>
+<td rowspan="1" colspan="1">
+Vehicle QD
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+(n = 270)
+</td>
+<td rowspan="1" colspan="1">
+(n = 137)
+</td>
+<td rowspan="1" colspan="1">
+(n = 271)
+</td>
+<td rowspan="1" colspan="1">
+(n = 135)
+</td>
+<td rowspan="1" colspan="1">
+(n = 41)
+</td>
+<td rowspan="1" colspan="1">
+(n = 40)
+</td>
+<td rowspan="1" colspan="1">
+(n = 144)
+</td>
+<td rowspan="1" colspan="1">
+(n = 70)
+</td>
+<td rowspan="1" colspan="1">
+(n = 41)
+</td>
+<td rowspan="1" colspan="1">
+(n = 40)
+</td>
+</tr>
+<tr><td colspan="11" rowspan="1">
+AE category (%)
+</td></tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Any AEs
+</td>
+<td rowspan="1" colspan="1">
+123 (45.6%)
+</td>
+<td rowspan="1" colspan="1">
+35 (25.5%)
+</td>
+<td rowspan="1" colspan="1">
+100 (36.9%)
+</td>
+<td rowspan="1" colspan="1">
+28 (21.1%)
+</td>
+<td rowspan="1" colspan="1">
+24 (58.5%)
+</td>
+<td rowspan="1" colspan="1">
+23 (57.5%)
+</td>
+<td rowspan="1" colspan="1">
+94 (65.3%)
+</td>
+<td rowspan="1" colspan="1">
+30 (42.3%)
+</td>
+<td rowspan="1" colspan="1">
+24 (59%)
+</td>
+<td rowspan="1" colspan="1">
+16 (40%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Serious AEs
+</td>
+<td rowspan="1" colspan="1">
+3 (1.1%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+2 (0.7%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Severe AEs
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Treatment-related AEs
+</td>
+<td rowspan="1" colspan="1">
+34 (12.6%)
+</td>
+<td rowspan="1" colspan="1">
+9 (6.6%)
+</td>
+<td rowspan="1" colspan="1">
+32 (11.8%)
+</td>
+<td rowspan="1" colspan="1">
+9 (6.8%)
+</td>
+<td rowspan="1" colspan="1">
+7 (17.1%)
+</td>
+<td rowspan="1" colspan="1">
+10 (25.0%)
+</td>
+<td rowspan="1" colspan="1">
+55 (38.2%)
+</td>
+<td rowspan="1" colspan="1">
+12 (16.9%)
+</td>
+<td rowspan="1" colspan="1">
+22 (54%)
+</td>
+<td rowspan="1" colspan="1">
+15 (38%)
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+AEs leading to discontinuation
+</td>
+<td rowspan="1" colspan="1">
+5 (1.9%)
+</td>
+<td rowspan="1" colspan="1">
+5 (3.6%)
+</td>
+<td rowspan="1" colspan="1">
+4 (1.5%)
+</td>
+<td rowspan="1" colspan="1">
+4 (3.0%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2.4%)
+</td>
+<td rowspan="1" colspan="1">
+7 (17.5%)
+</td>
+<td rowspan="1" colspan="1">
+9 (6.3%)
+</td>
+<td rowspan="1" colspan="1">
+9 (12.7%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+2 (5%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Application site irritation
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+3 (7.3%)
+</td>
+<td rowspan="1" colspan="1">
+5 (12.5%)
+</td>
+<td rowspan="1" colspan="1">
+2 (1.4%)
+</td>
+<td rowspan="1" colspan="1">
+2 (2.8%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Nasopharyngitis
+</td>
+<td rowspan="1" colspan="1">
+13 (4.8%)
+</td>
+<td rowspan="1" colspan="1">
+7 (5.1%)
+</td>
+<td rowspan="1" colspan="1">
+4 (1.5%)
+</td>
+<td rowspan="1" colspan="1">
+1 (0.8%)
+</td>
+<td rowspan="1" colspan="1">
+4 (9.8%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2.5%)
+</td>
+<td rowspan="1" colspan="1">
+8 (5.6%)
+</td>
+<td rowspan="1" colspan="1">
+2 (2.8%)
+</td>
+<td rowspan="1" colspan="1">
+5 (12%)
+</td>
+<td rowspan="1" colspan="1">
+3 (8%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Headache
+</td>
+<td rowspan="1" colspan="1">
+19 (7.0%)
+</td>
+<td rowspan="1" colspan="1">
+3 (2.2%)
+</td>
+<td rowspan="1" colspan="1">
+4 (1.5%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+3 (7.3%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+23 (16.0%)
+</td>
+<td rowspan="1" colspan="1">
+1 (1.4%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2%)
+</td>
+<td rowspan="1" colspan="1">
+2 (5%)
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Folliculitis
+</td>
+<td rowspan="1" colspan="1">
+22 (8.1%)
+</td>
+<td rowspan="1" colspan="1">
+1 (0.7%)
+</td>
+<td rowspan="1" colspan="1">
+22 (8.1%)
+</td>
+<td rowspan="1" colspan="1">
+2 (1.5%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+17 (11.8%)
+</td>
+<td rowspan="1" colspan="1">
+1 (1.4%)
+</td>
+<td rowspan="1" colspan="1">
+8 (20%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Acne
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+14 (9.7%)
+</td>
+<td rowspan="1" colspan="1">
+1 (1.4%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2%)
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Contact dermatitis
+</td>
+<td rowspan="1" colspan="1">
+4 (1.5%)
+</td>
+<td rowspan="1" colspan="1">
+3 (2.2%)
+</td>
+<td rowspan="1" colspan="1">
+3 (1.1%)
+</td>
+<td rowspan="1" colspan="1">
+2 (1.5%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2.4%)
+</td>
+<td rowspan="1" colspan="1">
+3 (7.5%)
+</td>
+<td rowspan="1" colspan="1">
+5 (3.5%)
+</td>
+<td rowspan="1" colspan="1">
+2 (2.8%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Pyrexia
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+3 (7.3%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2.5%)
+</td>
+<td rowspan="1" colspan="1">
+1 (0.7%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Upper respiratory tract infection/inflammation
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+3 (7.3%)
+</td>
+<td rowspan="1" colspan="1">
+1 (2.5%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+2 (5%)
+</td>
+<td rowspan="1" colspan="1">
+4 (10%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+COVID-19
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+2 (5.0%)
+</td>
+<td rowspan="1" colspan="1">
+3 (2.1%)
+</td>
+<td rowspan="1" colspan="1">
+1 (1.4%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Atopic dermatitis exacerbation
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+6 (15.0%)
+</td>
+<td rowspan="1" colspan="1">
+7 (4.9%)
+</td>
+<td rowspan="1" colspan="1">
+11 (15.5%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+5 (13%)
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Oral herpes
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+2 (4.9%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">
+Skin papilloma
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+4 (2.8%)
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">
+Rhinitis
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+0 (0%)
+</td>
+<td rowspan="1" colspan="1">
+2 (5.0%)
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+<td rowspan="1" colspan="1">
+N/A
+</td>
+</tr>
+</tbody></table></div>
+<div class="p text-right font-secondary"><a href="table/TAB2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><p>SAEs: All included trials [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>] reported data on the incidence of SAE rates. The pooled analysis indicated no difference between groups in the incidence of SAE rates between the tapinarof group compared to placebo, with a pooled RR of 1.98 (95% CI: 0.36 to 24.69; p = 0.31). Low heterogeneity was noted among studies (χ² = 80.03; df = 1; p = 0.86; I² = 0%; τ² = 0.00) (Figure <a href="#FIG4" class="usa-link">4</a>).</p>
+<figure class="fig xbox font-sm" id="FIG4"><h3 class="obj_head">Figure 4. Forest plot for serious adverse events. </h3>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=12494503_cureus-0017-00000091549-i04.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a0f/12494503/7fcea07c1c3a/cureus-0017-00000091549-i04.jpg" loading="lazy" height="262" width="750" alt="Figure 4"></a></p>
+<div class="p text-right font-secondary"><a href="figure/FIG4/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>No significant difference between the tapinarof group and the placebo group in the incidence of serious adverse events (SAEs).</p></figcaption></figure><p>Reporting Bias</p>
+<p>As fewer than 10 studies were included in each meta-analysis, funnel plots and formal tests for publication bias were not performed, per the Cochrane Handbook recommendations [<a href="#REF24" class="usa-link" aria-describedby="REF24">24</a>]. </p>
+<p>Certainty of Evidence (GRADE Assessment)</p>
+<p>Our findings provide high-certainty evidence regarding the efficacy outcomes (IGA success, EASI-75, pruritus improvement), while the certainty for AE outcomes was moderate due to moderate heterogeneity across studies (I² = 55%). No other outcomes required downgrading. Certainty ratings were determined using the GRADE framework, with downgrades applied when appropriate based on factors such as imprecision (e.g., wide confidence intervals or limited sample size) and indirectness (e.g., variability in outcome measurement or population characteristics. A summary of findings for the main efficacy and safety outcomes, along with the certainty of evidence assessed using the GRADE approach, is provided in Table <a href="#TAB3" class="usa-link">3</a>.</p>
+<section class="tw xbox font-sm" id="TAB3"><h3 class="obj_head">Table 3. Summary of findings table for tapinarof vs. vehicle in mild to severe atopic dermatitis.</h3>
+<div class="caption p">
+<p>*The risk in the intervention group (and its 95% confidence interval) is based on the assumed risk in the comparison group and the relative effect of the intervention (and its 95% CI). <sup>a</sup>High heterogeneity (I² &gt; 50%) downgrade by one level for inconsistency.</p>
+<p>EASI-75 = Eczema Area and Severity Index 75%, IGA = Investigator Global Assessment, PP-NRS = Peak Pruritus Numeric Rating Scale, QD = quaque die (once daily), RCT = randomized controlled trial, RR = risk ratio</p>
+<p>GRADE Working Group grades of evidence are as follows. High certainty: We are very confident that the true effect lies close to that of the estimate of the effect. Moderate certainty: We are moderately confident in the effect estimate; the true effect is likely to be close to the estimate of the effect, but there is a possibility that it is substantially different. Low certainty: Our confidence in the effect estimate is limited; the true effect may be substantially different from the estimate of the effect. Very low certainty: We have very little confidence in the effect estimate; the true effect is likely to be substantially different from the estimated effect.</p>
+</div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups"><tbody>
+<tr style="background-color:#ccc">
+<td colspan="1" rowspan="2">
+Outcomes
+</td>
+<td colspan="2" rowspan="1">Anticipated absolute effects*(95% CI)</td>
+<td colspan="1" rowspan="2">
+Relative effect (95% CI)
+</td>
+<td colspan="1" rowspan="2">
+No. of participants (studies)
+</td>
+<td colspan="1" rowspan="2">
+Certainty of the evidence (GRADE)
+</td>
+<td colspan="1" rowspan="2">
+Comments
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Risk with Vehicle QD</td>
+<td rowspan="1" colspan="1">Risk with Tapinarof 1% QD</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">IGA Success</td>
+<td rowspan="1" colspan="1">126 per 1000</td>
+<td rowspan="1" colspan="1">381 per 1000 (244 to 595)</td>
+<td rowspan="1" colspan="1">RR 3.03 (1.94 to 4.74)</td>
+<td rowspan="1" colspan="1">1189 (5 RCTs)</td>
+<td rowspan="1" colspan="1">⨁⨁⨁⨁ High</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD results in large increase in IGA Success rates [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">EASI-75 Response</td>
+<td rowspan="1" colspan="1">178 per 1000</td>
+<td rowspan="1" colspan="1">531 per 1000 (345 to 818)</td>
+<td rowspan="1" colspan="1">RR 2.99 (1.94 to 4.60)</td>
+<td rowspan="1" colspan="1">1189 (5 RCTs)</td>
+<td rowspan="1" colspan="1">⨁⨁⨁⨁ High</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD results in large increase in EASI-75 Response rates [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]
+</td>
+</tr>
+<tr style="background-color:#ccc">
+<td rowspan="1" colspan="1">PP-NRS improvement</td>
+<td rowspan="1" colspan="1">342 per 1000</td>
+<td rowspan="1" colspan="1">541 per 1000 (376 to 773)</td>
+<td rowspan="1" colspan="1">RR 1.58 (1.10 to 2.26)</td>
+<td rowspan="1" colspan="1">909 (4 RCTs)</td>
+<td rowspan="1" colspan="1">⨁⨁⨁⨁ High</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD results in a moderate increase in PP-NRS improvement rates [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>,<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>,<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]
+</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Adverse events</td>
+<td rowspan="1" colspan="1">337 per 1000</td>
+<td rowspan="1" colspan="1">469 per 1000 (344 to 641)</td>
+<td rowspan="1" colspan="1">RR 1.39 (1.02 to 1.90)</td>
+<td rowspan="1" colspan="1">1188 (5 RCTs)</td>
+<td rowspan="1" colspan="1">⨁⨁⨁◯ Moderate<sup>a</sup>
+</td>
+<td rowspan="1" colspan="1">
+Tapinarof 1% QD probably results in a moderate increase in adverse events [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]
+</td>
+</tr>
+</tbody></table></div>
+<div class="p text-right font-secondary"><a href="table/TAB3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><p>Discussion</p>
+<p>Summary of Main Findings</p>
+<p>According to the data we collected, we selected IGA treatment success rates, EASI-75 response, and PP-NRS improvement rates to assess the treatment efficacy of tapinarof cream. The IGA and EASI-75 scores evaluate primarily localized lesions, assessing disease severity based on eczema characteristics such as erythema, excoriation, induration, and lichenification. In contrast, the PP-NRS score evaluates itch intensity, a key symptom impacting the quality of life in AD patients.</p>
+<p>In this systematic review and meta-analysis of five RCTs and 1191 patients, we compared topical tapinarof cream 1% QD with placebo in patients with mild-to-severe AD after eight weeks of treatment. The main findings were as follows: (1) patients applying tapinarof daily were three times more likely to achieve IGA success and EASI-75 response compared to placebo (RR 3.03, 95% CI 1.94-4.74, p = 0.002; RR 2.99, 95% CI 1.94-4.60, p = 0.002, respectively); (2) treatment with tapinarof resulted in significant improvement in pruritus measured by PP-NRS score (RR 1.58, 95% CI 1.10-2.26, p = 0.03); and (3) tapinarof exhibited a favorable safety profile, although associated with a slight but statistically significant increase in mild-to-moderate AEs compared with placebo (RR 1.39, 95% CI 1.02-1.90, p = 0.04).</p>
+<p>Comparison With Existing Literature</p>
+<p>An initial formulation of tapinarof, known as WBI-1001, developed by Welichem Biotech (Burnaby, Canada), the former asset owner, has been investigated in prior clinical trials, which provided preliminary evidence of the drug’s efficacy and safety in AD [<a href="#REF29" class="usa-link" aria-describedby="REF29">29</a>]. This meta-analysis particularly focuses on the current formulation, VTAMA® cream (tapinarof; GSK2894512) developed by Dermavant Sciences, Inc. and approved for plaque psoriasis [<a href="#REF30" class="usa-link" aria-describedby="REF30">30</a>], as it is closest to clinical practice. To maintain consistency and clinical applicability, studies involving the earlier WBI-1001 formulation were not included in our meta-analysis.</p>
+<p>A recent systematic review and meta-analysis by de Farias Santos et al. [<a href="#REF31" class="usa-link" aria-describedby="REF31">31</a>] reported similar efficacy and safety outcomes for tapinarof in AD. Their analysis incorporated benvitimod (WBI-1001), the earlier formulation of the molecule [<a href="#REF29" class="usa-link" aria-describedby="REF29">29</a>], showing statistically significant improvements in IGA success rates and EASI-75 scores, with sensitivity analysis excluding benvitimod not altering significance [<a href="#REF31" class="usa-link" aria-describedby="REF31">31</a>]. In contrast, our analysis focused exclusively on the currently approved VTAMA® formulation of tapinarof [<a href="#REF30" class="usa-link" aria-describedby="REF30">30</a>] and included one additional pediatric study [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>], further reinforcing the efficacy and safety profile of the currently approved formulation across the pediatric population. Both analyses identified folliculitis and headache as common AEs [<a href="#REF31" class="usa-link" aria-describedby="REF31">31</a>]. Interestingly, de Farias Santos et al. found these events to be statistically significant (RR 6.21; p &lt; 0.001 and RR 3.24; p = 0.025, respectively) [<a href="#REF31" class="usa-link" aria-describedby="REF31">31</a>], although headache causality in relation to tapinarof cream remains unclear [<a href="#REF31" class="usa-link" aria-describedby="REF31">31</a>]. Notably, their review did not evaluate PP-NRS (PP-NRS ≥ 4), a key symptom burden in AD. Our study addresses this gap by providing pooled estimates for antipruritic efficacy.</p>
+<p>Pruritus relief was observed from as early as two weeks of treatment initiation [<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>,<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]. The rapidity of symptom improvement, particularly for pruritus, is clinically relevant and directly affects patient adherence and satisfaction [<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>]. However, specific timing for initial relief was not consistently reported across all trials [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>,<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>]. It is recommended that future randomized trials assess and report time-to-relief outcomes to better inform clinical decision-making.</p>
+<p>Tapinarof treatment demonstrated an acceptable safety profile. Although patients receiving Tapinarof experienced a higher frequency of AEs compared with placebo, the events were typically mild, well-tolerated, and rarely led to treatment discontinuation. The most commonly reported AEs included folliculitis (9.0%), headache (6.5%), nasopharyngitis (4.4%), acne (1.8%), and application site irritation (0.7%) (Table <a href="#TAB2" class="usa-link">2</a>). These AE are consistent with AE of other topical therapies for AD, such as topical corticosteroids and calcineurin inhibitors [<a href="#REF7" class="usa-link" aria-describedby="REF7">7</a>]. The acne and folliculitis lesions primarily presented as inflammatory papules and pustules, and all reported cases were non-serious. Headache events generally occurred early in treatment and were of short duration [<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>]. There were a few cases with asymptomatic elevations in aminotransferase levels; the events were transient and did not necessitate discontinuation of treatment [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>]. Regarding serious AEs, there was no significant difference between the tapinarof and placebo groups.</p>
+<p>While our meta-analysis primarily assessed outcomes at eight weeks, extended-duration studies further support tapinarof cream’s favorable long-term safety. The Japanese phase 3 trial by Igarashi et al. [<a href="#REF21" class="usa-link" aria-describedby="REF21">21</a>] assessed treatment with tapinarof up to 52 weeks, showing sustained efficacy and stable safety without emergent concerns. Likewise, the ADORING 3 trial assessed tapinarof 1% cream QD for up to 48 weeks in their adult and pediatric patients down to two years of age, showing consistent safety outcomes and the absence of new safety concerns with prolonged use [<a href="#REF32" class="usa-link" aria-describedby="REF32">32</a>].</p>
+<p>This study design only included trials using tapinarof 1% QD regimen, as a pooled analysis of the other regimes (1% BID and 0.5% QD and BID) could not be performed due to insufficient data. In the initial phase 2 dose-ranging study [<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>,<a href="#REF30" class="usa-link" aria-describedby="REF30">30</a>], multiple doses and regimens were compared. The 1% QD regimen exhibited efficacy superior to that of the 0.5% QD regimen and exhibited comparable efficacy to 1% BID regimen (IGA success rate 46% vs. 53%, respectively) while maintaining a lower incidence of AEs (54% vs. 70%, respectively) [<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>,<a href="#REF33" class="usa-link" aria-describedby="REF33">33</a>]. Subsequently, trials that were published after Paller et al. adopted the 1% QD regimen across pediatric [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>,<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>] and adult populations [<a href="#REF20" class="usa-link" aria-describedby="REF20">20</a>-<a href="#REF23" class="usa-link" aria-describedby="REF23">23</a>]. While a pediatric trial compared tapinarof 0.5% QD to 1% QD [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>], the 1% QD regimen has remained the predominant choice across the adult population.</p>
+<p>Strengths and Limitations</p>
+<p>This meta-analysis provides valuable insights into the efficacy and safety of tapinarof in AD, focusing exclusively on the approved VTAMA® 1% QD formulation. It incorporates recent pediatric data and evaluates PP-NRS, underscoring the drug’s impact on clinically meaningful symptom relief. The study followed PRISMA 2020 guidelines with rigorous methodology and GRADE assessment, enhancing the reliability and clinical relevance of its findings.</p>
+<p>Despite these strengths, several limitations should be acknowledged. The overall number of included studies was limited, with relatively small sample sizes in some trials, which may affect the generalizability of our findings. Subgroup analyses by age, disease severity, anatomical site, and duration of therapy could not be performed due to insufficient stratified data. Only English-language studies were included, which may have also introduced language bias. Although current findings are promising, tapinarof is a relatively new therapeutic option for AD; thus, further RCTs, particularly those comparing tapinarof to active comparators, are needed to comprehensively assess its long-term efficacy and safety. Finally, real-world data on adherence, cost-effectiveness, and long-term outcomes are limited and should be addressed in future studies.</p>
+<p>Clinical Implications and Research Needs</p>
+<p>Tapinarof offers distinct advantages that could enhance its clinical utility in real-world practice. Tapinarof cream represents a nonsteroidal, QD topical option, addressing adherence barriers typically associated with the BID regimens required for topical PDE4, calcineurin, and JAK inhibitors [<a href="#REF10" class="usa-link" aria-describedby="REF10">10</a>-<a href="#REF14" class="usa-link" aria-describedby="REF14">14</a>]. Additionally, tapinarof exhibits fewer long-term safety concerns compared to topical corticosteroids and has demonstrated a favorable tolerability profile. Therefore, tapinarof may effectively bridge a therapeutic gap, particularly benefiting patients with significant steroid phobia and those showing inadequate response to standard topical therapies and who are still not optimal candidates for systemic treatments.</p>
+<p>To further clarify pediatric dosing and safety, an additional Japanese phase 3 trial is planned, assessing specifically the 0.5% tapinarof cream formulation in pediatric patients aged two to 11 years [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>]. The lower concentration was chosen based on results from the Japanese pediatric phase 2 trial, where tapinarof 0.5% QD demonstrated numerically higher efficacy (EASI-75 response: 77.5% vs. 70.7%) and fewer AEs compared to the 1% concentration [<a href="#REF22" class="usa-link" aria-describedby="REF22">22</a>]. Therefore, optimal pediatric dosing remains uncertain, warranting further investigation.</p></section><section id="sec3"><h2 class="pmc_sec_title">Conclusions</h2>
+<p>In conclusion, 1% tapinarof cream applied once daily for eight weeks reduced disease severity, improved clinical outcomes (IGA success, EASI-75 response, and pruritus), and demonstrated acceptable tolerability in patients with mild-to-severe AD. The composite of clinical improvement (IGA success or EASI-75) and patient-reported outcomes (pruritus NRS) is consistently improved by tapinarof cream across multiple patient subgroups, including pediatric and adult populations. Finally, the incidence of AEs with tapinarof cream appears mild and acceptable. These findings support the use of tapinarof cream 1% once daily as a potential new therapeutic option in the management of AD.</p></section><section id="ack1" class="ack"><h2 class="pmc_sec_title">Acknowledgments</h2>
+<p>The RevMan 5.4 (.rm5) project file is available upon request from the corresponding author (N.E.).</p></section><section id="app1" class="app"><h2 class="pmc_sec_title">Appendices</h2>
+<p>Search strategy for each database up to the 1st of March 2025</p>
+<p>Pubmed</p>
+<p>("Tapinarof" OR "GSK2894512" OR "Aryl Hydrocarbon Receptor Agonist") AND ("Atopic</p>
+<p>Dermatitis"[ti]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR clinical trials as topic[mesh:noexp] OR trial[ti] OR random*[tiab] OR placebo*[tiab])</p>
+<p>Embase</p>
+<p>('tapinarof'/exp OR 'tapinarof':ti,ab OR 'gsk2894512':ti,ab OR 'aryl hydrocarbon receptor agonist':ti,ab) AND ('atopic dermatitis'/exp OR 'atopic dermatitis':ti,ab) AND 'randomized controlled trial'/de</p>
+<p>Cochrane</p>
+<p>("Tapinarof" OR "GSK2894512" OR “Aryl Hydrocarbon Receptor Agonist”)  AND  ("Atopic Dermatitis")</p>
+<p>
+<a href="https://ClinicalTrials.gov" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">ClinicalTrials.gov</a>
+</p>
+<p>(tapinarof OR gsk2894512 OR aryl hydrocarbon receptor agonist) AND atopic dermatitis</p></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Disclosures</h2>
+<div class="fn-group p font-secondary-light font-sm"><div class="fn p" id="fn1">
+<p><strong>Conflicts of interest:</strong> In compliance with the ICMJE uniform disclosure form, all authors declare the following:</p>
+<p><strong>Payment/services info:</strong> All authors have declared that no financial support was received from any organization for the submitted work.</p>
+<p><strong>Financial relationships:</strong> All authors have declared that they have no financial relationships at present or within the previous three years with any organizations that might have an interest in the submitted work.</p>
+<p><strong>Other relationships:</strong> All authors have declared that there are no other relationships or activities that could appear to have influenced the submitted work.</p>
+</div></div></section><section id="fn-group2" class="fn-group"><h2 class="pmc_sec_title">Author Contributions</h2>
+<div class="fn-group p font-secondary-light font-sm"><div class="fn p" id="fn2">
+<p><strong>Concept and design:</strong>  Baraa A. Saifi, Nancy Emmanuel </p>
+<p><strong>Acquisition, analysis, or interpretation of data:</strong>  Baraa A. Saifi, Nancy Emmanuel , Zyad A. Saifi</p>
+<p><strong>Drafting of the manuscript:</strong>  Baraa A. Saifi, Zyad A. Saifi</p>
+<p><strong>Critical review of the manuscript for important intellectual content:</strong>  Baraa A. Saifi, Nancy Emmanuel </p>
+<p><strong>Supervision:</strong>  Nancy Emmanuel </p>
+</div></div></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref-list1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="REF1">
+<span class="label">1.</span><cite>Atopic dermatitis. Weidinger S, Novak N. Lancet. 2016;387:1109–1122. doi: 10.1016/S0140-6736(15)00149-X.</cite> [<a href="https://doi.org/10.1016/S0140-6736(15)00149-X" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26377142/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet&amp;title=Atopic%20dermatitis&amp;volume=387&amp;publication_year=2016&amp;pages=1109-1122&amp;pmid=26377142&amp;doi=10.1016/S0140-6736(15)00149-X&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF2">
+<span class="label">2.</span><cite>The burden of atopic dermatitis: impact on the patient, family, and society. Carroll CL, Balkrishnan R, Feldman SR, Fleischer AB Jr, Manuel JC. Pediatr Dermatol. 2005;22:192–199. doi: 10.1111/j.1525-1470.2005.22303.x.</cite> [<a href="https://doi.org/10.1111/j.1525-1470.2005.22303.x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/15916563/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Pediatr%20Dermatol&amp;title=The%20burden%20of%20atopic%20dermatitis:%20impact%20on%20the%20patient,%20family,%20and%20society&amp;volume=22&amp;publication_year=2005&amp;pages=192-199&amp;pmid=15916563&amp;doi=10.1111/j.1525-1470.2005.22303.x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF3">
+<span class="label">3.</span><cite>Quality of life and childhood atopic dermatitis: the misery of living with childhood eczema. Lewis-Jones S. <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1742-1241.2006.01047.x?msockid=22901d121af763173afe08041b2162e2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1742-1241.2006.01047.x?msockid=22901d121af763173afe08041b2162e2</a>. Int J Clin Pract. 2006;60:984–992. doi: 10.1111/j.1742-1241.2006.01047.x.</cite> [<a href="https://doi.org/10.1111/j.1742-1241.2006.01047.x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/16893440/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Int%20J%20Clin%20Pract&amp;title=Quality%20of%20life%20and%20childhood%20atopic%20dermatitis:%20the%20misery%20of%20living%20with%20childhood%20eczema&amp;volume=60&amp;publication_year=2006&amp;pages=984-992&amp;pmid=16893440&amp;doi=10.1111/j.1742-1241.2006.01047.x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF4">
+<span class="label">4.</span><cite>The interplay between genetic and environmental factors in the pathogenesis of atopic dermatitis. Otsuka A, Nomura T, Rerknimitr P, Seidel JA, Honda T, Kabashima K. Immunol Rev. 2017;278:246–262. doi: 10.1111/imr.12545.</cite> [<a href="https://doi.org/10.1111/imr.12545" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28658541/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Immunol%20Rev&amp;title=The%20interplay%20between%20genetic%20and%20environmental%20factors%20in%20the%20pathogenesis%20of%20atopic%20dermatitis&amp;volume=278&amp;publication_year=2017&amp;pages=246-262&amp;pmid=28658541&amp;doi=10.1111/imr.12545&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF5">
+<span class="label">5.</span><cite>Multifactorial skin barrier deficiency and atopic dermatitis: essential topics to prevent the atopic march. Egawa G, Kabashima K. J Allergy Clin Immunol. 2016;138:350–358. doi: 10.1016/j.jaci.2016.06.002.</cite> [<a href="https://doi.org/10.1016/j.jaci.2016.06.002" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27497277/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Allergy%20Clin%20Immunol&amp;title=Multifactorial%20skin%20barrier%20deficiency%20and%20atopic%20dermatitis:%20essential%20topics%20to%20prevent%20the%20atopic%20march&amp;volume=138&amp;publication_year=2016&amp;pages=350-358&amp;pmid=27497277&amp;doi=10.1016/j.jaci.2016.06.002&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF6">
+<span class="label">6.</span><cite>Cellular and molecular immunologic mechanisms in patients with atopic dermatitis. Werfel T, Allam JP, Biedermann T, et al.  J Allergy Clin Immunol. 2016;138:336–349. doi: 10.1016/j.jaci.2016.06.010.</cite> [<a href="https://doi.org/10.1016/j.jaci.2016.06.010" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27497276/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Allergy%20Clin%20Immunol&amp;title=Cellular%20and%20molecular%20immunologic%20mechanisms%20in%20patients%20with%20atopic%20dermatitis&amp;volume=138&amp;publication_year=2016&amp;pages=336-349&amp;pmid=27497276&amp;doi=10.1016/j.jaci.2016.06.010&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF7">
+<span class="label">7.</span><cite>English version of clinical practice guidelines for the management of atopic dermatitis 2021. Saeki H, Ohya Y, Furuta J, et al.  J Dermatol. 2022;49:0–75. doi: 10.1111/1346-8138.16527.</cite> [<a href="https://doi.org/10.1111/1346-8138.16527" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35996152/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Dermatol&amp;title=English%20version%20of%20clinical%20practice%20guidelines%20for%20the%20management%20of%20atopic%20dermatitis%202021&amp;volume=49&amp;publication_year=2022&amp;pages=0-75&amp;pmid=35996152&amp;doi=10.1111/1346-8138.16527&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF8">
+<span class="label">8.</span><cite>Strategies for using topical corticosteroids in children and adults with eczema. Lax SJ, Harvey J, Axon E, et al.  Cochrane Database Syst Rev. 2022;3:0. doi: 10.1002/14651858.CD013356.pub2.</cite> [<a href="https://doi.org/10.1002/14651858.CD013356.pub2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8916090/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35275399/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cochrane%20Database%20Syst%20Rev&amp;title=Strategies%20for%20using%20topical%20corticosteroids%20in%20children%20and%20adults%20with%20eczema&amp;volume=3&amp;publication_year=2022&amp;pages=0&amp;pmid=35275399&amp;doi=10.1002/14651858.CD013356.pub2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF9">
+<span class="label">9.</span><cite>The long-term safety of topical corticosteroids in atopic dermatitis: a systematic review. Harvey J, Lax SJ, Lowe A, et al.  Skin Health Dis. 2023;3:0. doi: 10.1002/ski2.268.</cite> [<a href="https://doi.org/10.1002/ski2.268" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10549798/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37799373/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Skin%20Health%20Dis&amp;title=The%20long-term%20safety%20of%20topical%20corticosteroids%20in%20atopic%20dermatitis:%20a%20systematic%20review&amp;volume=3&amp;publication_year=2023&amp;pages=0&amp;pmid=37799373&amp;doi=10.1002/ski2.268&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF10">
+<span class="label">10.</span><cite>Efficacy and safety of crisaborole ointment, a novel, nonsteroidal phosphodiesterase 4 (PDE4) inhibitor for the topical treatment of atopic dermatitis (AD) in children and adults. Paller AS, Tom WL, Lebwohl MG, et al.  J Am Acad Dermatol. 2016;75:494–503. doi: 10.1016/j.jaad.2016.05.046.</cite> [<a href="https://doi.org/10.1016/j.jaad.2016.05.046" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27417017/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=Efficacy%20and%20safety%20of%20crisaborole%20ointment,%20a%20novel,%20nonsteroidal%20phosphodiesterase%204%20(PDE4)%20inhibitor%20for%20the%20topical%20treatment%20of%20atopic%20dermatitis%20(AD)%20in%20children%20and%20adults&amp;volume=75&amp;publication_year=2016&amp;pages=494-503&amp;pmid=27417017&amp;doi=10.1016/j.jaad.2016.05.046&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF11">
+<span class="label">11.</span><cite>U.S. Food and Drug Administration. Crisaborole (EUCRISA) Food and Drug Administration 2020.  [
+Mar;
+2025 
+]. 2020. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/207695s012lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/207695s012lbl.pdf</a> <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/207695s012lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/207695s012lbl.pdf</a></cite>
+</li>
+<li id="REF12">
+<span class="label">12.</span><cite>U.S. Food and Drug Administration. Tacrolimus (PROTOPIC) Food and Drug Administration 2011.  [
+Mar;
+2025 
+]. 2011. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2011/050777s018lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2011/050777s018lbl.pdf</a> <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2011/050777s018lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2011/050777s018lbl.pdf</a></cite>
+</li>
+<li id="REF13">
+<span class="label">13.</span><cite>U.S. Food and Drug Administration. Pimecrolimus (ELIDEL) Food and Drug Administration 2014.  [
+Mar;
+2025 
+]. 2014. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/021302s018lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/021302s018lbl.pdf</a> <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/021302s018lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/021302s018lbl.pdf</a></cite>
+</li>
+<li id="REF14">
+<span class="label">14.</span><cite>U.S. Food and Drug Administration. Ruxolitinib (OPZELURA) Food and Drug Administration 2022.  [
+Mar;
+2025 
+]. 2022. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/215309s001lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/215309s001lbl.pdf</a> <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/215309s001lbl.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/215309s001lbl.pdf</a></cite>
+</li>
+<li id="REF15">
+<span class="label">15.</span><cite>Long-term management of moderate-to-severe atopic dermatitis with dupilumab and concomitant topical corticosteroids (LIBERTY AD CHRONOS): a 1-year, randomised, double-blinded, placebo-controlled, phase 3 trial. Blauvelt A, De Bruin-Weller M, Gooderham M, et al.  Lancet. 2017;389:2287–2303. doi: 10.1016/S0140-6736(17)31191-1.</cite> [<a href="https://doi.org/10.1016/S0140-6736(17)31191-1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28478972/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet&amp;title=Long-term%20management%20of%20moderate-to-severe%20atopic%20dermatitis%20with%20dupilumab%20and%20concomitant%20topical%20corticosteroids%20(LIBERTY%20AD%20CHRONOS):%20a%201-year,%20randomised,%20double-blinded,%20placebo-controlled,%20phase%203%20trial&amp;volume=389&amp;publication_year=2017&amp;pages=2287-2303&amp;pmid=28478972&amp;doi=10.1016/S0140-6736(17)31191-1&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF16">
+<span class="label">16.</span><cite>One-year safety and efficacy of tapinarof cream for the treatment of plaque psoriasis: results from the PSOARING 3 trial. Strober B, Stein Gold L, Bissonnette R, et al.  J Am Acad Dermatol. 2022;87:800–806. doi: 10.1016/j.jaad.2022.06.1171.</cite> [<a href="https://doi.org/10.1016/j.jaad.2022.06.1171" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35772599/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=One-year%20safety%20and%20efficacy%20of%20tapinarof%20cream%20for%20the%20treatment%20of%20plaque%20psoriasis:%20results%20from%20the%20PSOARING%C2%A03%20trial&amp;volume=87&amp;publication_year=2022&amp;pages=800-806&amp;pmid=35772599&amp;doi=10.1016/j.jaad.2022.06.1171&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF17">
+<span class="label">17.</span><cite>Phase 3 trials of tapinarof cream for plaque psoriasis. Lebwohl MG, Stein Gold L, Strober B, et al.  N Engl J Med. 2021;385:2219–2229. doi: 10.1056/NEJMoa2103629.</cite> [<a href="https://doi.org/10.1056/NEJMoa2103629" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34879448/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Phase%203%20trials%20of%20tapinarof%20cream%20for%20plaque%20psoriasis&amp;volume=385&amp;publication_year=2021&amp;pages=2219-2229&amp;pmid=34879448&amp;doi=10.1056/NEJMoa2103629&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF18">
+<span class="label">18.</span><cite>Tapinarof in the treatment of psoriasis: a review of the unique mechanism of action of a novel therapeutic aryl hydrocarbon receptor-modulating agent. Bissonnette R, Stein Gold L, Rubenstein DS, Tallman AM, Armstrong A. J Am Acad Dermatol. 2021;84:1059–1067. doi: 10.1016/j.jaad.2020.10.085.</cite> [<a href="https://doi.org/10.1016/j.jaad.2020.10.085" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33157177/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=Tapinarof%20in%20the%20treatment%20of%20psoriasis:%20a%20review%20of%20the%20unique%20mechanism%20of%20action%20of%20a%20novel%20therapeutic%20aryl%20hydrocarbon%20receptor-modulating%20agent&amp;volume=84&amp;publication_year=2021&amp;pages=1059-1067&amp;pmid=33157177&amp;doi=10.1016/j.jaad.2020.10.085&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF19">
+<span class="label">19.</span><cite>Tapinarof is a natural AhR agonist that resolves skin inflammation in mice and humans. Smith SH, Jayawickreme C, Rickard DJ, et al.  J Invest Dermatol. 2017;137:2110–2119. doi: 10.1016/j.jid.2017.05.004.</cite> [<a href="https://doi.org/10.1016/j.jid.2017.05.004" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28595996/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Invest%20Dermatol&amp;title=Tapinarof%20is%20a%20natural%20AhR%20agonist%20that%20resolves%20skin%20inflammation%20in%20mice%20and%20humans&amp;volume=137&amp;publication_year=2017&amp;pages=2110-2119&amp;pmid=28595996&amp;doi=10.1016/j.jid.2017.05.004&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF20">
+<span class="label">20.</span><cite>Tapinarof cream 1% once daily: significant efficacy in the treatment of moderate to severe atopic dermatitis in adults and children down to 2 years of age in the pivotal phase 3 ADORING trials. Silverberg JI, Eichenfield LF, Hebert AA, et al.  <a href="https://doi.org/10.1016/j.jaad.2024.05.023" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/j.jaad.2024.05.023</a>. J Am Acad Dermatol. 2024;91:457–465. doi: 10.1016/j.jaad.2024.05.023.</cite> [<a href="https://doi.org/10.1016/j.jaad.2024.05.023" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/38777187/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=Tapinarof%20cream%201%%20once%20daily:%20significant%20efficacy%20in%20the%20treatment%20of%20moderate%20to%20severe%20atopic%20dermatitis%20in%20adults%20and%20children%20down%20to%202%20years%20of%20age%20in%20the%20pivotal%20phase%203%20ADORING%20trials&amp;volume=91&amp;publication_year=2024&amp;pages=457-465&amp;pmid=38777187&amp;doi=10.1016/j.jaad.2024.05.023&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF21">
+<span class="label">21.</span><cite>Tapinarof cream for the treatment of atopic dermatitis: Efficacy and safety results from two Japanese phase 3 trials. Igarashi A, Tsuji G, Fukasawa S, Murata R, Yamane S. J Dermatol. 2024;51:1404–1413. doi: 10.1111/1346-8138.17451.</cite> [<a href="https://doi.org/10.1111/1346-8138.17451" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/39269202/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Dermatol&amp;title=Tapinarof%20cream%20for%20the%20treatment%20of%20atopic%20dermatitis:%20Efficacy%20and%20safety%20results%20from%20two%20Japanese%20phase%203%20trials&amp;volume=51&amp;publication_year=2024&amp;pages=1404-1413&amp;pmid=39269202&amp;doi=10.1111/1346-8138.17451&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF22">
+<span class="label">22.</span><cite>A phase 2, randomized, double-blind, vehicle-controlled trial of tapinarof cream in Japanese pediatric patients with atopic dermatitis. Igarashi A, Tsuji G, Murata R, Fukasawa S, Yamane S. J Dermatol. 2025;52:247–255. doi: 10.1111/1346-8138.17587.</cite> [<a href="https://doi.org/10.1111/1346-8138.17587" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC11807361/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/39676466/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Dermatol&amp;title=A%20phase%202,%20randomized,%20double-blind,%20vehicle-controlled%20trial%20of%20tapinarof%20cream%20in%20Japanese%20pediatric%20patients%20with%20atopic%20dermatitis&amp;volume=52&amp;publication_year=2025&amp;pages=247-255&amp;pmid=39676466&amp;doi=10.1111/1346-8138.17587&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF23">
+<span class="label">23.</span><cite>Efficacy and patient-reported outcomes from a phase 2b, randomized clinical trial of tapinarof cream for the treatment of adolescents and adults with atopic dermatitis. Paller AS, Stein Gold L, Soung J, Tallman AM, Rubenstein DS, Gooderham M. J Am Acad Dermatol. 2021;84:632–638. doi: 10.1016/j.jaad.2020.05.135.</cite> [<a href="https://doi.org/10.1016/j.jaad.2020.05.135" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32502588/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=Efficacy%20and%20patient-reported%20outcomes%20from%20a%20phase%202b,%20randomized%20clinical%20trial%20of%20tapinarof%20cream%20for%20the%20treatment%20of%20adolescents%20and%20adults%20with%20atopic%20dermatitis&amp;volume=84&amp;publication_year=2021&amp;pages=632-638&amp;pmid=32502588&amp;doi=10.1016/j.jaad.2020.05.135&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF24">
+<span class="label">24.</span><cite>The PRISMA 2020 statement: an updated guideline for reporting systematic reviews. Page MJ, McKenzie JE, Bossuyt PM, et al.  BMJ. 2021;372:0. doi: 10.1186/s13643-021-01626-4.</cite> [<a href="https://doi.org/10.1186/s13643-021-01626-4" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8008539/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33781348/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMJ&amp;title=The%20PRISMA%202020%20statement:%20an%20updated%20guideline%20for%20reporting%20systematic%20reviews&amp;volume=372&amp;publication_year=2021&amp;pages=0&amp;pmid=33781348&amp;doi=10.1186/s13643-021-01626-4&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF25">
+<span class="label">25.</span><cite>RoB 2: a revised tool for assessing risk of bias in randomised trials. Sterne JA, Savović J, Page MJ, et al.  BMJ. 2019;366:0. doi: 10.1136/bmj.l4898.</cite> [<a href="https://doi.org/10.1136/bmj.l4898" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31462531/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMJ&amp;title=RoB%202:%20a%20revised%20tool%20for%20assessing%20risk%20of%20bias%20in%20randomised%20trials&amp;volume=366&amp;publication_year=2019&amp;pages=0&amp;pmid=31462531&amp;doi=10.1136/bmj.l4898&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF26">
+<span class="label">26.</span><cite>Higgins J, Thomas J, Chandler J : Systematic Reviews of Interventions. Version, Welch V.A.Cochrane Handbook. pp. 6–4.</cite> [<a href="https://scholar.google.com/scholar_lookup?Higgins%20J,%20Thomas%20J,%20Chandler%20J%20:%20Systematic%20Reviews%20of%20Interventions.%20Version,%20Welch%20V.A.Cochrane%20Handbook.%20pp.%206%E2%80%934." class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF27">
+<span class="label">27.</span><cite>GRADEpro GDT: GRADEpro Guideline Development Tool. Hamilton, ON: Evidence Prime.  [
+Mar;
+2025 
+]. 2025. <a href="https://www.gradepro.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.gradepro.org/</a> <a href="https://www.gradepro.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.gradepro.org/</a></cite>
+</li>
+<li id="REF28">
+<span class="label">28.</span><cite>Risk-of-bias visualization (robvis): an R package and Shiny web app for visualizing risk-of-bias assessments. McGuinness LA, Higgins JPT. <a href="https://www.riskofbias.info/welcome/robvis-visualization-tool" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.riskofbias.info/welcome/robvis-visualization-tool</a>. Res Synth Methods. 2021;12:55–61. doi: 10.1002/jrsm.1411.</cite> [<a href="https://doi.org/10.1002/jrsm.1411" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32336025/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Res%20Synth%20Methods&amp;title=Risk-of-bias%20visualization%20(robvis):%20an%20R%20package%20and%20Shiny%20web%20app%20for%20visualizing%20risk-of-bias%20assessments&amp;volume=12&amp;publication_year=2021&amp;pages=55-61&amp;pmid=32336025&amp;doi=10.1002/jrsm.1411&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF29">
+<span class="label">29.</span><cite>Efficacy and safety of topical WBI-1001 in patients with mild to severe atopic dermatitis: results from a 12-week, multicentre, randomized, placebo-controlled double-blind trial. Bissonnette R, Poulin Y, Zhou Y, et al.  Br J Dermatol. 2012;166:853–860. doi: 10.1111/j.1365-2133.2011.10775.x.</cite> [<a href="https://doi.org/10.1111/j.1365-2133.2011.10775.x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/22182053/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Br%20J%20Dermatol&amp;title=Efficacy%20and%20safety%20of%20topical%20WBI-1001%20in%20patients%20with%20mild%20to%20severe%20atopic%20dermatitis:%20results%20from%20a%2012-week,%20multicentre,%20randomized,%20placebo-controlled%20double-blind%20trial&amp;volume=166&amp;publication_year=2012&amp;pages=853-860&amp;pmid=22182053&amp;doi=10.1111/j.1365-2133.2011.10775.x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF30">
+<span class="label">30.</span><cite>U.S. Food and Drug Administration. VTAMA® (tapinarof) cream, 1% prescribing information. Silver Spring, MD: U.S. Food and Drug Administration 2024.  [
+Mar;
+2025 
+]. 2024. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/215272s002lbl.pdf?utm_source=chatgpt.com" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/215272s002lbl.pdf?utm_source=chatgpt.com</a> <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/215272s002lbl.pdf?utm_source=chatgpt.com" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/215272s002lbl.pdf?utm_source=chatgpt.com</a></cite>
+</li>
+<li id="REF31">
+<span class="label">31.</span><cite>Tapinarof cream in the treatment of atopic dermatitis in children and adults a systematic review and meta-analysis. de Farias Santos ACF., Zamora FV, Cavalcante DVS, et al.  Discov Med. 2025;89:2.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Discov%20Med&amp;title=Tapinarof%20cream%20in%20the%20treatment%20of%20atopic%20dermatitis%20in%20children%20and%20adults%20a%20systematic%20review%20and%20meta-analysis&amp;volume=89&amp;publication_year=2025&amp;pages=2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF32">
+<span class="label">32.</span><cite>Skin clearance, duration of treatment-free interval, and safety of tapinarof cream 1% once daily: results from ADORING 3, a 48-week phase 3 open-label extension trial in adults and children down to 2 years of age with atopic dermatitis. Bissonnette R, Stein Gold L, Kircik L, et al.  J Am Acad Dermatol. 2025;93:707–714. doi: 10.1016/j.jaad.2025.05.1391.</cite> [<a href="https://doi.org/10.1016/j.jaad.2025.05.1391" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/40383273/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=Skin%20clearance,%20duration%20of%20treatment-free%20interval,%20and%20safety%20of%20tapinarof%20cream%201%%20once%20daily:%20results%20from%20ADORING%203,%20a%2048-week%20phase%203%20open-label%20extension%20trial%20in%20adults%20and%20children%20down%20to%202%20years%20of%20age%20with%20atopic%20dermatitis&amp;volume=93&amp;publication_year=2025&amp;pages=707-714&amp;pmid=40383273&amp;doi=10.1016/j.jaad.2025.05.1391&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="REF33">
+<span class="label">33.</span><cite>A phase 2, randomized dose-finding study of tapinarof (GSK2894512 cream) for the treatment of atopic dermatitis. Peppers J, Paller AS, Maeda-Chubachi T, Wu S, Robbins K, Gallagher K, Kraus JE. J Am Acad Dermatol. 2019;80:89–98. doi: 10.1016/j.jaad.2018.06.047.</cite> [<a href="https://doi.org/10.1016/j.jaad.2018.06.047" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30554600/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Acad%20Dermatol&amp;title=A%20phase%202,%20randomized%20dose-finding%20study%20of%20tapinarof%20(GSK2894512%20cream)%20for%20the%20treatment%20of%20atopic%20dermatitis&amp;volume=80&amp;publication_year=2019&amp;pages=89-98&amp;pmid=30554600&amp;doi=10.1016/j.jaad.2018.06.047&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from Cureus are provided here courtesy of <strong>Cureus Inc.</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="pmc-sidenav__container__close">
+            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.7759/cureus.91549"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/launch.svg" alt="View on publisher site icon" class="usa-icon usa-icon--size-3 usa-icon--link"/>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/cureus-0017-00000091549.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/file_download.svg" alt="Download PDF icon" class="usa-icon usa-icon--size-3 usa-icon--link"/>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (2.8 MB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/12494503/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/12494503/export/"
+                    >
+                       <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/format_quote.svg" alt="Cite icon" class="usa-icon usa-icon--size-3 usa-icon--white"/>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC12494503%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/action-bookmark-full.svg" alt="Collections icon" class="usa-icon usa-icon--size-3 usa-icon--white usa-icon--bookmark-full" hidden />
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/action-bookmark-empty.svg" alt="Collections icon" class="usa-icon usa-icon--size-3 usa-icon--white usa-icon--bookmark-empty" hidden />
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                        <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/share.svg" alt="Permalink icon" class="usa-icon usa-icon--size-3 usa-icon--white"/>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC12494503/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/content_copy.svg" alt="Copy icon" aria-hidden="true" class="usa-icon usa-icon--white" />
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC12494503/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC12494503/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/41050042/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC12494503/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/41050042/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC12494503/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/12494503/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                 <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/close.svg" alt="Close icon" class="usa-icon usa-icon--size-3 usa-icon--button" />
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/content_copy.svg" alt="Copy icon" class="usa-icon usa-icon--size-3 usa-icon--link" />
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/file_download.svg" alt="Download icon" aria-hidden="true" class="usa-icon usa-icon--size-3 usa-icon--link" />
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="D9mtdIoIZaasTdOwBIQgsupJ4XYP6HvW41AHq9mdY8fiCwmTetT0ASRAXWCOw1sg">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/img/usa-icons/arrow_upward.svg" alt="back to top icon" class="usa-icon usa-icon--size-3 order-0 usa-icon--white" />
+</button>
+    
+
+
+        
+    
+    <div id="icon-container" style="display: none;"></div>
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: 'https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/base-Cp_Il6gk.js"></script>
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/vendor-Co8Vdmw2.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/CACHE/js/output.4e25b6297b38.js"></script>
+
+    <script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/article-D47MIn9n.js"></script>
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/vendor-Co8Vdmw2.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/index-DXSA0fsx.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/9b1d9d87/var/data/static/assets/secure-cookie-Br6x5jtB.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+    
+    
+
+    </body>
+</html>

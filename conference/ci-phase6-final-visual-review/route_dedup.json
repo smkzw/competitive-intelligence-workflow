@@ -1,0 +1,97 @@
+{
+  "policy": "execution-used-provider-model-nodes-are-excluded-from-conference",
+  "linked_execution_task_id": "ci-phase6-final-render-evidence",
+  "linked": true,
+  "execution_evidence": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_01_followup_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_02_followup_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_02_followup_02_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_02_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_03_followup_01_stdout.txt",
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_03_stdout.txt"
+  ],
+  "excluded_route_nodes": [
+    {
+      "agent": "pi",
+      "provider": "openai-codex",
+      "model": "gpt-5.6-luna",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_01_followup_01_stdout.txt",
+      "reason": "effective execution route"
+    },
+    {
+      "agent": "grok",
+      "provider": "grok-build",
+      "model": "grok-4.6",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_01_stdout.txt",
+      "reason": "effective execution route"
+    },
+    {
+      "agent": "cursor",
+      "provider": "cursor-cli",
+      "model": "cursor-grok-4.6",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-phase6-final-render-evidence/worker_01_stdout.txt",
+      "reason": "execution route attempt"
+    }
+  ],
+  "effective_conference_roles": {
+    "visual_single_object": {
+      "agent": "pi",
+      "provider": "kimi-code",
+      "model": "k3-256k",
+      "effort": "medium",
+      "default_provider": "kimi-code",
+      "default_model": "k3-256k",
+      "default_effort": "medium",
+      "escalate_provider": "kimi-code",
+      "escalate_model": "k3-256k",
+      "escalate_effort": "medium",
+      "primary": {
+        "agent": "pi",
+        "provider": "kimi-code",
+        "model": "k3-256k",
+        "effort": "medium"
+      },
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-5.6-terra",
+          "effort": "medium"
+        }
+      ],
+      "execution_route": "Visual/HTML/PPT/visual-QC object: Pi/Kimi-Code/k3-256k medium -> Pi/openai-codex/gpt-5.6-terra medium",
+      "role": "single visual/design conference object; Codex chairs directly with no sub-venue chair",
+      "skills_enabled": true,
+      "tools_enabled": true,
+      "schedule": {
+        "policy": "beijing-day-night-v1",
+        "timezone": "Asia/Shanghai",
+        "period": "day",
+        "evaluated_at": "2026-08-30T16:28:55.254300+08:00"
+      },
+      "route_contract_frozen": true,
+      "deduplicated_against_execution": [
+        {
+          "provider": "cursor-cli",
+          "model": "cursor-grok-4.6"
+        },
+        {
+          "provider": "grok-build",
+          "model": "grok-4.6"
+        },
+        {
+          "provider": "openai-codex",
+          "model": "gpt-5.6-luna"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "policy": "beijing-day-night-v1",
+    "timezone": "Asia/Shanghai",
+    "period": "day",
+    "evaluated_at": "2026-08-30T16:28:55.254300+08:00"
+  },
+  "generated_at": "2026-08-30 16:28:55 CST"
+}

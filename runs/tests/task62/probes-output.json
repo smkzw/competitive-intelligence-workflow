@@ -1,0 +1,113 @@
+{
+  "probe1_guidance_parallel_and_lifecycle": {
+    "probe": "1_guidance_parallel_lifecycle",
+    "sup_lifecycle": "superseded",
+    "sup_label": "已替代（历史）",
+    "draft_lifecycle": "draft",
+    "draft_label": "草案",
+    "cur_lifecycle": "current",
+    "cur_label": "当前",
+    "default_ids": [
+      "cde-ad",
+      "fda-ad"
+    ],
+    "default_kept_superseded": false,
+    "default_kept_draft": false,
+    "default_has_cde_and_fda": true,
+    "default_has_superseded": false
+  },
+  "probe2_consensus_denominator_and_role": {
+    "probe": "2_consensus_denominator_role",
+    "basis_keys": [
+      {
+        "endpoint": [
+          "endpoint-easi-total-change-v1"
+        ],
+        "adoption": "not_selected",
+        "primary_trial_ids": [
+          "NCT00000004"
+        ],
+        "denominator": [
+          "NCT00000001",
+          "NCT00000002",
+          "NCT00000003",
+          "NCT00000004"
+        ]
+      },
+      {
+        "endpoint": [
+          "endpoint-easi75-response-v1"
+        ],
+        "adoption": "strict_majority",
+        "primary_trial_ids": [
+          "NCT00000001",
+          "NCT00000002",
+          "NCT00000003"
+        ],
+        "denominator": [
+          "NCT00000001",
+          "NCT00000002",
+          "NCT00000003",
+          "NCT00000004"
+        ]
+      }
+    ]
+  },
+  "probe3_longitudinal_vs_singletimepoint": {
+    "probe": "3_longitudinal_vs_singletimepoint",
+    "single_12_rows": [
+      "t-12",
+      "c-12"
+    ],
+    "single_24_rows": [
+      "t-24",
+      "c-24"
+    ],
+    "single_12_cross_pollution": false,
+    "single_24_cross_pollution": false,
+    "longitudinal_timepoints": [
+      12,
+      24
+    ],
+    "longitudinal_present": true
+  },
+  "probe4_forest_no_derive_parallel_arms": {
+    "probe": "4_forest_no_derive_parallel_arms",
+    "forest_view_count": 0,
+    "single_comparisons": [
+      {
+        "comparison_id": "cmp-1",
+        "treatment": "t1",
+        "control": "c1"
+      }
+    ]
+  },
+  "probe5_sort_default_unknown_reset": {
+    "probe": "5_sort_default_unknown_reset",
+    "default_stable_across_construction_order": true,
+    "default_first_two": [
+      "a-treatment",
+      "a-control"
+    ],
+    "default_last_two": [
+      "b-treatment",
+      "b-control"
+    ],
+    "signals": {
+      "lower-t": 2.0,
+      "lower-c": 2.0
+    },
+    "unknown_ids": [
+      "unknown-t",
+      "unknown-c"
+    ],
+    "reset_rows": [
+      "lower-t",
+      "lower-c",
+      "unknown-t",
+      "unknown-c"
+    ],
+    "cross_bucket_rejected": true,
+    "cross_bucket_error": "EfficacyViewError"
+  }
+}

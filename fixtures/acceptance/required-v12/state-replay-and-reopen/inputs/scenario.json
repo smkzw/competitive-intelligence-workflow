@@ -1,0 +1,29 @@
+{
+  "case_id": "state-replay-and-reopen",
+  "source_fixture": "fixtures/synthetic/host-smoke-v1/inputs/recovery-report-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "状态机在非法迁移和终态阻断时失败关闭，重放不重复副作用，只有显式 reopen 才能恢复目标对象。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "illegal-transition",
+      "description_zh": "未声明迁移被拒绝并记录可审计事件。"
+    },
+    {
+      "id": "idempotent-replay",
+      "description_zh": "检查点/事件重放不重复发布、移动、批准或删除。"
+    },
+    {
+      "id": "remaining-object-terminal-block",
+      "description_zh": "仍有对象未完成时项目保持正确终态阻断，不伪造完成。"
+    },
+    {
+      "id": "explicit-reopen",
+      "description_zh": "终态阻断必须由明确 reopen、目标重绑和版本证据后才能续跑。"
+    }
+  ]
+}

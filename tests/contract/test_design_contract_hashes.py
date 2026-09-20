@@ -210,8 +210,20 @@ def test_four_format_negative_boundaries_are_explicit() -> None:
 
 def test_project_profile_cannot_override_the_approved_v12_scope() -> None:
     profile = (DESIGN_PACKAGE / "project_profile.md").read_text(encoding="utf-8")
-    assert "用户当前指令 > 已批准 v1.2 > 本文件 > 通用 `core/track`" in profile
-    assert "不得缩减 v1.2 的报告范围" in profile
+    assert "用户当前指令 > 已批准 v1.2 及其已批准范围修订 > 本文件 > 通用 `core/track`" in profile
+    assert "不得缩减 A/B/C 报告范围" in profile
+
+
+def test_project_profile_requires_pre_delivery_visual_finalization_loop() -> None:
+    profile = (DESIGN_PACKAGE / "project_profile.md").read_text(encoding="utf-8")
+    for phrase in (
+        "定稿前视觉策划与美化闭环",
+        "视觉策划 → 候选生成 → 真实渲染与逐项诊断 → 定向美化并复测",
+        "最多进行三轮",
+        "审阅者与生成者不同",
+        "“无横向溢出”只是一项检查",
+    ):
+        assert phrase in profile
 
 
 def test_compatibility_stubs_cannot_reintroduce_a_second_contract_body() -> None:

@@ -1,0 +1,4 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"已批准的 B 类终点依据、疗效视图、筛选和默认选择合同"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"权威 Pydantic 边界失败关闭与 model_copy 对抗要求"}
+{"file":".trellis/spec/guides/code-reuse-thinking-guide.md","reason":"复用 Task 6.1 兼容合同，避免复制规则"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"固定事实行到后续图表、表格和证据抽屉的数据流"}

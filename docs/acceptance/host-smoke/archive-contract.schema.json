@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cms.example/schemas/host-smoke-archive.schema.json",
+  "title": "候选 Skill 包三宿主冒烟验收归档",
+  "description": "候选 .tar.zst 包 fresh-install 后的 Codex、Hermes、OMP host-smoke-v1 归档索引。回执正文仍必须分别符合 host-receipt.schema.json；本合同只描述归档索引和跨宿主验收结论。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "archive_kind",
+    "generated_at",
+    "bundle",
+    "fixture",
+    "receipts",
+    "checks",
+    "real_host_pass",
+    "acceptance_status",
+    "summary_zh"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "archive_kind": {"const": "candidate-bundle-host-smoke"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "bundle": {"$ref": "#/$defs/bundle"},
+    "fixture": {"$ref": "#/$defs/fixture"},
+    "receipts": {"$ref": "#/$defs/receipts"},
+    "checks": {"$ref": "#/$defs/checks"},
+    "real_host_pass": {"type": "boolean"},
+    "acceptance_status": {"enum": ["pending", "accepted", "rejected"]},
+    "summary_zh": {"type": "string", "minLength": 1}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"acceptance_status": {"const": "accepted"}}},
+      "then": {
+        "properties": {
+          "real_host_pass": {"const": true},
+          "checks": {
+            "properties": {
+              "bundle_verified": {"const": true},
+              "receipts_schema_valid": {"const": true},
+              "receipts_current": {"const": true},
+              "path_resolved": {"const": true},
+              "package_digest_consistent": {"const": true},
+              "case_digest_consistent": {"const": true},
+              "semantic_state_consistent": {"const": true},
+              "process_session_run_distinct": {"const": true},
+              "no_draft_assertion": {"const": true},
+              "html_only": {"const": true}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "package_manifest_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "package_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "case_digest"],
+      "properties": {
+        "case_id": {"const": "host-smoke-v1"},
+        "case_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["codex", "hermes", "omp"],
+      "properties": {
+        "codex": {"$ref": "#/$defs/receipt_path"},
+        "hermes": {"$ref": "#/$defs/receipt_path"},
+        "omp": {"$ref": "#/$defs/receipt_path"}
+      }
+    },
+    "receipt_path": {
+      "type": "string",
+      "pattern": "^(codex|hermes|omp)\\.json$"
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_verified",
+        "receipts_schema_valid",
+        "receipts_current",
+        "path_resolved",
+        "package_digest_consistent",
+        "case_digest_consistent",
+        "semantic_state_consistent",
+        "process_session_run_distinct",
+        "no_draft_assertion",
+        "html_only"
+      ],
+      "properties": {
+        "bundle_verified": {"type": "boolean"},
+        "receipts_schema_valid": {"type": "boolean"},
+        "receipts_current": {"type": "boolean"},
+        "path_resolved": {"type": "boolean"},
+        "package_digest_consistent": {"type": "boolean"},
+        "case_digest_consistent": {"type": "boolean"},
+        "semantic_state_consistent": {"type": "boolean"},
+        "process_session_run_distinct": {"type": "boolean"},
+        "no_draft_assertion": {"type": "boolean"},
+        "html_only": {"type": "boolean"}
+      }
+    }
+  }
+}

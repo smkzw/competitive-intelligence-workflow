@@ -1,0 +1,161 @@
+{
+  "agent": "codebuddy",
+  "requested_agent": "codebuddy",
+  "role_id": "codebuddy_connectivity",
+  "requested_provider": "codebuddy-cli",
+  "requested_model": "hy3-x",
+  "requested_effort": "max",
+  "explicit_route": true,
+  "requested_route_warnings": [],
+  "scheduled_route_manifest": null,
+  "schedule_reconciliation": {
+    "enabled": false,
+    "packet_period": null,
+    "active_period": null,
+    "dispatch_period": "night",
+    "changed": false,
+    "session_policy": "preserve_started_session; re-resolve_before_new_session",
+    "reason": "no scheduled route manifest"
+  },
+  "schedule_reconciliation_events": [],
+  "schedule_manifest_error": null,
+  "effective_agent": "codebuddy",
+  "effective_provider": "codebuddy-cli",
+  "effective_model": "hy3-x",
+  "effective_effort": "max",
+  "route_constraints": {
+    "policy": "scheduled-route-v2",
+    "explicit_route": true,
+    "primary_route_changed": false,
+    "route_rewritten": false,
+    "constraint_events": [],
+    "events": [],
+    "primary_replaced": false,
+    "requested_primary": {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "hy3-x",
+      "effort": "max",
+      "fallbacks": []
+    },
+    "effective_primary": {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "hy3-x",
+      "effort": "max"
+    }
+  },
+  "round_count": 1,
+  "estimated_input_context_tokens": 78,
+  "round_policy": "single initial pass; Codex decides whether to add same-session follow-ups",
+  "fallback": null,
+  "declared_fallback_candidates": [],
+  "fallback_candidates": [],
+  "rounds": [
+    {
+      "round": 1,
+      "command": [
+        "/Users/smkzw/.local/bin/codebuddy",
+        "-p",
+        "--model",
+        "hy3-x",
+        "--effort",
+        "max",
+        "--max-turns",
+        "30",
+        "--output-format",
+        "stream-json",
+        "--permission-mode",
+        "plan",
+        "Delegated mode. MODE=TEST. This is only a connectivity test for the exact user-selected route `codebuddy/hy3-x`.\n\nDo not modify files, do not browse, and do not start another agent. Work in the current workspace. Confirm that tools remain available, then reply with exactly:\n\n`TASK82_CODEBUDDY_VISUAL_ROUTE_OK`\n"
+      ],
+      "returncode": 0,
+      "stdout": "{\"type\":\"system\",\"subtype\":\"init\",\"uuid\":\"c7973e65-60e9-4bbb-9693-c23be411be28\",\"session_id\":\"c7973e65-60e9-4bbb-9693-c23be411be28\",\"apiKeySource\":\"copilot.tencent.com\",\"cwd\":\"/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow\",\"tools\":[\"mcp__kimi-cu__click\",\"mcp__kimi-cu__drag\",\"mcp__kimi-cu__get_app_state\",\"mcp__kimi-cu__list_apps\",\"mcp__kimi-cu__perform_secondary_action\",\"mcp__kimi-cu__press_key\",\"mcp__kimi-cu__scroll\",\"mcp__kimi-cu__select_text\",\"mcp__kimi-cu__set_value\",\"mcp__kimi-cu__type_text\",\"mcp__camofox__camofox_click\",\"mcp__camofox__camofox_close_tab\",\"mcp__camofox__camofox_create_tab\",\"mcp__camofox__camofox_evaluate\",\"mcp__camofox__camofox_import_cookies\",\"mcp__camofox__camofox_list_tabs\",\"mcp__camofox__camofox_navigate\",\"mcp__camofox__camofox_screenshot\",\"mcp__camofox__camofox_scroll\",\"mcp__camofox__camofox_snapshot\",\"mcp__camofox__camofox_type\",\"Agent\",\"Read\",\"Write\",\"Edit\",\"Bash\",\"PowerShell\",\"Glob\",\"Grep\",\"EnterPlanMode\",\"ExitPlanMode\",\"TaskCreate\",\"TaskGet\",\"TaskUpdate\",\"TaskList\",\"WebFetch\",\"WebSearch\",\"TaskStop\",\"TaskOutput\",\"Skill\",\"SkillManage\",\"AskUserQuestion\",\"AskUserForStructuredInput\",\"StructuredOutput\",\"ToolSearch\",\"DeferExecuteTool\",\"SendMessage\",\"SendUserMessage\",\"TeamCreate\",\"TeamDelete\",\"NotebookEdit\",\"LSP\",\"ImageGen\",\"VideoGen\",\"Artifact\",\"ArtifactControl\",\"EnterWorktree\",\"LeaveWorktree\",\"CronCreate\",\"CronDelete\",\"CronList\",\"WeChatReply\",\"WeComReply\",\"PushNotification\",\"ReportFindings\",\"ComputerUse\",\"ListMcpResources\",\"ReadMcpResource\",\"WaitForMcpServers\",\"Workflow\",\"Monitor\",\"REPL\",\"MessageColleague\",\"SpeakInChannel\"],\"mcp_servers\":[{\"name\":\"kimi-cu\",\"status\":\"connected\"},{\"name\":\"camofox\",\"status\":\"connected\"}],\"model\":\"hy3-x\",\"permissionMode\":\"plan\",\"slash_commands\":[\"add-dir\",\"agents\",\"background\",\"bg\",\"branch\",\"btw\",\"clear\",\"config\",\"autocompact\",\"context\",\"cost\",\"doctor\",\"exit\",\"export\",\"feedback\",\"fork\",\"fork-bg\",\"gateway\",\"goal\",\"remote-control\",\"help\",\"hooks\",\"keybindings\",\"ide\",\"install-github-app\",\"login\",\"logout\",\"mcp\",\"memory\",\"migrate-installer\",\"model\",\"model:lite\",\"model:reasoning\",\"permissions\",\"plan\",\"pr-comments\",\"release-notes\",\"rename\",\"resume\",\"review\",\"rewind\",\"sandbox\",\"skills\",\"status\",\"terminal-setup\",\"upgrade\",\"vim\",\"tasks\",\"todos\",\"plugin\",\"reload-plugins\",\"plugin-validate\",\"theme\",\"output-style\",\"stats\",\"workflows\",\"effort\",\"deep-research\",\"simplify\",\"code-review\",\"verify\",\"copy\",\"debug\",\"model:text-to-image\",\"model:text-to-video\",\"model:image-to-video\",\"init\",\"compact\",\"_compact\",\"statusline\",\"security-review\",\"commit\",\"commit-push-pr\",\"insights\",\"trellis:continue\",\"trellis:finish-work\"],\"output_style\":\"default\",\"__timestamp\":\"2026-08-30T20:24:40.904Z\",\"_requestId\":\"d7d6c0155c5743f7409edb96afae7b66\"}\n{\"type\":\"system\",\"subtype\":\"status\",\"status\":null,\"uuid\":\"67479e45-4914-4706-b51b-9787e542324e\",\"session_id\":\"c7973e65-60e9-4bbb-9693-c23be411be28\",\"_meta\":{\"traceparent\":\"00-d7d6c0155c5743f7409edb96afae7b66-ad06463e70337eea-01\",\"baggage\":\"codebuddy.session_id=c7973e65-60e9-4bbb-9693-c23be411be28,codebuddy.conversation_request_id=d7d6c0155c5743f7409edb96afae7b66\"},\"__timestamp\":\"2026-08-30T20:24:40.911Z\",\"_requestId\":\"d7d6c0155c5743f7409edb96afae7b66\"}\n{\"type\":\"file-history-snapshot\",\"id\":\"361f164f-3eb0-4afe-a78d-895815e67a22\",\"timestamp\":1788121480011,\"isSnapshotUpdate\":false,\"snapshot\":{\"messageId\":\"01a05458-7b0d-7e00-a2f9-01b190588306\",\"trackedFileBackups\":{}},\"_meta\":{\"traceparent\":\"00-d7d6c0155c5743f7409edb96afae7b66-ad06463e70337eea-01\",\"baggage\":\"codebuddy.session_id=c7973e65-60e9-4bbb-9693-c23be411be28,codebuddy.conversation_request_id=d7d6c0155c5743f7409edb96afae7b66\"},\"__timestamp\":\"2026-08-30T20:24:40.911Z\",\"_requestId\":\"d7d6c0155c5743f7409edb96afae7b66\"}\n{\"type\":\"assistant\",\"uuid\":\"01a05458-8cdd-7078-8758-236f00dbac42\",\"session_id\":\"c7973e65-60e9-4bbb-9693-c23be411be28\",\"message\":{\"id\":\"01a05458-8cdd-7078-8758-236f00dbac42\",\"content\":[{\"type\":\"text\",\"text\":\"Trellis SessionStart ✓\\n\\nConnectivity confirmed: tools available, workspace loaded, no files modified, no subagents spawned.\\n\\n`TASK82_CODEBUDDY_VISUAL_ROUTE_OK`\"}],\"model\":\"hy3-x\",\"role\":\"assistant\",\"stop_reason\":null,\"stop_sequence\":null,\"type\":\"message\",\"usage\":{\"input_tokens\":30988,\"output_tokens\":43,\"cache_creation_input_tokens\":30476,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null}},\"parent_tool_use_id\":null,\"_meta\":{\"traceparent\":\"00-d7d6c0155c5743f7409edb96afae7b66-ad06463e70337eea-01\",\"baggage\":\"codebuddy.session_id=c7973e65-60e9-4bbb-9693-c23be411be28,codebuddy.conversation_request_id=d7d6c0155c5743f7409edb96afae7b66\"},\"__timestamp\":\"2026-08-30T20:24:44.512Z\",\"_requestId\":\"d7d6c0155c5743f7409edb96afae7b66\"}\n{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"result\":\"Trellis SessionStart ✓\\n\\nConnectivity confirmed: tools available, workspace loaded, no files modified, no subagents spawned.\\n\\n`TASK82_CODEBUDDY_VISUAL_ROUTE_OK`\",\"uuid\":\"01a05458-8d5f-7045-9c02-14b4b35d85ae\",\"session_id\":\"c7973e65-60e9-4bbb-9693-c23be411be28\",\"duration_ms\":3741,\"duration_api_ms\":3741,\"num_turns\":2,\"total_cost_usd\":0,\"usage\":{\"input_tokens\":30988,\"output_tokens\":43,\"cache_creation_input_tokens\":30476,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null},\"permission_denials\":[],\"modelUsage\":{\"hy3-x\":{\"inputTokens\":0,\"outputTokens\":43,\"cacheReadInputTokens\":512,\"cacheCreationInputTokens\":30476,\"contextWindow\":192000,\"maxOutputTokens\":64000}},\"_meta\":{\"codebuddy.ai/contextUsed\":30988,\"codebuddy.ai/usageByCategory\":{\"systemPrompt\":1909,\"conversation\":4946,\"tools\":23325,\"mcp\":92,\"skills\":716,\"version\":1},\"traceparent\":\"00-d7d6c0155c5743f7409edb96afae7b66-ad06463e70337eea-01\",\"baggage\":\"codebuddy.session_id=c7973e65-60e9-4bbb-9693-c23be411be28,codebuddy.conversation_request_id=d7d6c0155c5743f7409edb96afae7b66\"},\"__timestamp\":\"2026-08-30T20:24:44.647Z\",\"_requestId\":\"d7d6c0155c5743f7409edb96afae7b66\"}\n",
+      "output": "Trellis SessionStart ✓\n\nConnectivity confirmed: tools available, workspace loaded, no files modified, no subagents spawned.\n\n`TASK82_CODEBUDDY_VISUAL_ROUTE_OK`",
+      "stderr": "",
+      "duration_seconds": 5.504,
+      "timed_out": false,
+      "session_id": "c7973e65-60e9-4bbb-9693-c23be411be28",
+      "tool_call_count": 0,
+      "tool_result_count": 0,
+      "parsed_event_count": 5,
+      "codebuddy_effort": "max",
+      "requested_max_turns": 30,
+      "requested_internal_turns": 30,
+      "input_chars": 311,
+      "estimated_input_tokens": 78,
+      "output_chars": 159,
+      "estimated_output_tokens": 40,
+      "input_budget": {
+        "char_limit": 240000,
+        "status": "within"
+      },
+      "output_budget": {
+        "soft_char_limit": 120000,
+        "hard_char_limit": 320000,
+        "status": "within"
+      },
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "hy3-x",
+      "explicit_route": true,
+      "health": {
+        "agent": "codebuddy",
+        "provider": "codebuddy-cli",
+        "model": "hy3-x",
+        "checked_at": 1788121474.898196,
+        "cached": false,
+        "healthy": true,
+        "preflight_kind": "diagnostic_catalog_or_auth_probe",
+        "health_command": [
+          "/Users/smkzw/.local/bin/codebuddy",
+          "-p",
+          "--model",
+          "hy3-x",
+          "--effort",
+          "max",
+          "--max-turns",
+          "2",
+          "--output-format",
+          "stream-json",
+          "--permission-mode",
+          "plan",
+          "Reply exactly CODEX_CODEBUDDY_HEALTH_OK. Do not modify files; tools remain available if the CLI requires them."
+        ],
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 4.257,
+        "stdout_tail": "_tokens\":25469,\"output_tokens\":10,\"cache_creation_input_tokens\":24957,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null}},\"parent_tool_use_id\":null,\"_meta\":{\"traceparent\":\"00-ede350bfc6b0978d8de2314d4f24ac08-5f83d523ed8c5f0b-01\",\"baggage\":\"codebuddy.session_id=967e487e-7b27-4dc3-8a55-4a1df0256186,codebuddy.conversation_request_id=ede350bfc6b0978d8de2314d4f24ac08\"},\"__timestamp\":\"2026-08-30T20:24:39.012Z\",\"_requestId\":\"ede350bfc6b0978d8de2314d4f24ac08\"} {\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"result\":\"CODEX_CODEBUDDY_HEALTH_OK\",\"uuid\":\"01a05458-77de-7508-bcf7-5111e7f7576f\",\"session_id\":\"967e487e-7b27-4dc3-8a55-4a1df0256186\",\"duration_ms\":2994,\"duration_api_ms\":2994,\"num_turns\":2,\"total_cost_usd\":0,\"usage\":{\"input_tokens\":25469,\"output_tokens\":10,\"cache_creation_input_tokens\":24957,\"cache_read_input_tokens\":512,\"cache_creation\":null,\"server_tool_use\":null,\"service_tier\":null},\"permission_denials\":[],\"modelUsage\":{\"hy3-x\":{\"inputTokens\":0,\"outputTokens\":10,\"cacheReadInputTokens\":512,\"cacheCreationInputTokens\":24957,\"contextWindow\":192000,\"maxOutputTokens\":64000}},\"_meta\":{\"codebuddy.ai/contextUsed\":25469,\"codebuddy.ai/usageByCategory\":{\"systemPrompt\":1775,\"conversation\":2083,\"tools\":21190,\"mcp\":85,\"skills\":336,\"version\":1},\"traceparent\":\"00-ede350bfc6b0978d8de2314d4f24ac08-5f83d523ed8c5f0b-01\",\"baggage\":\"codebuddy.session_id=967e487e-7b27-4dc3-8a55-4a1df0256186,codebuddy.conversation_request_id=ede350bfc6b0978d8de2314d4f24ac08\"},\"__timestamp\":\"2026-08-30T20:24:39.142Z\",\"_requestId\":\"ede350bfc6b0978d8de2314d4f24ac08\"}",
+        "stderr_tail": "",
+        "tool_call_count": 0,
+        "session_id": "967e487e-7b27-4dc3-8a55-4a1df0256186",
+        "observation": "CodeBuddy returned the authenticated health marker."
+      }
+    }
+  ],
+  "health_check": true,
+  "health_ttl_seconds": 300,
+  "require_execution_report": false,
+  "execution_dispatch": false,
+  "grok_permission_policy": {
+    "requested": "plan",
+    "effective": "plan",
+    "adjusted_for_execution_manager": false
+  },
+  "budget_policy": {
+    "external_timeout_seconds": 600,
+    "requested_internal_turns": 30,
+    "input_char_limit": 240000,
+    "output_soft_char_limit": 120000,
+    "output_hard_char_limit": 320000,
+    "same_session_recovery_passes": 2
+  },
+  "wait_policy": {
+    "mode": "single hard wait; no fixed controller polling",
+    "runner_timeout_seconds": 600,
+    "parent_native_wait_max_ms": 3600000,
+    "same_session_recovery_passes": 2,
+    "fallback_after": "terminal failure, exhausted same-session recovery, or failed acceptance; latency alone is not failure"
+  },
+  "dispatch_started_at": 1788121474.898048
+}

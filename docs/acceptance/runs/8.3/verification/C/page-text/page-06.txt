@@ -1,0 +1,38 @@
+续表 · 设计图谱完整表
+
+         产品          登记号          试验          设计要素      内容                         时间点        量表     披露
+                                                                                                     已报告
+         Lebrikizumab NCT04178967 ADvocate2   试验组干预     Lebrikizumab，每2周1次         未公开        不适用
+                                                                                                     数值
+                                                        双盲诱导期第16周达到EASI-75应答的受试者                     已报告
+         Lebrikizumab NCT05149313 ADvantage   主要终点定义                               第16周       EASI
+                                                        比例                                           数值
+                                                                                                     已报告
+         Lebrikizumab NCT05149313 ADvantage   随机与盲法     四盲、平行分组                    未公开        不适用
+                                                                                                     数值
+                                                        诱导期接受Lebrikizumab 250      诱导期第16周；          已报告
+         Lebrikizumab NCT05149313 ADvantage   访视与随访                                           不适用
+                                                        mg每2周1次者，维持期继续同剂量给药        维持期第52周           数值
+                                                                                                     已报告
+         Lebrikizumab NCT05149313 ADvantage   目标人群      青少年与成人；年龄≥12岁              知情同意时      不适用
+                                                                                                     数值
+                                              计划或实际样本                                                已报告
+         Lebrikizumab NCT05149313 ADvantage             331 例                      未公开        不适用
+                                              量                                                      数值
+                                                                                                     已报告
+         Lebrikizumab NCT05149313 ADvantage   主要终点时间点   第16周                       第16周       不适用
+                                                                                                     数值
+                                                                                                     已报告
+         Lebrikizumab NCT05149313 ADvantage   对照干预      Lebrikizumab匹配安慰剂          未公开        不适用
+                                                                                                     数值
+                                                                                                     已报告
+         Lebrikizumab NCT05149313 ADvantage   给药方案      诱导期每2周给药；主要治疗期至第16周        基线至第16周    不适用
+                                                                                                     数值
+                                                                                                     已报告
+         Lebrikizumab NCT05149313 ADvantage   试验组干预     Lebrikizumab               未公开        不适用
+                                                                                                     数值
+
+
+
+
+                            特应性皮炎临床试验设计比较 · 第 6 页

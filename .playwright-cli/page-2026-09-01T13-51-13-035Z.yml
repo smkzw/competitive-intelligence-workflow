@@ -1,0 +1,1180 @@
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - link "康哲药业" [ref=f1e4] [cursor=pointer]:
+        - /url: overview.html
+        - img "康哲药业" [ref=f1e5]
+      - generic [ref=f1e6]: 阵发性睡眠性血红蛋白尿临床试验结果比较
+      - navigation "主导航" [ref=f1e7]:
+        - link "首页" [ref=f1e9] [cursor=pointer]:
+          - /url: overview.html
+        - button "疗效与安全性" [ref=f1e11] [cursor=pointer]
+        - button "基线与人群" [ref=f1e15] [cursor=pointer]
+        - button "试验完成情况" [ref=f1e19] [cursor=pointer]
+        - button "试验与证据" [ref=f1e23] [cursor=pointer]
+      - generic [ref=f1e26]:
+        - generic [ref=f1e27]: 全局搜索
+        - searchbox "全局搜索" [ref=f1e28]
+  - main [ref=f1e30]:
+    - generic [ref=f1e31]:
+      - heading "基线与人群总览" [level=1] [ref=f1e32]
+      - generic "页面范围" [ref=f1e33]:
+        - generic [ref=f1e34]: 适应症：阵发性睡眠性血红蛋白尿
+        - generic [ref=f1e35]: 观察截止：2026-07-31
+    - generic "快速筛选产品" [ref=f1e36]:
+      - generic [ref=f1e38]:
+        - button "伊普可泮（iptacopan）" [ref=f1e39] [cursor=pointer]
+        - button "pegcetacoplan（C3抑制剂）" [ref=f1e40] [cursor=pointer]
+        - button "达尼可泮（danicopan）" [ref=f1e41] [cursor=pointer]
+        - button "拉武利尤单抗（ravulizumab）" [ref=f1e42] [cursor=pointer]
+        - button "可伐利单抗（crovalimab）" [ref=f1e43] [cursor=pointer]
+    - group [ref=f1e44]:
+      - generic "筛选条件 未设置筛选 +" [ref=f1e45] [cursor=pointer]:
+        - generic [ref=f1e46]: 筛选条件
+        - generic [ref=f1e47]: 未设置筛选
+        - text: +
+    - region [ref=f1e48]:
+      - heading "基线特征" [level=2] [ref=f1e51]
+      - paragraph [ref=f1e52]: 点击数值查看数据依据。
+      - generic [ref=f1e53]:
+        - generic [ref=f1e54]:
+          - heading "基线样本量｜基线变量（人）" [level=3] [ref=f1e55]
+          - generic "组别图例" [ref=f1e56]:
+            - generic [ref=f1e57]: 治疗组
+            - generic [ref=f1e59]: 对照组
+          - img "基线样本量｜基线变量（人） 图形" [ref=f1e61]:
+            - img [ref=f1e63]:
+              - generic [ref=f1e65]:
+                - generic [ref=f1e66]: 人
+                - generic [ref=f1e67]: "0"
+                - generic [ref=f1e68]: "30"
+                - generic [ref=f1e69]: "60"
+                - generic [ref=f1e70]: "90"
+                - generic [ref=f1e71]: "120"
+                - generic [ref=f1e72]: "150"
+                - generic [ref=f1e73]: 基线样本量
+                - generic [ref=f1e74]: 治疗组
+                - generic [ref=f1e75]: 基线样本量
+                - generic [ref=f1e76]: 对照组
+                - generic [ref=f1e77]: 基线样本量
+                - generic [ref=f1e78]: 治疗组
+                - generic [ref=f1e79]: 基线样本量
+                - generic [ref=f1e80]: 治疗组
+                - generic [ref=f1e81]: 基线样本量
+                - generic [ref=f1e82]: 对照组
+                - generic [ref=f1e83]: 基线样本量
+                - generic [ref=f1e84]: 治疗组
+                - generic [ref=f1e85]: 基线样本量
+                - generic [ref=f1e86]: 对照组
+                - generic [ref=f1e87]: 基线样本量
+                - generic [ref=f1e88]: 治疗组
+                - generic [ref=f1e89]: 基线样本量
+                - generic [ref=f1e90]: 对照组
+                - generic [ref=f1e91]: 基线样本量
+                - generic [ref=f1e92]: 治疗组
+                - generic [ref=f1e93]: 基线样本量
+                - generic [ref=f1e94]: 对照组
+                - generic [ref=f1e106]: "62"
+                - generic [ref=f1e107]: "35"
+                - generic [ref=f1e108]: "40"
+                - generic [ref=f1e109]: "41"
+                - generic [ref=f1e110]: "39"
+                - generic [ref=f1e111]: "42"
+                - generic [ref=f1e112]: "21"
+                - generic [ref=f1e113]: "125"
+                - generic [ref=f1e114]: "121"
+                - generic [ref=f1e115]: "135"
+                - generic [ref=f1e116]: "69"
+            - button "查看数值 62 的数据依据" [ref=f1e117] [cursor=pointer]
+            - button "查看数值 35 的数据依据" [ref=f1e118] [cursor=pointer]
+            - button "查看数值 40 的数据依据" [ref=f1e119] [cursor=pointer]
+            - button "查看数值 41 的数据依据" [ref=f1e120] [cursor=pointer]
+            - button "查看数值 39 的数据依据" [ref=f1e121] [cursor=pointer]
+            - button "查看数值 42 的数据依据" [ref=f1e122] [cursor=pointer]
+            - button "查看数值 21 的数据依据" [ref=f1e123] [cursor=pointer]
+            - button "查看数值 125 的数据依据" [ref=f1e124] [cursor=pointer]
+            - button "查看数值 121 的数据依据" [ref=f1e125] [cursor=pointer]
+            - button "查看数值 135 的数据依据" [ref=f1e126] [cursor=pointer]
+            - button "查看数值 69 的数据依据" [ref=f1e127] [cursor=pointer]
+          - table [ref=f1e129]:
+            - caption [ref=f1e130]: 基线与人群总览数据表
+            - rowgroup [ref=f1e131]:
+              - row [ref=f1e132]:
+                - columnheader "产品" [ref=f1e133]
+                - columnheader "试验" [ref=f1e134]
+                - columnheader "基线变量" [ref=f1e135]
+                - columnheader "组别" [ref=f1e136]
+                - columnheader "时间点" [ref=f1e137]
+                - columnheader "分析人群" [ref=f1e138]
+                - columnheader "统计形式" [ref=f1e139]
+                - columnheader "分子" [ref=f1e140]
+                - columnheader "分母" [ref=f1e141]
+                - columnheader "数值" [ref=f1e142]
+                - columnheader "单位" [ref=f1e143]
+                - columnheader "披露状态" [ref=f1e144]
+            - rowgroup [ref=f1e145]:
+              - row [ref=f1e146]:
+                - cell [ref=f1e147]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e148] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e149]:
+                  - link "APPLY-PNH" [ref=f1e150] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "基线样本量" [ref=f1e151] [cursor=pointer]
+                - button "治疗组" [ref=f1e152] [cursor=pointer]
+                - button "基线" [ref=f1e153] [cursor=pointer]
+                - button "全分析集" [ref=f1e154] [cursor=pointer]
+                - button "样本量" [ref=f1e155] [cursor=pointer]
+                - button "未列示" [ref=f1e156] [cursor=pointer]
+                - button "62" [ref=f1e157] [cursor=pointer]
+                - button "62" [ref=f1e158] [cursor=pointer]
+                - button "人" [ref=f1e159] [cursor=pointer]
+                - button "已报告值" [ref=f1e160] [cursor=pointer]
+              - row [ref=f1e161]:
+                - cell [ref=f1e162]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e163] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e164]:
+                  - link "APPLY-PNH" [ref=f1e165] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "基线样本量" [ref=f1e166] [cursor=pointer]
+                - button "对照组" [ref=f1e167] [cursor=pointer]
+                - button "基线" [ref=f1e168] [cursor=pointer]
+                - button "全分析集" [ref=f1e169] [cursor=pointer]
+                - button "样本量" [ref=f1e170] [cursor=pointer]
+                - button "未列示" [ref=f1e171] [cursor=pointer]
+                - button "35" [ref=f1e172] [cursor=pointer]
+                - button "35" [ref=f1e173] [cursor=pointer]
+                - button "人" [ref=f1e174] [cursor=pointer]
+                - button "已报告值" [ref=f1e175] [cursor=pointer]
+              - row [ref=f1e176]:
+                - cell [ref=f1e177]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e178] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e179]:
+                  - link "APPOINT-PNH" [ref=f1e180] [cursor=pointer]:
+                    - /url: trials/nct04820530.html
+                - button "基线样本量" [ref=f1e181] [cursor=pointer]
+                - button "治疗组" [ref=f1e182] [cursor=pointer]
+                - button "基线" [ref=f1e183] [cursor=pointer]
+                - button "全分析集" [ref=f1e184] [cursor=pointer]
+                - button "样本量" [ref=f1e185] [cursor=pointer]
+                - button "未列示" [ref=f1e186] [cursor=pointer]
+                - button "40" [ref=f1e187] [cursor=pointer]
+                - button "40" [ref=f1e188] [cursor=pointer]
+                - button "人" [ref=f1e189] [cursor=pointer]
+                - button "已报告值" [ref=f1e190] [cursor=pointer]
+              - row [ref=f1e191]:
+                - cell [ref=f1e192]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e193] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e194]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e195] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "基线样本量" [ref=f1e196] [cursor=pointer]
+                - button "治疗组" [ref=f1e197] [cursor=pointer]
+                - button "基线" [ref=f1e198] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e199] [cursor=pointer]
+                - button "样本量" [ref=f1e200] [cursor=pointer]
+                - button "未列示" [ref=f1e201] [cursor=pointer]
+                - button "未列示" [ref=f1e202] [cursor=pointer]
+                - button "41" [ref=f1e203] [cursor=pointer]
+                - button "人" [ref=f1e204] [cursor=pointer]
+                - button "已报告值" [ref=f1e205] [cursor=pointer]
+              - row [ref=f1e206]:
+                - cell [ref=f1e207]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e208] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e209]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e210] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "基线样本量" [ref=f1e211] [cursor=pointer]
+                - button "对照组" [ref=f1e212] [cursor=pointer]
+                - button "基线" [ref=f1e213] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e214] [cursor=pointer]
+                - button "样本量" [ref=f1e215] [cursor=pointer]
+                - button "未列示" [ref=f1e216] [cursor=pointer]
+                - button "未列示" [ref=f1e217] [cursor=pointer]
+                - button "39" [ref=f1e218] [cursor=pointer]
+                - button "人" [ref=f1e219] [cursor=pointer]
+                - button "已报告值" [ref=f1e220] [cursor=pointer]
+              - row [ref=f1e221]:
+                - cell [ref=f1e222]:
+                  - link "达尼可泮（danicopan）" [ref=f1e223] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e224]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e225] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "基线样本量" [ref=f1e226] [cursor=pointer]
+                - button "治疗组" [ref=f1e227] [cursor=pointer]
+                - button "基线" [ref=f1e228] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e229] [cursor=pointer]
+                - button "样本量" [ref=f1e230] [cursor=pointer]
+                - button "未列示" [ref=f1e231] [cursor=pointer]
+                - button "未列示" [ref=f1e232] [cursor=pointer]
+                - button "42" [ref=f1e233] [cursor=pointer]
+                - button "人" [ref=f1e234] [cursor=pointer]
+                - button "已报告值" [ref=f1e235] [cursor=pointer]
+              - row [ref=f1e236]:
+                - cell [ref=f1e237]:
+                  - link "达尼可泮（danicopan）" [ref=f1e238] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e239]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e240] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "基线样本量" [ref=f1e241] [cursor=pointer]
+                - button "对照组" [ref=f1e242] [cursor=pointer]
+                - button "基线" [ref=f1e243] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e244] [cursor=pointer]
+                - button "样本量" [ref=f1e245] [cursor=pointer]
+                - button "未列示" [ref=f1e246] [cursor=pointer]
+                - button "未列示" [ref=f1e247] [cursor=pointer]
+                - button "21" [ref=f1e248] [cursor=pointer]
+                - button "人" [ref=f1e249] [cursor=pointer]
+                - button "已报告值" [ref=f1e250] [cursor=pointer]
+              - row [ref=f1e251]:
+                - cell [ref=f1e252]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e253] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e254]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e255] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "基线样本量" [ref=f1e256] [cursor=pointer]
+                - button "治疗组" [ref=f1e257] [cursor=pointer]
+                - button "基线" [ref=f1e258] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e259] [cursor=pointer]
+                - button "样本量" [ref=f1e260] [cursor=pointer]
+                - button "未列示" [ref=f1e261] [cursor=pointer]
+                - button "未列示" [ref=f1e262] [cursor=pointer]
+                - button "125" [ref=f1e263] [cursor=pointer]
+                - button "人" [ref=f1e264] [cursor=pointer]
+                - button "已报告值" [ref=f1e265] [cursor=pointer]
+              - row [ref=f1e266]:
+                - cell [ref=f1e267]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e268] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e269]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e270] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "基线样本量" [ref=f1e271] [cursor=pointer]
+                - button "对照组" [ref=f1e272] [cursor=pointer]
+                - button "基线" [ref=f1e273] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e274] [cursor=pointer]
+                - button "样本量" [ref=f1e275] [cursor=pointer]
+                - button "未列示" [ref=f1e276] [cursor=pointer]
+                - button "未列示" [ref=f1e277] [cursor=pointer]
+                - button "121" [ref=f1e278] [cursor=pointer]
+                - button "人" [ref=f1e279] [cursor=pointer]
+                - button "已报告值" [ref=f1e280] [cursor=pointer]
+              - row [ref=f1e281]:
+                - cell [ref=f1e282]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e283] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e284]:
+                  - link "COMMODORE 2" [ref=f1e285] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "基线样本量" [ref=f1e286] [cursor=pointer]
+                - button "治疗组" [ref=f1e287] [cursor=pointer]
+                - button "基线" [ref=f1e288] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e289] [cursor=pointer]
+                - button "样本量" [ref=f1e290] [cursor=pointer]
+                - button "未列示" [ref=f1e291] [cursor=pointer]
+                - button "未列示" [ref=f1e292] [cursor=pointer]
+                - button "135" [ref=f1e293] [cursor=pointer]
+                - button "人" [ref=f1e294] [cursor=pointer]
+                - button "已报告值" [ref=f1e295] [cursor=pointer]
+              - row [ref=f1e296]:
+                - cell [ref=f1e297]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e298] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e299]:
+                  - link "COMMODORE 2" [ref=f1e300] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "基线样本量" [ref=f1e301] [cursor=pointer]
+                - button "对照组" [ref=f1e302] [cursor=pointer]
+                - button "基线" [ref=f1e303] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e304] [cursor=pointer]
+                - button "样本量" [ref=f1e305] [cursor=pointer]
+                - button "未列示" [ref=f1e306] [cursor=pointer]
+                - button "未列示" [ref=f1e307] [cursor=pointer]
+                - button "69" [ref=f1e308] [cursor=pointer]
+                - button "人" [ref=f1e309] [cursor=pointer]
+                - button "已报告值" [ref=f1e310] [cursor=pointer]
+        - generic [ref=f1e311]:
+          - heading "年龄｜基线变量（岁）" [level=3] [ref=f1e312]
+          - generic "组别图例" [ref=f1e313]:
+            - generic [ref=f1e314]: 治疗组
+            - generic [ref=f1e316]: 对照组
+          - img "年龄｜基线变量（岁） 图形" [ref=f1e318]:
+            - img [ref=f1e320]:
+              - generic [ref=f1e322]:
+                - generic [ref=f1e323]: 岁
+                - generic [ref=f1e324]: "0"
+                - generic [ref=f1e325]: "10"
+                - generic [ref=f1e326]: "20"
+                - generic [ref=f1e327]: "30"
+                - generic [ref=f1e328]: "40"
+                - generic [ref=f1e329]: "50"
+                - generic [ref=f1e330]: "60"
+                - generic [ref=f1e331]: "70"
+                - generic [ref=f1e332]: 年龄
+                - generic [ref=f1e333]: 治疗组
+                - generic [ref=f1e334]: 年龄
+                - generic [ref=f1e335]: 对照组
+                - generic [ref=f1e336]: 年龄
+                - generic [ref=f1e337]: 治疗组
+                - generic [ref=f1e338]: 年龄
+                - generic [ref=f1e339]: 治疗组
+                - generic [ref=f1e340]: 年龄
+                - generic [ref=f1e341]: 对照组
+                - generic [ref=f1e342]: 年龄
+                - generic [ref=f1e343]: 治疗组
+                - generic [ref=f1e344]: 年龄
+                - generic [ref=f1e345]: 对照组
+                - generic [ref=f1e346]: 年龄
+                - generic [ref=f1e347]: 治疗组
+                - generic [ref=f1e348]: 年龄
+                - generic [ref=f1e349]: 对照组
+                - generic [ref=f1e350]: 年龄
+                - generic [ref=f1e351]: 治疗组
+                - generic [ref=f1e352]: 年龄
+                - generic [ref=f1e353]: 对照组
+                - generic [ref=f1e365]: "51.7"
+                - generic [ref=f1e366]: "49.8"
+                - generic [ref=f1e367]: "42.1"
+                - generic [ref=f1e368]: "50.2"
+                - generic [ref=f1e369]: "47.3"
+                - generic [ref=f1e370]: "55"
+                - generic [ref=f1e371]: "53"
+                - generic [ref=f1e372]: "44.8"
+                - generic [ref=f1e373]: "46.2"
+                - generic [ref=f1e374]: "36"
+                - generic [ref=f1e375]: "38"
+            - button "查看数值 51.7 的数据依据" [ref=f1e376] [cursor=pointer]
+            - button "查看数值 49.8 的数据依据" [ref=f1e377] [cursor=pointer]
+            - button "查看数值 42.1 的数据依据" [ref=f1e378] [cursor=pointer]
+            - button "查看数值 50.2 的数据依据" [ref=f1e379] [cursor=pointer]
+            - button "查看数值 47.3 的数据依据" [ref=f1e380] [cursor=pointer]
+            - button "查看数值 55 的数据依据" [ref=f1e381] [cursor=pointer]
+            - button "查看数值 53 的数据依据" [ref=f1e382] [cursor=pointer]
+            - button "查看数值 44.8 的数据依据" [ref=f1e383] [cursor=pointer]
+            - button "查看数值 46.2 的数据依据" [ref=f1e384] [cursor=pointer]
+            - button "查看数值 36 的数据依据" [ref=f1e385] [cursor=pointer]
+            - button "查看数值 38 的数据依据" [ref=f1e386] [cursor=pointer]
+          - table [ref=f1e388]:
+            - caption [ref=f1e389]: 基线与人群总览数据表
+            - rowgroup [ref=f1e390]:
+              - row [ref=f1e391]:
+                - columnheader "产品" [ref=f1e392]
+                - columnheader "试验" [ref=f1e393]
+                - columnheader "基线变量" [ref=f1e394]
+                - columnheader "组别" [ref=f1e395]
+                - columnheader "时间点" [ref=f1e396]
+                - columnheader "分析人群" [ref=f1e397]
+                - columnheader "统计形式" [ref=f1e398]
+                - columnheader "分子" [ref=f1e399]
+                - columnheader "分母" [ref=f1e400]
+                - columnheader "数值" [ref=f1e401]
+                - columnheader "单位" [ref=f1e402]
+                - columnheader "披露状态" [ref=f1e403]
+            - rowgroup [ref=f1e404]:
+              - row [ref=f1e405]:
+                - cell [ref=f1e406]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e407] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e408]:
+                  - link "APPLY-PNH" [ref=f1e409] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "年龄" [ref=f1e410] [cursor=pointer]
+                - button "治疗组" [ref=f1e411] [cursor=pointer]
+                - button "基线" [ref=f1e412] [cursor=pointer]
+                - button "全分析集" [ref=f1e413] [cursor=pointer]
+                - button "均值" [ref=f1e414] [cursor=pointer]
+                - button "未列示" [ref=f1e415] [cursor=pointer]
+                - button "62" [ref=f1e416] [cursor=pointer]
+                - button "51.7" [ref=f1e417] [cursor=pointer]
+                - button "岁" [ref=f1e418] [cursor=pointer]
+                - button "已报告值" [ref=f1e419] [cursor=pointer]
+              - row [ref=f1e420]:
+                - cell [ref=f1e421]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e422] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e423]:
+                  - link "APPLY-PNH" [ref=f1e424] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "年龄" [ref=f1e425] [cursor=pointer]
+                - button "对照组" [ref=f1e426] [cursor=pointer]
+                - button "基线" [ref=f1e427] [cursor=pointer]
+                - button "全分析集" [ref=f1e428] [cursor=pointer]
+                - button "均值" [ref=f1e429] [cursor=pointer]
+                - button "未列示" [ref=f1e430] [cursor=pointer]
+                - button "35" [ref=f1e431] [cursor=pointer]
+                - button "49.8" [ref=f1e432] [cursor=pointer]
+                - button "岁" [ref=f1e433] [cursor=pointer]
+                - button "已报告值" [ref=f1e434] [cursor=pointer]
+              - row [ref=f1e435]:
+                - cell [ref=f1e436]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e437] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e438]:
+                  - link "APPOINT-PNH" [ref=f1e439] [cursor=pointer]:
+                    - /url: trials/nct04820530.html
+                - button "年龄" [ref=f1e440] [cursor=pointer]
+                - button "治疗组" [ref=f1e441] [cursor=pointer]
+                - button "基线" [ref=f1e442] [cursor=pointer]
+                - button "全分析集" [ref=f1e443] [cursor=pointer]
+                - button "均值" [ref=f1e444] [cursor=pointer]
+                - button "未列示" [ref=f1e445] [cursor=pointer]
+                - button "40" [ref=f1e446] [cursor=pointer]
+                - button "42.1" [ref=f1e447] [cursor=pointer]
+                - button "岁" [ref=f1e448] [cursor=pointer]
+                - button "已报告值" [ref=f1e449] [cursor=pointer]
+              - row [ref=f1e450]:
+                - cell [ref=f1e451]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e452] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e453]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e454] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "年龄" [ref=f1e455] [cursor=pointer]
+                - button "治疗组" [ref=f1e456] [cursor=pointer]
+                - button "基线" [ref=f1e457] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e458] [cursor=pointer]
+                - button "均值" [ref=f1e459] [cursor=pointer]
+                - button "未列示" [ref=f1e460] [cursor=pointer]
+                - button "未列示" [ref=f1e461] [cursor=pointer]
+                - button "50.2" [ref=f1e462] [cursor=pointer]
+                - button "岁" [ref=f1e463] [cursor=pointer]
+                - button "已报告值" [ref=f1e464] [cursor=pointer]
+              - row [ref=f1e465]:
+                - cell [ref=f1e466]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e467] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e468]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e469] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "年龄" [ref=f1e470] [cursor=pointer]
+                - button "对照组" [ref=f1e471] [cursor=pointer]
+                - button "基线" [ref=f1e472] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e473] [cursor=pointer]
+                - button "均值" [ref=f1e474] [cursor=pointer]
+                - button "未列示" [ref=f1e475] [cursor=pointer]
+                - button "未列示" [ref=f1e476] [cursor=pointer]
+                - button "47.3" [ref=f1e477] [cursor=pointer]
+                - button "岁" [ref=f1e478] [cursor=pointer]
+                - button "已报告值" [ref=f1e479] [cursor=pointer]
+              - row [ref=f1e480]:
+                - cell [ref=f1e481]:
+                  - link "达尼可泮（danicopan）" [ref=f1e482] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e483]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e484] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "年龄" [ref=f1e485] [cursor=pointer]
+                - button "治疗组" [ref=f1e486] [cursor=pointer]
+                - button "基线" [ref=f1e487] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e488] [cursor=pointer]
+                - button "均值" [ref=f1e489] [cursor=pointer]
+                - button "未列示" [ref=f1e490] [cursor=pointer]
+                - button "未列示" [ref=f1e491] [cursor=pointer]
+                - button "55" [ref=f1e492] [cursor=pointer]
+                - button "岁" [ref=f1e493] [cursor=pointer]
+                - button "已报告值" [ref=f1e494] [cursor=pointer]
+              - row [ref=f1e495]:
+                - cell [ref=f1e496]:
+                  - link "达尼可泮（danicopan）" [ref=f1e497] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e498]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e499] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "年龄" [ref=f1e500] [cursor=pointer]
+                - button "对照组" [ref=f1e501] [cursor=pointer]
+                - button "基线" [ref=f1e502] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e503] [cursor=pointer]
+                - button "均值" [ref=f1e504] [cursor=pointer]
+                - button "未列示" [ref=f1e505] [cursor=pointer]
+                - button "未列示" [ref=f1e506] [cursor=pointer]
+                - button "53" [ref=f1e507] [cursor=pointer]
+                - button "岁" [ref=f1e508] [cursor=pointer]
+                - button "已报告值" [ref=f1e509] [cursor=pointer]
+              - row [ref=f1e510]:
+                - cell [ref=f1e511]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e512] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e513]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e514] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "年龄" [ref=f1e515] [cursor=pointer]
+                - button "治疗组" [ref=f1e516] [cursor=pointer]
+                - button "基线" [ref=f1e517] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e518] [cursor=pointer]
+                - button "均值" [ref=f1e519] [cursor=pointer]
+                - button "未列示" [ref=f1e520] [cursor=pointer]
+                - button "未列示" [ref=f1e521] [cursor=pointer]
+                - button "44.8" [ref=f1e522] [cursor=pointer]
+                - button "岁" [ref=f1e523] [cursor=pointer]
+                - button "已报告值" [ref=f1e524] [cursor=pointer]
+              - row [ref=f1e525]:
+                - cell [ref=f1e526]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e527] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e528]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e529] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "年龄" [ref=f1e530] [cursor=pointer]
+                - button "对照组" [ref=f1e531] [cursor=pointer]
+                - button "基线" [ref=f1e532] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e533] [cursor=pointer]
+                - button "均值" [ref=f1e534] [cursor=pointer]
+                - button "未列示" [ref=f1e535] [cursor=pointer]
+                - button "未列示" [ref=f1e536] [cursor=pointer]
+                - button "46.2" [ref=f1e537] [cursor=pointer]
+                - button "岁" [ref=f1e538] [cursor=pointer]
+                - button "已报告值" [ref=f1e539] [cursor=pointer]
+              - row [ref=f1e540]:
+                - cell [ref=f1e541]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e542] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e543]:
+                  - link "COMMODORE 2" [ref=f1e544] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "年龄" [ref=f1e545] [cursor=pointer]
+                - button "治疗组" [ref=f1e546] [cursor=pointer]
+                - button "基线" [ref=f1e547] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e548] [cursor=pointer]
+                - button "中位数" [ref=f1e549] [cursor=pointer]
+                - button "未列示" [ref=f1e550] [cursor=pointer]
+                - button "未列示" [ref=f1e551] [cursor=pointer]
+                - button "36" [ref=f1e552] [cursor=pointer]
+                - button "岁" [ref=f1e553] [cursor=pointer]
+                - button "已报告值" [ref=f1e554] [cursor=pointer]
+              - row [ref=f1e555]:
+                - cell [ref=f1e556]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e557] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e558]:
+                  - link "COMMODORE 2" [ref=f1e559] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "年龄" [ref=f1e560] [cursor=pointer]
+                - button "对照组" [ref=f1e561] [cursor=pointer]
+                - button "基线" [ref=f1e562] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e563] [cursor=pointer]
+                - button "中位数" [ref=f1e564] [cursor=pointer]
+                - button "未列示" [ref=f1e565] [cursor=pointer]
+                - button "未列示" [ref=f1e566] [cursor=pointer]
+                - button "38" [ref=f1e567] [cursor=pointer]
+                - button "岁" [ref=f1e568] [cursor=pointer]
+                - button "已报告值" [ref=f1e569] [cursor=pointer]
+        - generic [ref=f1e570]:
+          - heading "性别｜基线变量（%）" [level=3] [ref=f1e571]
+          - generic "组别图例" [ref=f1e572]:
+            - generic [ref=f1e573]: 治疗组
+            - generic [ref=f1e575]: 对照组
+          - img "性别｜基线变量（%） 图形" [ref=f1e577]:
+            - img [ref=f1e579]:
+              - generic [ref=f1e581]:
+                - generic [ref=f1e582]: "%"
+                - generic [ref=f1e583]: "0"
+                - generic [ref=f1e584]: "20"
+                - generic [ref=f1e585]: "40"
+                - generic [ref=f1e586]: "60"
+                - generic [ref=f1e587]: "80"
+                - generic [ref=f1e588]: "100"
+                - generic [ref=f1e589]: 性别
+                - generic [ref=f1e590]: 治疗组
+                - generic [ref=f1e591]: 性别
+                - generic [ref=f1e592]: 对照组
+                - generic [ref=f1e593]: 性别
+                - generic [ref=f1e594]: 治疗组
+                - generic [ref=f1e595]: 性别
+                - generic [ref=f1e596]: 治疗组
+                - generic [ref=f1e597]: 性别
+                - generic [ref=f1e598]: 对照组
+                - generic [ref=f1e599]: 性别
+                - generic [ref=f1e600]: 治疗组
+                - generic [ref=f1e601]: 性别
+                - generic [ref=f1e602]: 对照组
+                - generic [ref=f1e603]: 性别
+                - generic [ref=f1e604]: 治疗组
+                - generic [ref=f1e605]: 性别
+                - generic [ref=f1e606]: 对照组
+                - generic [ref=f1e607]: 性别
+                - generic [ref=f1e608]: 治疗组
+                - generic [ref=f1e609]: 性别
+                - generic [ref=f1e610]: 对照组
+                - generic [ref=f1e622]: "69.4"
+                - generic [ref=f1e623]: "68.6"
+                - generic [ref=f1e624]: "42.5"
+                - generic [ref=f1e625]: "65.9"
+                - generic [ref=f1e626]: "56.4"
+                - generic [ref=f1e627]: "54.8"
+                - generic [ref=f1e628]: "66.7"
+                - generic [ref=f1e629]: "52"
+                - generic [ref=f1e630]: "57"
+                - generic [ref=f1e631]: "57"
+                - generic [ref=f1e632]: "50.7"
+            - button "查看数值 69.4 的数据依据" [ref=f1e633] [cursor=pointer]
+            - button "查看数值 68.6 的数据依据" [ref=f1e634] [cursor=pointer]
+            - button "查看数值 42.5 的数据依据" [ref=f1e635] [cursor=pointer]
+            - button "查看数值 65.9 的数据依据" [ref=f1e636] [cursor=pointer]
+            - button "查看数值 56.4 的数据依据" [ref=f1e637] [cursor=pointer]
+            - button "查看数值 54.8 的数据依据" [ref=f1e638] [cursor=pointer]
+            - button "查看数值 66.7 的数据依据" [ref=f1e639] [cursor=pointer]
+            - button "查看数值 52 的数据依据" [ref=f1e640] [cursor=pointer]
+            - button "查看数值 57 的数据依据" [ref=f1e641] [cursor=pointer]
+            - button "查看数值 57 的数据依据" [ref=f1e642] [cursor=pointer]
+            - button "查看数值 50.7 的数据依据" [ref=f1e643] [cursor=pointer]
+          - table [ref=f1e645]:
+            - caption [ref=f1e646]: 基线与人群总览数据表
+            - rowgroup [ref=f1e647]:
+              - row [ref=f1e648]:
+                - columnheader "产品" [ref=f1e649]
+                - columnheader "试验" [ref=f1e650]
+                - columnheader "基线变量" [ref=f1e651]
+                - columnheader "组别" [ref=f1e652]
+                - columnheader "时间点" [ref=f1e653]
+                - columnheader "分析人群" [ref=f1e654]
+                - columnheader "统计形式" [ref=f1e655]
+                - columnheader "分子" [ref=f1e656]
+                - columnheader "分母" [ref=f1e657]
+                - columnheader "数值" [ref=f1e658]
+                - columnheader "单位" [ref=f1e659]
+                - columnheader "披露状态" [ref=f1e660]
+            - rowgroup [ref=f1e661]:
+              - row [ref=f1e662]:
+                - cell [ref=f1e663]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e664] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e665]:
+                  - link "APPLY-PNH" [ref=f1e666] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "性别" [ref=f1e667] [cursor=pointer]
+                - button "治疗组" [ref=f1e668] [cursor=pointer]
+                - button "基线" [ref=f1e669] [cursor=pointer]
+                - button "全分析集" [ref=f1e670] [cursor=pointer]
+                - button "比例" [ref=f1e671] [cursor=pointer]
+                - button "43" [ref=f1e672] [cursor=pointer]
+                - button "62" [ref=f1e673] [cursor=pointer]
+                - button "69.4" [ref=f1e674] [cursor=pointer]
+                - button "%" [ref=f1e675] [cursor=pointer]
+                - button "已报告值" [ref=f1e676] [cursor=pointer]
+              - row [ref=f1e677]:
+                - cell [ref=f1e678]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e679] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e680]:
+                  - link "APPLY-PNH" [ref=f1e681] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "性别" [ref=f1e682] [cursor=pointer]
+                - button "对照组" [ref=f1e683] [cursor=pointer]
+                - button "基线" [ref=f1e684] [cursor=pointer]
+                - button "全分析集" [ref=f1e685] [cursor=pointer]
+                - button "比例" [ref=f1e686] [cursor=pointer]
+                - button "24" [ref=f1e687] [cursor=pointer]
+                - button "35" [ref=f1e688] [cursor=pointer]
+                - button "68.6" [ref=f1e689] [cursor=pointer]
+                - button "%" [ref=f1e690] [cursor=pointer]
+                - button "已报告值" [ref=f1e691] [cursor=pointer]
+              - row [ref=f1e692]:
+                - cell [ref=f1e693]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e694] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e695]:
+                  - link "APPOINT-PNH" [ref=f1e696] [cursor=pointer]:
+                    - /url: trials/nct04820530.html
+                - button "性别" [ref=f1e697] [cursor=pointer]
+                - button "治疗组" [ref=f1e698] [cursor=pointer]
+                - button "基线" [ref=f1e699] [cursor=pointer]
+                - button "全分析集" [ref=f1e700] [cursor=pointer]
+                - button "比例" [ref=f1e701] [cursor=pointer]
+                - button "17" [ref=f1e702] [cursor=pointer]
+                - button "40" [ref=f1e703] [cursor=pointer]
+                - button "42.5" [ref=f1e704] [cursor=pointer]
+                - button "%" [ref=f1e705] [cursor=pointer]
+                - button "已报告值" [ref=f1e706] [cursor=pointer]
+              - row [ref=f1e707]:
+                - cell [ref=f1e708]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e709] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e710]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e711] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "性别" [ref=f1e712] [cursor=pointer]
+                - button "治疗组" [ref=f1e713] [cursor=pointer]
+                - button "基线" [ref=f1e714] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e715] [cursor=pointer]
+                - button "比例" [ref=f1e716] [cursor=pointer]
+                - button "27" [ref=f1e717] [cursor=pointer]
+                - button "41" [ref=f1e718] [cursor=pointer]
+                - button "65.9" [ref=f1e719] [cursor=pointer]
+                - button "%" [ref=f1e720] [cursor=pointer]
+                - button "已报告值" [ref=f1e721] [cursor=pointer]
+              - row [ref=f1e722]:
+                - cell [ref=f1e723]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e724] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e725]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e726] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "性别" [ref=f1e727] [cursor=pointer]
+                - button "对照组" [ref=f1e728] [cursor=pointer]
+                - button "基线" [ref=f1e729] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e730] [cursor=pointer]
+                - button "比例" [ref=f1e731] [cursor=pointer]
+                - button "22" [ref=f1e732] [cursor=pointer]
+                - button "39" [ref=f1e733] [cursor=pointer]
+                - button "56.4" [ref=f1e734] [cursor=pointer]
+                - button "%" [ref=f1e735] [cursor=pointer]
+                - button "已报告值" [ref=f1e736] [cursor=pointer]
+              - row [ref=f1e737]:
+                - cell [ref=f1e738]:
+                  - link "达尼可泮（danicopan）" [ref=f1e739] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e740]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e741] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "性别" [ref=f1e742] [cursor=pointer]
+                - button "治疗组" [ref=f1e743] [cursor=pointer]
+                - button "基线" [ref=f1e744] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e745] [cursor=pointer]
+                - button "比例" [ref=f1e746] [cursor=pointer]
+                - button "23" [ref=f1e747] [cursor=pointer]
+                - button "42" [ref=f1e748] [cursor=pointer]
+                - button "54.8" [ref=f1e749] [cursor=pointer]
+                - button "%" [ref=f1e750] [cursor=pointer]
+                - button "已报告值" [ref=f1e751] [cursor=pointer]
+              - row [ref=f1e752]:
+                - cell [ref=f1e753]:
+                  - link "达尼可泮（danicopan）" [ref=f1e754] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e755]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e756] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "性别" [ref=f1e757] [cursor=pointer]
+                - button "对照组" [ref=f1e758] [cursor=pointer]
+                - button "基线" [ref=f1e759] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e760] [cursor=pointer]
+                - button "比例" [ref=f1e761] [cursor=pointer]
+                - button "14" [ref=f1e762] [cursor=pointer]
+                - button "21" [ref=f1e763] [cursor=pointer]
+                - button "66.7" [ref=f1e764] [cursor=pointer]
+                - button "%" [ref=f1e765] [cursor=pointer]
+                - button "已报告值" [ref=f1e766] [cursor=pointer]
+              - row [ref=f1e767]:
+                - cell [ref=f1e768]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e769] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e770]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e771] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "性别" [ref=f1e772] [cursor=pointer]
+                - button "治疗组" [ref=f1e773] [cursor=pointer]
+                - button "基线" [ref=f1e774] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e775] [cursor=pointer]
+                - button "比例" [ref=f1e776] [cursor=pointer]
+                - button "65" [ref=f1e777] [cursor=pointer]
+                - button "125" [ref=f1e778] [cursor=pointer]
+                - button "52" [ref=f1e779] [cursor=pointer]
+                - button "%" [ref=f1e780] [cursor=pointer]
+                - button "已报告值" [ref=f1e781] [cursor=pointer]
+              - row [ref=f1e782]:
+                - cell [ref=f1e783]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e784] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e785]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e786] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "性别" [ref=f1e787] [cursor=pointer]
+                - button "对照组" [ref=f1e788] [cursor=pointer]
+                - button "基线" [ref=f1e789] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e790] [cursor=pointer]
+                - button "比例" [ref=f1e791] [cursor=pointer]
+                - button "69" [ref=f1e792] [cursor=pointer]
+                - button "121" [ref=f1e793] [cursor=pointer]
+                - button "57" [ref=f1e794] [cursor=pointer]
+                - button "%" [ref=f1e795] [cursor=pointer]
+                - button "已报告值" [ref=f1e796] [cursor=pointer]
+              - row [ref=f1e797]:
+                - cell [ref=f1e798]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e799] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e800]:
+                  - link "COMMODORE 2" [ref=f1e801] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "性别" [ref=f1e802] [cursor=pointer]
+                - button "治疗组" [ref=f1e803] [cursor=pointer]
+                - button "基线" [ref=f1e804] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e805] [cursor=pointer]
+                - button "比例" [ref=f1e806] [cursor=pointer]
+                - button "77" [ref=f1e807] [cursor=pointer]
+                - button "135" [ref=f1e808] [cursor=pointer]
+                - button "57" [ref=f1e809] [cursor=pointer]
+                - button "%" [ref=f1e810] [cursor=pointer]
+                - button "已报告值" [ref=f1e811] [cursor=pointer]
+              - row [ref=f1e812]:
+                - cell [ref=f1e813]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e814] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e815]:
+                  - link "COMMODORE 2" [ref=f1e816] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "性别" [ref=f1e817] [cursor=pointer]
+                - button "对照组" [ref=f1e818] [cursor=pointer]
+                - button "基线" [ref=f1e819] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e820] [cursor=pointer]
+                - button "比例" [ref=f1e821] [cursor=pointer]
+                - button "35" [ref=f1e822] [cursor=pointer]
+                - button "69" [ref=f1e823] [cursor=pointer]
+                - button "50.7" [ref=f1e824] [cursor=pointer]
+                - button "%" [ref=f1e825] [cursor=pointer]
+                - button "已报告值" [ref=f1e826] [cursor=pointer]
+        - generic [ref=f1e827]:
+          - heading "多项可比指标｜基线变量（g/dL）" [level=3] [ref=f1e828]
+          - generic "组别图例" [ref=f1e829]:
+            - generic [ref=f1e830]: 治疗组
+            - generic [ref=f1e832]: 对照组
+          - img "多项可比指标｜基线变量（g/dL） 图形" [ref=f1e834]:
+            - img [ref=f1e836]:
+              - generic [ref=f1e838]:
+                - generic [ref=f1e839]: g/dL
+                - generic [ref=f1e840]: "0"
+                - generic [ref=f1e841]: "5"
+                - generic [ref=f1e842]: "10"
+                - generic [ref=f1e843]: "15"
+                - generic [ref=f1e844]: "20"
+                - generic [ref=f1e845]: 基线血红蛋白
+                - generic [ref=f1e846]: 治疗组
+                - generic [ref=f1e847]: 基线血红蛋白
+                - generic [ref=f1e848]: 对照组
+                - generic [ref=f1e849]: 基线血红蛋白
+                - generic [ref=f1e850]: 治疗组
+                - generic [ref=f1e851]: 基线血红蛋白
+                - generic [ref=f1e852]: 治疗组
+                - generic [ref=f1e853]: 基线血红蛋白
+                - generic [ref=f1e854]: 对照组
+                - generic [ref=f1e855]: 基线血红蛋白入组阈值
+                - generic [ref=f1e856]: 对照组
+                - generic [ref=f1e857]: 基线血红蛋白
+                - generic [ref=f1e858]: 对照组
+                - generic [ref=f1e868]: "8.9"
+                - generic [ref=f1e869]: "8.9"
+                - generic [ref=f1e870]: "8.2"
+                - generic [ref=f1e871]: "8.69"
+                - generic [ref=f1e872]: "8.68"
+                - generic [ref=f1e873]: "9.5"
+                - generic [ref=f1e874]: "9.5"
+                - generic [ref=f1e875]: "8.5"
+                - generic [ref=f1e876]: "8.5"
+            - button "查看数值 8.9 的数据依据" [ref=f1e877] [cursor=pointer]
+            - button "查看数值 8.9 的数据依据" [ref=f1e878] [cursor=pointer]
+            - button "查看数值 8.2 的数据依据" [ref=f1e879] [cursor=pointer]
+            - button "查看数值 8.69 的数据依据" [ref=f1e880] [cursor=pointer]
+            - button "查看数值 8.68 的数据依据" [ref=f1e881] [cursor=pointer]
+            - button "查看数值 9.5 的数据依据" [ref=f1e882] [cursor=pointer]
+            - button "查看数值 9.5 的数据依据" [ref=f1e883] [cursor=pointer]
+            - button "查看数值 8.5 的数据依据" [ref=f1e884] [cursor=pointer]
+            - button "查看数值 8.5 的数据依据" [ref=f1e885] [cursor=pointer]
+          - table [ref=f1e887]:
+            - caption [ref=f1e888]: 基线与人群总览数据表
+            - rowgroup [ref=f1e889]:
+              - row [ref=f1e890]:
+                - columnheader "产品" [ref=f1e891]
+                - columnheader "试验" [ref=f1e892]
+                - columnheader "基线变量" [ref=f1e893]
+                - columnheader "组别" [ref=f1e894]
+                - columnheader "时间点" [ref=f1e895]
+                - columnheader "分析人群" [ref=f1e896]
+                - columnheader "统计形式" [ref=f1e897]
+                - columnheader "分子" [ref=f1e898]
+                - columnheader "分母" [ref=f1e899]
+                - columnheader "数值" [ref=f1e900]
+                - columnheader "单位" [ref=f1e901]
+                - columnheader "披露状态" [ref=f1e902]
+            - rowgroup [ref=f1e903]:
+              - row [ref=f1e904]:
+                - cell [ref=f1e905]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e906] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e907]:
+                  - link "APPLY-PNH" [ref=f1e908] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "基线血红蛋白" [ref=f1e909] [cursor=pointer]
+                - button "治疗组" [ref=f1e910] [cursor=pointer]
+                - button "基线" [ref=f1e911] [cursor=pointer]
+                - button "全分析集" [ref=f1e912] [cursor=pointer]
+                - button "均值" [ref=f1e913] [cursor=pointer]
+                - button "未列示" [ref=f1e914] [cursor=pointer]
+                - button "62" [ref=f1e915] [cursor=pointer]
+                - button "8.9" [ref=f1e916] [cursor=pointer]
+                - button "g/dL" [ref=f1e917] [cursor=pointer]
+                - button "已报告值" [ref=f1e918] [cursor=pointer]
+              - row [ref=f1e919]:
+                - cell [ref=f1e920]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e921] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e922]:
+                  - link "APPLY-PNH" [ref=f1e923] [cursor=pointer]:
+                    - /url: trials/nct04558918.html
+                - button "基线血红蛋白" [ref=f1e924] [cursor=pointer]
+                - button "对照组" [ref=f1e925] [cursor=pointer]
+                - button "基线" [ref=f1e926] [cursor=pointer]
+                - button "全分析集" [ref=f1e927] [cursor=pointer]
+                - button "均值" [ref=f1e928] [cursor=pointer]
+                - button "未列示" [ref=f1e929] [cursor=pointer]
+                - button "35" [ref=f1e930] [cursor=pointer]
+                - button "8.9" [ref=f1e931] [cursor=pointer]
+                - button "g/dL" [ref=f1e932] [cursor=pointer]
+                - button "已报告值" [ref=f1e933] [cursor=pointer]
+              - row [ref=f1e934]:
+                - cell [ref=f1e935]:
+                  - link "伊普可泮（iptacopan）" [ref=f1e936] [cursor=pointer]:
+                    - /url: products/iptacopan.html
+                - cell [ref=f1e937]:
+                  - link "APPOINT-PNH" [ref=f1e938] [cursor=pointer]:
+                    - /url: trials/nct04820530.html
+                - button "基线血红蛋白" [ref=f1e939] [cursor=pointer]
+                - button "治疗组" [ref=f1e940] [cursor=pointer]
+                - button "基线" [ref=f1e941] [cursor=pointer]
+                - button "全分析集" [ref=f1e942] [cursor=pointer]
+                - button "均值" [ref=f1e943] [cursor=pointer]
+                - button "未列示" [ref=f1e944] [cursor=pointer]
+                - button "40" [ref=f1e945] [cursor=pointer]
+                - button "8.2" [ref=f1e946] [cursor=pointer]
+                - button "g/dL" [ref=f1e947] [cursor=pointer]
+                - button "已报告值" [ref=f1e948] [cursor=pointer]
+              - row [ref=f1e949]:
+                - cell [ref=f1e950]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e951] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e952]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e953] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "基线血红蛋白" [ref=f1e954] [cursor=pointer]
+                - button "治疗组" [ref=f1e955] [cursor=pointer]
+                - button "基线" [ref=f1e956] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e957] [cursor=pointer]
+                - button "均值" [ref=f1e958] [cursor=pointer]
+                - button "未列示" [ref=f1e959] [cursor=pointer]
+                - button "未列示" [ref=f1e960] [cursor=pointer]
+                - button "8.69" [ref=f1e961] [cursor=pointer]
+                - button "g/dL" [ref=f1e962] [cursor=pointer]
+                - button "已报告值" [ref=f1e963] [cursor=pointer]
+              - row [ref=f1e964]:
+                - cell [ref=f1e965]:
+                  - link "pegcetacoplan（C3抑制剂）" [ref=f1e966] [cursor=pointer]:
+                    - /url: products/pegcetacoplan.html
+                - cell [ref=f1e967]:
+                  - link "PEGASUS（APL2-302）" [ref=f1e968] [cursor=pointer]:
+                    - /url: trials/nct03500549.html
+                - button "基线血红蛋白" [ref=f1e969] [cursor=pointer]
+                - button "对照组" [ref=f1e970] [cursor=pointer]
+                - button "基线" [ref=f1e971] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e972] [cursor=pointer]
+                - button "均值" [ref=f1e973] [cursor=pointer]
+                - button "未列示" [ref=f1e974] [cursor=pointer]
+                - button "未列示" [ref=f1e975] [cursor=pointer]
+                - button "8.68" [ref=f1e976] [cursor=pointer]
+                - button "g/dL" [ref=f1e977] [cursor=pointer]
+                - button "已报告值" [ref=f1e978] [cursor=pointer]
+              - row [ref=f1e979]:
+                - cell [ref=f1e980]:
+                  - link "达尼可泮（danicopan）" [ref=f1e981] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e982]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e983] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "基线血红蛋白入组阈值" [ref=f1e984] [cursor=pointer]
+                - button "治疗组" [ref=f1e985] [cursor=pointer]
+                - button "基线" [ref=f1e986] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e987] [cursor=pointer]
+                - button "其他" [ref=f1e988] [cursor=pointer]
+                - button "未列示" [ref=f1e989] [cursor=pointer]
+                - button "未列示" [ref=f1e990] [cursor=pointer]
+                - button "9.5" [ref=f1e991] [cursor=pointer]
+                - button "g/dL" [ref=f1e992] [cursor=pointer]
+                - button "已报告值" [ref=f1e993] [cursor=pointer]
+              - row [ref=f1e994]:
+                - cell [ref=f1e995]:
+                  - link "达尼可泮（danicopan）" [ref=f1e996] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e997]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e998] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "基线血红蛋白入组阈值" [ref=f1e999] [cursor=pointer]
+                - button "对照组" [ref=f1e1000] [cursor=pointer]
+                - button "基线" [ref=f1e1001] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1002] [cursor=pointer]
+                - button "其他" [ref=f1e1003] [cursor=pointer]
+                - button "未列示" [ref=f1e1004] [cursor=pointer]
+                - button "未列示" [ref=f1e1005] [cursor=pointer]
+                - button "9.5" [ref=f1e1006] [cursor=pointer]
+                - button "g/dL" [ref=f1e1007] [cursor=pointer]
+                - button "已报告值" [ref=f1e1008] [cursor=pointer]
+              - row [ref=f1e1009]:
+                - cell [ref=f1e1010]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e1011] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e1012]:
+                  - link "COMMODORE 2" [ref=f1e1013] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "基线血红蛋白" [ref=f1e1014] [cursor=pointer]
+                - button "治疗组" [ref=f1e1015] [cursor=pointer]
+                - button "基线" [ref=f1e1016] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1017] [cursor=pointer]
+                - button "中位数" [ref=f1e1018] [cursor=pointer]
+                - button "未列示" [ref=f1e1019] [cursor=pointer]
+                - button "未列示" [ref=f1e1020] [cursor=pointer]
+                - button "8.5" [ref=f1e1021] [cursor=pointer]
+                - button "g/dL" [ref=f1e1022] [cursor=pointer]
+                - button "已报告值" [ref=f1e1023] [cursor=pointer]
+              - row [ref=f1e1024]:
+                - cell [ref=f1e1025]:
+                  - link "可伐利单抗（crovalimab）" [ref=f1e1026] [cursor=pointer]:
+                    - /url: products/crovalimab.html
+                - cell [ref=f1e1027]:
+                  - link "COMMODORE 2" [ref=f1e1028] [cursor=pointer]:
+                    - /url: trials/nct04434092.html
+                - button "基线血红蛋白" [ref=f1e1029] [cursor=pointer]
+                - button "对照组" [ref=f1e1030] [cursor=pointer]
+                - button "基线" [ref=f1e1031] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1032] [cursor=pointer]
+                - button "中位数" [ref=f1e1033] [cursor=pointer]
+                - button "未列示" [ref=f1e1034] [cursor=pointer]
+                - button "未列示" [ref=f1e1035] [cursor=pointer]
+                - button "8.5" [ref=f1e1036] [cursor=pointer]
+                - button "g/dL" [ref=f1e1037] [cursor=pointer]
+                - button "已报告值" [ref=f1e1038] [cursor=pointer]
+        - generic [ref=f1e1039]:
+          - heading "基线乳酸脱氢酶｜基线变量（U/L）" [level=3] [ref=f1e1040]
+          - generic "组别图例" [ref=f1e1041]:
+            - generic [ref=f1e1042]: 治疗组
+            - generic [ref=f1e1044]: 对照组
+          - img "基线乳酸脱氢酶｜基线变量（U/L） 图形" [ref=f1e1046]:
+            - img [ref=f1e1048]:
+              - generic [ref=f1e1050]:
+                - generic [ref=f1e1051]: U/L
+                - generic [ref=f1e1052]: "0"
+                - generic [ref=f1e1053]: "300"
+                - generic [ref=f1e1054]: "600"
+                - generic [ref=f1e1055]: "900"
+                - generic [ref=f1e1056]: 1,200
+                - generic [ref=f1e1057]: 1,500
+                - generic [ref=f1e1058]: 1,800
+                - generic [ref=f1e1059]: 基线乳酸脱氢酶
+                - generic [ref=f1e1060]: 治疗组
+                - generic [ref=f1e1061]: 基线乳酸脱氢酶
+                - generic [ref=f1e1062]: 对照组
+                - generic [ref=f1e1065]: "1633.5"
+                - generic [ref=f1e1066]: "1578.3"
+            - button "查看数值 1633.5 的数据依据" [ref=f1e1067] [cursor=pointer]
+            - button "查看数值 1578.3 的数据依据" [ref=f1e1068] [cursor=pointer]
+          - table [ref=f1e1070]:
+            - caption [ref=f1e1071]: 基线与人群总览数据表
+            - rowgroup [ref=f1e1072]:
+              - row [ref=f1e1073]:
+                - columnheader "产品" [ref=f1e1074]
+                - columnheader "试验" [ref=f1e1075]
+                - columnheader "基线变量" [ref=f1e1076]
+                - columnheader "组别" [ref=f1e1077]
+                - columnheader "时间点" [ref=f1e1078]
+                - columnheader "分析人群" [ref=f1e1079]
+                - columnheader "统计形式" [ref=f1e1080]
+                - columnheader "分子" [ref=f1e1081]
+                - columnheader "分母" [ref=f1e1082]
+                - columnheader "数值" [ref=f1e1083]
+                - columnheader "单位" [ref=f1e1084]
+                - columnheader "披露状态" [ref=f1e1085]
+            - rowgroup [ref=f1e1086]:
+              - row [ref=f1e1087]:
+                - cell [ref=f1e1088]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e1089] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e1090]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e1091] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "基线乳酸脱氢酶" [ref=f1e1092] [cursor=pointer]
+                - button "治疗组" [ref=f1e1093] [cursor=pointer]
+                - button "基线" [ref=f1e1094] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1095] [cursor=pointer]
+                - button "均值" [ref=f1e1096] [cursor=pointer]
+                - button "未列示" [ref=f1e1097] [cursor=pointer]
+                - button "未列示" [ref=f1e1098] [cursor=pointer]
+                - button "1633.5" [ref=f1e1099] [cursor=pointer]
+                - button "U/L" [ref=f1e1100] [cursor=pointer]
+                - button "已报告值" [ref=f1e1101] [cursor=pointer]
+              - row [ref=f1e1102]:
+                - cell [ref=f1e1103]:
+                  - link "拉武利尤单抗（ravulizumab）" [ref=f1e1104] [cursor=pointer]:
+                    - /url: products/ravulizumab.html
+                - cell [ref=f1e1105]:
+                  - link "Study 301（CHAMPION-301）" [ref=f1e1106] [cursor=pointer]:
+                    - /url: trials/nct02946463.html
+                - button "基线乳酸脱氢酶" [ref=f1e1107] [cursor=pointer]
+                - button "对照组" [ref=f1e1108] [cursor=pointer]
+                - button "基线" [ref=f1e1109] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1110] [cursor=pointer]
+                - button "均值" [ref=f1e1111] [cursor=pointer]
+                - button "未列示" [ref=f1e1112] [cursor=pointer]
+                - button "未列示" [ref=f1e1113] [cursor=pointer]
+                - button "1578.3" [ref=f1e1114] [cursor=pointer]
+                - button "U/L" [ref=f1e1115] [cursor=pointer]
+                - button "已报告值" [ref=f1e1116] [cursor=pointer]
+        - generic [ref=f1e1117]:
+          - heading "baseline_hgb_actual｜基线变量（单位未列示）" [level=3] [ref=f1e1118]
+          - img "baseline_hgb_actual｜基线变量（单位未列示） 图形" [ref=f1e1119]:
+            - status [ref=f1e1120]:
+              - paragraph [ref=f1e1121]: 暂无公开记录（基线）；完整字段表保留披露状态
+              - paragraph [ref=f1e1122]: 完整记录仍列于下方表格，便于核对来源与口径。
+          - table [ref=f1e1124]:
+            - caption [ref=f1e1125]: 基线与人群总览数据表
+            - rowgroup [ref=f1e1126]:
+              - row [ref=f1e1127]:
+                - columnheader "产品" [ref=f1e1128]
+                - columnheader "试验" [ref=f1e1129]
+                - columnheader "基线变量" [ref=f1e1130]
+                - columnheader "组别" [ref=f1e1131]
+                - columnheader "时间点" [ref=f1e1132]
+                - columnheader "分析人群" [ref=f1e1133]
+                - columnheader "统计形式" [ref=f1e1134]
+                - columnheader "分子" [ref=f1e1135]
+                - columnheader "分母" [ref=f1e1136]
+                - columnheader "数值" [ref=f1e1137]
+                - columnheader "单位" [ref=f1e1138]
+                - columnheader "披露状态" [ref=f1e1139]
+            - rowgroup [ref=f1e1140]:
+              - row [ref=f1e1141]:
+                - cell [ref=f1e1142]:
+                  - link "达尼可泮（danicopan）" [ref=f1e1143] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e1144]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e1145] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "baseline_hgb_actual" [ref=f1e1146] [cursor=pointer]
+                - button "治疗组" [ref=f1e1147] [cursor=pointer]
+                - button "基线" [ref=f1e1148] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1149] [cursor=pointer]
+                - button "均值" [ref=f1e1150] [cursor=pointer]
+                - button "未列示" [ref=f1e1151] [cursor=pointer]
+                - button "未列示" [ref=f1e1152] [cursor=pointer]
+                - button "未公开" [ref=f1e1153] [cursor=pointer]
+                - button "未列示" [ref=f1e1154] [cursor=pointer]
+                - button "未公开" [ref=f1e1155] [cursor=pointer]
+              - row [ref=f1e1156]:
+                - cell [ref=f1e1157]:
+                  - link "达尼可泮（danicopan）" [ref=f1e1158] [cursor=pointer]:
+                    - /url: products/danicopan.html
+                - cell [ref=f1e1159]:
+                  - link "ALPHA（ALXN2040-PNH-301）" [ref=f1e1160] [cursor=pointer]:
+                    - /url: trials/nct04469465.html
+                - button "baseline_hgb_actual" [ref=f1e1161] [cursor=pointer]
+                - button "对照组" [ref=f1e1162] [cursor=pointer]
+                - button "基线" [ref=f1e1163] [cursor=pointer]
+                - button "来源报告基线/相应分析人群" [ref=f1e1164] [cursor=pointer]
+                - button "均值" [ref=f1e1165] [cursor=pointer]
+                - button "未列示" [ref=f1e1166] [cursor=pointer]
+                - button "未列示" [ref=f1e1167] [cursor=pointer]
+                - button "未公开" [ref=f1e1168] [cursor=pointer]
+                - button "未列示" [ref=f1e1169] [cursor=pointer]
+                - button "未公开" [ref=f1e1170] [cursor=pointer]
+  - contentinfo [ref=f1e1171]:
+    - generic [ref=f1e1172]: 康哲药业临床试验结果比较；数据截止 2026-07-31。

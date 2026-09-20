@@ -1,0 +1,4 @@
+source=assets/brand/cms-logo.svg
+source_sha256=8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae
+png_sha256=fbf9932458007b5e03e916d0b9ba7701e728dbc551ce2187a5e7993974efb63e
+note=Rasterized from official SVG for ReportLab Image embedding; charts remain ReportLab vectors.

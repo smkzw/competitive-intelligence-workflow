@@ -123,31 +123,31 @@ def test_manual_inbox_recovery():
             failures.append("子用例1：已识别状态中断后应自动续跑归档")
         after_resume_events = len(svc.event_store.read_all())
         jobs_before_replay = len(_read_jsonl(svc.re_extraction_path))
-        crash_path.write_bytes(crash_content)  # 模拟接受事件写入后、收件副本删除前中断
+        # 接受后的重放不得删除用户文件；规范文件与原始文件都由用户目录保留
+        crash_path.write_bytes(crash_content)
         replayed = svc.scan_and_process_inbox(
             crash_req.request_id, occurred_at=_NOW + timedelta(milliseconds=3),
         )
         if replayed is None or replayed.state is not DownloadRequestState.ACCEPTED:
-            failures.append("子用例1：已归档状态遗留收件副本应自动清理")
-        if crash_path.exists():
-            failures.append("子用例1：续跑后不应遗留收件副本")
+            failures.append("子用例1：已接受状态重放应保持 accepted")
+        if not crash_path.exists():
+            failures.append("子用例1：已接受重放不应删除用户收件文件")
         if len(svc.event_store.read_all()) != after_resume_events:
-            failures.append("子用例1：已归档重放不应重复写入事件")
+            failures.append("子用例1：已接受重放不应重复写入事件")
         if len(_read_jsonl(svc.re_extraction_path)) != jobs_before_replay:
-            failures.append("子用例1：已归档重放不应重复创建重抽取作业")
+            failures.append("子用例1：已接受重放不应重复创建重抽取作业")
         if after_resume_events != before_resume_events + 1:
             failures.append("子用例1：从已识别续跑只应新增一次接受事件")
-        crash_path.write_bytes(crash_content)
         svc.accept(
             crash_req.request_id, filename=crash_path.name, content=crash_content,
             media_type="text/html", occurred_at=_NOW + timedelta(milliseconds=4),
         )
-        if crash_path.exists():
-            failures.append("子用例1：直接归档重放也应清理遗留收件副本")
+        if not crash_path.exists():
+            failures.append("子用例1：直接接受重放不应删除用户收件文件")
         if len(svc.event_store.read_all()) != after_resume_events:
-            failures.append("子用例1：直接归档重放不应重复写入事件")
+            failures.append("子用例1：直接接受重放不应重复写入事件")
         if len(_read_jsonl(svc.re_extraction_path)) != jobs_before_replay:
-            failures.append("子用例1：直接归档重放不应重复创建重抽取作业")
+            failures.append("子用例1：直接接受重放不应重复创建作业")
 
         # ── 子用例 2：多合法文件 → 全部按歧义隔离；两个请求作业保留 ─────────
         req_a = _create(svc, trial_id="NCT010", doi="10.1000/test.010",

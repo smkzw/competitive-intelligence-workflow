@@ -449,9 +449,11 @@
         "omission_review": {
           "gap_id": "gap-eligibility-a-empty",
           "reviewer_role_id": "reviewer-independent",
+          "producer_context_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "reviewer_context_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
           "conclusion": "no_material_omission",
           "review_notes_zh": "已按资格检索范围逐项复核，未发现可归因遗漏。",
-          "reviewed_inputs_digest": "omission-review-inputs_ca19d52b45973ce90f9fa127"
+          "reviewed_inputs_digest": "omission-review-inputs_c60a9033253b1b941ee4c593"
         },
         "technical_diagnosis": null,
         "information_gain_rounds": [

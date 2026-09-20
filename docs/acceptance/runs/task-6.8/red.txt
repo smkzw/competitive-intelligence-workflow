@@ -1,0 +1,5 @@
+Task 6.8 RED
+
+- test_disposition_views.py：模块不存在时收集失败。
+- test_disposition_view_interactions.py：模块不存在时收集失败。
+- RED 证明测试先于生产实现，并覆盖图表资格、完整表、状态矩阵、筛选、证据、网址和同步失败关闭。

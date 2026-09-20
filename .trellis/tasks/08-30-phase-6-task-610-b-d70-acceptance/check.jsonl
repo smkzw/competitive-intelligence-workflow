@@ -1,0 +1,11 @@
+{"file":".trellis/tasks/08-30-phase-6-task-610-b-d70-acceptance/prd.md","reason":"逐条核对本任务验收标准"}
+{"file":".trellis/tasks/08-27-phase-6-report-b/prd.md","reason":"核对 Phase 6 不可放宽边界"}
+{"file":"contracts/kangzhe/design_specs/core.md","reason":"视觉、中文和证据 P0 检查"}
+{"file":"contracts/kangzhe/design_specs/track_site.md","reason":"全路由站点验收"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"确定性与失败场景检查"}
+{"file":".trellis/spec/frontend/quality-guidelines.md","reason":"真实浏览器与交互检查"}
+{"check":"pytest","result":"146 passed in 152.43s","scope":"B 类门户、报告、图表同步、设计合同与包清单"}
+{"check":"browser_matrix","result":"pass","scope":"24 页 × Chromium/WebKit × 1024/1280/1440；横向溢出 0，指定字号小于 16px 计数 0"}
+{"check":"visual_review","result":"pass","scope":"MiniMax、Cursor Grok、CodeBuddy 能力边界及 Kimi v7-v9 独立复核；v9 无新增 P0/P1"}
+{"check":"governance","result":"pass","scope":"audit-execution、validate-conference、execution/conference review-gate"}
+{"check":"cleanup","result":"archived","scope":"v2-v8、执行工作包和任务专属临时视觉文件；v9 与最终截图保留"}

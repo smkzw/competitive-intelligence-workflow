@@ -133,7 +133,7 @@ def test_html_ppt_runtime_has_required_navigation_presenter_and_offline_boundari
     assert "#/" in runtime
     assert "data-current" in runtime and "data-total" in runtime
     assert "1280" in css and "720" in css
-    assert "Math.min(window.innerWidth / 1280, window.innerHeight / 720)" in runtime
+    assert "Math.min(viewportWidth / DESIGN_WIDTH, viewportHeight / DESIGN_HEIGHT)" in runtime
     for forbidden_network_api in ("fetch(", "XMLHttpRequest", "WebSocket", "EventSource"):
         assert forbidden_network_api not in runtime
     assert "@import" not in css

@@ -60,10 +60,10 @@
     },
     "outputs": {
       "type": "array",
-      "items": { "enum": ["html", "pdf", "html-ppt", "pptx"] },
       "minItems": 1,
-      "uniqueItems": true,
-      "description": "选定输出格式"
+      "maxItems": 1,
+      "items": { "type": "string", "const": "html" },
+      "description": "唯一支持的站点式 HTML 输出格式"
     },
     "inputs": {
       "type": "array",
@@ -78,7 +78,7 @@
             "description": "案例目录内相对路径"
           },
           "role": {
-            "enum": ["universe_closure", "report_data"],
+            "enum": ["universe_closure", "report_data", "recovery_report_data"],
             "description": "输入文件角色"
           },
           "sha256": {
@@ -106,8 +106,12 @@
           "description": "预期报告版本段"
         },
         "outcome": {
-          "enum": ["evidence_blocked", "rendered"],
+          "enum": ["evidence_blocked", "recovery_required", "rendered"],
           "description": "预期运行结果"
+        },
+        "state": {
+          "enum": ["evidence_blocked", "recovery_required", "rendered_unreviewed"],
+          "description": "预期运行状态：证据阻断或已渲染待独立复核"
         },
         "product_count": {
           "type": "integer",

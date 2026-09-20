@@ -1,0 +1,725 @@
+{
+  "studyVersion" : 0,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT06383468",
+        "orgStudyIdInfo" : {
+          "id" : "AK120-301"
+        },
+        "organization" : {
+          "fullName" : "Akeso",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A Phase III Study to Evaluate the Efficacy and Safety of AK120 in Patients With Moderate to Severe Atopic Dermatitis",
+        "officialTitle" : "a Randomized Double-blind, Placebo-controlled, Multicenter Phase III Clinical Study to Evaluate the Efficacy and Safety of AK120 in the Treatment of Patients With Moderate to Severe Atopic Dermatitis"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2024-04",
+        "overallStatus" : "UNKNOWN",
+        "lastKnownStatus" : "RECRUITING",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2024-04-30",
+          "type" : "ESTIMATED"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2025-01-30",
+          "type" : "ESTIMATED"
+        },
+        "completionDateStruct" : {
+          "date" : "2026-01-30",
+          "type" : "ESTIMATED"
+        },
+        "studyFirstSubmitDate" : "2024-04-21",
+        "studyFirstSubmitQcDate" : "2024-04-21",
+        "studyFirstPostDateStruct" : {
+          "date" : "2024-04-25",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2024-04-21",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2024-04-25",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Akeso",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "This is a randomized double-blind, placebo-controlled, multicenter phase III clinical study evaluating the efficacy and safety of AK120 injection in the treatment of patients with moderate to severe atopic dermatitis.",
+        "detailedDescription" : "This is a randomized double-blind, placebo-controlled, multicenter phase III clinical study evaluating the efficacy and safety of AK120 injection in the treatment of patients with moderate to severe atopic dermatitis.\nThe entire study included a screening period, a double-blind controlled treatment period, a conversion and maintenance treatment period, and a safe follow-up period."
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Atopic Dermatitis" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE3" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "QUADRUPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR", "OUTCOMES_ASSESSOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 420,
+          "type" : "ESTIMATED"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "AK120 600mg&#x2F;300mg",
+          "type" : "EXPERIMENTAL",
+          "description" : "AK120 600mg(first day) then 300mg Q2W subcutaneous injection thereafter until week 50.",
+          "interventionNames" : [ "Drug: AK120" ]
+        }, {
+          "label" : "Placebo&#x2F;AK120 600mg to 300mg",
+          "type" : "PLACEBO_COMPARATOR",
+          "description" : "placebo Q2W SC, then AK120 600mg at week 16, thereafter change to AK120 300mg Q2W subcutaneous injection until week 50.",
+          "interventionNames" : [ "Drug: AK120" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "AK120",
+          "description" : "300mg Q2W subcutaneous injection thereafter until week 50.",
+          "armGroupLabels" : [ "AK120 600mg&#x2F;300mg", "Placebo&#x2F;AK120 600mg to 300mg" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Percentage of subjects who achieved (Eczema Area and Severity Index) EASI-75",
+          "description" : "Percentage of patients in both treatment group and placebo group who achieved EASI 75 at week 16.",
+          "timeFrame" : "at week 16"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Percentage of subjects who achieved 0&#x2F;1 in the (Investigator&#x27;s Global Assessment) IGA",
+          "description" : "The percentage of patients in both treatment group and placebo group who achieved IGA 0&#x2F;1 score at week 16.",
+          "timeFrame" : "at week 16"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ol><li>Male or female subjects aged ≥18≤75 years old.</li><li>Atopic dermatitis (AD) diagnosed at least 1 year before screening.</li><li>Subject with eczema area and severity index (EASI) score ≥16, Investigator Global Assessment (IGA) score≥ 3, Body Surface Area (BSA) score ≥ 10% at screening and baseline.</li><li>Previously received at least 4 weeks of moderate to strong or at least 2 weeks of strong local glucocorticoid (TCS) treatment for AD before screening, with poor efficacy or intolerable</li></ol><p>Exclusion Criteria:</p><ol><li>Acute onset of AD within the first 4 weeks of randomization.</li><li>Have participated in any clinical research on AK120 in the past</li><li>Received systemic corticosteroids, immunosuppressive&#x2F;immunomodulatory drugs, phototherapy within the 4 weeks before randomization.</li><li>Received treatment with other clinical research drugs (non-biological agents) within the first 4 weeks or 5 half-lives of randomization (whichever is longer)</li><li>Received or planned to receive live vaccine treatment within the 3 months before randomization or during the study period.</li><li>Received allergen specific immunotherapy within the 3 months before randomization.</li><li>Have a history of allergies to any component of AK120 and&#x2F;or severe allergic reactions to monoclonal antibodies.</li></ol>",
+        "healthyVolunteers" : false,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "75 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "centralContacts" : [ {
+          "name" : "Guoqin Wang",
+          "role" : "CONTACT",
+          "phone" : "+86 (0760) 8987 3999",
+          "email" : "global.trials@akesobio.com"
+        } ],
+        "locations" : [ {
+          "facility" : "Beijing Friendship Hospital Capital Medical University",
+          "status" : "RECRUITING",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          }
+        }, {
+          "facility" : "Beijing Luhe Hospital Affiliated to Capital Medical University",
+          "status" : "RECRUITING",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          }
+        }, {
+          "facility" : "Beijing Tongren Hospital",
+          "status" : "RECRUITING",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          }
+        }, {
+          "facility" : "Peking University People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          }
+        }, {
+          "facility" : "Peking University Third Hospital",
+          "status" : "RECRUITING",
+          "city" : "Beijing",
+          "state" : "Beijing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 39.9075,
+            "lon" : 116.39723
+          }
+        }, {
+          "facility" : "Chongqing Three Gorges Medical College Affiliated People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Chongqing",
+          "state" : "Chongqing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 29.56026,
+            "lon" : 106.55771
+          }
+        }, {
+          "facility" : "Chongqing Traditional Chinese Medicine Hospital",
+          "status" : "RECRUITING",
+          "city" : "Chongqing",
+          "state" : "Chongqing Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 29.56026,
+            "lon" : 106.55771
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Fujian Medical University",
+          "status" : "RECRUITING",
+          "city" : "Fuzhou",
+          "state" : "Fujian",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 26.06139,
+            "lon" : 119.30611
+          }
+        }, {
+          "facility" : "The Second Affiliated Hospital of Xiamen Medical College",
+          "status" : "RECRUITING",
+          "city" : "Xiamen",
+          "state" : "Fujian",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 24.47979,
+            "lon" : 118.08187
+          }
+        }, {
+          "facility" : "Guangdong Provincial People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          }
+        }, {
+          "facility" : "Southern Medical University Dermatology Hospital&#x2F;Guangdong Provincial Dermatology Hospital",
+          "status" : "RECRUITING",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          }
+        }, {
+          "facility" : "Southern Medical University Southern Hospital",
+          "status" : "RECRUITING",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          }
+        }, {
+          "facility" : "Sun Yat-sen Memorial Hospital, Sun Yat-sen University",
+          "status" : "RECRUITING",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Guangzhou Medical University",
+          "status" : "RECRUITING",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          }
+        }, {
+          "facility" : "Zhujiang Hospital of Southern Medical University",
+          "status" : "RECRUITING",
+          "city" : "Guangzhou",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 23.11667,
+            "lon" : 113.25
+          }
+        }, {
+          "facility" : "Yuebei People&#x27;s hospital, Guangdong, China",
+          "status" : "RECRUITING",
+          "city" : "Shaoguan",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 24.8,
+            "lon" : 113.58333
+          }
+        }, {
+          "facility" : "Shunde Hospital of Southern Medical University",
+          "status" : "RECRUITING",
+          "city" : "Shunde",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 22.84067,
+            "lon" : 113.2503
+          }
+        }, {
+          "facility" : "Guangdong Medical University Affiliated Hospital",
+          "status" : "RECRUITING",
+          "city" : "Zhanjiang",
+          "state" : "Guangdong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 21.23391,
+            "lon" : 110.38749
+          }
+        }, {
+          "facility" : "The Affiliated Hospital of Guizhou Medical University",
+          "status" : "RECRUITING",
+          "city" : "Guiyang",
+          "state" : "Guizhou",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 26.58333,
+            "lon" : 106.71667
+          }
+        }, {
+          "facility" : "Hainan General Hospital",
+          "status" : "RECRUITING",
+          "city" : "Haikou",
+          "state" : "Hainan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 20.03421,
+            "lon" : 110.34651
+          }
+        }, {
+          "facility" : "Hainan Provincial Fifth People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Haikou",
+          "state" : "Hainan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 20.03421,
+            "lon" : 110.34651
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Hainan Medical College",
+          "status" : "RECRUITING",
+          "city" : "Haikou",
+          "state" : "Hainan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 20.03421,
+            "lon" : 110.34651
+          }
+        }, {
+          "facility" : "Chengde Medical College Affiliated Hospital",
+          "status" : "RECRUITING",
+          "city" : "Chengde",
+          "state" : "Hebei",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 40.9519,
+            "lon" : 117.95883
+          }
+        }, {
+          "facility" : "The Second Affiliated Hospital of Xingtai Medical College",
+          "status" : "RECRUITING",
+          "city" : "Xingtai",
+          "state" : "Hebei",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 37.06217,
+            "lon" : 114.49272
+          }
+        }, {
+          "facility" : "Harbin Medical University Affiliated Second Hospital",
+          "status" : "RECRUITING",
+          "city" : "Harbin",
+          "state" : "Heilongjiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 45.75,
+            "lon" : 126.65
+          }
+        }, {
+          "facility" : "Heilongjiang Provincial Hospital",
+          "status" : "RECRUITING",
+          "city" : "Harbin",
+          "state" : "Heilongjiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 45.75,
+            "lon" : 126.65
+          }
+        }, {
+          "facility" : "The Second Affiliated Hospital of Henan University of Science and Technology",
+          "status" : "RECRUITING",
+          "city" : "Luoyang",
+          "state" : "Henan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 34.67345,
+            "lon" : 112.43684
+          }
+        }, {
+          "facility" : "Renmin Hospital of Wuhan University Hubei General Hospital",
+          "status" : "RECRUITING",
+          "city" : "Wuhan",
+          "state" : "Hubei",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.58333,
+            "lon" : 114.26667
+          }
+        }, {
+          "facility" : "Tongji Hospital",
+          "status" : "RECRUITING",
+          "city" : "Wuhan",
+          "state" : "Hubei",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.58333,
+            "lon" : 114.26667
+          }
+        }, {
+          "facility" : "Changde First People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Changde",
+          "state" : "Hunan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 29.03205,
+            "lon" : 111.69844
+          }
+        }, {
+          "facility" : "Xiangya Hospital of Central South University",
+          "status" : "RECRUITING",
+          "city" : "Changsha",
+          "state" : "Hunan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 28.19874,
+            "lon" : 112.97087
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of South China University",
+          "status" : "RECRUITING",
+          "city" : "Hengyang",
+          "state" : "Hunan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 26.88946,
+            "lon" : 112.61888
+          }
+        }, {
+          "facility" : "Inner Mongolia Medical University Affiliated Hospital",
+          "status" : "RECRUITING",
+          "city" : "Hohhot",
+          "state" : "Inner Mongolia",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 40.81056,
+            "lon" : 111.65222
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Bengbu Medical College",
+          "status" : "RECRUITING",
+          "city" : "Bengbu",
+          "state" : "Jiangsu",
+          "country" : "China"
+        }, {
+          "facility" : "Changzhou First People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Changzhou",
+          "state" : "Jiangsu",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.77359,
+            "lon" : 119.95401
+          }
+        }, {
+          "facility" : "Yancheng First People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Yancheng",
+          "state" : "Jiangsu",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 33.3575,
+            "lon" : 120.1573
+          }
+        }, {
+          "facility" : "Jiangsu University Affiliated Hospital",
+          "status" : "RECRUITING",
+          "city" : "Zhenjiang",
+          "state" : "Jiangsu",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 32.21086,
+            "lon" : 119.45508
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Gannan Medical College",
+          "status" : "RECRUITING",
+          "city" : "Ganzhou",
+          "state" : "Jiangxi",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 25.84664,
+            "lon" : 114.9326
+          }
+        }, {
+          "facility" : "The First Bethune Hospital of Jilin University",
+          "status" : "RECRUITING",
+          "city" : "Changchun",
+          "state" : "Jilin",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 43.88,
+            "lon" : 125.32278
+          }
+        }, {
+          "facility" : "Panjin Liaoyou Gemstone Flower Hospital",
+          "status" : "RECRUITING",
+          "city" : "Panjin",
+          "state" : "Liaoning",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 41.121,
+            "lon" : 122.0739
+          }
+        }, {
+          "facility" : "Shenyang Integrated Traditional Chinese and Western Medicine Hospital",
+          "status" : "RECRUITING",
+          "city" : "Shenyang",
+          "state" : "Liaoning",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 41.79222,
+            "lon" : 123.43278
+          }
+        }, {
+          "facility" : "Zhongyi Northeast International Hospital",
+          "status" : "RECRUITING",
+          "city" : "Shenyang",
+          "state" : "Liaoning",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 41.79222,
+            "lon" : 123.43278
+          }
+        }, {
+          "facility" : "General Hospital of Ningxia Medical University",
+          "status" : "RECRUITING",
+          "city" : "Yinchuan",
+          "state" : "Ningxia",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 38.46806,
+            "lon" : 106.27306
+          }
+        }, {
+          "facility" : "Shandong Provincial Dermatology Hospital",
+          "status" : "RECRUITING",
+          "city" : "Jinan",
+          "state" : "Shandong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 36.66833,
+            "lon" : 116.99722
+          }
+        }, {
+          "facility" : "Shandong University Qilu Hospital",
+          "status" : "RECRUITING",
+          "city" : "Jinan",
+          "state" : "Shandong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 36.66833,
+            "lon" : 116.99722
+          }
+        }, {
+          "facility" : "Qingdao Municipal Hospital",
+          "status" : "RECRUITING",
+          "city" : "Qingdao",
+          "state" : "Shandong",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 36.06488,
+            "lon" : 120.38042
+          }
+        }, {
+          "facility" : "Shanghai Dermatology Hospital",
+          "status" : "RECRUITING",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          }
+        }, {
+          "facility" : "Baoji Central Hospital",
+          "status" : "RECRUITING",
+          "city" : "Baoji",
+          "state" : "Shanxi",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 35.90348,
+            "lon" : 111.38866
+          }
+        }, {
+          "facility" : "Sichuan Provincial People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Chengdu",
+          "state" : "Sichuan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.66667,
+            "lon" : 104.06667
+          }
+        }, {
+          "facility" : "Tianjin Institute of Traditional Chinese Medicine Affiliated Hospital",
+          "status" : "RECRUITING",
+          "city" : "Tianjin",
+          "state" : "Tianjin Municipality",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 39.14222,
+            "lon" : 117.17667
+          }
+        }, {
+          "facility" : "Xinjiang Uygur Autonomous Region People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Ürümqi",
+          "state" : "Xinjiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 43.80096,
+            "lon" : 87.60046
+          }
+        }, {
+          "facility" : "The First Affiliated Hospital of Kunming Medical University",
+          "status" : "RECRUITING",
+          "city" : "Kunming",
+          "state" : "Yunnan",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 25.03889,
+            "lon" : 102.71833
+          }
+        }, {
+          "facility" : "Hangzhou First People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          }
+        }, {
+          "facility" : "Hangzhou Third People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          }
+        }, {
+          "facility" : "The Second Affiliated Hospital of Zhejiang University School of Medicine",
+          "status" : "RECRUITING",
+          "city" : "Hangzhou",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.29365,
+            "lon" : 120.16142
+          }
+        }, {
+          "facility" : "Jiaxing First People&#x27;s Hospital",
+          "status" : "RECRUITING",
+          "city" : "Jiaxing",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 30.7522,
+            "lon" : 120.75
+          }
+        }, {
+          "facility" : "Ningbo First Hospital",
+          "status" : "RECRUITING",
+          "city" : "Ningbo",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 29.87819,
+            "lon" : 121.54945
+          }
+        }, {
+          "facility" : "Ningbo Huamei Hospital, University of Chinese Academy of Sciences",
+          "status" : "RECRUITING",
+          "city" : "Ningbo",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 29.87819,
+            "lon" : 121.54945
+          }
+        }, {
+          "facility" : "Wenzhou Medical University First Affiliated Hospital",
+          "status" : "RECRUITING",
+          "city" : "Wenzhou",
+          "state" : "Zhejiang",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 27.99942,
+            "lon" : 120.66682
+          }
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

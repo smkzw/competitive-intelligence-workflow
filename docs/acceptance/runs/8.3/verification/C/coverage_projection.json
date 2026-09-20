@@ -1,0 +1,147 @@
+{
+  "report": "C",
+  "expected_page_count": 12,
+  "registry_page_count": 12,
+  "covered_page_ids": [
+    "overview",
+    "design-map",
+    "trial-profile",
+    "population-disease-definition",
+    "inclusion-criteria",
+    "exclusion-criteria",
+    "treatment-arms",
+    "endpoint-timepoint-matrix",
+    "visit-duration-followup",
+    "sample-analysis-statistics",
+    "design-patterns",
+    "evidence-versions-limitations"
+  ],
+  "missing_page_ids": [],
+  "unexpected_bookmark_titles": [],
+  "pages": [
+    {
+      "page_responsibility_id": "overview",
+      "title_zh": "首页",
+      "covered": true,
+      "evidence": [
+        "bookmark:overview",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "design-map",
+      "title_zh": "设计图谱",
+      "covered": true,
+      "evidence": [
+        "bookmark:design-map",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "trial-profile",
+      "title_zh": "试验档案",
+      "covered": true,
+      "evidence": [
+        "bookmark:trial-profile",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "population-disease-definition",
+      "title_zh": "人群与疾病定义",
+      "covered": true,
+      "evidence": [
+        "bookmark:population-disease-definition",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "inclusion-criteria",
+      "title_zh": "入选标准",
+      "covered": true,
+      "evidence": [
+        "bookmark:inclusion-criteria",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "exclusion-criteria",
+      "title_zh": "排除标准",
+      "covered": true,
+      "evidence": [
+        "bookmark:exclusion-criteria",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "treatment-arms",
+      "title_zh": "分组、干预与对照",
+      "covered": true,
+      "evidence": [
+        "bookmark:treatment-arms",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "endpoint-timepoint-matrix",
+      "title_zh": "终点、定义与时间点",
+      "covered": true,
+      "evidence": [
+        "bookmark:endpoint-timepoint-matrix",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "visit-duration-followup",
+      "title_zh": "访视、疗程与随访",
+      "covered": true,
+      "evidence": [
+        "bookmark:visit-duration-followup",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "sample-analysis-statistics",
+      "title_zh": "样本量、分析集与统计设计",
+      "covered": true,
+      "evidence": [
+        "bookmark:sample-analysis-statistics",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "design-patterns",
+      "title_zh": "设计模式、权衡与可选路径",
+      "covered": true,
+      "evidence": [
+        "bookmark:design-patterns",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    },
+    {
+      "page_responsibility_id": "evidence-versions-limitations",
+      "title_zh": "资料版本与局限",
+      "covered": true,
+      "evidence": [
+        "bookmark:evidence-versions-limitations",
+        "text_needle"
+      ],
+      "missing_reasons": []
+    }
+  ],
+  "forbidden_markers_found": [],
+  "has_continued_table_marker": true,
+  "differences_approved": false,
+  "ok": true
+}

@@ -11,7 +11,6 @@ LOCKFILE = ROOT / "uv.lock"
 REQUIRED_RUNTIME_DEPENDENCIES = {
     "pydantic",
     "jinja2",
-    "reportlab",
     "pypdf",
     "pdfplumber",
     "playwright",

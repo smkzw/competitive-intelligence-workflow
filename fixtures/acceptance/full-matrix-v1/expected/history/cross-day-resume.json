@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "case_id": "historical-cutoff-cross-day-resume",
+  "materialized_cutoff": "2026-08-09T23:59:59.999999+08:00",
+  "resume_cutoff_before_cross_day": "2026-08-09T23:59:59.999999+08:00",
+  "resume_cutoff_after_cross_day": "2026-08-09T23:59:59.999999+08:00",
+  "resumed_at": "2026-08-10T10:00:00+08:00",
+  "assessment": "snapshot_eligible",
+  "can_enter_snapshot": true,
+  "refresh_candidate": false,
+  "recovery_required": false,
+  "invariants": [
+    "跨自然日恢复不自动推进已物化 cutoff",
+    "恢复前后 cutoff 字节值和时区偏移完全一致",
+    "恢复时间晚于 cutoff 不得重分类截止前已披露来源"
+  ]
+}

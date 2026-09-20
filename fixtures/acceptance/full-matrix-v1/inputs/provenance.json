@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "source_fixture": "fixtures/synthetic/three-report-complete",
+  "source_case_id": "three-report-complete",
+  "deidentified": true,
+  "identity_verified": true,
+  "verification_basis_zh": "仅使用仓库内已登记的合成 A/B/C fixture；实体、试验和来源定位不含受试者身份信息。",
+  "release_scope": "site_html_v1",
+  "formats": ["html"],
+  "note_zh": "本文件记录 full-matrix-v1 的脱敏来源与身份核验状态，不是生产来源或真实受试者数据。"
+}

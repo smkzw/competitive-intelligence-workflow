@@ -1,0 +1,33 @@
+{
+  "case_id": "host-smoke-v1",
+  "source_fixture": "fixtures/synthetic/host-smoke-v1/inputs/universe.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "三宿主必须从各自 fresh-install 入口和独立外部进程发现公共 Skill，执行相同最小 HTML 流程并绑定真实回执。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "codex-entry",
+      "description_zh": "Codex 从其安装入口执行公共 Skill。"
+    },
+    {
+      "id": "hermes-entry",
+      "description_zh": "Hermes 从其安装入口执行公共 Skill。"
+    },
+    {
+      "id": "omp-entry",
+      "description_zh": "OMP 从其安装入口执行公共 Skill。"
+    },
+    {
+      "id": "semantic-conformance",
+      "description_zh": "三宿主的科学状态、失败分类和 HTML 产物语义一致。"
+    },
+    {
+      "id": "independent-processes",
+      "description_zh": "宿主入口、会话、运行和外部进程互异，禁止同进程伪造。"
+    }
+  ]
+}

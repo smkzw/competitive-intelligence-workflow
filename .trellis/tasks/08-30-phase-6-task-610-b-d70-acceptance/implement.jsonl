@@ -1,0 +1,12 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"批准的产品合同与 D70 边界"}
+{"file":".trellis/tasks/08-27-phase-6-report-b/prd.md","reason":"Phase 6 B 类范围和退出条件"}
+{"file":"contracts/kangzhe/design_specs/ROUTER.md","reason":"项目内多页面门户路线裁决"}
+{"file":"contracts/kangzhe/design_specs/core.md","reason":"品牌、中文、证据和视觉硬合同"}
+{"file":"contracts/kangzhe/design_specs/track_site.md","reason":"多页面门户布局与交互合同"}
+{"file":".trellis/spec/backend/index.md","reason":"运行、清单与失败关闭实现规范"}
+{"file":".trellis/spec/frontend/index.md","reason":"门户和浏览器验收实现规范"}
+{"file":"fixtures/positive/b-pnh/inputs/report-data.json","reason":"最终 PNH 疗效、安全性、基线与完成情况真源"}
+{"file":"src/ci_workflow/renderers/portal/report_b.py","reason":"B 类身份、筛选、基线和完成情况分组修订"}
+{"file":"src/ci_workflow/renderers/portal/assets/report-b.css","reason":"默认视野、字号和表格可读性修订"}
+{"file":"tests/browser/test_b_portal.py","reason":"双内核视图与临床数值回归入口"}
+{"file":"docs/acceptance/runs/task-6.10/checkpoint.md","reason":"最终无损检查点与下一安全动作"}

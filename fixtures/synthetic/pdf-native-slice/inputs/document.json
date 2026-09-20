@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "pdf-native-vertical-slice-001",
+  "report_kind": "A",
+  "title_zh": "特应性皮炎创新药疗效与安全性比较",
+  "indication_zh": "特应性皮炎",
+  "data_cutoff_zh": "数据截止日：2026年7月31日",
+  "report_snapshot_id": "snapshot-pdf-native-slice-001",
+  "report_version": "v-pdf-slice-001",
+  "cover_subtitle_zh": "疗效与安全性关键结果",
+  "summary_bullets_zh": [
+    "三款生物制剂第16周 EASI-75 应答率均高于各自研究中的安慰剂组。",
+    "度普利尤单抗治疗组与安慰剂组的应答率差值较大；各产品结果来自不同示例试验，不作跨试验合并。",
+    "安全性明细按至第52周的治疗组发生率由高到低列示。"
+  ],
+  "bookmarks": [
+    {
+      "title_zh": "封面与摘要",
+      "target_id": "cover-summary"
+    },
+    {
+      "title_zh": "疗效比较",
+      "target_id": "efficacy-comparison"
+    },
+    {
+      "title_zh": "安全性明细表",
+      "target_id": "safety-detail-table"
+    }
+  ],
+  "page_plan": [
+    {
+      "section_id": "cover-summary",
+      "orientation": "portrait",
+      "responsibility": "封面与摘要"
+    },
+    {
+      "section_id": "efficacy-comparison",
+      "orientation": "landscape",
+      "responsibility": "疗效比较图与完整表"
+    },
+    {
+      "section_id": "safety-detail-table",
+      "orientation": "portrait",
+      "responsibility": "跨页安全性长表"
+    }
+  ],
+  "views": {
+    "efficacy": "efficacy_view.json",
+    "safety_long": "safety_long_view.json"
+  },
+  "display_projection": "display_projection.json",
+  "expected_structure": {
+    "min_pages": 3,
+    "first_page_orientation": "portrait",
+    "requires_landscape_page": true,
+    "requires_repeated_table_header_marker_zh": "续表",
+    "requires_vector_comparison_chart": true,
+    "searchable_chinese_phrases": [
+      "特应性皮炎",
+      "EASI-75",
+      "泰瑞奇单抗",
+      "度普利尤单抗",
+      "来瑞珠单抗",
+      "治疗组",
+      "安慰剂组",
+      "示例试验 01",
+      "续表",
+      "注射部位反应"
+    ]
+  },
+  "build_constraints": {
+    "input_must_be_report_view_model": true,
+    "forbid_html_input": true,
+    "forbid_non_native_print_pipeline": true,
+    "engine": "reportlab"
+  }
+}

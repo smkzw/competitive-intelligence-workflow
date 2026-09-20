@@ -1,0 +1,33 @@
+{
+  "case_id": "c-protocol-registry-paths",
+  "source_fixture": "fixtures/synthetic/three-report-complete/inputs/report-c-data.json",
+  "redaction": "synthetic-identities-only",
+  "scenario": "C 同时验证登记优先的充分路径、Protocol/SAP 补件恢复路径、统计细节非阻断路径和多路径综合。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "protocol-sap-complete",
+      "description_zh": "Protocol/SAP 完整时保留字段定位并支持恢复后的核心设计核验。"
+    },
+    {
+      "id": "registry-sufficient",
+      "description_zh": "官方登记已足够覆盖临床设计核心时无需 Protocol/SAP 也可通过。"
+    },
+    {
+      "id": "statistical-only-missing",
+      "description_zh": "仅统计细节缺失时保持披露状态且不阻断核心设计门槛。"
+    },
+    {
+      "id": "critical-design-missing-then-recovered",
+      "description_zh": "临床设计核心缺失先阻断，用户补件后从同一项目恢复并锁定。"
+    },
+    {
+      "id": "multiple-design-paths-no-unique-recommendation",
+      "description_zh": "多条证据支持设计路径并列展示，不形成唯一推荐或隐性排名。"
+    }
+  ]
+}

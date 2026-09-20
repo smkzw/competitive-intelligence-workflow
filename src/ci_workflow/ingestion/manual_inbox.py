@@ -31,7 +31,6 @@ from typing import Any, Literal, cast
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from ci_workflow.domain.enums import DownloadRequestState
-from ci_workflow.domain.evidence import DateEvidence, EvidenceLocator
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.gates.models import GateBlockingLevel, GateSpec
 from ci_workflow.ingestion.classifier import DocumentRole
@@ -174,9 +173,15 @@ class DownloadRequest(BaseModel):
     updated_at: datetime
 
     @field_validator(
-        "request_id", "project_id", "run_id",
-        "title", "publisher", "landing_page_url", "attachment_url",
-        "spec_id", "spec_fingerprint",
+        "request_id",
+        "project_id",
+        "run_id",
+        "title",
+        "publisher",
+        "landing_page_url",
+        "attachment_url",
+        "spec_id",
+        "spec_fingerprint",
     )
     @classmethod
     def _text_not_blank(cls, value: str) -> str:
@@ -188,8 +193,12 @@ class DownloadRequest(BaseModel):
         return None if value is None else _not_blank(value)
 
     @field_validator(
-        "registry_identifiers", "missing_fields", "expected_to_close_units",
-        "matched_identifiers", "re_extraction_job_ids", "quarantine_rejected_paths",
+        "registry_identifiers",
+        "missing_fields",
+        "expected_to_close_units",
+        "matched_identifiers",
+        "re_extraction_job_ids",
+        "quarantine_rejected_paths",
     )
     @classmethod
     def _items_not_blank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
@@ -285,11 +294,9 @@ class DownloadRequest(BaseModel):
 
 # ── GateSpec 真源校验 ───────────────────────────────────────────────────────
 
+
 def _canonical_gate_spec_path(report_kind: str) -> Path:
-    return (
-        Path(__file__).resolve().parents[3]
-        / "policies" / "gates" / f"{report_kind}-v1.yaml"
-    )
+    return Path(__file__).resolve().parents[3] / "policies" / "gates" / f"{report_kind}-v1.yaml"
 
 
 def _canonical_gate_spec(report_kind: str) -> GateSpec:
@@ -298,13 +305,12 @@ def _canonical_gate_spec(report_kind: str) -> GateSpec:
 
 def _critical_unit_ids(spec: GateSpec) -> frozenset[str]:
     return frozenset(
-        unit.unit_id
-        for unit in spec.units
-        if unit.blocking_level is GateBlockingLevel.CRITICAL
+        unit.unit_id for unit in spec.units if unit.blocking_level is GateBlockingLevel.CRITICAL
     )
 
 
 # ── 规范命名 ────────────────────────────────────────────────────────────────
+
 
 def _canonical_slug(value: str) -> str:
     normalized = re.sub(r"[^A-Za-z0-9]+", "-", value).strip("-").lower()
@@ -332,6 +338,7 @@ def _canonical_basis(request: DownloadRequest) -> str:
 
 
 # ── 标识符规范化 ────────────────────────────────────────────────────────────
+
 
 def _normalize_doi(value: str) -> str:
     return _DOI_TRAILING.sub("", value).casefold()
@@ -375,8 +382,9 @@ def _request_identifier_set(request: DownloadRequest) -> set[str]:
 
 # ── 内容识别 ────────────────────────────────────────────────────────────────
 
-def _pdf_text_and_metadata(content: bytes) -> tuple[str, bool]:
-    """解析真实 PDF：返回（标题/主题/关键词 + 页面文本，是否解析成功）。"""
+
+def _pdf_text_and_metadata(content: bytes) -> tuple[str, bool, bool]:
+    """Return searchable text, parseability, and whether a page text layer exists."""
     try:
         import io as _io
 
@@ -387,24 +395,27 @@ def _pdf_text_and_metadata(content: bytes) -> tuple[str, bool]:
         title = str(metadata.get("/Title") or metadata.get("title") or "")
         subject = str(metadata.get("/Subject") or metadata.get("subject") or "")
         keywords = str(metadata.get("/Keywords") or metadata.get("keywords") or "")
-        pages = "\n".join(
-            str(page.extract_text() or "") for page in reader.pages
+        pages = "\n".join(str(page.extract_text() or "") for page in reader.pages)
+        return (
+            "\n".join(part for part in (title, subject, keywords, pages) if part),
+            True,
+            bool(pages.strip()),
         )
-        return "\n".join(part for part in (title, subject, keywords, pages) if part), True
     except Exception:  # noqa: BLE001
-        return "", False
+        return "", False, False
 
 
-def _extract_embedded_text(content: bytes, media_type: str) -> tuple[str, bool]:
-    """返回（嵌入文本，是否可读）。PDF 要求解析成功；HTML/纯文本按 UTF-8 解码。"""
+def _extract_embedded_text(content: bytes, media_type: str) -> tuple[str, bool, bool]:
+    """Return embedded text, readability, and whether OCR is required."""
     if media_type == "application/pdf":
-        return _pdf_text_and_metadata(content)
+        text, readable, has_page_text = _pdf_text_and_metadata(content)
+        return text, readable, readable and not has_page_text
     if media_type in ("text/html", "text/plain", "application/json", "text/json"):
         try:
-            return content.decode("utf-8"), True
+            return content.decode("utf-8"), True, False
         except UnicodeDecodeError:
-            return "", False
-    return "", False
+            return "", False, False
+    return "", False, False
 
 
 class ContentIdentification(BaseModel):
@@ -416,6 +427,7 @@ class ContentIdentification(BaseModel):
     identifiers: tuple[str, ...] = ()
     is_login_or_error_page: bool = False
     is_readable: bool = True
+    requires_ocr: bool = False
 
     @model_validator(mode="after")
     def _readability_consistent(self) -> ContentIdentification:
@@ -428,7 +440,7 @@ def identify_content(content: bytes, media_type: str) -> ContentIdentification:
     if not content:
         raise DownloadRequestError("文件内容为空")
     digest = hashlib.sha256(content).hexdigest()
-    text, readable = _extract_embedded_text(content, media_type)
+    text, readable, requires_ocr = _extract_embedded_text(content, media_type)
     is_error = _is_login_or_error_page(content, media_type, text)
     return ContentIdentification(
         sha256=digest,
@@ -437,6 +449,7 @@ def identify_content(content: bytes, media_type: str) -> ContentIdentification:
         identifiers=_identifiers_in_text(text),
         is_login_or_error_page=is_error and readable,
         is_readable=readable,
+        requires_ocr=requires_ocr,
     )
 
 
@@ -447,26 +460,33 @@ def _is_login_or_error_page(content: bytes, media_type: str, text: str) -> bool:
     return False
 
 
-_GENERIC_TITLE_WORDS = frozenset({
-    "analysis", "clinical", "results", "study", "trial",
-})
+_GENERIC_TITLE_WORDS = frozenset(
+    {
+        "analysis",
+        "clinical",
+        "results",
+        "study",
+        "trial",
+    }
+)
 
 
 def _title_matches(title: str, text: str) -> bool:
     """中文标题按连续语义片段核对；英文标题至少命中两个有区分度的词。"""
     comparable_text = text.casefold()
-    cjk_parts = tuple(
-        part for part in re.split(r"[^\u4e00-\u9fff]+", title)
-        if len(part) >= 4
-    )
+    cjk_parts = tuple(part for part in re.split(r"[^\u4e00-\u9fff]+", title) if len(part) >= 4)
     if any(part in comparable_text for part in cjk_parts):
         return True
-    latin_parts = tuple(dict.fromkeys(
-        part for part in re.findall(
-            r"[A-Za-z0-9][A-Za-z0-9-]{3,}", title.casefold(),
+    latin_parts = tuple(
+        dict.fromkeys(
+            part
+            for part in re.findall(
+                r"[A-Za-z0-9][A-Za-z0-9-]{3,}",
+                title.casefold(),
+            )
+            if part not in _GENERIC_TITLE_WORDS
         )
-        if part not in _GENERIC_TITLE_WORDS
-    ))
+    )
     if not latin_parts:
         return False
     matched_count = sum(part in comparable_text for part in latin_parts)
@@ -475,13 +495,17 @@ def _title_matches(title: str, text: str) -> bool:
 
 def _media_type_for(ext: str) -> str:
     _map = {
-        ".pdf": "application/pdf", ".html": "text/html", ".htm": "text/html",
-        ".txt": "text/plain", ".json": "application/json",
+        ".pdf": "application/pdf",
+        ".html": "text/html",
+        ".htm": "text/html",
+        ".txt": "text/plain",
+        ".json": "application/json",
     }
     return _map.get(ext.lower(), "application/octet-stream")
 
 
 # ── 类型与角色一致性 ────────────────────────────────────────────────────────
+
 
 def _validate_file_type(content: bytes, filename: str, media_type: str) -> None:
     """文件名扩展名、媒体类型与内容三者一致；不一致即拒绝。"""
@@ -511,12 +535,11 @@ def _validate_file_type(content: bytes, filename: str, media_type: str) -> None:
 def _assert_role_type_coherent(document_role: DocumentRole, media_type: str) -> None:
     """publication_pdf 必须由真实 PDF 满足；HTML 不能冒充论文全文。"""
     if document_role == "publication_pdf" and media_type != "application/pdf":
-        raise DownloadRequestError(
-            "论文全文必须提供真实 PDF 附件，HTML 文件不能替代。"
-        )
+        raise DownloadRequestError("论文全文必须提供真实 PDF 附件，HTML 文件不能替代。")
 
 
 # ── 持久化辅助 ──────────────────────────────────────────────────────────────
+
 
 def _load_requests(path: Path) -> tuple[DownloadRequest, ...]:
     if not path.exists() or not path.read_text(encoding="utf-8").strip():
@@ -571,15 +594,11 @@ def _save_request(path: Path, request: DownloadRequest) -> None:
     for record in records:
         if record.request_id == request.request_id:
             if _request_identity_fields(record) != _request_identity_fields(request):
-                raise DownloadRequestError(
-                    "同一下载请求标识对应了不同身份内容，拒绝覆盖"
-                )
+                raise DownloadRequestError("同一下载请求标识对应了不同身份内容，拒绝覆盖")
             continue
         kept.append(record)
     kept.append(request)
-    content = "\n".join(
-        json.dumps(r.model_dump(mode="json"), ensure_ascii=False) for r in kept
-    )
+    content = "\n".join(json.dumps(r.model_dump(mode="json"), ensure_ascii=False) for r in kept)
     if content:
         content += "\n"
     _atomic_write(path, content)
@@ -598,16 +617,13 @@ def _append_jsonl(path: Path, line: dict[str, Any]) -> None:
 def _record_quarantine_note(note_path: Path, filename: str, reason_zh: str) -> None:
     """保留每个隔离文件的处理说明；同一说明重放时不重复。"""
     line = f"- {Path(filename).name}：{reason_zh}"
-    existing = (
-        note_path.read_text(encoding="utf-8")
-        if note_path.exists()
-        else "# 文件处理说明\n"
-    )
+    existing = note_path.read_text(encoding="utf-8") if note_path.exists() else "# 文件处理说明\n"
     if line not in existing.splitlines():
         _atomic_write(note_path, existing.rstrip() + "\n\n" + line + "\n")
 
 
 # ── 下载列表（原子重生成，不显示内部状态） ─────────────────────────────────
+
 
 def _request_list_line(request: DownloadRequest) -> str:
     return (
@@ -620,12 +636,14 @@ def _request_list_line(request: DownloadRequest) -> str:
 
 
 def _regenerate_download_list(
-    log_path: Path, requests_path: Path,
+    log_path: Path,
+    requests_path: Path,
 ) -> None:
     """从物化请求原子重生成当前下载列表：只列活跃待办请求，每个一次；
     已接受/不再需要消失；无待办时显示“当前无需补充资料”。"""
     active = [
-        request for request in _load_requests(requests_path)
+        request
+        for request in _load_requests(requests_path)
         if request.state in _ACTIVE_REQUEST_STATES
     ]
     if not active:
@@ -640,6 +658,7 @@ def _regenerate_download_list(
 
 # ── main 服务 ──────────────────────────────────────────────────────────────
 
+
 class ManualInboxService:
     """用户辅助下载服务：六态迁移、守卫事件、内容识别、隔离、归档与重抽取。"""
 
@@ -653,6 +672,7 @@ class ManualInboxService:
         self.requests_path = self.project_root / "receipts" / "download_requests.jsonl"
         self.re_extraction_path = self.project_root / "receipts" / "re-extraction-jobs.jsonl"
         self.download_log_path = self.project_root / "logs" / "download_requests.md"
+        self.manual_mapping_path = self.project_root / "receipts" / "manual-source-mappings.jsonl"
 
     # ── 请求读取/保存 ──────────────────────────────────────────────────────────
 
@@ -669,7 +689,8 @@ class ManualInboxService:
     def _active_others(self, request_id: str) -> tuple[DownloadRequest, ...]:
         current = self.load_request(request_id)
         return tuple(
-            request for request in _load_requests(self.requests_path)
+            request
+            for request in _load_requests(self.requests_path)
             if request.request_id != request_id
             and request.project_id == current.project_id
             and request.run_id == current.run_id
@@ -694,9 +715,12 @@ class ManualInboxService:
         event = WorkflowEvent(
             schema_version="1.0",
             event_id=stable_id(
-                "download-event", request.request_id,
-                prior.value, current.value,
-                str(attempt), effective_digest,
+                "download-event",
+                request.request_id,
+                prior.value,
+                current.value,
+                str(attempt),
+                effective_digest,
             ),
             project_id=request.project_id,
             run_id=request.run_id,
@@ -764,9 +788,7 @@ class ManualInboxService:
                 "已接受的登记/主文/监管证据已关闭关键缺口，不再请求补充材料。"
             )
         if not expected_to_close_units:
-            raise RequestNotRequiredError(
-                "目标文档必须声明预期关闭至少一个关键单元。"
-            )
+            raise RequestNotRequiredError("目标文档必须声明预期关闭至少一个关键单元。")
         # 真实 GateSpec 校验：身份/指纹/关键单元都取自批准 YAML，伪造不可能。
         canonical = _canonical_gate_spec(report_kind)
         if spec.report_kind.value != report_kind:
@@ -780,18 +802,12 @@ class ManualInboxService:
         critical = _critical_unit_ids(canonical)
         for field in missing_fields:
             if field not in critical:
-                raise RequestNotRequiredError(
-                    f"非阻断字段（{field}）缺失不得触发用户补件"
-                )
+                raise RequestNotRequiredError(f"非阻断字段（{field}）缺失不得触发用户补件")
         for unit in expected_to_close_units:
             if unit not in critical:
-                raise RequestNotRequiredError(
-                    f"目标文档声明的关闭单元（{unit}）不是关键单元"
-                )
+                raise RequestNotRequiredError(f"目标文档声明的关闭单元（{unit}）不是关键单元")
         if not set(expected_to_close_units) & set(missing_fields):
-            raise RequestNotRequiredError(
-                "目标文档未覆盖任何所缺关键单元，不创建请求"
-            )
+            raise RequestNotRequiredError("目标文档未覆盖任何所缺关键单元，不创建请求")
         if not doi and not pmid and not registry_identifiers:
             raise RequestNotRequiredError(
                 "目标资料缺少可核对的论文或试验标识，暂不向用户发起下载请求。"
@@ -823,7 +839,8 @@ class ManualInboxService:
             product_id=product_id,
             trial_id=trial_id,
             registry_identifiers=tuple(registry_identifiers),
-            doi=doi, pmid=pmid,
+            doi=doi,
+            pmid=pmid,
             document_role=document_role,
             title=title,
             publisher=publisher,
@@ -840,9 +857,7 @@ class ManualInboxService:
         )
         if existing is not None:
             if _request_identity_fields(existing) != _request_identity_fields(candidate):
-                raise DownloadRequestError(
-                    "同一下载请求标识对应了不同身份内容，拒绝覆盖"
-                )
+                raise DownloadRequestError("同一下载请求标识对应了不同身份内容，拒绝覆盖")
             return existing
         self._persist(candidate)
         inbox_dir = self.project_root / candidate.inbox_directory
@@ -941,9 +956,15 @@ class ManualInboxService:
         return request.content_sha256 == hashlib.sha256(content).hexdigest()
 
     def _transition(
-        self, request_id: str, *, to_state: DownloadRequestState,
-        trigger: str, guard_evidence: dict[str, Any], updates: dict[str, Any],
-        content_digest: str = "", occurred_at: datetime | None = None,
+        self,
+        request_id: str,
+        *,
+        to_state: DownloadRequestState,
+        trigger: str,
+        guard_evidence: dict[str, Any],
+        updates: dict[str, Any],
+        content_digest: str = "",
+        occurred_at: datetime | None = None,
     ) -> DownloadRequest:
         request = self.load_request(request_id)
         prior = request.state
@@ -952,12 +973,14 @@ class ManualInboxService:
                 f"未声明的下载请求迁移：{prior.value} -> {to_state.value}"
             )
         timestamp = occurred_at or datetime.now(UTC)
-        updated = request.model_copy(
-            update={**updates, "state": to_state, "updated_at": timestamp}
-        )
+        updated = request.model_copy(update={**updates, "state": to_state, "updated_at": timestamp})
         self._write_transition_event(
-            request=updated, prior=prior, current=to_state, trigger=trigger,
-            guard_evidence=guard_evidence, content_digest=content_digest,
+            request=updated,
+            prior=prior,
+            current=to_state,
+            trigger=trigger,
+            guard_evidence=guard_evidence,
+            content_digest=content_digest,
             occurred_at=timestamp,
         )
         return self._persist(updated)
@@ -965,8 +988,13 @@ class ManualInboxService:
     # ── 文件检测（直接 API 也强制类型一致性） ────────────────────────────────
 
     def detect_file(
-        self, request_id: str, *, filename: str, content: bytes,
-        media_type: str, occurred_at: datetime | None = None,
+        self,
+        request_id: str,
+        *,
+        filename: str,
+        content: bytes,
+        media_type: str,
+        occurred_at: datetime | None = None,
     ) -> DownloadRequest:
         _validate_file_type(content, filename, media_type)
         request = self.load_request(request_id)
@@ -997,18 +1025,27 @@ class ManualInboxService:
     # ── 文件系统扫描（真实文件系统行为） ────────────────────────────────────
 
     def scan_and_process_inbox(
-        self, request_id: str, *, occurred_at: datetime | None = None,
+        self,
+        request_id: str,
+        *,
+        occurred_at: datetime | None = None,
     ) -> DownloadRequest | None:
         """扫描收件目录：逐文件校验/识别，无效或错附件按摘要隔离；
         恰好一个合法高置信目标则接受；多个合法目标全部按歧义隔离。"""
         request = self.load_request(request_id)
+        if request.state is DownloadRequestState.ACCEPTED:
+            # 已接受状态重放必须是 no-op：不扫描、删除、移动或改写用户文件。
+            return request
         inbox = self.project_root / request.inbox_directory
         if not inbox.is_dir():
             return None
         files = [
-            f for f in sorted(inbox.iterdir())
-            if f.is_file() and not f.name.startswith(".")
-            and not f.name.endswith("~") and f.name != "下载说明.md"
+            f
+            for f in sorted(inbox.iterdir())
+            if f.is_file()
+            and not f.name.startswith(".")
+            and not f.name.endswith("~")
+            and f.name != "下载说明.md"
         ]
         if not files:
             return None
@@ -1029,20 +1066,24 @@ class ManualInboxService:
                 continue
             if identification.is_login_or_error_page:
                 self._quarantine_file(
-                    request_id, filepath,
+                    request_id,
+                    filepath,
                     "收到的是登录提示页或错误页，请下载附件原文后重新放入。",
                 )
                 quarantine_reasons.append("登录提示页或错误页")
                 continue
             if not identification.is_readable:
                 self._quarantine_file(
-                    request_id, filepath,
+                    request_id,
+                    filepath,
                     "文件残缺或不可读，请重新下载完整附件后放入。",
                 )
                 quarantine_reasons.append("文件残缺或不可读")
                 continue
             matched, _matched_ids, reason = self._match_guard(
-                request, identification, self._active_others(request_id),
+                request,
+                identification,
+                self._active_others(request_id),
             )
             if matched:
                 valid_targets.append((filepath, content, filename, media_type))
@@ -1054,40 +1095,47 @@ class ManualInboxService:
             filepath, content, filename, media_type = valid_targets[0]
             try:
                 self.detect_file(
-                    request_id, filename=filename, content=content,
-                    media_type=media_type, occurred_at=occurred_at,
+                    request_id,
+                    filename=filename,
+                    content=content,
+                    media_type=media_type,
+                    occurred_at=occurred_at,
                 )
             except UndeclaredTransitionError:
                 return self.load_request(request_id)
             return self.match_and_accept(
-                request_id, filename=filename, content=content,
-                media_type=media_type, occurred_at=occurred_at,
+                request_id,
+                filename=filename,
+                content=content,
+                media_type=media_type,
+                occurred_at=occurred_at,
             )
         # 无合法目标，或存在多个合法目标 → 全部已隔离，请求进入需要重新下载
         if len(valid_targets) > 1:
             for _filepath, _content, _filename, _media_type in valid_targets:
                 self._quarantine_file(
-                    request_id, _filepath,
-                    "收件目录中存在多个匹配附件，无法唯一确定目标文档，"
-                    "请删除多余文件后重新放入。",
+                    request_id,
+                    _filepath,
+                    "收件目录中存在多个匹配附件，无法唯一确定目标文档，请删除多余文件后重新放入。",
                 )
             reason_zh = (
-                "收件目录中存在多个匹配附件，无法唯一确定目标文档，"
-                "请删除多余文件后重新放入。"
+                "收件目录中存在多个匹配附件，无法唯一确定目标文档，请删除多余文件后重新放入。"
             )
         else:
-            reason_zh = quarantine_reasons[0] if quarantine_reasons else (
-                "未发现与目标资料匹配的合法附件，请重新下载后放入。"
+            reason_zh = (
+                quarantine_reasons[0]
+                if quarantine_reasons
+                else ("未发现与目标资料匹配的合法附件，请重新下载后放入。")
             )
         request = self.load_request(request_id)
         if request.state is DownloadRequestState.AWAITING_USER:
             return self._quarantine(
-                request_id, reason_zh=reason_zh,
+                request_id,
+                reason_zh=reason_zh,
                 trigger="scan_no_valid_target",
                 guard_evidence={
-                    "quarantined_count": len(quarantine_reasons) + (
-                        len(valid_targets) if len(valid_targets) > 1 else 0
-                    ),
+                    "quarantined_count": len(quarantine_reasons)
+                    + (len(valid_targets) if len(valid_targets) > 1 else 0),
                     "reason_zh": reason_zh,
                 },
                 occurred_at=occurred_at,
@@ -1095,7 +1143,10 @@ class ManualInboxService:
         return self.load_request(request_id)
 
     def _quarantine_file(
-        self, request_id: str, filepath: Path, reason_zh: str,
+        self,
+        request_id: str,
+        filepath: Path,
+        reason_zh: str,
     ) -> DownloadRequest:
         """把单个文件按摘要消歧移到隔离区，并记录路径/原因（不改变状态）。"""
         request = self.load_request(request_id)
@@ -1111,24 +1162,29 @@ class ManualInboxService:
             if hashlib.sha256(target.read_bytes()).hexdigest() != digest:
                 raise DownloadRequestError("隔离区同名文件内容不一致，拒绝覆盖")
             filepath.unlink(missing_ok=True)
-        rejected_path = (
-            f"evidence/quarantine/{request_id}/{digest_dir.name}/{filepath.name}"
-        )
+        rejected_path = f"evidence/quarantine/{request_id}/{digest_dir.name}/{filepath.name}"
         note = quarantine_dir / "处理说明.md"
         _record_quarantine_note(note, filepath.name, reason_zh)
-        updated = request.model_copy(update={
-            "quarantine_reason_zh": reason_zh,
-            "quarantine_rejected_paths": (
-                (*request.quarantine_rejected_paths, rejected_path)
-                if rejected_path not in request.quarantine_rejected_paths
-                else request.quarantine_rejected_paths
-            ),
-        })
+        updated = request.model_copy(
+            update={
+                "quarantine_reason_zh": reason_zh,
+                "quarantine_rejected_paths": (
+                    (*request.quarantine_rejected_paths, rejected_path)
+                    if rejected_path not in request.quarantine_rejected_paths
+                    else request.quarantine_rejected_paths
+                ),
+            }
+        )
         return self._persist(updated)
 
     def match_and_accept(
-        self, request_id: str, *, filename: str, content: bytes,
-        media_type: str, occurred_at: datetime | None = None,
+        self,
+        request_id: str,
+        *,
+        filename: str,
+        content: bytes,
+        media_type: str,
+        occurred_at: datetime | None = None,
     ) -> DownloadRequest:
         """匹配并接受：内容匹配 + 类型验证 → 规范归档。"""
         _validate_file_type(content, filename, media_type)
@@ -1138,28 +1194,30 @@ class ManualInboxService:
         if request.state is DownloadRequestState.ACCEPTED:
             if request.content_sha256 != identification.sha256:
                 raise DownloadRequestError("已归档资料与收件目录中的文件内容不一致")
-            inbox_source = (
-                self.project_root / request.inbox_directory / Path(filename).name
-            )
-            inbox_source.unlink(missing_ok=True)
+            # 已接受状态重放必须保留用户收件文件。
             return request
         if request.state is DownloadRequestState.MATCHED:
             if request.content_sha256 != identification.sha256:
                 raise DownloadRequestError("已识别资料与本次文件内容不一致")
             return self.accept(
-                request_id, filename=filename, content=content,
-                media_type=media_type, occurred_at=occurred_at,
+                request_id,
+                filename=filename,
+                content=content,
+                media_type=media_type,
+                occurred_at=occurred_at,
             )
         if request.state is not DownloadRequestState.FILE_DETECTED:
-            raise UndeclaredTransitionError(
-                f"匹配只能在文件检测后执行（{request.state.value}）"
-            )
+            raise UndeclaredTransitionError(f"匹配只能在文件检测后执行（{request.state.value}）")
         matched, matched_ids, reason = self._match_guard(
-            request, identification, self._active_others(request_id),
+            request,
+            identification,
+            self._active_others(request_id),
         )
         if not matched:
             return self._quarantine(
-                request_id, reason_zh=cast(str, reason), trigger="content_mismatch",
+                request_id,
+                reason_zh=cast(str, reason),
+                trigger="content_mismatch",
                 guard_evidence={
                     "content_sha256": identification.sha256,
                     "identifiers": list(identification.identifiers),
@@ -1185,14 +1243,19 @@ class ManualInboxService:
             occurred_at=occurred_at,
         )
         return self.accept(
-            request_id, filename=filename, content=content,
-            media_type=media_type, occurred_at=occurred_at,
+            request_id,
+            filename=filename,
+            content=content,
+            media_type=media_type,
+            occurred_at=occurred_at,
         )
 
     # ── 匹配（规范化 + 自动比对其他活跃请求） ────────────────────────────────
 
     def _match_guard(
-        self, request: DownloadRequest, identification: ContentIdentification,
+        self,
+        request: DownloadRequest,
+        identification: ContentIdentification,
         other_active_requests: tuple[DownloadRequest, ...],
     ) -> tuple[bool, tuple[str, ...], str | None]:
         if identification.is_login_or_error_page:
@@ -1217,8 +1280,13 @@ class ManualInboxService:
         return True, matched, None
 
     def match_file(
-        self, request_id: str, *, filename: str, content: bytes,
-        media_type: str, other_candidate_requests: tuple[DownloadRequest, ...] = (),
+        self,
+        request_id: str,
+        *,
+        filename: str,
+        content: bytes,
+        media_type: str,
+        other_candidate_requests: tuple[DownloadRequest, ...] = (),
         occurred_at: datetime | None = None,
     ) -> DownloadRequest:
         _validate_file_type(content, filename, media_type)
@@ -1233,7 +1301,9 @@ class ManualInboxService:
         identification = identify_content(content, media_type)
         others = tuple(other_candidate_requests) + self._active_others(request_id)
         matched, matched_ids, reason = self._match_guard(
-            request, identification, others,
+            request,
+            identification,
+            others,
         )
         if matched:
             return self._transition(
@@ -1253,7 +1323,9 @@ class ManualInboxService:
                 occurred_at=occurred_at,
             )
         return self._quarantine(
-            request_id, reason_zh=cast(str, reason), trigger="content_mismatch",
+            request_id,
+            reason_zh=cast(str, reason),
+            trigger="content_mismatch",
             guard_evidence={
                 "content_sha256": identification.sha256,
                 "identifiers": list(identification.identifiers),
@@ -1266,16 +1338,23 @@ class ManualInboxService:
     # ── 隔离 ──────────────────────────────────────────────────────────────────
 
     def _quarantine(
-        self, request_id: str, *, reason_zh: str, trigger: str,
-        guard_evidence: dict[str, Any], occurred_at: datetime | None,
+        self,
+        request_id: str,
+        *,
+        reason_zh: str,
+        trigger: str,
+        guard_evidence: dict[str, Any],
+        occurred_at: datetime | None,
     ) -> DownloadRequest:
         request = self.load_request(request_id)
         quarantine_dir = self.project_root / "evidence/quarantine" / request_id
         quarantine_dir.mkdir(parents=True, exist_ok=True)
         rejected_path = None
         source = (
-            self.project_root / request.inbox_directory / request.original_filename
-        ) if request.original_filename else None
+            (self.project_root / request.inbox_directory / request.original_filename)
+            if request.original_filename
+            else None
+        )
         if source is not None and source.exists():
             digest = hashlib.sha256(source.read_bytes()).hexdigest()
             digest_dir = quarantine_dir / digest[:16]
@@ -1287,7 +1366,9 @@ class ManualInboxService:
         note = quarantine_dir / "处理说明.md"
         if rejected_path is not None:
             _record_quarantine_note(
-                note, request.original_filename or "附件", reason_zh,
+                note,
+                request.original_filename or "附件",
+                reason_zh,
             )
         elif not request.quarantine_rejected_paths:
             _record_quarantine_note(note, "未能识别文件名的附件", reason_zh)
@@ -1306,8 +1387,7 @@ class ManualInboxService:
                 "quarantine_reason_zh": reason_zh,
                 "quarantine_rejected_paths": (
                     (*request.quarantine_rejected_paths, rejected_path)
-                    if rejected_path
-                    and rejected_path not in request.quarantine_rejected_paths
+                    if rejected_path and rejected_path not in request.quarantine_rejected_paths
                     else request.quarantine_rejected_paths
                 ),
             },
@@ -1317,7 +1397,10 @@ class ManualInboxService:
         return updated
 
     def quarantine(
-        self, request_id: str, *, reason_zh: str,
+        self,
+        request_id: str,
+        *,
+        reason_zh: str,
         occurred_at: datetime | None = None,
     ) -> DownloadRequest:
         request = self.load_request(request_id)
@@ -1328,7 +1411,9 @@ class ManualInboxService:
                 f"未声明的迁移：隔离只能在发现/匹配后执行（{request.state.value}）"
             )
         return self._quarantine(
-            request_id, reason_zh=reason_zh, trigger="explicit_quarantine",
+            request_id,
+            reason_zh=reason_zh,
+            trigger="explicit_quarantine",
             guard_evidence={
                 "reason_zh": reason_zh,
                 "content_sha256": request.content_sha256 or request.request_id,
@@ -1337,7 +1422,10 @@ class ManualInboxService:
         )
 
     def re_request(
-        self, request_id: str, *, reason_zh: str,
+        self,
+        request_id: str,
+        *,
+        reason_zh: str,
         occurred_at: datetime | None = None,
     ) -> DownloadRequest:
         request = self.load_request(request_id)
@@ -1364,89 +1452,189 @@ class ManualInboxService:
         _regenerate_download_list(self.download_log_path, self.requests_path)
         return updated
 
-    # ── 接受：内容寻址归档 + 规范命名 + 重抽取任务（全部幂等） ───────────────
+    # ── 接受：收件目录内原地规范命名 + 重抽取任务（全部幂等） ────────────────
+
+    def _append_manual_mapping(self, mapping: dict[str, Any]) -> str:
+        """在原地改名之前写入可恢复、冲突感知的映射回执。"""
+        mapping_id = stable_id(
+            "manual-source-mapping",
+            str(mapping["request_id"]),
+            str(mapping["content_sha256"]),
+            str(mapping["target_relative_path"]),
+        )
+        stable_mapping = {
+            key: value for key, value in mapping.items() if key not in {"mapping_id", "recorded_at"}
+        }
+        existing: list[dict[str, Any]] = []
+        if self.manual_mapping_path.exists():
+            existing = [
+                json.loads(line)
+                for line in self.manual_mapping_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+        for record in existing:
+            if record.get("mapping_id") != mapping_id:
+                continue
+            existing_stable = {
+                key: value
+                for key, value in record.items()
+                if key not in {"mapping_id", "recorded_at"}
+            }
+            if existing_stable != stable_mapping:
+                raise DownloadRequestError("同一补件映射标识对应了不同内容，拒绝覆盖")
+            return mapping_id
+        _append_jsonl(
+            self.manual_mapping_path,
+            {
+                "mapping_id": mapping_id,
+                **stable_mapping,
+                "recorded_at": datetime.now(UTC).isoformat(),
+            },
+        )
+        return mapping_id
 
     def accept(
-        self, request_id: str, *, filename: str, content: bytes,
-        media_type: str, version_or_date: str | None = None,
+        self,
+        request_id: str,
+        *,
+        filename: str,
+        content: bytes,
+        media_type: str,
+        version_or_date: str | None = None,
         occurred_at: datetime | None = None,
     ) -> DownloadRequest:
+        """匹配后在唯一收件目录中原子改名；不复制、移动或改写用户文件。"""
         _validate_file_type(content, filename, media_type)
         request = self.load_request(request_id)
         _assert_role_type_coherent(request.document_role, media_type)
+        digest = hashlib.sha256(content).hexdigest()
         if request.state is DownloadRequestState.ACCEPTED:
-            digest = hashlib.sha256(content).hexdigest()
             if request.content_sha256 != digest:
-                raise DownloadRequestError("已归档资料与收件目录中的文件内容不一致")
-            inbox_source = (
-                self.project_root / request.inbox_directory / Path(filename).name
-            )
-            inbox_source.unlink(missing_ok=True)
+                raise DownloadRequestError("已接受资料与本次文件内容不一致")
+            # 接受后的重放是 no-op：保留收件目录中的规范文件，不删除用户文件。
             return request
         if request.state is not DownloadRequestState.MATCHED:
-            raise UndeclaredTransitionError(
-                f"未声明的迁移：接受只能在匹配后执行（{request.state.value}）"
-            )
+            raise UndeclaredTransitionError(f"接受只能在匹配后执行（{request.state.value}）")
         timestamp = occurred_at or datetime.now(UTC)
         identification = identify_content(content, media_type)
         if not identification.is_readable or identification.is_login_or_error_page:
             raise DownloadRequestError("不可读或登录/错误页内容不得接受")
-        digest = identification.sha256
         if request.content_sha256 not in (None, digest):
             raise DownloadRequestError("已发现文件与接受内容摘要不一致")
 
-        source_version = self.evidence_repo.add_source_version(
-            source_id=stable_id("source", request.project_id, request.trial_id or request.title),
-            content=content, media_type=media_type, acquired_at=timestamp,
-            published_at=DateEvidence(state="not_publicly_disclosed", value=None,
-                locator=EvidenceLocator(document_role="user-supplied", url=request.attachment_url)),
-            effective_at=DateEvidence(state="not_publicly_disclosed", value=None,
-                locator=EvidenceLocator(document_role="user-supplied", url=request.attachment_url)),
-            first_disclosed_at=DateEvidence(state="not_publicly_disclosed", value=None,
-                locator=EvidenceLocator(document_role="user-supplied", url=request.attachment_url)),
-        )
+        original_name = request.original_filename or Path(filename).name
+        safe_name = Path(filename).name
+        if not safe_name or safe_name != filename:
+            raise DownloadRequestError("补件文件名必须是收件目录中的单一文件名")
+        inbox_dir = self.project_root / request.inbox_directory
+        inbox_dir.mkdir(parents=True, exist_ok=True)
+        inbox_source = inbox_dir / safe_name
+        if not inbox_source.is_file():
+            raise DownloadRequestError("接受必须引用收件目录中实际存在的原文件")
+        actual_bytes = inbox_source.read_bytes()
+        if actual_bytes != content or hashlib.sha256(actual_bytes).hexdigest() != digest:
+            raise DownloadRequestError("收件目录原文件内容与接受内容摘要不一致")
 
         basis = _canonical_basis(request)
         canonical = _canonical_filename(
-            basis=basis, document_role=request.document_role,
-            version_or_date=version_or_date, digest=digest,
-            original_extension=Path(filename).suffix or ".bin",
+            basis=basis,
+            document_role=request.document_role,
+            version_or_date=version_or_date,
+            digest=digest,
+            original_extension=Path(original_name).suffix or ".bin",
         )
-        library_dir = self.project_root / "evidence/library" / request_id
-        library_dir.mkdir(parents=True, exist_ok=True)
-        canonical_path = library_dir / canonical
-        if canonical_path.exists():
-            # 规范归档已存在：按摘要校验，绝不静默复用漂移内容
-            existing_bytes = canonical_path.read_bytes()
-            if hashlib.sha256(existing_bytes).hexdigest() != digest:
-                raise DownloadRequestError(
-                    "规范归档文件摘要与本次接受内容不一致，拒绝复用"
-                )
+        canonical_path = inbox_dir / canonical
+        if canonical_path == inbox_source:
+            collision_check = "same_path"
+        elif canonical_path.exists():
+            existing_digest = hashlib.sha256(canonical_path.read_bytes()).hexdigest()
+            collision_check = "conflict"
+            self._append_manual_mapping(
+                {
+                    "request_id": request_id,
+                    "original_filename": original_name,
+                    "content_sha256": digest,
+                    "doi": request.doi,
+                    "pmid": request.pmid,
+                    "registry_identifiers": request.registry_identifiers,
+                    "target_filename": canonical,
+                    "target_relative_path": f"{request.inbox_directory}/{canonical}",
+                    "collision_check": collision_check,
+                    "existing_target_sha256": existing_digest,
+                }
+            )
+            raise DownloadRequestError("收件目录规范文件名已存在，拒绝覆盖")
         else:
-            descriptor, temp_name = tempfile.mkstemp(prefix=f".{canonical}.", dir=library_dir)
-            try:
-                with open(descriptor, "wb") as stream:
-                    stream.write(content)
-                os.replace(temp_name, canonical_path)
-            except BaseException:
-                Path(temp_name).unlink(missing_ok=True)
-                raise
+            collision_check = "clear"
 
-        canonical_relative = f"evidence/library/{request_id}/{canonical}"
+        # Compatibility guard for stale copied archives: it never receives a
+        # new byte, but a pre-existing drift is still a hard conflict.
+        legacy_path = self.project_root / "evidence/library" / request_id / canonical
+        if legacy_path.is_file():
+            legacy_digest = hashlib.sha256(legacy_path.read_bytes()).hexdigest()
+            if legacy_digest != digest:
+                self._append_manual_mapping(
+                    {
+                        "request_id": request_id,
+                        "original_filename": original_name,
+                        "content_sha256": digest,
+                        "doi": request.doi,
+                        "pmid": request.pmid,
+                        "registry_identifiers": request.registry_identifiers,
+                        "target_filename": canonical,
+                        "target_relative_path": f"{request.inbox_directory}/{canonical}",
+                        "collision_check": "legacy-library-conflict",
+                        "existing_target_sha256": legacy_digest,
+                    }
+                )
+                raise DownloadRequestError("历史归档同名文件摘要不一致，拒绝接受")
+
+        canonical_relative = f"{request.inbox_directory}/{canonical}"
+        mapping_id = self._append_manual_mapping(
+            {
+                "request_id": request_id,
+                "original_filename": original_name,
+                "content_sha256": digest,
+                "doi": request.doi,
+                "pmid": request.pmid,
+                "registry_identifiers": request.registry_identifiers,
+                "target_filename": canonical,
+                "target_relative_path": canonical_relative,
+                "collision_check": collision_check,
+                "existing_target_sha256": None,
+            }
+        )
+        if canonical_path != inbox_source:
+            try:
+                os.replace(inbox_source, canonical_path)
+            except OSError as error:
+                raise DownloadRequestError("收件目录原地规范命名失败，未接受补件") from error
+
+        source_version_id = stable_id(
+            "source-version",
+            stable_id("source", request.project_id, request.trial_id or request.title),
+            digest,
+        )
+
         job_ids: list[str] = []
         for gap_id in request.missing_fields:
             job_id = stable_id(
-                "re-extraction", request_id,
-                source_version.source_version_id, gap_id,
+                "re-extraction",
+                request_id,
+                source_version_id,
+                gap_id,
             )
             job = {
                 "job_id": job_id,
                 "request_id": request_id,
-                "source_version_id": source_version.source_version_id,
+                "source_version_id": source_version_id,
                 "gap_id": gap_id,
-                "original_filename": filename,
+                "original_filename": original_name,
                 "canonical_relative_path": canonical_relative,
                 "state": "queued",
+                "extraction_mode": (
+                    "ocr_required" if identification.requires_ocr else "embedded_text"
+                ),
                 "created_at": timestamp.isoformat(),
             }
             self._append_re_extraction_job(job)
@@ -1455,29 +1643,31 @@ class ManualInboxService:
         accepted_request = self._transition(
             request_id,
             to_state=DownloadRequestState.ACCEPTED,
-            trigger="content_accept_archive",
+            trigger="content_accept_in_place_rename",
             guard_evidence={
-                "content_sha256": digest,
+                "original_filename": original_name,
+                "original_filename_sha256": digest,
+                "doi": request.doi,
+                "pmid": request.pmid,
+                "registry_identifiers": list(request.registry_identifiers),
                 "canonical_filename": canonical,
                 "canonical_relative_path": canonical_relative,
-                "source_version_id": source_version.source_version_id,
+                "collision_check": collision_check,
+                "manual_mapping_id": mapping_id,
+                "source_version_id": source_version_id,
                 "re_extraction_job_ids": job_ids,
             },
             content_digest=digest,
             updates={
                 "canonical_filename": canonical,
                 "canonical_relative_path": canonical_relative,
-                "source_version_id": source_version.source_version_id,
+                "source_version_id": source_version_id,
                 "re_extraction_job_ids": tuple(job_ids),
                 "content_sha256": digest,
                 "media_type": media_type,
             },
             occurred_at=timestamp,
         )
-        # 收件副本只在规范归档与事件/状态记录可恢复后移除；不把原文件名副本放进库。
-        inbox_source = self.project_root / request.inbox_directory / Path(filename).name
-        if inbox_source.exists():
-            inbox_source.unlink(missing_ok=True)
         _regenerate_download_list(self.download_log_path, self.requests_path)
         return accepted_request
 
@@ -1494,15 +1684,9 @@ class ManualInboxService:
             ]
         for record in existing:
             if record.get("job_id") == job["job_id"]:
-                stable_record = {
-                    key: value for key, value in record.items() if key != "created_at"
-                }
-                stable_job = {
-                    key: value for key, value in job.items() if key != "created_at"
-                }
+                stable_record = {key: value for key, value in record.items() if key != "created_at"}
+                stable_job = {key: value for key, value in job.items() if key != "created_at"}
                 if stable_record == stable_job:
                     return  # 相同重试：no-op
-                raise DownloadRequestError(
-                    "同一重抽取任务标识对应了不同内容，拒绝覆盖"
-                )
+                raise DownloadRequestError("同一重抽取任务标识对应了不同内容，拒绝覆盖")
         _append_jsonl(self.re_extraction_path, job)

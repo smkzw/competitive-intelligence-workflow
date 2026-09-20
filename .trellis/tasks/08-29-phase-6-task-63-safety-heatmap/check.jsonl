@@ -1,0 +1,3 @@
+{"file":"docs/specs/competitive-intelligence-workflow-design-v1.2.md","reason":"独立核对安全性显示、披露状态、默认事件和不合并语义"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"验证失败关闭、不可篡改和完整来源谱系"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"检查同一事实行在热图、完整表和后续交互中的一致性"}

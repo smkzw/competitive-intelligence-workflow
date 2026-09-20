@@ -1,0 +1,12 @@
+Task 6.6 RED
+
+Command:
+uv run pytest tests/reports/b/test_baseline_views.py tests/reports/b/test_baseline_view_interactions.py
+
+Observed result after the test files were cleaned:
+pytest: 2 errors in 0.07s (exit code 2)
+
+Both authorized target test modules fail during collection at their public import boundary:
+ModuleNotFoundError: No module named 'ci_workflow.reports.b.baseline_views'
+
+The RED is genuine: the contract tests are active (not skipped or xfailed) and the implementation module has not yet been created. No production implementation or renderer was added in this work item.

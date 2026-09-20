@@ -1,0 +1,37 @@
+{
+  "case_id": "legacy-negative-regressions",
+  "source_fixture": "fixtures/negative/legacy-a-five-products-zero-trials/sample.json",
+  "redaction": "negative-summary-only",
+  "scenario": "旧版输出只以最小失败摘要参与回归，六类缺陷均拒绝且不进入首版正向输入或模板。",
+  "owner_stage": "10.6",
+  "release_scope": "site_html_v1",
+  "formats": [
+    "html"
+  ],
+  "subscenarios": [
+    {
+      "id": "old-csu-a",
+      "description_zh": "旧 CSU A 负向样本不得因空壳/缺乏锚定而通过。"
+    },
+    {
+      "id": "pnh-b",
+      "description_zh": "旧 PNH B 负向样本不得因基线、处置或分母缺陷而通过。"
+    },
+    {
+      "id": "ad-a",
+      "description_zh": "旧 AD A 负向样本不得因无可追溯内容而形成报告。"
+    },
+    {
+      "id": "style-collapse",
+      "description_zh": "样式崩塌样本不得被当作可读站点或视觉模板。"
+    },
+    {
+      "id": "fake-screenshot",
+      "description_zh": "伪截图/伪渲染样本不得替代真实页面和证据验收。"
+    },
+    {
+      "id": "false-green-qc",
+      "description_zh": "false-green QC 样本不得以退出 0 或卡片数量掩盖科学缺陷。"
+    }
+  ]
+}

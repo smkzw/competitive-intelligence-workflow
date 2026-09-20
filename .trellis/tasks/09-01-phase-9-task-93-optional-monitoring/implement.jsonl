@@ -1,0 +1,2 @@
+{"file": ".trellis/tasks/09-01-phase-9-task-93-optional-monitoring/research/authoritative-boundaries.md", "reason": "§17.3 权威边界、既有实现约束和实施裁决的精简上下文"}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "权威聚合边界需抵御 model_copy 漂移"}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cms/ci-workflow/publication-blocker-audit.schema.json",
+  "title": "必需论文不可取得阻断审计",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "blocker_kind", "audit_id", "project_id", "report_kind",
+    "contract_version", "report_version", "state", "reason",
+    "evidence_snapshot_id", "manual_gate_id", "manual_gate_sha256",
+    "request_ids", "publication_titles", "blocking_fields", "attempted_paths",
+    "source_links", "user_response_id", "responded_at", "user_guidance",
+    "audit_directory", "no_draft", "resume_node", "created_at", "audit_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "blocker_kind": {"const": "publication_unavailable"},
+    "audit_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "report_kind": {"enum": ["A", "B", "C"]},
+    "contract_version": {"type": "string", "minLength": 1},
+    "report_version": {
+      "type": "string",
+      "pattern": "^v[0-9]+(?:\\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?$"
+    },
+    "state": {"const": "evidence_blocked"},
+    "reason": {"const": "required_publication_unavailable"},
+    "evidence_snapshot_id": {"type": "string", "minLength": 1},
+    "manual_gate_id": {"type": "string", "minLength": 1},
+    "manual_gate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "request_ids": {"$ref": "#/$defs/non_empty_unique_strings"},
+    "publication_titles": {"$ref": "#/$defs/non_empty_unique_strings"},
+    "blocking_fields": {"$ref": "#/$defs/non_empty_unique_strings"},
+    "attempted_paths": {
+      "allOf": [
+        {"$ref": "#/$defs/non_empty_unique_strings"},
+        {"minItems": 2}
+      ]
+    },
+    "source_links": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^https?://\\S+$"}
+    },
+    "user_response_id": {"type": "string", "minLength": 1},
+    "responded_at": {"type": "string", "format": "date-time"},
+    "user_guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["missing_zh", "attempted_zh", "outcome_zh"],
+      "properties": {
+        "missing_zh": {"type": "string", "minLength": 1},
+        "attempted_zh": {"type": "string", "minLength": 1},
+        "outcome_zh": {"type": "string", "minLength": 1}
+      }
+    },
+    "audit_directory": {
+      "type": "string",
+      "pattern": "^blockers/(?:A|B|C)/v[0-9]+(?:\\.[0-9]+){0,2}(?:-[a-z0-9][a-z0-9.-]*)?$"
+    },
+    "no_draft": {"const": true},
+    "resume_node": {"const": "recovery"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "audit_digest": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "non_empty_unique_strings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

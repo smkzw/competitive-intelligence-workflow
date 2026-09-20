@@ -16,7 +16,9 @@ from ci_workflow.domain.evidence import (
     DatePrecision,
     EvidenceFragmentRecord,
     EvidenceLocator,
+    SourceTextDerivation,
     SourceVersionRecord,
+    source_version_identity,
 )
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.storage.sqlite import open_database
@@ -46,7 +48,13 @@ class ContentAddressedStore:
         pure = PurePosixPath(relative_path)
         if pure.is_absolute() or ".." in pure.parts or "\\" in relative_path:
             raise ContentIntegrityError("内容路径必须留在项目目录内")
-        resolved = (self.project_root / Path(*pure.parts)).resolve()
+        path = self.project_root / Path(*pure.parts)
+        for parent in (path, *path.parents):
+            if parent == self.project_root:
+                break
+            if parent.is_symlink():
+                raise ContentIntegrityError("内容寻址路径不得经过软链接")
+        resolved = path.resolve()
         if not resolved.is_relative_to(self.project_root):
             raise ContentIntegrityError("内容路径必须留在项目目录内")
         return resolved
@@ -112,11 +120,20 @@ class EvidenceRepository:
         published_at: DateEvidence,
         effective_at: DateEvidence,
         first_disclosed_at: DateEvidence,
+        text_derivation: SourceTextDerivation | None = None,
     ) -> SourceVersionRecord:
         if acquired_at.tzinfo is None or acquired_at.utcoffset() is None:
             raise ValueError("来源获取时间必须包含明确时区偏移")
+        if text_derivation is not None:
+            self.content_store.read_bytes(text_derivation.raw_asset)
+            if hashlib.sha256(content).hexdigest() != text_derivation.text_sha256:
+                raise ContentIntegrityError("入库文本与原始资产派生摘要不一致")
         blob = self.content_store.put_bytes(content, media_type=media_type)
-        version_id = stable_id("source-version", source_id, blob.sha256)
+        version_id = source_version_identity(
+            source_id, blob.sha256, published_at=published_at,
+            effective_at=effective_at, first_disclosed_at=first_disclosed_at,
+            text_derivation=text_derivation,
+        )
         with open_database(self.database_path) as database:
             exists = database.execute(
                 "SELECT 1 FROM source_versions WHERE source_version_id = ?",
@@ -139,6 +156,17 @@ class EvidenceRepository:
                     acquired_at.isoformat(),
                 ),
             )
+            if text_derivation is not None:
+                raw = text_derivation.raw_asset
+                database.execute(
+                    "INSERT OR IGNORE INTO content_blobs "
+                    "(content_sha256, relative_path, byte_size, media_type, created_at) "
+                    "VALUES (?, ?, ?, ?, ?)",
+                    (
+                        raw.sha256, raw.relative_path, raw.byte_size,
+                        raw.media_type, acquired_at.isoformat(),
+                    ),
+                )
             database.execute(
                 """
                 INSERT INTO source_versions (
@@ -161,6 +189,13 @@ class EvidenceRepository:
                     acquired_at.isoformat(),
                 ),
             )
+            if text_derivation is not None:
+                database.execute(
+                    "INSERT INTO source_text_derivations "
+                    "(source_version_id, raw_content_sha256, derivation_json) VALUES (?, ?, ?)",
+                    (version_id, text_derivation.raw_asset.sha256,
+                     _canonical_json(text_derivation.model_dump(mode="json"))),
+                )
             acquired_locator = EvidenceLocator(
                 document_role="acquisition-receipt",
                 field_path="acquired_at",
@@ -242,6 +277,16 @@ class EvidenceRepository:
         acquired = date_evidence("acquired_at")
         if acquired.value is None:
             raise ContentIntegrityError("来源版本缺少获取时间")
+        has_derivations = database.execute(
+            "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'source_text_derivations'"
+        ).fetchone() is not None
+        derivation_row = (
+            database.execute(
+                "SELECT derivation_json FROM source_text_derivations WHERE source_version_id = ?",
+                (source_version_id,),
+            ).fetchone()
+            if has_derivations else None
+        )
         return SourceVersionRecord(
             schema_version="1.0",
             source_version_id=str(row[0]),
@@ -249,6 +294,10 @@ class EvidenceRepository:
             content_sha256=str(row[2]),
             content_relative_path=str(row[5]),
             media_type=str(row[6]),
+            text_derivation=(
+                SourceTextDerivation.model_validate_json(str(derivation_row[0]))
+                if derivation_row is not None else None
+            ),
             acquired_at=acquired.value,
             acquired_locator=acquired.locator,
             published_at=date_evidence("published_at"),
@@ -361,6 +410,19 @@ class EvidenceRepository:
             media_type=source_version.media_type,
         )
         source_content = self.content_store.read_bytes(blob)
+        if source_version.text_derivation is not None:
+            from ci_workflow.storage.source_derivation import (
+                SourceDerivationError,
+                verify_source_text_derivation,
+            )
+
+            try:
+                verify_source_text_derivation(
+                    self.content_store.project_root, source_version.text_derivation,
+                    source_content.decode("utf-8"),
+                )
+            except (UnicodeDecodeError, SourceDerivationError) as error:
+                raise ContentIntegrityError("原始资产与重开文本的派生链校验失败") from error
         if source_version.media_type.startswith("text/") or any(
             marker in source_version.media_type
             for marker in ("json", "xml", "javascript")

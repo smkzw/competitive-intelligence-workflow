@@ -38,7 +38,10 @@ from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
 from pydantic import ValidationError as PydanticValidationError
 
-from ci_workflow.gates.blocker_audit import assert_no_report_downstream_artifacts
+from ci_workflow.gates.blocker_audit import (
+    assert_no_report_downstream_artifacts,
+    build_and_write_scientific_qc_blocker_package,
+)
 from ci_workflow.gates.exhaustion import DoubleExhaustionRecord
 from ci_workflow.gates.models import ApplicableUniverseSnapshot, ReportDecision, ReportGateResult
 from ci_workflow.graph.executor import GraphExecutor
@@ -437,6 +440,18 @@ def apply_scientific_qc_verdict(
     else:
         if exhaustion_digest is None:
             raise ScientificQcBoundaryError("已穷尽否决缺少穷尽记录摘要")
+        assert exhaustion is not None
+        build_and_write_scientific_qc_blocker_package(
+            current_context=ctx,
+            review_bundle=b,
+            verdict=v,
+            snapshot=sn,
+            gate_result=gr,
+            exhaustion=_revalidate_exhaustion(exhaustion),
+            workspace_root=workspace_root,
+            database_path=database_path,
+            created_at=now,
+        )
         evidence = {
             "qc_veto": True,
             "qc_veto_unfixable": True,

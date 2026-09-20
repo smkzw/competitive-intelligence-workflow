@@ -1,0 +1,205 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+  <nav class="kz-b-breadcrumb" aria-label="当前位置">
+    <a href="../product-trial-profiles.html">产品与试验档案</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ detail_product if detail_kind == "product" else detail_trial }}</span>
+  </nav>
+
+  <header class="portal-page-head kz-b-page-head">
+    {% if detail_kind == "product" %}
+    <div data-product-id="{{ detail_id }}" class="kz-b-dossier-marker">产品档案</div>
+    <h1 class="portal-page-title">{{ detail_product }}产品档案</h1>
+    {% else %}
+    <div data-trial-id="{{ detail_id }}" class="kz-b-dossier-marker">试验档案</div>
+    <h1 class="portal-page-title">{{ detail_trial }}试验档案</h1>
+    {% endif %}
+  </header>
+
+  {% if detail_kind == "product" %}
+  <section class="kz-b-dossier-profile" aria-labelledby="product-profile-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">产品属性</p>
+        <h2 id="product-profile-heading">{{ detail_product }}基本信息</h2>
+      </div>
+      <a class="kz-b-inline-link" href="../product-trial-profiles.html">返回档案索引</a>
+    </div>
+    <dl class="kz-b-detail-grid">
+      <div><dt>靶点/机制</dt><dd>{{ detail_product_obj.target }}</dd></div>
+      <div><dt>类型</dt><dd>{{ detail_product_obj.modality }}</dd></div>
+      <div><dt>临床阶段</dt><dd>{{ detail_product_obj.phase }}</dd></div>
+      <div><dt>当前状态</dt><dd>{{ detail_product_obj.status }}</dd></div>
+      <div><dt>结果覆盖</dt><dd>{{ detail_product_obj.result_status }}</dd></div>
+      <div><dt>区域</dt><dd>{{ detail_product_obj.regions | join("、") }}</dd></div>
+      <div><dt>给药途径</dt><dd>{{ detail_product_obj.route }}</dd></div>
+      <div><dt>开发方</dt><dd>{{ detail_product_obj.developer }}</dd></div>
+      <div><dt>作用机制</dt><dd>{{ detail_product_obj.mechanism }}</dd></div>
+    </dl>
+  </section>
+
+  <section class="kz-b-related-context" aria-labelledby="product-trials-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">关联语境</p>
+        <h2 id="product-trials-heading">关联试验</h2>
+      </div>
+    </div>
+    <div class="kz-b-related-grid">
+      {% for trial in detail_product_trials %}
+      <a class="kz-b-related-card" href="../trials/{{ trial.id }}.html">
+        <strong>{{ trial.name }}</strong>
+        <span>{{ trial.display_id }} · {{ trial.phase }} · {{ trial.region }}</span>
+        <span>{{ trial.status }} · 总样本量 {{ trial.sample_size }} 人</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="kz-b-context-table-section" aria-labelledby="product-context-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">外部语境</p>
+        <h2 id="product-context-heading">监管、合作、专利与历史</h2>
+      </div>
+    </div>
+    <div class="kz-b-context-columns">
+      <article>
+        <h3>监管事件</h3>
+        {% for item in detail_product_regulatory %}
+        <p><strong>{{ item.track }}</strong> · {{ item.event }} · {{ item.date }} · {{ item.status }}</p>
+        {% endfor %}
+      </article>
+      <article>
+        <h3>合作交易</h3>
+        {% for item in detail_product_companies %}
+        <p>{{ item.relationship }}：{{ item.licensor }} → {{ item.licensee }}（{{ item.territory }}）</p>
+        {% endfor %}
+      </article>
+      <article>
+        <h3>专利保护</h3>
+        {% for item in detail_product_patents %}
+        <p>{{ item.display_family }} · {{ item.jurisdiction }} · {{ item.scope }} · {{ item.exclusivity }}</p>
+        {% endfor %}
+      </article>
+      <article>
+        <h3>历史观察</h3>
+        {% for item in detail_product_history %}
+        <p>{{ item.date }} · {{ item.status }} · {{ item.observation }}</p>
+        {% endfor %}
+      </article>
+    </div>
+  </section>
+  {% else %}
+  <section class="kz-b-dossier-profile" aria-labelledby="trial-profile-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">试验属性</p>
+        <h2 id="trial-profile-heading">{{ detail_trial }}基本信息</h2>
+      </div>
+      <a class="kz-b-inline-link" href="../product-trial-profiles.html">返回档案索引</a>
+    </div>
+    <dl class="kz-b-detail-grid">
+      <div><dt>登记编号</dt><dd>{{ detail_trial_obj.display_id }}</dd></div>
+      <div><dt>关联产品</dt><dd><a href="../products/{{ detail_trial_product_obj.id }}.html">{{ detail_trial_product_obj.name }}</a></dd></div>
+      <div><dt>临床阶段</dt><dd>{{ detail_trial_obj.phase }}</dd></div>
+      <div><dt>区域</dt><dd>{{ detail_trial_obj.region }}</dd></div>
+      <div><dt>试验状态</dt><dd>{{ detail_trial_obj.status }}</dd></div>
+      <div><dt>研究角色</dt><dd>{{ detail_trial_obj.role }}</dd></div>
+      <div><dt>总样本量</dt><dd>{{ detail_trial_obj.sample_size }} 人</dd></div>
+      <div><dt>治疗组样本量</dt><dd>{{ detail_trial_obj.treatment_sample_size or "未列示" }}{% if detail_trial_obj.treatment_sample_size %} 人{% endif %}</dd></div>
+    </dl>
+  </section>
+
+  <section class="kz-b-related-context" aria-labelledby="trial-context-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">关联语境</p>
+        <h2 id="trial-context-heading">研究角色与结果入口</h2>
+      </div>
+    </div>
+    <div class="kz-b-related-grid">
+      <a class="kz-b-related-card" href="../products/{{ detail_trial_product_obj.id }}.html">
+        <strong>{{ detail_trial_product_obj.name }}</strong>
+        <span>返回产品档案</span>
+        <span>{{ detail_trial_product_obj.target }} · {{ detail_trial_product_obj.modality }}</span>
+      </a>
+      <a class="kz-b-related-card" href="../efficacy.html?trial={{ detail_id }}">
+        <strong>疗效结果</strong>
+        <span>按当前试验查看完整数据表</span>
+      </a>
+      <a class="kz-b-related-card" href="../safety.html?trial={{ detail_id }}">
+        <strong>安全性结果</strong>
+        <span>按当前试验查看事件、时间窗与披露状态</span>
+      </a>
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="kz-b-dossier-summary" aria-labelledby="dossier-summary-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <p class="kz-b-section-eyebrow">绑定结果</p>
+        <h2 id="dossier-summary-heading">疗效、安全性与研究过程</h2>
+      </div>
+      <p class="kz-b-section-note">档案页只展示已绑定到当前产品或试验的记录。</p>
+    </div>
+    <div class="kz-b-dossier-tags">
+      <span class="kz-b-tag">疗效</span>
+      <span class="kz-b-tag">安全性</span>
+      <span class="kz-b-tag">基线与人群</span>
+      <span class="kz-b-tag">试验完成情况</span>
+      <span class="kz-b-tag">来源可回溯</span>
+    </div>
+  </section>
+
+  {% if quick_filter_groups %}
+  <div class="kz-b-filter-quick" aria-label="快速筛选产品">
+    <span class="kz-b-filter-quick__label">快速筛选产品</span>
+    {% for group in quick_filter_groups %}
+    <div class="kz-b-filter-quick__group" data-filter-dimension="{{ group.dimension }}">
+      {% for option in group.options %}
+      <button type="button" class="kz-b-filter-button kz-b-filter-quick__button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" aria-pressed="false">{{ option.label }}</button>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <details id="kz-filter-panel" class="kz-b-filter-panel">
+    <summary class="kz-b-filter-summary">
+      <span>筛选条件</span>
+      <span class="kz-b-filter-summary__selected" data-filter-summary>未设置筛选</span>
+    </summary>
+    <div class="kz-b-filters" aria-label="筛选条件">
+      <p class="kz-b-filter-note">{{ filter_note }}</p>
+      {% for group in filter_groups if group.dimension != "product" %}
+      <div class="kz-b-filter-group" data-filter-dimension="{{ group.dimension }}">
+        <div class="kz-b-filter-heading"><h2>{{ group.label }}</h2><span>可多选</span></div>
+        <div class="kz-b-filter-options">
+          {% for option in group.options %}
+          <button type="button" class="kz-b-filter-button" data-filter-dimension="{{ group.dimension }}" data-filter-value="{{ option.value }}" aria-pressed="false">{{ option.label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      <div class="kz-b-filter-actions">
+        <button type="button" class="kz-b-filter-reset" data-filter-reset>清除筛选</button>
+        <span class="kz-b-filter-status" data-filter-status aria-live="polite">显示全部可用记录</span>
+      </div>
+    </div>
+  </details>
+
+  <section class="kz-b-visual-section" aria-labelledby="visual-heading">
+    <div class="kz-b-section-heading">
+      <div>
+        <h2 id="visual-heading">疗效、安全性与研究过程</h2>
+      </div>
+    </div>
+    <p class="kz-b-evidence-hint">点击数值查看数据依据。</p>
+    <div id="kz-chart-module" class="kz-chart-module" aria-live="polite"></div>
+    {% if not records or has_domain_empty_state %}
+    <p class="kz-b-page-empty" role="status">{{ empty_state_title }}。当前档案没有可接受的专属记录。</p>
+    {% endif %}
+  </section>
+{% endblock %}

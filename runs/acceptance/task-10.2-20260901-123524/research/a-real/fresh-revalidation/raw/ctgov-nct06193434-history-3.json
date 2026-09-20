@@ -1,0 +1,225 @@
+{
+  "studyVersion" : 3,
+  "study" : {
+    "protocolSection" : {
+      "identificationModule" : {
+        "nctId" : "NCT06193434",
+        "orgStudyIdInfo" : {
+          "id" : "CIBI356A101CN"
+        },
+        "organization" : {
+          "fullName" : "Innovent Biologics (Suzhou) Co. Ltd.",
+          "class" : "INDUSTRY"
+        },
+        "briefTitle" : "A First In Human (FIH) Study of IBI356 in Healthy Participants and in Atopic Dermatitis Patients",
+        "officialTitle" : "A Phase 1 FIH, Randomized, Double Blind, Placebo Controlled, SAD&#x2F;MAD Study to Assess Safety, Tolerability and PK in Healthy Participants and in Atopic Dermatitis Patients"
+      },
+      "statusModule" : {
+        "statusVerifiedDate" : "2025-08",
+        "overallStatus" : "COMPLETED",
+        "expandedAccessInfo" : {
+          "hasExpandedAccess" : false
+        },
+        "startDateStruct" : {
+          "date" : "2024-01-05",
+          "type" : "ACTUAL"
+        },
+        "primaryCompletionDateStruct" : {
+          "date" : "2025-08-20",
+          "type" : "ACTUAL"
+        },
+        "completionDateStruct" : {
+          "date" : "2025-08-20",
+          "type" : "ACTUAL"
+        },
+        "studyFirstSubmitDate" : "2023-12-12",
+        "studyFirstSubmitQcDate" : "2023-12-21",
+        "studyFirstPostDateStruct" : {
+          "date" : "2024-01-05",
+          "type" : "ACTUAL"
+        },
+        "lastUpdateSubmitDate" : "2025-08-29",
+        "lastUpdatePostDateStruct" : {
+          "date" : "2025-09-02",
+          "type" : "ACTUAL"
+        }
+      },
+      "sponsorCollaboratorsModule" : {
+        "responsibleParty" : {
+          "type" : "SPONSOR"
+        },
+        "leadSponsor" : {
+          "name" : "Innovent Biologics (Suzhou) Co. Ltd.",
+          "class" : "INDUSTRY"
+        }
+      },
+      "oversightModule" : {
+        "oversightHasDmc" : false,
+        "isFdaRegulatedDrug" : false,
+        "isFdaRegulatedDevice" : false,
+        "isUsExport" : false
+      },
+      "descriptionModule" : {
+        "briefSummary" : "The purpose of this study is to evaluate the safety, tolerability and pharmacokinetics of IBI356 in Healthy Participants and in Atopic Dermatitis Patients"
+      },
+      "conditionsModule" : {
+        "conditions" : [ "Healthy Participants", "Atopic Dermatitis Patients" ]
+      },
+      "designModule" : {
+        "studyType" : "INTERVENTIONAL",
+        "phases" : [ "PHASE1" ],
+        "designInfo" : {
+          "allocation" : "RANDOMIZED",
+          "interventionModel" : "PARALLEL",
+          "primaryPurpose" : "TREATMENT",
+          "maskingInfo" : {
+            "masking" : "TRIPLE",
+            "whoMasked" : [ "PARTICIPANT", "CARE_PROVIDER", "INVESTIGATOR" ]
+          }
+        },
+        "enrollmentInfo" : {
+          "count" : 99,
+          "type" : "ACTUAL"
+        }
+      },
+      "armsInterventionsModule" : {
+        "armGroups" : [ {
+          "label" : "IBI356 for Single ascending dose (SAD)",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: IBI356 for SAD" ]
+        }, {
+          "label" : "IBI356 for Multiple ascending dose (MAD)",
+          "type" : "EXPERIMENTAL",
+          "interventionNames" : [ "Drug: IBI356 for MAD" ]
+        }, {
+          "label" : "Placebo for MAD",
+          "type" : "PLACEBO_COMPARATOR",
+          "interventionNames" : [ "Drug: Placebo for MAD" ]
+        }, {
+          "label" : "Dupilumab for MAD",
+          "type" : "ACTIVE_COMPARATOR",
+          "interventionNames" : [ "Drug: Dupilumab for MAD" ]
+        }, {
+          "label" : "Placebo for SAD",
+          "type" : "PLACEBO_COMPARATOR",
+          "interventionNames" : [ "Drug: Placebo for SAD" ]
+        } ],
+        "interventions" : [ {
+          "type" : "DRUG",
+          "name" : "IBI356 for MAD",
+          "description" : "Receive IBI356 in a multiple dose.",
+          "armGroupLabels" : [ "IBI356 for Multiple ascending dose (MAD)" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Dupilumab for MAD",
+          "description" : "Active comparator",
+          "armGroupLabels" : [ "Dupilumab for MAD" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "IBI356 for SAD",
+          "description" : "Receive IBI356 in a single dose.",
+          "armGroupLabels" : [ "IBI356 for Single ascending dose (SAD)" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Placebo for SAD",
+          "description" : "Receive placebo in a single dose.",
+          "armGroupLabels" : [ "Placebo for SAD" ]
+        }, {
+          "type" : "DRUG",
+          "name" : "Placebo for MAD",
+          "description" : "Receive placebo in a multiple dose.",
+          "armGroupLabels" : [ "Placebo for MAD" ]
+        } ]
+      },
+      "outcomesModule" : {
+        "primaryOutcomes" : [ {
+          "measure" : "Occurrence of Adverse Event (AE) in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Occurrence of Adverse Event (AE) in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        }, {
+          "measure" : "Occurrence of Serious Adverse Event (SAE) in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Occurrence of Serious Adverse Event (SAE) in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        }, {
+          "measure" : "Changes in blood pressure mmHg (as a measure of safety and tolerability) in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Changes in blood pressure mmHg (as a measure of safety and tolerability) in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        }, {
+          "measure" : "Changes in respiratory rate measured as breaths per minute (as a measure of safety and tolerability) in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Changes in respiratory rate measured as breaths per minute (as a measure of safety and tolerability) in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        }, {
+          "measure" : "Changes in heart rate bpm (as a measure of safety and tolerability) in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Changes in heart rate bpm (as a measure of safety and tolerability) in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        }, {
+          "measure" : "Changes in tympanic temperature °C in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Changes in tympanic temperature °C in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        }, {
+          "measure" : "Changes in electrocardiograms PR, QR, QRS and QT intervals (as a measure of safety and tolerability) in SAD study.",
+          "timeFrame" : "Baseline to Week 20"
+        }, {
+          "measure" : "Changes in electrocardiograms PR, QR, QRS and QT intervals (as a measure of safety and tolerability) in MAD study.",
+          "timeFrame" : "Baseline to Week 36"
+        } ],
+        "secondaryOutcomes" : [ {
+          "measure" : "Area under the concentration time curve from time 0 to last observation (AUC 0-t).",
+          "timeFrame" : "Baseline to Week 16"
+        }, {
+          "measure" : "Maximum observed concentration (Cmax) after infusion.",
+          "timeFrame" : "Baseline to Week 16"
+        }, {
+          "measure" : "Systemic clearance after infusion (CL).",
+          "timeFrame" : "Baseline to Week 16"
+        }, {
+          "measure" : "Volume of distribution during the terminal phase after infusion(Apparent volume of distribution, V).",
+          "timeFrame" : "Baseline to Week 16"
+        }, {
+          "measure" : "Elimination half-life during the terminal phase after infusion(Half-life, t1&#x2F;2).",
+          "timeFrame" : "Baseline to Week 16"
+        }, {
+          "measure" : "To assess immunogenicity: production of anti-drug antibodies (ADA) following SAD and Multiple ascending dose(MAD) doses.",
+          "timeFrame" : "Baseline to Week 16"
+        } ]
+      },
+      "eligibilityModule" : {
+        "eligibilityCriteria" : "<p>Inclusion Criteria:</p><ol><li><p>Healthy participants:</p><ol><li>Aged 18 to 45 years,</li><li>Weight 50 to 120 kgs,</li><li>Good physical and mental health based on medical history, physical examination, clinical laboratory, ECG, and vital signs, as judged by the Investigator.</li><li>No child-bearing potential during the trial and within 6 months after SAD doses, and adequate contraceptive measures can be taken.</li></ol></li><li><p>Atopic dermatitis:</p><ol><li>Aged 18 to 75 years,</li><li>body mass index (BMI): 18.0 - 32.0 kg&#x2F;m2,</li><li>Atopic Dermatitis (AD) for 1 year or longer at Baseline,</li><li>Eczema Area and Severity Index (EASI) of 16 or higher at baseline,</li><li>Investigator Global Assessment (IGA) of 3 or 4 at baseline,</li><li>AD involvement of 10 percent or more of body surface area at Baseline,</li><li>Documented history, within 1 year before Baseline, of either inadequate response to topical treatments or inadvisability of topical treatments,</li><li>Must have applied a stable dose of topical bland emollient at least twice daily for at least 7 consecutive days before Baseline.</li></ol></li></ol><p>Exclusion Criteria:</p><ol><li>History of relevant drug allergies.</li><li>Has any condition that, in the opinion of the investigator, would make participation not be in the best interest (for example, compromise the well-being) of the participant or that could prevent, limit, or confound the protocol-specified assessments</li><li><p>Healthy participants:</p><ol><li>History of alcohol abuse or drug addiction within 1 year before screen,</li><li>Positive drug and alcohol screen at screening.</li></ol></li><li><p>Atopic dermatitis:</p><ol><li>Having used any of the following treatments within 4 weeks before the baseline visit, or any condition that, in the opinion of the investigator, was likely to require Immunosuppressive&#x2F; immunomodulating drugs treatment(s) during the first 4 weeks of study treatment:</li><li>Treatment with topical corticosteroids (TCS) or topical calcineurin inhibitors (TCI) within 1 week before the baseline visit.</li></ol></li></ol>",
+        "healthyVolunteers" : true,
+        "sex" : "ALL",
+        "minimumAge" : "18 Years",
+        "maximumAge" : "70 Years",
+        "stdAges" : [ "ADULT", "OLDER_ADULT" ]
+      },
+      "contactsLocationsModule" : {
+        "locations" : [ {
+          "facility" : "Shanghai Skin Disease Hospital",
+          "city" : "Shanghai",
+          "state" : "Shanghai Municipality",
+          "zip" : "200443",
+          "country" : "China",
+          "geoPoint" : {
+            "lat" : 31.22222,
+            "lon" : 121.45806
+          }
+        } ]
+      },
+      "ipdSharingStatementModule" : {
+        "ipdSharing" : "NO"
+      }
+    },
+    "hasResults" : false
+  }
+}

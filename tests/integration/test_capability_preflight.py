@@ -23,6 +23,59 @@ def _selection(
     )
 
 
+def test_optional_authenticated_browser_failure_never_blocks_core_research(
+    tmp_path: Path,
+) -> None:
+    matrix = _run(
+        tmp_path,
+        blocked=("login_browser",),
+        source_routes=("public-http", "public-browser", "authenticated-browser"),
+        needs_document_ingestion=False,
+    )
+
+    login = matrix.capability("login_browser")
+    assert login.state == "blocked"
+    assert login.required_by == ()
+    assert matrix.overall_state == "ready"
+    assert all(item.state == "ready" for item in matrix.research)
+    assert all(item.state == "ready" for item in matrix.deliveries)
+    assert any("药智网可选路线" in item and "自行登录" in item for item in matrix.user_messages)
+
+
+def test_runtime_probe_does_not_equate_blank_chromium_with_logged_in_session(
+    tmp_path: Path,
+) -> None:
+    from ci_workflow.application.capability_preflight import RuntimeCapabilityProbe
+
+    outcome = RuntimeCapabilityProbe().check("login_browser", project_root=tmp_path)
+
+    assert outcome.available is False
+    assert "会话" in outcome.detail
+
+
+def test_project_selection_consumes_available_yaozh_answer_only(tmp_path: Path) -> None:
+    from ci_workflow.application.capability_preflight import selection_from_project
+    from ci_workflow.application.project_service import create_project_workspace
+    from ci_workflow.application.yaozh_access import answer_yaozh_access
+    from ci_workflow.domain.contracts import create_project_contract
+
+    def project(name: str, answer: str) -> Path:
+        contract = create_project_contract(
+            indication="重度哮喘", reports=["A"], outputs=["html"]
+        )
+        root = create_project_workspace(tmp_path / name, contract)
+        answer_yaozh_access(root, answer)
+        return root
+
+    available = selection_from_project(project("available", "available"))
+    unavailable = selection_from_project(project("unavailable", "unavailable"))
+    skipped = selection_from_project(project("skipped", "skipped"))
+
+    assert "authenticated-browser" in available.source_routes
+    assert "authenticated-browser" not in unavailable.source_routes
+    assert "authenticated-browser" not in skipped.source_routes
+
+
 def _run(tmp_path: Path, *, blocked: tuple[str, ...] = (), **selection: object) -> object:
     from ci_workflow.application.capability_preflight import (
         StaticCapabilityProbe,
@@ -168,67 +221,19 @@ def test_preflight_checks_real_browser_for_selected_html_outputs(tmp_path: Path)
     assert {item.output: item.state for item in matrix.deliveries} == {"html": "blocked"}
 
 
-def test_preflight_checks_native_pdf_for_selected_pdf_output(tmp_path: Path) -> None:
-    matrix = _run(
-        tmp_path,
-        blocked=("native_pdf",),
-        outputs=("html", "pdf"),
-    )
-    states = {(item.report, item.output): item.state for item in matrix.deliveries}
-    assert all(states[(report, "html")] == "ready" for report in ("A", "B"))
-    assert all(states[(report, "pdf")] == "blocked" for report in ("A", "B"))
-    assert matrix.capability("html_ppt_runtime").state == "not_applicable"
+def test_preflight_rejects_non_html_outputs(tmp_path: Path) -> None:
+    del tmp_path
+    for outputs in (("html", "pdf"), ("html", "html-ppt"), ("html", "pptx")):
+        with pytest.raises(ValueError, match="html"):
+            _selection(outputs=outputs)
 
 
-def test_preflight_checks_html_ppt_runtime_for_selected_html_ppt_output(
-    tmp_path: Path,
-) -> None:
-    matrix = _run(
-        tmp_path,
-        blocked=("html_ppt_runtime",),
-        outputs=("html", "html-ppt"),
+def test_non_html_runtime_capabilities_are_absent_from_release_matrix(tmp_path: Path) -> None:
+    matrix = _run(tmp_path)
+    capability_ids = {item.capability_id for item in matrix.capabilities}
+    assert capability_ids.isdisjoint(
+        {"native_pdf", "html_ppt_runtime", "ppt_master", "office_renderer"}
     )
-    states = {(item.report, item.output): item.state for item in matrix.deliveries}
-    assert all(states[(report, "html")] == "ready" for report in ("A", "B"))
-    assert all(states[(report, "html-ppt")] == "blocked" for report in ("A", "B"))
-
-
-def test_preflight_checks_ppt_master_and_powerpoint_for_selected_pptx_output(
-    tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    matrix = _run(
-        tmp_path,
-        blocked=("ppt_master",),
-        outputs=("html", "pdf", "pptx"),
-    )
-    assert matrix.capability("ppt_master").state == "blocked"
-    assert matrix.capability("office_renderer").state == "ready"
-    states = {(item.report, item.output): item.state for item in matrix.deliveries}
-    assert all(states[(report, "html")] == "ready" for report in ("A", "B"))
-    assert all(states[(report, "pdf")] == "ready" for report in ("A", "B"))
-    assert all(states[(report, "pptx")] == "blocked" for report in ("A", "B"))
-    assert any(
-        "可编辑 PPTX" in message and "不受影响" in message
-        for message in matrix.user_messages
-    )
-
-    from ci_workflow.application import capability_preflight
-    from ci_workflow.application.capability_preflight import RuntimeCapabilityProbe
-
-    monkeypatch.delenv("CI_WORKFLOW_OFFICE_COMMAND", raising=False)
-    monkeypatch.setattr(
-        capability_preflight.Path,
-        "exists",
-        lambda path: str(path).endswith("LibreOffice.app"),
-    )
-    monkeypatch.setattr(
-        capability_preflight.shutil,
-        "which",
-        lambda command: "/usr/local/bin/soffice" if command == "soffice" else None,
-    )
-    office = RuntimeCapabilityProbe().check("office_renderer", project_root=tmp_path)
-    assert office.available is False
 
 
 def test_environment_recovery_requeues_only_failed_capability_and_downstream_nodes(
@@ -236,42 +241,19 @@ def test_environment_recovery_requeues_only_failed_capability_and_downstream_nod
 ) -> None:
     from ci_workflow.application.capability_preflight import plan_environment_recovery
 
-    before = _run(
-        tmp_path,
-        blocked=("ppt_master",),
-        outputs=("html", "pdf", "pptx"),
-    )
-    after = _run(tmp_path, outputs=("html", "pdf", "pptx"))
+    before = _run(tmp_path, blocked=("browser_validation",))
+    after = _run(tmp_path)
     recovery = plan_environment_recovery(before, after)
-    assert recovery.repaired_capability_ids == ("ppt_master",)
+    assert recovery.repaired_capability_ids == ("browser_validation",)
     assert set(recovery.requeue_node_ids) == {
-        "render:A:pptx",
-        "render:B:pptx",
-        "verify:A:pptx",
-        "verify:B:pptx",
+        "render:A:html",
+        "render:B:html",
+        "verify:A:html",
+        "verify:B:html",
     }
-    assert all("html" not in node and "pdf" not in node for node in recovery.requeue_node_ids)
 
-    still_blocked = _run(
-        tmp_path,
-        blocked=("office_renderer",),
-        outputs=("html", "pptx"),
-    )
-    both_blocked = _run(
-        tmp_path,
-        blocked=("ppt_master", "office_renderer"),
-        outputs=("html", "pptx"),
-    )
-    not_yet_requeued = plan_environment_recovery(both_blocked, still_blocked)
-    assert not_yet_requeued.repaired_capability_ids == ("ppt_master",)
-    assert not_yet_requeued.requeue_node_ids == ()
-
-    research_before = _run(
-        tmp_path,
-        blocked=("http_network",),
-        outputs=("html", "pdf"),
-    )
-    research_after = _run(tmp_path, outputs=("html", "pdf"))
+    research_before = _run(tmp_path, blocked=("http_network",))
+    research_after = _run(tmp_path)
     research_recovery = plan_environment_recovery(research_before, research_after)
     assert research_recovery.repaired_capability_ids == ("http_network",)
     assert set(research_recovery.requeue_node_ids) == {
@@ -280,13 +262,9 @@ def test_environment_recovery_requeues_only_failed_capability_and_downstream_nod
         "snapshot:A",
         "render:A:html",
         "verify:A:html",
-        "render:A:pdf",
-        "verify:A:pdf",
         "research:B",
         "analyze:B",
         "snapshot:B",
         "render:B:html",
         "verify:B:html",
-        "render:B:pdf",
-        "verify:B:pdf",
     }

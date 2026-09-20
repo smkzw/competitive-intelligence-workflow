@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <title>{{ page_title }} - {{ report_title }}</title>
+  <link rel="icon" href="{{ asset_prefix }}/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ asset_prefix }}/portal.css">
+  <link rel="stylesheet" href="{{ asset_prefix }}/report-b.css">
+  <link rel="stylesheet" href="{{ asset_prefix }}/evidence-drawer.css">
+</head>
+<body class="kz-b-site kz-b-site--{{ page_id }}">
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a href="{{ home_href }}" class="site-header__logo" aria-label="康哲药业">
+        <img src="{{ asset_prefix }}/logo.svg" alt="康哲药业" width="121" height="25" decoding="async">
+      </a>
+      <span class="site-header__title">{{ report_title }}</span>
+      <nav class="site-header__nav" id="site-primary-nav" aria-label="主导航">
+        {% for group in nav_groups %}
+        <div class="site-nav-group{% if group.pages | selectattr('active') | list %} site-nav-group--current{% endif %}">
+          {% if group.pages | length == 1 %}
+          {% set nav_page = group.pages[0] %}
+          <a href="{{ nav_page.href }}" class="site-header__nav-item{% if nav_page.active %} site-header__nav-item--active{% endif %}" aria-current="{% if nav_page.active %}page{% else %}false{% endif %}">{{ nav_page.title }}</a>
+          {% else %}
+          <button type="button" class="site-nav-group__trigger{% if group.pages | selectattr('active') | list %} site-nav-group__trigger--current{% endif %}" aria-expanded="false" aria-haspopup="true" aria-controls="nav-group-{{ loop.index }}">
+            <span class="site-nav-group__label">{{ group.label }}</span>
+            <span class="site-nav-group__chevron" aria-hidden="true"></span>
+          </button>
+          <div class="site-nav-group__panel" id="nav-group-{{ loop.index }}" hidden>
+            {% for nav_page in group.pages %}
+            <a href="{{ nav_page.href }}" class="site-nav-group__link{% if nav_page.active %} site-nav-group__link--active{% endif %}" aria-current="{% if nav_page.active %}page{% else %}false{% endif %}">{{ nav_page.title }}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </nav>
+      <div class="site-header__search">
+        <label class="visually-hidden" for="global-search-input">全局搜索</label>
+        <input type="search" id="global-search-input" class="site-header__search-input" placeholder="搜索页面或关键词" aria-label="全局搜索" autocomplete="off">
+        <div id="global-search-results" class="site-header__search-results" role="listbox" hidden></div>
+      </div>
+      <button type="button" class="site-header__menu-toggle" id="menu-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="site-primary-nav">菜单</button>
+    </div>
+    <div class="site-header__brand-line" aria-hidden="true"></div>
+  </header>
+
+  {% if publication_limitation_zh %}
+  <aside class="publication-limitation" role="note" aria-label="证据限制">
+    <strong>证据限制</strong>
+    <p>{{ publication_limitation_zh }}</p>
+  </aside>
+  {% endif %}
+
+  <main class="portal-main kz-b-main" id="main" role="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <section class="portal-source-section" id="external-sources" aria-labelledby="external-sources-title">
+    <div class="portal-source-section__inner">
+      <h2 id="external-sources-title">外部来源</h2>
+      {% if external_sources %}
+      <ul class="portal-source-section__list">
+        {% for source in external_sources %}
+        <li>
+          {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}<span>{{ source.label }}</span>{% endif %}
+          {% if source.scope %}<span>｜覆盖：{{ source.scope }}</span>{% endif %}
+          {% if source.limitation %}<span>｜限制：{{ source.limitation }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>本页未提供可公开链接；详细定位保留在数据依据中。</p>
+      {% endif %}
+    </div>
+  </section>
+
+  {{ evidence_host | safe }}
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner">
+      <span>康哲药业临床试验结果比较；数据截止 {{ report.data_cutoff.strftime('%Y-%m-%d') if report is defined else '' }}。</span>
+    </div>
+  </footer>
+
+  <script>window.__SEARCH_INDEX__ = [];</script>
+  <script src="{{ data_prefix }}/search-index.js"></script>
+  <script>
+    window.__SEARCH_INDEX__ = (window.__SEARCH_INDEX__ || []).map(function (entry) {
+      var copy = {title: entry.title, slug: entry.slug, keywords: entry.keywords};
+      copy.slug = {{ site_prefix | tojson }} + copy.slug;
+      return copy;
+    });
+  </script>
+  <script>window.__SNAPSHOT_ID__ = {{ snapshot_id | tojson }}; window.__ROW_SET_DIGEST__ = {{ row_set_digest | tojson }}; window.__FILTER_ROWS__ = {{ filter_rows_json | safe }}; window.__B_ROW_DIMENSIONS__ = {{ row_dimensions_json | safe }}; window.__B_FILTER_DIMENSIONS__ = {{ filter_dimensions_json | safe }}; window.__B_PAGE_TITLE__ = {{ page_title | tojson }}; window.__B_PAGE_ID__ = {{ page_id | tojson }}; window.__B_SITE_PREFIX__ = {{ site_prefix | tojson }}; window.__B_EMPTY_STATE__ = {{ empty_state_title | tojson }};</script>
+  <script>window.__CHART_GROUPS__ = {{ chart_groups_json | safe }};</script>
+  {{ evidence_embed | safe }}
+  <script src="{{ asset_prefix }}/portal.js"></script>
+  <script src="{{ asset_prefix }}/echarts.min.js"></script>
+  <script src="{{ asset_prefix }}/evidence-drawer.js"></script>
+  <script src="{{ asset_prefix }}/report-b.js"></script>
+  <script src="{{ asset_prefix }}/charts.js"></script>
+</body>
+</html>
