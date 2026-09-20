@@ -268,7 +268,8 @@ async def _probe_page(page, site: Path, rel: str, engine: str, width: int,
     errors: list[str] = []
     page.on("pageerror", lambda e, b=errors: b.append(str(e)[:120]))
     await page.goto((site / rel).as_uri(), wait_until="networkidle", timeout=30000)
-    await page.wait_for_timeout(200)
+    # ECharts 入场动画约 1s：未结束即量测会把动画中的标签判为重叠
+    await page.wait_for_timeout(900)
 
     overflow = await page.evaluate(
         "document.documentElement.scrollWidth - document.documentElement.clientWidth")
@@ -276,7 +277,8 @@ async def _probe_page(page, site: Path, rel: str, engine: str, width: int,
     shot.parent.mkdir(parents=True, exist_ok=True)
     await page.screenshot(path=str(shot), full_page=False)
 
-    probes = await page.evaluate(INTERACTION_PROBE)
+    # 指标量测在交互探测之前：交互会展开筛选面板/改变布局，
+    # 静息态才是呈现质量的真实对象
     metrics_probe = await page.evaluate("""() => {
       const vw = document.documentElement.clientWidth;
       let clipped = 0, overlap = 0, unreadable = 0;
@@ -284,13 +286,18 @@ async def _probe_page(page, site: Path, rel: str, engine: str, width: int,
       for (const el of document.querySelectorAll('body *')) {
         const cs = getComputedStyle(el);
         if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+        // 未展开 details/[hidden] 祖先内的内容不参与布局流，其子元素与
+        // 后续内容同坐标堆叠，属测量幻影（独立视觉 C 复核指出）
+        if (el.closest('[hidden], details:not([open])')) continue;
         const r = el.getBoundingClientRect();
         if (r.width < 4 || r.height < 4) continue;
         if (r.right > vw + 2 && cs.overflowX === 'visible' && !cs.position) clipped++;
         const fs = parseFloat(cs.fontSize);
         if (fs < 10 && el.textContent.trim()) unreadable++;
-        // 仅统计元素自身直接文本（textContent 会继承子元素文本，父容器
-        // 与子文本矩形必然相交，属结构性伪重叠）
+        // 仅统计元素自身直接文本节点（textContent 会继承子元素文本，父容器
+        // 与子文本矩形必然相交，属结构性伪重叠）；SVG 旋转文本的包围盒
+        // 远大于字形本身，其碰撞由 ECharts hideOverlap 负责，不入本指标
+        if (el.closest('svg')) continue;
         let own = '';
         for (const node of el.childNodes) {
           if (node.nodeType === 3) own += node.textContent;
@@ -300,6 +307,9 @@ async def _probe_page(page, site: Path, rel: str, engine: str, width: int,
       for (let i = 0; i < rects.length; i++)
         for (let j = i + 1; j < rects.length; j++) {
           if (rects[i].el.contains(rects[j].el) || rects[j].el.contains(rects[i].el)) continue;
+          // 同父兄弟（如同一条引用行内的相邻 inline 节点）按行流排布，
+          // 行高造成的边框盒轻微相接不是视觉碰撞
+          if (rects[i].el.parentElement === rects[j].el.parentElement) continue;
           const a = rects[i].r, b = rects[j].r;
           const ix = Math.min(a.right, b.right) - Math.max(a.left, b.left);
           const iy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
@@ -307,6 +317,7 @@ async def _probe_page(page, site: Path, rel: str, engine: str, width: int,
         }
       return {clipped, overlap, unreadable};
     }""")
+    probes = await page.evaluate(INTERACTION_PROBE)
 
     # 键盘可达：连续 Tab（至多 8 次）内焦点落在可交互元素
     focused = ""
