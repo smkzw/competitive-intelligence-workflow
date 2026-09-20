@@ -237,13 +237,13 @@
             color: seriesColor
           },
           label: {
-            show: true,
+            show: series[0] && series[0].data && series[0].data.length <= 12,
             position: value < 0 ? "insideBottom" : "top",
             formatter: String(value),
             color: value < 0 ? "#FFFFFF" : "#0F1115",
-            fontSize: 15,
+            fontSize: 13,
             fontWeight: 600,
-            padding: 3
+            padding: 2
           }
         });
       }
@@ -282,7 +282,11 @@
           bottom: 0,
           textStyle: { fontSize: 13 }
         },
-        grid: { left: 56, right: 40, top: series.length > 1 ? 66 : 44, bottom: 78, containLabel: true },
+        grid: { left: 56, right: 40, top: series.length > 1 ? 66 : 44, bottom: categories.length > 8 ? 100 : 78, containLabel: true },
+        dataZoom: categories.length > 8 ? [
+          { type: "slider", height: 20, bottom: 4, start: 0, end: Math.min(100, 800 / categories.length) },
+          { type: "inside" }
+        ] : [],
         xAxis: {
           type: "category",
           data: categories,
@@ -341,13 +345,13 @@
           status: null,
           itemStyle: { color: arm === "对照组" ? ctrlColor : treatColor },
           label: {
-            show: true,
+            show: categories.length <= 12,
             position: v < 0 ? "insideBottom" : "top",
             formatter: String(v),
             color: v < 0 ? "#FFFFFF" : "#0F1115",
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: 600,
-            padding: 4
+            padding: 3
           }
       });
     }
