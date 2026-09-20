@@ -1,0 +1,14 @@
+{
+  "artifact_type": "review_instruction_pack",
+  "json_files_parse": true,
+  "python_files_parse": true,
+  "work_package_dependency_graph_acyclic": true,
+  "work_packages": 11,
+  "acceptance_cases": 59,
+  "acceptance_reference_closure": true,
+  "runtime_source_extract_ids_blob_verified": "89106ea68861731725e1f05569f38bbe00518581",
+  "probe_observed_failed_desired_invariants": 7,
+  "probe_control_passed": 1,
+  "assert_fixed_exit_code_observed": 1,
+  "product_full_tests_or_browser_acceptance_performed": false
+}

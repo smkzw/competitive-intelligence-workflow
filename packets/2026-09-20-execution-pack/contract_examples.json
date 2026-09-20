@@ -1,0 +1,181 @@
+{
+  "status": "illustrative_contract_intent_not_existing_API_payload_not_production_schema",
+  "instruction": "Integrate these capabilities into existing canonical models; symbolic IDs are placeholders, not valid persisted identities. No second truth store.",
+  "fact_correction_request": {
+    "command_id": "<stable-idempotency-id>",
+    "project_id": "<existing-project-id>",
+    "expected_project_revision": "<current-project-revision>",
+    "fact_id": "<existing-logical-fact-id>",
+    "expected_fact_version_id": "<old-fact-version-id>",
+    "expected_content_sha256": "<full-old-content-digest>",
+    "changes": [
+      {
+        "field": "numerator",
+        "type": "integer",
+        "before": 20,
+        "after": 24
+      }
+    ],
+    "reason_code": "extraction_correction",
+    "source_fragment_ids": [
+      "<existing-fragment-id>"
+    ],
+    "confirmation": "save_and_synchronize",
+    "origin_report": "B",
+    "scope": "all-dependent-current-project-views-not-only-origin-report"
+  },
+  "fact_correction_response": {
+    "status": "applied",
+    "project_revision": "<new-effective-revision>",
+    "verification_status": "user_corrected_not_independently_reverified",
+    "affected_fact_versions": [
+      "<new-source-or-derived-version-id>"
+    ],
+    "affected_views": [
+      "A/efficacy",
+      "B/efficacy",
+      "B/trial-detail"
+    ],
+    "invalidated_claims": [
+      "<claim-with-no-deterministic-update>"
+    ],
+    "unchanged_views": [
+      "C/planned-enrollment"
+    ],
+    "actual_artifact_manifest_sha256": "<verified-manifest-digest>"
+  },
+  "view_state": {
+    "schema_version": "<versioned-view-schema>",
+    "project_revision": "<revision>",
+    "report": "C",
+    "page_id": "design-comparison",
+    "keyword": "洗脱期",
+    "filters": {
+      "op": "and",
+      "children": [
+        {
+          "field": "design_topic",
+          "op": "in",
+          "values": [
+            "prior_treatment",
+            "washout"
+          ]
+        }
+      ]
+    },
+    "selected_trial_ids": [
+      "<trial-a>",
+      "<trial-b>"
+    ],
+    "columns": [
+      "original_clause",
+      "operator",
+      "threshold",
+      "unit",
+      "time_anchor",
+      "applicable_population"
+    ],
+    "facet_by": [
+      "development_phase"
+    ],
+    "only_differences": true,
+    "drilldown_path": [
+      "design_topic:prior_treatment"
+    ],
+    "pinned_fact_ids": [],
+    "chart_preferences": {
+      "type": "endpoint_time_matrix"
+    },
+    "no_annotations": true
+  },
+  "b_query_and_frame_contract": {
+    "clinical_question": "<canonical-clinical-question-id>",
+    "workspace_membership": {
+      "include_relevant_supporting_studies": true,
+      "preserve_role_labels": true
+    },
+    "facet_plan": {
+      "dimensions": [
+        "population_context",
+        "statistical_form",
+        "time_context"
+      ],
+      "trial_id_is_not_default_facet": true
+    },
+    "numeric_frame_eligibility": {
+      "policy_id": "<versioned-policy>",
+      "policy_content_sha256": "<actual-policy-hash>",
+      "guard_fields": [
+        "clinical_construct",
+        "unit",
+        "scale",
+        "statistic",
+        "denominator_semantics",
+        "analysis_population",
+        "time_kind",
+        "time_anchor"
+      ]
+    },
+    "nonplot_rows": "retained_with_specific_reason",
+    "pooling": false
+  },
+  "design_clause": {
+    "clause_id": "<stable-id>",
+    "trial_id": "<trial-id>",
+    "protocol_version_id": "<source-version>",
+    "domain": "eligibility",
+    "type": "inclusion",
+    "topic_ids": [
+      "prior_treatment",
+      "washout"
+    ],
+    "original_text": "<complete-unmodified-clause>",
+    "translation_zh": "<faithful-translation>",
+    "expression": {
+      "op": "and",
+      "children": [
+        {
+          "predicate_ref": "<criterion-1>"
+        },
+        {
+          "op": "or",
+          "children": [
+            {
+              "predicate_ref": "<criterion-2>"
+            },
+            {
+              "predicate_ref": "<criterion-3>"
+            }
+          ]
+        }
+      ]
+    },
+    "source_fragment_ids": [
+      "<precise-fragment-id>"
+    ],
+    "parent_clause_id": null,
+    "raw_order": 1,
+    "parse_state": "structured"
+  },
+  "shared_revision_manifest": {
+    "project_revision": "<revision>",
+    "parent_revision": "<parent>",
+    "evidence_base_digest": "<digest>",
+    "effective_fact_set_digest": "<digest>",
+    "report_projections": {
+      "A": {
+        "artifact_manifest": "<path-and-hash>"
+      },
+      "B": {
+        "artifact_manifest": "<path-and-hash>"
+      },
+      "C": {
+        "artifact_manifest": "<path-and-hash>"
+      }
+    },
+    "report_fact_sets_may_be_different": true,
+    "view_config_digest": "<digest>",
+    "correction_history_digest": "<digest>",
+    "publication_pointer_switch": "atomic_only_after_affected_artifacts_verified"
+  }
+}

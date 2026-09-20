@@ -1,0 +1,419 @@
+{
+  "schema_version": "review-acceptance-cases-1",
+  "status": "required_tests_not_claimed_passed",
+  "cases": [
+    {
+      "id": "BASE01",
+      "title": "记录基线",
+      "given": "HEAD不同或工作树有用户未提交改动",
+      "expected": "不覆盖、不重置，记录差异并复用当前修复",
+      "owner": "WP00"
+    },
+    {
+      "id": "BASE02",
+      "title": "红测试真实",
+      "given": "本包候选问题走当前实际入口",
+      "expected": "确证或以输入/调用/产物证据排除，不静默skip",
+      "owner": "WP00"
+    },
+    {
+      "id": "SCI01",
+      "title": "零与缺失",
+      "given": "reported_zero=0/null；未报告/不适用携数值；zero人数",
+      "expected": "0正确，缺失不当0；不合法组合失败；计划实际明确",
+      "owner": "WP01"
+    },
+    {
+      "id": "SCI02",
+      "title": "安全类型",
+      "given": "SAE/Non-serious AE/AE/TEAE/混合分类",
+      "expected": "否定不误判，AE不升级TEAE，正确阳性不回归",
+      "owner": "WP01"
+    },
+    {
+      "id": "SCI03",
+      "title": "数字保真",
+      "given": "0.5、5-10、5.10、≤、±、小数阈值",
+      "expected": "原文和显示不损坏，不同含义不归成同签名",
+      "owner": "WP01"
+    },
+    {
+      "id": "SCI04",
+      "title": "条款完整",
+      "given": "18条入选+21条排除，短条款，嵌套项目",
+      "expected": "全量可定位；不按长度/数量删项",
+      "owner": "WP01"
+    },
+    {
+      "id": "SCI05",
+      "title": "多元素完整",
+      "given": "2个主要/多个次要终点；3组2期间；未知masking",
+      "expected": "全部保留、正确组别配对；unknown不变open-label",
+      "owner": "WP01"
+    },
+    {
+      "id": "DATA01",
+      "title": "内容版本",
+      "given": "同规范值改状态/原始表达/上下文",
+      "expected": "新版本或明确冲突，不能IGNORE吞掉",
+      "owner": "WP02"
+    },
+    {
+      "id": "DATA02",
+      "title": "逐条定位",
+      "given": "一篇来源的两张表各一事实",
+      "expected": "每事实定位回自己字段，非仅共同全文fragment",
+      "owner": "WP02"
+    },
+    {
+      "id": "DATA03",
+      "title": "别名非误合并",
+      "given": "同产品别名与不同人群的同名终点",
+      "expected": "产品正确消歧；不同事实上下文不强合并",
+      "owner": "WP02"
+    },
+    {
+      "id": "DATA04",
+      "title": "计划实际分开",
+      "given": "C计划N与B实际N及A汇总同页",
+      "expected": "独立事实身份；修一处不覆盖另一事实",
+      "owner": "WP02"
+    },
+    {
+      "id": "DATA05",
+      "title": "来源新版本",
+      "given": "同source_id不同字节/获取尝试",
+      "expected": "本次回执不复用旧的，版本绑定闭合",
+      "owner": "WP02"
+    },
+    {
+      "id": "DATA06",
+      "title": "派生DAG",
+      "given": "n,N→粗率→试验内派生→多个页面；人为环",
+      "expected": "正确完整传播；拒绝环/缺边导致伪同步",
+      "owner": "WP02"
+    },
+    {
+      "id": "UI01",
+      "title": "多视图同事实",
+      "given": "点击某点同时存在两图两表",
+      "expected": "所有对应位置同选中，数据身份不靠dataIndex",
+      "owner": "WP03"
+    },
+    {
+      "id": "UI02",
+      "title": "查询守恒",
+      "given": "筛选后有可绘图和不可绘图记录",
+      "expected": "可绘+非可绘覆盖匹配集，非可绘显示准确原因",
+      "owner": "WP03"
+    },
+    {
+      "id": "UI03",
+      "title": "配置往返",
+      "given": "修改字段/排序/分面/图例/布局并重开",
+      "expected": "恢复等价ViewState与事实选择，不依赖旧浏览器缓存",
+      "owner": "WP03"
+    },
+    {
+      "id": "UI04",
+      "title": "坐标碰撞",
+      "given": "多臂同role、多剂量、多时期",
+      "expected": "没有第一条获胜；显式维度/分面或诊断",
+      "owner": "WP03"
+    },
+    {
+      "id": "UI05",
+      "title": "下钻返回",
+      "given": "三级以上下钻后返回、URL前进后退",
+      "expected": "筛选/选择/滚动/焦点一致，不跳回全量",
+      "owner": "WP03"
+    },
+    {
+      "id": "UI06",
+      "title": "导入与脚本安全",
+      "given": "恶意标签/HTML/script结束串/非法维度JSON",
+      "expected": "不执行输入，严格校验配置；合法中文照常显示",
+      "owner": "WP03"
+    },
+    {
+      "id": "EDIT01",
+      "title": "跨报告同步",
+      "given": "合成事实n20/N80，修n24；多个A/B视图共用",
+      "expected": "粗率25%→30%，相关图表正文一致；不相关C事实不变",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT02",
+      "title": "已报告统计量",
+      "given": "来源调整率和n/N派生粗率同时存在",
+      "expected": "只重算明确粗率，来源调整率不被替换；矛盾可见",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT03",
+      "title": "语义修改",
+      "given": "终点时间窗/单位/分析集改变",
+      "expected": "重新分面并失效相应裁决；不能继承旧compatible标记",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT04",
+      "title": "原子失败",
+      "given": "B已生成候选新产物时C相关生成失败",
+      "expected": "current仍完整旧版；不会宣布全部同步；可恢复",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT05",
+      "title": "并发标签页",
+      "given": "两标签页基于同旧事实提交不同修改",
+      "expected": "一次成功、一次明确冲突；不能后写无声覆盖",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT06",
+      "title": "幂等与撤销",
+      "given": "重复保存同请求；再撤销",
+      "expected": "不重复创建相同修订，撤销产生新历史版本",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT07",
+      "title": "叙事失效",
+      "given": "模型生成解释依赖被改事实",
+      "expected": "旧解释不继续标当前有效，可显示失效理由并重算",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT08",
+      "title": "核验状态",
+      "given": "编辑已独立核验内容后分享",
+      "expected": "原始版和旧回执保留；新内容标用户修订而非重新通过",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT09",
+      "title": "实际产物校验",
+      "given": "提交正确格式hash但文件缺失/字节不同/漏页面",
+      "expected": "校验拒绝；不以结构正确回执通过",
+      "owner": "WP04"
+    },
+    {
+      "id": "EDIT10",
+      "title": "本地接口安全",
+      "given": "非预期Origin/Host、路径穿越、symlink、无会话写入",
+      "expected": "拒绝越权；合法本地typed修改能工作",
+      "owner": "WP04"
+    },
+    {
+      "id": "A01",
+      "title": "全宇宙",
+      "given": "临床前、早期、终止、撤回和结果性项目",
+      "expected": "纳入集合与来源处置一致，不因没结果删产品",
+      "owner": "WP05A"
+    },
+    {
+      "id": "A02",
+      "title": "全景联动",
+      "given": "机制→产品→地区事件→试验→证据",
+      "expected": "图表/列表统一筛选；能返回原状态",
+      "owner": "WP05A"
+    },
+    {
+      "id": "A03",
+      "title": "地域分轨",
+      "given": "中国与境外阶段/监管状态不同",
+      "expected": "不互相覆盖，来源日期与事件身份明确",
+      "owner": "WP05A"
+    },
+    {
+      "id": "A04",
+      "title": "独立交付",
+      "given": "只请求A",
+      "expected": "A完整可读，不依赖B/C输出目录",
+      "owner": "WP05A"
+    },
+    {
+      "id": "B01",
+      "title": "默认分面",
+      "given": "同问题3研究，24/26/52周有实际差异",
+      "expected": "3项均可达，近窗规则和长期分面清楚",
+      "owner": "WP05B"
+    },
+    {
+      "id": "B02",
+      "title": "不可共轴",
+      "given": "不同量表/绝对与变化/均值与中位数/不同分母",
+      "expected": "同工作空间查看，但不误共轴/池化",
+      "owner": "WP05B"
+    },
+    {
+      "id": "B03",
+      "title": "时间锚点",
+      "given": "28d/4w；0–24周累计/24周评估；不同基准日",
+      "expected": "精确换算只在同语义；累计与单点不误合并",
+      "owner": "WP05B"
+    },
+    {
+      "id": "B04",
+      "title": "完整治疗语境",
+      "given": "多臂、活性对照、单臂、支持研究",
+      "expected": "角色保留；无对照不伪造比较效应",
+      "owner": "WP05B"
+    },
+    {
+      "id": "B05",
+      "title": "未知仍可查",
+      "given": "某研究estimand未公开",
+      "expected": "可达并标未知，不伪造字段以获得兼容",
+      "owner": "WP05B"
+    },
+    {
+      "id": "B06",
+      "title": "独立交付",
+      "given": "只请求B",
+      "expected": "B完整自足，无A生成前置",
+      "owner": "WP05B"
+    },
+    {
+      "id": "C01",
+      "title": "单研究可用",
+      "given": "一项核心设计完整但没有第二种路径",
+      "expected": "C先例正常交付，无候选路径数量阻断",
+      "owner": "WP05C"
+    },
+    {
+      "id": "C02",
+      "title": "全文无丢失",
+      "given": "条款inventory→解构→索引→对照表",
+      "expected": "每条有映射，不截条数/长度；母子句可还原",
+      "owner": "WP05C"
+    },
+    {
+      "id": "C03",
+      "title": "布尔逻辑",
+      "given": "AND/OR/NOT、例外、条件适用人群、洗脱时限",
+      "expected": "搜索可命中主题，展示完整关系不反转含义",
+      "owner": "WP05C"
+    },
+    {
+      "id": "C04",
+      "title": "按需横查",
+      "given": "关键词→主题→点选研究→只看差异→原文",
+      "expected": "同义匹配不冒充临床等价，完整句和阈值可下钻",
+      "owner": "WP05C"
+    },
+    {
+      "id": "C05",
+      "title": "字段一对多",
+      "given": "共主要终点/多剂量/多时期/多个方案版本",
+      "expected": "配对保留；不按首条覆盖",
+      "owner": "WP05C"
+    },
+    {
+      "id": "C06",
+      "title": "修订反映索引",
+      "given": "修改某条门槛/译名/分类",
+      "expected": "检索/分类/矩阵/原文对照更新，原始quote不覆写",
+      "owner": "WP05C"
+    },
+    {
+      "id": "C07",
+      "title": "独立交付",
+      "given": "只请求C",
+      "expected": "C无需先完成A或B，试验列表来自共同身份层",
+      "owner": "WP05C"
+    },
+    {
+      "id": "SHARE01",
+      "title": "无环境读取",
+      "given": "断网新浏览器/清存储，解压改路径，双击HTML",
+      "expected": "A/B/C图、表、来源、配置一致且无远程依赖",
+      "owner": "WP06"
+    },
+    {
+      "id": "SHARE02",
+      "title": "用户修订可携带",
+      "given": "修改并同步后导出分享",
+      "expected": "同事默认打开就是当前修订，不需手动修补JSON",
+      "owner": "WP06"
+    },
+    {
+      "id": "SHARE03",
+      "title": "配置与单报告",
+      "given": "分别导出A/B/C单份和组合包",
+      "expected": "每包资源依赖闭合且状态恢复，无强制融合首页",
+      "owner": "WP06"
+    },
+    {
+      "id": "SHARE04",
+      "title": "版本错配",
+      "given": "把旧配置/patch用于另一快照",
+      "expected": "显式校验/可解释迁移；不静默绑定同名字段",
+      "owner": "WP06"
+    },
+    {
+      "id": "SHARE05",
+      "title": "内容边界",
+      "given": "扫描导出包",
+      "expected": "不含token、绝对工作目录、商业会话/未经授权全文",
+      "owner": "WP06"
+    },
+    {
+      "id": "LOOP01",
+      "title": "去重效率",
+      "given": "ABC同时需要同登记记录和论文",
+      "expected": "每内容/提取版本只做必要获取解析，三报告都可用",
+      "owner": "WP07"
+    },
+    {
+      "id": "LOOP02",
+      "title": "动态新鲜度",
+      "given": "动态页面不变与网络失败两种情况",
+      "expected": "重新核查回执存在；失败不称本次已确认",
+      "owner": "WP07"
+    },
+    {
+      "id": "LOOP03",
+      "title": "局部阻断",
+      "given": "C附件失败，A/B已有充分资料",
+      "expected": "共享完成节点复用，不整项目重复检索",
+      "owner": "WP07"
+    },
+    {
+      "id": "LOOP04",
+      "title": "真实回环",
+      "given": "重试无进展/独立审阅/进程中断",
+      "expected": "诊断/恢复/预算有实测，不靠生产者自填通过",
+      "owner": "WP07"
+    },
+    {
+      "id": "END01",
+      "title": "三门户平等",
+      "given": "A/B/C各自连续任务和组合场景",
+      "expected": "三个均通过，不宣布一个成功等于整体完成",
+      "owner": "WP08"
+    },
+    {
+      "id": "END02",
+      "title": "浏览器覆盖",
+      "given": "Chromium/WebKit，1440×900、1024×1366、390×844、320×568",
+      "expected": "操作/焦点/遮挡/console/链接均实测，失败有记录",
+      "owner": "WP08"
+    },
+    {
+      "id": "END03",
+      "title": "安装与来源矩阵",
+      "given": "全新安装、三宿主、现行8适应症×ABC正式范围",
+      "expected": "从安装入口验证，不复用旧回执冒充新验收",
+      "owner": "WP08"
+    },
+    {
+      "id": "END04",
+      "title": "迁移恢复性能",
+      "given": "旧项目迁移、崩溃恢复、代表与压力数据集",
+      "expected": "历史可读、相同输入可复现，记录耗时/内存/查询p95；不删数据保性能",
+      "owner": "WP08"
+    }
+  ]
+}

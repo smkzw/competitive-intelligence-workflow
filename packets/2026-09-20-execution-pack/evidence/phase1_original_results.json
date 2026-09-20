@@ -1,0 +1,107 @@
+{
+  "commit": "d6cb6d51e1b5a5e2abdacea485ea84b5268dc7ca",
+  "scope": "isolated transcribed source-model probes; not repository tests",
+  "pydantic_version": "2.13.4",
+  "cases": [
+    {
+      "case": "reported_zero_with_0",
+      "observed": "rejected",
+      "expected_semantics": "accepted: an explicitly reported zero must retain numeric zero",
+      "errors": [
+        {
+          "loc": [],
+          "type": "value_error",
+          "msg": "Value error, 未披露状态行不得携带数值"
+        }
+      ]
+    },
+    {
+      "case": "reported_zero_with_null",
+      "observed": "accepted",
+      "expected_semantics": "rejected: reported_zero cannot be represented as a missing numeric value",
+      "parsed": {
+        "row_id": "r-1",
+        "product_id": "p-1",
+        "trial_id": "t-1",
+        "endpoint": "test endpoint",
+        "timepoint": "week 24",
+        "arm": "treatment",
+        "arm_detail": null,
+        "value": null,
+        "disclosure_state": "reported_zero",
+        "numerator": null,
+        "denominator": null,
+        "unit": "%",
+        "population": "ITT"
+      }
+    },
+    {
+      "case": "reported_value_with_0_control",
+      "observed": "accepted",
+      "expected_semantics": "accepted: numeric zero is valid as a reported value",
+      "parsed": {
+        "row_id": "r-1",
+        "product_id": "p-1",
+        "trial_id": "t-1",
+        "endpoint": "test endpoint",
+        "timepoint": "week 24",
+        "arm": "treatment",
+        "arm_detail": null,
+        "value": 0.0,
+        "disclosure_state": "reported_value",
+        "numerator": null,
+        "denominator": null,
+        "unit": "%",
+        "population": "ITT"
+      }
+    },
+    {
+      "case": "not_applicable_with_numeric_safety_value",
+      "observed": "accepted",
+      "expected_semantics": "requires rejection or an explicitly separate non-applicable-measure contract",
+      "parsed": {
+        "row_id": "s-1",
+        "product_id": "p-1",
+        "trial_id": null,
+        "arm": "治疗组",
+        "arm_detail": null,
+        "category": "test",
+        "term": "test",
+        "value": 12.5,
+        "numerator": null,
+        "denominator": null,
+        "unit": "%",
+        "time_window": "week 0-24",
+        "disclosure_state": "不适用"
+      }
+    },
+    {
+      "case": "trial_actual_enrollment_0",
+      "observed": "rejected",
+      "expected_semantics": "product decision: preserve a known-zero-enrollment trial in the full universe",
+      "errors": [
+        {
+          "loc": [
+            "sample_size"
+          ],
+          "type": "greater_than",
+          "msg": "Input should be greater than 0"
+        }
+      ]
+    },
+    {
+      "case": "trial_unknown_enrollment",
+      "observed": "rejected",
+      "expected_semantics": "product decision: preserve an otherwise in-scope trial with enrollment unknown",
+      "errors": [
+        {
+          "loc": [
+            "sample_size"
+          ],
+          "type": "int_type",
+          "msg": "Input should be a valid integer"
+        }
+      ]
+    }
+  ]
+}

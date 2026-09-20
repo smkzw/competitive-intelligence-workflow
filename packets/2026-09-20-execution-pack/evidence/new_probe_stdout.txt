@@ -1,0 +1,88 @@
+{
+  "baseline_commit": "d6cb6d51e1b5a5e2abdacea485ea84b5268dc7ca",
+  "execution_mode": "transcribed_source_excerpts",
+  "python": "3.13.5",
+  "not_performed": [
+    "full_repository_tests",
+    "real_research",
+    "installed_bundle",
+    "browser_acceptance"
+  ],
+  "checks": [
+    {
+      "case_id": "R01",
+      "desired_invariant": "Preserve all 12 inclusion and 11 exclusion clauses",
+      "observed": {
+        "inclusion_count": 10,
+        "exclusion_count": 10
+      },
+      "desired_invariant_passed": false,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R02",
+      "desired_invariant": "Never discard a source clause only because it is short",
+      "observed": [
+        "Able to sign informed consent"
+      ],
+      "desired_invariant_passed": false,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R03",
+      "desired_invariant": "Decimal punctuation is preserved in user-visible design clauses",
+      "observed": "0 5 mg bid",
+      "desired_invariant_passed": false,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R04",
+      "desired_invariant": "A dose range and decimal dose must not have the same canonical text",
+      "observed": {
+        "range": "5 10 mg",
+        "decimal": "5 10 mg"
+      },
+      "desired_invariant_passed": false,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R05",
+      "desired_invariant": "Non-serious AE must not be classified as SAE",
+      "observed": "sae",
+      "desired_invariant_passed": false,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R06",
+      "desired_invariant": "Generic AE must not be upgraded to treatment-emergent AE without temporal evidence",
+      "observed": "teae",
+      "desired_invariant_passed": false,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R07_CONTROL",
+      "desired_invariant": "Explicit SAE remains SAE",
+      "observed": "sae",
+      "desired_invariant_passed": true,
+      "scope": "source_function"
+    },
+    {
+      "case_id": "R08",
+      "desired_invariant": "Disclosure-state change is not swallowed by version identity + INSERT OR IGNORE",
+      "observed": {
+        "old_id": "fact-version_9221a544bafd4075a45f852e",
+        "new_id": "fact-version_9221a544bafd4075a45f852e",
+        "stored_rows": [
+          [
+            "fact-version_9221a544bafd4075a45f852e",
+            "reported_value"
+          ]
+        ]
+      },
+      "desired_invariant_passed": false,
+      "scope": "actual_identity_expression_plus_minimal_sqlite_demonstration_not_repository_ingestion"
+    }
+  ],
+  "desired_invariants_failed": 7,
+  "controls_and_invariants_passed": 1
+}

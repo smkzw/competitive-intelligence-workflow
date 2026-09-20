@@ -1,0 +1,95 @@
+{
+  "baseline_commit": "d6cb6d51e1b5a5e2abdacea485ea84b5268dc7ca",
+  "review_date": "2026-09-20",
+  "repository_changed_by_reviewer": false,
+  "repository_fetch_method": "connected_GitHub_file_reads",
+  "full_executable_checkout_obtained": false,
+  "limitations": [
+    "container git clone failed DNS resolution for github.com",
+    "GitHub connector read succeeded; full files and selected ranges as indicated",
+    "No entire-repository tests, product run, installed bundle, host matrix or actual portal browser acceptance performed"
+  ],
+  "executed": [
+    "stdlib function excerpt probes R01-R07_CONTROL",
+    "version expression plus minimal in-memory SQLite demonstration R08"
+  ],
+  "runtime_assets_match_root_assets": {
+    "charts.js": "956d94118fefa1706e31cec273b692d944f5f77c",
+    "portal.js": "23f5ee595baf12a17b55902010f93a2f4435c41d"
+  },
+  "full_original_ids_py_git_blob_verified": "89106ea68861731725e1f05569f38bbe00518581",
+  "new_source_reads": [
+    {
+      "path": "src/ci_workflow/application/correction_service.py",
+      "ranges": [
+        "1-430",
+        "950-end"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/graph/impact.py",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/domain/facts.py",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/application/fresh_research_ingestion.py",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/application/fresh_c_research_package.py",
+      "ranges": [
+        "1-435"
+      ]
+    },
+    {
+      "path": "packets/2026-09-11-pnh-vertical/build_pnh_c_audit.py",
+      "ranges": [
+        "1-440"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/application/source_research_service.py",
+      "ranges": [
+        "1-205",
+        "440-625",
+        "1800-2050"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/domain/ids.py",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/builder.py",
+      "ranges": [
+        "1-230"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/assets/charts.js",
+      "ranges": [
+        "1-22 + blob-identity-match"
+      ]
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/assets/portal.js",
+      "ranges": [
+        "1-12 + blob-identity-match"
+      ]
+    }
+  ],
+  "previous_turn_review_reference": "Conversation first-pass review; full scopes documented in original attached phase1 report, not all repeated this turn",
+  "clinical_sources_independently_researched_for_this_review": false,
+  "architecture_status": "user_decisions_fixed_engineering_details_recommended_not_already_implemented"
+}
