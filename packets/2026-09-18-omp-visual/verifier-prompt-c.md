@@ -1,15 +1,15 @@
-# 独立视觉验收审阅任务（报告 C · abc-v54 · HTML 门户）
+# 独立视觉验收审阅任务（报告 C · abc-v62 · HTML 门户）
 
 你是独立上下文视觉审阅者（身份 omp-cms-router-deepseekflash-max），与生产者（zcode-main-thread-glm53）相互独立。你的结论将以你的身份签署进正式视觉验收记录，必须基于你自己对渲染页面的真实检查。
 
 ## 工作目录（必须在此目录内操作）
 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow`（仓库根）。
-被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v54/reports/C/v1/html`
+被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v62/reports/C/v1/html`
 
 ## 材料（均相对项目根）
 1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-c.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
 2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-c.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
-3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v54/reports/C/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
+3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v62/reports/C/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
 4. 截图可自行用浏览器或读图复核；至少亲自检查 3 个页面（可结合读 HTML）
 
 ## 审阅域（七域，逐域独立判断）
@@ -22,11 +22,11 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 ```json
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-deepseek-vis-abc54-c",
+  "verdict_id": "verdict-omp-deepseek-vis-abc62-c",
   "format": "html",
-  "visual_plan_digest": "d9d8c5540041f704d22b4be2782c091c30af55a152d239f52480645699ad90aa",
-  "candidate_artifact_digest": "00ce2ba156fec5254dcaebacf757fa6257b5fdd1802fa2a9d5b2f25179f0c9ae",
-  "render_evidence_digest": "054280d38b554bc88e330eaad506bd7902ec998752915b45bfa74f3c8ae8086e",
+  "visual_plan_digest": "e0eb8135447b301b4ffdcd18b18669ae212627cf867a199fa8e2292034643f9d",
+  "candidate_artifact_digest": "1a566d52daa66bc8cce38b239cbbf439c657aea51186bff1d87391154352e7a2",
+  "render_evidence_digest": "2c5d8f3d2beefd6544426257aa91ad779762f341010ed41095089a1098abc2c7",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-cms-router-deepseekflash-max",
   "verdict": "accepted 或 rejected",

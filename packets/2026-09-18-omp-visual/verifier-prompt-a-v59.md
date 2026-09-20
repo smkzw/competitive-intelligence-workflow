@@ -1,15 +1,15 @@
-# 独立视觉验收审阅任务（报告 B · abc-v62 · HTML 门户）
+# 独立视觉验收审阅任务（报告 A · abc-v59 · HTML 门户）
 
-你是独立上下文视觉审阅者（身份 omp-google-antigravity-gemini38flash-high），与生产者（zcode-main-thread-glm53）相互独立。你的结论将以你的身份签署进正式视觉验收记录，必须基于你自己对渲染页面的真实检查。
+你是独立上下文视觉审阅者（身份 omp-cursor-default-auto），与生产者（zcode-main-thread-glm53）相互独立。你的结论将以你的身份签署进正式视觉验收记录，必须基于你自己对渲染页面的真实检查。
 
 ## 工作目录（必须在此目录内操作）
 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow`（仓库根）。
-被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v62/reports/B/v1/html`
+被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v59/reports/A/v1/html`
 
 ## 材料（均相对项目根）
-1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-b.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
-2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-b.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
-3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v62/reports/B/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
+1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-a.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
+2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-a.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
+3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v59/reports/A/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
 4. 截图可自行用浏览器或读图复核；至少亲自检查 3 个页面（可结合读 HTML）
 
 ## 审阅域（七域，逐域独立判断）
@@ -18,17 +18,17 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 逐域对照策划书判据抽查：中文原生与诚实空态、层级密度、字号间距、颜色令牌与对比度、图表表格同源与单位口径、六类交互一致性、双引擎渲染一致性。若发现域内任一判据不成立，该域 status = "rejected"。
 
 ## 产出（必须）
-写文件 `packets/2026-09-18-omp-visual/visual-verdict-b.json`，UTF-8 JSON：
+写文件 `packets/2026-09-18-omp-visual/visual-verdict-a.json`，UTF-8 JSON：
 ```json
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-gemini38-vis-abc62-b",
+  "verdict_id": "verdict-omp-cursor-vis-abc59-a",
   "format": "html",
-  "visual_plan_digest": "9636122aa79eab4fb9d9c26720c98e39cbd390dbb9f2ed46135f718ab5e6c051",
-  "candidate_artifact_digest": "73ce2e3628e45e72d1278c6adfbfe00d641b259cf9f55701f209d23b97506473",
-  "render_evidence_digest": "e5ec7f806866ba66a56167ad15a9f37b1cf071a8a3f8260ccd780f1d0651b092",
+  "visual_plan_digest": "94856c6cde5f3547c6666046d0e073d96311e5d07074f5d9c8f70c9b8935b7d2",
+  "candidate_artifact_digest": "aaa35f1159e69feda86fe26bd216ff6458ad0af0b74c87888d178e0d7fe4db45",
+  "render_evidence_digest": "c420ce608a4234760f71fa29e80eda09bfa03f2386079d7571fb879f16860e6f",
   "producer_identity": "zcode-main-thread-glm53",
-  "verifier_identity": "omp-google-antigravity-gemini38flash-high",
+  "verifier_identity": "omp-cursor-default-auto",
   "verdict": "accepted 或 rejected",
   "domains": [
     {"domain": "copy_zh", "status": "accepted 或 rejected",
