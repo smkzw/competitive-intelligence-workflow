@@ -1172,3 +1172,28 @@ mtplx 连续 4 次崩溃（exit 1）→ 换 gemini 或 deepseek 重试
   charts_tables）；typography/color/interaction/format 已 accepted——A 距通过最近。
   copy_zh 修复方向与 B r23 第 1/4 项同源（内部令牌直出）；A 的图表/层级属设计批次。
 - C（deepseek）：verdict 落盘后以 packets/2026-09-18-omp-visual/visual-verdict-c.json 为准。
+
+## v42 与 B r24：收敛到单一主题"组别口径"（下一会话核心工作包）
+
+### v42 修复承载（本轮已落码进链）
+- B r23 四项全部修复：通用族行显示回退登记原文；安全事件名不再用组别名 +
+  补齐登记死亡行（安全行 16→32，A 构建器加 deathsNumAffected/deathsNumAtRisk）；
+  分数周回天显示（第36.1429周→第253天）；组别筛选值显示登记臂名。
+- C r7：accepted，回执已签发（连续第 4 次 accepted）。706 测试绿、A/B gates 过。
+
+### B r24（deepseek）：veto 3 项——全部收敛于"登记组别身份被角色标签顶替"
+1. NCT02605993 剂量队列（Cohort 1–4 vs Total）104 行组别显示"全研究人群"，
+   图表序列"组别未列示"，队列间差异（年龄 43.1/48.6/37.3/48.5）被抹平。
+2. NCT04170023 "Group 1: Treatment Naive"被泛化为"治疗组"（Group 2/3 却保留原名）
+   ——初治特征在呈现层丢失。
+3. NCT04469465 Placebo-Danicopan 显示为"对照组"、Danicopan 组显示"组别未列示"。
+修复方向（下一会话）：B builder 的 `_arm_group_for`/arm 组装保留登记组名为主键与
+显示标签（角色 treatment/control 降为辅助属性）；`_arm_label` 的角色归一只用于
+别名（active/placebo），登记专名（Cohort N、Group N: X、Placebo-Danicopan）一律
+原文呈现；"组别未列示"回退链补 arm_label 查表。这是第 20 轮以来最收敛的一次
+veto——修完组别口径，B 复核有望通过。
+
+### 流程资产
+- 视觉 v42 提示词已生成（A=cursor、B=gemini、C=deepseek，含执行纪律守卫），
+  digest 已绑 v42 产物——下一会话直接派发。
+- visual-verdict-c（v41 轮）deepseek 未落盘（会话超时嫌疑）；v42 轮重派即覆盖。

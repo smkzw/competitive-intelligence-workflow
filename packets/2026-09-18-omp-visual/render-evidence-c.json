@@ -5,9 +5,9 @@
  "report_kind": "C",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_b423dc21fd153ca7fda9377b",
- "visual_plan_digest": "edeac368c3c22d045d6a17510f24757590da03dfe6bf4465eec6774bc281ec27",
- "candidate_artifact_digest": "40e9875976b236c443d22020d509950ad190b8a9d362b7950f398d65d02bb7cb",
+ "run_id": "run_c6247f97c8d425b76f96388a",
+ "visual_plan_digest": "7bfd98f9446afba7386f39e815987a6cadad1ec1877fa2f37750697394488887",
+ "candidate_artifact_digest": "22c3f1518086b0abf24221877b6b31b6b254336773d83e99335119f757ed6b59",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -23,7 +23,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2888,
+    "label_overlap_count": 26,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -79,7 +79,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 727,
+    "label_overlap_count": 12,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -135,7 +135,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1947,
+    "label_overlap_count": 31,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -191,7 +191,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2841,
+    "label_overlap_count": 30,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -247,7 +247,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 670,
+    "label_overlap_count": 12,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -303,7 +303,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1898,
+    "label_overlap_count": 31,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -359,7 +359,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2869,
+    "label_overlap_count": 42,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -415,7 +415,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 723,
+    "label_overlap_count": 23,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -471,7 +471,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1883,
+    "label_overlap_count": 27,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -527,7 +527,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2871,
+    "label_overlap_count": 57,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -583,7 +583,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 854,
+    "label_overlap_count": 57,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -639,7 +639,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1858,
+    "label_overlap_count": 36,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -695,7 +695,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2881,
+    "label_overlap_count": 58,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -751,7 +751,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 830,
+    "label_overlap_count": 53,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -807,7 +807,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1888,
+    "label_overlap_count": 40,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -863,7 +863,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2895,
+    "label_overlap_count": 26,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -919,7 +919,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 727,
+    "label_overlap_count": 12,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -975,7 +975,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1947,
+    "label_overlap_count": 31,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1031,7 +1031,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2841,
+    "label_overlap_count": 30,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1087,7 +1087,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 670,
+    "label_overlap_count": 12,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1143,7 +1143,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1898,
+    "label_overlap_count": 31,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1199,7 +1199,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2865,
+    "label_overlap_count": 39,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1255,7 +1255,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 723,
+    "label_overlap_count": 23,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1311,7 +1311,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1883,
+    "label_overlap_count": 27,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1367,7 +1367,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2871,
+    "label_overlap_count": 57,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1423,7 +1423,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 854,
+    "label_overlap_count": 57,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1479,7 +1479,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1858,
+    "label_overlap_count": 36,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1535,7 +1535,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 2881,
+    "label_overlap_count": 58,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1591,7 +1591,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 830,
+    "label_overlap_count": 53,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1647,7 +1647,7 @@
    "metrics": {
     "horizontal_overflow_px": 0,
     "clipped_text_count": 0,
-    "label_overlap_count": 1888,
+    "label_overlap_count": 40,
     "unreadable_label_count": 0
    },
    "unavailable_required_fields": [],
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-20T06:29:01.562003+00:00"
+ "created_at": "2026-09-20T11:36:18.655207+00:00"
 }

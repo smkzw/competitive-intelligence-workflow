@@ -233,7 +233,7 @@ def main() -> None:
         if isinstance(trial.get("sample_size"), int) and trial["sample_size"] > 0:
             _trial_enrollment[trial["id"]] = trial["sample_size"]
     facts = []
-    seen_safety: set[tuple[str, str]] = set()
+    seen_safety: set[tuple[str, str, str]] = set()
     dropped: dict[str, list[str]] = {
         "unclassified": [], "no_timepoint": [], "safety_domain": [],
     }
@@ -354,7 +354,7 @@ def main() -> None:
     for row in a["safety"]:
         if row.get("value") is None:
             continue
-        key = (row["trial_id"], row.get("arm", "治疗组"))
+        key = (row["trial_id"], row.get("arm", "治疗组"), row.get("term", ""))
         if key in seen_safety:
             continue  # 同试验同组多时段计数：代表行入门，全量留 A 门户与 sidecar
         seen_safety.add(key)
@@ -365,7 +365,9 @@ def main() -> None:
             "product_id": row["product_id"],
             "trial_id": row["trial_id"],
             "family": "sae",
-            "source_term": row.get("arm", "登记不良事件")[:60],
+            # 独立复核第二十三轮 veto：事件名不得用组别名（组别名已在臂列）；
+            # 登记载荷的事件语义是"组别汇总计数"或"死亡病例"
+            "source_term": row.get("term") or "登记严重不良事件组别汇总计数",
             "event_definition_zh": (
                 f"登记严重不良事件计数；受影响人数=0 的登记原文计数（{row.get('term', '')}）"
                 if value == 0 else "登记严重不良事件计数"

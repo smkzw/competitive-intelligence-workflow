@@ -391,6 +391,21 @@ def main() -> None:
                     "denominator": at_risk if isinstance(at_risk, int) and at_risk > 0 else None,
                     "time_window": "全研究期（登记）",
                 })
+                # 独立复核第二十三轮 veto：登记已报告的死亡必须入安全性域
+                deaths_affected = group.get("deathsNumAffected")
+                if deaths_affected is not None:
+                    si += 1
+                    deaths_at_risk = group.get("deathsNumAtRisk")
+                    safety_rows.append({
+                        "row_id": f"safe-{si}", "product_id": pid,
+                        "trial_id": nct.lower(), "arm": term,
+                        "category": "死亡病例（登记）",
+                        "term": "死亡病例组别汇总计数",
+                        "value": deaths_affected, "unit": "例",
+                        "numerator": deaths_affected,
+                        "denominator": deaths_at_risk if isinstance(deaths_at_risk, int) and deaths_at_risk > 0 else None,
+                        "time_window": "全研究期（登记）",
+                    })
 
     # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 主产品试验的申办方优先，其次试验药物臂的申办方，对照臂申办方不计。

@@ -914,6 +914,15 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
         return "around_month_6", _TIME_BAND_LABELS["around_month_6"]
     if 48 <= weeks <= 56:
         return "around_year_1", _TIME_BAND_LABELS["around_year_1"]
+    # 独立复核第二十三轮 veto：天换算的分数周不可读（第36.1429周）——
+    # 恰为 1/7 周的整数天时回到天显示，其余小数至多保留一位
+    if unit == "week" and value_num % 1 != 0:
+        days = value_num * 7
+        if abs(days - round(days)) < 0.01:
+            unit = "day"
+            value_num = round(days)
+        else:
+            value_num = round(value_num, 1)
     unit_label = {"day": "天", "week": "周", "month": "个月", "year": "年"}[unit]
     shown = f"{value_num:g}"
     if low != high:
@@ -1531,7 +1540,22 @@ def _label_for(value: Any, domain: str) -> str:
             "endpoint_family_id",
             default=None,
         )
-        return _native_text(candidate, "疗效指标")
+        label = _native_text(candidate, "疗效指标")
+        # 独立复核第二十三轮 veto：通用兜底族标签（"未分类登记观察"）不得
+        # 顶替登记终点身份——此类行直接以登记原文为显示标签
+        family_id = _text(_first(value, "endpoint_family_id", default=""))
+        if "generic-unclassified" in family_id or label in ("未分类登记观察", "登记通用观察"):
+            original = _text(_first(
+                value,
+                "original_definition",
+                "endpoint_definition",
+                "original_endpoint",
+                "endpoint",
+                default="",
+            ))
+            if original:
+                return original
+        return label
     if domain == "safety":
         candidate = _first(
             value,
@@ -3326,15 +3350,23 @@ def _filter_dimensions(
             continue
         seen.add(row_id)
         product_id = _text(row.get("product_id"))
+        # 独立复核第二十三轮 veto：组别筛选值显示登记臂名，不显示内部组标识
+        _arm_display = _text(row.get("arm"), "")
+        _raw_group = re.sub(r"^nct[0-9]+-arm-", "", _text(
+            row.get("group"), _arm_display or "组别未列示"
+        )) or "组别未列示"
+        _group_value = (
+            _raw_group
+            if _arm_display in ("治疗组", "对照组", "单臂", "组别未列示", "")
+            else _arm_display
+        )
         result.append(
             {
                 "id": row_id,
                 "product": product_id,
                 "target": _text(row.get("target"), target_by_product.get(product_id, "")),
                 "trial": _text(row.get("trial_id")),
-                "group": re.sub(r"^nct[0-9]+-arm-", "", _text(
-                    row.get("group"), _text(row.get("arm"), "组别未列示")
-                )) or "组别未列示",
+                "group": _group_value,
                 "arm_role": _text(row.get("arm_role")),
                 "element": _text(
                     row.get("clinical_concept_label_zh"),
