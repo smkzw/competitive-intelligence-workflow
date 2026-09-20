@@ -1323,3 +1323,20 @@ B（gemini）：**accepted，7/7 域**——从连续五轮 6 域被拒到全域
 四科室色令牌、系列命名、copy_zh 修复全部经独立复核确认。注意：存在一份
 stale-digest 的 C verdict（旧会话竞态写入，绑定校验 False），以更正后重派会话
 （exec_1567bfde，c2 verdict_id）的落盘为准。
+
+## 里程碑：A/B 两报告完成全部签收链（科学复核回执 + 视觉验收接受清单）
+
+- A 视觉验收 accepted（7/7 域，cursor/default）；B 视觉验收 accepted（7/7 域，
+  gemini）。接受清单已写入 v47 manifests/artifacts/（A: 76a3c27f、B: fe0a60dd）。
+- 走通 accept-visual 的两个工程要点：
+  1. 策划书/证据/verdict 三件套必须复制进项目目录内（state/visual/）。
+  2. verdict 的 render_evidence_digest 是 evidence 对象的 canonical contract
+     digest（visual_contract_digest），不是文件 sha——提示词此前给的是文件 sha，
+     已把 A/B verdict 绑定字段机械修正（结论内容未动）。
+  3. 回执签发后需 `project run --resume` 推进状态机到
+     scientifically_reviewed_rendered_candidate，才能进 accept-visual。
+- C 剩视觉验收：v47 轮（deepseek）rejected 6/7（hierarchy/typography/color/
+  charts/format——C 站点设计债，与 B 批次同类）。copy_zh 本轮被拒需对照 v47
+  站点核实（B/A 均已 accepted，C 的 assets/report-c.css/js 待同批设计修）。
+- 下一会话：C 设计专修批次（同 B 批次打法）→ 视觉重测 → C accept-visual →
+  PNH 竖向完整收口 → UC/IgAN 重测 → AD B/C → 横向 → 三宿主/安装包/RC。
