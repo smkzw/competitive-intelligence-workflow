@@ -843,3 +843,9 @@ deepseek 第十八轮确认数值溯源可靠，2 项收窄至元数据层：
 3. abc-v28 → B/C 复核重派 → accept-visual
 4. AD B/C 竖向（泛化管线验证）→ 横向
 5. 三宿主/安装包/恢复链/RC
+
+### GitHub 公开仓库
+- **URL**: https://github.com/smkzw/competitive-intelligence-workflow
+- 5741 文件 / 3.4M 行 / 71+ 提交
+- ARCHITECTURE.md 架构关联图谱已入库
+- 未来构建同步：`git add -A && git commit && git push origin main`
