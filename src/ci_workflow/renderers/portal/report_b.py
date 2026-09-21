@@ -3298,9 +3298,13 @@ def _disambiguate_group_titles(groups: list[dict[str, Any]]) -> list[dict[str, A
                 for row in group.get("rows", ())
             })
             signatures.append("||".join(sigs))
-        # 无论签名是否相异，同名图卡一律顺序编号，保证页内标题唯一可归属
+        # 无论签名是否相异，同名图卡一律顺序编号，保证页内标题唯一可归属；
+        # 序号同时落到行级 _endpoint_ordinal（下划线键不参与事实摘要），
+        # 展开表按行也能归属到具体终点定义
         for i, group in enumerate(dups, start=1):
             group["title_zh"] = f"{title}（登记终点定义{i}）"
+            for row in group.get("rows", ()):
+                row["_endpoint_ordinal"] = f"登记终点定义{i}"
     return groups
 
 

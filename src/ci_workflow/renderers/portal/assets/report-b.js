@@ -286,7 +286,8 @@
         ["arm_detail", "组别"],
         ["clinical_concept", "安全性事件"],
         ["time_window", "观察时间"],
-        ["numeric_value", "发生率/数值"],
+        ["numeric_value", "数值"],
+        ["denominator", "风险人数"],
         ["unit", "单位"],
         ["disclosure_state", "披露状态"]
       ];
@@ -385,7 +386,9 @@
       return detailText || armText(row);
     }
     if (key === "clinical_concept") {
-      return row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
+      var ccLabel = row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
+      // 独立复核 B r40：行级携带终点定义序号，展开表内可归属到具体定义
+      return row._endpoint_ordinal ? ccLabel + "（" + row._endpoint_ordinal + "）" : ccLabel;
     }
     if (key === "original_endpoint") {
       return row._b_original_event || row.original_endpoint || row.event || "原始终点未列示";
