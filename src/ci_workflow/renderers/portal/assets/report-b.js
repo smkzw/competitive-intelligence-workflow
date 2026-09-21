@@ -298,6 +298,7 @@
         ["trial_zh", "试验"],
         ["arm_detail", "组别"],
         ["clinical_concept", "基线变量"],
+        ["category_level_label_zh", "分层"],
         ["statistical_form_family", "统计形式"],
         ["numeric_value", "数值"],
         ["unit", "单位"],
@@ -374,6 +375,10 @@
 
   function columnValue(row, key) {
     if (key === "disclosure_state") return disclosureLabel(row.disclosure_state);
+    if (key === "category_level_label_zh") {
+      var catZh = row.category_level_label_zh || row.category_level || "";
+      return catZh || "—";
+    }
     if (key === "statistical_form_family_label_zh") {
       return row.statistical_form_family_label_zh || row.statistic_form || "未列示";
     }
