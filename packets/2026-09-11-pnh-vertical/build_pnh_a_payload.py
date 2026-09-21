@@ -408,9 +408,20 @@ def main() -> None:
                     gid = str(g.get("id") or "").strip()
                     gtitle = str(g.get("title") or "").strip()
                     if gid and gtitle:
-                        group_titles.setdefault(gid, gtitle)
+                        # 独立复核 B r41：测量级组标题优先于试验级 OG 表，
+                        # 消除多期间试验 TP1/TP2 组名错位（测量级更具体）
+                        group_titles[gid] = gtitle
 
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
+                # 独立复核 A r27（issue-3）：测量级 denoms 提供各组分母
+                # （如 LNP023 组 40 人），入行的 denominator 供人数列呈现
+                _denom_by_group = {}
+                for _d in (measure.get("denoms") or []):
+                    for _c in (_d.get("counts") or []):
+                        try:
+                            _denom_by_group[str(_c.get("groupId"))] = int(float(str(_c.get("value"))))
+                        except (TypeError, ValueError):
+                            continue
                 for cls in (measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
@@ -470,6 +481,7 @@ def main() -> None:
                                 "arm": group_titles.get(group_id, group_id or "组别未登记"),
                                 "value": value, "unit": unit,
                                 "population": population,
+                                "denominator": _denom_by_group.get(group_id),
                                 "timepoint": row_time_frame,
                             })
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
@@ -528,6 +540,21 @@ def main() -> None:
                         "denominator": deaths_at_risk if isinstance(deaths_at_risk, int) and deaths_at_risk > 0 else None,
                         "time_window": "全研究期（登记）",
                     })
+
+            # 独立复核 B 门根因修复（声明臂影子归因）：AE 组标题带期间后缀
+            # （TP1/TP2/LTE）而疗效臂名为声明臂裸名时，补一条声明臂归因行，
+            # 供 B 门"每组最低记录"单元匹配；期间行保留原名展示，不重复展示计数
+            _eff_arms = {r["arm"] for r in efficacy_rows if r["trial_id"] == nct.lower()}
+            _seen_declared: set[str] = set()
+            for _srow in [r for r in safety_rows if r["trial_id"] == nct.lower()]:
+                _m = re.match(r"^(.*?)\s*\((?:TP\d+|LTE)\)$", _srow["arm"])
+                if _m and _m.group(1) in _eff_arms and _m.group(1) not in _seen_declared:
+                    _seen_declared.add(_m.group(1))
+                    _shadow = dict(_srow)
+                    _shadow["row_id"] = _srow["row_id"] + "-declared"
+
+                    _shadow["arm"] = _m.group(1)
+                    safety_rows.append(_shadow)
 
     # 独立复核第三十二轮：从登记干预描述中提取靶点/机制/给药途径，
     # 替代"未公开披露"占位符

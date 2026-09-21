@@ -3855,6 +3855,11 @@ def _filter_groups(
                     continue
                 zh = _b_native_label(str(option_label))
                 option_label = zh if zh else option_label
+            # 独立复核 B r43（issue-3）：时间窗/时间点维度接确定性时间转写
+            if dimension in {"time_window", "timepoint", "time"}:
+                zh_t = _native_timepoint_zh(str(option_label))
+                if zh_t != "登记时间窗（详见登记来源）":
+                    option_label = zh_t
             options.append({"value": value, "label": option_label})
         groups.append({"dimension": dimension, "label": label, "options": tuple(options)})
     return tuple(_disambiguate_group_titles(groups))
