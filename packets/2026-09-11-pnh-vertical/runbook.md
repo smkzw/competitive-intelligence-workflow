@@ -2532,3 +2532,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B r52（veto 3+）**：①基线展开表缺分层列——**已修**（category_level_label_zh"分层"列）②③见前
 - **C r36 静默运行中**
 - v91 队列：B r52 剩余（人群 token）+ C r36 意见合并 + A 组别构成式转写收尾
+
+## 追记 50：v91 队列实施完成 + v91 派发（commit 14013b1 系）
+- **C r36 修复**：①analysis_sets 已抽取时不再并列"登记未公开"自相矛盾行（stat_appended 纳入 analysis_sets）②Weeks 枚举转写保单位（"基线、第49周、第169周"）③重复词坍缩（"至研究 研究结束"→"至研究结束"）
+- **B r52 部分实施**：基线展开表补"分层"列（category_level_label_zh）+ columnValue 取值
+- **v91 全链建成提交**（A 3895 行 0 碰撞、B 357 行、C 259 观察 12 页）。三路复核 r39/r53/r37 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
