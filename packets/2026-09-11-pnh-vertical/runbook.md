@@ -2324,3 +2324,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **下轮首查**：①用 v80 事件中的 evidence_snapshot_id + lineage 手工调 evaluate_fresh_b_gate 看真实失败原因（CLI 吞掉了异常）②对照 v79（B 门通过）与 v80 的 B 包差异（arm_label 值 + treatment_sample_size + 字节 8965229）③排除是 B 门对 arm_label 长度/字符的断言。
 - **其余均已就绪**：v80 A 门户 3895 行 0 碰撞、TP1/TP2 臂身份正确、C 12 页；三份绑定 prompt 已生成（r28/r42/r26）待 B 门修复后直接派发。
 - **重要：后续所有 builder/submit/run 命令带 PYTHONHASHSEED=0**。
+
+## 追记 16：B 门失败根因精确锁定（手工调 evaluate_fresh_b_gate 成功）
+- **根因**：门按"对象组"（object_id=臂 slug）逐组要求最低记录。本轮 arm_label 保留 AE 原标题后，事实的臂身份分裂为两套：期间组（nct04469465-arm-danicopan-tp1/tp2、placebo-tp1 等，全部 satisfied ✓）与**声明臂**（nct04469465-arm-danicopan-danicopan / arm-placebo-danicopan——armGroups 计划序列名，被期间分组"架空"，无任何记录落在其下）→ 这两个声明臂单元 blocked（missing_required_evidence），连带 baseline_age/sample_size/severity_anchor/sex 四类同因（声明臂下无基线事实）。
+- **修复设计（v77 队列首个实施项）**：期间分组与声明臂的映射关系落进 B 载荷——每条 AE/基线事实同时携带 ①arm_label=期间原标题（展示）②treatment_group=声明臂标签（门单元匹配）。具体：B 构建器安全行补 "treatment_group": _arm_group_for(...)[1]；基线事实同理按 group_id→声明臂映射补 treatment_group；门单元的 treatment_group 匹配即命中声明臂。
+- **备选**：若 FreshB 合同禁 treatment_group 字段，则门 spec 层把 always_applicable 收紧为"有事实的组"（改 policies/gates/B-v1.yaml applicability_predicate）。
+- 其余就绪状态同追记 15：v80 A/C 完整、三份 prompt 待用、PYTHONHASHSEED=0 必须。
