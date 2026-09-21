@@ -1899,3 +1899,11 @@ A r21b 回执 + 视觉 7/7 ✓；B r35/r41 科学 + 视觉 7/7 ✓；C r19/r17 �
   resume + accept-visual ×3 → PNH 竖向收口。
 - 下一会话清单：收 A/B/C 视觉 verdict + A/C 科学复核 verdict →
   全 accepted → resume → accept-visual ×3 → AD B/C → 横向。
+
+### v64 视觉 dispatch 状态补记
+- B v64 dispatch 完成（exit 0）但 verdict 文件未写入。omp 进程输出了 JSON
+  到 stdout 而非写文件。可能原因：--no-session 模式下模型没有文件写入
+  工具（早期成功时可能用了不同 omp 版本或参数）。
+- 下一会话处置：检查 omp 视觉 dispatch 的正确参数（可能需要 --agent 或
+  非无会话模式让模型有文件写入工具），重新派发。
+- 此为 omp 参数配置问题而非产品代码问题。
