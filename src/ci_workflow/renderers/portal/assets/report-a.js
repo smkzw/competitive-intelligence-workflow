@@ -472,7 +472,7 @@
       ? "治疗组 " + insightRowValue(pair.rows["治疗组"]) + "；对照组 " + insightRowValue(pair.rows["对照组"])
       : "未公开";
     var safetyText = safetyRow
-      ? (safetyRow.term_label || safetyRow.term || safetyTermLabel(safetyTermKey(safetyRow)))
+      ? (safetyRow.measure_label || safetyRow.term_label || safetyRow.term || safetyTermLabel(safetyTermKey(safetyRow)))
         + " " + insightRowValue(safetyRow)
       : "未公开";
     var fields = [
@@ -541,7 +541,7 @@
     }
     rows.forEach(function (row, index) {
       if (index > 0) panel.appendChild(el("hr", "", null));
-      appendInsightField(fields, "事件", row.term_label || row.term);
+      appendInsightField(fields, "事件", row.measure_label || row.term_label || row.term);
       appendInsightField(fields, "安全性维度", row.category);
       appendInsightField(fields, "组别", row.arm_detail || row.arm || "治疗组");
       appendInsightField(fields, "发生率", insightRowValue(row));
@@ -878,7 +878,9 @@
         cell.setAttribute("data-heat-key", safetyTermKey(record));
         cell.setAttribute("data-heat-product", productName(record.product_id));
         cell.setAttribute("data-heat-event", safetyTermLabel(safetyTermKey(record)));
-        var eventLabel = el("span", "", record.category + "｜" + safetyTermLabel(safetyTermKey(record)));
+        // 独立复核 A r42（issue-2）：分流行事件列带原测量标题，可区分不同测量
+        var eventLabel = el("span", "", record.category + "｜"
+          + (record.measure_label || safetyTermLabel(safetyTermKey(record))));
         eventLabel.setAttribute("data-heat-label", "event");
         cell.appendChild(eventLabel);
         var value = el("strong", "kz-a-heat-value", safetyDisplayValue(record));
@@ -891,7 +893,7 @@
           cell.appendChild(el("small", "", record.numerator + "/" + record.denominator + "人"));
         }
         cell.setAttribute("aria-label", productName(record.product_id) + "："
-          + safetyTermLabel(safetyTermKey(record)) + " " + safetyDisplayValue(record)
+          + (record.measure_label || safetyTermLabel(safetyTermKey(record))) + " " + safetyDisplayValue(record)
           + "，" + record.time_window + "，打开产品档案");
         cells.appendChild(cell);
       });

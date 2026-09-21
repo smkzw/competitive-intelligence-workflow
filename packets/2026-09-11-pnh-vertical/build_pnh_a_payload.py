@@ -14,6 +14,7 @@ import sys
 
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parents[1] / "src"))
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
+from ci_workflow.renderers.portal.report_a import _native_timepoint_zh
 from collections import defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -148,6 +149,15 @@ PHASE_MAP = {
 def slugify(name: str) -> str:
     text = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
     return text or "intervention"
+
+
+def _measure_term(title: str, cap: int = 72) -> str:
+    """独立复核 A r42（issue-2）：原测量标题按词边界截断，
+    不再把单词拦腰切断（"Treatm"类残词不可读）。"""
+    text = " ".join(title.split())
+    if len(text) <= cap:
+        return text
+    return text[:cap].rsplit(" ", 1)[0] + "…"
 
 
 def main() -> None:
@@ -400,6 +410,28 @@ def main() -> None:
                 for gid, title in zip(om_group_ids, replacement):
                     if title:
                         group_titles[gid] = title
+            # 独立复核 A r42（issue-3）：AE 组级 atRisk 人数是分流 TEAE 行的
+            # 真实臂级分母。AE 组标识（EG*）与结局测量组标识（OG*，且按测量
+            # 重新编号）不同名，只能按归一化组标题归属；仅单一报告组的试验
+            # 才允许整试验回退，多组无匹配时不虚构分母
+            def _norm_group_title(value: object) -> str:
+                text = " ".join(str(value or "").split()).casefold()
+                text = re.sub(r"^(?:oltp|olep|ltep|tp\d+)\s*[:：_]\s*", "", text)
+                text = re.sub(r"\((?:randomized[^)]*|tp\d+|lte)\)\s*$", "", text)
+                return text.strip(" -:")
+
+            _atrisk_by_title: dict[str, int] = {}
+            for _eg in (results.get("adverseEventsModule", {}).get("eventGroups") or []):
+                _risk = _eg.get("otherNumAtRisk")
+                if not isinstance(_risk, int) or _risk <= 0:
+                    _risk = _eg.get("seriousNumAtRisk")
+                _t = _norm_group_title(_eg.get("title"))
+                if _t and isinstance(_risk, int) and _risk > 0:
+                    _atrisk_by_title.setdefault(_t, _risk)
+            _atrisk_single: int | None = (
+                next(iter(_atrisk_by_title.values()))
+                if len(_atrisk_by_title) == 1 else None
+            )
             for measure in ((results.get("outcomeMeasuresModule") or {})
                             .get("outcomeMeasures") or []):
                 title = str(measure.get("title") or "").strip() or NA
@@ -467,10 +499,67 @@ def main() -> None:
                             # 会商 P0 #2（域分流）：安全域终点不得混入疗效表——
                             # TEAE/AE/ADA 类测量改记入 derivation 并跳过疗效写入
                             if is_safety_domain_endpoint(title):
+                                # 会商 P0 #3（B r46/A r40）：安全域测量改入安全行
+                                # （带 term_key），供矩阵安全轴与安全页使用，
+                                # 不再丢弃——疗效表清污与数据保全兼得
+                                # 独立复核 A r42（issue-1/3）：组标识先取（防沿用
+                                # 上一测量残留导致臂名错挂）；单位归一中文；
+                                # 人数类计数配 atRisk 臂级分母（分子=值本身）
+                                group_id = str(measurement.get("groupId") or "")
+                                _skey = (
+                                    "any_sae"
+                                    if re.search(r"serious\b|\bsae\b", title, re.I)
+                                    else "any_teae"
+                                )
+                                _unit_l = unit.strip().casefold()
+                                if _unit_l == "participants":
+                                    _unit_zh = "人"
+                                elif _unit_l == "events":
+                                    _unit_zh = "例"
+                                elif "percentage" in _unit_l:
+                                    _unit_zh = "%"
+                                else:
+                                    _unit_zh = unit
+                                _div_arm = group_titles.get(group_id, group_id or "组别未登记")
+                                _div_denom = _atrisk_by_title.get(
+                                    _norm_group_title(_div_arm), _atrisk_single
+                                )
+                                _div_num: int | None = None
+                                if (
+                                    _unit_zh == "人" and _div_denom is not None
+                                    and float(value).is_integer()
+                                    and 0 <= value <= _div_denom
+                                ):
+                                    _div_num = int(value)
                                 SAFETY_DOMAIN_DIVERTED.append(
                                     {"trial_id": nct.lower(), "endpoint": title,
                                      "value": value, "timepoint": row_time_frame}
                                 )
+                                si += 1
+                                # 独立复核 B r56（issue-1）：叙事型观察窗在源头
+                                # 走确定性转写；不可转写的保留原句并按惯例标注
+                                _tw_raw = " ".join(row_time_frame.split())
+                                _tw_zh = _native_timepoint_zh(_tw_raw)
+                                if _tw_zh != _tw_raw:
+                                    _tw_out = _tw_zh
+                                elif re.findall(r"[A-Za-z]{3,}", _tw_raw):
+                                    _tw_out = _tw_raw + "（登记原文，未译）"
+                                else:
+                                    _tw_out = _tw_raw
+                                _div_row = {
+                                    "row_id": f"safe-{si}", "product_id": pid,
+                                    "trial_id": nct.lower(),
+                                    "arm": _div_arm,
+                                    "value": value, "unit": _unit_zh,
+                                    "category": "治疗中出现的不良事件（登记）",
+                                    "term": _measure_term(title),
+                                    "term_key": _skey,
+                                    "time_window": _tw_out,
+                                }
+                                if _div_num is not None and _div_denom is not None:
+                                    _div_row["numerator"] = _div_num
+                                    _div_row["denominator"] = _div_denom
+                                safety_rows.append(_div_row)
                                 continue
                             group_id = str(measurement.get("groupId") or "")
                             ei += 1
@@ -506,11 +595,17 @@ def main() -> None:
             events = (results.get("adverseEventsModule", {})
                       .get("eventGroups") or [])
             # 独立复核 A r36（issue-3）：AE 观察窗逐试验取登记 timeFrame，
-            # 不再统一写"全研究期（登记）"
+            # 不再统一写"全研究期（登记）"；独立复核 B r56（issue-1）：
+            # 叙事型原句在源头转写，不可转写保留原句并按惯例标注
             _ae_time_window = (
                 " ".join(str((results.get("adverseEventsModule") or {}).get("timeFrame") or "").split())
                 or "全研究期（登记）"
             )
+            _ae_tw_zh = _native_timepoint_zh(_ae_time_window)
+            if _ae_tw_zh != _ae_time_window:
+                _ae_time_window = _ae_tw_zh
+            elif re.findall(r"[A-Za-z]{3,}", _ae_time_window):
+                _ae_time_window = _ae_time_window + "（登记原文，未译）"
             for group in events:
                 term = str(group.get("title") or "治疗期间不良事件")
                 freq = group.get("seriousNumAffected")
@@ -817,9 +912,9 @@ def main() -> None:
              "maturity": "官方登记当前记录",
              "limitation": "当前记录口径，非历史 as-of 还原"},
             {"source": "PubMed",
-             "scope": "PNH 治疗文献真实获取（878 条记录 + 14 分类属性）",
-             "maturity": "complete_with_attrition",
-             "limitation": "属性差异经 esummary 分类；论文—试验关系判定未完成"},
+             "scope": "PNH 治疗文献检索回执未纳入当前工作区绑定（计数与分类属性以检索回执为准，不在载荷中虚构）",
+             "maturity": "not_bound",
+             "limitation": "文献层证据未接入当前载荷，相关叙事仅来自登记来源"},
         ],
         "derivation": {
             "pages": [

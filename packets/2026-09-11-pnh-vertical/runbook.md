@@ -2618,3 +2618,20 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ④design-patterns 适用前提"签名"概念未解释 + 小写 nct id + 重复设计要素（builder 摘要生成修正）
 - ⑤人群柱图柱值恒 1 无区分度（真实条目数计数）⑥入排标题残片（Key Inclusion Criteria 残片过滤已实施于 splitter，v95 验证）
 - v96 队列 = 上述 + B r56 三项（AE timeFrame 源头转写、series 解码路径统一、SVG 同源）+ A r42 六项 → v96 全链 → 三路重派
+
+## 追记 65：v96 队列实施完成 + v96 全链建成验证（会话暂停点）
+- **承前**：会话因上下文中断于 C 构建器观察行标识重复（row_id 碰撞）处；本节记录 v96 全队列收尾。
+- **C r40 ①（分析集双行矛盾）根因与修复**：主终点说明行（seq=priN，N=0 时为空 seq）与"登记未公开主要比较与统计模型"兜底行（seq=""）共享同一 row_id 且自相矛盾。修复：兜底抑制改为**字段级已披露判定**（_reported_stat_fields，在 _stat_notes 行全部入谱后计算），statistical_comparisons 与 analysis_sets 均抑制；探针验证 0 重复后移除。
+- **A r42 五项**：
+  - ①组标识错挂：分流行 `group_id` 原在分流块**之后**才读取（沿用上一测量残留）→ 前置修复。单位归一 Participants→人/Events→例/percentage→%（185→211 行归一）。
+  - ②事件列同名塌缩：渲染器 `_display_safety_rows` 增 `measure_label`（原测量标题+未译标注），JS 热图/aria/洞察摘要四处消费——分流行可按测量区分。
+  - ③atRisk 分母：AE eventGroups 的 EG\* 标识与结局测量 OG\*（按测量重编号）不同名——按**归一化组标题**归属（剥离 OLTP:/OLEP:/(TP1)/(Randomized…) 前后缀），单一报告组试验才整试验回退；211 行中 180 行（85%）获得分子=值+分母=atRisk 的成对计数（人单位才配对，Events/% 不虚构）。
+  - ④时间点标注条件：efficacy timepoint 与安全 time_window 统一为"**转写后仍残留英文即标注**"（含部分转写），源头已标注不重复追加。
+  - ⑥eculizumab 状态来源决策（定稿）：状态值本就来自登记试验状态（APPROVED_FOR_MARKETING 映射），不引入登记外批准库；产品页"当前状态"下加来源口径说明行（kz-a-status-note）。
+- **B r56 三项**：
+  - ①观察窗源头转写：A 载荷安全行 time_window（含 AE 模块整句）构建器内走 _native_timepoint_zh，不可转写保留原句+标注——B 安全表继承已转写口径。
+  - ②组别未列示：`_project_record` 角色未知时回落已解码组标签（表格/图例不再直出"组别未列示"）；渲染验证 baseline-demographics 页该词 **0 次**。
+  - ③SVG/表格同源：`_arm_label` 与 `_chart_series_label` 共用新 `_decode_arm_identifier`（cohort-N→第N组、group-N-限定→第N组（…）、-tpN→"第N期 药名"、-lte→"长期扩展期 药名"、placebo→安慰剂、拉丁药名保留）；剂量类登记专名（"LNP023 25mg Bid"）不命中解码模式仍保留原文。渲染验证："第1期 安慰剂"×21、"第N期 Danicopan"×50。
+- **C r40 其余**：②消歧键去掉 value（同名不同测定也获序号）+序号含义图例（页面导语：登记定义N=按登记原文顺序的条目编号，非排名）；③聚合单元格"共N条明细"→前置"〔本格聚合N条登记明细〕"显式分隔；④design summary NCT+dedup 已在 2ca752b（验证随 v96 渲染）；⑤人群柱图柱值恒 1——**未修**（需数据级语义决策：population 页每试验仅 1 条为真实形态，改为计数无区分度；留 r41 复核定夺）；⑥入排残片过滤维持 v95 已实施口径。
+- **验证**：PYTHONHASHSEED=0 全程；审计包→三包 submit **ACCEPTED**（0 row_id 碰撞）→ project run 完成 run_a5d0ecde691668514b50b83d；A 56 / B 70 / C 18 页渲染，抽检通过。
+- **v96 未含/移交下一轮**：①C r40 ⑤人群柱图语义；②矩阵空态 Playwright 运行时核查（term_key/derived-rate/尺寸降级链——渲染层修复需浏览器实测气泡数）；③三路复核 r43/r57/r41 stagger 派发（派发令牌与 reviewer 绑定按追记 61 同流程）；④收包后全 accepted → accept-visual ×3 → PNH 闭环 → 横向扩展。

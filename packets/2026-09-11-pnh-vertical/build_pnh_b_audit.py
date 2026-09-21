@@ -193,6 +193,10 @@ def main() -> None:
         """把行臂名映射到试验已声明组：精确标签优先；对照名归对照组；
         其余（如 AE 行臂名与疗效行命名不一致时）归治疗组。"""
         label_n = (label or "").strip()
+        # 独立复核 B r50（issue-1）：登记 Total/合计列是全组汇总，
+        # 不得归入任何治疗臂（防"同队列两个 N"）
+        if re.search(r"\btotal\b|全部报告组合计", label_n, re.I):
+            return (f"{trial_id}-arm-total", "总体", "total")
         arms = trial_arms.get(trial_id) or []
         for g in arms:
             if g[1] == label_n or g[0] == f"{trial_id}-arm-{_arm_slug(label_n)}":
@@ -258,6 +262,11 @@ def main() -> None:
         family = classify_registry_endpoint(fact["endpoint_text"], indication_id="pnh")
         if family is None:
             dropped["unclassified"].append(fact["row_id"])
+            continue
+        if re.search(r"maximum\s+exposure|eot\s+visit", fact.get("time_frame") or "", re.I):
+            # 独立复核 B r45（issue-3）：最长暴露时长不是评价时点，
+            # 不产出数值 actual_timepoint（防止"第213.4周"幻影）
+            dropped["no_timepoint"].append(fact["row_id"])
             continue
         weeks, unit = _weeks(fact["time_frame"])
         if weeks is None:

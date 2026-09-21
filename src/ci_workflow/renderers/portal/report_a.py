@@ -468,15 +468,22 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         # 独立复核 A r37（issue-4）：声明臂影子行显式标注归因性质
         if str(item.row_id).endswith("-declared"):
             row["term_label"] = (row["term_label"] or item.term) + "（声明臂归因，由期间组汇总）"
-        # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写；
-        # 叙事型无法转写时保留原句并标注"（登记原文，未译）"
-        _tw = _native_timepoint_zh(item.time_window)
-        if _tw != item.time_window:
-            row["time_window"] = _tw
-        elif re.findall(r"[A-Za-z]{3,}", item.time_window):
-            row["time_window"] = item.time_window + "（登记原文，未译）"
+        # 独立复核 A r42（issue-2）：分流的 TEAE/AE 测量行带原测量标题，
+        # 事件列可区分不同测量（不再全部塌缩为同一受控标签）
+        if term_key in {"any_sae", "any_teae", "death"} and "组别汇总计数" not in item.term:
+            if re.findall(r"[A-Za-z]{3,}", item.term) and not item.term.endswith("（登记原文，未译）"):
+                row["measure_label"] = item.term + "（登记原文，未译）"
+            else:
+                row["measure_label"] = item.term
         else:
-            row["time_window"] = _tw
+            row["measure_label"] = None
+        # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写；
+        # 独立复核 A r42（issue-4）/B r56（issue-1）：转写后仍残留英文的
+        # （含部分转写、含构建器已标注的）统一保留标注，不重复追加
+        _tw = _native_timepoint_zh(item.time_window)
+        if re.findall(r"[A-Za-z]{3,}", _tw) and not _tw.endswith("（登记原文，未译）"):
+            _tw = _tw + "（登记原文，未译）"
+        row["time_window"] = _tw
         rows.append(row)
     if not any(row["category"] == "特别关注不良事件" and row["value"] is not None for row in rows):
         rows = [row for row in rows if row["category"] != "特别关注不良事件"]
@@ -1615,7 +1622,12 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
             endpoint = re.sub(pattern, replacement, endpoint, flags=re.I)
         row["endpoint"] = _native_endpoint_zh(endpoint)
 
-        row["timepoint"] = _native_timepoint_zh(str(row["timepoint"]))
+        # 独立复核 A r42（issue-4）：转写后仍残留英文的时间点（含部分转写），
+        # 按惯例标注"（登记原文，未译）"，不让半翻译串冒充已译口径
+        _tp = _native_timepoint_zh(str(row["timepoint"]))
+        if re.findall(r"[A-Za-z]{3,}", _tp) and not _tp.endswith("（登记原文，未译）"):
+            _tp = _tp + "（登记原文，未译）"
+        row["timepoint"] = _tp
 
         arm = str(row["arm"])
         arm = re.sub(r"\bPart\s*A\b", "A部分", arm, flags=re.I)

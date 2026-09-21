@@ -80,8 +80,11 @@ from .report_a import (
     ReportAPortalData,
     SafetyRow,
     TrialRow,
+    _ARM_CODE_ZH,
     _POPULATION_TOKENS,
+    _PRODUCT_DISPLAY_NAMES_ZH,
     _git_commit,
+    _native_arm_zh,
     _native_timepoint_zh,
 )
 
@@ -1742,6 +1745,45 @@ def _is_pure_role_label(raw: str) -> bool:
     return bool(role_tokens) and tokens <= role_tokens | {"matching", "dose", "a", "b", "c", "1", "2", "3", "4"}
 
 
+def _arm_code_zh(code: str) -> str:
+    """组标识中的药名/角色代码 → 展示名（拉丁药名按登记惯例保留）。"""
+    if code.casefold() == "placebo":
+        return "安慰剂"
+    known = _ARM_CODE_ZH.get(code.upper())
+    if known:
+        return known
+    out = _b_native_label(code) or code
+    return out[:1].upper() + out[1:] if out and out[0].isalpha() else out
+
+
+def _decode_arm_identifier(identifier: str) -> str | None:
+    """组标识 → 中文序数标签（第N组/第N期/长期扩展期）；未命中返回 None。
+
+    独立复核 B r51/r55/r56：行标签与图表系列标签共用本解码，
+    SVG 文本层与表格不再各说各话。"""
+    human = re.sub(r"^nct[0-9]+-arm-", "", identifier.casefold()).replace("-", " ").strip()
+    if not human:
+        return None
+    canonical, canonical_label = _canonical_arm_role(human)
+    if canonical != "unknown" and _is_pure_role_label(human):
+        return canonical_label
+    m_cohort = re.fullmatch(r"cohort\s*(\d+)", human, re.I)
+    if m_cohort:
+        return f"第{m_cohort.group(1)}组"
+    m_group = re.fullmatch(r"group\s*(\d+)(?:\s+(.*))?", human, re.I)
+    if m_group:
+        qualifier = _b_native_label(m_group.group(2) or "") if m_group.group(2) else ""
+        base = f"第{m_group.group(1)}组"
+        return f"{base}（{qualifier}）" if qualifier else base
+    m_tp = re.search(r"(?:^|\s)([a-z0-9]+)\s*tp(\d+)$", human)
+    if m_tp:
+        return f"第{m_tp.group(2)}期 {_arm_code_zh(m_tp.group(1))}"
+    m_lte = re.search(r"(?:^|\s)([a-z0-9]+)\s*lte$", human)
+    if m_lte:
+        return f"长期扩展期 {_arm_code_zh(m_lte.group(1))}"
+    return None
+
+
 def _arm_label(value: Any) -> str:
     candidate = _first(value, "arm_label", "group_label", "group_label_zh", "arm", default=None)
     if candidate is not None:
@@ -1752,31 +1794,28 @@ def _arm_label(value: Any) -> str:
         if canonical != "unknown" and _is_pure_role_label(raw):
             return canonical_label
         if raw:
+            # 独立复核 B r56（issue-3）：纯英文复合组名（如 "Placebo (TP1)"）
+            # 先按组标识解码为第N期/第N组序数标签，与图表层同源；未命中
+            # 解码模式的登记专名仍保留原文（第二十四轮 veto 口径不变）
+            if not re.search(r"[\u4e00-\u9fff]", raw):
+                decoded = _decode_arm_identifier(
+                    _text(_first(value, "group_id", "arm_id", "cohort_id", default=""))
+                )
+                if decoded is not None:
+                    return decoded
             return raw
     role = _text(_first(value, "arm_role", "group_role", "arm_type", default=""))
     canonical, canonical_label = _canonical_arm_role(role)
     if canonical != "unknown":
         return canonical_label
     identifier = _text(_first(value, "group_id", "arm_id", "cohort_id", default=""))
-    # 第二十四轮 veto：无登记名时回退解码组标识本身（cohort-1→"cohort 1"），
+    # 第二十四轮 veto：无登记名时回退解码组标识本身，
     # 不得折叠为"全研究人群/对照组"等泛化角色
+    decoded = _decode_arm_identifier(identifier)
+    if decoded is not None:
+        return decoded
     human = re.sub(r"^nct[0-9]+-arm-", "", identifier.casefold()).replace("-", " ").strip()
-    if human:
-        canonical, canonical_label = _canonical_arm_role(human)
-        if canonical != "unknown" and _is_pure_role_label(human):
-            return canonical_label
-        # 独立复核 B r39/r42：队列与声明组标识解码
-        m_cohort = re.fullmatch(r"cohort\s*(\d+)", human, re.I)
-        if m_cohort:
-            return f"第{m_cohort.group(1)}组"
-        m_group = re.fullmatch(r"group\s*(\d+)(?:\s+(.*))?", human, re.I)
-        if m_group:
-            qualifier = _b_native_label(m_group.group(2) or "") if m_group.group(2) else ""
-            base = f"第{m_group.group(1)}组"
-            return f"{base}（{qualifier}）" if qualifier else base
-        if human:
-            return human
-    return "组别未列示"
+    return human or "组别未列示"
 
 
 def _category_for(value: Any, domain: str, arm: str) -> str:
@@ -2020,6 +2059,11 @@ def _project_record(
     numerator = _number(_source_first(value, source, "numerator", default=None))
     denominator = _number(_source_first(value, source, "denominator", default=None))
     semantics = _semantic_projection(value, source, domain=domain)
+    # 独立复核 B r56（issue-2）：角色归一未知时展示已解码的组标签
+    # （第1组/第N期 等），不再把"组别未列示"直出到表格与图例
+    _role_label_zh = semantics["arm_role_label_zh"]
+    if semantics["arm_role"] == "unknown" and arm and arm not in {"", "组别未列示"}:
+        _role_label_zh = arm
     actual_timepoint = _source_first(
         value,
         source,
@@ -2130,7 +2174,7 @@ def _project_record(
         "group": arm,
         "group_id": group_id,
         "arm_role": semantics["arm_role"],
-        "arm_role_label_zh": semantics["arm_role_label_zh"],
+        "arm_role_label_zh": _role_label_zh,
         # 独立复核 B r36（issue-1）：剂量递增队列行（Cohort 1..4）原臂标签
         # 不得在角色收敛（治疗组）后丢失，兜底到原始臂名并经漏斗转写
         "arm_detail": _native_text(
@@ -2946,21 +2990,10 @@ def _chart_series_label(row: Mapping[str, Any], key: str) -> str:
     # （-arm-cohort-N → 第N组；-arm-group-N-treatment-naive → 第N组（初治）；
     #  -arm-<code>-tpN → <code> 第N期）
     if role_label in {"", "组别未列示"}:
-        gid = _text(row.get("group_id"))
-        m_coh = re.search(r"-arm-cohort-(\d+)$", gid)
-        if m_coh:
-            return f"第{m_coh.group(1)}组"
-        m_grp = re.search(r"-arm-group-(\d+)-(.+)$", gid)
-        if m_grp:
-            qualifier = _b_native_label(m_grp.group(2).replace("-", " "))
-            return f"第{m_grp.group(1)}组" + (f"（{qualifier}）" if qualifier else "")
-        m_tp = re.search(r"-arm-([a-z0-9]+)-tp(\d+)$", gid)
-        if m_tp:
-            return f"{m_tp.group(1)} 第{m_tp.group(2)}期"
-        m_lte = re.search(r"-arm-([a-z0-9]+)-lte$", gid)
-        if m_lte:
-            return f"{m_lte.group(1)} 长期扩展期"
-            # qualifier 为空时仍返回基础标签
+        # 独立复核 B r51/r55/r56：与 _arm_label 共用同一组标识解码（同源）
+        decoded = _decode_arm_identifier(_text(row.get("group_id")))
+        if decoded is not None:
+            return decoded
     # 独立复核 B r35：基线类别必须出现在系列标签上，数值才可归属
     category = _baseline_category_zh(row)
     if category:

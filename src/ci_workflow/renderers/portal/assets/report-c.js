@@ -635,7 +635,11 @@
           formatter: function (p) {
             if (!p.data.value[2]) return "未公开";
             var base = matrixLabel(p.data.row);
-            return p.data.rowCount > 1 ? base + "\n共" + p.data.rowCount + "条明细" : base;
+            // 独立复核 C r40（issue-3）：计数是"本格聚合的登记明细数"，
+            // 前置括注与标签显式分隔，不再误读为该终点有 N 条
+            return p.data.rowCount > 1
+              ? "〔本格聚合" + p.data.rowCount + "条登记明细〕\n" + base
+              : base;
           }
         },
         emphasis: {itemStyle: {shadowBlur: 12, shadowColor: "rgba(36,54,80,.25)"}}

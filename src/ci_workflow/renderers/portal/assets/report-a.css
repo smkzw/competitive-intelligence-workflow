@@ -26,3 +26,11 @@
   .kz-a-observation-group { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .kz-a-observation-group .kz-a-bar-lane { grid-template-columns: minmax(58px, 1fr) minmax(64px, 2fr) minmax(42px, auto); }
 }
+
+/* 独立复核 A r37/r42：产品状态来源说明行 */
+.kz-a-status-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6b7280;
+}

@@ -11,7 +11,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import collections
 import shutil
 from collections.abc import Mapping, Sequence
 
@@ -1549,24 +1548,18 @@ def _table_rows(
                 continue
         chart["table_item_id"] = observation.row_id
         rows.append(chart)
-    # 独立复核 C r28/r29（同名行消歧）：同试验+同设计要素+同时间点的重复
-    # 可见标签追加登记定义序号，行级可归属（原文保留在证据抽屉）
+    # 独立复核 C r28/r29/r40（同名行消歧）：同试验+同设计要素+同时间点的
+    # 重复可见标签追加登记定义序号，行级可归属（原文保留在证据抽屉）。
+    # 独立复核 C r40（issue-2）：键不含数值——同名终点不同测定
+    # （如 Hgb 较基线升高 vs 正常化）也必须获得序号区分
     seen_keys: dict[tuple, int] = {}
-    keyed = []
     for row in rows:
         key = (
             str(row.get("trial_id")),
             str(row.get("display_label_zh") or row.get("element_zh") or ""),
             str(row.get("time") or ""),
-            str(row.get("value") or ""),
         )
-        n = seen_keys.get(key, 0)
-        seen_keys[key] = n + 1
-        keyed.append((key, n, row))
-    for key, n, row in keyed:
-        total = max(v for k, v in seen_keys.items() if k[:3] == key[:3] and k[3] == key[3]) if False else None
-    counts = collections.Counter(k[:4] for k in seen_keys)
-    # 简化：同键出现多次时逐行补序号
+        seen_keys[key] = seen_keys.get(key, 0) + 1
     dup_keys = {k for k, v in seen_keys.items() if v > 1}
     if dup_keys:
         counters: dict[tuple, int] = {}
@@ -1575,7 +1568,6 @@ def _table_rows(
                 str(row.get("trial_id")),
                 str(row.get("display_label_zh") or row.get("element_zh") or ""),
                 str(row.get("time") or ""),
-                str(row.get("value") or ""),
             )
             if k in dup_keys:
                 counters[k] = counters.get(k, 0) + 1

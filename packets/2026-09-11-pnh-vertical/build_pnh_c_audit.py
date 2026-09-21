@@ -382,14 +382,10 @@ def main() -> None:
         # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
         # 独立复核 C r36（issue-1/5）：已抽取分析集内容的试验，
         # 不再并列输出"登记未公开分析集信息"的自相矛盾行
-        # 独立复核 C r40（issue-1/2）：抑制条件按"该试验已有分析集内容"判定——
-        # 已抽取的统计/分析集说明行（statistical_comparisons）即代表分析集已披露
-        _has_stat_content = any(
-            o["trial_id"] == trial_id
-            and o["field"] in {"analysis_sets", "statistical_comparisons"}
-            and o.get("disclosure_state") == "reported_value"
-            for o in observations
-        )
+        # 独立复核 C r40（issue-1/2）与 v92 修复：抑制条件在 _stat_notes 行
+        # 全部入谱后按"字段级已披露"判定（见下方 _reported_stat_fields）——
+        # 否则主终点说明行（seq=priN，N=0 时为空）与"未公开"行（seq=""）
+        # 共享同一 row_id 且自相矛盾
         # 独立复核 C r30：登记各结局 description / populationDescription
         # 已载明分析集与统计方法的，逐条入谱（不再一律错标未公开）
         _stat_notes: list[str] = []
@@ -420,22 +416,30 @@ def main() -> None:
             if pd_ and pd_ not in _stat_notes:
                 _stat_notes.append("分析人群说明：" + pd_)
         for si_note, note in enumerate(_stat_notes[:8], start=1):
-            # 分析集说明归 analysis_sets 维度，其余归统计模型维度
-            is_set = note.startswith("分析人群说明：") or "analysis set" in note.lower()
+            # 分析集说明归 analysis_sets 维度，其余归统计模型维度；
+            # seq 逐条递增避免同 trial 内 row_id 冲突
+            is_set = "分析人群说明：" in note or "analysis set" in note.lower()
             observations.append(_row(
                 trial_id, product_id, nct, page, "statistical",
                 "analysis_sets" if is_set else "statistical_comparisons",
                 f"登记披露的统计与分析方法：{note}", seq=f"stat{si_note}",
                 stage=stage, source_name="registry.outcomes.description",
             ))
+        _reported_stat_fields = {
+            o["field"]
+            for o in observations
+            if o["trial_id"] == trial_id
+            and o["field"] in {"analysis_sets", "statistical_comparisons"}
+            and o.get("disclosure_state") == "reported_value"
+        }
         for stat_field, stat_label in (
             ("analysis_sets", "分析集"),
             ("statistical_comparisons", "主要比较与统计模型"),
             ("multiplicity_adjustment", "多重性校正"),
             ("missing_data_handling", "缺失数据处理"),
         ):
-            if stat_field == "analysis_sets" and _has_stat_content:
-                # 分析集已有披露内容行，不再并列"未公开"声明
+            if stat_field in _reported_stat_fields:
+                # 该维度已有披露内容行，不再并列"未公开"声明
                 continue
             observations.append(_row(
                 trial_id, product_id, nct, page, "statistical", stat_field,
