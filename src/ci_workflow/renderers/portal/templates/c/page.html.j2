@@ -1,6 +1,22 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
+{% if evidence_limitations %}
+<section class="kz-c-limitations" aria-label="证据版本与局限">
+  <h2>证据版本与局限</h2>
+  <p>本页声明报告的证据边界；缺失与受阻如实记档，不作推断。</p>
+  <dl class="kz-evidence-field">
+    <div class="kz-evidence-field"><dt>数据截止</dt><dd>{{ evidence_limitations.data_cutoff }}</dd></div>
+    <div class="kz-evidence-field"><dt>证据来源</dt><dd>{{ evidence_limitations.source_count }} 个来源绑定</dd></div>
+    <div class="kz-evidence-field"><dt>覆盖范围</dt><dd>{{ evidence_limitations.trial_count }} 项试验 · {{ evidence_limitations.product_count }} 个产品 · {{ evidence_limitations.fact_count }} 条设计事实</dd></div>
+  </dl>
+  <p>{{ evidence_limitations.notes }}</p>
+  <h3>登记记录入口</h3>
+  <ul class="kz-c-registry-links">
+    {% for link in evidence_limitations.registry_links %}<li><a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ link }}</a></li>{% endfor %}
+  </ul>
+</section>
+{% endif %}
   <header class="portal-page-head kz-c-page-head">
     <h1 class="portal-page-title">{{ page_title }}</h1>
     <div class="kz-c-page-meta" aria-label="页面范围">

@@ -1382,6 +1382,12 @@ def _text(value: Any, default: str = "") -> str:
 
 _B_VARIABLE_TOKENS: tuple[tuple[str, str], ...] = (
     (r"\bcohort\s*(\d+)\b", r"第\1组"),
+    (r"\bgroup\s*(\d+)\b", r"第\1组"),
+    (r"treatment[- ]naive", "初治"),
+    (r"treatment[- ]experienced", "经治"),
+    (r"eculizumab switch", "换用依库珠单抗"),
+    (r"rollover", "延续入组"),
+    (r"\btreatment naive arm\b", "初治臂"),
     (r"\bsex\b|\bgender\b", "性别"),
     (r"\bage\b", "年龄"),
     (r"\brace\b", "种族"),
@@ -1826,6 +1832,28 @@ def _source_locator(value: Any, row_id: str) -> EvidenceLocator:
     return EvidenceLocator(document_role="registry", heading="登记结果")
 
 
+_DEEP_LINK_PREFIX = "https://clinicaltrials.gov/study/"
+
+
+def _deep_link_for(value: Any, current_url: str | None) -> str | None:
+    """按行上试验标识（NCTxxxx）构造登记深链；无法识别时保留原链接。
+
+    独立复核 B r37（issue-4）："打开原文"指向 CT.gov 首页不构成可回溯定位。
+    """
+    nct = _text(
+        _first(
+            value,
+            "trial_id",
+            "nct_id",
+            "trial",
+            default=None,
+        )
+    ).upper()
+    if re.fullmatch(r"NCT\d{8}", nct):
+        return f"{_DEEP_LINK_PREFIX}{nct}"
+    return current_url
+
+
 def _display_locator(value: Any, row_id: str) -> EvidenceLocator:
     """Hide storage keys while keeping a useful source-facing anchor."""
     locator = _source_locator(value, row_id)
@@ -1838,6 +1866,9 @@ def _display_locator(value: Any, row_id: str) -> EvidenceLocator:
         "paragraph": locator.paragraph,
         "url": locator.url,
     }
+    # 独立复核 B r37（issue-4）：定位链接必须能回到具体登记记录，
+    # 而非 CT.gov 首页——按行上的试验标识构造深链
+    visible["url"] = _deep_link_for(value, visible["url"])
     if not any(value for key, value in visible.items() if key != "document_role"):
         visible["heading"] = "登记结果"
     return EvidenceLocator.model_validate(visible)

@@ -744,6 +744,12 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
         "amlitelimab": "阿姆特利单抗",
     }
     matched_product = next((label for key, label in product_map.items() if key in folded), "")
+    # 独立复核 C r21（issue-2）：组合限定（+ C5 Inhibitor 等）是登记事实，
+    # 折叠为裸产品名会丢失关键干预语义
+    combo_suffix = ""
+    combo_match = re.search(r"\+\s*(C5 inhibitor|C3 inhibitor|background therapy)", folded)
+    if combo_match:
+        combo_suffix = f"（+{combo_match.group(1)}抑制剂）" if "inhibitor" in combo_match.group(1) else "（+背景治疗）"
     if "escape" in folded or "rescue" in folded:
         product = "补救治疗"
     elif "vehicle" in folded:
@@ -751,7 +757,7 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
     elif "placebo" in folded:
         product = f"{matched_product}匹配安慰剂" if matched_product else "安慰剂"
     else:
-        product = matched_product or product
+        product = (matched_product or product) + combo_suffix
 
     doses: list[str] = []
     for match in re.findall(r"\b\d+(?:\.\d+)?\s*(?:mg|milligrams?)\b", source, re.I):
@@ -955,7 +961,10 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             return ep_zh + (f"（{timepoint}）" if timepoint else "")
         label = _native_endpoint_zh(source_text)
         if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
-            return "次要终点（原文见证据抽屉）"
+            # 独立复核 C r21（issue-1）：不同次要终点的兜底标签必须可区分，
+            # 以观察序号命名，原文保留在证据抽屉"简短原文"
+            ordinal = "".join(ch for ch in observation.observation_id if ch.isdigit()) or "0"
+            return f"次要终点{ordinal}（原文见证据抽屉）"
         return label + (f"（{timepoint}）" if timepoint else "")
     if observation.field == "secondary_endpoint_timepoint":
         translated = _registry_timeframe_zh(timepoint) if timepoint else None
@@ -1040,6 +1049,7 @@ def _chart_row(
         ),
         "category": "设计事实",
         "time": _registry_timeframe_zh(_text(observation.assessment_timepoint))
+        or _native_timepoint_zh(_text(observation.assessment_timepoint))
         or _text(observation.assessment_timepoint)
         or (
             "不适用"
@@ -1697,6 +1707,32 @@ def _render_page_context(
     filter_rows, dimensions = _filter_dimensions_for_rows(data, observations)
     filter_groups = _filter_groups(data, filter_rows)
     page_filter_groups = tuple(group for group in filter_groups if group["scope"] == "page")
+    evidence_limitations = None
+    if catalog_page_id == "evidence-limitations" and trial is None:
+        nct_routes = sorted(
+            {
+                f"https://clinicaltrials.gov/study/{o.trial_id.upper()}"
+                for o in data.observations
+                if re.fullmatch(r"nct\d{8}", o.trial_id, re.I)
+            }
+        )
+        evidence_limitations = {
+            "data_cutoff": _text(data.data_cutoff)[:10],
+            "source_count": len(
+                {o.source_version_id for o in data.observations if o.source_version_id}
+            ),
+            "trial_count": len(data.trials),
+            "product_count": len(data.products),
+            "fact_count": len(data.observations),
+            "registry_links": tuple(nct_routes),
+            "notes": (
+                "本报告的设计事实仅来自 ClinicalTrials.gov 当前记录检索报文"
+                "（数据截止见上），未接入监管、专利与文献层来源；"
+                "中国境内登记路线访问受阻，已按合同如实记档；"
+                "样本量未披露的试验未纳入试验明细；"
+                "统计与分析维度登记未公开处以显式声明呈现，不推断。"
+            ),
+        }
     # 独立视觉复核（interaction）：核心比较页 CSS 隐藏快速筛选栏（优先展示
     # 比较图），服务端同步不渲染——隐藏的可交互元素会造成探测与键盘路径失败
     if catalog_page_id in {"design-map", "endpoint-timepoint-matrix", "overview"} and trial is None:
@@ -1731,6 +1767,7 @@ def _render_page_context(
         ]
     return {
         "report": data,
+        "evidence_limitations": evidence_limitations,
         "report_title": f"{data.indication}临床试验设计比较",
         "page_title": title,
         "overview_conclusions": overview_conclusions,
