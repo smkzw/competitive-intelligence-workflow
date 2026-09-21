@@ -1956,3 +1956,26 @@ JS 端（report-c.js/data 渲染）也加格式化。
 2. 中文原生：B 竛选面板 31/416 按钮文案为内部规范化令牌（ldh水平变化、
    breakthrough_hemolysis_rate 等 clinical_concept 值直出）。修复点：
    B 渲染器 filter 面板的 option_label 需走 _controlled_concept zh 映射。
+
+## v66 全面状态（最终记档）
+
+### 已确认
+- v66 全链完成：366 疗效行 + 32 安全行、A/B gates 过、143 页三门户
+- 全部修复承载：字号归刻度、聚合计数标注、时间筛选本地化、EOT 守卫、
+  组名截断根除、类标题转写、CSS 132 条、LDH Normalization v7.4、
+  C5 子类、单位词表完备、A 类标题残余转写
+- 706 项测试全绿
+
+### v66 复核/视觉状态
+- A 科学复核 r30：omp 失败 exit 1
+- B r44：veto 1 项（单位列混排——millimole 已归一但新残余待查）
+- C r26：accepted 状态待确认
+- 视觉 A v66（cursor）：rejected 4/7（refs 指向 abc-v65 旧路径——提示词路径替换问题）
+- 视觉 B/C：dispatch 未成功写文件
+
+### 下一会话关键任务
+1. 排查视觉提示词路径替换问题（abc-v65→abc-v66 替换未生效或模型仍走旧路径）
+2. 排查 omp 科学复核子进程退出码 1 根因
+3. 修复后重新派发三路复核 + 三节点视觉
+4. 全 accepted → resume + accept-visual ×3 → PNH 竖向收口
+5. AD B/C → 横向 6 适应症 → 三宿主/RC
