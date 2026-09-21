@@ -335,7 +335,7 @@ def main() -> None:
             ("missing_data_handling", "缺失数据处理"),
         ):
             observations.append(_row(
-                trial_id, product_id, nct, page, "statistics", stat_field,
+                trial_id, product_id, nct, page, "statistical", stat_field,
                 f"登记未公开{stat_label}信息", seq="", stage=stage,
                 source_name=f"registry.statistics.{stat_field}",
                 disclosure="not_publicly_disclosed",
