@@ -2467,3 +2467,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 ## 追记 38：B r48 收包（veto 5）——并入 v87 队列
 - ①补体抑制药效学指标两行同标签不同值（b-eff-1747/-1755，分析集维度缺失——TP1/TP2 分别为不同分析集）②LDH 水平变化第84天按分析集（Full/Interim）分行的两值并列无归属字段 ③基线人口学展开表缺性别/年龄分层列（category_level 已在载荷）④357 行抽屉"分子/分母/阈值 来源未列示"（合同成对约束）⑤"lteperiod"/"cohort" 筛选令牌直出
 - v87 队列（B 侧收口）：展开表列头补"分析形式/分析集"两列（数据已在行字段，仅列头缺失）；time_window_band 选项标签转写兜底（lteperiod→长期扩展期）；基线 category_level 列；分母展示决策
+
+## 追记 39：C r32 收包（veto 5）——两项已修（commit 823277f）
+- ①内容列括注时间点走 _tp_disp（secondary/primary 兜底分支的 2 处 raw 拼接已修）②术语表补齐 haptoglobin→触珠蛋白/facit→FACIT 量表/血红蛋白——跨试验同名问题（Haemoglobin 测量落入通用标签）缓解
+- v87 队列（C r32 剩余）：③同试验同名标签不同分析物（Haptoglobin vs Hemoglobin 同标签）——term 表已有触珠蛋白，验证 ④访视页空轴"未公开"→证据不足声明 ⑤populationDescription 深链核对
+- v87 队列（B 侧）：展开表补分析形式/分析集列（行字段已有）；time_window_band 选项转写；基线 category_level 列
+- v87 全链 → 三路重派 → 全 accepted → accept-visual ×3
