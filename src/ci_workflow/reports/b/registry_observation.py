@@ -60,14 +60,59 @@ def is_safety_domain_endpoint(endpoint_text: str) -> bool:
     return bool(safety_domain_pattern().search(text))
 
 
-def classify_registry_endpoint(endpoint_text: str) -> str | None:
-    """把登记终点文本映射到版本化终点族 rule_id；无法确定时返回 None。"""
+def indication_scope_of(rule: dict[str, Any]) -> tuple[str, ...]:
+    """规则门闩：无 scope 为跨适应症共享；有 scope 仅在匹配适应症生效。"""
+    scope = rule.get("indication_scope") or ()
+    if isinstance(scope, str):
+        return (scope,)
+    return tuple(scope)
+
+
+def resolve_indication_id(name: str | None) -> str | None:
+    """把适应症中文名/英文名/缩写解析为政策 scope 标识。"""
+    if not name:
+        return None
+    needle = str(name).strip().casefold().replace(" ", "")
+    aliases = _load_policy().get("indication_aliases") or {}
+    for scope_id, names in aliases.items():
+        for alias in names or ():
+            if needle == str(alias).strip().casefold().replace(" ", ""):
+                return scope_id
+    return None
+
+
+def scoped_family_rules() -> tuple[tuple[str, re.Pattern[str], tuple[str, ...]], ...]:
+    """（rule_id, 编译模式, 门闩 scope）三元组；scope 为空 = 跨适应症共享。"""
+    if "compiled_scoped_rules" not in _cache:
+        _cache["compiled_scoped_rules"] = tuple(
+            (
+                rule["rule_id"],
+                re.compile(rule["match_pattern"], re.IGNORECASE),
+                indication_scope_of(rule),
+            )
+            for rule in _load_policy()["rules"]
+        )
+    return _cache["compiled_scoped_rules"]  # type: ignore[return-value]
+
+
+def classify_registry_endpoint(
+    endpoint_text: str, indication_id: str | None = None
+) -> str | None:
+    """把登记终点文本映射到版本化终点族 rule_id；无法确定时返回 None。
+
+    indication_id（或适应症名，经 resolve_indication_id 解析）提供时，
+    仅适用"共享规则 ∪ 该适应症规则"——per-indication 规则不再跨适应症
+    误命中（会商 P0 #1）。未提供时保持历史全局首条命中行为。
+    """
     text = " ".join((endpoint_text or "").strip().split())
     if not text:
         return None
     if is_safety_domain_endpoint(text):
         return None
-    for rule_id, pattern in family_rules():
+    resolved = resolve_indication_id(indication_id) if indication_id else None
+    for rule_id, pattern, scope in scoped_family_rules():
+        if scope and resolved is not None and resolved not in scope:
+            continue
         if pattern.search(text):
             return rule_id
     return None

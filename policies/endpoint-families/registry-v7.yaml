@@ -1,11 +1,30 @@
 schema_version: '1.0'
 policy_id: registry-endpoint-family
-version: '7.4'
-description: 适应症无关的登记终点族分类规则（per-indication 配置块）
+version: '7.5'
+description: 适应症登记终点族分类规则；per-indication 规则带 indication_scope 门闩，
+  无 scope 的规则为跨适应症共享。会商 P0 #1（2026-09-21）落地。
+indication_aliases:
+  pnh:
+  - 阵发性睡眠性血红蛋白尿症
+  - pnh
+  atopic-dermatitis:
+  - 特应性皮炎
+  - atopic dermatitis
+  igan:
+  - iga肾病
+  - iga nephropathy
+  - igan
+  ulcerative-colitis:
+  - 溃疡性结肠炎
+  - ulcerative colitis
+  ipf:
+  - 特发性肺纤维化
+  - idiopathic pulmonary fibrosis
 safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|\badrs\b|serious
   adverse|number of participants with adverse|incidence rate of all adverse|incidence rate of all adr
 rules:
 - rule_id: endpoint-pnh-clone-pct-v1
+  indication_scope: [pnh]
   match_pattern: clone size|pnh clone
   family_meta:
     canonical_id: pnh_clone_pct
@@ -16,6 +35,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-ldh-ratio-v1
+  indication_scope: [pnh]
   match_pattern: ratio of ldh|ldh[:/ ]*uln|ldh ratio
   family_meta:
     canonical_id: ldh_uln_ratio
@@ -26,6 +46,7 @@ rules:
     - ratio
     - 比值
 - rule_id: endpoint-pnh-free-hemoglobin-pct-v1
+  indication_scope: [pnh]
   match_pattern: percent change in free (hgb|hemoglobin)
   family_meta:
     canonical_id: free_hemoglobin_pct
@@ -36,6 +57,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-free-hemoglobin-v1
+  indication_scope: [pnh]
   match_pattern: free (hgb|hemoglobin)
   family_meta:
     canonical_id: free_hemoglobin
@@ -45,6 +67,7 @@ rules:
     units:
     - mg/dL
 - rule_id: endpoint-pnh-ldh-change-v2
+  indication_scope: [pnh]
   match_pattern: (change|reduction|decrease)[^;]{0,40}(ldh|lactate dehydrogenase)|(ldh|lactate dehydrogenase)[^;]{0,40}(change|reduction|decrease)
   family_meta:
     canonical_id: ldh
@@ -56,6 +79,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-ldh-normalization-v2
+  indication_scope: [pnh]
   match_pattern: (achieving|with)[^;]{0,30}ldh normalization|ldh normalization
   family_meta:
     canonical_id: ldh_normalization
@@ -66,6 +90,7 @@ rules:
     - '%'
     - percent
 - rule_id: endpoint-pnh-ldh-levels-v1
+  indication_scope: [pnh]
   match_pattern: ldh|lactate dehydrogenase
   family_meta:
     canonical_id: ldh_levels
@@ -77,6 +102,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-hemoglobin-v1
+  indication_scope: [pnh]
   match_pattern: hemoglobin|\bhgb\b
   family_meta:
     canonical_id: hemoglobin
@@ -89,6 +115,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-transfusion-burden-change-units-v1
+  indication_scope: [pnh]
   match_pattern: change in (the )?number of rbc units
   family_meta:
     canonical_id: rbc_units_change
@@ -98,6 +125,7 @@ rules:
     units:
     - 单位
 - rule_id: endpoint-pnh-transfusion-burden-change-v1
+  indication_scope: [pnh]
   match_pattern: change in (the )?number of (rbc )?transfusion
   family_meta:
     canonical_id: transfusion_burden_change
@@ -107,6 +135,7 @@ rules:
     units:
     - 次
 - rule_id: endpoint-pnh-transfusion-burden-units-v1
+  indication_scope: [pnh]
   match_pattern: number of rbc units|rbc units transfused
   family_meta:
     canonical_id: rbc_units_burden
@@ -116,6 +145,7 @@ rules:
     units:
     - 单位
 - rule_id: endpoint-pnh-transfusion-instances-v2
+  indication_scope: [pnh]
   match_pattern: number of (rbc )?transfusion instances
   family_meta:
     canonical_id: transfusion_instances
@@ -125,6 +155,7 @@ rules:
     units:
     - 次
 - rule_id: endpoint-pnh-transfusion-avoidance-v2
+  indication_scope: [pnh]
   match_pattern: transfusion avoidance|transfusion[- ]free
   family_meta:
     canonical_id: transfusion_avoidance
@@ -135,6 +166,7 @@ rules:
     - '%'
     - 人
 - rule_id: endpoint-pnh-transfusion-v2
+  indication_scope: [pnh]
   match_pattern: transfusion|prbc|packed red blood
   family_meta:
     canonical_id: transfusion
@@ -147,6 +179,7 @@ rules:
     - 次
     - 单位
 - rule_id: endpoint-pnh-breakthrough-hemolysis-v1
+  indication_scope: [pnh]
   match_pattern: breakthrough|hemolysis
   family_meta:
     canonical_id: breakthrough_hemolysis
@@ -158,6 +191,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-survival-v1
+  indication_scope: [pnh]
   match_pattern: survival|\befs\b|\bdfs\b|engraftment|\banc\b|neutrophil
   family_meta:
     canonical_id: survival
@@ -169,8 +203,9 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-pnh-complement-inhibition-v1
-  match_pattern: complement|\bc5\b|ch50|pd effect|pharmacodynamic|plasma concentration|free
-    c5
+  indication_scope: [pnh]
+  # 会商 P0 #1：去除裸 plasma concentration（曾把内皮素/PK 测量误归补体抑制）
+  match_pattern: complement|\bc5\b|ch50|pd effect|pharmacodynamic|free c5|complement inhibitor
   family_meta:
     canonical_id: complement_inhibition
     label_zh: 补体抑制药效学指标
@@ -180,6 +215,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-ad-pp-nrs-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: pp[- ]?nrs|peak pruritus|pruritus nrs|瘙痒.*nrs
   family_meta:
     canonical_id: pp_nrs
@@ -190,7 +226,9 @@ rules:
     - score
     - points
 - rule_id: endpoint-ad-iga-v1
-  match_pattern: \biga\b|investigator.*global.*assessment
+  indication_scope: [atopic-dermatitis]
+  # 会商 P0 #1：IGA 需评估语境，避免 IgA 肾病关键词误命中
+  match_pattern: investigator.*global.*assessment|\bviga\b|\bisga\b|\biga\b(?=.{0,60}(?:score|assessment|response|clear|success))
   family_meta:
     canonical_id: iga
     label_zh: IGA 评分
@@ -200,6 +238,7 @@ rules:
     - score
     - points
 - rule_id: endpoint-ad-easi50-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: easi[ -]?50|easi_50
   family_meta:
     canonical_id: easi50
@@ -210,6 +249,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-ad-easi90-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: easi[ -]?90|easi_90
   family_meta:
     canonical_id: easi90
@@ -220,6 +260,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-ad-bsa-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: \bbsa\b|body surface area|受累体表面积
   family_meta:
     canonical_id: bsa
@@ -230,6 +271,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-ad-dlqi-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: \bdlqi\b|dermatology life quality
   family_meta:
     canonical_id: dlqi
@@ -240,6 +282,7 @@ rules:
     - score
     - points
 - rule_id: endpoint-ad-poit-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: poem|patient.*orient.*eczema
   family_meta:
     canonical_id: poem
@@ -250,6 +293,7 @@ rules:
     - score
     - points
 - rule_id: endpoint-ad-wpai-v1
+  indication_scope: [atopic-dermatitis]
   match_pattern: \bwpai\b|work productivity.*activity
   family_meta:
     canonical_id: wpai
@@ -260,7 +304,8 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-igan-proteinuria-v1
-  match_pattern: proteinuria|upcr|urine protein|protein.*urine|urinary protein
+  indication_scope: [igan]
+  match_pattern: proteinuria|upcr|urine protein|protein.*urine|urinary protein|albuminuria|urine albumin[- ]?to[- ]?creatinine|\buacr\b
   family_meta:
     canonical_id: proteinuria
     label_zh: 蛋白尿
@@ -272,6 +317,7 @@ rules:
     - g/day
     - ratio
 - rule_id: endpoint-igan-egfr-v1
+  indication_scope: [igan]
   match_pattern: egfr|estimated.*filtration|gfr|glomerular
   family_meta:
     canonical_id: egfr
@@ -282,6 +328,7 @@ rules:
     - mL/min
     - ml/min
 - rule_id: endpoint-igan-hematuria-v1
+  indication_scope: [igan]
   match_pattern: hematuria|blood.*urine|red.*blood.*cell.*urine
   family_meta:
     canonical_id: hematuria
@@ -292,6 +339,7 @@ rules:
     - ratio
     - count
 - rule_id: endpoint-igan-kidney-function-v1
+  indication_scope: [igan]
   match_pattern: kidney|renal.*function|creatinine|serum creatinine|urine.*creatinine
   family_meta:
     canonical_id: kidney_function
@@ -302,6 +350,7 @@ rules:
     - mg/dL
     - umol/L
 - rule_id: endpoint-uc-mayo-response-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: (clinical )?(remission|response)( (per|based on|by) )?(partial )?mayo|mayo (clinical )?(remission|response)
   family_meta:
     canonical_id: mayo_response
@@ -312,6 +361,7 @@ rules:
     - '%'
     - percent
 - rule_id: endpoint-uc-steroid-free-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: corticosteroid[- ]free|steroid[- ]free
   family_meta:
     canonical_id: steroid_free_remission
@@ -322,6 +372,7 @@ rules:
     - '%'
     - percent
 - rule_id: endpoint-uc-histologic-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: histolog|geboes|robbins|heml|epithelial
   family_meta:
     canonical_id: histologic_improvement
@@ -332,6 +383,7 @@ rules:
     - '%'
     - percent
 - rule_id: endpoint-uc-calprotectin-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: calprotectin
   family_meta:
     canonical_id: fecal_calprotectin
@@ -341,6 +393,7 @@ rules:
     units:
     - mg/kg
 - rule_id: endpoint-uc-urgency-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: urgency|urgent bowel
   family_meta:
     canonical_id: bowel_urgency
@@ -351,6 +404,7 @@ rules:
     - score
     - points
 - rule_id: endpoint-uc-ibdq-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: ibdq|inflammatory bowel disease questionnaire
   family_meta:
     canonical_id: ibdq
@@ -361,6 +415,7 @@ rules:
     - score
     - points
 - rule_id: endpoint-uc-endoscopic-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: endoscopic|mucosal healing|colonoscopy
   family_meta:
     canonical_id: endoscopic_improvement
@@ -371,7 +426,9 @@ rules:
     - '%'
     - percent
 - rule_id: endpoint-uc-remission-v1
-  match_pattern: clinical remission|remission
+  indication_scope: [ulcerative-colitis]
+  # 会商 P0 #1：scope 门闩到 UC/IBD 语境，裸 remission 不再跨适应症误命中
+  match_pattern: clinical remission|endoscopic remission|histologic remission|remission
   family_meta:
     canonical_id: clinical_remission
     label_zh: 临床缓解
@@ -381,6 +438,7 @@ rules:
     - percent
     - '%'
 - rule_id: endpoint-uc-mayo-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: mayo|partial mayo|mayo score
   family_meta:
     canonical_id: mayo_score
@@ -391,6 +449,7 @@ rules:
     - score
     - points
 - rule_id: endpoint-uc-bleeding-v1
+  indication_scope: [ulcerative-colitis]
   match_pattern: bleeding|rectal bleeding|stool frequency
   family_meta:
     canonical_id: bleeding

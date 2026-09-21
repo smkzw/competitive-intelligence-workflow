@@ -255,7 +255,7 @@ def main() -> None:
             # AE/TEAE/SAE 计数属安全性口径：不入疗效域（v2 veto 修复）
             dropped["safety_domain"].append(fact["row_id"])
             continue
-        family = classify_registry_endpoint(fact["endpoint_text"])
+        family = classify_registry_endpoint(fact["endpoint_text"], indication_id="pnh")
         if family is None:
             dropped["unclassified"].append(fact["row_id"])
             continue
