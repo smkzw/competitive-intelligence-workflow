@@ -2610,3 +2610,11 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ②基线组别未列示（NCT02605993 性别行）——cohort 解码在 _arm_label 已有，但 v94 渲染仍现——需核查 series 标签的实际来源函数（可能是 _canonical_arm_role 的 unknown 路径而非 _arm_label）
 - ③SVG 坐标轴/图例直出登记英文组名（Cohort 1/Placebo (TP1)/Group 2: Switch 等）与表格中文标签并存——SVG 文本层需与表格同源标签
 - 以上并入 v95 队列（与 A r42 六项合并）
+
+## 追记 64：C r40 收包（veto 7）——并入 v95/v96 队列
+- ①分析集双行矛盾（未公开 + 已报告值并列，NCT02605993/05886244）——stat_appended 抑制未生效需查（extracted 行 field=statistical_comparisons 与 blanket 的 analysis_sets 是不同字段——抑制条件需按"该试验已有分析集内容"而非字段名精确匹配）
+- ②同名终点不同测定（Hgb increase vs normalization；FACIT vs QOQ）——行级消歧序号需覆盖 C 端（同 B 方案移植）
+- ③聚合单元格把整格明细数标在首条标签后（"标签 N条"被误读为 N 条终点）——计数口径需显式分隔
+- ④design-patterns 适用前提"签名"概念未解释 + 小写 nct id + 重复设计要素（builder 摘要生成修正）
+- ⑤人群柱图柱值恒 1 无区分度（真实条目数计数）⑥入排标题残片（Key Inclusion Criteria 残片过滤已实施于 splitter，v95 验证）
+- v96 队列 = 上述 + B r56 三项（AE timeFrame 源头转写、series 解码路径统一、SVG 同源）+ A r42 六项 → v96 全链 → 三路重派
