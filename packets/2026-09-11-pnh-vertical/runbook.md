@@ -2231,3 +2231,13 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - 本轮已提交（commit 0a3cadd）：_time_label 数值恢复、抽屉变量声明兜底、C scale 不截断、次要终点序号化、**C 目录第 12 页 evidence-limitations**（frozen 测试计数 11→12 已同步）
 - 遗留队列（v76 前）：B 深链+Group N 转写+抽屉枚举 zh；C 局限页渲染内容（catalog 已加、渲染器上下文+模板未接）、给药逗号分段验证、目标人群统一验证；会商 P0 门闩+矩阵契约
 - 已知非回归：test_review_issuer/test_scientific_review_transition 8 项失败为环境/密封证据系（stash 验证与本轮改动无关），下轮排查
+
+## 追记 3：B r37 剩余三项 + C r21 渲染项完成（commit 43ffaed/25050f7）
+- **B 抽屉枚举**：FIELD_VALUE_ZH 映射（demographics→人口学特征 等 18 项）；compatibility_rule 内部契约字段已隐藏；组别 group_zh 走 _b_native_label
+- **B 深链**：_deep_link_for 按 trial_id 构 https://clinicaltrials.gov/study/NCTxxxx（无法识别保留原链接）
+- **B 安全臂**：Group N→第N组 + treatment naive→初治 / eculizumab switch→换用依库珠单抗 / rollover→延续入组
+- **C 局限页**：渲染器 evidence_limitations 上下文（截止/来源数/覆盖范围/局限声明/6 条登记深链）+ page.html.j2 模板块（注意：C 模板无 ui 宏导入，用纯 HTML；**打包目录 src/ci_workflow/reports/common/page-catalogs/C.yaml 必须与仓库根同步**——packaged catalog 测试保证一致）
+- **C 时间点单元格**：_registry_timeframe_zh → _native_timepoint_zh → 原文 三级回退
+- **C 干预组合限定**：+ C5 Inhibitor →（+C5抑制剂）保留组合语义
+- 测试：unit+integration 1368 过 / 9 失败（review_issuer/scientific_review_transition/manual_inbox/no_draft/cli_catalog 系，stash 对照确认与本轮改动无关，单独排查项）
+- **v76 前待办**：会商 P0 #1 分类器门闩（indication_scope 设计+规则收紧+回归探针）、#3 矩阵三轴契约（term_key/发生率%/treatment_sample_size 投影合同+缺轴诊断文案）、C 时间点 tuple 顺序核查；然后 v76 全链→三路重派
