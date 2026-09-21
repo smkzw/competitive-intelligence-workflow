@@ -1946,3 +1946,13 @@ JS 端（report-c.js/data 渲染）也加格式化。
 - 三报告科学复核：A r24/B r43/C r25 全部后台派发中
 - 三节点视觉：v65 prompts 已生成（contract digest 断言），A/B/C 后台派发中
 - 视觉 A v59 已 accepted 7/7 ✓、B v52 已 accepted 7/7 ✓
+
+### B r43（v65，deepseek）：veto 2 项
+1. 时间格式：分数周直出仍未修复（_time_label 天数恢复修复未生效于 JS 端
+   report-b.js 的 actual_timepoint 渲染——已有 Python 端修复但 JS 端模板
+   直接输出 row.actual_timepoint 原始浮点）。已加 JS 端修复（unitSuffix +
+   天数恢复）但 v65 渲染时 JS 修改可能未同步到 assets/portal/report-b.js。
+   需验证双副本同步。
+2. 中文原生：B 竛选面板 31/416 按钮文案为内部规范化令牌（ldh水平变化、
+   breakthrough_hemolysis_rate 等 clinical_concept 值直出）。修复点：
+   B 渲染器 filter 面板的 option_label 需走 _controlled_concept zh 映射。
