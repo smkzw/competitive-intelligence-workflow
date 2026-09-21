@@ -11,6 +11,9 @@ import hashlib
 import json
 import re
 import sys
+
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parents[1] / "src"))
+from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
 from collections import defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -165,6 +168,7 @@ def main() -> None:
     product_phase, product_status = {}, {}
     seen_company = set()
     ei = si = 0
+    SAFETY_DOMAIN_DIVERTED: list = []
 
     for study, page_no, array_index in studies:
         proto = study.get("protocolSection", {})
@@ -443,6 +447,14 @@ def main() -> None:
                                 value = float(raw)
                             except ValueError:
                                 continue
+                            # 会商 P0 #2（域分流）：安全域终点不得混入疗效表——
+                            # TEAE/AE/ADA 类测量改记入 derivation 并跳过疗效写入
+                            if is_safety_domain_endpoint(title):
+                                SAFETY_DOMAIN_DIVERTED.append(
+                                    {"trial_id": nct.lower(), "endpoint": title,
+                                     "value": value, "timepoint": row_time_frame}
+                                )
+                                continue
                             group_id = str(measurement.get("groupId") or "")
                             ei += 1
                             efficacy_rows.append({
@@ -674,6 +686,12 @@ def main() -> None:
     }
     derivation = payload.pop("derivation")
     derivation["skipped_trials_no_sample_size"] = skipped_trials
+    # 会商 P0 #2：安全域分流审计计数（TEAE/AE 类测量不再混入疗效表）
+    derivation["safety_domain_diverted"] = len(SAFETY_DOMAIN_DIVERTED)
+    derivation["safety_domain_diverted_samples"] = [
+        {k: str(v)[:80] for k, v in item.items()}
+        for item in SAFETY_DOMAIN_DIVERTED[:10]
+    ]
     derivation["records_without_drug_intervention"] = NON_PRODUCT_RECORDS
     derivation["combo_regimens"] = COMBO_RECORDS
     derivation["alias_map_id"] = ALIAS["map_id"]

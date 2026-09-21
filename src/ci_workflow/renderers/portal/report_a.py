@@ -847,7 +847,9 @@ def _native_endpoint_zh(value: str) -> str:
     if match := re.search(r"\bPart\s*([AB12])\b", value, re.I):
         qualifiers.append(f"第{match.group(1)}部分")
     suffix = "；" + "；".join(qualifiers) if qualifiers else ""
-    return f"{measure}{form}{suffix}"
+    # 会商 #5 残留：measure 已含 form 语义时不再叠加（"药物浓度浓度"→"药物浓度"）
+    body = measure + form if not measure.endswith(form) else measure
+    return f"{body}{suffix}"
 
 
 def _native_arm_detail_zh(value: str | None) -> str | None:
