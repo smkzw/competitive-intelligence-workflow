@@ -2028,3 +2028,11 @@ JS 端（report-c.js/data 渲染）也加格式化。
 
 ### 当前候选：v65（最后成功全链）；v66 = 最新工作区
 ### 下一会话从 runbook 末节续接
+
+### B r45（v67）：veto 2 项——下一会话修复
+1. 事实可溯源：source_id=ctgov-pnh-page-1 与 ctgov-pnh-page-2 的标签互换
+   （CAS 枚举顺序与 builder 的 sources 数组顺序可能不一致）。需验证 CAS
+   文件枚举顺序并修正 page 编号映射。
+2. 单位/时间格式：评价时间列仍直出浮点（25.71428571428571）——修复需
+   在 report-b.js 的 time_window 字段渲染路径中应用天数恢复（当前修复
+   在 actual_timepoint 路径但评价时间列读的是 time_window 字段）。
