@@ -213,7 +213,7 @@ def main() -> None:
             protocol = study.get("protocolSection", {})
             nct = protocol.get("identificationModule", {}).get("nctId")
             if nct in TARGET_TRIALS and nct not in studies:
-                studies[nct] = (protocol, index)
+                studies[nct] = (study, index)
 
     product_by_trial: dict[str, str] = {}
     trial_meta: dict[str, dict] = {}
@@ -231,7 +231,8 @@ def main() -> None:
     path_dims: dict[str, dict[str, tuple[str, ...]]] = {}
 
     for nct in TARGET_TRIALS:
-        protocol, page = studies[nct]
+        study, page = studies[nct]
+        protocol = study.get("protocolSection", {})
         trial_id = nct.lower()
         product_id = product_by_trial[nct]
         design = protocol.get("designModule", {})
@@ -381,6 +382,43 @@ def main() -> None:
         # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
         stat_appended = {o["field"] for o in observations
                          if o["trial_id"] == trial_id and o["field"].startswith("statistical_")}
+        # 独立复核 C r30：登记各结局 description / populationDescription
+        # 已载明分析集与统计方法的，逐条入谱（不再一律错标未公开）
+        _stat_notes: list[str] = []
+        for p_item in primary_outcomes + (outcomes.get("secondaryOutcomes") or []):
+            p_desc = (p_item.get("description") or "").strip()
+            if not p_desc:
+                continue
+            _m_title = (p_item.get("title") or "").strip()[:44]
+            if re.search(
+                r"analysis\s+set|population[s]?\s+analys|statistic|MMRM|mixed model|imputation",
+                p_desc, re.I,
+            ):
+                _stat_notes.append(f"【{_m_title}】{p_desc}")
+        _pop_descs = [
+            (om_i.get("populationDescription") or "").strip()
+            for om_i in (outcomes.get("primaryOutcomes") or [])
+            + (outcomes.get("secondaryOutcomes") or [])
+        ]
+        # 独立复核 C r31：基线特征模块的 populationDescription 亦载明
+        # 分析集（如 Full Analysis Set 定义），必须并入抽取
+        _bc_pop = (((study.get("resultsSection") or {})
+                    .get("baselineCharacteristicsModule") or {})
+                   .get("populationDescription") or "").strip()
+        if _bc_pop:
+            _pop_descs.append(_bc_pop)
+        for pd_ in _pop_descs:
+            if pd_ and pd_ not in _stat_notes:
+                _stat_notes.append("分析人群说明：" + pd_)
+        for si_note, note in enumerate(_stat_notes[:8], start=1):
+            # 分析集说明归 analysis_sets 维度，其余归统计模型维度
+            is_set = note.startswith("分析人群说明：") or "analysis set" in note.lower()
+            observations.append(_row(
+                trial_id, product_id, nct, page, "statistical",
+                "analysis_sets" if is_set else "statistical_comparisons",
+                f"登记披露的统计与分析方法：{note}", seq=f"stat{si_note}",
+                stage=stage, source_name="registry.outcomes.description",
+            ))
         for stat_field, stat_label in (
             ("analysis_sets", "分析集"),
             ("statistical_comparisons", "主要比较与统计模型"),

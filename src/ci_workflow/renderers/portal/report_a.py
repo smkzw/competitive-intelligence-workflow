@@ -1498,6 +1498,16 @@ def _native_history_zh(text: str) -> str:
     return out
 
 
+# 研发代号 → 已确立中文名（构成式转写的药名层；仅收录可核实条目）
+_ARM_CODE_ZH = {
+    "LNP023": "伊普可泮",
+    "RVA576": "Coversin",
+    "ALXN2050": "Danicopan",
+    "ACH-0144471": "Danicopan",
+    "ALN-CC5": "ALN-CC5",
+}
+
+
 def _native_arm_zh(value: str) -> str:
     """登记组别名的确定性中文转写；残余多词英文回退显式声明。"""
     out = " ".join(str(value or "").split())
@@ -1511,8 +1521,21 @@ def _native_arm_zh(value: str) -> str:
     out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
     out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
     if len([w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]) >= 2:
+        # 构成式转写：研发代号→中文名，剂量/频次词保留
+        for code, zhname in _ARM_CODE_ZH.items():
+            if re.search(code, out, re.I):
+                out = re.sub(code, zhname, out, flags=re.I)
+        out = re.sub(r"\bBid\b|\bBID\b|\bb\.i\.d\.?\b", "每日2次", out, flags=re.I)
+        out = re.sub(r"\bQD\b|\bqd\b", "每日1次", out, flags=re.I)
+        out = re.sub(r"\bQ4W\b", "每4周1次", out, flags=re.I)
+        out = re.sub(r"\bQ2W\b", "每2周1次", out, flags=re.I)
+        out = re.sub(r"\bmg\b", "毫克", out, flags=re.I)
+        out = re.sub(r"\bSoC\b|\bsoc\b", "标准治疗", out, flags=re.I)
+        out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
+        out = re.sub(r"\s{2,}", " ", out).strip()
+        if len([w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]) < 2:
+            return out
         # 独立复核 A r29/r30：臂区分度优先于外观——残余英文保留原臂名
-        # （构成式转写见 v83 队列：别名→中文名+剂量频次）
         return " ".join(str(value or "").split())
     return out
 
