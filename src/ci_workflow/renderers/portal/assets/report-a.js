@@ -976,7 +976,12 @@
           && String(eventRecord.unit || "").indexOf("例") !== -1) {
         eventRate = Math.round(eventRate / numericValue(eventRecord.denominator) * 1000) / 10;
       }
-      if (!trial || eventRate == null || (!useTotalSample && trial.treatment_sample_size == null)) return;
+      // 会商 P0 #3：治疗臂样本量缺失时降级用试验总样本量（登记已披露），
+      // 不再因此丢点；尺寸标注在气泡说明中体现口径
+      if (!trial || eventRate == null) return;
+      if (!useTotalSample && trial.treatment_sample_size == null) {
+        if (!(trial.sample_size > 0)) return;
+      }
       var treatmentRow = pair.rows["治疗组"] || pair.rows[Object.keys(pair.rows)[0]];
       var controlRow = pair.rows["对照组"] || null;
       var treatment = treatmentRow.value;
@@ -1010,7 +1015,7 @@
         var safetyArmDetail = pair.rows[safetyArm] ? pair.rows[safetyArm].arm_detail : null;
         var rec = safetyRecordFor(p.id, termKey, pair.trial_id, safetyArmDetail, sourceRows);
         if (rec && numericValue(rec.value) != null) haveSafety += 1;
-        if (trial && (useTotalSample || trial.treatment_sample_size != null)) haveSize += 1;
+        if (trial && ((useTotalSample || trial.treatment_sample_size != null) || (trial.sample_size > 0))) haveSize += 1;
       });
       if (!haveEfficacy) missingAxes.push("疗效轴：当前筛选下没有可量化为主要观察的疗效终点");
       if (!haveSafety) missingAxes.push("安全性轴：登记只有组别计数、没有可比较的发生率（%）");
@@ -1031,14 +1036,17 @@
       ? Math.max(10, Math.ceil(Math.max.apply(null, [0].concat(allEventRates)) / 10) * 10) : 100;
     var maxN = Math.max.apply(null, points.map(function (point) {
       if (!point.trial) return 1;
-      return useTotalSample ? point.trial.sample_size : point.trial.treatment_sample_size;
+      var n = useTotalSample
+        ? point.trial.sample_size
+        : (point.trial.treatment_sample_size != null ? point.trial.treatment_sample_size : point.trial.sample_size);
+      return n;
     }));
     for (var i = 0; i < points.length; i += 1) {
       var point = points[i], p = point.product;
       var xPosition = 14 + 72 * (point.x - xMin) / (xMax - xMin);
       var yPosition = 14 + 72 * (yMax - point.eventRate) / (yMax - yMin);
       var trial = point.trial;
-      var n = trial ? (useTotalSample ? trial.sample_size : trial.treatment_sample_size) : 1;
+      var n = trial ? (useTotalSample ? trial.sample_size : (trial.treatment_sample_size != null ? trial.treatment_sample_size : trial.sample_size)) : 1;
       var size = 80 * Math.sqrt(n / maxN);
       var bubble = el("button", "kz-a-bubble", String(i + 1));
       bubble.type = "button";
