@@ -2284,3 +2284,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **PYTHONHASHSEED 实锤**：v78 首次 submit 报"独立科学复核与当前内容摘要不一致"——digest 依赖 set 迭代顺序，跨进程随机种子导致构建与校验哈希不同。**PYTHONHASHSEED=0 固定后重建+提交即通过**。教训入册：B/C/A 构建器与 submit 必须同一固定种子环境。
 - **v78 全链建成提交**（3895 行 0 碰撞；B 安全行带期间标题+风险人数；C 12 页）。三路复核 r26/r40/r24 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修。
+
+## 追记 10：A r26 收包（veto 3）与修复
+- ①单位回归（上轮 SI 第二形状正则分组序号错位：den 前缀误取括注组 → mg/dL 显示 mg/L，68 行）→ **已修**（group(3)），全部 mg/dL 变体恢复正确
+- ②时间窗/人群残留（after/trough/postdose/Minutes/OLEP）→ **已修** token 补齐
+- ③矩阵页自相矛盾（诊断说缺安全率，safety.html 却显示 8/40人）→ 派生发生率与 term_key 已在 v78 代码中，但诊断计数仍报缺失——需浏览器运行时探针核查（safetyRecordFor 匹配链），下轮 ego-lite 实测
+- 修复已提交（7aaa7cb 后续）。v77 B r39 收包同轮；v78 三路复核运行中（A r26 已收包→修复需 v79；B r40/C r24 静默）
