@@ -1724,7 +1724,12 @@ def _arm_label(value: Any) -> str:
         canonical, canonical_label = _canonical_arm_role(human)
         if canonical != "unknown" and _is_pure_role_label(human):
             return canonical_label
-        return human
+        # 独立复核 B r39（issue-1）：队列组标识（cohort-1）→ 第1组
+        m_cohort = re.fullmatch(r"cohort\s*(\d+)", human, re.I)
+        if m_cohort:
+            return f"第{m_cohort.group(1)}组"
+        if human:
+            return human
     return "组别未列示"
 
 
