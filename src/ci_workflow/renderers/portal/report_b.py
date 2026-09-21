@@ -907,6 +907,10 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
     # 不得折算为"第213.4周"
     if "eot" in text.casefold() or "最大暴露" in text:
         return "eot_visit", "治疗结束访视（EOT）"
+    # 独立复核 B r42（issue-2）："Maximum exposure: N weeks" 是最长暴露时长，
+    # 不得折算为"约第N周"的访视时点
+    if re.search(r"maximum\s+exposure", text, re.I):
+        return "max_exposure", "最长暴露期（登记）"
     token = _semantic_token(text)
     if any(marker in token for marker in ("baseline", "基线", "screening", "筛选期")):
         return "baseline", _TIME_BAND_LABELS["baseline"]
@@ -1389,6 +1393,7 @@ def _text(value: Any, default: str = "") -> str:
 
 _B_VARIABLE_TOKENS: tuple[tuple[str, str], ...] = (
     (r"\bcohort\s*(\d+)\b", r"第\1组"),
+    (r"\babsolute\b", "绝对值"),
     (r"\bgroup\s*(\d+)\b", r"第\1组"),
     (r"\bTP(\d+)\b", r"治疗期\1"),
     (r"\bLTE\b", "长期扩展期"),
@@ -1724,10 +1729,15 @@ def _arm_label(value: Any) -> str:
         canonical, canonical_label = _canonical_arm_role(human)
         if canonical != "unknown" and _is_pure_role_label(human):
             return canonical_label
-        # 独立复核 B r39（issue-1）：队列组标识（cohort-1）→ 第1组
+        # 独立复核 B r39/r42：队列与声明组标识解码
         m_cohort = re.fullmatch(r"cohort\s*(\d+)", human, re.I)
         if m_cohort:
             return f"第{m_cohort.group(1)}组"
+        m_group = re.fullmatch(r"group\s*(\d+)(?:\s+(.*))?", human, re.I)
+        if m_group:
+            qualifier = _b_native_label(m_group.group(2) or "") if m_group.group(2) else ""
+            base = f"第{m_group.group(1)}组"
+            return f"{base}（{qualifier}）" if qualifier else base
         if human:
             return human
     return "组别未列示"

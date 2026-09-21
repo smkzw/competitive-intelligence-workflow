@@ -806,6 +806,7 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
 
 
 _REGISTRY_ENDPOINT_TERM_ZH = {
+    "breakthrough hemolysis": "突破性溶血发生比例",
     "pnh clone size": "PNH 克隆大小",
     "clone size": "PNH 克隆大小",
     "pnh clone": "PNH 克隆",
@@ -1344,10 +1345,16 @@ def _filter_groups(
                 option_label = _field_label(value)
             elif dimension == "disclosure_state":
                 option_label = _state_label(value)
-            elif dimension == "time":
-                # 独立视觉复核（v59 copy_zh）：时间点筛选标签与行单元格
-                # 同源转写（第0天与第28天），不再直出登记英文原文
-                option_label = _registry_timeframe_zh(value) or value
+            elif dimension in {"time", "timepoint"}:
+                # 独立视觉复核（v59 copy_zh）+ 独立复核 C r20/r26：
+                # 时间点筛选标签与行单元格同源转写，不再直出登记英文原文
+                option_label = (
+                    _registry_timeframe_zh(value)
+                    or _native_timepoint_zh(value)
+                    or value
+                )
+            elif dimension == "scale":
+                option_label = _native_endpoint_zh(value) or value
             else:
                 option_label = value
             options.append({"value": value, "label": option_label})
