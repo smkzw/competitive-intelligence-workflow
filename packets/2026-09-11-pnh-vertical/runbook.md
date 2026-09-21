@@ -2594,3 +2594,13 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - 途中修正：分流行 numerator 与 denominator 成对约束（numerator 移除，denominator 本就无）
 - **v94 全链建成提交**（A 3895→3895、B 357、C 259）。三路复核 r42/r56/r40 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 62：A r42 收包（veto 5）——并入 v95 队列
+- ①**分流行被错标"严重不良事件"**：pozelimab "All Treatment Emergent Adverse Events"（any_teae）显示为"严重不良事件 21Participants"——divert 行的 category/term_key 传递与显示映射需核查；单位 Participants/Events 未转中文且与数值紧贴②**安全表 22 组/234 行同名标签**（divert 行 term=title[:40] 已实施但热图分组仍塌缩——分组键需含原测量标题）③**分流行缺 atRisk 分母**（登记 atRisk 按组可得——分流行补 denominator）④时间点 34 行未标注英文⑤矩阵仍空+成因矛盾（derived-rate/term_key/尺寸降级链需 Playwright 运行时核查）
+- **v95 队列（定稿）**：
+  1. 分流行完善：atRisk 分母提取（AE eventGroups→arm 映射）、unit 归一（Participants→人/Events→例）、term 保留原测量标题
+  2. 矩阵运行时核查（Playwright 气泡数）——term_key/derived-rate/size-fallback 链路逐环验证
+  3. 时间点 34 行未标注（partial-transcription 标注条件修正）
+  4. eculizumab 状态来源决策（政策）
+  5. B 侧展开表列头/静默丢值提示（B r54 延续）
+- v95 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环 → 横向扩展
