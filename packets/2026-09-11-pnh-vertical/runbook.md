@@ -2604,3 +2604,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
   4. eculizumab 状态来源决策（政策）
   5. B 侧展开表列头/静默丢值提示（B r54 延续）
 - v95 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环 → 横向扩展
+
+## 追记 63：B r56 收包（veto 3）——并入 v95 队列
+- ①安全表"观察时间"列整句英文 8 行（ravulizumab NCT02605993 "Adverse events were monitored continuously from Screening to Day 253..."）——该串来自 A 载荷安全行 time_window（B r46 ③ 同源：A 构建器 AE timeFrame 需转写后再入行）
+- ②基线组别未列示（NCT02605993 性别行）——cohort 解码在 _arm_label 已有，但 v94 渲染仍现——需核查 series 标签的实际来源函数（可能是 _canonical_arm_role 的 unknown 路径而非 _arm_label）
+- ③SVG 坐标轴/图例直出登记英文组名（Cohort 1/Placebo (TP1)/Group 2: Switch 等）与表格中文标签并存——SVG 文本层需与表格同源标签
+- 以上并入 v95 队列（与 A r42 六项合并）
