@@ -601,6 +601,17 @@ def main() -> None:
         # 靶点/机制选择：在含别名的句子内，取"距别名提及最近"的模式命中，
         # 而非全文首条命中（否则"danicopan + C5 抑制剂背景治疗"类句子
         # 会把 C5 误归给 Factor D 产品——独立复核 A r22 复验发现）
+        _MECH_TARGET_HINT = {
+            "anti-C5": "C5", "C5抑制剂": "C5", "anti-C3": "C3", "C3抑制剂": "C3",
+            "Factor B抑制剂": "Factor B", "Factor D抑制剂": "Factor D",
+        }
+
+        def _mech_implies(mech, target_value):
+            hint = _MECH_TARGET_HINT.get(mech)
+            if hint is None:
+                return True
+            return hint == target_value
+
         def _nearest(patterns, joined, needle):
             best_label, best_dist = None, None
             low = joined.casefold()
@@ -613,6 +624,7 @@ def main() -> None:
                     if best_dist is None or dist < best_dist:
                         best_label, best_dist = label, dist
             return best_label
+
         joined = " ".join(texts)
         cand_target: list[tuple[int, str]] = []
         cand_mech: list[tuple[int, str]] = []
@@ -630,12 +642,23 @@ def main() -> None:
                 break
         target = min(cand_target)[1] if cand_target else None
         mechanism = min(cand_mech)[1] if cand_mech else None
+        # 机制与靶点必须同源（独立复核 A r23：iptacopan 显示
+        # "靶点 Factor B｜机制 anti-C5" 自相矛盾）。取定靶点后，
+        # 机制改从"其暗示靶点与所定靶点一致"的候选中就近选择。
+        if target:
+            consistent = [
+                (dist, lab) for dist, lab in cand_mech
+                if _mech_implies(lab, target)
+            ]
+            # 无同源机制候选时宁缺毋滥：机制留空（NA），
+            # 也不再从全文兜底挑选（避免 anti-C5 复活）
+            mechanism = min(consistent)[1] if consistent else None
         if target is None:
             for pat, label in _TARGET_PATTERNS:
                 if pat.search(joined):
                     target = label
                     break
-        if mechanism is None:
+        if mechanism is None and target is None:
             for pat, label in _MECH_PATTERNS:
                 if pat.search(joined):
                     mechanism = label

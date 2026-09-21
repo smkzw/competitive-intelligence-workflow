@@ -681,7 +681,14 @@ def _compact_regimen_zh(data: ReportCPortalData, observation: DesignObservation)
     # 按给药阶段切分：负荷/初始 vs 之后/维持
     segments = [s for s in re.split(r"\bthen\b|\bfollowed by\b|;|\.\s+", source, flags=re.I) if s.strip()]
     load_seg = next((s for s in segments if re.search(r"loading|initially|first", s, re.I)), None)
-    later_segs = [s for s in segments if s is not load_seg and _segment_doses(s)]
+    dose_segments = [s for s in segments if _segment_doses(s)]
+    if load_seg is None and len(dose_segments) >= 2:
+        # 无显式 loading 关键词但存在先后两个剂量段
+        # （"receive 600 mg once a week …, and then 900 mg every 2 weeks"）
+        load_seg = dose_segments[0]
+        later_segs = dose_segments[1:]
+    else:
+        later_segs = [s for s in segments if s is not load_seg and _segment_doses(s)]
 
     parts = [product]
     if load_seg and later_segs:
@@ -704,7 +711,22 @@ def _compact_regimen_zh(data: ReportCPortalData, observation: DesignObservation)
     timepoint = _text(observation.assessment_timepoint)
     if timepoint:
         parts.append(timepoint)
-    return "；".join(dict.fromkeys(p for p in parts if p))
+    body = "；".join(dict.fromkeys(p for p in parts if p))
+    # 独立复核 C r20（veto 第3项）：无剂量句时提取给药途径，
+    # 不得只剩产品名与"试验组干预"列重复
+    if not _segment_doses(source):
+        route = ""
+        if re.search(r"IV infusion|intravenous", source, re.I):
+            route = "静脉输注"
+        elif re.search(r"subcutaneous", source, re.I):
+            route = "皮下注射"
+        elif re.search(r"oral", source, re.I):
+            route = "口服"
+        elif re.search(r"topical", source, re.I):
+            route = "外用"
+        if route:
+            body = (body + "；" + route) if body else route
+    return body
 
 
 def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> str:
@@ -866,6 +888,12 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
     if observation.field == "trial_identity":
         return _trial_name(data, observation.trial_id)
     if observation.field == "target_population":
+        # 独立复核 C r20（veto 第8项）：结构化最低年龄优先，
+        # 同列口径统一为可比事实，不再自指"已记录（原文见来源）"
+        structured_age = _text(observation.threshold_value)
+        if structured_age:
+            unit = _text(observation.threshold_unit, "岁")
+            return f"登记最低年龄：{structured_age}{unit}"
         return _target_population_text(text)
     if observation.field in {"inclusion_criterion", "exclusion_criterion"}:
         if not source_text:

@@ -118,3 +118,12 @@ pages:
     complete_table: true
     filter_profiles: [c-patterns]
     evidence_drawer_profile: design-fact
+  - id: evidence-limitations
+    route: /c/evidence-limitations
+    title: 证据版本与局限
+    navigation_group: 分析与判断
+    responsibility: "声明证据来源版本、数据截止、覆盖范围与已知局限；缺失与访问受阻如实记档，不推断。"
+    visuals: [来源覆盖矩阵]
+    complete_table: false
+    filter_profiles: []
+    evidence_drawer_profile: design-fact
