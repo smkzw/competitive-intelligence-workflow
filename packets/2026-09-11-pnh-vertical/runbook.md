@@ -2347,3 +2347,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B 安全影子行**保留（-declared 行）——供门"每组最低记录"单元与展示双重用途，实测 2 条。
 - **v80 全链建成提交**（3895 行 0 碰撞、TP1/TP2 归属正确、B 安全行带期间标题+风险人数分母、C 12 页含局限页）。三路复核 r28/r42/r26 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环。
+
+## 追记 20：v80 三路收包（A r28 veto3 / B r42 veto3 / C r26 veto4）——A r28 修复已提交
+- **A r28 三项已修**（commit e838f84）：①组别英文原名直出 → _native_arm_zh 转写漏斗（残余→"登记组别（原名见数据依据）"）②endpoint_source 可见子行改悬停 title（原句不再拼进单元格）③transfusion/postdose/concentration/尿检定性 token 补齐
+- **B r42 三项（待修）**：①基线性别行仍"组别未列示"（alxn2050 NCT04170023——cohort 影子未覆盖该行的键路径，需查 _arm_label 输入）②"约第213.4周"幻影时点（timeFrame 内 Maximum exposure 时长被当作访视时点——r32 修复只覆盖 EOT 词形）③人群 token 残留（absolute 等）
+- **C r26 四项（待修）**：①内容列 75/76 行黏英文时间窗括注（v80 未含 _tp_disp 转写——已修于 d482081 之后的代码？需确认 v81 生效）②筛选"时间点/量表"维度纯英文（33 个选项）③同名终点两行逐格相同（需行级消歧序号落地到 C 表格）④"血管内溶血应答率"错译（breakthrough hemolysis 的发生比例，既非血管内溶血也非应答率——term 映射修正）
+- v81 队列：B 基线键路径 + 幻影时点 + C 四项 + population token 收尾 → v81 全链 → 三路重派
