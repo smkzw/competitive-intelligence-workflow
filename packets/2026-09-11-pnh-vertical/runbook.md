@@ -2113,3 +2113,34 @@ A r32/B r49/C r30 三路科学复核均遇 omp 子进程退出码 1 或 verdict 
 3. 逐个 dispatch（不并行）排查
 4. 如 provider 不可用，换用其他 provider
 5. 修复后重派三路科学复核 → 收 verdict → 全 accepted → accept-visual ×3
+
+## 2026-09-21 会话：A r20 veto 修复落地 + B 通过；无损暂停点
+
+### 复核收包状态（v71）
+- **B：ACCEPTED**（deepseek，verdict-omp-deepseek-abc71-b-r34）——B 第 4 次通过，B 载荷本次未改动，结论随快照继续有效
+- **A：VETO 3 项**（gemini r20）——当日已全部定位并落码（见下）
+- **C：仍未收包**——gemini 派发两次均静默失败（包装器退出码 0 但 reviewer 未写 verdict.json）。B 用 deepseek 成功 → 下会话 C 改绑 deepseek 重派（需先重新生成 C 的 reviewer-prompt，绑定 deepseek 的 reviewer_id）
+
+### A r20 三项 veto 的修复（已落码，待重建渲染验证）
+1. **终点标签碰撞（493 处同名不同值）**：根因是渲染器把登记测量的长标题收敛成 166 个短中文标签，不同测量定义共用同一标签且门户不保留登记原文。
+   修复：渲染输出新增 `endpoint_source` 字段（登记测量原文全称）；同一试验内若多个不同登记定义收敛为同一标签，自动追加"（登记终点定义N）"序号显式区分（`_disambiguate_endpoint_labels`）
+2. **时间窗半汉化（2242/4141 条中英混排）**：根因是旧转换把 "of"→"的"、"and"→"、"逐词硬替，产出"absence 的 transfusions"式拼接。
+   修复：重写为结构化短语表（约 120 条规则，长短语→裸枚举→通用词兜底三段排序），残余裸英文≥2 词时显式回退"登记时间窗（详见登记来源）"。语料实测回退率 4141→114 条（2.8%），其余全部纯中文
+3. **安全性组别 40 字符截断**：两个 A 构建器（tools/build_a_payload.py 与 build_pnh_a_payload.py）的 `[:40]` 已移除
+4. **附带**：单位中文化补齐（`_native_unit_zh`：SI 符号化规则+字面映射+显式回退），实测 0 残留英文（此前 1145 行 "Participants"、104 行 "Percentage of participants" 等直接漏英文）
+
+### 验证状态
+- 模块语法编译通过；定向单元测试 5/5 通过
+- 9 个验收测试失败均为环境能力门（browser/render 的 capability_blocked），需重建渲染后才能跑——非本次改动引起的逻辑回归
+- **尚未做**：A 载荷重建 + 门户重渲染 + 视觉探针 + A 复核重派（下一会话顺序执行）
+
+### 下一会话步骤
+1. 重建 A 载荷（消截断）→ 重渲染 v71 链 → 快速浏览器探针（4 视口抽样）
+2. C 改绑 deepseek 重派复核（重新生成 C prompt）；A 重派复核
+3. 三路 accepted 后 accept-visual ×3 → PNH 纵向闭环
+4. 然后：UC/IgAN 用修复后构建器重测（验证泛化）→ AD B/C → 横向 6 适应症 → 三宿主新装 → 安装包 → 恢复链 → RC
+5. 遗留：deepseek C r30 提的 6 项数据充实（给药 mg/kg、负荷/维持期、靶点溯源、cohort 保留、统计设计声明）仍待实施——若 C 重派后再次 veto 同类问题，按 runbook v70 节方案实施
+
+### 本会话坑（复盘）
+- omp gemini 提供者在 --no-session 模式下间歇性静默失败（退出码 0 但无产出文件），deepseek 稳定；派发后必须显式检查 verdict 文件存在性，不能信包装器退出码
+- 批量正则改写脚本对含字面 `)` 的正则串做括号计数会截断字符串字面量——本会话曾把 report_a.py 改坏，已从 HEAD 恢复并整体重写落码；教训：对代码做结构化改写前先 `py_compile` 快照，改写后立即编译验证

@@ -475,7 +475,7 @@ def main() -> None:
             events = (results.get("adverseEventsModule", {})
                       .get("eventGroups") or [])
             for group in events:
-                term = str(group.get("title") or "治疗期间不良事件")[:40]
+                term = str(group.get("title") or "治疗期间不良事件")
                 freq = group.get("seriousNumAffected")
                 if freq is None:
                     continue

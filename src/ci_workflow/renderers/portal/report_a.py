@@ -548,27 +548,179 @@ def _navigation() -> tuple[dict[str, str], ...]:
     )
 
 
+_TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...] = (
+    # 结构化长短语先行：整句式登记时间窗
+    (r"final study visit", "末次研究访视"),
+    (r"on entry and every 3 months thereafter[^,;.]*", "入组时及此后每3个月"),
+    (
+        r"from (?:first|single) dose of study drug up to (\d+) days? after (?:the )?last dose(?: of study (?:drug|medication))?",
+        r"自首次给药至末次给药后\1天",
+    ),
+    (
+        r"from (?:first|single) dose of study drug \(days? (\d+)\) up to (\d+) days?(?: after the last dose(?: of study (?:drug|medication))?)?",
+        r"首次给药（第\1天）后至\2天",
+    ),
+    (
+        r"after the first dose of study medication \(days? (\d+)\) through (\d+) days? after the last dose(?: of study (?:drug|medication))?",
+        r"首次给药后（第\1天）至末次给药后\2天",
+    ),
+    (r"from days? (\d+) to (\d+) days? after the last dose", r"自第\1天至末次给药后\2天"),
+    (r"post (\d+) weeks? of treatment", r"治疗开始后\1周"),
+    (r"within (\d+) weeks? prior to first dose", r"首次给药前\1周内"),
+    (r"prior to initiation of treatment", "治疗开始前"),
+    (r"post initiation of treatment", "治疗开始后"),
+    (r"prior to first dose", "首次给药前"),
+    (r"from first dose of study drug", "自首次给药起"),
+    (r"first dose of study drug", "首次给药"),
+    (r"last available rolling average before the first dose of study drug", "首次给药前最后一次可用滚动均值"),
+    (
+        r"between (day|week|month)s? (\d+) and (?:day|week|month)s? (\d+)",
+        lambda m: "第%s至第%s%s"
+        % (m.group(2), m.group(3), {"d": "天", "w": "周", "m": "个月"}[m.group(1)[0].casefold()]),
+    ),
+    (r"between days? (\d+) and (\d+)", r"第\1至\2天"),
+    (r"between weeks? (\d+) and (\d+)", r"第\1至\2周"),
+    (r"blood samples for ada assessments were taken\s*", "ADA检测采样："),
+    (r"mean of visits", "访视均值"),
+    (r"through days? (\d+)", r"至第\1天"),
+    (r"through weeks? (\d+)", r"至第\1周"),
+    (r"up to end of study", "至研究结束"),
+    (r"up to weeks? (\d+)", r"至第\1周"),
+    (r"up to days? (\d+)", r"至第\1天"),
+    (r"up to months? (\d+)", r"至第\1个月"),
+    (r"up to ([\d.]+) years?", r"至\1年"),
+    (r"up to (\d+) months?", r"至\1个月"),
+    (r"up to (\d+) weeks?", r"至\1周"),
+    (r"up to (\d+) days?", r"至\1天"),
+    (r"up to (\d+) hours?", r"至\1小时"),
+    (r"weeks? (\d+)\s*[-–]\s*weeks? (\d+)", r"第\1–\2周"),
+    (r"days? (\d+)\s*[-–]\s*days? (\d+)", r"第\1–\2天"),
+    (r"maximum exposure\s*[:：]?\s*", "最长暴露"),
+    (r"end of follow-?up", "随访结束"),
+    (r"end of (?:the )?study", "研究结束"),
+    (r"end of treatment|\beot\b", "治疗结束"),
+    (r"end of infusion", "输注结束"),
+    (r"(\d+)\s*[-–]\s*(\d+)\s*hrs?", r"\1–\2小时"),
+    (r"every (\d+) months?", r"每\1个月"),
+    (r"every (\d+) weeks?", r"每\1周"),
+    (r"(\d+(?:\.\d+)?)\s*weeks?", r"\1周"),
+    (r"(\d+(?:\.\d+)?)\s*months?", r"\1个月"),
+    (r"(\d+(?:\.\d+)?)\s*years?", r"\1年"),
+    (r"post ?transplant", "移植后"),
+    (r"\bolep\b", "开放扩展期"),
+    (r"\boltp\b", "开放治疗期"),
+    (r"part ([abc])\s*:", lambda m: f"{m.group(1).upper()}部分："),
+    (r"part ([abc])\b", lambda m: f"{m.group(1).upper()}部分"),
+    (r"cohorts? ([\d\-]+)\s*:", r"第\1组："),
+    (r"cohorts? (\d+)\s+to\s+(\d+)", r"第\1–\2组"),
+    (r"cohort (\d+)", r"第\1组"),
+    (r"weekly/monthly/biweekly/monthly cohorts", "混合给药频率组"),
+    (r"\((?:weekly|biweekly)[^)]*\)", "（分组给药）"),
+    (r"dosing cohorts", "给药组"),
+    (r"symptom scales? at", ""),
+    # 症状与体征名词（症状量表行的时间窗自带症状名）
+    (r"abdominal pain", "腹痛"),
+    (r"chest pain", "胸痛"),
+    (r"erectile dysfunction", "勃起功能障碍"),
+    (r"\bdyspnea\b|\bdyspnoea\b", "呼吸困难"),
+    (r"\bdysphagia\b", "吞咽困难"),
+    (r"\bfatigue\b", "疲乏"),
+    (r"\bdiarrhea\b", "腹泻"),
+    (r"\bnausea\b", "恶心"),
+    (r"\bheadache\b", "头痛"),
+    (r"\bpruritus\b", "瘙痒"),
+    (r"\bhemoglobin\b|\bhaemoglobin\b", "血红蛋白"),
+    (r"absence of (?:red blood cell|rbc) transfusions?", "无红细胞输血"),
+    (r"absence of transfusions?", "无输血"),
+    (r"\bplatelets?\b", "血小板"),
+    (r"\breticulocytes?\b", "网织红细胞"),
+    (r"lactate dehydrogenase|\bldh\b", "乳酸脱氢酶"),
+    (r"\btransfusions?\b", "输血"),
+    # 登记月份/周/日枚举与裸时间
+    (
+        r"months?\s+((?:\d+)(?:,\s*\d+)*(?:,?\s*and\s*\d+)?)",
+        lambda m: "第" + re.sub(r",\s*|\s*and\s*", "、", m.group(1), flags=re.I) + "个月",
+    ),
+    (r"\bmonth\s*(\d+)", r"第\1个月"),
+    (r"\bweeks?\s*(\d+)e?\b", r"第\1周"),
+    (r"\bdays?\s*(\d+)e?\b", r"第\1天"),
+    (r"\bbaseline\b", "基线"),
+    (r"\bscreening\b", "筛选期"),
+    (r"\bsingle dose\b", "单次给药"),
+    (r"after (?:the )?last dose", "末次给药后"),
+    (r"\bafter eot\b", "治疗结束后"),
+    (r"\bafter dosing\b|\bpost-dose\b", "给药后"),
+    (r"immediately postdose", "给药后即时"),
+    (r"\bapproximately\b", "约"),
+    (r"\buntil the\b|\buntil\b", "至"),
+    (r"\bthrough\b", "至"),
+    (r"^from\s+", "自"),
+    (r"\bhrs?\b", "小时"),
+    (r"\bhours?\b", "小时"),
+    (r"\byears?\b", "年"),
+    (r"\bweekly\b", "每周"),
+    (r"\bbiweekly\b", "每2周1次"),
+    (r"\bmonthly\b", "每月1次"),
+    (r"\bdosing\b", "给药"),
+    (r"\bthereafter\b", "此后"),
+    (r"\bsubsequent\b", "后续"),
+    (r"\bduring the study\b|for the duration of the study", "研究期内"),
+    (r"\bon entry\b|\bat entry\b", "入组时"),
+    (r"\bvisit\b", "访视"),
+    # 通用词收敛放最后：仅在结构化短语消费完毕后兜底
+    (r"\bresponders?\b", "应答者"),
+    (r"\bunbound\b", "游离型"),
+    (r"\btotal\b", "总"),
+    (r"\bpre dose\b|\bpredose\b|\bpre-dose\b", "给药前"),
+    (r"\bed\b", "勃起功能障碍"),
+    (r"\bnone\b", "无"),
+    (r"\bmild\b", "轻度"),
+    (r"\bmoderate\b", "中度"),
+    (r"\bsevere\b", "重度"),
+    (r"\bchange\b", "较基线变化"),
+    (r"\beculizumab\b", "依库珠单抗"),
+    (r"\bravulizumab\b", "雷夫利珠单抗"),
+    (r"\bcrovalimab\b", "可伐利单抗"),
+    (r"\biptacopan\b", "伊普可泮"),
+    (r"\bpegcetacoplan\b", "培戈赛他泮"),
+    (r"\btreatment\b|\bdose\b", "给药"),
+    (r"\bfrom\b", "自"),
+    (r"\bon\s+", ""),
+    (r"\bstudy\b", "研究"),
+    (r"(\d+)\s*days?", r"\1天"),
+)
+
+
 def _native_timepoint_zh(value: str) -> str:
-    text = re.sub(r"\bWeeks?\s*(\d+)\b", r"第\1周", value, flags=re.I)
-    text = re.sub(r"\bDays?\s*(\d+)\b", r"第\1天", text, flags=re.I)
-    text = re.sub(r"up to End of Study", "至研究结束", text, flags=re.I)
-    text = re.sub(r"\bBaseline\b", "基线", text, flags=re.I)
-    text = re.sub(r"\bto\b", "至", text, flags=re.I)
-    text = re.sub(r"\band\b|&", "、", text, flags=re.I)
-    replacements = (
-        (
-            r"last available rolling average before the first dose of study drug",
-            "首次给药前最后一次可用滚动均值",
-        ),
-        (r"From first dose of study drug", "自首次给药起"),
-        (r"\bPre-dose\b|\bPredose\b", "给药前"),
-        (r"\bpost-dose\b", "给药后"),
-        (r"\bhours?\b", "小时"),
-        (r"\bof\b", "的"),
-    )
-    for pattern, replacement in replacements:
-        text = re.sub(pattern, replacement, text, flags=re.I)
-    return " ".join(text.split())
+    """登记时间窗的确定性中文转写；结构性短语优先，裸枚举次之，通用词兜底。
+
+    残余裸英文 ≥2 词视为未转写成功，回退为显式声明式标签（原文保留证据层）。
+    """
+    text = " ".join(str(value or "").split())
+    if not text:
+        return text
+    if _contains_chinese(text) and len(re.findall(r"[A-Za-z]{2,}", text)) == 0:
+        return text
+    out = text
+    for pattern, rep in _TIMEPOINT_PHRASES:
+        out = re.sub(pattern, rep, out, flags=re.I)
+    out = re.sub(r"\s*(?:and|&)\s*", "、", out, flags=re.I)
+    out = re.sub(r"\s*\bat\s+", "", out, flags=re.I)
+    out = re.sub(r"\s*\bto\b\s*", "至", out, flags=re.I)
+    out = re.sub(r"\s*\bof the\b\s*|\s*\bof\b\s*", "", out, flags=re.I)
+    out = re.sub(r",\s*", "、", out)
+    out = re.sub(r";\s*", "；", out)
+    out = re.sub(r"\[\s*", "（", out)
+    out = re.sub(r"\s*\]", "）", out)
+    out = re.sub(r"\(\s*", "（", out)
+    out = re.sub(r"\s*\)", "）", out)
+    out = re.sub(r"、、+", "、", out)
+    out = re.sub(r"\s{2,}", " ", out).strip(" 、；")
+    # 残余裸英文 ≥2 词 → 未转写成功，显式声明
+    if len(re.findall(r"[A-Za-z]{2,}", out)) >= 2:
+        return "登记时间窗（详见登记来源）"
+    return out
+
 
 
 def _native_endpoint_zh(value: str) -> str:
@@ -795,6 +947,110 @@ def _native_population_zh(value: str) -> str:
     return value
 
 
+_UNIT_LITERAL_ZH = {
+    "participants": "例",
+    "events": "例",
+    "number of events": "例数",
+    "number of participants": "例",
+    "score on a scale": "分",
+    "scores on a scale": "分",
+    "score on a scale (change from baseline)": "分（较基线变化）",
+    "units on a scale": "分",
+    "points on a scale": "分",
+    "percentage of participants": "受试者百分比",
+    "percentage of subjects": "受试者百分比",
+    "percentage of responders": "应答者百分比",
+    "percent change": "百分比变化",
+    "percentage reduction": "百分比降幅",
+    "percentage of activity": "活性百分比",
+    "percentage of hemolysis": "溶血百分比",
+    "percentage of pnh rbc": "PNH红细胞百分比",
+    "percentage of pnh red blood cells": "PNH红细胞百分比",
+    "percentage of type iii erythrocytes": "Ⅲ型红细胞百分比",
+    "percentage of the total cell population": "总细胞群百分比",
+    "percentage of carboxyhemoglobin": "碳氧血红蛋白百分比",
+    "percent of lln for all ch50 values": "CH50占正常下限百分比",
+    "percent lysis of sheep erythrocytes": "绵羊红细胞溶血百分比",
+    "% c3 fragment deposition on pnh rbc": "PNH红细胞C3片段沉积率",
+    "%change in hb value compare to screening": "较筛选期血红蛋白百分比变化",
+    "percent change in ldh levels": "LDH水平百分比变化",
+    "transfusion instances": "输血次数",
+    "rbc units": "红细胞单位",
+    "seconds": "秒",
+    "hours": "小时",
+    "weeks": "周",
+    "days": "天",
+    "months": "个月",
+    "years": "年",
+    "ratio": "比值",
+    "events per patient-year": "每患者年事件数",
+    "mg fibrinogen-equivalent unit (feu)/l": "mg FEU/L",
+}
+
+
+def _native_unit_zh(unit: str) -> str:
+    """登记单位中文化：SI 符号化规则（可泛化）+ 字面映射 + 显式回退。"""
+    text = " ".join(str(unit or "").split())
+    if not text:
+        return text
+    low = text.casefold()
+    m = re.fullmatch(
+        r"(?:kilo|milli|micro|nano)?\s*(?:gram|mole|equivalent)s?\s*\(([^)]+)\)\s*/?\s*"
+        r"per\s*(?:deci|milli|micro|nano)?\s*lit(?:er|re)(?:\s*\(([^)]+)\))?",
+        low,
+    )
+    if m:
+        sym = (m.group(2) or m.group(1) or "").replace(" ", "")
+        sym = re.sub(r"ug", "μg", sym)
+        sym = re.sub(r"umol", "μmol", sym)
+        return sym
+    m = re.fullmatch(
+        r"(?:kilo|milli|micro|nano)?(gram|mole)s? per (?:deci|milli|micro|nano)?lit(?:er|re)",
+        low,
+    )
+    if m:
+        stem = "g" if m.group(1).startswith("gram") else "mol"
+        prefix = "μ" if "micro" in low else "n" if "nano" in low else "k" if "kilo" in low else ""
+        return f"{prefix}{stem}/L"
+    if low in {"10^12 cells/l", "10^12 cells/l (si units)", "10^12 reticulocytes (cells)/l"}:
+        return "×10¹²/L"
+    if low in {"10^9 cells/l", "10^9 cells/liter (l)", "10^9/l"}:
+        return "×10⁹/L"
+    if low in _UNIT_LITERAL_ZH:
+        return _UNIT_LITERAL_ZH[low]
+    if text in _UNIT_LITERAL_ZH:
+        return _UNIT_LITERAL_ZH[text]
+    # 回退：残余多词英文 → 显式声明；短符号（g/L、U/L、μmol/L 等）保留
+    if len(re.findall(r"[A-Za-z]{3,}", text)) >= 2:
+        return "登记报告单位（详见登记来源）"
+    return text
+
+
+def _disambiguate_endpoint_labels(rows: list[dict[str, Any]]) -> None:
+    """同试验内不同登记测量被收敛为同一中文终点标签时，以序号显式区分。
+
+    独立复核：同名标签不同数值无法归属到登记终点 → 标签必须一一对应测量定义。
+    """
+    by_trial_label: dict[tuple[str, str], dict[str, int]] = {}
+    for row in rows:
+        key = (str(row.get("trial_id")), str(row.get("endpoint")))
+        src = str(row.get("endpoint_source") or "")
+        by_trial_label.setdefault(key, {}).setdefault(src, 0)
+    for sources in by_trial_label.values():
+        if len(sources) >= 2:
+            ordered = sorted(sources)
+            for idx, src in enumerate(ordered, start=1):
+                sources[src] = idx
+    for row in rows:
+        key = (str(row.get("trial_id")), str(row.get("endpoint")))
+        sources = by_trial_label.get(key)
+        if sources and len(sources) >= 2:
+            src = str(row.get("endpoint_source") or "")
+            n = sources.get(src)
+            if n:
+                row["endpoint"] = f"{row['endpoint']}（登记终点定义{n}）"
+
+
 def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...]:
     """仅转换面向用户的疗效文字；保留原始数值及证据数据。"""
     rows: list[dict[str, Any]] = []
@@ -853,16 +1109,11 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
         row["arm_detail"] = _native_arm_detail_zh(row.get("arm_detail"))
 
         row["population"] = _native_population_zh(str(row["population"]))
-        unit = str(row["unit"])
-        row["unit"] = {
-            "weeks": "周",
-            "days": "天",
-            "score on a scale": "分",
-            "units on a scale": "分",
-            "points on a scale": "分",
-            "events per patient-year": "每患者年事件数",
-        }.get(unit.casefold(), unit)
+        row["unit"] = _native_unit_zh(str(row["unit"]))
+        # 登记结果测量原文（独立复核：门户必须保留可回溯的终点原文）
+        row["endpoint_source"] = str(item.endpoint)
         rows.append(row)
+    _disambiguate_endpoint_labels(rows)
     return tuple(rows)
 
 
