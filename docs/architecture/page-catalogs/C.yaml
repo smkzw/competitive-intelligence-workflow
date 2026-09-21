@@ -50,7 +50,7 @@ pages:
     route: /c/population-disease-definition
     title: 人群与疾病定义
     navigation_group: 人群与标准
-    responsibility: "比较目标人群、疾病诊断、病程、严重度、既往与背景治疗、年龄和重要合并症规则。"
+    responsibility: "比较各试验登记的目标人群与最低年龄要求；完整人群定义原文逐条见入选与排除标准页。"
     visuals: [人群范围图, 定义差异矩阵, 小多图]
     complete_table: true
     filter_profiles: [c-population]
