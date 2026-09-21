@@ -306,6 +306,40 @@ def main() -> None:
             time_frame, seq="", endpoint_key="primary", stage=stage,
             timepoint=time_frame, source_name="registry.outcomes.primary",
         ))
+        # 独立复核 C r19（veto 第7项）：次要终点定义与时间点全量入谱，
+        # 此前只记录主终点导致页面承诺与实际不符
+        secondary_outcomes = outcomes.get("secondaryOutcomes") or []
+        for s_index, s_item in enumerate(secondary_outcomes):
+            s_measure = (s_item.get("measure") or "").strip()
+            if not s_measure:
+                continue
+            s_frame = (s_item.get("timeFrame") or "").strip()
+            observations.append(_row(
+                trial_id, product_id, nct, page, "endpoint", "secondary_endpoint_definition",
+                s_measure, seq=f"sec{s_index}", endpoint_key="secondary", stage=stage,
+                scale=_endpoint_form(s_measure), timepoint=s_frame,
+                source_name="registry.outcomes.secondary",
+            ))
+            if s_frame:
+                observations.append(_row(
+                    trial_id, product_id, nct, page, "timepoint", "secondary_endpoint_timepoint",
+                    s_frame, seq=f"sec{s_index}", endpoint_key="secondary", stage=stage,
+                    timepoint=s_frame, source_name="registry.outcomes.secondary",
+                ))
+        # 独立复核 C r19（veto 第8项）：统计设计维度显式声明——
+        # 登记未公开的维度以 not_publicly_disclosed 状态明示，不得沉默缺行
+        for stat_field, stat_label in (
+            ("analysis_sets", "分析集"),
+            ("statistical_comparisons", "主要比较与统计模型"),
+            ("multiplicity_adjustment", "多重性校正"),
+            ("missing_data_handling", "缺失数据处理"),
+        ):
+            observations.append(_row(
+                trial_id, product_id, nct, page, "statistics", stat_field,
+                f"登记未公开{stat_label}信息", seq="", stage=stage,
+                source_name=f"registry.statistics.{stat_field}",
+                disclosure="not_publicly_disclosed",
+            ))
         # 计划或实际样本量
         count = enrollment.get("count")
         if not isinstance(count, int) or count < 0:

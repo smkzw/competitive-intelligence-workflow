@@ -820,7 +820,7 @@
       "treatment-structure-matrix": "分组、干预与给药结构",
       "design-choice-matrix": "关键设计选择",
       "evidence-coverage": "设计信息公开情况",
-      "criteria-comparison": "人群标准结构比较",
+      "criteria-comparison": "人群标准结构比较（柱高为登记原文已记录的结构分组数，非标准条目总数）",
       "core-design-matrix": "核心设计事实比较",
       "trial-design-summary": "本试验全部设计字段",
       "design-fact-matrix": "设计事实比较"

@@ -848,7 +848,11 @@ def project_c_report_snapshot(
         gate_result_key=outcome.gate_result_key,
         package_digest=package.research_content_digest,
         portal_data=package.report_data.model_copy(
-            update={"report_snapshot_id": locked.snapshot_id}
+            update={
+                "report_snapshot_id": locked.snapshot_id,
+                # 独立复核 C r19：包内设计路径综合随门户数据下发
+                "design_paths": package.design_paths.model_dump(mode="json"),
+            }
         ),
     )
 

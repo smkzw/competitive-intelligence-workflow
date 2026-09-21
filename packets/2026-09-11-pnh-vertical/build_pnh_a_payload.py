@@ -582,6 +582,16 @@ def main() -> None:
     for pid in products_with_results:
         if pid in product_index:
             product_index[pid]["result_status"] = "已有部分公开结果"
+    # 独立复核 C r19：靶点/机制/给药途径从登记干预描述提取。
+    # 该函数此前已定义但从未接线，导致全部产品显示"未公开披露"。
+    for pid_e, product_e in product_index.items():
+        target_e, mech_e, route_e = _extract_intervention_info(pid_e)
+        if target_e and product_e["target"] == NA:
+            product_e["target"] = target_e
+        if mech_e and product_e["mechanism"] == NA:
+            product_e["mechanism"] = mech_e
+        if route_e and product_e["route"] == NA:
+            product_e["route"] = route_e
 
     payload = {
         "schema_version": "1.0",

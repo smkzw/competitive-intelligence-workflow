@@ -13,6 +13,8 @@ import json
 import re
 import shutil
 from collections.abc import Mapping, Sequence
+
+from .report_a import _native_timepoint_zh
 from datetime import datetime
 from html import unescape
 from pathlib import Path
@@ -64,6 +66,12 @@ _FIELD_LABELS_ZH: dict[str, str] = {
     "dosing_regimen": "给药方案",
     "primary_endpoint_definition": "主要终点定义",
     "primary_endpoint_timepoint": "主要终点时间点",
+    "secondary_endpoint_definition": "次要终点定义",
+    "secondary_endpoint_timepoint": "次要终点时间点",
+    "analysis_sets": "分析集",
+    "statistical_comparisons": "主要比较与统计模型",
+    "multiplicity_adjustment": "多重性校正",
+    "missing_data_handling": "缺失数据处理",
     "visit_schedule": "访视与随访",
     "planned_or_actual_sample_size": "计划或实际样本量",
     "analysis_population": "分析人群",
@@ -91,11 +99,23 @@ _PAGE_FIELDS: dict[str, frozenset[str] | None] = {
         }
     ),
     "endpoint-timepoint-matrix": frozenset(
-        {"primary_endpoint_definition", "primary_endpoint_timepoint"}
+        {
+            "primary_endpoint_definition",
+            "primary_endpoint_timepoint",
+            "secondary_endpoint_definition",
+            "secondary_endpoint_timepoint",
+        }
     ),
     "visit-duration-followup": frozenset({"visit_schedule", "dosing_regimen"}),
     "sample-analysis-statistics": frozenset(
-        {"planned_or_actual_sample_size", "analysis_population"}
+        {
+            "planned_or_actual_sample_size",
+            "analysis_population",
+            "analysis_sets",
+            "statistical_comparisons",
+            "multiplicity_adjustment",
+            "missing_data_handling",
+        }
     ),
     "design-patterns": frozenset(
         {
@@ -175,6 +195,9 @@ class ReportCPortalData(BaseModel):
     products: tuple[ProductRow, ...] = Field(min_length=1)
     trials: tuple[TrialRow, ...] = Field(min_length=1)
     observations: tuple[DesignObservation, ...] = Field(min_length=1)
+    # 独立复核 C r19：包内设计路径综合（patterns + candidate_paths）随门户数据下发，
+    # design-patterns 页不再空转为核心事实表
+    design_paths: Mapping[str, Any] | None = None
 
     @field_validator("report_snapshot_id")
     @classmethod
@@ -571,6 +594,17 @@ def _cohort_label_zh(cohort_id: str | None) -> str:
     return "已定义分析队列"
 
 
+def _observation_cohort_zh(observation: DesignObservation) -> str:
+    """队列名优先还原登记标签（观察原文恰为 Cohort N 时 → 第N组）。
+
+    仅在原文整体就是队列标签时替换，避免句中偶含 cohort 字样被误判。
+    """
+    m = re.fullmatch(r"[Cc]ohort\s+(\d+)", " ".join(_text(observation.source_text).split()))
+    if m:
+        return f"第{m.group(1)}组"
+    return _cohort_label_zh(observation.cohort_id)
+
+
 def _page_observations(
     data: ReportCPortalData,
     page_id: str,
@@ -605,31 +639,72 @@ def _operator_zh(value: str | None) -> str:
     }.get(_text(value), _text(value))
 
 
+_DOSE_PATTERN = re.compile(
+    r"\b\d+(?:\.\d+)?\s*(?:mg|milligrams?)\s*(?:/\s*(?:kg|kilogram)\b|/\s*m2|m²)?",
+    re.I,
+)
+
+
+def _segment_doses(segment: str) -> list[str]:
+    """剂量抽取：保留 /kg 体重口径（独立复核 C r19：0.57mg/kg 不得丢失分母）。"""
+    doses: list[str] = []
+    for match in _DOSE_PATTERN.findall(segment):
+        dose = re.sub(r"\s*milligrams?", " mg", match, flags=re.I)
+        dose = re.sub(r"\s+", " ", dose).strip()
+        if dose not in doses:
+            doses.append(dose)
+    return doses
+
+
+def _segment_frequency(segment: str) -> str:
+    if re.search(r"\bq2w\b|every two weeks|every 2 weeks", segment, re.I):
+        return "每2周1次"
+    if re.search(r"\bq4w\b|every four weeks|every 4 weeks", segment, re.I):
+        return "每4周1次"
+    if re.search(r"\bqw\b|once weekly|every week", segment, re.I):
+        return "每周1次"
+    if re.search(r"\bbid\b|twice daily", segment, re.I):
+        return "每日2次"
+    if re.search(r"\btid\b|three times (?:a )?day", segment, re.I):
+        return "每日3次"
+    if re.search(r"once a day|\bqd\b|daily", segment, re.I):
+        return "每日1次"
+    return ""
+
+
 def _compact_regimen_zh(data: ReportCPortalData, observation: DesignObservation) -> str:
+    """给药方案压缩：负荷期/维持期分开标注（独立复核 C r19）。"""
     source = _text(observation.source_text)
     product = _product_name(data, observation.product_id).split("（", 1)[0]
-    doses = []
-    for match in re.findall(r"\b\d+(?:\.\d+)?\s*(?:mg|milligram)", source, re.I):
-        value = re.sub(r"\s*milligram", " mg", match, flags=re.I)
-        value = re.sub(r"\s+", " ", value).strip()
-        if value not in doses:
-            doses.append(value)
-    frequency = ""
-    if re.search(r"\bq2w\b|every two weeks|every 2 weeks", source, re.I):
-        frequency = "每2周1次"
-    elif re.search(r"\bqw\b|once weekly|every week", source, re.I):
-        frequency = "每周1次"
+    timepoint = _text(observation.assessment_timepoint)
+
+    # 按给药阶段切分：负荷/初始 vs 之后/维持
+    segments = [s for s in re.split(r"\bthen\b|\bfollowed by\b|;|\.\s+", source, flags=re.I) if s.strip()]
+    load_seg = next((s for s in segments if re.search(r"loading|initially|first", s, re.I)), None)
+    later_segs = [s for s in segments if s is not load_seg and _segment_doses(s)]
+
     parts = [product]
-    if doses:
-        parts.append("剂量" + "、".join(doses))
-    if frequency:
-        parts.append(frequency)
-    if "loading dose" in source.casefold():
-        parts.append("含负荷剂量")
+    if load_seg and later_segs:
+        load_doses = _segment_doses(load_seg)
+        load_freq = _segment_frequency(load_seg) or _segment_frequency(source)
+        parts.append("负荷期" + ("、".join(load_doses) if load_doses else "剂量见登记原文")
+                     + ((f"（{load_freq}）") if load_freq else ""))
+        maint = later_segs[0]
+        maint_doses = _segment_doses(maint)
+        maint_freq = _segment_frequency(maint) or _segment_frequency(source)
+        parts.append("维持期" + ("、".join(maint_doses) if maint_doses else "剂量见登记原文")
+                     + ((f"（{maint_freq}）") if maint_freq else ""))
+    else:
+        doses = _segment_doses(source)
+        frequency = _segment_frequency(source)
+        if doses:
+            parts.append("剂量" + "、".join(doses))
+        if frequency:
+            parts.append(frequency)
     timepoint = _text(observation.assessment_timepoint)
     if timepoint:
         parts.append(timepoint)
-    return "；".join(parts)
+    return "；".join(dict.fromkeys(p for p in parts if p))
 
 
 def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> str:
@@ -903,7 +978,7 @@ def _chart_row(
         "group_id": observation.group_id,
         "cohort_id": observation.cohort_id,
         "group_zh": _group_label_zh(observation.group_id),
-        "cohort_zh": _cohort_label_zh(observation.cohort_id),
+        "cohort_zh": _observation_cohort_zh(observation),
         "product_zh": _product_name(data, observation.product_id),
         "trial_zh": _trial_name(data, observation.trial_id),
         "trial_display_id": _trial_display(data, observation.trial_id),
@@ -912,8 +987,16 @@ def _chart_row(
         "element": observation.field,
         "element_zh": _field_label(observation.field),
         "field_family_zh": _family_label(observation.field_family),
-        "arm": "组别未细分",
-        "group": "组别未细分",
+        "arm": (
+            _observation_cohort_zh(observation)
+            if re.search(r"\bcohort\s+\d+", _text(observation.source_text), re.I)
+            else "组别未细分"
+        ),
+        "group": (
+            _observation_cohort_zh(observation)
+            if re.search(r"\bcohort\s+\d+", _text(observation.source_text), re.I)
+            else "组别未细分"
+        ),
         "category": "设计事实",
         "time": _registry_timeframe_zh(_text(observation.assessment_timepoint))
         or _text(observation.assessment_timepoint)
@@ -1119,7 +1202,7 @@ def _evidence_view(
         locator=_safe_locator(observation),
         explanation=_evidence_field(
             "本条信息摘自临床试验登记页，"
-            f"适用于{_cohort_label_zh(observation.cohort_id)}；"
+            f"适用于{_observation_cohort_zh(observation)}；"
             "已核对来源版本和原文位置，"
             f"当前公开情况为{_state_label(observation.disclosure_state)}。"
         ),
@@ -1205,6 +1288,33 @@ def _filter_groups(
 def _candidate_design_paths(
     data: ReportCPortalData,
 ) -> tuple[dict[str, Any], ...]:
+    payload_paths = (data.design_paths or {})
+    candidates = payload_paths.get("candidate_paths") or ()
+    patterns = payload_paths.get("patterns") or ()
+    if candidates or patterns:
+        converted: list[dict[str, Any]] = []
+        for item in candidates:
+            entry = dict(item)
+            entry["trial_labels"] = [
+                f"{_trial_display(data, trial_id)}（{_trial_name(data, trial_id)}）"
+                for trial_id in entry.get("trial_ids", ())
+            ]
+            converted.append(entry)
+        for index, item in enumerate(patterns, start=1):
+            converted.append({
+                "path_id": _text(item.get("item_id"), f"pattern-{index}"),
+                "family": _text(item.get("item_id"), f"pattern-{index}"),
+                "summary_zh": _text(item.get("statement_zh"), ""),
+                "assumptions_zh": "该模式的前提是各试验共同公开的登记设计安排。",
+                "tradeoffs_zh": "与未覆盖该模式的路径相比，可比较性与证据成熟度以登记原文为准。",
+                "trial_ids": list(item.get("trial_ids", ())),
+                "observation_ids": list(item.get("observation_ids", ())),
+                "trial_labels": [
+                    f"{_trial_display(data, trial_id)}（{_trial_name(data, trial_id)}）"
+                    for trial_id in item.get("trial_ids", ())
+                ],
+            })
+        return tuple(converted)
     buckets: dict[str, dict[str, Any]] = {}
     for observation in data.observations:
         if observation.field != "primary_endpoint_definition":
