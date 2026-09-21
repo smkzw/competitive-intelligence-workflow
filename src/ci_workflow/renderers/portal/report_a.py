@@ -1329,6 +1329,18 @@ def _native_unit_zh(unit: str) -> str:
         return "U"
     if low == "ln(ratio)":
         return "ln(比值)"
+    # 符号规范化（A r34）：同一物理量的多种拼写统一
+    canonical = re.sub(r"[\s]", "", low)
+    canonical = re.sub(r"\bmicromol", "μmol", canonical)
+    canonical = canonical.replace("ug/", "μg/").replace("mcg/", "μg/")
+    canonical = canonical.replace("umol", "μmol").replace("μmol/l", "μmol/L")
+    canonical = canonical.replace("/ml", "/mL").replace("/l", "/L")
+    canonical = canonical.replace("μmoles", "μmol")
+    if canonical != low:
+        return canonical
+    canonical2 = re.sub(r"\s", "", low)
+    if canonical2 != low and canonical2:
+        return canonical2
     # 拼写式单位第二形状：前缀词直接连在 gram/mole 上、符号在括注里
     # （A r24：'micrograms per litre (ug/L)' 类 500+ 行被占位串误吞）
     m = re.fullmatch(
@@ -1468,7 +1480,7 @@ def _disambiguate_endpoint_labels(rows: list[dict[str, Any]]) -> None:
 
 _HISTORY_PHRASING: tuple[tuple[str, str], ...] = (
     (r"条因未披露样本量未入试验表", "项试验因登记未披露样本量，未纳入试验明细"),
-    (r"条无独立药物干预未产出实体（明细见派生记录）", "条记录经登记适用性筛查未纳入试验明细（纳入规则见证据与局限页）"),
+    (r"条无独立药物干预未产出实体（明细见派生记录）", "条记录经登记适用性筛查未纳入试验明细（A 门户当前不含证据与局限页，规则说明随证据包交付）"),
     (r"无独立药物干预未产出实体", "经登记适用性筛查未纳入明细"),
     (r"联合治疗关系受载荷单产品字段限制", "联合用药信息按各产品分别记录"),
     (r"监管/专利来源待接入", "监管与专利来源将在后续版本接入"),
