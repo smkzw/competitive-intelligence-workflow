@@ -2341,3 +2341,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **已验证**：声明臂影子行方案对 b_safety_minimum_record 生效——v80 B 门重评后 blocked 从 5 → 4（仅剩基线四类：age/sample_size/severity_anchor/sex）。
 - **基线影子卡在临床口径**：NCT04469465 基线事实按期间分组（tp1/tp2 变体），声明臂（Danicopan-Danicopan / Placebo-Danicopan）无事实。期间→声明臂映射不是简单去后缀（TP1 的 Danicopan (TP1) ≠ 声明臂 Danicopan-Danicopan；TP2 的 Placebo-Danicopan (TP2) 是换药组）。**需要临床语义决策**：声明臂的基线用哪一期代表（TP1 随机化时点 vs TP2 后），或由门 spec 把基线单元的适用对象改为"有基线事实的组"。不宜自动化臆断。
 - 建议下轮：先做基线影子的口径决策（TP1 为基线代表期最合理——随机化时点的人群特征），实施后 v80' 全链 → 三路重派。
+
+## 追记 19：B 门转绿，v80 三路复核派发
+- **B 门根因修复确认**：A 构建器测量级组标题优先（去掉 setdefault）后，A 载荷疗效行自然产出声明臂（Danicopan-Danicopan / Placebo-Danicopan）+ 期间组（TP1/TP2）双套归属，B 门四个基线单元随之转绿——无需额外影子机制（此前阻塞是 A 载荷臂名缺期间信息的旧状态 + 事实按臂聚合后声明臂无基线行所致）。
+- **B 安全影子行**保留（-declared 行）——供门"每组最低记录"单元与展示双重用途，实测 2 条。
+- **v80 全链建成提交**（3895 行 0 碰撞、TP1/TP2 归属正确、B 安全行带期间标题+风险人数分母、C 12 页含局限页）。三路复核 r28/r42/r26 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环。
