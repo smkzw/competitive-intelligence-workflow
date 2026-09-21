@@ -357,7 +357,7 @@ def main() -> None:
             # 独立复核修复：OG id 标题按 measure 级 groups 精确映射
             _om = results.get("outcomeMeasuresModule") or {}
             group_titles = {
-                str(g.get("id")): str(g.get("title") or "组别未登记")[:40]
+                str(g.get("id")): str(g.get("title") or "组别未登记")
                 for g in (_om.get("groups") or [])
             }
             # 多期间试验：OG 标题可能是不透明代码，用 flow 标题按序补全
@@ -368,17 +368,17 @@ def main() -> None:
                 for idx, fg in enumerate(flow_groups):
                     ft = str(fg.get("title") or "").strip()
                     if ft:
-                        group_titles[str(fg.get("id") or f"OG{idx:04d}")] = ft[:40]
+                        group_titles[str(fg.get("id") or f"OG{idx:04d}")] = ft
                     elif idx < len(protocol_arms):
                         at = str((protocol_arms[idx] or {}).get("label") or "").strip()
                         if at:
-                            group_titles[str(fg.get("id") or f"OG{idx:04d}")] = at[:40]
+                            group_titles[str(fg.get("id") or f"OG{idx:04d}")] = at
             # 补充：AE eventGroups 标题（TP1/TP2/LTE 多期间区分）
             for eg in (results.get("adverseEventsModule") or {}).get("eventGroups") or []:
                 eg_id = str(eg.get("id") or "")
                 eg_title = str(eg.get("title") or "").strip()
                 if eg_id and eg_title:
-                    group_titles.setdefault(eg_id, eg_title[:40])
+                    group_titles.setdefault(eg_id, eg_title)
             # 独立复核修复（arm 标签）：结果段组 id 为不透明代码（OG001 等）时，
             # 依次用 participantFlow 组、协议 armGroups 的描述性标题按顺序补全。
             def _opaque_title(value: str) -> bool:
@@ -407,7 +407,7 @@ def main() -> None:
             if replacement:
                 for gid, title in zip(om_group_ids, replacement):
                     if title:
-                        group_titles[gid] = title[:40]
+                        group_titles[gid] = title
             for measure in ((results.get("outcomeMeasuresModule") or {})
                             .get("outcomeMeasures") or []):
                 # 独立测试第二轮（UC）：不得截断登记终点标题——截断会
