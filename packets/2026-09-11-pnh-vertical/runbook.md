@@ -2391,3 +2391,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ④人群页 series 名"公开条目"与轴名矛盾 + 页面缺疾病定义事实（builder 只录 target_population+入排）
 - ⑤**全部 246 行抽屉"原文定位"恒为"章节：登记结果"+CT.gov 首页链接**——需按 trial_id 深链 + field_path（证据包已有 studies[]/NCT 级定位，门户未呈现）
 - 以上与 B r43 五项、A r29 四项（组别构成式转写/分母/历史理由）合并为 v82 大队列
+
+## 追记 26：v82 全链建成提交，三路复核派发（commit 3b10a68 系）
+- **v82 队列实施**：⑤B 筛选 time_window/timepoint/time 维度接确定性时间转写；③历史措辞改中性可核实表述（"经登记适用性筛查未纳入试验明细（纳入规则见证据与局限页）"）；
+- **分母抽取遇合同约束**：FreshA 合同要求分子/分母成对（"疗效分子与分母必须同时公开或同时缺失"）——仅分母不可入载荷。已回退 denoms 字段注入，保留引导语如实声明方案（登记 denoms 结构已探明：measure.denoms[].counts[]{groupId,value}，后续若做派生分子需谨慎评估）。
+- **v82 全链建成提交**（3895 行 0 碰撞、TP1/TP2 正确、B 安全行期间标题+分母、C 12 页）。三路复核 r30/r44/r28 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环。
