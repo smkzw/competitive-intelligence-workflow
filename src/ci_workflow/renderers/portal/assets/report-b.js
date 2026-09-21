@@ -398,7 +398,10 @@
     if (key === "clinical_concept") {
       var ccLabel = row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
       // 独立复核 B r40：行级携带终点定义序号，展开表内可归属到具体定义
-      return row._endpoint_ordinal ? ccLabel + "（" + row._endpoint_ordinal + "）" : ccLabel;
+      var withOrdinal = row._endpoint_ordinal ? ccLabel + "（" + row._endpoint_ordinal + "）" : ccLabel;
+      // 独立复核 B r49：合成状态行（无登记数值的覆盖占位）显式标注
+      if (row._synthetic) return "合成状态行（无登记数值）";
+      return withOrdinal;
     }
     if (key === "original_endpoint") {
       return row._b_original_event || row.original_endpoint || row.event || "原始终点未列示";

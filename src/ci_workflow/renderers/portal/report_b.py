@@ -1397,6 +1397,8 @@ def _text(value: Any, default: str = "") -> str:
 
 
 _B_VARIABLE_TOKENS: tuple[tuple[str, str], ...] = (
+    (r"free[_ ]?hemoglobin", "游离血红蛋白"),
+    (r"\bdiarrhoea\b", "腹泻"),
     (r"\bcohort\s*(\d+)\b", r"第\1组"),
     (r"\babsolute\b", "绝对值"),
     (r"\bgroup\s*(\d+)\b", r"第\1组"),
