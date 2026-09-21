@@ -2496,3 +2496,11 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **v88 队列实施**：①C stat 行带所属结局测量标题前缀（【标题】描述 格式，9 行可归属）②A 组别构成式转写落地（研发代号→中文名：LNP023→伊普可泮、ALXN2050→Danicopan 等，剂量/频次词转写保留，残余英文保留原臂名——区分度优先）③B 幻影时点守卫（maximum exposure → 最长暴露期）持续生效
 - **v88 全链建成提交**（A 3895 行 0 碰撞、B 357 行幻影消除、C 259 观察）。三路复核 r36/r50/r34 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 44：A r36 五项修复（commit 7f7854b）
+- ①人数列：分母独在时显示"分母 N 人"（不再一律 —）——模板已改
+- ②安全行观察窗：逐试验取 AE 模块 timeFrame 并走 _native_timepoint_zh 转写（不再统一"全研究期（登记）"）
+- ③单位规范化回归（空格剥离）已修（上轮）
+- ④matrix 空态+SAE 切换仍 0 气泡：term_key 传递已修，v89 渲染后 Playwright 实测气泡数
+- ⑤时间点 28 行叙事窗：保留原文（可核对优先）为既定口径
+- v89 队列：A r36 剩余（矩阵运行时核查）+ B r48 五项（分析形式/分析集列头、lteperiod 标签、基线 category_level 列、分母成对约束决策、人群 token）+ C r32 剩余
