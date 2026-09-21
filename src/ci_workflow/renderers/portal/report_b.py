@@ -3232,8 +3232,18 @@ def _dress_membership_groups(
                 for row, _source in bucket
             ))
             title += " · 实际观察时间：" + " / ".join(actual_times)
-        if any(semantic_value_is_unknown(value) for value in key):
+        # 独立复核 B r39（issue-2）：合并标记按"事实是否发生"判定——
+        # 仅当桶内确实合并了多个登记臂（或分组键含未知值且臂缺失）时标注；
+        # 此前按分组键含未知值判定，834 张组别完整的图被错误标注
+        bucket_arms = {
+            _text(r.get("arm"))
+            for r, _s in bucket
+            if _text(r.get("arm"))
+        }
+        if any(semantic_value_is_unknown(value) for value in key) and not bucket_arms:
             title += " · 该组部分观察的登记分组信息不全，已按试验合并展示"
+        elif len(bucket_arms) > 1:
+            title += " · 多登记臂已合并展示"
         group = _group(
             title,
             bucket,
@@ -3772,19 +3782,20 @@ def _filter_groups(
         values = collected.get(dimension) or []
         if not values:
             continue
-        if page_id in {"baseline-overview", "baseline-severity", "baseline-demographics",
-                       "baseline-disease-context"}:
-            label = "基线指标"
-        elif page_id in _DISPOSITION_PAGE_IDS:
-            label = "完成情况指标"
-        elif page_id == "safety":
-            label = "安全性事件"
-        elif page_id in {"efficacy", "longitudinal-results", "subgroups-supporting-evidence"}:
-            label = "疗效指标"
-        elif page_id == "efficacy-safety-matrix":
-            label = "比较指标"
-        else:
-            label = "观察指标"
+        # 独立复核 B r39（issue-4）：分组标题按维度命名，
+        # 不再整页复用主题词（此前 13 个分组标题全部同名）
+        dimension_labels = {
+            "product": "产品", "target": "靶点/机制", "trial": "试验",
+            "group": "组别", "arm_role": "组别角色", "element": "设计要素",
+            "clinical_concept": "临床概念", "time": "时间点", "time_window": "时间窗",
+            "time_window_band": "时间窗分组", "population": "人群",
+            "population_context": "分析人群", "field_family": "字段族",
+            "reason": "原因", "denominator_role": "分母角色",
+            "measure_object": "计量对象", "statistic_form": "统计形式",
+            "statistical_form_family": "统计口径", "cohort": "队列",
+            "period": "周期", "disclosure_state": "披露状态",
+        }
+        label = dimension_labels.get(dimension, dimension)
         options = []
         label_fields = {
             "clinical_concept": "clinical_concept_label_zh",
@@ -3818,6 +3829,13 @@ def _filter_groups(
                 option_label = value
             # 中文原生兜底：canonical 令牌/合成键不得直接作为按钮文本
             option_label = _filter_value_label_zh(dimension, value, option_label)
+            # 独立复核 B r39（issue-4）：残余英文/内部串经漏斗转写；
+            # 披露状态值不得混入指标/概念等分组
+            if dimension not in {"product", "trial", "disclosure_state"}:
+                if value in {"未公开披露", "未公开", "not_reported"}:
+                    continue
+                zh = _b_native_label(str(option_label))
+                option_label = zh if zh else option_label
             options.append({"value": value, "label": option_label})
         groups.append({"dimension": dimension, "label": label, "options": tuple(options)})
     return tuple(_disambiguate_group_titles(groups))

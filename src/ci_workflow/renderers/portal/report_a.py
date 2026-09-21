@@ -551,6 +551,9 @@ def _navigation() -> tuple[dict[str, str], ...]:
 _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...] = (
     # 结构化长短语先行：整句式登记时间窗
     (r"final study visit", "末次研究访视"),
+    (r"primary treatment period", "主要治疗期"),
+    (r"\bprimary\b", "主要"),
+    (r"\blte\b", "长期扩展期"),
     (r"within (\d+) weeks? prior to first dose and during (\d+)[- ]week treatment period",
      r"首次给药前\1周内及\2周治疗期内"),
     (r"within (\d+) weeks? prior to first dose", r"首次给药前\1周内"),
