@@ -1994,3 +1994,25 @@ JS 端（report-c.js/data 渲染）也加格式化。
 3. 收 B/C visual verdicts（B 可能需用 cursor 重派）
 4. 全 accepted → resume + accept-visual ×3 → PNH 竖向收口
 5. AD B/C → 横向 → 三宿主/RC
+
+### 最终记档（本轮结束）
+
+#### 已确认的根因
+1. B r42 时间浮点直出：report-b.js "评价时间"列读取 row.time_window（未格式化）
+   而非 row.actual_timepoint（已格式化）。修复需定位 time_window 的 JS 渲染路径
+   并套用同一格式化逻辑。
+2. C 交互 style 清空：目标行 style 被整体清空而非设为 display:none。
+   removeAttribute("style") 搜索无果（可能通过 cssText 或 style.display="" 写入）。
+   需 DevTools 断点级调试定位写入方。
+3. B r44 vetos 2 项：单位列混排（millimole 已修但可能仍有其他原文变体）+
+   科学语义问题。
+
+#### v66 = 最新全链候选
+全部修复承载（366 疗效行 + 32 安全行、A/B gates 过、706 测试绿）。
+
+#### 下一会话工作清单
+1. 定位 report-b.js 中 time_window 字段的实际渲染路径 → 套用天数格式化
+2. DevTools 断点追踪 C overview style 清空来源 → 修复
+3. deepseek A 5 项 + C 2 项 + B r44 2 项分批修复
+4. v67 全链 → 全线复核 + 视觉 → accept-visual ×3 → PNH 收口
+5. 重派 UC/IgAN → AD B/C → 横向 6 适应症 → 三宿主/安装包/RC
