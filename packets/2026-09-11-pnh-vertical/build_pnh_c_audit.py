@@ -380,8 +380,11 @@ def main() -> None:
                 ))
         # 独立复核 C r19/C r20：统计设计维度显式声明——登记未公开才声明；
         # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
+        # 独立复核 C r36（issue-1/5）：已抽取分析集内容的试验，
+        # 不再并列输出"登记未公开分析集信息"的自相矛盾行
         stat_appended = {o["field"] for o in observations
-                         if o["trial_id"] == trial_id and o["field"].startswith("statistical_")}
+                         if o["trial_id"] == trial_id
+                         and (o["field"].startswith("statistical_") or o["field"] == "analysis_sets")}
         # 独立复核 C r30：登记各结局 description / populationDescription
         # 已载明分析集与统计方法的，逐条入谱（不再一律错标未公开）
         _stat_notes: list[str] = []
@@ -394,7 +397,8 @@ def main() -> None:
                 r"analysis\s+set|population[s]?\s+analys|statistic|MMRM|mixed model|imputation",
                 p_desc, re.I,
             ):
-                _stat_notes.append(f"【{_m_title}】{p_desc}")
+                # 独立复核 C r35：测量标题为空时不输出空【】前缀
+                _stat_notes.append(f"【{_m_title}】{p_desc}" if _m_title else p_desc)
         _pop_descs = [
             (om_i.get("populationDescription") or "").strip()
             for om_i in (outcomes.get("primaryOutcomes") or [])

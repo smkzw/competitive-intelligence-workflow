@@ -696,6 +696,8 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
         lambda m: "第" + re.sub(r",\s*|\s*and\s*", "、", m.group(1), flags=re.I) + "个月",
     ),
     (r"\bmonth\s*(\d+)", r"第\1个月"),
+    (r"\bweeks?\s+(\d+)(?:\s*(?:,|and)\s*(\d+))+\b",
+     lambda m: "、" .join(f"第{x}周" for x in re.findall(r"\d+", m.group(0)))),
     (r"\bweeks?\s*(\d+)e?\b", r"第\1周"),
     (r"\bdays?\s*(\d+)e?\b", r"第\1天"),
     (r"\bbaseline\b", "基线"),
@@ -794,6 +796,8 @@ def _native_timepoint_zh(value: str) -> str:
     out = re.sub(r"\s*\)", "）", out)
     out = re.sub(r"、、+", "、", out)
     out = re.sub(r"至至+", "至", out)
+    out = re.sub(r"([\u4e00-\u9fff]{2,}) \1", r"\1", out)
+    out = re.sub(r"研究 研究结束", "研究结束", out)
     out = re.sub(r"\s{2,}", " ", out).strip(" 、；")
     # 残余裸英文 ≥2 词 → 未转写成功，显式声明
     if len(re.findall(r"[A-Za-z]{2,}", out)) >= 2:
