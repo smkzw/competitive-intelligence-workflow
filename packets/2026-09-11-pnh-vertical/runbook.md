@@ -2317,3 +2317,10 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
   5. B 筛选时间窗转写 + 人群标签形态修复
   6. v80 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环
 - 收敛轨迹：C 路 9→4→3→3→3→3 项（类型在减少、修复在累积）；A 路 5→3→2→4（单位回归已修）；B 路因臂身份管线为主矛盾维持在 3-4 项
+
+## 追记 15：v80 构建受阻——B 门未启动（下轮首查项）
+- **现象**：v80 全链 create→builders→audit→submit 全部成功；但 project run 后 A/C 完整（含 review_request），**B 覆盖状态 not_started、无 review_request**。多次 resume 不推进。事件流：A 完成节点 4/C 4/**B 仅 1**（ingest）。project verify 显示合同 OK，无 blocker 落盘。
+- **触发嫌疑**：本轮 B 载荷内容变更（arm_label 恢复 AE 原标题含 TP1/TP2/LTE + 测量级组标题优先）→ B 门（evaluate_fresh_b_gate）或其输入节点在静默失败。
+- **下轮首查**：①用 v80 事件中的 evidence_snapshot_id + lineage 手工调 evaluate_fresh_b_gate 看真实失败原因（CLI 吞掉了异常）②对照 v79（B 门通过）与 v80 的 B 包差异（arm_label 值 + treatment_sample_size + 字节 8965229）③排除是 B 门对 arm_label 长度/字符的断言。
+- **其余均已就绪**：v80 A 门户 3895 行 0 碰撞、TP1/TP2 臂身份正确、C 12 页；三份绑定 prompt 已生成（r28/r42/r26）待 B 门修复后直接派发。
+- **重要：后续所有 builder/submit/run 命令带 PYTHONHASHSEED=0**。
