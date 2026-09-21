@@ -2504,3 +2504,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ④matrix 空态+SAE 切换仍 0 气泡：term_key 传递已修，v89 渲染后 Playwright 实测气泡数
 - ⑤时间点 28 行叙事窗：保留原文（可核对优先）为既定口径
 - v89 队列：A r36 剩余（矩阵运行时核查）+ B r48 五项（分析形式/分析集列头、lteperiod 标签、基线 category_level 列、分母成对约束决策、人群 token）+ C r32 剩余
+
+## 追记 45：v88 三路收包（A r36 veto5 已修3项 / B r50 veto3 / C r34 veto6）——v89 队列定稿
+- **B r50 三项**：①Total 合计列误归 2 期治疗队列（86人）——Total 组应标"总体"不入治疗队列分母 ②基线样本量图三柱同名"组别未列示"（57/86/57——Total 与期间组混轴）③筛选"人群"维度 12 个标签缺前缀+多余右括号（"呼吸困难 （第28天））"）——括号配平清理
+- **C r34 六项**：①分析集 6 试验仍"登记未公开"（bc populationDescription 抽取路径在本轮 study 变量修正后生效，需 v89 渲染验证）②主终点括注未走 _tp_disp（已修）③内容列 27 行英文残留 ④量表列 term 错配 ⑤时间点枚举保单位（已修）⑥单位丢失——v89 渲染验证
+- **v89 队列（定稿）**：①B Total 组标"总体"不入治疗队列 ②B 人群标签括号配平 ③C bc_pop 路径 v89 渲染验证 ④C 主终点括注 _tp_disp（已修，验证）⑤矩阵运行时核查（Playwright 气泡数）⑥剩余 token 收尾
+- v89 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环
