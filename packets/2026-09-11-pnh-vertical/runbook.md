@@ -2413,3 +2413,11 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - 构建 bug：build_pnh_audit.py 动态计数误用 report_payload 变量名（实际为 payload）——已修
 - 三路复核 r31/r45/r29 stagger 派发，静默运行
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 30：B r45 收包（veto 5）——并入 v84 队列
+- ①展开表 36 组同名不同值（列头仍缺"分析形式/分析集"——v83 队列项未实施，本轮补）
+- ②基线组别未列示 27 行（ravulizumab 4/2/5/1/1/6/5/2 等）——series 标签用 semantics 的 arm_role_label_zh（unknown→未列示），未走 _arm_label 的 group 解码；修法：_chart_series_label 在 role label 为"组别未列示"时回退 _arm_label(value)（第1组（初治）等）
+- ③"第213.4周"幻影仍在：数值 actual_timepoint 上游剥离了 EOT/maximum exposure 语境——修法需在 B 构建器抽取 actual_timepoint 时保留来源语境标记（time_window_zh 已有全文），或 _time_band 对纯数值周加来源缺失标注
+- ④抽屉"分子/分母 来源未列示"（合同成对约束下 366 行均 null——与 A r27③ 同源，待合同级决策：派生分子标注 or 接受缺失声明）
+- ⑤"未分类登记观察（登记终点定义1/2/3）"208 行共用同一未分类标签——C 端 generic 标签行也需要行级 identity（同 B 方案）
+- v84 队列 = ①②③④⑤ + A r29 组别构成式转写 + C r28 摘要修正 → v84 全链 → 三路重派
