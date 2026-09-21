@@ -1329,18 +1329,19 @@ def _native_unit_zh(unit: str) -> str:
         return "U"
     if low == "ln(ratio)":
         return "ln(比值)"
-    # 符号规范化（A r34）：同一物理量的多种拼写统一
+    # 符号规范化（A r34 修订）：仅对"符号形"单位（含 / 且 ≤14 字符）做
+    # 拼写统一；不得对多词英文单位做整串空格剥离（A r35 回归：单位被
+    # 压成 percentageofresponders 之类的无空格串）
     canonical = re.sub(r"[\s]", "", low)
-    canonical = re.sub(r"\bmicromol", "μmol", canonical)
-    canonical = canonical.replace("ug/", "μg/").replace("mcg/", "μg/")
-    canonical = canonical.replace("umol", "μmol").replace("μmol/l", "μmol/L")
-    canonical = canonical.replace("/ml", "/mL").replace("/l", "/L")
-    canonical = canonical.replace("μmoles", "μmol")
-    if canonical != low:
-        return canonical
-    canonical2 = re.sub(r"\s", "", low)
-    if canonical2 != low and canonical2:
-        return canonical2
+    if "/" in canonical and len(canonical) <= 16:
+        c2 = canonical
+        c2 = re.sub(r"\bmicromol", "μmol", c2)
+        c2 = c2.replace("ug/", "μg/").replace("mcg/", "μg/")
+        c2 = c2.replace("umol", "μmol").replace("μmol/l", "μmol/L")
+        c2 = c2.replace("/ml", "/mL").replace("/l", "/L")
+        c2 = c2.replace("μmoles", "μmol")
+        if c2 != canonical:
+            return c2
     # 拼写式单位第二形状：前缀词直接连在 gram/mole 上、符号在括注里
     # （A r24：'micrograms per litre (ug/L)' 类 500+ 行被占位串误吞）
     m = re.fullmatch(
