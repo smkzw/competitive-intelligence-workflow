@@ -2259,3 +2259,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 2. C r22 剩二：eculizumab 负荷频次（"once a week on Day 1, 8, 15, and then"分段验证）、coversin 负荷期显式标注
 3. P0 #3 矩阵完整契约（发生率%/term_key）；C 时间点 tuple 顺序全面核查（r23 的"期间 1"类）
 4. v77 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环 → IPF/横向
+
+## 追记 6：B r38 根因精确定位（v77 实施输入）
+- **①安全组期间塌陷根因**：A 载荷安全行 arm="Danicopan-Danicopan (TP2)"（完整，含分母 57/55/54 等）——B 构建器 `for row in a["safety"]` 转换时 `_arm_group_for()` 把 AE 组名映射到试验**已声明组**（TP1/TP2/LTE 三段全部折叠进声明的 danicopan 臂），期间后缀丢失。修法：B 构建器安全行保留 AE eventGroup 原标题为 arm_label（或新增 arm_period 维度），_arm_group_for 仅作角色判定不做标题替换；渲染器 arm_detail 兜底链已能带上该标题。另发现渲染后 role 字段出现字符串 "None"（_project_record 对缺失键写入了字面 "None"——需改 _text 空值处理）。
+- **②基线组别未列示**：NCT04170023 基线 facts 的 group_id 存在但 arm/group 显示字段为空——同 _project_record 空值处理问题。
+- **③筛选项原始 token**：clinical_concept 筛选值 = 语义 token（ldh水平变化 小写）——筛选 groups 构造改用 clinical_concept_label_zh。
+- **④计数≠发生率**：safety 图题 statistical_form_family="事件发生率" 而 unit=例——图题按 unit 分流：例→"受累人数（例）"+表头加"风险人数"分母列（denominator 字段已有 57/29 等）。
