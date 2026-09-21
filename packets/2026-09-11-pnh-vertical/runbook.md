@@ -2336,3 +2336,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **修复设计定稿（v80 首项）**：A 构建器安全行在 AE 标题能去后缀匹配到本试验疗效臂名时，额外输出一条**声明臂归因行**（arm=去后缀名，source_field_name 标 ".declared"，避免与期间行重复计数——期间行保留原名展示）；或等价地在 B 构建器为每条安全事实补充"声明臂影子事实"（discovery 标记，仅门匹配用）。二选一，优先前者（A 层单一事实源）。
 - 基线四类同法：基线事实补声明臂归因行。
 - 落地后 PYTHONHASHSEED=0 重跑 B builder→audit→submit→run 直至 B review_request 生成 → 三路复核派发。
+
+## 追记 18：安全影子行生效（安全单元转绿）；基线影子需临床口径决策
+- **已验证**：声明臂影子行方案对 b_safety_minimum_record 生效——v80 B 门重评后 blocked 从 5 → 4（仅剩基线四类：age/sample_size/severity_anchor/sex）。
+- **基线影子卡在临床口径**：NCT04469465 基线事实按期间分组（tp1/tp2 变体），声明臂（Danicopan-Danicopan / Placebo-Danicopan）无事实。期间→声明臂映射不是简单去后缀（TP1 的 Danicopan (TP1) ≠ 声明臂 Danicopan-Danicopan；TP2 的 Placebo-Danicopan (TP2) 是换药组）。**需要临床语义决策**：声明臂的基线用哪一期代表（TP1 随机化时点 vs TP2 后），或由门 spec 把基线单元的适用对象改为"有基线事实的组"。不宜自动化臆断。
+- 建议下轮：先做基线影子的口径决策（TP1 为基线代表期最合理——随机化时点的人群特征），实施后 v80' 全链 → 三路重派。
