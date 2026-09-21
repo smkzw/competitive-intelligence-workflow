@@ -969,6 +969,8 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"haemoglobin", "血红蛋白"),
     (r"antibody positive at/?before baseline", "抗体基线时/前阳性"),
     (r"antibody positive anytime", "抗体任何时候阳性"),
+    (r"\bbinding\b", "结合"),
+    (r"\bneutralizing\b", "中和"),
     (r"\bpositive\b", "阳性"),
     (r"\banytime\b", "任何时候"),
     (r"at/?before baseline", "基线时/前"),

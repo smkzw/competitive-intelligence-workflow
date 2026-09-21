@@ -806,6 +806,8 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
 
 
 _REGISTRY_ENDPOINT_TERM_ZH = {
+    "free hemoglobin": "游离血红蛋白",
+    "free hgb": "游离血红蛋白",
     "ldh": "LDH",
     "lactate dehydrogenase": "LDH",
     "hgb": "血红蛋白",
@@ -962,6 +964,14 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         return translated or timepoint or "主要终点评估时间未公开"
     # 独立复核 C r20（veto 第1项）：次要终点定义/时间点走同一确定性转写，
     # 不得直出登记英文原句
+    if observation.field == "primary_endpoint_definition":
+        ep_zh = _registry_endpoint_zh(source_text)
+        if ep_zh:
+            return ep_zh + (f"（{timepoint}）" if timepoint else "")
+        label = _native_endpoint_zh(source_text)
+        if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
+            return "主要终点（原文见证据抽屉）"
+        return label + (f"（{timepoint}）" if timepoint else "")
     if observation.field == "secondary_endpoint_definition":
         ep_zh = _registry_endpoint_zh(source_text)
         if ep_zh:
