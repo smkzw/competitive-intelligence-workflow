@@ -2473,3 +2473,10 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - v87 队列（C r32 剩余）：③同试验同名标签不同分析物（Haptoglobin vs Hemoglobin 同标签）——term 表已有触珠蛋白，验证 ④访视页空轴"未公开"→证据不足声明 ⑤populationDescription 深链核对
 - v87 队列（B 侧）：展开表补分析形式/分析集列（行字段已有）；time_window_band 选项转写；基线 category_level 列
 - v87 全链 → 三路重派 → 全 accepted → accept-visual ×3
+
+## 追记 40：v87 队列实施完成 + v87 全链派发（commit 7d9c448 系）
+- **B 展开表**：efficacy 列头补"统计形式/分析人群"两列（行字段已有）；columnValue 新增两键取值
+- **LTE band 标签**：lteperiod 等未知语义键的中文标签补齐
+- **C 访视页**：全观察无时间点时渲染"证据不足声明"横幅（visit_insufficient 上下文 + 模板块）
+- **v87 全链建成提交**（A 3895 行 0 碰撞、B 门绿、C 12 页 259 观察）。三路复核 r35/r49/r33 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
