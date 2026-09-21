@@ -1,15 +1,15 @@
-# 独立视觉验收审阅任务（报告 A · abc-v64 · HTML 门户）
+# 独立视觉验收审阅任务（报告 A · abc-v71 · HTML 门户）
 
 你是独立上下文视觉审阅者（身份 omp-cursor-default-auto），与生产者（zcode-main-thread-glm53）相互独立。你的结论将以你的身份签署进正式视觉验收记录，必须基于你自己对渲染页面的真实检查。
 
 ## 工作目录（必须在此目录内操作）
 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow`（仓库根）。
-被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v64/reports/A/v1/html`
+被验收站点（绝对路径）：`/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v71/reports/A/v1/html`
 
 ## 材料（均相对项目根）
 1. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/visual-plan-a.json` — 视觉策划书（七验收域判据在 acceptance_matrix）
 2. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/render-evidence-a.json` — 真实呈现证据（30 个呈现目标：Chromium/WebKit × 5 视口 × 3 代表页，每目标含真实交互探测与截图路径）
-3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v64/reports/A/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
+3. `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/runs/pnh-vertical/abc-v71/reports/A/v1/html/` — 被验收站点（截图在 `/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/packets/2026-09-18-omp-visual/screenshots/`）
 4. 截图可自行用浏览器或读图复核；至少亲自检查 3 个页面（可结合读 HTML）
 
 ## 审阅域（七域，逐域独立判断）
@@ -22,11 +22,11 @@ copy_zh / hierarchy_density / typography_spacing / color_legibility / charts_tab
 ```json
 {
   "schema_version": "1.0",
-  "verdict_id": "verdict-omp-cursor-vis-abc64-a",
+  "verdict_id": "verdict-omp-cursor-vis-abc71-a",
   "format": "html",
-  "visual_plan_digest": "2e76abea5dd0bb5a3302e12946f994cd383d98ed538058803e1ddd625de8fdb4",
-  "candidate_artifact_digest": "9c942bc94528ca48c197d7cd313152609e440742122229aa03efdc13726f5bc0",
-  "render_evidence_digest": "89e40a14f9562787defdc32afa47bbf8137ff9acc7c6e8a13c1ac583ee7250f3",
+  "visual_plan_digest": "67f50e688656b91b6abe9b00ffbb7da42c9b0244ec8607993cd752d31167dfef",
+  "candidate_artifact_digest": "e9b3dcf0a8ee8233e94f6b8329ea99c8dacc5f3775e0048fb2af6cd413f344ed",
+  "render_evidence_digest": "db5ddb0202c111576765a8710a7530486ea4d36de8fe65281dd1e2a9e0cf79ec",
   "producer_identity": "zcode-main-thread-glm53",
   "verifier_identity": "omp-cursor-default-auto",
   "verdict": "accepted 或 rejected",

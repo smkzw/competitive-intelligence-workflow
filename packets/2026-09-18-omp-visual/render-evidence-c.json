@@ -5,9 +5,9 @@
  "report_kind": "C",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_e8c124a04f8353a8cbdba310",
- "visual_plan_digest": "9ad43f4b9680a539df77ccb2902ff2e1d1fb2bcd9f886b1667f223229af81d02",
- "candidate_artifact_digest": "3f2f5e39d48d2cd9e8bd46179ada6da0468d20ac5d16fd2eb40b37a42061d91f",
+ "run_id": "run_d9c6397e3288eae972c59a30",
+ "visual_plan_digest": "1b3bfed3b0bd85baf678d1ed274c70fb2769fae09ae67045322469173e8bf910",
+ "candidate_artifact_digest": "d001dab2d3541b5773509bd1d1675db88da51e29971338cc7c55448b67730f47",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -37,7 +37,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 13087→1639）"
+     "evidence": "筛选控件真实点击（文本长度 13087→1637）"
     },
     {
      "trigger": "drill_down",
@@ -93,7 +93,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 3208→1103）"
+     "evidence": "筛选控件真实点击（文本长度 3208→1102）"
     },
     {
      "trigger": "drill_down",
@@ -149,7 +149,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 4759→771）"
+     "evidence": "筛选控件真实点击（文本长度 4759→770）"
     },
     {
      "trigger": "drill_down",
@@ -205,7 +205,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 11018→1611）"
+     "evidence": "筛选控件真实点击（文本长度 11018→1609）"
     },
     {
      "trigger": "drill_down",
@@ -261,7 +261,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -317,7 +317,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2690→743）"
+     "evidence": "筛选控件真实点击（文本长度 2690→742）"
     },
     {
      "trigger": "drill_down",
@@ -373,7 +373,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 11018→1611）"
+     "evidence": "筛选控件真实点击（文本长度 11018→1609）"
     },
     {
      "trigger": "drill_down",
@@ -429,7 +429,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -485,7 +485,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2690→743）"
+     "evidence": "筛选控件真实点击（文本长度 2690→742）"
     },
     {
      "trigger": "drill_down",
@@ -541,7 +541,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 11018→1611）"
+     "evidence": "筛选控件真实点击（文本长度 11018→1609）"
     },
     {
      "trigger": "drill_down",
@@ -597,7 +597,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -653,7 +653,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2690→743）"
+     "evidence": "筛选控件真实点击（文本长度 2690→742）"
     },
     {
      "trigger": "drill_down",
@@ -709,7 +709,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 11018→1611）"
+     "evidence": "筛选控件真实点击（文本长度 11018→1609）"
     },
     {
      "trigger": "drill_down",
@@ -765,7 +765,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -821,7 +821,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2690→743）"
+     "evidence": "筛选控件真实点击（文本长度 2690→742）"
     },
     {
      "trigger": "drill_down",
@@ -877,7 +877,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 12952→1621）"
+     "evidence": "筛选控件真实点击（文本长度 12952→1619）"
     },
     {
      "trigger": "drill_down",
@@ -933,7 +933,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 3212→1107）"
+     "evidence": "筛选控件真实点击（文本长度 3212→1106）"
     },
     {
      "trigger": "drill_down",
@@ -989,7 +989,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 4734→773）"
+     "evidence": "筛选控件真实点击（文本长度 4734→772）"
     },
     {
      "trigger": "drill_down",
@@ -1045,7 +1045,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 10879→1589）"
+     "evidence": "筛选控件真实点击（文本长度 10879→1587）"
     },
     {
      "trigger": "drill_down",
@@ -1101,7 +1101,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -1157,7 +1157,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2661→741）"
+     "evidence": "筛选控件真实点击（文本长度 2661→740）"
     },
     {
      "trigger": "drill_down",
@@ -1213,7 +1213,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 10879→1589）"
+     "evidence": "筛选控件真实点击（文本长度 10879→1587）"
     },
     {
      "trigger": "drill_down",
@@ -1269,7 +1269,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -1325,7 +1325,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2661→741）"
+     "evidence": "筛选控件真实点击（文本长度 2661→740）"
     },
     {
      "trigger": "drill_down",
@@ -1381,7 +1381,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 10879→1589）"
+     "evidence": "筛选控件真实点击（文本长度 10879→1587）"
     },
     {
      "trigger": "drill_down",
@@ -1437,7 +1437,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -1493,7 +1493,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2661→741）"
+     "evidence": "筛选控件真实点击（文本长度 2661→740）"
     },
     {
      "trigger": "drill_down",
@@ -1549,7 +1549,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 10879→1589）"
+     "evidence": "筛选控件真实点击（文本长度 10879→1587）"
     },
     {
      "trigger": "drill_down",
@@ -1605,7 +1605,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 1139→1075）"
+     "evidence": "筛选控件真实点击（文本长度 1139→1074）"
     },
     {
      "trigger": "drill_down",
@@ -1661,7 +1661,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 2661→741）"
+     "evidence": "筛选控件真实点击（文本长度 2661→740）"
     },
     {
      "trigger": "drill_down",
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-21T01:49:48.111014+00:00"
+ "created_at": "2026-09-21T05:12:38.150096+00:00"
 }

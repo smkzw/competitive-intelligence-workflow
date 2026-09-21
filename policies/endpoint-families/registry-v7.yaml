@@ -2,8 +2,8 @@ schema_version: '1.0'
 policy_id: registry-endpoint-family
 version: '7.4'
 description: 适应症无关的登记终点族分类规则（per-indication 配置块）
-safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|serious
-  adverse|number of participants with adverse
+safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|\badrs\b|serious
+  adverse|number of participants with adverse|incidence rate of all adverse|incidence rate of all adr
 rules:
 - rule_id: endpoint-pnh-clone-pct-v1
   match_pattern: clone size|pnh clone

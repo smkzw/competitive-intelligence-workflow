@@ -21,14 +21,14 @@ Status: **not acceptance**. Codex remains the final authority for visual, PPT, c
 
 ## Screenshots
 
-- `docs/acceptance/runs/8.4/screenshots/chromium-1280x720-slide-2.png` `bdda1b1c023b` (28065 bytes)
-- `docs/acceptance/runs/8.4/screenshots/chromium-1280x720-notes.png` `188d73e1cd98` (41037 bytes)
-- `docs/acceptance/runs/8.4/screenshots/chromium-1440x900-presenter.png` `5d42c7441fca` (60097 bytes)
-- `docs/acceptance/runs/8.4/screenshots/chromium-echarts-svg.png` `0369154a1313` (10340 bytes)
-- `docs/acceptance/runs/8.4/screenshots/webkit-1280x720-slide-2.png` `0c3748da69ad` (46420 bytes)
-- `docs/acceptance/runs/8.4/screenshots/webkit-1280x720-notes.png` `b8d2907324b8` (60969 bytes)
-- `docs/acceptance/runs/8.4/screenshots/webkit-1440x900-presenter.png` `d418f672fef3` (84618 bytes)
-- `docs/acceptance/runs/8.4/screenshots/webkit-echarts-svg.png` `9d2bf24286c7` (26155 bytes)
+- `docs/acceptance/runs/8.4/screenshots/chromium-1280x720-slide-2.png` `b80edb1c34ae` (28401 bytes)
+- `docs/acceptance/runs/8.4/screenshots/chromium-1280x720-notes.png` `8a5aab66bcac` (41689 bytes)
+- `docs/acceptance/runs/8.4/screenshots/chromium-1440x900-presenter.png` `85643c193a2e` (61451 bytes)
+- `docs/acceptance/runs/8.4/screenshots/chromium-echarts-svg.png` `140f4c78ba48` (10350 bytes)
+- `docs/acceptance/runs/8.4/screenshots/webkit-1280x720-slide-2.png` `b750a39a2300` (47025 bytes)
+- `docs/acceptance/runs/8.4/screenshots/webkit-1280x720-notes.png` `fc0ba9467b25` (61886 bytes)
+- `docs/acceptance/runs/8.4/screenshots/webkit-1440x900-presenter.png` `ed92625b3d69` (87416 bytes)
+- `docs/acceptance/runs/8.4/screenshots/webkit-echarts-svg.png` `4e7cdf74abf0` (26089 bytes)
 
 ## Residual
 

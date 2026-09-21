@@ -9,13 +9,76 @@
    "sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
   }
  ],
- "built_at": "2026-09-21T05:02:56.765143+00:00",
+ "built_at": "2026-09-21T13:26:14.436447+00:00",
  "skipped_trials_no_sample_size": [
   "NCT06028594",
   "NCT05982938",
   "NCT05222412",
   "NCT00438789",
   "NCT00112983"
+ ],
+ "safety_domain_diverted": 246,
+ "safety_domain_diverted_samples": [
+  {
+   "trial_id": "nct04888507",
+   "endpoint": "OLTP: Number of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "6.0",
+   "timepoint": "Up to Day 225"
+  },
+  {
+   "trial_id": "nct04888507",
+   "endpoint": "OLEP: Number of Participants With TEAEs",
+   "value": "5.0",
+   "timepoint": "Day 1 through Week 52 of the OLEP"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "7.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "2.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "4.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "1.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "2.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "2.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "3.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  },
+  {
+   "trial_id": "nct00867932",
+   "endpoint": "Number Of Participants With Treatment-emergent Adverse Events (TEAEs)",
+   "value": "2.0",
+   "timepoint": "First dose of study drug (Day 0) to End of Follow-up (Week 20 [8 weeks after EOT"
+  }
  ],
  "records_without_drug_intervention": [
   "NCT06852092",

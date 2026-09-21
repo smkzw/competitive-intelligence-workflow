@@ -5,9 +5,9 @@
  "report_kind": "B",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_e8c124a04f8353a8cbdba310",
- "visual_plan_digest": "dc9993f1b7293d0647399713e044047e16da4e4626778ca67c837fabdde85eeb",
- "candidate_artifact_digest": "bb1e9a169262795811aa51a341d53ccde77b134efd12443270e7be0f87703a12",
+ "run_id": "run_d9c6397e3288eae972c59a30",
+ "visual_plan_digest": "e56afc88017fef0f74c3d41485ae6df952c014c7571c964e018ce58d4bf631da",
+ "candidate_artifact_digest": "8227e4dbc715a99053b3b60c38465c4a8e2225324d9b775841f40549fc0d90e3",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -149,7 +149,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 82148→8122）"
+     "evidence": "筛选控件真实点击（文本长度 82147→8121）"
     },
     {
      "trigger": "drill_down",
@@ -159,7 +159,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8119→82027）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8118→82026）"
     },
     {
      "trigger": "keyboard",
@@ -317,7 +317,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8126→8129）"
+     "evidence": "筛选控件真实点击（文本长度 8125→8128）"
     },
     {
      "trigger": "drill_down",
@@ -327,7 +327,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8126→8126）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8125→8125）"
     },
     {
      "trigger": "keyboard",
@@ -485,7 +485,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8126→8129）"
+     "evidence": "筛选控件真实点击（文本长度 8125→8128）"
     },
     {
      "trigger": "drill_down",
@@ -495,7 +495,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8126→8126）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8125→8125）"
     },
     {
      "trigger": "keyboard",
@@ -653,7 +653,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8148→8151）"
+     "evidence": "筛选控件真实点击（文本长度 8147→8150）"
     },
     {
      "trigger": "drill_down",
@@ -663,7 +663,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8148→8148）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8147→8147）"
     },
     {
      "trigger": "keyboard",
@@ -821,7 +821,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8194→8197）"
+     "evidence": "筛选控件真实点击（文本长度 8193→8196）"
     },
     {
      "trigger": "drill_down",
@@ -831,7 +831,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8194→8194）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8193→8193）"
     },
     {
      "trigger": "keyboard",
@@ -989,7 +989,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 82152→8126）"
+     "evidence": "筛选控件真实点击（文本长度 82151→8125）"
     },
     {
      "trigger": "drill_down",
@@ -999,7 +999,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8123→82031）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8122→82030）"
     },
     {
      "trigger": "keyboard",
@@ -1157,7 +1157,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8126→8129）"
+     "evidence": "筛选控件真实点击（文本长度 8125→8128）"
     },
     {
      "trigger": "drill_down",
@@ -1167,7 +1167,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8126→8126）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8125→8125）"
     },
     {
      "trigger": "keyboard",
@@ -1325,7 +1325,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8126→8129）"
+     "evidence": "筛选控件真实点击（文本长度 8125→8128）"
     },
     {
      "trigger": "drill_down",
@@ -1335,7 +1335,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8126→8126）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8125→8125）"
     },
     {
      "trigger": "keyboard",
@@ -1493,7 +1493,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8148→8151）"
+     "evidence": "筛选控件真实点击（文本长度 8147→8150）"
     },
     {
      "trigger": "drill_down",
@@ -1503,7 +1503,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8148→8148）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8147→8147）"
     },
     {
      "trigger": "keyboard",
@@ -1661,7 +1661,7 @@
     {
      "trigger": "filter_change",
      "passed": true,
-     "evidence": "筛选控件真实点击（文本长度 8194→8197）"
+     "evidence": "筛选控件真实点击（文本长度 8193→8196）"
     },
     {
      "trigger": "drill_down",
@@ -1671,7 +1671,7 @@
     {
      "trigger": "search",
      "passed": true,
-     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8194→8194）"
+     "evidence": "搜索框存在且接受输入（输入后文档文本长度 8193→8193）"
     },
     {
      "trigger": "keyboard",
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-21T01:48:30.567356+00:00"
+ "created_at": "2026-09-21T05:11:18.397861+00:00"
 }

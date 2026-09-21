@@ -785,6 +785,14 @@ def _native_endpoint_zh(value: str) -> str:
         (r"haematuria|hematuria", lambda _m: "血尿"),
         (r"serum creatinine|\bscr\b(?!at)", lambda _m: "血肌酐"),
         (r"creatinine clearance|\bcrc[l]\b", lambda _m: "肌酐清除率"),
+        # 肺科终点（IPF round-3 泛化测试：不得落入通用占位标签）
+        (r"forced vital capacity|\bfvc\b", lambda _m: "用力肺活量（FVC）"),
+        (r"six[- ]minute walk distance|\b6mwd\b|6[- ]minute walk", lambda _m: "6分钟步行距离（6MWD）"),
+        (r"diffusing (?:capacity|ability).*(?:carbon monoxide|co)|\bdlco\b", lambda _m: "一氧化碳弥散量（DLCO）"),
+        (r"acute exacerbation|worsening(?: of)? ipf|disease progression", lambda _m: "急性加重/疾病进展"),
+        (r"high[- ]resolution computed tomography|\bhrct\b", lambda _m: "高分辨CT（HRCT）"),
+        (r"forced expiratory volume|\bfev1\b", lambda _m: "第一秒用力呼气量（FEV1）"),
+        (r"oxygen saturation|spo2|\bpao2\b", lambda _m: "血氧饱和度"),
         # 消化科终点（UC 泛化测试）
         (r"endoscopic(?:\s+\w+)*\s*(?:remission|improvement|response)|endoscopy", lambda _m: "内镜改善"),
         (r"mucosal healing", lambda _m: "黏膜愈合"),
@@ -1238,6 +1246,33 @@ def _native_unit_zh(unit: str) -> str:
     if m:
         exp = m.group(1)
         return {("9",): "×10⁹/L", ("12",): "×10¹²/L", ("6",): "×10⁶/L"}.get((exp,), f"×10{exp}/L")
+    # 值列拼接单位的来源（独立复核 A r22：'2.56hour (h)' 类）
+    m = re.fullmatch(r"hours?\s*\(h\)", low)
+    if m:
+        return "小时"
+    if low in {"g/liter (l)", "g/liter(l)", "g/l"}:
+        return "g/L"
+    if low == "units":
+        return "U"
+    if low == "ln(ratio)":
+        return "ln(比值)"
+    # 指数计数单位：空格无关的容差匹配（round-3 IPF：'10^9 cells/ liter (L)' 类变体）
+    compact = re.sub(r"\s+", "", low)
+    m = re.fullmatch(
+        r"10\^?(\d+)(?:cells?|reticulocytes\(cells\))?(?:/|per)(microlit(?:er|re)|nanolit(?:er|re)|lit(?:er|re)|ml|l)(?:\(siunits\)|\(l\)|\(μl\)|\(ul\))?",
+        compact,
+    )
+    if m:
+        exp = m.group(1)
+        denom = m.group(2)
+        denom_zh = {"microliter": "μL", "microlitre": "μL", "nanoliter": "nL", "nanolitre": "nL",
+                    "liter": "L", "litre": "L", "ml": "mL", "l": "L"}.get(denom, denom)
+        sup = {"6": "⁶", "9": "⁹", "12": "¹²"}.get(exp, f"^{exp}")
+        return f"×10{sup}/{denom_zh}"
+    if compact in {"arc/nanoliter", "arc/nl"}:
+        return "ARC/nL"
+    if compact in {"gramperliter(g/l)", "g/l"}:
+        return "g/L"
     if low in {"10^12 cells/l", "10^12 cells/l (si units)", "10^12 reticulocytes (cells)/l"}:
         return "×10¹²/L"
     if low in {"10^9 cells/l", "10^9 cells/liter (l)", "10^9/l"}:

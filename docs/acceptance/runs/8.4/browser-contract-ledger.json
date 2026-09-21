@@ -2,7 +2,7 @@
   "task": "8.4",
   "worker": "worker_03",
   "not_acceptance": true,
-  "recorded_at": "2026-09-05T07:30:41.338775+00:00",
+  "recorded_at": "2026-09-20T10:36:28.611447+00:00",
   "fixture_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/tests/fixtures/html-ppt-runtime/index.html",
   "echarts_url": "file:///Users/smkzw/Documents/AI%20Products/competitive-intelligence-workflow/tests/fixtures/offline-echarts/index.html",
   "runtime_js_sha256": "affadf9e344ec9da62cdd27942a41218983d2cb88a377eca540b7da622a990f7",
@@ -40,50 +40,50 @@
     {
       "name": "chromium-1280x720-slide-2",
       "path": "docs/acceptance/runs/8.4/screenshots/chromium-1280x720-slide-2.png",
-      "sha256": "bdda1b1c023b938b73e1b240ad523375f8e1c995151a3da6b893e023f31b61b4",
-      "bytes": 28065
+      "sha256": "b80edb1c34ae38a72068f77476be5e1fdcff26dfcf8ff1f2f3283120b7881f34",
+      "bytes": 28401
     },
     {
       "name": "chromium-1280x720-notes",
       "path": "docs/acceptance/runs/8.4/screenshots/chromium-1280x720-notes.png",
-      "sha256": "188d73e1cd9899152ce7490ff1f55e033244f7ca817a00844c4179cb1eab51aa",
-      "bytes": 41037
+      "sha256": "8a5aab66bcac9094b218bea30e445f0146b61c323a9035eaf9385a602eafab50",
+      "bytes": 41689
     },
     {
       "name": "chromium-1440x900-presenter",
       "path": "docs/acceptance/runs/8.4/screenshots/chromium-1440x900-presenter.png",
-      "sha256": "5d42c7441fca32cdac9dfd5e262510a8c231aa3e3c8ec22fd79a94cc7f0df334",
-      "bytes": 60097
+      "sha256": "85643c193a2ee840a1c2d44d4cbb4079460d2caee4bb00dcb10e7c0f55fb7ee1",
+      "bytes": 61451
     },
     {
       "name": "chromium-echarts-svg",
       "path": "docs/acceptance/runs/8.4/screenshots/chromium-echarts-svg.png",
-      "sha256": "0369154a1313dccfa4ba5361f5fd171570c7e3f0cfb93c09020f5e97f150e05c",
-      "bytes": 10340
+      "sha256": "140f4c78ba4837e21960f22952277d8b6923f6947a113b29a323ea6df063064e",
+      "bytes": 10350
     },
     {
       "name": "webkit-1280x720-slide-2",
       "path": "docs/acceptance/runs/8.4/screenshots/webkit-1280x720-slide-2.png",
-      "sha256": "0c3748da69ade92f6532a867f13f7060b0a2783faf93d45c49f0cf4a14e7850f",
-      "bytes": 46420
+      "sha256": "b750a39a2300925d8a5dd3cdba163525c71262210123212d8d8a0b63cb5b39d6",
+      "bytes": 47025
     },
     {
       "name": "webkit-1280x720-notes",
       "path": "docs/acceptance/runs/8.4/screenshots/webkit-1280x720-notes.png",
-      "sha256": "b8d2907324b8ed2dfbb1be43abd0199ca6024ca9fa8b1f99e4bd69b5ecba9ae1",
-      "bytes": 60969
+      "sha256": "fc0ba9467b25eacf2f4a40a0aa74925eaa5ae01cb559a8c96a483396c076e5fe",
+      "bytes": 61886
     },
     {
       "name": "webkit-1440x900-presenter",
       "path": "docs/acceptance/runs/8.4/screenshots/webkit-1440x900-presenter.png",
-      "sha256": "d418f672fef3b6c279714802540520bdd8b9367ed2187f434f067ac3dd2d065f",
-      "bytes": 84618
+      "sha256": "ed92625b3d696cad22cd2ab2d8e4368f458d8d581b1d1949a36d3d8cc43a6c61",
+      "bytes": 87416
     },
     {
       "name": "webkit-echarts-svg",
       "path": "docs/acceptance/runs/8.4/screenshots/webkit-echarts-svg.png",
-      "sha256": "9d2bf24286c79009d0cb760f7c2b580b7c676ff3a7b08deba452bd7ea5dea71b",
-      "bytes": 26155
+      "sha256": "4e7cdf74abf0e9d631f541767eca3b1a6514a54ca7146308f13c35509f96dd6d",
+      "bytes": 26089
     }
   ]
 }

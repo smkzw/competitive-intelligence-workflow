@@ -139,7 +139,7 @@ ALIAS = json.loads(
     Path(_args.alias_map).read_text(encoding="utf-8")
 )
 NORMALIZED_ALIAS = {
-    re.sub(r"[^a-z0-9]+", "", alias): canonical
+    re.sub(r"[^a-z0-9]+", "", alias.lower()): canonical
     for alias, canonical in ALIAS["canonical_by_alias"].items()
 }
 COMBO_RECORDS: list[dict] = []
@@ -421,7 +421,13 @@ def main() -> None:
                 # 独立测试第二轮（UC）：不得截断登记终点标题——截断会
                 # 摧毁 Mayo/时间窗等尾部语义并造成分类漏检
                 title = str(measure.get("title") or "").strip() or NA
-                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"
+                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"                # 独立复核 A r22（issue-5）：组别标题优先取自测量自带 groups（OG 代码 → 登记标题）
+                for g in (measure.get("groups") or []):
+                    gid = str(g.get("id") or "").strip()
+                    gtitle = str(g.get("title") or "").strip()
+                    if gid and gtitle:
+                        group_titles.setdefault(gid, gtitle)
+
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
                 for cls in (measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），

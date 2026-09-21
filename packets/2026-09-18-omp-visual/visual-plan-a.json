@@ -6,14 +6,14 @@
  "report_version": "v1",
  "format": "html",
  "route_id": "portal",
- "report_snapshot_sha256": "00b96697c0e1acb6201ed9c7fd585438c1c205975609e70a7887ecb54c3c2841",
+ "report_snapshot_sha256": "bd629f7bb3d53b15c275eee8c3f9774265a6b8c6ef6fbf71a4bed01c6c37a579",
  "report_snapshot": {
-  "snapshot_id": "report-snapshot_38c222e4ed9c00c350ffeb27",
+  "snapshot_id": "report-snapshot_e769721645bffbcc0e59ad2a",
   "report": "A",
   "report_version": "v1",
-  "evidence_snapshot_id": "evidence-snapshot_9e75b65e9c34d8e2e82a84a2",
-  "claim_snapshot_id": "claim-snapshot_290f60f7eea561d0cee806c7",
-  "coverage_set_id": "coverage-set_7495cd2512007474917a97a8"
+  "evidence_snapshot_id": "evidence-snapshot_3df6e8cc0c04f0d804bac408",
+  "claim_snapshot_id": "claim-snapshot_8bdf44bc361ebaaf065ecb43",
+  "coverage_set_id": "coverage-set_c346c8664db6183947f2cea1"
  },
  "design_contract_sha256": "facdc54cb92fba350b4e519ff7db6e7e7a3a5499d4dd74a53bd43bcfd677434d",
  "design_contract": {
@@ -1022,5 +1022,5 @@
  ],
  "planner_identity": "zcode-main-thread-glm53",
  "planner_role": "visual-design-director",
- "created_at": "2026-09-21T01:44:37.059957+00:00"
+ "created_at": "2026-09-21T05:04:37.776673+00:00"
 }
