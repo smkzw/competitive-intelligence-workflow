@@ -3616,6 +3616,9 @@ def _filter_groups(
                     ),
                     value,
                 )
+                # 独立复核第四十三轮：未映射的概念键走 _CLINICAL_CONCEPT_LABELS 查表
+                if option_label == value and value in _CLINICAL_CONCEPT_LABELS:
+                    option_label = _CLINICAL_CONCEPT_LABELS[value]
             else:
                 option_label = value
             # 中文原生兜底：canonical 令牌/合成键不得直接作为按钮文本
