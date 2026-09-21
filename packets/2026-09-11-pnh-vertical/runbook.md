@@ -2278,3 +2278,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C r23（veto 3，收敛）**：①游离血红蛋白误标"血红蛋白" → **已修**：free hemoglobin 独立身份（先于血红蛋白消费）②同名标签不同终点 → 随①与主终点转写缓解③主终点定义 7 行纯英文 → **已修**：primary_endpoint_definition 兜底走 _native_endpoint_zh（序号化）。
 - 本轮同时提交：矩阵契约（term_key 受控词表 any_sae/death、计数+分母→派生发生率%、类别包含式匹配、臂筛选仅在用户选择时生效）。
 - B r39（v77）仍在运行，收包后合并进 v78 队列。
+
+## 追记 9：B r39 四项实施完成 + v78 派发（PYTHONHASHSEED 坑确认）
+- **B r39 四项实施**：①cohort 组标识解码（-arm-cohort-N→第N组，_arm_label 尾部）②合并标记改为事实判定（桶内确实合并多登记臂→"多登记臂已合并展示"；键含未知值且臂缺失才用旧文案）③筛选分组标题按维度命名（21 维度中文标题表），选项经漏斗转写+剔除"未公开披露"混入④TP1/LTE/primary 时间窗 token 前置。
+- **PYTHONHASHSEED 实锤**：v78 首次 submit 报"独立科学复核与当前内容摘要不一致"——digest 依赖 set 迭代顺序，跨进程随机种子导致构建与校验哈希不同。**PYTHONHASHSEED=0 固定后重建+提交即通过**。教训入册：B/C/A 构建器与 submit 必须同一固定种子环境。
+- **v78 全链建成提交**（3895 行 0 碰撞；B 安全行带期间标题+风险人数；C 12 页）。三路复核 r26/r40/r24 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修。
