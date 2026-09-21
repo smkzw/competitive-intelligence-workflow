@@ -2444,3 +2444,11 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C 时间点枚举保单位**：weeks 正则序列修正
 - **v85 全链建成提交**（A 3895 行 0 碰撞、B 门绿、C 255 观察）。三路复核 r33/r47/r31 stagger 派发，静默运行
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v86）
+
+## 追记 35：A r33 收包（veto 5）——v86 队列
+- ①**矩阵空**：term_key 传递补丁本轮刚提交（payload any_sae → 显示层），v86 渲染后应使 any_sae 轴+尺寸降级生效；下轮先用 Playwright 实测 v86 matrix 气泡数>0
+- ②**序号可读性**：2357 行（60.5%）的"（登记终点定义N）"编号不具含义——改为从各登记定义标题提取**区分性短描述**（如"持续升高≥2g/dL"），实现：取各 title 经 _native_endpoint_zh 后的差异词/首句关键词；47 个跨试验覆盖标签按试验再分
+- ③单位变体第二批：gram (g)/L、micromoles/L、microgram (ug)/mL、hr、transfusions、hour*ug/mL、U/L x Day
+- ④**影子行溯源**：-declared 行需显式标注"声明臂归因（由期间组汇总）"（category 或 time_window 后缀），避免被当成独立登记行
+- ⑤历史排除理由核实（A r27④ 延续）
+- v86 队列=①-⑤ → v86 全链 → 三路重派 → 全 accepted → accept-visual ×3
