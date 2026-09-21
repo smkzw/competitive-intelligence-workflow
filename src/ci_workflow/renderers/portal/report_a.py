@@ -432,11 +432,16 @@ def _display_products(data: ReportAPortalData) -> tuple[ProductRow, ...]:
     )
 
 
-def _safety_term_projection(term: str) -> tuple[str, str]:
+def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str, str]:
+    # 独立复核 A r27/r31：优先消费构建器受控词表键（any_sae/any_teae/death），
+    # 未命中时才回退 raw: 归一化
     normalized = " ".join(term.split()).casefold()
     known = _SAFETY_TERM_ALIASES.get(normalized)
     if known is not None:
         return known
+    if term_key in {"any_sae", "any_teae", "death"}:
+        label = {"any_sae": "严重不良事件", "any_teae": "治疗期间不良事件", "death": "死亡病例"}[term_key]
+        return term_key, label
     return f"raw:{normalized}", term
 
 
@@ -449,7 +454,7 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
     rows: list[dict[str, object]] = []
     for item in data.safety:
         row = item.model_dump(mode="json")
-        term_key, term_label = _safety_term_projection(item.term)
+        term_key, term_label = _safety_term_projection(item.term, getattr(item, "term_key", None))
         row["original_term"] = item.term
         row["term_key"] = term_key
         row["term_label"] = term_label
@@ -476,11 +481,23 @@ def _display_trials(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
     """把登记平台字段投影成面向医学用户的中文展示，不改写证据原文。"""
     product_names = {item.id: item.name for item in _display_products(data)}
     rows: list[dict[str, object]] = []
+    # 独立复核 A r31（issue-1）：同名试验折叠修复——组合名重复时全部
+    # 追加登记号区分（NCT04820530 与 NCT05630001 不再同名）
+    name_counts: dict[str, int] = {}
     for trial in data.trials:
         row = trial.model_dump(mode="json")
         row["original_name"] = trial.name
         if not _contains_chinese(trial.name):
             row["name"] = f"{product_names[trial.product_id]} {trial.phase}临床研究"
+        name_counts[row["name"]] = name_counts.get(row["name"], 0) + 1
+    dup_names = {n for n, c in name_counts.items() if c > 1}
+    for trial in data.trials:
+        row = trial.model_dump(mode="json")
+        row["original_name"] = trial.name
+        if not _contains_chinese(trial.name):
+            row["name"] = f"{product_names[trial.product_id]} {trial.phase}临床研究"
+        if row["name"] in dup_names:
+            row["name"] = f"{row['name']}（{trial.display_id}）"
         row["status"] = _TRIAL_STATUS_ZH.get(trial.status, trial.status)
         rows.append(row)
     return tuple(rows)
