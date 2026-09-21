@@ -2491,3 +2491,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C r33（veto 4）**：①主/次终点括注统一走 _tp_disp（_value_text 顶部定义 lambda，IGA/EASI 分支同步）——已修②量表列英文原句标注"（登记原文，未译）"——已修③stat 行补测量标题前缀区分——待实施④分析集（populationDescription）抽取——已实施（study 变量修正后 4 条新事实）
 - v88 队列：③stat 行带测量标题前缀；剩余 populationDescription 类推；B 幻影守卫后效验证
 - v88 全链 → 三路重派 → 全 accepted → accept-visual ×3
+
+## 追记 43：v88 全链建成 + 三路复核派发
+- **v88 队列实施**：①C stat 行带所属结局测量标题前缀（【标题】描述 格式，9 行可归属）②A 组别构成式转写落地（研发代号→中文名：LNP023→伊普可泮、ALXN2050→Danicopan 等，剂量/频次词转写保留，残余英文保留原臂名——区分度优先）③B 幻影时点守卫（maximum exposure → 最长暴露期）持续生效
+- **v88 全链建成提交**（A 3895 行 0 碰撞、B 357 行幻影消除、C 259 观察）。三路复核 r36/r50/r34 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
