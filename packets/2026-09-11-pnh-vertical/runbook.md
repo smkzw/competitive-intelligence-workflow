@@ -2301,3 +2301,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - Playwright 无头探针实测 v79 matrix.html：0 pageerror、45 行表格、诊断文案渲染正常。确认：默认 any_teae 轴在 PNH 语料无数据（登记 AE 仅 SAE/死亡），切换 any_sae 轴即有数据；唯一结构性缺轴是样本量。
 - **尺寸轴降级**：治疗臂样本量缺失时自动降级用试验总样本量（登记已披露），不再丢点；诊断计数同步。落到 v80 渲染。
 - v79 三路复核（r27/r41/r25）静默运行中。
+
+## 追记 13：A r27/B r41 收包（v79）；B 组别身份管线成主要矛盾
+- **A r27（veto 4）**：①矩阵恒空（尺寸轴降级已修但 v79 构建在前）②**派生发生率除数 bug（numericValue 返回布尔、除以 true=1 → 计数×100）——已修 parseFloat**（commit 537ab7c）③疗效分母 3895 行全 null 而登记 outcomeMeasure 带 denoms（NCT04820530 LNP023 组 40 人）——需在 A 构建器测度级抽 denom（CAS 结构探针未命中 denom_count，需按 NCT04820530 实际 shape 再查）④历史页"49 条排除理由"与登记不符（17 条含药物干预、8 条已公布结果）——NON_PRODUCT_RECORDS 判定口径需核实修正
+- **B r41（veto 4）**：①基线组别未列示 34/60/14/43 处仍现（cohort 解码未覆盖这些行的键路径——需查 _arm_label 输入键）②筛选按钮 64 项英文残留（time_window 维度需走 _native_timepoint_zh 转写）③人群标签形态损坏（"cale第28天"——token 词汇互噬；"changefrom基线"——空格吞噬与 token 缺失并存）④**组别身份与登记 outcomeMeasure 组标题不符**（NCT04469465 Week 12 登记为 TP1 组、门户显示 TP2 组名——A 构建器测度级 groups 映射被 B 侧 _arm_group_for 覆盖）。结论：**B 侧臂身份管线（A 载荷组标题→B 构建 _arm_group_for→渲染角色归一）是下一阶段主矛盾**
+- C r25 运行中。v80 队列：B 臂身份管线（组标题以 outcomeMeasure.groups 为准贯穿）+ A 分母 denoms 抽取 + 历史排除理由核实 + B 筛选时间窗转写
