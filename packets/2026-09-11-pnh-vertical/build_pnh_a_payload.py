@@ -511,6 +511,7 @@ def main() -> None:
         (re.compile(r"complement C5\b|\bC5\b", re.I), "C5"),
         (re.compile(r"complement C3\b|\bC3\b", re.I), "C3"),
         (re.compile(r"factor D", re.I), "Factor D"),
+        (re.compile(r"\bFD\b inhibitor|oral FD", re.I), "Factor D"),
         (re.compile(r"factor B\b", re.I), "Factor B"),
         (re.compile(r"ceruloplasmin", re.I), "血浆铜蓝蛋白"),
     ]
@@ -521,16 +522,31 @@ def main() -> None:
     ]
 
     def _extract_intervention_info(product_id):
-        """从该产品相关试验的干预描述中提取靶点/机制/给药方式。"""
-        texts = []
+        """从该产品"自身干预条目"的描述中提取靶点/机制/给药方式。
+
+        严格按登记干预名称匹配归因（摘要/对照句中的提及不归因，
+        避免把对照药的靶点错误归属给本产品——独立复核既有先例）。
+        摘要仅在产品自身条目无描述时作为兜底，且要求产品名出现在
+        简要摘要首句（主语位置）才采信。
+        """
+        needle = product_id.lower().replace("-", "").replace(" ", "")
+        texts: list[str] = []
+        summary_texts: list[str] = []
         for study in all_studies:
-            pid2 = (study.get("protocolSection", {}).get("identificationModule", {}) or {}).get("nctId", "")
-            for iv in ((study.get("protocolSection", {}).get("armsInterventionsModule", {}) or {}).get("interventions") or []):
+            proto = study.get("protocolSection", {})
+            for iv in (proto.get("armsInterventionsModule", {}) or {}).get("interventions") or []:
                 iv_name = str(iv.get("name", "")).strip()
-                if product_id.lower().replace("-", "") in iv_name.lower().replace("-", "").replace(" ", ""):
+                if needle in iv_name.lower().replace("-", "").replace(" ", ""):
                     desc = str(iv.get("description", "")).strip()
                     if desc:
                         texts.append(desc)
+            if not texts:
+                brief = str((proto.get("descriptionModule", {}) or {}).get("briefSummary") or "").strip()
+                head = " ".join(brief.split())[:200]
+                if brief and needle in head.lower().replace("-", "").replace(" ", ""):
+                    summary_texts.append(brief)
+        if not texts:
+            texts = summary_texts[:1]
         if not texts:
             return None, None, None
         joined = " ".join(texts)
@@ -555,7 +571,7 @@ def main() -> None:
         return target, mechanism, route
 
     # 收集所有原始 CAS 研究
-    all_studies = []
+    all_studies = [study for study, _page, _idx in studies]
     # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 主产品试验的申办方优先，其次试验药物臂的申办方，对照臂申办方不计。
