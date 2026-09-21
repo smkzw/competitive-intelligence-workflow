@@ -2363,3 +2363,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
   4. C 内容列括注时间点转写确认（_tp_disp 在 v80 之后代码已加，v81 渲染验证）+ 筛选时间点维度转写 + 同名行消歧 + 溶血错译（breakthrough hemolysis → 突破性溶血发生比例）
   5. population token 收尾：Direct Bilirubin/Binding/Neutralizing 等
 - v81 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 22：v81 队列实施完成 + v81 派发（commit e25a59b 系）
+- **B r42 三项实施**：①maximum exposure 幻影时点守卫（_time_band → 最长暴露期（登记））②absolute→绝对值 token ③基线组解码扩展：group-N-qualifier → 第N组（初治/换用依库珠单抗 等，qualifier 经漏斗转写）
+- **C r26 四项实施**：①时间点筛选维度转写（time/timepoint 双分支+三级转写）②量表维度接 _native_endpoint_zh ③突破性溶血整短语优先（不再错译"血管内溶血应答率"）④同名行消歧序号（前轮已落 _endpoint_ordinal 方案）
+- **v81 全链建成提交**（3895 行 0 碰撞；B 安全行期间标题+分母；C 12 页）。三路复核 r29/r43/r27 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环。
