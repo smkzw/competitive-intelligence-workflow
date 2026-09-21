@@ -910,8 +910,8 @@
       var productId = rows[i].getAttribute("data-matrix-product");
       var point = byProduct[productId];
       var values = point ? {
-        treatment: point.treatment.toFixed(1) + "%",
-        control: point.control.toFixed(1) + "%",
+        treatment: (typeof point.treatment === "number" ? point.treatment.toFixed(1) : String(point.treatment ?? "")),
+        control: (typeof point.control === "number" ? point.control.toFixed(1) : String(point.control ?? "")),
         teae: safetyDisplayValue(point.teaeRecord),
         sae: safetyDisplayValue(point.saeRecord),
         sample: String(point.trial.sample_size)
@@ -1060,7 +1060,7 @@
       bubble.setAttribute("data-product-id", p.id);
       bubble.setAttribute("data-product", p.name);
       bubble.setAttribute("data-efficacy-value", point.x.toFixed(1));
-      bubble.setAttribute("data-event-rate", point.eventRate.toFixed(1));
+      bubble.setAttribute("data-event-rate", (typeof point.eventRate === "number" ? point.eventRate.toFixed(1) : ""));
       bubble.setAttribute("data-trial-id", trial.id);
       bubble.setAttribute("data-arm-detail", point.safetyArmDetail || "");
       bubble.setAttribute("data-event-key", termKey);

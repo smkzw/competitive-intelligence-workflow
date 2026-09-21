@@ -461,8 +461,15 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         row["term_key"] = term_key
         row["term_label"] = term_label
         row["arm_detail"] = _native_arm_detail_zh(item.arm_detail)
-        # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写
-        row["time_window"] = _native_timepoint_zh(item.time_window)
+        # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写；
+        # 叙事型无法转写时保留原句并标注"（登记原文，未译）"
+        _tw = _native_timepoint_zh(item.time_window)
+        if _tw != item.time_window:
+            row["time_window"] = _tw
+        elif re.findall(r"[A-Za-z]{3,}", item.time_window):
+            row["time_window"] = item.time_window + "（登记原文，未译）"
+        else:
+            row["time_window"] = _tw
         rows.append(row)
     if not any(row["category"] == "特别关注不良事件" and row["value"] is not None for row in rows):
         rows = [row for row in rows if row["category"] != "特别关注不良事件"]

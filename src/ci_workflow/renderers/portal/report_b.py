@@ -1438,6 +1438,20 @@ def _b_native_label(text: str) -> str | None:
         return out
     out = _NATIVE_LABELS.get(out, out)
     out = out.replace("Other events", "其他不良事件")
+    # 括号配平提前：纯中文串也可能带孤立括号（B r50 issue-3）
+    cleaned_chars = []
+    depth = 0
+    for ch in out:
+        if ch == "（":
+            depth += 1
+            cleaned_chars.append(ch)
+        elif ch == "）":
+            if depth > 0:
+                depth -= 1
+                cleaned_chars.append(ch)
+        else:
+            cleaned_chars.append(ch)
+    out = "".join(cleaned_chars)
     if not re.search(r"[A-Za-z]{3,}", out):
         return out
     for pattern, rep in _B_VARIABLE_TOKENS:
@@ -1449,6 +1463,21 @@ def _b_native_label(text: str) -> str | None:
     out = re.sub(r"\(\s*", "（", out)
     out = re.sub(r"\s*\)", "）", out)
     out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
+    # 括号配平：按深度丢弃孤立右括号（"（第28天））"类残缺）
+    cleaned_chars = []
+    depth = 0
+    for ch in out:
+        if ch == "（":
+            depth += 1
+            cleaned_chars.append(ch)
+        elif ch == "）":
+            if depth > 0:
+                depth -= 1
+                cleaned_chars.append(ch)
+            # 深度为 0 的孤立右括号直接丢弃
+        else:
+            cleaned_chars.append(ch)
+    out = "".join(cleaned_chars)
     out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
     residual = [w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]
     if len(residual) >= 2:
