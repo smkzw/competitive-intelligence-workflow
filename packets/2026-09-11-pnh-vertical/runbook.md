@@ -2402,3 +2402,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **④声明绑定计数动态化**：build_pnh_audit.py 复核签发 observations 的计数改为 len() 动态计算（此前硬编码 44/239/81 与实际 45/3895/273 漂移——A r30 issue-4）
 - **①组别占位回退**：_native_arm_zh 残余英文时保留原臂名（可归属优先于外观），2103 行组别区分度恢复；构成式转写（别名→中文名+剂量频次）仍为 v83 完善项
 - v82 三路复核（r30/r44/r28）静默运行中——A r30 的①③两项（占位回归、分母）已在本轮处理，收包结果将于下轮合并分析
+
+## 追记 28：B r44/C r28 收包——v83 队列合并定稿
+- **B r44（veto 5）**：①展开表缺"分析形式/分析集"列致同名行不可归属（列头补两列）②幻影"第213.4周"（timeFrame 剥离后只剩数值周的路径未守卫——守卫需前移到数值分支前）③人群 token（absolute 等）+内部枚举 ④基线图 series"组别未列示（女/男）"（role unknown 时 series 回退 _arm_label 解码）⑤基线覆盖声明（78 行 vs 登记变量——导语对齐+变量扩展评估）
+- **C r28（veto 3）**：①主终点括注时间点未走 _tp_disp（primary 分支两处 ep_zh 后仍用 raw timepoint——本轮已修 disp）②同名终点两行（Hgb increase vs normalization 同标签）→ C 行级消歧序号 ③design-patterns 摘要用小写 nct id+签名重复元素（builder 摘要用 NCT 大写+去重）
+- **v83 队列（合并定稿）**：A r29①组别构成式转写（别名→中文名+剂量频次）+A r30③分母派生评估+B r44①分析形式/分析集列+C 行级消歧+B 幻影守卫前移+C 摘要修正 → v83 全链 → 三路重派
