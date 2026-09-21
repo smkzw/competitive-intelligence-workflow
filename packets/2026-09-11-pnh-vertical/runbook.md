@@ -2290,3 +2290,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ②时间窗/人群残留（after/trough/postdose/Minutes/OLEP）→ **已修** token 补齐
 - ③矩阵页自相矛盾（诊断说缺安全率，safety.html 却显示 8/40人）→ 派生发生率与 term_key 已在 v78 代码中，但诊断计数仍报缺失——需浏览器运行时探针核查（safetyRecordFor 匹配链），下轮 ego-lite 实测
 - 修复已提交（7aaa7cb 后续）。v77 B r39 收包同轮；v78 三路复核运行中（A r26 已收包→修复需 v79；B r40/C r24 静默）
+
+## 追记 11：B r40/C r24 修复（commit d482081）
+- **B r40**：①终点定义序号落到行级 `_endpoint_ordinal`（下划线键不进事实摘要，避免 digest 不变式冲突）+ JS 展开表指标列追加序号 ②diarrhoea→腹泻、Direct/Indirect Bilirubin→直接/间接胆红素 token
+- **C r24**：①PNH 克隆身份优先（clone size/PNH clone 先于血红蛋白消费——游离血红蛋白同类先例）②终点标签括注时间点走三级转写 ③人群页导语改为与实际交付一致（catalog+打包目录双份同步）
+- 遗留（v79 后继续）：B r40-① 基线组别未列示（NCT02605993 行组标识形状需再查）；矩阵诊断运行时核查（ego-lite）；C 同名行细粒度消歧
+- v79 队列：合并上述遗留 → 全链 → 三路重派
