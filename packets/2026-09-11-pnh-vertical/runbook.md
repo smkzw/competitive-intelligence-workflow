@@ -2016,3 +2016,15 @@ JS 端（report-c.js/data 渲染）也加格式化。
 3. deepseek A 5 项 + C 2 项 + B r44 2 项分批修复
 4. v67 全链 → 全线复核 + 视觉 → accept-visual ×3 → PNH 收口
 5. 重派 UC/IgAN → AD B/C → 横向 6 适应症 → 三宿主/安装包/RC
+
+### 最终修复提交（全部累计修复已进主干）
+- 单位词表（millimole(s)/litre→mmol/L 等变体）+ achieving 覆盖
+- A 类标题中文转写 + C5 子类 + 组名截断根除 + EOT 守卫
+- 字号归刻度（四份 CSS）+ C 聚合计数标注 + 响应式 grid
+- 时间筛选本地化 + 核心页隐藏快速栏不渲染 + B r43 JS 修复
+- C 交互 style 清空根因：MutationObserver 实证 style 被清空但写入源未定位
+  （需 DevTools 断点级调试，下一会话继续）
+- LDH Normalization 应答族（政策 v7.4）+ 分数周→天数格式化 + achieving 变体
+
+### 当前候选：v65（最后成功全链）；v66 = 最新工作区
+### 下一会话从 runbook 末节续接
