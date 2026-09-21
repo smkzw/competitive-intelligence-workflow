@@ -2247,3 +2247,15 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **P0 #3 矩阵（部分）**：两 A 构建器从 participantFlow Started 里程碑提取治疗臂样本量（本 PNH 语料无 milestones → 0 命中，机制留待其他语料/后续按 AE at-risk 降级策略）；JS 矩阵空态改为**缺轴诊断**（疗效轴/安全轴发生率/样本量轴分别说明缺什么）。
 - **v76 全链建成提交**（3895 疗效行 0 碰撞；C 12 静态页含局限页+246 观察）。三路复核 r24/r38/r22 stagger 派发，静默运行。
 - v76 收包后：全 accepted → accept-visual ×3 → PNH 纵向闭环；再 veto 则按行级定位续修。
+
+## 追记 5：v76 三路收包（A r24/B r38/C r22）——收敛中，末批快修已提交
+- **A r24（veto 3，从 5 收敛）**：①单位占位串吞掉可转写单位 594 行 → **已修**：SI 拼写第二形状+78 条字面映射，回退 0②时间窗占位 108 行 → **已修**：token 批量补齐（completion/period/Prior/Minutes/since/postdose/overall/prestudy/absolute/values），回退 108→79（剩余为叙事型 PK 采样描述，诚实占位）③人群 183 格英文 → **部分**（transfusion/OLEP/minutes 等 token 已加）④靶点机制自相矛盾 → **已修**（机制-靶点同源约束）。注意：时间点 token 物理顺序曾被新块插入打乱（of/the/in 过早消费破坏后置结构条目）——已重排至元组末尾，教训：**短语表尾部通配 token 必须最后注册**。
+- **B r38（veto 4，行级定位）**：①AE 模块按期间分组（TP1/TP2/LTE 六组 EG000-005）塌陷——组标题需保留+TP1→治疗期1 转写②基线性别 4 值"组别未列示"（NCT04170023 4/7/3/3）③抽屉组别小写机器串+clinical_concept 筛选项用原始 token（应用 label_zh）④safety 13 图"事件发生率"标签实为计数（例）——需计数/发生率口径分离+暴露分母（25人/57人）
+- **C r22（veto 4，收敛自 8）**：①eculizumab 负荷频次改写矛盾 ②coversin 单次负荷剂量呈现为整体方案 ③ravulizumab 6 次要终点同名（ordinal 从 observation_id 提数字取到试验号——已修为 sec(\d+)）④**行内编号切分碎片**（"Key"、"500 ng/ML)"）以"已报告值"呈现——**已修**：短碎片并回前一条目
+- 本轮提交：0dd61d5（A 单位/时间点 token+顺序）、6d77c9a（C ordinal+碎片过滤）、fc77496→43ffaed（B 抽屉/深链/Group N、C 局限页等）
+
+### 下一会话队列（v77 前）
+1. B r38 四项：安全组标题 TP1/TP2/LTE 保留+转写；基线 arm/group 字段补全；筛选项/抽屉用 label_zh；安全计数 vs 发生率口径分离+分母展示
+2. C r22 剩二：eculizumab 负荷频次（"once a week on Day 1, 8, 15, and then"分段验证）、coversin 负荷期显式标注
+3. P0 #3 矩阵完整契约（发生率%/term_key）；C 时间点 tuple 顺序全面核查（r23 的"期间 1"类）
+4. v77 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环 → IPF/横向
