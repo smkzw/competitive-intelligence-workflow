@@ -971,10 +971,13 @@
       var teaeRecord = safetyRecordFor(p.id, "any_teae", pair.trial_id, safetyArmDetail, sourceRows);
       var saeRecord = safetyRecordFor(p.id, "any_sae", pair.trial_id, safetyArmDetail, sourceRows);
       var eventRate = eventRecord && numericValue(eventRecord.value) ? eventRecord.value : null;
-      // 会商 P0 #3：登记只给组别计数（例）+风险人数时，纵轴使用派生发生率（%）
-      if (eventRate != null && eventRecord.denominator && numericValue(eventRecord.denominator)
-          && String(eventRecord.unit || "").indexOf("例") !== -1) {
-        eventRate = Math.round(eventRate / numericValue(eventRecord.denominator) * 1000) / 10;
+      // 会商 P0 #3：登记只给组别计数（例）+风险人数时，纵轴使用派生发生率（%）。
+      // 独立复核 A r27：numericValue 是布尔判定，不能作除数——用 parseFloat 取数值
+      if (eventRate != null && String(eventRecord.unit || "").indexOf("例") !== -1) {
+        var den = parseFloat(eventRecord.denominator);
+        if (isFinite(den) && den > 0) {
+          eventRate = Math.round(eventRate / den * 1000) / 10;
+        }
       }
       // 会商 P0 #3：治疗臂样本量缺失时降级用试验总样本量（登记已披露），
       // 不再因此丢点；尺寸标注在气泡说明中体现口径
