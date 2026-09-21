@@ -2583,3 +2583,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **克隆/输血规避术语顺序**：字典按"长词优先"重排（pnh clone size→克隆大小、transfusion avoidance→输血规避 先于 hemoglobin/transfusion 消费）——克隆终点不再错标血红蛋白、输血规避不再丢"规避"语义
 - **窗口转写统一**：_registry_endpoint_zh 内的 window 组合走 _native_timepoint_zh（"Week 12"→第12周）
 - v94 剩余队列：①入排柱图真实计数（B 侧同源）②C 行级消歧验证 ③A 组别构成式转写收尾（药名表扩充）④分母派生决策 ⑤B 展开表列头
+
+## 追记 58：B r55 收包（veto 3）——并入 v94 队列
+- ①基线性别行三行同名（组别未列示 + 女；NCT04469465 的 group_id 形状为 -arm-danicopan-tp1 / -arm-placebo-tp1，非 cohort-N——series 解码正则需扩展 -arm-<drug>-tp(\d+) → 第N期 Danicopan 组等）②完成情况图"组别未列示"重复系列+表图不一致（静默丢值提示）③完成情况图 x 轴直出登记内部组键（placebo tp1）
+- 修法（v94）：series/轴解码正则扩展 `-arm-([a-z0-9]+)-tp(\d+)` → 第N期 + 药名（经 _ARM_CODE_ZH/_PRODUCT_DISPLAY_NAMES_ZH）；图表静默丢值加提示行；x 轴组键统一走中文标签函数
+- 与 A r41 六项、C r39 修复合并为 v94 队列 → v94 全链 → 三路重派
