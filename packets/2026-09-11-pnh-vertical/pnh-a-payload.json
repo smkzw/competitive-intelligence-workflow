@@ -22,7 +22,7 @@
   {
    "id": "eculizumab",
    "name": "eculizumab",
-   "target": "C5",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "IV期",
    "status": "已批准上市",
@@ -30,9 +30,9 @@
     "中国",
     "境外"
    ],
-   "route": "静脉注射",
+   "route": "未公开披露",
    "developer": "Alexion Pharmaceuticals, Inc.",
-   "mechanism": "抗C5单克隆抗体",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -83,7 +83,7 @@
   {
    "id": "iptacopan",
    "name": "iptacopan",
-   "target": "Factor B",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
@@ -91,9 +91,9 @@
     "中国",
     "境外"
    ],
-   "route": "口服",
+   "route": "未公开披露",
    "developer": "Novartis Pharmaceuticals",
-   "mechanism": "口服Factor B抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -159,7 +159,7 @@
   {
    "id": "ravulizumab",
    "name": "ravulizumab",
-   "target": "C5",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
@@ -167,9 +167,9 @@
     "中国",
     "境外"
    ],
-   "route": "静脉注射",
+   "route": "未公开披露",
    "developer": "Alexion Pharmaceuticals, Inc.",
-   "mechanism": "抗C5单克隆抗体",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -220,16 +220,16 @@
   {
    "id": "sirolimus",
    "name": "sirolimus",
-   "target": "mTOR",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "IV期",
    "status": "进行中（不招募）",
    "regions": [
     "中国"
    ],
-   "route": "口服",
+   "route": "未公开披露",
    "developer": "Peking Union Medical College Hospital",
-   "mechanism": "mTOR抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -250,46 +250,46 @@
   {
    "id": "danicopan",
    "name": "danicopan",
-   "target": "Factor D",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
    "regions": [
     "境外"
    ],
-   "route": "口服",
+   "route": "未公开披露",
    "developer": "Alexion Pharmaceuticals, Inc.",
-   "mechanism": "口服Factor D抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
    "id": "coversin",
    "name": "coversin",
-   "target": "C5和C3",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "已完成",
    "regions": [
     "境外"
    ],
-   "route": "静脉注射",
+   "route": "未公开披露",
    "developer": "AKARI Therapeutics",
-   "mechanism": "双补体抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
    "id": "pegcetacoplan",
    "name": "pegcetacoplan",
-   "target": "C3",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
    "regions": [
     "境外"
    ],
-   "route": "皮下注射",
+   "route": "未公开披露",
    "developer": "Apellis Pharmaceuticals, Inc.",
-   "mechanism": "C3抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -340,7 +340,7 @@
   {
    "id": "crovalimab",
    "name": "crovalimab",
-   "target": "C5",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "进行中（不招募）",
@@ -348,9 +348,9 @@
     "中国",
     "境外"
    ],
-   "route": "皮下/静脉",
+   "route": "未公开披露",
    "developer": "Hoffmann-La Roche",
-   "mechanism": "抗C5单克隆抗体",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -386,16 +386,16 @@
   {
    "id": "zilucoplan",
    "name": "zilucoplan",
-   "target": "C5",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "II期",
    "status": "已完成",
    "regions": [
     "境外"
    ],
-   "route": "皮下注射",
+   "route": "未公开披露",
    "developer": "Ra Pharmaceuticals",
-   "mechanism": "C5抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "已有部分公开结果"
   },
   {
@@ -521,7 +521,7 @@
   {
    "id": "kp104",
    "name": "kp104",
-   "target": "C3和C5",
+   "target": "未公开披露",
    "modality": "未公开披露",
    "phase": "II期",
    "status": "进行中（不招募）",
@@ -529,9 +529,9 @@
     "中国",
     "境外"
    ],
-   "route": "静脉注射",
+   "route": "未公开披露",
    "developer": "Kira Pharmacenticals (US), LLC.",
-   "mechanism": "双补体抑制剂",
+   "mechanism": "未公开披露",
    "result_status": "暂无公开关键结果"
   },
   {

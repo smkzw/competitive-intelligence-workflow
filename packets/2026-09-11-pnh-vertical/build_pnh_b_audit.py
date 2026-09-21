@@ -907,6 +907,19 @@ def main() -> None:
 
     # ── 门户投影：先于校验构建并挂载；视图 facts=内容行 dump；A 形行与内容数值一致 ──
     a_eff_by_id = {f"b-{x['row_id']}": x for x in a["efficacy"]}
+    # 独立复核第四十六轮：评价时间列用格式化标签替代原始浮点周数
+    def _fmt_tp(weeks, unit="week"):
+        if weeks is None:
+            return "未列示"
+        if unit == "week" and weeks % 1 != 0:
+            d = weeks * 7
+            if abs(d - round(d)) < 0.01:
+                return f"第{round(d)}天"
+            return f"约{round(weeks, 1)}周"
+        if unit == "week":
+            return f"第{round(weeks)}周"
+        return f"第{round(weeks)}天"
+
     portal_efficacy = [
         {
             **a_eff_by_id[r["row_id"]],
@@ -1188,6 +1201,34 @@ def _normalize_unit(raw_unit: str, allowed: list[str]) -> str:
                 return candidate
     # 独立复核第二十轮 veto：登记单位优先于族占位——单位列必须忠实呈现登记口径
     return text
+
+
+
+_TIME_WINDOW_ZH = {
+    "Extension Period": "扩展期",
+    "LTE Period": "长期扩展期",
+    "Long-Term Extension (LTE)": "长期扩展期（LTE）",
+    "Long-Term Extension Period (52 Weeks)": "长期扩展期（52周）",
+    "Overall Study": "整个研究期",
+    "Primary Treatment Period (12 Weeks)": "主要治疗期（12周）",
+    "Treatment Period 1 (TP1)": "治疗期1（TP1）",
+    "Treatment Period 2 (TP2)": "治疗期2（TP2）",
+    "Treatment Period": "治疗期",
+    "Baseline": "基线",
+}
+
+def _format_time_label(weeks: float) -> str:
+    """将周数格式化为人类可读的时间标签（独立复核第四十六轮）。"""
+    if weeks is None:
+        return "未列示"
+    if weeks % 1 != 0:
+        days = weeks * 7
+        if abs(days - round(days)) < 0.01:
+            return f"第{round(days)}天"
+        return f"约{round(weeks, 1)}周"
+    unit_word = "周" if weeks >= 1 else "天"
+    num = weeks if weeks >= 1 else round(weeks * 7)
+    return f"第{round(num)}{unit_word}"
 
 
 def sys_exit() -> int:

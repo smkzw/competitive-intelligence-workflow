@@ -252,8 +252,21 @@
         el.style.display = show ? "" : "none";
       }
     } else {
-      var keyed2 = document.querySelectorAll('[data-product-id][style], [data-trial-id][style]');
-      for (var r = 0; r < keyed2.length; r += 1) keyed2[r].style.display = "";
+      // 独立视觉复核（v60 interaction）：当其他维度（如 element）有筛选时，
+      // 不重置 keyed 元素——重置会覆盖 element 维度的行隐藏效果
+      var hasOtherFilter = false;
+      var allKeys = filterDimensions();
+      for (var fi = 0; fi < allKeys.length; fi++) {
+        var fk = allKeys[fi];
+        if (fk !== "product" && fk !== "trial" && state[fk] && state[fk].length) {
+          hasOtherFilter = true;
+          break;
+        }
+      }
+      if (!hasOtherFilter) {
+        var keyed2 = document.querySelectorAll('[data-product-id][style], [data-trial-id][style]');
+        for (var r = 0; r < keyed2.length; r += 1) keyed2[r].style.display = "";
+      }
     }
     applyMatrixState(state);
     if (

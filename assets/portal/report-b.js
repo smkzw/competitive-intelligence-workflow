@@ -384,6 +384,11 @@
       return row.original_variable_label_zh || row.original_variable || row.variable || row.display_label_zh || "原始变量未列示";
     }
     if (key === "original_definition") return row.original_definition || "原始定义未列示";
+    if (key === "time_window") {
+      var twMap = {"Extension Period":"扩展期","LTE Period":"长期扩展期","Long-Term Extension (LTE)":"长期扩展期（LTE）","Long-Term Extension Period (52 Weeks)":"长期扩展期（52周）","Overall Study":"整个研究期","Primary Treatment Period (12 Weeks)":"主要治疗期（12周）","Treatment Period 1 (TP1)":"治疗期1（TP1）","Treatment Period 2 (TP2)":"治疗期2（TP2）","Treatment Period":"治疗期","Baseline":"基线"};
+      var twVal = row.time_window || "";
+      return twMap[twVal] || twVal;
+    }
     if (key === "actual_timepoint") {
       if (row.actual_timepoint === null || row.actual_timepoint === undefined) return "未列示";
       var tp = Number(row.actual_timepoint);
