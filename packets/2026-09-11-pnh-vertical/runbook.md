@@ -2186,3 +2186,34 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **reviewer-prompt 是会话手工生成的**：project run 只产 review_request.json；提示词由模板+请求字段生成（本会话已脚本化：绑定字段速查节+deepseek reviewer_id）。
 - **提交 A 包要用 $P/evidence/library/a-research-package.json**（build_pnh_audit.py 组装后的信封形状），不是 packets/ 的裸载荷。
 - 循环论证测试教训：验证转写函数时统计"输出中英文残留"会把通用回退（纯中文）误判为成功——必须直接断言"输出 != 回退文本"。
+
+## 2026-09-21 深夜会话：B/C 五项+九项修复落地；v74 三路收包（A r22/B r36/C r20）；会商备忘录产出
+
+### 本会话已完成（全部已提交推送）
+1. **B 渲染器 5 项修复**（commit "B r35 veto fixes"）：同名图卡消歧（页级统一重编号，20 页 0 重复）、基线类别入系列键（女/男）、时间窗回退转写（死分支修复）、_b_native_label 标签漏斗、展开表组别列 zh-first。23 测试过。
+2. **C 渲染器/构建器 9 项修复**（commit "C r19 nine veto fixes" + 后续）：mg/kg 口径保留、负荷/维持期分段、靶点抽取接线（build_pnh_a_payload._extract_intervention_info 此前定义未调用+all_studies 恒空）、Cohort 组名（fullmatch Cohort N→第N组）、design_paths 管道（ReportCPortalData 新字段+投影下发+渲染器消费）、次要终点全量（61 条）、统计四维声明（24 条）、入排轴澄清、时间点筛选 dead-branch 修复。20 测试过。
+3. **A 靶点别名归因**（commit c8c23ea 后续）：_ALIAS_NEEDLES（LNP023→iptacopan 等 15 组）+ 句子级证据 + 全局最近距离选择 + 组合语境过滤（add-on/background 句子的靶点不归属本产品）。最终：iptacopan=Factor B、alxn2050=Factor D、eculizumab/ravulizumab/coversin=C5、pegcetacoplan=C3、danicopan=NA（语料无其机制文本，诚实 NA 优于错误归属）。NA 27/45（v74 为 40/45）。
+4. **会商 P0 #2 域分流**：两个 A 构建器疗效写入前调 is_safety_domain_endpoint，246 行分流并记 derivation（safety_domain_diverted）。疗效行 4141→3895。
+5. **会商备忘录**：packets/2026-09-21-conference-round2/conference-memo.md——5 项裁决（4 未修复/1 部分修复）、根因层归属、IPF 推演泛化风险、P0-P2 排期。#1 分类器门闩、#3 矩阵契约、#4 B/C 参数化、#5 标签单源化仍待做。
+
+### v74 三路复核收包（deepseek，全部 veto——每项均带行级证据）
+- **A r22 五项**：①疗效指标 429 行残留英文（根因：endpoint_rules 部分替换后含中文→_native_endpoint_zh zh-直通短路放行混合文本；时间窗"至至/completion/period/Prior/Minutes"、人群"least/all/to"token 缺失；单位 26.6g/liter (L) 类值内嵌单位）②AE/药代并入疗效+**门户未渲染 endpoint_source**（数据层有但 UI 无原文）③靶点 NA（已修，见上）④**产品档案页"关键安全性"表缺组别列**（102 行不可归属；safety.html 有组别而 products/*.html 无——投影层丢维度）⑤**组别列直出 OG000 内部码**（group_titles 只取 outcomeModule.groups 顶层，测量级 measure.groups 未读；693 行）——**measure.groups 接线已完成**（两构建器）。
+- **B r36 三项**：①cohort 维度并入同表（b-eff-2741..44 四行全同，cohort 未显示）②数据依据抽屉"终点/事件"位直出登记英文原句 ③评价时间列直出周小数（36.142857…，Day 制登记被换算——time_window 字段路径，r45 时代已知问题回归）
+- **C r20 八项**：①次要终点 61/67 行直出英文（新字段未接 zh 转写——渲染器 _chart_row 对新字段未走 _registry_endpoint_zh/_native_timepoint_zh）②eculizumab 负荷/维持仍合并（源文本逗号结构，分段规则未命中）③4 项试验给药方案仅产品名（"IV infusions"句未提取途径）④**统计声明错标"未公开"而来源 description 载明 MMRM**——声明前须先抽 primaryOutcomes[].description 的统计句 ⑤入排轴值=内部行数非登记条目数 ⑥**缺"证据版本与局限"页**（合同要求，17 路由全无局限声明）⑦trial 页承诺"全部设计字段"但只录 primary[0]（登记 9 条主终点）→ builder 需遍历全部 primaryOutcomes ⑧目标人群单元格口径不一（自指文本 vs 最低年龄）
+
+### 下一会话工作队列（按序，全部有行级定位）
+1. **A r22 UI 项**：endpoint_source 渲染进 UI（efficacy 表/抽屉）；产品页安全表加组别列；label 直通短路收紧（含中文但残英文的混合文本不得放行）+ 时间窗/人群 token 补齐（completion/period/Prior/Minutes/least/all）+ 至至去重 + 值内嵌单位变体（g/liter (L)/hour (h)/Units/ln(ratio)）
+2. **B r36 三项**：cohort 维度显示；抽屉终点/事件位走 _b_native_label；评价时间列 Day 恢复（time_window 路径）
+3. **C r20 八项**：次要终点字段接 zh 转写；给药分段支持逗号结构+"IV infusion"途径句；统计声明改为"先抽 primaryOutcomes[].description 统计句，缺失才声明未公开"；入排真实条目数（eligibility 原文计数）；**新增"证据版本与局限"页**；builder 遍历全部 primaryOutcomes；目标人群单元格统一结构化（minAge 等）
+4. **会商 P0**：#1 分类器门闩（indication_scope + 规则收紧 + 回归探针）、#3 矩阵契约（term_key/发生率%/样本量投影合同）
+5. v75 全链 → 三路重派 → accepted → accept-visual ×3
+6. 会商 P1/P2：B/C IndicationProfile 参数化、标签单源化；round-3 IPF 测试收包后复盘
+
+### 后台在飞任务（本会话结束时仍在运行）
+- round-2 会商已收包✓；round-3 IPF 测试（grok-4.6，runs/test-ipf/findings.json）运行中
+- v74 三路复核已收包✓
+
+### 本会话坑（新增）
+- 验证转写函数断言"输出≠回退文本"的教训再次生效（第二轮复用）
+- 靶点归因三连坑：①全描述文本首条命中→对照药靶点污染（iptacopan=C5）；②试验级归因→同试验对照药描述拉入；③组合治疗语境（add-on to C5i）→背景药靶点误归。最终方案=别名 needle+句子级+全局最近距离+组合语境过滤。结论：机制抽取必须"证据句子同时提及产品别名"才可采信
+- v74 提交后又改 A 载荷→替换锁→再次重建 v74 的教训：**提交前确认本轮全部改动已进链**

@@ -403,7 +403,13 @@ def main() -> None:
             for measure in ((results.get("outcomeMeasuresModule") or {})
                             .get("outcomeMeasures") or []):
                 title = str(measure.get("title") or "").strip() or NA
-                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"
+                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"                # 独立复核 A r22（issue-5）：组别标题优先取自测量自带 groups（OG 代码 → 登记标题）
+                for g in (measure.get("groups") or []):
+                    gid = str(g.get("id") or "").strip()
+                    gtitle = str(g.get("title") or "").strip()
+                    if gid and gtitle:
+                        group_titles.setdefault(gid, gtitle)
+
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
                 for cls in (measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
@@ -533,47 +539,107 @@ def main() -> None:
         (re.compile(r"subcutaneous", re.I), "皮下注射"),
     ]
 
-    def _extract_intervention_info(product_id):
-        """从该产品"自身干预条目"的描述中提取靶点/机制/给药方式。
+    # 独立复核 A r22（issue-3）：别名归因——登记用研发代号（LNP023/rVA576），
+    # 门户用通用名（iptacopan/coversin），靶点抽取必须沿别名映射归因
+    _ALIAS_NEEDLES: dict[str, list[str]] = {}
+    for _alias, _canon in (ALIAS.get("canonical_by_alias") or {}).items():
+        _ALIAS_NEEDLES.setdefault(_canon, []).append(
+            _alias.lower().replace("-", "").replace(" ", "")
+        )
+    for _pid in list(_ALIAS_NEEDLES):
+        _ALIAS_NEEDLES[_pid].append(_pid.lower().replace("-", "").replace(" ", ""))
 
-        严格按登记干预名称匹配归因（摘要/对照句中的提及不归因，
-        避免把对照药的靶点错误归属给本产品——独立复核既有先例）。
-        摘要仅在产品自身条目无描述时作为兜底，且要求产品名出现在
-        简要摘要首句（主语位置）才采信。
+    def _extract_intervention_info(product_id):
+        """靶点/机制/给药途径抽取：别名归因 + 试验级证据绑定。
+
+        归因规则：仅当某登记试验的干预名称命中本产品任一别名时，该试验的
+        干预描述、详细描述、关键词、简要摘要才可作为本产品的证据来源
+        （对照试验的提及不归因，避免对照药靶点误归属——独立复核既有先例）。
         """
-        needle = product_id.lower().replace("-", "").replace(" ", "")
+        needles = _ALIAS_NEEDLES.get(product_id, [product_id.lower().replace("-", "").replace(" ", "")])
         texts: list[str] = []
-        summary_texts: list[str] = []
         for study in all_studies:
             proto = study.get("protocolSection", {})
-            for iv in (proto.get("armsInterventionsModule", {}) or {}).get("interventions") or []:
+            interventions = (proto.get("armsInterventionsModule", {}) or {}).get("interventions") or []
+            # 句子级归因：只采信"含本产品别名"的句子，避免同试验对照药
+            # 的靶点句子污染本产品（独立复核 A r22 issue-3 复验发现）
+            for iv in interventions:
                 iv_name = str(iv.get("name", "")).strip()
-                if needle in iv_name.lower().replace("-", "").replace(" ", ""):
-                    desc = str(iv.get("description", "")).strip()
-                    if desc:
-                        texts.append(desc)
-            if not texts:
-                brief = str((proto.get("descriptionModule", {}) or {}).get("briefSummary") or "").strip()
-                head = " ".join(brief.split())[:200]
-                if brief and needle in head.lower().replace("-", "").replace(" ", ""):
-                    summary_texts.append(brief)
-        if not texts:
-            texts = summary_texts[:1]
+                desc = str(iv.get("description", "")).strip()
+                name_hit = any(n in iv_name.lower().replace("-", "").replace(" ", "") for n in needles)
+                if name_hit and desc:
+                    texts.append(desc)
+            desc_module = proto.get("descriptionModule", {}) or {}
+            trial_relevant = any(
+                any(n in str(iv.get("name", "")).lower().replace("-", "").replace(" ", "") for n in needles)
+                for iv in interventions
+            )
+            if trial_relevant:
+                for key in ("detailedDescription", "briefSummary"):
+                    txt = str(desc_module.get(key) or "").strip()
+                    if not txt:
+                        continue
+                    for sentence in re.split(r"(?<=[.!?])\s+", txt):
+                        sent_norm = sentence.lower().replace("-", "").replace(" ", "")
+                        if not any(n in sent_norm for n in needles):
+                            continue
+                        # 组合/背景治疗语境（"add-on to a background C5i"）里
+                        # 的靶点词属于背景药，不归属本产品（独立复核 A r22：
+                        # danicopan 被背景 C5i 语境误标为 C5 的根因）
+                        if re.search(r"add-?on|in addition to|background", sentence, re.I) \
+                                and not re.search(r"\bis a\b|\bis an\b", sentence, re.I):
+                            continue
+                        texts.append(sentence.strip())
+            # 关键词属试验级证据：试验已按干预名归因给本产品时，
+            # 其全部关键词（如 "Factor D inhibitor"）均可作为机制证据
+            for kw in (proto.get("keywordsModule", {}) or {}).get("keywords", []) or []:
+                kw_text = str(kw).strip()
+                if kw_text and re.search(r"inhibit|inhibitor|agonist|antagonist|antibody", kw_text, re.I):
+                    texts.append(kw_text)
         if not texts:
             return None, None, None
+        # 靶点/机制选择：在含别名的句子内，取"距别名提及最近"的模式命中，
+        # 而非全文首条命中（否则"danicopan + C5 抑制剂背景治疗"类句子
+        # 会把 C5 误归给 Factor D 产品——独立复核 A r22 复验发现）
+        def _nearest(patterns, joined, needle):
+            best_label, best_dist = None, None
+            low = joined.casefold()
+            positions = [m.start() for m in re.finditer(re.escape(needle), low)]
+            if not positions:
+                positions = [0]
+            for pat, label in patterns:
+                for m in pat.finditer(joined):
+                    dist = min(abs(p - m.start()) for p in positions)
+                    if best_dist is None or dist < best_dist:
+                        best_label, best_dist = label, dist
+            return best_label
         joined = " ".join(texts)
-        # 机制
-        mechanism = None
-        for pat, label in _MECH_PATTERNS:
-            if pat.search(joined):
-                mechanism = label
+        cand_target: list[tuple[int, str]] = []
+        cand_mech: list[tuple[int, str]] = []
+        for text in texts:
+            low_text = text.casefold().replace("-", "").replace(" ", "")
+            for needle in needles:
+                if needle not in low_text:
+                    continue
+                m_t = _nearest(_TARGET_PATTERNS, text, needle)
+                m_m = _nearest(_MECH_PATTERNS, text, needle)
+                if m_t:
+                    cand_target.append((text.casefold().find(m_t.casefold()[:8]) if m_t else 0, m_t))
+                if m_m:
+                    cand_mech.append((text.casefold().find(m_m.casefold()[:8]) if m_m else 0, m_m))
                 break
-        # 靶点
-        target = None
-        for pat, label in _TARGET_PATTERNS:
-            if pat.search(joined):
-                target = label
-                break
+        target = min(cand_target)[1] if cand_target else None
+        mechanism = min(cand_mech)[1] if cand_mech else None
+        if target is None:
+            for pat, label in _TARGET_PATTERNS:
+                if pat.search(joined):
+                    target = label
+                    break
+        if mechanism is None:
+            for pat, label in _MECH_PATTERNS:
+                if pat.search(joined):
+                    mechanism = label
+                    break
         # 给药途径
         route = None
         for pat, label in _ROUTE_PATTERNS:
