@@ -5,9 +5,9 @@
  "report_kind": "C",
  "report_version": "v1",
  "format": "html",
- "run_id": "run_307f65bfd418c0a0a264e338",
- "visual_plan_digest": "e0eb8135447b301b4ffdcd18b18669ae212627cf867a199fa8e2292034643f9d",
- "candidate_artifact_digest": "1a566d52daa66bc8cce38b239cbbf439c657aea51186bff1d87391154352e7a2",
+ "run_id": "run_e8c124a04f8353a8cbdba310",
+ "visual_plan_digest": "9ad43f4b9680a539df77ccb2902ff2e1d1fb2bcd9f886b1667f223229af81d02",
+ "candidate_artifact_digest": "3f2f5e39d48d2cd9e8bd46179ada6da0468d20ac5d16fd2eb40b37a42061d91f",
  "producer_identity": "zcode-main-thread-glm53",
  "render_targets": [
   {
@@ -1692,5 +1692,5 @@
   }
  ],
  "defects": [],
- "created_at": "2026-09-20T21:59:58.306882+00:00"
+ "created_at": "2026-09-21T01:49:48.111014+00:00"
 }
