@@ -2144,3 +2144,6 @@ A r32/B r49/C r30 三路科学复核均遇 omp 子进程退出码 1 或 verdict 
 ### 本会话坑（复盘）
 - omp gemini 提供者在 --no-session 模式下间歇性静默失败（退出码 0 但无产出文件），deepseek 稳定；派发后必须显式检查 verdict 文件存在性，不能信包装器退出码
 - 批量正则改写脚本对含字面 `)` 的正则串做括号计数会截断字符串字面量——本会话曾把 report_a.py 改坏，已从 HEAD 恢复并整体重写落码；教训：对代码做结构化改写前先 `py_compile` 快照，改写后立即编译验证
+
+### 补记：独立测试轮 round-2 状态
+IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tmp/test-round-2.log 中均停在"要不要建 Trellis 任务"的确认提问上，未实际执行测试（tester-v2 提示词里的执行纪律守卫未能阻止）。下会话重派时需在提示词首行加"直接开始执行，禁止询问确认、禁止创建任务流程"，并要求把 findings.json 写入 runs/test-igan、runs/test-uc。
