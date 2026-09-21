@@ -1915,3 +1915,8 @@ A r21b 回执 + 视觉 7/7 ✓；B r35/r41 科学 + 视觉 7/7 ✓；C r19/r17 �
   --no-session 模式可能没有。
 - 修复方向：改用 cursor/default 或给 gemini/deepseek 加文件写入参数重派。
 - **v64 视觉计分**：A ✓ 7/7、B/C 待重派。
+
+### 视觉 C（v64，deepseek，binding ✓）：rejected 6/7——仅 color ✓
+全部 refs 指向 overview.html。C 站点 overview 页仍需设计迭代（层级/排版/
+筛选联动/图表完整性）。这是 C 站点的核心设计债，与 A/B 的域级修复不同——
+C 站点需要 overview 页的结构性重设计。
