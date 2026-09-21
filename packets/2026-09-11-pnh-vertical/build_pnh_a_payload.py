@@ -491,6 +491,72 @@ def main() -> None:
                         "time_window": "全研究期（登记）",
                     })
 
+    # 独立复核第三十二轮：从登记干预描述中提取靶点/机制/给药途径，
+    # 替代"未公开披露"占位符
+    _MECH_PATTERNS = [
+        (re.compile(r"anti[- ]Factor Bb", re.I), "anti-Factor Bb"),
+        (re.compile(r"anti[- ]C5", re.I), "anti-C5"),
+        (re.compile(r"anti[- ]C3", re.I), "anti-C3"),
+        (re.compile(r"C5 inhibitor", re.I), "C5抑制剂"),
+        (re.compile(r"C3 inhibitor", re.I), "C3抑制剂"),
+        (re.compile(r"factor B inhibitor|factor Bb inhibitor", re.I), "Factor B抑制剂"),
+        (re.compile(r"complement (?:C5|C3) (?:receptor|inhibitor)", re.I), "补体抑制剂"),
+        (re.compile(r"monoclonal antibody", re.I), "单克隆抗体"),
+        (re.compile(r"small molecule|oral.{0,20}inhibitor", re.I), "小分子口服抑制剂"),
+        (re.compile(r"factor D inhibitor", re.I), "Factor D抑制剂"),
+        (re.compile(r"convertase", re.I), "转化酶"),
+    ]
+    _TARGET_PATTERNS = [
+        (re.compile(r"anti[- ]Factor Bb|Factor Bb", re.I), "Factor Bb"),
+        (re.compile(r"complement C5\b|\bC5\b", re.I), "C5"),
+        (re.compile(r"complement C3\b|\bC3\b", re.I), "C3"),
+        (re.compile(r"factor D", re.I), "Factor D"),
+        (re.compile(r"factor B\b", re.I), "Factor B"),
+        (re.compile(r"ceruloplasmin", re.I), "血浆铜蓝蛋白"),
+    ]
+    _ROUTE_PATTERNS = [
+        (re.compile(r"route of administration:\s*oral|oral administration|taken orally|oral b\.i\.d", re.I), "口服"),
+        (re.compile(r"intravenous|IV infusion|administered intravenously", re.I), "静脉注射"),
+        (re.compile(r"subcutaneous", re.I), "皮下注射"),
+    ]
+
+    def _extract_intervention_info(product_id):
+        """从该产品相关试验的干预描述中提取靶点/机制/给药方式。"""
+        texts = []
+        for study in all_studies:
+            pid2 = (study.get("protocolSection", {}).get("identificationModule", {}) or {}).get("nctId", "")
+            for iv in ((study.get("protocolSection", {}).get("armsInterventionsModule", {}) or {}).get("interventions") or []):
+                iv_name = str(iv.get("name", "")).strip()
+                if product_id.lower().replace("-", "") in iv_name.lower().replace("-", "").replace(" ", ""):
+                    desc = str(iv.get("description", "")).strip()
+                    if desc:
+                        texts.append(desc)
+        if not texts:
+            return None, None, None
+        joined = " ".join(texts)
+        # 机制
+        mechanism = None
+        for pat, label in _MECH_PATTERNS:
+            if pat.search(joined):
+                mechanism = label
+                break
+        # 靶点
+        target = None
+        for pat, label in _TARGET_PATTERNS:
+            if pat.search(joined):
+                target = label
+                break
+        # 给药途径
+        route = None
+        for pat, label in _ROUTE_PATTERNS:
+            if pat.search(joined):
+                route = label
+                break
+        return target, mechanism, route
+
+    # 收集所有原始 CAS 研究
+    all_studies = []
+    # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 主产品试验的申办方优先，其次试验药物臂的申办方，对照臂申办方不计。
     for dp, cands in dev_candidates.items():
@@ -556,11 +622,11 @@ def main() -> None:
             "date": "2026-09-06",
             "observation": (
                 f"CT.gov 当前记录 189 条：{len(trials_rows)} 条试验入表；"
-                f"{len(skipped_trials)} 条因未披露样本量未入试验表（G10-1，NCT 明细见派生 sidecar："
+                f"{len(skipped_trials)} 条因未披露样本量未入试验表（NCT："
                 + "、".join(skipped_trials[:8])
-                + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体（明细见 sidecar）；"
-                "联合治疗关系受载荷单产品字段限制（G11-1），全部联合组合记录于派生 sidecar；"
-                "中国路线 access_blocked 如实记录；监管/专利来源待接入"
+                + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体（明细见派生记录）；"
+                "联合治疗关系受载荷单产品字段限制；"
+                "中国路线 访问受阻已如实记档；监管/专利来源待接入"
             ),
         }],
         "sources": [

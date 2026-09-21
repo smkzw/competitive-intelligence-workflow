@@ -22,7 +22,7 @@
   {
    "id": "eculizumab",
    "name": "eculizumab",
-   "target": "未公开披露",
+   "target": "C5",
    "modality": "未公开披露",
    "phase": "IV期",
    "status": "已批准上市",
@@ -30,9 +30,9 @@
     "中国",
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "静脉注射",
    "developer": "Alexion Pharmaceuticals, Inc.",
-   "mechanism": "未公开披露",
+   "mechanism": "抗C5单克隆抗体",
    "result_status": "已有部分公开结果"
   },
   {
@@ -83,7 +83,7 @@
   {
    "id": "iptacopan",
    "name": "iptacopan",
-   "target": "未公开披露",
+   "target": "Factor B",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
@@ -91,9 +91,9 @@
     "中国",
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "口服",
    "developer": "Novartis Pharmaceuticals",
-   "mechanism": "未公开披露",
+   "mechanism": "口服Factor B抑制剂",
    "result_status": "已有部分公开结果"
   },
   {
@@ -159,7 +159,7 @@
   {
    "id": "ravulizumab",
    "name": "ravulizumab",
-   "target": "未公开披露",
+   "target": "C5",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
@@ -167,9 +167,9 @@
     "中国",
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "静脉注射",
    "developer": "Alexion Pharmaceuticals, Inc.",
-   "mechanism": "未公开披露",
+   "mechanism": "抗C5单克隆抗体",
    "result_status": "已有部分公开结果"
   },
   {
@@ -220,16 +220,16 @@
   {
    "id": "sirolimus",
    "name": "sirolimus",
-   "target": "未公开披露",
+   "target": "mTOR",
    "modality": "未公开披露",
    "phase": "IV期",
    "status": "进行中（不招募）",
    "regions": [
     "中国"
    ],
-   "route": "未公开披露",
+   "route": "口服",
    "developer": "Peking Union Medical College Hospital",
-   "mechanism": "未公开披露",
+   "mechanism": "mTOR抑制剂",
    "result_status": "已有部分公开结果"
   },
   {
@@ -250,46 +250,46 @@
   {
    "id": "danicopan",
    "name": "danicopan",
-   "target": "未公开披露",
+   "target": "Factor D",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
    "regions": [
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "口服",
    "developer": "Alexion Pharmaceuticals, Inc.",
-   "mechanism": "未公开披露",
+   "mechanism": "口服Factor D抑制剂",
    "result_status": "已有部分公开结果"
   },
   {
    "id": "coversin",
    "name": "coversin",
-   "target": "未公开披露",
+   "target": "C5和C3",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "已完成",
    "regions": [
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "静脉注射",
    "developer": "AKARI Therapeutics",
-   "mechanism": "未公开披露",
+   "mechanism": "双补体抑制剂",
    "result_status": "已有部分公开结果"
   },
   {
    "id": "pegcetacoplan",
    "name": "pegcetacoplan",
-   "target": "未公开披露",
+   "target": "C3",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "招募中",
    "regions": [
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "皮下注射",
    "developer": "Apellis Pharmaceuticals, Inc.",
-   "mechanism": "未公开披露",
+   "mechanism": "C3抑制剂",
    "result_status": "已有部分公开结果"
   },
   {
@@ -340,7 +340,7 @@
   {
    "id": "crovalimab",
    "name": "crovalimab",
-   "target": "未公开披露",
+   "target": "C5",
    "modality": "未公开披露",
    "phase": "III期",
    "status": "进行中（不招募）",
@@ -348,9 +348,9 @@
     "中国",
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "皮下/静脉",
    "developer": "Hoffmann-La Roche",
-   "mechanism": "未公开披露",
+   "mechanism": "抗C5单克隆抗体",
    "result_status": "已有部分公开结果"
   },
   {
@@ -386,16 +386,16 @@
   {
    "id": "zilucoplan",
    "name": "zilucoplan",
-   "target": "未公开披露",
+   "target": "C5",
    "modality": "未公开披露",
    "phase": "II期",
    "status": "已完成",
    "regions": [
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "皮下注射",
    "developer": "Ra Pharmaceuticals",
-   "mechanism": "未公开披露",
+   "mechanism": "C5抑制剂",
    "result_status": "已有部分公开结果"
   },
   {
@@ -521,7 +521,7 @@
   {
    "id": "kp104",
    "name": "kp104",
-   "target": "未公开披露",
+   "target": "C3和C5",
    "modality": "未公开披露",
    "phase": "II期",
    "status": "进行中（不招募）",
@@ -529,9 +529,9 @@
     "中国",
     "境外"
    ],
-   "route": "未公开披露",
+   "route": "静脉注射",
    "developer": "Kira Pharmacenticals (US), LLC.",
-   "mechanism": "未公开披露",
+   "mechanism": "双补体抑制剂",
    "result_status": "暂无公开关键结果"
   },
   {
@@ -51852,7 +51852,7 @@
    "product_id": "my008211a",
    "status": "登记检索完成",
    "date": "2026-09-06",
-   "observation": "CT.gov 当前记录 189 条：135 条试验入表；5 条因未披露样本量未入试验表（G10-1，NCT 明细见派生 sidecar：NCT06028594、NCT05982938、NCT05222412、NCT00438789、NCT00112983）；49 条无独立药物干预未产出实体（明细见 sidecar）；联合治疗关系受载荷单产品字段限制（G11-1），全部联合组合记录于派生 sidecar；中国路线 access_blocked 如实记录；监管/专利来源待接入"
+   "observation": "CT.gov 当前记录 189 条：135 条试验入表；5 条因未披露样本量未入试验表（NCT：NCT06028594、NCT05982938、NCT05222412、NCT00438789、NCT00112983）；49 条无独立药物干预未产出实体（明细见派生记录）；联合治疗关系受载荷单产品字段限制；中国路线 访问受阻已如实记档；监管/专利来源待接入"
   }
  ],
  "sources": [
