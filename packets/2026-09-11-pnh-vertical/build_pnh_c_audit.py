@@ -136,6 +136,22 @@ def _split_eligibility(text: str) -> tuple[list[str], list[str]]:
             else:
                 merged.append(item)
         items = merged
+        # 独立复核 C r29（issue-4）：章节标题残片（"Key Inclusion Criteria"等）
+        # 不得作为条目呈现
+        items = [
+            i for i in items
+            if not re.fullmatch(
+                r"(key\s+|main\s+|specific\s+)?(inclusion|exclusion|eligibility)\s+criteria[:\s]*",
+                i.strip(), re.I)
+            and i.strip()
+        ]
+        merged = []
+        for item in items:
+            if len(item) < 8 and merged:
+                merged[-1] = merged[-1] + " " + item
+            else:
+                merged.append(item)
+        items = merged
         if not items:
             joined = " ".join(chunk.split())
             return [joined] if joined else []

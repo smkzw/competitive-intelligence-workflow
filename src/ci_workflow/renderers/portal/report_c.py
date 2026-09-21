@@ -1036,6 +1036,28 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
     return joined or _state_label(observation.disclosure_state)
 
 
+_NO_TIMEPOINT_FIELDS = frozenset(
+    {
+        "trial_identity",
+        "target_population",
+        "inclusion_criterion",
+        "exclusion_criterion",
+        "arm_randomization_blinding",
+        "experimental_arm",
+        "control_arm",
+        "dosing_regimen",
+        "planned_or_actual_sample_size",
+        "analysis_population",
+        "analysis_sets",
+        "statistical_comparisons",
+        "multiplicity_adjustment",
+        "missing_data_handling",
+        "design_kind",
+        "study_design_type",
+    }
+)
+
+
 def _chart_row(
     data: ReportCPortalData,
     observation: DesignObservation,
@@ -1075,20 +1097,17 @@ def _chart_row(
             else "组别未细分"
         ),
         "category": "设计事实",
-        "time": _registry_timeframe_zh(_text(observation.assessment_timepoint))
-        or _native_timepoint_zh(_text(observation.assessment_timepoint))
-        or _text(observation.assessment_timepoint)
-        or (
-            "不适用"
-            if observation.field
-            in {
-                "arm_randomization_blinding",
-                "experimental_arm",
-                "control_arm",
-                "planned_or_actual_sample_size",
-                "analysis_population",
-            }
-            else "未公开"
+        # 独立复核 C r29（issue-3）：结构上无时间点的字段缺省"不适用"，
+        # 与"已报告值"披露状态不再矛盾；有时间点却缺失的才标"未公开"
+        "time": (
+            _registry_timeframe_zh(_text(observation.assessment_timepoint))
+            or _native_timepoint_zh(_text(observation.assessment_timepoint))
+            or _text(observation.assessment_timepoint)
+            or (
+                "不适用"
+                if observation.field in _NO_TIMEPOINT_FIELDS
+                else "未公开"
+            )
         ),
         "unit": _text(observation.threshold_unit),
         "disclosure_state": observation.disclosure_state.value,
@@ -1217,6 +1236,10 @@ def _safe_locator(observation: DesignObservation) -> EvidenceLocator:
     nct_match = re.search(r"/api/v2/studies/(NCT\d+)", url or "", re.I)
     if nct_match:
         url = f"https://clinicaltrials.gov/study/{nct_match.group(1).upper()}"
+    # 独立复核 C r29（issue-5）：定位链接必须能回到具体登记记录；
+    # 观察行自带试验标识（NCTxxxx）时按行构造深链，不再落回 CT.gov 首页
+    if re.fullmatch(r"NCT\d{8}", (observation.trial_id or "").upper() or ""):
+        url = f"https://clinicaltrials.gov/study/{observation.trial_id.upper()}"
     visible = {
         "document_role": document_role_map.get(
             locator.document_role, locator.document_role
