@@ -1644,3 +1644,13 @@ input:focus-visible {
 .kz-b-conclusions__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .kz-b-conclusions__item { display: flex; gap: 10px; align-items: baseline; font-size: 14px; line-height: 1.55; color: var(--text-2, #3c434d); }
 .kz-b-conclusions__item strong { flex: 0 0 auto; color: var(--text-1, #171a1f); }
+
+/* 独立复核 A r22（issue-2）：疗效表行内展示登记终点原文，数值可回溯到具体测量 */
+.kz-a-endpoint-source {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--kz-neutral-600, #6b7280);
+  font-weight: normal;
+}
