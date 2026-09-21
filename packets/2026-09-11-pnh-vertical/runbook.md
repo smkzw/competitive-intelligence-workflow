@@ -2036,3 +2036,9 @@ JS 端（report-c.js/data 渲染）也加格式化。
 2. 单位/时间格式：评价时间列仍直出浮点（25.71428571428571）——修复需
    在 report-b.js 的 time_window 字段渲染路径中应用天数恢复（当前修复
    在 actual_timepoint 路径但评价时间列读的是 time_window 字段）。
+
+### v67 最终状态快照
+- 科学复核：A deepseek 重派运行中、B r45 veto 2 项（来源页标签互换+时间浮点）、
+  C r27 veto 待查详情
+- 视觉：A=cursor、B=gemini、C=deepseek v67 prompts 已派发，运行中
+- 下一会话从 runbook 末节续接
