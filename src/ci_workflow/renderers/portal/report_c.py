@@ -807,17 +807,19 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
 
 
 _REGISTRY_ENDPOINT_TERM_ZH = {
+    # 顺序关键：长词/特定词先于其子串（clone→hemoglobin、avoidance→transfusion）
+    "pnh clone size": "PNH 克隆大小",
+    "clone size": "克隆大小",
+    "pnh clone": "PNH 克隆",
+    "transfusion avoidance": "输血规避",
     "breakthrough hemolysis": "突破性溶血发生比例",
     "haptoglobin": "触珠蛋白",
     "facit": "FACIT 量表",
     "quality of life questionnaire": "生活质量问卷",
-    "hemoglobin": "血红蛋白",
-    "hgb": "血红蛋白",
-    "pnh clone size": "PNH 克隆大小",
-    "clone size": "PNH 克隆大小",
-    "pnh clone": "PNH 克隆",
     "free hemoglobin": "游离血红蛋白",
     "free hgb": "游离血红蛋白",
+    "hemoglobin": "血红蛋白",
+    "hgb": "血红蛋白",
     "ldh": "LDH",
     "lactate dehydrogenase": "LDH",
     "transfusion": "输血",
@@ -875,13 +877,13 @@ def _registry_endpoint_zh(text: str) -> str | None:
         r"[Pp]ercent [Cc]hange [Ii]n (.+?) [Ff]rom [Bb]aseline [Tt]o (.+)", value
     )
     if m:
-        window = _registry_timeframe_zh(m.group(2)) or m.group(2)
+        window = _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2)) or m.group(2)
         return f"{term}较基线百分比变化（{window}）"
     m = re.fullmatch(
         r"[Cc]hange [Ff]rom [Bb]aseline in (.+?) at (.+)", value
     )
     if m:
-        window = _registry_timeframe_zh(m.group(2)) or m.group(2)
+        window = _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2)) or m.group(2)
         return f"{term}较基线变化（{window}）"
     m = re.fullmatch(
         r"[Mm]easurement of [Rr]atio of (.+?) to the [Uu]pper [Ll]imit of [Nn]ormal(.*)",
