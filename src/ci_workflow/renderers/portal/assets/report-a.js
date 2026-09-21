@@ -270,9 +270,10 @@
     var matches = rows.filter(function (row) {
       if (row.product_id !== productId || safetyTermKey(row) !== termKey) return false;
       if (trialId && row.trial_id !== trialId) return false;
-      if ((row.arm || "治疗组") !== (selected.arm && selected.arm.length ? selected.arm[0] : "治疗组")) return false;
+      if (selected.arm && selected.arm.length && (row.arm || "治疗组") !== selected.arm[0]) return false;
       if (armDetail && (row.arm_detail || "").trim() !== armDetail.trim()) return false;
-      if (categoryName && row.category !== categoryName) return false;
+      // 独立复核会商 P0 #3：payload 类目带（登记）后缀，包含式匹配
+      if (categoryName && row.category !== categoryName && String(row.category || "").indexOf(categoryName) === -1) return false;
       if (timeWindow && row.time_window !== timeWindow) return false;
       return numericValue(row.value) || row.value == null;
     });
@@ -970,6 +971,11 @@
       var teaeRecord = safetyRecordFor(p.id, "any_teae", pair.trial_id, safetyArmDetail, sourceRows);
       var saeRecord = safetyRecordFor(p.id, "any_sae", pair.trial_id, safetyArmDetail, sourceRows);
       var eventRate = eventRecord && numericValue(eventRecord.value) ? eventRecord.value : null;
+      // 会商 P0 #3：登记只给组别计数（例）+风险人数时，纵轴使用派生发生率（%）
+      if (eventRate != null && eventRecord.denominator && numericValue(eventRecord.denominator)
+          && String(eventRecord.unit || "").indexOf("例") !== -1) {
+        eventRate = Math.round(eventRate / numericValue(eventRecord.denominator) * 1000) / 10;
+      }
       if (!trial || eventRate == null || (!useTotalSample && trial.treatment_sample_size == null)) return;
       var treatmentRow = pair.rows["治疗组"] || pair.rows[Object.keys(pair.rows)[0]];
       var controlRow = pair.rows["对照组"] || null;

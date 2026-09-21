@@ -521,6 +521,8 @@ def main() -> None:
                     "row_id": f"safe-{si}", "product_id": pid,
                     "trial_id": nct.lower(), "arm": term,
                     "category": "严重不良事件（登记）",
+                    # 会商 P0 #3：受控词表键，供矩阵安全轴精确匹配
+                    "term_key": "any_sae",
                     # 独立复核修复：该行为组别汇总计数，term 不再冒充事件名
                     "term": "严重不良事件组别汇总计数",
                     "value": freq, "unit": "例",
@@ -537,6 +539,7 @@ def main() -> None:
                         "row_id": f"safe-{si}", "product_id": pid,
                         "trial_id": nct.lower(), "arm": term,
                         "category": "死亡病例（登记）",
+                    "term_key": "death",
                         "term": "死亡病例组别汇总计数",
                         "value": deaths_affected, "unit": "例",
                         "numerator": deaths_affected,
