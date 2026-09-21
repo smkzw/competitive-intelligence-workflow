@@ -1381,6 +1381,7 @@ def _text(value: Any, default: str = "") -> str:
 
 
 _B_VARIABLE_TOKENS: tuple[tuple[str, str], ...] = (
+    (r"\bcohort\s*(\d+)\b", r"第\1组"),
     (r"\bsex\b|\bgender\b", "性别"),
     (r"\bage\b", "年龄"),
     (r"\brace\b", "种族"),
@@ -1751,18 +1752,25 @@ def _time_label(value: Any) -> str:
     if candidate is None:
         return "时间点未列示"
     unit = _first(value, "actual_timepoint_unit", "time_unit", "timepoint_unit", default=None)
-    if unit and isinstance(candidate, (int, float)):
+    # 独立复核 B r37（issue-1）：candidate 已被 _text 字符串化，
+    # 数字+单位必须在此恢复数值路径；分数周回读为整数天
+    numeric = None
+    if unit:
+        try:
+            numeric = float(candidate)
+        except (TypeError, ValueError):
+            numeric = None
+    if unit and numeric is not None:
+        unit_key = _text(unit).casefold()
         unit_zh = {
-            "day": "天",
-            "days": "天",
-            "week": "周",
-            "weeks": "周",
-            "month": "个月",
-            "months": "个月",
-            "year": "年",
-            "years": "年",
-        }.get(_text(unit).casefold(), _text(unit))
-        return f"第{candidate:g}{unit_zh}"
+            "day": "天", "days": "天", "week": "周", "weeks": "周",
+            "month": "个月", "months": "个月", "year": "年", "years": "年",
+        }.get(unit_key, _text(unit))
+        if "week" in unit_key and abs(numeric * 7 - round(numeric * 7)) < 0.01:
+            return f"第{round(numeric * 7):g}天"
+        if numeric == int(numeric):
+            return f"第{int(numeric):g}{unit_zh}"
+        return f"约第{round(numeric, 1):g}{unit_zh}"
     return _text(candidate, "时间点未列示")
 
 
@@ -2032,8 +2040,11 @@ def _project_record(
         "group_id": group_id,
         "arm_role": semantics["arm_role"],
         "arm_role_label_zh": semantics["arm_role_label_zh"],
+        # 独立复核 B r36（issue-1）：剂量递增队列行（Cohort 1..4）原臂标签
+        # 不得在角色收敛（治疗组）后丢失，兜底到原始臂名并经漏斗转写
         "arm_detail": _native_text(
-            _source_first(value, source, "arm_detail", "arm_name", "group_name", default="")
+            _source_first(value, source, "arm_detail", "arm_name", "group_name",
+                          "arm", "group", default="")
         ),
         # 独立复核 B r35：基线类别值（女/男等）随行走，行级可归属
         "category_level": _text(
@@ -2102,7 +2113,12 @@ def _project_record(
         "original_endpoint": original_endpoint,
         "original_definition": original_definition,
         "original_variable": original_variable,
-        "original_variable_label_zh": _native_text(original_variable, "原始变量未列示"),
+        # 独立复核 B r36（issue-2）：变量名转写失败时显式声明，
+        # 不再原样漏出登记英文原句；原文保留在"简短原文"引文与证据层
+        "original_variable_label_zh": (
+            _b_native_label(original_variable)
+            or ("登记变量（原文见来源）" if _text(original_variable) else "原始变量未列示")
+        ),
         "status": status_value or _state_label(state),
         "source_version_id": _source_version(value),
         "source_name": source_name,

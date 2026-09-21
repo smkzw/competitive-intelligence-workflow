@@ -43,6 +43,7 @@ C_STATIC_PAGE_IDS = (
     "visit-duration-followup",
     "sample-analysis-statistics",
     "design-patterns",
+        "evidence-limitations",
 )
 C_CORE_FAMILIES = {
     DesignFieldFamily.POPULATION,

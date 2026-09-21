@@ -118,6 +118,15 @@ def _split_eligibility(text: str) -> tuple[list[str], list[str]]:
             for part in re.split(r"\n\s*(?:[-–•]|\(\d+\)|\d+\.)\s*\n?", chunk)
             if part.strip(" \n-–;；")
         ]
+        if len(items) <= 1:
+            # 行内编号（"1. … 2. …"）与分号条目的容差切分
+            inline = [
+                part.strip(" \n-–;；")
+                for part in re.split(r"(?:^|\s)\(?\d+[.)]\s+", " ".join(chunk.split()))
+                if part.strip(" \n-–;；")
+            ]
+            if len(inline) > len(items):
+                items = inline
         if not items:
             joined = " ".join(chunk.split())
             return [joined] if joined else []
@@ -134,7 +143,8 @@ def _endpoint_form(measure: str) -> str:
         return "LDH"
     if "transfusion" in folded:
         return "输血"
-    return measure[:20]
+    # 独立复核 C r20（veto 第4项）：量表/计量口径不得截断（截断产生"Percent Change In Ha"残片）
+    return measure
 
 
 def main() -> None:

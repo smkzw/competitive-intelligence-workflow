@@ -483,7 +483,7 @@ def _page(
 
 def test_registry_loads_frozen_abc_catalogs_preserving_chinese_labels() -> None:
     registry = PageRegistry.load()
-    expected_counts = {ReportKind.A: 11, ReportKind.B: 20, ReportKind.C: 11}
+    expected_counts = {ReportKind.A: 11, ReportKind.B: 20, ReportKind.C: 12}
     for kind, count in expected_counts.items():
         catalog = registry.catalog(kind)
         assert len(catalog.pages) == count
@@ -509,7 +509,7 @@ def test_registry_loads_packaged_catalog_layout_without_repo_docs() -> None:
     assert [c.report.value for c in registry.catalogs] == ["A", "B", "C"]
     assert len(registry.catalog(ReportKind.A).pages) == 11
     assert len(registry.catalog(ReportKind.B).pages) == 20
-    assert len(registry.catalog(ReportKind.C).pages) == 11
+    assert len(registry.catalog(ReportKind.C).pages) == 12
     sitemap = registry.sitemap(
         ReportKind.A, product_ids=("product-01",), trial_ids=("trial-01",)
     )
