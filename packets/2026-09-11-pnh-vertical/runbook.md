@@ -2272,3 +2272,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B builder schema 教训**：B 安全行 schema 禁 arm_detail——新字段先查 FreshB 合同再写
 - **v77 全链建成提交**（3895 行 0 碰撞；B 安全行带完整期间标题+分母 57/29；C 246 观察）。三路复核 r25/r39/r23 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 8：A r25/C r23 收包与末批修复（commit 7aaa7cb）
+- **A r25（veto 2，从 3 收敛）**：①引导语承诺"可核对分母"但人数列 3895 行全"—"且 CAS 测量组无 denom_count（本语料不可得）→ **已修**：引导语改为与数据现状一致的如实声明；②人群残留 "Binding 抗体..." → **已修**：binding/neutralizing token。
+- **C r23（veto 3，收敛）**：①游离血红蛋白误标"血红蛋白" → **已修**：free hemoglobin 独立身份（先于血红蛋白消费）②同名标签不同终点 → 随①与主终点转写缓解③主终点定义 7 行纯英文 → **已修**：primary_endpoint_definition 兜底走 _native_endpoint_zh（序号化）。
+- 本轮同时提交：矩阵契约（term_key 受控词表 any_sae/death、计数+分母→派生发生率%、类别包含式匹配、臂筛选仅在用户选择时生效）。
+- B r39（v77）仍在运行，收包后合并进 v78 队列。
