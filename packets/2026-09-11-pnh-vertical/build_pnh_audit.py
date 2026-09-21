@@ -271,7 +271,10 @@ def main() -> None:
         "reviewed_at": "2026-09-12T03:30:00+00:00",
         "reviewed_content_digest": compute_research_content_digest(report_payload),
         "observations": [
-            "R18 四项修复均已闭合，当前载荷计数为44个产品、135项试验、239条疗效、81条安全及54条申办关系。",
+            # 独立复核 A r30（issue-4）：计数动态计算，杜绝签发文本与实际载荷漂移
+            f"当前载荷计数为{len(report_payload['products'])}个产品、{len(report_payload['trials'])}项试验、"
+            f"{len(report_payload['efficacy'])}条疗效、{len(report_payload['safety'])}条安全及"
+            f"{len(report_payload.get('companies') or [])}条申办关系。",
             "ATG变体与NCT00566696移植方案已不再形成独立产品或错误结果归属。",
             "ACH-0144471、OMS906及抗因子B泛称已分别归并至danicopan、zaltenibart和SAR443809。",
             "sirolimus及Levamisole联合方案已恢复，但仍标记为边界再定位，待纳排审查；联合关系受G11-1单产品字段限制。",

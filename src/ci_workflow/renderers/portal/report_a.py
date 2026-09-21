@@ -1469,7 +1469,9 @@ def _native_arm_zh(value: str) -> str:
     out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
     out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
     if len([w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]) >= 2:
-        return "登记组别（原名见数据依据）"
+        # 独立复核 A r29/r30：臂区分度优先于外观——残余英文保留原臂名
+        # （构成式转写见 v83 队列：别名→中文名+剂量频次）
+        return " ".join(str(value or "").split())
     return out
 
 
