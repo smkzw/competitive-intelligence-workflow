@@ -2431,3 +2431,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **已实施（commit 8c0bd88/d28678f 系 + 本轮）**：①C 时间点缺省口径（结构无时间点→不适用，不再与已报告值矛盾）②入排标题残片过滤（Key/Eligibility Criteria 标题不作为条目+短碎片合并）③C 抽屉按 trial_id 深链 ④B maximum-exposure 守卫（最长暴露时长不产出数值时点，9 行幻影消除——eff 366→357）⑤A r31 试验同名去重（NCT 后缀）⑥安全行 term_key 受控词表传递 ⑦A r28 组别名转写漏斗+原文悬停+人群 token
 - **v84 = 最新候选**（357 行 B 疗效（幻影时点排除后）、A 3895 行 0 碰撞、C 12 页 245 观察）。三路复核 r32/r46/r30 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v85）。
+
+## 追记 33：v84 三路收包（A r28 已修 / B r46 veto5 / C r30 veto6）——v85 队列
+- **A r28 三项已修**（e838f84）：组别名转写漏斗、原文悬停、人群 token——v84 复核确认这批方向正确（后续意见都是其深化）
+- **B r46（veto 5）**：①展开表缺性别/分析形式/分析集分层列（alxn2050 4/7/3/3 无法归属）②筛选临床概念小写 token（ldh水平变化 vs 正文 LDH 水平变化）③抽屉"终点/事件"735/1500 纯英文整句无标注 ④357 行疗效抽屉"分母 来源未列示"（合同成对约束——与 A 侧同源）⑤基线覆盖声明
+- **C r30（veto 6）**：①统计声明错标未公开（登记 populationDescription/主终点说明已披露分析集与统计方法——抽取需遍历全部 outcomeMeasures[].description + populationDescription 字段）②同名终点折叠（Hgb increase vs normalization）③design-patterns 摘要 nct 小写+签名重复 ④PNH 克隆 scale 错配血红蛋白 ⑤时间点半翻译丢单位（"第49周、169"缺第二单位）⑥单位丢失
+- **v85 队列（合并定稿）**：①C 统计抽取遍历全部 outcomeMeasures[].description + populationDescription ②C 同名行行级消歧 ③C 量表列 term 映射修正（PNH 克隆优先）④C 时间点枚举转写保单位 ⑤B 展开表补分析形式/分析集/性别分层列 ⑥B 筛选概念维度用 label_zh ⑦抽屉英文标注（已实施 markUntranslated）⑧A 组别构成式转写 → v85 全链 → 三路重派
