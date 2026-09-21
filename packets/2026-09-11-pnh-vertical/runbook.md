@@ -2330,3 +2330,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **修复设计（v77 队列首个实施项）**：期间分组与声明臂的映射关系落进 B 载荷——每条 AE/基线事实同时携带 ①arm_label=期间原标题（展示）②treatment_group=声明臂标签（门单元匹配）。具体：B 构建器安全行补 "treatment_group": _arm_group_for(...)[1]；基线事实同理按 group_id→声明臂映射补 treatment_group；门单元的 treatment_group 匹配即命中声明臂。
 - **备选**：若 FreshB 合同禁 treatment_group 字段，则门 spec 层把 always_applicable 收紧为"有事实的组"（改 policies/gates/B-v1.yaml applicability_predicate）。
 - 其余就绪状态同追记 15：v80 A/C 完整、三份 prompt 待用、PYTHONHASHSEED=0 必须。
+
+## 追记 17：B 门根因再深化（机制完整版）
+- **门对象宇宙的推导**：blocked 对象 "nct04469465-arm-danicopan-danicopan" 来自**疗效事实的臂名**（TP2/延续期的 5 行 efficacy 行），而安全事实的臂名是带期间后缀的 AE 标题（slug 不同）→ 同一声明臂在疗效域有对象、在安全域无记录 → b_safety_minimum_record 阻断；基线四类同理（声明臂下无基线事实）。
+- **修复设计定稿（v80 首项）**：A 构建器安全行在 AE 标题能去后缀匹配到本试验疗效臂名时，额外输出一条**声明臂归因行**（arm=去后缀名，source_field_name 标 ".declared"，避免与期间行重复计数——期间行保留原名展示）；或等价地在 B 构建器为每条安全事实补充"声明臂影子事实"（discovery 标记，仅门匹配用）。二选一，优先前者（A 层单一事实源）。
+- 基线四类同法：基线事实补声明臂归因行。
+- 落地后 PYTHONHASHSEED=0 重跑 B builder→audit→submit→run 直至 B review_request 生成 → 三路复核派发。
