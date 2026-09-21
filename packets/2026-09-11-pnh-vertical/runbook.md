@@ -2578,3 +2578,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ①**安全表 22 组/235 行同名标签**（分流的 TEAE 行缺测量级区分——需带原测量标题短摘要在事件列区分，且补 atRisk 分母）②组别名 2240 行英文（_native_arm_zh 词汇扩展：C5-INH→C5抑制剂、Naïve→初治、Standard of Care→标准治疗、Zilucoplan/Ravulizumab/Pegcetacoplan 等药名表）③观察窗 44 行部分转写后残留英文未标注（标注条件需改为"转写后仍含英文也标注"）④单位 262 行英文+紧贴（gram(g)/L、units/Liter(u/L) 等变体+值单位分隔）⑤246 行分母未公开但登记 atRisk 存在（分流行补 atRisk 分母）⑥eculizumab 已批准上市来源决策（延续）
 - **v94 队列（定稿）**：以上六项 + B 侧展开表列头/静默丢值提示（B r54 延续）→ v94 全链 → 三路重派
 - A r41 同轮已确认的进展：matrix 诊断句与 term_key 传递方向正确；分流行已入安全域（带 term_key）——矩阵数据前提成立，剩余为行级区分与分母补全
+
+## 追记 57：C r39 核心错配修复（commit 09fe042）
+- **克隆/输血规避术语顺序**：字典按"长词优先"重排（pnh clone size→克隆大小、transfusion avoidance→输血规避 先于 hemoglobin/transfusion 消费）——克隆终点不再错标血红蛋白、输血规避不再丢"规避"语义
+- **窗口转写统一**：_registry_endpoint_zh 内的 window 组合走 _native_timepoint_zh（"Week 12"→第12周）
+- v94 剩余队列：①入排柱图真实计数（B 侧同源）②C 行级消歧验证 ③A 组别构成式转写收尾（药名表扩充）④分母派生决策 ⑤B 展开表列头
