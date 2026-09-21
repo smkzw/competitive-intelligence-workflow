@@ -2353,3 +2353,13 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B r42 三项（待修）**：①基线性别行仍"组别未列示"（alxn2050 NCT04170023——cohort 影子未覆盖该行的键路径，需查 _arm_label 输入）②"约第213.4周"幻影时点（timeFrame 内 Maximum exposure 时长被当作访视时点——r32 修复只覆盖 EOT 词形）③人群 token 残留（absolute 等）
 - **C r26 四项（待修）**：①内容列 75/76 行黏英文时间窗括注（v80 未含 _tp_disp 转写——已修于 d482081 之后的代码？需确认 v81 生效）②筛选"时间点/量表"维度纯英文（33 个选项）③同名终点两行逐格相同（需行级消歧序号落地到 C 表格）④"血管内溶血应答率"错译（breakthrough hemolysis 的发生比例，既非血管内溶血也非应答率——term 映射修正）
 - v81 队列：B 基线键路径 + 幻影时点 + C 四项 + population token 收尾 → v81 全链 → 三路重派
+
+## 追记 21：v80 渲染探针结果（B r42 复核细项落实输入）
+- Playwright/直渲探针实测 v80 B 站点：安全行 arm='Danicopan (TP1)' 等**期间标题已保留**（B r38 的塌陷主项已修）；arm_detail/arm_role 为 null → JS 组别列回退显示原标题（可区分但英文——B r42 issue-3 的残余：roleLabel 组合分支需要 _b_native_label 转写 detailText）。
+- **v81 剩余队列（B r42/C r26 细项）**：
+  1. B 幻影时点：_time_band 增 maximum exposure 守卫（"Maximum exposure: N weeks" → 最长暴露期，不得折算为第N周）
+  2. B population token：absolute→绝对值（_B_VARIABLE_TOKENS）
+  3. B 基线行组别：_project_record 的 arm 空值时回退 group_id 解码（humanize 已能产 "group 1 treatment naive"→需转写 第1组：初治）
+  4. C 内容列括注时间点转写确认（_tp_disp 在 v80 之后代码已加，v81 渲染验证）+ 筛选时间点维度转写 + 同名行消歧 + 溶血错译（breakthrough hemolysis → 突破性溶血发生比例）
+  5. population token 收尾：Direct Bilirubin/Binding/Neutralizing 等
+- v81 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环
