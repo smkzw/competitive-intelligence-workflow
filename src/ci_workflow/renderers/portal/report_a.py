@@ -145,6 +145,8 @@ class SafetyRow(BaseModel):
     arm_detail: str | None = None
     category: str
     term: str
+    # 会商 P0 #3：受控词表键（any_sae/any_teae/death），供矩阵安全轴精确匹配
+    term_key: str | None = None
     value: float | None = Field(allow_inf_nan=False)
     numerator: int | None = Field(default=None, ge=0)
     denominator: int | None = Field(default=None, gt=0)
@@ -716,6 +718,10 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bbid\b", "每日2次"),
     (r"\bqd\b", "每日1次"),
     (r"\bminutes?\b", "分钟"),
+    (r"\bafter\b", "后"),
+    (r"\btrough\b", "谷浓度"),
+    (r"\bpostdose\b", "给药后"),
+    (r"\bolep\b", "开放扩展期"),
     (r"\boverall\b", "总体"),
     (r"\bprestudy\b|\bpre-study\b", "研究前"),
     (r"\babsolute\b", "绝对值"),
@@ -1098,6 +1104,8 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bmale\b", "男性"),
     (r"\bfemale\b", "女性"),
     (r"\bat least\b", "至少"),
+    (r"\bminutes?\b", "分钟"),
+    (r"\bolep\b", "开放扩展期"),
     (r"\ball\b", "全部"),
     (r"\band\b", "、"),
     (r"\bto\b", ""),
@@ -1290,13 +1298,11 @@ def _native_unit_zh(unit: str) -> str:
         low,
     )
     if m:
+        # 注意分组：3=分母词前缀（deci/milli/...），4=括注符号
         num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(m.group(1) or "", "")
-        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(m.group(4) or "", "")
+        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(m.group(3) or "", "")
         stem = "g" if (m.group(2) or "").startswith("gram") else "mol"
-        sym = f"{num_prefix}{stem}/{den_prefix}L"
-        if sym == "g/L" and "decilit" in low:
-            sym = "g/dL"
-        return sym
+        return f"{num_prefix}{stem}/{den_prefix}L"
     m = re.fullmatch(
         r"(?:international\s*)?units?\s*(?:\([^)]*\))?\s*(?:per\s*(?:lit(?:er|re)|ml)|/\s*lit(?:er|re)|/\s*ml|/l)"
         r"(?:\s*\(([^)]+)\))?",
