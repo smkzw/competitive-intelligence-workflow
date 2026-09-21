@@ -2042,3 +2042,22 @@ JS 端（report-c.js/data 渲染）也加格式化。
   C r27 veto 待查详情
 - 视觉：A=cursor、B=gemini、C=deepseek v67 prompts 已派发，运行中
 - 下一会话从 runbook 末节续接
+
+### A deepseek 复审（v67）：veto 5 项——数据充实 + 呈现系统性改进
+deepseek 的更严格审查暴露了 A 门户的结构性数据缺口：
+1. 靶点/机制/给药方式/路线 全部"未公开披露"——需从登记干预描述中提取
+2. 矩阵永久空白——需 treatment_sample_size 数据恢复
+3. 登记英文终点直出——需系统性 zh 转写
+4. 历史页内部令牌（已在 v63 修复但 A 载荷历史页 observation 仍需清洗确认）
+5. C5 子类区分——已添加词汇但需确认 B 渲染层生效
+
+### 总结
+这些是**数据充实级别**的改进（从登记原始记录中提取靶点、机制、给药方式
+等结构化信息），不是简单的显示修复。需要 A 构建器深度改造：
+- 从 interventions 模块提取给药途径（oral/IV/SC）
+- 从 condition 浏览器提取靶点信息
+- 从 intervention 描述提取机制描述
+- 填充 treatment_sample_size
+
+工作量估计：每个修复点需要 1-2 轮构建+复核迭代。
+建议下一会话集中处理 A 报告的数据充实 + 呈现修复。
