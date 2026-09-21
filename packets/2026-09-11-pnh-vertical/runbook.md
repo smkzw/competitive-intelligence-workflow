@@ -2463,3 +2463,7 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - v86 = 最新候选（A 3895 行 0 碰撞 + 全部 label/token 修复；B 安全行期间标题+分母+幻影消除；C 259 观察含基线 populationDescription 分析集入谱+局限页+全部主终点）。PYTHONHASHSEED=0 全程。
 - 三路复核 r34/r48/r32 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v87）。
+
+## 追记 38：B r48 收包（veto 5）——并入 v87 队列
+- ①补体抑制药效学指标两行同标签不同值（b-eff-1747/-1755，分析集维度缺失——TP1/TP2 分别为不同分析集）②LDH 水平变化第84天按分析集（Full/Interim）分行的两值并列无归属字段 ③基线人口学展开表缺性别/年龄分层列（category_level 已在载荷）④357 行抽屉"分子/分母/阈值 来源未列示"（合同成对约束）⑤"lteperiod"/"cohort" 筛选令牌直出
+- v87 队列（B 侧收口）：展开表列头补"分析形式/分析集"两列（数据已在行字段，仅列头缺失）；time_window_band 选项标签转写兜底（lteperiod→长期扩展期）；基线 category_level 列；分母展示决策
