@@ -963,7 +963,8 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
             # 独立复核 C r21（issue-1）：不同次要终点的兜底标签必须可区分，
             # 以观察序号命名，原文保留在证据抽屉"简短原文"
-            ordinal = "".join(ch for ch in observation.observation_id if ch.isdigit()) or "0"
+            m_sec = re.search(r"sec(\d+)$", observation.observation_id)
+            ordinal = m_sec.group(1) if m_sec else "0"
             return f"次要终点{ordinal}（原文见证据抽屉）"
         return label + (f"（{timepoint}）" if timepoint else "")
     if observation.field == "secondary_endpoint_timepoint":

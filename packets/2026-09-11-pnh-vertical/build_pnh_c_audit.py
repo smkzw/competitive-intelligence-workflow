@@ -127,6 +127,15 @@ def _split_eligibility(text: str) -> tuple[list[str], list[str]]:
             ]
             if len(inline) > len(items):
                 items = inline
+        # 独立复核 C r22：行内编号切分会产生无意义碎片（"Key"、"500 ng/ML)"），
+        # 过短碎片并回前一条目，不作为独立观察呈现
+        merged: list[str] = []
+        for item in items:
+            if len(item) < 8 and merged:
+                merged[-1] = merged[-1] + " " + item
+            else:
+                merged.append(item)
+        items = merged
         if not items:
             joined = " ".join(chunk.split())
             return [joined] if joined else []
