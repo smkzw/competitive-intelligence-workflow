@@ -2538,3 +2538,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B r52 部分实施**：基线展开表补"分层"列（category_level_label_zh）+ columnValue 取值
 - **v91 全链建成提交**（A 3895 行 0 碰撞、B 357 行、C 259 观察 12 页）。三路复核 r39/r53/r37 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 51：B r53 收包（veto 3）——并入 v92 队列
+- ①叙事型 AE 观察窗整句直出（ravulizumab Screening to Day 253...）——筛选面板选项无"登记原文未译"标注（标注惯例需覆盖筛选面板）
+- ②半翻译残缺标签（"至30天 末次给药后 研究 drug"、"cale第28天"、"changefrom基线"）——漏斗的部分转写产出不可读串：需加"形态质量门槛"（中英混排且 latin 碎片长度≤4 的、zh-latin 交错的 → 判定失败走标注）
+- ③Free C5 vs Total C5 同族名不可归属——族名需带游离/总前缀（A 侧 _CLASS_TITLE_TOKENS 已有 free/total complement 5 词汇，B 侧标签计算需消费）
+- 以上并入 v92 队列（与 A r39 观察窗翻译政策决策、分母派生决策并列）
