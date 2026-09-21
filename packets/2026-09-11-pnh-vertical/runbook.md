@@ -2383,3 +2383,11 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ④overview 覆盖声明"44 产品 6 试验"与基线行数不匹配——导语需与交付一致（同 C 人群页先例）
 - ⑤产品快速筛选用 slug（abp 959）而其他处用中文名——统一走 names 映射
 - 以上并入 v82 队列（与 A r29 组别构成式转写、分母抽取、历史理由核实并列）
+
+## 追记 25：C r27 收包（veto 5）——并入 v80/v82 队列
+- ①同名终点 7 组 14 行不可归属 → C 表格行级消歧序号（同 B 方案，未实施）
+- ②统计声明错标未公开：抽取只挂在主终点描述且关键词受限——应遍历全部 outcomeMeasures[].description 抽统计句（NCT04469465 的"Interim Efficacy Analysis Set..."即证据）
+- ③内容列/量表列英文：表格路径（_table_rows）与卡片路径（_value_text）不同源——表格路径未走 _tp_disp/_native_endpoint_zh；量表列 41 行整句英文
+- ④人群页 series 名"公开条目"与轴名矛盾 + 页面缺疾病定义事实（builder 只录 target_population+入排）
+- ⑤**全部 246 行抽屉"原文定位"恒为"章节：登记结果"+CT.gov 首页链接**——需按 trial_id 深链 + field_path（证据包已有 studies[]/NCT 级定位，门户未呈现）
+- 以上与 B r43 五项、A r29 四项（组别构成式转写/分母/历史理由）合并为 v82 大队列
