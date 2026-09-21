@@ -2375,3 +2375,11 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **②矩阵恒空（复查）**：缺轴诊断/尺寸降级已提交但 v81 渲染在前——v82 验证。**③疗效分母**：登记 outcomeMeasure denoms 存在（NCT04820530 LNP023 组 40 人）——A 构建器需按 denoms 实际结构抽取（CAS shape 探针下轮先做）。④历史排除理由：同前。
 - **④安全表英文组名 82 行**：与①同方案（构成式转写）覆盖。
 - **v82 队列**：①组别构成式转写（别名+剂量+频次）②分母 denoms 抽取（先 CAS shape 探针）③历史排除理由核实 ④矩阵 v82 验证 → 三路重派
+
+## 追记 24：B r43 收包（veto 4）——并入 v82 队列
+- ①基线 series 组别仍"组别未列示（女）"×12：根因=series 标签用 semantics 的 arm_role_label_zh（unknown→组别未列示），未走 _arm_label 的 group 解码——修法：_chart_series_label 在 role unknown 时回退 _arm_label(value)（第1组（初治））
+- ②"第213.4周"幻影仍在：该时点文本不含 eot/maximum exposure 字样（上游已剥离）——需查该卡 timepoint 原文，maximum-exposure 守卫前移或对纯数值周加"来源时点缺失"校验
+- ③筛选"试验"维度直出登记英文标题整句（6 项）——trial 维度 option_label 应固定用 trial_names 中文名映射
+- ④overview 覆盖声明"44 产品 6 试验"与基线行数不匹配——导语需与交付一致（同 C 人群页先例）
+- ⑤产品快速筛选用 slug（abp 959）而其他处用中文名——统一走 names 映射
+- 以上并入 v82 队列（与 A r29 组别构成式转写、分母抽取、历史理由核实并列）
