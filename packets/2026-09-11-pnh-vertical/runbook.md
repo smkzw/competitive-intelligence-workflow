@@ -2407,3 +2407,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B r44（veto 5）**：①展开表缺"分析形式/分析集"列致同名行不可归属（列头补两列）②幻影"第213.4周"（timeFrame 剥离后只剩数值周的路径未守卫——守卫需前移到数值分支前）③人群 token（absolute 等）+内部枚举 ④基线图 series"组别未列示（女/男）"（role unknown 时 series 回退 _arm_label 解码）⑤基线覆盖声明（78 行 vs 登记变量——导语对齐+变量扩展评估）
 - **C r28（veto 3）**：①主终点括注时间点未走 _tp_disp（primary 分支两处 ep_zh 后仍用 raw timepoint——本轮已修 disp）②同名终点两行（Hgb increase vs normalization 同标签）→ C 行级消歧序号 ③design-patterns 摘要用小写 nct id+签名重复元素（builder 摘要用 NCT 大写+去重）
 - **v83 队列（合并定稿）**：A r29①组别构成式转写（别名→中文名+剂量频次）+A r30③分母派生评估+B r44①分析形式/分析集列+C 行级消歧+B 幻影守卫前移+C 摘要修正 → v83 全链 → 三路重派
+
+## 追记 29：v83 全链建成，三路复核派发（A r31/B r45/C r29）
+- v83 = 承载全部修复的最新候选（3895 行 0 碰撞；TP1/TP2 臂归属；B 安全行期间标题+分母；C 12 页；声明臂计数动态化+基线影子行）
+- 构建 bug：build_pnh_audit.py 动态计数误用 report_payload 变量名（实际为 payload）——已修
+- 三路复核 r31/r45/r29 stagger 派发，静默运行
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
