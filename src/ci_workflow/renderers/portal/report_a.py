@@ -461,6 +461,9 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         row["term_key"] = term_key
         row["term_label"] = term_label
         row["arm_detail"] = _native_arm_detail_zh(item.arm_detail)
+        # 独立复核 A r37（issue-4）：声明臂影子行显式标注归因性质
+        if str(item.row_id).endswith("-declared"):
+            row["term_label"] = (row["term_label"] or item.term) + "（声明臂归因，由期间组汇总）"
         # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写；
         # 叙事型无法转写时保留原句并标注"（登记原文，未译）"
         _tw = _native_timepoint_zh(item.time_window)
