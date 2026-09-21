@@ -684,6 +684,39 @@ def main() -> None:
                         except Exception:
                             continue
 
+        # 独立复核 B r41/B 门（声明臂基线影子）：多期间试验的基线事实落在
+        # 期间组（-arm-...-tp1/tp2/lte）时，为无基线事实的声明臂补影子行——
+        # 以 TP1（随机化时点）期间组为基线代表，行标识加 -declared 后缀
+        have_groups = {r.group_id for r in baseline_rows}
+        for g in arms:
+            if g[0] in have_groups:
+                continue
+            # 期间组 → 声明臂：去期间后缀后为声明臂 slug 前缀者；
+            # TP1（随机化时点）优先作为基线代表
+            period_groups = sorted(
+                (
+                    gid for gid in have_groups
+                    if re.search(r"-(tp\d+|lte)$", gid)
+                ),
+                key=lambda x: (0 if x.endswith("-tp1") else 1, x),
+            )
+            matched = None
+            for gid in period_groups:
+                base = re.sub(r"-(tp\d+|lte)$", "", gid)
+                if g[0] == base or g[0].startswith(base + "-"):
+                    matched = gid
+                    break
+            if not matched:
+                continue
+            src_gid = matched
+            for r in [x for x in baseline_rows if x.group_id == src_gid]:
+                data = r.model_dump(mode="json")
+                data["group_id"] = g[0]
+                data["row_id"] = r.row_id + "-declared"
+                data["source_row_id"] = (r.source_row_id or "") + "-declared"
+                data["observation_id"] = (r.observation_id or "") + "-declared"
+                baseline_rows.append(BaselineObservation.model_validate(data))
+
 
     # 预过滤：只保留能通过 _baseline_unit_id 的行
     from ci_workflow.application.fresh_b_research_package import _baseline_unit_id

@@ -481,7 +481,6 @@ def main() -> None:
                                 "arm": group_titles.get(group_id, group_id or "组别未登记"),
                                 "value": value, "unit": unit,
                                 "population": population,
-                                "denominator": _denom_by_group.get(group_id),
                                 "timepoint": row_time_frame,
                             })
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
