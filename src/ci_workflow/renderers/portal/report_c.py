@@ -897,6 +897,10 @@ def _registry_endpoint_zh(text: str) -> str | None:
 
 
 def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
+    _tp_disp = lambda tp: (
+        _registry_timeframe_zh(tp) or _native_timepoint_zh(tp) or tp
+    ) if tp else ""
+
     numeric = _numeric_for(observation)
     if numeric is not None:
         if numeric.is_integer():
@@ -955,17 +959,17 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         is_iga = scale.upper() == "IGA" or "investigator's global assessment" in folded
         if is_iga and threshold:
             return f"IGA达到0或1分，且较基线降低{operator}{threshold}{unit}" + (
-                f"（{timepoint}）" if timepoint else ""
+                (f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else "")
             )
         if (scale.upper() == "EASI" or "easi" in text.casefold()) and threshold:
             endpoint_unit = unit.replace("改善", "")
             return f"EASI较基线改善{operator}{threshold}{endpoint_unit}" + (
-                f"（{timepoint}）" if timepoint else ""
+                (f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else "")
             )
         if is_iga or " iga " in f" {folded} ":
-            return "IGA 0/1应答率" + (f"（{timepoint}）" if timepoint else "")
+            return "IGA 0/1应答率" + ((f"（{_tp_disp(timepoint)}）") if _tp_disp(timepoint) else "")
         if "easi" in text.casefold():
-            return "EASI应答" + (f"（{timepoint}）" if timepoint else "")
+            return "EASI应答" + ((f"（{_tp_disp(timepoint)}）") if _tp_disp(timepoint) else "")
         registry_zh = _registry_endpoint_zh(text)
         if registry_zh:
             return registry_zh
@@ -1127,7 +1131,11 @@ def _chart_row(
         "source_text": _text(observation.source_text),
         "source_field_name": _text(observation.source_field_name, "未列示"),
         "source_location_zh": f"ClinicalTrials.gov · {_field_label(observation.field)}",
-        "scale": _text(observation.scale),
+        "scale": (
+            lambda s: s + "（登记原文，未译）"
+            if s and len(re.findall(r"[A-Za-z]{3,}", s)) >= 2 and not re.search(r"[\u4e00-\u9fff]", s)
+            else s
+        )(_text(observation.scale)),
     }
     if numeric is not None and reported:
         row["numeric_value"] = numeric
