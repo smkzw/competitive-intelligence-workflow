@@ -2458,3 +2458,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ②"时间窗分组"筛选按钮直出内部令牌（time_window_band 的 unknown 语义键）→ 选项标签走 _b_native_label 兜底
 - ③分子/分母/阈值"来源未列示"（357/357）——合同成对约束，与 A 侧同源，待派生分子决策
 - 均并入 v86 队列（与 A r33 ①②③④⑤ 合并）
+
+## 追记 37：v86 全链建成 + 三路复核派发
+- v86 = 最新候选（A 3895 行 0 碰撞 + 全部 label/token 修复；B 安全行期间标题+分母+幻影消除；C 259 观察含基线 populationDescription 分析集入谱+局限页+全部主终点）。PYTHONHASHSEED=0 全程。
+- 三路复核 r34/r48/r32 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v87）。
