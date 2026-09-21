@@ -2452,3 +2452,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ④**影子行溯源**：-declared 行需显式标注"声明臂归因（由期间组汇总）"（category 或 time_window 后缀），避免被当成独立登记行
 - ⑤历史排除理由核实（A r27④ 延续）
 - v86 队列=①-⑤ → v86 全链 → 三路重派 → 全 accepted → accept-visual ×3
+
+## 追记 36：B r47 收包（veto 3）——并入 v86 队列
+- ①展开表缺"性别分层"列（alxn2050 组别口径在表与抽屉间不一致——抽屉已显示"第2组（换用依库珠单抗）"，表格需同源）→ 列头补"性别/分层"列（category_level_label_zh）
+- ②"时间窗分组"筛选按钮直出内部令牌（time_window_band 的 unknown 语义键）→ 选项标签走 _b_native_label 兜底
+- ③分子/分母/阈值"来源未列示"（357/357）——合同成对约束，与 A 侧同源，待派生分子决策
+- 均并入 v86 队列（与 A r33 ①②③④⑤ 合并）
