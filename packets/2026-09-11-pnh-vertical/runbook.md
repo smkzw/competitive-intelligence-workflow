@@ -2306,3 +2306,14 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **A r27（veto 4）**：①矩阵恒空（尺寸轴降级已修但 v79 构建在前）②**派生发生率除数 bug（numericValue 返回布尔、除以 true=1 → 计数×100）——已修 parseFloat**（commit 537ab7c）③疗效分母 3895 行全 null 而登记 outcomeMeasure 带 denoms（NCT04820530 LNP023 组 40 人）——需在 A 构建器测度级抽 denom（CAS 结构探针未命中 denom_count，需按 NCT04820530 实际 shape 再查）④历史页"49 条排除理由"与登记不符（17 条含药物干预、8 条已公布结果）——NON_PRODUCT_RECORDS 判定口径需核实修正
 - **B r41（veto 4）**：①基线组别未列示 34/60/14/43 处仍现（cohort 解码未覆盖这些行的键路径——需查 _arm_label 输入键）②筛选按钮 64 项英文残留（time_window 维度需走 _native_timepoint_zh 转写）③人群标签形态损坏（"cale第28天"——token 词汇互噬；"changefrom基线"——空格吞噬与 token 缺失并存）④**组别身份与登记 outcomeMeasure 组标题不符**（NCT04469465 Week 12 登记为 TP1 组、门户显示 TP2 组名——A 构建器测度级 groups 映射被 B 侧 _arm_group_for 覆盖）。结论：**B 侧臂身份管线（A 载荷组标题→B 构建 _arm_group_for→渲染角色归一）是下一阶段主矛盾**
 - C r25 运行中。v80 队列：B 臂身份管线（组标题以 outcomeMeasure.groups 为准贯穿）+ A 分母 denoms 抽取 + 历史排除理由核实 + B 筛选时间窗转写
+
+## 追记 14：C r25 收包——v79 三路全部收包，v80 队列定稿
+- **C r25（veto 3，继续收敛）**：①同名终点标签+同时间点 7 组不可归属（C 表格行需行级消歧序号，同 B 方案）②内容列 22 行中英拼接（时间点括注在 v79 中未生效的路径——_table_rows 表格路径与 _value_text 卡片路径不同源，需统一走转写）③21 行坍缩"其他临床疗效指标"（C 的 _registry_endpoint_term_zh 词汇表需接入与 A 同款结构化终点标签管线，或直接复用 _native_endpoint_zh 兜底链）
+- **v80 实施队列（定稿）**：
+  1. B 臂身份管线（主矛盾）：组标题以 outcomeMeasure.groups 为准贯穿 A 载荷→B 构建→渲染
+  2. A 疗效分母：按登记 denoms 实际结构抽取（NCT04820530 LNP023 组 40 人实锤）
+  3. 历史排除理由核实（NON_PRODUCT_RECORDS 判定口径）
+  4. C 表格行级消歧 + 内容列转写统一 + 终点标签管线复用
+  5. B 筛选时间窗转写 + 人群标签形态修复
+  6. v80 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环
+- 收敛轨迹：C 路 9→4→3→3→3→3 项（类型在减少、修复在累积）；A 路 5→3→2→4（单位回归已修）；B 路因臂身份管线为主矛盾维持在 3-4 项
