@@ -295,12 +295,28 @@ def main() -> None:
         time_frame = (primary.get("timeFrame") or "").strip()
         if not measure or not time_frame:
             raise SystemExit(f"{nct} 主要终点定义或时间点缺失，不能进入设计图谱")
-        observations.append(_row(
-            trial_id, product_id, nct, page, "endpoint", "primary_endpoint_definition",
-            measure, seq="", endpoint_key="primary", stage=stage,
-            scale=_endpoint_form(measure), timepoint=time_frame,
-            source_name="registry.outcomes.primary",
-        ))
+        # 独立复核 C r20（veto 第7项）：全部主要终点入谱（此前只录 primary[0]，
+        # 登记多条主终点时页面承诺与实际不符）
+        for p_index, p_item in enumerate(primary_outcomes):
+            p_measure = (p_item.get("measure") or "").strip()
+            p_frame = (p_item.get("timeFrame") or "").strip()
+            if not p_measure:
+                continue
+            observations.append(_row(
+                trial_id, product_id, nct, page, "endpoint", "primary_endpoint_definition",
+                p_measure, seq=f"pri{p_index}" if p_index else "", endpoint_key="primary", stage=stage,
+                scale=_endpoint_form(p_measure), timepoint=p_frame,
+                source_name="registry.outcomes.primary",
+            ))
+            # 统计方法句（独立复核 C r20 veto 第4项）：主终点描述常载明
+            # 分析模型（如 MMRM），有则入"主要比较与统计模型"行，不得错标未公开
+            p_desc = (p_item.get("description") or "").strip()
+            if p_desc and re.search(r"statistic|model|analys|MMRM|mixed model|comparison", p_desc, re.I):
+                observations.append(_row(
+                    trial_id, product_id, nct, page, "statistical", "statistical_comparisons",
+                    f"主要比较与统计模型（登记主终点说明）：{p_desc}", seq=f"pri{p_index}" if p_index else "",
+                    stage=stage, source_name="registry.outcomes.primary.description",
+                ))
         observations.append(_row(
             trial_id, product_id, nct, page, "timepoint", "primary_endpoint_timepoint",
             time_frame, seq="", endpoint_key="primary", stage=stage,
@@ -326,14 +342,18 @@ def main() -> None:
                     s_frame, seq=f"sec{s_index}", endpoint_key="secondary", stage=stage,
                     timepoint=s_frame, source_name="registry.outcomes.secondary",
                 ))
-        # 独立复核 C r19（veto 第8项）：统计设计维度显式声明——
-        # 登记未公开的维度以 not_publicly_disclosed 状态明示，不得沉默缺行
+        # 独立复核 C r19/C r20：统计设计维度显式声明——登记未公开才声明；
+        # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
+        stat_appended = {o["field"] for o in observations
+                         if o["trial_id"] == trial_id and o["field"].startswith("statistical_")}
         for stat_field, stat_label in (
             ("analysis_sets", "分析集"),
             ("statistical_comparisons", "主要比较与统计模型"),
             ("multiplicity_adjustment", "多重性校正"),
             ("missing_data_handling", "缺失数据处理"),
         ):
+            if stat_field in stat_appended:
+                continue
             observations.append(_row(
                 trial_id, product_id, nct, page, "statistical", stat_field,
                 f"登记未公开{stat_label}信息", seq="", stage=stage,

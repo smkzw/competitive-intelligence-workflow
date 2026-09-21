@@ -14,7 +14,7 @@ import re
 import shutil
 from collections.abc import Mapping, Sequence
 
-from .report_a import _native_timepoint_zh
+from .report_a import _native_endpoint_zh, _native_timepoint_zh
 from datetime import datetime
 from html import unescape
 from pathlib import Path
@@ -919,6 +919,19 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
     if observation.field == "primary_endpoint_timepoint":
         translated = _registry_timeframe_zh(timepoint) if timepoint else None
         return translated or timepoint or "主要终点评估时间未公开"
+    # 独立复核 C r20（veto 第1项）：次要终点定义/时间点走同一确定性转写，
+    # 不得直出登记英文原句
+    if observation.field == "secondary_endpoint_definition":
+        ep_zh = _registry_endpoint_zh(source_text)
+        if ep_zh:
+            return ep_zh + (f"（{timepoint}）" if timepoint else "")
+        label = _native_endpoint_zh(source_text)
+        if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
+            return "次要终点（原文见证据抽屉）"
+        return label + (f"（{timepoint}）" if timepoint else "")
+    if observation.field == "secondary_endpoint_timepoint":
+        translated = _registry_timeframe_zh(timepoint) if timepoint else None
+        return translated or _native_timepoint_zh(timepoint or "") or timepoint or "未公开"
     if observation.field == "visit_schedule":
         return f"主要评估与随访：{timepoint}" if timepoint else "访视安排未公开"
     if (
