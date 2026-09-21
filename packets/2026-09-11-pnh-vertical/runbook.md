@@ -2224,3 +2224,10 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **round-3 IPF 测试收包**：overall=partial。通用构建器从零跑通第 4 适应症 ✓；快修已提交（肺科标签 FVC/6MWD/DLCO、单位空格容差、别名大小写容差、安全模式 ADR/SAE 发生率）。遗留：IPF 分类族规则（待门闩）、nav 抽屉交互遮挡、page-1 宇宙不足（测试范围）
 - **C 局限页**：catalog 已加 evidence-limitations 页（12 页）；渲染器上下文+模板节下轮接
 - 机制归因教训升级：机制与靶点必须同源约束，无同源机制时宁 NA 勿从全文兜底（兜底会复活 anti-C5）
+
+## 追记 2：B r37/C r21 收包与本轮修复
+- **B r37（v75）veto 4 项**：①评价时间列浮点（根因：_time_label 在 _text 字符串化后才判 numeric——已修：字符串数字恢复数值路径+分数周回读整数天）②安全臂三臂塌陷"治疗组"（Group 1/2/3 标题丢失——arm_detail 兜底已扩但 Group N 模式未转写，下轮补 Group N→第N组+臂名）③抽屉内部枚举直出（demographics/count/cohort/registry-baseline-v1 等——需 zh 映射或隐藏内部契约字段）④**门户无登记深链**（drawer"打开原文"只到 CT.gov 首页；需按 trial_id 构 https://clinicaltrials.gov/study/NCTxxxx 深链）
+- **C r21（v75）veto 8 项**：①不同次要终点兜底同名（已修：次要终点N 序号化）②干预列丢"+ C5 Inhibitor"组合限定（arm 组合标签需保留）③时间点列 90 行纯英文（"time"单元格需接 _native_timepoint_zh）④scale 20 字截断（已修）⑤"简短原文"是中文派生句非登记原文（builder 的 source_text 应存登记原值）⑥⑦⑧见上轮清单（局限页/主终点全量/人群统一——部分已修）
+- 本轮已提交（commit 0a3cadd）：_time_label 数值恢复、抽屉变量声明兜底、C scale 不截断、次要终点序号化、**C 目录第 12 页 evidence-limitations**（frozen 测试计数 11→12 已同步）
+- 遗留队列（v76 前）：B 深链+Group N 转写+抽屉枚举 zh；C 局限页渲染内容（catalog 已加、渲染器上下文+模板未接）、给药逗号分段验证、目标人群统一验证；会商 P0 门闩+矩阵契约
+- 已知非回归：test_review_issuer/test_scientific_review_transition 8 项失败为环境/密封证据系（stash 验证与本轮改动无关），下轮排查
