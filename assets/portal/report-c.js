@@ -324,6 +324,9 @@
           else state[dimension].splice(index, 1);
           applyButtonState(state);
           applyState(state);
+          // 独立复核：延迟重跑确保最终行显隐状态正确（其他 handler 可能
+          // 修改行可见性），防止覆盖
+          setTimeout(function() { applyState(state); }, 0);
           writeFilterUrl(state);
         });
       })(buttons[i]);
@@ -821,9 +824,19 @@
       return;
     }
     var elementCount = uniqueValues(rows, "element_zh").length;
+    // 独立视觉复核（v58 typography）：折行标签需要更多行高——按最长标签
+    // 的换行数联动增加每行高度，避免 SVG 文本互相叠压
+    var maxLabelLines = 1;
+    rows.forEach(function (row) {
+      var lbl = String(row.display_label_zh || row.element_zh || "");
+      var lines = Math.ceil(lbl.length / 14);
+      if (lines > maxLabelLines) maxLabelLines = lines;
+    });
+    var rowH = elementCount <= 4 ? 58 : 66;
+    rowH += (maxLabelLines - 1) * 14;
     var matrixHeight = kind === "criteria-comparison"
       ? rows.length * 36 + 88
-      : elementCount * (elementCount <= 4 ? 58 : 66) + 150;
+      : elementCount * rowH + 150;
     chart.style.height = Math.max(360, Math.min(1800, matrixHeight)) + "px";
     chartState.rows = rows.slice();
     chartState.kind = kind;
