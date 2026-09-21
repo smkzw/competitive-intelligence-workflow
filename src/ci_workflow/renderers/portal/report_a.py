@@ -551,6 +551,11 @@ def _navigation() -> tuple[dict[str, str], ...]:
 _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...] = (
     # 结构化长短语先行：整句式登记时间窗
     (r"final study visit", "末次研究访视"),
+    (r"within (\d+) weeks? prior to first dose and during (\d+)[- ]week treatment period",
+     r"首次给药前\1周内及\2周治疗期内"),
+    (r"within (\d+) weeks? prior to first dose", r"首次给药前\1周内"),
+    (r"during (\d+)[- ]week treatment period", r"\1周治疗期内"),
+    (r"period (\d+)", r"第\1周期"),
     (r"on entry and every 3 months thereafter[^,;.]*", "入组时及此后每3个月"),
     (
         r"from (?:first|single) dose of study drug up to (\d+) days? after (?:the )?last dose(?: of study (?:drug|medication))?",
@@ -584,7 +589,6 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"mean of visits", "访视均值"),
     (r"through days? (\d+)", r"至第\1天"),
     (r"through weeks? (\d+)", r"至第\1周"),
-    (r"parent study", "母研究"),
     (r"long[- ]term extension", "长期扩展期"),
     (r"extension period", "扩展期"),
     (r"extension study", "扩展研究"),
@@ -697,7 +701,24 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bfrom\b", "自"),
     (r"\bon\s+", ""),
     (r"\bstudy\b", "研究"),
-    (r"(\d+)\s*days?", r"\1天"),
+    (r"(\d+)\s*days?", r"\1天"),    (r"parent study", "母研究"),
+    (r"\bpre-?treatment\b", "治疗前"),
+    (r"\bpost-?treatment\b", "治疗后"),
+    (r"\bmissing severity\b", "严重程度缺失"),
+    (r"\bpre-?infusion\b", "输注前"),
+    (r"\bpost-?infusion\b", "输注后"),
+    (r"\bpost\b", "给药后"),
+    (r"\bsince\b", "自"),
+    (r"\b\btid\b\b|\btid\b", "每日3次"),
+    (r"\bbid\b", "每日2次"),
+    (r"\bqd\b", "每日1次"),
+    (r"\bminutes?\b", "分钟"),
+    (r"\boverall\b", "总体"),
+    (r"\bprestudy\b|\bpre-study\b", "研究前"),
+    (r"\babsolute\b", "绝对值"),
+    (r"\bvalues?\b", "值"),
+    (r"\bin the\b|\bthe\b|\bin\b", ""),
+    (r"\bof\b", ""),
 )
 
 
@@ -1256,6 +1277,88 @@ def _native_unit_zh(unit: str) -> str:
         return "U"
     if low == "ln(ratio)":
         return "ln(比值)"
+    # 拼写式单位第二形状：前缀词直接连在 gram/mole 上、符号在括注里
+    # （A r24：'micrograms per litre (ug/L)' 类 500+ 行被占位串误吞）
+    m = re.fullmatch(
+        r"(kilo|milli|micro|nano)?(gram|mole)s?\s*(?:\([^)]*\))?\s*per\s*"
+        r"(deci|milli|micro|nano|kilo)?\s*lit(?:er|re)\s*(?:\(([^)]+)\))?",
+        low,
+    )
+    if m:
+        num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(m.group(1) or "", "")
+        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(m.group(4) or "", "")
+        stem = "g" if (m.group(2) or "").startswith("gram") else "mol"
+        sym = f"{num_prefix}{stem}/{den_prefix}L"
+        if sym == "g/L" and "decilit" in low:
+            sym = "g/dL"
+        return sym
+    m = re.fullmatch(
+        r"(?:international\s*)?units?\s*(?:\([^)]*\))?\s*(?:per\s*(?:lit(?:er|re)|ml)|/\s*lit(?:er|re)|/\s*ml|/l)"
+        r"(?:\s*\(([^)]+)\))?",
+        low,
+    )
+    if m:
+        paren_sym = (m.group(1) or "").replace(" ", "")
+        return paren_sym if paren_sym else ("IU/L" if "international" in low else "U/L")
+    # 括注符号直取（"micromoles (μmol)/liter" → μmol/L）
+    m = re.search(r"\(([^)]*/[^)]+)\)", text)
+    if m and re.fullmatch(r"[kμµMmGgdUIn]?[A-Za-zμμ]{0,5}/[kμµMmGdn]?[A-Za-zμL]{1,5}", m.group(1).strip()):
+        sym = m.group(1).strip().replace("µ", "μ")
+        return sym
+    # 常见派生形状
+    _DERIVED_UNIT_ZH = {
+        "% of pnh-rbc within total rbc population": "PNH红细胞占比",
+        "prbc units": "红细胞单位",
+        "prbc transfusions": "红细胞输注",
+        "units/liter": "U/L",
+        "grams/liter": "g/L",
+        "millimole(s)/litre": "mmol/L",
+        "micromoles/liter": "μmol/L",
+        "percentage of survival probability": "生存概率百分比",
+        "bth events/year": "突破性溶血事件/年",
+        "mave events/year": "重要血管事件/年",
+        "ratio of ldh:uln (250 u/l)": "LDH:ULN 比值",
+        "% change from baseline in serum ldh": "较基线血清LDH百分比变化",
+        "transfusions per person-year": "每人年输血次数",
+        "score on scale": "分",
+        "percentage of change": "百分比变化",
+        "units of prbcs": "红细胞单位数",
+        "units/liter (u/l)": "U/L",
+        "percent change from baseline": "较基线百分比变化",
+        "events per person-years of treatment": "每治疗人年事件数",
+        "percent reduction": "百分比降幅",
+        "hour (hr)*nanograms/milliliter (ng/ml)": "ng/mL·h",
+        "facit-f scale (change from baseline)": "FACIT-f 分（较基线变化）",
+        "mg per deciliter (mg/dl)": "mg/dL",
+        "number of blood transfusions": "输血次数",
+        "packed rbc units per month": "红细胞单位/月",
+        "proportion of participants": "受试者比例",
+        "percentage change": "百分比变化",
+        "number of events per 100 patient-years": "每100患者年事件数",
+        "hour*microgram/milliliter (h*μg/ml)": "μg/mL·h",
+        "international units per ml (iu/ml)": "IU/mL",
+        "units * days per liter (u*day/l)": "U·天/L",
+        "percentage of days": "天数百分比",
+        "infusions per participant year": "每受试者年输注次数",
+        "number of units of transfusions of rbc": "红细胞输注单位数",
+        "percentage of patients with bth events": "突破性溶血事件患者百分比",
+        "percentage of patients with maves": "重要血管事件患者百分比",
+        "mean percentage of participants": "受试者百分比均值",
+        "rbc transfusion instances": "红细胞输注次数",
+        "transfusion per person-year of treatment": "每治疗人年输血次数",
+        "days since first dose": "自首次给药起天数",
+        "grams/deciliter": "g/dL",
+        "scores on a scale (change from baseline)": "分（较基线变化）",
+        "milligram per litre (mg)/l": "mg/L",
+        "milligram per liter (mg)/l": "mg/L",
+        "micromoles (μmol)/liter": "μmol/L",
+        "micromole (μmol)/l": "μmol/L",
+        "percent change from baseline in ldh": "较基线LDH百分比变化",
+        "u*day/l/week": "U·天/周",
+        "microgram per milliliter (ug/ml)": "μg/mL",
+    }
+    if low in _DERIVED_UNIT_ZH:
+        return _DERIVED_UNIT_ZH[low]
     # 指数计数单位：空格无关的容差匹配（round-3 IPF：'10^9 cells/ liter (L)' 类变体）
     compact = re.sub(r"\s+", "", low)
     m = re.fullmatch(
