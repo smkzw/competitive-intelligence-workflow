@@ -1979,3 +1979,18 @@ JS 端（report-c.js/data 渲染）也加格式化。
 3. 修复后重新派发三路复核 + 三节点视觉
 4. 全 accepted → resume + accept-visual ×3 → PNH 竖向收口
 5. AD B/C → 横向 6 适应症 → 三宿主/RC
+
+### 最新状态快照
+- v66 科学复核：A/B/C 全部 dispatched but verdicts 尚未全部落盘
+  - A: pending (omp subprocess running)
+  - B: veto 2 issues (receipt not signed)
+  - C: pending
+- v66 视觉：A accepted 7/7 ✓ (abc66-a id correct)、B/C dispatches running
+- B veto 2 issues 需要排查（可能是新发现的问题）
+
+### 下一会话从这继续
+1. 排查 B veto 2 issues → 修复
+2. 收 A/C science verdicts
+3. 收 B/C visual verdicts（B 可能需用 cursor 重派）
+4. 全 accepted → resume + accept-visual ×3 → PNH 竖向收口
+5. AD B/C → 横向 → 三宿主/RC
