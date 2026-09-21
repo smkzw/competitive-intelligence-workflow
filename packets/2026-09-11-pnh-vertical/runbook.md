@@ -2097,3 +2097,19 @@ A visual verdict on v69 rejected。详细发现待下会话分析（evidence_ref
 - 从登记原文提取统计方法和给药方案详情
 
 ### 这些改进需要系统性的 A/C 构建器改造，建议下一会话集中实施
+
+### v71 科学复核 dispatch 系统性失败
+A r32/B r49/C r30 三路科学复核均遇 omp 子进程退出码 1 或 verdict 文件未写入。
+这是 omp dispatch 基础设施的系统性问题，不是单次偶发。
+
+可能原因：
+1. gemini/deepseek 模型提供者暂时不可用
+2. omp 版本更新后与 review issue 的参数兼容性变化
+3. 并发 dispatch 过多导致限流
+
+### 下一会话排查步骤
+1. 直接运行 omp 命令（不经 review issue 包装）测试各提供者可用性
+2. 检查 omp 版本是否更新
+3. 逐个 dispatch（不并行）排查
+4. 如 provider 不可用，换用其他 provider
+5. 修复后重派三路科学复核 → 收 verdict → 全 accepted → accept-visual ×3
