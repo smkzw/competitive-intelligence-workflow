@@ -1893,3 +1893,9 @@ deepseek（thinking=max）在 v62 上发现了 A 报告 7 项、C 报告 2 项�
 A r21b 回执 + 视觉 7/7 ✓；B r35/r41 科学 + 视觉 7/7 ✓；C r19/r17 回执 + 视觉 7/7 ✓
 
 ### 下一会话：deepseek 新发现 5+2 项分批修复 → v64 → 复审 → 巩固
+
+### v64 视觉三节点已派发（contract digest 断言版提示词）
+- A=cursor、B=gemini、C=deepseek——verdict 落盘后全 accepted 即
+  resume + accept-visual ×3 → PNH 竖向收口。
+- 下一会话清单：收 A/B/C 视觉 verdict + A/C 科学复核 verdict →
+  全 accepted → resume → accept-visual ×3 → AD B/C → 横向。
