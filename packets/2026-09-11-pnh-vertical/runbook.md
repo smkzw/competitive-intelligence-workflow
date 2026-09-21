@@ -2526,3 +2526,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **v90 队列实施**：①B 基线 series 回退解码（role 未列示时按 group_id 解码 cohort-N→第N组、group-N-qualifier→第N组（限定词））②C 【】空前缀跳过③访视页声明存在时抑制空图（groups 置空）④token 收尾
 - **v90 全链建成提交**（A 3895 行 0 碰撞、B 357 行+期间标题+Total 守卫、C 259 观察 12 页）。三路复核 r38/r52/r36 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v91）
+
+## 追记 49：A r38 部分修复 + B r52 收包（v90）
+- **A r38（veto 5）**：①阶段分栏矛盾（IV期落II期及更早、未标注被断言）——**已修** stageForProduct（IV期/III期/II期/I期/未标注分级+阶段未标注独立列）②safe-declared 重复计数观感——**已修**（影子行不进 A 安全展示，仅存 B 门匹配）③单位/时间点 token 残留——持续收尾④regulatory/patents 占位页——v1 范围已知项
+- **B r52（veto 3+）**：①基线展开表缺分层列——**已修**（category_level_label_zh"分层"列）②③见前
+- **C r36 静默运行中**
+- v91 队列：B r52 剩余（人群 token）+ C r36 意见合并 + A 组别构成式转写收尾
