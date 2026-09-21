@@ -125,7 +125,9 @@ class EfficacyRow(BaseModel):
 
     @model_validator(mode="after")
     def _counts_are_complete_and_ordered(self) -> EfficacyRow:
-        if (self.numerator is None) != (self.denominator is None):
+        # 独立复核 A r27/r30/r32：登记 denoms（各组受试者数）是真实披露，
+        # 允许"仅有分母"（组规模），分子缺失不再是契约违规
+        if self.numerator is not None and self.denominator is None:
             raise ValueError("疗效分子与分母必须同时公开或同时缺失")
         if (
             self.numerator is not None
@@ -779,9 +781,10 @@ def _native_timepoint_zh(value: str) -> str:
     out = re.sub(r"\s{2,}", " ", out).strip(" 、；")
     # 残余裸英文 ≥2 词 → 未转写成功，显式声明
     if len(re.findall(r"[A-Za-z]{2,}", out)) >= 2:
-        return "登记时间窗（详见登记来源）"
+                # 独立复核 A r32：已披露但难以转写的叙事型时间窗保留登记原句
+        # （可核对优先于占位串）
+        return " ".join(str(value or "").split())
     return out
-
 
 
 def _native_endpoint_zh(value: str) -> str:
@@ -1008,6 +1011,15 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bsmall\b", "少量"),
     (r"\blarge\b", "大量"),
     (r"\bpositive\b", "阳性"),
+    (r"\bpeak\b", "峰浓度"),
+    (r"\bblood\b", "血液"),
+    (r"\bthrombos[ée]?s?\b", "血栓"),
+    (r"\bhematology\b", "血液学"),
+    (r"\bchemistry\b", "生化"),
+    (r"\burinalysis\b", "尿液分析"),
+    (r"\bsince\b", "自"),
+    (r"\blnp023\b", "伊普可泮"),
+    (r"\bquality\b", "质量"),
     (r"\banytime\b", "任何时候"),
     (r"at/?before baseline", "基线时/前"),
     (r"definitely related", "肯定相关"),
