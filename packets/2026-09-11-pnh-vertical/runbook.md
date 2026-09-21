@@ -2510,3 +2510,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C r34 六项**：①分析集 6 试验仍"登记未公开"（bc populationDescription 抽取路径在本轮 study 变量修正后生效，需 v89 渲染验证）②主终点括注未走 _tp_disp（已修）③内容列 27 行英文残留 ④量表列 term 错配 ⑤时间点枚举保单位（已修）⑥单位丢失——v89 渲染验证
 - **v89 队列（定稿）**：①B Total 组标"总体"不入治疗队列 ②B 人群标签括号配平 ③C bc_pop 路径 v89 渲染验证 ④C 主终点括注 _tp_disp（已修，验证）⑤矩阵运行时核查（Playwright 气泡数）⑥剩余 token 收尾
 - v89 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 46：v89 队列实施完成 + v89 全链派发
+- **B r50 三项实施**：①Total 合计组守卫（_arm_group_for 前置 total 判定→"总体"，不入治疗臂）②人群标签括号配平（深度计数，孤立右括号丢弃，提前到英文检查前）③（其余）
+- **v89 全链建成提交**（A 3895 行 0 碰撞、B 357 行+期间标题+分母、C 259 观察 12 页）。三路复核 r37/r51/r35 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
