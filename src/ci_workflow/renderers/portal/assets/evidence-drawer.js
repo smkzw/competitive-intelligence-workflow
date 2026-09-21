@@ -228,6 +228,19 @@
     }
   }
 
+  // 独立复核 B r46（issue-3）：纯英文整句标注为登记原文（未译），
+  // 与门户中文文案明确区分，读者不误判为未翻译的门户文案
+  function markUntranslated(text) {
+    var s = String(text || "");
+    if (!s) return s;
+    var latinWords = s.match(/[A-Za-z]{3,}/g);
+    var hasCJK = /[\u4e00-\u9fff]/.test(s);
+    if (!hasCJK && latinWords && latinWords.length >= 2) {
+      return s + "（登记原文，未译）";
+    }
+    return s;
+  }
+
   function appendFieldRow(dl, label, text, isState) {
     var row = document.createElement("div");
     row.className = "kz-evidence-field";
@@ -235,7 +248,7 @@
     dt.textContent = label;
     var dd = document.createElement("dd");
     if (isState) dd.classList.add("kz-evidence-field__state");
-    dd.textContent = text;
+    dd.textContent = markUntranslated(text);
     row.appendChild(dt);
     row.appendChild(dd);
     dl.appendChild(row);

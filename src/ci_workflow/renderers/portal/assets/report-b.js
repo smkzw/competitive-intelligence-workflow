@@ -356,11 +356,15 @@
         ["mechanism", "作用机制"]
       ];
     }
+    // 独立复核 B r46（issue-1）：补"统计形式/分析人群"两列，
+    // 展开表行可归属到分析集与分析形式（数据已在行字段）
     return [
       ["product_zh", "产品"],
       ["trial_zh", "试验"],
       ["arm_detail", "组别"],
       ["clinical_concept", "疗效指标"],
+      ["statistical_form_family_label_zh", "统计形式"],
+      ["population_context_label_zh", "分析人群"],
       ["time_window", "评价时间"],
       ["numeric_value", "比较值"],
       ["unit", "单位"],
@@ -370,6 +374,12 @@
 
   function columnValue(row, key) {
     if (key === "disclosure_state") return disclosureLabel(row.disclosure_state);
+    if (key === "statistical_form_family_label_zh") {
+      return row.statistical_form_family_label_zh || row.statistic_form || "未列示";
+    }
+    if (key === "population_context_label_zh") {
+      return row.population_context_label_zh || row.population || "分析人群未列示";
+    }
     if (key === "product_zh") return row.product_zh || "未列示产品";
     if (key === "trial_zh") return row.trial_zh || "未列示试验";
     if (key === "arm") return armText(row);

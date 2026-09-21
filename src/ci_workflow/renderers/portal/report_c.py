@@ -1804,6 +1804,18 @@ def _render_page_context(
     filter_groups = _filter_groups(data, filter_rows)
     page_filter_groups = tuple(group for group in filter_groups if group["scope"] == "page")
     evidence_limitations = None
+    visit_insufficient = False
+    if catalog_page_id == "visit-duration-followup" and trial is None:
+        visit_obs = [o for o in observations if o.field in {"visit_schedule", "dosing_regimen"}]
+        _tp_ok = [
+            o for o in visit_obs
+            if _registry_timeframe_zh(_text(o.assessment_timepoint))
+            or _native_timepoint_zh(_text(o.assessment_timepoint)) != "登记时间窗（详见登记来源）"
+            and _text(o.assessment_timepoint)
+        ]
+        _tp_ok = [o for o in _tp_ok if _text(o.assessment_timepoint)]
+        if visit_obs and not _tp_ok:
+            visit_insufficient = True
     if catalog_page_id == "evidence-limitations" and trial is None:
         nct_routes = sorted(
             {
@@ -1864,6 +1876,7 @@ def _render_page_context(
     return {
         "report": data,
         "evidence_limitations": evidence_limitations,
+        "visit_insufficient": visit_insufficient,
         "report_title": f"{data.indication}临床试验设计比较",
         "page_title": title,
         "overview_conclusions": overview_conclusions,

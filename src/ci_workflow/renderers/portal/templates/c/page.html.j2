@@ -1,6 +1,12 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
+{% if visit_insufficient %}
+<section class="kz-c-limitations" aria-label="证据不足声明">
+  <h2>证据不足声明</h2>
+  <p>绑定登记来源未公开本组试验的访视、疗程与随访时间安排，本页无可呈现的时间线数据；给药方案信息见「分组、干预与对照」。按证据不足规则收口，不以占位数值替代。</p>
+</section>
+{% endif %}
 {% if evidence_limitations %}
 <section class="kz-c-limitations" aria-label="证据版本与局限">
   <h2>证据版本与局限</h2>

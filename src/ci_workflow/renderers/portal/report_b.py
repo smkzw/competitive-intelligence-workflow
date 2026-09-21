@@ -780,6 +780,11 @@ _TIMEPOINT_PREFIX_PATTERN = re.compile(
     re.IGNORECASE,
 )
 _TIME_BAND_LABELS = {
+    "lteperiod": "长期扩展期",
+    "lte_period": "长期扩展期",
+    "longterm_extension": "长期扩展期",
+    "extension_period": "扩展期",
+    "extension": "扩展期",
     "around_day_28": "约第28天",
     "around_week_12": "约第12周",
     "longterm_extension_period_52w": "长期扩展期（52周）",
