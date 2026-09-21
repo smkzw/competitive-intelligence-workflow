@@ -2241,3 +2241,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C 干预组合限定**：+ C5 Inhibitor →（+C5抑制剂）保留组合语义
 - 测试：unit+integration 1368 过 / 9 失败（review_issuer/scientific_review_transition/manual_inbox/no_draft/cli_catalog 系，stash 对照确认与本轮改动无关，单独排查项）
 - **v76 前待办**：会商 P0 #1 分类器门闩（indication_scope 设计+规则收紧+回归探针）、#3 矩阵三轴契约（term_key/发生率%/treatment_sample_size 投影合同+缺轴诊断文案）、C 时间点 tuple 顺序核查；然后 v76 全链→三路重派
+
+## 追记 4：会商 P0 两项落地 + v76 派发（commit 4a1e0d7 系）
+- **P0 #1 分类器门闩（v7.5）**：42 条规则中 39 条 per-indication 规则注入 indication_scope（pnh/ad/igan/uc），3 条共享规则不带门闩；新增顶层 indication_aliases（中文名/英文名/缩写→scope id）；registry_observation 新增 scoped_family_rules + resolve_indication_id + classify(text, indication_id)（未传 id 保持历史全局行为，向后兼容）；收紧三宽规则：complement 去裸 plasma concentration、IGA 需评估语境 lookahead、remission scope+语境；IgAN 蛋白尿规则补 albuminuria/UACR/urine albumin-creatinine 别名。B 构建器传 indication_id="pnh"。**红绿探针集 tests/unit/reports/test_registry_observation_gates.py 14/14 绿**。
+- **P0 #3 矩阵（部分）**：两 A 构建器从 participantFlow Started 里程碑提取治疗臂样本量（本 PNH 语料无 milestones → 0 命中，机制留待其他语料/后续按 AE at-risk 降级策略）；JS 矩阵空态改为**缺轴诊断**（疗效轴/安全轴发生率/样本量轴分别说明缺什么）。
+- **v76 全链建成提交**（3895 疗效行 0 碰撞；C 12 静态页含局限页+246 观察）。三路复核 r24/r38/r22 stagger 派发，静默运行。
+- v76 收包后：全 accepted → accept-visual ×3 → PNH 纵向闭环；再 veto 则按行级定位续修。
