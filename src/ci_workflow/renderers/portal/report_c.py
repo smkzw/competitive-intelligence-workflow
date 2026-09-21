@@ -659,6 +659,8 @@ def _segment_doses(segment: str) -> list[str]:
 def _segment_frequency(segment: str) -> str:
     if re.search(r"\bq2w\b|every two weeks|every 2 weeks", segment, re.I):
         return "每2周1次"
+    if re.search(r"once a week|once per week", segment, re.I):
+        return "每周1次"
     if re.search(r"\bq4w\b|every four weeks|every 4 weeks", segment, re.I):
         return "每4周1次"
     if re.search(r"\bqw\b|once weekly|every week", segment, re.I):
@@ -701,6 +703,11 @@ def _compact_regimen_zh(data: ReportCPortalData, observation: DesignObservation)
         maint_freq = _segment_frequency(maint) or _segment_frequency(source)
         parts.append("维持期" + ("、".join(maint_doses) if maint_doses else "剂量见登记原文")
                      + ((f"（{maint_freq}）") if maint_freq else ""))
+    elif load_seg:
+        load_doses = _segment_doses(load_seg) or _segment_doses(source)
+        parts.append("负荷剂量" + ("、".join(load_doses) if load_doses else "见登记原文"))
+        if re.search(r"titrat|adjust", source, re.I):
+            parts.append("维持期按临床反应滴定")
     else:
         doses = _segment_doses(source)
         frequency = _segment_frequency(source)

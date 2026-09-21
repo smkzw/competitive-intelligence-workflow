@@ -389,9 +389,12 @@ def main() -> None:
             ),
             "time_window_zh": row.get("time_window", "登记窗口"),
             # 臂级分母未在载荷中披露：只公开计数，不用试验级人数冒充臂级分母
+            # 独立复核 B r38（issue-1）：保留 AE eventGroup 原标题
+            # （含 TP1/TP2/LTE 期间语义），_arm_group_for 仅作角色/组归属判定
             "arm_role": _arm_group_for(row["trial_id"], row.get("arm", ""))[2],
             "arm_id": _arm_group_for(row["trial_id"], row.get("arm", ""))[0],
-            "arm_label": _arm_group_for(row["trial_id"], row.get("arm", ""))[1],
+            "arm_label": row.get("arm") or _arm_group_for(row["trial_id"], row.get("arm", ""))[1],
+            "arm_detail": row.get("arm"),
             "value": value,
             "raw_value": str(row["value"]),
             "numerator": value,
