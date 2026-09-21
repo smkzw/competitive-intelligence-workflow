@@ -983,6 +983,13 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"antibody positive anytime", "抗体任何时候阳性"),
     (r"\bbinding\b", "结合"),
     (r"\bneutralizing\b", "中和"),
+    (r"\btransfusions?\b", "输血"),
+    (r"\bpostdose\b", "给药后"),
+    (r"\bconcentration\b", "浓度"),
+    (r"negative", "阴性"),
+    (r"\btrace\b", "痕量"),
+    (r"\bsmall\b", "少量"),
+    (r"\blarge\b", "大量"),
     (r"\bpositive\b", "阳性"),
     (r"\banytime\b", "任何时候"),
     (r"at/?before baseline", "基线时/前"),
@@ -1449,6 +1456,23 @@ def _native_history_zh(text: str) -> str:
     return out
 
 
+def _native_arm_zh(value: str) -> str:
+    """登记组别名的确定性中文转写；残余多词英文回退显式声明。"""
+    out = " ".join(str(value or "").split())
+    if not out:
+        return out
+    for pattern, rep in _POPULATION_TOKENS:
+        out = re.sub(pattern, rep, out, flags=re.I)
+    out = re.sub(r"、、+", "、", out)
+    out = re.sub(r"\(\s*", "（", out)
+    out = re.sub(r"\s*\)", "）", out)
+    out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
+    out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
+    if len([w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]) >= 2:
+        return "登记组别（原名见数据依据）"
+    return out
+
+
 def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...]:
     """仅转换面向用户的疗效文字；保留原始数值及证据数据。"""
     rows: list[dict[str, Any]] = []
@@ -1503,7 +1527,7 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
         arm = re.sub(r"\bPlacebo\b", "安慰剂", arm, flags=re.I)
         arm = re.sub(r"\bQ2W\b", "每2周1次", arm, flags=re.I)
         arm = re.sub(r"\bQ4W\b", "每4周1次", arm, flags=re.I)
-        row["arm"] = arm
+        row["arm"] = _native_arm_zh(arm)
         row["arm_detail"] = _native_arm_detail_zh(row.get("arm_detail"))
 
         row["population"] = _native_population_zh(str(row["population"]))

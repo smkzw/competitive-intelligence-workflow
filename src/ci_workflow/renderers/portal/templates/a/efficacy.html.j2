@@ -12,7 +12,7 @@
     <tbody>{% for row in efficacy %}
       <tr data-row-id="{{ row.row_id }}" data-product="{{ product_names[row.product_id] }}" data-endpoint="{{ row.endpoint }}" data-endpoint-source="{{ row.endpoint_source }}" data-timepoint="{{ row.timepoint }}">
         <td>{{ product_names[row.product_id] }}</td><td>{{ trial_names[row.trial_id] }}</td>
-        <td>{{ row.endpoint }}{% if row.endpoint_source and row.endpoint_source != row.endpoint %}<span class="kz-a-endpoint-source">{{ row.endpoint_source }}</span>{% endif %}</td><td>{{ row.timepoint }}</td><td>{{ row.arm_detail or row.arm }}</td>
+        <td{% if row.endpoint_source and row.endpoint_source != row.endpoint %} title="{{ row.endpoint_source }}"{% endif %}>{{ row.endpoint }}</td><td>{{ row.timepoint }}</td><td>{{ row.arm_detail or row.arm }}</td>
         <td><strong>{{ row.value }}{{ row.unit }}</strong></td>
         <td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% else %}—{% endif %}</td>
         <td>{{ row.population }}</td>
