@@ -2567,3 +2567,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **v92 全链建成提交**（A 3895 行 0 碰撞+组别构成式转写；B 357 行+期间标题+Total 守卫；C 259 观察+分析集入谱+局限页 12 页）。PYTHONHASHSEED=0 全程。
 - 三路复核 r40/r54/r38 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 55：v93 全链建成（安全域分流落地）+ 三路复核派发
+- **v93 = 最新候选**：A 疗效 3895 行（246 条 TEAE/AE 测量已改入安全域，带 term_key any_teae/any_sae 供矩阵安全轴）+ PubMed 声明修正 + 安全观察窗逐试验转写；B/C 同步。三路复核 r41/r55/r39 stagger 派发，静默运行。
+- 实施记录：分流行带 term_key（any_sae/any_teae）+ category "治疗中出现的不良事件（登记）"；schema 修正两轮（endpoint/timepoint 键、numerator 成对约束）。
+- v94 队列：①B r54 基线 series/图表静默丢值 ②C r38 安全终点表述（分流后复查）③A 矩阵安全轴数据验证（term_key any_teae/any_sae 现已入安全域）④剩余 token 收尾
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
