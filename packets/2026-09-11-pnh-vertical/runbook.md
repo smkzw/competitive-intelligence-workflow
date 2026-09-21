@@ -2437,3 +2437,10 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B r46（veto 5）**：①展开表缺性别/分析形式/分析集分层列（alxn2050 4/7/3/3 无法归属）②筛选临床概念小写 token（ldh水平变化 vs 正文 LDH 水平变化）③抽屉"终点/事件"735/1500 纯英文整句无标注 ④357 行疗效抽屉"分母 来源未列示"（合同成对约束——与 A 侧同源）⑤基线覆盖声明
 - **C r30（veto 6）**：①统计声明错标未公开（登记 populationDescription/主终点说明已披露分析集与统计方法——抽取需遍历全部 outcomeMeasures[].description + populationDescription 字段）②同名终点折叠（Hgb increase vs normalization）③design-patterns 摘要 nct 小写+签名重复 ④PNH 克隆 scale 错配血红蛋白 ⑤时间点半翻译丢单位（"第49周、169"缺第二单位）⑥单位丢失
 - **v85 队列（合并定稿）**：①C 统计抽取遍历全部 outcomeMeasures[].description + populationDescription ②C 同名行行级消歧 ③C 量表列 term 映射修正（PNH 克隆优先）④C 时间点枚举转写保单位 ⑤B 展开表补分析形式/分析集/性别分层列 ⑥B 筛选概念维度用 label_zh ⑦抽屉英文标注（已实施 markUntranslated）⑧A 组别构成式转写 → v85 全链 → 三路重派
+
+## 追记 34：v85 队列实施完成 + v85 派发
+- **C 统计抽取扩展**：遍历全部 primary+secondary outcome measures 的 description 与 populationDescription，抽出的统计/分析句逐条入谱（3 个试验已有实锤内容）——不再一律错标"登记未公开"
+- **C 同名行消歧**：同试验+同设计要素+同时间点+同值的重复行追加"（登记定义N）"序号（Hgb increase vs normalization 不再同名）
+- **C 时间点枚举保单位**：weeks 正则序列修正
+- **v85 全链建成提交**（A 3895 行 0 碰撞、B 门绿、C 255 观察）。三路复核 r33/r47/r31 stagger 派发，静默运行
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v86）
