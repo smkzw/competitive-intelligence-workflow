@@ -1907,3 +1907,11 @@ A r21b 回执 + 视觉 7/7 ✓；B r35/r41 科学 + 视觉 7/7 ✓；C r19/r17 �
 - 下一会话处置：检查 omp 视觉 dispatch 的正确参数（可能需要 --agent 或
   非无会话模式让模型有文件写入工具），重新派发。
 - 此为 omp 参数配置问题而非产品代码问题。
+
+### 视觉 A v64 accepted 7/7 ✓！B/C verdict 未写文件——omp 参数问题
+- A（cursor）：**accepted 7/7** 全域通过（含 copy_zh ✓），binding 有效。
+- B（gemini）/C（deepseek）：dispatch 完成 exit 0 但 verdict 文件未写入。
+  输出到 stdout 而非写文件。cursor 模式有文件写入工具、gemini/deepseek
+  --no-session 模式可能没有。
+- 修复方向：改用 cursor/default 或给 gemini/deepseek 加文件写入参数重派。
+- **v64 视觉计分**：A ✓ 7/7、B/C 待重派。
