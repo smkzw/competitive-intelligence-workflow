@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import collections
 import shutil
 from collections.abc import Mapping, Sequence
 
@@ -807,6 +808,11 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
 
 _REGISTRY_ENDPOINT_TERM_ZH = {
     "breakthrough hemolysis": "突破性溶血发生比例",
+    "haptoglobin": "触珠蛋白",
+    "facit": "FACIT 量表",
+    "quality of life questionnaire": "生活质量问卷",
+    "hemoglobin": "血红蛋白",
+    "hgb": "血红蛋白",
     "pnh clone size": "PNH 克隆大小",
     "clone size": "PNH 克隆大小",
     "pnh clone": "PNH 克隆",
@@ -979,7 +985,8 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         label = _native_endpoint_zh(source_text)
         if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
             return "主要终点（原文见证据抽屉）"
-        return label + (f"（{timepoint}）" if timepoint else "")
+        _d = _tp_disp(timepoint)
+        return label + (f"（{_d}）" if _d else "")
     if observation.field == "secondary_endpoint_definition":
         ep_zh = _registry_endpoint_zh(source_text)
         if ep_zh:
@@ -992,7 +999,8 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             m_sec = re.search(r"sec(\d+)$", observation.observation_id)
             ordinal = m_sec.group(1) if m_sec else "0"
             return f"次要终点{ordinal}（原文见证据抽屉）"
-        return label + (f"（{timepoint}）" if timepoint else "")
+        _d = _tp_disp(timepoint)
+        return label + (f"（{_d}）" if _d else "")
     if observation.field == "secondary_endpoint_timepoint":
         translated = _registry_timeframe_zh(timepoint) if timepoint else None
         return translated or _native_timepoint_zh(timepoint or "") or timepoint or "未公开"
@@ -1532,6 +1540,38 @@ def _table_rows(
                 continue
         chart["table_item_id"] = observation.row_id
         rows.append(chart)
+    # 独立复核 C r28/r29（同名行消歧）：同试验+同设计要素+同时间点的重复
+    # 可见标签追加登记定义序号，行级可归属（原文保留在证据抽屉）
+    seen_keys: dict[tuple, int] = {}
+    keyed = []
+    for row in rows:
+        key = (
+            str(row.get("trial_id")),
+            str(row.get("display_label_zh") or row.get("element_zh") or ""),
+            str(row.get("time") or ""),
+            str(row.get("value") or ""),
+        )
+        n = seen_keys.get(key, 0)
+        seen_keys[key] = n + 1
+        keyed.append((key, n, row))
+    for key, n, row in keyed:
+        total = max(v for k, v in seen_keys.items() if k[:3] == key[:3] and k[3] == key[3]) if False else None
+    counts = collections.Counter(k[:4] for k in seen_keys)
+    # 简化：同键出现多次时逐行补序号
+    dup_keys = {k for k, v in seen_keys.items() if v > 1}
+    if dup_keys:
+        counters: dict[tuple, int] = {}
+        for row in rows:
+            k = (
+                str(row.get("trial_id")),
+                str(row.get("display_label_zh") or row.get("element_zh") or ""),
+                str(row.get("time") or ""),
+                str(row.get("value") or ""),
+            )
+            if k in dup_keys:
+                counters[k] = counters.get(k, 0) + 1
+                row["table_item_id"] = f"{row.get('table_item_id')}-d{counters[k]}"
+                row["value"] = f"{row['value']}（登记定义{counters[k]}）"
     return tuple(rows)
 
 
