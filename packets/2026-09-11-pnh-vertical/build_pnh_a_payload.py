@@ -481,6 +481,9 @@ def main() -> None:
                                 "arm": group_titles.get(group_id, group_id or "组别未登记"),
                                 "value": value, "unit": unit,
                                 "population": population,
+                                # 独立复核 A r27/r30/r32：登记 denoms（组规模）入行，
+                                # 人数列不再全"—"（登记按组披露的分母是真实数据）
+                                "denominator": _denom_by_group.get(group_id),
                                 "timepoint": row_time_frame,
                             })
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
@@ -502,6 +505,12 @@ def main() -> None:
                 trials_rows[-1]["treatment_sample_size"] = _treatment_n
             events = (results.get("adverseEventsModule", {})
                       .get("eventGroups") or [])
+            # 独立复核 A r36（issue-3）：AE 观察窗逐试验取登记 timeFrame，
+            # 不再统一写"全研究期（登记）"
+            _ae_time_window = (
+                " ".join(str((results.get("adverseEventsModule") or {}).get("timeFrame") or "").split())
+                or "全研究期（登记）"
+            )
             for group in events:
                 term = str(group.get("title") or "治疗期间不良事件")
                 freq = group.get("seriousNumAffected")
@@ -521,7 +530,7 @@ def main() -> None:
                     "value": freq, "unit": "例",
                     "numerator": freq,
                     "denominator": at_risk if isinstance(at_risk, int) and at_risk > 0 else None,
-                    "time_window": "全研究期（登记）",
+                    "time_window": _ae_time_window,
                 })
                 # 独立复核第二十三轮 veto：登记已报告的死亡必须入安全性域
                 deaths_affected = group.get("deathsNumAffected")
@@ -537,7 +546,7 @@ def main() -> None:
                         "value": deaths_affected, "unit": "例",
                         "numerator": deaths_affected,
                         "denominator": deaths_at_risk if isinstance(deaths_at_risk, int) and deaths_at_risk > 0 else None,
-                        "time_window": "全研究期（登记）",
+                        "time_window": _ae_time_window,
                     })
 
             # 独立复核 B 门根因修复（声明臂影子归因）：AE 组标题带期间后缀

@@ -14,7 +14,7 @@
         <td>{{ product_names[row.product_id] }}</td><td>{{ trial_names[row.trial_id] }}</td>
         <td{% if row.endpoint_source and row.endpoint_source != row.endpoint %} title="{{ row.endpoint_source }}"{% endif %}>{{ row.endpoint }}</td><td>{{ row.timepoint }}</td><td>{{ row.arm_detail or row.arm }}</td>
         <td><strong>{{ row.value }}{{ row.unit }}</strong></td>
-        <td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% else %}—{% endif %}</td>
+        <td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% elif row.denominator is not none %}分母 {{ row.denominator }}{% else %}—{% endif %}</td>
         <td>{{ row.population }}</td>
       </tr>
     {% endfor %}</tbody>

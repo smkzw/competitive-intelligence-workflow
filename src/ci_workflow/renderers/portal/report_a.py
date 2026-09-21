@@ -461,6 +461,8 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         row["term_key"] = term_key
         row["term_label"] = term_label
         row["arm_detail"] = _native_arm_detail_zh(item.arm_detail)
+        # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写
+        row["time_window"] = _native_timepoint_zh(item.time_window)
         rows.append(row)
     if not any(row["category"] == "特别关注不良事件" and row["value"] is not None for row in rows):
         rows = [row for row in rows if row["category"] != "特别关注不良事件"]
