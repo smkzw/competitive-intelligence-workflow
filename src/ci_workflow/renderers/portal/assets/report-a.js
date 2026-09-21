@@ -992,8 +992,28 @@
     });
     updateMatrixTable(points);
     if (!points.length) {
-      if (coverage) coverage.innerHTML = "当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。";
-      host.appendChild(el("div", "kz-empty", "当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。"));
+      // 会商 P0 #3：空态必须告知缺哪一轴，而非笼统一句话。
+      var missingAxes = [];
+      var haveEfficacy = 0, haveSafety = 0, haveSize = 0;
+      candidateProducts.forEach(function (p) {
+        var pair = efficacyPairFor(p.id, preferredEndpoints(p.id), []);
+        if (!pair) return;
+        haveEfficacy += 1;
+        var trial = trialById(pair.trial_id);
+        var safetyArm = selected.arm && selected.arm.length ? selected.arm[0] : "治疗组";
+        var safetyArmDetail = pair.rows[safetyArm] ? pair.rows[safetyArm].arm_detail : null;
+        var rec = safetyRecordFor(p.id, termKey, pair.trial_id, safetyArmDetail, sourceRows);
+        if (rec && numericValue(rec.value) != null) haveSafety += 1;
+        if (trial && (useTotalSample || trial.treatment_sample_size != null)) haveSize += 1;
+      });
+      if (!haveEfficacy) missingAxes.push("疗效轴：当前筛选下没有可量化为主要观察的疗效终点");
+      if (!haveSafety) missingAxes.push("安全性轴：登记只有组别计数、没有可比较的发生率（%）");
+      if (!haveSize) missingAxes.push("样本量轴：登记未按治疗组披露样本量");
+      var diag = missingAxes.length
+        ? "矩阵需要同时具备三轴数据；本次缺失——" + missingAxes.join("；") + "。"
+        : "当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。";
+      if (coverage) coverage.innerHTML = diag;
+      host.appendChild(el("div", "kz-empty", diag));
       return;
     }
     var shownProducts = points.map(function (point) { return point.product; });

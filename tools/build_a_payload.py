@@ -490,6 +490,23 @@ def main() -> None:
                                 "population": population,
                                 "timepoint": row_time_frame,
                             })
+            # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
+            # Started 里程碑数提取，喂饱矩阵气泡图的样本量轴
+            _flow_groups = (results.get("participantFlowModule") or {}).get("groups") or []
+            _arm_types = {
+                str(a.get("label") or "").strip(): str(a.get("type") or "").upper()
+                for a in (study.get("protocolSection", {}).get("armsInterventionsModule", {})
+                          or {}).get("armGroups") or []
+            }
+            _treatment_n = 0
+            for _g in _flow_groups:
+                if _arm_types.get(str(_g.get("title") or "").strip()) != "EXPERIMENTAL":
+                    continue
+                for _ms in _g.get("milestones") or []:
+                    if str(_ms.get("type")) == "Started" and isinstance(_ms.get("numSubjects"), int):
+                        _treatment_n += _ms["numSubjects"]
+            if _treatment_n > 0 and trials_rows and trials_rows[-1]["id"] == nct.lower():
+                trials_rows[-1]["treatment_sample_size"] = _treatment_n
             events = (results.get("adverseEventsModule", {})
                       .get("eventGroups") or [])
             for group in events:
