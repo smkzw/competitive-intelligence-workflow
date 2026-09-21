@@ -1824,6 +1824,8 @@ def _render_page_context(
         _tp_ok = [o for o in _tp_ok if _text(o.assessment_timepoint)]
         if visit_obs and not _tp_ok:
             visit_insufficient = True
+            # 证据不足收口：不再渲染无信息量的空轴图
+            groups = ()
     if catalog_page_id == "evidence-limitations" and trial is None:
         nct_routes = sorted(
             {

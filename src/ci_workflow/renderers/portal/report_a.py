@@ -455,6 +455,10 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
     """
     rows: list[dict[str, object]] = []
     for item in data.safety:
+        # 独立复核 A r37（issue-4）：声明臂影子行仅供 B 门匹配，
+        # 不进 A 门户安全展示（避免与期间行重复计数）
+        if str(item.row_id).endswith("-declared"):
+            continue
         row = item.model_dump(mode="json")
         term_key, term_label = _safety_term_projection(item.term, getattr(item, "term_key", None))
         row["original_term"] = item.term

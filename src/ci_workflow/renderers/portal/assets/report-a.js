@@ -1124,8 +1124,13 @@
     function stageForProduct(product) {
       if (/终止|暂停|撤回|停止|清算/.test(product.status)) return "历史观察";
       if (/申报|上市|获批|NDA/.test(product.phase + product.status)) return "申报或上市";
+      // 独立复核 A r38（issue-1）：IV 期产品不得落入"II期及更早"；
+      // 阶段未标注的不得被断言为某一期
+      if (/IV期/.test(product.phase)) return "IV期";
       if (/III期/.test(product.phase)) return "III期";
-      return "II期及更早";
+      if (/II期/.test(product.phase)) return "II期及更早";
+      if (/I期/.test(product.phase)) return "I期及更早";
+      return "阶段未标注";
     }
     var active = visibleProductNames();
     targets.forEach(function (target) {
