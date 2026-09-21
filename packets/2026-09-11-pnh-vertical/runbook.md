@@ -2588,3 +2588,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - ①基线性别行三行同名（组别未列示 + 女；NCT04469465 的 group_id 形状为 -arm-danicopan-tp1 / -arm-placebo-tp1，非 cohort-N——series 解码正则需扩展 -arm-<drug>-tp(\d+) → 第N期 Danicopan 组等）②完成情况图"组别未列示"重复系列+表图不一致（静默丢值提示）③完成情况图 x 轴直出登记内部组键（placebo tp1）
 - 修法（v94）：series/轴解码正则扩展 `-arm-([a-z0-9]+)-tp(\d+)` → 第N期 + 药名（经 _ARM_CODE_ZH/_PRODUCT_DISPLAY_NAMES_ZH）；图表静默丢值加提示行；x 轴组键统一走中文标签函数
 - 与 A r41 六项、C r39 修复合并为 v94 队列 → v94 全链 → 三路重派
+
+## 追记 61：v94 队列实施完成 + v94 全链派发
+- **实施**：①B series/轴解码扩展（-arm-cohort-N→第N组、-arm-group-N-qualifier→第N组（限定）、-arm-<code>-tpN→第N期、-arm-<code>-lte→长期扩展期）②分流行带原测量标题（term=title[:40]）③组别词汇扩展（Standard of Care→标准治疗、inadequate responder→应答不佳、naive 变体、group/cohort→组/队列）④观察窗标注一致性⑤单位变体
+- 途中修正：分流行 numerator 与 denominator 成对约束（numerator 移除，denominator 本就无）
+- **v94 全链建成提交**（A 3895→3895、B 357、C 259）。三路复核 r42/r56/r40 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环
