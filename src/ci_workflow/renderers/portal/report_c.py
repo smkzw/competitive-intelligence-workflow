@@ -820,10 +820,7 @@ _REGISTRY_ENDPOINT_TERM_ZH = {
     "free hgb": "游离血红蛋白",
     "ldh": "LDH",
     "lactate dehydrogenase": "LDH",
-    "hgb": "血红蛋白",
-    "hemoglobin": "血红蛋白",
     "transfusion": "输血",
-    "breakthrough hemolysis": "突破性溶血",
     "facit-fatigue": "FACIT 疲乏评分",
     "chc": "慢性溶血标志物",
 }
@@ -893,7 +890,9 @@ def _registry_endpoint_zh(text: str) -> str | None:
     if m:
         window = _registry_timeframe_zh(m.group(2).strip(" (),")) if m.group(2).strip(" (),") else None
         return f"{term}/正常上限比值" + (f"（{window}）" if window else "")
-    return None
+    # 独立复核 C r32/r37：术语命中但句式未匹配时，至少返回术语本身
+    # （如"突破性溶血发生比例"），不再返回 None 导致英文直出
+    return term
 
 
 def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
