@@ -2485,3 +2485,9 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - free_hemoglobin→游离血红蛋白、diarrhoea→腹泻 token；合成状态行（_synthetic）显式标注"合成状态行（无登记数值）"，不再与真实记录混淆
 - 第③项（抽屉分子/分母/阈值"来源未列示"——合同成对约束 357 行）与 C r32 剩余项继续留在 v88 队列
 - C r33（v87）静默运行中
+
+## 追记 42：B r49/C r33 收包与本轮修复（commit d906c3d）
+- **B r49（veto 3）**：②absolute/diarrhoea/free_hemoglobin token、合成状态行标注已修；③抽屉分子/分母/阈值"来源未列示"（成对合同约束）留 v88 决策
+- **C r33（veto 4）**：①主/次终点括注统一走 _tp_disp（_value_text 顶部定义 lambda，IGA/EASI 分支同步）——已修②量表列英文原句标注"（登记原文，未译）"——已修③stat 行补测量标题前缀区分——待实施④分析集（populationDescription）抽取——已实施（study 变量修正后 4 条新事实）
+- v88 队列：③stat 行带测量标题前缀；剩余 populationDescription 类推；B 幻影守卫后效验证
+- v88 全链 → 三路重派 → 全 accepted → accept-visual ×3
