@@ -2080,3 +2080,20 @@ B 复核收敛轨迹：r40(3)→r41(0→但v63重发现)→r44(2)→r45(2)→r47
 ### 视觉 A v69 rejected——refs 需排查
 A visual verdict on v69 rejected。详细发现待下会话分析（evidence_refs 指向
 的具体问题需逐域检查）。B/C 视觉仍在运行中。
+
+### C r30（v70，deepseek）：veto 6 项——全部为数据充实/呈现精度问题
+1. 给药方案：Eculizumab 600mg负荷期与900mg维持期被合并为"每2周1次"
+2. Coversin 靶点 C5和C3 → 仅C5有溯源（C3无来源证据）
+3. Coversin 0.57mg/kg → 0.57mg（丢每公斤口径）
+4. alxn2050 靶点/机制标"未公开"但登记已有"Oral FD inhibitor"
+5. Ravulizumab Cohort 1-4 组名被产品名替换（剂量递增结构丢失）
+6. 统计设计/分析集/模型/多重性数据缺失且无"未公开"声明
+
+### 修复方向（需要 A/C 构建器深度改造）
+- 从登记干预描述提取：给药途径（oral/IV/SC）、靶点（Factor B/C5/C3）、
+  机制描述（inhibitor/blocker/antibody）
+- 保留原始 cohort/group 标签（不替换为产品名）
+- 补充"未公开"声明（分析集/模型/多重性/缺失数据维度）
+- 从登记原文提取统计方法和给药方案详情
+
+### 这些改进需要系统性的 A/C 构建器改造，建议下一会话集中实施
