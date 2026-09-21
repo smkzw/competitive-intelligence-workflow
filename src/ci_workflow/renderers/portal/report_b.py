@@ -2942,8 +2942,9 @@ def _chart_series_label(row: Mapping[str, Any], key: str) -> str:
         row.get("arm_role_label_zh"),
         _text(row.get("arm"), _text(row.get("group"), "组别未列示")),
     )
-    # 独立复核 B r51（issue-2）：role 归一为"组别未列示"时，回退组标识解码
-    # （-arm-cohort-N → 第N组；-arm-group-N-treatment-naive → 第N组（初治））
+    # 独立复核 B r51/r55（issue-2）：role 归一为"组别未列示"时，回退组标识解码
+    # （-arm-cohort-N → 第N组；-arm-group-N-treatment-naive → 第N组（初治）；
+    #  -arm-<code>-tpN → <code> 第N期）
     if role_label in {"", "组别未列示"}:
         gid = _text(row.get("group_id"))
         m_coh = re.search(r"-arm-cohort-(\d+)$", gid)
@@ -2953,6 +2954,12 @@ def _chart_series_label(row: Mapping[str, Any], key: str) -> str:
         if m_grp:
             qualifier = _b_native_label(m_grp.group(2).replace("-", " "))
             return f"第{m_grp.group(1)}组" + (f"（{qualifier}）" if qualifier else "")
+        m_tp = re.search(r"-arm-([a-z0-9]+)-tp(\d+)$", gid)
+        if m_tp:
+            return f"{m_tp.group(1)} 第{m_tp.group(2)}期"
+        m_lte = re.search(r"-arm-([a-z0-9]+)-lte$", gid)
+        if m_lte:
+            return f"{m_lte.group(1)} 长期扩展期"
             # qualifier 为空时仍返回基础标签
     # 独立复核 B r35：基线类别必须出现在系列标签上，数值才可归属
     category = _baseline_category_zh(row)

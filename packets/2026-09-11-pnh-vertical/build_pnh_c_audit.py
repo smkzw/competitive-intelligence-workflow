@@ -382,9 +382,14 @@ def main() -> None:
         # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
         # 独立复核 C r36（issue-1/5）：已抽取分析集内容的试验，
         # 不再并列输出"登记未公开分析集信息"的自相矛盾行
-        stat_appended = {o["field"] for o in observations
-                         if o["trial_id"] == trial_id
-                         and (o["field"].startswith("statistical_") or o["field"] == "analysis_sets")}
+        # 独立复核 C r40（issue-1/2）：抑制条件按"该试验已有分析集内容"判定——
+        # 已抽取的统计/分析集说明行（statistical_comparisons）即代表分析集已披露
+        _has_stat_content = any(
+            o["trial_id"] == trial_id
+            and o["field"] in {"analysis_sets", "statistical_comparisons"}
+            and o.get("disclosure_state") == "reported_value"
+            for o in observations
+        )
         # 独立复核 C r30：登记各结局 description / populationDescription
         # 已载明分析集与统计方法的，逐条入谱（不再一律错标未公开）
         _stat_notes: list[str] = []
@@ -429,7 +434,8 @@ def main() -> None:
             ("multiplicity_adjustment", "多重性校正"),
             ("missing_data_handling", "缺失数据处理"),
         ):
-            if stat_field in stat_appended:
+            if stat_field == "analysis_sets" and _has_stat_content:
+                # 分析集已有披露内容行，不再并列"未公开"声明
                 continue
             observations.append(_row(
                 trial_id, product_id, nct, page, "statistical", stat_field,
@@ -510,7 +516,9 @@ def main() -> None:
             "path_id": _stable("c-design-path", signature),
             "design_signature": _stable("c-design-signature", signature),
             "summary_zh": (
-                f"设计要素组合为「{signature}」；覆盖 {'、'.join(member_trials)} 共 "
+                # 独立复核 C r40（issue-6）：摘要用大写登记号并去重签名元素
+                f"设计要素组合为「{'·'.join(dict.fromkeys(signature.split('·')))}」；"
+                f"覆盖 {'、'.join(x.upper() for x in member_trials)} 共 "
                 f"{len(member_trials)} 项登记试验，主要终点围绕 "
                 f"{'、'.join(endpoint_terms)} 等血液学指标。"
             ),

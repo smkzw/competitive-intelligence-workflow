@@ -418,7 +418,14 @@
     if (key === "time_window") {
       var twMap = {"Extension Period":"扩展期","LTE Period":"长期扩展期","Long-Term Extension (LTE)":"长期扩展期（LTE）","Long-Term Extension Period (52 Weeks)":"长期扩展期（52周）","Overall Study":"整个研究期","Primary Treatment Period (12 Weeks)":"主要治疗期（12周）","Treatment Period 1 (TP1)":"治疗期1（TP1）","Treatment Period 2 (TP2)":"治疗期2（TP2）","Treatment Period":"治疗期","Baseline":"基线"};
       var twVal = row.time_window || "";
-      return twMap[twVal] || twVal;
+      var mapped = twMap[twVal] || twVal;
+      // 独立复核 B r47（issue-3）：未译英文原句按报告惯例标注
+      var latin = mapped.match(/[A-Za-z]{3,}/g);
+      var cjk = /[\u4e00-\u9fff]/.test(mapped);
+      if (latin && latin.length >= 2 && !cjk) {
+        return mapped + "（登记原文，未译）";
+      }
+      return mapped;
     }
     if (key === "actual_timepoint") {
       if (row.actual_timepoint === null || row.actual_timepoint === undefined) return "未列示";
