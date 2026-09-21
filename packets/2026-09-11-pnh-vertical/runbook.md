@@ -2265,3 +2265,10 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **②基线组别未列示**：NCT04170023 基线 facts 的 group_id 存在但 arm/group 显示字段为空——同 _project_record 空值处理问题。
 - **③筛选项原始 token**：clinical_concept 筛选值 = 语义 token（ldh水平变化 小写）——筛选 groups 构造改用 clinical_concept_label_zh。
 - **④计数≠发生率**：safety 图题 statistical_form_family="事件发生率" 而 unit=例——图题按 unit 分流：例→"受累人数（例）"+表头加"风险人数"分母列（denominator 字段已有 57/29 等）。
+
+## 追记 7：B r38 四项落地 + v77 派发
+- **B 四项实施**：①B 构建器安全行 arm_label 保留 AE eventGroup 原标题（含 TP1/TP2/LTE），_arm_group_for 仅作角色判定；schema 禁止 arm_detail 字段 → 改走 arm_label+渲染器兜底链扩展（arm_label 加入）②B _text 加 "None"/"null" 字符串守卫（字面 None 不再进渲染数据）③TP1→治疗期1、TP2→治疗期2、LTE→长期扩展期 token；Group N/初治/换用依库珠单抗/延续入组 已在④安全图题按 unit 分流：例→"受累人数（例）"；JS 安全表新增"风险人数"分母列
+- **C r22 两细项**：_segment_frequency 补 "once a week"→每周1次（负荷期频次不再错标每2周）；ablating/titrated 句型→"负荷剂量0.57mg/kg；维持期按临床反应滴定"
+- **B builder schema 教训**：B 安全行 schema 禁 arm_detail——新字段先查 FreshB 合同再写
+- **v77 全链建成提交**（3895 行 0 碰撞；B 安全行带完整期间标题+分母 57/29；C 246 观察）。三路复核 r25/r39/r23 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环

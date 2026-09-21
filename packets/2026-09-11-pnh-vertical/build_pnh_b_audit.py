@@ -394,7 +394,6 @@ def main() -> None:
             "arm_role": _arm_group_for(row["trial_id"], row.get("arm", ""))[2],
             "arm_id": _arm_group_for(row["trial_id"], row.get("arm", ""))[0],
             "arm_label": row.get("arm") or _arm_group_for(row["trial_id"], row.get("arm", ""))[1],
-            "arm_detail": row.get("arm"),
             "value": value,
             "raw_value": str(row["value"]),
             "numerator": value,

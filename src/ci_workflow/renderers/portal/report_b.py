@@ -843,6 +843,10 @@ def _canonical_statistical_form(
         return canonical, _STATISTICAL_FORM_LABELS[canonical]
     unit_token = _text(unit).strip().casefold().replace("％", "%")
     if domain == "safety":
+        # 独立复核 B r38（issue-4）：计数与发生率口径分离——
+        # 登记只报组别受累人数（例）时不得标成"事件发生率"
+        if unit_token in {"例", "人", "count", "名"}:
+            return "event_count", "受累人数（例）"
         return "event_rate", _STATISTICAL_FORM_LABELS["event_rate"]
     if domain == "efficacy":
         if concept.endswith("_response") or concept == "hemoglobin_response_without_transfusion":
@@ -1376,6 +1380,9 @@ def _text(value: Any, default: str = "") -> str:
     value = _enum_value(value)
     if value is None:
         return default
+    if isinstance(value, str) and value.strip() in {"None", "null"}:
+        # 独立复核 B r38（issue-1/2）：投影链产生的字面 "None" 字符串按缺失处理
+        return default
     result = " ".join(str(value).split())
     return result or default
 
@@ -1383,6 +1390,8 @@ def _text(value: Any, default: str = "") -> str:
 _B_VARIABLE_TOKENS: tuple[tuple[str, str], ...] = (
     (r"\bcohort\s*(\d+)\b", r"第\1组"),
     (r"\bgroup\s*(\d+)\b", r"第\1组"),
+    (r"\bTP(\d+)\b", r"治疗期\1"),
+    (r"\bLTE\b", "长期扩展期"),
     (r"treatment[- ]naive", "初治"),
     (r"treatment[- ]experienced", "经治"),
     (r"eculizumab switch", "换用依库珠单抗"),
@@ -2075,7 +2084,7 @@ def _project_record(
         # 不得在角色收敛（治疗组）后丢失，兜底到原始臂名并经漏斗转写
         "arm_detail": _native_text(
             _source_first(value, source, "arm_detail", "arm_name", "group_name",
-                          "arm", "group", default="")
+                          "arm_label", "arm", "group", default="")
         ),
         # 独立复核 B r35：基线类别值（女/男等）随行走，行级可归属
         "category_level": _text(
