@@ -2480,3 +2480,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C 访视页**：全观察无时间点时渲染"证据不足声明"横幅（visit_insufficient 上下文 + 模板块）
 - **v87 全链建成提交**（A 3895 行 0 碰撞、B 门绿、C 12 页 259 观察）。三路复核 r35/r49/r33 stagger 派发，静默运行。
 - 收包后：全 accepted → accept-visual ×3 → PNH 闭环
+
+## 追记 41：B r49（veto 3）两项快修（commit 480ffba）
+- free_hemoglobin→游离血红蛋白、diarrhoea→腹泻 token；合成状态行（_synthetic）显式标注"合成状态行（无登记数值）"，不再与真实记录混淆
+- 第③项（抽屉分子/分母/阈值"来源未列示"——合同成对约束 357 行）与 C r32 剩余项继续留在 v88 队列
+- C r33（v87）静默运行中
