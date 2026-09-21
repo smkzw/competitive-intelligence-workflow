@@ -75,7 +75,15 @@ from ci_workflow.storage.snapshot_store import (
 
 from .builder import resolve_echarts_bundle, resolve_logo_src, resolve_portal_asset
 from .evidence_drawer import render_evidence_drawer_embed, render_evidence_drawer_host
-from .report_a import EfficacyRow, ReportAPortalData, SafetyRow, TrialRow, _git_commit
+from .report_a import (
+    EfficacyRow,
+    ReportAPortalData,
+    SafetyRow,
+    TrialRow,
+    _POPULATION_TOKENS,
+    _git_commit,
+    _native_timepoint_zh,
+)
 
 _TEMPLATE_DIR = Path(__file__).resolve().parent / "templates" / "b"
 _ASSET_DIR = Path(__file__).resolve().parent / "assets"
@@ -860,7 +868,11 @@ def _canonical_population(value: Any) -> tuple[str, str]:
     canonical = _POPULATION_LOOKUP.get(_semantic_token(value))
     if canonical is not None:
         return canonical, _POPULATION_LABELS[canonical]
-    return _unknown_semantic_key("population", value), _native_text(value)
+    # 独立复核 B r35：登记人群原文走 token 转写，残余英文显式声明
+    transcribed = _b_native_label(_text(value))
+    if transcribed is not None:
+        return _unknown_semantic_key("population", value), transcribed
+    return _unknown_semantic_key("population", value), "登记分析人群（定义详见登记来源）"
 
 
 def _canonical_arm_role(value: Any) -> tuple[str, str]:
@@ -905,7 +917,8 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
     if match is None:
         match = _TIMEPOINT_PREFIX_PATTERN.fullmatch(candidate_text)
     if match is None:
-        return _unknown_semantic_key("time", text), text
+        # 独立复核 B r35：登记英文时间窗不得直出，先走确定性中文转写
+        return _unknown_semantic_key("time", text), _native_timepoint_zh(text)
     low = float(match.group("low"))
     high = float(match.group("high") or match.group("low"))
     value_num = (low + high) / 2.0
@@ -1367,10 +1380,58 @@ def _text(value: Any, default: str = "") -> str:
     return result or default
 
 
+_B_VARIABLE_TOKENS: tuple[tuple[str, str], ...] = (
+    (r"\bsex\b|\bgender\b", "性别"),
+    (r"\bage\b", "年龄"),
+    (r"\brace\b", "种族"),
+    (r"\bethnicity\b", "民族"),
+    (r"\bweight\b", "体重"),
+    (r"\bheight\b", "身高"),
+    (r"\bbody mass index\b|\bbmi\b", "体质指数（BMI）"),
+    (r"\bcompleted?\b", "完成"),
+    (r"\bdiscontinued?\b", "提前终止"),
+    (r"\bwithdrawn\b", "退出"),
+    (r"\bdeaths?\b|\bdied\b", "死亡"),
+    (r"\badverse events?\b|\baes?\b", "不良事件"),
+    (r"\bserious\b", "严重"),
+    (r"\binfections?\b", "感染"),
+    (r"\breason\b", "原因"),
+    (r"\black of (?:efficacy|effect)\b", "疗效不足"),
+)
+
+
+def _b_native_label(text: str) -> str | None:
+    """B 类标签确定性转写漏斗：字面映射 → 变量 token → 人群 token。
+
+    返回 None 表示残余英文过多、无法诚实转写，由调用方选择显式声明。
+    """
+    out = _text(text)
+    if not out:
+        return out
+    out = _NATIVE_LABELS.get(out, out)
+    out = out.replace("Other events", "其他不良事件")
+    if not re.search(r"[A-Za-z]{3,}", out):
+        return out
+    for pattern, rep in _B_VARIABLE_TOKENS:
+        out = re.sub(pattern, rep, out, flags=re.I)
+    for pattern, rep in _POPULATION_TOKENS:
+        out = re.sub(pattern, rep, out, flags=re.I)
+    out = re.sub(r"\s*and\s*", "、", out, flags=re.I)
+    out = re.sub(r",\s*", "、", out)
+    out = re.sub(r"\(\s*", "（", out)
+    out = re.sub(r"\s*\)", "）", out)
+    out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
+    out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
+    residual = [w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]
+    if len(residual) >= 2:
+        return None
+    return out
+
+
 def _native_text(value: Any, default: str = "") -> str:
     text = _text(value, default)
-    text = _NATIVE_LABELS.get(text, text)
-    return text.replace("Other events", "其他不良事件")
+    transcribed = _b_native_label(text)
+    return text if transcribed is None else transcribed
 
 
 def _iter_values(value: Any) -> tuple[Any, ...]:
@@ -1974,6 +2035,15 @@ def _project_record(
         "arm_detail": _native_text(
             _source_first(value, source, "arm_detail", "arm_name", "group_name", default="")
         ),
+        # 独立复核 B r35：基线类别值（女/男等）随行走，行级可归属
+        "category_level": _text(
+            _source_first(value, source, "category_level", default="")
+        ),
+        "category_level_label_zh": _baseline_category_zh(
+            {"category_level": _text(
+                _source_first(value, source, "category_level", default="")
+            )}
+        ),
         "cohort": cohort,
         "period": period,
         "category": category,
@@ -1981,7 +2051,8 @@ def _project_record(
         "time": time_label,
         "actual_timepoint": actual_timepoint,
         "actual_timepoint_unit": actual_timepoint_unit,
-        "time_window": time_window,
+        # 独立复核 B r35：展开表直读的 time_window/arm_detail 必须中文化
+        "time_window": _native_timepoint_zh(time_window),
         "time_window_band": semantics["time_window_band"],
         "time_window_band_label_zh": semantics["time_window_band_label_zh"],
         "population": population,
@@ -2721,10 +2792,42 @@ def _records_with_semantics(
     return tuple(result)
 
 
+_BASELINE_CATEGORY_ZH = {
+    "female": "女",
+    "male": "男",
+    "other": "其他",
+    "unknown": "未知",
+    "not reported": "未报告",
+    "hispanic or latino": "西班牙裔或拉丁裔",
+    "not hispanic or latino": "非西班牙裔或拉丁裔",
+    "white": "白人",
+    "black or african american": "黑人或非裔美国人",
+    "asian": "亚裔",
+    "american indian or alaska native": "美洲印第安人或阿拉斯加原住民",
+    "native hawaiian or other pacific islander": "夏威夷原住民或其他太平洋岛民",
+    "yes": "是",
+    "no": "否",
+}
+
+
+def _baseline_category_zh(row: Mapping[str, Any]) -> str:
+    """登记基线类别值的中性中文呈现；数字区间等原样保留。"""
+    raw = _text(row.get("category_level"))
+    if not raw:
+        return ""
+    low = raw.casefold()
+    return _BASELINE_CATEGORY_ZH.get(low, raw)
+
+
 def _chart_series_key(row: Mapping[str, Any]) -> str:
     role = _text(row.get("arm_role"), "unknown")
     group_id = _text(row.get("group_id"))
-    return role if role != "unknown" or not group_id else group_id
+    key = role if role != "unknown" or not group_id else group_id
+    # 独立复核 B r35：基线类别行（女/男）并入系列键，同卡不同类别不再同系列
+    category = _text(row.get("category_level"))
+    if category:
+        key = f"{key}::category-{category}"
+    return key
 
 
 def _chart_series_label(row: Mapping[str, Any], key: str) -> str:
@@ -2732,6 +2835,10 @@ def _chart_series_label(row: Mapping[str, Any], key: str) -> str:
         row.get("arm_role_label_zh"),
         _text(row.get("arm"), _text(row.get("group"), "组别未列示")),
     )
+    # 独立复核 B r35：基线类别必须出现在系列标签上，数值才可归属
+    category = _baseline_category_zh(row)
+    if category:
+        return f"{role_label}（{category}）"
     if key.startswith("treatment:") or key.startswith("control:"):
         for detail in (
             _text(row.get("arm_detail")),
@@ -3091,7 +3198,39 @@ def _dress_membership_groups(
                 group["y_axis_min"] = min(0.0, min(values))
                 group["y_axis_max"] = max(0.0, max(values))
         groups.append(group)
-    return tuple(groups)
+    return tuple(_disambiguate_group_titles(groups))
+
+
+def _disambiguate_group_titles(groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """同页标题逐字相同的图卡消歧（独立复核 B r35 veto）。
+
+    以组内登记测量原文（semantic_definition/original_definition）签名区分；
+    原文一致者按登记终点定义序号显式标注，使数值可唯一归属。
+    """
+    by_title: dict[str, list[dict[str, Any]]] = {}
+    import re as _re
+    for group in groups:
+        # 剥离此前 pass 加的序号后缀，页级统一重新编号（幂等）
+        base = _re.sub(r"（登记终点定义(?:变体)?\d*）$", "", str(group.get("title_zh")))
+        group["title_zh"] = base
+        by_title.setdefault(base, []).append(group)
+    for title, dups in by_title.items():
+        if len(dups) < 2:
+            continue
+        signatures = []
+        for group in dups:
+            sigs = sorted({
+                _text(row.get("semantic_definition"),
+                      _text(row.get("original_definition"),
+                            _text(row.get("endpoint_source"),
+                                  _text(row.get("time"), ""))))
+                for row in group.get("rows", ())
+            })
+            signatures.append("||".join(sigs))
+        # 无论签名是否相异，同名图卡一律顺序编号，保证页内标题唯一可归属
+        for i, group in enumerate(dups, start=1):
+            group["title_zh"] = f"{title}（登记终点定义{i}）"
+    return groups
 
 
 def _baseline_bucket_sort_key(key: tuple[str, ...]) -> tuple[int, tuple[str, ...]]:
@@ -3147,7 +3286,7 @@ def _adjudicate_full_pool(
                 domain_page, selected, semantic_proposals=semantic_proposals,
                 semantic_adjudications=semantic_adjudications,
             ))
-    return tuple(groups)
+    return tuple(_disambiguate_group_titles(groups))
 
 
 def _assert_page_fallback_only_uncovered(
@@ -3625,7 +3764,7 @@ def _filter_groups(
             option_label = _filter_value_label_zh(dimension, value, option_label)
             options.append({"value": value, "label": option_label})
         groups.append({"dimension": dimension, "label": label, "options": tuple(options)})
-    return tuple(groups)
+    return tuple(_disambiguate_group_titles(groups))
 
 
 def _display_trial_name(trial: TrialRow, product_name: str) -> str:
@@ -3650,7 +3789,7 @@ def _nav_groups(catalog: ReportCatalog, *, prefix: str, current: str) -> tuple[d
                 "active": page.id == current,
             }
         )
-    return tuple(groups)
+    return tuple(_disambiguate_group_titles(groups))
 
 
 def _copy_assets(site_root: Path) -> None:
@@ -3942,14 +4081,14 @@ def _render_page_context(
     covered = [item for item in records if str(item[0]["row_id"]) in covered_ids]
     uncovered = [item for item in records if str(item[0]["row_id"]) not in covered_ids]
     _assert_page_fallback_only_uncovered(uncovered)
-    groups = (
+    groups = _disambiguate_group_titles(list((
         *_project_scientific_groups(scientific_groups, covered),
         *_groups_for_page(
             page_id, uncovered,
             semantic_proposals=data.semantic_proposals,
             semantic_adjudications=semantic_adjudications,
         ),
-    )
+    )))
     has_domain_empty_state = bool(records) and all(
         row.get("_empty_state") is True for row, _source in records
     )

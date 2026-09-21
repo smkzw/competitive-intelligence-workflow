@@ -373,7 +373,17 @@
     if (key === "trial_zh") return row.trial_zh || "未列示试验";
     if (key === "arm") return armText(row);
     if (key === "arm_role") return row.arm_role_label_zh || row.arm_role || "组别未列示";
-    if (key === "arm_detail") return row.arm_detail || armText(row);
+    if (key === "arm_detail") {
+      // 独立复核 B r35：组别列以中文角色为主，登记明细只作括注，
+      // 表格与图例（治疗组/对照组）不再出现两种写法
+      var roleLabel = row.arm_role_label_zh || "";
+      var detailText = String(row.arm_detail || "");
+      if (roleLabel && detailText && detailText !== roleLabel) {
+        return roleLabel + "（" + detailText + "）";
+      }
+      if (roleLabel) return roleLabel;
+      return detailText || armText(row);
+    }
     if (key === "clinical_concept") {
       return row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
     }
