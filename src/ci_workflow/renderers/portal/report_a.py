@@ -589,6 +589,11 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"extension period", "扩展期"),
     (r"extension study", "扩展研究"),
     (r"\bextension\b", "扩展期"),
+    (r"to completion|\bcompletion\b", "研究结束"),
+    (r"\bprior to\b", "之前"),
+    (r"\bprior\b", "之前"),
+    (r"\bminutes?\b", "分钟"),
+    (r"\bperiod\b", "期间"),
     (r"up to end of study", "至研究结束"),
     (r"up to weeks? (\d+)", r"至第\1周"),
     (r"up to days? (\d+)", r"至第\1天"),
@@ -720,6 +725,7 @@ def _native_timepoint_zh(value: str) -> str:
     out = re.sub(r"\(\s*", "（", out)
     out = re.sub(r"\s*\)", "）", out)
     out = re.sub(r"、、+", "、", out)
+    out = re.sub(r"至至+", "至", out)
     out = re.sub(r"\s{2,}", " ", out).strip(" 、；")
     # 残余裸英文 ≥2 词 → 未转写成功，显式声明
     if len(re.findall(r"[A-Za-z]{2,}", out)) >= 2:
@@ -730,10 +736,15 @@ def _native_timepoint_zh(value: str) -> str:
 
 def _native_endpoint_zh(value: str) -> str:
     """把登记结果长标题收敛成中文临床终点名；原文仍保存在证据层。"""
-    # 中文原生（独立复核 r21）：短英文标题不再直通，一律走确定性转写；
-    # 登记原文保留在行级 endpoint_source 与证据层
-    if _contains_chinese(value) and len(re.findall(r"[A-Za-z]{3,}", value)) < 3:
-        return value
+    # 中文原生（独立复核 r22）：只有"零非缩写英文词"的中西混合文本才直通。
+    # 此前 <3 词即放行，导致 "Absolute 较基线变化： Hemoglobin" 类规则半替换
+    # 的混合文本原样漏出（429 行）。全大写缩写（LDH/EASI/ULN 等）不算残留。
+    if _contains_chinese(value):
+        residual = [
+            w for w in re.findall(r"[A-Za-z]{3,}", value) if not w.isupper()
+        ]
+        if not residual:
+            return value
     folded = value.casefold()
     if re.search(
         r"(?:≥|>=)\s*(50|75|90)\s*%\s+improvement\s+in\s+"
@@ -816,6 +827,15 @@ def _native_endpoint_zh(value: str) -> str:
                 measure = label(match)
                 break
 
+    # 中文原生（独立复核 r22）：endpoint_rules 半替换留下的中文形式词
+    # 也要参与 form 识别，避免退化成通用"疗效评价"
+    zh_form = ""
+    if "较基线百分比变化" in value:
+        zh_form = "较基线百分比变化"
+    elif "较基线变化" in value:
+        zh_form = "较基线变化"
+    elif "达到以下标准的受试者比例" in value:
+        zh_form = "应答率"
     if "time to" in folded:
         form = "达到应答所需时间"
     elif re.search(r"percent(?:age)? of (?:participants|subjects)", folded) or re.search(
@@ -846,6 +866,8 @@ def _native_endpoint_zh(value: str) -> str:
         qualifiers.append(f"第{match.group(1)}周")
     if match := re.search(r"\bPart\s*([AB12])\b", value, re.I):
         qualifiers.append(f"第{match.group(1)}部分")
+    if zh_form and form == "疗效评价":
+        form = zh_form
     suffix = "；" + "；".join(qualifiers) if qualifiers else ""
     # 会商 #5 残留：measure 已含 form 语义时不再叠加（"药物浓度浓度"→"药物浓度"）
     body = measure + form if not measure.endswith(form) else measure
@@ -1041,7 +1063,10 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bfull analysis\b", "全分析集"),
     (r"\bmale\b", "男性"),
     (r"\bfemale\b", "女性"),
+    (r"\bat least\b", "至少"),
+    (r"\ball\b", "全部"),
     (r"\band\b", "、"),
+    (r"\bto\b", ""),
     (r"\bof\b", ""),
     (r"\bin\b", ""),
     (r"\bat\b", ""),
