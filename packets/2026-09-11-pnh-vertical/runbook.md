@@ -2076,3 +2076,7 @@ B 复核收敛轨迹：r40(3)→r41(0→但v63重发现)→r44(2)→r45(2)→r47
 1. 给药方案：mg/kg 保留体重口径（不截分母）；负荷/维持期分开标注
 2. Coversin 靶点修正：仅 C5（登记无 C3 证据）
 3. C 视觉重测（v69 6/7→待收 verdict）
+
+### 视觉 A v69 rejected——refs 需排查
+A visual verdict on v69 rejected。详细发现待下会话分析（evidence_refs 指向
+的具体问题需逐域检查）。B/C 视觉仍在运行中。
