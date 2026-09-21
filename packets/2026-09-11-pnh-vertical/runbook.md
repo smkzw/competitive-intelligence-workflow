@@ -1829,3 +1829,13 @@ v61 的 B 包残余"units/liter (U/L)"和"millimole(s)/litre"已归一。
 4. 重派 UC/IgAN（载荷已修复重建，截断/污染/分类器全清）
 5. AD B/C 竖向 → 横向 6 适应症（重度哮喘/CRSwNP/结节性痒疹/类风湿/UC/IgAN）
 6. 三宿主 fresh-install → 安装包重建 → 恢复链验证 → RC 冻结
+
+### B r40（v62，deepseek）：veto 3 项——下一会话修复清单
+1. 评价时间格式：天→周换算后直出浮点数不标单位（0.14285714285714285）。
+   修复点：_time_label/format 中 Day→周 换算时回到"第N天"显示。
+2. 科学语义：Free C5 vs Total C5 两条方向相反的终点合并为同一标签
+   "补体抑制药效学指标"。修复：A/B 构建器补 C5 子类区分
+   （free_c5_change vs total_c5_change）。
+3. 中文原生：登记英文原名直出"疗效指标/评价时间"——需对高频英文终点
+   短语补 zh 转写（同 _registry_endpoint_zh 扩展）。
+修复后 → v63 → B r41 + A/C 复核 → 三节点视觉 → accept-visual ×3。
