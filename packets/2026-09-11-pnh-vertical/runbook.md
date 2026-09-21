@@ -2521,3 +2521,8 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **B r51 四项**：①ALPHA Total 仍误归 TP2 队列（Total 守卫已修但 v89 构建早于该补丁——v90 验证）②基线 series 组别未列示 27 行（series 回退解码待接）③分母/分析集"来源未列示"（成对约束）④筛选时间窗按钮半翻译（"至30天 末次给药后 研究 drug"）——token 收尾
 - **C r35 八项**：①分析集/缺失数据处理 4 试验仍错标（bc populationDescription 已接入——v90 渲染验证）②stat 行【】空前缀（测量标题为空的条目需跳过前缀）③血管内溶血应答率错译（已修 term）④同名行序号区分（已实施，验证）⑤访视页声明与空图并存（声明已加，图仍渲染——需在声明存在时抑制空图）⑥派生内容英文时间窗（已修）⑦量表列混装（已标注）⑧"登记原文，未译"标注惯例统一（已实施，覆盖面验证）
 - **v90 队列（定稿）**：①A 矩阵 toFixed 守卫 v90 实测②B Total 守卫 v90 验证③B 基线 series 回退解码接线④C 【】空前缀跳过⑤访视页声明存在时抑制空图⑥人群 token 收尾 → v90 全链 → 三路重派 → 全 accepted → accept-visual ×3 → PNH 闭环 → 横向扩展
+
+## 追记 48：v90 队列实施完成 + v90 全链派发
+- **v90 队列实施**：①B 基线 series 回退解码（role 未列示时按 group_id 解码 cohort-N→第N组、group-N-qualifier→第N组（限定词））②C 【】空前缀跳过③访视页声明存在时抑制空图（groups 置空）④token 收尾
+- **v90 全链建成提交**（A 3895 行 0 碰撞、B 357 行+期间标题+Total 守卫、C 259 观察 12 页）。三路复核 r38/r52/r36 stagger 派发，静默运行。
+- 收包后：全 accepted → accept-visual ×3 → PNH 闭环；再 veto 按行级定位续修（v91）
