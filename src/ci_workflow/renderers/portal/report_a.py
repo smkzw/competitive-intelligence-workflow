@@ -725,8 +725,8 @@ def _native_timepoint_zh(value: str) -> str:
 
 def _native_endpoint_zh(value: str) -> str:
     """把登记结果长标题收敛成中文临床终点名；原文仍保存在证据层。"""
-    if len(value) <= 40 and len(re.findall(r"[A-Za-z]{3,}", value)) <= 2:
-        return value
+    # 中文原生（独立复核 r21）：短英文标题不再直通，一律走确定性转写；
+    # 登记原文保留在行级 endpoint_source 与证据层
     if _contains_chinese(value) and len(re.findall(r"[A-Za-z]{3,}", value)) < 3:
         return value
     folded = value.casefold()
@@ -760,6 +760,33 @@ def _native_endpoint_zh(value: str) -> str:
         (r"body surface area|\bbsa\b", lambda _m: "受累体表面积（BSA）"),
         (r"trough.*concentration|plasma concentration|serum concentration", lambda _m: "药物浓度"),
         # 跨适应症通用生物医学终点（独立视觉复核：通用族标签不得顶替终点身份）
+        # 肾脏科终点（IgAN 泛化测试：不得落入通用占位标签）
+        (r"urine protein[- ]?to[- ]?creatinine ratio|\bupcr\b|protein[- ]?creatinine ratio", lambda _m: "尿蛋白/肌酐比值（UPCR）"),
+        (r"urine albumin[- ]?to[- ]?creatinine ratio|\buacr\b", lambda _m: "尿白蛋白/肌酐比值（UACR）"),
+        (r"estimated glomerular filtration rate|\begfr\b", lambda _m: "估算肾小球滤过率（eGFR）"),
+        (r"proteinuria|urine protein|urinary protein", lambda _m: "蛋白尿"),
+        (r"albuminuria|urine albumin(?!/)", lambda _m: "白蛋白尿"),
+        (r"haematuria|hematuria", lambda _m: "血尿"),
+        (r"serum creatinine|\bscr\b(?!at)", lambda _m: "血肌酐"),
+        (r"creatinine clearance|\bcrc[l]\b", lambda _m: "肌酐清除率"),
+        # 消化科终点（UC 泛化测试）
+        (r"endoscopic(?:\s+\w+)*\s*(?:remission|improvement|response)|endoscopy", lambda _m: "内镜改善"),
+        (r"mucosal healing", lambda _m: "黏膜愈合"),
+        (r"histologic(?:al)?(?:\s+\w+)*\s*(?:remission|improvement|response)", lambda _m: "组织学改善"),
+        (r"rectal bleeding|bowel bleeding", lambda _m: "直肠出血"),
+        (r"stool frequency", lambda _m: "排便次数"),
+        (r"bowel urgency|urgency", lambda _m: "便急"),
+        (r"inflammatory bowel disease questionnaire|\bibdq\b", lambda _m: "IBD 问卷（IBDQ）"),
+        (r"steroid[- ]free", lambda _m: "无激素缓解"),
+        (r"clinical remission|complete remission(?!.*iga)", lambda _m: "临床缓解"),
+        (r"clinical (?:response|remission)", lambda _m: "临床应答"),
+        # 跨适应症通用生物医学终点
+        # PNH 特异症状/克隆/溶血终点必须先于 hemoglobin 等子串匹配
+        # （独立复核 r21：89 条症状/克隆观察被误标为血红蛋白）
+        (r"hemoglobinuria|haemoglobinuria", lambda _m: "血红蛋白尿"),
+        (r"\bpnh clone|clone (?:size|count)|clonal (?:population|fraction)", lambda _m: "PNH 克隆"),
+        (r"clinical pnh symptoms?|pnh symptoms?", lambda _m: "PNH 症状"),
+        (r"intravascular hemolysis|\bhemolysis\b|\bhaemolysis\b", lambda _m: "血管内溶血"),
         (r"\bldh\b|lactate dehydrogenase", lambda _m: "乳酸脱氢酶（LDH）"),
         (r"hemoglobin|\bhgb\b", lambda _m: "血红蛋白"),
         (r"platelet", lambda _m: "血小板"),
@@ -870,6 +897,150 @@ def _native_arm_detail_zh(value: str | None) -> str | None:
     return " ".join(text.split())
 
 
+_POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...] = (
+    # 登记类标题残留英文的确定性转写（先于通用回退；全大写缩写保留）
+    (r"not applicable", "不适用"),
+    (r"prior to first eculizumab dose", "首次依库珠单抗给药前"),
+    (r"from first dose of eculizumab through last dose", "自首次依库珠单抗给药至末次给药"),
+    (r"\beculizumab\b", "依库珠单抗"),
+    (r"creatin(e)? kinase", "肌酸激酶"),
+    (r"gamma glutamyl transpeptidase", "γ-谷氨酰转移酶"),
+    (r"entire study", "整个研究期"),
+    (r"post[- ]baseline", "基线后"),
+    (r"\bmean\b", "均值"),
+    (r"haemoglobin", "血红蛋白"),
+    (r"antibody positive at/?before baseline", "抗体基线时/前阳性"),
+    (r"antibody positive anytime", "抗体任何时候阳性"),
+    (r"\bpositive\b", "阳性"),
+    (r"\banytime\b", "任何时候"),
+    (r"at/?before baseline", "基线时/前"),
+    (r"definitely related", "肯定相关"),
+    (r"global satisfaction", "总体满意度"),
+    (r"peak concentration", "峰浓度"),
+    (r"alanine aminotransferase", "丙氨酸氨基转移酶"),
+    (r"aspartate aminotransferase", "天冬氨酸氨基转移酶"),
+    (r"neutrophil count", "中性粒细胞计数"),
+    (r"prior to starting trial", "试验开始前"),
+    (r"transfusion dependent", "输血依赖"),
+    (r"treatment emergent adverse event|treatment-emergent adverse event", "治疗中出现的不良事件"),
+    (r"treatment[- ]emergent", "治疗中新出现的"),
+    (r"\beoi\b", "感兴趣事件"),
+    (r"infusion reaction", "输注反应"),
+    (r"serious infection", "严重感染"),
+    (r"blood transfusions?", "输血"),
+    (r"binding antibody", "结合抗体"),
+    (r"neutralizing antibody", "中和抗体"),
+    (r"antibody positive anytime", "抗体任何时候阳性"),
+    (r"antibody positive at/?before baseline", "抗体基线时/前阳性"),
+    (r"antibody positive", "抗体阳性"),
+    (r"boosted", "强化"),
+    (r"within (\d+) weeks? prior to first dose", r"首次给药前\1周内"),
+    (r"during (\d+)[- ]week treatment period", r"\1周治疗期内"),
+    (r"predose \(trough\)|predose", "给药前"),
+    (r"trough", "谷浓度"),
+    (r"financial difficulties", "经济困难"),
+    (r"missing severity", "严重程度缺失"),
+    (r"life[- ]threatening", "危及生命"),
+    (r"treatment[- ]boosted response", "治疗强化应答"),
+    (r"treatment[- ]emergent response", "治疗中新出现的应答"),
+    (r"increase in hb", "血红蛋白升高"),
+    (r"\bhb\b|hemoglobin", "血红蛋白"),
+    (r"irrespective of", "不论"),
+    (r"rbc transfusions?", "红细胞输血"),
+    (r"direct bilirubin", "直接胆红素"),
+    (r"indirect bilirubin", "间接胆红素"),
+    (r"bilirubin", "胆红素"),
+    (r"\baes?\b", "不良事件"),
+    (r"study medication", "研究药物"),
+    (r"\bincrease\b|\bincreased\b", "升高"),
+    (r"\bdecrease\b|\bdecreased\b", "下降"),
+    (r"\bevents?\b", "事件"),
+    (r"at least (\d+)", r"至少\1次"),
+    (r"serious adverse events?", "严重不良事件"),
+    (r"adverse events?", "不良事件"),
+    (r"leading to discontinuation", "导致停药"),
+    (r"leading to death", "导致死亡"),
+    (r"leading to", "导致"),
+    (r"discontinuation|discontinued", "停药"),
+    (r"possibly related", "可能相关"),
+    (r"probably related", "很可能相关"),
+    (r"related to study drug|related to", "相关"),
+    (r"study drug|study treatment", "研究药物"),
+    (r"maximum severity", "最重严重程度"),
+    (r"global health status", "整体健康状态"),
+    (r"quality of life|\bqol\b", "生活质量"),
+    (r"functional scales", "功能量表"),
+    (r"physical functioning", "躯体功能"),
+    (r"role functioning", "角色功能"),
+    (r"emotional functioning", "情绪功能"),
+    (r"cognitive functioning", "认知功能"),
+    (r"social functioning", "社会功能"),
+    (r"\bfatigue\b", "疲乏"),
+    (r"\bnausea\b", "恶心"),
+    (r"\bvomiting\b", "呕吐"),
+    (r"\bconstipation\b", "便秘"),
+    (r"\bdiarrhea\b", "腹泻"),
+    (r"\bappetite loss\b", "食欲减退"),
+    (r"\binsomnia\b", "失眠"),
+    (r"\bdyspnea\b|\bdyspnoea\b", "呼吸困难"),
+    (r"non\s*responders?", "非应答者"),
+    (r"responders?", "应答者"),
+    (r"overall", "总体"),
+    (r"up to", "至"),
+    (r"\bthrough\b", "至"),
+    (r"\bduring\b", "期间"),
+    (r"\bonset\b", "发生"),
+    (r"non\s*-?\s*clinically\s+significant|not\s+clinically\s+significant", "无临床意义"),
+    (r"clinically\s+significant", "有临床意义"),
+    (r"treatment[- ]emergent adverse events?|teaes?", "治疗中出现的不良事件"),
+    (r"\bgrade\s*(\d+)", r"\1级"),
+    (r"\bserious\b", "严重"),
+    (r"\bmoderate\b", "中度"),
+    (r"\bmild\b", "轻度"),
+    (r"\bsevere\b", "重度"),
+    (r"\bhigh\b", "升高"),
+    (r"\blow\b", "降低"),
+    (r"\bpre\b", "给药前"),
+    (r"\bpost\b", "给药后"),
+    (r"infusion", "输注"),
+    (r"\bdose\b|\bdosing\b", "给药"),
+    (r"\bchange\b", "变化"),
+    (r"symptoms?", "症状"),
+    (r"\btotal\b", "总"),
+    (r"functioning", "功能"),
+    (r"\bany\b", "任意"),
+    (r"\bwith\b", "伴"),
+    (r"\bfrom\b", "自"),
+    (r"\bday\s*(\d+)", r"第\1天"),
+    (r"\bperiod\s*(\d+)", r"第\1周期"),
+    (r"\bweek\s*(\d+)", r"第\1周"),
+    (r"participants?", "受试者"),
+    (r"\btreatment\b", "治疗"),
+    (r"\bend\b", "末次"),
+    (r"\bunbound\b", "游离型"),
+    (r"\bscales?\b", "量表"),
+    (r"\bscores?\b", "评分"),
+    (r"\bworst\b", "最重"),
+    (r"\bpains?\b", "疼痛"),
+    (r"\bworsening\b|\bworsened\b", "恶化"),
+    (r"\bimproved?ment?\b", "改善"),
+    (r"\bbaseline\b", "基线"),
+    (r"\bsource\b", "来源"),
+    (r"\blead[- ]?in\b", "导入期"),
+    (r"\bwithdrawn\b", "提前停药者"),
+    (r"\bcompleters?\b", "完成者"),
+    (r"\bper\s+protocol\b", "符合方案"),
+    (r"\binterim efficacy analysis\b", "期中疗效分析"),
+    (r"\bfull analysis\b", "全分析集"),
+    (r"\bmale\b", "男性"),
+    (r"\bfemale\b", "女性"),
+    (r"\band\b", "、"),
+    (r"\bof\b", ""),
+    (r"\bin\b", ""),
+    (r"\bat\b", ""),
+)
+
+
 def _native_population_zh(value: str) -> str:
     """将登记平台分析人群长句压缩为可比较的中文定义。"""
     folded = value.casefold()
@@ -942,9 +1113,20 @@ def _native_population_zh(value: str) -> str:
         return "分析集：至少接受1次研究药物且相应时间点有可用数据的随机受试者"
     if "participants who" in folded or "subjects who" in folded:
         return "预设分析人群：达到相应应答或基线条件并有可用数据者"
-    if re.search(r"[A-Za-z]{3,}", value):
+    # 登记类标题残留英文：确定性转写；全大写缩写（EORTC/QLQ/FACIT 等）保留；
+    # 转写后仍剩 ≥2 个非缩写英文词才回退通用声明
+    out = " ".join(str(value or "").split())
+    for pattern, rep in _POPULATION_TOKENS:
+        out = re.sub(pattern, rep, out, flags=re.I)
+    out = re.sub(r"、\s*、", "、", out)
+    out = re.sub(r"\(\s*", "（", out)
+    out = re.sub(r"\s*\)", "）", out)
+    out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
+    out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
+    residual = [w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]
+    if len(residual) >= 2:
         return "预设分析人群：按登记平台分析集定义及相应时间点可用数据纳入"
-    return value
+    return out
 
 
 _UNIT_LITERAL_ZH = {
@@ -1012,6 +1194,18 @@ def _native_unit_zh(unit: str) -> str:
         stem = "g" if m.group(1).startswith("gram") else "mol"
         prefix = "μ" if "micro" in low else "n" if "nano" in low else "k" if "kilo" in low else ""
         return f"{prefix}{stem}/L"
+    # 指数计数单位写法归一（独立复核 r21：同一量级多种写法并存）
+    m = re.fullmatch(
+        r"(?:cells?\s*)?[x×*]\s*10\s*\^?\s*(\d+)(?:\s*cells?)?\s*/?\s*l(?:\s*\([^)]*\))?",
+        low,
+    )
+    if m:
+        exp = m.group(1)
+        return {("9",): "×10⁹/L", ("12",): "×10¹²/L", ("6",): "×10⁶/L"}.get((exp,), f"×10{exp}/L")
+    m = re.fullmatch(r"cells?\s*[x×]\s*10\s*\^?\s*(\d+)\s*/\s*l", low)
+    if m:
+        exp = m.group(1)
+        return {("9",): "×10⁹/L", ("12",): "×10¹²/L", ("6",): "×10⁶/L"}.get((exp,), f"×10{exp}/L")
     if low in {"10^12 cells/l", "10^12 cells/l (si units)", "10^12 reticulocytes (cells)/l"}:
         return "×10¹²/L"
     if low in {"10^9 cells/l", "10^9 cells/liter (l)", "10^9/l"}:
@@ -1049,6 +1243,26 @@ def _disambiguate_endpoint_labels(rows: list[dict[str, Any]]) -> None:
             n = sources.get(src)
             if n:
                 row["endpoint"] = f"{row['endpoint']}（登记终点定义{n}）"
+
+
+
+_HISTORY_PHRASING: tuple[tuple[str, str], ...] = (
+    (r"条因未披露样本量未入试验表", "项试验因登记未披露样本量，未纳入试验明细"),
+    (r"条无独立药物干预未产出实体（明细见派生记录）", "条记录因不含独立药物治疗且无已公布结果，未纳入产品与试验明细"),
+    (r"无独立药物干预未产出实体", "因不含独立药物治疗且无已公布结果，未纳入明细"),
+    (r"联合治疗关系受载荷单产品字段限制", "联合用药信息按各产品分别记录"),
+    (r"监管/专利来源待接入", "监管与专利来源将在后续版本接入"),
+    (r"中国路线\s*访问受阻已如实记档", "中国境内登记路线访问受阻，已按合同记档并声明"),
+    (r"访问受阻已如实记档", "访问受阻，已按合同记档"),
+)
+
+
+def _native_history_zh(text: str) -> str:
+    """历史时间线面向用户改写：内部派生口径不得直出（独立复核 r21）。"""
+    out = str(text or "")
+    for pattern, rep in _HISTORY_PHRASING:
+        out = re.sub(pattern, rep, out)
+    return out
 
 
 def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...]:
@@ -1151,7 +1365,10 @@ def _view_context(
         "external_sources": public_provenance.sources if public_provenance else (),
         "companies": data.companies,
         "patents": data.patents,
-        "history": data.history,
+        "history": tuple(
+            row.model_copy(update={"observation": _native_history_zh(row.observation)})
+            for row in data.history
+        ),
         "product_names": product_names,
         "trial_names": trial_names,
         "trial_original_names": trial_original_names,

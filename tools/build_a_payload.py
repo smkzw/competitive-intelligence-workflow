@@ -590,9 +590,9 @@ def main() -> None:
              "maturity": "官方登记当前记录",
              "limitation": "当前记录口径，非历史 as-of 还原"},
             {"source": "PubMed",
-             "scope": f"{INDICATION}治疗文献真实获取（878 条记录 + 14 分类属性）",
-             "maturity": "complete_with_attrition",
-             "limitation": "属性差异经 esummary 分类；论文—试验关系判定未完成"},
+             "scope": f"{INDICATION}治疗文献检索回执未纳入当前工作区绑定（计数与分类属性以检索回执为准，不在载荷中虚构）",
+             "maturity": "not_bound",
+             "limitation": "文献层证据未接入当前载荷，相关叙事仅来自登记来源"},
         ],
         "derivation": {
             "pages": [

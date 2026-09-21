@@ -2147,3 +2147,42 @@ A r32/B r49/C r30 三路科学复核均遇 omp 子进程退出码 1 或 verdict 
 
 ### 补记：独立测试轮 round-2 状态
 IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tmp/test-round-2.log 中均停在"要不要建 Trellis 任务"的确认提问上，未实际执行测试（tester-v2 提示词里的执行纪律守卫未能阻止）。下会话重派时需在提示词首行加"直接开始执行，禁止询问确认、禁止创建任务流程"，并要求把 findings.json 写入 runs/test-igan、runs/test-uc。
+
+## 2026-09-21 晚会话：v73 全链 + A/B/C 三路复核收包（全部 veto，问题清单完整）
+
+### 更正
+- 昨日补记"round-2 测试停滞"有误：/tmp/test-round-2.log 是 v1 旧日志。**tester-v2 实际完成**：runs/test-igan/findings.json 与 runs/test-uc/findings.json 均已产出（overall=partial），发现清单完整（跨适应症误匹配、TEAE 入疗效表、矩阵空态、B 构建器不可移植、PubMed 878 模板数等）。
+
+### v73 = 当前最新候选（本会话建成）
+干净重建：project create → B/C/A builders → audit → submit ACCEPTED → run。
+- A 渲染验证：4141 疗效行，**同名冲突 0**（v71 为 493）、时间窗英文 0、通用人群占位 0、安全性组别截断 0、endpoint_source 全量保留
+- 本会话已落码（commit 待提交）：①人群确定性转写（约 80 规则，813 行英文人群→0）②肾脏/消化科终点 zh 标签（IgAN/UC 泛化）③A r21 四项修复（PNH 症状/克隆/溶血标签优先级、短英文标题直通移除、单位指数写法归一、history 内部口径口语化）④PubMed"878 条"模板数改为如实声明（tools/build_a_payload.py）
+
+### v73 三路复核 verdicts（deepseek，全部收包成功——改绑 deepseek 解决了 gemini 静默失败）
+- **A r21：veto 4 项**（全部已在本会话修复落码，待 v74 渲染验证）
+- **B r35：veto 5 项**（B 渲染器，未修）：
+  1. 疗效页 8 对同标题图卡数值不同（B 标签收敛无消歧，需 A 同款 endpoint_source+序号方案）
+  2. 基线页 10 组同名行数值不同、缺类别归属（baseline 类别维度未展示）
+  3. disposition/flow 页 8 卡直出登记英文时间窗（B 渲染器时间窗转换只覆盖疗效路径）
+  4. 人群/变量标签英文残留（疗效 57/221、overview 61/253、longitudinal 65/366 张卡）
+  5. 展开表直出登记臂标识串（"Danicopan-Danicopan"）+无单位裸数值
+- **C r19：veto 9 项**（C 载荷+渲染器，未修）：
+  1. Coversin 0.57mg 丢 /kg 口径 2. Eculizumab 负荷/维持期合并 3. 入排图表条数语义误导
+  4. Ravulizumab 4 行 Cohort 标签全被产品名替换 5. 全部产品靶点/机制"未公开"但登记已公开
+  6. design-patterns 页未渲染 design_paths（与 overview 重复）7. 终点页只渲染 1 主终点/试验，页面承诺与实际不符
+  8. 统计页无分析集/模型/多重性行且无"登记未公开"声明（登记终点描述其实已公开统计方法）
+  9. 时间点筛选按钮直出英文（"Day 0 and Day 28"）
+
+### 下一会话工作队列（按序）
+1. **B 渲染器 5 项修复**：标签消歧移植、基线类别展示、时间窗转换扩展到 disposition/flow 路径、人群 token 转写、展开表臂名中文化+单位
+2. **C 9 项修复**：给药 mg/kg 保留与负荷/维持期拆分、靶点/机制从登记干预描述提取、Cohort 组名保留、design_paths 渲染、次要终点/角色/量表/分析人群全量渲染或显式声明、统计维度"未公开"显式声明、时间点筛选按钮 zh 转写（可复用 report_a._TIMEPOINT_PHRASES）
+3. v74 干净重建（同 v73 流程）→ 三路重派（deepseek）→ 收包 → 全 accepted → accept-visual ×3 → PNH 闭环
+4. 会商复盘 round-2 findings 交叉项：分类器适应症门闩（complement/remission/IGA 规则顺序）、TEAE 不得入疗效表（A 构建器 SAFETY_DOMAIN 前置）、矩阵气泡图空态（需样本量+安全发生率形态）
+5. round-3 独立测试派发：**换新疾病领域**（如特发性肺纤维化/2型糖尿病），测试者提示词加"立即执行"硬守卫 + ego lite 真实交互视觉验证
+
+### 本会话坑（新增复盘）
+- **图执行器按输入摘要跳过节点**：渲染节点输入只有载荷摘要，不含渲染器代码版本——同一工作区改代码后 run --resume 不会重渲染。既往解法即每轮新工作区（v35→v74 演化的根因）。v72 因此停在"人群修复前一代"渲染，v73 才是全修复渲染。
+- **快照 ID 是全快照内容摘要**（含 project_id 绑定）：B 载荷字节相同但跨工作区快照 ID 不同 → 复核结论不能跨工作区继承，每工作区三路都要重派。
+- **reviewer-prompt 是会话手工生成的**：project run 只产 review_request.json；提示词由模板+请求字段生成（本会话已脚本化：绑定字段速查节+deepseek reviewer_id）。
+- **提交 A 包要用 $P/evidence/library/a-research-package.json**（build_pnh_audit.py 组装后的信封形状），不是 packets/ 的裸载荷。
+- 循环论证测试教训：验证转写函数时统计"输出中英文残留"会把通用回退（纯中文）误判为成功——必须直接断言"输出 != 回退文本"。
