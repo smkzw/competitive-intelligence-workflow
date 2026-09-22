@@ -164,12 +164,22 @@ def _split_eligibility(text: str) -> tuple[list[str], list[str]]:
 
 def _endpoint_form(measure: str) -> str:
     folded = measure.casefold()
-    if "hgb" in folded or "hemoglobin" in folded:
+    # 独立复核 C r42（issue-3）：克隆/尿血红蛋白等长词先于 hemoglobin 消费，
+    # 通用缩写必须词边界匹配——"PNH RBC Clone Size" 不得标"血红蛋白"
+    if re.search(r"pnh\s+rbc\s+clone|clone\s+size|pnh\s+clone", folded):
+        return "PNH克隆"
+    if re.search(r"\bhemoglobinuria\b", folded):
+        return "尿血红蛋白"
+    if re.search(r"\bhgb\b|\bhemoglobin\b", folded):
         return "血红蛋白"
-    if "ldh" in folded or "lactate dehydrogenase" in folded:
+    if re.search(r"\bldh\b|lactate dehydrogenase", folded):
         return "LDH"
-    if "transfusion" in folded:
+    if re.search(r"\btransfusion\b", folded):
         return "输血"
+    if re.search(r"\bfacit\b|\beortc\b|\bqol\b|quality of life", folded):
+        return "生活质量量表"
+    if re.search(r"\bfvc\b|forced vital capacity", folded):
+        return "FVC"
     # 独立复核 C r20（veto 第4项）：量表/计量口径不得截断（截断产生"Percent Change In Ha"残片）
     return measure
 

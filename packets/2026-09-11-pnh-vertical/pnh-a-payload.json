@@ -49916,12 +49916,10 @@
    "arm": "REGN3918",
    "value": 21.0,
    "unit": "人",
-   "category": "严重TEAE子集（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "serious_teae_subset",
-   "time_window": "基线 至第26周",
-   "numerator": 21,
-   "denominator": 24.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至第26周"
   },
   {
    "row_id": "safe-46",
@@ -49930,12 +49928,10 @@
    "arm": "REGN3918",
    "value": 0.0,
    "unit": "人",
-   "category": "严重TEAE子集（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "serious_teae_subset",
-   "time_window": "基线 至第26周",
-   "numerator": 0,
-   "denominator": 24.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至第26周"
   },
   {
    "row_id": "safe-47",
@@ -54194,12 +54190,10 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 2.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 2,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-351",
@@ -54208,12 +54202,10 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 7.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 7,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-352",
@@ -54222,12 +54214,10 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 4.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 4,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-353",
@@ -54236,12 +54226,10 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 6.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 6,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-354",
@@ -54250,12 +54238,10 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 1,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-355",
@@ -54264,12 +54250,10 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 1,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-356",
@@ -54278,12 +54262,10 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 1,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-357",
@@ -54292,12 +54274,10 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 0.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "discontinuation_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
-   "numerator": 0,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
   },
   {
    "row_id": "safe-358",
@@ -55244,12 +55224,10 @@
    "arm": "Danicopan",
    "value": 8.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "基线 至4.5年",
-   "numerator": 8,
-   "denominator": 8.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至4.5年"
   },
   {
    "row_id": "safe-429",
@@ -55258,12 +55236,10 @@
    "arm": "Danicopan",
    "value": 3.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "基线 至4.5年",
-   "numerator": 3,
-   "denominator": 8.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至4.5年"
   },
   {
    "row_id": "safe-430",
@@ -55272,12 +55248,10 @@
    "arm": "Danicopan",
    "value": 2.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "基线 至4.5年",
-   "numerator": 2,
-   "denominator": 8.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至4.5年"
   },
   {
    "row_id": "safe-431",
@@ -55286,12 +55260,10 @@
    "arm": "Danicopan",
    "value": 0.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "基线 至4.5年",
-   "numerator": 0,
-   "denominator": 8.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至4.5年"
   },
   {
    "row_id": "safe-432",
@@ -55300,12 +55272,10 @@
    "arm": "Danicopan",
    "value": 0.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "基线 至4.5年",
-   "numerator": 0,
-   "denominator": 8.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至4.5年"
   },
   {
    "row_id": "safe-433",
@@ -55566,12 +55536,10 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "discontinuation_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
-   "numerator": 1,
-   "denominator": 10.0
+   "term_key": "composite_ae",
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
   },
   {
    "row_id": "safe-452",
@@ -55580,12 +55548,10 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "discontinuation_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
-   "numerator": 1,
-   "denominator": 10.0
+   "term_key": "composite_ae",
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
   },
   {
    "row_id": "safe-453",
@@ -55594,12 +55560,10 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "discontinuation_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
-   "numerator": 1,
-   "denominator": 10.0
+   "term_key": "composite_ae",
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
   },
   {
    "row_id": "safe-454",
@@ -55608,12 +55572,10 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "discontinuation_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
-   "numerator": 1,
-   "denominator": 10.0
+   "term_key": "composite_ae",
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
   },
   {
    "row_id": "safe-455",
@@ -55750,12 +55712,10 @@
    "arm": "REGN3918",
    "value": 15.0,
    "unit": "人",
-   "category": "严重TEAE子集（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "serious_teae_subset",
-   "time_window": "基线 至第104周",
-   "numerator": 15,
-   "denominator": 24.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至第104周"
   },
   {
    "row_id": "safe-466",
@@ -55764,12 +55724,10 @@
    "arm": "REGN3918",
    "value": 2.0,
    "unit": "人",
-   "category": "严重TEAE子集（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "serious_teae_subset",
-   "time_window": "基线 至第104周",
-   "numerator": 2,
-   "denominator": 24.0
+   "term_key": "composite_ae",
+   "time_window": "基线 至第104周"
   },
   {
    "row_id": "safe-467",
@@ -55860,9 +55818,9 @@
    "arm": "rVA576",
    "value": 14.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55872,9 +55830,9 @@
    "arm": "rVA576",
    "value": 3.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55884,9 +55842,9 @@
    "arm": "rVA576",
    "value": 7.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55896,9 +55854,9 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55908,9 +55866,9 @@
    "arm": "rVA576",
    "value": 4.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55920,9 +55878,9 @@
    "arm": "rVA576",
    "value": 3.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55932,9 +55890,9 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55944,9 +55902,9 @@
    "arm": "rVA576",
    "value": 4.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55956,9 +55914,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55968,9 +55926,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55980,9 +55938,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -55992,9 +55950,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56004,9 +55962,9 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56016,9 +55974,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56028,9 +55986,9 @@
    "arm": "rVA576",
    "value": 3.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56040,9 +55998,9 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56052,9 +56010,9 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56064,9 +56022,9 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56076,9 +56034,9 @@
    "arm": "rVA576",
    "value": 5.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56088,9 +56046,9 @@
    "arm": "rVA576",
    "value": 7.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56100,9 +56058,9 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56112,9 +56070,9 @@
    "arm": "rVA576",
    "value": 10.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56124,9 +56082,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56136,9 +56094,9 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56148,9 +56106,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56160,9 +56118,9 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_sae",
+   "term_key": "composite_ae",
    "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
@@ -56200,12 +56158,10 @@
    "arm": "Group 1: Treatment Naive",
    "value": 12.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 12,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-502",
@@ -56214,12 +56170,10 @@
    "arm": "Group 2: Eculizumab Switch",
    "value": 10.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 10,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-503",
@@ -56228,12 +56182,10 @@
    "arm": "Group 3: Danicopan Rollover",
    "value": 6.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 6,
-   "denominator": 6.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-504",
@@ -56242,12 +56194,10 @@
    "arm": "Group 1: Treatment Naive",
    "value": 7.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 7,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-505",
@@ -56256,12 +56206,10 @@
    "arm": "Group 2: Eculizumab Switch",
    "value": 5.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 5,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-506",
@@ -56270,12 +56218,10 @@
    "arm": "Group 3: Danicopan Rollover",
    "value": 2.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 2,
-   "denominator": 6.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-507",
@@ -56284,12 +56230,10 @@
    "arm": "Group 1: Treatment Naive",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 1,
-   "denominator": 12.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-508",
@@ -56298,12 +56242,10 @@
    "arm": "Group 2: Eculizumab Switch",
    "value": 1.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 1,
-   "denominator": 11.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-509",
@@ -56312,12 +56254,10 @@
    "arm": "Group 3: Danicopan Rollover",
    "value": 0.0,
    "unit": "人",
-   "category": "因不良事件停药（登记）",
+   "category": "复合不良事件指标（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "discontinuation_ae",
-   "time_window": "自首次给药起 至第217周",
-   "numerator": 0,
-   "denominator": 6.0
+   "term_key": "composite_ae",
+   "time_window": "自首次给药起 至第217周"
   },
   {
    "row_id": "safe-510",

@@ -481,7 +481,7 @@ def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str
     catalog_keys = {
         "any_sae", "any_teae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
-        "generic_ae",
+        "generic_ae", "composite_ae",
     }
     if term_key and term_key in catalog_keys:
         return term_key, spec_of(term_key).label_zh
@@ -512,7 +512,14 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         row["original_term"] = item.term
         row["term_key"] = term_key
         row["term_label"] = term_label
-        row["arm_detail"] = _native_arm_detail_zh(item.arm_detail)
+        # 独立复核 A r44（issue-4）：安全行组名与疗效行同一解码口径；
+        # 登记原名保留在 arm_detail 供证据回溯
+        _arm_decoded = _native_arm_zh(str(item.arm))
+        if _arm_decoded and _arm_decoded != str(item.arm):
+            row["arm"] = _arm_decoded
+            row["arm_detail"] = _native_arm_detail_zh(item.arm_detail) or str(item.arm)
+        else:
+            row["arm_detail"] = _native_arm_detail_zh(item.arm_detail)
         # 独立复核 A r37（issue-4）：声明臂影子行显式标注归因性质
         if str(item.row_id).endswith("-declared"):
             row["term_label"] = (row["term_label"] or item.term) + "（声明臂归因，由期间组汇总）"
@@ -955,6 +962,18 @@ def _native_endpoint_zh(value: str) -> str:
         (r"mayo", lambda _m: "Mayo 评分"),
         (r"adverse event", lambda _m: "不良事件"),
     )
+    # 独立复核 C r42（issue-1/2）：安全域与免疫原性终点不得落入
+    # "疗效评价/其他临床疗效指标"——医学读者须能看出终点评价的是安全性
+    if re.search(
+        r"anti[- ]?drug antibod|antidrug antibod|immunogenicit|\badas?\b", value, re.I
+    ):
+        return "免疫原性评价"
+    if re.search(
+        r"adverse event|\bteaes?\b|\bsaes?\b|treatment[- ]emergent|"
+        r"\baes\b of special|infection|\bdeath?s?\b",
+        value, re.I,
+    ):
+        return "安全性评价"
     if not measure:
         measure = "其他临床疗效指标"
         for pattern, label in scale_patterns:

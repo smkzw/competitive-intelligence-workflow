@@ -1528,6 +1528,16 @@ def _table_rows(
         chart["source_version"] = observation.source_version_id
         if chart.get("value") is None:
             chart["value"] = _state_label(observation.disclosure_state)
+        # 独立复核 C r42（issue-4）：值列登记英文原句按惯例标注，
+        # 与量表列口径一致
+        _v = chart.get("value")
+        if (
+            isinstance(_v, str)
+            and re.findall(r"[A-Za-z]{3,}", _v)
+            and not re.search(r"[\u4e00-\u9fff]", _v)
+            and not _v.endswith("（登记原文，未译）")
+        ):
+            chart["value"] = _v + "（登记原文，未译）"
         if chart.get("scale") in {None, ""}:
             chart["scale"] = "不适用"
         if chart.get("group_id") in {None, ""}:

@@ -2523,6 +2523,16 @@ def _state_rows_from_view(
             "rows",
         )
     )
+    # 会商 round-4 #4（B r58 issue-2）：-declared 影子行过滤统一到
+    # 视图行入口——基线域与安全域同规则，不再只在安全域过滤
+    values = [
+        value
+        for value in values
+        if not str(
+            (value.get("row_id") if isinstance(value, dict) else getattr(value, "row_id", ""))
+            or ""
+        ).endswith("-declared")
+    ]
     records_list: list[tuple[dict[str, Any], Any]] = []
     for index, value in enumerate(values):
         row = _project_record(
@@ -3848,6 +3858,12 @@ def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
     period_match = re.match(r"^(nct[0-9]+)-p(\d+)$", text)
     if period_match:
         return f"第{int(period_match.group(2))}治疗期"
+    # 独立复核 B r58（issue-1）：登记长句/机器拼接串直出前按惯例标注，
+    # 不再伪装中文标签
+    if re.findall(r"[A-Za-z]{3,}", text) and not re.search(r"[\u4e00-\u9fff]", text):
+        short = " ".join(text.split())
+        return (short[:28] + "…") if len(short) > 28 else short
+    return text
     if text == "not_reported":
         return "未列示"
     zh_trim = re.sub(r"[A-Za-z0-9_.\-]+$", "", text)

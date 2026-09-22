@@ -573,7 +573,14 @@ def main() -> None:
                                     "arm": _div_arm,
                                     "value": value, "unit": _unit_zh,
                                     "category": safety_category_zh(_concept),
-                                    "term": _measure_term(title),
+                                    # 独立复核 A r44（issue-2）：同一测量的不同
+                                    # 登记类目行（如 at least 1 TEAE / any grade）
+                                    # 必须在事件标签上可区分——类目短标并入 term
+                                    "term": _measure_term(
+                                        title + "｜" + cat_label
+                                        if cat_label and cat_label != title
+                                        else title
+                                    ),
                                     "term_key": _skey,
                                     "time_window": _tw_out,
                                 }

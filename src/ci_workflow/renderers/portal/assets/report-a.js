@@ -982,6 +982,17 @@
           eventRate = Math.round(eventRate / den * 1000) / 10;
         }
       }
+      // 独立复核 A r44（issue-3）：人单位计数行（值=受累人数、带分子分母）
+      // 同样派生发生率——7/7 不得当作 7% 直绘
+      if (
+        eventRate != null && String(eventRecord.unit || "") === "人"
+        && eventRecord.numerator != null && eventRecord.denominator != null
+        && Number(eventRecord.denominator) > 0
+      ) {
+        eventRate = Math.round(
+          Number(eventRecord.numerator) / Number(eventRecord.denominator) * 1000
+        ) / 10;
+      }
       // 会商 P0 #3：治疗臂样本量缺失时降级用试验总样本量（登记已披露），
       // 不再因此丢点；尺寸标注在气泡说明中体现口径
       if (!trial || eventRate == null) return;

@@ -39,6 +39,10 @@ def period_of(title: str) -> str | None:
     m = re.search(r"\btp\s*[- ]?(\d+)\b", text, re.I)
     if m:
         return f"TP{m.group(1)}"
+    # 会商 round-5（grok F12）："Period 1: X" 是期别标记，不得剥前缀后丢期别
+    m = re.search(r"\bperiod\s*(\d+)\b", text, re.I)
+    if m:
+        return f"TP{m.group(1)}"
     if re.search(r"\boltp\b", text, re.I):
         return "OLTP"
     if re.search(r"\bolep\b", text, re.I):
@@ -88,13 +92,20 @@ class _Crosswalk:
             if e.stat == stat and e.base_title == base
         ]
         if not candidates:
-            # 会商 #6：跨模块组名粒度不一致（如疗效组 "rVA576" vs AE 组
-            # "rVA576 Coversin"）——仅当该统计对象下全部条目本就同源
-            # （标题互为包含）且值唯一时才可归属，否则未知
+            # 会商 #6 + round-5（grok F10/F11）：名称变体回退仅限——
+            # ①该统计对象下恰好一条（人时等其他量纲不参与，也不得挡位）；
+            # ②词元级包含（非子串）；③请求期别与该条期别一致（或缺省）
             same_stat = [e for e in self.entries if e.stat == stat]
-            if len(same_stat) == 1 and len(self.entries) == len(same_stat):
+            # 会商 round-5（grok F11）：其他量纲（人时）不参与也不得挡位；
+            # 期别一致与词元包含已足够约束归属
+            if len(same_stat) == 1:
                 e0 = same_stat[0]
-                if base in (e0.base_title + " ") or e0.base_title in (base + " "):
+                base_tokens = set(base.split())
+                entry_tokens = set(e0.base_title.split())
+                token_included = base_tokens <= entry_tokens or entry_tokens <= base_tokens
+                requested = normalize_period(period)
+                period_ok = requested is None or e0.period == requested
+                if token_included and period_ok and base and e0.base_title:
                     return e0.num_at_risk
             return None
         values = {e.num_at_risk for e in candidates}
@@ -105,11 +116,13 @@ class _Crosswalk:
             if len(scoped_values) == 1:
                 return scoped.pop().num_at_risk
             if len(scoped_values) > 1:
+                # 会商 round-5（grok F13）：期别内冲突只记一条理由
                 self.conflicts.append({
                     "stat": stat, "period": requested, "base_title": base,
                     "values": sorted(scoped_values), "reason": "period_scoped_conflict",
                 })
-            # 会商 F01：请求期别无候选或期别冲突时一律未知——
+                return None
+            # 会商 F01：请求期别无候选时一律未知——
             # 不得从其他期别借出（"唯一候选"不是放行理由）
             self.conflicts.append({
                 "stat": stat, "period": requested, "base_title": base,

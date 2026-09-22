@@ -35,7 +35,7 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("treatment_related_ae", re.compile(
         r"treatment[\s-]*related|related\s+adverse\s+events?", re.I)),
     ("grade_3_plus", re.compile(
-        r"grade\s*(?:≥|>=)?\s*[34]\b|grade\s+[34]\s+or", re.I)),
+        r"grade\s*(?:≥|>=)?\s*[34]\b|grade\s+[1-4]\s+(?:or|and)\s+[1-4]\b", re.I)),
     ("aesi", re.compile(
         r"(?:adverse\s+events?|\(?teaes?\)?)\s+of\s+special\s+interest|(?<![a-z])aesis?(?![a-z])", re.I)),
     # 严重 TEAE 子集：特定子集，不得归 any_teae/any_sae
@@ -61,7 +61,7 @@ _CONCEPT_CATEGORY_ZH = {
     key: spec_of(key).category_zh for key in (
         "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
-        "generic_ae", "specific_ae", "unknown",
+        "generic_ae", "specific_ae", "composite_ae", "unknown",
     )
 }
 
@@ -71,30 +71,57 @@ CONCEPT_ATRISK_STAT = {
     for key in (
         "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
-        "generic_ae", "specific_ae", "unknown",
+        "generic_ae", "specific_ae", "composite_ae", "unknown",
     )
     if spec_of(key).at_risk_stat
 }
 
 
+def _classify_single(text: str) -> str | None:
+    for concept, pattern in _SPECIFIC_RULES:
+        if pattern.search(text):
+            return concept
+    for concept, pattern in _GENERAL_RULES:
+        if pattern.search(text):
+            return concept
+    if _GENERIC_RULE.search(text):
+        return "generic_ae"
+    if re.search(r"adverse|safety|\bae\b", text, re.I):
+        return "specific_ae"
+    return None
+
+
 def classify_safety_concept(title: str) -> str:
-    """把安全域测量标题映射到受控概念键；永不返回 None（拒判不丢数据）。"""
+    """把安全域测量标题映射到受控概念键；永不返回 None（拒判不丢数据）。
+
+    会商 round-5（A r44）：逗号/"and" 并列多处面的复合测量（如
+    "TEAEs, SAEs, Grade 3/4 AEs, And Events Leading To Discontinuation"）
+    不得按首个特定键收类——逐片段独立分类，≥2 个不同概念即判
+    composite_ae（复合不良事件指标），描述性呈现不冒充单一族。"""
     text = " ".join(str(title or "").split())
     if not text:
         return "unknown"
     stripped = text
     for pattern in _NEGATION_PATTERNS:
         stripped = pattern.sub(" ", stripped)
-    for concept, pattern in _SPECIFIC_RULES:
-        if pattern.search(stripped):
-            return concept
-    for concept, pattern in _GENERAL_RULES:
-        if pattern.search(stripped):
-            return concept
-    if _GENERIC_RULE.search(stripped):
-        return "generic_ae"
-    if re.search(r"adverse|safety|\bae\b", stripped, re.I):
-        return "specific_ae"
+    fragments = [
+        fragment.strip(" ,;:")
+        for fragment in re.split(r",|;|\band\b", stripped, flags=re.I)
+        if fragment.strip(" ,;:")
+    ]
+    fragment_concepts = [
+        concept
+        for fragment in fragments
+        if (concept := _classify_single(fragment)) is not None
+    ]
+    distinct = set(fragment_concepts)
+    if len(distinct) == 1:
+        return fragment_concepts[0]
+    if len(distinct) > 1:
+        return "composite_ae"
+    whole = _classify_single(stripped)
+    if whole is not None:
+        return whole
     return "unknown"
 
 
