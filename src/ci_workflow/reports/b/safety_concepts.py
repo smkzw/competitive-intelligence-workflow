@@ -35,7 +35,9 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("treatment_related_ae", re.compile(
         r"treatment[\s-]*related|related\s+adverse\s+events?", re.I)),
     ("grade_3_plus", re.compile(
-        r"grade\s*(?:≥|>=)?\s*[34]\b|grade\s+[1-4]\s+(?:or|and)\s+[1-4]\b", re.I)),
+        r"grade\s*(?:≥|>=)?\s*[34]\b"
+        r"|grade\s+[12]\s+(?:or|and)\s+[34]\b"
+        r"|grade\s+[34]\s+(?:or|and)\s+[1-4]\b", re.I)),
     ("aesi", re.compile(
         r"(?:adverse\s+events?|\(?teaes?\)?)\s+of\s+special\s+interest|(?<![a-z])aesis?(?![a-z])", re.I)),
     # 严重 TEAE 子集：特定子集，不得归 any_teae/any_sae

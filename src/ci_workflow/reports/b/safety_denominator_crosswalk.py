@@ -100,9 +100,15 @@ class _Crosswalk:
             # 期别一致与词元包含已足够约束归属
             if len(same_stat) == 1:
                 e0 = same_stat[0]
-                base_tokens = set(base.split())
+                base_tokens = base.split()
                 entry_tokens = set(e0.base_title.split())
-                token_included = base_tokens <= entry_tokens or entry_tokens <= base_tokens
+                # 会商 round-6（grok F18）：锚定词元一致 + 查询词元全含——
+                # "rVA576 Placebo"（多出的角色词）与 "576"（剂量碎片）都不得借
+                token_included = (
+                    bool(base_tokens)
+                    and base_tokens[0] == e0.base_title.split()[0]
+                    and set(base_tokens) <= entry_tokens
+                )
                 requested = normalize_period(period)
                 period_ok = requested is None or e0.period == requested
                 if token_included and period_ok and base and e0.base_title:

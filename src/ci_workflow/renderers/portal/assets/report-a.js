@@ -55,7 +55,7 @@
 
   safety.forEach(function (row) {
     var key = safetyTermKey(row);
-    if (!safetyTermLabels[key]) safetyTermLabels[key] = row.term_label || row.term || key;
+    if (!safetyTermLabels[key]) safetyTermLabels[key] = row.measure_label || row.term_label || row.term || key;
   });
 
   efficacy.forEach(function (row) {

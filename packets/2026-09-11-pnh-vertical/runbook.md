@@ -2667,3 +2667,10 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **实施途中坑**：①Jinja 表达式不支持 set 字面量（模板编译错）②本地直调构建器写入错绑定清单→图节点恢复拒绝→清残留③B 载荷漂移锁定（同工作区禁再提交不同内容）→按"构建器改代码=新工作区"纪律换 v100。
 - **v100=最新候选**（run_3c12371c4fff9f7fb70e5722，A 56/B 70/C 18，submit ACCEPTED）。回归：31 项不变量绿；unit+contract 1054 过，仅 2 项既有失败（脏树遗留，与轮次无关）。
 - **round-5 派发**：deepseek A r44/B r58/C r42（复核会商 12 项落地）+ grok-4.7 重跑 73 探针+新守卫用例 + cursor 复走 5 项交互缺陷。未排期：#8/#9 归 R10 主线；#11 沿用原排期。
+
+## 追记 68：round-5/6 收包 + v101 批次 + 待办移交（会话暂停点）
+- **round-5 收包**：A r44/B r58/C r42 均 veto + grok 88/95（F10–F15）+ cursor 供应商连接故障未产出。核心新发现：特定族重排导致复合测量过匹配（26/28 行"因 AE 停药"实为多方面复合标题）；矩阵人单位行 7/7 当 7% 直绘。
+- **v101 批次（515500f）**：①composite_ae 片段化分类（逗号/and 逐片段判类，≥2 概念→复合指标；56 行诚实单列，真停药 2 行）②crosswalk 锚定词元+期别一致+人时不挡位（F10–F14 全过）③矩阵人单位派生发生率④安全行组别解码（arm 解码值入 arm、登记名入 arm_detail）⑤类目上下文并入事件标签（cat_label；**cls_title 路径未生效——A r45 issue-2 复发**）⑥基线域影子行过滤（_state_rows_from_view）⑦C 端点域判定（安全性评价/免疫原性评价）⑧_endpoint_form 词边界+克隆优先⑨分面/值列未译标注⑩grade 模式要求含 3/4 级（F19）⑪锚定词元匹配（F18）。
+- **round-6 收包**：**C r43 = 首个 accepted**！A r45 veto 5 项（类目标题复发：cls_title≠cat_label，转写后 cls_title 未并入 term；复合指标事件列仍单标签——measure_label 对 composite 未生效；矩阵横轴单位与气泡逸出未全修；**安全页组别列模板优先 arm_detail（登记英文原文）盖过解码 arm——v102 待修一行**；分母脚注措辞与实际不符；载荷内嵌 scientific_review 声明"已接受"先于独立复核——合同层悖论，移交会商/用户）。B r59 veto 2 项（含中文半翻译残片未标注——上轮只修纯英文；基线影子渲染路径仍有漏网——v101 HTML 已无 declared id 但复核仍报重复，需带新鲜上下文定位）。grok 101/109（F16–F22：变体回退 conflicts 空、composite 否定边界、F18 锚定词元已修、F19 已修、15 处概念字面匹配残留、V01 缺分母人数仍按百分数落点、V02 composite 事件列单标签）。
+- **待办（下一会话优先队列）**：①A：safety.html.j2 组别列已改为"解码 arm 优先"（本会话已改模板，v102 渲染验证）；事件列 measure_label 对 composite/全部 term_key 生效；cls_title 并入 term；矩阵横轴单位与气泡溢出；分母脚注措辞统一"无法归属/未公开/—"②B：基线影子真实渲染路径定位（建议会商带 fresh context 复现）；含中文半翻译分面清洗③F15 概念字面 15 处匹配残留清理④载荷内嵌复核声明的合同层决策（R2.4/复核流）⑤R10 产品闭环主线不变。
+- **验证**：31 项不变量绿；abc-v101（run_437a0327，A56/B70/C18）submit ACCEPTED；C r43 首个 accepted。
