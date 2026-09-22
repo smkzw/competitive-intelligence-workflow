@@ -264,8 +264,9 @@
     var termKey = typeof termView === "string" ? termView : termView.key;
     var categoryName = typeof termView === "string" ? null : termView.category;
     var timeWindow = typeof termView === "string" ? null : termView.time_window;
-    if (!categoryName && termKey === "any_teae") categoryName = "治疗期间不良事件";
-    if (!categoryName && termKey === "any_sae") categoryName = "严重不良事件";
+    // 会商 #2（概念词表单源）：概念过滤以 term_key 为准（下方 !== termKey），
+    // 删除按中文类别字面的兜底匹配（TEAE 轴 0/146 命中的根因）
+    categoryName = null;
     var rows = sourceRows || safetyRowsForView();
     var matches = rows.filter(function (row) {
       if (row.product_id !== productId || safetyTermKey(row) !== termKey) return false;
@@ -1182,7 +1183,7 @@
       item.appendChild(el("span", "", trial.region + "｜" + trial.phase));
       item.appendChild(el("strong", "", productName(trial.product_id)));
       item.appendChild(el("b", "", trial.name));
-      item.appendChild(el("small", "", trial.role + "｜" + trial.status + "｜n=" + trial.sample_size));
+      item.appendChild(el("small", "", trial.role + "｜" + trial.status + "｜样本量" + (trial.sample_size == null ? "未公开" : "n=" + trial.sample_size)));
       wrapper.appendChild(item);
     });
     host.appendChild(wrapper);

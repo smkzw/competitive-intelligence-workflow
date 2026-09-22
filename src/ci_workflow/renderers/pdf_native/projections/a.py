@@ -12,6 +12,8 @@ from reportlab.lib.units import mm  # type: ignore[import-untyped]
 from reportlab.platypus import KeepTogether, Paragraph, Spacer  # type: ignore[import-untyped]
 
 from ci_workflow.renderers.pdf_native.projections._layout import (
+
+
     UNPUBLISHED,
     bookmark,
     bubble_matrix_chart,
@@ -33,6 +35,15 @@ from ci_workflow.renderers.pdf_native.projections._layout import (
     toc_page,
     trial_map,
 )
+
+
+def _is_any_teae_row(row) -> bool:
+    """会商 #2：概念匹配按 term_key（词表单源），旧数据回退基础类别名。"""
+    if row.get("term_key"):
+        return row["term_key"] == "any_teae"
+    base = str(row.get("category") or "").replace("（登记）", "").strip()
+    return base in {"治疗期间不良事件", "治疗中出现的不良事件"}
+
 
 _FORBIDDEN = ("html", "chromium", "playwright", "browser", "screenshot")
 
@@ -153,7 +164,7 @@ def _matrix_points(
     teae: dict[str, float] = {}
     for row in data.get("safety") or []:
         if (
-            row.get("category") == "治疗期间不良事件"
+            _is_any_teae_row(row)
             and row.get("arm", "治疗组") == "治疗组"
             and row.get("value") is not None
         ):
@@ -222,7 +233,7 @@ def _summary_highlights(
     teae_open = [
         row
         for row in data.get("safety") or []
-        if row.get("category") == "治疗期间不良事件" and row.get("value") is not None
+        if _is_any_teae_row(row) and row.get("value") is not None
     ]
     if teae_open:
         bullets.append(

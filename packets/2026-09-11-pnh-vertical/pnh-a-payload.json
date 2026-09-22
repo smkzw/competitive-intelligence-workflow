@@ -49916,9 +49916,9 @@
    "arm": "REGN3918",
    "value": 21.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "基线 至第26周",
    "numerator": 21,
    "denominator": 24.0
@@ -49930,9 +49930,9 @@
    "arm": "REGN3918",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "基线 至第26周",
    "numerator": 0,
    "denominator": 24.0
@@ -51679,7 +51679,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 6,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-173",
@@ -51691,7 +51693,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-174",
@@ -51703,7 +51707,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-175",
@@ -51715,7 +51721,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 2,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-176",
@@ -51727,7 +51735,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 2,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-177",
@@ -51739,7 +51749,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-178",
@@ -51751,7 +51763,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-179",
@@ -51763,7 +51777,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 2,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-180",
@@ -51775,7 +51791,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-181",
@@ -51787,7 +51805,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 6,
+   "denominator": 6.0
   },
   {
    "row_id": "safe-182",
@@ -51799,7 +51819,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 2,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-183",
@@ -51811,7 +51833,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-184",
@@ -51823,7 +51847,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-185",
@@ -51835,7 +51861,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-186",
@@ -51847,7 +51875,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 2,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-187",
@@ -51859,7 +51889,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-188",
@@ -51871,7 +51903,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-189",
@@ -51883,7 +51917,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 3,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-190",
@@ -51895,7 +51931,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-191",
@@ -51907,7 +51945,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-192",
@@ -51919,7 +51959,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-193",
@@ -51931,7 +51973,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-194",
@@ -51943,7 +51987,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-195",
@@ -51955,7 +52001,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-196",
@@ -51967,7 +52015,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-197",
@@ -51979,7 +52029,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-198",
@@ -51991,7 +52043,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-199",
@@ -52003,7 +52057,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 6.0
   },
   {
    "row_id": "safe-200",
@@ -52015,7 +52071,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-201",
@@ -52027,7 +52085,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-202",
@@ -52039,7 +52099,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-203",
@@ -52051,7 +52113,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-204",
@@ -52063,7 +52127,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-205",
@@ -52075,7 +52141,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-206",
@@ -52087,7 +52155,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-207",
@@ -52099,7 +52169,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-208",
@@ -52111,7 +52183,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-209",
@@ -52123,7 +52197,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-210",
@@ -52135,7 +52211,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-211",
@@ -52147,7 +52225,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-212",
@@ -52159,7 +52239,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-213",
@@ -52171,7 +52253,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-214",
@@ -52183,7 +52267,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-215",
@@ -52195,7 +52281,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-216",
@@ -52207,7 +52295,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-217",
@@ -52219,7 +52309,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 6.0
   },
   {
    "row_id": "safe-218",
@@ -52231,7 +52323,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-219",
@@ -52243,7 +52337,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-220",
@@ -52255,7 +52351,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-221",
@@ -52267,7 +52365,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-222",
@@ -52279,7 +52379,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-223",
@@ -52291,7 +52393,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-224",
@@ -52303,7 +52407,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-225",
@@ -52315,7 +52421,9 @@
    "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
+   "numerator": 0,
+   "denominator": 3.0
   },
   {
    "row_id": "safe-226",
@@ -54086,9 +54194,9 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 2.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 2,
    "denominator": 12.0
@@ -54100,9 +54208,9 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 7.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 7,
    "denominator": 11.0
@@ -54114,9 +54222,9 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 4.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 4,
    "denominator": 12.0
@@ -54128,9 +54236,9 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 6.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 6,
    "denominator": 11.0
@@ -54142,9 +54250,9 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 1,
    "denominator": 12.0
@@ -54156,9 +54264,9 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 1,
    "denominator": 11.0
@@ -54170,9 +54278,9 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 1,
    "denominator": 12.0
@@ -54184,9 +54292,9 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 0.0,
    "unit": "人",
-   "category": "严重不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
-   "term_key": "any_sae",
+   "term_key": "discontinuation_ae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 0,
    "denominator": 11.0
@@ -54776,9 +54884,9 @@
    "arm": "Zilucoplan-Cohort A (Eculizumab Naïve)",
    "value": 10.0,
    "unit": "%",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Percentage of Participants With Serious TEAEs",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "自第1天 至 末次研究访视 （至第49个月）"
   },
   {
@@ -54788,9 +54896,9 @@
    "arm": "Zilucoplan-Cohort B (Eculizumab Switch)",
    "value": 50.0,
    "unit": "%",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Percentage of Participants With Serious TEAEs",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "自第1天 至 末次研究访视 （至第49个月）"
   },
   {
@@ -54800,9 +54908,9 @@
    "arm": "Zilucoplan (Inadequate Responder to Eculizumab)",
    "value": 66.7,
    "unit": "%",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Percentage of Participants With Serious TEAEs",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "自第1天 至 末次研究访视 （至第49个月）"
   },
   {
@@ -54920,9 +55028,9 @@
    "arm": "Pozelimab and Cemdisiran",
    "value": 1.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "特别关注不良事件（登记）",
    "term": "Incidence of Treatment-emergent Adverse Events (TEAEs) of Special…",
-   "term_key": "any_teae",
+   "term_key": "aesi",
    "time_window": "至第29周"
   },
   {
@@ -54932,9 +55040,9 @@
    "arm": "Anti-C5 Standard-of-care",
    "value": 0.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "特别关注不良事件（登记）",
    "term": "Incidence of Treatment-emergent Adverse Events (TEAEs) of Special…",
-   "term_key": "any_teae",
+   "term_key": "aesi",
    "time_window": "至第29周"
   },
   {
@@ -54944,9 +55052,9 @@
    "arm": "Pozelimab and Cemdisiran",
    "value": 0.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Incidence of TEAEs Leading to Treatment Discontinuation",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "至第29周"
   },
   {
@@ -54956,9 +55064,9 @@
    "arm": "Anti-C5 Standard-of-care",
    "value": 0.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Incidence of TEAEs Leading to Treatment Discontinuation",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "至第29周"
   },
   {
@@ -55136,9 +55244,9 @@
    "arm": "Danicopan",
    "value": 8.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "基线 至4.5年",
    "numerator": 8,
    "denominator": 8.0
@@ -55150,9 +55258,9 @@
    "arm": "Danicopan",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "基线 至4.5年",
    "numerator": 3,
    "denominator": 8.0
@@ -55164,9 +55272,9 @@
    "arm": "Danicopan",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "基线 至4.5年",
    "numerator": 2,
    "denominator": 8.0
@@ -55178,9 +55286,9 @@
    "arm": "Danicopan",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "基线 至4.5年",
    "numerator": 0,
    "denominator": 8.0
@@ -55192,9 +55300,9 @@
    "arm": "Danicopan",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "基线 至4.5年",
    "numerator": 0,
    "denominator": 8.0
@@ -55458,9 +55566,9 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
    "denominator": 10.0
@@ -55472,9 +55580,9 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
    "denominator": 10.0
@@ -55486,9 +55594,9 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
    "denominator": 10.0
@@ -55500,9 +55608,9 @@
    "arm": "Danicopan",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
    "denominator": 10.0
@@ -55642,9 +55750,9 @@
    "arm": "REGN3918",
    "value": 15.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "基线 至第104周",
    "numerator": 15,
    "denominator": 24.0
@@ -55656,9 +55764,9 @@
    "arm": "REGN3918",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重TEAE子集（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_teae",
+   "term_key": "serious_teae_subset",
    "time_window": "基线 至第104周",
    "numerator": 2,
    "denominator": 24.0
@@ -55713,7 +55821,9 @@
    "category": "不良事件（登记）",
    "term": "Incidence of Treatment-emergent Adverse Events",
    "term_key": "generic_ae",
-   "time_window": "From time of consent to a maximum of 2.5 years of study treatment（登记原文，未译）"
+   "time_window": "From time of consent to a maximum of 2.5 years of study treatment（登记原文，未译）",
+   "numerator": 182,
+   "denominator": 187.0
   },
   {
    "row_id": "safe-471",
@@ -56090,9 +56200,9 @@
    "arm": "Group 1: Treatment Naive",
    "value": 12.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 12,
    "denominator": 12.0
@@ -56104,9 +56214,9 @@
    "arm": "Group 2: Eculizumab Switch",
    "value": 10.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 10,
    "denominator": 11.0
@@ -56118,9 +56228,9 @@
    "arm": "Group 3: Danicopan Rollover",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 6,
    "denominator": 6.0
@@ -56132,9 +56242,9 @@
    "arm": "Group 1: Treatment Naive",
    "value": 7.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 7,
    "denominator": 12.0
@@ -56146,9 +56256,9 @@
    "arm": "Group 2: Eculizumab Switch",
    "value": 5.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 5,
    "denominator": 11.0
@@ -56160,9 +56270,9 @@
    "arm": "Group 3: Danicopan Rollover",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 2,
    "denominator": 6.0
@@ -56174,9 +56284,9 @@
    "arm": "Group 1: Treatment Naive",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 1,
    "denominator": 12.0
@@ -56188,9 +56298,9 @@
    "arm": "Group 2: Eculizumab Switch",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 1,
    "denominator": 11.0
@@ -56202,9 +56312,9 @@
    "arm": "Group 3: Danicopan Rollover",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "因不良事件停药（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_teae",
+   "term_key": "discontinuation_ae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 0,
    "denominator": 6.0

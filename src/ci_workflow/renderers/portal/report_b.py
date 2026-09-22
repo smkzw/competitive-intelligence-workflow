@@ -2455,6 +2455,16 @@ def _safety_records(
         legacy_name="safety",
         view_fields=("fact_rows", "facts", "rows"),
     )
+    # 会商 round-4 #4（B r57 issue-2）：-declared 声明臂影子行是 B 门
+    # 匹配的内部索引（与所在期间行同值），渲染层统一过滤，不再展示
+    values = [
+        value
+        for value in values
+        if not str(
+            (value.get("row_id") if isinstance(value, dict) else getattr(value, "row_id", ""))
+            or ""
+        ).endswith("-declared")
+    ]
     records = [
         (
             _project_record(

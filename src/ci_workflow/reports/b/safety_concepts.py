@@ -1,57 +1,79 @@
-"""安全域测量的受控概念分类（独立审阅 R02 / 验收 SCI02）。
+"""安全域测量的受控概念分类（独立审阅 R02 / 会商 round-4 #1）。
 
-分类原则：
-- 否定先行：non-serious 等否定短语先剥离，再跑正向规则，否定不得被
-  positive 词命中；
-- 总体与特定分开：any TEAE / any SAE 只给总体指标；generic AE、因 AE
-  停药、治疗相关、3 级及以上等特定指标不得自动归入 any 键
-  （term_key 驱动安全轴与气泡选择，错配会伪造总体发生率）；
-- 拒判不丢数据：无法确认时返回 specific_ae/unknown 概念，行仍可描述性
-  呈现，不强行 any。
+分类原则（会商裁决后的实现顺序）：
+1. 否定先行：non-/not-/no-/without- + 严重/TEAE 等否定短语只剥离否定
+   短语本身（不得吞掉并列句后半句），剥离后走正常规则；
+2. **特定族优先**：因 AE 停药、治疗相关、3 级及以上、AESI、严重 TEAE
+   子集等特定指标先判定——它们不得被总体键（any_teae/any_sae）吞掉
+   （会商 F02：any 键优先使"无法确认"只可能更粗，伪造总体发生率）；
+3. 总体族其次：any TEAE / any SAE / death 只收总体指标；
+4. generic AE 兜底；无法确认保留 specific_ae/unknown 一等状态，
+   拒判不丢数据。
+
+分母统计对象（CONCEPT_ATRISK_STAT）：generic_ae 同样对应 AE 模块
+other 统计口径（会商 #6：generic_ae 不查 crosswalk 导致 55 行分母
+写成"未公开"）。
 """
 from __future__ import annotations
 
 import re
 
-# 概念 → 受控键。顺序即优先级；否定剥离先于全部规则。
-_CONCEPT_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
-    # 总体 TEAE：TEAE 缩写独立成词，或 any/overall 与 treatment-emergent 同现
-    ("any_teae", re.compile(r"(?<![a-z])teaes?(?![a-z])", re.I)),
-    ("any_teae", re.compile(
-        r"\b(?:any|overall|all)\b[^.;]{0,40}treatment[\s-]*emergent", re.I)),
-    # 总体 SAE：serious adverse events / SAE 缩写（否定已先行剥离）
-    ("any_sae", re.compile(r"\bserious\s+adverse\s+events?\b", re.I)),
-    ("any_sae", re.compile(r"(?<![a-z])saes?(?![a-z])", re.I)),
-    ("death", re.compile(r"\bdeaths?\b|\bmortality\b", re.I)),
-    ("aesi", re.compile(r"adverse\s+events?\s+of\s+special\s+interest|(?<![a-z])aesis?(?![a-z])", re.I)),
+# 否定短语：只剥离否定词与其紧邻的限定词，不动并列句其余部分
+_NEGATION_PATTERNS = (
+    re.compile(r"\bnon[\s-]*serious\b", re.I),
+    re.compile(r"\b(?:not|no|without)[\s-]+serious\b", re.I),
+    re.compile(r"\bnon[\s-]*treatment[\s-]*emergent\b", re.I),
+    re.compile(r"\bnon[\s-]*teaes?\b", re.I),
+    re.compile(r"\b(?:not|no|without)\s+teaes?\b", re.I),
+)
+
+# 特定族优先（会商 #1：任何 specific 标记先于总体键判定）
+_SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("discontinuation_ae", re.compile(
         r"discontinu\w*(?:\s+\w+){0,4}\s(?:due\s+to|because\s+of|leading)|"
-        r"(?:due\s+to|because\s+of)\s+adverse", re.I)),
+        r"(?:due\s+to|because\s+of)\s+adverse|leading\s+to\s+(?:treatment\s+)?discontinu", re.I)),
     ("treatment_related_ae", re.compile(
         r"treatment[\s-]*related|related\s+adverse\s+events?", re.I)),
-    ("grade_3_plus", re.compile(r"grade\s*(?:≥|>=)?\s*3\b|grade\s+3\s+or", re.I)),
-    # generic AE 兜底：adverse events/AEs 无总体限定词
-    ("generic_ae", re.compile(r"\badverse\s+events?\b|(?<![a-z])aes(?![a-z])", re.I)),
+    ("grade_3_plus", re.compile(
+        r"grade\s*(?:≥|>=)?\s*[34]\b|grade\s+[34]\s+or", re.I)),
+    ("aesi", re.compile(
+        r"(?:adverse\s+events?|\(?teaes?\)?)\s+of\s+special\s+interest|(?<![a-z])aesis?(?![a-z])", re.I)),
+    # 严重 TEAE 子集：特定子集，不得归 any_teae/any_sae
+    ("serious_teae_subset", re.compile(
+        r"serious\s+(?:treatment[\s-]*emergent|teaes?)", re.I)),
 )
 
-# 否定短语：命中即从候选文本剥离，防止正向词误命中
-_NEGATION_PATTERNS = (
-    re.compile(r"\bnon[\s-]*serious\b[^;,.)]*", re.I),
-    re.compile(r"\bnot[\s-]*serious\b[^;,.)]*", re.I),
-    re.compile(r"\bnon[\s-]*treatment[\s-]*emergent\b[^;,.)]*", re.I),
+# 总体族（特定族未命中才判定）
+_GENERAL_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("any_teae", re.compile(r"(?<![a-z\-])teaes?(?![a-z])", re.I)),
+    ("any_teae", re.compile(
+        r"\b(?:any|overall|all)\b[^.;]{0,40}treatment[\s-]*emergent", re.I)),
+    ("any_sae", re.compile(r"\bserious\s+adverse\s+events?\b", re.I)),
+    ("any_sae", re.compile(r"(?<![a-z\-])saes?(?![a-z])", re.I)),
+    ("death", re.compile(r"\bdeaths?\b|\bmortality\b", re.I)),
 )
+
+_GENERIC_RULE = re.compile(r"\badverse\s+events?\b|(?<![a-z\-])aes(?![a-z])", re.I)
+
+from ci_workflow.reports.b.concept_catalog import spec_of
 
 _CONCEPT_CATEGORY_ZH = {
-    "any_teae": "治疗中出现的不良事件（登记）",
-    "any_sae": "严重不良事件（登记）",
-    "death": "死亡病例（登记）",
-    "aesi": "特别关注不良事件（登记）",
-    "discontinuation_ae": "因不良事件停药（登记）",
-    "treatment_related_ae": "治疗相关不良事件（登记）",
-    "grade_3_plus": "3级及以上不良事件（登记）",
-    "generic_ae": "不良事件（登记）",
-    "specific_ae": "特定不良事件指标（登记）",
-    "unknown": "未归类安全域指标（登记）",
+    key: spec_of(key).category_zh for key in (
+        "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
+        "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
+        "generic_ae", "specific_ae", "unknown",
+    )
+}
+
+# 概念 → AE 模块分母统计对象（单源：concept_catalog；会商 #6 generic_ae 查 other）
+CONCEPT_ATRISK_STAT = {
+    key: spec_of(key).at_risk_stat
+    for key in (
+        "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
+        "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
+        "generic_ae", "specific_ae", "unknown",
+    )
+    if spec_of(key).at_risk_stat
 }
 
 
@@ -63,9 +85,14 @@ def classify_safety_concept(title: str) -> str:
     stripped = text
     for pattern in _NEGATION_PATTERNS:
         stripped = pattern.sub(" ", stripped)
-    for concept, pattern in _CONCEPT_RULES:
+    for concept, pattern in _SPECIFIC_RULES:
         if pattern.search(stripped):
             return concept
+    for concept, pattern in _GENERAL_RULES:
+        if pattern.search(stripped):
+            return concept
+    if _GENERIC_RULE.search(stripped):
+        return "generic_ae"
     if re.search(r"adverse|safety|\bae\b", stripped, re.I):
         return "specific_ae"
     return "unknown"
@@ -74,11 +101,3 @@ def classify_safety_concept(title: str) -> str:
 def safety_category_zh(concept: str) -> str:
     """概念键 → 展示类别（构建器统一消费，避免各处自造中文）。"""
     return _CONCEPT_CATEGORY_ZH.get(concept, _CONCEPT_CATEGORY_ZH["unknown"])
-
-
-# 分母统计对象：概念 → AE 模块对应统计列（R03：人数/事件数/人时不可互换）
-CONCEPT_ATRISK_STAT = {
-    "any_sae": "serious",
-    "any_teae": "other",
-    "death": "deaths",
-}

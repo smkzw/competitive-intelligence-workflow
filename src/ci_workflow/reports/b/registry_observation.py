@@ -75,14 +75,16 @@ def resolve_indication_id(name: str | None) -> str | None:
     别名表收录自身；无法解析返回 None。"""
     if not name:
         return None
-    needle = str(name).strip().casefold().replace(" ", "").replace("-", "")
+    # 会商 F08：连字符是规范 id 的组成部分（atopic-dermatitis），不得当
+    # 噪声删除——否则 "p-n-h" 之类伪 id 会与 pnh 全等
+    needle = str(name).strip().casefold().replace(" ", "")
     aliases = _load_policy().get("indication_aliases") or {}
     for scope_id, names in aliases.items():
-        canonical = str(scope_id).strip().casefold().replace(" ", "").replace("-", "")
+        canonical = str(scope_id).strip().casefold().replace(" ", "")
         if needle == canonical:
             return scope_id
         for alias in names or ():
-            if needle == str(alias).strip().casefold().replace(" ", "").replace("-", ""):
+            if needle == str(alias).strip().casefold().replace(" ", ""):
                 return scope_id
     return None
 

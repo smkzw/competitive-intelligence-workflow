@@ -30,7 +30,8 @@
       <div><dt>靶点/机制</dt><dd>{{ detail_product_obj.target }}</dd></div>
       <div><dt>类型</dt><dd>{{ detail_product_obj.modality }}</dd></div>
       <div><dt>临床阶段</dt><dd>{{ detail_product_obj.phase }}</dd></div>
-      <div><dt>当前状态</dt><dd>{{ detail_product_obj.status }}</dd></div>
+      <div><dt>当前状态（登记记录口径）</dt><dd>{{ detail_product_obj.status }}</dd></div>
+      <div><dt>监管批准事实</dt><dd>{{ detail_product_obj.regulatory_approval_status or "待核验（监管原始文件未接入，登记状态不构成批准证据）" }}</dd></div>
       <div><dt>结果覆盖</dt><dd>{{ detail_product_obj.result_status }}</dd></div>
       <div><dt>区域</dt><dd>{{ detail_product_obj.regions | join("、") }}</dd></div>
       <div><dt>给药途径</dt><dd>{{ detail_product_obj.route }}</dd></div>

@@ -1058,6 +1058,8 @@ def main() -> None:
     # 视图 facts 属于门户投影（report_data）而非包顶层。
     b_portal["baseline_views"] = {"facts": [r.model_dump(mode="json", exclude_none=True) for r in baseline_rows]}
     b_portal["efficacy_views"] = {"facts": [dict(r) for r in efficacy_rows]}
+    # 会商 round-4 #4（B r57 issue-2）：-declared 影子行按合同与科学事实
+    # 保持 1:1（B 门匹配依赖）；展示层由 report_b._safety_records 统一过滤
     b_portal["safety_views"] = {"facts": [dict(r) for r in safety_rows]}
     b_portal["disposition_views"] = {
         "facts": [r.model_dump(mode="json", exclude_none=True) for r in disposition_rows]

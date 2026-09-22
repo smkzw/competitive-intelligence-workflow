@@ -303,13 +303,21 @@ class ReportAPortalData(BaseModel):
             raise ValueError("疗效事实引用了未知试验")
         if any(item.trial_id is not None and item.trial_id not in trials for item in self.safety):
             raise ValueError("安全性事实引用了未知试验")
-        required_safety = {"治疗期间不良事件", "严重不良事件", "特别关注不良事件", "常见不良事件"}
+        # 会商 #2/#12：门禁按概念键判定（any_teae/any_sae 必须齐备），
+        # 不再比对与载荷词表脱节的中文类别字面
+        from ci_workflow.reports.b.concept_catalog import row_concept
+
+        required_concepts = {"any_teae", "any_sae"}
         product_by_id = {item.id: item for item in self.products}
         for product_id in products:
             if product_by_id[product_id].result_status != "有公开关键结果":
                 continue
-            categories = {row.category for row in self.safety if row.product_id == product_id}
-            if not required_safety <= categories:
+            concepts = {
+                row_concept(row)
+                for row in self.safety
+                if row.product_id == product_id
+            }
+            if not required_concepts <= concepts:
                 raise ValueError(f"产品 {product_id} 的关键安全性维度不完整")
             arms = {row.arm for row in self.efficacy if row.product_id == product_id}
             if not {"治疗组", "对照组"} <= arms:
@@ -466,20 +474,19 @@ def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str
     known = _SAFETY_TERM_ALIASES.get(normalized)
     if known is not None:
         return known
-    if term_key in {"any_sae", "any_teae", "death"}:
-        label = {"any_sae": "严重不良事件", "any_teae": "治疗期间不良事件", "death": "死亡病例"}[term_key]
-        return term_key, label
+    # 会商 #2（概念词表单源）：受控标签一律取自 concept_catalog，
+    # 渲染器不再自造中文概念字面
+    from ci_workflow.reports.b.concept_catalog import spec_of
+
+    catalog_keys = {
+        "any_sae", "any_teae", "death", "aesi", "discontinuation_ae",
+        "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
+        "generic_ae",
+    }
+    if term_key and term_key in catalog_keys:
+        return term_key, spec_of(term_key).label_zh
     # 独立审阅 R02：受控安全概念键（分流特定指标）的展示标签；
     # specific_ae/unknown 仍走 raw 原文路径，不冒充受控类别
-    concept_labels = {
-        "aesi": "特别关注不良事件",
-        "discontinuation_ae": "因不良事件停药",
-        "treatment_related_ae": "治疗相关不良事件",
-        "grade_3_plus": "3级及以上不良事件",
-        "generic_ae": "不良事件",
-    }
-    if term_key in concept_labels:
-        return term_key, concept_labels[term_key]
     return f"raw:{normalized}", term
 
 

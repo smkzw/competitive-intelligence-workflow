@@ -92,7 +92,13 @@ def validate_endpoint_timepoint_pairs(
                     f"{prior!r} vs {text!r}"
                 )
             seen[str(oid)] = text
-        else:
+        elif family == "timepoint":
+            # 会商 F07/E05：配对判据是内容非空的配对，空白时间点不得冒充已配对
+            if not str(observation.source_text or "").strip():
+                raise EndpointInstanceError(
+                    f"试验 {trial_id} 的终点实例 {oid} 的时间点观察为空白，"
+                    "不得作为已配对时间点"
+                )
             timepoint_ids.setdefault(trial_id, set()).add(str(oid))
 
     instances = build_endpoint_instances(observations)
@@ -110,6 +116,15 @@ def validate_endpoint_timepoint_pairs(
         if orphan:
             problems.append(
                 f"试验 {trial_id} 无对应终点的时间点实例：{'、'.join(orphan)}"
+            )
+    # 会商 F07/E06：孤儿检验补反向迭代域——只有时间点、没有终点的试验
+    # 同样必须报错（此前只在"该试验同时有终点"时可达）
+    for trial_id, tps in timepoint_ids.items():
+        if universe_trial_ids is not None and trial_id not in universe_trial_ids:
+            continue
+        if not endpoint_ids.get(trial_id):
+            problems.append(
+                f"试验 {trial_id} 只有时间点实例而无终点实例：{'、'.join(sorted(tps))}"
             )
     if problems:
         raise EndpointInstanceError("；".join(problems))

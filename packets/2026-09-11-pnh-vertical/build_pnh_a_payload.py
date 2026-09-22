@@ -523,8 +523,9 @@ def main() -> None:
                                 # 停药等特定指标不冒充 any_teae；无法确认保留
                                 # specific/unknown 概念，拒判不丢数据
                                 _concept = classify_safety_concept(title)
-                                _skey = _concept if _concept in {
-                                    "any_teae", "any_sae", "death"} else _concept
+                                # 概念键全量入 term_key（会商 #2：展示层按
+                                # key 消费；specific/unknown 走 raw 描述路径）
+                                _skey = _concept
                                 _unit_l = unit.strip().casefold()
                                 if _unit_l == "participants":
                                     _unit_zh = "人"

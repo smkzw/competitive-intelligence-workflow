@@ -268,8 +268,16 @@ def build_report_a_slides(data: dict[str, Any]) -> list[Slide]:
 
     teae_by_pid: dict[str, float] = {}
     for row in safety_rows:
+        # 会商 #2：概念匹配按 term_key（词表单源），旧数据回退基础类别名
+        _te = row.get("term_key")
+        _is_teae = (
+            _te == "any_teae"
+            if _te
+            else str(row.get("category") or "").replace("（登记）", "").strip()
+            in {"治疗期间不良事件", "治疗中出现的不良事件"}
+        )
         if (
-            row.get("category") == "治疗期间不良事件"
+            _is_teae
             and row.get("arm", "治疗组") == "治疗组"
             and row.get("value") is not None
         ):

@@ -2654,3 +2654,16 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **R13（SCI10 绿）**：TrialRow sample_size 放宽为可 None + 增 planned_sample_size（计划/实际分开）；构建器保留未知样本量试验（140 试验，此前跳过 5 项）；模板/B 投影"未公开"守卫。
 - **R10（WP2–WP6 产品闭环）未动**——共同修订事务、B 分面运行时、C 检索横比、静态分享、统一 ViewState 为下一阶段主任务。
 - **验证**：31 项新回归全绿（unit 27 + integration 4）；v97 全链 PYTHONHASHSEED=0 重建（A 140 试验载荷→submit ACCEPTED→run_90a5e4c874a31f8f14f590a8→A 56/B 70/C 18 页）；产物抽查（诚实分类 233 行、待核验×1、未知样本量×5、实例配对全量）。
+
+## 追记 67：round-4 会商收包 + 会商排期 12 项实施（v100）+ round-5 派发
+- **会商收包**：`packets/2026-09-22-conference-round4/conference-memo.md`——21 项发现全部成立（grok F01–F09 / cursor BI-01–05+CV / 复核 15/16 项，A issue-5 归因改写）。四层根因：①概念词表四处复制互不相同（TEAE 轴 0/146 命中、PDF A 安全轴 45/45 静默坏死、门禁词表脱节永不触发）②保守守卫写成放行条件（F01 期别借用/E07 配对判据）③登记字段投影多链路④内部产物泄漏用户面。
+- **会商排期实施（#1–#7、#10、#12）**：
+  - #1 概念分层：safety_concepts 重写为"否定→特定族（停药/治疗相关/3级+/AESI/严重TEAE子集）→总体族→generic"顺序；否定表补 no/without/non-TEAE 且只剥否定短语本身；AESI 兼容 "(TEAEs) of Special Interest" 括号。载荷重分类：discontinuation_ae 0→28、serious_teae_subset 0→7、aesi 0→2、any_teae 146→117。
+  - #2 词表单源：新增 `concept_catalog.py`（key→短标签/类别/分母口径单源）；report_a 标签与门禁（#12 按 term_key 判定）、report-a.js 矩阵过滤（删中文类别字面兜底）、pdf_native/ppt_native 投影全部改按 term_key（旧数据回退基础类别名+legacy 别名表）。
+  - #3 守卫：crosswalk 期别入口归一+期别不符一律未知（禁借用）+冲突理由修正；endpoint_instances 空白时间点不冒充配对+孤儿检验补反向迭代；resolve_indication_id 连字符不再删除。
+  - #4 影子行：B 合同要求 views 与事实 1:1（zip strict），改为保留事实/视图、渲染层 `_safety_records` 统一过滤 `-declared`（B 门匹配不受影响）。
+  - #5 R11 跨报告：B dossier 产品页补"当前状态（登记记录口径）+监管批准事实"两列。
+  - #6/#7/#10：安全明细表事件列改用 measure_label（30 互异值可见）；分母缺失区分"无法归属（登记组名不一致）"vs"未公开"；crosswalk 单组名称变体归属+Period N: 前缀剥离；generic_ae 纳入分母口径（55 行找回分母）；n=null→"样本量未公开"；"签名"→"设计要素组合"；人群柱图全 1 时以说明+表格替代。
+- **实施途中坑**：①Jinja 表达式不支持 set 字面量（模板编译错）②本地直调构建器写入错绑定清单→图节点恢复拒绝→清残留③B 载荷漂移锁定（同工作区禁再提交不同内容）→按"构建器改代码=新工作区"纪律换 v100。
+- **v100=最新候选**（run_3c12371c4fff9f7fb70e5722，A 56/B 70/C 18，submit ACCEPTED）。回归：31 项不变量绿；unit+contract 1054 过，仅 2 项既有失败（脏树遗留，与轮次无关）。
+- **round-5 派发**：deepseek A r44/B r58/C r42（复核会商 12 项落地）+ grok-4.7 重跑 73 探针+新守卫用例 + cursor 复走 5 项交互缺陷。未排期：#8/#9 归 R10 主线；#11 沿用原排期。
