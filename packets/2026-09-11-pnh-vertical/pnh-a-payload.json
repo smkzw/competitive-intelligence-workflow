@@ -49933,7 +49933,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
    "measure_context": "Participants with TEAEs",
    "term_key": "composite_ae",
-   "time_window": "基线 至第26周"
+   "time_window": "基线 至第26周",
+   "numerator": 21,
+   "denominator": 24.0
   },
   {
    "row_id": "safe-46",
@@ -49946,7 +49948,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
    "measure_context": "Participants with Serious TEAEs",
    "term_key": "composite_ae",
-   "time_window": "基线 至第26周"
+   "time_window": "基线 至第26周",
+   "numerator": 0,
+   "denominator": 24.0
   },
   {
    "row_id": "safe-47",
@@ -54348,7 +54352,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "SAEs",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 2,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-351",
@@ -54361,7 +54367,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "SAEs",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 7,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-352",
@@ -54374,7 +54382,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "Grade 3 AEs",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 4,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-353",
@@ -54387,7 +54397,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "Grade 3 AEs",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 6,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-354",
@@ -54400,7 +54412,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "Grade 4 AEs",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 1,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-355",
@@ -54413,7 +54427,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "Grade 4 AEs",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 1,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-356",
@@ -54426,7 +54442,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "AEs Leading to Discontinuation of Study Drug",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 1,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-357",
@@ -54439,7 +54457,9 @@
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "measure_context": "AEs Leading to Discontinuation of Study Drug",
    "term_key": "composite_ae",
-   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）"
+   "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
+   "numerator": 0,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-358",
@@ -55420,7 +55440,9 @@
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
    "measure_context": "Any TEAEs",
    "term_key": "composite_ae",
-   "time_window": "基线 至4.5年"
+   "time_window": "基线 至4.5年",
+   "numerator": 8,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-429",
@@ -55433,7 +55455,9 @@
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
    "measure_context": "SAEs",
    "term_key": "composite_ae",
-   "time_window": "基线 至4.5年"
+   "time_window": "基线 至4.5年",
+   "numerator": 3,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-430",
@@ -55446,7 +55470,9 @@
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
    "measure_context": "TEAE Grade 3",
    "term_key": "composite_ae",
-   "time_window": "基线 至4.5年"
+   "time_window": "基线 至4.5年",
+   "numerator": 2,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-431",
@@ -55459,7 +55485,9 @@
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
    "measure_context": "TEAE Grade 4",
    "term_key": "composite_ae",
-   "time_window": "基线 至4.5年"
+   "time_window": "基线 至4.5年",
+   "numerator": 0,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-432",
@@ -55472,7 +55500,9 @@
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
    "measure_context": "AE leading to discontinuation",
    "term_key": "composite_ae",
-   "time_window": "基线 至4.5年"
+   "time_window": "基线 至4.5年",
+   "numerator": 0,
+   "denominator": 8.0
   },
   {
    "row_id": "safe-433",
@@ -55737,7 +55767,9 @@
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
    "measure_context": "SAE",
    "term_key": "composite_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
+   "numerator": 1,
+   "denominator": 10.0
   },
   {
    "row_id": "safe-452",
@@ -55750,7 +55782,9 @@
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
    "measure_context": "TEAE Grade 3",
    "term_key": "composite_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
+   "numerator": 1,
+   "denominator": 10.0
   },
   {
    "row_id": "safe-453",
@@ -55763,7 +55797,9 @@
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
    "measure_context": "TEAE Grade 4",
    "term_key": "composite_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
+   "numerator": 1,
+   "denominator": 10.0
   },
   {
    "row_id": "safe-454",
@@ -55776,7 +55812,9 @@
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
    "measure_context": "AE leading to discontinuation",
    "term_key": "composite_ae",
-   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）"
+   "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
+   "numerator": 1,
+   "denominator": 10.0
   },
   {
    "row_id": "safe-455",
@@ -55923,7 +55961,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
    "measure_context": "Participants with TEAEs",
    "term_key": "composite_ae",
-   "time_window": "基线 至第104周"
+   "time_window": "基线 至第104周",
+   "numerator": 15,
+   "denominator": 24.0
   },
   {
    "row_id": "safe-466",
@@ -55936,7 +55976,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
    "measure_context": "Participants with Serious TEAEs",
    "term_key": "composite_ae",
-   "time_window": "基线 至第104周"
+   "time_window": "基线 至第104周",
+   "numerator": 2,
+   "denominator": 24.0
   },
   {
    "row_id": "safe-467",
@@ -56033,7 +56075,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Adverse Events",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 14,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-474",
@@ -56046,7 +56090,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Serious Adverse Events",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 3,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-475",
@@ -56059,7 +56105,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant hemoglobin (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 7,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-476",
@@ -56072,7 +56120,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant hematocrit (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 6,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-477",
@@ -56085,7 +56135,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant MCH (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 4,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-478",
@@ -56098,7 +56150,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant MCV (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 3,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-479",
@@ -56111,7 +56165,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant RBC (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 6,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-480",
@@ -56124,7 +56180,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant reticulocytes (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 4,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-481",
@@ -56137,7 +56195,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant basophils (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-482",
@@ -56150,7 +56210,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant eosinophils (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-483",
@@ -56163,7 +56225,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant neutrophils (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-484",
@@ -56176,7 +56240,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant platelets (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-485",
@@ -56189,7 +56255,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant reticulocytes (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 2,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-486",
@@ -56202,7 +56270,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant WBC (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-487",
@@ -56215,7 +56285,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant ALT (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 3,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-488",
@@ -56228,7 +56300,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant AST (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 6,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-489",
@@ -56241,7 +56315,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant creatine kinase (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 2,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-490",
@@ -56254,7 +56330,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant creatinine (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 6,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-491",
@@ -56267,7 +56345,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant direct bilirubin (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 5,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-492",
@@ -56280,7 +56360,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant total bilirubin (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 7,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-493",
@@ -56293,7 +56375,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant gamma glutamyl transpeptidase (GGT) (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 2,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-494",
@@ -56306,7 +56390,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant LDH (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 10,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-495",
@@ -56319,7 +56405,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant potassium (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-496",
@@ -56332,7 +56420,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant urea (high)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 2,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-497",
@@ -56345,7 +56435,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant potassium (low)",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-498",
@@ -56358,7 +56450,9 @@
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
    "measure_context": "Clinically significant ECG",
    "term_key": "composite_ae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
+   "numerator": 1,
+   "denominator": 15.0
   },
   {
    "row_id": "safe-499",
@@ -56399,7 +56493,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "Any AEs",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 12,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-502",
@@ -56412,7 +56508,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "Any AEs",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 10,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-503",
@@ -56425,7 +56523,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "Any AEs",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 6,
+   "denominator": 6.0
   },
   {
    "row_id": "safe-504",
@@ -56438,7 +56538,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "SAEs",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 7,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-505",
@@ -56451,7 +56553,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "SAEs",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 5,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-506",
@@ -56464,7 +56568,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "SAEs",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 2,
+   "denominator": 6.0
   },
   {
    "row_id": "safe-507",
@@ -56477,7 +56583,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "AEs Leading to Discontinuation of Study Medication",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 1,
+   "denominator": 12.0
   },
   {
    "row_id": "safe-508",
@@ -56490,7 +56598,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "AEs Leading to Discontinuation of Study Medication",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 1,
+   "denominator": 11.0
   },
   {
    "row_id": "safe-509",
@@ -56503,7 +56613,9 @@
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
    "measure_context": "AEs Leading to Discontinuation of Study Medication",
    "term_key": "composite_ae",
-   "time_window": "自首次给药起 至第217周"
+   "time_window": "自首次给药起 至第217周",
+   "numerator": 0,
+   "denominator": 6.0
   },
   {
    "row_id": "safe-510",

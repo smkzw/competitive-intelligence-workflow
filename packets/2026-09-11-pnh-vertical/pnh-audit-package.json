@@ -2,7 +2,7 @@
  "schema_version": "1.3",
  "package_id": "pnh-vertical-audit-001",
  "contract_identity": {
-  "project_id": "project_77aae8930816fd522571c67d",
+  "project_id": "project_a6b1a92b4354558d980bd253",
   "indication": "阵发性睡眠性血红蛋白尿症",
   "contract_version": "1.3"
  },
@@ -1272,13 +1272,13 @@
    "2"
   ],
   "review_digest_version": "2",
-  "reviewed_universe_sha256": "63718280949bc06bda37d62822efc1e05c56fed5321d1823efd2710e8d1945a1"
+  "reviewed_universe_sha256": "53b1b1116420d9110ad22cad4776f406e402e7b0f72c470d1c43d268eeab0530"
  },
  "report_payloads": [
   {
    "report": "A",
    "relative_path": "evidence/library/a-research-package.json",
-   "content_sha256": "77648f24f3a41dc0f88420c61479abd7bc3a71c8d54c5f66bbc64ef6f6a5ff67",
+   "content_sha256": "867ca66458df8a7343889bd9a601b567c12e2dfb5e069835a865b416bdbb9607",
    "universe_product_ids": [
     "my008211a",
     "eculizumab",
@@ -1330,7 +1330,7 @@
   {
    "report": "B",
    "relative_path": "evidence/library/b-research-package.json",
-   "content_sha256": "83bbde7b50474452cde8cca21858275a14b3d53948a5cf4d7e8f467e3bae37eb",
+   "content_sha256": "5110a180df8aa42a8656e77c374b1d0e71e74bfb7c9091b64a39e75a68336650",
    "universe_product_ids": [
     "abp-959",
     "adx-038",

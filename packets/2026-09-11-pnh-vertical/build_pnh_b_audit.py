@@ -79,6 +79,22 @@ def _weeks(time_frame: str) -> tuple[float | None, str]:
     return float(m.group(1)) * factor, m.group(2)
 
 
+
+
+def _annotate_partial(text: str) -> str:
+    """部分转写残留英文（含中英混排机器拼接碎片）按惯例标注。"""
+    value = " ".join(str(text or "").split())
+    if not value:
+        return value
+    import sys as _sys
+    _sys.path.insert(0, str(ROOT.parent / "src"))
+    from ci_workflow.renderers.portal.report_a import _native_timepoint_zh
+    translated = _native_timepoint_zh(value)
+    if re.findall(r"[A-Za-z]{3,}", translated) and not translated.endswith("（登记原文，未译）"):
+        return translated + "（登记原文，未译）"
+    return translated
+
+
 def main() -> None:
     from ci_workflow.application.fresh_b_research_package import (
         BaselineObservation,
@@ -396,7 +412,10 @@ def main() -> None:
                 f"登记严重不良事件计数；受影响人数=0 的登记原文计数（{row.get('term', '')}）"
                 if value == 0 else "登记严重不良事件计数"
             ),
-            "time_window_zh": row.get("time_window", "登记窗口"),
+            # 独立复核 B r61（issue-1）：观察窗部分转写后残留英文的
+            # 按惯例标注（A 载荷已源头转写，此处兜底半翻译串）
+            "time_window_zh": _annotate_partial(
+                row.get("time_window", "登记窗口")),
             # 臂级分母未在载荷中披露：只公开计数，不用试验级人数冒充臂级分母
             # 独立复核 B r38（issue-1）：保留 AE eventGroup 原标题
             # （含 TP1/TP2/LTE 期间语义），_arm_group_for 仅作角色/组归属判定

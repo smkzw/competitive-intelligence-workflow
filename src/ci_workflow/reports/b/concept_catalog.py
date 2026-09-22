@@ -43,7 +43,7 @@ SAFETY_CONCEPTS: dict[str, SafetyConceptSpec] = {
     "specific_ae": SafetyConceptSpec(
         "specific_ae", "特定不良事件指标", "特定不良事件指标（登记）", "other"),
     "composite_ae": SafetyConceptSpec(
-        "composite_ae", "复合不良事件指标", "复合不良事件指标（登记）", None),
+        "composite_ae", "复合不良事件指标", "复合不良事件指标（登记）", "other"),
     "unknown": SafetyConceptSpec(
         "unknown", "未归类安全域指标", "未归类安全域指标（登记）", None),
 }

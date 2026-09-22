@@ -1093,8 +1093,15 @@
       bubble.setAttribute("aria-label", p.name + "：" + bubble.title + "；点击查看产品洞察");
       plot.appendChild(bubble);
     }
+    // 独立复核 A r47（issue-2）：刻度后缀随轴口径——疗效轴非百分比时
+    // 不再硬标 "%"
+    var efficacyUnits = points.map(function (point) { return String(point.unit || ""); });
+    var xUnitSuffix = "%";
+    if (!useDifference && efficacyUnits.length && efficacyUnits.some(function (u) { return u && u !== "%"; })) {
+      xUnitSuffix = "";
+    }
     [0, 0.25, 0.5, 0.75, 1].forEach(function (ratio) {
-      var xTick = el("span", "kz-a-axis-tick kz-a-axis-tick--x", (xMin + ratio * (xMax - xMin)).toFixed(1) + "%");
+      var xTick = el("span", "kz-a-axis-tick kz-a-axis-tick--x", (xMin + ratio * (xMax - xMin)).toFixed(1) + xUnitSuffix);
       xTick.style.left = (14 + ratio * 72) + "%"; plot.appendChild(xTick);
       var yTick = el("span", "kz-a-axis-tick kz-a-axis-tick--y", (yMax - ratio * (yMax - yMin)).toFixed(1) + "%");
       yTick.style.bottom = (14 + ratio * 72) + "%"; plot.appendChild(yTick);

@@ -1328,6 +1328,16 @@ def _scrub_declared_shadow_rows(data: ReportBPortalData) -> ReportBPortalData:
             if len(kept) != len(facts):
                 updates[field] = dict(view)
                 updates[field]["facts"] = kept
+    # 独立复核 B r61（issue-2）：report.js 嵌入数据来自 legacy 顶层列表，
+    # 同样清洗（合同 1:1 在提交校验层已履行，渲染副本不受限）
+    for field in ("safety", "baseline", "efficacy", "disposition"):
+        rows = getattr(data, field, None)
+        if rows is None or isinstance(rows, (str, Mapping)):
+            continue
+        if isinstance(rows, Sequence):
+            kept = tuple(row for row in rows if not _row_is_declared_shadow(row))
+            if len(kept) != len(rows):
+                updates[field] = kept
     if updates:
         return data.model_copy(update=updates)
     return data
@@ -3779,6 +3789,14 @@ def _filter_dimensions(
             if _arm_display in ("治疗组", "对照组", "单臂", "组别未列示", "")
             else _arm_display
         )
+        # 独立复核 A r47（issue-3）：筛选维度组名残留英文按惯例标注
+        if (
+            _group_value
+            and _group_value not in ("治疗组", "对照组", "单臂", "组别未列示")
+            and re.findall(r"[A-Za-z]{3,}", _group_value)
+            and not _group_value.endswith("（登记原文，未译）")
+        ):
+            _group_value = _group_value + "（登记原文，未译）"
         result.append(
             {
                 "id": row_id,
