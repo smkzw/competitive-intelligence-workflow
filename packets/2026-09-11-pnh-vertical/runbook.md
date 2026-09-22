@@ -2685,3 +2685,14 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **当前候选 abc-v106**（run_b6d6d289715d3b558b641f47，A56/B70/C18）。round-10（r49/r63/r47）静默运行中。
 - **B r62 issue-2（不阻断）**：bsafe-* 内部行标识字面嵌入 report.js——内部标识不展示为重复行，仅 ID 字面残留；彻底清除需渲染层 ID 重映射（R10/合同级）。
 - **未决**：①载荷内嵌复核声明悖论②F17 复合否定口径③并列时间点单位省略（呈现）④F15 概念字面 15 处（合同级）——均已记录，前两项待专家/用户裁决。
+
+## 追记 70：round-10 收包（A/B/C 均 veto，含两项我方回退性错误）——无损暂停点
+- **round-10（abc-v106）**：三路均 veto，但发现质量极高，含两项生产者自身错误：
+  - **C r47 issue-2（我方回归）**：v106 把值列标注条件放宽（去掉"无中文"）后，把"（登记原文，未译）"错标到**门户自己翻译出的中文值**上——违反 evidence-drawer.js markUntranslated 的"无 CJK 才算未译"语义。**修法：回退该放宽；"During"残片改走转写词表**（_TIMEPOINT_PHRASES/_native_endpoint_zh 增 During→期间类规则）而非标注。
+  - **A r49 issue-1/2（我方误判）**：上轮认定"残余 39 行分母属真歧义"被复核行级证据部分推翻——safe-31、safe-50、safe-150~157、safe-297 的绑定来源**确按组公开 Participants atRisk**。**修法：逐行核对这些 arm 与 EG 组名的失配原因**（疑为组名粒度/词序变体），扩展 crosswalk 匹配；不得再以"真歧义"一言蔽之。
+  - **A r49 issue-3/4/5**：A 侧筛选按钮（131 个"组别"维度）标注未接——我的过滤在 report_b.py（B 侧），A 侧筛选维度构建在 report_a.py/筛选管线，需同规则；矩阵气泡单位残项（points.unit 已接但 y 轴口径仍有残差）。
+  - **B r63 issue-1**：分面标注门（_filter_value_label_zh）未达实际按钮路径——复核者明示"根因可定位"（证据含 .kz-b-filter-button 文本、data-filter-dimension、data-filter-value 三层），下一会话按此定位。
+  - **B r63 issue-2**：time_window_band 标签形态退化（"duration研究2年登记原文未译"——`_annotate_partial` 的标注被 band 派生拼接吞掉括号）——**修法：标注应在 band 派生之后应用**，而非源头（源头标注被下游再加工）。
+  - **B r63 issue-3 / C r47 issue-3**：不阻断（bsafe ID 命名空间随包分发；并列时间点单位省略——均如实归类呈现待改/合同级）。
+- **重大流程教训（写进纪律）**：①标注类修复不得放宽既有语义（markUntranslated 的 no-CJK 语义是合同）；②"真歧义"结论必须行级举证后才可成立，否则复核者会用来源反证；③源头标注会被下游派生（band/facet）再加工——标注应是管线最后一环。
+- **当前候选 abc-v106**（run_b6d6d289，A56/B70/C18）。round-10 全部发现已逐条记录于 `runs/pnh-vertical/abc-v106/state/scientific_review/*/verdict.json`（含 sha256 与行级对照），下一会话按上述修法实施 v107。
