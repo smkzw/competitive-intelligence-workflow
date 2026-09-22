@@ -1006,6 +1006,7 @@
       points.push({
         product: p,
         treatment: treatment,
+        unit: treatmentRow.unit || "",
         control: control,
         x: (useDifference && control != null) ? treatment - control : treatment,
         eventRate: eventRate,
@@ -1095,9 +1096,9 @@
     }
     // 独立复核 A r47（issue-2）：刻度后缀随轴口径——疗效轴非百分比时
     // 不再硬标 "%"
-    var efficacyUnits = points.map(function (point) { return String(point.unit || ""); });
+    var efficacyUnits = points.map(function (point) { return String(point.unit || ""); }).filter(Boolean);
     var xUnitSuffix = "%";
-    if (!useDifference && efficacyUnits.length && efficacyUnits.some(function (u) { return u && u !== "%"; })) {
+    if (!useDifference && efficacyUnits.length && efficacyUnits.some(function (u) { return u !== "%"; })) {
       xUnitSuffix = "";
     }
     [0, 0.25, 0.5, 0.75, 1].forEach(function (ratio) {

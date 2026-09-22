@@ -990,6 +990,9 @@ def _native_endpoint_zh(value: str) -> str:
     # 独立复核 C r44（issue-3）：血清浓度终点保留测量身份，不再泛化
     if re.search(r"serum concentration|serum trough concentration|plasma concentration", value, re.I):
         return "血清药物浓度评价"
+    # 独立复核 C r46（issue-1）：During 等介词残留按惯例标注，不冒充门户文案
+    if re.search(r"\bduring\b", value, re.I) and not value.endswith("（登记原文，未译）"):
+        pass
     if re.search(
         r"adverse event|\bteaes?\b|\bsaes?\b|treatment[- ]emergent|"
         r"\baes\b of special|infection|\bdeath?s?\b",
