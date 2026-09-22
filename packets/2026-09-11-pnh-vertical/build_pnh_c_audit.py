@@ -58,6 +58,7 @@ def _stable(tag: str, *parts: str) -> str:
 
 def _row(trial_id: str, product_id: str, nct: str, page: int, family: str,
          field: str, text: str, *, seq: str, endpoint_key: str | None = None,
+         outcome_id: str | None = None,
          group_id: str | None = None, stage: str | None = None,
          scale: str | None = None, operator: str | None = None,
          threshold: str | None = None, unit: str | None = None,
@@ -78,6 +79,7 @@ def _row(trial_id: str, product_id: str, nct: str, page: int, family: str,
         "field_family": family,
         "field": field,
         "endpoint_key": endpoint_key,
+        "outcome_id": outcome_id,
         "source_field_name": source_name or f"registry.{field}",
         "source_field_definition": f"CT.gov 登记字段 {field} 的原文记录",
         "source_text": text,
@@ -338,12 +340,30 @@ def main() -> None:
             p_frame = (p_item.get("timeFrame") or "").strip()
             if not p_measure:
                 continue
+            # 独立审阅 R05（SCI06）：每条主终点持有独立实例标识
+            _p_oid = f"pri{p_index}" if p_index else "pri0"
             observations.append(_row(
                 trial_id, product_id, nct, page, "endpoint", "primary_endpoint_definition",
-                p_measure, seq=f"pri{p_index}" if p_index else "", endpoint_key="primary", stage=stage,
+                p_measure, seq=_p_oid, endpoint_key="primary", outcome_id=_p_oid,
+                stage=stage,
                 scale=_endpoint_form(p_measure), timepoint=p_frame,
                 source_name="registry.outcomes.primary",
             ))
+            # 逐实例时间点行入谱（此前只在循环外录第一条）；登记未公开
+            # 时间窗的以未披露状态保留配对，不缺实例
+            if p_frame:
+                observations.append(_row(
+                    trial_id, product_id, nct, page, "timepoint", "primary_endpoint_timepoint",
+                    p_frame, seq=_p_oid, endpoint_key="primary", outcome_id=_p_oid,
+                    timepoint=p_frame, source_name="registry.outcomes.primary",
+                ))
+            else:
+                observations.append(_row(
+                    trial_id, product_id, nct, page, "timepoint", "primary_endpoint_timepoint",
+                    "登记未公开评估时间窗", seq=_p_oid, endpoint_key="primary",
+                    outcome_id=_p_oid, source_name="registry.outcomes.primary",
+                    disclosure="not_publicly_disclosed",
+                ))
             # 统计方法句（独立复核 C r20 veto 第4项）：主终点描述常载明
             # 分析模型（如 MMRM），有则入"主要比较与统计模型"行，不得错标未公开
             p_desc = (p_item.get("description") or "").strip()
@@ -353,11 +373,7 @@ def main() -> None:
                     f"主要比较与统计模型（登记主终点说明）：{p_desc}", seq=f"pri{p_index}" if p_index else "",
                     stage=stage, source_name="registry.outcomes.primary.description",
                 ))
-        observations.append(_row(
-            trial_id, product_id, nct, page, "timepoint", "primary_endpoint_timepoint",
-            time_frame, seq="", endpoint_key="primary", stage=stage,
-            timepoint=time_frame, source_name="registry.outcomes.primary",
-        ))
+
         # 独立复核 C r19（veto 第7项）：次要终点定义与时间点全量入谱，
         # 此前只记录主终点导致页面承诺与实际不符
         secondary_outcomes = outcomes.get("secondaryOutcomes") or []
@@ -366,17 +382,26 @@ def main() -> None:
             if not s_measure:
                 continue
             s_frame = (s_item.get("timeFrame") or "").strip()
+            _s_oid = f"sec{s_index}"
             observations.append(_row(
                 trial_id, product_id, nct, page, "endpoint", "secondary_endpoint_definition",
-                s_measure, seq=f"sec{s_index}", endpoint_key="secondary", stage=stage,
+                s_measure, seq=_s_oid, endpoint_key="secondary", outcome_id=_s_oid,
+                stage=stage,
                 scale=_endpoint_form(s_measure), timepoint=s_frame,
                 source_name="registry.outcomes.secondary",
             ))
             if s_frame:
                 observations.append(_row(
                     trial_id, product_id, nct, page, "timepoint", "secondary_endpoint_timepoint",
-                    s_frame, seq=f"sec{s_index}", endpoint_key="secondary", stage=stage,
+                    s_frame, seq=_s_oid, endpoint_key="secondary", outcome_id=_s_oid,
                     timepoint=s_frame, source_name="registry.outcomes.secondary",
+                ))
+            else:
+                observations.append(_row(
+                    trial_id, product_id, nct, page, "timepoint", "secondary_endpoint_timepoint",
+                    "登记未公开评估时间窗", seq=_s_oid, endpoint_key="secondary",
+                    outcome_id=_s_oid, source_name="registry.outcomes.secondary",
+                    disclosure="not_publicly_disclosed",
                 ))
         # 独立复核 C r19/C r20：统计设计维度显式声明——登记未公开才声明；
         # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
@@ -415,7 +440,8 @@ def main() -> None:
         for pd_ in _pop_descs:
             if pd_ and pd_ not in _stat_notes:
                 _stat_notes.append("分析人群说明：" + pd_)
-        for si_note, note in enumerate(_stat_notes[:8], start=1):
+        # 独立审阅 R09（C02）：统计/分析集说明全量入谱，不再 [:8] 裁剪
+        for si_note, note in enumerate(_stat_notes, start=1):
             # 分析集说明归 analysis_sets 维度，其余归统计模型维度；
             # seq 逐条递增避免同 trial 内 row_id 冲突
             is_set = "分析人群说明：" in note or "analysis set" in note.lower()

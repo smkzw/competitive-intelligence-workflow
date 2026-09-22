@@ -158,6 +158,9 @@ class DesignObservation(BaseModel):
     field_family: DesignFieldFamily
     field: str
     endpoint_key: str | None = None
+    # 独立审阅 R05（SCI06）：终点实例标识——角色不是实例键，
+    # 同一试验的多条主要终点各持独立 outcome_id 与自己的评估时间
+    outcome_id: str | None = None
     source_field_name: str
     source_field_definition: str
     source_text: str

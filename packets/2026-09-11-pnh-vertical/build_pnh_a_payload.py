@@ -14,6 +14,15 @@ import sys
 
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parents[1] / "src"))
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
+from ci_workflow.reports.b.safety_concepts import (
+    CONCEPT_ATRISK_STAT,
+    classify_safety_concept,
+    safety_category_zh,
+)
+from ci_workflow.reports.b.safety_denominator_crosswalk import (
+    build_atrisk_crosswalk,
+    period_of,
+)
 from ci_workflow.renderers.portal.report_a import _native_timepoint_zh
 from collections import defaultdict
 from datetime import UTC, datetime
@@ -302,6 +311,7 @@ def main() -> None:
                     "phase": "未标注", "status": "状态未更新",
                     "regions": ["未登记地点"], "route": NA, "developer": NA,
                     "mechanism": NA, "result_status": "暂无公开关键结果",
+                    "regulatory_approval_status": None,
                 }
         dev_candidates.setdefault(pid, []).append(
             (_drug_experimental(product_name), lead if lead != NA else ""))
@@ -341,18 +351,21 @@ def main() -> None:
 
         enrollment = design.get("enrollmentInfo", {})
         count = enrollment.get("count") if isinstance(enrollment, dict) else None
-        # G10-1：A 试验模型 sample_size 强制 gt=0，登记未披露样本量的试验暂不入表，
-        # 数量在 history/limitation 显式记录，不填造假值。
-        if not isinstance(count, int) or count <= 0:
+        # 独立审阅 R13（SCI10）：未知样本量显式建模为 None 并保留适格研究，
+        # 不再为 gt=0 删除试验；计划（Anticipated）与实际（Actual）分开保存。
+        if isinstance(count, int) and count <= 0:
+            # 明确零在登记语义中几乎总是"未报告"，按未知保留并显式记录
             skipped_trials.append(nct)
-        else:
-            trials_rows.append({
-                "id": nct.lower(), "display_id": nct, "product_id": pid,
-                "name": ident.get("briefTitle", nct), "phase": phase_zh,
-                "region": trial_region, "status": status_zh,
-                "sample_size": count,
-                "treatment_sample_size": None, "role": "登记研究",
-            })
+            count = None
+        _enroll_type = str(enrollment.get("type") or "").strip() if isinstance(enrollment, dict) else ""
+        trials_rows.append({
+            "id": nct.lower(), "display_id": nct, "product_id": pid,
+            "name": ident.get("briefTitle", nct), "phase": phase_zh,
+            "region": trial_region, "status": status_zh,
+            "sample_size": count if _enroll_type.upper() != "ANTICIPATED" else None,
+            "planned_sample_size": count if _enroll_type.upper() == "ANTICIPATED" else None,
+            "treatment_sample_size": None, "role": "登记研究",
+        })
 
         results = study.get("resultsSection") or {}
         if results:
@@ -410,28 +423,27 @@ def main() -> None:
                 for gid, title in zip(om_group_ids, replacement):
                     if title:
                         group_titles[gid] = title
-            # 独立复核 A r42（issue-3）：AE 组级 atRisk 人数是分流 TEAE 行的
-            # 真实臂级分母。AE 组标识（EG*）与结局测量组标识（OG*，且按测量
-            # 重新编号）不同名，只能按归一化组标题归属；仅单一报告组的试验
-            # 才允许整试验回退，多组无匹配时不虚构分母
-            def _norm_group_title(value: object) -> str:
-                text = " ".join(str(value or "").split()).casefold()
-                text = re.sub(r"^(?:oltp|olep|ltep|tp\d+)\s*[:：_]\s*", "", text)
-                text = re.sub(r"\((?:randomized[^)]*|tp\d+|lte)\)\s*$", "", text)
-                return text.strip(" -:")
-
-            _atrisk_by_title: dict[str, int] = {}
+            # 独立审阅 R03（SCI03/04）：跨模块分母 crosswalk——每条目绑定
+            # 统计对象（serious/other/deaths 各自的 atRisk，不再 other 优先）、
+            # 期别与原始标题；标题匹配只生成候选，期别不一致或候选冲突时
+            # 分母记为未知，不借用、不 first-wins、不以单组回退吞掉冲突
+            _atrisk_rows: list[dict] = []
             for _eg in (results.get("adverseEventsModule", {}).get("eventGroups") or []):
-                _risk = _eg.get("otherNumAtRisk")
-                if not isinstance(_risk, int) or _risk <= 0:
-                    _risk = _eg.get("seriousNumAtRisk")
-                _t = _norm_group_title(_eg.get("title"))
-                if _t and isinstance(_risk, int) and _risk > 0:
-                    _atrisk_by_title.setdefault(_t, _risk)
-            _atrisk_single: int | None = (
-                next(iter(_atrisk_by_title.values()))
-                if len(_atrisk_by_title) == 1 else None
-            )
+                _eg_title = str(_eg.get("title") or "")
+                _eg_period = period_of(_eg_title)
+                for _stat_name, _risk_key in (
+                    ("serious", "seriousNumAtRisk"),
+                    ("other", "otherNumAtRisk"),
+                    ("deaths", "deathsNumAtRisk"),
+                ):
+                    _risk = _eg.get(_risk_key)
+                    if isinstance(_risk, int) and _risk > 0:
+                        _atrisk_rows.append({
+                            "module": "ae", "group_id": str(_eg.get("id") or ""),
+                            "title": _eg_title, "period": _eg_period,
+                            "stat": _stat_name, "num_at_risk": _risk,
+                        })
+            _atrisk_crosswalk = build_atrisk_crosswalk(_atrisk_rows)
             for measure in ((results.get("outcomeMeasuresModule") or {})
                             .get("outcomeMeasures") or []):
                 title = str(measure.get("title") or "").strip() or NA
@@ -506,11 +518,13 @@ def main() -> None:
                                 # 上一测量残留导致臂名错挂）；单位归一中文；
                                 # 人数类计数配 atRisk 臂级分母（分子=值本身）
                                 group_id = str(measurement.get("groupId") or "")
-                                _skey = (
-                                    "any_sae"
-                                    if re.search(r"serious\b|\bsae\b", title, re.I)
-                                    else "any_teae"
-                                )
+                                # 独立审阅 R02（SCI02）：概念分类表驱动——否定不
+                                # 命中（Non-serious 不得归 SAE），generic AE/因 AE
+                                # 停药等特定指标不冒充 any_teae；无法确认保留
+                                # specific/unknown 概念，拒判不丢数据
+                                _concept = classify_safety_concept(title)
+                                _skey = _concept if _concept in {
+                                    "any_teae", "any_sae", "death"} else _concept
                                 _unit_l = unit.strip().casefold()
                                 if _unit_l == "participants":
                                     _unit_zh = "人"
@@ -521,8 +535,14 @@ def main() -> None:
                                 else:
                                     _unit_zh = unit
                                 _div_arm = group_titles.get(group_id, group_id or "组别未登记")
-                                _div_denom = _atrisk_by_title.get(
-                                    _norm_group_title(_div_arm), _atrisk_single
+                                _div_stat = CONCEPT_ATRISK_STAT.get(_concept)
+                                _div_period = period_of(_div_arm) or period_of(title)
+                                _div_denom = (
+                                    _atrisk_crosswalk.lookup(
+                                        stat=_div_stat, period=_div_period,
+                                        title=_div_arm,
+                                    )
+                                    if _div_stat else None
                                 )
                                 _div_num: int | None = None
                                 if (
@@ -551,7 +571,7 @@ def main() -> None:
                                     "trial_id": nct.lower(),
                                     "arm": _div_arm,
                                     "value": value, "unit": _unit_zh,
-                                    "category": "治疗中出现的不良事件（登记）",
+                                    "category": safety_category_zh(_concept),
                                     "term": _measure_term(title),
                                     "term_key": _skey,
                                     "time_window": _tw_out,
@@ -838,6 +858,11 @@ def main() -> None:
         product_index[pid]["phase"] = phase
     for pid, status in product_status.items():
         product_index[pid]["status"] = status
+    # 独立审阅 R11（SCI11）：登记试验状态聚合出"已批准上市"的产品，
+    # 监管批准事实单列并显式待核验——登记状态不冒充监管证据
+    for pid, product_row in product_index.items():
+        if product_row.get("status") == "已批准上市":
+            product_row["regulatory_approval_status"] = "待核验（监管原始文件未接入，登记状态不构成批准证据）"
     # R12-④产品区域=其试验地点并集（真实派生）。
     for pid, regions in product_regions.items():
         if pid in product_index:

@@ -2579,7 +2579,10 @@ def _synthetic_status_records(
                 "role": trial.role,
                 "sample_size": trial.sample_size,
                 "treatment_sample_size": trial.treatment_sample_size,
-                "disclosure_state": "reported_value",
+                # 独立审阅 R13：未知样本量显式 not_reported，不得伪造成 reported_value
+                "disclosure_state": (
+                    "reported_value" if trial.sample_size is not None else "not_reported"
+                ),
             }
             synthetic_row = _project_record(
                 source,
@@ -2641,7 +2644,9 @@ def _trial_context_records(
             "display_label_zh": f"{trial_names.get(trial.id, trial.name)}样本量",
             "value": trial.sample_size,
             "unit": "人",
-            "disclosure_state": "reported_value",
+            "disclosure_state": (
+                "reported_value" if trial.sample_size is not None else "not_reported"
+            ),
             "status": trial.status,
             "role": trial.role,
             "phase": trial.phase,

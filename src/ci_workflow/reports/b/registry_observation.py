@@ -69,14 +69,20 @@ def indication_scope_of(rule: dict[str, Any]) -> tuple[str, ...]:
 
 
 def resolve_indication_id(name: str | None) -> str | None:
-    """把适应症中文名/英文名/缩写解析为政策 scope 标识。"""
+    """把适应症中文名/英文名/缩写/规范 ID 解析为政策 scope 标识。
+
+    独立审阅 R04（SCI05）：规范 ID（pnh/ipf/...）直接识别，不再要求
+    别名表收录自身；无法解析返回 None。"""
     if not name:
         return None
-    needle = str(name).strip().casefold().replace(" ", "")
+    needle = str(name).strip().casefold().replace(" ", "").replace("-", "")
     aliases = _load_policy().get("indication_aliases") or {}
     for scope_id, names in aliases.items():
+        canonical = str(scope_id).strip().casefold().replace(" ", "").replace("-", "")
+        if needle == canonical:
+            return scope_id
         for alias in names or ():
-            if needle == str(alias).strip().casefold().replace(" ", ""):
+            if needle == str(alias).strip().casefold().replace(" ", "").replace("-", ""):
                 return scope_id
     return None
 
@@ -110,6 +116,16 @@ def classify_registry_endpoint(
     if is_safety_domain_endpoint(text):
         return None
     resolved = resolve_indication_id(indication_id) if indication_id else None
+    if indication_id and resolved is None:
+        # 独立审阅 R04（SCI05）：提供了适应症但无法解析（未知适应症）时
+        # 只允许跨适应症共享规则，不得放行任何疾病专属规则——
+        # 与"未提供适应症"的历史全局行为显式区分
+        for rule_id, pattern, scope in scoped_family_rules():
+            if scope:
+                continue
+            if pattern.search(text):
+                return rule_id
+        return None
     for rule_id, pattern, scope in scoped_family_rules():
         if scope and resolved is not None and resolved not in scope:
             continue

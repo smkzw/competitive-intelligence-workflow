@@ -284,7 +284,25 @@ class FreshCResearchContent(BaseModel):
         return self
 
     def _validate_endpoint_timepoint_pairs(self) -> None:
-        """终点定义与评估时间共同构成临床设计语义，不得互相替代。"""
+        """终点定义与评估时间共同构成临床设计语义，不得互相替代。
+
+        独立审阅 R05（SCI06）：携带 outcome_id 的数据逐实例配对
+        （角色不是实例键）；全无实例标识的旧数据走兼容的角色集合检查。"""
+        endpoint_observations = [
+            observation
+            for observation in self.report_data.observations
+            if str(observation.field_family) == "endpoint"
+        ]
+        if any(getattr(item, "outcome_id", None) for item in endpoint_observations):
+            from ci_workflow.reports.c.endpoint_instances import (
+                validate_endpoint_timepoint_pairs,
+            )
+
+            validate_endpoint_timepoint_pairs(
+                self.report_data.observations,
+                universe_trial_ids=set(self.universe_trial_ids),
+            )
+            return
         endpoint_keys: dict[str, set[str]] = {}
         timepoint_keys: dict[str, set[str]] = {}
         for observation in self.report_data.observations:
@@ -333,11 +351,10 @@ class FreshCResearchContent(BaseModel):
                 )
 
     def _validate_design_paths(self) -> None:
+        # 独立审阅 R09（C01）：删除"候选路径不足两条"门槛——
+        # 设计先例库合同下一项完整研究即可交付，有几条先例展示几条；
+        # 旧门槛是 v1.3 全景比较时代的产物，不再约束新 C 输入
         paths = self.design_paths.candidate_paths
-        if len(paths) < 2:
-            raise FreshCPackageError(
-                "候选设计路径不足两条：只输入适应症时不得输出唯一方案"
-            )
         signatures = [path.design_signature for path in paths]
         if len(set(signatures)) != len(signatures):
             raise FreshCPackageError("候选设计路径的设计签名不得重复")

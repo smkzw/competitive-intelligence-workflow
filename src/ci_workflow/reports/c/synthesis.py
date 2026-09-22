@@ -155,9 +155,19 @@ class DesignPathSynthesisResult(BaseModel):
 
 
 def _normalize_text(value: str) -> str:
+    """检索归一：折叠标点但保留数值语义字符（独立审阅 R06 / SCI07）。
+
+    0.5 mg、5-10 mg、5.10 mg、≤/≥ 等在存储、查询、显示中不得被标点
+    折叠破坏（此前 0.5→"0 5"、5-10→"5 10"）。"""
     normalized = unicodedata.normalize("NFKC", value)
+    preserved = set("._-–—~≤≥<>%/:")
     punctuation_folded = "".join(
-        " " if unicodedata.category(character).startswith("P") else character
+        character
+        if (
+            not unicodedata.category(character).startswith("P")
+            or character in preserved
+        )
+        else " "
         for character in normalized
     )
     return " ".join(punctuation_folded.casefold().split())

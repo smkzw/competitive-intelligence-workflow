@@ -17,7 +17,8 @@
    "route": "未公开披露",
    "developer": "Wuhan Createrna Science and Technology Co., Ltd",
    "mechanism": "anti-C5",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "eculizumab",
@@ -33,7 +34,8 @@
    "route": "静脉注射",
    "developer": "Alexion Pharmaceuticals, Inc.",
    "mechanism": "单克隆抗体",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": "待核验（监管原始文件未接入，登记状态不构成批准证据）"
   },
   {
    "id": "hsk39297",
@@ -48,7 +50,8 @@
    "route": "口服",
    "developer": "Haisco Pharmaceutical Group Co., Ltd.",
    "mechanism": "anti-C5",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "cms-d017",
@@ -63,7 +66,8 @@
    "route": "口服",
    "developer": "Shenzhen Kangzhe Biotechnology Co., Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "xh-s003",
@@ -78,7 +82,8 @@
    "route": "未公开披露",
    "developer": "S-INFINITY Pharmaceuticals Co., Ltd",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "iptacopan",
@@ -94,7 +99,8 @@
    "route": "口服",
    "developer": "Novartis Pharmaceuticals",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "lfg316",
@@ -109,7 +115,8 @@
    "route": "未公开披露",
    "developer": "Novartis Pharmaceuticals",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "hrs-5965",
@@ -124,7 +131,8 @@
    "route": "口服",
    "developer": "Chengdu Suncadia Medicine Co., Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "cemdisiran",
@@ -139,7 +147,8 @@
    "route": "皮下注射",
    "developer": "Regeneron Pharmaceuticals",
    "mechanism": "anti-C5",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "pozelimab",
@@ -154,7 +163,8 @@
    "route": "静脉注射",
    "developer": "Regeneron Pharmaceuticals",
    "mechanism": "anti-C5",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "ravulizumab",
@@ -170,7 +180,8 @@
    "route": "静脉注射",
    "developer": "Alexion Pharmaceuticals, Inc.",
    "mechanism": "anti-C5",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "bcx9930",
@@ -185,7 +196,8 @@
    "route": "口服",
    "developer": "BioCryst Pharmaceuticals",
    "mechanism": "C5抑制剂",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "sb12",
@@ -200,7 +212,8 @@
    "route": "未公开披露",
    "developer": "Samsung Bioepis Co., Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "ntq5082",
@@ -215,7 +228,8 @@
    "route": "未公开披露",
    "developer": "Nanjing Chia-tai Tianqing Pharmaceutical",
    "mechanism": "小分子口服抑制剂",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "sirolimus",
@@ -230,7 +244,8 @@
    "route": "未公开披露",
    "developer": "Peking Union Medical College Hospital",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "nm8074",
@@ -245,7 +260,8 @@
    "route": "静脉注射",
    "developer": "NovelMed Therapeutics",
    "mechanism": "anti-Factor Bb",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "danicopan",
@@ -260,7 +276,8 @@
    "route": "未公开披露",
    "developer": "Alexion Pharmaceuticals, Inc.",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "coversin",
@@ -275,7 +292,8 @@
    "route": "皮下注射",
    "developer": "AKARI Therapeutics",
    "mechanism": "补体抑制剂",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "pegcetacoplan",
@@ -290,7 +308,8 @@
    "route": "皮下注射",
    "developer": "Apellis Pharmaceuticals, Inc.",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "ea5",
@@ -305,7 +324,8 @@
    "route": "静脉注射",
    "developer": "Shanghai Lanyi Therapeutics Co., Ltd.",
    "mechanism": "单克隆抗体",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "levamisole-cyclosporin-a-glucocorticoids",
@@ -320,7 +340,8 @@
    "route": "未公开披露",
    "developer": "Institute of Hematology & Blood Diseases Hospital, China",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "amy-101",
@@ -335,7 +356,8 @@
    "route": "静脉注射",
    "developer": "Amyndas Pharmaceuticals S.A.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "crovalimab",
@@ -351,7 +373,8 @@
    "route": "未公开披露",
    "developer": "Hoffmann-La Roche",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "fxs6837",
@@ -366,7 +389,8 @@
    "route": "未公开披露",
    "developer": "Shanghai Fosun Pharmaceutical Industrial Development Co. Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "elizaria",
@@ -381,7 +405,8 @@
    "route": "静脉注射",
    "developer": "AO GENERIUM",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "zilucoplan",
@@ -396,7 +421,8 @@
    "route": "皮下注射",
    "developer": "Ra Pharmaceuticals",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "vsa012",
@@ -411,7 +437,8 @@
    "route": "未公开披露",
    "developer": "Bisirna Therapeutics Pte. Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "sar443809",
@@ -426,7 +453,8 @@
    "route": "未公开披露",
    "developer": "Sanofi",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "lp-005",
@@ -441,7 +469,8 @@
    "route": "静脉注射",
    "developer": "Longbio Pharma",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "abp-959",
@@ -456,7 +485,8 @@
    "route": "静脉注射",
    "developer": "未公开披露",
    "mechanism": "未公开披露",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "lanoracopan-hydrochloride",
@@ -471,7 +501,8 @@
    "route": "未公开披露",
    "developer": "Peking Union Medical College Hospital",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "bcd-148",
@@ -486,7 +517,8 @@
    "route": "未公开披露",
    "developer": "Biocad",
    "mechanism": "单克隆抗体",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "sgb-9768",
@@ -501,7 +533,8 @@
    "route": "皮下注射",
    "developer": "Suzhou Sanegene Bio Inc.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "zaltenibart",
@@ -516,7 +549,8 @@
    "route": "静脉注射",
    "developer": "Omeros Corporation",
    "mechanism": "C5抑制剂",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "kp104",
@@ -532,7 +566,8 @@
    "route": "静脉注射",
    "developer": "Kira Pharmacenticals (US), LLC.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "hs-10542",
@@ -547,7 +582,8 @@
    "route": "未公开披露",
    "developer": "Jiangsu Hansoh Pharmaceutical Co., Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "alxn1102",
@@ -562,7 +598,8 @@
    "route": "未公开披露",
    "developer": "Alexion Pharmaceuticals, Inc.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "alxn1103",
@@ -577,7 +614,8 @@
    "route": "未公开披露",
    "developer": "未公开披露",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "tul321",
@@ -592,7 +630,8 @@
    "route": "口服",
    "developer": "Zhuhai United Laboratories Co., Ltd.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "bryostatin-1",
@@ -607,7 +646,8 @@
    "route": "静脉注射",
    "developer": "National Cancer Institute (NCI)",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "aln-cfb",
@@ -622,7 +662,8 @@
    "route": "未公开披露",
    "developer": "Regeneron Pharmaceuticals",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "sln12140",
@@ -637,7 +678,8 @@
    "route": "未公开披露",
    "developer": "Linno Pharmaceuticals, Inc.",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "adx-038",
@@ -652,7 +694,8 @@
    "route": "未公开披露",
    "developer": "ADARx Pharmaceuticals, Inc.",
    "mechanism": "anti-C5",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "bcx10013",
@@ -667,7 +710,8 @@
    "route": "未公开披露",
    "developer": "BioCryst Pharmaceuticals",
    "mechanism": "未公开披露",
-   "result_status": "暂无公开关键结果"
+   "result_status": "暂无公开关键结果",
+   "regulatory_approval_status": null
   },
   {
    "id": "alxn2050",
@@ -682,7 +726,8 @@
    "route": "未公开披露",
    "developer": "Alexion Pharmaceuticals, Inc.",
    "mechanism": "小分子口服抑制剂",
-   "result_status": "已有部分公开结果"
+   "result_status": "已有部分公开结果",
+   "regulatory_approval_status": null
   }
  ],
  "trials": [
@@ -695,6 +740,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -707,6 +753,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 73,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -719,6 +766,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 88,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -731,6 +779,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -743,6 +792,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 47,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -755,6 +805,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 40,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -767,6 +818,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 10,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -779,6 +831,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 26,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -791,6 +844,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 6,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -803,6 +857,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 7,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -815,6 +870,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 66,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -827,6 +883,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 97,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -839,6 +896,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 34,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -851,6 +909,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 19,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -863,6 +922,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -875,6 +935,7 @@
    "region": "中国",
    "status": "尚未招募",
    "sample_size": 78,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -887,6 +948,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 208,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -899,6 +961,7 @@
    "region": "中国",
    "status": "状态未更新",
    "sample_size": 40,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -911,6 +974,7 @@
    "region": "未登记地点",
    "status": "尚未招募",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -923,6 +987,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -935,6 +1000,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 9,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -947,6 +1013,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 53,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -959,6 +1026,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -971,6 +1039,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -983,6 +1052,20 @@
    "region": "中国",
    "status": "状态未更新",
    "sample_size": 120,
+   "planned_sample_size": null,
+   "treatment_sample_size": null,
+   "role": "登记研究"
+  },
+  {
+   "id": "nct06028594",
+   "display_id": "NCT06028594",
+   "product_id": "pozelimab",
+   "name": "Compassionate Use of Pozelimab and Cemdisiran Combination Therapy in Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": "未标注",
+   "region": "未登记地点",
+   "status": "不再可用",
+   "sample_size": null,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -995,6 +1078,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1007,6 +1091,7 @@
    "region": "中国",
    "status": "邀请入组中",
    "sample_size": 26,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1019,6 +1104,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 52,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1031,6 +1117,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 87,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1043,6 +1130,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1055,6 +1143,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 13,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1067,6 +1156,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 51,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1079,6 +1169,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 80,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1091,6 +1182,7 @@
    "region": "中国",
    "status": "尚未招募",
    "sample_size": 90,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1103,6 +1195,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 28,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1115,6 +1208,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 32,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1127,6 +1221,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1139,6 +1234,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 85,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1151,6 +1247,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 3,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1163,6 +1260,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 202,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1175,6 +1273,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 64,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1187,6 +1286,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 9,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1199,6 +1299,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1211,6 +1312,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 13,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1223,6 +1325,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 80,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1235,6 +1338,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 75,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1247,6 +1351,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 80,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1259,6 +1364,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 54,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1271,6 +1377,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 30,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1283,6 +1390,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 42,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1295,6 +1403,7 @@
    "region": "未登记地点",
    "status": "尚未招募",
    "sample_size": 90,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1307,6 +1416,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 1,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1319,6 +1429,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 75,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1331,6 +1442,7 @@
    "region": "未登记地点",
    "status": "尚未招募",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1343,6 +1455,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 132,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1355,6 +1468,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 120,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1367,6 +1481,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 168,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1379,6 +1494,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 62,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1391,6 +1507,7 @@
    "region": "未登记地点",
    "status": "进行中（不招募）",
    "sample_size": 260,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1403,6 +1520,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 16,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1415,6 +1533,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 23,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1427,6 +1546,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 137,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1439,6 +1559,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 36,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1451,6 +1572,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 28,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1463,6 +1585,7 @@
    "region": "中国",
    "status": "尚未招募",
    "sample_size": 78,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1475,6 +1598,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 25,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1487,6 +1611,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 210,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1499,6 +1624,7 @@
    "region": "中国",
    "status": "尚未招募",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1511,6 +1637,7 @@
    "region": "中国",
    "status": "尚未招募",
    "sample_size": 30,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1523,6 +1650,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 272,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1535,6 +1663,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 15,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1547,6 +1676,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 16,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1559,6 +1689,20 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 13,
+   "planned_sample_size": null,
+   "treatment_sample_size": null,
+   "role": "登记研究"
+  },
+  {
+   "id": "nct05982938",
+   "display_id": "NCT05982938",
+   "product_id": "danicopan",
+   "name": "Danicopan Early Access Program",
+   "phase": "未标注",
+   "region": "境外",
+   "status": "可用",
+   "sample_size": null,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1571,6 +1715,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 80,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1583,6 +1728,7 @@
    "region": "中国",
    "status": "状态未更新",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1595,6 +1741,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 76,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1607,6 +1754,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 59,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1619,6 +1767,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 35,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1631,6 +1780,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1643,6 +1793,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 86,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1655,6 +1806,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 44,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1667,6 +1819,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 26,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1679,6 +1832,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1691,6 +1845,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1703,6 +1858,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 139,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1715,6 +1871,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 190,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1727,6 +1884,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 25,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1739,6 +1897,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1751,6 +1910,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 10,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1763,6 +1923,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 16,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1775,6 +1936,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1787,6 +1949,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 4,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1799,6 +1962,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 68,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1811,6 +1975,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1823,6 +1988,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1835,6 +2001,7 @@
    "region": "未登记地点",
    "status": "尚未招募",
    "sample_size": 6,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1847,6 +2014,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 19,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1859,6 +2027,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 20,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1871,6 +2040,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 94,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1883,6 +2053,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 202,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1895,6 +2066,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 3,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1907,6 +2079,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 35,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1919,6 +2092,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 202,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1931,6 +2105,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 8,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1943,6 +2118,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 47,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1955,6 +2131,20 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 18,
+   "planned_sample_size": null,
+   "treatment_sample_size": null,
+   "role": "登记研究"
+  },
+  {
+   "id": "nct05222412",
+   "display_id": "NCT05222412",
+   "product_id": "iptacopan",
+   "name": "Managed Access Programs for LNP023, Iptacopan",
+   "phase": "未标注",
+   "region": "未登记地点",
+   "status": "可用",
+   "sample_size": null,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1967,6 +2157,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1979,6 +2170,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 6,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -1991,6 +2183,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 26,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2003,6 +2196,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 39,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2015,6 +2209,7 @@
    "region": "未登记地点",
    "status": "尚未招募",
    "sample_size": 40,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2027,6 +2222,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 63,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2039,6 +2235,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 18,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2051,6 +2248,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 12,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2063,6 +2261,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 165,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2075,6 +2274,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2087,6 +2287,7 @@
    "region": "未登记地点",
    "status": "已完成",
    "sample_size": 29,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2099,6 +2300,7 @@
    "region": "中国",
    "status": "已完成",
    "sample_size": 40,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2111,6 +2313,7 @@
    "region": "境外",
    "status": "进行中（不招募）",
    "sample_size": 200,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2123,6 +2326,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2135,6 +2339,7 @@
    "region": "中国",
    "status": "进行中（不招募）",
    "sample_size": 35,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2147,6 +2352,7 @@
    "region": "未登记地点",
    "status": "尚未招募",
    "sample_size": 10,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2159,6 +2365,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 10,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2171,6 +2378,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 1,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2183,6 +2391,7 @@
    "region": "中国",
    "status": "状态未更新",
    "sample_size": 16,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2195,6 +2404,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 75,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2207,6 +2417,20 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 24,
+   "planned_sample_size": null,
+   "treatment_sample_size": null,
+   "role": "登记研究"
+  },
+  {
+   "id": "nct00438789",
+   "display_id": "NCT00438789",
+   "product_id": "eculizumab",
+   "name": "The Paroxysmal Nocturnal Hemoglobinuria Early Access Treatment Protocol",
+   "phase": "未标注",
+   "region": "境外",
+   "status": "已批准上市",
+   "sample_size": null,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2219,6 +2443,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 187,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2231,6 +2456,20 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 120,
+   "planned_sample_size": null,
+   "treatment_sample_size": null,
+   "role": "登记研究"
+  },
+  {
+   "id": "nct00112983",
+   "display_id": "NCT00112983",
+   "product_id": "eculizumab",
+   "name": "Eculizumab in Treating Patients With Paroxysmal Nocturnal Hemoglobinuria",
+   "phase": "III期",
+   "region": "境外",
+   "status": "已完成",
+   "sample_size": null,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2243,6 +2482,7 @@
    "region": "境外",
    "status": "招募中",
    "sample_size": 50,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2255,6 +2495,7 @@
    "region": "境外",
    "status": "已完成",
    "sample_size": 8,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2267,6 +2508,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 15,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2279,6 +2521,7 @@
    "region": "境外",
    "status": "已终止",
    "sample_size": 29,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2291,6 +2534,7 @@
    "region": "中国",
    "status": "招募中",
    "sample_size": 24,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   },
@@ -2303,6 +2547,7 @@
    "region": "未登记地点",
    "status": "已完成",
    "sample_size": 27,
+   "planned_sample_size": null,
    "treatment_sample_size": null,
    "role": "登记研究"
   }
@@ -49146,7 +49391,7 @@
    "term_key": "any_teae",
    "time_window": "至第225天",
    "numerator": 6,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-8",
@@ -49160,7 +49405,7 @@
    "term_key": "any_teae",
    "time_window": "第1天 至第52周 开放扩展期",
    "numerator": 5,
-   "denominator": 6
+   "denominator": 5.0
   },
   {
    "row_id": "safe-9",
@@ -49230,7 +49475,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 7,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-14",
@@ -49244,7 +49489,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 2,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-15",
@@ -49258,7 +49503,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 4,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-16",
@@ -49272,7 +49517,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 1,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-17",
@@ -49286,7 +49531,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 2,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-18",
@@ -49300,7 +49545,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 2,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-19",
@@ -49314,7 +49559,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 3,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-20",
@@ -49328,7 +49573,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 2,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-21",
@@ -49342,7 +49587,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药 （第0天）至随访结束 （第20周 （8周 后 治疗结束））",
    "numerator": 0,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-22",
@@ -49494,7 +49739,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药起 至3周 末次给药后 （第147周）",
    "numerator": 7,
-   "denominator": 7
+   "denominator": 7.0
   },
   {
    "row_id": "safe-33",
@@ -49673,10 +49918,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至第26周",
    "numerator": 21,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-46",
@@ -49687,10 +49932,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至第26周",
    "numerator": 0,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-47",
@@ -49704,7 +49949,7 @@
    "term_key": "any_teae",
    "time_window": "基线 至第26周",
    "numerator": 13,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-48",
@@ -49718,7 +49963,7 @@
    "term_key": "any_teae",
    "time_window": "基线 至第26周",
    "numerator": 6,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-49",
@@ -49732,7 +49977,7 @@
    "term_key": "any_teae",
    "time_window": "基线 至第26周",
    "numerator": 2,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-50",
@@ -49741,12 +49986,10 @@
    "arm": "REGN3918",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "未归类安全域指标（登记）",
    "term": "Number of Participants With Treatment-emergent Anti-Drug Antibodies…",
-   "term_key": "any_teae",
-   "time_window": "基线 至第26周",
-   "numerator": 0,
-   "denominator": 24
+   "term_key": "unknown",
+   "time_window": "基线 至第26周"
   },
   {
    "row_id": "safe-51",
@@ -49900,7 +50143,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天 至30天 末次给药后 （up至约 100周）",
    "numerator": 27,
-   "denominator": 28
+   "denominator": 28.0
   },
   {
    "row_id": "safe-62",
@@ -49970,7 +50213,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-67",
@@ -49984,7 +50227,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 2,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-68",
@@ -49998,7 +50241,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-69",
@@ -50012,7 +50255,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-70",
@@ -50026,7 +50269,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-71",
@@ -50040,7 +50283,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-72",
@@ -50054,7 +50297,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-73",
@@ -50068,7 +50311,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-74",
@@ -50082,7 +50325,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-75",
@@ -50096,7 +50339,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-76",
@@ -50110,7 +50353,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-77",
@@ -50124,7 +50367,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-78",
@@ -50138,7 +50381,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-79",
@@ -50152,7 +50395,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-80",
@@ -50166,7 +50409,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-81",
@@ -50180,7 +50423,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-82",
@@ -50194,7 +50437,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-83",
@@ -50208,7 +50451,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 2,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-84",
@@ -50222,7 +50465,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-85",
@@ -50236,7 +50479,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 6,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-86",
@@ -50250,7 +50493,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-87",
@@ -50264,7 +50507,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-88",
@@ -50278,7 +50521,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-89",
@@ -50292,7 +50535,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 4,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-90",
@@ -50306,7 +50549,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-91",
@@ -50320,7 +50563,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-92",
@@ -50334,7 +50577,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-93",
@@ -50348,7 +50591,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 2,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-94",
@@ -50362,7 +50605,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-95",
@@ -50376,7 +50619,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-96",
@@ -50390,7 +50633,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-97",
@@ -50404,7 +50647,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-98",
@@ -50418,7 +50661,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-99",
@@ -50432,7 +50675,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-100",
@@ -50446,7 +50689,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-101",
@@ -50460,7 +50703,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-102",
@@ -50474,7 +50717,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-103",
@@ -50488,7 +50731,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-104",
@@ -50502,7 +50745,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-105",
@@ -50516,7 +50759,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-106",
@@ -50530,7 +50773,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-107",
@@ -50544,7 +50787,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 2,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-108",
@@ -50558,7 +50801,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-109",
@@ -50572,7 +50815,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 2,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-110",
@@ -50586,7 +50829,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 1,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-111",
@@ -50600,7 +50843,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-112",
@@ -50614,7 +50857,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-113",
@@ -50628,7 +50871,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 4,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-114",
@@ -50642,7 +50885,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 1
+   "denominator": 1.0
   },
   {
    "row_id": "safe-115",
@@ -50656,7 +50899,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-116",
@@ -50670,7 +50913,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 2
+   "denominator": 2.0
   },
   {
    "row_id": "safe-117",
@@ -50684,7 +50927,7 @@
    "term_key": "any_teae",
    "time_window": "自首次给药至末次给药后30天 （第1-3组： 至58天；第4组： 至759天）.",
    "numerator": 0,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-118",
@@ -51433,12 +51676,10 @@
    "arm": "Placebo - Single Ascending Dose",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 6,
-   "denominator": 8
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-173",
@@ -51447,12 +51688,10 @@
    "arm": "ALN-CC5 50mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-174",
@@ -51461,12 +51700,10 @@
    "arm": "ALN-CC5 50mg (Japanese) - Single Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-175",
@@ -51475,12 +51712,10 @@
    "arm": "ALN-CC5 200mg - Single Ascending Dose",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 2,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-176",
@@ -51489,12 +51724,10 @@
    "arm": "ALN-CC5 200mg (Japanese) - Single Ascending Dose",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 2,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-177",
@@ -51503,12 +51736,10 @@
    "arm": "ALN-CC5 400mg - Single Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-178",
@@ -51517,12 +51748,10 @@
    "arm": "ALN-CC5 600mg - Single Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-179",
@@ -51531,12 +51760,10 @@
    "arm": "ALN-CC5 600mg (Japanese) - Single Ascending Dose",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 2,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-180",
@@ -51545,12 +51772,10 @@
    "arm": "ALN-CC5 900mg - Single Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-181",
@@ -51559,12 +51784,10 @@
    "arm": "Placebo - Multiple Ascending Dose",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 6,
-   "denominator": 6
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-182",
@@ -51573,12 +51796,10 @@
    "arm": "ALN-CC5 100mg Weekly - Multiple Ascending Dose",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 2,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-183",
@@ -51587,12 +51808,10 @@
    "arm": "ALN-CC5 200mg Weekly - Multiple Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-184",
@@ -51601,12 +51820,10 @@
    "arm": "ALN-CC5 400mg Weekly - Multiple Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-185",
@@ -51615,12 +51832,10 @@
    "arm": "ALN-CC5 600mg Biweekly - Multiple Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-186",
@@ -51629,12 +51844,10 @@
    "arm": "ALN-CC5 200mg Weekly/Biweekly - Multiple Ascending Dose",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 2,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-187",
@@ -51643,12 +51856,10 @@
    "arm": "ALN-CC5 200mg Weekly/Monthly - Multiple Ascending Dose",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-188",
@@ -51657,12 +51868,10 @@
    "arm": "ALN-CC5 Multiple Dose - Eculizumab Treated",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-189",
@@ -51671,12 +51880,10 @@
    "arm": "ALN-CC5 Multiple Dose - Eculizumab Naive",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 3,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-190",
@@ -51685,12 +51892,10 @@
    "arm": "Placebo - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 8
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-191",
@@ -51699,12 +51904,10 @@
    "arm": "ALN-CC5 50mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-192",
@@ -51713,12 +51916,10 @@
    "arm": "ALN-CC5 50mg (Japanese) - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-193",
@@ -51727,12 +51928,10 @@
    "arm": "ALN-CC5 200mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-194",
@@ -51741,12 +51940,10 @@
    "arm": "ALN-CC5 200mg (Japanese) - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-195",
@@ -51755,12 +51952,10 @@
    "arm": "ALN-CC5 400mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-196",
@@ -51769,12 +51964,10 @@
    "arm": "ALN-CC5 600mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-197",
@@ -51783,12 +51976,10 @@
    "arm": "ALN-CC5 600mg (Japanese) - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-198",
@@ -51797,12 +51988,10 @@
    "arm": "ALN-CC5 900mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-199",
@@ -51811,12 +52000,10 @@
    "arm": "Placebo - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 6
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-200",
@@ -51825,12 +52012,10 @@
    "arm": "ALN-CC5 100mg Weekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-201",
@@ -51839,12 +52024,10 @@
    "arm": "ALN-CC5 200mg Weekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-202",
@@ -51853,12 +52036,10 @@
    "arm": "ALN-CC5 400mg Weekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-203",
@@ -51867,12 +52048,10 @@
    "arm": "ALN-CC5 600mg Biweekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-204",
@@ -51881,12 +52060,10 @@
    "arm": "ALN-CC5 200mg Weekly/Biweekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-205",
@@ -51895,12 +52072,10 @@
    "arm": "ALN-CC5 200mg Weekly/Monthly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-206",
@@ -51909,12 +52084,10 @@
    "arm": "ALN-CC5 Multiple Dose - Eculizumab Treated",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-207",
@@ -51923,12 +52096,10 @@
    "arm": "ALN-CC5 Multiple Dose - Eculizumab Naive",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-208",
@@ -51937,12 +52108,10 @@
    "arm": "Placebo - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 8
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-209",
@@ -51951,12 +52120,10 @@
    "arm": "ALN-CC5 50mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-210",
@@ -51965,12 +52132,10 @@
    "arm": "ALN-CC5 50mg (Japanese) - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-211",
@@ -51979,12 +52144,10 @@
    "arm": "ALN-CC5 200mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-212",
@@ -51993,12 +52156,10 @@
    "arm": "ALN-CC5 200mg (Japanese) - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-213",
@@ -52007,12 +52168,10 @@
    "arm": "ALN-CC5 400mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-214",
@@ -52021,12 +52180,10 @@
    "arm": "ALN-CC5 600mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-215",
@@ -52035,12 +52192,10 @@
    "arm": "ALN-CC5 600mg (Japanese) - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-216",
@@ -52049,12 +52204,10 @@
    "arm": "ALN-CC5 900mg - Single Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-217",
@@ -52063,12 +52216,10 @@
    "arm": "Placebo - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 6
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-218",
@@ -52077,12 +52228,10 @@
    "arm": "ALN-CC5 100mg Weekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-219",
@@ -52091,12 +52240,10 @@
    "arm": "ALN-CC5 200mg Weekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-220",
@@ -52105,12 +52252,10 @@
    "arm": "ALN-CC5 400mg Weekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-221",
@@ -52119,12 +52264,10 @@
    "arm": "ALN-CC5 600mg Biweekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-222",
@@ -52133,12 +52276,10 @@
    "arm": "ALN-CC5 200mg Weekly/Biweekly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-223",
@@ -52147,12 +52288,10 @@
    "arm": "ALN-CC5 200mg Weekly/Monthly - Multiple Ascending Dose",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-224",
@@ -52161,12 +52300,10 @@
    "arm": "ALN-CC5 Multiple Dose - Eculizumab Treated",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-225",
@@ -52175,12 +52312,10 @@
    "arm": "ALN-CC5 Multiple Dose - Eculizumab Naive",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number of Participants With Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天",
-   "numerator": 0,
-   "denominator": 3
+   "term_key": "generic_ae",
+   "time_window": "A部分： 至第658天；B部分： 至第532天；C部分： 至第280天"
   },
   {
    "row_id": "safe-226",
@@ -52866,7 +53001,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 2,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-275",
@@ -52880,7 +53015,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 18,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-276",
@@ -52894,7 +53029,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 2,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-277",
@@ -52908,7 +53043,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 9,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-278",
@@ -52922,7 +53057,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 1,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-279",
@@ -52936,7 +53071,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 6,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-280",
@@ -52950,7 +53085,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 1,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-281",
@@ -52964,7 +53099,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 2,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-282",
@@ -52978,7 +53113,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 0,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-283",
@@ -52992,7 +53127,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 1,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-284",
@@ -53006,7 +53141,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 0,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-285",
@@ -53020,7 +53155,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 3,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-286",
@@ -53034,7 +53169,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 2,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-287",
@@ -53048,7 +53183,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 8,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-288",
@@ -53062,7 +53197,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 0,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-289",
@@ -53076,7 +53211,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 5,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-290",
@@ -53090,7 +53225,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 0,
-   "denominator": 3
+   "denominator": 3.0
   },
   {
    "row_id": "safe-291",
@@ -53104,7 +53239,7 @@
    "term_key": "any_teae",
    "time_window": "首次给药（第1天）后至30天、up至约 563天.",
    "numerator": 1,
-   "denominator": 20
+   "denominator": 20.0
   },
   {
    "row_id": "safe-292",
@@ -53174,7 +53309,7 @@
    "term_key": "any_teae",
    "time_window": "基线 至第64周",
    "numerator": 23,
-   "denominator": 25
+   "denominator": 25.0
   },
   {
    "row_id": "safe-297",
@@ -53183,12 +53318,10 @@
    "arm": "Eculizumab",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "未归类安全域指标（登记）",
    "term": "Number of Participants With Treatment-emergent Antidrug Antibodies…",
-   "term_key": "any_teae",
-   "time_window": "基线 至第64周",
-   "numerator": 0,
-   "denominator": 25
+   "term_key": "unknown",
+   "time_window": "基线 至第64周"
   },
   {
    "row_id": "safe-298",
@@ -53953,12 +54086,12 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 2,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-351",
@@ -53967,12 +54100,12 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 7.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 7,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-352",
@@ -53981,12 +54114,12 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 4.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 4,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-353",
@@ -53995,12 +54128,12 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 6,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-354",
@@ -54009,12 +54142,12 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 1,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-355",
@@ -54023,12 +54156,12 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 1,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-356",
@@ -54037,12 +54170,12 @@
    "arm": "24-Week Treatment Period: Danicopan + Eculizumab",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 1,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-357",
@@ -54051,12 +54184,12 @@
    "arm": "LTE Period: Danicopan + Eculizumab",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Number Of Participants With Serious Adverse Events (SAEs), Grade 3 And…",
    "term_key": "any_sae",
    "time_window": "第1天 （给药后） 至 研究结束 （最长暴露1631天）",
    "numerator": 0,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-358",
@@ -54374,7 +54507,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 3,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-382",
@@ -54388,7 +54521,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 2,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-383",
@@ -54402,7 +54535,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 1,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-384",
@@ -54416,7 +54549,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 0,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-385",
@@ -54430,7 +54563,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 2,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-386",
@@ -54444,7 +54577,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 0,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-387",
@@ -54458,7 +54591,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 1,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-388",
@@ -54472,7 +54605,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 0,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-389",
@@ -54486,7 +54619,7 @@
    "term_key": "any_teae",
    "time_window": "自第1天至末次给药后30天 （约 56周）",
    "numerator": 0,
-   "denominator": 4
+   "denominator": 4.0
   },
   {
    "row_id": "safe-390",
@@ -54645,7 +54778,7 @@
    "unit": "%",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Percentage of Participants With Serious TEAEs",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自第1天 至 末次研究访视 （至第49个月）"
   },
   {
@@ -54657,7 +54790,7 @@
    "unit": "%",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Percentage of Participants With Serious TEAEs",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自第1天 至 末次研究访视 （至第49个月）"
   },
   {
@@ -54669,7 +54802,7 @@
    "unit": "%",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Percentage of Participants With Serious TEAEs",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自第1天 至 末次研究访视 （至第49个月）"
   },
   {
@@ -54763,7 +54896,7 @@
    "arm": "Pozelimab and Cemdisiran",
    "value": 0.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Incidence of Treatment Emergent Serious Adverse Events (SAEs)",
    "term_key": "any_sae",
    "time_window": "至第29周"
@@ -54775,7 +54908,7 @@
    "arm": "Anti-C5 Standard-of-care",
    "value": 0.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Incidence of Treatment Emergent Serious Adverse Events (SAEs)",
    "term_key": "any_sae",
    "time_window": "至第29周"
@@ -55005,10 +55138,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至4.5年",
    "numerator": 8,
-   "denominator": 8
+   "denominator": 8.0
   },
   {
    "row_id": "safe-429",
@@ -55019,10 +55152,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至4.5年",
    "numerator": 3,
-   "denominator": 8
+   "denominator": 8.0
   },
   {
    "row_id": "safe-430",
@@ -55033,10 +55166,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至4.5年",
    "numerator": 2,
-   "denominator": 8
+   "denominator": 8.0
   },
   {
    "row_id": "safe-431",
@@ -55047,10 +55180,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至4.5年",
    "numerator": 0,
-   "denominator": 8
+   "denominator": 8.0
   },
   {
    "row_id": "safe-432",
@@ -55061,10 +55194,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-Emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至4.5年",
    "numerator": 0,
-   "denominator": 8
+   "denominator": 8.0
   },
   {
    "row_id": "safe-433",
@@ -55327,10 +55460,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
-   "denominator": 10
+   "denominator": 10.0
   },
   {
    "row_id": "safe-452",
@@ -55341,10 +55474,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
-   "denominator": 10
+   "denominator": 10.0
   },
   {
    "row_id": "safe-453",
@@ -55355,10 +55488,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
-   "denominator": 10
+   "denominator": 10.0
   },
   {
    "row_id": "safe-454",
@@ -55369,10 +55502,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Serious Adverse Events (SAEs), Grade 3 And Grade 4 Treatment-emergent…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "首次给药后（第1天）至末次给药后14天 （至第104天）",
    "numerator": 1,
-   "denominator": 10
+   "denominator": 10.0
   },
   {
    "row_id": "safe-455",
@@ -55409,9 +55542,9 @@
    "arm": "Coversin",
    "value": 2.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number and Type of Adverse Events (AE)",
-   "term_key": "any_teae",
+   "term_key": "generic_ae",
    "time_window": "2年"
   },
   {
@@ -55421,9 +55554,9 @@
    "arm": "Coversin",
    "value": 20.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number and Type of Adverse Events (AE)",
-   "term_key": "any_teae",
+   "term_key": "generic_ae",
    "time_window": "2年"
   },
   {
@@ -55433,9 +55566,9 @@
    "arm": "Coversin",
    "value": 13.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number and Type of Adverse Events (AE)",
-   "term_key": "any_teae",
+   "term_key": "generic_ae",
    "time_window": "2年"
   },
   {
@@ -55445,9 +55578,9 @@
    "arm": "Coversin",
    "value": 1.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number and Type of Adverse Events (AE)",
-   "term_key": "any_teae",
+   "term_key": "generic_ae",
    "time_window": "2年"
   },
   {
@@ -55457,9 +55590,9 @@
    "arm": "Coversin",
    "value": 1.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number and Type of Adverse Events (AE)",
-   "term_key": "any_teae",
+   "term_key": "generic_ae",
    "time_window": "2年"
   },
   {
@@ -55469,9 +55602,9 @@
    "arm": "Coversin",
    "value": 18.0,
    "unit": "例",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Number and Type of Adverse Events (AE)",
-   "term_key": "any_teae",
+   "term_key": "generic_ae",
    "time_window": "2年"
   },
   {
@@ -55511,10 +55644,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至第104周",
    "numerator": 15,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-466",
@@ -55525,10 +55658,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs)…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "基线 至第104周",
    "numerator": 2,
-   "denominator": 24
+   "denominator": 24.0
   },
   {
    "row_id": "safe-467",
@@ -55537,12 +55670,10 @@
    "arm": "REGN3918",
    "value": 0.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "未归类安全域指标（登记）",
    "term": "Number of Participants With Treatment-emergent Anti-Drug Antibodies…",
-   "term_key": "any_teae",
-   "time_window": "基线 至第104周",
-   "numerator": 0,
-   "denominator": 24
+   "term_key": "unknown",
+   "time_window": "基线 至第104周"
   },
   {
    "row_id": "safe-468",
@@ -55579,12 +55710,10 @@
    "arm": "Eculizumab",
    "value": 182.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "不良事件（登记）",
    "term": "Incidence of Treatment-emergent Adverse Events",
-   "term_key": "any_teae",
-   "time_window": "From time of consent to a maximum of 2.5 years of study treatment（登记原文，未译）",
-   "numerator": 182,
-   "denominator": 187
+   "term_key": "generic_ae",
+   "time_window": "From time of consent to a maximum of 2.5 years of study treatment（登记原文，未译）"
   },
   {
    "row_id": "safe-471",
@@ -55621,12 +55750,10 @@
    "arm": "rVA576",
    "value": 14.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 14,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-474",
@@ -55635,12 +55762,10 @@
    "arm": "rVA576",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 3,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-475",
@@ -55649,12 +55774,10 @@
    "arm": "rVA576",
    "value": 7.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 7,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-476",
@@ -55663,12 +55786,10 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 6,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-477",
@@ -55677,12 +55798,10 @@
    "arm": "rVA576",
    "value": 4.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 4,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-478",
@@ -55691,12 +55810,10 @@
    "arm": "rVA576",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 3,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-479",
@@ -55705,12 +55822,10 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 6,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-480",
@@ -55719,12 +55834,10 @@
    "arm": "rVA576",
    "value": 4.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 4,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-481",
@@ -55733,12 +55846,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-482",
@@ -55747,12 +55858,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-483",
@@ -55761,12 +55870,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-484",
@@ -55775,12 +55882,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-485",
@@ -55789,12 +55894,10 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 2,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-486",
@@ -55803,12 +55906,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-487",
@@ -55817,12 +55918,10 @@
    "arm": "rVA576",
    "value": 3.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 3,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-488",
@@ -55831,12 +55930,10 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 6,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-489",
@@ -55845,12 +55942,10 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 2,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-490",
@@ -55859,12 +55954,10 @@
    "arm": "rVA576",
    "value": 6.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 6,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-491",
@@ -55873,12 +55966,10 @@
    "arm": "rVA576",
    "value": 5.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 5,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-492",
@@ -55887,12 +55978,10 @@
    "arm": "rVA576",
    "value": 7.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 7,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-493",
@@ -55901,12 +55990,10 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 2,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-494",
@@ -55915,12 +56002,10 @@
    "arm": "rVA576",
    "value": 10.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 10,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-495",
@@ -55929,12 +56014,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-496",
@@ -55943,12 +56026,10 @@
    "arm": "rVA576",
    "value": 2.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 2,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-497",
@@ -55957,12 +56038,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-498",
@@ -55971,12 +56050,10 @@
    "arm": "rVA576",
    "value": 1.0,
    "unit": "人",
-   "category": "治疗中出现的不良事件（登记）",
+   "category": "严重不良事件（登记）",
    "term": "Long Term Safety and Efficacy of rVA576 (Coversin) Therapy Assessed by…",
-   "term_key": "any_teae",
-   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）",
-   "numerator": 1,
-   "denominator": 15
+   "term_key": "any_sae",
+   "time_window": "入组时及此后每3个月、研究期内 （约 3年、5个月）"
   },
   {
    "row_id": "safe-499",
@@ -56015,10 +56092,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 12,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-502",
@@ -56029,10 +56106,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 10,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-503",
@@ -56043,10 +56120,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 6,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-504",
@@ -56057,10 +56134,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 7,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-505",
@@ -56071,10 +56148,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 5,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-506",
@@ -56085,10 +56162,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 2,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-507",
@@ -56099,10 +56176,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 1,
-   "denominator": 12
+   "denominator": 12.0
   },
   {
    "row_id": "safe-508",
@@ -56113,10 +56190,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 1,
-   "denominator": 11
+   "denominator": 11.0
   },
   {
    "row_id": "safe-509",
@@ -56127,10 +56204,10 @@
    "unit": "人",
    "category": "治疗中出现的不良事件（登记）",
    "term": "Number of Participants With Treatment-emergent Adverse Events (TEAEs),…",
-   "term_key": "any_sae",
+   "term_key": "any_teae",
    "time_window": "自首次给药起 至第217周",
    "numerator": 0,
-   "denominator": 6
+   "denominator": 6.0
   },
   {
    "row_id": "safe-510",
@@ -56712,7 +56789,7 @@
    "product_id": "my008211a",
    "status": "登记检索完成",
    "date": "2026-09-06",
-   "observation": "CT.gov 当前记录 189 条：135 条试验入表；5 条因未披露样本量未入试验表（NCT：NCT06028594、NCT05982938、NCT05222412、NCT00438789、NCT00112983）；49 条无独立药物干预未产出实体（明细见派生记录）；联合治疗关系受载荷单产品字段限制；中国路线 访问受阻已如实记档；监管/专利来源待接入"
+   "observation": "CT.gov 当前记录 189 条：140 条试验入表；0 条因未披露样本量未入试验表（NCT：）；49 条无独立药物干预未产出实体（明细见派生记录）；联合治疗关系受载荷单产品字段限制；中国路线 访问受阻已如实记档；监管/专利来源待接入"
   }
  ],
  "sources": [

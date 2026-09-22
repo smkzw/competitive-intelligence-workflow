@@ -237,7 +237,9 @@
             color: seriesColor
           },
           label: {
-            show: series[0] && series[0].data && series[0].data.length <= 12,
+            // 独立审阅 R08（UI01）：标签策略按当前显示类别数判定；
+            // 原 series[0] 自引用在首系列构建时恒为 undefined，首系列标签被吞
+            show: categories.length <= 12,
             position: value < 0 ? "insideBottom" : "top",
             formatter: String(value),
             color: value < 0 ? "#FFFFFF" : "#0F1115",

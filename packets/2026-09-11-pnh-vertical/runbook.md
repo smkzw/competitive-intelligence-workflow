@@ -2635,3 +2635,22 @@ IgAN（grok build/grok-4.6）与 UC（cursor/default）两个测试节点在 /tm
 - **C r40 其余**：②消歧键去掉 value（同名不同测定也获序号）+序号含义图例（页面导语：登记定义N=按登记原文顺序的条目编号，非排名）；③聚合单元格"共N条明细"→前置"〔本格聚合N条登记明细〕"显式分隔；④design summary NCT+dedup 已在 2ca752b（验证随 v96 渲染）；⑤人群柱图柱值恒 1——**未修**（需数据级语义决策：population 页每试验仅 1 条为真实形态，改为计数无区分度；留 r41 复核定夺）；⑥入排残片过滤维持 v95 已实施口径。
 - **验证**：PYTHONHASHSEED=0 全程；审计包→三包 submit **ACCEPTED**（0 row_id 碰撞）→ project run 完成 run_a5d0ecde691668514b50b83d；A 56 / B 70 / C 18 页渲染，抽检通过。
 - **v96 未含/移交下一轮**：①C r40 ⑤人群柱图语义；②矩阵空态 Playwright 运行时核查（term_key/derived-rate/尺寸降级链——渲染层修复需浏览器实测气泡数）；③三路复核 r43/r57/r41 stagger 派发（派发令牌与 reviewer 绑定按追记 61 同流程）；④收包后全 accepted → accept-visual ×3 → PNH 闭环 → 横向扩展。
+
+## 追记 66：GPT Pro 专家审阅纠偏（R01–R13）——WP0/WP1 完成 + v97 全链
+- **审阅包**：`/tmp/ci_v96_review/CI_workflow_v96_review/`（REVIEW.md 13 项缺陷、AGENT_NEXT.md 7 工作包、ACCEPTANCE.md 36 项验收；基线 d1909b8）。
+- **主线纠偏（采纳）**：停止"全页复核→v97→再全页复核"症状循环；验收单位改为"数据不变量修复 + 真实用户操作链"。本轮执行 WP0（回归证据）+ WP1（科学身份与安全性不变量）。
+- **WP0 基线**：unit+contract 1050 过；既有失败 2 项（均为脏树问题，非本轮引入）：①test_page_catalogs C.yaml evidence-limitations 页与冻结集不同步 ②隔离安装包 portal.css 摘要与未提交资产不一致。
+- **R01（SCI01 绿）**：EfficacyRow 三个 validator 合并为唯一披露不变量——reported_zero 必须显式 0（缺失拒绝），REPORTED_VALUE 必须有限数，其余状态禁数值；同族 gates/models.py 与 domain/facts.py 检查确认本已正确。
+- **R02（SCI02 绿）**：新增 `src/ci_workflow/reports/b/safety_concepts.py` 表驱动分类器——否定剥离先行（non-serious 不命中 SAE），any/specific 分层（generic AE/因 AE 停药/治疗相关/3级+ 独立概念键，不冒充 any_teae），拒判不丢数据（specific_ae/unknown 描述性保留）。渲染器概念标签扩展 + 类别"（登记）"后缀容错匹配。载荷重分类：any_teae 211→146（61 行诚实化为 generic_ae、3 行 unknown）。
+- **R03（SCI03/04 绿）**：新增 `safety_denominator_crosswalk.py`——分母条目绑定统计对象（serious/other/deaths 各自 atRisk，废除 other 优先）、期别（TP1/TP2/OLTP/OLEP/LTE）、原始标题；标题匹配只产候选，期别不一致/候选冲突→未知（禁借用、禁 first-wins、禁单组回退）；人时与人数量纲互斥。构建器接入。
+- **R04（SCI05 绿）**：resolve_indication_id 接受规范 ID（pnh/ipf/...直接识别）；classify_registry_endpoint 区分"未提供"（历史全局）与"提供但未知"（收缩到共享规则，不解锁疾病专属）。
+- **R05（SCI06 绿）**：DesignObservation 增 outcome_id；新增 `reports/c/endpoint_instances.py`（实例构建+逐实例配对校验+同 id 异定义冲突）；fresh_c 校验实例级（旧数据兼容角色集合检查）；C 构建器主/次终点逐条携带实例标识，主终点时间点行移入循环（NCT03181633 的 9 条主终点此前只录 1 条时间点，现全量配对）。
+- **R06（SCI07 绿）**：synthesis._normalize_text 保留数值语义字符（.-%/:≤≥），0.5/5-10/5.10 不再折叠为 "0 5"/"5 10"。
+- **R07（SCI08/09 绿，integration 4 项）**：摄取 version_id 改完整载荷摘要（实体/字段/原文/规范值/披露状态/片段任一变化→新版本）；INSERT OR IGNORE 改查后插入+同 id 异载荷显式冲突；事实自带精确 locator 时落逐事实片段（不再共用整篇全文片段）。存储层 append-only 触发器验证。
+- **R08（UI01 代码面）**：charts.js 两副本——首系列标签策略 `series[0]` 自引用（恒 undefined）改按当前类别数判定。
+- **R09（C01/C02 代码面）**：FreshC 删除 candidate_paths≥2 门槛（单项完整研究可交付）；_stat_notes 全量入谱（删 [:8] 裁剪）。C03（多组多期给药归属 arm1）未动——见移交。
+- **R11（SCI11 代码面）**：ProductRow 增 regulatory_approval_status（与登记状态分字段）；eculizumab 置"待核验（监管原始文件未接入）"；产品页两字段分列展示。
+- **R12（UI02 代码面）**：抽屉恢复 scale 展示，isUnitShapedScale 形状判别跳过单位形脏数据（真实量表可见、无量表不造）。src 模块副本已改；根 assets/portal 旧副本未同步（安装包资产同步属 ENG 任务）。
+- **R13（SCI10 绿）**：TrialRow sample_size 放宽为可 None + 增 planned_sample_size（计划/实际分开）；构建器保留未知样本量试验（140 试验，此前跳过 5 项）；模板/B 投影"未公开"守卫。
+- **R10（WP2–WP6 产品闭环）未动**——共同修订事务、B 分面运行时、C 检索横比、静态分享、统一 ViewState 为下一阶段主任务。
+- **验证**：31 项新回归全绿（unit 27 + integration 4）；v97 全链 PYTHONHASHSEED=0 重建（A 140 试验载荷→submit ACCEPTED→run_90a5e4c874a31f8f14f590a8→A 56/B 70/C 18 页）；产物抽查（诚实分类 233 行、待核验×1、未知样本量×5、实例配对全量）。

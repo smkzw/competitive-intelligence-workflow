@@ -184,6 +184,26 @@ def ingest_research_evidence(
             )
         )
 
+    # 独立审阅 R07（SCI09）：事实自带精确 locator（字段路径/行/段）时
+    # 落逐事实片段，证据定位不再共用整篇全文片段；
+    # 片段创建在事实事务之前（避免嵌套连接的 SQLite 写锁冲突）
+    fact_fragments: dict[str, str] = {}
+    for fact in facts:
+        fact_locator = fact.locator
+        if (
+            fact_locator.field_path
+            or fact_locator.row
+            or fact_locator.paragraph
+            or fact_locator.table
+        ):
+            fact_fragment = repository.add_fragment(
+                source_version_id=source_versions[fact.source_id],
+                locator=fact_locator,
+                original_text=fact.original_text,
+                created_at=created_at,
+            )
+            fact_fragments[fact.fact_id] = fact_fragment.fragment_id
+
     fact_versions: dict[str, str] = {}
     with open_database(database_path) as database:
         for fact in facts:
@@ -192,32 +212,55 @@ def ingest_research_evidence(
                 (entity_id,entity_type,canonical_name,created_at) VALUES (?,?,?,?)""",
                 (fact.entity_id, fact.entity_type, fact.canonical_name, created_at.isoformat()),
             )
-            fragment_id = fragments[fact.source_id]
+            fragment_id = fact_fragments.get(fact.fact_id, fragments[fact.source_id])
+            # 独立审阅 R07（SCI08）：version_id 是完整载荷摘要——逻辑
+            # fact_id 之外，实体、字段、原文、规范值与披露状态任一变化都
+            # 必须形成新版本（旧式 normalized_value or disclosure_state
+            # 会把状态变化静默折叠进旧版本）
             version_id = stable_id(
                 "fact-version",
                 fact.fact_id,
+                fact.entity_id,
                 fact.field_id,
-                fact.normalized_value or fact.disclosure_state,
+                fact.raw_value or "",
+                fact.normalized_value or "",
+                fact.disclosure_state,
                 fragment_id,
             )
-            database.execute(
-                """INSERT OR IGNORE INTO fact_versions (
-                fact_version_id,fact_id,entity_id,field_id,raw_value,normalized_value,
-                disclosure_state,review_state,primary_fragment_id,supersedes_fact_version_id,created_at
-                ) VALUES (?,?,?,?,?,?,?,?,?,NULL,?)""",
-                (
-                    version_id,
-                    fact.fact_id,
-                    fact.entity_id,
-                    fact.field_id,
+            existing_version = database.execute(
+                """SELECT raw_value, normalized_value, disclosure_state
+                FROM fact_versions WHERE fact_version_id=?""",
+                (version_id,),
+            ).fetchone()
+            if existing_version is not None:
+                if tuple(existing_version) != (
                     fact.raw_value,
                     fact.normalized_value,
                     fact.disclosure_state,
-                    "accepted",
-                    fragment_id,
-                    created_at.isoformat(),
-                ),
-            )
+                ):
+                    raise ResearchIngestionError(
+                        f"事实版本冲突：{fact.fact_id} 的同一版本标识携带不同载荷，"
+                        "同内容重放应幂等，异载荷必须显式冲突"
+                    )
+            else:
+                database.execute(
+                    """INSERT INTO fact_versions (
+                    fact_version_id,fact_id,entity_id,field_id,raw_value,normalized_value,
+                    disclosure_state,review_state,primary_fragment_id,supersedes_fact_version_id,created_at
+                    ) VALUES (?,?,?,?,?,?,?,?,?,NULL,?)""",
+                    (
+                        version_id,
+                        fact.fact_id,
+                        fact.entity_id,
+                        fact.field_id,
+                        fact.raw_value,
+                        fact.normalized_value,
+                        fact.disclosure_state,
+                        "accepted",
+                        fragment_id,
+                        created_at.isoformat(),
+                    ),
+                )
             database.execute(
                 """INSERT OR IGNORE INTO fact_evidence
                 (fact_version_id,fragment_id,evidence_role,created_at) VALUES (?,?,?,?)""",

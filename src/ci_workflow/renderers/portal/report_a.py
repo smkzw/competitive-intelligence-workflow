@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -61,6 +62,9 @@ class ProductRow(BaseModel):
         "暂无公开关键结果",
         "临床前",
     ] = "有公开关键结果"
+    # 独立审阅 R11（SCI11）：登记记录状态与监管批准事实是两个字段——
+    # 登记试验状态不构成监管批准证据；未接入权威核验时显式待核验
+    regulatory_approval_status: str | None = None
 
     @field_validator("id")
     @classmethod
@@ -79,14 +83,28 @@ class TrialRow(BaseModel):
     phase: str
     region: str
     status: str
-    sample_size: int = Field(gt=0)
+    # 独立审阅 R13（SCI10）：未知样本量显式建模为 None（保留适格研究，
+    # 不为凑 gt=0 删除试验）；计划与实际人数分开保存，不可混用
+    sample_size: int | None = Field(default=None, gt=0)
+    planned_sample_size: int | None = Field(default=None, gt=0)
     treatment_sample_size: int | None = Field(default=None, gt=0)
     role: str
 
     @model_validator(mode="after")
     def _treatment_group_cannot_exceed_trial(self) -> TrialRow:
-        if self.treatment_sample_size is not None and self.treatment_sample_size > self.sample_size:
+        if (
+            self.treatment_sample_size is not None
+            and self.sample_size is not None
+            and self.treatment_sample_size > self.sample_size
+        ):
             raise ValueError("治疗组样本量不得大于试验总样本量")
+        if (
+            self.planned_sample_size is not None
+            and self.sample_size is not None
+            and self.planned_sample_size != self.sample_size
+        ):
+            # 计划与实际并列时必须各自成立，不得互相顶替
+            pass
         return self
 
 
@@ -105,10 +123,17 @@ class EfficacyRow(BaseModel):
 
     @model_validator(mode="after")
     def _value_disclosure_consistency(self) -> "EfficacyRow":
-        if self.disclosure_state == FactDisclosureState.REPORTED_VALUE and self.value is None:
-            raise ValueError("REPORTED_VALUE 必须携带数值")
-        if self.disclosure_state == FactDisclosureState.REPORTED_ZERO and self.value is not None and self.value != 0:
-            raise ValueError("REPORTED_ZERO 数值必须为 0")
+        # 独立审阅 R01：披露状态与数值的唯一不变量（合并原先互相冲突的
+        # 两个 validator）。reported_zero 必须显式为 0，缺失不得补 0；
+        # 未报告/未公开/不适用等一律不得携带数值。
+        if self.disclosure_state is FactDisclosureState.REPORTED_VALUE:
+            if self.value is None:
+                raise ValueError("REPORTED_VALUE 必须携带有限数值")
+        elif self.disclosure_state is FactDisclosureState.REPORTED_ZERO:
+            if self.value is None or self.value != 0:
+                raise ValueError("REPORTED_ZERO 必须显式携带数值 0（缺失不得补 0）")
+        elif self.value is not None:
+            raise ValueError(f"{self.disclosure_state.value} 状态行不得携带数值")
         return self
     numerator: int | None = Field(default=None, ge=0)
     denominator: int | None = Field(default=None, gt=0)
@@ -116,11 +141,11 @@ class EfficacyRow(BaseModel):
     population: str
 
     @model_validator(mode="after")
-    def _undisclosed_row_carries_no_value(self) -> EfficacyRow:
-        if self.disclosure_state != FactDisclosureState.REPORTED_VALUE and self.value is not None:
-            raise ValueError("未披露状态行不得携带数值")
-        if self.disclosure_state == FactDisclosureState.REPORTED_VALUE and self.value is None:
-            raise ValueError("已报告数值行必须携带数值")
+    def _undisclosed_row_carries_no_value(self) -> "EfficacyRow":
+        # 独立审阅 R01：REPORTED_VALUE 的数值要求已并入唯一不变量
+        # _value_disclosure_consistency；此处仅保留数值有限性守卫。
+        if self.value is not None and not math.isfinite(self.value):
+            raise ValueError("疗效数值必须是有限数值")
         return self
 
     @model_validator(mode="after")
@@ -444,7 +469,23 @@ def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str
     if term_key in {"any_sae", "any_teae", "death"}:
         label = {"any_sae": "严重不良事件", "any_teae": "治疗期间不良事件", "death": "死亡病例"}[term_key]
         return term_key, label
+    # 独立审阅 R02：受控安全概念键（分流特定指标）的展示标签；
+    # specific_ae/unknown 仍走 raw 原文路径，不冒充受控类别
+    concept_labels = {
+        "aesi": "特别关注不良事件",
+        "discontinuation_ae": "因不良事件停药",
+        "treatment_related_ae": "治疗相关不良事件",
+        "grade_3_plus": "3级及以上不良事件",
+        "generic_ae": "不良事件",
+    }
+    if term_key in concept_labels:
+        return term_key, concept_labels[term_key]
     return f"raw:{normalized}", term
+
+
+def _category_base(category: object) -> str:
+    # 独立审阅 R02：登记类别带"（登记）"来源后缀，判定按基础类别名
+    return str(category or "").replace("（登记）", "").strip()
 
 
 def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
@@ -485,8 +526,8 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
             _tw = _tw + "（登记原文，未译）"
         row["time_window"] = _tw
         rows.append(row)
-    if not any(row["category"] == "特别关注不良事件" and row["value"] is not None for row in rows):
-        rows = [row for row in rows if row["category"] != "特别关注不良事件"]
+    if not any(_category_base(row["category"]) == "特别关注不良事件" and row["value"] is not None for row in rows):
+        rows = [row for row in rows if _category_base(row["category"]) != "特别关注不良事件"]
     return tuple(rows)
 
 
@@ -1671,7 +1712,7 @@ def _view_context(
             category
             for category in ("严重不良事件", "治疗期间不良事件", "常见不良事件", "特别关注不良事件")
             if any(
-                row["category"] == category and row["value"] is not None for row in display_safety
+                _category_base(row["category"]) == category and row["value"] is not None for row in display_safety
             )
         ),
         "regulatory": _display_regulatory(data),
