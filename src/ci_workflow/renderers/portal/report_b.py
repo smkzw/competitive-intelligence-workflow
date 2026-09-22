@@ -2387,6 +2387,19 @@ def _dedupe_records(
     return tuple(result)
 
 
+def _without_declared_shadow_rows(rows):
+    """会商 round-4 #4（B r57/r58/r59）：-declared 影子行只在门匹配索引
+    中生效，任何展示路径（表格/图/证据视图）一律过滤。"""
+    return tuple(
+        row
+        for row in rows
+        if not str(
+            (row.get("row_id") if isinstance(row, dict) else getattr(row, "row_id", ""))
+            or ""
+        ).endswith("-declared")
+    )
+
+
 def _legacy_or_view_rows(
     data: ReportBPortalData,
     *,
@@ -2416,8 +2429,12 @@ def _legacy_or_view_rows(
         if rows:
             # A view state complete table is already a projection; its nested
             # fact is unwrapped by the record adapter without recomputation.
-            return rows
-    return tuple(_get(data, legacy_name, ()) or ())
+            return _without_declared_shadow_rows(rows)
+    # 会商 round-4 #4：-declared 声明臂影子行是 B 门匹配的内部索引，
+    # 展示层在唯一视图行入口统一过滤（安全/基线/疗效域同规则）
+    return _without_declared_shadow_rows(
+        tuple(_get(data, legacy_name, ()) or ())
+    )
 
 
 def _efficacy_records(
@@ -4034,6 +4051,34 @@ def _tag_records(
 
 
 def _page_records(
+    data: ReportBPortalData,
+    *,
+    page_id: str,
+    names: Mapping[str, str],
+    trial_names: Mapping[str, str],
+    efficacy: Sequence[tuple[dict[str, Any], Any]],
+    safety: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
+    return _without_declared_shadow_pairs(_page_records_unfiltered(
+        data, page_id=page_id, names=names, trial_names=trial_names,
+        efficacy=efficacy, safety=safety,
+    ))
+
+
+def _without_declared_shadow_pairs(records):
+    """会商 round-4 #4：-declared 影子行在页面记录总出口过滤——
+    任何页面域（含 subgroups/matrix）都不再泄漏到表格与证据视图。"""
+    return tuple(
+        (row, source)
+        for row, source in records
+        if not str(
+            (row.get("row_id") if isinstance(row, dict) else getattr(row, "row_id", ""))
+            or ""
+        ).endswith("-declared")
+    )
+
+
+def _page_records_unfiltered(
     data: ReportBPortalData,
     *,
     page_id: str,

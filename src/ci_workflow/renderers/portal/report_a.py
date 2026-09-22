@@ -174,6 +174,8 @@ class SafetyRow(BaseModel):
     term: str
     # 会商 P0 #3：受控词表键（any_sae/any_teae/death），供矩阵安全轴精确匹配
     term_key: str | None = None
+    # 独立复核 A r44/r45（issue-2）：类目/类标题上下文（term 保持登记原貌）
+    measure_context: str | None = None
     value: float | None = Field(allow_inf_nan=False)
     numerator: int | None = Field(default=None, ge=0)
     denominator: int | None = Field(default=None, gt=0)
@@ -530,6 +532,8 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
                 row["measure_label"] = item.term + "（登记原文，未译）"
             else:
                 row["measure_label"] = item.term
+        elif getattr(item, "measure_context", None):
+            row["measure_label"] = str(item.measure_context)
         else:
             row["measure_label"] = None
         # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写；
