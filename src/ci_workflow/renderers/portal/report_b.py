@@ -1290,9 +1290,47 @@ def load_report_b_data(path: Path) -> ReportBPortalData:
     except (OSError, json.JSONDecodeError) as exc:
         raise ReportBPortalError(f"无法读取 B 类报告数据：{path}") from exc
     try:
-        return ReportBPortalData.model_validate(payload)
+        data = ReportBPortalData.model_validate(payload)
     except ValueError as exc:
         raise ReportBPortalError(f"B 类报告数据不符合合同：{exc}") from exc
+    return _scrub_declared_shadow_rows(data)
+
+
+def _row_is_declared_shadow(row: object) -> bool:
+    """会商 round-4 #4：影子行识别——row_id 在投影/规范化环节可能被再生，
+    fact_id 与 source_row_id 保留 "-declared" 后缀，三字段任一命中即判。"""
+    for field in ("row_id", "fact_id", "source_row_id"):
+        value = (
+            row.get(field)
+            if isinstance(row, dict)
+            else getattr(row, field, None)
+        )
+        if value and str(value).endswith("-declared"):
+            return True
+    return False
+
+
+def _scrub_declared_shadow_rows(data: ReportBPortalData) -> ReportBPortalData:
+    """会商 round-4 #4（B r57/r58/r59/r60）：-declared 影子行在门户数据
+    入口一次性清洗。投影会再生 row_id，后置过滤不可靠；此处先于一切
+    消费者（页面/分组/证据视图/筛选）生效。包内容量不受影响（1:1 合同
+    在提交校验层已履行）。"""
+    updates: dict[str, Any] = {}
+    for field in ("baseline_views", "safety_views", "efficacy_views", "disposition_views"):
+        view = getattr(data, field, None)
+        if not isinstance(view, Mapping) or "facts" not in view:
+            continue
+        facts = view["facts"]
+        if isinstance(facts, Sequence) and not isinstance(facts, str):
+            kept = tuple(
+                row for row in facts if not _row_is_declared_shadow(row)
+            )
+            if len(kept) != len(facts):
+                updates[field] = dict(view)
+                updates[field]["facts"] = kept
+    if updates:
+        return data.model_copy(update=updates)
+    return data
 
 
 _BASELINE_REQUIREMENTS = {
@@ -2390,14 +2428,7 @@ def _dedupe_records(
 def _without_declared_shadow_rows(rows):
     """会商 round-4 #4（B r57/r58/r59）：-declared 影子行只在门匹配索引
     中生效，任何展示路径（表格/图/证据视图）一律过滤。"""
-    return tuple(
-        row
-        for row in rows
-        if not str(
-            (row.get("row_id") if isinstance(row, dict) else getattr(row, "row_id", ""))
-            or ""
-        ).endswith("-declared")
-    )
+    return tuple(row for row in rows if not _row_is_declared_shadow(row))
 
 
 def _legacy_or_view_rows(
@@ -3880,6 +3911,13 @@ def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
     if re.findall(r"[A-Za-z]{3,}", text) and not re.search(r"[\u4e00-\u9fff]", text):
         short = " ".join(text.split())
         return (short[:28] + "…") if len(short) > 28 else short
+    # 独立复核 B r60（issue-2）：形态质量门槛（B r53 口径）——中英混排且
+    # 含机器拼接碎片（change/duration/drug 等未转写词或 2–5 字母小写残片）
+    # 的串判定为转写失败，按惯例标注，不冒充已译口径
+    if re.search(r"[\u4e00-\u9fff]", text) and re.search(
+        r"\b[a-z]{2,5}\b|changefrom|研究 drug|duration", text, re.I
+    ):
+        return text + "（登记原文，未译）"
     return text
     if text == "not_reported":
         return "未列示"
@@ -4071,10 +4109,7 @@ def _without_declared_shadow_pairs(records):
     return tuple(
         (row, source)
         for row, source in records
-        if not str(
-            (row.get("row_id") if isinstance(row, dict) else getattr(row, "row_id", ""))
-            or ""
-        ).endswith("-declared")
+        if not _row_is_declared_shadow(row)
     )
 
 
@@ -4896,6 +4931,8 @@ def build_report_b_artifact(
             merge.model_dump(mode="json") for merge in extra_adjudications
         ]
         data = ReportBPortalData.model_validate(payload)
+    # 会商 round-4 #4：影子行清洗挂在构建入口（load 之外的直接校验路径）
+    data = _scrub_declared_shadow_rows(data)
     started_at = datetime.now(UTC)
     transaction = UnpublishedRenderTransaction(
         project_root,

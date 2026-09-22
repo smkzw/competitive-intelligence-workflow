@@ -468,14 +468,18 @@ def main() -> None:
             and o["field"] in {"analysis_sets", "statistical_comparisons"}
             and o.get("disclosure_state") == "reported_value"
         }
+        # 独立复核 C r44（issue-1）：试验已有任一统计/分析集披露时，
+        # 四个统计维度的"未公开"兜底全部抑制——登记描述往往不区分维度，
+        # 逐字段兜底会与绑定来源相反（误判试验统计披露程度）
+        _suppress_all_stat_blankets = bool(_reported_stat_fields)
         for stat_field, stat_label in (
             ("analysis_sets", "分析集"),
             ("statistical_comparisons", "主要比较与统计模型"),
             ("multiplicity_adjustment", "多重性校正"),
             ("missing_data_handling", "缺失数据处理"),
         ):
-            if stat_field in _reported_stat_fields:
-                # 该维度已有披露内容行，不再并列"未公开"声明
+            if _suppress_all_stat_blankets:
+                # 该试验已有统计披露内容，不再并列任何"未公开"声明
                 continue
             observations.append(_row(
                 trial_id, product_id, nct, page, "statistical", stat_field,

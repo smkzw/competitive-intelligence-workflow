@@ -1045,7 +1045,14 @@
       return;
     }
     var shownProducts = points.map(function (point) { return point.product; });
-    var xMin = useDifference ? -100 : 0, xMax = 100;
+    var xMin = useDifference ? -100 : 0;
+    // 独立复核 A r46（issue-3）：疗效轴上限按实测数据驱动（非固定 100），
+    // 非百分比单位或越界值不再逸出绘图区
+    var efficacyValues = points.map(function (point) {
+      return numericValue(point.treatment) ? Number(point.treatment) : null;
+    }).filter(function (value) { return value != null; });
+    var dataMax = efficacyValues.length ? Math.max.apply(null, efficacyValues) : 100;
+    var xMax = Math.max(100, Math.ceil(dataMax * 1.1));
     var allEventRates = safety.filter(function (record) {
       return safetyTermKey(record) === termKey && isPercentUnit(record.unit) && numericValue(record.value);
     }).map(function (record) { return record.value; });

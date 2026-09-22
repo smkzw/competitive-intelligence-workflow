@@ -522,18 +522,33 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
             row["arm_detail"] = _native_arm_detail_zh(item.arm_detail) or str(item.arm)
         else:
             row["arm_detail"] = _native_arm_detail_zh(item.arm_detail)
+            # 独立复核 A r46（issue-4）：解码后仍残留英文组名按惯例标注
+            if (
+                _arm_decoded
+                and re.findall(r"[A-Za-z]{3,}", _arm_decoded)
+                and not _arm_decoded.endswith("（登记原文，未译）")
+            ):
+                row["arm"] = _arm_decoded + "（登记原文，未译）"
         # 独立复核 A r37（issue-4）：声明臂影子行显式标注归因性质
         if str(item.row_id).endswith("-declared"):
             row["term_label"] = (row["term_label"] or item.term) + "（声明臂归因，由期间组汇总）"
         # 独立复核 A r42（issue-2）：分流的 TEAE/AE 测量行带原测量标题，
         # 事件列可区分不同测量（不再全部塌缩为同一受控标签）
+        # 独立复核 A r46（issue-1）：类目上下文对所有受控键组合进标签——
+        # any_* 行此前走第一分支时把 measure_context 丢掉，类目行仍不可区分
+        _base_label = None
         if term_key in {"any_sae", "any_teae", "death"} and "组别汇总计数" not in item.term:
             if re.findall(r"[A-Za-z]{3,}", item.term) and not item.term.endswith("（登记原文，未译）"):
-                row["measure_label"] = item.term + "（登记原文，未译）"
+                _base_label = item.term + "（登记原文，未译）"
             else:
-                row["measure_label"] = item.term
-        elif getattr(item, "measure_context", None):
-            row["measure_label"] = str(item.measure_context)
+                _base_label = item.term
+        _ctx = getattr(item, "measure_context", None)
+        if _base_label and _ctx:
+            row["measure_label"] = f"{_base_label}｜{str(_ctx).strip()}"
+        elif _base_label:
+            row["measure_label"] = _base_label
+        elif _ctx:
+            row["measure_label"] = str(_ctx)
         else:
             row["measure_label"] = None
         # 独立复核 A r36（issue-3）：安全行观察窗按登记 timeFrame 逐试验转写；
@@ -972,6 +987,9 @@ def _native_endpoint_zh(value: str) -> str:
         r"anti[- ]?drug antibod|antidrug antibod|immunogenicit|\badas?\b", value, re.I
     ):
         return "免疫原性评价"
+    # 独立复核 C r44（issue-3）：血清浓度终点保留测量身份，不再泛化
+    if re.search(r"serum concentration|serum trough concentration|plasma concentration", value, re.I):
+        return "血清药物浓度评价"
     if re.search(
         r"adverse event|\bteaes?\b|\bsaes?\b|treatment[- ]emergent|"
         r"\baes\b of special|infection|\bdeath?s?\b",
