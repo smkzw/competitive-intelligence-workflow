@@ -24,6 +24,12 @@ C 其余十一物理页的浏览器合同现改按正式四档桌面宽度运行
 
 W07 只读来源追踪见 [W07-source-trace-0923.md](evidence/W07-source-trace-0923.md)：当前 A 展示 4412、历史同运行中间门户 4277、研究包 4458 是三个不同分母，不能混合闭包。SQLite 本轮重算仅有 10 个来源版本/fragment、0 个文本派生，旧包装器仍以 `studies[]` 和自造“登记结果事实”作粗引用；两个真实 CAS 研究切片字节哈希已复核。小批实例支持“多数有原始数值但未映射”这一修复方向，尚不能断言全量可恢复；具体路径需逐条重放。真实来源门继续 FAIL，子任务模型身份 UNVERIFIED。
 
+W07 首个接缝现可把 `derive_ctgov_records` 的单研究 CAS 切片转换为现有 `SourceCapture`，重开原始资产校验 NCT/日期；本机真实 NCT04558918 切片按精确路径重提取 `68.8`。相关邻接集成批 `16 passed`；`source_research_service.py` 的返回后不可达旧摄取段已移除，修改模块 Ruff 与 strict mypy 通过。此步**尚未**把 4412 条事实写入 SQLite 或接到报告页，来源门仍 FAIL。用户明确的清除数值功能、A+B 合法修订扇出与离线分享也仍待做。
+
+同一真实切片在自动清理的临时试验项目中已经走过共享摄取边界：1 个来源版本、1 个原文派生回执、1 个精确定位的事实版本，SQLite fragment 原文 `68.8`。这只证明接缝技术可行；正式 PNH 数据库、稳定事实身份、组/期/类别、派生分母、门户逐事实入口和 4412 闭包尚未完成。
+
+本次里程碑运行 `bash tools/gate.sh` 的声明范围为 Ruff `src/tests/tools`、strict mypy `src/tools`、活跃 unit+contract、保留轨兼容子集、测试分层和旧路径检查。结果 **GATE_FAIL**：Ruff 112 项，mypy 97 项/10 文件，活跃批 `15 failed, 1047 passed, 20 deselected, 1 error`；保留轨兼容 `20 passed`、分层 `7 passed`、旧路径检查通过。抽查失败分别涉及旧快照 JSON 形状、B 运行输入根约束、已新增 `user_modified` 状态与旧枚举预期不符、安装包 schema 清单漏列，以及 W03 冻结证据哈希与当前作者资源变动不符。后者必须保留历史 FAIL，不得改旧证据哈希迎合当前版本。全仓静态与合同门尚未通过；本轮修改的来源模块单独 strict mypy/Ruff 与 W07 相邻集成 `16 passed` 不能替代全门。按根因成族修订，不逐行全仓重跑。
+
 旧 A “初始 DOM 必须显示所有疗效行”测试已按用户 0923V1 裁决迁移为“数据全量+可验证筛选到达”：四档桌面×两浏览器验证非百分比 -4/0/7 分观察可达并与折叠表一致；同批含多 facet 保留/视图恢复共 `10 passed`。这不是删掉负面案例：旧测试原先 8 个失败已在本轮复现；根因同时包含初始 DOM 旧合同和非百分比数值的真实科学投影缺陷。数值投影单元整组 `13 passed`；相邻 B 图表兼容与门户集成 `101 passed`；修改模块 strict mypy/Ruff 通过。
 
 本次 W04 受影响集成批为 `48 passed`：显式 null 不得静默忽略，事件流也必须只记录实际提交字段，不能把默认 null 伪装成用户清除。共享图形/证据点击/空图语义在补齐折叠表后的 Chromium/WebKit 定向批为 `12 passed`；图和表都不得把“已公开但未绘制”称为“未公开”，并保留完整记录入口。先前在单线程本地 fixture HTTP 服务下出现 `ERR_SOCKET_NOT_CONNECTED`/`ERR_CONNECTION_RESET` 与点击不稳定，已将该测试服务改为并发服务并直接让系统分配端口，未放宽点击/来源/回焦断言；完整整族稳定性仍需复跑。最新字节的镜像校验、所改 Python Ruff、JS 语法、`user_fact_edit.py` strict mypy 及 `git diff --check` 通过。当前作者源 SHA-256：`charts.js 976f9eff...`、`portal.css 673aa9e6...`、`report-a.js 52a6ca7d...`、`report-c.css a36ddb8d...`；构建前仍需重新校验镜像。未提交、未推送；所有未跟踪历史资料保留。

@@ -16,6 +16,8 @@
 
 只读样本显示：多组、多期、真实零值、复合安全类别、LDH 多时间点的数值在 CAS 中有可追踪候选；某些分母在对应终点对象中确实缺失或跨对象来源未证实；另有 `hasResults:false` 的研究本身无结果。**不能**因为数值可找到就自动补分母、编造来源或把真实零值当缺失。尚未验证八组全部 JSONPath、组别/时间窗语义和版本绑定，也没有发现可证实的这批真实记录解析失败；“未发现”不等于全量不存在。
 
+另一个待核科学边界：活动 AE 解析器对个别 `stats.numAffected` 缺省使用 `0`，而精确重提取无法引用不存在的字段。ClinicalTrials.gov [官方字段结构](https://clinicaltrials.gov/data-api/about-api/study-data-structure)定义该字段为整数及其含义，但本轮没有找到足以普遍证明“字段缺省=真实零值”的官方规则。生产链不得把这种推断零值当作带有精确原文的 `reported_zero`；先核对原页面/下载格式及组别语义，必要时以缺失/待核状态保留。此项为审计推论，不是已确认的 ClinicalTrials.gov 编码规范。
+
 ## 下一最小实施批
 
 1. 选上述多组/多期/零值/缺失/多终点/复合安全小批真实 CAS；重放 `SourceCapture`，将按研究切片的来源版本和 `source_text_derivations` 持久化，禁止再用页级 `studies[]` 当事实定位。
@@ -23,3 +25,11 @@
 3. 用真实小批在快照和 A 页面核对逐事实入口，分类记录 `source_missing`、`parse_failure`、`source_unmapped`；然后才选择唯一新的 A 载荷哈希，重新计算全量闭合分母并扩展 B/C。W05B/C 的桌面结构可以并行，不因来源暂缺而虚报终验或暂停开发。
 
 当前请求的子任务模型/effort只有请求参数，没有独立运行时回执，身份记 **UNVERIFIED**；该报告是只读诊断，不是用户所禁止的执行/会商机制。
+
+## 首个生产接缝（同日实施，仍非闭包）
+
+新增 `source_capture_from_ctgov_study(project_root, study)`：消费现有 `derive_ctgov_records` 的单研究切片，重新打开原始 CAS 回执并核对 NCT 身份、标题、来源网址、`lastUpdatePostDateStruct.date`；以 `calendar_day` 而非虚构时刻进入现有 `SourceCapture`。未新增第二套来源存储。一次本机真实 CAS 探针在 `5e055f4c…bin` 的 `studies[5]` 重放 NCT04558918，精确路径 `$.resultsSection.outcomeMeasuresModule.outcomeMeasures[1].classes[0].categories[0].measurements[0].value` 重提取字符串 `68.8`，回执方法 `ctgov-study-json-v1`。该探针在临时目录运行，**尚未**把事实写入正式 SQLite、快照或页面，故 0/4412 未变。
+
+随后在自动清理的**临时试验项目**中，使用同一真实 CAS 切片和上述精确 `EvidenceLocator` 调用现有 `ingest_research_evidence`：得到 1 个来源版本、1 个 `source_text_derivations`、1 个事实版本；SQLite 事实 fragment 的原文是 `68.8`，locator 是上述无通配符路径。临时试验项目并非当前 PNH 项目的正式数据库/快照；试验用 fact ID 和 claim 仅为接缝验证，尚未建立跨来源/排序稳定科学身份，不得用来称正式报告来源闭包。
+
+为清除重构噪音，删除 `source_research_service.py` 中 `ingest_fresh_a_research_package` 已经 `return` 后的约 230 行不可达旧摄取代码；历史可由 Git 父提交找回，现有生产入口仍使用共享 `ingest_research_evidence`。新增接缝正/负案例及邻接日期/来源审计/研究包集成批 `16 passed`，修改模块 Ruff 与 strict mypy 通过。后续仍需把多组、多期等真实事实、分母和状态通过该接缝进入摄取与门户。

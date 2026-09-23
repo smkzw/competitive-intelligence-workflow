@@ -8,7 +8,7 @@ import math
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, date, datetime, time
 from pathlib import Path
 from typing import Any, Literal, Self
 
@@ -18,19 +18,18 @@ from ci_workflow.domain.evidence import (
     DateEvidence,
     DatePrecision,
     EvidenceLocator,
-    SourceReceipt,
     SourceTextDerivation,
     source_version_identity,
 )
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.renderers.portal.report_a import ReportAPortalData
-from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
+from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
-from ci_workflow.storage.snapshot_store import (
-    EvidenceSnapshotManifest,
-    LockedSnapshot,
-    SnapshotStore,
+from ci_workflow.storage.snapshot_store import LockedSnapshot
+from ci_workflow.storage.source_derivation import (
+    source_json_decoder,
+    verify_source_text_derivation,
 )
 from ci_workflow.storage.sqlite import open_database
 
@@ -127,6 +126,74 @@ class SourceCapture(BaseModel):
         elif self.media_type == "application/pdf":
             raise ValueError("PDF提取文本必须绑定原始资产及派生回执")
         return self
+
+
+def source_capture_from_ctgov_study(
+    project_root: Path, study: DerivedCtgovStudy,
+) -> SourceCapture:
+    """Bridge one replayed CT.gov record into the existing precision-bound source contract.
+
+    This does not create facts or assert that the trial-result universe is closed.
+    The posted *calendar day* is the first disclosure of this current record
+    version; it is never promoted to an exact publication instant.
+    """
+    verify_source_text_derivation(project_root, study.text_derivation, study.content_text)
+    try:
+        record = source_json_decoder().decode(study.content_text)
+        if not isinstance(record, dict):
+            raise TypeError("登记切片不是对象")
+        protocol = record["protocolSection"]
+        if not isinstance(protocol, dict):
+            raise TypeError("登记方案字段不是对象")
+        identification = protocol["identificationModule"]
+        status = protocol["statusModule"]
+        if not isinstance(identification, dict) or not isinstance(status, dict):
+            raise TypeError("登记身份或状态字段不是对象")
+        last_update = status["lastUpdatePostDateStruct"]
+        if not isinstance(last_update, dict):
+            raise TypeError("登记版本日期字段不是对象")
+        expected_title = str(
+            identification.get("briefTitle") or identification.get("officialTitle")
+            or study.nct_id
+        ).strip()
+        posted = date.fromisoformat(study.registry_posted_version_date)
+        if (
+            identification.get("nctId") != study.nct_id
+            or study.text_derivation.record_selector is None
+            or study.text_derivation.record_selector.nct_id != study.nct_id
+            or study.title != expected_title
+            or last_update.get("date") != study.registry_posted_version_date
+            or study.record_url != f"https://clinicaltrials.gov/study/{study.nct_id}"
+        ):
+            raise ResearchPackageError("登记切片与研究身份或公开版本日期不一致")
+    except (KeyError, TypeError, ValueError) as error:
+        raise ResearchPackageError("登记切片无法证明研究身份与公开版本日期") from error
+    posted_day = datetime.combine(posted, time.min, tzinfo=UTC)
+    return SourceCapture(
+        source_id=f"ctgov-{study.nct_id.lower()}",
+        route_id="ctgov-api-v2",
+        source_type="clinical_trial_registry",
+        title=study.title,
+        url=study.record_url,
+        query_or_identifier=study.nct_id,
+        language="en",
+        access_method="public_api",
+        media_type="application/json",
+        content_text=study.content_text,
+        text_derivation=study.text_derivation,
+        acquired_at=study.acquired_at,
+        published_at=posted_day,
+        effective_at=None,
+        first_disclosed_at=posted_day,
+        date_precisions=CaptureDatePrecisions(
+            published_at="calendar_day", first_disclosed_at="calendar_day"
+        ),
+        locator=EvidenceLocator(
+            document_role="clinical_trial_registry",
+            field_path="$.protocolSection.identificationModule.nctId",
+            url=study.record_url,
+        ),
+    )
 
 
 class ResearchFact(BaseModel):
@@ -1815,241 +1882,6 @@ def ingest_fresh_a_research_package(
         fact_version_ids=candidate.fact_version_ids,
         fragment_ids=candidate.fragment_ids,
     )
-
-    # Historical implementation retained below for source archaeology only;
-    # it is unreachable and must never be used to mint accepted facts.
-    database_path = project_root / "state/project.sqlite"
-    repository = EvidenceRepository(database_path, ContentAddressedStore(project_root))
-    timestamp = package.scientific_review.reviewed_at
-    versions: dict[str, str] = {}
-    fragments: dict[str, str] = {}
-    receipts: list[SourceReceipt] = []
-    from ci_workflow.storage.source_derivation import verify_source_text_derivation
-
-    for capture in package.sources:
-        if capture.text_derivation is not None:
-            verify_source_text_derivation(
-                project_root, capture.text_derivation, capture.content_text
-            )
-    for capture in package.sources:
-        version = repository.add_source_version(
-            source_id=capture.source_id,
-            content=capture.content_text.encode("utf-8"),
-            media_type=(
-                "text/plain" if capture.media_type == "application/pdf" else capture.media_type
-            ),
-            text_derivation=capture.text_derivation,
-            acquired_at=capture.acquired_at,
-            published_at=capture.date_evidence("published_at"),
-            effective_at=capture.date_evidence("effective_at"),
-            first_disclosed_at=capture.date_evidence("first_disclosed_at"),
-        )
-        fragment = repository.add_fragment(
-            source_version_id=version.source_version_id,
-            locator=capture.locator,
-            original_text=capture.content_text,
-            created_at=capture.acquired_at,
-        )
-        versions[capture.source_id] = version.source_version_id
-        fragments[capture.source_id] = fragment.fragment_id
-        receipts.append(SourceReceipt(
-            schema_version="1.0",
-            receipt_id=stable_id("source-receipt", project_id, capture.source_id),
-            route_id=capture.route_id,
-            strategy_unit_id=f"{capture.route_id}:primary",
-            entity_id=project_id,
-            gap_id="A_FRESH_SOURCE",
-            claim_domain="A_PROFILE",
-            query_or_identifier=capture.query_or_identifier,
-            language=capture.language,
-            access_method=capture.access_method,
-            attempt_index=1,
-            started_at=capture.acquired_at,
-            ended_at=capture.acquired_at,
-            scheduled_backoff_ms=0,
-            actual_backoff_ms=0,
-            result_class="content_acquired",
-            error_class=None,
-            completeness_checks=("身份可定位", "正文已保存", "截止日适格"),
-            alternative_paths=("其他官方登记", "主要论文或监管材料"),
-            source_version_id=version.source_version_id,
-            content_sha256=version.content_sha256,
-            diagnostic_confidence="high",
-            parent_attempt_id=None,
-            recovery_round=0,
-        ))
-    for attempt in package.route_attempts:
-        receipts.append(
-            SourceReceipt(
-                schema_version="1.0",
-                receipt_id=attempt.attempt_id,
-                route_id=attempt.route_id,
-                strategy_unit_id=attempt.strategy_unit_id,
-                entity_id=project_id,
-                gap_id=attempt.gap_id,
-                claim_domain="A_PROFILE",
-                query_or_identifier=attempt.query_or_identifier,
-                language=attempt.language,
-                access_method=attempt.access_method,
-                attempt_index=attempt.attempt_index,
-                started_at=attempt.started_at,
-                ended_at=attempt.ended_at,
-                scheduled_backoff_ms=2000 if attempt.attempt_index > 1 else 0,
-                actual_backoff_ms=2000 if attempt.attempt_index > 1 else 0,
-                result_class=attempt.result_class,
-                error_class=attempt.error_class,
-                completeness_checks=("未取得可解析正文", "已区分技术失败与未检出"),
-                alternative_paths=attempt.alternative_paths,
-                source_version_id=None,
-                content_sha256=None,
-                diagnostic_confidence=attempt.diagnostic_confidence,
-                parent_attempt_id=attempt.parent_attempt_id,
-                recovery_round=attempt.recovery_round,
-            )
-        )
-
-    fact_versions: dict[str, str] = {}
-    with open_database(database_path) as database:
-        for fact in package.facts:
-            database.execute(
-                """
-                INSERT OR IGNORE INTO entities (
-                    entity_id,entity_type,canonical_name,created_at
-                ) VALUES (?,?,?,?)
-                """,
-                (fact.entity_id, fact.entity_type, fact.canonical_name, timestamp.isoformat()),
-            )
-            fragment_id = fragments[fact.source_id]
-            version_id = stable_id(
-                "fact-version", fact.fact_id, fact.field_id,
-                fact.normalized_value or fact.disclosure_state, fragment_id,
-            )
-            database.execute(
-                """
-                INSERT OR IGNORE INTO fact_versions (
-                    fact_version_id,fact_id,entity_id,field_id,raw_value,normalized_value,
-                    disclosure_state,review_state,primary_fragment_id,supersedes_fact_version_id,created_at
-                ) VALUES (?,?,?,?,?,?,?,?,?,NULL,?)
-                """,
-                (version_id, fact.fact_id, fact.entity_id, fact.field_id, fact.raw_value,
-                 fact.normalized_value, fact.disclosure_state, "accepted", fragment_id,
-                 timestamp.isoformat()),
-            )
-            database.execute(
-                """
-                INSERT OR IGNORE INTO fact_evidence (
-                    fact_version_id,fragment_id,evidence_role,created_at
-                ) VALUES (?,?,?,?)
-                """,
-                (version_id, fragment_id, "primary", timestamp.isoformat()),
-            )
-            fact_versions[fact.fact_id] = version_id
-        for claim in package.claims:
-            claim_version_id = stable_id(
-                "claim-version", claim.claim_id, claim.claim_text,
-                *(fact_versions[item] for item in claim.fact_ids),
-            )
-            database.execute(
-                """
-                INSERT OR IGNORE INTO claim_versions (
-                    claim_version_id,claim_id,claim_text,claim_kind,review_state,
-                    supersedes_claim_version_id,created_at
-                ) VALUES (?,?,?,?,?,NULL,?)
-                """,
-                (claim_version_id, claim.claim_id, claim.claim_text, claim.claim_kind,
-                 "accepted", timestamp.isoformat()),
-            )
-            for fact_id in claim.fact_ids:
-                database.execute(
-                    """
-                    INSERT OR IGNORE INTO claim_facts (
-                        claim_version_id,fact_version_id,support_role,created_at
-                    ) VALUES (?,?,?,?)
-                    """,
-                    (claim_version_id, fact_versions[fact_id], "supports", timestamp.isoformat()),
-                )
-
-    evidence_manifest = EvidenceSnapshotManifest(
-        schema_version="1.0",
-        project_id=project_id,
-        contract_version=contract_version,
-        data_cutoff=package.data_cutoff,
-        source_version_ids=tuple(sorted(versions.values())),
-        fragment_ids=tuple(fragments[item.source_id] for item in package.sources),
-        fact_version_ids=tuple(sorted(fact_versions.values())),
-        scientific_content_digest=package.research_content_digest,
-        created_at=timestamp,
-    )
-    evidence_snapshot = SnapshotStore(project_root).lock_evidence_snapshot(
-        evidence_manifest.model_dump(mode="json")
-    )
-    claim_ids = tuple(item.claim_id for item in package.claims)
-    claim_snapshot_id = stable_id(
-        "claim-snapshot", project_id, package.research_content_digest, *claim_ids
-    )
-    coverage_set_id = stable_id(
-        "coverage-set", project_id, "A", evidence_snapshot.snapshot_id, claim_snapshot_id
-    )
-    coverage_projection_id = stable_id(
-        "coverage-projection", coverage_set_id, "html"
-    )
-    with open_database(database_path) as database:
-        database.execute(
-            """
-            INSERT OR IGNORE INTO gate_evaluations (
-                gate_evaluation_id,project_id,report_kind,gate_id,result,details_json,created_at
-            ) VALUES (?,?,?,?,?,?,?)
-            """,
-            (
-                stable_id(
-                    "gate-evaluation", project_id, "A", package.research_content_digest
-                ),
-                project_id,
-                "A",
-                "A_MATURITY_V1",
-                "passed",
-                json.dumps(
-                    {
-                        "universe_closed": True,
-                        "product_ids": list(package.universe_product_ids),
-                        "scientific_reviewer": package.scientific_review.reviewer_id,
-                    },
-                    ensure_ascii=False,
-                ),
-                timestamp.isoformat(),
-            ),
-        )
-    receipt_path = project_root / "receipts/source_receipts.jsonl"
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
-    existing_ids: set[str] = set()
-    if receipt_path.is_file():
-        for line in receipt_path.read_text(encoding="utf-8").splitlines():
-            if line.strip():
-                existing_ids.add(str(json.loads(line)["receipt_id"]))
-    with receipt_path.open("a", encoding="utf-8") as handle:
-        for item in receipts:
-            if item.receipt_id not in existing_ids:
-                handle.write(
-                    json.dumps(
-                        item.model_dump(mode="json"),
-                        ensure_ascii=False,
-                        sort_keys=True,
-                    )
-                    + "\n"
-                )
-    return ResearchLineage(
-        package_digest=package.research_content_digest,
-        evidence_snapshot=evidence_snapshot,
-        claim_snapshot_id=claim_snapshot_id,
-        coverage_set_id=coverage_set_id,
-        coverage_projection_id=coverage_projection_id,
-        claim_ids=claim_ids,
-        source_version_ids=tuple(sorted(versions.values())),
-        source_fragment_ids=tuple(fragments[item.source_id] for item in package.sources),
-        fact_version_ids=tuple(sorted(fact_versions.values())),
-        fragment_ids=tuple(sorted(fragments.values())),
-    )
-
 
 def persist_report_a_projection(
     *,
