@@ -23,7 +23,7 @@ from ci_workflow.domain.evidence import (
 )
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
-from ci_workflow.renderers.portal.report_a import ReportAPortalData
+from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import LockedSnapshot
@@ -206,6 +206,7 @@ class ResearchResultContext(BaseModel):
     category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
     trial_id: str
     group_id: str
+    group_title: str
     arm: str
     term: str
     endpoint: str
@@ -435,6 +436,7 @@ class _RegistryResult:
     endpoint: str = ""
     timepoint: str = ""
     unit: str = ""
+    group_title: str = ""
     value_path: str = ""
     denominator_path: str | None = None
 
@@ -448,6 +450,7 @@ class CtgovAtomicResult:
     trial_id: str
     source_id: str
     group_id: str
+    group_title: str
     arm: str
     term: str
     endpoint: str
@@ -988,6 +991,7 @@ def _iter_outcome_results(
                         term=report_term,
                         group_id=group_id,
                         arm=_result_arm(groups[group_id]),
+                        group_title=groups[group_id],
                         value=normalized_value,
                         numerator=numerator,
                         denominator=denominator,
@@ -1077,6 +1081,7 @@ def _iter_adverse_event_results(
                         term=term,
                         group_id=group_id,
                         arm=group_info[group_id][1],
+                        group_title=group_info[group_id][0],
                         value=round(numerator * 100 / denominator, 1),
                         numerator=numerator,
                         denominator=denominator,
@@ -1171,6 +1176,7 @@ def _iter_adverse_event_results(
                         term=term,
                         group_id=group_id,
                         arm=group_info[group_id][1],
+                        group_title=group_info[group_id][0],
                         value=round(numerator * 100 / denominator, 1),
                         numerator=numerator,
                         denominator=denominator,
@@ -1191,6 +1197,7 @@ def _iter_adverse_event_results(
                                 term=term,
                                 group_id=group_id,
                                 arm=group_info[group_id][1],
+                                group_title=group_info[group_id][0],
                                 value=result.value,
                                 numerator=numerator,
                                 denominator=denominator,
@@ -1282,7 +1289,8 @@ def extract_ctgov_atomic_results(
         atoms.append(CtgovAtomicResult(
             result_key=result.result_key, category=result.category,
             trial_id=result.trial_id, source_id=result.source_id,
-            group_id=result.group_id, arm=result.arm, term=result.term,
+            group_id=result.group_id, group_title=result.group_title,
+            arm=result.arm, term=result.term,
             endpoint=result.endpoint,
             timepoint=result.timepoint, display_value=result.value,
             display_unit=result.unit, numerator=result.numerator,
@@ -1322,6 +1330,7 @@ def research_facts_from_ctgov_atom(
         context = ResearchResultContext(
             result_key=atom.result_key, category=atom.category,
             trial_id=atom.trial_id, group_id=atom.group_id,
+            group_title=atom.group_title,
             arm=atom.arm, term=atom.term, endpoint=atom.endpoint,
             timepoint=atom.timepoint,
             value_role=role,
@@ -1356,6 +1365,69 @@ def research_facts_from_ctgov_atom(
             quote=atom.denominator_quote, reference=f"{row_ref}:denominator",
         ))
     return tuple(facts)
+
+
+def bind_ctgov_outcome_to_a_row(
+    source: SourceCapture,
+    atom: CtgovAtomicResult,
+    row: EfficacyRow,
+) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
+    """Bind a directly reported outcome to one explicit A row before review.
+
+    This only handles a source-reported measure. Count-derived rates require a
+    separate derivation with both input fact versions and cannot use this path.
+    """
+    verified_atoms, _issues = extract_ctgov_atomic_results(source)
+    if atom not in verified_atoms or atom.source_id != source.source_id:
+        raise ResearchPackageError("登记原子与当前来源版本不一致")
+    if atom.category != "outcome" or atom.numerator is not None:
+        raise ResearchPackageError("此绑定仅接受来源直接报告的疗效数值")
+    if (
+        row.trial_id.casefold() != atom.trial_id.casefold()
+        or _result_text(row.endpoint).casefold() != _result_text(atom.endpoint).casefold()
+        or _result_text(row.timepoint).casefold() != _result_text(atom.timepoint).casefold()
+        or row.arm != atom.arm
+        or row.unit != atom.display_unit
+        or row.value is None
+        or atom.display_value is None
+        or not math.isclose(row.value, atom.display_value, rel_tol=0.0, abs_tol=1e-9)
+    ):
+        raise ResearchPackageError("登记原子与疗效行的试验、终点、组别、时间或数值不一致")
+    if row.arm_detail is None and row.group_id is None:
+        raise ResearchPackageError("疗效行缺少可核对的来源组别明细或组号")
+    if row.arm_detail is not None and (
+        _result_text(row.arm_detail).casefold()
+        != _result_text(atom.group_title).casefold()
+    ):
+        raise ResearchPackageError("疗效行组别明细与来源组别标题不一致")
+    if row.group_id is not None and row.group_id != atom.group_id:
+        raise ResearchPackageError("疗效行来源组号与登记结果不一致")
+    version_id = source_version_identity(
+        source.source_id,
+        hashlib.sha256(source.content_text.encode("utf-8")).hexdigest(),
+        published_at=source.date_evidence("published_at"),
+        effective_at=source.date_evidence("effective_at"),
+        first_disclosed_at=source.date_evidence("first_disclosed_at"),
+        text_derivation=source.text_derivation,
+    )
+    expected_fields = {
+        "source_field_path": atom.value_locator.field_path,
+        "source_version_id": version_id,
+        "source_text": atom.value_quote,
+    }
+    for field, expected in expected_fields.items():
+        previous = getattr(row, field)
+        if previous is not None and previous != expected:
+            raise ResearchPackageError(f"疗效行已有冲突的{field}，不得静默覆盖")
+    bound = EfficacyRow.model_validate({
+        **row.model_dump(mode="json"),
+        **expected_fields,
+        "group_id": atom.group_id,
+    })
+    facts = research_facts_from_ctgov_atom(
+        atom, report_row_ref=f"efficacy:{row.row_id}"
+    )
+    return bound, facts
 
 
 def _audit_source_record(

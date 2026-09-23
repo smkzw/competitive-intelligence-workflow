@@ -15,11 +15,13 @@ from ci_workflow.application.source_research_service import (
     ResearchClaim,
     ResearchFact,
     SourceCapture,
+    bind_ctgov_outcome_to_a_row,
     extract_ctgov_atomic_results,
     research_facts_from_ctgov_atom,
     source_capture_from_ctgov_study,
 )
 from ci_workflow.domain.evidence import CtgovRecordSelector
+from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_report_a_site
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.source_derivation import capture_source_text
 from ci_workflow.storage.sqlite import open_database
@@ -169,3 +171,59 @@ def test_missing_affected_count_never_becomes_a_zero_atom_or_fact() -> None:
         fact.locator.field_path != f"$.{missing.source_path}"
         for atom in atoms for fact in research_facts_from_ctgov_atom(atom)
     )
+
+
+def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
+    tmp_path: Path,
+) -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item)
+        for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT02277743"
+    )
+    atom = next(
+        item for item in extract_ctgov_atomic_results(source)[0]
+        if item.category == "outcome" and item.value_quote == "10.3"
+    )
+    report = ReportAPortalData.model_validate(payload["report_data"])
+    row = next(
+        item for item in report.efficacy
+        if item.trial_id.casefold() == atom.trial_id.casefold()
+        and item.value == atom.display_value
+        and item.arm_detail == atom.group_title
+        and item.endpoint == atom.endpoint
+    )
+    bound, facts = bind_ctgov_outcome_to_a_row(source, atom, row)
+    assert bound.source_field_path == atom.value_locator.field_path
+    assert bound.source_text == atom.value_quote == facts[0].original_text
+    assert bound.source_version_id is not None
+    assert bound.group_id == atom.group_id
+    assert facts[0].row_ref == f"efficacy:{row.row_id}"
+    assert facts[0].result_context is not None
+    assert facts[0].result_context.group_title == atom.group_title
+
+    rendered = ReportAPortalData.model_validate({
+        **report.model_dump(mode="json"),
+        "efficacy": [
+            bound.model_dump(mode="json") if item.row_id == row.row_id
+            else item.model_dump(mode="json")
+            for item in report.efficacy
+        ],
+    })
+    render_report_a_site(rendered, tmp_path / "site")
+    report_js = (tmp_path / "site/data/report.js").read_text()
+    assert bound.source_field_path in report_js
+    assert bound.source_version_id in report_js
+
+    for changed in (
+        row.model_copy(update={"trial_id": "nct00000000"}),
+        row.model_copy(update={"value": 10.4}),
+        row.model_copy(update={"arm_detail": "另一剂量组"}),
+        row.model_copy(update={"group_id": "OG999"}),
+        row.model_copy(update={"source_text": "编造引文"}),
+    ):
+        with pytest.raises(ValueError):
+            bind_ctgov_outcome_to_a_row(source, atom, changed)
