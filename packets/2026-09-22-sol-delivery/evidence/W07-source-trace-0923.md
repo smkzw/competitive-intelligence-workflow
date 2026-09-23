@@ -4,6 +4,8 @@
 
 `build_ctgov_a_outcome_candidate_batch` 对每份 `SourceCapture` 只做一次原子重提取，用试验和完整终点标题缩小候选，再执行组别、单位、数值、时间、class/category 与来源路径的既有确定性校验。单行有 0 或多于 1 个完整候选、或多个报告行争用同一原子时，输出显式 gap 且不生成绑定事实；原始解析/缺失问题另行返回。测试中两个不同访视的直接人数 `30`、`31` 和各自来源分母经既有 `ingest_research_evidence` 形成 4 个事实版本、2 个声明版本与精确片段；真实 AD NCT02277743 的 `10.3` 行在批量/单行合同下结果一致。首次试测因合成 CAS 不在摄取项目根内、诊断 SQL 误用不存在的 `original_text` 列而失败，修正测试设置后 W07/CT.gov/A 包整族 **28 passed in 95.50s**，Ruff、单模块 strict-mypy、diff 检查通过。该批是可摄取候选接缝，不代表正式 PNH 4412 行已摄取、独立复核或科学门通过。
 
+真实 v106 只读复算：研究包 SHA-256 `867ca66458df8a7343889bd9a601b567c12e2dfb5e069835a865b416bdbb9607`，两页内容逐字节等于 CAS `1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98` 与 `c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3`。在自动清理的临时项目中从这两页重提取 48 个采用 NCT，再用新批量接口检查旧输入 3895 条疗效行：2966 唯一绑定候选，产生 3557 个原子事实、2966 个直接声明；929 条 `no_exact_match`，无 `ambiguous` 或 `source_atom_reused`。来源解析另返回 3 个 `missing` 与 51 个 `parse_failure`，不能把 929 全归咎于真实未公开。该批未调用正式 PNH 摄取、未签科学复核、未重建门户；当前 W05A v6 的 4412 条展示事实来源闭包仍 0/4412。旧候选输入存在已知“from baseline”误标，修正后的新载荷须另建并重算。
+
 ### 构建器与原子解析共用明确访视判定
 
 `tools/build_a_payload.py` 曾将任意含 `baseline` 的类别标题直接标成 Baseline 访视，导致 NCT04820530 `eff-10` 一类“from baseline”比较基准行被误标。现改用登记原子解析同一 `ctgov_class_observation_timepoint` 判定：仅明确 Baseline 或单一 Day/Week/Month 访视覆盖测量时间窗；其他保留原时间窗与 class 标签。相邻 W07 接缝/CT.gov 覆盖批 **24 passed in 94.73s**，Ruff、两个源文件 strict-mypy、diff 检查通过。首次直接导入脚本的测试因顶层 argparse 失败，改测共享判定后通过。旧 v106 载荷未重建；先前 2966 候选仅适用该旧输入版本，不能自动沿用到新候选。正式 4412 来源闭包仍 0/4412。
