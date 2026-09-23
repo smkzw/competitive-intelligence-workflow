@@ -65,6 +65,8 @@ AxisPlan 由统计形式和科学资格决定，不仅由单位决定。受试�
 分母输入保存source version、study、module/measure、原始group、期别、分析人群、窗口、统计对象；跨模块采用需明确关系与理由。标题只给候选、同N只校核；来源确有分母但模型丢字段时修提取，不全部设unknown掩盖缺陷。otherNumAtRisk不能泛化到任意复合TEAE。
 Safety保留polarity、seriousness、TEAE、relatedness、grade集合/关系、父子测量及measure_object；未知原文仍可查。数值投影含原值/规范值、单位/方向、分母来源、公式、对照对象、时间、大小口径和不可绘理由。前端轴域取投影后实际值，无对照不做差值，未知治疗N不冒称治疗N。
 
+用户 2026-09-23 裁决：ClinicalTrials.gov 不良事件统计中的 `numAffected` 缺失，即使同组 `numAtRisk` 存在，也只能记“未知，待核”，保留精确来源路径并触发恢复，不得解释为 0、生成零事件或零风险率。只有原始记录明确给出数值 `0` 才可标为真实零。历史载荷中由字段省略推断出的零值须在 W07 重提取时复核；旧审计 PASS 不能沿用。
+
 C身份区分研究/方案版本、outcome_id、角色、组/队列/期别、时间语义；同ID矛盾要显式。全universe逐研究记录已有/缺失/冲突，每个终点时间独立校验。按显式arm–intervention关系建给药，不能一律arm1。
 DesignClause为受限条款结构：原文/译文、母子关系、AND/OR/NOT/例外、阈值/单位、适用条件、主题、来源/版本。检索同义不等医学等价；母句完整可展开。无需通用NLP本体或新向量数据库作为必需依赖。
 

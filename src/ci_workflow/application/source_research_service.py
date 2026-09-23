@@ -1067,8 +1067,27 @@ def _iter_adverse_event_results(
                     group_id = _result_text(stat.get("groupId"))
                     if group_id not in group_info:
                         raise ValueError(f"事件组未定义：{group_id or '空值'}")
-                    # ClinicalTrials.gov 的 JSON 会省略值为 0 的整数标量。
-                    numerator = _result_int(stat.get("numAffected", 0))
+                    # A missing field is not evidence of zero affected patients.
+                    # Keep the exact location for recovery instead of drawing a
+                    # zero event/rate from a protobuf/JSON omission hypothesis.
+                    if stat.get("numAffected") is None:
+                        _result_issue(
+                            issues=issues,
+                            category=category,  # type: ignore[arg-type]
+                            status="missing",
+                            trial_id=trial_id,
+                            source_id=source_id,
+                            source_path=f"{stat_path}.numAffected",
+                            result_key=_result_key(
+                                category, trial_id, term, group_id, stat_path
+                            ),
+                            reason_zh=(
+                                f"{trial_id} 的 {term} / {group_id} 未提供 numAffected；"
+                                "受影响人数未知，待核，不得推断为 0"
+                            ),
+                        )
+                        continue
+                    numerator = _result_int(stat["numAffected"])
                     denominator = _result_int(stat.get("numAtRisk"))
                     if denominator == 0 and numerator == 0:
                         continue

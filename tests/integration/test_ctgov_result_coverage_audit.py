@@ -9,6 +9,7 @@ from ci_workflow.application.source_research_service import (
     FreshAResearchContent,
     ResearchFact,
     SourceCapture,
+    _iter_adverse_event_results,
     audit_clinicaltrials_result_coverage,
 )
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, SafetyRow
@@ -178,16 +179,48 @@ def test_other_num_affected_cannot_be_projected_as_teae() -> None:
     )
 
 
-def test_omitted_zero_event_fields_are_not_misreported_as_parse_failures() -> None:
+def test_omitted_ae_affected_count_is_unknown_not_zero() -> None:
     _, report, sources = _fixture()
 
     audit = audit_clinicaltrials_result_coverage(report, (_source(sources, "NCT05131477"),))
 
-    assert not any(
-        issue.category == "parse_failure"
-        and "seriousEvents[16].stats[7]" in issue.source_path
+    assert any(
+        issue.status == "missing"
+        and issue.source_path.endswith("seriousEvents[16].stats[7].numAffected")
+        and "未知，待核" in issue.reason_zh
         for issue in audit.issues
     )
+
+
+def test_ae_explicit_zero_is_preserved_but_missing_affected_is_not_inferred() -> None:
+    record = {
+        "resultsSection": {
+            "adverseEventsModule": {
+                "eventGroups": [{"id": "EG1", "title": "治疗组"}],
+                "seriousEvents": [
+                    {
+                        "term": "头痛",
+                        "stats": [
+                            {"groupId": "EG1", "numAtRisk": 100},
+                            {"groupId": "EG1", "numAffected": 0, "numAtRisk": 100},
+                        ],
+                    }
+                ],
+            }
+        }
+    }
+    issues = []
+    rows = _iter_adverse_event_results(
+        record=record, trial_id="nct-test", source_id="source-test", issues=issues
+    )
+
+    assert len(rows) == 1
+    assert rows[0].numerator == 0
+    assert rows[0].denominator == 100
+    assert rows[0].value == 0
+    assert len(issues) == 1
+    assert issues[0].status == "missing"
+    assert issues[0].source_path.endswith("seriousEvents[0].stats[0].numAffected")
 
 
 def test_explicit_teae_and_aesi_are_separate_from_other_events() -> None:
