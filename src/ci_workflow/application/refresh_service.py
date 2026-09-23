@@ -30,7 +30,7 @@ import tempfile
 from collections.abc import Sequence
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
@@ -87,6 +87,9 @@ from ci_workflow.storage.snapshot_store import (
 )
 from ci_workflow.storage.sqlite import open_database
 
+if TYPE_CHECKING:
+    from ci_workflow.application.user_fact_edit import RefreshConflictComparison
+
 _RUN_ID = "refresh"
 _PLAN_EVENT = "refresh.plan.created"
 _PROMOTION_EVENT = "refresh.candidates.promoted"
@@ -95,6 +98,7 @@ _GATE_DECISION_EVENT = "refresh.gate.decision.recorded"
 _SNAPSHOT_EVENT = "refresh.report.snapshot.registered"
 _QC_EVENT = "refresh.scientific_qc.recorded"
 _ACCEPTED_EVENT = "refresh.version.accepted"
+_USER_FACT_COMPARISON_EVENT = "refresh.user_fact.compared"
 
 # 首版唯一必选交付格式（决策 0013）
 _SUPPORTED_FORMATS: tuple[str, ...] = ("html",)
@@ -653,6 +657,277 @@ class RefreshService:
             ),
         }
 
+    def _user_fact_row(self, fact_version_id: str) -> dict[str, Any]:
+        with open_database(self.database_path) as database:
+            row = database.execute(
+                "SELECT fact_version_id,fact_id,entity_id,field_id,raw_value,normalized_value,"
+                "primary_fragment_id,supersedes_fact_version_id,scientific_context_json "
+                "FROM fact_versions WHERE fact_version_id=?",
+                (fact_version_id,),
+            ).fetchone()
+        if row is None:
+            raise RefreshStateError("三方比较事实版本不存在")
+        names = (
+            "fact_version_id",
+            "fact_id",
+            "entity_id",
+            "field_id",
+            "raw_value",
+            "normalized_value",
+            "primary_fragment_id",
+            "supersedes_fact_version_id",
+            "scientific_context_json",
+        )
+        result = dict(zip(names, row, strict=True))
+        try:
+            context = json.loads(str(result["scientific_context_json"] or "{}"))
+        except json.JSONDecodeError as error:
+            raise RefreshStateError("三方比较事实语义无法读取") from error
+        if not isinstance(context, dict):
+            raise RefreshStateError("三方比较事实语义不是对象")
+        context.pop("user_edit", None)
+        context.update(
+            {
+                "raw_value": result["raw_value"],
+                "normalized_value": result["normalized_value"],
+                "entity_id": result["entity_id"],
+                "field_id": result["field_id"],
+                "primary_fragment_id": result["primary_fragment_id"],
+            }
+        )
+        result["fields"] = context
+        return result
+
+    def _user_lineage(
+        self,
+        *,
+        fact_id: str,
+        base_fact_version_id: str,
+        user_fact_version_id: str,
+    ) -> tuple[str, ...]:
+        lineage: list[str] = []
+        current_id: str | None = user_fact_version_id
+        visited: set[str] = set()
+        while current_id is not None:
+            if current_id in visited:
+                raise RefreshStateError("用户事实版本谱系存在环")
+            visited.add(current_id)
+            row = self._user_fact_row(current_id)
+            if row["fact_id"] != fact_id:
+                raise RefreshStateError("用户事实版本谱系跨越了事实身份")
+            lineage.append(current_id)
+            if current_id == base_fact_version_id:
+                return tuple(lineage)
+            parent = row["supersedes_fact_version_id"]
+            current_id = None if parent is None else str(parent)
+        raise RefreshStateError("用户事实版本不是指定base的后代")
+
+    def _declared_user_fields(self, lineage: tuple[str, ...]) -> set[str]:
+        user_versions = lineage[:-1]
+        if not user_versions:
+            return set()
+        placeholders = ",".join("?" for _ in user_versions)
+        with open_database(self.database_path) as database:
+            rows = database.execute(
+                "SELECT result_fact_version_id,command_json FROM user_fact_edit_requests "
+                f"WHERE result_fact_version_id IN ({placeholders})",
+                user_versions,
+            ).fetchall()
+        commands = {
+            str(version_id): json.loads(str(command_json))
+            for version_id, command_json in rows
+        }
+        if set(commands) != set(user_versions):
+            raise RefreshStateError("用户事实谱系缺少对应的typed保存命令")
+        declared: set[str] = set()
+        for version_id in user_versions:
+            command = commands[version_id]
+            edits = command.get("edits")
+            if not isinstance(edits, dict):
+                raise RefreshStateError("用户事实谱系保存命令缺少typed edits")
+            declared.update(key for key, value in edits.items() if value is not None)
+        if declared & {"numerator", "denominator", "threshold_operator", "threshold_value"}:
+            declared.update({"raw_value", "normalized_value"})
+        return declared
+
+    def compare_user_fact_refresh(
+        self,
+        *,
+        fact_id: str,
+        base_fact_version_id: str,
+        user_fact_version_id: str,
+        source_version_id: str,
+        source_fields: dict[str, object],
+        source_withdrawn: bool,
+        request_id: str,
+        compared_at: datetime,
+        actor_id: str,
+    ) -> RefreshConflictComparison:
+        """Persist a complete typed base/user/new-source comparison for W07."""
+        from ci_workflow.application.user_fact_edit import (
+            RefreshConflictComparison,
+            RefreshFieldComparison,
+            RefreshFieldState,
+        )
+
+        occurred_at = _offset_datetime(compared_at)
+        base = self._user_fact_row(base_fact_version_id)
+        user = self._user_fact_row(user_fact_version_id)
+        if base["fact_id"] != fact_id or user["fact_id"] != fact_id:
+            raise RefreshStateError("三方比较事实身份不一致")
+        lineage = self._user_lineage(
+            fact_id=fact_id,
+            base_fact_version_id=base_fact_version_id,
+            user_fact_version_id=user_fact_version_id,
+        )
+        base_fields = dict(base["fields"])
+        user_fields = dict(user["fields"])
+        missing_user = sorted(set(base_fields) - set(user_fields))
+        if missing_user:
+            raise RefreshStateError(f"用户事实没有完整继承base字段：{missing_user}")
+        declared_user_fields = self._declared_user_fields(lineage)
+        undeclared_changes = sorted(
+            field
+            for field in set(base_fields) | set(user_fields)
+            if base_fields.get(field) != user_fields.get(field)
+            and field not in declared_user_fields
+        )
+        if undeclared_changes:
+            raise RefreshStateError(
+                f"用户事实存在未由typed命令声明的字段变化：{undeclared_changes}"
+            )
+        comparisons: dict[str, RefreshFieldComparison] = {}
+        field_names = sorted(set(base_fields) | set(user_fields) | set(source_fields))
+        for field in field_names:
+            base_present = field in base_fields
+            user_present = field in user_fields
+            source_present = field in source_fields
+            base_value = base_fields.get(field)
+            user_value = user_fields.get(field)
+            source_value = source_fields.get(field, base_value)
+            user_changed = user_present != base_present or user_value != base_value
+            source_changed = source_present and source_value != base_value
+            if source_withdrawn:
+                state = RefreshFieldState.SOURCE_WITHDRAWN
+            elif user_changed and source_changed:
+                state = (
+                    RefreshFieldState.CONVERGED
+                    if user_value == source_value
+                    else RefreshFieldState.CONFLICT
+                )
+            elif user_changed:
+                state = RefreshFieldState.USER_MODIFIED
+            elif source_changed:
+                state = RefreshFieldState.SOURCE_CHANGED
+            else:
+                state = RefreshFieldState.UNCHANGED
+            requires = state in {
+                RefreshFieldState.CONFLICT,
+                RefreshFieldState.SOURCE_WITHDRAWN,
+            }
+            comparisons[field] = RefreshFieldComparison(
+                field=field,
+                base_value=base_value,
+                user_value=user_value,
+                source_value=None if source_withdrawn else source_value,
+                base_present=base_present,
+                user_present=user_present,
+                source_present=source_present,
+                source_inherited_from_base=not source_withdrawn and not source_present,
+                state=state,
+                source_version_id=source_version_id,
+                resolution_required=requires,
+                resolution_options=("keep_user", "accept_source", "manual") if requires else (),
+            )
+        states = {field: item.state for field, item in comparisons.items()}
+        requires_explicit_resolution = any(
+            item.resolution_required for item in comparisons.values()
+        )
+        conflict_id = stable_id(
+            "user-refresh-conflict",
+            request_id,
+            fact_id,
+            base_fact_version_id,
+            user_fact_version_id,
+            source_version_id,
+            _payload_digest(source_fields),
+            str(source_withdrawn),
+        )
+        comparison = RefreshConflictComparison(
+            conflict_id=conflict_id,
+            fact_id=fact_id,
+            base_fact_version_id=base_fact_version_id,
+            user_fact_version_id=user_fact_version_id,
+            source_version_id=source_version_id,
+            user_lineage=lineage,
+            field_states=states,
+            field_comparisons=comparisons,
+            requires_explicit_resolution=requires_explicit_resolution,
+        )
+        comparison_json = comparison.model_dump_json()
+        with open_database(self.database_path) as database:
+            request_row = database.execute(
+                "SELECT conflict_id,comparison_json FROM user_refresh_conflicts WHERE request_id=?",
+                (request_id,),
+            ).fetchone()
+            if request_row is not None and (
+                str(request_row[0]) != conflict_id or str(request_row[1]) != comparison_json
+            ):
+                raise RefreshConflictError("同一刷新比较请求标识对应了不同内容")
+            existing = database.execute(
+                "SELECT comparison_json FROM user_refresh_conflicts WHERE conflict_id=?",
+                (conflict_id,),
+            ).fetchone()
+            if existing is not None:
+                if str(existing[0]) != comparison_json:
+                    raise RefreshConflictError("同一三方比较身份对应了不同内容")
+            else:
+                database.execute(
+                    "INSERT INTO user_refresh_conflicts (conflict_id,request_id,fact_id,"
+                    "base_fact_version_id,user_fact_version_id,source_fields_json,field_states_json,"
+                    "requires_explicit_resolution,created_at,source_version_id,base_fields_json,"
+                    "user_fields_json,comparison_json,resolution_json) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    (
+                        conflict_id,
+                        request_id,
+                        fact_id,
+                        base_fact_version_id,
+                        user_fact_version_id,
+                        _canonical_json_text(source_fields),
+                        _canonical_json_text({key: value.value for key, value in states.items()}),
+                        int(requires_explicit_resolution),
+                        occurred_at.isoformat(),
+                        source_version_id,
+                        _canonical_json_text(base_fields),
+                        _canonical_json_text(user_fields),
+                        comparison_json,
+                        _canonical_json_text(
+                            {
+                                key: list(value.resolution_options)
+                                for key, value in comparisons.items()
+                                if value.resolution_required
+                            }
+                        ),
+                    ),
+                )
+            project = database.execute(
+                "SELECT project_id FROM project_contract_versions "
+                "ORDER BY contract_version DESC LIMIT 1"
+            ).fetchone()
+        if project is None:
+            raise RefreshStateError("项目合同不存在，无法持久化刷新比较事件")
+        self._append_event(
+            event_type=_USER_FACT_COMPARISON_EVENT,
+            event_kind="user-fact-refresh-comparison",
+            project_id=str(project[0]),
+            actor_id=actor_id,
+            occurred_at=occurred_at,
+            payload={"comparison": comparison.model_dump(mode="json")},
+            idempotency_key=f"refresh.user_fact.compare:{request_id}",
+        )
+        return comparison
+
     # ── 幂等账本 ───────────────────────────────────────────────────────────
 
     def _claim(self, *, key: str, operation: str, result: dict[str, Any]) -> bool:
@@ -698,13 +973,20 @@ class RefreshService:
         payload: dict[str, Any],
         idempotency_key: str,
     ) -> None:
+        event_identity = str(payload.get("refresh_id") or "")
+        if not event_identity:
+            comparison = payload.get("comparison")
+            if isinstance(comparison, dict):
+                event_identity = str(comparison.get("conflict_id") or "")
+        if not event_identity:
+            event_identity = idempotency_key
         event = WorkflowEvent(
             schema_version="1.0",
             event_id=stable_id(
                 event_kind,
                 project_id,
                 _RUN_ID,
-                str(payload.get("refresh_id", "")),
+                event_identity,
                 _payload_digest(payload),
             ),
             project_id=project_id,

@@ -28,6 +28,19 @@ SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$|^[0-9a-f]{64}$")
 _WINDOWS_ABSOLUTE_PATTERN = re.compile(r"^[A-Za-z]:")
 REQUIRED_CATALOG_ID = "required-v12"
+PORTAL_ASSET_MIRROR_FILES: tuple[str, ...] = (
+    "charts.js",
+    "portal.css",
+    "portal.js",
+    "evidence-drawer.css",
+    "evidence-drawer.js",
+    "report-a.css",
+    "report-a.js",
+    "report-b.css",
+    "report-b.js",
+    "report-c.css",
+    "report-c.js",
+)
 
 # These names are never valid payloads for a portable candidate bundle. The
 # builder skips them when they occur below an approved directory; the verifier
@@ -435,9 +448,37 @@ FINAL_REQUIRED_CONTENT: tuple[str, ...] = (
 )
 
 
-def default_allowlist(source_root: Path) -> tuple[str, ...]:
-    """返回当前候选包的显式 allowlist。"""
+def validate_portal_asset_mirror(source_root: Path) -> None:
+    """Require authored module assets, bundle mirror, and manifest to agree."""
 
+    author_root = source_root / "src/ci_workflow/renderers/portal/assets"
+    mirror_root = source_root / "assets/portal"
+    manifest = _load_json_object(mirror_root / "manifest.json")
+    if manifest.get("author_source") != "src/ci_workflow/renderers/portal/assets/":
+        raise BundleError("门户资源清单未声明模块 assets 为唯一作者源")
+    records = manifest.get("files")
+    if not isinstance(records, dict):
+        raise BundleError("门户资源清单 files 必须是对象")
+    for name in PORTAL_ASSET_MIRROR_FILES:
+        author = author_root / name
+        mirror = mirror_root / name
+        if not author.is_file() or not mirror.is_file():
+            raise BundleError(f"门户资源作者源或发包镜像缺失：{name}")
+        author_bytes = author.read_bytes()
+        if mirror.read_bytes() != author_bytes:
+            raise BundleError(f"门户资源发包镜像与模块作者源不一致：{name}")
+        record = records.get(name)
+        if not isinstance(record, dict):
+            raise BundleError(f"门户资源清单缺少镜像条目：{name}")
+        digest = hashlib.sha256(author_bytes).hexdigest()
+        if record.get("sha256") != digest or record.get("bytes") != len(author_bytes):
+            raise BundleError(f"门户资源清单与模块作者源不一致：{name}")
+
+
+def default_allowlist(source_root: Path) -> tuple[str, ...]:
+    """返回当前候选包的显式 allowlist，并校验门户资源同步合同。"""
+
+    validate_portal_asset_mirror(source_root)
     return DEFAULT_ALLOWLIST
 
 

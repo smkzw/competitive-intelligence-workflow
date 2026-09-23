@@ -47,7 +47,7 @@ cases:
     inputs:
       - path: inputs/report-data.json
         role: report_data
-        sha256: "eeae14ce581aeacc6c098cde5f45571e4d0f88d2cc5877cba5429654448381d1"
+        sha256: "a37d7239bfc68f50d86ff732953c68769f1e70710d9e05e36f474941ce172e3b"
     expected:
       report: B
       report_version: v-fixture-b-pnh-001
@@ -55,7 +55,7 @@ cases:
       state: rendered_unreviewed
       product_count: 1
       static_route_count: 24
-    case_digest: "f908d4f269b3b169315000016de10c809fa9783d20610c4a43530332fa9ec33a"
+    case_digest: "02f86d273f1656d68fbe4bd845811ab5e9d84d6af4a28dee2a4ba62d8a9b70df"
   - id: b-d70-baseline-blocked
     description_zh: "B 报告 D70：核心试验组别基线缺失导致阻断"
     indication: "阵发性睡眠性血红蛋白尿"

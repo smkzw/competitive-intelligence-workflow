@@ -17,6 +17,7 @@ from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
 from ci_workflow.reports.b.safety_concepts import (
     CONCEPT_ATRISK_STAT,
     classify_safety_concept,
+    describe_safety_concept,
     safety_category_zh,
 )
 from ci_workflow.reports.b.safety_denominator_crosswalk import (
@@ -439,13 +440,18 @@ def main() -> None:
                     _risk = _eg.get(_risk_key)
                     if isinstance(_risk, int) and _risk > 0:
                         _atrisk_rows.append({
-                            "module": "ae", "group_id": str(_eg.get("id") or ""),
+                            "study_id": nct.lower(), "module": "adverseEventsModule",
+                            "group_id": str(_eg.get("id") or ""),
                             "title": _eg_title, "period": _eg_period,
                             "stat": _stat_name, "num_at_risk": _risk,
+                            "measure_object": "participants_at_risk",
+                            "analysis_population": "SAF",
+                            "window": _eg_period or "",
+                            "source_version_id": f"ctgov-pnh-page-{page_no}",
                         })
             _atrisk_crosswalk = build_atrisk_crosswalk(_atrisk_rows)
-            for measure in ((results.get("outcomeMeasuresModule") or {})
-                            .get("outcomeMeasures") or []):
+            for _measure_index, measure in enumerate(((results.get("outcomeMeasuresModule") or {})
+                            .get("outcomeMeasures") or [])):
                 title = str(measure.get("title") or "").strip() or NA
                 time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"                # 独立复核 A r22（issue-5）：组别标题优先取自测量自带 groups（OG 代码 → 登记标题）
                 for g in (measure.get("groups") or []):
@@ -466,7 +472,7 @@ def main() -> None:
                             _denom_by_group[str(_c.get("groupId"))] = int(float(str(_c.get("value"))))
                         except (TypeError, ValueError):
                             continue
-                for cls in (measure.get("classes") or []):
+                for _class_index, cls in enumerate(measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
@@ -490,7 +496,7 @@ def main() -> None:
                         f"登记结果人群（{cls_title}）" if cls_title
                         else "登记结果人群"
                     )
-                    for cat in (cls.get("categories") or []):
+                    for _category_index, cat in enumerate(cls.get("categories") or []):
                         # 独立复核第二十一轮 veto：登记测量的互斥子类
                         # （如 Improved/Worsened from Baseline）必须进入行标签，
                         # 否则同臂同测量的 4 行同名并列，数值含义无法还原
@@ -502,7 +508,7 @@ def main() -> None:
                             population = base_population[:-1] + f"；{cat_label}）"                                 if base_population.endswith("）") else f"{base_population}（{cat_label}）"
                         else:
                             population = base_population
-                        for measurement in (cat.get("measurements") or []):
+                        for _measurement_index, measurement in enumerate(cat.get("measurements") or []):
                             raw = str(measurement.get("value") or "").strip()
                             try:
                                 value = float(raw)
@@ -522,7 +528,8 @@ def main() -> None:
                                 # 命中（Non-serious 不得归 SAE），generic AE/因 AE
                                 # 停药等特定指标不冒充 any_teae；无法确认保留
                                 # specific/unknown 概念，拒判不丢数据
-                                _concept = classify_safety_concept(title)
+                                _semantic = describe_safety_concept(title)
+                                _concept = _semantic.key
                                 # 概念键全量入 term_key（会商 #2：展示层按
                                 # key 消费；specific/unknown 走 raw 描述路径）
                                 _skey = _concept
@@ -530,7 +537,7 @@ def main() -> None:
                                 if _unit_l == "participants":
                                     _unit_zh = "人"
                                 elif _unit_l == "events":
-                                    _unit_zh = "例"
+                                    _unit_zh = "次"
                                 elif "percentage" in _unit_l:
                                     _unit_zh = "%"
                                 else:
@@ -538,13 +545,12 @@ def main() -> None:
                                 _div_arm = group_titles.get(group_id, group_id or "组别未登记")
                                 _div_stat = CONCEPT_ATRISK_STAT.get(_concept)
                                 _div_period = period_of(_div_arm) or period_of(title)
-                                _div_denom = (
-                                    _atrisk_crosswalk.lookup(
-                                        stat=_div_stat, period=_div_period,
-                                        title=_div_arm,
-                                    )
-                                    if _div_stat else None
-                                )
+                                # Outcome measurements may use only their own
+                                # published denominator.  No title/ID heuristic
+                                # may manufacture an AE-to-outcome relationship.
+                                _div_denom = _denom_by_group.get(group_id)
+                                if _semantic.count_basis == "mixed":
+                                    _div_denom = None
                                 _div_num: int | None = None
                                 if (
                                     _unit_zh == "人" and _div_denom is not None
@@ -572,6 +578,10 @@ def main() -> None:
                                     "trial_id": nct.lower(),
                                     "arm": _div_arm,
                                     "value": value, "unit": _unit_zh,
+                                    "measure_object": (
+                                        "event_count" if _unit_zh == "次"
+                                        else "participant_proportion"
+                                    ),
                                     "category": safety_category_zh(_concept),
                                     "term": _measure_term(title),
                                     # 独立复核 A r44/r45（issue-2）：类目/类标题
@@ -579,7 +589,22 @@ def main() -> None:
                                     # B 侧族判定消费 term，注入会改变其分类）
                                     "measure_context": cat_label or cls_title,
                                     "term_key": _skey,
+                                    "polarity": _semantic.polarity,
+                                    "grade_set": list(_semantic.grade_set),
+                                    "seriousness": _semantic.seriousness,
+                                    "teae": _semantic.teae,
+                                    "relatedness": _semantic.relatedness,
+                                    "parent": _semantic.parent,
+                                    "children": list(_semantic.children),
+                                    "count_basis": _semantic.count_basis,
+                                    "at_risk_stat": _semantic.at_risk_stat,
                                     "time_window": _tw_out,
+                                    "source_field_path": (
+                                        f"$.studies[{array_index}].resultsSection.outcomeMeasuresModule."
+                                        f"outcomeMeasures[{_measure_index}].classes[{_class_index}]."
+                                        f"categories[{_category_index}].measurements[{_measurement_index}].value"
+                                    ),
+                                    "source_text": raw,
                                 }
                                 if _div_num is not None and _div_denom is not None:
                                     _div_row["numerator"] = _div_num
@@ -599,6 +624,12 @@ def main() -> None:
                                 # 人数列不再全"—"（登记按组披露的分母是真实数据）
                                 "denominator": _denom_by_group.get(group_id),
                                 "timepoint": row_time_frame,
+                                "source_field_path": (
+                                    f"$.studies[{array_index}].resultsSection.outcomeMeasuresModule."
+                                    f"outcomeMeasures[{_measure_index}].classes[{_class_index}]."
+                                    f"categories[{_category_index}].measurements[{_measurement_index}].value"
+                                ),
+                                "source_text": raw,
                             })
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
             # Started 里程碑数提取，喂饱矩阵气泡图的样本量轴
@@ -631,7 +662,7 @@ def main() -> None:
                 _ae_time_window = _ae_tw_zh
             elif re.findall(r"[A-Za-z]{3,}", _ae_time_window):
                 _ae_time_window = _ae_time_window + "（登记原文，未译）"
-            for group in events:
+            for _event_group_index, group in enumerate(events):
                 term = str(group.get("title") or "治疗期间不良事件")
                 freq = group.get("seriousNumAffected")
                 if freq is None:
@@ -645,12 +676,23 @@ def main() -> None:
                     "category": "严重不良事件（登记）",
                     # 会商 P0 #3：受控词表键，供矩阵安全轴精确匹配
                     "term_key": "any_sae",
+                    "polarity": "affirmed", "grade_set": [],
+                    "seriousness": "serious", "teae": None,
+                    "relatedness": "unspecified", "parent": None,
+                    "children": [], "count_basis": "participants",
+                    "at_risk_stat": "serious",
                     # 独立复核修复：该行为组别汇总计数，term 不再冒充事件名
                     "term": "严重不良事件组别汇总计数",
-                    "value": freq, "unit": "例",
+                    "value": freq, "unit": "人",
+                    "measure_object": "participant_proportion",
                     "numerator": freq,
                     "denominator": at_risk if isinstance(at_risk, int) and at_risk > 0 else None,
                     "time_window": _ae_time_window,
+                    "source_field_path": (
+                        f"$.studies[{array_index}].resultsSection.adverseEventsModule."
+                        f"eventGroups[{_event_group_index}].seriousNumAffected"
+                    ),
+                    "source_text": str(freq),
                 })
                 # 独立复核第二十三轮 veto：登记已报告的死亡必须入安全性域
                 deaths_affected = group.get("deathsNumAffected")
@@ -661,12 +703,23 @@ def main() -> None:
                         "row_id": f"safe-{si}", "product_id": pid,
                         "trial_id": nct.lower(), "arm": term,
                         "category": "死亡病例（登记）",
-                    "term_key": "death",
+                        "term_key": "death",
+                        "polarity": "affirmed", "grade_set": [],
+                        "seriousness": "unspecified", "teae": None,
+                        "relatedness": "unspecified", "parent": None,
+                        "children": [], "count_basis": "participants",
+                        "at_risk_stat": "deaths",
                         "term": "死亡病例组别汇总计数",
-                        "value": deaths_affected, "unit": "例",
+                        "value": deaths_affected, "unit": "人",
+                        "measure_object": "participant_proportion",
                         "numerator": deaths_affected,
                         "denominator": deaths_at_risk if isinstance(deaths_at_risk, int) and deaths_at_risk > 0 else None,
                         "time_window": _ae_time_window,
+                        "source_field_path": (
+                            f"$.studies[{array_index}].resultsSection.adverseEventsModule."
+                            f"eventGroups[{_event_group_index}].deathsNumAffected"
+                        ),
+                        "source_text": str(deaths_affected),
                     })
 
             # 独立复核 B 门根因修复（声明臂影子归因）：AE 组标题带期间后缀

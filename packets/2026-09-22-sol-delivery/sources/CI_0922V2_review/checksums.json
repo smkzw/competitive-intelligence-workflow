@@ -1,0 +1,16 @@
+{
+  "round": "0922V2",
+  "algorithm": "SHA-256",
+  "files": {
+    "0922V2_ACCEPTANCE.md": "167859a1cf74db2c7cd1a013f9685e1183de1e3448ef3fd1171fbe3f526046e7",
+    "0922V2_AGENT_NEXT.md": "f714a3aee46034288d39e477e03f4f633ae1a45c9a19145a6ed3f98e1594c67e",
+    "0922V2_REVIEW.md": "45fe2ebfc2275dc9d1f5521bc87ef956c7256e691b90a18ba9713410998dc3ff",
+    "README.md": "ad5b15aab1143258ea7de85ddb12a75f515aa77bc7ad601ed542a0de8022b103",
+    "evidence/probe_results.json": "4953a0622ee466ae1bf29f72ee48d0967890490178ce3373a562e068bac3717d",
+    "evidence/probe_stdout.txt": "67a10d5213c9579d734b4aa6dc430a81adee169fe7e80b1301424f441fd58ca3",
+    "evidence/source_manifest.json": "ac6fe4d7270e1739e1cfdc7913fbf80acd8ee928ec8cd50251978b63d7f5577b",
+    "probes/js_probes.js": "f6645c0619e7f71eb775f77de272a1eaceb44746b3cfa6fd6fd3a8999e91300f",
+    "probes/run_probes.py": "bd9d77622c7652c909702d3b6e162189d24abb211ca8b83a83a0bb01f7656693",
+    "probes/source_excerpts.py": "efda341ee0367095eb06190c9caacba7883e18fd8a373325e5f83bfb243a98ff"
+  }
+}

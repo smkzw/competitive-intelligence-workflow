@@ -1,0 +1,154 @@
+{
+  "round": "0922V2",
+  "repository": "smkzw/competitive-intelligence-workflow",
+  "base": "d1909b8d81ddf01e15e0ff4db8dd5985d5853b36",
+  "commit": "700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c",
+  "sources": [
+    {
+      "id": "S00",
+      "path": "packets/2026-09-22-v102-handoff/handoff.md",
+      "git_blob_sha": "1914c592c1aa88d5d57d4c5026be3011b50be6dd",
+      "read_range": "handoff full via commit + file lines75-170",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/packets/2026-09-22-v102-handoff/handoff.md"
+    },
+    {
+      "id": "S01",
+      "path": "src/ci_workflow/reports/b/safety_concepts.py",
+      "git_blob_sha": "6b233240e2e5da1282fabdd4e0ede299c61b8c57",
+      "read_range": "full",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/reports/b/safety_concepts.py"
+    },
+    {
+      "id": "S02",
+      "path": "src/ci_workflow/reports/b/concept_catalog.py",
+      "git_blob_sha": "d7b0b29792c5447cb079e9de0f1db3084cf2960e",
+      "read_range": "full",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/reports/b/concept_catalog.py"
+    },
+    {
+      "id": "S03",
+      "path": "src/ci_workflow/reports/b/safety_denominator_crosswalk.py",
+      "git_blob_sha": "8838b4cd4e9270c36de07cb3788055c7ada13dc2",
+      "read_range": "full",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/reports/b/safety_denominator_crosswalk.py"
+    },
+    {
+      "id": "S04",
+      "path": "src/ci_workflow/reports/c/endpoint_instances.py",
+      "git_blob_sha": "2e83a95a96c52dc0ff3aa6db3e4c0d6d38db30da",
+      "read_range": "full",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/reports/c/endpoint_instances.py"
+    },
+    {
+      "id": "S05",
+      "path": "src/ci_workflow/renderers/portal/report_a.py",
+      "git_blob_sha": "f4ba67af7960dcfc42c4b9383cf083b4ef0eab85",
+      "read_range": "35-205",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/renderers/portal/report_a.py"
+    },
+    {
+      "id": "S06",
+      "path": "src/ci_workflow/application/fresh_c_research_package.py",
+      "git_blob_sha": "8e816d90eab2e2e01f7c75cba86c44e0154bc802",
+      "read_range": "265-420",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/application/fresh_c_research_package.py"
+    },
+    {
+      "id": "S07",
+      "path": "src/ci_workflow/application/fresh_research_ingestion.py",
+      "git_blob_sha": "6bc4821014d52356a573d31c8d881d87d13129bf",
+      "read_range": "90-320",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/application/fresh_research_ingestion.py"
+    },
+    {
+      "id": "S08",
+      "path": "src/ci_workflow/application/fresh_research_ingestion.py",
+      "git_blob_sha": "6bc4821014d52356a573d31c8d881d87d13129bf",
+      "read_range": "290-390",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/application/fresh_research_ingestion.py"
+    },
+    {
+      "id": "S09",
+      "path": "packets/2026-09-11-pnh-vertical/build_pnh_audit.py",
+      "git_blob_sha": "15ed71835594ce4ea61472fb0e1c98d8bdbfcd60",
+      "read_range": "160-325",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/packets/2026-09-11-pnh-vertical/build_pnh_audit.py"
+    },
+    {
+      "id": "S10",
+      "path": "tests/integration/test_review_r07_ingestion_invariants.py",
+      "git_blob_sha": "f7abd69a4cd143df051e011cad57e50d4ac96302",
+      "read_range": "full",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/tests/integration/test_review_r07_ingestion_invariants.py"
+    },
+    {
+      "id": "S11",
+      "path": "src/ci_workflow/storage/content_store.py",
+      "git_blob_sha": "48f9405ff1962fe9ea0edfcb92d4d1c47dd139fa",
+      "read_range": "285-430",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/storage/content_store.py"
+    },
+    {
+      "id": "S12",
+      "path": "src/ci_workflow/renderers/portal/assets/report-a.js",
+      "git_blob_sha": "713ea60632498cfc508413c688740091bba34508",
+      "read_range": "500-765;880-1260",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/renderers/portal/assets/report-a.js"
+    },
+    {
+      "id": "S13",
+      "path": "src/ci_workflow/renderers/portal/builder.py",
+      "git_blob_sha": "2a070b50951c13e812368cd4957ab3d00fb186fb",
+      "read_range": "1-190",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/renderers/portal/builder.py"
+    },
+    {
+      "id": "S14",
+      "path": "src/ci_workflow/reports/c/synthesis.py",
+      "git_blob_sha": "1b0526ada1dedccbd7ca05446459f100cd5b61f2",
+      "read_range": "1-205",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/reports/c/synthesis.py"
+    },
+    {
+      "id": "S15",
+      "path": "src/ci_workflow/application/review_issuer.py",
+      "git_blob_sha": "e0dabccdd1210fdf4917b4004efadaf726b22887",
+      "read_range": "1-175",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/application/review_issuer.py"
+    },
+    {
+      "id": "S16",
+      "path": "src/ci_workflow/reports/b/registry_observation.py",
+      "git_blob_sha": "f85a6571377a76df4a0c56ef1f2cf519cbc37655",
+      "read_range": "60-150",
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow/blob/700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c/src/ci_workflow/reports/b/registry_observation.py"
+    }
+  ],
+  "public_primary_sources": [
+    {
+      "id": "W01",
+      "title": "ClinicalTrials.gov Study Data Structure",
+      "url": "https://clinicaltrials.gov/data-api/about-api/study-data-structure",
+      "used_for": "otherNumAtRisk refers to Other (Not Including Serious) adverse events"
+    },
+    {
+      "id": "W02",
+      "title": "ClinicalTrials.gov Results Quality Control Review Criteria",
+      "url": "https://clinicaltrials.gov/submit-studies/prs-help/results-quality-control-review-criteria",
+      "used_for": "At-risk counts and consistency/valid explanations across outcome and AE modules"
+    },
+    {
+      "id": "W03",
+      "title": "Apache ECharts Dataset",
+      "url": "https://echarts.apache.org/handbook/en/concepts/dataset/",
+      "used_for": "dataset dimensions/encode/data-config separation"
+    }
+  ],
+  "not_obtained": [
+    "runs/test-round6-grok/findings.json (404 at fixed commit)",
+    "runs/test-round5-cursor/findings.json (404 at fixed commit)",
+    "runnable repository checkout",
+    "abc-v102 generated site/runtime evidence"
+  ],
+  "probe_scope": "extracted computational branches with synthetic inputs; not repository tests, not browser or installation validation; surrounding imports/comments omitted; some exception messages shortened"
+}

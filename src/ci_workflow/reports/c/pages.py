@@ -103,6 +103,9 @@ class EndpointDefinitionTimepointRow(BaseModel):
     trial_id: str
     cohort_id: str
     group_id: str
+    outcome_id: str | None = None
+    endpoint_role: str | None = None
+    period: str | None = None
     endpoint_display_name: str
     endpoint_definition: str
     assessment_timepoint: str
@@ -175,6 +178,9 @@ class DesignFactRow(BaseModel):
     trial_id: str
     cohort_id: str
     group_id: str
+    outcome_id: str | None = None
+    endpoint_role: str | None = None
+    period: str | None = None
     field_family: DesignFieldFamily
     field: str
     source_field_name: str
@@ -300,7 +306,9 @@ def _scope_key(observation: DesignObservation, pairing_key: str) -> tuple[str, .
         observation.trial_id,
         observation.cohort_id,
         observation.group_id,
-        pairing_key,
+        observation.outcome_id or pairing_key,
+        observation.endpoint_key or "",
+        observation.period or "",
     )
 
 
@@ -318,11 +326,15 @@ def _endpoint_identity(
         endpoint.trial_id,
         endpoint.cohort_id,
         endpoint.group_id,
-        pairing_key,
+        endpoint.outcome_id or pairing_key,
+        endpoint.endpoint_key or "",
+        endpoint.period or "period-unspecified",
         display_name,
         definition,
         assessment_timepoint,
         endpoint.observation_id,
+        endpoint.source_version_id,
+        endpoint.compatibility_rule,
     )
 
 
@@ -335,6 +347,9 @@ def _fact_row_identity(observation: DesignObservation) -> str:
         observation.group_id,
         observation.field_family.value,
         observation.field,
+        observation.outcome_id or "outcome-unspecified",
+        observation.endpoint_key or "role-unspecified",
+        observation.period or "period-unspecified",
         observation.observation_id,
     )
 
@@ -378,6 +393,9 @@ def _to_fact_row(observation: DesignObservation) -> DesignFactRow:
         trial_id=observation.trial_id,
         cohort_id=observation.cohort_id,
         group_id=observation.group_id,
+        outcome_id=observation.outcome_id,
+        endpoint_role=observation.endpoint_key,
+        period=observation.period,
         field_family=observation.field_family,
         field=observation.field,
         source_field_name=observation.source_field_name,
@@ -463,6 +481,9 @@ def _build_endpoint_row(
         trial_id=endpoint.trial_id,
         cohort_id=endpoint.cohort_id,
         group_id=endpoint.group_id,
+        outcome_id=endpoint.outcome_id,
+        endpoint_role=endpoint.endpoint_key,
+        period=endpoint.period,
         endpoint_display_name=display_name,
         endpoint_definition=definition,
         assessment_timepoint=assessment_timepoint,
@@ -523,7 +544,9 @@ def project_endpoint_definition_timepoint(
             raise DesignPagesError(
                 "同一产品/试验/队列/组别/配对键下终点或时间点观察不唯一，拒绝静默合并"
             )
-        pairing_key = scope[-1]
+        pairing_key = _pairing_key_from_definition_field(endpoint_items[0].field)
+        if pairing_key is None:
+            continue
         rows.append(
             _build_endpoint_row(
                 endpoint=endpoint_items[0],

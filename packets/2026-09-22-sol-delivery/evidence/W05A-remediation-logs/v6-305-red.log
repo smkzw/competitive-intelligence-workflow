@@ -1,0 +1,10 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_high_load_landscape_exposes_complete_core_unit_without_clipping[305-568-compact] _
+tests/browser/test_a_w05a_product.py:270: in test_high_load_landscape_exposes_complete_core_unit_without_clipping
+    assert metrics["core"]["bottom"] <= height, metrics
+E   AssertionError: {'mode': 'compact', 'core': {'top': 455.328125, 'bottom': 617.296875, 'width': 265, 'height': 161.96875, ...}, 'coreCount': 45, 'labelsFit': True, ...}
+E   assert 617.296875 <= 568
+=========================== short test summary info ============================
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_exposes_complete_core_unit_without_clipping[305-568-compact]
+1 failed in 2.03s

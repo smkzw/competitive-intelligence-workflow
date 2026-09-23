@@ -1,6 +1,6 @@
-{% macro filter_group(dimension, label, values, default_values=()) -%}
-{% if values|length > 12 %}
-<details class="kz-a-filter kz-a-filter-disclosure" data-filter-dimension="{{ dimension }}" data-filter-total="{{ values|length }}" aria-label="{{ label }}">
+{% macro filter_group(dimension, label, values, default_values=(), compact=false) -%}
+{% if values|length > 12 or compact %}
+<details class="kz-a-filter kz-a-filter-disclosure" data-filter-dimension="{{ dimension }}" data-filter-total="{{ values|length }}"{% if compact %} data-responsive-filter{% endif %} aria-label="{{ label }}">
   <summary><span class="kz-a-filter__label">{{ label }}</span><span data-filter-selection-count="{{ dimension }}">默认显示全部 {{ values|length }} 项</span></summary>
   <div class="kz-a-filter-options">
     {% for value in values %}<button type="button" data-filter-value="{{ value }}"{% if value in default_values %} data-filter-default{% endif %} aria-pressed="{{ 'true' if value in default_values else 'false' }}">{{ value }}</button>{% endfor %}
@@ -42,6 +42,10 @@
 <div class="kz-chart" data-a-chart="{{ chart_type }}" data-chart-id="{{ chart_id }}"
      {% if product_scope %}data-product-scope="{{ product_scope }}"{% endif %}
      data-view-digest="initial" role="img" aria-label="{{ aria_label }}"></div>
+{%- endmacro %}
+
+{% macro complete_table_summary(label='展开完整数据表') -%}
+<summary class="kz-complete-table__summary">{{ label }}</summary>
 {%- endmacro %}
 
 {% macro empty_state() -%}

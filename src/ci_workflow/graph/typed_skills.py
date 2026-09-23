@@ -137,8 +137,8 @@ V13_SKILL_NODES: tuple[SkillNodeContract, ...] = (
     ),
     _node(
         "research-package",
-        ("ProjectContract", "SourcePlan", "optional:ResearchPackage"),
-        ("ResearchPackage", "RouteReceipts"),
+        ("ProjectContract", "MergedSourcePlan", "optional:ResearchPackage"),
+        ("ResearchPackage", "SharedExtractionSet", "RouteReceipts"),
         ("evidence", "receipts"),
     ),
     _node(
@@ -178,24 +178,30 @@ V13_SKILL_NODES: tuple[SkillNodeContract, ...] = (
     _node(
         "coverage-gates",
         ("ResolvedFacts", "GateSpec", "UniverseClosure"),
-        ("CoverageResult", "BlockerAudit"),
+        (
+            "CoverageResult",
+            "WorkspaceMembership",
+            "FacetPlan",
+            "NumericFrameEligibility",
+            "BlockerAudit",
+        ),
         ("coverage", "blockers"),
     ),
     _node(
         "analysis-a",
-        ("AcceptedSnapshot",),
+        ("AcceptedSnapshot", "WorkspaceMembership", "FacetPlan", "NumericFrameEligibility"),
         ("ReportAView",),
         ("reports/A",),
     ),
     _node(
         "analysis-b",
-        ("AcceptedSnapshot",),
+        ("AcceptedSnapshot", "WorkspaceMembership", "FacetPlan", "NumericFrameEligibility"),
         ("ReportBView",),
         ("reports/B",),
     ),
     _node(
         "analysis-c",
-        ("AcceptedSnapshot",),
+        ("AcceptedSnapshot", "WorkspaceMembership", "FacetPlan", "NumericFrameEligibility"),
         ("ReportCView",),
         ("reports/C",),
     ),

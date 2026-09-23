@@ -38,7 +38,7 @@ _REPORT_COMPLETION: dict[ReportName, tuple[str, ...]] = {
     "C": (
         "试验架构、人群、入排、终点、时间点、访视和统计设计均以登记或方案为先",
         "终点定义与时间窗成对保存，完整入排和方案参数可下钻",
-        "只输入适应症时输出多条证据支持的设计路径，不输出唯一最佳方案",
+        "形成完整可检索的设计先例横比；单项有效研究即可使用，不强制多个设计路径",
     ),
 }
 
@@ -59,6 +59,7 @@ class ResearchRouteSpec(_StrictModel):
 
 class ReportResearchSpec(_StrictModel):
     report: ReportName
+    analysis_route_id: str
     claim_domains: tuple[ClaimDomain, ...]
     completion_conditions_zh: tuple[str, ...]
 
@@ -135,6 +136,7 @@ class AutonomousResearchTask(_StrictModel):
     source_policy_id: str
     source_policy_version: str
     routes: tuple[ResearchRouteSpec, ...] = Field(min_length=1)
+    shared_source_route_ids: tuple[str, ...] = Field(min_length=1)
     report_specs: tuple[ReportResearchSpec, ...] = Field(min_length=1)
     yaozh_access: YaozhAccessAsk | YaozhAccessResolution
     package_target: ResearchPackageTarget
@@ -152,6 +154,16 @@ class AutonomousResearchTask(_StrictModel):
         route_ids = tuple(item.route_id for item in self.routes)
         if len(route_ids) != len(set(route_ids)):
             raise ValueError("来源计划路线不得重复")
+        route_id_set = set(route_ids)
+        if not set(self.shared_source_route_ids) <= route_id_set:
+            raise ValueError("共享来源计划引用了不存在的路线")
+        if len(self.shared_source_route_ids) != len(set(self.shared_source_route_ids)):
+            raise ValueError("共享来源路线不得重复")
+        branch_ids = tuple(item.analysis_route_id for item in self.report_specs)
+        if not set(branch_ids) <= route_id_set or set(branch_ids) & set(
+            self.shared_source_route_ids
+        ):
+            raise ValueError("报告分析分支必须独立于共享来源路线")
         return self
 
 
@@ -182,7 +194,7 @@ def build_autonomous_research_task(
         dict.fromkeys(domain for report in reports for domain in _REPORT_DOMAINS[report])
     )
     expansion_sources = _direct_sources(source_policy, all_domains)
-    routes = [
+    shared_routes = [
         ResearchRouteSpec(
             route_id="global-baseline",
             purpose_zh="全球官方登记与适用监管来源基线检索",
@@ -203,7 +215,7 @@ def build_autonomous_research_task(
         ),
     ]
     for dimension in ("alias", "target", "company", "trial"):
-        routes.append(
+        shared_routes.append(
             ResearchRouteSpec(
                 route_id=f"reverse-{dimension}",
                 purpose_zh=f"按 {dimension} 维度反向扩展竞品宇宙",
@@ -214,6 +226,7 @@ def build_autonomous_research_task(
                 completion_zh="记录新增实体；最后连续两轮零新增并经独立复核才可声明收敛",
             )
         )
+    routes = list(shared_routes)
     for report in reports:
         domains = _REPORT_DOMAINS[report]
         routes.append(
@@ -229,8 +242,7 @@ def build_autonomous_research_task(
         )
     if yaozh_record is not None and yaozh_record.answer == "available":
         source_policy.source("yaozh_enterprise")
-        routes.append(
-            ResearchRouteSpec(
+        yaozh_route = ResearchRouteSpec(
                 route_id="yaozh-optional-browser",
                 purpose_zh="通过已登录浏览器补充药智网线索与交叉核验",
                 region="cross_region",
@@ -241,7 +253,8 @@ def build_autonomous_research_task(
                     "记录线索、交叉核验或技术访问受限状态；不得作为关键结论的唯一依据"
                 ),
             )
-        )
+        routes.append(yaozh_route)
+        shared_routes.append(yaozh_route)
     payload_paths = {
         report: f"evidence/library/{report.lower()}-research-package.json" for report in reports
     }
@@ -260,9 +273,11 @@ def build_autonomous_research_task(
         source_policy_id=source_policy.policy_id,
         source_policy_version=source_policy.version,
         routes=tuple(routes),
+        shared_source_route_ids=tuple(route.route_id for route in shared_routes),
         report_specs=tuple(
             ReportResearchSpec(
                 report=report,
+                analysis_route_id=f"report-{report.lower()}-evidence",
                 claim_domains=_REPORT_DOMAINS[report],
                 completion_conditions_zh=_REPORT_COMPLETION[report],
             )

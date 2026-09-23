@@ -22,12 +22,13 @@ from pathlib import Path
 from typing import Any, Literal, Self, cast
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
-from pydantic import ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.qc.browser import route_to_site_path, site_directory_digest
+from ci_workflow.reports.b.concept_catalog import SAFETY_CONCEPTS
 from ci_workflow.reports.b.portal_science import (
     adjudicate_comparable_membership,
     efficacy_science_partition,
@@ -51,6 +52,11 @@ from ci_workflow.reports.common.evidence_view import (
     EvidenceView,
     OriginalTextStatus,
 )
+from ci_workflow.reports.common.numeric_projection import (
+    NumericMeasureKind,
+    infer_numeric_kind,
+    project_numeric,
+)
 from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
 from ci_workflow.reports.common.view_state import ReportRow
 from ci_workflow.storage.manifest_store import (
@@ -73,18 +79,27 @@ from ci_workflow.storage.snapshot_store import (
     compute_locked_snapshot,
 )
 
+from .active_fact_projection import (
+    ActiveFactBinding,
+    ActiveFactRevision,
+    PortalConsumerNode,
+    canonical_sha256,
+    canonical_source_pointer,
+    numeric_value,
+    user_edit_disclosure,
+    validate_active_fact_binding,
+    write_render_receipt,
+)
 from .builder import resolve_echarts_bundle, resolve_logo_src, resolve_portal_asset
 from .evidence_drawer import render_evidence_drawer_embed, render_evidence_drawer_host
 from .report_a import (
+    _ARM_CODE_ZH,
+    _POPULATION_TOKENS,
     EfficacyRow,
     ReportAPortalData,
     SafetyRow,
     TrialRow,
-    _ARM_CODE_ZH,
-    _POPULATION_TOKENS,
-    _PRODUCT_DISPLAY_NAMES_ZH,
     _git_commit,
-    _native_arm_zh,
     _native_timepoint_zh,
 )
 
@@ -973,9 +988,11 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
 
 
 def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, str]:
+    typed_term_key: str | None = None
     if domain == "efficacy":
         concept_value = _first(
             value,
+            "term_key",
             "clinical_concept",
             "construct_id",
             "endpoint_family_label_zh",
@@ -988,6 +1005,7 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
         )
         fallback_concept = _first(
             source,
+            "term_key",
             "clinical_concept",
             "construct_id",
             "endpoint_family_label_zh",
@@ -1017,8 +1035,16 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
             default=None,
         )
     elif domain == "safety":
+        typed_term_key = _first(value, "term_key", default=None)
+        if typed_term_key is None:
+            typed_term_key = _first(source, "term_key", default=None)
+        if typed_term_key is not None:
+            typed_term_key = _text(typed_term_key)
+            if typed_term_key not in SAFETY_CONCEPTS:
+                raise ValueError(f"B 安全性 term_key 不在受控 catalog：{typed_term_key}")
         concept_value = _first(
             value,
+            "term_key",
             "clinical_concept",
             "standardized_concept",
             "standard_term",
@@ -1034,6 +1060,7 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
         )
         fallback_concept = _first(
             source,
+            "term_key",
             "clinical_concept",
             "standardized_concept",
             "standard_term",
@@ -1082,11 +1109,15 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
             "label_zh",
             default=None,
         )
-    concept, concept_label = _controlled_concept(
-        concept_value if concept_value is not None else fallback_concept,
-        domain=domain if domain in _CLINICAL_CONCEPT_LOOKUPS else "efficacy",
-        fallback=fallback_concept,
-    )
+    if domain == "safety" and typed_term_key is not None:
+        concept = typed_term_key
+        concept_label = SAFETY_CONCEPTS[typed_term_key].label_zh
+    else:
+        concept, concept_label = _controlled_concept(
+            concept_value if concept_value is not None else fallback_concept,
+            domain=domain if domain in _CLINICAL_CONCEPT_LOOKUPS else "efficacy",
+            fallback=fallback_concept,
+        )
     raw_time = _first(
         value,
         "time_window",
@@ -1242,6 +1273,94 @@ class ReportBSafetyRow(SafetyRow):
     reason_zh: str | None = None
 
 
+class TypedNumericProjection(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    projection_version: Literal["canonical_numeric_projection_v1"]
+    kind: NumericMeasureKind
+    raw_value: float
+    raw_unit: str
+    plot_value: float
+    plot_unit: str
+    numerator: float | None = None
+    denominator: float | None = None
+    direction: str = ""
+    window: str
+    estimand: str
+    facet_key: str
+    renderable: Literal[True]
+    size_basis: str | None = None
+
+    @model_validator(mode="after")
+    def _matches_canonical_projection(self) -> Self:
+        canonical = project_numeric(
+            value=self.raw_value,
+            unit=self.raw_unit,
+            kind=self.kind,
+            numerator=self.numerator,
+            denominator=self.denominator,
+            direction=self.direction,
+            window=self.window,
+            estimand=self.estimand,
+            size_basis=self.size_basis,
+        )
+        if not canonical.renderable or canonical.plot_value is None:
+            raise ValueError("矩阵投影原始输入不能形成可绘 canonical projection")
+        if not math.isclose(self.plot_value, canonical.plot_value, rel_tol=1e-12, abs_tol=1e-12):
+            raise ValueError("矩阵 plot_value 与 canonical projection 不一致")
+        if self.plot_unit != canonical.plot_unit or self.facet_key != canonical.facet_key:
+            raise ValueError("矩阵单位或 facet 不是由 canonical projection 重算所得")
+        return self
+
+
+class TypedMatrixComparison(BaseModel):
+    """Closed matrix input: no absolute x/y override and no inferred control."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    comparison_row_id: str
+    product_id: str
+    trial_id: str
+    treatment_projection: TypedNumericProjection
+    control_projection: TypedNumericProjection
+    safety_projection: TypedNumericProjection
+    size_projection: TypedNumericProjection
+
+    @model_validator(mode="after")
+    def _compatible(self) -> Self:
+        treatment = self.treatment_projection
+        control = self.control_projection
+        if any(
+            getattr(treatment, field) != getattr(control, field)
+            for field in ("kind", "plot_unit", "direction", "window", "estimand", "facet_key")
+        ):
+            raise ValueError("矩阵治疗组与对照组投影口径不兼容")
+        if self.safety_projection.kind is not NumericMeasureKind.PARTICIPANT_PROPORTION:
+            raise ValueError("矩阵安全轴必须是参与者比例")
+        if self.safety_projection.plot_unit != "%":
+            raise ValueError("矩阵安全轴单位必须为 %")
+        if self.size_projection.kind not in {
+            NumericMeasureKind.SAMPLE_SIZE, NumericMeasureKind.PARTICIPANT_COUNT,
+        }:
+            raise ValueError("矩阵气泡大小必须是明确人数口径")
+        if self.size_projection.plot_unit != "人":
+            raise ValueError("矩阵气泡大小单位必须为人")
+        if (
+            self.size_projection.plot_value <= 0
+            or not float(self.size_projection.plot_value).is_integer()
+        ):
+            raise ValueError("矩阵气泡大小必须是正整数人数")
+        if self.size_projection.size_basis not in {
+            "治疗组安全性分析人数",
+            "治疗组样本量",
+        }:
+            raise ValueError("矩阵气泡大小必须使用批准且非空的 size_basis")
+        return self
+
+
+class TypedMatrixView(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    rows: tuple[TypedMatrixComparison, ...]
+
+
 class ReportBPortalData(ReportAPortalData):
     """B 类门户输入合同。
 
@@ -1265,8 +1384,8 @@ class ReportBPortalData(ReportAPortalData):
     supporting_views: Mapping[str, Any] | None = None
     subgroup_views: Mapping[str, Any] | None = None
     subgroups_views: Mapping[str, Any] | None = None
-    matrix_view: Mapping[str, Any] | None = None
-    matrix_views: Mapping[str, Any] | None = None
+    matrix_view: TypedMatrixView | None = None
+    matrix_views: TypedMatrixView | None = None
     views: Mapping[str, Any] | None = None
     view_states: Mapping[str, Any] | None = None
     semantic_proposals: tuple[SemanticGroupingProposal, ...] = Field(
@@ -2036,6 +2155,10 @@ def _project_record(
     trial_names: Mapping[str, str],
     fallback: str,
 ) -> dict[str, Any]:
+    if domain == "matrix":
+        raise ReportBPortalError(
+            "矩阵记录不得由任意 Mapping 投影；请使用 TypedMatrixView"
+        )
     source = _unwrap_fact(value)
     row_id = _stable_row_id(value, fallback)
     product_id = _product_id(value) or _product_id(source)
@@ -2205,6 +2328,17 @@ def _project_record(
     if regions is None:
         regions = _first(source, "regions", default=None)
     coverage = _number(_source_first(value, source, "coverage", default=None))
+    projection = project_numeric(
+        value=numeric, unit=unit,
+        kind=infer_numeric_kind(
+            measure_object=measure_object, statistic_form=statistic_form,
+            unit=unit, domain=domain,
+        ),
+        numerator=numerator, denominator=denominator,
+        direction=_text(_source_first(value, source, "direction", default="")),
+        window=time_window, estimand=_text(_source_first(value, source, "estimand", default=label)),
+    )
+    renderable = renderable and projection.renderable
     result: dict[str, Any] = {
         "row_id": row_id,
         "_domain": domain,
@@ -2242,6 +2376,16 @@ def _project_record(
         "period": period,
         "category": category,
         "event": label,
+        "term_key": _text(_source_first(value, source, "term_key", default="unknown"), "unknown"),
+        "polarity": _text(_source_first(value, source, "polarity", default="affirmed"), "affirmed"),
+        "grade_set": tuple(_source_first(value, source, "grade_set", default=()) or ()),
+        "seriousness": _text(_source_first(value, source, "seriousness", default="unspecified"), "unspecified"),
+        "teae": _source_first(value, source, "teae", default=None),
+        "relatedness": _text(_source_first(value, source, "relatedness", default="unspecified"), "unspecified"),
+        "parent": _source_first(value, source, "parent", default=None),
+        "children": tuple(_source_first(value, source, "children", default=()) or ()),
+        "count_basis": _text(_source_first(value, source, "count_basis", default="participants"), "participants"),
+        "at_risk_stat": _source_first(value, source, "at_risk_stat", default=None),
         "time": time_label,
         "actual_timepoint": actual_timepoint,
         "actual_timepoint_unit": actual_timepoint_unit,
@@ -2325,7 +2469,9 @@ def _project_record(
         "numerator": numerator,
         "denominator": denominator,
         "value": numeric,
-        "numeric_value": numeric,
+        "raw_numeric_value": numeric,
+        "numeric_value": projection.plot_value,
+        "numeric_projection": projection.as_dict(),
         "renderable": renderable,
         "disclosure_state": state,
         "difference_note": "；".join(
@@ -2615,6 +2761,31 @@ def _synthetic_status_records(
     include_products: bool = False,
     domain: str = "generic",
 ) -> tuple[tuple[dict[str, Any], Any], ...]:
+    def project_status(source: Mapping[str, Any], row_id: str) -> dict[str, Any]:
+        # A matrix data row is accepted only through TypedMatrixView.  Empty-page
+        # status rows are UI metadata, not comparisons, so keep them explicitly
+        # non-renderable and outside the matrix projection entrance.
+        projection_domain = "generic" if domain == "matrix" else domain
+        row = _project_record(
+            source,
+            domain=projection_domain,
+            names=names,
+            trial_names=trial_names,
+            fallback=row_id,
+        )
+        if domain == "matrix":
+            row.update(
+                {
+                    "_domain": "matrix",
+                    "x_value": None,
+                    "y_value": None,
+                    "size": None,
+                    "renderable": False,
+                    "status": "未形成封闭 typed 比较",
+                }
+            )
+        return row
+
     records: list[tuple[dict[str, Any], Any]] = []
     if include_products:
         for product in data.products:
@@ -2634,13 +2805,7 @@ def _synthetic_status_records(
                 "mechanism": product.mechanism,
                 "disclosure_state": "reported_value",
             }
-            synthetic_row = _project_record(
-                source,
-                domain=domain,
-                names=names,
-                trial_names=trial_names,
-                fallback=row_id,
-            )
+            synthetic_row = project_status(source, row_id)
             synthetic_row["_synthetic"] = True
             records.append((synthetic_row, source))
     else:
@@ -2662,13 +2827,7 @@ def _synthetic_status_records(
                     "reported_value" if trial.sample_size is not None else "not_reported"
                 ),
             }
-            synthetic_row = _project_record(
-                source,
-                domain=domain,
-                names=names,
-                trial_names=trial_names,
-                fallback=row_id,
-            )
+            synthetic_row = project_status(source, row_id)
             synthetic_row["_synthetic"] = True
             records.append((synthetic_row, source))
     return tuple(records)
@@ -2755,64 +2914,27 @@ def _matrix_records(
     source = _view_source(data, "matrix_view")
     if source is None:
         return ()
-    if isinstance(source, Mapping):
-        source = _get(source, "efficacy-safety-matrix", source)
-    values = _flatten_view_rows(
-        _collection(source, "complete_table", "comparison_rows", "rows", "matrix_rows")
-    )
-    point_by_id: dict[str, Any] = {}
-    for point_source in (source, _get(source, "chart", None)):
-        for point in _collection(point_source, "points", "bubble_points"):
-            point_id = _text(
-                _first(point, "comparison_row_id", "row_id", "comparison_id", default="")
-            )
-            if point_id:
-                point_by_id[point_id] = point
+    if not isinstance(source, TypedMatrixView):
+        raise ReportBPortalError("矩阵输入必须通过封闭 typed projection 合同")
     result: list[tuple[dict[str, Any], Any]] = []
-    for index, value in enumerate(values):
-        comparison = _get(value, "comparison_row", None) or value
-        original = _first(
-            comparison,
-            "efficacy_treatment",
-            "efficacy_control",
-            "safety_treatment",
-            "safety_control",
-            default=comparison,
-        )
-        point = _first(value, "point", default=None)
-        if point is None:
-            point = point_by_id.get(_stable_row_id(value, ""))
-        projected_value = value
-        if point is not None and _get(value, "point", None) is None:
-            projected_value = {
-                "row_id": _stable_row_id(value, f"matrix-{index + 1}"),
-                "product_id": _product_id(value) or _product_id(comparison),
-                "trial_id": _trial_id(value) or _trial_id(comparison),
-                "target_id": _first(comparison, "target_id", "target", default=""),
-                "display_label_zh": _label_for(comparison, "efficacy"),
-                "difference_labels_zh": _first(
-                    comparison,
-                    "compatibility_difference_labels_zh",
-                    "difference_labels_zh",
-                    default=(),
-                ),
-                "comparison_row": comparison,
-                "point": point,
-            }
-        row = _project_record(
-            projected_value,
-            domain="matrix",
-            names=names,
-            trial_names=trial_names,
-            fallback=f"matrix-{index + 1}",
-        )
-        if not row["product_id"]:
-            row["product_id"] = _product_id(comparison)
-            row["product_zh"] = names.get(row["product_id"], "未列示产品")
-        if not row["trial_id"]:
-            row["trial_id"] = _trial_id(comparison)
-            row["trial_zh"] = trial_names.get(row["trial_id"], "未列示试验")
-        result.append((row, original))
+    for value in source.rows:
+        treatment = value.treatment_projection
+        control = value.control_projection
+        row = {
+            "row_id": value.comparison_row_id, "_domain": "matrix",
+            "product_id": value.product_id, "trial_id": value.trial_id,
+            "product_zh": names.get(value.product_id, "未列示产品"),
+            "trial_zh": trial_names.get(value.trial_id, "未列示试验"),
+            "x_value": treatment.plot_value - control.plot_value,
+            "y_value": value.safety_projection.plot_value,
+            "size": value.size_projection.plot_value,
+            "x_unit": treatment.plot_unit, "y_unit": value.safety_projection.plot_unit,
+            "size_basis": value.size_projection.size_basis,
+            "renderable": True, "status": "可比较",
+            "disclosure_state": "reported_value",
+            "arm": "试验内治疗组与对照组", "group": "试验内治疗组与对照组",
+        }
+        result.append((row, value))
     return _dedupe_records(result)
 
 
@@ -2881,6 +3003,9 @@ def _evidence_view(
     group = _text(row.get("arm"), "组别未列示")
     source_id = _source_version(source)
     source_label = "ClinicalTrials.gov"
+    original_text = _text(
+        _first(source, "original_definition", "source_text", default=None)
+    )
     report_row = ReportRow.model_construct(
         row_id=row_id,
         fact_id=_source_row_id(source, row_id),
@@ -2919,8 +3044,13 @@ def _evidence_view(
         "source_version_label_zh": source_label,
         "locator": _display_locator(source, row_id),
         "explanation": _evidence_field(f"该记录保留来源披露状态：{_state_label(state)}。"),
-        "original_text": None,
-        "original_text_status": OriginalTextStatus.NOT_PROVIDED,
+        "original_text": original_text or None,
+        "original_text_status": (
+            OriginalTextStatus.PROVIDED
+            if original_text
+            else OriginalTextStatus.NOT_PROVIDED
+        ),
+        "user_edit": data.user_edits.get(row_id),
         "conflicts": (),
         "historical_versions": (),
     }
@@ -3228,7 +3358,15 @@ def _project_scientific_groups(
             raise ValueError("页面观察域或事实摘要与完整科学视图不一致")
     result: list[dict[str, Any]] = []
     for group in groups:
-        rows = [dict(row) for row in group["rows"] if str(row["row_id"]) in selected]
+        rows = []
+        for row in group["rows"]:
+            selected_row = selected.get(str(row["row_id"]))
+            if selected_row is None:
+                continue
+            copied = dict(row)
+            if "_user_edit" in selected_row:
+                copied["_user_edit"] = selected_row["_user_edit"]
+            rows.append(copied)
         if rows:
             result.append({**group, "rows": rows,
                            "cross_trial": _bucket_spans_trials([(row, None) for row in rows])})
@@ -3625,17 +3763,29 @@ def _groups_for_page(
             "bubble" if any(item[0].get("renderable") for item in records) else "status_matrix"
         )
         matrix_groups = []
-        for bucket in proposed_semantic_buckets(
-            (records,), semantic_proposals, descriptive_only=True,
-            approved_merges=semantic_adjudications,
-        ):
-            group = _group("疗效与安全性观察位置", bucket, chart_type=chart_type)
-            group.update(
-                x_axis_label_zh="试验内疗效差（百分点）",
-                y_axis_label_zh="治疗组治疗期间不良事件发生率（%）",
-                size_label_zh="气泡大小：治疗组样本量",
-            )
-            matrix_groups.append(group)
+        typed_facets: dict[tuple[str, str, str], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+        for item in records:
+            row = item[0]
+            typed_facets[(
+                _text(row.get("x_unit")),
+                _text(row.get("y_unit")),
+                _text(row.get("size_basis"), "明确样本量"),
+            )].append(item)
+        for (x_unit, y_unit, size_basis), facet_records in typed_facets.items():
+            for bucket in proposed_semantic_buckets(
+                (tuple(facet_records),), semantic_proposals, descriptive_only=True,
+                approved_merges=semantic_adjudications,
+            ):
+                group = _group("疗效与安全性观察位置", bucket, chart_type=chart_type)
+                group.update(
+                    x_axis_label_zh=f"试验内疗效差（{x_unit or '数值'}）",
+                    y_axis_label_zh=f"治疗组安全性观察值（{y_unit or '数值'}）",
+                    size_label_zh=f"气泡大小：{size_basis}",
+                    x_unit=x_unit,
+                    y_unit=y_unit,
+                    size_basis=size_basis,
+                )
+                matrix_groups.append(group)
         return tuple(matrix_groups)
     if page_id in _BASELINE_PAGE_IDS:
         buckets: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
@@ -3813,6 +3963,11 @@ def _filter_dimensions(
                     ),
                 ),
                 "clinical_concept": _text(row.get("clinical_concept")).split(":")[-1],
+                "polarity": _text(row.get("polarity"), "affirmed"),
+                "seriousness": _text(row.get("seriousness"), "unspecified"),
+                "teae": "true" if row.get("teae") is True else "false" if row.get("teae") is False else "unknown",
+                "relatedness": _text(row.get("relatedness"), "unspecified"),
+                "count_basis": _text(row.get("count_basis"), "participants"),
                 "time": _text(row.get("time"), "时间点未列示"),
                 "time_window": _text(row.get("time_window")),
                 "time_window_band": _text(row.get("time_window_band")).split(":")[-1],
@@ -3960,7 +4115,8 @@ def _filter_groups(
     """筛选面板分组：维度 → 候选值（含中文标签），组名按页面语境命名。"""
     dimensions = (
         "product", "target", "trial", "group", "arm_role", "element",
-        "clinical_concept", "time", "time_window", "time_window_band",
+        "clinical_concept", "polarity", "seriousness", "teae", "relatedness", "count_basis",
+        "time", "time_window", "time_window_band",
         "population", "population_context", "field_family", "reason",
         "denominator_role", "measure_object", "statistic_form",
         "statistical_form_family", "cohort", "period", "disclosure_state",
@@ -3999,6 +4155,8 @@ def _filter_groups(
             "product": "产品", "target": "靶点/机制", "trial": "试验",
             "group": "组别", "arm_role": "组别角色", "element": "设计要素",
             "clinical_concept": "临床概念", "time": "时间点", "time_window": "时间窗",
+            "polarity": "否定/肯定", "seriousness": "严重性", "teae": "TEAE语义",
+            "relatedness": "相关性", "count_basis": "计数基础",
             "time_window_band": "时间窗分组", "population": "人群",
             "population_context": "分析人群", "field_family": "字段族",
             "reason": "原因", "denominator_role": "分母角色",
@@ -4390,6 +4548,18 @@ def _render_page_context(
             safety=safety,
         )
     )
+    records = tuple(
+        (
+            {
+                **row,
+                "_user_edit": data.user_edits[str(row["row_id"])].model_dump(mode="json"),
+            }
+            if str(row.get("row_id")) in data.user_edits
+            else row,
+            source,
+        )
+        for row, source in records
+    )
     if page_id == "longitudinal-results":
         scientific_groups = longitudinal_groups
     covered_ids = {str(row["row_id"]) for group in scientific_groups for row in group["rows"]}
@@ -4560,14 +4730,233 @@ def _reset_site_root(site_root: Path) -> None:
     site_root.mkdir(parents=True, exist_ok=True)
 
 
+def _project_active_facts_b(
+    data: ReportBPortalData,
+    active_revision: ActiveFactRevision,
+) -> tuple[ReportBPortalData, tuple[PortalConsumerNode, ...]]:
+    payload = data.model_dump(mode="python")
+    user_edits = dict(data.user_edits)
+    consumers: list[PortalConsumerNode] = []
+    for fact, binding in active_revision.bindings_for("B"):
+        if binding.collection not in {"safety", "efficacy"}:
+            raise ReportBPortalError("B renderer只接受safety/efficacy领域绑定")
+        collection = cast(list[dict[str, Any]], payload[binding.collection])
+        matches = [row for row in collection if str(row.get("row_id")) == binding.row_id]
+        if len(matches) != 1:
+            raise ReportBPortalError(
+                f"B active fact绑定必须命中唯一领域行：{binding.collection}/{binding.row_id}"
+            )
+        row = matches[0]
+        try:
+            verified_binding = validate_active_fact_binding(
+                fact,
+                binding,
+                active_fact_binding_for_b(data, binding.collection, binding.row_id),
+            )
+        except ValueError as error:
+            raise ReportBPortalError(str(error)) from error
+        unit = str(
+            fact.model_extra.get("normalized_unit")
+            or fact.model_extra.get("unit")
+            or row["unit"]
+        )
+        endpoint = (
+            fact.model_extra.get("endpoint_definition")
+            or row.get("term")
+            or row.get("endpoint")
+        )
+        narrative = (
+            f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
+        )
+        original_value = (
+            "未公开" if row.get("value") is None else f"{row['value']:g}{row['unit']}"
+        )
+        if row.get("numerator") is not None and row.get("denominator") is not None:
+            original_value += f" ({row['numerator']}/{row['denominator']})"
+        row.update(
+            {
+                "value": numeric_value(fact),
+                "unit": unit,
+                "clinical_narrative": narrative,
+            }
+        )
+        for field in ("numerator", "denominator"):
+            value = fact.model_extra.get(field)
+            if isinstance(value, int):
+                row[field] = value
+        view_name = f"{binding.collection}_views"
+        view = payload.get(view_name)
+        view_matches: list[dict[str, Any]] = []
+        if isinstance(view, Mapping):
+            facts = view.get("facts")
+            if isinstance(facts, list):
+                view_matches = [
+                    candidate
+                    for candidate in facts
+                    if isinstance(candidate, dict)
+                    and str(candidate.get("row_id")) == binding.row_id
+                ]
+        if view_matches:
+            if len(view_matches) != 1:
+                raise ReportBPortalError("B active fact领域view行不唯一")
+            projected = view_matches[0]
+            projected.update(
+                {
+                    "value": numeric_value(fact),
+                    "raw_value": fact.raw_value or str(fact.normalized_value),
+                    "unit": unit,
+                }
+            )
+            for field in ("numerator", "denominator"):
+                value = fact.model_extra.get(field)
+                if isinstance(value, int):
+                    projected[field] = value
+        user_edits[binding.row_id] = user_edit_disclosure(
+            fact,
+            active_revision,
+            original_value=original_value,
+        )
+        page = "safety.html" if binding.collection == "safety" else "efficacy.html"
+        consumers.append(
+            PortalConsumerNode(
+                report="B",
+                fact_id=fact.fact_id,
+                fact_version_id=fact.fact_version_id,
+                collection=binding.collection,
+                row_id=binding.row_id,
+                binding_identity=verified_binding,
+                original_row_sha256=verified_binding.original_row_sha256,
+                page_relative_path=page,
+                chart_consumer=f"__CHART_GROUPS__.rows[row_id={binding.row_id}].value",
+                table_consumer=f"{page}#table-row:{binding.row_id}",
+                narrative_consumer=f"evidence-view:{binding.row_id}.user_edit.current_value",
+                index_consumer=f"data/search-index.js#{binding.collection}:{binding.row_id}",
+                source_binding_consumer=f"evidence-view:{binding.row_id}.source_locator",
+            )
+        )
+    payload["user_edits"] = user_edits
+    try:
+        projected_data = ReportBPortalData.model_validate(payload)
+    except ValueError as error:
+        raise ReportBPortalError(f"B active fact投影不符合领域合同：{error}") from error
+    return projected_data, tuple(consumers)
+
+
+def validate_active_fact_revision_b(
+    data: ReportBPortalData,
+    active_revision: ActiveFactRevision,
+) -> None:
+    """Validate every B binding before a render transaction can begin."""
+    for fact, binding in active_revision.bindings_for("B"):
+        if binding.collection not in {"safety", "efficacy"}:
+            raise ReportBPortalError("B renderer只接受safety/efficacy领域绑定")
+        try:
+            validate_active_fact_binding(
+                fact,
+                binding,
+                active_fact_binding_for_b(data, binding.collection, binding.row_id),
+            )
+        except ValueError as error:
+            raise ReportBPortalError(str(error)) from error
+
+
+def _b_source_view_row(
+    data: ReportBPortalData,
+    collection: str,
+    row_id: str,
+) -> dict[str, Any]:
+    view = getattr(data, f"{collection}_views", None)
+    facts = view.get("facts") if isinstance(view, Mapping) else None
+    matches = [
+        candidate
+        for candidate in facts or ()
+        if isinstance(candidate, dict) and str(candidate.get("row_id")) == row_id
+    ]
+    if len(matches) != 1:
+        raise ReportBPortalError("B active fact目标必须有唯一来源view行")
+    return dict(matches[0])
+
+
+def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
+    if isinstance(row, EfficacyRow) and not isinstance(row, SafetyRow):
+        form = "crude_rate" if row.unit == "%" and row.numerator is not None else "estimate"
+        return form, "participants" if row.numerator is not None else "estimate"
+    forms = {
+        "participant_proportion": ("crude_rate", "participants"),
+        "participant_count": ("count", "participants"),
+        "event_count": ("count", "events"),
+        "person_time_rate": ("person_time_rate", "person_time"),
+        "adjusted_estimate": ("adjusted_rate", "estimate"),
+    }
+    return forms[row.measure_object]
+
+
+def active_fact_binding_for_b(
+    data: ReportBPortalData,
+    collection: str,
+    row_id: str,
+) -> ActiveFactBinding:
+    """Resolve a B row together with its immutable evidence-view identity."""
+    if collection not in {"safety", "efficacy"}:
+        raise ReportBPortalError("B renderer只接受safety/efficacy领域绑定")
+    rows = getattr(data, collection)
+    matches = [row for row in rows if row.row_id == row_id]
+    if len(matches) != 1:
+        raise ReportBPortalError(f"B active fact绑定必须命中唯一领域行：{collection}/{row_id}")
+    row = matches[0]
+    if row.trial_id is None:
+        raise ReportBPortalError("B active fact目标原行缺少试验身份")
+    view_row = _b_source_view_row(data, collection, row_id)
+    source_version = str(view_row.get("source_version_id") or "").strip()
+    locator = view_row.get("source_locator")
+    if not source_version or not isinstance(locator, Mapping):
+        raise ReportBPortalError("B active fact目标原行缺少来源版本或来源指针")
+    products = {item.id: item for item in data.products}
+    trials = {item.id: item for item in data.trials}
+    digest = canonical_sha256(
+        {"domain_row": row.model_dump(mode="json"), "evidence_view_row": view_row}
+    )
+    statistical_form, measure_object = _b_statistical_identity(row)
+    return ActiveFactBinding(
+        report="B",
+        collection=collection,
+        row_id=row.row_id,
+        product_id=row.product_id,
+        drug_name=products[row.product_id].name,
+        trial_id=row.trial_id,
+        registry_id=trials[row.trial_id].display_id,
+        group_id=str(view_row.get("arm_id")) if view_row.get("arm_id") else None,
+        arm=row.arm,
+        cohort_id=(
+            str(view_row.get("analysis_population_zh"))
+            if view_row.get("analysis_population_zh")
+            else None
+        ),
+        period=row.time_window if isinstance(row, SafetyRow) else row.timepoint,
+        endpoint_definition=row.endpoint if isinstance(row, EfficacyRow) else None,
+        event_definition=row.term if isinstance(row, SafetyRow) else None,
+        statistical_form=statistical_form,
+        measure_object=measure_object,
+        unit=row.unit,
+        normalized_unit=row.unit,
+        source_version_id=source_version,
+        source_pointer=canonical_source_pointer(locator),
+        original_row_sha256=digest,
+    )
+
+
 def render_report_b_site(
     data: ReportBPortalData,
     site_root: Path,
     *,
     publication_limitation_zh: str | None = None,
+    active_revision: ActiveFactRevision | None = None,
 ) -> tuple[Path, ...]:
     """Render all B catalog pages plus every product and trial dossier."""
     site_root = Path(site_root)
+    consumers: tuple[PortalConsumerNode, ...] = ()
+    if active_revision is not None:
+        data, consumers = _project_active_facts_b(data, active_revision)
 
     registry = PageRegistry.load()
     catalog = registry.catalog(ReportKind.B)
@@ -4876,6 +5265,11 @@ def render_report_b_site(
             row.get("arm"),
             row.get("population"),
             row.get("unit"),
+            row.get("value"),
+            row.get("numerator"),
+            row.get("denominator"),
+            row.get("original_definition"),
+            row.get("source_version_id"),
         )
     for row, _source in safety:
         product_name = _text(row.get("product_zh"), "未列示产品")
@@ -4893,12 +5287,24 @@ def render_report_b_site(
             row.get("time_window"),
             row.get("population"),
             row.get("unit"),
+            row.get("value"),
+            row.get("numerator"),
+            row.get("denominator"),
+            row.get("original_definition"),
+            row.get("source_version_id"),
         )
     search_json = _json(search)
     (site_root / "data" / "search-index.js").write_text(
         "window.__SEARCH_INDEX__=" + search_json + ";\n",
         encoding="utf-8",
     )
+    if active_revision is not None:
+        write_render_receipt(
+            site_root,
+            report="B",
+            active_revision=active_revision,
+            consumers=consumers,
+        )
     return tuple(generated)
 
 

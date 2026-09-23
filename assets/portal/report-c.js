@@ -293,6 +293,18 @@
       : kind === "visit-timeline" ? timelineOption(visible)
       : kind === "evidence-coverage" ? evidenceOption(visible)
       : matrixOption(visible, kind, chartState.chart && chartState.chart.clientWidth ? chartState.chart.clientWidth : 900);
+    if (option && option.__no_discrimination) {
+      cChart.clear();
+      var host2 = chartState.chart;
+      if (host2) {
+        host2.innerHTML = "";
+        var note = document.createElement("p");
+        note.className = "kz-c-evidence-hint";
+        note.textContent = option._note;
+        host2.appendChild(note);
+      }
+      return;
+    }
     cChart.setOption(option, true);
   }
 
@@ -635,7 +647,11 @@
           formatter: function (p) {
             if (!p.data.value[2]) return "未公开";
             var base = matrixLabel(p.data.row);
-            return p.data.rowCount > 1 ? base + "\n共" + p.data.rowCount + "条明细" : base;
+            // 独立复核 C r40（issue-3）：计数是"本格聚合的登记明细数"，
+            // 前置括注与标签显式分隔，不再误读为该终点有 N 条
+            return p.data.rowCount > 1
+              ? "〔本格聚合" + p.data.rowCount + "条登记明细〕\n" + base
+              : base;
           }
         },
         emphasis: {itemStyle: {shadowBlur: 12, shadowColor: "rgba(36,54,80,.25)"}}
@@ -693,6 +709,15 @@
       row.__entry_count = item.count;
       return row;
     });
+    // 会商 #10（C r41 issue-5）：每试验恰好 1 条定义时柱图无区分度——
+    // 上游改为渲染"设计定义对照"说明并保表，不再绘制全 1 柱
+    var noDiscrimination = aggregated.length > 0 && aggregated.every(function (item) { return item.count === 1; });
+    if (noDiscrimination) {
+      return {
+        __no_discrimination: true,
+        _note: "当前页面每项研究仅登记 1 条人群/疾病定义条目，条目数柱状图不具区分度；本页改以同源数据表逐项呈现各研究的登记定义原文，请在下方表格中对照查看。"
+      };
+    }
     return {
       animationDuration: 300,
       grid: {left: 250, right: 58, top: 22, bottom: 38, containLabel: false},
@@ -820,7 +845,7 @@
       "treatment-structure-matrix": "分组、干预与给药结构",
       "design-choice-matrix": "关键设计选择",
       "evidence-coverage": "设计信息公开情况",
-      "criteria-comparison": "人群标准结构比较",
+      "criteria-comparison": "人群标准结构比较（柱高为登记原文已记录的结构分组数，非标准条目总数）",
       "core-design-matrix": "核心设计事实比较",
       "trial-design-summary": "本试验全部设计字段",
       "design-fact-matrix": "设计事实比较"

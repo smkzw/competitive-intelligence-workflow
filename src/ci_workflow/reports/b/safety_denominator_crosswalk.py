@@ -24,6 +24,9 @@ def normalize_period(value: str | None) -> str | None:
     m = _re.fullmatch(r"TP(\d+)", text)
     if m:
         return f"TP{m.group(1)}"
+    m = _re.fullmatch(r"PERIOD(\d+)", text)
+    if m:
+        return f"TP{m.group(1)}"
     if text in {"LTE", "LTEP"}:
         return "LTE"
     if text == "OLTP":
@@ -64,12 +67,19 @@ def _base_title(title: str) -> str:
 
 @dataclass(frozen=True)
 class _Entry:
+    study_id: str
+    module: str
     stat: str
     period: str | None
     base_title: str
     group_id: str
     title: str
-    num_at_risk: float
+    num_at_risk: int | float
+    measure_object: str
+    analysis_population: str
+    window: str
+    source_version_id: str
+    relationships: tuple[tuple[str, str, str, str], ...]
 
 
 @dataclass
@@ -83,9 +93,67 @@ class _Crosswalk:
         stat: str,
         period: str | None,
         title: str,
-    ) -> float | None:
+        study_id: str | None = None,
+        module: str | None = None,
+        group_id: str | None = None,
+        measure_object: str | None = None,
+        analysis_population: str | None = None,
+        window: str | None = None,
+        source_version_id: str | None = None,
+    ) -> int | float | None:
         if stat not in _VALID_STATS:
             return None
+        base = _base_title(title)
+        identity = (
+            study_id, module, group_id, measure_object, analysis_population, window,
+            source_version_id,
+        )
+        if all(value is not None and str(value).strip() for value in identity):
+            requested = normalize_period(period)
+            def compatible(e: _Entry) -> bool:
+                if study_id is not None and e.study_id != str(study_id):
+                    return False
+                if measure_object is not None and e.measure_object != str(measure_object):
+                    return False
+                if analysis_population is not None and e.analysis_population != str(analysis_population):
+                    return False
+                if window is not None and normalize_period(e.window) != normalize_period(window):
+                    return False
+                if source_version_id is not None and e.source_version_id != str(source_version_id):
+                    return False
+                if requested is not None and e.period != requested:
+                    return False
+                if group_id is None:
+                    return False
+                direct = module is not None and e.module == str(module) and e.group_id == str(group_id)
+                explicit = any(
+                    target_module == str(module)
+                    and target_group == str(group_id)
+                    and kind in {"source_declared", "audited_mapping"}
+                    and bool(mapping_id)
+                    for target_module, target_group, kind, mapping_id in e.relationships
+                )
+                return direct or explicit
+            identified = [e for e in self.entries if e.stat == stat and compatible(e)]
+            # A title can veto a wrong explicit edge but can never create one.
+            identified = [e for e in identified if not base or e.base_title == base]
+            values = {e.num_at_risk for e in identified}
+            if len(values) == 1:
+                return identified[0].num_at_risk
+            if identified:
+                self.conflicts.append({
+                    "stat": stat, "period": requested, "base_title": base,
+                    "values": sorted(values), "reason": "explicit_identity_conflict",
+                })
+            return None
+        # Production lookup is identity-complete and fail closed.  Historical
+        # title-only migration is available only through the explicit adapter
+        # below and is therefore unreachable from current consumers.
+        return None
+
+    def _legacy_readonly_lookup(
+        self, *, stat: str, period: str | None, title: str,
+    ) -> int | float | None:
         base = _base_title(title)
         candidates = [
             e for e in self.entries
@@ -156,21 +224,49 @@ def build_atrisk_crosswalk(rows) -> "_Crosswalk":
         if stat not in _VALID_STATS or risk is None:
             continue
         try:
-            value = float(risk)
+            if isinstance(risk, bool):
+                continue
+            value: int | float = risk if isinstance(risk, (int, float)) else float(risk)
         except (TypeError, ValueError):
             continue
         if value < 0 or not math_isfinite(value):
             continue
         title = str(row.get("title") or "")
         entries.append(_Entry(
+            study_id=str(row.get("study_id") or ""),
+            module=str(row.get("module") or ""),
             stat=stat,
             period=normalize_period(row.get("period") or period_of(title)),
             base_title=_base_title(title),
             group_id=str(row.get("group_id") or ""),
             title=title,
             num_at_risk=value,
+            measure_object=str(row.get("measure_object") or ""),
+            analysis_population=str(row.get("analysis_population") or ""),
+            window=str(row.get("window") or row.get("period") or ""),
+            source_version_id=str(row.get("source_version_id") or ""),
+            relationships=tuple(
+                (
+                    str(item.get("target_module") or ""),
+                    str(item.get("target_group_id") or ""),
+                    str(item.get("relationship_kind") or ""),
+                    str(item.get("mapping_id") or ""),
+                )
+                for item in row.get("relationships", ())
+                if isinstance(item, dict)
+            ),
         ))
     return _Crosswalk(entries=tuple(entries))
+
+
+@dataclass(frozen=True)
+class LegacyReadOnlyAtRiskCrosswalkAdapter:
+    """Explicit historical snapshot adapter; never use for production builds."""
+
+    crosswalk: _Crosswalk
+
+    def lookup(self, *, stat: str, period: str | None, title: str) -> int | float | None:
+        return self.crosswalk._legacy_readonly_lookup(stat=stat, period=period, title=title)
 
 
 def math_isfinite(value: float) -> bool:

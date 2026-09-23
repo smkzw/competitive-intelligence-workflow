@@ -9,7 +9,13 @@ description: 触发词“竞品调研”。面向临床试验医学人员，用�
 
 直接告诉我适应症，例如：“请调研特应性皮炎的竞品，重点看疗效和安全性。”
 
-- 未指定报告类型时，我会用宿主原生 Ask 说明并请您选择：
+Agent 使用同一公开命令创建项目：
+
+```bash
+ci-workflow project create --root <项目目录> --request "请做特应性皮炎竞品调研" --reports B --outputs html
+```
+
+- 未指定 `--reports` 时，命令返回机器可读的 `ASK_REQUIRED`，宿主必须用原生 Ask 说明并请您选择：
   - **A 研究创新竞品、管线、作用机制及开发/监管状态**
   - **B 研究临床疗效、安全性、基线和结果差异**
   - **C 研究人群、终点、访视、入排标准和方案设计模式**
@@ -30,8 +36,8 @@ description: 触发词“竞品调研”。面向临床试验医学人员，用�
 2. 运行 `ci-workflow project create`，传入适应症、报告类型和 `--outputs html`。
 3. 宿主用原生 Ask 询问一次药智网访问条件，并由 Agent 调用 `ci-workflow yaozh answer` 记录 `available`、`unavailable` 或 `skipped`；不向命令传递任何账号或会话内容，同一项目不重复询问。
 4. 若回答为 `available`，宿主必须用自己的浏览器能力观察用户已登录的药智企业版页面；只把项目、回答摘要、观察时间、宿主/观察者、规范来源 origin、封闭技术状态和非敏感页面标记摘要写入临时 JSON，再调用 `ci-workflow yaozh observe --root <项目目录> --observation <临时 JSON>`。不得读取或保存浏览器 profile、Cookie、存储、授权头、HAR、全量 DOM 或账号截图；会话失效、验证码、权限、工具或解析失败均不阻断其他来源。相同观察幂等，回执按内容摘要不可变保存；临时 JSON 在回执核验后精确删除。
-5. 运行 `ci-workflow capability preflight --host <local|codex|hermes|omp>` 检查当前宿主能力；若宿主具备与生产者不同会话、不同身份的独立上下文审阅者（主 Agent 不能自证首份宇宙闭包），加 `--independent-context yes` 声明。能启动空白 Chromium 不代表药智会话有效；药智路线状态以刚生成的无凭据观察回执为准。
-6. 运行 `ci-workflow project run --root <项目目录>`，读取项目内生成的来源计划；这一步只建立可恢复的研究任务，不把“已启动”误报为调研完成。
+5. 运行 `ci-workflow capability preflight --host <local|codex|hermes|omp> --project <项目目录> --independent-context-probe <宿主探针可执行文件>` 检查当前宿主能力。探针必须真实启动子Agent、独立会话或兼容执行器并返回不同上下文的运行时回执；环境变量或“yes”声明不能通过。能启动空白 Chromium 不代表药智会话有效；药智路线状态以刚生成的无凭据观察回执为准。
+6. 运行 `ci-workflow project run --root <项目目录> --independent-context-probe <宿主探针可执行文件>`，读取项目内生成的合并来源计划；共享来源只执行一次，所选 A/B/C 各自进入独立分析分支。这一步只建立可恢复的研究任务，不把“已启动”误报为调研完成。
 7. 当前 Agent 按来源计划完成检索、Publication 判断、竞品宇宙闭包、缺口恢复和独立复核，形成 v1.3 研究审计包及所选 A/B/C 科学载荷。药智来源必须标为 `commercial_database`/`secondary`，只作线索或交叉核验。用户无需填写内部字段。
 8. Agent 使用 `ci-workflow research submit` 校验并绑定审计包与科学载荷；松散 JSON、字节漂移、项目/适应症/截止日不一致或未完成闭包均会被拒绝。
 9. 仅在提交成功后运行 `ci-workflow project run --root <项目目录> --resume`。一个项目选择多个报告时会逐份生成独立门户，不建立融合首页；中断后始终从同一项目恢复且只重做未完成节点。

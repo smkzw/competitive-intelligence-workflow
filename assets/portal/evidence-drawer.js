@@ -81,21 +81,60 @@
     ["trial_zh", "试验"],
     ["group_zh", "组别"],
     ["element_zh", "终点/事件/设计要素"],
-    // 独立复核第二十七轮 veto：scale 字段在登记行里承载的是计量口径
-    // 原文（如 unitOfMeasure），标"量表"且直出原文属误标——不再展示，
-    // 计量口径由"单位"字段承载
+    // 独立审阅 R12（UI02）：真实量表名称恢复展示；单位形状的脏数据
+    // （ng/ml、participants 等计量口径）由 isUnitShapedScale 判别跳过，
+    // 不再因局部脏数据全局隐藏量表字段
+    ["scale", "量表（登记标注）"],
     ["timepoint", "时间点"],
     ["value", "值"],
     ["threshold", "阈值"],
     ["unit", "单位"],
     ["numerator", "分子"],
     ["denominator", "分母"],
+    ["_user_edit_status", "复核状态"],
+    ["_current_user_value", "当前用户修订值"],
+    ["_original_source_value", "原来源值"],
     ["_disclosure", "披露状态"],
     ["explanation", "数据说明"],
     ["source_version_label_zh", "来源版本"],
     ["_locator", "原文定位"],
-    ["_original_text", "简短原文"]
+    ["_original_text", "原来源原文"]
   ];
+
+  // 独立审阅 R12：单位形状判别——登记 scale 字段偶被错填为计量口径，
+  // 展示层按形状拒绝（真正量表名可见，无量表不造，单位不冒充量表）
+  function isUnitShapedScale(value) {
+    var v = String(value || "").trim();
+    if (!v) return true;
+    if (/[\u4e00-\u9fff]/.test(v)) return false;
+    if (v.indexOf("/") !== -1 && v.length <= 16) return true;
+    if (/^%$|^percent(age)?$/i.test(v)) return true;
+    if (/^(participants?|subjects?|patients?|events?|ratio|count|times?|hours?|days?|weeks?|months?|years?|mg|ml|ug|µg|ng|g|l|iu|u|mm3|cm|kg)$/i.test(v)) return true;
+    if (/^\d+(\.\d+)?(\s*(mg|ml|ug|g|l|iu|u|%))?$/i.test(v)) return true;
+    return false;
+  }
+
+  // 独立复核 B r37：抽屉枚举值中文化（内部英文枚举不得直出）
+  var FIELD_VALUE_ZH = {
+    "demographics": "人口学特征",
+    "participant_flow": "受试者流转",
+    "disposition": "完成情况",
+    "baseline": "基线",
+    "efficacy": "疗效",
+    "safety": "安全性",
+    "laboratory": "实验室检查",
+    "disease_status": "疾病状态",
+    "count": "计数",
+    "proportion": "比例",
+    "mean": "均值",
+    "median": "中位数",
+    "cohort": "队列",
+    "period_start": "期初",
+    "period_end": "期末",
+    "treatment": "治疗组",
+    "total": "全部",
+    "registry": "登记版本"
+  };
 
   var EXTENSION_FIELDS = [
     ["canonical_variable_family", "规范变量族"],
@@ -108,7 +147,7 @@
     ["_reason_original", "原因原文"],
     ["canonical_reason", "规范原因"],
     ["mutual_exclusion_exhaustiveness", "互斥与穷尽"],
-    ["compatibility_rule", "兼容规则"],
+    // 独立复核 B r37：compatibility_rule 为内部合同标识，不再向用户展示
     ["difference_label", "差异标签"]
   ];
 
@@ -206,6 +245,19 @@
     }
   }
 
+  // 独立复核 B r46（issue-3）：纯英文整句标注为登记原文（未译），
+  // 与门户中文文案明确区分，读者不误判为未翻译的门户文案
+  function markUntranslated(text) {
+    var s = String(text || "");
+    if (!s) return s;
+    var latinWords = s.match(/[A-Za-z]{3,}/g);
+    var hasCJK = /[\u4e00-\u9fff]/.test(s);
+    if (!hasCJK && latinWords && latinWords.length >= 2) {
+      return s + "（登记原文，未译）";
+    }
+    return s;
+  }
+
   function appendFieldRow(dl, label, text, isState) {
     var row = document.createElement("div");
     row.className = "kz-evidence-field";
@@ -213,7 +265,7 @@
     dt.textContent = label;
     var dd = document.createElement("dd");
     if (isState) dd.classList.add("kz-evidence-field__state");
-    dd.textContent = text;
+    dd.textContent = markUntranslated(text);
     row.appendChild(dt);
     row.appendChild(dd);
     dl.appendChild(row);
@@ -356,7 +408,22 @@
     for (i = 0; i < GENERAL_FIELDS.length; i++) {
       var spec = GENERAL_FIELDS[i];
       var key = spec[0];
-      if (key === "_disclosure") {
+      if (key === "scale" && isUnitShapedScale(view.scale)) {
+        continue;
+      }
+      if (key === "_user_edit_status") {
+        if (view.user_edit) {
+          appendFieldRow(viewFields, spec[1], view.user_edit.status_label_zh, true);
+        }
+      } else if (key === "_current_user_value") {
+        if (view.user_edit) {
+          appendFieldRow(viewFields, spec[1], view.user_edit.current_value, false);
+        }
+      } else if (key === "_original_source_value") {
+        if (view.user_edit) {
+          appendFieldRow(viewFields, spec[1], view.user_edit.original_value, false);
+        }
+      } else if (key === "_disclosure") {
         appendFieldRow(viewFields, spec[1], disclosureText(view), true);
       } else if (key === "_locator") {
         appendLocatorRow(viewFields, spec[1], view.locator);
@@ -381,7 +448,8 @@
         appendFieldRow(viewFields, spec[1], String(view[key]), false);
       } else {
         var resolved = fieldValue(view[key]);
-        appendFieldRow(viewFields, spec[1], resolved.text, resolved.isState);
+        var zhText = FIELD_VALUE_ZH[String(resolved.text).trim()] || FIELD_VALUE_ZH[String(view[key]).trim()] || resolved.text;
+        appendFieldRow(viewFields, spec[1], zhText, resolved.isState);
       }
     }
 

@@ -41,6 +41,14 @@ class ImpactLayer(StrEnum):
     SOURCE = "source"
     FACT = "fact"
     CLAIM = "claim"
+    DERIVATION = "derivation"
+    MEDICAL_SEMANTIC = "medical_semantic"
+    FACET = "facet"
+    NARRATIVE = "narrative"
+    CHART = "chart"
+    TABLE = "table"
+    INDEX = "index"
+    SOURCE_POINTER = "source_pointer"
     PAGE = "page"
     FORMAT = "format"
 
@@ -65,6 +73,7 @@ class ImpactNode:
     layer: ImpactLayer
     object_id: str
     report_kinds: frozenset[str] = frozenset()
+    revision: int | None = None
 
     def __post_init__(self) -> None:
         try:
@@ -80,6 +89,8 @@ class ImpactNode:
             raise ImpactGraphError(f"报告类型超出封闭词表: {unknown}")
         if kinds and layer is not ImpactLayer.PAGE:
             raise ImpactGraphError(f"仅页面层可声明报告类型: {layer.value}:{self.object_id}")
+        if self.revision is not None and self.revision < 0:
+            raise ImpactGraphError("影响对象revision不得为负数")
         object.__setattr__(self, "report_kinds", kinds)
 
 
@@ -91,9 +102,72 @@ class ImpactEdge:
     downstream: ImpactNode
 
     def __post_init__(self) -> None:
-        if _LAYER_ORDER[self.downstream.layer] != _LAYER_ORDER[self.upstream.layer] + 1:
+        if (
+            self.upstream.revision is not None
+            and self.downstream.revision is not None
+            and self.upstream.revision != self.downstream.revision
+        ):
             raise ImpactGraphError(
-                "影响边必须连接相邻层，不能跳过中间依赖: "
+                "影响边不得跨revision: "
+                f"{_token(self.upstream)}@{self.upstream.revision} -> "
+                f"{_token(self.downstream)}@{self.downstream.revision}"
+            )
+        allowed: dict[ImpactLayer, frozenset[ImpactLayer]] = {
+            ImpactLayer.SOURCE: frozenset({ImpactLayer.FACT}),
+            ImpactLayer.FACT: frozenset(
+                {
+                    ImpactLayer.CLAIM,
+                    ImpactLayer.DERIVATION,
+                    ImpactLayer.MEDICAL_SEMANTIC,
+                    ImpactLayer.FACET,
+                    ImpactLayer.NARRATIVE,
+                    ImpactLayer.CHART,
+                    ImpactLayer.TABLE,
+                    ImpactLayer.INDEX,
+                    ImpactLayer.SOURCE_POINTER,
+                }
+            ),
+            ImpactLayer.CLAIM: frozenset({ImpactLayer.PAGE}),
+            ImpactLayer.DERIVATION: frozenset(
+                {
+                    ImpactLayer.DERIVATION,
+                    ImpactLayer.FACET,
+                    ImpactLayer.NARRATIVE,
+                    ImpactLayer.CHART,
+                    ImpactLayer.TABLE,
+                    ImpactLayer.INDEX,
+                }
+            ),
+            ImpactLayer.MEDICAL_SEMANTIC: frozenset(
+                {
+                    ImpactLayer.MEDICAL_SEMANTIC,
+                    ImpactLayer.FACET,
+                    ImpactLayer.NARRATIVE,
+                    ImpactLayer.CHART,
+                    ImpactLayer.TABLE,
+                    ImpactLayer.INDEX,
+                }
+            ),
+            ImpactLayer.FACET: frozenset(
+                {
+                    ImpactLayer.FACET,
+                    ImpactLayer.NARRATIVE,
+                    ImpactLayer.CHART,
+                    ImpactLayer.TABLE,
+                    ImpactLayer.INDEX,
+                }
+            ),
+            ImpactLayer.NARRATIVE: frozenset({ImpactLayer.NARRATIVE, ImpactLayer.PAGE}),
+            ImpactLayer.CHART: frozenset({ImpactLayer.PAGE}),
+            ImpactLayer.TABLE: frozenset({ImpactLayer.PAGE}),
+            ImpactLayer.INDEX: frozenset({ImpactLayer.PAGE}),
+            ImpactLayer.SOURCE_POINTER: frozenset({ImpactLayer.PAGE}),
+            ImpactLayer.PAGE: frozenset({ImpactLayer.FORMAT}),
+            ImpactLayer.FORMAT: frozenset(),
+        }
+        if self.downstream.layer not in allowed[self.upstream.layer]:
+            raise ImpactGraphError(
+                "影响边不符合声明的派生方向或跳过必要相邻层: "
                 f"{_token(self.upstream)} -> {_token(self.downstream)}"
             )
 
@@ -172,6 +246,27 @@ class ImpactGraph:
                 raise ImpactGraphError(
                     f"影响边端点未登记: {_token(edge.upstream)} -> {_token(edge.downstream)}"
                 )
+        adjacency: dict[ImpactNode, tuple[ImpactNode, ...]] = {}
+        for node in canonical_nodes:
+            adjacency[node] = tuple(
+                edge.downstream for edge in canonical_edges if edge.upstream == node
+            )
+        visiting: set[ImpactNode] = set()
+        visited: set[ImpactNode] = set()
+
+        def visit(node: ImpactNode) -> None:
+            if node in visiting:
+                raise ImpactGraphError(f"影响图存在环：{_token(node)}")
+            if node in visited:
+                return
+            visiting.add(node)
+            for downstream in adjacency[node]:
+                visit(downstream)
+            visiting.remove(node)
+            visited.add(node)
+
+        for node in canonical_nodes:
+            visit(node)
         projected_pages = {
             edge.upstream
             for edge in canonical_edges
@@ -208,7 +303,8 @@ class ImpactGraph:
     def graph_digest(self) -> str:
         """图内容摘要：登记对象与依赖边共同决定；内容相同则摘要相同。"""
         node_parts = tuple(
-            f"node:{node.layer.value}:{node.object_id}:{','.join(sorted(node.report_kinds))}"
+            f"node:{node.layer.value}:{node.object_id}:{','.join(sorted(node.report_kinds))}:"
+            f"{node.revision if node.revision is not None else '-'}"
             for node in self.nodes
         )
         edge_parts = tuple(

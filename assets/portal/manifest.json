@@ -1,23 +1,25 @@
 {
  "schema_version": "1.0",
  "name": "竞品调研门户壳层静态资源",
- "purpose": "康哲站点式 HTML 门户共享样式与交互脚本；随包复制，零远程依赖。含离线图表联动、数据依据面板与包内 ECharts。",
+ "purpose": "康哲站点式 HTML 门户样式与交互脚本的发包镜像；构建前与模块作者源逐字节校验，零远程依赖。",
+ "author_source": "src/ci_workflow/renderers/portal/assets/",
+ "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "71935b9b3476fe0ef94e568c53a7debc7743cd9a515c010ff5a82ac60ce5c8be",
-   "bytes": 49960
+   "sha256": "bdde55b28bd0644b7ef7b1559db713f8f68eed4072a754bfbe8effb64783749b",
+   "bytes": 53768
   },
   "portal.js": {
    "sha256": "8ede241d7b3d3cf03569286c2b28a3398b4024d46e44f54e14d79ba5c512f505",
    "bytes": 40204
   },
   "charts.js": {
-   "sha256": "969f165c466c13ec62efcd413eecf390a6e909bfed255ef1559b3a6b2dc129c3",
-   "bytes": 66033
+   "sha256": "0925e6ef140af8566578e63cc3b2a9a6936e41c7bd731b9394da5aa84c53f47e",
+   "bytes": 66454
   },
   "evidence-drawer.js": {
-   "sha256": "d74406c6e52641d86aff2bd8b85bf45daf06de1ddd5a089df43d61d2a7933d50",
-   "bytes": 28555
+   "sha256": "f31d56090fe5b7703dda60e8ee47f61e74b4257d753f3bc14caf72433959ade6",
+   "bytes": 30958
   },
   "evidence-drawer.css": {
    "sha256": "d6d946528b7ce833ae09f493899cc5c27315e828f043ff22a18074841f446e92",
@@ -28,11 +30,30 @@
    "bytes": 1121883
   },
   "report-a.js": {
-   "sha256": "31ab9fd6c34998089ab7e5b100d979ff1163b59d6c4d7d7d85890aeebecd66b8",
-   "bytes": 75103
+   "sha256": "eb6bc2cf56490c22abcfd4276824077f1612ee652ee22ad4ff08b0bf06f2fd19",
+   "bytes": 81000
+  },
+  "report-a.css": {
+   "sha256": "9f1c024d6981caaaeffc86071fd2615a86ff744c4086bb206d44eebd55842bf4",
+   "bytes": 2718
+  },
+  "report-b.js": {
+   "sha256": "a50857d890207504901d664626954bf8816ed35584323a23415acf3999ba1ce2",
+   "bytes": 33382
+  },
+  "report-b.css": {
+   "sha256": "e4e02363330bb7a708ce6d28c96d2006dc342b7ed24a17bf89e421241230b9b0",
+   "bytes": 18076
+  },
+  "report-c.js": {
+   "sha256": "79f7bcf5523c48ae4d2a7d17cf240648564587a941d04dce50854ef175470072",
+   "bytes": 35881
+  },
+  "report-c.css": {
+   "sha256": "f2387c641cf04e7f7c46d85793681fc75a1302e5a1444e4cef8fc540852500bb",
+   "bytes": 11492
   }
  },
- "packaged_module_assets": "src/ci_workflow/renderers/portal/assets/",
  "logo_source": "assets/brand/cms-logo.svg",
  "logo_sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
  "echarts_source": "assets/third-party/echarts/echarts.min.js",

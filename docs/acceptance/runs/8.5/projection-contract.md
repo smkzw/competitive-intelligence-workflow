@@ -9,14 +9,14 @@
 |---|---|---|---|
 | A | `fixtures/positive/a-atopic-dermatitis/research-content.json` | 唯一内容源；只投影 `report_data` | `988c1607e08c7f9747a6feb493dcdaf66b6ccd7c26cafefe96e956622196fa1a` |
 | A 包 | `fixtures/positive/a-atopic-dermatitis/research-package.json` | 仅核对其 `report_data` 与 content 同构；禁止投影 `scientific_review` / 原始 `sources[].content_text` | `2a2d789833b2f380639137ca50ab54a63c588c13c082a0cd8d6645eb6880c39b` |
-| B | `fixtures/positive/b-pnh/inputs/report-data.json` | 唯一内容源 | `eeae14ce581aeacc6c098cde5f45571e4d0f88d2cc5877cba5429654448381d1` |
+| B | `fixtures/positive/b-pnh/inputs/report-data.json` | 唯一内容源 | `a37d7239bfc68f50d86ff732953c68769f1e70710d9e05e36f474941ce172e3b` |
 | C | `fixtures/positive/c-atopic-dermatitis/inputs/report-data.json` | 唯一内容源 | `a59d7f88b3d8a2e163422c01f0d0981aa64bf2610cc6bb41852c58e9561ed2e6` |
 
 当前快照事实（实现必须消费，不得改写输入）：
 
 - A：适应症「特应性皮炎」；`report_data` 含 38 产品、49 试验、6780 条疗效、10228 条安全性、76 条监管、38 条企业、38 条专利、41 条历史、5 条来源局限。顶层 `sources`（86 条含原文）、`route_attempts`、`facts`、`claims`、`gate_status` 不得进入观众页。
-- B：适应症「阵发性睡眠性血红蛋白尿」；产品伊普可泮；试验 APPLY-PNH（NCT04558918，关键确证，治疗组 62 / 对照 35）与 APPOINT-PNH（NCT04820530，单臂 40）。疗效仅第 24 周血红蛋白应答率；矩阵第二点 `status=not_applicable`。基线仅人口学 + 基线血红蛋白；处置 54 条中 40 条 `not_publicly_disclosed`。
-- C：适应症「中重度特应性皮炎」；3 产品 4 试验（CHRONOS / ADvocate2 / 奈莫利珠单抗疗效与安全性研究 / ADvantage）；48 条 `observations`，12 字段 × 4 试验。无独立 pattern 对象；路径必须从观察差异推导且不少于 2 条。
+- B：适应症「阵发性睡眠性血红蛋白尿」；产品伊普可泮；试验 APPLY-PNH（NCT04558918，关键确证，治疗组 62 / 对照 35）与 APPOINT-PNH（NCT04820530，单臂 40）。疗效仅第 24 周血红蛋白应答率；矩阵只接收封闭 typed 治疗—对照投影，APPOINT 单臂不生成伪差值点。基线仅人口学 + 基线血红蛋白；处置 54 条中 40 条 `not_publicly_disclosed`。
+- C：适应症「中重度特应性皮炎」；3 产品 4 试验（CHRONOS / ADvocate2 / 奈莫利珠单抗疗效与安全性研究 / ADvantage）；48 条 `observations`，12 字段 × 4 试验。无独立 pattern 对象；一项证据完整研究可形成单条设计先例，多条先例不得排名。
 
 ## 2. 运行时与视觉资产（原样内联）
 
@@ -87,7 +87,7 @@ A 矩阵：气泡 x=所选疗效族治疗组值，y=治疗期间不良事件（�
 | 4 | b-efficacy | content | 疗效 | efficacy | `efficacy` + `efficacy_views.facts` | APPLY 82.3% vs 1.8%；APPOINT 92.2% 无对照 |
 | 5 | b-longitudinal | content | 纵向结果 | longitudinal-results | 仅第24周 | 不得编造其他访视曲线 |
 | 6 | b-safety | content | 安全性 | safety | `safety` + `safety_views`（teae/sae/aesi/common_ae） | 枚举必须译中文 |
-| 7 | b-matrix | content | 疗效与安全性矩阵 | efficacy-safety-matrix | `matrix_view.comparison_rows` | APPOINT `not_applicable` 必须展示 `reason_zh` |
+| 7 | b-matrix | content | 疗效与安全性矩阵 | efficacy-safety-matrix | `matrix_view.rows` typed projections | APPOINT 单臂不得生成治疗—对照差值点 |
 | 8 | b-baseline-overview | content | 基线与人群总览 | baseline-overview | `baseline_views.facts` | |
 | 9 | b-demographics | content | 人口学 | baseline-demographics | 样本量/年龄/性别 | |
 | 10 | b-disease-context | content | 疾病语境 | baseline-disease-context | **无该 domain 事实** | 披露矩阵；禁止用血红蛋白冒充语境 |
@@ -126,9 +126,9 @@ A 矩阵：气泡 x=所选疗效族治疗组值，y=治疗期间不良事件（�
 | 12 | c-dossiers | content | 试验档案 | trial-profile | 四试验身份卡：药名、NCT、评分、时间点 |
 | 13 | c-identity | content | 试验定位核对 | trial-profile | 强制可同时读到药物、试验、量表/阈值、评估时间点 |
 | 14 | c-patterns | content | 设计模式与权衡 | design-patterns | 从差标归纳；禁止唯一最佳 |
-| 15 | c-path-1 | content | 可选路径一 | design-patterns | 路径 ≥2 |
-| 16 | c-path-2 | content | 可选路径二 | design-patterns | |
-| 17 | c-limitations | content | 资料版本与局限 | evidence-versions-limitations | 观众页说「登记版本」 |
+| 15 | c-path-1 | content | 可选路径一 | design-patterns | 单条完整先例可用 |
+| 16 | c-path-2 | content | 可选路径二（兼容位） | design-patterns | 保留首版结构兼容，不作为真实渲染门 |
+| 17 | c-limitations | content | 资料版本与局限 | evidence-limitations | 观众页说「登记版本」 |
 | 18 | c-ending | ending | 谢谢 | overview | |
 
 C 观众文案规则：禁止把 `source_text` 英文登记原文、`allocation=RANDOMIZED`、`The registry record does not` 作为正文。使用 `source_field_name`、`difference_labels_zh`、`randomization`/`blinding`、`scale`+`threshold_value`+`threshold_unit`、产品 `name`、试验 `display_id`/`name`。统计未公开写「登记记录未单独公开分析集」，不得推断。
@@ -149,7 +149,7 @@ C 观众文案规则：禁止把 `source_text` 英文登记原文、`allocation=
 3. 主题页在源数据存在数值时输出空卡或统一「未公开」。
 4. 把 APPOINT 画成有对照的疗效差，或把疾病语境页画成血红蛋白。
 5. 为 B 纵向结果编造非第 24 周点，或为亚组页编造估计值。
-6. C 输出唯一最佳路径，或路径数 <2。
+6. C 将单条或多条设计先例排名为唯一最佳。
 7. 观众页出现英文登记原文主文案或禁用子串。
 8. 单文件含外链资源属性，或 runtime/FX/Logo 哈希不匹配。
 9. 任一 `.slide` 缺 `aside.notes`，或汉字数不在 [150,300]，或缺 `<strong>`。
@@ -177,7 +177,7 @@ C 观众文案规则：禁止把 `source_text` 英文登记原文、`allocation=
     },
     "B": {
       "path": "fixtures/positive/b-pnh/inputs/report-data.json",
-      "sha256": "eeae14ce581aeacc6c098cde5f45571e4d0f88d2cc5877cba5429654448381d1"
+      "sha256": "a37d7239bfc68f50d86ff732953c68769f1e70710d9e05e36f474941ce172e3b"
     },
     "C": {
       "path": "fixtures/positive/c-atopic-dermatitis/inputs/report-data.json",
@@ -230,16 +230,24 @@ C 观众文案规则：禁止把 `source_text` 英文登记原文、`allocation=
       "c-visits": "visit-duration-followup", "c-stats": "sample-analysis-statistics",
       "c-dossiers": "trial-profile", "c-identity": "trial-profile",
       "c-patterns": "design-patterns", "c-path-1": "design-patterns",
-      "c-path-2": "design-patterns", "c-limitations": "evidence-versions-limitations",
+      "c-path-2": "design-patterns", "c-limitations": "evidence-limitations",
       "c-ending": "overview"
     }
+  },
+  "non_portal_responsibilities": {
+    "A": ["evidence-limitations"],
+    "B": ["evidence-limitations"],
+    "C": []
+  },
+  "compatibility": {
+    "C_second_path_slide_is_not_a_render_gate": true
   },
   "fail_close": {
     "B_missing_disease_context_domain": true,
     "B_missing_subgroup_rows": true,
     "B_longitudinal_only_week_24": true,
     "B_appoint_matrix_not_applicable": true,
-    "C_min_design_paths": 2,
+    "C_min_design_paths": 1,
     "C_unique_best_forbidden": true,
     "A_easi75_literal_endpoint_forbidden": true
   }

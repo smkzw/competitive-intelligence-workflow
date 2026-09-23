@@ -12,13 +12,17 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import pytest
 
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
+from ci_workflow.application.review_issuer import (
+    ExternalProcessResult,
+    issue_review_receipt,
+)
 from ci_workflow.application.scientific_review_transition import (
     RENDERED_UNREVIEWED,
     SCIENTIFICALLY_REVIEWED_RENDERED_CANDIDATE,
@@ -84,12 +88,12 @@ def _sources() -> tuple[SourceCapture, ...]:
             query_or_identifier=f"NCT-{source_id}",
             language="en",
             access_method="public_registry",
-            content_text=content,
+            content_text='{"quote":"客观缓解率 80%"}',
             acquired_at=PRODUCED_AT,
             published_at=PRODUCED_AT,
             effective_at=None,
             first_disclosed_at=PRODUCED_AT,
-            locator=_locator(role),
+            locator=EvidenceLocator(document_role=role, field_path="$"),
         )
 
     return (
@@ -111,7 +115,9 @@ def _facts() -> tuple[ResearchFact, ...]:
             normalized_value="80",
             disclosure_state="reported_value",
             source_id=source_id,
-            locator=_locator("primary_result"),
+            locator=EvidenceLocator(
+                document_role="primary_result", field_path="$.quote"
+            ),
             original_text="客观缓解率 80%",
         )
 
@@ -203,7 +209,7 @@ def _artifact_file(context: Any, project_root: Path) -> ReviewArtifactBinding:
         reviewer_id="independent-reviewer",
         review_input_digest=bundle.input_digest,
         reviewed_at=REVIEW_FINISHED_AT,
-        valid_until=ISSUED_AT + timedelta(days=7),
+        valid_until=datetime(2099, 1, 1, tzinfo=UTC),
     )
     path.write_text(
         json.dumps(verdict.model_dump(mode="json"), ensure_ascii=False),
@@ -324,6 +330,48 @@ def _write_receipt(receipt: Any, project_root: Path, report_kind: str = "B") -> 
     return path
 
 
+def _issuer_receipt(context: Any, project_root: Path) -> Any:
+    """Use the production issuer seam; a hand-built receipt is not authority."""
+    _verified_receipt(context, project_root)
+    publish_production_context(project_root, "B", context)
+
+    def runner(argv: tuple[str, ...], cwd: str, timeout: float) -> ExternalProcessResult:
+        assert argv == ("/opt/homebrew/bin/codex", "exec", "scientific-review")
+        assert cwd == str(project_root)
+        assert timeout > 0
+        return ExternalProcessResult(
+            pid=4242,
+            argv=argv,
+            cwd=cwd,
+            started_at=REVIEW_STARTED_AT,
+            finished_at=REVIEW_FINISHED_AT,
+            returncode=0,
+        )
+
+    return issue_review_receipt(
+        project_root=project_root,
+        report_kind="B",
+        reviewer_id="independent-reviewer",
+        review_session_id="review-session-9",
+        host="codex",
+        host_executable=ReviewExecutableEvidence(
+            provenance="path_resolved",
+            path="/opt/homebrew/bin/codex",
+            resolved_realpath="/opt/homebrew/bin/codex",
+            version="codex-cli 0.42.0",
+        ),
+        review_argv=("exec", "scientific-review"),
+        verdict_relative_path="receipts/scientific_review/B/verdict.json",
+        session=ReviewHostSession(
+            session_id="review-session-9",
+            launcher_pid=777,
+            launcher_parent_pid=1,
+        ),
+        runner=runner,
+        clock=lambda: ISSUED_AT,
+    ).receipt
+
+
 # ─── 权威上下文重建：来源引用绑定真实摄取谱系 ────────────────────────────────
 
 
@@ -356,7 +404,7 @@ def test_source_refs_recompute_persisted_lineage_ids(tmp_path: Path) -> None:
     )
     assert {ref.source_version_id for ref in refs} == set(lineage.source_version_ids)
     assert {loc.fragment_id for ref in refs for loc in ref.locators} == set(
-        lineage.fragment_ids
+        lineage.fragment_by_fact_id.values()
     )
     assert sorted(
         version for ref in refs for version in ref.fact_version_ids
@@ -442,7 +490,7 @@ def test_missing_production_context_publication_fails_closed(tmp_path: Path) -> 
 
 def test_verified_receipt_promotes_rendered_candidate(tmp_path: Path) -> None:
     context = _context()
-    receipt = _verified_receipt(context, tmp_path)
+    receipt = _issuer_receipt(context, tmp_path)
     state = promote_rendered_candidate(
         project_root=tmp_path,
         current_state=RENDERED_UNREVIEWED,
@@ -488,8 +536,7 @@ def test_missing_receipt_fails_closed(tmp_path: Path) -> None:
 
 def test_receipt_file_on_disk_binds_and_promotes(tmp_path: Path) -> None:
     context = _context()
-    receipt = _verified_receipt(context, tmp_path)
-    _write_receipt(receipt, tmp_path)
+    receipt = _issuer_receipt(context, tmp_path)
     loaded = load_scientific_review_receipt(tmp_path, "B")
     assert loaded.receipt_digest == receipt.receipt_digest
     assert (

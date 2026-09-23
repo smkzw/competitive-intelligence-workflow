@@ -15,7 +15,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-PROJECT = Path(open("/tmp/pnh-proj-path.txt").read().strip().split("=", 1)[1])
+# Production builders are rooted explicitly in the English repository.  They
+# never discover a project through an ambient /tmp pointer.
+PROJECT = ROOT
 NA = "未公开披露"
 ACQUIRED = "2026-09-06T00:00:00+08:00"
 CUTOFF = "2026-09-06T23:59:59.999999+08:00"
@@ -44,6 +46,46 @@ OBSERVATIONS = [
     "分类器 registry-endpoint-family-v1 把自由文本登记终点确定性归入版本化终点族；原始措辞保留在 original_definition。",
     "结论基于 CT.gov 当前快照；中国路线访问受阻（G7-2）；历史宇宙未覆盖。",
 ]
+
+
+def build_portal_safety_rows(safety_rows: list[dict]) -> list[dict]:
+    """Project typed B safety rows without reconstructing semantics from family."""
+    from ci_workflow.reports.b.concept_catalog import SAFETY_CONCEPTS
+
+    projected: list[dict] = []
+    for row in safety_rows:
+        term_key = str(row.get("term_key") or "")
+        if term_key not in SAFETY_CONCEPTS:
+            raise ValueError(f"B 安全性 term_key 不在受控 catalog：{term_key or '<blank>'}")
+        spec = SAFETY_CONCEPTS[term_key]
+        projected.append({
+            "row_id": row["row_id"],
+            "product_id": row["product_id"],
+            "trial_id": row["trial_id"],
+            "arm": row["arm_label"],
+            "category": spec.category_zh,
+            "term": row["source_term"],
+            "term_key": term_key,
+            "polarity": row["polarity"],
+            "grade_set": row["grade_set"],
+            "seriousness": row["seriousness"],
+            "teae": row["teae"],
+            "relatedness": row["relatedness"],
+            "parent": row["parent"],
+            "children": row["children"],
+            "count_basis": row["count_basis"],
+            "at_risk_stat": row["at_risk_stat"],
+            "value": row["value"],
+            "numerator": row["numerator"],
+            "denominator": row["denominator"],
+            "unit": row["unit"],
+            "measure_object": (
+                "event_count" if row["unit"] == "次" else "participant_proportion"
+            ),
+            "time_window": row["time_window_zh"],
+            "disclosure_state": "已公开",
+        })
+    return projected
 
 
 def _weeks(time_frame: str) -> tuple[float | None, str]:
@@ -148,7 +190,7 @@ def main() -> None:
             "date_precisions": {"first_disclosed_at": "calendar_day"},
             "locator": {
                 "document_role": "registry-search-page",
-                "field_path": "studies[]",
+                "field_path": "$.studies",
                 "url": "https://clinicaltrials.gov/",
             },
         })
@@ -158,10 +200,10 @@ def main() -> None:
             "source_role": "official_registry",
             "source_type": "registry",
             "url": "https://clinicaltrials.gov/api/v2/studies?query.cond=paroxysmal+nocturnal+hemoglobinuria",
-            "locator": "studies[]",
+            "locator": "$.studies",
             "locator_detail": {
                 "document_role": "registry-search-page",
-                "field_path": "studies[]",
+                "field_path": "$.studies",
                 "url": "https://clinicaltrials.gov/",
             },
             "content_sha256": hashlib.sha256(blob).hexdigest(),
@@ -175,13 +217,17 @@ def main() -> None:
     cas = [json.loads(pp.read_bytes()) for pp in cas_pages]
     studies_by_nct = {}
     for si, data in enumerate(cas, start=1):
-        for s in data.get("studies", []):
+        for study_index, s in enumerate(data.get("studies", [])):
             nct = (s.get("protocolSection", {}).get("identificationModule", {}) or {}).get("nctId", "")
-            studies_by_nct[nct] = (s, si)
+            studies_by_nct[nct] = (s, si, study_index)
 
     def _trial_page(trial_id: str) -> int:
         study = studies_by_nct.get(str(trial_id).upper())
         return study[1] if study else 1
+
+    def _trial_json_path(trial_id: str, suffix: str) -> str:
+        study = studies_by_nct[str(trial_id).upper()]
+        return f"$.studies[{study[2]}].{suffix}"
 
     def _trial_source(trial_id: str) -> str:
         return f"ctgov-pnh-page-{_trial_page(trial_id)}"
@@ -237,7 +283,9 @@ def main() -> None:
             "source_id": _trial_source(trial["id"]),
             "fact_id": f"fact-b-trial-{trial['id']}",
             "fact_version_id": f"fv-{trial['id']}",
-            "source_location": f"studies[]/{trial['display_id']}",
+            "source_location": _trial_json_path(
+                trial["id"], "protocolSection.identificationModule.nctId"
+            ),
         }
         trials_out.append({
             "trial_id": trial["id"],
@@ -368,7 +416,7 @@ def main() -> None:
             "source_version_id": f"ctgov-pnh-page-{_trial_page(fact['trial_id'])}",
             "source_locator": {
                 "document_role": "registry-search-page",
-                "field_path": f"studies[]/{fact['nct']}",
+                "field_path": fact["source_field_path"],
                 "url": "https://clinicaltrials.gov/",
             },
         })
@@ -385,10 +433,10 @@ def main() -> None:
             "source_id": _trial_source(fact["trial_id"]),
             "locator": {
                 "document_role": "registry-search-page",
-                "field_path": "studies[]",
+                "field_path": fact["source_field_path"],
                 "url": "https://clinicaltrials.gov/",
             },
-            "original_text": "CT.gov 登记结果度量",
+            "original_text": fact["source_text"],
         })
 
     for row in a["safety"]:
@@ -399,18 +447,35 @@ def main() -> None:
             continue  # 同试验同组多时段计数：代表行入门，全量留 A 门户与 sidecar
         seen_safety.add(key)
         value = int(row["value"])
+        _concept = row.get("term_key") or "unknown"
+        _family = {
+            "any_teae": "teae", "any_sae": "sae", "death": "death",
+            "aesi": "aesi", "grade_3_plus": "grade_3_or_higher",
+            "discontinuation_ae": "discontinuation_due_to_ae",
+            "treatment_related_ae": "treatment_related_teae",
+        }.get(_concept, "common_ae")
         safety_rows.append({
             "row_id": f"bsafe-{row['row_id']}",
             "source_row_id": row["row_id"],
             "product_id": row["product_id"],
             "trial_id": row["trial_id"],
-            "family": "sae",
+            "family": _family,
             # 独立复核第二十三轮 veto：事件名不得用组别名（组别名已在臂列）；
             # 登记载荷的事件语义是"组别汇总计数"或"死亡病例"
-            "source_term": row.get("term") or "登记严重不良事件组别汇总计数",
+            "source_term": row.get("term") or "登记不良事件组别汇总计数",
+            "term_key": _concept,
+            "polarity": row.get("polarity", "affirmed"),
+            "grade_set": row.get("grade_set", []),
+            "seriousness": row.get("seriousness", "unspecified"),
+            "teae": row.get("teae"),
+            "relatedness": row.get("relatedness", "unspecified"),
+            "parent": row.get("parent"),
+            "children": row.get("children", []),
+            "count_basis": row.get("count_basis", "participants"),
+            "at_risk_stat": row.get("at_risk_stat"),
             "event_definition_zh": (
-                f"登记严重不良事件计数；受影响人数=0 的登记原文计数（{row.get('term', '')}）"
-                if value == 0 else "登记严重不良事件计数"
+                f"登记安全性计数；受影响人数=0 的登记原文计数（{row.get('term', '')}）"
+                if value == 0 else "登记安全性计数"
             ),
             # 独立复核 B r61（issue-1）：观察窗部分转写后残留英文的
             # 按惯例标注（A 载荷已源头转写，此处兜底半翻译串）
@@ -424,26 +489,33 @@ def main() -> None:
             "arm_label": row.get("arm") or _arm_group_for(row["trial_id"], row.get("arm", ""))[1],
             "value": value,
             "raw_value": str(row["value"]),
-            "numerator": value,
+            "numerator": None,
             # 独立复核修复：臂级分母取登记 AE 模块同组 atRisk 人数
             "denominator": (row.get("denominator")
                             if isinstance(row.get("denominator"), int)
-                            and row["denominator"] > 0 else None),
+                            and row["denominator"] > 0
+                            and row.get("count_basis") != "mixed" else None),
             "denominator_semantics_zh": "登记 AE 模块同组风险人数（臂级）",
             "unit": row.get("unit") or "例",
             "disclosure_state": "reported_zero" if value == 0 else "reported_value",
             "source_version_id": f"ctgov-pnh-page-{_trial_page(row['trial_id'])}",
             "source_locator": {
                 "document_role": "registry-search-page",
-                "field_path": "studies[]",
+                "field_path": row["source_field_path"],
                 "url": "https://clinicaltrials.gov/",
             },
         })
-        if safety_rows[-1]["denominator"] is None:
+        if (
+            safety_rows[-1]["denominator"] is None
+            and safety_rows[-1]["count_basis"] == "participants"
+            and safety_rows[-1]["unit"] not in {"次", "事件数", "event_count"}
+        ):
             # 合同要求已报告安全性数值必须保留正分母；无分母则诚实丢弃该行
             safety_rows.pop()
             dropped["safety_domain"].append(f"no-denominator:{row['row_id']}")
             continue
+        if safety_rows[-1]["denominator"] is not None:
+            safety_rows[-1]["numerator"] = value
         facts.append({
             "fact_id": f"fact-b-{row['row_id']}",
             "row_ref": f"bsafe-{row['row_id']}",
@@ -457,10 +529,10 @@ def main() -> None:
             "source_id": _trial_source(row["trial_id"]),
             "locator": {
                 "document_role": "registry-search-page",
-                "field_path": "studies[]",
+                "field_path": row["source_field_path"],
                 "url": "https://clinicaltrials.gov/",
             },
-            "original_text": "CT.gov 登记安全结果",
+            "original_text": row["source_text"],
         })
 
 
@@ -512,7 +584,9 @@ def main() -> None:
                 "source_id": _trial_source(tid),
                 "fact_id": f"fact-b-trial-{tid}",
                 "fact_version_id": f"fv-{tid}",
-                "source_location": f"studies[]/{display_id}",
+                "source_location": _trial_json_path(
+                    tid, "protocolSection.identificationModule.nctId"
+                ),
             },
         }
 
@@ -523,7 +597,7 @@ def main() -> None:
         study = studies_by_nct.get(nct)
         if not study:
             continue
-        s, si = study
+        s, si, study_index = study
         proto = s.get("protocolSection", {})
         results = s.get("resultsSection") or {}
         bc_mod = results.get("baselineCharacteristicsModule") or {}
@@ -538,16 +612,20 @@ def main() -> None:
 
         # 臂级分母：基线模块 denoms（BG 组序，权威队列人数；dict/list 两种形态）
         arm_denoms: dict[str, int] = {}
+        arm_denom_paths: dict[str, str] = {}
         denom_entries = bc_mod.get("denoms") or []
+        flat_counts: list[tuple[dict, str]] = []
         if isinstance(denom_entries, dict):
-            denom_entries = denom_entries.get("counts") or []
-        flat_counts: list[dict] = []
-        for entry in denom_entries:
-            if isinstance(entry, dict) and entry.get("counts"):
-                flat_counts.extend(entry["counts"])
-            elif isinstance(entry, dict) and entry.get("groupId"):
-                flat_counts.append(entry)
-        for count in flat_counts:
+            for count_index, count in enumerate(denom_entries.get("counts") or []):
+                flat_counts.append((count, f"denoms.counts[{count_index}].value"))
+        else:
+            for denom_index, entry in enumerate(denom_entries):
+                if isinstance(entry, dict) and entry.get("counts"):
+                    for count_index, count in enumerate(entry["counts"]):
+                        flat_counts.append((count, f"denoms[{denom_index}].counts[{count_index}].value"))
+                elif isinstance(entry, dict) and entry.get("groupId"):
+                    flat_counts.append((entry, f"denoms[{denom_index}].value"))
+        for count, relative_path in flat_counts:
             cid = str(count.get("groupId") or "")
             try:
                 bg_index = int(cid.replace("BG", ""))
@@ -562,6 +640,10 @@ def main() -> None:
                 continue
             if n_arm > 0:
                 arm_denoms[arm[0]] = n_arm
+                arm_denom_paths[arm[0]] = (
+                    f"$.studies[{study_index}].resultsSection.baselineCharacteristicsModule."
+                    f"{relative_path}"
+                )
         _UNIT_ZH = {
             "years": "岁", "participants": "人", "instances": "次",
             "grams/liter (g)/liter (l)": "g/L", "grams/liter": "g/L",
@@ -579,7 +661,7 @@ def main() -> None:
             "direction": "not_applicable", "baseline_definition": "登记基线",
             "baseline_timepoint": "入组时", "source_version_id": f"ctgov-pnh-page-{si}",
             "source_locator": {"document_role": "registry-search-page",
-                "field_path": "studies[]", "url": "https://clinicaltrials.gov/"},
+                "field_path": f"$.studies[{study_index}]", "url": "https://clinicaltrials.gov/"},
             "source_role": "clinical_trial_registry",
             "disclosure_maturity": "registry_result_or_primary_report",
             "review_state": "accepted", "disclosure_state": "reported_value",
@@ -597,6 +679,8 @@ def main() -> None:
                 "scale": "count", "data_type": "count", "statistic_form": "sample_size",
                 "denominator": n_arm, "denominator_role": "cohort",
                 "value": n_arm, "raw_value": str(n_arm), "unit": "人",
+                "source_locator": {"document_role": "registry-search-page",
+                    "field_path": arm_denom_paths[gid], "url": "https://clinicaltrials.gov/"},
             }))
         if not arm_denoms and isinstance(n_total, int) and n_total > 0:
             fallback_group = (
@@ -612,8 +696,11 @@ def main() -> None:
                 "scale": "count", "data_type": "count", "statistic_form": "sample_size",
                 "denominator": n_total, "denominator_role": "cohort",
                 "value": n_total, "raw_value": str(n_total), "unit": "人",
+                "source_locator": {"document_role": "registry-search-page",
+                    "field_path": f"$.studies[{study_index}].protocolSection.designModule.enrollmentInfo.count",
+                    "url": "https://clinicaltrials.gov/"},
             }))
-        for measure in bc:
+        for measure_index, measure in enumerate(bc):
             title = str(measure.get("title") or "")[:60] or "基线指标"
             unit = str(measure.get("unitOfMeasure") or "") or "值"
             if not unit.strip():
@@ -645,10 +732,10 @@ def main() -> None:
                 "pnh_clone_size": "lower_is_better",
                 "hemoglobin": "higher_is_better",
             }.get(concept, "not_applicable") if domain == "baseline_severity" else "not_applicable"
-            for cls_ in (measure.get("classes") or []):
-                for cat in (cls_.get("categories") or []):
+            for class_index, cls_ in enumerate(measure.get("classes") or []):
+                for category_index, cat in enumerate(cls_.get("categories") or []):
                     cat_title = str(cat.get("title") or "").strip()
-                    for m_ in (cat.get("measurements") or []):
+                    for measurement_index, m_ in enumerate(cat.get("measurements") or []):
                         gid_raw = str(m_.get("groupId") or "")
                         try:
                             bg_index = int(gid_raw.replace("BG", ""))
@@ -708,6 +795,12 @@ def main() -> None:
                                 "category_level": cat_title.casefold() if is_sex else None,
                                 "unit": row_unit,
                                 "baseline_definition": definition, "baseline_timepoint": "入组时",
+                                "source_locator": {"document_role": "registry-search-page",
+                                    "field_path": (
+                                        f"$.studies[{study_index}].resultsSection.baselineCharacteristicsModule."
+                                        f"measures[{measure_index}].classes[{class_index}].categories[{category_index}]."
+                                        f"measurements[{measurement_index}].value"
+                                    ), "url": "https://clinicaltrials.gov/"},
                             }))
                         except Exception:
                             continue
@@ -788,10 +881,10 @@ def main() -> None:
             "source_id": _trial_source(r.trial_id),
             "locator": {
                 "document_role": "registry-search-page",
-                "field_path": "studies[]",
+                "field_path": r.source_locator.field_path,
                 "url": "https://clinicaltrials.gov/",
             },
-            "original_text": "CT.gov 登记基线特征",
+            "original_text": str(r.raw_value),
         })
     product_ids = sorted(set(r["product_id"] for r in efficacy_rows) | set(r["product_id"] for r in safety_rows) | set(t["product_id"] for t in trials_out))
 
@@ -805,7 +898,7 @@ def main() -> None:
         study = studies_by_nct.get(trial["display_id"])
         if not study:
             continue
-        s_d, si_d = study
+        s_d, si_d, study_index_d = study
         flow = (s_d.get("resultsSection", {}).get("participantFlowModule") or {})
         periods = flow.get("periods") or []
         arms_d = trial_arms.get(trial["id"]) or []
@@ -815,7 +908,7 @@ def main() -> None:
             "time_window": "登记治疗期",
             "source_version_id": f"ctgov-pnh-page-{si_d}",
             "source_locator": {"document_role": "registry-search-page",
-                "field_path": f"studies[]/{trial['display_id']}",
+                "field_path": f"$.studies[{study_index_d}]",
                 "url": "https://clinicaltrials.gov/"},
             "source_role": "clinical_trial_registry",
             "disclosure_maturity": "registry_result_or_primary_report",
@@ -866,6 +959,11 @@ def main() -> None:
                         "route_receipt_id": None,
                         "applicability_predicate_id": None,
                         "difference_labels_zh": [],
+                        "source_locator": {"document_role": "registry-search-page",
+                            "field_path": (
+                                f"$.studies[{study_index_d}].resultsSection.participantFlowModule."
+                                f"periods[{pi}].milestones[{mi}].achievements[{gi}].numSubjects"
+                            ), "url": "https://clinicaltrials.gov/"},
                     }))
     trial_name_by_id = {t["id"]: t["name"] for t in a["trials"]}
     for r in disposition_rows:
@@ -881,8 +979,8 @@ def main() -> None:
             "disclosure_state": "reported_value",
             "source_id": r.source_version_id,
             "locator": {"document_role": "registry-search-page",
-                "field_path": "studies[]", "url": "https://clinicaltrials.gov/"},
-            "original_text": "登记受试者流转里程碑人数",
+                "field_path": r.source_locator.field_path, "url": "https://clinicaltrials.gov/"},
+            "original_text": str(r.raw_value),
         })
     content_payload_overrides = (
         {"disposition": [
@@ -945,10 +1043,12 @@ def main() -> None:
             "source_id": _trial_source(trial["id"]),
             "locator": {
                 "document_role": "registry-search-page",
-                "field_path": f"studies[]/{trial['display_id']}",
+                "field_path": _trial_json_path(
+                    trial["id"], "protocolSection.identificationModule.nctId"
+                ),
                 "url": "https://clinicaltrials.gov/",
             },
-            "original_text": "CT.gov 登记试验身份",
+            "original_text": trial["display_id"],
         })
     from collections import Counter as _C
     _dups = [k for k, v in _C(f["fact_id"] for f in facts).items() if v > 1]
@@ -1057,29 +1157,16 @@ def main() -> None:
             _t["name"] = _full
     content_payload["universe_product_ids"] = sorted(portal_product_ids)
     b_portal["efficacy"] = portal_efficacy
-    b_portal["safety"] = [
-        {
-            "row_id": r["row_id"],
-            "product_id": r["product_id"],
-            "trial_id": r["trial_id"],
-            "arm": r["arm_label"],
-            "category": "严重不良事件（登记）",
-            "term": r["source_term"],
-            "value": r["value"],
-            "numerator": r["numerator"],
-            "denominator": r["denominator"],
-            "unit": r["unit"],
-            "time_window": r["time_window_zh"],
-            "disclosure_state": "已公开",
-        }
-        for r in safety_rows
-    ]
+    b_portal["safety"] = build_portal_safety_rows(safety_rows)
     # 视图 facts 属于门户投影（report_data）而非包顶层。
     b_portal["baseline_views"] = {"facts": [r.model_dump(mode="json", exclude_none=True) for r in baseline_rows]}
     b_portal["efficacy_views"] = {"facts": [dict(r) for r in efficacy_rows]}
     # 会商 round-4 #4（B r57 issue-2）：-declared 影子行按合同与科学事实
     # 保持 1:1（B 门匹配依赖）；展示层由 report_b._safety_records 统一过滤
     b_portal["safety_views"] = {"facts": [dict(r) for r in safety_rows]}
+    typed_matrix = build_typed_matrix_view(efficacy_rows, safety_rows)
+    if typed_matrix["rows"]:
+        b_portal["matrix_view"] = typed_matrix
     b_portal["disposition_views"] = {
         "facts": [r.model_dump(mode="json", exclude_none=True) for r in disposition_rows]
     }
@@ -1138,7 +1225,122 @@ def b_facts(a: dict):
             "value": row.get("value"),
             "population": row.get("population") or "登记结果人群",
             "nct": (row.get("trial_id") or "").upper(),
+            "source_field_path": row.get("source_field_path"),
+            "source_text": row.get("source_text"),
         }
+
+
+def build_typed_matrix_view(
+    efficacy_rows: list[dict], safety_rows: list[dict]
+) -> dict[str, list[dict]]:
+    """Build the production B bubble input solely from typed projections.
+
+    A missing control, mismatched endpoint/timepoint/population, non-participant
+    safety count, or missing arm denominator produces no point.  No absolute
+    value is substituted for an unavailable within-trial comparison.
+    """
+    from ci_workflow.reports.common.numeric_projection import (
+        NumericMeasureKind,
+        compatible,
+        project_numeric,
+    )
+
+    def typed(projection) -> dict:
+        return {
+            "projection_version": "canonical_numeric_projection_v1",
+            "kind": projection.kind.value,
+            "raw_value": projection.raw_value,
+            "raw_unit": projection.raw_unit,
+            "plot_value": projection.plot_value,
+            "plot_unit": projection.plot_unit,
+            "numerator": projection.numerator,
+            "denominator": projection.denominator,
+            "direction": projection.direction,
+            "window": projection.window,
+            "estimand": projection.estimand,
+            "facet_key": projection.facet_key,
+            "renderable": True,
+            "size_basis": projection.size_basis,
+        }
+
+    rows: list[dict] = []
+    buckets: dict[tuple[str, str, float, str], list[dict]] = {}
+    for row in efficacy_rows:
+        key = (
+            str(row["trial_id"]),
+            str(row["endpoint_family_id"]),
+            float(row["actual_timepoint"]),
+            str(row["analysis_population"]),
+        )
+        buckets.setdefault(key, []).append(row)
+    for (trial_id, endpoint_id, timepoint, population), bucket in sorted(buckets.items()):
+        treatment = next((row for row in bucket if row.get("arm_role") == "treatment"), None)
+        control = next((row for row in bucket if row.get("arm_role") == "control"), None)
+        if treatment is None or control is None:
+            continue
+        safety = next(
+            (
+                row for row in safety_rows
+                if row.get("trial_id") == trial_id
+                and row.get("arm_role") == "treatment"
+                and row.get("count_basis") == "participants"
+                and isinstance(row.get("denominator"), int)
+                and row["denominator"] > 0
+            ),
+            None,
+        )
+        if safety is None:
+            continue
+        unit = str(treatment.get("unit") or "")
+        if unit != str(control.get("unit") or ""):
+            continue
+        kind = (
+            NumericMeasureKind.PARTICIPANT_PROPORTION
+            if unit in {"%", "百分比"}
+            else NumericMeasureKind.ADJUSTED_ESTIMATE
+        )
+        estimand = "|".join((str(treatment.get("analysis_form") or ""), population))
+        window = f"week-{timepoint:g}"
+        left = project_numeric(
+            value=treatment.get("value"), unit=unit, kind=kind,
+            direction=str(treatment.get("direction") or ""), window=window,
+            estimand=estimand,
+        )
+        right = project_numeric(
+            value=control.get("value"), unit=unit, kind=kind,
+            direction=str(control.get("direction") or ""), window=window,
+            estimand="|".join((str(control.get("analysis_form") or ""), population)),
+        )
+        safety_projection = project_numeric(
+            value=safety.get("value"), unit=str(safety.get("unit") or ""),
+            kind=NumericMeasureKind.PARTICIPANT_PROPORTION,
+            numerator=safety.get("numerator"), denominator=safety.get("denominator"),
+            direction="lower_is_better", window=str(safety.get("time_window_zh") or ""),
+            estimand="participants_with_event",
+        )
+        size_projection = project_numeric(
+            value=safety.get("denominator"), unit="人",
+            kind=NumericMeasureKind.SAMPLE_SIZE,
+            direction="not_applicable", window=str(safety.get("time_window_zh") or ""),
+            estimand="treatment_safety_population",
+            size_basis="治疗组安全性分析人数",
+        )
+        if not (
+            compatible(left, right)
+            and safety_projection.renderable
+            and size_projection.renderable
+        ):
+            continue
+        rows.append({
+            "comparison_row_id": f"typed-matrix-{trial_id}-{len(rows) + 1}",
+            "product_id": treatment["product_id"],
+            "trial_id": trial_id,
+            "treatment_projection": typed(left),
+            "control_projection": typed(right),
+            "safety_projection": typed(safety_projection),
+            "size_projection": typed(size_projection),
+        })
+    return {"rows": rows}
 
 
 def _timepoint_rule_for_weeks(weeks: float) -> str:

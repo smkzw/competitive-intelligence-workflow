@@ -1,0 +1,249 @@
+{
+  "round": "0922V2",
+  "commit": "700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c",
+  "scope": "Isolated source-algorithm excerpts and synthetic inputs, not repository/browser tests",
+  "total": 28,
+  "pass_count": 12,
+  "fail_count": 16,
+  "results": [
+    {
+      "id": "S01",
+      "input": "Non-serious adverse events",
+      "actual": "generic_ae",
+      "expected": "generic_ae",
+      "pass_": true
+    },
+    {
+      "id": "S02",
+      "input": "Non-serious adverse events and serious adverse events",
+      "actual": "composite_ae",
+      "expected": "composite_ae",
+      "pass_": true
+    },
+    {
+      "id": "S03",
+      "input": "Non-serious TEAEs",
+      "actual": "any_teae",
+      "expected": "must not be any_teae",
+      "pass_": false
+    },
+    {
+      "id": "S04",
+      "input": "Participants without SAEs",
+      "actual": "any_sae",
+      "expected": "must not be any_sae",
+      "pass_": false
+    },
+    {
+      "id": "S05",
+      "input": "Grade 4 adverse events",
+      "actual": "grade_3_plus",
+      "expected": "must not be grade_3_plus",
+      "pass_": false
+    },
+    {
+      "id": "S06",
+      "input": "Grade 1 or 3 adverse events",
+      "actual": "grade_3_plus",
+      "expected": "must not be grade_3_plus",
+      "pass_": false
+    },
+    {
+      "id": "S07",
+      "input": "TEAEs leading to discontinuation",
+      "actual": "discontinuation_ae",
+      "expected": "discontinuation_ae",
+      "pass_": true
+    },
+    {
+      "id": "D01",
+      "input": "different periods",
+      "actual": 40.0,
+      "expected": 40,
+      "pass_": true
+    },
+    {
+      "id": "D02",
+      "input": "absent requested period",
+      "actual": null,
+      "expected": null,
+      "pass_": true
+    },
+    {
+      "id": "D03",
+      "input": "different module/group identities, same numeric denominator, no crosswalk proof",
+      "actual": 100.0,
+      "expected": null,
+      "pass_": false
+    },
+    {
+      "id": "D04",
+      "input": "query drug title borrows placebo-labelled denominator",
+      "actual": 80.0,
+      "expected": null,
+      "pass_": false
+    },
+    {
+      "id": "D05",
+      "input": "normalize explicit Period 1",
+      "actual": "PERIOD1",
+      "expected": "TP1",
+      "pass_": false
+    },
+    {
+      "id": "E01",
+      "input": "valid pair",
+      "actual": true,
+      "expected": true,
+      "pass_": true
+    },
+    {
+      "id": "E02",
+      "input": "second endpoint missing time",
+      "actual": false,
+      "expected": false,
+      "pass_": true
+    },
+    {
+      "id": "E03",
+      "input": "T2 in universe but no endpoint or timepoint supplied",
+      "actual": true,
+      "expected": false,
+      "pass_": false
+    },
+    {
+      "id": "E04",
+      "input": "endpoint role primary, matched timepoint role secondary",
+      "actual": true,
+      "expected": false,
+      "pass_": false
+    },
+    {
+      "id": "E05",
+      "input": "blank timepoint",
+      "actual": false,
+      "expected": false,
+      "pass_": true
+    },
+    {
+      "id": "M01",
+      "input": {
+        "value": 7,
+        "unit": "人"
+      },
+      "actual": 7,
+      "expected": null,
+      "pass_": false
+    },
+    {
+      "id": "M02",
+      "input": {
+        "value": 7,
+        "unit": "人",
+        "numerator": 7,
+        "denominator": 7
+      },
+      "actual": 100,
+      "expected": 100,
+      "pass_": true
+    },
+    {
+      "id": "M03",
+      "input": {
+        "value": 20,
+        "unit": "例",
+        "denominator": 10,
+        "measureObject": "events"
+      },
+      "actual": 200,
+      "expected": null,
+      "pass_": false
+    },
+    {
+      "id": "M04",
+      "input": {
+        "value": 7,
+        "unit": "%"
+      },
+      "actual": 7,
+      "expected": 7,
+      "pass_": true
+    },
+    {
+      "id": "M05",
+      "input": {
+        "treatment": 12,
+        "control": null,
+        "useDifference": true
+      },
+      "actual": 12,
+      "expected": null,
+      "pass_": false
+    },
+    {
+      "id": "M06",
+      "input": {
+        "derivedRate": 100,
+        "allEventRates": []
+      },
+      "actual": false,
+      "expected": true,
+      "pass_": false
+    },
+    {
+      "id": "L01",
+      "input": {
+        "phase": "I期",
+        "status": "招募中",
+        "stage": "I期及更早"
+      },
+      "actual": false,
+      "expected": true,
+      "pass_": false
+    },
+    {
+      "id": "L02",
+      "input": {
+        "phase": "II期",
+        "status": "招募中",
+        "stage": "II期及更早"
+      },
+      "actual": true,
+      "expected": true,
+      "pass_": true
+    },
+    {
+      "id": "L03",
+      "input": {
+        "phase": "III期",
+        "status": "招募中",
+        "stage": "III期"
+      },
+      "actual": true,
+      "expected": true,
+      "pass_": true
+    },
+    {
+      "id": "L04",
+      "input": {
+        "phase": "IV期",
+        "status": "招募中",
+        "stage": "IV期"
+      },
+      "actual": false,
+      "expected": true,
+      "pass_": false
+    },
+    {
+      "id": "L05",
+      "input": {
+        "phase": "未标注",
+        "status": "招募中",
+        "stage": "阶段未标注"
+      },
+      "actual": false,
+      "expected": true,
+      "pass_": false
+    }
+  ]
+}

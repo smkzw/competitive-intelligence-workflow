@@ -17,6 +17,9 @@ other 统计口径（会商 #6：generic_ae 不查 crosswalk 导致 55 行分母
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
+
+from ci_workflow.reports.b.concept_catalog import spec_of
 
 # 否定短语：只剥离否定词与其紧邻的限定词，不动并列句其余部分
 _NEGATION_PATTERNS = (
@@ -57,13 +60,12 @@ _GENERAL_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
 
 _GENERIC_RULE = re.compile(r"\badverse\s+events?\b|(?<![a-z\-])aes(?![a-z])", re.I)
 
-from ci_workflow.reports.b.concept_catalog import spec_of
-
 _CONCEPT_CATEGORY_ZH = {
     key: spec_of(key).category_zh for key in (
         "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
-        "generic_ae", "specific_ae", "composite_ae", "unknown",
+        "generic_ae", "specific_ae", "composite_ae", "grade_specific",
+        "non_serious_teae", "absence_sae", "unknown",
     )
 }
 
@@ -73,10 +75,72 @@ CONCEPT_ATRISK_STAT = {
     for key in (
         "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
-        "generic_ae", "specific_ae", "composite_ae", "unknown",
+        "generic_ae", "specific_ae", "composite_ae", "grade_specific",
+        "non_serious_teae", "absence_sae", "unknown",
     )
     if spec_of(key).at_risk_stat
 }
+
+
+@dataclass(frozen=True)
+class SafetyConcept:
+    key: str
+    polarity: str = "affirmed"
+    grade_set: tuple[int, ...] = ()
+    seriousness: str = "unspecified"
+    teae: bool | None = None
+    relatedness: str = "unspecified"
+    parent: str | None = None
+    children: tuple[str, ...] = ()
+    count_basis: str = "participants"
+    at_risk_stat: str | None = None
+
+
+def _fragments(text: str) -> list[str]:
+    # Parenthetical commas describe one event and are not list separators.
+    scrubbed = re.sub(r"\([^)]*\)", lambda m: m.group(0).replace(",", "，"), text)
+    return [item.strip(" ,;:") for item in re.split(r",|;|\band\b", scrubbed, flags=re.I)
+            if item.strip(" ,;:")]
+
+
+def describe_safety_concept(title: str) -> SafetyConcept:
+    text = " ".join(str(title or "").split())
+    if not text:
+        return SafetyConcept(key="unknown")
+    lowered = text.casefold()
+    grades = tuple(sorted({int(value) for value in re.findall(r"\b([1-5])\b", lowered)})) \
+        if "grade" in lowered else ()
+    if re.search(r"\bnon[\s-]*serious\b", lowered) and re.search(r"\bteaes?\b|treatment[\s-]*emergent", lowered):
+        return SafetyConcept("non_serious_teae", "negative_seriousness", grades,
+                             "non_serious", True, at_risk_stat=spec_of("non_serious_teae").at_risk_stat)
+    if re.search(r"\b(?:without|no|not)\s+(?:any\s+)?saes?\b", lowered):
+        return SafetyConcept("absence_sae", "negative_presence", grades, "serious", False,
+                             at_risk_stat=spec_of("absence_sae").at_risk_stat)
+    if grades:
+        if re.search(r"grade\s*3\s*(?:or|and|/)\s*(?:4|5)|grade\s*(?:≥|>=)\s*3|grade\s*3\s+or\s+higher", lowered):
+            key = "grade_3_plus"
+        else:
+            key = "grade_specific"
+        return SafetyConcept(key, grade_set=grades, seriousness="graded",
+                             parent="generic_ae", at_risk_stat=spec_of(key).at_risk_stat)
+    children: list[str] = []
+    for fragment in _fragments(text):
+        stripped = fragment
+        for pattern in _NEGATION_PATTERNS:
+            stripped = pattern.sub(" ", stripped)
+        key = _classify_single(stripped)
+        if key and key not in children:
+            children.append(key)
+    if len(children) > 1:
+        return SafetyConcept("composite_ae", children=tuple(children), count_basis="mixed")
+    key = children[0] if children else "unknown"
+    return SafetyConcept(
+        key=key,
+        seriousness="serious" if key in {"any_sae", "serious_teae_subset"} else "unspecified",
+        teae=True if key in {"any_teae", "serious_teae_subset"} else None,
+        relatedness="related" if key == "treatment_related_ae" else "unspecified",
+        at_risk_stat=spec_of(key).at_risk_stat,
+    )
 
 
 def _classify_single(text: str) -> str | None:
@@ -100,6 +164,9 @@ def classify_safety_concept(title: str) -> str:
     "TEAEs, SAEs, Grade 3/4 AEs, And Events Leading To Discontinuation"）
     不得按首个特定键收类——逐片段独立分类，≥2 个不同概念即判
     composite_ae（复合不良事件指标），描述性呈现不冒充单一族。"""
+    described = describe_safety_concept(title)
+    if described.key in {"non_serious_teae", "absence_sae", "grade_specific", "grade_3_plus", "composite_ae"}:
+        return described.key
     text = " ".join(str(title or "").split())
     if not text:
         return "unknown"

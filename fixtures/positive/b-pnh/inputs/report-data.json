@@ -680,28 +680,66 @@
     ]
   },
   "matrix_view": {
-    "comparison_rows": [
+    "rows": [
       {
-        "row_id": "matrix-apply-teae",
+        "comparison_row_id": "matrix-apply-teae",
         "product_id": "iptacopan",
         "trial_id": "nct04558918",
-        "target_id": "factor-b",
-        "display_label_zh": "第24周血红蛋白应答率与治疗期间不良事件",
-        "status": "comparable",
-        "point": {
-          "x_value": 80.5,
-          "y_value": 54.8,
-          "size": 62
+      "treatment_projection": {
+        "projection_version": "canonical_numeric_projection_v1",
+        "kind": "participant_proportion",
+        "raw_value": 82.3,
+        "raw_unit": "%",
+        "plot_value": 82.3,
+          "plot_unit": "%",
+          "direction": "higher_is_better",
+          "window": "week-24",
+          "estimand": "response_rate|全分析集",
+          "facet_key": "participant_proportion|%|higher_is_better|week-24|response_rate|全分析集",
+          "renderable": true
+        },
+      "control_projection": {
+        "projection_version": "canonical_numeric_projection_v1",
+        "kind": "participant_proportion",
+        "raw_value": 1.8,
+        "raw_unit": "%",
+        "plot_value": 1.8,
+          "plot_unit": "%",
+          "direction": "higher_is_better",
+          "window": "week-24",
+          "estimand": "response_rate|全分析集",
+          "facet_key": "participant_proportion|%|higher_is_better|week-24|response_rate|全分析集",
+          "renderable": true
+        },
+      "safety_projection": {
+        "projection_version": "canonical_numeric_projection_v1",
+        "kind": "participant_proportion",
+        "raw_value": 34,
+        "raw_unit": "人",
+        "plot_value": 54.83870967741935,
+        "plot_unit": "%",
+        "numerator": 34,
+        "denominator": 62,
+          "direction": "lower_is_better",
+          "window": "treatment-period",
+          "estimand": "participants_with_event",
+          "facet_key": "participant_proportion|%|lower_is_better|treatment-period|participants_with_event",
+          "renderable": true
+        },
+      "size_projection": {
+        "projection_version": "canonical_numeric_projection_v1",
+        "kind": "sample_size",
+        "raw_value": 62,
+        "raw_unit": "人",
+        "plot_value": 62,
+          "plot_unit": "人",
+          "direction": "not_applicable",
+          "window": "treatment-period",
+          "estimand": "treatment_safety_population",
+          "facet_key": "sample_size|人|not_applicable|treatment-period|treatment_safety_population",
+          "renderable": true,
+          "size_basis": "治疗组安全性分析人数"
         }
-      },
-      {
-        "row_id": "matrix-appoint-teae",
-        "product_id": "iptacopan",
-        "trial_id": "nct04820530",
-        "target_id": "factor-b",
-        "display_label_zh": "第24周血红蛋白应答率与治疗期间不良事件",
-        "status": "not_applicable",
-        "reason_zh": "单臂研究没有试验内对照组，不计算治疗—对照疗效差"
       }
     ]
   },

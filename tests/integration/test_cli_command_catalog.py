@@ -116,6 +116,70 @@ def test_frozen_command_catalog_has_real_package_and_project_handlers_and_fail_c
         assert result.returncode != 0
 
 
+def test_public_project_create_emits_native_ask_when_report_type_is_missing(
+    tmp_path: Path,
+) -> None:
+    project_root = tmp_path / "待选择项目"
+    result = _run(
+        "project",
+        "create",
+        "--root",
+        str(project_root),
+        "--request",
+        "请做特应性皮炎的竞品调研",
+    )
+
+    assert result.returncode == 6
+    assert not project_root.exists()
+    payload = json.loads(result.stdout.removeprefix("ASK_REQUIRED "))
+    assert [option["code"] for option in payload["options"]] == ["A", "B", "C"]
+    assert all(option["explanation_zh"] for option in payload["options"])
+
+
+def test_same_public_entry_runs_two_indications_and_only_selected_report(
+    tmp_path: Path,
+) -> None:
+    journeys = (
+        ("PNH", "请做阵发性睡眠性血红蛋白尿症竞品调研", "A"),
+        ("AD", "请做特应性皮炎竞品调研", "C"),
+    )
+    for name, request, report in journeys:
+        project_root = tmp_path / name
+        created = _run(
+            "project",
+            "create",
+            "--root",
+            str(project_root),
+            "--request",
+            request,
+            "--reports",
+            report,
+            "--outputs",
+            "html",
+        )
+        assert created.returncode == 0, created.stderr
+        answer = _run(
+            "yaozh", "answer", "--root", str(project_root), "--answer", "skipped"
+        )
+        assert answer.returncode == 0, answer.stderr
+        run = _run(
+            "project", "run", "--host", "codex", "--root", str(project_root)
+        )
+        assert run.returncode == 0, run.stderr
+        capability = json.loads(
+            (project_root / "capabilities/preflight.json").read_text(encoding="utf-8")
+        )
+        assert capability["host"] == "codex"
+        task = json.loads(
+            (project_root / "state/work-items/source-research.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        assert task["reports"] == [report]
+        assert list(task["package_target"]["report_payload_paths"]) == [report]
+        assert [spec["report"] for spec in task["report_specs"]] == [report]
+
+
 def test_cli_project_run_resume_rebinds_canonical_input_and_preserves_blocked_decision(
     tmp_path: Path,
 ) -> None:

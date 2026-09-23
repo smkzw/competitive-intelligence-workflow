@@ -236,7 +236,7 @@ def finish_c_slides(**ctx: Any) -> list[Slide]:
         Slide(
             slide_id="c-path-2",
             kind="content",
-            title="可选路径二",
+            title="可选路径二（兼容位）",
             responsibility="design-patterns",
             date_zh=date_zh,
             body_html='<div class="kz-card" style="margin-bottom:14px"><h3>来布利珠单抗与奈莫利珠单抗确证试验</h3><p>ADvocate2 · ADvantage · NCT03985943</p></div>'
@@ -245,12 +245,12 @@ def finish_c_slides(**ctx: Any) -> list[Slide]:
             + '<div class="kz-card"><span class="kz-label">共同设计</span><h3>四盲、平行分组</h3><p>三项均设对照臂，不按单臂试验解读。</p></div>'
             + '<div class="kz-card"><span class="kz-label">终点差异</span><h3>量表构造并不相同</h3><p>ADvantage 采用第 16 周 EASI-75；其余试验采用研究者整体评估成功。</p></div>'
             + "</div>",
-            conclusion_html="路径二不少于一项后续确证试验，强调入组阈值对齐与终点构造差异。",
+            conclusion_html="存在第二条先例时展示其设计差异；单条先例不因本兼容位被阻断。",
             notes_html=notes(
                 "c-path-2",
                 "路径二把后三项放在一起：入组都是十六分，盲法都是四盲。"
                 "请点出ADvantage终点量表不同，避免听众以为三项完全同构。"
-                "对照仍是对照臂。收尾必须说<strong>两条路径并列</strong>，不要比较哪条更值得学。",
+                "对照仍是对照臂。若存在多条先例须<strong>并列呈现</strong>，不要比较哪条更值得学。",
             ),
         )
     )
@@ -267,12 +267,12 @@ def finish_c_slides(**ctx: Any) -> list[Slide]:
             slide_id="c-limitations",
             kind="content",
             title="资料版本与局限",
-            responsibility="evidence-versions-limitations",
+            responsibility="evidence-limitations",
             date_zh=date_zh,
             body_html=disclosure_rows(version_rows)
             + '<div class="kz-card" style="margin-top:12px"><h3>本页口径</h3>'
             + "<p>观众页只说登记版本。分析集未单独公开，入选排除中未单列的阈值也不推断。</p>"
-            + "<p>没有独立模式对象，路径由观察差标推导，至少两条，且不给出单一优选。</p></div>",
+            + "<p>没有独立模式对象，路径由观察差标推导；单条完整先例可用，且不给出单一优选。</p></div>",
             conclusion_html="资料边界以登记版本为准；未单列分析集保持未公开。",
             notes_html=notes(
                 "c-limitations",

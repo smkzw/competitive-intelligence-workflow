@@ -736,13 +736,13 @@
   function buildBubbleOption(group) {
     var seriesData = [];
     var rowIds = collectRowIds(group);
-    var xUnitMatch = /（([^）]+)）/.exec(String(group.x_axis_label_zh || ""));
-    var yUnitMatch = /（([^）]+)）/.exec(String(group.y_axis_label_zh || ""));
-    var xUnit = xUnitMatch ? xUnitMatch[1] : "百分点";
-    var yUnit = yUnitMatch ? yUnitMatch[1] : "%";
+    var xUnit = String(group.x_unit || "");
+    var yUnit = String(group.y_unit || "");
     var sizeTerm = String(group.size_label_zh || "治疗组样本量")
       .replace(/^气泡大小[：:]/, "")
       .trim();
+    var projectedX = [];
+    var projectedY = [];
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
       if (!isRenderable(row)) {
@@ -753,11 +753,14 @@
         });
       } else {
         var sampleSize = Number(row.size) || 0;
+        projectedX.push(Number(row.x_value));
+        projectedY.push(Number(row.y_value));
         seriesData.push({
           value: [row.x_value, row.y_value, row.size],
           name: groupedIdentityLabel(row),
           _row_id: String(row.row_id),
           _status: row.status || "",
+          _size_basis: row.size_basis || sizeTerm,
           status: null,
           symbolSize: Math.max(18, Math.min(56, 4 * Math.sqrt(sampleSize / Math.PI))),
           label: {
@@ -776,7 +779,7 @@
         tooltip: {
           trigger: "item",
           formatter: function (p) {
-            return p.name + "<br>疗效差：" + p.value[0] + " " + xUnit + "<br>不良事件：" + p.value[1] + yUnit + "<br>" + sizeTerm + "：" + p.value[2];
+            return p.name + "<br>疗效：" + p.value[0] + (xUnit ? " " + xUnit : "") + "<br>安全性：" + p.value[1] + (yUnit ? " " + yUnit : "") + "<br>" + (p.data._size_basis || sizeTerm) + "：" + p.value[2];
           }
         },
         grid: { left: 64, right: 40, top: 44, bottom: 68, containLabel: true },
@@ -792,8 +795,8 @@
           name: group.y_axis_label_zh || "安全性",
           nameLocation: "middle",
           nameGap: 48,
-          min: 0,
-          max: 100,
+          min: projectedY.length ? Math.min.apply(null, projectedY.concat([0])) : 0,
+          max: projectedY.length ? Math.max.apply(null, projectedY) * 1.1 || 1 : 1,
           inverse: true,
           axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
@@ -812,9 +815,9 @@
                 }
                 var lines = [p.name];
                 if (p.data && p.data._status) lines.push("比较状态 " + p.data._status);
-                lines.push("疗效差 " + v[0] + " " + xUnit);
-                lines.push("不良事件 " + v[1] + yUnit);
-                lines.push(sizeTerm + " " + v[2]);
+                lines.push("疗效差 " + v[0] + (xUnit ? " " + xUnit : ""));
+                lines.push("不良事件 " + v[1] + (yUnit ? " " + yUnit : ""));
+                lines.push(((p.data && p.data._size_basis) || sizeTerm) + " " + v[2]);
                 return lines.join("\n");
               },
               fontSize: 16,

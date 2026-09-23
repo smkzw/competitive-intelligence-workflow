@@ -48,6 +48,7 @@ class FactDisclosureState(Enum):
 class FactReviewState(Enum):
     CANDIDATE = "candidate"
     ACCEPTED = "accepted"
+    USER_MODIFIED = "user_modified"
     REJECTED = "rejected"
     SUPERSEDED = "superseded"
 

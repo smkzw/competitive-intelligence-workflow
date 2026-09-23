@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{{ asset_prefix }}/portal.css">
   <link rel="stylesheet" href="{{ asset_prefix }}/report-a.css">
 </head>
-<body data-page-id="{{ current }}">
+<body class="kz-a-site" data-page-id="{{ current }}" data-report-version="{{ report.report_version }}">
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="site-header__logo" href="{{ root_prefix }}overview.html" aria-label="返回首页">
@@ -59,6 +59,20 @@
       <h1 class="portal-page-title">{% block heading %}{% endblock %}</h1>
       <p class="portal-lead">{% block lead %}{% endblock %}</p>
     </header>
+    <details class="kz-a-workspace-bar" data-responsive-workspace open>
+      <summary>视图与修订配置{% if user_edits %}<span class="kz-a-review-state">{{ user_edits|length }} 项用户修订</span>{% endif %}</summary>
+      <div class="kz-a-workspace-bar__content" aria-label="当前视图与事实状态">
+        <div>
+          <strong>当前视图</strong>
+          <span data-a-view-status>筛选与比较维度可保存到本机</span>
+        </div>
+        <div class="kz-a-workspace-bar__actions">
+          <button type="button" data-a-save-view>保存当前视图</button>
+          <button type="button" data-a-clear-view>清除本机视图</button>
+        </div>
+        {% if user_edits %}<span class="kz-a-review-state">用户修订，未独立复核｜{{ user_edits|length }} 项</span>{% endif %}
+      </div>
+    </details>
     {% block content %}{% endblock %}
   </main>
 

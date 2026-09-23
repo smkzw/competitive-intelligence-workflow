@@ -58,7 +58,7 @@ PRODUCED_AT = datetime(2026, 9, 5, 1, 0, 0, tzinfo=UTC)
 REVIEW_STARTED_AT = datetime(2026, 9, 5, 2, 0, 0, tzinfo=UTC)
 REVIEW_FINISHED_AT = datetime(2026, 9, 5, 2, 30, 0, tzinfo=UTC)
 ISSUED_AT = datetime(2026, 9, 5, 3, 0, 0, tzinfo=UTC)
-VALID_UNTIL = ISSUED_AT + timedelta(days=7)
+VALID_UNTIL = datetime(2099, 1, 1, tzinfo=UTC)
 
 CANDIDATE_DIGEST = hashlib.sha256("候选内容".encode()).hexdigest()
 FACT_VERSION_BY_REF = {
@@ -102,12 +102,12 @@ def _sources() -> tuple[SourceCapture, ...]:
             query_or_identifier=f"NCT-{source_id}",
             language="en",
             access_method="public_registry",
-            content_text=content,
+            content_text='{"quote":"客观缓解率 80%"}',
             acquired_at=PRODUCED_AT,
             published_at=PRODUCED_AT,
             effective_at=None,
             first_disclosed_at=PRODUCED_AT,
-            locator=_locator(role),
+            locator=EvidenceLocator(document_role=role, field_path="$"),
         )
 
     return (
@@ -129,7 +129,9 @@ def _facts() -> tuple[ResearchFact, ...]:
             normalized_value="80",
             disclosure_state="reported_value",
             source_id=source_id,
-            locator=_locator("primary_result"),
+            locator=EvidenceLocator(
+                document_role="primary_result", field_path="$.quote"
+            ),
             original_text="客观缓解率 80%",
         )
 

@@ -1,0 +1,202 @@
+.......FFFFFFF...FFFFFFF                                                 [100%]
+=================================== FAILURES ===================================
+_ test_high_load_landscape_exposes_complete_core_unit_without_clipping[1920-1080-matrix] _
+tests/browser/test_a_w05a_product.py:232: in test_high_load_landscape_exposes_complete_core_unit_without_clipping
+    metrics = page.evaluate(
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:9280: in evaluate
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_page.py:472: in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:345: in evaluate
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+E       at eval (eval at evaluate (:303:30), <anonymous>:4:36)
+E       at UtilityScript.evaluate (<anonymous>:310:18)
+E       at UtilityScript.<anonymous> (<anonymous>:1:44)
+_ test_high_load_landscape_exposes_complete_core_unit_without_clipping[1440-900-matrix] _
+tests/browser/test_a_w05a_product.py:232: in test_high_load_landscape_exposes_complete_core_unit_without_clipping
+    metrics = page.evaluate(
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:9280: in evaluate
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_page.py:472: in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:345: in evaluate
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+E       at eval (eval at evaluate (:303:30), <anonymous>:4:36)
+E       at UtilityScript.evaluate (<anonymous>:310:18)
+E       at UtilityScript.<anonymous> (<anonymous>:1:44)
+_ test_high_load_landscape_exposes_complete_core_unit_without_clipping[1024-1366-compact] _
+tests/browser/test_a_w05a_product.py:232: in test_high_load_landscape_exposes_complete_core_unit_without_clipping
+    metrics = page.evaluate(
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:9280: in evaluate
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_page.py:472: in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:345: in evaluate
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+E       at eval (eval at evaluate (:303:30), <anonymous>:4:36)
+E       at UtilityScript.evaluate (<anonymous>:310:18)
+E       at UtilityScript.<anonymous> (<anonymous>:1:44)
+_ test_high_load_landscape_exposes_complete_core_unit_without_clipping[390-844-compact] _
+tests/browser/test_a_w05a_product.py:232: in test_high_load_landscape_exposes_complete_core_unit_without_clipping
+    metrics = page.evaluate(
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:9280: in evaluate
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_page.py:472: in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:345: in evaluate
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+E       at eval (eval at evaluate (:303:30), <anonymous>:4:36)
+E       at UtilityScript.evaluate (<anonymous>:310:18)
+E       at UtilityScript.<anonymous> (<anonymous>:1:44)
+_ test_high_load_landscape_exposes_complete_core_unit_without_clipping[320-568-compact] _
+tests/browser/test_a_w05a_product.py:232: in test_high_load_landscape_exposes_complete_core_unit_without_clipping
+    metrics = page.evaluate(
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:9280: in evaluate
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_page.py:472: in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:345: in evaluate
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+E       at eval (eval at evaluate (:303:30), <anonymous>:4:36)
+E       at UtilityScript.evaluate (<anonymous>:310:18)
+E       at UtilityScript.<anonymous> (<anonymous>:1:44)
+_ test_high_load_landscape_mobile_detail_and_complete_table_do_not_scroll_sideways[390-844] _
+tests/browser/test_a_w05a_product.py:309: in test_high_load_landscape_mobile_detail_and_complete_table_do_not_scroll_sideways
+    assert cards.is_visible()
+E   AssertionError: assert False
+E    +  where False = is_visible()
+E    +    where is_visible = <Locator frame=<Frame name= url='file:///private/var/folders/yb/31r9763x6_54mdxswxk36c4w0000gn/T/pytest-of-smkzw/pytest-977/w05a-a-high-load-site0/landscape.html'> selector='details.kz-complete-table >> .kz-a-landscape-records'>.is_visible
+_ test_high_load_landscape_mobile_detail_and_complete_table_do_not_scroll_sideways[320-568] _
+tests/browser/test_a_w05a_product.py:309: in test_high_load_landscape_mobile_detail_and_complete_table_do_not_scroll_sideways
+    assert cards.is_visible()
+E   AssertionError: assert False
+E    +  where False = is_visible()
+E    +    where is_visible = <Locator frame=<Frame name= url='file:///private/var/folders/yb/31r9763x6_54mdxswxk36c4w0000gn/T/pytest-of-smkzw/pytest-977/w05a-a-high-load-site0/landscape.html'> selector='details.kz-complete-table >> .kz-a-landscape-records'>.is_visible
+_____________ test_a_safety_details_are_paginated_and_fit_at_1024 ______________
+tests/browser/test_a_portal.py:780: in test_a_safety_details_are_paginated_and_fit_at_1024
+    assert dimension_box is not None and dimension_box["width"] >= 100
+E   AssertionError: assert ({'x': 322.390625, 'y': -5108.734375, 'width': 94.796875, 'height': 236.53125} is not None and 94.796875 >= 100)
+______________ test_pointer_bar_opens_same_row_evidence[chromium] ______________
+tests/browser/test_evidence_drawer.py:948: in test_pointer_bar_opens_same_row_evidence
+    page.locator("#kz-evidence-drawer").wait_for(state="visible")
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:20298: in wait_for
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_locator.py:741: in wait_for
+    await self._frame.wait_for_selector(
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:394: in wait_for_selector
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 30000ms exceeded.
+E   Call log:
+E     - waiting for locator("#kz-evidence-drawer") to be visible
+E       63 × locator resolved to hidden <aside hidden="" id="kz-evidence-drawer" class="kz-evidence-drawer">…</aside>
+_______________ test_pointer_bar_opens_same_row_evidence[webkit] _______________
+tests/browser/test_evidence_drawer.py:948: in test_pointer_bar_opens_same_row_evidence
+    page.locator("#kz-evidence-drawer").wait_for(state="visible")
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:20298: in wait_for
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_locator.py:741: in wait_for
+    await self._frame.wait_for_selector(
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:394: in wait_for_selector
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 30000ms exceeded.
+E   Call log:
+E     - waiting for locator("#kz-evidence-drawer") to be visible
+E       63 × locator resolved to hidden <aside hidden="" id="kz-evidence-drawer" class="kz-evidence-drawer">…</aside>
+______ test_pointer_bar_escape_returns_focus_to_exact_svg_mark[chromium] _______
+tests/browser/test_evidence_drawer.py:991: in test_pointer_bar_escape_returns_focus_to_exact_svg_mark
+    page.locator("#kz-evidence-drawer").wait_for(state="visible")
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:20298: in wait_for
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_locator.py:741: in wait_for
+    await self._frame.wait_for_selector(
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:394: in wait_for_selector
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 30000ms exceeded.
+E   Call log:
+E     - waiting for locator("#kz-evidence-drawer") to be visible
+E       63 × locator resolved to hidden <aside hidden="" id="kz-evidence-drawer" class="kz-evidence-drawer">…</aside>
+_______ test_pointer_bar_escape_returns_focus_to_exact_svg_mark[webkit] ________
+tests/browser/test_evidence_drawer.py:991: in test_pointer_bar_escape_returns_focus_to_exact_svg_mark
+    page.locator("#kz-evidence-drawer").wait_for(state="visible")
+.venv/lib/python3.12/site-packages/playwright/sync_api/_generated.py:20298: in wait_for
+    self._sync(
+.venv/lib/python3.12/site-packages/playwright/_impl/_locator.py:741: in wait_for
+    await self._frame.wait_for_selector(
+.venv/lib/python3.12/site-packages/playwright/_impl/_frame.py:394: in wait_for_selector
+    await self._channel.send(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:563: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 30000ms exceeded.
+E   Call log:
+E     - waiting for locator("#kz-evidence-drawer") to be visible
+E       63 × locator resolved to hidden <aside hidden="" id="kz-evidence-drawer" class="kz-evidence-drawer">…</aside>
+______________ test_pointer_click_highlights_table_row[chromium] _______________
+tests/browser/test_chart_table_sync.py:294: in test_pointer_click_highlights_table_row
+    assert clicked == meta["expected"], (
+E   AssertionError: 真实 pointer 未选中期望行：got=None expected=row-ctrl-endpoint-a
+E   assert None == 'row-ctrl-endpoint-a'
+_______________ test_pointer_click_highlights_table_row[webkit] ________________
+tests/browser/test_chart_table_sync.py:294: in test_pointer_click_highlights_table_row
+    assert clicked == meta["expected"], (
+E   AssertionError: 真实 pointer 未选中期望行：got=None expected=row-ctrl-endpoint-a
+E   assert None == 'row-ctrl-endpoint-a'
+=========================== short test summary info ============================
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_exposes_complete_core_unit_without_clipping[1920-1080-matrix]
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_exposes_complete_core_unit_without_clipping[1440-900-matrix]
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_exposes_complete_core_unit_without_clipping[1024-1366-compact]
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_exposes_complete_core_unit_without_clipping[390-844-compact]
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_exposes_complete_core_unit_without_clipping[320-568-compact]
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_mobile_detail_and_complete_table_do_not_scroll_sideways[390-844]
+FAILED tests/browser/test_a_w05a_product.py::test_high_load_landscape_mobile_detail_and_complete_table_do_not_scroll_sideways[320-568]
+FAILED tests/browser/test_a_portal.py::test_a_safety_details_are_paginated_and_fit_at_1024
+FAILED tests/browser/test_evidence_drawer.py::test_pointer_bar_opens_same_row_evidence[chromium]
+FAILED tests/browser/test_evidence_drawer.py::test_pointer_bar_opens_same_row_evidence[webkit]
+FAILED tests/browser/test_evidence_drawer.py::test_pointer_bar_escape_returns_focus_to_exact_svg_mark[chromium]
+FAILED tests/browser/test_evidence_drawer.py::test_pointer_bar_escape_returns_focus_to_exact_svg_mark[webkit]
+FAILED tests/browser/test_chart_table_sync.py::test_pointer_click_highlights_table_row[chromium]
+FAILED tests/browser/test_chart_table_sync.py::test_pointer_click_highlights_table_row[webkit]
+14 failed, 10 passed in 291.86s (0:04:51)

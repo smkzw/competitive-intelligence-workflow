@@ -1,0 +1,45 @@
+{
+  "schema_version": "w03-playwright-journey-v1",
+  "runner": "playwright-cli",
+  "browser": "chromium",
+  "viewport": {
+    "width": 1720,
+    "height": 1100,
+    "device_scale_capture": true
+  },
+  "page_id": "treatment-arms",
+  "catalog_route": "/c/treatment-arms",
+  "served_path": "/treatment-arms.html",
+  "page_title": "分组、干预与对照 - 阵发性睡眠性血红蛋白尿症临床试验设计比较",
+  "page_sha256": "ab502f8a645f6da03906d2d49773511b203ce2983b4319766ba27d22dcee8b93",
+  "report_js_sha256": "fff71397b08d24b8ed3ef21f9736298ca16b9814ee88df143e4f12af21b1882d",
+  "payload_trial_display_ids": [
+    "NCT02591862",
+    "NCT02605993",
+    "NCT03181633",
+    "NCT04170023",
+    "NCT04469465",
+    "NCT05886244"
+  ],
+  "dom_trial_display_ids": [
+    "NCT02591862",
+    "NCT02605993",
+    "NCT03181633",
+    "NCT04170023",
+    "NCT04469465",
+    "NCT05886244"
+  ],
+  "assertions": {
+    "payload_matches_report_js": true,
+    "dom_matches_payload": true,
+    "all_trials_visible": true
+  },
+  "console": {
+    "errors": [],
+    "warnings": []
+  },
+  "screenshot": {
+    "path": "output/playwright/W03-browser-freeze-C-arm-relations.png",
+    "sha256": "67652ce43ba8b57ce3a411092361b4098eba2b418644a9b987d0be4b5144bd54"
+  }
+}

@@ -97,6 +97,9 @@ def test_pnh_view_facts_share_arm_identity_and_build_the_default_matrix() -> Non
     assert view.comparison_rows[1].status_reason_zh == (
         "缺少治疗组或对照组事实，无法确定试验内疗效信号"
     )
+    portal_matrix = payload["matrix_view"]  # type: ignore[index]
+    assert len(portal_matrix["rows"]) == 1
+    assert portal_matrix["rows"][0]["comparison_row_id"] == "matrix-apply-teae"
 
 
 @pytest.mark.parametrize(

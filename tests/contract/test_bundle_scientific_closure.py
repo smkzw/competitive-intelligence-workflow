@@ -26,7 +26,12 @@ import pytest
 
 from ci_workflow.application.fresh_install import install_bundle
 from tools.build_bundle import build_bundle
-from tools.bundle_contract import DEFAULT_ALLOWLIST, FINAL_REQUIRED_CONTENT, expand_allowlist
+from tools.bundle_contract import (
+    DEFAULT_ALLOWLIST,
+    FINAL_REQUIRED_CONTENT,
+    expand_allowlist,
+    validate_portal_asset_mirror,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC_ROOT = ROOT / "src"
@@ -116,6 +121,10 @@ def test_default_allowlist_covers_first_party_import_closure() -> None:
         "默认 allowlist 漏收包内模块的第一方依赖，干净安装会导入失败："
         f"{ {target: sorted(importers) for target, importers in gaps.items()} }"
     )
+
+
+def test_portal_asset_author_source_mirror_and_manifest_are_consistent() -> None:
+    validate_portal_asset_mirror(ROOT)
 
 
 def test_final_required_content_closes_scientific_review_trust_root() -> None:

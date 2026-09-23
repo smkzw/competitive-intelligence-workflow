@@ -55,6 +55,7 @@ EXPECTED_PAGES = {
         "visit-duration-followup",
         "sample-analysis-statistics",
         "design-patterns",
+        "evidence-limitations",
     },
 }
 FORBIDDEN_COPY = {
@@ -101,7 +102,10 @@ def test_a_b_c_page_catalogs_freeze_every_v12_responsibility_without_top_n() -> 
             assert str(page["title"]).strip()
             assert str(page["responsibility"]).strip()
             assert cast(list[str], page["visuals"])
-            assert page["complete_table"] is True
+            if page["id"] == "evidence-limitations":
+                assert page["complete_table"] is False
+            else:
+                assert page["complete_table"] is True
             assert cast(list[str], page["filter_profiles"])
             assert str(page["evidence_drawer_profile"]).strip()
             assert page["route"] == f"/{report.casefold()}/{page['id']}"

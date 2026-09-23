@@ -161,9 +161,11 @@ class DesignObservation(BaseModel):
     # 独立审阅 R05（SCI06）：终点实例标识——角色不是实例键，
     # 同一试验的多条主要终点各持独立 outcome_id 与自己的评估时间
     outcome_id: str | None = None
+    period: str | None = None
     source_field_name: str
     source_field_definition: str
     source_text: str
+    display_text: str | None = None
     scale: str | None = None
     scale_version: str | None = None
     operator: str | None = None
@@ -186,6 +188,9 @@ class DesignObservation(BaseModel):
     applicability_predicate_id: str | None = None
     compatibility_rule: str
     difference_labels_zh: tuple[str, ...] = ()
+    relationship_status: Literal["bound", "missing_arm_labels", "unknown_arm_label"] | None = None
+    relationship_reason: str | None = None
+    relationship_blocking: bool = False
 
     @field_validator(
         "row_id",
@@ -235,6 +240,8 @@ class DesignObservation(BaseModel):
         "route_receipt_id",
         "applicability_predicate_id",
         "endpoint_key",
+        "relationship_reason",
+        "display_text",
     )
     @classmethod
     def _optional_text_fields(cls, value: str | None) -> str | None:
@@ -267,6 +274,12 @@ class DesignObservation(BaseModel):
                 raise ValueError("终点与时间点观察必须具有可配对的终点键")
         elif self.endpoint_key is not None:
             raise ValueError("非终点设计事实不得携带终点配对键")
+        if self.relationship_status is not None and self.field_family not in {
+            DesignFieldFamily.INTERVENTION, DesignFieldFamily.DOSE_SCHEDULE,
+        }:
+            raise ValueError("只有干预或给药观察可携带 arm 关系状态")
+        if self.relationship_blocking and self.relationship_status == "bound":
+            raise ValueError("已绑定 arm 关系不得标记为阻断")
         if self.scale is None and self.scale_version is not None:
             raise ValueError("量表版本不能脱离量表名称单独存在")
         if (

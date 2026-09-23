@@ -4,7 +4,7 @@
 
 首版交付面只有站点式 HTML（`package-manifest.json` 的 `formats: ["html"]`）。PDF/HTML-PPT/PPTX 代码保留在开发仓做出范围回归，不进入安装包；不提供 CSV/XLSX 导出、雷达图、证据成熟度视图、定时监测或默认排名。
 
-当前状态：开发候选构建中（详见 `context/ci-gpt6-takeover-20260905.md` 检查点与 `plans/zcode-execution-plan-v6-20260911.md` 计划）。旧工程仅作为迁移证据，零接触。
+当前产品合同入口：`packets/2026-09-22-sol-delivery/PRD.md`；实施入口：`packets/2026-09-22-sol-delivery/PLAN.md`。当前仍为开发候选，旧工程仅作为迁移证据，零接触。
 
 ## 产品底线
 

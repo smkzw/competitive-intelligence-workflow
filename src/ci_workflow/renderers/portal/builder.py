@@ -5,9 +5,10 @@ Produces a complete static portal directory with:
   - One ``<slug>.html`` per ``PageSpec``
   - ``search-index.js`` for global search
 
-Assets resolve from the packaged module tree first (wheel-safe), then from
-the repository ``assets/`` tree in editable source checkouts.  The builder
-never fetches remote resources.  Output is ``file://``-safe.
+Assets resolve only from the packaged module tree (wheel-safe).  The repository
+``assets/portal`` tree is a bundle mirror validated before packaging, not a
+runtime fallback.  The builder never fetches remote resources.  Output is
+``file://``-safe.
 """
 
 from __future__ import annotations
@@ -129,44 +130,15 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _repo_assets_root() -> Path | None:
-    """Best-effort repository ``assets/`` root for editable checkouts."""
-    candidate = _MODULE_DIR.parents[3] / "assets"
-    if candidate.is_dir():
-        return candidate
-    for parent in _MODULE_DIR.parents:
-        assets = parent / "assets"
-        if (assets / "portal").is_dir() and (assets / "brand").is_dir():
-            return assets
-    return None
-
-
 def resolve_portal_asset(name: str) -> Path:
-    """Resolve a portal static asset for copy into a generated site."""
+    """Resolve an authored module asset for copy into a generated site."""
     module_candidate = _MODULE_ASSETS_DIR / name
     if module_candidate.is_file():
         return module_candidate
 
-    repo_assets = _repo_assets_root()
-    if repo_assets is not None:
-        if name in {
-            "portal.css",
-            "portal.js",
-            "charts.js",
-            "evidence-drawer.css",
-            "evidence-drawer.js",
-        }:
-            repo_candidate = repo_assets / "portal" / name
-            if repo_candidate.is_file():
-                return repo_candidate
-        if name in {"cms-logo.svg", "logo.svg"}:
-            brand = repo_assets / "brand" / "cms-logo.svg"
-            if brand.is_file():
-                return brand
-
     raise PortalBuildError(
-        f"Portal asset '{name}' not found in packaged module assets "
-        f"({_MODULE_ASSETS_DIR}) or repository assets tree"
+        f"Portal asset '{name}' not found in authored module assets "
+        f"({_MODULE_ASSETS_DIR})"
     )
 
 

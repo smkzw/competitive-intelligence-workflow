@@ -402,6 +402,17 @@
     }
     if (key === "clinical_concept") {
       var ccLabel = row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
+      var semanticParts = [];
+      if (row.polarity && row.polarity !== "affirmed") semanticParts.push(row.polarity);
+      if (row.grade_set && row.grade_set.length) semanticParts.push("Grade " + row.grade_set.join("/"));
+      if (row.seriousness && row.seriousness !== "unspecified") semanticParts.push(row.seriousness);
+      if (row.teae === true) semanticParts.push("TEAE");
+      if (row.teae === false) semanticParts.push("非TEAE");
+      if (row.relatedness && row.relatedness !== "unspecified") semanticParts.push(row.relatedness);
+      if (row.parent) semanticParts.push("父项:" + row.parent);
+      if (row.children && row.children.length) semanticParts.push("子项:" + row.children.join("/"));
+      if (row.count_basis) semanticParts.push("口径:" + row.count_basis);
+      if (semanticParts.length) ccLabel += "｜" + semanticParts.join("；");
       // 独立复核 B r40：行级携带终点定义序号，展开表内可归属到具体定义
       var withOrdinal = row._endpoint_ordinal ? ccLabel + "（" + row._endpoint_ordinal + "）" : ccLabel;
       // 独立复核 B r49：合成状态行（无登记数值的覆盖占位）显式标注
@@ -457,8 +468,12 @@
     if (key === "regions") {
       return Array.isArray(row.regions) ? row.regions.join("、") : row.regions || "未列示";
     }
-    if (key === "numeric_value") return rowValueText(row) || "未列示";
-    if (key === "value") return rowValueText(row) || "未列示";
+    if (key === "numeric_value" || key === "value") {
+      var displayed = rowValueText(row) || "未列示";
+      return row._user_edit
+        ? displayed + "（" + row._user_edit.status_label_zh + "）"
+        : displayed;
+    }
     if (key === "numerator" || key === "denominator") {
       return row[key] === null || row[key] === undefined ? "未列示" : String(row[key]);
     }

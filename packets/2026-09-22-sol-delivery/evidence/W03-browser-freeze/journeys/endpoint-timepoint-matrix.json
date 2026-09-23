@@ -1,0 +1,45 @@
+{
+  "schema_version": "w03-playwright-journey-v1",
+  "runner": "playwright-cli",
+  "browser": "chromium",
+  "viewport": {
+    "width": 1720,
+    "height": 1100,
+    "device_scale_capture": true
+  },
+  "page_id": "endpoint-timepoint-matrix",
+  "catalog_route": "/c/endpoint-timepoint-matrix",
+  "served_path": "/endpoint-timepoint-matrix.html",
+  "page_title": "终点、定义与时间点 - 阵发性睡眠性血红蛋白尿症临床试验设计比较",
+  "page_sha256": "823d3d400298e4fc4fd269b584275fef77554d6b899bf736f5845245e183eaee",
+  "report_js_sha256": "fff71397b08d24b8ed3ef21f9736298ca16b9814ee88df143e4f12af21b1882d",
+  "payload_trial_display_ids": [
+    "NCT02591862",
+    "NCT02605993",
+    "NCT03181633",
+    "NCT04170023",
+    "NCT04469465",
+    "NCT05886244"
+  ],
+  "dom_trial_display_ids": [
+    "NCT02591862",
+    "NCT02605993",
+    "NCT03181633",
+    "NCT04170023",
+    "NCT04469465",
+    "NCT05886244"
+  ],
+  "assertions": {
+    "payload_matches_report_js": true,
+    "dom_matches_payload": true,
+    "all_trials_visible": true
+  },
+  "console": {
+    "errors": [],
+    "warnings": []
+  },
+  "screenshot": {
+    "path": "output/playwright/W03-browser-freeze-C-endpoint-timepoint.png",
+    "sha256": "9c945099649d8a6b8347a4b88e4fcfa7e81cf589056f0750c55a3e5137894188"
+  }
+}

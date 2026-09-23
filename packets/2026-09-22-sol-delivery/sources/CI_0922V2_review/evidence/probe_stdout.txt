@@ -1,0 +1,36 @@
+{
+  "round": "0922V2",
+  "commit": "700bd4c1fb90c49e27b6ff46fba07a5f7f296b6c",
+  "scope": "Isolated source-algorithm excerpts and synthetic inputs, not repository/browser tests",
+  "total": 28,
+  "pass_count": 12,
+  "fail_count": 16
+}
+PASS S01 'generic_ae'
+PASS S02 'composite_ae'
+FAIL S03 'any_teae'
+FAIL S04 'any_sae'
+FAIL S05 'grade_3_plus'
+FAIL S06 'grade_3_plus'
+PASS S07 'discontinuation_ae'
+PASS D01 40.0
+PASS D02 None
+FAIL D03 100.0
+FAIL D04 80.0
+FAIL D05 'PERIOD1'
+PASS E01 True
+PASS E02 False
+FAIL E03 True
+FAIL E04 True
+PASS E05 False
+FAIL M01 7
+PASS M02 100
+FAIL M03 200
+PASS M04 7
+FAIL M05 12
+FAIL M06 False
+FAIL L01 False
+PASS L02 True
+PASS L03 True
+FAIL L04 False
+FAIL L05 False

@@ -585,6 +585,16 @@ class SafetyFactRow(BaseModel):
             "ae_term",
         )
     )
+    term_key: str = "unknown"
+    polarity: str = "affirmed"
+    grade_set: tuple[int, ...] = ()
+    seriousness: str = "unspecified"
+    teae: bool | None = None
+    relatedness: str = "unspecified"
+    parent: str | None = None
+    children: tuple[str, ...] = ()
+    count_basis: str = "participants"
+    at_risk_stat: str | None = None
     standard_term: str | None = Field(
         default=None,
         validation_alias=AliasChoices(
@@ -992,12 +1002,10 @@ class SafetyFactRow(BaseModel):
 
     @model_validator(mode="after")
     def _fact_integrity(self) -> Self:
-        if (
-            self.numerator is not None
-            and self.denominator is not None
-            and self.numerator > self.denominator
+        if self.count_basis == "mixed" and (
+            self.numerator is not None or self.denominator is not None
         ):
-            raise ValueError("安全性事实分子不得大于分母")
+            raise ValueError("复合安全项不得拆值或借用其他项分母")
 
         if self.disclosure_state in _NON_CONCRETE_STATES and self.value is not None:
             raise ValueError("非数值披露状态不得携带确定数值")
@@ -1020,17 +1028,21 @@ class SafetyFactRow(BaseModel):
             raise ValueError("确定零值必须使用 reported_zero 状态")
 
         if self.has_numeric_value:
-            if self.denominator is None:
+            requires_denominator = (
+                self.count_basis == "participants"
+                and self.unit not in {"事件数", "event_count", "次"}
+            )
+            if requires_denominator and self.denominator is None:
                 raise ValueError("已报告安全性数值必须保留正分母")
             assert self.value is not None
             if self.value < 0:
                 raise ValueError("安全性发生率或事件数不得为负数")
             if self.unit is not None and self.unit.endswith("%") and not 0 <= self.value <= 100:
                 raise ValueError("百分比安全性结果必须位于0至100之间")
-            if self.unit in {"例", "participant_count"}:
+            if self.unit in {"例", "人", "participant_count"}:
                 if not isinstance(self.value, int) or isinstance(self.value, bool):
                     raise ValueError("受试者人数必须是整数")
-                if self.value > self.denominator:
+                if self.denominator is not None and self.value > self.denominator:
                     raise ValueError("受试者人数不得大于分母")
             if self.unit in {"事件数", "event_count"} and (
                 not isinstance(self.value, int) or isinstance(self.value, bool)

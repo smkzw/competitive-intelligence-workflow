@@ -1,0 +1,135 @@
+{
+  "search_root": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow",
+  "patterns": [
+    "runs/**/reports/A/**/data/report.js",
+    "packets/**/reports/A/**/data/report.js",
+    "packets/**/evidence/**/A/**/data/report.js",
+    "packets/**/evidence/**/data/report.js"
+  ],
+  "parsed_a_payloads": 152,
+  "fully_closed_count": 0,
+  "maximum_closed_rows": 1,
+  "maximum_public_sources": 10,
+  "best_partial_candidates": [
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v4/w04-project/reports/A/v1-user-r1/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 0,
+      "rows_with_locator_and_text": 1,
+      "rows_with_either_source_field": 1,
+      "fully_closed": false,
+      "sha256": "06a58fda6c5d6c515ecf6ed0b2ed28159259d85709340c9ee24078867ebacb72"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v4/w04-project/reports/A/v1-user-r2/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 0,
+      "rows_with_locator_and_text": 1,
+      "rows_with_either_source_field": 1,
+      "fully_closed": false,
+      "sha256": "06a58fda6c5d6c515ecf6ed0b2ed28159259d85709340c9ee24078867ebacb72"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v4/w04-project/reports/A/v1-user-r3/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 0,
+      "rows_with_locator_and_text": 1,
+      "rows_with_either_source_field": 1,
+      "fully_closed": false,
+      "sha256": "06a58fda6c5d6c515ecf6ed0b2ed28159259d85709340c9ee24078867ebacb72"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v5/w04-project/reports/A/v1-user-r1/html/data/report.js",
+      "products": 4,
+      "observation_rows": 24,
+      "public_sources": 0,
+      "rows_with_locator_and_text": 1,
+      "rows_with_either_source_field": 1,
+      "fully_closed": false,
+      "sha256": "9812faf79cd3607eb02669212ec4af9ffa3c8bc7a6594d989b4329d43b2f43ef"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v5-final/w04-project/reports/A/v1-user-r1/html/data/report.js",
+      "products": 4,
+      "observation_rows": 24,
+      "public_sources": 0,
+      "rows_with_locator_and_text": 1,
+      "rows_with_either_source_field": 1,
+      "fully_closed": false,
+      "sha256": "9812faf79cd3607eb02669212ec4af9ffa3c8bc7a6594d989b4329d43b2f43ef"
+    },
+    {
+      "path": "runs/test-pnh/reports/A/v1/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4277,
+      "public_sources": 10,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "062fa78b4907d7697fca981e1de128056625018f8e84db0e59ff083c6552daa2"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal/w04-project/reports/A/v1/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 2,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "88094f7e40fb8a27bc44f1d412e6a15eb42d9df5b32930af60fee89bf89c1e94"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal/w04-project/reports/A/v1-user-r1/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 2,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "5ef4879e5d22bc36403755ae2b7a9689c4e2880d700229c6933cc3f15fb56b73"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal/w04-project/reports/A/v1-user-r2/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 2,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "0103e8d36a4e4d647bd86f29562fc1f67e8910d1ce5b1de8b9c16da75a48cdf1"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal/w04-project/reports/A/v1-user-r3/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 2,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "553dc32fdc41874e9bf700cc063cea0c02c676f56d7cee3ee8b3e4079f373c58"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v2/w04-project/reports/A/v1/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 2,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "88094f7e40fb8a27bc44f1d412e6a15eb42d9df5b32930af60fee89bf89c1e94"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/W04-remediation-real-portal-v2/w04-project/reports/A/v1-user-r1/html/data/report.js",
+      "products": 45,
+      "observation_rows": 4412,
+      "public_sources": 2,
+      "rows_with_locator_and_text": 0,
+      "rows_with_either_source_field": 0,
+      "fully_closed": false,
+      "sha256": "914ca6b9c3e254526b7e52f6d0a7dbdbf388c4ff0049a5c3d1efe815e37c0a0f"
+    }
+  ]
+}

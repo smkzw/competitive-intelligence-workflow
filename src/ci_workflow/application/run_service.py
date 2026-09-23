@@ -117,6 +117,34 @@ class RunContext:
     capability_host: HostName = "local"
     capability_matrix: CapabilityMatrix | None = None
     recover_committed_render: bool = False
+    indication: str = field(init=False)
+    reports: tuple[str, ...] = field(init=False)
+    data_cutoff: datetime = field(init=False)
+    source_input_paths: dict[str, Path] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        self.project_root = self.project_root.expanduser().resolve()
+        self.indication = str(self.contract.indication)
+        self.reports = tuple(report.value for report in self.contract.reports)
+        self.data_cutoff = self.contract.data_cutoff
+        for name, path in (
+            ("universe", self.universe_input_path),
+            ("report-data", self.report_data_path),
+            ("research-package", self.research_package_path),
+        ):
+            if path is not None:
+                self.bind_source_input(name, path)
+        for report, path in self.report_data_paths.items():
+            self.bind_source_input(f"report-data:{report}", path)
+
+    def bind_source_input(self, name: str, path: Path | None) -> None:
+        if path is None:
+            self.source_input_paths.pop(name, None)
+            return
+        resolved = path.expanduser().resolve()
+        if not resolved.is_relative_to(self.project_root):
+            raise ContractConfigError("运行输入必须位于显式项目根内")
+        self.source_input_paths[name] = resolved
 
 
 # ─── Constants ─────────────────────────────────────────────────────────────
@@ -1307,6 +1335,15 @@ def run_project(
 
     # ── Run context for handlers ────────────────────────────────────────
     ctx = run_context or RunContext(project_root=project_root, contract=contract)
+    if ctx.project_root != project_root:
+        raise ContractConfigError("RunContext 项目根与当前项目不一致")
+    if (
+        ctx.contract.project_id != contract.project_id
+        or ctx.indication != contract.indication
+        or ctx.reports != tuple(report.value for report in contract.reports)
+        or ctx.data_cutoff != contract.data_cutoff
+    ):
+        raise ContractConfigError("RunContext 项目、适应症、报告或截止日与当前合同不一致")
     ctx.recover_committed_render = resume
     if capability_probe is not None:
         ctx.capability_probe = capability_probe
@@ -1337,6 +1374,7 @@ def run_project(
             ctx.research_package_path = submission.report_package_paths[
                 cast(Literal["A", "B", "C"], selected_reports[0])
             ]
+            ctx.bind_source_input("research-package", ctx.research_package_path)
         else:
             # 多报告严格提交：逐报告独立执行；先绑定首个研究包供共享
             # resume 终态校验识别“已有研究输入”，执行期再按报告重绑。
@@ -1345,6 +1383,7 @@ def run_project(
                 for name in selected_reports
             }
             ctx.research_package_path = submitted_report_packages[selected_reports[0]]
+            ctx.bind_source_input("research-package", ctx.research_package_path)
         for bound_path in (
             submission.audit_package_path,
             submission.manifest_path,
@@ -1365,6 +1404,7 @@ def run_project(
         canonical_research_package = project_root / canonical_relative
         if canonical_research_package.is_file():
             ctx.research_package_path = canonical_research_package
+            ctx.bind_source_input("research-package", ctx.research_package_path)
             ctx.run_inputs.setdefault(
                 canonical_relative,
                 _sha256_file(canonical_research_package),
@@ -1373,6 +1413,7 @@ def run_project(
         canonical_report_data = project_root / CANONICAL_REPORT_DATA_RELATIVE_PATH
         if canonical_report_data.is_file():
             ctx.report_data_path = canonical_report_data
+            ctx.bind_source_input("report-data", ctx.report_data_path)
             ctx.run_inputs.setdefault(
                 CANONICAL_REPORT_DATA_RELATIVE_PATH,
                 _sha256_file(canonical_report_data),
@@ -1396,6 +1437,7 @@ def run_project(
             canonical = project_root / CANONICAL_UNIVERSE_RELATIVE_PATH
             if canonical.is_file():
                 ctx.universe_input_path = canonical
+                ctx.bind_source_input("universe", ctx.universe_input_path)
         if ctx.universe_input_path is not None:
             if not ctx.universe_input_path.is_file():
                 raise ContractConfigError(f"宇宙证据文件不存在：{ctx.universe_input_path}")
@@ -1796,7 +1838,7 @@ def run_project(
                             "sha256": _sha256_bytes(source.content_text.encode("utf-8")),
                         }
                         for fragment_id, source in zip(
-                            lineage.fragment_ids, package.sources, strict=True
+                            lineage.source_fragment_ids, package.sources, strict=True
                         )
                     )
                 },
@@ -2232,6 +2274,7 @@ def run_project(
         derived_data_path.parent.mkdir(parents=True, exist_ok=True)
         derived_data_path.write_bytes(_canonical_json(package.report_data.model_dump(mode="json")))
         ctx.report_data_path = derived_data_path
+        ctx.bind_source_input("report-data", ctx.report_data_path)
         ctx.run_inputs.setdefault(
             "state/derived/report-a-data.json", _sha256_file(derived_data_path)
         )
@@ -2299,7 +2342,9 @@ def run_project(
                 "fragment_id": fragment_id,
                 "sha256": _sha256_bytes(capture.content_text.encode("utf-8")),
             }
-            for fragment_id, capture in zip(lineage.fragment_ids, package.sources, strict=True)
+            for fragment_id, capture in zip(
+                lineage.source_fragment_ids, package.sources, strict=True
+            )
         )
         shared_nodes: tuple[tuple[str, dict[str, Any]], ...] = (
             (
@@ -2642,9 +2687,11 @@ def run_project(
             # 每个报告只消费自己的科学载荷；谱系/投影/报告数据按报告重置，
             # 避免上一报告的运行上下文泄入下一报告。
             ctx.research_package_path = submitted_report_packages[report_name]
+            ctx.bind_source_input("research-package", ctx.research_package_path)
             ctx.research_lineage = None
             ctx.research_projection = None
             ctx.report_data_path = None
+            ctx.bind_source_input("report-data", None)
             if report_name == "A":
                 report_outcome = _execute_research_a()
             else:

@@ -155,6 +155,7 @@ class ProductResearchSubmission:
     report_package_paths: Mapping[ReportName, Path]
     manifest_path: Path
     replayed: bool
+    authorization_state: Literal["candidate_unreviewed"] = "candidate_unreviewed"
 
 
 def _sha256(value: bytes) -> str:
@@ -313,6 +314,7 @@ def _manifest_bytes(package: ResearchPackage, audit_bytes: bytes) -> bytes:
         "schema_version": "1.0",
         "package_id": package.package_id,
         "project_id": package.contract_identity.project_id,
+        "authorization_state": "candidate_unreviewed",
         "reports": list(package.reports),
         "audit_package": {
             "relative_path": AUDIT_PACKAGE_PATH,
@@ -442,6 +444,7 @@ def submit_product_research_package(
         },
         manifest_path=root / SUBMISSION_MANIFEST_PATH,
         replayed=replayed,
+        authorization_state="candidate_unreviewed",
     )
 
 
@@ -473,6 +476,7 @@ def load_product_research_submission(project_root: Path) -> ProductResearchSubmi
         report_package_paths=report_paths,
         manifest_path=manifest_path,
         replayed=True,
+        authorization_state="candidate_unreviewed",
     )
 
 

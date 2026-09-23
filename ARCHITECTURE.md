@@ -10,7 +10,8 @@
 
 | 优先级 | 文档 | 职能 |
 |--------|------|------|
-| **产品合同** | `docs/specs/competitive-intelligence-workflow-design-v1.3.md` | 产品权威合同（v1.3），所有功能实现以此为准 |
+| **产品合同** | `packets/2026-09-22-sol-delivery/PRD.md` | 当前交付基线与用户确认范围 |
+| **实施计划** | `packets/2026-09-22-sol-delivery/PLAN.md` | 当前 W00–W10 依赖、里程碑与连续实施入口 |
 | **运行日志** | `packets/2026-09-11-pnh-vertical/runbook.md` | 当前权威运行日志（B/C 门户打通 + 复核环 18 轮记录） |
 | **规划** | `plans/zcode-execution-plan-v6-20260911.md` | 现行执行计划 |
 | **历史交接** | `context/ci-gpt6-takeover-20260905.md` | 早期交接文档（参考） |

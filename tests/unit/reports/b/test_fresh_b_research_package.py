@@ -89,7 +89,7 @@ def _fact(row_ref: str, entity_id: str, entity_type: str, field_id: str) -> dict
         "normalized_value": "规范化值",
         "disclosure_state": "reported_value",
         "source_id": _SOURCE_ID,
-        "locator": _locator(f"facts/{row_ref}"),
+        "locator": _locator("$.facts[0].quote"),
         "original_text": f"{row_ref} 来源原文",
     }
 
@@ -412,6 +412,16 @@ def _package_payload(project_id: str = _PROJECT_ID) -> dict[str, object]:
         _fact(fact_ref(row), "study-1", "trial", "b.observation")  # type: ignore[arg-type]
         for row in (*baseline, *efficacy, *safety, *disposition)
     )
+    # W01 trust contract: the claimed original quote is replayable from the
+    # persisted JSON bytes at one exact wildcard-free path.
+    for index, item in enumerate(facts):
+        item["locator"] = _locator(f"$.facts[{index}].quote")
+    source_document = {
+        "facts": [
+            {"row_ref": item["row_ref"], "quote": item["original_text"]}
+            for item in facts
+        ]
+    }
     payload: dict[str, object] = {
         "schema_version": "1.0",
         "report_kind": "B",
@@ -460,12 +470,12 @@ def _package_payload(project_id: str = _PROJECT_ID) -> dict[str, object]:
                 "query_or_identifier": "Study-1 主要研究报告",
                 "language": "zh",
                 "access_method": "official_page",
-                "content_text": "Study-1 完整主要研究报道文本（测试存档）",
+                "content_text": json.dumps(source_document, ensure_ascii=False),
                 "acquired_at": _CREATED_AT,
                 "published_at": "2026-05-01T00:00:00+00:00",
                 "effective_at": None,
                 "first_disclosed_at": "2026-05-01T00:00:00+00:00",
-                "locator": _locator("全文"),
+                "locator": _locator("$.facts"),
             }
         ],
         "facts": facts,

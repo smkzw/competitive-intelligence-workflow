@@ -5,11 +5,12 @@ import json
 import os
 import re
 import tempfile
+from base64 import b64decode
 from datetime import datetime
 from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from ci_workflow.domain.ids import stable_id
 
@@ -52,22 +53,33 @@ def _offset_datetime(value: datetime) -> datetime:
 class EvidenceSnapshotManifest(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    schema_version: Literal["1.0"]
+    schema_version: Literal["1.0", "2.0"]
     project_id: str
     contract_version: int = Field(ge=1)
     data_cutoff: datetime
     source_version_ids: tuple[str, ...] = Field(min_length=1)
     fragment_ids: tuple[str, ...] = Field(min_length=1)
     fact_version_ids: tuple[str, ...] = Field(min_length=1)
+    claim_version_ids: tuple[str, ...] = ()
+    derivation_ids: tuple[str, ...] = ()
+    receipt_ids: tuple[str, ...] = ()
     scientific_content_digest: str
     created_at: datetime
+    closure: dict[str, Any] | None = None
 
     @field_validator("project_id")
     @classmethod
     def _project_is_not_blank(cls, value: str) -> str:
         return _not_blank(value)
 
-    @field_validator("source_version_ids", "fragment_ids", "fact_version_ids")
+    @field_validator(
+        "source_version_ids",
+        "fragment_ids",
+        "fact_version_ids",
+        "claim_version_ids",
+        "derivation_ids",
+        "receipt_ids",
+    )
     @classmethod
     def _ids_are_unique_and_nonblank(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         normalized = tuple(_not_blank(value) for value in values)
@@ -86,6 +98,39 @@ class EvidenceSnapshotManifest(BaseModel):
     @classmethod
     def _times_have_offsets(cls, value: datetime) -> datetime:
         return _offset_datetime(value)
+
+    @model_validator(mode="after")
+    def _v2_contains_portable_transitive_closure(self) -> EvidenceSnapshotManifest:
+        if self.schema_version == "1.0":
+            if self.closure is not None:
+                raise ValueError("历史1.0快照不得补写传递闭包")
+            return self
+        if self.closure is None:
+            raise ValueError("2.0证据快照必须包含可移植传递闭包")
+        required = {
+            "sources",
+            "fragments",
+            "facts",
+            "claims",
+            "derivations",
+            "acquisition_attempts",
+            "receipts",
+        }
+        if set(self.closure) != required:
+            raise ValueError("证据快照传递闭包字段不完整")
+        if not all(isinstance(self.closure[key], list) for key in required):
+            raise ValueError("证据快照传递闭包各集合必须是列表")
+        return self
+
+
+def _evidence_payload(manifest: EvidenceSnapshotManifest) -> dict[str, Any]:
+    """Keep historical 1.0 bytes unchanged; never backfill new closure fields."""
+    excluded = (
+        {"claim_version_ids", "derivation_ids", "receipt_ids", "closure"}
+        if manifest.schema_version == "1.0"
+        else set()
+    )
+    return manifest.model_dump(mode="json", exclude=excluded)
 
 
 class ReportSnapshotManifest(BaseModel):
@@ -168,7 +213,11 @@ def compute_locked_snapshot(
         if kind == "evidence"
         else ReportSnapshotManifest.model_validate(manifest)
     )
-    payload = validated.model_dump(mode="json")
+    payload = (
+        _evidence_payload(validated)
+        if isinstance(validated, EvidenceSnapshotManifest)
+        else validated.model_dump(mode="json")
+    )
     encoded = _canonical_json(payload)
     digest = hashlib.sha256(encoded).hexdigest()
     identity_parts = (digest,) if report is None else (report, digest)
@@ -229,7 +278,7 @@ class SnapshotStore:
     def lock_evidence_snapshot(self, manifest: dict[str, Any]) -> LockedSnapshot:
         validated = EvidenceSnapshotManifest.model_validate(manifest)
         return self._lock(
-            kind="evidence", report=None, payload=validated.model_dump(mode="json")
+            kind="evidence", report=None, payload=_evidence_payload(validated)
         )
 
     def lock_report_snapshot(
@@ -274,3 +323,187 @@ class SnapshotStore:
             if validated.report != snapshot.report:
                 raise SnapshotIntegrityError("报告快照身份不匹配")
         return payload
+
+    def restore_evidence_manifest(self, manifest_path: Path) -> LockedSnapshot:
+        """Restore a v2 evidence chain into an empty project from one manifest."""
+        if any(self.project_root.iterdir()) if self.project_root.exists() else False:
+            raise SnapshotIntegrityError("manifest恢复目标必须是空目录")
+        try:
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest = EvidenceSnapshotManifest.model_validate(payload)
+        except (OSError, json.JSONDecodeError, ValueError) as error:
+            raise SnapshotIntegrityError("证据manifest不可读或合同无效") from error
+        if manifest.schema_version != "2.0" or manifest.closure is None:
+            raise SnapshotIntegrityError("历史快照只读保留，不能迁移补签或单manifest恢复")
+
+        from ci_workflow.application.source_research_service import SourceCapture
+        from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
+        from ci_workflow.storage.migrations import apply_migrations
+        from ci_workflow.storage.sqlite import open_database
+
+        self.project_root.mkdir(parents=True, exist_ok=True)
+        database_path = self.project_root / "state/project.sqlite"
+        apply_migrations(database_path)
+        content_store = ContentAddressedStore(self.project_root)
+        repository = EvidenceRepository(database_path, content_store)
+        closure = manifest.closure
+
+        for item in closure["sources"]:
+            if not isinstance(item, dict):
+                raise SnapshotIntegrityError("来源闭包记录无效")
+            capture = SourceCapture.model_validate(item.get("capture"))
+            raw_b64 = item.get("raw_asset_b64")
+            if capture.text_derivation is not None:
+                if not isinstance(raw_b64, str):
+                    raise SnapshotIntegrityError("来源派生闭包缺少原始资产字节")
+                raw_blob = content_store.put_bytes(
+                    b64decode(raw_b64, validate=True),
+                    media_type=capture.text_derivation.raw_asset.media_type,
+                )
+                if raw_blob != capture.text_derivation.raw_asset:
+                    raise SnapshotIntegrityError("恢复原始资产与派生回执不一致")
+            version = repository.add_source_version(
+                source_id=capture.source_id,
+                content=capture.content_text.encode("utf-8"),
+                media_type=(
+                    "text/plain"
+                    if capture.media_type == "application/pdf"
+                    else capture.media_type
+                ),
+                text_derivation=capture.text_derivation,
+                acquired_at=capture.acquired_at,
+                published_at=capture.date_evidence("published_at"),
+                effective_at=capture.date_evidence("effective_at"),
+                first_disclosed_at=capture.date_evidence("first_disclosed_at"),
+            )
+            if version.source_version_id != item.get("source_version_id"):
+                raise SnapshotIntegrityError("恢复来源版本身份不一致")
+
+        for item in closure["fragments"]:
+            if not isinstance(item, dict):
+                raise SnapshotIntegrityError("片段闭包记录无效")
+            from ci_workflow.domain.evidence import EvidenceFragmentRecord
+
+            fragment = EvidenceFragmentRecord.model_validate(item)
+            restored_fragment = repository.add_fragment(
+                source_version_id=fragment.source_version_id,
+                locator=fragment.locator,
+                original_text=fragment.original_text,
+                created_at=fragment.created_at,
+            )
+            if restored_fragment.fragment_id != fragment.fragment_id:
+                raise SnapshotIntegrityError("恢复片段身份不一致")
+
+        with open_database(database_path) as database:
+            for item in closure["facts"]:
+                fact = item["fact"]
+                database.execute(
+                    "INSERT OR IGNORE INTO entities "
+                    "(entity_id,entity_type,canonical_name,created_at) VALUES (?,?,?,?)",
+                    (
+                        fact["entity_id"],
+                        fact["entity_type"],
+                        fact["canonical_name"],
+                        item["created_at"],
+                    ),
+                )
+                database.execute(
+                    """INSERT INTO fact_versions (
+                    fact_version_id,fact_id,entity_id,field_id,raw_value,normalized_value,
+                    disclosure_state,review_state,primary_fragment_id,
+                    supersedes_fact_version_id,created_at,content_sha256,
+                    scientific_context_json) VALUES (?,?,?,?,?,?,?,?,?,NULL,?,?,?)""",
+                    (
+                        item["fact_version_id"],
+                        fact["fact_id"],
+                        fact["entity_id"],
+                        fact["field_id"],
+                        fact.get("raw_value"),
+                        fact.get("normalized_value"),
+                        fact["disclosure_state"],
+                        item["review_state"],
+                        item["primary_fragment_id"],
+                        item["created_at"],
+                        item["content_sha256"],
+                        item["scientific_context_json"],
+                    ),
+                )
+                database.execute(
+                    "INSERT INTO fact_evidence "
+                    "(fact_version_id,fragment_id,evidence_role,created_at) VALUES (?,?,?,?)",
+                    (
+                        item["fact_version_id"],
+                        item["primary_fragment_id"],
+                        "primary",
+                        item["created_at"],
+                    ),
+                )
+            for item in closure["claims"]:
+                claim = item["claim"]
+                database.execute(
+                    """INSERT INTO claim_versions (
+                    claim_version_id,claim_id,claim_text,claim_kind,review_state,
+                    supersedes_claim_version_id,created_at) VALUES (?,?,?,?,?,NULL,?)""",
+                    (
+                        item["claim_version_id"],
+                        claim["claim_id"],
+                        claim["claim_text"],
+                        claim["claim_kind"],
+                        item["review_state"],
+                        item["created_at"],
+                    ),
+                )
+                for fact_version_id in item["fact_version_ids"]:
+                    database.execute(
+                        "INSERT INTO claim_facts "
+                        "(claim_version_id,fact_version_id,support_role,created_at) "
+                        "VALUES (?,?,?,?)",
+                        (
+                            item["claim_version_id"],
+                            fact_version_id,
+                            "supports",
+                            item["created_at"],
+                        ),
+                    )
+            for item in closure["derivations"]:
+                database.execute(
+                    "INSERT INTO evidence_derivations "
+                    "(derivation_id,derivation_kind,input_fragment_ids_json,rule_id,"
+                    "rule_version,output_json,created_at) VALUES (?,?,?,?,?,?,?)",
+                    (
+                        item["derivation_id"],
+                        item["derivation_kind"],
+                        json.dumps(item["input_fragment_ids"], ensure_ascii=False),
+                        item["rule_id"],
+                        item["rule_version"],
+                        json.dumps(item["output"], ensure_ascii=False, sort_keys=True),
+                        item["created_at"],
+                    ),
+                )
+            for item in closure["acquisition_attempts"]:
+                database.execute(
+                    """INSERT INTO source_acquisition_attempts (
+                    attempt_id,request_id,source_id,source_version_id,receipt_id,
+                    attempt_index,acquired_at,created_at) VALUES (?,?,?,?,?,?,?,?)""",
+                    tuple(item[key] for key in (
+                        "attempt_id", "request_id", "source_id", "source_version_id",
+                        "receipt_id", "attempt_index", "acquired_at", "created_at",
+                    )),
+                )
+
+        receipt_path = self.project_root / "receipts/source_receipts.jsonl"
+        receipt_path.parent.mkdir(parents=True, exist_ok=True)
+        receipt_path.write_text(
+            "".join(
+                json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+                for item in closure["receipts"]
+            ),
+            encoding="utf-8",
+        )
+        restored_snapshot = self.lock_evidence_snapshot(manifest.model_dump(mode="json"))
+        expected = compute_locked_snapshot(
+            kind="evidence", report=None, manifest=manifest.model_dump(mode="json")
+        )
+        if restored_snapshot != expected:
+            raise SnapshotIntegrityError("恢复快照身份不一致")
+        return restored_snapshot

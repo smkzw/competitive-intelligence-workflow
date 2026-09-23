@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import re
 from enum import StrEnum
-from typing import Any, Self
+from typing import Any, Literal, Self
 
 from pydantic import (
     BaseModel,
@@ -208,6 +208,52 @@ class EvidenceHistoricalVersion(BaseModel):
         return normalized
 
 
+class UserEditDisclosure(BaseModel):
+    """User-authored current value kept separate from immutable source evidence."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    review_state: Literal["user_modified"] = "user_modified"
+    status_label_zh: Literal["用户修订，未独立复核"] = "用户修订，未独立复核"
+    fact_id: str
+    fact_version_id: str
+    request_id: str
+    revision: int
+    primary_fragment_id: str
+    source_version_id: str
+    source_locator: dict[str, Any]
+    current_value: str
+    original_value: str
+    basis: str
+    saved_by: str
+    saved_at: str
+    operation: Literal["save", "undo"]
+
+    @field_validator(
+        "fact_id",
+        "fact_version_id",
+        "request_id",
+        "primary_fragment_id",
+        "source_version_id",
+        "current_value",
+        "original_value",
+        "basis",
+        "saved_by",
+        "saved_at",
+    )
+    @classmethod
+    def _required_user_edit_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("用户修订披露字段不得为空")
+        return value
+
+    @model_validator(mode="after")
+    def _locator_is_structured(self) -> Self:
+        if not self.source_locator:
+            raise ValueError("用户修订必须保留结构化原来源定位")
+        return self
+
+
 class EvidenceView(BaseModel):
     """一条规范证据：稳定 row_id、单一锁定快照、来源版本与精确 locator。
 
@@ -241,6 +287,7 @@ class EvidenceView(BaseModel):
     explanation: EvidenceField
     original_text: str | None = None
     original_text_status: OriginalTextStatus = OriginalTextStatus.NOT_PROVIDED
+    user_edit: UserEditDisclosure | None = None
 
     conflicts: tuple[EvidenceConflict, ...] = ()
     historical_versions: tuple[EvidenceHistoricalVersion, ...] = ()

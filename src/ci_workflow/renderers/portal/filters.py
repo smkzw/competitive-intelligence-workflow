@@ -565,17 +565,15 @@ def select_view_rows(
                 f"筛选维度「{dim_id}」无法映射到报告行身份字段，不能投影"
             )
 
-    selected_rows = []
-    for row in view.rows:
-        matched = True
-        for dim_id, value_ids in criteria.items():
-            field = _ROW_FIELD_BY_DIMENSION[dim_id]
-            row_val = getattr(row, field, None)
-            # OR within dimension
-            if row_val is None or row_val not in value_ids:
-                matched = False
-                break
-        if matched:
-            selected_rows.append(row)
+    from ci_workflow.reports.common.view_state import (
+        ReportQuery,
+        query_workspace_membership,
+    )
 
-    return FilteredRowSet(view=view, rows=tuple(selected_rows))
+    query_fields: dict[str, tuple[str, ...]] = {}
+    for dim_id, value_ids in criteria.items():
+        field = _ROW_FIELD_BY_DIMENSION[dim_id]
+        query_fields[f"{field.removesuffix('_id')}_ids"] = value_ids
+    selected_rows = query_workspace_membership(view, ReportQuery(**query_fields))
+
+    return FilteredRowSet(view=view, rows=selected_rows)

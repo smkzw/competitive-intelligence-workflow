@@ -1,0 +1,31 @@
+{
+  "stage_site": "/var/folders/yb/31r9763x6_54mdxswxk36c4w0000gn/T/w05a-stage-probe-xdbjzgbz",
+  "safety_site": "/var/folders/yb/31r9763x6_54mdxswxk36c4w0000gn/T/w05a-safety-probe-52__apsk",
+  "stage_320": {
+    "box": {
+      "x": 20,
+      "y": 406.234375,
+      "width": 280,
+      "height": 169.78125,
+      "top": 406.234375,
+      "right": 300,
+      "bottom": 576.015625,
+      "left": 20
+    },
+    "fully_visible": false,
+    "project_count": 7,
+    "stage_count": 7,
+    "overflow": 0,
+    "minimum_font": 14
+  },
+  "safety_1024": {
+    "row_height": 286.125,
+    "dimension_width": 104.265625,
+    "scroll_width": 948,
+    "client_width": 948,
+    "trial_expanded": "true",
+    "trial_collapsed": "false",
+    "trial_text_length": 13,
+    "page_overflow": 0
+  }
+}

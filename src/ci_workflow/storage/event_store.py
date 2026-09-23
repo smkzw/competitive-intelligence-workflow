@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
 import os
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Literal
@@ -148,19 +150,29 @@ class EventStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         if not self.path.exists():
             self.path.touch()
+        self.lock_path = self.path.with_suffix(".lock")
 
-    def read_all(self) -> tuple[StoredWorkflowEvent, ...]:
+    @staticmethod
+    def _validate_lines(
+        payload: bytes, *, recover_trailing_partial: bool
+    ) -> tuple[tuple[StoredWorkflowEvent, ...], bytes]:
         records: list[StoredWorkflowEvent] = []
         try:
-            lines = self.path.read_text(encoding="utf-8").splitlines()
-        except OSError as error:
-            raise EventStoreError("无法读取规范事件流") from error
-        for expected_sequence, line in enumerate(lines, start=1):
+            text = payload.decode("utf-8")
+        except UnicodeDecodeError as error:
+            raise EventStoreError("规范事件流不是UTF-8") from error
+        lines = text.splitlines(keepends=True)
+        valid_size = 0
+        for expected_sequence, raw_line in enumerate(lines, start=1):
+            complete = raw_line.endswith("\n")
+            line = raw_line[:-1] if complete else raw_line
+            if not complete and recover_trailing_partial and expected_sequence == len(lines):
+                break
             if not line.strip():
                 raise EventStoreError("规范事件流不得包含空行")
             try:
-                payload = json.loads(line)
-                record = StoredWorkflowEvent.model_validate(payload)
+                parsed = json.loads(line)
+                record = StoredWorkflowEvent.model_validate(parsed)
             except (json.JSONDecodeError, ValueError) as error:
                 raise EventStoreError("规范事件流包含无效记录") from error
             if record.sequence != expected_sequence:
@@ -171,16 +183,52 @@ class EventStore:
             if record.event_digest != _event_digest(source, record.sequence):
                 raise EventStoreError("规范事件摘要不匹配")
             records.append(record)
-        return tuple(records)
+            valid_size += len(raw_line.encode("utf-8"))
+        return tuple(records), payload[:valid_size]
+
+    def read_all(self) -> tuple[StoredWorkflowEvent, ...]:
+        try:
+            payload = self.path.read_bytes()
+        except OSError as error:
+            raise EventStoreError("无法读取规范事件流") from error
+        records, valid = self._validate_lines(payload, recover_trailing_partial=False)
+        if valid != payload:
+            raise EventStoreError("规范事件流包含不完整尾记录")
+        return records
+
+    @staticmethod
+    def _fsync_directory(path: Path) -> None:
+        descriptor = os.open(path, os.O_RDONLY)
+        try:
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+
+    def _replace_stream(self, payload: bytes) -> None:
+        descriptor, temporary = tempfile.mkstemp(prefix=".events-", dir=self.path.parent)
+        try:
+            offset = 0
+            while offset < len(payload):
+                written = os.write(descriptor, payload[offset:])
+                if written <= 0:
+                    raise OSError("event stream write没有前进")
+                offset += written
+            os.fsync(descriptor)
+            os.close(descriptor)
+            descriptor = -1
+            os.replace(temporary, self.path)
+            self._fsync_directory(self.path.parent)
+        finally:
+            if descriptor >= 0:
+                os.close(descriptor)
+            Path(temporary).unlink(missing_ok=True)
 
     def append(self, event: WorkflowEvent) -> StoredWorkflowEvent:
         # 公开追加路径无条件拒绝科学质控授权事件（存储前、去重前）：即使
         # 攻击者计算出完全正确的 boundary_proof_digest/事件 ID/幂等键，
         # 也不能经公开 API 写入授权事件。
         if event.event_type == _QC_AUTHORIZATION_EVENT_TYPE:
-            raise AuthorizationAppendForbiddenError(
-                "科学质控授权事件只能由质控边界经专用路径签发"
-            )
+            raise AuthorizationAppendForbiddenError("科学质控授权事件只能由质控边界经专用路径签发")
         return self._append(event)
 
     def _append_authorization(
@@ -204,37 +252,42 @@ class EventStore:
     def _append(self, event: WorkflowEvent) -> StoredWorkflowEvent:
         # Validate JSON before consulting existing records so unsupported values fail closed.
         _canonical_json(event.model_dump(mode="json"))
-        existing = self.read_all()
-        fingerprint = _idempotency_fingerprint(event)
-        for record in existing:
-            source = WorkflowEvent.model_validate(
-                record.model_dump(exclude={"sequence", "event_digest"})
-            )
-            if record.event_id == event.event_id:
-                if source == event:
-                    return record
-                raise EventConflictError("同一事件标识对应了不同内容")
-            if record.idempotency_key == event.idempotency_key:
-                if _idempotency_fingerprint(source) == fingerprint:
-                    return record
-                raise EventConflictError("同一幂等键对应了不同业务载荷")
-
-        sequence = len(existing) + 1
-        record = StoredWorkflowEvent(
-            **event.model_dump(),
-            sequence=sequence,
-            event_digest=_event_digest(event, sequence),
-        )
-        encoded = _canonical_json(record.model_dump(mode="json"))
+        lock_descriptor = os.open(self.lock_path, os.O_RDWR | os.O_CREAT, 0o600)
         try:
-            descriptor = os.open(self.path, os.O_WRONLY | os.O_APPEND)
+            fcntl.flock(lock_descriptor, fcntl.LOCK_EX)
             try:
-                os.write(descriptor, encoded)
-                os.fsync(descriptor)
-            finally:
-                os.close(descriptor)
+                stream_bytes = self.path.read_bytes()
+            except OSError as error:
+                raise EventStoreError("无法读取规范事件流") from error
+            existing, valid_prefix = self._validate_lines(
+                stream_bytes, recover_trailing_partial=True
+            )
+            fingerprint = _idempotency_fingerprint(event)
+            for previous in existing:
+                source = WorkflowEvent.model_validate(
+                    previous.model_dump(exclude={"sequence", "event_digest"})
+                )
+                if previous.event_id == event.event_id:
+                    if source == event:
+                        return previous
+                    raise EventConflictError("同一事件标识对应了不同内容")
+                if previous.idempotency_key == event.idempotency_key:
+                    if _idempotency_fingerprint(source) == fingerprint:
+                        return previous
+                    raise EventConflictError("同一幂等键对应了不同业务载荷")
+            sequence = len(existing) + 1
+            record = StoredWorkflowEvent(
+                **event.model_dump(),
+                sequence=sequence,
+                event_digest=_event_digest(event, sequence),
+            )
+            encoded = _canonical_json(record.model_dump(mode="json"))
+            self._replace_stream(valid_prefix + encoded)
         except OSError as error:
             raise EventStoreError("无法追加规范事件") from error
+        finally:
+            fcntl.flock(lock_descriptor, fcntl.LOCK_UN)
+            os.close(lock_descriptor)
         return record
 
     def stream_digest(self, *, through_sequence: int | None = None) -> str:

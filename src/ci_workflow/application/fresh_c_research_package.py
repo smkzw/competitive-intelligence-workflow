@@ -192,6 +192,7 @@ class FreshCResearchContent(BaseModel):
     data_cutoff: datetime
     report_version: str
     producer_id: str
+    endpoint_identity_mode: Literal["instance_v1"] = "instance_v1"
     report_data: ReportCPortalData
     sources: tuple[SourceCapture, ...] = Field(min_length=1)
     route_attempts: tuple[RouteAttempt, ...] = ()
@@ -278,58 +279,34 @@ class FreshCResearchContent(BaseModel):
             if unknown:
                 raise FreshCPackageError(f"声明引用了研究包外观察：{claim.claim_id}")
         self._validate_trial_designs()
+        self._validate_intervention_relationships()
         self._validate_endpoint_timepoint_pairs()
         self._validate_design_paths()
         self._reject_ranking_metadata()
         return self
 
-    def _validate_endpoint_timepoint_pairs(self) -> None:
-        """终点定义与评估时间共同构成临床设计语义，不得互相替代。
-
-        独立审阅 R05（SCI06）：携带 outcome_id 的数据逐实例配对
-        （角色不是实例键）；全无实例标识的旧数据走兼容的角色集合检查。"""
-        endpoint_observations = [
-            observation
-            for observation in self.report_data.observations
-            if str(observation.field_family) == "endpoint"
+    def _validate_intervention_relationships(self) -> None:
+        gaps = [
+            item for item in self.report_data.observations
+            if getattr(item, "relationship_blocking", False)
         ]
-        if any(getattr(item, "outcome_id", None) for item in endpoint_observations):
-            from ci_workflow.reports.c.endpoint_instances import (
-                validate_endpoint_timepoint_pairs,
+        if gaps:
+            details = "、".join(
+                f"{item.trial_id}:{item.relationship_status or 'unknown'}"
+                for item in gaps
             )
+            raise FreshCPackageError(f"干预与 arm 的显式关系缺失，设计包阻断：{details}")
 
-            validate_endpoint_timepoint_pairs(
-                self.report_data.observations,
-                universe_trial_ids=set(self.universe_trial_ids),
-            )
-            return
-        endpoint_keys: dict[str, set[str]] = {}
-        timepoint_keys: dict[str, set[str]] = {}
-        for observation in self.report_data.observations:
-            if observation.field_family is DesignFieldFamily.ENDPOINT:
-                endpoint_keys.setdefault(observation.trial_id, set()).add(
-                    str(observation.endpoint_key)
-                )
-            elif observation.field_family is DesignFieldFamily.TIMEPOINT:
-                timepoint_keys.setdefault(observation.trial_id, set()).add(
-                    str(observation.endpoint_key)
-                )
-        for trial_id in self.universe_trial_ids:
-            endpoints = endpoint_keys.get(trial_id, set())
-            timepoints = timepoint_keys.get(trial_id, set())
-            if not endpoints or endpoints != timepoints:
-                missing_timepoints = sorted(endpoints - timepoints)
-                orphan_timepoints = sorted(timepoints - endpoints)
-                details = []
-                if missing_timepoints:
-                    details.append("缺时间点=" + "、".join(missing_timepoints))
-                if orphan_timepoints:
-                    details.append("无对应终点=" + "、".join(orphan_timepoints))
-                if not details:
-                    details.append("终点与时间点均缺失")
-                raise FreshCPackageError(
-                    f"试验 {trial_id} 的终点—时间点完整语义缺失：{'；'.join(details)}"
-                )
+    def _validate_endpoint_timepoint_pairs(self) -> None:
+        """新 Fresh C 内容只接受逐 outcome 实例身份。"""
+        from ci_workflow.reports.c.endpoint_instances import (
+            validate_endpoint_timepoint_pairs,
+        )
+
+        validate_endpoint_timepoint_pairs(
+            self.report_data.observations,
+            universe_trial_ids=set(self.universe_trial_ids),
+        )
 
     def _validate_trial_designs(self) -> None:
         design_trial_ids = [item.trial_id for item in self.trial_designs]

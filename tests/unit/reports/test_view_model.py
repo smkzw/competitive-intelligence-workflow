@@ -30,8 +30,18 @@ from ci_workflow.reports.common.page_registry import (
     StaticPage,
 )
 from ci_workflow.reports.common.view_state import (
+    FacetAssignment,
+    FacetPlan,
+    NumericFrameEligibility,
+    ReportQuery,
+    ReportViewModel,
+    ReportViewState,
     ViewStateBoundaryError,
+    VisualState,
+    WorkspaceMembership,
     derive_row_id,
+    execute_report_query,
+    query_workspace_membership,
     validate_report_row_payload,
     validate_report_view_model_payload,
 )
@@ -250,6 +260,132 @@ def test_row_id_is_stable_regardless_of_argument_order() -> None:
     first = derive_row_id(product_id="product-01", trial_id="trial-01")
     second = derive_row_id(trial_id="trial-01", product_id="product-01")
     assert first == second
+
+
+def test_public_query_conserves_q_equals_drawable_union_undrawable() -> None:
+    fact_rows = (
+        row(fact_id="fact-1", trial_id="trial-1"),
+        row(fact_id="fact-2", trial_id="trial-2", state="not_reported"),
+        row(fact_id="fact-3", trial_id="trial-3"),
+    )
+    model = validate_report_view_model_payload(view(fact_rows))
+    membership = WorkspaceMembership.from_view(model)
+    facets = FacetPlan(
+        membership_row_ids=membership.row_ids,
+        assignments=tuple(
+            FacetAssignment(row_id=item.row_id, facet_id="主要终点")
+            for item in model.rows
+        ),
+    )
+    eligibility = NumericFrameEligibility(
+        membership_row_ids=membership.row_ids,
+        drawable_row_ids=(model.rows[0].row_id, model.rows[2].row_id),
+        undrawable_reasons={model.rows[1].row_id: "原文未报告数值"},
+    )
+
+    result = execute_report_query(
+        model,
+        ReportQuery(trial_ids=("trial-1", "trial-2")),
+        membership=membership,
+        facets=facets,
+        eligibility=eligibility,
+    )
+    assert set(result.query_row_ids) == set(result.drawable_row_ids) | set(
+        result.undrawable_row_ids
+    )
+    assert set(result.drawable_row_ids).isdisjoint(result.undrawable_row_ids)
+    assert result.query_fact_ids == ("fact-1", "fact-2")
+
+
+def test_zero_hit_query_and_visual_state_are_scientifically_independent() -> None:
+    fact_rows = (row(fact_id="fact-1", trial_id="trial-1"),)
+    model = validate_report_view_model_payload(view(fact_rows))
+    membership = WorkspaceMembership.from_view(model)
+    facets = FacetPlan(
+        membership_row_ids=membership.row_ids,
+        assignments=(FacetAssignment(row_id=model.rows[0].row_id, facet_id="主要终点"),),
+    )
+    eligibility = NumericFrameEligibility(
+        membership_row_ids=membership.row_ids,
+        drawable_row_ids=membership.row_ids,
+        undrawable_reasons={},
+    )
+    query = ReportQuery(trial_ids=("trial-does-not-exist",))
+    result = execute_report_query(
+        model,
+        query,
+        membership=membership,
+        facets=facets,
+        eligibility=eligibility,
+    )
+    assert result.query_row_ids == ()
+
+    state = ReportViewState(
+        schema_version="1.0",
+        report_kind="A",
+        report_snapshot_id=SNAPSHOT,
+        page_responsibility_id=PAGE,
+        query=query,
+        visual=VisualState(hidden_series=(), zoom=(0.0, 100.0)),
+    )
+    changed = state.with_visual(hidden_series=("安慰剂",), zoom=(20.0, 60.0))
+    assert changed.query == state.query
+    assert changed.visual != state.visual
+    assert execute_report_query(
+        model,
+        changed.query,
+        membership=membership,
+        facets=facets,
+        eligibility=eligibility,
+    ).query_row_ids == ()
+
+
+def test_selected_and_drilldown_views_share_the_same_fact_identity() -> None:
+    fact_rows = (row(fact_id="fact-1", trial_id="trial-1"),)
+    model = validate_report_view_model_payload(view(fact_rows))
+    membership = WorkspaceMembership.from_view(model)
+    facets = FacetPlan(
+        membership_row_ids=membership.row_ids,
+        assignments=(FacetAssignment(row_id=model.rows[0].row_id, facet_id="主要终点"),),
+    )
+    eligibility = NumericFrameEligibility(
+        membership_row_ids=membership.row_ids,
+        drawable_row_ids=membership.row_ids,
+        undrawable_reasons={},
+    )
+    result = execute_report_query(
+        model,
+        ReportQuery(),
+        membership=membership,
+        facets=facets,
+        eligibility=eligibility,
+    )
+    state = ReportViewState(
+        schema_version="1.0",
+        report_kind="A",
+        report_snapshot_id=SNAPSHOT,
+        page_responsibility_id=PAGE,
+        query=ReportQuery(),
+        selected_fact_id="fact-1",
+        drilldown_fact_id="fact-1",
+        visual=VisualState(),
+    )
+    linked = result.bind_view_state(state)
+    assert linked.chart_fact_ids == linked.table_fact_ids == ("fact-1",)
+    assert linked.selected_fact_id == linked.drilldown_fact_id == "fact-1"
+
+
+@pytest.mark.parametrize("report_kind", [ReportKind.A, ReportKind.B, ReportKind.C])
+def test_all_three_report_products_consume_the_same_public_query(
+    report_kind: ReportKind,
+) -> None:
+    fact_rows = (row(fact_id="fact-1", trial_id="trial-1"),)
+    payload = view(fact_rows)
+    payload["report_kind"] = report_kind.value
+    model = ReportViewModel.model_validate(payload)
+    assert query_workspace_membership(
+        model, ReportQuery(fact_ids=("fact-1",))
+    ) == model.rows
 
 
 # ─── 冻结目录页面责任权威（生产边界强制） ───────────────────────────────────

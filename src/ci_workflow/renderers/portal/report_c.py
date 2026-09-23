@@ -13,8 +13,6 @@ import json
 import re
 import shutil
 from collections.abc import Mapping, Sequence
-
-from .report_a import _native_endpoint_zh, _native_timepoint_zh
 from datetime import datetime
 from html import unescape
 from pathlib import Path
@@ -23,9 +21,19 @@ from typing import Any, Self
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from ci_workflow.domain.enums import FactDisclosureState, ReportKind
+from ci_workflow.domain.enums import FactDisclosureState, FactReviewState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.qc.browser import route_to_site_path
+from ci_workflow.renderers.portal.active_fact_projection import (
+    ActiveFactBinding,
+    ActiveFactRevision,
+    PortalConsumerNode,
+    canonical_sha256,
+    canonical_source_pointer,
+    user_edit_disclosure,
+    validate_active_fact_binding,
+    write_render_receipt,
+)
 from ci_workflow.renderers.portal.builder import (
     resolve_echarts_bundle,
     resolve_logo_src,
@@ -48,9 +56,13 @@ from ci_workflow.reports.common.evidence_view import (
     EvidenceObservationKind,
     EvidenceView,
     OriginalTextStatus,
+    UserEditDisclosure,
 )
+from ci_workflow.reports.common.numeric_projection import NumericMeasureKind, project_numeric
 from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
 from ci_workflow.reports.common.view_state import ReportRow
+
+from .report_a import _native_endpoint_zh, _native_timepoint_zh
 
 _TEMPLATE_DIR = Path(__file__).resolve().parent / "templates" / "c"
 _ASSET_DIR = Path(__file__).resolve().parent / "assets"
@@ -195,6 +207,7 @@ class ReportCPortalData(BaseModel):
     products: tuple[ProductRow, ...] = Field(min_length=1)
     trials: tuple[TrialRow, ...] = Field(min_length=1)
     observations: tuple[DesignObservation, ...] = Field(min_length=1)
+    user_edits: dict[str, UserEditDisclosure] = Field(default_factory=dict)
     # 独立复核 C r19：包内设计路径综合（patterns + candidate_paths）随门户数据下发，
     # design-patterns 页不再空转为核心事实表
     design_paths: Mapping[str, Any] | None = None
@@ -906,7 +919,7 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         if numeric.is_integer():
             return str(int(numeric))
         return str(numeric)
-    source_text = _text(observation.source_text)
+    source_text = _text(observation.display_text or observation.source_text)
     text = _registry_display_text(source_text)
     operator = _operator_zh(observation.operator)
     threshold = _text(observation.threshold_value)
@@ -1131,6 +1144,7 @@ def _chart_row(
         "source_text": _text(observation.source_text),
         "source_field_name": _text(observation.source_field_name, "未列示"),
         "source_location_zh": f"ClinicalTrials.gov · {_field_label(observation.field)}",
+        "review_state": observation.review_state.value,
         "scale": (
             lambda s: s + "（登记原文，未译）"
             if s and len(re.findall(r"[A-Za-z]{3,}", s)) >= 2 and not re.search(r"[\u4e00-\u9fff]", s)
@@ -1138,13 +1152,25 @@ def _chart_row(
         )(_text(observation.scale)),
     }
     if numeric is not None and reported:
-        row["numeric_value"] = numeric
+        projection = project_numeric(
+            value=numeric, unit=_text(observation.threshold_unit),
+            kind=(NumericMeasureKind.SAMPLE_SIZE
+                  if observation.field == "planned_or_actual_sample_size"
+                  else NumericMeasureKind.PARTICIPANT_COUNT),
+            window=_text(observation.assessment_timepoint), estimand=observation.field,
+            size_value=numeric if chart_type == "bubble" else None,
+            size_basis="登记计划或实际样本量" if chart_type == "bubble" else None,
+        )
+        row["numeric_projection"] = projection.as_dict()
+        row["numeric_value"] = projection.plot_value
+        row["unit"] = projection.plot_unit
         row["value"] = int(numeric) if numeric.is_integer() else numeric
         row["renderable"] = True
         if chart_type == "bubble":
-            row["x_value"] = numeric
+            row["x_value"] = projection.plot_value
             row["y_value"] = 1
             row["size"] = max(numeric, 1.0)
+            row["size_basis"] = projection.size_basis
     return row
 
 
@@ -1329,6 +1355,7 @@ def _evidence_view(
             if _text(observation.source_text)
             else OriginalTextStatus.NOT_PROVIDED
         ),
+        user_edit=data.user_edits.get(observation.row_id),
         conflicts=(),
         historical_versions=(),
         source_field_name=_evidence_field(_field_label(observation.field), state),
@@ -1531,7 +1558,9 @@ def _table_rows(
         # 独立复核 C r42（issue-4）/C r46（issue-1）：值列残留英文
         # （含部分转写后中英混排，如 During 残片）一律按惯例标注
         _v = chart.get("value")
-        if (
+        if observation.review_state is FactReviewState.USER_MODIFIED:
+            chart["value"] = f"{_v}（用户修订，未独立复核）"
+        elif (
             isinstance(_v, str)
             and re.findall(r"[A-Za-z]{3,}", _v)
             and not _v.endswith("（登记原文，未译）")
@@ -1962,9 +1991,100 @@ def render_report_c_site(
     site_root: Path,
     *,
     publication_limitation_zh: str | None = None,
+    active_revision: ActiveFactRevision | None = None,
 ) -> tuple[Path, ...]:
     """Render all C catalog pages plus every trial dossier page."""
     site_root = Path(site_root)
+    consumers: list[PortalConsumerNode] = []
+    if active_revision is not None:
+        observations = list(data.observations)
+        user_edits = dict(data.user_edits)
+        for fact, binding in active_revision.bindings_for("C"):
+            if binding.collection != "observations":
+                raise ReportCPortalError("C renderer只接受observations领域绑定")
+            matches = [
+                index for index, row in enumerate(observations) if row.row_id == binding.row_id
+            ]
+            if len(matches) != 1:
+                raise ReportCPortalError(
+                    f"C active fact绑定必须命中唯一设计观察：{binding.row_id}"
+                )
+            index = matches[0]
+            try:
+                verified_binding = validate_active_fact_binding(
+                    fact,
+                    binding,
+                    active_fact_binding_for_c(data, binding.row_id),
+                )
+            except ValueError as error:
+                raise ReportCPortalError(str(error)) from error
+            row_payload = observations[index].model_dump(mode="python")
+            original_value = (
+                f"{row_payload.get('operator') or ''}"
+                f"{row_payload.get('threshold_value') or ''} "
+                f"{row_payload.get('threshold_unit') or ''}"
+            ).strip()
+            operator = fact.model_extra.get("threshold_operator")
+            threshold = fact.model_extra.get("threshold_value")
+            unit = fact.model_extra.get("threshold_unit") or fact.model_extra.get("unit")
+            endpoint = (
+                fact.model_extra.get("endpoint_definition")
+                or row_payload["source_field_name"]
+            )
+            narrative = (
+                f"{endpoint}："
+                f"{operator or ''}{threshold if threshold is not None else fact.normalized_value} "
+                f"{unit or ''}。"
+            ).replace("  ", " ")
+            row_payload.update(
+                {
+                    "operator": operator,
+                    "threshold_value": None if threshold is None else str(threshold),
+                    "threshold_unit": unit,
+                    "display_text": narrative,
+                    "review_state": "user_modified",
+                }
+            )
+            observations[index] = DesignObservation.model_validate(row_payload)
+            current_value = None
+            if threshold is not None:
+                current_value = f"{operator or ''}{float(threshold):g} {unit or ''}".strip()
+            user_edits[binding.row_id] = user_edit_disclosure(
+                fact,
+                active_revision,
+                original_value=original_value,
+                current_value=current_value,
+            )
+            specific_pages = [
+                page_id
+                for page_id, fields in _PAGE_FIELDS.items()
+                if fields is not None and observations[index].field in fields
+            ]
+            if not specific_pages:
+                raise ReportCPortalError(
+                    f"C设计观察没有既有专题消费者：{observations[index].field}"
+                )
+            page = f"{specific_pages[0]}.html"
+            consumers.append(
+                PortalConsumerNode(
+                    report="C",
+                    fact_id=fact.fact_id,
+                    fact_version_id=fact.fact_version_id,
+                    collection="observations",
+                    row_id=binding.row_id,
+                    binding_identity=verified_binding,
+                    original_row_sha256=verified_binding.original_row_sha256,
+                    page_relative_path=page,
+                    chart_consumer=f"__CHART_GROUPS__.rows[row_id={binding.row_id}].threshold_value",
+                    table_consumer=f"{page}#table-row:{binding.row_id}",
+                    narrative_consumer=f"evidence-view:{binding.row_id}.user_edit.current_value",
+                    index_consumer=f"data/search-index.js#observation:{binding.row_id}",
+                    source_binding_consumer=f"evidence-view:{binding.row_id}.source_locator",
+                )
+            )
+        data = data.model_copy(
+            update={"observations": tuple(observations), "user_edits": user_edits}
+        )
     _assert_design_gate(data)
     _reset_site_root(site_root)
     _copy_assets(site_root)
@@ -2092,4 +2212,67 @@ def render_report_c_site(
         "window.__SEARCH_INDEX__=" + _json(search) + ";\n",
         encoding="utf-8",
     )
+    if active_revision is not None:
+        write_render_receipt(
+            site_root,
+            report="C",
+            active_revision=active_revision,
+            consumers=tuple(consumers),
+        )
     return tuple(generated)
+
+
+def validate_active_fact_revision_c(
+    data: ReportCPortalData,
+    active_revision: ActiveFactRevision,
+) -> None:
+    """Validate every C binding before a render transaction can begin."""
+    for fact, binding in active_revision.bindings_for("C"):
+        if binding.collection != "observations":
+            raise ReportCPortalError("C renderer只接受observations领域绑定")
+        try:
+            validate_active_fact_binding(
+                fact,
+                binding,
+                active_fact_binding_for_c(data, binding.row_id),
+            )
+        except ValueError as error:
+            raise ReportCPortalError(str(error)) from error
+
+
+def active_fact_binding_for_c(
+    data: ReportCPortalData,
+    row_id: str,
+) -> ActiveFactBinding:
+    """Resolve the immutable identity of one original C design observation."""
+    matches = [row for row in data.observations if row.row_id == row_id]
+    if len(matches) != 1:
+        raise ReportCPortalError(f"C active fact绑定必须命中唯一设计观察：{row_id}")
+    row = matches[0]
+    products = {item.id: item for item in data.products}
+    trials = {item.id: item for item in data.trials}
+    statistical_form = "threshold" if row.threshold_value is not None else "design_text"
+    measure_object = "participants" if row.field_family is DesignFieldFamily.POPULATION else "design"
+    unit = row.threshold_unit or "text"
+    return ActiveFactBinding(
+        report="C",
+        collection="observations",
+        row_id=row.row_id,
+        product_id=row.product_id,
+        drug_name=products[row.product_id].name,
+        trial_id=row.trial_id,
+        registry_id=trials[row.trial_id].display_id,
+        group_id=row.group_id,
+        arm=None,
+        cohort_id=row.cohort_id,
+        period=row.period,
+        endpoint_definition=row.field,
+        event_definition=None,
+        statistical_form=statistical_form,
+        measure_object=measure_object,
+        unit=unit,
+        normalized_unit=unit,
+        source_version_id=row.source_version_id,
+        source_pointer=canonical_source_pointer(row.source_locator.model_dump(mode="json")),
+        original_row_sha256=canonical_sha256(row.model_dump(mode="json")),
+    )

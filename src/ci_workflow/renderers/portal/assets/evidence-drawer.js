@@ -91,11 +91,14 @@
     ["unit", "单位"],
     ["numerator", "分子"],
     ["denominator", "分母"],
+    ["_user_edit_status", "复核状态"],
+    ["_current_user_value", "当前用户修订值"],
+    ["_original_source_value", "原来源值"],
     ["_disclosure", "披露状态"],
     ["explanation", "数据说明"],
     ["source_version_label_zh", "来源版本"],
     ["_locator", "原文定位"],
-    ["_original_text", "简短原文"]
+    ["_original_text", "原来源原文"]
   ];
 
   // 独立审阅 R12：单位形状判别——登记 scale 字段偶被错填为计量口径，
@@ -408,7 +411,19 @@
       if (key === "scale" && isUnitShapedScale(view.scale)) {
         continue;
       }
-      if (key === "_disclosure") {
+      if (key === "_user_edit_status") {
+        if (view.user_edit) {
+          appendFieldRow(viewFields, spec[1], view.user_edit.status_label_zh, true);
+        }
+      } else if (key === "_current_user_value") {
+        if (view.user_edit) {
+          appendFieldRow(viewFields, spec[1], view.user_edit.current_value, false);
+        }
+      } else if (key === "_original_source_value") {
+        if (view.user_edit) {
+          appendFieldRow(viewFields, spec[1], view.user_edit.original_value, false);
+        }
+      } else if (key === "_disclosure") {
         appendFieldRow(viewFields, spec[1], disclosureText(view), true);
       } else if (key === "_locator") {
         appendLocatorRow(viewFields, spec[1], view.locator);

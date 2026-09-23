@@ -1701,6 +1701,7 @@ class ResearchLineage:
     coverage_projection_id: str
     claim_ids: tuple[str, ...]
     source_version_ids: tuple[str, ...]
+    source_fragment_ids: tuple[str, ...]
     fact_version_ids: tuple[str, ...]
     fragment_ids: tuple[str, ...]
 
@@ -1774,6 +1775,49 @@ def ingest_fresh_a_research_package(
     package: FreshAResearchPackage,
 ) -> ResearchLineage:
     """幂等摄取来源、事实、声明和真实锁定证据快照。"""
+    # Compatibility entry only: the embedded legacy ``scientific_review`` is
+    # input metadata, never an acceptance authority.  All new persistence uses
+    # the shared candidate ingestion path; formal acceptance remains exclusively
+    # in review_issuer + scientific_review_transition.
+    from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
+
+    candidate_created_at = max(item.acquired_at for item in package.sources)
+    candidate = ingest_research_evidence(
+        project_root=project_root,
+        project_id=project_id,
+        contract_version=contract_version,
+        report_kind="A",
+        data_cutoff=package.data_cutoff,
+        scientific_content_digest=package.research_content_digest,
+        created_at=candidate_created_at,
+        sources=package.sources,
+        route_attempts=package.route_attempts,
+        facts=package.facts,
+        claims=package.claims,
+    )
+    claim_snapshot_id = stable_id(
+        "claim-snapshot", project_id, package.research_content_digest,
+        *candidate.claim_version_ids,
+    )
+    coverage_set_id = stable_id(
+        "coverage-set", project_id, "A", candidate.evidence_snapshot.snapshot_id,
+        claim_snapshot_id,
+    )
+    return ResearchLineage(
+        package_digest=package.research_content_digest,
+        evidence_snapshot=candidate.evidence_snapshot,
+        claim_snapshot_id=claim_snapshot_id,
+        coverage_set_id=coverage_set_id,
+        coverage_projection_id=stable_id("coverage-projection", coverage_set_id, "html"),
+        claim_ids=candidate.claim_ids,
+        source_version_ids=candidate.source_version_ids,
+        source_fragment_ids=candidate.source_fragment_ids,
+        fact_version_ids=candidate.fact_version_ids,
+        fragment_ids=candidate.fragment_ids,
+    )
+
+    # Historical implementation retained below for source archaeology only;
+    # it is unreachable and must never be used to mint accepted facts.
     database_path = project_root / "state/project.sqlite"
     repository = EvidenceRepository(database_path, ContentAddressedStore(project_root))
     timestamp = package.scientific_review.reviewed_at
@@ -2001,6 +2045,7 @@ def ingest_fresh_a_research_package(
         coverage_projection_id=coverage_projection_id,
         claim_ids=claim_ids,
         source_version_ids=tuple(sorted(versions.values())),
+        source_fragment_ids=tuple(fragments[item.source_id] for item in package.sources),
         fact_version_ids=tuple(sorted(fact_versions.values())),
         fragment_ids=tuple(sorted(fragments.values())),
     )

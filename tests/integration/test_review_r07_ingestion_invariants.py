@@ -13,24 +13,18 @@ SRC = Path(__file__).resolve().parents[2] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from tests.integration.test_research_package_submission import (  # noqa: E402
-    _project,
-    _source_payload,
-)
-
 from ci_workflow.application.fresh_research_ingestion import (  # noqa: E402
-    ResearchIngestionError,
     ingest_research_evidence,
 )
 from ci_workflow.application.source_research_service import (  # noqa: E402
     FreshAResearchPackage,
     compute_research_content_digest,
 )
-from ci_workflow.storage.content_store import (  # noqa: E402
-    ContentAddressedStore,
-    EvidenceRepository,
-)
 from ci_workflow.storage.sqlite import open_database  # noqa: E402
+from tests.integration.test_research_package_submission import (  # noqa: E402
+    _project,
+    _source_payload,
+)
 
 
 def _prepare(tmp_path: Path, *, mutate_fact=None):
@@ -110,13 +104,15 @@ def test_sci08_same_version_id_storage_is_append_only(tmp_path: Path) -> None:
     # 内容寻址版本标识 + append-only 存储：同版本标识携带不同载荷在
     # 存储层不可达（UPDATE/DELETE 被拒），摄取层的冲突守卫是纵深防御
     fact = package.facts[0]
-    with pytest.raises(sqlite3.IntegrityError):
-        with open_database(project / "state/project.sqlite") as database:
-            database.execute(
-                """UPDATE fact_versions SET normalized_value=?
-                WHERE fact_id=?""",
-                (str((fact.normalized_value or "") + "篡改"), fact.fact_id),
-            )
+    with (
+        pytest.raises(sqlite3.IntegrityError),
+        open_database(project / "state/project.sqlite") as database,
+    ):
+        database.execute(
+            """UPDATE fact_versions SET normalized_value=?
+            WHERE fact_id=?""",
+            (str((fact.normalized_value or "") + "篡改"), fact.fact_id),
+        )
 
 
 def test_sci09_fact_fragment_locates_own_field_not_whole_capture(
@@ -124,9 +120,6 @@ def test_sci09_fact_fragment_locates_own_field_not_whole_capture(
 ) -> None:
     project, package, digest = _prepare(tmp_path)
     lineage = _ingest(project, package, digest)
-    repository = EvidenceRepository(
-        project / "state/project.sqlite", ContentAddressedStore(project)
-    )
     precise = 0
     with open_database(project / "state/project.sqlite") as database:
         for version_id in lineage.fact_version_ids:

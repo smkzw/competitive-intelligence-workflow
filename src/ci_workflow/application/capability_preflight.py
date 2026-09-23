@@ -59,7 +59,10 @@ CAPABILITY_ACTIONS = {
     "document_ingestion": "请恢复 PDF/文档读取组件，或把无法读取的原文交给 Agent。",
     "ocr": "请恢复扫描件文字识别能力；可正常读取的文本资料不受影响。",
     "browser_validation": "请恢复真实浏览器后再验收网页产物。",
-    "independent_context": "请提供独立上下文审阅者；主 Agent 不能自证首份宇宙闭包。",
+    "independent_context": (
+        "请启用宿主子Agent、独立会话或兼容执行器，并配置可执行的独立上下文探针；"
+        "主 Agent 不能自证首份宇宙闭包。"
+    ),
 }
 
 
@@ -116,6 +119,33 @@ class ProbeOutcome(BaseModel):
         return value
 
 
+class IndependentContextProbeReceipt(BaseModel):
+    """Receipt emitted by a separately executed host capability probe."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_version: Literal["1.0"]
+    available: bool
+    mechanism: Literal["native_subagent", "independent_session", "compatible_executor"]
+    producer_context: str
+    reviewer_context: str
+    invocation_id: str
+
+    @field_validator("producer_context", "reviewer_context", "invocation_id")
+    @classmethod
+    def _nonblank(cls, value: str) -> str:
+        value = " ".join(value.split())
+        if not value:
+            raise ValueError("独立上下文探针回执字段不能为空")
+        return value
+
+    @model_validator(mode="after")
+    def _contexts_are_independent(self) -> IndependentContextProbeReceipt:
+        if self.available and self.producer_context == self.reviewer_context:
+            raise ValueError("生产者与复核者上下文必须不同")
+        return self
+
+
 class CapabilityProbe(Protocol):
     def check(self, capability_id: str, *, project_root: Path) -> ProbeOutcome: ...
 
@@ -142,7 +172,7 @@ class StaticCapabilityProbe:
 class RuntimeCapabilityProbe:
     """本地确定性执行器使用的轻量实机探针。"""
 
-    def __init__(self) -> None:
+    def __init__(self, *, independent_context_probe: Path | None = None) -> None:
         raw = (
             os.environ.get("CI_WORKFLOW_CAPABILITY_OVERRIDES", "")
             if os.environ.get("CI_WORKFLOW_TEST_MODE") == "1"
@@ -161,6 +191,11 @@ class RuntimeCapabilityProbe:
             self.overrides = cast(dict[str, bool], value)
         else:
             self.overrides = {}
+        configured_probe = independent_context_probe
+        if configured_probe is None:
+            raw_probe = os.environ.get("CI_WORKFLOW_INDEPENDENT_CONTEXT_PROBE", "").strip()
+            configured_probe = Path(raw_probe) if raw_probe else None
+        self.independent_context_probe = configured_probe
         self.cache: dict[str, ProbeOutcome] = {}
 
     def reset(self) -> None:
@@ -270,12 +305,32 @@ class RuntimeCapabilityProbe:
             available = bool(gate and Path(gate).is_file()) or shutil.which("omlx") is not None
             return available, "扫描件文字识别入口已发现" if available else "未发现文字识别入口"
         if capability_id == "independent_context":
-            declaration = os.environ.get("CI_WORKFLOW_INDEPENDENT_CONTEXT")
-            if declaration == "1":
-                return True, "宿主已声明独立上下文审阅者"
-            if declaration == "0":
-                return False, "宿主明确声明没有独立上下文审阅者"
-            return False, "宿主未声明独立上下文审阅者"
+            probe = self.independent_context_probe
+            if probe is None:
+                return False, "未配置可执行的独立上下文探针，静态声明不构成能力证据"
+            path = probe.expanduser().resolve()
+            if not path.is_file() or path.is_symlink() or not os.access(path, os.X_OK):
+                return False, "独立上下文探针不是可执行的普通文件"
+            completed = subprocess.run(
+                [str(path)],
+                cwd=project_root,
+                capture_output=True,
+                text=True,
+                timeout=20,
+                check=False,
+            )
+            if completed.returncode != 0:
+                return False, f"独立上下文探针执行失败（退出码 {completed.returncode}）"
+            try:
+                receipt = IndependentContextProbeReceipt.model_validate_json(completed.stdout)
+            except ValueError as error:
+                raise CapabilityProbeFailure("独立上下文探针未返回有效运行时回执") from error
+            if not receipt.available:
+                return False, f"独立上下文探针回执不可用（{receipt.invocation_id}）"
+            return (
+                True,
+                f"独立上下文探针已执行：{receipt.mechanism}；回执 {receipt.invocation_id}",
+            )
         raise ValueError(f"未知能力：{capability_id}")
 
 

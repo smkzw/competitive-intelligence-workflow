@@ -14,6 +14,6 @@
   <div class="kz-a-matrix-coverage" data-matrix-coverage aria-live="polite"></div>
   {{ ui.chart('matrix', 'matrix-full', '可调整维度的疗效安全性气泡图') }}
   <div class="kz-a-comparability">不同试验的入组人群、对照反应和观察时间可能不同，气泡位置用于快速观察，不作为头对头结论。</div>
-  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th>试验样本量</th></tr></thead><tbody>{% for p in products %}<tr data-product="{{ p.name }}" data-matrix-product="{{ p.id }}"><td>{{ p.name }}</td><td data-matrix-value="treatment">未纳入当前矩阵</td><td data-matrix-value="control">—</td><td data-matrix-value="teae">—</td><td data-matrix-value="sae">—</td><td data-matrix-value="sample">—</td></tr>{% endfor %}</tbody></table></div>
+  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th data-matrix-size-heading>治疗组样本量</th></tr></thead><tbody>{% for p in products %}<tr data-product="{{ p.name }}" data-matrix-product="{{ p.id }}"><td>{{ p.name }}</td><td data-matrix-value="treatment">未纳入当前矩阵</td><td data-matrix-value="control">—</td><td data-matrix-value="teae">—</td><td data-matrix-value="sae">—</td><td data-matrix-value="sample">—</td></tr>{% endfor %}</tbody></table></div>
 </section>
 {% endblock %}

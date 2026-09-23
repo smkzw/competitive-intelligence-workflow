@@ -63,7 +63,9 @@
         "not_applicable", "conflicting", "unresolved_due_to_route"
       ]
     },
-    "review_state": {"enum": ["candidate", "accepted", "rejected", "superseded"]},
+    "review_state": {
+      "enum": ["candidate", "accepted", "user_modified", "rejected", "superseded"]
+    },
     "normalization": {"anyOf": [{"$ref": "#/$defs/normalization"}, {"type": "null"}]},
     "applicability_predicate_id": {"type": ["string", "null"], "minLength": 1},
     "unresolved_route_receipt_id": {"type": ["string", "null"], "minLength": 1},

@@ -1,0 +1,117 @@
+{
+  "schema_version": "w03-browser-freeze-v2",
+  "report": "C",
+  "builder_chain": "fixed-ctgov-cas -> PNH A main -> PNH C main -> render_report_c_site",
+  "retention_policy": "retain manifest, report.js, sitemap, two structured journey receipts, and two screenshots; full rebuild site remains outside the evidence bundle",
+  "fixed_cas": [
+    {
+      "path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/1e/1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98.bin",
+      "sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98"
+    },
+    {
+      "path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/c3/c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3.bin",
+      "sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
+    }
+  ],
+  "current_sources": [
+    {
+      "path": "src/ci_workflow/application/fresh_c_research_package.py",
+      "sha256": "255231868c7d4db2cd4ebfe61a567829f0099fec96786ac9d8526a2d377072b2"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/report_c.py",
+      "sha256": "b1c1cf140de78382d9079294e9c40f8d96ea92f1722982f94bf0bfb82cdb5df4"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/templates/c/base.html.j2",
+      "sha256": "00497d0d4e88d16ed48bd2e04921889b555f7d914e136ced64698d7af76e4dc6"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/templates/c/page.html.j2",
+      "sha256": "38b9c8e527a0c17f44fc63661955302291aeb5d887393b34adc4b91b61f0d8c2"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/assets/portal.js",
+      "sha256": "8ede241d7b3d3cf03569286c2b28a3398b4024d46e44f54e14d79ba5c512f505"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/assets/portal.css",
+      "sha256": "bdde55b28bd0644b7ef7b1559db713f8f68eed4072a754bfbe8effb64783749b"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/assets/report-c.js",
+      "sha256": "79f7bcf5523c48ae4d2a7d17cf240648564587a941d04dce50854ef175470072"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/assets/report-c.css",
+      "sha256": "f2387c641cf04e7f7c46d85793681fc75a1302e5a1444e4cef8fc540852500bb"
+    },
+    {
+      "path": "packets/2026-09-11-pnh-vertical/build_pnh_a_payload.py",
+      "sha256": "cbbce1840e6402eb362b0e32deee8d9df0e8a0469611ada8ce2dfd256300351e"
+    },
+    {
+      "path": "packets/2026-09-11-pnh-vertical/build_pnh_c_audit.py",
+      "sha256": "b4bf016481f584a926dd88755ab5f5de4be641e7ce8221e8a2a28806f4130ed0"
+    },
+    {
+      "path": "tools/build_w03_browser_freeze.py",
+      "sha256": "25d610e101a7f5b5c5546fe69bae44f8c470516f848e392542d0a3bd4f3a3bad"
+    }
+  ],
+  "generated": {
+    "c_research_package_sha256": "2c6381e93c68dd80c40636b0a3739ba89eafdcc8a5ae7f3b85dd9b142f76a310",
+    "site_file_count": 18,
+    "sitemap_sha256": "001ca757ea8f827e11af64ca1ab097422a8938cc10a1443237152cba25013d01",
+    "retained_report_js": "data/report.js",
+    "retained_report_js_sha256": "fff71397b08d24b8ed3ef21f9736298ca16b9814ee88df143e4f12af21b1882d",
+    "retained_sitemap": "data/sitemap.json",
+    "retained_sitemap_sha256": "001ca757ea8f827e11af64ca1ab097422a8938cc10a1443237152cba25013d01",
+    "trial_display_ids": [
+      "NCT02591862",
+      "NCT02605993",
+      "NCT03181633",
+      "NCT04170023",
+      "NCT04469465",
+      "NCT05886244"
+    ],
+    "pages": [
+      {
+        "page_id": "endpoint-timepoint-matrix",
+        "route": "/c/endpoint-timepoint-matrix",
+        "site_path": "endpoint-timepoint-matrix.html",
+        "sha256": "823d3d400298e4fc4fd269b584275fef77554d6b899bf736f5845245e183eaee"
+      },
+      {
+        "page_id": "treatment-arms",
+        "route": "/c/treatment-arms",
+        "site_path": "treatment-arms.html",
+        "sha256": "ab502f8a645f6da03906d2d49773511b203ce2983b4319766ba27d22dcee8b93"
+      }
+    ]
+  },
+  "journeys": [
+    {
+      "page_id": "endpoint-timepoint-matrix",
+      "path": "packets/2026-09-22-sol-delivery/evidence/W03-browser-freeze/journeys/endpoint-timepoint-matrix.json",
+      "sha256": "56b5f760463527e7246f6fffbfdc002118021582d64bb4619685b86e68332ade"
+    },
+    {
+      "page_id": "treatment-arms",
+      "path": "packets/2026-09-22-sol-delivery/evidence/W03-browser-freeze/journeys/treatment-arms.json",
+      "sha256": "56cfbacdae3d46ea92ee4dcaf251a9f3832e79c4bc9bc10c17387f618b477db0"
+    }
+  ],
+  "screenshots": [
+    {
+      "page_id": "endpoint-timepoint-matrix",
+      "path": "output/playwright/W03-browser-freeze-C-endpoint-timepoint.png",
+      "sha256": "9c945099649d8a6b8347a4b88e4fcfa7e81cf589056f0750c55a3e5137894188"
+    },
+    {
+      "page_id": "treatment-arms",
+      "path": "output/playwright/W03-browser-freeze-C-arm-relations.png",
+      "sha256": "67652ce43ba8b57ce3a411092361b4098eba2b418644a9b987d0be4b5144bd54"
+    }
+  ]
+}

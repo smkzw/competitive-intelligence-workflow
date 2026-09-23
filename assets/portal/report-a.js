@@ -11,6 +11,7 @@
   var patents = data.patents || [];
   var historyRows = data.history || [];
   var sources = data.sources || [];
+  var userEdits = data.user_edits || {};
   var selected = {};
   var safetyTermLabels = {};
   var efficacyContextArms = {};
@@ -55,7 +56,7 @@
 
   safety.forEach(function (row) {
     var key = safetyTermKey(row);
-    if (!safetyTermLabels[key]) safetyTermLabels[key] = row.term_label || row.term || key;
+    if (!safetyTermLabels[key]) safetyTermLabels[key] = row.measure_label || row.term_label || row.term || key;
   });
 
   efficacy.forEach(function (row) {
@@ -257,6 +258,7 @@
       if (chosenArm && (row.arm || "治疗组") !== chosenArm) return false;
       if (selected.category && selected.category.indexOf(row.category) === -1) return false;
       if (selected.event && selected.event.indexOf(safetyTermKey(row)) === -1) return false;
+      if (selected.semantic && selected.semantic.indexOf(row.semantic_filter_key) === -1) return false;
       return true;
     });
   }
@@ -264,15 +266,17 @@
     var termKey = typeof termView === "string" ? termView : termView.key;
     var categoryName = typeof termView === "string" ? null : termView.category;
     var timeWindow = typeof termView === "string" ? null : termView.time_window;
-    if (!categoryName && termKey === "any_teae") categoryName = "治疗期间不良事件";
-    if (!categoryName && termKey === "any_sae") categoryName = "严重不良事件";
+    // 会商 #2（概念词表单源）：概念过滤以 term_key 为准（下方 !== termKey），
+    // 删除按中文类别字面的兜底匹配（TEAE 轴 0/146 命中的根因）
+    categoryName = null;
     var rows = sourceRows || safetyRowsForView();
     var matches = rows.filter(function (row) {
       if (row.product_id !== productId || safetyTermKey(row) !== termKey) return false;
       if (trialId && row.trial_id !== trialId) return false;
-      if ((row.arm || "治疗组") !== (selected.arm && selected.arm.length ? selected.arm[0] : "治疗组")) return false;
+      if (selected.arm && selected.arm.length && (row.arm || "治疗组") !== selected.arm[0]) return false;
       if (armDetail && (row.arm_detail || "").trim() !== armDetail.trim()) return false;
-      if (categoryName && row.category !== categoryName) return false;
+      // 独立复核会商 P0 #3：payload 类目带（登记）后缀，包含式匹配
+      if (categoryName && row.category !== categoryName && String(row.category || "").indexOf(categoryName) === -1) return false;
       if (timeWindow && row.time_window !== timeWindow) return false;
       return numericValue(row.value) || row.value == null;
     });
@@ -292,7 +296,10 @@
   }
   function safetyDisplayValue(row) {
     if (!row) return "未公开";
-    if (numericValue(row.value)) return row.value + (row.unit || "");
+    var projection = row.numeric_projection;
+    if (projection && projection.renderable && numericValue(projection.plot_value)) {
+      return projection.plot_value + (projection.plot_unit || "");
+    }
     return row.disclosure_state || "未公开";
   }
   function safetyTimeWindowLabel(value) {
@@ -362,6 +369,13 @@
     var path = window.location.pathname || "";
     var prefix = /\/products\/[^/]+\.html$/i.test(path) ? "../" : "";
     return prefix + "products/" + encodeURIComponent(String(productId)) + ".html";
+  }
+  function productDossierNavigationHref(productId) {
+    var base = productDossierHref(productId);
+    var returnUrl = new URL(window.location.href);
+    returnUrl.searchParams.set("focus", String(productId));
+    var returnTo = returnUrl.href;
+    return base + "?return=" + encodeURIComponent(returnTo);
   }
   function insightTrial(productId, preferredTrialId) {
     if (preferredTrialId) {
@@ -471,7 +485,7 @@
       ? "治疗组 " + insightRowValue(pair.rows["治疗组"]) + "；对照组 " + insightRowValue(pair.rows["对照组"])
       : "未公开";
     var safetyText = safetyRow
-      ? (safetyRow.term_label || safetyRow.term || safetyTermLabel(safetyTermKey(safetyRow)))
+      ? (safetyRow.measure_label || safetyRow.term_label || safetyRow.term || safetyTermLabel(safetyTermKey(safetyRow)))
         + " " + insightRowValue(safetyRow)
       : "未公开";
     var fields = [
@@ -540,7 +554,7 @@
     }
     rows.forEach(function (row, index) {
       if (index > 0) panel.appendChild(el("hr", "", null));
-      appendInsightField(fields, "事件", row.term_label || row.term);
+      appendInsightField(fields, "事件", row.measure_label || row.term_label || row.term);
       appendInsightField(fields, "安全性维度", row.category);
       appendInsightField(fields, "组别", row.arm_detail || row.arm || "治疗组");
       appendInsightField(fields, "发生率", insightRowValue(row));
@@ -774,10 +788,13 @@
     if (heading) heading.textContent = title;
     host.setAttribute("aria-label", title + "：按试验及完整观察条件分组");
     efficacy.forEach(function (item) {
-      if (!numericValue(item.value) || !rowMatchesFilters(item)) return;
+      var projection = item.numeric_projection;
+      if (!projection || !projection.renderable || !numericValue(projection.plot_value)
+          || !rowMatchesFilters(item)) return;
       if (productScope && item.product_id !== productScope) return;
       if (!productScope && Object.keys(active).length && !active[productName(item.product_id)]) return;
-      var key = [item.product_id, item.trial_id, item.endpoint, item.timepoint, item.unit, item.population].join("\u0001");
+      var key = [item.product_id, item.trial_id, item.endpoint, item.timepoint,
+        projection.facet_key, item.population].join("\u0001");
       if (!groups[key]) groups[key] = [];
       groups[key].push(item);
     });
@@ -790,8 +807,13 @@
       var observations = groups[key];
       var first = observations[0];
       var trial = trialById(first.trial_id);
-      var minimum = Math.min.apply(null, [0].concat(observations.map(function (item) { return item.value; })));
-      var maximum = Math.max.apply(null, [isPercentUnit(first.unit) ? 100 : 0].concat(observations.map(function (item) { return item.value; })));
+      var firstProjection = first.numeric_projection;
+      var minimum = Math.min.apply(null, [0].concat(observations.map(function (item) {
+        return Number(item.numeric_projection.plot_value);
+      })));
+      var maximum = Math.max.apply(null, [0].concat(observations.map(function (item) {
+        return Number(item.numeric_projection.plot_value);
+      })));
       var span = maximum - minimum || 1;
       var row = el("div", "kz-a-bar-row kz-a-observation-group");
       row.setAttribute("data-product-id", first.product_id);
@@ -807,6 +829,8 @@
       row.appendChild(label);
       var bars = el("div", "kz-a-bar-row__bars");
       observations.forEach(function (item) {
+        var projection = item.numeric_projection;
+        var projectedValue = Number(projection.plot_value);
         var lane = el("div", "kz-a-bar-lane");
         lane.setAttribute("data-row-id", item.row_id);
         var observationButton = el("button", "kz-a-product-trigger", item.arm_detail || item.arm);
@@ -821,15 +845,15 @@
         zero.style.left = ((0 - minimum) / span * 100) + "%";
         track.appendChild(zero);
         var bar = el("div", "kz-a-bar" + (item.arm === "对照组" ? " kz-a-bar--control" : ""));
-        bar.style.left = ((Math.min(0, item.value) - minimum) / span * 100) + "%";
-        bar.style.width = (Math.abs(item.value) / span * 100) + "%";
-        bar.title = (item.arm_detail || item.arm) + " " + item.value + unitSuffix(item.unit);
+        bar.style.left = ((Math.min(0, projectedValue) - minimum) / span * 100) + "%";
+        bar.style.width = (Math.abs(projectedValue) / span * 100) + "%";
+        bar.title = (item.arm_detail || item.arm) + " " + projectedValue + unitSuffix(projection.plot_unit);
         track.appendChild(bar);
         lane.appendChild(track);
-        lane.appendChild(el("strong", "kz-a-observation-value", item.value + unitSuffix(item.unit)));
+        lane.appendChild(el("strong", "kz-a-observation-value", projectedValue + unitSuffix(projection.plot_unit)));
         bars.appendChild(lane);
       });
-      bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(first.unit)));
+      bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(firstProjection.plot_unit)));
       row.appendChild(bars); host.appendChild(row);
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");
@@ -845,6 +869,9 @@
   function renderSafety(host) {
     host.innerHTML = "";
     var rows = safetyRowsForView(host.getAttribute("data-product-scope"));
+    rows = rows.filter(function (item) {
+      return item.numeric_projection && item.numeric_projection.renderable;
+    });
     if (!rows.length) {
       host.appendChild(el("div", "kz-empty", "当前筛选没有公开安全性观察。"));
       return;
@@ -877,20 +904,30 @@
         cell.setAttribute("data-heat-key", safetyTermKey(record));
         cell.setAttribute("data-heat-product", productName(record.product_id));
         cell.setAttribute("data-heat-event", safetyTermLabel(safetyTermKey(record)));
-        var eventLabel = el("span", "", record.category + "｜" + safetyTermLabel(safetyTermKey(record)));
+        // 独立复核 A r42（issue-2）：分流行事件列带原测量标题，可区分不同测量
+        var eventLabel = el("span", "", record.category + "｜"
+          + (record.measure_label || safetyTermLabel(safetyTermKey(record))));
         eventLabel.setAttribute("data-heat-label", "event");
         cell.appendChild(eventLabel);
         var value = el("strong", "kz-a-heat-value", safetyDisplayValue(record));
-        if (numericValue(record.value) && isPercentUnit(record.unit) && record.value >= 0 && record.value <= 100) {
-          value.style.background = color(record.value, 0, 100);
-          value.style.color = record.value > 55 ? "#fff" : "#17130f";
+        var projection = record.numeric_projection;
+        if (projection && projection.renderable && projection.plot_unit === "%"
+            && numericValue(projection.plot_value)
+            && projection.plot_value >= 0 && projection.plot_value <= 100) {
+          value.style.background = color(projection.plot_value, 0, 100);
+          value.style.color = projection.plot_value > 55 ? "#fff" : "#17130f";
         }
         cell.appendChild(value);
         if (record.numerator != null) {
           cell.appendChild(el("small", "", record.numerator + "/" + record.denominator + "人"));
         }
+        var edit = userEdits[record.row_id];
+        if (edit) {
+          cell.appendChild(el("small", "kz-user-edit-status", edit.status_label_zh));
+        }
         cell.setAttribute("aria-label", productName(record.product_id) + "："
-          + safetyTermLabel(safetyTermKey(record)) + " " + safetyDisplayValue(record)
+          + (record.measure_label || safetyTermLabel(safetyTermKey(record))) + " " + safetyDisplayValue(record)
+          + (edit ? "，" + edit.status_label_zh : "")
           + "，" + record.time_window + "，打开产品档案");
         cells.appendChild(cell);
       });
@@ -905,15 +942,17 @@
     var byProduct = {};
     points.forEach(function (point) { byProduct[point.product.id] = point; });
     var rows = document.querySelectorAll("[data-matrix-product]");
+    var sizeHeading = document.querySelector("[data-matrix-size-heading]");
+    if (sizeHeading) sizeHeading.textContent = points.length ? points[0].sizeBasis : "样本量口径";
     for (var i = 0; i < rows.length; i += 1) {
       var productId = rows[i].getAttribute("data-matrix-product");
       var point = byProduct[productId];
       var values = point ? {
-        treatment: point.treatment.toFixed(1) + "%",
-        control: point.control.toFixed(1) + "%",
+        treatment: (typeof point.treatment === "number" ? point.treatment.toFixed(1) : String(point.treatment ?? "")),
+        control: (typeof point.control === "number" ? point.control.toFixed(1) : String(point.control ?? "")),
         teae: safetyDisplayValue(point.teaeRecord),
         sae: safetyDisplayValue(point.saeRecord),
-        sample: String(point.trial.sample_size)
+        sample: String(point.sizeValue) + "（" + point.sizeBasis + "）"
       } : { treatment: "未纳入当前矩阵", control: "—", teae: "—", sae: "—", sample: "—" };
       Object.keys(values).forEach(function (key) {
         var cell = rows[i].querySelector('[data-matrix-value="' + key + '"]');
@@ -969,17 +1008,29 @@
       var eventRecord = safetyRecordFor(p.id, termKey, pair.trial_id, safetyArmDetail, sourceRows);
       var teaeRecord = safetyRecordFor(p.id, "any_teae", pair.trial_id, safetyArmDetail, sourceRows);
       var saeRecord = safetyRecordFor(p.id, "any_sae", pair.trial_id, safetyArmDetail, sourceRows);
-      var eventRate = eventRecord && numericValue(eventRecord.value) ? eventRecord.value : null;
-      if (!trial || eventRate == null || (!useTotalSample && trial.treatment_sample_size == null)) return;
+      var safetyProjection = eventRecord && eventRecord.numeric_projection;
+      var eventRate = safetyProjection && safetyProjection.renderable
+        && safetyProjection.plot_unit === "%" ? Number(safetyProjection.plot_value) : null;
+      if (!trial || eventRate == null) return;
+      if (!useTotalSample && trial.treatment_sample_size == null) return;
       var treatmentRow = pair.rows["治疗组"] || pair.rows[Object.keys(pair.rows)[0]];
       var controlRow = pair.rows["对照组"] || null;
-      var treatment = treatmentRow.value;
-      var control = controlRow ? controlRow.value : null;
+      var treatmentProjection = treatmentRow.numeric_projection;
+      var controlProjection = controlRow && controlRow.numeric_projection;
+      if (!treatmentProjection || !treatmentProjection.renderable) return;
+      if (useDifference && (!controlProjection || !controlProjection.renderable
+          || controlProjection.facet_key !== treatmentProjection.facet_key)) return;
+      var treatment = Number(treatmentProjection.plot_value);
+      var control = controlProjection ? Number(controlProjection.plot_value) : null;
+      var pointN = useTotalSample ? trial.sample_size : trial.treatment_sample_size;
+      if (!(pointN > 0)) return;
       points.push({
         product: p,
         treatment: treatment,
+        unit: treatmentProjection.plot_unit || "",
         control: control,
-        x: (useDifference && control != null) ? treatment - control : treatment,
+        x: useDifference ? treatment - control : treatment,
+        xFacet: treatmentProjection.facet_key,
         eventRate: eventRate,
         eventRecord: eventRecord,
         teaeRecord: teaeRecord,
@@ -987,32 +1038,63 @@
         safetyTimeWindow: eventRecord.time_window || "",
         safetyArmDetail: safetyArmDetail,
         efficacyTimepoint: pair.timepoint,
-        trial: trial
+        trial: trial,
+        sizeValue: pointN,
+        sizeBasis: useTotalSample ? "全部随机样本量" : "治疗组样本量"
       });
     });
+    if (points.length) {
+      var activeFacet = points[0].xFacet;
+      points = points.filter(function (point) { return point.xFacet === activeFacet; });
+    }
     updateMatrixTable(points);
     if (!points.length) {
-      if (coverage) coverage.innerHTML = "当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。";
-      host.appendChild(el("div", "kz-empty", "当前筛选下缺少可同时量化疗效、安全性和样本量的公开数据。"));
+      // 会商 P0 #3：空态必须告知缺哪一轴，而非笼统一句话。
+      var missingAxes = [];
+      var haveEfficacy = 0, haveSafety = 0, haveSize = 0;
+      candidateProducts.forEach(function (p) {
+        var pair = efficacyPairFor(p.id, preferredEndpoints(p.id), []);
+        if (!pair) return;
+        haveEfficacy += 1;
+        var trial = trialById(pair.trial_id);
+        var safetyArm = selected.arm && selected.arm.length ? selected.arm[0] : "治疗组";
+        var safetyArmDetail = pair.rows[safetyArm] ? pair.rows[safetyArm].arm_detail : null;
+        var rec = safetyRecordFor(p.id, termKey, pair.trial_id, safetyArmDetail, sourceRows);
+        if (rec && rec.numeric_projection && rec.numeric_projection.renderable
+            && rec.numeric_projection.plot_unit === "%") haveSafety += 1;
+        if (trial && (useTotalSample ? trial.sample_size > 0 : trial.treatment_sample_size > 0)) haveSize += 1;
+      });
+      if (!haveEfficacy) missingAxes.push("疗效轴：当前筛选下没有可量化为主要观察的疗效终点");
+      if (!haveSafety) missingAxes.push("安全性轴：登记只有组别计数、没有可比较的发生率（%）");
+      if (!haveSize) missingAxes.push("样本量轴：登记未按治疗组披露样本量");
+      var diag = missingAxes.length
+        ? "矩阵需要同时具备三轴数据；本次缺失——" + missingAxes.join("；") + "。"
+        : "当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。";
+      if (coverage) coverage.innerHTML = diag;
+      host.appendChild(el("div", "kz-empty", diag));
       return;
     }
     var shownProducts = points.map(function (point) { return point.product; });
-    var xMin = useDifference ? -100 : 0, xMax = 100;
-    var allEventRates = safety.filter(function (record) {
-      return safetyTermKey(record) === termKey && isPercentUnit(record.unit) && numericValue(record.value);
-    }).map(function (record) { return record.value; });
+    var efficacyValues = points.map(function (point) { return point.x; });
+    var xDataMin = Math.min.apply(null, efficacyValues);
+    var xDataMax = Math.max.apply(null, efficacyValues);
+    var xPadding = Math.max((xDataMax - xDataMin) * 0.1, Math.abs(xDataMax || 1) * 0.05, 0.5);
+    var xMin = Math.min(0, xDataMin - xPadding);
+    // 独立复核 A r46（issue-3）：疗效轴上限按实测数据驱动（非固定 100），
+    // 非百分比单位或越界值不再逸出绘图区
+    var xMax = xDataMax + xPadding;
+    var allEventRates = points.map(function (point) { return point.eventRate; });
     var yMin = 0, yMax = termKey === "any_sae"
       ? Math.max(10, Math.ceil(Math.max.apply(null, [0].concat(allEventRates)) / 10) * 10) : 100;
     var maxN = Math.max.apply(null, points.map(function (point) {
-      if (!point.trial) return 1;
-      return useTotalSample ? point.trial.sample_size : point.trial.treatment_sample_size;
+      return point.sizeValue;
     }));
     for (var i = 0; i < points.length; i += 1) {
       var point = points[i], p = point.product;
       var xPosition = 14 + 72 * (point.x - xMin) / (xMax - xMin);
       var yPosition = 14 + 72 * (yMax - point.eventRate) / (yMax - yMin);
       var trial = point.trial;
-      var n = trial ? (useTotalSample ? trial.sample_size : trial.treatment_sample_size) : 1;
+      var n = point.sizeValue;
       var size = 80 * Math.sqrt(n / maxN);
       var bubble = el("button", "kz-a-bubble", String(i + 1));
       bubble.type = "button";
@@ -1023,20 +1105,25 @@
       bubble.setAttribute("data-product-id", p.id);
       bubble.setAttribute("data-product", p.name);
       bubble.setAttribute("data-efficacy-value", point.x.toFixed(1));
-      bubble.setAttribute("data-event-rate", point.eventRate.toFixed(1));
+      bubble.setAttribute("data-event-rate", (typeof point.eventRate === "number" ? point.eventRate.toFixed(1) : ""));
       bubble.setAttribute("data-trial-id", trial.id);
       bubble.setAttribute("data-arm-detail", point.safetyArmDetail || "");
       bubble.setAttribute("data-event-key", termKey);
       bubble.setAttribute("data-disclosure-state", point.eventRecord.disclosure_state || "已公开");
       bubble.setAttribute("data-original-term", point.eventRecord.original_term || point.eventRecord.term || "");
       bubble.setAttribute("data-safety-time-window", point.safetyTimeWindow);
-      bubble.title = trial.display_id + "｜" + efficacyTimepointLabel(point.efficacyTimepoint) + "疗效 " + point.x.toFixed(1) + "%｜" + termLabel + " " + point.eventRate + "%｜样本量 " + n
+      bubble.setAttribute("data-size-basis", point.sizeBasis);
+      bubble.title = trial.display_id + "｜" + efficacyTimepointLabel(point.efficacyTimepoint) + "疗效 " + point.x.toFixed(1) + unitSuffix(point.unit) + "｜" + termLabel + " " + point.eventRate + "%｜" + point.sizeBasis + " " + n
         + (point.safetyTimeWindow ? "｜观察窗 " + point.safetyTimeWindow : "");
       bubble.setAttribute("aria-label", p.name + "：" + bubble.title + "；点击查看产品洞察");
       plot.appendChild(bubble);
     }
+    // 独立复核 A r47（issue-2）：刻度后缀随轴口径——疗效轴非百分比时
+    // 不再硬标 "%"
+    var efficacyUnits = points.map(function (point) { return String(point.unit || ""); }).filter(Boolean);
+    var xUnitSuffix = efficacyUnits.length ? unitSuffix(efficacyUnits[0]) : "";
     [0, 0.25, 0.5, 0.75, 1].forEach(function (ratio) {
-      var xTick = el("span", "kz-a-axis-tick kz-a-axis-tick--x", (xMin + ratio * (xMax - xMin)).toFixed(1) + "%");
+      var xTick = el("span", "kz-a-axis-tick kz-a-axis-tick--x", (xMin + ratio * (xMax - xMin)).toFixed(1) + xUnitSuffix);
       xTick.style.left = (14 + ratio * 72) + "%"; plot.appendChild(xTick);
       var yTick = el("span", "kz-a-axis-tick kz-a-axis-tick--y", (yMax - ratio * (yMax - yMin)).toFixed(1) + "%");
       yTick.style.bottom = (14 + ratio * 72) + "%"; plot.appendChild(yTick);
@@ -1078,26 +1165,88 @@
   }
   function renderLandscape(host) {
     host.innerHTML = "";
-    var stages = ["II期及更早", "III期", "申报或上市", "历史观察"];
-    var targets = products.map(function (p) { return p.target; }).filter(function (value, index, all) { return all.indexOf(value) === index; });
+    var stageOrder = ["临床前", "I期", "I/II期", "II期", "II/III期", "III期", "III/IV期", "IV期", "未知"];
+    function stageForProduct(product) {
+      var phase = String(product.phase || "").trim().replace(/\s+/g, "");
+      if (/临床前|preclinical/i.test(phase)) return "临床前";
+      if (/III\/IV|III-IV|3\/4/i.test(phase)) return "III/IV期";
+      if (/II\/III|II-III|2\/3/i.test(phase)) return "II/III期";
+      if (/I\/II|I-II|1\/2/i.test(phase)) return "I/II期";
+      if (/IV期|phaseIV/i.test(phase)) return "IV期";
+      if (/III期|phaseIII/i.test(phase)) return "III期";
+      if (/II期|phaseII/i.test(phase)) return "II期";
+      if (/I期|phaseI/i.test(phase)) return "I期";
+      return "未知";
+    }
+    var scopedProducts = products.filter(function (product) {
+      if (selected.target && selected.target.length && selected.target.indexOf(product.target) === -1) return false;
+      if (selected.phase && selected.phase.length && selected.phase.indexOf(product.phase) === -1) return false;
+      if (selected.product && selected.product.length && selected.product.indexOf(product.name) === -1) return false;
+      return true;
+    });
+    var presentStages = {};
+    scopedProducts.forEach(function (product) { presentStages[stageForProduct(product)] = true; });
+    var stages = stageOrder.filter(function (stage) { return presentStages[stage]; });
+    var targets = scopedProducts.map(function (p) { return p.target; }).filter(function (value, index, all) { return all.indexOf(value) === index; });
+    if (!scopedProducts.length) {
+      host.appendChild(el("p", "kz-a-empty", "当前筛选没有可绘制项目；未生成空坐标轴。"));
+      host.setAttribute("data-landscape-mode", window.innerWidth >= 1200 ? "matrix" : "compact");
+      host.setAttribute("data-view-digest", "无数据");
+      return;
+    }
+    var useMatrix = window.innerWidth >= 1200;
+    host.setAttribute("data-landscape-mode", useMatrix ? "matrix" : "compact");
     var wrapper = el("div", "kz-a-landscape-grid");
     wrapper.style.setProperty("--stage-count", stages.length);
+    var core = el("section", "kz-a-landscape-band kz-a-landscape-core");
+    core.setAttribute("aria-label", "当前完整宇宙与阶段分布");
+    var overview = el("div", "kz-a-landscape-overview");
+    overview.appendChild(el("strong", "", "当前完整宇宙"));
+    overview.appendChild(el("span", "", scopedProducts.length + "项目"));
+    overview.appendChild(el("span", "", targets.length + "靶点"));
+    overview.appendChild(el("span", "", stages.length + "阶段"));
+    core.appendChild(overview);
+    var distribution = el("div", "kz-a-landscape-core__stages");
+    distribution.setAttribute("aria-label", "阶段项目分布");
+    var maximumStageCount = Math.max.apply(null, stages.map(function (stage) {
+      return scopedProducts.filter(function (product) { return stageForProduct(product) === stage; }).length;
+    }));
+    stages.forEach(function (stage) {
+      var count = scopedProducts.filter(function (product) { return stageForProduct(product) === stage; }).length;
+      var item = el("div", "kz-a-landscape-core__stage");
+      item.setAttribute("data-landscape-stage-summary", stage);
+      item.setAttribute("data-landscape-stage", stage);
+      item.setAttribute("data-count", String(count));
+      item.appendChild(el("strong", "", stage));
+      item.appendChild(el("span", "", count + "项目"));
+      var meter = el("i", "");
+      meter.setAttribute("aria-hidden", "true");
+      meter.style.setProperty("--stage-share", String(count / maximumStageCount));
+      item.appendChild(meter);
+      distribution.appendChild(item);
+    });
+    core.appendChild(distribution);
+    host.appendChild(core);
     wrapper.appendChild(el("div", "kz-a-landscape-head", "靶点"));
-    stages.forEach(function (stage) { wrapper.appendChild(el("div", "kz-a-landscape-head", stage)); });
-    function stageForProduct(product) {
-      if (/终止|暂停|撤回|停止|清算/.test(product.status)) return "历史观察";
-      if (/申报|上市|获批|NDA/.test(product.phase + product.status)) return "申报或上市";
-      if (/III期/.test(product.phase)) return "III期";
-      return "II期及更早";
-    }
-    var active = visibleProductNames();
+    stages.forEach(function (stage) {
+      var heading = el("div", "kz-a-landscape-head", stage);
+      heading.setAttribute("data-landscape-stage", stage);
+      wrapper.appendChild(heading);
+    });
     targets.forEach(function (target) {
-      wrapper.appendChild(el("strong", "kz-a-landscape-target", target));
+      var band = el("details", "kz-a-landscape-target-band");
+      band.open = useMatrix;
+      var targetProducts = scopedProducts.filter(function (product) { return product.target === target; });
+      var targetSummary = el("summary", "kz-a-landscape-target");
+      targetSummary.appendChild(el("strong", "", target));
+      targetSummary.appendChild(el("span", "", targetProducts.length + " 个项目"));
+      band.appendChild(targetSummary);
+      var cells = el("div", "kz-a-landscape-band__cells");
       stages.forEach(function (stage) {
         var cell = el("div", "kz-a-landscape-cell");
-        products.filter(function (p) {
-          return p.target === target && stageForProduct(p) === stage &&
-            (Object.keys(active).length === 0 || active[p.name]);
+        cell.setAttribute("data-landscape-stage", stage);
+        scopedProducts.filter(function (p) {
+          return p.target === target && stageForProduct(p) === stage;
         }).forEach(function (p) {
           var chip = el("button", "kz-a-landscape-product", p.name);
           chip.type = "button";
@@ -1109,11 +1258,13 @@
           cell.appendChild(chip);
         });
         if (!cell.children.length) cell.appendChild(el("span", "kz-a-landscape-empty", "—"));
-        wrapper.appendChild(cell);
+        cells.appendChild(cell);
       });
+      band.appendChild(cells);
+      wrapper.appendChild(band);
     });
     host.appendChild(wrapper);
-    host.setAttribute("data-view-digest", Object.keys(active).sort().join("|") || "全部产品");
+    host.setAttribute("data-view-digest", scopedProducts.map(function (product) { return product.id; }).sort().join("|"));
   }
   function renderPortfolio(host) {
     host.innerHTML = "";
@@ -1138,7 +1289,7 @@
       item.appendChild(el("span", "", trial.region + "｜" + trial.phase));
       item.appendChild(el("strong", "", productName(trial.product_id)));
       item.appendChild(el("b", "", trial.name));
-      item.appendChild(el("small", "", trial.role + "｜" + trial.status + "｜n=" + trial.sample_size));
+      item.appendChild(el("small", "", trial.role + "｜" + trial.status + "｜样本量" + (trial.sample_size == null ? "未公开" : "n=" + trial.sample_size)));
       wrapper.appendChild(item);
     });
     host.appendChild(wrapper);
@@ -1184,6 +1335,24 @@
     content.innerHTML = "";
     content.appendChild(el("h3", "", title));
     content.appendChild(el("p", "", "数据截至 " + formatCutoff(data.data_cutoff)));
+    var editedRows = safety.concat(efficacy).filter(function (row) {
+      return userEdits[row.row_id] && (!productScope || row.product_id === productScope);
+    });
+    if (editedRows.length) {
+      content.appendChild(el("h3", "", "用户修订与原来源"));
+      var editList = el("ul", "kz-a-evidence-list");
+      editedRows.forEach(function (row) {
+        var edit = userEdits[row.row_id];
+        var locator = edit.source_locator || { field_path: row.source_field_path || "定位见证据链" };
+        editList.appendChild(el("li", "kz-user-edit-evidence",
+          edit.status_label_zh + "｜当前用户修订值：" + edit.current_value +
+          "｜原来源值：" + edit.original_value +
+          "｜原来源原文：" + (row.source_text || "原文未提供") +
+          "｜来源版本：" + edit.source_version_id +
+          "｜原定位：" + JSON.stringify(locator)));
+      });
+      content.appendChild(editList);
+    }
     content.appendChild(el("h3", "", "涉及试验"));
     var trialList = el("ul", "kz-a-evidence-list");
     trials.filter(function (trial) { return !productScope || trial.product_id === productScope; }).forEach(function (trial) {
@@ -1320,7 +1489,7 @@
       var count = countDim && selected[countDim] ? selected[countDim].length : 0;
       var total = counts[s].closest("[data-filter-total]");
       var totalCount = total ? total.getAttribute("data-filter-total") : String(products.length);
-      counts[s].textContent = count ? "已选择 " + count + " 项" : "默认显示全部 " + totalCount + " 项";
+      counts[s].textContent = count ? "已选择 " + count + " 项" : "全部 " + totalCount + " 项";
     }
     var summaries = document.querySelectorAll("[data-filter-summary]");
     for (var u = 0; u < summaries.length; u += 1) summaries[u].textContent = Object.keys(selected).length ? "筛选范围：已选择" : "筛选范围：全部";
@@ -1338,9 +1507,108 @@
     applyPagedTables(resetPage !== false);
     renderCharts();
   }
+  function savedViewStorageKey() {
+    var pageId = document.body.getAttribute("data-page-id") || "unknown";
+    var reportVersion = document.body.getAttribute("data-report-version") || "unknown";
+    var sitePath = (window.location.pathname || "").replace(/\/products\/[^/]+\.html$/i, "");
+    return "ci-report-a-view:1:" + sitePath + ":" + reportVersion + ":" + pageId;
+  }
+  function currentViewPayload() {
+    var allowedDimensions = {};
+    document.querySelectorAll("[data-filter-dimension]").forEach(function (node) {
+      allowedDimensions[node.getAttribute("data-filter-dimension")] = true;
+    });
+    var query = {};
+    Object.keys(selected).forEach(function (dimension) {
+      if (allowedDimensions[dimension]) query[dimension] = selected[dimension].slice();
+    });
+    if (controls.length) {
+      query.matrix_x = [controls[0].selectedIndex === 1 ? "difference" : "value"];
+      query.matrix_y = [controls[1].selectedIndex === 1 ? "sae" : "teae"];
+      query.matrix_size = [controls[2].selectedIndex === 1 ? "total" : "treatment"];
+    }
+    return {schema_version: "1.0", report: "A", query: query};
+  }
+  function setViewStatus(message) {
+    var status = document.querySelector("[data-a-view-status]");
+    if (status) status.textContent = message;
+  }
+  function saveCurrentView() {
+    try {
+      window.localStorage.setItem(savedViewStorageKey(), JSON.stringify(currentViewPayload()));
+      setViewStatus("已保存当前视图到本机");
+    } catch (_error) {
+      setViewStatus("浏览器未允许保存本机视图");
+    }
+  }
+  function clearSavedView() {
+    try { window.localStorage.removeItem(savedViewStorageKey()); } catch (_error) { /* no-op */ }
+    setViewStatus("已清除本机保存的视图");
+  }
+  function restoreSavedView(params) {
+    var scientificKeys = {};
+    document.querySelectorAll("[data-filter-dimension]").forEach(function (node) {
+      scientificKeys[node.getAttribute("data-filter-dimension")] = true;
+    });
+    scientificKeys.matrix_x = scientificKeys.matrix_y = scientificKeys.matrix_size = true;
+    var hasExplicitState = false;
+    params.forEach(function (_value, key) { if (scientificKeys[key]) hasExplicitState = true; });
+    if (hasExplicitState) return false;
+    var raw;
+    try { raw = window.localStorage.getItem(savedViewStorageKey()); } catch (_error) { return false; }
+    if (!raw) return false;
+    try {
+      var saved = JSON.parse(raw);
+      if (!saved || saved.schema_version !== "1.0" || saved.report !== "A" || !saved.query) return false;
+      Object.keys(saved.query).forEach(function (key) {
+        if (!scientificKeys[key] || !Array.isArray(saved.query[key])) return;
+        saved.query[key].forEach(function (value) {
+          if (typeof value === "string") params.append(key, value);
+        });
+      });
+      setViewStatus("已恢复本机保存的视图");
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  }
+  function configureReturnLink(params) {
+    var link = document.querySelector("[data-a-return]");
+    if (!link) return;
+    var requested = params.get("return");
+    if (!requested) return;
+    try {
+      var destination = new URL(requested, window.location.href);
+      var sameFileContext = window.location.protocol === "file:" && destination.protocol === "file:";
+      if (!sameFileContext && destination.origin !== window.location.origin) return;
+      link.href = destination.href;
+    } catch (_error) { /* retain template fallback */ }
+  }
+  function configureResponsiveFilters() {
+    var disclosures = document.querySelectorAll("details[data-responsive-filter]");
+    for (var i = 0; i < disclosures.length; i += 1) disclosures[i].open = window.innerWidth > 1100;
+    var workspace = document.querySelector("details[data-responsive-workspace]");
+    if (workspace) workspace.open = window.innerWidth > 560;
+  }
   document.addEventListener("click", function (event) {
     var target = event.target;
     if (!(target instanceof Element)) return;
+    var cellDetailToggle = target.closest("[data-a-cell-detail-toggle]");
+    if (cellDetailToggle) {
+      var cellDetail = cellDetailToggle.nextElementSibling;
+      if (cellDetail) {
+        var expanded = cellDetailToggle.getAttribute("aria-expanded") === "true";
+        cellDetailToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+        cellDetail.hidden = expanded;
+      }
+      return;
+    }
+    var dossierLink = target.closest(".kz-a-insight-dossier-link");
+    if (dossierLink && productInsightId) {
+      event.preventDefault();
+      window.location.href = productDossierNavigationHref(productInsightId);
+      return;
+    }
     var productTrigger = target.closest("[data-a-product-focus]");
     if (productTrigger) {
       event.preventDefault();
@@ -1392,6 +1660,8 @@
     var evidence = target.closest("[data-open-evidence]");
     if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"));} }
     if (target.closest("[data-close-evidence]")) { var p=document.getElementById("data-basis-panel");if(p)p.hidden=true; }
+    if (target.closest("[data-a-save-view]")) saveCurrentView();
+    if (target.closest("[data-a-clear-view]")) clearSavedView();
   });
   document.addEventListener("keydown", function (event) {
     var trigger = event.target && event.target.closest
@@ -1406,6 +1676,8 @@
     var host=document.querySelector('[data-module="matrix"] .kz-chart'); if(host){host.setAttribute("data-view-digest", Array.prototype.map.call(controls,function(x){return x.selectedIndex;}).join("-"));applyFilters();}
   });
   var params = new URLSearchParams(window.location.search);
+  configureReturnLink(params);
+  restoreSavedView(params);
   var initialProductFocus = params.get("focus");
   if (initialProductFocus && productById(initialProductFocus)) productInsightId = initialProductFocus;
   var parameterDimensions = {};
@@ -1433,9 +1705,10 @@
     reset.type = "button"; reset.setAttribute("data-filter-reset", "");
     tools.appendChild(reset); tools.appendChild(el("span", "", "筛选范围：全部"));
     tools.lastChild.setAttribute("data-filter-summary", "");
-    var grid = filterRoots[f].querySelector(".kz-a-filter-grid") || filterRoots[f].querySelector("[data-filter-dimension]");
+    var grid = filterRoots[f].querySelector(".kz-a-filter-grid") || filterRoots[f].querySelector(".kz-a-core-filters") || filterRoots[f].querySelector("[data-filter-dimension]");
     if (grid) grid.insertAdjacentElement("afterend", tools);
   }
+  configureResponsiveFilters();
   window.addEventListener("popstate", function () {
     var focus = new URLSearchParams(window.location.search || "").get("focus");
     if (focus && productById(focus)) {

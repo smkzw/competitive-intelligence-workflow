@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "scope": "W00 reproducible handoff; not a release or RC source set",
+  "repository": {
+    "head": "2df24bb441e555f20b233ad2011b4ffd3610655b",
+    "tree": "eb1901963d514bf64fe9c1af0cbfc075578b3925",
+    "branch": "main",
+    "tracked_dirty_before_w00": [],
+    "dependency_lock": {
+      "path": "uv.lock",
+      "sha256": "21ec076831667b407c7fd57bd46e10e0c2724d2a7a439b81c361fea2e5147db8"
+    }
+  },
+  "delivery_packet": {
+    "copy_rule": "Copy only paths enumerated by delivery-manifest.json plus W00 output evidence; do not copy whole runs.",
+    "manifest_path": "packets/2026-09-22-sol-delivery/evidence/delivery-manifest.json",
+    "manifest_sha256": "b8d573298d0b084b3c62663b670a0cc96006b9a84fca6532b93a1913fe3eae2a",
+    "manifest_entries_verified_before_w00": 45,
+    "manifest_mismatches_before_w00": 0,
+    "work_package": {
+      "path": "packets/2026-09-22-sol-delivery/work_packages/W00.md",
+      "sha256": "1da6795464f7f1db10abf50800e2e145523e4164a459d4a3ab595d423a746f65"
+    },
+    "expert_checksum_entries_verified": 10,
+    "expert_checksum_mismatches": 0
+  },
+  "tracked_pnh_derivation_inputs": [
+    {"path": "packets/2026-09-11-pnh-vertical/pnh-a-payload.json", "sha256": "766bba8329aa33a3d08f4efc6bf9e99bf40f4d8fcd77e70a864996ecf0fbcead", "bytes": 1881022},
+    {"path": "packets/2026-09-11-pnh-vertical/pnh-a-payload.derivation.json", "sha256": "489cac2727d3cde35207b8de6f5ba7b0a5a2722b9d0ff3a5ffd964cdce892c7a", "bytes": 15917},
+    {"path": "packets/2026-09-11-pnh-vertical/pnh-audit-package.json", "sha256": "0ea5aec23cdf1ae7ba7efdb58d803173d2646898464e64f1f82758e5092f0f11", "bytes": 30302},
+    {"path": "packets/2026-09-11-pnh-vertical/universe-derivation.json", "sha256": "0b9884ea39fd684c25b602cb186142d329176c63570dd9f06caf1822c5967bcc", "bytes": 117407}
+  ],
+  "required_untracked_cas": [
+    {"path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/1e/1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98.bin", "sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98", "bytes": 2811140},
+    {"path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/c3/c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3.bin", "sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3", "bytes": 2871697}
+  ],
+  "candidate": {
+    "path": "runs/pnh-vertical/abc-v106",
+    "run_id": "run_b6d6d289715d3b558b641f47",
+    "current_run_sha256": "d077542d42da59b5f462ec84c82997441bf14b78dc0f6b57a5d447c90887e816",
+    "research_package_submission_sha256": "3782ef815e2020f46e5d907fa05690902683b3f536106d8652c0b0418a6eda0e",
+    "input_packages": {
+      "A": "867ca66458df8a7343889bd9a601b567c12e2dfb5e069835a865b416bdbb9607",
+      "B": "8d240d2ebeee273a9bc4d7dc109b9774e9a1811651ca2182c25dc0eea53b83e0",
+      "C": "40dadaeecf383b6aedc11a9f0f84316f9dd90c62764bb7662b3fe739d4cd5e05"
+    },
+    "html": {
+      "A": {"pages": 56, "manifest_sha256": "139f3085d9890cafd8d3514e2d6fa61ef4a160a6c9cf5aa0b539e03b85013d7d"},
+      "B": {"pages": 70, "manifest_sha256": "c2f9e20c42a204150e97332642ed2b1d2ba02bb30d3d905fff64766b48fea080"},
+      "C": {"pages": 18, "manifest_sha256": "76927bd134aa6e3495e95f1a5deb436a3ce2e28cef799ebc01c6b29b00523aea"}
+    },
+    "scientific_verdicts": {
+      "A": {"verdict": "veto", "sha256": "d912d39be4cc41d5876faed6bdac23c0801d9df0ded1a2ec75c061ee751bbae5", "candidate_snapshot_id": "report-snapshot_ac46182f135b95f031d966ae", "candidate_content_digest": "9dce8bf565192049f9d74cd4d039339a5599b7c46cf5f8082108d396bbe20639"},
+      "B": {"verdict": "veto", "sha256": "6350cf9b84c7f2b93e5a1d70fdcfd57bd1acf2f3dd10db81659607de4b61f3b0", "candidate_snapshot_id": "report-snapshot_bd4b82d9194b6db8bb6e792f", "candidate_content_digest": "767710e74bdbb34992037157417b792216f11f56e78c8f279afdaa52aa12d2ef"},
+      "C": {"verdict": "veto", "sha256": "46e12a1c3d219d642ac23c22442391cc16480e93b76a73c31ed540a89275f28f", "candidate_snapshot_id": "report-snapshot_5b299d9874b99125329158f7", "candidate_content_digest": "ff65145b9e8117d4722a8c4c12a3eb4f47f4ec0ae781f934164ad85b6138fa83"}
+    }
+  },
+  "excluded": [
+    "whole runs/ copies",
+    "prior abc-vNN candidates",
+    "screenshots and caches not enumerated by delivery-manifest.json",
+    "credentials, sessions, and local absolute paths"
+  ]
+}

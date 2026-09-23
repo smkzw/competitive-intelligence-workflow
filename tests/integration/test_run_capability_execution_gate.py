@@ -16,8 +16,11 @@ from ci_workflow.application.capability_preflight import (
     run_capability_preflight,
     selection_from_project,
 )
-from ci_workflow.application.project_service import create_project_workspace
-from ci_workflow.application.run_service import run_project
+from ci_workflow.application.project_service import (
+    create_project_workspace,
+    verify_project_workspace,
+)
+from ci_workflow.application.run_service import ContractConfigError, RunContext, run_project
 from ci_workflow.application.yaozh_access import answer_yaozh_access
 from ci_workflow.domain.contracts import create_project_contract
 from ci_workflow.storage.event_store import EventStore
@@ -221,3 +224,32 @@ def test_reused_runtime_probe_discards_previous_flight_cache(tmp_path: Path) -> 
 
     assert calls_after_first > 0
     assert probe.real_calls == calls_after_first * 2
+
+
+def test_run_context_exposes_and_enforces_project_semantics_and_source_inputs(
+    tmp_path: Path,
+) -> None:
+    project = _project(tmp_path)
+    contract = verify_project_workspace(project).contract
+    source = project / "evidence/library/universe.json"
+    context = RunContext(
+        project_root=project,
+        contract=contract,
+        universe_input_path=source,
+    )
+    assert context.project_root == project.resolve()
+    assert context.indication == "重度哮喘"
+    assert context.reports == ("A",)
+    assert context.data_cutoff == contract.data_cutoff
+    assert context.source_input_paths == {"universe": source.resolve()}
+
+    other_project = create_project_contract(
+        indication="特应性皮炎", reports=["A"], outputs=["html"]
+    )
+    mismatched = RunContext(project_root=project, contract=other_project)
+    with pytest.raises(ContractConfigError, match="RunContext"):
+        run_project(
+            project,
+            run_context=mismatched,
+            capability_probe=StaticCapabilityProbe(),
+        )

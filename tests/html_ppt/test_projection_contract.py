@@ -106,10 +106,14 @@ def test_slide_counts_and_coverage_match_catalogs(contract: Mapping[str, Any]) -
         catalog = yaml.safe_load((CATALOG_DIR / f"{report}.yaml").read_text(encoding="utf-8"))
         page_ids = {page["id"] for page in catalog["pages"]}
         mapped = set(contract["coverage"][report].values())
-        missing = page_ids - mapped
+        non_portal = set(contract["non_portal_responsibilities"][report])
+        assert not (page_ids & non_portal), f"{report} 非门户责任不得进入真实页面 catalog"
+        portal_mapped = mapped - non_portal
+        missing = page_ids - portal_mapped
         assert not missing, f"{report} 未覆盖页面责任: {sorted(missing)}"
-        extra = mapped - page_ids
+        extra = portal_mapped - page_ids
         assert not extra, f"{report} 出现未知页面责任: {sorted(extra)}"
+        assert mapped - page_ids == non_portal
         slides = contract[ids_key]
         assert list(contract["coverage"][report]) == slides
         assert catalog["pages"][0]["id"] == "overview"
@@ -159,13 +163,11 @@ def test_report_b_modules_and_unpublished_gaps(contract: Mapping[str, Any]) -> N
         "亚组" not in str(row.get("endpoint_role") or "")
         for row in data["efficacy_views"]["facts"]
     )
-    appoint = next(
-        row
-        for row in data["matrix_view"]["comparison_rows"]
-        if row["trial_id"] == "nct04820530"
+    matrix_rows = data["matrix_view"]["rows"]
+    assert all(row["trial_id"] != "nct04820530" for row in matrix_rows)
+    assert matrix_rows[0]["treatment_projection"]["facet_key"] == (
+        matrix_rows[0]["control_projection"]["facet_key"]
     )
-    assert appoint["status"] == "not_applicable"
-    assert "单臂" in appoint["reason_zh"]
     unpublished = [
         row
         for row in data["disposition_views"]["facts"]
@@ -208,7 +210,7 @@ def test_report_c_observation_families_and_paths(contract: Mapping[str, Any]) ->
         "analysis_population",
     }
     assert required <= fields
-    assert contract["fail_close"]["C_min_design_paths"] == 2
+    assert contract["fail_close"]["C_min_design_paths"] == 1
     assert contract["fail_close"]["C_unique_best_forbidden"] is True
     path_slides = [
         slide_id
@@ -216,6 +218,7 @@ def test_report_c_observation_families_and_paths(contract: Mapping[str, Any]) ->
         if page_id == "design-patterns"
     ]
     assert path_slides == ["c-patterns", "c-path-1", "c-path-2"]
+    assert contract["compatibility"]["C_second_path_slide_is_not_a_render_gate"] is True
     identity_rows = [
         row
         for row in data["observations"]

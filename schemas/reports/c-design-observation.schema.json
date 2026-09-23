@@ -52,9 +52,12 @@
     },
     "field": {"type": "string", "minLength": 1},
     "endpoint_key": {"type": ["string", "null"], "minLength": 1},
+    "outcome_id": {"type": ["string", "null"], "minLength": 1},
+    "period": {"type": ["string", "null"], "minLength": 1},
     "source_field_name": {"type": "string", "minLength": 1},
     "source_field_definition": {"type": "string", "minLength": 1},
     "source_text": {"type": "string", "minLength": 1},
+    "display_text": {"type": ["string", "null"], "minLength": 1},
     "scale": {"type": ["string", "null"], "minLength": 1},
     "scale_version": {"type": ["string", "null"], "minLength": 1},
     "operator": {"type": ["string", "null"], "minLength": 1},
@@ -110,7 +113,13 @@
       "type": "array",
       "items": {"type": "string", "minLength": 1},
       "uniqueItems": true
-    }
+    },
+    "relationship_status": {
+      "type": ["string", "null"],
+      "enum": ["bound", "missing_arm_labels", "unknown_arm_label", null]
+    },
+    "relationship_reason": {"type": ["string", "null"], "minLength": 1},
+    "relationship_blocking": {"type": "boolean"}
   },
   "$defs": {
     "evidence_locator": {

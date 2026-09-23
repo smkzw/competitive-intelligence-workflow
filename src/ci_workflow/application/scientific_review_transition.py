@@ -248,14 +248,12 @@ def derive_scientific_source_refs(
                 for role in ("published_at", "effective_at", "first_disclosed_at")
             },
         )
-        locator_json = _canonical_json(capture.locator.model_dump(mode="json"))
-        fragment_id = stable_id(
-            "evidence-fragment", source_version_id, locator_json, content_digest
-        )
         source_facts = facts_by_source.get(capture.source_id, ())
         if not source_facts:
             continue
         fact_version_ids: list[str] = []
+        fragment_ids: list[str] = []
+        locator_refs: list[LocatorRef] = []
         for fact in source_facts:
             version_id = fact_version_by_ref.get(fact.fact_id)
             if version_id is None:
@@ -264,6 +262,21 @@ def derive_scientific_source_refs(
                 )
             if version_id not in fact_version_ids:
                 fact_version_ids.append(version_id)
+            locator_json = _canonical_json(fact.locator.model_dump(mode="json"))
+            fragment_id = stable_id(
+                "evidence-fragment",
+                source_version_id,
+                locator_json,
+                hashlib.sha256(fact.original_text.encode("utf-8")).hexdigest(),
+            )
+            if fragment_id not in fragment_ids:
+                fragment_ids.append(fragment_id)
+                locator_refs.append(
+                    LocatorRef(
+                        fragment_id=fragment_id,
+                        locator=LocatorDetail(**fact.locator.model_dump()),
+                    )
+                )
         claim_ids = [
             claim.claim_id
             for claim in claims
@@ -279,15 +292,10 @@ def derive_scientific_source_refs(
         refs.append(
             SourceRef(
                 source_version_id=source_version_id,
-                fragment_ids=(fragment_id,),
+                fragment_ids=tuple(fragment_ids),
                 claim_ids=tuple(claim_ids),
                 fact_version_ids=tuple(fact_version_ids),
-                locators=(
-                    LocatorRef(
-                        fragment_id=fragment_id,
-                        locator=LocatorDetail(**capture.locator.model_dump()),
-                    ),
-                ),
+                locators=tuple(locator_refs),
             )
         )
     return tuple(refs)
@@ -685,6 +693,25 @@ def promote_rendered_candidate(
         raise ScientificReviewTransitionError("科学晋级时间早于回执签发时间")
     if verdict.valid_until <= checked_at:
         raise ScientificReviewTransitionError("科学质控接受结论在晋级时已失效")
+    # A structurally self-consistent receipt is not authority.  Reopen the
+    # issuer-owned append-only record and bind it to the exact receipt bytes.
+    from ci_workflow.application.review_issuer import (
+        ReviewIssuanceError,
+        verify_receipt_issuance,
+    )
+
+    try:
+        issued = verify_receipt_issuance(
+            project_root,
+            context.report_kind.value,
+            checked_at=checked_at,
+        )
+    except ReviewIssuanceError as error:
+        raise ScientificReviewTransitionError(
+            f"候选缺少真实独立issuer签发：{error}"
+        ) from error
+    if issued.receipt_digest != receipt.receipt_digest:
+        raise ScientificReviewTransitionError("issuer记录未签发当前科学复核回执")
     return SCIENTIFICALLY_REVIEWED_RENDERED_CANDIDATE
 
 

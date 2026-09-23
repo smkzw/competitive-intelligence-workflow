@@ -36,6 +36,12 @@ SAFETY_CONCEPTS: dict[str, SafetyConceptSpec] = {
         "treatment_related_ae", "治疗相关不良事件", "治疗相关不良事件（登记）", "other"),
     "grade_3_plus": SafetyConceptSpec(
         "grade_3_plus", "3级及以上不良事件", "3级及以上不良事件（登记）", "other"),
+    "grade_specific": SafetyConceptSpec(
+        "grade_specific", "特定等级不良事件", "特定等级不良事件（登记）", "other"),
+    "non_serious_teae": SafetyConceptSpec(
+        "non_serious_teae", "非严重TEAE", "非严重TEAE（登记）", "other"),
+    "absence_sae": SafetyConceptSpec(
+        "absence_sae", "未发生SAE", "未发生SAE（登记）", "serious"),
     "serious_teae_subset": SafetyConceptSpec(
         "serious_teae_subset", "严重TEAE子集", "严重TEAE子集（登记）", "other"),
     "generic_ae": SafetyConceptSpec(
@@ -43,7 +49,7 @@ SAFETY_CONCEPTS: dict[str, SafetyConceptSpec] = {
     "specific_ae": SafetyConceptSpec(
         "specific_ae", "特定不良事件指标", "特定不良事件指标（登记）", "other"),
     "composite_ae": SafetyConceptSpec(
-        "composite_ae", "复合不良事件指标", "复合不良事件指标（登记）", "other"),
+        "composite_ae", "复合不良事件指标", "复合不良事件指标（登记）", None),
     "unknown": SafetyConceptSpec(
         "unknown", "未归类安全域指标", "未归类安全域指标（登记）", None),
 }

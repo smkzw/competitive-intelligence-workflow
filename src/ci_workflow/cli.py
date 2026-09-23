@@ -306,15 +306,43 @@ def _atomic_json_write(path: Path, value: dict[str, Any]) -> None:
 
 
 def _create_project(args: argparse.Namespace) -> int:
-    reports = _split_choices(args.reports, VALID_REPORTS, "报告类型")
+    reports = (
+        _split_choices(args.reports, VALID_REPORTS, "报告类型")
+        if args.reports
+        else []
+    )
     outputs = _split_choices(args.outputs, VALID_OUTPUTS, "交付格式")
     try:
+        indication = args.indication
+        cutoff = args.cutoff
+        if args.request:
+            from ci_workflow.application.intake import build_public_intake
+
+            intake = build_public_intake(
+                args.request,
+                reports=cast(Any, tuple(reports)) if reports else None,
+                historical_cutoff=cutoff,
+            )
+            if intake.ask is not None:
+                print(
+                    "ASK_REQUIRED "
+                    + json.dumps(
+                        intake.ask.model_dump(mode="json"),
+                        ensure_ascii=False,
+                        separators=(",", ":"),
+                    )
+                )
+                return 6
+            indication = intake.indication
+            cutoff = intake.historical_cutoff
+        elif not reports:
+            raise ContractError("使用 --indication 创建项目时必须指定 --reports")
         contract = create_project_contract(
-            indication=args.indication,
+            indication=indication,
             reports=reports,
             outputs=outputs,
             timezone=args.timezone,
-            cutoff=args.cutoff,
+            cutoff=cutoff,
         )
         root = create_project_workspace(Path(args.root), contract)
     except (ValueError, ProjectWorkspaceError) as exc:
@@ -344,10 +372,6 @@ def _package_verify(args: argparse.Namespace) -> int:
 
 
 def _capability_preflight(args: argparse.Namespace) -> int:
-    if getattr(args, "independent_context", None) is not None:
-        os.environ["CI_WORKFLOW_INDEPENDENT_CONTEXT"] = (
-            "1" if args.independent_context == "yes" else "0"
-        )
     source_routes = tuple(
         _split_choices(
             args.source_routes,
@@ -381,7 +405,13 @@ def _capability_preflight(args: argparse.Namespace) -> int:
         matrix = run_capability_preflight(
             selection,
             host=args.host,
-            probe=RuntimeCapabilityProbe(),
+            probe=RuntimeCapabilityProbe(
+                independent_context_probe=(
+                    Path(args.independent_context_probe)
+                    if args.independent_context_probe
+                    else None
+                )
+            ),
             project_root=project_root,
         )
     except (ValueError, ProjectWorkspaceError) as exc:
@@ -398,6 +428,7 @@ def _capability_preflight(args: argparse.Namespace) -> int:
 
 
 def _project_run_handler(args: argparse.Namespace) -> int:
+    from ci_workflow.application.capability_preflight import RuntimeCapabilityProbe
     from ci_workflow.application.run_service import (
         ContractConfigError,
         EvidenceBlockedError,
@@ -411,6 +442,14 @@ def _project_run_handler(args: argparse.Namespace) -> int:
             Path(args.root),
             resume=args.resume,
             require_bound_submission=True,
+            capability_host=args.host,
+            capability_probe=RuntimeCapabilityProbe(
+                independent_context_probe=(
+                    Path(args.independent_context_probe)
+                    if args.independent_context_probe
+                    else None
+                )
+            ),
         )
     except ContractConfigError as exc:
         raise ContractError(str(exc)) from exc
@@ -990,8 +1029,10 @@ def _build_parser() -> argparse.ArgumentParser:
     project_create.add_argument(
         "--root", "--project", dest="root", required=True, help="新项目目录"
     )
-    project_create.add_argument("--indication", required=True, help="适应症")
-    project_create.add_argument("--reports", required=True, help="报告类型，如 A,B,C")
+    create_input = project_create.add_mutually_exclusive_group(required=True)
+    create_input.add_argument("--request", help="一句话竞品调研请求")
+    create_input.add_argument("--indication", help="高级模式的显式适应症")
+    project_create.add_argument("--reports", help="报告类型，如 A,B,C；缺省时返回原生 Ask")
     project_create.add_argument("--outputs", default="html", help="交付格式固定为 html")
     project_create.add_argument(
         "--timezone", default="Asia/Shanghai", help="项目时区，默认 Asia/Shanghai"
@@ -1004,6 +1045,16 @@ def _build_parser() -> argparse.ArgumentParser:
     project_run = project_commands.add_parser("run", help="运行或恢复项目")
     project_run.add_argument("--root", "--project", dest="root", required=True, help="项目目录")
     project_run.add_argument("--resume", action="store_true", help="从同一项目检查点恢复")
+    project_run.add_argument(
+        "--host",
+        choices=("local", "codex", "hermes", "omp"),
+        default="local",
+        help="当前执行宿主，默认 local",
+    )
+    project_run.add_argument(
+        "--independent-context-probe",
+        help="宿主独立上下文能力探针的可执行文件；必须实际运行并返回回执",
+    )
     project_run.set_defaults(handler=_project_run_handler)
     project_accept_visual = project_commands.add_parser(
         "accept-visual", help="持久化独立网页视觉验收并推进 HTML 状态"
@@ -1054,10 +1105,8 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     preflight.add_argument("--require-ocr", action="store_true", help="本次已知需要读取扫描件")
     preflight.add_argument(
-        "--independent-context",
-        choices=("yes", "no"),
-        help="宿主是否具备与生产者不同会话/身份的独立上下文审阅者"
-        "（主 Agent 不能自证首份宇宙闭包；不声明则按未声明处理）",
+        "--independent-context-probe",
+        help="宿主独立上下文能力探针的可执行文件；必须实际运行并返回回执",
     )
     preflight.add_argument(
         "--json",

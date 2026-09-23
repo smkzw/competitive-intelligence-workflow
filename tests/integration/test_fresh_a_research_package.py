@@ -24,6 +24,7 @@ def _package_payload() -> dict[str, object]:
         Path(__file__).resolve().parents[2]
         / "fixtures/synthetic/a-complete/inputs/report-data.json"
     )
+    source_document = json.loads(source_path.read_text(encoding="utf-8"))
     report = json.loads(source_path.read_text(encoding="utf-8"))
     report["report_version"] = "v1"
     trial_by_product = {row["product_id"]: row["id"] for row in report["trials"]}
@@ -41,12 +42,18 @@ def _package_payload() -> dict[str, object]:
     )
     locator = {
         "document_role": "测试用已存来源",
-        "field_path": "完整结构化记录",
+        "field_path": "$",
         "url": "https://clinicaltrials.gov/study/NCT00000001",
     }
     facts: list[dict[str, object]] = []
 
-    def add_fact(row_ref: str, entity_id: str, name: str, field_id: str) -> None:
+    def add_fact(
+        row_ref: str,
+        entity_id: str,
+        name: str,
+        field_id: str,
+        field_path: str,
+    ) -> None:
         facts.append(
             {
                 "fact_id": f"fact-{len(facts) + 1}",
@@ -59,28 +66,44 @@ def _package_payload() -> dict[str, object]:
                 "normalized_value": name,
                 "disclosure_state": "reported_value",
                 "source_id": "source-ctgov-recorded",
-                "locator": locator,
-                "original_text": f"{row_ref} 的已存来源定位文本",
+                "locator": {
+                    "document_role": "测试用已存来源",
+                    "field_path": field_path,
+                    "url": "https://clinicaltrials.gov/study/NCT00000001",
+                },
+                "original_text": name,
             }
         )
 
-    for row in report["products"]:
-        add_fact(f"product:{row['id']}", row["id"], row["name"], "product.status")
-    for row in report["trials"]:
-        add_fact(f"trial:{row['id']}", row["id"], row["name"], "trial.status")
-    for row in report["efficacy"]:
+    for index, row in enumerate(report["products"]):
+        add_fact(
+            f"product:{row['id']}", row["id"], row["name"], "product.status",
+            f"$.products[{index}].name",
+        )
+    for index, row in enumerate(report["trials"]):
+        add_fact(
+            f"trial:{row['id']}", row["id"], row["name"], "trial.status",
+            f"$.trials[{index}].name",
+        )
+    for index, row in enumerate(report["efficacy"]):
         add_fact(
             f"efficacy:{row['row_id']}",
             row["trial_id"],
             row["endpoint"],
             "result.efficacy",
+            f"$.efficacy[{index}].endpoint",
         )
+    safety_index = {
+        row["row_id"]: index for index, row in enumerate(source_document["safety"])
+    }
     for row in report["safety"]:
+        source_row_id = str(row["row_id"]).removesuffix("-control")
         add_fact(
             f"safety:{row['row_id']}",
             row["product_id"],
             row["term"],
             "result.safety",
+            f"$.safety[{safety_index[source_row_id]}].term",
         )
 
     payload: dict[str, object] = {

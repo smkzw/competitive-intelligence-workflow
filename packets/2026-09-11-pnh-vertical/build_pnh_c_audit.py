@@ -19,7 +19,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-PROJECT = Path(open("/tmp/pnh-proj-path.txt").read().strip().split("=", 1)[1])
+# Production builders are rooted explicitly in the English repository.  They
+# never discover a project through an ambient /tmp pointer.
+PROJECT = ROOT
 NA = "未公开披露"
 ACQUIRED = "2026-09-06T00:00:00+08:00"
 CUTOFF = "2026-09-06T23:59:59.999999+08:00"
@@ -39,15 +41,11 @@ REVIEW = {
     "conflict_disposition": "resolved_selected_accepted_fact",
 }
 
-_LOCATOR = {
-    "document_role": "registry-study-record",
-    "field_path": "studies[]",
-    "url": "https://clinicaltrials.gov/",
-}
+_LOCATOR = {"document_role": "registry-study-record", "url": "https://clinicaltrials.gov/"}
 # 载荷来源定位必须与审计包 locator_detail 逐实例一致
 _CAPTURE_LOCATOR = {
     "document_role": "registry-search-page",
-    "field_path": "studies[]",
+    "field_path": "$.studies",
     "url": "https://clinicaltrials.gov/",
 }
 
@@ -56,15 +54,24 @@ def _stable(tag: str, *parts: str) -> str:
     return tag + "_" + hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()[:24]
 
 
+def _source_quote(value: object) -> str:
+    return value if isinstance(value, str) else json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False,
+    )
+
+
 def _row(trial_id: str, product_id: str, nct: str, page: int, family: str,
-         field: str, text: str, *, seq: str, endpoint_key: str | None = None,
+         field: str, text: str, *, seq: str, field_path: str, source_value: object,
+         endpoint_key: str | None = None,
          outcome_id: str | None = None,
          group_id: str | None = None, stage: str | None = None,
+         period: str | None = None,
          scale: str | None = None, operator: str | None = None,
          threshold: str | None = None, unit: str | None = None,
          timepoint: str | None = None, source_name: str | None = None,
          disclosure: str = "reported_value",
-         predicate: str | None = None) -> dict:
+         predicate: str | None = None, relationship_status: str | None = None,
+         relationship_reason: str | None = None, relationship_blocking: bool = False) -> dict:
     row_id = f"row-{trial_id}-{field}" + (f"-{seq}" if seq else "")
     obs_id = "obs-" + row_id[4:]
     row = {
@@ -80,9 +87,11 @@ def _row(trial_id: str, product_id: str, nct: str, page: int, family: str,
         "field": field,
         "endpoint_key": endpoint_key,
         "outcome_id": outcome_id,
+        "period": period,
         "source_field_name": source_name or f"registry.{field}",
         "source_field_definition": f"CT.gov 登记字段 {field} 的原文记录",
-        "source_text": text,
+        "source_text": _source_quote(source_value),
+        "display_text": text,
         "scale": scale,
         "scale_version": None,
         "operator": operator,
@@ -94,13 +103,16 @@ def _row(trial_id: str, product_id: str, nct: str, page: int, family: str,
         "randomization": None,
         "blinding": None,
         "source_version_id": f"ctgov-pnh-page-{page}",
-        "source_locator": {**_LOCATOR, "field_path": f"studies[]/{nct}"},
+        "source_locator": {**_LOCATOR, "field_path": field_path},
         "disclosure_state": disclosure,
         "reported_zero_text": None,
         "route_receipt_id": None,
         "applicability_predicate_id": predicate,
         "compatibility_rule": "c-design-v1",
         "difference_labels_zh": [],
+        "relationship_status": relationship_status,
+        "relationship_reason": relationship_reason,
+        "relationship_blocking": relationship_blocking,
         **REVIEW,
     }
     return row
@@ -221,11 +233,11 @@ def main() -> None:
 
     studies: dict[str, tuple[dict, int]] = {}
     for index, data, _blob in page_sources:
-        for study in data.get("studies", []):
+        for study_index, study in enumerate(data.get("studies", [])):
             protocol = study.get("protocolSection", {})
             nct = protocol.get("identificationModule", {}).get("nctId")
             if nct in TARGET_TRIALS and nct not in studies:
-                studies[nct] = (study, index)
+                studies[nct] = (study, index, study_index)
 
     product_by_trial: dict[str, str] = {}
     trial_meta: dict[str, dict] = {}
@@ -243,7 +255,8 @@ def main() -> None:
     path_dims: dict[str, dict[str, tuple[str, ...]]] = {}
 
     for nct in TARGET_TRIALS:
-        study, page = studies[nct]
+        study, page, study_index = studies[nct]
+        root_path = f"$.studies[{study_index}]"
         protocol = study.get("protocolSection", {})
         trial_id = nct.lower()
         product_id = product_by_trial[nct]
@@ -268,6 +281,8 @@ def main() -> None:
         observations.append(_row(
             trial_id, product_id, nct, page, "trial_identity", "trial_identity",
             f"{nct}（{stage}期，登记研究）", seq="", stage=stage,
+            field_path=f"{root_path}.protocolSection.identificationModule.nctId",
+            source_value=nct,
             source_name="registry.identification",
         ))
         # 目标人群（结构化年龄 + 登记原文）
@@ -279,6 +294,8 @@ def main() -> None:
         observations.append(_row(
             trial_id, product_id, nct, page, "population", "target_population",
             " ".join(eligibility.split())[:600] or "登记人群原文未公开", seq="",
+            field_path=f"{root_path}.protocolSection.eligibilityModule.eligibilityCriteria",
+            source_value=eligibility,
             scale="年龄", operator="≥" if age_num else None,
             threshold=age_num, unit="岁" if age_num else None,
             source_name="registry.eligibility",
@@ -289,11 +306,15 @@ def main() -> None:
             observations.append(_row(
                 trial_id, product_id, nct, page, "population", "inclusion_criterion",
                 item, seq=str(i), source_name="registry.eligibility.inclusion",
+                field_path=f"{root_path}.protocolSection.eligibilityModule.eligibilityCriteria",
+                source_value=eligibility,
             ))
         for i, item in enumerate(exc_items, start=1):
             observations.append(_row(
                 trial_id, product_id, nct, page, "population", "exclusion_criterion",
                 item, seq=str(i), source_name="registry.eligibility.exclusion",
+                field_path=f"{root_path}.protocolSection.eligibilityModule.eligibilityCriteria",
+                source_value=eligibility,
             ))
         # 分组、随机化与盲法（结构化 token，演示层确定性翻译）
         tokens = []
@@ -311,6 +332,8 @@ def main() -> None:
         observations.append(_row(
             trial_id, product_id, nct, page, "grouping", "arm_randomization_blinding",
             ";".join(tokens), seq="", source_name="registry.design",
+            field_path=f"{root_path}.protocolSection.designModule.designInfo",
+            source_value=info,
         ))
         # 干预与对照（逐组）
         control_types = {"PLACEBO", "NO_INTERVENTION", "ACTIVE_COMPARATOR", "SHAM_COMPARATOR"}
@@ -323,21 +346,38 @@ def main() -> None:
             observations.append(_row(
                 trial_id, product_id, nct, page, "intervention", field,
                 label, seq=f"arm{arm_index}",
+                field_path=f"{root_path}.protocolSection.armsInterventionsModule.armGroups[{arm_index - 1}].label",
+                source_value=label,
                 group_id=f"group-{trial_id}-arm{arm_index}",
                 stage=stage, source_name="registry.arms",
             ))
-        # 剂量与给药（登记干预描述原文）
-        regimen = " ".join(
-            part for part in (
-                ((iv.get("label") or "") + " " + (iv.get("description") or "")).strip()
-                for iv in interventions
-            ) if part
-        ) or "登记未公开给药方案描述"
-        observations.append(_row(
-            trial_id, product_id, nct, page, "dose_schedule", "dosing_regimen",
-            " ".join(regimen.split()), seq="", group_id=f"group-{trial_id}-arm1",
-            stage=stage, source_name="registry.interventions",
-        ))
+        # 剂量与给药严格按 CT.gov armGroupLabels 关系逐臂投影；未绑定干预
+        # 不得静默塞入 arm1。
+        from ci_workflow.reports.c.arm_interventions import project_arm_interventions
+        for relation_index, relation in enumerate(project_arm_interventions(
+            trial_id=trial_id, arms=arms, interventions=interventions,
+        ), start=1):
+            bound = relation["relationship_status"] == "bound"
+            arm_index = int(str(relation["group_id"]).replace("arm", "")) if bound else 0
+            regimen = " ".join(
+                part for part in (
+                    str(relation["intervention_name"]).strip(),
+                    str(relation["description"]).strip(),
+                ) if part
+            ) or "登记未公开给药方案描述"
+            observations.append(_row(
+                trial_id, product_id, nct, page, "dose_schedule", "dosing_regimen",
+                regimen, seq=f"arm{arm_index}-{relation_index}" if bound else f"unbound-{relation_index}",
+                field_path=(
+                    f"{root_path}.protocolSection.armsInterventionsModule.interventions["
+                    f"{relation['intervention_index']}].name"
+                ), source_value=relation["intervention_name"],
+                group_id=(f"group-{trial_id}-arm{arm_index}" if bound else f"group-{trial_id}-relationship-missing"), stage=stage,
+                source_name="registry.interventions.armGroupLabels",
+                relationship_status=str(relation["relationship_status"]),
+                relationship_reason=(None if bound else "干预未通过显式 armGroupLabels 绑定到已登记 arm"),
+                relationship_blocking=bool(relation["blocking"]),
+            ))
         # 主要终点定义与时间点（配对 endpoint_key）
         measure = (primary.get("measure") or "").strip()
         time_frame = (primary.get("timeFrame") or "").strip()
@@ -355,7 +395,10 @@ def main() -> None:
             observations.append(_row(
                 trial_id, product_id, nct, page, "endpoint", "primary_endpoint_definition",
                 p_measure, seq=_p_oid, endpoint_key="primary", outcome_id=_p_oid,
+                field_path=f"{root_path}.protocolSection.outcomesModule.primaryOutcomes[{p_index}].measure",
+                source_value=p_measure,
                 stage=stage,
+                period="overall",
                 scale=_endpoint_form(p_measure), timepoint=p_frame,
                 source_name="registry.outcomes.primary",
             ))
@@ -365,14 +408,10 @@ def main() -> None:
                 observations.append(_row(
                     trial_id, product_id, nct, page, "timepoint", "primary_endpoint_timepoint",
                     p_frame, seq=_p_oid, endpoint_key="primary", outcome_id=_p_oid,
+                    field_path=f"{root_path}.protocolSection.outcomesModule.primaryOutcomes[{p_index}].timeFrame",
+                    source_value=p_frame,
                     timepoint=p_frame, source_name="registry.outcomes.primary",
-                ))
-            else:
-                observations.append(_row(
-                    trial_id, product_id, nct, page, "timepoint", "primary_endpoint_timepoint",
-                    "登记未公开评估时间窗", seq=_p_oid, endpoint_key="primary",
-                    outcome_id=_p_oid, source_name="registry.outcomes.primary",
-                    disclosure="not_publicly_disclosed",
+                    period="overall",
                 ))
             # 统计方法句（独立复核 C r20 veto 第4项）：主终点描述常载明
             # 分析模型（如 MMRM），有则入"主要比较与统计模型"行，不得错标未公开
@@ -381,6 +420,8 @@ def main() -> None:
                 observations.append(_row(
                     trial_id, product_id, nct, page, "statistical", "statistical_comparisons",
                     f"主要比较与统计模型（登记主终点说明）：{p_desc}", seq=f"pri{p_index}" if p_index else "",
+                    field_path=f"{root_path}.protocolSection.outcomesModule.primaryOutcomes[{p_index}].description",
+                    source_value=p_desc,
                     stage=stage, source_name="registry.outcomes.primary.description",
                 ))
 
@@ -396,7 +437,10 @@ def main() -> None:
             observations.append(_row(
                 trial_id, product_id, nct, page, "endpoint", "secondary_endpoint_definition",
                 s_measure, seq=_s_oid, endpoint_key="secondary", outcome_id=_s_oid,
+                field_path=f"{root_path}.protocolSection.outcomesModule.secondaryOutcomes[{s_index}].measure",
+                source_value=s_measure,
                 stage=stage,
+                period="overall",
                 scale=_endpoint_form(s_measure), timepoint=s_frame,
                 source_name="registry.outcomes.secondary",
             ))
@@ -404,14 +448,10 @@ def main() -> None:
                 observations.append(_row(
                     trial_id, product_id, nct, page, "timepoint", "secondary_endpoint_timepoint",
                     s_frame, seq=_s_oid, endpoint_key="secondary", outcome_id=_s_oid,
+                    field_path=f"{root_path}.protocolSection.outcomesModule.secondaryOutcomes[{s_index}].timeFrame",
+                    source_value=s_frame,
                     timepoint=s_frame, source_name="registry.outcomes.secondary",
-                ))
-            else:
-                observations.append(_row(
-                    trial_id, product_id, nct, page, "timepoint", "secondary_endpoint_timepoint",
-                    "登记未公开评估时间窗", seq=_s_oid, endpoint_key="secondary",
-                    outcome_id=_s_oid, source_name="registry.outcomes.secondary",
-                    disclosure="not_publicly_disclosed",
+                    period="overall",
                 ))
         # 独立复核 C r19/C r20：统计设计维度显式声明——登记未公开才声明；
         # 主终点描述已载明统计模型的维度（上方已入谱）不得再错标未公开
@@ -423,8 +463,14 @@ def main() -> None:
         # 共享同一 row_id 且自相矛盾
         # 独立复核 C r30：登记各结局 description / populationDescription
         # 已载明分析集与统计方法的，逐条入谱（不再一律错标未公开）
-        _stat_notes: list[str] = []
-        for p_item in primary_outcomes + (outcomes.get("secondaryOutcomes") or []):
+        _stat_notes: list[tuple[str, str, object]] = []
+        _all_outcomes = [
+            ("primaryOutcomes", i, item) for i, item in enumerate(primary_outcomes)
+        ] + [
+            ("secondaryOutcomes", i, item)
+            for i, item in enumerate(outcomes.get("secondaryOutcomes") or [])
+        ]
+        for outcome_collection, outcome_index, p_item in _all_outcomes:
             p_desc = (p_item.get("description") or "").strip()
             if not p_desc:
                 continue
@@ -434,24 +480,32 @@ def main() -> None:
                 p_desc, re.I,
             ):
                 # 独立复核 C r35：测量标题为空时不输出空【】前缀
-                _stat_notes.append(f"【{_m_title}】{p_desc}" if _m_title else p_desc)
-        _pop_descs = [
-            (om_i.get("populationDescription") or "").strip()
-            for om_i in (outcomes.get("primaryOutcomes") or [])
-            + (outcomes.get("secondaryOutcomes") or [])
-        ]
+                _stat_notes.append((
+                    f"【{_m_title}】{p_desc}" if _m_title else p_desc,
+                    f"{root_path}.protocolSection.outcomesModule.{outcome_collection}[{outcome_index}].description",
+                    p_desc,
+                ))
+        for outcome_collection, outcome_index, p_item in _all_outcomes:
+            population_description = (p_item.get("populationDescription") or "").strip()
+            if population_description:
+                _stat_notes.append((
+                    "分析人群说明：" + population_description,
+                    f"{root_path}.protocolSection.outcomesModule.{outcome_collection}[{outcome_index}].populationDescription",
+                    population_description,
+                ))
         # 独立复核 C r31：基线特征模块的 populationDescription 亦载明
         # 分析集（如 Full Analysis Set 定义），必须并入抽取
         _bc_pop = (((study.get("resultsSection") or {})
                     .get("baselineCharacteristicsModule") or {})
                    .get("populationDescription") or "").strip()
         if _bc_pop:
-            _pop_descs.append(_bc_pop)
-        for pd_ in _pop_descs:
-            if pd_ and pd_ not in _stat_notes:
-                _stat_notes.append("分析人群说明：" + pd_)
+            _stat_notes.append((
+                "分析人群说明：" + _bc_pop,
+                f"{root_path}.resultsSection.baselineCharacteristicsModule.populationDescription",
+                _bc_pop,
+            ))
         # 独立审阅 R09（C02）：统计/分析集说明全量入谱，不再 [:8] 裁剪
-        for si_note, note in enumerate(_stat_notes, start=1):
+        for si_note, (note, note_path, note_source) in enumerate(_stat_notes, start=1):
             # 分析集说明归 analysis_sets 维度，其余归统计模型维度；
             # seq 逐条递增避免同 trial 内 row_id 冲突
             is_set = "分析人群说明：" in note or "analysis set" in note.lower()
@@ -459,6 +513,7 @@ def main() -> None:
                 trial_id, product_id, nct, page, "statistical",
                 "analysis_sets" if is_set else "statistical_comparisons",
                 f"登记披露的统计与分析方法：{note}", seq=f"stat{si_note}",
+                field_path=note_path, source_value=note_source,
                 stage=stage, source_name="registry.outcomes.description",
             ))
         _reported_stat_fields = {
@@ -484,6 +539,8 @@ def main() -> None:
             observations.append(_row(
                 trial_id, product_id, nct, page, "statistical", stat_field,
                 f"登记未公开{stat_label}信息", seq="", stage=stage,
+                field_path=f"{root_path}.protocolSection.outcomesModule",
+                source_value=outcomes,
                 source_name=f"registry.statistics.{stat_field}",
                 disclosure="not_publicly_disclosed",
             ))
@@ -494,6 +551,8 @@ def main() -> None:
         observations.append(_row(
             trial_id, product_id, nct, page, "sample_size", "planned_or_actual_sample_size",
             f"登记样本量 {count} 例（{enrollment.get('type') or 'UNKNOWN'}）", seq="",
+            field_path=f"{root_path}.protocolSection.designModule.enrollmentInfo.count",
+            source_value=count,
             stage=stage, threshold=str(count), unit="例",
             source_name="registry.enrollment",
         ))

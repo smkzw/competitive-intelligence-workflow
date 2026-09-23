@@ -4,16 +4,100 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from importlib.metadata import version
 from pathlib import Path
 from typing import Literal, NoReturn
 
-from ci_workflow.domain.evidence import CtgovRecordSelector, SourceTextDerivation
+from ci_workflow.domain.evidence import (
+    CtgovRecordSelector,
+    EvidenceLocator,
+    SourceTextDerivation,
+)
 from ci_workflow.storage.content_store import ContentAddressedStore, ContentIntegrityError
 
 
 class SourceDerivationError(ValueError):
     """Raw asset or extraction cannot substantiate the submitted source text."""
+
+
+_JSON_PATH_PART = re.compile(
+    r"(?:\.([A-Za-z_][A-Za-z0-9_-]*))|(?:\[(0|[1-9][0-9]*)\])"
+)
+
+
+def _json_path_value(content_text: str, field_path: str) -> object:
+    """Resolve one strict, wildcard-free JSON path against persisted text."""
+    if field_path == "$" or not field_path.startswith("$."):
+        raise SourceDerivationError("事实JSON定位必须精确到字段或数组元素")
+    position = 1
+    parts: list[str | int] = []
+    while position < len(field_path):
+        match = _JSON_PATH_PART.match(field_path, position)
+        if match is None:
+            raise SourceDerivationError("事实JSON定位不是可重放的精确路径")
+        key, index = match.groups()
+        parts.append(key if key is not None else int(index))
+        position = match.end()
+    try:
+        value: object = source_json_decoder().decode(content_text)
+        for part in parts:
+            if isinstance(part, str):
+                if not isinstance(value, dict) or part not in value:
+                    raise KeyError(part)
+                value = value[part]
+            else:
+                if not isinstance(value, list):
+                    raise TypeError("not an array")
+                value = value[part]
+    except (ValueError, KeyError, IndexError, TypeError, RecursionError) as error:
+        raise SourceDerivationError("事实JSON定位无法从来源字节重提取对象") from error
+    return value
+
+
+def extract_locator_quote(
+    content_text: str,
+    *,
+    media_type: str,
+    locator: EvidenceLocator,
+) -> str:
+    """Re-extract the exact fact quote from persisted source text.
+
+    URL-only, root-only and wildcard-like locators are intentionally rejected.
+    Translations and normalized values are not accepted as source quotes.
+    """
+    if media_type == "application/json":
+        if locator.field_path is None:
+            raise SourceDerivationError("JSON事实缺少精确字段路径")
+        value = _json_path_value(content_text, locator.field_path)
+        if isinstance(value, str):
+            return value
+        return json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+
+    anchors = (
+        locator.heading,
+        locator.table,
+        locator.row,
+        locator.column,
+        locator.paragraph,
+    )
+    if not any(anchors):
+        raise SourceDerivationError("文本事实定位过粗，链接或页码不能单独证明原文")
+    candidates = [line.strip() for line in content_text.splitlines() if line.strip()]
+    anchored = [
+        line
+        for line in candidates
+        if any(anchor is not None and anchor in line for anchor in anchors)
+    ]
+    if len(anchored) != 1:
+        raise SourceDerivationError("文本事实定位不能唯一重提取原文")
+    return anchored[0]
 
 
 def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:

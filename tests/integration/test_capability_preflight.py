@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import os
 from pathlib import Path
 
 import pytest
@@ -51,6 +53,45 @@ def test_runtime_probe_does_not_equate_blank_chromium_with_logged_in_session(
 
     assert outcome.available is False
     assert "会话" in outcome.detail
+
+
+def test_runtime_independent_context_requires_an_executed_probe_receipt(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from ci_workflow.application.capability_preflight import RuntimeCapabilityProbe
+
+    monkeypatch.setenv("CI_WORKFLOW_INDEPENDENT_CONTEXT", "1")
+    blocked = RuntimeCapabilityProbe().check("independent_context", project_root=tmp_path)
+    assert blocked.available is False
+    assert "子Agent" in blocked.user_action
+    assert "独立会话" in blocked.user_action
+    assert "兼容执行器" in blocked.user_action
+
+    probe = tmp_path / "independent-context-probe"
+    probe.write_text(
+        "#!/bin/sh\n"
+        "printf '%s\\n' '"
+        + json.dumps(
+            {
+                "schema_version": "1.0",
+                "available": True,
+                "mechanism": "independent_session",
+                "producer_context": "producer-1",
+                "reviewer_context": "reviewer-2",
+                "invocation_id": "probe-run-001",
+            }
+        )
+        + "'\n",
+        encoding="utf-8",
+    )
+    os.chmod(probe, 0o700)
+
+    ready = RuntimeCapabilityProbe(independent_context_probe=probe).check(
+        "independent_context", project_root=tmp_path
+    )
+    assert ready.available is True
+    assert "probe-run-001" in ready.detail
 
 
 def test_project_selection_consumes_available_yaozh_answer_only(tmp_path: Path) -> None:

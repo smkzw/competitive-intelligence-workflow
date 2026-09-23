@@ -1,0 +1,15 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_a_responsive_space_uses_canvas_and_keeps_a_complete_first_reading_unit[320-568-0.98-12] _
+tests/browser/test_a_w05a_product.py:211: in test_a_responsive_space_uses_canvas_and_keeps_a_complete_first_reading_unit
+    assert metrics["firstBandBottom"] <= height, metrics
+E   AssertionError: {'ratio': 1, 'padding': 10, 'headMargin': 8, 'chartHeight': 353.78125, ...}
+E   assert 586.015625 <= 568
+_____________ test_a_safety_details_are_paginated_and_fit_at_1024 ______________
+tests/browser/test_a_portal.py:781: in test_a_safety_details_are_paginated_and_fit_at_1024
+    assert row_box is not None and row_box["height"] < 120
+E   AssertionError: assert ({'x': 38, 'y': -3421.734375, 'width': 948, 'height': 286.125} is not None and 286.125 < 120)
+=========================== short test summary info ============================
+FAILED tests/browser/test_a_w05a_product.py::test_a_responsive_space_uses_canvas_and_keeps_a_complete_first_reading_unit[320-568-0.98-12]
+FAILED tests/browser/test_a_portal.py::test_a_safety_details_are_paginated_and_fit_at_1024
+2 failed, 1 passed in 152.01s (0:02:32)

@@ -21,6 +21,8 @@ from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance
 from ci_workflow.qc.browser import load_locked_sitemap_source, site_directory_digest
+from ci_workflow.reports.common.evidence_view import UserEditDisclosure
+from ci_workflow.reports.common.numeric_projection import infer_numeric_kind, project_numeric
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.storage.manifest_store import (
     ArtifactFileBinding,
@@ -37,6 +39,16 @@ from ci_workflow.storage.render_transaction import (
 )
 from ci_workflow.storage.snapshot_store import ReportSnapshotManifest, SnapshotStore
 
+from .active_fact_projection import (
+    ActiveFactBinding,
+    ActiveFactRevision,
+    PortalConsumerNode,
+    canonical_sha256,
+    numeric_value,
+    user_edit_disclosure,
+    validate_active_fact_binding,
+    write_render_receipt,
+)
 from .builder import resolve_echarts_bundle, resolve_logo_src, resolve_portal_asset
 
 
@@ -139,6 +151,9 @@ class EfficacyRow(BaseModel):
     denominator: int | None = Field(default=None, gt=0)
     unit: str
     population: str
+    source_field_path: str | None = None
+    source_text: str | None = None
+    clinical_narrative: str | None = None
 
     @model_validator(mode="after")
     def _undisclosed_row_carries_no_value(self) -> "EfficacyRow":
@@ -174,6 +189,15 @@ class SafetyRow(BaseModel):
     term: str
     # 会商 P0 #3：受控词表键（any_sae/any_teae/death），供矩阵安全轴精确匹配
     term_key: str | None = None
+    polarity: str = "affirmed"
+    grade_set: tuple[int, ...] = ()
+    seriousness: str = "unspecified"
+    teae: bool | None = None
+    relatedness: str = "unspecified"
+    parent: str | None = None
+    children: tuple[str, ...] = ()
+    count_basis: str = "participants"
+    at_risk_stat: str | None = None
     # 独立复核 A r44/r45（issue-2）：类目/类标题上下文（term 保持登记原貌）
     measure_context: str | None = None
     value: float | None = Field(allow_inf_nan=False)
@@ -181,7 +205,11 @@ class SafetyRow(BaseModel):
     denominator: int | None = Field(default=None, gt=0)
     unit: str
     time_window: str
+    measure_object: Literal["participant_proportion", "participant_count", "event_count", "person_time_rate", "adjusted_estimate"] = "participant_proportion"
     disclosure_state: Literal["已公开", "未公开", "不适用"] = "已公开"
+    source_field_path: str | None = None
+    source_text: str | None = None
+    clinical_narrative: str | None = None
 
     @model_validator(mode="after")
     def _value_matches_disclosure_state(self) -> SafetyRow:
@@ -192,11 +220,15 @@ class SafetyRow(BaseModel):
         if (self.numerator is None) != (self.denominator is None):
             raise ValueError("安全性分子与分母必须同时公开或同时缺失")
         if (
+            self.measure_object == "participant_proportion"
+            and
             self.numerator is not None
             and self.denominator is not None
             and self.numerator > self.denominator
         ):
             raise ValueError("安全性分子不得大于分母")
+        if self.count_basis == "mixed" and (self.numerator is not None or self.denominator is not None):
+            raise ValueError("复合安全项不得拆值或借用其他项分母")
         return self
 
 
@@ -275,6 +307,7 @@ class ReportAPortalData(BaseModel):
     patents: tuple[PatentRow, ...] = Field(min_length=1)
     history: tuple[HistoryRow, ...] = Field(min_length=1)
     sources: tuple[SourceRow, ...] = Field(min_length=1)
+    user_edits: dict[str, UserEditDisclosure] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def _relations_are_closed(self) -> Self:
@@ -558,6 +591,22 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         if re.findall(r"[A-Za-z]{3,}", _tw) and not _tw.endswith("（登记原文，未译）"):
             _tw = _tw + "（登记原文，未译）"
         row["time_window"] = _tw
+        projection = project_numeric(
+            value=item.value, unit=item.unit,
+            kind=infer_numeric_kind(measure_object=item.measure_object, unit=item.unit, domain="safety"),
+            numerator=item.numerator, denominator=item.denominator,
+            window=item.time_window, estimand="安全性登记测量",
+        )
+        row["numeric_projection"] = projection.as_dict()
+        row["plot_value"] = projection.plot_value
+        row["plot_unit"] = projection.plot_unit
+        row["renderable"] = projection.renderable
+        row["semantic_filter_key"] = "|".join((
+            str(item.term_key or "unknown"), item.polarity, item.seriousness,
+            "teae" if item.teae is True else "non_teae" if item.teae is False else "teae_unknown",
+            item.relatedness, ",".join(str(value) for value in item.grade_set),
+            item.count_basis,
+        ))
         rows.append(row)
     if not any(_category_base(row["category"]) == "特别关注不良事件" and row["value"] is not None for row in rows):
         rows = [row for row in rows if _category_base(row["category"]) != "特别关注不良事件"]
@@ -573,6 +622,23 @@ def _safety_event_filters(
         key = str(row["term_key"])
         if key not in seen:
             seen[key] = {"key": key, "label": str(row["term_label"])}
+    return tuple(seen.values())
+
+
+def _safety_semantic_filters(rows: tuple[dict[str, object], ...]) -> tuple[dict[str, str], ...]:
+    seen: dict[str, dict[str, str]] = {}
+    for row in rows:
+        key = str(row["semantic_filter_key"])
+        if key not in seen:
+            grades = "/".join(str(value) for value in row.get("grade_set", ())) or "无等级"
+            seen[key] = {
+                "key": key,
+                "label": "｜".join((
+                    str(row.get("term_label") or row.get("term_key")),
+                    str(row.get("polarity")), grades, str(row.get("seriousness")),
+                    str(row.get("relatedness")), str(row.get("count_basis")),
+                )),
+            }
     return tuple(seen.values())
 
 
@@ -1731,6 +1797,16 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
 
         row["population"] = _native_population_zh(str(row["population"]))
         row["unit"] = _native_unit_zh(str(row["unit"]))
+        projection = project_numeric(
+            value=item.value, unit=item.unit,
+            kind=infer_numeric_kind(unit=item.unit, domain="efficacy"),
+            numerator=item.numerator, denominator=item.denominator,
+            window=item.timepoint, estimand=item.endpoint,
+        )
+        row["numeric_projection"] = projection.as_dict()
+        row["plot_value"] = projection.plot_value
+        row["plot_unit"] = projection.plot_unit
+        row["renderable"] = projection.renderable
         # 登记结果测量原文（独立复核：门户必须保留可回溯的终点原文）
         row["endpoint_source"] = str(item.endpoint)
         rows.append(row)
@@ -1768,7 +1844,9 @@ def _view_context(
         ),
         "regulatory": _display_regulatory(data),
         "safety_event_filters": _safety_event_filters(display_safety),
+        "safety_semantic_filters": _safety_semantic_filters(display_safety),
         "sources": data.sources,
+        "user_edits": data.user_edits,
         "external_sources": public_provenance.sources if public_provenance else (),
         "companies": data.companies,
         "patents": data.patents,
@@ -1788,14 +1866,209 @@ def _view_context(
     }
 
 
+def _project_active_facts_a(
+    data: ReportAPortalData,
+    active_revision: ActiveFactRevision,
+) -> tuple[ReportAPortalData, tuple[PortalConsumerNode, ...]]:
+    safety = list(data.safety)
+    efficacy = list(data.efficacy)
+    user_edits = dict(data.user_edits)
+    consumers: list[PortalConsumerNode] = []
+    for fact, binding in active_revision.bindings_for("A"):
+        rows: list[SafetyRow] | list[EfficacyRow]
+        page: str
+        if binding.collection == "safety":
+            rows = safety
+            page = "safety.html"
+        elif binding.collection == "efficacy":
+            rows = efficacy
+            page = "efficacy.html"
+        else:
+            raise ReportAPortalError("A renderer只接受safety/efficacy领域绑定")
+        matches = [index for index, row in enumerate(rows) if row.row_id == binding.row_id]
+        if len(matches) != 1:
+            raise ReportAPortalError(
+                f"A active fact绑定必须命中唯一领域行：{binding.collection}/{binding.row_id}"
+            )
+        index = matches[0]
+        row = rows[index]
+        try:
+            verified_binding = validate_active_fact_binding(
+                fact,
+                binding,
+                active_fact_binding_for_a(data, binding.collection, binding.row_id),
+            )
+        except ValueError as error:
+            raise ReportAPortalError(str(error)) from error
+        unit = str(
+            fact.model_extra.get("normalized_unit")
+            or fact.model_extra.get("unit")
+            or row.unit
+        )
+        endpoint = (
+            fact.model_extra.get("endpoint_definition")
+            or getattr(row, "term", None)
+            or getattr(row, "endpoint", "")
+        )
+        narrative = (
+            f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
+        )
+        updates: dict[str, Any] = {
+            "value": numeric_value(fact),
+            "unit": unit,
+            "clinical_narrative": narrative,
+        }
+        for field in ("numerator", "denominator"):
+            value = fact.model_extra.get(field)
+            if isinstance(value, int):
+                updates[field] = value
+        if isinstance(row, SafetyRow):
+            if fact.model_extra.get("time_window"):
+                updates["time_window"] = str(fact.model_extra["time_window"])
+            if (
+                fact.model_extra.get("statistical_form") == "crude_rate"
+                and fact.model_extra.get("measure_object") == "participants"
+            ):
+                updates["measure_object"] = "participant_proportion"
+                updates["count_basis"] = "participants"
+        else:
+            if fact.model_extra.get("timepoint"):
+                updates["timepoint"] = str(fact.model_extra["timepoint"])
+            if fact.model_extra.get("population"):
+                updates["population"] = str(fact.model_extra["population"])
+        rows[index] = row.model_copy(update=updates)
+        original_value = "未公开" if row.value is None else f"{row.value:g}{row.unit}"
+        user_edits[binding.row_id] = user_edit_disclosure(
+            fact,
+            active_revision,
+            original_value=original_value,
+        )
+        consumers.append(
+            PortalConsumerNode(
+                report="A",
+                fact_id=fact.fact_id,
+                fact_version_id=fact.fact_version_id,
+                collection=binding.collection,
+                row_id=binding.row_id,
+                binding_identity=verified_binding,
+                original_row_sha256=verified_binding.original_row_sha256,
+                page_relative_path=page,
+                chart_consumer=f"REPORT_A.{binding.collection}[row_id={binding.row_id}].value",
+                table_consumer=f"{page}#table-row:{binding.row_id}",
+                narrative_consumer=f"{page}#clinical-narrative:{binding.row_id}",
+                index_consumer=f"data/search-index.js#{binding.collection}:{binding.row_id}",
+                source_binding_consumer=(
+                    f"REPORT_A.{binding.collection}[row_id={binding.row_id}].source_field_path"
+                ),
+            )
+        )
+    return (
+        data.model_copy(
+            update={
+                "safety": tuple(safety),
+                "efficacy": tuple(efficacy),
+                "user_edits": user_edits,
+            }
+        ),
+        tuple(consumers),
+    )
+
+
+def validate_active_fact_revision_a(
+    data: ReportAPortalData,
+    active_revision: ActiveFactRevision,
+) -> None:
+    """Validate every A binding without creating or modifying a staging tree."""
+    for fact, binding in active_revision.bindings_for("A"):
+        if binding.collection not in {"safety", "efficacy"}:
+            raise ReportAPortalError("A renderer只接受safety/efficacy领域绑定")
+        try:
+            validate_active_fact_binding(
+                fact,
+                binding,
+                active_fact_binding_for_a(data, binding.collection, binding.row_id),
+            )
+        except ValueError as error:
+            raise ReportAPortalError(str(error)) from error
+
+
+def _a_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
+    if isinstance(row, EfficacyRow):
+        form = "crude_rate" if row.unit == "%" and row.numerator is not None else "estimate"
+        return form, "participants" if row.numerator is not None else "estimate"
+    forms = {
+        "participant_proportion": ("crude_rate", "participants"),
+        "participant_count": ("count", "participants"),
+        "event_count": ("count", "events"),
+        "person_time_rate": ("person_time_rate", "person_time"),
+        "adjusted_estimate": ("adjusted_rate", "estimate"),
+    }
+    return forms[row.measure_object]
+
+
+def active_fact_binding_for_a(
+    data: ReportAPortalData,
+    collection: str,
+    row_id: str,
+) -> ActiveFactBinding:
+    """Resolve the immutable identity of an original A builder row."""
+    if collection == "safety":
+        candidates: tuple[SafetyRow | EfficacyRow, ...] = data.safety
+    elif collection == "efficacy":
+        candidates = data.efficacy
+    else:
+        raise ReportAPortalError("A renderer只接受safety/efficacy领域绑定")
+    matches = [row for row in candidates if row.row_id == row_id]
+    if len(matches) != 1:
+        raise ReportAPortalError(f"A active fact绑定必须命中唯一领域行：{collection}/{row_id}")
+    row = matches[0]
+    if row.trial_id is None:
+        raise ReportAPortalError("A active fact目标原行缺少试验身份")
+    products = {item.id: item for item in data.products}
+    trials = {item.id: item for item in data.trials}
+    product = products[row.product_id]
+    trial = trials[row.trial_id]
+    row_payload = row.model_dump(mode="json")
+    row_digest = canonical_sha256(row_payload)
+    source_pointer = row.source_field_path or f"REPORT_A.{collection}[row_id={row.row_id}]"
+    source_version = f"report-a-row:{row_digest}"
+    statistical_form, measure_object = _a_statistical_identity(row)
+    return ActiveFactBinding(
+        report="A",
+        collection=collection,
+        row_id=row.row_id,
+        product_id=row.product_id,
+        drug_name=product.name,
+        trial_id=row.trial_id,
+        registry_id=trial.display_id,
+        group_id=None,
+        arm=row.arm,
+        cohort_id=None,
+        period=row.time_window if isinstance(row, SafetyRow) else row.timepoint,
+        endpoint_definition=row.endpoint if isinstance(row, EfficacyRow) else None,
+        event_definition=row.term if isinstance(row, SafetyRow) else None,
+        statistical_form=statistical_form,
+        measure_object=measure_object,
+        unit=row.unit,
+        normalized_unit=row.unit,
+        source_version_id=source_version,
+        source_pointer=source_pointer,
+        original_row_sha256=row_digest,
+    )
+
+
 def render_report_a_site(
     data: ReportAPortalData,
     site_root: Path,
     *,
     publication_limitation_zh: str | None = None,
     public_provenance: PublicProvenance | None = None,
+    active_revision: ActiveFactRevision | None = None,
 ) -> tuple[Path, ...]:
     """生成 11 个静态责任页及全部产品详情页。"""
+    consumers: tuple[PortalConsumerNode, ...] = ()
+    if active_revision is not None:
+        data, consumers = _project_active_facts_a(data, active_revision)
     if public_provenance is not None:
         public_provenance = PublicProvenance.model_validate(
             public_provenance.model_dump(mode="json")
@@ -1896,6 +2169,40 @@ def render_report_a_site(
             "keywords": [product.target, product.modality],
         }
         for product in data.products
+    ] + [
+        {
+            "title": row.clinical_narrative
+            or f"{row.term} · {display_products[row.product_id].name}",
+            "slug": "safety",
+            "keywords": [
+                row.row_id,
+                row.term,
+                row.value,
+                row.unit,
+                row.numerator,
+                row.denominator,
+                row.source_text,
+                row.source_field_path,
+            ],
+        }
+        for row in data.safety
+    ] + [
+        {
+            "title": row.clinical_narrative
+            or f"{row.endpoint} · {display_products[row.product_id].name}",
+            "slug": "efficacy",
+            "keywords": [
+                row.row_id,
+                row.endpoint,
+                row.value,
+                row.unit,
+                row.numerator,
+                row.denominator,
+                row.source_text,
+                row.source_field_path,
+            ],
+        }
+        for row in data.efficacy
     ]
     (data_dir / "search-index.js").write_text(
         "window.__SEARCH_INDEX__="
@@ -1903,6 +2210,13 @@ def render_report_a_site(
         + ";\n",
         encoding="utf-8",
     )
+    if active_revision is not None:
+        write_render_receipt(
+            site_root,
+            report="A",
+            active_revision=active_revision,
+            consumers=consumers,
+        )
     return tuple(generated)
 
 

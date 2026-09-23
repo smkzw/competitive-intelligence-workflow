@@ -37,6 +37,10 @@ EXPECTED_MIGRATIONS = (
     "0008_project_lineage_guards.sql",
     "0009_source_date_precision.sql",
     "0010_source_text_derivations.sql",
+    "0011_candidate_lineage_closure.sql",
+    "0012_user_fact_edits.sql",
+    "0013_user_refresh_comparisons.sql",
+    "0014_current_generation_protocol.sql",
 )
 
 EXPECTED_TABLES = {
@@ -67,6 +71,13 @@ EXPECTED_TABLES = {
     "content_blobs",
     "source_date_assertions",
     "source_text_derivations",
+    "source_acquisition_attempts",
+    "evidence_derivations",
+    "user_fact_edit_requests",
+    "user_fact_derivations",
+    "user_refresh_conflicts",
+    "current_delivery_generations",
+    "current_delivery_state",
 }
 
 
@@ -85,16 +96,12 @@ def test_ordered_migrations_preserve_task_1_3_and_extend_the_truth_store(
     with open_database(database_path) as database:
         tables = {
             row[0]
-            for row in database.execute(
-                "SELECT name FROM sqlite_master WHERE type = 'table'"
-            )
+            for row in database.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
         }
         assert tables >= EXPECTED_TABLES
         assert database.execute("PRAGMA foreign_keys").fetchone() == (1,)
         assert database.execute("PRAGMA integrity_check").fetchone() == ("ok",)
-        assert database.execute("PRAGMA user_version").fetchone() == (
-            len(EXPECTED_MIGRATIONS),
-        )
+        assert database.execute("PRAGMA user_version").fetchone() == (len(EXPECTED_MIGRATIONS),)
         recorded = database.execute(
             "SELECT version, name, length(sha256) FROM schema_migrations ORDER BY version"
         ).fetchall()
@@ -304,8 +311,7 @@ def test_state_families_accept_their_exact_values_and_reject_cross_family_values
             "('bad_snapshot', 'project_test', 'A', 'v99', 'generating', '{}', 'x')",
             "INSERT INTO format_jobs VALUES "
             "('bad_job', 'snapshot_format', 'html', 'collecting', 'x')",
-            "INSERT INTO download_requests VALUES "
-            "('bad_download', NULL, 'published', NULL, 'x')",
+            "INSERT INTO download_requests VALUES ('bad_download', NULL, 'published', NULL, 'x')",
             "INSERT INTO correction_proposals VALUES "
             "('bad_revision', 'project_test', 'file_detected', '{}', 'x')",
             """INSERT INTO artifact_records (

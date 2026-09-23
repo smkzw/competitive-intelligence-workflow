@@ -208,13 +208,21 @@ def _observation(
         "field_family": family,
         "field": field,
         "endpoint_key": endpoint_key,
+        "outcome_id": (
+            f"{trial_id}-{endpoint_key or 'primary'}-1"
+            if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT}
+            else None
+        ),
         "source_field_name": f"registry.{field}",
+        "period": (
+            "overall" if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT} else None
+        ),
         "source_field_definition": f"{field} 的登记字段定义",
         "source_text": text,
         "threshold_value": threshold_value,
         "threshold_unit": threshold_unit,
         "assessment_timepoint": (
-            "第16周" if family is DesignFieldFamily.TIMEPOINT else None
+            "第16周" if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT} else None
         ),
         "stage": "III",
         "development_role": "关键注册试验",
@@ -255,6 +263,12 @@ def _observations(
                 if trial.id in _COMPARATIVE_TRIALS
                 else f"group-{trial.id}-single"
             )
+            if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT}:
+                group_id = (
+                    f"group-{trial.id}-arm-1"
+                    if trial.id in _COMPARATIVE_TRIALS
+                    else f"group-{trial.id}-single"
+                )
             if family is DesignFieldFamily.SAMPLE_SIZE:
                 rows.append(
                     _observation(
@@ -363,8 +377,40 @@ def _trial_designs_payload(
     ]
 
 
+def _bind_observations_to_source_bytes(
+    observation_payloads: list[dict[str, object]],
+    source_payloads: list[dict[str, object]],
+) -> None:
+    """Bind every observation to an exact quote in the persisted source JSON."""
+    for source in source_payloads:
+        source_id = str(source["source_id"])
+        members = [
+            item for item in observation_payloads if item["source_version_id"] == source_id
+        ]
+        source["content_text"] = json.dumps(
+            {"observations": [{"source_text": item["source_text"]} for item in members]},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+        for index, item in enumerate(members):
+            existing_locator = item.get("source_locator")
+            document_role = "clinical-trial-registry"
+            if isinstance(existing_locator, dict):
+                document_role = str(
+                    existing_locator.get("document_role") or document_role
+                )
+            item["source_locator"] = {
+                "document_role": document_role,
+                "field_path": f"$.observations[{index}].source_text",
+                "url": source["url"],
+            }
+
+
 def _content_payload(**overrides: object) -> dict[str, object]:
     rows = _observations()
+    observation_payloads = [item.model_dump(mode="json") for item in rows]
+    source_payloads = [dict(item) for item in _sources()]
+    _bind_observations_to_source_bytes(observation_payloads, source_payloads)
     payload: dict[str, object] = {
         "schema_version": "1.0",
         "indication_id": "atopic-dermatitis",
@@ -380,9 +426,9 @@ def _content_payload(**overrides: object) -> dict[str, object]:
             "data_cutoff": CUTOFF,
             "products": [item.model_dump(mode="json") for item in _products()],
             "trials": [item.model_dump(mode="json") for item in _trials()],
-            "observations": [item.model_dump(mode="json") for item in rows],
+            "observations": observation_payloads,
         },
-        "sources": list(_sources()),
+        "sources": source_payloads,
         "route_attempts": [],
         "claims": [
             {
@@ -408,6 +454,97 @@ def _content_payload(**overrides: object) -> dict[str, object]:
     }
     payload.update(overrides)
     return payload
+
+
+def test_fresh_c_rejects_multiple_primary_without_per_instance_timepoint(module: ModuleType) -> None:
+    payload = _content_payload()
+    observations = payload["report_data"]["observations"]
+    endpoint = next(item for item in observations if item["field_family"] == "endpoint")
+    duplicate = dict(endpoint)
+    duplicate.update({
+        "row_id": endpoint["row_id"] + "-second",
+        "source_row_id": endpoint["source_row_id"] + "-second",
+        "observation_id": endpoint["observation_id"] + "-second",
+        "source_text": "Second co-primary endpoint",
+        "outcome_id": "primary-second",
+    })
+    observations.append(duplicate)
+    with pytest.raises(ValueError, match="outcome_id|时间点|实例"):
+        module.FreshCResearchContent.model_validate(payload)
+
+
+def test_fresh_c_rejects_group_period_window_mismatch(module: ModuleType) -> None:
+    payload = _content_payload()
+    observations = payload["report_data"]["observations"]
+    endpoint = next(item for item in observations if item["field_family"] == "endpoint")
+    timepoint = next(
+        item for item in observations
+        if item["field_family"] == "timepoint" and item["trial_id"] == endpoint["trial_id"]
+    )
+    endpoint["outcome_id"] = "primary-1"
+    timepoint["outcome_id"] = "primary-1"
+    timepoint["group_id"] = timepoint["group_id"] + "-wrong"
+    with pytest.raises(ValueError, match="时间点|实例|对应终点"):
+        module.FreshCResearchContent.model_validate(payload)
+
+
+def test_fresh_c_new_content_cannot_self_declare_legacy_identity_mode(
+    module: ModuleType,
+) -> None:
+    payload = _content_payload()
+    payload["endpoint_identity_mode"] = "legacy_readonly_v0"
+    for observation in payload["report_data"]["observations"]:
+        if observation["field_family"] in {"endpoint", "timepoint"}:
+            observation["outcome_id"] = None
+    with pytest.raises(module.FreshCPackageError, match="legacy|instance_v1|endpoint_identity_mode"):
+        module.validate_fresh_c_content(payload)
+
+
+def test_run_service_rejects_new_c_package_that_self_declares_legacy(
+    module: ModuleType, tmp_path: Path,
+) -> None:
+    from ci_workflow.application.run_service import ContractConfigError
+
+    contract = create_project_contract(
+        indication="特应性皮炎", reports=["C"], outputs=["html"], cutoff="2026-09-01"
+    )
+    project_root = create_project_workspace(tmp_path / "项目", contract)
+    payload = _ready_package_payload(module)
+    payload["endpoint_identity_mode"] = "legacy_readonly_v0"
+    for observation in payload["report_data"]["observations"]:
+        if observation["field_family"] in {"endpoint", "timepoint"}:
+            observation["outcome_id"] = None
+    package_path = project_root / "inputs/c-self-declared-legacy.json"
+    package_path.parent.mkdir(parents=True, exist_ok=True)
+    package_path.write_text(
+        json.dumps({**payload, "scientific_review": _review(module, "invalid")},
+                   ensure_ascii=False, default=str),
+        encoding="utf-8",
+    )
+    with pytest.raises(ContractConfigError, match="legacy|instance_v1|endpoint_identity_mode"):
+        run_project(
+            project_root,
+            run_context=RunContext(
+                project_root=project_root, contract=contract,
+                research_package_path=package_path,
+            ),
+            capability_probe=StaticCapabilityProbe(),
+        )
+
+
+def test_fresh_c_blocks_explicit_unbound_intervention_relationship(module: ModuleType) -> None:
+    payload = _content_payload()
+    observation = next(
+        item for item in payload["report_data"]["observations"]
+        if item["field_family"] == "dose_schedule"
+    )
+    observation.update({
+        "relationship_status": "missing_arm_labels",
+        "relationship_reason": "source intervention has no armGroupLabels",
+        "relationship_blocking": True,
+    })
+    with pytest.raises(ValueError, match="arm|关系缺失|阻断"):
+        module.FreshCResearchContent.model_validate(payload)
 
 
 def _synthesis_payload(module: ModuleType, **overrides: object) -> dict[str, object]:
@@ -516,9 +653,11 @@ def test_content_fails_closed_on_unknown_source_reference(
         source_version_id="source-not-in-package",
     )
     payload = _content_payload()
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    observation_payloads = [item.model_dump(mode="json") for item in rows]
+    source_payloads = payload["sources"]
+    assert isinstance(source_payloads, list)
+    _bind_observations_to_source_bytes(observation_payloads, source_payloads)
+    payload["report_data"]["observations"] = observation_payloads
     with pytest.raises(module.FreshCPackageError):
         module.validate_fresh_c_content(payload)
 
@@ -699,7 +838,7 @@ def test_each_critical_unit_blocks_independently_when_missing(
             item.model_dump(mode="json") for item in rows
         ]
         payload["trial_designs"] = _trial_designs_payload(rows)
-        with pytest.raises(ValueError, match="终点—时间点完整语义缺失"):
+        with pytest.raises(ValueError, match="终点实例|时间点实例"):
             module.FreshCResearchContent.model_validate(payload)
 
     both_rows = tuple(
@@ -715,7 +854,7 @@ def test_each_critical_unit_blocks_independently_when_missing(
         item.model_dump(mode="json") for item in both_rows
     ]
     payload["trial_designs"] = _trial_designs_payload(both_rows)
-    with pytest.raises(ValueError, match="终点—时间点完整语义缺失"):
+    with pytest.raises(ValueError, match="终点实例|时间点实例"):
         module.FreshCResearchContent.model_validate(payload)
 
 
@@ -740,6 +879,7 @@ def test_protocol_sap_can_complete_registry_design_coverage(
             "湿疹面积评分（方案第8.1节）",
             source_role=SourceRole.PROTOCOL_SAP,
             source_version_id="source-registry-2",
+            group_id="group-trial-alpha-1-arm-1",
         )
     )
     payload = _content_payload()
@@ -770,7 +910,7 @@ def test_each_endpoint_requires_its_own_timepoint(module: ModuleType) -> None:
     ]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
 
-    with pytest.raises(ValueError, match="缺时间点=secondary_endpoint"):
+    with pytest.raises(ValueError, match="缺评估时间点的终点实例.*secondary_endpoint"):
         module.FreshCResearchContent.model_validate(payload)
 
     rows.append(
@@ -880,14 +1020,15 @@ def test_content_requires_two_evidence_backed_candidate_paths(
         assert set(path.observation_ids) <= known
 
 
-def test_content_rejects_single_candidate_path(module: ModuleType) -> None:
-    """只有一条候选路径时失败关闭，不得输出唯一方案。"""
+def test_content_accepts_single_evidence_backed_precedent_path(module: ModuleType) -> None:
+    """一项完整研究可形成 C 先例；不得恢复旧的多候选方案门。"""
     payload = _content_payload()
     synthesis = _synthesis_payload(module)
     synthesis["candidate_paths"] = synthesis["candidate_paths"][:1]
     payload["design_paths"] = synthesis
-    with pytest.raises(module.FreshCPackageError):
-        module.validate_fresh_c_content(payload)
+    content = module.validate_fresh_c_content(payload)
+    assert len(content.design_paths.candidate_paths) == 1
+    assert content.design_paths.candidate_paths[0].observation_ids
 
 
 def test_content_rejects_duplicate_design_signatures(module: ModuleType) -> None:
@@ -1099,7 +1240,8 @@ def test_run_service_executes_c_research_lineage_before_render(
     project_root = create_project_workspace(tmp_path / "项目", contract)
     payload = _ready_package_payload(module)
     content = module.validate_fresh_c_content(payload)
-    package_path = tmp_path / "c-research-package.json"
+    package_path = project_root / "inputs" / "c-research-package.json"
+    package_path.parent.mkdir(parents=True, exist_ok=True)
     package_path.write_text(
         json.dumps(
             {**payload, "scientific_review": _review(module, content.content_digest)},
@@ -1234,12 +1376,15 @@ def test_run_service_persists_recovery_state_for_blocked_c_evidence(
             source_role=SourceRole.PRIMARY_TRIAL_REPORT,
         )
     )
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    observation_payloads = [item.model_dump(mode="json") for item in rows]
+    source_payloads = payload["sources"]
+    assert isinstance(source_payloads, list)
+    _bind_observations_to_source_bytes(observation_payloads, source_payloads)
+    payload["report_data"]["observations"] = observation_payloads
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
     content = module.validate_fresh_c_content(payload)
-    package_path = tmp_path / "c-research-package-blocked.json"
+    package_path = project_root / "inputs" / "c-research-package-blocked.json"
+    package_path.parent.mkdir(parents=True, exist_ok=True)
     package_path.write_text(
         json.dumps(
             {**payload, "scientific_review": _review(module, content.content_digest)},
@@ -1299,12 +1444,15 @@ def test_fresh_c_double_exhaustion_publishes_reopenable_terminal_decision(
             source_role=SourceRole.PRIMARY_TRIAL_REPORT,
         )
     )
-    payload["report_data"]["observations"] = [  # type: ignore[index]
-        item.model_dump(mode="json") for item in rows
-    ]
+    observation_payloads = [item.model_dump(mode="json") for item in rows]
+    source_payloads = payload["sources"]
+    assert isinstance(source_payloads, list)
+    _bind_observations_to_source_bytes(observation_payloads, source_payloads)
+    payload["report_data"]["observations"] = observation_payloads  # type: ignore[index]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
     content = module.validate_fresh_c_content(payload)
-    package_path = tmp_path / "c-research-package-blocked.json"
+    package_path = project_root / "inputs" / "c-research-package-blocked.json"
+    package_path.parent.mkdir(parents=True, exist_ok=True)
     package_path.write_text(
         json.dumps(
             {**payload, "scientific_review": _review(module, content.content_digest)},

@@ -286,7 +286,8 @@
         ["arm_detail", "组别"],
         ["clinical_concept", "安全性事件"],
         ["time_window", "观察时间"],
-        ["numeric_value", "发生率/数值"],
+        ["numeric_value", "数值"],
+        ["denominator", "风险人数"],
         ["unit", "单位"],
         ["disclosure_state", "披露状态"]
       ];
@@ -297,6 +298,7 @@
         ["trial_zh", "试验"],
         ["arm_detail", "组别"],
         ["clinical_concept", "基线变量"],
+        ["category_level_label_zh", "分层"],
         ["statistical_form_family", "统计形式"],
         ["numeric_value", "数值"],
         ["unit", "单位"],
@@ -355,11 +357,15 @@
         ["mechanism", "作用机制"]
       ];
     }
+    // 独立复核 B r46（issue-1）：补"统计形式/分析人群"两列，
+    // 展开表行可归属到分析集与分析形式（数据已在行字段）
     return [
       ["product_zh", "产品"],
       ["trial_zh", "试验"],
       ["arm_detail", "组别"],
       ["clinical_concept", "疗效指标"],
+      ["statistical_form_family_label_zh", "统计形式"],
+      ["population_context_label_zh", "分析人群"],
       ["time_window", "评价时间"],
       ["numeric_value", "比较值"],
       ["unit", "单位"],
@@ -369,13 +375,49 @@
 
   function columnValue(row, key) {
     if (key === "disclosure_state") return disclosureLabel(row.disclosure_state);
+    if (key === "category_level_label_zh") {
+      var catZh = row.category_level_label_zh || row.category_level || "";
+      return catZh || "—";
+    }
+    if (key === "statistical_form_family_label_zh") {
+      return row.statistical_form_family_label_zh || row.statistic_form || "未列示";
+    }
+    if (key === "population_context_label_zh") {
+      return row.population_context_label_zh || row.population || "分析人群未列示";
+    }
     if (key === "product_zh") return row.product_zh || "未列示产品";
     if (key === "trial_zh") return row.trial_zh || "未列示试验";
     if (key === "arm") return armText(row);
     if (key === "arm_role") return row.arm_role_label_zh || row.arm_role || "组别未列示";
-    if (key === "arm_detail") return row.arm_detail || armText(row);
+    if (key === "arm_detail") {
+      // 独立复核 B r35：组别列以中文角色为主，登记明细只作括注，
+      // 表格与图例（治疗组/对照组）不再出现两种写法
+      var roleLabel = row.arm_role_label_zh || "";
+      var detailText = String(row.arm_detail || "");
+      if (roleLabel && detailText && detailText !== roleLabel) {
+        return roleLabel + "（" + detailText + "）";
+      }
+      if (roleLabel) return roleLabel;
+      return detailText || armText(row);
+    }
     if (key === "clinical_concept") {
-      return row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
+      var ccLabel = row.clinical_concept_label_zh || row.clinical_concept || "临床概念未列示";
+      var semanticParts = [];
+      if (row.polarity && row.polarity !== "affirmed") semanticParts.push(row.polarity);
+      if (row.grade_set && row.grade_set.length) semanticParts.push("Grade " + row.grade_set.join("/"));
+      if (row.seriousness && row.seriousness !== "unspecified") semanticParts.push(row.seriousness);
+      if (row.teae === true) semanticParts.push("TEAE");
+      if (row.teae === false) semanticParts.push("非TEAE");
+      if (row.relatedness && row.relatedness !== "unspecified") semanticParts.push(row.relatedness);
+      if (row.parent) semanticParts.push("父项:" + row.parent);
+      if (row.children && row.children.length) semanticParts.push("子项:" + row.children.join("/"));
+      if (row.count_basis) semanticParts.push("口径:" + row.count_basis);
+      if (semanticParts.length) ccLabel += "｜" + semanticParts.join("；");
+      // 独立复核 B r40：行级携带终点定义序号，展开表内可归属到具体定义
+      var withOrdinal = row._endpoint_ordinal ? ccLabel + "（" + row._endpoint_ordinal + "）" : ccLabel;
+      // 独立复核 B r49：合成状态行（无登记数值的覆盖占位）显式标注
+      if (row._synthetic) return "合成状态行（无登记数值）";
+      return withOrdinal;
     }
     if (key === "original_endpoint") {
       return row._b_original_event || row.original_endpoint || row.event || "原始终点未列示";
@@ -387,7 +429,14 @@
     if (key === "time_window") {
       var twMap = {"Extension Period":"扩展期","LTE Period":"长期扩展期","Long-Term Extension (LTE)":"长期扩展期（LTE）","Long-Term Extension Period (52 Weeks)":"长期扩展期（52周）","Overall Study":"整个研究期","Primary Treatment Period (12 Weeks)":"主要治疗期（12周）","Treatment Period 1 (TP1)":"治疗期1（TP1）","Treatment Period 2 (TP2)":"治疗期2（TP2）","Treatment Period":"治疗期","Baseline":"基线"};
       var twVal = row.time_window || "";
-      return twMap[twVal] || twVal;
+      var mapped = twMap[twVal] || twVal;
+      // 独立复核 B r47（issue-3）：未译英文原句按报告惯例标注
+      var latin = mapped.match(/[A-Za-z]{3,}/g);
+      var cjk = /[\u4e00-\u9fff]/.test(mapped);
+      if (latin && latin.length >= 2 && !cjk) {
+        return mapped + "（登记原文，未译）";
+      }
+      return mapped;
     }
     if (key === "actual_timepoint") {
       if (row.actual_timepoint === null || row.actual_timepoint === undefined) return "未列示";
@@ -419,8 +468,12 @@
     if (key === "regions") {
       return Array.isArray(row.regions) ? row.regions.join("、") : row.regions || "未列示";
     }
-    if (key === "numeric_value") return rowValueText(row) || "未列示";
-    if (key === "value") return rowValueText(row) || "未列示";
+    if (key === "numeric_value" || key === "value") {
+      var displayed = rowValueText(row) || "未列示";
+      return row._user_edit
+        ? displayed + "（" + row._user_edit.status_label_zh + "）"
+        : displayed;
+    }
     if (key === "numerator" || key === "denominator") {
       return row[key] === null || row[key] === undefined ? "未列示" : String(row[key]);
     }
