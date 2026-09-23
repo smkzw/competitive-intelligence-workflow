@@ -151,9 +151,9 @@ def test_statistical_form_and_time_band_remain_separate_axes() -> None:
 
     assert len(groups) == 3
     assert {group["title_zh"] for group in groups} == {
-        "EASI-75应答 · 应答率 · 约6个月 · 全分析集 · 该组部分观察的登记分组信息不全，已按试验合并展示",
-        "EASI-75应答 · 均值 · 约6个月 · 全分析集 · 该组部分观察的登记分组信息不全，已按试验合并展示",
-        "EASI-75应答 · 应答率 · 约第12周 · 全分析集 · 该组部分观察的登记分组信息不全，已按试验合并展示",
+        "EASI-75应答 · 应答率 · 约6个月 · 全分析集",
+        "EASI-75应答 · 均值 · 约6个月 · 全分析集",
+        "EASI-75应答 · 应答率 · 约第12周 · 全分析集",
     }
 
 
@@ -230,10 +230,25 @@ def test_unknown_semantics_keep_trials_in_adjacent_descriptive_groups() -> None:
     groups = _groups_for_page("efficacy", [(first, None), (second, None)])
     assert len(groups) == 2
     assert all(group["cross_trial"] is False for group in groups)
-    assert all("登记分组信息不全" in group["title_zh"] for group in groups)
+    assert all("登记分组信息不全" not in group["title_zh"] for group in groups)
     assert {row["row_id"] for group in groups for row in group["rows"]} == {
         "first", "second",
     }
+
+
+def test_missing_registered_arm_is_disclosed_without_cross_trial_merge() -> None:
+    first = _project_efficacy("first", "EASI-75")
+    second = dict(first, row_id="second", trial_id="trial-b")
+    for row in (first, second):
+        row["arm"] = ""
+        row["arm_role"] = "unknown"
+        row["group_id"] = ""
+
+    groups = _groups_for_page("efficacy", [(first, None), (second, None)])
+
+    assert len(groups) == 2
+    assert all(group["cross_trial"] is False for group in groups)
+    assert all("登记分组信息不全" in group["title_zh"] for group in groups)
 
 
 def test_complete_known_semantics_still_allow_cross_trial_group() -> None:

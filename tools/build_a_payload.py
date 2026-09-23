@@ -484,7 +484,6 @@ def main() -> None:
                             efficacy_rows.append({
                                 "row_id": f"eff-{ei}", "product_id": pid,
                                 "trial_id": nct.lower(), "endpoint": title,
-                                "timepoint": time_frame,
                                 "arm": group_titles.get(group_id, group_id or "组别未登记"),
                                 "value": value, "unit": unit,
                                 "population": population,
