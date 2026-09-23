@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from ci_workflow.renderers.portal.report_b import (
+    ReportBPortalData,
     _efficacy_records,
     _filter_dimensions,
     _groups_for_page,
@@ -121,6 +123,23 @@ def test_safety_keeps_original_event_identity() -> None:
         row["original_endpoint"] == "任何TEAE"
         for row, _source in safety
     )
+
+
+def test_safety_view_declared_shadow_never_reaches_display_records() -> None:
+    payload = json.loads(PNH_DATA.read_text(encoding="utf-8"))
+    source_row = payload["safety"][0]
+    payload["safety_views"] = {
+        "facts": [source_row, {**source_row, "row_id": source_row["row_id"] + "-declared"}]
+    }
+    data = ReportBPortalData.model_validate(payload)
+    names = {row.id: row.name for row in data.products}
+    trial_names = {row.id: row.display_id for row in data.trials}
+
+    records = _safety_records(data, names, trial_names)
+
+    visible_ids = {row["row_id"] for row, _source in records}
+    assert source_row["row_id"] in visible_ids
+    assert source_row["row_id"] + "-declared" not in visible_ids
 
 
 def test_controlled_semantics_do_not_fuzzy_merge_distinct_concepts() -> None:

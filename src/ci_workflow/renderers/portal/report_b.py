@@ -1615,8 +1615,8 @@ def _b_native_label(text: str) -> str | None:
         return out
     for pattern, rep in _B_VARIABLE_TOKENS:
         out = re.sub(pattern, rep, out, flags=re.I)
-    for pattern, rep in _POPULATION_TOKENS:
-        out = re.sub(pattern, rep, out, flags=re.I)
+    for pattern, population_rep in _POPULATION_TOKENS:
+        out = re.sub(pattern, population_rep, out, flags=re.I)
     out = re.sub(r"\s*and\s*", "、", out, flags=re.I)
     out = re.sub(r",\s*", "、", out)
     out = re.sub(r"\(\s*", "（", out)
@@ -1898,7 +1898,8 @@ def _is_pure_role_label(raw: str) -> bool:
         "placebo", "active", "control", "comparator", "treatment",
         "treated", "experimental", "arm", "group", "cohort", "therapy",
     }
-    return bool(role_tokens) and tokens <= role_tokens | {"matching", "dose", "a", "b", "c", "1", "2", "3", "4"}
+    allowed_suffixes = {"matching", "dose", "a", "b", "c", "1", "2", "3", "4"}
+    return bool(role_tokens) and tokens <= role_tokens | allowed_suffixes
 
 
 def _arm_code_zh(code: str) -> str:
@@ -2010,7 +2011,7 @@ def _time_label(value: Any) -> str:
     if "eot" in raw_time_text.casefold():
         return "治疗结束访视（EOT）"
     candidate = raw_time_text
-    if candidate is None:
+    if not candidate:
         return "时间点未列示"
     unit = _first(value, "actual_timepoint_unit", "time_unit", "timepoint_unit", default=None)
     # 独立复核 B r37（issue-1）：candidate 已被 _text 字符串化，
@@ -2123,7 +2124,7 @@ def _display_locator(value: Any, row_id: str) -> EvidenceLocator:
     }
     # 独立复核 B r37（issue-4）：定位链接必须能回到具体登记记录，
     # 而非 CT.gov 首页——按行上的试验标识构造深链
-    visible["url"] = _deep_link_for(value, visible["url"])
+    visible["url"] = _deep_link_for(value, locator.url)
     if not any(value for key, value in visible.items() if key != "document_role"):
         visible["heading"] = "登记结果"
     return EvidenceLocator.model_validate(visible)
@@ -2365,15 +2366,23 @@ def _project_record(
         "period": period,
         "category": category,
         "event": label,
-        "term_key": _text(_source_first(value, source, "term_key", default="unknown"), "unknown"),
+        "term_key": _text(
+            _source_first(value, source, "term_key", default="unknown"), "unknown"
+        ),
         "polarity": _text(_source_first(value, source, "polarity", default="affirmed"), "affirmed"),
         "grade_set": tuple(_source_first(value, source, "grade_set", default=()) or ()),
-        "seriousness": _text(_source_first(value, source, "seriousness", default="unspecified"), "unspecified"),
+        "seriousness": _text(
+            _source_first(value, source, "seriousness", default="unspecified"), "unspecified"
+        ),
         "teae": _source_first(value, source, "teae", default=None),
-        "relatedness": _text(_source_first(value, source, "relatedness", default="unspecified"), "unspecified"),
+        "relatedness": _text(
+            _source_first(value, source, "relatedness", default="unspecified"), "unspecified"
+        ),
         "parent": _source_first(value, source, "parent", default=None),
         "children": tuple(_source_first(value, source, "children", default=()) or ()),
-        "count_basis": _text(_source_first(value, source, "count_basis", default="participants"), "participants"),
+        "count_basis": _text(
+            _source_first(value, source, "count_basis", default="participants"), "participants"
+        ),
         "at_risk_stat": _source_first(value, source, "at_risk_stat", default=None),
         "time": time_label,
         "actual_timepoint": actual_timepoint,
@@ -2570,7 +2579,7 @@ def _dedupe_records(
     return tuple(result)
 
 
-def _without_declared_shadow_rows(rows):
+def _without_declared_shadow_rows(rows: Sequence[Any]) -> tuple[Any, ...]:
     """会商 round-4 #4（B r57/r58/r59）：-declared 影子行只在门匹配索引
     中生效，任何展示路径（表格/图/证据视图）一律过滤。"""
     return tuple(row for row in rows if not _row_is_declared_shadow(row))
@@ -2650,7 +2659,7 @@ def _safety_records(
     )
     # 会商 round-4 #4（B r57 issue-2）：-declared 声明臂影子行是 B 门
     # 匹配的内部索引（与所在期间行同值），渲染层统一过滤，不再展示
-    values = [
+    visible_values = [
         value
         for value in values
         if not str(
@@ -2669,7 +2678,7 @@ def _safety_records(
             ),
             value,
         )
-        for index, value in enumerate(values)
+        for index, value in enumerate(visible_values)
     ]
     row_ids = {row["row_id"] for row, _source in records}
     for legacy in data.safety:
@@ -2718,7 +2727,7 @@ def _state_rows_from_view(
     )
     # 会商 round-4 #4（B r58 issue-2）：-declared 影子行过滤统一到
     # 视图行入口——基线域与安全域同规则，不再只在安全域过滤
-    values = [
+    visible_values = [
         value
         for value in values
         if not str(
@@ -2727,7 +2736,7 @@ def _state_rows_from_view(
         ).endswith("-declared")
     ]
     records_list: list[tuple[dict[str, Any], Any]] = []
-    for index, value in enumerate(values):
+    for index, value in enumerate(visible_values):
         row = _project_record(
             value,
             domain=domain,
@@ -3752,7 +3761,9 @@ def _groups_for_page(
             "bubble" if any(item[0].get("renderable") for item in records) else "status_matrix"
         )
         matrix_groups = []
-        typed_facets: dict[tuple[str, str, str], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+        typed_facets: dict[
+            tuple[str, str, str], list[tuple[dict[str, Any], Any]]
+        ] = defaultdict(list)
         for item in records:
             row = item[0]
             typed_facets[(
@@ -3954,7 +3965,10 @@ def _filter_dimensions(
                 "clinical_concept": _text(row.get("clinical_concept")).split(":")[-1],
                 "polarity": _text(row.get("polarity"), "affirmed"),
                 "seriousness": _text(row.get("seriousness"), "unspecified"),
-                "teae": "true" if row.get("teae") is True else "false" if row.get("teae") is False else "unknown",
+                "teae": (
+                    "true" if row.get("teae") is True
+                    else "false" if row.get("teae") is False else "unknown"
+                ),
                 "relatedness": _text(row.get("relatedness"), "unspecified"),
                 "count_basis": _text(row.get("count_basis"), "participants"),
                 "time": _text(row.get("time"), "时间点未列示"),
@@ -4079,17 +4093,6 @@ def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
     ):
         return text + "（登记原文，未译）"
     return text
-    if text == "not_reported":
-        return "未列示"
-    zh_trim = re.sub(r"[A-Za-z0-9_.\-]+$", "", text)
-    if re.search(r"[\u4e00-\u9fff]", zh_trim):
-        return zh_trim
-    if isinstance(label, str) and re.search(r"[\u4e00-\u9fff]", label):
-        return label
-    mapped = _FILTER_STATIC_LABELS.get(text.casefold())
-    if mapped:
-        return mapped
-    return label if isinstance(label, str) and label else text
 
 
 def _filter_groups(
@@ -4266,7 +4269,9 @@ def _page_records(
     ))
 
 
-def _without_declared_shadow_pairs(records):
+def _without_declared_shadow_pairs(
+    records: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[tuple[dict[str, Any], Any], ...]:
     """会商 round-4 #4：-declared 影子行在页面记录总出口过滤——
     任何页面域（含 subgroups/matrix）都不再泄漏到表格与证据视图。"""
     return tuple(
@@ -4641,7 +4646,8 @@ def _render_page_context(
         "overview_conclusions": (
             [
                 {"label": "试验宇宙", "text": (
-                    f"覆盖 {len(data.products)} 个产品、{len(data.trials)} 项基线信息完整的注册试验；"
+                    f"覆盖 {len(data.products)} 个产品、"
+                    f"{len(data.trials)} 项基线信息完整的注册试验；"
                     "宇宙按登记检索全闭包，不以名单排序替代。")},
                 {"label": "疗效证据", "text": (
                     "公开疗效观察按登记终点族与观察窗分组呈现，与数据表同源，数值可回溯登记来源；"
@@ -4742,13 +4748,14 @@ def _project_active_facts_b(
             )
         except ValueError as error:
             raise ReportBPortalError(str(error)) from error
+        fact_extra = fact.model_extra or {}
         unit = str(
-            fact.model_extra.get("normalized_unit")
-            or fact.model_extra.get("unit")
+            fact_extra.get("normalized_unit")
+            or fact_extra.get("unit")
             or row["unit"]
         )
         endpoint = (
-            fact.model_extra.get("endpoint_definition")
+            fact_extra.get("endpoint_definition")
             or row.get("term")
             or row.get("endpoint")
         )
@@ -4768,7 +4775,7 @@ def _project_active_facts_b(
             }
         )
         for field in ("numerator", "denominator"):
-            value = fact.model_extra.get(field)
+            value = fact_extra.get(field)
             if isinstance(value, int):
                 row[field] = value
         view_name = f"{binding.collection}_views"
@@ -4795,7 +4802,7 @@ def _project_active_facts_b(
                 }
             )
             for field in ("numerator", "denominator"):
-                value = fact.model_extra.get(field)
+                value = fact_extra.get(field)
                 if isinstance(value, int):
                     projected[field] = value
         user_edits[binding.row_id] = user_edit_disclosure(
@@ -4865,7 +4872,7 @@ def _b_source_view_row(
 
 
 def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
-    if isinstance(row, EfficacyRow) and not isinstance(row, SafetyRow):
+    if isinstance(row, EfficacyRow):
         form = "crude_rate" if row.unit == "%" and row.numerator is not None else "estimate"
         return form, "participants" if row.numerator is not None else "estimate"
     forms = {
@@ -4880,7 +4887,7 @@ def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
 
 def active_fact_binding_for_b(
     data: ReportBPortalData,
-    collection: str,
+    collection: Literal["safety", "efficacy"],
     row_id: str,
 ) -> ActiveFactBinding:
     """Resolve a B row together with its immutable evidence-view identity."""
