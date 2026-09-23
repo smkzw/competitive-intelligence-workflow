@@ -202,6 +202,7 @@ def main() -> None:
     safety_rows: list[dict[str, Any]] = []
     dev_candidates: dict[str, list[tuple[bool, str]]] = {}
     skipped_trials: list[str] = []
+    denominator_conflicts: list[dict[str, str]] = []
     product_regions: dict[str, set[str]] = {}
     product_phase: dict[str, str] = {}
     product_status: dict[str, str] = {}
@@ -534,9 +535,35 @@ def main() -> None:
                     gid = str(g.get("id") or "").strip()
                     gtitle = str(g.get("title") or "").strip()
                     if gid and gtitle:
-                        group_titles.setdefault(gid, gtitle)
+                        # The measure's group title is more specific than the
+                        # trial-level title for multi-period observations.
+                        group_titles[gid] = gtitle
 
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
+                denominator_by_group: dict[str, int] = {}
+                conflicting_denominator_groups: set[str] = set()
+                for denom in measure.get("denoms") or []:
+                    for count in denom.get("counts") or []:
+                        group_id = str(count.get("groupId") or "").strip()
+                        raw_count = count.get("value")
+                        if not group_id or isinstance(raw_count, bool):
+                            continue
+                        try:
+                            count_value = int(str(raw_count))
+                        except (TypeError, ValueError):
+                            continue
+                        if count_value > 0 and group_id not in conflicting_denominator_groups:
+                            if group_id in denominator_by_group and (
+                                denominator_by_group[group_id] != count_value
+                            ):
+                                conflicting_denominator_groups.add(group_id)
+                                denominator_by_group.pop(group_id)
+                                denominator_conflicts.append({
+                                    "trial_id": nct.lower(), "endpoint": title,
+                                    "group_id": group_id,
+                                })
+                                continue
+                            denominator_by_group[group_id] = count_value
                 for cls in measure.get("classes") or []:
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
@@ -595,6 +622,7 @@ def main() -> None:
                                     "unit": unit,
                                     "population": population,
                                     "timepoint": row_time_frame,
+                                    "denominator": denominator_by_group.get(group_id),
                                 }
                             )
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
@@ -809,6 +837,7 @@ def main() -> None:
     }
     derivation = payload.pop("derivation")
     derivation["skipped_trials_no_sample_size"] = skipped_trials
+    derivation["denominator_conflicts"] = denominator_conflicts
     # 会商 P0 #2：安全域分流审计计数（TEAE/AE 类测量不再混入疗效表）
     derivation["safety_domain_diverted"] = len(SAFETY_DOMAIN_DIVERTED)
     derivation["safety_domain_diverted_samples"] = [

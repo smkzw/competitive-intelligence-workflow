@@ -1,5 +1,11 @@
 # W07 真实来源链只读追踪（2026-09-23，开发证据）
 
+### 新旧 A 构建路径不可互换；通用测量组名/分母修复
+
+两份原始页 CAS SHA-256 `1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98`、`c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3` 与 v106 两页 `content_text` 逐字节一致。用当前 `packets/2026-09-11-pnh-vertical/pnh-alias-map-v1.json`（map ID `pnha-alias-v2`）、通用 `tools/build_a_payload.py` 重建的第一版载荷 SHA-256 `65c92d49bb04afc0ff805e9c423466c26691b274591aa187f56a4561f1c81ba5`：3895 疗效、271 安全；只有 2916 疗效行在完整身份下唯一匹配，979 无匹配。v106 研究包 3895 疗效、519 安全且全体疗效带登记组分母；两者不是同一生成链。直接替换会丢安全事实，禁止晋级。
+
+通用构建器现采用测量级组名覆盖泛试验组名，按测量公布的 `denoms` 给同组疗效行分母；多个同值可合并，不同值拒绝绑定并记 `denominator_conflicts`。合成两期/相冲突分母用例通过；当前 PNH CAS 重建无分母冲突，载荷 SHA-256 `98159d680da05abc3ea7d5343cbdee7856ee0ff295994a99f33cebea805d4d1f`，3895 行均带同组分母，安全仍 271。48 个采用 NCT 的原始页切片在隔离临时项目中重新核对：批量候选 3425、原始事实 4034、缺口 470，`eff-10` 从错误 Baseline 改为真实测量时间窗后可绑定；来源另有 `missing=3`、`parse_failure=51`。定向合成/相邻 **3 passed in 4.74s**，Ruff、strict-mypy `src tools` 243 文件全绿。所有新旧重建都是开发候选；未摄取正式 PNH 项目、未独立医学复核、未生成正式 A 门户。临时 3.2 MB 构建物确认仅四份可再生 JSON/派生文件后移入废纸篓，历史 v106 和原始 CAS 未改。
+
 ### A 疗效批量候选不再逐行重复重提取
 
 `build_ctgov_a_outcome_candidate_batch` 对每份 `SourceCapture` 只做一次原子重提取，用试验和完整终点标题缩小候选，再执行组别、单位、数值、时间、class/category 与来源路径的既有确定性校验。单行有 0 或多于 1 个完整候选、或多个报告行争用同一原子时，输出显式 gap 且不生成绑定事实；原始解析/缺失问题另行返回。测试中两个不同访视的直接人数 `30`、`31` 和各自来源分母经既有 `ingest_research_evidence` 形成 4 个事实版本、2 个声明版本与精确片段；真实 AD NCT02277743 的 `10.3` 行在批量/单行合同下结果一致。首次试测因合成 CAS 不在摄取项目根内、诊断 SQL 误用不存在的 `original_text` 列而失败，修正测试设置后 W07/CT.gov/A 包整族 **28 passed in 95.50s**，Ruff、单模块 strict-mypy、diff 检查通过。该批是可摄取候选接缝，不代表正式 PNH 4412 行已摄取、独立复核或科学门通过。
