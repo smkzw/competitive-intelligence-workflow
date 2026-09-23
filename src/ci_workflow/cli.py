@@ -260,6 +260,15 @@ def verify_package(root: Path) -> dict[str, Any]:
     extra_schema = actual_schema - declared_schema - HISTORICAL_SCHEMA_PATHS
     if missing_schema or extra_schema:
         raise ContractError("Schema 清单与安装包实际 v1 文件不一致")
+    declared_migrations = set(components["migrations"])
+    actual_migrations = {
+        path.relative_to(root).as_posix() for path in (root / "migrations").glob("*.sql")
+    }
+    if (
+        len(components["migrations"]) != len(declared_migrations)
+        or declared_migrations != actual_migrations
+    ):
+        raise ContractError("Migration 清单与安装包实际文件不一致")
 
     cli = cast(dict[str, Any], manifest["cli"])
     if cli["catalog"] != EXPECTED_CLI_CATALOG:

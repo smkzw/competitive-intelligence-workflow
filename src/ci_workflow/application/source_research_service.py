@@ -249,6 +249,24 @@ class ResearchFact(BaseModel):
         return value.strip()
 
 
+class CtgovAeRateCalculation(BaseModel):
+    """One bounded n/N rule; the source quotes remain separate atomic facts."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    rule_id: Literal["ctgov-ae-affected-over-at-risk-percent"] = (
+        "ctgov-ae-affected-over-at-risk-percent"
+    )
+    rule_version: Literal["1"] = "1"
+    formula: Literal["round(100 * affected / at_risk, 1)"] = (
+        "round(100 * affected / at_risk, 1)"
+    )
+    decimal_places: Literal[1] = 1
+    output_value: float = Field(allow_inf_nan=False)
+    unit: Literal["%"] = "%"
+    scope_row_ref: str
+
+
 class ResearchClaim(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -256,6 +274,20 @@ class ResearchClaim(BaseModel):
     claim_text: str
     claim_kind: Literal["direct_evidence", "deterministic_calculation", "synthesis"]
     fact_ids: tuple[str, ...] = Field(min_length=1)
+    calculation: CtgovAeRateCalculation | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+
+    @model_validator(mode="after")
+    def _calculation_has_two_inputs(self) -> Self:
+        if self.calculation is not None and (
+            self.claim_kind != "deterministic_calculation"
+            or len(self.fact_ids) != 2
+            or self.fact_ids[0] == self.fact_ids[1]
+            or not self.calculation.scope_row_ref.startswith("safety:")
+        ):
+            raise ValueError("AE 计算必须引用两条不同原子事实和一个安全性结果行")
+        return self
 
 
 class RouteAttempt(BaseModel):
@@ -1508,6 +1540,10 @@ def _bind_verified_ctgov_ae_to_a_row(
         ),
         claim_kind="deterministic_calculation",
         fact_ids=tuple(item.fact_id for item in facts),
+        calculation=CtgovAeRateCalculation(
+            output_value=atom.display_value,
+            scope_row_ref=f"safety:{row.row_id}",
+        ),
     )
     return bound, facts, claim
 
@@ -1576,8 +1612,8 @@ def _validate_bound_ctgov_a_results(
         safety_row = safety_rows.get(fact.row_ref)
         if safety_row is None or context.value_role != "affected_count":
             raise ResearchPackageError("已绑定 AE 行缺少受影响人数原子")
-        safety_expected_row, safety_expected_facts, expected_claim = _bind_verified_ctgov_ae_to_a_row(
-            source, atom, safety_row
+        safety_expected_row, safety_expected_facts, expected_claim = (
+            _bind_verified_ctgov_ae_to_a_row(source, atom, safety_row)
         )
         denominator_ref = f"{fact.row_ref}:denominator"
         if (

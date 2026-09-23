@@ -73,3 +73,9 @@
 真实 `任何SAE / EG001 / Dupilumab 300 mg q2w` 小批：来源 `seriousNumAffected=7`、`seriousNumAtRisk=229`，解析展示率为 `3.1%`。`bind_ctgov_ae_to_a_row` 对试验、类别、事件、剂量组、收集时间窗、统计对象、分子/分母和展示值做同一身份核对；报告行的 `source_text` 是原始人数 `7`，不是捏造的“来源原文 3.1%”。分子和分母各成一条精确来源事实，并生成同时引用两事实的确定性计算声明。A 研究包的显式绑定验证要求这两事实和计算声明同时存在；缺分母、改原文、错行或缺计算声明均拒绝。真实站点 `data/report.js` 可见该单条 AE 的精确来源路径。
 
 代码 Ruff 与单模块 strict-mypy 通过，来源摄取、登记覆盖及 A 包邻接批 `20 passed in 86.80s`。**仍未完成**：计算声明尚非设计合同要求的完整结构化派生记录（输入 fact *version*、规则版本、公式、输出、适用范围与快照关联）；页面尚未把人数/风险人数/计算式一起呈现给用户，且没有浏览器验收。A 其他 AE、B/C、正式 PNH 数据及 4412 条全量来源均未闭合。下一批应补共享派生记录及其页面消费，再按真实小批扩展，不可把此处的单条示例写成 S01–S03 通过。
+
+### AE 结构化派生与安装迁移闭合（同日后续；仅小批）
+
+对同一 NCT02277743 的 `7` 与 `229`，`CtgovAeRateCalculation` 固定规则 ID/版本、`round(100 * affected / at_risk, 1)`、输出 `3.1%` 与 A 安全性行作用域。摄取前按共同登记研究、事件、组别、时间窗、来源、原始整数及算式核对；伪造 `3.2%` 被拒且数据库来源版本仍为零。成功摄取后，`evidence_derivations` 的 `calculation` 行及不可变快照同时记录两个 fragment ID、两个 fact version ID、规则/版本、公式、参数、输出及 claim version ID；恢复空项目后计算行保持一致。同一输入重复摄取不重复增加派生。此计算来自两个原子来源值，不声称登记页直接报告了 `3.1%` 原文。
+
+初次端到端用例发现旧 0011 表的 kind CHECK 只允许 `source_text/normalization/translation`；若使用 `INSERT OR IGNORE` 会把新 `calculation` 静默丢掉，形成“快照有、SQLite 无”的假一致。新增 0015 迁移复制旧行并重建 CHECK/append-only 触发器，改计算插入为仅对相同派生 ID 幂等，其他错误不忽略。迁移测试证实旧行保留、防修改有效与 `PRAGMA integrity_check=ok`。安装 `package-manifest.json` 原仅列 0001–0010，而实际已有 0014；现列至 0015，并让 `package verify` 比对声明与全部实际 SQL。定向 W07/迁移/包合同 **13 passed**，`PACKAGE_OK` 为开发候选；先前同界面相邻批 **32 passed**、Ruff 与 243 文件 strict-mypy 通过。上述属于不同测试时点，不合并冒称一个终验。仍缺页面消费、B/C 同源绑定、正式 PNH 数据库 4412 条闭包、浏览器和 fresh-install 验收；W07 继续 FAIL。

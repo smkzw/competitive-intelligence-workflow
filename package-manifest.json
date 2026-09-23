@@ -107,7 +107,12 @@
       "migrations/0007_evidence_audit_chain.sql",
       "migrations/0008_project_lineage_guards.sql",
       "migrations/0009_source_date_precision.sql",
-      "migrations/0010_source_text_derivations.sql"
+      "migrations/0010_source_text_derivations.sql",
+      "migrations/0011_candidate_lineage_closure.sql",
+      "migrations/0012_user_fact_edits.sql",
+      "migrations/0013_user_refresh_comparisons.sql",
+      "migrations/0014_current_generation_protocol.sql",
+      "migrations/0015_evidence_calculation_derivations.sql"
     ]
   },
   "cli": {

@@ -125,9 +125,11 @@ def test_package_manifest_closes_public_skill_internal_skills_and_current_compon
         "policies/recovery/source-strategies-v1.yaml",
         "policies/sources/source-policy-v1.yaml",
     ]
-    assert "migrations/0008_project_lineage_guards.sql" in components["migrations"]
-    assert "migrations/0009_source_date_precision.sql" in components["migrations"]
-    assert "migrations/0010_source_text_derivations.sql" in components["migrations"]
+    actual_migrations = {
+        path.relative_to(ROOT).as_posix() for path in (ROOT / "migrations").glob("*.sql")
+    }
+    assert len(components["migrations"]) == len(actual_migrations)
+    assert set(components["migrations"]) == actual_migrations
 
     cli = cast(dict[str, object], manifest["cli"])
     assert cli["catalog"] == EXPECTED_CLI_CATALOG

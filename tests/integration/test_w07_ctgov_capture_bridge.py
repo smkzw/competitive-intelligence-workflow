@@ -26,6 +26,7 @@ from ci_workflow.application.source_research_service import (
 from ci_workflow.domain.evidence import CtgovRecordSelector
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_report_a_site
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
+from ci_workflow.storage.snapshot_store import SnapshotStore
 from ci_workflow.storage.source_derivation import capture_source_text
 from ci_workflow.storage.sqlite import open_database
 from tests.integration.test_research_package_submission import _project
@@ -328,3 +329,89 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
         ]
     with pytest.raises(ValueError, match="冲突的source_text"):
         FreshAResearchContent.model_validate(candidate)
+
+
+def test_ae_rate_derivation_is_version_bound_and_restorable(tmp_path: Path) -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item)
+        for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT02277743"
+    )
+    atom = next(
+        item for item in extract_ctgov_atomic_results(source)[0]
+        if item.category == "sae" and item.term == "任何SAE"
+        and item.group_id == "EG001" and item.value_quote == "7"
+    )
+    report = ReportAPortalData.model_validate(payload["report_data"])
+    row = next(
+        item for item in report.safety
+        if item.trial_id and item.trial_id.casefold() == atom.trial_id.casefold()
+        and item.term == atom.term and item.arm_detail == atom.group_title
+        and item.numerator == atom.numerator
+    )
+    bound, facts, claim = bind_ctgov_ae_to_a_row(
+        source, atom, row.model_copy(update={"time_window": atom.timepoint})
+    )
+    assert claim.calculation is not None
+    assert claim.calculation.scope_row_ref == f"safety:{bound.row_id}"
+    project = _project(tmp_path)
+    contract = verify_project_workspace(project).contract
+    arguments = dict(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        report_kind="A", data_cutoff=contract.data_cutoff,
+        scientific_content_digest=sha256(b"NCT02277743:AE:7/229").hexdigest(),
+        created_at=source.acquired_at, sources=(source,), route_attempts=(),
+        facts=facts,
+    )
+    bad_calculation = claim.calculation.model_copy(update={"output_value": 3.2})
+    with pytest.raises(ValueError, match="计算输出"):
+        ingest_research_evidence(
+            **arguments, claims=(claim.model_copy(update={"calculation": bad_calculation}),)
+        )
+    with open_database(project / "state/project.sqlite") as database:
+        assert database.execute("SELECT count(*) FROM source_versions").fetchone()[0] == 0
+
+    lineage = ingest_research_evidence(**arguments, claims=(claim,))
+    snapshot = SnapshotStore(project).read(lineage.evidence_snapshot)
+    calculations = [
+        item for item in snapshot["closure"]["derivations"]
+        if item["derivation_kind"] == "calculation"
+    ]
+    assert len(calculations) == 1
+    calculation = calculations[0]
+    assert calculation["rule_version"] == "1"
+    assert calculation["input_fragment_ids"] == [
+        lineage.fragment_by_fact_id[item.fact_id] for item in facts
+    ]
+    assert calculation["output"]["input_fact_version_ids"] == [
+        lineage.fact_version_by_ref[item.fact_id] for item in facts
+    ]
+    assert calculation["output"]["value"] == 3.1
+    assert calculation["output"]["scope_row_ref"] == f"safety:{bound.row_id}"
+    with open_database(project / "state/project.sqlite") as database:
+        recorded = database.execute(
+            "SELECT output_json FROM evidence_derivations WHERE derivation_kind='calculation'"
+        ).fetchone()
+    assert recorded is not None
+    assert json.loads(recorded[0]) == calculation["output"]
+    repeated = ingest_research_evidence(**arguments, claims=(claim,))
+    assert repeated.evidence_snapshot.snapshot_id == lineage.evidence_snapshot.snapshot_id
+    with open_database(project / "state/project.sqlite") as database:
+        assert database.execute(
+            "SELECT count(*) FROM evidence_derivations WHERE derivation_kind='calculation'"
+        ).fetchone() == (1,)
+
+    restored_root = tmp_path / "restored-evidence"
+    restored = SnapshotStore(restored_root).restore_evidence_manifest(
+        project / lineage.evidence_snapshot.relative_path
+    )
+    assert restored.snapshot_id == lineage.evidence_snapshot.snapshot_id
+    with open_database(restored_root / "state/project.sqlite") as database:
+        restored_output = database.execute(
+            "SELECT output_json FROM evidence_derivations WHERE derivation_kind='calculation'"
+        ).fetchone()
+    assert restored_output is not None
+    assert json.loads(restored_output[0]) == calculation["output"]

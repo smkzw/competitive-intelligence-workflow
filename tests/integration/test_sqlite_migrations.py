@@ -41,6 +41,7 @@ EXPECTED_MIGRATIONS = (
     "0012_user_fact_edits.sql",
     "0013_user_refresh_comparisons.sql",
     "0014_current_generation_protocol.sql",
+    "0015_evidence_calculation_derivations.sql",
 )
 
 EXPECTED_TABLES = {
@@ -110,6 +111,43 @@ def test_ordered_migrations_preserve_task_1_3_and_extend_the_truth_store(
         ]
 
     assert apply_migrations(database_path) == ()
+
+
+def test_calculation_migration_preserves_old_rows_and_append_only_guards(
+    tmp_path: Path,
+) -> None:
+    old_root = tmp_path / "prior-migrations"
+    old_root.mkdir()
+    for name in EXPECTED_MIGRATIONS[:-1]:
+        shutil.copyfile(migration_directory() / name, old_root / name)
+    database_path = tmp_path / "old-project.sqlite"
+    apply_migrations(database_path, old_root)
+    with open_database(database_path) as database:
+        database.execute(
+            "INSERT INTO evidence_derivations "
+            "(derivation_id,derivation_kind,input_fragment_ids_json,rule_id,"
+            "rule_version,output_json,created_at) VALUES (?,?,?,?,?,?,?)",
+            ("old-normalization", "normalization", "[]", "old-rule", "1", "{}", "t"),
+        )
+
+    assert [item.version for item in apply_migrations(database_path)] == [15]
+    with open_database(database_path) as database:
+        assert database.execute(
+            "SELECT derivation_kind,rule_id FROM evidence_derivations "
+            "WHERE derivation_id='old-normalization'"
+        ).fetchone() == ("normalization", "old-rule")
+        database.execute(
+            "INSERT INTO evidence_derivations "
+            "(derivation_id,derivation_kind,input_fragment_ids_json,rule_id,"
+            "rule_version,output_json,created_at) VALUES (?,?,?,?,?,?,?)",
+            ("new-calculation", "calculation", "[]", "rate-rule", "1", "{}", "t"),
+        )
+        with pytest.raises(sqlite3.IntegrityError, match="append-only"):
+            database.execute(
+                "UPDATE evidence_derivations SET rule_id='changed' "
+                "WHERE derivation_id='old-normalization'"
+            )
+        assert database.execute("PRAGMA integrity_check").fetchone() == ("ok",)
 
 
 def test_migration_sequence_and_applied_digest_drift_fail_closed(tmp_path: Path) -> None:

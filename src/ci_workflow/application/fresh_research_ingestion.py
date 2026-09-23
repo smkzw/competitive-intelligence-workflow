@@ -8,6 +8,7 @@ decision: report gates are recomputed by the deterministic engine afterwards.
 from __future__ import annotations
 
 import json
+import math
 import re
 from base64 import b64encode
 from collections.abc import Mapping, Sequence
@@ -72,9 +73,46 @@ def _validate_references(
         raise ResearchIngestionError("研究声明标识不得重复")
     if set(item.source_id for item in facts) - set(source_ids):
         raise ResearchIngestionError("研究事实引用了包外来源")
+    facts_by_id = {fact.fact_id: fact for fact in facts}
     for claim in claims:
         if set(claim.fact_ids) - set(fact_ids):
             raise ResearchIngestionError("研究声明引用了包外事实")
+        validated = ResearchClaim.model_validate(claim.model_dump(mode="json"))
+        calculation = validated.calculation
+        if calculation is None:
+            continue
+        affected, at_risk = (facts_by_id[item] for item in validated.fact_ids)
+        left, right = affected.result_context, at_risk.result_context
+        if (
+            left is None or right is None
+            or left.value_role != "affected_count"
+            or right.value_role != "denominator"
+            or left.category == "outcome"
+            or (
+                left.result_key, left.trial_id, left.group_id, left.timepoint,
+                left.category, affected.source_id
+            ) != (
+                right.result_key, right.trial_id, right.group_id, right.timepoint,
+                right.category, at_risk.source_id
+            )
+            or affected.row_ref != calculation.scope_row_ref
+            or at_risk.row_ref != f"{calculation.scope_row_ref}:denominator"
+        ):
+            raise ResearchIngestionError("AE 计算输入不属于同一登记结果或报告行")
+        try:
+            numerator = int(affected.raw_value or "")
+            denominator = int(at_risk.raw_value or "")
+        except ValueError as error:
+            raise ResearchIngestionError("AE 计算输入不是原始整数人数") from error
+        if (
+            denominator <= 0 or numerator < 0 or numerator > denominator
+            or not math.isclose(
+                round(100 * numerator / denominator, 1),
+                calculation.output_value,
+                rel_tol=0.0, abs_tol=1e-9,
+            )
+        ):
+            raise ResearchIngestionError("AE 计算输出与原始受影响人数/风险人数不一致")
 
 
 def ingest_research_evidence(
@@ -418,11 +456,14 @@ def ingest_research_evidence(
         claim_versions: dict[str, str] = {}
         claim_closure: list[dict[str, object]] = []
         for claim in claims:
-            claim_version_id = stable_id(
-                "claim-version",
-                claim.claim_id,
-                claim.claim_text,
+            claim_identity = [
+                claim.claim_id, claim.claim_text,
                 *(fact_versions[item] for item in claim.fact_ids),
+            ]
+            if claim.calculation is not None:
+                claim_identity.append(claim.calculation.model_dump_json())
+            claim_version_id = stable_id(
+                "claim-version", *claim_identity,
             )
             database.execute(
                 """INSERT OR IGNORE INTO claim_versions (
@@ -454,6 +495,46 @@ def ingest_research_evidence(
                     "created_at": created_at.isoformat(),
                 }
             )
+            if claim.calculation is not None:
+                calculation = claim.calculation
+                input_versions = [fact_versions[item] for item in claim.fact_ids]
+                input_fragments = [fact_fragments[item] for item in claim.fact_ids]
+                output: dict[str, object] = {
+                    "claim_version_id": claim_version_id,
+                    "input_fact_version_ids": input_versions,
+                    "parameters": {"decimal_places": calculation.decimal_places},
+                    "formula": calculation.formula,
+                    "value": calculation.output_value,
+                    "unit": calculation.unit,
+                    "scope_row_ref": calculation.scope_row_ref,
+                }
+                rate_derivation: dict[str, object] = {
+                    "derivation_id": stable_id(
+                        "evidence-derivation", calculation.rule_id,
+                        calculation.rule_version, *input_versions,
+                        json.dumps(output, ensure_ascii=False, sort_keys=True),
+                    ),
+                    "derivation_kind": "calculation",
+                    "input_fragment_ids": input_fragments,
+                    "rule_id": calculation.rule_id,
+                    "rule_version": calculation.rule_version,
+                    "output": output,
+                    "created_at": created_at.isoformat(),
+                }
+                database.execute(
+                    "INSERT INTO evidence_derivations "
+                    "(derivation_id,derivation_kind,input_fragment_ids_json,rule_id,"
+                    "rule_version,output_json,created_at) VALUES (?,?,?,?,?,?,?) "
+                    "ON CONFLICT(derivation_id) DO NOTHING",
+                    (
+                        rate_derivation["derivation_id"], rate_derivation["derivation_kind"],
+                        json.dumps(input_fragments, ensure_ascii=False),
+                        rate_derivation["rule_id"], rate_derivation["rule_version"],
+                        json.dumps(output, ensure_ascii=False, sort_keys=True),
+                        rate_derivation["created_at"],
+                    ),
+                )
+                derivations.append(rate_derivation)
 
     store = ContentAddressedStore(project_root)
     source_closure: list[dict[str, object]] = []
