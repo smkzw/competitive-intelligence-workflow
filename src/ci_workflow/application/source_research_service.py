@@ -29,6 +29,8 @@ from ci_workflow.domain.public_provenance import (
     PublicSource,
 )
 from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData, SafetyRow
+from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
+from ci_workflow.reports.b.safety_concepts import describe_safety_concept, safety_category_zh
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
@@ -1444,7 +1446,8 @@ def research_facts_from_ctgov_atom(
     A derived display percentage is intentionally not written as a source fact;
     its calculation must be recorded separately with both input fact versions.
     """
-    expected_prefix = "efficacy:" if atom.category == "outcome" else "safety:"
+    is_safety = atom.category != "outcome" or is_safety_domain_endpoint(atom.endpoint)
+    expected_prefix = "safety:" if is_safety else "efficacy:"
     if report_row_ref is not None and not report_row_ref.startswith(expected_prefix):
         raise ResearchPackageError("登记原子与报告行领域不一致")
     row_ref = report_row_ref or f"registry:{atom.result_key}:source_value"
@@ -1489,11 +1492,14 @@ def research_facts_from_ctgov_atom(
             result_context=context,
         )
 
-    role: Literal["reported_measure", "participant_count", "affected_count"] = (
-        "reported_measure" if atom.numerator is None
-        else "participant_count" if atom.category == "outcome"
-        else "affected_count"
-    )
+    role: Literal["reported_measure", "participant_count", "affected_count"]
+    if atom.numerator is None:
+        role = "reported_measure"
+    elif atom.endpoint:
+        # outcomeMeasures reports counts; AE eventGroups reports affected people.
+        role = "participant_count"
+    else:
+        role = "affected_count"
     facts = [make_fact(
         role=role, locator=atom.value_locator, quote=atom.value_quote,
         reference=row_ref,
@@ -1522,7 +1528,7 @@ def _bind_verified_ctgov_outcome_to_a_row(
     atom: CtgovAtomicResult,
     row: EfficacyRow,
 ) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
-    if atom.category != "outcome":
+    if atom.category != "outcome" or is_safety_domain_endpoint(atom.endpoint):
         raise ResearchPackageError("此绑定仅接受登记疗效结局")
     is_count = atom.numerator is not None
     if is_count and (
@@ -1722,7 +1728,8 @@ def _bind_verified_ctgov_ae_to_a_row(
     row: SafetyRow,
 ) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
     if (
-        atom.category == "outcome" or atom.numerator is None
+        atom.category == "outcome" or is_safety_domain_endpoint(atom.endpoint)
+        or atom.numerator is None
         or atom.denominator is None or not atom.timepoint
     ):
         raise ResearchPackageError("AE 行缺少来源分子、风险人数或收集时间窗")
@@ -1786,6 +1793,95 @@ def _bind_verified_ctgov_ae_to_a_row(
         ),
     )
     return bound, facts, claim
+
+
+def _bind_verified_ctgov_direct_safety_to_a_row(
+    source: SourceCapture,
+    atom: CtgovAtomicResult,
+    row: SafetyRow,
+) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
+    """Bind a safety outcome's reported value; never infer a rate from its count."""
+    if not atom.endpoint or not is_safety_domain_endpoint(atom.endpoint):
+        raise ResearchPackageError("此绑定仅接受直接报告的安全性结局")
+    semantic = describe_safety_concept(atom.endpoint)
+    unit = atom.raw_unit.strip().casefold()
+    if unit in {"participants", "participant"}:
+        expected_unit, measure_object = "人", "participant_count"
+    elif unit in {"events", "event"}:
+        expected_unit, measure_object = "次", "event_count"
+    elif "percentage" in unit and "participant" in unit:
+        expected_unit, measure_object = "%", "participant_proportion"
+    else:
+        expected_unit, measure_object = atom.raw_unit, "adjusted_estimate"
+    expected_time = atom.observation_timepoint or atom.timepoint
+    raw_value = _result_number(atom.value_quote)
+    if (
+        row.trial_id is None
+        or row.trial_id.casefold() != atom.trial_id.casefold()
+        or row.group_id != atom.group_id
+        or _result_text(row.arm).casefold() != _result_text(atom.group_title).casefold()
+        or (row.arm_detail is not None and _result_text(row.arm_detail).casefold()
+            != _result_text(atom.group_title).casefold())
+        or _result_text(row.term).casefold() != _result_text(atom.endpoint).casefold()
+        or row.source_class_title != (atom.class_title or None)
+        or row.source_category_title != (atom.category_title or None)
+        or _result_text(row.time_window).casefold() != _result_text(expected_time).casefold()
+        or row.category != safety_category_zh(semantic.key)
+        or row.term_key != semantic.key
+        or row.count_basis != semantic.count_basis
+        or row.measure_object != measure_object
+        or row.unit != expected_unit
+        or row.disclosure_state != "已公开"
+        or row.value is None
+        or not math.isclose(row.value, raw_value, rel_tol=0.0, abs_tol=1e-9)
+    ):
+        raise ResearchPackageError("安全性结局的完整来源身份、统计对象或原文数值不一致")
+    if measure_object == "participant_count" and semantic.count_basis != "mixed":
+        if (atom.numerator is None or atom.denominator is None
+            or row.numerator != atom.numerator or row.denominator != atom.denominator):
+            raise ResearchPackageError("直接报告人数与同组分母不一致")
+    elif row.numerator is not None or row.denominator is not None:
+        raise ResearchPackageError("非人数或复合安全结果不得借用人数分母")
+    expected_fields = {
+        "source_field_path": atom.value_locator.field_path,
+        "source_version_id": _capture_version_id(source),
+        "source_text": atom.value_quote,
+    }
+    for field, expected in expected_fields.items():
+        previous = getattr(row, field)
+        if previous is not None and previous != expected:
+            raise ResearchPackageError(f"安全性行已有冲突的{field}")
+    bound = SafetyRow.model_validate({**row.model_dump(mode="json"), **expected_fields})
+    facts = research_facts_from_ctgov_atom(atom, report_row_ref=f"safety:{row.row_id}")
+    claim = ResearchClaim(
+        claim_id=stable_id("ctgov-direct-safety-claim", row.row_id, facts[0].fact_id),
+        claim_text=(
+            f"登记直接报告 {atom.endpoint}：{atom.value_quote} {atom.raw_unit}"
+            f"（{atom.group_title}；{expected_time}）"
+        ),
+        claim_kind="direct_evidence",
+        fact_ids=tuple(fact.fact_id for fact in facts),
+    )
+    return bound, facts, claim
+
+
+def bind_ctgov_direct_safety_to_a_row(
+    source: SourceCapture,
+    atom: CtgovAtomicResult,
+    row: SafetyRow,
+) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
+    """Require exactly one source atom matching the full direct-safety identity."""
+    atoms, _issues = extract_ctgov_atomic_results(source)
+    matches = []
+    for candidate in atoms:
+        try:
+            result = _bind_verified_ctgov_direct_safety_to_a_row(source, candidate, row)
+        except ResearchPackageError:
+            continue
+        matches.append((candidate, result))
+    if len(matches) != 1 or matches[0][0] != atom or atom.source_id != source.source_id:
+        raise ResearchPackageError("登记安全结局与报告行没有唯一的完整来源身份匹配")
+    return matches[0][1]
 
 
 def bind_ctgov_ae_to_a_row(
@@ -1859,7 +1955,27 @@ def _validate_bound_ctgov_a_results(
                 matched_denominator_refs.add(denominator_ref)
             continue
         safety_row = safety_rows.get(fact.row_ref)
-        if safety_row is None or context.value_role != "affected_count":
+        if safety_row is None:
+            raise ResearchPackageError("已绑定 AE 行缺少受影响人数原子")
+        if atom.endpoint and is_safety_domain_endpoint(atom.endpoint):
+            direct_row, direct_facts, direct_claim = (
+                _bind_verified_ctgov_direct_safety_to_a_row(source, atom, safety_row)
+            )
+            if (
+                direct_row != safety_row or fact != direct_facts[0]
+                or direct_claim not in claims
+            ):
+                raise ResearchPackageError("直接报告安全结果缺少同一来源事实与声明")
+            if len(direct_facts) == 2:
+                denominator_ref = f"{fact.row_ref}:denominator"
+                if (
+                    row_ref_counts.get(denominator_ref) != 1
+                    or facts_by_ref.get(denominator_ref) != direct_facts[1]
+                ):
+                    raise ResearchPackageError("安全人数缺少同组分母原子事实")
+                matched_denominator_refs.add(denominator_ref)
+            continue
+        if context.value_role != "affected_count":
             raise ResearchPackageError("已绑定 AE 行缺少受影响人数原子")
         safety_expected_row, safety_expected_facts, expected_claim = (
             _bind_verified_ctgov_ae_to_a_row(source, atom, safety_row)

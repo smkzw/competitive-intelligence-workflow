@@ -20,6 +20,7 @@ from ci_workflow.application.source_research_service import (
     SourceCapture,
     _validate_bound_ctgov_a_results,
     bind_ctgov_ae_to_a_row,
+    bind_ctgov_direct_safety_to_a_row,
     bind_ctgov_outcome_to_a_row,
     build_ctgov_a_outcome_candidate_batch,
     extract_ctgov_atomic_results,
@@ -32,8 +33,10 @@ from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.renderers.portal.report_a import (
     EfficacyRow,
     ReportAPortalData,
+    SafetyRow,
     render_report_a_site,
 )
+from ci_workflow.reports.b.safety_concepts import describe_safety_concept, safety_category_zh
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.snapshot_store import SnapshotStore
 from ci_workflow.storage.source_derivation import capture_source_text
@@ -72,6 +75,8 @@ def _reported_count_source(
     *,
     classes: list[dict[str, object]] | None = None,
     timeframe: str = "Week 26",
+    title: str = "Participants With Response",
+    unit: str = "Participants",
 ) -> SourceCapture:
     record = {
         "protocolSection": {
@@ -79,8 +84,9 @@ def _reported_count_source(
             "statusModule": {"lastUpdatePostDateStruct": {"date": "2026-08-01"}},
         },
         "resultsSection": {"outcomeMeasuresModule": {"outcomeMeasures": [{
-            "title": "Participants With Response", "timeFrame": timeframe,
-            "unitOfMeasure": "Participants", "paramType": "COUNT_OF_PARTICIPANTS",
+            "title": title, "timeFrame": timeframe,
+            "unitOfMeasure": unit,
+            "paramType": "COUNT_OF_PARTICIPANTS" if unit == "Participants" else "",
             "groups": [{"id": "OG1", "title": "Drug 200 mg"}],
             "denoms": [{"counts": [{"groupId": "OG1", "value": "35"}]}],
             "classes": classes if classes is not None else [{"categories": [{"measurements": [
@@ -101,6 +107,113 @@ def _reported_count_source(
         content_text=text, text_derivation=receipt,
     )
     return source_capture_from_ctgov_study(tmp_path, study)
+
+
+def test_direct_safety_outcome_binds_exact_category_and_raw_count(
+    tmp_path: Path,
+) -> None:
+    project = _project(tmp_path)
+    title = "Number of Participants With Treatment-emergent Adverse Events (TEAEs)"
+    source = _reported_count_source(
+        project, title=title, timeframe="Baseline to Week 26",
+        classes=[{"title": "Week 26", "categories": [
+            {"title": "Any", "measurements": [{"groupId": "OG1", "value": "8"}]},
+            {"title": "Other", "measurements": [{"groupId": "OG1", "value": "8"}]},
+        ]}],
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 2
+    semantic = describe_safety_concept(title)
+    row = SafetyRow(
+        row_id="safe-direct", product_id="dupilumab", trial_id="nct02277743",
+        arm="Drug 200 mg", group_id="OG1",
+        category=safety_category_zh(semantic.key), term=title,
+        term_key=semantic.key, count_basis=semantic.count_basis,
+        source_class_title="Week 26", source_category_title="Any",
+        measure_context="第26周；Any", value=8, unit="人",
+        measure_object="participant_count", numerator=8, denominator=35,
+        time_window="Week 26",
+    )
+    bound, facts, claim = bind_ctgov_direct_safety_to_a_row(source, atoms[0], row)
+    assert bound.source_text == "8" and bound.value == 8
+    assert bound.source_field_path == atoms[0].value_locator.field_path
+    assert [fact.original_text for fact in facts] == ["8", "35"]
+    assert claim.claim_kind == "direct_evidence" and claim.calculation is None
+    assert facts[0].result_context is not None
+    assert facts[0].result_context.value_role == "participant_count"
+    baseline = ReportAPortalData.model_validate(json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )["report_data"])
+    report = ReportAPortalData.model_validate({
+        **baseline.model_dump(mode="json"),
+        "safety": [*baseline.model_dump(mode="json")["safety"], bound.model_dump(mode="json")],
+    })
+    _validate_bound_ctgov_a_results(report, (source,), facts, (claim,))
+    contract = verify_project_workspace(project).contract
+    lineage = ingest_research_evidence(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        report_kind="A", data_cutoff=contract.data_cutoff,
+        scientific_content_digest=sha256(b"direct-safety-outcome").hexdigest(),
+        created_at=source.acquired_at, sources=(source,), route_attempts=(),
+        facts=facts, claims=(claim,),
+    )
+    assert len(lineage.fact_version_ids) == 2
+    with open_database(project / "state/project.sqlite") as database:
+        fragments = database.execute(
+            "SELECT content_text,locator FROM evidence_fragments WHERE fragment_id IN (?,?)",
+            tuple(lineage.fragment_by_fact_id[item.fact_id] for item in facts),
+        ).fetchall()
+    assert {item[0] for item in fragments} == {"8", "35"}
+    assert all('"field_path":"$.' in item[1] for item in fragments)
+    for changes in (
+        {"source_category_title": "Other"}, {"source_class_title": "Baseline"},
+        {"time_window": "Baseline"}, {"value": 9}, {"group_id": "OG2"},
+        {"unit": "%"}, {"numerator": None, "denominator": None},
+        {"source_field_path": "$.wrong"},
+    ):
+        with pytest.raises(ResearchPackageError):
+            bind_ctgov_direct_safety_to_a_row(
+                source, atoms[0], row.model_copy(update=changes)
+            )
+    with pytest.raises(ResearchPackageError, match="唯一"):
+        bind_ctgov_direct_safety_to_a_row(source, atoms[1], row)
+    with pytest.raises(ResearchPackageError, match="声明"):
+        _validate_bound_ctgov_a_results(report, (source,), facts)
+
+
+@pytest.mark.parametrize(
+    ("title", "raw_unit", "display_unit", "measure_object", "value"),
+    [
+        ("Number of Events With Adverse Events", "Events", "次", "event_count", 41),
+        ("Percentage of Participants With Serious Adverse Events (SAEs)",
+         "Percentage of participants", "%", "participant_proportion", 20),
+    ],
+)
+def test_direct_safety_event_and_percentage_are_not_derived_rates(
+    tmp_path: Path, title: str, raw_unit: str, display_unit: str,
+    measure_object: str, value: int,
+) -> None:
+    source = _reported_count_source(
+        tmp_path, title=title, unit=raw_unit,
+        classes=[{"categories": [{"measurements": [
+            {"groupId": "OG1", "value": str(value)},
+        ]}]}],
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    semantic = describe_safety_concept(title)
+    row = SafetyRow.model_validate({
+        "row_id": "safe-direct", "product_id": "dupilumab", "trial_id": "nct02277743",
+        "arm": "Drug 200 mg", "group_id": "OG1",
+        "category": safety_category_zh(semantic.key), "term": title,
+        "term_key": semantic.key, "count_basis": semantic.count_basis,
+        "value": value, "unit": display_unit, "measure_object": measure_object,
+        "time_window": "Week 26",
+    })
+    bound, facts, claim = bind_ctgov_direct_safety_to_a_row(source, atoms[0], row)
+    assert bound.value == value and bound.source_text == str(value)
+    assert len(facts) == 1 and facts[0].original_text == str(value)
+    assert claim.calculation is None and claim.claim_kind == "direct_evidence"
 
 
 def test_reported_participant_count_binds_raw_count_and_same_group_denominator(

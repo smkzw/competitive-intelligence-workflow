@@ -208,6 +208,8 @@ class SafetyRow(BaseModel):
     at_risk_stat: str | None = None
     # 独立复核 A r44/r45（issue-2）：类目/类标题上下文（term 保持登记原貌）
     measure_context: str | None = None
+    source_class_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    source_category_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
     value: float | None = Field(allow_inf_nan=False)
     numerator: int | None = Field(default=None, ge=0)
     denominator: int | None = Field(default=None, gt=0)

@@ -572,6 +572,7 @@ def main() -> None:
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
+                    source_class_title = cls_title
                     # 仅明确单一访视覆盖测量时间窗；"from baseline" 是
                     # 比较基准，不是 Baseline 访视。
                     row_time_frame = ctgov_class_observation_timepoint(cls_title) or time_frame
@@ -647,6 +648,8 @@ def main() -> None:
                                     "measure_context": "；".join(
                                         part for part in (cls_title, cat_label) if part
                                     ) or None,
+                                    "source_class_title": source_class_title or None,
+                                    "source_category_title": cat_title or None,
                                     "value": value,
                                     "unit": display_unit,
                                     "measure_object": measure_object,

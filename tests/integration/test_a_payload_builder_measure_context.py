@@ -39,11 +39,14 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
         ("Number of Participants With TEAEs and Serious Adverse Events (SAEs)",
          "Participants", "9"),
     ):
+        is_first_safety = title.startswith("Number of Participants With Treatment-emergent")
         measures.append({
             "title": title, "timeFrame": "Week 4", "unitOfMeasure": unit,
             "groups": [{"id": "OG1", "title": "Drug 10 mg (TP1)"}],
             "denoms": [{"counts": [{"groupId": "OG1", "value": "30"}]}],
-            "classes": [{"categories": [{"measurements": [
+            "classes": [{"title": "Week 4" if is_first_safety else "",
+                         "categories": [{"title": "Any" if is_first_safety else "",
+                                         "measurements": [
                 {"groupId": "OG1", "value": value},
             ]}]}],
         })
@@ -112,6 +115,11 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
     assert all(item["term_key"] and item["time_window"] == "Week 4"
                for item in safety[:4])
     assert all(item["group_id"] == "OG1" for item in safety[:4])
+    assert (safety[0]["source_class_title"], safety[0]["source_category_title"]) == (
+        "Week 4", "Any",
+    )
+    assert all(item["source_class_title"] is None and
+               item["source_category_title"] is None for item in safety[1:4])
     assert [(item["term_key"], item["value"], item["numerator"], item["denominator"])
             for item in safety[4:]] == [
         ("death", 2, 2, 30), ("any_sae", 0, 0, 20),
