@@ -751,6 +751,12 @@
   }
   function paginateObservations(host, groupSelector, label) {
     var observations = Array.prototype.slice.call(host.querySelectorAll("[data-row-id]"));
+    if (observations.length && observations[0].hasAttribute("data-observation-order")) {
+      observations.sort(function (a, b) {
+        return Number(a.getAttribute("data-observation-order"))
+          - Number(b.getAttribute("data-observation-order"));
+      });
+    }
     var pageSize = 60, currentPage = 0;
     if (observations.length > pageSize) {
       var navigation = el("nav", "kz-a-observation-pagination");
@@ -803,6 +809,17 @@
       host.appendChild(el("div", "kz-empty", "当前筛选没有可绘制的公开疗效数值。"));
       return;
     }
+    var observationGrid = el("div", "kz-a-observation-grid");
+    host.appendChild(observationGrid);
+    var wideColumns = window.innerWidth >= 1920;
+    var columns = [], columnWeights = [0, 0], observationOrder = 0;
+    if (wideColumns) {
+      for (var columnIndex = 0; columnIndex < 2; columnIndex += 1) {
+        var column = el("div", "kz-a-observation-column");
+        observationGrid.appendChild(column);
+        columns.push(column);
+      }
+    }
     keys.forEach(function (key) {
       var observations = groups[key];
       var first = observations[0];
@@ -835,6 +852,7 @@
         var projectedValue = Number(projection.plot_value);
         var lane = el("div", "kz-a-bar-lane");
         lane.setAttribute("data-row-id", item.row_id);
+        lane.setAttribute("data-observation-order", String(observationOrder++));
         var observationButton = el("button", "kz-a-product-trigger", item.arm_detail || item.arm);
         observationButton.type = "button";
         observationButton.setAttribute("data-a-product-focus", item.product_id);
@@ -858,7 +876,14 @@
         bars.appendChild(lane);
       });
       if (!singleObservation) bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(firstProjection.plot_unit)));
-      row.appendChild(bars); host.appendChild(row);
+      row.appendChild(bars);
+      if (wideColumns) {
+        var targetColumn = columnWeights[0] <= columnWeights[1] ? 0 : 1;
+        columns[targetColumn].appendChild(row);
+        columnWeights[targetColumn] += Math.max(2, observations.length);
+      } else {
+        observationGrid.appendChild(row);
+      }
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");
     host.appendChild(el("p", "kz-a-chart-note", "保留全部组别和观察；单条观察直接列值，多条观察使用组内刻度，不代表跨试验可比或优劣排名。"));

@@ -393,6 +393,40 @@ def test_safety_observation_groups_preserve_events_at_desktop_width(
     assert any("2/112人" in value for value in values)
 
 
+def test_wide_efficacy_uses_two_readable_lanes_without_losing_observations(
+    page: Page, rendered_ad_site: Path
+) -> None:
+    for width, expected_columns in ((1440, 1), (1600, 1), (1920, 2), (2560, 2)):
+        _open(page, rendered_ad_site / "overview.html", width=width, height=1440)
+        grid = page.locator("[data-chart-id='home-efficacy'] .kz-a-observation-grid")
+        assert grid.count() == 1
+        columns = grid.evaluate(
+            "node => getComputedStyle(node).gridTemplateColumns.split(' ').length"
+        )
+        assert columns == expected_columns
+        assert grid.locator(".kz-a-observation-column").count() == (
+            2 if width >= 1920 else 0
+        )
+        assert grid.locator("[data-row-id]").count() == 6753
+        assert grid.evaluate("node => node.scrollWidth <= node.clientWidth")
+        assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
+        first_ids = set(
+            grid.locator("[data-row-id]:not([hidden])").evaluate_all(
+                "nodes => nodes.map(node => node.dataset.rowId)"
+            )
+        )
+        page.locator(
+            "[data-chart-id='home-efficacy'] .kz-a-observation-pagination button"
+        ).last.click()
+        second_ids = set(
+            grid.locator("[data-row-id]:not([hidden])").evaluate_all(
+                "nodes => nodes.map(node => node.dataset.rowId)"
+            )
+        )
+        assert len(first_ids) == len(second_ids) == 60
+        assert first_ids.isdisjoint(second_ids)
+
+
 def test_landscape_assigns_each_product_once_and_regulatory_timeline_is_directly_split(
     page: Page, rendered_ad_site: Path
 ) -> None:

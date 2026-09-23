@@ -1,5 +1,11 @@
 # 2026-09-23 0923V1 新裁决与续建状态
 
+## 2026-09-23 A 疗效页桌面宽屏利用率修复（当前增量）
+
+- A 疗效观察在 1440/1600 CSS px 使用更紧凑的单列；在 1920/2560 CSS px 使用两列独立观察组，按观察数均衡列高。分页仍依原始稳定顺序，对全部 6753 条可绘制观察保留可达性，不用默认 Top-N 或仅呈现首项。作者源为模块内 `report-a.js/css`，`assets/portal` 仅作逐字节发包镜像，manifest 同步更新；未引入第二作者源。
+- 实际 Chromium 定向批 `6 passed, 15 deselected`，覆盖四档宽度、列数、无横向溢出、第一页与第二页各 60 条且不重复；发包镜像合同 `1 passed`，JS 语法及 `git diff --check` 通过。真实浏览器截图：`evidence/W05A-0923-desktop/a-efficacy-1440.png`（SHA-256 `45b6c56289c4b3758689050299fccdc6237a987fc16b491619eebaf1322e449b`）与 `a-efficacy-2560.png`（`ff0f5a597f9302abda0a70f6a03eccb871aa84c8a08e17ec38c328247caea460`）。截图基于现有 AD 夹具，仅证明该局部呈现，不证明真实来源已闭合。
+- 四档宽屏 × 稀疏/密集/筛选后稀疏/证据侧栏 × A/B/C 全物理页面的视觉门尚未完成；W07 的 4412 条逐事实来源、W04 用户清除实际投影与合法 A+B 扇出、W06 离线分享、24 门户、三宿主及 RC 均保持未验收。历史 FAIL 不得改写为 PASS。CT.gov AE `numAffected` 缺失按用户裁决仍为“未知、待核”，绝不自动补 0。
+
 ## 2026-09-23 里程碑 gate 与旧合同成族修复
 
 - 提交 `e770401` 后的 `bash tools/gate.sh` 实际范围：Ruff `src/tests/tools`、strict-mypy `src/tools`、活跃 unit+contract、保留轨兼容子集、测试分层、旧路径检查。结果 **GATE_FAIL**：静态两门全绿；活跃批 `10 failed, 1054 passed, 20 deselected`；保留轨 `20 passed`、分层 `7 passed`、旧路径检查通过。
