@@ -44,8 +44,10 @@ from ci_workflow.graph.impact import (
     ImpactLayer,
     ImpactNode,
 )
+from ci_workflow.renderers.portal.active_fact_projection import canonical_source_pointer
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
+    SafetyRow,
     active_fact_binding_for_a,
     render_report_a_site,
 )
@@ -141,7 +143,33 @@ def _project(
         report: model.model_validate_json(path.read_bytes())
         for report, (model, _renderer, path) in payloads.items()
     }
-    a_binding = active_fact_binding_for_a(report_data["A"], "safety", "safe-fixture-teae")
+    if cross_report_binding == "legal_AB":
+        b_data = report_data["B"]
+        b_row = next(row for row in b_data.safety if row.row_id == "safe-apply-t-1")
+        b_view = next(
+            row for row in b_data.safety_views["facts"]
+            if row["row_id"] == b_row.row_id
+        )
+        a_payload = b_data.model_dump(
+            mode="python", include=set(ReportAPortalData.model_fields)
+        )
+        a_payload["safety"] = [
+            {key: value for key, value in row.items() if key in SafetyRow.model_fields}
+            for row in a_payload["safety"]
+        ]
+        a_row = next(row for row in a_payload["safety"] if row["row_id"] == b_row.row_id)
+        a_row.update(
+            source_version_id=b_view["source_version_id"],
+            source_field_path=canonical_source_pointer(b_view["source_locator"]),
+            group_id=b_view["arm_id"],
+            cohort_id=b_view["analysis_population_zh"],
+        )
+        report_data["A"] = ReportAPortalData.model_validate(a_payload)
+        a_path = root / "report-a-shared-source.json"
+        a_path.write_text(report_data["A"].model_dump_json(), encoding="utf-8")
+        payloads["A"] = (ReportAPortalData, render_report_a_site, a_path)
+    a_row_id = "safe-apply-t-1" if cross_report_binding == "legal_AB" else "safe-fixture-teae"
+    a_binding = active_fact_binding_for_a(report_data["A"], "safety", a_row_id)
     b_binding = active_fact_binding_for_b(report_data["B"], "safety", "safe-apply-t-1")
     c_binding = active_fact_binding_for_c(report_data["C"], "c-nct04178967-inclusion")
     if b_binding_override is not None:
@@ -149,6 +177,9 @@ def _project(
         b_binding = b_binding.model_copy(update={field: replacement})
     consumer_bindings = [b_binding.model_dump(mode="json")]
     a_consumer_bindings = [a_binding.model_dump(mode="json")]
+    if cross_report_binding == "legal_AB":
+        consumer_bindings.append(a_binding.model_dump(mode="json"))
+        a_consumer_bindings = []
     if cross_report_binding == "B":
         a_consumer_bindings.append(
             a_binding.model_copy(
@@ -276,23 +307,24 @@ def _project(
                 "consumer_bindings": consumer_bindings,
             },
         )
-        _seed_fact(
-            database,
-            fact_id="fact-a-safety",
-            version_id="fact-a-safety-v1",
-            entity_id="entity-arm",
-            field_id="safety.any_teae",
-            raw_value="66.2%",
-            normalized_value="66.2",
-            fragment_id=fragments["a"],
-            context={
-                **a_binding.model_dump(
-                    mode="json",
-                    exclude={"report", "collection", "row_id", "original_row_sha256"},
-                ),
-                "consumer_bindings": a_consumer_bindings,
-            },
-        )
+        if cross_report_binding != "legal_AB":
+            _seed_fact(
+                database,
+                fact_id="fact-a-safety",
+                version_id="fact-a-safety-v1",
+                entity_id="entity-arm",
+                field_id="safety.any_teae",
+                raw_value="66.2%",
+                normalized_value="66.2",
+                fragment_id=fragments["a"],
+                context={
+                    **a_binding.model_dump(
+                        mode="json",
+                        exclude={"report", "collection", "row_id", "original_row_sha256"},
+                    ),
+                    "consumer_bindings": a_consumer_bindings,
+                },
+            )
         _seed_fact(
             database,
             fact_id="fact-adjusted-rate",
@@ -362,7 +394,7 @@ def _project(
         },
         fact_version_ids=(
             "fact-crude-rate-v1",
-            "fact-a-safety-v1",
+            *(("fact-a-safety-v1",) if cross_report_binding != "legal_AB" else ()),
             "fact-adjusted-rate-v1",
             "fact-lsmean-v1",
             "fact-c-threshold-v1",
@@ -703,6 +735,78 @@ def test_rereview2_cross_report_fact_binding_fails_closed(
         )
     assert pointer.read_bytes() == before
     assert not any(root.glob("reports/*/v1-user-r1"))
+
+
+def test_same_source_fact_legally_rebuilds_a_and_b_without_touching_c(tmp_path: Path) -> None:
+    root, fragments = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
+    before = service.read_current_delivery()
+    old_c = next(item for item in before.reports if item.report == "C")
+    result = service.save(
+        _command(
+            request_id="shared-a-b-rate",
+            edits=FactEdit(numerator=24, denominator=62),
+        )
+    )
+    assert result.rebuilt_reports == ("A", "B")
+    assert result.derived_crude_rate == round(24 / 62 * 100, 10)
+    current = service.read_current_delivery()
+    assert next(item for item in current.reports if item.report == "C") == old_c
+    for report, row_id in (("A", "safe-apply-t-1"), ("B", "safe-apply-t-1")):
+        projection = _projection(root, report)
+        row = next(item for item in projection["safety"] if item["row_id"] == row_id)
+        assert row["value"] == result.derived_crude_rate
+        assert (row["numerator"], row["denominator"]) == (24, 62)
+        edit = projection["user_edits"][row_id]
+        assert edit["original_value"].startswith("54.8%")
+        assert edit["review_state"] == "user_modified"
+        delivery = next(item for item in current.reports if item.report == report)
+        assert delivery.revision == 1
+        site = root / delivery.site_relative_path
+        receipt = json.loads((site / "data/consumer-receipt.json").read_text())
+        assert any(
+            item["fact_id"] == "fact-crude-rate" and item["row_id"] == row_id
+            and item["binding_identity"]["source_version_id"]
+            == "nct04558918-safety-report-v1"
+            for item in receipt["consumers"]
+        )
+        assert str(result.derived_crude_rate) in (
+            site / "data/search-index.js"
+        ).read_text(encoding="utf-8")
+        assert (site / "safety.html").is_file()
+    with open_database(root / "state/project.sqlite") as database:
+        source = database.execute(
+            "SELECT content_text FROM evidence_fragments WHERE fragment_id=?",
+            (fragments["count"],),
+        ).fetchone()
+    assert source is not None and source[0] == "34/62例受试者发生任何TEAE（54.8%）。"
+
+
+def test_shared_a_b_failure_never_publishes_half_updated_current(tmp_path: Path) -> None:
+    root, _ = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
+    before = service.read_current_delivery()
+    pointer = root / "reports/current.json"
+    old_pointer = pointer.read_bytes()
+    command = _command(
+        request_id="shared-a-b-retry",
+        edits=FactEdit(numerator=24, denominator=62),
+    )
+
+    def interrupt(report: str) -> None:
+        if report == "A":
+            raise OSError("injected failure after first affected report")
+
+    service._after_report_built = interrupt
+    with pytest.raises(OSError, match="first affected report"):
+        service.save(command)
+    assert pointer.read_bytes() == old_pointer
+    assert service.read_current_delivery() == before
+
+    service._after_report_built = lambda _report: None
+    retry = service.save(command)
+    assert retry.rebuilt_reports == ("A", "B")
+    assert service.read_current_delivery().revision == 1
 
 
 def test_rereview2_current_protocol_uses_immutable_generation_selector(

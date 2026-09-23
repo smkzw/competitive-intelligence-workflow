@@ -153,6 +153,9 @@ class EfficacyRow(BaseModel):
     unit: str
     population: str
     source_field_path: str | None = None
+    source_version_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    group_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    cohort_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
     source_text: str | None = None
     clinical_narrative: str | None = None
 
@@ -215,6 +218,9 @@ class SafetyRow(BaseModel):
     ] = "participant_proportion"
     disclosure_state: Literal["已公开", "未公开", "不适用"] = "已公开"
     source_field_path: str | None = None
+    source_version_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    group_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    cohort_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
     source_text: str | None = None
     clinical_narrative: str | None = None
 
@@ -2131,7 +2137,7 @@ def active_fact_binding_for_a(
     row_payload = row.model_dump(mode="json")
     row_digest = canonical_sha256(row_payload)
     source_pointer = row.source_field_path or f"REPORT_A.{collection}[row_id={row.row_id}]"
-    source_version = f"report-a-row:{row_digest}"
+    source_version = row.source_version_id or f"report-a-row:{row_digest}"
     statistical_form, measure_object = _a_statistical_identity(row)
     return ActiveFactBinding(
         report="A",
@@ -2141,9 +2147,9 @@ def active_fact_binding_for_a(
         drug_name=product.name,
         trial_id=row.trial_id,
         registry_id=trial.display_id,
-        group_id=None,
+        group_id=row.group_id,
         arm=row.arm,
-        cohort_id=None,
+        cohort_id=row.cohort_id,
         period=row.time_window if isinstance(row, SafetyRow) else row.timepoint,
         endpoint_definition=row.endpoint if isinstance(row, EfficacyRow) else None,
         event_definition=row.term if isinstance(row, SafetyRow) else None,
