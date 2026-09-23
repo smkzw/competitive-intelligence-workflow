@@ -3,6 +3,7 @@
 红组：跨适应症文本在指定适应症下不得命中他适应症族；
 绿组：本适应症核心族照常命中；未提供 indication 时保持历史行为。
 """
+
 from __future__ import annotations
 
 import pytest
@@ -21,9 +22,9 @@ from ci_workflow.reports.b.registry_observation import classify_registry_endpoin
 )
 def test_cross_indication_text_does_not_hit_foreign_families(text: str, indication: str) -> None:
     family = classify_registry_endpoint(text, indication_id=indication)
-    assert family is None or family.startswith(
-        ("endpoint-igan-", "endpoint-generic-")
-    ), f"{text!r} 在 {indication} 下误命中 {family}"
+    assert family is None or family.startswith(("endpoint-igan-", "endpoint-generic-")), (
+        f"{text!r} 在 {indication} 下误命中 {family}"
+    )
 
 
 @pytest.mark.parametrize(
@@ -35,7 +36,11 @@ def test_cross_indication_text_does_not_hit_foreign_families(text: str, indicati
         ("UACR Change From Baseline", "igan", "endpoint-igan-proteinuria-v1"),
         ("Estimated GFR Change", "igan", "endpoint-igan-egfr-v1"),
         ("Hematuria Resolution", "igan", "endpoint-igan-hematuria-v1"),
-        ("Clinical Remission Per Adapted Mayo Score", "ulcerative-colitis", "endpoint-uc-remission-v1"),
+        (
+            "Clinical Remission Per Adapted Mayo Score",
+            "ulcerative-colitis",
+            "endpoint-uc-remission-v1",
+        ),
         ("Percentage of Participants With Reduction in Serum LDH", "pnh", "endpoint-pnh-"),
         ("IGA 0/1 Response", "atopic-dermatitis", "endpoint-ad-iga-v1"),
     ],
@@ -54,7 +59,5 @@ def test_within_indication_families_still_match(
         ("Sustained Remissions From Week 40 to Week 46", "endpoint-uc-remission-v1"),
     ],
 )
-def test_legacy_global_behavior_unchanged_without_indication(
-    text: str, expected: str
-) -> None:
+def test_legacy_global_behavior_unchanged_without_indication(text: str, expected: str) -> None:
     assert classify_registry_endpoint(text) == expected

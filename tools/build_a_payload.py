@@ -5,18 +5,20 @@
 resultsSection 记录的 outcomeMeasures/不良事件）、来源区。未披露字段
 一律"未公开披露"，不补造。
 """
+
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
 import sys
-
-sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parents[1] / "src"))
-from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
-from collections import defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 NA = "未公开披露"
@@ -84,7 +86,7 @@ def _transcribe_class_title(title: str) -> str:
         if en in low:
             changed = True
             idx = low.find(en)
-            out = out[:idx] + zh + out[idx + len(en):]
+            out = out[:idx] + zh + out[idx + len(en) :]
             low = out.casefold()
     if not changed:
         return text
@@ -110,8 +112,7 @@ _REGISTRY_CATEGORY_ZH = {
 }
 
 
-def _parse_args():
-    import argparse
+def _parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="通用 A 载荷构建器")
     p.add_argument("--cas-dir", required=True, help="CAS 原始数据根目录")
     p.add_argument("--alias-map", required=True, help="别名映射 JSON")
@@ -121,42 +122,58 @@ def _parse_args():
     p.add_argument("--cutoff", default="2026-09-06", help="数据截止日")
     return p.parse_args()
 
+
 _args = _parse_args()
-CAS = sorted(
-    p for p in (Path(_args.cas_dir) / "evidence" / "raw").rglob("*.bin")
-)
+CAS = sorted(p for p in (Path(_args.cas_dir) / "evidence" / "raw").rglob("*.bin"))
 OUT = Path(_args.output)
 INDICATION = _args.indication
 INDICATION_ID = _args.indication_id
 CUTOFF_DATE = _args.cutoff
 
 _STATUS_RANK = {
-    "已批准上市": 8, "招募中": 75, "邀请入组中": 74, "进行中（不招募）": 73,
-    "尚未招募": 6, "已完成": 5, "可用": 4, "不再可用": 3, "状态未更新": 2,
-    "已暂停": 2, "已终止": 1, "已撤回": 0,
+    "已批准上市": 8,
+    "招募中": 75,
+    "邀请入组中": 74,
+    "进行中（不招募）": 73,
+    "尚未招募": 6,
+    "已完成": 5,
+    "可用": 4,
+    "不再可用": 3,
+    "状态未更新": 2,
+    "已暂停": 2,
+    "已终止": 1,
+    "已撤回": 0,
 }
-ALIAS = json.loads(
-    Path(_args.alias_map).read_text(encoding="utf-8")
-)
-NORMALIZED_ALIAS = {
-    re.sub(r"[^a-z0-9]+", "", alias.lower()): canonical
+ALIAS = json.loads(Path(_args.alias_map).read_text(encoding="utf-8"))
+NORMALIZED_ALIAS: dict[str, str] = {
+    re.sub(r"[^a-z0-9]+", "", alias.lower()): str(canonical)
     for alias, canonical in ALIAS["canonical_by_alias"].items()
 }
-COMBO_RECORDS: list[dict] = []
+COMBO_RECORDS: list[dict[str, Any]] = []
 NON_PRODUCT_RECORDS: list[str] = []
 BORDERLINE: set[str] = set()
 
 STATUS_MAP = {
-    "RECRUITING": "招募中", "ACTIVE_NOT_RECRUITING": "进行中（不招募）",
-    "COMPLETED": "已完成", "TERMINATED": "已终止", "WITHDRAWN": "已撤回",
-    "NOT_YET_RECRUITING": "尚未招募", "SUSPENDED": "已暂停",
-    "ENROLLING_BY_INVITATION": "邀请入组中", "UNKNOWN": "状态未更新",
-    "AVAILABLE": "可用", "NO_LONGER_AVAILABLE": "不再可用",
+    "RECRUITING": "招募中",
+    "ACTIVE_NOT_RECRUITING": "进行中（不招募）",
+    "COMPLETED": "已完成",
+    "TERMINATED": "已终止",
+    "WITHDRAWN": "已撤回",
+    "NOT_YET_RECRUITING": "尚未招募",
+    "SUSPENDED": "已暂停",
+    "ENROLLING_BY_INVITATION": "邀请入组中",
+    "UNKNOWN": "状态未更新",
+    "AVAILABLE": "可用",
+    "NO_LONGER_AVAILABLE": "不再可用",
     "APPROVED_FOR_MARKETING": "已批准上市",
 }
 PHASE_MAP = {
-    "PHASE1": "I期", "PHASE2": "II期", "PHASE3": "III期",
-    "PHASE1/PHASE2": "I/II期", "PHASE2/PHASE3": "II/III期", "PHASE4": "IV期",
+    "PHASE1": "I期",
+    "PHASE2": "II期",
+    "PHASE3": "III期",
+    "PHASE1/PHASE2": "I/II期",
+    "PHASE2/PHASE3": "II/III期",
+    "PHASE4": "IV期",
     "NA": "未分期",
 }
 
@@ -167,24 +184,27 @@ def slugify(name: str) -> str:
 
 
 def main() -> None:
-    studies = []
-    page_meta = []
+    studies: list[tuple[dict[str, Any], int, int]] = []
+    page_meta: list[tuple[int, str]] = []
     for page_index, path in enumerate(CAS):
         blob = path.read_bytes()
         data = json.loads(blob)
         page_meta.append((page_index + 1, hashlib.sha256(blob).hexdigest()))
-        studies.extend(
-            (s, page_index + 1, i) for i, s in enumerate(data.get("studies", []))
-        )
+        studies.extend((s, page_index + 1, i) for i, s in enumerate(data.get("studies", [])))
 
-    trials_rows, product_index, company_rows, efficacy_rows, safety_rows = [], {}, [], [], []
+    trials_rows: list[dict[str, Any]] = []
+    product_index: dict[str, dict[str, Any]] = {}
+    company_rows: list[dict[str, Any]] = []
+    efficacy_rows: list[dict[str, Any]] = []
+    safety_rows: list[dict[str, Any]] = []
     dev_candidates: dict[str, list[tuple[bool, str]]] = {}
     skipped_trials: list[str] = []
     product_regions: dict[str, set[str]] = {}
-    product_phase, product_status = {}, {}
+    product_phase: dict[str, str] = {}
+    product_status: dict[str, str] = {}
     seen_company = set()
     ei = si = 0
-    SAFETY_DOMAIN_DIVERTED: list = []
+    SAFETY_DOMAIN_DIVERTED: list[dict[str, Any]] = []
 
     for study, page_no, array_index in studies:
         proto = study.get("protocolSection", {})
@@ -198,22 +218,65 @@ def main() -> None:
 
         # R13-①过滤扩充：移植预处理/系统化疗/同位素标记/通用类/非独立方案。
         NON_PRODUCT_MARKERS = (
-            "placebo", "normal saline", "imaging", "questionnaire",
-            "blood draw", "blood sample", "sampling", "clinimacs",
-            "conditioning regimen", "preparative regimen", "transplant",
-            "allo sct", "ablative regimen", "supportive care", "standard of care",
-            "granulocyte", "stem cell infusion", "chemotherapy",
-            "carbon-14", "radiolabeled", "labeled ", "c5 inhibitor",
-            "complement inhibitor", "anti-c5",
-            "cyclophosphamide", "fludarabine", "busulfan", "alemtuzumab",
-            "cyclosporine", "mycophenolate", "melphalan", "etoposide",
-            "anti-thymocyte globulin", "phenylalanine mustard", "rituxan",
-            "rabbit atg", "t-lymphocyte immune globulin", "muromonab", "orthoclone",
-            "thioplex", "treosulfan", "sargramostim", "gm-csf",
-            "g-csf", "filgrastim", "rituximab", "cell infusion", "infusion",
-            "prednisone", "steroid", "glucocorticoid", "methylprednisolone",
-            "campath", "basiliximab", "sirolimus", "tacrolimus", "methotrexate",
+            "placebo",
+            "normal saline",
+            "imaging",
+            "questionnaire",
+            "blood draw",
+            "blood sample",
+            "sampling",
+            "clinimacs",
+            "conditioning regimen",
+            "preparative regimen",
+            "transplant",
+            "allo sct",
+            "ablative regimen",
+            "supportive care",
+            "standard of care",
+            "granulocyte",
+            "stem cell infusion",
+            "chemotherapy",
+            "carbon-14",
+            "radiolabeled",
+            "labeled ",
+            "c5 inhibitor",
+            "complement inhibitor",
+            "anti-c5",
+            "cyclophosphamide",
+            "fludarabine",
+            "busulfan",
+            "alemtuzumab",
+            "cyclosporine",
+            "mycophenolate",
+            "melphalan",
+            "etoposide",
+            "anti-thymocyte globulin",
+            "phenylalanine mustard",
+            "rituxan",
+            "rabbit atg",
+            "t-lymphocyte immune globulin",
+            "muromonab",
+            "orthoclone",
+            "thioplex",
+            "treosulfan",
+            "sargramostim",
+            "gm-csf",
+            "g-csf",
+            "filgrastim",
+            "rituximab",
+            "cell infusion",
+            "infusion",
+            "prednisone",
+            "steroid",
+            "glucocorticoid",
+            "methylprednisolone",
+            "campath",
+            "basiliximab",
+            "sirolimus",
+            "tacrolimus",
+            "methotrexate",
         )
+
         def _split_brand_combo(normalized_base: str) -> str | None:
             # R16-c 窄规则：连字符各段均为已知别名时归并为映射序首（如 soliris-ultomiris）。
             parts = [seg for seg in re.split(r"[-/]", normalized_base) if seg.strip()]
@@ -226,17 +289,22 @@ def main() -> None:
                 return first_known
             return None
 
-        def _norm_drug(name: str) -> str | None:
+        def _norm_drug(name: str, markers: tuple[str, ...] = NON_PRODUCT_MARKERS) -> str | None:
             lowered = name.lower().strip()
             if "sirolimus" in lowered or "levamisole" in lowered:
                 return lowered  # R18-d 边界再定位候选：豁免黑名单，标 borderline 待纳排审查。
-            if any(marker in lowered for marker in NON_PRODUCT_MARKERS):
+            if any(marker in lowered for marker in markers):
                 return None
             if re.fullmatch(r"nct\d+", lowered):
                 return None
             # R13-c 复合/制剂名称：取括号外主体再归一。
             base = re.sub(r"\s*\([^)]*\)\s*", " ", lowered).strip()
-            base = re.sub(r"\b(injections?|infusions?|tablets?|capsules?|solutions?|monotherapy|study drug|dose \d+|part ?\d+)\b", "", base).strip()
+            base = re.sub(
+                r"\b(injections?|infusions?|tablets?|capsules?|solutions?|"
+                r"monotherapy|study drug|dose \d+|part ?\d+)\b",
+                "",
+                base,
+            ).strip()
             # R17-c 剂量/频次尾部剔除（如 ntq5082 100mg qd）。
             base = re.sub(r"\b\d+\s*(mg|mcg|g|iu)\b.*$", "", base).strip()
             base = re.sub(r"\b(qd|bid|tid|q24h|q12h|q2w|q4w|q8w)\b", "", base).strip()
@@ -251,6 +319,7 @@ def main() -> None:
                 return combo
             # R13-a 映射表键做同样归一，双侧一致。
             return NORMALIZED_ALIAS.get(normalized, base)
+
         raw_drugs = []
         for item in arms_mod.get("interventions", []) or []:
             name = str(item.get("name") or "").strip()
@@ -278,19 +347,22 @@ def main() -> None:
         # R13-f 联合治疗全记录（模型单 product_id 限制内的最诚实表达）。
         COMBO_RECORDS.append({"nct_id": nct, "canonical_drugs": canonical_drugs})
         pid = slugify(product_name)
+
         # 独立复核修复（第十二轮）：研发企业归属按臂类型判定——
         # 仅当药物在本试验的 EXPERIMENTAL 臂时，申办方才可作为其研发企业；
         # 对照药/背景治疗药物的申办方不是该药物的研发企业。
-        def _drug_experimental(drug_name: str) -> bool:
+        def _drug_experimental(drug_name: str, protocol: dict[str, Any] = proto) -> bool:
             arm_type = {
                 str(a.get("label") or "").strip(): str(a.get("type") or "").upper()
-                for a in (proto.get("armsInterventionsModule", {}).get("armGroups") or [])
+                for a in (protocol.get("armsInterventionsModule", {}).get("armGroups") or [])
             }
-            for iv in (proto.get("armsInterventionsModule", {}).get("interventions") or []):
+            for iv in protocol.get("armsInterventionsModule", {}).get("interventions") or []:
                 for segment in re.split(r"[;；]", str(iv.get("name") or "")):
                     if _norm_drug(segment) == drug_name:
-                        labels = [str(l or "").strip() for l in (iv.get("armGroupLabels") or [])]
-                        types = [arm_type.get(l, "") for l in labels]
+                        labels = [
+                            str(label or "").strip() for label in (iv.get("armGroupLabels") or [])
+                        ]
+                        types = [arm_type.get(label, "") for label in labels]
                         if types:
                             return any(t == "EXPERIMENTAL" for t in types)
             return True  # 无臂结构可判定时保守视为试验药物
@@ -301,16 +373,25 @@ def main() -> None:
             experimental = _drug_experimental(drug)
             # 研发企业候选：主产品试验优先，其次试验药物臂，对照臂不计
             dev_candidates.setdefault(drug_pid, []).append(
-                (drug_pid == pid and experimental, lead if lead != NA else ""))
+                (drug_pid == pid and experimental, lead if lead != NA else "")
+            )
             if drug_pid not in product_index:
                 product_index[drug_pid] = {
-                    "id": drug_pid, "name": drug, "target": NA, "modality": NA,
-                    "phase": "未标注", "status": "状态未更新",
-                    "regions": ["未登记地点"], "route": NA, "developer": NA,
-                    "mechanism": NA, "result_status": "暂无公开关键结果",
+                    "id": drug_pid,
+                    "name": drug,
+                    "target": NA,
+                    "modality": NA,
+                    "phase": "未标注",
+                    "status": "状态未更新",
+                    "regions": ["未登记地点"],
+                    "route": NA,
+                    "developer": NA,
+                    "mechanism": NA,
+                    "result_status": "暂无公开关键结果",
                 }
         dev_candidates.setdefault(pid, []).append(
-            (_drug_experimental(product_name), lead if lead != NA else ""))
+            (_drug_experimental(product_name), lead if lead != NA else "")
+        )
         phases = design.get("phases") or []
         phase_zh = PHASE_MAP.get("/".join(phases), "未标注") if phases else "未标注"
         current = product_phase.get(pid)
@@ -326,17 +407,24 @@ def main() -> None:
         company_key = (pid, lead)
         if lead != NA and company_key not in seen_company:
             seen_company.add(company_key)
-            company_rows.append({
-                "product_id": pid, "relationship": "申办方（登记信息）",
-                "licensor": lead, "licensee": NA, "territory": NA,
-                "transaction": "登记申办关系；交易条款未公开",
-            })
+            company_rows.append(
+                {
+                    "product_id": pid,
+                    "relationship": "申办方（登记信息）",
+                    "licensor": lead,
+                    "licensee": NA,
+                    "territory": NA,
+                    "transaction": "登记申办关系；交易条款未公开",
+                }
+            )
         locations_mod = proto.get("contactsLocationsModule", {}) or {}
-        countries = sorted({
-            str(loc.get("country") or "").strip()
-            for loc in (locations_mod.get("locations") or [])
-            if loc.get("country")
-        })
+        countries = sorted(
+            {
+                str(loc.get("country") or "").strip()
+                for loc in (locations_mod.get("locations") or [])
+                if loc.get("country")
+            }
+        )
         # 区域口径：仅 mainland China 计入"中国"；港台按境外处理（独立复核第十四轮）
         has_china = any(c.lower() == "china" for c in countries)
         trial_region = "中国" if has_china else ("境外" if countries else "未登记地点")
@@ -352,13 +440,20 @@ def main() -> None:
         if not isinstance(count, int) or count <= 0:
             skipped_trials.append(nct)
         else:
-            trials_rows.append({
-                "id": nct.lower(), "display_id": nct, "product_id": pid,
-                "name": ident.get("briefTitle", nct)[:120], "phase": phase_zh,
-                "region": trial_region, "status": status_zh,
-                "sample_size": count,
-                "treatment_sample_size": None, "role": "登记研究",
-            })
+            trials_rows.append(
+                {
+                    "id": nct.lower(),
+                    "display_id": nct,
+                    "product_id": pid,
+                    "name": ident.get("briefTitle", nct)[:120],
+                    "phase": phase_zh,
+                    "region": trial_region,
+                    "status": status_zh,
+                    "sample_size": count,
+                    "treatment_sample_size": None,
+                    "role": "登记研究",
+                }
+            )
 
         results = study.get("resultsSection") or {}
         if results:
@@ -371,8 +466,11 @@ def main() -> None:
             # 多期间试验：OG 标题可能是不透明代码，用 flow 标题按序补全
             if not group_titles:
                 flow_groups = (results.get("participantFlowModule") or {}).get("groups") or []
-                protocol_arms = (study.get("protocolSection", {}).get("armsInterventionsModule", {})
-                                 .get("armGroups")) or []
+                protocol_arms = (
+                    study.get("protocolSection", {})
+                    .get("armsInterventionsModule", {})
+                    .get("armGroups")
+                ) or []
                 for idx, fg in enumerate(flow_groups):
                     ft = str(fg.get("title") or "").strip()
                     if ft:
@@ -387,49 +485,56 @@ def main() -> None:
                 eg_title = str(eg.get("title") or "").strip()
                 if eg_id and eg_title:
                     group_titles.setdefault(eg_id, eg_title)
+
             # 独立复核修复（arm 标签）：结果段组 id 为不透明代码（OG001 等）时，
             # 依次用 participantFlow 组、协议 armGroups 的描述性标题按顺序补全。
             def _opaque_title(value: str) -> bool:
                 t = value.strip()
                 return (not t) or bool(re.fullmatch(r"[A-Za-z]{0,3}\d{2,4}", t))
+
             om_measures = (results.get("outcomeMeasuresModule") or {}).get("outcomeMeasures") or []
             om_group_ids: list[str] = []
             for measure in om_measures[:1]:
                 for cls in (measure.get("classes") or [])[:1]:
                     for cat in (cls.get("categories") or [])[:2]:
-                        for measurement in (cat.get("measurements") or []):
+                        for measurement in cat.get("measurements") or []:
                             gid = str(measurement.get("groupId") or "")
                             if gid and gid not in om_group_ids:
                                 om_group_ids.append(gid)
             replacement = None
             flow_groups = (results.get("participantFlowModule") or {}).get("groups", []) or []
             flow_titles = [str(g.get("title") or "").strip() for g in flow_groups]
-            protocol_arms = (study.get("protocolSection", {}).get("armsInterventionsModule", {})
-                             .get("armGroups")) or []
+            protocol_arms = (
+                study.get("protocolSection", {}).get("armsInterventionsModule", {}).get("armGroups")
+            ) or []
             arm_labels = [str(a.get("label") or "").strip() for a in protocol_arms]
-            if om_group_ids and all(_opaque_title(group_titles.get(gid, "")) for gid in om_group_ids):
+            if om_group_ids and all(
+                _opaque_title(group_titles.get(gid, "")) for gid in om_group_ids
+            ):
                 if len(flow_titles) == len(om_group_ids) and any(flow_titles):
                     replacement = flow_titles
                 elif len(arm_labels) == len(om_group_ids) and any(arm_labels):
                     replacement = arm_labels
             if replacement:
-                for gid, title in zip(om_group_ids, replacement):
+                for gid, title in zip(om_group_ids, replacement, strict=True):
                     if title:
                         group_titles[gid] = title
-            for measure in ((results.get("outcomeMeasuresModule") or {})
-                            .get("outcomeMeasures") or []):
+            for measure in (results.get("outcomeMeasuresModule") or {}).get(
+                "outcomeMeasures"
+            ) or []:
                 # 独立测试第二轮（UC）：不得截断登记终点标题——截断会
                 # 摧毁 Mayo/时间窗等尾部语义并造成分类漏检
                 title = str(measure.get("title") or "").strip() or NA
-                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"                # 独立复核 A r22（issue-5）：组别标题优先取自测量自带 groups（OG 代码 → 登记标题）
-                for g in (measure.get("groups") or []):
+                time_frame = str(measure.get("timeFrame") or "").strip() or "时间窗未登记"
+                # 独立复核 A r22（issue-5）：组别标题优先取自测量自带 groups
+                for g in measure.get("groups") or []:
                     gid = str(g.get("id") or "").strip()
                     gtitle = str(g.get("title") or "").strip()
                     if gid and gtitle:
                         group_titles.setdefault(gid, gtitle)
 
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
-                for cls in (measure.get("classes") or []):
+                for cls in measure.get("classes") or []:
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
@@ -437,7 +542,8 @@ def main() -> None:
                     # 该行实际时间点取类标签，而非列出双访视日的测量级 time_frame
                     row_time_frame = time_frame
                     _cls_days = set(
-                        m.group(1) for m in re.finditer(
+                        m.group(1)
+                        for m in re.finditer(
                             r"(?:day|week)\s+(\d+(?:\.\d+)?)", cls_title.casefold()
                         )
                     )
@@ -450,22 +556,23 @@ def main() -> None:
                     # 中文 population 行；词汇级确定性转写，未命中保留原文
                     cls_title = _transcribe_class_title(cls_title)
                     base_population = (
-                        f"登记结果人群（{cls_title}）" if cls_title
-                        else "登记结果人群"
+                        f"登记结果人群（{cls_title}）" if cls_title else "登记结果人群"
                     )
-                    for cat in (cls.get("categories") or []):
+                    for cat in cls.get("categories") or []:
                         # 独立复核第二十一轮 veto：登记测量的互斥子类
                         # （如 Improved/Worsened from Baseline）必须进入行标签，
                         # 否则同臂同测量的 4 行同名并列，数值含义无法还原
                         cat_title = str(cat.get("title") or "").strip()
-                        cat_label = _REGISTRY_CATEGORY_ZH.get(
-                            cat_title.casefold(), cat_title
-                        )
+                        cat_label = _REGISTRY_CATEGORY_ZH.get(cat_title.casefold(), cat_title)
                         if cat_label:
-                            population = base_population[:-1] + f"；{cat_label}）"                                 if base_population.endswith("）") else f"{base_population}（{cat_label}）"
+                            population = (
+                                base_population[:-1] + f"；{cat_label}）"
+                                if base_population.endswith("）")
+                                else f"{base_population}（{cat_label}）"
+                            )
                         else:
                             population = base_population
-                        for measurement in (cat.get("measurements") or []):
+                        for measurement in cat.get("measurements") or []:
                             raw = str(measurement.get("value") or "").strip()
                             try:
                                 value = float(raw)
@@ -475,39 +582,51 @@ def main() -> None:
                             # TEAE/AE/ADA 类测量改记入 derivation 并跳过疗效写入
                             if is_safety_domain_endpoint(title):
                                 SAFETY_DOMAIN_DIVERTED.append(
-                                    {"trial_id": nct.lower(), "endpoint": title,
-                                     "value": value, "timepoint": row_time_frame}
+                                    {
+                                        "trial_id": nct.lower(),
+                                        "endpoint": title,
+                                        "value": value,
+                                        "timepoint": row_time_frame,
+                                    }
                                 )
                                 continue
                             group_id = str(measurement.get("groupId") or "")
                             ei += 1
-                            efficacy_rows.append({
-                                "row_id": f"eff-{ei}", "product_id": pid,
-                                "trial_id": nct.lower(), "endpoint": title,
-                                "arm": group_titles.get(group_id, group_id or "组别未登记"),
-                                "value": value, "unit": unit,
-                                "population": population,
-                                "timepoint": row_time_frame,
-                            })
+                            efficacy_rows.append(
+                                {
+                                    "row_id": f"eff-{ei}",
+                                    "product_id": pid,
+                                    "trial_id": nct.lower(),
+                                    "endpoint": title,
+                                    "arm": group_titles.get(group_id, group_id or "组别未登记"),
+                                    "value": value,
+                                    "unit": unit,
+                                    "population": population,
+                                    "timepoint": row_time_frame,
+                                }
+                            )
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
             # Started 里程碑数提取，喂饱矩阵气泡图的样本量轴
             _flow_groups = (results.get("participantFlowModule") or {}).get("groups") or []
             _arm_types = {
                 str(a.get("label") or "").strip(): str(a.get("type") or "").upper()
-                for a in (study.get("protocolSection", {}).get("armsInterventionsModule", {})
-                          or {}).get("armGroups") or []
+                for a in (
+                    study.get("protocolSection", {}).get("armsInterventionsModule", {}) or {}
+                ).get("armGroups")
+                or []
             }
             _treatment_n = 0
             for _g in _flow_groups:
                 if _arm_types.get(str(_g.get("title") or "").strip()) != "EXPERIMENTAL":
                     continue
                 for _ms in _g.get("milestones") or []:
-                    if str(_ms.get("type")) == "Started" and isinstance(_ms.get("numSubjects"), int):
+                    if str(_ms.get("type")) == "Started" and isinstance(
+                        _ms.get("numSubjects"), int
+                    ):
                         _treatment_n += _ms["numSubjects"]
             if _treatment_n > 0 and trials_rows and trials_rows[-1]["id"] == nct.lower():
                 trials_rows[-1]["treatment_sample_size"] = _treatment_n
-            events = (results.get("adverseEventsModule", {})
-                      .get("eventGroups") or [])
+            events = results.get("adverseEventsModule", {}).get("eventGroups") or []
             for group in events:
                 term = str(group.get("title") or "治疗期间不良事件")
                 freq = group.get("seriousNumAffected")
@@ -516,46 +635,62 @@ def main() -> None:
                 # 独立复核修复（臂级分母）：AE 模块同组 atRisk 人数为真实臂级分母
                 at_risk = group.get("seriousNumAtRisk")
                 si += 1
-                safety_rows.append({
-                    "row_id": f"safe-{si}", "product_id": pid,
-                    "trial_id": nct.lower(), "arm": term,
-                    "category": "严重不良事件（登记）",
-                    # 会商 P0 #3：受控词表键，供矩阵安全轴精确匹配
-                    "term_key": "any_sae",
-                    # 独立复核修复：该行为组别汇总计数，term 不再冒充事件名
-                    "term": "严重不良事件组别汇总计数",
-                    "value": freq, "unit": "例",
-                    "numerator": freq,
-                    "denominator": at_risk if isinstance(at_risk, int) and at_risk > 0 else None,
-                    "time_window": "全研究期（登记）",
-                })
+                safety_rows.append(
+                    {
+                        "row_id": f"safe-{si}",
+                        "product_id": pid,
+                        "trial_id": nct.lower(),
+                        "arm": term,
+                        "category": "严重不良事件（登记）",
+                        # 会商 P0 #3：受控词表键，供矩阵安全轴精确匹配
+                        "term_key": "any_sae",
+                        # 独立复核修复：该行为组别汇总计数，term 不再冒充事件名
+                        "term": "严重不良事件组别汇总计数",
+                        "value": freq,
+                        "unit": "例",
+                        "numerator": freq,
+                        "denominator": at_risk
+                        if isinstance(at_risk, int) and at_risk > 0
+                        else None,
+                        "time_window": "全研究期（登记）",
+                    }
+                )
                 # 独立复核第二十三轮 veto：登记已报告的死亡必须入安全性域
                 deaths_affected = group.get("deathsNumAffected")
                 if deaths_affected is not None:
                     si += 1
                     deaths_at_risk = group.get("deathsNumAtRisk")
-                    safety_rows.append({
-                        "row_id": f"safe-{si}", "product_id": pid,
-                        "trial_id": nct.lower(), "arm": term,
-                        "category": "死亡病例（登记）",
-                    "term_key": "death",
-                        "term": "死亡病例组别汇总计数",
-                        "value": deaths_affected, "unit": "例",
-                        "numerator": deaths_affected,
-                        "denominator": deaths_at_risk if isinstance(deaths_at_risk, int) and deaths_at_risk > 0 else None,
-                        "time_window": "全研究期（登记）",
-                    })
+                    safety_rows.append(
+                        {
+                            "row_id": f"safe-{si}",
+                            "product_id": pid,
+                            "trial_id": nct.lower(),
+                            "arm": term,
+                            "category": "死亡病例（登记）",
+                            "term_key": "death",
+                            "term": "死亡病例组别汇总计数",
+                            "value": deaths_affected,
+                            "unit": "例",
+                            "numerator": deaths_affected,
+                            "denominator": (
+                                deaths_at_risk
+                                if isinstance(deaths_at_risk, int) and deaths_at_risk > 0
+                                else None
+                            ),
+                            "time_window": "全研究期（登记）",
+                        }
+                    )
 
     # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 主产品试验的申办方优先，其次试验药物臂的申办方，对照臂申办方不计。
     for dp, cands in dev_candidates.items():
         if dp not in product_index or not cands:
             continue
-        primary = next((lead for is_p, lead in cands if is_p and lead), None)
-        experimental = next((lead for is_e, lead in cands if is_e and lead), None)
-        chosen = primary or experimental
-        if chosen:
-            product_index[dp]["developer"] = chosen
+        primary_lead = next((lead for is_p, lead in cands if is_p and lead), None)
+        experimental_lead = next((lead for is_e, lead in cands if is_e and lead), None)
+        chosen_lead = primary_lead or experimental_lead
+        if chosen_lead:
+            product_index[dp]["developer"] = chosen_lead
     for pid, phase in product_phase.items():
         product_index[pid]["phase"] = phase
     for pid, status in product_status.items():
@@ -579,62 +714,104 @@ def main() -> None:
         "data_cutoff": "2026-09-06T23:59:59.999999+08:00",
         "products": list(product_index.values()),
         "trials": trials_rows,
-        "efficacy": efficacy_rows or [{
-            "row_id": "eff-none", "product_id": next(iter(product_index)),
-            "trial_id": trials_rows[0]["id"], "endpoint": "暂无公开关键结果",
-            "timepoint": NA, "arm": NA, "value": None, "unit": NA,
-            "population": "公开登记结果尚未覆盖数值终点",
-        }],
-        "safety": safety_rows or [{
-            "row_id": "safe-none", "product_id": next(iter(product_index)),
-            "trial_id": trials_rows[0]["id"], "arm": NA,
-            "category": "暂无公开结果", "term": NA, "value": None,
-            "unit": NA, "time_window": NA,
-        }],
-        "regulatory": [{
-            "product_id": next(iter(product_index)), "track": "中国",
-            "event": "监管状态", "date": "2026-09-06",
-            "status": "未公开披露（监管路线来源接入待后续版本开放）",
-        }],
-        "companies": company_rows or [{
-            "product_id": next(iter(product_index)), "relationship": "申办方",
-            "licensor": NA, "licensee": NA, "territory": NA,
-            "transaction": "未公开披露",
-        }],
-        "patents": [{
-            "product_id": next(iter(product_index)), "family": NA,
-            "display_family": "专利路线来源接入待后续版本开放", "jurisdiction": NA,
-            "scope": NA, "expiry": NA, "exclusivity": NA,
-        }],
-        "history": [{
-            "product_id": next(iter(product_index)), "status": "登记检索完成",
-            "date": CUTOFF_DATE,
-            # 独立测试第二轮（UC）：检索统计与排除明细从本运行真实派生，
-            # 不得携带 PNH 轮次的固定数字与内部流程代号
-            "observation": (
-                f"CT.gov 当前记录检索共 {sum(1 for _ in CAS)} 页原始响应："
-                f"{len(trials_rows)} 条试验入表；"
-                f"{len(skipped_trials)} 条因样本量未披露未入试验表（NCT 明细见派生记录："
-                + "、".join(skipped_trials[:8])
-                + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体（明细见派生记录）；"
-                "联合治疗组合完整记录于派生记录；中国路线访问受阻已如实记档；"
-                "监管/专利来源接入待后续版本开放"
-            ),
-        }],
+        "efficacy": efficacy_rows
+        or [
+            {
+                "row_id": "eff-none",
+                "product_id": next(iter(product_index)),
+                "trial_id": trials_rows[0]["id"],
+                "endpoint": "暂无公开关键结果",
+                "timepoint": NA,
+                "arm": NA,
+                "value": None,
+                "unit": NA,
+                "population": "公开登记结果尚未覆盖数值终点",
+            }
+        ],
+        "safety": safety_rows
+        or [
+            {
+                "row_id": "safe-none",
+                "product_id": next(iter(product_index)),
+                "trial_id": trials_rows[0]["id"],
+                "arm": NA,
+                "category": "暂无公开结果",
+                "term": NA,
+                "value": None,
+                "unit": NA,
+                "time_window": NA,
+            }
+        ],
+        "regulatory": [
+            {
+                "product_id": next(iter(product_index)),
+                "track": "中国",
+                "event": "监管状态",
+                "date": "2026-09-06",
+                "status": "未公开披露（监管路线来源接入待后续版本开放）",
+            }
+        ],
+        "companies": company_rows
+        or [
+            {
+                "product_id": next(iter(product_index)),
+                "relationship": "申办方",
+                "licensor": NA,
+                "licensee": NA,
+                "territory": NA,
+                "transaction": "未公开披露",
+            }
+        ],
+        "patents": [
+            {
+                "product_id": next(iter(product_index)),
+                "family": NA,
+                "display_family": "专利路线来源接入待后续版本开放",
+                "jurisdiction": NA,
+                "scope": NA,
+                "expiry": NA,
+                "exclusivity": NA,
+            }
+        ],
+        "history": [
+            {
+                "product_id": next(iter(product_index)),
+                "status": "登记检索完成",
+                "date": CUTOFF_DATE,
+                # 独立测试第二轮（UC）：检索统计与排除明细从本运行真实派生，
+                # 不得携带 PNH 轮次的固定数字与内部流程代号
+                "observation": (
+                    f"CT.gov 当前记录检索共 {sum(1 for _ in CAS)} 页原始响应："
+                    f"{len(trials_rows)} 条试验入表；"
+                    f"{len(skipped_trials)} 条因样本量未披露未入试验表"
+                    "（NCT 明细见派生记录："
+                    + "、".join(skipped_trials[:8])
+                    + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体"
+                    "（明细见派生记录）；"
+                    "联合治疗组合完整记录于派生记录；中国路线访问受阻已如实记档；"
+                    "监管/专利来源接入待后续版本开放"
+                ),
+            }
+        ],
         "sources": [
-            {"source": "ClinicalTrials.gov",
-             "scope": f"{INDICATION}当前记录检索（{len(page_meta)} 页原始响应 SHA-256 绑定）",
-             "maturity": "官方登记当前记录",
-             "limitation": "当前记录口径，非历史 as-of 还原"},
-            {"source": "PubMed",
-             "scope": f"{INDICATION}治疗文献检索回执未纳入当前工作区绑定（计数与分类属性以检索回执为准，不在载荷中虚构）",
-             "maturity": "not_bound",
-             "limitation": "文献层证据未接入当前载荷，相关叙事仅来自登记来源"},
+            {
+                "source": "ClinicalTrials.gov",
+                "scope": f"{INDICATION}当前记录检索（{len(page_meta)} 页原始响应 SHA-256 绑定）",
+                "maturity": "官方登记当前记录",
+                "limitation": "当前记录口径，非历史 as-of 还原",
+            },
+            {
+                "source": "PubMed",
+                "scope": (
+                    f"{INDICATION}治疗文献检索回执未纳入当前工作区绑定"
+                    "（计数与分类属性以检索回执为准，不在载荷中虚构）"
+                ),
+                "maturity": "not_bound",
+                "limitation": "文献层证据未接入当前载荷，相关叙事仅来自登记来源",
+            },
         ],
         "derivation": {
-            "pages": [
-                {"page": page, "sha256": sha} for page, sha in page_meta
-            ],
+            "pages": [{"page": page, "sha256": sha} for page, sha in page_meta],
             "built_at": datetime.now(UTC).isoformat(),
         },
     }
@@ -643,8 +820,7 @@ def main() -> None:
     # 会商 P0 #2：安全域分流审计计数（TEAE/AE 类测量不再混入疗效表）
     derivation["safety_domain_diverted"] = len(SAFETY_DOMAIN_DIVERTED)
     derivation["safety_domain_diverted_samples"] = [
-        {k: str(v)[:80] for k, v in item.items()}
-        for item in SAFETY_DOMAIN_DIVERTED[:10]
+        {k: str(v)[:80] for k, v in item.items()} for item in SAFETY_DOMAIN_DIVERTED[:10]
     ]
     derivation["records_without_drug_intervention"] = NON_PRODUCT_RECORDS
     derivation["combo_regimens"] = COMBO_RECORDS
@@ -659,4 +835,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

@@ -10,7 +10,7 @@ import json
 import sqlite3
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, cast
 
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
@@ -61,17 +61,23 @@ def _binding_from_bytes(
     collection = str(consumer["collection"])
     row_id = str(consumer["row_id"])
     if report == "A":
+        if collection not in ("safety", "efficacy"):
+            raise ValueError(f"invalid A consumer collection: {collection}")
         binding = active_fact_binding_for_a(
-            ReportAPortalData.model_validate_json(data), collection, row_id
+            ReportAPortalData.model_validate_json(data),
+            cast(Literal["safety", "efficacy"], collection),
+            row_id,
         )
     elif report == "B":
+        if collection not in ("safety", "efficacy"):
+            raise ValueError(f"invalid B consumer collection: {collection}")
         binding = active_fact_binding_for_b(
-            ReportBPortalData.model_validate_json(data), collection, row_id
+            ReportBPortalData.model_validate_json(data),
+            cast(Literal["safety", "efficacy"], collection),
+            row_id,
         )
     elif report == "C":
-        binding = active_fact_binding_for_c(
-            ReportCPortalData.model_validate_json(data), row_id
-        )
+        binding = active_fact_binding_for_c(ReportCPortalData.model_validate_json(data), row_id)
     else:
         raise ValueError(f"unknown report: {report}")
     return binding.model_dump(mode="json")
@@ -169,9 +175,7 @@ def verify(
     project = (repo / project_relative).resolve(strict=False)
     current: dict[str, Any] = {}
     try:
-        selector = sqlite3.connect(
-            f"file:{project / 'state/project.sqlite'}?mode=ro", uri=True
-        )
+        selector = sqlite3.connect(f"file:{project / 'state/project.sqlite'}?mode=ro", uri=True)
         try:
             row = selector.execute(
                 "SELECT generation_relative_path FROM current_delivery_state WHERE singleton=1"
@@ -211,9 +215,7 @@ def _builder_override(
     mode: str,
 ) -> tuple[str, bytes]:
     project = repo / str(manifest["project_relative_path"])
-    database = sqlite3.connect(
-        f"file:{project / 'state/project.sqlite'}?mode=ro", uri=True
-    )
+    database = sqlite3.connect(f"file:{project / 'state/project.sqlite'}?mode=ro", uri=True)
     try:
         row = database.execute(
             "SELECT generation_relative_path FROM current_delivery_state WHERE singleton=1"
@@ -232,9 +234,7 @@ def _builder_override(
     if mode == "target":
         receipt = json.loads(
             (
-                project
-                / str(delivery["site_relative_path"])
-                / "data/consumer-receipt.json"
+                project / str(delivery["site_relative_path"]) / "data/consumer-receipt.json"
             ).read_text()
         )
         row_id = receipt["consumers"][0]["row_id"]

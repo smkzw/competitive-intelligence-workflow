@@ -215,14 +215,18 @@ def _observation(
         ),
         "source_field_name": f"registry.{field}",
         "period": (
-            "overall" if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT} else None
+            "overall"
+            if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT}
+            else None
         ),
         "source_field_definition": f"{field} 的登记字段定义",
         "source_text": text,
         "threshold_value": threshold_value,
         "threshold_unit": threshold_unit,
         "assessment_timepoint": (
-            "第16周" if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT} else None
+            "第16周"
+            if family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT}
+            else None
         ),
         "stage": "III",
         "development_role": "关键注册试验",
@@ -284,9 +288,7 @@ def _observations(
                     )
                 )
                 continue
-            signature = (
-                "每天两次口服" if trial.id.startswith("trial-beta") else "皮下注射"
-            )
+            signature = "每天两次口服" if trial.id.startswith("trial-beta") else "皮下注射"
             rows.append(
                 _observation(
                     trial.id,
@@ -384,9 +386,7 @@ def _bind_observations_to_source_bytes(
     """Bind every observation to an exact quote in the persisted source JSON."""
     for source in source_payloads:
         source_id = str(source["source_id"])
-        members = [
-            item for item in observation_payloads if item["source_version_id"] == source_id
-        ]
+        members = [item for item in observation_payloads if item["source_version_id"] == source_id]
         source["content_text"] = json.dumps(
             {"observations": [{"source_text": item["source_text"]} for item in members]},
             ensure_ascii=False,
@@ -396,9 +396,7 @@ def _bind_observations_to_source_bytes(
             existing_locator = item.get("source_locator")
             document_role = "clinical-trial-registry"
             if isinstance(existing_locator, dict):
-                document_role = str(
-                    existing_locator.get("document_role") or document_role
-                )
+                document_role = str(existing_locator.get("document_role") or document_role)
             item["source_locator"] = {
                 "document_role": document_role,
                 "field_path": f"$.observations[{index}].source_text",
@@ -456,18 +454,22 @@ def _content_payload(**overrides: object) -> dict[str, object]:
     return payload
 
 
-def test_fresh_c_rejects_multiple_primary_without_per_instance_timepoint(module: ModuleType) -> None:
+def test_fresh_c_rejects_multiple_primary_without_per_instance_timepoint(
+    module: ModuleType,
+) -> None:
     payload = _content_payload()
     observations = payload["report_data"]["observations"]
     endpoint = next(item for item in observations if item["field_family"] == "endpoint")
     duplicate = dict(endpoint)
-    duplicate.update({
-        "row_id": endpoint["row_id"] + "-second",
-        "source_row_id": endpoint["source_row_id"] + "-second",
-        "observation_id": endpoint["observation_id"] + "-second",
-        "source_text": "Second co-primary endpoint",
-        "outcome_id": "primary-second",
-    })
+    duplicate.update(
+        {
+            "row_id": endpoint["row_id"] + "-second",
+            "source_row_id": endpoint["source_row_id"] + "-second",
+            "observation_id": endpoint["observation_id"] + "-second",
+            "source_text": "Second co-primary endpoint",
+            "outcome_id": "primary-second",
+        }
+    )
     observations.append(duplicate)
     with pytest.raises(ValueError, match="outcome_id|时间点|实例"):
         module.FreshCResearchContent.model_validate(payload)
@@ -478,7 +480,8 @@ def test_fresh_c_rejects_group_period_window_mismatch(module: ModuleType) -> Non
     observations = payload["report_data"]["observations"]
     endpoint = next(item for item in observations if item["field_family"] == "endpoint")
     timepoint = next(
-        item for item in observations
+        item
+        for item in observations
         if item["field_family"] == "timepoint" and item["trial_id"] == endpoint["trial_id"]
     )
     endpoint["outcome_id"] = "primary-1"
@@ -496,12 +499,15 @@ def test_fresh_c_new_content_cannot_self_declare_legacy_identity_mode(
     for observation in payload["report_data"]["observations"]:
         if observation["field_family"] in {"endpoint", "timepoint"}:
             observation["outcome_id"] = None
-    with pytest.raises(module.FreshCPackageError, match="legacy|instance_v1|endpoint_identity_mode"):
+    with pytest.raises(
+        module.FreshCPackageError, match="legacy|instance_v1|endpoint_identity_mode"
+    ):
         module.validate_fresh_c_content(payload)
 
 
 def test_run_service_rejects_new_c_package_that_self_declares_legacy(
-    module: ModuleType, tmp_path: Path,
+    module: ModuleType,
+    tmp_path: Path,
 ) -> None:
     from ci_workflow.application.run_service import ContractConfigError
 
@@ -517,15 +523,19 @@ def test_run_service_rejects_new_c_package_that_self_declares_legacy(
     package_path = project_root / "inputs/c-self-declared-legacy.json"
     package_path.parent.mkdir(parents=True, exist_ok=True)
     package_path.write_text(
-        json.dumps({**payload, "scientific_review": _review(module, "invalid")},
-                   ensure_ascii=False, default=str),
+        json.dumps(
+            {**payload, "scientific_review": _review(module, "invalid")},
+            ensure_ascii=False,
+            default=str,
+        ),
         encoding="utf-8",
     )
     with pytest.raises(ContractConfigError, match="legacy|instance_v1|endpoint_identity_mode"):
         run_project(
             project_root,
             run_context=RunContext(
-                project_root=project_root, contract=contract,
+                project_root=project_root,
+                contract=contract,
                 research_package_path=package_path,
             ),
             capability_probe=StaticCapabilityProbe(),
@@ -535,14 +545,17 @@ def test_run_service_rejects_new_c_package_that_self_declares_legacy(
 def test_fresh_c_blocks_explicit_unbound_intervention_relationship(module: ModuleType) -> None:
     payload = _content_payload()
     observation = next(
-        item for item in payload["report_data"]["observations"]
+        item
+        for item in payload["report_data"]["observations"]
         if item["field_family"] == "dose_schedule"
     )
-    observation.update({
-        "relationship_status": "missing_arm_labels",
-        "relationship_reason": "source intervention has no armGroupLabels",
-        "relationship_blocking": True,
-    })
+    observation.update(
+        {
+            "relationship_status": "missing_arm_labels",
+            "relationship_reason": "source intervention has no armGroupLabels",
+            "relationship_blocking": True,
+        }
+    )
     with pytest.raises(ValueError, match="arm|关系缺失|阻断"):
         module.FreshCResearchContent.model_validate(payload)
 
@@ -745,8 +758,7 @@ def test_publication_cannot_replace_registry_design_fact(module: ModuleType) -> 
         item
         for item in _observations()
         if not (
-            item.trial_id == "trial-alpha-1"
-            and item.field_family is DesignFieldFamily.POPULATION
+            item.trial_id == "trial-alpha-1" and item.field_family is DesignFieldFamily.POPULATION
         )
     ]
     rows.append(
@@ -760,16 +772,13 @@ def test_publication_cannot_replace_registry_design_fact(module: ModuleType) -> 
         )
     )
     payload = _content_payload()
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
     outcome = _evaluate(module, payload)
     population = [
         item
         for item in outcome.result.unit_results
-        if item.unit_id == "c_target_population_criteria"
-        and item.object_id == "trial-alpha-1"
+        if item.unit_id == "c_target_population_criteria" and item.object_id == "trial-alpha-1"
     ]
     assert len(population) == 1
     assert population[0].outcome is GateUnitOutcome.BLOCKED
@@ -810,15 +819,10 @@ def test_each_critical_unit_blocks_independently_when_missing(
         rows = tuple(
             item
             for item in _observations()
-            if not (
-                item.trial_id == "trial-alpha-1"
-                and item.field_family is missing_family
-            )
+            if not (item.trial_id == "trial-alpha-1" and item.field_family is missing_family)
         )
         payload = _content_payload()
-        payload["report_data"]["observations"] = [
-            item.model_dump(mode="json") for item in rows
-        ]
+        payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
         payload["trial_designs"] = _trial_designs_payload(rows)
         outcome = _evaluate(module, payload)
         assert outcome.result.decision is ReportDecision.BLOCKED, missing_family
@@ -828,15 +832,10 @@ def test_each_critical_unit_blocks_independently_when_missing(
         rows = tuple(
             item
             for item in _observations()
-            if not (
-                item.trial_id == "trial-alpha-1"
-                and item.field_family is missing_family
-            )
+            if not (item.trial_id == "trial-alpha-1" and item.field_family is missing_family)
         )
         payload = _content_payload()
-        payload["report_data"]["observations"] = [
-            item.model_dump(mode="json") for item in rows
-        ]
+        payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
         payload["trial_designs"] = _trial_designs_payload(rows)
         with pytest.raises(ValueError, match="终点实例|时间点实例"):
             module.FreshCResearchContent.model_validate(payload)
@@ -844,15 +843,10 @@ def test_each_critical_unit_blocks_independently_when_missing(
     both_rows = tuple(
         item
         for item in _observations()
-        if not (
-            item.trial_id == "trial-alpha-1"
-            and item.field_family in single_unit_families
-        )
+        if not (item.trial_id == "trial-alpha-1" and item.field_family in single_unit_families)
     )
     payload = _content_payload()
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in both_rows
-    ]
+    payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in both_rows]
     payload["trial_designs"] = _trial_designs_payload(both_rows)
     with pytest.raises(ValueError, match="终点实例|时间点实例"):
         module.FreshCResearchContent.model_validate(payload)
@@ -866,8 +860,7 @@ def test_protocol_sap_can_complete_registry_design_coverage(
         item
         for item in _observations()
         if not (
-            item.trial_id == "trial-alpha-1"
-            and item.field_family is DesignFieldFamily.ENDPOINT
+            item.trial_id == "trial-alpha-1" and item.field_family is DesignFieldFamily.ENDPOINT
         )
     ]
     rows.append(
@@ -883,9 +876,7 @@ def test_protocol_sap_can_complete_registry_design_coverage(
         )
     )
     payload = _content_payload()
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
     outcome = _evaluate(module, payload)
     assert outcome.result.decision is ReportDecision.PASSED
@@ -905,9 +896,7 @@ def test_each_endpoint_requires_its_own_timepoint(module: ModuleType) -> None:
         )
     )
     payload = _content_payload()
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
 
     with pytest.raises(ValueError, match="缺评估时间点的终点实例.*secondary_endpoint"):
@@ -923,9 +912,7 @@ def test_each_endpoint_requires_its_own_timepoint(module: ModuleType) -> None:
             endpoint_key="secondary_endpoint",
         )
     )
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
     content = module.FreshCResearchContent.model_validate(payload)
     assert content.report_data.observations[-1].endpoint_key == "secondary_endpoint"
@@ -937,15 +924,11 @@ def test_region_visit_operational_follows_indication_rule(
     """地区/访视/操作特征仅在指示规则合同声明为关键时适用。"""
     outcome = _evaluate(
         module,
-        _content_payload(
-            applicable_conditional_predicates=["region_visit_operational_key"]
-        ),
+        _content_payload(applicable_conditional_predicates=["region_visit_operational_key"]),
     )
     assert outcome.result.decision is ReportDecision.BLOCKED
     region = [
-        item
-        for item in outcome.result.unit_results
-        if item.unit_id == "c_region_visit_operational"
+        item for item in outcome.result.unit_results if item.unit_id == "c_region_visit_operational"
     ]
     assert region
     assert all(item.outcome is GateUnitOutcome.BLOCKED for item in region)
@@ -990,9 +973,7 @@ def test_statistical_extensions_are_nonblocking(module: ModuleType) -> None:
         "c_missing_data_sensitivity",
     )
     for unit_id in statistical_units:
-        results = [
-            item for item in outcome.result.unit_results if item.unit_id == unit_id
-        ]
+        results = [item for item in outcome.result.unit_results if item.unit_id == unit_id]
         assert results, unit_id
         assert all(
             item.outcome is GateUnitOutcome.EXTENSION_MISSING and item.blocking is False
@@ -1070,9 +1051,7 @@ def test_content_rejects_ranking_semantics_in_metadata(
 def test_design_paths_indication_must_match_content(module: ModuleType) -> None:
     """路径综合结果的适应症必须与内容一致。"""
     payload = _content_payload()
-    payload["design_paths"] = _synthesis_payload(
-        module, indication_id="prurigo-nodularis"
-    )
+    payload["design_paths"] = _synthesis_payload(module, indication_id="prurigo-nodularis")
     with pytest.raises(module.FreshCPackageError):
         module.validate_fresh_c_content(payload)
 
@@ -1115,9 +1094,7 @@ def test_package_rejects_rejected_or_digest_mismatched_review(
 
     rejected = {
         **payload,
-        "scientific_review": _review(
-            module, content.content_digest, status="rejected"
-        ),
+        "scientific_review": _review(module, content.content_digest, status="rejected"),
     }
     with pytest.raises(module.FreshCPackageError):
         module.validate_fresh_c_package(rejected)
@@ -1151,9 +1128,7 @@ def test_c_observations_derive_closed_research_facts(module: ModuleType) -> None
     assert {item.fact_id for item in facts} == {
         item.row_id for item in content.report_data.observations
     }
-    assert {item.source_id for item in facts} <= {
-        item.source_id for item in content.sources
-    }
+    assert {item.source_id for item in facts} <= {item.source_id for item in content.sources}
     assert all(item.field_id.startswith("c.") for item in facts)
 
 
@@ -1191,11 +1166,7 @@ def test_projection_locks_c_report_snapshot_after_gate_and_review(
     )
     assert projection.report_snapshot.report == "C"
     snapshot_file = (
-        tmp_path
-        / "snapshots"
-        / "reports"
-        / "C"
-        / f"{projection.report_snapshot.snapshot_id}.json"
+        tmp_path / "snapshots" / "reports" / "C" / f"{projection.report_snapshot.snapshot_id}.json"
     )
     assert snapshot_file.is_file()
     manifest = json.loads(snapshot_file.read_text(encoding="utf-8"))
@@ -1206,10 +1177,7 @@ def test_projection_locks_c_report_snapshot_after_gate_and_review(
     assert projection.coverage_set_id
     assert projection.gate_result_key
     # 门户数据绑定锁定快照标识；本模块不渲染，rendered_unreviewed 快捷路径不受影响
-    assert (
-        projection.portal_data.report_snapshot_id
-        == projection.report_snapshot.snapshot_id
-    )
+    assert projection.portal_data.report_snapshot_id == projection.report_snapshot.snapshot_id
 
 
 def test_projection_is_idempotent(module: ModuleType, tmp_path: Path) -> None:
@@ -1293,9 +1261,7 @@ def test_run_service_executes_c_research_lineage_before_render(
     promoted_manifest = json.loads(
         (project_root / "manifests/current_run.json").read_text(encoding="utf-8")
     )
-    assert promoted_manifest["report_states"] == {
-        "C": "scientifically_reviewed_rendered_candidate"
-    }
+    assert promoted_manifest["report_states"] == {"C": "scientifically_reviewed_rendered_candidate"}
 
 
 def test_projection_refuses_blocked_gate(module: ModuleType, tmp_path: Path) -> None:
@@ -1305,8 +1271,7 @@ def test_projection_refuses_blocked_gate(module: ModuleType, tmp_path: Path) -> 
         item
         for item in _observations()
         if not (
-            item.trial_id == "trial-alpha-1"
-            and item.field_family is DesignFieldFamily.POPULATION
+            item.trial_id == "trial-alpha-1" and item.field_family is DesignFieldFamily.POPULATION
         )
     ]
     rows.append(
@@ -1319,9 +1284,7 @@ def test_projection_refuses_blocked_gate(module: ModuleType, tmp_path: Path) -> 
             source_role=SourceRole.PRIMARY_TRIAL_REPORT,
         )
     )
-    payload["report_data"]["observations"] = [
-        item.model_dump(mode="json") for item in rows
-    ]
+    payload["report_data"]["observations"] = [item.model_dump(mode="json") for item in rows]
     payload["trial_designs"] = _trial_designs_payload(tuple(rows))
     content = module.validate_fresh_c_content(payload)
     blocked_package = module.validate_fresh_c_package(
@@ -1362,8 +1325,7 @@ def test_run_service_persists_recovery_state_for_blocked_c_evidence(
         item
         for item in _observations()
         if not (
-            item.trial_id == "trial-alpha-1"
-            and item.field_family is DesignFieldFamily.POPULATION
+            item.trial_id == "trial-alpha-1" and item.field_family is DesignFieldFamily.POPULATION
         )
     ]
     rows.append(
@@ -1407,9 +1369,7 @@ def test_run_service_persists_recovery_state_for_blocked_c_evidence(
     assert result.node_summary["gate:C"] == "completed"
     assert result.node_summary["recovery:C"] == "awaiting_recovery"
     recovery = json.loads(
-        (project_root / "state/work-items/c-evidence-recovery.json").read_text(
-            encoding="utf-8"
-        )
+        (project_root / "state/work-items/c-evidence-recovery.json").read_text(encoding="utf-8")
     )
     assert "c_target_population_criteria" in recovery["blocked_unit_ids"]
     assert (project_root / "manifests/current_run.json").is_file()
@@ -1430,8 +1390,7 @@ def test_fresh_c_double_exhaustion_publishes_reopenable_terminal_decision(
         item
         for item in _observations()
         if not (
-            item.trial_id == "trial-alpha-1"
-            and item.field_family is DesignFieldFamily.POPULATION
+            item.trial_id == "trial-alpha-1" and item.field_family is DesignFieldFamily.POPULATION
         )
     ]
     rows.append(
@@ -1464,9 +1423,7 @@ def test_fresh_c_double_exhaustion_publishes_reopenable_terminal_decision(
     context = RunContext(
         project_root=project_root, contract=contract, research_package_path=package_path
     )
-    first = run_project(
-        project_root, run_context=context, capability_probe=StaticCapabilityProbe()
-    )
+    first = run_project(project_root, run_context=context, capability_probe=StaticCapabilityProbe())
     assert first.outcome == "running"
 
     package = module.load_fresh_c_research_package(package_path)
@@ -1530,9 +1487,7 @@ def test_fresh_c_double_exhaustion_publishes_reopenable_terminal_decision(
     assert validate_run_manifest(project_root)["run_id"] == third.run_id
 
 
-def test_load_fresh_c_research_package_roundtrip(
-    module: ModuleType, tmp_path: Path
-) -> None:
+def test_load_fresh_c_research_package_roundtrip(module: ModuleType, tmp_path: Path) -> None:
     """包可落盘并以同一合同读回，内容摘要不变；损坏文件失败关闭。"""
     payload = _ready_package_payload(module)
     content = module.validate_fresh_c_content(payload)

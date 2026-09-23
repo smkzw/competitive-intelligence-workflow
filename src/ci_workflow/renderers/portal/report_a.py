@@ -134,7 +134,7 @@ class EfficacyRow(BaseModel):
     disclosure_state: FactDisclosureState = FactDisclosureState.REPORTED_VALUE
 
     @model_validator(mode="after")
-    def _value_disclosure_consistency(self) -> "EfficacyRow":
+    def _value_disclosure_consistency(self) -> EfficacyRow:
         # 独立审阅 R01：披露状态与数值的唯一不变量（合并原先互相冲突的
         # 两个 validator）。reported_zero 必须显式为 0，缺失不得补 0；
         # 未报告/未公开/不适用等一律不得携带数值。
@@ -147,6 +147,7 @@ class EfficacyRow(BaseModel):
         elif self.value is not None:
             raise ValueError(f"{self.disclosure_state.value} 状态行不得携带数值")
         return self
+
     numerator: int | None = Field(default=None, ge=0)
     denominator: int | None = Field(default=None, gt=0)
     unit: str
@@ -156,7 +157,7 @@ class EfficacyRow(BaseModel):
     clinical_narrative: str | None = None
 
     @model_validator(mode="after")
-    def _undisclosed_row_carries_no_value(self) -> "EfficacyRow":
+    def _undisclosed_row_carries_no_value(self) -> EfficacyRow:
         # 独立审阅 R01：REPORTED_VALUE 的数值要求已并入唯一不变量
         # _value_disclosure_consistency；此处仅保留数值有限性守卫。
         if self.value is not None and not math.isfinite(self.value):
@@ -205,7 +206,13 @@ class SafetyRow(BaseModel):
     denominator: int | None = Field(default=None, gt=0)
     unit: str
     time_window: str
-    measure_object: Literal["participant_proportion", "participant_count", "event_count", "person_time_rate", "adjusted_estimate"] = "participant_proportion"
+    measure_object: Literal[
+        "participant_proportion",
+        "participant_count",
+        "event_count",
+        "person_time_rate",
+        "adjusted_estimate",
+    ] = "participant_proportion"
     disclosure_state: Literal["已公开", "未公开", "不适用"] = "已公开"
     source_field_path: str | None = None
     source_text: str | None = None
@@ -221,13 +228,14 @@ class SafetyRow(BaseModel):
             raise ValueError("安全性分子与分母必须同时公开或同时缺失")
         if (
             self.measure_object == "participant_proportion"
-            and
-            self.numerator is not None
+            and self.numerator is not None
             and self.denominator is not None
             and self.numerator > self.denominator
         ):
             raise ValueError("安全性分子不得大于分母")
-        if self.count_basis == "mixed" and (self.numerator is not None or self.denominator is not None):
+        if self.count_basis == "mixed" and (
+            self.numerator is not None or self.denominator is not None
+        ):
             raise ValueError("复合安全项不得拆值或借用其他项分母")
         return self
 
@@ -347,11 +355,7 @@ class ReportAPortalData(BaseModel):
         for product_id in products:
             if product_by_id[product_id].result_status != "有公开关键结果":
                 continue
-            concepts = {
-                row_concept(row)
-                for row in self.safety
-                if row.product_id == product_id
-            }
+            concepts = {row_concept(row) for row in self.safety if row.product_id == product_id}
             if not required_concepts <= concepts:
                 raise ValueError(f"产品 {product_id} 的关键安全性维度不完整")
             arms = {row.arm for row in self.efficacy if row.product_id == product_id}
@@ -514,9 +518,16 @@ def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str
     from ci_workflow.reports.b.concept_catalog import spec_of
 
     catalog_keys = {
-        "any_sae", "any_teae", "death", "aesi", "discontinuation_ae",
-        "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
-        "generic_ae", "composite_ae",
+        "any_sae",
+        "any_teae",
+        "death",
+        "aesi",
+        "discontinuation_ae",
+        "treatment_related_ae",
+        "grade_3_plus",
+        "serious_teae_subset",
+        "generic_ae",
+        "composite_ae",
     }
     if term_key and term_key in catalog_keys:
         return term_key, spec_of(term_key).label_zh
@@ -571,7 +582,9 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
         # any_* 行此前走第一分支时把 measure_context 丢掉，类目行仍不可区分
         _base_label = None
         if term_key in {"any_sae", "any_teae", "death"} and "组别汇总计数" not in item.term:
-            if re.findall(r"[A-Za-z]{3,}", item.term) and not item.term.endswith("（登记原文，未译）"):
+            if re.findall(r"[A-Za-z]{3,}", item.term) and not item.term.endswith(
+                "（登记原文，未译）"
+            ):
                 _base_label = item.term + "（登记原文，未译）"
             else:
                 _base_label = item.term
@@ -592,23 +605,40 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
             _tw = _tw + "（登记原文，未译）"
         row["time_window"] = _tw
         projection = project_numeric(
-            value=item.value, unit=item.unit,
-            kind=infer_numeric_kind(measure_object=item.measure_object, unit=item.unit, domain="safety"),
-            numerator=item.numerator, denominator=item.denominator,
-            window=item.time_window, estimand="安全性登记测量",
+            value=item.value,
+            unit=item.unit,
+            kind=infer_numeric_kind(
+                measure_object=item.measure_object, unit=item.unit, domain="safety"
+            ),
+            numerator=item.numerator,
+            denominator=item.denominator,
+            window=item.time_window,
+            estimand="安全性登记测量",
         )
         row["numeric_projection"] = projection.as_dict()
         row["plot_value"] = projection.plot_value
         row["plot_unit"] = projection.plot_unit
         row["renderable"] = projection.renderable
-        row["semantic_filter_key"] = "|".join((
-            str(item.term_key or "unknown"), item.polarity, item.seriousness,
-            "teae" if item.teae is True else "non_teae" if item.teae is False else "teae_unknown",
-            item.relatedness, ",".join(str(value) for value in item.grade_set),
-            item.count_basis,
-        ))
+        row["semantic_filter_key"] = "|".join(
+            (
+                str(item.term_key or "unknown"),
+                item.polarity,
+                item.seriousness,
+                "teae"
+                if item.teae is True
+                else "non_teae"
+                if item.teae is False
+                else "teae_unknown",
+                item.relatedness,
+                ",".join(str(value) for value in item.grade_set),
+                item.count_basis,
+            )
+        )
         rows.append(row)
-    if not any(_category_base(row["category"]) == "特别关注不良事件" and row["value"] is not None for row in rows):
+    if not any(
+        _category_base(row["category"]) == "特别关注不良事件" and row["value"] is not None
+        for row in rows
+    ):
         rows = [row for row in rows if _category_base(row["category"]) != "特别关注不良事件"]
     return tuple(rows)
 
@@ -631,17 +661,24 @@ def _safety_semantic_filters(rows: tuple[dict[str, object], ...]) -> tuple[dict[
         key = str(row["semantic_filter_key"])
         if key not in seen:
             raw_grades = row.get("grade_set", ())
-            grades = "/".join(str(value) for value in raw_grades) if isinstance(
-                raw_grades, (tuple, list)
-            ) else ""
+            grades = (
+                "/".join(str(value) for value in raw_grades)
+                if isinstance(raw_grades, (tuple, list))
+                else ""
+            )
             grades = grades or "无等级"
             seen[key] = {
                 "key": key,
-                "label": "｜".join((
-                    str(row.get("term_label") or row.get("term_key")),
-                    str(row.get("polarity")), grades, str(row.get("seriousness")),
-                    str(row.get("relatedness")), str(row.get("count_basis")),
-                )),
+                "label": "｜".join(
+                    (
+                        str(row.get("term_label") or row.get("term_key")),
+                        str(row.get("polarity")),
+                        grades,
+                        str(row.get("seriousness")),
+                        str(row.get("relatedness")),
+                        str(row.get("count_basis")),
+                    )
+                ),
             }
     return tuple(seen.values())
 
@@ -742,22 +779,27 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"primary treatment period", "主要治疗期"),
     (r"\bprimary\b", "主要"),
     (r"\blte\b", "长期扩展期"),
-    (r"within (\d+) weeks? prior to first dose and during (\d+)[- ]week treatment period",
-     r"首次给药前\1周内及\2周治疗期内"),
+    (
+        r"within (\d+) weeks? prior to first dose and during (\d+)[- ]week treatment period",
+        r"首次给药前\1周内及\2周治疗期内",
+    ),
     (r"within (\d+) weeks? prior to first dose", r"首次给药前\1周内"),
     (r"during (\d+)[- ]week treatment period", r"\1周治疗期内"),
     (r"period (\d+)", r"第\1周期"),
     (r"on entry and every 3 months thereafter[^,;.]*", "入组时及此后每3个月"),
     (
-        r"from (?:first|single) dose of study drug up to (\d+) days? after (?:the )?last dose(?: of study (?:drug|medication))?",
+        r"from (?:first|single) dose of study drug up to (\d+) days? "
+        r"after (?:the )?last dose(?: of study (?:drug|medication))?",
         r"自首次给药至末次给药后\1天",
     ),
     (
-        r"from (?:first|single) dose of study drug \(days? (\d+)\) up to (\d+) days?(?: after the last dose(?: of study (?:drug|medication))?)?",
+        r"from (?:first|single) dose of study drug \(days? (\d+)\) "
+        r"up to (\d+) days?(?: after the last dose(?: of study (?:drug|medication))?)?",
         r"首次给药（第\1天）后至\2天",
     ),
     (
-        r"after the first dose of study medication \(days? (\d+)\) through (\d+) days? after the last dose(?: of study (?:drug|medication))?",
+        r"after the first dose of study medication \(days? (\d+)\) "
+        r"through (\d+) days? after the last dose(?: of study (?:drug|medication))?",
         r"首次给药后（第\1天）至末次给药后\2天",
     ),
     (r"from days? (\d+) to (\d+) days? after the last dose", r"自第\1天至末次给药后\2天"),
@@ -768,11 +810,16 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"prior to first dose", "首次给药前"),
     (r"from first dose of study drug", "自首次给药起"),
     (r"first dose of study drug", "首次给药"),
-    (r"last available rolling average before the first dose of study drug", "首次给药前最后一次可用滚动均值"),
+    (
+        r"last available rolling average before the first dose of study drug",
+        "首次给药前最后一次可用滚动均值",
+    ),
     (
         r"between (day|week|month)s? (\d+) and (?:day|week|month)s? (\d+)",
-        lambda m: "第%s至第%s%s"
-        % (m.group(2), m.group(3), {"d": "天", "w": "周", "m": "个月"}[m.group(1)[0].casefold()]),
+        lambda m: (
+            f"第{m.group(2)}至第{m.group(3)}"
+            f"{dict(d='天', w='周', m='个月')[m.group(1)[0].casefold()]}"
+        ),
     ),
     (r"between days? (\d+) and (\d+)", r"第\1至\2天"),
     (r"between weeks? (\d+) and (\d+)", r"第\1至\2周"),
@@ -847,8 +894,10 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
         lambda m: "第" + re.sub(r",\s*|\s*and\s*", "、", m.group(1), flags=re.I) + "个月",
     ),
     (r"\bmonth\s*(\d+)", r"第\1个月"),
-    (r"\bweeks?\s+(\d+)(?:\s*(?:,|and)\s*(\d+))+\b",
-     lambda m: "、" .join(f"第{x}周" for x in re.findall(r"\d+", m.group(0)))),
+    (
+        r"\bweeks?\s+(\d+)(?:\s*(?:,|and)\s*(\d+))+\b",
+        lambda m: "、".join(f"第{x}周" for x in re.findall(r"\d+", m.group(0))),
+    ),
     (r"\bweeks?\s*(\d+)e?\b", r"第\1周"),
     (r"\bdays?\s*(\d+)e?\b", r"第\1天"),
     (r"\bbaseline\b", "基线"),
@@ -894,7 +943,8 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bfrom\b", "自"),
     (r"\bon\s+", ""),
     (r"\bstudy\b", "研究"),
-    (r"(\d+)\s*days?", r"\1天"),    (r"parent study", "母研究"),
+    (r"(\d+)\s*days?", r"\1天"),
+    (r"parent study", "母研究"),
     (r"\bpre-?treatment\b", "治疗前"),
     (r"\bpost-?treatment\b", "治疗后"),
     (r"\bmissing severity\b", "严重程度缺失"),
@@ -952,7 +1002,7 @@ def _native_timepoint_zh(value: str) -> str:
     out = re.sub(r"\s{2,}", " ", out).strip(" 、；")
     # 残余裸英文 ≥2 词 → 未转写成功，显式声明
     if len(re.findall(r"[A-Za-z]{2,}", out)) >= 2:
-                # 独立复核 A r32：已披露但难以转写的叙事型时间窗保留登记原句
+        # 独立复核 A r32：已披露但难以转写的叙事型时间窗保留登记原句
         # （可核对优先于占位串）
         return " ".join(str(value or "").split())
     return out
@@ -964,9 +1014,7 @@ def _native_endpoint_zh(value: str) -> str:
     # 此前 <3 词即放行，导致 "Absolute 较基线变化： Hemoglobin" 类规则半替换
     # 的混合文本原样漏出（429 行）。全大写缩写（LDH/EASI/ULN 等）不算残留。
     if _contains_chinese(value):
-        residual = [
-            w for w in re.findall(r"[A-Za-z]{3,}", value) if not w.isupper()
-        ]
+        residual = [w for w in re.findall(r"[A-Za-z]{3,}", value) if not w.isupper()]
         if not residual:
             return value
     folded = value.casefold()
@@ -1001,8 +1049,14 @@ def _native_endpoint_zh(value: str) -> str:
         (r"trough.*concentration|plasma concentration|serum concentration", lambda _m: "药物浓度"),
         # 跨适应症通用生物医学终点（独立视觉复核：通用族标签不得顶替终点身份）
         # 肾脏科终点（IgAN 泛化测试：不得落入通用占位标签）
-        (r"urine protein[- ]?to[- ]?creatinine ratio|\bupcr\b|protein[- ]?creatinine ratio", lambda _m: "尿蛋白/肌酐比值（UPCR）"),
-        (r"urine albumin[- ]?to[- ]?creatinine ratio|\buacr\b", lambda _m: "尿白蛋白/肌酐比值（UACR）"),
+        (
+            r"urine protein[- ]?to[- ]?creatinine ratio|\bupcr\b|protein[- ]?creatinine ratio",
+            lambda _m: "尿蛋白/肌酐比值（UPCR）",
+        ),
+        (
+            r"urine albumin[- ]?to[- ]?creatinine ratio|\buacr\b",
+            lambda _m: "尿白蛋白/肌酐比值（UACR）",
+        ),
         (r"estimated glomerular filtration rate|\begfr\b", lambda _m: "估算肾小球滤过率（eGFR）"),
         (r"proteinuria|urine protein|urinary protein", lambda _m: "蛋白尿"),
         (r"albuminuria|urine albumin(?!/)", lambda _m: "白蛋白尿"),
@@ -1011,16 +1065,31 @@ def _native_endpoint_zh(value: str) -> str:
         (r"creatinine clearance|\bcrc[l]\b", lambda _m: "肌酐清除率"),
         # 肺科终点（IPF round-3 泛化测试：不得落入通用占位标签）
         (r"forced vital capacity|\bfvc\b", lambda _m: "用力肺活量（FVC）"),
-        (r"six[- ]minute walk distance|\b6mwd\b|6[- ]minute walk", lambda _m: "6分钟步行距离（6MWD）"),
-        (r"diffusing (?:capacity|ability).*(?:carbon monoxide|co)|\bdlco\b", lambda _m: "一氧化碳弥散量（DLCO）"),
-        (r"acute exacerbation|worsening(?: of)? ipf|disease progression", lambda _m: "急性加重/疾病进展"),
+        (
+            r"six[- ]minute walk distance|\b6mwd\b|6[- ]minute walk",
+            lambda _m: "6分钟步行距离（6MWD）",
+        ),
+        (
+            r"diffusing (?:capacity|ability).*(?:carbon monoxide|co)|\bdlco\b",
+            lambda _m: "一氧化碳弥散量（DLCO）",
+        ),
+        (
+            r"acute exacerbation|worsening(?: of)? ipf|disease progression",
+            lambda _m: "急性加重/疾病进展",
+        ),
         (r"high[- ]resolution computed tomography|\bhrct\b", lambda _m: "高分辨CT（HRCT）"),
         (r"forced expiratory volume|\bfev1\b", lambda _m: "第一秒用力呼气量（FEV1）"),
         (r"oxygen saturation|spo2|\bpao2\b", lambda _m: "血氧饱和度"),
         # 消化科终点（UC 泛化测试）
-        (r"endoscopic(?:\s+\w+)*\s*(?:remission|improvement|response)|endoscopy", lambda _m: "内镜改善"),
+        (
+            r"endoscopic(?:\s+\w+)*\s*(?:remission|improvement|response)|endoscopy",
+            lambda _m: "内镜改善",
+        ),
         (r"mucosal healing", lambda _m: "黏膜愈合"),
-        (r"histologic(?:al)?(?:\s+\w+)*\s*(?:remission|improvement|response)", lambda _m: "组织学改善"),
+        (
+            r"histologic(?:al)?(?:\s+\w+)*\s*(?:remission|improvement|response)",
+            lambda _m: "组织学改善",
+        ),
         (r"rectal bleeding|bowel bleeding", lambda _m: "直肠出血"),
         (r"stool frequency", lambda _m: "排便次数"),
         (r"bowel urgency|urgency", lambda _m: "便急"),
@@ -1053,12 +1122,12 @@ def _native_endpoint_zh(value: str) -> str:
     )
     # 独立复核 C r42（issue-1/2）：安全域与免疫原性终点不得落入
     # "疗效评价/其他临床疗效指标"——医学读者须能看出终点评价的是安全性
-    if re.search(
-        r"anti[- ]?drug antibod|antidrug antibod|immunogenicit|\badas?\b", value, re.I
-    ):
+    if re.search(r"anti[- ]?drug antibod|antidrug antibod|immunogenicit|\badas?\b", value, re.I):
         return "免疫原性评价"
     # 独立复核 C r44（issue-3）：血清浓度终点保留测量身份，不再泛化
-    if re.search(r"serum concentration|serum trough concentration|plasma concentration", value, re.I):
+    if re.search(
+        r"serum concentration|serum trough concentration|plasma concentration", value, re.I
+    ):
         return "血清药物浓度评价"
     # 独立复核 C r46（issue-1）：During 等介词残留按惯例标注，不冒充门户文案
     if re.search(r"\bduring\b", value, re.I) and not value.endswith("（登记原文，未译）"):
@@ -1066,7 +1135,8 @@ def _native_endpoint_zh(value: str) -> str:
     if re.search(
         r"adverse event|\bteaes?\b|\bsaes?\b|treatment[- ]emergent|"
         r"\baes\b of special|infection|\bdeath?s?\b",
-        value, re.I,
+        value,
+        re.I,
     ):
         return "安全性评价"
     if not measure:
@@ -1548,8 +1618,12 @@ def _native_unit_zh(unit: str) -> str:
     )
     if m:
         # 注意分组：3=分母词前缀（deci/milli/...），4=括注符号
-        num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(m.group(1) or "", "")
-        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(m.group(3) or "", "")
+        num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(
+            m.group(1) or "", ""
+        )
+        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(
+            m.group(3) or "", ""
+        )
         stem = "g" if (m.group(2) or "").startswith("gram") else "mol"
         return f"{num_prefix}{stem}/{den_prefix}L"
     m = re.fullmatch(
@@ -1562,7 +1636,9 @@ def _native_unit_zh(unit: str) -> str:
         return paren_sym if paren_sym else ("IU/L" if "international" in low else "U/L")
     # 括注符号直取（"micromoles (μmol)/liter" → μmol/L）
     m = re.search(r"\(([^)]*/[^)]+)\)", text)
-    if m and re.fullmatch(r"[kμµMmGgdUIn]?[A-Za-zμμ]{0,5}/[kμµMmGdn]?[A-Za-zμL]{1,5}", m.group(1).strip()):
+    if m and re.fullmatch(
+        r"[kμµMmGgdUIn]?[A-Za-zμμ]{0,5}/[kμµMmGdn]?[A-Za-zμL]{1,5}", m.group(1).strip()
+    ):
         sym = m.group(1).strip().replace("µ", "μ")
         return sym
     # 常见派生形状
@@ -1628,8 +1704,16 @@ def _native_unit_zh(unit: str) -> str:
     if m:
         exp = m.group(1)
         denom = m.group(2)
-        denom_zh = {"microliter": "μL", "microlitre": "μL", "nanoliter": "nL", "nanolitre": "nL",
-                    "liter": "L", "litre": "L", "ml": "mL", "l": "L"}.get(denom, denom)
+        denom_zh = {
+            "microliter": "μL",
+            "microlitre": "μL",
+            "nanoliter": "nL",
+            "nanolitre": "nL",
+            "liter": "L",
+            "litre": "L",
+            "ml": "mL",
+            "l": "L",
+        }.get(denom, denom)
         sup = {"6": "⁶", "9": "⁹", "12": "¹²"}.get(exp, f"^{exp}")
         return f"×10{sup}/{denom_zh}"
     if compact in {"arc/nanoliter", "arc/nl"}:
@@ -1675,10 +1759,12 @@ def _disambiguate_endpoint_labels(rows: list[dict[str, Any]]) -> None:
                 row["endpoint"] = f"{row['endpoint']}（登记终点定义{n}）"
 
 
-
 _HISTORY_PHRASING: tuple[tuple[str, str], ...] = (
     (r"条因未披露样本量未入试验表", "项试验因登记未披露样本量，未纳入试验明细"),
-    (r"条无独立药物干预未产出实体（明细见派生记录）", "条记录经登记适用性筛查未纳入试验明细（A 门户当前不含证据与局限页，规则说明随证据包交付）"),
+    (
+        r"条无独立药物干预未产出实体（明细见派生记录）",
+        "条记录经登记适用性筛查未纳入试验明细（A 门户当前不含证据与局限页，规则说明随证据包交付）",
+    ),
     (r"无独立药物干预未产出实体", "经登记适用性筛查未纳入明细"),
     (r"联合治疗关系受载荷单产品字段限制", "联合用药信息按各产品分别记录"),
     (r"监管/专利来源待接入", "监管与专利来源将在后续版本接入"),
@@ -1802,10 +1888,13 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
         row["population"] = _native_population_zh(str(row["population"]))
         row["unit"] = _native_unit_zh(str(row["unit"]))
         projection = project_numeric(
-            value=item.value, unit=item.unit,
+            value=item.value,
+            unit=item.unit,
             kind=infer_numeric_kind(unit=item.unit, domain="efficacy"),
-            numerator=item.numerator, denominator=item.denominator,
-            window=item.timepoint, estimand=item.endpoint,
+            numerator=item.numerator,
+            denominator=item.denominator,
+            window=item.timepoint,
+            estimand=item.endpoint,
         )
         displayed_projection = projection.as_dict()
         displayed_projection["plot_unit"] = _native_unit_zh(projection.plot_unit)
@@ -1845,7 +1934,8 @@ def _view_context(
             category
             for category in ("严重不良事件", "治疗期间不良事件", "常见不良事件", "特别关注不良事件")
             if any(
-                _category_base(row["category"]) == category and row["value"] is not None for row in display_safety
+                _category_base(row["category"]) == category and row["value"] is not None
+                for row in display_safety
             )
         ),
         "regulatory": _display_regulatory(data),
@@ -1884,13 +1974,15 @@ def _project_active_facts_a(
         page: str
         if binding.collection == "safety":
             matches = [
-                index for index, candidate in enumerate(safety)
+                index
+                for index, candidate in enumerate(safety)
                 if candidate.row_id == binding.row_id
             ]
             page = "safety.html"
         elif binding.collection == "efficacy":
             matches = [
-                index for index, candidate in enumerate(efficacy)
+                index
+                for index, candidate in enumerate(efficacy)
                 if candidate.row_id == binding.row_id
             ]
             page = "efficacy.html"
@@ -1913,19 +2005,13 @@ def _project_active_facts_a(
             )
         except ValueError as error:
             raise ReportAPortalError(str(error)) from error
-        unit = str(
-            fact_extra.get("normalized_unit")
-            or fact_extra.get("unit")
-            or row.unit
-        )
+        unit = str(fact_extra.get("normalized_unit") or fact_extra.get("unit") or row.unit)
         endpoint = (
             fact_extra.get("endpoint_definition")
             or getattr(row, "term", None)
             or getattr(row, "endpoint", "")
         )
-        narrative = (
-            f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
-        )
+        narrative = f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
         updates: dict[str, Any] = {
             "value": numeric_value(fact),
             "unit": unit,
@@ -2087,9 +2173,10 @@ def render_report_a_site(
         public_provenance = PublicProvenance.model_validate(
             public_provenance.model_dump(mode="json")
         )
-        if public_provenance.report_data_digest != hashlib.sha256(
-            data.model_dump_json().encode("utf-8")
-        ).hexdigest():
+        if (
+            public_provenance.report_data_digest
+            != hashlib.sha256(data.model_dump_json().encode("utf-8")).hexdigest()
+        ):
             raise ReportAPortalError("公共来源与报告内容不一致")
     env = Environment(
         loader=FileSystemLoader(_TEMPLATE_DIR),
@@ -2105,7 +2192,8 @@ def render_report_a_site(
     display_payload = data.model_dump(mode="json")
     display_payload["public_sources"] = (
         [item.model_dump(mode="json") for item in public_provenance.sources]
-        if public_provenance is not None else []
+        if public_provenance is not None
+        else []
     )
     display_payload["products"] = [item.model_dump(mode="json") for item in _display_products(data)]
     display_payload["trials"] = list(_display_trials(data))
@@ -2173,51 +2261,56 @@ def render_report_a_site(
         for product in data.products
     ]
     (data_dir / "sitemap.json").write_bytes(_canonical_json({"routes": routes}))
-    search = [
-        {"title": item["title"], "slug": item["id"], "keywords": [item["group"]]}
-        for item in _navigation()
-    ] + [
-        {
-            "title": display_products[product.id].name,
-            "slug": f"products/{product.id}",
-            "keywords": [product.target, product.modality],
-        }
-        for product in data.products
-    ] + [
-        {
-            "title": row.clinical_narrative
-            or f"{row.term} · {display_products[row.product_id].name}",
-            "slug": "safety",
-            "keywords": [
-                row.row_id,
-                row.term,
-                row.value,
-                row.unit,
-                row.numerator,
-                row.denominator,
-                row.source_text,
-                row.source_field_path,
-            ],
-        }
-        for row in data.safety
-    ] + [
-        {
-            "title": row.clinical_narrative
-            or f"{row.endpoint} · {display_products[row.product_id].name}",
-            "slug": "efficacy",
-            "keywords": [
-                row.row_id,
-                row.endpoint,
-                row.value,
-                row.unit,
-                row.numerator,
-                row.denominator,
-                row.source_text,
-                row.source_field_path,
-            ],
-        }
-        for row in data.efficacy
-    ]
+    search = (
+        [
+            {"title": item["title"], "slug": item["id"], "keywords": [item["group"]]}
+            for item in _navigation()
+        ]
+        + [
+            {
+                "title": display_products[product.id].name,
+                "slug": f"products/{product.id}",
+                "keywords": [product.target, product.modality],
+            }
+            for product in data.products
+        ]
+        + [
+            {
+                "title": row.clinical_narrative
+                or f"{row.term} · {display_products[row.product_id].name}",
+                "slug": "safety",
+                "keywords": [
+                    row.row_id,
+                    row.term,
+                    row.value,
+                    row.unit,
+                    row.numerator,
+                    row.denominator,
+                    row.source_text,
+                    row.source_field_path,
+                ],
+            }
+            for row in data.safety
+        ]
+        + [
+            {
+                "title": row.clinical_narrative
+                or f"{row.endpoint} · {display_products[row.product_id].name}",
+                "slug": "efficacy",
+                "keywords": [
+                    row.row_id,
+                    row.endpoint,
+                    row.value,
+                    row.unit,
+                    row.numerator,
+                    row.denominator,
+                    row.source_text,
+                    row.source_field_path,
+                ],
+            }
+            for row in data.efficacy
+        ]
+    )
     (data_dir / "search-index.js").write_text(
         "window.__SEARCH_INDEX__="
         + json.dumps(search, ensure_ascii=False, separators=(",", ":"))
@@ -2235,31 +2328,51 @@ def render_report_a_site(
 
 
 def _render_recovery_digest(
-    data: ReportAPortalData, project_id: str, contract_version: int,
-    lineage: ReportALineageBinding | None, public_provenance: PublicProvenance | None,
+    data: ReportAPortalData,
+    project_id: str,
+    contract_version: int,
+    lineage: ReportALineageBinding | None,
+    public_provenance: PublicProvenance | None,
     limitation: str | None,
 ) -> str:
     """Bind exact inputs and installed renderer resources, never infer old bindings."""
     root = Path(__file__).resolve().parents[4]
-    digest = hashlib.sha256(_canonical_json({
-        "data": data.model_dump(mode="json"), "project_id": project_id,
-        "contract_version": contract_version,
-        "lineage": lineage.model_dump(mode="json") if lineage else None,
-        "public_provenance": (
-            public_provenance.model_dump(mode="json") if public_provenance else None
-        ),
-        "publication_limitation": limitation,
-        "runtime_versions": {name: dependency_version(name) for name in ("Jinja2", "pydantic")},
-    }))
-    files = [path for path in (root / "src/ci_workflow").rglob("*")
-             if path.is_file() and path.suffix in {".py", ".js", ".css", ".j2", ".json", ".yaml"}]
+    digest = hashlib.sha256(
+        _canonical_json(
+            {
+                "data": data.model_dump(mode="json"),
+                "project_id": project_id,
+                "contract_version": contract_version,
+                "lineage": lineage.model_dump(mode="json") if lineage else None,
+                "public_provenance": (
+                    public_provenance.model_dump(mode="json") if public_provenance else None
+                ),
+                "publication_limitation": limitation,
+                "runtime_versions": {
+                    name: dependency_version(name) for name in ("Jinja2", "pydantic")
+                },
+            }
+        )
+    )
+    files = [
+        path
+        for path in (root / "src/ci_workflow").rglob("*")
+        if path.is_file() and path.suffix in {".py", ".js", ".css", ".j2", ".json", ".yaml"}
+    ]
     files.extend(root / name for name in ("package-manifest.json", "uv.lock"))
-    files.extend(path for path in (root / "contracts").rglob("*")
-                 if path.is_file() and path.suffix in {".json", ".yaml"})
+    files.extend(
+        path
+        for path in (root / "contracts").rglob("*")
+        if path.is_file() and path.suffix in {".json", ".yaml"}
+    )
     for path in sorted(files):
         digest.update(path.relative_to(root).as_posix().encode() + b"\0" + path.read_bytes())
-    for path in (resolve_logo_src(), resolve_echarts_bundle(),
-                 resolve_portal_asset("portal.css"), resolve_portal_asset("portal.js")):
+    for path in (
+        resolve_logo_src(),
+        resolve_echarts_bundle(),
+        resolve_portal_asset("portal.css"),
+        resolve_portal_asset("portal.js"),
+    ):
         digest.update(path.name.encode() + b"\0" + path.read_bytes())
     return digest.hexdigest()
 
@@ -2298,17 +2411,29 @@ def build_report_a_artifact(
         run_id=run_id,
     )
     recovery_digest = _render_recovery_digest(
-        data, project_id, contract_version, lineage, public_provenance, publication_limitation_zh,
+        data,
+        project_id,
+        contract_version,
+        lineage,
+        public_provenance,
+        publication_limitation_zh,
     )
     if recover_committed and transaction.manifest_path.exists():
         for path in (transaction.manifest_path, transaction.version_root, transaction.site_root):
             if path.is_symlink():
                 raise ReportAPortalError("已提交渲染恢复路径不得是链接")
         existing = ArtifactManifest.model_validate_json(transaction.manifest_path.read_bytes())
-        bindings = [item.receipt for item in existing.deterministic_checks
-                    if item.check_id == "committed-render-input-v1" and item.status == "passed"]
-        if (existing.project_id != project_id or existing.contract_version != contract_version
-                or existing.status != "generated" or bindings != [recovery_digest]):
+        bindings = [
+            item.receipt
+            for item in existing.deterministic_checks
+            if item.check_id == "committed-render-input-v1" and item.status == "passed"
+        ]
+        if (
+            existing.project_id != project_id
+            or existing.contract_version != contract_version
+            or existing.status != "generated"
+            or bindings != [recovery_digest]
+        ):
             raise ReportAPortalError("已提交渲染缺少一致的输入/源码绑定，拒绝覆盖或猜测复用")
         ManifestStore(project_root).verify_artifact(existing)
         load_locked_sitemap_source(project_root, ReportKind.A, data.report_version)
@@ -2410,7 +2535,9 @@ def build_report_a_artifact(
         generated_at=started_at,
         deterministic_checks=(
             DeterministicCheck(
-                check_id="committed-render-input-v1", status="passed", receipt=recovery_digest,
+                check_id="committed-render-input-v1",
+                status="passed",
+                receipt=recovery_digest,
             ),
             DeterministicCheck(
                 check_id="eleven-static-plus-products",
