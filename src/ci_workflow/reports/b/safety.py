@@ -168,6 +168,7 @@ _DISCLOSURE_LABELS_ZH: dict[FactDisclosureState, str] = {
     FactDisclosureState.NOT_APPLICABLE: "不适用",
     FactDisclosureState.CONFLICTING: "来源存在冲突",
     FactDisclosureState.UNRESOLVED_DUE_TO_ROUTE: "技术路径未解决",
+    FactDisclosureState.USER_CLEARED: "用户清除，待重新核实",
 }
 
 _NON_CONCRETE_STATES = frozenset(
@@ -178,6 +179,7 @@ _NON_CONCRETE_STATES = frozenset(
         FactDisclosureState.NOT_APPLICABLE,
         FactDisclosureState.CONFLICTING,
         FactDisclosureState.UNRESOLVED_DUE_TO_ROUTE,
+        FactDisclosureState.USER_CLEARED,
     }
 )
 

@@ -24,10 +24,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "raw_value": {"type": "string", "minLength": 1},
-        "normalized_value": {"type": ["string", "number", "boolean"]},
-        "numerator": {"type": "integer", "minimum": 0},
-        "denominator": {"type": "integer", "minimum": 1},
+        "raw_value": {"type": ["string", "null"], "minLength": 1},
+        "normalized_value": {"type": ["string", "number", "boolean", "null"]},
+        "numerator": {"type": ["integer", "null"], "minimum": 0},
+        "denominator": {"type": ["integer", "null"], "minimum": 1},
         "timepoint": {"type": "string", "minLength": 1},
         "time_window": {"type": "string", "minLength": 1},
         "unit": {"type": "string", "minLength": 1},
@@ -47,7 +47,7 @@
         "period": {"type": "string", "minLength": 1},
         "measure_object": {"enum": ["participants", "events", "person_time", "estimate"]},
         "threshold_operator": {"enum": ["<", "<=", ">", ">=", "="]},
-        "threshold_value": {"type": "number"},
+        "threshold_value": {"type": ["number", "null"]},
         "threshold_unit": {"type": "string", "minLength": 1}
       }
     }

@@ -64,7 +64,7 @@
 | F04–F06 | 分页/虚拟化稳定ID遍历并集=Q、末条可搜索/来源/返回；同category+series碰撞不first-wins；legend/dataZoom/研究过滤三态分离 | W02/W05 |
 | I01–I03 | 原6个失败nodeid在Chromium/WebKit复跑：pointer正确开同事实依据、Esc回实际标记或稳定同事实锚点、图点高亮真实表行 | W05共享 |
 | I04–I06 | 同事实多图多表均同步；bar宽/legend/sort/侧栏变化后命中区随真实glyph；返回恢复查询/分面/滚动/选择且多次重绘无重复事件 | W05共享 |
-| E01–E03 | 省略保持、0/False合法；显式clear仅清可清字段且不吞掉混合补丁；清数值改变披露并失效派生，reported_value+null及字符串None拒绝 | W04 |
+| E01–E03 | 省略保持、0/False合法；显式clear仅清数值白名单字段且不吞掉混合补丁；当前图/表/索引/证据显示“用户清除，待重新核实”，清分子/分母/阈值和派生，不把原来源状态改为未公开；原来源值/定位仍可查，`reported_value + null` 的有效当前投影及字符串None拒绝；不完整恢复拒绝；合法 A+B 扇出、C 阈值、撤销及中断重试逐一验 | W04 |
 | E04–E05 | 一次合法同事实A+B保存同步图/表/索引/源层披露和current；故障旧current完整、revision冲突/幂等/undo/原文保全 | W04 |
 | S01–S03 | 实际source version按locator重提取每条采用事实，记录已闭合/未解ID与原因；多组多期、零值、缺失、多终点、复合安全输入；仅凭manifest空目录恢复后仍可逐条核验 | W07 |
 

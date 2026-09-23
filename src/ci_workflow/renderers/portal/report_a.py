@@ -216,7 +216,7 @@ class SafetyRow(BaseModel):
         "person_time_rate",
         "adjusted_estimate",
     ] = "participant_proportion"
-    disclosure_state: Literal["已公开", "未公开", "不适用"] = "已公开"
+    disclosure_state: Literal["已公开", "未公开", "不适用", "用户清除，待重新核实"] = "已公开"
     source_field_path: str | None = None
     source_version_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
     group_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
@@ -230,6 +230,8 @@ class SafetyRow(BaseModel):
             raise ValueError("已公开安全性记录必须包含数值")
         if self.disclosure_state == "未公开" and self.value is not None:
             raise ValueError("未公开安全性记录不得填入推测数值")
+        if self.disclosure_state == "用户清除，待重新核实" and self.value is not None:
+            raise ValueError("用户清除的安全性记录不得携带当前数值")
         if (self.numerator is None) != (self.denominator is None):
             raise ValueError("安全性分子与分母必须同时公开或同时缺失")
         if (
@@ -2017,12 +2019,22 @@ def _project_active_facts_a(
             or getattr(row, "term", None)
             or getattr(row, "endpoint", "")
         )
-        narrative = f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
+        cleared = fact.disclosure_state == "user_cleared"
+        narrative = (
+            f"{endpoint}：用户清除，待重新核实。"
+            if cleared else f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
+        )
         updates: dict[str, Any] = {
-            "value": numeric_value(fact),
+            "value": None if cleared else numeric_value(fact),
             "unit": unit,
             "clinical_narrative": narrative,
         }
+        if cleared:
+            updates.update(numerator=None, denominator=None)
+            updates["disclosure_state"] = (
+                "用户清除，待重新核实" if isinstance(row, SafetyRow)
+                else FactDisclosureState.USER_CLEARED
+            )
         for field in ("numerator", "denominator"):
             value = fact_extra.get(field)
             if isinstance(value, int):
@@ -2036,13 +2048,13 @@ def _project_active_facts_a(
             ):
                 updates["measure_object"] = "participant_proportion"
                 updates["count_basis"] = "participants"
-            safety[index] = row.model_copy(update=updates)
+            safety[index] = SafetyRow.model_validate(row.model_copy(update=updates))
         else:
             if fact_extra.get("timepoint"):
                 updates["timepoint"] = str(fact_extra["timepoint"])
             if fact_extra.get("population"):
                 updates["population"] = str(fact_extra["population"])
-            efficacy[index] = row.model_copy(update=updates)
+            efficacy[index] = EfficacyRow.model_validate(row.model_copy(update=updates))
         original_value = "未公开" if row.value is None else f"{row.value:g}{row.unit}"
         user_edits[binding.row_id] = user_edit_disclosure(
             fact,

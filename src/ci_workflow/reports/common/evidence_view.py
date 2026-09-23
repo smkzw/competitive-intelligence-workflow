@@ -52,6 +52,7 @@ class EvidenceFieldState(StrEnum):
     NOT_YET_DISCLOSED = "not_yet_disclosed"
     SOURCE_NOT_LISTED = "source_not_listed"
     TECHNICALLY_UNAVAILABLE = "technically_unavailable"
+    USER_CLEARED = "user_cleared"
 
 
 EVIDENCE_FIELD_STATE_LABELS_ZH: dict[EvidenceFieldState, str] = {
@@ -59,6 +60,7 @@ EVIDENCE_FIELD_STATE_LABELS_ZH: dict[EvidenceFieldState, str] = {
     EvidenceFieldState.NOT_YET_DISCLOSED: "尚未公开",
     EvidenceFieldState.SOURCE_NOT_LISTED: "来源未列示",
     EvidenceFieldState.TECHNICALLY_UNAVAILABLE: "技术暂不可用",
+    EvidenceFieldState.USER_CLEARED: "用户清除，待重新核实",
 }
 
 
@@ -119,6 +121,7 @@ _NON_CONCRETE_VALUE_STATES: frozenset[FactDisclosureState] = frozenset(
         FactDisclosureState.NOT_REPORTED,
         FactDisclosureState.NOT_PUBLICLY_DISCLOSED,
         FactDisclosureState.NOT_APPLICABLE,
+        FactDisclosureState.USER_CLEARED,
     }
 )
 
@@ -214,7 +217,9 @@ class UserEditDisclosure(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     review_state: Literal["user_modified"] = "user_modified"
-    status_label_zh: Literal["用户修订，未独立复核"] = "用户修订，未独立复核"
+    status_label_zh: Literal["用户修订，未独立复核", "用户清除，待重新核实"] = (
+        "用户修订，未独立复核"
+    )
     fact_id: str
     fact_version_id: str
     request_id: str

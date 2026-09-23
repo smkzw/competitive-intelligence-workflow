@@ -186,6 +186,7 @@ _STATE_LABELS = {
     FactDisclosureState.BELOW_REPORTING_THRESHOLD: "低于报告阈值",
     FactDisclosureState.UNRESOLVED_DUE_TO_ROUTE: "路径未解析",
     FactDisclosureState.CONFLICTING: "来源冲突",
+    FactDisclosureState.USER_CLEARED: "用户清除，待重新核实",
 }
 
 
@@ -1270,6 +1271,7 @@ def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
         "below_reporting_threshold": EvidenceFieldState.NOT_YET_DISCLOSED,
         "unresolved_due_to_route": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
         "conflicting": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
+        "user_cleared": EvidenceFieldState.USER_CLEARED,
     }
     return EvidenceField(state=state_map.get(state or "", EvidenceFieldState.SOURCE_NOT_LISTED))
 
@@ -2048,11 +2050,16 @@ def render_report_c_site(
                 fact_extra.get("endpoint_definition")
                 or row_payload["source_field_name"]
             )
+            cleared = fact.disclosure_state == "user_cleared"
+            display_numeric = threshold if threshold is not None else fact.normalized_value
             narrative = (
-                f"{endpoint}："
-                f"{operator or ''}{threshold if threshold is not None else fact.normalized_value} "
-                f"{unit or ''}。"
-            ).replace("  ", " ")
+                f"{endpoint}：用户清除，待重新核实。"
+                if cleared else (
+                    f"{endpoint}："
+                    f"{operator or ''}{display_numeric} "
+                    f"{unit or ''}。"
+                ).replace("  ", " ")
+            )
             row_payload.update(
                 {
                     "operator": operator,
@@ -2060,6 +2067,10 @@ def render_report_c_site(
                     "threshold_unit": unit,
                     "display_text": narrative,
                     "review_state": "user_modified",
+                    "disclosure_state": (
+                        FactDisclosureState.USER_CLEARED
+                        if cleared else row_payload["disclosure_state"]
+                    ),
                 }
             )
             observations[index] = DesignObservation.model_validate(row_payload)

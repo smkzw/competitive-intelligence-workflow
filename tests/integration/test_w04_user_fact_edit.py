@@ -9,6 +9,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator
 
 import ci_workflow.application.latest_delivery as latest_delivery_module
 import ci_workflow.application.user_fact_edit as user_fact_edit_module
@@ -1745,11 +1746,210 @@ def test_explicit_clear_is_not_silently_treated_as_omission(tmp_path: Path) -> N
     )
     root, _ = _project(tmp_path)
     service = UserFactEditService(root)
+    with pytest.raises(UserFactSaveError, match="此字段尚不支持显式清除"):
+        service.save(_command(edits=FactEdit(timepoint=None)))
+    with pytest.raises(UserFactSaveError, match="同时清除和设置数值"):
+        service.save(_command(edits=FactEdit(normalized_value=None, numerator=24)))
+    assert service.read_current_delivery().revision == 0
+
+
+def test_wire_schema_accepts_only_allowlisted_null_clears() -> None:
+    schema = json.loads(Path("schemas/user-fact-save.schema.json").read_text())
+    validator = Draft202012Validator(schema)
+    for edits in (
+        FactEdit(normalized_value=None),
+        FactEdit(raw_value=None),
+        FactEdit(numerator=None),
+        FactEdit(denominator=None),
+        FactEdit(threshold_value=None),
+    ):
+        payload = _command(edits=edits).model_dump(mode="json", exclude_unset=True)
+        payload["schema_version"] = "1.0"
+        validator.validate(payload)
+    payload = _command(edits=FactEdit(timepoint=None)).model_dump(
+        mode="json", exclude_unset=True
+    )
+    payload["schema_version"] = "1.0"
+    assert list(validator.iter_errors(payload))
+
+
+def test_clear_current_rate_preserves_source_and_invalidates_shared_a_b(
+    tmp_path: Path,
+) -> None:
+    root, fragments = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
     before = service.read_current_delivery()
-    with pytest.raises(UserFactSaveError, match="显式清除尚未具备完整投影事务"):
-        service.save(_command(edits=FactEdit(normalized_value=None)))
-    after = service.read_current_delivery()
-    assert after == before
+    old_c = next(item for item in before.reports if item.report == "C")
+    result = service.save(
+        _command(request_id="shared-a-b-clear", edits=FactEdit(normalized_value=None))
+    )
+    assert result.derived_crude_rate is None
+    assert result.rebuilt_reports == ("A", "B")
+    current = service.read_current_delivery()
+    assert next(item for item in current.reports if item.report == "C") == old_c
+    fact = service.current_facts()["fact-crude-rate"]
+    assert fact["raw_value"] is None
+    assert fact["normalized_value"] is None
+    assert fact["numerator"] is None
+    assert fact["denominator"] is None
+    assert fact["disclosure_state"] == "user_cleared"
+    for report in ("A", "B"):
+        projection = _projection(root, report)
+        row = next(item for item in projection["safety"] if item["row_id"] == "safe-apply-t-1")
+        assert row["value"] is None
+        assert row["numerator"] is None
+        assert row["denominator"] is None
+        assert "用户清除，待重新核实" in json.dumps(row, ensure_ascii=False)
+        edit = projection["user_edits"]["safe-apply-t-1"]
+        assert edit["status_label_zh"] == "用户清除，待重新核实"
+        assert edit["original_value"].startswith("54.8%")
+        delivery = next(item for item in current.reports if item.report == report)
+        html = (root / delivery.site_relative_path / "safety.html").read_text()
+        assert "用户清除，待重新核实" in html
+        assert "None" not in html
+        if report == "B":
+            view = _evidence_view_projection(root, "B", row["row_id"])
+            assert view["row"]["disclosure_state"] == "user_cleared"
+            assert view["value"] == {"value": None, "state": "user_cleared"}
+            assert view["numerator"] == {"value": None, "state": "user_cleared"}
+            assert view["denominator"] == {"value": None, "state": "user_cleared"}
+    with open_database(root / "state/project.sqlite") as database:
+        source = database.execute(
+            "SELECT content_text FROM evidence_fragments WHERE fragment_id=?",
+            (fragments["count"],),
+        ).fetchone()
+        derived = database.execute(
+            "SELECT count(*) FROM user_fact_derivations WHERE revision=1"
+        ).fetchone()
+    assert source is not None and source[0] == "34/62例受试者发生任何TEAE（54.8%）。"
+    assert derived is not None and derived[0] == 0
+
+
+def test_clear_c_threshold_removes_current_numeric_but_preserves_source(
+    tmp_path: Path,
+) -> None:
+    root, fragments = _project(tmp_path)
+    service = UserFactEditService(root)
+    command = UserFactSaveCommand(
+        request_id="clear-c-threshold",
+        project_id=PROJECT_ID,
+        expected_revision=0,
+        target=FactTargetIdentity(
+            fact_id="fact-c-threshold",
+            fact_version_id="fact-c-threshold-v1",
+            entity_id="entity-arm",
+            field_id="eligibility.score_threshold",
+        ),
+        edits=FactEdit(threshold_value=None),
+        user_basis="阈值待核，暂不展示当前数值。",
+        saved_by="medical-user",
+        saved_at=NOW,
+    )
+    result = service.save(command)
+    assert result.rebuilt_reports == ("C",)
+    fact = service.current_facts()["fact-c-threshold"]
+    assert fact["normalized_value"] is None
+    assert fact["threshold_value"] is None
+    assert fact["disclosure_state"] == "user_cleared"
+    projection = _projection(root, "C")
+    row = next(
+        item for item in projection["observations"]
+        if item["row_id"] == "c-nct04178967-inclusion"
+    )
+    assert row["threshold_value"] is None
+    assert row["disclosure_state"] == "user_cleared"
+    assert "用户清除，待重新核实" in row["display_text"]
+    assert projection["user_edits"][row["row_id"]]["original_value"] == "≥16 分"
+    view = _evidence_view_projection(root, "C", row["row_id"])
+    assert view["row"]["disclosure_state"] == "user_cleared"
+    assert view["threshold"] == {"value": None, "state": "user_cleared"}
+    assert view["user_edit"]["original_value"] == "≥16 分"
+    with open_database(root / "state/project.sqlite") as database:
+        source = database.execute(
+            "SELECT content_text FROM evidence_fragments WHERE fragment_id=?",
+            (fragments["threshold"],),
+        ).fetchone()
+    assert source is not None and "16" in source[0]
+
+
+def test_clear_restore_and_undo_restore_replays_effective_current_state(
+    tmp_path: Path,
+) -> None:
+    root, _ = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
+    cleared = service.save(
+        _command(request_id="clear-then-restore-1", edits=FactEdit(numerator=None))
+    )
+    with pytest.raises(UserFactSaveError, match="恢复当前数值必须提供完整数值"):
+        service.save(
+            _command(
+                request_id="incomplete-restoration",
+                expected_revision=1,
+                fact_version_id=cleared.fact_version_id,
+                edits=FactEdit(numerator=24),
+            )
+        )
+    assert service.read_current_delivery().revision == 1
+    restored = service.save(
+        _command(
+            request_id="clear-then-restore-2",
+            expected_revision=1,
+            fact_version_id=cleared.fact_version_id,
+            edits=FactEdit(numerator=24, denominator=62),
+        )
+    )
+    assert restored.derived_crude_rate == round(24 / 62 * 100, 10)
+    for report in ("A", "B"):
+        row = next(
+            item for item in _projection(root, report)["safety"]
+            if item["row_id"] == "safe-apply-t-1"
+        )
+        assert row["value"] == restored.derived_crude_rate
+        assert row["numerator"] == 24
+    undone = service.save(
+        _command(
+            request_id="clear-then-restore-3",
+            expected_revision=2,
+            fact_version_id=restored.fact_version_id,
+            edits=FactEdit(),
+            operation="undo",
+        )
+    )
+    assert undone.derived_crude_rate is None
+    assert service.read_current_delivery().revision == 3
+    assert service.current_facts()["fact-crude-rate"]["disclosure_state"] == "user_cleared"
+    for report in ("A", "B"):
+        row = next(
+            item for item in _projection(root, report)["safety"]
+            if item["row_id"] == "safe-apply-t-1"
+        )
+        assert row["value"] is None
+        assert row["numerator"] is None
+
+
+def test_clear_failure_keeps_old_generation_and_same_request_retries(
+    tmp_path: Path,
+) -> None:
+    root, _ = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
+    before = service.read_current_delivery()
+    pointer = root / "reports/current.json"
+    original_pointer = pointer.read_bytes()
+    command = _command(request_id="clear-fault-retry", edits=FactEdit(denominator=None))
+
+    def interrupt(report: str) -> None:
+        if report == "A":
+            raise OSError("injected clear interruption")
+
+    service._after_report_built = interrupt
+    with pytest.raises(OSError, match="clear interruption"):
+        service.save(command)
+    assert pointer.read_bytes() == original_pointer
+    assert service.read_current_delivery() == before
+    service._after_report_built = lambda _report: None
+    result = service.save(command)
+    assert result.rebuilt_reports == ("A", "B")
+    assert service.read_current_delivery().revision == 1
 
 
 def test_saved_event_preserves_sparse_edit_presence(tmp_path: Path) -> None:

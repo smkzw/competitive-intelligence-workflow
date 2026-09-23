@@ -186,6 +186,7 @@ _MISSING_STATE_LABELS = {
     "unresolved_due_to_route": "路径未解析",
     "conflicting": "来源冲突",
     "conflicting_sources": "来源冲突",
+    "user_cleared": "用户清除，待重新核实",
 }
 _STATE_ALIASES = {
     "已公开": "reported_value",
@@ -201,6 +202,7 @@ _STATE_ALIASES = {
     "低于报告阈值": "below_reporting_threshold",
     "路径未解析": "unresolved_due_to_route",
     "来源冲突": "conflicting",
+    "用户清除，待重新核实": "user_cleared",
 }
 _CONCRETE_STATES = frozenset({"reported_value", "reported_zero"})
 _FILTER_DIMENSION_LABELS = {
@@ -1258,7 +1260,7 @@ class ReportBPortalError(ValueError):
 class ReportBSafetyRow(SafetyRow):
     """B 类安全性行允许显式保存非数值披露状态及其医学原因。"""
 
-    disclosure_state: Literal["已公开", "未公开", "不适用"] = "已公开"
+    disclosure_state: Literal["已公开", "未公开", "不适用", "用户清除，待重新核实"] = "已公开"
     reason_zh: str | None = None
 
 
@@ -2951,6 +2953,7 @@ def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
         "below_reporting_threshold": EvidenceFieldState.NOT_YET_DISCLOSED,
         "unresolved_due_to_route": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
         "conflicting": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
+        "user_cleared": EvidenceFieldState.USER_CLEARED,
     }
     return EvidenceField(state=state_map.get(state or "", EvidenceFieldState.SOURCE_NOT_LISTED))
 
@@ -4759,8 +4762,10 @@ def _project_active_facts_b(
             or row.get("term")
             or row.get("endpoint")
         )
+        cleared = fact.disclosure_state == "user_cleared"
         narrative = (
-            f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
+            f"{endpoint}：用户清除，待重新核实。"
+            if cleared else f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
         )
         original_value = (
             "未公开" if row.get("value") is None else f"{row['value']:g}{row['unit']}"
@@ -4769,11 +4774,20 @@ def _project_active_facts_b(
             original_value += f" ({row['numerator']}/{row['denominator']})"
         row.update(
             {
-                "value": numeric_value(fact),
+                "value": None if cleared else numeric_value(fact),
                 "unit": unit,
                 "clinical_narrative": narrative,
             }
         )
+        if cleared:
+            row.update(
+                numerator=None,
+                denominator=None,
+                disclosure_state=(
+                    "用户清除，待重新核实"
+                    if binding.collection == "safety" else "user_cleared"
+                ),
+            )
         for field in ("numerator", "denominator"):
             value = fact_extra.get(field)
             if isinstance(value, int):
@@ -4796,11 +4810,19 @@ def _project_active_facts_b(
             projected = view_matches[0]
             projected.update(
                 {
-                    "value": numeric_value(fact),
-                    "raw_value": fact.raw_value or str(fact.normalized_value),
+                    "value": None if cleared else numeric_value(fact),
+                    "raw_value": (
+                        None if cleared else fact.raw_value or str(fact.normalized_value)
+                    ),
                     "unit": unit,
                 }
             )
+            if cleared:
+                projected.update(
+                    numerator=None,
+                    denominator=None,
+                    disclosure_state="user_cleared",
+                )
             for field in ("numerator", "denominator"):
                 value = fact_extra.get(field)
                 if isinstance(value, int):

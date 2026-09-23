@@ -234,6 +234,10 @@ def test_state_families_accept_their_exact_values_and_reject_cross_family_values
                 (f"run_{index}", state.value, "2026-08-11T09:00:00+08:00"),
             )
         for index, state in enumerate(FactDisclosureState):
+            if state is FactDisclosureState.USER_CLEARED:
+                # Source fact disclosure and the effective user current layer
+                # are distinct: an edit must not rewrite source disclosure.
+                continue
             database.execute(
                 """
                 INSERT INTO fact_versions (
@@ -243,6 +247,14 @@ def test_state_families_accept_their_exact_values_and_reject_cross_family_values
                           'fragment_test', '2026-08-11T09:00:00+08:00')
                 """,
                 (f"fact_disclosure_{index}", f"fact_d_{index}", state.value),
+            )
+        with pytest.raises(sqlite3.IntegrityError, match="disclosure_state"):
+            database.execute(
+                "INSERT INTO fact_versions (fact_version_id,fact_id,entity_id,field_id,"
+                "disclosure_state,review_state,primary_fragment_id,created_at) "
+                "VALUES ('fact-user-clear','fact-user-clear','entity_test','safety.event',"
+                "'user_cleared','user_modified','fragment_test',"
+                "'2026-08-11T09:00:00+08:00')"
             )
         for index, state in enumerate(FactReviewState):
             database.execute(

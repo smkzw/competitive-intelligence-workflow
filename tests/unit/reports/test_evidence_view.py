@@ -186,15 +186,18 @@ def test_missing_value_must_be_typed_state_not_blank_or_zero() -> None:
         validate_evidence_view_payload(evidence(value=field(value="5.2", state="not_applicable")))
 
 
-def test_four_states_are_mutually_exclusive_with_chinese_labels() -> None:
+def test_missing_and_user_cleared_states_are_mutually_exclusive_with_chinese_labels() -> None:
     labels = EVIDENCE_FIELD_STATE_LABELS_ZH
     assert set(labels) == {
         EvidenceFieldState.NOT_APPLICABLE,
         EvidenceFieldState.NOT_YET_DISCLOSED,
         EvidenceFieldState.SOURCE_NOT_LISTED,
         EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
+        EvidenceFieldState.USER_CLEARED,
     }
-    assert set(labels.values()) == {"不适用", "尚未公开", "来源未列示", "技术暂不可用"}
+    assert set(labels.values()) == {
+        "不适用", "尚未公开", "来源未列示", "技术暂不可用", "用户清除，待重新核实",
+    }
     for label in labels.values():
         assert any("\u4e00" <= ch <= "\u9fff" for ch in label)
 

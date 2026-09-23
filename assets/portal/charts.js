@@ -42,6 +42,7 @@
     if (state === "below_reporting_threshold") return "低于报告阈值";
     if (state === "unresolved_due_to_route") return "路径未解析";
     if (state === "conflicting" || state === "conflicting_sources") return "来源冲突";
+    if (state === "user_cleared") return "用户清除，待重新核实";
     return "未公开";
   }
 
@@ -716,7 +717,13 @@
     }
     return withMeta(
       {
-        tooltip: { position: "top" },
+        tooltip: {
+          position: "top",
+          formatter: function (p) {
+            if (p.data && p.data.status) return disclosureLabelZh(p.data.status);
+            return String((p.value && p.value[2]) || 0) + String(rowUnit || "");
+          }
+        },
         grid: { left: 100, right: 40, top: 24, bottom: 40, containLabel: true },
         xAxis: {
           type: "category",
@@ -751,6 +758,7 @@
               formatter: function (p) {
                 var rowIndex = p.data && p.data.rowIndex;
                 if (p.data && p.data.status) {
+                  if (p.data.status === "user_cleared") return "待核";
                   return disclosureLabelZh(
                     (group.rows[rowIndex] && group.rows[rowIndex].disclosure_state) ||
                       "not_publicly_disclosed"
@@ -1120,13 +1128,16 @@
     var total = 0;
     var notApplicable = 0;
     var publishedButUnplotted = 0;
+    var userCleared = 0;
     for (var i = 0; i < rows.length; i++) {
       total += 1;
       if (rows[i].disclosure_state === "not_applicable") notApplicable += 1;
+      if (rows[i].disclosure_state === "user_cleared") userCleared += 1;
       if (rows[i].disclosure_state === "reported_value" ||
           rows[i].disclosure_state === "reported_zero") publishedButUnplotted += 1;
     }
     if (publishedButUnplotted) return "有公开记录，但当前口径不适合绘图";
+    if (userCleared) return "用户清除，待重新核实";
     return total > 0 && notApplicable === total ? "不适用" : "该指标结果尚未公开";
   }
 

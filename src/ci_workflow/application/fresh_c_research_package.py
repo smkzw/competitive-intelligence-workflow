@@ -246,6 +246,11 @@ class FreshCResearchContent(BaseModel):
 
     @model_validator(mode="after")
     def _content_is_closed(self) -> FreshCResearchContent:
+        if any(
+            item.disclosure_state is FactDisclosureState.USER_CLEARED
+            for item in self.report_data.observations
+        ):
+            raise FreshCPackageError("用户清除属于修订当前层，不得进入原始 C 研究包")
         if self.indication != self.report_data.indication:
             raise FreshCPackageError("研究包与报告数据的适应症不一致")
         if self.indication_id != self.report_data.indication_id:
@@ -411,19 +416,21 @@ def derive_c_research_facts(
     """Project typed design observations into shared atomic evidence facts."""
     trial_names = {item.id: item.name for item in content.report_data.trials}
     return tuple(
-        ResearchFact(
-            fact_id=item.row_id,
-            row_ref=item.row_id,
-            entity_id=item.trial_id,
-            entity_type="trial",
-            canonical_name=trial_names[item.trial_id],
-            field_id=f"c.{item.field_family.value}.{item.field}",
-            raw_value=item.source_text,
-            normalized_value=item.source_text,
-            disclosure_state=item.disclosure_state.value,
-            source_id=item.source_version_id,
-            locator=item.source_locator,
-            original_text=item.source_text,
+        ResearchFact.model_validate(
+            {
+                "fact_id": item.row_id,
+                "row_ref": item.row_id,
+                "entity_id": item.trial_id,
+                "entity_type": "trial",
+                "canonical_name": trial_names[item.trial_id],
+                "field_id": f"c.{item.field_family.value}.{item.field}",
+                "raw_value": item.source_text,
+                "normalized_value": item.source_text,
+                "disclosure_state": item.disclosure_state.value,
+                "source_id": item.source_version_id,
+                "locator": item.source_locator,
+                "original_text": item.source_text,
+            }
         )
         for item in content.report_data.observations
     )

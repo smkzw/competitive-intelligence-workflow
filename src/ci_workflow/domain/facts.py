@@ -150,6 +150,8 @@ class AtomicFactVersion(BaseModel):
 
     @model_validator(mode="after")
     def _fact_contract_is_consistent(self) -> AtomicFactVersion:
+        if self.disclosure_state is FactDisclosureState.USER_CLEARED:
+            raise ValueError("用户清除是当前呈现状态，不得伪装为来源事实披露状态")
         if self.primary_fragment_id not in self.source_fragment_ids:
             raise ValueError("主要来源片段必须包含在事实来源片段中")
         if self.timepoint is None and self.time_window is None:

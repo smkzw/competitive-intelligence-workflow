@@ -43,6 +43,7 @@ class FactDisclosureState(Enum):
     NOT_APPLICABLE = "not_applicable"
     CONFLICTING = "conflicting"
     UNRESOLVED_DUE_TO_ROUTE = "unresolved_due_to_route"
+    USER_CLEARED = "user_cleared"
 
 
 class FactReviewState(Enum):

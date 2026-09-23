@@ -46,6 +46,7 @@ DISCLOSURE_STATE_LABELS_ZH: dict[str, str] = {
     FactDisclosureState.NOT_APPLICABLE.value: "不适用",
     FactDisclosureState.CONFLICTING.value: "来源冲突",
     FactDisclosureState.UNRESOLVED_DUE_TO_ROUTE.value: "路径未解析",
+    FactDisclosureState.USER_CLEARED.value: "用户清除，待重新核实",
 }
 
 # 已知来源文档角色 → 中文标签；未知角色不渲染英文角色名（定位行回落到

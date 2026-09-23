@@ -213,7 +213,8 @@
       below_reporting_threshold: "低于报告阈值",
       unresolved_due_to_route: "路径未解析",
       conflicting: "来源冲突",
-      conflicting_sources: "来源冲突"
+      conflicting_sources: "来源冲突",
+      user_cleared: "用户清除，待重新核实"
     };
     return labels[String(state || "")] || "未报告";
   }
@@ -470,12 +471,16 @@
     }
     if (key === "numeric_value" || key === "value") {
       var displayed = rowValueText(row) || "未列示";
-      return row._user_edit
+      return row._user_edit && displayed !== row._user_edit.status_label_zh
         ? displayed + "（" + row._user_edit.status_label_zh + "）"
         : displayed;
     }
     if (key === "numerator" || key === "denominator") {
-      return row[key] === null || row[key] === undefined ? "未列示" : String(row[key]);
+      if (row[key] === null || row[key] === undefined) {
+        return row.disclosure_state === "user_cleared"
+          ? "用户清除，待重新核实" : "未列示";
+      }
+      return String(row[key]);
     }
     if (key === "x_value" || key === "y_value" || key === "size") {
       return row[key] === null || row[key] === undefined ? "未列示" : String(row[key]);

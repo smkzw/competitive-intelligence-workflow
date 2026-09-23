@@ -158,6 +158,7 @@ _MISSING_DISCLOSURE_STATES: frozenset[str] = frozenset(
         FactDisclosureState.NOT_APPLICABLE.value,
         FactDisclosureState.UNRESOLVED_DUE_TO_ROUTE.value,
         FactDisclosureState.BELOW_REPORTING_THRESHOLD.value,
+        FactDisclosureState.USER_CLEARED.value,
     }
 )
 _RENDERABLE_DISCLOSURE_STATES: frozenset[str] = frozenset(

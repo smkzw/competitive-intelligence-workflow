@@ -358,9 +358,11 @@
     container.appendChild(list);
   }
   function insightRowValue(row) {
+    if (row && row.disclosure_state === "用户清除，待重新核实") return row.disclosure_state;
     return row && numericValue(row.value) ? String(row.value) + (row.unit || "") : "未公开";
   }
   function insightCountValue(row) {
+    if (row && row.disclosure_state === "用户清除，待重新核实") return row.disclosure_state;
     if (!row || row.numerator === null || row.numerator === undefined
       || row.denominator === null || row.denominator === undefined) return "未公开";
     return String(row.numerator) + "/" + String(row.denominator);

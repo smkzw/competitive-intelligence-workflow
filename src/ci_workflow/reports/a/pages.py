@@ -2128,6 +2128,7 @@ _DISCLOSURE_LABELS_ZH: dict[FactDisclosureState, str] = {
     FactDisclosureState.NOT_APPLICABLE: "不适用",
     FactDisclosureState.CONFLICTING: "存在冲突",
     FactDisclosureState.UNRESOLVED_DUE_TO_ROUTE: "来源路线未解决",
+    FactDisclosureState.USER_CLEARED: "用户清除，待重新核实",
 }
 
 

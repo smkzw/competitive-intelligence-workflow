@@ -85,6 +85,7 @@ class ActiveFact(BaseModel):
     field_id: str
     raw_value: str | None = None
     normalized_value: str | int | float | bool | None = None
+    disclosure_state: str = "reported_value"
     primary_fragment_id: str
     source_version_id: str
     source_locator: str
@@ -233,8 +234,11 @@ def user_edit_disclosure(
         raise ValueError("active projection只接受带完整provenance的user_modified事实")
     if provenance.get("request_id") != active_revision.request_id:
         raise ValueError("用户修订provenance与active revision请求不一致")
-    value = current_value or fact.raw_value
+    cleared = fact.disclosure_state == "user_cleared"
+    value = "用户清除，待重新核实" if cleared else current_value or fact.raw_value
     if value is None:
+        if fact.normalized_value is None:
+            raise ValueError("用户修订当前值缺失，且并非显式清除")
         value = str(fact.normalized_value)
     try:
         parsed_locator = json.loads(fact.source_locator)
@@ -251,6 +255,9 @@ def user_edit_disclosure(
         fact_version_id=fact.fact_version_id,
         request_id=active_revision.request_id,
         revision=active_revision.revision,
+        status_label_zh=(
+            "用户清除，待重新核实" if cleared else "用户修订，未独立复核"
+        ),
         primary_fragment_id=fact.primary_fragment_id,
         source_version_id=fact.source_version_id,
         source_locator=parsed_locator,

@@ -483,6 +483,14 @@ class UserFactEditService:
                 "field_id": row["field_id"],
                 "raw_value": row["raw_value"],
                 "normalized_value": row["normalized_value"],
+                # Source disclosure is immutable in SQLite. The effective
+                # current user layer is explicitly overlaid from edit lineage.
+                "disclosure_state": (
+                    "user_cleared"
+                    if isinstance(context.get("user_edit"), dict)
+                    and context["user_edit"].get("cleared") is True
+                    else row["disclosure_state"]
+                ),
                 "review_state": row["review_state"],
                 "primary_fragment_id": row["primary_fragment_id"],
                 "source_locator": str(source[0]),
@@ -583,19 +591,48 @@ class UserFactEditService:
             context = dict(previous["context_payload"])
             raw_value = previous["raw_value"]
             normalized_value = previous["normalized_value"]
+            previous_edit = context.get("user_edit")
+            disclosure_state = (
+                "user_cleared"
+                if isinstance(previous_edit, dict) and previous_edit.get("cleared") is True
+                else previous["disclosure_state"]
+            )
         else:
             context = dict(source["context_payload"])
             changes = command.edits.changes()
-            # Until the source/derived/portal clear projection is atomic, never
-            # silently turn an explicit clear into a no-op or a false disclosure.
-            uncleared = [field for field, value in changes.items() if value is None]
-            if uncleared:
+            clear_fields = {field for field, value in changes.items() if value is None}
+            numeric_fields = {
+                "raw_value", "normalized_value", "numerator", "denominator",
+                "threshold_value",
+            }
+            unsupported_clear = clear_fields - numeric_fields
+            if unsupported_clear:
                 raise UserFactSaveError(
-                    "显式清除尚未具备完整投影事务：" + ",".join(sorted(uncleared))
+                    "此字段尚不支持显式清除：" + ",".join(sorted(unsupported_clear))
                 )
+            if clear_fields and any(
+                field in numeric_fields and value is not None
+                for field, value in changes.items()
+            ):
+                raise UserFactSaveError("同一次保存不能同时清除和设置数值字段")
             context.update(changes)
             raw_value = changes.get("raw_value", source["raw_value"])
             normalized_value = changes.get("normalized_value", source["normalized_value"])
+            source_edit = context.get("user_edit")
+            disclosure_state = (
+                "user_cleared"
+                if isinstance(source_edit, dict) and source_edit.get("cleared") is True
+                else source["disclosure_state"]
+            )
+            if clear_fields:
+                raw_value = None
+                normalized_value = None
+                for field in ("numerator", "denominator", "threshold_value"):
+                    context[field] = None
+                disclosure_state = "user_cleared"
+            elif any(field in numeric_fields for field in changes):
+                if disclosure_state == "user_cleared":
+                    disclosure_state = "reported_value"
         numerator = context.get("numerator")
         denominator = context.get("denominator")
         is_participant_crude_rate = (
@@ -603,7 +640,8 @@ class UserFactEditService:
             and context.get("measure_object") == "participants"
         )
         if (
-            is_participant_crude_rate
+            disclosure_state != "user_cleared"
+            and is_participant_crude_rate
             and isinstance(numerator, int)
             and isinstance(denominator, int)
             and numerator > denominator
@@ -618,12 +656,20 @@ class UserFactEditService:
             derived_rate = round(numerator / denominator * 100, 10)
             normalized_value = str(derived_rate)
             raw_value = f"{derived_rate:g}% ({numerator}/{denominator})"
-        elif context.get("statistical_form") == "threshold" and "threshold_value" in context:
+        elif (
+            disclosure_state != "user_cleared"
+            and context.get("statistical_form") == "threshold"
+            and context.get("threshold_value") is not None
+        ):
             normalized_value = str(context["threshold_value"])
             raw_value = (
                 f"{context.get('threshold_operator', '')}{context['threshold_value']:g} "
                 f"{context.get('threshold_unit', context.get('unit', ''))}"
             ).strip()
+        if disclosure_state in {"reported_value", "reported_zero"} and (
+            raw_value is None or normalized_value is None
+        ):
+            raise UserFactSaveError("恢复当前数值必须提供完整数值或有效分子/分母")
         context["user_edit"] = {
             "request_id": command.request_id,
             "revision": revision,
@@ -631,6 +677,7 @@ class UserFactEditService:
             "saved_by": command.saved_by,
             "saved_at": command.saved_at.isoformat(),
             "operation": command.operation,
+            "cleared": disclosure_state == "user_cleared",
             "independent_scientific_acceptance": "not_inherited",
         }
         context_json = _canonical(context)

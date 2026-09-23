@@ -39,7 +39,16 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     payload, report, sources = _fixture()
     audit = audit_clinicaltrials_result_coverage(report, sources, facts=_facts(payload))
 
-    assert audit.passed
+    # The captured registry payload omits one SAE affected count. Coverage
+    # remains complete, but scientific acceptance must stay red until that
+    # exact source field is recovered or explicitly resolved.
+    assert not audit.passed
+    assert len(audit.issues) == 1
+    assert audit.issues[0].category == "sae"
+    assert audit.issues[0].status == "missing"
+    assert audit.issues[0].source_path.endswith(
+        "seriousEvents[16].stats[7].numAffected"
+    )
     assert len(audit.audited_trial_ids) == 44
     assert len(report.trials) == len(audit.trial_coverage) == 49
     assert len(audit.product_coverage) == 38
@@ -47,7 +56,13 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
         "registry_results_projected",
         "reported_by_secondary_source",
         "registry_results_not_posted",
+        "reported_not_projected",
     }
+    assert [
+        item.trial_id
+        for item in audit.trial_coverage
+        if item.status == "reported_not_projected"
+    ] == ["nct05131477"]
     secondary = {
         item.trial_id
         for item in audit.trial_coverage

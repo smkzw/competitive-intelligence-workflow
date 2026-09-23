@@ -1551,6 +1551,8 @@ input:focus-visible {
 }
 
 .kz-chart-module__group:not([data-grid-span="6"]) { grid-column: 1 / -1; }
+/* A compact chart may use half a row, but its complete table needs the canvas. */
+.kz-chart-module__group:has(.kz-complete-table[open]) { grid-column: 1 / -1; }
 @media (min-width: 1440px) {
   .kz-chart-module[data-group-count="4"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -519,6 +519,8 @@ def _statistical_gap_note_zh(
             f"该项试验（{trial_id}）的{label}因技术路径未解决暂不可用；"
             f"统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
         )
+    if disclosure_state is FactDisclosureState.USER_CLEARED:
+        return f"该项试验（{trial_id}）的{label}由用户清除，待重新核实。"
     return (
         f"该项试验（{trial_id}）的{label}尚未公开；"
         f"统计细节缺失不阻断本报告通过。如已公开，请补充来源。"

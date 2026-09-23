@@ -122,6 +122,7 @@ _MISSING_STATE_LABELS_ZH: dict[EvidenceFieldState, str] = {
     EvidenceFieldState.NOT_YET_DISCLOSED: "尚未公开",
     EvidenceFieldState.SOURCE_NOT_LISTED: "穷尽检索后未找到",
     EvidenceFieldState.TECHNICALLY_UNAVAILABLE: "技术暂不可用",
+    EvidenceFieldState.USER_CLEARED: "用户清除，待重新核实",
 }
 
 # 用户可见成熟度层中文名；阻断说明只使用中文临床/开发语言。
