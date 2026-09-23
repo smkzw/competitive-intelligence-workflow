@@ -14,7 +14,7 @@ from playwright.sync_api import Browser, Page, Playwright, sync_playwright
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_DATA = ROOT / "fixtures/positive/c-atopic-dermatitis/inputs/report-data.json"
 BROWSERS = ("chromium", "webkit")
-RESPONSIVE_WIDTHS = (1024, 1280, 1440, 1920)
+RESPONSIVE_WIDTHS = (1440, 1600, 1920, 2560)
 STATIC_PAGES = (
     "overview",
     "design-map",
@@ -96,7 +96,7 @@ def test_c_all_eleven_pages_render_without_horizontal_dragging(
     browser_name: str,
     width: int,
 ) -> None:
-    """四个内容列宽度下，批准的十一页均有默认核心图和可读完整表。"""
+    """0923V1 四档桌面宽度下，十一页均有默认核心图和可读完整表。"""
     errors: list[str] = []
     with sync_playwright() as playwright:
         browser = _launch(playwright, browser_name)
