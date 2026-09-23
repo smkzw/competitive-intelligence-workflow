@@ -106,6 +106,7 @@ def test_real_registry_atoms_enter_existing_fact_snapshot_with_exact_quotes(
     assert facts[2].raw_value == "229"
     assert facts[1].result_context is not None
     assert facts[1].result_context.group_id == "EG001"
+    assert facts[1].result_context.term == zero.term
     assert facts[1].result_context.value_role == "affected_count"
     with pytest.raises(ValueError, match="领域不一致"):
         research_facts_from_ctgov_atom(zero, report_row_ref="efficacy:wrong")
@@ -142,3 +143,29 @@ def test_real_registry_atoms_enter_existing_fact_snapshot_with_exact_quotes(
     assert any('"group_id":"EG001"' in row[2] for row in rows)
     assert {row[0] for row in fragments} == {"10.3", "0", "229"}
     assert all('"field_path":"$.' in row[1] for row in fragments)
+
+
+def test_missing_affected_count_never_becomes_a_zero_atom_or_fact() -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item)
+        for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT05131477"
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    missing = next(
+        issue for issue in issues
+        if issue.source_path.endswith("seriousEvents[16].stats[7].numAffected")
+    )
+    assert missing.status == "missing"
+    assert "未知，待核" in missing.reason_zh
+    assert all(
+        atom.value_locator.field_path != f"$.{missing.source_path}"
+        for atom in atoms
+    )
+    assert all(
+        fact.locator.field_path != f"$.{missing.source_path}"
+        for atom in atoms for fact in research_facts_from_ctgov_atom(atom)
+    )

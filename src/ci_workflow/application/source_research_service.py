@@ -207,6 +207,7 @@ class ResearchResultContext(BaseModel):
     trial_id: str
     group_id: str
     arm: str
+    term: str
     endpoint: str
     timepoint: str
     value_role: Literal["reported_measure", "participant_count", "affected_count", "denominator"]
@@ -448,6 +449,7 @@ class CtgovAtomicResult:
     source_id: str
     group_id: str
     arm: str
+    term: str
     endpoint: str
     timepoint: str
     display_value: float | None
@@ -1280,7 +1282,8 @@ def extract_ctgov_atomic_results(
         atoms.append(CtgovAtomicResult(
             result_key=result.result_key, category=result.category,
             trial_id=result.trial_id, source_id=result.source_id,
-            group_id=result.group_id, arm=result.arm, endpoint=result.endpoint,
+            group_id=result.group_id, arm=result.arm, term=result.term,
+            endpoint=result.endpoint,
             timepoint=result.timepoint, display_value=result.value,
             display_unit=result.unit, numerator=result.numerator,
             denominator=result.denominator, value_locator=value_locator,
@@ -1319,7 +1322,8 @@ def research_facts_from_ctgov_atom(
         context = ResearchResultContext(
             result_key=atom.result_key, category=atom.category,
             trial_id=atom.trial_id, group_id=atom.group_id,
-            arm=atom.arm, endpoint=atom.endpoint, timepoint=atom.timepoint,
+            arm=atom.arm, term=atom.term, endpoint=atom.endpoint,
+            timepoint=atom.timepoint,
             value_role=role,
             source_unit=(atom.display_unit if role == "reported_measure" else "人"),
         )
