@@ -1,5 +1,11 @@
 # W07 真实来源链只读追踪（2026-09-23，开发证据）
 
+### 安全域旁路观察进入 A 候选，但来源门仍未过
+
+通用构建器原 `is_safety_domain_endpoint` 后只把值写到 `SAFETY_DOMAIN_DIVERTED`，直接 `continue`，导致当前两页真实 PNH CAS 的 A 输出安全行仅 271。按既有 `describe_safety_concept`/`safety_category_zh` 分类后，保留完整原终点、class/category、group ID/标题与原始时间窗；`Participants`→人数、`Events`→事件次数、`Percentage of participants`→百分比，不把事件次数化作患者风险率，不借分母给混合复合项。AE group `seriousNumAffected` 与 `deathsNumAffected` 分开读取，缺失不会推断零或遮蔽另一有效字段。合成批覆盖多统计类型、复合项、缺 SAE 但有死亡、明确 SAE 零；构建器及 W07 定向 `4 passed`，Ruff 与 strict-mypy `src tools` 243 文件通过。
+
+最终字节重建载荷 SHA-256 `4041ddec3751cf99e15344b0b79bdb740b39eeec1c08c96c9f971c8f505ccce1`，3895 疗效、517 安全，517 安全按统计对象为事件次数 12、人数 490、百分比 15；45 产品、135 试验。`ReportAPortalData` 校验成功，实际 A 多页站点 `data/report.js` 为 3895/517，两集合的 `group_id` 全部非空。旧 v106 研究包有 519 安全行，其中 `safe-334-declared` 与 `safe-336-declared` 是同 NCT04469465 已有观察的声明臂归因影子行，并非另外两个事实；旧可见门户为 517。新构建器分类从历史 56 个复合行中把 17 个等级型单独分面，需在独立科学审阅时核对，不按数量相等直接接受。相邻安全投影/A 验收批 `26 passed, 1 failed`：失败是 AD 登记原文 7 条 `0/0` 与 1 条 `numAffected` 缺失仍被科学门拒绝，不能改成 PASS。当前重建仅为开发候选，无 source version/精确原文片段绑定，非最终门户、非科学或视觉验收。核验后仅含本轮可再生载荷/站点的 17 MB 临时目录已移入废纸篓；历史 CAS、v106 包及失败证据未清理。
+
 ### 新旧 A 构建路径不可互换；通用测量组名/分母修复
 
 两份原始页 CAS SHA-256 `1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98`、`c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3` 与 v106 两页 `content_text` 逐字节一致。用当前 `packets/2026-09-11-pnh-vertical/pnh-alias-map-v1.json`（map ID `pnha-alias-v2`）、通用 `tools/build_a_payload.py` 重建的第一版载荷 SHA-256 `65c92d49bb04afc0ff805e9c423466c26691b274591aa187f56a4561f1c81ba5`：3895 疗效、271 安全；只有 2916 疗效行在完整身份下唯一匹配，979 无匹配。v106 研究包 3895 疗效、519 安全且全体疗效带登记组分母；两者不是同一生成链。直接替换会丢安全事实，禁止晋级。

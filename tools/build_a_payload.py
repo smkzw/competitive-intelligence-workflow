@@ -22,6 +22,10 @@ from ci_workflow.application.source_research_service import (  # noqa: E402
     ctgov_class_observation_timepoint,
 )
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint  # noqa: E402
+from ci_workflow.reports.b.safety_concepts import (  # noqa: E402
+    describe_safety_concept,
+    safety_category_zh,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 NA = "未公开披露"
@@ -598,14 +602,65 @@ def main() -> None:
                             except ValueError:
                                 continue
                             # 会商 P0 #2（域分流）：安全域终点不得混入疗效表——
-                            # TEAE/AE/ADA 类测量改记入 derivation 并跳过疗效写入
+                            # TEAE/AE 类测量在安全域保留独立统计对象和来源语境。
                             if is_safety_domain_endpoint(title):
+                                group_id = str(measurement.get("groupId") or "")
+                                semantic = describe_safety_concept(title)
+                                unit_lower = unit.strip().casefold()
+                                if unit_lower in {"participants", "participant"}:
+                                    display_unit, measure_object = "人", "participant_count"
+                                elif unit_lower in {"events", "event"}:
+                                    display_unit, measure_object = "次", "event_count"
+                                elif "percentage" in unit_lower and "participant" in unit_lower:
+                                    display_unit, measure_object = "%", "participant_proportion"
+                                else:
+                                    display_unit, measure_object = unit, "adjusted_estimate"
+                                safety_count: int | None = (
+                                    int(value) if measure_object == "participant_count"
+                                    and value.is_integer() else None
+                                )
+                                safety_denominator: int | None = denominator_by_group.get(group_id)
+                                if (
+                                    semantic.count_basis == "mixed"
+                                    or safety_count is None or safety_denominator is None
+                                    or not 0 <= safety_count <= safety_denominator
+                                ):
+                                    safety_count = safety_denominator = None
+                                si += 1
+                                safety_rows.append({
+                                    "row_id": f"safe-{si}", "product_id": pid,
+                                    "trial_id": nct.lower(),
+                                    "arm": group_titles.get(group_id, group_id or "组别未登记"),
+                                    "group_id": group_id or None,
+                                    "category": safety_category_zh(semantic.key),
+                                    "term": title,
+                                    "term_key": semantic.key,
+                                    "polarity": semantic.polarity,
+                                    "grade_set": list(semantic.grade_set),
+                                    "seriousness": semantic.seriousness,
+                                    "teae": semantic.teae,
+                                    "relatedness": semantic.relatedness,
+                                    "parent": semantic.parent,
+                                    "children": list(semantic.children),
+                                    "count_basis": semantic.count_basis,
+                                    "at_risk_stat": semantic.at_risk_stat,
+                                    "measure_context": "；".join(
+                                        part for part in (cls_title, cat_label) if part
+                                    ) or None,
+                                    "value": value,
+                                    "unit": display_unit,
+                                    "measure_object": measure_object,
+                                    "numerator": safety_count,
+                                    "denominator": safety_denominator,
+                                    "time_window": row_time_frame,
+                                })
                                 SAFETY_DOMAIN_DIVERTED.append(
                                     {
                                         "trial_id": nct.lower(),
                                         "endpoint": title,
                                         "value": value,
                                         "timepoint": row_time_frame,
+                                        "safety_row_id": f"safe-{si}",
                                     }
                                 )
                                 continue
@@ -618,6 +673,7 @@ def main() -> None:
                                     "trial_id": nct.lower(),
                                     "endpoint": title,
                                     "arm": group_titles.get(group_id, group_id or "组别未登记"),
+                                    "group_id": group_id or None,
                                     "value": value,
                                     "unit": unit,
                                     "population": population,
@@ -646,58 +702,49 @@ def main() -> None:
                         _treatment_n += _ms["numSubjects"]
             if _treatment_n > 0 and trials_rows and trials_rows[-1]["id"] == nct.lower():
                 trials_rows[-1]["treatment_sample_size"] = _treatment_n
-            events = results.get("adverseEventsModule", {}).get("eventGroups") or []
+            ae_module = results.get("adverseEventsModule") or {}
+            events = ae_module.get("eventGroups") or []
+            ae_time_window = str(ae_module.get("timeFrame") or "收集时间窗未登记").strip()
             for group in events:
-                term = str(group.get("title") or "治疗期间不良事件")
-                freq = group.get("seriousNumAffected")
-                if freq is None:
-                    continue
-                # 独立复核修复（臂级分母）：AE 模块同组 atRisk 人数为真实臂级分母
-                at_risk = group.get("seriousNumAtRisk")
-                si += 1
-                safety_rows.append(
-                    {
-                        "row_id": f"safe-{si}",
-                        "product_id": pid,
-                        "trial_id": nct.lower(),
-                        "arm": term,
-                        "category": "严重不良事件（登记）",
-                        # 会商 P0 #3：受控词表键，供矩阵安全轴精确匹配
-                        "term_key": "any_sae",
-                        # 独立复核修复：该行为组别汇总计数，term 不再冒充事件名
-                        "term": "严重不良事件组别汇总计数",
-                        "value": freq,
-                        "unit": "例",
-                        "numerator": freq,
-                        "denominator": at_risk
-                        if isinstance(at_risk, int) and at_risk > 0
-                        else None,
-                        "time_window": "全研究期（登记）",
-                    }
-                )
-                # 独立复核第二十三轮 veto：登记已报告的死亡必须入安全性域
-                deaths_affected = group.get("deathsNumAffected")
-                if deaths_affected is not None:
+                arm_title = str(group.get("title") or "登记组别未提供")
+                for affected_field, at_risk_field, category, concept, term, seriousness in (
+                    (
+                        "seriousNumAffected", "seriousNumAtRisk", "严重不良事件（登记）",
+                        "any_sae", "严重不良事件组别汇总计数", "serious",
+                    ),
+                    (
+                        "deathsNumAffected", "deathsNumAtRisk", "死亡病例（登记）",
+                        "death", "死亡病例组别汇总计数", "unspecified",
+                    ),
+                ):
+                    affected = group.get(affected_field)
+                    if type(affected) is not int or affected < 0:
+                        continue  # 缺失不是零，死亡字段也不依赖 SAE 字段存在。
+                    at_risk = group.get(at_risk_field)
+                    valid_denominator = (
+                        type(at_risk) is int and at_risk > 0 and affected <= at_risk
+                    )
                     si += 1
-                    deaths_at_risk = group.get("deathsNumAtRisk")
                     safety_rows.append(
                         {
                             "row_id": f"safe-{si}",
                             "product_id": pid,
                             "trial_id": nct.lower(),
-                            "arm": term,
-                            "category": "死亡病例（登记）",
-                            "term_key": "death",
-                            "term": "死亡病例组别汇总计数",
-                            "value": deaths_affected,
-                            "unit": "例",
-                            "numerator": deaths_affected,
-                            "denominator": (
-                                deaths_at_risk
-                                if isinstance(deaths_at_risk, int) and deaths_at_risk > 0
-                                else None
-                            ),
-                            "time_window": "全研究期（登记）",
+                            "arm": arm_title,
+                            "group_id": str(group.get("id") or "") or None,
+                            "category": category,
+                            "term_key": concept,
+                            "term": term,
+                            "polarity": "affirmed",
+                            "seriousness": seriousness,
+                            "count_basis": "participants",
+                            "at_risk_stat": "serious" if concept == "any_sae" else "deaths",
+                            "value": affected,
+                            "unit": "人",
+                            "measure_object": "participant_count",
+                            "numerator": affected if valid_denominator else None,
+                            "denominator": at_risk if valid_denominator else None,
+                            "time_window": ae_time_window,
                         }
                     )
 
