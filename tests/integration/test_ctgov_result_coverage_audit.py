@@ -14,9 +14,19 @@ from ci_workflow.application.source_research_service import (
     extract_ctgov_atomic_results,
 )
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, SafetyRow
+from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTENT = ROOT / "fixtures/positive/a-atopic-dermatitis/research-content.json"
+
+
+def test_treatment_emergent_ada_is_not_an_adverse_event_endpoint() -> None:
+    assert not is_safety_domain_endpoint(
+        "Percentage of Participants With Treatment-emergent ADA (Part 1)"
+    )
+    assert is_safety_domain_endpoint(
+        "Number of Participants With Treatment-emergent Adverse Events (TEAEs)"
+    )
 
 
 def _fixture() -> tuple[dict[str, object], ReportAPortalData, tuple[SourceCapture, ...]]:

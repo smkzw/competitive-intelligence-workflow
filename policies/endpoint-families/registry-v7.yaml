@@ -1,6 +1,6 @@
 schema_version: '1.0'
 policy_id: registry-endpoint-family
-version: '7.5'
+version: '7.6'
 description: 适应症登记终点族分类规则；per-indication 规则带 indication_scope 门闩，
   无 scope 的规则为跨适应症共享。会商 P0 #1（2026-09-21）落地。
 indication_aliases:
@@ -20,7 +20,7 @@ indication_aliases:
   ipf:
   - 特发性肺纤维化
   - idiopathic pulmonary fibrosis
-safety_domain_pattern: teae|treatment[- ]emergent|adverse event|\baes\b|\bsae\b|\badrs\b|serious
+safety_domain_pattern: teae|adverse event|\baes\b|\bsae\b|\badrs\b|serious
   adverse|number of participants with adverse|incidence rate of all adverse|incidence rate of all adr
 rules:
 - rule_id: endpoint-pnh-clone-pct-v1

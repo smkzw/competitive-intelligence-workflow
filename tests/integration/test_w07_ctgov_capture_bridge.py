@@ -23,6 +23,7 @@ from ci_workflow.application.source_research_service import (
     bind_ctgov_direct_safety_to_a_row,
     bind_ctgov_outcome_to_a_row,
     build_ctgov_a_outcome_candidate_batch,
+    build_ctgov_a_safety_candidate_batch,
     extract_ctgov_atomic_results,
     project_a_calculation_evidence,
     research_facts_from_ctgov_atom,
@@ -77,6 +78,7 @@ def _reported_count_source(
     timeframe: str = "Week 26",
     title: str = "Participants With Response",
     unit: str = "Participants",
+    denominator: int | None = 35,
 ) -> SourceCapture:
     record = {
         "protocolSection": {
@@ -88,7 +90,10 @@ def _reported_count_source(
             "unitOfMeasure": unit,
             "paramType": "COUNT_OF_PARTICIPANTS" if unit == "Participants" else "",
             "groups": [{"id": "OG1", "title": "Drug 200 mg"}],
-            "denoms": [{"counts": [{"groupId": "OG1", "value": "35"}]}],
+            "denoms": (
+                [{"counts": [{"groupId": "OG1", "value": str(denominator)}]}]
+                if denominator is not None else []
+            ),
             "classes": classes if classes is not None else [{"categories": [{"measurements": [
                 {"groupId": "OG1", "value": "30"},
             ]}]}],
@@ -214,6 +219,123 @@ def test_direct_safety_event_and_percentage_are_not_derived_rates(
     assert bound.value == value and bound.source_text == str(value)
     assert len(facts) == 1 and facts[0].original_text == str(value)
     assert claim.calculation is None and claim.claim_kind == "direct_evidence"
+
+
+def test_safety_batch_keeps_unique_categories_and_exposes_unmatched_rows(
+    tmp_path: Path,
+) -> None:
+    title = "Number of Participants With Treatment-emergent Adverse Events (TEAEs)"
+    source = _reported_count_source(
+        tmp_path, title=title,
+        classes=[{"title": "Week 26", "categories": [
+            {"title": "Any", "measurements": [{"groupId": "OG1", "value": "8"}]},
+            {"title": "Other", "measurements": [{"groupId": "OG1", "value": "8"}]},
+        ]}],
+    )
+    semantic = describe_safety_concept(title)
+    first = SafetyRow(
+        row_id="any", product_id="dupilumab", trial_id="nct02277743",
+        arm="Drug 200 mg", group_id="OG1",
+        category=safety_category_zh(semantic.key), term=title,
+        term_key=semantic.key, count_basis=semantic.count_basis,
+        source_class_title="Week 26", source_category_title="Any",
+        value=8, unit="人", measure_object="participant_count",
+        numerator=8, denominator=35, time_window="Week 26",
+    )
+    other = first.model_copy(update={"row_id": "other", "source_category_title": "Other"})
+    missing = first.model_copy(update={"row_id": "missing", "source_category_title": "Absent"})
+    batch = build_ctgov_a_safety_candidate_batch((source,), (first, other, missing))
+    assert [row.row_id for row in batch.bound_rows] == ["any", "other"]
+    assert [fact.original_text for fact in batch.facts] == ["8", "35", "8", "35"]
+    assert len(batch.claims) == 2 and all(
+        claim.claim_kind == "direct_evidence" and claim.calculation is None
+        for claim in batch.claims
+    )
+    assert [(gap.row_id, gap.reason) for gap in batch.gaps] == [
+        ("missing", "no_exact_match")
+    ]
+    reused = build_ctgov_a_safety_candidate_batch(
+        (source,), (first, first.model_copy(update={"row_id": "copy"}))
+    )
+    assert not reused.bound_rows and not reused.facts
+    assert [gap.reason for gap in reused.gaps] == [
+        "source_atom_reused", "source_atom_reused"
+    ]
+    ambiguous = build_ctgov_a_safety_candidate_batch(
+        (source, source.model_copy(update={"source_id": "second-version"})), (first,)
+    )
+    assert not ambiguous.bound_rows
+    assert [(gap.reason, gap.candidate_count) for gap in ambiguous.gaps] == [
+        ("ambiguous", 2)
+    ]
+    with pytest.raises(ResearchPackageError, match="标识重复"):
+        build_ctgov_a_safety_candidate_batch((source,), (first, first))
+
+
+def test_direct_safety_count_without_denominator_keeps_reported_value_only(
+    tmp_path: Path,
+) -> None:
+    title = "Number of Participants With Treatment-emergent Adverse Events (TEAEs)"
+    source = _reported_count_source(
+        tmp_path, title=title, denominator=None,
+        classes=[{"categories": [{"measurements": [
+            {"groupId": "OG1", "value": "1"},
+        ]}]}],
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert len(atoms) == 1
+    assert atoms[0].value_quote == "1" and atoms[0].denominator_locator is None
+    assert atoms[0].display_value == 1 and atoms[0].display_unit == "人"
+    assert len(issues) == 1 and issues[0].status == "missing"
+    assert "风险率未知" in issues[0].reason_zh
+    semantic = describe_safety_concept(title)
+    row = SafetyRow(
+        row_id="direct-no-denom", product_id="dupilumab", trial_id="nct02277743",
+        arm="Drug 200 mg", group_id="OG1", term=title,
+        category=safety_category_zh(semantic.key), term_key=semantic.key,
+        count_basis=semantic.count_basis, value=1, unit="人",
+        measure_object="participant_count", time_window="Week 26",
+    )
+    bound, facts, claim = bind_ctgov_direct_safety_to_a_row(source, atoms[0], row)
+    assert bound.value == 1 and bound.numerator is None and bound.denominator is None
+    assert len(facts) == 1 and facts[0].original_text == "1"
+    assert claim.calculation is None
+    with pytest.raises(ResearchPackageError):
+        bind_ctgov_direct_safety_to_a_row(
+            source, atoms[0], row.model_copy(update={"numerator": 1, "denominator": 35})
+        )
+
+
+def test_combined_safety_outcome_remains_unsplit_with_explicit_zero(
+    tmp_path: Path,
+) -> None:
+    title = (
+        "Number of Participants With Treatment-emergent Adverse Events (TEAEs), "
+        "Serious Adverse Events (SAEs), and AEs Leading to Discontinuation"
+    )
+    source = _reported_count_source(
+        tmp_path, title=title, classes=[{
+            "title": "AE leading to discontinuation",
+            "categories": [{"measurements": [{"groupId": "OG1", "value": "0"}]}],
+        }],
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    assert atoms[0].category == "outcome" and atoms[0].value_quote == "0"
+    semantic = describe_safety_concept(title)
+    assert semantic.count_basis == "mixed"
+    row = SafetyRow(
+        row_id="combined-zero", product_id="dupilumab", trial_id="nct02277743",
+        arm="Drug 200 mg", group_id="OG1", term=title,
+        category=safety_category_zh(semantic.key), term_key=semantic.key,
+        count_basis="mixed", source_class_title="AE leading to discontinuation",
+        value=0, unit="人", measure_object="participant_count", time_window="Week 26",
+    )
+    bound, facts, claim = bind_ctgov_direct_safety_to_a_row(source, atoms[0], row)
+    assert bound.value == 0 and bound.numerator is None and bound.denominator is None
+    assert len(facts) == 2 and facts[0].disclosure_state == "reported_zero"
+    assert all(fact.result_context and fact.result_context.category == "outcome" for fact in facts)
+    assert claim.claim_kind == "direct_evidence" and claim.calculation is None
 
 
 def test_reported_participant_count_binds_raw_count_and_same_group_denominator(

@@ -765,6 +765,9 @@ def _outcome_category(
             return "sae"
         if class_is_teae or class_name.strip() in {"aes", "any aes"}:
             return "teae"
+        if is_safety_domain_endpoint(title):
+            # Keep the combined outcome intact; do not invent separate TEAE/SAE counts.
+            return "outcome"
         return None
     if has_sae:
         return "sae"
@@ -1045,10 +1048,25 @@ def _iter_outcome_results(
                 if is_participant_count:
                     denominator_entry = denominator_by_group.get(group_id)
                     if denominator_entry is None:
-                        raise ValueError(f"受试者人数缺少分母：{group_id}")
-                    denominator, denominator_path = denominator_entry
+                        if not is_safety_domain_endpoint(title):
+                            raise ValueError(f"受试者人数缺少分母：{group_id}")
+                        _result_issue(
+                            issues=issues,
+                            category=result_category,
+                            status="missing",
+                            trial_id=trial_id,
+                            source_id=source_id,
+                            source_path=f"{path}.denoms",
+                            result_key=_result_key(
+                                result_category, trial_id, title, timeframe,
+                                group_id, measurement_path,
+                            ),
+                            reason_zh="安全结局直接报告人数，但同终点分母缺失；风险率未知，待核",
+                        )
+                    else:
+                        denominator, denominator_path = denominator_entry
                     numerator = int(value)
-                    if numerator < 0 or numerator > denominator:
+                    if numerator < 0 or (denominator is not None and numerator > denominator):
                         raise ValueError("受试者人数超出来源分母")
                     if denominator == 0:
                         _result_issue(
@@ -1057,16 +1075,20 @@ def _iter_outcome_results(
                             status="missing",
                             trial_id=trial_id,
                             source_id=source_id,
-                            source_path=denominator_path,
+                            source_path=denominator_path or f"{path}.denoms",
                             result_key=_result_key(
                                 result_category, trial_id, title, timeframe,
                                 group_id, measurement_path,
                             ),
                             reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
                         )
-                        continue
-                    normalized_value = round(numerator * 100 / denominator, 1)
-                    normalized_unit = "%"
+                        if not is_safety_domain_endpoint(title):
+                            continue
+                        denominator = None
+                        denominator_path = None
+                    if denominator is not None:
+                        normalized_value = round(numerator * 100 / denominator, 1)
+                        normalized_unit = "%"
                 results.append(
                     _RegistryResult(
                         category=result_category,
@@ -1837,8 +1859,11 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
     ):
         raise ResearchPackageError("安全性结局的完整来源身份、统计对象或原文数值不一致")
     if measure_object == "participant_count" and semantic.count_basis != "mixed":
-        if (atom.numerator is None or atom.denominator is None
-            or row.numerator != atom.numerator or row.denominator != atom.denominator):
+        if atom.numerator is None or (
+            (row.numerator, row.denominator)
+            != ((atom.numerator, atom.denominator) if atom.denominator is not None
+                else (None, None))
+        ):
             raise ResearchPackageError("直接报告人数与同组分母不一致")
     elif row.numerator is not None or row.denominator is not None:
         raise ResearchPackageError("非人数或复合安全结果不得借用人数分母")
@@ -1882,6 +1907,94 @@ def bind_ctgov_direct_safety_to_a_row(
     if len(matches) != 1 or matches[0][0] != atom or atom.source_id != source.source_id:
         raise ResearchPackageError("登记安全结局与报告行没有唯一的完整来源身份匹配")
     return matches[0][1]
+
+
+@dataclass(frozen=True)
+class CtgovASafetyBindingGap:
+    row_id: str
+    reason: Literal["no_exact_match", "ambiguous", "source_atom_reused"]
+    candidate_count: int
+
+
+@dataclass(frozen=True)
+class CtgovASafetyCandidateBatch:
+    """Unreviewed safety candidates; not a source-closure or release receipt."""
+
+    bound_rows: tuple[SafetyRow, ...]
+    facts: tuple[ResearchFact, ...]
+    claims: tuple[ResearchClaim, ...]
+    gaps: tuple[CtgovASafetyBindingGap, ...]
+    source_issues: tuple[ClinicalTrialsResultCoverageIssue, ...]
+
+
+def build_ctgov_a_safety_candidate_batch(
+    sources: Sequence[SourceCapture], rows: Sequence[SafetyRow],
+) -> CtgovASafetyCandidateBatch:
+    """Reextract each source once; return only unique direct-safety matches."""
+    if len({source.source_id for source in sources}) != len(sources):
+        raise ResearchPackageError("批量登记来源标识重复")
+    if len({row.row_id for row in rows}) != len(rows):
+        raise ResearchPackageError("批量安全行标识重复")
+    indexed: dict[tuple[str, str], list[tuple[SourceCapture, CtgovAtomicResult]]] = {}
+    issues: list[ClinicalTrialsResultCoverageIssue] = []
+    for source in sources:
+        atoms, source_issues = extract_ctgov_atomic_results(source)
+        issues.extend(source_issues)
+        for atom in atoms:
+            if atom.endpoint and is_safety_domain_endpoint(atom.endpoint):
+                indexed.setdefault(
+                    (atom.trial_id.casefold(), _result_text(atom.endpoint).casefold()), []
+                ).append((source, atom))
+
+    selected: dict[str, tuple[SourceCapture, CtgovAtomicResult, SafetyRow,
+                              tuple[ResearchFact, ...], ResearchClaim]] = {}
+    gaps: list[CtgovASafetyBindingGap] = []
+    for row in rows:
+        candidates = []
+        for source, atom in indexed.get(
+            ((row.trial_id or "").casefold(), _result_text(row.term).casefold()), []
+        ):
+            try:
+                bound, facts, claim = _bind_verified_ctgov_direct_safety_to_a_row(
+                    source, atom, row
+                )
+            except ResearchPackageError:
+                continue
+            candidates.append((source, atom, bound, facts, claim))
+        if len(candidates) == 1:
+            selected[row.row_id] = candidates[0]
+        else:
+            gaps.append(CtgovASafetyBindingGap(
+                row_id=row.row_id,
+                reason="no_exact_match" if not candidates else "ambiguous",
+                candidate_count=len(candidates),
+            ))
+
+    atom_owners: dict[tuple[str, str, str], list[str]] = {}
+    for row_id, (source, atom, _bound, _facts, _claim) in selected.items():
+        atom_key = (source.source_id, atom.result_key, atom.value_locator.field_path or "")
+        atom_owners.setdefault(atom_key, []).append(row_id)
+    for owners in atom_owners.values():
+        if len(owners) > 1:
+            for row_id in owners:
+                selected.pop(row_id)
+                gaps.append(CtgovASafetyBindingGap(
+                    row_id=row_id, reason="source_atom_reused", candidate_count=1
+                ))
+
+    bound_rows: list[SafetyRow] = []
+    facts_out: list[ResearchFact] = []
+    claims_out: list[ResearchClaim] = []
+    for row in rows:
+        if row.row_id in selected:
+            _source, _atom, bound, facts, claim = selected[row.row_id]
+            bound_rows.append(bound)
+            facts_out.extend(facts)
+            claims_out.append(claim)
+    return CtgovASafetyCandidateBatch(
+        bound_rows=tuple(bound_rows), facts=tuple(facts_out),
+        claims=tuple(claims_out), gaps=tuple(gaps), source_issues=tuple(issues),
+    )
 
 
 def bind_ctgov_ae_to_a_row(
@@ -2068,7 +2181,7 @@ def _audit_source_record(
     }
     for result in registry_results:
         inventory[result.category] += 1
-        if result.category == "outcome":
+        if result.category == "outcome" and not is_safety_domain_endpoint(result.endpoint):
             exact = [
                 row
                 for row in efficacy_by_source_path.get(result.source_path, [])
