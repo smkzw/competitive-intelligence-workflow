@@ -41,3 +41,9 @@
 真实本机 CAS 探针：`5e/5e055f4c38b521ee0b77d8d55c403955f543e6800db21245bd2d1bf36e7b4a14.bin`，SHA-256 与文件名相同；从 `studies[5]` 重开 NCT04558918 后得到 **216 个原子结果、0 个该研究解析问题**。其中 `68.8` 重提取路径为 `$.resultsSection.outcomeMeasuresModule.outcomeMeasures[1].classes[0].categories[0].measurements[0].value`，组 `OG000`；此项为来源直接报告的百分比，无单独分母 locator，不可借其他 `N` 重算。该 CAS 位于当前未跟踪运行资料，不能据此声称新安装包可复现。
 
 定向整族：`tests/integration/test_ctgov_result_coverage_audit.py`、`test_w07_ctgov_capture_bridge.py`、`test_source_text_derivation.py` **30 passed in 55.29s**；所改模块 Ruff 与 strict-mypy（该 1 个源文件）通过。以上仅是原子重提取层：尚未形成稳定 `ResearchFact` 身份/组期关系、独立分母派生记录、正式 PNH 数据库/快照、A/B/C 页逐事实来源入口；4412 条展示事实的闭包数量仍未重算，保持 W07 FAIL。下一步用原子结果经既有 `ResearchFact` 和 `ingest_research_evidence` 摄取真实小批，验证不匹配/0/0/缺失及报告行绑定，再扩全量。
+
+### 原子事实摄取接缝续建
+
+新增 `ResearchResultContext`（既有事实可选字段，省略时序列化字节不变）与 `research_facts_from_ctgov_atom`：从一个有精确字段路径的结果生成原始数值事实，存在分母时另外生成一个分母事实。组别、终点、时间、类别和原始数值角色进入事实版本的科学上下文；来源报告的估计百分比仅保存其原始报告值，不把显示比例误当 n/N 派生。错误的疗效/安全行绑定被拒绝。使用已入库 AD 来源 NCT02277743，在独立临时项目中摄取一条报告百分比、一条明确零事件及其风险分母，得到 1 个来源版本、3 个事实版本与逐字段原文片段；测试同时核查数据库中的 `reported_zero`、`EG001` 和精确 locator。该测试尚未把事实映射到最终门户。
+
+又以本机真实 PNH CAS `5e055f4c…bin` 的 NCT04558918 在自动清理临时项目中完整走过：原始分页字节→研究切片/派生回执→`SourceCapture`→216 条可解析原子→选取原文 `68.8`→`ResearchFact`→既有 `ingest_research_evidence`→SQLite 精确片段。该探针结果为 1 个来源版本、1 个事实版本、片段原文 `68.8` 与上述精确字段路径一致；首次探针只因诊断 SQL 错把 context manager 当连接而失败，修正探针后成功，未改产品数据。此处的摄取项目是临时项目，不是正式 PNH 数据库；216 是该单研究解析原子数，绝不等于 4412 条报告事实的来源闭包。后续仍须做稳定报告行交叉绑定、派生 DAG、0/0 无风险人数边界、缺失分类、快照/页面和全量重算。

@@ -4,16 +4,26 @@ from __future__ import annotations
 
 import json
 from datetime import UTC, datetime
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
 
+from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
+from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import (
+    ResearchClaim,
+    ResearchFact,
+    SourceCapture,
+    extract_ctgov_atomic_results,
+    research_facts_from_ctgov_atom,
     source_capture_from_ctgov_study,
 )
 from ci_workflow.domain.evidence import CtgovRecordSelector
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.source_derivation import capture_source_text
+from ci_workflow.storage.sqlite import open_database
+from tests.integration.test_research_package_submission import _project
 
 
 def _derived(tmp_path: Path) -> DerivedCtgovStudy:
@@ -62,3 +72,73 @@ def test_ctgov_study_capture_rejects_identity_date_or_raw_drift(tmp_path: Path) 
     ):
         with pytest.raises(ValueError):
             source_capture_from_ctgov_study(tmp_path, changed)
+
+
+def test_real_registry_atoms_enter_existing_fact_snapshot_with_exact_quotes(
+    tmp_path: Path,
+) -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item)
+        for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT02277743"
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert "result_context" not in ResearchFact.model_validate(
+        payload["facts"][0]
+    ).model_dump(mode="json")
+    assert not issues
+    reported = next(item for item in atoms if item.category == "outcome")
+    zero = next(
+        item for item in atoms
+        if item.category == "sae" and item.group_id == "EG001"
+        and item.value_quote == "0" and item.denominator_quote == "229"
+    )
+    facts = (
+        *research_facts_from_ctgov_atom(reported),
+        *research_facts_from_ctgov_atom(zero),
+    )
+    assert len(facts) == 3
+    assert facts[0].raw_value == "10.3"
+    assert facts[1].disclosure_state == "reported_zero"
+    assert facts[2].raw_value == "229"
+    assert facts[1].result_context is not None
+    assert facts[1].result_context.group_id == "EG001"
+    assert facts[1].result_context.value_role == "affected_count"
+    with pytest.raises(ValueError, match="领域不一致"):
+        research_facts_from_ctgov_atom(zero, report_row_ref="efficacy:wrong")
+
+    project = _project(tmp_path)
+    contract = verify_project_workspace(project).contract
+    claim = ResearchClaim(
+        claim_id="direct-registry-atoms", claim_text="登记原始数值和独立分母字段",
+        claim_kind="direct_evidence", fact_ids=tuple(item.fact_id for item in facts),
+    )
+    digest = sha256(b"NCT02277743:three-atomic-facts").hexdigest()
+    lineage = ingest_research_evidence(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        report_kind="A", data_cutoff=contract.data_cutoff,
+        scientific_content_digest=digest, created_at=source.acquired_at,
+        sources=(source,), route_attempts=(), facts=facts, claims=(claim,),
+    )
+
+    assert len(lineage.source_version_ids) == 1
+    assert len(lineage.fact_version_ids) == len(facts)
+    with open_database(project / "state/project.sqlite") as database:
+        rows = database.execute(
+            "SELECT raw_value,disclosure_state,scientific_context_json "
+            "FROM fact_versions WHERE fact_id IN (?,?,?) ORDER BY raw_value",
+            tuple(item.fact_id for item in facts),
+        ).fetchall()
+        fragments = database.execute(
+            "SELECT content_text,locator FROM evidence_fragments "
+            "WHERE fragment_id IN (?,?,?)",
+            tuple(lineage.fragment_by_fact_id[item.fact_id] for item in facts),
+        ).fetchall()
+    assert {row[0] for row in rows} == {"10.3", "0", "229"}
+    assert any(row[0] == "0" and row[1] == "reported_zero" for row in rows)
+    assert any('"group_id":"EG001"' in row[2] for row in rows)
+    assert {row[0] for row in fragments} == {"10.3", "0", "229"}
+    assert all('"field_path":"$.' in row[1] for row in fragments)

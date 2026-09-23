@@ -197,6 +197,22 @@ def source_capture_from_ctgov_study(
     )
 
 
+class ResearchResultContext(BaseModel):
+    """Scientific identity of a registry atom, not a display-label shortcut."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    result_key: str
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
+    trial_id: str
+    group_id: str
+    arm: str
+    endpoint: str
+    timepoint: str
+    value_role: Literal["reported_measure", "participant_count", "affected_count", "denominator"]
+    source_unit: str
+
+
 class ResearchFact(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -216,6 +232,9 @@ class ResearchFact(BaseModel):
     source_id: str
     locator: EvidenceLocator
     original_text: str
+    result_context: ResearchResultContext | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator(
         "fact_id", "row_ref", "entity_id", "entity_type", "canonical_name",
@@ -424,7 +443,7 @@ class CtgovAtomicResult:
     """One registry result with re-extracted numerator/value and denominator atoms."""
 
     result_key: str
-    category: ClinicalTrialsResultCategory
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
     trial_id: str
     source_id: str
     group_id: str
@@ -1269,6 +1288,70 @@ def extract_ctgov_atomic_results(
             denominator_quote=denominator_quote,
         ))
     return tuple(atoms), tuple(issues)
+
+
+def research_facts_from_ctgov_atom(
+    atom: CtgovAtomicResult,
+    *,
+    report_row_ref: str | None = None,
+) -> tuple[ResearchFact, ...]:
+    """Turn one verified registry result into direct source facts for W01 ingestion.
+
+    A derived display percentage is intentionally not written as a source fact;
+    its calculation must be recorded separately with both input fact versions.
+    """
+    expected_prefix = "efficacy:" if atom.category == "outcome" else "safety:"
+    if report_row_ref is not None and not report_row_ref.startswith(expected_prefix):
+        raise ResearchPackageError("登记原子与报告行领域不一致")
+    row_ref = report_row_ref or f"registry:{atom.result_key}:source_value"
+    entity_id = stable_id("clinical-trial", atom.trial_id)
+
+    def make_fact(
+        *, role: Literal[
+            "reported_measure", "participant_count", "affected_count", "denominator"
+        ],
+        locator: EvidenceLocator, quote: str, reference: str,
+    ) -> ResearchFact:
+        numeric = _result_number(quote, integer=role != "reported_measure")
+        normalized = (
+            str(int(numeric)) if role != "reported_measure" else str(numeric)
+        )
+        context = ResearchResultContext(
+            result_key=atom.result_key, category=atom.category,
+            trial_id=atom.trial_id, group_id=atom.group_id,
+            arm=atom.arm, endpoint=atom.endpoint, timepoint=atom.timepoint,
+            value_role=role,
+            source_unit=(atom.display_unit if role == "reported_measure" else "人"),
+        )
+        return ResearchFact(
+            fact_id=stable_id(
+                "ctgov-atomic-fact", atom.source_id, atom.result_key,
+                locator.field_path or "", role,
+            ),
+            row_ref=reference, entity_id=entity_id, entity_type="clinical_trial",
+            canonical_name=atom.trial_id,
+            field_id=f"ctgov.{atom.category}.{role}",
+            raw_value=quote, normalized_value=normalized,
+            disclosure_state="reported_zero" if numeric == 0 else "reported_value",
+            source_id=atom.source_id, locator=locator, original_text=quote,
+            result_context=context,
+        )
+
+    role: Literal["reported_measure", "participant_count", "affected_count"] = (
+        "reported_measure" if atom.numerator is None
+        else "participant_count" if atom.category == "outcome"
+        else "affected_count"
+    )
+    facts = [make_fact(
+        role=role, locator=atom.value_locator, quote=atom.value_quote,
+        reference=row_ref,
+    )]
+    if atom.denominator_locator is not None and atom.denominator_quote is not None:
+        facts.append(make_fact(
+            role="denominator", locator=atom.denominator_locator,
+            quote=atom.denominator_quote, reference=f"{row_ref}:denominator",
+        ))
+    return tuple(facts)
 
 
 def _audit_source_record(
