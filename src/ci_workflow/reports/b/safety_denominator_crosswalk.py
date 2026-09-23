@@ -10,7 +10,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
+from typing import Any
 
 _VALID_STATS = frozenset({"serious", "other", "deaths", "person_time"})
 
@@ -85,7 +87,7 @@ class _Entry:
 @dataclass
 class _Crosswalk:
     entries: tuple[_Entry, ...]
-    conflicts: list[dict] = field(default_factory=list)
+    conflicts: list[dict[str, object]] = field(default_factory=list)
 
     def lookup(
         self,
@@ -115,7 +117,10 @@ class _Crosswalk:
                     return False
                 if measure_object is not None and e.measure_object != str(measure_object):
                     return False
-                if analysis_population is not None and e.analysis_population != str(analysis_population):
+                if (
+                    analysis_population is not None
+                    and e.analysis_population != str(analysis_population)
+                ):
                     return False
                 if window is not None and normalize_period(e.window) != normalize_period(window):
                     return False
@@ -125,7 +130,9 @@ class _Crosswalk:
                     return False
                 if group_id is None:
                     return False
-                direct = module is not None and e.module == str(module) and e.group_id == str(group_id)
+                direct = (
+                    module is not None and e.module == str(module) and e.group_id == str(group_id)
+                )
                 explicit = any(
                     target_module == str(module)
                     and target_group == str(group_id)
@@ -215,7 +222,7 @@ class _Crosswalk:
         return None
 
 
-def build_atrisk_crosswalk(rows) -> "_Crosswalk":
+def build_atrisk_crosswalk(rows: Sequence[Mapping[str, Any]]) -> _Crosswalk:
     """rows: 含 module/group_id/title/period/stat/num_at_risk 的映射序列。"""
     entries: list[_Entry] = []
     for row in rows:

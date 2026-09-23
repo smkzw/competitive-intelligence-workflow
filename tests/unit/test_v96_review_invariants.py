@@ -17,7 +17,6 @@ from ci_workflow.domain.enums import FactDisclosureState  # noqa: E402
 from ci_workflow.renderers.portal.report_a import EfficacyRow, TrialRow  # noqa: E402
 from ci_workflow.reports.b.registry_observation import (  # noqa: E402
     classify_registry_endpoint,
-    is_safety_domain_endpoint,
     resolve_indication_id,
 )
 
@@ -128,7 +127,24 @@ def _safety_concept(title: str) -> str:
 def _atrisk_crosswalk(rows):
     from ci_workflow.reports.b.safety_denominator_crosswalk import build_atrisk_crosswalk
 
-    return build_atrisk_crosswalk(rows)
+    # The production crosswalk now requires complete study/group/source identity.
+    # Preserve these historical clinical scenarios under that stronger contract.
+    return build_atrisk_crosswalk([
+        {
+            "study_id": "S1", "measure_object": "participants_at_risk",
+            "analysis_population": "SAF", "source_version_id": "sv1",
+            "window": row["period"], **row,
+        }
+        for row in rows
+    ])
+
+
+def _identified_lookup(crosswalk, *, stat, period, title, group_id):
+    return crosswalk.lookup(
+        stat=stat, period=period, title=title, study_id="S1", module="ae",
+        group_id=group_id, measure_object="participants_at_risk",
+        analysis_population="SAF", window=period, source_version_id="sv1",
+    )
 
 
 def test_sci03_period_mismatch_is_unknown_not_borrowed():
@@ -139,8 +155,12 @@ def test_sci03_period_mismatch_is_unknown_not_borrowed():
          "period": "TP2", "stat": "other", "num_at_risk": 40},
     ]
     crosswalk = _atrisk_crosswalk(rows)
-    assert crosswalk.lookup(stat="other", period="TP2", title="Drug X (TP2)") == 40
-    assert crosswalk.lookup(stat="other", period="TP1", title="Drug X (TP1)") == 100
+    assert _identified_lookup(
+        crosswalk, stat="other", period="TP2", title="Drug X (TP2)", group_id="EG001",
+    ) == 40
+    assert _identified_lookup(
+        crosswalk, stat="other", period="TP1", title="Drug X (TP1)", group_id="EG000",
+    ) == 100
     # 期别未知时不得借用任何一期的人数
     assert crosswalk.lookup(stat="other", period=None, title="Drug X") is None
 
@@ -153,7 +173,9 @@ def test_sci03_conflicting_values_never_first_wins():
          "period": "TP1", "stat": "other", "num_at_risk": 60},
     ]
     crosswalk = _atrisk_crosswalk(rows)
-    assert crosswalk.lookup(stat="other", period="TP1", title="Drug X") is None
+    assert _identified_lookup(
+        crosswalk, stat="other", period="TP1", title="Drug X", group_id="EG000",
+    ) is None
     assert crosswalk.conflicts  # 冲突显式保留，不静默取第一个
 
 
@@ -167,9 +189,15 @@ def test_sci04_sae_other_death_denominators_match_own_statistic():
          "period": "TP1", "stat": "deaths", "num_at_risk": 57},
     ]
     crosswalk = _atrisk_crosswalk(rows)
-    assert crosswalk.lookup(stat="serious", period="TP1", title="Drug X") == 57
-    assert crosswalk.lookup(stat="other", period="TP1", title="Drug X") == 80
-    assert crosswalk.lookup(stat="deaths", period="TP1", title="Drug X") == 57
+    assert _identified_lookup(
+        crosswalk, stat="serious", period="TP1", title="Drug X", group_id="EG000",
+    ) == 57
+    assert _identified_lookup(
+        crosswalk, stat="other", period="TP1", title="Drug X", group_id="EG000",
+    ) == 80
+    assert _identified_lookup(
+        crosswalk, stat="deaths", period="TP1", title="Drug X", group_id="EG000",
+    ) == 57
     # SAE 行不得优先借用 other 的人数（R03：other 优先于 serious 是缺陷）
 
 
@@ -182,7 +210,9 @@ def test_sci04_person_time_not_interchangeable_with_persons():
     crosswalk = _atrisk_crosswalk(rows)
     # 人时不是人数：查询人数口径不得返回人时值
     assert crosswalk.lookup(stat="other", period="TP1", title="Drug X") is None
-    assert crosswalk.lookup(stat="person_time", period="TP1", title="Drug X") == 123.5
+    assert _identified_lookup(
+        crosswalk, stat="person_time", period="TP1", title="Drug X", group_id="EG000",
+    ) == 123.5
 
 
 # ── SCI05（R04）：适应症作用域解析 ───────────────────────────────────────

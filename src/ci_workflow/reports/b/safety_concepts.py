@@ -42,7 +42,8 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
         r"|grade\s+[12]\s+(?:or|and)\s+[34]\b"
         r"|grade\s+[34]\s+(?:or|and)\s+[1-4]\b", re.I)),
     ("aesi", re.compile(
-        r"(?:adverse\s+events?|\(?teaes?\)?)\s+of\s+special\s+interest|(?<![a-z])aesis?(?![a-z])", re.I)),
+        r"(?:adverse\s+events?|\(?teaes?\)?)\s+of\s+special\s+interest"
+        r"|(?<![a-z])aesis?(?![a-z])", re.I)),
     # 严重 TEAE 子集：特定子集，不得归 any_teae/any_sae
     ("serious_teae_subset", re.compile(
         r"serious\s+(?:treatment[\s-]*emergent|teaes?)", re.I)),
@@ -110,14 +111,20 @@ def describe_safety_concept(title: str) -> SafetyConcept:
     lowered = text.casefold()
     grades = tuple(sorted({int(value) for value in re.findall(r"\b([1-5])\b", lowered)})) \
         if "grade" in lowered else ()
-    if re.search(r"\bnon[\s-]*serious\b", lowered) and re.search(r"\bteaes?\b|treatment[\s-]*emergent", lowered):
+    if re.search(r"\bnon[\s-]*serious\b", lowered) and re.search(
+        r"\bteaes?\b|treatment[\s-]*emergent", lowered
+    ):
         return SafetyConcept("non_serious_teae", "negative_seriousness", grades,
-                             "non_serious", True, at_risk_stat=spec_of("non_serious_teae").at_risk_stat)
+                             "non_serious", True,
+                             at_risk_stat=spec_of("non_serious_teae").at_risk_stat)
     if re.search(r"\b(?:without|no|not)\s+(?:any\s+)?saes?\b", lowered):
         return SafetyConcept("absence_sae", "negative_presence", grades, "serious", False,
                              at_risk_stat=spec_of("absence_sae").at_risk_stat)
     if grades:
-        if re.search(r"grade\s*3\s*(?:or|and|/)\s*(?:4|5)|grade\s*(?:≥|>=)\s*3|grade\s*3\s+or\s+higher", lowered):
+        if re.search(
+            r"grade\s*3\s*(?:or|and|/)\s*(?:4|5)|grade\s*(?:≥|>=)\s*3"
+            r"|grade\s*3\s+or\s+higher", lowered
+        ):
             key = "grade_3_plus"
         else:
             key = "grade_specific"
@@ -128,18 +135,20 @@ def describe_safety_concept(title: str) -> SafetyConcept:
         stripped = fragment
         for pattern in _NEGATION_PATTERNS:
             stripped = pattern.sub(" ", stripped)
-        key = _classify_single(stripped)
-        if key and key not in children:
-            children.append(key)
+        fragment_key = _classify_single(stripped)
+        if fragment_key and fragment_key not in children:
+            children.append(fragment_key)
     if len(children) > 1:
         return SafetyConcept("composite_ae", children=tuple(children), count_basis="mixed")
-    key = children[0] if children else "unknown"
+    chosen_key = children[0] if children else "unknown"
     return SafetyConcept(
-        key=key,
-        seriousness="serious" if key in {"any_sae", "serious_teae_subset"} else "unspecified",
-        teae=True if key in {"any_teae", "serious_teae_subset"} else None,
-        relatedness="related" if key == "treatment_related_ae" else "unspecified",
-        at_risk_stat=spec_of(key).at_risk_stat,
+        key=chosen_key,
+        seriousness=(
+            "serious" if chosen_key in {"any_sae", "serious_teae_subset"} else "unspecified"
+        ),
+        teae=True if chosen_key in {"any_teae", "serious_teae_subset"} else None,
+        relatedness="related" if chosen_key == "treatment_related_ae" else "unspecified",
+        at_risk_stat=spec_of(chosen_key).at_risk_stat,
     )
 
 
@@ -165,7 +174,9 @@ def classify_safety_concept(title: str) -> str:
     不得按首个特定键收类——逐片段独立分类，≥2 个不同概念即判
     composite_ae（复合不良事件指标），描述性呈现不冒充单一族。"""
     described = describe_safety_concept(title)
-    if described.key in {"non_serious_teae", "absence_sae", "grade_specific", "grade_3_plus", "composite_ae"}:
+    if described.key in {
+        "non_serious_teae", "absence_sae", "grade_specific", "grade_3_plus", "composite_ae",
+    }:
         return described.key
     text = " ".join(str(title or "").split())
     if not text:

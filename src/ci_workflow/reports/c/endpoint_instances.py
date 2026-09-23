@@ -7,7 +7,10 @@ outcome_id 与自己的评估时间。按"角色集合"检查会漏掉"两条主
 """
 from __future__ import annotations
 
+from collections.abc import Collection, Sequence
 from dataclasses import dataclass
+
+from ci_workflow.reports.c.contracts import DesignObservation
 
 
 class EndpointInstanceError(ValueError):
@@ -28,11 +31,11 @@ class EndpointInstance:
     source_version_id: str
 
 
-def _family_of(observation) -> str:
+def _family_of(observation: DesignObservation) -> str:
     return str(getattr(observation, "field_family", "") or "")
 
 
-def _identity(observation) -> tuple[str, ...]:
+def _identity(observation: DesignObservation) -> tuple[str, ...]:
     return (
         str(getattr(observation, "trial_id", "") or ""),
         str(getattr(observation, "outcome_id", "") or ""),
@@ -44,10 +47,12 @@ def _identity(observation) -> tuple[str, ...]:
     )
 
 
-def build_endpoint_instances(observations) -> tuple[EndpointInstance, ...]:
+def build_endpoint_instances(
+    observations: Sequence[DesignObservation],
+) -> tuple[EndpointInstance, ...]:
     """把携带 outcome_id 的终点/时间点观察折叠成实例列表。"""
-    measures: dict[tuple[str, ...], list] = {}
-    times: dict[tuple[str, ...], list] = {}
+    measures: dict[tuple[str, ...], list[DesignObservation]] = {}
+    times: dict[tuple[str, ...], list[DesignObservation]] = {}
     for observation in observations:
         oid = getattr(observation, "outcome_id", None)
         if not oid:
@@ -80,9 +85,9 @@ def build_endpoint_instances(observations) -> tuple[EndpointInstance, ...]:
 
 
 def validate_endpoint_timepoint_pairs(
-    observations,
+    observations: Sequence[DesignObservation],
     *,
-    universe_trial_ids=None,
+    universe_trial_ids: Collection[str] | None = None,
 ) -> tuple[EndpointInstance, ...]:
     """逐实例检查终点—时间点配对；返回实例列表，违规抛 EndpointInstanceError。
 
@@ -105,10 +110,12 @@ def validate_endpoint_timepoint_pairs(
             "trial_id", "outcome_id", "endpoint_role", "group_id", "cohort_id",
             "period", "window",
         )
-        missing = [label for label, value in zip(required_labels, identity) if not value]
-        if missing:
+        missing_axes = [
+            label for label, value in zip(required_labels, identity, strict=True) if not value
+        ]
+        if missing_axes:
             raise EndpointInstanceError(
-                f"观察 {observation.row_id} 的终点实例身份不完整：{','.join(missing)}"
+                f"观察 {observation.row_id} 的终点实例身份不完整：{','.join(missing_axes)}"
             )
         trial_id = str(observation.trial_id)
         identity = identity[1:]
@@ -154,7 +161,8 @@ def validate_endpoint_timepoint_pairs(
             continue
         if not endpoint_ids.get(trial_id):
             problems.append(
-                f"试验 {trial_id} 只有时间点实例而无终点实例：{'、'.join(item[0] for item in sorted(tps))}"
+                f"试验 {trial_id} 只有时间点实例而无终点实例："
+                f"{'、'.join(item[0] for item in sorted(tps))}"
             )
     if universe_trial_ids is not None:
         for trial_id in sorted(str(item) for item in universe_trial_ids):
