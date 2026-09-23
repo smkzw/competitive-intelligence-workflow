@@ -438,6 +438,7 @@ FINAL_REQUIRED_CONTENT: tuple[str, ...] = (
     "skills/_internal/intake-preflight/SKILL.md",
     "schemas/package-manifest.schema.json",
     "schemas/research-package.schema.json",
+    "schemas/user-fact-save.schema.json",
     "schemas/scientific-qc-verdict.schema.json",
     "schemas/scientific-review-receipt.schema.json",
     "assets/portal/manifest.json",
