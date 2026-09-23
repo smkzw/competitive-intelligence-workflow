@@ -630,7 +630,11 @@ def _safety_semantic_filters(rows: tuple[dict[str, object], ...]) -> tuple[dict[
     for row in rows:
         key = str(row["semantic_filter_key"])
         if key not in seen:
-            grades = "/".join(str(value) for value in row.get("grade_set", ())) or "无等级"
+            raw_grades = row.get("grade_set", ())
+            grades = "/".join(str(value) for value in raw_grades) if isinstance(
+                raw_grades, (tuple, list)
+            ) else ""
+            grades = grades or "无等级"
             seen[key] = {
                 "key": key,
                 "label": "｜".join((
@@ -1663,10 +1667,10 @@ def _disambiguate_endpoint_labels(rows: list[dict[str, Any]]) -> None:
                 sources[src] = idx
     for row in rows:
         key = (str(row.get("trial_id")), str(row.get("endpoint")))
-        sources = by_trial_label.get(key)
-        if sources and len(sources) >= 2:
+        source_ordinals = by_trial_label.get(key)
+        if source_ordinals and len(source_ordinals) >= 2:
             src = str(row.get("endpoint_source") or "")
-            n = sources.get(src)
+            n = source_ordinals.get(src)
             if n:
                 row["endpoint"] = f"{row['endpoint']}（登记终点定义{n}）"
 
@@ -1803,9 +1807,11 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
             numerator=item.numerator, denominator=item.denominator,
             window=item.timepoint, estimand=item.endpoint,
         )
-        row["numeric_projection"] = projection.as_dict()
+        displayed_projection = projection.as_dict()
+        displayed_projection["plot_unit"] = _native_unit_zh(projection.plot_unit)
+        row["numeric_projection"] = displayed_projection
         row["plot_value"] = projection.plot_value
-        row["plot_unit"] = projection.plot_unit
+        row["plot_unit"] = displayed_projection["plot_unit"]
         row["renderable"] = projection.renderable
         # 登记结果测量原文（独立复核：门户必须保留可回溯的终点原文）
         row["endpoint_source"] = str(item.endpoint)
@@ -1875,23 +1881,30 @@ def _project_active_facts_a(
     user_edits = dict(data.user_edits)
     consumers: list[PortalConsumerNode] = []
     for fact, binding in active_revision.bindings_for("A"):
-        rows: list[SafetyRow] | list[EfficacyRow]
         page: str
         if binding.collection == "safety":
-            rows = safety
+            matches = [
+                index for index, candidate in enumerate(safety)
+                if candidate.row_id == binding.row_id
+            ]
             page = "safety.html"
         elif binding.collection == "efficacy":
-            rows = efficacy
+            matches = [
+                index for index, candidate in enumerate(efficacy)
+                if candidate.row_id == binding.row_id
+            ]
             page = "efficacy.html"
         else:
             raise ReportAPortalError("A renderer只接受safety/efficacy领域绑定")
-        matches = [index for index, row in enumerate(rows) if row.row_id == binding.row_id]
         if len(matches) != 1:
             raise ReportAPortalError(
                 f"A active fact绑定必须命中唯一领域行：{binding.collection}/{binding.row_id}"
             )
         index = matches[0]
-        row = rows[index]
+        row: SafetyRow | EfficacyRow = (
+            safety[index] if binding.collection == "safety" else efficacy[index]
+        )
+        fact_extra = fact.model_extra or {}
         try:
             verified_binding = validate_active_fact_binding(
                 fact,
@@ -1901,12 +1914,12 @@ def _project_active_facts_a(
         except ValueError as error:
             raise ReportAPortalError(str(error)) from error
         unit = str(
-            fact.model_extra.get("normalized_unit")
-            or fact.model_extra.get("unit")
+            fact_extra.get("normalized_unit")
+            or fact_extra.get("unit")
             or row.unit
         )
         endpoint = (
-            fact.model_extra.get("endpoint_definition")
+            fact_extra.get("endpoint_definition")
             or getattr(row, "term", None)
             or getattr(row, "endpoint", "")
         )
@@ -1919,24 +1932,25 @@ def _project_active_facts_a(
             "clinical_narrative": narrative,
         }
         for field in ("numerator", "denominator"):
-            value = fact.model_extra.get(field)
+            value = fact_extra.get(field)
             if isinstance(value, int):
                 updates[field] = value
         if isinstance(row, SafetyRow):
-            if fact.model_extra.get("time_window"):
-                updates["time_window"] = str(fact.model_extra["time_window"])
+            if fact_extra.get("time_window"):
+                updates["time_window"] = str(fact_extra["time_window"])
             if (
-                fact.model_extra.get("statistical_form") == "crude_rate"
-                and fact.model_extra.get("measure_object") == "participants"
+                fact_extra.get("statistical_form") == "crude_rate"
+                and fact_extra.get("measure_object") == "participants"
             ):
                 updates["measure_object"] = "participant_proportion"
                 updates["count_basis"] = "participants"
+            safety[index] = row.model_copy(update=updates)
         else:
-            if fact.model_extra.get("timepoint"):
-                updates["timepoint"] = str(fact.model_extra["timepoint"])
-            if fact.model_extra.get("population"):
-                updates["population"] = str(fact.model_extra["population"])
-        rows[index] = row.model_copy(update=updates)
+            if fact_extra.get("timepoint"):
+                updates["timepoint"] = str(fact_extra["timepoint"])
+            if fact_extra.get("population"):
+                updates["population"] = str(fact_extra["population"])
+            efficacy[index] = row.model_copy(update=updates)
         original_value = "未公开" if row.value is None else f"{row.value:g}{row.unit}"
         user_edits[binding.row_id] = user_edit_disclosure(
             fact,
@@ -2008,7 +2022,7 @@ def _a_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
 
 def active_fact_binding_for_a(
     data: ReportAPortalData,
-    collection: str,
+    collection: Literal["safety", "efficacy"],
     row_id: str,
 ) -> ActiveFactBinding:
     """Resolve the immutable identity of an original A builder row."""

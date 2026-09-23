@@ -452,6 +452,16 @@ def test_product_efficacy_values_use_native_chinese_units_and_timepoints(
         assert raw_copy not in visible
 
 
+def test_efficacy_chart_projection_uses_native_unit_without_changing_source_unit() -> None:
+    data = ReportAPortalData.model_validate(_payload()["report_data"])
+    source = next(row for row in data.efficacy if row.unit.casefold() == "score on a scale")
+    displayed = next(row for row in _display_efficacy_rows(data) if row["row_id"] == source.row_id)
+    assert source.unit.casefold() == "score on a scale"
+    assert displayed["unit"] == "分"
+    assert displayed["numeric_projection"]["plot_unit"] == "分"
+    assert displayed["plot_unit"] == "分"
+
+
 def test_efficacy_population_and_arm_descriptions_are_native_chinese() -> None:
     rows = _display_efficacy_rows(ReportAPortalData.model_validate(_payload()["report_data"]))
     for row in rows:

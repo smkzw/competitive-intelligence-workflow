@@ -694,7 +694,10 @@ def _compact_regimen_zh(data: ReportCPortalData, observation: DesignObservation)
     timepoint = _text(observation.assessment_timepoint)
 
     # 按给药阶段切分：负荷/初始 vs 之后/维持
-    segments = [s for s in re.split(r"\bthen\b|\bfollowed by\b|;|\.\s+", source, flags=re.I) if s.strip()]
+    segments = [
+        s for s in re.split(r"\bthen\b|\bfollowed by\b|;|\.\s+", source, flags=re.I)
+        if s.strip()
+    ]
     load_seg = next((s for s in segments if re.search(r"loading|initially|first", s, re.I)), None)
     dose_segments = [s for s in segments if _segment_doses(s)]
     if load_seg is None and len(dose_segments) >= 2:
@@ -769,7 +772,10 @@ def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> 
     combo_suffix = ""
     combo_match = re.search(r"\+\s*(C5 inhibitor|C3 inhibitor|background therapy)", folded)
     if combo_match:
-        combo_suffix = f"（+{combo_match.group(1)}抑制剂）" if "inhibitor" in combo_match.group(1) else "（+背景治疗）"
+        combo_suffix = (
+            f"（+{combo_match.group(1)}抑制剂）"
+            if "inhibitor" in combo_match.group(1) else "（+背景治疗）"
+        )
     if "escape" in folded or "rescue" in folded:
         product = "补救治疗"
     elif "vehicle" in folded:
@@ -889,20 +895,29 @@ def _registry_endpoint_zh(text: str) -> str | None:
         r"[Pp]ercent [Cc]hange [Ii]n (.+?) [Ff]rom [Bb]aseline [Tt]o (.+)", value
     )
     if m:
-        window = _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2)) or m.group(2)
+        window = (
+            _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2))
+            or m.group(2)
+        )
         return f"{term}较基线百分比变化（{window}）"
     m = re.fullmatch(
         r"[Cc]hange [Ff]rom [Bb]aseline in (.+?) at (.+)", value
     )
     if m:
-        window = _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2)) or m.group(2)
+        window = (
+            _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2))
+            or m.group(2)
+        )
         return f"{term}较基线变化（{window}）"
     m = re.fullmatch(
         r"[Mm]easurement of [Rr]atio of (.+?) to the [Uu]pper [Ll]imit of [Nn]ormal(.*)",
         value,
     )
     if m:
-        window = _registry_timeframe_zh(m.group(2).strip(" (),")) if m.group(2).strip(" (),") else None
+        window = (
+            _registry_timeframe_zh(m.group(2).strip(" (),"))
+            if m.group(2).strip(" (),") else None
+        )
         return f"{term}/正常上限比值" + (f"（{window}）" if window else "")
     # 独立复核 C r32/r37：术语命中但句式未匹配时，至少返回术语本身
     # （如"突破性溶血发生比例"），不再返回 None 导致英文直出
@@ -910,9 +925,10 @@ def _registry_endpoint_zh(text: str) -> str | None:
 
 
 def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
-    _tp_disp = lambda tp: (
-        _registry_timeframe_zh(tp) or _native_timepoint_zh(tp) or tp
-    ) if tp else ""
+    def _tp_disp(tp: str | None) -> str:
+        if not tp:
+            return ""
+        return _registry_timeframe_zh(tp) or _native_timepoint_zh(tp) or tp
 
     numeric = _numeric_for(observation)
     if numeric is not None:
@@ -972,12 +988,12 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         is_iga = scale.upper() == "IGA" or "investigator's global assessment" in folded
         if is_iga and threshold:
             return f"IGA达到0或1分，且较基线降低{operator}{threshold}{unit}" + (
-                (f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else "")
+                f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else ""
             )
         if (scale.upper() == "EASI" or "easi" in text.casefold()) and threshold:
             endpoint_unit = unit.replace("改善", "")
             return f"EASI较基线改善{operator}{threshold}{endpoint_unit}" + (
-                (f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else "")
+                f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else ""
             )
         if is_iga or " iga " in f" {folded} ":
             return "IGA 0/1应答率" + ((f"（{_tp_disp(timepoint)}）") if _tp_disp(timepoint) else "")
@@ -991,9 +1007,6 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         return translated or timepoint or "主要终点评估时间未公开"
     # 独立复核 C r20（veto 第1项）：次要终点定义/时间点走同一确定性转写，
     # 不得直出登记英文原句
-    _tp_disp = lambda tp: (
-        _registry_timeframe_zh(tp) or _native_timepoint_zh(tp) or tp
-    ) if tp else ""
     if observation.field == "primary_endpoint_definition":
         ep_zh = _registry_endpoint_zh(source_text)
         if ep_zh:
@@ -1042,12 +1055,12 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             "masking=TRIPLE": "三盲",
             "masking=QUADRUPLE": "四盲",
         }
-        translated = [
+        design_parts = [
             design_labels.get(part.strip(), part.strip())
             for part in text.split(";")
             if part.strip()
         ]
-        text = "；".join(translated)
+        text = "；".join(design_parts)
     if text:
         return text
     parts = [
@@ -1147,7 +1160,10 @@ def _chart_row(
         "review_state": observation.review_state.value,
         "scale": (
             lambda s: s + "（登记原文，未译）"
-            if s and len(re.findall(r"[A-Za-z]{3,}", s)) >= 2 and not re.search(r"[\u4e00-\u9fff]", s)
+            if (
+                s and len(re.findall(r"[A-Za-z]{3,}", s)) >= 2
+                and not re.search(r"[\u4e00-\u9fff]", s)
+            )
             else s
         )(_text(observation.scale)),
     }
@@ -1590,7 +1606,7 @@ def _table_rows(
     # 重复可见标签追加登记定义序号，行级可归属（原文保留在证据抽屉）。
     # 独立复核 C r40（issue-2）：键不含数值——同名终点不同测定
     # （如 Hgb 较基线升高 vs 正常化）也必须获得序号区分
-    seen_keys: dict[tuple, int] = {}
+    seen_keys: dict[tuple[str, str, str], int] = {}
     for row in rows:
         key = (
             str(row.get("trial_id")),
@@ -1600,7 +1616,7 @@ def _table_rows(
         seen_keys[key] = seen_keys.get(key, 0) + 1
     dup_keys = {k for k, v in seen_keys.items() if v > 1}
     if dup_keys:
-        counters: dict[tuple, int] = {}
+        counters: dict[tuple[str, str, str], int] = {}
         for row in rows:
             k = (
                 str(row.get("trial_id")),
@@ -2024,11 +2040,12 @@ def render_report_c_site(
                 f"{row_payload.get('threshold_value') or ''} "
                 f"{row_payload.get('threshold_unit') or ''}"
             ).strip()
-            operator = fact.model_extra.get("threshold_operator")
-            threshold = fact.model_extra.get("threshold_value")
-            unit = fact.model_extra.get("threshold_unit") or fact.model_extra.get("unit")
+            fact_extra = fact.model_extra or {}
+            operator = fact_extra.get("threshold_operator")
+            threshold = fact_extra.get("threshold_value")
+            unit = fact_extra.get("threshold_unit") or fact_extra.get("unit")
             endpoint = (
-                fact.model_extra.get("endpoint_definition")
+                fact_extra.get("endpoint_definition")
                 or row_payload["source_field_name"]
             )
             narrative = (
@@ -2064,7 +2081,7 @@ def render_report_c_site(
                 raise ReportCPortalError(
                     f"C设计观察没有既有专题消费者：{observations[index].field}"
                 )
-            page = f"{specific_pages[0]}.html"
+            consumer_page = f"{specific_pages[0]}.html"
             consumers.append(
                 PortalConsumerNode(
                     report="C",
@@ -2074,9 +2091,9 @@ def render_report_c_site(
                     row_id=binding.row_id,
                     binding_identity=verified_binding,
                     original_row_sha256=verified_binding.original_row_sha256,
-                    page_relative_path=page,
+                    page_relative_path=consumer_page,
                     chart_consumer=f"__CHART_GROUPS__.rows[row_id={binding.row_id}].threshold_value",
-                    table_consumer=f"{page}#table-row:{binding.row_id}",
+                    table_consumer=f"{consumer_page}#table-row:{binding.row_id}",
                     narrative_consumer=f"evidence-view:{binding.row_id}.user_edit.current_value",
                     index_consumer=f"data/search-index.js#observation:{binding.row_id}",
                     source_binding_consumer=f"evidence-view:{binding.row_id}.source_locator",
@@ -2252,7 +2269,9 @@ def active_fact_binding_for_c(
     products = {item.id: item for item in data.products}
     trials = {item.id: item for item in data.trials}
     statistical_form = "threshold" if row.threshold_value is not None else "design_text"
-    measure_object = "participants" if row.field_family is DesignFieldFamily.POPULATION else "design"
+    measure_object = (
+        "participants" if row.field_family is DesignFieldFamily.POPULATION else "design"
+    )
     unit = row.threshold_unit or "text"
     return ActiveFactBinding(
         report="C",
