@@ -21,6 +21,7 @@ from ci_workflow.application.source_research_service import (
     _validate_bound_ctgov_a_results,
     bind_ctgov_ae_to_a_row,
     bind_ctgov_outcome_to_a_row,
+    build_ctgov_a_outcome_candidate_batch,
     extract_ctgov_atomic_results,
     project_a_calculation_evidence,
     research_facts_from_ctgov_atom,
@@ -245,6 +246,107 @@ def test_a_builder_does_not_mistake_from_baseline_for_baseline_visit() -> None:
     assert ctgov_class_observation_timepoint("Day 1 and Day 253") == ""
 
 
+def test_outcome_batch_persists_only_unique_rows_and_classifies_gaps(
+    tmp_path: Path,
+) -> None:
+    project = _project(tmp_path)
+    contract = verify_project_workspace(project).contract
+    source = _reported_count_source(
+        project,
+        classes=[
+            {"title": "Baseline", "categories": [{"title": "Responder", "measurements": [
+                {"groupId": "OG1", "value": "30"},
+            ]}]},
+            {"title": "Week 26", "categories": [{"title": "Responder", "measurements": [
+                {"groupId": "OG1", "value": "31"},
+            ]}]},
+        ],
+        timeframe="Baseline to Week 26",
+    )
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    base = next(
+        row for row in ReportAPortalData.model_validate(payload["report_data"]).efficacy
+        if row.trial_id.casefold() == "nct02277743"
+    )
+
+    def row(row_id: str, visit: str, value: int) -> EfficacyRow:
+        return EfficacyRow.model_validate({
+            **base.model_dump(mode="json"), "row_id": row_id,
+            "endpoint": "Participants With Response", "timepoint": visit,
+            "arm": "Drug 200 mg", "arm_detail": None, "group_id": None,
+            "population": f"登记结果人群（{visit}；Responder）",
+            "value": value, "unit": "Participants", "numerator": None,
+            "denominator": None, "source_field_path": None,
+            "source_version_id": None, "source_text": None,
+        })
+
+    baseline = row("baseline", "Baseline", 30)
+    week = row("week-26", "Week 26", 31)
+    missing = row("unmatched", "Week 50", 31)
+    batch = build_ctgov_a_outcome_candidate_batch((source,), (baseline, week, missing))
+    assert [item.row_id for item in batch.bound_rows] == ["baseline", "week-26"]
+    assert [(gap.row_id, gap.reason, gap.candidate_count) for gap in batch.gaps] == [
+        ("unmatched", "no_exact_match", 0),
+    ]
+    assert [item.original_text for item in batch.facts] == ["30", "35", "31", "35"]
+    assert len(batch.claims) == 2
+    lineage = ingest_research_evidence(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        report_kind="A", data_cutoff=contract.data_cutoff,
+        scientific_content_digest=sha256(b"two-exact-outcomes").hexdigest(),
+        created_at=source.acquired_at, sources=(source,), route_attempts=(),
+        facts=batch.facts, claims=batch.claims,
+    )
+    assert len(lineage.fact_version_ids) == 4
+    assert len(lineage.claim_version_ids) == 2
+    with open_database(project / "state/project.sqlite") as database:
+        persisted = database.execute(
+            "SELECT content_text,locator FROM evidence_fragments "
+            "WHERE fragment_id IN (?,?,?,?)",
+            tuple(lineage.fragment_by_fact_id[fact.fact_id] for fact in batch.facts),
+        ).fetchall()
+    assert {item[0] for item in persisted} == {"30", "31", "35"}
+    assert all('"field_path":"$.' in item[1] for item in persisted)
+
+    reused = build_ctgov_a_outcome_candidate_batch(
+        (source,), (baseline, baseline.model_copy(update={"row_id": "copy"}))
+    )
+    assert not reused.bound_rows and not reused.facts
+    assert [gap.reason for gap in reused.gaps] == [
+        "source_atom_reused", "source_atom_reused"
+    ]
+    with pytest.raises(ResearchPackageError, match="标识重复"):
+        build_ctgov_a_outcome_candidate_batch((source,), (baseline, baseline))
+
+
+def test_outcome_batch_rejects_two_exact_source_versions(tmp_path: Path) -> None:
+    source = _reported_count_source(tmp_path)
+    atoms, _ = extract_ctgov_atomic_results(source)
+    assert len(atoms) == 1
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    base = next(
+        row for row in ReportAPortalData.model_validate(payload["report_data"]).efficacy
+        if row.trial_id.casefold() == "nct02277743"
+    )
+    target = EfficacyRow.model_validate({
+        **base.model_dump(mode="json"), "endpoint": "Participants With Response",
+        "timepoint": "Week 26", "arm": "Drug 200 mg", "arm_detail": None,
+        "group_id": None, "value": 30, "unit": "Participants",
+        "numerator": None, "denominator": None, "source_field_path": None,
+        "source_version_id": None, "source_text": None,
+    })
+    second = source.model_copy(update={"source_id": "ctgov-second-version"})
+    batch = build_ctgov_a_outcome_candidate_batch((source, second), (target,))
+    assert not batch.bound_rows and not batch.facts
+    assert [(gap.reason, gap.candidate_count) for gap in batch.gaps] == [
+        ("ambiguous", 2)
+    ]
+
+
 def test_ctgov_study_capture_reopens_raw_and_preserves_calendar_day(tmp_path: Path) -> None:
     study = _derived(tmp_path)
     capture = source_capture_from_ctgov_study(tmp_path, study)
@@ -446,6 +548,10 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
     assert bound.source_text == atom.value_quote == facts[0].original_text
     assert bound.source_version_id is not None
     assert bound.group_id == atom.group_id
+    real_batch = build_ctgov_a_outcome_candidate_batch((source,), (row,))
+    assert real_batch.bound_rows == (bound,)
+    assert real_batch.facts == facts
+    assert real_batch.claims[0].claim_text == "ClinicalTrials.gov 登记结局原始数值"
     assert facts[0].row_ref == f"efficacy:{row.row_id}"
     assert facts[0].result_context is not None
     assert facts[0].result_context.group_title == atom.group_title

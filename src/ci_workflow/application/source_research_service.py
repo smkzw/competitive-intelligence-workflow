@@ -6,7 +6,7 @@ import hashlib
 import json
 import math
 import re
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time
 from pathlib import Path
@@ -1618,6 +1618,102 @@ def bind_ctgov_outcome_to_a_row(
     if len(matches) != 1 or matches[0] != atom or bound_result is None:
         raise ResearchPackageError("登记结局与报告行没有唯一的完整医学身份匹配")
     return bound_result
+
+
+@dataclass(frozen=True)
+class CtgovAOutcomeBindingGap:
+    row_id: str
+    reason: Literal["no_exact_match", "ambiguous", "source_atom_reused"]
+    candidate_count: int
+
+
+@dataclass(frozen=True)
+class CtgovAOutcomeCandidateBatch:
+    """Unreviewed exact matches, never a scientific-acceptance receipt."""
+
+    bound_rows: tuple[EfficacyRow, ...]
+    facts: tuple[ResearchFact, ...]
+    claims: tuple[ResearchClaim, ...]
+    gaps: tuple[CtgovAOutcomeBindingGap, ...]
+    source_issues: tuple[ClinicalTrialsResultCoverageIssue, ...]
+
+
+def build_ctgov_a_outcome_candidate_batch(
+    sources: Sequence[SourceCapture], rows: Sequence[EfficacyRow]
+) -> CtgovAOutcomeCandidateBatch:
+    """Reextract each source once and bind only unique, non-reused direct outcomes."""
+    if len({source.source_id for source in sources}) != len(sources):
+        raise ResearchPackageError("批量登记来源标识重复")
+    if len({row.row_id for row in rows}) != len(rows):
+        raise ResearchPackageError("批量疗效行标识重复")
+    indexed: dict[tuple[str, str], list[tuple[SourceCapture, CtgovAtomicResult]]] = {}
+    issues: list[ClinicalTrialsResultCoverageIssue] = []
+    for source in sources:
+        atoms, source_issues = extract_ctgov_atomic_results(source)
+        issues.extend(source_issues)
+        for atom in atoms:
+            if atom.category == "outcome":
+                indexed.setdefault(
+                    (atom.trial_id.casefold(), _result_text(atom.endpoint).casefold()), []
+                ).append((source, atom))
+
+    selected: dict[str, tuple[SourceCapture, CtgovAtomicResult, EfficacyRow,
+                              tuple[ResearchFact, ...]]] = {}
+    gaps: list[CtgovAOutcomeBindingGap] = []
+    for row in rows:
+        candidates = []
+        for source, atom in indexed.get(
+            (row.trial_id.casefold(), _result_text(row.endpoint).casefold()), []
+        ):
+            try:
+                bound, facts = _bind_verified_ctgov_outcome_to_a_row(source, atom, row)
+            except ResearchPackageError:
+                continue
+            candidates.append((source, atom, bound, facts))
+        if len(candidates) == 1:
+            selected[row.row_id] = candidates[0]
+        else:
+            gaps.append(CtgovAOutcomeBindingGap(
+                row_id=row.row_id,
+                reason="no_exact_match" if not candidates else "ambiguous",
+                candidate_count=len(candidates),
+            ))
+
+    atom_owners: dict[tuple[str, str, str], list[str]] = {}
+    for row_id, (source, atom, _bound, _facts) in selected.items():
+        atom_key = (source.source_id, atom.result_key, atom.value_locator.field_path or "")
+        atom_owners.setdefault(atom_key, []).append(row_id)
+    for owners in atom_owners.values():
+        if len(owners) > 1:
+            for row_id in owners:
+                selected.pop(row_id)
+                gaps.append(CtgovAOutcomeBindingGap(
+                    row_id=row_id, reason="source_atom_reused", candidate_count=1
+                ))
+
+    bound_rows: list[EfficacyRow] = []
+    facts_out: list[ResearchFact] = []
+    claims: list[ResearchClaim] = []
+    for row in rows:
+        if row.row_id not in selected:
+            continue
+        _source, _atom, bound, facts = selected[row.row_id]
+        bound_rows.append(bound)
+        facts_out.extend(facts)
+        claims.append(ResearchClaim(
+            claim_id=stable_id("ctgov-a-direct-outcome-claim", row.row_id,
+                               *(fact.fact_id for fact in facts)),
+            claim_text=(
+                "ClinicalTrials.gov 登记结局原始人数及同组分母"
+                if len(facts) == 2 else "ClinicalTrials.gov 登记结局原始数值"
+            ),
+            claim_kind="direct_evidence",
+            fact_ids=tuple(fact.fact_id for fact in facts),
+        ))
+    return CtgovAOutcomeCandidateBatch(
+        bound_rows=tuple(bound_rows), facts=tuple(facts_out), claims=tuple(claims),
+        gaps=tuple(gaps), source_issues=tuple(issues),
+    )
 
 
 def _bind_verified_ctgov_ae_to_a_row(
