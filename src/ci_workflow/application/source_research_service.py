@@ -1009,6 +1009,21 @@ def _iter_outcome_results(
                     numerator = int(value)
                     if numerator < 0 or numerator > denominator:
                         raise ValueError("受试者人数超出来源分母")
+                    if denominator == 0:
+                        _result_issue(
+                            issues=issues,
+                            category=result_category,
+                            status="missing",
+                            trial_id=trial_id,
+                            source_id=source_id,
+                            source_path=denominator_path,
+                            result_key=_result_key(
+                                result_category, trial_id, title, timeframe,
+                                group_id, measurement_path,
+                            ),
+                            reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
+                        )
+                        continue
                     normalized_value = round(numerator * 100 / denominator, 1)
                     normalized_unit = "%"
                 results.append(
@@ -1107,6 +1122,18 @@ def _iter_adverse_event_results(
                     continue
                 numerator = _result_int(affected)
                 denominator = _result_int(at_risk)
+                if numerator == 0 and denominator == 0:
+                    _result_issue(
+                        issues=issues,
+                        category=category,  # type: ignore[arg-type]
+                        status="missing",
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=f"{path}.{at_risk_key}",
+                        result_key=_result_key(category, trial_id, group_id, path),
+                        reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
+                    )
+                    continue
                 if denominator <= 0 or numerator < 0 or numerator > denominator:
                     raise ValueError("事件组分子/分母不符合范围")
                 results.append(
@@ -1203,6 +1230,18 @@ def _iter_adverse_event_results(
                     numerator = _result_int(stat["numAffected"])
                     denominator = _result_int(stat.get("numAtRisk"))
                     if denominator == 0 and numerator == 0:
+                        _result_issue(
+                            issues=issues,
+                            category=category,  # type: ignore[arg-type]
+                            status="missing",
+                            trial_id=trial_id,
+                            source_id=source_id,
+                            source_path=f"{stat_path}.numAtRisk",
+                            result_key=_result_key(
+                                category, trial_id, term, group_id, stat_path
+                            ),
+                            reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
+                        )
                         continue
                     if denominator <= 0 or numerator < 0 or numerator > denominator:
                         raise ValueError("AE 分子/分母不符合范围")
@@ -1279,6 +1318,12 @@ def extract_ctgov_atomic_results(
             raise ValueError("来源试验身份不一致")
     except (KeyError, TypeError, ValueError) as error:
         raise ResearchPackageError("登记来源不能证明试验身份") from error
+    if record.get("resultsSection") is None:
+        if record.get("hasResults") is False:
+            # Source has explicitly not posted results; callers classify this
+            # separately from a parse failure, and no atom/rate can be emitted.
+            return (), ()
+        raise ResearchPackageError("登记未明确声明无结果却缺少 resultsSection，需重取核查")
     issues: list[ClinicalTrialsResultCoverageIssue] = []
     parsed = [
         *_iter_outcome_results(

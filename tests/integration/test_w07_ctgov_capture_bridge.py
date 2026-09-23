@@ -16,6 +16,7 @@ from ci_workflow.application.source_research_service import (
     ResearchClaim,
     ResearchFact,
     ResearchLineage,
+    ResearchPackageError,
     SourceCapture,
     _validate_bound_ctgov_a_results,
     bind_ctgov_ae_to_a_row,
@@ -179,6 +180,59 @@ def test_missing_affected_count_never_becomes_a_zero_atom_or_fact() -> None:
         fact.locator.field_path != f"$.{missing.source_path}"
         for atom in atoms for fact in research_facts_from_ctgov_atom(atom)
     )
+
+
+def test_registry_explicitly_without_results_is_not_a_parse_failure() -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item) for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT04875169"
+    )
+    record = json.loads(source.content_text)
+    assert record["hasResults"] is False and "resultsSection" not in record
+    assert extract_ctgov_atomic_results(source) == ((), ())
+    record["hasResults"] = True
+    with pytest.raises(ResearchPackageError, match="resultsSection"):
+        extract_ctgov_atomic_results(
+            source.model_copy(update={"content_text": json.dumps(record)})
+        )
+
+
+def test_zero_over_zero_is_undefined_but_other_registry_results_survive() -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item) for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT02277743"
+    )
+    record = json.loads(source.content_text)
+    measure = record["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][0]
+    measure["unitOfMeasure"] = "Participants"
+    measurement = measure["classes"][0]["categories"][0]["measurements"][0]
+    measure["classes"][0]["categories"][0]["measurements"] = [measurement]
+    measurement["value"] = "0"
+    group_id = measurement["groupId"]
+    count = next(
+        item for denom in measure["denoms"] for item in denom["counts"]
+        if item["groupId"] == group_id
+    )
+    count["value"] = "0"
+    event_group = record["resultsSection"]["adverseEventsModule"]["eventGroups"][1]
+    event_group["seriousNumAffected"] = 0
+    event_group["seriousNumAtRisk"] = 0
+    changed = source.model_copy(update={"content_text": json.dumps(record)})
+    atoms, issues = extract_ctgov_atomic_results(changed)
+    assert atoms
+    zero_issues = [item for item in issues if "0/0" in item.reason_zh]
+    assert {item.category for item in zero_issues} >= {"outcome", "sae"}
+    assert all(item.status == "missing" for item in zero_issues)
+    assert all("NumAtRisk" in item.source_path or ".denoms[" in item.source_path
+               for item in zero_issues)
+    assert all(atom.result_key != item.result_key
+               for item in zero_issues for atom in atoms)
 
 
 def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(

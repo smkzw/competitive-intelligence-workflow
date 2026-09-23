@@ -40,16 +40,25 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     payload, report, sources = _fixture()
     audit = audit_clinicaltrials_result_coverage(report, sources, facts=_facts(payload))
 
-    # The captured registry payload omits one SAE affected count. Coverage
-    # remains complete, but scientific acceptance must stay red until that
-    # exact source field is recovered or explicitly resolved.
+    # The captured registry payload omits one SAE affected count and contains
+    # seven explicit 0/0 groups. Neither absence nor an undefined rate is zero.
     assert not audit.passed
-    assert len(audit.issues) == 1
-    assert audit.issues[0].category == "sae"
-    assert audit.issues[0].status == "missing"
-    assert audit.issues[0].source_path.endswith(
+    assert len(audit.issues) == 8
+    absent_affected = [
+        item for item in audit.issues if item.source_path.endswith(".numAffected")
+    ]
+    assert len(absent_affected) == 1
+    assert absent_affected[0].category == "sae"
+    assert absent_affected[0].status == "missing"
+    assert absent_affected[0].source_path.endswith(
         "seriousEvents[16].stats[7].numAffected"
     )
+    zero_over_zero = [item for item in audit.issues if "0/0" in item.reason_zh]
+    assert len(zero_over_zero) == 7
+    assert {item.status for item in zero_over_zero} == {"missing"}
+    assert {item.trial_id for item in zero_over_zero} == {
+        "nct03334396", "nct05131477",
+    }
     assert len(audit.audited_trial_ids) == 44
     assert len(report.trials) == len(audit.trial_coverage) == 49
     assert len(audit.product_coverage) == 38
@@ -63,7 +72,7 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
         item.trial_id
         for item in audit.trial_coverage
         if item.status == "reported_not_projected"
-    ] == ["nct05131477"]
+    ] == ["nct03334396", "nct05131477"]
     secondary = {
         item.trial_id
         for item in audit.trial_coverage
