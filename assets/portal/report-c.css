@@ -11,7 +11,7 @@
 }
 
 .kz-c-main {
-  max-width: 1180px;
+  max-width: var(--portal-canvas-max);
   margin: 0 auto;
   padding: 1rem 1rem 3rem;
 }
@@ -235,7 +235,24 @@
 .kz-chart-module {
   width: 100%;
   overflow: visible;
+  grid-template-columns: minmax(0, 1fr);
 }
+
+.kz-c-site .kz-chart-module:has(> #kz-design-paths) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* A uniformly disclosed design comparison is substantive text, not a half-width heatmap. */
+.kz-c-site .kz-chart-module:has(> #kz-design-paths):has(.kz-c-chart-canvas--design-summary) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.kz-c-site .kz-chart-module > .kz-complete-table,
+.kz-c-site .kz-chart-module > .kz-chart-table {
+  grid-column: 1 / -1;
+}
+
+.kz-c-site .kz-chart-module > #kz-design-paths { margin: 0; }
 
 .kz-c-chart-visuals {
   margin-bottom: 1rem;
@@ -260,6 +277,17 @@
   width: 100%;
   min-height: 300px;
 }
+.kz-c-chart-canvas--design-summary { min-height: 0; height: auto; }
+.kz-c-design-summary__note { margin: 0 0 8px; color: #405066; font-size: 14px; }
+.kz-c-design-summary__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 1850px) {
+  .kz-c-design-summary__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.kz-c-design-summary__trial { min-width: 0; padding: 10px 12px; border: 1px solid #dce3eb; border-radius: 10px; background: #fff; }
+.kz-c-design-summary__trial h3 { margin: 0 0 6px; color: #243650; font-size: 16px; }
+.kz-c-design-summary__trial ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.kz-c-design-summary__trial button { width: 100%; padding: 6px 8px; border: 0; border-left: 3px solid #e9a528; background: #fff9ee; color: #243650; text-align: left; font: inherit; cursor: pointer; overflow-wrap: anywhere; }
+.kz-c-design-summary__trial button:focus-visible { outline: 2px solid #d98200; outline-offset: 2px; }
 .kz-c-design-matrix-section {
   margin-top: 1rem;
 }

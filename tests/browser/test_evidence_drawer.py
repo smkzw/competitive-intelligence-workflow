@@ -22,7 +22,6 @@ import hashlib
 import http.server
 import json
 import re
-import socket
 import threading
 from pathlib import Path
 from typing import Any, cast
@@ -82,22 +81,16 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
-def _free_port() -> int:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind(("127.0.0.1", 0))
-        return int(sock.getsockname()[1])
-
-
 def _start_server(directory: Path) -> tuple[http.server.HTTPServer, int]:
-    port = _free_port()
-
     def handler(*a: Any) -> _QuietHandler:
         return _QuietHandler(*a, directory=str(directory))
 
-    server = http.server.HTTPServer(("127.0.0.1", port), handler)
+    # Browsers fetch JS/CSS concurrently. A single-threaded local fixture
+    # server intermittently resets sockets and leaves the drawer script absent.
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
-    return server, port
+    return server, int(server.server_port)
 
 
 def _launch(playwright: Playwright, browser_name: str) -> Browser:
@@ -824,7 +817,7 @@ def _pointer_meta_bar(page: Page) -> dict[str, Any]:
           const group = (window.__CHART_GROUPS__ || [])[groupIndex];
           if (!group) return { ok: false, reason: 'no-group' };
           const expected = group.rows[0];
-          const paths = Array.from(chartEl.querySelectorAll('path'))
+          const paths = Array.from(chartEl.querySelectorAll('path[fill]:not([fill="none"])'))
             .map((p) => {
               const b = p.getBoundingClientRect();
               return { x: b.left, y: b.top, w: b.width, h: b.height };

@@ -861,6 +861,49 @@
       chart.textContent = "当前筛选条件下暂无可显示的设计信息";
       return;
     }
+    if (kind === "design-choice-matrix" && rows.every(function (row) {
+      return row.disclosure_state === "reported_value" || row.disclosure_state === "reported_zero";
+    })) {
+      // Every heatmap cell would have the same disclosure color. Show the
+      // substantive design choices instead; every observation remains linked.
+      chart.setAttribute("data-chart-type", "design-choice-summary");
+      chart.setAttribute("role", "region");
+      chart.classList.add("kz-c-chart-canvas--design-summary");
+      var note = document.createElement("p");
+      note.className = "kz-c-design-summary__note";
+      note.textContent = "这些研究均已公开所列设计要素；按研究对照具体定义，点击任一条查看来源。";
+      chart.appendChild(note);
+      var grid = document.createElement("div");
+      grid.className = "kz-c-design-summary__grid";
+      var trialIds = uniqueValues(rows, "trial_display_id");
+      trialIds.forEach(function (trialId) {
+        var trialRows = rows.filter(function (row) {
+          return String(row.trial_display_id || "") === trialId;
+        });
+        var card = document.createElement("section");
+        card.className = "kz-c-design-summary__trial";
+        var heading = document.createElement("h3");
+        heading.textContent = String(trialRows[0].product_zh || "产品未列示")
+          + "｜" + String(trialId || "试验未列示");
+        card.appendChild(heading);
+        var list = document.createElement("ul");
+        trialRows.forEach(function (row) {
+          var item = document.createElement("li");
+          var button = document.createElement("button");
+          button.type = "button";
+          button.setAttribute("data-evidence-open", String(row.row_id));
+          button.setAttribute("data-row-id", String(row.row_id));
+          button.textContent = String(row.element_zh || row.display_label_zh || "设计要素")
+            + "：" + String(row.value == null ? row.status || "未列示" : row.value);
+          item.appendChild(button);
+          list.appendChild(item);
+        });
+        card.appendChild(list);
+        grid.appendChild(card);
+      });
+      chart.appendChild(grid);
+      return;
+    }
     var elementCount = uniqueValues(rows, "element_zh").length;
     // 独立视觉复核（v58 typography）：折行标签需要更多行高——按最长标签
     // 的换行数联动增加每行高度，避免 SVG 文本互相叠压

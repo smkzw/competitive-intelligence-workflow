@@ -204,7 +204,8 @@ class FactEdit(BaseModel):
         return self
 
     def changes(self) -> dict[str, object]:
-        return self.model_dump(exclude_none=True)
+        # A patch is presence-aware: omission and explicit null are distinct.
+        return self.model_dump(exclude_unset=True)
 
 
 class UserFactSaveCommand(BaseModel):
@@ -492,8 +493,12 @@ class UserFactEditService:
         return context
 
     def save(self, command: UserFactSaveCommand) -> UserFactSaveResult:
-        command = UserFactSaveCommand.model_validate(command.model_dump(mode="python"))
-        request_digest = _digest(command.model_dump(mode="json"))
+        # Revalidate caller data without materializing omitted nested edit fields:
+        # doing a full dump here would turn every default None into an explicit clear.
+        command = UserFactSaveCommand.model_validate(
+            command.model_dump(mode="python", exclude_unset=True)
+        )
+        request_digest = _digest(command.model_dump(mode="json", exclude_unset=True))
         with self._exclusive():
             existing = self._request_row(command.request_id)
             if existing is not None:
@@ -581,6 +586,13 @@ class UserFactEditService:
         else:
             context = dict(source["context_payload"])
             changes = command.edits.changes()
+            # Until the source/derived/portal clear projection is atomic, never
+            # silently turn an explicit clear into a no-op or a false disclosure.
+            uncleared = [field for field, value in changes.items() if value is None]
+            if uncleared:
+                raise UserFactSaveError(
+                    "显式清除尚未具备完整投影事务：" + ",".join(sorted(uncleared))
+                )
             context.update(changes)
             raw_value = changes.get("raw_value", source["raw_value"])
             normalized_value = changes.get("normalized_value", source["normalized_value"])
@@ -696,7 +708,7 @@ class UserFactEditService:
                     fact_version_id,
                     revision,
                     "staging",
-                    command.model_dump_json(),
+                    command.model_dump_json(exclude_unset=True),
                     command.saved_at.isoformat(),
                 ),
             )
@@ -825,7 +837,7 @@ class UserFactEditService:
             actor_id=command.saved_by,
             idempotency_key=f"user.fact.save:{command.request_id}",
             payload={
-                "command": command.model_dump(mode="json"),
+                "command": command.model_dump(mode="json", exclude_unset=True),
                 "result": result.model_dump(mode="json"),
                 "current_delivery": new_bundle.model_dump(mode="json"),
             },

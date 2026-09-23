@@ -1515,7 +1515,9 @@ def test_loopback_editor_rejects_malicious_host_origin_csrf_session_and_import(
         cookie = headers["set-cookie"].split(";", 1)[0]
         csrf = headers["x-csrf-token"]
         assert b"fact-crude-rate" in page and b"fact-c-threshold" in page
-        encoded = _command().model_dump_json().encode()
+        # The wire contract sends only explicit edit fields. Full model dumps
+        # materialize default nulls and now correctly mean clear requests.
+        encoded = _command().model_dump_json(exclude_unset=True).encode()
 
         attacks = (
             ({"Host": "evil.example"}, "/api/save", encoded),
@@ -1627,3 +1629,30 @@ def test_invalid_edit_contract_fails_closed(tmp_path: Path) -> None:
         )
     with pytest.raises(ValueError):
         FactEdit(statistical_form="reported_adjusted_rate")
+
+
+def test_explicit_clear_is_not_silently_treated_as_omission(tmp_path: Path) -> None:
+    assert FactEdit().changes() == {}
+    assert FactEdit(normalized_value=None).changes() == {"normalized_value": None}
+    omitted = _command(edits=FactEdit(numerator=24))
+    cleared = _command(edits=FactEdit(numerator=24, normalized_value=None))
+    assert omitted.model_dump_json(exclude_unset=True) != cleared.model_dump_json(
+        exclude_unset=True
+    )
+    root, _ = _project(tmp_path)
+    service = UserFactEditService(root)
+    before = service.read_current_delivery()
+    with pytest.raises(UserFactSaveError, match="显式清除尚未具备完整投影事务"):
+        service.save(_command(edits=FactEdit(normalized_value=None)))
+    after = service.read_current_delivery()
+    assert after == before
+
+
+def test_saved_event_preserves_sparse_edit_presence(tmp_path: Path) -> None:
+    root, _ = _project(tmp_path)
+    service = UserFactEditService(root)
+    command = _command(request_id="sparse-event", edits=FactEdit(numerator=24))
+    service.save(command)
+    events = service.event_store.read_all()
+    saved = next(event for event in events if event.event_type == "user.fact.saved")
+    assert saved.payload["command"]["edits"] == {"numerator": 24}

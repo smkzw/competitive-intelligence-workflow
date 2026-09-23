@@ -21,6 +21,8 @@
   var chartTypeByGroup = {};
   var rowElementMap = {};
   var optionCache = {};
+  var resizeObserver = null;
+  var windowResizeBound = false;
 
   var CHART_TYPES = {
     bar: true,
@@ -178,6 +180,40 @@
     return keys;
   }
 
+  function valueAxisMaximum(group, extent) {
+    var observed = Math.max(0, Number(extent.max) || 0);
+    if (typeof group.y_axis_max === "number") return Math.max(group.y_axis_max, observed);
+    var plotted = (group.rows || []).filter(isRenderable);
+    var proportions = plotted.length > 0 && plotted.every(function (row) {
+      var projection = row.numeric_projection || {};
+      return projection.kind === "participant_proportion" && projection.plot_unit === "%"
+        && Number(projection.plot_value) >= 0 && Number(projection.plot_value) <= 100;
+    });
+    if (proportions) return 100;
+    if (observed === 0) return 1;
+    var padded = observed * 1.12;
+    var step = Math.pow(10, Math.floor(Math.log10(padded)) - 1);
+    return Math.ceil(padded / step) * step;
+  }
+
+  function groupedCategoryAssignments(rows) {
+    var occurrences = {};
+    var assignments = [];
+    for (var i = 0; i < rows.length; i++) {
+      var base = groupedIdentity(rows[i]);
+      var series = groupedSeriesKey(rows[i]);
+      var cell = base + "\u0001" + series;
+      var occurrence = occurrences[cell] || 0;
+      occurrences[cell] = occurrence + 1;
+      assignments.push({
+        key: occurrence ? base + "\u0001repeat:" + occurrence : base,
+        label: groupedIdentityLabel(rows[i]) + (occurrence ? "｜第" + (occurrence + 1) + "项同身份观察" : ""),
+        repeated: occurrence > 0
+      });
+    }
+    return assignments;
+  }
+
   function groupedBarOption(group) {
     var categories = [];
     var categoryIndex = {};
@@ -188,12 +224,13 @@
     var seriesLabels = {};
     var rowIds = collectRowIds(group);
     var unitLabel = "";
+    var assignments = groupedCategoryAssignments(group.rows);
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
-      var categoryKey = groupedIdentity(row);
+      var categoryKey = assignments[i].key;
       if (!categoryIndex.hasOwnProperty(categoryKey)) {
         categoryIndex[categoryKey] = categories.length;
-        categories.push(groupedIdentityLabel(row));
+        categories.push(assignments[i].label);
         categoryKeys.push(categoryKey);
         rowsByCategory[categoryKey] = {};
       }
@@ -202,9 +239,10 @@
         seriesRows[seriesKey] = {};
         seriesOrder.push(seriesKey);
       }
-      if (!rowsByCategory[categoryKey].hasOwnProperty(seriesKey)) {
-        rowsByCategory[categoryKey][seriesKey] = row;
+      if (rowsByCategory[categoryKey].hasOwnProperty(seriesKey)) {
+        throw new Error("同身份观察分列后仍有图形坐标冲突：" + categoryKey + " / " + seriesKey);
       }
+      rowsByCategory[categoryKey][seriesKey] = row;
       seriesRows[seriesKey][categoryKey] = rowsByCategory[categoryKey][seriesKey];
       if (!seriesLabels[seriesKey]) {
         seriesLabels[seriesKey] = groupedSeriesLabel(row, seriesKey);
@@ -307,10 +345,7 @@
             return Math.min(0, extent.min);
           },
           max: function (extent) {
-            if (typeof group.y_axis_max === "number") return group.y_axis_max;
-            if (unitLabel === "%") return 100;
-            var padded = Math.max(0, extent.max * 1.15);
-            return Math.ceil(padded / 10) * 10;
+            return valueAxisMaximum(group, extent);
           },
           axisLine: { show: true, onZero: true },
           splitLine: { show: true }
@@ -376,10 +411,7 @@
             return Math.min(0, extent.min);
           },
           max: function (extent) {
-            if (typeof group.y_axis_max === "number") return group.y_axis_max;
-            if (unitLabel === "%") return 100;
-            var padded = Math.max(0, extent.max * 1.15);
-            return Math.ceil(padded / 10) * 10;
+            return valueAxisMaximum(group, extent);
           },
           axisLine: { show: true, onZero: true },
           splitLine: { show: true }
@@ -1081,12 +1113,23 @@
     var rows = (group && group.rows) || [];
     var total = 0;
     var notApplicable = 0;
+    var publishedButUnplotted = 0;
     for (var i = 0; i < rows.length; i++) {
-      if (isRenderable(rows[i])) return "该指标结果尚未公开";
       total += 1;
       if (rows[i].disclosure_state === "not_applicable") notApplicable += 1;
+      if (rows[i].disclosure_state === "reported_value" ||
+          rows[i].disclosure_state === "reported_zero") publishedButUnplotted += 1;
     }
+    if (publishedButUnplotted) return "有公开记录，但当前口径不适合绘图";
     return total > 0 && notApplicable === total ? "不适用" : "该指标结果尚未公开";
+  }
+
+  function hasPublishedDisclosure(row) {
+    return row.disclosure_state === "reported_value" || row.disclosure_state === "reported_zero";
+  }
+
+  function unplottedReason(row) {
+    return String(row.difference_note || row.reason || "当前图形口径不适合该记录");
   }
 
   function renderUndisclosedMessage(chartDiv, group) {
@@ -1101,14 +1144,53 @@
     p1.textContent = undisclosedTitle(group);
     var p2 = document.createElement("p");
     p2.className = "kz-chart-undisclosed__hint";
-    p2.textContent = "完整记录仍列于下方表格，便于核对来源与口径。";
+    var reasons = (group.rows || []).filter(function (row) {
+      return !isRenderable(row) && (row.difference_note || row.reason);
+    }).map(function (row) { return String(row.difference_note || row.reason); });
+    p2.textContent = (reasons.length ? Array.from(new Set(reasons)).join("；") + "。" : "") +
+      "完整记录仍列于下方表格，便于核对来源与口径。";
     status.appendChild(p1);
     status.appendChild(p2);
     chartDiv.appendChild(status);
   }
 
+  function presentationPlan(group) {
+    var rows = group.rows || [];
+    var plotted = rows.filter(isRenderable);
+    var kind = resolveChartType(group);
+    var compact = (kind === "bar" || kind === "line") && plotted.length <= 4;
+    var height = kind === "heatmap" || kind === "status_matrix"
+      ? Math.min(420, Math.max(260, 140 + rows.length * 28))
+      : plotted.length <= 1 ? 168
+        : plotted.length <= 2 ? 220
+          : plotted.length <= 8 ? 300 : 380;
+    return {
+      query_digest: group.query_digest || rowSetDigest,
+      revision: group.revision || window.__FACT_REVISION__ || 0,
+      facet: group.facet_key || null,
+      numeric_frame: group.numeric_frame || null,
+      observation_ids: rows.map(function (row) { return String(row.row_id || ""); }),
+      plotted_ids: plotted.map(function (row) { return String(row.row_id || ""); }),
+      unplotted: rows.filter(function (row) { return !isRenderable(row); }).map(function (row) {
+        return { row_id: String(row.row_id || ""), reason: String(row.difference_note || row.reason || row.disclosure_state || "未形成可绘图形") };
+      }),
+      observation_count: rows.length,
+      glyph_count: plotted.length,
+      series_count: usesIdentitySeries(group) ? groupedSeriesOrder(rows).length : 1,
+      kind: kind,
+      grid_span: compact ? 6 : 12,
+      target_height: height,
+      max_height: 420,
+      axis_plan: { explicit_min: group.y_axis_min, explicit_max: group.y_axis_max, unit: group.unit || null },
+      reason: compact ? "少量同框观察，紧凑显示" : "多项观察或复杂图形，需要完整绘图区"
+    };
+  }
+
   function renderChartContainer(container, groupIndex, group) {
     container.setAttribute("data-group-index", String(groupIndex));
+    var plan = presentationPlan(group);
+    container.setAttribute("data-grid-span", String(plan.grid_span));
+    container.setAttribute("data-observation-count", String(plan.observation_count));
 
     var title = document.createElement("h3");
     title.className = "kz-chart-group__title";
@@ -1178,13 +1260,13 @@
     if (!groupHasRenderable(group)) {
       if (chartType === "heatmap") {
         chartDiv.style.width = "100%";
-        chartDiv.style.height = "340px";
+        chartDiv.style.height = plan.target_height + "px";
       } else {
         renderUndisclosedMessage(chartDiv, group);
       }
     } else {
       chartDiv.style.width = "100%";
-      chartDiv.style.height = "340px";
+      chartDiv.style.height = plan.target_height + "px";
     }
     var viewport = document.createElement("div");
     viewport.style.maxWidth = "100%";
@@ -1251,7 +1333,11 @@
       var tdValue = document.createElement("td");
       tdValue.className = "kz-chart-table__cell kz-chart-table__cell--value";
       if (!isRenderable(row)) {
-        tdValue.textContent = "该指标结果尚未公开";
+        tdValue.textContent = hasPublishedDisclosure(row)
+          ? String(row.display_value != null ? row.display_value
+            : row.numeric_value != null ? row.numeric_value
+              : row.value != null ? row.value : "已公开；核对原始来源")
+          : disclosureLabelZh(row.disclosure_state);
         tdValue.classList.add("kz-chart-table__cell--status");
       } else {
         var shown =
@@ -1281,14 +1367,17 @@
 
       var tdStatus = document.createElement("td");
       tdStatus.className = "kz-chart-table__cell kz-chart-table__cell--disclosure";
-      tdStatus.textContent = !isRenderable(row) ? "该指标结果尚未公开" : "已披露";
+      tdStatus.textContent = isRenderable(row) ? "已披露"
+        : hasPublishedDisclosure(row) ? "已披露；未绘制：" + unplottedReason(row)
+          : disclosureLabelZh(row.disclosure_state);
       if (!isRenderable(row)) tdStatus.classList.add("kz-chart-table__cell--unrenderable");
       tdStatus.setAttribute("data-evidence-field", "disclosure");
       markEvidenceCell(tdStatus, row.row_id);
       tr.appendChild(tdStatus);
 
       tbody.appendChild(tr);
-      rowElementMap[row.row_id] = tr;
+      if (!rowElementMap[row.row_id]) rowElementMap[row.row_id] = [];
+      rowElementMap[row.row_id].push(tr);
     }
     table.appendChild(tbody);
     var disclosure = document.createElement("details");
@@ -1316,8 +1405,10 @@
       markChartSelection(null);
       return;
     }
-    var prevEl = rowElementMap[selectedRowId];
-    if (prevEl) prevEl.classList.remove("kz-chart-table__row--selected");
+    var previousRows = rowElementMap[selectedRowId] || [];
+    for (var p = 0; p < previousRows.length; p++) {
+      previousRows[p].classList.remove("kz-chart-table__row--selected");
+    }
     var keys = Object.keys(chartInstances);
     for (var i = 0; i < keys.length; i++) {
       var inst = chartInstances[keys[i]];
@@ -1338,12 +1429,12 @@
     }
     clearSelection();
     selectedRowId = rowId;
-    var trEl = rowElementMap[rowId];
-    if (trEl) {
-      trEl.classList.add("kz-chart-table__row--selected");
-      if (typeof trEl.scrollIntoView === "function") {
-        trEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      }
+    var targetRows = rowElementMap[rowId] || [];
+    for (var r = 0; r < targetRows.length; r++) {
+      targetRows[r].classList.add("kz-chart-table__row--selected");
+    }
+    if (targetRows.length && typeof targetRows[0].scrollIntoView === "function") {
+      targetRows[0].scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
     var keys = Object.keys(chartRowMap);
     for (var i = 0; i < keys.length; i++) {
@@ -1367,7 +1458,6 @@
             dataIndex: dataIndex
           });
         }
-        break;
       }
     }
     markChartSelection(rowId);
@@ -1434,22 +1524,30 @@
   function positionBarEvidenceTargets(chartDiv, inst) {
     var targets = chartDiv.querySelectorAll(".kz-chart-evidence-hit");
     for (var i = 0; i < targets.length; i++) {
-      var index = Number(targets[i].getAttribute("data-chart-index"));
-      var value = Number(targets[i].getAttribute("data-chart-value"));
-      var point = inst.convertToPixel(
-        { xAxisIndex: 0, yAxisIndex: 0 },
-        [index, value]
-      );
-      if (!Array.isArray(point) || !isFinite(point[0]) || !isFinite(point[1])) {
+      var seriesIndex = Number(targets[i].getAttribute("data-chart-series-index") || 0);
+      var dataIndex = Number(targets[i].getAttribute("data-chart-data-index"));
+      var series = inst.getModel().getSeriesByIndex(seriesIndex);
+      var glyph = series && series.getData().getItemGraphicEl(dataIndex);
+      if (!glyph || typeof glyph.getBoundingRect !== "function") {
         targets[i].hidden = true;
         continue;
       }
-      var seriesIndex = Number(targets[i].getAttribute("data-chart-series-index") || 0);
-      var seriesCount = Number(targets[i].getAttribute("data-chart-series-count") || 1);
-      var seriesOffset = (seriesIndex - (seriesCount - 1) / 2) * 30;
+      var bounds = glyph.getBoundingRect();
+      var centerX = bounds.x + bounds.width / 2;
+      var centerY = bounds.y + bounds.height / 2;
+      var transform = glyph.getComputedTransform();
+      if (transform) {
+        var transformedX = transform[0] * centerX + transform[2] * centerY + transform[4];
+        centerY = transform[1] * centerX + transform[3] * centerY + transform[5];
+        centerX = transformedX;
+      }
+      if (!isFinite(centerX) || !isFinite(centerY)) {
+        targets[i].hidden = true;
+        continue;
+      }
       targets[i].hidden = false;
-      targets[i].style.left = String(point[0] + seriesOffset - targets[i].offsetWidth / 2) + "px";
-      targets[i].style.top = String(point[1] - targets[i].offsetHeight / 2) + "px";
+      targets[i].style.left = String(centerX - targets[i].offsetWidth / 2) + "px";
+      targets[i].style.top = String(centerY - targets[i].offsetHeight / 2) + "px";
     }
   }
 
@@ -1457,33 +1555,23 @@
     if (chartTypeByGroup[groupIndex] !== "bar") return;
     var old = chartDiv.querySelectorAll(".kz-chart-evidence-hit");
     for (var o = 0; o < old.length; o++) old[o].remove();
-    var categoryKeys = [];
-    var categorySeen = {};
-    var seriesOrder = usesIdentitySeries(group) ? groupedSeriesOrder(group.rows) : [];
-    for (var c = 0; c < group.rows.length; c++) {
-      var categoryKey = groupedIdentity(group.rows[c]);
-      if (!categorySeen[categoryKey]) {
-        categorySeen[categoryKey] = true;
-        categoryKeys.push(categoryKey);
-      }
-    }
-    var chartIndex = 0;
+    var rowTargets = chartRowMap[groupIndex] || {};
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
       if (!isRenderable(row)) continue;
       var value = row.numeric_value != null ? row.numeric_value : row.value;
+      var mapped = rowTargets[String(row.row_id)];
+      if (mapped === undefined) continue;
+      var seriesIndex = typeof mapped === "object" ? mapped.seriesIndex : 0;
+      var dataIndex = typeof mapped === "object" ? mapped.dataIndex : mapped;
       var button = document.createElement("button");
       button.type = "button";
       button.className = "kz-chart-evidence-hit";
-      var categoryIndex = usesIdentitySeries(group)
-        ? categoryKeys.indexOf(groupedIdentity(row))
-        : chartIndex;
-      button.setAttribute("data-chart-index", String(categoryIndex));
       button.setAttribute("data-chart-value", String(value));
-      if (usesIdentitySeries(group)) {
-        button.setAttribute("data-chart-series-index", String(seriesOrder.indexOf(groupedSeriesKey(row))));
-        button.setAttribute("data-chart-series-count", String(seriesOrder.length));
-      }
+      button.setAttribute("data-chart-series-index", String(seriesIndex));
+      button.setAttribute("data-chart-data-index", String(dataIndex));
+      button.style.width = "32px";
+      button.style.height = "32px";
       button.setAttribute("data-chart-evidence-open", String(row.row_id));
       button.setAttribute("aria-label", "查看数值 " + String(value) + " 的数据依据");
       (function (rowId, target) {
@@ -1494,7 +1582,6 @@
         });
       })(String(row.row_id), button);
       chartDiv.appendChild(button);
-      chartIndex += 1;
     }
     positionBarEvidenceTargets(chartDiv, inst);
   }
@@ -1583,8 +1670,10 @@
     var keys = Object.keys(rowElementMap);
     for (var t = 0; t < keys.length; t++) {
       var rid = keys[t];
-      var tr = rowElementMap[rid];
-      if (tr) tr.style.display = visibleSet[rid] ? "" : "none";
+      var rowsForFact = rowElementMap[rid] || [];
+      for (var rt = 0; rt < rowsForFact.length; rt++) {
+        rowsForFact[rt].style.display = visibleSet[rid] ? "" : "none";
+      }
     }
 
     var gKeys = Object.keys(chartRowIdsByGroup);
@@ -1623,6 +1712,11 @@
             filteredGroup[sourceKeys[sk]] = sourceGroup[sourceKeys[sk]];
           }
           filteredGroup.rows = filteredRows;
+          var filteredPlan = presentationPlan(filteredGroup);
+          if (wrapper) {
+            wrapper.setAttribute("data-grid-span", String(filteredPlan.grid_span));
+            wrapper.setAttribute("data-observation-count", String(filteredPlan.observation_count));
+          }
           initGroupChart(chartEl, Number(gIdx), filteredGroup);
         }
       }
@@ -1668,9 +1762,11 @@
     viewport.setAttribute("aria-label", "完整图形，较宽时可左右滚动");
     inst.resize();
     inst.setOption({
-      grid: { left: 28, right: 8, bottom: 80 },
+      grid: { left: 64, right: 24, top: 32, bottom: count <= 3 ? 66 : 88,
+        containLabel: false },
       xAxis: { nameGap: 64, axisLabel: {
         interval: 0, hideOverlap: false, fontSize: 14, lineHeight: 18,
+        rotate: count <= 3 ? 0 : 30,
         width: Math.max(40, Math.min(180, (width - 64) / count - 8)),
         overflow: "break",
         formatter: function (value) { return String(value).replace(/｜/g, "\n"); }
@@ -1708,7 +1804,7 @@
 
     chartDiv.classList.remove("kz-chart-group__chart--undisclosed");
     chartDiv.style.width = "100%";
-    chartDiv.style.height = "340px";
+    chartDiv.style.height = presentationPlan(group).target_height + "px";
     chartDiv.style.minHeight = "";
 
     var option = buildOption(group);
@@ -1741,10 +1837,30 @@
     renderBarEvidenceTargets(chartDiv, inst, groupIndex, group);
   }
 
+  function resizeCharts() {
+    var keys = Object.keys(chartInstances);
+    for (var i = 0; i < keys.length; i++) {
+      var inst = chartInstances[keys[i]];
+      if (!inst || inst.isDisposed()) continue;
+      inst.resize();
+      var chartDiv = document.getElementById("kz-chart-" + keys[i]);
+      if (!chartDiv) continue;
+      fitHeatmapLabels(inst, chartDiv);
+      fitBarLabels(inst, chartDiv);
+      positionBarEvidenceTargets(chartDiv, inst);
+    }
+  }
+
   function init() {
     var moduleEl = document.getElementById("kz-chart-module");
     if (!moduleEl) return;
+    if (resizeObserver) resizeObserver.disconnect();
+    Object.keys(chartInstances).forEach(function (key) {
+      var previous = chartInstances[key];
+      if (previous && !previous.isDisposed()) previous.dispose();
+    });
     moduleEl.innerHTML = "";
+    moduleEl.setAttribute("data-group-count", String(chartGroups.length));
     selectedRowId = null;
     chartInstances = {};
     chartRowMap = {};
@@ -1772,6 +1888,10 @@
       var chartDiv = renderChartContainer(wrapper, g, group);
       renderTable(wrapper, g, group);
       initGroupChart(chartDiv, g, group);
+      if (typeof window.ResizeObserver === "function") {
+        if (!resizeObserver) resizeObserver = new ResizeObserver(resizeCharts);
+        resizeObserver.observe(chartDiv.parentElement);
+      }
       var rows = wrapper.querySelectorAll(".kz-chart-table__row");
       for (var ri = 0; ri < rows.length; ri++) wireTableRowClick(rows[ri]);
     }
@@ -1798,21 +1918,10 @@
       });
     }
 
-    window.addEventListener("resize", function () {
-      var keys = Object.keys(chartInstances);
-      for (var i = 0; i < keys.length; i++) {
-        var inst = chartInstances[keys[i]];
-        if (inst && !inst.isDisposed()) {
-          inst.resize();
-          var chartDiv = document.getElementById("kz-chart-" + keys[i]);
-          if (chartDiv) {
-            fitHeatmapLabels(inst, chartDiv);
-            fitBarLabels(inst, chartDiv);
-          }
-          if (chartDiv) positionBarEvidenceTargets(chartDiv, inst);
-        }
-      }
-    });
+    if (!windowResizeBound) {
+      window.addEventListener("resize", resizeCharts);
+      windowResizeBound = true;
+    }
   }
 
   if (document.readyState === "loading") {

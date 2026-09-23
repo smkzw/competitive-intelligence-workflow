@@ -20,10 +20,11 @@ def test_grouped_bar_evidence_targets_follow_series_order_without_overlap() -> N
 
     assert "function groupedSeriesOrder(rows)" in source
     assert 'data-chart-series-index' in source
-    assert 'data-chart-series-count' in source
-    assert "* 30" in source
-    assert "width: 28px" in css
-    assert "height: 28px" in css
+    assert 'data-chart-data-index' in source
+    assert "getItemGraphicEl(dataIndex)" in source
+    assert "seriesOffset" not in source
+    assert "width: 32px" in css
+    assert "height: 32px" in css
 
 
 def test_b_rebuilt_table_cells_open_the_evidence_drawer() -> None:

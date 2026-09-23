@@ -6,20 +6,20 @@
  "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "bdde55b28bd0644b7ef7b1559db713f8f68eed4072a754bfbe8effb64783749b",
-   "bytes": 53768
+   "sha256": "673aa9e6bf5900d1b046d9a801c112479bf389f5a945f3bdf23da56e920c9bf5",
+   "bytes": 65325
   },
   "portal.js": {
    "sha256": "8ede241d7b3d3cf03569286c2b28a3398b4024d46e44f54e14d79ba5c512f505",
    "bytes": 40204
   },
   "charts.js": {
-   "sha256": "0925e6ef140af8566578e63cc3b2a9a6936e41c7bd731b9394da5aa84c53f47e",
-   "bytes": 66454
+   "sha256": "976f9efff75c13f7c4e6b5b02dcd36db3a856480097e6f44e4e2f8e3bc5115df",
+   "bytes": 71988
   },
   "evidence-drawer.js": {
-   "sha256": "f31d56090fe5b7703dda60e8ee47f61e74b4257d753f3bc14caf72433959ade6",
-   "bytes": 30958
+   "sha256": "27cd8c560439bdad3dbcb21f796015cfda18f76985ff0ed6b2abed4992a4eb7e",
+   "bytes": 31631
   },
   "evidence-drawer.css": {
    "sha256": "d6d946528b7ce833ae09f493899cc5c27315e828f043ff22a18074841f446e92",
@@ -30,28 +30,28 @@
    "bytes": 1121883
   },
   "report-a.js": {
-   "sha256": "eb6bc2cf56490c22abcfd4276824077f1612ee652ee22ad4ff08b0bf06f2fd19",
-   "bytes": 81000
+   "sha256": "52a6ca7d2113851e97658529cc1a6204b677f0b117bc0bc9754985f1811f6859",
+   "bytes": 93731
   },
   "report-a.css": {
-   "sha256": "9f1c024d6981caaaeffc86071fd2615a86ff744c4086bb206d44eebd55842bf4",
-   "bytes": 2718
+   "sha256": "7631249753d3a13b67cb6f66de1e1542a6203908b8b3b8f80a0bf4af300dc7c4",
+   "bytes": 3004
   },
   "report-b.js": {
-   "sha256": "a50857d890207504901d664626954bf8816ed35584323a23415acf3999ba1ce2",
-   "bytes": 33382
+   "sha256": "a2a704b78e9ccf23fbad486391472caf4dbc139fd0cc7e7ff58175de00caf4dd",
+   "bytes": 33476
   },
   "report-b.css": {
-   "sha256": "e4e02363330bb7a708ce6d28c96d2006dc342b7ed24a17bf89e421241230b9b0",
-   "bytes": 18076
+   "sha256": "7e3ead16f6d5abed01a033ab8f02b5a3836dbedbb6ce3955bdf3f93baf852303",
+   "bytes": 18094
   },
   "report-c.js": {
-   "sha256": "79f7bcf5523c48ae4d2a7d17cf240648564587a941d04dce50854ef175470072",
-   "bytes": 35881
+   "sha256": "9f1b52b54039088bf7a9fa1d8c5058abf32c0ec82953f0e23ea32c418a9ec659",
+   "bytes": 38094
   },
   "report-c.css": {
-   "sha256": "f2387c641cf04e7f7c46d85793681fc75a1302e5a1444e4cef8fc540852500bb",
-   "bytes": 11492
+   "sha256": "a36ddb8d389649d86b2add11b14e1c20358ee4f55fad906165c3b42cb7017d0f",
+   "bytes": 13093
   }
  },
  "logo_source": "assets/brand/cms-logo.svg",

@@ -47,7 +47,7 @@ body {
 
 .kz-b-main {
   width: 100%;
-  max-width: 1440px;
+  max-width: var(--portal-canvas-max);
   padding: 32px clamp(16px, 3vw, 48px) 72px;
 }
 
@@ -407,8 +407,8 @@ body {
 .kz-chart-evidence-hit {
   position: absolute;
   z-index: 8;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: 0;
   border-radius: 50%;

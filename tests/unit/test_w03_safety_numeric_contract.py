@@ -13,6 +13,7 @@ from ci_workflow.reports.b.safety_concepts import (
 from ci_workflow.reports.b.safety_denominator_crosswalk import build_atrisk_crosswalk
 from ci_workflow.reports.common.numeric_projection import (
     NumericMeasureKind,
+    infer_numeric_kind,
     project_numeric,
 )
 
@@ -150,6 +151,23 @@ def test_typed_numeric_projection_separates_people_events_rates_and_estimates() 
         direction="越低越好", window="第12周", estimand="LS mean difference",
     )
     assert estimate.plot_value == -3.2
+
+
+def test_nonpercent_efficacy_is_not_forced_into_participant_proportion() -> None:
+    score_kind = infer_numeric_kind(unit="分", domain="efficacy")
+    assert score_kind is NumericMeasureKind.CONTINUOUS_MEASURE
+    score = project_numeric(
+        value=-4, unit="分", kind=score_kind, window="第24周", estimand="评分变化"
+    )
+    assert score.renderable and score.plot_value == -4 and score.plot_unit == "分"
+    assert (
+        infer_numeric_kind(unit="%", domain="efficacy")
+        is NumericMeasureKind.PARTICIPANT_PROPORTION
+    )
+    assert (
+        infer_numeric_kind(unit="", domain="efficacy")
+        is NumericMeasureKind.PARTICIPANT_PROPORTION
+    )
 
 
 def test_n_le_n_applies_only_to_participant_proportion() -> None:

@@ -71,8 +71,6 @@ def c_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return root
 
 
-
-
 def _open(page: Page, site: Path, relative: str, *, width: int, height: int = 900) -> None:
     page.set_viewport_size({"width": width, "height": height})
     page.goto((site / relative).as_uri(), wait_until="load")
@@ -105,11 +103,11 @@ def test_c_all_eleven_pages_render_without_horizontal_dragging(
         page = browser.new_page(viewport={"width": width, "height": 900})
         page.on(
             "console",
-            lambda message: errors.append(
-                f"console:{message.type}:{message.text}"
-            )
-            if message.type == "error"
-            else None,
+            lambda message: (
+                errors.append(f"console:{message.type}:{message.text}")
+                if message.type == "error"
+                else None
+            ),
         )
         page.on("pageerror", lambda error: errors.append(f"page:{error}"))
         for page_id in STATIC_PAGES:
@@ -159,7 +157,7 @@ def test_c_trial_details_are_physical_and_keep_trial_scoped_facts(
             _open(page, c_site, f"trials/{trial_id}.html", width=1280)
             assert page.locator(f'[data-trial-id="{trial_id}"]').count() == 1
             assert trial["display_id"] in page.locator("body").inner_text()
-            assert page.locator("h1").inner_text() == f'{trial["display_id"]} 试验档案'
+            assert page.locator("h1").inner_text() == f"{trial['display_id']} 试验档案"
             assert "模块级" not in page.locator("body").inner_text()
             rows = page.locator(".kz-chart-table__row[data-row-id]")
             assert rows.count() == 12
@@ -197,9 +195,7 @@ def test_c_filters_restore_url_and_keep_chart_table_drawer_in_sync(
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.on(
             "console",
-            lambda message: errors.append(message.text)
-            if message.type == "error"
-            else None,
+            lambda message: errors.append(message.text) if message.type == "error" else None,
         )
         _open(page, c_site, "overview.html", width=1280)
         page.locator("#kz-filter-panel > summary").click()
@@ -262,9 +258,8 @@ def test_c_evidence_drawer_supports_keyboard_close_and_focus_return(
             page.wait_for_timeout(50)
         trigger = page.locator("[data-evidence-open]").first
         assert trigger.count() == 1
-        trigger_id = (
-            trigger.get_attribute("data-row-id")
-            or trigger.get_attribute("data-evidence-open")
+        trigger_id = trigger.get_attribute("data-row-id") or trigger.get_attribute(
+            "data-evidence-open"
         )
         trigger.focus()
         trigger.click()
@@ -481,21 +476,57 @@ def test_c_overview_chart_shows_real_design_facts_not_coverage_dots(
 
 
 @pytest.mark.parametrize("browser_name", BROWSERS)
-def test_c_design_patterns_chart_compares_choices_instead_of_overlapping_radar(
+@pytest.mark.parametrize("width", [1440, 1600, 1920, 2560])
+def test_c_design_patterns_uniform_matrix_becomes_source_linked_comparison(
     c_site: Path,
     browser_name: str,
+    width: int,
 ) -> None:
-    """设计模式页要展示具体选择，不能用四条完全重叠的覆盖雷达线。"""
+    """同色披露矩阵没有区分度时，以完整设计选择和来源入口替代。"""
     with sync_playwright() as playwright:
         browser = _launch(playwright, browser_name)
-        page = browser.new_page(viewport={"width": 1024, "height": 900})
-        _open(page, c_site, "design-patterns.html", width=1024)
-        chart = page.locator('[data-chart-type="design-choice-matrix"]')
+        page = browser.new_page(viewport={"width": width, "height": 900})
+        _open(page, c_site, "design-patterns.html", width=width)
+        chart = page.locator('[data-chart-type="design-choice-summary"]')
         chart.wait_for(state="visible")
         text = chart.text_content() or ""
         assert "主要终点定义" in text
         assert "IGA达到0或1分" in text
         assert page.locator('[data-chart-type="design-pattern-radar"]').count() == 0
+        assert page.locator('[data-chart-type="design-choice-matrix"] svg').count() == 0
+        buttons = chart.locator("button[data-evidence-open][data-row-id]")
+        actual = set(buttons.evaluate_all("nodes => nodes.map(node => node.dataset.rowId)"))
+        expected = set(page.evaluate("window.__C_VISIBLE_CHART_ROW_IDS__"))
+        assert actual == expected
+        chart_box = chart.bounding_box()
+        path_box = page.locator("#kz-design-paths").bounding_box()
+        assert chart_box is not None and path_box is not None
+        assert chart_box["width"] >= width * 0.75
+        assert path_box["y"] >= chart_box["y"] + chart_box["height"]
+        assert chart.locator(".kz-c-design-summary__trial").count() == 4
+        if width >= 1920:
+            card_boxes = [
+                item.bounding_box() for item in chart.locator(".kz-c-design-summary__trial").all()
+            ]
+            assert all(box is not None for box in card_boxes)
+            assert (
+                max(box["y"] for box in card_boxes if box)
+                - min(box["y"] for box in card_boxes if box)
+                < 5
+            )
+        buttons.first.click()
+        page.locator("#kz-evidence-drawer").wait_for(state="visible")
+        page.keyboard.press("Escape")
+        product_filter = page.locator('button[data-filter-dimension="product"]').first
+        assert product_filter.count() == 1
+        product_filter.click()
+        page.wait_for_timeout(150)
+        filtered = set(
+            chart.locator("button[data-row-id]").evaluate_all(
+                "nodes => nodes.map(node => node.dataset.rowId)"
+            )
+        )
+        assert filtered == set(page.evaluate("window.__C_VISIBLE_CHART_ROW_IDS__"))
         browser.close()
 
 

@@ -143,6 +143,52 @@ def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def test_grouped_bar_repeated_observations_keep_both_glyphs(tmp_path: Path) -> None:
+    site = tmp_path / "site"
+    write_fixture_site(site, repo_root=ROOT)
+    page_file = site / "index.html"
+    html = page_file.read_text(encoding="utf-8")
+    marker = '<script src="assets/charts.js"></script>'
+    assert marker in html
+    injection = """<script>
+      var group = window.__CHART_GROUPS__[0];
+      group.identity_series = true;
+      var repeated = Object.assign({}, group.rows[0], {row_id: 'repeat-observation'});
+      group.rows.push(repeated);
+      window.__PORTAL_FILTER__ = null;
+      window.__FILTER_ROWS__ = [];
+    </script>
+    """
+    page_file.write_text(html.replace(marker, injection + marker), encoding="utf-8")
+    server, port = _start_server(site)
+    try:
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch()
+            page = browser.new_page(viewport={"width": 1600, "height": 900})
+            errors: list[str] = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto(f"http://127.0.0.1:{port}/index.html")
+            page.wait_for_function("window.__CHART_SYNC__ !== undefined")
+            result = page.evaluate(
+                """() => {
+                  const chartNode = document.getElementById('kz-chart-0');
+                  const instance = window.echarts.getInstanceByDom(chartNode);
+                  const option = instance.getOption();
+                  return {
+                    categories: option.xAxis[0].data,
+                    ids: option.series.flatMap(series =>
+                      series.data.map(point => point._row_id).filter(Boolean))
+                  };
+                }"""
+            )
+            assert "repeat-observation" in result["ids"]
+            assert len(result["categories"]) >= 2
+            assert not errors
+            browser.close()
+    finally:
+        server.shutdown()
+
+
 @pytest.fixture(scope="module")
 def fixture_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
     site = tmp_path_factory.mktemp("task44-fixture-site")
@@ -270,7 +316,8 @@ def test_pointer_click_highlights_table_row(browser_name: str, fixture_site: Pat
                   if (!inst) return { ok: false, reason: 'no-instance' };
                   const expected = window.__CHART_GROUPS__[0].rows[0].row_id;
                   // 真实 SVG 柱路径：取宽高足够的 path，按 x 排序后点第一根
-                  const paths = Array.from(chartEl.querySelectorAll('path'))
+                  const selector = 'path[fill]:not([fill="none"])';
+                  const paths = Array.from(chartEl.querySelectorAll(selector))
                     .map((p) => {
                       const b = p.getBoundingClientRect();
                       return { x: b.left, y: b.top, w: b.width, h: b.height };
@@ -771,6 +818,49 @@ def test_undisclosed_group_no_empty_axes(browser_name: str, fixture_site: Path) 
             assert "该指标结果尚未公开" in proof["text"]
             assert proof["values"] == [None]
             assert proof["table"]
+            browser.close()
+    finally:
+        server.shutdown()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
+def test_published_but_unplotted_is_not_called_unpublished(
+    browser_name: str, fixture_site: Path
+) -> None:
+    server, port = _start_server(fixture_site)
+    try:
+        with sync_playwright() as pw:
+            browser = _launch(pw, browser_name)
+            page = browser.new_page(viewport={"width": 1600, "height": 900})
+            page.goto(f"http://127.0.0.1:{port}/index.html")
+            page.evaluate(
+                """() => {
+                  const group = window.__CHART_GROUPS__.find(g =>
+                    g.rows.some(r => r.row_id === 'row-not-disclosed'));
+                  const row = group.rows.find(r => r.row_id === 'row-not-disclosed');
+                  row.disclosure_state = 'reported_value';
+                  row.renderable = false;
+                  row.numeric_value = 7.5;
+                  row.value = 7.5;
+                  row.reason = '分析集不同，未纳入此图';
+                }"""
+            )
+            page.add_script_tag(url=f"http://127.0.0.1:{port}/assets/charts.js")
+            page.wait_for_function(
+                "document.querySelectorAll('.kz-chart-undisclosed').length > 0"
+            )
+            status = page.locator(".kz-chart-undisclosed").filter(
+                has_text="有公开记录，但当前口径不适合绘图"
+            )
+            assert status.count() == 1
+            assert "分析集不同，未纳入此图" in status.inner_text()
+            assert status.locator("svg, canvas").count() == 0
+            row = page.locator('.kz-chart-table__row[data-row-id="row-not-disclosed"]')
+            assert row.locator(".kz-chart-table__cell--value").text_content() == "7.5"
+            disclosure = row.locator(".kz-chart-table__cell--disclosure").text_content() or ""
+            assert "已披露；未绘制" in disclosure
+            assert "分析集不同，未纳入此图" in disclosure
+            assert "未公开" not in disclosure
             browser.close()
     finally:
         server.shutdown()

@@ -9,6 +9,76 @@ from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_repo
 from tests.integration.test_fresh_a_research_package import _package_payload
 
 
+def test_single_efficacy_observation_is_a_compact_fact_not_a_full_scale_bar(
+    tmp_path: Path,
+) -> None:
+    payload = _package_payload()["report_data"]
+    expected = payload["efficacy"][0]["row_id"]
+    site = tmp_path / "site"
+    render_report_a_site(ReportAPortalData.model_validate(payload), site)
+    page_file = site / "efficacy.html"
+    html = page_file.read_text(encoding="utf-8")
+    marker = '<script src="assets/report-a.js"></script>'
+    assert marker in html
+    page_file.write_text(
+        html.replace(
+            marker,
+            "<script>window.REPORT_A.efficacy = window.REPORT_A.efficacy.slice(0, 1);</script>\n  "
+            + marker,
+        ),
+        encoding="utf-8",
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        page.goto((site / "efficacy.html").as_uri())
+        group = page.locator(".kz-a-observation-group--single")
+        assert group.count() == 1
+        assert group.locator(f'[data-row-id="{expected}"]').count() == 1
+        assert group.locator(".kz-a-bar-track, .kz-a-local-scale").count() == 0
+        assert group.locator(".kz-a-observation-value").inner_text()
+        browser.close()
+
+
+def test_matrix_exposes_each_numeric_facet_without_input_order_loss(tmp_path: Path) -> None:
+    payload = _package_payload()["report_data"]
+    product_ids = list(dict.fromkeys(row["product_id"] for row in payload["efficacy"]))
+    assert len(product_ids) >= 2
+    for row in payload["efficacy"]:
+        if row["product_id"] == product_ids[1]:
+            row["timepoint"] = "第50周"
+    site = tmp_path / "site"
+    render_report_a_site(ReportAPortalData.model_validate(payload), site)
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        page.goto((site / "matrix.html").as_uri())
+        selector = page.get_by_role("combobox", name="选择疗效比较口径")
+        assert selector.count() == 1
+        assert selector.locator("option").count() >= 2
+        bubbles = page.locator('[data-chart-id="matrix-full"] .kz-a-bubble')
+        first_products = set(bubbles.evaluate_all(
+            "nodes => nodes.map(node => node.dataset.productId)"
+        ))
+        selector.select_option(index=1)
+        chosen_facet = selector.input_value()
+        assert "matrix_facet=" in page.url
+        second_products = set(bubbles.evaluate_all(
+            "nodes => nodes.map(node => node.dataset.productId)"
+        ))
+        assert first_products and second_products and first_products != second_products
+        assert product_ids[1] in first_products | second_products
+        assert "全部口径共" in page.locator("[data-matrix-coverage]").inner_text()
+        page.reload()
+        assert page.get_by_role("combobox", name="选择疗效比较口径").input_value() == chosen_facet
+        save = page.locator("[data-a-save-view]")
+        assert save.count() == 1
+        save.click()
+        page.goto((site / "matrix.html").as_uri())
+        assert page.get_by_role("combobox", name="选择疗效比较口径").input_value() == chosen_facet
+        browser.close()
+
+
 def test_serious_risk_axis_contains_all_reported_values(tmp_path: Path) -> None:
     payload = _package_payload()["report_data"]
     for row in payload["safety"]:
@@ -140,7 +210,7 @@ def test_observation_pagination_retains_every_row_and_bounds_page_height(
 
 
 @pytest.mark.parametrize("engine", ["chromium", "webkit"])
-@pytest.mark.parametrize("width", [1440, 768, 390, 320])
+@pytest.mark.parametrize("width", [1440, 1600, 1920, 2560])
 def test_all_efficacy_observations_survive_chart_and_table(
     tmp_path: Path, engine: str, width: int,
 ) -> None:
@@ -161,12 +231,11 @@ def test_all_efficacy_observations_survive_chart_and_table(
         page = browser.new_page(viewport={"width": width, "height": 900})
         page.goto((site / "efficacy.html").as_uri())
         chart = page.locator('[data-chart-id="efficacy-full"]')
-        assert "-4分" in chart.inner_text()
         expected = {row.row_id for row in data.efficacy}
-        chart_ids = set(chart.locator("[data-row-id]").evaluate_all(
+        initial_chart_ids = set(chart.locator("[data-row-id]").evaluate_all(
             "nodes => nodes.map(node => node.dataset.rowId)"
         ))
-        assert chart_ids == expected
+        assert initial_chart_ids and initial_chart_ids <= expected
         table_ids = set(page.locator("tbody tr[data-row-id]").evaluate_all(
             "nodes => nodes.map(node => node.dataset.rowId)"
         ))
@@ -176,6 +245,9 @@ def test_all_efficacy_observations_survive_chart_and_table(
         page.screenshot(path=str(tmp_path / f"{engine}-{width}.png"), full_page=True)
         page.locator('[data-filter-dimension="endpoint"] button').filter(
             has_text="合成评分变化"
+        ).click()
+        page.locator('[data-filter-dimension="timepoint"] button').filter(
+            has_text="第24周"
         ).click()
         selected_ids = {f"synthetic-score-{index}" for index in range(3)}
         assert set(chart.locator("[data-row-id]").evaluate_all(

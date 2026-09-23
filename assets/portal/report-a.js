@@ -808,6 +808,7 @@
       var first = observations[0];
       var trial = trialById(first.trial_id);
       var firstProjection = first.numeric_projection;
+      var singleObservation = observations.length === 1;
       var minimum = Math.min.apply(null, [0].concat(observations.map(function (item) {
         return Number(item.numeric_projection.plot_value);
       })));
@@ -815,7 +816,8 @@
         return Number(item.numeric_projection.plot_value);
       })));
       var span = maximum - minimum || 1;
-      var row = el("div", "kz-a-bar-row kz-a-observation-group");
+      var row = el("div", "kz-a-bar-row kz-a-observation-group"
+        + (singleObservation ? " kz-a-observation-group--single" : ""));
       row.setAttribute("data-product-id", first.product_id);
       row.setAttribute("data-trial-id", first.trial_id);
       var label = el("div", "kz-a-bar-label");
@@ -840,24 +842,26 @@
         observationButton.setAttribute("data-efficacy-row-id", item.row_id);
         observationButton.setAttribute("aria-label", (item.arm_detail || item.arm) + "：查看此项疗效观察");
         lane.appendChild(observationButton);
-        var track = el("div", "kz-a-bar-track");
-        var zero = el("i", "kz-a-zero-line");
-        zero.style.left = ((0 - minimum) / span * 100) + "%";
-        track.appendChild(zero);
-        var bar = el("div", "kz-a-bar" + (item.arm === "对照组" ? " kz-a-bar--control" : ""));
-        bar.style.left = ((Math.min(0, projectedValue) - minimum) / span * 100) + "%";
-        bar.style.width = (Math.abs(projectedValue) / span * 100) + "%";
-        bar.title = (item.arm_detail || item.arm) + " " + projectedValue + unitSuffix(projection.plot_unit);
-        track.appendChild(bar);
-        lane.appendChild(track);
+        if (!singleObservation) {
+          var track = el("div", "kz-a-bar-track");
+          var zero = el("i", "kz-a-zero-line");
+          zero.style.left = ((0 - minimum) / span * 100) + "%";
+          track.appendChild(zero);
+          var bar = el("div", "kz-a-bar" + (item.arm === "对照组" ? " kz-a-bar--control" : ""));
+          bar.style.left = ((Math.min(0, projectedValue) - minimum) / span * 100) + "%";
+          bar.style.width = (Math.abs(projectedValue) / span * 100) + "%";
+          bar.title = (item.arm_detail || item.arm) + " " + projectedValue + unitSuffix(projection.plot_unit);
+          track.appendChild(bar);
+          lane.appendChild(track);
+        }
         lane.appendChild(el("strong", "kz-a-observation-value", projectedValue + unitSuffix(projection.plot_unit)));
         bars.appendChild(lane);
       });
-      bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(firstProjection.plot_unit)));
+      if (!singleObservation) bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(firstProjection.plot_unit)));
       row.appendChild(bars); host.appendChild(row);
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");
-    host.appendChild(el("p", "kz-a-chart-note", "保留全部组别和观察；每组独立刻度，不代表跨试验可比或优劣排名。"));
+    host.appendChild(el("p", "kz-a-chart-note", "保留全部组别和观察；单条观察直接列值，多条观察使用组内刻度，不代表跨试验可比或优劣排名。"));
   }
   function color(value, min, max) {
     var ratio = max === min ? 0.5 : (value - min) / (max - min);
@@ -1031,6 +1035,7 @@
         control: control,
         x: useDifference ? treatment - control : treatment,
         xFacet: treatmentProjection.facet_key,
+        facetLabel: treatmentRow.endpoint + "｜" + pair.timepoint + "｜" + (treatmentProjection.plot_unit || "原单位"),
         eventRate: eventRate,
         eventRecord: eventRecord,
         teaeRecord: teaeRecord,
@@ -1043,9 +1048,41 @@
         sizeBasis: useTotalSample ? "全部随机样本量" : "治疗组样本量"
       });
     });
-    if (points.length) {
-      var activeFacet = points[0].xFacet;
-      points = points.filter(function (point) { return point.xFacet === activeFacet; });
+    var allPoints = points.slice();
+    var facets = {};
+    allPoints.forEach(function (point) {
+      var facet = String(point.xFacet || "未标明口径");
+      if (!facets[facet]) facets[facet] = { label: point.facetLabel, count: 0 };
+      facets[facet].count += 1;
+    });
+    var facetKeys = Object.keys(facets).sort(function (left, right) {
+      return facets[left].label.localeCompare(facets[right].label, "zh-CN") || left.localeCompare(right);
+    });
+    if (facetKeys.length > 1) {
+      var requested = host.getAttribute("data-active-facet");
+      var activeFacet = requested && facets[requested] ? requested : facetKeys[0];
+      host.setAttribute("data-active-facet", activeFacet);
+      var facetLabel = el("label", "kz-a-matrix-facet-label", "疗效比较口径 ");
+      var facetSelect = el("select", "kz-a-matrix-facet-select");
+      facetSelect.setAttribute("aria-label", "选择疗效比较口径");
+      facetKeys.forEach(function (facet) {
+        var choice = el("option", "", facets[facet].label + "（" + facets[facet].count + "项）");
+        choice.value = facet;
+        choice.selected = facet === activeFacet;
+        facetSelect.appendChild(choice);
+      });
+      facetSelect.addEventListener("change", function () {
+        host.setAttribute("data-active-facet", facetSelect.value);
+        var facetParams = new URLSearchParams(window.location.search);
+        facetParams.set("matrix_facet", facetSelect.value);
+        window.history.replaceState(null, "", window.location.pathname + "?" + facetParams.toString());
+        renderMatrix(host);
+      });
+      facetLabel.appendChild(facetSelect);
+      host.appendChild(facetLabel);
+      host.appendChild(el("p", "kz-a-matrix-facet-note", "共有" + facetKeys.length
+        + "种不同疗效口径；不能混在同一坐标轴，可切换查看，完整事实仍在下方表格。"));
+      points = allPoints.filter(function (point) { return String(point.xFacet || "未标明口径") === activeFacet; });
     }
     updateMatrixTable(points);
     if (!points.length) {
@@ -1149,15 +1186,17 @@
     host.appendChild(key);
     var missing = products.filter(function (product) {
       if (selected.product && selected.product.length && selected.product.indexOf(product.name) === -1) return false;
-      return !shownProducts.some(function (shown) { return shown.id === product.id; });
+      return !allPoints.some(function (point) { return point.product.id === product.id; });
     });
     if (missing.length) {
       var disclosure = el("details", "kz-a-matrix-coverage__details");
-      disclosure.appendChild(el("summary", "", "本图绘入 " + shownProducts.length + " 个产品；另有 " + missing.length + " 个因当前三维数据未完整公开而未绘入"));
+      disclosure.appendChild(el("summary", "", "当前口径绘入 " + shownProducts.length + " 项；全部口径共 "
+        + allPoints.length + " 项；另有 " + missing.length + " 个产品因三维数据不完整未绘入"));
       disclosure.appendChild(el("p", "", missing.map(function (product) { return product.name; }).join("、")));
       if (coverage) { coverage.innerHTML = ""; coverage.appendChild(disclosure); }
     } else if (coverage) {
-      coverage.textContent = "本图已绘入当前筛选范围内全部 " + shownProducts.length + " 个产品。";
+      coverage.textContent = "当前口径绘入 " + shownProducts.length + " 项；全部口径共 "
+        + allPoints.length + " 项。";
     }
     host.appendChild(el("p", "kz-a-chart-note", "横轴：越靠右，疗效观察值越高｜纵轴：发生率（越低越靠上）；0起点且量程覆盖全部公开值，产品筛选不改变刻度"));
     var sizeNote = document.querySelector(".kz-a-bubble-size");
@@ -1501,6 +1540,10 @@
       if (matrixControls[1].selectedIndex === 1) query.set("matrix_y", "sae");
       if (matrixControls[2].selectedIndex === 1) query.set("matrix_size", "total");
     }
+    var matrixHost = document.querySelector('[data-module="matrix"] [data-a-chart="matrix"]');
+    if (matrixHost && matrixHost.getAttribute("data-active-facet")) {
+      query.set("matrix_facet", matrixHost.getAttribute("data-active-facet"));
+    }
     if (productInsightId) query.set("focus", productInsightId);
     var next = window.location.pathname + (query.toString() ? "?" + query.toString() : "");
     window.history.replaceState(null, "", next);
@@ -1527,6 +1570,10 @@
       query.matrix_y = [controls[1].selectedIndex === 1 ? "sae" : "teae"];
       query.matrix_size = [controls[2].selectedIndex === 1 ? "total" : "treatment"];
     }
+    var matrixHost = document.querySelector('[data-module="matrix"] [data-a-chart="matrix"]');
+    if (matrixHost && matrixHost.getAttribute("data-active-facet")) {
+      query.matrix_facet = [matrixHost.getAttribute("data-active-facet")];
+    }
     return {schema_version: "1.0", report: "A", query: query};
   }
   function setViewStatus(message) {
@@ -1551,6 +1598,7 @@
       scientificKeys[node.getAttribute("data-filter-dimension")] = true;
     });
     scientificKeys.matrix_x = scientificKeys.matrix_y = scientificKeys.matrix_size = true;
+    scientificKeys.matrix_facet = true;
     var hasExplicitState = false;
     params.forEach(function (_value, key) { if (scientificKeys[key]) hasExplicitState = true; });
     if (hasExplicitState) return false;
@@ -1691,6 +1739,10 @@
     controls[0].selectedIndex = params.get("matrix_x") === "difference" ? 1 : 0;
     controls[1].selectedIndex = params.get("matrix_y") === "sae" ? 1 : 0;
     controls[2].selectedIndex = params.get("matrix_size") === "total" ? 1 : 0;
+  }
+  var initialMatrixHost = document.querySelector('[data-module="matrix"] [data-a-chart="matrix"]');
+  if (initialMatrixHost && params.get("matrix_facet")) {
+    initialMatrixHost.setAttribute("data-active-facet", params.get("matrix_facet"));
   }
   var resizeTimer = null;
   window.addEventListener("resize", function () {
