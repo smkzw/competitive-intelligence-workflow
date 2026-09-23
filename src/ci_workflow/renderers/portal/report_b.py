@@ -2320,15 +2320,40 @@ def _project_record(
     if regions is None:
         regions = _first(source, "regions", default=None)
     coverage = _number(_source_first(value, source, "coverage", default=None))
+    numeric_kind = infer_numeric_kind(
+        measure_object=measure_object, statistic_form=statistic_form,
+        unit=unit, domain=domain,
+    )
+    plot_numerator = numerator
+    plot_denominator = denominator
+    plot_estimand = _text(_source_first(value, source, "estimand", default=label))
+    value_basis = _text(_source_first(value, source, "value_basis", default=""))
+    if domain == "efficacy":
+        if value_basis in {"modeled_estimate", "reported_estimate"}:
+            numeric_kind = NumericMeasureKind.ADJUSTED_ESTIMATE
+            plot_numerator = None
+            plot_denominator = None
+            plot_estimand = f"{plot_estimand}|{value_basis}"
+        elif (
+            unit in {"%", "百分比"}
+            and numeric is not None
+            and numerator is not None
+            and denominator is not None
+            and abs(float(numeric) - numerator / denominator * 100) > 0.11
+        ):
+            if value_basis == "crude_rate":
+                raise ReportBPortalError("B 疗效声明粗率但报告值与原始计数不一致")
+            # Keep the reported number and the raw counts, but never let the
+            # latter overwrite an unresolved statistical form in the plot.
+            plot_numerator = None
+            plot_denominator = None
+            plot_estimand = f"{plot_estimand}|reported_value_not_count_derived"
     projection = project_numeric(
         value=numeric, unit=unit,
-        kind=infer_numeric_kind(
-            measure_object=measure_object, statistic_form=statistic_form,
-            unit=unit, domain=domain,
-        ),
-        numerator=numerator, denominator=denominator,
+        kind=numeric_kind,
+        numerator=plot_numerator, denominator=plot_denominator,
         direction=_text(_source_first(value, source, "direction", default="")),
-        window=time_window, estimand=_text(_source_first(value, source, "estimand", default=label)),
+        window=time_window, estimand=plot_estimand,
     )
     renderable = renderable and projection.renderable
     result: dict[str, Any] = {
@@ -2468,6 +2493,7 @@ def _project_record(
         "unit": unit,
         "numerator": numerator,
         "denominator": denominator,
+        "value_basis": value_basis,
         "value": numeric,
         "raw_numeric_value": numeric,
         "numeric_value": projection.plot_value,
@@ -3003,7 +3029,10 @@ def _evidence_view(
     value_field = _evidence_field(None, state) if numeric is None else _evidence_field(numeric)
     group = _text(row.get("arm"), "组别未列示")
     source_id = _source_version(source)
-    source_label = "ClinicalTrials.gov"
+    source_label = _text(
+        _first(source, "source_version_label_zh", "source_provider", "source_label", default=None),
+        "来源待核",
+    )
     original_text = _text(
         _first(source, "original_definition", "source_text", default=None)
     )
@@ -4752,6 +4781,11 @@ def _project_active_facts_b(
         except ValueError as error:
             raise ReportBPortalError(str(error)) from error
         fact_extra = fact.model_extra or {}
+        if fact_extra.get("review_state") != "user_modified":
+            continue
+        visible_row_id = str(
+            _b_source_view_row(data, binding.collection, binding.row_id)["row_id"]
+        )
         unit = str(
             fact_extra.get("normalized_unit")
             or fact_extra.get("unit")
@@ -4798,14 +4832,11 @@ def _project_active_facts_b(
         if isinstance(view, Mapping):
             facts = view.get("facts")
             if isinstance(facts, list):
-                view_row_id = _b_source_view_row(
-                    data, binding.collection, binding.row_id
-                )["row_id"]
                 view_matches = [
                     candidate
                     for candidate in facts
                     if isinstance(candidate, dict)
-                    and str(candidate.get("row_id")) == str(view_row_id)
+                    and str(candidate.get("row_id")) == visible_row_id
                 ]
         if view_matches:
             if len(view_matches) != 1:
@@ -4830,7 +4861,7 @@ def _project_active_facts_b(
                 value = fact_extra.get(field)
                 if isinstance(value, int):
                     projected[field] = value
-        user_edits[binding.row_id] = user_edit_disclosure(
+        user_edits[visible_row_id] = user_edit_disclosure(
             fact,
             active_revision,
             original_value=original_value,
@@ -4846,11 +4877,11 @@ def _project_active_facts_b(
                 binding_identity=verified_binding,
                 original_row_sha256=verified_binding.original_row_sha256,
                 page_relative_path=page,
-                chart_consumer=f"__CHART_GROUPS__.rows[row_id={binding.row_id}].value",
-                table_consumer=f"{page}#table-row:{binding.row_id}",
-                narrative_consumer=f"evidence-view:{binding.row_id}.user_edit.current_value",
-                index_consumer=f"data/search-index.js#{binding.collection}:{binding.row_id}",
-                source_binding_consumer=f"evidence-view:{binding.row_id}.source_locator",
+                chart_consumer=f"__CHART_GROUPS__.rows[row_id={visible_row_id}].value",
+                table_consumer=f"{page}#table-row:{visible_row_id}",
+                narrative_consumer=f"evidence-view:{visible_row_id}.user_edit.current_value",
+                index_consumer=f"data/search-index.js#{binding.collection}:{visible_row_id}",
+                source_binding_consumer=f"evidence-view:{visible_row_id}.source_locator",
             )
         )
     payload["user_edits"] = user_edits

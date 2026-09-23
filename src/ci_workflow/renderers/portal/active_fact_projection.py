@@ -232,8 +232,20 @@ def user_edit_disclosure(
     provenance = extra.get("user_edit")
     if extra.get("review_state") != "user_modified" or not isinstance(provenance, dict):
         raise ValueError("active projection只接受带完整provenance的user_modified事实")
-    if provenance.get("request_id") != active_revision.request_id:
-        raise ValueError("用户修订provenance与active revision请求不一致")
+    edit_request_id = provenance.get("request_id")
+    edit_revision = provenance.get("revision")
+    if (
+        not isinstance(edit_request_id, str)
+        or not edit_request_id.strip()
+        or type(edit_revision) is not int
+        or edit_revision < 1
+        or edit_revision > active_revision.revision
+        or (
+            edit_revision == active_revision.revision
+            and edit_request_id != active_revision.request_id
+        )
+    ):
+        raise ValueError("用户修订provenance与当前事实闭包不一致")
     cleared = fact.disclosure_state == "user_cleared"
     value = "用户清除，待重新核实" if cleared else current_value or fact.raw_value
     if value is None:
@@ -253,8 +265,8 @@ def user_edit_disclosure(
     return UserEditDisclosure(
         fact_id=fact.fact_id,
         fact_version_id=fact.fact_version_id,
-        request_id=active_revision.request_id,
-        revision=active_revision.revision,
+        request_id=edit_request_id,
+        revision=edit_revision,
         status_label_zh=(
             "用户清除，待重新核实" if cleared else "用户修订，未独立复核"
         ),

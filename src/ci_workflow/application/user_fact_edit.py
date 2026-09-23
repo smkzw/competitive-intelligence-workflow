@@ -615,6 +615,22 @@ class UserFactEditService:
                 for field, value in changes.items()
             ):
                 raise UserFactSaveError("同一次保存不能同时清除和设置数值字段")
+            is_estimated_value = context.get("statistical_form") in {
+                "estimate", "adjusted_rate", "ls_mean",
+            }
+            if (
+                not clear_fields
+                and is_estimated_value
+                and (("raw_value" in changes) != ("normalized_value" in changes))
+            ):
+                raise UserFactSaveError("估计值修订必须同时提供当前数值文本和规范值")
+            if (
+                not clear_fields
+                and is_estimated_value
+                and ("numerator" in changes or "denominator" in changes)
+                and not {"raw_value", "normalized_value"}.issubset(changes)
+            ):
+                raise UserFactSaveError("估计值的原始计数变化必须同时提供重新核实的估计值")
             context.update(changes)
             raw_value = changes.get("raw_value", source["raw_value"])
             normalized_value = changes.get("normalized_value", source["normalized_value"])

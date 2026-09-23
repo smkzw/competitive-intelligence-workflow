@@ -2017,6 +2017,8 @@ def _project_active_facts_a(
             )
         except ValueError as error:
             raise ReportAPortalError(str(error)) from error
+        if fact_extra.get("review_state") != "user_modified":
+            continue
         unit = str(fact_extra.get("normalized_unit") or fact_extra.get("unit") or row.unit)
         endpoint = (
             fact_extra.get("endpoint_definition")

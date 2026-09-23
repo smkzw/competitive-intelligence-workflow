@@ -38,12 +38,12 @@
    "bytes": 3575
   },
   "report-b.js": {
-   "sha256": "67ee8491cd591cd35726319dbe7fcd53baa3f64f429a2fa7d96d5255aadfdd7d",
-   "bytes": 33698
+   "sha256": "12b372ca6e5837e79c731d6859abbc87cf425d543be552485d8da9dd8c469bc6",
+   "bytes": 34364
   },
   "report-b.css": {
-   "sha256": "a18ad5a7a3209cfbf76daf9abe23d3de210ae7011e4a26616fb6044a8b7fa924",
-   "bytes": 17998
+   "sha256": "9774b5c66574a3927a17dbd9950264b05741c5f8ee21dc464f840d613e7fbc56",
+   "bytes": 18061
   },
   "report-c.js": {
    "sha256": "9f1b52b54039088bf7a9fa1d8c5058abf32c0ec82953f0e23ea32c418a9ec659",

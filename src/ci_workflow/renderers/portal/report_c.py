@@ -2036,6 +2036,8 @@ def render_report_c_site(
                 )
             except ValueError as error:
                 raise ReportCPortalError(str(error)) from error
+            if (fact.model_extra or {}).get("review_state") != "user_modified":
+                continue
             row_payload = observations[index].model_dump(mode="python")
             original_value = (
                 f"{row_payload.get('operator') or ''}"

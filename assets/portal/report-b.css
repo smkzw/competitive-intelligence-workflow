@@ -748,6 +748,10 @@ body {
   table-layout: auto;
 }
 
+.kz-b-site--efficacy .kz-chart-table {
+  min-width: 1600px;
+}
+
 .kz-chart-table__th,
 .kz-chart-table__cell {
   min-width: 84px;

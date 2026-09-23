@@ -58,6 +58,7 @@ from ci_workflow.renderers.portal.report_a import (
 )
 from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
+    _efficacy_records,
     _project_active_facts_b,
     active_fact_binding_for_b,
     render_report_b_site,
@@ -91,7 +92,31 @@ def _b_efficacy_data_with_linked_view() -> ReportBPortalData:
     for domain in payload["efficacy"]:
         domain["source_view_row_id"] = explicit_links[domain["row_id"]]
         domain["value_basis"] = "modeled_estimate"
+    for view_row in payload["efficacy_views"]["facts"]:
+        view_row["value_basis"] = "modeled_estimate"
     return ReportBPortalData.model_validate(payload)
+
+
+def test_b_legacy_efficacy_plot_preserves_reported_value_when_counts_disagree() -> None:
+    legacy = ReportBPortalData.model_validate_json(
+        Path("fixtures/positive/b-pnh/inputs/report-data.json").read_bytes()
+    )
+    records = _efficacy_records(
+        legacy,
+        {product.id: product.name for product in legacy.products},
+        {trial.id: trial.name for trial in legacy.trials},
+    )
+    treatment = next(row for row, _ in records if row["row_id"].endswith("apply-treatment"))
+
+    assert treatment["value"] == 82.3
+    assert treatment["numeric_value"] == 82.3
+    assert treatment["numeric_projection"]["plot_value"] == 82.3
+    # The historical view omits raw numerator even though its legacy domain
+    # row retains it; the revised view below must preserve both without
+    # treating that count as the modeled percentage's derivation.
+    assert treatment["numerator"] is None
+    assert treatment["denominator"] == 60
+    assert legacy.efficacy[0].numerator == 51
 
 
 def test_b_efficacy_binding_keeps_estimated_rate_distinct_from_raw_counts() -> None:
@@ -159,6 +184,7 @@ def test_b_estimated_efficacy_revision_updates_domain_and_explicit_view_without_
         review_state="user_modified",
         user_edit={
             "request_id": "edit-estimate",
+            "revision": 2,
             "basis": "原报告值核对",
             "saved_by": "test",
             "saved_at": NOW.isoformat(),
@@ -188,7 +214,177 @@ def test_b_estimated_efficacy_revision_updates_domain_and_explicit_view_without_
     report_payload = json.loads(report_js.removeprefix("window.REPORT_B=").removesuffix(";\n"))
     assert report_payload["efficacy"][0]["value"] == 80.1
     assert report_payload["efficacy"][0]["numerator"] == 51
-    assert report_payload["user_edits"]["eff-apply-treatment"]["current_value"] == "80.1%"
+    visible_id = "eff-row-nct04558918-apply-treatment"
+    assert report_payload["user_edits"][visible_id]["current_value"] == "80.1%"
+    efficacy_html = (site / "efficacy.html").read_text(encoding="utf-8")
+    chart_groups = json.loads(
+        efficacy_html.split("window.__CHART_GROUPS__ = ", 1)[1].split(";</script>", 1)[0]
+    )
+    treatment_chart_row = next(
+        row for group in chart_groups for row in group["rows"]
+        if row["row_id"] == "eff-row-nct04558918-apply-treatment"
+    )
+    assert treatment_chart_row["numeric_value"] == 80.1
+    assert treatment_chart_row["numeric_projection"]["plot_value"] == 80.1
+    evidence_views = json.loads(
+        efficacy_html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
+    )
+    evidence = next(view for view in evidence_views if view["row"]["row_id"] == visible_id)
+    assert evidence["user_edit"]["current_value"] == "80.1%"
+    assert evidence["user_edit"]["original_value"].startswith("82.3%")
+    assert evidence["source_version_label_zh"] == "来源待核"
+
+
+def test_b_estimated_efficacy_save_rebuilds_current_without_redividing(tmp_path: Path) -> None:
+    root, fragments = _project(tmp_path, include_b_efficacy=True)
+    service = UserFactEditService(root)
+    result = service.save(
+        UserFactSaveCommand(
+            request_id="save-b-estimated-efficacy",
+            project_id=PROJECT_ID,
+            expected_revision=0,
+            target=FactTargetIdentity(
+                fact_id="fact-b-estimated-efficacy",
+                fact_version_id="fact-b-estimated-efficacy-v1",
+                entity_id="entity-arm",
+                field_id="efficacy.estimated_response",
+            ),
+            edits=FactEdit(raw_value="80.1%", normalized_value=80.1),
+            user_basis="依据原始报告复核模型估计结果。",
+            saved_by="medical-user",
+            saved_at=NOW,
+        )
+    )
+
+    assert result.rebuilt_reports == ("B",)
+    assert {entry.report: entry.revision for entry in service.read_current_delivery().reports} == {
+        "A": 0, "B": 1, "C": 0,
+    }
+    current = _projection(root, "B")
+    assert current["efficacy"][0]["value"] == 80.1
+    assert current["efficacy"][0]["numerator"] == 51
+    assert current["efficacy"][0]["denominator"] == 60
+    edit = current["user_edits"]["eff-row-nct04558918-apply-treatment"]
+    assert edit["original_value"].startswith("82.3%")
+    with open_database(root / "state/project.sqlite") as database:
+        original = database.execute(
+            "SELECT content_text FROM evidence_fragments WHERE fragment_id=?",
+            (fragments["efficacy"],),
+        ).fetchone()
+    assert original is not None and "82.3%" in original[0]
+
+
+def test_second_b_edit_preserves_first_b_edit_provenance(tmp_path: Path) -> None:
+    root, _ = _project(tmp_path, include_b_efficacy=True)
+    service = UserFactEditService(root)
+    service.save(_command(request_id="first-b-safety"))
+
+    result = service.save(
+        UserFactSaveCommand(
+            request_id="second-b-efficacy",
+            project_id=PROJECT_ID,
+            expected_revision=1,
+            target=FactTargetIdentity(
+                fact_id="fact-b-estimated-efficacy",
+                fact_version_id="fact-b-estimated-efficacy-v1",
+                entity_id="entity-arm",
+                field_id="efficacy.estimated_response",
+            ),
+            edits=FactEdit(raw_value="80.1%", normalized_value=80.1),
+            user_basis="依据原始报告复核模型估计结果。",
+            saved_by="medical-user",
+            saved_at=NOW + timedelta(minutes=1),
+        )
+    )
+
+    assert result.rebuilt_reports == ("B",)
+    current = _projection(root, "B")
+    safety = next(row for row in current["safety"] if row["row_id"] == "safe-apply-t-1")
+    assert (safety["value"], safety["numerator"], safety["denominator"]) == (30, 24, 80)
+    assert current["efficacy"][0]["value"] == 80.1
+    assert current["user_edits"]["safe-apply-t-1"]["request_id"] == "first-b-safety"
+    assert current["user_edits"]["eff-row-nct04558918-apply-treatment"]["request_id"] == (
+        "second-b-efficacy"
+    )
+    b_delivery = next(
+        entry for entry in service.read_current_delivery().reports if entry.report == "B"
+    )
+    efficacy_html = (
+        root / b_delivery.site_relative_path / "efficacy.html"
+    ).read_text(encoding="utf-8")
+    chart_groups = json.loads(
+        efficacy_html.split("window.__CHART_GROUPS__ = ", 1)[1].split(";</script>", 1)[0]
+    )
+    treatment_chart_row = next(
+        row for group in chart_groups for row in group["rows"]
+        if row["row_id"] == "eff-row-nct04558918-apply-treatment"
+    )
+    assert treatment_chart_row["value"] == 80.1
+    assert treatment_chart_row["numeric_value"] == 80.1
+    assert treatment_chart_row["numeric_projection"]["plot_value"] == 80.1
+    assert treatment_chart_row["numerator"] == 51
+    receipt = json.loads(
+        (root / b_delivery.site_relative_path / "data/consumer-receipt.json").read_text()
+    )
+    efficacy_consumer = next(
+        item for item in receipt["consumers"] if item["collection"] == "efficacy"
+    )
+    assert "eff-row-nct04558918-apply-treatment" in efficacy_consumer["chart_consumer"]
+    assert "eff-row-nct04558918-apply-treatment" in efficacy_consumer["table_consumer"]
+
+
+def test_estimated_rate_count_edit_requires_explicit_reestimated_value(
+    tmp_path: Path,
+) -> None:
+    root, _ = _project(tmp_path, include_b_efficacy=True)
+    service = UserFactEditService(root)
+    target = FactTargetIdentity(
+        fact_id="fact-b-estimated-efficacy",
+        fact_version_id="fact-b-estimated-efficacy-v1",
+        entity_id="entity-arm",
+        field_id="efficacy.estimated_response",
+    )
+    command = UserFactSaveCommand(
+        request_id="estimate-count-without-model",
+        project_id=PROJECT_ID,
+        expected_revision=0,
+        target=target,
+        edits=FactEdit(numerator=50),
+        user_basis="仅核实原始应答人数，未重新估计模型结果。",
+        saved_by="medical-user",
+        saved_at=NOW,
+    )
+    before = (root / "reports/current.json").read_bytes()
+
+    with pytest.raises(UserFactSaveError, match="估计值"):
+        service.save(command)
+    for suffix, edit in (
+        ("raw-only", FactEdit(raw_value="80.1%")),
+        ("normalized-only", FactEdit(normalized_value=80.1)),
+    ):
+        with pytest.raises(UserFactSaveError, match="当前数值文本和规范值"):
+            service.save(
+                command.model_copy(
+                    update={"request_id": f"estimate-{suffix}", "edits": edit}
+                )
+            )
+    assert (root / "reports/current.json").read_bytes() == before
+    assert service.read_current_delivery().revision == 0
+    corrected = service.save(
+        command.model_copy(
+            update={
+                "request_id": "estimate-count-with-result",
+                "edits": FactEdit(
+                    numerator=50, raw_value="80.1%", normalized_value=80.1
+                ),
+            }
+        )
+    )
+    assert corrected.derived_crude_rate is None
+    current = _projection(root, "B")
+    assert (current["efficacy"][0]["value"], current["efficacy"][0]["numerator"]) == (
+        80.1, 50,
+    )
 
 
 def _seed_fact(
@@ -236,6 +432,7 @@ def _project(
     *,
     b_binding_override: tuple[str, object] | None = None,
     cross_report_binding: str | None = None,
+    include_b_efficacy: bool = False,
 ) -> tuple[Path, dict[str, str]]:
     root = tmp_path / "w04-project"
     root.mkdir(parents=True)
@@ -261,6 +458,12 @@ def _project(
         report: model.model_validate_json(path.read_bytes())
         for report, (model, _renderer, path) in payloads.items()
     }
+    if include_b_efficacy:
+        linked_b_data = _b_efficacy_data_with_linked_view()
+        report_data["B"] = linked_b_data
+        linked_b_path = root / "report-b-linked-estimate.json"
+        linked_b_path.write_text(linked_b_data.model_dump_json(), encoding="utf-8")
+        payloads["B"] = (ReportBPortalData, render_report_b_site, linked_b_path)
     if cross_report_binding == "legal_AB":
         b_data = report_data["B"]
         b_row = next(row for row in b_data.safety if row.row_id == "safe-apply-t-1")
@@ -289,6 +492,10 @@ def _project(
     a_row_id = "safe-apply-t-1" if cross_report_binding == "legal_AB" else "safe-fixture-teae"
     a_binding = active_fact_binding_for_a(report_data["A"], "safety", a_row_id)
     b_binding = active_fact_binding_for_b(report_data["B"], "safety", "safe-apply-t-1")
+    b_efficacy_binding = (
+        active_fact_binding_for_b(report_data["B"], "efficacy", "eff-apply-treatment")
+        if include_b_efficacy else None
+    )
     c_binding = active_fact_binding_for_c(report_data["C"], "c-nct04178967-inclusion")
     if b_binding_override is not None:
         field, replacement = b_binding_override
@@ -341,6 +548,7 @@ def _project(
             a_binding.source_version_id,
             b_binding.source_version_id,
             c_binding.source_version_id,
+            *( (b_efficacy_binding.source_version_id,) if b_efficacy_binding else () ),
         }:
             database.execute(
                 "INSERT INTO source_versions (source_version_id,source_id,content_sha256,"
@@ -361,6 +569,8 @@ def _project(
             "threshold": "fragment-threshold",
             "unrelated": "fragment-unrelated",
         }
+        if b_efficacy_binding is not None:
+            fragments["efficacy"] = "fragment-b-estimated-efficacy"
         quotes = {
             "count": "34/62例受试者发生任何TEAE（54.8%）。",
             "a": "任何TEAE在治疗组中的原始门户值为66.2%。",
@@ -369,11 +579,17 @@ def _project(
             "threshold": "入选标准阈值为至少16分。",
             "unrelated": "另一研究共有20例受试者。",
         }
+        if b_efficacy_binding is not None:
+            quotes["efficacy"] = "模型估计应答比例82.3%；原始应答计数51/60。"
         source_by_key = {
             "count": (b_binding.source_version_id, b_binding.source_pointer),
             "a": (a_binding.source_version_id, a_binding.source_pointer),
             "threshold": (c_binding.source_version_id, c_binding.source_pointer),
         }
+        if b_efficacy_binding is not None:
+            source_by_key["efficacy"] = (
+                b_efficacy_binding.source_version_id, b_efficacy_binding.source_pointer
+            )
         for key, fragment_id in fragments.items():
             source_version_id, locator = source_by_key.get(key, ("source-v1", f"$.{key}"))
             database.execute(
@@ -425,6 +641,26 @@ def _project(
                 "consumer_bindings": consumer_bindings,
             },
         )
+        if b_efficacy_binding is not None:
+            _seed_fact(
+                database,
+                fact_id="fact-b-estimated-efficacy",
+                version_id="fact-b-estimated-efficacy-v1",
+                entity_id="entity-arm",
+                field_id="efficacy.estimated_response",
+                raw_value="82.3%",
+                normalized_value="82.3",
+                fragment_id=fragments["efficacy"],
+                context={
+                    **b_efficacy_binding.model_dump(
+                        mode="json",
+                        exclude={"report", "collection", "row_id", "original_row_sha256"},
+                    ),
+                    "numerator": 51,
+                    "denominator": 60,
+                    "consumer_bindings": [b_efficacy_binding.model_dump(mode="json")],
+                },
+            )
         if cross_report_binding != "legal_AB":
             _seed_fact(
                 database,
@@ -517,6 +753,7 @@ def _project(
             "fact-lsmean-v1",
             "fact-c-threshold-v1",
             "fact-unrelated-20-v1",
+            *(("fact-b-estimated-efficacy-v1",) if b_efficacy_binding else ()),
         ),
         created_at=NOW,
     )

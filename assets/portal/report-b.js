@@ -369,7 +369,11 @@
       ["population_context_label_zh", "分析人群"],
       ["time_window", "评价时间"],
       ["numeric_value", "比较值"],
+      ["value_basis", "数值依据"],
+      ["numerator", "原始应答人数"],
+      ["denominator", "分析人数"],
       ["unit", "单位"],
+      ["difference_note", "口径提示"],
       ["disclosure_state", "披露状态"]
     ];
   }
@@ -382,6 +386,13 @@
     }
     if (key === "statistical_form_family_label_zh") {
       return row.statistical_form_family_label_zh || row.statistic_form || "未列示";
+    }
+    if (key === "value_basis") {
+      var basis = String(row.value_basis || "");
+      if (basis === "modeled_estimate") return "模型估计值";
+      if (basis === "reported_estimate") return "报告估计值";
+      if (basis === "crude_rate") return "原始人数比例";
+      return "未确认（见口径提示）";
     }
     if (key === "population_context_label_zh") {
       return row.population_context_label_zh || row.population || "分析人群未列示";
@@ -608,6 +619,9 @@
       ) {
         var scroll = document.createElement("div");
         scroll.className = "kz-b-table-scroll";
+        scroll.tabIndex = 0;
+        scroll.setAttribute("role", "region");
+        scroll.setAttribute("aria-label", "完整数据表，可左右滚动查看所有列");
         table.parentNode.insertBefore(scroll, table);
         scroll.appendChild(table);
       }
