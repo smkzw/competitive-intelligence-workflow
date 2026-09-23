@@ -23,7 +23,7 @@ from ci_workflow.domain.evidence import (
 )
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
-from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData
+from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData, SafetyRow
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import LockedSnapshot
@@ -1026,6 +1026,7 @@ def _iter_adverse_event_results(
     if raw_module is None:
         return results
     module = _mapping_at(raw_module, "resultsSection.adverseEventsModule")
+    event_timeframe = _result_text(module.get("timeFrame"))
     raw_groups = module.get("eventGroups", [])
     groups = _list_at(raw_groups, "resultsSection.adverseEventsModule.eventGroups")
     group_info: dict[str, tuple[str, str]] = {}
@@ -1085,6 +1086,7 @@ def _iter_adverse_event_results(
                         value=round(numerator * 100 / denominator, 1),
                         numerator=numerator,
                         denominator=denominator,
+                        timepoint=event_timeframe,
                         value_path=f"{path}.{affected_key}",
                         denominator_path=f"{path}.{at_risk_key}",
                     )
@@ -1180,6 +1182,7 @@ def _iter_adverse_event_results(
                         value=round(numerator * 100 / denominator, 1),
                         numerator=numerator,
                         denominator=denominator,
+                        timepoint=event_timeframe,
                         value_path=f"{stat_path}.numAffected",
                         denominator_path=f"{stat_path}.numAtRisk",
                     )
@@ -1201,6 +1204,7 @@ def _iter_adverse_event_results(
                                 value=result.value,
                                 numerator=numerator,
                                 denominator=denominator,
+                                timepoint=event_timeframe,
                                 value_path=f"{stat_path}.numAffected",
                                 denominator_path=f"{stat_path}.numAtRisk",
                             )
@@ -1367,6 +1371,17 @@ def research_facts_from_ctgov_atom(
     return tuple(facts)
 
 
+def _capture_version_id(source: SourceCapture) -> str:
+    return source_version_identity(
+        source.source_id,
+        hashlib.sha256(source.content_text.encode("utf-8")).hexdigest(),
+        published_at=source.date_evidence("published_at"),
+        effective_at=source.date_evidence("effective_at"),
+        first_disclosed_at=source.date_evidence("first_disclosed_at"),
+        text_derivation=source.text_derivation,
+    )
+
+
 def _bind_verified_ctgov_outcome_to_a_row(
     source: SourceCapture,
     atom: CtgovAtomicResult,
@@ -1394,17 +1409,9 @@ def _bind_verified_ctgov_outcome_to_a_row(
         raise ResearchPackageError("疗效行组别明细与来源组别标题不一致")
     if row.group_id is not None and row.group_id != atom.group_id:
         raise ResearchPackageError("疗效行来源组号与登记结果不一致")
-    version_id = source_version_identity(
-        source.source_id,
-        hashlib.sha256(source.content_text.encode("utf-8")).hexdigest(),
-        published_at=source.date_evidence("published_at"),
-        effective_at=source.date_evidence("effective_at"),
-        first_disclosed_at=source.date_evidence("first_disclosed_at"),
-        text_derivation=source.text_derivation,
-    )
     expected_fields = {
         "source_field_path": atom.value_locator.field_path,
-        "source_version_id": version_id,
+        "source_version_id": _capture_version_id(source),
         "source_text": atom.value_quote,
     }
     for field, expected in expected_fields.items():
@@ -1437,30 +1444,114 @@ def bind_ctgov_outcome_to_a_row(
     return _bind_verified_ctgov_outcome_to_a_row(source, atom, row)
 
 
-def _validate_bound_ctgov_a_outcomes(
+def _bind_verified_ctgov_ae_to_a_row(
+    source: SourceCapture,
+    atom: CtgovAtomicResult,
+    row: SafetyRow,
+) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
+    if (
+        atom.category == "outcome" or atom.numerator is None
+        or atom.denominator is None or not atom.timepoint
+    ):
+        raise ResearchPackageError("AE 行缺少来源分子、风险人数或收集时间窗")
+    if (
+        row.trial_id is None
+        or row.trial_id.casefold() != atom.trial_id.casefold()
+        or row.arm != atom.arm
+        or row.category != _RESULT_CATEGORY_ZH[atom.category]
+        or _result_text(row.term).casefold() != _result_text(atom.term).casefold()
+        or _result_text(row.time_window).casefold()
+        != _result_text(atom.timepoint).casefold()
+        or row.unit != "%"
+        or row.measure_object != "participant_proportion"
+        or row.count_basis != "participants"
+        or row.disclosure_state != "已公开"
+        or row.numerator != atom.numerator
+        or row.denominator != atom.denominator
+        or row.value is None or atom.display_value is None
+        or not math.isclose(row.value, atom.display_value, rel_tol=0.0, abs_tol=1e-9)
+    ):
+        raise ResearchPackageError("AE 行与来源类别、事件、组别、时间或 n/N 比例不一致")
+    if row.arm_detail is None and row.group_id is None:
+        raise ResearchPackageError("AE 行缺少可核对的来源组别明细或组号")
+    if row.arm_detail is not None and (
+        _result_text(row.arm_detail).casefold()
+        != _result_text(atom.group_title).casefold()
+    ):
+        raise ResearchPackageError("AE 行组别明细与来源组别标题不一致")
+    if row.group_id is not None and row.group_id != atom.group_id:
+        raise ResearchPackageError("AE 行来源组号与登记结果不一致")
+    expected_fields = {
+        "source_field_path": atom.value_locator.field_path,
+        "source_version_id": _capture_version_id(source),
+        "source_text": atom.value_quote,
+    }
+    for field, expected in expected_fields.items():
+        previous = getattr(row, field)
+        if previous is not None and previous != expected:
+            raise ResearchPackageError(f"AE 行已有冲突的{field}，不得静默覆盖")
+    bound = SafetyRow.model_validate({
+        **row.model_dump(mode="json"),
+        **expected_fields,
+        "group_id": atom.group_id,
+    })
+    facts = research_facts_from_ctgov_atom(
+        atom, report_row_ref=f"safety:{row.row_id}"
+    )
+    if len(facts) != 2:
+        raise ResearchPackageError("AE 比例必须同时绑定分子和风险人数来源事实")
+    claim = ResearchClaim(
+        claim_id=stable_id("ctgov-ae-rate-claim", row.row_id, *[item.fact_id for item in facts]),
+        claim_text=(
+            f"{atom.numerator}/{atom.denominator}×100，按登记结果解析规则保留一位小数"
+            f"={atom.display_value}%（{atom.term}；{atom.group_title}）"
+        ),
+        claim_kind="deterministic_calculation",
+        fact_ids=tuple(item.fact_id for item in facts),
+    )
+    return bound, facts, claim
+
+
+def bind_ctgov_ae_to_a_row(
+    source: SourceCapture,
+    atom: CtgovAtomicResult,
+    row: SafetyRow,
+) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
+    """Bind verified affected/at-risk atoms and a deterministic rate claim."""
+    verified_atoms, _issues = extract_ctgov_atomic_results(source)
+    if atom not in verified_atoms or atom.source_id != source.source_id:
+        raise ResearchPackageError("登记 AE 原子与当前来源版本不一致")
+    return _bind_verified_ctgov_ae_to_a_row(source, atom, row)
+
+
+def _validate_bound_ctgov_a_results(
     report_data: ReportAPortalData,
     sources: tuple[SourceCapture, ...],
     facts: tuple[ResearchFact, ...],
+    claims: tuple[ResearchClaim, ...] = (),
 ) -> None:
-    """Reopen each source once for atomic facts offered as visible A efficacy."""
-    rows = {f"efficacy:{row.row_id}": row for row in report_data.efficacy}
+    """Reopen each source once for atomic facts offered as visible A results."""
+    efficacy_rows = {f"efficacy:{row.row_id}": row for row in report_data.efficacy}
+    safety_rows = {f"safety:{row.row_id}": row for row in report_data.safety}
     source_by_id = {source.source_id: source for source in sources}
     atom_by_source: dict[str, dict[tuple[str, str], CtgovAtomicResult]] = {}
     row_ref_counts: dict[str, int] = {}
+    facts_by_ref: dict[str, ResearchFact] = {}
     for fact in facts:
         row_ref_counts[fact.row_ref] = row_ref_counts.get(fact.row_ref, 0) + 1
+        facts_by_ref[fact.row_ref] = fact
+    matched_denominator_refs: set[str] = set()
     for fact in facts:
-        if not fact.row_ref.startswith("efficacy:") or fact.result_context is None:
+        if fact.result_context is None or not fact.row_ref.startswith(("efficacy:", "safety:")):
+            continue
+        if fact.row_ref.endswith(":denominator"):
             continue
         if row_ref_counts[fact.row_ref] != 1:
-            raise ResearchPackageError("登记疗效行有多个主事实绑定，不能选择性覆盖")
+            raise ResearchPackageError("登记结果行有多个主事实绑定，不能选择性覆盖")
         context = fact.result_context
-        if context.value_role != "reported_measure" or context.category != "outcome":
-            raise ResearchPackageError("已绑定 A 疗效行的登记原子缺少直接报告的结局依据")
-        row = rows.get(fact.row_ref)
         source = source_by_id.get(fact.source_id)
-        if row is None or source is None or fact.locator.field_path is None:
-            raise ResearchPackageError("登记原子绑定的疗效行或来源不存在")
+        if source is None or fact.locator.field_path is None:
+            raise ResearchPackageError("登记原子绑定的来源或精确路径不存在")
         if fact.source_id not in atom_by_source:
             atoms, _issues = extract_ctgov_atomic_results(source)
             atom_by_source[fact.source_id] = {
@@ -1472,11 +1563,39 @@ def _validate_bound_ctgov_a_outcomes(
         )
         if atom is None:
             raise ResearchPackageError("登记原子事实不能从当前来源精确重提取")
-        expected_row, expected_facts = _bind_verified_ctgov_outcome_to_a_row(
-            source, atom, row
+        if fact.row_ref.startswith("efficacy:"):
+            row = efficacy_rows.get(fact.row_ref)
+            if row is None or context.value_role != "reported_measure":
+                raise ResearchPackageError("已绑定疗效行缺少直接报告的来源结局")
+            expected_row, expected_facts = _bind_verified_ctgov_outcome_to_a_row(
+                source, atom, row
+            )
+            if expected_row != row or fact != expected_facts[0]:
+                raise ResearchPackageError("登记原子事实与已提交疗效行不一致")
+            continue
+        safety_row = safety_rows.get(fact.row_ref)
+        if safety_row is None or context.value_role != "affected_count":
+            raise ResearchPackageError("已绑定 AE 行缺少受影响人数原子")
+        safety_expected_row, safety_expected_facts, expected_claim = _bind_verified_ctgov_ae_to_a_row(
+            source, atom, safety_row
         )
-        if expected_row != row or fact != expected_facts[0]:
-            raise ResearchPackageError("登记原子事实与已提交疗效行的当前内容不一致")
+        denominator_ref = f"{fact.row_ref}:denominator"
+        if (
+            safety_expected_row != safety_row or fact != safety_expected_facts[0]
+            or row_ref_counts.get(denominator_ref) != 1
+            or facts_by_ref.get(denominator_ref) != safety_expected_facts[1]
+            or expected_claim not in claims
+        ):
+            raise ResearchPackageError("AE 派生比例缺少匹配的分母事实或计算声明")
+        matched_denominator_refs.add(denominator_ref)
+    for fact in facts:
+        if (
+            fact.row_ref.startswith("safety:")
+            and fact.row_ref.endswith(":denominator")
+            and fact.result_context is not None
+            and fact.row_ref not in matched_denominator_refs
+        ):
+            raise ResearchPackageError("AE 风险人数原子没有对应的已核证结果行")
 
 
 def _audit_source_record(
@@ -2015,7 +2134,9 @@ class FreshAResearchContent(BaseModel):
         missing = sorted(required_refs - available_refs)
         if missing:
             raise ValueError("核心受众事实缺少来源绑定：" + "、".join(missing[:5]))
-        _validate_bound_ctgov_a_outcomes(self.report_data, self.sources, self.facts)
+        _validate_bound_ctgov_a_results(
+            self.report_data, self.sources, self.facts, self.claims
+        )
         validate_clinicaltrials_result_coverage(
             self.report_data,
             self.sources,

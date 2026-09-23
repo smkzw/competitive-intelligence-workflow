@@ -16,7 +16,8 @@ from ci_workflow.application.source_research_service import (
     ResearchClaim,
     ResearchFact,
     SourceCapture,
-    _validate_bound_ctgov_a_outcomes,
+    _validate_bound_ctgov_a_results,
+    bind_ctgov_ae_to_a_row,
     bind_ctgov_outcome_to_a_row,
     extract_ctgov_atomic_results,
     research_facts_from_ctgov_atom,
@@ -111,6 +112,7 @@ def test_real_registry_atoms_enter_existing_fact_snapshot_with_exact_quotes(
     assert facts[1].result_context is not None
     assert facts[1].result_context.group_id == "EG001"
     assert facts[1].result_context.term == zero.term
+    assert "Week 28" in facts[1].result_context.timepoint
     assert facts[1].result_context.value_role == "affected_count"
     with pytest.raises(ValueError, match="领域不一致"):
         research_facts_from_ctgov_atom(zero, report_row_ref="efficacy:wrong")
@@ -207,6 +209,37 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
     assert facts[0].result_context is not None
     assert facts[0].result_context.group_title == atom.group_title
 
+    ae_atom = next(
+        item for item in extract_ctgov_atomic_results(source)[0]
+        if item.category == "sae" and item.term == "任何SAE"
+        and item.group_id == "EG001" and item.value_quote == "7"
+    )
+    safety_row = next(
+        item for item in report.safety
+        if item.trial_id and item.trial_id.casefold() == ae_atom.trial_id.casefold()
+        and item.term == ae_atom.term and item.arm_detail == ae_atom.group_title
+        and item.numerator == ae_atom.numerator
+    )
+    with pytest.raises(ValueError, match="时间"):
+        bind_ctgov_ae_to_a_row(source, ae_atom, safety_row)
+    corrected_safety = safety_row.model_copy(update={"time_window": ae_atom.timepoint})
+    bound_safety, ae_facts, ae_claim = bind_ctgov_ae_to_a_row(
+        source, ae_atom, corrected_safety
+    )
+    assert bound_safety.source_field_path == ae_atom.value_locator.field_path
+    assert bound_safety.source_text == "7"
+    assert (ae_facts[0].original_text, ae_facts[1].original_text) == ("7", "229")
+    assert ae_claim.fact_ids == (ae_facts[0].fact_id, ae_facts[1].fact_id)
+    assert ae_claim.claim_kind == "deterministic_calculation"
+    for changed in (
+        corrected_safety.model_copy(update={"denominator": 228}),
+        corrected_safety.model_copy(update={"value": 3.2}),
+        corrected_safety.model_copy(update={"arm_detail": "另一剂量组"}),
+        corrected_safety.model_copy(update={"source_text": "3.1%"}),
+    ):
+        with pytest.raises(ValueError):
+            bind_ctgov_ae_to_a_row(source, ae_atom, changed)
+
     rendered = ReportAPortalData.model_validate({
         **report.model_dump(mode="json"),
         "efficacy": [
@@ -214,12 +247,18 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
             else item.model_dump(mode="json")
             for item in report.efficacy
         ],
+        "safety": [
+            bound_safety.model_dump(mode="json") if item.row_id == safety_row.row_id
+            else item.model_dump(mode="json")
+            for item in report.safety
+        ],
     })
-    _validate_bound_ctgov_a_outcomes(rendered, (source,), facts)
+    _validate_bound_ctgov_a_results(rendered, (source,), (*facts, *ae_facts), (ae_claim,))
     render_report_a_site(rendered, tmp_path / "site")
     report_js = (tmp_path / "site/data/report.js").read_text()
     assert bound.source_field_path in report_js
     assert bound.source_version_id in report_js
+    assert bound_safety.source_field_path in report_js
 
     for changed in (
         row.model_copy(update={"trial_id": "nct00000000"}),
@@ -243,14 +282,24 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
         ),
     ):
         with pytest.raises(ValueError):
-            _validate_bound_ctgov_a_outcomes(rendered, (source,), bad_facts)
+            _validate_bound_ctgov_a_results(rendered, (source,), bad_facts)
+    for bad_facts, bad_claims in (
+        ((*facts, ae_facts[0]), (ae_claim,)),
+        ((*facts, *ae_facts), ()),
+        ((*facts, ae_facts[0], ae_facts[1].model_copy(update={"original_text": "228"})),
+         (ae_claim,)),
+    ):
+        with pytest.raises(ValueError):
+            _validate_bound_ctgov_a_results(
+                rendered, (source,), bad_facts, bad_claims
+            )
     altered_rows = [
         item.model_copy(update={"source_field_path": "$.wrong"})
         if item.row_id == row.row_id else item
         for item in rendered.efficacy
     ]
     with pytest.raises(ValueError):
-        _validate_bound_ctgov_a_outcomes(
+        _validate_bound_ctgov_a_results(
             rendered.model_copy(update={"efficacy": tuple(altered_rows)}),
             (source,), facts,
         )
