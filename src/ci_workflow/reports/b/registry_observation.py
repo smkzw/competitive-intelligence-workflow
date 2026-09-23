@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Final
+from typing import Any, Final, cast
 
 _POLICY_DIR: Final = Path(__file__).resolve().parents[4] / "policies" / "endpoint-families"
 _POLICY_FILE: Final = _POLICY_DIR / "registry-v7.yaml"
@@ -22,8 +22,10 @@ def _load_policy() -> dict[str, Any]:
         import yaml
 
         raw = yaml.safe_load(_POLICY_FILE.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            raise ValueError("登记终点分类政策必须是映射")
         _cache["policy"] = raw
-    return _cache["policy"]  # type: ignore[return-value]
+    return cast(dict[str, Any], _cache["policy"])
 
 
 def classifier_version() -> str:
@@ -43,14 +45,17 @@ def family_rules() -> tuple[tuple[str, re.Pattern[str]], ...]:
             (rule["rule_id"], re.compile(rule["match_pattern"], re.IGNORECASE))
             for rule in _load_policy()["rules"]
         )
-    return _cache["compiled_rules"]  # type: ignore[return-value]
+    return cast(tuple[tuple[str, re.Pattern[str]], ...], _cache["compiled_rules"])
 
 
 def family_meta_for(rule_id: str) -> dict[str, Any]:
     """返回指定族的 family_meta，供构建器消费。"""
     for rule in _load_policy()["rules"]:
         if rule["rule_id"] == rule_id:
-            return rule.get("family_meta") or {}
+            meta = rule.get("family_meta") or {}
+            if not isinstance(meta, dict):
+                raise ValueError("登记终点分类元数据必须是映射")
+            return cast(dict[str, Any], meta)
     return {}
 
 
@@ -82,10 +87,10 @@ def resolve_indication_id(name: str | None) -> str | None:
     for scope_id, names in aliases.items():
         canonical = str(scope_id).strip().casefold().replace(" ", "")
         if needle == canonical:
-            return scope_id
+            return str(scope_id)
         for alias in names or ():
             if needle == str(alias).strip().casefold().replace(" ", ""):
-                return scope_id
+                return str(scope_id)
     return None
 
 
@@ -100,7 +105,10 @@ def scoped_family_rules() -> tuple[tuple[str, re.Pattern[str], tuple[str, ...]],
             )
             for rule in _load_policy()["rules"]
         )
-    return _cache["compiled_scoped_rules"]  # type: ignore[return-value]
+    return cast(
+        tuple[tuple[str, re.Pattern[str], tuple[str, ...]], ...],
+        _cache["compiled_scoped_rules"],
+    )
 
 
 def classify_registry_endpoint(

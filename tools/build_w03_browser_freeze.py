@@ -10,6 +10,7 @@ import json
 import shutil
 import tempfile
 from pathlib import Path
+from types import ModuleType
 
 from ci_workflow.application.fresh_c_research_package import load_fresh_c_research_package
 from ci_workflow.renderers.portal.report_c import render_report_c_site
@@ -25,7 +26,7 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _load_builder(name: str):
+def _load_builder(name: str) -> ModuleType:
     path = PACKET / name
     spec = importlib.util.spec_from_file_location("w03_freeze_" + path.stem, path)
     if spec is None or spec.loader is None:
@@ -42,12 +43,12 @@ def _build(temp: Path, site: Path) -> None:
     project.mkdir()
 
     a_builder = _load_builder("build_pnh_a_payload.py")
-    a_builder.OUT = inputs / "pnh-a-payload.json"
+    a_builder.__dict__["OUT"] = inputs / "pnh-a-payload.json"
     a_builder.main()
 
     c_builder = _load_builder("build_pnh_c_audit.py")
-    c_builder.HERE = inputs
-    c_builder.PROJECT = project
+    c_builder.__dict__["HERE"] = inputs
+    c_builder.__dict__["PROJECT"] = project
     c_builder.main()
 
     package_path = project / "evidence/library/c-research-package.json"

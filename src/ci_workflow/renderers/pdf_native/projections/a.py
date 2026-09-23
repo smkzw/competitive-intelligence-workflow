@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -12,8 +13,6 @@ from reportlab.lib.units import mm  # type: ignore[import-untyped]
 from reportlab.platypus import KeepTogether, Paragraph, Spacer  # type: ignore[import-untyped]
 
 from ci_workflow.renderers.pdf_native.projections._layout import (
-
-
     UNPUBLISHED,
     bookmark,
     bubble_matrix_chart,
@@ -37,10 +36,10 @@ from ci_workflow.renderers.pdf_native.projections._layout import (
 )
 
 
-def _is_any_teae_row(row) -> bool:
+def _is_any_teae_row(row: Mapping[str, Any]) -> bool:
     """会商 #2：概念匹配按 term_key（词表单源），旧数据回退基础类别名。"""
     if row.get("term_key"):
-        return row["term_key"] == "any_teae"
+        return str(row["term_key"]) == "any_teae"
     base = str(row.get("category") or "").replace("（登记）", "").strip()
     return base in {"治疗期间不良事件", "治疗中出现的不良事件"}
 
