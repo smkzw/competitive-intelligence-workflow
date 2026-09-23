@@ -2189,17 +2189,28 @@ def render_report_a_site(
     _copy_assets(site_root)
     data_dir = site_root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+    # One immutable report revision has one presentation projection. Rebuilding
+    # thousands of translated rows for every product page is both wasteful and
+    # capable of making a large real report appear to hang.
+    base_context = _view_context(
+        data,
+        current="overview",
+        public_provenance=public_provenance,
+        publication_limitation_zh=publication_limitation_zh,
+    )
     display_payload = data.model_dump(mode="json")
     display_payload["public_sources"] = (
         [item.model_dump(mode="json") for item in public_provenance.sources]
         if public_provenance is not None
         else []
     )
-    display_payload["products"] = [item.model_dump(mode="json") for item in _display_products(data)]
-    display_payload["trials"] = list(_display_trials(data))
-    display_payload["efficacy"] = list(_display_efficacy_rows(data))
-    display_payload["safety"] = list(_display_safety_rows(data))
-    display_payload["regulatory"] = list(_display_regulatory(data))
+    display_payload["products"] = [
+        item.model_dump(mode="json") for item in base_context["products"]
+    ]
+    display_payload["trials"] = list(base_context["trials"])
+    display_payload["efficacy"] = list(base_context["efficacy"])
+    display_payload["safety"] = list(base_context["safety"])
+    display_payload["regulatory"] = list(base_context["regulatory"])
     literal = json.dumps(display_payload, ensure_ascii=False, separators=(",", ":"))
     (data_dir / "report.js").write_text(f"window.REPORT_A={literal};\n", encoding="utf-8")
 
@@ -2208,12 +2219,7 @@ def render_report_a_site(
         output = site_root / f"{page_id}.html"
         output.write_text(
             env.get_template(template_name).render(
-                **_view_context(
-                    data,
-                    current=page_id,
-                    public_provenance=public_provenance,
-                    publication_limitation_zh=publication_limitation_zh,
-                )
+                **{**base_context, "current": page_id}
             ),
             encoding="utf-8",
         )
@@ -2222,16 +2228,16 @@ def render_report_a_site(
     product_dir = site_root / "products"
     product_dir.mkdir(parents=True, exist_ok=True)
     product_template = env.get_template("product.html.j2")
-    display_products = {item.id: item for item in _display_products(data)}
+    display_products = {item.id: item for item in base_context["products"]}
     for product in data.products:
         output = product_dir / f"{product.id}.html"
-        context = _view_context(
-            data,
-            current="product-overview",
-            depth=1,
-            public_provenance=public_provenance,
-            publication_limitation_zh=publication_limitation_zh,
-        )
+        context = {
+            **base_context,
+            "current": "product-overview",
+            "root_prefix": "../",
+            "asset_prefix": "../assets",
+            "data_prefix": "../data",
+        }
         context["product"] = display_products[product.id]
         context["product_trials"] = tuple(
             row for row in context["trials"] if row["product_id"] == product.id

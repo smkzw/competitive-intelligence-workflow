@@ -5,6 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
+from ci_workflow.renderers.portal import report_a
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
     _display_safety_rows,
@@ -73,3 +76,27 @@ def test_rendered_safety_payload_keeps_unpublished_state_and_raw_term(tmp_path: 
     assert 'data-event-key="headache"' in safety_html
     assert 'data-normalized-term="头痛"' in safety_html
     assert 'data-disclosure-state="未公开"' in safety_html
+
+
+def test_report_a_projects_each_row_collection_once_per_site(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    counts = {"efficacy": 0, "safety": 0}
+    original_efficacy = report_a._display_efficacy_rows
+    original_safety = report_a._display_safety_rows
+
+    def counted_efficacy(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
+        counts["efficacy"] += 1
+        return original_efficacy(data)
+
+    def counted_safety(data: ReportAPortalData) -> tuple[dict[str, object], ...]:
+        counts["safety"] += 1
+        return original_safety(data)
+
+    monkeypatch.setattr(report_a, "_display_efficacy_rows", counted_efficacy)
+    monkeypatch.setattr(report_a, "_display_safety_rows", counted_safety)
+    render_report_a_site(_report(), tmp_path)
+
+    assert counts == {"efficacy": 1, "safety": 1}
+    assert (tmp_path / "data/report.js").is_file()
+    assert (tmp_path / "products").is_dir()

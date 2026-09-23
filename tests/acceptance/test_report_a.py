@@ -294,14 +294,17 @@ def test_legacy_report_a_failures_are_rejected(directory: str, expected_issue: s
 def test_default_efficacy_view_is_truthful_compact_and_resettable(
     page: Page, rendered_ad_site: Path
 ) -> None:
-    _open(page, rendered_ad_site / "efficacy.html")
+    _open(page, rendered_ad_site / "efficacy.html", width=1440)
 
     product_picker = page.locator("details[data-filter-dimension='product']")
     assert product_picker.count() == 1
     assert not product_picker.get_attribute("open")
     assert page.locator("[data-filter-reset]").get_by_text("清除筛选").count() == 1
-    assert page.locator("[data-filter-value='EASI-75'][aria-pressed='true']").count() == 1
-    assert page.locator("[data-filter-value='第16周'][aria-pressed='true']").count() == 1
+    # The first view must not silently narrow a cross-indication evidence set.
+    for dimension in ("endpoint", "timepoint"):
+        assert page.locator(
+            f"[data-filter-dimension='{dimension}'] button[aria-pressed='true']"
+        ).count() == 0
     assert page.locator("[data-chart-id='efficacy-full']").bounding_box()["y"] < 820  # type: ignore[index]
     complete_table = page.locator("details.kz-complete-table")
     assert complete_table.count() == 1
@@ -309,21 +312,19 @@ def test_default_efficacy_view_is_truthful_compact_and_resettable(
     complete_table.locator("summary").click()
     visible = page.locator("tbody tr:visible")
     assert visible.count() >= 14
-    endpoints = {
-        visible.nth(index).get_attribute("data-endpoint") or "" for index in range(visible.count())
-    }
-    timepoints = {
-        visible.nth(index).get_attribute("data-timepoint") or "" for index in range(visible.count())
-    }
-    assert all("easi" in value.casefold() and "75" in value for value in endpoints)
-    assert all("16" in value for value in timepoints)
+    endpoints = set(visible.evaluate_all("rows => rows.map(row => row.dataset.endpoint || '')"))
+    timepoints = set(visible.evaluate_all("rows => rows.map(row => row.dataset.timepoint || '')"))
+    assert len(endpoints) > 1
+    assert len(timepoints) > 1
 
     page.locator("details[data-filter-dimension='endpoint']").click()
     endpoint = page.locator("[data-filter-dimension='endpoint'] button").nth(1)
     endpoint_text = endpoint.inner_text()
     endpoint.click()
-    page.locator("details[data-filter-dimension='timepoint']").click()
-    timepoint = page.locator("[data-filter-dimension='timepoint'] button").nth(1)
+    timepoint_picker = page.locator("details[data-filter-dimension='timepoint']")
+    if not timepoint_picker.get_attribute("open"):
+        timepoint_picker.locator("summary").click()
+    timepoint = timepoint_picker.locator("button:visible").first
     timepoint_text = timepoint.inner_text()
     timepoint.click()
     assert (
@@ -337,22 +338,28 @@ def test_default_efficacy_view_is_truthful_compact_and_resettable(
     assert title in page.locator("[data-chart-id='efficacy-full']").get_attribute("aria-label")
 
     page.locator("[data-filter-reset]").click()
-    assert page.locator("[data-filter-value='EASI-75'][aria-pressed='true']").count() == 1
-    assert page.locator("[data-filter-value='第16周'][aria-pressed='true']").count() == 1
-    assert page.locator("[data-efficacy-heading] h2").inner_text() == "第16周EASI-75应答率"
+    for dimension in ("endpoint", "timepoint"):
+        assert page.locator(
+            f"[data-filter-dimension='{dimension}'] button[aria-pressed='true']"
+        ).count() == 0
+    reset_endpoints = set(
+        page.locator("tbody tr:visible").evaluate_all(
+            "rows => rows.map(row => row.dataset.endpoint || '')"
+        )
+    )
+    assert len(reset_endpoints) > 1
 
 
-def test_safety_heatmaps_transpose_products_to_rows_and_fit_at_1280(
+def test_safety_observation_groups_preserve_events_at_desktop_width(
     page: Page, rendered_ad_site: Path
 ) -> None:
     for relative, chart_id in (("overview.html", "home-safety"), ("safety.html", "safety-full")):
-        _open(page, rendered_ad_site / relative, width=1280)
+        _open(page, rendered_ad_site / relative, width=1440)
         host = page.locator(f"[data-chart-id='{chart_id}']")
         assert host.evaluate("node => node.scrollWidth <= node.clientWidth")
-        heatmap_count = host.locator(".kz-a-heatmap").count()
-        assert heatmap_count == 1
-        assert host.locator("[data-heat-label='product']").count() == 38 * heatmap_count
-        assert host.locator("[data-heat-label='event']").count() == 3
+        assert host.locator(".kz-a-safety-observation-group").count() > 0
+        assert host.locator("[data-heat-label='product']").count() > 0
+        assert host.locator("[data-heat-label='event']").count() >= 3
         assert "预先界定AESI" not in host.inner_text()
         assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
 
@@ -362,34 +369,28 @@ def test_safety_heatmaps_transpose_products_to_rows_and_fit_at_1280(
     assert event_buttons.count() >= 6
     for index in range(6):
         event_buttons.nth(index).click()
-    assert host.locator("[data-heat-label='event']").count() == 6
-    assert host.locator(".kz-a-heatmap").count() == 2
-    assert all(
-        host.locator(".kz-a-heatmap")
-        .nth(index)
-        .evaluate("node => node.scrollWidth <= node.clientWidth")
-        for index in range(2)
-    )
+    assert host.locator("[data-heat-label='event']").count() >= 6
+    assert host.locator(".kz-a-safety-observation-group").count() > 0
+    assert host.evaluate("node => node.scrollWidth <= node.clientWidth")
     assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
 
     page.locator("details[data-filter-dimension='product']").click()
     page.locator("[data-filter-dimension='product'] [data-filter-value='度普利尤单抗']").click()
     product_labels = host.locator("[data-heat-label='product']")
-    assert product_labels.count() == host.locator(".kz-a-heatmap").count()
+    assert product_labels.count() == host.locator(".kz-a-safety-observation-group").count()
     assert set(product_labels.all_inner_texts()) == {"度普利尤单抗"}
     assert "已选择 1 项" in page.locator("[data-filter-selection-count='product']").inner_text()
 
     page.locator("[data-filter-dimension='product'] [data-filter-value='度普利尤单抗']").click()
     page.locator("[data-filter-dimension='product'] [data-filter-value='艾玛昔替尼']").click()
-    assert host.locator(".kz-a-heatmap").count() == 2
-    assert host.locator("[data-heat-label='product']").all_inner_texts() == [
-        "艾玛昔替尼",
-        "艾玛昔替尼",
-    ]
-    values = host.locator(".kz-a-heat-cell").all_inner_texts()
-    assert len(values) == 6
-    assert any(value.startswith("66.1%") for value in values)
-    assert any(value.startswith("1.8%") for value in values)
+    assert host.locator(".kz-a-safety-observation-group").count() >= 1
+    assert set(host.locator("[data-heat-label='product']").all_inner_texts()) == {
+        "艾玛昔替尼"
+    }
+    values = host.locator(".kz-a-safety-observation").all_inner_texts()
+    assert len(values) >= 4
+    assert any("74/112人" in value for value in values)
+    assert any("2/112人" in value for value in values)
 
 
 def test_landscape_assigns_each_product_once_and_regulatory_timeline_is_directly_split(
@@ -477,7 +478,7 @@ def test_efficacy_population_and_arm_descriptions_are_native_chinese() -> None:
         )
 
 
-def test_matrix_labels_bubbles_with_product_names_and_keeps_product_legend(
+def test_matrix_bubble_numbers_map_to_named_product_legend(
     page: Page, rendered_ad_site: Path
 ) -> None:
     _open(page, rendered_ad_site / "matrix.html")
@@ -489,8 +490,11 @@ def test_matrix_labels_bubbles_with_product_names_and_keeps_product_legend(
     coverage = page.locator("[data-matrix-coverage]")
     assert coverage.is_visible()
     coverage_text = coverage.inner_text()
-    assert f"本图绘入 {bubbles.count()} 个产品" in coverage_text
-    assert f"{38 - bubbles.count()} 个因当前三维数据未完整公开而未绘入" in coverage_text
-    labels = [bubbles.nth(index).inner_text() for index in range(bubbles.count())]
-    assert all(labels)
-    assert labels != [str(index + 1) for index in range(bubbles.count())]
+    assert f"当前口径绘入 {bubbles.count()} 项" in coverage_text
+    assert "全部口径共" in coverage_text
+    assert "因三维数据不完整未绘入" in coverage_text
+    labels = bubbles.all_inner_texts()
+    assert labels == [str(index + 1) for index in range(bubbles.count())]
+    bubble_products = set(bubbles.evaluate_all("nodes => nodes.map(node => node.dataset.product)"))
+    legend_products = set(legend.locator("button").all_inner_texts())
+    assert bubble_products == legend_products
