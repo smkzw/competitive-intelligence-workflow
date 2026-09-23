@@ -154,6 +154,17 @@ def test_typed_numeric_projection_separates_people_events_rates_and_estimates() 
 
 
 def test_nonpercent_efficacy_is_not_forced_into_participant_proportion() -> None:
+    percent_kind = infer_numeric_kind(unit="Percentage of responders", domain="efficacy")
+    assert percent_kind is NumericMeasureKind.PARTICIPANT_PROPORTION
+    percent = project_numeric(
+        value=92.2, unit="Percentage of responders", kind=percent_kind,
+        window="Week 26", estimand="Hb response",
+    )
+    assert percent.renderable and percent.plot_value == 92.2 and percent.plot_unit == "%"
+    assert (
+        infer_numeric_kind(unit="percent change", domain="efficacy")
+        is NumericMeasureKind.CONTINUOUS_MEASURE
+    )
     count_kind = infer_numeric_kind(unit="Participants", domain="efficacy")
     assert count_kind is NumericMeasureKind.PARTICIPANT_COUNT
     count = project_numeric(

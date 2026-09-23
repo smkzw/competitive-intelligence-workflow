@@ -476,6 +476,7 @@ class _RegistryResult:
     group_title: str = ""
     value_path: str = ""
     denominator_path: str | None = None
+    raw_unit: str = ""
 
 
 @dataclass(frozen=True)
@@ -500,6 +501,7 @@ class CtgovAtomicResult:
     value_quote: str
     denominator_locator: EvidenceLocator | None
     denominator_quote: str | None
+    raw_unit: str = ""
 
 
 _RESULT_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
@@ -1052,6 +1054,7 @@ def _iter_outcome_results(
                         unit=normalized_unit,
                         value_path=f"{measurement_path}.value",
                         denominator_path=denominator_path,
+                        raw_unit=unit_raw,
                     )
                 )
         except (TypeError, ValueError, KeyError) as exc:
@@ -1383,6 +1386,7 @@ def extract_ctgov_atomic_results(
             denominator=result.denominator, value_locator=value_locator,
             value_quote=value_quote, denominator_locator=denominator_locator,
             denominator_quote=denominator_quote,
+            raw_unit=result.raw_unit,
         ))
     return tuple(atoms), tuple(issues)
 
@@ -1420,7 +1424,10 @@ def research_facts_from_ctgov_atom(
             arm=atom.arm, term=atom.term, endpoint=atom.endpoint,
             timepoint=atom.timepoint,
             value_role=role,
-            source_unit=(atom.display_unit if role == "reported_measure" else "人"),
+            source_unit=(
+                (atom.raw_unit or atom.display_unit)
+                if role == "reported_measure" else "人"
+            ),
         )
         return ResearchFact(
             fact_id=stable_id(
@@ -1486,7 +1493,7 @@ def _bind_verified_ctgov_outcome_to_a_row(
         or _result_text(row.endpoint).casefold() != _result_text(atom.endpoint).casefold()
         or _result_text(row.timepoint).casefold() != _result_text(atom.timepoint).casefold()
         or row.arm not in {atom.arm, atom.group_title}
-        or (not is_count and row.unit != atom.display_unit)
+        or (not is_count and row.unit not in {atom.display_unit, atom.raw_unit})
         or row.value is None
         or expected_value is None
         or not math.isclose(row.value, expected_value, rel_tol=0.0, abs_tol=1e-9)

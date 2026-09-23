@@ -23,6 +23,12 @@ class NumericMeasureKind(StrEnum):
     SAMPLE_SIZE = "sample_size"
 
 
+_PARTICIPANT_PERCENT_UNITS = frozenset({
+    "percentage of participants", "percentage of responders",
+    "percentage of subjects", "percentage of patients",
+})
+
+
 @dataclass(frozen=True)
 class NumericProjection:
     kind: NumericMeasureKind
@@ -82,7 +88,10 @@ def project_numeric(
                 raise ValueError("人数比例的分子不得大于分母")
             plot_value = float(numerator) / float(denominator) * 100.0
             plot_unit = "%"
-        elif plot_unit in {"%", "百分比"} and value is not None:
+        elif (
+            plot_unit in {"%", "百分比"}
+            or plot_unit.strip().casefold() in _PARTICIPANT_PERCENT_UNITS
+        ) and value is not None:
             plot_unit = "%"
         else:
             plot_value = None
@@ -129,6 +138,8 @@ def infer_numeric_kind(
     *, measure_object: str = "", statistic_form: str = "", unit: str = "", domain: str = ""
 ) -> NumericMeasureKind:
     text = " ".join((measure_object, statistic_form, unit)).casefold()
+    if unit.strip().casefold() in _PARTICIPANT_PERCENT_UNITS:
+        return NumericMeasureKind.PARTICIPANT_PROPORTION
     if any(token in text for token in ("person_time", "人年", "patient-year", "person-year")):
         return NumericMeasureKind.PERSON_TIME_RATE
     if any(

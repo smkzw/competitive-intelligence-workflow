@@ -363,6 +363,20 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
     assert facts[0].row_ref == f"efficacy:{row.row_id}"
     assert facts[0].result_context is not None
     assert facts[0].result_context.group_title == atom.group_title
+    assert atom.raw_unit == "percentage of participants"
+    original_unit_row = EfficacyRow.model_validate({
+        **row.model_dump(mode="json"), "unit": atom.raw_unit,
+    })
+    original_unit_bound, original_unit_facts = bind_ctgov_outcome_to_a_row(
+        source, atom, original_unit_row
+    )
+    assert original_unit_bound.value == row.value
+    assert original_unit_facts[0].result_context is not None
+    assert original_unit_facts[0].result_context.source_unit == atom.raw_unit
+    with pytest.raises(ValueError):
+        bind_ctgov_outcome_to_a_row(
+            source, atom, row.model_copy(update={"unit": "percentage reduction"})
+        )
 
     ae_atom = next(
         item for item in extract_ctgov_atomic_results(source)[0]
