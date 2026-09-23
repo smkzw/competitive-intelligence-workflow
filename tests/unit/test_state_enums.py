@@ -47,7 +47,7 @@ def test_task_1_1_freezes_all_nine_state_families_without_interchangeability() -
             "conflicting",
             "unresolved_due_to_route",
         },
-        FactReviewState: {"candidate", "accepted", "rejected", "superseded"},
+        FactReviewState: {"candidate", "accepted", "rejected", "superseded", "user_modified"},
         ProjectRunState: {
             "running",
             "awaiting_user",

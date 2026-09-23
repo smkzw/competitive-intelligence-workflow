@@ -44,7 +44,11 @@ from ci_workflow.reports.a.pages import (
     build_regulatory_view,
 )
 from ci_workflow.reports.common.evidence_view import EvidenceField, EvidenceFieldState
-from ci_workflow.storage.snapshot_store import SnapshotStore, compute_locked_snapshot
+from ci_workflow.storage.snapshot_store import (
+    EvidenceSnapshotManifest,
+    SnapshotStore,
+    compute_locked_snapshot,
+)
 
 
 def _snapshot_r4(
@@ -164,7 +168,9 @@ def test_locked_recompute_matches_store_read(tmp_path) -> None:
     )
     assert recomputed == evidence.locked
     stored = evidence.store.read(evidence.locked)
-    assert stored == evidence.manifest.model_dump(mode="json")
+    # The wire format omits optional v2 fields for v1 snapshots; compare the
+    # validated scientific manifest, not an expanded Pydantic serialization.
+    assert EvidenceSnapshotManifest.model_validate(stored) == evidence.manifest
     assert recomputed.snapshot_id == evidence.locked.snapshot_id
     assert recomputed.sha256 == evidence.locked.sha256
     assert recomputed.byte_size == evidence.locked.byte_size

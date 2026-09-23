@@ -1007,7 +1007,7 @@ def test_shared_ingestion_is_idempotent_and_never_persists_a_gate_claim(
 def test_run_service_executes_b_research_lineage_before_render(tmp_path: Path) -> None:
     project_root, contract = _project(tmp_path)
     package_path = _write_package(
-        tmp_path, _with_review(_package_payload(contract.project_id))
+        project_root, _with_review(_package_payload(contract.project_id))
     )
     result = run_project(
         project_root,
@@ -1159,7 +1159,7 @@ def test_b_candidate_requires_valid_verdict_artifact_before_promotion(
 ) -> None:
     project_root, contract = _project(tmp_path)
     package_path = _write_package(
-        tmp_path, _with_review(_package_payload(contract.project_id))
+        project_root, _with_review(_package_payload(contract.project_id))
     )
     context = RunContext(
         project_root=project_root,
@@ -1186,7 +1186,7 @@ def test_b_candidate_requires_valid_verdict_artifact_before_promotion(
 def _b_run(tmp_path: Path) -> tuple[Path, Any, RunContext]:
     project_root, contract = _project(tmp_path)
     package_path = _write_package(
-        tmp_path, _with_review(_package_payload(contract.project_id))
+        project_root, _with_review(_package_payload(contract.project_id))
     )
     context = RunContext(
         project_root=project_root,
@@ -1329,7 +1329,7 @@ def test_run_service_persists_recovery_state_for_blocked_b_evidence(
         item["fact_id"] for item in payload["facts"]  # type: ignore[index]
     ]
     payload.pop("report_data")
-    package_path = _write_package(tmp_path, _with_review(payload))
+    package_path = _write_package(project_root, _with_review(payload))
     result = run_project(
         project_root,
         run_context=RunContext(
@@ -1357,7 +1357,7 @@ def test_run_service_rejects_report_kind_mismatch(tmp_path: Path) -> None:
     )
     project_root = create_project_workspace(tmp_path / "项目", contract)
     package_path = _write_package(
-        tmp_path, _with_review(_package_payload(contract.project_id))
+        project_root, _with_review(_package_payload(contract.project_id))
     )
     with pytest.raises(ContractConfigError, match="C 类新鲜来源研究包"):
         run_project(
