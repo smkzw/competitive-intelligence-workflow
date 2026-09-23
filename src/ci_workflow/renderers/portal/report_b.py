@@ -4798,11 +4798,14 @@ def _project_active_facts_b(
         if isinstance(view, Mapping):
             facts = view.get("facts")
             if isinstance(facts, list):
+                view_row_id = _b_source_view_row(
+                    data, binding.collection, binding.row_id
+                )["row_id"]
                 view_matches = [
                     candidate
                     for candidate in facts
                     if isinstance(candidate, dict)
-                    and str(candidate.get("row_id")) == binding.row_id
+                    and str(candidate.get("row_id")) == str(view_row_id)
                 ]
         if view_matches:
             if len(view_matches) != 1:
@@ -4881,20 +4884,59 @@ def _b_source_view_row(
     collection: str,
     row_id: str,
 ) -> dict[str, Any]:
+    domain_rows = getattr(data, collection, ())
+    domain_matches = [row for row in domain_rows if row.row_id == row_id]
+    if len(domain_matches) != 1:
+        raise ReportBPortalError("B active fact目标必须有唯一领域行")
+    domain_row = domain_matches[0]
+    view_row_id = (
+        domain_row.source_view_row_id
+        if collection == "efficacy" and domain_row.source_view_row_id
+        else row_id
+    )
     view = getattr(data, f"{collection}_views", None)
     facts = view.get("facts") if isinstance(view, Mapping) else None
     matches = [
         candidate
         for candidate in facts or ()
-        if isinstance(candidate, dict) and str(candidate.get("row_id")) == row_id
+        if isinstance(candidate, dict) and str(candidate.get("row_id")) == view_row_id
     ]
     if len(matches) != 1:
         raise ReportBPortalError("B active fact目标必须有唯一来源view行")
-    return dict(matches[0])
+    candidate = dict(matches[0])
+    if collection == "efficacy" and any(
+        candidate.get(field) != expected
+        for field, expected in (
+            ("product_id", domain_row.product_id),
+            ("trial_id", domain_row.trial_id),
+            ("original_definition", domain_row.endpoint),
+            ("arm_label", domain_row.arm),
+            ("analysis_population", domain_row.population),
+            ("unit", domain_row.unit),
+            ("value", domain_row.value),
+            ("denominator", domain_row.denominator),
+        )
+    ):
+        raise ReportBPortalError("B 疗效领域行与显式来源view身份不一致")
+    return candidate
 
 
 def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
     if isinstance(row, EfficacyRow):
+        if row.value_basis in {"modeled_estimate", "reported_estimate"}:
+            return "estimate", "estimate"
+        if row.value_basis == "crude_rate" and (
+            row.numerator is None or row.denominator is None or row.unit != "%"
+        ):
+            raise ReportBPortalError("B 疗效粗率缺少百分比及完整原始计数")
+        if (
+            row.unit == "%"
+            and row.numerator is not None
+            and row.denominator is not None
+            and row.value is not None
+            and abs(row.value - row.numerator / row.denominator * 100) > 0.11
+        ):
+            raise ReportBPortalError("B 疗效百分比与原始计数不一致，缺少类型化数值依据")
         form = "crude_rate" if row.unit == "%" and row.numerator is not None else "estimate"
         return form, "participants" if row.numerator is not None else "estimate"
     forms = {

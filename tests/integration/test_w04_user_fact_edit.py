@@ -45,7 +45,11 @@ from ci_workflow.graph.impact import (
     ImpactLayer,
     ImpactNode,
 )
-from ci_workflow.renderers.portal.active_fact_projection import canonical_source_pointer
+from ci_workflow.renderers.portal.active_fact_projection import (
+    ActiveFact,
+    ActiveFactRevision,
+    canonical_source_pointer,
+)
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
     SafetyRow,
@@ -54,6 +58,7 @@ from ci_workflow.renderers.portal.report_a import (
 )
 from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
+    _project_active_facts_b,
     active_fact_binding_for_b,
     render_report_b_site,
 )
@@ -72,6 +77,118 @@ PROJECT_ID = "project-w04"
 
 def _digest(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
+
+
+def _b_efficacy_data_with_linked_view() -> ReportBPortalData:
+    payload = json.loads(
+        Path("fixtures/positive/b-pnh/inputs/report-data.json").read_text(encoding="utf-8")
+    )
+    explicit_links = {
+        "eff-apply-treatment": "eff-row-nct04558918-apply-treatment",
+        "eff-apply-control": "eff-row-nct04558918-apply-control",
+        "eff-appoint-treatment": "eff-row-nct04820530-appoint-treatment",
+    }
+    for domain in payload["efficacy"]:
+        domain["source_view_row_id"] = explicit_links[domain["row_id"]]
+        domain["value_basis"] = "modeled_estimate"
+    return ReportBPortalData.model_validate(payload)
+
+
+def test_b_efficacy_binding_keeps_estimated_rate_distinct_from_raw_counts() -> None:
+    data = _b_efficacy_data_with_linked_view()
+
+    binding = active_fact_binding_for_b(data, "efficacy", "eff-apply-treatment")
+
+    assert binding.source_version_id == "apply-report-v1"
+    assert binding.statistical_form == "estimate"
+    assert binding.measure_object == "estimate"
+    assert data.efficacy[0].value == 82.3
+    assert (data.efficacy[0].numerator, data.efficacy[0].denominator) == (51, 60)
+
+
+def test_b_efficacy_binding_rejects_wrong_explicit_view_pointer() -> None:
+    data = _b_efficacy_data_with_linked_view()
+    changed = data.model_dump(mode="python")
+    changed["efficacy"][0]["source_view_row_id"] = "eff-row-nct04558918-apply-control"
+    tampered = ReportBPortalData.model_validate(changed)
+
+    with pytest.raises(ValueError, match="身份不一致"):
+        active_fact_binding_for_b(tampered, "efficacy", "eff-apply-treatment")
+
+
+def test_b_efficacy_binding_does_not_guess_missing_view_pointer_or_estimate_basis() -> None:
+    legacy = ReportBPortalData.model_validate_json(
+        Path("fixtures/positive/b-pnh/inputs/report-data.json").read_bytes()
+    )
+    with pytest.raises(ValueError, match="唯一来源view行"):
+        active_fact_binding_for_b(legacy, "efficacy", "eff-apply-treatment")
+
+    linked = _b_efficacy_data_with_linked_view().model_dump(mode="python")
+    linked["efficacy"][0]["value_basis"] = None
+    ambiguous = ReportBPortalData.model_validate(linked)
+    with pytest.raises(ValueError, match="缺少类型化数值依据"):
+        active_fact_binding_for_b(ambiguous, "efficacy", "eff-apply-treatment")
+
+
+def test_b_estimated_efficacy_revision_updates_domain_and_explicit_view_without_redividing(
+    tmp_path: Path,
+) -> None:
+    data = _b_efficacy_data_with_linked_view()
+    binding = active_fact_binding_for_b(data, "efficacy", "eff-apply-treatment")
+    identity = {
+        field: getattr(binding, field)
+        for field in (
+            "product_id", "drug_name", "trial_id", "registry_id", "group_id", "arm",
+            "cohort_id", "period", "endpoint_definition", "event_definition",
+            "statistical_form", "measure_object", "unit", "normalized_unit",
+        )
+    }
+    fact = ActiveFact(
+        fact_id="fact-estimated-efficacy",
+        fact_version_id="fact-estimated-efficacy-v2",
+        field_id="response-rate",
+        raw_value="80.1%",
+        normalized_value="80.1",
+        primary_fragment_id="fragment-original",
+        source_version_id=binding.source_version_id,
+        source_locator=binding.source_pointer,
+        source_quote="原来源报告值为82.3%",
+        consumer_bindings=(binding,),
+        numerator=51,
+        denominator=60,
+        review_state="user_modified",
+        user_edit={
+            "request_id": "edit-estimate",
+            "basis": "原报告值核对",
+            "saved_by": "test",
+            "saved_at": NOW.isoformat(),
+            "operation": "save",
+        },
+        **identity,
+    )
+    revision = ActiveFactRevision(
+        revision=2,
+        request_id="edit-estimate",
+        fact_revision_digest="a" * 64,
+        facts=(fact,),
+    )
+
+    projected, consumers = _project_active_facts_b(data, revision)
+
+    assert projected.efficacy[0].value == 80.1
+    assert (projected.efficacy[0].numerator, projected.efficacy[0].denominator) == (51, 60)
+    assert projected.efficacy_views["facts"][0]["value"] == 80.1
+    assert projected.efficacy_views["facts"][0]["row_id"] == (
+        "eff-row-nct04558918-apply-treatment"
+    )
+    assert len(consumers) == 1
+    site = tmp_path / "estimated-efficacy-site"
+    render_report_b_site(data, site, active_revision=revision)
+    report_js = (site / "data/report.js").read_text(encoding="utf-8")
+    report_payload = json.loads(report_js.removeprefix("window.REPORT_B=").removesuffix(";\n"))
+    assert report_payload["efficacy"][0]["value"] == 80.1
+    assert report_payload["efficacy"][0]["numerator"] == 51
+    assert report_payload["user_edits"]["eff-apply-treatment"]["current_value"] == "80.1%"
 
 
 def _seed_fact(

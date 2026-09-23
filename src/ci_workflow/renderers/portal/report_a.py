@@ -123,6 +123,10 @@ class TrialRow(BaseModel):
 class EfficacyRow(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     row_id: str
+    source_view_row_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    value_basis: Literal["crude_rate", "modeled_estimate", "reported_estimate"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     product_id: str
     trial_id: str
     endpoint: str
