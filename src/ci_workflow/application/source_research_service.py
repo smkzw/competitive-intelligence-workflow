@@ -1367,19 +1367,11 @@ def research_facts_from_ctgov_atom(
     return tuple(facts)
 
 
-def bind_ctgov_outcome_to_a_row(
+def _bind_verified_ctgov_outcome_to_a_row(
     source: SourceCapture,
     atom: CtgovAtomicResult,
     row: EfficacyRow,
 ) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
-    """Bind a directly reported outcome to one explicit A row before review.
-
-    This only handles a source-reported measure. Count-derived rates require a
-    separate derivation with both input fact versions and cannot use this path.
-    """
-    verified_atoms, _issues = extract_ctgov_atomic_results(source)
-    if atom not in verified_atoms or atom.source_id != source.source_id:
-        raise ResearchPackageError("登记原子与当前来源版本不一致")
     if atom.category != "outcome" or atom.numerator is not None:
         raise ResearchPackageError("此绑定仅接受来源直接报告的疗效数值")
     if (
@@ -1428,6 +1420,63 @@ def bind_ctgov_outcome_to_a_row(
         atom, report_row_ref=f"efficacy:{row.row_id}"
     )
     return bound, facts
+
+
+def bind_ctgov_outcome_to_a_row(
+    source: SourceCapture,
+    atom: CtgovAtomicResult,
+    row: EfficacyRow,
+) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
+    """Bind a directly reported registry outcome to one explicit A row.
+
+    Count-derived rates require a separate derivation with input fact versions.
+    """
+    verified_atoms, _issues = extract_ctgov_atomic_results(source)
+    if atom not in verified_atoms or atom.source_id != source.source_id:
+        raise ResearchPackageError("登记原子与当前来源版本不一致")
+    return _bind_verified_ctgov_outcome_to_a_row(source, atom, row)
+
+
+def _validate_bound_ctgov_a_outcomes(
+    report_data: ReportAPortalData,
+    sources: tuple[SourceCapture, ...],
+    facts: tuple[ResearchFact, ...],
+) -> None:
+    """Reopen each source once for atomic facts offered as visible A efficacy."""
+    rows = {f"efficacy:{row.row_id}": row for row in report_data.efficacy}
+    source_by_id = {source.source_id: source for source in sources}
+    atom_by_source: dict[str, dict[tuple[str, str], CtgovAtomicResult]] = {}
+    row_ref_counts: dict[str, int] = {}
+    for fact in facts:
+        row_ref_counts[fact.row_ref] = row_ref_counts.get(fact.row_ref, 0) + 1
+    for fact in facts:
+        if not fact.row_ref.startswith("efficacy:") or fact.result_context is None:
+            continue
+        if row_ref_counts[fact.row_ref] != 1:
+            raise ResearchPackageError("登记疗效行有多个主事实绑定，不能选择性覆盖")
+        context = fact.result_context
+        if context.value_role != "reported_measure" or context.category != "outcome":
+            raise ResearchPackageError("已绑定 A 疗效行的登记原子缺少直接报告的结局依据")
+        row = rows.get(fact.row_ref)
+        source = source_by_id.get(fact.source_id)
+        if row is None or source is None or fact.locator.field_path is None:
+            raise ResearchPackageError("登记原子绑定的疗效行或来源不存在")
+        if fact.source_id not in atom_by_source:
+            atoms, _issues = extract_ctgov_atomic_results(source)
+            atom_by_source[fact.source_id] = {
+                (atom.result_key, atom.value_locator.field_path or ""): atom
+                for atom in atoms
+            }
+        atom = atom_by_source[fact.source_id].get(
+            (context.result_key, fact.locator.field_path)
+        )
+        if atom is None:
+            raise ResearchPackageError("登记原子事实不能从当前来源精确重提取")
+        expected_row, expected_facts = _bind_verified_ctgov_outcome_to_a_row(
+            source, atom, row
+        )
+        if expected_row != row or fact != expected_facts[0]:
+            raise ResearchPackageError("登记原子事实与已提交疗效行的当前内容不一致")
 
 
 def _audit_source_record(
@@ -1966,6 +2015,7 @@ class FreshAResearchContent(BaseModel):
         missing = sorted(required_refs - available_refs)
         if missing:
             raise ValueError("核心受众事实缺少来源绑定：" + "、".join(missing[:5]))
+        _validate_bound_ctgov_a_outcomes(self.report_data, self.sources, self.facts)
         validate_clinicaltrials_result_coverage(
             self.report_data,
             self.sources,

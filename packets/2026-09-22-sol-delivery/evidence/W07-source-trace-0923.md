@@ -59,3 +59,9 @@
 真实 AD 夹具 NCT02277743 的 Placebo IGA 16 周 `10.3%` 作为首个样本，来源原文 `10.3`、路径 `$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0].classes[0].categories[0].measurements[0].value`。替换内存中的单条 A 行后，真实 `render_report_a_site` 产出的 `data/report.js` 包含该路径和当前来源版本；错试验、错值、错组别、既有冲突引文均拒绝。此小批并未修改历史夹具、当前正式 PNH 项目或 4412 条最终展示事实；`source_version_id` 入页面仅证明该行链路，不代表全站来源闭合。人数/分母派生 DAG、其他 A 行及 B/C 绑定仍待实施。
 
 改动代码 Ruff 与单模块 strict-mypy 通过，邻接来源审计、摄取和研究包提交批 `22 passed in 83.23s`；实际站点仅验证数据载荷，不是浏览器视觉/交互验收。
+
+### A 研究包提交边界接入（同日下一批）
+
+已将上述核验接入 `FreshAResearchContent` 的提交前验证：只要事实声明 `result_context` 且绑定到 `efficacy:` 报告行，执行器按来源版本每份重提取一次结果原子，核对结果键/精确路径/组别及完整报告行；同一行多个主事实、未绑定到当前行的事实、原文或行字段冲突均拒绝。人数计数不得借“直接报告值”路径绕过派生公式。真实 AD `10.3` 行的正确原子绑定通过定向核验；在内存构造的研究包里把该行 `source_text` 改为编造引文，实际 `FreshAResearchContent.model_validate` 在覆盖审计前拒绝。合成历史包不含新 `result_context`，此新增门不追溯重写或宣称其逐事实来源已闭合。
+
+改动模块 Ruff、单模块 strict-mypy 均通过；摄取、A 研究包及来源覆盖邻接批 `20 passed in 84.21s`。**限制**：新门只覆盖显式原子绑定的 A 直接报告疗效；未绑定旧事实、人数/分母派生率、安全性以及 B/C 还需各自的逐事实闭包和生产路径。真实来源数值到最终 4412 条事实的分子未重算，W07 仍 FAIL。

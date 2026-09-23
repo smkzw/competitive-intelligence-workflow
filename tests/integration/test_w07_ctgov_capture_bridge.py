@@ -12,9 +12,11 @@ import pytest
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import (
+    FreshAResearchContent,
     ResearchClaim,
     ResearchFact,
     SourceCapture,
+    _validate_bound_ctgov_a_outcomes,
     bind_ctgov_outcome_to_a_row,
     extract_ctgov_atomic_results,
     research_facts_from_ctgov_atom,
@@ -213,6 +215,7 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
             for item in report.efficacy
         ],
     })
+    _validate_bound_ctgov_a_outcomes(rendered, (source,), facts)
     render_report_a_site(rendered, tmp_path / "site")
     report_js = (tmp_path / "site/data/report.js").read_text()
     assert bound.source_field_path in report_js
@@ -227,3 +230,52 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
     ):
         with pytest.raises(ValueError):
             bind_ctgov_outcome_to_a_row(source, atom, changed)
+
+    for bad_facts in (
+        (facts[0].model_copy(update={"original_text": "11.3"}),),
+        (facts[0].model_copy(update={"row_ref": "efficacy:wrong"}),),
+        (
+            facts[0],
+            next(
+                ResearchFact.model_validate(item) for item in payload["facts"]
+                if item["row_ref"] == facts[0].row_ref
+            ),
+        ),
+    ):
+        with pytest.raises(ValueError):
+            _validate_bound_ctgov_a_outcomes(rendered, (source,), bad_facts)
+    altered_rows = [
+        item.model_copy(update={"source_field_path": "$.wrong"})
+        if item.row_id == row.row_id else item
+        for item in rendered.efficacy
+    ]
+    with pytest.raises(ValueError):
+        _validate_bound_ctgov_a_outcomes(
+            rendered.model_copy(update={"efficacy": tuple(altered_rows)}),
+            (source,), facts,
+        )
+
+    # The actual pre-review package boundary consumes the same verifier. The
+    # historical AD package has an unrelated known missing SAE field, so this
+    # negative assertion targets the earlier atomic binding failure only.
+    candidate = json.loads(json.dumps(payload))
+    candidate.pop("scientific_review", None)
+    candidate["report_data"]["efficacy"] = [
+        {**bound.model_dump(mode="json"), "source_text": "编造引文"}
+        if item["row_id"] == row.row_id else item
+        for item in candidate["report_data"]["efficacy"]
+    ]
+    obsolete = [
+        item["fact_id"] for item in candidate["facts"]
+        if item["row_ref"] == facts[0].row_ref
+    ]
+    candidate["facts"] = [
+        item for item in candidate["facts"]
+        if item["fact_id"] not in obsolete
+    ] + [facts[0].model_dump(mode="json")]
+    for claim in candidate["claims"]:
+        claim["fact_ids"] = [
+            item for item in claim["fact_ids"] if item not in obsolete
+        ]
+    with pytest.raises(ValueError, match="冲突的source_text"):
+        FreshAResearchContent.model_validate(candidate)
