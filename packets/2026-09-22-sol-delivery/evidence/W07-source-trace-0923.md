@@ -109,3 +109,9 @@
 对 2479 条另查原始标题：2469 条是登记终点存在但报告行时间点不等于测量级 `timeFrame`，只有 10 条没有同终点或有解析缺口。真实例：NCT04820530 的 class 标题 `≥2 g/dL increase in Hb from baseline...` 不是单一基线访视，旧构建逻辑却因包含 `baseline` 将行时间点改成 `Baseline`；NCT02534909 的 class 标题 `Overall (Up to Week 4)` 是测量级多时间窗下的具体观察层。后续需在来源原子保留 measure/class/category/观察访视的层级关系，并纠正构建器把“from baseline”误作基线观察的规则；不得用时间字符串模糊匹配把这些科学差异遮掉。QLQ-C30 多 class 同值造成的 238 歧义亦须依 class/category 或精确来源路径解开，禁止 first-wins。
 
 相邻 W07/登记覆盖/W03 批 `35 passed in 95.83s`；改动源码 Ruff 与 2 文件 strict-mypy 通过。基于当前 v106 载荷重渲染的 A 疗效页在 1600 CSS px Chromium 无控制台错误、百分比标签可见，但截图 `output/playwright/w07-a-efficacy-unit-1600.png`（SHA-256 `3caed29ee656f9c5a6652477661ee4300047ce3ba8097d405c2c8eb35de608d8`）显示首屏单观察行宽空、高稀疏；视觉门 FAIL，不可据此声称 W05 已修复。浏览器与预览服务已关闭；临时渲染目录移入废纸篓。截图仅留本机，不在安装包。
+
+### CT.gov 观察层级保真与真实同值消歧（同日后续；未摄取正式项目）
+
+原子结果和 `ResearchResultContext` 新增 class/category/明确观察访视字段；历史事实省略这些字段仍按旧内容序列化。仅 `Baseline`/`at baseline` 或 class 原文明示唯一 Day/Week/Month 访视时，才允许 class 作为观察时间身份。报告时间须精确等于测量级 timeFrame 或该明确 class 访视；非访视 class 和 category 必须由独立人口标签或精确来源路径证明，不能从数值与组别推断。公开绑定入口会重新打开同一来源并枚举完整身份候选，非唯一即拒绝，不取首条。真实 NCT04820530 `eff-10` 的 class `≥2 g/dL increase in Hb from baseline irrespective...` 不是 Baseline 访视，旧构建器错误标成 `Baseline`，现保持拒绝；没有为使测试变绿而改动原文。
+
+以 v106 相同包 SHA-256、48 个采用试验、临时 CAS 重提取全部 3895 条原始疗效行：严格唯一直接数值 **2375**、严格唯一直接人数 **591**、无匹配 **929**、多候选 **0**；2966 个单候选对应 2966 个不同来源原子，未发现跨行争用。真实 NCT02534909 `eff-19` 唯一定位到 `$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0].classes[0].categories[0].measurements[0].value`，class=`Overall (Up to Week 4)`、category=`Responder`、原值 10 人；NCT03500549 `eff-1191` 的 QLQ-C30 同值多 class 经 `Functional Scales - Cognitive functioning` 标签定位到 `outcomeMeasures[23].classes[4].categories[0].measurements[1].value`，原值 0。此数字反映当前严格算法的**候选资格**，未持久化到正式项目、未更新 W05A v6 的 4412 展示行、未完成 929 条排因、未做独立医学复核，不能写成逐事实来源 PASS。相邻 W07/CT.gov/A 包 `25 passed in 96.20s`、Ruff、单模块 strict-mypy、diff 检查通过。下一批应把唯一候选批量摄入已有快照并生成带完整来源的新候选，继续单独闭合未匹配、安全、B/C 与桌面视觉。

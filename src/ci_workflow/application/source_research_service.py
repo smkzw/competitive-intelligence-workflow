@@ -218,6 +218,11 @@ class ResearchResultContext(BaseModel):
     timepoint: str
     value_role: Literal["reported_measure", "participant_count", "affected_count", "denominator"]
     source_unit: str
+    class_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    category_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    observation_timepoint: str | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
 
 class ResearchFact(BaseModel):
@@ -477,6 +482,9 @@ class _RegistryResult:
     value_path: str = ""
     denominator_path: str | None = None
     raw_unit: str = ""
+    class_title: str = ""
+    category_title: str = ""
+    observation_timepoint: str = ""
 
 
 @dataclass(frozen=True)
@@ -502,6 +510,9 @@ class CtgovAtomicResult:
     denominator_locator: EvidenceLocator | None
     denominator_quote: str | None
     raw_unit: str = ""
+    class_title: str = ""
+    category_title: str = ""
+    observation_timepoint: str = ""
 
 
 _RESULT_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
@@ -596,6 +607,23 @@ def _result_time_matches(source: str, report: str) -> bool:
         or report_tokens <= source_tokens
         or bool(source_numbers & report_numbers)
     )
+
+
+def _result_class_visit_title(class_title: str) -> str:
+    """Only a stated visit, not any mention of baseline, can narrow a measure window."""
+    title = _result_text(class_title)
+    if title.casefold() in {"baseline", "at baseline"}:
+        return title
+    visits = re.findall(r"\b(?:day|week|month)\s*-?\d+(?:\.\d+)?\b", title.casefold())
+    return title if len(visits) == 1 else ""
+
+
+def _result_population_labels(population: str) -> frozenset[str]:
+    text = _result_text(population)
+    if "（" not in text or not text.endswith("）"):
+        return frozenset()
+    labels = text.split("（", 1)[1][:-1]
+    return frozenset(_result_text(label).casefold() for label in labels.split("；"))
 
 
 def _result_arm(group_title: object) -> str:
@@ -920,11 +948,14 @@ def _iter_outcome_results(
                 or "count_of_participants" in param_type
             )
             classes = _list_at(measure.get("classes", []), f"{path}.classes")
-            measurements: list[tuple[str, float, str, _ParsedOutcomeCategory, str]] = []
+            measurements: list[
+                tuple[str, float, str, _ParsedOutcomeCategory, str, str, str]
+            ] = []
             saw_not_reported = False
             for class_index, raw_class in enumerate(classes):
                 class_mapping = _mapping_at(raw_class, f"{path}.classes[{class_index}]")
                 class_title = _result_text(class_mapping.get("title"))
+                observation_timepoint = _result_class_visit_title(class_title)
                 result_category = _outcome_category(title, class_title)
                 if result_category is None:
                     _parse_failure(
@@ -944,6 +975,7 @@ def _iter_outcome_results(
                         raw_category,
                         f"{path}.classes[{class_index}].categories[{category_index}]",
                     )
+                    category_title = _result_text(category_mapping.get("title"))
                     for measurement_index, raw_measurement in enumerate(
                         _list_at(
                             category_mapping.get("measurements", []),
@@ -972,6 +1004,8 @@ def _iter_outcome_results(
                                     measurement_path,
                                     result_category,
                                     class_title,
+                                    category_title,
+                                    observation_timepoint,
                                 )
                             )
                         except (TypeError, ValueError, KeyError) as exc:
@@ -994,7 +1028,10 @@ def _iter_outcome_results(
                     detail=detail,
                 )
                 continue
-            for group_id, value, measurement_path, result_category, class_title in measurements:
+            for (
+                group_id, value, measurement_path, result_category,
+                class_title, category_title, observation_timepoint,
+            ) in measurements:
                 report_term = _outcome_report_term(result_category, title, class_title)
                 numerator = None
                 denominator = None
@@ -1055,6 +1092,9 @@ def _iter_outcome_results(
                         value_path=f"{measurement_path}.value",
                         denominator_path=denominator_path,
                         raw_unit=unit_raw,
+                        class_title=class_title,
+                        category_title=category_title,
+                        observation_timepoint=observation_timepoint,
                     )
                 )
         except (TypeError, ValueError, KeyError) as exc:
@@ -1387,6 +1427,9 @@ def extract_ctgov_atomic_results(
             value_quote=value_quote, denominator_locator=denominator_locator,
             denominator_quote=denominator_quote,
             raw_unit=result.raw_unit,
+            class_title=result.class_title,
+            category_title=result.category_title,
+            observation_timepoint=result.observation_timepoint,
         ))
     return tuple(atoms), tuple(issues)
 
@@ -1428,6 +1471,9 @@ def research_facts_from_ctgov_atom(
                 (atom.raw_unit or atom.display_unit)
                 if role == "reported_measure" else "人"
             ),
+            class_title=atom.class_title or None,
+            category_title=atom.category_title or None,
+            observation_timepoint=atom.observation_timepoint or None,
         )
         return ResearchFact(
             fact_id=stable_id(
@@ -1488,10 +1534,29 @@ def _bind_verified_ctgov_outcome_to_a_row(
     expected_value = (
         float(atom.numerator) if atom.numerator is not None else atom.display_value
     )
+    population_labels = _result_population_labels(row.population)
+    exact_path = row.source_field_path == atom.value_locator.field_path
+    measure_time_matches = (
+        _result_text(row.timepoint).casefold() == _result_text(atom.timepoint).casefold()
+    )
+    observation_time_matches = bool(atom.observation_timepoint) and (
+        _result_text(row.timepoint).casefold()
+        == _result_text(atom.observation_timepoint).casefold()
+    )
+    class_matches = (
+        not atom.class_title or exact_path
+        or _result_text(atom.class_title).casefold() in population_labels
+        or observation_time_matches
+    )
+    category_matches = (
+        not atom.category_title or exact_path
+        or _result_text(atom.category_title).casefold() in population_labels
+    )
     if (
         row.trial_id.casefold() != atom.trial_id.casefold()
         or _result_text(row.endpoint).casefold() != _result_text(atom.endpoint).casefold()
-        or _result_text(row.timepoint).casefold() != _result_text(atom.timepoint).casefold()
+        or not (measure_time_matches or observation_time_matches)
+        or not class_matches or not category_matches
         or row.arm not in {atom.arm, atom.group_title}
         or (not is_count and row.unit not in {atom.display_unit, atom.raw_unit})
         or row.value is None
@@ -1538,7 +1603,21 @@ def bind_ctgov_outcome_to_a_row(
     verified_atoms, _issues = extract_ctgov_atomic_results(source)
     if atom not in verified_atoms or atom.source_id != source.source_id:
         raise ResearchPackageError("登记原子与当前来源版本不一致")
-    return _bind_verified_ctgov_outcome_to_a_row(source, atom, row)
+    matches: list[CtgovAtomicResult] = []
+    bound_result: tuple[EfficacyRow, tuple[ResearchFact, ...]] | None = None
+    for candidate in verified_atoms:
+        if candidate.category != "outcome":
+            continue
+        try:
+            result = _bind_verified_ctgov_outcome_to_a_row(source, candidate, row)
+        except ResearchPackageError:
+            continue
+        matches.append(candidate)
+        if candidate == atom:
+            bound_result = result
+    if len(matches) != 1 or matches[0] != atom or bound_result is None:
+        raise ResearchPackageError("登记结局与报告行没有唯一的完整医学身份匹配")
+    return bound_result
 
 
 def _bind_verified_ctgov_ae_to_a_row(

@@ -66,18 +66,23 @@ def _derived(tmp_path: Path) -> DerivedCtgovStudy:
     )
 
 
-def _reported_count_source(tmp_path: Path) -> SourceCapture:
+def _reported_count_source(
+    tmp_path: Path,
+    *,
+    classes: list[dict[str, object]] | None = None,
+    timeframe: str = "Week 26",
+) -> SourceCapture:
     record = {
         "protocolSection": {
             "identificationModule": {"nctId": "NCT02277743", "briefTitle": "AD count study"},
             "statusModule": {"lastUpdatePostDateStruct": {"date": "2026-08-01"}},
         },
         "resultsSection": {"outcomeMeasuresModule": {"outcomeMeasures": [{
-            "title": "Participants With Response", "timeFrame": "Week 26",
+            "title": "Participants With Response", "timeFrame": timeframe,
             "unitOfMeasure": "Participants", "paramType": "COUNT_OF_PARTICIPANTS",
             "groups": [{"id": "OG1", "title": "Drug 200 mg"}],
             "denoms": [{"counts": [{"groupId": "OG1", "value": "35"}]}],
-            "classes": [{"categories": [{"measurements": [
+            "classes": classes if classes is not None else [{"categories": [{"measurements": [
                 {"groupId": "OG1", "value": "30"},
             ]}]}],
         }]}},
@@ -127,6 +132,10 @@ def test_reported_participant_count_binds_raw_count_and_same_group_denominator(
     assert [fact.result_context.value_role for fact in facts if fact.result_context] == [
         "participant_count", "denominator",
     ]
+    assert facts[0].result_context is not None
+    assert not {
+        "class_title", "category_title", "observation_timepoint"
+    } & facts[0].result_context.model_dump(mode="json").keys()
     report = ReportAPortalData.model_validate({
         **baseline.model_dump(mode="json"),
         "efficacy": [
@@ -157,6 +166,72 @@ def test_reported_participant_count_binds_raw_count_and_same_group_denominator(
             bind_ctgov_outcome_to_a_row(source, atom, changed)
     with pytest.raises(ValueError, match="分母"):
         _validate_bound_ctgov_a_results(report, (source,), facts[:1])
+
+
+def test_registry_class_visit_and_category_keep_same_value_observations_distinct(
+    tmp_path: Path,
+) -> None:
+    classes = [
+        {"title": title, "categories": [{
+            "title": category,
+            "measurements": [{"groupId": "OG1", "value": "30"}],
+        }]}
+        for title, category in (
+            ("Baseline", "Responder"),
+            ("Week 26", "Responder"),
+            ("Week 26", "Non Responder"),
+            ("≥2 g/dL increase from baseline", "Responder"),
+        )
+    ]
+    source = _reported_count_source(
+        tmp_path, classes=classes, timeframe="Baseline to Week 26"
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 4
+    assert [atom.observation_timepoint for atom in atoms] == [
+        "Baseline", "Week 26", "Week 26", "",
+    ]
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    report = ReportAPortalData.model_validate(payload["report_data"])
+    original = next(
+        row for row in report.efficacy
+        if row.trial_id.casefold() == "nct02277743"
+    )
+    row = EfficacyRow.model_validate({
+        **original.model_dump(mode="json"),
+        "endpoint": "Participants With Response", "timepoint": "Week 26",
+        "arm": "Drug 200 mg", "arm_detail": None, "group_id": None,
+        "population": "登记结果人群（Week 26；Responder）",
+        "value": 30, "unit": "Participants", "numerator": None,
+        "denominator": None, "source_field_path": None,
+        "source_version_id": None, "source_text": None,
+    })
+    bound, facts = bind_ctgov_outcome_to_a_row(source, atoms[1], row)
+    assert bound.timepoint == "Week 26"
+    assert facts[0].result_context is not None
+    assert (
+        facts[0].result_context.timepoint,
+        facts[0].result_context.observation_timepoint,
+        facts[0].result_context.class_title,
+        facts[0].result_context.category_title,
+    ) == ("Baseline to Week 26", "Week 26", "Week 26", "Responder")
+    for wrong_atom in (atoms[0], atoms[2], atoms[3]):
+        with pytest.raises(ValueError):
+            bind_ctgov_outcome_to_a_row(source, wrong_atom, row)
+    misleading_baseline = row.model_copy(update={
+        "timepoint": "Baseline",
+        "population": "登记结果人群（≥2 g/dL increase from baseline；Responder）",
+    })
+    with pytest.raises(ValueError):
+        bind_ctgov_outcome_to_a_row(source, atoms[3], misleading_baseline)
+    duplicate_source = _reported_count_source(
+        tmp_path, classes=[*classes, classes[1]], timeframe="Baseline to Week 26"
+    )
+    duplicate_atoms, _ = extract_ctgov_atomic_results(duplicate_source)
+    with pytest.raises(ValueError, match="唯一"):
+        bind_ctgov_outcome_to_a_row(duplicate_source, duplicate_atoms[1], row)
 
 
 def test_ctgov_study_capture_reopens_raw_and_preserves_calendar_day(tmp_path: Path) -> None:
