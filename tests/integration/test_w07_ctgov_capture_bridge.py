@@ -15,15 +15,18 @@ from ci_workflow.application.source_research_service import (
     FreshAResearchContent,
     ResearchClaim,
     ResearchFact,
+    ResearchLineage,
     SourceCapture,
     _validate_bound_ctgov_a_results,
     bind_ctgov_ae_to_a_row,
     bind_ctgov_outcome_to_a_row,
     extract_ctgov_atomic_results,
+    project_a_calculation_evidence,
     research_facts_from_ctgov_atom,
     source_capture_from_ctgov_study,
 )
 from ci_workflow.domain.evidence import CtgovRecordSelector
+from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_report_a_site
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.snapshot_store import SnapshotStore
@@ -403,6 +406,66 @@ def test_ae_rate_derivation_is_version_bound_and_restorable(tmp_path: Path) -> N
         assert database.execute(
             "SELECT count(*) FROM evidence_derivations WHERE derivation_kind='calculation'"
         ).fetchone() == (1,)
+
+    report_data = report.model_copy(update={
+        "safety": tuple(
+            bound if item.row_id == row.row_id else item for item in report.safety
+        )
+    })
+    public_lineage = ResearchLineage(
+        package_digest=arguments["scientific_content_digest"],
+        evidence_snapshot=lineage.evidence_snapshot,
+        claim_snapshot_id="test-claim-snapshot",
+        coverage_set_id="test-coverage-set",
+        coverage_projection_id="test-coverage-projection",
+        claim_ids=lineage.claim_ids,
+        source_version_ids=lineage.source_version_ids,
+        source_fragment_ids=lineage.source_fragment_ids,
+        fact_version_ids=lineage.fact_version_ids,
+        fragment_ids=lineage.fragment_ids,
+    )
+    visible = project_a_calculation_evidence(project, report_data, public_lineage)
+    assert len(visible) == 1
+    assert visible[0].row_id == bound.row_id
+    assert (visible[0].numerator_quote, visible[0].denominator_quote) == ("7", "229")
+    assert visible[0].source_version_id == bound.source_version_id
+    assert visible[0].numerator_field_path == bound.source_field_path
+    assert visible[0].denominator_field_path != visible[0].numerator_field_path
+    public_sources = PublicProvenance(
+        evidence_snapshot_id=lineage.evidence_snapshot.snapshot_id,
+        report_data_digest=sha256(report_data.model_dump_json().encode("utf-8")).hexdigest(),
+        sources=(PublicSource(
+            source_version_id=visible[0].source_version_id,
+            label=source.title,
+            url=source.url,
+            source_type="临床试验登记",
+            published_at=(
+                source.published_at.date().isoformat()
+                if source.published_at is not None else "未知（来源未明确公开）"
+            ),
+            data_cutoff=report_data.data_cutoff.date().isoformat(),
+            limitation="此处只核对一条安全性比例，不代表全站来源闭包。",
+        ),),
+    )
+    render_report_a_site(
+        report_data, tmp_path / "calculation-site",
+        calculation_evidence=visible, public_provenance=public_sources,
+    )
+    report_js = (tmp_path / "calculation-site/data/report.js").read_text()
+    assert '"calculation_evidence"' in report_js
+    assert visible[0].denominator_field_path in report_js
+    wrong_row = bound.model_copy(update={"value": 3.2})
+    with pytest.raises(ValueError, match="计算派生"):
+        project_a_calculation_evidence(
+            project,
+            report_data.model_copy(update={
+                "safety": tuple(
+                    wrong_row if item.row_id == row.row_id else item
+                    for item in report_data.safety
+                )
+            }),
+            public_lineage,
+        )
 
     restored_root = tmp_path / "restored-evidence"
     restored = SnapshotStore(restored_root).restore_evidence_manifest(

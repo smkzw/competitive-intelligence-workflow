@@ -79,3 +79,9 @@
 对同一 NCT02277743 的 `7` 与 `229`，`CtgovAeRateCalculation` 固定规则 ID/版本、`round(100 * affected / at_risk, 1)`、输出 `3.1%` 与 A 安全性行作用域。摄取前按共同登记研究、事件、组别、时间窗、来源、原始整数及算式核对；伪造 `3.2%` 被拒且数据库来源版本仍为零。成功摄取后，`evidence_derivations` 的 `calculation` 行及不可变快照同时记录两个 fragment ID、两个 fact version ID、规则/版本、公式、参数、输出及 claim version ID；恢复空项目后计算行保持一致。同一输入重复摄取不重复增加派生。此计算来自两个原子来源值，不声称登记页直接报告了 `3.1%` 原文。
 
 初次端到端用例发现旧 0011 表的 kind CHECK 只允许 `source_text/normalization/translation`；若使用 `INSERT OR IGNORE` 会把新 `calculation` 静默丢掉，形成“快照有、SQLite 无”的假一致。新增 0015 迁移复制旧行并重建 CHECK/append-only 触发器，改计算插入为仅对相同派生 ID 幂等，其他错误不忽略。迁移测试证实旧行保留、防修改有效与 `PRAGMA integrity_check=ok`。安装 `package-manifest.json` 原仅列 0001–0010，而实际已有 0014；现列至 0015，并让 `package verify` 比对声明与全部实际 SQL。定向 W07/迁移/包合同 **13 passed**，`PACKAGE_OK` 为开发候选；先前同界面相邻批 **32 passed**、Ruff 与 243 文件 strict-mypy 通过。上述属于不同测试时点，不合并冒称一个终验。仍缺页面消费、B/C 同源绑定、正式 PNH 数据库 4412 条闭包、浏览器和 fresh-install 验收；W07 继续 FAIL。
+
+### AE 快照派生的 A 门户公开投影与浏览器检查（同日后续；仅一行）
+
+新的 `project_a_calculation_evidence` 读取有 hash 保护的证据快照，按 claim version、两个 fact version、两个原文 fragment、同一 source version、报告安全行的值与精确定位逐项闭合，再给渲染器一个公开字段子集。没有 `calculation` 派生的旧行不从 `n/N` 猜测得到；缺行、错值或缺派生失败关闭。真实 AD NCT02277743 的一条 7/229→3.1% 在 A 安全页“查看数据依据”中有折叠条目、原始人数、计算式、Week 28 登记原文时间窗、双字段路径和 CT.gov 外链。直接渲染的浏览器试验只给该行一个真实来源条目并明示“此处只核对一条安全性比例，不代表全站来源闭包”；不是正式 AD 报告或独立科学接受。
+
+第一次 1600px Chromium 实测发现长英文时间窗和 JSON 字段路径把证据区撑至 610px、超出 395px 容器；改为短摘要+完整可展开原文，专用单列栅格与长词换行后同一容器 `clientWidth=scrollWidth=395px`，可见文本不截断。截图：本机 `output/playwright/w07-calc-evidence-1600-final.png`，SHA-256 `e725a7af89616be0a9584da3f76cb2b4b7267bfb405f319ac7e447f533ac6a6e`。浏览器检查了点击打开、摘要展开、真实外链与无 console error；随后修复原有证据侧栏 Escape 不关闭/不回焦问题，最新浏览器重测：打开后焦点到“关闭数据依据”，Esc 后 `hidden=true` 且焦点回“安全性热图”触发按钮。相关 A 来源/渲染/事务/镜像测试批 **44 passed**，Ruff、strict-mypy 243 文件、JS 语法、候选包校验均通过；后续微调测试来源日期与焦点处理需随最终源码再核相邻范围。W07 仍 FAIL：仅一条 AE，小批临时项目；正式 4412 条、B/C、全桌面矩阵、fresh-install、24 门户、三宿主未完成。

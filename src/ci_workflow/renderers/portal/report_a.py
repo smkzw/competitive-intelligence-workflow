@@ -19,7 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.ids import stable_id
-from ci_workflow.domain.public_provenance import PublicProvenance
+from ci_workflow.domain.public_provenance import PublicCalculationEvidence, PublicProvenance
 from ci_workflow.qc.browser import load_locked_sitemap_source, site_directory_digest
 from ci_workflow.reports.common.evidence_view import UserEditDisclosure
 from ci_workflow.reports.common.numeric_projection import infer_numeric_kind, project_numeric
@@ -2187,6 +2187,7 @@ def render_report_a_site(
     *,
     publication_limitation_zh: str | None = None,
     public_provenance: PublicProvenance | None = None,
+    calculation_evidence: tuple[PublicCalculationEvidence, ...] = (),
     active_revision: ActiveFactRevision | None = None,
 ) -> tuple[Path, ...]:
     """生成 11 个静态责任页及全部产品详情页。"""
@@ -2223,6 +2224,9 @@ def render_report_a_site(
         publication_limitation_zh=publication_limitation_zh,
     )
     display_payload = data.model_dump(mode="json")
+    display_payload["calculation_evidence"] = [
+        item.model_dump(mode="json") for item in calculation_evidence
+    ]
     display_payload["public_sources"] = (
         [item.model_dump(mode="json") for item in public_provenance.sources]
         if public_provenance is not None
@@ -2363,6 +2367,7 @@ def _render_recovery_digest(
     contract_version: int,
     lineage: ReportALineageBinding | None,
     public_provenance: PublicProvenance | None,
+    calculation_evidence: tuple[PublicCalculationEvidence, ...],
     limitation: str | None,
 ) -> str:
     """Bind exact inputs and installed renderer resources, never infer old bindings."""
@@ -2377,6 +2382,9 @@ def _render_recovery_digest(
                 "public_provenance": (
                     public_provenance.model_dump(mode="json") if public_provenance else None
                 ),
+                "calculation_evidence": [
+                    item.model_dump(mode="json") for item in calculation_evidence
+                ],
                 "publication_limitation": limitation,
                 "runtime_versions": {
                     name: dependency_version(name) for name in ("Jinja2", "pydantic")
@@ -2416,6 +2424,7 @@ def build_report_a_artifact(
     run_id: str,
     lineage: ReportALineageBinding | None = None,
     public_provenance: PublicProvenance | None = None,
+    calculation_evidence: tuple[PublicCalculationEvidence, ...] = (),
     publication_limitation_zh: str | None = None,
     recover_committed: bool = False,
 ) -> tuple[Path, Path]:
@@ -2433,6 +2442,24 @@ def build_report_a_artifact(
         != sorted(lineage.source_version_ids)
     ):
         raise ReportAPortalError("公共来源与报告谱系不一致")
+    source_ids = (
+        {item.source_version_id for item in public_provenance.sources}
+        if public_provenance is not None else set()
+    )
+    safety_rows = {row.row_id: row for row in data.safety}
+    if len({item.row_id for item in calculation_evidence}) != len(calculation_evidence):
+        raise ReportAPortalError("公开计算依据存在重复报告行")
+    for item in calculation_evidence:
+        row = safety_rows.get(item.row_id)
+        if (
+            lineage is None or row is None or item.source_version_id not in source_ids
+            or row.source_version_id != item.source_version_id
+            or row.source_field_path != item.numerator_field_path
+            or row.source_text != item.numerator_quote
+            or row.numerator != item.numerator or row.denominator != item.denominator
+            or row.value != item.value or row.unit != item.unit
+        ):
+            raise ReportAPortalError("公开计算依据与已锁定报告行不一致")
     started_at = datetime.now(UTC)
     transaction = UnpublishedRenderTransaction(
         project_root,
@@ -2446,6 +2473,7 @@ def build_report_a_artifact(
         contract_version,
         lineage,
         public_provenance,
+        calculation_evidence,
         publication_limitation_zh,
     )
     if recover_committed and transaction.manifest_path.exists():
@@ -2476,6 +2504,7 @@ def build_report_a_artifact(
         data,
         staging_root,
         public_provenance=public_provenance,
+        calculation_evidence=calculation_evidence,
         publication_limitation_zh=publication_limitation_zh,
     )
 

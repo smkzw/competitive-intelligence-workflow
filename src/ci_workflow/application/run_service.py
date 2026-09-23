@@ -29,6 +29,7 @@ from ci_workflow.application.project_service import (
 )
 from ci_workflow.domain.enums import ReportKind
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.domain.public_provenance import PublicCalculationEvidence
 from ci_workflow.graph.executor import GraphExecutor
 from ci_workflow.graph.recovery import DeliveryContract, PartialDeliveryCoordinator
 from ci_workflow.graph.types import TransitionRequest
@@ -715,17 +716,23 @@ def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
 
     binding = None
     public_provenance = None
+    calculation_evidence: tuple[PublicCalculationEvidence, ...] = ()
     if ctx.research_lineage is not None:
         from ci_workflow.application.source_research_service import (
             load_fresh_a_research_package,
+            project_a_calculation_evidence,
             project_a_public_provenance,
         )
 
         if ctx.research_package_path is None:
             raise ContractConfigError("A 类公共来源缺少已绑定研究包")
         lineage = ctx.research_lineage
+        research_package = load_fresh_a_research_package(ctx.research_package_path)
         public_provenance = project_a_public_provenance(
-            load_fresh_a_research_package(ctx.research_package_path), lineage
+            research_package, lineage
+        )
+        calculation_evidence = project_a_calculation_evidence(
+            ctx.project_root, research_package.report_data, lineage
         )
         binding = ReportALineageBinding(
             evidence_snapshot_id=lineage.evidence_snapshot.snapshot_id,
@@ -744,6 +751,7 @@ def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
         run_id=run_id,
         lineage=binding,
         public_provenance=public_provenance,
+        calculation_evidence=calculation_evidence,
         publication_limitation_zh=_publication_limitation(ctx, "A"),
         recover_committed=ctx.recover_committed_render,
     )

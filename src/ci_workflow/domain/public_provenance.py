@@ -70,3 +70,23 @@ class PublicProvenance(BaseModel):
     evidence_snapshot_id: str
     report_data_digest: str
     sources: tuple[PublicSource, ...]
+
+
+class PublicCalculationEvidence(BaseModel):
+    """One snapshot-bound, source-backed calculation visible in a report."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    row_id: str
+    derivation_id: str
+    claim_version_id: str
+    source_version_id: str
+    numerator: int
+    denominator: int
+    numerator_quote: str
+    denominator_quote: str
+    numerator_field_path: str
+    denominator_field_path: str
+    value: float
+    unit: str
+    rule_id: str
+    rule_version: str

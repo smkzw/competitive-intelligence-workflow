@@ -8,6 +8,10 @@
 .kz-a-safety-observation strong { padding: 8px; border-radius: 4px; }
 .kz-a-safety-observation small { font-size: 14px; }
 .kz-a-safety-observation[hidden], .kz-a-safety-observation-group[hidden] { display: none !important; }
+.kz-a-calculation-list { grid-template-columns: minmax(0, 1fr); min-width: 0; margin-left: 0; }
+.kz-a-calculation-evidence { min-width: 0; border-bottom: 1px solid #ddd; padding: 6px 0; }
+.kz-a-calculation-evidence summary { cursor: pointer; font-weight: 600; overflow-wrap: anywhere; }
+.kz-a-calculation-evidence p { margin: 6px 0; line-height: 1.45; overflow-wrap: anywhere; }
 .kz-a-observation-group[hidden], .kz-a-observation-group .kz-a-bar-lane[hidden] { display: none !important; }
 .kz-a-observation-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; }
 .kz-a-observation-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 16px; min-width: 0; }

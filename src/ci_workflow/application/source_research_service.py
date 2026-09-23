@@ -17,16 +17,21 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from ci_workflow.domain.evidence import (
     DateEvidence,
     DatePrecision,
+    EvidenceFragmentRecord,
     EvidenceLocator,
     SourceTextDerivation,
     source_version_identity,
 )
 from ci_workflow.domain.ids import stable_id
-from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
+from ci_workflow.domain.public_provenance import (
+    PublicCalculationEvidence,
+    PublicProvenance,
+    PublicSource,
+)
 from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData, SafetyRow
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
-from ci_workflow.storage.snapshot_store import LockedSnapshot
+from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
 from ci_workflow.storage.source_derivation import (
     extract_locator_quote,
     source_json_decoder,
@@ -2355,6 +2360,109 @@ def project_a_public_provenance(
         ).hexdigest(),
         sources=tuple(sources),
     )
+
+
+def project_a_calculation_evidence(
+    project_root: Path, report_data: ReportAPortalData, lineage: ResearchLineage,
+) -> tuple[PublicCalculationEvidence, ...]:
+    """Expose only calculations that close against locked facts and visible A rows."""
+    snapshot = SnapshotStore(project_root).read(lineage.evidence_snapshot)
+    if snapshot["scientific_content_digest"] != lineage.package_digest:
+        raise ResearchPackageError("计算依据与证据快照内容不一致")
+    closure = snapshot["closure"]
+    fragments = {
+        item.fragment_id: item
+        for raw in closure["fragments"]
+        for item in (EvidenceFragmentRecord.model_validate(raw),)
+    }
+    facts = {
+        str(raw["fact_version_id"]): (
+            ResearchFact.model_validate(raw["fact"]), str(raw["primary_fragment_id"])
+        )
+        for raw in closure["facts"]
+    }
+    claims = {
+        str(raw["claim_version_id"]): ResearchClaim.model_validate(raw["claim"])
+        for raw in closure["claims"]
+    }
+    rows = {f"safety:{row.row_id}": row for row in report_data.safety}
+    exposed: dict[str, PublicCalculationEvidence] = {}
+    for raw in closure["derivations"]:
+        if raw["derivation_kind"] != "calculation":
+            continue
+        output = raw["output"]
+        scope = str(output["scope_row_ref"])
+        row = rows.get(scope)
+        claim = claims.get(str(output["claim_version_id"]))
+        version_ids = output["input_fact_version_ids"]
+        fragment_ids = raw["input_fragment_ids"]
+        if (
+            row is None or claim is None or claim.calculation is None
+            or scope in exposed or len(version_ids) != 2 or len(fragment_ids) != 2
+            or raw["rule_id"] != claim.calculation.rule_id
+            or raw["rule_version"] != claim.calculation.rule_version
+            or output["formula"] != claim.calculation.formula
+            or output["value"] != claim.calculation.output_value
+            or output["unit"] != claim.calculation.unit
+            or output["parameters"] != {"decimal_places": claim.calculation.decimal_places}
+            or scope != claim.calculation.scope_row_ref
+        ):
+            raise ResearchPackageError("计算派生与报告行或声明不一致")
+        try:
+            (numerator_fact, numerator_fragment_id), (
+                denominator_fact, denominator_fragment_id
+            ) = (facts[str(item)] for item in version_ids)
+            numerator_fragment = fragments[numerator_fragment_id]
+            denominator_fragment = fragments[denominator_fragment_id]
+            numerator = int(numerator_fact.raw_value or "")
+            denominator = int(denominator_fact.raw_value or "")
+        except (KeyError, ValueError) as error:
+            raise ResearchPackageError("计算派生输入缺少原子事实或原文片段") from error
+        if (
+            fragment_ids != [numerator_fragment_id, denominator_fragment_id]
+            or numerator_fact.fact_id != claim.fact_ids[0]
+            or denominator_fact.fact_id != claim.fact_ids[1]
+            or numerator_fact.row_ref != scope
+            or denominator_fact.row_ref != f"{scope}:denominator"
+            or numerator_fragment.source_version_id != row.source_version_id
+            or denominator_fragment.source_version_id != row.source_version_id
+            or numerator_fragment.original_text != numerator_fact.original_text
+            or denominator_fragment.original_text != denominator_fact.original_text
+            or numerator_fragment.locator.field_path != row.source_field_path
+            or numerator_fragment.original_text != row.source_text
+            or numerator_fragment.locator.field_path is None
+            or denominator_fragment.locator.field_path is None
+            or row.numerator != numerator or row.denominator != denominator
+            or row.value is None
+            or not math.isclose(row.value, float(output["value"]), abs_tol=1e-9)
+            or not math.isclose(
+                row.value, round(100 * numerator / denominator, 1), abs_tol=1e-9
+            )
+        ):
+            raise ResearchPackageError("计算派生原文、来源版本或展示值不一致")
+        exposed[scope] = PublicCalculationEvidence(
+            row_id=row.row_id,
+            derivation_id=str(raw["derivation_id"]),
+            claim_version_id=str(output["claim_version_id"]),
+            source_version_id=row.source_version_id,
+            numerator=numerator,
+            denominator=denominator,
+            numerator_quote=numerator_fragment.original_text,
+            denominator_quote=denominator_fragment.original_text,
+            numerator_field_path=numerator_fragment.locator.field_path,
+            denominator_field_path=denominator_fragment.locator.field_path,
+            value=row.value,
+            unit=row.unit,
+            rule_id=str(raw["rule_id"]),
+            rule_version=str(raw["rule_version"]),
+        )
+    expected_scopes = {
+        claim.calculation.scope_row_ref
+        for claim in claims.values() if claim.calculation is not None
+    }
+    if set(exposed) != expected_scopes:
+        raise ResearchPackageError("已声明的报告计算缺少快照派生或公开行")
+    return tuple(exposed[key] for key in sorted(exposed))
 
 
 def ingest_fresh_a_research_package(

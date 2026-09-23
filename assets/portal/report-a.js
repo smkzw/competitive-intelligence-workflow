@@ -11,6 +11,7 @@
   var patents = data.patents || [];
   var historyRows = data.history || [];
   var sources = data.sources || [];
+  var calculationEvidence = data.calculation_evidence || [];
   var userEdits = data.user_edits || {};
   var selected = {};
   var safetyTermLabels = {};
@@ -22,6 +23,7 @@
   var productInsightClose = document.getElementById("a-product-insight-close");
   var productInsightId = null;
   var productInsightTrigger = null;
+  var evidencePanelTrigger = null;
   var fallbackSafetyTermKeys = {
     "任何teae": "any_teae", "any teae": "any_teae", "teae": "any_teae",
     "任何sae": "any_sae", "any sae": "any_sae", "sae": "any_sae",
@@ -1432,6 +1434,45 @@
       });
       content.appendChild(editList);
     }
+    var calculatedRows = calculationEvidence.map(function (item) {
+      return { evidence: item, row: safety.find(function (row) { return row.row_id === item.row_id; }) };
+    }).filter(function (item) {
+      return item.row && (!productScope || item.row.product_id === productScope);
+    });
+    if (calculatedRows.length) {
+      content.appendChild(el("h3", "", "安全性比例的计算依据"));
+      var calculationList = el("div", "kz-a-evidence-list kz-a-calculation-list");
+      calculatedRows.forEach(function (item) {
+        var evidence = item.evidence;
+        var row = item.row;
+        var detail = el("details", "kz-a-calculation-evidence");
+        detail.appendChild(el("summary", "", productName(row.product_id) + "｜" + row.term
+          + "｜" + (row.arm_detail || row.arm || "组别见明细") + "："
+          + evidence.numerator + "/" + evidence.denominator + "人 → "
+          + evidence.value + evidence.unit));
+        detail.appendChild(el("p", "", "收集时间窗：" + row.time_window));
+        detail.appendChild(el("p", "", "登记原文：受影响人数“" + evidence.numerator_quote
+          + "”、风险人数“" + evidence.denominator_quote + "”。按受影响人数÷风险人数×100，保留一位小数。"));
+        detail.appendChild(el("p", "", "原始字段：受影响人数 " + evidence.numerator_field_path
+          + "；风险人数 " + evidence.denominator_field_path));
+        var source = (data.public_sources || []).find(function (entry) {
+          return entry.source_version_id === evidence.source_version_id;
+        });
+        if (source) {
+          var sourceLine = el("p", "", "来源：" + source.label + "。" + source.limitation);
+          if (source.url) {
+            var link = el("a", "", "查看来源");
+            link.href = source.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            sourceLine.appendChild(link);
+          }
+          detail.appendChild(sourceLine);
+        }
+        calculationList.appendChild(detail);
+      });
+      content.appendChild(calculationList);
+    }
     content.appendChild(el("h3", "", "涉及试验"));
     var trialList = el("ul", "kz-a-evidence-list");
     trials.filter(function (trial) { return !productScope || trial.product_id === productScope; }).forEach(function (trial) {
@@ -1445,6 +1486,21 @@
     });
     content.appendChild(sourceList);
   }
+  function closeEvidencePanel() {
+    var panel = document.getElementById("data-basis-panel");
+    if (!panel || panel.hidden) return;
+    panel.hidden = true;
+    var trigger = evidencePanelTrigger;
+    evidencePanelTrigger = null;
+    if (trigger && trigger.isConnected && typeof trigger.focus === "function") trigger.focus();
+  }
+  document.addEventListener("keydown", function (event) {
+    var panel = document.getElementById("data-basis-panel");
+    if (!panel || panel.hidden || (event.key !== "Escape" && event.key !== "Esc")) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeEvidencePanel();
+  }, true);
   function renderNetwork(host) {
     host.innerHTML = "";
     var wrapper = el("div", "kz-a-network-visual");
@@ -1746,8 +1802,8 @@
       }
     }
     var evidence = target.closest("[data-open-evidence]");
-    if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"));} }
-    if (target.closest("[data-close-evidence]")) { var p=document.getElementById("data-basis-panel");if(p)p.hidden=true; }
+    if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){evidencePanelTrigger=evidence;panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"));var close=panel.querySelector("[data-close-evidence]");if(close)close.focus();} }
+    if (target.closest("[data-close-evidence]")) closeEvidencePanel();
     if (target.closest("[data-a-save-view]")) saveCurrentView();
     if (target.closest("[data-a-clear-view]")) clearSavedView();
   });
