@@ -11,6 +11,7 @@ from ci_workflow.application.source_research_service import (
     SourceCapture,
     _iter_adverse_event_results,
     audit_clinicaltrials_result_coverage,
+    extract_ctgov_atomic_results,
 )
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, SafetyRow
 
@@ -205,6 +206,102 @@ def test_omitted_ae_affected_count_is_unknown_not_zero() -> None:
         and "未知，待核" in issue.reason_zh
         for issue in audit.issues
     )
+
+
+def test_registry_atoms_reextract_real_value_and_denominator_fields() -> None:
+    _, _, sources = _fixture()
+    atoms, issues = extract_ctgov_atomic_results(_source(sources, "NCT02277743"))
+
+    assert not issues
+    outcome = next(row for row in atoms if row.category == "outcome")
+    assert outcome.value_quote == "10.3"
+    assert outcome.value_locator.field_path is not None
+    assert outcome.value_locator.field_path.endswith("measurements[0].value")
+    assert outcome.denominator_locator is None
+    zero = next(
+        row for row in atoms
+        if row.category == "sae" and row.endpoint == "" and row.value_quote == "0"
+        and row.group_id == "EG001" and row.denominator_quote == "229"
+    )
+    assert zero.numerator == 0
+    assert zero.display_value == 0
+    assert zero.value_locator.field_path is not None
+    assert zero.value_locator.field_path.endswith("seriousEvents[0].stats[1].numAffected")
+    assert zero.denominator_locator is not None
+    assert zero.denominator_locator.field_path is not None
+    assert zero.denominator_locator.field_path.endswith("seriousEvents[0].stats[1].numAtRisk")
+
+
+def test_registry_atoms_do_not_turn_missing_affected_into_zero() -> None:
+    _, _, sources = _fixture()
+    atoms, issues = extract_ctgov_atomic_results(_source(sources, "NCT05131477"))
+
+    assert any(
+        issue.status == "missing"
+        and issue.source_path.endswith("seriousEvents[16].stats[7].numAffected")
+        for issue in issues
+    )
+    assert not any(
+        row.value_locator.field_path == "$.resultsSection.adverseEventsModule."
+        "seriousEvents[16].stats[7].numAffected"
+        for row in atoms
+    )
+
+
+def test_registry_participant_count_retains_both_raw_inputs() -> None:
+    _, _, sources = _fixture()
+    record = {
+        "protocolSection": {"identificationModule": {"nctId": "NCT02277743"}},
+        "resultsSection": {"outcomeMeasuresModule": {"outcomeMeasures": [{
+            "title": "Participants With Response",
+            "timeFrame": "Week 16",
+            "unitOfMeasure": "Participants",
+            "groups": [{"id": "OG1", "title": "治疗组"}],
+            "denoms": [{"counts": [{"groupId": "OG1", "value": "4"}]}],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": "OG1", "value": "1"}
+            ]}]}],
+        }]}},
+    }
+    source = _source(sources, "NCT02277743").model_copy(
+        update={"content_text": json.dumps(record)}
+    )
+
+    atoms, issues = extract_ctgov_atomic_results(source)
+
+    assert not issues and len(atoms) == 1
+    assert atoms[0].display_value == 25.0
+    assert (atoms[0].value_quote, atoms[0].denominator_quote) == ("1", "4")
+    assert atoms[0].value_locator.field_path is not None
+    assert atoms[0].value_locator.field_path.endswith("measurements[0].value")
+    assert atoms[0].denominator_locator is not None
+    assert atoms[0].denominator_locator.field_path is not None
+    assert atoms[0].denominator_locator.field_path.endswith("denoms[0].counts[0].value")
+
+
+def test_missing_group_affected_does_not_hide_other_valid_group_results() -> None:
+    _, _, sources = _fixture()
+    record = {
+        "protocolSection": {"identificationModule": {"nctId": "NCT02277743"}},
+        "resultsSection": {"adverseEventsModule": {"eventGroups": [
+            {
+                "id": "EG1", "title": "治疗组", "seriousNumAtRisk": 100,
+                "otherNumAffected": 0, "otherNumAtRisk": 100,
+            }
+        ]}},
+    }
+    source = _source(sources, "NCT02277743").model_copy(
+        update={"content_text": json.dumps(record)}
+    )
+
+    atoms, issues = extract_ctgov_atomic_results(source)
+
+    assert len(atoms) == 1
+    assert atoms[0].category == "common_ae"
+    assert (atoms[0].value_quote, atoms[0].denominator_quote) == ("0", "100")
+    assert len(issues) == 1
+    assert issues[0].status == "missing"
+    assert issues[0].source_path.endswith("eventGroups[0].seriousNumAffected")
 
 
 def test_ae_explicit_zero_is_preserved_but_missing_affected_is_not_inferred() -> None:

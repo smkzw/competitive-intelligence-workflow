@@ -28,6 +28,7 @@ from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import LockedSnapshot
 from ci_workflow.storage.source_derivation import (
+    extract_locator_quote,
     source_json_decoder,
     verify_source_text_derivation,
 )
@@ -414,6 +415,30 @@ class _RegistryResult:
     endpoint: str = ""
     timepoint: str = ""
     unit: str = ""
+    value_path: str = ""
+    denominator_path: str | None = None
+
+
+@dataclass(frozen=True)
+class CtgovAtomicResult:
+    """One registry result with re-extracted numerator/value and denominator atoms."""
+
+    result_key: str
+    category: ClinicalTrialsResultCategory
+    trial_id: str
+    source_id: str
+    group_id: str
+    arm: str
+    endpoint: str
+    timepoint: str
+    display_value: float | None
+    display_unit: str
+    numerator: int | None
+    denominator: int | None
+    value_locator: EvidenceLocator
+    value_quote: str
+    denominator_locator: EvidenceLocator | None
+    denominator_quote: str | None
 
 
 _RESULT_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
@@ -806,7 +831,7 @@ def _iter_outcome_results(
             }
             if any(not title for title in groups.values()):
                 raise ValueError("结果组别缺少标题")
-            denominator_by_group: dict[str, int] = {}
+            denominator_by_group: dict[str, tuple[int, str]] = {}
             for denom_index, raw_denom in enumerate(measure.get("denoms", [])):
                 denom = _mapping_at(raw_denom, f"{path}.denoms[{denom_index}]")
                 for count_index, raw_count in enumerate(denom.get("counts", [])):
@@ -814,7 +839,10 @@ def _iter_outcome_results(
                         raw_count, f"{path}.denoms[{denom_index}].counts[{count_index}]"
                     )
                     group_id = _result_text(count.get("groupId"))
-                    denominator_by_group[group_id] = _result_int(count.get("value"))
+                    denominator_by_group[group_id] = (
+                        _result_int(count.get("value")),
+                        f"{path}.denoms[{denom_index}].counts[{count_index}].value",
+                    )
             unit_raw = _result_text(measure.get("unitOfMeasure"))
             unit = unit_raw.casefold()
             param_type = _result_text(measure.get("paramType")).casefold()
@@ -907,14 +935,16 @@ def _iter_outcome_results(
                 report_term = _outcome_report_term(result_category, title, class_title)
                 numerator = None
                 denominator = None
+                denominator_path = None
                 normalized_value = value
                 normalized_unit = "%" if is_percentage else (
                     "人" if is_participant_count else unit_raw
                 )
                 if is_participant_count:
-                    denominator = denominator_by_group.get(group_id)
-                    if denominator is None:
+                    denominator_entry = denominator_by_group.get(group_id)
+                    if denominator_entry is None:
                         raise ValueError(f"受试者人数缺少分母：{group_id}")
+                    denominator, denominator_path = denominator_entry
                     numerator = int(value)
                     if numerator < 0 or numerator > denominator:
                         raise ValueError("受试者人数超出来源分母")
@@ -943,6 +973,8 @@ def _iter_outcome_results(
                         endpoint=title,
                         timepoint=timeframe,
                         unit=normalized_unit,
+                        value_path=f"{measurement_path}.value",
+                        denominator_path=denominator_path,
                     )
                 )
         except (TypeError, ValueError, KeyError) as exc:
@@ -995,7 +1027,21 @@ def _iter_adverse_event_results(
                 if affected is None and at_risk is None:
                     continue
                 if affected is None or at_risk is None:
-                    raise ValueError(f"{affected_key} 与 {at_risk_key} 必须同时存在")
+                    missing_key = affected_key if affected is None else at_risk_key
+                    _result_issue(
+                        issues=issues,
+                        category=category,  # type: ignore[arg-type]
+                        status="missing",
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=f"{path}.{missing_key}",
+                        result_key=_result_key(category, trial_id, group_id, path),
+                        reason_zh=(
+                            f"{trial_id} 的 {group_id} 未提供 {missing_key}；"
+                            "当前比例未知，待核，不得推断为 0"
+                        ),
+                    )
+                    continue
                 numerator = _result_int(affected)
                 denominator = _result_int(at_risk)
                 if denominator <= 0 or numerator < 0 or numerator > denominator:
@@ -1013,6 +1059,8 @@ def _iter_adverse_event_results(
                         value=round(numerator * 100 / denominator, 1),
                         numerator=numerator,
                         denominator=denominator,
+                        value_path=f"{path}.{affected_key}",
+                        denominator_path=f"{path}.{at_risk_key}",
                     )
                 )
         except (TypeError, ValueError, KeyError) as exc:
@@ -1105,6 +1153,8 @@ def _iter_adverse_event_results(
                         value=round(numerator * 100 / denominator, 1),
                         numerator=numerator,
                         denominator=denominator,
+                        value_path=f"{stat_path}.numAffected",
+                        denominator_path=f"{stat_path}.numAtRisk",
                     )
                     results.append(result)
                     if explicit_aesi:
@@ -1123,6 +1173,8 @@ def _iter_adverse_event_results(
                                 value=result.value,
                                 numerator=numerator,
                                 denominator=denominator,
+                                value_path=f"{stat_path}.numAffected",
+                                denominator_path=f"{stat_path}.numAtRisk",
                             )
                         )
                 except (TypeError, ValueError, KeyError) as exc:
@@ -1134,6 +1186,89 @@ def _iter_adverse_event_results(
                         detail=str(exc),
                     )
     return results
+
+
+def extract_ctgov_atomic_results(
+    source: SourceCapture,
+) -> tuple[tuple[CtgovAtomicResult, ...], tuple[ClinicalTrialsResultCoverageIssue, ...]]:
+    """Reopen one captured registry record and retain every scalar source path.
+
+    The display percentage is only a projection. Its affected count and at-risk
+    denominator stay independently addressable; parse/missing issues remain in
+    the return value and must not be counted as verified zeroes.
+    """
+    if source.source_type != "clinical_trial_registry" or source.media_type != "application/json":
+        raise ResearchPackageError("原子结果提取需要 JSON 登记来源")
+    try:
+        record = source_json_decoder().decode(source.content_text)
+        if not isinstance(record, dict):
+            raise TypeError("登记来源不是对象")
+        trial_id = str(
+            record["protocolSection"]["identificationModule"]["nctId"]
+        ).strip()
+        if not trial_id or trial_id.casefold() != source.query_or_identifier.casefold():
+            raise ValueError("来源试验身份不一致")
+    except (KeyError, TypeError, ValueError) as error:
+        raise ResearchPackageError("登记来源不能证明试验身份") from error
+    issues: list[ClinicalTrialsResultCoverageIssue] = []
+    parsed = [
+        *_iter_outcome_results(
+            record=record, trial_id=trial_id, source_id=source.source_id, issues=issues
+        ),
+        *_iter_adverse_event_results(
+            record=record, trial_id=trial_id, source_id=source.source_id, issues=issues
+        ),
+    ]
+    atoms: list[CtgovAtomicResult] = []
+    for result in parsed:
+        if not result.value_path:
+            raise ResearchPackageError("登记结果没有原子数值路径")
+        value_locator = EvidenceLocator(
+            document_role="clinical_trial_registry",
+            field_path=f"$.{result.value_path}",
+            url=source.url,
+        )
+        value_quote = extract_locator_quote(
+            source.content_text, media_type=source.media_type, locator=value_locator
+        )
+        try:
+            expected_raw = result.numerator if result.numerator is not None else result.value
+            if expected_raw is None or not math.isclose(
+                _result_number(value_quote), float(expected_raw), rel_tol=0.0, abs_tol=1e-9
+            ):
+                raise ValueError("原子数值与已解析登记结果不一致")
+        except (TypeError, ValueError) as error:
+            raise ResearchPackageError("登记结果的原子数值不能按精确路径复核") from error
+        denominator_locator = None
+        denominator_quote = None
+        if result.denominator is not None:
+            if result.denominator_path is None:
+                raise ResearchPackageError("派生比例缺少分母精确路径")
+            denominator_locator = EvidenceLocator(
+                document_role="clinical_trial_registry",
+                field_path=f"$.{result.denominator_path}",
+                url=source.url,
+            )
+            denominator_quote = extract_locator_quote(
+                source.content_text, media_type=source.media_type,
+                locator=denominator_locator,
+            )
+            try:
+                if _result_int(denominator_quote) != result.denominator:
+                    raise ValueError("分母与已解析结果不一致")
+            except ValueError as error:
+                raise ResearchPackageError("登记结果分母不能按精确路径复核") from error
+        atoms.append(CtgovAtomicResult(
+            result_key=result.result_key, category=result.category,
+            trial_id=result.trial_id, source_id=result.source_id,
+            group_id=result.group_id, arm=result.arm, endpoint=result.endpoint,
+            timepoint=result.timepoint, display_value=result.value,
+            display_unit=result.unit, numerator=result.numerator,
+            denominator=result.denominator, value_locator=value_locator,
+            value_quote=value_quote, denominator_locator=denominator_locator,
+            denominator_quote=denominator_quote,
+        ))
+    return tuple(atoms), tuple(issues)
 
 
 def _audit_source_record(

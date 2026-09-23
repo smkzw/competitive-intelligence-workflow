@@ -33,3 +33,11 @@
 随后在自动清理的**临时试验项目**中，使用同一真实 CAS 切片和上述精确 `EvidenceLocator` 调用现有 `ingest_research_evidence`：得到 1 个来源版本、1 个 `source_text_derivations`、1 个事实版本；SQLite 事实 fragment 的原文是 `68.8`，locator 是上述无通配符路径。临时试验项目并非当前 PNH 项目的正式数据库/快照；试验用 fact ID 和 claim 仅为接缝验证，尚未建立跨来源/排序稳定科学身份，不得用来称正式报告来源闭包。
 
 为清除重构噪音，删除 `source_research_service.py` 中 `ingest_fresh_a_research_package` 已经 `return` 后的约 230 行不可达旧摄取代码；历史可由 Git 父提交找回，现有生产入口仍使用共享 `ingest_research_evidence`。新增接缝正/负案例及邻接日期/来源审计/研究包集成批 `16 passed`，修改模块 Ruff 与 strict mypy 通过。后续仍需把多组、多期等真实事实、分母和状态通过该接缝进入摄取与门户。
+
+## 原子数值与分母重提取（同日后续，开发候选）
+
+`source_research_service.py` 的登记结果解析现保留每一项原始数值字段路径；存在由人数计算比例的记录时，同时保留独立分母字段路径。新增 `extract_ctgov_atomic_results` 对既有 `SourceCapture` 的 JSON 原文按精确 locator 重提取数值与分母，返回可见值、原始 quote、组别/终点/时间以及解析/缺失问题，不把派生百分比当作来源原文。`numAffected` 缺失仍只产生“未知，待核”的问题，不产生零原子；组别汇总某一字段缺失也不再吞掉同组另一项有效统计。
+
+真实本机 CAS 探针：`5e/5e055f4c38b521ee0b77d8d55c403955f543e6800db21245bd2d1bf36e7b4a14.bin`，SHA-256 与文件名相同；从 `studies[5]` 重开 NCT04558918 后得到 **216 个原子结果、0 个该研究解析问题**。其中 `68.8` 重提取路径为 `$.resultsSection.outcomeMeasuresModule.outcomeMeasures[1].classes[0].categories[0].measurements[0].value`，组 `OG000`；此项为来源直接报告的百分比，无单独分母 locator，不可借其他 `N` 重算。该 CAS 位于当前未跟踪运行资料，不能据此声称新安装包可复现。
+
+定向整族：`tests/integration/test_ctgov_result_coverage_audit.py`、`test_w07_ctgov_capture_bridge.py`、`test_source_text_derivation.py` **30 passed in 55.29s**；所改模块 Ruff 与 strict-mypy（该 1 个源文件）通过。以上仅是原子重提取层：尚未形成稳定 `ResearchFact` 身份/组期关系、独立分母派生记录、正式 PNH 数据库/快照、A/B/C 页逐事实来源入口；4412 条展示事实的闭包数量仍未重算，保持 W07 FAIL。下一步用原子结果经既有 `ResearchFact` 和 `ingest_research_evidence` 摄取真实小批，验证不匹配/0/0/缺失及报告行绑定，再扩全量。
