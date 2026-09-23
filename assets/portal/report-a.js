@@ -749,6 +749,14 @@
     if (isIgaResponse(value)) return "IGA 0/1";
     return "其他主要疗效指标";
   }
+  function observationValueLabel(value, projection) {
+    if (projection.kind === "participant_proportion"
+      && projection.numerator !== null && projection.denominator !== null) {
+      var rounded = Number(value.toPrecision(3));
+      return (rounded === value ? "" : "约") + rounded + unitSuffix(projection.plot_unit);
+    }
+    return value + unitSuffix(projection.plot_unit);
+  }
   function paginateObservations(host, groupSelector, label) {
     var observations = Array.prototype.slice.call(host.querySelectorAll("[data-row-id]"));
     if (observations.length && observations[0].hasAttribute("data-observation-order")) {
@@ -868,14 +876,19 @@
           var bar = el("div", "kz-a-bar" + (item.arm === "对照组" ? " kz-a-bar--control" : ""));
           bar.style.left = ((Math.min(0, projectedValue) - minimum) / span * 100) + "%";
           bar.style.width = (Math.abs(projectedValue) / span * 100) + "%";
-          bar.title = (item.arm_detail || item.arm) + " " + projectedValue + unitSuffix(projection.plot_unit);
+          bar.title = (item.arm_detail || item.arm) + " "
+            + observationValueLabel(projectedValue, projection)
+            + (projection.numerator !== null && projection.denominator !== null
+              ? "（" + projection.numerator + "/" + projection.denominator + "）" : "");
           track.appendChild(bar);
           lane.appendChild(track);
         }
-        lane.appendChild(el("strong", "kz-a-observation-value", projectedValue + unitSuffix(projection.plot_unit)));
+        lane.appendChild(el("strong", "kz-a-observation-value", observationValueLabel(projectedValue, projection)));
         bars.appendChild(lane);
       });
-      if (!singleObservation) bars.appendChild(el("small", "kz-a-local-scale", "本组刻度：" + minimum + " 至 " + maximum + unitSuffix(firstProjection.plot_unit)));
+      if (!singleObservation) bars.appendChild(el("small", "kz-a-local-scale", "本组刻度："
+        + Number(minimum.toPrecision(3)) + " 至 " + Number(maximum.toPrecision(3))
+        + unitSuffix(firstProjection.plot_unit)));
       row.appendChild(bars);
       if (wideColumns) {
         var targetColumn = columnWeights[0] <= columnWeights[1] ? 0 : 1;

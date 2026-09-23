@@ -427,6 +427,19 @@ def test_wide_efficacy_uses_two_readable_lanes_without_losing_observations(
         assert first_ids.isdisjoint(second_ids)
 
 
+def test_computed_participant_rate_uses_readable_label_and_keeps_exact_counts(
+    page: Page, rendered_ad_site: Path
+) -> None:
+    _open(page, rendered_ad_site / "overview.html", width=1920, height=1080)
+    observation = page.locator(
+        '[data-chart-id="home-efficacy"] '
+        '[data-row-id="a-rebuild-efficacy-row_0033dbeea2d437ed588d5d53"]'
+    )
+    assert observation.count() == 1
+    assert observation.locator(".kz-a-observation-value").text_content() == "约21.2%"
+    assert "11/52" in observation.locator(".kz-a-bar").get_attribute("title")
+
+
 def test_landscape_assigns_each_product_once_and_regulatory_timeline_is_directly_split(
     page: Page, rendered_ad_site: Path
 ) -> None:
