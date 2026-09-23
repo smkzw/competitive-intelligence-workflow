@@ -24,6 +24,15 @@
   z-index: 1100;
 }
 
+@media (min-width: 1440px) {
+  body:has(.kz-evidence-drawer:not([hidden])) .portal-main {
+    width: calc(100% - min(560px, 42vw));
+    max-width: calc(100% - min(560px, 42vw));
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 .kz-evidence-drawer__panel {
   min-height: 100%;
   display: flex;

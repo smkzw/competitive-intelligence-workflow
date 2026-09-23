@@ -919,11 +919,6 @@ body {
   margin-bottom: 16px;
 }
 
-.kz-b-site--safety .kz-chart-group__chart {
-  height: 260px !important;
-  min-height: 260px;
-}
-
 @media (max-width: 1350px) {
   .kz-b-filter-panel[open] .kz-b-filters {
     max-height: 360px;

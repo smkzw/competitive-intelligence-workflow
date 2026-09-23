@@ -54,6 +54,56 @@ def b_pnh_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.mark.parametrize("browser_name", BROWSERS)
+@pytest.mark.parametrize("width", (1920, 2560))
+def test_sparse_safety_heatmaps_use_compact_parallel_desktop_cards(
+    b_pnh_site: Path, browser_name: str, width: int
+) -> None:
+    with sync_playwright() as playwright:
+        browser = _launch(playwright, browser_name)
+        page = browser.new_page(viewport={"width": width, "height": 1080})
+        _open(page, b_pnh_site, "safety.html")
+        cards = page.locator(".kz-chart-module__group[data-grid-span='6']")
+        assert cards.count() >= 2
+        first = cards.nth(0).bounding_box()
+        second = cards.nth(1).bounding_box()
+        assert first is not None and second is not None
+        assert first["width"] < width / 2
+        assert second["x"] > first["x"] + first["width"]
+        assert abs(second["y"] - first["y"]) < 3
+        heights = cards.locator("[data-chart-type='heatmap']").evaluate_all(
+            "nodes => nodes.map(node => node.getBoundingClientRect().height)"
+        )
+        assert heights and all(height <= 190 for height in heights)
+        assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
+        browser.close()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
+def test_desktop_evidence_drawer_reflows_charts_without_covering_facts(
+    b_pnh_site: Path, browser_name: str
+) -> None:
+    with sync_playwright() as playwright:
+        browser = _launch(playwright, browser_name)
+        page = browser.new_page(viewport={"width": 1920, "height": 1080})
+        _open(page, b_pnh_site, "safety.html")
+        _expand_complete_tables(page)
+        trigger = page.locator("#kz-chart-module [data-evidence-open]").first
+        trigger.click()
+        drawer = page.locator(".kz-evidence-drawer:not([hidden])")
+        assert drawer.count() == 1
+        page.wait_for_timeout(200)
+        main_box = page.locator(".portal-main").bounding_box()
+        drawer_box = drawer.bounding_box()
+        assert main_box is not None and drawer_box is not None
+        assert main_box["x"] + main_box["width"] <= drawer_box["x"] + 1
+        assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
+        assert page.locator(
+            "[data-chart-type='heatmap'] svg, [data-chart-type='heatmap'] canvas"
+        ).count() > 0
+        browser.close()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
 @pytest.mark.parametrize("width", (1024, 1280, 1440))
 def test_b_pnh_names_timepoint_and_matrix_are_user_visible(
     b_pnh_site: Path, browser_name: str, width: int

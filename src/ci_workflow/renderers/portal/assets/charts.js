@@ -750,12 +750,18 @@
               show: true,
               formatter: function (p) {
                 var rowIndex = p.data && p.data.rowIndex;
-                return p.data && p.data.status
-                  ? disclosureLabelZh(
-                      (group.rows[rowIndex] && group.rows[rowIndex].disclosure_state) ||
-                        "not_publicly_disclosed"
-                    )
-                  : String(p.value[2]);
+                if (p.data && p.data.status) {
+                  return disclosureLabelZh(
+                    (group.rows[rowIndex] && group.rows[rowIndex].disclosure_state) ||
+                      "not_publicly_disclosed"
+                  );
+                }
+                var sourceRow = group.rows[rowIndex] || {};
+                if (sourceRow._user_edit && typeof p.value[2] === "number") {
+                  var rounded = Number(p.value[2].toPrecision(3));
+                  return (rounded === p.value[2] ? "" : "约") + rounded + String(sourceRow.unit || "");
+                }
+                return String(p.value[2]);
               }
             }
           }
@@ -1158,9 +1164,13 @@
     var rows = group.rows || [];
     var plotted = rows.filter(isRenderable);
     var kind = resolveChartType(group);
-    var compact = (kind === "bar" || kind === "line") && plotted.length <= 4;
+    var compactMatrix = (kind === "heatmap" || kind === "status_matrix")
+      && rows.length <= 4;
+    var compact = ((kind === "bar" || kind === "line") && plotted.length <= 4)
+      || compactMatrix;
     var height = kind === "heatmap" || kind === "status_matrix"
-      ? Math.min(420, Math.max(260, 140 + rows.length * 28))
+      ? compactMatrix ? (rows.length <= 1 ? 160 : 184)
+        : Math.min(420, Math.max(260, 140 + rows.length * 28))
       : plotted.length <= 1 ? 168
         : plotted.length <= 2 ? 220
           : plotted.length <= 8 ? 300 : 380;
