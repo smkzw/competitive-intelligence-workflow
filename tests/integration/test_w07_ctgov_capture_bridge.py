@@ -234,6 +234,17 @@ def test_registry_class_visit_and_category_keep_same_value_observations_distinct
         bind_ctgov_outcome_to_a_row(duplicate_source, duplicate_atoms[1], row)
 
 
+def test_a_builder_does_not_mistake_from_baseline_for_baseline_visit() -> None:
+    from ci_workflow.application.source_research_service import (
+        ctgov_class_observation_timepoint,
+    )
+
+    assert ctgov_class_observation_timepoint("≥2 g/dL increase from baseline") == ""
+    assert ctgov_class_observation_timepoint("Baseline") == "Baseline"
+    assert ctgov_class_observation_timepoint("Fatigue: Day 253") == "Fatigue: Day 253"
+    assert ctgov_class_observation_timepoint("Day 1 and Day 253") == ""
+
+
 def test_ctgov_study_capture_reopens_raw_and_preserves_calendar_day(tmp_path: Path) -> None:
     study = _derived(tmp_path)
     capture = source_capture_from_ctgov_study(tmp_path, study)

@@ -609,7 +609,7 @@ def _result_time_matches(source: str, report: str) -> bool:
     )
 
 
-def _result_class_visit_title(class_title: str) -> str:
+def ctgov_class_observation_timepoint(class_title: str) -> str:
     """Only a stated visit, not any mention of baseline, can narrow a measure window."""
     title = _result_text(class_title)
     if title.casefold() in {"baseline", "at baseline"}:
@@ -955,7 +955,7 @@ def _iter_outcome_results(
             for class_index, raw_class in enumerate(classes):
                 class_mapping = _mapping_at(raw_class, f"{path}.classes[{class_index}]")
                 class_title = _result_text(class_mapping.get("title"))
-                observation_timepoint = _result_class_visit_title(class_title)
+                observation_timepoint = ctgov_class_observation_timepoint(class_title)
                 result_category = _outcome_category(title, class_title)
                 if result_category is None:
                     _parse_failure(

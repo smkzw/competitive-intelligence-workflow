@@ -18,6 +18,9 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from ci_workflow.application.source_research_service import (  # noqa: E402
+    ctgov_class_observation_timepoint,
+)
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -538,20 +541,9 @@ def main() -> None:
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
-                    # 分析集标签自带单一访视日（如 "Fatigue: Day 253"）时，
-                    # 该行实际时间点取类标签，而非列出双访视日的测量级 time_frame
-                    row_time_frame = time_frame
-                    _cls_days = set(
-                        m.group(1)
-                        for m in re.finditer(
-                            r"(?:day|week)\s+(\d+(?:\.\d+)?)", cls_title.casefold()
-                        )
-                    )
-                    if len(_cls_days) == 1:
-                        row_time_frame = cls_title
-                    elif not _cls_days and "baseline" in cls_title.casefold():
-                        # 登记明示的基线类行（class="Baseline"）是真实观察
-                        row_time_frame = "Baseline"
+                    # 仅明确单一访视覆盖测量时间窗；"from baseline" 是
+                    # 比较基准，不是 Baseline 访视。
+                    row_time_frame = ctgov_class_observation_timepoint(cls_title) or time_frame
                     # 独立视觉复核（A copy_zh）：class 原文英文不得嵌入
                     # 中文 population 行；词汇级确定性转写，未命中保留原文
                     cls_title = _transcribe_class_title(cls_title)
