@@ -1469,20 +1469,30 @@ def _bind_verified_ctgov_outcome_to_a_row(
     atom: CtgovAtomicResult,
     row: EfficacyRow,
 ) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
-    if atom.category != "outcome" or atom.numerator is not None:
-        raise ResearchPackageError("此绑定仅接受来源直接报告的疗效数值")
+    if atom.category != "outcome":
+        raise ResearchPackageError("此绑定仅接受登记疗效结局")
+    is_count = atom.numerator is not None
+    if is_count and (
+        atom.denominator is None or row.unit not in {"Participants", "受试者", "人"}
+        or row.numerator not in {None, atom.numerator}
+        or row.denominator not in {None, atom.denominator}
+    ):
+        raise ResearchPackageError("登记应答人数缺少同组分母或与报告人数口径不一致")
+    expected_value = (
+        float(atom.numerator) if atom.numerator is not None else atom.display_value
+    )
     if (
         row.trial_id.casefold() != atom.trial_id.casefold()
         or _result_text(row.endpoint).casefold() != _result_text(atom.endpoint).casefold()
         or _result_text(row.timepoint).casefold() != _result_text(atom.timepoint).casefold()
-        or row.arm != atom.arm
-        or row.unit != atom.display_unit
+        or row.arm not in {atom.arm, atom.group_title}
+        or (not is_count and row.unit != atom.display_unit)
         or row.value is None
-        or atom.display_value is None
-        or not math.isclose(row.value, atom.display_value, rel_tol=0.0, abs_tol=1e-9)
+        or expected_value is None
+        or not math.isclose(row.value, expected_value, rel_tol=0.0, abs_tol=1e-9)
     ):
         raise ResearchPackageError("登记原子与疗效行的试验、终点、组别、时间或数值不一致")
-    if row.arm_detail is None and row.group_id is None:
+    if row.arm_detail is None and row.group_id is None and row.arm != atom.group_title:
         raise ResearchPackageError("疗效行缺少可核对的来源组别明细或组号")
     if row.arm_detail is not None and (
         _result_text(row.arm_detail).casefold()
@@ -1504,6 +1514,7 @@ def _bind_verified_ctgov_outcome_to_a_row(
         **row.model_dump(mode="json"),
         **expected_fields,
         "group_id": atom.group_id,
+        **({"numerator": atom.numerator, "denominator": atom.denominator} if is_count else {}),
     })
     facts = research_facts_from_ctgov_atom(
         atom, report_row_ref=f"efficacy:{row.row_id}"
@@ -1516,10 +1527,7 @@ def bind_ctgov_outcome_to_a_row(
     atom: CtgovAtomicResult,
     row: EfficacyRow,
 ) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
-    """Bind a directly reported registry outcome to one explicit A row.
-
-    Count-derived rates require a separate derivation with input fact versions.
-    """
+    """Bind a direct measure or reported participant count, never an inferred rate."""
     verified_atoms, _issues = extract_ctgov_atomic_results(source)
     if atom not in verified_atoms or atom.source_id != source.source_id:
         raise ResearchPackageError("登记原子与当前来源版本不一致")
@@ -1651,13 +1659,22 @@ def _validate_bound_ctgov_a_results(
             raise ResearchPackageError("登记原子事实不能从当前来源精确重提取")
         if fact.row_ref.startswith("efficacy:"):
             row = efficacy_rows.get(fact.row_ref)
-            if row is None or context.value_role != "reported_measure":
-                raise ResearchPackageError("已绑定疗效行缺少直接报告的来源结局")
+            if row is None or context.value_role not in {"reported_measure", "participant_count"}:
+                raise ResearchPackageError("已绑定疗效行缺少直接报告的来源结局或人数")
             expected_row, expected_facts = _bind_verified_ctgov_outcome_to_a_row(
                 source, atom, row
             )
             if expected_row != row or fact != expected_facts[0]:
                 raise ResearchPackageError("登记原子事实与已提交疗效行不一致")
+            if context.value_role == "participant_count":
+                denominator_ref = f"{fact.row_ref}:denominator"
+                if (
+                    len(expected_facts) != 2
+                    or row_ref_counts.get(denominator_ref) != 1
+                    or facts_by_ref.get(denominator_ref) != expected_facts[1]
+                ):
+                    raise ResearchPackageError("登记应答人数缺少同组分母原子事实")
+                matched_denominator_refs.add(denominator_ref)
             continue
         safety_row = safety_rows.get(fact.row_ref)
         if safety_row is None or context.value_role != "affected_count":
@@ -1676,12 +1693,12 @@ def _validate_bound_ctgov_a_results(
         matched_denominator_refs.add(denominator_ref)
     for fact in facts:
         if (
-            fact.row_ref.startswith("safety:")
+            fact.row_ref.startswith(("efficacy:", "safety:"))
             and fact.row_ref.endswith(":denominator")
             and fact.result_context is not None
             and fact.row_ref not in matched_denominator_refs
         ):
-            raise ResearchPackageError("AE 风险人数原子没有对应的已核证结果行")
+            raise ResearchPackageError("登记分母原子没有对应的已核证结果行")
 
 
 def _audit_source_record(

@@ -28,7 +28,11 @@ from ci_workflow.application.source_research_service import (
 )
 from ci_workflow.domain.evidence import CtgovRecordSelector
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
-from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_report_a_site
+from ci_workflow.renderers.portal.report_a import (
+    EfficacyRow,
+    ReportAPortalData,
+    render_report_a_site,
+)
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.snapshot_store import SnapshotStore
 from ci_workflow.storage.source_derivation import capture_source_text
@@ -60,6 +64,99 @@ def _derived(tmp_path: Path) -> DerivedCtgovStudy:
         content_text=text,
         text_derivation=receipt,
     )
+
+
+def _reported_count_source(tmp_path: Path) -> SourceCapture:
+    record = {
+        "protocolSection": {
+            "identificationModule": {"nctId": "NCT02277743", "briefTitle": "AD count study"},
+            "statusModule": {"lastUpdatePostDateStruct": {"date": "2026-08-01"}},
+        },
+        "resultsSection": {"outcomeMeasuresModule": {"outcomeMeasures": [{
+            "title": "Participants With Response", "timeFrame": "Week 26",
+            "unitOfMeasure": "Participants", "paramType": "COUNT_OF_PARTICIPANTS",
+            "groups": [{"id": "OG1", "title": "Drug 200 mg"}],
+            "denoms": [{"counts": [{"groupId": "OG1", "value": "35"}]}],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": "OG1", "value": "30"},
+            ]}]}],
+        }]}},
+    }
+    raw = json.dumps({"studies": [record]}, ensure_ascii=False).encode()
+    text, receipt = capture_source_text(
+        tmp_path, raw, media_type="application/json",
+        record_selector=CtgovRecordSelector(study_index=0, nct_id="NCT02277743"),
+    )
+    study = DerivedCtgovStudy(
+        nct_id="NCT02277743", title="AD count study",
+        record_url="https://clinicaltrials.gov/study/NCT02277743",
+        registry_posted_version_date="2026-08-01",
+        acquired_at=datetime(2026, 8, 3, tzinfo=UTC),
+        content_text=text, text_derivation=receipt,
+    )
+    return source_capture_from_ctgov_study(tmp_path, study)
+
+
+def test_reported_participant_count_binds_raw_count_and_same_group_denominator(
+    tmp_path: Path,
+) -> None:
+    source = _reported_count_source(tmp_path)
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    atom = atoms[0]
+    assert (atom.numerator, atom.denominator, atom.display_value) == (30, 35, 85.7)
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    baseline = ReportAPortalData.model_validate(payload["report_data"])
+    original = next(
+        item for item in baseline.efficacy
+        if item.trial_id.casefold() == "nct02277743"
+    )
+    row = EfficacyRow.model_validate({
+        **original.model_dump(mode="json"),
+        "endpoint": "Participants With Response", "timepoint": "Week 26",
+        "arm": "Drug 200 mg", "arm_detail": None, "group_id": None,
+        "value": 30, "unit": "Participants", "numerator": None,
+        "denominator": None, "source_field_path": None,
+        "source_version_id": None, "source_text": None,
+    })
+    bound, facts = bind_ctgov_outcome_to_a_row(source, atom, row)
+    assert (bound.value, bound.numerator, bound.denominator) == (30, 30, 35)
+    assert [fact.original_text for fact in facts] == ["30", "35"]
+    assert [fact.result_context.value_role for fact in facts if fact.result_context] == [
+        "participant_count", "denominator",
+    ]
+    report = ReportAPortalData.model_validate({
+        **baseline.model_dump(mode="json"),
+        "efficacy": [
+            bound.model_dump(mode="json") if item.row_id == row.row_id
+            else item.model_dump(mode="json")
+            for item in baseline.efficacy
+        ],
+    })
+    _validate_bound_ctgov_a_results(report, (source,), facts)
+    render_report_a_site(report, tmp_path / "count-site")
+    report_js = (tmp_path / "count-site/data/report.js").read_text()
+    rendered_rows = json.loads(
+        report_js.removeprefix("window.REPORT_A=").rstrip(" ;\n")
+    )["efficacy"]
+    displayed = next(
+        item for item in rendered_rows if item["row_id"] == bound.row_id
+    )
+    assert displayed["numeric_projection"]["kind"] == "participant_count"
+    assert displayed["plot_value"] == 30
+    assert displayed["source_field_path"] == atom.value_locator.field_path
+    for changed in (
+        row.model_copy(update={"value": 85.7, "unit": "%"}),
+        row.model_copy(update={"denominator": 36}),
+        row.model_copy(update={"arm": "Other Drug"}),
+        row.model_copy(update={"timepoint": "Week 50"}),
+    ):
+        with pytest.raises(ValueError):
+            bind_ctgov_outcome_to_a_row(source, atom, changed)
+    with pytest.raises(ValueError, match="分母"):
+        _validate_bound_ctgov_a_results(report, (source,), facts[:1])
 
 
 def test_ctgov_study_capture_reopens_raw_and_preserves_calendar_day(tmp_path: Path) -> None:

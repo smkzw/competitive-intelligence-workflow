@@ -147,6 +147,11 @@ def infer_numeric_kind(
         and "%" not in unit
     ):
         return NumericMeasureKind.PARTICIPANT_COUNT
+    if unit.strip().casefold() in {
+        "participant", "participants", "subject", "subjects", "patient", "patients",
+        "人", "受试者",
+    }:
+        return NumericMeasureKind.PARTICIPANT_COUNT
     if domain == "efficacy" and unit.strip() and unit.strip() not in {"%", "百分比"}:
         # A reported score, laboratory value or other continuous endpoint is
         # not a participant proportion. Its raw unit and estimand stay in the

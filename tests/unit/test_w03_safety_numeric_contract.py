@@ -154,6 +154,13 @@ def test_typed_numeric_projection_separates_people_events_rates_and_estimates() 
 
 
 def test_nonpercent_efficacy_is_not_forced_into_participant_proportion() -> None:
+    count_kind = infer_numeric_kind(unit="Participants", domain="efficacy")
+    assert count_kind is NumericMeasureKind.PARTICIPANT_COUNT
+    count = project_numeric(
+        value=30, unit="Participants", kind=count_kind,
+        numerator=30, denominator=35, window="Week 26", estimand="Responders",
+    )
+    assert count.plot_value == 30 and count.plot_unit == "Participants"
     score_kind = infer_numeric_kind(unit="分", domain="efficacy")
     assert score_kind is NumericMeasureKind.CONTINUOUS_MEASURE
     score = project_numeric(
