@@ -186,6 +186,30 @@ def test_direct_safety_outcome_binds_exact_category_and_raw_count(
         _validate_bound_ctgov_a_results(report, (source,), facts)
 
 
+def test_immunogenicity_atom_keeps_raw_measure_context_and_rejects_efficacy_binding(
+    tmp_path: Path,
+) -> None:
+    source = _reported_count_source(
+        tmp_path, title="Number of Participants With Anti-drug Antibodies (ADA)",
+    )
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    atom = atoms[0]
+    assert atom.domain == "immunogenicity"
+    assert atom.metric == "participant_count"
+    assert atom.source_param_type == "COUNT_OF_PARTICIPANTS"
+    assert atom.raw_value_type == "str"
+    assert atom.source_measure_path.endswith("outcomeMeasures[0]")
+    assert atom.denominator_candidates[0].raw_value == "35"
+    assert atom.denominator_candidates[0].group_id == "OG1"
+    facts = research_facts_from_ctgov_atom(atom)
+    assert facts[0].result_context is not None
+    assert facts[0].result_context.domain == "immunogenicity"
+    assert facts[0].result_context.source_param_type == "COUNT_OF_PARTICIPANTS"
+    with pytest.raises(ResearchPackageError, match="领域"):
+        research_facts_from_ctgov_atom(atom, report_row_ref="efficacy:eff-130")
+
+
 @pytest.mark.parametrize(
     ("title", "raw_unit", "display_unit", "measure_object", "value"),
     [
@@ -676,6 +700,54 @@ def test_real_registry_atoms_enter_existing_fact_snapshot_with_exact_quotes(
     assert all('"field_path":"$.' in row[1] for row in fragments)
 
 
+def test_source_fact_version_is_independent_of_a_or_b_consumer_row(
+    tmp_path: Path,
+) -> None:
+    payload = json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )
+    source = next(
+        SourceCapture.model_validate(item) for item in payload["sources"]
+        if item["query_or_identifier"] == "NCT02277743"
+    )
+    atom = next(
+        item for item in extract_ctgov_atomic_results(source)[0]
+        if item.category == "outcome" and item.numerator is None
+    )
+    raw_fact = research_facts_from_ctgov_atom(atom)[0]
+    a_fact = raw_fact.model_copy(update={"row_ref": "efficacy:a-row"})
+    b_fact = raw_fact.model_copy(update={"row_ref": "b:evidence-row"})
+    claim = ResearchClaim(
+        claim_id="same-source-atom", claim_text="同一登记原子",
+        claim_kind="direct_evidence", fact_ids=(raw_fact.fact_id,),
+    )
+    project = _project(tmp_path)
+    contract = verify_project_workspace(project).contract
+    arguments = dict(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        data_cutoff=contract.data_cutoff, created_at=source.acquired_at,
+        sources=(source,), route_attempts=(), claims=(claim,),
+    )
+    first = ingest_research_evidence(
+        **arguments, report_kind="A", facts=(a_fact,),
+        scientific_content_digest=sha256(b"r24-a-consumer").hexdigest(),
+    )
+    second = ingest_research_evidence(
+        **arguments, report_kind="B", facts=(b_fact,),
+        scientific_content_digest=sha256(b"r24-b-consumer").hexdigest(),
+    )
+    assert first.fact_version_by_ref[a_fact.row_ref] == (
+        second.fact_version_by_ref[b_fact.row_ref]
+    )
+    with open_database(project / "state/project.sqlite") as database:
+        versions = database.execute(
+            "SELECT scientific_context_json FROM fact_versions WHERE fact_id=?",
+            (raw_fact.fact_id,),
+        ).fetchall()
+    assert len(versions) == 1
+    assert "row_ref" not in json.loads(versions[0][0])
+
+
 def test_missing_affected_count_never_becomes_a_zero_atom_or_fact() -> None:
     payload = json.loads(
         Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
@@ -751,8 +823,22 @@ def test_zero_over_zero_is_undefined_but_other_registry_results_survive() -> Non
     assert all(item.status == "missing" for item in zero_issues)
     assert all("NumAtRisk" in item.source_path or ".denoms[" in item.source_path
                for item in zero_issues)
-    assert all(atom.result_key != item.result_key
-               for item in zero_issues for atom in atoms)
+    # The reported outcome 0 and denominator 0 are still two source atoms;
+    # only their 0/0 percentage is undefined. AE event-group raw n/N also
+    # remain source atoms; no undefined rate may enter a numeric plot.
+    outcome_zero = next(item for item in zero_issues if item.category == "outcome")
+    assert any(
+        atom.result_key == outcome_zero.result_key
+        and atom.numerator == atom.denominator == 0
+        and atom.display_value == 0 and atom.display_unit == "人"
+        for atom in atoms
+    )
+    assert any(
+        atom.result_key == item.result_key
+        and atom.numerator == atom.denominator == 0
+        and atom.display_value == 0 and atom.display_unit == "人"
+        for item in zero_issues if item.category == "sae" for atom in atoms
+    )
 
 
 def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(

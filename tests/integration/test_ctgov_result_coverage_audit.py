@@ -53,7 +53,9 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     # The captured registry payload omits one SAE affected count and contains
     # seven explicit 0/0 groups. Neither absence nor an undefined rate is zero.
     assert not audit.passed
-    assert len(audit.issues) == 8
+    # The current classifier exposes 51 additional unprojected AE-subset rows
+    # in the old A portal. They remain real coverage gaps, not test noise.
+    assert len(audit.issues) == 59
     absent_affected = [
         item for item in audit.issues if item.source_path.endswith(".numAffected")
     ]
@@ -78,11 +80,14 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
         "registry_results_not_posted",
         "reported_not_projected",
     }
-    assert [
+    assert {
         item.trial_id
         for item in audit.trial_coverage
         if item.status == "reported_not_projected"
-    ] == ["nct03334396", "nct05131477"]
+    } == {
+        "nct02277743", "nct03131648", "nct03334396", "nct03745638",
+        "nct02118792", "nct05014568", "nct05131477", "nct03533751",
+    }
     secondary = {
         item.trial_id
         for item in audit.trial_coverage
@@ -164,10 +169,10 @@ def test_audit_identifies_missing_outcomes_and_each_ae_family() -> None:
 
     assert not audit.passed
     assert audit.inventory_counts["outcome"] == 54
-    assert audit.inventory_counts["teae"] == 6
+    assert audit.inventory_counts["teae"] == 3
     assert audit.inventory_counts["sae"] == 72
     assert audit.inventory_counts["aesi"] == 0
-    assert audit.inventory_counts["common_ae"] == 21
+    assert audit.inventory_counts["common_ae"] == 24
     assert any(issue.category == "outcome" for issue in audit.issues)
     assert any(issue.category == "sae" for issue in audit.issues)
     assert any(issue.category == "common_ae" for issue in audit.issues)
@@ -275,8 +280,11 @@ def test_registry_participant_count_retains_both_raw_inputs() -> None:
             "title": "Participants With Response",
             "timeFrame": "Week 16",
             "unitOfMeasure": "Participants",
+            "paramType": "COUNT_OF_PARTICIPANTS",
             "groups": [{"id": "OG1", "title": "治疗组"}],
-            "denoms": [{"counts": [{"groupId": "OG1", "value": "4"}]}],
+            "denoms": [{"units": "Participants", "counts": [
+                {"groupId": "OG1", "value": "4"},
+            ]}],
             "classes": [{"categories": [{"measurements": [
                 {"groupId": "OG1", "value": "1"}
             ]}]}],
@@ -365,7 +373,8 @@ def test_explicit_teae_and_aesi_are_separate_from_other_events() -> None:
 
     audit = audit_clinicaltrials_result_coverage(report, (changed,))
 
-    assert audit.inventory_counts["teae"] > 6
+    assert audit.inventory_counts["teae"] == 4
+    assert audit.inventory_counts["common_ae"] == 24
     assert audit.inventory_counts["aesi"] == 3
     assert any(issue.category == "teae" and issue.status == "missing" for issue in audit.issues)
     assert any(issue.category == "aesi" and issue.status == "missing" for issue in audit.issues)

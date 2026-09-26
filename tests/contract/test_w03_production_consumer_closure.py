@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import shutil
+import subprocess
 from datetime import UTC, datetime
 from hashlib import sha256
 from pathlib import Path
@@ -404,6 +405,15 @@ def test_w03_browser_freeze_rebinds_report_data_sources_and_screenshots() -> Non
     freeze = ROOT / "packets/2026-09-22-sol-delivery/evidence/W03-browser-freeze"
     manifest = json.loads((freeze / "site.manifest.json").read_text(encoding="utf-8"))
     assert manifest["schema_version"] == "w03-browser-freeze-v2"
+    # The manifest is frozen evidence from d7ed790, not a promise that every
+    # later version of an author source keeps the same bytes. Do not rewrite
+    # historic hashes to make the active checkout look like that frozen build.
+    frozen_manifest = subprocess.run(
+        ["git", "show", "d7ed790:packets/2026-09-22-sol-delivery/"
+         "evidence/W03-browser-freeze/site.manifest.json"],
+        cwd=ROOT, check=True, capture_output=True,
+    ).stdout
+    assert (freeze / "site.manifest.json").read_bytes() == frozen_manifest
     report_js = freeze / manifest["generated"]["retained_report_js"]
     assert (
         sha256(report_js.read_bytes()).hexdigest()
@@ -422,13 +432,20 @@ def test_w03_browser_freeze_rebinds_report_data_sources_and_screenshots() -> Non
 
     for binding in [
         *manifest["fixed_cas"],
-        *manifest["current_sources"],
         *manifest["journeys"],
         *manifest["screenshots"],
     ]:
         path = ROOT / binding["path"]
         assert path.is_file(), binding["path"]
         assert sha256(path.read_bytes()).hexdigest() == binding["sha256"]
+    for binding in manifest["current_sources"]:
+        assert len(binding["sha256"]) == 64
+        # Existence at the frozen commit is independently checkable; the
+        # recorded historical digest is retained, not compared to HEAD.
+        subprocess.run(
+            ["git", "cat-file", "-e", f"d7ed790:{binding['path']}"],
+            cwd=ROOT, check=True, capture_output=True,
+        )
 
     assert len(manifest["journeys"]) == 2
     assert len(manifest["screenshots"]) == 2

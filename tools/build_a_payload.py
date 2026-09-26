@@ -19,9 +19,9 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from ci_workflow.application.source_research_service import (  # noqa: E402
+    classify_source_outcome,
     ctgov_class_observation_timepoint,
 )
-from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint  # noqa: E402
 from ci_workflow.reports.b.safety_concepts import (  # noqa: E402
     describe_safety_concept,
     safety_category_zh,
@@ -190,6 +190,21 @@ def slugify(name: str) -> str:
     return text or "intervention"
 
 
+def _linked_product_for_group(
+    group_title: str, product_links: list[dict[str, Any]], focus_product_id: str,
+) -> tuple[str, str]:
+    declared = {
+        str(link["product_id"])
+        for link in product_links
+        if group_title.strip().casefold() in {
+            str(label).strip().casefold() for label in link["arm_labels"]
+        }
+    }
+    if len(declared) == 1:
+        return next(iter(declared)), "declared"
+    return focus_product_id, "unknown"
+
+
 def main() -> None:
     studies: list[tuple[dict[str, Any], int, int]] = []
     page_meta: list[tuple[int, str]] = []
@@ -205,7 +220,7 @@ def main() -> None:
     efficacy_rows: list[dict[str, Any]] = []
     safety_rows: list[dict[str, Any]] = []
     dev_candidates: dict[str, list[tuple[bool, str]]] = {}
-    skipped_trials: list[str] = []
+    enrollment_issues: list[dict[str, str]] = []
     denominator_conflicts: list[dict[str, str]] = []
     product_regions: dict[str, set[str]] = {}
     product_phase: dict[str, str] = {}
@@ -213,6 +228,7 @@ def main() -> None:
     seen_company = set()
     ei = si = 0
     SAFETY_DOMAIN_DIVERTED: list[dict[str, Any]] = []
+    NON_EFFICACY_OBSERVATIONS: list[dict[str, Any]] = []
 
     for study, page_no, array_index in studies:
         proto = study.get("protocolSection", {})
@@ -342,44 +358,61 @@ def main() -> None:
                 normalized = _norm_drug(segment)
                 if normalized:
                     raw_drugs.append(normalized)
-        # R16-a 保持来源干预顺序：主药=记录中首个真实干预（排序曾致 LFG316→iptacopan 错投影）。
-        seen_order: list[str] = []
-        for drug in raw_drugs:
-            if drug not in seen_order:
-                seen_order.append(drug)
         canonical_drugs = sorted(set(raw_drugs))
-        product_name = seen_order[0] if seen_order else None
-        if product_name is None:
+        arm_types = {
+            str(arm.get("label") or "").strip(): str(arm.get("type") or "").upper()
+            for arm in (arms_mod.get("armGroups") or [])
+        }
+        role_names = {
+            "EXPERIMENTAL": "experimental",
+            "ACTIVE_COMPARATOR": "active_comparator",
+            "PLACEBO_COMPARATOR": "other_comparator",
+            "SHAM_COMPARATOR": "other_comparator",
+            "NO_INTERVENTION": "other",
+            "OTHER": "other",
+        }
+        product_links: list[dict[str, Any]] = []
+        for drug in canonical_drugs:
+            by_role: dict[str, set[str]] = {}
+            for intervention in arms_mod.get("interventions", []) or []:
+                if not any(
+                    _norm_drug(segment) == drug
+                    for segment in re.split(r"[;；]", str(intervention.get("name") or ""))
+                ):
+                    continue
+                for label in intervention.get("armGroupLabels") or []:
+                    arm_label = str(label or "").strip()
+                    role = role_names.get(arm_types.get(arm_label, ""), "unknown")
+                    by_role.setdefault(role, set()).add(arm_label)
+            if not by_role:
+                by_role["unknown"] = set()
+            for role in sorted(by_role):
+                product_links.append({
+                    "product_id": slugify(drug), "arm_role": role,
+                    "arm_labels": sorted(by_role[role]),
+                })
+
+        experimental_drugs = sorted(
+            drug for drug in canonical_drugs
+            if any(link["product_id"] == slugify(drug)
+                   and link["arm_role"] == "experimental" for link in product_links)
+        )
+        # The legacy single product_id is only a deterministic display focus;
+        # product_links is the complete trial relationship, independent of
+        # source intervention array order.
+        if not canonical_drugs:
             NON_PRODUCT_RECORDS.append(nct)  # 记录明细，可审计
             continue
+        product_name = (experimental_drugs or canonical_drugs)[0]
         # R13-f 联合治疗全记录（模型单 product_id 限制内的最诚实表达）。
         COMBO_RECORDS.append({"nct_id": nct, "canonical_drugs": canonical_drugs})
         pid = slugify(product_name)
 
-        # 独立复核修复（第十二轮）：研发企业归属按臂类型判定——
-        # 仅当药物在本试验的 EXPERIMENTAL 臂时，申办方才可作为其研发企业；
-        # 对照药/背景治疗药物的申办方不是该药物的研发企业。
-        def _drug_experimental(drug_name: str, protocol: dict[str, Any] = proto) -> bool:
-            arm_type = {
-                str(a.get("label") or "").strip(): str(a.get("type") or "").upper()
-                for a in (protocol.get("armsInterventionsModule", {}).get("armGroups") or [])
-            }
-            for iv in protocol.get("armsInterventionsModule", {}).get("interventions") or []:
-                for segment in re.split(r"[;；]", str(iv.get("name") or "")):
-                    if _norm_drug(segment) == drug_name:
-                        labels = [
-                            str(label or "").strip() for label in (iv.get("armGroupLabels") or [])
-                        ]
-                        types = [arm_type.get(label, "") for label in labels]
-                        if types:
-                            return any(t == "EXPERIMENTAL" for t in types)
-            return True  # 无臂结构可判定时保守视为试验药物
-
-        # R15-a 每个真实药物干预都注册产品实体（试验行仍归首项，G11-1 限制）。
+        # Sponsor is not a developer of an active comparator or an intervention
+        # with no source-declared arm relationship.
         for drug in canonical_drugs:
             drug_pid = slugify(drug)
-            experimental = _drug_experimental(drug)
-            # 研发企业候选：主产品试验优先，其次试验药物臂，对照臂不计
+            experimental = drug in experimental_drugs
             dev_candidates.setdefault(drug_pid, []).append(
                 (drug_pid == pid and experimental, lead if lead != NA else "")
             )
@@ -397,9 +430,6 @@ def main() -> None:
                     "mechanism": NA,
                     "result_status": "暂无公开关键结果",
                 }
-        dev_candidates.setdefault(pid, []).append(
-            (_drug_experimental(product_name), lead if lead != NA else "")
-        )
         phases = design.get("phases") or []
         phase_zh = PHASE_MAP.get("/".join(phases), "未标注") if phases else "未标注"
         current = product_phase.get(pid)
@@ -443,25 +473,29 @@ def main() -> None:
 
         enrollment = design.get("enrollmentInfo", {})
         count = enrollment.get("count") if isinstance(enrollment, dict) else None
-        # G10-1：A 试验模型 sample_size 强制 gt=0，登记未披露样本量的试验暂不入表，
-        # 数量在 history/limitation 显式记录，不填造假值。
-        if not isinstance(count, int) or count <= 0:
-            skipped_trials.append(nct)
-        else:
-            trials_rows.append(
-                {
-                    "id": nct.lower(),
-                    "display_id": nct,
-                    "product_id": pid,
-                    "name": ident.get("briefTitle", nct)[:120],
-                    "phase": phase_zh,
-                    "region": trial_region,
-                    "status": status_zh,
-                    "sample_size": count,
-                    "treatment_sample_size": None,
-                    "role": "登记研究",
-                }
-            )
+        enrollment_type = (
+            str(enrollment.get("type") or "").upper()
+            if isinstance(enrollment, dict) else ""
+        )
+        if enrollment_type not in {"ACTUAL", "ESTIMATED"}:
+            enrollment_type = "UNKNOWN"
+        if type(count) is not int or count < 0:
+            if count is not None:
+                enrollment_issues.append({
+                    "trial_id": nct, "reason": "invalid_enrollment_count",
+                })
+            count = None
+        trials_rows.append({
+            "id": nct.lower(), "display_id": nct, "product_id": pid,
+            "product_links": product_links,
+            "name": ident.get("briefTitle", nct)[:120],
+            "phase": phase_zh, "region": trial_region, "status": status_zh,
+            "sample_size": count if enrollment_type == "ACTUAL" else None,
+            "planned_sample_size": count if enrollment_type == "ESTIMATED" else None,
+            "reported_sample_size": count if enrollment_type == "UNKNOWN" else None,
+            "enrollment_type": enrollment_type,
+            "treatment_sample_size": None, "role": "登记研究",
+        })
 
         results = study.get("resultsSection") or {}
         if results:
@@ -474,19 +508,11 @@ def main() -> None:
             # 多期间试验：OG 标题可能是不透明代码，用 flow 标题按序补全
             if not group_titles:
                 flow_groups = (results.get("participantFlowModule") or {}).get("groups") or []
-                protocol_arms = (
-                    study.get("protocolSection", {})
-                    .get("armsInterventionsModule", {})
-                    .get("armGroups")
-                ) or []
-                for idx, fg in enumerate(flow_groups):
+                for fg in flow_groups:
+                    group_id = str(fg.get("id") or "").strip()
                     ft = str(fg.get("title") or "").strip()
-                    if ft:
-                        group_titles[str(fg.get("id") or f"OG{idx:04d}")] = ft
-                    elif idx < len(protocol_arms):
-                        at = str((protocol_arms[idx] or {}).get("label") or "").strip()
-                        if at:
-                            group_titles[str(fg.get("id") or f"OG{idx:04d}")] = at
+                    if group_id and ft:
+                        group_titles[group_id] = ft
             # 补充：AE eventGroups 标题（TP1/TP2/LTE 多期间区分）
             for eg in (results.get("adverseEventsModule") or {}).get("eventGroups") or []:
                 eg_id = str(eg.get("id") or "")
@@ -494,42 +520,11 @@ def main() -> None:
                 if eg_id and eg_title:
                     group_titles.setdefault(eg_id, eg_title)
 
-            # 独立复核修复（arm 标签）：结果段组 id 为不透明代码（OG001 等）时，
-            # 依次用 participantFlow 组、协议 armGroups 的描述性标题按顺序补全。
-            def _opaque_title(value: str) -> bool:
-                t = value.strip()
-                return (not t) or bool(re.fullmatch(r"[A-Za-z]{0,3}\d{2,4}", t))
-
-            om_measures = (results.get("outcomeMeasuresModule") or {}).get("outcomeMeasures") or []
-            om_group_ids: list[str] = []
-            for measure in om_measures[:1]:
-                for cls in (measure.get("classes") or [])[:1]:
-                    for cat in (cls.get("categories") or [])[:2]:
-                        for measurement in cat.get("measurements") or []:
-                            gid = str(measurement.get("groupId") or "")
-                            if gid and gid not in om_group_ids:
-                                om_group_ids.append(gid)
-            replacement = None
-            flow_groups = (results.get("participantFlowModule") or {}).get("groups", []) or []
-            flow_titles = [str(g.get("title") or "").strip() for g in flow_groups]
-            protocol_arms = (
-                study.get("protocolSection", {}).get("armsInterventionsModule", {}).get("armGroups")
-            ) or []
-            arm_labels = [str(a.get("label") or "").strip() for a in protocol_arms]
-            if om_group_ids and all(
-                _opaque_title(group_titles.get(gid, "")) for gid in om_group_ids
-            ):
-                if len(flow_titles) == len(om_group_ids) and any(flow_titles):
-                    replacement = flow_titles
-                elif len(arm_labels) == len(om_group_ids) and any(arm_labels):
-                    replacement = arm_labels
-            if replacement:
-                for gid, title in zip(om_group_ids, replacement, strict=True):
-                    if title:
-                        group_titles[gid] = title
-            for measure in (results.get("outcomeMeasuresModule") or {}).get(
-                "outcomeMeasures"
-            ) or []:
+            # Never pair opaque outcome-group IDs with protocol arms by array position.
+            outcome_measures = (
+                (results.get("outcomeMeasuresModule") or {}).get("outcomeMeasures") or []
+            )
+            for measure_index, measure in enumerate(outcome_measures):
                 # 独立测试第二轮（UC）：不得截断登记终点标题——截断会
                 # 摧毁 Mayo/时间窗等尾部语义并造成分类漏检
                 title = str(measure.get("title") or "").strip() or NA
@@ -568,7 +563,7 @@ def main() -> None:
                                 })
                                 continue
                             denominator_by_group[group_id] = count_value
-                for cls in measure.get("classes") or []:
+                for class_index, cls in enumerate(measure.get("classes") or []):
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
@@ -582,7 +577,7 @@ def main() -> None:
                     base_population = (
                         f"登记结果人群（{cls_title}）" if cls_title else "登记结果人群"
                     )
-                    for cat in cls.get("categories") or []:
+                    for category_index, cat in enumerate(cls.get("categories") or []):
                         # 独立复核第二十一轮 veto：登记测量的互斥子类
                         # （如 Improved/Worsened from Baseline）必须进入行标签，
                         # 否则同臂同测量的 4 行同名并列，数值含义无法还原
@@ -596,16 +591,52 @@ def main() -> None:
                             )
                         else:
                             population = base_population
-                        for measurement in cat.get("measurements") or []:
-                            raw = str(measurement.get("value") or "").strip()
+                        for measurement_index, measurement in enumerate(
+                            cat.get("measurements") or []
+                        ):
+                            raw_source_value = measurement.get("value")
+                            raw = (
+                                str(raw_source_value).strip()
+                                if raw_source_value is not None else ""
+                            )
                             try:
                                 value = float(raw)
                             except ValueError:
                                 continue
+                            group_id = str(measurement.get("groupId") or "")
+                            group_title = group_titles.get(group_id, group_id or "组别未登记")
+                            row_product_id, assignment_state = _linked_product_for_group(
+                                group_title, product_links, pid,
+                            )
+                            domain = classify_source_outcome(
+                                title, source_class_title, cat_title,
+                            )
+                            if domain not in {"efficacy", "adverse_events"}:
+                                source_path = (
+                                    "$.resultsSection.outcomeMeasuresModule.outcomeMeasures"
+                                    f"[{measure_index}].classes[{class_index}].categories"
+                                    f"[{category_index}].measurements[{measurement_index}].value"
+                                )
+                                NON_EFFICACY_OBSERVATIONS.append({
+                                    "row_id": "other-" + hashlib.sha256(
+                                        f"{nct}|{source_path}".encode()
+                                    ).hexdigest()[:16],
+                                    "trial_id": nct.lower(), "product_id": row_product_id,
+                                    "group_id": group_id, "group_title": group_title,
+                                    "group_assignment_state": assignment_state,
+                                    "endpoint": title, "class_title": source_class_title,
+                                    "category_title": cat_title, "time_window": row_time_frame,
+                                    "domain": domain, "raw_value": raw,
+                                    "raw_value_type": type(raw_source_value).__name__,
+                                    "raw_unit": unit,
+                                    "source_url": f"https://clinicaltrials.gov/study/{nct}",
+                                    "source_page_sha256": page_meta[page_no - 1][1],
+                                    "source_path": source_path,
+                                })
+                                continue
                             # 会商 P0 #2（域分流）：安全域终点不得混入疗效表——
                             # TEAE/AE 类测量在安全域保留独立统计对象和来源语境。
-                            if is_safety_domain_endpoint(title):
-                                group_id = str(measurement.get("groupId") or "")
+                            if domain == "adverse_events":
                                 semantic = describe_safety_concept(title)
                                 unit_lower = unit.strip().casefold()
                                 if unit_lower in {"participants", "participant"}:
@@ -629,9 +660,10 @@ def main() -> None:
                                     safety_count = safety_denominator = None
                                 si += 1
                                 safety_rows.append({
-                                    "row_id": f"safe-{si}", "product_id": pid,
+                                    "row_id": f"safe-{si}", "product_id": row_product_id,
                                     "trial_id": nct.lower(),
-                                    "arm": group_titles.get(group_id, group_id or "组别未登记"),
+                                    "arm": group_title,
+                                    "group_assignment_state": assignment_state,
                                     "group_id": group_id or None,
                                     "category": safety_category_zh(semantic.key),
                                     "term": title,
@@ -667,15 +699,15 @@ def main() -> None:
                                     }
                                 )
                                 continue
-                            group_id = str(measurement.get("groupId") or "")
                             ei += 1
                             efficacy_rows.append(
                                 {
                                     "row_id": f"eff-{ei}",
-                                    "product_id": pid,
+                                    "product_id": row_product_id,
                                     "trial_id": nct.lower(),
                                     "endpoint": title,
-                                    "arm": group_titles.get(group_id, group_id or "组别未登记"),
+                                    "arm": group_title,
+                                    "group_assignment_state": assignment_state,
                                     "group_id": group_id or None,
                                     "value": value,
                                     "unit": unit,
@@ -703,13 +735,22 @@ def main() -> None:
                         _ms.get("numSubjects"), int
                     ):
                         _treatment_n += _ms["numSubjects"]
-            if _treatment_n > 0 and trials_rows and trials_rows[-1]["id"] == nct.lower():
-                trials_rows[-1]["treatment_sample_size"] = _treatment_n
+            if _treatment_n > 0 and trials_rows[-1]["id"] == nct.lower():
+                actual_n = trials_rows[-1]["sample_size"]
+                if actual_n is None or _treatment_n <= actual_n:
+                    trials_rows[-1]["treatment_sample_size"] = _treatment_n
+                else:
+                    enrollment_issues.append({
+                        "trial_id": nct, "reason": "arm_n_exceeds_actual_enrollment",
+                    })
             ae_module = results.get("adverseEventsModule") or {}
             events = ae_module.get("eventGroups") or []
             ae_time_window = str(ae_module.get("timeFrame") or "收集时间窗未登记").strip()
             for group in events:
                 arm_title = str(group.get("title") or "登记组别未提供")
+                row_product_id, assignment_state = _linked_product_for_group(
+                    arm_title, product_links, pid,
+                )
                 for affected_field, at_risk_field, category, concept, term, seriousness in (
                     (
                         "seriousNumAffected", "seriousNumAtRisk", "严重不良事件（登记）",
@@ -731,9 +772,10 @@ def main() -> None:
                     safety_rows.append(
                         {
                             "row_id": f"safe-{si}",
-                            "product_id": pid,
+                            "product_id": row_product_id,
                             "trial_id": nct.lower(),
                             "arm": arm_title,
+                            "group_assignment_state": assignment_state,
                             "group_id": str(group.get("id") or "") or None,
                             "category": category,
                             "term_key": concept,
@@ -781,37 +823,12 @@ def main() -> None:
         "schema_version": "1.0",
         "report_version": "v1",
         "indication": INDICATION,
-        "data_cutoff": "2026-09-06T23:59:59.999999+08:00",
+        "data_cutoff": f"{CUTOFF_DATE}T23:59:59.999999+08:00",
         "products": list(product_index.values()),
         "trials": trials_rows,
-        "efficacy": efficacy_rows
-        or [
-            {
-                "row_id": "eff-none",
-                "product_id": next(iter(product_index)),
-                "trial_id": trials_rows[0]["id"],
-                "endpoint": "暂无公开关键结果",
-                "timepoint": NA,
-                "arm": NA,
-                "value": None,
-                "unit": NA,
-                "population": "公开登记结果尚未覆盖数值终点",
-            }
-        ],
-        "safety": safety_rows
-        or [
-            {
-                "row_id": "safe-none",
-                "product_id": next(iter(product_index)),
-                "trial_id": trials_rows[0]["id"],
-                "arm": NA,
-                "category": "暂无公开结果",
-                "term": NA,
-                "value": None,
-                "unit": NA,
-                "time_window": NA,
-            }
-        ],
+        "efficacy": efficacy_rows,
+        "safety": safety_rows,
+        "additional_observations": NON_EFFICACY_OBSERVATIONS,
         "regulatory": [
             {
                 "product_id": next(iter(product_index)),
@@ -852,11 +869,9 @@ def main() -> None:
                 # 不得携带 PNH 轮次的固定数字与内部流程代号
                 "observation": (
                     f"CT.gov 当前记录检索共 {sum(1 for _ in CAS)} 页原始响应："
-                    f"{len(trials_rows)} 条试验入表；"
-                    f"{len(skipped_trials)} 条因样本量未披露未入试验表"
-                    "（NCT 明细见派生记录："
-                    + "、".join(skipped_trials[:8])
-                    + f"）；{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体"
+                    f"{len(trials_rows)} 条研究入表（含样本量未知或明确零值）；"
+                    f"{len(enrollment_issues)} 条样本量来源问题留待核查；"
+                    f"{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体"
                     "（明细见派生记录）；"
                     "联合治疗组合完整记录于派生记录；中国路线访问受阻已如实记档；"
                     "监管/专利来源接入待后续版本开放"
@@ -886,10 +901,11 @@ def main() -> None:
         },
     }
     derivation = payload.pop("derivation")
-    derivation["skipped_trials_no_sample_size"] = skipped_trials
+    derivation["enrollment_issues"] = enrollment_issues
     derivation["denominator_conflicts"] = denominator_conflicts
     # 会商 P0 #2：安全域分流审计计数（TEAE/AE 类测量不再混入疗效表）
     derivation["safety_domain_diverted"] = len(SAFETY_DOMAIN_DIVERTED)
+    derivation["non_efficacy_observations"] = NON_EFFICACY_OBSERVATIONS
     derivation["safety_domain_diverted_samples"] = [
         {k: str(v)[:80] for k, v in item.items()} for item in SAFETY_DOMAIN_DIVERTED[:10]
     ]

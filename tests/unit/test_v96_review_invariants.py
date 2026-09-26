@@ -404,19 +404,19 @@ def test_sci10_unknown_sample_size_is_representable():
     assert row.sample_size is None
 
 
-def test_sci10_zero_and_negative_sample_size_still_rejected():
+def test_sci10_explicit_zero_is_preserved_but_negative_size_is_rejected():
+    base = {
+        "display_id": "NCTZERO",
+        "product_id": "p1",
+        "name": "研究",
+        "phase": "II期",
+        "region": "全球",
+        "status": "招募中",
+        "role": "登记研究",
+    }
+    assert TrialRow(id="nct-zero", sample_size=0, **base).sample_size == 0
     with pytest.raises(ValueError):
-        TrialRow(
-            id="nct-zero",
-            display_id="NCTZERO",
-            product_id="p1",
-            name="研究",
-            phase="II期",
-            region="全球",
-            status="招募中",
-            sample_size=0,
-            role="登记研究",
-        )
+        TrialRow(id="nct-negative", sample_size=-1, **base)
 
 
 def test_sci10_planned_and_actual_are_separate_fields():

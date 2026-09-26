@@ -1,0 +1,102 @@
+{
+  "schema_version": "r24-candidate-1",
+  "status": "development_candidate_not_accepted",
+  "baseline_head": "754d79cc21a021b6ec81794e067636fa7d332661",
+  "review_id": "0924V1",
+  "source_set": {
+    "kind": "clinicaltrials_gov_captured_pages",
+    "local_cas_root": ".artifacts/source-cas/ctgov-live-20260906",
+    "capture_label": "2026-09-06",
+    "historical_as_of_reconstruction_proven": false,
+    "pages": [
+      {
+        "path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/1e/1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98.bin",
+        "sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98"
+      },
+      {
+        "path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/c3/c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3.bin",
+        "sha256": "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
+      }
+    ],
+    "alias_map": {
+      "path": "packets/2026-09-11-pnh-vertical/pnh-alias-map-v1.json",
+      "map_id": "pnha-alias-v2",
+      "sha256": "2bc88b7f9286d8398c2cf1ff23f58e27781963bac5765791f93fc528cb97b5d4"
+    }
+  },
+  "rule_and_renderer_bytes": {
+    "builder_sha256": "b61649845e329f06fec9fe33ea45e541f7d8b1c98df0259e6842e07428a5c173",
+    "source_research_service_sha256": "283391785f74cae72ee463ad081ce71098a775f76562ef5fec5650af10172979",
+    "report_a_renderer_sha256": "4ddb9e4792edfd4d714066fd8ab99a5b459adb127ba155df43f729681a7d0cd8",
+    "efficacy_template_sha256": "54264514da683dfdfc9b4f86e3cb2941a80e27a0784a3e0c1953a8b21d7c174d",
+    "safety_template_sha256": "5f393c1bfea71b27ee0b3eb870378d0031784ad2b3c70da400715440a7a6eb19",
+    "asset_manifest_sha256": "a695203e53f77160e751fc606dd82dedc280e11328611bb50e19f3f8ce417792"
+  },
+  "candidate": {
+    "payload_path": ".artifacts/r24-pnh-candidate-20260926/report-a.json",
+    "payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "sidecar_path": ".artifacts/r24-pnh-candidate-20260926/report-a.derivation.json",
+    "sidecar_sha256": "2c4b8adfe55c5602c1681b8d0af82a01ca5bee4cabbaf29c01724fe101315411",
+    "sidecar_contains_nondeterministic_built_at": true,
+    "candidate_revision": "r24-20260926-pnh-2cd32ccb",
+    "immutable_snapshot_committed": false,
+    "current_generation_switched": false,
+    "counts": {
+      "products": 45,
+      "trials": 140,
+      "efficacy": 3617,
+      "safety": 514,
+      "additional_observations": 281,
+      "source_fact_version_ids": 0,
+      "consumer_binding_ids": 0,
+      "unassigned_efficacy_group_rows": 2411,
+      "unassigned_safety_group_rows": 414,
+      "unassigned_additional_group_rows": 247,
+      "records_without_drug_intervention": 49,
+      "denominator_conflicts_reported_by_builder": 0
+    },
+    "unresolved": [
+      "The payload still carries a legacy single product_id fallback on non-unique result groups. Current A graphs and tables suppress false attribution, but native multi-product result identity is not implemented.",
+      "No adopted row has a committed source version, exact public locator, consumer binding, or independent scientific closure.",
+      "This source set alone does not prove global/China competitor-universe closure or historical-as-of semantics.",
+      "A/B/C real edit, current-generation offline sharing, three-host and 24-portal release gates are not executed on this candidate."
+    ],
+    "rendered_site": {
+      "local_path": ".artifacts/r24-pnh-candidate-20260926/site",
+      "page_count": 56,
+      "efficacy_html_sha256": "c2e693b46860cbf28eb10635253126e8b0cec5558175e7795252dfe80bc032ef",
+      "safety_html_sha256": "8eee9d0d6439b1d6a43e57949fca35d9e48d337e2fae9a715710d381b3e9c940",
+      "clinical_portfolio_html_sha256": "c66b1a6b781bbfe24d15ac8ee6cc40f1ffd1b6bfb9bf21fab6a310025d54bf46"
+    }
+  },
+  "rebuild": {
+    "repository_required": "competitive-intelligence-workflow",
+    "command": [
+      "uv", "run", "python", "tools/build_a_payload.py",
+      "--cas-dir", ".artifacts/source-cas/ctgov-live-20260906",
+      "--alias-map", "packets/2026-09-11-pnh-vertical/pnh-alias-map-v1.json",
+      "--indication", "阵发性睡眠性血红蛋白尿症",
+      "--indication-id", "pnh",
+      "--output", ".artifacts/r24-pnh-candidate-20260926/report-a.json",
+      "--cutoff", "2026-09-06"
+    ],
+    "check": "Verify input hashes first, then compare payload_sha256. The sidecar's built_at and rendered site can vary independently of scientific payload bytes."
+  },
+  "visual_evidence": [
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/a-clinical-selected-1600.png",
+      "sha256": "b9ba3ddb12262c170c33b54d1bbd92b4a97d5d5df19b98f421a4addca5956487",
+      "scope": "1600px selected-product clinical-portfolio slice before latest table refinements"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/a-additional-ada-1600.png",
+      "sha256": "5a0d13850201aaa89a2339767488d12e76937b5f3e328f077cca60992ead0485",
+      "scope": "1600px additional-observation search slice on current candidate"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/a-safety-unresolved-row-1600.png",
+      "sha256": "e8a4df6ec9a28ef17d51f965f6327b4d654d4bcc1b0ebd11d170cd3441362167",
+      "scope": "1600px one unresolved safety row with short window preview and accessible full text"
+    }
+  ]
+}

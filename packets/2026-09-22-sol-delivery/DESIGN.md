@@ -35,7 +35,9 @@
 source_id是逻辑来源，source_version_id绑定真实字节和必要元信息。获取attempt独立于content：本次核查同字节也有本次回执；网络失败有失败记录但不称已确认新鲜。同次请求重放幂等，不把旧attempt_index=1无限沿用。
 fragment绑定来源版本与精确locator：JSON索引/字段、表/行/列、PDF页/段/表。original_quote来自实际原始对象，不能生成“某行登记事实”。规范值/翻译另记derivation。历史粗片段保留但不得伪装已逐条核验。
 登记结果的原始数值和分母分别是可按字段路径重提取的原子事实；`n/N` 形成的显示比例是派生输出，不能把比例文本写成来源直接原文。原子事实版本应保留类别、试验、组别、终点、时间和数值角色；已有来源事实未带这些扩展字段时保持原有序列化/历史身份。缺少 `numAffected` 只产生待核问题，不得由 `numAtRisk` 合成原子零值。原子事实入库只是门户逐事实闭包的前置步骤，仍须显式报告行绑定、派生输入与公式、来源区和快照恢复。
+0924V1 增量：采集器先保存完整候选，不由两个解析器独立裁决分母；同组的 N 还须比较统计单位、测量实例、class/category、分析人群和期别。相同 N 只有上下文一致才可复用，冲突集合与每个 locator 均保留，比例拒绝派生。单原子缺失/解析失败/语义冲突分别记 scope+reason，不能扩大成整测量丢失；0/0 是两个真实零而不是 0% 风险率。来源的 domain 与 metric 分开：`efficacy / adverse_events / immunogenicity / pk_pd / biomarkers / other / unresolved` 为轻量标签，不加大本体，科学类别由统一语义函数决定，A/B/C 使用同一结果而各自筛选展示。ADA 阳性不等于 AE 或临床疗效。
 FactVersion内容身份包含完整科学上下文；显示标签不能当主身份，同值不等于同事实。计划N/实际N、组期、人群、终点实例/角色分别保存；不可依赖field后缀或数组顺序。
+`SourceFactVersion` 的科学摘要排除 report/page/row 引用；`ConsumerBinding` 将一个版本映射到 A/B/C 合法行。兼容旧只读 v2 摘要与新 v3 身份，旧快照不补签不迁移为新 accepted。同一原子新增消费者不制造冲突；改原值/来源版本/人群/时间才使科学版本变化。研究—产品和结果组别通过显式 arm–intervention 关系投影，缺关系为 unknown。
 
 ### 派生DAG
 
@@ -48,6 +50,7 @@ B 疗效展示投影必须保持报告值、计数与统计依据三个概念分
 ### 共享查询与ViewState
 
 三层不可混淆：WorkspaceMembership保留全部相关研究/观察；FacetPlan按人群/终点/统计/时间分面；NumericFrameEligibility决定同轴资格。不可比较不能删除成员。
+共享图形的 `comparison_context_id` 由研究、结局实例、人群、分析集、期别、访视/区间等已证明字段组成，再按明确 arm 拆系列；未知关联保持独立面板或未绘制原因。不得以跨系列第 n 次出现、数组顺序、标题相似或数值接近拼成伪对照。PresentationPlan 继续作为唯一几何合同，筛后 1/2 个观察应重新选择紧凑形态，同时保留图例/缩放/焦点与原查询身份。
 查询集Q=可绘P∪不可绘U且不相交；图形可多事实→一个点，但点须保存输入集合。不要强行一事实一气泡。
 ViewState含schema/revision/report/page、query/filter、selected item、合法字段/分面/布局、视觉状态、返回焦点/滚动。图例隐藏/缩放与研究筛选不同，不从DOM反推事实，不建立任意代码查询DSL。
 复用已打包ECharts dataset/encode适用部分；科学资格先于图库。关系图/树/时间轴不强制一种组件。[官方dataset文档](https://echarts.apache.org/handbook/en/concepts/dataset/)只支持数据与配置分离，不能替代医学判断。

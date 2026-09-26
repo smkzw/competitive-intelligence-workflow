@@ -333,7 +333,10 @@ def ingest_research_evidence(
                 (fact.entity_id, fact.entity_type, fact.canonical_name, created_at.isoformat()),
             )
             fragment_id = fact_fragments[fact.fact_id]
-            scientific_context = fact.model_dump(mode="json")
+            # A report row is a consumer binding, not part of the source fact's
+            # scientific version. Historical v2 snapshots remain read-only;
+            # this v3 identity applies to newly ingested candidate facts only.
+            scientific_context = fact.model_dump(mode="json", exclude={"row_ref"})
             scientific_context_json = json.dumps(
                 scientific_context,
                 ensure_ascii=False,
@@ -344,7 +347,7 @@ def ingest_research_evidence(
             content_sha256 = sha256(scientific_context_json.encode("utf-8")).hexdigest()
             version_id = stable_id(
                 "fact-version",
-                "scientific-context-v2",
+                "scientific-context-v3",
                 content_sha256,
                 source_versions[fact.source_id],
                 fragment_id,
@@ -414,6 +417,10 @@ def ingest_research_evidence(
             fact_closure.append(
                 {
                     "fact": scientific_context,
+                    "consumer_binding": {
+                        "report_kind": report_kind,
+                        "row_ref": fact.row_ref,
+                    },
                     "fact_version_id": version_id,
                     "primary_fragment_id": fragment_id,
                     "review_state": "candidate",

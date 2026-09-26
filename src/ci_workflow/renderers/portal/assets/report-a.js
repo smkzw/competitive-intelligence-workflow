@@ -120,6 +120,9 @@
   }
   function dimensionMatches(dimension, actual, wanted, companion) {
     if (actual === wanted) return true;
+    if (dimension === "product" || dimension === "target") {
+      return String(actual || "").split("｜").indexOf(wanted) !== -1;
+    }
     if (dimension === "endpoint" && wanted === "EASI-75") return isEasi75(actual);
     if (dimension === "endpoint" && wanted === "IGA 0/1") return isIgaResponse(actual);
     if (dimension === "timepoint" && wanted === "第16周") {
@@ -188,8 +191,27 @@
     }
     return 0;
   }
+  function trialProductIds(trial) {
+    var links = Array.isArray(trial.product_links) ? trial.product_links : [];
+    var ids = links.map(function (link) { return link.product_id; }).filter(Boolean);
+    if (!ids.length) ids.push(trial.product_id); // Historical snapshots.
+    return Array.from(new Set(ids));
+  }
+  function trialHasProduct(trial, productId) {
+    return trialProductIds(trial).indexOf(productId) !== -1;
+  }
+  function enrollmentLabel(trial) {
+    if (trial.enrollment_type === "ESTIMATED") {
+      return trial.planned_sample_size == null ? "计划样本量未公开" : "计划 n=" + trial.planned_sample_size;
+    }
+    if (trial.enrollment_type === "ACTUAL") {
+      return trial.sample_size == null ? "实际样本量未公开" : "实际 n=" + trial.sample_size;
+    }
+    if (trial.reported_sample_size != null) return "登记 n=" + trial.reported_sample_size + "（类型未注明）";
+    return trial.sample_size == null ? "样本量未公开" : "n=" + trial.sample_size;
+  }
   function trialFor(productId) {
-    var candidates = trials.filter(function (trial) { return trial.product_id === productId; });
+    var candidates = trials.filter(function (trial) { return trialHasProduct(trial, productId); });
     candidates.sort(function (left, right) {
       return trialRank(right) - trialRank(left)
         || (right.sample_size || 0) - (left.sample_size || 0)
@@ -501,7 +523,7 @@
       ["安全性事件", safetyText],
       ["安全性观察窗", safetyRow ? safetyTimeWindowLabel(safetyRow.time_window) : "未公开"],
       ["治疗组样本量", trial ? textOr(trial.treatment_sample_size, "未公开") : "未公开"],
-      ["总样本量", trial ? textOr(trial.sample_size, "未公开") : "未公开"]
+      ["登记样本量", trial ? enrollmentLabel(trial) : "未公开"]
     ];
     fields.forEach(function (field) {
       var item = el("dl", "kz-a-insight-summary-field");
@@ -818,7 +840,7 @@
     });
     var keys = Object.keys(groups);
     if (!keys.length) {
-      host.appendChild(el("div", "kz-empty", "当前筛选没有可绘制的公开疗效数值。"));
+      host.appendChild(el("div", "kz-empty", "当前筛选没有可安全绘制的疗效图形；未绘制的原始值仍可在完整表中核对。"));
       return;
     }
     var observationGrid = el("div", "kz-a-observation-grid");
@@ -856,7 +878,9 @@
       product.setAttribute("aria-label", productName(first.product_id) + "：打开产品档案");
       label.appendChild(product);
       label.appendChild(el("small", "", first.endpoint + "｜" + first.timepoint));
-      label.appendChild(el("small", "", (trial ? trial.display_id : first.trial_id) + "｜" + first.population));
+      label.appendChild(el("small", "", (trial ? trial.display_id : first.trial_id)
+        + "｜" + first.population
+        + (first.group_assignment_state === "unknown" ? "｜结果组别归属待核" : "")));
       row.appendChild(label);
       var bars = el("div", "kz-a-bar-row__bars");
       observations.forEach(function (item) {
@@ -919,7 +943,7 @@
       return item.numeric_projection && item.numeric_projection.renderable;
     });
     if (!rows.length) {
-      host.appendChild(el("div", "kz-empty", "当前筛选没有公开安全性观察。"));
+      host.appendChild(el("div", "kz-empty", "当前筛选没有可安全绘制的安全性图形；未绘制的原始值仍可在完整表中核对。"));
       return;
     }
     var groups = {};
@@ -937,7 +961,8 @@
       group.appendChild(productLabel);
       group.appendChild(el("p", "kz-a-safety-context",
         (trial ? trial.display_id : "未公开试验") + "｜" + (first.arm_detail || first.arm)
-        + "｜" + first.time_window));
+        + "｜" + first.time_window
+        + (first.group_assignment_state === "unknown" ? "｜结果组别归属待核" : "")));
       var cells = el("div", "kz-a-safety-observations");
       observations.forEach(function (record) {
         var cell = el("button", "kz-a-safety-observation kz-a-product-trigger");
@@ -1352,25 +1377,30 @@
     var wrapper = el("div", "kz-a-portfolio-visual");
     var active = visibleProductNames();
     trials.filter(function (trial) {
-      var name = productName(trial.product_id);
-      if (Object.keys(active).length && !active[name]) return false;
+      if (Object.keys(active).length && !trialProductIds(trial).some(function (id) {
+        return Boolean(active[productName(id)]);
+      })) return false;
       if (selected.phase && selected.phase.indexOf(trial.phase) === -1) return false;
       if (selected.region && selected.region.indexOf(trial.region) === -1) return false;
       return true;
     }).forEach(function (trial) {
+      var linked = trialProductIds(trial);
+      var focusId = linked.filter(function (id) { return active[productName(id)]; })[0]
+        || trial.product_id;
+      var names = linked.map(productName).join("、");
       var item = el("article", "kz-a-portfolio-item kz-a-product-trigger");
       item.setAttribute("data-visual-node", "trial");
-      item.setAttribute("data-a-product-focus", trial.product_id);
-      item.setAttribute("data-product-id", trial.product_id);
-      item.setAttribute("data-product", productName(trial.product_id));
+      item.setAttribute("data-a-product-focus", focusId);
+      item.setAttribute("data-product-id", focusId);
+      item.setAttribute("data-product", productName(focusId));
       item.setAttribute("data-trial-id", trial.id);
       item.setAttribute("role", "button");
       item.setAttribute("tabindex", "0");
-      item.setAttribute("aria-label", productName(trial.product_id) + "：" + trial.display_id + "，打开疗效与安全性产品档案");
+      item.setAttribute("aria-label", names + "：" + trial.display_id + "，打开产品档案");
       item.appendChild(el("span", "", trial.region + "｜" + trial.phase));
-      item.appendChild(el("strong", "", productName(trial.product_id)));
+      item.appendChild(el("strong", "", names));
       item.appendChild(el("b", "", trial.name));
-      item.appendChild(el("small", "", trial.role + "｜" + trial.status + "｜样本量" + (trial.sample_size == null ? "未公开" : "n=" + trial.sample_size)));
+      item.appendChild(el("small", "", trial.role + "｜" + trial.status + "｜" + enrollmentLabel(trial)));
       wrapper.appendChild(item);
     });
     host.appendChild(wrapper);
@@ -1475,8 +1505,8 @@
     }
     content.appendChild(el("h3", "", "涉及试验"));
     var trialList = el("ul", "kz-a-evidence-list");
-    trials.filter(function (trial) { return !productScope || trial.product_id === productScope; }).forEach(function (trial) {
-      trialList.appendChild(el("li", "", trial.name + "（" + trial.display_id + "）｜" + trial.phase + "｜总样本量：" + textOr(trial.sample_size, "未公开") + "｜治疗组样本量：" + textOr(trial.treatment_sample_size, "未公开")));
+    trials.filter(function (trial) { return !productScope || trialHasProduct(trial, productScope); }).forEach(function (trial) {
+      trialList.appendChild(el("li", "", trial.name + "（" + trial.display_id + "）｜" + trial.phase + "｜" + enrollmentLabel(trial) + "｜治疗组样本量：" + textOr(trial.treatment_sample_size, "未公开")));
     });
     content.appendChild(trialList);
     content.appendChild(el("h3", "", "资料来源"));
@@ -1600,6 +1630,7 @@
     var candidates = document.querySelectorAll("tbody tr, [data-product-id], .kz-a-history-list article");
     var shown = 0;
     for (var r = 0; r < candidates.length; r += 1) {
+      if (candidates[r].hasAttribute("data-additional-row")) continue;
       var ok = true;
       Object.keys(selected).forEach(function (dim) {
         var actual = dim === "event"
@@ -1857,6 +1888,22 @@
     if (grid) grid.insertAdjacentElement("afterend", tools);
   }
   configureResponsiveFilters();
+  var additionalSearch = document.querySelector("[data-additional-search]");
+  if (additionalSearch) additionalSearch.addEventListener("input", function () {
+    var needle = additionalSearch.value.trim().toLocaleLowerCase();
+    var rows = document.querySelectorAll("[data-additional-row]");
+    var shown = 0;
+    for (var n = 0; n < rows.length; n += 1) {
+      var matches = (rows[n].getAttribute("data-additional-text") || "")
+        .toLocaleLowerCase().indexOf(needle) !== -1;
+      rows[n].hidden = !matches;
+      if (matches) shown += 1;
+    }
+    var count = document.querySelector("[data-additional-search-count]");
+    if (count) count.textContent = "显示 " + shown + "/" + rows.length + " 条";
+    var details = document.querySelector("[data-additional-details]");
+    if (needle && details) details.open = true;
+  });
   window.addEventListener("popstate", function () {
     var focus = new URLSearchParams(window.location.search || "").get("focus");
     if (focus && productById(focus)) {

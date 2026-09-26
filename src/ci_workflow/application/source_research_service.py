@@ -46,6 +46,12 @@ class ResearchPackageError(ValueError):
     """新鲜来源研究包不能形成可审计科学真源。"""
 
 
+ObservationDomain = Literal[
+    "efficacy", "adverse_events", "immunogenicity", "pk_pd",
+    "biomarkers", "other", "unresolved",
+]
+
+
 def _canonical_json(value: object) -> bytes:
     return (
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -204,6 +210,18 @@ def source_capture_from_ctgov_study(
     )
 
 
+class RegistryDenominatorCandidate(BaseModel):
+    """An observed N candidate; only an unambiguous compatible one is derivable."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    group_id: str
+    raw_value: str
+    raw_value_type: str
+    parsed_value: int = Field(ge=0)
+    unit: str
+    value_path: str
+
+
 class ResearchResultContext(BaseModel):
     """Scientific identity of a registry atom, not a display-label shortcut."""
 
@@ -220,6 +238,14 @@ class ResearchResultContext(BaseModel):
     timepoint: str
     value_role: Literal["reported_measure", "participant_count", "affected_count", "denominator"]
     source_unit: str
+    domain: ObservationDomain = "unresolved"
+    metric: str = "unresolved"
+    source_measure_path: str | None = None
+    source_param_type: str | None = None
+    source_dispersion_type: str | None = None
+    raw_value_type: str | None = None
+    analysis_population: str | None = None
+    denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
     class_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
     category_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
     observation_timepoint: str | None = Field(
@@ -377,8 +403,10 @@ class ScientificReview(BaseModel):
 ClinicalTrialsResultCategory = Literal[
     "outcome", "teae", "sae", "aesi", "common_ae", "parse_failure"
 ]
-ClinicalTrialsResultIssueStatus = Literal["missing", "misclassified", "parse_failure"]
-_ParsedOutcomeCategory = Literal["outcome", "teae", "sae", "aesi"]
+ClinicalTrialsResultIssueStatus = Literal[
+    "missing", "misclassified", "conflicting", "parse_failure"
+]
+_ParsedOutcomeCategory = Literal["outcome", "teae", "sae", "aesi", "common_ae"]
 ClinicalTrialsTrialCoverageStatus = Literal[
     "registry_results_projected",
     "reported_by_secondary_source",
@@ -487,6 +515,14 @@ class _RegistryResult:
     class_title: str = ""
     category_title: str = ""
     observation_timepoint: str = ""
+    domain: ObservationDomain = "unresolved"
+    metric: str = "unresolved"
+    source_measure_path: str = ""
+    source_param_type: str = ""
+    source_dispersion_type: str = ""
+    raw_value_type: str = ""
+    analysis_population: str = ""
+    denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -515,6 +551,14 @@ class CtgovAtomicResult:
     class_title: str = ""
     category_title: str = ""
     observation_timepoint: str = ""
+    domain: ObservationDomain = "unresolved"
+    metric: str = "unresolved"
+    source_measure_path: str = ""
+    source_param_type: str = ""
+    source_dispersion_type: str = ""
+    raw_value_type: str = ""
+    analysis_population: str = ""
+    denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
 
 
 _RESULT_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
@@ -736,49 +780,77 @@ def _explicit_aesi(value: Mapping[str, Any]) -> bool:
 def _outcome_category(
     title: str, class_title: str = ""
 ) -> _ParsedOutcomeCategory | None:
-    normalized = title.casefold()
-    class_name = class_title.casefold()
-    combined = f"{normalized} {class_name}"
-    if class_name:
-        if "aesi" in class_name or "adverse event of special interest" in class_name:
-            return "aesi"
-        if "serious" in class_name or class_name.strip() in {"sae", "saes", "serious aes"}:
-            return "sae"
-        if "teae" in class_name or "treatment emergent adverse event" in class_name:
-            return "teae"
-        if class_name.strip() in {"ae", "aes", "any ae", "any aes", "adverse events"}:
-            return "teae"
-    has_teae = "teae" in combined or "treatment-emergent adverse event" in combined
-    has_sae = (
-        "sae" in combined
-        or "serious adverse event" in combined
-        or "treatment-emergent serious" in combined
-    )
-    if "aesi" in combined or "adverse event of special interest" in combined:
-        return "aesi"
-    if has_teae and has_sae:
-        class_is_sae = "sae" in class_name or "serious" in class_name
-        class_is_teae = "teae" in class_name or (
-            "adverse event" in class_name and not class_is_sae
-        )
-        if class_is_sae:
-            return "sae"
-        if class_is_teae or class_name.strip() in {"aes", "any aes"}:
-            return "teae"
-        if is_safety_domain_endpoint(title):
-            # Keep the combined outcome intact; do not invent separate TEAE/SAE counts.
-            return "outcome"
-        return None
-    if has_sae:
+    # The safety vocabulary is the semantic source of truth. In particular,
+    # "non-serious", "without SAE" and generic AE cannot establish a positive
+    # SAE/TEAE aggregate. A class may narrow the title but may not erase it.
+    title_concept = describe_safety_concept(title)
+    class_concept = describe_safety_concept(class_title) if class_title else None
+    selected = class_concept if class_concept and class_concept.key != "unknown" else title_concept
+    if selected.key == "any_sae" and selected.polarity == "affirmed":
         return "sae"
-    if has_teae:
+    if selected.key == "any_teae" and selected.polarity == "affirmed":
         return "teae"
+    if selected.key == "aesi" and selected.polarity == "affirmed":
+        return "aesi"
+    if (
+        selected.key == "generic_ae" and class_concept is not None
+        and "non-serious" not in class_title.casefold()
+        and title_concept.key in {"any_sae", "any_teae", "aesi"}
+    ):
+        return {"any_sae": "sae", "any_teae": "teae", "aesi": "aesi"}[
+            title_concept.key
+        ]  # type: ignore[return-value]
+    if selected.key in {
+        "generic_ae", "specific_ae", "discontinuation_ae", "treatment_related_ae",
+        "grade_3_plus", "serious_teae_subset", "composite_ae",
+        "grade_specific", "non_serious_teae", "absence_sae", "death",
+    }:
+        return "common_ae"
     return "outcome"
+
+
+_IMMUNOGENICITY_TERM = re.compile(
+    r"anti[- ]drug antibod|neutraliz\w* antibod|binding antibod|"
+    r"\badas?\b|immunogenicity", re.I,
+)
+_PK_PD_TERM = re.compile(
+    r"pharmacokinetic|pharmacodynamic|\bcmax\b|\btmax\b|"
+    r"\bauc(?:0|tau|inf)?\b|(?:plasma|serum) drug concentration", re.I,
+)
+_BIOMARKER_TERM = re.compile(r"\bbiomarkers?\b|\bserum (?:free|total) c5\b", re.I)
+
+
+def classify_source_outcome(
+    title: str, class_title: str = "", category_title: str = "",
+) -> ObservationDomain:
+    """Conservative scientific domain; it does not decide numeric co-axis eligibility."""
+    text = " ".join(part for part in (title, class_title, category_title) if part)
+    if _IMMUNOGENICITY_TERM.search(text):
+        return "immunogenicity"
+    if _PK_PD_TERM.search(text):
+        return "pk_pd"
+    if _BIOMARKER_TERM.search(text):
+        return "biomarkers"
+    if is_safety_domain_endpoint(title) or is_safety_domain_endpoint(class_title):
+        return "adverse_events"
+    # Existing clinical outcome rows retain their legacy domain until a
+    # source-specific rule can decide a narrower one; uncertainty is still
+    # explicit in metric/statistical context, never a guessed comparator.
+    return "efficacy"
 
 
 def _outcome_report_term(category: str, title: str, class_title: str) -> str:
     if category == "sae":
-        return "任何SAE"
+        generic = re.fullmatch(
+            r"(?:number|percentage) of participants with (?:any )?"
+            r"serious adverse events(?: \(saes?\))?|"
+            r"(?:any )?serious adverse events(?: \(saes?\))?",
+            title.strip(), flags=re.I,
+        ) is not None
+        broad_class = not class_title or class_title.casefold().strip() in {
+            "any", "all", "overall", "serious adverse events",
+        } or bool(ctgov_class_observation_timepoint(class_title))
+        return "任何SAE" if generic and broad_class else title
     if category == "aesi":
         return "预先界定AESI"
     if category != "teae":
@@ -927,20 +999,49 @@ def _iter_outcome_results(
             }
             if any(not title for title in groups.values()):
                 raise ValueError("结果组别缺少标题")
-            denominator_by_group: dict[str, tuple[int, str]] = {}
+            denominator_candidates: dict[str, list[RegistryDenominatorCandidate]] = {}
             for denom_index, raw_denom in enumerate(measure.get("denoms", [])):
-                denom = _mapping_at(raw_denom, f"{path}.denoms[{denom_index}]")
-                for count_index, raw_count in enumerate(denom.get("counts", [])):
-                    count = _mapping_at(
-                        raw_count, f"{path}.denoms[{denom_index}].counts[{count_index}]"
-                    )
-                    group_id = _result_text(count.get("groupId"))
-                    denominator_by_group[group_id] = (
-                        _result_int(count.get("value")),
-                        f"{path}.denoms[{denom_index}].counts[{count_index}].value",
+                denom_path = f"{path}.denoms[{denom_index}]"
+                try:
+                    denom = _mapping_at(raw_denom, denom_path)
+                    for count_index, raw_count in enumerate(
+                        _list_at(denom.get("counts", []), f"{denom_path}.counts")
+                    ):
+                        count_path = f"{denom_path}.counts[{count_index}]"
+                        try:
+                            count = _mapping_at(raw_count, count_path)
+                            group_id = _result_text(count.get("groupId"))
+                            if group_id not in groups:
+                                raise ValueError(f"分母组别未定义：{group_id or '空值'}")
+                            raw_count_value = count.get("value")
+                            denominator_candidates.setdefault(group_id, []).append(
+                                RegistryDenominatorCandidate(
+                                    group_id=group_id,
+                                    raw_value=str(raw_count_value),
+                                    raw_value_type=type(raw_count_value).__name__,
+                                    parsed_value=_result_int(raw_count_value),
+                                    unit=_result_text(denom.get("units")),
+                                    value_path=f"{count_path}.value",
+                                )
+                            )
+                        except (TypeError, ValueError, KeyError) as exc:
+                            _parse_failure(
+                                issues=issues, trial_id=trial_id, source_id=source_id,
+                                source_path=count_path, detail=str(exc),
+                            )
+                except (TypeError, ValueError, KeyError) as exc:
+                    _parse_failure(
+                        issues=issues, trial_id=trial_id, source_id=source_id,
+                        source_path=denom_path, detail=str(exc),
                     )
             unit_raw = _result_text(measure.get("unitOfMeasure"))
             unit = unit_raw.casefold()
+            source_param_type = _result_text(measure.get("paramType"))
+            source_dispersion_type = _result_text(measure.get("dispersionType"))
+            analysis_population = _result_text(
+                measure.get("populationDescription")
+                or measure.get("analysisPopulationDescription")
+            )
             param_type = _result_text(measure.get("paramType")).casefold()
             is_percentage = any(
                 token in unit for token in ("percent", "percentage", "%", "百分比")
@@ -954,7 +1055,7 @@ def _iter_outcome_results(
             )
             classes = _list_at(measure.get("classes", []), f"{path}.classes")
             measurements: list[
-                tuple[str, float, str, _ParsedOutcomeCategory, str, str, str]
+                tuple[str, float, str, _ParsedOutcomeCategory, str, str, str, str]
             ] = []
             saw_not_reported = False
             for class_index, raw_class in enumerate(classes):
@@ -1011,6 +1112,7 @@ def _iter_outcome_results(
                                     class_title,
                                     category_title,
                                     observation_timepoint,
+                                    type(raw_value).__name__,
                                 )
                             )
                         except (TypeError, ValueError, KeyError) as exc:
@@ -1035,21 +1137,27 @@ def _iter_outcome_results(
                 continue
             for (
                 group_id, value, measurement_path, result_category,
-                class_title, category_title, observation_timepoint,
+                class_title, category_title, observation_timepoint, raw_value_type,
             ) in measurements:
                 report_term = _outcome_report_term(result_category, title, class_title)
                 numerator = None
                 denominator = None
                 denominator_path = None
+                candidates = denominator_candidates.get(group_id, [])
                 normalized_value = value
                 normalized_unit = "%" if is_percentage else (
                     "人" if is_participant_count else unit_raw
                 )
                 if is_participant_count:
-                    denominator_entry = denominator_by_group.get(group_id)
-                    if denominator_entry is None:
-                        if not is_safety_domain_endpoint(title):
-                            raise ValueError(f"受试者人数缺少分母：{group_id}")
+                    numerator = int(value)
+                    distinct = {
+                        (item.parsed_value, item.unit.casefold()) for item in candidates
+                    }
+                    result_identity = _result_key(
+                        result_category, trial_id, title, timeframe,
+                        group_id, measurement_path,
+                    )
+                    if not candidates:
                         _result_issue(
                             issues=issues,
                             category=result_category,
@@ -1057,17 +1165,44 @@ def _iter_outcome_results(
                             trial_id=trial_id,
                             source_id=source_id,
                             source_path=f"{path}.denoms",
-                            result_key=_result_key(
-                                result_category, trial_id, title, timeframe,
-                                group_id, measurement_path,
+                            result_key=result_identity,
+                            reason_zh=(
+                                f"{group_id} 直接报告人数，但同终点分母缺失；"
+                                "风险率未知，待核"
                             ),
-                            reason_zh="安全结局直接报告人数，但同终点分母缺失；风险率未知，待核",
+                        )
+                    elif len(distinct) != 1 or not all(
+                        unit in {"participants", "participant", "subjects", "subject", "人"}
+                        or (not unit and "count_of_participants" in param_type)
+                        for _, unit in distinct
+                    ):
+                        _result_issue(
+                            issues=issues, category=result_category,
+                            status="conflicting", trial_id=trial_id,
+                            source_id=source_id, source_path=f"{path}.denoms",
+                            result_key=result_identity,
+                            reason_zh=(
+                                f"{group_id} 同终点分母候选的数值或统计单位不一致："
+                                f"{sorted(distinct)}；不选择任一候选计算比例"
+                            ),
                         )
                     else:
-                        denominator, denominator_path = denominator_entry
-                    numerator = int(value)
+                        denominator = candidates[0].parsed_value
+                        denominator_path = candidates[0].value_path
                     if numerator < 0 or (denominator is not None and numerator > denominator):
-                        raise ValueError("受试者人数超出来源分母")
+                        _result_issue(
+                            issues=issues, category=result_category,
+                            status="conflicting", trial_id=trial_id,
+                            source_id=source_id,
+                            source_path=denominator_path or measurement_path,
+                            result_key=result_identity,
+                            reason_zh=(
+                                f"{group_id} 来源人数 {numerator} 超出同组分母 {denominator}；"
+                                "不得生成比例"
+                            ),
+                        )
+                        denominator = None
+                        denominator_path = None
                     if denominator == 0:
                         _result_issue(
                             issues=issues,
@@ -1076,17 +1211,10 @@ def _iter_outcome_results(
                             trial_id=trial_id,
                             source_id=source_id,
                             source_path=denominator_path or f"{path}.denoms",
-                            result_key=_result_key(
-                                result_category, trial_id, title, timeframe,
-                                group_id, measurement_path,
-                            ),
+                            result_key=result_identity,
                             reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
                         )
-                        if not is_safety_domain_endpoint(title):
-                            continue
-                        denominator = None
-                        denominator_path = None
-                    if denominator is not None:
+                    if denominator is not None and denominator > 0:
                         normalized_value = round(numerator * 100 / denominator, 1)
                         normalized_unit = "%"
                 results.append(
@@ -1119,6 +1247,20 @@ def _iter_outcome_results(
                         class_title=class_title,
                         category_title=category_title,
                         observation_timepoint=observation_timepoint,
+                        domain=classify_source_outcome(
+                            title, class_title, category_title,
+                        ),
+                        metric=(
+                            "participant_count" if is_participant_count
+                            else "reported_percentage" if is_percentage
+                            else "reported_measure"
+                        ),
+                        source_measure_path=path,
+                        source_param_type=source_param_type,
+                        source_dispersion_type=source_dispersion_type,
+                        raw_value_type=raw_value_type,
+                        analysis_population=analysis_population,
+                        denominator_candidates=tuple(candidates),
                     )
                 )
         except (TypeError, ValueError, KeyError) as exc:
@@ -1171,25 +1313,40 @@ def _iter_adverse_event_results(
                 at_risk = group.get(at_risk_key)
                 if affected is None and at_risk is None:
                     continue
-                if affected is None or at_risk is None:
-                    missing_key = affected_key if affected is None else at_risk_key
+                if affected is None:
                     _result_issue(
                         issues=issues,
                         category=category,  # type: ignore[arg-type]
                         status="missing",
                         trial_id=trial_id,
                         source_id=source_id,
-                        source_path=f"{path}.{missing_key}",
+                        source_path=f"{path}.{affected_key}",
                         result_key=_result_key(category, trial_id, group_id, path),
                         reason_zh=(
-                            f"{trial_id} 的 {group_id} 未提供 {missing_key}；"
-                            "当前比例未知，待核，不得推断为 0"
+                            f"{trial_id} 的 {group_id} 未提供 {affected_key}；"
+                            "受影响人数未知，待核，不得推断为 0"
                         ),
                     )
                     continue
                 numerator = _result_int(affected)
-                denominator = _result_int(at_risk)
-                if numerator == 0 and denominator == 0:
+                denominator = _result_int(at_risk) if at_risk is not None else None
+                candidates = (
+                    RegistryDenominatorCandidate(
+                        group_id=group_id, raw_value=str(at_risk),
+                        raw_value_type=type(at_risk).__name__,
+                        parsed_value=denominator, unit="participants",
+                        value_path=f"{path}.{at_risk_key}",
+                    ),
+                ) if denominator is not None and denominator >= 0 else ()
+                if denominator is None:
+                    _result_issue(
+                        issues=issues, category=category,  # type: ignore[arg-type]
+                        status="missing", trial_id=trial_id, source_id=source_id,
+                        source_path=f"{path}.{at_risk_key}",
+                        result_key=_result_key(category, trial_id, group_id, path),
+                        reason_zh=f"{trial_id} 的 {group_id} 原始人数存在但分母缺失；比例未知",
+                    )
+                elif denominator == 0 and numerator == 0:
                     _result_issue(
                         issues=issues,
                         category=category,  # type: ignore[arg-type]
@@ -1200,9 +1357,19 @@ def _iter_adverse_event_results(
                         result_key=_result_key(category, trial_id, group_id, path),
                         reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
                     )
-                    continue
-                if denominator <= 0 or numerator < 0 or numerator > denominator:
-                    raise ValueError("事件组分子/分母不符合范围")
+                elif denominator <= 0 or numerator < 0 or numerator > denominator:
+                    _result_issue(
+                        issues=issues, category=category,  # type: ignore[arg-type]
+                        status="conflicting", trial_id=trial_id, source_id=source_id,
+                        source_path=f"{path}.{at_risk_key}",
+                        result_key=_result_key(category, trial_id, group_id, path),
+                        reason_zh=(
+                            f"{group_id} 来源人数 {numerator} 与分母 {denominator} 矛盾；"
+                            "不生成比例"
+                        ),
+                    )
+                    denominator = None
+                valid_rate = denominator is not None and denominator > 0
                 results.append(
                     _RegistryResult(
                         category=category,  # type: ignore[arg-type]
@@ -1214,12 +1381,19 @@ def _iter_adverse_event_results(
                         group_id=group_id,
                         arm=group_info[group_id][1],
                         group_title=group_info[group_id][0],
-                        value=round(numerator * 100 / denominator, 1),
+                        value=round(numerator * 100 / denominator, 1)
+                        if valid_rate and denominator is not None else float(numerator),
                         numerator=numerator,
                         denominator=denominator,
                         timepoint=event_timeframe,
+                        unit="%" if valid_rate else "人",
                         value_path=f"{path}.{affected_key}",
-                        denominator_path=f"{path}.{at_risk_key}",
+                        denominator_path=f"{path}.{at_risk_key}"
+                        if denominator is not None else None,
+                        domain="adverse_events", metric="affected_count",
+                        source_measure_path=path,
+                        raw_value_type=type(affected).__name__,
+                        denominator_candidates=candidates,
                     )
                 )
         except (TypeError, ValueError, KeyError) as exc:
@@ -1295,8 +1469,29 @@ def _iter_adverse_event_results(
                         )
                         continue
                     numerator = _result_int(stat["numAffected"])
-                    denominator = _result_int(stat.get("numAtRisk"))
-                    if denominator == 0 and numerator == 0:
+                    raw_at_risk = stat.get("numAtRisk")
+                    denominator = (
+                        _result_int(raw_at_risk) if raw_at_risk is not None else None
+                    )
+                    candidates = (
+                        RegistryDenominatorCandidate(
+                            group_id=group_id, raw_value=str(raw_at_risk),
+                            raw_value_type=type(raw_at_risk).__name__,
+                            parsed_value=denominator, unit="participants",
+                            value_path=f"{stat_path}.numAtRisk",
+                        ),
+                    ) if denominator is not None and denominator >= 0 else ()
+                    if denominator is None:
+                        _result_issue(
+                            issues=issues, category=category,  # type: ignore[arg-type]
+                            status="missing", trial_id=trial_id, source_id=source_id,
+                            source_path=f"{stat_path}.numAtRisk",
+                            result_key=_result_key(
+                                category, trial_id, term, group_id, stat_path
+                            ),
+                            reason_zh=f"{term} / {group_id} 人数已报告但分母缺失；比例未知",
+                        )
+                    elif denominator == 0 and numerator == 0:
                         _result_issue(
                             issues=issues,
                             category=category,  # type: ignore[arg-type]
@@ -1309,9 +1504,21 @@ def _iter_adverse_event_results(
                             ),
                             reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
                         )
-                        continue
-                    if denominator <= 0 or numerator < 0 or numerator > denominator:
-                        raise ValueError("AE 分子/分母不符合范围")
+                    elif denominator <= 0 or numerator < 0 or numerator > denominator:
+                        _result_issue(
+                            issues=issues, category=category,  # type: ignore[arg-type]
+                            status="conflicting", trial_id=trial_id,
+                            source_id=source_id, source_path=f"{stat_path}.numAtRisk",
+                            result_key=_result_key(
+                                category, trial_id, term, group_id, stat_path
+                            ),
+                            reason_zh=(
+                                f"{term} / {group_id} 人数 {numerator} "
+                                f"与分母 {denominator} 矛盾"
+                            ),
+                        )
+                        denominator = None
+                    valid_rate = denominator is not None and denominator > 0
                     result = _RegistryResult(
                         category=category,  # type: ignore[arg-type]
                         trial_id=trial_id,
@@ -1322,12 +1529,19 @@ def _iter_adverse_event_results(
                         group_id=group_id,
                         arm=group_info[group_id][1],
                         group_title=group_info[group_id][0],
-                        value=round(numerator * 100 / denominator, 1),
+                        value=round(numerator * 100 / denominator, 1)
+                        if valid_rate and denominator is not None else float(numerator),
                         numerator=numerator,
                         denominator=denominator,
                         timepoint=event_timeframe,
+                        unit="%" if valid_rate else "人",
                         value_path=f"{stat_path}.numAffected",
-                        denominator_path=f"{stat_path}.numAtRisk",
+                        denominator_path=f"{stat_path}.numAtRisk"
+                        if denominator is not None else None,
+                        domain="adverse_events", metric="affected_count",
+                        source_measure_path=path,
+                        raw_value_type=type(stat["numAffected"]).__name__,
+                        denominator_candidates=candidates,
                     )
                     results.append(result)
                     if explicit_aesi:
@@ -1348,8 +1562,13 @@ def _iter_adverse_event_results(
                                 numerator=numerator,
                                 denominator=denominator,
                                 timepoint=event_timeframe,
+                                unit=result.unit,
                                 value_path=f"{stat_path}.numAffected",
-                                denominator_path=f"{stat_path}.numAtRisk",
+                                denominator_path=result.denominator_path,
+                                domain="adverse_events", metric="affected_count",
+                                source_measure_path=path,
+                                raw_value_type=type(stat["numAffected"]).__name__,
+                                denominator_candidates=candidates,
                             )
                         )
                 except (TypeError, ValueError, KeyError) as exc:
@@ -1454,6 +1673,14 @@ def extract_ctgov_atomic_results(
             class_title=result.class_title,
             category_title=result.category_title,
             observation_timepoint=result.observation_timepoint,
+            domain="adverse_events" if result.category != "outcome" else result.domain,
+            metric=result.metric,
+            source_measure_path=result.source_measure_path,
+            source_param_type=result.source_param_type,
+            source_dispersion_type=result.source_dispersion_type,
+            raw_value_type=result.raw_value_type,
+            analysis_population=result.analysis_population,
+            denominator_candidates=result.denominator_candidates,
         ))
     return tuple(atoms), tuple(issues)
 
@@ -1468,7 +1695,9 @@ def research_facts_from_ctgov_atom(
     A derived display percentage is intentionally not written as a source fact;
     its calculation must be recorded separately with both input fact versions.
     """
-    is_safety = atom.category != "outcome" or is_safety_domain_endpoint(atom.endpoint)
+    is_safety = atom.domain == "adverse_events" or atom.category != "outcome"
+    if report_row_ref is not None and atom.domain not in {"efficacy", "adverse_events"}:
+        raise ResearchPackageError("登记原子与报告行领域不一致；该领域尚未接入 A 专用结果行")
     expected_prefix = "safety:" if is_safety else "efficacy:"
     if report_row_ref is not None and not report_row_ref.startswith(expected_prefix):
         raise ResearchPackageError("登记原子与报告行领域不一致")
@@ -1499,6 +1728,14 @@ def research_facts_from_ctgov_atom(
             class_title=atom.class_title or None,
             category_title=atom.category_title or None,
             observation_timepoint=atom.observation_timepoint or None,
+            domain=atom.domain,
+            metric=atom.metric,
+            source_measure_path=atom.source_measure_path or None,
+            source_param_type=atom.source_param_type or None,
+            source_dispersion_type=atom.source_dispersion_type or None,
+            raw_value_type=atom.raw_value_type or None,
+            analysis_population=atom.analysis_population or None,
+            denominator_candidates=atom.denominator_candidates,
         )
         return ResearchFact(
             fact_id=stable_id(
@@ -2848,9 +3085,27 @@ def project_a_calculation_evidence(
         for raw in closure["fragments"]
         for item in (EvidenceFragmentRecord.model_validate(raw),)
     }
+
+    def bound_fact(raw: Mapping[str, Any]) -> ResearchFact:
+        fact = raw["fact"]
+        if not isinstance(fact, dict):
+            raise ResearchPackageError("计算依据事实闭包无效")
+        if "row_ref" not in fact:
+            binding = raw.get("consumer_binding")
+            if (
+                not isinstance(binding, dict)
+                or binding.get("report_kind") != "A"
+                or not isinstance(binding.get("row_ref"), str)
+            ):
+                raise ResearchPackageError("计算依据缺少 A 报告消费绑定")
+            fact = {**fact, "row_ref": binding["row_ref"]}
+        # Historical v2 snapshots embedded row_ref in the fact object;
+        # current snapshots keep it separately without rewriting that history.
+        return ResearchFact.model_validate(fact)
+
     facts = {
         str(raw["fact_version_id"]): (
-            ResearchFact.model_validate(raw["fact"]), str(raw["primary_fragment_id"])
+            bound_fact(raw), str(raw["primary_fragment_id"])
         )
         for raw in closure["facts"]
     }

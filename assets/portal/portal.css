@@ -146,6 +146,17 @@
 .kz-a-network-flow strong { color:var(--text-1); }.kz-a-network-flow b{color:#6a4b15}.kz-a-network-flow em{font-style:normal;font-weight:700;color:var(--kz-dmst)}
 .kz-a-network-flow small { grid-column:1/-1; color:var(--text-3); font-size: 12px; }.kz-a-network-arrow{color:var(--kz-orange);font-size: 20px;font-weight:700}
 .kz-a-filter-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-bottom: 18px; }
+@media (min-width: 1101px) {
+  .kz-a-panel[data-module="clinical-portfolio"] .kz-a-filter-grid {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    align-items: start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .kz-a-panel[data-module="clinical-portfolio"] [data-filter-dimension="product"] {
+    grid-column: 1 / -1;
+  }
+}
 .kz-a-panel[data-module="efficacy"] .kz-a-filter-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap:8px; margin-bottom:8px; }
 .kz-a-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; }
 .kz-a-filter__label { font-size: 16px; font-weight: 700; color: var(--text-1); margin-right: 2px; }
@@ -174,6 +185,15 @@
 .kz-a-table-wrap td { font-size: 16px; line-height: 1.5; padding: 13px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
 .kz-a-table-wrap tr:last-child td { border-bottom: 0; }
 .kz-a-table-wrap tbody tr:hover { background: #fffaf1; }
+[data-module="additional-observations"] .kz-a-table-wrap table { table-layout: fixed; min-width: 1150px; }
+[data-module="additional-observations"] .kz-a-table-wrap th:nth-child(1) { width: 9%; }
+[data-module="additional-observations"] .kz-a-table-wrap th:nth-child(2) { width: 16%; }
+[data-module="additional-observations"] .kz-a-table-wrap th:nth-child(3) { width: 39%; }
+[data-module="additional-observations"] .kz-a-table-wrap th:nth-child(4) { width: 14%; }
+[data-module="additional-observations"] .kz-a-table-wrap th:nth-child(5) { width: 11%; }
+[data-module="additional-observations"] .kz-a-table-wrap th:nth-child(6) { width: 11%; }
+[data-module="additional-observations"] .kz-a-table-wrap td:nth-child(2) small { white-space: nowrap; }
+[data-module="additional-observations"] .kz-a-table-wrap td:nth-child(3) { overflow-wrap: anywhere; }
 .kz-a-safety-table { overflow-x: visible; }
 .kz-a-safety-table table { min-width: 0; table-layout: fixed; }
 .kz-a-safety-table col.kz-a-safety-col-product { width: 9%; }

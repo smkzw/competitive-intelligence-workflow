@@ -11,13 +11,34 @@
     <thead><tr><th>产品</th><th>试验</th><th>疗效指标</th><th>时间点</th><th>组别</th><th>观察值</th><th>人数</th><th>分析人群</th></tr></thead>
     <tbody>{% for row in efficacy %}
       <tr data-row-id="{{ row.row_id }}" data-product="{{ product_names[row.product_id] }}" data-endpoint="{{ row.endpoint }}" data-endpoint-source="{{ row.endpoint_source }}" data-timepoint="{{ row.timepoint }}">
-        <td>{{ product_names[row.product_id] }}</td><td>{{ trial_names[row.trial_id] }}</td>
+        <td>{% if row.group_assignment_state == 'unknown' %}产品归属待核{% else %}{{ product_names[row.product_id] }}{% endif %}</td><td>{{ trial_names[row.trial_id] }}</td>
         <td{% if row.endpoint_source and row.endpoint_source != row.endpoint %} title="{{ row.endpoint_source }}"{% endif %}>{{ row.endpoint }}</td><td>{{ row.timepoint }}</td><td>{{ row.arm_detail or row.arm }}</td>
         <td><strong>{{ row.value }}{{ row.unit }}</strong></td>
         <td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% elif row.denominator is not none %}分母 {{ row.denominator }}{% else %}—{% endif %}</td>
-        <td>{{ row.population }}</td>
+        <td>{{ row.population }}{% if row.unrendered_reason == 'group_product_relationship_unresolved' %}<br><small>未绘图：组别与产品关系待核</small>{% endif %}</td>
       </tr>
     {% endfor %}</tbody>
   </table></div></details>{{ ui.empty_state() }}
 </section>
+{% if additional_observations %}
+<section class="kz-a-panel" data-module="additional-observations">
+  <div class="kz-a-section-head"><div><h2>其他登记观察（{{ additional_observations|length }}）</h2><p>免疫原性、药代/药效学及生物标志物等按各自统计对象保留，不计作临床疗效，也不与疗效共轴。</p></div></div>
+  <label for="additional-observation-search">在这些观察中搜索</label>
+  <input id="additional-observation-search" type="search" data-additional-search placeholder="输入终点、试验号、组别或领域">
+  <span data-additional-search-count>共 {{ additional_observations|length }} 条</span>
+  <details class="kz-complete-table" data-additional-details><summary class="kz-complete-table__summary">展开完整其他观察表</summary><div class="kz-a-table-wrap"><table>
+    <thead><tr><th>领域</th><th>产品/试验</th><th>观察与条件</th><th>组别</th><th>来源原值</th><th>登记来源</th></tr></thead>
+    <tbody>{% for row in additional_observations %}
+      <tr id="{{ row.row_id }}" data-additional-row data-additional-text="{{ row.domain_label }} {{ row.endpoint }} {{ row.trial_id }} {{ row.group_title }} {{ row.class_title }} {{ row.category_title }}">
+        <td>{{ row.domain_label }}</td>
+        <td>{% if row.group_assignment_state == 'declared' %}{{ product_names[row.product_id] }}{% else %}产品归属待核{% endif %}<br><small>{{ row.trial_id|upper }}</small></td>
+        <td>{{ row.endpoint }}<br><small>{{ row.time_window }}{% if row.class_title %}｜{{ row.class_title }}{% endif %}{% if row.category_title %}｜{{ row.category_title }}{% endif %}</small></td>
+        <td>{{ row.group_title }}</td>
+        <td><strong>{{ row.raw_value }} {{ row.raw_unit }}</strong></td>
+        <td><a href="{{ row.source_url }}" target="_blank" rel="noopener noreferrer">登记原文</a><br><small>逐事实来源核验待完成</small></td>
+      </tr>
+    {% endfor %}</tbody>
+  </table></div></details>
+</section>
+{% endif %}
 {% endblock %}

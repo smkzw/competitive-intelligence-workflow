@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -12,7 +13,6 @@ from playwright.sync_api import Browser, Page, sync_playwright
 
 from ci_workflow.application.source_research_service import (
     FreshAResearchContent,
-    compute_research_content_digest,
 )
 from ci_workflow.qc.report_a_acceptance import inspect_legacy_report_a_sample
 from ci_workflow.renderers.portal.report_a import (
@@ -24,7 +24,7 @@ from ci_workflow.renderers.portal.report_a import (
 ROOT = Path(__file__).resolve().parents[2]
 FRESH_CONTENT = ROOT / "fixtures/positive/a-atopic-dermatitis/research-content.json"
 NEGATIVE_ROOT = ROOT / "fixtures/negative"
-EXPECTED_CONTENT_DIGEST = "3c42232e53194820e319696afc7c3e815300718efe3ec0e95028b26ab8d91080"
+EXPECTED_SOURCE_BYTES_SHA256 = "988c1607e08c7f9747a6feb493dcdaf66b6ccd7c26cafefe96e956622196fa1a"
 
 
 @pytest.fixture(scope="module")
@@ -68,20 +68,22 @@ def _rows(payload: dict[str, object], section: str, product_id: str) -> list[dic
     return [row for row in values if row["product_id"] == product_id]
 
 
-def test_fresh_ad_content_is_frozen_complete_and_native_chinese() -> None:
+def test_frozen_ad_bytes_remain_intact_but_current_scientific_gate_rejects_gaps() -> None:
     payload = _payload()
-    content = FreshAResearchContent.model_validate(payload)
-
-    assert compute_research_content_digest(payload) == EXPECTED_CONTENT_DIGEST
-    assert content.indication == "特应性皮炎"
-    assert len(content.report_data.products) == 38
-    assert len(content.report_data.trials) == 49
-    assert len(content.sources) == 86
-    assert len(content.facts) == 17_124
-    assert len(content.report_data.efficacy) == 6_780
-    assert len(content.report_data.safety) == 10_228
-    assert all(source.first_disclosed_at <= content.data_cutoff for source in content.sources)
-    visible_text = json.dumps(content.report_data.model_dump(mode="json"), ensure_ascii=False)
+    # This tests historical source bytes without invoking today's stricter
+    # scientific validator or rewriting the old frozen fixture.
+    assert hashlib.sha256(FRESH_CONTENT.read_bytes()).hexdigest() == EXPECTED_SOURCE_BYTES_SHA256
+    report = ReportAPortalData.model_validate(payload["report_data"])
+    assert report.indication == "特应性皮炎"
+    assert len(report.products) == 38
+    assert len(report.trials) == 49
+    assert len(payload["sources"]) == 86
+    assert len(payload["facts"]) == 17_124
+    assert len(report.efficacy) == 6_780
+    assert len(report.safety) == 10_228
+    with pytest.raises(ValueError, match="ClinicalTrials.gov 结果覆盖审计失败"):
+        FreshAResearchContent.model_validate(payload)
+    visible_text = json.dumps(report.model_dump(mode="json"), ensure_ascii=False)
     for forbidden in (
         "Gate",
         "Signal",

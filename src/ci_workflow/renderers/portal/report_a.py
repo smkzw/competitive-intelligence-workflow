@@ -86,6 +86,17 @@ class ProductRow(BaseModel):
         return value
 
 
+class TrialProductLink(BaseModel):
+    """A source-declared intervention-to-arm link, not a guessed trial owner."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    product_id: str
+    arm_role: Literal[
+        "experimental", "active_comparator", "other_comparator", "other", "unknown"
+    ]
+    arm_labels: tuple[str, ...] = ()
+
+
 class TrialRow(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     id: str
@@ -97,13 +108,24 @@ class TrialRow(BaseModel):
     status: str
     # 独立审阅 R13（SCI10）：未知样本量显式建模为 None（保留适格研究，
     # 不为凑 gt=0 删除试验）；计划与实际人数分开保存，不可混用
-    sample_size: int | None = Field(default=None, gt=0)
-    planned_sample_size: int | None = Field(default=None, gt=0)
-    treatment_sample_size: int | None = Field(default=None, gt=0)
+    sample_size: int | None = Field(default=None, ge=0)
+    planned_sample_size: int | None = Field(default=None, ge=0)
+    reported_sample_size: int | None = Field(default=None, ge=0)
+    enrollment_type: Literal["ACTUAL", "ESTIMATED", "UNKNOWN"] = "UNKNOWN"
+    treatment_sample_size: int | None = Field(default=None, ge=0)
+    product_links: tuple[TrialProductLink, ...] = ()
     role: str
 
     @model_validator(mode="after")
     def _treatment_group_cannot_exceed_trial(self) -> TrialRow:
+        if self.enrollment_type == "ESTIMATED" and self.sample_size is not None:
+            raise ValueError("计划样本量不得伪装成实际样本量")
+        if self.enrollment_type == "ACTUAL" and self.planned_sample_size is not None:
+            raise ValueError("实际样本量不得伪装成计划样本量")
+        if len({(link.product_id, link.arm_role) for link in self.product_links}) != len(
+            self.product_links
+        ):
+            raise ValueError("试验产品-组别角色重复")
         if (
             self.treatment_sample_size is not None
             and self.sample_size is not None
@@ -129,6 +151,7 @@ class EfficacyRow(BaseModel):
     )
     product_id: str
     trial_id: str
+    group_assignment_state: Literal["declared", "unknown", "unassessed"] = "unassessed"
     endpoint: str
     timepoint: str
     arm: str
@@ -191,6 +214,7 @@ class SafetyRow(BaseModel):
     row_id: str
     product_id: str
     trial_id: str | None = None
+    group_assignment_state: Literal["declared", "unknown", "unassessed"] = "unassessed"
     arm: str = "治疗组"
     arm_detail: str | None = None
     category: str
@@ -300,6 +324,29 @@ class SourceRow(BaseModel):
     limitation: str
 
 
+class AdditionalObservationRow(BaseModel):
+    """Reported non-efficacy, non-AE study observation retained without co-axis claims."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    row_id: str
+    product_id: str
+    trial_id: str
+    group_id: str
+    group_title: str
+    group_assignment_state: Literal["declared", "unknown"]
+    endpoint: str
+    class_title: str
+    category_title: str
+    time_window: str
+    domain: Literal["immunogenicity", "pk_pd", "biomarkers", "other", "unresolved"]
+    raw_value: str
+    raw_value_type: str
+    raw_unit: str
+    source_url: str
+    source_page_sha256: str
+    source_path: str
+
+
 class ReportALineageBinding(BaseModel):
     """新鲜来源路径传给渲染器的已锁定科学谱系。"""
 
@@ -322,8 +369,9 @@ class ReportAPortalData(BaseModel):
     data_cutoff: datetime
     products: tuple[ProductRow, ...] = Field(min_length=1)
     trials: tuple[TrialRow, ...] = Field(min_length=1)
-    efficacy: tuple[EfficacyRow, ...] = Field(min_length=1)
-    safety: tuple[SafetyRow, ...] = Field(min_length=1)
+    efficacy: tuple[EfficacyRow, ...] = ()
+    safety: tuple[SafetyRow, ...] = ()
+    additional_observations: tuple[AdditionalObservationRow, ...] = ()
     regulatory: tuple[RegulatoryRow, ...] = Field(min_length=1)
     companies: tuple[CompanyRow, ...] = Field(min_length=1)
     patents: tuple[PatentRow, ...] = Field(min_length=1)
@@ -343,12 +391,19 @@ class ReportAPortalData(BaseModel):
         trials = set(trial_ids)
         if any(item.product_id not in products for item in self.trials):
             raise ValueError("试验引用了未知产品")
+        if any(
+            link.product_id not in products
+            for trial in self.trials for link in trial.product_links
+        ):
+            raise ValueError("试验干预关系引用了未知产品")
         linked_product_rows: tuple[
-            EfficacyRow | SafetyRow | RegulatoryRow | CompanyRow | PatentRow | HistoryRow,
+            EfficacyRow | SafetyRow | AdditionalObservationRow | RegulatoryRow
+            | CompanyRow | PatentRow | HistoryRow,
             ...,
         ] = (
             *self.efficacy,
             *self.safety,
+            *self.additional_observations,
             *self.regulatory,
             *self.companies,
             *self.patents,
@@ -358,6 +413,8 @@ class ReportAPortalData(BaseModel):
             raise ValueError("报告事实引用了未知产品")
         if any(item.trial_id not in trials for item in self.efficacy):
             raise ValueError("疗效事实引用了未知试验")
+        if any(item.trial_id not in trials for item in self.additional_observations):
+            raise ValueError("其他观察引用了未知试验")
         if any(item.trial_id is not None and item.trial_id not in trials for item in self.safety):
             raise ValueError("安全性事实引用了未知试验")
         # 会商 #2/#12：门禁按概念键判定（any_teae/any_sae 必须齐备），
@@ -630,9 +687,14 @@ def _display_safety_rows(data: ReportAPortalData) -> tuple[dict[str, object], ..
             estimand="安全性登记测量",
         )
         row["numeric_projection"] = projection.as_dict()
+        if item.group_assignment_state == "unknown":
+            row["numeric_projection"]["renderable"] = False
+            row["unrendered_reason"] = "group_product_relationship_unresolved"
+        else:
+            row["unrendered_reason"] = None
         row["plot_value"] = projection.plot_value
         row["plot_unit"] = projection.plot_unit
-        row["renderable"] = projection.renderable
+        row["renderable"] = row["numeric_projection"]["renderable"]
         row["semantic_filter_key"] = "|".join(
             (
                 str(item.term_key or "unknown"),
@@ -1912,10 +1974,15 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
         )
         displayed_projection = projection.as_dict()
         displayed_projection["plot_unit"] = _native_unit_zh(projection.plot_unit)
+        if item.group_assignment_state == "unknown":
+            displayed_projection["renderable"] = False
+            row["unrendered_reason"] = "group_product_relationship_unresolved"
+        else:
+            row["unrendered_reason"] = None
         row["numeric_projection"] = displayed_projection
         row["plot_value"] = projection.plot_value
         row["plot_unit"] = displayed_projection["plot_unit"]
-        row["renderable"] = projection.renderable
+        row["renderable"] = displayed_projection["renderable"]
         # 登记结果测量原文（独立复核：门户必须保留可回溯的终点原文）
         row["endpoint_source"] = str(item.endpoint)
         rows.append(row)
@@ -1943,6 +2010,19 @@ def _view_context(
         "products": display_products,
         "trials": display_trials,
         "efficacy": display_efficacy,
+        "additional_observations": tuple(
+            {
+                **item.model_dump(mode="json"),
+                "domain_label": {
+                    "immunogenicity": "免疫原性",
+                    "pk_pd": "药代/药效学",
+                    "biomarkers": "生物标志物",
+                    "other": "其他研究观察",
+                    "unresolved": "领域待核",
+                }[item.domain],
+            }
+            for item in data.additional_observations
+        ),
         "safety": display_safety,
         "safety_public_categories": tuple(
             category
@@ -2270,13 +2350,19 @@ def render_report_a_site(
         }
         context["product"] = display_products[product.id]
         context["product_trials"] = tuple(
-            row for row in context["trials"] if row["product_id"] == product.id
+            row for row in context["trials"]
+            if row["product_id"] == product.id
+            or any(link["product_id"] == product.id for link in row["product_links"])
         )
         context["product_efficacy"] = tuple(
-            row for row in context["efficacy"] if row["product_id"] == product.id
+            row for row in context["efficacy"]
+            if row["product_id"] == product.id
+            and row["group_assignment_state"] != "unknown"
         )
         context["product_safety"] = tuple(
-            row for row in context["safety"] if row["product_id"] == product.id
+            row for row in context["safety"]
+            if row["product_id"] == product.id
+            and row["group_assignment_state"] != "unknown"
         )
         context["product_regulatory"] = tuple(
             row for row in context["regulatory"] if row["product_id"] == product.id
@@ -2312,8 +2398,12 @@ def render_report_a_site(
         ]
         + [
             {
-                "title": row.clinical_narrative
-                or f"{row.term} · {display_products[row.product_id].name}",
+                "title": (
+                    f"{row.term} · 产品归属待核"
+                    if row.group_assignment_state == "unknown"
+                    else row.clinical_narrative
+                    or f"{row.term} · {display_products[row.product_id].name}"
+                ),
                 "slug": "safety",
                 "keywords": [
                     row.row_id,
@@ -2330,8 +2420,12 @@ def render_report_a_site(
         ]
         + [
             {
-                "title": row.clinical_narrative
-                or f"{row.endpoint} · {display_products[row.product_id].name}",
+                "title": (
+                    f"{row.endpoint} · 产品归属待核"
+                    if row.group_assignment_state == "unknown"
+                    else row.clinical_narrative
+                    or f"{row.endpoint} · {display_products[row.product_id].name}"
+                ),
                 "slug": "efficacy",
                 "keywords": [
                     row.row_id,
@@ -2345,6 +2439,21 @@ def render_report_a_site(
                 ],
             }
             for row in data.efficacy
+        ]
+        + [
+            {
+                "title": (
+                    f"{row.endpoint} · 产品归属待核"
+                    if row.group_assignment_state == "unknown"
+                    else f"{row.endpoint} · {display_products[row.product_id].name}"
+                ),
+                "slug": "efficacy",
+                "keywords": [
+                    row.row_id, row.trial_id, row.group_title,
+                    row.time_window, row.domain, row.raw_value, row.raw_unit,
+                ],
+            }
+            for row in data.additional_observations
         ]
     )
     (data_dir / "search-index.js").write_text(

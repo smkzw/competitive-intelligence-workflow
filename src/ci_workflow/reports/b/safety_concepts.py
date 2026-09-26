@@ -53,6 +53,8 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
 _GENERAL_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("any_teae", re.compile(r"(?<![a-z\-])teaes?(?![a-z])", re.I)),
     ("any_teae", re.compile(
+        r"^treatment[\s-]*emergent\s+adverse\s+events?\s*$", re.I)),
+    ("any_teae", re.compile(
         r"\b(?:any|overall|all)\b[^.;]{0,40}treatment[\s-]*emergent", re.I)),
     ("any_sae", re.compile(r"\bserious\s+adverse\s+events?\b", re.I)),
     ("any_sae", re.compile(r"(?<![a-z\-])saes?(?![a-z])", re.I)),

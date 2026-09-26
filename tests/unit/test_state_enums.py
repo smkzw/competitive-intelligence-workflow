@@ -40,6 +40,8 @@ def test_task_1_1_freezes_all_nine_state_families_without_interchangeability() -
         FactDisclosureState: {
             "reported_value",
             "reported_zero",
+            # Current-layer display state. Source fact versions still reject it.
+            "user_cleared",
             "not_reported",
             "below_reporting_threshold",
             "not_publicly_disclosed",

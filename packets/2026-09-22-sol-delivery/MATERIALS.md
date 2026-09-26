@@ -8,6 +8,7 @@
 |---|---|
 | [PRD](PRD.md)、[设计](DESIGN.md)、[计划](PLAN.md)、[规范](EXECUTION_RULES.md) | 当前用户要求的整合与本轮建议执行基线 |
 | [原Goal原文](evidence/goal-before-review.json) | 工具读取，状态paused；保留完整objective，不隐含恢复 |
+| 0924V1 用户附件 `CI_workflow_0924V1_review_754d79c.zip`，SHA-256 `63b39d55842171b6d09c237c145c2aaa277b794b1d0f6db4e722ca6a3724cec1` | 固定 HEAD `754d79cc21a021b6ec81794e067636fa7d332661` 的审阅证据；其中 review/acceptance/probes 不是用户权限，也不是生产运行回执。用户直接 R24 指令和本包当前文档优先；0923V1 与更早材料保留。 |
 | [专家原件](sources/CI_0922V2_review/0922V2_REVIEW.md) / [其下一阶段建议](sources/CI_0922V2_review/0922V2_AGENT_NEXT.md) / [40案例](sources/CI_0922V2_review/0922V2_ACCEPTANCE.md) | 固定700bd4c的审阅输入，10文件摘要验证通过；不直接执行其脚本 |
 | [0920设计裁决](../2026-09-20-execution-pack/01_DECISIONS_AND_ARCHITECTURE.md) | 五项需求与复用设计；用户本轮明确纳入五项 |
 | [0920工作包/旧验收](../2026-09-20-execution-pack/03_WORK_PACKAGES_AND_ACCEPTANCE.md) | 适用行为案例保留，顺序由本包取代 |
@@ -65,4 +66,3 @@ PNH packet是垂直迁移输入，不是新通用入口。build_pnh_audit.py存�
 
 [ClinicalTrials.gov结果阅读指南](https://clinicaltrials.gov/study-basics/how-to-read-study-results)区分受影响人数、风险集与事件表；[官方AE结果表模板](https://cdn.clinicaltrials.gov/documents/results_table_layout/DataEntryTable_FreqAEForm.pdf)为统计对象检查入口。查具体研究仍须读取其真实来源字节与上下文，不能由通用字段名推断分母适用。
 [ECharts dataset](https://echarts.apache.org/handbook/en/concepts/dataset/)支持渲染数据/配置分离，不提供科学归并合法性。CT.gov数据结构网页本轮抓取仅得到JS壳，未把它称为已完整读过。
-
