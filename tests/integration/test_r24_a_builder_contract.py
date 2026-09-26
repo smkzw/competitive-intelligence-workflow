@@ -141,6 +141,7 @@ def test_outcome_group_is_not_inferred_from_unrelated_array_positions(
     render_report_a_site(ReportAPortalData.model_validate(payload), site)
     html = (site / "efficacy.html").read_text(encoding="utf-8")
     assert "产品归属待核" in html
+    assert "1 条疗效观察的组别—产品关系待核" in html
     search = (site / "data" / "search-index.js").read_text(encoding="utf-8")
     assert "Participants With Response · studydrug" not in search
 
@@ -198,3 +199,4 @@ def test_ae_event_group_uses_declared_arm_relationship_not_focus_product(
     html = (site / "safety.html").read_text(encoding="utf-8")
     assert "查看完整观察窗" in html
     assert long_window in html
+    assert "1 条安全性观察的组别—产品关系待核" in html

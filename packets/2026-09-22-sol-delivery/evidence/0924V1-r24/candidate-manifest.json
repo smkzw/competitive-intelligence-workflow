@@ -27,10 +27,10 @@
   "rule_and_renderer_bytes": {
     "builder_sha256": "b61649845e329f06fec9fe33ea45e541f7d8b1c98df0259e6842e07428a5c173",
     "source_research_service_sha256": "283391785f74cae72ee463ad081ce71098a775f76562ef5fec5650af10172979",
-    "report_a_renderer_sha256": "4ddb9e4792edfd4d714066fd8ab99a5b459adb127ba155df43f729681a7d0cd8",
-    "efficacy_template_sha256": "54264514da683dfdfc9b4f86e3cb2941a80e27a0784a3e0c1953a8b21d7c174d",
-    "safety_template_sha256": "5f393c1bfea71b27ee0b3eb870378d0031784ad2b3c70da400715440a7a6eb19",
-    "asset_manifest_sha256": "a695203e53f77160e751fc606dd82dedc280e11328611bb50e19f3f8ce417792"
+    "report_a_renderer_sha256": "2d08e38841163fd0e61a6cd4e211418d6ae512ad47529a2779243284a8cb275e",
+    "efficacy_template_sha256": "68a0855a84e1106cf7a1c2c2d3c1f28f951241312d9ad87f2a2770e747bd4a58",
+    "safety_template_sha256": "d05f18f830edbb99359e6ede500ad48591216e2319390d6b60e4ca8cdecc6515",
+    "asset_manifest_sha256": "43a78c6582131436252f055e8b2ec809fa8756cf1bf3f4825b25b652ff474bdb"
   },
   "candidate": {
     "payload_path": ".artifacts/r24-pnh-candidate-20260926/report-a.json",
@@ -64,8 +64,8 @@
     "rendered_site": {
       "local_path": ".artifacts/r24-pnh-candidate-20260926/site",
       "page_count": 56,
-      "efficacy_html_sha256": "c2e693b46860cbf28eb10635253126e8b0cec5558175e7795252dfe80bc032ef",
-      "safety_html_sha256": "8eee9d0d6439b1d6a43e57949fca35d9e48d337e2fae9a715710d381b3e9c940",
+      "efficacy_html_sha256": "01d6b5a7401b0c29d09eb974b1fedb0df51578826e23e47a2f9914af511a2353",
+      "safety_html_sha256": "abaa69c9c5e2ac73bbc39fe2e33828e3d18953f9db688e723dff6cdf8a8db57e",
       "clinical_portfolio_html_sha256": "c66b1a6b781bbfe24d15ac8ee6cc40f1ffd1b6bfb9bf21fab6a310025d54bf46"
     }
   },
@@ -97,6 +97,16 @@
       "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/a-safety-unresolved-row-1600.png",
       "sha256": "e8a4df6ec9a28ef17d51f965f6327b4d654d4bcc1b0ebd11d170cd3441362167",
       "scope": "1600px one unresolved safety row with short window preview and accessible full text"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/a-efficacy-unassigned-count-1600.png",
+      "sha256": "471472e7cecb200eff1417f0c944f96dcb46a68e9ca543e559914a245e0ea2c7",
+      "scope": "1600px current A efficacy warning: 2411 unresolved group-to-product relationships not plotted"
+    },
+    {
+      "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/a-safety-unassigned-count-1600.png",
+      "sha256": "199df245fd3e7b650b967191bf208369fb69d92495fcc46b4e690ce2a5793d4f",
+      "scope": "1600px current A safety warning: 414 unresolved group-to-product relationships not plotted"
     }
   ]
 }

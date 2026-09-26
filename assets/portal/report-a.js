@@ -927,7 +927,7 @@
       }
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");
-    host.appendChild(el("p", "kz-a-chart-note", "保留全部组别和观察；单条观察直接列值，多条观察使用组内刻度，不代表跨试验可比或优劣排名。"));
+    host.appendChild(el("p", "kz-a-chart-note", "图中仅保留可安全绘制的观察；单条观察直接列值，多条观察使用组内刻度。未绘制的原始值仍见完整表；图形不代表跨试验可比或排名。"));
   }
   function color(value, min, max) {
     var ratio = max === min ? 0.5 : (value - min) / (max - min);
@@ -1007,7 +1007,7 @@
     paginateObservations(host, ".kz-a-safety-observation-group", "安全性");
     host.setAttribute("data-view-digest", rows.map(function (item) { return item.row_id; }).join("|"));
     host.appendChild(el("p", "kz-a-heat-note",
-      "保留全部组别、事件和观察窗。百分比颜色使用固定0至100%刻度；其他单位不着色。不同试验、观察窗及分母不默认可比。"));
+      "图中仅保留可安全绘制的组别与事件；未绘制的原值仍在完整表。百分比颜色使用固定0至100%刻度；其他单位不着色。不同试验、观察窗及分母不默认可比。"));
   }
   function updateMatrixTable(points) {
     var byProduct = {};

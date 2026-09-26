@@ -2010,6 +2010,9 @@ def _view_context(
         "products": display_products,
         "trials": display_trials,
         "efficacy": display_efficacy,
+        "unassigned_efficacy_count": sum(
+            item["group_assignment_state"] == "unknown" for item in display_efficacy
+        ),
         "additional_observations": tuple(
             {
                 **item.model_dump(mode="json"),
@@ -2024,6 +2027,9 @@ def _view_context(
             for item in data.additional_observations
         ),
         "safety": display_safety,
+        "unassigned_safety_count": sum(
+            item["group_assignment_state"] == "unknown" for item in display_safety
+        ),
         "safety_public_categories": tuple(
             category
             for category in ("严重不良事件", "治疗期间不良事件", "常见不良事件", "特别关注不良事件")

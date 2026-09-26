@@ -4,8 +4,9 @@
 {% block content %}
 <section class="kz-a-panel" data-module="safety">
   <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('arm', '组别', safety|map(attribute='arm')|unique|list) }}{{ ui.filter_group('category', '安全性维度', safety|map(attribute='category')|unique|list) }}{{ ui.filter_group_choices('event', '不良事件', safety_event_filters) }}{{ ui.filter_group_choices('semantic', '安全语义', safety_semantic_filters) }}</div>
-  {{ ui.section_head('安全性热图', '按试验、组别和观察窗保留全部记录；百分比使用固定0至100%色阶，不形成排名') }}
+  {{ ui.section_head('安全性热图', '图只绘制组别—产品关系已确认且数值可绘的观察；百分比使用固定0至100%色阶，不形成排名') }}
   {{ ui.chart('safety', 'safety-full', '多维安全性发生率热图') }}
+  {% if unassigned_safety_count %}<p class="kz-a-comparability">本页有 {{ unassigned_safety_count }} 条安全性观察的组别—产品关系待核，未绘图；完整表保留原始值。</p>{% endif %}
   <div class="kz-a-safety-legend" aria-label="颜色说明"><span>较低发生率</span><i></i><i></i><i></i><i></i><span>较高发生率</span></div>
   {{ ui.section_head('发生率与观察窗明细', '按当前筛选逐页核对全部公开数据') }}
   <div class="kz-a-table-wrap kz-a-safety-table" data-paged-table data-page-size="50">
