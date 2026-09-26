@@ -34,6 +34,7 @@ from ci_workflow.application.source_research_service import (
 from ci_workflow.domain.evidence import CtgovRecordSelector
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.renderers.portal.report_a import (
+    AdditionalObservationRow,
     EfficacyRow,
     ReportAPortalData,
     SafetyRow,
@@ -42,10 +43,11 @@ from ci_workflow.renderers.portal.report_a import (
 from ci_workflow.reports.b.safety_concepts import describe_safety_concept, safety_category_zh
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.content_store import ContentAddressedStore
-from ci_workflow.storage.snapshot_store import SnapshotStore
+from ci_workflow.storage.snapshot_store import SnapshotIntegrityError, SnapshotStore
 from ci_workflow.storage.source_derivation import SourceDerivationError, capture_source_text
 from ci_workflow.storage.sqlite import open_database
 from tests.integration.test_research_package_submission import _project
+from tools.materialize_ctgov_a_candidate import _extra_facts
 
 
 def _derived(tmp_path: Path) -> DerivedCtgovStudy:
@@ -119,6 +121,76 @@ def test_saved_ctgov_page_replay_rejects_malformed_record_with_scoped_error(
             tmp_path, blob, "NCT04558918",
             replayed_at=datetime(2026, 9, 26, tzinfo=UTC),
         )
+
+
+def test_two_registry_captures_share_one_portable_raw_asset_in_locked_snapshot(
+    tmp_path: Path,
+) -> None:
+    from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
+
+    project = _project(tmp_path)
+    first_record = json.loads(_reported_count_source(project).content_text)
+    second_record = json.loads(json.dumps(first_record))
+    second_record["protocolSection"]["identificationModule"].update(
+        nctId="NCT03334396", briefTitle="Second count study",
+    )
+    second_record["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][0][
+        "classes"
+    ][0]["categories"][0]["measurements"][0]["value"] = "20"
+    raw = json.dumps({"studies": [first_record, second_record]}).encode()
+    asset = ContentAddressedStore(project).put_bytes(raw, media_type="application/json")
+    sources = tuple(
+        source_capture_from_ctgov_study(
+            project, derive_saved_ctgov_record(
+                project, asset, trial_id,
+                replayed_at=datetime(2026, 9, 26, tzinfo=UTC),
+            ),
+        )
+        for trial_id in ("NCT02277743", "NCT03334396")
+    )
+    assert sources[0].text_derivation is not None
+    assert sources[0].text_derivation.raw_asset == sources[1].text_derivation.raw_asset
+    facts = tuple(
+        fact
+        for source in sources
+        for fact in research_facts_from_ctgov_atom(
+            extract_ctgov_atomic_results(source)[0][0]
+        )
+    )
+    claims = tuple(
+        ResearchClaim(
+            claim_id=f"count-{source.query_or_identifier}",
+            claim_text="登记原始人数及同组分母",
+            claim_kind="direct_evidence",
+            fact_ids=tuple(
+                fact.fact_id for fact in facts if fact.source_id == source.source_id
+            ),
+        ) for source in sources
+    )
+    contract = verify_project_workspace(project).contract
+    lineage = ingest_research_evidence(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        report_kind="A", data_cutoff=contract.data_cutoff,
+        scientific_content_digest=sha256(b"shared-raw-asset").hexdigest(),
+        created_at=sources[0].acquired_at, sources=sources, route_attempts=(),
+        facts=facts, claims=claims,
+    )
+    manifest_path = project / lineage.evidence_snapshot.relative_path
+    closure_sources = SnapshotStore(project).read(lineage.evidence_snapshot)["closure"][
+        "sources"
+    ]
+    assert len(closure_sources) == 2
+    assert sum(bool(item["raw_asset_b64"]) for item in closure_sources) == 1
+    restored = SnapshotStore(tmp_path / "restored-shared").restore_evidence_manifest(
+        manifest_path
+    )
+    assert restored.snapshot_id == lineage.evidence_snapshot.snapshot_id
+    broken = json.loads(manifest_path.read_text())
+    broken["closure"]["sources"][0]["raw_asset_b64"] = None
+    broken_path = tmp_path / "missing-first-asset.json"
+    broken_path.write_text(json.dumps(broken), encoding="utf-8")
+    with pytest.raises(SnapshotIntegrityError, match="缺少原始资产"):
+        SnapshotStore(tmp_path / "invalid-shared").restore_evidence_manifest(broken_path)
 
 
 def test_event_group_sae_and_death_counts_bind_raw_atoms_without_rate_substitution(
@@ -340,6 +412,45 @@ def test_immunogenicity_atom_keeps_raw_measure_context_and_rejects_efficacy_bind
     assert facts[0].result_context.source_param_type == "COUNT_OF_PARTICIPANTS"
     with pytest.raises(ResearchPackageError, match="领域"):
         research_facts_from_ctgov_atom(atom, report_row_ref="efficacy:eff-130")
+
+
+def test_other_domain_source_fact_is_retained_without_numeric_portal_binding(
+    tmp_path: Path,
+) -> None:
+    source = _reported_count_source(
+        tmp_path, title="Number of Participants With Anti-drug Antibodies (ADA)",
+    )
+    atom = extract_ctgov_atomic_results(source)[0][0]
+    assert source.text_derivation is not None
+    page_hash = source.text_derivation.raw_asset.sha256
+    row = AdditionalObservationRow(
+        row_id="ada-1", product_id="drug", trial_id=atom.trial_id.casefold(),
+        group_id=atom.group_id, group_title=atom.group_title,
+        group_assignment_state="unknown", endpoint=atom.endpoint,
+        class_title=atom.class_title, category_title=atom.category_title,
+        time_window=atom.timepoint, domain="immunogenicity",
+        raw_value=atom.value_quote, raw_value_type=atom.raw_value_type,
+        raw_unit=atom.raw_unit, source_url=source.url,
+        source_page_sha256=page_hash,
+        source_path=atom.value_locator.field_path or "",
+    )
+    facts, claims = _extra_facts(
+        (row,), {row.trial_id: source}, {row.trial_id: page_hash},
+    )
+    assert len(facts) == 2 and len(claims) == 1
+    assert facts[0].result_context is not None
+    assert facts[0].result_context.domain == "immunogenicity"
+    assert facts[0].row_ref.startswith("registry:")
+    assert claims[0].claim_kind == "direct_evidence"
+    assert claims[0].fact_ids == tuple(fact.fact_id for fact in facts)
+    for changed in (
+        {"raw_value": "31"}, {"group_id": "OG2"}, {"domain": "pk_pd"},
+    ):
+        with pytest.raises(ValueError, match="identity conflict"):
+            _extra_facts(
+                (row.model_copy(update=changed),),
+                {row.trial_id: source}, {row.trial_id: page_hash},
+            )
 
 
 @pytest.mark.parametrize(

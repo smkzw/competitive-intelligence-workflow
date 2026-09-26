@@ -1,0 +1,91 @@
+{
+  "schema_version": "r24-21-evidence-1",
+  "status": "development_candidate_not_scientific_acceptance",
+  "base_head": "0a985fee4d4bacd18831a2e2fcb277d3422b18ca",
+  "scope": "W07 fixed CT.gov PNH CAS to immutable source/fact snapshot and A development preview; W05A crude-rate display",
+  "source": {
+    "access_method": "offline_cas_replay_not_live_refresh",
+    "source_page_sha256": [
+      "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+      "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
+    ],
+    "payload": ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.json",
+    "payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "sidecar": ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.derivation.json",
+    "sidecar_sha256": "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09"
+  },
+  "candidate": {
+    "project_root": ".artifacts/r24-pnh-full-source-project",
+    "receipt": ".artifacts/r24-pnh-full-source-project/logs/diagnostics/r24-21-all50-preview.json",
+    "receipt_sha256": "254f033f4a28375acca08330711351e6562b470851e6ce2a8a07a384739809f4",
+    "snapshot_relative_path": "snapshots/evidence/evidence-snapshot_9ed589d8602351d431106d39.json",
+    "snapshot_sha256": "1ba5400e78b15df9cc6a832844ea7a0bb2db118d3edf4f1950d67013404e98b3",
+    "snapshot_bytes": 48410228,
+    "source_versions": 50,
+    "raw_paths_verified": 4412,
+    "bound_a_efficacy_rows": 3617,
+    "bound_a_safety_rows": 514,
+    "other_domain_source_rows_without_portal_binding": 281,
+    "source_fact_versions": 5839,
+    "direct_claim_versions": 4412,
+    "binding_gaps": 0,
+    "source_issues": 79,
+    "source_issue_statuses": {"missing": 79, "parse_failure": 0},
+    "original_raw_assets_embedded_once_each": 2,
+    "current_generation_switched": false
+  },
+  "recovery": {
+    "mode": "snapshot_only_to_new_empty_temporary_directory",
+    "result": "passed",
+    "restored_snapshot_id": "evidence-snapshot_9ed589d8602351d431106d39",
+    "restored_source_versions": 50,
+    "restored_fact_versions": 5839,
+    "restored_claim_versions": 4412,
+    "temporary_restore_removed_after_check": true
+  },
+  "a_development_preview": {
+    "root": ".artifacts/r24-pnh-full-source-project/preview/A-r24-21",
+    "site_sha256": "d6dbe50049fdf5b3c59aa83d998968d5d4bef627026bec08aa7a6304bcf1c272",
+    "site_bytes": 16795873,
+    "physical_pages": 56,
+    "candidate_banner": "fixed offline source, not medical review or release",
+    "browser": "Chromium file://, 1600x900 CSS px",
+    "efficacy_row": "eff-9: raw 0.00, outcomeMeasures[8], NCT04820530 public link; Escape returns trigger focus",
+    "safety_row": "safe-2: explicit deathsNumAffected 0, public link; Escape returns trigger focus",
+    "additional_observation_search": "Anti-drug Antibodies: 3/281",
+    "horizontal_overflow_px": 0,
+    "page_errors": 0,
+    "remote_requests": 0,
+    "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-21-a-source-1600.png",
+    "screenshot_sha256": "09eed487952552951941b684adb5331ccfe7977fa91856c12d6b8a5318160e9e"
+  },
+  "verification": {
+    "source_and_snapshot_related_batch": "50 passed / 86.99s",
+    "a_crude_rate_and_source_browser_after_final_guard": "4 passed, 56 deselected / 4.24s",
+    "a_crude_rate_browser_focused": "2 passed, 59 deselected / 2.83s",
+    "quality_gate": "GATE_OK quality-only: Ruff src/tests/tools, strict mypy 247 files, active 1066 passed, retained 20 passed, layering 7 passed, legacy reference check passed",
+    "package_manifest": "PACKAGE_OK version=0.1.0a0 stage=development-candidate",
+    "not_run": ["independent medical acceptance", "four widths x four states on every physical page", "B/C current source consumers", "three-host fresh-install", "24 real portals", "RC"]
+  },
+  "source_code_sha256": {
+    "materializer": "0854d146511bef2c4b6849119d3a764a0f85008dcf8ab1c2f61d19813f348f72",
+    "ingestion": "945ed431d0fe1b986cea1322047f8ec085a4a4f692f6c192894f11131aa599c1",
+    "snapshot_restore": "98f5b29a5d2aeea95c38b7513fbfee67ee28582757f3a958887179bcb5f8e46d",
+    "a_author_asset": "a0d2eea7df4c627796888da1c0321faec750a8d2d16d45325f25fa96363479fc"
+  },
+  "superseded_candidate_and_cleanup": {
+    "old_duplicate_raw_snapshot_sha256": "95d17d97e82965ad74414eae66e4a40cc4a9ad006e0f98d4f665697be0b1dff8",
+    "old_duplicate_raw_snapshot_bytes": 230341756,
+    "first_receipt_issue_count_was_wrong": 53,
+    "reason": "different trials used equal JSON result paths; issue identity now includes source and result key, yielding 79; raw page bytes are now embedded once per unique content/media type",
+    "completed_cleanup": "after validating the compact snapshot and snapshot-only recovery, removed only the superseded 230341756-byte generated snapshot and its two generated receipts; preserved fixed source CAS, current compact snapshot, small-slice snapshots, final receipt, tests and review evidence. Removed generated bytes are not recoverable in place but can be regenerated from the preserved fixed inputs and current code"
+  },
+  "limits": [
+    "No new live registry/status check was made; the fixed source pages were captured on 2026-09-06 and are not historical-as-of proof.",
+    "The 281 other-domain atoms are source-backed but not yet legal A/B/C portal consumers.",
+    "Product-arm assignment remains unknown for 2411 efficacy, 414 safety and 247 other-domain rows; absence of a binding gap is not evidence of product assignment.",
+    "Required publications, China authoritative sources, universe closure, independent scientific review, B/C real binding, current revision and final visual/host/24-portal acceptance remain open.",
+    "The local ignored CAS and snapshot are not part of a fresh Git checkout; a fork on another filesystem needs controlled asset transfer or fresh acquisition and revalidation."
+  ],
+  "replay_command": "uv run python -m tools.materialize_ctgov_a_candidate --project .artifacts/r24-pnh-full-source-project --cas-dir .artifacts/source-cas/ctgov-live-20260906 --payload .artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.json --sidecar .artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.derivation.json --observed-at 2026-09-26T05:54:30+00:00 --output <new-versioned-receipt.json>"
+}

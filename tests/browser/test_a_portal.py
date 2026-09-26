@@ -16,6 +16,7 @@ from tests.integration.test_fresh_a_research_package import _package_payload
 
 ROOT = Path(__file__).resolve().parents[2]
 FRESH_A_CONTENT = ROOT / "fixtures/positive/a-atopic-dermatitis/research-content.json"
+CRUDE_A_CONTENT = ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json"
 
 
 @pytest.fixture(scope="module")
@@ -73,6 +74,25 @@ def row_source_a_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
     )
     project = tmp_path_factory.mktemp("a-row-source")
     render_report_a_site(data, project, public_provenance=provenance)
+    return project
+
+
+@pytest.fixture(scope="module")
+def crude_rate_a_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    payload = json.loads(CRUDE_A_CONTENT.read_text(encoding="utf-8"))
+    rows = {row["row_id"]: row for row in payload["safety"]}
+    rows["safe-fixture-teae"].update(
+        value=round(24 / 62 * 100, 10), numerator=24, denominator=62,
+        measure_object="participant_proportion",
+        source_text="原来源：34/62例受试者发生任何TEAE（54.8%）。",
+    )
+    rows["safe-fixture-sae"].update(
+        value=82.3, numerator=51, denominator=60,
+        measure_object="adjusted_estimate",
+        source_text="模型估计值82.3%；原始计数51/60。",
+    )
+    project = tmp_path_factory.mktemp("a-crude-rate")
+    render_report_a_site(ReportAPortalData.model_validate(payload), project)
     return project
 
 
@@ -227,6 +247,78 @@ def test_a_safety_page_shows_multidimensional_heatmap_before_table(
     assert chart.bounding_box()["y"] < table.bounding_box()["y"]  # type: ignore[index]
     for term in ("严重不良事件", "治疗期间不良事件", "常见不良事件"):
         assert page.get_by_text(term, exact=True).count() >= 1
+
+
+def test_a_crude_rate_is_readable_across_chart_matrix_and_drawer(
+    page: Page, crude_rate_a_site: Path
+) -> None:
+    for relative, chart_id in (("overview.html", "home-safety"),
+                               ("safety.html", "safety-full")):
+        _open(page, crude_rate_a_site, relative)
+        card = page.locator(
+            f'[data-chart-id="{chart_id}"] [data-row-id="safe-fixture-teae"]'
+        )
+        assert card.locator(".kz-a-heat-value").inner_text() == "约38.7%"
+        assert "24/62人" in card.inner_text()
+        assert "38.709" not in card.get_attribute("aria-label")
+        card.click()
+        drawer = page.locator("#a-product-insight-drawer")
+        assert drawer.is_visible()
+        assert "约38.7%" in drawer.locator("#a-product-insight-summary").inner_text()
+        drawer.locator('[data-product-tab="safety"]').click()
+        assert "约38.7%" in drawer.locator('[data-product-panel="safety"]').inner_text()
+
+    row = page.locator('tr[data-row-id="safe-fixture-teae"]')
+    assert row.locator("td").nth(6).text_content() == "38.7096774194%"
+    assert "24/62人" in row.locator("td").nth(7).text_content()
+    assert page.evaluate("""() => {
+        const row = window.REPORT_A.safety.find(r => r.row_id === 'safe-fixture-teae');
+        return [row.value, row.numeric_projection.plot_value, row.source_text];
+    }""") == [
+        round(24 / 62 * 100, 10), 24 / 62 * 100,
+        "原来源：34/62例受试者发生任何TEAE（54.8%）。",
+    ]
+
+    _open(page, crude_rate_a_site, "matrix.html")
+    page.locator(
+        '[data-filter-dimension="product"] [data-filter-value="泰瑞奇单抗"]'
+    ).click()
+    matrix_row = page.locator('[data-matrix-product="fixture-product"]')
+    assert matrix_row.locator('[data-matrix-value="teae"]').text_content() == "约38.7%"
+    bubble = page.locator('.kz-a-bubble[data-product-id="fixture-product"]')
+    assert "约38.7%" in bubble.get_attribute("title")
+    assert "38.709" not in bubble.get_attribute("aria-label")
+
+
+def test_a_estimate_with_counts_is_not_displayed_as_crude_rate(
+    page: Page, crude_rate_a_site: Path
+) -> None:
+    _open(page, crude_rate_a_site, "safety.html")
+    card = page.locator('[data-chart-id="safety-full"] [data-row-id="safe-fixture-sae"]')
+    assert card.locator(".kz-a-heat-value").inner_text() == "82.3%"
+    assert "51/60人" in card.inner_text()
+    assert "85%" not in card.inner_text()
+    assert page.locator('tr[data-row-id="safe-fixture-sae"] td').nth(6).text_content() == "82.3%"
+    assert page.evaluate("""() => {
+        const row = window.REPORT_A.safety.find(r => r.row_id === 'safe-fixture-sae');
+        return [row.value, row.measure_object, row.numerator, row.denominator];
+    }""") == [82.3, "adjusted_estimate", 51, 60]
+    card.click()
+    drawer = page.locator("#a-product-insight-drawer")
+    assert "82.3%" in drawer.locator("#a-product-insight-summary").inner_text()
+    drawer.locator('[data-product-tab="safety"]').click()
+    assert "82.3%" in drawer.locator('[data-product-panel="safety"]').inner_text()
+
+    _open(page, crude_rate_a_site, "matrix.html")
+    page.locator(
+        '[data-filter-dimension="product"] [data-filter-value="泰瑞奇单抗"]'
+    ).click()
+    page.locator('[data-matrix-control="safety-axis"]').select_option(index=1)
+    matrix_row = page.locator('[data-matrix-product="fixture-product"]')
+    assert matrix_row.locator('[data-matrix-value="sae"]').text_content() == "82.3%"
+    bubble = page.locator('.kz-a-bubble[data-product-id="fixture-product"]')
+    assert "82.3%" in bubble.get_attribute("title")
+    assert "85%" not in bubble.get_attribute("aria-label")
 
 
 def test_a_matrix_page_updates_bubble_axes_size_filters_and_table(

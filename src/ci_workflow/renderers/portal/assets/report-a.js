@@ -105,6 +105,17 @@
   function unitSuffix(unit) {
     return isPercentUnit(unit) ? "%" : " " + String(unit || "").trim();
   }
+  function compactCrudeRate(row, value) {
+    var projection = row && row.numeric_projection;
+    // 估计比例可能另带原始人数；只压短与人数粗率一致的当前值。
+    if (!row || typeof row.category !== "string"
+        || row.measure_object !== "participant_proportion" || !projection
+        || projection.kind !== "participant_proportion" || projection.plot_unit !== "%"
+        || projection.numerator == null || projection.denominator == null
+        || !numericValue(row.value) || !numericValue(value)
+        || Math.abs(row.value - value) > 1e-8) return null;
+    return observationValueLabel(value, projection);
+  }
   function isEasi75(value) {
     var text = String(value || "").toLowerCase();
     return /easi\s*[- ]?\s*75/.test(text)
@@ -322,7 +333,8 @@
     if (!row) return "未公开";
     var projection = row.numeric_projection;
     if (projection && projection.renderable && numericValue(projection.plot_value)) {
-      return projection.plot_value + (projection.plot_unit || "");
+      return compactCrudeRate(row, projection.plot_value)
+        || projection.plot_value + (projection.plot_unit || "");
     }
     return row.disclosure_state || "未公开";
   }
@@ -383,6 +395,9 @@
   }
   function insightRowValue(row) {
     if (row && row.disclosure_state === "用户清除，待重新核实") return row.disclosure_state;
+    var projection = row && row.numeric_projection;
+    var crudeRate = projection && compactCrudeRate(row, projection.plot_value);
+    if (crudeRate) return crudeRate;
     return row && numericValue(row.value) ? String(row.value) + (row.unit || "") : "未公开";
   }
   function insightCountValue(row) {
@@ -1217,7 +1232,7 @@
       bubble.setAttribute("data-original-term", point.eventRecord.original_term || point.eventRecord.term || "");
       bubble.setAttribute("data-safety-time-window", point.safetyTimeWindow);
       bubble.setAttribute("data-size-basis", point.sizeBasis);
-      bubble.title = trial.display_id + "｜" + efficacyTimepointLabel(point.efficacyTimepoint) + "疗效 " + point.x.toFixed(1) + unitSuffix(point.unit) + "｜" + termLabel + " " + point.eventRate + "%｜" + point.sizeBasis + " " + n
+      bubble.title = trial.display_id + "｜" + efficacyTimepointLabel(point.efficacyTimepoint) + "疗效 " + point.x.toFixed(1) + unitSuffix(point.unit) + "｜" + termLabel + " " + safetyDisplayValue(point.eventRecord) + "｜" + point.sizeBasis + " " + n
         + (point.safetyTimeWindow ? "｜观察窗 " + point.safetyTimeWindow : "");
       bubble.setAttribute("aria-label", p.name + "：" + bubble.title + "；点击查看产品洞察");
       plot.appendChild(bubble);

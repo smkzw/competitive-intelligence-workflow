@@ -337,7 +337,11 @@ class SnapshotStore:
             raise SnapshotIntegrityError("历史快照只读保留，不能迁移补签或单manifest恢复")
 
         from ci_workflow.application.source_research_service import SourceCapture
-        from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
+        from ci_workflow.storage.content_store import (
+            ContentAddressedStore,
+            ContentIntegrityError,
+            EvidenceRepository,
+        )
         from ci_workflow.storage.migrations import apply_migrations
         from ci_workflow.storage.sqlite import open_database
 
@@ -348,20 +352,29 @@ class SnapshotStore:
         repository = EvidenceRepository(database_path, content_store)
         closure = manifest.closure
 
+        restored_raw_assets: set[tuple[str, str]] = set()
         for item in closure["sources"]:
             if not isinstance(item, dict):
                 raise SnapshotIntegrityError("来源闭包记录无效")
             capture = SourceCapture.model_validate(item.get("capture"))
             raw_b64 = item.get("raw_asset_b64")
             if capture.text_derivation is not None:
-                if not isinstance(raw_b64, str):
+                raw_asset = capture.text_derivation.raw_asset
+                raw_key = (raw_asset.sha256, raw_asset.media_type)
+                if isinstance(raw_b64, str):
+                    raw_blob = content_store.put_bytes(
+                        b64decode(raw_b64, validate=True), media_type=raw_asset.media_type,
+                    )
+                    if raw_blob != raw_asset:
+                        raise SnapshotIntegrityError("恢复原始资产与派生回执不一致")
+                    restored_raw_assets.add(raw_key)
+                elif raw_b64 is None and raw_key in restored_raw_assets:
+                    try:
+                        content_store.read_bytes(raw_asset)
+                    except (OSError, ContentIntegrityError) as error:
+                        raise SnapshotIntegrityError("复用的原始资产字节不可核验") from error
+                else:
                     raise SnapshotIntegrityError("来源派生闭包缺少原始资产字节")
-                raw_blob = content_store.put_bytes(
-                    b64decode(raw_b64, validate=True),
-                    media_type=capture.text_derivation.raw_asset.media_type,
-                )
-                if raw_blob != capture.text_derivation.raw_asset:
-                    raise SnapshotIntegrityError("恢复原始资产与派生回执不一致")
             version = repository.add_source_version(
                 source_id=capture.source_id,
                 content=capture.content_text.encode("utf-8"),

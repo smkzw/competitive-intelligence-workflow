@@ -545,12 +545,15 @@ def ingest_research_evidence(
 
     store = ContentAddressedStore(project_root)
     source_closure: list[dict[str, object]] = []
+    raw_assets_in_closure: set[tuple[str, str]] = set()
     for capture in sources:
         raw_asset_b64 = None
         if capture.text_derivation is not None:
-            raw_asset_b64 = b64encode(
-                store.read_bytes(capture.text_derivation.raw_asset)
-            ).decode("ascii")
+            raw_asset = capture.text_derivation.raw_asset
+            raw_key = (raw_asset.sha256, raw_asset.media_type)
+            if raw_key not in raw_assets_in_closure:
+                raw_asset_b64 = b64encode(store.read_bytes(raw_asset)).decode("ascii")
+                raw_assets_in_closure.add(raw_key)
             derivations.append(
                 {
                     "derivation_id": stable_id(
