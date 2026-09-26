@@ -14,6 +14,19 @@ def test_grouped_bar_legend_uses_the_same_colors_as_the_bars() -> None:
     assert "color: seriesColor" in source
 
 
+def test_grouped_bar_category_does_not_repeat_identity_under_the_legend() -> None:
+    source = (ASSETS / "charts.js").read_text(encoding="utf-8")
+    grouped_bar = source.split("  function groupedBarOption(group) {", 1)[1].split(
+        "  function buildBarOption(group) {", 1
+    )[0]
+
+    assert "data: categories" in grouped_bar
+    assert 'name: group.x_axis_label_zh || "产品｜试验"' not in grouped_bar
+    assert 'type: "scroll"' in grouped_bar
+    assert "top: 2" in grouped_bar
+    assert "top: hasLegend ? 52 : 32" in source
+
+
 def test_grouped_bar_evidence_targets_follow_series_order_without_overlap() -> None:
     source = (ASSETS / "charts.js").read_text(encoding="utf-8")
     css = (ASSETS / "report-b.css").read_text(encoding="utf-8")

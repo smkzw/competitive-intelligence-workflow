@@ -1,0 +1,46 @@
+{
+  "work_item": "R24-27 W05B grouped-bar legend and category geometry",
+  "status": "development_candidate",
+  "base_head": "155eca6136e9e92462724e00883cc846c665cf40",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/charts.js": "d38f377d17648676186787e098a75d6c877fdc7ceafe4139373fd1310bbfb653",
+    "fixtures/synthetic/a-complete/inputs/report-data.json": "2aa14424da788b68a84558b45d25a13f33423c50475f3782d4483e2743168771"
+  },
+  "preview": {
+    "path": "output/playwright/r24-27-b-legend-site-v2",
+    "efficacy_html_sha256": "f72ea85a45dc7d41158a3d6aad7c6761b9b60393257ff3278d093ff2acdeedaa",
+    "charts_js_sha256": "d38f377d17648676186787e098a75d6c877fdc7ceafe4139373fd1310bbfb653",
+    "asset_matches_author_source": true,
+    "data_kind": "synthetic"
+  },
+  "browser": {
+    "engine": "Ego Lite TaskSpace 8",
+    "page": "B efficacy.html",
+    "css_viewports": [1440, 1600, 1920, 2560],
+    "category_legend_overlap_after_fix": [false, false, false, false],
+    "redundant_identity_axis_title_present": [false, false, false, false],
+    "journey": "At 1440 px the 64.1 bar evidence target opened the correct reported-value drawer; Escape returned focus to the same value button.",
+    "screenshots": [
+      {
+        "path": "output/playwright/r24-27-b-legend-v2-ego-1440.png",
+        "sha256": "4160ca73ae098d252ade6c8960be97aa1c8853922bfc2c1d8f72666f5ce846b5"
+      },
+      {
+        "path": "output/playwright/r24-27-b-legend-v2-ego-2560.png",
+        "sha256": "f3ccb4ebaf37b62ec29f299fdfe99d0c6cd9d2c7c85ab2dbab230cf3fee9e874"
+      }
+    ]
+  },
+  "checks": {
+    "focused_pytest": "9 passed in 1.52s (grouped-bar static contracts plus B portal integration)",
+    "broader_static_and_b_batch": "14 passed, 3 failed in 0.97s; three old A-only source-text assertions do not match the unchanged HEAD report-a.js and were not changed to conceal failure",
+    "javascript_syntax": "node --check passed",
+    "package_verify": "PACKAGE_OK version=0.1.0a0 stage=development-candidate",
+    "full_development_gate": "not_run_yet"
+  },
+  "limitations": [
+    "This is one synthetic B efficacy page, not the full physical-page and sparse/dense/filtered/sidebar acceptance matrix.",
+    "No real clinical source or scientific acceptance is asserted from this visual check.",
+    "A, C, cross-browser, offline share, three-host and 24-portal gates remain open."
+  ]
+}

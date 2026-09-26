@@ -353,8 +353,9 @@
         },
         legend: {
           show: series.length > 1,
+          type: "scroll",
           data: series.map(function (item) { return item.name; }),
-          bottom: 0,
+          top: 2,
           textStyle: { fontSize: 13 }
         },
         grid: { left: 56, right: 40, top: series.length > 1 ? 66 : 44, bottom: categories.length > 8 ? 100 : 78, containLabel: true },
@@ -365,9 +366,6 @@
         xAxis: {
           type: "category",
           data: categories,
-          name: group.x_axis_label_zh || "产品｜试验",
-          nameLocation: "middle",
-          nameGap: 40,
           axisLabel: { interval: "auto", hideOverlap: true, fontSize: 14, rotate: 30, width: 110, overflow: "break" }
         },
         yAxis: {
@@ -1862,8 +1860,10 @@
 
   function fitBarLabels(inst, chartDiv) {
     if (chartDiv.getAttribute("data-chart-type") !== "bar") return;
-    var axis = inst.getOption().xAxis[0];
+    var option = inst.getOption();
+    var axis = option.xAxis[0];
     if (!axis || axis.type !== "category" || !axis.data.length) return;
+    var hasLegend = option.legend && option.legend[0] && option.legend[0].show;
     var count = axis.data.length;
     var viewport = chartDiv.parentElement;
     var width = Math.max(viewport.clientWidth, count > 3 ? count * 120 + 100 : 0);
@@ -1873,7 +1873,8 @@
     viewport.setAttribute("aria-label", "完整图形，较宽时可左右滚动");
     inst.resize();
     inst.setOption({
-      grid: { left: 64, right: 24, top: 32, bottom: count <= 3 ? 66 : 88,
+      grid: { left: 64, right: 24, top: hasLegend ? 52 : 32,
+        bottom: count <= 3 ? 66 : 88,
         containLabel: false },
       xAxis: { nameGap: 64, axisLabel: {
         interval: 0, hideOverlap: false, fontSize: 14, lineHeight: 18,
