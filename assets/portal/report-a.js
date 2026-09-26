@@ -1442,10 +1442,53 @@
     if (Number.isNaN(date.getTime())) return value || "未注明";
     return date.getFullYear() + "年" + String(date.getMonth() + 1).padStart(2, "0") + "月" + String(date.getDate()).padStart(2, "0") + "日";
   }
-  function renderEvidencePanel(content, title, productScope) {
+  function renderEvidencePanel(content, title, productScope, rowRef) {
     content.innerHTML = "";
     content.appendChild(el("h3", "", title));
     content.appendChild(el("p", "", "数据截至 " + formatCutoff(data.data_cutoff)));
+    if (rowRef) {
+      var collection = rowRef.collection === "efficacy" ? efficacy : rowRef.collection === "safety" ? safety : [];
+      var selectedRow = collection.find(function (row) { return row.row_id === rowRef.rowId; });
+      if (!selectedRow) {
+        content.appendChild(el("p", "", "当前观察无法定位；请勿据此判断已完成来源核验。"));
+        return;
+      }
+      var isEfficacy = rowRef.collection === "efficacy";
+      content.appendChild(el("p", "", (isEfficacy ? selectedRow.endpoint + "｜" + selectedRow.timepoint : selectedRow.measure_label || selectedRow.term)
+        + "｜" + (selectedRow.arm_detail || selectedRow.arm) + "｜"
+        + (selectedRow.value == null ? (selectedRow.disclosure_state || "数值未提供") : selectedRow.value + unitSuffix(selectedRow.unit))));
+      if (userEdits[selectedRow.row_id]) {
+        var selectedEdit = userEdits[selectedRow.row_id];
+        content.appendChild(el("p", "", selectedEdit.status_label_zh + "｜当前用户修订值："
+          + selectedEdit.current_value + "｜原来源值：" + selectedEdit.original_value));
+      }
+      if (!selectedRow.source_version_id || !selectedRow.source_field_path || !selectedRow.source_text) {
+        content.appendChild(el("p", "", "逐事实来源尚未核验；报告级来源清单不能替代此观察的原文依据。"));
+        return;
+      }
+      content.appendChild(el("p", "", "原文摘录：" + selectedRow.source_text));
+      content.appendChild(el("p", "", "精确字段：" + selectedRow.source_field_path));
+      var rowSource = (data.public_sources || []).find(function (entry) {
+        return entry.source_version_id === selectedRow.source_version_id;
+      });
+      if (!rowSource) {
+        content.appendChild(el("p", "", "来源版本未进入当前公共来源清单；外部链接待核。"));
+        return;
+      }
+      content.appendChild(el("p", "", "来源：" + rowSource.label + "｜发布日期：" + rowSource.published_at
+        + "｜数据截止：" + rowSource.data_cutoff));
+      if (rowSource.limitation) content.appendChild(el("p", "", "限制：" + rowSource.limitation));
+      if (rowSource.url) {
+        var rowLink = el("a", "", "打开来源原文");
+        rowLink.href = rowSource.url;
+        rowLink.target = "_blank";
+        rowLink.rel = "noopener noreferrer";
+        content.appendChild(rowLink);
+      } else {
+        content.appendChild(el("p", "", "此来源未提供可安全公开的链接。"));
+      }
+      return;
+    }
     var editedRows = safety.concat(efficacy).filter(function (row) {
       return userEdits[row.row_id] && (!productScope || row.product_id === productScope);
     });
@@ -1833,7 +1876,7 @@
       }
     }
     var evidence = target.closest("[data-open-evidence]");
-    if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){evidencePanelTrigger=evidence;panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"));var close=panel.querySelector("[data-close-evidence]");if(close)close.focus();} }
+    if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){evidencePanelTrigger=evidence;panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");var rowId=evidence.getAttribute("data-evidence-row-id");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"),rowId ? {collection:evidence.getAttribute("data-evidence-collection"),rowId:rowId} : null);var close=panel.querySelector("[data-close-evidence]");if(close)close.focus();} }
     if (target.closest("[data-close-evidence]")) closeEvidencePanel();
     if (target.closest("[data-a-save-view]")) saveCurrentView();
     if (target.closest("[data-a-clear-view]")) clearSavedView();

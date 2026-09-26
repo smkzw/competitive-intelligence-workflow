@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -9,7 +10,9 @@ import pytest
 from playwright.sync_api import Browser, Page, sync_playwright
 
 from ci_workflow.application.fixture_runner import run_fixture_case
+from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_report_a_site
+from tests.integration.test_fresh_a_research_package import _package_payload
 
 ROOT = Path(__file__).resolve().parents[2]
 FRESH_A_CONTENT = ROOT / "fixtures/positive/a-atopic-dermatitis/research-content.json"
@@ -31,6 +34,45 @@ def full_a_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
     payload = json.loads(FRESH_A_CONTENT.read_text(encoding="utf-8"))
     data = ReportAPortalData.model_validate(payload["report_data"])
     render_report_a_site(data, project)
+    return project
+
+
+@pytest.fixture(scope="module")
+def row_source_a_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    payload = _package_payload()["report_data"]
+    for collection, locator, quote in (
+        ("efficacy", "results.outcomeMeasures[0].groups[0].value", "68.4"),
+        ("safety", "results.adverseEvents[0].groups[0].numAffected", "51"),
+    ):
+        row = payload[collection][0]
+        row.update(
+            source_version_id="source-v-row",
+            source_field_path=locator,
+            source_text=quote,
+        )
+        if collection == "safety":
+            row.update(value=51, unit="人", measure_object="participant_count")
+    payload["efficacy"][1].update(
+        source_version_id="source-v-not-public",
+        source_field_path="results.outcomeMeasures[0].groups[1].value",
+        source_text="31.2",
+    )
+    data = ReportAPortalData.model_validate(payload)
+    provenance = PublicProvenance(
+        evidence_snapshot_id="snapshot-synthetic-row-source",
+        report_data_digest=hashlib.sha256(data.model_dump_json().encode("utf-8")).hexdigest(),
+        sources=(PublicSource(
+            source_version_id="source-v-row",
+            label="合成登记原文",
+            url="https://clinicaltrials.gov/study/NCT00000301",
+            source_type="临床试验登记",
+            published_at="2026-07-01",
+            data_cutoff="2026-07-31",
+            limitation="仅用于合成回归测试",
+        ),),
+    )
+    project = tmp_path_factory.mktemp("a-row-source")
+    render_report_a_site(data, project, public_provenance=provenance)
     return project
 
 
@@ -77,7 +119,17 @@ def test_a_home_efficacy_preserves_all_endpoints_and_timepoints(
     assert len(labels) >= 28
     payload = json.loads(FRESH_A_CONTENT.read_text(encoding="utf-8"))
     expected = {row["row_id"] for row in payload["report_data"]["efficacy"]}
-    assert set(page.locator('[data-chart-id="home-efficacy"] [data-row-id]').evaluate_all(
+    assert set(page.evaluate("window.REPORT_A.efficacy.map(row => row.row_id)")) == expected
+    plotted = set(page.locator('[data-chart-id="home-efficacy"] [data-row-id]').evaluate_all(
+        "nodes => nodes.map(node => node.dataset.rowId)"
+    ))
+    eligible = set(page.evaluate(
+        "window.REPORT_A.efficacy.filter(row => row.numeric_projection?.renderable "
+        "&& Number.isFinite(row.numeric_projection.plot_value)).map(row => row.row_id)"
+    ))
+    assert plotted == eligible
+    _open(page, full_a_site, "efficacy.html")
+    assert set(page.locator('tbody tr[data-row-id]').evaluate_all(
         "nodes => nodes.map(node => node.dataset.rowId)"
     )) == expected
 
@@ -229,7 +281,7 @@ def test_a_matrix_bubble_and_legend_open_accessible_product_insight_drawer(
         assert drawer.get_by_role("tab", name=tab, exact=True).count() == 1
     assert "疗效治疗组/对照组" in drawer.inner_text()
     assert "治疗组样本量" in drawer.inner_text()
-    assert "总样本量" in drawer.inner_text()
+    assert "登记样本量" in drawer.inner_text()
     assert f"focus={product_id}" in page.url
 
     drawer.get_by_role("tab", name="产品档案", exact=True).click()
@@ -286,12 +338,22 @@ def test_a_matrix_keeps_amlitelimab_on_one_trial_and_excludes_ak120_pooled_safet
     page: Page, full_a_site: Path
 ) -> None:
     _open(page, full_a_site, "matrix.html")
-    amlitelimab = page.locator('.kz-a-bubble[aria-label^="阿姆特利单抗（Amlitelimab）："]')
-    assert amlitelimab.count() == 1
-    assert amlitelimab.get_attribute("data-trial-id") == "nct05131477"
-    assert amlitelimab.get_attribute("data-arm-detail")
-    assert "NCT05131477" in amlitelimab.get_attribute("title")
-    assert page.locator('.kz-a-bubble[aria-label^="AK120："]').count() == 0
+    selector = page.locator('[data-chart-id="matrix-full"] .kz-a-matrix-facet-select')
+    facets = selector.locator("option").evaluate_all(
+        "nodes => nodes.map(node => node.value)"
+    ) if selector.count() else [""]
+    amlitelimab_trials: set[str] = set()
+    for facet in facets:
+        if facet:
+            selector.select_option(facet)
+        amlitelimab = page.locator('.kz-a-bubble[data-product-id="amlitelimab"]')
+        amlitelimab_trials.update(
+            value for value in amlitelimab.evaluate_all(
+                "nodes => nodes.map(node => node.dataset.trialId)"
+            ) if value
+        )
+        assert page.locator('.kz-a-bubble[data-product-id="ak120"]').count() == 0
+    assert amlitelimab_trials == {"nct05131477"}
 
 
 def test_a_legacy_pages_do_not_promote_source_categories_to_citations(
@@ -462,10 +524,24 @@ def test_a_safety_heatmap_uses_distinct_continuous_colors_within_each_event(
 ) -> None:
     _open(page, a_site, "safety.html")
     cells = page.locator(
-        '[data-a-chart="safety"] .kz-a-safety-observation[data-heat-event="任何TEAE"] strong'
+        '[data-a-chart="safety"] .kz-a-safety-observation[data-event-key="any_teae"]'
     )
-    teae_backgrounds = cells.evaluate_all("nodes => nodes.map(node => node.style.background)")
-    assert len(set(teae_backgrounds)) == 4
+    observations = cells.evaluate_all(
+        "nodes => nodes.map(node => ({rowId: node.dataset.rowId, "
+        "color: node.querySelector('strong').style.background}))"
+    )
+    assert len(observations) >= 4
+    values = dict(page.evaluate(
+        "window.REPORT_A.safety.map(row => [row.row_id, row.numeric_projection?.plot_value])"
+    ))
+    colored = sorted((values[item["rowId"]], item["color"]) for item in observations)
+    assert all(color.startswith("rgb(") for _, color in colored)
+    assert all(left_color == right_color for (left_value, left_color), (right_value, right_color)
+               in zip(colored, colored[1:], strict=False) if left_value == right_value)
+    assert all(
+        int(left_color[4:].split(",", 1)[0]) >= int(right_color[4:].split(",", 1)[0])
+        for (_, left_color), (_, right_color) in zip(colored, colored[1:], strict=False)
+    )
     assert "固定0至100%刻度" in page.locator('[data-a-chart="safety"]').inner_text()
 
 
@@ -480,6 +556,70 @@ def test_a_evidence_panel_lists_specific_trials_sources_and_cutoff(
     assert "治疗组样本量：210" in visible
     assert "ClinicalTrials.gov" in visible
     assert "2026年07月31日" in visible
+
+
+@pytest.mark.parametrize(
+    ("collection", "relative", "row_id", "locator", "quote"),
+    (
+        (
+            "efficacy", "efficacy.html", "eff-fixture-t",
+            "outcomeMeasures[0].groups[0].value", "68.4",
+        ),
+        (
+            "safety", "safety.html", "safe-fixture-teae",
+            "adverseEvents[0].groups[0].numAffected", "51",
+        ),
+    ),
+)
+def test_a_source_bound_row_opens_exact_evidence_and_returns_focus(
+    page: Page,
+    row_source_a_site: Path,
+    collection: str,
+    relative: str,
+    row_id: str,
+    locator: str,
+    quote: str,
+) -> None:
+    _open(page, row_source_a_site, relative)
+    page.locator("details.kz-complete-table").first.locator("summary").click()
+    trigger = page.locator(f'tr[data-row-id="{row_id}"] [data-evidence-row-id]')
+    assert trigger.get_attribute("data-evidence-collection") == collection
+    trigger.click()
+    panel = page.locator("#data-basis-panel")
+    assert panel.is_visible()
+    assert locator in panel.inner_text()
+    assert quote in panel.inner_text()
+    assert "合成登记原文" in panel.inner_text()
+    assert panel.get_by_role("link", name="打开来源原文").get_attribute("href") == (
+        "https://clinicaltrials.gov/study/NCT00000301"
+    )
+    page.keyboard.press("Escape")
+    assert not panel.is_visible()
+    assert trigger.evaluate("element => document.activeElement === element")
+
+
+def test_a_unbound_row_does_not_borrow_report_level_source(
+    page: Page, row_source_a_site: Path
+) -> None:
+    _open(page, row_source_a_site, "efficacy.html")
+    page.locator("details.kz-complete-table summary").first.click()
+    trigger = page.locator('tr[data-row-id="eff-competitor-t"] [data-evidence-row-id]')
+    trigger.click()
+    panel = page.locator("#data-basis-panel")
+    assert "逐事实来源尚未核验" in panel.inner_text()
+    assert panel.get_by_role("link", name="打开来源原文").count() == 0
+
+
+def test_a_row_with_unpublished_source_version_does_not_borrow_other_link(
+    page: Page, row_source_a_site: Path
+) -> None:
+    _open(page, row_source_a_site, "efficacy.html")
+    page.locator("details.kz-complete-table summary").first.click()
+    page.locator('tr[data-row-id="eff-fixture-c"] [data-evidence-row-id]').click()
+    panel = page.locator("#data-basis-panel")
+    assert "来源版本未进入当前公共来源清单" in panel.inner_text()
+    assert "results.outcomeMeasures[0].groups[1].value" in panel.inner_text()
+    assert panel.get_by_role("link", name="打开来源原文").count() == 0
 
 
 def test_a_history_distinguishes_past_events_from_current_product_status(

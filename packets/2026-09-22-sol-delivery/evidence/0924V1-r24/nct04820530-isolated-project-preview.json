@@ -1,0 +1,78 @@
+{
+  "schema_version": "r24-isolated-project-preview-1",
+  "status": "development_slice_not_released",
+  "preceding_code_commit": "680c41e5dbca07d32f979278e08e0f6eb9ea96fc",
+  "source_slice_receipt": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/nct04820530-source-slice.json",
+  "project": {
+    "root": ".artifacts/r24-pnh-source-slice-project",
+    "project_id": "project_00cdde773957f36fd1d27b7f",
+    "source_access_method": "offline_cas_replay",
+    "raw_page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "source_version_id": "source-version_1bdd4ab8659ce6a88f640b96",
+    "evidence_snapshot_id": "evidence-snapshot_a5f7dbc1f67d406956131aac",
+    "evidence_snapshot_path": ".artifacts/r24-pnh-source-slice-project/snapshots/evidence/evidence-snapshot_a5f7dbc1f67d406956131aac.json",
+    "evidence_snapshot_sha256": "9eb95bd70186d62ccc0d793f6be94d428cba3f2d565d43b1096a4c1193019c07",
+    "source_versions": 1,
+    "claim_versions": 20,
+    "fact_versions": 22,
+    "a_consumer_bindings_in_snapshot": 22,
+    "current_delivery_generations": 0,
+    "historical_as_of_reconstruction_proven": false
+  },
+  "a_preview": {
+    "root": ".artifacts/r24-pnh-source-slice-project/preview/A",
+    "physical_html_pages": 56,
+    "candidate_payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "report_js_sha256": "5350f183f1d2117c3e8d2ddca80376d52dbbe58cf6297d35a3bda37c0acb455c",
+    "efficacy_html_sha256": "45867458f59126b6c8e8e063773c1941f6ae23b42122fee6d0a22fe4245fd2cf",
+    "safety_html_sha256": "4a2f915fe12f29f68d31189e415645efe8ece599780fd176ebe40bab3a3c37e1",
+    "source_bound_efficacy_rows": 18,
+    "source_bound_safety_rows": 2,
+    "unbound_candidate_rows_remain": true,
+    "publication_limitation_shown": true
+  },
+  "presentation_source_sha256": {
+    "report_a_js": "d3c71fab2c6c6bf0d557bf70bef6ac556ed27d3cdf525f8164bf883fd6a0ec3a",
+    "portal_css": "4bbbf63aa606ca4458636a51b38c0b83df96ca4ab41c16781d3e3c29cace7502",
+    "efficacy_template": "ca9ba8db21b88aa1c74136f3cc1f6942d38cbd5c173201b12366b8bfe8fb66cf",
+    "safety_template": "3f3fe946ecc8edb625025f3bf52adb6c13c90576abab54eaf024cf7ac22ca83e"
+  },
+  "browser_evidence": {
+    "engine": "Chromium",
+    "viewport_css_px": [1600, 900],
+    "efficacy_row": "eff-9",
+    "efficacy_original_quote": "0.00",
+    "efficacy_exact_path_visible": true,
+    "efficacy_public_url": "https://clinicaltrials.gov/study/NCT04820530",
+    "efficacy_escape_restores_trigger_focus": true,
+    "safety_row": "safe-2",
+    "safety_deaths_num_affected_original_zero": true,
+    "safety_exact_path_visible": true,
+    "page_horizontal_overflow_px": 0,
+    "evidence_panel_client_and_scroll_width_px": [439, 439],
+    "efficacy_screenshot": ".artifacts/r24-pnh-source-slice-project/preview/eff-9-evidence-1600.png",
+    "efficacy_screenshot_sha256": "5a44c149b79926540edab27b58514cae6a436664ff6e22d28ae9fc16409738cb"
+  },
+  "test_receipts": {
+    "row_evidence_and_existing_generic_panel": "5 passed, 53 deselected",
+    "adjacent_a_portal_public_source_bundle": "88 passed, 4 failed, 5 deselected",
+    "adjacent_failure_nodes": [
+      "test_a_home_efficacy_preserves_all_endpoints_and_timepoints",
+      "test_a_matrix_bubble_and_legend_open_accessible_product_insight_drawer",
+      "test_a_matrix_keeps_amlitelimab_on_one_trial_and_excludes_ak120_pooled_safety",
+      "test_a_safety_heatmap_uses_distinct_continuous_colors_within_each_event"
+    ],
+    "adjacent_failures_closed": true,
+    "adjacent_failure_disposition": "Migrated retired all-values-must-plot, old sample-size label, default-facet-only and fixed TEAE color-count assertions to full data reachability, renderability, all-facet access and same-context color semantics.",
+    "adjacent_a_portal_public_source_bundle_after_contract_migration": "116 passed, 5 deselected",
+    "matrix_axis_desktop_chromium_webkit": "8 passed; 1440/1600/1920/2560 CSS px; point position checked against displayed data-driven axes",
+    "quality_gate": "GATE_OK quality-only; Ruff src/tests/tools; strict mypy 243 files; active unit/contract 1064; retained compatibility 20; layering 7; legacy path check",
+    "asset_mirror": "MIRROR_OK"
+  },
+  "release_limits": [
+    "This preview is not a current generation or accepted A portal.",
+    "The four historical A browser failures were resolved as current-contract test migrations; this is not whole-portal visual or scientific acceptance.",
+    "B/C source consumers, full PNH source closure, four viewport x four state visual gate, three hosts, offline sharing and 24 real portals are unverified.",
+    "The 2026-09-06 cutoff on this candidate does not establish historical-as-of completeness; replay is not a new live status check."
+  ]
+}

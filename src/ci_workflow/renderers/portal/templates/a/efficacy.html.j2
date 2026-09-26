@@ -9,7 +9,7 @@
   {% if unassigned_efficacy_count %}<p class="kz-a-comparability">本页有 {{ unassigned_efficacy_count }} 条疗效观察的组别—产品关系待核，未绘图；完整表保留原始值。</p>{% endif %}
   <p class="kz-a-comparability">不同量表、时间点和分析人群分组展示；每组独立刻度，不能按图形长度判断跨试验优劣。</p>
   <details class="kz-complete-table"><summary class="kz-complete-table__summary">展开当前筛选的完整疗效表</summary><div class="kz-a-table-wrap"><table>
-    <thead><tr><th>产品</th><th>试验</th><th>疗效指标</th><th>时间点</th><th>组别</th><th>观察值</th><th>人数</th><th>分析人群</th></tr></thead>
+    <thead><tr><th>产品</th><th>试验</th><th>疗效指标</th><th>时间点</th><th>组别</th><th>观察值</th><th>人数</th><th>分析人群</th><th>来源</th></tr></thead>
     <tbody>{% for row in efficacy %}
       <tr data-row-id="{{ row.row_id }}" data-product="{{ product_names[row.product_id] }}" data-endpoint="{{ row.endpoint }}" data-endpoint-source="{{ row.endpoint_source }}" data-timepoint="{{ row.timepoint }}">
         <td>{% if row.group_assignment_state == 'unknown' %}产品归属待核{% else %}{{ product_names[row.product_id] }}{% endif %}</td><td>{{ trial_names[row.trial_id] }}</td>
@@ -17,6 +17,7 @@
         <td><strong>{{ row.value }}{{ row.unit }}</strong></td>
         <td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% elif row.denominator is not none %}分母 {{ row.denominator }}{% else %}—{% endif %}</td>
         <td>{{ row.population }}{% if row.unrendered_reason == 'group_product_relationship_unresolved' %}<br><small>未绘图：组别与产品关系待核</small>{% endif %}</td>
+        <td><button type="button" class="kz-a-row-source" data-open-evidence="{{ row.endpoint }}来源" data-evidence-collection="efficacy" data-evidence-row-id="{{ row.row_id }}">查看来源</button></td>
       </tr>
     {% endfor %}</tbody>
   </table></div></details>{{ ui.empty_state() }}

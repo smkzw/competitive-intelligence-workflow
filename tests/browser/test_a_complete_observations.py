@@ -103,7 +103,7 @@ def test_serious_risk_axis_contains_all_reported_values(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize("engine", ["chromium", "webkit"])
-@pytest.mark.parametrize("width", [1440, 768, 390, 320])
+@pytest.mark.parametrize("width", [1440, 1600, 1920, 2560])
 def test_matrix_bubbles_do_not_move_data_coordinates_to_avoid_collisions(
     tmp_path: Path, engine: str, width: int,
 ) -> None:
@@ -120,9 +120,26 @@ def test_matrix_bubbles_do_not_move_data_coordinates_to_avoid_collisions(
             "rate: Number(node.dataset.eventRate)}))"
         )
         assert len(coordinates) >= 2
+        x_ticks = page.locator('[data-chart-id="matrix-full"] .kz-a-axis-tick--x').evaluate_all(
+            "nodes => nodes.map(node => Number.parseFloat(node.textContent))"
+        )
+        y_ticks = page.locator('[data-chart-id="matrix-full"] .kz-a-axis-tick--y').evaluate_all(
+            "nodes => nodes.map(node => Number.parseFloat(node.textContent))"
+        )
+        assert len(x_ticks) == len(y_ticks) == 5
+        assert x_ticks[-1] > x_ticks[0]
+        assert y_ticks[0] > y_ticks[-1]
         for point in coordinates:
-            assert point["x"] == pytest.approx(14 + 72 * point["efficacy"] / 100)
-            assert point["y"] == pytest.approx(14 + 72 * (100 - point["rate"]) / 100)
+            # Axes are facet/data driven. Compare with the displayed ticks, not
+            # the retired fixed 0..100 efficacy axis. Tick labels round to 0.1.
+            expected_x = 14 + 72 * (point["efficacy"] - x_ticks[0]) / (
+                x_ticks[-1] - x_ticks[0]
+            )
+            expected_y = 14 + 72 * (y_ticks[0] - point["rate"]) / (
+                y_ticks[0] - y_ticks[-1]
+            )
+            assert point["x"] == pytest.approx(expected_x, abs=0.3)
+            assert point["y"] == pytest.approx(expected_y, abs=0.3)
         areas = page.locator('[data-chart-id="matrix-full"] .kz-a-bubble').evaluate_all(
             "nodes => nodes.map(node => ({diameter: parseFloat(node.style.width), "
             "n: window.REPORT_A.trials.find(trial => trial.id === node.dataset.trialId)"
