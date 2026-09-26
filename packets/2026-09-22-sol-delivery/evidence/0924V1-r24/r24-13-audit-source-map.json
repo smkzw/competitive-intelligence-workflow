@@ -1,0 +1,60 @@
+{
+  "schema_version": "r24-13-diagnostic-1",
+  "status": "development_diagnostic_not_scientific_acceptance",
+  "base_head": "f629155e59ede3a1d8fbd8034820ce556b6ec828",
+  "source_pages_sha256": [
+    "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
+  ],
+  "alias_map_sha256": "2bc88b7f9286d8398c2cf1ff23f58e27781963bac5765791f93fc528cb97b5d4",
+  "old_display_js_sha256": "aac92845217e81f9933ce2c57db58f0d937acf79bbfba86c0c3b3bb4dc7ee7ec",
+  "new_payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+  "new_payload_rebuilt_with_source_map_same_sha256": true,
+  "audit_tool_sha256": "afcc7736dd6d2dc1a4d0b6888792c387d40f24810528302a79c426613fc8f1c2",
+  "builder_sha256": "725f068739da236380f3cc4f5d08512ac8b055aaaed61cb43e10cf3167a8d018",
+  "generated_drift_path": ".artifacts/r24-pnh-candidate-20260926/old-new-drift.json",
+  "generated_drift_sha256": "0335ba0f91d534e571032be1de2ad2d6da0b948b2936292f327821bf3596e4f9",
+  "generated_source_map_path": ".artifacts/r24-pnh-candidate-20260926/report-a-with-source-map.derivation.json",
+  "generated_source_map_sidecar_sha256": "43a47c161306e7befc27a5387dcf5f37a212da8894d459a05cd52ee2a8cbfbe9",
+  "old_new_rows": {
+    "old_efficacy": 3895,
+    "old_safety": 517,
+    "new_efficacy": 3617,
+    "new_safety": 514,
+    "new_additional_observations": 281,
+    "unique_weak_key_matches": 2709,
+    "unique_reclassified": 216,
+    "unique_context_changed": 588,
+    "old_only_weak_keys_and_rows": [14, 20],
+    "new_only_weak_keys_and_rows": [14, 20],
+    "ambiguous_or_count_drift_keys": 339,
+    "ambiguous_old_rows": 1683,
+    "ambiguous_new_rows": 1683,
+    "reused_row_ids_with_different_weak_key": 3691
+  },
+  "source_map": {
+    "efficacy": 3617,
+    "safety": 514,
+    "additional_observations": 281,
+    "total_unique_row_refs": 4412,
+    "path_raw_value_or_type_mismatches_against_original_cas": 0,
+    "unresolved_group_product_relationships": {
+      "efficacy": 2411,
+      "safety": 414,
+      "additional_observations": 247,
+      "distinct_trials": 34
+    }
+  },
+  "limits": [
+    "Old displayed rows lack exact atom locators; title/value matching cannot prove scientific equivalence.",
+    "The source map proves raw page, study, exact field path, value and type, but not an accepted source version or lawful product attribution.",
+    "Old-only and new-only safety weak keys include changed taxonomy; they are not automatically omitted or added clinical events.",
+    "The 2026-09-06 captured pages are offline replay, not a fresh status check or historical-as-of reconstruction.",
+    "No current delivery generation was switched, and no A/B/C scientific or visual release gate passed."
+  ],
+  "rebuild_command": [
+    "uv run python tools/build_a_payload.py --cas-dir .artifacts/source-cas/ctgov-live-20260906 --alias-map packets/2026-09-11-pnh-vertical/pnh-alias-map-v1.json --indication 阵发性睡眠性血红蛋白尿症 --indication-id pnh --output .artifacts/r24-pnh-candidate-20260926/report-a-with-source-map.json --cutoff 2026-09-06",
+    "uv run python tools/audit_a_payload_drift.py --old runs/pnh-vertical/abc-v106/reports/A/v1/html/data/report.js --new .artifacts/r24-pnh-candidate-20260926/report-a.json --output .artifacts/r24-pnh-candidate-20260926/old-new-drift.json"
+  ],
+  "verification": "Related integration batch: 62 passed in 109.79s; exact-path replay: 4412/4412 with zero mismatches; full bash tools/gate.sh GATE_OK quality-only: Ruff src/tests/tools, strict mypy 244 files, active unit/contract 1064, retained compatibility 20, layering 7, legacy refs. No scientific, visual, install or release gate claimed."
+}

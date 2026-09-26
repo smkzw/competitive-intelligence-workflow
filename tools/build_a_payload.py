@@ -229,6 +229,7 @@ def main() -> None:
     ei = si = 0
     SAFETY_DOMAIN_DIVERTED: list[dict[str, Any]] = []
     NON_EFFICACY_OBSERVATIONS: list[dict[str, Any]] = []
+    ROW_SOURCE_MAP: list[dict[str, Any]] = []
 
     for study, page_no, array_index in studies:
         proto = study.get("protocolSection", {})
@@ -541,10 +542,23 @@ def main() -> None:
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
                 denominator_by_group: dict[str, int] = {}
                 conflicting_denominator_groups: set[str] = set()
-                for denom in measure.get("denoms") or []:
-                    for count in denom.get("counts") or []:
+                denominator_candidates: dict[str, list[dict[str, Any]]] = {}
+                for denom_index, denom in enumerate(measure.get("denoms") or []):
+                    for count_index, count in enumerate(denom.get("counts") or []):
                         group_id = str(count.get("groupId") or "").strip()
                         raw_count = count.get("value")
+                        if group_id:
+                            denominator_candidates.setdefault(group_id, []).append({
+                                "value_path": (
+                                    "$.resultsSection.outcomeMeasuresModule.outcomeMeasures"
+                                    f"[{measure_index}].denoms[{denom_index}]"
+                                    f".counts[{count_index}].value"
+                                ),
+                                "raw_value": raw_count,
+                                "raw_value_type": type(raw_count).__name__,
+                                "param_type": denom.get("paramType"),
+                                "unit": denom.get("unitOfMeasure"),
+                            })
                         if not group_id or isinstance(raw_count, bool):
                             continue
                         try:
@@ -608,19 +622,38 @@ def main() -> None:
                             row_product_id, assignment_state = _linked_product_for_group(
                                 group_title, product_links, pid,
                             )
+                            source_path = (
+                                "$.resultsSection.outcomeMeasuresModule.outcomeMeasures"
+                                f"[{measure_index}].classes[{class_index}].categories"
+                                f"[{category_index}].measurements[{measurement_index}].value"
+                            )
+                            source_atom = {
+                                "trial_id": nct.lower(),
+                                "source_page_sha256": page_meta[page_no - 1][1],
+                                "source_url": f"https://clinicaltrials.gov/study/{nct}",
+                                "value_path": source_path,
+                                "raw_value": raw_source_value,
+                                "raw_value_type": type(raw_source_value).__name__,
+                                "raw_unit": unit,
+                                "outcome_title": title,
+                                "class_title": source_class_title,
+                                "category_title": cat_title,
+                                "group_id": group_id,
+                                "group_title": group_title,
+                                "timepoint": row_time_frame,
+                                "denominator_candidates": denominator_candidates.get(
+                                    group_id, [],
+                                ),
+                            }
                             domain = classify_source_outcome(
                                 title, source_class_title, cat_title,
                             )
                             if domain not in {"efficacy", "adverse_events"}:
-                                source_path = (
-                                    "$.resultsSection.outcomeMeasuresModule.outcomeMeasures"
-                                    f"[{measure_index}].classes[{class_index}].categories"
-                                    f"[{category_index}].measurements[{measurement_index}].value"
-                                )
+                                other_row_id = "other-" + hashlib.sha256(
+                                    f"{nct}|{source_path}".encode()
+                                ).hexdigest()[:16]
                                 NON_EFFICACY_OBSERVATIONS.append({
-                                    "row_id": "other-" + hashlib.sha256(
-                                        f"{nct}|{source_path}".encode()
-                                    ).hexdigest()[:16],
+                                    "row_id": other_row_id,
                                     "trial_id": nct.lower(), "product_id": row_product_id,
                                     "group_id": group_id, "group_title": group_title,
                                     "group_assignment_state": assignment_state,
@@ -632,6 +665,10 @@ def main() -> None:
                                     "source_url": f"https://clinicaltrials.gov/study/{nct}",
                                     "source_page_sha256": page_meta[page_no - 1][1],
                                     "source_path": source_path,
+                                })
+                                ROW_SOURCE_MAP.append({
+                                    "domain": "additional_observations",
+                                    "row_id": other_row_id, **source_atom,
                                 })
                                 continue
                             # 会商 P0 #2（域分流）：安全域终点不得混入疗效表——
@@ -689,6 +726,10 @@ def main() -> None:
                                     "denominator": safety_denominator,
                                     "time_window": row_time_frame,
                                 })
+                                ROW_SOURCE_MAP.append({
+                                    "domain": "safety", "row_id": f"safe-{si}",
+                                    **source_atom,
+                                })
                                 SAFETY_DOMAIN_DIVERTED.append(
                                     {
                                         "trial_id": nct.lower(),
@@ -716,6 +757,10 @@ def main() -> None:
                                     "denominator": denominator_by_group.get(group_id),
                                 }
                             )
+                            ROW_SOURCE_MAP.append({
+                                "domain": "efficacy", "row_id": f"eff-{ei}",
+                                **source_atom,
+                            })
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
             # Started 里程碑数提取，喂饱矩阵气泡图的样本量轴
             _flow_groups = (results.get("participantFlowModule") or {}).get("groups") or []
@@ -746,7 +791,7 @@ def main() -> None:
             ae_module = results.get("adverseEventsModule") or {}
             events = ae_module.get("eventGroups") or []
             ae_time_window = str(ae_module.get("timeFrame") or "收集时间窗未登记").strip()
-            for group in events:
+            for group_index, group in enumerate(events):
                 arm_title = str(group.get("title") or "登记组别未提供")
                 row_product_id, assignment_state = _linked_product_for_group(
                     arm_title, product_links, pid,
@@ -792,6 +837,34 @@ def main() -> None:
                             "time_window": ae_time_window,
                         }
                     )
+                    at_risk_candidate = ([{
+                        "value_path": (
+                            "$.resultsSection.adverseEventsModule.eventGroups"
+                            f"[{group_index}].{at_risk_field}"
+                        ),
+                        "raw_value": at_risk,
+                        "raw_value_type": type(at_risk).__name__,
+                    }] if at_risk is not None else [])
+                    ROW_SOURCE_MAP.append({
+                        "domain": "safety", "row_id": f"safe-{si}",
+                        "trial_id": nct.lower(),
+                        "source_page_sha256": page_meta[page_no - 1][1],
+                        "source_url": f"https://clinicaltrials.gov/study/{nct}",
+                        "value_path": (
+                            "$.resultsSection.adverseEventsModule.eventGroups"
+                            f"[{group_index}].{affected_field}"
+                        ),
+                        "raw_value": affected,
+                        "raw_value_type": type(affected).__name__,
+                        "raw_unit": "participants",
+                        "outcome_title": term,
+                        "class_title": None,
+                        "category_title": None,
+                        "group_id": str(group.get("id") or ""),
+                        "group_title": arm_title,
+                        "timepoint": ae_time_window,
+                        "denominator_candidates": at_risk_candidate,
+                    })
 
     # 独立复核修复（第十二轮）：研发企业两段式归属——
     # 主产品试验的申办方优先，其次试验药物臂的申办方，对照臂申办方不计。
@@ -906,6 +979,7 @@ def main() -> None:
     # 会商 P0 #2：安全域分流审计计数（TEAE/AE 类测量不再混入疗效表）
     derivation["safety_domain_diverted"] = len(SAFETY_DOMAIN_DIVERTED)
     derivation["non_efficacy_observations"] = NON_EFFICACY_OBSERVATIONS
+    derivation["row_source_map"] = ROW_SOURCE_MAP
     derivation["safety_domain_diverted_samples"] = [
         {k: str(v)[:80] for k, v in item.items()} for item in SAFETY_DOMAIN_DIVERTED[:10]
     ]

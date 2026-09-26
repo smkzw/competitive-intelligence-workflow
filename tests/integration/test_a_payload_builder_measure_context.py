@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -75,7 +76,8 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
             },
         },
     }
-    (cas / "page.bin").write_text(json.dumps({"studies": [record]}), encoding="utf-8")
+    page = cas / "page.bin"
+    page.write_text(json.dumps({"studies": [record]}), encoding="utf-8")
     alias = tmp_path / "alias.json"
     alias.write_text(json.dumps({
         "map_id": "synthetic-v1", "canonical_by_alias": {"Testdrug": "testdrug"},
@@ -99,6 +101,33 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
     )
     assert derivation["denominator_conflicts"] == [{
         "trial_id": "nct00000001", "endpoint": "Response B", "group_id": "OG1",
+    }]
+    row_sources = {item["row_id"]: item for item in derivation["row_source_map"]}
+    assert set(row_sources) == {
+        *(item["row_id"] for item in rows),
+        *(item["row_id"] for item in payload["safety"]),
+    }
+    assert row_sources["eff-1"]["source_page_sha256"] == hashlib.sha256(
+        page.read_bytes()
+    ).hexdigest()
+    assert row_sources["eff-1"]["value_path"] == (
+        "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]"
+        ".classes[0].categories[0].measurements[0].value"
+    )
+    assert row_sources["eff-1"]["raw_value"] == "7"
+    assert row_sources["eff-1"]["raw_value_type"] == "str"
+    assert len(row_sources["eff-1"]["denominator_candidates"]) == 2
+    assert {item["raw_value"] for item in
+            row_sources["eff-2"]["denominator_candidates"]} == {"20", "25"}
+    assert row_sources["safe-5"]["value_path"] == (
+        "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAffected"
+    )
+    assert row_sources["safe-5"]["denominator_candidates"] == [{
+        "value_path": (
+            "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAtRisk"
+        ),
+        "raw_value": 30,
+        "raw_value_type": "int",
     }]
     safety = payload["safety"]
     assert len(safety) == 6
