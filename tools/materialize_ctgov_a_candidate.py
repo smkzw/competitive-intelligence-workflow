@@ -15,6 +15,10 @@ from pathlib import Path
 from typing import Any
 
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
+from ci_workflow.application.portal_consumer_registry import (
+    SourceRowContext,
+    register_a_source_consumers,
+)
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import (
     CtgovARowSourceRef,
@@ -98,6 +102,7 @@ def materialize(
     sidecar_path: Path, observed_at: datetime,
     selected_trials: set[str] | None = None,
     preview_site: Path | None = None,
+    bound_report_output: Path | None = None,
 ) -> dict[str, Any]:
     """Recheck row bytes, ingest only exact candidates, retain unresolved counts."""
     if observed_at.tzinfo is None or observed_at.utcoffset() is None:
@@ -106,6 +111,14 @@ def materialize(
         destination = preview_site.resolve()
         if not destination.is_relative_to(project_root.resolve()) or destination.exists():
             raise ValueError("preview site must be a new directory inside the project")
+    if bound_report_output is not None:
+        destination = bound_report_output.resolve()
+        if (
+            not destination.is_relative_to(project_root.resolve())
+            or bound_report_output.exists() or bound_report_output.is_symlink()
+            or destination.suffix.lower() != ".json"
+        ):
+            raise ValueError("bound report input must be a new JSON file inside the project")
     workspace = verify_project_workspace(project_root)
     if "A" not in {kind.value for kind in workspace.contract.reports}:
         raise ValueError("project contract does not include report A")
@@ -206,27 +219,65 @@ def materialize(
         entry["capture"]["source_id"]: entry["source_version_id"]
         for entry in locked_content["closure"]["sources"]
     }
+    bound_efficacy = {row.row_id: row for row in outcomes.bound_rows}
+    bound_safety = {row.row_id: row for row in safety_batch.bound_rows}
+    bound_report = ReportAPortalData.model_validate({
+        **report.model_dump(mode="json"),
+        "efficacy": [
+            bound_efficacy.get(row.row_id, row).model_dump(mode="json")
+            for row in report.efficacy
+        ],
+        "safety": [
+            bound_safety.get(row.row_id, row).model_dump(mode="json")
+            for row in report.safety
+        ],
+    })
+    declared_efficacy = {
+        f"efficacy:{row.row_id}" for row in outcomes.bound_rows
+        if row.group_assignment_state == "declared"
+    }
+    direct_versions = {
+        fact.row_ref: lineage.fact_version_by_ref[fact.fact_id]
+        for fact in outcomes.facts if fact.row_ref in declared_efficacy
+    }
+    if set(direct_versions) != declared_efficacy:
+        raise ValueError("declared efficacy rows lack a unique direct source atom")
+    sidecar_by_row = {
+        f"efficacy:{entry['row_id']}": entry
+        for entry in sidecar["row_source_map"]
+        if entry["domain"] == "efficacy"
+    }
+    original_contexts = {
+        row_ref: SourceRowContext(
+            endpoint=str(sidecar_by_row[row_ref]["outcome_title"]),
+            timepoint=str(sidecar_by_row[row_ref]["timepoint"]),
+            group_title=str(sidecar_by_row[row_ref]["group_title"]),
+            value_path=str(sidecar_by_row[row_ref]["value_path"]),
+        ) for row_ref in declared_efficacy
+    }
+    registered_efficacy = register_a_source_consumers(
+        project_root, lineage.evidence_snapshot, bound_report, direct_versions,
+        registered_at=observed_at, source_row_contexts=original_contexts,
+    ) if direct_versions else ()
+    bound_report_bytes = bound_report.model_dump_json().encode()
+    bound_report_asset: dict[str, object] | None = None
+    if bound_report_output is not None:
+        destination = bound_report_output.resolve()
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with destination.open("xb") as handle:
+            handle.write(bound_report_bytes)
+        bound_report_asset = {
+            "relative_path": destination.relative_to(project_root.resolve()).as_posix(),
+            "sha256": _sha256(bound_report_bytes), "bytes": len(bound_report_bytes),
+        }
     preview: dict[str, object] | None = None
     if preview_site is not None:
         destination = preview_site.resolve()
         if not destination.is_relative_to(project_root.resolve()) or destination.exists():
             raise ValueError("preview site must be a new directory inside the project")
-        bound_efficacy = {row.row_id: row for row in outcomes.bound_rows}
-        bound_safety = {row.row_id: row for row in safety_batch.bound_rows}
-        bound_report = ReportAPortalData.model_validate({
-            **report.model_dump(mode="json"),
-            "efficacy": [
-                bound_efficacy.get(row.row_id, row).model_dump(mode="json")
-                for row in report.efficacy
-            ],
-            "safety": [
-                bound_safety.get(row.row_id, row).model_dump(mode="json")
-                for row in report.safety
-            ],
-        })
         provenance = PublicProvenance(
             evidence_snapshot_id=lineage.evidence_snapshot.snapshot_id,
-            report_data_digest=_sha256(bound_report.model_dump_json().encode()),
+            report_data_digest=_sha256(bound_report_bytes),
             sources=tuple(
                 PublicSource(
                     source_version_id=source_version_by_id[source.source_id],
@@ -271,6 +322,9 @@ def materialize(
         "raw_paths_verified": diagnostic["raw_paths_verified_in_selected_trials"],
         "bound_efficacy_rows": [row.row_id for row in outcomes.bound_rows],
         "bound_safety_rows": [row.row_id for row in safety_batch.bound_rows],
+        "registered_a_efficacy_consumers": [
+            binding.row_id for binding in registered_efficacy
+        ],
         "other_domain_source_rows_without_portal_binding": [row.row_id for row in other],
         "binding_gaps": unresolved,
         "fact_bindings": [
@@ -293,9 +347,11 @@ def materialize(
         "snapshot_sha256": lineage.evidence_snapshot.sha256,
         "snapshot_relative_path": lineage.evidence_snapshot.relative_path,
         "preview_site": preview,
+        "bound_report_data": bound_report_asset,
         "counts": {
             "sources": len(captures), "facts": len(lineage.fact_version_ids),
             "claims": len(lineage.claim_version_ids), "other_rows": len(other),
+            "registered_a_efficacy_consumers": len(registered_efficacy),
             "binding_gaps": len(unresolved), "source_issues": len(issues),
         },
         "limits": [
@@ -303,6 +359,8 @@ def materialize(
             "Offline replay is not a new live status check or historical-as-of reconstruction.",
             "Other-domain source facts have no A/B/C portal consumer binding yet.",
             "Unknown arm-product relations, China sources and required publications remain open.",
+            "Only declared direct A efficacy consumers are registered; safety/B/C remain open.",
+            "Portal consumer registry is not part of the source snapshot-only recovery yet.",
         ],
     }
 
@@ -317,6 +375,7 @@ def main() -> None:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--trial", action="append", default=[])
     parser.add_argument("--preview-site", type=Path)
+    parser.add_argument("--bound-report-output", type=Path)
     args = parser.parse_args()
     if args.output.exists() or args.output.is_symlink():
         parser.error("Output exists; choose a new versioned receipt path")
@@ -326,6 +385,7 @@ def main() -> None:
         observed_at=args.observed_at,
         selected_trials={value.casefold() for value in args.trial} if args.trial else None,
         preview_site=args.preview_site,
+        bound_report_output=args.bound_report_output,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8") as handle:

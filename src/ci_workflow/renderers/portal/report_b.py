@@ -5234,6 +5234,7 @@ def render_report_b_site(
             publication_limitation_zh=publication_limitation_zh,
             semantic_adjudications=data.semantic_adjudications,
         )
+        context["current_revision"] = active_revision.revision if active_revision else 0
         output = site_root / f"{page.id}.html"
         output.write_text(page_template.render(**context), encoding="utf-8")
         generated.append(output)
@@ -5301,6 +5302,7 @@ def render_report_b_site(
             item for item in data.history if item.product_id == product.id
         )
         output = products_dir / f"{product.id}.html"
+        context["current_revision"] = active_revision.revision if active_revision else 0
         output.write_text(dossier_template.render(**context), encoding="utf-8")
         generated.append(output)
 
@@ -5338,6 +5340,7 @@ def render_report_b_site(
         )
         context["detail_trial_obj"] = trial
         output = trials_dir / f"{trial.id}.html"
+        context["current_revision"] = active_revision.revision if active_revision else 0
         output.write_text(dossier_template.render(**context), encoding="utf-8")
         generated.append(output)
 

@@ -35,7 +35,7 @@ _QUERY_KEY = re.compile(r"[a-z][a-z0-9_]{0,39}\Z")
 
 
 class ShareViewSelection(BaseModel):
-    """One saved view, bound to the exact committed generation revision."""
+    """One saved view, bound to its report within the committed current bundle."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -224,11 +224,11 @@ def export_current_html_share(
     current = read_current_delivery(project_root)
     if current is None:
         raise ValueError("当前交付不存在，不能从旧HTML拼装分享包")
-    if any(item.revision != current.revision for item in selections):
-        raise ValueError("分享配置revision与当前事实版本不一致")
     available = {item.report: item for item in current.reports}
     if any(item.report not in available for item in selections):
         raise ValueError("分享配置包含当前未交付报告")
+    if any(item.revision != available[item.report].revision for item in selections):
+        raise ValueError("分享配置revision与当前报告版本不一致")
     root = project_root.expanduser().resolve()
     destination = output.expanduser().absolute()
     if destination.exists() or destination.is_symlink():

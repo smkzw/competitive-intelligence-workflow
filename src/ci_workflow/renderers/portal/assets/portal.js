@@ -1238,3 +1238,230 @@
     restoreEvidence: restoreEvidenceFromUrl
   };
 })();
+
+/* Portable personal filters. The file contains display selections only. */
+(function () {
+  "use strict";
+  var body = document.body;
+  var report = body.classList.contains("kz-a-site") ? "A" :
+    body.classList.contains("kz-b-site") ? "B" :
+    body.classList.contains("kz-c-site") ? "C" : "";
+  var revisionText = body.getAttribute("data-current-revision");
+  var main = document.getElementById("main");
+  if (!report || !main || !revisionText || !/^(0|[1-9][0-9]*)$/.test(revisionText)) return;
+  var revision = Number(revisionText);
+  if (!Number.isSafeInteger(revision)) return;
+  var home = document.querySelector(".site-header__logo[href]");
+  var site = home ? new URL(home.getAttribute("href"), window.location.href).pathname.replace(/[^/]*$/, "") :
+    window.location.pathname.replace(/[^/]*$/, "");
+  if (window.location.pathname.indexOf(site) !== 0) return;
+  var page = decodeURIComponent(window.location.pathname.substring(site.length));
+  if (!/^[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_-]+)*\.html$/.test(page)) return;
+  var siteIdentity = report === "A" ? body.getAttribute("data-report-version") : window.__SNAPSHOT_ID__;
+  var storageKey = "ci-personal-view:2:" + site + ":" + report + ":" + String(siteIdentity || "") + ":" + revision;
+  var MAX_BYTES = 65536;
+
+  function exactKeys(value, keys) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+    var actual = Object.keys(value).sort();
+    return actual.length === keys.length && actual.every(function (key, index) {
+      return key === keys.slice().sort()[index];
+    });
+  }
+  function safeText(value) {
+    return typeof value === "string" && value.length > 0 && value.length <= 256 &&
+      !/[<>\u0000-\u001f\u007f]/.test(value) &&
+      !/(?:^|[\s"'=])\/(?:Users|home|tmp|var|private|Volumes)\//i.test(value) &&
+      !/^(?:\/|[a-z]:\\|file:|https?:\/\/)/i.test(value) &&
+      !/(?:token|cookie|secret|password|authorization|api[_-]?key)\s*[:=]/i.test(value);
+  }
+  function knownValues() {
+    var known = Object.create(null);
+    var groups = document.querySelectorAll("[data-filter-dimension]");
+    for (var i = 0; i < groups.length; i++) {
+      var group = groups[i];
+      var dimension = group.getAttribute("data-filter-dimension");
+      if (!safeText(dimension)) continue;
+      if (!known[dimension]) known[dimension] = Object.create(null);
+      var buttons = group.matches("button[data-filter-value]") ? [group] :
+        group.querySelectorAll("button[data-filter-value]");
+      for (var j = 0; j < buttons.length; j++) {
+        var value = buttons[j].getAttribute("data-filter-value");
+        if (safeText(value) && buttons[j].getAttribute("aria-disabled") !== "true") {
+          known[dimension][value] = true;
+        }
+      }
+    }
+    return known;
+  }
+  function queryFromPage() {
+    var known = knownValues();
+    var params = new URLSearchParams(window.location.search);
+    var query = {};
+    Object.keys(known).sort().forEach(function (dimension) {
+      var values = [];
+      if (report === "A") {
+        document.querySelectorAll("[data-filter-dimension]").forEach(function (group) {
+          if (group.getAttribute("data-filter-dimension") !== dimension) return;
+          group.querySelectorAll("button[data-filter-value][aria-pressed='true']").forEach(function (button) {
+            values.push(button.getAttribute("data-filter-value"));
+          });
+        });
+      } else {
+        values = params.getAll(dimension);
+      }
+      values = values.filter(function (value, index) {
+        return known[dimension][value] && values.indexOf(value) === index;
+      });
+      if (values.length) query[dimension] = values.sort();
+    });
+    return query;
+  }
+  function validQuery(query, known, requireKnown) {
+    if (!query || typeof query !== "object" || Array.isArray(query) ||
+        Object.keys(query).length > 32) return false;
+    return Object.keys(query).every(function (dimension) {
+      var values = query[dimension];
+      return /^[a-z][a-z0-9_]{0,39}$/.test(dimension) &&
+        (!requireKnown || !!known[dimension]) &&
+        Array.isArray(values) && values.length > 0 && values.length <= 60 &&
+        values.every(function (value, index) {
+          return safeText(value) && value.length <= 240 &&
+            values.indexOf(value) === index &&
+            (!requireKnown || !!known[dimension][value]);
+        });
+    });
+  }
+  function validSelection(selection) {
+    return exactKeys(selection, ["report", "revision", "entry_page", "query"]) &&
+      selection.report === report && Number.isSafeInteger(selection.revision) &&
+      selection.revision === revision && selection.entry_page === page &&
+      validQuery(selection.query, knownValues(), true);
+  }
+  function validConfig(config) {
+    return exactKeys(config, ["schema_version", "selections"]) &&
+      config.schema_version === "1.0" && Array.isArray(config.selections) &&
+      config.selections.length === 1 && validSelection(config.selections[0]);
+  }
+  function readStored() {
+    try {
+      var raw = window.localStorage.getItem(storageKey);
+      if (!raw || raw.length > MAX_BYTES) return null;
+      var stored = JSON.parse(raw);
+      return exactKeys(stored, ["schema_version", "report", "revision", "query"]) &&
+        stored.schema_version === "1.0" && stored.report === report &&
+        stored.revision === revision && validQuery(stored.query, {}, false) ? stored : null;
+    } catch (_error) { return null; }
+  }
+  function reusableQuery(stored) {
+    var known = knownValues();
+    var shared = {};
+    Object.keys(stored.query).forEach(function (dimension) {
+      if (!known[dimension]) return;
+      var values = stored.query[dimension].filter(function (value) { return !!known[dimension][value]; });
+      if (values.length) shared[dimension] = values;
+    });
+    return shared;
+  }
+  function applyQuery(query, navigate) {
+    var url = new URL(window.location.href);
+    var known = knownValues();
+    Object.keys(known).forEach(function (dimension) { url.searchParams.delete(dimension); });
+    Object.keys(query).forEach(function (dimension) {
+      query[dimension].forEach(function (value) { url.searchParams.append(dimension, value); });
+    });
+    url.hash = "";
+    if (navigate) window.location.assign(url.href);
+    else window.history.replaceState({}, "", url.href);
+  }
+  var stored = readStored();
+  var known = knownValues();
+  var explicit = Object.keys(known).some(function (dimension) {
+    return new URLSearchParams(window.location.search).has(dimension);
+  });
+  if (stored && !explicit) {
+    var restored = reusableQuery(stored);
+    if (restored && Object.keys(restored).length) applyQuery(restored, false);
+  }
+
+  var bar = document.createElement("section");
+  bar.className = "kz-personal-view";
+  bar.setAttribute("aria-label", "个人视图配置");
+  var label = document.createElement("span");
+  label.textContent = "个人视图";
+  var exportButton = document.createElement("button");
+  exportButton.type = "button";
+  exportButton.textContent = "导出配置";
+  var importButton = document.createElement("button");
+  importButton.type = "button";
+  importButton.textContent = "导入配置";
+  var input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json,application/json";
+  input.hidden = true;
+  input.setAttribute("aria-label", "选择个人视图 JSON 文件");
+  var status = document.createElement("span");
+  status.className = "kz-personal-view__status";
+  status.setAttribute("role", "status");
+  bar.appendChild(label);
+  bar.appendChild(exportButton);
+  bar.appendChild(importButton);
+  bar.appendChild(input);
+  bar.appendChild(status);
+  main.insertBefore(bar, main.firstChild);
+  exportButton.addEventListener("click", function () {
+    status.textContent = "";
+    var query = queryFromPage();
+    if (!validQuery(query, knownValues(), true)) {
+      status.textContent = "当前筛选值不符合分享配置合同";
+      return;
+    }
+    var config = {schema_version: "1.0", selections: [{
+      report: report, revision: revision, entry_page: page, query: query
+    }]};
+    var output = JSON.stringify(config, null, 2) + "\n";
+    if (new Blob([output]).size > MAX_BYTES) {
+      status.textContent = "配置过大，无法导出";
+      return;
+    }
+    try { window.localStorage.setItem(storageKey, JSON.stringify({
+      schema_version: "1.0", report: report, revision: revision, query: query
+    })); } catch (_error) {
+      status.textContent = "本机存储不可用；已导出当前页配置，跨页复用需导入文件";
+    }
+    var objectUrl = URL.createObjectURL(new Blob([output], {type: "application/json"}));
+    var link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = "personal-view-" + report.toLowerCase() + ".json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 1000);
+    if (!status.textContent) status.textContent = "已导出；同一报告的其他页面可复用共同筛选";
+  });
+  importButton.addEventListener("click", function () { input.click(); });
+  input.addEventListener("change", function () {
+    var file = input.files && input.files[0];
+    input.value = "";
+    if (!file) return;
+    if (file.size > MAX_BYTES || file.size === 0) {
+      status.textContent = "配置文件过大或为空";
+      return;
+    }
+    file.text().then(function (raw) {
+      var config;
+      try { config = JSON.parse(raw); } catch (_error) { config = null; }
+      if (!validConfig(config)) {
+        status.textContent = "配置格式、报告、版本、页面或筛选值不匹配";
+        return;
+      }
+      var query = config.selections[0].query;
+      try { window.localStorage.setItem(storageKey, JSON.stringify({
+        schema_version: "1.0", report: report, revision: revision, query: query
+      })); } catch (_error) {
+        status.textContent = "本机存储不可用；只能使用当前页配置";
+      }
+      applyQuery(query, true);
+    }).catch(function () { status.textContent = "无法读取配置文件"; });
+  });
+})();

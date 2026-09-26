@@ -42,6 +42,7 @@ EXPECTED_MIGRATIONS = (
     "0013_user_refresh_comparisons.sql",
     "0014_current_generation_protocol.sql",
     "0015_evidence_calculation_derivations.sql",
+    "0016_source_portal_consumer_bindings.sql",
 )
 
 EXPECTED_TABLES = {
@@ -79,6 +80,7 @@ EXPECTED_TABLES = {
     "user_refresh_conflicts",
     "current_delivery_generations",
     "current_delivery_state",
+    "source_portal_consumer_bindings",
 }
 
 
@@ -118,7 +120,7 @@ def test_calculation_migration_preserves_old_rows_and_append_only_guards(
 ) -> None:
     old_root = tmp_path / "prior-migrations"
     old_root.mkdir()
-    for name in EXPECTED_MIGRATIONS[:-1]:
+    for name in EXPECTED_MIGRATIONS[:-2]:
         shutil.copyfile(migration_directory() / name, old_root / name)
     database_path = tmp_path / "old-project.sqlite"
     apply_migrations(database_path, old_root)
@@ -130,7 +132,7 @@ def test_calculation_migration_preserves_old_rows_and_append_only_guards(
             ("old-normalization", "normalization", "[]", "old-rule", "1", "{}", "t"),
         )
 
-    assert [item.version for item in apply_migrations(database_path)] == [15]
+    assert [item.version for item in apply_migrations(database_path)] == [15, 16]
     with open_database(database_path) as database:
         assert database.execute(
             "SELECT derivation_kind,rule_id FROM evidence_derivations "

@@ -192,6 +192,18 @@ def validate_active_fact_binding(
         ]
         raise ValueError("active fact原消费者科学身份不一致：" + ",".join(differing))
     extra = fact.model_extra or {}
+    source_pointer = fact.source_locator
+    # Registry fragments preserve the full JSON locator; A's existing row
+    # contract carries its exact field_path. Both must identify the same atom.
+    if actual.report == "A" and actual.source_pointer.startswith("$."):
+        try:
+            locator_value = json.loads(source_pointer)
+        except json.JSONDecodeError:
+            locator_value = None
+        if isinstance(locator_value, dict) and isinstance(
+            locator_value.get("field_path"), str
+        ):
+            source_pointer = locator_value["field_path"]
     fact_identity: dict[str, Any] = {
         "product_id": extra.get("product_id"),
         "drug_name": extra.get("drug_name"),
@@ -208,7 +220,7 @@ def validate_active_fact_binding(
         "unit": extra.get("unit"),
         "normalized_unit": extra.get("normalized_unit"),
         "source_version_id": fact.source_version_id,
-        "source_pointer": fact.source_locator,
+        "source_pointer": source_pointer,
     }
     mismatches = [
         field

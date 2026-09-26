@@ -1856,3 +1856,31 @@ input:focus-visible {
   .kz-a-panel[data-module="landscape"] .kz-a-section-head p { width:100%; }
   .kz-a-panel[data-module="landscape"] .kz-a-section-head .kz-a-evidence-button { position:absolute; top:0; right:0; }
 }
+.kz-personal-view {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid #d8e3e8;
+  border-radius: 0.5rem;
+  background: #f5f9fa;
+  color: #244150;
+  font-size: 0.875rem;
+}
+.kz-personal-view button {
+  border: 1px solid #9cb8c3;
+  border-radius: 0.35rem;
+  background: #fff;
+  color: #183e4d;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+}
+.kz-personal-view button:focus-visible {
+  outline: 2px solid #096c83;
+  outline-offset: 2px;
+}
+.kz-personal-view__status {
+  min-width: 0;
+}

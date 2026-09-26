@@ -2342,7 +2342,7 @@ def test_current_share_exports_committed_a_b_edit_and_unchanged_c(
                                query={"product": ("伊普可泮",)}),
             ShareViewSelection(report="B", revision=1, entry_page="safety.html",
                                query={"trial": ("nct04558918",)}),
-            ShareViewSelection(report="C", revision=1,
+            ShareViewSelection(report="C", revision=0,
                                entry_page="inclusion-criteria.html",
                                query={"criteria_q": ("EASI",)}),
         ),

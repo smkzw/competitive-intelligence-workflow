@@ -36,6 +36,7 @@ from ci_workflow.domain.ids import stable_id
 from ci_workflow.graph.impact import ImpactEdge, ImpactGraph, ImpactLayer, ImpactNode
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFact,
+    ActiveFactBinding,
     ActiveFactRevision,
     PortalConsumerNode,
     PortalRenderReceipt,
@@ -116,6 +117,27 @@ def _fact_digest(fact_version_ids: tuple[str, ...]) -> str:
     return hashlib.sha256(
         json.dumps(sorted(fact_version_ids), ensure_ascii=False, separators=(",", ":")).encode()
     ).hexdigest()
+
+
+def _source_count_denominator(context: dict[str, Any]) -> int:
+    result = context.get("result_context")
+    if not isinstance(result, dict):
+        raise UserFactSaveError("直接报告人数缺少来源统计上下文")
+    candidates = result.get("denominator_candidates")
+    if not isinstance(candidates, list):
+        raise UserFactSaveError("直接报告人数缺少独立同组分母")
+    values = {
+        item.get("parsed_value")
+        for item in candidates
+        if isinstance(item, dict) and item.get("group_id") == result.get("group_id")
+        and isinstance(item.get("parsed_value"), int)
+    }
+    if len(values) != 1:
+        raise UserFactSaveError("直接报告人数的分母缺失或存在冲突")
+    denominator = next(iter(values))
+    if not isinstance(denominator, int) or denominator <= 0:
+        raise UserFactSaveError("直接报告人数的分母不可用于当前计数")
+    return denominator
 
 
 class FactTargetIdentity(BaseModel):
@@ -465,8 +487,82 @@ class UserFactEditService:
             facts[str(row["fact_id"])] = self._public_fact(row)
         return facts
 
+    def _registered_source_bindings(self, row: dict[str, Any]) -> tuple[ActiveFactBinding, ...]:
+        """Follow user revisions to their immutable source-side consumer declarations."""
+        version_id = str(row["fact_version_id"])
+        visited: set[str] = set()
+        with open_database(self.database_path) as database:
+            while version_id:
+                if version_id in visited:
+                    raise UserFactSaveError("事实版本继承链存在循环")
+                visited.add(version_id)
+                records = database.execute(
+                    "SELECT binding_json,binding_sha256 FROM "
+                    "source_portal_consumer_bindings WHERE source_fact_version_id=? "
+                    "ORDER BY report,collection,row_id", (version_id,),
+                ).fetchall()
+                if records:
+                    bindings: list[ActiveFactBinding] = []
+                    for encoded, digest in records:
+                        if hashlib.sha256(str(encoded).encode()).hexdigest() != str(digest):
+                            raise UserFactSaveError("来源消费者绑定摘要不一致")
+                        bindings.append(ActiveFactBinding.model_validate_json(str(encoded)))
+                    return tuple(bindings)
+                predecessor = database.execute(
+                    "SELECT supersedes_fact_version_id,fact_id FROM fact_versions "
+                    "WHERE fact_version_id=?", (version_id,),
+                ).fetchone()
+                if predecessor is None or predecessor[1] != row["fact_id"]:
+                    raise UserFactSaveError("来源消费者绑定继承链身份不一致")
+                version_id = str(predecessor[0]) if predecessor[0] else ""
+        return ()
+
     def _public_fact(self, row: dict[str, Any]) -> dict[str, Any]:
         context = dict(row["context_payload"])
+        registered = self._registered_source_bindings(row)
+        if registered:
+            declarations = [binding.model_dump(mode="json") for binding in registered]
+            existing = context.get("consumer_bindings")
+            if existing is not None and existing != declarations:
+                raise UserFactSaveError("来源消费者绑定与事实内旧绑定冲突")
+            context["consumer_bindings"] = declarations
+            # Legacy projection still expects one common scientific identity.
+            # Reject divergent report semantics here rather than silently
+            # assigning an A presentation to a B consumer.
+            identity_fields = (
+                "product_id", "drug_name", "trial_id", "registry_id", "group_id",
+                "arm", "cohort_id", "period", "endpoint_definition",
+                "event_definition", "statistical_form", "measure_object", "unit",
+                "normalized_unit",
+            )
+            for field in identity_fields:
+                values = {json.dumps(getattr(binding, field)) for binding in registered}
+                if len(values) != 1:
+                    raise UserFactSaveError("多报告消费者科学口径不一致：" + field)
+                value = getattr(registered[0], field)
+                if field in context and context[field] != value:
+                    raise UserFactSaveError("事实与外置消费者身份冲突：" + field)
+                context[field] = value
+            if (
+                registered[0].statistical_form == "count"
+                and registered[0].measure_object == "participants"
+            ):
+                denominator = _source_count_denominator(context)
+                user_edit = context.get("user_edit")
+                if isinstance(user_edit, dict) and user_edit.get("cleared") is True:
+                    context["numerator"] = None
+                    context["denominator"] = None
+                else:
+                    try:
+                        current = float(str(row["normalized_value"]))
+                    except (TypeError, ValueError) as error:
+                        raise UserFactSaveError("当前报告人数不是可核验整数") from error
+                    if (
+                        not current.is_integer() or current < 0 or current > denominator
+                    ):
+                        raise UserFactSaveError("当前报告人数与来源分母矛盾")
+                    context["numerator"] = int(current)
+                    context["denominator"] = denominator
         with open_database(self.database_path) as database:
             source = database.execute(
                 "SELECT f.locator,f.content_text,f.source_version_id "
@@ -600,6 +696,28 @@ class UserFactEditService:
         else:
             context = dict(source["context_payload"])
             changes = command.edits.changes()
+            bindings = self._registered_source_bindings(source)
+            source_direct_count = bool(bindings) and all(
+                binding.statistical_form == "count"
+                and binding.measure_object == "participants" for binding in bindings
+            )
+            if source_direct_count and changes:
+                if set(changes) - {"raw_value", "normalized_value"}:
+                    raise UserFactSaveError("直接来源人数须单独编辑当前原值，分母是另一来源原子")
+                if all(value is not None for value in changes.values()):
+                    if set(changes) != {"raw_value", "normalized_value"}:
+                        raise UserFactSaveError("直接来源人数修订须同时提供数值文本和规范值")
+                    source_denominator = _source_count_denominator(context)
+                    try:
+                        raw_number = float(str(changes["raw_value"]))
+                        normalized_number = float(str(changes["normalized_value"]))
+                    except (TypeError, ValueError) as error:
+                        raise UserFactSaveError("直接来源人数修订不是有限数值") from error
+                    if (
+                        not raw_number.is_integer() or raw_number != normalized_number
+                        or raw_number < 0 or raw_number > source_denominator
+                    ):
+                        raise UserFactSaveError("直接来源人数原值、规范值或分母矛盾")
             clear_fields = {field for field, value in changes.items() if value is None}
             numeric_fields = {
                 "raw_value", "normalized_value", "numerator", "denominator",
@@ -610,6 +728,11 @@ class UserFactEditService:
                 raise UserFactSaveError(
                     "此字段尚不支持显式清除：" + ",".join(sorted(unsupported_clear))
                 )
+            if bindings and not source_direct_count and not clear_fields:
+                if ("raw_value" in changes) != ("normalized_value" in changes):
+                    raise UserFactSaveError("直接来源数值修订须同时提供数值文本和规范值")
+                if {"numerator", "denominator", "threshold_value"} & changes.keys():
+                    raise UserFactSaveError("来源计数或阈值是独立原子，尚不能随当前数值改写")
             if clear_fields and any(
                 field in numeric_fields and value is not None
                 for field, value in changes.items()

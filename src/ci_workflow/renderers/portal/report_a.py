@@ -2216,6 +2216,10 @@ def validate_active_fact_revision_a(
 
 def _a_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
     if isinstance(row, EfficacyRow):
+        if row.unit.strip().casefold() in {
+            "人", "例", "participants", "number of participants",
+        } and row.numerator is not None and row.value == row.numerator:
+            return "count", "participants"
         form = "crude_rate" if row.unit == "%" and row.numerator is not None else "estimate"
         return form, "participants" if row.numerator is not None else "estimate"
     forms = {
@@ -2321,6 +2325,7 @@ def render_report_a_site(
         public_provenance=public_provenance,
         publication_limitation_zh=publication_limitation_zh,
     )
+    base_context["current_revision"] = active_revision.revision if active_revision else 0
     display_payload = data.model_dump(mode="json")
     display_payload["calculation_evidence"] = [
         item.model_dump(mode="json") for item in calculation_evidence

@@ -1,0 +1,97 @@
+{
+  "schema_version": "r24-22-evidence-1",
+  "status": "development_candidate_not_scientific_or_release_acceptance",
+  "base_head": "5a0756a7b6eba489b4fec9d81b485437b8bdcca6",
+  "scope": "W07 fixed CT.gov source atoms to external A consumers; W04 real-source A edit transaction; W06 personal view and report-revision share contract",
+  "fixed_source": {
+    "method": "offline_cas_replay_not_live_refresh",
+    "cas": ".artifacts/source-cas/ctgov-live-20260906",
+    "payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "sidecar_sha256": "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09",
+    "previous_source_fact_claim_id_sequence_sha256": "5d4d834a361cbb81c27dc7257278d52ded9a2d20c6f810f7fc21d15454bf40b9",
+    "current_source_fact_claim_id_sequence_sha256": "5d4d834a361cbb81c27dc7257278d52ded9a2d20c6f810f7fc21d15454bf40b9"
+  },
+  "full_candidate": {
+    "project_root": ".artifacts/r24-pnh-auto-binding-full-20260926",
+    "receipt": ".artifacts/r24-pnh-auto-binding-full-20260926/logs/diagnostics/r24-22-all50-final.json",
+    "receipt_sha256": "67b55385f6d6f34405068517a3ecf66962098767a7c387aa84be089d82a90ea1",
+    "evidence_snapshot_id": "evidence-snapshot_df4bb81e97d8f0eae2fb3f7a",
+    "evidence_snapshot_sha256": "0443339f94cdb54678e213182afaa82db4c6b4285656d880a7198f57964ec14d",
+    "bound_report_input": "inputs/report-a-r24-22-bound.json",
+    "bound_report_input_sha256": "9a13e4b867e0f27341a616409bdd179851d8467cf7b6cf411a04d54f5b39b45d",
+    "sources": 50,
+    "source_fact_versions": 5839,
+    "direct_claim_versions": 4412,
+    "registered_declared_a_efficacy_consumers": 1206,
+    "registered_binding_set_sha256": "f2489e3d2a5cfe16722af26a4fb8db523b8fae96cf7052278b23c0594684e22c",
+    "unregistered_a_efficacy_rows": 2411,
+    "unregistered_a_safety_rows": 514,
+    "other_domain_source_rows_without_consumer": 281,
+    "source_issues": {"missing": 79, "parse_failure": 0},
+    "current_generation_switched": false,
+    "binding_replay_same_count": true
+  },
+  "one_study_transaction": {
+    "project_root": ".artifacts/r24-pnh-auto-binding-slice-20260926",
+    "receipt": ".artifacts/r24-pnh-auto-binding-slice-20260926/logs/diagnostics/r24-22-bound-input.json",
+    "receipt_sha256": "ee54864f0c91032cb03b27e847188127bb93fb9db36b70546d1be37d595a5860",
+    "study": "NCT04820530",
+    "source_version_id": "source-version_1bdd4ab8659ce6a88f640b96",
+    "source_fact_version_id": "fact-version_a876aec36e2678898887b4dd",
+    "source_fact_scientific_content_sha256": "9ed41dfbb0eb520b7ce16c31d55f4047f06f1f8f1608571c071416d4aa5ef568",
+    "source_value_and_quote": "92.2",
+    "registered_a_efficacy_consumers": 18,
+    "bound_report_input_sha256": "0d8acf15ae64a925ebcef0e5688f504369185a43ff2c262ac38c61e8ad782a80",
+    "revision_0": "isolated development A site, 18 active source facts",
+    "revision_1": {
+      "operation": "hypothetical user save 92.2 to 90.1 for transaction test only",
+      "fact_version_id": "fact-version_2d27841f8e29a065fd5fb88d",
+      "rebuilt_reports": ["A"],
+      "report_js_sha256": "3e1eadc858f82289d89c587438bf4b04ec298ce7dc721c14e6059edb36b65fc6",
+      "visible_row_value": 90.1,
+      "unchanged_source_quote": "92.2",
+      "review_state": "user_modified"
+    },
+    "invalid_half_edit": "raw_value only rejected; current bundle identical at revision 1",
+    "revision_2": {
+      "operation": "undo hypothetical edit",
+      "fact_version_id": "fact-version_777512a0eb24fb6947d77161",
+      "report_js_sha256": "be4cc78255b97fdbfe632ed04189c079d88eee908090c51b7726c13daa10713e",
+      "visible_row_value": 92.2,
+      "unchanged_source_quote": "92.2"
+    },
+    "not_a_medical_correction": true
+  },
+  "personal_view_and_share": {
+    "page_config": "single-report JSON can be downloaded/imported and supplied unchanged to project share",
+    "revision_semantics": "selection revision equals selected report revision within committed current; project current revision remains separately recorded",
+    "verified": "B committed revision 0/1 CLI round trip; C unchanged revision 0 under project current 1; A/C rendered revision 0 and shared cross-page filter behavior",
+    "limits": "No full offline moved-directory/new-browser acceptance for this code candidate or final visual review"
+  },
+  "verification": {
+    "source_consumer_and_migration_batch": "10 passed / 32.40s before casefold fixture extension; final source registry file 4 passed / 23.62s",
+    "w04_w06_migration_browser_batch": "85 passed / 110.70s",
+    "ruff_changed_files": "passed",
+    "mypy_changed_sources_and_tool": "passed with MYPYPATH=src; isolated tool-only invocation without source path reported 16 import-untyped errors and is not a source-code failure",
+    "javascript_syntax": "node --check portal.js passed",
+    "asset_mirror": "author and package mirror JS/CSS byte-identical",
+    "package_verify": "PACKAGE_OK version=0.1.0a0 stage=development-candidate",
+    "quality_gate": "GATE_OK quality-only: Ruff src/tests/tools; strict mypy 248 source files; active unit/contract 1066 passed, retained compatibility 20 passed, layering 7 passed, legacy path reference check passed",
+    "not_run": ["independent medical review", "all physical pages x 4 desktop widths x 4 states", "real source A+B or C co-consumption", "registry recovery from source snapshot alone", "fresh-install on three hosts", "24 real portals", "RC"]
+  },
+  "diagnosed_failures": [
+    "First all-50 consumer pass failed because registry compared source group title and declared intervention-arm label case-sensitively; the existing builder uses strip+casefold. Exact fixed sidecar audit found 689 such rows before normalization and zero afterward. First failed run wrote no consumer bindings.",
+    "An earlier manual English-row binding and the later Chinese-row binding for the same source fact were rejected as conflicting append-only A identities. That manual isolated project was superseded, then removed; no source or current user project was overwritten.",
+    "Snapshot IDs differ from R24-21 although source/fact/claim ID sequence matches; acquisition attempt/receipt closures differ and neither snapshot identity is substituted for the other."
+  ],
+  "cleanup": {
+    "removed": ".artifacts/r24-pnh-binding-slice-20260926",
+    "bytes_approx": "21 MB generated manual prototype",
+    "recoverability": "not recoverable in place; fixed CAS, payload, sidecar and new automatic one-study/full projects remain"
+  },
+  "next": [
+    "Attach a real B consumer to the same source fact with independent B source-view identity and prove one A+B save/clear/undo fan-out; do not bind C without a real dependency.",
+    "Make registered consumer identities recoverable with the release candidate, separate from the immutable scientific source hash.",
+    "Continue safety/other-domain source consumers, dynamic global/China/publication closure and all-page desktop, host and 24-portal acceptance."
+  ]
+}

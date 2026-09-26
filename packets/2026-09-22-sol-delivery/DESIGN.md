@@ -95,7 +95,7 @@ DesignClause为受限条款结构：原文/译文、母子关系、AND/OR/NOT/�
 
 按需loopback服务，默认127.0.0.1；严格Host/Origin、会话/CSRF、限定资源ID、路径/symlink、导入类型/大小；拒绝file/null任意Origin、通配CORS、任意shell/路径。
 分享从current生成，非旧HTML+patch。闭合本地JS/CSS/图标/合法数据/配置，不把file:// fetch JSON作为必需条件；可内嵌或本地script分片。离线源外链可显示元信息和合法摘录，受限原文不承诺离线可得。
-分享不含凭据、绝对路径、商业全文、开发源/日志；Skill安装包和报告分享包不同。配置严格schema和版本迁移，不执行函数/HTML。机器ID可以保留绑定但不放用户字段墙。
+分享不含凭据、绝对路径、商业全文、开发源/日志；Skill安装包和报告分享包不同。配置严格schema和版本迁移，不执行函数/HTML。配置中的 revision 绑定当前交付包内**所选报告的实际页面版本**，项目 current revision 另存于分享清单；未受事实修订影响的 C 可保留旧页面版本并从该页面原样导出配置，不强行重渲染或伪改版本。机器ID可以保留绑定但不放用户字段墙。
 模块assets建议作为唯一作者来源；根副本若仍有其他轨消费者，通过构建同步。先查实际消费者再统一，不用改hash掩盖漂移。
 
 当前 W00 已确立 `src/ci_workflow/renderers/portal/assets` 为唯一作者源，根 `assets/portal` 为发包镜像；构建前逐字节与 manifest 校验，不恢复双作者模式。分享包默认直接显示 current generation 的修订事实和配置，不依赖原浏览器 localStorage、旧绝对路径或手工 patch；单 A/B/C 与联合包都需在新浏览器、移动目录及断网环境实际打开。
