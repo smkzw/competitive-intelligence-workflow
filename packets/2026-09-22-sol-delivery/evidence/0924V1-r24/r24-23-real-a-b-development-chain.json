@@ -1,0 +1,74 @@
+{
+  "schema_version": "r24-23-evidence-1",
+  "status": "development_candidate_not_scientific_or_release_acceptance",
+  "base_head": "ad755ba62e2bb6d2a8a27ec2178a1c3c5084c56e",
+  "scope": "W04/W07 one fixed CT.gov source atom shared by A and B; B direct-count and reported-measure identity, exact evidence and atomic current fan-out",
+  "source": {
+    "mode": "offline_cas_replay_not_live_or_historical_as_of_check",
+    "cas": ".artifacts/source-cas/ctgov-live-20260906",
+    "payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "sidecar_sha256": "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09",
+    "study": "NCT04820530",
+    "source_version_id": "source-version_1bdd4ab8659ce6a88f640b96",
+    "source_fact_version_id": "fact-version_a876aec36e2678898887b4dd",
+    "exact_field_path": "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0].classes[0].categories[0].measurements[0].value",
+    "original_value_and_quote": "92.2",
+    "original_denominator": 40,
+    "snapshot_id": "evidence-snapshot_68fd97a331040c3637068faf",
+    "snapshot_sha256": "36791d7ed49ff5d8d3eb4759556a6d4d3f907710030e22d1c3ed479d712a10f1"
+  },
+  "isolated_development_project": {
+    "relative_path": ".artifacts/r24-pnh-real-ab-20260926",
+    "size_approx": "140 MiB; ignored local artifact, not part of Git or install bundle",
+    "a_original_builder_input_sha256": "0d8acf15ae64a925ebcef0e5688f504369185a43ff2c262ac38c61e8ad782a80",
+    "b_development_builder_input_sha256": "abf704c9e6f070b2115f6f315c8ccdd3f408797f4c788d500b7ae4402553ae30",
+    "registered_source_consumers": {"A": 18, "B": 1},
+    "current_revision": 1,
+    "current_request_id": "real-cas-pnh-ab-development-only",
+    "active_source_fact_count": 18,
+    "hypothetical_user_edit": "92.2 to 90.1; test only, not a medical correction",
+    "rebuilt_reports": ["A", "B"],
+    "a_report_js_sha256": "d62de446cfa77e4bf9ec890b2353e3eeb5dd9cfae347fc4b82356a30b710a4b3",
+    "b_report_js_sha256": "2208274f0f377c3c38dffab235f1053dc31fc373b0ac6091178ec82e8b34be23",
+    "b_efficacy_html_sha256": "67561c0eb83192d78a8c451e10e7f85cb8e1eef5523ad1da4b93d11e539fcb19",
+    "a_consumer_receipt_sha256": "1ab071d097f535df92c078b34ed20b643888aa5d8b71437c41ee85244bdc0b9b",
+    "b_consumer_receipt_sha256": "f8e1e8fa038fb72c26a415d45a1c7e864191f7ef3b07a3c185f7345f5b62d40d",
+    "observed": "A/B domain rows and B evidence drawer current value 90.1; A/B original source text and immutable fragment 92.2; B evidence user_modified not independently accepted",
+    "b_scope_limit": "Only one exact efficacy source-view row is constructed for the B development journey; this is not B's full related-study pool or an approved B portal."
+  },
+  "verification": {
+    "red": "new synthetic B direct count path initially unavailable; later wrong B denominator 36/35 incorrectly admitted, reproduced as 1 failed then rejected",
+    "synthetic_vs_real": "Captured synthetic CT.gov-shaped 30/35 fixtures prove negative and transaction contracts; the separate fixed NCT04820530 CAS test proves one real-source development operation",
+    "milestone_batch": "19 passed, 61 deselected / 151.40s; tests/integration/test_w04_source_consumer_registry.py, tests/integration/reports/test_b_report_portal.py and selected tests/integration/test_w04_user_fact_edit.py",
+    "fixed_real_cas_test": "1 passed, 8 deselected / 12.81s, before the final milestone batch",
+    "quality_gate": "GATE_OK status=quality-only steps=6; Ruff src/tests/tools, strict-mypy 248 source files, active unit/contract 1066 passed, retained compatibility 20 passed, layering 7 passed and old-path check",
+    "package_verify": "PACKAGE_OK version=0.1.0a0 stage=development-candidate; uv run ci-workflow package verify --root .",
+    "not_run": [
+      "independent scientific review",
+      "real-source A+B clear/restore/undo and injected failure retry",
+      "new B source view with all related studies and native clinical labels",
+      "real browser click/keyboard/four desktop widths and four states on this candidate",
+      "current share of this real-source A+B project",
+      "consumer registry recovery from source manifest alone",
+      "dynamic global/China/publication and competitor-universe closure",
+      "three-host fresh install, 24 complete portals and RC"
+    ]
+  },
+  "source_code_sha256": {
+    "consumer_registry": "41dd05724e49f519bf1c7a947dc260a7fe9e039a156fe7d8b4d92d85783b4e51",
+    "b_renderer": "1ec26989428c8247f07e6e44a0f7feb985ccf750d81092edd8c260f0684a8074",
+    "integration_tests": "efa86dcbd5e19b0dfc83fa7642a9be57fb708f4a8a59d523e7b1a91871313d72"
+  },
+  "rebuild": "With the fixed ignored CAS/payload/sidecar and reference project available: uv run pytest -q tests/integration/test_w04_source_consumer_registry.py -k fixed_real_ctgov_pnh_atom_rebuilds_a_and_b_from_one_user_save. Missing local inputs produce SKIP, not PASS; a fork needs controlled asset transfer or new acquisition and revalidation.",
+  "cleanup": {
+    "preserved": ".artifacts/r24-pnh-real-ab-20260926, fixed CAS and prior projects/snapshots",
+    "removed": "three exact superseded pytest-generated real-PNH project directories, about 420 MiB total; two failed assertion runs and one duplicate passing rerun",
+    "recoverability": "removed temporary copies cannot be recovered in place but are reproducible from retained fixed inputs and the test; the passing 140 MiB project remains"
+  },
+  "next": [
+    "Make actual B evidence-view input cover the relevant study pool without losing precise source identity or inventing B source rows.",
+    "Run real-source clear/undo/rollback and committed-current share on a bounded candidate.",
+    "Add recoverable consumer binding set separate from the immutable scientific source snapshot, then continue safety/other-domain and dynamic source closure.",
+    "Perform actual browser and independent scientific/visual acceptance before any RC claim."
+  ]
+}

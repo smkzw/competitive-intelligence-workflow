@@ -3041,7 +3041,7 @@ def _evidence_view(
         "来源待核",
     )
     original_text = _text(
-        _first(source, "original_definition", "source_text", default=None)
+        _first(source, "source_text", "original_definition", default=None)
     )
     report_row = ReportRow.model_construct(
         row_id=row_id,
@@ -5031,6 +5031,15 @@ def _b_source_view_row(
 
 def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
     if isinstance(row, EfficacyRow):
+        if (
+            row.unit.strip().casefold() in {
+                "人", "例", "participants", "number of participants",
+            }
+            and row.numerator is not None
+            and row.value == row.numerator
+            and row.value_basis is None
+        ):
+            return "count", "participants"
         if row.value_basis in {"modeled_estimate", "reported_estimate"}:
             return "estimate", "estimate"
         if row.value_basis == "crude_rate" and (

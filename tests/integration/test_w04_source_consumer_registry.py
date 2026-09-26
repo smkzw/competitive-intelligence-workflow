@@ -15,8 +15,12 @@ from ci_workflow.application.portal_consumer_registry import (
     PortalConsumerRegistrationError,
     SourceRowContext,
     register_a_source_consumers,
+    register_b_shared_source_consumers,
 )
-from ci_workflow.application.project_service import verify_project_workspace
+from ci_workflow.application.project_service import (
+    create_project_workspace,
+    verify_project_workspace,
+)
 from ci_workflow.application.source_research_service import (
     ResearchClaim,
     bind_ctgov_outcome_to_a_row,
@@ -38,18 +42,26 @@ from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
     render_report_a_site,
 )
+from ci_workflow.renderers.portal.report_b import (
+    ReportBPortalData,
+    active_fact_binding_for_b,
+    render_report_b_site,
+)
 from ci_workflow.storage.snapshot_store import LockedSnapshot
 from ci_workflow.storage.sqlite import open_database
 from tests.integration.test_research_package_submission import _project
 from tests.integration.test_w07_ctgov_capture_bridge import _reported_count_source
+from tools.materialize_ctgov_a_candidate import materialize
 
 CONTENT = Path("fixtures/positive/a-atopic-dermatitis/research-content.json")
 AT = datetime(2026, 9, 26, tzinfo=UTC)
 
 
-def _candidate(tmp_path: Path) -> tuple[Path, LockedSnapshot, ReportAPortalData, str]:
+def _candidate(
+    tmp_path: Path, *, source_unit: str = "Participants",
+) -> tuple[Path, LockedSnapshot, ReportAPortalData, str]:
     root = _project(tmp_path)
-    source = _reported_count_source(root)
+    source = _reported_count_source(root, unit=source_unit)
     atom = extract_ctgov_atomic_results(source)[0][0]
     baseline = ReportAPortalData.model_validate(
         json.loads(CONTENT.read_text(encoding="utf-8"))["report_data"]
@@ -64,9 +76,9 @@ def _candidate(tmp_path: Path) -> tuple[Path, LockedSnapshot, ReportAPortalData,
         "group_id": atom.group_id,
         "group_assignment_state": "declared",
         "value": 30,
-        "unit": "Participants",
+        "unit": source_unit,
         "numerator": None,
-        "denominator": None,
+        "denominator": 35 if source_unit != "Participants" else None,
         "source_field_path": None,
         "source_version_id": None,
         "source_text": None,
@@ -93,7 +105,7 @@ def _candidate(tmp_path: Path) -> tuple[Path, LockedSnapshot, ReportAPortalData,
         ],
     })
     claim = ResearchClaim(
-        claim_id="source-consumer-test-claim", claim_text="登记报告30人",
+        claim_id="source-consumer-test-claim", claim_text="登记报告直接数值30",
         claim_kind="direct_evidence", fact_ids=tuple(fact.fact_id for fact in facts),
     )
     lineage = ingest_research_evidence(
@@ -107,6 +119,300 @@ def _candidate(tmp_path: Path) -> tuple[Path, LockedSnapshot, ReportAPortalData,
     return root, lineage.evidence_snapshot, report, lineage.fact_version_by_ref[
         f"efficacy:{bound.row_id}"
     ]
+
+
+def _b_direct_source_view(
+    report: ReportAPortalData, locator: str, *, source_text: str,
+) -> ReportBPortalData:
+    row = next(item for item in report.efficacy if item.source_version_id)
+    return ReportBPortalData.model_validate({
+        **report.model_dump(mode="json"),
+        "efficacy_views": {"facts": [{
+            "row_id": row.row_id,
+            "product_id": row.product_id,
+            "trial_id": row.trial_id,
+            "original_definition": row.endpoint,
+            "arm_id": row.group_id,
+            "arm_label": row.arm,
+            "analysis_population": row.population,
+            "value": row.value,
+            "unit": row.unit,
+            "numerator": row.numerator,
+            "denominator": row.denominator,
+            "source_version_id": row.source_version_id,
+            "source_locator": json.loads(locator),
+            "source_text": source_text,
+            "disclosure_state": "reported_value",
+        }]},
+    })
+
+
+def test_captured_synthetic_direct_count_has_a_and_b_consumers(
+    tmp_path: Path,
+) -> None:
+    root, snapshot, a_report, version_id = _candidate(tmp_path)
+    row_id = next(row.row_id for row in a_report.efficacy if row.source_version_id)
+    a_binding = register_a_source_consumers(
+        root, snapshot, a_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )[0]
+    with open_database(root / "state/project.sqlite") as database:
+        locator, quote = database.execute(
+            "SELECT f.locator,f.content_text FROM fact_versions v "
+            "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+            "WHERE v.fact_version_id=?", (version_id,),
+        ).fetchone()
+        before = database.execute(
+            "SELECT content_sha256,scientific_context_json FROM fact_versions "
+            "WHERE fact_version_id=?", (version_id,),
+        ).fetchone()
+    b_report = _b_direct_source_view(a_report, locator, source_text=quote)
+    b_binding = register_b_shared_source_consumers(
+        root, snapshot, b_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )[0]
+    assert (a_binding.statistical_form, b_binding.statistical_form) == ("count", "count")
+    assert (a_binding.measure_object, b_binding.measure_object) == (
+        "participants", "participants",
+    )
+    assert b_binding == active_fact_binding_for_b(b_report, "efficacy", row_id)
+    assert register_b_shared_source_consumers(
+        root, snapshot, b_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    ) == (b_binding,)
+    public = UserFactEditService(root)._public_fact(UserFactEditService(root)._fact_row(version_id))
+    assert {item["report"] for item in public["consumer_bindings"]} == {"A", "B"}
+    with open_database(root / "state/project.sqlite") as database:
+        assert database.execute(
+            "SELECT content_sha256,scientific_context_json FROM fact_versions "
+            "WHERE fact_version_id=?", (version_id,),
+        ).fetchone() == before
+
+
+def test_reported_measure_is_shared_as_estimate_not_a_crude_rate(tmp_path: Path) -> None:
+    root, snapshot, a_report, version_id = _candidate(
+        tmp_path, source_unit="Percentage of responders",
+    )
+    row_id = next(row.row_id for row in a_report.efficacy if row.source_version_id)
+    a_binding = register_a_source_consumers(
+        root, snapshot, a_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )[0]
+    with open_database(root / "state/project.sqlite") as database:
+        locator, quote = database.execute(
+            "SELECT f.locator,f.content_text FROM fact_versions v "
+            "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+            "WHERE v.fact_version_id=?", (version_id,),
+        ).fetchone()
+    b_report = _b_direct_source_view(a_report, locator, source_text=quote)
+    b_binding = register_b_shared_source_consumers(
+        root, snapshot, b_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )[0]
+    assert (a_binding.statistical_form, a_binding.measure_object) == ("estimate", "estimate")
+    assert (b_binding.statistical_form, b_binding.measure_object) == ("estimate", "estimate")
+    assert b_report.efficacy_views["facts"][0]["numerator"] is None
+
+
+def test_b_shared_source_registration_rejects_wrong_view_without_partial_write(
+    tmp_path: Path,
+) -> None:
+    root, snapshot, a_report, version_id = _candidate(tmp_path)
+    row_id = next(row.row_id for row in a_report.efficacy if row.source_version_id)
+    register_a_source_consumers(
+        root, snapshot, a_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )
+    with open_database(root / "state/project.sqlite") as database:
+        locator, quote = database.execute(
+            "SELECT f.locator,f.content_text FROM fact_versions v "
+            "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+            "WHERE v.fact_version_id=?", (version_id,),
+        ).fetchone()
+    b_report = _b_direct_source_view(a_report, locator, source_text=quote)
+    for changed in (
+        {"source_locator": {**json.loads(locator), "field_path": "$.wrong.value"}},
+        {"source_text": "30 from an unrelated source"},
+        {"analysis_population_zh": "another analysis set"},
+        {"numerator": 31},
+    ):
+        payload = b_report.model_dump(mode="json")
+        payload["efficacy_views"]["facts"][0].update(changed)
+        with pytest.raises(PortalConsumerRegistrationError):
+            register_b_shared_source_consumers(
+                root, snapshot, ReportBPortalData.model_validate(payload),
+                {f"efficacy:{row_id}": version_id}, registered_at=AT,
+            )
+    wrong_denominator = b_report.model_dump(mode="json")
+    domain = next(item for item in wrong_denominator["efficacy"] if item["row_id"] == row_id)
+    domain["denominator"] = 36
+    wrong_denominator["efficacy_views"]["facts"][0]["denominator"] = 36
+    with pytest.raises(PortalConsumerRegistrationError, match="来源|科学"):
+        register_b_shared_source_consumers(
+            root, snapshot, ReportBPortalData.model_validate(wrong_denominator),
+            {f"efficacy:{row_id}": version_id}, registered_at=AT,
+        )
+    with open_database(root / "state/project.sqlite") as database:
+        assert database.execute(
+            "SELECT COUNT(*) FROM source_portal_consumer_bindings WHERE report='B'"
+        ).fetchone()[0] == 0
+
+
+def test_captured_synthetic_count_save_fans_out_to_a_and_b_atomically(tmp_path: Path) -> None:
+    root, snapshot, a_report, version_id = _candidate(tmp_path)
+    row_id = next(row.row_id for row in a_report.efficacy if row.source_version_id)
+    register_a_source_consumers(
+        root, snapshot, a_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )
+    with open_database(root / "state/project.sqlite") as database:
+        locator, quote = database.execute(
+            "SELECT f.locator,f.content_text FROM fact_versions v "
+            "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+            "WHERE v.fact_version_id=?", (version_id,),
+        ).fetchone()
+    b_report = _b_direct_source_view(a_report, locator, source_text=quote)
+    register_b_shared_source_consumers(
+        root, snapshot, b_report, {f"efficacy:{row_id}": version_id}, registered_at=AT,
+    )
+    sites = {"A": root / "reports/A/v1/html", "B": root / "reports/B/v1/html"}
+    render_report_a_site(a_report, sites["A"])
+    render_report_b_site(b_report, sites["B"])
+    b_html = (sites["B"] / "efficacy.html").read_text(encoding="utf-8")
+    embedded = b_html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
+    evidence = next(item for item in json.loads(embedded) if item["row"]["row_id"] == row_id)
+    assert evidence["original_text"] == quote
+    inputs = {"A": root / "inputs/a-source.json", "B": root / "inputs/b-source.json"}
+    inputs["A"].parent.mkdir(parents=True)
+    inputs["A"].write_text(a_report.model_dump_json(), encoding="utf-8")
+    inputs["B"].write_text(b_report.model_dump_json(), encoding="utf-8")
+    service = UserFactEditService(root)
+    contract = verify_project_workspace(root).contract
+    service.initialize_current_delivery(
+        project_id=contract.project_id, report_sites=sites, report_data_paths=inputs,
+        fact_version_ids=(version_id,), created_at=AT,
+    )
+    source = service._fact_row(version_id)
+    target = FactTargetIdentity(
+        fact_id=source["fact_id"], fact_version_id=version_id,
+        entity_id=source["entity_id"], field_id=source["field_id"],
+    )
+    old_current = service.read_current_delivery()
+    with pytest.raises(UserFactSaveError, match="数值文本和规范值"):
+        service.save(UserFactSaveCommand(
+            request_id="source-ab-invalid", project_id=contract.project_id,
+            expected_revision=0, target=target, edits=FactEdit(raw_value="25"),
+            user_basis="开发候选负例", saved_by="test", saved_at=AT,
+        ))
+    assert service.read_current_delivery() == old_current
+    saved = service.save(UserFactSaveCommand(
+        request_id="source-ab-save", project_id=contract.project_id,
+        expected_revision=0, target=target,
+        edits=FactEdit(raw_value="25", normalized_value=25),
+        user_basis="开发候选演练，不是医学修订", saved_by="test", saved_at=AT,
+    ))
+    assert saved.rebuilt_reports == ("A", "B")
+    current = service.read_current_delivery()
+    assert current.revision == 1
+    for report in current.reports:
+        content = (root / report.site_relative_path / "data/report.js").read_text()
+        payload = json.loads(content.split("=", 1)[1].rstrip(" ;\n"))
+        row = next(item for item in payload["efficacy"] if item["row_id"] == row_id)
+        assert (row["value"], row["numerator"], row["denominator"]) == (25, 25, 35)
+        assert "25" in (root / report.site_relative_path / "data/search-index.js").read_text()
+        assert any(item["row_id"] == row_id for item in json.loads(
+            (root / report.site_relative_path / "data/consumer-receipt.json").read_text()
+        )["consumers"])
+
+
+def test_fixed_real_ctgov_pnh_atom_rebuilds_a_and_b_from_one_user_save(
+    tmp_path: Path,
+) -> None:
+    """Local fixed-CAS probe; an absent raw corpus is SKIP, not a scientific PASS."""
+    repo = Path(__file__).resolve().parents[2]
+    cas = repo / ".artifacts/source-cas/ctgov-live-20260906"
+    payload = repo / ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.json"
+    sidecar = repo / ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.derivation.json"
+    previous = repo / ".artifacts/r24-pnh-auto-binding-slice-20260926"
+    if not all(path.exists() for path in (cas, payload, sidecar, previous)):
+        pytest.skip("fixed 2026-09-06 CT.gov CAS not present in this checkout")
+    assert sha256(payload.read_bytes()).hexdigest() == (
+        "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74"
+    )
+    assert sha256(sidecar.read_bytes()).hexdigest() == (
+        "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09"
+    )
+    root = tmp_path / "real-pnh-a-b-development"
+    contract = verify_project_workspace(previous).contract
+    create_project_workspace(root, contract)
+    a_input = root / "inputs/a-bound.json"
+    receipt = materialize(
+        project_root=root, cas_dir=cas, payload_path=payload, sidecar_path=sidecar,
+        observed_at=datetime(2026, 9, 26, 5, 54, 30, tzinfo=UTC),
+        selected_trials={"nct04820530"}, bound_report_output=a_input,
+    )
+    manifest = root / receipt["snapshot_relative_path"]
+    snapshot = LockedSnapshot(
+        snapshot_id=receipt["snapshot_id"], kind="evidence", report=None,
+        sha256=receipt["snapshot_sha256"],
+        relative_path=receipt["snapshot_relative_path"], byte_size=manifest.stat().st_size,
+    )
+    a_report = ReportAPortalData.model_validate_json(a_input.read_bytes())
+    source_row = next(row for row in a_report.efficacy if row.row_id == "eff-1")
+    assert (source_row.value, source_row.source_text) == (92.2, "92.2")
+    versions = {item["row_ref"]: item["fact_version_id"] for item in receipt["fact_bindings"]}
+    version_id = versions["efficacy:eff-1"]
+    with open_database(root / "state/project.sqlite") as database:
+        locator, quote = database.execute(
+            "SELECT f.locator,f.content_text FROM fact_versions v "
+            "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+            "WHERE v.fact_version_id=?", (version_id,),
+        ).fetchone()
+    b_report = _b_direct_source_view(a_report, locator, source_text=quote)
+    b_binding = register_b_shared_source_consumers(
+        root, snapshot, b_report, {"efficacy:eff-1": version_id}, registered_at=AT,
+    )[0]
+    assert (b_binding.statistical_form, b_binding.measure_object) == ("estimate", "estimate")
+    b_input = root / "inputs/b-direct-source-development.json"
+    b_input.write_text(b_report.model_dump_json(), encoding="utf-8")
+    sites = {"A": root / "reports/A/development/html", "B": root / "reports/B/development/html"}
+    render_report_a_site(a_report, sites["A"])
+    render_report_b_site(b_report, sites["B"])
+    service = UserFactEditService(root)
+    service.initialize_current_delivery(
+        project_id=contract.project_id, report_sites=sites,
+        report_data_paths={"A": a_input, "B": b_input},
+        fact_version_ids=tuple(
+            versions[f"efficacy:{row_id}"]
+            for row_id in receipt["registered_a_efficacy_consumers"]
+        ),
+        created_at=AT,
+    )
+    source = service._fact_row(version_id)
+    saved = service.save(UserFactSaveCommand(
+        request_id="real-cas-pnh-ab-development-only", project_id=contract.project_id,
+        expected_revision=0,
+        target=FactTargetIdentity(
+            fact_id=source["fact_id"], fact_version_id=version_id,
+            entity_id=source["entity_id"], field_id=source["field_id"],
+        ),
+        edits=FactEdit(raw_value="90.1", normalized_value=90.1),
+        user_basis="开发演练假设值，非医学订正", saved_by="test", saved_at=AT,
+    ))
+    assert saved.rebuilt_reports == ("A", "B")
+    for item in service.read_current_delivery().reports:
+        site = root / item.site_relative_path
+        projection = json.loads(
+            (site / "data/report.js").read_text(encoding="utf-8").split("=", 1)[1].rstrip(" ;\n")
+        )
+        row = next(entry for entry in projection["efficacy"] if entry["row_id"] == "eff-1")
+        assert row["value"] == 90.1 and row["source_text"] == "92.2"
+        if item.report == "B":
+            evidence = (site / "efficacy.html").read_text(encoding="utf-8")
+            embedded = evidence.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
+            view = next(
+                entry for entry in json.loads(embedded) if entry["row"]["row_id"] == "eff-1"
+            )
+            assert view["value"]["value"] == "90.1"
+            assert view["original_text"] == "92.2"
+    with open_database(root / "state/project.sqlite") as database:
+        assert database.execute(
+            "SELECT content_text FROM evidence_fragments WHERE fragment_id=?",
+            (source["primary_fragment_id"],),
+        ).fetchone() == ("92.2",)
 
 
 def test_real_ingested_source_fact_gets_external_a_binding_without_science_rewrite(
