@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-60",
+  "status": "bounded_source_atom_slice_accepted_not_c_portal",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source": {
+    "kind": "locked_ctgov_cas",
+    "sha256": "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be",
+    "studies": ["NCT02264639", "NCT03829449"]
+  },
+  "execution": {
+    "route": "zcode/GLM-5.3-Flash:max",
+    "fallback": false,
+    "guard_audit_execution": "ok=true",
+    "worker_report": "runs/execution/ci-0924-r24-60-c-protocol-source-slice-20260926/worker_01.md",
+    "codex_review": "reviews/codex_execution_ci-0924-r24-60-c-protocol-source-slice-20260926_review.md"
+  },
+  "files": {
+    "production": "src/ci_workflow/application/ctgov_design_atoms.py",
+    "production_sha256": "eee0d7d0c7023c353160259b7ae8aeeb4585510569a36c1183aa3bdacc5124e3",
+    "tests": "tests/integration/test_r24_c_ctgov_protocol_atoms.py"
+  },
+  "verification": {
+    "new_tests": 19,
+    "adjacent_tests": 30,
+    "result": "49 passed in 93.05s",
+    "ruff": "passed",
+    "strict_mypy_production": "passed"
+  },
+  "limits": [
+    "Two fixed studies only; source atoms are not accepted C design observations or consumer bindings.",
+    "Empty phases or arm/intervention arrays can yield no atom and no absent-path entry; the worker's broader empty-list claim is not accepted.",
+    "C precedent search, report, current-generation fanout and browser checks are NOT_RUN."
+  ]
+}

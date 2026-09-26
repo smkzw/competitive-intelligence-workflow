@@ -1,0 +1,48 @@
+{
+  "work_item": "R24-40 W06 committed-current A+B offline share from fixed real-source development project",
+  "status": "development_candidate_not_scientific_release_acceptance",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "project": ".artifacts/r24-pnh-real-ab-20260926",
+  "clinical_boundary": "Fixed 2026-09-06 CT.gov CAS, not a fresh source check. The user edit 92.2 -> 90.1 is a prior hypothetical development exercise, not a medical correction.",
+  "source_sha256": {
+    "src/ci_workflow/application/share_export.py": "0ee710035517903bcfa26c0a6a88ede2eb776c65524624ee0bbf09d2db0e98d0",
+    "tests/browser/test_personal_view_transfer.py": "224d0d353500099a96e144870e516316f26e87914fc47de73ccee6d7b9af2436"
+  },
+  "command": "uv run ci-workflow project share --root .artifacts/r24-pnh-real-ab-20260926 --output <new archive path> --reports A,B",
+  "retained_archive": ".artifacts/r24-current-share-ab-20260926.zip",
+  "archive_sha256": "3071b06e030628c246e93c9549352a8f67f57980802e20afe8a141af3a0c77b0",
+  "archive_size_approx": "4.5 MiB; generated test share retained locally outside Git and outside the Skill installation package",
+  "archive_manifest": {
+    "kind": "current-html-report-share",
+    "current_revision": 1,
+    "A_report_version": "v1-user-r1",
+    "B_report_version": "v1-user-r1",
+    "current_generation_sha256": "9d31c4a28ceabfd131a2d4ecd28b4a560b4f3d9fec31be79209372519f564d3c",
+    "fact_revision_digest": "e4a11cf5f64129e82a4c819b9a023aaef4ebdac29a7793939f3de622df0e803f",
+    "external_sources_require_network": true
+  },
+  "ego_lite_observation": {
+    "task_space": 8,
+    "scope": "ZIP extracted into a different temporary directory, opened through file:// with network emulated offline, browser cache disabled, and localStorage/sessionStorage cleared before navigating; separate A/B pages in the same Ego profile, not a new browser-profile test.",
+    "launcher": "Shows exactly A and B links with text '所选报告各自独立', not a false claim that three reports were exported.",
+    "A": "Efficacy row eff-1 displays 90.1% with localStorage length 0, no remote script URL and no document horizontal overflow at 1600px.",
+    "B": "Efficacy single fact and complete-table row eff-1 display current 90.1; source drawer retains original 92.2, reports user_modified, and Escape returns focus to eff-1; localStorage length 0, no remote script URL or horizontal overflow at 1600px.",
+    "B_html_sha256": "67561c0eb83192d78a8c451e10e7f85cb8e1eef5523ad1da4b93d11e539fcb19",
+    "B_report_js_sha256": "2208274f0f377c3c38dffab235f1053dc31fc373b0ac6091178ec82e8b34be23",
+    "B_screenshot": "output/playwright/r24-40-current-share-b-source-final-1600.png",
+    "B_screenshot_sha256": "359ad38b7b736f6192151b44a3691935f31b1ed6f5dc978b4bd40b0487a6c776"
+  },
+  "checks": {
+    "ruff_changed_python_and_test": "passed",
+    "strict_mypy_share_export_py": "passed",
+    "git_diff_check": "passed",
+    "added_regression_assertion": "B-only launcher cannot claim all three reports; browser test execution deferred until concurrent R24-29 renderer writes end.",
+    "full_gate": "not_run_while_R24-29_shared_source_repair_is_in_flight"
+  },
+  "cleanup": "Deleted own 66 MiB first extraction/old archive scratch and 62 MiB final extraction after verification; retained only 4.5 MiB final ZIP and one ~0.2 MiB screenshot. Deleted one superseded screenshot.",
+  "open": [
+    "Archive is from an old current generation and keeps its old source-trace wording; R24-29 fixes do not retroactively alter this immutable share or confer scientific source closure.",
+    "This project has current A+B only and B has one exact source-view row; C and B's full related-study pool are not demonstrated.",
+    "Separate fresh browser profile, full offline resource/network audit, current integrated regenerated A/B/C share, 24 portals, hosts and release acceptance remain open."
+  ]
+}

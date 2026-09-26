@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-53",
+  "status": "c_global_design_observation_search_development_only",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "root_cause": "C indexed every design observation as an overview-page hit without an observation row ID. The shared search link therefore could not deep-link to the observation's own topical or trial page.",
+  "change": "Each C observation now has a row-ID search entry routed to the first existing topical page that contains its field, or to its own trial detail when no topical page applies. The rendered C template preserves row_id, allowing the shared exact-ID search link to carry ?focus=<row_id>. Original text and current display/threshold terms remain searchable.",
+  "evidence": {
+    "fixed_fixture": "fixtures/positive/c-atopic-dermatitis/inputs/report-data.json",
+    "observation_count": 48,
+    "test": "tests/integration/reports/test_c_report_portal.py::test_c_global_search_reaches_each_design_observation_on_its_own_page",
+    "red": "0 indexed observation IDs versus 48 fixture observations",
+    "green_batch": "11 passed in 1.10s; every indexed row ID resolves to a physical page whose embedded evidence includes that ID; inclusion/exclusion route assertions passed",
+    "ruff_changed_files": "All checks passed",
+    "strict_mypy_src_tools": "Success: no issues found in 251 source files",
+    "git_diff_check": "passed",
+    "renderer_sha256": "b5cf7e3c531375eaf2e01e44219792e3376b732e3458c5dbc5b0a7d37b628e76",
+    "template_sha256": "6f84b455d5fac40ea751d25bebed15649cc734551249ae28d5ce2f19d788375d",
+    "rendered_search_index_sha256": "a9bf4b9912f8c8f824e682b788a8d2c16f9f6e2b385070b3bffd465abe33432d",
+    "rendered_overview_sha256": "44260c2a62c7c7fedf70d8f749794cc3c49bb11b98fb932bf62f0d7162c90342",
+    "rendered_site_relative_path": ".artifacts/r24-53-c-global-search-20260926/pytest-green/c-report-portal0/html"
+  },
+  "browser_status": "NOT_RUN: the Ego Lite browser-control interface rejected a local file URL for the preceding R24-52 check; no alternate UI mechanism was used to bypass that policy.",
+  "cleanup": "Only disposable R24-53 pytest-red scratch (3.5 MiB) was deleted after path, symlink, receipt-reference and Git-tracking checks. The rendered green site is retained; deleted scratch is reproducible from the test source but not recoverable as an on-disk artifact.",
+  "limits": [
+    "This is a 48-observation fixture and rendered-site contract, not the current complete C real-source portal.",
+    "Deep-link focus, post-filter visibility and Esc focus restoration require allowed real-browser verification.",
+    "No C scientific source closure, current shared-fact revision, four-width/four-state visual, three-host or 24-portal acceptance is implied."
+  ]
+}

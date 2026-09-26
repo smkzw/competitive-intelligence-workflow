@@ -1,0 +1,219 @@
+{
+  "status": "read_only_candidate_no_current_switch",
+  "safe_to_switch_current": false,
+  "current": {
+    "revision": 1,
+    "generation_sha256": "9d31c4a28ceabfd131a2d4ecd28b4a560b4f3d9fec31be79209372519f564d3c"
+  },
+  "source_delta_counts": {
+    "old_atoms": 4412,
+    "new_atoms": 4412,
+    "unchanged": 4412,
+    "modified": 0,
+    "withdrawn": 0,
+    "added": 0,
+    "source_page_changed": 4412
+  },
+  "counts": {
+    "a_exact_path_candidates": 18,
+    "a_source_changed_review": 0,
+    "a_unresolved": 0,
+    "other_reports_rebuild_required": 1,
+    "user_edits_requiring_three_way_merge": 1
+  },
+  "bindings": [
+    {
+      "source_fact_version_id": "fact-version_a876aec36e2678898887b4dd",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-1",
+      "new_row_id": "eff-9f54cd0202c1f000619a",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_1780a1e365d4ef20a7f6ccb8",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-10",
+      "new_row_id": "eff-78c9baf3853ce0563744",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_8fd6963439210981c3b61d50",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-11",
+      "new_row_id": "eff-839981bcdda62ae30e3c",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_5016e54ea0ccdceb1e951b95",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-12",
+      "new_row_id": "eff-e90811657057ffa4e70c",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_93862c0f703e065501d22c46",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-13",
+      "new_row_id": "eff-401b49e5163f2f7acd4c",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_78c23911153830bce95d4306",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-14",
+      "new_row_id": "eff-1f42fd4e43e9cef22ae6",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_095522dfbb19183295acdecc",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-15",
+      "new_row_id": "eff-8b56229e898feecb54b2",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_f52a33c5ba8cf6b93baa9dcf",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-16",
+      "new_row_id": "eff-d1b404ebc6622a57a0ed",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_355a7e23dbb4e996ffe7b2ca",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-17",
+      "new_row_id": "eff-4c94455aba06cdf315f5",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_0bf4020317963b4bf0d1205c",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-18",
+      "new_row_id": "eff-919236d77752f252e83e",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_34497918a6002a0f152746fb",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-2",
+      "new_row_id": "eff-1f24e09db91274e6b3d4",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_bfa3973afeb1cd2c862abc4c",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-3",
+      "new_row_id": "eff-d4f7e4107831e462c8ef",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_3b11f01bc4cbca8d3b45df60",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-4",
+      "new_row_id": "eff-e139c92c2e469505d52c",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_dad039fe3f4314c14b873ae2",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-5",
+      "new_row_id": "eff-8a4f9ca43cc4705d37da",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_0f473af127fefc920a474fde",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-6",
+      "new_row_id": "eff-c0b951e7813a95b42436",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_48026b44045278e8dffb3bad",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-7",
+      "new_row_id": "eff-469de75428df9a3f8629",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_86c0fb33304f981ca55009e4",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-8",
+      "new_row_id": "eff-452ef2ed6bbdfee91621",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_00d12a1e048566cf87d20194",
+      "report": "A",
+      "collection": "efficacy",
+      "row_id": "eff-9",
+      "new_row_id": "eff-341e4a6d4802ede05713",
+      "source_page_changed": true,
+      "status": "exact_path_candidate_not_accepted"
+    },
+    {
+      "source_fact_version_id": "fact-version_a876aec36e2678898887b4dd",
+      "report": "B",
+      "collection": "efficacy",
+      "row_id": "eff-1",
+      "new_row_id": null,
+      "source_page_changed": null,
+      "status": "report_rebuild_required"
+    }
+  ],
+  "user_edits": [
+    {
+      "target_fact_version_id": "fact-version_a876aec36e2678898887b4dd",
+      "result_fact_version_id": "fact-version_78ec541f77ee047803e486ea",
+      "bound_reports": [
+        "A",
+        "B"
+      ],
+      "status": "three_way_merge_required"
+    }
+  ],
+  "limitations": [
+    "Exact source path and unchanged atom are candidates, not accepted fact identity.",
+    "A consumers need re-registration; B/C require their own source-bound rebuild.",
+    "Any user edit needs source/base/user three-way comparison before propagation."
+  ],
+  "input_sha256": {
+    "old_sidecar": "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09",
+    "new_sidecar": "0ef8a7275bab87eccc4e0a296744b8ae624a0771ca1d082300a1fa081b78d655",
+    "project_db": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "audit_tool_sha256": "f4c1cebc6ccfcfbf1a9cc559e286bb44bd86c86f10ee4b8b472ad0b5d94e3ee1"
+}

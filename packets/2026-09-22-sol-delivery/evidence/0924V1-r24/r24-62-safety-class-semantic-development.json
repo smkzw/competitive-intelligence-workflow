@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-62",
+  "status": "development_candidate_not_science_or_browser_accepted",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "input": {
+    "report_a_payload": ".artifacts/r24-pnh-auto-binding-full-20260926/inputs/report-a-r24-22-bound.json",
+    "report_a_payload_sha256": "9a13e4b867e0f27341a616409bdd179851d8467cf7b6cf411a04d54f5b39b45d",
+    "historical_ctgov_cas": "2026-09-06",
+    "locked_source_database_sha256_unchanged": "a1434296bff630e187a4fe1357a44708ba60ffe3101512e452cbe46a99699c12"
+  },
+  "candidate": {
+    "ignored_recovery_directory": ".artifacts/r24-62-safety-semantic-20260926",
+    "a_before_payload_sha256": "05ffa894196dba49db0802192f5e54a29f8d5e0dce49f4572ed4c3916026e4ee",
+    "a_payload_sha256": "71e2de24f796397cbbe5e47e93ad2853d211746ac60b55cc8abfcf6277e3f8c4",
+    "a_derivation_sha256": "4c29f83c1cc5a4d9f2c5820ec2737cafa341e971d0576c55c306600da52935fd",
+    "a_safety_html_sha256": "dc9727bc99449594c4fbc5dca0a3c50498a6320d37518064b6d430fb4ba582d4",
+    "b_safety_html_sha256": "360537c86771e47f4a828c82bab16cecb45097c77abae80f833c81608d444f28",
+    "a_page_count": 56,
+    "b_page_count": 205,
+    "safety_rows_old_new": [514, 514],
+    "stable_safety_ids_changed": 0,
+    "raw_value_or_scientific_context_changed": 0,
+    "term_key_reclassifications": 197,
+    "event_count_basis_changed_from_participants_to_events": 12,
+    "unknown_arm_product_relation_rows": 414,
+    "b_safety_rows_with_measured_class": 224,
+    "b_safety_rows_with_precise_source_view_in_this_direct_render": 0
+  },
+  "changes": [
+    "Measured class/category rather than composite parent alone controls safety subtype; severe TEAE and SAE/discontinuation subsets retain their meaning.",
+    "Event counts no longer imply a participant denominator or universal incidence rate.",
+    "B participant_proportion receives a proportion label rather than event-rate label.",
+    "Unknown arm-product rows cannot acquire a product-detail link from the B evidence drawer."
+  ],
+  "verification": {
+    "regression_tests": "tests/integration/test_r24_safety_class_context.py",
+    "red": "14 failed before the production repair",
+    "grouped_result": "69 passed in 127.89s across the new regression and four adjacent integration files",
+    "ruff_changed_files": "passed",
+    "strict_mypy_changed_production": "passed",
+    "node_check_report_b_js": "passed",
+    "author_mirror_bytes": "equal",
+    "git_diff_check": "passed",
+    "ego_lite_current_candidate": "NOT_RUN; local-page control denied in this task, no alternate route used",
+    "independent_clinical_reclassification_review": "PENDING"
+  },
+  "conference": {
+    "frozen_r24_57_verdict": "FAIL",
+    "route": "codebuddy-cli/deepseek-v4.1-flash:max",
+    "codex_review": "reviews/codex_conference_ci-0924-r24-57-safety-unit-review-20260926_review.md",
+    "method_limit": "Reviewer had no Bash/SQLite access and attempted a denied read-only recursive probe; Codex reproduced both findings independently."
+  },
+  "limits": [
+    "This is a candidate built from a fixed historical source; it is not current dynamic source verification.",
+    "Twenty-four former composite rows now have unknown measured class (for example lab/ECG). Their domain placement is not independently accepted.",
+    "The direct B render does not include the separately verified B safety_views exact per-row source contract.",
+    "Full A/B/C science, interactive browser, three-host package, 24-report and release gates are open."
+  ]
+}

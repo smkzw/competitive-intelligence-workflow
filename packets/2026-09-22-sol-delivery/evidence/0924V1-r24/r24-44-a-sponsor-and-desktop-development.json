@@ -1,0 +1,65 @@
+{
+  "work_item": "R24-44 W02/W05A/W07 sponsor semantics and dense desktop A preview",
+  "status": "development_candidate_not_current_or_scientifically_accepted",
+  "head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source": {
+    "capture_receipt_sha256": "8fc674005ecccc61815fa8ca41862e51865a40b9028cf0d69f5abaaf056b7e1d",
+    "alias_map_sha256": "2bc88b7f9286d8398c2cf1ff23f58e27781963bac5765791f93fc528cb97b5d4",
+    "prior_result_array_sha256": "3f04e55803c2bfbeb7489ed9e0704778b688a67aa7ba5b93747c1067bde0c5f6",
+    "current_result_array_sha256": "3f04e55803c2bfbeb7489ed9e0704778b688a67aa7ba5b93747c1067bde0c5f6"
+  },
+  "retained_candidate": {
+    "payload": ".artifacts/r24-pnh-current-ctgov-20260926/report-a-ctgov-20260926-sponsor-separate-v5.json",
+    "payload_sha256": "3ae2a238733eb06269c2fd58c171e4f6a1a3b8c97bc3a7069beec88ca08c952a",
+    "derivation_sha256": "0ef8a7275bab87eccc4e0a296744b8ae624a0771ca1d082300a1fa081b78d655",
+    "preview": ".artifacts/r24-integrated-portal-20260926/a-v5c",
+    "preview_sha256": "af81402b7164af6032ce14f0fca88ac9ad219b4425b7169b812f61d19d5dcf34",
+    "preview_bytes": 14546023,
+    "preview_pages": 56
+  },
+  "changes": [
+    "A newly captured Phase III VSA012 trial no longer first-wins its product developer field: two distinct lead sponsors are collected in stable order and explicitly labeled registration sponsors, not verified developers.",
+    "CompanyRow now has a distinct sponsor field. CT.gov lead sponsors no longer populate licensor or imply a transaction/territory in product, table or network views.",
+    "The A first screen starts with the competitive landscape. Unknown target labels are not counted as a target or one shared mechanism; all 45 source projects remain reachable in six compact phase rows.",
+    "In two-column desktop efficacy, each observation's clinical context receives its full card width. Values, evidence links, pagination and all observations remain present."
+  ],
+  "observed": {
+    "products": 45,
+    "drug_trials": 141,
+    "efficacy": 3617,
+    "safety": 514,
+    "additional_observations": 281,
+    "registration_sponsor_relationships": 56,
+    "vsa012_sponsors": ["Bisirna Therapeutics (Suzhou) Co., Ltd.", "Bisirna Therapeutics Pte. Ltd."],
+    "verified_targets_in_current_ctgov_only_candidate": 0,
+    "unknown_target_projects": 45,
+    "desktop_widths_css_px": [1440, 1600, 1920, 2560],
+    "page_horizontal_overflow_px": [0, 0, 0, 0],
+    "landscape_product_chips": [45, 45, 45, 45],
+    "first_efficacy_card_height_px": [117, 109, 109, 109],
+    "previous_1600_first_card_height_px": 166,
+    "sponsor_card_height_1600_px": 53,
+    "sponsor_layout_1600_2560": "2 columns / 3 columns; one chart-level source limitation note"
+  },
+  "checks": {
+    "red": "2 focused failures: absent developer_basis and landscape-first order; separate sponsor-field negative later failed as expected",
+    "focused_green": "10 passed for generic A builder family and four-width efficacy acceptance",
+    "quality_gate": "GATE_OK quality-only: Ruff whole src/tests/tools; strict-mypy 250 files; active unit/contract 1067 passed; retained compatibility 20 passed; layer audit 7 passed; legacy path check passed",
+    "asset_mirror": "author source equals release mirror and manifest digest",
+    "ego_lite": "ordinary A v5c, four desktop widths, first screen, efficacy local card, VSA012 product and sponsor-only enterprise view visually inspected"
+  },
+  "screenshots_sha256": {
+    "output/ego/r24-44/a-v5c-overview-1600.png": "60c37bfa89b4347f492b1378f30bebbb0fdfe8577d5014db9ab11434a4fbfdc3",
+    "output/ego/r24-44/a-v5c-efficacy-1600.png": "3b83b81f10cf5b9246bf0121323f392fc19f4825b9fed07f25540c22f0f00ff2",
+    "output/ego/r24-44/a-v5c-overview-2560.png": "c65bd307dab2c3ccf08a97ed0e15edc505a843b8a94be67c8ed9610f3c669f26",
+    "output/ego/r24-44/a-v5c-vsa012-1600.png": "9885ea6088f31f255cec7c3a676269ec7e0e9b7e025ec62d4a53bdadb5afdff9",
+    "output/ego/r24-44/a-company-sponsor-compact-1600.png": "37f76f4fd4cd3acfd61b76b3215e153a5c3cd1729cb1840f24e8a8a83ca964ad"
+  },
+  "cleanup": "Deleted only five superseded generated A preview directories and the intermediate v4 payload/sidecar, about 77 MiB; kept v3, v5, raw source, current preview and screenshots.",
+  "not_done": [
+    "Broad CT.gov candidate is not an independently closed innovation-competitor universe; all 45 targets still require external target/source corroboration.",
+    "No verified unique product developer, China/regulatory/publication closure, user-edit old/new bridge or current generation switch.",
+    "A homepage still contains a long paged efficacy section; all A physical pages/four states and cross-browser visual acceptance remain pending.",
+    "B/C current research, three hosts, recovery package binding, 24 portals and RC remain pending."
+  ]
+}

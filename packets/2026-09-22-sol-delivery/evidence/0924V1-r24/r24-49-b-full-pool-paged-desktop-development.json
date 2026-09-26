@@ -1,0 +1,54 @@
+{
+  "schema": "ci-r24-development-receipt-v1",
+  "task": "R24-49 W05B/W07 complete-related-pool pagination and desktop inspection",
+  "status": "development_pass_only",
+  "head_at_check": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "candidate": {
+    "generator": "render_report_b_site from a pinned current NCT04820530 partial source view plus the complete existing related-efficacy pool",
+    "site": ".artifacts/r24-49-b-final-20260926/test_real_one_precise_b_view_k0/b-full-related-pool-partial-source",
+    "page": "efficacy.html",
+    "page_sha256": "21c2aebcc6a06f2956d50b2766727439bfd343ff44b75dd569f416ac8952cff9",
+    "page_bytes": 29915810,
+    "related_unique_rows": 3617,
+    "comparison_groups": 2102,
+    "page_size_groups": 24,
+    "page_count": 88,
+    "precisely_located_rows": 18,
+    "other_rows_not_located": 3599,
+    "source_limit": "Only one current ClinicalTrials.gov study is precisely re-extracted here; the other related records retain explicit unverified source states. This is not a clinical-evidence or competitor-universe closure."
+  },
+  "author_assets_sha256": {
+    "charts.js": "73634c58e639cf729011e5673cb93738d2d94f6decaf2c93d7b2594a30b5b196",
+    "portal.js": "dd0b04782469357778f89480c05054f4f2f1cdb6b3e003bf454f2fe1691c8ee9",
+    "portal.css": "ebd73ca5439a3e4e9b317b478b35523bcc7ce563ccfbb7fc537f3d2c29e8e5c7",
+    "report-b.js": "aefb74077db6ceebf3ed9aaa2d1cf6bf87c8b57df97ab76b266c45b6569bbc73",
+    "report-b.css": "6ff01454beb39be20ea46ff0a7a5913b9e565eb53fd3d56bd9633258078fdad3"
+  },
+  "verification": {
+    "automated": "uv run python -m pytest -q tests/integration/test_r24_real_b_partial_full_pool.py tests/integration/reports/test_b_report_portal.py --basetemp=.artifacts/r24-49-b-final-20260926: 7 passed in 39.30s. The real-source test checks chart/evidence ID equality and the 24-group page-slice ID union against the complete 3617-row query. It is a static set check, not browser navigation across all 88 pages.",
+    "ego_lite_space": 8,
+    "ego_lite_result": "Fresh ordinary B output opened in about 2.8s at 1600px; 24 groups mounted. Ego captured and measured the final candidate at 1440/1600/1920/2560 CSS px in full, product-filtered, one-fact sparse and evidence-drawer states: 16/16 had no page horizontal overflow. Representative full, sparse and drawer screenshots were visually opened; the checked full view shows exact arm labels and the long unit without the former SVG legend collision. iptacopan filter matched 749 facts across 424 groups; exact-row search matched one. Last page showed groups 2089-2102/2102 and 14 mounted groups. A focus deep link opened the precisely located 92.2 source row on page 39 and Esc returned to that row's visible evidence trigger. These are one physical page's desktop checks, not all B pages or cross-browser acceptance.",
+    "source_evidence_example": "eff-9f54cd0202c1f000619a: ClinicalTrials.gov NCT04820530 original 92.2, exact JSON locator, original quote and source link visible in drawer",
+    "asset_mirror": "validate_portal_asset_mirror: PASS; generated-site asset SHA-256 equals author source for the five changed assets",
+    "full_quality_gate": "Not rerun after R24-49; previous R24-46 quality-only gate is historical. Independent scientific conference and W06 execution remain separate."
+  },
+  "screenshots": {
+    "root": "output/ego/r24-49",
+    "widths_css_px": [1440, 1600, 1920, 2560],
+    "states": ["full", "product", "sparse", "evidence"],
+    "naming": "b-final-{state}-{width}.png",
+    "sha256_by_state_width": {
+      "full": ["505960c7326c7c1b2d0ef2ea7d8fb6a954a7d63743090b762269a826705e1747", "e123e4f7c0f645e1951893464bf3939cc3391bfb6c448c2a56d0c4c689fc4b1f", "7d73eae640a6ca2a3371e88c791d274ade79f6c5c27b8a202b509842fd28a6f0", "9e8167c94b6588a647dfb46329ab75ee3c8f8dcd98ba5a6a3e0965045a7566cf"],
+      "product": ["c06d0323ecaacef4bf16f9dbd6617886e555dc36156b75269ba0eaa86ebcca75", "22258afd3392e5729a336392280bd0b655ff671648c8d3c01ca6b41e19ef3690", "0f2f7bc47de207684e2521852e96347258dd3065cebb6d0ece47be958c665f64", "638d082def1ece87ec5f122f5b91d67803597592b00462e0d46b48713792f18c"],
+      "sparse": ["ab7aee5e094dabaf533af2f4c1894153dcccd56386d0f985a4d0a4db70c3e6d7", "2acd73024427f6b60cfff8242fc1bced299efeb128301890d11ff921a69e26f6", "81a3e32a68ac92b1a16b9502bbb5f84381168e04ee1a267b52d11b28686160d1", "c7890c29344cbe866b8515f57f7471022a86372553abaec1f019dff290825dec"],
+      "evidence": ["029728465057852abdedca97fe7e3179d76934f9f90542a0756894aa267b39b8", "2c799126475fb33404efdd5bae90f87bd13fd0ebd11e25cfad727e86891de951", "3495c82482779922a14fe4c208235e7fd0cbf6c094a328820b976672b5a3dbf8", "024310ae074a135bdccd8d4c86465fe0412b7bbcb22d4f414a1b21d851d0a639"]
+    }
+  },
+  "cleanup": "Four superseded pytest-generated R24-49 site directories and six interim debugging screenshots were removed after final hashes and browser checks, releasing approximately 783 MiB; they are reproducible from the pinned test command. The final candidate, all 16 final screenshots, source slice and historical evidence remain.",
+  "open_items": [
+    "Exact provenance for the remaining 3599 rows and all other B domains is not closed.",
+    "No cross-browser WebKit result or every-physical-page 4-by-4 visual acceptance is claimed.",
+    "The full related set is preserved, but semantic qualification for joint numeric axes and multilingual title editing remain separate scientific and UX checks.",
+    "This site is an immutable development candidate, not the old project's current generation or a released 24-portal matrix."
+  ]
+}

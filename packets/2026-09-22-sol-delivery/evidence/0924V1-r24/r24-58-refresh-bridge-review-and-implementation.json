@@ -1,0 +1,45 @@
+{
+  "schema_version": "0924V1-R24-58-1",
+  "scope": "W04/W07 read-only candidate bridge identity; no current switch",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "independent_review": {
+    "route": "codebuddy/deepseek-v4.1-flash/max",
+    "reviewed_artifact": "R24-45 v3, not the new v4 implementation",
+    "judgment": "bounded PASS only for the frozen read-only candidate",
+    "tool_limit": "Bash and SQLite unavailable to reviewer; no reviewer SHA recomputation or DB query",
+    "report": "runs/conference/ci-0924-r24-45-refresh-bridge-review-20260926/evidence_single_object.md",
+    "report_sha256": "18de9367bb4509777e2eaf76fd61e6735cdc5447df3740297ab070fec1e7c344"
+  },
+  "implemented_p1": [
+    "Explicit observations -> additional_observations mapping; unknown collection fails closed",
+    "Frozen old/new sidecar, project DB, epoch receipt and delta-tool hashes enforced before assessment",
+    "Old epoch receipt ties old sidecar to a pinned snapshot; every selected binding must name that snapshot",
+    "Actual snapshot bytes and input/code bytes rechecked before a new output is created"
+  ],
+  "red": "test import of missing identity functions rejected; fixed real replay initially rejected an incorrect 32-character snapshot-ID assumption before correcting to stable_id's 24-character identity",
+  "green": {
+    "focused_tests": "6 passed in 0.18s; includes fixed real 4412-atom replay, fixture negative pins and epoch mismatches",
+    "ruff": "passed for changed tool and test",
+    "strict_mypy": "passed for changed tool",
+    "git_diff_check": "passed",
+    "old_project_db_sha256_after": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "v4_artifact": {
+    "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-58-current-a-refresh-bridge-readonly-v4.json",
+    "sha256": "b419dc5e244d182b53b7434157dd67a9a160eba3c67dd4297129b463f9986988",
+    "a_exact_path_candidates_not_accepted": 18,
+    "b_rebuild_required": 1,
+    "hypothetical_user_edit_three_way_required": 1,
+    "safe_to_switch_current": false
+  },
+  "code_sha256": {
+    "tools/audit_current_a_refresh_bridge.py": "12e871fbcd6f81f85395b001183deec414ef7e4fc18ae469fd97867acdff8991",
+    "tools/audit_a_payload_drift.py": "0fa6574cf07f89d1de64cdef996f7932ea69a3c2047ec60e71f4c37a668da9f1",
+    "tests/integration/test_r24_a_refresh_bridge.py": "8ea89bcc690236f237eb6e07e240a5d02b086ebedbca10d6570e95eea8a27c6c"
+  },
+  "open": [
+    "P2 extra source atom fields and non-edit supersedes lineage still need fail-closed handling",
+    "P2 duplicate/dropped binding telemetry, WAL-after-read, page-change interpretation remain",
+    "No real old-current refresh transaction, A/B/C rebuilt current, medical acceptance, Ego Lite browser or release acceptance"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-54",
+  "status": "b_unknown_group_product_boundary_development_pending_independent_and_visual_review",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_basis": {
+    "r24_50_receipt": "evidence/0924V1-r24/r24-50-two-study-source-safety-development.json",
+    "r24_51_receipt": "evidence/0924V1-r24/r24-51-real-b-safety-current-development.json",
+    "raw_ctgov_page_sha256": "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be",
+    "explicitly_unknown_relation_in_the_two_selected_studies": 90
+  },
+  "finding": "B's projection previously ignored the A candidate's explicit group_assignment_state=unknown and could present the group's number as a named product's plottable result. Its product table cell and evidence drawer could also link an unassigned group to that product. The shared chart status label mapped a published but unplottable result to '未公开'.",
+  "change": {
+    "scope": "Only efficacy/safety rows explicitly marked unknown; unassessed legacy rows are not silently reclassified.",
+    "row": "Keep trial, group, reported numeric value, disclosure and evidence-panel access; label group-to-product relation as pending; mark numeric projection not renderable with a machine-readable reason and human explanation. Most fact-level source traces remain unverified.",
+    "links": "Do not link an explicitly unknown group to the study product from B table or evidence drawer; retain the trial/source routes.",
+    "shared_chart": "Reported but unplottable statuses now retain 已报告值/已报告零值 rather than becoming 未公开.",
+    "report_b_renderer_sha256": "8f392b19ed674d8792f388fa1be999f1ba655679df437e3e882d394ae5f2bbe9",
+    "report_b_js_sha256": "e2e4b53ad6c8cfc4dd68182191f24b4c0f44884794b0a02d4b28cc1082988557",
+    "shared_charts_js_sha256": "636256cc11c664d2a67367fdb0ab3cb69b1aea89352fcbb3c7383f7632de61d3"
+  },
+  "isolated_real_candidate": {
+    "relative_path": ".artifacts/r24-54-b-arm-identity-20260926/pytest-real-accepted-candidate/test_two_real_safety_counts_sh0/safety-a-b-candidate",
+    "current_revision": 1,
+    "current_bundle_sha256": "da761ae5574c313d61b931a9d5c694ff02af1790ebb1594a68df20573633569e",
+    "database_sha256": "21a28ce2ad7bdff7b2f360a41b7304cb5835295808019235cf431ed1ab839579",
+    "b_current_safety_page_sha256": "c7d578ff45279ddcf2aa7528583d4f38918e87a4e21fc90144bfa34c9b5a42e4",
+    "b_current_safety_unique_rows": 514,
+    "explicit_unknown_relation_rows_in_full_b_pool": 414,
+    "unknown_unplotted": 414,
+    "unknown_reported_numeric_value_visible_in_evidence": 414,
+    "unknown_evidence_rows_without_false_product_link": 414,
+    "unknown_kept_as_reported_not_missing": 414,
+    "same_counts_in_development_and_user_revision_1": true,
+    "old_actual_project_database_sha256_unchanged": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "checks": {
+    "red": "B omitted group_assignment_state in its chart rows; initial synthetic regression failed.",
+    "final_synthetic_batch": "8 passed in 2.32s; both efficacy and safety unknown cases covered",
+    "final_real_chain": "1 passed in 120.87s; two CT.gov studies, A+B source binding, user revision and rollback behavior retained",
+    "read_only_full_pool_audit": "On both development and current B pages, all 514 safety IDs are present and all 414 explicitly unknown rows remain reported, unplotted, numeric-visible and without a product evidence link; this is not fact-level source verification.",
+    "ruff": "All checks passed on src tests tools",
+    "strict_mypy": "Success: no issues found in 251 source files",
+    "node_syntax": "report-b.js and charts.js passed",
+    "asset_mirror": "ASSET_MIRROR_OK",
+    "git_diff_check": "passed",
+    "ego_lite_current_visual": "NOT_RUN: local file URL browser control was explicitly rejected in R24-52; no alternate UI workaround attempted",
+    "independent_scientific_review": "PENDING: impact on 414 full-pool rows requires a frozen-candidate review before scientific/visual acceptance"
+  },
+  "cleanup": "After confirming exact English-repo targets, no Git tracking or receipt references and inspecting symlink presence (rm -r did not follow links), intermediate R24-54 red/green/failed/passing test trees totaling approximately 730 MiB were deleted. Final synthetic and real candidates remain. Removed test scratch is not recoverable in this workspace but can be rebuilt from the tests.",
+  "limits": [
+    "Unknown group-product relation is not a missing value or a proof that the original source is wrong; trial and group evidence remain available.",
+    "Only 2/514 safety rows in this candidate carry the new precise source chain; source closure remains blocked.",
+    "The large 414-row presentation change has no current Ego Lite visual, cross-browser or independent science acceptance; do not claim B quality or RC PASS.",
+    "The saved 0/15 to 1/15 change is a development hypothesis, not a clinical correction."
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-57",
+  "status": "fixed_50_study_b_safety_source_view_development_not_current_or_release",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source": {
+    "mode": "fixed_2026-09-06_ctgov_cas_offline_replay_not_live_check",
+    "project_relative_path": ".artifacts/r24-pnh-auto-binding-full-20260926",
+    "prior_receipt": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-22-source-consumer-current-config.json",
+    "source_receipt_sha256": "67b55385f6d6f34405068517a3ecf66962098767a7c387aa84be089d82a90ea1",
+    "a_bound_input_sha256": "9a13e4b867e0f27341a616409bdd179851d8467cf7b6cf411a04d54f5b39b45d",
+    "evidence_snapshot_id": "evidence-snapshot_df4bb81e97d8f0eae2fb3f7a",
+    "evidence_snapshot_sha256": "0443339f94cdb54678e213182afaa82db4c6b4285656d880a7198f57964ec14d",
+    "database_sha256_before_and_after": "a1434296bff630e187a4fe1357a44708ba60ffe3101512e452cbe46a99699c12",
+    "source_versions": 50,
+    "source_fact_versions": 5839,
+    "direct_claim_versions": 4412,
+    "source_issues_missing_not_zero": 79
+  },
+  "candidate": {
+    "b_safety_related_rows": 514,
+    "original_quote_source_version_precise_locator_rows": 514,
+    "unknown_arm_product_rows": 414,
+    "candidate_declared_arm_product_rows_without_safety_consumer_registration": 100,
+    "source_unit_display_normalizations": {
+      "Percentage of participants_to_percent": 15,
+      "Events_to_count_of_events": 12,
+      "condition": "Original unit, metric, measure object and NUMBER paramType all match the narrow map; no rate or denominator is computed. Ambiguous Proportion of participants is not admitted by this map."
+    },
+    "new_b_edit_consumer_bindings": 0,
+    "rendered_b_safety_page_sha256_in_rebuildable_test_site": "44e65d11319f3b247fc566cd59a18b3a146869ceb36d4541e7561bdd159b2d2c",
+    "page_profile": "514/514 unique safety chart-payload and evidence-view rows; 514/514 source_trace_state located; 414/414 explicit unknown have no product evidence link and are not product-plottable. Full table browser interaction was not run."
+  },
+  "verification": {
+    "red": "The full 50-study production-function regression failed at safe-364 because the prior two-study-only source-unit equality rejected explicit Percentage of participants; one read-only 514-row audit found exactly 27 unit-display mismatches (15 explicit percentage, 12 Events), no endpoint/time/class mismatch.",
+    "green": "3 passed in 100.03s: full 50-study B safety render and adjacent two-study source projection",
+    "ruff_changed_files": "passed",
+    "strict_mypy_src_tools": "passed, 251 source files",
+    "git_diff_check": "passed",
+    "production_registry_sha256": "bf4952295587997b3f512214c4cce5c34a53e533b5e38b7b3b0e22a63b180fc4",
+    "full_pool_test_sha256": "8af4e251e57c888781d93a162deea632bd436de8d90b7e7d433490437ec61eab"
+  },
+  "limits": [
+    "514 located rows prove a source version, exact original quote, numeric value and precise field locator against the fixed locked CT.gov snapshot; they do not prove scientific acceptance, current freshness or universe completeness.",
+    "The original source's 414 unknown arm-product relationships remain unknown. The other 100 are candidate-declared only; this fixed project registered no A or B safety edit consumers and does not authorize a user edit.",
+    "The test rendered B safety from a complete source-view model; the full B input was not committed/current or packaged. The prior R24-55 normal materialize option was proven for two studies only.",
+    "No actual Ego Lite visual run was possible after the local file URL control was rejected; browser product acceptance is NOT_RUN. An independent medical/scientific challenge of this widened source-unit and arm-identity boundary is PENDING.",
+    "China, commercial, publications, regulatory status, full B multi-domain sources, current refresh, three-host distribution and 24 real portals remain open."
+  ],
+  "rebuild": ".venv/bin/python -m pytest tests/integration/test_r24_full_b_safety_source_view_projection.py -q"
+}

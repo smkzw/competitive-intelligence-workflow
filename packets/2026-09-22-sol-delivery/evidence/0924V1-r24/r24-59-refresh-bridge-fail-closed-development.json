@@ -1,0 +1,35 @@
+{
+  "schema_version": "0924V1-R24-59-1",
+  "scope": "W04/W07 read-only source-atom and supersedes fail-closed diagnostic",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "changed": [
+    "Reject an unrecognized row_source_map field before unchanged-atom classification",
+    "Reject an old bound fact which reaches the active set through a non-edit supersedes edge instead of silently dropping it",
+    "Recheck for an SQLite WAL after the immutable read"
+  ],
+  "red": "2 failed, 4 passed in the focused family; both failures were the intended unknown-field and non-edit-supersedes counterexamples",
+  "green": {
+    "focused_tests": "6 passed in 0.23s including pinned fixed-real 4412-atom replay",
+    "ruff": "passed for changed tool and tests",
+    "strict_mypy": "passed for changed tool",
+    "git_diff_check": "passed",
+    "old_project_db_sha256_after": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "v5_artifact": {
+    "path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-59-current-a-refresh-bridge-readonly-v5.json",
+    "sha256": "62721dfe8521636447888999b5e8adb58d2744bfac683a4848a63b27ff985ce4",
+    "a_exact_path_candidates_not_accepted": 18,
+    "b_rebuild_required": 1,
+    "hypothetical_user_edit_three_way_required": 1,
+    "safe_to_switch_current": false
+  },
+  "code_sha256": {
+    "tools/audit_current_a_refresh_bridge.py": "cdb115508108d5c12a69e244ac17b9f34df236656379b6715d6b309ad6ef1a2e",
+    "tests/integration/test_r24_a_refresh_bridge.py": "608006521c5ced28863a1f6e58c53420f905712fe3dafa1180cb7aea88b38342"
+  },
+  "open": [
+    "Duplicate/dropped-binding telemetry and scientific interpretation of changed source pages",
+    "Race remains possible if a WAL is created and removed entirely between checks",
+    "No real current refresh transaction, B/C rebuild, medical, browser or release acceptance"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "work_item": "R24-42 W02/W03/W07 pinned current CT.gov A candidate and exact result-atom delta",
+  "status": "development_candidate_not_accepted_or_current",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_set": {
+    "capture_receipt_sha256": "8fc674005ecccc61815fa8ca41862e51865a40b9028cf0d69f5abaaf056b7e1d",
+    "raw_page_sha256": ["342612879ac3dcab9c4fa226133a85fbe4d7dafe9ce426483f7e211f280177f9", "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be"],
+    "alias_map_sha256": "2bc88b7f9286d8398c2cf1ff23f58e27781963bac5765791f93fc528cb97b5d4",
+    "builder_sha256": "e62c7e2a5c94d513b9d6e9d7734b6b07ec2a23c9846a0ff1f63f8fc64135d7a0",
+    "delta_tool_sha256": "0fa6574cf07f89d1de64cdef996f7932ea69a3c2047ec60e71f4c37a668da9f1"
+  },
+  "retained_artifacts": {
+    "project": ".artifacts/r24-pnh-current-ctgov-20260926",
+    "old_a_payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "old_a_sidecar_sha256": "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09",
+    "new_a_payload": "report-a-ctgov-20260926-stable-ids-v3.json",
+    "new_a_payload_sha256": "42630cc2c4417189a799993af23c25c636106b31526dffab1a7938a22d7b6af4",
+    "new_a_sidecar": "report-a-ctgov-20260926-stable-ids-v3.derivation.json",
+    "new_a_sidecar_sha256": "1c09fe5df172e92035485986e881c2cad34bcad255aaa0777641ab93d4735e29",
+    "exact_delta": "a-payload-drift-exact-20260926-v3.json",
+    "exact_delta_sha256": "af169541341d11b15ef6afdb7ff05c95b4a85535e4f52ef7af59b940f09ab1ce"
+  },
+  "changes": [
+    "The generic builder now selects only the byte-verified complete acquisition pages named by a receipt, and rejects mixed CAS without a receipt.",
+    "A result row ID is derived from NCT, exact source path and semantic context, not cursor/page order; a numeric value change alone keeps the logical row ID. Existing old snapshots are not rewritten or auto-migrated.",
+    "The source-delta diagnostic joins exact NCT and JSON path, reports row-ID bridge and modified source fields, and rejects duplicate path keys rather than first-winning.",
+    "The new candidate no longer hard-codes 2026-09-06 as its unverified regulatory placeholder date or falsely asserts a China route was blocked."
+  ],
+  "observed": {
+    "official_query_records": 190,
+    "new_a_products": 45,
+    "old_a_drug_trials": 140,
+    "new_a_drug_trials": 141,
+    "new_trial_id": "NCT07816237",
+    "new_trial_status": "NOT_YET_RECRUITING",
+    "new_trial_phase": "PHASE3",
+    "efficacy_rows": 3617,
+    "safety_rows": 514,
+    "additional_observations": 281,
+    "exact_old_and_new_result_atoms": 4412,
+    "exact_atom_unchanged": 4412,
+    "exact_atom_modified": 0,
+    "exact_atom_added": 0,
+    "exact_atom_withdrawn": 0,
+    "source_page_hash_changed_for_existing_atoms": 4412,
+    "new_product_level_change": "VSA012 highest registry phase I to III from the newly captured trial; displayed sponsor/developer text also changes from the old single sponsor to the new trial sponsor and requires separate attribution review.",
+    "display_only_diagnostic_ambiguous_keys": 342
+  },
+  "checks": {
+    "focused_test_batch": "13 passed; integration tests for receipt selection, study order/value-stable row IDs, exact source delta, source measure context and adjacent A builder contracts",
+    "ruff": "passed for two changed tools and three changed test files",
+    "mypy": "strict passed for two changed tools with MYPYPATH=src",
+    "git_diff_check": "passed",
+    "new_candidate_schema_validation": "ReportAPortalData valid; 45 products, 141 trials, 3617 efficacy, 514 safety, 281 additional observations"
+  },
+  "not_done": [
+    "Source and product-universe adjudication of the new trial, China/regulatory/publication corroboration and independent omission review.",
+    "A sponsor is not automatically the sole developer; do not publish the product-level attribution change without source review.",
+    "The exact-path bridge is diagnostic only. Historical ordinal row IDs, saved user edits and consumer bindings have not been migrated or validated on the new candidate.",
+    "No B/C current-source rebuild, adopted source fact delta, current switch, full browser matrix, three-host install or 24-portal acceptance."
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "work_item": "R24-41 W07 current ClinicalTrials.gov PNH acquisition and bounded raw-record delta",
+  "status": "source_capture_complete_universe_and_facts_not_accepted",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_code_sha256": {
+    "src/ci_workflow/sources/connectors/ctgov_fetch.py": "eaa953115faabb05ff818ae2e89de764d7e619651bf4da93d39729570edd92fc",
+    "src/ci_workflow/sources/connectors/clinicaltrials_gov.py": "50914158fda6fd8887311018f81b440f9ce58f750f63449e87b7bead4db7d0b0"
+  },
+  "command": "uv run ci-workflow project create --root .artifacts/r24-pnh-current-ctgov-20260926 --indication 'Paroxysmal Nocturnal Hemoglobinuria' --reports A,B,C; uv run ci-workflow research fetch-ctgov --root .artifacts/r24-pnh-current-ctgov-20260926 --condition 'Paroxysmal Nocturnal Hemoglobinuria' --page-size 100 --max-pages 10",
+  "retained_project": ".artifacts/r24-pnh-current-ctgov-20260926",
+  "retained_size_approx": "12 MiB of content-addressed raw pages, derived records and receipt; ignored local source evidence, not a Skill bundle or report",
+  "capture_receipt_sha256": "8fc674005ecccc61815fa8ca41862e51865a40b9028cf0d69f5abaaf056b7e1d",
+  "capture_receipt_relative_path": "evidence/raw/sha256/8f/8fc674005ecccc61815fa8ca41862e51865a40b9028cf0d69f5abaaf056b7e1d.bin",
+  "query": "Paroxysmal Nocturnal Hemoglobinuria",
+  "acquisition": {
+    "source": "ClinicalTrials.gov public API v2 current records",
+    "status": "complete",
+    "pagination_complete": true,
+    "temporal_scope": "current_records",
+    "total_count": 190,
+    "derived_record_count": 190,
+    "pages": [
+      {"page_number": 1, "acquired_at": "2026-09-26T10:00:31.217992Z", "study_count": 100, "raw_sha256": "342612879ac3dcab9c4fa226133a85fbe4d7dafe9ce426483f7e211f280177f9"},
+      {"page_number": 2, "acquired_at": "2026-09-26T10:00:33.226225Z", "study_count": 90, "raw_sha256": "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be"}
+    ]
+  },
+  "fixed_prior_capture": {
+    "label": "2026-09-06 fixed CAS; offline historical development input, not historical-as-of proof",
+    "total_count": 189,
+    "raw_page_sha256": ["c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3", "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98"]
+  },
+  "raw_delta": {
+    "query_set_additions": ["NCT07816237"],
+    "query_set_removals": [],
+    "new_study_public_url": "https://clinicaltrials.gov/study/NCT07816237",
+    "new_study_first_posted_date": "2026-09-11",
+    "new_study_current_registry_status": "NOT_YET_RECRUITING",
+    "changed_existing_records_after_excluding_platform_versionHolder": 12,
+    "changed_existing_ids": ["NCT01174108", "NCT02946463", "NCT03329365", "NCT03520647", "NCT03531255", "NCT04645199", "NCT05744921", "NCT05776472", "NCT06154512", "NCT06606314", "NCT06633536", "NCT07657052"],
+    "section_level_diff": "11 existing studies have protocolSection module changes, one has only a derivedSection change after removing versionHolder; none of the 12 has a changed resultsSection in these two raw captures. Eight statusModule objects differ, but only one overallStatus string changed.",
+    "one_observed_status_change": {"nctId": "NCT03329365", "prior": "UNKNOWN", "current": "ACTIVE_NOT_RECRUITING", "current_last_update_posted": "2026-09-18"},
+    "comparison_method": "Join the two complete raw cursor chains by NCT ID; ignore only derivedSection.miscInfoModule.versionHolder when comparing existing study records, because the provider advances that platform-wide field on otherwise unchanged studies. Original raw CAS bytes remain unmodified. Scientific source version code already excludes the holder; this check did not classify the other 11 raw deltas as clinically meaningful."
+  },
+  "limitations": [
+    "Complete pagination is not a closed innovator competitor universe; alias, target, company, China, regulatory, publication and independent omission searches remain open.",
+    "The old fixed capture is not proof of what a user knew on any requested historical cutoff date.",
+    "No new A/B/C payload, adopted fact diff, user edit merge, independent scientific review, browser portal or current generation was produced from this new acquisition.",
+    "The 12 changed raw study records need fact-level added/modified/withdrawn classification before entering report delta or source version acceptance."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "task": "R24-36 W05C overview first-screen desktop density",
+  "status": "local-fixture-visual-slice-passed-not-release",
+  "head_at_start": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "input": "fixtures/positive/c-atopic-dermatitis/inputs/report-data.json",
+  "input_sha256": "a59d7f88b3d8a2e163422c01f0d0981aa64bf2610cc6bb41852c58e9561ed2e6",
+  "author_css": "src/ci_workflow/renderers/portal/assets/report-c.css",
+  "author_css_sha256": "1fd06839fff5bff6c9605f5c63163c21fdcda07a6c35d1afdf465b46b2eab2e9",
+  "author_js": "src/ci_workflow/renderers/portal/assets/report-c.js",
+  "author_js_sha256": "9fee42f32cb3cdc9ad423620271ca9af56eeffd316b3786ec6d2cdecc9d4c65c",
+  "ordinary_preview": "output/playwright/r24-36-c-desktop-preview",
+  "ordinary_preview_overview_html_sha256": "d09ffd74fe0151bf1daf09923f5a6857185a7cf381e87db8b2882a23dc4a6db7",
+  "browser": "Ego Lite on the ordinary C renderer output, viewport height 960",
+  "first_visual_top_px": {
+    "before_1440": 592,
+    "after_1440": 489,
+    "after_1600": 465,
+    "after_1920": 465,
+    "after_2560": 444
+  },
+  "observations": [
+    "Three original conclusion items remain unchanged but are displayed beside one another at desktop widths; 1440px conclusion height fell from 158px to 90px without reducing their font size or hiding text.",
+    "The first design-fact comparison at 1440px starts 103px higher; at 2560px the ordinary C main canvas is 2208px wide. No document horizontal overflow occurred at 1440/1600/1920/2560.",
+    "The four-study core matrix formerly fixed text to 86px and 12px within roughly 295px cells. On ordinary pages at 1440px, the new computed label width is 274px and chart/axis text is 14px; at 1600/1920/2560 the capped label width is 300px. The NCT axis labels are horizontal and none of the three affected C page families horizontally overflows at four widths.",
+    "After a same-page viewport sequence 2560→1440→1600→1920→2560→1440 and layout settling, the same ECharts instance recalculated label width 300→274→300→300→300→274 through container observation. A filtered one-trial state kept 14px text, a 300px label and no overflow.",
+    "The filter details still exposes 49 option buttons. The real matrix source button for c-nct02260986-population opened its evidence drawer, and Escape returned focus to the same row trigger; a chart glyph click after resize also opened its corresponding source and Escape focused the chart canvas.",
+    "Ego Lite initially refused clicking an off-viewport matrix button; scrolling the actual trigger into view resolved it. This was a test-operation issue, not a page defect."
+  ],
+  "screenshots_sha256": {
+    "output/playwright/r24-36-c-overview-1440-before.png": "3528efaf88fbb070cdebc77171cf961972e554c6459eb4850bc6364b7463ea92",
+    "output/playwright/r24-36-c-overview-1440-final.png": "290f670a86b1f9ab32787067c6ebb9b69d0db3fc7c63b3ec86dfd2a536a9f915",
+    "output/playwright/r24-36-c-overview-2560-final.png": "88b13f0f97b3fe1ffd0b5604c11e2f74bc347d27f78120d9be21d103b04c433b",
+    "output/playwright/r24-36-c-chart-1440-final.png": "5a57b552e60366177aaedd3be7197cfb40487887a0b9862867656f615394bb2d",
+    "output/playwright/r24-36-c-chart-2560-final.png": "7518d819d32d961b4fe193e59af4c8dd43ec0f579b7af00da72349b915e2f88e"
+  },
+  "checks": [
+    "The rendered site's report-c.css and report-c.js are byte-identical to the author resources; JavaScript syntax checked.",
+    "git diff --check passed; no shared asset mirror/manifest update or full gate was attempted during the concurrent R24-29 manifest write."
+  ],
+  "limitations": [
+    "This is one fixed atopic-dermatitis C fixture, not a current real-source design-precedent research project.",
+    "Only the C overview default, filter expansion and one source-return path were checked; other C pages and four-state/cross-browser release matrix remain open.",
+    "The chart itself remains tall, so moving the start upward is a local first-screen improvement, not full chart-density acceptance."
+  ]
+}

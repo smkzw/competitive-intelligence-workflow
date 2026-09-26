@@ -1,0 +1,59 @@
+{
+  "work_item": "R24-37 W05B sparse desktop cards and single safety observation",
+  "status": "development_candidate",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/charts.js": "ac019400054152a3b48c9a5a05ba3940d59940fd6801b81ffbe1618b610e5016",
+    "src/ci_workflow/renderers/portal/assets/report-b.css": "4255e91387d66dd1c36b0d4a45a6ad7a9d53c61349a3e7d16e64ef44810e59d7",
+    "src/ci_workflow/renderers/portal/templates/b/page.html.j2": "275296d0941c91ee00863a8308af823603f2805dba8f9b4566613168ca3ac51d"
+  },
+  "preview_contract": "Copied earlier ordinary B-rendered synthetic AD and fixed offline PNH sites into an isolated temporary browser preview; replaced only report-b.css and charts.js with current author bytes. The B renderer was under a separate in-flight source-trace repair, so this is asset behavior, not a fresh current-source B render or a current clinical evidence verdict.",
+  "baseline_1440": {
+    "synthetic_efficacy_first_visual_y": 434,
+    "first_card_y": 552,
+    "first_table_y": 888,
+    "synthetic_safety_first_table_y": 793,
+    "synthetic_safety_single_observation": "a full-width heatmap normalized to its own 5.1% maximum"
+  },
+  "after": {
+    "synthetic_efficacy_first_visual_y": 388,
+    "first_card_y": 494,
+    "first_table_y": 830,
+    "synthetic_safety_single_observation": "compact original 5.1% fact row with a source button and complete-table entry; no independent color scale",
+    "synthetic_safety_first_table_y": 632,
+    "synthetic_safety_single_fact_count": 16,
+    "fixed_offline_pnh_safety": {
+      "heatmaps_with_multiple_observations": 8,
+      "single_fact_groups": 4,
+      "group_count": 12
+    }
+  },
+  "ego_lite": {
+    "task_space": 8,
+    "desktop_widths_css_px": [1440, 1600, 1920, 2560],
+    "synthetic_efficacy_page_horizontal_overflow": [0, 0, 0, 0],
+    "filtered_synthetic_efficacy_visible_groups": 1,
+    "filtered_efficacy_source_button": "68.4 source drawer opened; Escape returned focus to the same value button",
+    "fixed_offline_pnh_single_safety_button": "safe-appoint-t-2 source drawer opened; Escape hid the drawer and returned focus to the same button",
+    "adjacent_b_pages_checked": ["overview", "safety", "baseline-overview", "efficacy-safety-matrix"],
+    "adjacent_page_widths_css_px": [1440, 2560],
+    "adjacent_page_horizontal_overflow": 0,
+    "screenshots": {
+      "output/playwright/r24-37-b-density-1440-final.png": "cda0d87e6581dea271e38e469c5512d54f6d89f9f4fb42dbbb51a71bc35fcc10",
+      "output/playwright/r24-37-b-density-2560-final.png": "7c0c312dd6d739aa41a1bcf546b6fd7dbb1e1d95d08cec134fc9721b15e2181e",
+      "output/playwright/r24-37-b-safety-1440-final.png": "2e6858d0aa6141332829040a71a945ea031af0ce7f0ce29cfe71825422742cd1",
+      "output/playwright/r24-37-b-safety-single-fact-1440.png": "cbf5d49b0d5ece2e0ed6b7bf48d85a7991e89dcf928cd91bae77d79f54501864"
+    }
+  },
+  "checks": {
+    "node_check_charts_js": "passed",
+    "git_diff_check": "passed",
+    "test_r13_visual_contract_static": "10 passed, 1 failed: a C-source static phrase assertion while R24-29 was editing report_c.py; not a B slice PASS and not repaired concurrently",
+    "full_gate": "not_run_while_R24-29_shared_source_repair_is_in_flight"
+  },
+  "open": [
+    "After R24-29 terminates, mirror author assets and update the single asset manifest without overwriting the worker's manifest edits, then regenerate an ordinary B site from current source.",
+    "Repeat source-trace, multi-observation heatmap, sparse/dense/filtered/sidebar and cross-browser checks on the integrated candidate; do not infer science acceptance from this fixed preview.",
+    "Resolve the in-flight C static assertion from actual source-trace behavior, not by restoring stale prose solely for a text test."
+  ]
+}

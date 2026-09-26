@@ -1,0 +1,50 @@
+{
+  "schema_version": "0924V1-R24-48-1",
+  "scope": "W06 committed-current A-only, B-only and A+B offline share; development proof only",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "execution": {
+    "role": "long_horizon_code_executor",
+    "agent": "zcode",
+    "runtime_model": "GLM-5.3-Flash",
+    "observed_effort": "max",
+    "runner_exit": "ok; one completed round; no fallback",
+    "guard_audit": "passed; declared worker output nonplaceholder",
+    "report": "runs/execution/ci-0924-r24-48-current-source-share-20260926/worker_01.md",
+    "report_sha256": "21452acd251080aa17b9ee382db9d3f9feedb1b349f9ab2725d96356ee664ffc"
+  },
+  "input": {
+    "relative_project": ".artifacts/r24-46-browser-rerun-20260926/test_current_capture_has_legit0/current-source-ab-development",
+    "current_revision": 1,
+    "current_generation_sha256": "528a27ad7aee6ec02b5ee1857eafa9f5ff10c00562d702a5781777bf5cb7f5b7",
+    "user_value_is_hypothetical_not_medical_correction": "90.1",
+    "original_source_quote": "92.2"
+  },
+  "implementation": {
+    "share_export_changed_by_worker": false,
+    "new_test": "tests/integration/test_r24_current_source_share.py",
+    "new_test_sha256": "e3ecbd6e99c060d29d76aeb23f90836dd8ab988e3a3c17d88f17e6d1d58a7699"
+  },
+  "zip_sha256": {
+    "a_only": "316c716d1637f11b6b4a39b27e12727d38a0460ea1b9d764413fc619e141dda5",
+    "b_only": "056f9575406ed608316e8942e08524267869703a473fea2327e852bd74bb3ba7",
+    "a_plus_b": "2914d5ff3fcd1ff8cac1302f34f891601ab784bf047fb4329921d4eb5423e5e0"
+  },
+  "checks": {
+    "worker_focused": "2 passed/19.57s",
+    "worker_adjacent": "6 passed/48.89s",
+    "codex_independent_focused": "2 passed/19.00s",
+    "ruff": "passed",
+    "strict_mypy": "passed for share_export.py",
+    "manifest_and_member_hashes": "passed for all three selected-report variants",
+    "stale_config_rejected_without_output": true,
+    "moved_directory_static_resource_closure": "passed",
+    "remote_runtime_dependency_scan": "passed, external CT.gov source links still need network",
+    "ego_lite_new_browser_offline_visual": "NOT_RUN; local file URL control was rejected and not bypassed"
+  },
+  "limits": [
+    "No C report is in this pinned A+B project, so this is not the A/B/C joint share acceptance",
+    "No actual fresh-browser offline visual or interaction check; static relocation is not a substitute",
+    "The 90.1 value is a test hypothesis and the source quotation remains 92.2; no medical correction or scientific release acceptance",
+    "No fresh-install, three-host, 24-portal or RC acceptance"
+  ]
+}

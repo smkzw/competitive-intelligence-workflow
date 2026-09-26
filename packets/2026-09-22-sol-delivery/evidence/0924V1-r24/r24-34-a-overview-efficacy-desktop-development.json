@@ -1,0 +1,61 @@
+{
+  "task": "R24-34 W05A overview/efficacy/safety desktop density",
+  "status": "local-visual-slice-passed-not-release",
+  "head_at_start": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "a3b01df77a5935fbb10d551211e04b5a1dc2e15a92b78c0d53e3fd7b9179fd19",
+    "src/ci_workflow/renderers/portal/assets/report-a.css": "2a80abc9f657b74943f6469da91ec0c0d399bdfbcadee7130ad38a149da4463c"
+  },
+  "preview": {
+    "directory": "output/playwright/r24-34-a-desktop-final",
+    "builder": "render_report_a_site(ReportAPortalData.model_validate(_high_load_payload()), Path('output/playwright/r24-34-a-desktop-final'))",
+    "overview_sha256": "b6bd1c3e6bf8c1c637ae40993d765f97248995bcf1667fce56d0feac9b5a22f2",
+    "safety_page_sha256": "f4cba534ce6d0762525af724ff1d5ba12b75416a78b3387914e9c0975bb7ca7f",
+    "input": "synthetic 45-product high-load fixture with four plottable efficacy product groups"
+  },
+  "browser": "Ego Lite; direct ordinary rendered file pages; actual 1440/1600/1920/2560 CSS px, height 960",
+  "overview_first_efficacy_card_height_px": {
+    "before_1440": 670,
+    "after_1440": 430,
+    "after_1600": 432,
+    "after_1920": 432,
+    "after_2560": 432
+  },
+  "safety_chart_height_px": {
+    "before_1440": 1654,
+    "after_1440": 1128,
+    "after_1600": 1128,
+    "after_1920": 1075,
+    "before_2560": 1548,
+    "after_2560": 846
+  },
+  "observations": [
+    "At 1440 and 1600 the four groups occupy two readable columns; groups are 670 and 750 CSS px wide respectively, with no local or document horizontal overflow.",
+    "At 1920 and 2560 the existing two-column behavior remains; the four groups remain individually accessible.",
+    "At 1440 the overview's next safety section enters the first 960px viewport; the efficacy physical page also shows all four plotted groups and its full-table disclosure entry in the first viewport.",
+    "Eight simple safety groups remain separately labeled and all 24 visible event cards remain accessible; they use two columns at all four desktop widths, with no group or document overflow.",
+    "An ordinary page regenerated from the fixed offline PNH builder input (SHA-256 0d8acf15...) contains 799 efficacy groups and 35 safety groups; 60 efficacy and 17 safety groups are visible on page one. At 1440px the efficacy grid decreases from 7870 to 4672px with 0 overflow among 60 rows, including long labels up to 139 characters. Complex safety is intentionally full-width (5506px, unchanged) because a blanket two-column probe increased it to 6418px and made long event labels less readable.",
+    "Clicking the first product in the ordinary efficacy page opens the correct product drawer; Escape closes it and returns focus to the same product trigger. Clicking safety row safe-fixture-teae also opens that product and Escape returns focus to the same safety button."
+  ],
+  "screenshots": {
+    "output/playwright/r24-34-overview-1440-final.png": "e5d96abd7ae09832d7e27e393c75a1b523a95029f1fb556bb68c0ea57e83b68f",
+    "output/playwright/r24-34-efficacy-1440-final.png": "ce4614af9280d80bfc1e38d436aec44477d986e50eab30fe13dca046be97da61",
+    "output/playwright/r24-34-safety-1440-final.png": "b990cc67969a4b065339aa9cceee215c3bdba22ae614dc33e05d9a87555e2ca6",
+    "output/playwright/r24-34-safety-2560-final.png": "eb7614c0382e89ec3f05af03dec6f07c7e19523cdd47effaf18441989f3196a8",
+    "output/playwright/r24-34-pnh-real-a-safety-1440-group.png": "5c65f416ef3cfccc765d7611b256c6a0953e66d3d3e7edae7c8aed2bfa86ad9b"
+  },
+  "fixed_offline_pnh": {
+    "input": ".artifacts/r24-pnh-real-ab-20260926/state/user-fact-builder-inputs/report-a-data.json",
+    "input_sha256": "0d8acf15ae64a925ebcef0e5688f504369185a43ff2c262ac38c61e8ad782a80",
+    "preview": "output/playwright/r24-34-pnh-real-a-desktop-preview",
+    "overview_sha256": "5d24c4810ad8275431d1c21535bb1a6ceed7658d3a0d16ae57e90f3124eee1eb",
+    "limits": "Offline historical CT.gov input, not today's refreshed global/China/publication set; rendered preview is not accepted/current."
+  },
+  "cleanup": "After confirming no packet references, removed two superseded generated previews (about 4.4 MiB) and 15 disposable inspect/probe screenshots (about 2.9 MiB). The final synthetic and fixed-offline-PNH previews and five final screenshots remain; deleted scratch is reproducible but cannot be restored in place.",
+  "limitations": [
+    "Synthetic improvement and fixed offline PNH long-label guard are not current clinical source review or complete A physical-page visual acceptance.",
+    "The large real safety page deliberately remains full-width at about 5506px for 17 visible groups; a separate dense high-complexity design remains open.",
+    "Only overview, efficacy and safety default desktop states plus two drawer/focus paths were inspected; full four-state and cross-browser matrix remains open.",
+    "The distribution mirror/manifest and full gate await concurrent R24-29 integration."
+  ]
+}

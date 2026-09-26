@@ -1,0 +1,50 @@
+{
+  "work_item": "R24-43 W03/W05B/W05C/W07 shared source-trace integration",
+  "status": "implementation_verified_locally_not_scientific_or_independent_acceptance",
+  "head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "execution": {
+    "packet": "runs/execution/ci-0924-r24-29-source-trace-closure-20260926/worker_01.md",
+    "observed_fallback": "cursor/default via pi-agent after CodeBuddy unavailability and Cursor Shell failure",
+    "underlying_model_identity": "unverified; runner summary and persisted fallback account differ",
+    "codex_integration": "Central serializer trace assertion, Python source_record label, B/C verbatim source text preservation, author/mirror/manifest synchronization and ordinary portal inspection",
+    "prior_independent_review": "R24-25 C03 FAIL retained; no new independent scientific PASS"
+  },
+  "source_sha256": {
+    "evidence_view.py": "f8a3bc7b5988e8356eab95f875c8472068f98e0840fb0b922f763ed59baaf9b6",
+    "evidence_drawer.py": "308678965cbcb90e7e74828a57f825e3610309d164866552cc8bf059b9478536",
+    "report_b.py": "21b9acf41576932f506735e8116cbadef1d5e8637e3a50112f2067ecf91aaa7e",
+    "report_c.py": "68eba16263a50986dc40c859ac7ae6af283a378b7576e14752e246e8170e42b9",
+    "evidence-drawer.js": "e6eafe02aa4935eb9cabd9e4350a0c55d8ae0bbe80bb159d1f9100b3de5f555e"
+  },
+  "ordinary_entry_previews": {
+    "b": {
+      "site": ".artifacts/r24-integrated-portal-20260926/b",
+      "sha256": "3065ba572041167220c2a222d94d8f736baa2eea4635a70a70263df292b4da1c",
+      "fixture": "fixtures/synthetic/a-complete/inputs/report-data.json",
+      "ego_lite_1600": "68.4 source drawer says unverified, retains reported value, does not invent version/quote/locator; Escape restores the triggering value button; page overflow 0",
+      "screenshot": "output/ego/r24-43/b-unverified-source-1600.png",
+      "screenshot_sha256": "c842db4764e99366916d799f4276773d00c98bd6536b6396c44740d6d64404fa"
+    },
+    "c": {
+      "site": ".artifacts/r24-integrated-portal-20260926/c",
+      "sha256": "ea303bc42f31f04ad6f156c6c13534c364b2c3c442eb42685d9c74686375a237",
+      "fixture": "fixtures/positive/c-atopic-dermatitis/inputs/report-data.json",
+      "ego_lite_1600": "NCT02260986 population fact drawer retains actual ClinicalTrials.gov URL, source original text and protocolSection.eligibilityModule.eligibilityCriteria; Escape restores the triggering matrix button; page overflow 0",
+      "screenshot": "output/ego/r24-43/c-located-source-1600.png",
+      "screenshot_sha256": "daa83064bc4aab3fa851d729fbe2fd868af6c1b285705e6c3521d2fa47d3b943"
+    }
+  },
+  "checks": {
+    "source_trace_focused_batch": "81 passed after Codex integration; scoped source/portal/A adjacency, not a science gate",
+    "quality_gate_after_r24_44": "GATE_OK quality-only: Ruff src/tests/tools; strict-mypy 250 source files; active unit/contract 1067 passed and 20 deselected; retained compatibility 20 passed; layer audit 7 passed; legacy path check passed",
+    "portal_asset_mirror": "author source, bundle mirror and manifest byte/digest verification passed",
+    "javascript_syntax": "passed for the changed author assets",
+    "diff_check": "passed"
+  },
+  "not_done": [
+    "Located means trace fields are present, not independently re-extracted or medically adjudicated; C03 original FAIL is not relabeled PASS.",
+    "The precision predicate and untrusted locator policy need a frozen independent re-review before scientific closure.",
+    "B fixture is synthetic and unverified; C fixture is a bounded example, not current complete clinical research.",
+    "No complete PNH B/C rebuild, multi-source source closure, all physical pages/four desktop states, cross-browser, 24 portals or RC."
+  ]
+}

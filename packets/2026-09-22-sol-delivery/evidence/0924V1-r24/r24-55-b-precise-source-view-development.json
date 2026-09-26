@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-55",
+  "status": "offline_two_study_b_partial_source_development_not_current_or_release",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "execution_choice": "Codex owns shared scientific identity; R24-45 independent review and R24-48 bounded execution remain separate in-flight nodes, with no duplicate dispatch",
+  "source": {
+    "mode": "fixed_2026-09-26_ctgov_cas_offline_replay",
+    "studies": ["NCT02264639", "NCT03829449"],
+    "prior_receipt": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-50-two-study-source-safety-development.json",
+    "locked_snapshot_id": "evidence-snapshot_0e9e695dcc4816a0274944fb",
+    "locked_snapshot_sha256": "569e68882b38554ca8b53778dfb26d3f5e7fcf2844f45c203467b38bb92d5a25",
+    "source_database_sha256_before_and_after": "6d9a4397d7741af8100d70e26ffe03534a93cae8633ca60c534cd77d3b081763"
+  },
+  "candidate": {
+    "b_partial_input_relative_path": ".artifacts/r24-55-b-source-view-20260926/b-partial-source.json",
+    "b_partial_input_sha256": "a476005d564948059a4c41799a684a3d118e6c3978fbed128e2ec4ae8d2aadc1",
+    "b_safety_related_rows": 514,
+    "exact_original_quote_locator_source_version_views": 92,
+    "unknown_arm_product_views": 90,
+    "declared_arm_product_views": 2,
+    "new_b_edit_consumer_bindings_from_projection": 0,
+    "rendered_b_safety_page_sha256_in_rebuildable_pytest_site": "9789d6d950a27530113873ca1c5ed436471be53360ffc60466d016d19e5aeacd",
+    "legacy_uncovered_safety_rows_remain": 422
+  },
+  "verification": {
+    "initial_red": "Focused integration import failed because the read-only source-view projection did not exist; a subsequent source-context RED exposed blank registry AE endpoint versus source-derived SAE/death label, now handled by explicit category-key-label mapping rather than loose matching.",
+    "adjacent_batch": "4 passed in 175.15s: source-view B render, two-study normal materialize B input, existing real A+B safety edit/rejection chain",
+    "after_final_type_guard": "2 passed in 47.72s: 92 located views, 90 unknown unplotted and unlinked, full 514-row B page, quote/version drift rejection, no B consumer or source DB mutation",
+    "ruff_changed_files": "passed",
+    "strict_mypy_src_tools": "passed, 251 source files",
+    "git_diff_check": "passed",
+    "production_registry_sha256": "2b4d14a542d3b59053f1582bca2b9308d12a92c8b38c3be06e4ba927f49d844a",
+    "materialize_tool_sha256": "74f7fdd6fa7a39723f42a82d028c4f5b000365fe0936ed92a00fce31ce867d94",
+    "source_view_test_sha256": "4bcbcad643a170a7bc59805aab1a07c8ad33d44898f0a4d13226a99db33501e1",
+    "two_study_test_sha256": "fe220ae44aa6f9bfe3515c8e244612f9b894576aba8b2f55adb1596c07ec4dda"
+  },
+  "resource_cleanup": {
+    "deleted": "Three exact pytest-2237 generated scratch directories, about 664 MiB; no fixed CAS, locked snapshot, historical receipt or current project was removed.",
+    "recovery": "Those scratch bytes cannot be restored in place, but the pinned two-study input, retained B JSON candidate and the focused tests deterministically rebuild them."
+  },
+  "limits": [
+    "The 92 exact records cover only two offline-replayed official studies; they are not a new live source check or accepted science.",
+    "A source locator and original quote do not prove unknown arm-product attribution; the 90 unknown rows remain non-comparable and non-editable. The separate R24-51 candidate registered only two legal B edit consumers.",
+    "The existing committed/current B report is not switched; this B input is a development candidate. The other 422 B safety rows in this 514-row pool remain without this batch's exact source view.",
+    "Ego Lite browser verification for this new B candidate is NOT_RUN after the local file URL control was rejected; no alternate interface was used. Independent medical/source review is PENDING.",
+    "No full developer gate, China/commercial/publication/universe closure, three-host packaging or 24-portal release acceptance was run."
+  ]
+}

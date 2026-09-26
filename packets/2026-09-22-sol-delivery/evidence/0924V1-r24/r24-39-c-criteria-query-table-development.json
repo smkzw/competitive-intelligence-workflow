@@ -1,0 +1,39 @@
+{
+  "work_item": "R24-39 W05C criteria precedent search/choice and complete-table identity",
+  "status": "development_candidate",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/report-c.js": "1b9f50ebe48c72ef1940da96a98eb1efbecc11aebbbac45cb43c0fdf9177afc7"
+  },
+  "site": {
+    "origin": "Earlier ordinary C-entry generated four-study atopic-dermatitis site; current author report-c.js copied into an isolated temporary preview. No source or historical page changed.",
+    "inclusion_page_sha256": "82059769e5316db4b13c14d23a8e850d1233f35d4a74cd4464e4bb1d8032ebfc",
+    "exclusion_page_sha256": "ea5d29f9ddab66b19fc0bb67e0a91bae75a4603ca4b9c24401712b76eefaf867",
+    "browser": "Ego Lite TaskSpace 8, page p1",
+    "viewport": "1600x900 CSS px",
+    "screenshot": "output/playwright/r24-39-c-criteria-query-1600.png",
+    "screenshot_sha256": "1793d02d8943f72058d76a305fe1fec49ded064d44e2b600ce3077c3e0d5f4bf"
+  },
+  "red": "On inclusion-criteria, searching NCT02260986 showed one precedent item but all four complete-table rows remained visible.",
+  "green": {
+    "inclusion_query": "NCT02260986 -> one grid item, same one complete-table row, one status count, criteria_q persisted; search kept focus.",
+    "clear_query": "Four grid items and four table rows restored; criteria_q removed.",
+    "study_choice": "Hiding NCT02260986 -> three grid items and three table rows, criteria_hide persisted after reload.",
+    "global_intersection": "product=dupilumab -> one grid/table row; searching an unmatched other trial -> zero/zero; clearing local query -> one/one again.",
+    "exclusion_query": "NCT02260986 -> one exclusion item and same one table row; page reload retains query and one/one.",
+    "source_focus": "From the filtered inclusion item, source drawer opened; Escape closed parent drawer and returned focus to c-nct02260986-inclusion.",
+    "horizontal_overflow": "none at tested 1600px viewport"
+  },
+  "checks": {
+    "node_check_report_c_js": "passed",
+    "ruff_check_tests_browser_test_c_portal_py": "passed",
+    "regression_test": "Added chart/table ID equality at selection, keyword, reload and clear to existing Chromium/WebKit C precedent case; execution deferred until R24-29 stops editing report_c.py.",
+    "git_diff_check": "passed",
+    "full_gate": "not_run_while_R24-29_shared_source_repair_is_in_flight"
+  },
+  "open": [
+    "This isolates a four-study C precedent fixture, not the complete current C research package or all C physical pages and four states.",
+    "After R24-29 terminates, mirror final author assets, rebuild current ordinary C output and recheck chart/table/source state on that integrated candidate.",
+    "Cross-browser, fresh-install, share, 24-portal and source-closure gates remain open."
+  ]
+}

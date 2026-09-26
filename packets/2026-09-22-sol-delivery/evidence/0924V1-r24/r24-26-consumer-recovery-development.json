@@ -1,0 +1,60 @@
+{
+  "schema_version": "r24-26-evidence-1",
+  "stage": "development_candidate_not_release_or_scientific_acceptance",
+  "worker_receipt": {
+    "route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "rounds": 1,
+    "fallback": null,
+    "output_sha256": "5eb0629921f70e6b2a6ab36139960e85d726a49a657652edc33513b75f6af910",
+    "codex_review": "reviews/codex_execution_ci-0924-r24-26-consumer-recovery-20260926_review.md"
+  },
+  "source_candidate": {
+    "kind": "fixed_offline_ctgov_cas_not_live_refresh",
+    "project": ".artifacts/r24-pnh-real-ab-20260926",
+    "study": "NCT04820530",
+    "evidence_snapshot_id": "evidence-snapshot_68fd97a331040c3637068faf",
+    "evidence_snapshot_sha256": "36791d7ed49ff5d8d3eb4759556a6d4d3f907710030e22d1c3ed479d712a10f1",
+    "isolated_backup": true,
+    "source_project_modified": false
+  },
+  "recovery_probe": {
+    "original_verified_bindings": 19,
+    "before_explicit_sidecar_import": 0,
+    "after_import_by_report": {"A": 18, "B": 1},
+    "byte_identical_registry_rows": true,
+    "second_import_idempotent": true,
+    "temporary_sidecar_sha256": "6e113cd9cedb14f77d857b4f1349b236c20880b37bb25c1c028688e8a41ccdb4",
+    "temporary_registry_rows_sha256": "266bcdb4343a4d8aac6c06a21ca0cec1efb191b9b89ba0818c9477fb242bd503",
+    "temporary_project_removed_after_probe": true
+  },
+  "full_candidate_recovery_probe": {
+    "kind": "fixed_offline_50_registry_studies_not_live_refresh",
+    "source_project": ".artifacts/r24-pnh-auto-binding-full-20260926",
+    "evidence_snapshot_id": "evidence-snapshot_df4bb81e97d8f0eae2fb3f7a",
+    "evidence_snapshot_sha256": "0443339f94cdb54678e213182afaa82db4c6b4285656d880a7198f57964ec14d",
+    "verified_a_bindings_before": 1206,
+    "restored_registry_before_sidecar": 0,
+    "restored_registry_after_sidecar": 1206,
+    "byte_identical_registry_rows": true,
+    "temporary_sidecar_sha256": "ebacfba447d8ba1d15c04ef3f67e8f97f5aaff9b2467ef94637fe39bd55a8c44",
+    "temporary_registry_rows_sha256": "4d80319fb43a31da1bec60c41b1c4a7185c48bf6510ae2b7b11ba8e3ea266db1",
+    "elapsed_seconds": 19.35,
+    "temporary_project_removed_after_probe": true
+  },
+  "deterministic_acceptance_rerun": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -p no:cacheprovider -q tests/acceptance/test_w08_verified_consumer_recovery.py; requires the two fixed ignored English-root projects; missing source is SKIP, not PASS; test uses isolated temporary backup and removes it after execution",
+  "verification": {
+    "worker_original": "16 focused passed; 40 adjacent passed; 13 selected restore passed; wider 104 passed/1 old B-label failure",
+    "codex_before_final_c_guard": "43 passed / 168.02 s: recovery, registry, snapshot closure, migrations; changed-file Ruff and strict mypy 2 source files passed",
+    "codex_final_selection": "4 passed / 16 deselected: forged C, existing destination, rehashed trial/group; changed-file Ruff passed",
+    "negative_red": "two rehashed A/B identity cases and one forged C case initially accepted, then fixed",
+    "full_current_gate": "not yet run after this candidate",
+    "release_recovery": "not run"
+  },
+  "boundaries": [
+    "Only verified A/B registry rows, not ingestion hints, are exportable and recoverable.",
+    "C consumer sidecars are rejected pending a production C registration route.",
+    "A caller-supplied sidecar is not historical proof without a separately trusted candidate/release hash binding.",
+    "Snapshot restore still has pre-existing late-failure atomicity risk; this branch only preflights fact-context consistency before writes.",
+    "Full-source coverage, dynamic sources, three-host installation, offline share, 24 portals and RC remain open."
+  ]
+}

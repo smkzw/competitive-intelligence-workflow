@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-56",
+  "status": "isolated_current_revision_development_not_medical_or_release_acceptance",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source": {
+    "prior_slice": "R24-55",
+    "fixed_studies": ["NCT02264639", "NCT03829449"],
+    "retained_b_input_relative_path": ".artifacts/r24-55-b-source-view-20260926/b-partial-source.json",
+    "retained_b_input_sha256": "a476005d564948059a4c41799a684a3d118e6c3978fbed128e2ec4ae8d2aadc1",
+    "generated_b_input_sha256_matches_retained": true,
+    "old_actual_current_database_sha256_unchanged": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "isolated_scratch_current": {
+    "revision": 1,
+    "generation_manifest_sha256": "3bee17905b3fbc68a09b70d2b34c2c35f8395a8a75397391c943d8add30c3d71",
+    "b_safety_related_rows": 514,
+    "b_exact_source_views_before_and_after": 92,
+    "unknown_arm_product_views_before_and_after": 90,
+    "unknown_views_with_original_quote_before_and_after": 90,
+    "unknown_views_without_product_evidence_link_or_product_plot_before_and_after": 90,
+    "legal_b_edit_consumers": 2,
+    "development_edit": "Official source death count 0/15; user-layer test hypothesis current count 1/15. This is not a medical correction.",
+    "b_development_safety_page_sha256": "9789d6d950a27530113873ca1c5ed436471be53360ffc60466d016d19e5aeacd",
+    "b_revision1_safety_page_sha256": "3a5b47481c33759a8e9dfa667a0e34b0a04ea0fcc68d25a9f806727dbdffe393"
+  },
+  "verification": {
+    "real_current_chain": "1 passed in 138.56s: two-study official offline replay, A+B legal consumer fanout, invalid 16/15 rejection, current revision 1 rebuild, 92 exact B views preserved",
+    "read_only_full_page_audit": "Both B development and revision 1 safety pages: 92/92 located, 90/90 unknown original quotes preserved, 90/90 unknown product links absent and product plots disabled; 514 related safety rows retained.",
+    "ruff_changed_files": "passed",
+    "strict_mypy_src_tools": "passed, 251 source files",
+    "git_diff_check": "passed",
+    "regression_test_sha256": "6393c5d18886a53e04faad7350c67c3a79e3ca84ae521f89b7fb528be7379185"
+  },
+  "limits": [
+    "The revision is an isolated development exercise; the user's existing current project was not switched or migrated.",
+    "Only two B safety rows are legal editable consumers. An additional 90 precise source views are not permission to assign an unknown arm to a product or propagate a user edit.",
+    "The B full related safety pool contains 514 rows but only these 92 were located by this two-study source slice; other domains and studies remain open.",
+    "No new Ego Lite visual run was possible after the local file URL control was rejected; browser acceptance is NOT_RUN for this candidate. Independent medical/scientific review remains pending.",
+    "No current-source dynamic check, complete Chinese/publication/regulatory closure, three-host package or 24-portal release acceptance was performed."
+  ],
+  "rebuild": ".venv/bin/python -m pytest tests/integration/test_r24_real_b_safety_consumer.py -q"
+}

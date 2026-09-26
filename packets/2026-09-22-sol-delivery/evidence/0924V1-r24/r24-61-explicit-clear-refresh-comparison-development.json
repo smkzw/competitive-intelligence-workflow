@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-61",
+  "status": "development_comparison_only_not_current_refresh",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "defect": "Stored presence-aware user clears used explicit null, but RefreshService._declared_user_fields dropped null edits and rejected the legitimate user lineage as undeclared.",
+  "change": "Treat keys present in stored typed edits as declared even when null; a numeric clear declares its existing dependent numeric invalidations, while unsupported clear fields still fail closed.",
+  "red": "2 failed: clear numerator and clear normalized_value both rejected raw_value, normalized_value, numerator and denominator as undeclared.",
+  "green": "4 passed, 65 deselected in 7.40s: two clear-and-new-source conflict cases, existing complete refresh union/persistence, and the pinned real PNH three-way comparison.",
+  "static": {
+    "ruff_changed_files": "passed",
+    "strict_mypy_refresh_service": "passed, 1 source file",
+    "git_diff_check": "passed"
+  },
+  "hashes": {
+    "refresh_service_sha256": "fcff7cab7a048ac35a025a092d3470055417f7210acf35d17ca093fe71ac7355",
+    "test_w04_sha256": "2429739fe8d7c8268fb6152d47c412e1739980be5200d62721b17553537fd2ca",
+    "pinned_old_current_database_sha256_unchanged": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "limits": [
+    "The clear test uses an isolated synthetic legal A+B shared-fact project; it does not edit the fixed PNH current project.",
+    "The true old-project source-update migration, source/user conflict resolution, A/B/C rebuild, selector switch and failure rollback remain NOT_RUN.",
+    "No independent scientific or release acceptance is implied by this focused comparison test."
+  ]
+}

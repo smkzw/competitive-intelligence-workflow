@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-50",
+  "status": "offline_two_study_development_candidate_not_current_or_release",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source": {
+    "access_method": "fixed_2026-09-26_ctgov_cas_offline_replay",
+    "selected_trials": ["nct02264639", "nct03829449"],
+    "raw_page_sha256": "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be",
+    "payload_sha256": "3ae2a238733eb06269c2fd58c171e4f6a1a3b8c97bc3a7069beec88ca08c952a",
+    "sidecar_sha256": "0ef8a7275bab87eccc4e0a296744b8ae624a0771ca1d082300a1fa081b78d655",
+    "audit_relative_path": ".artifacts/r24-50-source-expansion-20260926/audit-two-studies.json",
+    "audit_sha256": "9df6cb44291a2d83ff1247e96ea432493c2b479fadd59d7d18b5215c03cb9f63"
+  },
+  "candidate": {
+    "project_relative_path": ".artifacts/r24-50-source-expansion-20260926/project-v2",
+    "receipt_relative_path": ".artifacts/r24-50-source-expansion-20260926/receipt-two-studies-v2.json",
+    "receipt_sha256": "d07641e682fb6c12393d2e5546d2b642c8a7b82caebfc03e862979cdaa1e0e14",
+    "database_sha256_at_observation": "6d9a4397d7741af8100d70e26ffe03534a93cae8633ca60c534cd77d3b081763",
+    "snapshot_id": "evidence-snapshot_0e9e695dcc4816a0274944fb",
+    "snapshot_sha256": "569e68882b38554ca8b53778dfb26d3f5e7fcf2844f45c203467b38bb92d5a25",
+    "bound_a_input_sha256": "fe2a3228888649820c0f71e6705381126c886bc1245856f85abc00acf5632f79",
+    "raw_numeric_paths_verified": 190,
+    "science_facts": 374,
+    "claims": 190,
+    "bound_efficacy_rows": 98,
+    "bound_safety_rows": 92,
+    "registered_a_efficacy_consumers": 71,
+    "registered_a_safety_consumers": 2,
+    "source_binding_gaps": 0,
+    "missing_value_issues": 1
+  },
+  "safety_boundary": {
+    "source_explicit_zero_rows": 43,
+    "safety_rows_without_denominator": 26,
+    "safety_rows_without_declared_arm_product_identity": 90,
+    "registered_safety_row_ids": [
+      "safe-7727c2ce1c1803f54bb0",
+      "safe-9fe1ea2f8b52dd3ec294"
+    ],
+    "registered_zero_source_quote": "0",
+    "unreported_outcome_group_values": "NCT03829449 outcomeMeasures[11].classes missing; not inferred as zero"
+  },
+  "verification": {
+    "red": "one focused real-CAS regression failed on absent registered_a_safety_consumers",
+    "green": "2 passed, 8 deselected in 66.21s; real two-study plus adjacent one-study A+B current source test",
+    "ruff_changed_files": "passed",
+    "strict_mypy_src_tools": "passed, 251 source files",
+    "snapshot_store_read_integrity": "passed, 374 fact and 190 claim versions",
+    "old_current_database_sha256_still": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1",
+    "production_tool_sha256": "17a0f93ec563d616f42e966184b96326cf981fab19ec6298c7a25e595c006f9d",
+    "regression_test_sha256": "15e19495fc5f6e55fcba56bbf616c5b4cbdb11a5e4cfd14c2f8262c5ff4f6ac2"
+  },
+  "limits": [
+    "No new live source fetch, historical-as-of reconstruction or independent scientific review.",
+    "Only two A safety rows and 71 A efficacy rows have legal declared direct consumers; unbound source atoms remain in the immutable snapshot.",
+    "No B/C safety consumer, current switch, rendered portal browser check or full quality/release gate in this work item.",
+    "China and commercial sources, publications, product relations, universe closure, three-host distribution and 24 real portals remain open."
+  ]
+}

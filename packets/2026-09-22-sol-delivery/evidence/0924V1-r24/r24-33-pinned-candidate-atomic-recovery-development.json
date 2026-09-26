@@ -1,0 +1,41 @@
+{
+  "task": "R24-33 W08 pinned candidate recovery",
+  "status": "development-slice-passed-not-release",
+  "head_at_start": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_sha256": {
+    "src/ci_workflow/application/verified_candidate_recovery.py": "660e978ab4c992b9cf1abd5cdaca5f10979e798badeade104175dc598692f510",
+    "tests/integration/test_w08_verified_candidate_recovery.py": "46816a61f6a4b9a1cb40d4c877894d9119af1384ca864f2cdfd03d1b258f1164",
+    "tests/acceptance/test_w08_verified_consumer_recovery.py": "02a92494d22f57a835702f9606f505a00f66fc6c4400a1c1917081ad1a282bef"
+  },
+  "red": "New integration family initially failed collection: ModuleNotFoundError for ci_workflow.application.verified_candidate_recovery.",
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -p no:cacheprovider -q tests/integration/test_w08_verified_candidate_recovery.py tests/integration/test_w04_consumer_binding_recovery.py tests/integration/test_w07_ctgov_capture_bridge.py::test_two_registry_captures_share_one_portable_raw_asset_in_locked_snapshot",
+      "result": "23 passed in 20.67s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -p no:cacheprovider -q tests/acceptance/test_w08_verified_consumer_recovery.py",
+      "result": "2 passed in 31.25s; fixed one-study A18/B1 and 50-study A1206 source projects opened read-only through isolated SQLite backups"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -p no:cacheprovider -q tests/integration/test_w08_verified_candidate_recovery.py",
+      "result": "2 passed in 2.73s after adding subset-seal and preexisting-empty-target cases"
+    },
+    {
+      "command": ".venv/bin/ruff check src/ci_workflow/application/verified_candidate_recovery.py tests/integration/test_w08_verified_candidate_recovery.py tests/acceptance/test_w08_verified_consumer_recovery.py; .venv/bin/mypy --strict src/ci_workflow/application/verified_candidate_recovery.py",
+      "result": "ruff passed; strict mypy passed for 1 source file"
+    }
+  ],
+  "proven": [
+    "The manifest has no local paths and pins the locked evidence bytes, sidecar bytes and registered-consumer count.",
+    "Sealing rejects a sidecar missing registered rows; restore requires an externally retained manifest SHA-256.",
+    "Restore constructs evidence and registered consumers off-target and publishes one directory only after both validate; late count failure leaves no target.",
+    "Both fixed offline source projects reproduce the exact registered binding rows with the atomic candidate path."
+  ],
+  "not_proven": [
+    "The manifest digest is not yet bound into a signed/released bundle or current-generation pointer.",
+    "C has no verified registration route; full 24-report and three-host recovery have not run.",
+    "A successful source/consumer recovery does not independently accept clinical facts or portal appearance.",
+    "The full repository quality gate was deferred until the concurrent R24-29 worker can be integrated."
+  ]
+}

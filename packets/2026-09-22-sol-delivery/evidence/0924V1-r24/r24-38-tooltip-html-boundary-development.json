@@ -1,0 +1,29 @@
+{
+  "work_item": "R24-38 W05 shared/B/C untrusted tooltip HTML boundary",
+  "status": "development_candidate",
+  "base_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/charts.js": "8719de0e7a40e27fd90f08c2ba17bba092f98263eb90d0bfec9c79caf8815265",
+    "src/ci_workflow/renderers/portal/assets/report-c.js": "40a0c8bee571574cadc3179c29613d106e6e613a0b08500059c9d119d643c299"
+  },
+  "production_probe": {
+    "browser": "Ego Lite TaskSpace 8",
+    "site_input": "Earlier ordinary B and C rendered sites with only the named current author JS assets copied into isolated temporary previews; no clinical claim or source material was changed.",
+    "attack_string": "<img src=x onerror=alert(1)> &",
+    "before_B_grouped_bar_formatter": "<img src=x onerror=alert(1)><br><img src=x onerror=alert(1)>：2",
+    "before_C_matrix_formatter": "<strong><img src=x onerror=alert(1)></strong><br>NCT00000000<br>设计事实<br>设计要素<br>2",
+    "after_B_grouped_bar_formatter": "&lt;img src=x onerror=alert(1)&gt; &amp;<br>&lt;img src=x onerror=alert(1)&gt; &amp;：2",
+    "after_C_matrix_formatter": "<strong>&lt;img src=x onerror=alert(1)&gt; &amp;</strong><br>NCT00000000<br>设计事实<br>&lt;img src=x onerror=alert(1)&gt; &amp;<br>2",
+    "boundary": "Escapes dynamic source/product/series/unit/status text in custom ECharts HTML formatters; retains only authored strong and br markup. Labels rendered as SVG text or DOM textContent were not changed."
+  },
+  "checks": {
+    "node_check_charts_js": "passed",
+    "node_check_report_c_js": "passed",
+    "git_diff_check": "passed",
+    "full_gate": "not_run_while_R24-29_shared_source_repair_is_in_flight"
+  },
+  "open": [
+    "Mirror final author resources and manifest only after R24-29 terminates, then regenerate ordinary current B/C pages.",
+    "This targeted custom-formatter check is not a complete HTML/JS injection or package security audit; current source, share, host, and 24-portal gates remain open."
+  ]
+}

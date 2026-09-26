@@ -1,0 +1,56 @@
+{
+  "id": "R24-31-W05A-matrix-desktop-development",
+  "status": "development-slice-only",
+  "baseline_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "scope": "A matrix ordinary renderer, synthetic 45-product fixture with four plottable observations",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "caba7d93fc8d1b0ad1cf2ecf306b89c686b685eee3e77e954e51941f21a223b5",
+    "src/ci_workflow/renderers/portal/assets/report-a.css": "244658d329b50ccf3ee05dae754af681bf5f5209607ae026ea068621c021872c",
+    "src/ci_workflow/renderers/portal/templates/a/matrix.html.j2": "9164229132ac9de11c6985e35469cca234bb0d5eac1d5f4260fa1b17f8cea480",
+    "tests/browser/test_a_w05a_product.py": "ac45949534ca9f362fdf68fabfa157c3eb53648edd38f1913b1c03fc076061de"
+  },
+  "preview": {
+    "path": "output/playwright/r24-31-a-matrix-debug-site",
+    "matrix_html_sha256": "e5dae1abc3cdeda71130d4650b3d1f04ba2c67a9a0cbeefda7a7a0920bc655fa",
+    "report_js_sha256": "b037008e22173204cd002d63e2f28f0d263fdc40f66ca6249ce96b00b0c1298f",
+    "copied_report_a_js_sha256": "caba7d93fc8d1b0ad1cf2ecf306b89c686b685eee3e77e954e51941f21a223b5"
+  },
+  "ego_lite": {
+    "taskspace": 8,
+    "page": "p1",
+    "viewport_height_css_px": 960,
+    "widths_css_px": [1440, 1600, 1920, 2560],
+    "horizontal_document_overflow_css_px": [0, 0, 0, 0],
+    "chart_top_css_px": [430, 432, 432, 432],
+    "chart_width_css_px": [1036, 1159, 1440, 1760],
+    "chart_height_css_px": [400, 400, 400, 400],
+    "complete_table_entry_top_css_px": [893, 894, 894, 894],
+    "verified_interactions": [
+      "overlapping smaller bubble opens its own product insight without changing coordinates",
+      "Escape restores focus to the clicked bubble",
+      "selecting a product without three-axis data does not reopen the insight drawer",
+      "empty chart contracts to 80px and gives axis-specific non-disclosure-neutral reasons",
+      "expanded table shows the one selected product without page overflow"
+    ],
+    "screenshots_sha256": {
+      "output/playwright/r24-31-a-matrix-verified-1440.png": "0419fb990874fb12c553bd5ec6846b9ce1106bb4fd7ab187736552ea1a692d02",
+      "output/playwright/r24-31-a-matrix-verified-2560.png": "c6a74b78f1a6fe0f3c80856fadd9458567beca25a029d3747f73e75a696e",
+      "output/playwright/r24-31-a-matrix-verified-drawer-1440.png": "fde7eace506e571647cd0b1cfd57cb96cdb30cbb35b92132779c7ce79e753367",
+      "output/playwright/r24-31-a-matrix-final-filter-expanded-1440.png": "24ad7bd4173f77d1a4b1a2898007d0bfcb3b888ae39db83ab3e3c51c9ceac648"
+    }
+  },
+  "tests": [
+    "focused A matrix and neighboring browser batch: 4 passed",
+    "expanded A matrix browser/acceptance batch: 26 passed, 79 deselected",
+    "node --check report-a.js: passed",
+    "Ruff changed A browser test: passed",
+    "git diff --check: passed"
+  ],
+  "known_limits": [
+    "Synthetic fixture is not a real research report or science acceptance",
+    "Only matrix page and specified states were visually inspected; not all A physical pages or all four states",
+    "Cross-browser and three-host fresh-install checks remain open",
+    "Bundle mirror/manifest refresh and current full gate pending the separate source-trace worker integration",
+    "No source trace closure or 24-portal RC claim"
+  ]
+}

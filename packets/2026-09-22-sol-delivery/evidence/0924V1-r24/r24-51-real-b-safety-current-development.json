@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-51",
+  "status": "real_source_safety_a_b_current_development_only",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_basis": {
+    "r24_50_receipt": "evidence/0924V1-r24/r24-50-two-study-source-safety-development.json",
+    "raw_page_sha256": "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be",
+    "trial": "NCT03829449",
+    "source_field_path": "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAffected",
+    "source_url": "https://clinicaltrials.gov/study/NCT03829449",
+    "source_quote": "0",
+    "original_denominator": 15,
+    "original_safety_row_id": "safe-7727c2ce1c1803f54bb0"
+  },
+  "isolated_project": {
+    "relative_path": ".artifacts/r24-51-b-safety-20260926/pytest-chain/test_two_real_safety_counts_sh0/safety-a-b-candidate",
+    "source_snapshot_sha256": "569e68882b38554ca8b53778dfb26d3f5e7fcf2844f45c203467b38bb92d5a25",
+    "a_registered_efficacy_consumers": 71,
+    "a_registered_safety_consumers": 2,
+    "b_registered_safety_consumers": 2,
+    "b_safety_rows_in_full_related_pool": 514,
+    "b_safety_rows_with_this_precise_source": 2,
+    "current_revision": 1,
+    "current_generation_sha256": "88cc975123a59aafac86fc3d3e5c53da46e335f03b1e6726f3aa88d2020b7463",
+    "database_sha256_at_observation": "501262bdf3b5b0edca1214d80644f2bf0fa9d84cc8fed7c01682c56800a9738b",
+    "b_current_safety_page_sha256": "a1970791a8d9338506868c65ae516e1d0185ae5726589e955eda8140b874d231"
+  },
+  "operation_chain": {
+    "development_hypothesis_not_medical_correction": "original affected count 0/15 -> user current affected count 1/15",
+    "invalid_16_of_15_rejected_and_old_current_unchanged": true,
+    "one_save_rebuilt_reports": ["A", "B"],
+    "both_report_rows_after_save": {"value": 1, "numerator": 1, "denominator": 15},
+    "source_quote_after_save": "0",
+    "original_source_fragment_after_save": "0",
+    "b_page_precise_link_and_user_edit_disclosure": true,
+    "same_source_fact_two_report_consumers": true,
+    "source_drift_cases_rejected": [
+      "wrong denominator", "wrong original quote", "wrong event term", "wrong field path"
+    ]
+  },
+  "checks": {
+    "focused_red": "B initially rejected direct safety by efficacy-only bridge",
+    "browser_found_display_issue": "B evidence drawer initially showed 1.0 people beside current edit 1",
+    "final_related_batch": "6 passed, 10 deselected in 135.49s",
+    "ruff_changed_files": "passed",
+    "strict_mypy_src_tools": "passed, 251 source files",
+    "ego_browser": "Ego Lite TaskSpace 8, 1600 CSS px; actual current B safety page, one-fact search, evidence drawer, exact source link, Escape focus return and no horizontal overflow",
+    "final_screenshot": "output/ego/r24-51-b-safety-current-evidence-final-1600.png",
+    "final_screenshot_sha256": "e4a34e9368f9fa1bc71a2879439ab2967766a55cfbd98a8f0049a37d478e69e0",
+    "final_drawer_value": "1",
+    "final_drawer_explanation": "当前数值由用户修订，尚未独立复核；原始来源值和定位仍可查。",
+    "old_a_b_current_database_sha256_still": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "code_sha256": {
+    "consumer_registry": "d446b57d42b59c48adcee62f154f0884c7cd64b337cf82fcc08668e5c6cab818",
+    "b_renderer": "7917ccda9fea79855b7a09baba0ee7388d30a376a856c3ca91abf9c27366313f",
+    "regression_test": "188c4d638d42869402ca67da62112eac28dcd843e45f3e8df27b38adcc96e461"
+  },
+  "limits": [
+    "Offline fixed-source replay, not a new live CT.gov check or historical-as-of answer.",
+    "Two precisely sourced B safety rows do not close the other 512 B safety rows or all 3617 B efficacy rows.",
+    "One 1600px B safety page and source drawer is not four-width/four-state all-page or cross-browser acceptance.",
+    "One development hypothesis edit is not an endorsed medical correction; no old-current refresh migration, C consumer or release switch.",
+    "Publication, China, product universe, three-host, 24-portal and independent scientific acceptance remain open."
+  ]
+}

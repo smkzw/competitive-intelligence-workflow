@@ -1,0 +1,32 @@
+{
+  "id": "R24-32-W08-atomic-evidence-restore-development",
+  "status": "development-slice-only",
+  "baseline_head": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_sha256": {
+    "src/ci_workflow/storage/snapshot_store.py": "06d98fb81230e3cdc50a88a57ec3faed39db8537b2dfce34f9b1b26158ddbc8f",
+    "tests/integration/test_w07_ctgov_capture_bridge.py": "6662baced6be85bb633caf8ff08f49d88e66a567fed897da1b405a5c2983dd13",
+    "tests/acceptance/test_w08_verified_consumer_recovery.py": "9ea5fd048d90725b201a2b13340891fe96cf41b486cfabdfd3a465d0f4a82047"
+  },
+  "negative_red": "Second of two captured source records has a forged source version ID. The original direct restore raises after writing the first source but leaves a nonempty target; assertion that target must not exist fails.",
+  "change": "Restore into an isolated sibling staging directory, validate the entire existing v2 restore flow and locked snapshot there, then os.replace into the requested absent or empty target. On any failure remove only that derived staging directory; never publish a partial target.",
+  "green": {
+    "result": "24 passed in 34.68 seconds",
+    "test_scope": [
+      "two-source shared raw-asset success into absent and pre-existing empty targets",
+      "early missing raw-asset rejection without target publication",
+      "late second-source ID mismatch rejection without target publication",
+      "single-manifest adopted source/fact restore",
+      "registered A/B consumer sidecar negative and idempotency family",
+      "fixed offline NCT04820530 and 50-study sidecar recovery acceptance, 2 cases"
+    ],
+    "ruff_changed_files": "passed",
+    "strict_mypy_snapshot_store": "passed: 1 source file",
+    "git_diff_check": "passed"
+  },
+  "known_limits": [
+    "This is filesystem atomicity for evidence-manifest restore, not atomicity of later separate sidecar recovery or project current-generation publication.",
+    "The sidecar digest is not yet bound to a trusted release/candidate manifest.",
+    "The fixed offline projects and synthetic two-source fixture do not establish current dynamic source, China, publication, clinical-science or 24-portal closure.",
+    "Full current gate, installation and three-host recovery drill not yet run after this change."
+  ]
+}

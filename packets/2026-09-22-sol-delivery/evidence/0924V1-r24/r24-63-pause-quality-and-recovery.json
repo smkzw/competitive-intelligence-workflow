@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-63",
+  "status": "lossless_pause_quality_only",
+  "baseline_head_before_delivery": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "quality_gate": {
+    "command": "bash tools/gate.sh",
+    "exit_code": 0,
+    "verdict": "GATE_OK status=quality-only steps=6",
+    "ruff_scope": "src tests tools; passed",
+    "mypy_scope": "strict src tools; no issues in 252 source files",
+    "active_unit_contract": "1067 passed, 20 deselected in 203.07s",
+    "retained_compat_subset": "20 passed, 1067 deselected in 1.37s",
+    "layer_audit": "7 passed in 0.29s",
+    "legacy_reference_check": "passed",
+    "not_included": ["all integration", "browser", "independent medical science", "current-source refresh transaction", "three hosts", "24 portals", "release"]
+  },
+  "recovery": {
+    "ignored_compact_directory": ".artifacts/r24-62-safety-semantic-20260926",
+    "approximate_size_mib": 15,
+    "files": ["a-before.json", "a.json", "a.derivation.json", "a-safety.html", "b-safety.html"],
+    "sha256_receipt": "r24-62-safety-class-semantic-development.json",
+    "removed_exact_disposable_temp_directories": 2,
+    "approximate_temp_freed_mib": 228,
+    "historical_cas_or_current_project_removed": false
+  },
+  "git_at_precommit": {
+    "remote_main": "f629155e59ede3a1d8fbd8034820ce556b6ec828",
+    "local_main_commits_ahead": 13,
+    "remote_main_commits_ahead": 0,
+    "force_push_required": false
+  },
+  "release_verdict": "NOT_ACCEPTED"
+}

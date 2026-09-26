@@ -1,0 +1,49 @@
+{
+  "task": "R24-35 W05A complex safety density and label identity",
+  "status": "local-fixed-offline-visual-slice-passed-not-release",
+  "head_at_start": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "fixed_input": ".artifacts/r24-pnh-real-ab-20260926/state/user-fact-builder-inputs/report-a-data.json",
+  "fixed_input_sha256": "0d8acf15ae64a925ebcef0e5688f504369185a43ff2c262ac38c61e8ad782a80",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "f42e14cb1ec13a7a092b6e5e7910228fd0af7b311e2b16168c8f09a6c51ef54f",
+    "src/ci_workflow/renderers/portal/assets/report-a.css": "2a80abc9f657b74943f6469da91ec0c0d399bdfbcadee7130ad38a149da4463c",
+    "tests/acceptance/test_report_a.py": "e2e3a87b90a1e66f18fbbd68e60b4b69e02ced77fa20f55d1a7ae97376fa5576"
+  },
+  "preview": "output/playwright/r24-35-pnh-real-a-label-preview",
+  "preview_safety_html_sha256": "253a93d102bcaa92534abc6283743cf5c3b668727443c93c6b0ba309c323c3a5",
+  "collision_probe": {
+    "site": "output/playwright/r24-35-safety-collision-probe",
+    "safety_html_sha256": "fa666679de722737f91ab0a5d077b8b788dc9ec7f7f205c5dc7559e19b2fdb59",
+    "result": "Two source titles with the same context in one group retain distinct full visible labels."
+  },
+  "browser": "Ego Lite; ordinary A renderer file pages; 1440/1600/1920/2560 CSS px, height 960",
+  "complex_safety_chart_height_px": {
+    "before_1440": 5506,
+    "after_1440": 4846,
+    "after_1600": 4793,
+    "after_1920": 4793,
+    "before_2560": 5292,
+    "after_2560": 4632
+  },
+  "observations": [
+    "Source-supplied measure_context becomes a shorter visible card label only when it removes at least 24 characters; category remains visible. Full exact measure title remains in title, accessible card name and complete table.",
+    "Within each product/trial/arm/window group, candidate shortened labels that would alias distinct full titles fall back to their full titles; the collision probe exercised this branch.",
+    "The fixed PNH safety page has 100 unique plotted row IDs, 60 visible on the first pagination page, 514 complete-table row IDs, and all plotted IDs occur in that table.",
+    "At all four desktop widths the page has zero horizontal overflow; the first event opens eculizumab product insight and Escape restores focus to row safe-13.",
+    "The two-column compact layout remains limited to simple groups; the fixed real complex case stays full-width and preserves raw group/time context."
+  ],
+  "screenshots_sha256": {
+    "output/playwright/r24-35-pnh-real-a-safety-1440-label.png": "7f069d39eb29db78c61ace77800b484444ccb0dd87e94732645b440862ccfc17",
+    "output/playwright/r24-35-pnh-real-a-safety-2560-label.png": "bab2da34b5e086bd426e8e3abc2028a6b651132e3fbb04d7d3f635ecfb671be7"
+  },
+  "tests": [
+    "Adjacent source-unit/acceptance batch before the final label-collision guard: 26 passed, 1 failed on an obsolete one-column 1440/1600 geometry assertion; no product rollback.",
+    "The migrated test now checks two readable columns, visible child width, total plotted ID count, no overflow and disjoint pagination; on final source it passed 1/1.",
+    "Final JavaScript syntax and git diff whitespace checks passed; full gate awaits R24-29 integration."
+  ],
+  "limitations": [
+    "Historical offline PNH input is not today's dynamic/global/China/publication closure or an accepted current report.",
+    "Only default safety state and one focus path were visually inspected here; full A/B/C physical-page four-state, cross-browser and 24-portal acceptance remain open.",
+    "The distribution mirror and asset manifest must be synchronized only after the concurrent R24-29 owner finishes its shared-manifest write."
+  ]
+}

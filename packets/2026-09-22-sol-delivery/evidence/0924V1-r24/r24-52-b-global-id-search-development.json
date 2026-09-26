@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-52",
+  "status": "b_global_fact_id_search_development_only",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_basis": {
+    "r24_51_receipt": "evidence/0924V1-r24/r24-51-real-b-safety-current-development.json",
+    "real_source_row_id": "safe-7727c2ce1c1803f54bb0",
+    "source_original_quote": "0",
+    "development_user_current_value": 1,
+    "report_b_safety_related_rows": 514,
+    "report_b_safety_rows_with_this_slice_precise_source": 2
+  },
+  "root_cause_and_change": {
+    "before": "B global search index did not retain a fact row ID; the B template also discarded it, so exact fact-ID search could not reliably reach the source row.",
+    "after": "B indexes each efficacy and safety row ID; the B template retains it; shared header search prioritizes exact row-ID matches and links to ?focus=<row_id>.",
+    "author_js_sha256": "4412aa9a025d3ce1f6b23825a1d86ecf8c75a30852a2a5c0d55bce442bfb2bd6",
+    "report_b_renderer_sha256": "ac320553ee01269e6017cf8ae5bf528afe32f7f55aa4df489ea8651e9ba0d546",
+    "b_base_template_sha256": "03802ff944e9355922345b7d9adf8c0eb374815a10a220712aa4abd133476bee"
+  },
+  "isolated_real_candidate": {
+    "relative_path": ".artifacts/r24-52-b-global-find-20260926/pytest-current/test_two_real_safety_counts_sh0/safety-a-b-candidate",
+    "current_revision": 1,
+    "current_bundle_sha256": "ff8e0c7d42db719d82cb5f32542e792fb5582dea338ea593b0f7720447779ea6",
+    "database_sha256": "68dcc11a66ea930f2a892277108db8e6293ea2392ad719c3e49cfd2b36bac69f",
+    "b_safety_page_sha256": "cf4d5531649dc2e540baf5064f300bc8ced5fe764194bf5bc99a0ca2e7357d96",
+    "b_search_index_sha256": "3bbdc790c2e1cc7a5b7725e37a3d316e759ab5346462aefe770111b2fa8679c2",
+    "old_actual_current_database_sha256_unchanged": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+  },
+  "checks": {
+    "related_batch": "2 passed, 5 deselected in 120.79s; exact index coverage and A+B current safety chain",
+    "ruff": "All checks passed: src tests tools",
+    "strict_mypy": "Success: no issues found in 251 source files: src tools --no-incremental --strict",
+    "node_check": "passed on author portal.js",
+    "asset_mirror": "ASSET_MIRROR_OK",
+    "git_diff_check": "passed",
+    "ego_lite_real_page": {
+      "viewport_css_px": [1600, 900],
+      "observed": "Exact fact-ID query gave one result; click opened B safety page ?focus=<row_id>&pg=5, with target current 1 person among 514 related rows and source drawer showing original 0/15, user edit, exact CT.gov field and source link.",
+      "screenshot_relative_path": "output/ego/r24-52-b-global-search-deep-link-1600.png",
+      "screenshot_sha256": "84b2d1e7add5d5333413a55f2753e8165b9687cccb8062647a29b21336a0043a"
+    },
+    "post_deep_link_escape_and_restored_full_width": "NOT_RUN: browser control rejected the local file URL; no alternate browser-control workaround attempted"
+  },
+  "cleanup": "Only disposable R24-52 pytest-red and pytest-green scratch directories (3.4 MiB each) were deleted after path, Git tracking, symlink and receipt-reference checks. The 442 MiB pytest-current real candidate and screenshot remain. Deleted scratch is not recoverable from this workspace, but its test is reproducible from source.",
+  "limits": [
+    "This is one real B safety page at 1600px, not all B physical pages or four-width/four-state visual acceptance.",
+    "Only 2 of 514 B safety rows have precise source in this slice; clinical source closure and independent medical review are outstanding.",
+    "The 0-to-1 user value is a development hypothesis, not a correction to the clinical registry.",
+    "Full gate, cross-browser, 24-portal matrix, three hosts, current-source refresh and RC are not accepted by this receipt."
+  ]
+}

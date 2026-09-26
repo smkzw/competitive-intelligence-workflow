@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "work_item": "R24-46",
+  "status": "development_vertical_slice_not_scientific_or_release_acceptance",
+  "head_at_observation": "bae2771b430a887ce251ad4a61ffae0cc8ac9553",
+  "source_slice": {
+    "project": ".artifacts/r24-pnh-refresh-slice-20260926",
+    "selected_trial": "nct04820530",
+    "raw_record_sha256": "342612879ac3dcab9c4fa226133a85fbe4d7dafe9ce426483f7e211f280177f9",
+    "candidate_receipt": "receipts/r24-46-nct04820530-candidate.json",
+    "candidate_receipt_sha256": "f6f7bfa8aab3d5635f3b93ebae340d5e8c676bb1ad07b983687699a695275e1b",
+    "database_sha256": "74330a821f722f22f56174b859cf098f289c6b1bd1f2307789f93e16db56d030",
+    "source_version_id": "source-version_73c373185062ea7054e135c8",
+    "evidence_snapshot_id": "evidence-snapshot_fb3478aff7a2ba1313518070",
+    "evidence_snapshot_sha256": "8f69873029c90f6b61f54dd2f78f4267e171a9d7ee2cb2aa570199adbcb577ce",
+    "facts": 22,
+    "claims": 20,
+    "registered_a_efficacy_consumers": 18,
+    "source_issues_in_selected_trial": 0
+  },
+  "shared_observation": {
+    "fact_id": "ctgov-atomic-fact_a8af3dff00942963b7800f15",
+    "new_source_fact_version_id": "fact-version_fc4fd5ad5d1c3bafae8a3055",
+    "new_a_row_id": "eff-9f54cd0202c1f000619a",
+    "a_consumers_for_selected_trial": 18,
+    "verified_b_consumer_for_selected_observation": 1,
+    "old_source_value": "92.2",
+    "new_source_value": "92.2",
+    "hypothetical_user_value": "90.1",
+    "user_value_is_medical_correction": false,
+    "three_way_comparison": {
+      "raw_and_normalized_value": "user_modified",
+      "source_fragment": "source_changed",
+      "explicit_conflict": false,
+      "old_and_new_original_scientific_context_equal": true,
+      "comparison_scope": "one exact real source atom in a scratch clone; no old-current migration or selector switch"
+    }
+  },
+  "old_current_unchanged": {
+    "project": ".artifacts/r24-pnh-real-ab-20260926",
+    "database_sha256_before_and_after": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1",
+    "revision": 1,
+    "generation_sha256": "9d31c4a28ceabfd131a2d4ecd28b4a560b4f3d9fec31be79209372519f564d3c"
+  },
+  "independent_new_project": {
+    "path": ".artifacts/r24-46-browser-rerun-20260926/test_current_capture_has_legit0/current-source-ab-development",
+    "current_revision": 1,
+    "current_generation_sha256": "528a27ad7aee6ec02b5ee1857eafa9f5ff10c00562d702a5781777bf5cb7f5b7",
+    "reports": ["A", "B"],
+    "current_bundle_file_integrity": "passed_by_read_current_delivery",
+    "both_current_report_rows": "90.1; source quote stays 92.2",
+    "failure_rollback_covered_by_adjacent_test": true,
+    "not_an_automatic_refresh_of_old_project": true
+  },
+  "browser_evidence": {
+    "browser": "Ego Lite Chromium",
+    "viewport_css_px": "1600x900",
+    "a_screenshot": "output/ego/r24-46/a-current-source-evidence-actual-current-1600.png",
+    "a_screenshot_sha256": "c183d1f47258e47f269b2569b32cc31d7ad6c62aed3b4846c2c60ab31e87edd5",
+    "a_observation_page": "9/12 after selecting iptacopan; all 704 filtered observations remain pageable",
+    "a_selected_row": "eff-9f54cd0202c1f000619a",
+    "a_current_and_source_visible_in_first_viewport": true,
+    "a_external_source_link": "not supplied by this partial A candidate; explicit limit shown, no fabricated link",
+    "a_escape_focus_returns_to_selected_row": true,
+    "b_screenshot": "output/ego/r24-46/b-current-source-evidence-actual-current-1600.png",
+    "b_screenshot_sha256": "d3d543a7ace916550256b0cb655668ff7a6322582dbe0ce5f54a21ea87070a5c",
+    "b_source_timepoint_and_original_value_visible": true,
+    "horizontal_overflow_px": 0,
+    "source_and_display_limitation": "one selected clinical observation; most B endpoints remain original English and this is not the complete B research universe"
+  },
+  "checks": {
+    "real_source_ab_and_adjacent_failure_batch": "3 passed in 86.94s",
+    "final_current_source_ab_regeneration": "1 passed in 21.41s",
+    "three_way_pinned_source_batch": "2 passed with one adjacent comparison test before the final renderer revision",
+    "development_gate": "GATE_OK quality-only; Ruff, strict mypy 251 source files, 1067 active tests, 20 retained compatibility tests, 7 layer checks, legacy reference check",
+    "portal_asset_mirror": "validated after author JS/CSS and manifest update",
+    "full_browser_and_scientific_acceptance": "not_run"
+  },
+  "source_code_sha256": {
+    "report_a_js": "1527f659748eec5c7a237ca67639b208531621ccf766a151726589b6aeca4580",
+    "portal_css": "5eb9ec2e2cf66a80dbd94f4cf5e5e368ff9ccbdcccae7bf696619bc86acdd04f",
+    "report_a_py": "9a34bac17b3c09419cf51da8da298b584183a0c74ebfcbf3e2ae6de9ab8664fb",
+    "report_b_py": "6861dffb8ebd8ce46a2b71529ea0eed55dfec42cb29a4af703b76b1814a4a1ff"
+  },
+  "open": [
+    "independent conference on the frozen R24-45 read-only bridge has not yet returned an accepted receipt",
+    "no three-way merge, consumer migration, or current switch was performed on the old project",
+    "source identity and real consumer binding are verified only for this selected trial, not all 4412 result atoms",
+    "B is a one-observation development view, C not regenerated from the current source",
+    "global and China source routes, publications, regulatory status, independent universe closure, all pages, four desktop widths, three hosts, and 24 portals remain unaccepted"
+  ],
+  "temporary_storage_cleanup": {
+    "deleted_reproducible_test_directories": [
+      ".artifacts/r24-46-browser-test-20260926",
+      ".artifacts/r24-46-browser-final-20260926"
+    ],
+    "approximate_space_reclaimed_mib": 286,
+    "retained": [
+      ".artifacts/r24-pnh-current-ctgov-20260926",
+      ".artifacts/r24-pnh-refresh-slice-20260926",
+      ".artifacts/r24-pnh-real-ab-20260926",
+      ".artifacts/r24-46-browser-rerun-20260926",
+      "output/ego/r24-46"
+    ],
+    "deleted_files_are_directly_recoverable": false,
+    "deterministic_regeneration_test": "tests/integration/test_r24_current_source_ab_fanout.py"
+  },
+  "rebuild": {
+    "pinned_source_test": "uv run pytest -q tests/integration/test_r24_real_refresh_three_way.py",
+    "current_ab_test": "uv run pytest -q tests/integration/test_r24_current_source_ab_fanout.py --basetemp .artifacts/r24-46-browser-rerun-20260926",
+    "development_gate": "bash tools/gate.sh",
+    "browser": "Ego Lite TaskSpace 8; open the current A/B HTML above, select the exact row and inspect the data-evidence drawer"
+  }
+}
