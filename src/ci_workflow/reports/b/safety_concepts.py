@@ -62,6 +62,9 @@ _GENERAL_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
 )
 
 _GENERIC_RULE = re.compile(r"\badverse\s+events?\b|(?<![a-z\-])aes(?![a-z])", re.I)
+_NON_AE_CLINICAL_EVENT = re.compile(
+    r"\bmajor adverse (?:vascular|cardiovascular) events?\b", re.I,
+)
 
 _CONCEPT_CATEGORY_ZH = {
     key: spec_of(key).category_zh for key in (
@@ -161,6 +164,10 @@ def _classify_single(text: str) -> str | None:
     for concept, pattern in _GENERAL_RULES:
         if pattern.search(text):
             return concept
+    # A MAVE/MACE clinical outcome is not, merely by containing "adverse",
+    # an aggregate treatment AE. Explicit AESI/SAE wording is handled above.
+    if _NON_AE_CLINICAL_EVENT.search(text):
+        return None
     if _GENERIC_RULE.search(text):
         return "generic_ae"
     if re.search(r"adverse|safety|\bae\b", text, re.I):

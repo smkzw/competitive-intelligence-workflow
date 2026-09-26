@@ -222,6 +222,67 @@ class DerivedCtgovStudy(BaseModel):
     acquired_at: datetime
     content_text: str
     text_derivation: SourceTextDerivation
+    acquisition_mode: Literal["public_api", "offline_cas_replay"] = "public_api"
+
+
+def derive_saved_ctgov_record(
+    project_root: Path, raw_page: ContentBlob, nct_id: str, *, replayed_at: datetime,
+) -> DerivedCtgovStudy:
+    """Reopen one CAS page record without claiming a new live fetch or page closure.
+
+    The caller must separately establish how the saved page was acquired and
+    whether the complete cursor chain was captured. ``replayed_at`` is the
+    current offline extraction time, not the original API acquisition time.
+    """
+    if replayed_at.tzinfo is None or replayed_at.utcoffset() is None:
+        raise SourceDerivationError("离线重开时间必须包含时区")
+    try:
+        raw = ContentAddressedStore(project_root).read_bytes(raw_page)
+        page = source_json_decoder().decode(raw.decode("utf-8"))
+        if not isinstance(page, dict) or not isinstance(page.get("studies"), list):
+            raise TypeError("原始分页缺少研究数组")
+        matches = []
+        for index, study in enumerate(page["studies"]):
+            if not isinstance(study, dict):
+                raise TypeError("原始分页含非对象研究")
+            protocol = study.get("protocolSection")
+            if not isinstance(protocol, dict):
+                raise TypeError("原始分页研究方案结构无效")
+            identification = protocol.get("identificationModule")
+            if not isinstance(identification, dict):
+                raise TypeError("原始分页研究身份结构无效")
+            if identification.get("nctId") == nct_id:
+                matches.append((index, study))
+        if len(matches) != 1:
+            raise SourceDerivationError("原始分页中目标研究身份不是唯一一条")
+        index, record = matches[0]
+        protocol = record["protocolSection"]
+        identification = protocol["identificationModule"]
+        status = protocol["statusModule"]
+        posted = str(status["lastUpdatePostDateStruct"]["date"])
+        date.fromisoformat(posted)
+        title = str(identification.get("briefTitle") or identification.get("officialTitle")
+                    or nct_id).strip()
+        if not title:
+            raise ValueError("目标研究缺少标题")
+        text, receipt = capture_source_text(
+            project_root, raw, media_type="application/json",
+            record_selector=CtgovRecordSelector(study_index=index, nct_id=nct_id),
+        )
+    except (OSError, UnicodeError, KeyError, TypeError, ValueError, ContentIntegrityError) as error:
+        if isinstance(error, SourceDerivationError):
+            raise
+        raise SourceDerivationError("保存的登记分页不能精确重开目标研究") from error
+    return DerivedCtgovStudy(
+        nct_id=nct_id,
+        title=title,
+        record_url=f"https://clinicaltrials.gov/study/{nct_id}",
+        registry_posted_version_date=posted,
+        acquired_at=replayed_at,
+        content_text=text,
+        text_derivation=receipt,
+        acquisition_mode="offline_cas_replay",
+    )
 
 
 def derive_ctgov_records(

@@ -19,6 +19,7 @@ from ci_workflow.application.source_research_service import (
     ResearchPackageError,
     SourceCapture,
     _validate_bound_ctgov_a_results,
+    bind_ctgov_ae_count_to_a_row,
     bind_ctgov_ae_to_a_row,
     bind_ctgov_direct_safety_to_a_row,
     bind_ctgov_outcome_to_a_row,
@@ -39,8 +40,9 @@ from ci_workflow.renderers.portal.report_a import (
 )
 from ci_workflow.reports.b.safety_concepts import describe_safety_concept, safety_category_zh
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
+from ci_workflow.storage.content_store import ContentAddressedStore
 from ci_workflow.storage.snapshot_store import SnapshotStore
-from ci_workflow.storage.source_derivation import capture_source_text
+from ci_workflow.storage.source_derivation import SourceDerivationError, capture_source_text
 from ci_workflow.storage.sqlite import open_database
 from tests.integration.test_research_package_submission import _project
 
@@ -69,6 +71,133 @@ def _derived(tmp_path: Path) -> DerivedCtgovStudy:
         content_text=text,
         text_derivation=receipt,
     )
+
+
+def test_saved_ctgov_page_replay_is_exact_and_never_masquerades_as_live_fetch(
+    tmp_path: Path,
+) -> None:
+    from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
+
+    original = _derived(tmp_path)
+    blob = original.text_derivation.raw_asset
+    replayed = derive_saved_ctgov_record(
+        tmp_path, blob, "NCT04558918",
+        replayed_at=datetime(2026, 9, 26, tzinfo=UTC),
+    )
+    assert replayed.content_text == original.content_text
+    assert replayed.text_derivation == original.text_derivation
+    capture = source_capture_from_ctgov_study(tmp_path, replayed)
+    assert capture.access_method == "offline_cas_replay"
+    assert capture.route_id == "ctgov-cas-replay-v1"
+    assert capture.date_precisions is not None
+    assert capture.date_precisions.first_disclosed_at == "calendar_day"
+
+    record = json.loads(original.content_text)
+    duplicate_raw = json.dumps({"studies": [record, record]}).encode()
+    duplicate_blob = ContentAddressedStore(tmp_path).put_bytes(
+        duplicate_raw, media_type="application/json"
+    )
+    with pytest.raises(ValueError, match="唯一"):
+        derive_saved_ctgov_record(
+            tmp_path, duplicate_blob, "NCT04558918",
+            replayed_at=datetime(2026, 9, 26, tzinfo=UTC),
+        )
+
+
+def test_saved_ctgov_page_replay_rejects_malformed_record_with_scoped_error(
+    tmp_path: Path,
+) -> None:
+    malformed = {"studies": [{"protocolSection": None}]}
+    blob = ContentAddressedStore(tmp_path).put_bytes(
+        json.dumps(malformed).encode(), media_type="application/json"
+    )
+    with pytest.raises(SourceDerivationError, match="保存的登记分页"):
+        from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
+
+        derive_saved_ctgov_record(
+            tmp_path, blob, "NCT04558918",
+            replayed_at=datetime(2026, 9, 26, tzinfo=UTC),
+        )
+
+
+def test_event_group_sae_and_death_counts_bind_raw_atoms_without_rate_substitution(
+    tmp_path: Path,
+) -> None:
+    project = _project(tmp_path)
+    record = {
+        "protocolSection": {
+            "identificationModule": {"nctId": "NCT04820530", "briefTitle": "PNH study"},
+            "statusModule": {"lastUpdatePostDateStruct": {"date": "2026-08-01"}},
+        },
+        "resultsSection": {"adverseEventsModule": {
+            "timeFrame": "Day 1 through Week 48",
+            "eventGroups": [{
+                "id": "EG000", "title": "LNP023 200mg b.i.d.",
+                "seriousNumAffected": 8, "seriousNumAtRisk": 40,
+                "deathsNumAffected": 0, "deathsNumAtRisk": 40,
+            }],
+        }},
+    }
+    raw = json.dumps({"studies": [record]}, ensure_ascii=False).encode()
+    blob = ContentAddressedStore(project).put_bytes(raw, media_type="application/json")
+    from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
+
+    replayed = derive_saved_ctgov_record(
+        project, blob, "NCT04820530", replayed_at=datetime(2026, 9, 26, tzinfo=UTC)
+    )
+    source = source_capture_from_ctgov_study(project, replayed)
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues
+    assert {(atom.category, atom.value_quote, atom.denominator_quote) for atom in atoms} == {
+        ("sae", "8", "40"), ("death", "0", "40"),
+    }
+    specs = (
+        ("sae", "严重不良事件（登记）", "严重不良事件组别汇总计数", "any_sae", 8),
+        ("death", "死亡病例（登记）", "死亡病例组别汇总计数", "death", 0),
+    )
+    bound_rows = []
+    facts = []
+    claims = []
+    for category, label, term, concept, count in specs:
+        row = SafetyRow(
+            row_id=f"r24-{category}", product_id="iptacopan",
+            trial_id="nct04820530", arm="LNP023 200mg b.i.d.", group_id="EG000",
+            category=label, term=term, term_key=concept,
+            value=count, unit="人", measure_object="participant_count",
+            numerator=count, denominator=40, time_window="Day 1 through Week 48",
+        )
+        atom = next(item for item in atoms if item.category == category)
+        bound, row_facts, claim = bind_ctgov_ae_count_to_a_row(source, atom, row)
+        assert bound.value == count and bound.source_text == str(count)
+        assert claim.claim_kind == "direct_evidence" and claim.calculation is None
+        assert [fact.original_text for fact in row_facts] == [str(count), "40"]
+        bound_rows.append(bound)
+        facts.extend(row_facts)
+        claims.append(claim)
+        with pytest.raises(ResearchPackageError):
+            bind_ctgov_ae_count_to_a_row(
+                source, atom, row.model_copy(update={"value": count + 1})
+            )
+    batch = build_ctgov_a_safety_candidate_batch((source,), tuple(bound_rows))
+    assert len(batch.bound_rows) == 2 and not batch.gaps
+    assert len(batch.facts) == 4 and len(batch.claims) == 2
+    baseline = ReportAPortalData.model_validate(json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )["report_data"])
+    # This test targets the source-to-row validator, not full indication-universe
+    # admission; the fixture's unrelated AD product catalog is left unchanged.
+    report = baseline.model_copy(update={"safety": (*baseline.safety, *bound_rows)})
+    _validate_bound_ctgov_a_results(report, (source,), tuple(facts), tuple(claims))
+    contract = verify_project_workspace(project).contract
+    lineage = ingest_research_evidence(
+        project_root=project, project_id=contract.project_id, contract_version=1,
+        report_kind="A", data_cutoff=contract.data_cutoff,
+        scientific_content_digest=sha256(b"r24-sae-death-raw-counts").hexdigest(),
+        created_at=source.acquired_at, sources=(source,), route_attempts=(),
+        facts=tuple(facts), claims=tuple(claims),
+    )
+    assert len(lineage.fact_version_ids) == 4
+    assert len(lineage.claim_version_ids) == 2
 
 
 def _reported_count_source(

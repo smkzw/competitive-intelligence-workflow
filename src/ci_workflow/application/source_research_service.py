@@ -185,13 +185,14 @@ def source_capture_from_ctgov_study(
     posted_day = datetime.combine(posted, time.min, tzinfo=UTC)
     return SourceCapture(
         source_id=f"ctgov-{study.nct_id.lower()}",
-        route_id="ctgov-api-v2",
+        route_id=("ctgov-cas-replay-v1" if study.acquisition_mode == "offline_cas_replay"
+                  else "ctgov-api-v2"),
         source_type="clinical_trial_registry",
         title=study.title,
         url=study.record_url,
         query_or_identifier=study.nct_id,
         language="en",
-        access_method="public_api",
+        access_method=study.acquisition_mode,
         media_type="application/json",
         content_text=study.content_text,
         text_derivation=study.text_derivation,
@@ -228,7 +229,7 @@ class ResearchResultContext(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     result_key: str
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death"]
     trial_id: str
     group_id: str
     group_title: str
@@ -401,7 +402,7 @@ class ScientificReview(BaseModel):
 
 
 ClinicalTrialsResultCategory = Literal[
-    "outcome", "teae", "sae", "aesi", "common_ae", "parse_failure"
+    "outcome", "teae", "sae", "aesi", "common_ae", "death", "parse_failure"
 ]
 ClinicalTrialsResultIssueStatus = Literal[
     "missing", "misclassified", "conflicting", "parse_failure"
@@ -494,7 +495,7 @@ class ClinicalTrialsResultCoverageAudit:
 
 @dataclass(frozen=True)
 class _RegistryResult:
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death"]
     trial_id: str
     source_id: str
     source_path: str
@@ -530,7 +531,7 @@ class CtgovAtomicResult:
     """One registry result with re-extracted numerator/value and denominator atoms."""
 
     result_key: str
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae"]
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death"]
     trial_id: str
     source_id: str
     group_id: str
@@ -575,6 +576,7 @@ _RESULT_CATEGORY_ZH = {
     "sae": "严重不良事件",
     "aesi": "特别关注不良事件",
     "common_ae": "常见不良事件",
+    "death": "死亡病例",
 }
 
 
@@ -785,6 +787,10 @@ def _outcome_category(
     # SAE/TEAE aggregate. A class may narrow the title but may not erase it.
     title_concept = describe_safety_concept(title)
     class_concept = describe_safety_concept(class_title) if class_title else None
+    # The measure title is a composite statistical object. A narrower class
+    # label cannot turn its single reported number into one component's AE rate.
+    if title_concept.key == "composite_ae":
+        return "outcome"
     selected = class_concept if class_concept and class_concept.key != "unknown" else title_concept
     if selected.key == "any_sae" and selected.polarity == "affirmed":
         return "sae"
@@ -923,13 +929,36 @@ def _report_outcome_match(
 def _report_safety_match(row: object, expected: _RegistryResult) -> bool:
     if getattr(row, "trial_id", None) is None:
         return False
-    if not _result_arm_matches(expected.arm, str(getattr(row, "arm", ""))):
+    row_group_id = getattr(row, "group_id", None)
+    if row_group_id is not None and row_group_id != expected.group_id:
+        return False
+    if (
+        str(getattr(row, "arm", "")) != expected.group_title
+        and not _result_arm_matches(expected.arm, str(getattr(row, "arm", "")))
+    ):
         return False
     value = getattr(row, "value", None)
     numerator = getattr(row, "numerator", None)
     denominator = getattr(row, "denominator", None)
     if expected.value is None or not isinstance(value, (int, float)):
         return False
+    raw_group_count = (
+        expected.category in {"sae", "death"}
+        and expected.source_path.startswith("resultsSection.adverseEventsModule.eventGroups[")
+        and getattr(row, "measure_object", None) == "participant_count"
+    )
+    if raw_group_count:
+        return (
+            getattr(row, "disclosure_state", "已公开") == "已公开"
+            and getattr(row, "unit", "") == "人"
+            and expected.numerator is not None
+            and math.isclose(float(value), expected.numerator, rel_tol=0.0, abs_tol=1e-9)
+            and (numerator, denominator) == (
+                (expected.numerator, expected.denominator)
+                if expected.denominator is not None and expected.denominator > 0
+                else (None, None)
+            )
+        )
     if expected.unit and str(getattr(row, "unit", "")) != expected.unit:
         return False
     if expected.numerator is not None and numerator != expected.numerator:
@@ -946,9 +975,22 @@ def _report_safety_term_matches(row: object, expected: _RegistryResult) -> bool:
     category = str(getattr(row, "category", ""))
     term = _result_text(getattr(row, "term", ""))
     if expected.category == "sae":
+        if expected.source_path.endswith(".seriousNumAffected"):
+            return (
+                category == "严重不良事件（登记）"
+                and term == "严重不良事件组别汇总计数"
+                and getattr(row, "term_key", None) == "any_sae"
+            )
         if category != "严重不良事件":
             return False
         return term == expected.term or (expected.term == "任何SAE" and term == "任何SAE")
+    if expected.category == "death":
+        return (
+            expected.source_path.endswith(".deathsNumAffected")
+            and category == "死亡病例（登记）"
+            and term == "死亡病例组别汇总计数"
+            and getattr(row, "term_key", None) == "death"
+        )
     if expected.category == "teae":
         return category == "治疗期间不良事件" and (
             term == expected.term
@@ -1304,6 +1346,7 @@ def _iter_adverse_event_results(
             )
             for category, term, affected_key, at_risk_key in (
                 ("sae", "任何SAE", "seriousNumAffected", "seriousNumAtRisk"),
+                ("death", "死亡", "deathsNumAffected", "deathsNumAtRisk"),
                 ("common_ae", "其他AE汇总", "otherNumAffected", "otherNumAtRisk"),
                 ("teae", "任何TEAE", "teaeNumAffected", "teaeNumAtRisk"),
                 ("teae", "任何TEAE", "anyTeaeNumAffected", "anyTeaeNumAtRisk"),
@@ -2167,7 +2210,7 @@ class CtgovASafetyCandidateBatch:
 def build_ctgov_a_safety_candidate_batch(
     sources: Sequence[SourceCapture], rows: Sequence[SafetyRow],
 ) -> CtgovASafetyCandidateBatch:
-    """Reextract each source once; return only unique direct-safety matches."""
+    """Reextract once; bind unique direct measures or raw SAE/death group counts."""
     if len({source.source_id for source in sources}) != len(sources):
         raise ResearchPackageError("批量登记来源标识重复")
     if len({row.row_id for row in rows}) != len(rows):
@@ -2182,6 +2225,20 @@ def build_ctgov_a_safety_candidate_batch(
                 indexed.setdefault(
                     (atom.trial_id.casefold(), _result_text(atom.endpoint).casefold()), []
                 ).append((source, atom))
+            elif atom.category in _RAW_EVENT_GROUP_COUNTS:
+                expected_field, _category, row_term, _concept = (
+                    _RAW_EVENT_GROUP_COUNTS[atom.category]
+                )
+                if (
+                    atom.value_locator.field_path
+                    and atom.value_locator.field_path.startswith(
+                        "$.resultsSection.adverseEventsModule.eventGroups["
+                    )
+                    and atom.value_locator.field_path.endswith(f".{expected_field}")
+                ):
+                    indexed.setdefault(
+                        (atom.trial_id.casefold(), _result_text(row_term).casefold()), []
+                    ).append((source, atom))
 
     selected: dict[str, tuple[SourceCapture, CtgovAtomicResult, SafetyRow,
                               tuple[ResearchFact, ...], ResearchClaim]] = {}
@@ -2192,9 +2249,14 @@ def build_ctgov_a_safety_candidate_batch(
             ((row.trial_id or "").casefold(), _result_text(row.term).casefold()), []
         ):
             try:
-                bound, facts, claim = _bind_verified_ctgov_direct_safety_to_a_row(
-                    source, atom, row
-                )
+                if atom.endpoint:
+                    bound, facts, claim = _bind_verified_ctgov_direct_safety_to_a_row(
+                        source, atom, row
+                    )
+                else:
+                    bound, facts, claim = _bind_verified_ctgov_ae_count_to_a_row(
+                        source, atom, row
+                    )
             except ResearchPackageError:
                 continue
             candidates.append((source, atom, bound, facts, claim))
@@ -2244,6 +2306,88 @@ def bind_ctgov_ae_to_a_row(
     if atom not in verified_atoms or atom.source_id != source.source_id:
         raise ResearchPackageError("登记 AE 原子与当前来源版本不一致")
     return _bind_verified_ctgov_ae_to_a_row(source, atom, row)
+
+
+_RAW_EVENT_GROUP_COUNTS = {
+    "sae": ("seriousNumAffected", "严重不良事件（登记）",
+            "严重不良事件组别汇总计数", "any_sae"),
+    "death": ("deathsNumAffected", "死亡病例（登记）",
+              "死亡病例组别汇总计数", "death"),
+}
+
+
+def _bind_verified_ctgov_ae_count_to_a_row(
+    source: SourceCapture, atom: CtgovAtomicResult, row: SafetyRow,
+) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
+    """Bind a registry event-group's *reported count*, never its derived rate."""
+    spec = _RAW_EVENT_GROUP_COUNTS.get(atom.category)
+    if spec is None or atom.endpoint or atom.numerator is None:
+        raise ResearchPackageError("此绑定仅接受 SAE 或死亡的原始组别人数")
+    field_name, category, term, concept = spec
+    if (
+        not atom.value_locator.field_path
+        or not atom.value_locator.field_path.startswith(
+            "$.resultsSection.adverseEventsModule.eventGroups["
+        )
+        or not atom.value_locator.field_path.endswith(f".{field_name}")
+    ):
+        raise ResearchPackageError("组别人数没有对应的登记原子字段")
+    reported_denominator = (
+        (atom.numerator, atom.denominator)
+        if atom.denominator is not None and atom.denominator > 0
+        else (None, None)
+    )
+    if (
+        row.trial_id is None
+        or row.trial_id.casefold() != atom.trial_id.casefold()
+        or row.group_id != atom.group_id
+        or _result_text(row.arm).casefold() != _result_text(atom.group_title).casefold()
+        or row.category != category or row.term != term or row.term_key != concept
+        or _result_text(row.time_window).casefold() != _result_text(atom.timepoint).casefold()
+        or row.unit != "人" or row.measure_object != "participant_count"
+        or row.count_basis != "participants" or row.disclosure_state != "已公开"
+        or (row.numerator, row.denominator) != reported_denominator
+        or row.value is None
+        or not math.isclose(row.value, atom.numerator, rel_tol=0.0, abs_tol=1e-9)
+    ):
+        raise ResearchPackageError("登记组别原始人数与安全行身份、时间或统计口径不一致")
+    expected_fields = {
+        "source_field_path": atom.value_locator.field_path,
+        "source_version_id": _capture_version_id(source),
+        "source_text": atom.value_quote,
+    }
+    for field, expected in expected_fields.items():
+        previous = getattr(row, field)
+        if previous is not None and previous != expected:
+            raise ResearchPackageError(f"安全原始人数已有冲突的{field}")
+    bound = SafetyRow.model_validate({**row.model_dump(mode="json"), **expected_fields})
+    facts = research_facts_from_ctgov_atom(atom, report_row_ref=f"safety:{row.row_id}")
+    claim = ResearchClaim(
+        claim_id=stable_id(
+            "ctgov-ae-raw-count-claim", row.row_id, *(fact.fact_id for fact in facts)
+        ),
+        claim_text=f"登记直接报告 {term}：{atom.value_quote} 人（{atom.group_title}）",
+        claim_kind="direct_evidence",
+        fact_ids=tuple(fact.fact_id for fact in facts),
+    )
+    return bound, facts, claim
+
+
+def bind_ctgov_ae_count_to_a_row(
+    source: SourceCapture, atom: CtgovAtomicResult, row: SafetyRow,
+) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
+    """Public entry requiring exactly one verified source atom for the count row."""
+    verified_atoms, _issues = extract_ctgov_atomic_results(source)
+    matches = []
+    for candidate in verified_atoms:
+        try:
+            result = _bind_verified_ctgov_ae_count_to_a_row(source, candidate, row)
+        except ResearchPackageError:
+            continue
+        matches.append((candidate, result))
+    if len(matches) != 1 or matches[0][0] != atom or atom.source_id != source.source_id:
+        raise ResearchPackageError("登记组别原始人数与安全行没有唯一的完整来源身份匹配")
+    return matches[0][1]
 
 
 def _validate_bound_ctgov_a_results(
@@ -2327,6 +2471,23 @@ def _validate_bound_ctgov_a_results(
             continue
         if context.value_role != "affected_count":
             raise ResearchPackageError("已绑定 AE 行缺少受影响人数原子")
+        if safety_row.measure_object == "participant_count" and atom.category in {
+            "sae", "death",
+        }:
+            count_row, count_facts, count_claim = _bind_verified_ctgov_ae_count_to_a_row(
+                source, atom, safety_row
+            )
+            if count_row != safety_row or fact != count_facts[0] or count_claim not in claims:
+                raise ResearchPackageError("AE 原始人数缺少同一来源事实与直接声明")
+            if len(count_facts) == 2:
+                denominator_ref = f"{fact.row_ref}:denominator"
+                if (
+                    row_ref_counts.get(denominator_ref) != 1
+                    or facts_by_ref.get(denominator_ref) != count_facts[1]
+                ):
+                    raise ResearchPackageError("AE 原始人数缺少同组风险人数原子")
+                matched_denominator_refs.add(denominator_ref)
+            continue
         safety_expected_row, safety_expected_facts, expected_claim = (
             _bind_verified_ctgov_ae_to_a_row(source, atom, safety_row)
         )
@@ -2360,7 +2521,9 @@ def _audit_source_record(
     issues: list[ClinicalTrialsResultCoverageIssue],
     used_efficacy_rows: set[str],
 ) -> dict[str, int]:
-    inventory = {category: 0 for category in ("outcome", "teae", "sae", "aesi", "common_ae")}
+    inventory = {
+        category: 0 for category in ("outcome", "teae", "sae", "aesi", "common_ae", "death")
+    }
     registry_results: list[_RegistryResult] = []
     for parser, path in (
         (_iter_outcome_results, "resultsSection.outcomeMeasuresModule"),
@@ -2656,7 +2819,9 @@ def audit_clinicaltrials_result_coverage(
     registry_parse_failures_by_trial: dict[str, set[str]] = {}
     registry_projection_issues_by_trial: dict[str, set[str]] = {}
     inventory_counts = {
-        category: 0 for category in ("outcome", "teae", "sae", "aesi", "common_ae", "parse_failure")
+        category: 0 for category in (
+            "outcome", "teae", "sae", "aesi", "common_ae", "death", "parse_failure"
+        )
     }
     used_efficacy_rows: set[str] = set()
     for source in sources:

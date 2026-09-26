@@ -8,7 +8,7 @@
 
 | R24 | 对应包 | 2026-09-26 当前处理 | 下一个可核验出口 |
 |---|---|---|---|
-| 01 分类与术语 | W03/W07 | 生产来源 `_outcome_category` 已改用安全概念；反例定向通过；原语义记录和特殊子集术语仍待统一 | 否定/复合/子集/ADA真实记录与 A/B 消费一致 |
+| 01 分类与术语 | W03/W07 | 生产来源 `_outcome_category` 已改用安全概念；复合测量不再被 class 偷拆，MAVE 不因“adverse”字面误入 AE。NCT04820530 两个 MAVE 原文 0.00 现可精确绑定疗效行；其他研究的终点定位仍需按方案/统计计划核对 | 否定/复合/子集/ADA真实记录与 A/B 消费一致 |
 | 02 分母候选 | W03/W07 | 同组候选数值/单位冲突不再按顺序 last-wins；原人数保留；仅局部通过 | 原始统计对象/候选/来源路径与派生全部入事实检查点 |
 | 03 错误隔离 | W03/W07 | 缺 N、0/0、n>N 保留原人数且单原子记问题；定向 30 项通过 | 真实多期/多组故障不截断邻组及异常来源分类闭包 |
 | 04 N 类型 | W02/W07 | 通用构建器保留未知、明确 0、计划、实际；定向构建 3 项通过 | 普通入口、模型和真实页面同口径 |
@@ -18,6 +18,11 @@
 | 08 图点配对 | W03/W05 | 未实施；既有 occurrence 仍可能按顺序错配 | 显式比较上下文及乱序负例、真实图表核对 |
 | 09 桌面密度 | W05A/B/C | A 临床组合筛选格全宽；其他观察检索可用；安全表长观察窗从撑高整行改为短预览＋原位全文，1600px 实页展开/无横溢已核。仅三处局部，不是桌面视觉门，安全页首屏筛选仍过高 | 四宽度×四状态三门户、局部图卡和焦点/来源回执 |
 | 10 可恢复候选/门 | W00/W07/W09 | 新 manifest 固定两页来源、别名表、代码与资源摘要、候选/页面哈希、重建命令及未归属/未绑定数；旧历史摘要未改。当前完整开发 gate 已实跑 quality-only PASS | 历史冻结与当前代码分别判定；科学/浏览器/分享/安装另验 |
+| 11 W07 精确来源垂直切片 | W03/W07 | 从固定 PNH CAS 的 NCT04820530 离线重开、显式标记非实时获取；38 个原子、0 个本研究解析问题，当前候选中 18/18 疗效行及 2/2 安全人数行唯一匹配，形成内存中 22 个原始事实，原始死亡 0 和独立 40 人分母均保留。回执见 [`evidence/0924V1-r24/nct04820530-source-slice.json`](evidence/0924V1-r24/nct04820530-source-slice.json)。真实事实尚未正式摄取/切 current；老 AD 夹具按新增死亡原子复算为 304 项未闭合（其中 104 项死亡），零个登记研究可称完整投影 | 在真实项目中摄取、合法绑定和重渲染小批后扩源；审计旧门户与新候选必须分别核验，不将 20 行小批当 4412 行闭包 |
+
+R24-11 的证据与旧候选的生成摘要属于两个不同代码时点：`candidate-manifest.json` 的源码 hash 是候选生成时的字节；小切片 JSON 单独固定本轮修改后的源码 hash。实际 SAP 将 NCT04820530 的 MAVE 列于疗效终点，见 [登记附件统计分析计划](https://cdn.clinicaltrials.gov/large-docs/30/NCT04820530/SAP_001.pdf)；这只支持该研究的归类，不授权把其他试验的 MAVE/MACE 一律写为疗效或把人数自动换算为发生率。旧 AD 夹具的当前审计断言从历史 59 项迁移为逐类别 304 项（outcome 50 / SAE 122 / common AE 12 / TEAE 16 / death 104），保留失败身份和 7 项 0/0、1 项缺受影响人数；**没有把 AD 报告改判通过**。相邻生产来源/审计/构建器批 `uv run pytest -q tests/integration/test_r24_source_measure_regressions.py tests/integration/test_w07_ctgov_capture_bridge.py tests/integration/test_ctgov_result_coverage_audit.py tests/integration/test_a_payload_builder_measure_context.py tests/reports/b/test_registry_observation.py tests/unit/reports/test_registry_observation_gates.py` 最终字节 **75 passed / 98.43s**。接口里程碑质量门 `bash tools/gate.sh` 为 **GATE_OK quality-only**：Ruff 全 src/tests/tools、strict-mypy 243 源文件、活跃 unit+contract 1064 passed、保留兼容 20 passed、分层 7 passed、旧路径检查通过；不含真实来源闭包、浏览器矩阵、离线分享、三宿主或 24 门户。
+
+下一安全动作：先把这 20 行精确绑定接入**隔离的真实 PNH 项目**，验证来源版本/事实版本/消费者绑定/不可变快照和 A 页展示同一值及来源，再扩到多个组别/多期与其他产品；同时保持 B/C 桌面包推进，不把 A 全量闭包当成它们的开发阻断。安全人数仅直引原始人数，派生率须另行有分子/分母/公式。继续针对 304 项旧 AD 审计缺口做新旧集合与口径差异核对，而不是按旧 59 的断言或总数硬消项。正式当前 generation、A/B/C 编辑与离线分享、四宽度四状态、独立科学复核、三宿主和 24 门户均未完成。
 
 本轮测试节奏：先一组生产函数 RED（9 fail/2 pass），修完同组及 CT.gov 邻接集成 `30 passed/39.07s`；通用构建器先 RED 2，AE 组别/未归属图形/长窗折叠再各先 RED，R24 构建/来源/AD 覆盖邻接批 **32 passed/58.77s**、构建器最终定向 **5 passed/2.80s**。第一轮完整 gate 因 v96 旧测试仍拒绝明确 0N 而 `1063 passed, 1 failed`；在不回退 0N 的前提下迁移该断言，第二轮完整 gate **GATE_OK quality-only**。AD 邻接审计仍记录 **59 个公开记录覆盖问题**（不是本 PNH 候选的 59 个问题）：旧 8 项加新暴露的 51 项 AE 子集遗漏，当前测试诚实断言 FAIL 状态；旧 AD 原始夹具字节 SHA-256 `988c1607e08c7f9747a6feb493dcdaf66b6ccd7c26cafefe96e956622196fa1a` 未改，当前科学模型明确拒绝其“已完整”旧标签。真实 A 浏览器局部证据在 `evidence/0924V1-r24/`；不代表四档视觉门。三宿主/24 门户无新回执。历史冻结材料与旧 SHA 不改；旧 mobile FAIL/PASS 不更名为桌面 PASS。
 

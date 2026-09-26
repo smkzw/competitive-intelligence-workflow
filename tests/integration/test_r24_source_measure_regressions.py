@@ -17,7 +17,9 @@ from ci_workflow.application.source_research_service import (
     _iter_outcome_results,
     _outcome_category,
     _outcome_report_term,
+    classify_source_outcome,
 )
+from ci_workflow.reports.b.safety_concepts import describe_safety_concept
 
 
 def _record(
@@ -63,6 +65,13 @@ def test_outcome_category_does_not_invent_seriousness_or_emergence(
     title: str, class_title: str, expected: str,
 ) -> None:
     assert _outcome_category(title, class_title) == expected
+
+
+def test_major_adverse_vascular_event_rate_is_not_generic_treatment_ae() -> None:
+    title = "Adjusted Annualized Major Adverse Vascular Events Rate in the Core Treatment Period"
+    assert describe_safety_concept(title).key == "unknown"
+    assert _outcome_category(title) == "outcome"
+    assert classify_source_outcome(title) == "efficacy"
 
 
 def test_conflicting_denominators_keep_count_and_are_order_independent() -> None:
@@ -155,3 +164,24 @@ def test_ae_event_groups_preserve_zero_and_missing_denominator_counts() -> None:
             by_group["EG3"].value) == (3, None, 3)
     assert any(item.status == "missing" and "0/0" in item.reason_zh for item in issues)
     assert any(item.status == "missing" and "EG3" in item.reason_zh for item in issues)
+
+
+def test_death_event_group_missing_is_unknown_and_explicit_zero_is_not_a_rate() -> None:
+    record = {"resultsSection": {"adverseEventsModule": {
+        "timeFrame": "Week 48",
+        "eventGroups": [
+            {"id": "EG1", "title": "Unknown", "deathsNumAtRisk": 40},
+            {"id": "EG2", "title": "Zero denominator", "deathsNumAffected": 0,
+             "deathsNumAtRisk": 0},
+        ],
+    }}}
+    issues: list[Any] = []
+    results = _iter_adverse_event_results(
+        record=record, trial_id="NCT00000000", source_id="r24-death", issues=issues,
+    )
+    death_rows = [row for row in results if row.category == "death"]
+    assert len(death_rows) == 1 and death_rows[0].group_id == "EG2"
+    assert (death_rows[0].numerator, death_rows[0].denominator,
+            death_rows[0].value, death_rows[0].unit) == (0, 0, 0, "人")
+    assert any(item.category == "death" and "未知" in item.reason_zh for item in issues)
+    assert any(item.category == "death" and "0/0" in item.reason_zh for item in issues)

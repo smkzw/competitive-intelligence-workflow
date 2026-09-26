@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -53,9 +54,13 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     # The captured registry payload omits one SAE affected count and contains
     # seven explicit 0/0 groups. Neither absence nor an undefined rate is zero.
     assert not audit.passed
-    # The current classifier exposes 51 additional unprojected AE-subset rows
-    # in the old A portal. They remain real coverage gaps, not test noise.
-    assert len(audit.issues) == 59
+    # The legacy 59-item expectation predates source-atom classification and
+    # death event-group inventory. This frozen AD payload still has unresolved
+    # coverage: count every class, never turn the extra findings into PASS.
+    assert Counter(item.category for item in audit.issues) == {
+        "outcome": 50, "sae": 122, "common_ae": 12, "teae": 16, "death": 104,
+    }
+    assert audit.inventory_counts["death"] == 104
     absent_affected = [
         item for item in audit.issues if item.source_path.endswith(".numAffected")
     ]
@@ -74,8 +79,9 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     assert len(audit.audited_trial_ids) == 44
     assert len(report.trials) == len(audit.trial_coverage) == 49
     assert len(audit.product_coverage) == 38
+    # Once deaths are inventoried, none of this older AD portal's registry
+    # studies has *complete* atomic projection. Do not preserve a false PASS.
     assert {item.status for item in audit.trial_coverage} == {
-        "registry_results_projected",
         "reported_by_secondary_source",
         "registry_results_not_posted",
         "reported_not_projected",
@@ -85,8 +91,11 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
         for item in audit.trial_coverage
         if item.status == "reported_not_projected"
     } == {
-        "nct02277743", "nct03131648", "nct03334396", "nct03745638",
-        "nct02118792", "nct05014568", "nct05131477", "nct03533751",
+        "nct02277743", "nct03131648", "nct04146363", "nct03985943",
+        "nct03349060", "nct03569293", "nct03334396", "nct03745638",
+        "nct02118792", "nct05014568", "nct04773587", "nct05131477",
+        "nct05651711", "nct03703102", "nct03809663", "nct03533751",
+        "nct04021862",
     }
     secondary = {
         item.trial_id

@@ -1,0 +1,49 @@
+{
+  "schema_version": "r24-source-slice-1",
+  "status": "replay_bound_in_memory_not_adopted",
+  "baseline_head": "b4fc75bf7a5fe9c0ce72654b922f794225e6135d",
+  "replayed_at_utc": "2026-09-26T02:34:09.256994+00:00",
+  "source": {
+    "id": "ctgov-nct04820530",
+    "access_method": "offline_cas_replay",
+    "raw_page_path": ".artifacts/source-cas/ctgov-live-20260906/evidence/raw/sha256/1e/1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98.bin",
+    "raw_page_sha256": "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "source_text_sha256": "4816a1f74fa67ce03b23561c958a8d14f32ffa9a301161ce5fa4cfae48fcae67",
+    "source_version_id": "source-version_1bdd4ab8659ce6a88f640b96",
+    "historical_as_of_reconstruction_proven": false,
+    "new_live_fetch_performed": false
+  },
+  "input_candidate": {
+    "path": ".artifacts/r24-pnh-candidate-20260926/report-a.json",
+    "sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "generation_switched": false
+  },
+  "code_sha256": {
+    "source_research_service": "0d8633bb6c4012b26d6612c04c80c64c23d78d93e50254d441f0d0610fa096b1",
+    "ctgov_fetch": "eaa953115faabb05ff818ae2e89de764d7e619651bf4da93d39729570edd92fc",
+    "safety_concepts": "0cb9a17a7210ebb3e11d63e48d9ada55fd66ca9113d84958aa2a1fff1a0f5f0a"
+  },
+  "result": {
+    "atomic_results": 38,
+    "parse_or_missing_issues": 0,
+    "efficacy_rows": 18,
+    "efficacy_exactly_bound": 18,
+    "efficacy_source_facts": 18,
+    "safety_rows": 2,
+    "safety_exactly_bound": 2,
+    "safety_source_facts": 4,
+    "direct_count_not_substituted_with_rate": true,
+    "retained_explicit_death_zero": true,
+    "source_paths": {
+      "eff-9": "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[8].classes[0].categories[0].measurements[0].value",
+      "eff-18": "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[16].classes[0].categories[0].measurements[0].value",
+      "safe-1": "$.resultsSection.adverseEventsModule.eventGroups[0].seriousNumAffected",
+      "safe-2": "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAffected"
+    }
+  },
+  "limits": [
+    "These 20 rows are an in-memory replay/binding slice, not committed source fact versions or consumer bindings in the PNH project.",
+    "The other PNH candidate rows, product-to-result identities, B/C consumers, universe closure, manual refresh, historical as-of, browser matrix and independent clinical review remain open.",
+    "The legacy AD source coverage fixture currently reports 304 visible issues, including 104 death-group counts; it is not a passed portal."
+  ]
+}
