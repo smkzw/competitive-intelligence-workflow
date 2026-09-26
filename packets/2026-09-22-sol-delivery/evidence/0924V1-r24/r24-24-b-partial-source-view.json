@@ -1,0 +1,42 @@
+{
+  "schema_version": "r24-24-evidence-1",
+  "status": "development_candidate_not_scientific_or_release_acceptance",
+  "base_head": "20121f7a72529bff2d1ad3e9e50e737be842fa02",
+  "scope": "W05B/W07 B partial precise efficacy and safety views retain unviewed related observations; legacy implicit view behavior stays historical only",
+  "source_inputs": {
+    "fixed_real_development_b_input": ".artifacts/r24-pnh-real-ab-20260926/state/user-fact-builder-inputs/report-b-data.json",
+    "fixed_real_development_b_input_sha256": "abf704c9e6f070b2115f6f315c8ccdd3f408797f4c788d500b7ae4402553ae30",
+    "old_pnh_fixture_sha256_unchanged": "a37d7239bfc68f50d86ff732953c68769f1e70710d9e05e36f474941ce172e3b"
+  },
+  "fixed_candidate_read_only_projection": {
+    "method": "Read fixed B input, set efficacy_views.coverage_mode=partial only in memory, validate ReportBPortalData and call production _efficacy_records; no candidate file or current pointer changed",
+    "domain_efficacy_rows": 3617,
+    "precise_view_rows": 1,
+    "selected_unique_rows": 3617,
+    "distinct_trial_ids": 47,
+    "domain_rows_with_source_version_exact_path_and_quote": 18,
+    "domain_rows_missing_that_triple": 3599,
+    "scientific_limitation": "Selected rows are not accepted facts merely by appearing in B; full-source and study-universe closure remain open"
+  },
+  "verification": {
+    "red": "3 new partial-view tests failed before implementation",
+    "first_adjacent_batch": "34 passed, 3 failed, 1 deselected in 251.06s; interrupted one expensive old full-PNH site build after diagnosis; not a PASS",
+    "resolved_root_causes": "Old PNH fixture lacks an explicit link between differently numbered domain/view rows; silent union would double-display results. Explicit partial mode limits merging to proven row identities. Reported zero and legacy disclosed 0 are equivalent when the numeric value is exactly zero.",
+    "adjacent_batch": "41 passed, 2 deselected in 142.32s; r13 semantic grouping, B portal integration, synthetic A/B source registry; old full-PNH site test and fixed real-CAS rebuild deliberately excluded from this development batch",
+    "physical_page_batch": "1 passed, 5 deselected in 0.68s; synthetic B efficacy/safety HTML evidence views preserve all 8/16 domain rows with one precise view each",
+    "explicit_complete_red_and_green": "A declared-complete view with one of eight rows first failed to reject omission; after repair, 35 passed/1 deselected in 0.73s across B semantic and physical-page tests, including complete one-row/empty refusal and all-eight acceptance",
+    "static": "git diff --check, Ruff changed source/tests, strict-mypy changed B source passed",
+    "quality_gate": "GATE_OK status=quality-only steps=6 on final source bytes; Ruff src/tests/tools, strict-mypy 248 source files, active unit/contract 1066 passed, retained compatibility 20 passed, layering 7 passed and old-path check",
+    "not_run": ["full real B HTML rendering and browser", "source closure for 3599 unverified efficacy rows", "independent scientific review", "four desktop widths and four data states", "three hosts, 24 portals, RC"]
+  },
+  "source_code_sha256": {
+    "b_renderer": "78ed51711981ababb5568342654a2daa366faeb62a8e64876b0ba1b161b5cbc7",
+    "r13_tests": "a06d44cdcc2441f88be4b305e141944afe1042417cf78f9e4368ea7e4d83b298",
+    "physical_page_tests": "370b9e6dc5101b1e71b2bf99a496e548445c239f7ad37d0f0393860121a30e3b"
+  },
+  "next": [
+    "Stop synthetic ctgov-fixture from masquerading as a source version on unverified B legacy rows; disclose unverified provenance without invented locator or original quote.",
+    "Keep complete fresh B packages tied to all scientific rows, then build and source-close the real B universe before final pages.",
+    "Continue real-source clear/undo/rollback and committed-current sharing, and desktop A/B/C visual acceptance."
+  ]
+}

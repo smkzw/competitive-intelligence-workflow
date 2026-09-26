@@ -372,6 +372,109 @@ def test_empty_typed_matrix_retains_efficacy_view_studies(tmp_path: Path) -> Non
     assert "未进入气泡坐标的相关研究（2）" in html
 
 
+def test_partial_precise_views_preserve_other_efficacy_and_safety_studies() -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    first_efficacy = payload["efficacy"][0]
+    first_safety = payload["safety"][0]
+    first_safety["value"] = 0.0
+    payload["efficacy_views"] = {"coverage_mode": "partial", "facts": [{
+        **first_efficacy,
+        "source_version_id": "source-version-verified-efficacy",
+        "source_text": "68.4",
+    }]}
+    payload["safety_views"] = {"coverage_mode": "partial", "facts": [{
+        **first_safety,
+        "source_version_id": "source-version-verified-safety",
+        "source_text": "0",
+        "disclosure_state": "reported_zero",
+    }]}
+    data = ReportBPortalData.model_validate(payload)
+    names = {product.id: product.name for product in data.products}
+    trials = {trial.id: trial.display_id for trial in data.trials}
+    efficacy = _efficacy_records(data, names, trials)
+    safety = _safety_records(data, names, trials)
+
+    assert {row["row_id"] for row, _ in efficacy} == {
+        row["row_id"] for row in payload["efficacy"]
+    }
+    assert {row["row_id"] for row, _ in safety} == {
+        row["row_id"] for row in payload["safety"]
+    }
+    assert len(efficacy) == len(payload["efficacy"])
+    assert len(safety) == len(payload["safety"])
+    assert efficacy[0][0]["source_version_id"] == "source-version-verified-efficacy"
+    assert safety[0][0]["source_version_id"] == "source-version-verified-safety"
+
+
+def test_explicit_view_link_replaces_one_legacy_row_without_losing_others() -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    original = payload["efficacy"][0]
+    original["source_view_row_id"] = "verified-observation-1"
+    payload["efficacy_views"] = {"coverage_mode": "partial", "facts": [{
+        **original,
+        "row_id": "verified-observation-1",
+        "source_version_id": "source-version-verified",
+    }]}
+    data = ReportBPortalData.model_validate(payload)
+    names = {product.id: product.name for product in data.products}
+    trials = {trial.id: trial.display_id for trial in data.trials}
+    rows = _efficacy_records(data, names, trials)
+
+    assert len(rows) == len(payload["efficacy"])
+    assert {row["row_id"] for row, _ in rows} == {
+        "verified-observation-1",
+        *(item["row_id"] for item in payload["efficacy"][1:]),
+    }
+
+
+def test_partial_precise_view_rejects_conflicting_overlap() -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    payload["efficacy_views"] = {"coverage_mode": "partial", "facts": [{
+        **payload["efficacy"][0],
+        "value": 99.0,
+    }]}
+    data = ReportBPortalData.model_validate(payload)
+    names = {product.id: product.name for product in data.products}
+    trials = {trial.id: trial.display_id for trial in data.trials}
+    with pytest.raises(ValueError, match="来源视图.*领域行.*冲突"):
+        _efficacy_records(data, names, trials)
+
+
+def test_explicit_complete_view_must_cover_every_domain_row() -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    names = {row["id"]: row["name"] for row in payload["products"]}
+    trials = {row["id"]: row["display_id"] for row in payload["trials"]}
+    payload["efficacy_views"] = {
+        "coverage_mode": "complete", "facts": [payload["efficacy"][0]],
+    }
+    with pytest.raises(ValueError, match="完整.*遗漏"):
+        _efficacy_records(ReportBPortalData.model_validate(payload), names, trials)
+
+    payload["efficacy_views"] = {"coverage_mode": "complete", "facts": []}
+    with pytest.raises(ValueError, match="完整.*遗漏"):
+        _efficacy_records(ReportBPortalData.model_validate(payload), names, trials)
+
+    payload["efficacy_views"]["facts"] = payload["efficacy"]
+    complete = _efficacy_records(ReportBPortalData.model_validate(payload), names, trials)
+    assert len(complete) == len(payload["efficacy"])
+
+
 def test_b_view_only_efficacy_does_not_relax_a_completeness() -> None:
     payload = json.loads(
         (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(

@@ -85,6 +85,34 @@ def _page_json_assignment(site: Path, relative: str, name: str) -> Any:
     return _json_assignment(_text(site, relative), name)
 
 
+def test_partial_precise_view_keeps_all_related_rows_in_physical_b_pages(
+    tmp_path: Path,
+) -> None:
+    payload = _load_portal_payload()
+    payload["efficacy_views"] = {
+        "coverage_mode": "partial",
+        "facts": [{**payload["efficacy"][0], "source_version_id": "verified-efficacy"}],
+    }
+    payload["safety_views"] = {
+        "coverage_mode": "partial",
+        "facts": [{**payload["safety"][0], "source_version_id": "verified-safety"}],
+    }
+    site = tmp_path / "b-partial"
+    render_report_b_site(ReportBPortalData.model_validate(payload), site)
+
+    efficacy = _page_json_assignment(site, "efficacy.html", "__EVIDENCE_VIEWS__")
+    safety = _page_json_assignment(site, "safety.html", "__EVIDENCE_VIEWS__")
+    assert {view["row"]["row_id"] for view in efficacy} == {
+        row["row_id"] for row in payload["efficacy"]
+    }
+    assert {view["row"]["row_id"] for view in safety} == {
+        row["row_id"] for row in payload["safety"]
+    }
+    assert any(
+        view["source_version_id"] == "verified-efficacy" for view in efficacy
+    )
+
+
 def test_b_sitemap_expands_every_static_product_and_trial_route(
     b_site: Path, b_payload: dict[str, Any]
 ) -> None:
@@ -219,4 +247,3 @@ def test_b_pages_use_local_assets_and_native_chinese_audience_copy(b_site: Path)
             visible,
             flags=re.I,
         ), html_path
-

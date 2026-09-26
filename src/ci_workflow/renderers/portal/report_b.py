@@ -2614,6 +2614,59 @@ def _without_declared_shadow_rows(rows: Sequence[Any]) -> tuple[Any, ...]:
     return tuple(row for row in rows if not _row_is_declared_shadow(row))
 
 
+def _with_uncovered_legacy_rows(
+    view_rows: Sequence[Any], legacy_rows: Sequence[Any],
+) -> tuple[Any, ...]:
+    """A precise view may cover only part of B's related-study universe."""
+    views = _without_declared_shadow_rows(view_rows)
+    legacy = _without_declared_shadow_rows(legacy_rows)
+    by_id = {
+        row_id: row
+        for row in views
+        if (row_id := _text(_first(row, "row_id", default=None)))
+    }
+    linked: set[str] = set()
+    uncovered: list[Any] = []
+    for row in legacy:
+        view_id = _text(_first(row, "source_view_row_id", "row_id", default=None))
+        view = by_id.get(view_id)
+        if view is None:
+            uncovered.append(row)
+            continue
+        if view_id in linked:
+            raise ReportBPortalError("多个领域行指向同一来源视图观察")
+        linked.add(view_id)
+        view_fact = _unwrap_fact(view)
+        for field in ("product_id", "trial_id", "unit", "source_version_id"):
+            expected = _text(_first(row, field, default=None))
+            observed = _text(_source_first(view, view_fact, field, default=None))
+            if expected and observed and expected != observed:
+                raise ReportBPortalError(f"来源视图与领域行{field}冲突")
+        view_value = _value_for(view)
+        row_value = _value_for(row)
+        view_state = _state(_first(view, "disclosure_state", default=None), view_value)
+        row_state = _state(_first(row, "disclosure_state", default=None), row_value)
+        same_zero = view_value == row_value == 0 and {
+            view_state, row_state,
+        } == {"reported_value", "reported_zero"}
+        if view_value != row_value or (view_state != row_state and not same_zero):
+            raise ReportBPortalError("来源视图与领域行数值或披露状态冲突")
+    return (*views, *uncovered)
+
+
+def _select_view_coverage(
+    view_rows: Sequence[Any], legacy_rows: Sequence[Any], coverage_mode: str,
+) -> tuple[Any, ...]:
+    if coverage_mode == "legacy_complete":
+        return _without_declared_shadow_rows(view_rows)
+    selected = _with_uncovered_legacy_rows(view_rows, legacy_rows)
+    if coverage_mode == "complete" and len(selected) > len(
+        _without_declared_shadow_rows(view_rows)
+    ):
+        raise ReportBPortalError("声明完整的来源视图遗漏领域行")
+    return selected
+
+
 def _legacy_or_view_rows(
     data: ReportBPortalData,
     *,
@@ -2622,8 +2675,14 @@ def _legacy_or_view_rows(
     view_fields: tuple[str, ...],
     table_fields: tuple[str, ...] = (),
 ) -> tuple[Any, ...]:
+    legacy = tuple(_get(data, legacy_name, ()) or ())
     source = _view_source(data, view_name)
     if source is not None:
+        coverage_mode = _get(source, "coverage_mode", "legacy_complete")
+        if not isinstance(coverage_mode, str) or coverage_mode not in {
+            "legacy_complete", "complete", "partial",
+        }:
+            raise ReportBPortalError("来源视图 coverage_mode 仅允许 complete 或 partial")
         fields = (
             *view_fields,
             "single_timepoint_views",
@@ -2638,17 +2697,17 @@ def _legacy_or_view_rows(
                 if candidate is not _MISSING and candidate is not None:
                     rows = _flatten_view_rows(_iter_values(candidate))
                     if rows:
-                        return rows
+                        return _select_view_coverage(rows, legacy, coverage_mode)
         rows = _flatten_view_rows(_collection(source, *view_fields))
         if rows:
             # A view state complete table is already a projection; its nested
             # fact is unwrapped by the record adapter without recomputation.
-            return _without_declared_shadow_rows(rows)
+            return _select_view_coverage(rows, legacy, coverage_mode)
+        if coverage_mode == "complete" and _without_declared_shadow_rows(legacy):
+            raise ReportBPortalError("声明完整的来源视图遗漏领域行")
     # 会商 round-4 #4：-declared 声明臂影子行是 B 门匹配的内部索引，
     # 展示层在唯一视图行入口统一过滤（安全/基线/疗效域同规则）
-    return _without_declared_shadow_rows(
-        tuple(_get(data, legacy_name, ()) or ())
-    )
+    return _without_declared_shadow_rows(legacy)
 
 
 def _efficacy_records(
