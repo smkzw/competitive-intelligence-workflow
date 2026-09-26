@@ -185,6 +185,22 @@
 .kz-a-table-wrap td { font-size: 16px; line-height: 1.5; padding: 13px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
 .kz-a-table-wrap tr:last-child td { border-bottom: 0; }
 .kz-a-table-wrap tbody tr:hover { background: #fffaf1; }
+[data-module="efficacy"] .kz-a-efficacy-table { table-layout: fixed; min-width: 1320px; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(1) { width: 9%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(2) { width: 13%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(3) { width: 18%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(4) { width: 13%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(5) { width: 12%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(6) { width: 10%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(7) { width: 6%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(8) { width: 12%; }
+[data-module="efficacy"] .kz-a-efficacy-table th:nth-child(9) { width: 7%; }
+[data-module="efficacy"] .kz-a-efficacy-table td {
+  padding: 9px 10px;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
 [data-module="additional-observations"] .kz-a-table-wrap table { table-layout: fixed; min-width: 1150px; }
 [data-module="additional-observations"] .kz-a-table-wrap th:nth-child(1) { width: 9%; }
 [data-module="additional-observations"] .kz-a-table-wrap th:nth-child(2) { width: 16%; }

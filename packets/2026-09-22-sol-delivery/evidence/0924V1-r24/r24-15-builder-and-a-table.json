@@ -1,0 +1,54 @@
+{
+  "schema_version": "r24-15-checkpoint-1",
+  "status": "development_candidate_not_release_acceptance",
+  "base_head": "9af689932afe554068ce2e0bf07f4bb2afa69df8",
+  "scope": [
+    "Reject an existing A payload or derivation sidecar instead of overwriting a prior generated candidate",
+    "Use versioned A efficacy table column geometry; preserve complete data and scientific non-plot reasons"
+  ],
+  "source_sha256": {
+    "tools/build_a_payload.py": "3c51863cb92852e50888ae4e6105d737c73e518dddc32c8e1ebf932e006077c5",
+    "tests/integration/test_a_payload_builder_measure_context.py": "02929cb13e4e41b0a9ac47b44cbd6dec8594a18fa2a8586e7abec6125382f35e",
+    "src/ci_workflow/renderers/portal/templates/a/efficacy.html.j2": "a54c66284f4f5e509e196c8d01332238b585f987dee4200456bb4bd9d2a5c646",
+    "src/ci_workflow/renderers/portal/assets/portal.css": "2b506778e78d629b677e9cdf75c79544ab7c2aaf3160c05bcef7bfdc0f6c3ccc",
+    "assets/portal/portal.css": "2b506778e78d629b677e9cdf75c79544ab7c2aaf3160c05bcef7bfdc0f6c3ccc",
+    "assets/portal/manifest.json": "ea75d5f93124697159d85ebd225b575c96e0c80ec27a5f5af5caac4088b2c79e"
+  },
+  "candidate": {
+    "input_payload_path": ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.json",
+    "input_payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "rendered_site_path": ".artifacts/r24-pnh-candidate-20260926/site-r24-15-desktop",
+    "rendered_efficacy_sha256": "b03cd46c9d177dc56de4dda1355bff7c59ccd97f3b679ec75cf2601d3c9da16c",
+    "rendered_report_js_sha256": "28eba593b71dcf9ddf39fdb30cf61ecdd4cced46e9cde53003c147b4038e1a87",
+    "site_pages": 56,
+    "current_generation_changed": false
+  },
+  "browser_check": {
+    "browser": "Chromium via Playwright CLI; local HTTP preview; browser and server closed after check",
+    "page": "efficacy.html",
+    "row_id": "eff-800",
+    "viewports_css_px": [1440, 1600, 1920, 2560],
+    "page_horizontal_overflow": false,
+    "row_height_css_px": {"1440": 109, "1600": 86, "1920": 86, "2560": 86},
+    "product_label": "iptacopan",
+    "product_label_does_not_break_inside_word": true,
+    "raw_value_and_non_plot_reason_visible": true,
+    "screenshots": {
+      "1440": {"path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-15-efficacy-row-1440.png", "sha256": "d0ba8cab61421b09a94f1f4ec749fc13a5e38e228adc1ca440380658e0dadec1"},
+      "1600": {"path": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-15-efficacy-row-1600.png", "sha256": "e4e66a19d6a8c01a844c1a27d29e37ea537b30c319e517e05b9c7d9bca594667"}
+    },
+    "limit": "This is one A row and one expanded table, not all A pages or the four-state A/B/C visual acceptance matrix."
+  },
+  "verification": {
+    "builder_regression": "1 passed; existing payload+sidecar and sidecar-only both refuse regeneration without changing protected bytes",
+    "first_full_gate": "GATE_FAIL quality-only: 1 failed and 1 error due to stale authored CSS mirror and manifest after changing portal.css",
+    "mirror_targeted": "2 passed, 3 deselected after syncing the exact author bytes and hash manifest",
+    "final_full_gate": "GATE_OK quality-only: full Ruff src/tests/tools; strict mypy 245 source files; active tests 1066 passed; retained compatibility 20 passed; layering 7 passed; legacy path check passed",
+    "not_run": ["four visual states", "B/C current-version browser", "independent medical review", "fresh-install and three-host", "24 real portals"]
+  },
+  "limits": [
+    "R24-13 overwritten development sidecar bytes cannot be reconstructed; historical receipt remains unchanged.",
+    "The output pair is not an atomic transaction if the process crashes between exclusive file creations; no accepted current switch occurs here.",
+    "The fixed CAS source is an offline 2026-09-06 replay, not a fresh current-status check."
+  ]
+}

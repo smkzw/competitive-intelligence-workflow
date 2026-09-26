@@ -133,6 +133,9 @@ def _parse_args() -> argparse.Namespace:
 _args = _parse_args()
 CAS = sorted(p for p in (Path(_args.cas_dir) / "evidence" / "raw").rglob("*.bin"))
 OUT = Path(_args.output)
+SIDECAR_OUT = OUT.with_name(OUT.stem + ".derivation.json")
+if OUT.exists() or SIDECAR_OUT.exists():
+    raise SystemExit("输出或派生清单已存在；请选择新的版本化输出路径")
 INDICATION = _args.indication
 INDICATION_ID = _args.indication_id
 CUTOFF_DATE = _args.cutoff
@@ -988,9 +991,10 @@ def main() -> None:
     derivation["combo_regimens"] = COMBO_RECORDS
     derivation["alias_map_id"] = ALIAS["map_id"]
     derivation["borderline_repositioning"] = sorted(BORDERLINE)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
-    sidecar = OUT.with_name(OUT.stem + ".derivation.json")
-    sidecar.write_text(json.dumps(derivation, ensure_ascii=False, indent=1), encoding="utf-8")
+    with OUT.open("x", encoding="utf-8") as handle:
+        handle.write(json.dumps(payload, ensure_ascii=False, indent=1))
+    with SIDECAR_OUT.open("x", encoding="utf-8") as handle:
+        handle.write(json.dumps(derivation, ensure_ascii=False, indent=1))
     print("products:", len(payload["products"]), "| trials:", len(trials_rows))
     print("efficacy rows:", len(efficacy_rows), "| safety rows:", len(safety_rows))
     print("companies:", len(company_rows), "| bytes:", OUT.stat().st_size)

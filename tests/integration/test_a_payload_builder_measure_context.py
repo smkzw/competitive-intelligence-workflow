@@ -83,12 +83,13 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
         "map_id": "synthetic-v1", "canonical_by_alias": {"Testdrug": "testdrug"},
     }), encoding="utf-8")
     output = tmp_path / "a-payload.json"
-    subprocess.run([
+    command = [
         sys.executable, str(root / "tools/build_a_payload.py"),
         "--cas-dir", str(tmp_path / "cas"), "--alias-map", str(alias),
         "--indication", "合成适应症", "--indication-id", "synthetic",
         "--output", str(output), "--cutoff", "2026-09-06",
-    ], cwd=root, check=True, capture_output=True, text=True)
+    ]
+    subprocess.run(command, cwd=root, check=True, capture_output=True, text=True)
     payload = json.loads(output.read_text(encoding="utf-8"))
     rows = payload["efficacy"]
     assert [(row["endpoint"], row["arm"], row["denominator"]) for row in rows] == [
@@ -156,3 +157,14 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
         ("death", 2, 2, 30), ("any_sae", 0, 0, 20),
     ]
     assert all(item["time_window"] == "Week 1 to Week 4" for item in safety[4:])
+    original_payload = output.read_bytes()
+    original_sidecar = output.with_name("a-payload.derivation.json").read_bytes()
+    repeated = subprocess.run(command, cwd=root, capture_output=True, text=True)
+    assert repeated.returncode != 0 and "已存在" in repeated.stderr
+    assert output.read_bytes() == original_payload
+    assert output.with_name("a-payload.derivation.json").read_bytes() == original_sidecar
+    output.unlink()
+    sidecar_only = subprocess.run(command, cwd=root, capture_output=True, text=True)
+    assert sidecar_only.returncode != 0 and "已存在" in sidecar_only.stderr
+    assert not output.exists()
+    assert output.with_name("a-payload.derivation.json").read_bytes() == original_sidecar
