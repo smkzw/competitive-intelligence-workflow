@@ -7,9 +7,11 @@ import sqlite3
 import threading
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from zipfile import ZipFile
 
 import pytest
 from jsonschema import Draft202012Validator
+from playwright.sync_api import sync_playwright
 
 import ci_workflow.application.latest_delivery as latest_delivery_module
 import ci_workflow.application.user_fact_edit as user_fact_edit_module
@@ -23,6 +25,11 @@ from ci_workflow.application.latest_delivery import (
     read_latest_delivery,
 )
 from ci_workflow.application.refresh_service import RefreshService
+from ci_workflow.application.share_export import (
+    ShareViewSelection,
+    _validate_static_resources,
+    export_current_html_share,
+)
 from ci_workflow.application.user_fact_edit import (
     CurrentDeliveryConflictError,
     FactEdit,
@@ -35,6 +42,7 @@ from ci_workflow.application.user_fact_edit import (
     UserFactSaveResult,
 )
 from ci_workflow.application.user_fact_edit_server import LoopbackEditServer
+from ci_workflow.cli import main as cli_main
 from ci_workflow.domain.contracts import ProjectContract
 from ci_workflow.domain.enums import OutputFormat, ReportKind
 from ci_workflow.domain.ids import stable_id
@@ -2314,3 +2322,197 @@ def test_saved_event_preserves_sparse_edit_presence(tmp_path: Path) -> None:
     events = service.event_store.read_all()
     saved = next(event for event in events if event.event_type == "user.fact.saved")
     assert saved.payload["command"]["edits"] == {"numerator": 24}
+
+
+def test_current_share_exports_committed_a_b_edit_and_unchanged_c(
+    tmp_path: Path,
+) -> None:
+    root, _ = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
+    saved = service.save(
+        _command(request_id="share-current-ab", edits=FactEdit(numerator=24, denominator=62))
+    )
+    current = service.read_current_delivery()
+    output = tmp_path / "share-current.zip"
+    receipt = export_current_html_share(
+        root,
+        output,
+        selections=(
+            ShareViewSelection(report="A", revision=1, entry_page="safety.html",
+                               query={"product": ("伊普可泮",)}),
+            ShareViewSelection(report="B", revision=1, entry_page="safety.html",
+                               query={"trial": ("nct04558918",)}),
+            ShareViewSelection(report="C", revision=1,
+                               entry_page="inclusion-criteria.html",
+                               query={"criteria_q": ("EASI",)}),
+        ),
+    )
+    assert receipt.current_revision == 1
+    assert receipt.reports == ("A", "B", "C")
+    with ZipFile(output) as archive:
+        manifest = json.loads(archive.read("share-manifest.json"))
+        assert manifest["current_revision"] == current.revision
+        assert manifest["fact_revision_digest"] == current.fact_revision_digest
+        assert manifest["reports"]["C"]["report_revision"] == 0
+        landing = archive.read("打开报告.html").decode("utf-8")
+        assert "A/safety.html?product=" in landing
+        assert "B/safety.html?trial=nct04558918" in landing
+        assert "C/inclusion-criteria.html?criteria_q=" in landing
+        for report in ("A", "B", "C"):
+            delivery = next(item for item in current.reports if item.report == report)
+            site = root / delivery.site_relative_path
+            assert archive.read(f"{report}/data/report.js") == (
+                site / "data/report.js"
+            ).read_bytes()
+            assert manifest["reports"][report]["file_sha256"]["data/report.js"] == (
+                delivery.file_hashes["data/report.js"]
+            )
+        assert str(saved.derived_crude_rate).encode() in archive.read("A/data/report.js")
+        assert str(saved.derived_crude_rate).encode() in archive.read("B/data/report.js")
+        assert b"user_modified" in archive.read("A/data/report.js")
+        assert b"user_modified" in archive.read("B/data/report.js")
+    moved = tmp_path / "relocated" / "share"
+    moved.mkdir(parents=True)
+    with ZipFile(output) as archive:
+        archive.extractall(moved)
+    assert (moved / "A/safety.html").is_file()
+    assert (moved / "B/safety.html").is_file()
+    assert (moved / "C/inclusion-criteria.html").is_file()
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        for report in ("A", "B", "C"):
+            context = browser.new_context(viewport={"width": 1600, "height": 900})
+            page = context.new_page()
+            remote_requests: list[str] = []
+            page.on(
+                "request",
+                lambda request, requests=remote_requests: requests.append(request.url)
+                if request.url.startswith(("http://", "https://")) else None,
+            )
+            page.goto((moved / "打开报告.html").as_uri())
+            page.get_by_role("link", name=f"打开 {report} 报告").click()
+            page.wait_for_load_state("load")
+            assert page.url.startswith((moved / report).as_uri())
+            assert "?" in page.url
+            assert page.locator("h1").count() >= 1
+            if report == "A":
+                assert page.locator(
+                    '[data-filter-dimension="product"] '
+                    'button[data-filter-value="伊普可泮"]'
+                ).first.get_attribute("aria-pressed") == "true"
+            elif report == "B":
+                assert page.locator(
+                    'button[data-filter-dimension="trial"]'
+                    '[data-filter-value="nct04558918"]'
+                ).first.get_attribute("aria-pressed") == "true"
+            else:
+                assert page.locator("#kz-c-criteria-search").input_value() == "EASI"
+                assert page.locator(".kz-c-criteria-item").count() > 0
+            assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
+            assert remote_requests == []
+            context.close()
+        browser.close()
+
+
+def test_current_share_rejects_stale_config_tampered_site_and_existing_output(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str],
+) -> None:
+    root, _ = _project(tmp_path)
+    destination = tmp_path / "single-share.zip"
+    with pytest.raises(ValueError, match="revision"):
+        export_current_html_share(
+            root, destination,
+            selections=(ShareViewSelection(report="A", revision=9,
+                                           entry_page="overview.html"),),
+        )
+    with pytest.raises(ValueError, match="路径|页面"):
+        ShareViewSelection(report="A", revision=0, entry_page="../state/project.sqlite")
+    with pytest.raises(ValueError, match="筛选值"):
+        export_current_html_share(
+            root, destination,
+            selections=(ShareViewSelection(
+                report="A", revision=0, entry_page="safety.html",
+                query={"product": ("not-a-visible-product",)},
+            ),),
+        )
+    assert not destination.exists()
+    export_current_html_share(
+        root, destination,
+        selections=(ShareViewSelection(report="A", revision=0,
+                                       entry_page="overview.html"),),
+    )
+    with ZipFile(destination) as archive:
+        assert all(
+            not name.startswith(("B/", "C/")) for name in archive.namelist()
+        )
+    with pytest.raises(ValueError, match="已存在"):
+        export_current_html_share(
+            root, destination,
+            selections=(ShareViewSelection(report="A", revision=0,
+                                           entry_page="overview.html"),),
+        )
+    cli_output = tmp_path / "b-cli-share.zip"
+    assert cli_main([
+        "project", "share", "--root", str(root), "--output", str(cli_output),
+        "--reports", "B",
+    ]) == 0
+    assert "SHARE_READY revision=0 reports=B" in capsys.readouterr().out
+    with ZipFile(cli_output) as archive:
+        assert "B/overview.html" in archive.namelist()
+        assert "A/overview.html" not in archive.namelist()
+    config_path = tmp_path / "view-config.json"
+    config_path.write_text(json.dumps({
+        "schema_version": "1.0",
+        "selections": [{
+            "report": "B", "revision": 0, "entry_page": "safety.html",
+            "query": {"trial": ["nct04558918"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    configured = tmp_path / "configured-b.zip"
+    assert cli_main([
+        "project", "share", "--root", str(root), "--output", str(configured),
+        "--reports", "B", "--view-config", str(config_path),
+    ]) == 0
+    with ZipFile(configured) as archive:
+        config_manifest = json.loads(archive.read("share-manifest.json"))
+        assert config_manifest["reports"]["B"]["entry_href"] == (
+            "B/safety.html?trial=nct04558918"
+        )
+    config_path.write_text(config_path.read_text().replace('"revision": 0',
+                                                          '"revision": 9'), encoding="utf-8")
+    assert cli_main([
+        "project", "share", "--root", str(root),
+        "--output", str(tmp_path / "stale-cli.zip"), "--reports", "B",
+        "--view-config", str(config_path),
+    ]) == 2
+    assert not (tmp_path / "stale-cli.zip").exists()
+    current = UserFactEditService(root).read_current_delivery()
+    site = root / next(item for item in current.reports if item.report == "A").site_relative_path
+    page = site / "overview.html"
+    page.write_bytes(page.read_bytes() + b"<!-- tampered -->")
+    with pytest.raises(ValueError, match="哈希|实际文件"):
+        export_current_html_share(
+            root, tmp_path / "tampered-share.zip",
+            selections=(ShareViewSelection(report="A", revision=0,
+                                           entry_page="overview.html"),),
+        )
+
+
+def test_current_share_local_resource_closure_excludes_remote_or_missing_assets() -> None:
+    _validate_static_resources({
+        "overview.html": b'<a href="https://clinicaltrials.gov/">source</a>'
+                         b'<script src="assets/local.js"></script>',
+        "assets/local.js": b"window.ready = true;",
+    })
+    with pytest.raises(ValueError, match="外部"):
+        _validate_static_resources({
+            "overview.html": b'<script src="https://cdn.example/chart.js"></script>',
+        })
+    with pytest.raises(ValueError, match="外部"):
+        _validate_static_resources({
+            "overview.html": b'<script src="data:text/javascript,alert(1)"></script>',
+        })
+    with pytest.raises(ValueError, match="缺少本地资源"):
+        _validate_static_resources({
+            "overview.html": b'<link rel="stylesheet" href="assets/missing.css">',
+        })

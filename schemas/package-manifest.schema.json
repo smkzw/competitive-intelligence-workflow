@@ -95,13 +95,14 @@
         "catalog": {
           "type": "array",
           "uniqueItems": true,
-          "minItems": 15,
-          "maxItems": 15,
+          "minItems": 16,
+          "maxItems": 16,
           "prefixItems": [
             {"const": "package verify"},
             {"const": "project create"},
             {"const": "project verify"},
             {"const": "project run"},
+            {"const": "project share"},
             {"const": "project accept-visual"},
             {"const": "capability preflight"},
             {"const": "fixture run"},

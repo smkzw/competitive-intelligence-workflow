@@ -9,7 +9,7 @@ import tempfile
 import tomllib
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Never, cast
+from typing import Any, Literal, Never, cast
 
 import yaml
 from jsonschema import Draft202012Validator
@@ -52,6 +52,7 @@ EXPECTED_CLI_CATALOG = [
     "project create",
     "project verify",
     "project run",
+    "project share",
     "project accept-visual",
     "capability preflight",
     "fixture run",
@@ -369,6 +370,52 @@ def _verify_project(args: argparse.Namespace) -> int:
         "PROJECT_OK 项目可继续使用："
         f"{verification.project_root}；合同版本 "
         f"{verification.contract.contract_version}"
+    )
+    return 0
+
+
+def _project_share_handler(args: argparse.Namespace) -> int:
+    from ci_workflow.application.latest_delivery import read_current_delivery
+    from ci_workflow.application.share_export import (
+        ShareViewSelection,
+        export_current_html_share,
+    )
+
+    project = Path(args.root)
+    try:
+        current = read_current_delivery(project)
+        if current is None:
+            raise ValueError("当前交付不存在，不能从旧HTML生成分享包")
+        reports = _split_choices(args.reports, VALID_REPORTS, "报告类型")
+        if args.view_config:
+            payload = _load_json(Path(args.view_config))
+            if (
+                set(payload) != {"schema_version", "selections"}
+                or payload["schema_version"] != "1.0"
+            ):
+                raise ValueError("分享视图配置版本或字段不符合合同")
+            if not isinstance(payload["selections"], list):
+                raise ValueError("分享视图配置selections必须为列表")
+            selections = tuple(ShareViewSelection.model_validate(item)
+                               for item in payload["selections"])
+            if {item.report for item in selections} != set(reports):
+                raise ValueError("分享视图配置的报告集合与--reports不一致")
+        else:
+            selections = tuple(
+                ShareViewSelection(
+                    report=cast(Literal["A", "B", "C"], report),
+                    revision=current.revision,
+                )
+                for report in reports
+            )
+        receipt = export_current_html_share(
+            project, Path(args.output), selections=selections,
+        )
+    except (OSError, ValueError, ProjectWorkspaceError) as error:
+        raise ContractError(str(error)) from error
+    print(
+        f"SHARE_READY revision={receipt.current_revision} reports="
+        f"{','.join(receipt.reports)} sha256={receipt.sha256} output={receipt.output}"
     )
     return 0
 
@@ -1065,6 +1112,20 @@ def _build_parser() -> argparse.ArgumentParser:
         help="宿主独立上下文能力探针的可执行文件；必须实际运行并返回回执",
     )
     project_run.set_defaults(handler=_project_run_handler)
+    project_share = project_commands.add_parser(
+        "share", help="从已提交的current生成离线HTML报告分享包"
+    )
+    project_share.add_argument(
+        "--root", "--project", dest="root", required=True, help="项目目录"
+    )
+    project_share.add_argument("--output", required=True, help="新分享包 ZIP 路径；不得覆盖")
+    project_share.add_argument(
+        "--reports", default="A,B,C", help="导出报告，如 A 或 A,B,C"
+    )
+    project_share.add_argument(
+        "--view-config", help="可选的版本绑定视图配置 JSON"
+    )
+    project_share.set_defaults(handler=_project_share_handler)
     project_accept_visual = project_commands.add_parser(
         "accept-visual", help="持久化独立网页视觉验收并推进 HTML 状态"
     )

@@ -32,6 +32,7 @@ EXPECTED_CLI_CATALOG = [
     "project create",
     "project verify",
     "project run",
+    "project share",
     "project accept-visual",
     "capability preflight",
     "fixture run",
