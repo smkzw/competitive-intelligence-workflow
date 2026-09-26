@@ -119,6 +119,13 @@ def test_partial_precise_view_keeps_all_related_rows_in_physical_b_pages(
     site = tmp_path / "b-partial"
     render_report_b_site(ReportBPortalData.model_validate(payload), site)
 
+    search = _page_json_assignment(site, "data/search-index.js", "__SEARCH_INDEX__")
+    for collection in ("efficacy", "safety"):
+        row_id = payload[collection][0]["row_id"]
+        entry = next(item for item in search if item.get("row_id") == row_id)
+        assert entry["slug"] == collection
+        assert row_id in entry["keywords"]
+
     efficacy = _page_json_assignment(site, "efficacy.html", "__EVIDENCE_VIEWS__")
     safety = _page_json_assignment(site, "safety.html", "__EVIDENCE_VIEWS__")
     assert {view["row"]["row_id"] for view in efficacy} == {
@@ -149,6 +156,38 @@ def test_partial_precise_view_keeps_all_related_rows_in_physical_b_pages(
     assert pending["original_text"] is None
     assert pending["source_version_label_zh"] == "逐事实来源待核"
     assert pending["row"]["disclosure_state"] == "reported_value"
+
+
+@pytest.mark.parametrize("collection", ("efficacy", "safety"))
+def test_explicit_unknown_arm_product_relation_remains_visible_but_not_plotted(
+    tmp_path: Path,
+    collection: str,
+) -> None:
+    payload = _load_portal_payload()
+    target = payload[collection][0]
+    target["group_assignment_state"] = "unknown"
+    site = tmp_path / f"b-unknown-arm-product-{collection}"
+    render_report_b_site(ReportBPortalData.model_validate(payload), site)
+
+    groups = _page_json_assignment(site, f"{collection}.html", "__CHART_GROUPS__")
+    row = next(
+        row for group in groups for row in group.get("rows", [])
+        if row.get("row_id") == target["row_id"]
+    )
+    assert row["value"] == target["value"]
+    assert row["group_assignment_state"] == "unknown"
+    assert row["renderable"] is False
+    assert row["numeric_projection"]["renderable"] is False
+    assert row["unrendered_reason"] == "group_product_relationship_unresolved"
+    assert row["product_zh"] == "结果组别产品归属待核"
+    assert row["disclosure_state"] in {"reported_value", "reported_zero"}
+
+    views = _page_json_assignment(site, f"{collection}.html", "__EVIDENCE_VIEWS__")
+    view = next(item for item in views if item["row"]["row_id"] == target["row_id"])
+    assert float(view["value"]["value"]) == target["value"]
+    assert view["product_zh"] == "结果组别产品归属待核"
+    assert view["row"]["product_id"] is None
+    assert "结果组别与产品关联待核" in view["explanation"]["value"]
 
 
 def test_b_sitemap_expands_every_static_product_and_trial_route(

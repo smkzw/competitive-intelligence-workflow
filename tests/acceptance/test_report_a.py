@@ -398,16 +398,28 @@ def test_safety_observation_groups_preserve_events_at_desktop_width(
 def test_wide_efficacy_uses_two_readable_lanes_without_losing_observations(
     page: Page, rendered_ad_site: Path
 ) -> None:
-    for width, expected_columns in ((1440, 1), (1600, 1), (1920, 2), (2560, 2)):
+    home = (rendered_ad_site / "overview.html").read_text(encoding="utf-8")
+    assert home.index('data-summary-module="landscape"') < home.index(
+        'data-summary-module="efficacy"'
+    )
+    for width in (1440, 1600, 1920, 2560):
         _open(page, rendered_ad_site / "overview.html", width=width, height=1440)
         grid = page.locator("[data-chart-id='home-efficacy'] .kz-a-observation-grid")
         assert grid.count() == 1
         columns = grid.evaluate(
             "node => getComputedStyle(node).gridTemplateColumns.split(' ').length"
         )
-        assert columns == expected_columns
+        assert columns == 2
+        assert grid.evaluate(
+            "node => [...node.children].filter(child => child.getClientRects().length).every("
+            "child => child.getBoundingClientRect().width >= 600)"
+        )
         assert grid.locator(".kz-a-observation-column").count() == (
             2 if width >= 1920 else 0
+        )
+        assert grid.locator(".kz-a-observation-group").first.evaluate(
+            "node => node.querySelector('.kz-a-bar-label').getBoundingClientRect().width "
+            ">= node.getBoundingClientRect().width * 0.9"
         )
         assert grid.locator("[data-row-id]").count() == 6753
         assert grid.evaluate("node => node.scrollWidth <= node.clientWidth")

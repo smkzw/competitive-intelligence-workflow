@@ -289,6 +289,32 @@ def test_c_sitemap_expands_all_twelve_static_pages_and_every_trial_detail(
         assert (c_site / route_to_site_path(route)).is_file(), route
 
 
+def test_c_global_search_reaches_each_design_observation_on_its_own_page(
+    c_site: Path,
+) -> None:
+    observations = _observations(_load(REPORT_DATA))
+    search = _page_json_assignment(c_site, "data/search-index.js", "__SEARCH_INDEX__")
+    indexed = {entry["row_id"]: entry for entry in search if entry.get("row_id")}
+    assert len(indexed) == len(observations)
+    assert set(indexed) == {observation.row_id for observation in observations}
+
+    page_ids: dict[str, set[str]] = {}
+    for observation in observations:
+        entry = indexed[observation.row_id]
+        route = f"{entry['slug']}.html"
+        if route not in page_ids:
+            evidence = _page_json_assignment(c_site, route, "__EVIDENCE_VIEWS__")
+            page_ids[route] = {view["row"]["row_id"] for view in evidence}
+        assert observation.row_id in page_ids[route]
+        assert observation.row_id in entry["keywords"]
+        if observation.field == "inclusion_criterion":
+            assert entry["slug"] == "inclusion-criteria"
+        elif observation.field == "exclusion_criterion":
+            assert entry["slug"] == "exclusion-criteria"
+    # The rendered template must retain the row ID for shared exact-ID search/deep link.
+    assert "row_id: entry.row_id" in _text(c_site, "overview.html")
+
+
 def test_c_static_pages_bind_chart_table_and_evidence_to_one_fact_set(c_site: Path) -> None:
     """每页图表先于完整表格；图表行必须全部可从证据抽屉回溯。"""
     for page_id in C_STATIC_PAGE_IDS:

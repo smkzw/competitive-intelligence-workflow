@@ -17,6 +17,7 @@ from typing import Any
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
 from ci_workflow.application.portal_consumer_registry import (
     SourceRowContext,
+    project_b_safety_source_views,
     register_a_source_consumers,
 )
 from ci_workflow.application.project_service import verify_project_workspace
@@ -40,6 +41,7 @@ from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
     render_report_a_site,
 )
+from ci_workflow.renderers.portal.report_b import ReportBPortalData
 from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
 from ci_workflow.storage.content_store import ContentAddressedStore
 from ci_workflow.storage.snapshot_store import SnapshotStore
@@ -103,6 +105,7 @@ def materialize(
     selected_trials: set[str] | None = None,
     preview_site: Path | None = None,
     bound_report_output: Path | None = None,
+    bound_b_report_output: Path | None = None,
 ) -> dict[str, Any]:
     """Recheck row bytes, ingest only exact candidates, retain unresolved counts."""
     if observed_at.tzinfo is None or observed_at.utcoffset() is None:
@@ -119,9 +122,22 @@ def materialize(
             or destination.suffix.lower() != ".json"
         ):
             raise ValueError("bound report input must be a new JSON file inside the project")
+    if bound_b_report_output is not None:
+        destination = bound_b_report_output.resolve()
+        if (
+            not destination.is_relative_to(project_root.resolve())
+            or bound_b_report_output.exists() or bound_b_report_output.is_symlink()
+            or destination.suffix.lower() != ".json"
+            or (bound_report_output is not None
+                and destination == bound_report_output.resolve())
+        ):
+            raise ValueError("bound B input must be a distinct new JSON file inside the project")
     workspace = verify_project_workspace(project_root)
     if "A" not in {kind.value for kind in workspace.contract.reports}:
         raise ValueError("project contract does not include report A")
+    if (bound_b_report_output is not None
+        and "B" not in {kind.value for kind in workspace.contract.reports}):
+        raise ValueError("project contract does not include report B")
     payload_bytes = payload_path.read_bytes()
     sidecar_bytes = sidecar_path.read_bytes()
     report = ReportAPortalData.model_validate_json(payload_bytes)
@@ -236,12 +252,20 @@ def materialize(
         f"efficacy:{row.row_id}" for row in outcomes.bound_rows
         if row.group_assignment_state == "declared"
     }
+    declared_safety = {
+        f"safety:{row.row_id}" for row in safety_batch.bound_rows
+        if row.group_assignment_state == "declared"
+    }
     direct_versions = {
         fact.row_ref: lineage.fact_version_by_ref[fact.fact_id]
         for fact in outcomes.facts if fact.row_ref in declared_efficacy
     }
-    if set(direct_versions) != declared_efficacy:
-        raise ValueError("declared efficacy rows lack a unique direct source atom")
+    direct_versions.update({
+        fact.row_ref: lineage.fact_version_by_ref[fact.fact_id]
+        for fact in safety_batch.facts if fact.row_ref in declared_safety
+    })
+    if set(direct_versions) != declared_efficacy | declared_safety:
+        raise ValueError("declared efficacy/safety rows lack a unique direct source atom")
     sidecar_by_row = {
         f"efficacy:{entry['row_id']}": entry
         for entry in sidecar["row_source_map"]
@@ -255,10 +279,16 @@ def materialize(
             value_path=str(sidecar_by_row[row_ref]["value_path"]),
         ) for row_ref in declared_efficacy
     }
-    registered_efficacy = register_a_source_consumers(
+    registered = register_a_source_consumers(
         project_root, lineage.evidence_snapshot, bound_report, direct_versions,
         registered_at=observed_at, source_row_contexts=original_contexts,
     ) if direct_versions else ()
+    registered_efficacy = tuple(
+        binding for binding in registered if binding.collection == "efficacy"
+    )
+    registered_safety = tuple(
+        binding for binding in registered if binding.collection == "safety"
+    )
     bound_report_bytes = bound_report.model_dump_json().encode()
     bound_report_asset: dict[str, object] | None = None
     if bound_report_output is not None:
@@ -270,6 +300,33 @@ def materialize(
             "relative_path": destination.relative_to(project_root.resolve()).as_posix(),
             "sha256": _sha256(bound_report_bytes), "bytes": len(bound_report_bytes),
         }
+    bound_b_report_asset: dict[str, object] | None = None
+    located_b_safety_views = 0
+    if bound_b_report_output is not None:
+        safety_refs = {f"safety:{row.row_id}" for row in safety_batch.bound_rows}
+        safety_versions = {
+            fact.row_ref: lineage.fact_version_by_ref[fact.fact_id]
+            for fact in safety_batch.facts if fact.row_ref in safety_refs
+        }
+        if set(safety_versions) != safety_refs:
+            raise ValueError("B 来源视图缺少唯一的安全数值原子")
+        views = project_b_safety_source_views(
+            project_root, lineage.evidence_snapshot, bound_report, safety_versions,
+        )
+        b_report = ReportBPortalData.model_validate({
+            **bound_report.model_dump(mode="json"),
+            "safety_views": {"coverage_mode": "partial", "facts": views},
+        })
+        destination = bound_b_report_output.resolve()
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        encoded_b = b_report.model_dump_json().encode()
+        with destination.open("xb") as handle:
+            handle.write(encoded_b)
+        bound_b_report_asset = {
+            "relative_path": destination.relative_to(project_root.resolve()).as_posix(),
+            "sha256": _sha256(encoded_b), "bytes": len(encoded_b),
+        }
+        located_b_safety_views = len(views)
     preview: dict[str, object] | None = None
     if preview_site is not None:
         destination = preview_site.resolve()
@@ -325,6 +382,9 @@ def materialize(
         "registered_a_efficacy_consumers": [
             binding.row_id for binding in registered_efficacy
         ],
+        "registered_a_safety_consumers": [
+            binding.row_id for binding in registered_safety
+        ],
         "other_domain_source_rows_without_portal_binding": [row.row_id for row in other],
         "binding_gaps": unresolved,
         "fact_bindings": [
@@ -348,10 +408,13 @@ def materialize(
         "snapshot_relative_path": lineage.evidence_snapshot.relative_path,
         "preview_site": preview,
         "bound_report_data": bound_report_asset,
+        "bound_b_report_data": bound_b_report_asset,
         "counts": {
             "sources": len(captures), "facts": len(lineage.fact_version_ids),
             "claims": len(lineage.claim_version_ids), "other_rows": len(other),
             "registered_a_efficacy_consumers": len(registered_efficacy),
+            "registered_a_safety_consumers": len(registered_safety),
+            "located_b_safety_source_views": located_b_safety_views,
             "binding_gaps": len(unresolved), "source_issues": len(issues),
         },
         "limits": [
@@ -359,7 +422,9 @@ def materialize(
             "Offline replay is not a new live status check or historical-as-of reconstruction.",
             "Other-domain source facts have no A/B/C portal consumer binding yet.",
             "Unknown arm-product relations, China sources and required publications remain open.",
-            "Only declared direct A efficacy consumers are registered; safety/B/C remain open.",
+            "Only declared direct A efficacy/safety consumers are registered; B/C remain open.",
+            "B source views do not register edit consumers or prove "
+            "unknown arm-product identity.",
             "Portal consumer registry is not part of the source snapshot-only recovery yet.",
         ],
     }
@@ -376,6 +441,7 @@ def main() -> None:
     parser.add_argument("--trial", action="append", default=[])
     parser.add_argument("--preview-site", type=Path)
     parser.add_argument("--bound-report-output", type=Path)
+    parser.add_argument("--bound-b-report-output", type=Path)
     args = parser.parse_args()
     if args.output.exists() or args.output.is_symlink():
         parser.error("Output exists; choose a new versioned receipt path")
@@ -386,6 +452,7 @@ def main() -> None:
         selected_trials={value.casefold() for value in args.trial} if args.trial else None,
         preview_site=args.preview_site,
         bound_report_output=args.bound_report_output,
+        bound_b_report_output=args.bound_b_report_output,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8") as handle:

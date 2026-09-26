@@ -9,10 +9,12 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import sqlite3
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Literal
 
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.domain.ids import stable_id
@@ -30,6 +32,10 @@ from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
     _b_source_view_row,
     active_fact_binding_for_b,
+)
+from ci_workflow.reports.common.evidence_view import (
+    clean_evidence_locator,
+    precise_locator_anchor,
 )
 from ci_workflow.storage.migrations import apply_migrations
 from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
@@ -59,6 +65,178 @@ def _source_pointer(locator_text: str) -> str | None:
         return None
     path = locator.get("field_path")
     return path if isinstance(path, str) else None
+
+
+def project_b_safety_source_views(
+    project_root: Path,
+    evidence_snapshot: LockedSnapshot,
+    report: ReportAPortalData,
+    row_versions: Mapping[str, str],
+) -> tuple[dict[str, Any], ...]:
+    """Read-only exact source views; these do not grant B edit/product bindings.
+
+    An unknown arm can retain its original observation, quote and locator in B,
+    while registration and product comparison still require a separately proven
+    arm--intervention relationship.  The locked closure is checked against the
+    append-only database before exposing any of its locations as precise.
+    """
+    if evidence_snapshot.kind != "evidence" or evidence_snapshot.report is not None:
+        raise PortalConsumerRegistrationError("来源视图只能引用证据快照")
+    if not row_versions or len(set(row_versions.values())) != len(row_versions):
+        raise PortalConsumerRegistrationError("来源视图缺少唯一的来源数值原子")
+    snapshot = SnapshotStore(project_root).read(evidence_snapshot)
+    contract = verify_project_workspace(project_root).contract
+    if (
+        snapshot["project_id"] != contract.project_id
+        or snapshot["contract_version"] != contract.contract_version
+        or report.indication != contract.indication
+        or report.data_cutoff != datetime.fromisoformat(snapshot["data_cutoff"])
+    ):
+        raise PortalConsumerRegistrationError("B 来源视图、快照与项目合同不一致")
+    closure = snapshot.get("closure")
+    if not isinstance(closure, dict):
+        raise PortalConsumerRegistrationError("来源视图必须引用带原始闭包的证据快照")
+    facts = {item["fact_version_id"]: item for item in closure["facts"]}
+    fragments = {item["fragment_id"]: item for item in closure["fragments"]}
+    sources = {item["source_version_id"]: item for item in closure["sources"]}
+    if (
+        len(facts) != len(closure["facts"])
+        or len(fragments) != len(closure["fragments"])
+        or len(sources) != len(closure["sources"])
+    ):
+        raise PortalConsumerRegistrationError("来源闭包存在重复版本标识")
+    rows = {row.row_id: row for row in report.safety}
+    if len(rows) != len(report.safety):
+        raise PortalConsumerRegistrationError("A 安全行标识不唯一")
+    for row_ref in row_versions:
+        collection, separator, row_id = row_ref.partition(":")
+        if separator != ":" or collection != "safety" or row_id not in rows:
+            raise PortalConsumerRegistrationError("B 来源视图只接受已有安全数值行")
+    if not set(row_versions.values()) <= set(snapshot["fact_version_ids"]):
+        raise PortalConsumerRegistrationError("B 来源事实版本不在锁定快照")
+
+    result_views: list[dict[str, Any]] = []
+    database_path = project_root / "state/project.sqlite"
+    try:
+        with sqlite3.connect(database_path.resolve().as_uri() + "?mode=ro", uri=True) as database:
+            for row in report.safety:
+                version_id = row_versions.get(f"safety:{row.row_id}")
+                if version_id is None:
+                    continue
+                if row.trial_id is None or row.group_assignment_state == "unassessed":
+                    raise PortalConsumerRegistrationError("来源行缺少研究或明确的组别关系状态")
+                source = database.execute(
+                    "SELECT v.raw_value,v.scientific_context_json,v.primary_fragment_id,"
+                    "f.source_version_id,f.locator,f.content_text FROM fact_versions v "
+                    "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+                    "WHERE v.fact_version_id=?", (version_id,),
+                ).fetchone()
+                if source is None or version_id not in facts:
+                    raise PortalConsumerRegistrationError("来源数值原子缺失")
+                raw_value, context_json, fragment_id, source_id, locator_json, quote = source
+                fragment = fragments.get(fragment_id)
+                captured = sources.get(source_id)
+                if fragment is None or captured is None:
+                    raise PortalConsumerRegistrationError("来源原子缺少锁定的片段或来源版本")
+                try:
+                    context = json.loads(str(context_json))
+                    locator = json.loads(str(locator_json))
+                    numeric = float(str(raw_value))
+                    observation = context["result_context"]
+                    capture_url = captured["capture"]["url"]
+                except (TypeError, ValueError, KeyError, json.JSONDecodeError) as error:
+                    raise PortalConsumerRegistrationError("来源数值或科学语境不可核验") from error
+                exact_locator = clean_evidence_locator(locator)
+                if exact_locator is None or precise_locator_anchor(exact_locator) is None:
+                    raise PortalConsumerRegistrationError("来源原子缺少精确非本机定位")
+                source_endpoint = observation.get("endpoint")
+                endpoint_matches = (
+                    source_endpoint == row.term
+                    if isinstance(source_endpoint, str) and source_endpoint.strip()
+                    else (observation.get("category"), row.term_key, row.term) in {
+                        ("sae", "any_sae", "严重不良事件组别汇总计数"),
+                        ("death", "death", "死亡病例组别汇总计数"),
+                    }
+                )
+                source_unit = observation.get("source_unit")
+                metric = observation.get("metric")
+                unit_matches = (
+                    source_unit == row.unit
+                    or (
+                        isinstance(source_unit, str)
+                        and source_unit.casefold() == "percentage of participants"
+                        and row.unit == "%"
+                        and row.measure_object == "participant_proportion"
+                        and metric == "reported_percentage"
+                        and observation.get("source_param_type") == "NUMBER"
+                        and 0 <= numeric <= 100
+                    )
+                    or (
+                        source_unit == "Events" and row.unit == "次"
+                        and row.measure_object == "event_count"
+                        and metric == "reported_measure"
+                        and observation.get("source_param_type") == "NUMBER"
+                        and numeric.is_integer()
+                    )
+                )
+                checks = {
+                    "snapshot_fact": (
+                        facts[version_id]["primary_fragment_id"] == fragment_id
+                        and facts[version_id]["scientific_context_json"] == context_json
+                    ),
+                    "snapshot_fragment": (
+                        fragment["source_version_id"] == source_id
+                        and fragment["locator"] == locator
+                        and fragment["original_text"] == quote
+                    ),
+                    "source_identity": (
+                        row.source_version_id == source_id
+                        and locator.get("url") == capture_url
+                    ),
+                    "source_pointer": (
+                        context["locator"] == locator
+                        and row.source_field_path == locator.get("field_path")
+                    ),
+                    "source_value": (
+                        context["raw_value"] == raw_value
+                        and row.source_text == quote
+                        and row.value is not None and math.isfinite(numeric)
+                        and math.isclose(row.value, numeric, rel_tol=0, abs_tol=1e-9)
+                    ),
+                    "safety_domain": (
+                        observation.get("domain") == "adverse_events"
+                        and observation.get("value_role") != "denominator"
+                    ),
+                    "trial_and_group": (
+                        str(observation.get("trial_id", "")).casefold()
+                        == row.trial_id.casefold()
+                        and observation.get("group_id") == row.group_id
+                        and observation.get("group_title") == row.arm
+                    ),
+                    "measure_context": (
+                        endpoint_matches
+                        and observation.get("timepoint") == row.time_window
+                        and unit_matches
+                        and observation.get("class_title") == row.source_class_title
+                    ),
+                }
+                invalid = [scope for scope, valid in checks.items() if not valid]
+                if invalid:
+                    raise PortalConsumerRegistrationError(
+                        f"安全结果 {row.row_id} 与锁定来源不一致：{','.join(invalid)}"
+                    )
+                result_views.append({
+                    **row.model_dump(mode="json"),
+                    "arm_id": row.group_id,
+                    "arm_label": row.arm,
+                    "source_locator": exact_locator.model_dump(mode="json"),
+                    "source_text": quote,
+                })
+    except sqlite3.Error as error:
+        raise PortalConsumerRegistrationError("只读来源库不可用") from error
+    if len(result_views) != len(row_versions):
+        raise PortalConsumerRegistrationError("B 来源视图未覆盖指定的全部数值行")
+    return tuple(result_views)
 
 
 def register_a_source_consumers(
@@ -278,8 +456,11 @@ def register_b_shared_source_consumers(
     with open_database(database_path) as database:
         for row_ref, version_id in sorted(row_versions.items()):
             collection, separator, row_id = row_ref.partition(":")
-            if separator != ":" or collection != "efficacy":
-                raise PortalConsumerRegistrationError("共享 B 来源登记当前只支持直接疗效观察")
+            if separator != ":" or collection not in {"efficacy", "safety"}:
+                raise PortalConsumerRegistrationError("共享 B 来源登记只支持直接疗效/安全观察")
+            collection_name: Literal["efficacy", "safety"] = (
+                "efficacy" if collection == "efficacy" else "safety"
+            )
             if version_id not in snapshot_versions:
                 raise PortalConsumerRegistrationError("B 来源事实版本不在本次证据快照")
             source = database.execute(
@@ -301,13 +482,13 @@ def register_b_shared_source_consumers(
                 raise PortalConsumerRegistrationError("A/B 来源消费者引用不同证据快照")
             a_binding = ActiveFactBinding.model_validate_json(str(declared_a[0]))
             try:
-                b_binding = active_fact_binding_for_b(report, "efficacy", row_id)
-                view = _b_source_view_row(report, "efficacy", row_id)
+                b_binding = active_fact_binding_for_b(report, collection_name, row_id)
+                view = _b_source_view_row(report, collection, row_id)
                 context = json.loads(str(source[1]))["result_context"]
                 numeric = float(str(source[0]))
             except (ValueError, TypeError, KeyError, json.JSONDecodeError) as error:
                 raise PortalConsumerRegistrationError("B 来源行缺少可核验数值或来源view") from error
-            rows = [row for row in report.efficacy if row.row_id == row_id]
+            rows = [row for row in getattr(report, collection) if row.row_id == row_id]
             if len(rows) != 1:
                 raise PortalConsumerRegistrationError("B 来源行身份不唯一")
             row = rows[0]
@@ -336,21 +517,56 @@ def register_b_shared_source_consumers(
                 "statistical_form", "measure_object", "unit", "normalized_unit",
                 "source_version_id",
             )
+            efficacy_matches = (
+                context.get("domain") == "efficacy"
+                and (count_matches or measure_matches)
+                and len(source_denominators) <= 1
+                and (
+                    len(source_denominators) != 1
+                    or row.denominator in source_denominators
+                )
+                and (source_denominators or row.denominator is None)
+                and (not reported_count or bool(source_denominators))
+                and view.get("numerator") == row.numerator
+                and view.get("denominator") == row.denominator
+            ) if collection == "efficacy" else False
+            source_category = context.get("category")
+            safety_identity = {
+                "sae": ("any_sae", "serious"),
+                "death": ("death", "deaths"),
+            }.get(source_category) if isinstance(source_category, str) else None
+            safety_matches = (
+                isinstance(row, SafetyRow)
+                and context.get("domain") == "adverse_events"
+                and value_role == "affected_count"
+                and safety_identity is not None
+                and (row.term_key, row.at_risk_stat) == safety_identity
+                and row.measure_object == "participant_count"
+                and b_binding.statistical_form == "count"
+                and b_binding.measure_object == "participants"
+                and numeric.is_integer()
+                and row.numerator == int(numeric)
+                and len(source_denominators) == 1
+                and row.denominator in source_denominators
+                and all(view.get(field) == expected for field, expected in (
+                    ("product_id", row.product_id),
+                    ("trial_id", row.trial_id),
+                    ("arm_id", row.group_id),
+                    ("arm_label", row.arm),
+                    ("term", row.term),
+                    ("term_key", row.term_key),
+                    ("time_window", row.time_window),
+                    ("value", row.value),
+                    ("unit", row.unit),
+                    ("numerator", row.numerator),
+                    ("denominator", row.denominator),
+                ))
+            ) if collection == "safety" else False
             if (
                 not math.isfinite(numeric)
-                or context.get("domain") != "efficacy"
-                or not (count_matches or measure_matches)
+                or not (efficacy_matches or safety_matches)
                 or row.value is None
                 or not math.isclose(row.value, numeric, rel_tol=0, abs_tol=1e-9)
-                or len(source_denominators) > 1
-                or (
-                    len(source_denominators) == 1
-                    and row.denominator not in source_denominators
-                )
-                or (not source_denominators and row.denominator is not None)
-                or (reported_count and not source_denominators)
-                or view.get("numerator") != row.numerator
-                or view.get("denominator") != row.denominator
                 or row.group_assignment_state != "declared"
                 or row.group_id != context.get("group_id")
                 or str(context.get("trial_id", "")).casefold() != row.trial_id.casefold()

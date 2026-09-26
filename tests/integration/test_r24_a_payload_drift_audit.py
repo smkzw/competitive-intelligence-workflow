@@ -7,7 +7,11 @@ from pathlib import Path
 
 import pytest
 
-from tools.audit_a_payload_drift import audit_payloads, load_payload
+from tools.audit_a_payload_drift import (
+    audit_payloads,
+    audit_row_source_maps,
+    load_payload,
+)
 
 
 def test_drift_audit_matches_source_title_not_display_row_id() -> None:
@@ -72,3 +76,26 @@ def test_safety_true_zero_matches_and_file_loader_accepts_only_report_assignment
     path.write_text("window.UNRELATED=" + json.dumps(old) + ";", encoding="utf-8")
     with pytest.raises(ValueError, match="REPORT_A"):
         load_payload(path)
+
+
+def test_exact_source_delta_separates_page_noise_from_value_and_context() -> None:
+    base = {"trial_id": "nct1", "value_path": "$.resultsSection.outcome[0].value",
+            "domain": "efficacy", "raw_value": "7", "outcome_title": "Response",
+            "group_id": "OG1", "source_page_sha256": "old", "row_id": "eff-1"}
+    unchanged = {**base, "source_page_sha256": "new", "row_id": "eff-hash"}
+    first = audit_row_source_maps({"row_source_map": [base]},
+                                  {"row_source_map": [unchanged]})
+    assert first["counts"] == {
+        "old_atoms": 1, "new_atoms": 1, "unchanged": 1, "modified": 0,
+        "withdrawn": 0, "added": 0, "source_page_changed": 1,
+    }
+    assert first["pairs"][0]["old_row_id"] == "eff-1"
+    assert first["pairs"][0]["new_row_id"] == "eff-hash"
+    changed = {**unchanged, "raw_value": "8", "group_id": "OG2"}
+    second = audit_row_source_maps({"row_source_map": [base]},
+                                   {"row_source_map": [changed]})
+    assert second["counts"]["modified"] == 1
+    assert second["pairs"][0]["changed_fields"] == ["raw_value", "group_id"]
+    with pytest.raises(ValueError, match="duplicate exact source atom"):
+        audit_row_source_maps({"row_source_map": [base, base]},
+                              {"row_source_map": [changed]})

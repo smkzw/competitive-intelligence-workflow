@@ -44,6 +44,8 @@ SAFETY_CONCEPTS: dict[str, SafetyConceptSpec] = {
         "absence_sae", "未发生SAE", "未发生SAE（登记）", "serious"),
     "serious_teae_subset": SafetyConceptSpec(
         "serious_teae_subset", "严重TEAE子集", "严重TEAE子集（登记）", "other"),
+    "severity_specific_teae": SafetyConceptSpec(
+        "severity_specific_teae", "特定强度TEAE", "特定强度TEAE（登记）", "other"),
     "generic_ae": SafetyConceptSpec(
         "generic_ae", "不良事件", "不良事件（登记）", "other"),
     "specific_ae": SafetyConceptSpec(

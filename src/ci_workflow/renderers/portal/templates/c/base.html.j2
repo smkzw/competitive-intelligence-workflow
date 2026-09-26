@@ -85,7 +85,7 @@
   <script src="{{ data_prefix }}/search-index.js"></script>
   <script>
     window.__SEARCH_INDEX__ = (window.__SEARCH_INDEX__ || []).map(function (entry) {
-      var copy = {title: entry.title, slug: entry.slug, keywords: entry.keywords};
+      var copy = {title: entry.title, slug: entry.slug, keywords: entry.keywords, row_id: entry.row_id};
       copy.slug = {{ site_prefix | tojson }} + copy.slug;
       return copy;
     });

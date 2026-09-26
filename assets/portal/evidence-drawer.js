@@ -6,6 +6,8 @@
  *   本模块只渲染，绝不从展示层拼出临床事实。
  * - 空字段以互斥中文状态呈现（不适用/尚未公开/来源未列示/技术暂不可用），
  *   不留白；已报告零值渲染为 0 而不是缺失。
+ * - 来源追溯状态单独成行（已定位／逐事实来源待核），与「披露状态」「值」分离：
+ *   待核行不得复用「来源未列示」冒充定位结果，也不得渲染本机路径形状的定位。
  * - 原文定位仅在存在有效 http(s) 链接时渲染链接，非法协议不生成伪链接。
  * - 固定多条后以并列对照表核对定义、时间点、分母与冲突；重复固定去重。
  * - 未知/过期行失败关闭并给出中文提示。
@@ -53,6 +55,13 @@
   var UNKNOWN_DISCLOSURE = "来源未列示";
   var NOT_LISTED = "来源未列示";
 
+  // 来源追溯状态 → 中文表达（与数值披露状态分离；缺省按最保守的待核显示）
+  var TRACE_STATE_LABELS = {
+    located: "已定位（来源版本、原文与精确位置）",
+    unverified: "逐事实来源待核"
+  };
+  var TRACE_PENDING_LOCATOR = "来源待核，未提供精确定位";
+
   var byRowId = {};
   for (var i = 0; i < views.length; i++) {
     var view = views[i];
@@ -95,6 +104,7 @@
     ["_current_user_value", "当前用户修订值"],
     ["_original_source_value", "原来源值"],
     ["_disclosure", "披露状态"],
+    ["_source_trace", "来源追溯"],
     ["explanation", "数据说明"],
     ["source_version_label_zh", "来源版本"],
     ["_locator", "原文定位"],
@@ -162,6 +172,7 @@
     ["numerator", "分子"],
     ["denominator", "分母"],
     ["_disclosure", "披露状态"],
+    ["_source_trace", "来源追溯"],
     ["source_version_label_zh", "来源版本"],
     ["_conflicts", "冲突"],
     ["_locator", "原文定位"]
@@ -193,34 +204,76 @@
     return disclosureLabels[state] || UNKNOWN_DISCLOSURE;
   }
 
+  function traceStateLabel(view) {
+    var state = view ? view.source_trace_state : "";
+    return TRACE_STATE_LABELS[state] || TRACE_STATE_LABELS.unverified;
+  }
+
+  function traceIsPending(view) {
+    // 缺省按最保守的待核处理：未声明状态不得被当作已定位
+    return !view || view.source_trace_state !== "located";
+  }
+
+  // 本机路径形状判别（与生产 EvidenceView 判定同形）：绝对路径、家目录、UNC、
+  // 盘符、file:、相对路径与目录+本机文件名一律不作为定位渲染
+  function isLocalPathShape(value) {
+    var text = String(value === null || value === undefined ? "" : value).trim();
+    if (!text) return false;
+    if (/^(?:\/|~[\/\\]|\\\\|\/\/|[A-Za-z]:[\/\\]|file:|\.\.?[\/\\])/i.test(text)) {
+      return true;
+    }
+    if (/^[A-Za-z][A-Za-z0-9+.\-]*:\/\//.test(text)) return false;
+    return /[\/\\][^\/\\\s]+\.(?:json|jsonl|pdf|csv|tsv|xlsx?|xml|html?|txt|docx?|zip|png|jpe?g)$/i.test(
+      text
+    );
+  }
+
   function locatorUrlIsSafe(url) {
     return /^https?:\/\//i.test(String(url || ""));
   }
 
+  // B 字段路径回落角色：服务端标签表可能尚未收录 source_record
+  var FALLBACK_ROLE_LABELS = {
+    source_record: "来源字段记录"
+  };
+
   function locatorLines(locator) {
     var lines = [];
     if (!locator) return lines;
-    var role = roleLabels[locator.document_role];
+    var role =
+      roleLabels[locator.document_role] ||
+      FALLBACK_ROLE_LABELS[locator.document_role];
     if (role) lines.push("来源类型：" + role);
-    if (locator.field_path) lines.push("字段：" + locator.field_path);
-    if (locator.heading) lines.push("章节：" + locator.heading);
-    if (locator.table) {
+    if (locator.field_path && !isLocalPathShape(locator.field_path)) {
+      lines.push("字段：" + locator.field_path);
+    }
+    if (locator.heading && !isLocalPathShape(locator.heading)) {
+      lines.push("章节：" + locator.heading);
+    }
+    if (locator.table && !isLocalPathShape(locator.table)) {
       var tableText = String(locator.table);
       lines.push(tableText.indexOf("表") !== -1 ? tableText : "表 " + tableText);
     }
-    if (locator.row) lines.push("行：" + locator.row);
-    if (locator.column) lines.push("列：" + locator.column);
-    if (locator.paragraph) lines.push("段落：" + locator.paragraph);
+    if (locator.row && !isLocalPathShape(locator.row)) lines.push("行：" + locator.row);
+    if (locator.column && !isLocalPathShape(locator.column)) {
+      lines.push("列：" + locator.column);
+    }
+    if (locator.paragraph && !isLocalPathShape(locator.paragraph)) {
+      lines.push("段落：" + locator.paragraph);
+    }
     if (locator.page) lines.push("第 " + locator.page + " 页");
     return lines;
   }
 
   function locatorLink(locator) {
-    return locatorUrlIsSafe(locator && locator.url) ? locator.url : null;
+    return locatorUrlIsSafe(locator && locator.url) && !isLocalPathShape(locator.url)
+      ? locator.url
+      : null;
   }
 
-  // 定位渲染：文字定位行 + 有效链接；全部无效时呈现「来源未列示」。
-  function renderLocatorInto(container, locator) {
+  // 定位渲染：文字定位行 + 有效链接；全部无效时按来源追溯状态呈现，
+  // 待核行不得复用「来源未列示」冒充定位结论。
+  function renderLocatorInto(container, locator, pendingText) {
     var lines = locatorLines(locator);
     if (lines.length) {
       var span = document.createElement("span");
@@ -240,7 +293,7 @@
       container.appendChild(link);
     }
     if (!lines.length && !url) {
-      container.textContent = NOT_LISTED;
+      container.textContent = pendingText || NOT_LISTED;
       container.classList.add("kz-evidence-field__state");
     }
   }
@@ -271,14 +324,14 @@
     dl.appendChild(row);
   }
 
-  function appendLocatorRow(dl, label, locator) {
+  function appendLocatorRow(dl, label, locator, pendingText) {
     var row = document.createElement("div");
     row.className = "kz-evidence-field";
     var dt = document.createElement("dt");
     dt.textContent = label;
     var dd = document.createElement("dd");
     dd.className = "kz-evidence-locator";
-    renderLocatorInto(dd, locator);
+    renderLocatorInto(dd, locator, pendingText);
     row.appendChild(dt);
     row.appendChild(dd);
     dl.appendChild(row);
@@ -425,8 +478,15 @@
         }
       } else if (key === "_disclosure") {
         appendFieldRow(viewFields, spec[1], disclosureText(view), true);
+      } else if (key === "_source_trace") {
+        appendFieldRow(viewFields, spec[1], traceStateLabel(view), true);
       } else if (key === "_locator") {
-        appendLocatorRow(viewFields, spec[1], view.locator);
+        appendLocatorRow(
+          viewFields,
+          spec[1],
+          view.locator,
+          traceIsPending(view) ? TRACE_PENDING_LOCATOR : NOT_LISTED
+        );
       } else if (key === "_original_text") {
         if (
           view.original_text_status === "provided" &&
@@ -515,6 +575,7 @@
   }
 
   function compareLocatorCell(view) {
+    if (traceIsPending(view)) return TRACE_PENDING_LOCATOR;
     var lines = locatorLines(view.locator);
     if (!lines.length) return NOT_LISTED;
     var text = lines[0];
@@ -638,6 +699,9 @@
         var key = spec[0];
         if (key === "_disclosure") {
           td.textContent = disclosureText(pinnedView);
+          td.classList.add("kz-evidence-field__state");
+        } else if (key === "_source_trace") {
+          td.textContent = traceStateLabel(pinnedView);
           td.classList.add("kz-evidence-field__state");
         } else if (key === "_conflicts") {
           td.textContent = compareConflictCell(pinnedView);

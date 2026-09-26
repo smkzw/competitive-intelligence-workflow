@@ -29,6 +29,7 @@ from ci_workflow.domain.enums import FactDisclosureState
 from ci_workflow.reports.common.evidence_view import (
     EVIDENCE_FIELD_STATE_LABELS_ZH,
     EvidenceView,
+    assert_evidence_views_serializable,
 )
 
 EVIDENCE_DRAWER_CSS_ASSET = "evidence-drawer.css"
@@ -64,6 +65,7 @@ DOCUMENT_ROLE_LABELS_ZH: dict[str, str] = {
     "conference_disclosure": "会议披露",
     "designated_industry_source": "行业指定来源",
     "source_primary": "原始来源",
+    "source_record": "来源字段记录",
 }
 
 # 原文携带状态 → 中文表达：已提供渲染逐字原文；未提供/不允许时确定性呈现。
@@ -88,6 +90,7 @@ def _label_payload() -> dict[str, dict[str, str]]:
 
 def serialize_evidence_views(views: Sequence[EvidenceView]) -> str:
     """验证后的视图集 → 确定性 JSON 字面量（``model_dump(mode="json")``）。"""
+    assert_evidence_views_serializable(views)
     payloads = [view.model_dump(mode="json") for view in views]
     return json.dumps(payloads, ensure_ascii=False, separators=(",", ":"))
 

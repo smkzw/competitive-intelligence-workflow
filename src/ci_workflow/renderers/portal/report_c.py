@@ -57,6 +57,9 @@ from ci_workflow.reports.common.evidence_view import (
     EvidenceView,
     OriginalTextStatus,
     UserEditDisclosure,
+    assert_evidence_views_serializable,
+    clean_evidence_locator,
+    precise_locator_anchor,
 )
 from ci_workflow.reports.common.numeric_projection import NumericMeasureKind, project_numeric
 from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
@@ -1274,42 +1277,71 @@ def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
     return EvidenceField(state=state_map.get(state or "", EvidenceFieldState.SOURCE_NOT_LISTED))
 
 
-def _safe_locator(observation: DesignObservation) -> EvidenceLocator:
-    locator = observation.source_locator
-    document_role_map = {
-        "clinical-trial-registry": "registry",
-    }
-    heading_map = {
-        "Identification": "研究基本信息",
-        "Eligibility Criteria": "入选与排除标准",
-        "Inclusion Criteria": "入选标准",
-        "Exclusion Criteria": "排除标准",
-        "Study Design": "研究设计",
-        "Key Inclusion Criteria": "主要入选标准",
-        "Key Exclusion Criteria": "主要排除标准",
-        "Arms and Interventions": "分组与干预",
-        "Outcome Measures": "结局指标",
-    }
-    url = locator.url
-    nct_match = re.search(r"/api/v2/studies/(NCT\d+)", url or "", re.I)
-    if nct_match:
-        url = f"https://clinicaltrials.gov/study/{nct_match.group(1).upper()}"
-    # 独立复核 C r29（issue-5）：定位链接必须能回到具体登记记录；
-    # 观察行自带试验标识（NCTxxxx）时按行构造深链，不再落回 CT.gov 首页
-    if re.fullmatch(r"NCT\d{8}", (observation.trial_id or "").upper() or ""):
-        url = f"https://clinicaltrials.gov/study/{observation.trial_id.upper()}"
+_C_DOCUMENT_ROLE_ZH: dict[str, str] = {
+    "registry": "临床试验登记页",
+    "clinical-trial-registry": "临床试验登记页",
+    "primary_registry": "主要登记记录",
+    "registry_result": "登记结果记录",
+    "primary_trial_report": "主要试验报告",
+    "publication": "期刊论文",
+    "supplementary_material": "补充材料",
+    "protocol": "研究方案",
+    "protocol_sap": "研究方案与统计分析计划",
+    "company_disclosure": "企业披露",
+    "conference_disclosure": "会议披露",
+    "designated_industry_source": "行业指定来源",
+    "source_primary": "原始来源",
+    "source_record": "来源字段记录",
+}
+_C_DOCUMENT_ROLE_ALIASES: dict[str, str] = {
+    "clinical-trial-registry": "registry",
+}
+_C_HEADING_ZH: dict[str, str] = {
+    "Identification": "研究基本信息",
+    "Eligibility Criteria": "入选与排除标准",
+    "Inclusion Criteria": "入选标准",
+    "Exclusion Criteria": "排除标准",
+    "Study Design": "研究设计",
+    "Key Inclusion Criteria": "主要入选标准",
+    "Key Exclusion Criteria": "主要排除标准",
+    "Arms and Interventions": "分组与干预",
+    "Outcome Measures": "结局指标",
+}
+
+
+def _source_kind_zh(role: str) -> str:
+    return _C_DOCUMENT_ROLE_ZH.get(role, "来源记录")
+
+
+def _safe_locator(observation: DesignObservation) -> EvidenceLocator | None:
+    """保留来源自身的 URL、字段路径与文档位置，不改写、不补造。
+
+    独立会商 R24-25 FAIL 复现：C 曾把论文/外部来源 URL 按试验标识改写成 CT.gov
+    深链、丢掉 JSON 字段路径，并把无章节的行补成“登记结果”；这里只做本机路径
+    字段去除与章节中文映射，其余定位逐字保留；无可用锚点返回 None。
+    """
+    locator = clean_evidence_locator(observation.source_locator)
+    if locator is None:
+        return None
+    heading = _C_HEADING_ZH.get(locator.heading or "", locator.heading)
     visible = {
-        "document_role": document_role_map.get(
+        "document_role": _C_DOCUMENT_ROLE_ALIASES.get(
             locator.document_role, locator.document_role
         ),
-        "heading": heading_map.get(locator.heading or "", locator.heading or "登记结果"),
+        "field_path": locator.field_path,
+        "heading": heading,
         "page": locator.page,
         "table": locator.table,
+        "row": locator.row,
         "column": locator.column,
         "paragraph": locator.paragraph,
-        "url": url,
+        "url": locator.url,
     }
-    return EvidenceLocator.model_validate(visible)
+    visible = {name: value for name, value in visible.items() if value is not None}
+    try:
+        return EvidenceLocator.model_validate(visible)
+    except ValueError:
+        return None
 
 
 def _evidence_view(
@@ -1340,6 +1372,25 @@ def _evidence_view(
         disclosure_state=observation.disclosure_state,
     )
     value_text = _value_text(data, observation)
+    locator = _safe_locator(observation)
+    source_version_id = _text(observation.source_version_id) or None
+    # 精确来源原文不得经过用户可见标签的空白归一化函数。
+    source_text = (
+        observation.source_text
+        if observation.source_text and observation.source_text.strip() else None
+    )
+    # 已定位＝来源版本 + 逐字原文 + 精确非本机锚点三件套齐备（独立会商 R24-25）
+    located = bool(
+        source_version_id
+        and source_text
+        and locator is not None
+        and precise_locator_anchor(locator) is not None
+    )
+    if located and locator is not None:
+        source_kind = _source_kind_zh(locator.document_role)
+        source_version_label_zh = f"{source_kind}来源版本"
+    else:
+        source_version_label_zh = "逐事实来源待核"
     return EvidenceView.model_construct(
         None,
         report_kind=ReportKind.C,
@@ -1356,26 +1407,30 @@ def _evidence_view(
         unit=_evidence_field(observation.threshold_unit, state),
         numerator=_evidence_field(None, "not_applicable"),
         denominator=_evidence_field(None, "not_applicable"),
-        source_version_id=observation.source_version_id,
-        source_version_label_zh="ClinicalTrials.gov",
-        locator=_safe_locator(observation),
+        source_trace_state="located" if located else "unverified",
+        source_version_id=source_version_id if located else None,
+        source_version_label_zh=source_version_label_zh,
+        locator=locator if located else None,
         explanation=_evidence_field(
-            "本条信息摘自临床试验登记页，"
+            f"本条信息摘自{source_kind}，"
             f"适用于{_observation_cohort_zh(observation)}；"
-            "已核对来源版本和原文位置，"
+            "来源版本、逐字原文与精确位置均已定位，仍不代替医学裁决；"
             f"当前公开情况为{_state_label(observation.disclosure_state)}。"
+            if located
+            else (
+                "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
+                "不能作为已验科学结论。"
+            )
         ),
-        original_text=_text(observation.source_text) or None,
+        original_text=source_text if located else None,
         original_text_status=(
             OriginalTextStatus.PROVIDED
-            if _text(observation.source_text)
+            if located and source_text
             else OriginalTextStatus.NOT_PROVIDED
         ),
         user_edit=data.user_edits.get(observation.row_id),
         conflicts=(),
         historical_versions=(),
-        source_field_name=_evidence_field(_field_label(observation.field), state),
-        source_field_definition=_evidence_field("临床试验登记页对应设计要素", state),
     )
 
 
@@ -1855,6 +1910,8 @@ def _render_page_context(
         )
         for observation in observations
     )
+    # 序列化边界复核：本页嵌入前逐条确认来源追溯合同（model_construct 不豁免）
+    assert_evidence_views_serializable(views)
     filter_rows, dimensions = _filter_dimensions_for_rows(data, observations)
     filter_groups = _filter_groups(data, filter_rows)
     page_filter_groups = tuple(group for group in filter_groups if group["scope"] == "page")
@@ -2185,7 +2242,9 @@ def render_report_c_site(
 
     search: list[dict[str, Any]] = []
 
-    def add_search_entry(title: str, slug: str, *keywords: Any) -> None:
+    def add_search_entry(
+        title: str, slug: str, *keywords: Any, row_id: str | None = None,
+    ) -> None:
         values: list[str] = []
         seen: set[str] = set()
         for candidate in (title, *keywords):
@@ -2199,7 +2258,10 @@ def render_report_c_site(
                 if text and text not in seen:
                     seen.add(text)
                     values.append(text)
-        search.append({"title": title, "slug": slug, "keywords": values})
+        entry: dict[str, Any] = {"title": title, "slug": slug, "keywords": values}
+        if row_id:
+            entry["row_id"] = row_id
+        search.append(entry)
 
     for page in catalog.pages:
         add_search_entry(
@@ -2231,14 +2293,27 @@ def render_report_c_site(
             _product_name(data, trial.product_id),
         )
     for observation in data.observations:
+        specific_page = next(
+            (
+                page_id for page_id, fields in _PAGE_FIELDS.items()
+                if fields is not None and observation.field in fields
+            ),
+            None,
+        )
+        # Every trial detail holds its own observations, even if no topical page does.
+        route = specific_page or f"trials/{observation.trial_id}"
         add_search_entry(
             f"{_field_label(observation.field)} · {_trial_display(data, observation.trial_id)}",
-            "overview",
+            route,
             _field_label(observation.field),
             _family_label(observation.field_family),
             observation.source_text,
+            observation.display_text,
+            observation.threshold_value,
             _trial_name(data, observation.trial_id),
             _product_name(data, observation.product_id),
+            observation.row_id,
+            row_id=observation.row_id,
         )
 
     (site_root / "data" / "search-index.js").write_text(

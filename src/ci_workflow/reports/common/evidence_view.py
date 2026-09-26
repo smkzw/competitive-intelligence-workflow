@@ -17,6 +17,12 @@
   规范原因分离存储，原文不被规范化文本覆盖；
 - 冲突与历史版本各自绑定来源版本与精确 locator；来源定位未知时不生成
   伪链接或伪定位（``EvidenceLocator`` 至少一个锚点，否则失败关闭）；
+- 精确定位只承认字段、页、表、行、列、段落锚点：仅链接或仅章节不算定位，
+  ``$.`` 与 ``$.resultsSection`` 一类粗 JSON 容器也不算精确字段路径；
+- 任何 locator 字段都不得携带本机路径形状（绝对路径、家目录、UNC、盘符、
+  ``file:``、上跳相对路径），脏字段被拒绝而同一位置对象的其他好锚点保留；
+- ``located`` 必须同时具备来源版本、精确非本机锚点与（B/C 类）逐字原文；
+  ``unverified`` 不得残留来源版本、定位、原文引文、冲突、历史版本或原因原文；
 - 固定对照集合必须同报告类型、同锁定快照、同页面责任且行唯一；观察类型
   必须匹配冻结目录页面声明的证据抽屉配置。
 """
@@ -24,6 +30,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from enum import StrEnum
 from typing import Any, Literal, Self
 
@@ -89,6 +96,9 @@ _EXTENSION_KINDS: frozenset[EvidenceObservationKind] = frozenset(
     }
 )
 
+# B/C 类的已定位必须同时携带逐字原文；A 调用方的页/表/段锚点继续兼容
+_TRACE_VERBATIM_TEXT_KINDS: frozenset[ReportKind] = frozenset({ReportKind.B, ReportKind.C})
+
 # 冻结目录页面抽屉配置 → 观察类型：静态页面必须一致，未知配置失败关闭。
 _PROFILE_KINDS: dict[str, EvidenceObservationKind] = {
     "common-clinical": EvidenceObservationKind.GENERAL,
@@ -139,6 +149,121 @@ def _text(value: str) -> str:
 
 def _has_chinese(value: str) -> bool:
     return _CJK_RE.search(value) is not None
+
+
+# ─── 来源定位形状：精确非本机锚点（共享实现，模型与渲染层同源） ──────────────
+
+# 本机路径前缀：绝对路径、家目录、UNC、Windows 盘符、file:、上跳/当前相对路径
+_LOCAL_PATH_PREFIX_RE = re.compile(
+    r"^(?:/|~[/\\]|\\\\|//|[A-Za-z]:[\\/]|file:|\.\.?[/\\])",
+    re.IGNORECASE,
+)
+# 形如目录 + 本机文件名的相对路径（远程 http(s)/ftp 链接先行放行）
+_LOCAL_FILE_TAIL_RE = re.compile(
+    r"[\\/][^\\/\s]+\.(?:json|jsonl|pdf|csv|tsv|xlsx?|xml|html?|txt|docx?|zip|png|jpe?g)$",
+    re.IGNORECASE,
+)
+_REMOTE_SCHEME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9+.\-]*://")
+# 粗 JSON 容器：``$``、``$.``、``.``；单个顶层段（``$.resultsSection``）不算精确路径
+_COARSE_FIELD_PATH_RE = re.compile(r"^\$?\.?$")
+# 裸本机文件名（``internal.json``）不是来源字段路径
+_BARE_FILENAME_RE = re.compile(
+    r"^[^./\\\s]+\.(?:json|jsonl|pdf|csv|tsv|xlsx?|xml|html?|txt|docx?|zip)$",
+    re.IGNORECASE,
+)
+
+# 精确定位锚点字段：链接与章节不算锚点，粗容器字段路径不算精确路径
+LOCATOR_ANCHOR_FIELDS: tuple[str, ...] = ("page", "table", "row", "column", "paragraph")
+_LOCATOR_STRING_FIELDS: tuple[str, ...] = (
+    "field_path",
+    "heading",
+    "table",
+    "row",
+    "column",
+    "paragraph",
+    "url",
+)
+_LOCATOR_VISIBLE_FIELDS: tuple[str, ...] = ("document_role", *_LOCATOR_STRING_FIELDS, "page")
+
+
+def is_local_path_shape(value: str) -> bool:
+    """判断定位文本是否为本机路径形状（绝对、家目录、UNC、盘符、file:、相对）。"""
+    text = value.strip()
+    if not text:
+        return False
+    if _LOCAL_PATH_PREFIX_RE.match(text):
+        return True
+    if _REMOTE_SCHEME_RE.match(text):
+        return False
+    return _LOCAL_FILE_TAIL_RE.search(text) is not None
+
+
+def field_path_is_precise(field_path: str) -> bool:
+    """字段路径是否精确到具体测量/字段：粗容器与裸文件名不算精确。"""
+    path = field_path.strip()
+    if not path:
+        return False
+    if _COARSE_FIELD_PATH_RE.match(path):
+        return False
+    if _BARE_FILENAME_RE.match(path):
+        return False
+    if "[" in path:
+        return True
+    segments = [segment for segment in path.lstrip("$").strip(".").split(".") if segment]
+    return len(segments) >= 2
+
+
+def precise_locator_anchor(locator: EvidenceLocator | None) -> str | None:
+    """返回第一个精确锚点字段名；仅链接/仅章节/粗容器一律返回 None。"""
+    if locator is None:
+        return None
+    if locator.field_path is not None and field_path_is_precise(locator.field_path):
+        return "field_path"
+    for name in LOCATOR_ANCHOR_FIELDS:
+        if getattr(locator, name) is not None:
+            return name
+    return None
+
+
+def locator_local_path_fields(locator: EvidenceLocator) -> tuple[str, ...]:
+    """列出携带本机路径形状的 locator 字段（用于拒绝或去除脏字段）。"""
+    dirty: list[str] = []
+    for name in _LOCATOR_STRING_FIELDS:
+        value = getattr(locator, name)
+        if isinstance(value, str) and is_local_path_shape(value):
+            dirty.append(name)
+    return tuple(dirty)
+
+
+def clean_evidence_locator(candidate: object) -> EvidenceLocator | None:
+    """去除本机路径字段后仍可用的定位；无任何可用锚点返回 None。
+
+    只清除脏字段，不因某个字段携带本机路径而丢弃同一位置对象里的好锚点。
+    """
+    if isinstance(candidate, EvidenceLocator):
+        locator = candidate
+    elif isinstance(candidate, Mapping):
+        try:
+            locator = EvidenceLocator.model_validate(candidate)
+        except (TypeError, ValueError):
+            return None
+    else:
+        return None
+    visible: dict[str, Any] = {}
+    for name in _LOCATOR_VISIBLE_FIELDS:
+        value = getattr(locator, name)
+        if value is None:
+            continue
+        if isinstance(value, str) and is_local_path_shape(value):
+            continue
+        visible[name] = value
+    visible_anchor_names = (*LOCATOR_ANCHOR_FIELDS, "field_path", "heading", "url")
+    if not any(visible.get(name) is not None for name in visible_anchor_names):
+        return None
+    try:
+        return EvidenceLocator.model_validate(visible)
+    except ValueError:
+        return None
 
 
 class EvidenceField(BaseModel):
@@ -285,7 +410,8 @@ class EvidenceView(BaseModel):
     numerator: EvidenceField
     denominator: EvidenceField
 
-    source_trace_state: Literal["located", "unverified"] = "located"
+    # 缺省待核（独立会商 R24-25）：已定位必须显式声明，不得靠默认值晋级
+    source_trace_state: Literal["located", "unverified"] = "unverified"
     source_version_id: str | None
     source_version_label_zh: str
     locator: EvidenceLocator | None
@@ -335,16 +461,7 @@ class EvidenceView(BaseModel):
 
     @model_validator(mode="after")
     def _extension_and_disclosure_integrity(self) -> Self:
-        if self.source_trace_state == "located":
-            if self.source_version_id is None or self.locator is None:
-                raise ValueError("已定位来源必须同时包含来源版本与精确定位")
-        elif (
-            self.source_version_id is not None
-            or self.locator is not None
-            or self.original_text is not None
-            or self.original_text_status is OriginalTextStatus.PROVIDED
-        ):
-            raise ValueError("来源待核不得携带来源版本、定位或原文引文")
+        assert_evidence_trace_contract(self)
         is_extension = self.observation_kind in _EXTENSION_KINDS
         present = [name for name in _EXTENSION_FIELDS if getattr(self, name) is not None]
         if is_extension:
@@ -390,6 +507,70 @@ class EvidenceView(BaseModel):
         ):
             raise ValueError("互斥穷尽标记必须是已知中文标记或互斥状态")
         return self
+
+
+def assert_evidence_trace_contract(view: EvidenceView) -> None:
+    """来源追溯合同的唯一实现：模型校验与 B/C 序列化边界共用同一判定。
+
+    - ``located`` 必须同时具备来源版本、精确非本机锚点；B/C 类还必须携带
+      逐字原文（``provided``）。仅链接、仅章节、粗 JSON 容器不构成精确锚点；
+    - ``unverified`` 不得残留来源版本、定位、原文引文、冲突、历史版本或原因原文。
+    """
+    if view.source_trace_state == "located":
+        if view.source_version_id is None or view.locator is None:
+            raise EvidenceViewBoundaryError("已定位来源必须同时包含来源版本与精确定位")
+        dirty = locator_local_path_fields(view.locator)
+        if dirty:
+            raise EvidenceViewBoundaryError(
+                "来源定位不得包含本机路径形状：" + "、".join(dirty)
+            )
+        if precise_locator_anchor(view.locator) is None:
+            raise EvidenceViewBoundaryError(
+                "已定位来源必须包含字段、页、表、行、列或段落精确锚点，"
+                "仅链接或仅章节不足以定位"
+            )
+        if view.report_kind in _TRACE_VERBATIM_TEXT_KINDS and (
+            view.original_text is None
+            or view.original_text_status is not OriginalTextStatus.PROVIDED
+        ):
+            raise EvidenceViewBoundaryError(
+                "B/C 类已定位来源必须同时携带逐字原文且状态为已提供"
+            )
+        return
+    leftovers: list[str] = []
+    if view.source_version_id is not None:
+        leftovers.append("来源版本")
+    if view.locator is not None:
+        leftovers.append("定位")
+    if view.original_text is not None or view.original_text_status is OriginalTextStatus.PROVIDED:
+        leftovers.append("原文引文")
+    if view.conflicts:
+        leftovers.append("冲突")
+    if view.historical_versions:
+        leftovers.append("历史版本")
+    if view.reason_original_text is not None:
+        leftovers.append("原因原文")
+    if leftovers:
+        raise EvidenceViewBoundaryError(
+            "来源待核不得携带来源版本、定位或原文引文等残留：" + "、".join(leftovers)
+        )
+
+
+def assert_evidence_views_serializable(views: Sequence[EvidenceView]) -> None:
+    """序列化边界复核：``model_construct`` / ``model_copy`` 也不能绕过追溯合同。
+
+    B/C 页面的行显示名、产品/试验名与单元值来自真实来源，可能不满足完整模型
+    校验（例如登记英文名），因此这里只复核来源追溯合同本身；伪造中文名换取
+    全量模型校验不是本边界的职责。
+    """
+    for view in views:
+        try:
+            assert_evidence_trace_contract(view)
+        except EvidenceViewBoundaryError as error:
+            row_id = _text(getattr(view.row, "row_id", "") or "")
+            raise EvidenceViewBoundaryError(
+                f"证据视图序列化边界校验失败（{row_id or '未知行'}）：{error}"
+            ) from error
 
 
 class EvidenceViewSet(BaseModel):

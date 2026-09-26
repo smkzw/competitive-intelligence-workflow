@@ -263,6 +263,7 @@ def test_c_criteria_show_searchable_source_comparison_instead_of_count_bars(
         assert set(cards.evaluate_all(
             "nodes => nodes.map(node => node.getAttribute('data-criterion-row-id'))"
         )) == set(expected)
+        assert set(_visible_row_ids(page)) == set(expected)
         assert page.locator("#kz-c-chart-visuals svg").count() == 0
         assert "不按并列位置推断条款等价" in page.locator("#kz-c-chart-visuals").inner_text()
 
@@ -270,21 +271,30 @@ def test_c_criteria_show_searchable_source_comparison_instead_of_count_bars(
         first_choice = page.locator(".kz-c-criteria-choices input").first
         first_choice.uncheck()
         assert cards.count() < len(expected)
+        assert set(_visible_row_ids(page)) == set(cards.evaluate_all(
+            "nodes => nodes.map(node => node.getAttribute('data-criterion-row-id'))"
+        ))
         first_choice.check()
         assert cards.count() == len(expected)
+        assert set(_visible_row_ids(page)) == set(expected)
 
         query = page.locator("#kz-c-criteria-search")
         query.fill("Chronic AD")
         visible = cards.filter(visible=True)
         assert visible.count() == 1
         assert "Chronic AD" in visible.first.inner_text()
+        assert set(_visible_row_ids(page)) == set(visible.evaluate_all(
+            "nodes => nodes.map(node => node.getAttribute('data-criterion-row-id'))"
+        ))
         visible.first.locator("summary").click()
         assert "screening visit" in visible.first.inner_text()
         page.reload(wait_until="load")
         assert page.locator("#kz-c-criteria-search").input_value() == "Chronic AD"
         assert page.locator("[data-criterion-row-id]:visible").count() == 1
+        assert len(_visible_row_ids(page)) == 1
         query.fill("")
         assert cards.filter(visible=True).count() == len(expected)
+        assert set(_visible_row_ids(page)) == set(expected)
         browser.close()
 
 

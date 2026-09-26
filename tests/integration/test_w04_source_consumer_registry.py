@@ -7,6 +7,7 @@ import sqlite3
 from datetime import UTC, datetime
 from hashlib import sha256
 from pathlib import Path
+from zipfile import ZipFile
 
 import pytest
 
@@ -20,6 +21,10 @@ from ci_workflow.application.portal_consumer_registry import (
 from ci_workflow.application.project_service import (
     create_project_workspace,
     verify_project_workspace,
+)
+from ci_workflow.application.share_export import (
+    ShareViewSelection,
+    export_current_html_share,
 )
 from ci_workflow.application.source_research_service import (
     ResearchClaim,
@@ -135,6 +140,7 @@ def _b_direct_source_view(
             "arm_id": row.group_id,
             "arm_label": row.arm,
             "analysis_population": row.population,
+            "timepoint": row.timepoint,
             "value": row.value,
             "unit": row.unit,
             "numerator": row.numerator,
@@ -413,6 +419,55 @@ def test_fixed_real_ctgov_pnh_atom_rebuilds_a_and_b_from_one_user_save(
             "SELECT content_text FROM evidence_fragments WHERE fragment_id=?",
             (source["primary_fragment_id"],),
         ).fetchone() == ("92.2",)
+
+    target = FactTargetIdentity(
+        fact_id=source["fact_id"], fact_version_id=saved.fact_version_id,
+        entity_id=source["entity_id"], field_id=source["field_id"],
+    )
+    cleared = service.save(UserFactSaveCommand(
+        request_id="real-cas-pnh-ab-clear-development-only",
+        project_id=contract.project_id, expected_revision=1, target=target,
+        edits=FactEdit(raw_value=None), user_basis="开发演练清除，待重新核实",
+        saved_by="test", saved_at=AT,
+    ))
+    assert cleared.rebuilt_reports == ("A", "B")
+    for item in service.read_current_delivery().reports:
+        site = root / item.site_relative_path
+        projection = json.loads(
+            (site / "data/report.js").read_text(encoding="utf-8")
+            .split("=", 1)[1].rstrip(" ;\n")
+        )
+        row = next(entry for entry in projection["efficacy"] if entry["row_id"] == "eff-1")
+        assert row["value"] is None
+        assert row["disclosure_state"] == "user_cleared"
+        assert row["source_text"] == "92.2"
+    restored = service.save(UserFactSaveCommand(
+        request_id="real-cas-pnh-ab-undo-development-only",
+        project_id=contract.project_id, expected_revision=2, operation="undo",
+        target=target.model_copy(update={"fact_version_id": cleared.fact_version_id}),
+        edits=FactEdit(), user_basis="撤销开发演练清除",
+        saved_by="test", saved_at=AT,
+    ))
+    assert restored.rebuilt_reports == ("A", "B")
+    assert service.read_current_delivery().revision == 3
+    share_path = tmp_path / "real-ab-current-share.zip"
+    receipt = export_current_html_share(
+        root, share_path,
+        selections=(
+            ShareViewSelection(report="A", revision=3),
+            ShareViewSelection(report="B", revision=3),
+        ),
+    )
+    assert receipt.reports == ("A", "B") and receipt.current_revision == 3
+    with ZipFile(share_path) as archive:
+        assert {"打开报告.html", "A/overview.html", "B/overview.html"} <= set(
+            archive.namelist()
+        )
+        manifest = json.loads(archive.read("share-manifest.json"))
+        assert manifest["current_revision"] == 3
+        for report in ("A", "B"):
+            embedded = archive.read(f"{report}/data/report.js")
+            assert b"90.1" in embedded and b"92.2" in embedded
 
 
 def test_real_ingested_source_fact_gets_external_a_binding_without_science_rewrite(

@@ -108,24 +108,28 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
         *(item["row_id"] for item in rows),
         *(item["row_id"] for item in payload["safety"]),
     }
-    assert row_sources["eff-1"]["source_page_sha256"] == hashlib.sha256(
+    first = row_sources[rows[0]["row_id"]]
+    second = row_sources[rows[1]["row_id"]]
+    assert first["source_page_sha256"] == hashlib.sha256(
         page.read_bytes()
     ).hexdigest()
-    assert row_sources["eff-1"]["value_path"] == (
+    assert first["value_path"] == (
         "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]"
         ".classes[0].categories[0].measurements[0].value"
     )
-    assert row_sources["eff-1"]["raw_value"] == "7"
-    assert row_sources["eff-1"]["raw_value_type"] == "str"
-    assert len(row_sources["eff-1"]["denominator_candidates"]) == 2
+    assert first["raw_value"] == "7"
+    assert first["raw_value_type"] == "str"
+    assert len(first["denominator_candidates"]) == 2
     assert {item["unit"] for item in
-            row_sources["eff-1"]["denominator_candidates"]} == {"Participants"}
+            first["denominator_candidates"]} == {"Participants"}
     assert {item["raw_value"] for item in
-            row_sources["eff-2"]["denominator_candidates"]} == {"20", "25"}
-    assert row_sources["safe-5"]["value_path"] == (
+            second["denominator_candidates"]} == {"20", "25"}
+    death = next(item for item in row_sources.values() if item["value_path"] ==
+                 "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAffected")
+    assert death["value_path"] == (
         "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAffected"
     )
-    assert row_sources["safe-5"]["denominator_candidates"] == [{
+    assert death["denominator_candidates"] == [{
         "value_path": (
             "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAtRisk"
         ),

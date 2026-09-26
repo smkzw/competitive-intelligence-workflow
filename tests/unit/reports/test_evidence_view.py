@@ -102,9 +102,13 @@ def evidence(
         "unit": field(value="mg/dL"),
         "numerator": field(state="not_applicable"),
         "denominator": field(value="120"),
+        "source_trace_state": "located",
         "source_version_id": "source-version-01",
         "source_version_label_zh": "ClinicalTrials.gov 登记版本（2026年5月1日）",
         "locator": _LOCATOR,
+        # R24-29：B/C 类已定位必须同时携带逐字原文（A 类页/表锚点也允许提供）
+        "original_text": "Mean change from baseline: 5.2",
+        "original_text_status": OriginalTextStatus.PROVIDED.value,
         "explanation": field(value="直接取自来源报告值，未做换算"),
     }
     payload.update(overrides)
@@ -142,12 +146,15 @@ def test_general_evidence_view_binds_row_snapshot_source_version_and_locator() -
 
 
 def test_unverified_source_trace_cannot_carry_a_version_locator_or_quote() -> None:
-    pending = validate_evidence_view_payload(evidence(
-        source_trace_state="unverified",
-        source_version_id=None,
-        source_version_label_zh="逐事实来源待核",
-        locator=None,
-    ))
+    pending_fields: dict[str, Any] = {
+        "source_trace_state": "unverified",
+        "source_version_id": None,
+        "source_version_label_zh": "逐事实来源待核",
+        "locator": None,
+        "original_text": None,
+        "original_text_status": OriginalTextStatus.NOT_PROVIDED.value,
+    }
+    pending = validate_evidence_view_payload(evidence(**pending_fields))
     assert pending.source_version_id is None
     assert pending.locator is None
     assert pending.row.disclosure_state.value == "reported_value"
@@ -156,12 +163,7 @@ def test_unverified_source_trace_cannot_carry_a_version_locator_or_quote() -> No
         {"locator": _LOCATOR},
         {"original_text": "未经核对的原文", "original_text_status": "provided"},
     ):
-        forged = evidence(
-            source_trace_state="unverified",
-            source_version_id=None,
-            source_version_label_zh="逐事实来源待核",
-            locator=None,
-        )
+        forged = evidence(**pending_fields)
         forged.update(changed)
         with pytest.raises(EvidenceViewBoundaryError, match="来源待核"):
             validate_evidence_view_payload(forged)

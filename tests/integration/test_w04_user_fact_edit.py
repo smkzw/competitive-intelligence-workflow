@@ -1463,6 +1463,45 @@ def test_independent_review_complete_refresh_union_and_refresh_service_persisten
     assert set(withdrawn.field_states.values()) == {RefreshFieldState.SOURCE_WITHDRAWN}
 
 
+@pytest.mark.parametrize("cleared", ["numerator", "normalized_value"])
+def test_refresh_comparison_preserves_explicit_user_clear_and_derived_invalidation(
+    tmp_path: Path, cleared: str,
+) -> None:
+    root, _ = _project(tmp_path, cross_report_binding="legal_AB")
+    edits = FactEdit.model_validate({cleared: None})
+    saved = UserFactEditService(root).save(
+        _command(request_id=f"clear-refresh-{cleared}", edits=edits)
+    )
+    comparison = RefreshService(root).compare_user_fact_refresh(
+        fact_id="fact-crude-rate",
+        base_fact_version_id="fact-crude-rate-v1",
+        user_fact_version_id=saved.fact_version_id,
+        source_version_id="source-v2",
+        source_fields={},
+        source_withdrawn=False,
+        request_id=f"compare-clear-refresh-{cleared}",
+        compared_at=NOW,
+        actor_id="refresh-worker",
+    )
+    assert comparison.requires_explicit_resolution is False
+    for field in ("raw_value", "normalized_value", "numerator", "denominator"):
+        assert comparison.field_states[field] is RefreshFieldState.USER_MODIFIED
+        assert comparison.field_comparisons[field].user_value is None
+    conflict = RefreshService(root).compare_user_fact_refresh(
+        fact_id="fact-crude-rate",
+        base_fact_version_id="fact-crude-rate-v1",
+        user_fact_version_id=saved.fact_version_id,
+        source_version_id="source-v3",
+        source_fields={"normalized_value": "30"},
+        source_withdrawn=False,
+        request_id=f"compare-clear-new-source-{cleared}",
+        compared_at=NOW,
+        actor_id="refresh-worker",
+    )
+    assert conflict.requires_explicit_resolution is True
+    assert conflict.field_states["normalized_value"] is RefreshFieldState.CONFLICT
+
+
 def test_independent_review_numeric_scope_and_import_alias_removed(tmp_path: Path) -> None:
     FactEdit(
         numerator=120,

@@ -3,17 +3,23 @@
 {% block lead %}主要疗效终点与治疗期间不良事件发生率{% endblock %}
 {% block content %}
 <section class="kz-a-panel" data-module="matrix">
-  <div class="kz-a-matrix-controls">
-    <label>疗效横轴<select data-matrix-control="efficacy-axis"><option>主要疗效终点应答率</option><option>治疗组与对照组差值</option></select></label>
-    <label>安全性纵轴<select data-matrix-control="safety-axis"><option>任何TEAE发生率</option><option>任何SAE发生率</option></select></label>
-    <label>气泡大小<select data-matrix-control="bubble-size"><option>治疗组样本量</option><option>全部随机样本量</option></select></label>
+  <div class="kz-a-matrix-workspace">
+    <div class="kz-a-matrix-tools">
+      <div class="kz-a-matrix-controls">
+        <label>疗效横轴<select data-matrix-control="efficacy-axis"><option>主要疗效终点应答率</option><option>治疗组与对照组差值</option></select></label>
+        <label>安全性纵轴<select data-matrix-control="safety-axis"><option>任何TEAE发生率</option><option>任何SAE发生率</option></select></label>
+        <label>气泡大小<select data-matrix-control="bubble-size"><option>治疗组样本量</option><option>全部随机样本量</option></select></label>
+      </div>
+      {{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}
+      <div class="kz-a-matrix-coverage" data-matrix-coverage aria-live="polite"></div>
+    </div>
+    <div class="kz-a-matrix-primary">
+      {{ ui.section_head('疗效—安全性气泡图', '向右表示所选疗效观察值更高；向上表示所选安全事件发生率更低') }}
+      <p class="kz-a-bubble-size">气泡大小：治疗组样本量</p>
+      {{ ui.chart('matrix', 'matrix-full', '可调整维度的疗效安全性气泡图') }}
+      <div class="kz-a-comparability">不同试验的入组人群、对照反应和观察时间可能不同，气泡位置用于快速观察，不作为头对头结论。</div>
+      <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th data-matrix-size-heading>治疗组样本量</th></tr></thead><tbody>{% for p in products %}<tr data-product="{{ p.name }}" data-matrix-product="{{ p.id }}"><td>{{ p.name }}</td><td data-matrix-value="treatment">未纳入当前矩阵</td><td data-matrix-value="control">—</td><td data-matrix-value="teae">—</td><td data-matrix-value="sae">—</td><td data-matrix-value="sample">—</td></tr>{% endfor %}</tbody></table></div>
+    </div>
   </div>
-  {{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}
-  {{ ui.section_head('疗效—安全性气泡图', '向右表示所选疗效观察值更高；向上表示所选安全事件发生率更低') }}
-  <p class="kz-a-bubble-size">气泡大小：治疗组样本量</p>
-  <div class="kz-a-matrix-coverage" data-matrix-coverage aria-live="polite"></div>
-  {{ ui.chart('matrix', 'matrix-full', '可调整维度的疗效安全性气泡图') }}
-  <div class="kz-a-comparability">不同试验的入组人群、对照反应和观察时间可能不同，气泡位置用于快速观察，不作为头对头结论。</div>
-  <div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>疗效观察值</th><th>对照组观察值</th><th>TEAE</th><th>SAE</th><th data-matrix-size-heading>治疗组样本量</th></tr></thead><tbody>{% for p in products %}<tr data-product="{{ p.name }}" data-matrix-product="{{ p.id }}"><td>{{ p.name }}</td><td data-matrix-value="treatment">未纳入当前矩阵</td><td data-matrix-value="control">—</td><td data-matrix-value="teae">—</td><td data-matrix-value="sae">—</td><td data-matrix-value="sample">—</td></tr>{% endfor %}</tbody></table></div>
 </section>
 {% endblock %}

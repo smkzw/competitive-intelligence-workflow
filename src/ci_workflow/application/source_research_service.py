@@ -30,7 +30,11 @@ from ci_workflow.domain.public_provenance import (
 )
 from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData, SafetyRow
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
-from ci_workflow.reports.b.safety_concepts import describe_safety_concept, safety_category_zh
+from ci_workflow.reports.b.safety_concepts import (
+    describe_measured_safety_concept,
+    describe_safety_concept,
+    safety_category_zh,
+)
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
@@ -787,16 +791,14 @@ def _outcome_category(
     # safety vocabulary's fallback sees the word "adverse".
     if classify_source_outcome(title, class_title) != "adverse_events":
         return "outcome"
-    # The safety vocabulary is the semantic source of truth. In particular,
-    # "non-serious", "without SAE" and generic AE cannot establish a positive
-    # SAE/TEAE aggregate. A class may narrow the title but may not erase it.
+    # The safety vocabulary is the semantic source of truth. Explicit CT.gov
+    # classes are separately measured statistical objects. A composite parent
+    # cannot be split without such a class, but it cannot overwrite one either.
     title_concept = describe_safety_concept(title)
     class_concept = describe_safety_concept(class_title) if class_title else None
-    # The measure title is a composite statistical object. A narrower class
-    # label cannot turn its single reported number into one component's AE rate.
-    if title_concept.key == "composite_ae":
+    selected = describe_measured_safety_concept(title, class_title)
+    if title_concept.key == "composite_ae" and selected.key == "composite_ae":
         return "outcome"
-    selected = class_concept if class_concept and class_concept.key != "unknown" else title_concept
     if selected.key == "any_sae" and selected.polarity == "affirmed":
         return "sae"
     if selected.key == "any_teae" and selected.polarity == "affirmed":
@@ -814,7 +816,8 @@ def _outcome_category(
     if selected.key in {
         "generic_ae", "specific_ae", "discontinuation_ae", "treatment_related_ae",
         "grade_3_plus", "serious_teae_subset", "composite_ae",
-        "grade_specific", "non_serious_teae", "absence_sae", "death",
+        "grade_specific", "severity_specific_teae", "non_serious_teae",
+        "absence_sae", "death",
     }:
         return "common_ae"
     return "outcome"
@@ -845,7 +848,7 @@ def classify_source_outcome(
     explicit_safety_concepts = {
         "any_sae", "any_teae", "aesi", "generic_ae", "non_serious_teae",
         "absence_sae", "death", "serious_teae_subset", "discontinuation_ae",
-        "treatment_related_ae", "composite_ae",
+        "treatment_related_ae", "severity_specific_teae", "composite_ae",
     }
     if any(
         describe_safety_concept(part).key in explicit_safety_concepts
@@ -2266,7 +2269,9 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
     """Bind a safety outcome's reported value; never infer a rate from its count."""
     if not atom.endpoint or not is_safety_domain_endpoint(atom.endpoint):
         raise ResearchPackageError("此绑定仅接受直接报告的安全性结局")
-    semantic = describe_safety_concept(atom.endpoint)
+    semantic = describe_measured_safety_concept(
+        atom.endpoint, atom.class_title, atom.category_title,
+    )
     unit = atom.raw_unit.strip().casefold()
     if unit in {"participants", "participant"}:
         expected_unit, measure_object = "人", "participant_count"
@@ -2276,6 +2281,9 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
         expected_unit, measure_object = "%", "participant_proportion"
     else:
         expected_unit, measure_object = atom.raw_unit, "adjusted_estimate"
+    expected_count_basis = (
+        "events" if measure_object == "event_count" else semantic.count_basis
+    )
     expected_time = atom.observation_timepoint or atom.timepoint
     raw_value = _result_number(atom.value_quote)
     if (
@@ -2291,7 +2299,7 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
         or _result_text(row.time_window).casefold() != _result_text(expected_time).casefold()
         or row.category != safety_category_zh(semantic.key)
         or row.term_key != semantic.key
-        or row.count_basis != semantic.count_basis
+        or row.count_basis != expected_count_basis
         or row.measure_object != measure_object
         or row.unit != expected_unit
         or row.disclosure_state != "已公开"
@@ -2299,7 +2307,7 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
         or not math.isclose(row.value, raw_value, rel_tol=0.0, abs_tol=1e-9)
     ):
         raise ResearchPackageError("安全性结局的完整来源身份、统计对象或原文数值不一致")
-    if measure_object == "participant_count" and semantic.count_basis != "mixed":
+    if measure_object == "participant_count" and expected_count_basis != "mixed":
         if atom.numerator is None or (
             (row.numerator, row.denominator)
             != ((atom.numerator, atom.denominator) if atom.denominator is not None

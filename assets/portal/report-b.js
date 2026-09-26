@@ -3,6 +3,17 @@
   "use strict";
 
   var started = false;
+  var fullChartGroups = [];
+  var rowById = Object.create(null);
+  var searchById = Object.create(null);
+  var pagedResults = false;
+  var matchedRowIds = [];
+  var matchedGroups = [];
+  var resultPage = 1;
+  var resultQuery = "";
+  var initialFocus = "";
+  var resultPager = null;
+  var RESULT_PAGE_SIZE = 24;
 
   function armText(row) {
     var explicit = row && (row.arm || row.group);
@@ -96,7 +107,25 @@
         prepared.push(split);
       }
     }
-    window.__CHART_GROUPS__ = prepared;
+    fullChartGroups = prepared;
+    for (var pg = 0; pg < prepared.length; pg += 1) {
+      var indexedRows = prepared[pg].rows || [];
+      for (var pr = 0; pr < indexedRows.length; pr += 1) {
+        var indexed = indexedRows[pr];
+        var indexedId = String(indexed.row_id || "");
+        if (!indexedId) continue;
+        if (!rowById[indexedId]) rowById[indexedId] = indexed;
+        var searchText = [indexedId, indexed.product_zh, indexed.trial_zh,
+          indexed.display_label_zh, indexed.clinical_concept,
+          indexed.original_endpoint, indexed.time_window, indexed.arm_detail]
+          .map(function (part) { return String(part || ""); }).join(" ").toLowerCase();
+        searchById[indexedId] = (searchById[indexedId] || "") + " " + searchText;
+      }
+    }
+    pagedResults = prepared.length > 48;
+    window.__B_PAGED_RESULTS__ = pagedResults;
+    // The complete result set remains in memory; charts.js mounts only one page.
+    window.__CHART_GROUPS__ = pagedResults ? [] : prepared;
   }
 
   normalizeBChartGroups();
@@ -179,14 +208,7 @@
   }
 
   function rowRecord(rowId) {
-    var groups = window.__CHART_GROUPS__ || [];
-    for (var i = 0; i < groups.length; i += 1) {
-      var rows = groups[i].rows || [];
-      for (var j = 0; j < rows.length; j += 1) {
-        if (String(rows[j].row_id) === String(rowId)) return rows[j];
-      }
-    }
-    return null;
+    return rowById[String(rowId)] || null;
   }
 
   function decorateRows() {
@@ -221,6 +243,10 @@
 
   function rowValueText(row) {
     if (!row || row.renderable === false) {
+      if (row && row.group_assignment_state === "unknown" &&
+          row.raw_numeric_value !== null && row.raw_numeric_value !== undefined) {
+        return String(row.raw_numeric_value) + "（组别产品归属待核）";
+      }
       return row && row.status ? String(row.status) : disclosureLabel(row && row.disclosure_state);
     }
     if (row.numeric_value !== null && row.numeric_value !== undefined) {
@@ -534,7 +560,7 @@
     td.setAttribute("data-label", column[1]);
     var value = columnValue(row, key);
     var linked = false;
-    if (key === "product_zh" && row.product_id) {
+    if (key === "product_zh" && row.product_id && row.group_assignment_state !== "unknown") {
       var productLink = document.createElement("a");
       productLink.href = detailPrefix() + "products/" + encodeURIComponent(String(row.product_id)) + ".html";
       productLink.textContent = value;
@@ -594,12 +620,14 @@
     if (!id) return;
     var row = rowRecord(id);
     if (!row) return;
-    linkDrawerIdentity(
-      "产品",
-      row.product_id,
-      detailPrefix() + "products/" + encodeURIComponent(String(row.product_id)) + ".html",
-      row.product_zh || "未列示产品"
-    );
+    if (row.group_assignment_state !== "unknown") {
+      linkDrawerIdentity(
+        "产品",
+        row.product_id,
+        detailPrefix() + "products/" + encodeURIComponent(String(row.product_id)) + ".html",
+        row.product_zh || "未列示产品"
+      );
+    }
     linkDrawerIdentity(
       "试验",
       row.trial_id,
@@ -627,6 +655,11 @@
       }
       var index = Number(table.getAttribute("data-group-index"));
       var group = (window.__CHART_GROUPS__ || [])[index] || {};
+      var groupRowsById = Object.create(null);
+      var groupRows = group.rows || [];
+      for (var gr = 0; gr < groupRows.length; gr += 1) {
+        groupRowsById[String(groupRows[gr].row_id)] = groupRows[gr];
+      }
       var columns = columnsFor((group.rows || [])[0] || {});
       var header = table.querySelector("thead tr");
       if (header) {
@@ -640,7 +673,7 @@
       }
       var rows = table.querySelectorAll(".kz-chart-table__row[data-row-id]");
       for (var j = 0; j < rows.length; j += 1) {
-        var row = rowRecord(rows[j].getAttribute("data-row-id"));
+        var row = groupRowsById[String(rows[j].getAttribute("data-row-id"))];
         if (!row) continue;
         rows[j].innerHTML = "";
         for (var c = 0; c < columns.length; c += 1) {
@@ -651,6 +684,7 @@
   }
 
   function visibleRowIds() {
+    if (pagedResults) return matchedRowIds.slice();
     var rows = document.querySelectorAll(".kz-chart-table__row[data-row-id]");
     var result = [];
     for (var i = 0; i < rows.length; i += 1) {
@@ -691,7 +725,141 @@
       : "显示全部可用记录（" + visible + " 条）";
   }
 
+  function writeResultPosition() {
+    var url = new URL(window.location.href);
+    if (resultPage > 1) url.searchParams.set("pg", String(resultPage));
+    else url.searchParams.delete("pg");
+    if (resultQuery) url.searchParams.set("bq", resultQuery);
+    else url.searchParams.delete("bq");
+    window.history.replaceState({}, "", url.href);
+  }
+
+  function renderPagedResults(state) {
+    var search = resultQuery.trim().toLowerCase();
+    var unique = Object.create(null);
+    matchedRowIds = [];
+    matchedGroups = [];
+    for (var g = 0; g < fullChartGroups.length; g += 1) {
+      var source = fullChartGroups[g];
+      var sourceRows = source.rows || [];
+      var rows = [];
+      for (var r = 0; r < sourceRows.length; r += 1) {
+        var rowId = String(sourceRows[r].row_id || "");
+        if (!rowId || !matches(rowId, state) ||
+            (search && String(searchById[rowId] || "").indexOf(search) === -1)) continue;
+        rows.push(sourceRows[r]);
+        if (!unique[rowId]) {
+          unique[rowId] = true;
+          matchedRowIds.push(rowId);
+        }
+      }
+      if (rows.length) {
+        var group = Object.assign({}, source);
+        group.rows = rows;
+        matchedGroups.push(group);
+      }
+    }
+    var pages = Math.max(1, Math.ceil(matchedGroups.length / RESULT_PAGE_SIZE));
+    if (initialFocus) {
+      for (var f = 0; f < matchedGroups.length; f += 1) {
+        if (matchedGroups[f].rows.some(function (row) {
+          return String(row.row_id) === initialFocus;
+        })) {
+          resultPage = Math.floor(f / RESULT_PAGE_SIZE) + 1;
+          break;
+        }
+      }
+      initialFocus = "";
+    }
+    resultPage = Math.min(Math.max(resultPage, 1), pages);
+    window.__B_VISIBLE_ROW_IDS__ = matchedRowIds.slice();
+    var start = (resultPage - 1) * RESULT_PAGE_SIZE;
+    var current = matchedGroups.slice(start, start + RESULT_PAGE_SIZE);
+    var drawer = window.__EVIDENCE_DRAWER__;
+    if (drawer && drawer.isOpen && drawer.isOpen()) {
+      var openId = drawer.getOpenRowId();
+      var onPage = current.some(function (group) {
+        return group.rows.some(function (row) { return String(row.row_id) === openId; });
+      });
+      if (!onPage) drawer.close(false);
+    }
+    window.__CHART_SYNC__.replaceGroups(current);
+    updateTableContents();
+    addTableSemantics();
+    updateChartStatusMessages();
+    var label = resultPager.querySelector("[data-b-result-range]");
+    var from = matchedGroups.length ? start + 1 : 0;
+    var to = Math.min(start + RESULT_PAGE_SIZE, matchedGroups.length);
+    label.textContent = "比较面板 " + from + "–" + to + " / " + matchedGroups.length +
+      "；匹配 " + matchedRowIds.length + " 条事实";
+    resultPager.querySelector("[data-b-result-prev]").disabled = resultPage <= 1;
+    resultPager.querySelector("[data-b-result-next]").disabled = resultPage >= pages;
+    resultPager.setAttribute("data-total-groups", String(matchedGroups.length));
+    resultPager.setAttribute("data-total-rows", String(matchedRowIds.length));
+    resultPager.setAttribute("data-page", String(resultPage));
+    resultPager.setAttribute("data-page-count", String(pages));
+    writeResultPosition();
+  }
+
+  function installResultPager() {
+    if (!pagedResults) return;
+    var module = document.getElementById("kz-chart-module");
+    if (!module) return;
+    resultPager = document.createElement("nav");
+    resultPager.className = "kz-b-result-pager";
+    resultPager.setAttribute("aria-label", "完整研究结果分页与检索");
+    var label = document.createElement("label");
+    label.textContent = "检索本页全部事实";
+    var search = document.createElement("input");
+    search.type = "search";
+    search.setAttribute("aria-label", "检索本页全部事实");
+    search.placeholder = "产品、试验、指标或事实编号";
+    search.value = resultQuery;
+    label.appendChild(search);
+    var range = document.createElement("span");
+    range.setAttribute("data-b-result-range", "");
+    range.setAttribute("aria-live", "polite");
+    var prev = document.createElement("button");
+    prev.type = "button";
+    prev.textContent = "上一页";
+    prev.setAttribute("data-b-result-prev", "");
+    var next = document.createElement("button");
+    next.type = "button";
+    next.textContent = "下一页";
+    next.setAttribute("data-b-result-next", "");
+    resultPager.appendChild(label);
+    resultPager.appendChild(range);
+    resultPager.appendChild(prev);
+    resultPager.appendChild(next);
+    module.parentNode.insertBefore(resultPager, module);
+    search.addEventListener("input", function () {
+      resultQuery = search.value.trim();
+      resultPage = 1;
+      renderPagedResults(selectedState());
+      updateStatus(selectedState());
+    });
+    prev.addEventListener("click", function () {
+      if (resultPage <= 1) return;
+      resultPage -= 1;
+      renderPagedResults(selectedState());
+    });
+    next.addEventListener("click", function () {
+      if (resultPage * RESULT_PAGE_SIZE >= matchedGroups.length) return;
+      resultPage += 1;
+      renderPagedResults(selectedState());
+    });
+  }
+
   function applyState(state) {
+    if (pagedResults) {
+      renderPagedResults(state);
+      if (window.__EVIDENCE_DRAWER__ &&
+          typeof window.__EVIDENCE_DRAWER__.pruneToVisible === "function") {
+        window.__EVIDENCE_DRAWER__.pruneToVisible(matchedRowIds);
+      }
+      updateStatus(state);
+      return;
+    }
     var rows = document.querySelectorAll(".kz-chart-table__row[data-row-id]");
     var visible = [];
     for (var i = 0; i < rows.length; i += 1) {
@@ -755,6 +923,7 @@
           var index = state[dimension].indexOf(value);
           if (index === -1) state[dimension].push(value);
           else state[dimension].splice(index, 1);
+          if (pagedResults) resultPage = 1;
           applyButtonState(state);
           applyState(state);
           writeFilterUrl(state);
@@ -767,6 +936,7 @@
         var state = {};
         var dimensions = filterDimensions();
         for (var i = 0; i < dimensions.length; i += 1) state[dimensions[i]] = [];
+        if (pagedResults) resultPage = 1;
         applyButtonState(state);
         applyState(state);
         writeFilterUrl(state);
@@ -813,7 +983,11 @@
     }
     window.setTimeout(function () {
       if (window.__EVIDENCE_DRAWER__ && window.__EVIDENCE_DRAWER__.hasView(focus)) {
-        window.__EVIDENCE_DRAWER__.openByRowId(focus, null);
+        var trigger = document.querySelector(
+          '#kz-chart-module [data-chart-evidence-open="' +
+          CSS.escape(focus) + '"]'
+        ) || (resultPager && resultPager.querySelector("input"));
+        window.__EVIDENCE_DRAWER__.openByRowId(focus, trigger);
       }
     }, 0);
   }
@@ -863,7 +1037,7 @@
   }
 
   function allRowsDomainEmpty() {
-    var groups = window.__CHART_GROUPS__ || [];
+    var groups = fullChartGroups;
     var found = false;
     for (var i = 0; i < groups.length; i += 1) {
       var rows = groups[i].rows || [];
@@ -877,7 +1051,7 @@
 
 
   function updateEmptyState() {
-    var groups = window.__CHART_GROUPS__ || [];
+    var groups = fullChartGroups;
     if (groups.length && !allRowsDomainEmpty()) return;
     var emptyTitle = document.querySelector(".kz-chart-empty__title");
     if (emptyTitle && window.__B_EMPTY_STATE__) {
@@ -890,6 +1064,15 @@
     if (started) return;
     started = true;
     removeSharedHash();
+    if (pagedResults) {
+      var params = new URLSearchParams(window.location.search || "");
+      var requestedPage = Number(params.get("pg"));
+      resultPage = Number.isSafeInteger(requestedPage) && requestedPage > 0
+        ? requestedPage : 1;
+      resultQuery = String(params.get("bq") || "").trim();
+      initialFocus = String(params.get("focus") || "");
+      installResultPager();
+    }
     updateTableContents();
     addTableSemantics();
     updateEmptyState();

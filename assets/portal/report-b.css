@@ -48,11 +48,11 @@ body {
 .kz-b-main {
   width: 100%;
   max-width: var(--portal-canvas-max);
-  padding: 32px clamp(16px, 3vw, 48px) 72px;
+  padding: 20px clamp(16px, 3vw, 48px) 56px;
 }
 
 .kz-b-page-head {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .kz-b-page-head .portal-lead {
@@ -67,7 +67,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 18px;
-  margin-top: 18px;
+  margin-top: 10px;
   color: var(--b-muted);
   font-size: 16px;
   line-height: 1.5;
@@ -92,7 +92,7 @@ body {
 
 .kz-b-filter-panel {
   min-width: 0;
-  margin: 0 0 28px;
+  margin: 0 0 16px;
 }
 
 .kz-b-filter-quick {
@@ -100,8 +100,8 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px 12px;
-  margin: 0 0 10px;
-  padding: 8px 12px;
+  margin: 0 0 6px;
+  padding: 6px 12px;
   border: 1px solid var(--b-line);
   border-radius: 10px;
   background: #fffdf9;
@@ -339,8 +339,8 @@ body {
 .kz-b-dossier-summary,
 .kz-b-profile-index {
   min-width: 0;
-  margin-bottom: 28px;
-  padding: clamp(18px, 3vw, 28px);
+  margin-bottom: 20px;
+  padding: clamp(16px, 2vw, 24px);
   background: var(--b-surface);
   border: 1px solid var(--b-line);
   border-radius: var(--b-radius);
@@ -352,7 +352,7 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 22px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .kz-b-section-heading h2 {
@@ -385,6 +385,53 @@ body {
   font-size: 16px;
   line-height: 1.5;
 }
+
+.kz-b-result-pager {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--b-line);
+  border-radius: 8px;
+  background: #f6f5f3;
+  color: var(--b-ink);
+  font-size: 14px;
+}
+
+.kz-b-result-pager label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.kz-b-result-pager input {
+  width: min(340px, 30vw);
+  min-width: 220px;
+  padding: 7px 10px;
+  border: 1px solid var(--b-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--b-ink);
+  font: inherit;
+}
+
+.kz-b-result-pager [data-b-result-range] { margin-left: auto; }
+
+.kz-b-result-pager button {
+  padding: 6px 12px;
+  border: 1px solid var(--b-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--b-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.kz-b-result-pager button:disabled { opacity: 0.5; cursor: default; }
+.kz-b-result-pager :focus-visible { outline: 3px solid var(--b-orange); outline-offset: 2px; }
 
 .kz-chart-module {
   min-width: 0;

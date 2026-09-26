@@ -6,20 +6,20 @@
  "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "4ddfa490bb6d294e057f3bdc945fecc4136c8e02c1b6e21b5f941c074faef583",
-   "bytes": 69426
+   "sha256": "ebd73ca5439a3e4e9b317b478b35523bcc7ce563ccfbb7fc537f3d2c29e8e5c7",
+   "bytes": 69786
   },
   "portal.js": {
-   "sha256": "f351c5b8e55366c78789f84b864ada12458434b740ef2257cd30b75628019806",
-   "bytes": 50355
+   "sha256": "4412aa9a025d3ce1f6b23825a1d86ecf8c75a30852a2a5c0d55bce442bfb2bd6",
+   "bytes": 51112
   },
   "charts.js": {
-   "sha256": "d38f377d17648676186787e098a75d6c877fdc7ceafe4139373fd1310bbfb653",
-   "bytes": 78413
+   "sha256": "636256cc11c664d2a67367fdb0ab3cb69b1aea89352fcbb3c7383f7632de61d3",
+   "bytes": 81496
   },
   "evidence-drawer.js": {
-   "sha256": "27cd8c560439bdad3dbcb21f796015cfda18f76985ff0ed6b2abed4992a4eb7e",
-   "bytes": 31631
+   "sha256": "e6eafe02aa4935eb9cabd9e4350a0c55d8ae0bbe80bb159d1f9100b3de5f555e",
+   "bytes": 34373
   },
   "evidence-drawer.css": {
    "sha256": "7b3e5c14fbd5ecb8ba1a1b6a043edc79cd1392588b1dbbc9b4f217721de81032",
@@ -30,28 +30,28 @@
    "bytes": 1121883
   },
   "report-a.js": {
-   "sha256": "a0d2eea7df4c627796888da1c0321faec750a8d2d16d45325f25fa96363479fc",
-   "bytes": 104685
+   "sha256": "1527f659748eec5c7a237ca67639b208531621ccf766a151726589b6aeca4580",
+   "bytes": 112043
   },
   "report-a.css": {
-   "sha256": "67af99bb6216108be3bf2f5e60eea646c0a1d0b81533f77ddd86db18c73789d3",
-   "bytes": 3954
+   "sha256": "c5e6322dc23ed76ecc8b977825c861cea27838667b6e55b0d065dff4882bddb2",
+   "bytes": 8176
   },
   "report-b.js": {
-   "sha256": "12b372ca6e5837e79c731d6859abbc87cf425d543be552485d8da9dd8c469bc6",
-   "bytes": 34364
+   "sha256": "1406ac680ee8f7952effa01008d5311610df4deb4530e40c0afa04ebcfe628ec",
+   "bytes": 42125
   },
   "report-b.css": {
-   "sha256": "9774b5c66574a3927a17dbd9950264b05741c5f8ee21dc464f840d613e7fbc56",
-   "bytes": 18061
+   "sha256": "6ff01454beb39be20ea46ff0a7a5913b9e565eb53fd3d56bd9633258078fdad3",
+   "bytes": 19060
   },
   "report-c.js": {
-   "sha256": "88299db6fb2d5db9ed6af2e28ca6cb65283f16133bad6756a24991887cf58e0b",
-   "bytes": 45479
+   "sha256": "1b9f50ebe48c72ef1940da96a98eb1efbecc11aebbbac45cb43c0fdf9177afc7",
+   "bytes": 48176
   },
   "report-c.css": {
-   "sha256": "88221fb3dc673c753ff0c9778905a7b2cc99f8c7dc77eaea747aa1a4a5e07b33",
-   "bytes": 15577
+   "sha256": "1fd06839fff5bff6c9605f5c63163c21fdcda07a6c35d1afdf465b46b2eab2e9",
+   "bytes": 16488
   }
  },
  "logo_source": "assets/brand/cms-logo.svg",

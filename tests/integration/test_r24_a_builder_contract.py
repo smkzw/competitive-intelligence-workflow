@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -62,6 +63,112 @@ def _build(tmp_path: Path, studies: list[dict[str, Any]]) -> dict[str, Any]:
     return payload
 
 
+def test_capture_receipt_selects_only_pinned_pages_from_mixed_cas(
+    tmp_path: Path,
+) -> None:
+    """A live project also stores per-study slices and receipts in the same CAS."""
+    root = Path(__file__).resolve().parents[2]
+    cas = tmp_path / "cas"
+    study = _study("NCT00000011", 40, "ACTUAL", [
+        {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]},
+    ])
+    page = json.dumps({"studies": [study]}, sort_keys=True).encode()
+    digest = hashlib.sha256(page).hexdigest()
+    page_relative = f"evidence/raw/sha256/{digest[:2]}/{digest}.bin"
+    page_path = cas / page_relative
+    page_path.parent.mkdir(parents=True)
+    page_path.write_bytes(page)
+    decoy = cas / "evidence/raw/sha256/ff/other.bin"
+    decoy.parent.mkdir(parents=True)
+    decoy.write_text(json.dumps({"record": study}), encoding="utf-8")
+    receipt = cas / "capture.json"
+    receipt.write_text(json.dumps({
+        "schema_version": "1.0", "projection_status": "complete",
+        "records": [{"nct_id": "NCT00000011"}],
+        "acquisition": {
+            "status": "complete", "pagination_complete": True, "total_count": 1,
+            "pages": [{
+                "page_number": 1, "acquired_at": "2026-09-26T10:00:00Z",
+                "study_ids": ["NCT00000011"],
+                "raw_asset": {"relative_path": page_relative, "sha256": digest,
+                              "byte_size": len(page)},
+            }],
+        },
+    }), encoding="utf-8")
+    alias = tmp_path / "alias.json"
+    alias.write_text(json.dumps({
+        "map_id": "synthetic-v1", "canonical_by_alias": {"Studydrug": "studydrug"},
+    }), encoding="utf-8")
+
+    def run(output: Path, *, pinned: bool) -> subprocess.CompletedProcess[str]:
+        command = [
+            sys.executable, str(root / "tools/build_a_payload.py"),
+            "--cas-dir", str(cas), "--alias-map", str(alias),
+            "--indication", "合成适应症", "--indication-id", "synthetic",
+            "--output", str(output), "--cutoff", "2026-09-26",
+        ]
+        if pinned:
+            command.extend(["--capture-receipt", str(receipt)])
+        return subprocess.run(command, cwd=root, capture_output=True, text=True)
+
+    unpinned = tmp_path / "unpinned.json"
+    assert run(unpinned, pinned=False).returncode != 0
+    assert not unpinned.exists()
+
+    pinned = tmp_path / "pinned.json"
+    completed = run(pinned, pinned=True)
+    assert completed.returncode == 0, completed.stderr
+    payload = json.loads(pinned.read_text(encoding="utf-8"))
+    assert {row["display_id"] for row in payload["trials"]} == {"NCT00000011"}
+    sidecar = json.loads((tmp_path / "pinned.derivation.json").read_text())
+    assert sidecar["pages"] == [{"page": 1, "sha256": digest}]
+
+    receipt_data = json.loads(receipt.read_text())
+    receipt_data["records"][0]["nct_id"] = "NCT99999999"
+    receipt.write_text(json.dumps(receipt_data), encoding="utf-8")
+    mismatched = tmp_path / "mismatched.json"
+    assert run(mismatched, pinned=True).returncode != 0
+    assert not mismatched.exists()
+
+    receipt_data["records"][0]["nct_id"] = "NCT00000011"
+    receipt_data["acquisition"]["pages"][0]["raw_asset"]["sha256"] = "0" * 64
+    receipt.write_text(json.dumps(receipt_data), encoding="utf-8")
+    tampered = tmp_path / "tampered.json"
+    assert run(tampered, pinned=True).returncode != 0
+    assert not tampered.exists()
+
+
+def test_result_row_identity_survives_page_order_and_new_study(
+    tmp_path: Path,
+) -> None:
+    """A refresh must not retarget a saved consumer when pagination changes."""
+    drug = [{"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]}]
+
+    def with_result(nct: str, value: str) -> dict[str, Any]:
+        study = _study(nct, 40, "ACTUAL", drug)
+        study["resultsSection"] = {"outcomeMeasuresModule": {"outcomeMeasures": [{
+            "title": "Participants With Response", "timeFrame": "Week 24",
+            "unitOfMeasure": "Participants",
+            "groups": [{"id": "OG1", "title": "Drug arm"}],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": "OG1", "value": value},
+            ]}]}],
+        }]}}
+        return study
+
+    original = _build(tmp_path / "original", [
+        with_result("NCT00000021", "7"), with_result("NCT00000022", "8"),
+    ])
+    refreshed = _build(tmp_path / "refreshed", [
+        with_result("NCT00000020", "9"), with_result("NCT00000022", "8"),
+        with_result("NCT00000021", "10"),
+    ])
+    before = {row["trial_id"]: row["row_id"] for row in original["efficacy"]}
+    after = {row["trial_id"]: row["row_id"] for row in refreshed["efficacy"]}
+    assert {key: after[key] for key in before} == before
+    assert len(set(after.values())) == len(after)
+
+
 def test_unknown_zero_planned_and_actual_n_remain_distinct(tmp_path: Path) -> None:
     drug = [{"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]}]
     studies = [
@@ -70,7 +177,10 @@ def test_unknown_zero_planned_and_actual_n_remain_distinct(tmp_path: Path) -> No
         _study("NCT00000003", 50, "ESTIMATED", drug),
         _study("NCT00000004", 40, "ACTUAL", drug),
     ]
-    rows = {row["display_id"]: row for row in _build(tmp_path, studies)["trials"]}
+    payload = _build(tmp_path, studies)
+    rows = {row["display_id"]: row for row in payload["trials"]}
+    assert payload["regulatory"][0]["date"] == "2026-09-24"
+    assert "中国来源未接入当前载荷" in payload["history"][0]["observation"]
     assert set(rows) == {study["protocolSection"]["identificationModule"]["nctId"]
                          for study in studies}
     assert rows["NCT00000001"]["sample_size"] is None
@@ -79,6 +189,37 @@ def test_unknown_zero_planned_and_actual_n_remain_distinct(tmp_path: Path) -> No
     assert rows["NCT00000003"]["sample_size"] is None
     assert rows["NCT00000003"]["planned_sample_size"] == 50
     assert rows["NCT00000004"]["sample_size"] == 40
+
+
+def test_registration_sponsors_do_not_become_one_order_dependent_developer(
+    tmp_path: Path,
+) -> None:
+    drug = [{"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]}]
+
+    def sponsored(nct: str, sponsor: str) -> dict[str, Any]:
+        study = _study(nct, 40, "ACTUAL", drug)
+        study["protocolSection"]["sponsorCollaboratorsModule"] = {
+            "leadSponsor": {"name": sponsor},
+        }
+        return study
+
+    first = sponsored("NCT00000031", "Sponsor Beta")
+    second = sponsored("NCT00000032", "Sponsor Alpha")
+    for index, studies in enumerate(((first, second), (second, first))):
+        payload = _build(tmp_path / str(index), list(studies))
+        product = next(row for row in payload["products"] if row["id"] == "studydrug")
+        assert product["developer_basis"] == "registration_sponsor"
+        assert product["developer"] == "Sponsor Alpha、Sponsor Beta"
+        assert {row["sponsor"] for row in payload["companies"]} == {
+            "Sponsor Alpha", "Sponsor Beta",
+        }
+        assert all(row["licensor"] == "未公开披露" for row in payload["companies"])
+        site = tmp_path / str(index) / "site"
+        render_report_a_site(ReportAPortalData.model_validate(payload), site)
+        detail = (site / "products" / "studydrug.html").read_text(encoding="utf-8")
+        assert "登记申办方（不等于研发归属）" in detail
+        assert "许可方：Sponsor Alpha" not in detail
+        assert "登记申办方：Sponsor Alpha" in detail
 
 
 def test_intervention_order_does_not_reassign_the_trial_or_hide_comparator(

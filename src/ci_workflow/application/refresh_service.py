@@ -745,7 +745,19 @@ class RefreshService:
             edits = command.get("edits")
             if not isinstance(edits, dict):
                 raise RefreshStateError("用户事实谱系保存命令缺少typed edits")
-            declared.update(key for key, value in edits.items() if value is not None)
+            # A stored patch is presence-aware: explicit null is a user clear,
+            # not an omitted field. Saving any numeric clear also invalidates
+            # its dependent current values in UserFactEditService._stage_fact.
+            declared.update(edits)
+            cleared = {key for key, value in edits.items() if value is None}
+            numeric_fields = {
+                "raw_value", "normalized_value", "numerator", "denominator",
+                "threshold_value",
+            }
+            if cleared - numeric_fields:
+                raise RefreshStateError("用户事实谱系含不支持的显式清除字段")
+            if cleared:
+                declared.update(numeric_fields)
         if declared & {"numerator", "denominator", "threshold_operator", "threshold_value"}:
             declared.update({"raw_value", "normalized_value"})
         return declared

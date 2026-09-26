@@ -317,6 +317,7 @@ body.kz-a-insight-drawer-open { overflow: hidden; }
   gap: 8px;
   padding: 16px 0;
 }
+.kz-a-insight-drawer__summary[hidden] { display: none; }
 .kz-a-insight-summary-field { min-width: 0; padding: 10px 12px; border-left: 3px solid var(--kz-yellow); background: var(--bg-warm); }
 .kz-a-insight-summary-field dt { color: var(--text-3); font-size: 12px; }
 .kz-a-insight-summary-field dd { margin-top: 2px; color: var(--text-1); font-size: 16px; font-weight: 700; overflow-wrap: anywhere; }
@@ -1615,6 +1616,13 @@ input:focus-visible {
   padding-left: 10px;
 }
 
+.kz-chart-group__unit {
+  margin: -4px 0 8px;
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
 .kz-chart-legend {
   display: flex;
   flex-wrap: wrap;
@@ -1629,6 +1637,14 @@ input:focus-visible {
   align-items: center;
   gap: 6px;
 }
+
+.kz-chart-legend--identity .kz-chart-legend__item {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.kz-chart-legend--identity .kz-chart-legend__swatch { flex: 0 0 12px; }
 
 .kz-chart-legend__swatch {
   width: 12px;

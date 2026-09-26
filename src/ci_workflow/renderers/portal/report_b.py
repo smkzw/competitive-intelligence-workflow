@@ -51,6 +51,11 @@ from ci_workflow.reports.common.evidence_view import (
     EvidenceObservationKind,
     EvidenceView,
     OriginalTextStatus,
+    assert_evidence_views_serializable,
+    clean_evidence_locator,
+    field_path_is_precise,
+    is_local_path_shape,
+    precise_locator_anchor,
 )
 from ci_workflow.reports.common.numeric_projection import (
     NumericMeasureKind,
@@ -676,7 +681,9 @@ _STATISTICAL_FORM_GROUPS = {
     "median_difference": ("median difference", "中位数差"),
     "mean": ("mean", "average", "均值", "平均值"),
     "median": ("median", "中位数"),
-    "proportion": ("proportion", "percentage", "percent", "比例", "百分比"),
+    "proportion": (
+        "proportion", "participant_proportion", "percentage", "percent", "比例", "百分比",
+    ),
     "count": ("count", "number", "n", "例数", "人数", "数量"),
     "event_count": ("event count", "event_count", "events", "事件数", "事件计数", "件数"),
     "adherence_summary": ("adherence summary", "adherence_summary", "依从性概览"),
@@ -1716,6 +1723,20 @@ def _number(value: Any) -> int | float | None:
     return None
 
 
+def _reported_numeric(row: Mapping[str, Any]) -> int | float | None:
+    """证据视图展示的“值”＝原始报告值，而不是派生绘图值。
+
+    ``_project_record`` 把 ``raw_numeric_value`` 保存为原始报告值、``numeric_value``
+    保存为绘图投影值（不可绘图时为 None）。不可绘图不等于未报告：原始数值必须
+    仍可展示，缺失仍由互斥状态表达。
+    """
+    for name in ("raw_numeric_value", "value", "numeric_value"):
+        candidate = _number(row.get(name))
+        if candidate is not None:
+            return candidate
+    return None
+
+
 def _state(value: Any, numeric: int | float | None) -> str:
     value = _enum_value(value)
     if value is not None:
@@ -1850,6 +1871,10 @@ def _label_for(value: Any, domain: str) -> str:
                 return original
         return label
     if domain == "safety":
+        measured_class = _text(_first(value, "source_class_title", default=""))
+        typed_key = _text(_first(value, "term_key", default=""))
+        if measured_class and typed_key in SAFETY_CONCEPTS:
+            return SAFETY_CONCEPTS[typed_key].label_zh
         candidate = _first(
             value,
             "standard_term",
@@ -2073,52 +2098,28 @@ def _source_version(value: Any) -> str | None:
 
 
 def _exact_source_locator(value: Any) -> EvidenceLocator | None:
+    """精确、非本机的来源锚点；本机路径字段被去除，弱锚点一律返回 None。
+
+    独立会商 R24-25 FAIL 复现：绝对路径、UNC、上跳相对路径与仅链接/仅章节
+    曾被当作精确定位。此处只保留字段、页、表、行、列、段落锚点，且字段路径
+    必须是具体测量/字段（``$.`` 一类粗容器不算）。同一位置对象里若另有好锚点，
+    仅移除携带本机路径的脏字段，不丢弃整个定位。
+    """
     candidate = _first(value, "source_locator", "locator", "source_location", default=None)
     if isinstance(candidate, (EvidenceLocator, Mapping)):
-        try:
-            locator = EvidenceLocator.model_validate(candidate)
-        except (TypeError, ValueError):
-            return None
-        field_path = locator.field_path or ""
-        if (
-            field_path.startswith(("/", "~", "file:"))
-            or re.match(r"^[A-Za-z]:[\\/]", field_path)
-            or (locator.url or "").lower().startswith("file:")
-        ):
+        locator = clean_evidence_locator(candidate)
+        if locator is None or precise_locator_anchor(locator) is None:
             return None
         return locator
     # Existing source-bound builder inputs carry the exact JSON field directly.
     # It is a source pointer, not evidence that the source is a registry or has
     # a public URL; neither property may be inferred from a trial identifier.
-    field_path = _text(_first(value, "source_field_path", default=None))
-    if field_path.startswith(("$.", "$[")):
+    raw_field_path = _first(value, "source_field_path", default=None)
+    field_path = raw_field_path if isinstance(raw_field_path, str) else ""
+    field_path = _text(field_path)
+    if field_path and not is_local_path_shape(field_path) and field_path_is_precise(field_path):
         return EvidenceLocator(document_role="source_record", field_path=field_path)
     return None
-
-
-def _source_locator(value: Any, row_id: str) -> EvidenceLocator:
-    return _exact_source_locator(value) or EvidenceLocator(
-        document_role="registry", heading="登记结果"
-    )
-
-
-def _display_locator(value: Any, row_id: str) -> EvidenceLocator:
-    """Keep the supplied source anchor without inventing a registry citation."""
-    locator = _source_locator(value, row_id)
-    visible = {
-        "document_role": locator.document_role,
-        "field_path": locator.field_path,
-        "heading": locator.heading,
-        "page": locator.page,
-        "table": locator.table,
-        "row": locator.row,
-        "column": locator.column,
-        "paragraph": locator.paragraph,
-        "url": locator.url,
-    }
-    if not any(value for key, value in visible.items() if key != "document_role"):
-        visible["heading"] = "登记结果"
-    return EvidenceLocator.model_validate(visible)
 
 
 def _source_first(value: Any, source: Any, *names: str, default: Any = None) -> Any:
@@ -2148,7 +2149,16 @@ def _project_record(
     raw_state = _first(value, "disclosure_state", default=None)
     state = _state(raw_state, numeric)
     renderable = numeric is not None and state in _CONCRETE_STATES
-    product_name = names.get(product_id, "未列示产品")
+    group_assignment_state = _text(
+        _source_first(value, source, "group_assignment_state", default="unassessed")
+    )
+    unassigned_product = (
+        domain in {"efficacy", "safety"} and group_assignment_state == "unknown"
+    )
+    product_name = (
+        "结果组别产品归属待核"
+        if unassigned_product else names.get(product_id, "未列示产品")
+    )
     trial_name = trial_names.get(trial_id, "未列示试验")
     label = _label_for(value, domain)
     arm = _arm_label(value)
@@ -2195,7 +2205,9 @@ def _project_record(
         )
     )
     denominator_role = _native_text(_source_first(value, source, "denominator_role", default=""))
-    measure_object = _native_text(_source_first(value, source, "measure_object", default=""))
+    # A machine enum is scientific typing, not display copy: translating only
+    # part of it would make numeric-kind and statistical-form inference diverge.
+    measure_object = _text(_source_first(value, source, "measure_object", default=""))
     time_label = _time_label(value)
     time_window = _text(
         _source_first(
@@ -2270,6 +2282,13 @@ def _project_record(
             "baseline_definition",
         )
     )
+    if domain == "safety" and not original_definition:
+        original_definition = "｜".join(
+            part for part in (
+                _text(_source_first(value, source, "source_class_title", default="")),
+                _text(_source_first(value, source, "source_category_title", default="")),
+            ) if part
+        )
     original_variable = _text(
         _source_first(
             value,
@@ -2344,7 +2363,11 @@ def _project_record(
         direction=_text(_source_first(value, source, "direction", default="")),
         window=time_window, estimand=plot_estimand,
     )
-    renderable = renderable and projection.renderable
+    renderable = renderable and projection.renderable and not unassigned_product
+    numeric_projection = projection.as_dict()
+    if unassigned_product:
+        numeric_projection["renderable"] = False
+        numeric_projection["unrenderable_reason"] = "group_product_relationship_unresolved"
     result: dict[str, Any] = {
         "row_id": row_id,
         "_domain": domain,
@@ -2361,6 +2384,10 @@ def _project_record(
         "arm": arm,
         "group": arm,
         "group_id": group_id,
+        "group_assignment_state": group_assignment_state,
+        "unrendered_reason": (
+            "group_product_relationship_unresolved" if unassigned_product else None
+        ),
         "arm_role": semantics["arm_role"],
         "arm_role_label_zh": _role_label_zh,
         # 独立复核 B r36（issue-1）：剂量递增队列行（Cohort 1..4）原臂标签
@@ -2486,7 +2513,7 @@ def _project_record(
         "value": numeric,
         "raw_numeric_value": numeric,
         "numeric_value": projection.plot_value,
-        "numeric_projection": projection.as_dict(),
+        "numeric_projection": numeric_projection,
         "renderable": renderable,
         "disclosure_state": state,
         "difference_note": "；".join(
@@ -2508,6 +2535,11 @@ def _project_record(
             )
         ),
     }
+    if unassigned_product:
+        warning = "结果组别与产品关联待核；原始值保留，不进入产品间共轴比较"
+        result["difference_note"] = "；".join(
+            item for item in (result["difference_note"], warning) if item
+        )
     result["_source_binding"] = semantic_source_digest(value)
     if domain == "safety":
         result["value_matrix"] = numeric
@@ -3073,38 +3105,77 @@ def _evidence_view(
         or _first(source, "report_snapshot_id", "snapshot_id", default=None),
         f"b-{data.report_version}",
     )
-    product = names.get(product_id, "未列示产品")
+    product = (
+        "结果组别产品归属待核"
+        if row.get("group_assignment_state") == "unknown"
+        else names.get(product_id, "未列示产品")
+    )
     trial = trial_names.get(trial_id, "未列示试验")
     if page_id == "evidence-limitations" and not product_id and not trial_id:
         product = ""
         trial = ""
     label = _text(row.get("display_label_zh"), "研究记录")
-    numeric = _number(row.get("numeric_value"))
-    value_field = _evidence_field(None, state) if numeric is None else _evidence_field(numeric)
+    reported_numeric = _reported_numeric(row)
+    numeric_projection = row.get("numeric_projection")
+    if (
+        isinstance(reported_numeric, float)
+        and reported_numeric.is_integer()
+        and isinstance(numeric_projection, Mapping)
+        and numeric_projection.get("kind") in {"participant_count", "event_count"}
+    ):
+        reported_numeric = int(reported_numeric)
+    value_field = (
+        _evidence_field(reported_numeric)
+        if reported_numeric is not None and state in _CONCRETE_STATES
+        else _evidence_field(None, state)
+    )
+    # 独立会商 R24-25 FAIL：数值披露与来源追溯必须分离；真零由 reported_zero
+    # 显式表达（缺失仍为互斥状态，绝不当 0）
+    evidence_state = (
+        "reported_zero"
+        if reported_numeric == 0 and state in _CONCRETE_STATES
+        else state
+    )
     group = _text(row.get("arm"), "组别未列示")
     source_id = _source_version(source)
-    source_quote = _text(_first(source, "source_text", default=None))
+    # 引文是来源原始片段；只用 strip 判断是否为空，不折叠其空白或换行。
+    raw_quote = _first(source, "source_text", default=None)
+    source_quote = raw_quote if isinstance(raw_quote, str) and raw_quote.strip() else ""
     exact_locator = _exact_source_locator(source)
-    has_exact_anchor = exact_locator is not None and any(
-        getattr(exact_locator, field) is not None
-        for field in ("field_path", "page", "table", "row", "column", "paragraph")
-    )
-    located = bool(source_id and source_quote and has_exact_anchor)
+    located = bool(source_id and source_quote and exact_locator is not None)
     source_label = "逐事实来源待核"
     if located:
+        # 来源版本标签是用户可见文案：提供方中文标签优先，其余回落到原生中文，
+        # 不把英文提供方名（如 ClinicalTrials.gov）当作版本标签直出
         source_label = _text(
-            _first(
-                source, "source_version_label_zh", "source_provider", "source_label",
-                default=None,
-            ),
+            _first(source, "source_version_label_zh", default=None),
             "来源版本已定位",
         )
+        if not re.search(r"[\u4e00-\u9fff]", source_label):
+            source_label = "来源版本已定位"
     original_text = source_quote if located else ""
+    user_edit = data.user_edits.get(row_id)
+    if located and user_edit is not None:
+        explanation = (
+            "当前数值由用户清除，待重新核实；原始来源值和定位仍可查。"
+            if state == "user_cleared"
+            else "当前数值由用户修订，尚未独立复核；原始来源值和定位仍可查。"
+        )
+    elif located:
+        explanation = f"该记录保留来源披露状态：{_state_label(state)}。"
+    else:
+        explanation = (
+            "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
+            "不能作为已验科学结论。"
+        )
+    if row.get("group_assignment_state") == "unknown":
+        explanation += " 结果组别与产品关联待核；原始值可查，不进入产品间共轴比较。"
     report_row = ReportRow.model_construct(
         row_id=row_id,
         fact_id=_source_row_id(source, row_id),
         claim_id=None,
-        product_id=product_id or None,
+        product_id=(None if row.get("group_assignment_state") == "unknown"
+                    else product_id or None),
         trial_id=trial_id or None,
         group_id=None,
         endpoint_id=None,
@@ -3113,7 +3184,7 @@ def _evidence_view(
         display_label_zh=label,
         page_responsibility_id=page_id,
         report_snapshot_id=snapshot,
-        disclosure_state=_disclosure_enum(state),
+        disclosure_state=_disclosure_enum(evidence_state),
     )
     common = {
         "report_kind": ReportKind.B,
@@ -3137,19 +3208,15 @@ def _evidence_view(
         "source_trace_state": "located" if located else "unverified",
         "source_version_id": source_id if located else None,
         "source_version_label_zh": source_label,
-        "locator": _display_locator(source, row_id) if located else None,
-        "explanation": _evidence_field(
-            f"该记录保留来源披露状态：{_state_label(state)}。"
-            if located else "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
-                            "不能作为已验科学结论。"
-        ),
+        "locator": exact_locator if located else None,
+        "explanation": _evidence_field(explanation),
         "original_text": original_text or None,
         "original_text_status": (
             OriginalTextStatus.PROVIDED
             if original_text
             else OriginalTextStatus.NOT_PROVIDED
         ),
-        "user_edit": data.user_edits.get(row_id),
+        "user_edit": user_edit,
         "conflicts": (),
         "historical_versions": (),
     }
@@ -4739,6 +4806,8 @@ def _render_page_context(
         )
         for row, source in records
     )
+    # 序列化边界复核：本页嵌入前逐条确认来源追溯合同（model_construct 不豁免）
+    assert_evidence_views_serializable(views)
     chart_groups_json = _json(groups)
     target_by_product = {product.id: product.target for product in data.products}
     filter_rows = _filter_dimensions(records, target_by_product)
@@ -4940,8 +5009,11 @@ def _project_active_facts_b(
             f"{endpoint}：用户清除，待重新核实。"
             if cleared else f"{endpoint}：{fact.raw_value or fact.normalized_value}。"
         )
+        original_unit = str(row.get("unit") or "")
+        unit_separator = "" if original_unit in {"", "%", "％", "‰", "°C"} else " "
         original_value = (
-            "未公开" if row.get("value") is None else f"{row['value']:g}{row['unit']}"
+            "未公开" if row.get("value") is None
+            else f"{row['value']:g}{unit_separator}{original_unit}"
         )
         if row.get("numerator") is not None and row.get("denominator") is not None:
             original_value += f" ({row['numerator']}/{row['denominator']})"
@@ -5432,7 +5504,9 @@ def render_report_b_site(
     (site_root / "data" / "sitemap.json").write_bytes(_canonical_json(sitemap_payload))
     search: list[dict[str, Any]] = []
 
-    def add_search_entry(title: str, slug: str, *keywords: Any) -> None:
+    def add_search_entry(
+        title: str, slug: str, *keywords: Any, row_id: str | None = None,
+    ) -> None:
         values: list[str] = []
         seen: set[str] = set()
         for candidate in (title, *keywords):
@@ -5446,7 +5520,10 @@ def render_report_b_site(
                 if text and text not in seen:
                     seen.add(text)
                     values.append(text)
-        search.append({"title": title, "slug": slug, "keywords": values})
+        entry: dict[str, Any] = {"title": title, "slug": slug, "keywords": values}
+        if row_id:
+            entry["row_id"] = row_id
+        search.append(entry)
 
     for page in catalog.pages:
         add_search_entry(
@@ -5489,6 +5566,7 @@ def render_report_b_site(
             trial.role,
         )
     for row, _source in efficacy:
+        row_id = _text(row.get("row_id"))
         product_name = _text(row.get("product_zh"), "未列示产品")
         trial_name = _text(row.get("trial_zh"), "未列示试验")
         label = _text(row.get("display_label_zh"), "疗效指标")
@@ -5510,8 +5588,11 @@ def render_report_b_site(
             row.get("denominator"),
             row.get("original_definition"),
             row.get("source_version_id"),
+            row_id,
+            row_id=row_id,
         )
     for row, _source in safety:
+        row_id = _text(row.get("row_id"))
         product_name = _text(row.get("product_zh"), "未列示产品")
         trial_name = _text(row.get("trial_zh"), "未列示试验")
         event = _text(row.get("display_label_zh"), "安全性事件")
@@ -5532,6 +5613,8 @@ def render_report_b_site(
             row.get("denominator"),
             row.get("original_definition"),
             row.get("source_version_id"),
+            row_id,
+            row_id=row_id,
         )
     search_json = _json(search)
     (site_root / "data" / "search-index.js").write_text(

@@ -238,9 +238,16 @@
     var status = document.querySelector("[data-filter-status]");
     if (!status) return;
     var visible = visibleRowIds().length;
+    var criteriaActive = (window.__C_PAGE_ID__ === "inclusion-criteria" ||
+      window.__C_PAGE_ID__ === "exclusion-criteria") &&
+      (criteriaSearchQuery.trim() || Object.keys(excludedCriteriaTrials).some(function (trialId) {
+        return excludedCriteriaTrials[trialId];
+      }));
     status.textContent = selected
       ? "已选 " + selected + " 项，显示 " + visible + " 条记录"
-      : "显示全部可用记录（" + visible + " 条）";
+      : criteriaActive
+        ? "显示当前检索记录（" + visible + " 条）"
+        : "显示全部可用记录（" + visible + " 条）";
   }
 
   function applyState(state) {
@@ -440,6 +447,7 @@
 
   var cChart = null;
   var chartState = {rows: [], kind: "", chart: null};
+  var chartContainerWidth = 0;
 
   function uniqueValues(rows, key) {
     var values = [];
@@ -509,10 +517,15 @@
   }
 
 
+  function escapeTooltipHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+      return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[character];
+    });
+  }
+
   function tooltipHtml(row) {
     if (!row) return "";
-    return [
-      "<strong>" + String(row.product_zh || "产品未列示") + "</strong>",
+    var fields = [
       String(row.trial_display_id || row.trial_zh || "试验"),
       row.trial_zh && row.trial_zh !== row.trial_display_id ? String(row.trial_zh) : "",
       String(row.field_family_zh || "设计事实"),
@@ -521,7 +534,11 @@
       row.scale ? "量表：" + String(row.scale) : "",
       row.time && row.time !== "时间点未列示" ? "时间点：" + String(row.time) : "",
       row.group_zh && row.group_zh !== "组别未细分" ? "组别：" + String(row.group_zh) : ""
-    ].filter(Boolean).join("<br>");
+    ];
+    return "<strong>" + escapeTooltipHtml(row.product_zh || "产品未列示") + "</strong>"
+      + fields.filter(Boolean).map(function (value) {
+        return "<br>" + escapeTooltipHtml(value);
+      }).join("");
   }
 
   function matrixLabel(row) {
@@ -564,6 +581,10 @@
   function matrixOption(rows, kind, containerWidth) {
     var trialIds = uniqueValues(rows, "trial_display_id");
     var compactTrialAxis = kind === "core-design-matrix";
+    var gridLeft = Math.min(178, Math.max(96, Math.round(containerWidth * 0.32)));
+    var cellWidth = (containerWidth - gridLeft - 18) / Math.max(1, trialIds.length);
+    var readableCore = compactTrialAxis && trialIds.length <= 4 && cellWidth >= 180;
+    var coreLabelWidth = Math.min(300, Math.floor(cellWidth - 20));
     var trialLabels = trialIds.map(function (trialId) {
       var row = rows.find(function (item) { return item.trial_display_id === trialId; });
       return compactTrialAxis ? trialId : trialLabel(row || {trial_display_id: trialId});
@@ -608,7 +629,7 @@
       grid: {
         // 独立视觉复核（v59 format）：左边距按容器宽响应式，窄视口不再
         // 挤压绘图区至不可读
-        left: Math.min(178, Math.max(96, Math.round(containerWidth * 0.32))),
+        left: gridLeft,
         right: 18,
         top: 28,
         bottom: compactTrialAxis ? 88 : (trialIds.length > 3 ? 104 : 72)
@@ -626,13 +647,12 @@
         axisLabel: {
           color: "#405066",
           interval: 0,
-          rotate: compactTrialAxis && trialIds.length > 8
-            ? 48
-            : (trialIds.length > 3 ? 24 : 0),
-          fontSize: 12,
-          width: compactTrialAxis ? 90 : 160,
+          rotate: readableCore ? 0 : compactTrialAxis && trialIds.length > 8
+            ? 48 : (trialIds.length > 3 ? 24 : 0),
+          fontSize: readableCore ? 14 : 12,
+          width: readableCore ? 160 : compactTrialAxis ? 90 : 160,
           overflow: "break",
-          lineHeight: 15,
+          lineHeight: readableCore ? 18 : 15,
           margin: 14
         }
       },
@@ -644,10 +664,10 @@
         axisLabel: {
           color: "#243650",
           fontWeight: 600,
-          fontSize: 12,
+          fontSize: readableCore ? 14 : 12,
           width: 150,
           overflow: "break",
-          lineHeight: 15
+          lineHeight: readableCore ? 18 : 15
         }
       },
       series: [{
@@ -657,11 +677,12 @@
         label: {
           show: true,
           color: "#243650",
-          fontSize: 12,
-          lineHeight: 14,
+          fontSize: readableCore ? 14 : 12,
+          lineHeight: readableCore ? 18 : 14,
           // 独立视觉复核（typography/charts）：单元格长文本限宽截断，
           // 完整内容保留在 tooltip 与同源数据表
-          width: compactTrialAxis ? 86 : Math.min(150, Math.max(72, Math.round(640 / Math.max(1, trialIds.length)))),
+          width: readableCore ? coreLabelWidth : compactTrialAxis
+            ? 86 : Math.min(150, Math.max(72, Math.round(640 / Math.max(1, trialIds.length)))),
           overflow: "break",
           formatter: function (p) {
             if (!p.data.value[2]) return "未公开";
@@ -928,6 +949,15 @@
       window.__C_VISIBLE_CHART_ROW_IDS__ = shownRows.map(function (row) {
         return String(row.row_id);
       });
+      var shownIds = {};
+      window.__C_VISIBLE_CHART_ROW_IDS__.forEach(function (rowId) {
+        shownIds[rowId] = true;
+      });
+      var tableRows = document.querySelectorAll(".kz-chart-table__row[data-row-id]");
+      for (var i = 0; i < tableRows.length; i += 1) {
+        tableRows[i].style.display = shownIds[tableRows[i].getAttribute("data-row-id")] ? "" : "none";
+      }
+      updateStatus(sanitizeState(selectedState()));
     }
     search.addEventListener("input", function () {
       criteriaSearchQuery = search.value;
@@ -983,7 +1013,15 @@
   function renderCChart() {
     var host = document.getElementById("kz-c-chart-visuals");
     if (!host || !window.echarts) return;
-    var rows = visibleChartRows();
+    var criteriaPage = window.__C_PAGE_ID__ === "inclusion-criteria" ||
+      window.__C_PAGE_ID__ === "exclusion-criteria";
+    // A local keyword/choice hides table rows, but must not become the input
+    // universe for the next redraw: clearing the search restores every match.
+    var rows = criteriaPage
+      ? allChartRows().filter(function (row) {
+          return matches(String(row.row_id), sanitizeState(selectedState()));
+        })
+      : visibleChartRows();
     window.__C_VISIBLE_CHART_ROW_IDS__ = rows.map(function (row) {
       return String(row.row_id);
     });
@@ -1018,10 +1056,7 @@
       chart.textContent = "当前筛选条件下暂无可显示的设计信息";
       return;
     }
-    if (kind === "criteria-comparison" && (
-      window.__C_PAGE_ID__ === "inclusion-criteria" ||
-      window.__C_PAGE_ID__ === "exclusion-criteria"
-    )) {
+    if (kind === "criteria-comparison" && criteriaPage) {
       renderCriteriaSources(chart, rows);
       return;
     }
@@ -1086,6 +1121,7 @@
     chartState.rows = rows.slice();
     chartState.kind = kind;
     chartState.chart = chart;
+    chartContainerWidth = chart.clientWidth;
     cChart = window.echarts.init(chart, null, {renderer: "svg"});
     var option = kind === "sample-size-bar"
         ? sampleOption(rows)
@@ -1104,6 +1140,17 @@
         drawer.openByRowId(rowId, chart);
       }
     });
+  }
+
+  function resizeCChart() {
+    if (!cChart || !chartState.chart) return;
+    var width = chartState.chart.clientWidth;
+    cChart.resize();
+    if (chartState.kind === "core-design-matrix" && width > 0
+        && width !== chartContainerWidth) {
+      chartContainerWidth = width;
+      cChart.setOption(matrixOption(chartState.rows, chartState.kind, width), true);
+    }
   }
 
   function placeDesignPathsBetweenChartAndTable() {
@@ -1133,9 +1180,13 @@
       writeFocusUrl(detail.openRowId || "");
     });
     restoreFocusFromUrl();
-    window.addEventListener("resize", function () {
-      if (cChart) cChart.resize();
-    });
+    window.addEventListener("resize", resizeCChart);
+    if (typeof ResizeObserver === "function") {
+      var observer = new ResizeObserver(resizeCChart);
+      var chartHost = document.getElementById("kz-c-chart-visuals");
+      if (chartHost) observer.observe(chartHost);
+      window.addEventListener("pagehide", function () { observer.disconnect(); }, {once: true});
+    }
   }
 
   function scheduleStart() {

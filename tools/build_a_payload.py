@@ -13,8 +13,8 @@ import hashlib
 import json
 import re
 import sys
-from datetime import UTC, datetime
-from pathlib import Path
+from datetime import UTC, date, datetime
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -23,7 +23,7 @@ from ci_workflow.application.source_research_service import (  # noqa: E402
     ctgov_class_observation_timepoint,
 )
 from ci_workflow.reports.b.safety_concepts import (  # noqa: E402
-    describe_safety_concept,
+    describe_measured_safety_concept,
     safety_category_zh,
 )
 
@@ -122,6 +122,7 @@ _REGISTRY_CATEGORY_ZH = {
 def _parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="通用 A 载荷构建器")
     p.add_argument("--cas-dir", required=True, help="CAS 原始数据根目录")
+    p.add_argument("--capture-receipt", help="完整获取回执；混合CAS须用它锁定原始分页")
     p.add_argument("--alias-map", required=True, help="别名映射 JSON")
     p.add_argument("--indication", required=True, help="适应症中文名")
     p.add_argument("--indication-id", required=True, help="适应症英文标识")
@@ -131,7 +132,81 @@ def _parse_args() -> argparse.Namespace:
 
 
 _args = _parse_args()
-CAS = sorted(p for p in (Path(_args.cas_dir) / "evidence" / "raw").rglob("*.bin"))
+
+
+def _source_pages() -> list[tuple[Path, tuple[str, ...] | None]]:
+    cas_root = Path(_args.cas_dir).resolve()
+    if not _args.capture_receipt:
+        return [(path, None) for path in sorted((cas_root / "evidence/raw").rglob("*.bin"))]
+    receipt_path = Path(_args.capture_receipt)
+    if receipt_path.is_symlink() or not receipt_path.resolve().is_relative_to(cas_root):
+        raise SystemExit("获取回执必须是当前CAS内的普通文件")
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    if not isinstance(receipt, dict) or receipt.get("schema_version") != "1.0":
+        raise SystemExit("获取回执格式无效")
+    acquisition = receipt.get("acquisition")
+    if not isinstance(acquisition, dict) or (
+        acquisition.get("status") != "complete"
+        or acquisition.get("pagination_complete") is not True
+        or receipt.get("projection_status") != "complete"
+    ):
+        raise SystemExit("分页或逐研究派生未完成，不能建立A候选")
+    pages = acquisition.get("pages")
+    records = receipt.get("records")
+    total = acquisition.get("total_count")
+    if (
+        not isinstance(pages, list) or not pages
+        or not isinstance(records, list) or type(total) is not int
+        or len(records) != total
+    ):
+        raise SystemExit("获取回执缺少完整分页或逐研究集合")
+    cutoff = date.fromisoformat(_args.cutoff)
+    selected: list[tuple[Path, tuple[str, ...] | None]] = []
+    all_ids: set[str] = set()
+    for number, page in enumerate(pages, 1):
+        if not isinstance(page, dict) or page.get("page_number") != number:
+            raise SystemExit("获取回执分页顺序不连续")
+        acquired = datetime.fromisoformat(str(page.get("acquired_at", "")).replace("Z", "+00:00"))
+        if acquired.tzinfo is None or acquired.utcoffset() is None or acquired.date() > cutoff:
+            raise SystemExit("获取时间晚于报告截止日或缺少时区；不能倒填历史")
+        ids = page.get("study_ids")
+        asset = page.get("raw_asset")
+        if not isinstance(ids, list) or not all(isinstance(item, str) for item in ids):
+            raise SystemExit("获取回执研究ID无效")
+        if not isinstance(asset, dict):
+            raise SystemExit("获取回执原始分页身份无效")
+        digest = asset.get("sha256")
+        relative = asset.get("relative_path")
+        byte_size = asset.get("byte_size")
+        if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+            raise SystemExit("获取回执分页摘要无效")
+        if not isinstance(relative, str) or not isinstance(byte_size, int):
+            raise SystemExit("获取回执分页路径或大小无效")
+        parts = PurePosixPath(relative).parts
+        if parts != ("evidence", "raw", "sha256", digest[:2], digest + ".bin"):
+            raise SystemExit("获取回执分页不在预期内容寻址路径")
+        path = cas_root / relative
+        if (path.is_symlink() or not path.resolve().is_relative_to(cas_root)
+                or not path.is_file()):
+            raise SystemExit("获取回执引用的原始分页不存在或为链接")
+        blob = path.read_bytes()
+        if len(blob) != byte_size or hashlib.sha256(blob).hexdigest() != digest:
+            raise SystemExit("获取回执与原始分页字节不一致")
+        if all_ids.intersection(ids) or len(set(ids)) != len(ids):
+            raise SystemExit("获取回执包含重复研究ID")
+        all_ids.update(ids)
+        selected.append((path, tuple(ids)))
+    if len(all_ids) != total:
+        raise SystemExit("获取回执唯一研究数与来源总量不一致")
+    record_ids = [record.get("nct_id") if isinstance(record, dict) else None
+                  for record in records]
+    if (not all(isinstance(item, str) for item in record_ids)
+            or len(set(record_ids)) != total or set(record_ids) != all_ids):
+        raise SystemExit("逐研究派生集合与原始分页研究ID不一致")
+    return selected
+
+
+CAS = _source_pages()
 OUT = Path(_args.output)
 SIDECAR_OUT = OUT.with_name(OUT.stem + ".derivation.json")
 if OUT.exists() or SIDECAR_OUT.exists():
@@ -208,12 +283,37 @@ def _linked_product_for_group(
     return focus_product_id, "unknown"
 
 
+def _source_row_id(
+    prefix: str, nct: str, value_path: str, *context: str,
+) -> str:
+    """Keep a consumer row stable when source pages or other studies reorder.
+
+    The exact path disambiguates repeated measures within one record; semantic
+    context prevents an unrelated replacement at that path inheriting an old
+    consumer ID. A changed value alone retains the logical row identity.
+    """
+    material = json.dumps(
+        [nct.casefold(), value_path, *context], ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return f"{prefix}-{hashlib.sha256(material.encode('utf-8')).hexdigest()[:20]}"
+
+
 def main() -> None:
     studies: list[tuple[dict[str, Any], int, int]] = []
     page_meta: list[tuple[int, str]] = []
-    for page_index, path in enumerate(CAS):
+    for page_index, (path, expected_ids) in enumerate(CAS):
         blob = path.read_bytes()
         data = json.loads(blob)
+        if not isinstance(data, dict) or not isinstance(data.get("studies"), list):
+            raise SystemExit("CAS混有非原始分页；请提供 --capture-receipt 锁定本次来源")
+        if expected_ids is not None:
+            actual_ids = tuple(
+                study.get("protocolSection", {}).get("identificationModule", {}).get("nctId")
+                for study in data["studies"]
+            )
+            if actual_ids != expected_ids:
+                raise SystemExit("获取回执研究ID与原始分页不一致")
         page_meta.append((page_index + 1, hashlib.sha256(blob).hexdigest()))
         studies.extend((s, page_index + 1, i) for i, s in enumerate(data.get("studies", [])))
 
@@ -229,7 +329,14 @@ def main() -> None:
     product_phase: dict[str, str] = {}
     product_status: dict[str, str] = {}
     seen_company = set()
-    ei = si = 0
+    seen_result_row_ids: set[str] = set()
+
+    def checked_row_id(prefix: str, nct: str, path: str, *context: str) -> str:
+        row_id = _source_row_id(prefix, nct, path, *context)
+        if row_id in seen_result_row_ids:
+            raise SystemExit("来源结果行身份重复；不能生成可编辑候选")
+        seen_result_row_ids.add(row_id)
+        return row_id
     SAFETY_DOMAIN_DIVERTED: list[dict[str, Any]] = []
     NON_EFFICACY_OBSERVATIONS: list[dict[str, Any]] = []
     ROW_SOURCE_MAP: list[dict[str, Any]] = []
@@ -412,13 +519,13 @@ def main() -> None:
         COMBO_RECORDS.append({"nct_id": nct, "canonical_drugs": canonical_drugs})
         pid = slugify(product_name)
 
-        # Sponsor is not a developer of an active comparator or an intervention
-        # with no source-declared arm relationship.
+        # A trial lead sponsor is only a registration relationship. Collect all
+        # explicitly experimental-product sponsors, never an active comparator.
         for drug in canonical_drugs:
             drug_pid = slugify(drug)
             experimental = drug in experimental_drugs
             dev_candidates.setdefault(drug_pid, []).append(
-                (drug_pid == pid and experimental, lead if lead != NA else "")
+                (experimental, lead if lead != NA else "")
             )
             if drug_pid not in product_index:
                 product_index[drug_pid] = {
@@ -431,6 +538,7 @@ def main() -> None:
                     "regions": ["未登记地点"],
                     "route": NA,
                     "developer": NA,
+                    "developer_basis": "unverified",
                     "mechanism": NA,
                     "result_status": "暂无公开关键结果",
                 }
@@ -446,19 +554,21 @@ def main() -> None:
         prev = product_status.get(pid)
         if prev is None or rank > _STATUS_RANK.get(prev, 0):
             product_status[pid] = status_zh
-        company_key = (pid, lead)
-        if lead != NA and company_key not in seen_company:
-            seen_company.add(company_key)
-            company_rows.append(
-                {
-                    "product_id": pid,
-                    "relationship": "申办方（登记信息）",
-                    "licensor": lead,
-                    "licensee": NA,
-                    "territory": NA,
-                    "transaction": "登记申办关系；交易条款未公开",
-                }
-            )
+        for experimental_drug in experimental_drugs:
+            company_key = (slugify(experimental_drug), lead)
+            if lead != NA and company_key not in seen_company:
+                seen_company.add(company_key)
+                company_rows.append(
+                    {
+                        "product_id": company_key[0],
+                        "relationship": "申办方（登记信息；非研发归属）",
+                        "licensor": NA,
+                        "licensee": NA,
+                        "territory": NA,
+                        "transaction": "登记申办记录不构成交易事实",
+                        "sponsor": lead,
+                    }
+                )
         locations_mod = proto.get("contactsLocationsModule", {}) or {}
         countries = sorted(
             {
@@ -678,7 +788,9 @@ def main() -> None:
                             # 会商 P0 #2（域分流）：安全域终点不得混入疗效表——
                             # TEAE/AE 类测量在安全域保留独立统计对象和来源语境。
                             if domain == "adverse_events":
-                                semantic = describe_safety_concept(title)
+                                semantic = describe_measured_safety_concept(
+                                    title, source_class_title, cat_title,
+                                )
                                 unit_lower = unit.strip().casefold()
                                 if unit_lower in {"participants", "participant"}:
                                     display_unit, measure_object = "人", "participant_count"
@@ -688,20 +800,28 @@ def main() -> None:
                                     display_unit, measure_object = "%", "participant_proportion"
                                 else:
                                     display_unit, measure_object = unit, "adjusted_estimate"
+                                count_basis = (
+                                    "events" if measure_object == "event_count"
+                                    else semantic.count_basis
+                                )
                                 safety_count: int | None = (
                                     int(value) if measure_object == "participant_count"
                                     and value.is_integer() else None
                                 )
                                 safety_denominator: int | None = denominator_by_group.get(group_id)
                                 if (
-                                    semantic.count_basis == "mixed"
+                                    count_basis == "mixed"
                                     or safety_count is None or safety_denominator is None
                                     or not 0 <= safety_count <= safety_denominator
                                 ):
                                     safety_count = safety_denominator = None
-                                si += 1
+                                row_id = checked_row_id(
+                                    "safe", nct, source_path, title,
+                                    source_class_title, cat_title, group_id,
+                                    row_time_frame, unit,
+                                )
                                 safety_rows.append({
-                                    "row_id": f"safe-{si}", "product_id": row_product_id,
+                                    "row_id": row_id, "product_id": row_product_id,
                                     "trial_id": nct.lower(),
                                     "arm": group_title,
                                     "group_assignment_state": assignment_state,
@@ -716,8 +836,11 @@ def main() -> None:
                                     "relatedness": semantic.relatedness,
                                     "parent": semantic.parent,
                                     "children": list(semantic.children),
-                                    "count_basis": semantic.count_basis,
-                                    "at_risk_stat": semantic.at_risk_stat,
+                                    "count_basis": count_basis,
+                                    "at_risk_stat": (
+                                        None if measure_object == "event_count"
+                                        else semantic.at_risk_stat
+                                    ),
                                     "measure_context": "；".join(
                                         part for part in (cls_title, cat_label) if part
                                     ) or None,
@@ -731,7 +854,7 @@ def main() -> None:
                                     "time_window": row_time_frame,
                                 })
                                 ROW_SOURCE_MAP.append({
-                                    "domain": "safety", "row_id": f"safe-{si}",
+                                    "domain": "safety", "row_id": row_id,
                                     **source_atom,
                                 })
                                 SAFETY_DOMAIN_DIVERTED.append(
@@ -740,14 +863,18 @@ def main() -> None:
                                         "endpoint": title,
                                         "value": value,
                                         "timepoint": row_time_frame,
-                                        "safety_row_id": f"safe-{si}",
+                                        "safety_row_id": row_id,
                                     }
                                 )
                                 continue
-                            ei += 1
+                            row_id = checked_row_id(
+                                "eff", nct, source_path, title,
+                                source_class_title, cat_title, group_id,
+                                row_time_frame, unit,
+                            )
                             efficacy_rows.append(
                                 {
-                                    "row_id": f"eff-{ei}",
+                                    "row_id": row_id,
                                     "product_id": row_product_id,
                                     "trial_id": nct.lower(),
                                     "endpoint": title,
@@ -762,7 +889,7 @@ def main() -> None:
                                 }
                             )
                             ROW_SOURCE_MAP.append({
-                                "domain": "efficacy", "row_id": f"eff-{ei}",
+                                "domain": "efficacy", "row_id": row_id,
                                 **source_atom,
                             })
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
@@ -817,10 +944,17 @@ def main() -> None:
                     valid_denominator = (
                         type(at_risk) is int and at_risk > 0 and affected <= at_risk
                     )
-                    si += 1
+                    source_path = (
+                        "$.resultsSection.adverseEventsModule.eventGroups"
+                        f"[{group_index}].{affected_field}"
+                    )
+                    row_id = checked_row_id(
+                        "safe", nct, source_path, concept,
+                        str(group.get("id") or ""), arm_title, ae_time_window,
+                    )
                     safety_rows.append(
                         {
-                            "row_id": f"safe-{si}",
+                            "row_id": row_id,
                             "product_id": row_product_id,
                             "trial_id": nct.lower(),
                             "arm": arm_title,
@@ -850,14 +984,11 @@ def main() -> None:
                         "raw_value_type": type(at_risk).__name__,
                     }] if at_risk is not None else [])
                     ROW_SOURCE_MAP.append({
-                        "domain": "safety", "row_id": f"safe-{si}",
+                        "domain": "safety", "row_id": row_id,
                         "trial_id": nct.lower(),
                         "source_page_sha256": page_meta[page_no - 1][1],
                         "source_url": f"https://clinicaltrials.gov/study/{nct}",
-                        "value_path": (
-                            "$.resultsSection.adverseEventsModule.eventGroups"
-                            f"[{group_index}].{affected_field}"
-                        ),
+                        "value_path": source_path,
                         "raw_value": affected,
                         "raw_value_type": type(affected).__name__,
                         "raw_unit": "participants",
@@ -870,16 +1001,16 @@ def main() -> None:
                         "denominator_candidates": at_risk_candidate,
                     })
 
-    # 独立复核修复（第十二轮）：研发企业两段式归属——
-    # 主产品试验的申办方优先，其次试验药物臂的申办方，对照臂申办方不计。
+    # Registration sponsors do not establish a unique product developer.
+    # Stable, complete display avoids first-wins when a new study arrives.
     for dp, cands in dev_candidates.items():
         if dp not in product_index or not cands:
             continue
-        primary_lead = next((lead for is_p, lead in cands if is_p and lead), None)
-        experimental_lead = next((lead for is_e, lead in cands if is_e and lead), None)
-        chosen_lead = primary_lead or experimental_lead
-        if chosen_lead:
-            product_index[dp]["developer"] = chosen_lead
+        sponsors = sorted({lead for is_experimental, lead in cands
+                           if is_experimental and lead}, key=str.casefold)
+        if sponsors:
+            product_index[dp]["developer"] = "、".join(sponsors)
+            product_index[dp]["developer_basis"] = "registration_sponsor"
     for pid, phase in product_phase.items():
         product_index[pid]["phase"] = phase
     for pid, status in product_status.items():
@@ -911,7 +1042,7 @@ def main() -> None:
                 "product_id": next(iter(product_index)),
                 "track": "中国",
                 "event": "监管状态",
-                "date": "2026-09-06",
+                "date": CUTOFF_DATE,
                 "status": "未公开披露（监管路线来源接入待后续版本开放）",
             }
         ],
@@ -950,7 +1081,7 @@ def main() -> None:
                     f"{len(enrollment_issues)} 条样本量来源问题留待核查；"
                     f"{len(NON_PRODUCT_RECORDS)} 条无独立药物干预未产出实体"
                     "（明细见派生记录）；"
-                    "联合治疗组合完整记录于派生记录；中国路线访问受阻已如实记档；"
+                    "联合治疗组合完整记录于派生记录；中国来源未接入当前载荷；"
                     "监管/专利来源接入待后续版本开放"
                 ),
             }

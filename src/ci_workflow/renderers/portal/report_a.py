@@ -67,6 +67,11 @@ class ProductRow(BaseModel):
     regions: tuple[str, ...] = Field(min_length=1)
     route: str
     developer: str
+    # A registration lead sponsor is a trial relationship, not proof of who
+    # developed or owns the product. Older curated payloads retain their label.
+    developer_basis: Literal[
+        "reported_developer", "registration_sponsor", "unverified"
+    ] = "reported_developer"
     mechanism: str
     result_status: Literal[
         "有公开关键结果",
@@ -295,6 +300,7 @@ class CompanyRow(BaseModel):
     licensee: str
     territory: str
     transaction: str
+    sponsor: str | None = None
 
 
 class PatentRow(BaseModel):
@@ -581,32 +587,18 @@ def _display_products(data: ReportAPortalData) -> tuple[ProductRow, ...]:
 
 
 def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str, str]:
-    # 独立复核 A r27/r31：优先消费构建器受控词表键（any_sae/any_teae/death），
-    # 未命中时才回退 raw: 归一化
+    # A source-measured class may narrow a broader parent title. Its typed
+    # concept therefore wins over any historical raw-title alias.
+    from ci_workflow.reports.b.concept_catalog import SAFETY_CONCEPTS, spec_of
+
+    if term_key and term_key in SAFETY_CONCEPTS:
+        return term_key, spec_of(term_key).label_zh
+    # Old rows without a typed concept retain the read-only title aliases.
     normalized = " ".join(term.split()).casefold()
     known = _SAFETY_TERM_ALIASES.get(normalized)
     if known is not None:
         return known
-    # 会商 #2（概念词表单源）：受控标签一律取自 concept_catalog，
-    # 渲染器不再自造中文概念字面
-    from ci_workflow.reports.b.concept_catalog import spec_of
-
-    catalog_keys = {
-        "any_sae",
-        "any_teae",
-        "death",
-        "aesi",
-        "discontinuation_ae",
-        "treatment_related_ae",
-        "grade_3_plus",
-        "serious_teae_subset",
-        "generic_ae",
-        "composite_ae",
-    }
-    if term_key and term_key in catalog_keys:
-        return term_key, spec_of(term_key).label_zh
-    # 独立审阅 R02：受控安全概念键（分流特定指标）的展示标签；
-    # specific_ae/unknown 仍走 raw 原文路径，不冒充受控类别
+    # Unclassified historical text stays visible instead of being promoted.
     return f"raw:{normalized}", term
 
 
@@ -2159,7 +2151,12 @@ def _project_active_facts_a(
             if fact_extra.get("population"):
                 updates["population"] = str(fact_extra["population"])
             efficacy[index] = EfficacyRow.model_validate(row.model_copy(update=updates))
-        original_value = "未公开" if row.value is None else f"{row.value:g}{row.unit}"
+        original_unit = row.unit or ""
+        unit_separator = "" if original_unit in {"", "%", "％", "‰", "°C"} else " "
+        original_value = (
+            "未公开" if row.value is None
+            else f"{row.value:g}{unit_separator}{original_unit}"
+        )
         user_edits[binding.row_id] = user_edit_disclosure(
             fact,
             active_revision,

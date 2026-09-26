@@ -338,6 +338,31 @@
     }
     return row.disclosure_state || "未公开";
   }
+  function safetyObservationDisplayLabel(row) {
+    var full = row.category + "｜"
+      + (row.measure_label || safetyTermLabel(safetyTermKey(row)));
+    var context = String(row.measure_context || "").trim();
+    if (!context || String(full).indexOf(context) === -1) return full;
+    var concise = row.category + "｜" + context;
+    return String(full).length - concise.length >= 24 ? concise : full;
+  }
+  function safetyGroupDisplayLabels(observations) {
+    var original = observations.map(function (row) {
+      return row.category + "｜" + (row.measure_label || safetyTermLabel(safetyTermKey(row)));
+    });
+    var candidates = observations.map(safetyObservationDisplayLabel);
+    var firstOriginal = Object.create(null), ambiguous = Object.create(null);
+    candidates.forEach(function (candidate, index) {
+      if (firstOriginal[candidate] && firstOriginal[candidate] !== original[index]) {
+        ambiguous[candidate] = true;
+      } else {
+        firstOriginal[candidate] = original[index];
+      }
+    });
+    return candidates.map(function (candidate, index) {
+      return ambiguous[candidate] ? original[index] : candidate;
+    });
+  }
   function safetyTimeWindowLabel(value) {
     var raw = String(value || "").trim();
     var exact = {
@@ -608,7 +633,10 @@
     if (!panel) return;
     clearNode(panel);
     var fields = appendInsightHeading(panel, "完整产品档案");
-    appendInsightField(fields, "研发企业", product.developer);
+    appendInsightField(fields, product.developer_basis === "registration_sponsor"
+      ? "登记申办方（非研发归属）"
+      : (product.developer_basis === "unverified" ? "研发企业（待核）" : "研发企业"),
+    product.developer);
     appendInsightField(fields, "靶点", product.target);
     appendInsightField(fields, "技术类型", product.modality);
     appendInsightField(fields, "最高阶段", product.phase);
@@ -629,8 +657,35 @@
     appendInsightField(fields, "数据截至", formatCutoff(data.data_cutoff));
     appendInsightField(fields, "当前试验", context.trial ? context.trial.display_id : "未公开");
     var publicSources = data.public_sources || [];
+    var selectedRow = context.selectedEfficacy || context.eventRow;
+    if (selectedRow) {
+      var rowFields = appendInsightHeading(panel, "本次所选观察的依据");
+      var edit = userEdits[selectedRow.row_id];
+      if (edit) {
+        appendInsightField(rowFields, "当前与原来源", edit.status_label_zh + "：当前 "
+          + edit.current_value + "；原来源 " + edit.original_value);
+      }
+      if (selectedRow.source_version_id && selectedRow.source_field_path && selectedRow.source_text) {
+        appendInsightField(rowFields, "原文摘录", selectedRow.source_text);
+        appendInsightField(rowFields, "原文位置", selectedRow.source_field_path);
+        var selectedSource = publicSources.find(function (source) {
+          return source.source_version_id === selectedRow.source_version_id;
+        });
+        if (selectedSource && selectedSource.url) {
+          var sourceLink = el("a", "kz-a-insight-dossier-link", "打开本条观察的来源原文");
+          sourceLink.href = selectedSource.url;
+          sourceLink.target = "_blank";
+          sourceLink.rel = "noopener noreferrer";
+          panel.appendChild(sourceLink);
+        } else {
+          panel.appendChild(el("p", "kz-a-insight-note", "本条观察已保留来源原文与精确定位，但本报告未附可点击的同版原文链接；外部原文仍待核。"));
+        }
+      } else {
+        panel.appendChild(el("p", "kz-a-insight-note", "本条观察的逐事实原文尚未定位；报告级资料不能替代这条观察的依据。"));
+      }
+    }
     if (!publicSources.length) {
-      panel.appendChild(el("p", "kz-a-insight-note", "此报告没有绑定可核验的具体公共来源；来源类别不能替代出处。"));
+      if (!selectedRow) panel.appendChild(el("p", "kz-a-insight-note", "此报告没有绑定可核验的具体公共来源；来源类别不能替代出处。"));
       return;
     }
     appendInsightField(fields, "报告级来源数量", publicSources.length);
@@ -664,6 +719,8 @@
       if (selectedTab) active = true;
     }
     if (!active) tabId = "efficacy";
+    var summary = document.getElementById("a-product-insight-summary");
+    if (summary) summary.hidden = tabId === "evidence";
     for (var j = 0; j < panels.length; j += 1) {
       panels[j].hidden = panels[j].getAttribute("data-product-panel") !== tabId;
     }
@@ -953,6 +1010,7 @@
   }
   function renderSafety(host) {
     host.innerHTML = "";
+    host.removeAttribute("data-safety-layout");
     var rows = safetyRowsForView(host.getAttribute("data-product-scope"));
     rows = rows.filter(function (item) {
       return item.numeric_projection && item.numeric_projection.renderable;
@@ -967,7 +1025,22 @@
       if (!groups[key]) groups[key] = [];
       groups[key].push(item);
     });
-    Object.keys(groups).forEach(function (key) {
+    var groupKeys = Object.keys(groups);
+    var groupLabels = {};
+    groupKeys.forEach(function (key) {
+      groupLabels[key] = safetyGroupDisplayLabels(groups[key]);
+    });
+    var compactSafety = groupKeys.length <= 8 && groupKeys.every(function (key) {
+      var observations = groups[key], first = observations[0];
+      var contextLength = String(first.arm_detail || first.arm).length
+        + String(first.time_window).length;
+      return observations.length <= 4 && contextLength <= 100
+        && groupLabels[key].every(function (label) {
+          return label.length <= 70;
+        });
+    });
+    host.setAttribute("data-safety-layout", compactSafety ? "compact" : "full");
+    groupKeys.forEach(function (key) {
       var observations = groups[key], first = observations[0];
       var group = el("section", "kz-a-safety-observation-group");
       var trial = trialById(first.trial_id);
@@ -979,7 +1052,7 @@
         + "｜" + first.time_window
         + (first.group_assignment_state === "unknown" ? "｜结果组别归属待核" : "")));
       var cells = el("div", "kz-a-safety-observations");
-      observations.forEach(function (record) {
+      observations.forEach(function (record, index) {
         var cell = el("button", "kz-a-safety-observation kz-a-product-trigger");
         cell.type = "button";
         cell.setAttribute("data-row-id", record.row_id);
@@ -991,9 +1064,10 @@
         cell.setAttribute("data-heat-product", productName(record.product_id));
         cell.setAttribute("data-heat-event", safetyTermLabel(safetyTermKey(record)));
         // 独立复核 A r42（issue-2）：分流行事件列带原测量标题，可区分不同测量
-        var eventLabel = el("span", "", record.category + "｜"
-          + (record.measure_label || safetyTermLabel(safetyTermKey(record))));
+        var eventLabel = el("span", "", groupLabels[key][index]);
         eventLabel.setAttribute("data-heat-label", "event");
+        eventLabel.title = record.category + "｜"
+          + (record.measure_label || safetyTermLabel(safetyTermKey(record)));
         cell.appendChild(eventLabel);
         var value = el("strong", "kz-a-heat-value", safetyDisplayValue(record));
         var projection = record.numeric_projection;
@@ -1166,6 +1240,8 @@
         + "种不同疗效口径；不能混在同一坐标轴，可切换查看，完整事实仍在下方表格。"));
       points = allPoints.filter(function (point) { return String(point.xFacet || "未标明口径") === activeFacet; });
     }
+    host.setAttribute("data-matrix-density", points.length === 0 ? "empty"
+      : points.length <= 4 ? "compact" : points.length <= 12 ? "standard" : "dense");
     updateMatrixTable(points);
     if (!points.length) {
       // 会商 P0 #3：空态必须告知缺哪一轴，而非笼统一句话。
@@ -1184,12 +1260,13 @@
         if (trial && (useTotalSample ? trial.sample_size > 0 : trial.treatment_sample_size > 0)) haveSize += 1;
       });
       if (!haveEfficacy) missingAxes.push("疗效轴：当前筛选下没有可量化为主要观察的疗效终点");
-      if (!haveSafety) missingAxes.push("安全性轴：登记只有组别计数、没有可比较的发生率（%）");
-      if (!haveSize) missingAxes.push("样本量轴：登记未按治疗组披露样本量");
+      if (!haveSafety) missingAxes.push("安全性轴：当前范围内没有可绘制的发生率（%）");
+      if (!haveSize) missingAxes.push("样本量轴：当前范围内没有可用的指定样本量");
       var diag = missingAxes.length
         ? "矩阵需要同时具备三轴数据；本次缺失——" + missingAxes.join("；") + "。"
         : "当前筛选范围内没有产品具备可同时量化的疗效、安全性和样本量数据。";
-      if (coverage) coverage.innerHTML = diag;
+      if (coverage) coverage.textContent = "当前筛选 " + candidateProducts.length
+        + " 项；矩阵三轴信息不足，右侧列出具体原因。";
       host.appendChild(el("div", "kz-empty", diag));
       return;
     }
@@ -1220,6 +1297,8 @@
       bubble.style.left = xPosition + "%";
       bubble.style.bottom = yPosition + "%";
       bubble.style.width = size + "px"; bubble.style.height = size + "px";
+      // Preserve data coordinates while keeping small observations clickable.
+      bubble.style.setProperty("--bubble-layer", String(Math.round(100 - size)));
       bubble.setAttribute("data-a-product-focus", p.id);
       bubble.setAttribute("data-product-id", p.id);
       bubble.setAttribute("data-product", p.name);
@@ -1309,6 +1388,11 @@
     scopedProducts.forEach(function (product) { presentStages[stageForProduct(product)] = true; });
     var stages = stageOrder.filter(function (stage) { return presentStages[stage]; });
     var targets = scopedProducts.map(function (p) { return p.target; }).filter(function (value, index, all) { return all.indexOf(value) === index; });
+    function knownTarget(value) {
+      return Boolean(value && ["未公开披露", "未标注", "未知", "待核", "不适用", "N/A", "NA", "—"].indexOf(value) === -1);
+    }
+    var verifiedTargets = targets.filter(knownTarget);
+    var unknownTargetProducts = scopedProducts.filter(function (p) { return !knownTarget(p.target); }).length;
     if (!scopedProducts.length) {
       host.appendChild(el("p", "kz-a-empty", "当前筛选没有可绘制项目；未生成空坐标轴。"));
       host.setAttribute("data-landscape-mode", window.innerWidth >= 1200 ? "matrix" : "compact");
@@ -1316,15 +1400,27 @@
       return;
     }
     var useMatrix = window.innerWidth >= 1200;
-    host.setAttribute("data-landscape-mode", useMatrix ? "matrix" : "compact");
+    host.setAttribute("data-landscape-mode", !verifiedTargets.length ? "stage-list"
+      : (useMatrix ? "matrix" : "compact"));
+    function productChip(product) {
+      var chip = el("button", "kz-a-landscape-product", product.name);
+      chip.type = "button";
+      chip.setAttribute("data-visual-node", "product");
+      chip.setAttribute("data-a-product-focus", product.id);
+      chip.setAttribute("data-product-id", product.id);
+      chip.setAttribute("data-product", product.name);
+      chip.setAttribute("aria-label", product.name + "：打开疗效与安全性产品档案");
+      return chip;
+    }
     var wrapper = el("div", "kz-a-landscape-grid");
     wrapper.style.setProperty("--stage-count", stages.length);
     var core = el("section", "kz-a-landscape-band kz-a-landscape-core");
-    core.setAttribute("aria-label", "当前完整宇宙与阶段分布");
+    core.setAttribute("aria-label", "当前收录项目与阶段分布");
     var overview = el("div", "kz-a-landscape-overview");
-    overview.appendChild(el("strong", "", "当前完整宇宙"));
+    overview.appendChild(el("strong", "", "当前收录项目"));
     overview.appendChild(el("span", "", scopedProducts.length + "项目"));
-    overview.appendChild(el("span", "", targets.length + "靶点"));
+    overview.appendChild(el("span", "", verifiedTargets.length + "个已核靶点"));
+    if (unknownTargetProducts) overview.appendChild(el("span", "", unknownTargetProducts + "个项目靶点待核"));
     overview.appendChild(el("span", "", stages.length + "阶段"));
     core.appendChild(overview);
     var distribution = el("div", "kz-a-landscape-core__stages");
@@ -1348,18 +1444,20 @@
     });
     core.appendChild(distribution);
     host.appendChild(core);
-    wrapper.appendChild(el("div", "kz-a-landscape-head", "靶点"));
-    stages.forEach(function (stage) {
-      var heading = el("div", "kz-a-landscape-head", stage);
-      heading.setAttribute("data-landscape-stage", stage);
-      wrapper.appendChild(heading);
-    });
-    targets.forEach(function (target) {
+    if (verifiedTargets.length) {
+      wrapper.appendChild(el("div", "kz-a-landscape-head", "靶点"));
+      stages.forEach(function (stage) {
+        var heading = el("div", "kz-a-landscape-head", stage);
+        heading.setAttribute("data-landscape-stage", stage);
+        wrapper.appendChild(heading);
+      });
+    }
+    verifiedTargets.forEach(function (target) {
       var band = el("details", "kz-a-landscape-target-band");
       band.open = useMatrix;
       var targetProducts = scopedProducts.filter(function (product) { return product.target === target; });
       var targetSummary = el("summary", "kz-a-landscape-target");
-      targetSummary.appendChild(el("strong", "", target));
+      targetSummary.appendChild(el("strong", "", knownTarget(target) ? target : "靶点待核"));
       targetSummary.appendChild(el("span", "", targetProducts.length + " 个项目"));
       band.appendChild(targetSummary);
       var cells = el("div", "kz-a-landscape-band__cells");
@@ -1368,23 +1466,34 @@
         cell.setAttribute("data-landscape-stage", stage);
         scopedProducts.filter(function (p) {
           return p.target === target && stageForProduct(p) === stage;
-        }).forEach(function (p) {
-          var chip = el("button", "kz-a-landscape-product", p.name);
-          chip.type = "button";
-          chip.setAttribute("data-visual-node", "product");
-          chip.setAttribute("data-a-product-focus", p.id);
-          chip.setAttribute("data-product-id", p.id);
-          chip.setAttribute("data-product", p.name);
-          chip.setAttribute("aria-label", p.name + "：打开疗效与安全性产品档案");
-          cell.appendChild(chip);
-        });
+        }).forEach(function (p) { cell.appendChild(productChip(p)); });
         if (!cell.children.length) cell.appendChild(el("span", "kz-a-landscape-empty", "—"));
         cells.appendChild(cell);
       });
       band.appendChild(cells);
       wrapper.appendChild(band);
     });
-    host.appendChild(wrapper);
+    if (verifiedTargets.length) host.appendChild(wrapper);
+    if (unknownTargetProducts) {
+      var unresolved = el("section", "kz-a-landscape-unverified");
+      unresolved.setAttribute("aria-label", "靶点待核项目按登记分期列示");
+      unresolved.appendChild(el("p", "kz-a-landscape-unverified-note",
+        "以下项目未核实靶点，按最高登记分期列示；不把未知靶点当作一个共同机制。"));
+      stages.forEach(function (stage) {
+        var members = scopedProducts.filter(function (product) {
+          return !knownTarget(product.target) && stageForProduct(product) === stage;
+        }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+        if (!members.length) return;
+        var stageRow = el("div", "kz-a-landscape-unverified-stage");
+        stageRow.setAttribute("data-landscape-stage", stage);
+        stageRow.appendChild(el("strong", "", stage + " · " + members.length + "项目"));
+        var stageProducts = el("div", "kz-a-landscape-unverified-products");
+        members.forEach(function (product) { stageProducts.appendChild(productChip(product)); });
+        stageRow.appendChild(stageProducts);
+        unresolved.appendChild(stageRow);
+      });
+      host.appendChild(unresolved);
+    }
     host.setAttribute("data-view-digest", scopedProducts.map(function (product) { return product.id; }).sort().join("|"));
   }
   function renderPortfolio(host) {
@@ -1593,9 +1702,17 @@
     host.innerHTML = "";
     var wrapper = el("div", "kz-a-network-visual");
     var active = visibleProductNames();
-    companies.filter(function (row) {
+    var relevant = companies.filter(function (row) {
       return Object.keys(active).length === 0 || active[productName(row.product_id)];
-    }).forEach(function (row) {
+    });
+    host.setAttribute("data-company-layout", relevant.length && relevant.every(function (row) {
+      return Boolean(row.sponsor);
+    }) ? "sponsor-only" : "mixed");
+    if (relevant.some(function (row) { return Boolean(row.sponsor); })) {
+      host.appendChild(el("p", "kz-a-network-basis-note",
+        "登记申办关系只说明该研究的申办方，不推断产品研发归属、许可或地域权益。"));
+    }
+    relevant.forEach(function (row) {
       var flow = el("article", "kz-a-network-flow kz-a-product-trigger");
       flow.setAttribute("data-visual-node", "relationship");
       flow.setAttribute("data-a-product-focus", row.product_id);
@@ -1606,10 +1723,15 @@
       flow.setAttribute("aria-label", productName(row.product_id) + "：打开疗效与安全性产品档案");
       flow.appendChild(el("strong", "", productName(row.product_id)));
       flow.appendChild(el("span", "kz-a-network-arrow", "→"));
-      flow.appendChild(el("b", "", row.relationship));
-      flow.appendChild(el("span", "kz-a-network-arrow", "→"));
-      flow.appendChild(el("em", "", row.territory));
-      flow.appendChild(el("small", "", row.licensor + " / " + row.licensee));
+      if (row.sponsor) {
+        flow.classList.add("kz-a-network-flow--sponsor");
+        flow.appendChild(el("b", "", "登记申办方：" + row.sponsor));
+      } else {
+        flow.appendChild(el("b", "", row.relationship));
+        flow.appendChild(el("span", "kz-a-network-arrow", "→"));
+        flow.appendChild(el("em", "", row.territory));
+        flow.appendChild(el("small", "", row.licensor + " / " + row.licensee));
+      }
       wrapper.appendChild(flow);
     });
     host.appendChild(wrapper);
@@ -1689,6 +1811,10 @@
     var shown = 0;
     for (var r = 0; r < candidates.length; r += 1) {
       if (candidates[r].hasAttribute("data-additional-row")) continue;
+      // The insight dialog carries a product ID for context, not filtering.
+      // Toggling its hidden state here can reopen it after an Esc close.
+      if (productInsightDrawer && (candidates[r] === productInsightDrawer
+        || productInsightDrawer.contains(candidates[r]))) continue;
       var ok = true;
       Object.keys(selected).forEach(function (dim) {
         var actual = dim === "event"
@@ -1971,7 +2097,11 @@
     }
   });
   window.setTimeout(function () {
-    if (productInsightId) openProductInsight(productInsightId, null, false);
+    // Only the URL's initial focus may auto-open. A quick click followed by Esc
+    // must not be reopened by this deferred startup callback.
+    if (initialProductFocus && productInsightId === initialProductFocus) {
+      openProductInsight(initialProductFocus, null, false);
+    }
   }, 0);
   applyFilters();
 })();

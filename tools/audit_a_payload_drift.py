@@ -16,6 +16,11 @@ from pathlib import Path
 from typing import Any
 
 DOMAINS = ("efficacy", "safety", "additional_observations")
+ATOM_FIELDS = (
+    "domain", "raw_value", "raw_value_type", "raw_unit", "outcome_title",
+    "class_title", "category_title", "group_id", "group_title", "timepoint",
+    "display_population", "denominator_candidates",
+)
 CandidateKey = tuple[str, str, str, str]
 DisplayItem = tuple[str, dict[str, Any]]
 
@@ -190,13 +195,83 @@ def audit_payloads(old: dict[str, Any], new: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def audit_row_source_maps(old: dict[str, Any], new: dict[str, Any]) -> dict[str, Any]:
+    """Compare exact registered source paths, never a display title/value guess.
+
+    This produces a candidate refresh bridge, not permission to migrate edits or
+    accept changed source versions. A changed context must be adjudicated first.
+    """
+    def index(sidecar: dict[str, Any]) -> dict[tuple[str, str], dict[str, Any]]:
+        rows = sidecar.get("row_source_map")
+        if not isinstance(rows, list):
+            raise ValueError("derivation missing row_source_map")
+        indexed: dict[tuple[str, str], dict[str, Any]] = {}
+        for row in rows:
+            if not isinstance(row, dict):
+                raise ValueError("source row must be an object")
+            trial, path = row.get("trial_id"), row.get("value_path")
+            if not isinstance(trial, str) or not isinstance(path, str) or not path:
+                raise ValueError("source row missing exact trial/path")
+            key = (trial.casefold(), path)
+            if key in indexed:
+                raise ValueError("duplicate exact source atom; do not first-win")
+            indexed[key] = row
+        return indexed
+
+    before, after = index(old), index(new)
+    pairs = []
+    for key in sorted(before.keys() & after.keys()):
+        left, right = before[key], after[key]
+        changed = [field for field in ATOM_FIELDS if left.get(field) != right.get(field)]
+        pairs.append({
+            "trial_id": key[0], "value_path": key[1],
+            "old_row_id": left.get("row_id"), "new_row_id": right.get("row_id"),
+            "changed_fields": changed,
+            "source_page_changed": left.get("source_page_sha256") != right.get(
+                "source_page_sha256"
+            ),
+        })
+    return {
+        "status": "candidate_exact_path_delta_not_scientific_acceptance",
+        "counts": {
+            "old_atoms": len(before), "new_atoms": len(after),
+            "unchanged": sum(not pair["changed_fields"] for pair in pairs),
+            "modified": sum(bool(pair["changed_fields"]) for pair in pairs),
+            "withdrawn": len(before.keys() - after.keys()),
+            "added": len(after.keys() - before.keys()),
+            "source_page_changed": sum(pair["source_page_changed"] for pair in pairs),
+        },
+        "pairs": pairs,
+        "withdrawn": [{"trial_id": key[0], "value_path": key[1],
+                       "old_row_id": before[key].get("row_id")}
+                      for key in sorted(before.keys() - after.keys())],
+        "added": [{"trial_id": key[0], "value_path": key[1],
+                   "new_row_id": after[key].get("row_id")}
+                  for key in sorted(after.keys() - before.keys())],
+        "limitations": [
+            "The same JSON array path can be repurposed; changed context needs review.",
+            "A source page digest may change without a result atom changing.",
+            "Unchanged atoms do not establish a closed competitor universe or edit migration.",
+        ],
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--old", required=True, type=Path)
     parser.add_argument("--new", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--old-sidecar", type=Path)
+    parser.add_argument("--new-sidecar", type=Path)
     args = parser.parse_args()
+    if (args.old_sidecar is None) != (args.new_sidecar is None):
+        parser.error("both source sidecars are required for exact-path comparison")
     report = audit_payloads(load_payload(args.old), load_payload(args.new))
+    if args.old_sidecar is not None and args.new_sidecar is not None:
+        report["exact_source_delta"] = audit_row_source_maps(
+            json.loads(args.old_sidecar.read_text(encoding="utf-8")),
+            json.loads(args.new_sidecar.read_text(encoding="utf-8")),
+        )
     report["input_sha256"] = {
         "old": hashlib.sha256(args.old.read_bytes()).hexdigest(),
         "new": hashlib.sha256(args.new.read_bytes()).hexdigest(),

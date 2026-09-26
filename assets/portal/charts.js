@@ -23,6 +23,7 @@
   var optionCache = {};
   var resizeObserver = null;
   var windowResizeBound = false;
+  var filterListenersBound = false;
 
   var CHART_TYPES = {
     bar: true,
@@ -35,7 +36,15 @@
     status_matrix: true
   };
 
+  function escapeTooltipHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+      return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[character];
+    });
+  }
+
   function disclosureLabelZh(state) {
+    if (state === "reported_value") return "已报告值";
+    if (state === "reported_zero") return "已报告零值";
     if (state === "not_publicly_disclosed") return "未公开";
     if (state === "not_reported") return "未报告";
     if (state === "not_applicable") return "不适用";
@@ -342,23 +351,22 @@
           formatter: function (params) {
             var items = Array.isArray(params) ? params : [params];
             var title = items.length && items[0].axisValue ? String(items[0].axisValue) : "";
-            var lines = [title];
+            var lines = [escapeTooltipHtml(title)];
             for (var p = 0; p < items.length; p++) {
               var item = items[p];
               if (!item || !item.data || item.data.status) continue;
-              lines.push(String(item.seriesName) + "：" + String(item.data.value));
+              lines.push(escapeTooltipHtml(item.seriesName) + "：" + escapeTooltipHtml(item.data.value));
             }
             return lines.join("<br>");
           }
         },
         legend: {
-          show: series.length > 1,
-          type: "scroll",
+          show: false,
           data: series.map(function (item) { return item.name; }),
           top: 2,
           textStyle: { fontSize: 13 }
         },
-        grid: { left: 56, right: 40, top: series.length > 1 ? 66 : 44, bottom: categories.length > 8 ? 100 : 78, containLabel: true },
+        grid: { left: 56, right: 40, top: 36, bottom: categories.length > 8 ? 100 : 78, containLabel: true },
         dataZoom: categories.length > 8 ? [
           { type: "slider", height: 20, bottom: 4, start: 0, end: Math.min(100, 800 / categories.length) },
           { type: "inside" }
@@ -370,7 +378,7 @@
         },
         yAxis: {
           type: "value",
-          name: unitLabel,
+          name: String(unitLabel).length > 18 ? "" : unitLabel,
           axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           scale: false,
           min: function (extent) {
@@ -436,7 +444,7 @@
         },
         yAxis: {
           type: "value",
-          name: unitLabel,
+          name: String(unitLabel).length > 18 ? "" : unitLabel,
           axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           scale: false,
           min: function (extent) {
@@ -753,7 +761,7 @@
           position: "top",
           formatter: function (p) {
             if (p.data && p.data.status) return disclosureLabelZh(p.data.status);
-            return String((p.value && p.value[2]) || 0) + String(rowUnit || "");
+            return escapeTooltipHtml((p.value && p.value[2]) || 0) + escapeTooltipHtml(rowUnit);
           }
         },
         grid: { left: 100, right: 40, top: 24, bottom: 40, containLabel: true },
@@ -857,7 +865,12 @@
         tooltip: {
           trigger: "item",
           formatter: function (p) {
-            return p.name + "<br>疗效：" + p.value[0] + (xUnit ? " " + xUnit : "") + "<br>安全性：" + p.value[1] + (yUnit ? " " + yUnit : "") + "<br>" + (p.data._size_basis || sizeTerm) + "：" + p.value[2];
+            return escapeTooltipHtml(p.name) + "<br>疗效：" + escapeTooltipHtml(p.value[0])
+              + (xUnit ? " " + escapeTooltipHtml(xUnit) : "")
+              + "<br>安全性：" + escapeTooltipHtml(p.value[1])
+              + (yUnit ? " " + escapeTooltipHtml(yUnit) : "")
+              + "<br>" + escapeTooltipHtml(p.data._size_basis || sizeTerm)
+              + "：" + escapeTooltipHtml(p.value[2]);
           }
         },
         grid: { left: 64, right: 40, top: 44, bottom: 68, containLabel: true },
@@ -1049,7 +1062,8 @@
             var row = group.rows[p.value[1]];
             if (!row) return "";
             if (!isRenderable(row)) return disclosureLabelZh(row.disclosure_state);
-            return (row.status || "") + " · 覆盖 " + String(p.value[2]);
+            return escapeTooltipHtml(row.status || "") + " · 覆盖 "
+              + escapeTooltipHtml(p.value[2]);
           }
         },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
@@ -1156,6 +1170,32 @@
     return legend;
   }
 
+  function renderIdentityLegend(container, group) {
+    var keys = groupedSeriesOrder(group.rows || []);
+    if (keys.length < 2) return null;
+    var labels = {};
+    for (var i = 0; i < group.rows.length; i += 1) {
+      var key = groupedSeriesKey(group.rows[i]);
+      if (!labels[key]) labels[key] = groupedSeriesLabel(group.rows[i], key);
+    }
+    var legend = document.createElement("div");
+    legend.className = "kz-chart-legend kz-chart-legend--identity";
+    legend.setAttribute("aria-label", "完整组别图例");
+    for (var j = 0; j < keys.length; j += 1) {
+      var item = document.createElement("span");
+      item.className = "kz-chart-legend__item";
+      var swatch = document.createElement("span");
+      swatch.className = "kz-chart-legend__swatch";
+      swatch.style.background = String(keys[j]).split(":")[0] === "control" || keys[j] === "对照组"
+        ? "#407AAA" : "#FF9900";
+      item.appendChild(swatch);
+      item.appendChild(document.createTextNode(String(labels[keys[j]] || keys[j])));
+      legend.appendChild(item);
+    }
+    container.appendChild(legend);
+    return legend;
+  }
+
   function undisclosedTitle(group) {
     if (group && group.empty_message) return String(group.empty_message);
     var rows = (group && group.rows) || [];
@@ -1209,7 +1249,7 @@
     var rows = group.rows || [];
     var plotted = rows.filter(isRenderable);
     var kind = resolveChartType(group);
-    var singleFact = (kind === "bar" || kind === "line") &&
+    var singleFact = (kind === "bar" || kind === "line" || kind === "heatmap") &&
       rows.length === 1 && plotted.length === 1;
     var compactMatrix = (kind === "heatmap" || kind === "status_matrix")
       && rows.length <= 4;
@@ -1308,15 +1348,31 @@
           : indicatorTitle;
     container.appendChild(title);
     var resolvedType = resolveChartType(group);
+    if (resolvedType === "bar") {
+      var units = [];
+      for (var un = 0; un < group.rows.length; un += 1) {
+        var unit = String(group.rows[un].unit || "").trim();
+        if (unit && units.indexOf(unit) === -1) units.push(unit);
+      }
+      if (units.length === 1 && units[0].length > 18) {
+        var unitNote = document.createElement("p");
+        unitNote.className = "kz-chart-group__unit";
+        unitNote.textContent = "单位：" + units[0];
+        container.appendChild(unitNote);
+      }
+    }
     if (
       groupHasRenderable(group) &&
       resolvedType !== "status_matrix" &&
       resolvedType !== "heatmap" &&
       resolvedType !== "bubble" &&
-      !usesIdentitySeries(group) &&
       plan.kind !== "single_fact"
     ) {
-      renderArmLegend(container, group);
+      if (usesIdentitySeries(group) && resolvedType === "bar") {
+        renderIdentityLegend(container, group);
+      } else if (!usesIdentitySeries(group)) {
+        renderArmLegend(container, group);
+      }
     }
     if (resolvedType === "bubble" && group.size_label_zh) {
       var encodingNote = document.createElement("p");
@@ -1747,7 +1803,11 @@
     if (!filterRows || !filterRows.length) return allChartRowIds();
     var visible = [];
     var anyFilterEl = false;
+    var currentIds = {};
+    var chartIds = allChartRowIds();
+    for (var c = 0; c < chartIds.length; c++) currentIds[chartIds[c]] = true;
     for (var i = 0; i < filterRows.length; i++) {
+      if (!currentIds[filterRows[i].id]) continue;
       var el =
         document.getElementById("filter-row-" + filterRows[i].id) ||
         document.querySelector('[data-filter-row-id="' + filterRows[i].id + '"]');
@@ -1820,9 +1880,11 @@
             if (filteredPlan.kind !== "single_fact" && groupHasRenderable(filteredGroup) &&
                 resolveChartType(filteredGroup) !== "status_matrix" &&
                 resolveChartType(filteredGroup) !== "heatmap" &&
-                resolveChartType(filteredGroup) !== "bubble" &&
-                !usesIdentitySeries(filteredGroup)) {
-              var legend = renderArmLegend(wrapper, filteredGroup);
+                resolveChartType(filteredGroup) !== "bubble") {
+              var legend = usesIdentitySeries(filteredGroup)
+                ? resolveChartType(filteredGroup) === "bar"
+                  ? renderIdentityLegend(wrapper, filteredGroup) : null
+                : renderArmLegend(wrapper, filteredGroup);
               if (legend) wrapper.insertBefore(legend, chartEl.parentElement);
             }
           }
@@ -2032,17 +2094,20 @@
       syncChartWithFilter();
     }
 
-    var filterPanel = document.getElementById("kz-filter-panel");
-    if (filterPanel) {
-      filterPanel.addEventListener("toggle", function () {
-        if (!filterPanel.hasAttribute("open")) clearSelection();
-      });
-    }
-    var filterClose = document.getElementById("kz-filter-close");
-    if (filterClose) {
-      filterClose.addEventListener("click", function () {
-        clearSelection();
-      });
+    if (!filterListenersBound) {
+      var filterPanel = document.getElementById("kz-filter-panel");
+      if (filterPanel) {
+        filterPanel.addEventListener("toggle", function () {
+          if (!filterPanel.hasAttribute("open")) clearSelection();
+        });
+      }
+      var filterClose = document.getElementById("kz-filter-close");
+      if (filterClose) {
+        filterClose.addEventListener("click", function () {
+          clearSelection();
+        });
+      }
+      filterListenersBound = true;
     }
 
     if (!windowResizeBound) {
@@ -2059,6 +2124,11 @@
 
   window.__CHART_SYNC__ = {
     syncWithFilter: syncChartWithFilter,
+    replaceGroups: function (groups) {
+      chartGroups = Array.isArray(groups) ? groups : [];
+      window.__CHART_GROUPS__ = chartGroups;
+      init();
+    },
     selectByRowId: selectByRowId,
     clearSelection: clearSelection,
     getSelectedRowId: function () {

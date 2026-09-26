@@ -185,12 +185,28 @@ def test_two_registry_captures_share_one_portable_raw_asset_in_locked_snapshot(
         manifest_path
     )
     assert restored.snapshot_id == lineage.evidence_snapshot.snapshot_id
+    existing_empty = tmp_path / "restored-existing-empty"
+    existing_empty.mkdir()
+    assert SnapshotStore(existing_empty).restore_evidence_manifest(
+        manifest_path
+    ) == restored
     broken = json.loads(manifest_path.read_text())
     broken["closure"]["sources"][0]["raw_asset_b64"] = None
     broken_path = tmp_path / "missing-first-asset.json"
     broken_path.write_text(json.dumps(broken), encoding="utf-8")
+    early_target = tmp_path / "invalid-shared"
     with pytest.raises(SnapshotIntegrityError, match="缺少原始资产"):
-        SnapshotStore(tmp_path / "invalid-shared").restore_evidence_manifest(broken_path)
+        SnapshotStore(early_target).restore_evidence_manifest(broken_path)
+    assert not early_target.exists()
+
+    late = json.loads(manifest_path.read_text(encoding="utf-8"))
+    late["closure"]["sources"][1]["source_version_id"] = "forged-late-version"
+    late_path = tmp_path / "late-source-mismatch.json"
+    late_path.write_text(json.dumps(late), encoding="utf-8")
+    late_target = tmp_path / "invalid-late"
+    with pytest.raises(SnapshotIntegrityError, match="恢复来源版本身份"):
+        SnapshotStore(late_target).restore_evidence_manifest(late_path)
+    assert not late_target.exists(), "失败的恢复不得留下半成品项目"
 
 
 def test_event_group_sae_and_death_counts_bind_raw_atoms_without_rate_substitution(
@@ -478,7 +494,8 @@ def test_direct_safety_event_and_percentage_are_not_derived_rates(
         "row_id": "safe-direct", "product_id": "dupilumab", "trial_id": "nct02277743",
         "arm": "Drug 200 mg", "group_id": "OG1",
         "category": safety_category_zh(semantic.key), "term": title,
-        "term_key": semantic.key, "count_basis": semantic.count_basis,
+        "term_key": semantic.key,
+        "count_basis": "events" if measure_object == "event_count" else semantic.count_basis,
         "value": value, "unit": display_unit, "measure_object": measure_object,
         "time_window": "Week 26",
     })
@@ -573,7 +590,7 @@ def test_direct_safety_count_without_denominator_keeps_reported_value_only(
         )
 
 
-def test_combined_safety_outcome_remains_unsplit_with_explicit_zero(
+def test_composite_parent_keeps_explicitly_measured_discontinuation_zero(
     tmp_path: Path,
 ) -> None:
     title = (
@@ -588,20 +605,27 @@ def test_combined_safety_outcome_remains_unsplit_with_explicit_zero(
     )
     atoms, issues = extract_ctgov_atomic_results(source)
     assert not issues and len(atoms) == 1
-    assert atoms[0].category == "outcome" and atoms[0].value_quote == "0"
-    semantic = describe_safety_concept(title)
-    assert semantic.count_basis == "mixed"
+    # The parent title is composite, but this class reports a separately
+    # measured discontinuation count. Its exact zero remains zero, not a
+    # composite/unknown surrogate.
+    assert atoms[0].category == "common_ae" and atoms[0].value_quote == "0"
+    semantic = describe_safety_concept("AE leading to discontinuation")
+    assert semantic.key == "discontinuation_ae"
     row = SafetyRow(
         row_id="combined-zero", product_id="dupilumab", trial_id="nct02277743",
         arm="Drug 200 mg", group_id="OG1", term=title,
         category=safety_category_zh(semantic.key), term_key=semantic.key,
-        count_basis="mixed", source_class_title="AE leading to discontinuation",
+        count_basis="participants", source_class_title="AE leading to discontinuation",
         value=0, unit="人", measure_object="participant_count", time_window="Week 26",
+        numerator=0, denominator=35,
     )
     bound, facts, claim = bind_ctgov_direct_safety_to_a_row(source, atoms[0], row)
-    assert bound.value == 0 and bound.numerator is None and bound.denominator is None
+    assert bound.value == 0 and bound.numerator == 0 and bound.denominator == 35
     assert len(facts) == 2 and facts[0].disclosure_state == "reported_zero"
-    assert all(fact.result_context and fact.result_context.category == "outcome" for fact in facts)
+    assert all(
+        fact.result_context and fact.result_context.category == "common_ae"
+        for fact in facts
+    )
     assert claim.claim_kind == "direct_evidence" and claim.calculation is None
 
 

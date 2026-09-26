@@ -207,7 +207,7 @@ def _launcher(selections: tuple[ShareViewSelection, ...], revision: int) -> byte
         '<!doctype html><html lang="zh-CN"><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
         '<title>离线报告入口</title><body><main><h1>离线报告入口</h1>'
-        f"<p>当前事实版本 {revision}。三类报告各自独立；外部来源链接需要联网。</p>"
+        f"<p>当前事实版本 {revision}。所选报告各自独立；外部来源链接需要联网。</p>"
         f"<ul>{links}</ul></main></body></html>"
     ).encode()
 

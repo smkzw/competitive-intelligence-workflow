@@ -34,7 +34,9 @@ _NEGATION_PATTERNS = (
 _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("discontinuation_ae", re.compile(
         r"discontinu\w*(?:\s+\w+){0,4}\s(?:due\s+to|because\s+of|leading)|"
-        r"(?:due\s+to|because\s+of)\s+adverse|leading\s+to\s+(?:treatment\s+)?discontinu", re.I)),
+        r"(?:due\s+to|because\s+of)\s+adverse|"
+        r"leading\s+to\s+(?:(?:study\s+)?(?:drug|treatment|medication)\s+)?"
+        r"discontinu", re.I)),
     ("treatment_related_ae", re.compile(
         r"treatment[\s-]*related|related\s+adverse\s+events?", re.I)),
     ("grade_3_plus", re.compile(
@@ -51,13 +53,14 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
 
 # 总体族（特定族未命中才判定）
 _GENERAL_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    # SAE must precede the broad "any treatment-emergent" TEAE alias.
+    ("any_sae", re.compile(r"\bserious\s+adverse\s+events?\b", re.I)),
+    ("any_sae", re.compile(r"(?<![a-z\-])saes?(?![a-z])", re.I)),
     ("any_teae", re.compile(r"(?<![a-z\-])teaes?(?![a-z])", re.I)),
     ("any_teae", re.compile(
         r"^treatment[\s-]*emergent\s+adverse\s+events?\s*$", re.I)),
     ("any_teae", re.compile(
         r"\b(?:any|overall|all)\b[^.;]{0,40}treatment[\s-]*emergent", re.I)),
-    ("any_sae", re.compile(r"\bserious\s+adverse\s+events?\b", re.I)),
-    ("any_sae", re.compile(r"(?<![a-z\-])saes?(?![a-z])", re.I)),
     ("death", re.compile(r"\bdeaths?\b|\bmortality\b", re.I)),
 )
 
@@ -70,6 +73,7 @@ _CONCEPT_CATEGORY_ZH = {
     key: spec_of(key).category_zh for key in (
         "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
+        "severity_specific_teae",
         "generic_ae", "specific_ae", "composite_ae", "grade_specific",
         "non_serious_teae", "absence_sae", "unknown",
     )
@@ -81,6 +85,7 @@ CONCEPT_ATRISK_STAT = {
     for key in (
         "any_teae", "any_sae", "death", "aesi", "discontinuation_ae",
         "treatment_related_ae", "grade_3_plus", "serious_teae_subset",
+        "severity_specific_teae",
         "generic_ae", "specific_ae", "composite_ae", "grade_specific",
         "non_serious_teae", "absence_sae", "unknown",
     )
@@ -135,6 +140,39 @@ def describe_safety_concept(title: str) -> SafetyConcept:
             key = "grade_specific"
         return SafetyConcept(key, grade_set=grades, seriousness="graded",
                              parent="generic_ae", at_risk_stat=spec_of(key).at_risk_stat)
+    teae_present = bool(re.search(r"\bteaes?\b|treatment[\s-]*emergent", lowered))
+    relatedness = "unspecified"
+    for qualifier, qualifier_regex in (
+        ("unrelated", r"\bunrelated\b"),
+        ("at_least_possibly_related", r"\bat\s+least\s+possibly\s+related\b"),
+        ("probably_related", r"\bprobably\s+related\b"),
+    ):
+        if re.search(qualifier_regex, lowered):
+            relatedness = qualifier
+            break
+    if (
+        teae_present
+        and re.search(r"\b(?:mild|moderate|severe|life[\s-]*threatening)\b", lowered)
+        and not re.search(r"\bserious\b", lowered)
+    ):
+        key = "severity_specific_teae"
+        return SafetyConcept(
+            key, teae=True, relatedness=relatedness,
+            at_risk_stat=spec_of(key).at_risk_stat,
+        )
+    # A treatment-emergent AE leading to death is not the number of deaths.
+    # EOI is not automatically a registry-designated AESI; qualified
+    # relatedness is not the unqualified overall TEAE population.
+    if teae_present and (
+        re.search(r"\bleading\s+to\s+death\b", lowered)
+        or re.search(r"\beoi\b", lowered)
+        or relatedness != "unspecified"
+    ):
+        key = "specific_ae"
+        return SafetyConcept(
+            key, teae=True, relatedness=relatedness,
+            at_risk_stat=spec_of(key).at_risk_stat,
+        )
     children: list[str] = []
     for fragment in _fragments(text):
         stripped = fragment
@@ -151,10 +189,42 @@ def describe_safety_concept(title: str) -> SafetyConcept:
         seriousness=(
             "serious" if chosen_key in {"any_sae", "serious_teae_subset"} else "unspecified"
         ),
-        teae=True if chosen_key in {"any_teae", "serious_teae_subset"} else None,
+        teae=(True if chosen_key in {"any_teae", "serious_teae_subset"}
+              or (chosen_key == "any_sae" and teae_present) else None),
         relatedness="related" if chosen_key == "treatment_related_ae" else "unspecified",
         at_risk_stat=spec_of(chosen_key).at_risk_stat,
     )
+
+
+_CONTEXT_ONLY_CLASS = re.compile(
+    r"^(?:(?:week|day|month|year)\s*\d+(?:\s*(?:to|[-–])\s*\d+)?|"
+    r"(?:interim|full|final|primary)\s+analysis(?:\s+set)?|"
+    r"(?:safety|full)\s+analysis\s+set)$",
+    re.I,
+)
+
+
+def describe_measured_safety_concept(
+    title: str, class_title: str = "", category_title: str = "",
+) -> SafetyConcept:
+    """Classify the actual measured subclass, not an enclosing measure title.
+
+    A category with an explicit safety concept narrows the class. An unknown
+    measured class stays unknown instead of borrowing an enclosing TEAE/grade
+    label. Pure visit/analysis-set class labels are contextual and leave the
+    measure title in charge. The original class/category text remains separate.
+    """
+    if category_title:
+        category = describe_safety_concept(category_title)
+        if category.key != "unknown":
+            return category
+    if class_title:
+        measured = describe_safety_concept(class_title)
+        if measured.key != "unknown" or not _CONTEXT_ONLY_CLASS.fullmatch(
+            " ".join(class_title.split())
+        ):
+            return measured
+    return describe_safety_concept(title)
 
 
 def _classify_single(text: str) -> str | None:

@@ -94,6 +94,64 @@ def _open(page: Page, site: Path, relative: str) -> None:
     page.wait_for_timeout(150)
 
 
+def test_matrix_desktop_uses_parallel_canvas_and_compact_empty_state(
+    w05a_high_load_site: Path,
+) -> None:
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        page = browser.new_page(viewport={"width": 1440, "height": 960})
+        for width in (1440, 1600, 1920, 2560):
+            page.set_viewport_size({"width": width, "height": 960})
+            _open(page, w05a_high_load_site, "matrix.html")
+            metrics = page.evaluate(
+                """() => {
+                  const box = selector => {
+                    const rect = document.querySelector(selector).getBoundingClientRect();
+                    return {left: rect.left, right: rect.right, top: rect.top,
+                      bottom: rect.bottom, width: rect.width, height: rect.height};
+                  };
+                  const chart = document.querySelector('[data-chart-id="matrix-full"]');
+                  return {overflow: document.documentElement.scrollWidth - innerWidth,
+                    tools: box('.kz-a-matrix-tools'), chart: box('[data-chart-id="matrix-full"]'),
+                    table: box('.kz-a-table-wrap'), density: chart.dataset.matrixDensity,
+                    bubbles: chart.querySelectorAll('.kz-a-bubble').length,
+                    productRows: document.querySelectorAll('[data-matrix-product]').length};
+                }"""
+            )
+            assert metrics["overflow"] <= 1, metrics
+            assert metrics["tools"]["right"] < metrics["chart"]["left"], metrics
+            assert metrics["chart"]["top"] <= 450, metrics
+            assert metrics["chart"]["height"] <= 400, metrics
+            assert metrics["table"]["top"] <= 960, metrics
+            assert metrics["density"] == "compact"
+            assert metrics["bubbles"] == 4 and metrics["productRows"] == 45
+
+        page.set_viewport_size({"width": 1440, "height": 960})
+        _open(page, w05a_high_load_site, "matrix.html")
+        bubble = page.locator('.kz-a-bubble[data-product-id="fixture-product"]')
+        bubble.click()
+        assert page.locator("#a-product-insight-drawer").is_visible()
+        page.keyboard.press("Escape")
+        assert page.evaluate(
+            "document.activeElement === document.querySelector("
+            "'.kz-a-bubble[data-product-id=\"fixture-product\"]')"
+        )
+        page.locator('[data-filter-dimension="product"] summary').click()
+        page.locator(
+            '[data-filter-dimension="product"] '
+            'button[data-filter-value="长名称创新治疗候选项目05"]'
+        ).click()
+        assert page.locator("#a-product-insight-drawer").is_hidden()
+        chart = page.locator('[data-chart-id="matrix-full"]')
+        assert chart.get_attribute("data-matrix-density") == "empty"
+        assert chart.bounding_box()["height"] <= 80
+        assert "没有可绘制的发生率" in chart.inner_text()
+        assert "右侧列出具体原因" in page.locator("[data-matrix-coverage]").inner_text()
+        page.locator(".kz-a-table-wrap summary").click()
+        assert page.locator('[data-matrix-product]:visible').count() == 1
+        browser.close()
+
+
 def test_landscape_chart_and_table_conserve_every_stage_and_product(
     w05a_site: Path,
 ) -> None:

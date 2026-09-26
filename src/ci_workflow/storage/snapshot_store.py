@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import tempfile
 from base64 import b64decode
 from datetime import datetime
@@ -121,6 +122,33 @@ class EvidenceSnapshotManifest(BaseModel):
         if not all(isinstance(self.closure[key], list) for key in required):
             raise ValueError("证据快照传递闭包各集合必须是列表")
         return self
+
+
+def _require_fact_context_matches_closure(item: object) -> None:
+    """闭包事实、其规范JSON与内容摘要必须互相一致。
+
+    ``consumer_binding`` 只是摄取提示，不是已核验消费者身份；若 ``fact``、
+    ``scientific_context_json`` 与 ``content_sha256`` 三者可以互相矛盾，恢复出的
+    ``scientific_context_json`` 就能携带未经登记的消费者声明，并随后被当作已声明
+    绑定投影到门户。恢复前逐项复核可关闭该入口。
+    """
+    if not isinstance(item, dict):
+        raise SnapshotIntegrityError("事实闭包记录无效")
+    fact = item.get("fact")
+    context_json = item.get("scientific_context_json")
+    if not isinstance(context_json, str):
+        raise SnapshotIntegrityError("事实闭包科学语境、规范JSON或内容摘要不一致")
+    try:
+        context = json.loads(context_json)
+    except json.JSONDecodeError as error:
+        raise SnapshotIntegrityError("事实闭包科学语境不是有效JSON") from error
+    if (
+        not isinstance(fact, dict)
+        or context != fact
+        or hashlib.sha256(context_json.encode("utf-8")).hexdigest()
+        != item.get("content_sha256")
+    ):
+        raise SnapshotIntegrityError("事实闭包科学语境、规范JSON或内容摘要不一致")
 
 
 def _evidence_payload(manifest: EvidenceSnapshotManifest) -> dict[str, Any]:
@@ -325,9 +353,26 @@ class SnapshotStore:
         return payload
 
     def restore_evidence_manifest(self, manifest_path: Path) -> LockedSnapshot:
-        """Restore a v2 evidence chain into an empty project from one manifest."""
+        """Publish a fully restored v2 chain only after every source passes."""
         if any(self.project_root.iterdir()) if self.project_root.exists() else False:
             raise SnapshotIntegrityError("manifest恢复目标必须是空目录")
+        self.project_root.parent.mkdir(parents=True, exist_ok=True)
+        staged = Path(tempfile.mkdtemp(
+            prefix=f".{self.project_root.name}.restore-", dir=self.project_root.parent
+        ))
+        try:
+            restored = SnapshotStore(staged)._restore_evidence_into_empty(manifest_path)
+            try:
+                os.replace(staged, self.project_root)
+            except OSError as error:
+                raise SnapshotIntegrityError("manifest恢复目标在提交时不可替换") from error
+            return restored
+        finally:
+            if staged.exists():
+                shutil.rmtree(staged)
+
+    def _restore_evidence_into_empty(self, manifest_path: Path) -> LockedSnapshot:
+        """Build only inside an isolated staging directory."""
         try:
             payload = json.loads(manifest_path.read_text(encoding="utf-8"))
             manifest = EvidenceSnapshotManifest.model_validate(payload)
@@ -335,6 +380,10 @@ class SnapshotStore:
             raise SnapshotIntegrityError("证据manifest不可读或合同无效") from error
         if manifest.schema_version != "2.0" or manifest.closure is None:
             raise SnapshotIntegrityError("历史快照只读保留，不能迁移补签或单manifest恢复")
+        # Preflight the declared fact context before any byte of the target project
+        # is created, so an inconsistent closure cannot half-restore.
+        for item in manifest.closure["facts"]:
+            _require_fact_context_matches_closure(item)
 
         from ci_workflow.application.source_research_service import SourceCapture
         from ci_workflow.storage.content_store import (

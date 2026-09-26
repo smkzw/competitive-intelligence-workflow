@@ -38,6 +38,12 @@
     if (!query) {
       return searchIndex.slice();
     }
+    var exactRows = searchIndex.filter(function (entry) {
+      return String(entry.row_id || "").toLowerCase() === query;
+    });
+    if (exactRows.length > 0) {
+      return exactRows;
+    }
     var results = [];
     for (var i = 0; i < searchIndex.length; i += 1) {
       var score = scoreEntry(query, searchIndex[i]);
@@ -83,6 +89,11 @@
     );
   }
 
+  function searchHref(entry) {
+    var base = entry.slug + ".html";
+    return entry.row_id ? base + "?focus=" + encodeURIComponent(entry.row_id) : base;
+  }
+
   function showResults(results, query) {
     if (!searchResults) {
       return;
@@ -102,7 +113,7 @@
       var entry = results[i];
       var anchor = document.createElement("a");
       anchor.className = "site-header__search-result";
-      anchor.href = entry.slug + ".html";
+      anchor.href = searchHref(entry);
       anchor.setAttribute("role", "option");
       anchor.setAttribute("data-index", String(i));
       anchor.innerHTML = highlightMatch(entry.title, query);
@@ -201,7 +212,7 @@
           var results = search(query);
           if (results.length > 0) {
             event.preventDefault();
-            window.location.href = results[0].slug + ".html";
+            window.location.href = searchHref(results[0]);
           }
         }
         return;
@@ -659,6 +670,9 @@
   }
 
   function collectVisibleRowIds() {
+    if (window.__B_PAGED_RESULTS__) {
+      return (window.__B_VISIBLE_ROW_IDS__ || []).slice();
+    }
     var ids = [];
     var seen = {};
     var nodes = document.querySelectorAll("[data-filter-row-id]");
@@ -992,6 +1006,14 @@
   }
 
   function filterVisibleRows() {
+    // B's large result pool is paged: its own filter covers every fact, not only mounted DOM.
+    if (window.__B_PAGED_RESULTS__) {
+      if (filterRowCount) {
+        filterRowCount.textContent = "匹配 " +
+          (window.__B_VISIBLE_ROW_IDS__ || []).length + " 项结果";
+      }
+      return;
+    }
     var count = 0;
     for (var r = 0; r < syntheticRows.length; r++) {
       var row = syntheticRows[r];

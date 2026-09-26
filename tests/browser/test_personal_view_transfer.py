@@ -266,6 +266,9 @@ def test_browser_download_is_direct_cli_input_for_committed_b_current(
         manifest = json.loads(archive.read("share-manifest.json"))
         assert manifest["current_revision"] == expected_revision
         assert manifest["reports"]["B"]["entry_href"].startswith("B/overview.html?product=")
+        launcher = archive.read("打开报告.html").decode("utf-8")
+        assert "所选报告各自独立" in launcher
+        assert "三类报告各自独立" not in launcher
 
 
 def test_unchanged_c_page_config_remains_shareable_in_newer_current(
