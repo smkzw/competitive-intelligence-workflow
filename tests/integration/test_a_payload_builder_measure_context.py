@@ -24,7 +24,7 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
             "title": title, "timeFrame": "Week 4", "unitOfMeasure": "Participants",
             "groups": [{"id": "OG1", "title": group_title}],
             "denoms": [
-                {"counts": [{"groupId": "OG1", "value": str(count)}]}
+                {"units": "Participants", "counts": [{"groupId": "OG1", "value": str(count)}]}
                 for count in denoms
             ],
             "classes": [{"categories": [{"measurements": [
@@ -117,6 +117,8 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
     assert row_sources["eff-1"]["raw_value"] == "7"
     assert row_sources["eff-1"]["raw_value_type"] == "str"
     assert len(row_sources["eff-1"]["denominator_candidates"]) == 2
+    assert {item["unit"] for item in
+            row_sources["eff-1"]["denominator_candidates"]} == {"Participants"}
     assert {item["raw_value"] for item in
             row_sources["eff-2"]["denominator_candidates"]} == {"20", "25"}
     assert row_sources["safe-5"]["value_path"] == (

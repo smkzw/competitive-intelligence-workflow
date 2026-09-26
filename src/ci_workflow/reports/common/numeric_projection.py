@@ -27,6 +27,10 @@ _PARTICIPANT_PERCENT_UNITS = frozenset({
     "percentage of participants", "percentage of responders",
     "percentage of subjects", "percentage of patients",
 })
+_AMBIGUOUS_PROPORTION_UNITS = frozenset({
+    "proportion", "proportion of participants", "proportion of subjects",
+    "proportion of patients", "proportion of responders",
+})
 
 
 @dataclass(frozen=True)
@@ -139,6 +143,10 @@ def infer_numeric_kind(
 ) -> NumericMeasureKind:
     text = " ".join((measure_object, statistic_form, unit)).casefold()
     if unit.strip().casefold() in _PARTICIPANT_PERCENT_UNITS:
+        return NumericMeasureKind.PARTICIPANT_PROPORTION
+    if unit.strip().casefold() in _AMBIGUOUS_PROPORTION_UNITS:
+        # A source may express this as 0.536 or 100.0; the unit alone does not
+        # establish a 0–1 versus 0–100 scale. Keep the raw row but no co-axis.
         return NumericMeasureKind.PARTICIPANT_PROPORTION
     if any(token in text for token in ("person_time", "人年", "patient-year", "person-year")):
         return NumericMeasureKind.PERSON_TIME_RATE

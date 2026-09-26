@@ -74,6 +74,95 @@ def test_major_adverse_vascular_event_rate_is_not_generic_treatment_ae() -> None
     assert classify_source_outcome(title) == "efficacy"
 
 
+def test_no_adverse_change_in_quality_of_life_score_remains_clinical_outcome() -> None:
+    title = (
+        "Proportion of Subjects With no Adverse Change in Overall Scores of "
+        "Quality of Life Using the EORTC QLQ-C30, the EQ-5D-5L and FACIT-F Instruments"
+    )
+    assert classify_source_outcome(title) == "efficacy"
+    assert _outcome_category(title) == "outcome"
+    parsed, issues = _parse(_record([("OG1", "9")], [("OG1", "15", "Participants")],
+                                    title=title))
+    assert not issues
+    assert len(parsed) == 1 and parsed[0].category == "outcome"
+    assert (parsed[0].numerator, parsed[0].denominator) == (9, 15)
+    assert classify_source_outcome("Participants without SAEs") == "adverse_events"
+
+
+def test_dermatitis_score_grade_is_not_an_adverse_event_grade() -> None:
+    title = (
+        "Percent of Subjects Who Have a Validated Investigator Global Assessment "
+        "for Atopic Dermatitis (vIGA-AD) Score of Clear or Almost Clear (0 or 1) "
+        "With a Minimum 2-grade Improvement"
+    )
+    assert classify_source_outcome(title) == "efficacy"
+    assert _outcome_category(title) == "outcome"
+
+
+@pytest.mark.parametrize(("unit", "raw", "expected_numerator", "expected_value", "expected_unit"), [
+    ("participants", "0", 0, 0.0, "%"),
+    ("number of participants", "5", 5, 4.2, "%"),
+    ("transfusions per person-year", "0", None, 0.0, "transfusions per person-year"),
+    ("Proportion of participants", "100.0", None, 100.0, "Proportion of participants"),
+])
+def test_statistical_unit_does_not_turn_rates_or_proportions_into_people(
+    unit: str, raw: str, expected_numerator: int | None,
+    expected_value: float, expected_unit: str,
+) -> None:
+    record = _record([("OG1", raw)], [("OG1", "120", "Participants")])
+    measure = record["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][0]
+    measure["unitOfMeasure"] = unit
+    # CT.gov reports measure type and unit separately; NUMBER is not itself a
+    # count-of-people declaration, including when the unit contains "person".
+    measure["paramType"] = "NUMBER"
+    results, issues = _parse(record)
+    assert len(results) == 1 and not issues
+    result = results[0]
+    assert result.value == expected_value
+    assert (result.numerator, result.unit) == (expected_numerator, expected_unit)
+    if expected_numerator is None:
+        assert result.denominator is None
+        assert result.metric == "reported_measure"
+        assert result.denominator_candidates[0].parsed_value == 120
+    else:
+        assert result.denominator == 120
+        assert result.metric == "participant_count"
+
+
+@pytest.mark.parametrize("classes", [[], [{"categories": [{"measurements": []}]}]])
+def test_title_only_registry_outcome_is_source_missing_not_parser_failure(
+    classes: list[dict[str, Any]],
+) -> None:
+    record = _record([("OG1", "3")], [("OG1", "12", "Participants")])
+    measure = record["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][0]
+    measure["classes"] = classes
+    results, issues = _parse(record)
+    assert not results
+    assert len(issues) == 1 and issues[0].status == "missing"
+    assert "没有组别结果数值" in issues[0].reason_zh
+
+
+def test_malformed_result_node_remains_parser_failure_not_source_missing() -> None:
+    record = _record([("OG1", "3")], [("OG1", "12", "Participants")])
+    measure = record["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][0]
+    measure["classes"] = [{"categories": [{"measurements": "broken"}]}]
+    results, issues = _parse(record)
+    assert not results
+    assert len(issues) == 1 and issues[0].status == "parse_failure"
+
+
+def test_explicit_not_reported_group_does_not_hide_reported_zero_peer() -> None:
+    record = _record(
+        [("OG1", "Not Reported"), ("OG2", "0")],
+        [("OG1", "12", "Participants"), ("OG2", "14", "Participants")],
+    )
+    results, issues = _parse(record)
+    assert [(item.group_id, item.numerator) for item in results] == [("OG2", 0)]
+    assert len(issues) == 1 and issues[0].status == "missing"
+    assert "OG1" in issues[0].reason_zh
+    assert issues[0].source_path.endswith("measurements[0].value")
+
+
 def test_conflicting_denominators_keep_count_and_are_order_independent() -> None:
     denoms = [("OG1", "100", "Participants"), ("OG1", "40", "Participants")]
     observations = [("OG1", "20")]

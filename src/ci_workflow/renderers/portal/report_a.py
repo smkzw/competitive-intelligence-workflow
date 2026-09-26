@@ -1974,6 +1974,13 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
         )
         displayed_projection = projection.as_dict()
         displayed_projection["plot_unit"] = _native_unit_zh(projection.plot_unit)
+        row["numeric_unrendered_reason_zh"] = (
+            "来源未注明比例刻度（0–1 或 0–100）"
+            if projection.unrenderable_reason
+            == "participant_proportion_requires_percent_or_n_over_N"
+            else "当前数值或统计单位不足以安全绘图"
+            if projection.unrenderable_reason is not None else None
+        )
         if item.group_assignment_state == "unknown":
             displayed_projection["renderable"] = False
             row["unrendered_reason"] = "group_product_relationship_unresolved"

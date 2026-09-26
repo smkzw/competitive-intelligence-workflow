@@ -58,8 +58,13 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     # death event-group inventory. This frozen AD payload still has unresolved
     # coverage: count every class, never turn the extra findings into PASS.
     assert Counter(item.category for item in audit.issues) == {
-        "outcome": 50, "sae": 122, "common_ae": 12, "teae": 16, "death": 104,
+        # Two vIGA-AD 2-grade improvement rows are clinical efficacy, not AE
+        # grade events; the frozen source remains unchanged and still FAILs.
+        # Three explicit "Not Reported" AD measurements now remain visible as
+        # source-missing issues instead of disappearing from the audit.
+        "outcome": 53, "sae": 122, "common_ae": 10, "teae": 16, "death": 104,
     }
+    assert sum("明示未报告" in item.reason_zh for item in audit.issues) == 3
     assert audit.inventory_counts["death"] == 104
     absent_affected = [
         item for item in audit.issues if item.source_path.endswith(".numAffected")

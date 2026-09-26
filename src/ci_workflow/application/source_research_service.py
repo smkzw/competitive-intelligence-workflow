@@ -782,6 +782,11 @@ def _explicit_aesi(value: Mapping[str, Any]) -> bool:
 def _outcome_category(
     title: str, class_title: str = ""
 ) -> _ParsedOutcomeCategory | None:
+    # Source-domain planning and registry-atom parsing must agree. A clinical
+    # score with "no adverse change" is not an AE count merely because the
+    # safety vocabulary's fallback sees the word "adverse".
+    if classify_source_outcome(title, class_title) != "adverse_events":
+        return "outcome"
     # The safety vocabulary is the semantic source of truth. In particular,
     # "non-serious", "without SAE" and generic AE cannot establish a positive
     # SAE/TEAE aggregate. A class may narrow the title but may not erase it.
@@ -837,12 +842,30 @@ def classify_source_outcome(
         return "pk_pd"
     if _BIOMARKER_TERM.search(text):
         return "biomarkers"
+    explicit_safety_concepts = {
+        "any_sae", "any_teae", "aesi", "generic_ae", "non_serious_teae",
+        "absence_sae", "death", "serious_teae_subset", "discontinuation_ae",
+        "treatment_related_ae", "composite_ae",
+    }
+    if any(
+        describe_safety_concept(part).key in explicit_safety_concepts
+        for part in (title, class_title) if part
+    ):
+        return "adverse_events"
     if is_safety_domain_endpoint(title) or is_safety_domain_endpoint(class_title):
         return "adverse_events"
     # Existing clinical outcome rows retain their legacy domain until a
     # source-specific rule can decide a narrower one; uncertainty is still
     # explicit in metric/statistical context, never a guessed comparator.
     return "efficacy"
+
+
+def _is_participant_count_unit(unit: str) -> bool:
+    """Match a count unit, not a rate or proportion merely naming people."""
+    return " ".join(unit.casefold().split()) in {
+        "participant", "participants", "subject", "subjects",
+        "number of participants", "number of subjects", "人", "例", "受试者",
+    }
 
 
 def _outcome_report_term(category: str, title: str, class_title: str) -> str:
@@ -1092,14 +1115,15 @@ def _iter_outcome_results(
                 for token in ("percent", "percentage", "%", "百分比")
             ))
             is_participant_count = not is_percentage and (
-                any(token in unit for token in ("participant", "subject", "person", "人"))
-                or "count_of_participants" in param_type
+                _is_participant_count_unit(unit_raw)
+                or (not unit and "count_of_participants" in param_type)
             )
             classes = _list_at(measure.get("classes", []), f"{path}.classes")
             measurements: list[
                 tuple[str, float, str, _ParsedOutcomeCategory, str, str, str, str]
             ] = []
             saw_not_reported = False
+            saw_measurement_node = False
             for class_index, raw_class in enumerate(classes):
                 class_mapping = _mapping_at(raw_class, f"{path}.classes[{class_index}]")
                 class_title = _result_text(class_mapping.get("title"))
@@ -1130,6 +1154,7 @@ def _iter_outcome_results(
                             f"{path}.classes[{class_index}].categories[{category_index}].measurements",
                         )
                     ):
+                        saw_measurement_node = True
                         measurement_path = (
                             f"{path}.classes[{class_index}].categories[{category_index}]"
                             f".measurements[{measurement_index}]"
@@ -1144,6 +1169,22 @@ def _iter_outcome_results(
                                 "na", "n/a", "nr", "not available", "not reported"
                             }:
                                 saw_not_reported = True
+                                _result_issue(
+                                    issues=issues,
+                                    category=result_category,
+                                    status="missing",
+                                    trial_id=trial_id,
+                                    source_id=source_id,
+                                    source_path=f"{measurement_path}.value",
+                                    result_key=_result_key(
+                                        result_category, trial_id, title, timeframe,
+                                        group_id, measurement_path,
+                                    ),
+                                    reason_zh=(
+                                        f"{group_id} 的登记结局数值原文明示未报告；"
+                                        "不得推断为 0"
+                                    ),
+                                )
                                 continue
                             measurements.append(
                                 (
@@ -1167,6 +1208,21 @@ def _iter_outcome_results(
                             )
             if not measurements:
                 if saw_not_reported:
+                    continue
+                if not saw_measurement_node:
+                    _result_issue(
+                        issues=issues,
+                        category=_outcome_category(title) or "outcome",
+                        status="missing",
+                        trial_id=trial_id,
+                        source_id=source_id,
+                        source_path=f"{path}.classes",
+                        result_key=_result_key(trial_id, source_id, path, "no_measurements"),
+                        reason_zh=(
+                            f"{trial_id} 的登记结局有标题与时间窗，但没有组别结果数值节点；"
+                            "不可推断为 0 或已完成数值报告"
+                        ),
+                    )
                     continue
                 detail = "结局没有可解析的组别数值"
                 _parse_failure(
@@ -1214,7 +1270,7 @@ def _iter_outcome_results(
                             ),
                         )
                     elif len(distinct) != 1 or not all(
-                        unit in {"participants", "participant", "subjects", "subject", "人"}
+                        _is_participant_count_unit(unit)
                         or (not unit and "count_of_participants" in param_type)
                         for _, unit in distinct
                     ):
@@ -1834,7 +1890,7 @@ def _bind_verified_ctgov_outcome_to_a_row(
         raise ResearchPackageError("此绑定仅接受登记疗效结局")
     is_count = atom.numerator is not None
     if is_count and (
-        atom.denominator is None or row.unit not in {"Participants", "受试者", "人"}
+        atom.denominator is None or not _is_participant_count_unit(row.unit)
         or row.numerator not in {None, atom.numerator}
         or row.denominator not in {None, atom.denominator}
     ):
@@ -1929,9 +1985,59 @@ def bind_ctgov_outcome_to_a_row(
 
 
 @dataclass(frozen=True)
+class CtgovARowSourceRef:
+    """One development-side row locator; not a reviewed scientific binding."""
+
+    row_id: str
+    trial_id: str
+    source_page_sha256: str
+    value_path: str
+    raw_class_title: str | None = None
+    raw_category_title: str | None = None
+    display_population: str | None = None
+
+    def __post_init__(self) -> None:
+        if (
+            not self.row_id.strip() or not self.trial_id.strip()
+            or re.fullmatch(r"[0-9a-f]{64}", self.source_page_sha256) is None
+            or not self.value_path.startswith("$.resultsSection.")
+            or "*" in self.value_path
+        ):
+            raise ResearchPackageError("A 行来源引用缺少试验、原始页摘要或精确结果路径")
+
+
+def _a_row_source_refs(
+    refs: Sequence[CtgovARowSourceRef] | None,
+) -> dict[str, CtgovARowSourceRef] | None:
+    if refs is None:
+        return None
+    indexed = {item.row_id: item for item in refs}
+    if len(indexed) != len(refs):
+        raise ResearchPackageError("A 行来源引用的行标识重复")
+    return indexed
+
+
+def _ctgov_atom_ref_key(
+    source: SourceCapture, atom: CtgovAtomicResult,
+) -> tuple[str, str, str] | None:
+    derivation = source.text_derivation
+    path = atom.value_locator.field_path
+    if derivation is None or path is None:
+        return None
+    return (derivation.raw_asset.sha256, atom.trial_id.casefold(), path)
+
+
+def _row_ref_key(ref: CtgovARowSourceRef) -> tuple[str, str, str]:
+    return (ref.source_page_sha256, ref.trial_id.casefold(), ref.value_path)
+
+
+@dataclass(frozen=True)
 class CtgovAOutcomeBindingGap:
     row_id: str
-    reason: Literal["no_exact_match", "ambiguous", "source_atom_reused"]
+    reason: Literal[
+        "no_exact_match", "ambiguous", "source_atom_reused",
+        "source_reference_missing", "source_reference_mismatch",
+    ]
     candidate_count: int
 
 
@@ -1947,19 +2053,25 @@ class CtgovAOutcomeCandidateBatch:
 
 
 def build_ctgov_a_outcome_candidate_batch(
-    sources: Sequence[SourceCapture], rows: Sequence[EfficacyRow]
+    sources: Sequence[SourceCapture], rows: Sequence[EfficacyRow],
+    *, row_source_refs: Sequence[CtgovARowSourceRef] | None = None,
 ) -> CtgovAOutcomeCandidateBatch:
     """Reextract each source once and bind only unique, non-reused direct outcomes."""
     if len({source.source_id for source in sources}) != len(sources):
         raise ResearchPackageError("批量登记来源标识重复")
     if len({row.row_id for row in rows}) != len(rows):
         raise ResearchPackageError("批量疗效行标识重复")
+    refs = _a_row_source_refs(row_source_refs)
     indexed: dict[tuple[str, str], list[tuple[SourceCapture, CtgovAtomicResult]]] = {}
+    available_refs: set[tuple[str, str, str]] = set()
     issues: list[ClinicalTrialsResultCoverageIssue] = []
     for source in sources:
         atoms, source_issues = extract_ctgov_atomic_results(source)
         issues.extend(source_issues)
         for atom in atoms:
+            atom_ref = _ctgov_atom_ref_key(source, atom)
+            if atom_ref is not None:
+                available_refs.add(atom_ref)
             if atom.category == "outcome":
                 indexed.setdefault(
                     (atom.trial_id.casefold(), _result_text(atom.endpoint).casefold()), []
@@ -1969,12 +2081,61 @@ def build_ctgov_a_outcome_candidate_batch(
                               tuple[ResearchFact, ...]]] = {}
     gaps: list[CtgovAOutcomeBindingGap] = []
     for row in rows:
+        ref = refs.get(row.row_id) if refs is not None else None
+        if refs is not None and ref is None:
+            gaps.append(CtgovAOutcomeBindingGap(
+                row_id=row.row_id, reason="source_reference_missing", candidate_count=0,
+            ))
+            continue
+        if ref is not None and (
+            ref.trial_id.casefold() != row.trial_id.casefold()
+            or _row_ref_key(ref) not in available_refs
+        ):
+            gaps.append(CtgovAOutcomeBindingGap(
+                row_id=row.row_id, reason="source_reference_mismatch", candidate_count=0,
+            ))
+            continue
+        if ref is not None and row.source_field_path not in (None, ref.value_path):
+            gaps.append(CtgovAOutcomeBindingGap(
+                row_id=row.row_id, reason="no_exact_match", candidate_count=0,
+            ))
+            continue
+        # Exact raw page + atom path resolves the class/category instance even
+        # when the A row has a translated display label. The binder still checks
+        # trial, endpoint, group, time, unit and value against the source atom.
+        candidate_row = (
+            EfficacyRow.model_validate({
+                **row.model_dump(mode="json"), "source_field_path": ref.value_path,
+            }) if ref is not None else row
+        )
         candidates = []
         for source, atom in indexed.get(
             (row.trial_id.casefold(), _result_text(row.endpoint).casefold()), []
         ):
+            if ref is not None and _ctgov_atom_ref_key(source, atom) != _row_ref_key(ref):
+                continue
+            if ref is not None and (
+                (atom.class_title or atom.category_title)
+                and (
+                    ref.raw_class_title is None
+                    or ref.raw_category_title is None
+                    or ref.display_population is None
+                )
+            ):
+                continue
+            if ref is not None and (
+                (ref.raw_class_title is not None
+                 and ref.raw_class_title != atom.class_title)
+                or (ref.raw_category_title is not None
+                    and ref.raw_category_title != atom.category_title)
+                or (ref.display_population is not None
+                    and ref.display_population != row.population)
+            ):
+                continue
             try:
-                bound, facts = _bind_verified_ctgov_outcome_to_a_row(source, atom, row)
+                bound, facts = _bind_verified_ctgov_outcome_to_a_row(
+                    source, atom, candidate_row,
+                )
             except ResearchPackageError:
                 continue
             candidates.append((source, atom, bound, facts))
@@ -2192,7 +2353,10 @@ def bind_ctgov_direct_safety_to_a_row(
 @dataclass(frozen=True)
 class CtgovASafetyBindingGap:
     row_id: str
-    reason: Literal["no_exact_match", "ambiguous", "source_atom_reused"]
+    reason: Literal[
+        "no_exact_match", "ambiguous", "source_atom_reused",
+        "source_reference_missing", "source_reference_mismatch",
+    ]
     candidate_count: int
 
 
@@ -2209,18 +2373,24 @@ class CtgovASafetyCandidateBatch:
 
 def build_ctgov_a_safety_candidate_batch(
     sources: Sequence[SourceCapture], rows: Sequence[SafetyRow],
+    *, row_source_refs: Sequence[CtgovARowSourceRef] | None = None,
 ) -> CtgovASafetyCandidateBatch:
     """Reextract once; bind unique direct measures or raw SAE/death group counts."""
     if len({source.source_id for source in sources}) != len(sources):
         raise ResearchPackageError("批量登记来源标识重复")
     if len({row.row_id for row in rows}) != len(rows):
         raise ResearchPackageError("批量安全行标识重复")
+    refs = _a_row_source_refs(row_source_refs)
     indexed: dict[tuple[str, str], list[tuple[SourceCapture, CtgovAtomicResult]]] = {}
+    available_refs: set[tuple[str, str, str]] = set()
     issues: list[ClinicalTrialsResultCoverageIssue] = []
     for source in sources:
         atoms, source_issues = extract_ctgov_atomic_results(source)
         issues.extend(source_issues)
         for atom in atoms:
+            atom_ref = _ctgov_atom_ref_key(source, atom)
+            if atom_ref is not None:
+                available_refs.add(atom_ref)
             if atom.endpoint and is_safety_domain_endpoint(atom.endpoint):
                 indexed.setdefault(
                     (atom.trial_id.casefold(), _result_text(atom.endpoint).casefold()), []
@@ -2244,10 +2414,26 @@ def build_ctgov_a_safety_candidate_batch(
                               tuple[ResearchFact, ...], ResearchClaim]] = {}
     gaps: list[CtgovASafetyBindingGap] = []
     for row in rows:
+        ref = refs.get(row.row_id) if refs is not None else None
+        if refs is not None and ref is None:
+            gaps.append(CtgovASafetyBindingGap(
+                row_id=row.row_id, reason="source_reference_missing", candidate_count=0,
+            ))
+            continue
+        if ref is not None and (
+            (row.trial_id or "").casefold() != ref.trial_id.casefold()
+            or _row_ref_key(ref) not in available_refs
+        ):
+            gaps.append(CtgovASafetyBindingGap(
+                row_id=row.row_id, reason="source_reference_mismatch", candidate_count=0,
+            ))
+            continue
         candidates = []
         for source, atom in indexed.get(
             ((row.trial_id or "").casefold(), _result_text(row.term).casefold()), []
         ):
+            if ref is not None and _ctgov_atom_ref_key(source, atom) != _row_ref_key(ref):
+                continue
             try:
                 if atom.endpoint:
                     bound, facts, claim = _bind_verified_ctgov_direct_safety_to_a_row(

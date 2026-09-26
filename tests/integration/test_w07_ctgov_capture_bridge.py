@@ -12,6 +12,7 @@ import pytest
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import (
+    CtgovARowSourceRef,
     FreshAResearchContent,
     ResearchClaim,
     ResearchFact,
@@ -220,7 +221,9 @@ def _reported_count_source(
             "paramType": "COUNT_OF_PARTICIPANTS" if unit == "Participants" else "",
             "groups": [{"id": "OG1", "title": "Drug 200 mg"}],
             "denoms": (
-                [{"counts": [{"groupId": "OG1", "value": str(denominator)}]}]
+                [{"units": "Participants", "counts": [
+                    {"groupId": "OG1", "value": str(denominator)},
+                ]}]
                 if denominator is not None else []
             ),
             "classes": classes if classes is not None else [{"categories": [{"measurements": [
@@ -557,6 +560,30 @@ def test_reported_participant_count_binds_raw_count_and_same_group_denominator(
         _validate_bound_ctgov_a_results(report, (source,), facts[:1])
 
 
+@pytest.mark.parametrize("unit", ["participants", "number of participants"])
+def test_count_unit_variants_bind_original_people_without_inventing_a_rate(
+    tmp_path: Path, unit: str,
+) -> None:
+    source = _reported_count_source(tmp_path, unit=unit)
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert len(atoms) == 1 and not issues
+    baseline = ReportAPortalData.model_validate(json.loads(
+        Path("fixtures/positive/a-atopic-dermatitis/research-content.json").read_text()
+    )["report_data"])
+    original = next(item for item in baseline.efficacy
+                    if item.trial_id.casefold() == "nct02277743")
+    row = EfficacyRow.model_validate({
+        **original.model_dump(mode="json"),
+        "endpoint": "Participants With Response", "timepoint": "Week 26",
+        "arm": "Drug 200 mg", "arm_detail": None, "group_id": None,
+        "value": 30, "unit": unit, "numerator": None, "denominator": None,
+        "source_field_path": None, "source_version_id": None, "source_text": None,
+    })
+    bound, facts = bind_ctgov_outcome_to_a_row(source, atoms[0], row)
+    assert (bound.value, bound.numerator, bound.denominator) == (30, 30, 35)
+    assert [fact.original_text for fact in facts] == ["30", "35"]
+
+
 def test_registry_class_visit_and_category_keep_same_value_observations_distinct(
     tmp_path: Path,
 ) -> None:
@@ -733,6 +760,104 @@ def test_outcome_batch_rejects_two_exact_source_versions(tmp_path: Path) -> None
     assert [(gap.reason, gap.candidate_count) for gap in batch.gaps] == [
         ("ambiguous", 2)
     ]
+
+
+def test_explicit_source_reference_binds_only_current_raw_page_and_exact_atom(
+    tmp_path: Path,
+) -> None:
+    source = _reported_count_source(tmp_path, classes=[{
+        "title": "Baseline-none",
+        "categories": [{"measurements": [{"groupId": "OG1", "value": "30"}]}],
+    }])
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    assert source.text_derivation is not None
+    row = EfficacyRow(
+        row_id="eff-source-map", product_id="dupilumab", trial_id="nct02277743",
+        endpoint="Participants With Response", timepoint="Week 26",
+        arm="Drug 200 mg", group_id="OG1", value=30,
+        unit="Participants", population="登记结果人群（基线-无）",
+    )
+    ref = CtgovARowSourceRef(
+        row_id=row.row_id, trial_id=row.trial_id,
+        source_page_sha256=source.text_derivation.raw_asset.sha256,
+        value_path=atoms[0].value_locator.field_path or "",
+        raw_class_title="Baseline-none",
+        raw_category_title="",
+        display_population="登记结果人群（基线-无）",
+    )
+    assert [gap.reason for gap in build_ctgov_a_outcome_candidate_batch(
+        (source,), (row,),
+    ).gaps] == ["no_exact_match"]
+    good = build_ctgov_a_outcome_candidate_batch(
+        (source,), (row,), row_source_refs=(ref,),
+    )
+    assert len(good.bound_rows) == 1 and not good.gaps
+    assert good.bound_rows[0].source_field_path == ref.value_path
+    wrong_page = CtgovARowSourceRef(
+        row_id=ref.row_id, trial_id=ref.trial_id,
+        source_page_sha256="0" * 64, value_path=ref.value_path,
+    )
+    assert [gap.reason for gap in build_ctgov_a_outcome_candidate_batch(
+        (source,), (row,), row_source_refs=(wrong_page,),
+    ).gaps] == ["source_reference_mismatch"]
+    assert [gap.reason for gap in build_ctgov_a_outcome_candidate_batch(
+        (source,), (row,), row_source_refs=(),
+    ).gaps] == ["source_reference_missing"]
+    wrong_path = CtgovARowSourceRef(
+        row_id=ref.row_id, trial_id=ref.trial_id,
+        source_page_sha256=ref.source_page_sha256,
+        value_path="$.resultsSection.outcomeMeasuresModule.outcomeMeasures[99].value",
+    )
+    assert [gap.reason for gap in build_ctgov_a_outcome_candidate_batch(
+        (source,), (row,), row_source_refs=(wrong_path,),
+    ).gaps] == ["source_reference_mismatch"]
+    assert [gap.reason for gap in build_ctgov_a_outcome_candidate_batch(
+        (source,), (row.model_copy(update={"value": 31}),), row_source_refs=(ref,),
+    ).gaps] == ["no_exact_match"]
+    assert [gap.reason for gap in build_ctgov_a_outcome_candidate_batch(
+        (source,), (row.model_copy(update={"population": "登记结果人群（基线-轻度）"}),),
+        row_source_refs=(ref,),
+    ).gaps] == ["no_exact_match"]
+
+
+def test_explicit_source_reference_keeps_direct_safety_count_identity(
+    tmp_path: Path,
+) -> None:
+    title = "Number of Participants With Treatment-emergent Adverse Events (TEAEs)"
+    source = _reported_count_source(tmp_path, title=title, classes=[{
+        "categories": [{"measurements": [{"groupId": "OG1", "value": "8"}]}],
+    }])
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    assert source.text_derivation is not None
+    semantic = describe_safety_concept(title)
+    row = SafetyRow(
+        row_id="safe-source-map", product_id="dupilumab", trial_id="nct02277743",
+        arm="Drug 200 mg", group_id="OG1",
+        category=safety_category_zh(semantic.key), term=title,
+        term_key=semantic.key, count_basis=semantic.count_basis,
+        value=8, unit="人", measure_object="participant_count",
+        numerator=8, denominator=35, time_window="Week 26",
+    )
+    ref = CtgovARowSourceRef(
+        row_id=row.row_id, trial_id=row.trial_id or "",
+        source_page_sha256=source.text_derivation.raw_asset.sha256,
+        value_path=atoms[0].value_locator.field_path or "",
+    )
+    good = build_ctgov_a_safety_candidate_batch(
+        (source,), (row,), row_source_refs=(ref,),
+    )
+    assert len(good.bound_rows) == 1 and not good.gaps
+    assert good.bound_rows[0].source_text == "8"
+    wrong_path = CtgovARowSourceRef(
+        row_id=ref.row_id, trial_id=ref.trial_id,
+        source_page_sha256=ref.source_page_sha256,
+        value_path="$.resultsSection.adverseEventsModule.eventGroups[0].seriousNumAffected",
+    )
+    assert [gap.reason for gap in build_ctgov_a_safety_candidate_batch(
+        (source,), (row,), row_source_refs=(wrong_path,),
+    ).gaps] == ["source_reference_mismatch"]
 
 
 def test_ctgov_study_capture_reopens_raw_and_preserves_calendar_day(tmp_path: Path) -> None:

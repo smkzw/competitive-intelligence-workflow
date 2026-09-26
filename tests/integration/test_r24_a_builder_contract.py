@@ -169,6 +169,35 @@ def test_ada_is_not_delivered_as_a_clinical_efficacy_row(tmp_path: Path) -> None
     assert sidecar["non_efficacy_observations"][0]["raw_value"] == "2"
 
 
+def test_ambiguous_reported_proportion_explains_why_it_is_not_plotted(
+    tmp_path: Path,
+) -> None:
+    study = _study("NCT00000009", 40, "ACTUAL", [
+        {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]},
+    ])
+    study["resultsSection"] = {"outcomeMeasuresModule": {"outcomeMeasures": [{
+        "title": "Proportion of Participants With Response",
+        "timeFrame": "Week 24", "unitOfMeasure": "Proportion of participants",
+        "paramType": "NUMBER", "groups": [{"id": "OG1", "title": "Drug arm"}],
+        "denoms": [{"units": "Participants", "counts": [
+            {"groupId": "OG1", "value": "40"},
+        ]}],
+        "classes": [{"categories": [{"measurements": [
+            {"groupId": "OG1", "value": "92.7"},
+        ]}]}],
+    }]}}
+    data = ReportAPortalData.model_validate(_build(tmp_path, [study]))
+    display = _display_efficacy_rows(data)
+    assert len(display) == 1
+    assert display[0]["numeric_projection"]["renderable"] is False
+    assert display[0]["numeric_projection"]["raw_value"] == 92.7
+    site = tmp_path / "site"
+    render_report_a_site(data, site)
+    html = (site / "efficacy.html").read_text(encoding="utf-8")
+    assert "92.7受试者比例" in html
+    assert "未绘图：来源未注明比例刻度（0–1 或 0–100）" in html
+
+
 def test_ae_event_group_uses_declared_arm_relationship_not_focus_product(
     tmp_path: Path,
 ) -> None:

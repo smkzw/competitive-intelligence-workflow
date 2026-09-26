@@ -557,7 +557,7 @@ def main() -> None:
                                 "raw_value": raw_count,
                                 "raw_value_type": type(raw_count).__name__,
                                 "param_type": denom.get("paramType"),
-                                "unit": denom.get("unitOfMeasure"),
+                                "unit": denom.get("units"),
                             })
                         if not group_id or isinstance(raw_count, bool):
                             continue
@@ -638,6 +638,7 @@ def main() -> None:
                                 "outcome_title": title,
                                 "class_title": source_class_title,
                                 "category_title": cat_title,
+                                "display_population": population,
                                 "group_id": group_id,
                                 "group_title": group_title,
                                 "timepoint": row_time_frame,

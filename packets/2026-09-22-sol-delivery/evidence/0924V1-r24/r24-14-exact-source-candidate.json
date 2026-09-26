@@ -1,0 +1,85 @@
+{
+  "schema_version": "r24-14-diagnostic-1",
+  "status": "development_candidate_not_scientific_acceptance",
+  "base_head": "779e84e9dfbf77400536aaca483239fe6b461104",
+  "source_pages_sha256": [
+    "1e0a9bbe959e38c122c9894782ff56b4ae3dc566179d199108c0af64eb56ab98",
+    "c3bdbe61b97e175e0a312cb37be064d3a74c38ada1c02dfde33e4e61a46fbdf3"
+  ],
+  "alias_map_sha256": "2bc88b7f9286d8398c2cf1ff23f58e27781963bac5765791f93fc528cb97b5d4",
+  "source_files_sha256": {
+    "src/ci_workflow/application/source_research_service.py": "89d46404785768b3f0d9c95c31aa99bfb23634ec37572afa5123b557ce19cb92",
+    "src/ci_workflow/reports/common/numeric_projection.py": "e6ab497e995255697ba611b630a4406e2f2cf0eaa602f56db1b30a81fe2e38b4",
+    "src/ci_workflow/renderers/portal/report_a.py": "6e6032c45ab924c1656cd1a8e584d32e40ec55bb1bf50df7051cbcc60d248a75",
+    "src/ci_workflow/renderers/portal/templates/a/efficacy.html.j2": "31b5fa7f3c97fa38d3e74697ff1f49e9c16d82ee5dff638cdc4ae2c061c3ad9a",
+    "tools/build_a_payload.py": "22973dd22938933c1e1cbbb05fe3c5b8f91641e7f23ee870b487c072e7996d3d",
+    "tools/audit_ctgov_a_source_map.py": "cd9735af45fdeac218926f20b82c97f373db4f3a1e0bc00c86ce0c141cb664e2"
+  },
+  "local_candidate": {
+    "payload_path": ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.json",
+    "payload_sha256": "2cd32ccbb17ab044360a2ec10c7b41071e44f569c3b853421f95c24040d52d74",
+    "source_map_path": ".artifacts/r24-pnh-candidate-20260926/report-a-r24-14-final.derivation.json",
+    "source_map_sha256": "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09",
+    "diagnostic_path": ".artifacts/r24-pnh-candidate-20260926/r24-14-final-diagnostic-v2.json",
+    "diagnostic_sha256": "b763c87dd537b7a775f4d40c77ff49db28ad84c90f52a0ded32d6c3451214074",
+    "rendered_a_site_path": ".artifacts/r24-pnh-candidate-20260926/site-r24-14-current",
+    "rendered_report_js_sha256": "28eba593b71dcf9ddf39fdb30cf61ecdd4cced46e9cde53003c147b4038e1a87"
+  },
+  "offline_replay": {
+    "trials": 50,
+    "raw_paths_value_and_type_verified": 4412,
+    "raw_path_mismatches": 0,
+    "efficacy_unique_candidate_bindings": 3617,
+    "efficacy_rows": 3617,
+    "safety_unique_candidate_bindings": 514,
+    "safety_rows": 514,
+    "binding_gaps": 0,
+    "additional_domain_rows_paths_only": 281,
+    "source_coverage_issues": 79,
+    "source_issue_statuses": {"missing": 79, "parse_failure": 0},
+    "source_issue_causes": {
+      "outcome_title_without_measurement": 61,
+      "explicit_not_reported_measurement": 15,
+      "explicit_zero_over_zero_undefined_rate": 3
+    },
+    "unresolved_group_product_rows": {
+      "efficacy": 2411,
+      "safety": 414,
+      "additional_domains": 247
+    }
+  },
+  "browser_slice": {
+    "viewport_css_px": [1600, 900],
+    "row_id": "eff-800",
+    "raw_value": 92.7,
+    "raw_unit": "Proportion of participants",
+    "visual_behavior": "raw value retained in full table; ambiguous 0-1 versus 0-100 scale not plotted; Chinese unplotted reason visible; unverified per-fact source drawer does not impersonate an accepted citation; Escape restores focus to the actual row button",
+    "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-14-ambiguous-proportion-1600.png",
+    "screenshot_sha256": "18e5e931b956d4760dd80e675e9ead454bf4de7b946d3a244883aa3314196618",
+    "visual_limit": "The table columns still wrap product and trial labels too narrowly at 1600px; W05 desktop density and four-width/four-state visual acceptance remain open."
+  },
+  "verification": {
+    "related_batch_before_corrected_AD_assertion": "112 passed, 1 failed / 113.42s; failure was three newly visible explicit Not Reported source gaps in the unchanged AD fixture",
+    "affected_failed_test_after_source_check": "1 passed, 13 deselected / 1.52s; unchanged AD fixture audit still FAIL, now 305 issues",
+    "quality_gate": "GATE_OK quality-only: Ruff src/tests/tools; strict mypy 245 source files; active unit/contract 1066 passed; retained compatibility 20 passed; layering 7 passed; legacy path check passed",
+    "not_run": ["B/C real current-version browser", "four widths x four states", "independent medical review", "three-host fresh-install", "24 real portals", "offline current-version share"]
+  },
+  "r24_13_generated_sidecar_retention_incident": {
+    "historical_receipt_expected_sha256": "43a47c161306e7befc27a5387dcf5f37a212da8894d459a05cd52ee2a8cbfbe9",
+    "historical_receipt_path": ".artifacts/r24-pnh-candidate-20260926/report-a-with-source-map.derivation.json",
+    "same_path_current_sha256": "34273b93b4f8a827592c462ce06e15e8c64f17268450b750a372a89a7d9b026b",
+    "cause": "A development-only sidecar was rebuilt in place while adding display_population. The old exact bytes cannot be recovered because built_at was non-deterministic; accepted source snapshots and reader-facing payload were unchanged.",
+    "remediation": "All R24-14 generated sidecars use versioned paths and explicit pre-generation existence checks; the builder itself does not yet prevent overwrites. Do not retroactively rewrite the R24-13 hash."
+  },
+  "limits": [
+    "Exact source candidates have not been ingested as 4131 accepted source fact versions, independently reviewed or switched to current generation.",
+    "The original two CT.gov pages were captured 2026-09-06; offline replay is not a fresh dynamic-status check or historical-as-of reconstruction.",
+    "The 281 additional-domain rows have raw locators but no A/B/C consumer binding in this diagnostic.",
+    "Unknown group-product relationships and missing publications, China sources and B/C current-version consumer chains remain separate blockers.",
+    "The 56-page A render is an unaccepted preview, not an RC or release portal."
+  ],
+  "rebuild_commands": [
+    "uv run python tools/build_a_payload.py --cas-dir .artifacts/source-cas/ctgov-live-20260906 --alias-map packets/2026-09-11-pnh-vertical/pnh-alias-map-v1.json --indication 阵发性睡眠性血红蛋白尿症 --indication-id pnh --output .artifacts/r24-pnh-candidate-20260926/report-a-r24-14-next.json --cutoff 2026-09-06",
+    "uv run python tools/audit_ctgov_a_source_map.py --cas-dir .artifacts/source-cas/ctgov-live-20260906 --payload .artifacts/r24-pnh-candidate-20260926/report-a-r24-14-next.json --sidecar .artifacts/r24-pnh-candidate-20260926/report-a-r24-14-next.derivation.json --output .artifacts/r24-pnh-candidate-20260926/r24-14-next-diagnostic.json"
+  ]
+}

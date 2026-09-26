@@ -188,6 +188,19 @@ def test_nonpercent_efficacy_is_not_forced_into_participant_proportion() -> None
     )
 
 
+@pytest.mark.parametrize("raw", [0.536, 100.0])
+def test_ambiguous_proportion_unit_retains_raw_value_but_does_not_plot(raw: float) -> None:
+    kind = infer_numeric_kind(unit="Proportion of participants", domain="efficacy")
+    assert kind is NumericMeasureKind.PARTICIPANT_PROPORTION
+    projection = project_numeric(
+        value=raw, unit="Proportion of participants", kind=kind,
+        denominator=52, window="Week 24", estimand="Response",
+    )
+    assert projection.raw_value == raw and projection.raw_unit == "Proportion of participants"
+    assert not projection.renderable and projection.plot_value is None
+    assert projection.unrenderable_reason == "participant_proportion_requires_percent_or_n_over_N"
+
+
 def test_n_le_n_applies_only_to_participant_proportion() -> None:
     with pytest.raises(ValueError):
         project_numeric(

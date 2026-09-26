@@ -16,7 +16,7 @@
         <td{% if row.endpoint_source and row.endpoint_source != row.endpoint %} title="{{ row.endpoint_source }}"{% endif %}>{{ row.endpoint }}</td><td>{{ row.timepoint }}</td><td>{{ row.arm_detail or row.arm }}</td>
         <td><strong>{{ row.value }}{{ row.unit }}</strong></td>
         <td>{% if row.numerator is not none %}{{ row.numerator }}/{{ row.denominator }}{% elif row.denominator is not none %}分母 {{ row.denominator }}{% else %}—{% endif %}</td>
-        <td>{{ row.population }}{% if row.unrendered_reason == 'group_product_relationship_unresolved' %}<br><small>未绘图：组别与产品关系待核</small>{% endif %}</td>
+        <td>{{ row.population }}{% if row.unrendered_reason == 'group_product_relationship_unresolved' %}<br><small>未绘图：组别与产品关系待核</small>{% endif %}{% if row.numeric_unrendered_reason_zh %}<br><small>未绘图：{{ row.numeric_unrendered_reason_zh }}</small>{% endif %}</td>
         <td><button type="button" class="kz-a-row-source" data-open-evidence="{{ row.endpoint }}来源" data-evidence-collection="efficacy" data-evidence-row-id="{{ row.row_id }}">查看来源</button></td>
       </tr>
     {% endfor %}</tbody>
