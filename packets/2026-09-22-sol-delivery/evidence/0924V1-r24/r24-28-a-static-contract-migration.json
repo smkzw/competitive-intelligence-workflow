@@ -1,0 +1,32 @@
+{
+  "work_item": "R24-28 W05A migrate three stale static assertions to current observable contract",
+  "status": "development_candidate",
+  "base_head": "ecfbd0c78ab648d2851b4e41cdb9343a8754f44e",
+  "production_source_unchanged": true,
+  "report_a_js_sha256": "a0d2eea7df4c627796888da1c0321faec750a8d2d16d45325f25fa96363479fc",
+  "fixture_sha256": "2aa14424da788b68a84558b45d25a13f33423c50475f3782d4483e2743168771",
+  "ego_lite": {
+    "task_space": 8,
+    "viewport_css_px": 1440,
+    "page": "synthetic A matrix.html",
+    "matrix_html_sha256": "e3c51536298518b105006efc073e9fa712bb6a0dea60e72507fe65644fea4365",
+    "observed": [
+      "Four numbered bubble buttons map to four named product legend entries and retain product names in accessible labels.",
+      "Opening the first bubble shows program stage, evidence trial phase, and week-16 efficacy observation separately.",
+      "The product evidence tab with no bound public provenance explicitly says there is no verifiable concrete public source; it does not claim report-level or patent sources support this product."
+    ],
+    "screenshot": "output/playwright/r24-28-a-evidence-boundary-ego-1440.png",
+    "screenshot_sha256": "dcd0a7e38944e4f880ee4cbfa4727aa3df9cc002a5a153b347b84a5e4bb58bf0"
+  },
+  "checks": {
+    "before_migration": "14 passed, 3 failed in the old A/B static+integration batch; the three failed source-text patterns were absent from the unchanged HEAD A script",
+    "after_migration": "17 passed in 0.85s on final test bytes after line-wrap-only Ruff correction",
+    "ruff": "test file passes after line-wrap correction",
+    "full_development_gate": "not_run_yet"
+  },
+  "limitations": [
+    "The test migration preserves the report-level versus product-level provenance boundary; product-specific precise source binding remains a separate W07 requirement.",
+    "This synthetic A matrix journey is not the complete four-viewport by four-state visual acceptance.",
+    "No clinical result or source was independently validated by this A browser check."
+  ]
+}

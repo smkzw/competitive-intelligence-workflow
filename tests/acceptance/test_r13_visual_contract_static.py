@@ -60,20 +60,22 @@ def test_shared_evidence_drawer_is_a_modal_dialog_and_traps_focus() -> None:
     assert 'if (e.key !== "Tab") return;' in behavior
 
 
-def test_product_drawer_filters_product_specific_patent_sources() -> None:
+def test_product_drawer_does_not_label_report_sources_as_product_provenance() -> None:
     source = (ASSETS / "report-a.js").read_text(encoding="utf-8")
 
-    assert "var productSources = sources.filter" in source
-    assert "return patents[i].product_id === product.id" in source
-    assert 'appendInsightField(fields, "来源数量", productSources.length)' in source
+    assert "var publicSources = data.public_sources || [];" in source
+    assert 'appendInsightField(fields, "报告级来源数量", publicSources.length)' in source
+    assert "不代表每份来源都支持当前产品" in source
+    assert "来源类别不能替代出处" in source
 
 
-def test_a_bubble_uses_formal_parenthetical_code_without_generic_product_prefix() -> None:
+def test_a_bubble_number_has_named_product_legend_and_accessible_identity() -> None:
     source = (ASSETS / "report-a.js").read_text(encoding="utf-8")
 
-    assert "if (/^\\d+$/.test(shortName) && parenthetical)" in source
+    assert 'var bubble = el("button", "kz-a-bubble", String(i + 1));' in source
+    assert 'bubble.setAttribute("aria-label", p.name + "：" + bubble.title' in source
+    assert 'var legendButton = el("button", "", point.product.name);' in source
     assert 'shortName = "产品" + shortName' not in source
-    assert "shortName.length > 12" in source
 
 
 def test_c_evidence_explanation_does_not_expose_internal_identifiers() -> None:
@@ -125,7 +127,13 @@ def test_a_product_drawer_separates_program_stage_trial_phase_and_observation_ti
 
     assert '["项目最高阶段", product.phase]' in source
     assert '["证据试验分期", trial ? trial.phase : "未公开"]' in source
-    assert '["疗效数据时间点", pair ? efficacyObservationTimepoint(pair)' in source
+    selected_timepoint = (
+        '["疗效数据时间点", context.selectedEfficacy ? '
+        "context.selectedEfficacy.timepoint : pair ? "
+        "efficacyObservationTimepoint(pair)"
+    )
+    assert selected_timepoint in source
+    assert "if (selectedEfficacy) pair = null;" in source
     assert '"｜项目最高阶段：" + product.phase' in source
     assert "function efficacyObservationTimepoint(pair)" in source
 
