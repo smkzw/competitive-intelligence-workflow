@@ -1,0 +1,82 @@
+{
+  "schema_version": "r24-16-18-checkpoint-1",
+  "status": "development_candidate_not_scientific_or_release_acceptance",
+  "base_head": "19c72ea8a4a49940d75e2fd6a4f913e1fa15d17b",
+  "scope": {
+    "R24-16": "C admission and exclusion criteria use searchable, selectable original registry text, not a fabricated count bar",
+    "R24-17": "B singleton efficacy observations use compact exact-value rows with evidence access instead of large non-comparative axes",
+    "R24-18": "C 2560px comparison uses four occupied grid columns rather than balancing six study cards into three columns"
+  },
+  "fixed_preview_inputs": {
+    "nature": "PNH abc-v106 derived data dated 2026-09-06; historical development preview, not a fresh status check or accepted research package",
+    "B": {
+      "path": "runs/pnh-vertical/abc-v106/state/derived/report-b-data.json",
+      "sha256": "c7ef87082e05de6094bf129b626e64e5506592aab15cb5695e281657b382147f"
+    },
+    "C": {
+      "path": "runs/pnh-vertical/abc-v106/state/derived/report-c-data.json",
+      "sha256": "6a00108fed05c4023143eb994e5b68b828955e272746d6e4ffcd09bc0964a0ab"
+    }
+  },
+  "author_assets_sha256": {
+    "charts.js": "2d0f0b8e6c9b2d3b97a0b50ed69d0074b8cda12b2cc4e9aa63b697b36ddd6764",
+    "portal.css": "358d0d7c1e3c812807bdb5797cf7e4b1195735c910e5b0664df8c6e8b512f418",
+    "report-c.js": "88299db6fb2d5db9ed6af2e28ca6cb65283f16133bad6756a24991887cf58e0b",
+    "report-c.css": "88221fb3dc673c753ff0c9778905a7b2cc99f8c7dc77eaea747aa1a4a5e07b33",
+    "mirror_manifest": "8ce0b5493a333e68cabec1e5bde8176e1cb8acb20d9b4b10e340ab840b6fb69d"
+  },
+  "rendered_previews": {
+    "B": {
+      "path": ".artifacts/r24-pnh-candidate-20260926/site-b-r24-17-final",
+      "html_files": 70,
+      "efficacy_html_sha256": "d49a266ef6940efe0574a83f75b2af4c552e21ed35d167664ceaf0f7fdaf3c0c"
+    },
+    "C": {
+      "path": ".artifacts/r24-pnh-candidate-20260926/site-c-r24-18-grid",
+      "html_files": 18,
+      "inclusion_html_sha256": "2ebd5c55b7f77d574f319152505685c66dc74eabd92ad54ed753905fee38abb5"
+    },
+    "current_generation_changed": false
+  },
+  "real_browser": {
+    "browser": "Chromium via local HTTP Playwright CLI; browser and server closed",
+    "B_efficacy_2560": {
+      "viewport_css_px": 2560,
+      "document_scroll_width_css_px": 2560,
+      "groups": 218,
+      "single_fact_cards": 150,
+      "first_card_height_css_px": 173,
+      "first_fact_height_css_px": 36,
+      "single_fact_buttons_with_drawer_view": "150/150; opening a view does not prove per-fact source closure",
+      "source_open_and_escape_focus_return": true,
+      "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-17-b-efficacy-2560.png",
+      "screenshot_sha256": "75fca5361f7b248bfef694eb237f5ad05801a8ff42ec8e404d2c6df71b8b19dc"
+    },
+    "C_inclusion_2560": {
+      "viewport_css_px": 2560,
+      "document_scroll_width_css_px": 2560,
+      "study_cards": 6,
+      "source_text_groups": 23,
+      "first_four_card_x_css_px": [193, 739, 1285, 1831],
+      "synthetic_count_svg": false,
+      "search_flow_cytometry": "2 studies and 2 source groups in the preceding same-code JS/CSS slice; final grid CSS changes layout only",
+      "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-18-c-criteria-2560.png",
+      "screenshot_sha256": "f99a9d82523a580ffc70d207e39b71487e126000226d4695c76271143f987d3a"
+    }
+  },
+  "verification": {
+    "C_browser_before_final_grid": "81 passed; included Chromium and WebKit C portal suite",
+    "C_four_width_and_criteria_after_final_grid": "10 passed, 174 deselected; includes 1440/1600/1920/2560 CSS px across 11 C physical pages and criteria interaction in Chromium/WebKit",
+    "B_single_fact_browser": "2 passed in Chromium/WebKit; adjacent B browser 8 passed and shared chart-table sync 22 passed before final C-only grid change",
+    "C_renderer_and_source_contract": "17 passed before final C-only grid change",
+    "syntax_and_mirror": "node --check for charts.js and report-c.js, git diff --check, and validate_portal_asset_mirror passed",
+    "first_quality_gate": "GATE_FAIL quality-only: Ruff found one overlong line in new C browser assertion; strict mypy 245 files and active 1066, retained 20, layering 7, legacy references passed",
+    "final_quality_gate": "GATE_OK quality-only: full Ruff src/tests/tools; strict mypy 245 files; active 1066 passed; retained compatibility 20 passed; layering 7 passed; legacy reference check passed"
+  },
+  "unverified": [
+    "These B/C previews use historical derived payloads, not the R24-14 precise-source candidate or fresh dynamic-state lookup",
+    "Full per-fact source versions, legal B/C consumer bindings, and current-generation save/clear/undo/share chain",
+    "A/B/C all physical pages in four desktop viewports and four UI states by final human visual review",
+    "Independent scientific and visual consultation, 24 current real portals, fresh-install, three host parity, recovery, and RC"
+  ]
+}

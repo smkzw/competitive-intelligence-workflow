@@ -59,7 +59,7 @@
   </section>
   {% endif %}
 
-  {% if page_filter_groups %}
+  {% if page_filter_groups and show_quick_filter %}
   <div class="kz-c-filter-quick" aria-label="页面筛选">
     <span class="kz-c-filter-quick__label">快速筛选</span>
     {% for group in page_filter_groups %}

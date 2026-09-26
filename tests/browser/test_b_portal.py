@@ -79,6 +79,34 @@ def test_sparse_safety_heatmaps_use_compact_parallel_desktop_cards(
 
 
 @pytest.mark.parametrize("browser_name", BROWSERS)
+def test_single_efficacy_observation_is_compact_fact_with_source(
+    b_pnh_site: Path, browser_name: str
+) -> None:
+    with sync_playwright() as playwright:
+        browser = _launch(playwright, browser_name)
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        _open(page, b_pnh_site, "efficacy.html")
+        single = page.locator(
+            '.kz-chart-module__group[data-observation-count="1"]:has([data-chart-type="single-fact"])'
+        ).first
+        assert single.count() == 1
+        fact = single.locator(".kz-chart-group__chart--single-fact")
+        assert fact.locator("svg, canvas").count() == 0
+        assert fact.bounding_box()["height"] <= 90  # type: ignore[index]
+        button = fact.locator("[data-chart-evidence-open]")
+        assert button.count() == 1
+        button.click()
+        panel = page.locator("#kz-evidence-drawer-panel")
+        assert panel.is_visible()
+        page.keyboard.press("Escape")
+        assert not panel.is_visible()
+        assert page.evaluate(
+            "document.activeElement?.getAttribute('data-chart-evidence-open')"
+        ) == button.get_attribute("data-chart-evidence-open")
+        browser.close()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
 def test_desktop_evidence_drawer_reflows_charts_without_covering_facts(
     b_pnh_site: Path, browser_name: str
 ) -> None:

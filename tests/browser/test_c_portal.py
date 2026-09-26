@@ -117,6 +117,14 @@ def test_c_all_eleven_pages_render_without_horizontal_dragging(
             assert page.locator("#kz-chart-module").count() == 1, page_id
             assert page.locator(".kz-chart-table__row[data-row-id]").count() > 0, page_id
             assert page.locator("[data-chart-type]").count() > 0, page_id
+            if page_id == "inclusion-criteria" and width == 2560:
+                trial_cards = page.locator(".kz-c-criteria-trial")
+                assert trial_cards.count() >= 4
+                first_row_x = trial_cards.evaluate_all(
+                    "nodes => nodes.slice(0, 4).map(node => "
+                    "Math.round(node.getBoundingClientRect().x))"
+                )
+                assert len(set(first_row_x)) == 4, first_row_x
             if page_id == "design-patterns":
                 assert page.locator("[data-path-id]").count() >= 2
                 assert "唯一最佳" not in page.locator("body").inner_text()
@@ -236,6 +244,47 @@ def test_c_filters_restore_url_and_keep_chart_table_drawer_in_sync(
         assert "?" in page.url or "#" in page.url
         assert not errors
         page.close()
+        browser.close()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
+def test_c_criteria_show_searchable_source_comparison_instead_of_count_bars(
+    c_site: Path,
+    browser_name: str,
+) -> None:
+    with sync_playwright() as playwright:
+        browser = _launch(playwright, browser_name)
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        _open(page, c_site, "inclusion-criteria.html", width=1600)
+        expected = page.evaluate(
+            "window.__CHART_GROUPS__[0].rows.map(row => String(row.row_id))"
+        )
+        cards = page.locator("[data-criterion-row-id]")
+        assert set(cards.evaluate_all(
+            "nodes => nodes.map(node => node.getAttribute('data-criterion-row-id'))"
+        )) == set(expected)
+        assert page.locator("#kz-c-chart-visuals svg").count() == 0
+        assert "不按并列位置推断条款等价" in page.locator("#kz-c-chart-visuals").inner_text()
+
+        page.locator(".kz-c-criteria-choose > summary").click()
+        first_choice = page.locator(".kz-c-criteria-choices input").first
+        first_choice.uncheck()
+        assert cards.count() < len(expected)
+        first_choice.check()
+        assert cards.count() == len(expected)
+
+        query = page.locator("#kz-c-criteria-search")
+        query.fill("Chronic AD")
+        visible = cards.filter(visible=True)
+        assert visible.count() == 1
+        assert "Chronic AD" in visible.first.inner_text()
+        visible.first.locator("summary").click()
+        assert "screening visit" in visible.first.inner_text()
+        page.reload(wait_until="load")
+        assert page.locator("#kz-c-criteria-search").input_value() == "Chronic AD"
+        assert page.locator("[data-criterion-row-id]:visible").count() == 1
+        query.fill("")
+        assert cards.filter(visible=True).count() == len(expected)
         browser.close()
 
 
@@ -578,7 +627,7 @@ def test_c_treatment_chart_keeps_frequency_loading_dose_and_treatment_period(
         _open(page, c_site, "treatment-arms.html", width=1024)
         text = page.locator('[data-chart-type="treatment-structure-matrix"]').text_content() or ""
         assert "每2周1次" in text
-        assert "含负荷剂量" in text
+        assert "负荷期250 mg" in text
         assert "第1周至第51周" in text
         assert "基线至第52周" in text
         assert "度普利尤单抗" in text

@@ -1,6 +1,6 @@
 # 当前接手入口（2026-09-26；0924V1 R24 已恢复续建）
 
-用户已明确恢复连续实施。唯一当前状态在 [STATUS.md](packets/2026-09-22-sol-delivery/STATUS.md) 顶节；最新 R24-15 构建保护与 A 四档表格局部浏览器回执见 [机器摘要](packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-15-builder-and-a-table.json)，R24-14 固定来源精确候选与单位/空缺诊断见 [前一机器摘要](packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-14-exact-source-candidate.json)，R24-13 新旧集合与路径对账见 [更早机器摘要](packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-13-audit-source-map.json)。Goal 工具仍显示暂停，此为接口状态差异，不是本轮用户授权失效。下面 2026-09-26 暂停文件仍是进入本轮的历史起点，不再代表当前实施终态；真实动态来源、A/B/C 全链和 RC 仍未完成。
+用户已明确恢复连续实施。唯一当前状态在 [STATUS.md](packets/2026-09-22-sol-delivery/STATUS.md) 顶节；最新 R24-16–18 B/C 桌面开发切片、固定旧载荷真实浏览器截图及最终质量门见 [机器摘要](packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-16-18-bc-desktop-slice.json)，R24-15 构建保护与 A 四档表格局部回执见 [前一机器摘要](packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-15-builder-and-a-table.json)，R24-14 固定来源精确候选与单位/空缺诊断见 [更早机器摘要](packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-14-exact-source-candidate.json)。Goal 工具仍显示暂停，此为接口状态差异，不是本轮用户授权失效。下面 2026-09-26 暂停文件仍是进入本轮的历史起点，不再代表当前实施终态；真实动态来源、A/B/C 全链和 RC 仍未完成。
 
 唯一当前暂停现场见 [HANDOFF_20260926_R24_PAUSE.md](packets/2026-09-22-sol-delivery/HANDOFF_20260926_R24_PAUSE.md)，R24-01–12 台账见 [STATUS.md](packets/2026-09-22-sol-delivery/STATUS.md) 顶节。本轮从 `754d79cc21a021b6ec81794e067636fa7d332661` 起实施，首个受控开发提交为 `d87ba8eb363e36dbbcd3a913d31b441daab1d41b`；当前按用户要求无损暂停，恢复时先核 `git rev-parse HEAD`、工作树、Goal 状态和实际回执，不将下方历史描述当成现状。唯一工程是本英文仓库，旧中文工程零接触。
 

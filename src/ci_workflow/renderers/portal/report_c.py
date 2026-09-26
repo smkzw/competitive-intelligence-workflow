@@ -1205,17 +1205,15 @@ def _chart_groups(
         label = "公开入选标准条目" if page_id == "inclusion-criteria" else "公开排除标准条目"
         rows = []
         for observation in observations:
-            row = _chart_row(data, observation, chart_type="bar")
-            count = len(_criterion_parts(observation.source_text))
+            row = _chart_row(data, observation, chart_type="status_matrix")
+            # 人工拆分的登记原文段数不是临床事实的数值，也不能代替原条款。
+            row.pop("numeric_value", None)
+            row.pop("numeric_projection", None)
             row.update(
                 {
                     "display_label_zh": label,
                     "element_zh": label,
-                    "numeric_value": count,
-                    "value": count,
-                    "unit": "条",
-                    "renderable": True,
-                    "_chart_type": "bar",
+                    "_chart_type": "status_matrix",
                 }
             )
             rows.append(row)
@@ -1223,7 +1221,7 @@ def _chart_groups(
             {
                 "title_zh": f"各试验{label}",
                 "rows": rows,
-                "_chart_type": "bar",
+                "_chart_type": "status_matrix",
             },
         )
     if page_id == "sample-analysis-statistics":
@@ -1900,10 +1898,12 @@ def _render_page_context(
                 "统计与分析维度登记未公开处以显式声明呈现，不推断。"
             ),
         }
-    # 独立视觉复核（interaction）：核心比较页 CSS 隐藏快速筛选栏（优先展示
-    # 比较图），服务端同步不渲染——隐藏的可交互元素会造成探测与键盘路径失败
-    if catalog_page_id in {"design-map", "endpoint-timepoint-matrix", "overview"} and trial is None:
-        page_filter_groups = ()
+    # 核心比较页省略首屏快速筛选，但折叠面板仍保留试验/产品选择。
+    # 清空 page_filter_groups 会令研究列不可选，也使 URL 恢复失去入口。
+    show_quick_filter = (
+        catalog_page_id not in {"design-map", "endpoint-timepoint-matrix", "overview"}
+        or trial is not None
+    )
     module_filter_groups = tuple(group for group in filter_groups if group["scope"] == "module")
     paths = _candidate_design_paths(data) if catalog_page_id == "design-patterns" else ()
     table_rows = _table_rows(
@@ -1970,6 +1970,7 @@ def _render_page_context(
         "row_dimensions_json": _json(dimensions),
         "filter_dimensions_json": _json(tuple(_FILTER_DIMENSION_LABELS)),
         "page_filter_groups": page_filter_groups,
+        "show_quick_filter": show_quick_filter,
         "module_filter_groups": module_filter_groups,
         "essential_filter_dimensions": ("product", "trial", "target"),
         "evidence_embed": render_evidence_drawer_embed(views),

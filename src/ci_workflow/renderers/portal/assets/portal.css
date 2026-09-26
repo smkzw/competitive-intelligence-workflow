@@ -1603,6 +1603,8 @@ input:focus-visible {
   padding: clamp(12px, 1.2vw, 20px);
   box-shadow: var(--shadow-1);
 }
+.kz-chart-module__group:has(.kz-chart-group__chart--single-fact) { padding: 12px 14px; }
+.kz-chart-module__group:has(.kz-chart-group__chart--single-fact) .kz-chart-group__title { margin-bottom: 8px; }
 
 .kz-chart-group__title {
   font-size: 16px;
@@ -1639,6 +1641,19 @@ input:focus-visible {
   height: 340px;
   margin-bottom: 16px;
 }
+.kz-chart-group__chart.kz-chart-group__chart--single-fact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 12px;
+  height: auto;
+  margin-bottom: 8px;
+  min-height: 0;
+}
+.kz-chart-single-fact__value { color: var(--text-1); font-size: 21px; line-height: 1.25; white-space: nowrap; }
+.kz-chart-single-fact__context { min-width: 0; color: var(--text-2); font-size: 15px; line-height: 1.35; overflow-wrap: anywhere; }
+.kz-chart-single-fact__source { min-height: 36px; padding: 5px 9px; border: 1px solid var(--border-strong); border-radius: 7px; background: #fff; color: #6a4b15; font: 600 14px/1.25 var(--font-sans); cursor: pointer; }
+.kz-chart-single-fact__source:focus-visible { outline: 3px solid var(--kz-orange); outline-offset: 2px; }
 
 .kz-chart-group__chart--undisclosed {
   height: auto;

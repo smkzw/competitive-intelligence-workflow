@@ -3,6 +3,23 @@
   "use strict";
 
   var started = false;
+  var criteriaParams = new URLSearchParams(window.location.search || "");
+  var criteriaSearchQuery = criteriaParams.get("criteria_q") || "";
+  var excludedCriteriaTrials = {};
+  criteriaParams.getAll("criteria_hide").forEach(function (trialId) {
+    excludedCriteriaTrials[trialId] = true;
+  });
+
+  function writeCriteriaUrl() {
+    var url = new URL(window.location.href);
+    if (criteriaSearchQuery.trim()) url.searchParams.set("criteria_q", criteriaSearchQuery);
+    else url.searchParams.delete("criteria_q");
+    url.searchParams.delete("criteria_hide");
+    Object.keys(excludedCriteriaTrials).sort().forEach(function (trialId) {
+      if (excludedCriteriaTrials[trialId]) url.searchParams.append("criteria_hide", trialId);
+    });
+    window.history.replaceState({}, "", url.href);
+  }
 
   function filterDimensions() {
     var declared = window.__C_FILTER_DIMENSIONS__ || [];
@@ -480,7 +497,9 @@
 
   function trialLabel(row) {
     var id = String(row.trial_display_id || "试验");
-    var product = String(row.product_zh || "");
+    // 轴标签优先中文名；英文别名仍在来源和完整资料中可查。
+    var product = String(row.product_zh || "")
+      .replace(/（[A-Za-z][A-Za-z0-9 .-]*）$/, "");
     var name = String(row.trial_zh || "");
     if (name.indexOf("奈莫利珠单抗") !== -1) name = "奈莫利珠单抗研究";
     if (product.length > 18) product = product.slice(0, 17) + "…";
@@ -780,6 +799,144 @@
     };
   }
 
+  function renderCriteriaSources(chart, rows) {
+    chart.setAttribute("role", "region");
+    chart.classList.add("kz-c-chart-canvas--criteria-sources");
+    chart.style.height = "auto";
+
+    var note = document.createElement("p");
+    note.className = "kz-c-criteria-note";
+    note.textContent = "按研究并列登记原文；不按并列位置推断条款等价。点击条款可读全文，来源按钮可核对登记记录。";
+    chart.appendChild(note);
+
+    var toolbar = document.createElement("div");
+    toolbar.className = "kz-c-criteria-toolbar";
+    var label = document.createElement("label");
+    label.setAttribute("for", "kz-c-criteria-search");
+    label.textContent = "检索原文";
+    var search = document.createElement("input");
+    search.id = "kz-c-criteria-search";
+    search.type = "search";
+    search.placeholder = "关键词、产品或试验号";
+    search.value = criteriaSearchQuery;
+    label.appendChild(search);
+    toolbar.appendChild(label);
+    var status = document.createElement("span");
+    status.className = "kz-c-criteria-status";
+    status.setAttribute("role", "status");
+    toolbar.appendChild(status);
+    chart.appendChild(toolbar);
+
+    var byTrial = {};
+    rows.forEach(function (row) {
+      var key = String(row.trial_display_id || row.trial_zh || "试验未列示");
+      if (!byTrial[key]) byTrial[key] = [];
+      byTrial[key].push(row);
+    });
+    var trialIds = Object.keys(byTrial).sort();
+    var choice = document.createElement("details");
+    choice.className = "kz-c-criteria-choose";
+    var choiceSummary = document.createElement("summary");
+    choiceSummary.textContent = "选择并列研究（" + trialIds.length + "）";
+    choice.appendChild(choiceSummary);
+    var choices = document.createElement("div");
+    choices.className = "kz-c-criteria-choices";
+    trialIds.forEach(function (trialId) {
+      var checkboxLabel = document.createElement("label");
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = trialId;
+      checkbox.checked = excludedCriteriaTrials[trialId] !== true;
+      checkbox.addEventListener("change", function () {
+        excludedCriteriaTrials[trialId] = !checkbox.checked;
+        writeCriteriaUrl();
+        draw();
+      });
+      checkboxLabel.appendChild(checkbox);
+      checkboxLabel.appendChild(document.createTextNode(trialId));
+      choices.appendChild(checkboxLabel);
+    });
+    choice.appendChild(choices);
+    chart.appendChild(choice);
+
+    var grid = document.createElement("div");
+    grid.className = "kz-c-criteria-grid";
+    chart.appendChild(grid);
+
+    function draw() {
+      grid.replaceChildren();
+      var query = criteriaSearchQuery.trim().toLocaleLowerCase();
+      var shownRows = [];
+      var shownTrials = 0;
+      trialIds.forEach(function (trialId) {
+        if (excludedCriteriaTrials[trialId]) return;
+        var trialRows = byTrial[trialId].filter(function (row) {
+          var searchable = [row.product_zh, trialId, row.source_text, row.original_text]
+            .map(function (value) { return String(value || ""); }).join(" ").toLocaleLowerCase();
+          return !query || searchable.indexOf(query) !== -1;
+        });
+        if (!trialRows.length) return;
+        shownTrials += 1;
+        var card = document.createElement("section");
+        card.className = "kz-c-criteria-trial";
+        var heading = document.createElement("h3");
+        heading.textContent = String(trialRows[0].product_zh || "产品未列示") + "｜" + trialId;
+        card.appendChild(heading);
+        trialRows.forEach(function (row, index) {
+          shownRows.push(row);
+          var item = document.createElement("div");
+          item.className = "kz-c-criteria-item";
+          item.setAttribute("data-criterion-row-id", String(row.row_id));
+          if (row.review_state === "user_modified" || row.disclosure_state === "user_cleared") {
+            var revision = document.createElement("p");
+            revision.className = "kz-c-criteria-revision";
+            revision.textContent = row.disclosure_state === "user_cleared"
+              ? "当前值：用户清除，待重新核实"
+              : "当前修订（未独立复核）：" + String(row.value == null ? row.status || "待核" : row.value);
+            item.appendChild(revision);
+          }
+          var detail = document.createElement("details");
+          var summary = document.createElement("summary");
+          var sourceText = String(row.source_text || row.original_text || "").trim();
+          var preview = sourceText.replace(/\s+/g, " ");
+          summary.textContent = "登记原文 " + String(index + 1) + "｜" +
+            (preview ? preview.slice(0, 80) + (preview.length > 80 ? "…" : "") : "原文待核");
+          var original = document.createElement("div");
+          original.className = "kz-c-criteria-original";
+          original.textContent = sourceText || "原文未在本数据包提供；请核对下方完整表与来源。";
+          detail.appendChild(summary);
+          detail.appendChild(original);
+          item.appendChild(detail);
+          var source = document.createElement("button");
+          source.type = "button";
+          source.className = "kz-c-criteria-source";
+          source.setAttribute("data-evidence-open", String(row.row_id));
+          source.setAttribute("data-row-id", String(row.row_id));
+          source.textContent = "查看来源";
+          item.appendChild(source);
+          card.appendChild(item);
+        });
+        grid.appendChild(card);
+      });
+      if (!shownRows.length) {
+        var empty = document.createElement("p");
+        empty.className = "kz-c-criteria-empty";
+        empty.textContent = "当前关键词与所选研究下没有匹配原文；可清空检索或重新选择研究。";
+        grid.appendChild(empty);
+      }
+      status.textContent = "当前可达 " + shownTrials + " 项研究、" + shownRows.length + " 组登记原文";
+      window.__C_VISIBLE_CHART_ROW_IDS__ = shownRows.map(function (row) {
+        return String(row.row_id);
+      });
+    }
+    search.addEventListener("input", function () {
+      criteriaSearchQuery = search.value;
+      writeCriteriaUrl();
+      draw();
+    });
+    draw();
+  }
+
   function timelineOption(rows) {
     var trials = uniqueValues(rows, "trial_display_id");
     var times = uniqueValues(rows, "time");
@@ -845,7 +1002,7 @@
       "treatment-structure-matrix": "分组、干预与给药结构",
       "design-choice-matrix": "关键设计选择",
       "evidence-coverage": "设计信息公开情况",
-      "criteria-comparison": "人群标准结构比较（柱高为登记原文已记录的结构分组数，非标准条目总数）",
+      "criteria-comparison": "人群标准登记原文对照",
       "core-design-matrix": "核心设计事实比较",
       "trial-design-summary": "本试验全部设计字段",
       "design-fact-matrix": "设计事实比较"
@@ -859,6 +1016,13 @@
     host.appendChild(chart);
     if (!rows.length) {
       chart.textContent = "当前筛选条件下暂无可显示的设计信息";
+      return;
+    }
+    if (kind === "criteria-comparison" && (
+      window.__C_PAGE_ID__ === "inclusion-criteria" ||
+      window.__C_PAGE_ID__ === "exclusion-criteria"
+    )) {
+      renderCriteriaSources(chart, rows);
       return;
     }
     if (kind === "design-choice-matrix" && rows.every(function (row) {

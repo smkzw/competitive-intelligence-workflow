@@ -103,7 +103,7 @@ def test_complete_tables_expand_every_registry_criterion() -> None:
     assert any("Documented recent history" in item["value"] for item in rows)
 
 
-def test_eligibility_chart_compares_public_criterion_counts() -> None:
+def test_eligibility_comparison_keeps_source_text_without_synthetic_counts() -> None:
     payload = json.loads(REAL_INPUT.read_text(encoding="utf-8"))
     data = ReportCPortalData.model_validate(
         hydrate_report_eligibility(payload, REAL_SOURCES)
@@ -118,7 +118,8 @@ def test_eligibility_chart_compares_public_criterion_counts() -> None:
         title="入选标准",
     )
 
-    assert groups[0]["_chart_type"] == "bar"
+    assert groups[0]["_chart_type"] == "status_matrix"
     assert len(groups[0]["rows"]) == 20
-    assert all(item["unit"] == "条" for item in groups[0]["rows"])
-    assert max(item["numeric_value"] for item in groups[0]["rows"]) >= 4
+    assert all(item["source_text"] for item in groups[0]["rows"])
+    assert all(item.get("numeric_value") is None for item in groups[0]["rows"])
+    assert all(item["unit"] != "条" for item in groups[0]["rows"])

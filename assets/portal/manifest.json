@@ -6,16 +6,16 @@
  "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "2b506778e78d629b677e9cdf75c79544ab7c2aaf3160c05bcef7bfdc0f6c3ccc",
-   "bytes": 67854
+   "sha256": "358d0d7c1e3c812807bdb5797cf7e4b1195735c910e5b0664df8c6e8b512f418",
+   "bytes": 68849
   },
   "portal.js": {
    "sha256": "8ede241d7b3d3cf03569286c2b28a3398b4024d46e44f54e14d79ba5c512f505",
    "bytes": 40204
   },
   "charts.js": {
-   "sha256": "aa37d8a982f87defc95b91922d38d5db62c07f3c8d2415211b4561c3556d0d5d",
-   "bytes": 73057
+   "sha256": "2d0f0b8e6c9b2d3b97a0b50ed69d0074b8cda12b2cc4e9aa63b697b36ddd6764",
+   "bytes": 76507
   },
   "evidence-drawer.js": {
    "sha256": "27cd8c560439bdad3dbcb21f796015cfda18f76985ff0ed6b2abed4992a4eb7e",
@@ -46,12 +46,12 @@
    "bytes": 18061
   },
   "report-c.js": {
-   "sha256": "9f1b52b54039088bf7a9fa1d8c5058abf32c0ec82953f0e23ea32c418a9ec659",
-   "bytes": 38094
+   "sha256": "88299db6fb2d5db9ed6af2e28ca6cb65283f16133bad6756a24991887cf58e0b",
+   "bytes": 45479
   },
   "report-c.css": {
-   "sha256": "a36ddb8d389649d86b2add11b14e1c20358ee4f55fad906165c3b42cb7017d0f",
-   "bytes": 13093
+   "sha256": "88221fb3dc673c753ff0c9778905a7b2cc99f8c7dc77eaea747aa1a4a5e07b33",
+   "bytes": 15577
   }
  },
  "logo_source": "assets/brand/cms-logo.svg",

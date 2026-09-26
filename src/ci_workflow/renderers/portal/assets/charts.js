@@ -1106,7 +1106,7 @@
         arms.push(arm);
       }
     }
-    if (!arms.length) return;
+    if (!arms.length) return null;
     var legend = document.createElement("div");
     legend.className = "kz-chart-legend";
     legend.setAttribute("aria-label", "组别图例");
@@ -1121,6 +1121,7 @@
       legend.appendChild(item);
     }
     container.appendChild(legend);
+    return legend;
   }
 
   function undisclosedTitle(group) {
@@ -1175,11 +1176,13 @@
     var rows = group.rows || [];
     var plotted = rows.filter(isRenderable);
     var kind = resolveChartType(group);
+    var singleFact = (kind === "bar" || kind === "line") &&
+      rows.length === 1 && plotted.length === 1;
     var compactMatrix = (kind === "heatmap" || kind === "status_matrix")
       && rows.length <= 4;
     var compact = ((kind === "bar" || kind === "line") && plotted.length <= 4)
       || compactMatrix;
-    var height = kind === "heatmap" || kind === "status_matrix"
+    var height = singleFact ? 0 : kind === "heatmap" || kind === "status_matrix"
       ? compactMatrix ? (rows.length <= 1 ? 160 : 184)
         : Math.min(420, Math.max(260, 140 + rows.length * 28))
       : plotted.length <= 1 ? 168
@@ -1196,15 +1199,51 @@
         return { row_id: String(row.row_id || ""), reason: String(row.difference_note || row.reason || row.disclosure_state || "未形成可绘图形") };
       }),
       observation_count: rows.length,
-      glyph_count: plotted.length,
+      glyph_count: singleFact ? 0 : plotted.length,
       series_count: usesIdentitySeries(group) ? groupedSeriesOrder(rows).length : 1,
-      kind: kind,
+      kind: singleFact ? "single_fact" : kind,
       grid_span: compact ? 6 : 12,
       target_height: height,
       max_height: 420,
       axis_plan: { explicit_min: group.y_axis_min, explicit_max: group.y_axis_max, unit: group.unit || null },
-      reason: compact ? "少量同框观察，紧凑显示" : "多项观察或复杂图形，需要完整绘图区"
+      reason: singleFact ? "单项观察直接列示原值，不生成无比较意义的坐标轴"
+        : compact ? "少量同框观察，紧凑显示" : "多项观察或复杂图形，需要完整绘图区"
     };
+  }
+
+  function renderSingleFact(chartDiv, row) {
+    chartDiv.classList.add("kz-chart-group__chart--single-fact");
+    chartDiv.setAttribute("data-chart-type", "single-fact");
+    chartDiv.setAttribute("role", "group");
+    chartDiv.style.height = "auto";
+    chartDiv.style.minHeight = "0";
+    chartDiv.style.maxWidth = "";
+    var value = row.display_value != null ? row.display_value
+      : row.numeric_value != null ? row.numeric_value : row.value;
+    var unit = String(row.unit || "").trim();
+    var shown = String(value == null ? "已披露；原值待核" : value);
+    if (unit && shown.slice(-unit.length) !== unit) shown += (unit === "%" ? "" : " ") + unit;
+    var number = document.createElement("strong");
+    number.className = "kz-chart-single-fact__value";
+    number.textContent = shown;
+    chartDiv.appendChild(number);
+    var context = document.createElement("span");
+    context.className = "kz-chart-single-fact__context";
+    var trial = /^nct\d+$/i.test(String(row.trial_id || ""))
+      ? String(row.trial_id).toUpperCase() : row.trial_zh;
+    context.textContent = [row.product_zh, trial, row.arm_role_label_zh || armLabel(row)]
+      .filter(Boolean).join(" · ");
+    chartDiv.appendChild(context);
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "kz-chart-single-fact__source";
+    button.setAttribute("data-chart-evidence-open", String(row.row_id));
+    button.setAttribute("data-row-id", String(row.row_id));
+    button.textContent = "查看依据";
+    button.addEventListener("click", function () {
+      activateRow(String(row.row_id), button);
+    });
+    chartDiv.appendChild(button);
   }
 
   function renderChartContainer(container, groupIndex, group) {
@@ -1239,7 +1278,8 @@
       resolvedType !== "status_matrix" &&
       resolvedType !== "heatmap" &&
       resolvedType !== "bubble" &&
-      !usesIdentitySeries(group)
+      !usesIdentitySeries(group) &&
+      plan.kind !== "single_fact"
     ) {
       renderArmLegend(container, group);
     }
@@ -1276,8 +1316,9 @@
     chartDiv.id = "kz-chart-" + groupIndex;
     var chartType = resolveChartType(group);
     if (chartType) chartDiv.setAttribute("data-chart-type", chartType);
-    chartDiv.setAttribute("role", "img");
-    chartDiv.setAttribute("aria-label", title.textContent + " 图形");
+    chartDiv.setAttribute("role", plan.kind === "single_fact" ? "group" : "img");
+    chartDiv.setAttribute("aria-label", title.textContent +
+      (plan.kind === "single_fact" ? " 事实" : " 图形"));
     if (!groupHasRenderable(group)) {
       if (chartType === "heatmap") {
         chartDiv.style.width = "100%";
@@ -1285,6 +1326,8 @@
       } else {
         renderUndisclosedMessage(chartDiv, group);
       }
+    } else if (plan.kind === "single_fact") {
+      chartDiv.style.height = "auto";
     } else {
       chartDiv.style.width = "100%";
       chartDiv.style.height = plan.target_height + "px";
@@ -1737,6 +1780,16 @@
           if (wrapper) {
             wrapper.setAttribute("data-grid-span", String(filteredPlan.grid_span));
             wrapper.setAttribute("data-observation-count", String(filteredPlan.observation_count));
+            var previousLegend = wrapper.querySelector(".kz-chart-legend");
+            if (previousLegend) previousLegend.remove();
+            if (filteredPlan.kind !== "single_fact" && groupHasRenderable(filteredGroup) &&
+                resolveChartType(filteredGroup) !== "status_matrix" &&
+                resolveChartType(filteredGroup) !== "heatmap" &&
+                resolveChartType(filteredGroup) !== "bubble" &&
+                !usesIdentitySeries(filteredGroup)) {
+              var legend = renderArmLegend(wrapper, filteredGroup);
+              if (legend) wrapper.insertBefore(legend, chartEl.parentElement);
+            }
           }
           initGroupChart(chartEl, Number(gIdx), filteredGroup);
         }
@@ -1796,6 +1849,7 @@
   }
 
   function initGroupChart(chartDiv, groupIndex, group) {
+    var plan = presentationPlan(group);
     chartTypeByGroup[groupIndex] = resolveChartType(group);
     allRowIdsByGroup[groupIndex] = collectRowIds(group);
     var rowIds = chartTypeByGroup[groupIndex] === "bar"
@@ -1805,6 +1859,20 @@
     var idxMap = {};
     for (var r = 0; r < rowIds.length; r++) idxMap[rowIds[r]] = r;
     chartRowMap[groupIndex] = idxMap;
+    chartDiv.classList.remove("kz-chart-group__chart--single-fact");
+    chartDiv.setAttribute("data-chart-type", chartTypeByGroup[groupIndex]);
+    chartDiv.setAttribute("role", "img");
+
+    if (plan.kind === "single_fact") {
+      var factRow = group.rows[0];
+      chartDiv.style.width = "100%";
+      renderSingleFact(chartDiv, factRow);
+      if (chartDiv.parentElement) chartDiv.parentElement.tabIndex = -1;
+      optionCache[groupIndex] = withMeta({ series: [{ data: [{
+        value: factRow.numeric_value != null ? factRow.numeric_value : factRow.value
+      }] }] }, rowIds);
+      return;
+    }
 
     if (!groupHasRenderable(group)) {
       if (chartTypeByGroup[groupIndex] !== "heatmap") {
@@ -1825,7 +1893,7 @@
 
     chartDiv.classList.remove("kz-chart-group__chart--undisclosed");
     chartDiv.style.width = "100%";
-    chartDiv.style.height = presentationPlan(group).target_height + "px";
+    chartDiv.style.height = plan.target_height + "px";
     chartDiv.style.minHeight = "";
 
     var option = buildOption(group);
