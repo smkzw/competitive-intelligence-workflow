@@ -91,12 +91,31 @@ def test_partial_precise_view_keeps_all_related_rows_in_physical_b_pages(
     payload = _load_portal_payload()
     payload["efficacy_views"] = {
         "coverage_mode": "partial",
-        "facts": [{**payload["efficacy"][0], "source_version_id": "verified-efficacy"}],
+        "facts": [{
+            **payload["efficacy"][0], "source_version_id": "verified-efficacy",
+            "source_text": "68.4",
+            "source_locator": {
+                "document_role": "registry", "field_path": "$.results.efficacy[0].value",
+                "url": "https://example.org/study/1",
+            },
+        }],
     }
     payload["safety_views"] = {
         "coverage_mode": "partial",
-        "facts": [{**payload["safety"][0], "source_version_id": "verified-safety"}],
+        "facts": [{
+            **payload["safety"][0], "source_version_id": "verified-safety",
+            "source_text": "0",
+            "source_locator": {
+                "document_role": "registry", "field_path": "$.results.safety[0].value",
+                "url": "https://example.org/study/1",
+            },
+        }],
     }
+    payload["efficacy"][1].update({
+        "source_version_id": "verified-field-only",
+        "source_field_path": "$.results.efficacy[1].value",
+        "source_text": "31.2",
+    })
     site = tmp_path / "b-partial"
     render_report_b_site(ReportBPortalData.model_validate(payload), site)
 
@@ -111,6 +130,25 @@ def test_partial_precise_view_keeps_all_related_rows_in_physical_b_pages(
     assert any(
         view["source_version_id"] == "verified-efficacy" for view in efficacy
     )
+    precise_id = payload["efficacy"][0]["row_id"]
+    field_only_id = payload["efficacy"][1]["row_id"]
+    pending_id = payload["efficacy"][2]["row_id"]
+    precise = next(view for view in efficacy if view["row"]["row_id"] == precise_id)
+    field_only = next(view for view in efficacy if view["row"]["row_id"] == field_only_id)
+    pending = next(view for view in efficacy if view["row"]["row_id"] == pending_id)
+    assert precise["source_trace_state"] == "located"
+    assert precise["original_text"] == "68.4"
+    assert precise["locator"]["field_path"] == "$.results.efficacy[0].value"
+    assert field_only["source_trace_state"] == "located"
+    assert field_only["locator"]["field_path"] == "$.results.efficacy[1].value"
+    assert field_only["locator"]["url"] is None
+    assert field_only["locator"]["document_role"] == "source_record"
+    assert pending["source_trace_state"] == "unverified"
+    assert pending["source_version_id"] is None
+    assert pending["locator"] is None
+    assert pending["original_text"] is None
+    assert pending["source_version_label_zh"] == "逐事实来源待核"
+    assert pending["row"]["disclosure_state"] == "reported_value"
 
 
 def test_b_sitemap_expands_every_static_product_and_trial_route(

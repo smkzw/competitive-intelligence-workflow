@@ -1,0 +1,52 @@
+{
+  "work_item": "R24-25 W05B/W07 B source-trace display boundary",
+  "status": "development_candidate",
+  "base_head": "de64e2d23c5e7e63c4a6cf2ef33117d691a9deb3",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/report_b.py": "40f4d61998657d192c7516c3e6f29ffe2b3e20c98b66e3a34dbb9b9ef837a56e",
+    "src/ci_workflow/reports/common/evidence_view.py": "f95cdaf0ea99a664251aa200b09847bb3432ac4874e8fb1f05eed45e8fdd7606"
+  },
+  "fixture": {
+    "path": "fixtures/synthetic/a-complete/inputs/report-data.json",
+    "sha256": "2aa14424da788b68a84558b45d25a13f33423c50475f3782d4483e2743168771",
+    "explicit_view_coverage": "partial",
+    "portal_kind": "B",
+    "efficacy_rows": 8,
+    "safety_rows": 16,
+    "browser_preview": "output/playwright/r24-25-b-source-site-v4",
+    "efficacy_html_sha256": "34ae0e3fc0ed58f59a3727841165189590a0ec082ade18b7558f91903bfe6543",
+    "report_js_sha256": "500fda2de5d2843345dd8d4451b4991d37554a793133ef3b802c04026b318235"
+  },
+  "verification": {
+    "red_family": "three initially failing source-trace/model/URL cases before coherent repair",
+    "related_pytest": "uv run pytest -q tests/unit/reports/test_evidence_view.py tests/reports/b/test_r13_semantic_grouping.py tests/integration/reports/test_b_report_portal.py -k 'not test_b_portal_historical_full_pnh_site'",
+    "related_pytest_result": "67 passed in 2.38s on final related source/test bytes; an earlier 1-fail/66-pass batch used an invalid test input shape and was corrected without changing the production schema",
+    "static": "changed-file Ruff passed; strict mypy passed for report_b.py and evidence_view.py; git diff --check passed",
+    "fixed_real_input_probe": "Unmodified .artifacts/r24-pnh-real-ab-20260926/state/user-fact-builder-inputs/report-b-data.json SHA-256 abf704c9e6f070b2115f6f315c8ccdd3f408797f4c788d500b7ae4402553ae30; in-memory explicit partial selection: 3617 unique efficacy rows, 47 trials, 18 located, 3599 unverified. Before accepting source_field_path, only 1 of the 18 qualified rows was recognized.",
+    "browser": "Ego Lite task space 8, small synthetic B efficacy page at 1728x963 CSS px: unverified 64.1 retains reported_value but has no source version/locator/quote and says pending; field-only located 31.2 shows exact JSON field path without invented URL; linked located 68.4 preserves supplied URL/quote/field path; Escape returned focus to the triggering value button on the earlier same-work-item preview. Screenshots were taken on v3; final-source v4 re-render was byte-identical across the complete site directory (diff -qr exit 0).",
+    "screenshots": [
+      {
+        "path": "output/playwright/r24-25-b-unverified-v3-ego-1728.png",
+        "sha256": "5110637ae24879812acda193d25754c7a764dab059a0505a7defe6ebe77e7df5"
+      },
+      {
+        "path": "output/playwright/r24-25-b-field-only-ego-1728.png",
+        "sha256": "9af047c8cbd65f119b58ab8adbf391e6234fa1c1246e802cb404f34f23fdb891"
+      },
+      {
+        "path": "output/playwright/r24-25-b-linked-v3-ego-1728.png",
+        "sha256": "d7d88567dba75873ad4231420f70fddb761a03e23b8f611a70f279684ddfdfab"
+      }
+    ],
+    "full_development_gate": "not_run_yet",
+    "package_verify": "PACKAGE_OK version=0.1.0a0 stage=development-candidate on final R24-25 source bytes",
+    "independent_science_review": "not_run_yet"
+  },
+  "limitations": [
+    "Browser data are synthetic; example.org is a fixture URL, not an authoritative clinical source.",
+    "Located means the input contains a source version, quote, and precise locator; no CAS re-extraction or medical acceptance was performed by this browser check.",
+    "The fixed real B candidate has only 18/3617 domain efficacy rows with all three source fields; it was not rebuilt as a full B site in this work item.",
+    "One 1728 px browser smoke does not meet the 1440/1600/1920/2560 four-state physical-page gate. The synthetic chart legend remains visually cramped.",
+    "Consumer-registry portability is delegated separately; its pending result cannot be counted as passed."
+  ]
+}

@@ -2066,68 +2066,56 @@ def _unit_for(value: Any, default: str = "") -> str:
     )
 
 
-def _source_version(value: Any) -> str:
+def _source_version(value: Any) -> str | None:
     return _text(
-        _first(
-            value,
-            "source_version_id",
-            "source_version",
-            "captured_version",
-            default="ctgov-fixture",
-        ),
-        "ctgov-fixture",
-    )
+        _first(value, "source_version_id", "source_version", "captured_version", default=None)
+    ) or None
+
+
+def _exact_source_locator(value: Any) -> EvidenceLocator | None:
+    candidate = _first(value, "source_locator", "locator", "source_location", default=None)
+    if isinstance(candidate, (EvidenceLocator, Mapping)):
+        try:
+            locator = EvidenceLocator.model_validate(candidate)
+        except (TypeError, ValueError):
+            return None
+        field_path = locator.field_path or ""
+        if (
+            field_path.startswith(("/", "~", "file:"))
+            or re.match(r"^[A-Za-z]:[\\/]", field_path)
+            or (locator.url or "").lower().startswith("file:")
+        ):
+            return None
+        return locator
+    # Existing source-bound builder inputs carry the exact JSON field directly.
+    # It is a source pointer, not evidence that the source is a registry or has
+    # a public URL; neither property may be inferred from a trial identifier.
+    field_path = _text(_first(value, "source_field_path", default=None))
+    if field_path.startswith(("$.", "$[")):
+        return EvidenceLocator(document_role="source_record", field_path=field_path)
+    return None
 
 
 def _source_locator(value: Any, row_id: str) -> EvidenceLocator:
-    candidate = _first(value, "source_locator", "locator", "source_location", default=None)
-    if isinstance(candidate, EvidenceLocator):
-        return candidate
-    if isinstance(candidate, Mapping):
-        try:
-            return EvidenceLocator.model_validate(candidate)
-        except (TypeError, ValueError):
-            pass
-    return EvidenceLocator(document_role="registry", heading="登记结果")
-
-
-_DEEP_LINK_PREFIX = "https://clinicaltrials.gov/study/"
-
-
-def _deep_link_for(value: Any, current_url: str | None) -> str | None:
-    """按行上试验标识（NCTxxxx）构造登记深链；无法识别时保留原链接。
-
-    独立复核 B r37（issue-4）："打开原文"指向 CT.gov 首页不构成可回溯定位。
-    """
-    nct = _text(
-        _first(
-            value,
-            "trial_id",
-            "nct_id",
-            "trial",
-            default=None,
-        )
-    ).upper()
-    if re.fullmatch(r"NCT\d{8}", nct):
-        return f"{_DEEP_LINK_PREFIX}{nct}"
-    return current_url
+    return _exact_source_locator(value) or EvidenceLocator(
+        document_role="registry", heading="登记结果"
+    )
 
 
 def _display_locator(value: Any, row_id: str) -> EvidenceLocator:
-    """Hide storage keys while keeping a useful source-facing anchor."""
+    """Keep the supplied source anchor without inventing a registry citation."""
     locator = _source_locator(value, row_id)
     visible = {
         "document_role": locator.document_role,
+        "field_path": locator.field_path,
         "heading": locator.heading,
         "page": locator.page,
         "table": locator.table,
+        "row": locator.row,
         "column": locator.column,
         "paragraph": locator.paragraph,
         "url": locator.url,
     }
-    # 独立复核 B r37（issue-4）：定位链接必须能回到具体登记记录，
-    # 而非 CT.gov 首页——按行上的试验标识构造深链
-    visible["url"] = _deep_link_for(value, locator.url)
     if not any(value for key, value in visible.items() if key != "document_role"):
         visible["heading"] = "登记结果"
     return EvidenceLocator.model_validate(visible)
@@ -3095,13 +3083,23 @@ def _evidence_view(
     value_field = _evidence_field(None, state) if numeric is None else _evidence_field(numeric)
     group = _text(row.get("arm"), "组别未列示")
     source_id = _source_version(source)
-    source_label = _text(
-        _first(source, "source_version_label_zh", "source_provider", "source_label", default=None),
-        "来源待核",
+    source_quote = _text(_first(source, "source_text", default=None))
+    exact_locator = _exact_source_locator(source)
+    has_exact_anchor = exact_locator is not None and any(
+        getattr(exact_locator, field) is not None
+        for field in ("field_path", "page", "table", "row", "column", "paragraph")
     )
-    original_text = _text(
-        _first(source, "source_text", "original_definition", default=None)
-    )
+    located = bool(source_id and source_quote and has_exact_anchor)
+    source_label = "逐事实来源待核"
+    if located:
+        source_label = _text(
+            _first(
+                source, "source_version_label_zh", "source_provider", "source_label",
+                default=None,
+            ),
+            "来源版本已定位",
+        )
+    original_text = source_quote if located else ""
     report_row = ReportRow.model_construct(
         row_id=row_id,
         fact_id=_source_row_id(source, row_id),
@@ -3136,10 +3134,15 @@ def _evidence_view(
         "denominator": _evidence_field(
             _first(source, "denominator", default=row.get("denominator")), state
         ),
-        "source_version_id": source_id,
+        "source_trace_state": "located" if located else "unverified",
+        "source_version_id": source_id if located else None,
         "source_version_label_zh": source_label,
-        "locator": _display_locator(source, row_id),
-        "explanation": _evidence_field(f"该记录保留来源披露状态：{_state_label(state)}。"),
+        "locator": _display_locator(source, row_id) if located else None,
+        "explanation": _evidence_field(
+            f"该记录保留来源披露状态：{_state_label(state)}。"
+            if located else "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
+                            "不能作为已验科学结论。"
+        ),
         "original_text": original_text or None,
         "original_text_status": (
             OriginalTextStatus.PROVIDED

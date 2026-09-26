@@ -141,6 +141,34 @@ def test_general_evidence_view_binds_row_snapshot_source_version_and_locator() -
     assert view.locator.table == "基线特征表"
 
 
+def test_unverified_source_trace_cannot_carry_a_version_locator_or_quote() -> None:
+    pending = validate_evidence_view_payload(evidence(
+        source_trace_state="unverified",
+        source_version_id=None,
+        source_version_label_zh="逐事实来源待核",
+        locator=None,
+    ))
+    assert pending.source_version_id is None
+    assert pending.locator is None
+    assert pending.row.disclosure_state.value == "reported_value"
+    for changed in (
+        {"source_version_id": "source-version-forged"},
+        {"locator": _LOCATOR},
+        {"original_text": "未经核对的原文", "original_text_status": "provided"},
+    ):
+        forged = evidence(
+            source_trace_state="unverified",
+            source_version_id=None,
+            source_version_label_zh="逐事实来源待核",
+            locator=None,
+        )
+        forged.update(changed)
+        with pytest.raises(EvidenceViewBoundaryError, match="来源待核"):
+            validate_evidence_view_payload(forged)
+    with pytest.raises(EvidenceViewBoundaryError, match="来源版本|定位"):
+        validate_evidence_view_payload(evidence(source_version_id=None))
+
+
 def test_reported_value_requires_concrete_value() -> None:
     with pytest.raises(EvidenceViewBoundaryError, match="已报告"):
         validate_evidence_view_payload(evidence(value=field(state="not_yet_disclosed")))

@@ -260,7 +260,7 @@ class UserEditDisclosure(BaseModel):
 
 
 class EvidenceView(BaseModel):
-    """一条规范证据：稳定 row_id、单一锁定快照、来源版本与精确 locator。
+    """一条规范证据：稳定 row_id、单一快照、可核验来源或显式待核状态。
 
     临床事实由本模型携带并与披露状态交叉校验；基线/完成情况观察必须携带
     完整扩展字段族，通用观察不得携带扩展字段。
@@ -285,9 +285,10 @@ class EvidenceView(BaseModel):
     numerator: EvidenceField
     denominator: EvidenceField
 
-    source_version_id: str
+    source_trace_state: Literal["located", "unverified"] = "located"
+    source_version_id: str | None
     source_version_label_zh: str
-    locator: EvidenceLocator
+    locator: EvidenceLocator | None
 
     explanation: EvidenceField
     original_text: str | None = None
@@ -312,8 +313,8 @@ class EvidenceView(BaseModel):
 
     @field_validator("source_version_id")
     @classmethod
-    def _text_not_blank(cls, value: str) -> str:
-        return _text(value)
+    def _source_id_not_blank_when_present(cls, value: str | None) -> str | None:
+        return None if value is None else _text(value)
 
     @field_validator("product_zh", "trial_zh", "element_zh", "source_version_label_zh")
     @classmethod
@@ -334,6 +335,16 @@ class EvidenceView(BaseModel):
 
     @model_validator(mode="after")
     def _extension_and_disclosure_integrity(self) -> Self:
+        if self.source_trace_state == "located":
+            if self.source_version_id is None or self.locator is None:
+                raise ValueError("已定位来源必须同时包含来源版本与精确定位")
+        elif (
+            self.source_version_id is not None
+            or self.locator is not None
+            or self.original_text is not None
+            or self.original_text_status is OriginalTextStatus.PROVIDED
+        ):
+            raise ValueError("来源待核不得携带来源版本、定位或原文引文")
         is_extension = self.observation_kind in _EXTENSION_KINDS
         present = [name for name in _EXTENSION_FIELDS if getattr(self, name) is not None]
         if is_extension:

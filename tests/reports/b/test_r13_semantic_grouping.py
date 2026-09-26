@@ -10,6 +10,7 @@ import pytest
 from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
+    _display_locator,
     _efficacy_records,
     _filter_dimensions,
     _group,
@@ -450,6 +451,66 @@ def test_partial_precise_view_rejects_conflicting_overlap() -> None:
     trials = {trial.id: trial.display_id for trial in data.trials}
     with pytest.raises(ValueError, match="来源视图.*领域行.*冲突"):
         _efficacy_records(data, names, trials)
+
+
+def test_publication_locator_is_not_replaced_by_registry_trial_link() -> None:
+    locator = _display_locator({
+        "trial_id": "NCT04820530",
+        "source_locator": {
+            "document_role": "publication",
+            "table": "Table 2",
+            "url": "https://example.org/article/123",
+        },
+    }, "eff-publication")
+    assert locator.url == "https://example.org/article/123"
+    assert locator.table == "Table 2"
+
+
+def test_registered_json_field_anchor_is_visible_in_b_evidence() -> None:
+    locator = _display_locator({
+        "source_locator": {
+            "document_role": "registry",
+            "field_path": "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]",
+            "url": "https://clinicaltrials.gov/study/NCT04820530",
+        },
+    }, "eff-source-row")
+    assert locator.field_path == (
+        "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]"
+    )
+
+
+@pytest.mark.parametrize("locator_form", ["source_field_path", "source_locator"])
+def test_untrusted_local_path_cannot_be_promoted_to_source_field(
+    locator_form: str,
+) -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    payload["efficacy_views"] = {"coverage_mode": "partial", "facts": []}
+    data = ReportBPortalData.model_validate(payload)
+    names = {item.id: item.name for item in data.products}
+    trials = {item.id: item.name for item in data.trials}
+    row, _source = _efficacy_records(data, names, trials)[0]
+    source = {
+        "source_version_id": "claimed-version",
+        locator_form: (
+            "/Users/example/internal.json"
+            if locator_form == "source_field_path"
+            else {"document_role": "registry", "field_path": "/Users/example/internal.json"}
+        ),
+        "source_text": "68.4",
+    }
+    from ci_workflow.renderers.portal.report_b import _evidence_view
+    from ci_workflow.reports.common.evidence_view import EvidenceObservationKind
+    view = _evidence_view(
+        data, row=row, source=source, page_id="efficacy",
+        observation_kind=EvidenceObservationKind.GENERAL,
+        names=names, trial_names=trials,
+    )
+    assert view.source_trace_state == "unverified"
+    assert view.locator is None
 
 
 def test_explicit_complete_view_must_cover_every_domain_row() -> None:
