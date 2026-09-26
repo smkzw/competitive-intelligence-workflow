@@ -198,18 +198,48 @@
   }
 
   function groupedCategoryAssignments(rows) {
-    var occurrences = {};
+    var cells = {};
+    var conflictingClusters = {};
+    var contextCount = {};
+    var seenContexts = {};
     var assignments = [];
     for (var i = 0; i < rows.length; i++) {
       var base = groupedIdentity(rows[i]);
+      var context = String(rows[i]._chart_comparison_context_key || "");
       var series = groupedSeriesKey(rows[i]);
-      var cell = base + "\u0001" + series;
-      var occurrence = occurrences[cell] || 0;
-      occurrences[cell] = occurrence + 1;
+      var cluster = base + "\u0001" + context;
+      var cell = cluster + "\u0001" + series;
+      cells[cell] = (cells[cell] || 0) + 1;
+      if (!seenContexts[cluster]) {
+        seenContexts[cluster] = true;
+        contextCount[base] = (contextCount[base] || 0) + 1;
+      }
+    }
+    for (var c = 0; c < rows.length; c++) {
+      var checkedCluster = groupedIdentity(rows[c]) + "\u0001" +
+        String(rows[c]._chart_comparison_context_key || "");
+      var checkedCell = checkedCluster + "\u0001" + groupedSeriesKey(rows[c]);
+      if (cells[checkedCell] > 1) conflictingClusters[checkedCluster] = true;
+    }
+    for (var j = 0; j < rows.length; j++) {
+      var row = rows[j];
+      var identity = groupedIdentity(row);
+      var contextKey = String(row._chart_comparison_context_key || "");
+      var seriesKey = groupedSeriesKey(row);
+      var groupKey = identity + "\u0001" + contextKey;
+      var needsSeparateCategory = !contextKey || conflictingClusters[groupKey];
+      var contextLabel = String(row._chart_comparison_context_label || "");
+      var label = groupedIdentityLabel(row);
+      if (needsSeparateCategory) {
+        if (!row.row_id) throw new Error("比较上下文冲突的图点缺少来源行身份");
+        label += "｜" + (contextLabel || "上下文待核") + "｜" +
+          groupedSeriesLabel(row, seriesKey) + "（独立观察）";
+      } else if (contextCount[identity] > 1 && contextLabel) {
+        label += "｜" + contextLabel;
+      }
       assignments.push({
-        key: occurrence ? base + "\u0001repeat:" + occurrence : base,
-        label: groupedIdentityLabel(rows[i]) + (occurrence ? "｜第" + (occurrence + 1) + "项同身份观察" : ""),
-        repeated: occurrence > 0
+        key: needsSeparateCategory ? groupKey + "\u0001unpaired:" + String(row.row_id) : groupKey,
+        label: label
       });
     }
     return assignments;
@@ -217,8 +247,8 @@
 
   function groupedBarOption(group) {
     var categories = [];
-    var categoryIndex = {};
     var categoryKeys = [];
+    var categoryLabels = {};
     var rowsByCategory = {};
     var seriesRows = {};
     var seriesOrder = [];
@@ -229,9 +259,8 @@
     for (var i = 0; i < group.rows.length; i++) {
       var row = group.rows[i];
       var categoryKey = assignments[i].key;
-      if (!categoryIndex.hasOwnProperty(categoryKey)) {
-        categoryIndex[categoryKey] = categories.length;
-        categories.push(assignments[i].label);
+      if (!Object.prototype.hasOwnProperty.call(categoryLabels, categoryKey)) {
+        categoryLabels[categoryKey] = assignments[i].label;
         categoryKeys.push(categoryKey);
         rowsByCategory[categoryKey] = {};
       }
@@ -250,6 +279,11 @@
       }
       if (!unitLabel && row.unit) unitLabel = String(row.unit);
     }
+    categoryKeys.sort(function (left, right) {
+      return String(categoryLabels[left]).localeCompare(String(categoryLabels[right]), "zh-Hans-CN")
+        || left.localeCompare(right);
+    });
+    categories = categoryKeys.map(function (key) { return categoryLabels[key]; });
     seriesOrder = groupedSeriesOrder(group.rows);
     var series = [];
     for (var s = 0; s < seriesOrder.length; s++) {
@@ -1125,6 +1159,7 @@
   }
 
   function undisclosedTitle(group) {
+    if (group && group.empty_message) return String(group.empty_message);
     var rows = (group && group.rows) || [];
     var total = 0;
     var notApplicable = 0;
@@ -1266,11 +1301,13 @@
     var indicatorTitle = indicatorNames.length === 1 ? indicatorNames[0] : "多项可比指标";
     var dimensionTitle = group.title_zh || "";
     var completeTitle = group.title_complete === true;
-    title.textContent = completeTitle
-      ? dimensionTitle || indicatorTitle
-      : dimensionTitle && dimensionTitle !== "全部指标"
-        ? indicatorTitle + "｜" + dimensionTitle
-        : indicatorTitle;
+    title.textContent = group.empty_message && !groupHasRenderable(group)
+      ? dimensionTitle || "比较结果"
+      : completeTitle
+        ? dimensionTitle || indicatorTitle
+        : dimensionTitle && dimensionTitle !== "全部指标"
+          ? indicatorTitle + "｜" + dimensionTitle
+          : indicatorTitle;
     container.appendChild(title);
     var resolvedType = resolveChartType(group);
     if (
@@ -1303,7 +1340,7 @@
         statusNotes.push(noteText);
       }
     }
-    if (statusNotes.length) {
+    if (statusNotes.length && !group.empty_message) {
       var statusNote = document.createElement("div");
       statusNote.className = "kz-chart-group__status-note";
       statusNote.setAttribute("role", "note");

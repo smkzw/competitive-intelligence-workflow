@@ -1,0 +1,99 @@
+{
+  "schema_version": "r24-19-development-checkpoint-1",
+  "status": "development_candidate_not_scientific_or_release_acceptance",
+  "base_head": "95fc94a8d910d4ef30c21805c4772af2d4b35241",
+  "scope": [
+    "B grouped bars pair treatment/control only under an explicit same semantic and exact observation context; unknown or duplicate cells remain independent",
+    "B matrix labels treatment-control percentage differences in percentage points, not percent",
+    "B matrix keeps related studies without a qualified bubble in a folded reachable list, and an empty comparison is not mislabeled as an unpublished source result",
+    "B view-only efficacy records survive an intentionally empty typed matrix, while A-only result completeness remains enforced on A inputs",
+    "Old desktop/mobile implementation-detail assertions were migrated only where the 0923V1 desktop or current fact/graph contract replaced them"
+  ],
+  "fixed_input": {
+    "path": "runs/pnh-vertical/abc-v106/state/derived/report-b-data.json",
+    "sha256": "c7ef87082e05de6094bf129b626e64e5506592aab15cb5695e281657b382147f",
+    "nature": "Historical PNH derived payload dated 2026-09-06; not refreshed dynamic sources, not a current accepted research package"
+  },
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/report_a.py": "a267328ccc32a5288d555b0550f0d75cec73cf42bc8d1f4bb2a0b47041d3fcce",
+    "src/ci_workflow/renderers/portal/report_b.py": "ae2ad0d3a7f98e6ccb002fe2d5afd3a2e47dc0a5c917bbf086f4c1f1ccd70cdf",
+    "src/ci_workflow/renderers/portal/assets/charts.js": "ff7b21006a7c27430bfeffe4e270a41f69f5c064ce9d000d473417369a3178f7",
+    "src/ci_workflow/renderers/portal/templates/b/page.html.j2": "ef9bdf16f71d3976ff31cb28e7489fca6654a8140032c1b748d4c144adab97d4",
+    "assets/portal/charts.js": "ff7b21006a7c27430bfeffe4e270a41f69f5c064ce9d000d473417369a3178f7",
+    "assets/portal/manifest.json": "8e18c054c8b4bcc04b753e6a9d637cd24193e07bb50d6f014fdda04c39b25350"
+  },
+  "test_sha256": {
+    "tests/reports/b/test_r13_semantic_grouping.py": "5735e28c6725a2e230e746e65577a9f799f8fd9e64d2be0edbb5641dcbb9911a",
+    "tests/browser/test_chart_table_sync.py": "7cb9b2a34956fcbdd3579d46ef79fddf15ea24473491895d4baeea952dab2ee7",
+    "tests/browser/test_b_portal.py": "1004e5f800ccdc9f956dba597ad1893e0b8ae1b3c917b1b00edf18717c615acf"
+  },
+  "preview": {
+    "path": ".artifacts/r24-pnh-candidate-20260926/site-b-r24-19-final-compact",
+    "rendered_html_pages": 70,
+    "matrix_html_sha256": "12e87d044b8242366baebb4c8ad37ee7c7c0f537715e07099b6a95df1aaf17a6",
+    "participant_flow_html_sha256": "3f3a641517ec9116a86b5e140a499df9702093047557dfc54c3d675459cf6b55"
+  },
+  "real_browser": {
+    "browser": "Chromium, local HTTP preview, 1600 CSS px",
+    "participant_flow": {
+      "source_row_ids_and_new_chart_points": "12/12 visible points and distinct TP1/TP2 categories; page retains 48 complete-table rows",
+      "period_labels": [
+        "NCT04469465｜给药 第1周期 （TP1） · 登记期 p0",
+        "NCT04469465｜给药 第2周期 （TP2） · 登记期 p1"
+      ],
+      "page_horizontal_overflow": false,
+      "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-19-b-flow-compact-1600.png",
+      "screenshot_sha256": "30a2d24049ed62fedaf2eddf7d5880a6c376ed49e07568e2703ff658ad7b65d1"
+    },
+    "matrix": {
+      "empty_title": "当前未形成可绘制的试验内比较",
+      "repeated_row_status_notes": 0,
+      "related_studies_reachable_in_folded_list": 6,
+      "page_horizontal_overflow": false,
+      "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-19-b-matrix-honest-empty-1600.png",
+      "screenshot_sha256": "b27decfea4e923c6d51ece519d176b4451cc5c91e93ca41c1cbefce3e71d5072"
+    },
+    "view_only_empty_typed_matrix": {
+      "input": "unchanged positive B-PNH fixture with all three efficacy facts in efficacy_views, empty legacy efficacy, TypedMatrixView(rows=())",
+      "preview_path": ".artifacts/r24-pnh-candidate-20260926/site-b-r24-19-view-only-final",
+      "efficacy_fact_rows": 3,
+      "related_studies_reachable": ["APPLY-PNH", "APPOINT-PNH"],
+      "chart_status_rows": 2,
+      "page_horizontal_overflow": false,
+      "html_sha256": "04b9cbf6ec8e720c6a15400a68d3c2f608006c7fef80c8e5641d65929e4f",
+      "screenshot": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-19-b-view-only-empty-1600.png",
+      "screenshot_sha256": "02121c15fd5c1d39ad8702343885eefdb8bc919aa0107479d307b7b879b13cc0"
+    }
+  },
+  "verification": {
+    "red_cases": [
+      "Swapped treatment/control period order paired unrelated observations in the old chart logic",
+      "Repeated same-series cell and missing context lacked an independent-category guard",
+      "Two percent estimates were labeled percent after subtraction instead of percentage points",
+      "An unformed comparison was described as an unpublished source result",
+      "The empty comparison repeated the same reason for every row above its full table"
+    ],
+    "related_batch_before_independent_findings": "196 passed in 220.55s on the pre-review R24-19 source bytes",
+    "related_batch_after_scientific_fixes_before_compact_label": "199 passed in 219.63s; all B semantic, shared chart and B browser nodes",
+    "current_label_and_context_targeted": "5 passed, 21 deselected; focused Ruff and strict mypy two renderer modules passed; real Chromium flow and view-only empty matrix inspected after final edits",
+    "syntax_mirror_ruff_diff": "node --check charts.js, validate_portal_asset_mirror, focused Ruff, git diff --check all passed",
+    "quality_gate": "GATE_OK quality-only on final bytes: Ruff src/tests/tools; strict mypy 245 source files; active unit/contract 1066 passed; retained compatibility 20 passed; layering 7 passed; legacy reference check passed",
+    "independent_scientific_challenge": "Read-only fresh-context native subagent; exact runtime model/effort not exposed. Found P1 raw time_window/cohort omission and P2 empty typed-matrix/view-only omission. Both reproduced RED, fixed, targeted GREEN and real Chromium inspected. No second independent final acceptance review claimed."
+  },
+  "cleanup": {
+    "removed_only_generated_intermediate_preview_directories": 8,
+    "disk_reclaimed_approx_mb": 168,
+    "retained_previews": [
+      ".artifacts/r24-pnh-candidate-20260926/site-b-r24-19-final-compact",
+      ".artifacts/r24-pnh-candidate-20260926/site-b-r24-19-view-only-final"
+    ],
+    "retained_source_snapshots_and_historical_receipts": true
+  },
+  "limits": [
+    "This is a fixed old payload and a local development preview, not a newly researched or scientifically approved B report",
+    "Exact per-fact source version and B/C consumer closure, 24 portals, full four-viewport/four-state visual acceptance, edit/share, three hosts, recovery and RC remain open",
+    "An earlier Chromium preview exposed repeated missing-data prose and then excessively long registry IDs in the axis; compacted in the final preview without dropping rows. The earlier screenshots remain historical failure/development evidence, not final visual acceptance.",
+    "The comparison-context key prevents false visual pairings but does not itself authorize cross-trial comparability or head-to-head inference"
+  ],
+  "rebuild_command": "uv run python -c 'from pathlib import Path; from ci_workflow.renderers.portal.report_b import load_report_b_data, render_report_b_site; p=Path(\"runs/pnh-vertical/abc-v106/state/derived/report-b-data.json\"); out=Path(\".artifacts/r24-pnh-candidate-20260926/site-b-r24-19-rebuild-next\"); print(len(render_report_b_site(load_report_b_data(p), out)))'"
+}

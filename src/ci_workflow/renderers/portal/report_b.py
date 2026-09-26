@@ -19,7 +19,7 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Literal, Self, cast
+from typing import Any, ClassVar, Literal, Self, cast
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -1362,6 +1362,7 @@ class ReportBPortalData(ReportAPortalData):
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True, arbitrary_types_allowed=True)
+    require_a_result_completeness: ClassVar[bool] = False
 
     safety: tuple[ReportBSafetyRow, ...] = Field(min_length=1)
     report_snapshot_id: str | None = None
@@ -2807,7 +2808,13 @@ def _synthetic_status_records(
                     "y_value": None,
                     "size": None,
                     "renderable": False,
+                    "disclosure_state": "not_applicable",
                     "status": "未形成封闭 typed 比较",
+                    "reason": (
+                        "当前数据包未形成经验证的试验内疗效—安全性比较；"
+                        "原因需核对对照、人群、统计口径和来源版本，"
+                        "不等于研究未公开结果"
+                    ),
                 }
             )
         return row
@@ -3292,6 +3299,46 @@ def _group_title(
     return " · ".join(dict.fromkeys(part for part in parts if part))
 
 
+def _chart_comparison_context(row: Mapping[str, Any]) -> tuple[str, str]:
+    """Keep exact observation timing separate from a broad clinical time band.
+
+    This key only licenses a shared chart category. It is not a claim that
+    different trial estimates are interchangeable or head-to-head evidence.
+    """
+    axes = (
+        *_semantic_group_key(row, include_time=True, include_domain=True),
+        _text(row.get("time")),
+        _text(row.get("period")),
+        _text(row.get("actual_timepoint")),
+        _text(row.get("actual_timepoint_unit")),
+        _text(row.get("visit")),
+        _text(row.get("analysis_population")),
+        _text(row.get("time_window")),
+        _text(row.get("cohort")),
+    )
+    key = hashlib.sha256(_canonical_json(axes)).hexdigest()
+    time = _text(row.get("time"))
+    window = _text(row.get("time_window"))
+    time_tp = re.search(r"TP\s*(\d+)", time, flags=re.IGNORECASE)
+    window_tp = re.search(r"TP\s*(\d+)", window, flags=re.IGNORECASE)
+    same_tp = bool(time_tp and window_tp and time_tp.group(1) == window_tp.group(1))
+    label_parts = []
+    if time and (not window or not same_tp):
+        label_parts.append(time)
+    if window and window not in label_parts:
+        label_parts.append(window)
+    period = re.sub(r"^nct\d{8}-", "", _text(row.get("period")), flags=re.IGNORECASE)
+    if period and period not in {time, window}:
+        label_parts.append(f"登记期 {period}" if re.fullmatch(r"p\d+", period) else period)
+    cohort = re.sub(r"^nct\d{8}-", "", _text(row.get("cohort")), flags=re.IGNORECASE)
+    if cohort and cohort.casefold() not in {"全部", "all"} and cohort not in label_parts:
+        label_parts.append(cohort)
+    label = " · ".join(dict.fromkeys(label_parts)) or _text(
+        row.get("time_window_band_label_zh"), "时间点未列示"
+    )
+    return key, label
+
+
 def _group(
     title: str,
     records: Sequence[tuple[dict[str, Any], Any]],
@@ -3305,6 +3352,7 @@ def _group(
 ) -> dict[str, Any]:
     series_variants: dict[tuple[str, str], set[str]] = defaultdict(set)
     series_variant_by_row: dict[int, str] = {}
+    details_by_variant: dict[tuple[str, str, str], set[str]] = defaultdict(set)
     series_indexes: dict[tuple[str, str], list[int]] = defaultdict(list)
     identity_aware = cross_trial or identity_series
     if identity_aware:
@@ -3314,8 +3362,18 @@ def _group(
             variant_key = (identity_key, base_key)
             variant = _semantic_token(_text(row.get("group_id"), _text(row.get("arm_detail"))))
             series_variant_by_row[index] = variant
-            series_variants[variant_key].add(variant)
+            details_by_variant[(identity_key, base_key, variant)].add(
+                _semantic_token(_text(row.get("arm_detail")))
+            )
             series_indexes[variant_key].append(index)
+        for index, (row, _source) in enumerate(records):
+            identity_key = "::".join((_text(row.get("product_id")), _text(row.get("trial_id"))))
+            base_key = _chart_series_key(row)
+            variant = series_variant_by_row[index]
+            if len(details_by_variant[(identity_key, base_key, variant)]) > 1:
+                variant += ":" + _semantic_token(_text(row.get("arm_detail")))
+            series_variant_by_row[index] = variant
+            series_variants[(identity_key, base_key)].add(variant)
     duplicate_series_keys: dict[int, str] = {}
     for (_identity_key, base_key), variants in series_variants.items():
         if len(variants) < 2:
@@ -3348,6 +3406,9 @@ def _group(
             series_key = duplicate_series_keys.get(index, base_series_key)
             copied["_chart_series_key"] = series_key
             copied["_chart_series_label"] = _chart_series_label(copied, series_key)
+            context_key, context_label = _chart_comparison_context(copied)
+            copied["_chart_comparison_context_key"] = context_key
+            copied["_chart_comparison_context_label"] = context_label
             copied["_chart_time_key"] = _text(
                 copied.get("time_window_band"),
                 _text(copied.get("time"), "时间点未列示"),
@@ -3804,16 +3865,20 @@ def _groups_for_page(
                 _text(row.get("size_basis"), "明确样本量"),
             )].append(item)
         for (x_unit, y_unit, size_basis), facet_records in typed_facets.items():
+            # 两组百分比相减得到百分点；原臂的百分比单位仍留在源投影中。
+            difference_unit = "百分点" if x_unit == "%" else x_unit
             for bucket in proposed_semantic_buckets(
                 (tuple(facet_records),), semantic_proposals, descriptive_only=True,
                 approved_merges=semantic_adjudications,
             ):
                 group = _group("疗效与安全性观察位置", bucket, chart_type=chart_type)
+                if all(row.get("_synthetic") is True for row in group["rows"]):
+                    group["empty_message"] = "当前未形成可绘制的试验内比较"
                 group.update(
-                    x_axis_label_zh=f"试验内疗效差（{x_unit or '数值'}）",
+                    x_axis_label_zh=f"试验内疗效差（{difference_unit or '数值'}）",
                     y_axis_label_zh=f"治疗组安全性观察值（{y_unit or '数值'}）",
                     size_label_zh=f"气泡大小：{size_basis}",
-                    x_unit=x_unit,
+                    x_unit=difference_unit,
                     y_unit=y_unit,
                     size_basis=size_basis,
                 )
@@ -4424,8 +4489,6 @@ def _page_records_unfiltered(
         values = _matrix_records(data, names, trial_names)
         if values:
             return values
-        if _view_source(data, "matrix_view") is not None:
-            return ()
         return _synthetic_status_records(
             data,
             page_id=page_id,
@@ -4650,6 +4713,19 @@ def _render_page_context(
         lead = "当前没有可绘制的真实数值，完整数据表保留原始披露状态。"
     else:
         lead = page.responsibility_zh
+    matrix_unplotted_trials: tuple[str, ...] = ()
+    if page_id == "efficacy-safety-matrix":
+        plotted_trials = {
+            _text(row.get("trial_id"))
+            for row, _source in records if row.get("renderable") is True
+        }
+        related_trials = {
+            _text(row.get("trial_id")) for row, _source in efficacy if row.get("trial_id")
+        }
+        matrix_unplotted_trials = tuple(
+            trial_names.get(trial_id, trial_id)
+            for trial_id in sorted(related_trials - plotted_trials)
+        )
     section_titles = {
         "overview": "关键结果",
         "efficacy": "疗效结果",
@@ -4701,6 +4777,7 @@ def _render_page_context(
         "has_domain_empty_state": has_domain_empty_state,
         "has_drawable_data": has_drawable_data,
         "filter_note": filter_note,
+        "matrix_unplotted_trials": matrix_unplotted_trials,
         "nav_groups": _nav_groups(catalog, prefix=prefix, current=current or page.id),
         "home_href": f"{prefix}{catalog.pages[0].id}.html",
         "data_prefix": f"{prefix}data",

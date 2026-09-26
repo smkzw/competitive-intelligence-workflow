@@ -5,15 +5,22 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
+from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
     _efficacy_records,
     _filter_dimensions,
+    _group,
     _groups_for_page,
+    _matrix_records,
     _page_records,
     _project_record,
     _safety_records,
+    _synthetic_status_records,
     load_report_b_data,
+    render_report_b_site,
 )
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -241,6 +248,139 @@ def test_duplicate_same_role_arms_keep_distinct_human_labels() -> None:
         "治疗组（高剂量）",
         "治疗组（低剂量）",
     }
+
+
+def test_chart_comparison_context_pairs_only_same_exact_period() -> None:
+    treatment_1 = _project_efficacy("treatment-1", "EASI-75")
+    treatment_2 = dict(treatment_1, row_id="treatment-2")
+    control_1 = dict(treatment_1, row_id="control-1", arm_role="control", arm="对照组")
+    control_2 = dict(control_1, row_id="control-2")
+    for row, period in (
+        (treatment_1, "Treatment Period 1"),
+        (treatment_2, "Treatment Period 2"),
+        (control_1, "Treatment Period 1"),
+        (control_2, "Treatment Period 2"),
+    ):
+        row["time"] = period
+    group = _group(
+        "分期结果", tuple((row, None) for row in (
+            treatment_1, treatment_2, control_2, control_1,
+        )), chart_type="bar", identity_series=True,
+    )
+    contexts = {row["row_id"]: row["_chart_comparison_context_key"] for row in group["rows"]}
+    assert contexts["treatment-1"] == contexts["control-1"]
+    assert contexts["treatment-2"] == contexts["control-2"]
+    assert contexts["treatment-1"] != contexts["treatment-2"]
+
+
+def test_chart_context_keeps_raw_window_and_cohort_separate() -> None:
+    for field in ("time_window", "cohort"):
+        treatment_1 = _project_efficacy("treatment-1", "EASI-75")
+        treatment_2 = dict(treatment_1, row_id="treatment-2")
+        control_1 = dict(treatment_1, row_id="control-1", arm_role="control", arm="对照组")
+        control_2 = dict(control_1, row_id="control-2")
+        for row, period in (
+            (treatment_1, "Treatment Period 1"),
+            (treatment_2, "Treatment Period 2"),
+            (control_1, "Treatment Period 1"),
+            (control_2, "Treatment Period 2"),
+        ):
+            row["time"] = "第24周"
+            row[field] = period
+        projected = tuple(
+            _project_record(
+                row, domain="efficacy", names={"product-a": "产品甲"},
+                trial_names={"trial-a": "试验甲"}, fallback=str(row["row_id"]),
+            ) for row in (treatment_1, treatment_2, control_2, control_1)
+        )
+        group = _group(
+            "分期结果", tuple((row, None) for row in projected),
+            chart_type="bar", identity_series=True,
+        )
+        contexts = {
+            row["row_id"]: row["_chart_comparison_context_key"] for row in group["rows"]
+        }
+        assert contexts["treatment-1"] == contexts["control-1"]
+        assert contexts["treatment-2"] == contexts["control-2"]
+        assert contexts["treatment-1"] != contexts["treatment-2"], field
+
+
+def test_chart_context_label_uses_compact_source_period_not_registry_key() -> None:
+    row = _project_efficacy("treatment-1", "EASI-75")
+    row.update(
+        time="Treatment Period 1 (TP1)",
+        time_window="给药 第1周期（TP1）",
+        period="nct04469465-p0",
+        cohort="nct04469465-全部",
+    )
+    group = _group("分期结果", ((row, None),), chart_type="bar", identity_series=True)
+    label = group["rows"][0]["_chart_comparison_context_label"]
+    assert "TP1" in label and "p0" in label
+    assert "nct04469465" not in label.casefold()
+    assert len(label) < 50
+
+
+def test_matrix_percentage_difference_is_labeled_percentage_points() -> None:
+    data = load_report_b_data(PNH_DATA)
+    names = {row.id: row.name for row in data.products}
+    trials = {row.id: row.display_id for row in data.trials}
+    groups = _groups_for_page(
+        "efficacy-safety-matrix", _matrix_records(data, names, trials)
+    )
+    assert len(groups) == 1
+    assert groups[0]["rows"][0]["x_value"] == 80.5
+    assert groups[0]["x_unit"] == "百分点"
+    assert groups[0]["x_axis_label_zh"] == "试验内疗效差（百分点）"
+
+
+def test_unformed_matrix_is_not_called_unpublished_source_result() -> None:
+    data = load_report_b_data(PNH_DATA)
+    names = {row.id: row.name for row in data.products}
+    trials = {row.id: row.display_id for row in data.trials}
+    records = _synthetic_status_records(
+        data, page_id="efficacy-safety-matrix", names=names,
+        trial_names=trials, domain="matrix",
+    )
+    assert records
+    assert all(row["disclosure_state"] == "not_applicable" for row, _ in records)
+    assert all("不等于研究未公开结果" in row["reason"] for row, _ in records)
+    groups = _groups_for_page("efficacy-safety-matrix", records)
+    assert groups[0]["empty_message"] == "当前未形成可绘制的试验内比较"
+
+
+def test_empty_typed_matrix_retains_efficacy_view_studies(tmp_path: Path) -> None:
+    payload = json.loads(PNH_DATA.read_text(encoding="utf-8"))
+    payload["efficacy_views"] = {"facts": payload["efficacy"]}
+    payload["efficacy"] = []
+    payload["matrix_view"] = {"rows": []}
+    data = ReportBPortalData.model_validate(payload)
+    names = {row.id: row.name for row in data.products}
+    trials = {row.id: row.display_id for row in data.trials}
+    view_trial_ids = {
+        row["trial_id"] for row, _ in _efficacy_records(data, names, trials)
+    }
+    assert len(view_trial_ids) == 2
+    records = _page_records(
+        data, page_id="efficacy-safety-matrix", names=names, trial_names=trials,
+        efficacy=_efficacy_records(data, names, trials),
+        safety=_safety_records(data, names, trials),
+    )
+    assert {row["trial_id"] for row, _ in records} == view_trial_ids
+    assert all(row["renderable"] is False for row, _ in records)
+    render_report_b_site(data, tmp_path / "b")
+    html = (tmp_path / "b" / "efficacy-safety-matrix.html").read_text(encoding="utf-8")
+    assert "未进入气泡坐标的相关研究（2）" in html
+
+
+def test_b_view_only_efficacy_does_not_relax_a_completeness() -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    payload["efficacy"] = []
+    with pytest.raises(ValueError, match="疗效比较缺少治疗组或对照组"):
+        ReportAPortalData.model_validate(payload)
 
 
 def test_unknown_semantics_keep_trials_in_adjacent_descriptive_groups() -> None:

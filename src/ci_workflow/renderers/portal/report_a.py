@@ -12,7 +12,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from importlib.metadata import version as dependency_version
 from pathlib import Path
-from typing import Any, Literal, Self
+from typing import Any, ClassVar, Literal, Self
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -363,6 +363,7 @@ class ReportAPortalData(BaseModel):
     """模板只读输入；产品/试验/结果关系必须在入模时闭合。"""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
+    require_a_result_completeness: ClassVar[bool] = True
     schema_version: str
     report_version: str
     indication: str
@@ -417,6 +418,8 @@ class ReportAPortalData(BaseModel):
             raise ValueError("其他观察引用了未知试验")
         if any(item.trial_id is not None and item.trial_id not in trials for item in self.safety):
             raise ValueError("安全性事实引用了未知试验")
+        if not self.require_a_result_completeness:
+            return self
         # 会商 #2/#12：门禁按概念键判定（any_teae/any_sae 必须齐备），
         # 不再比对与载荷词表脱节的中文类别字面
         from ci_workflow.reports.b.concept_catalog import row_concept

@@ -132,7 +132,7 @@ def test_desktop_evidence_drawer_reflows_charts_without_covering_facts(
 
 
 @pytest.mark.parametrize("browser_name", BROWSERS)
-@pytest.mark.parametrize("width", (1024, 1280, 1440))
+@pytest.mark.parametrize("width", (1440, 1600, 1920, 2560))
 def test_b_pnh_names_timepoint_and_matrix_are_user_visible(
     b_pnh_site: Path, browser_name: str, width: int
 ) -> None:
@@ -178,27 +178,19 @@ def test_b_pnh_names_timepoint_and_matrix_are_user_visible(
         )
         assert matrix_axes == {
             "xName": "试验内疗效差（百分点）",
-            "yName": "治疗组治疗期间不良事件发生率（%）",
+            "yName": "治疗组安全性观察值（%）",
             "yInverse": True,
         }
         matrix_text = page.locator("#kz-chart-module").inner_text()
-        assert "气泡大小：治疗组样本量" in matrix_text
-        assert "单臂研究没有试验内对照组，不计算治疗—对照疗效差" in matrix_text
+        assert "气泡大小：治疗组安全性分析人数" in matrix_text
+        missing = page.locator(".kz-b-matrix-gaps")
+        assert missing.count() == 1
+        missing.locator("summary").click()
+        assert "不能当作零差值" in missing.inner_text()
+        assert "APPOINT-PNH" in missing.inner_text()
+        assert missing.locator('a[href="efficacy.html"]').count() == 1
         assert "comparable" not in matrix_text
         assert "可比较" in matrix_text
-
-        if width == 1024:
-            table_widths = page.locator(".kz-b-table-scroll").evaluate_all(
-                """nodes => nodes.map(node => ({
-                  clientWidth: node.clientWidth,
-                  scrollWidth: node.scrollWidth
-                }))"""
-            )
-            assert table_widths
-            assert all(
-                item["scrollWidth"] <= item["clientWidth"] + 1
-                for item in table_widths
-            )
 
         _open(page, b_pnh_site, "safety.html")
         safety_box = _chart(page).bounding_box()
@@ -231,7 +223,9 @@ def test_b_pnh_names_timepoint_and_matrix_are_user_visible(
         assert {trial for trials in trial_groups for trial in trials} == {
             "伊普可泮 · APPLY-PNH", "伊普可泮 · APPOINT-PNH",
         }
-        assert "语义信息未完整，按试验列示" in page.locator("#kz-chart-module").inner_text()
+        assert "APPOINT-PNH：单臂设计，无同期对照组" in page.locator(
+            "#kz-chart-module"
+        ).inner_text()
         assert "不适用" in page.locator("#kz-chart-module").inner_text()
         safety_options = page.evaluate(
             """() => Array.from(document.querySelectorAll('[data-chart-type="heatmap"]'))
@@ -252,19 +246,6 @@ def test_b_pnh_names_timepoint_and_matrix_are_user_visible(
         )
         assert table_font_size == "16px"
 
-        if width == 1024:
-            _open(page, b_pnh_site, "overview.html")
-            overview_table_widths = page.locator(".kz-b-table-scroll").evaluate_all(
-                """nodes => nodes.map(node => ({
-                  clientWidth: node.clientWidth,
-                  scrollWidth: node.scrollWidth
-                }))"""
-            )
-            assert overview_table_widths
-            assert all(
-                item["scrollWidth"] <= item["clientWidth"] + 1
-                for item in overview_table_widths
-            )
         browser.close()
 
 
@@ -346,9 +327,15 @@ def test_b_pnh_chart_values_groups_and_filters_are_clinically_direct(
             "试验",
             "组别",
             "疗效指标",
+            "统计形式",
+            "分析人群",
             "评价时间",
             "比较值",
+            "数值依据",
+            "原始应答人数",
+            "分析人数",
             "单位",
+            "口径提示",
             "披露状态",
         ]
         tables = page.locator("#kz-chart-module table")
@@ -553,9 +540,15 @@ def test_b_longitudinal_small_multiples_share_axes_and_keep_labels_readable(
         axes = page.evaluate(
             """() => Array.from(document.querySelectorAll('.kz-chart-group__chart'))
               .map(node => {
+                if (node.dataset.chartType === 'single-fact') {
+                  return {kind: 'fact', value: node.querySelector('strong')?.textContent,
+                    hasSvg: !!node.querySelector('svg, canvas')};
+                }
                 const chart = window.echarts.getInstanceByDom(node);
+                if (!chart) return {kind: 'missing'};
                 const model = chart.getModel();
                 return {
+                  kind: 'chart',
                   extent: model.getComponent('yAxis').axis.scale.getExtent(),
                   xFont: model.getComponent('xAxis').option.axisLabel.fontSize,
                   yFont: model.getComponent('yAxis').option.axisLabel.fontSize
@@ -563,7 +556,15 @@ def test_b_longitudinal_small_multiples_share_axes_and_keep_labels_readable(
               })"""
         )
         assert axes
-        assert all(axis["xFont"] >= 14 and axis["yFont"] >= 16 for axis in axes)
+        assert all(axis["kind"] != "missing" for axis in axes)
+        assert all(
+            axis["xFont"] >= 14 and axis["yFont"] >= 16
+            for axis in axes if axis["kind"] == "chart"
+        )
+        assert all(
+            axis["value"] and not axis["hasSvg"]
+            for axis in axes if axis["kind"] == "fact"
+        )
         browser.close()
 
 
@@ -658,7 +659,9 @@ def test_b_row_opens_data_basis_and_restores_focus_in_url(
         panel = page.locator("#kz-evidence-drawer-panel, #data-basis-panel").first
         assert panel.is_visible()
         assert "数据依据" in panel.inner_text()
-        assert "ClinicalTrials.gov" in panel.inner_text()
+        assert "来源待核" in panel.inner_text()
+        assert "原文未提供" in panel.inner_text()
+        assert "ClinicalTrials.gov" not in panel.inner_text()
         assert "focus=" in page.url
         assert row_id in panel.inner_text() or page.locator(
             f'[data-row-id="{row_id}"]'
@@ -767,47 +770,36 @@ def test_b_mobile_menu_open_focuses_search_input(
 
 @pytest.mark.parametrize("browser_name", BROWSERS)
 @pytest.mark.parametrize("relative", RESPONSIVE_PAGES)
-def test_b_pnh_768_tables_keep_all_columns_inside_container(
-    b_pnh_site: Path, browser_name: str, relative: str
+@pytest.mark.parametrize("width", (1440, 2560))
+def test_b_desktop_tables_keep_all_columns_reachable(
+    b_pnh_site: Path, browser_name: str, relative: str, width: int
 ) -> None:
-    """RED: 768 数据表不得把末列藏在表格容器的横向溢出区。"""
+    """0923V1: internal scrolling is allowed; the last fact must remain reachable."""
     with sync_playwright() as playwright:
         browser = _launch(playwright, browser_name)
-        page = browser.new_page(viewport={"width": 768, "height": 900})
+        page = browser.new_page(viewport={"width": width, "height": 900})
         _open(page, b_pnh_site, relative)
 
         containers = page.locator(".kz-b-table-scroll")
         assert containers.count() > 0, relative
         metrics = containers.evaluate_all(
             """nodes => nodes.map(node => {
-              const table = node.querySelector("table");
               const row = node.querySelector("tbody tr");
-              const containerBox = node.getBoundingClientRect();
               const cells = row ? Array.from(row.children) : [];
+              node.scrollLeft = node.scrollWidth;
+              const containerBox = node.getBoundingClientRect();
+              const lastBox = cells.at(-1)?.getBoundingClientRect();
               return {
-                clientWidth: node.clientWidth,
-                scrollWidth: node.scrollWidth,
-                tableWidth: table ? table.getBoundingClientRect().width : 0,
                 cellCount: cells.length,
-                cellsFit: cells.every(cell => {
-                  const box = cell.getBoundingClientRect();
-                  return box.width > 0 &&
-                    box.left >= containerBox.left - 1 &&
-                    box.right <= containerBox.right + 1;
-                })
+                lastCellReachable: !!lastBox && lastBox.width > 0 &&
+                  lastBox.left >= containerBox.left - 1 &&
+                  lastBox.right <= containerBox.right + 1
               };
             })"""
         )
         assert all(item["cellCount"] > 0 for item in metrics), metrics
-        assert all(
-            item["scrollWidth"] <= item["clientWidth"] + 1
-            for item in metrics
-        ), metrics
-        assert all(
-            item["tableWidth"] <= item["clientWidth"] + 1
-            and item["cellsFit"]
-            for item in metrics
-        ), metrics
+        assert all(item["lastCellReachable"] for item in metrics), metrics
+        assert page.evaluate("document.documentElement.scrollWidth") <= width + 1
         browser.close()
 
 

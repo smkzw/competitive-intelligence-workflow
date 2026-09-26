@@ -89,6 +89,13 @@
     {% endif %}
     <div id="kz-chart-module" class="kz-chart-module" aria-live="polite"></div>
     {% if page.id == "efficacy-safety-matrix" %}
+    {% if matrix_unplotted_trials %}
+    <details class="kz-b-matrix-gaps">
+      <summary>未进入气泡坐标的相关研究（{{ matrix_unplotted_trials|length }}）</summary>
+      <p>本数据包未形成这些研究可绘制的试验内治疗—对照疗效差；原因需核对来源和统计口径，不能当作零差值。其研究事实仍可在<a href="{{ site_prefix }}efficacy.html">疗效明细</a>查阅。</p>
+      <ul>{% for name in matrix_unplotted_trials %}<li>{{ name }}</li>{% endfor %}</ul>
+    </details>
+    {% endif %}
     <div class="kz-b-bubble-presets" data-bubble-presets aria-label="固定临床气泡预设">
       <span class="kz-b-bubble-presets__label">固定临床预设</span>
       {% for preset in bubble_presets %}

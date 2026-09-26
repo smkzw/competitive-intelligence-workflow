@@ -189,6 +189,119 @@ def test_grouped_bar_repeated_observations_keep_both_glyphs(tmp_path: Path) -> N
         server.shutdown()
 
 
+def test_empty_comparison_does_not_repeat_every_row_reason(tmp_path: Path) -> None:
+    site = tmp_path / "site"
+    write_fixture_site(site, repo_root=ROOT)
+    page_file = site / "index.html"
+    html = page_file.read_text(encoding="utf-8")
+    marker = '<script src="assets/charts.js"></script>'
+    assert marker in html
+    injection = """<script>
+      var group = window.__CHART_GROUPS__[0];
+      group.empty_message = '当前未形成可绘制的试验内比较';
+      group.rows = group.rows.slice(0, 2).map(function (row) {
+        return Object.assign({}, row, {
+          renderable: false, disclosure_state: 'not_applicable',
+          reason: '需核对对照、人群与来源，不等于未公开'
+        });
+      });
+    </script>
+    """
+    page_file.write_text(html.replace(marker, injection + marker), encoding="utf-8")
+    server, port = _start_server(site)
+    try:
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch()
+            page = browser.new_page(viewport={"width": 1600, "height": 900})
+            page.goto(f"http://127.0.0.1:{port}/index.html")
+            page.wait_for_function("window.__CHART_SYNC__ !== undefined")
+            card = page.locator('.kz-chart-module__group[data-group-index="0"]')
+            assert card.locator(".kz-chart-group__status-note").count() == 0
+            assert card.locator(".kz-chart-undisclosed__title").inner_text() == (
+                "当前未形成可绘制的试验内比较"
+            )
+            assert card.locator(".kz-chart-undisclosed__hint").inner_text().count(
+                "需核对对照、人群与来源"
+            ) == 1
+            assert card.locator(".kz-chart-table__row").count() == 2
+            browser.close()
+    finally:
+        server.shutdown()
+
+
+@pytest.mark.parametrize("case", ("swapped_periods", "duplicate_cell", "unknown_context"))
+def test_grouped_bar_never_pairs_observations_by_array_occurrence(
+    tmp_path: Path, case: str
+) -> None:
+    site = tmp_path / "site"
+    write_fixture_site(site, repo_root=ROOT)
+    page_file = site / "index.html"
+    html = page_file.read_text(encoding="utf-8")
+    marker = '<script src="assets/charts.js"></script>'
+    injection = """<script>
+      var group = window.__CHART_GROUPS__[0];
+      var seed = group.rows[0];
+      function item(id, series, context, value) {
+        return Object.assign({}, seed, {
+          row_id: id, value: value, numeric_value: value,
+          _chart_identity_key: 'drug::trial', _chart_identity_label: '药物｜研究',
+          _chart_series_key: series, _chart_series_label: series,
+          _chart_comparison_context_key: context,
+          _chart_comparison_context_label: context
+        });
+      }
+      group.identity_series = true;
+      group.rows = __CASE__ === 'swapped_periods'
+        ? [item('t1', 'treatment', 'period-1', 11),
+           item('t2', 'treatment', 'period-2', 22),
+           item('c2', 'control', 'period-2', 33),
+           item('c1', 'control', 'period-1', 44)]
+        : __CASE__ === 'duplicate_cell'
+        ? [item('t1', 'treatment', 'period-1', 11),
+           item('t2', 'treatment', 'period-1', 22),
+           item('c1', 'control', 'period-1', 44)]
+        : [item('t1', 'treatment', '', 11),
+           item('c1', 'control', '', 44)];
+      window.__PORTAL_FILTER__ = null;
+      window.__FILTER_ROWS__ = [];
+    </script>
+    """.replace("__CASE__", json.dumps(case))
+    page_file.write_text(html.replace(marker, injection + marker), encoding="utf-8")
+    server, port = _start_server(site)
+    try:
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch()
+            page = browser.new_page(viewport={"width": 1600, "height": 900})
+            errors: list[str] = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto(f"http://127.0.0.1:{port}/index.html")
+            page.wait_for_function("window.__CHART_SYNC__ !== undefined")
+            cells = page.evaluate(
+                """() => {
+                  const chart = document.getElementById('kz-chart-0');
+                  const option = window.echarts.getInstanceByDom(chart).getOption();
+                  return {
+                    labels: option.xAxis[0].data,
+                    cells: option.xAxis[0].data.map((_, index) => option.series
+                      .map(series => series.data[index]?._row_id)
+                      .filter(Boolean).sort())
+                  };
+                }"""
+            )
+            if case == "swapped_periods":
+                assert sorted(cells["cells"]) == [["c1", "t1"], ["c2", "t2"]]
+                assert "period-1" in cells["labels"][0]
+                assert "period-2" in cells["labels"][1]
+            elif case == "duplicate_cell":
+                assert sorted(cells["cells"]) == [["c1"], ["t1"], ["t2"]]
+            else:
+                assert sorted(cells["cells"]) == [["c1"], ["t1"]]
+            assert not errors
+            browser.close()
+    finally:
+        server.shutdown()
+
+
 @pytest.fixture(scope="module")
 def fixture_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
     site = tmp_path_factory.mktemp("task44-fixture-site")
