@@ -52,7 +52,7 @@
       <a class="kz-b-related-card" href="../trials/{{ trial.id }}.html">
         <strong>{{ trial.name }}</strong>
         <span>{{ trial.display_id }} · {{ trial.phase }} · {{ trial.region }}</span>
-        <span>{{ trial.status }} · 总样本量 {{ trial.sample_size }} 人</span>
+        <span>{{ trial.status }} · 实际样本量 {% if trial.sample_size is not none %}{{ trial.sample_size }} 人{% else %}未列示{% endif %}</span>
       </a>
       {% endfor %}
     </div>
@@ -103,13 +103,15 @@
     </div>
     <dl class="kz-b-detail-grid">
       <div><dt>登记编号</dt><dd>{{ detail_trial_obj.display_id }}</dd></div>
-      <div><dt>关联产品</dt><dd><a href="../products/{{ detail_trial_product_obj.id }}.html">{{ detail_trial_product_obj.name }}</a></dd></div>
+      <div><dt>关联产品</dt><dd>{% if detail_trial_product_obj %}<a href="../products/{{ detail_trial_product_obj.id }}.html">{{ detail_trial_product_obj.name }}</a>{% else %}产品关系待核；研究资料仍保留{% endif %}</dd></div>
       <div><dt>临床阶段</dt><dd>{{ detail_trial_obj.phase }}</dd></div>
       <div><dt>区域</dt><dd>{{ detail_trial_obj.region }}</dd></div>
       <div><dt>试验状态</dt><dd>{{ detail_trial_obj.status }}</dd></div>
       <div><dt>研究角色</dt><dd>{{ detail_trial_obj.role }}</dd></div>
-      <div><dt>总样本量</dt><dd>{{ detail_trial_obj.sample_size }} 人</dd></div>
-      <div><dt>治疗组样本量</dt><dd>{{ detail_trial_obj.treatment_sample_size or "未列示" }}{% if detail_trial_obj.treatment_sample_size %} 人{% endif %}</dd></div>
+      <div><dt>实际样本量</dt><dd>{% if detail_trial_obj.sample_size is not none %}{{ detail_trial_obj.sample_size }} 人{% else %}未列示{% endif %}</dd></div>
+      {% if detail_trial_obj.planned_sample_size is not none %}<div><dt>计划样本量</dt><dd>{{ detail_trial_obj.planned_sample_size }} 人</dd></div>{% endif %}
+      {% if detail_trial_obj.reported_sample_size is not none %}<div><dt>登记人数（类型未明）</dt><dd>{{ detail_trial_obj.reported_sample_size }} 人</dd></div>{% endif %}
+      <div><dt>治疗组样本量</dt><dd>{% if detail_trial_obj.treatment_sample_size is not none %}{{ detail_trial_obj.treatment_sample_size }} 人{% else %}未列示{% endif %}</dd></div>
     </dl>
   </section>
 
@@ -121,11 +123,13 @@
       </div>
     </div>
     <div class="kz-b-related-grid">
+      {% if detail_trial_product_obj %}
       <a class="kz-b-related-card" href="../products/{{ detail_trial_product_obj.id }}.html">
         <strong>{{ detail_trial_product_obj.name }}</strong>
         <span>返回产品档案</span>
         <span>{{ detail_trial_product_obj.target }} · {{ detail_trial_product_obj.modality }}</span>
       </a>
+      {% endif %}
       <a class="kz-b-related-card" href="../efficacy.html?trial={{ detail_id }}">
         <strong>疗效结果</strong>
         <span>按当前试验查看完整数据表</span>

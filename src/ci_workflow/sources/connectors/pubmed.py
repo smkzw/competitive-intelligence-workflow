@@ -5,10 +5,11 @@ from typing import Literal
 from urllib.parse import urlencode
 from xml.etree import ElementTree
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
+_NCT_ID = re.compile(r"\bNCT[0-9]{8}\b", re.IGNORECASE)
 PublicationRole = Literal[
+    "unclassified",
     "primary_report",
     "ad_hoc_analysis",
     "review",
@@ -24,6 +25,19 @@ EvidenceSourceRole = Literal[
 ]
 
 
+class PubMedIdentifierCandidate(BaseModel):
+    """One own native identifier occurrence, not a resolved identity verdict.
+
+    Preserve conflicts/empty values and their exact locations for recovery;
+    consumers must not choose the first DOI/PMC or borrow bibliography IDs.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    id_type: str
+    value: str
+    field_path: str
+
+
 class PubMedRecord(BaseModel):
     """由 PubMed EFetch 原文解析得到的最小不可变记录。"""
 
@@ -33,6 +47,18 @@ class PubMedRecord(BaseModel):
     title: str
     abstract: str
     publication_types: tuple[str, ...]
+    registry_nct_ids: tuple[str, ...] = ()
+    identifier_candidates: tuple[PubMedIdentifierCandidate, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
+
+    @field_validator("registry_nct_ids")
+    @classmethod
+    def _registry_identifiers(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        normalized = tuple(item.strip().upper() for item in values)
+        if any(re.fullmatch(r"NCT[0-9]{8}", item) is None for item in normalized):
+            raise ValueError("PubMed 登记关联需要完整 NCT 标识")
+        return tuple(dict.fromkeys(normalized))
 
     @field_validator("pmid")
     @classmethod
@@ -122,22 +148,51 @@ def _element_text(element: ElementTree.Element | None) -> str:
     return " ".join("".join(element.itertext()).split())
 
 
+def _own_identifier_candidates(
+    article_node: ElementTree.Element, *, is_book: bool,
+) -> tuple[PubMedIdentifierCandidate, ...]:
+    # NLM ArticleIdList also occurs under Reference and Book: never descend
+    # through those. BookDocument direct lists identify the chapter/monograph.
+    # https://dtd.nlm.nih.gov/ncbi/pubmed/doc/out/250101/el-ArticleIdList.html
+    container_tags = ("BookDocument", "PubmedBookData") if is_book else ("PubmedData",)
+    candidates: list[PubMedIdentifierCandidate] = []
+    for tag in container_tags:
+        for container_index, container in enumerate(article_node.findall(f"./{tag}"), 1):
+            for list_index, identifier_list in enumerate(container.findall("./ArticleIdList"), 1):
+                for identifier_index, node in enumerate(identifier_list.findall("./ArticleId"), 1):
+                    candidates.append(PubMedIdentifierCandidate(
+                        # The DTD default is pubmed; an explicit empty attribute
+                        # remains empty, not defaulted to a fabricated valid type.
+                        id_type=node.get("IdType", "pubmed"),
+                        value=_element_text(node),
+                        field_path=(f"./{tag}[{container_index}]/ArticleIdList[{list_index}]"
+                                    f"/ArticleId[{identifier_index}]"),
+                    ))
+    return tuple(candidates)
+
+
 def parse_pubmed_efetch_xml(xml_text: str) -> tuple[PubMedRecord, ...]:
-    """Parse article identities only from MedlineCitation, never nested relation PMIDs."""
+    """Parse own journal/book citation identity, never nested relation PMIDs."""
     try:
         root = ElementTree.fromstring(xml_text)
     except ElementTree.ParseError as exc:
         raise ValueError("PubMed EFetch XML 无法解析") from exc
     records: list[PubMedRecord] = []
-    for article_node in root.findall("./PubmedArticle"):
-        citation = article_node.find("./MedlineCitation")
+    for article_node in root:
+        is_book = article_node.tag == "PubmedBookArticle"
+        if article_node.tag not in {"PubmedArticle", "PubmedBookArticle"}:
+            continue
+        citation = article_node.find("./BookDocument" if is_book else "./MedlineCitation")
         if citation is None:
             continue
         pmid = _element_text(citation.find("./PMID"))
-        article = citation.find("./Article")
+        article = citation if is_book else citation.find("./Article")
         if article is None:
             raise ValueError(f"PubMed 记录 {pmid or '未知'} 缺少 Article")
         title = _element_text(article.find("./ArticleTitle"))
+        if is_book and not title:
+            # ArticleTitle is optional for a monograph in NLM's BookDocument.
+            title = _element_text(article.find("./Book/BookTitle"))
         abstract_parts: list[str] = []
         for abstract_node in article.findall("./Abstract/AbstractText"):
             text = _element_text(abstract_node)
@@ -147,32 +202,113 @@ def parse_pubmed_efetch_xml(xml_text: str) -> tuple[PubMedRecord, ...]:
             abstract_parts.append(f"{label}: {text}" if label else text)
         publication_types = tuple(
             text
-            for item in article.findall("./PublicationTypeList/PublicationType")
+            for item in article.findall(
+                "./PublicationType" if is_book else "./PublicationTypeList/PublicationType"
+            )
             if (text := _element_text(item))
         )
+        # NLM's output XML declares registration associations here, separately
+        # from the abstract. Never borrow IDs from comments or references.
+        # https://dtd.nlm.nih.gov/ncbi/pubmed/doc/out/250101/el-DataBank.html
+        registry_nct_ids = tuple(dict.fromkeys(
+            accession
+            for bank in article.findall("./DataBankList/DataBank")
+            if _element_text(bank.find("./DataBankName")).casefold() == "clinicaltrials.gov"
+            for node in bank.findall("./AccessionNumberList/AccessionNumber")
+            if re.fullmatch(r"NCT[0-9]{8}", accession := _element_text(node).upper())
+        ))
         records.append(
             PubMedRecord(
                 pmid=pmid,
                 title=title,
                 abstract=" ".join(abstract_parts),
                 publication_types=publication_types,
+                registry_nct_ids=registry_nct_ids,
+                identifier_candidates=_own_identifier_candidates(article_node, is_book=is_book),
             )
         )
     return tuple(records)
 
 
+_SECONDARY_ANALYSIS = re.compile(
+    r"\b(?:post[- ]hoc|ad[- ]hoc|subgroup analys(?:is|es)|exploratory analys(?:is|es))\b"
+)
+_SECONDARY_FRAMING = re.compile(
+    r"\b(?:(?:in this|this|(?:here )?we (?:performed|conducted|presented|"
+    r"report|present|describe))\s+(?:\w+[ -]){0,3}(?:post[- ]hoc|ad[- ]hoc|subgroup|"
+    r"exploratory)\b|(?:a|an)\s+(?:post[- ]hoc|ad[- ]hoc|subgroup|exploratory)\s+"
+    r"analys(?:is|es)\s+of\b)", re.IGNORECASE,
+)
+_ABSTRACT_SECTION = re.compile(
+    r"\b(?:background|importance|introduction|objectives?|aims?|methods?|"
+    r"design(?:, setting, and participants)?|interventions?|main outcomes? and measures|"
+    r"results|findings|conclusions?(?: and relevance)?|interpretation|meaning|funding)\s*:",
+    re.IGNORECASE,
+)
+
+
+def _result_regions(abstract: str) -> tuple[tuple[int, str], ...]:
+    sections = tuple(_ABSTRACT_SECTION.finditer(abstract))
+    result_sections = [
+        (match.end(),
+         abstract[match.end():sections[index + 1].start() if index + 1 < len(sections) else None])
+        for index, match in enumerate(sections)
+        if match.group().split(":", 1)[0].strip().casefold() in {"results", "findings"}
+    ]
+    # A methods-only structured record does not report outcomes merely because
+    # it includes statistical assumptions. Unstructured records remain reviewable.
+    return tuple(result_sections) if sections else ((0, abstract),)
+
+
+def _is_observed_result(sentence: str) -> bool:
+    text = sentence.casefold()
+    if _SECONDARY_ANALYSIS.search(text) or re.search(
+        r"\b(?:will|planned|planning|anticipated|expected|assumed|projected|"
+        r"previous|previously|prior)\b", text,
+    ):
+        return False
+    if re.search(
+        r"\b(?:results (?:are reported|were reported|showed|show)|"
+        r"trial findings|findings (?:suggested|showed|demonstrated))\b", text,
+    ):
+        return True
+    measured_result = re.search(
+        r"\b(?:mean difference|hazard ratio|risk ratio|odds ratio|"
+        r"least[- ]squares|least squares|response rate|improved|reduced|"
+        r"increased|decreased)\b", text,
+    )
+    outcome_statistic = re.search(
+        r"(?:\d(?:\.\d+)?\s*%|\d\s*/\s*\d|\b\d+(?:\.\d+)?\s*%?\s*ci\b|"
+        r"\bp\s*[=<]\s*\.?\d)", text,
+    )
+    return bool(measured_result and outcome_statistic)
+
+
+def _main_result_offset(abstract: str) -> int | None:
+    # Retain original offsets: an opening secondary-paper frame differs from
+    # a later analysis attached to an already reported primary comparison.
+    for offset, region in _result_regions(abstract):
+        start = 0
+        for boundary in re.finditer(r"(?<=[.!?。！？])\s+", region):
+            if _is_observed_result(region[start:boundary.start()]):
+                return offset + start
+            start = boundary.end()
+        if _is_observed_result(region[start:]):
+            return offset + start
+    return None
+
+
 def _classify(record: PubMedRecord, matched: tuple[str, ...]) -> ClassifiedPublication:
     combined = f"{record.title}\n{record.abstract}".casefold()
+    title = record.title.casefold()
     publication_types = {item.casefold() for item in record.publication_types}
     review_signals = (
         bool(publication_types & {"review", "meta-analysis", "systematic review"})
-        or "systematic review" in combined
-        or "meta-analysis" in combined
+        or "systematic review" in title
+        or "meta-analysis" in title
     )
-    ad_hoc_signals = any(
-        marker in combined
-        for marker in ("post hoc", "post-hoc", "subgroup analysis", "exploratory analysis")
-    )
+    ad_hoc_title = bool(_SECONDARY_ANALYSIS.search(title))
+    ad_hoc_abstract = bool(_SECONDARY_ANALYSIS.search(record.abstract.casefold()))
     randomized_signal = (
         "randomized controlled trial" in publication_types
         or "randomised" in combined
@@ -184,53 +320,53 @@ def _classify(record: PubMedRecord, matched: tuple[str, ...]) -> ClassifiedPubli
         "clinical trial protocol" in publication_types
         or "study protocol" in combined
         or combined.startswith("protocol ")
+        or bool(re.search(r"\b(?:rationale and (?:study )?design|"
+                          r"design and rationale|design of)\b|"
+                          r"\b(?:study|trial) design\s*:", title))
     )
-    primary_endpoint_signal = any(
-        marker in combined
-        for marker in (
-            "primary endpoint",
-            "primary endpoints",
-            "co-primary endpoint",
-            "co-primary endpoints",
-            "primary outcome",
-            "primary outcomes",
-        )
+    main_result_offset = _main_result_offset(record.abstract)
+    framing = _SECONDARY_FRAMING.search(record.abstract)
+    secondary_scope = framing is not None and (
+        main_result_offset is None or framing.start() < main_result_offset
     )
-    result_signal = any(
-        marker in combined
-        for marker in (
-            "results are reported",
-            "results showed",
-            "we report",
-            "efficacy and safety",
-            "trial findings",
-        )
-    )
+    primary_endpoint_signal = bool(re.search(
+        r"\b(?:co[- ]?)?primary (?:end ?points?|outcomes?)\b", combined,
+    ))
+    result_signal = main_result_offset is not None
     signals: tuple[str, ...]
     if not matched:
-        role: PublicationRole = "unrelated"
-        signals = ("未匹配目标 NCT",)
-        rationale = "正文未匹配目标试验登记号，不能据此建立论文—试验关系。"
+        role: PublicationRole = "unclassified"
+        signals = ("未匹配目标 NCT", "关系未确定，保留模型及独立复核")
+        rationale = (
+            "当前元数据未匹配目标试验登记号，论文—试验关系未确定；"
+            "缺少登记号不证明无关，不据此排除，也不能替代主要结果报告。"
+        )
     elif review_signals:
         role = "review"
         signals = ("综述或荟萃分析出版类型",)
         rationale = "出版类型或题名摘要表明这是综述/荟萃分析，不能替代主要结果报告。"
-    elif ad_hoc_signals:
-        role = "ad_hoc_analysis"
-        signals = ("事后、亚组或探索性分析用语",)
-        rationale = "题名或摘要明确标记事后、亚组或探索性分析。"
     elif protocol_signal:
         role = "supporting_publication"
         signals = ("目标 NCT", "试验方案出版类型或用语")
         rationale = "这是试验方案或设计论文，不得按主要结果报告使用。"
+    elif ad_hoc_title or secondary_scope or (ad_hoc_abstract and not result_signal):
+        role = "ad_hoc_analysis"
+        signals = ("事后、亚组或探索性分析用语",)
+        rationale = "题名或整篇摘要范围标记事后、亚组或探索性分析，或未识别非次级主要结果。"
     elif randomized_signal and primary_endpoint_signal and result_signal:
         role = "primary_report"
-        signals = ("目标 NCT", "随机/分期试验", "主要终点结果")
-        rationale = "论文匹配目标 NCT，并报告随机/分期试验的共同主要终点或主要终点结果。"
+        signals = ("目标 NCT", "随机/分期试验", "主要终点结果", "非次级分析的结果信号")
+        rationale = (
+            "论文匹配目标 NCT，识别到随机/分期试验的共同主要终点或主要终点结果；"
+            "附带次级分析不排除整篇主要报告。规则建议仍需独立分类复核。"
+        )
     else:
         role = "supporting_publication"
-        signals = ("目标 NCT", "未满足主要报告判定条件")
-        rationale = "论文与目标 NCT 有关，但未同时提供主要报告所需的试验与主要终点信号。"
+        signals = ("目标 NCT", "规则未识别充分主要结果信号", "需要模型及独立复核")
+        rationale = (
+            "论文与目标 NCT 有关，但规则未识别充分主要结果信号；"
+            "这不等于没有结果或可以排除，须由模型和独立复核结合原文判断。"
+        )
     return ClassifiedPublication(
         record=record,
         role=role,
@@ -253,7 +389,7 @@ def classify_pubmed_records(
     classified: list[ClassifiedPublication] = []
     for record in records:
         text = f"{record.title}\n{record.abstract}"
-        mentioned = {item.upper() for item in _NCT_ID.findall(text)}
+        mentioned = {item.upper() for item in _NCT_ID.findall(text)} | set(record.registry_nct_ids)
         matched = tuple(item for item in normalized_targets if item in mentioned & target_set)
         classified.append(_classify(record, matched))
     return tuple(classified)

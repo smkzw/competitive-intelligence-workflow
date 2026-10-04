@@ -9,8 +9,9 @@
   <link rel="stylesheet" href="{{ asset_prefix }}/portal.css">
   <link rel="stylesheet" href="{{ asset_prefix }}/report-c.css">
   <link rel="stylesheet" href="{{ asset_prefix }}/evidence-drawer.css">
+  <link rel="stylesheet" href="{{ asset_prefix }}/kangzhe-site.css">
 </head>
-<body class="kz-c-site kz-c-site--{{ page_id }}" data-current-revision="{{ current_revision }}">
+<body class="kz-c-site kz-c-site--{{ page_id }}" data-kz-design="6.0" data-current-revision="{{ current_revision }}" data-review-status="{{ review_status }}">
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a href="{{ home_href }}" class="site-header__logo" aria-label="康哲药业">
@@ -47,7 +48,7 @@
     <div class="site-header__brand-line" aria-hidden="true"></div>
   </header>
 
-  {% if publication_limitation_zh %}
+  {% if publication_limitation_zh and review_status != "unreviewed_candidate" %}
   <aside class="publication-limitation" role="note" aria-label="证据限制">
     <strong>证据限制</strong>
     <p>{{ publication_limitation_zh }}</p>
@@ -55,6 +56,13 @@
   {% endif %}
 
   <main class="portal-main kz-c-main" id="main" role="main">
+    {% if review_status == "unreviewed_candidate" %}
+    <aside class="publication-limitation" role="note" aria-label="待复核资料与证据限制">
+      <strong>待复核资料{% if publication_limitation_zh %}与证据限制{% endif %}</strong>
+      <p>来源条款和缺口供检索、横比与复核；不代表科学验收通过，不进入当前正式报告。</p>
+      {% if publication_limitation_zh %}<p>{{ publication_limitation_zh }}</p>{% endif %}
+    </aside>
+    {% endif %}
     {% block content %}{% endblock %}
   </main>
 
@@ -104,7 +112,10 @@
   {{ evidence_embed | safe }}
   <script src="{{ asset_prefix }}/portal.js"></script>
   <script src="{{ asset_prefix }}/echarts.min.js"></script>
+  <script src="{{ asset_prefix }}/charts.js"></script>
   <script src="{{ asset_prefix }}/evidence-drawer.js"></script>
   <script src="{{ asset_prefix }}/report-c.js"></script>
+  <script src="{{ asset_prefix }}/kz-motion.js"></script>
+  <script src="{{ asset_prefix }}/kangzhe-site.js"></script>
 </body>
 </html>

@@ -154,23 +154,81 @@ class DesignPathSynthesisResult(BaseModel):
         return value.strip()
 
 
-def _normalize_text(value: str) -> str:
-    """检索归一：折叠标点但保留数值语义字符（独立审阅 R06 / SCI07）。
+# 标点角色敏感折叠：同一标点字符既可能是数值分隔符，也可能是句子标点。
+# 数值分隔符仅在左右相邻（忽略空白）都是数字片段时保留：小数点、范围连接符、
+# 比值/日期分隔符在数值之外必须折叠，否则「给药。」与「给药.」会被拆成两条签名。
+_NUMERIC_SEPARATOR_PUNCTUATION: frozenset[str] = frozenset("._-–—~:")
+# 数值后缀仅在左侧相邻（忽略空白）为数字时保留：10% 与 10 语义不同。
+_NUMERIC_SUFFIX_PUNCTUATION: frozenset[str] = frozenset("%‰‱")
+# 单位/比值/词内连接符在临床文本中不承担句子标点角色，始终保留：
+# mg/kg、g/dL、第 2/4/8 周、字段名连接符。
+_ALWAYS_KEPT_PUNCTUATION: frozenset[str] = frozenset("/_")
 
-    0.5 mg、5-10 mg、5.10 mg、≤/≥ 等在存储、查询、显示中不得被标点
-    折叠破坏（此前 0.5→"0 5"、5-10→"5 10"）。"""
+
+def _neighbor_is_digit(text: str, index: int, *, step: int) -> bool:
+    """判断 index 沿 step 方向最近的非空白字符是否为数字。"""
+
+    cursor = index + step
+    while 0 <= cursor < len(text) and text[cursor].isspace():
+        cursor += step
+    return 0 <= cursor < len(text) and unicodedata.category(text[cursor]) == "Nd"
+
+
+def _neighbor_is_numeric(text: str, index: int, *, step: int) -> bool:
+    """判断 index 沿 step 方向最近的非空白字符是否属于数字片段。
+
+    数字片段包括数字本身与以数字结尾的数值后缀（如 10%、0.5%），
+    因此 10%-20% 的范围连接符与 10% 20% 的空格写法保持区分。"""
+
+    cursor = index + step
+    while 0 <= cursor < len(text) and text[cursor].isspace():
+        cursor += step
+    if not (0 <= cursor < len(text)):
+        return False
+    if unicodedata.category(text[cursor]) == "Nd":
+        return True
+    return text[cursor] in _NUMERIC_SUFFIX_PUNCTUATION and _neighbor_is_digit(
+        text, cursor, step=-1
+    )
+
+
+def _keeps_punctuation(text: str, index: int, character: str) -> bool:
+    if character in _ALWAYS_KEPT_PUNCTUATION:
+        return True
+    if character in _NUMERIC_SUFFIX_PUNCTUATION:
+        return _neighbor_is_digit(text, index, step=-1)
+    # ASCII minus is punctuation, unlike mathematical U+2212. Do not silently
+    # turn a negative threshold/change into its positive counterpart. Conservative
+    # retention also leaves ambiguous number-leading hyphens distinct, not merged.
+    if character == "-" and _neighbor_is_digit(text, index, step=1):
+        return True
+    return (
+        character in _NUMERIC_SEPARATOR_PUNCTUATION
+        and _neighbor_is_numeric(text, index, step=-1)
+        and _neighbor_is_numeric(text, index, step=1)
+    )
+
+
+def _normalize_text(value: str) -> str:
+    """检索归一：按标点角色折叠，保留数值语义（独立审阅 R06 / SCI07）。
+
+    句子标点折叠为空白，但同一字符的数值角色必须保留：小数点（0.5 与
+    0.05、5 不同）、范围连接符（5-10 与 5.10、5 10 不同；10%-20% 与
+    10% 20% 不同）、比值冒号（1:1 与 1 1 不同）、百分号（10% 与 10
+    不同）；≤/≥ 等比较符为数学符号本身不参与折叠。此前把句末句号与数值
+    小数点混同保留，导致「给药。」与「给药.」被拆成两条设计签名。"""
+
     normalized = unicodedata.normalize("NFKC", value)
-    preserved = set("._-–—~≤≥<>%/:")
-    punctuation_folded = "".join(
-        character
+    folded: list[str] = []
+    for index, character in enumerate(normalized):
         if (
             not unicodedata.category(character).startswith("P")
-            or character in preserved
-        )
-        else " "
-        for character in normalized
-    )
-    return " ".join(punctuation_folded.casefold().split())
+            or _keeps_punctuation(normalized, index, character)
+        ):
+            folded.append(character)
+        else:
+            folded.append(" ")
+    return " ".join("".join(folded).casefold().split())
 
 
 def _is_usable_fact(observation: DesignObservation) -> bool:
@@ -216,7 +274,11 @@ def _signature_component_text(observation: DesignObservation) -> str:
 def _trial_signature_materials(
     observations: Sequence[DesignObservation],
 ) -> dict[tuple[str, str], str]:
-    """按字段抽取试验设计签名材料；同字段多条时取观察身份字典序首条。"""
+    """Equivalent repeats are harmless; distinct observations need proven grouping.
+
+    This optional path synthesis cannot infer an arm/outcome combination from an
+    observation ID. Ambiguity stops synthesis, not the searchable precedent rows.
+    """
 
     by_field: dict[tuple[str, str], list[DesignObservation]] = defaultdict(list)
     for item in observations:
@@ -227,8 +289,14 @@ def _trial_signature_materials(
 
     materials: dict[tuple[str, str], str] = {}
     for key, rows in by_field.items():
-        chosen = sorted(rows, key=lambda row: row.observation_id)[0]
-        materials[key] = _signature_component_text(chosen)
+        values = {_signature_component_text(row) for row in rows}
+        if len(values) != 1:
+            label = _label_for(*key)
+            raise DesignSynthesisError(
+                f"研究 {rows[0].trial_id} 的{label}包含多个不同设计观察；"
+                "当前无法证明其组合关系，保留原始设计先例，停止路径综合。"
+            )
+        materials[key] = next(iter(values))
     return materials
 
 

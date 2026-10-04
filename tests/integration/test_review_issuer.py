@@ -406,7 +406,7 @@ def test_issue_binds_published_request_and_real_execution(tmp_path: Path) -> Non
     assert attested.receipt_digest == receipt.receipt_digest
 
 
-def test_reissuance_overwrites_receipt_and_record_for_same_request(
+def test_reissuance_preserves_immutable_receipt_and_record_for_same_request(
     tmp_path: Path,
 ) -> None:
     context = _context()
@@ -416,20 +416,18 @@ def test_reissuance_overwrites_receipt_and_record_for_same_request(
         context,
         _fake_runner(tmp_path, context, verdict_payload=_verdict_payload(context)),
     )
-    second = _issue(
-        tmp_path,
-        context,
-        _fake_runner(
-            tmp_path,
-            context,
-            verdict_payload=_verdict_payload(context),
-            pid=5252,
-        ),
-        clock=lambda: ISSUED_AT + timedelta(hours=1),
-    )
-    assert second.receipt.receipt_digest != first.receipt.receipt_digest
+    before = (first.receipt_path.read_bytes(), first.record_path.read_bytes())
+    # Current R24 epoch contract preserves history; the old overwrite assertion
+    # is retired, not applied to a new candidate or used to rewrite old evidence.
+    with pytest.raises(ReviewIssuanceError, match="不可覆盖|纪元"):
+        _issue(
+            tmp_path, context,
+            _fake_runner(tmp_path, context, verdict_payload=_verdict_payload(context), pid=5252),
+            clock=lambda: ISSUED_AT + timedelta(hours=1),
+        )
+    assert (first.receipt_path.read_bytes(), first.record_path.read_bytes()) == before
     attested = verify_receipt_issuance(tmp_path, "B")
-    assert attested.receipt_digest == second.receipt.receipt_digest
+    assert attested.receipt_digest == first.receipt.receipt_digest
 
 
 # ─── 负向：必须绑定运行时已发布的科学复核请求 ────────────────────────────────

@@ -1,0 +1,535 @@
+{
+  "kind": "public-rendered-cde-acceptance-directory",
+  "url": "https://www.cde.org.cn/main/xxgk/listpage/369ac7cfeb67c6000c33f85e6f374044",
+  "acquired_at": "2026-10-03T12:41:34.209Z",
+  "query": {
+    "year": "",
+    "drug_name": "度普利尤单抗",
+    "drug_type": "",
+    "application_type": ""
+  },
+  "tables": [
+    {
+      "html": "<table class=\"layui-table txt-center\">\n                        <thead>\n                        <tr><td width=\"60\">序号</td>\n                        <td width=\"100\">受理号</td>\n                        <td width=\"150\">药品名称</td>\n                        <td width=\"80\">药品类型</td>\n                        <td width=\"80\">申请类型</td>\n                        <td width=\"80\">注册分类</td>\n                        <td width=\"150\">企业名称</td>\n                        <td width=\"100\">承办日期</td>\n                        </tr></thead>\n                        <tbody id=\"acceptVarietyInfoTbody\">\n                            \n                            \n                            <tr>\n                                <td>1</td>\n                                <td>JYSB2600265</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-09-22</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>2</td>\n                                <td>JYSB2600264</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-09-22</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>3</td>\n                                <td>JYSB2600263</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-09-22</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>4</td>\n                                <td>JYSB2600262</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-09-22</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>5</td>\n                                <td>JYSB2600139</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie; Genzyme Ireland Limited;</td>\n                                <td>2026-06-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>6</td>\n                                <td>JYSB2600138</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie; Genzyme Ireland Limited;</td>\n                                <td>2026-06-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>7</td>\n                                <td>JTS2600100</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;</td>\n                                <td>2026-06-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>8</td>\n                                <td>JTS2600099</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;</td>\n                                <td>2026-06-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>9</td>\n                                <td>JYSB2600070</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-04-01</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>10</td>\n                                <td>JYSB2600069</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-04-01</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>11</td>\n                                <td>JYSB2600068</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-04-01</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>12</td>\n                                <td>JYSB2600067</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2026-04-01</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>13</td>\n                                <td>CXSL2600180</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>新药</td>\n                                <td>3.3</td>\n                                <td>珠海联邦生物医药有限公司;</td>\n                                <td>2026-02-06</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>14</td>\n                                <td>JTS2600010</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Regeneron Pharmaceuticals, Inc.（再生元制药公司）;sanofi-aventis U.S. LLC,and Regeneron Pharmaceuticals, Inc.（赛诺菲-安万特美国有限责任公司和再生元制药公司）;江苏景行生物医药有限公司;</td>\n                                <td>2026-01-30</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>15</td>\n                                <td>CXSL2600070</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>新药</td>\n                                <td>3.3</td>\n                                <td>华润生物医药有限公司;</td>\n                                <td>2026-01-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>16</td>\n                                <td>JTS2500148</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Regeneron Pharmaceuticals, Inc.（再生元制药公司）;sanofi-aventis U.S. LLC,and Regeneron Pharmaceuticals, Inc.（赛诺菲-安万特美国有限责任公司和再生元制药公司）;江苏景行医药科技有限公司;</td>\n                                <td>2025-12-02</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>17</td>\n                                <td>CXSL2500955</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>新药</td>\n                                <td>3.3</td>\n                                <td>江苏景行医药科技有限公司;</td>\n                                <td>2025-11-08</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>18</td>\n                                <td>JTS2500123</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;</td>\n                                <td>2025-11-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>19</td>\n                                <td>JTS2500122</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;</td>\n                                <td>2025-11-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>20</td>\n                                <td>JTS2500121</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;</td>\n                                <td>2025-11-04</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>21</td>\n                                <td>JXSL2500201</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>2.2</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-10-16</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>22</td>\n                                <td>JTS2500095</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>生物制品</td>\n                                <td></td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;</td>\n                                <td>2025-10-14</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>23</td>\n                                <td>JYSZ2500025</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口再注册</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-09-11</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>24</td>\n                                <td>JYSZ2500024</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口再注册</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-09-11</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>25</td>\n                                <td>CXSL2500453</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>新药</td>\n                                <td>3.3</td>\n                                <td>石药集团巨石生物制药有限公司;</td>\n                                <td>2025-06-06</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>26</td>\n                                <td>CXSL2500452</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>新药</td>\n                                <td>3.3</td>\n                                <td>石药集团巨石生物制药有限公司;</td>\n                                <td>2025-06-06</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>27</td>\n                                <td>JXSS2500063</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-21</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>28</td>\n                                <td>JXSS2500062</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-21</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>29</td>\n                                <td>JXSS2500060</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>30</td>\n                                <td>JXSS2500059</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>31</td>\n                                <td>JXSS2500058</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>32</td>\n                                <td>JXSS2500057</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>33</td>\n                                <td>JXSS2500056</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>34</td>\n                                <td>JXSS2500055</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-05-13</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>35</td>\n                                <td>JYSB2500079</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2025-03-25</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>36</td>\n                                <td>JYSB2500078</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td>无</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2025-03-25</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>37</td>\n                                <td>JYSB2500077</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2025-03-25</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>38</td>\n                                <td>JYSB2500076</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2025-03-25</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>39</td>\n                                <td>JYSB2500069</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2025-03-19</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>40</td>\n                                <td>JYSB2500068</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2025-03-19</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>41</td>\n                                <td>JXSS2500026</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>2.2</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-03-15</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>42</td>\n                                <td>JXSS2500025</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>2.2</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2025-03-15</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>43</td>\n                                <td>JXSL2400169</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>2.2</td>\n                                <td>Sanofi-Aventis Recherche &amp; Développement;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2024-09-14</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>44</td>\n                                <td>JXSL2400123</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2024-07-12</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>45</td>\n                                <td>JYSZ2400041</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口再注册</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2024-07-06</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>46</td>\n                                <td>JYSZ2400040</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>进口再注册</td>\n                                <td>3.1</td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;</td>\n                                <td>2024-07-06</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>47</td>\n                                <td>CXSL2400409</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>新药</td>\n                                <td>3.3</td>\n                                <td>百奥泰生物制药股份有限公司;</td>\n                                <td>2024-06-25</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>48</td>\n                                <td>JYSB2400111</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2024-05-17</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>49</td>\n                                <td>JYSB2400110</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2024-05-17</td>\n                            </tr>\n                            \n                            <tr>\n                                <td>50</td>\n                                <td>JYSB2400109</td>\n                                <td>度普利尤单抗注射液</td>\n                                <td>治疗用生物制品</td>\n                                <td>补充申请</td>\n                                <td></td>\n                                <td>Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;</td>\n                                <td>2024-05-17</td>\n                            </tr>\n                            \n                            \n                            \n                        </tbody>\n                    </table>",
+      "rows": [
+        [
+          "序号",
+          "受理号",
+          "药品名称",
+          "药品类型",
+          "申请类型",
+          "注册分类",
+          "企业名称",
+          "承办日期"
+        ],
+        [
+          "1",
+          "JYSB2600265",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-09-22"
+        ],
+        [
+          "2",
+          "JYSB2600264",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-09-22"
+        ],
+        [
+          "3",
+          "JYSB2600263",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-09-22"
+        ],
+        [
+          "4",
+          "JYSB2600262",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-09-22"
+        ],
+        [
+          "5",
+          "JYSB2600139",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie; Genzyme Ireland Limited;",
+          "2026-06-04"
+        ],
+        [
+          "6",
+          "JYSB2600138",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie; Genzyme Ireland Limited;",
+          "2026-06-04"
+        ],
+        [
+          "7",
+          "JTS2600100",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;",
+          "2026-06-04"
+        ],
+        [
+          "8",
+          "JTS2600099",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;",
+          "2026-06-04"
+        ],
+        [
+          "9",
+          "JYSB2600070",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-04-01"
+        ],
+        [
+          "10",
+          "JYSB2600069",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-04-01"
+        ],
+        [
+          "11",
+          "JYSB2600068",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-04-01"
+        ],
+        [
+          "12",
+          "JYSB2600067",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2026-04-01"
+        ],
+        [
+          "13",
+          "CXSL2600180",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "新药",
+          "3.3",
+          "珠海联邦生物医药有限公司;",
+          "2026-02-06"
+        ],
+        [
+          "14",
+          "JTS2600010",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Regeneron Pharmaceuticals, Inc.（再生元制药公司）;sanofi-aventis U.S. LLC,and Regeneron Pharmaceuticals, Inc.（赛诺菲-安万特美国有限责任公司和再生元制药公司）;江苏景行生物医药有限公司;",
+          "2026-01-30"
+        ],
+        [
+          "15",
+          "CXSL2600070",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "新药",
+          "3.3",
+          "华润生物医药有限公司;",
+          "2026-01-13"
+        ],
+        [
+          "16",
+          "JTS2500148",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Regeneron Pharmaceuticals, Inc.（再生元制药公司）;sanofi-aventis U.S. LLC,and Regeneron Pharmaceuticals, Inc.（赛诺菲-安万特美国有限责任公司和再生元制药公司）;江苏景行医药科技有限公司;",
+          "2025-12-02"
+        ],
+        [
+          "17",
+          "CXSL2500955",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "新药",
+          "3.3",
+          "江苏景行医药科技有限公司;",
+          "2025-11-08"
+        ],
+        [
+          "18",
+          "JTS2500123",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;",
+          "2025-11-04"
+        ],
+        [
+          "19",
+          "JTS2500122",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;",
+          "2025-11-04"
+        ],
+        [
+          "20",
+          "JTS2500121",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;",
+          "2025-11-04"
+        ],
+        [
+          "21",
+          "JXSL2500201",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "2.2",
+          "Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-10-16"
+        ],
+        [
+          "22",
+          "JTS2500095",
+          "度普利尤单抗注射液",
+          "生物制品",
+          "",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;上海宏成药业有限公司;",
+          "2025-10-14"
+        ],
+        [
+          "23",
+          "JYSZ2500025",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口再注册",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-09-11"
+        ],
+        [
+          "24",
+          "JYSZ2500024",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口再注册",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-09-11"
+        ],
+        [
+          "25",
+          "CXSL2500453",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "新药",
+          "3.3",
+          "石药集团巨石生物制药有限公司;",
+          "2025-06-06"
+        ],
+        [
+          "26",
+          "CXSL2500452",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "新药",
+          "3.3",
+          "石药集团巨石生物制药有限公司;",
+          "2025-06-06"
+        ],
+        [
+          "27",
+          "JXSS2500063",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-21"
+        ],
+        [
+          "28",
+          "JXSS2500062",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-21"
+        ],
+        [
+          "29",
+          "JXSS2500060",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-13"
+        ],
+        [
+          "30",
+          "JXSS2500059",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-13"
+        ],
+        [
+          "31",
+          "JXSS2500058",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-13"
+        ],
+        [
+          "32",
+          "JXSS2500057",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-13"
+        ],
+        [
+          "33",
+          "JXSS2500056",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-13"
+        ],
+        [
+          "34",
+          "JXSS2500055",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-05-13"
+        ],
+        [
+          "35",
+          "JYSB2500079",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2025-03-25"
+        ],
+        [
+          "36",
+          "JYSB2500078",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "无",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2025-03-25"
+        ],
+        [
+          "37",
+          "JYSB2500077",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2025-03-25"
+        ],
+        [
+          "38",
+          "JYSB2500076",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2025-03-25"
+        ],
+        [
+          "39",
+          "JYSB2500069",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2025-03-19"
+        ],
+        [
+          "40",
+          "JYSB2500068",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2025-03-19"
+        ],
+        [
+          "41",
+          "JXSS2500026",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "2.2",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-03-15"
+        ],
+        [
+          "42",
+          "JXSS2500025",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "2.2",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2025-03-15"
+        ],
+        [
+          "43",
+          "JXSL2400169",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "2.2",
+          "Sanofi-Aventis Recherche & Développement;Sanofi (China) Investment Co., Ltd.;",
+          "2024-09-14"
+        ],
+        [
+          "44",
+          "JXSL2400123",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2024-07-12"
+        ],
+        [
+          "45",
+          "JYSZ2400041",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口再注册",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2024-07-06"
+        ],
+        [
+          "46",
+          "JYSZ2400040",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "进口再注册",
+          "3.1",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;Sanofi (China) Investment Co., Ltd.;",
+          "2024-07-06"
+        ],
+        [
+          "47",
+          "CXSL2400409",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "新药",
+          "3.3",
+          "百奥泰生物制药股份有限公司;",
+          "2024-06-25"
+        ],
+        [
+          "48",
+          "JYSB2400111",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2024-05-17"
+        ],
+        [
+          "49",
+          "JYSB2400110",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2024-05-17"
+        ],
+        [
+          "50",
+          "JYSB2400109",
+          "度普利尤单抗注射液",
+          "治疗用生物制品",
+          "补充申请",
+          "",
+          "Sanofi Winthrop Industrie;Sanofi Winthrop Industrie;",
+          "2024-05-17"
+        ]
+      ]
+    }
+  ],
+  "pager": [
+    {
+      "id": "layui-laypage-4",
+      "text": "共 80 条上一页\n12下一页\n10 条/页\n20 条/页\n30 条/页\n40 条/页\n50 条/页\n到第页确定",
+      "page": "1"
+    }
+  ]
+}

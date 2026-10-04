@@ -60,8 +60,9 @@ def _scalar_text(value: object, path: str) -> str:
 def extract_ctgov_protocol_design_atoms(source: SourceCapture) -> CtgovProtocolDesignAtoms:
     """从一条登记研究采集合同提取可回溯的协议设计来源原子。
 
-    关键结构（研究身份、资格全文、终点定义与时间窗、组别标签、干预名称）缺失
-    或损坏时整体失败；可选标量缺失时记录精确路径而不补零。组别只保留登记原文
+    关键结构（研究身份、资格全文、终点定义、组别标签、干预名称）缺失
+    或损坏时整体失败；缺失时间窗只记录该终点的精确缺口，不丢弃其他原子。
+    非文本时间窗仍失败关闭。可选标量缺失时记录精确路径而不补零。组别只保留登记原文
     标签，干预—组别关系仅按来源自身的标签引用核对，不推断任何产品等式。
     """
     if source.source_type != "clinical_trial_registry" or source.media_type != "application/json":
@@ -387,6 +388,12 @@ def extract_ctgov_protocol_design_atoms(source: SourceCapture) -> CtgovProtocolD
                     ("timeFrame", f"ctgov.protocol.{role}_outcome.time_frame"),
                 ):
                     scalar_path = f"{base}.{key_name}"
+                    value = outcome.get(key_name)
+                    if key_name == "timeFrame" and (
+                        value is None or (isinstance(value, str) and not value.strip())
+                    ):
+                        mark_absent(scalar_path)
+                        continue
                     if outcome.get(key_name) is None:
                         raise ResearchPackageError(f"{scalar_path} 缺少终点定义或时间窗")
                     emit(

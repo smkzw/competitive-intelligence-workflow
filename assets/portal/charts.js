@@ -52,7 +52,7 @@
     if (state === "unresolved_due_to_route") return "路径未解析";
     if (state === "conflicting" || state === "conflicting_sources") return "来源冲突";
     if (state === "user_cleared") return "用户清除，待重新核实";
-    return "未公开";
+    return "披露状态待核实";
   }
 
   function isRenderable(row) {
@@ -325,7 +325,7 @@
             position: value < 0 ? "insideBottom" : "top",
             formatter: String(value),
             color: value < 0 ? "#FFFFFF" : "#0F1115",
-            fontSize: 13,
+            fontSize: 16,
             fontWeight: 600,
             padding: 2
           }
@@ -364,7 +364,7 @@
           show: false,
           data: series.map(function (item) { return item.name; }),
           top: 2,
-          textStyle: { fontSize: 13 }
+          textStyle: { fontSize: 16 }
         },
         grid: { left: 56, right: 40, top: 36, bottom: categories.length > 8 ? 100 : 78, containLabel: true },
         dataZoom: categories.length > 8 ? [
@@ -374,12 +374,12 @@
         xAxis: {
           type: "category",
           data: categories,
-          axisLabel: { interval: "auto", hideOverlap: true, fontSize: 14, rotate: 30, width: 110, overflow: "break" }
+          axisLabel: { interval: "auto", hideOverlap: true, fontSize: 16, rotate: 30, width: 110, overflow: "break" }
         },
         yAxis: {
           type: "value",
           name: String(unitLabel).length > 18 ? "" : unitLabel,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           scale: false,
           min: function (extent) {
             if (typeof group.y_axis_min === "number") return group.y_axis_min;
@@ -420,6 +420,7 @@
       var v = row.numeric_value != null ? row.numeric_value : row.value;
       seriesData.push({
           value: v,
+          _row_id: String(row.row_id),
           status: null,
           itemStyle: { color: arm === "对照组" ? ctrlColor : treatColor },
           label: {
@@ -427,13 +428,13 @@
             position: v < 0 ? "insideBottom" : "top",
             formatter: String(v),
             color: v < 0 ? "#FFFFFF" : "#0F1115",
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: 600,
             padding: 3
           }
       });
     }
-    return withMeta(
+    var option = withMeta(
       {
         tooltip: { trigger: "item", show: false },
         grid: { left: 56, right: 40, top: 36, bottom: 48, containLabel: true },
@@ -445,7 +446,7 @@
         yAxis: {
           type: "value",
           name: String(unitLabel).length > 18 ? "" : unitLabel,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           scale: false,
           min: function (extent) {
             if (typeof group.y_axis_min === "number") return group.y_axis_min;
@@ -478,6 +479,32 @@
       },
       collectRenderableRowIds(group)
     );
+    if (group.orientation === "horizontal") {
+      // Long dose/group names cannot consume the entire quantitative plot.
+      // Keep their full labels and values, orient the value axis horizontally.
+      var valueAxis = option.yAxis;
+      var categoryAxis = option.xAxis;
+      valueAxis.axisLabel = {fontSize: 16, hideOverlap: true};
+      valueAxis.nameLocation = "middle";
+      valueAxis.nameGap = 28;
+      categoryAxis.axisLabel = {fontSize: 16, interval: 0, rotate: 0,
+        width: 220, overflow: "break", lineHeight: 20, margin: 12};
+      categoryAxis.inverse = true;
+      option.xAxis = valueAxis;
+      option.yAxis = categoryAxis;
+      option.grid = {left: 250, right: 64, top: 18, bottom: 42, containLabel: false};
+      option.series[0].data.forEach(function (point) {
+        point.label.position = point.value < 0 ? "left" : "right";
+        point.label.color = "#0F1115";
+      });
+      option.series[0].barMaxWidth = 24;
+      if (categories.length > 6) option.dataZoom = [
+        {type: "slider", yAxisIndex: 0, right: 4, width: 14, start: 0,
+          end: Math.min(100, 600 / categories.length)},
+        {type: "inside", yAxisIndex: 0}
+      ];
+    }
+    return option;
   }
 
   function groupedLineOption(group) {
@@ -547,7 +574,7 @@
           show: series.length > 1,
           data: series.map(function (item) { return item.name; }),
           top: 0,
-          textStyle: { fontSize: 13 }
+          textStyle: { fontSize: 16 }
         },
         grid: { left: 56, right: 40, top: series.length > 1 ? 58 : 40, bottom: 54, containLabel: true },
         xAxis: {
@@ -557,12 +584,12 @@
           nameLocation: "middle",
           nameGap: 36,
           boundaryGap: false,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "value",
           scale: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
           max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
         },
@@ -594,12 +621,12 @@
           type: "category",
           data: times,
           boundaryGap: false,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "value",
           scale: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
           min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
           max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
         },
@@ -633,12 +660,12 @@
       {
         tooltip: { trigger: "item" },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "value", name: "效应值", axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
+        xAxis: { type: "value", name: "效应值", axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
         yAxis: {
           type: "category",
           data: categories,
           inverse: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         series: [
           {
@@ -713,7 +740,11 @@
       var row = group.rows[i];
       if (!rowUnit && row.unit) rowUnit = String(row.unit);
       if (rowUnit && row.unit && String(row.unit) !== rowUnit) rowUnit = "例";
-      var eventName = row.event || row.display_label_zh || "";
+      // Identity-series panels use a real product/study identifier on the axis;
+      // the complete study title remains in query rows, folded table and evidence.
+      var eventName = usesIdentitySeries(group) && row.product_zh && row.trial_id
+        ? String(row.product_zh) + " · " + String(row.trial_id).toUpperCase()
+        : row.event || row.display_label_zh || "";
       var armName = armLabel(row) || String(row.arm_detail || row.arm || "组别未列示");
       var eventIndex = events.indexOf(eventName);
       var armIndex = arms.indexOf(armName);
@@ -768,13 +799,13 @@
         xAxis: {
           type: "category",
           data: arms,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "category",
           data: events,
           inverse: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         visualMap: {
           min: 0,
@@ -879,7 +910,7 @@
           name: group.x_axis_label_zh || "疗效",
           nameLocation: "middle",
           nameGap: 42,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "value",
@@ -889,7 +920,7 @@
           min: projectedY.length ? Math.min.apply(null, projectedY.concat([0])) : 0,
           max: projectedY.length ? Math.max.apply(null, projectedY) * 1.1 || 1 : 1,
           inverse: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         series: [
           {
@@ -951,12 +982,12 @@
       {
         tooltip: { trigger: "item" },
         grid: { left: 120, right: 40, top: 24, bottom: 32, containLabel: true },
-        xAxis: { type: "value", name: "估计值", axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
+        xAxis: { type: "value", name: "估计值", axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
         yAxis: {
           type: "category",
           data: categories,
           inverse: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         series: [
           {
@@ -1013,7 +1044,7 @@
       {
         tooltip: { trigger: "axis" },
         grid: { left: 40, right: 24, top: 48, bottom: 40, containLabel: true },
-        xAxis: { type: "category", data: times, axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
+        xAxis: { type: "category", data: times, axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" } },
         yAxis: { type: "value", show: false, min: 0, max: group.rows.length + 1 },
         series: [
           {
@@ -1070,13 +1101,13 @@
         xAxis: {
           type: "category",
           data: ["状态"],
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         yAxis: {
           type: "category",
           data: labels,
           inverse: true,
-          axisLabel: { fontSize: 14, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
         },
         visualMap: {
           min: 0,
@@ -1197,14 +1228,16 @@
   }
 
   function undisclosedTitle(group) {
-    if (group && group.empty_message) return String(group.empty_message);
     var rows = (group && group.rows) || [];
     var total = 0;
     var notApplicable = 0;
     var publishedButUnplotted = 0;
     var userCleared = 0;
+    var stateLabels = [];
     for (var i = 0; i < rows.length; i++) {
       total += 1;
+      var label = disclosureLabelZh(rows[i].disclosure_state);
+      if (stateLabels.indexOf(label) === -1) stateLabels.push(label);
       if (rows[i].disclosure_state === "not_applicable") notApplicable += 1;
       if (rows[i].disclosure_state === "user_cleared") userCleared += 1;
       if (rows[i].disclosure_state === "reported_value" ||
@@ -1212,11 +1245,40 @@
     }
     if (publishedButUnplotted) return "有公开记录，但当前口径不适合绘图";
     if (userCleared) return "用户清除，待重新核实";
-    return total > 0 && notApplicable === total ? "不适用" : "该指标结果尚未公开";
+    if (total > 0 && notApplicable === total) return "不适用";
+    // Never turn unresolved routes/conflicts/censoring into non-publication.
+    // Row states own disclosure; comparison explanations belong in the hint.
+    if (total > 0) {
+      if (stateLabels.length === 1 && stateLabels[0] === "未公开") {
+        return "该指标结果尚未公开";
+      }
+      var title = stateLabels.join("；");
+      if (stateLabels.indexOf("低于报告阈值") !== -1) title += "，不能视为零";
+      return title;
+    }
+    if (group && group.empty_message) return String(group.empty_message);
+    return "当前查询无记录";
   }
 
   function hasPublishedDisclosure(row) {
     return row.disclosure_state === "reported_value" || row.disclosure_state === "reported_zero";
+  }
+
+  function unplottedValueText(row) {
+    if (!row || !hasPublishedDisclosure(row)) {
+      return disclosureLabelZh(row && row.disclosure_state);
+    }
+    var matrixValue = Array.isArray(row.value_matrix) ? row.value_matrix[0] : null;
+    var candidates = [row.display_value, row.numeric_value, row.value,
+      row.effect, matrixValue, row.raw_numeric_value];
+    for (var i = 0; i < candidates.length; i += 1) {
+      if (candidates[i] !== null && candidates[i] !== undefined && candidates[i] !== "") {
+        var value = String(candidates[i]);
+        return row.group_assignment_state === "unknown"
+          ? value + "（组别产品归属待核）" : value;
+      }
+    }
+    return "已公开；核对原始来源";
   }
 
   function unplottedReason(row) {
@@ -1238,6 +1300,7 @@
     var reasons = (group.rows || []).filter(function (row) {
       return !isRenderable(row) && (row.difference_note || row.reason);
     }).map(function (row) { return String(row.difference_note || row.reason); });
+    if (group.empty_message) reasons.push(String(group.empty_message));
     p2.textContent = (reasons.length ? Array.from(new Set(reasons)).join("；") + "。" : "") +
       "完整记录仍列于下方表格，便于核对来源与口径。";
     status.appendChild(p1);
@@ -1245,22 +1308,78 @@
     chartDiv.appendChild(status);
   }
 
+  function singleFactContext(row) {
+    var trial = /^nct\d+$/i.test(String(row.trial_id || ""))
+      ? String(row.trial_id).toUpperCase() : row.trial_zh;
+    return [row.product_zh, trial, row.arm_role_label_zh || armLabel(row)]
+      .filter(Boolean).join(" · ");
+  }
+
   function presentationPlan(group) {
     var rows = group.rows || [];
+    // C supplies the actual diagram axes/glyph geometry, never fabricated
+    // numeric facts. The same planner owns layout; C retains its renderer.
+    var design = group.design_layout;
+    if (design) {
+      var yLabels = design.y_labels || [];
+      var xLabels = design.x_labels || [];
+      var longest = yLabels.concat(xLabels).reduce(function (length, label) {
+        return Math.max(length, String(label).length);
+      }, 0);
+      var rowHeight = Math.max(32, Number(design.row_height) || 32,
+        Math.ceil(yLabels.reduce(function (length, label) {
+          return Math.max(length, String(label).length);
+        }, 0) / 14) * 23 + 8);
+      var height = rows.length ? Math.max(140,
+        (Number(design.axis_inset) || 112) + yLabels.length * rowHeight) : 0;
+      var span = xLabels.length > 4 || yLabels.length > 8 ? 12
+        : longest > 48 ? 8 : rows.length <= 2 && longest <= 20 ? 4 : 6;
+      return {
+        query_digest: group.query_digest || rowSetDigest,
+        revision: group.revision || window.__FACT_REVISION__ || 0,
+        facet: group.facet_key || null, numeric_frame: null,
+        observation_ids: rows.map(function (row) { return String(row.row_id || ""); }),
+        plotted_ids: rows.map(function (row) { return String(row.row_id || ""); }),
+        unplotted: [], observation_count: rows.length,
+        glyph_count: rows.length ? Number(design.glyph_count) || rows.length : 0,
+        series_count: Number(design.series_count) || 1,
+        kind: design.kind, grid_span: span, target_height: height,
+        // Dense category rows are not clipped to the numeric-card height cap.
+        max_height: height,
+        axis_plan: {x_labels: xLabels.slice(), y_labels: yLabels.slice(), unit: null},
+        reason: "按当前可见设计坐标与实际绘制标签安排空间，不按原文长度撑高图卡"
+      };
+    }
     var plotted = rows.filter(isRenderable);
     var kind = resolveChartType(group);
     var singleFact = (kind === "bar" || kind === "line" || kind === "heatmap") &&
-      rows.length === 1 && plotted.length === 1;
+      plotted.length === 1;
     var compactMatrix = (kind === "heatmap" || kind === "status_matrix")
       && rows.length <= 4;
-    var compact = ((kind === "bar" || kind === "line") && plotted.length <= 4)
-      || compactMatrix;
+    var labelLength = rows.reduce(function (longest, row) {
+      return Math.max(longest, String(row.display_label_zh || row.category || "").length,
+        singleFact ? singleFactContext(row).length
+          : [row.product_zh, row.trial_zh, row.arm_role_label_zh].filter(Boolean).join(" · ").length);
+    }, String(group.title_zh || "").length);
+    var simpleNumeric = kind === "bar" || kind === "line";
+    var span = singleFact ? labelLength > 48 ? 6 : 4
+      : compactMatrix ? 6
+        : simpleNumeric && plotted.length <= 5 && labelLength <= 32 ? 6
+          : simpleNumeric && plotted.length <= 8 && labelLength <= 56 ? 8 : 12;
     var height = singleFact ? 0 : kind === "heatmap" || kind === "status_matrix"
       ? compactMatrix ? (rows.length <= 1 ? 160 : 184)
         : Math.min(420, Math.max(260, 140 + rows.length * 28))
       : plotted.length <= 1 ? 168
-        : plotted.length <= 2 ? 220
-          : plotted.length <= 8 ? 300 : 380;
+        : plotted.length <= 2 ? 196
+          : plotted.length <= 5 ? labelLength > 32 ? 284 : 248
+            : plotted.length <= 8 ? 288 : 380;
+    if (!singleFact && group.orientation === "horizontal") {
+      var longestAxisLabel = rows.reduce(function (longest, row) {
+        return Math.max(longest, String(row.category || row.display_label_zh || "").length);
+      }, 0);
+      height = Math.min(420, Math.max(height,
+        60 + Math.min(6, plotted.length) * Math.max(44, Math.ceil(longestAxisLabel / 20) * 20)));
+    }
     return {
       query_digest: group.query_digest || rowSetDigest,
       revision: group.revision || window.__FACT_REVISION__ || 0,
@@ -1275,12 +1394,12 @@
       glyph_count: singleFact ? 0 : plotted.length,
       series_count: usesIdentitySeries(group) ? groupedSeriesOrder(rows).length : 1,
       kind: singleFact ? "single_fact" : kind,
-      grid_span: compact ? 6 : 12,
+      grid_span: span,
       target_height: height,
       max_height: 420,
       axis_plan: { explicit_min: group.y_axis_min, explicit_max: group.y_axis_max, unit: group.unit || null },
       reason: singleFact ? "单项观察直接列示原值，不生成无比较意义的坐标轴"
-        : compact ? "少量同框观察，紧凑显示" : "多项观察或复杂图形，需要完整绘图区"
+        : span < 12 ? "根据观察量和标签长度安排紧凑比较区" : "多项观察或复杂标签，需要完整绘图区"
     };
   }
 
@@ -1302,10 +1421,7 @@
     chartDiv.appendChild(number);
     var context = document.createElement("span");
     context.className = "kz-chart-single-fact__context";
-    var trial = /^nct\d+$/i.test(String(row.trial_id || ""))
-      ? String(row.trial_id).toUpperCase() : row.trial_zh;
-    context.textContent = [row.product_zh, trial, row.arm_role_label_zh || armLabel(row)]
-      .filter(Boolean).join(" · ");
+    context.textContent = singleFactContext(row);
     chartDiv.appendChild(context);
     var button = document.createElement("button");
     button.type = "button";
@@ -1317,6 +1433,14 @@
       activateRow(String(row.row_id), button);
     });
     chartDiv.appendChild(button);
+  }
+
+  function chartHeadingParts(text, complete) {
+    var parts = String(text || "").split(" · ");
+    // Only split the renderer's complete structured title, never arbitrary source text.
+    return complete && parts.length > 3
+      ? { title: parts.slice(0, 3).join(" · "), context: parts.slice(3).join(" · ") }
+      : { title: String(text || ""), context: "" };
   }
 
   function renderChartContainer(container, groupIndex, group) {
@@ -1346,7 +1470,15 @@
         : dimensionTitle && dimensionTitle !== "全部指标"
           ? indicatorTitle + "｜" + dimensionTitle
           : indicatorTitle;
+    var headingParts = chartHeadingParts(title.textContent, completeTitle);
+    title.textContent = headingParts.title;
     container.appendChild(title);
+    if (headingParts.context) {
+      var contextNote = document.createElement("p");
+      contextNote.className = "kz-chart-group__context";
+      contextNote.textContent = headingParts.context;
+      container.appendChild(contextNote);
+    }
     var resolvedType = resolveChartType(group);
     if (resolvedType === "bar") {
       var units = [];
@@ -1488,11 +1620,7 @@
       var tdValue = document.createElement("td");
       tdValue.className = "kz-chart-table__cell kz-chart-table__cell--value";
       if (!isRenderable(row)) {
-        tdValue.textContent = hasPublishedDisclosure(row)
-          ? String(row.display_value != null ? row.display_value
-            : row.numeric_value != null ? row.numeric_value
-              : row.value != null ? row.value : "已公开；核对原始来源")
-          : disclosureLabelZh(row.disclosure_state);
+        tdValue.textContent = unplottedValueText(row);
         tdValue.classList.add("kz-chart-table__cell--status");
       } else {
         var shown =
@@ -1909,14 +2037,15 @@
 
   function fitHeatmapLabels(inst, chartDiv) {
     if (chartDiv.getAttribute("data-chart-type") !== "heatmap") return;
-    var narrow = chartDiv.clientWidth <= 480;
+    var labelWidth = Math.min(176, Math.max(112, Math.floor(chartDiv.clientWidth * .25)));
     inst.setOption({
-      grid: { left: narrow ? 120 : 100, right: narrow ? 0 : 40,
-        top: 24, bottom: narrow ? 90 : 40, containLabel: !narrow },
-      xAxis: { axisLabel: { interval: 0 } },
-      yAxis: { axisLabel: { width: narrow ? 104 : null,
-        overflow: narrow ? "break" : null, lineHeight: 20, margin: 8 } },
-      visualMap: { itemWidth: 12, itemHeight: narrow ? 110 : 140 }
+      grid: { left: labelWidth + 16, right: 24,
+        top: 16, bottom: 68, containLabel: false },
+      xAxis: { axisLabel: { interval: 0, rotate: 0, hideOverlap: false,
+        width: 160, overflow: "break", lineHeight: 20 } },
+      yAxis: { axisLabel: { width: labelWidth, rotate: 0, hideOverlap: false,
+        overflow: "break", lineHeight: 20, margin: 8 } },
+      visualMap: { itemWidth: 12, itemHeight: 140 }
     });
   }
 
@@ -1939,7 +2068,7 @@
         bottom: count <= 3 ? 66 : 88,
         containLabel: false },
       xAxis: { nameGap: 64, axisLabel: {
-        interval: 0, hideOverlap: false, fontSize: 14, lineHeight: 18,
+        interval: 0, hideOverlap: false, fontSize: 16, lineHeight: 18,
         rotate: count <= 3 ? 0 : 30,
         width: Math.max(40, Math.min(180, (width - 64) / count - 8)),
         overflow: "break",
@@ -1952,7 +2081,7 @@
     var plan = presentationPlan(group);
     chartTypeByGroup[groupIndex] = resolveChartType(group);
     allRowIdsByGroup[groupIndex] = collectRowIds(group);
-    var rowIds = chartTypeByGroup[groupIndex] === "bar"
+    var rowIds = chartTypeByGroup[groupIndex] === "bar" || plan.kind === "single_fact"
       ? collectRenderableRowIds(group)
       : collectRowIds(group);
     chartRowIdsByGroup[groupIndex] = rowIds.slice();
@@ -1964,7 +2093,7 @@
     chartDiv.setAttribute("role", "img");
 
     if (plan.kind === "single_fact") {
-      var factRow = group.rows[0];
+      var factRow = group.rows.filter(isRenderable)[0];
       chartDiv.style.width = "100%";
       renderSingleFact(chartDiv, factRow);
       if (chartDiv.parentElement) chartDiv.parentElement.tabIndex = -1;
@@ -1975,20 +2104,15 @@
     }
 
     if (!groupHasRenderable(group)) {
-      if (chartTypeByGroup[groupIndex] !== "heatmap") {
-        if (!chartDiv.querySelector(".kz-chart-undisclosed")) {
-          renderUndisclosedMessage(chartDiv, group);
-        }
-        var stubData = [];
-        for (var s = 0; s < group.rows.length; s++) {
-          stubData.push({
-            value: null,
-            status: group.rows[s].disclosure_state
-          });
-        }
-        optionCache[groupIndex] = withMeta({ series: [{ data: stubData }] }, rowIds);
-        return;
+      if (!chartDiv.querySelector(".kz-chart-undisclosed")) {
+        renderUndisclosedMessage(chartDiv, group);
       }
+      var stubData = [];
+      for (var s = 0; s < group.rows.length; s++) {
+        stubData.push({value: null, status: group.rows[s].disclosure_state});
+      }
+      optionCache[groupIndex] = withMeta({ series: [{ data: stubData }] }, rowIds);
+      return;
     }
 
     chartDiv.classList.remove("kz-chart-group__chart--undisclosed");
@@ -2116,6 +2240,11 @@
     }
   }
 
+  window.__PRESENTATION_PLAN__ = presentationPlan;
+  // C owns its table/precedent and event lifecycle. Loading the shared planner
+  // must not clear its module or attach a second chart controller.
+  if (window.__C_PAGE_ID__) return;
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
@@ -2123,6 +2252,10 @@
   }
 
   window.__CHART_SYNC__ = {
+    presentationPlan: presentationPlan,
+    disclosureLabel: disclosureLabelZh,
+    unplottedValueText: unplottedValueText,
+    buildBarOption: buildBarOption,
     syncWithFilter: syncChartWithFilter,
     replaceGroups: function (groups) {
       chartGroups = Array.isArray(groups) ? groups : [];

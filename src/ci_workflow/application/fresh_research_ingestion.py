@@ -26,6 +26,7 @@ from ci_workflow.application.fresh_research_primitives import (
 )
 from ci_workflow.domain.evidence import SourceReceipt
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.sources.connectors.public_pdf_availability import verify_public_pdf_availability
 from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
 from ci_workflow.storage.snapshot_store import (
     EvidenceSnapshotManifest,
@@ -158,10 +159,64 @@ def ingest_research_evidence(
     )
 
     for capture in sources:
+        # Frozen/model_copy instances are not validation authority. Recheck all
+        # supplied current-availability proofs before persisting any lineage.
+        SourceCapture.model_validate(capture.model_dump(mode="json"))
+        if capture.public_pdf_availability is not None:
+            assert capture.text_derivation is not None
+            verify_public_pdf_availability(
+                project_root, capture.public_pdf_availability, capture.url,
+                capture.text_derivation.raw_asset, data_cutoff,
+            )
         if capture.text_derivation is not None:
             verify_source_text_derivation(
                 project_root, capture.text_derivation, capture.content_text
             )
+            if (
+                capture.text_derivation.method == "pypdf-page-text-v1"
+                and capture.locator.page != capture.text_derivation.page
+            ):
+                raise ResearchIngestionError("来源定位页码与分页派生所证页码不一致")
+    # Validate every quote before persisting sources or fragments. Explicit page
+    # receipts prove only that page; legacy receipts never acquire page proof.
+    captures_by_id = {capture.source_id: capture for capture in sources}
+    verified_quotes: dict[str, str] = {}
+    for fact in facts:
+        capture = captures_by_id[fact.source_id]
+        if (
+            capture.text_derivation is not None
+            and capture.text_derivation.method == "pypdf-page-text-v1"
+            and fact.locator.page != capture.text_derivation.page
+        ):
+            raise ResearchIngestionError("事实定位页码与分页派生所证页码不一致")
+        try:
+            extracted = extract_locator_quote(
+                capture.content_text, media_type=capture.media_type, locator=fact.locator,
+            )
+        except SourceDerivationError as error:
+            raise ResearchIngestionError(f"事实缺少精确可重放定位：{error}") from error
+        if extracted != fact.original_text:
+            raise ResearchIngestionError("事实原文与来源字节按locator重提取结果不一致")
+        verified_quotes[fact.fact_id] = extracted
+        # Context pages retain their own source/locator. Never prove joined
+        # multi-page text with the primary clause's single-page receipt.
+        if fact.source_clause_context is not None:
+            context = fact.source_clause_context
+            references = list(context.continuations)
+            references.extend(ref for relation in context.relations for ref in relation.references)
+            for ref in references:
+                supporting = captures_by_id.get(ref.source_id)
+                if supporting is None or supporting.url != ref.locator.url:
+                    raise ResearchIngestionError("条款上下文引用了包外或错误来源")
+                if (supporting.text_derivation is not None
+                        and supporting.text_derivation.method == "pypdf-page-text-v1"
+                        and ref.locator.page != supporting.text_derivation.page):
+                    raise ResearchIngestionError("条款上下文页码与派生回执不一致")
+                if extract_locator_quote(
+                    supporting.content_text, media_type=supporting.media_type,
+                    locator=ref.locator,
+                ) != ref.original_text:
+                    raise ResearchIngestionError("条款上下文原文不能按独立定位重放")
     for capture in sources:
         version = repository.add_source_version(
             source_id=capture.source_id,
@@ -259,7 +314,14 @@ def ingest_research_evidence(
                 actual_backoff_ms=0,
                 result_class="content_acquired",
                 error_class=None,
-                completeness_checks=("身份可定位", "正文已保存", "截止日适格"),
+                completeness_checks=(
+                    "身份可定位", "正文已保存",
+                    "首次公开日期满足截止日（不替代历史版本核验）"
+                    if capture.date_evidence("first_disclosed_at").is_known_by(data_cutoff)
+                    else "首次公开日期未知或晚于截止日，未授予历史资格",
+                    *(('本次官方完整获取及CAS回执已重开，仅授予观察时刻后的当前资格',)
+                      if capture.public_pdf_availability is not None else ()),
+                ),
                 alternative_paths=("其他官方登记", "主要论文或监管材料"),
                 source_version_id=version.source_version_id,
                 content_sha256=version.content_sha256,
@@ -301,19 +363,8 @@ def ingest_research_evidence(
     # Every adopted fact must be re-extracted from the persisted source text.
     # A non-empty or URL-only locator is not an exact quote.
     fact_fragments: dict[str, str] = {}
-    captures_by_id = {capture.source_id: capture for capture in sources}
     for fact in facts:
-        capture = captures_by_id[fact.source_id]
-        try:
-            extracted = extract_locator_quote(
-                capture.content_text,
-                media_type=capture.media_type,
-                locator=fact.locator,
-            )
-        except SourceDerivationError as error:
-            raise ResearchIngestionError(f"事实缺少精确可重放定位：{error}") from error
-        if extracted != fact.original_text:
-            raise ResearchIngestionError("事实原文与来源字节按locator重提取结果不一致")
+        extracted = verified_quotes[fact.fact_id]
         fact_fragment = repository.add_fragment(
             source_version_id=source_versions[fact.source_id],
             locator=fact.locator,
@@ -463,14 +514,8 @@ def ingest_research_evidence(
         claim_versions: dict[str, str] = {}
         claim_closure: list[dict[str, object]] = []
         for claim in claims:
-            claim_identity = [
-                claim.claim_id, claim.claim_text,
-                *(fact_versions[item] for item in claim.fact_ids),
-            ]
-            if claim.calculation is not None:
-                claim_identity.append(claim.calculation.model_dump_json())
-            claim_version_id = stable_id(
-                "claim-version", *claim_identity,
+            claim_version_id = claim.scientific_version_id(
+                [fact_versions[item] for item in claim.fact_ids],
             )
             database.execute(
                 """INSERT OR IGNORE INTO claim_versions (
@@ -571,13 +616,18 @@ def ingest_research_evidence(
                     "created_at": created_at.isoformat(),
                 }
             )
-        source_closure.append(
-            {
+        source_entry: dict[str, object] = {
                 "capture": capture.model_dump(mode="json"),
                 "source_version_id": source_versions[capture.source_id],
                 "raw_asset_b64": raw_asset_b64,
-            }
-        )
+        }
+        if capture.public_pdf_availability is not None:
+            receipt_asset = capture.public_pdf_availability.receipt_asset
+            assert receipt_asset is not None
+            source_entry["availability_receipt_b64"] = b64encode(
+                store.read_bytes(receipt_asset),
+            ).decode("ascii")
+        source_closure.append(source_entry)
     source_derivations = [
         item for item in derivations if item["derivation_kind"] == "source_text"
     ]

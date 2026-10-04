@@ -32,8 +32,8 @@ class ActiveFactBinding(BaseModel):
     report: ReportCode
     collection: DomainCollection
     row_id: str
-    product_id: str
-    drug_name: str
+    product_id: str | None
+    drug_name: str | None
     trial_id: str
     registry_id: str
     group_id: str | None
@@ -52,10 +52,14 @@ class ActiveFactBinding(BaseModel):
 
     @model_validator(mode="after")
     def _identity_is_complete(self) -> ActiveFactBinding:
+        unassigned = self.product_id is None or self.drug_name is None
+        if unassigned and not (
+            self.report == "C" and self.collection == "observations"
+            and self.product_id is None and self.drug_name is None
+        ):
+            raise ValueError("仅 C 设计观察允许明确未知的产品与药物身份；两字段必须同时为空")
         required_text = (
             "row_id",
-            "product_id",
-            "drug_name",
             "trial_id",
             "registry_id",
             "statistical_form",
@@ -67,6 +71,10 @@ class ActiveFactBinding(BaseModel):
         )
         if any(not str(getattr(self, field)).strip() for field in required_text):
             raise ValueError("active fact消费者科学身份必填字段不能为空")
+        if not unassigned and (
+            not str(self.product_id).strip() or not str(self.drug_name).strip()
+        ):
+            raise ValueError("active fact消费者产品与药物身份不得为空文本")
         definitions = (self.endpoint_definition, self.event_definition)
         if sum(value is not None and value.strip() != "" for value in definitions) != 1:
             raise ValueError("active fact消费者必须且只能声明endpoint或event定义之一")
@@ -192,7 +200,20 @@ def validate_active_fact_binding(
         ]
         raise ValueError("active fact原消费者科学身份不一致：" + ",".join(differing))
     extra = fact.model_extra or {}
+    if actual.report == "C" and actual.product_id is None:
+        missing = [field for field in ("product_id", "drug_name") if field not in extra]
+        if missing:
+            raise ValueError("active fact缺少明确空值身份：" + ",".join(missing))
     source_pointer = fact.source_locator
+    source_version_id = fact.source_version_id
+    # C observations use the capture-instance id while immutable fragments use
+    # the warehouse version id. Source registration proves that mapping against
+    # the locked closure; public facts retain the immutable context's source_id.
+    # Resolve only that explicit alias, without changing stored source versions
+    # or exempting an unknown C source from the identity comparison.
+    if (actual.report == "C" and actual.source_version_id != source_version_id
+            and extra.get("source_id") == actual.source_version_id):
+        source_version_id = actual.source_version_id
     # Registry fragments preserve the full JSON locator; A's existing row
     # contract carries its exact field_path. Both must identify the same atom.
     if actual.report == "A" and actual.source_pointer.startswith("$."):
@@ -219,7 +240,7 @@ def validate_active_fact_binding(
         "measure_object": extra.get("measure_object"),
         "unit": extra.get("unit"),
         "normalized_unit": extra.get("normalized_unit"),
-        "source_version_id": fact.source_version_id,
+        "source_version_id": source_version_id,
         "source_pointer": source_pointer,
     }
     mismatches = [
@@ -230,6 +251,32 @@ def validate_active_fact_binding(
     if mismatches:
         raise ValueError("active fact与消费者科学身份不一致：" + ",".join(mismatches))
     return actual
+
+
+def source_consumer_node(
+    fact: ActiveFact, binding: ActiveFactBinding, *, page: str,
+    visible_row_id: str | None = None,
+) -> PortalConsumerNode:
+    """Receipt of a verified native source consumer, never a user-edit overlay.
+
+    The renderer calls this only after resolving and validating its actual row.
+    Receipt creation does not grant scientific acceptance or change source values.
+    """
+    row_id = visible_row_id or binding.row_id
+    a = binding.report == "A"
+    prefix = f"REPORT_A.{binding.collection}[row_id={row_id}]"
+    return PortalConsumerNode(
+        report=binding.report, fact_id=fact.fact_id, fact_version_id=fact.fact_version_id,
+        collection=binding.collection, row_id=binding.row_id, binding_identity=binding,
+        original_row_sha256=binding.original_row_sha256, page_relative_path=page,
+        chart_consumer=(f"{prefix}.value" if a else f"native-view:{row_id}.value"),
+        table_consumer=f"{page}#table-row:{row_id}",
+        narrative_consumer=(f"{page}#clinical-narrative:{row_id}" if a
+                            else f"evidence-view:{row_id}.row.value"),
+        index_consumer=f"data/search-index.js#{binding.collection}:{row_id}",
+        source_binding_consumer=(f"{prefix}.source_field_path" if a
+                                 else f"evidence-view:{row_id}.source_locator"),
+    )
 
 
 def user_edit_disclosure(

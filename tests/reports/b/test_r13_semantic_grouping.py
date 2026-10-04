@@ -10,8 +10,8 @@ import pytest
 from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
-    _display_locator,
     _efficacy_records,
+    _exact_source_locator,
     _filter_dimensions,
     _group,
     _groups_for_page,
@@ -454,26 +454,28 @@ def test_partial_precise_view_rejects_conflicting_overlap() -> None:
 
 
 def test_publication_locator_is_not_replaced_by_registry_trial_link() -> None:
-    locator = _display_locator({
+    locator = _exact_source_locator({
         "trial_id": "NCT04820530",
         "source_locator": {
             "document_role": "publication",
             "table": "Table 2",
             "url": "https://example.org/article/123",
         },
-    }, "eff-publication")
+    })
+    assert locator is not None
     assert locator.url == "https://example.org/article/123"
     assert locator.table == "Table 2"
 
 
 def test_registered_json_field_anchor_is_visible_in_b_evidence() -> None:
-    locator = _display_locator({
+    locator = _exact_source_locator({
         "source_locator": {
             "document_role": "registry",
             "field_path": "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]",
             "url": "https://clinicaltrials.gov/study/NCT04820530",
         },
-    }, "eff-source-row")
+    })
+    assert locator is not None
     assert locator.field_path == (
         "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]"
     )

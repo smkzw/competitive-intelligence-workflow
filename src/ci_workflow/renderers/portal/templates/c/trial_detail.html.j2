@@ -42,6 +42,10 @@
         <button type="button" class="kz-c-filter-reset" data-filter-reset>清除筛选</button>
         <span class="kz-c-filter-status" data-filter-status aria-live="polite">显示全部可用记录</span>
       </div>
+      <details class="kz-c-personal">
+        <summary>个人视图配置</summary>
+        <div class="kz-c-personal__body kz-a-workspace-bar__actions"></div>
+      </details>
     </div>
   </details>
 
@@ -67,7 +71,7 @@
               <tr>
                 <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__field-th">设计领域 / 设计要素</th>
                 {% for trial in design_matrix_trials %}
-                <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__trial-th" data-matrix-trial="{{ trial.id }}" data-matrix-product="{{ trial.product_id }}">
+                <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__trial-th" data-matrix-trial="{{ trial.id }}" data-matrix-product="{{ trial.product_id or '' }}">
                   <span class="kz-c-design-matrix__trial-id">{{ trial.display_id }}</span>
                   <span class="kz-c-design-matrix__trial-product">{{ trial.product_zh }}</span>
                   <span class="kz-c-design-matrix__trial-meta">{{ trial.phase }} · {{ trial.status }}</span>
@@ -91,7 +95,7 @@
                   <span class="kz-c-design-matrix__field-family">{{ row.family_label }}</span>
                 </th>
                 {% for cell in row.cells %}
-                <td class="kz-c-design-matrix__cell{% if cell.empty %} kz-c-design-matrix__cell--empty{% endif %}" data-matrix-cell data-matrix-field="{{ row.field }}" data-matrix-family="{{ row.family_id }}" data-matrix-trial="{{ cell.trial_id }}" data-matrix-product="{{ cell.product_id }}" data-row-ids="{{ cell.row_ids | join(' ') }}">
+                <td class="kz-c-design-matrix__cell{% if cell.empty %} kz-c-design-matrix__cell--empty{% endif %}" data-matrix-cell data-matrix-field="{{ row.field }}" data-matrix-family="{{ row.family_id }}" data-matrix-trial="{{ cell.trial_id }}" data-matrix-product="{{ cell.product_id or '' }}" data-row-ids="{{ cell.row_ids | join(' ') }}">
                   {% if cell["items"] %}
                   <ul class="kz-c-design-matrix__items">
                     {% for item in cell["items"] %}
@@ -124,7 +128,7 @@
         </thead>
         <tbody>
           {% for row in table_rows %}
-          <tr class="kz-chart-table__row" data-row-id="{{ row.row_id }}" data-table-item-id="{{ row.table_item_id }}" data-product-id="{{ row.product_id }}" tabindex="0">
+          <tr class="kz-chart-table__row" data-row-id="{{ row.row_id }}" data-table-item-id="{{ row.table_item_id }}" data-product-id="{{ row.product_id or '' }}" tabindex="0">
             {% for key, label in table_columns %}
             <td class="kz-chart-table__cell" data-evidence-open="{{ row.row_id }}" data-row-id="{{ row.row_id }}">{{ row[key] }}</td>
             {% endfor %}

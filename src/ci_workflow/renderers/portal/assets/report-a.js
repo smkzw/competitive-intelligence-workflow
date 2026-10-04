@@ -23,6 +23,7 @@
   var productInsightClose = document.getElementById("a-product-insight-close");
   var productInsightId = null;
   var productInsightTrigger = null;
+  var productInsightInert = null;
   var evidencePanelTrigger = null;
   var fallbackSafetyTermKeys = {
     "任何teae": "any_teae", "any teae": "any_teae", "teae": "any_teae",
@@ -288,6 +289,10 @@
     var active = visibleProductNames();
     var chosenArm = selected.arm && selected.arm.length ? selected.arm[0] : null;
     return safety.filter(function (row) {
+      // Unknown result-group attribution is displayed as 产品归属待核 in the
+      // table. A historical product_id is not authority to join that record to
+      // an explicitly selected named product. Keep it in the unfiltered query.
+      if ((productScope || (selected.product && selected.product.length)) && row.group_assignment_state === "unknown") return false;
       if (productScope && row.product_id !== productScope) return false;
       if (!productScope && Object.keys(active).length && !active[productName(row.product_id)]) return false;
       if (chosenArm && (row.arm || "治疗组") !== chosenArm) return false;
@@ -337,31 +342,6 @@
         || projection.plot_value + (projection.plot_unit || "");
     }
     return row.disclosure_state || "未公开";
-  }
-  function safetyObservationDisplayLabel(row) {
-    var full = row.category + "｜"
-      + (row.measure_label || safetyTermLabel(safetyTermKey(row)));
-    var context = String(row.measure_context || "").trim();
-    if (!context || String(full).indexOf(context) === -1) return full;
-    var concise = row.category + "｜" + context;
-    return String(full).length - concise.length >= 24 ? concise : full;
-  }
-  function safetyGroupDisplayLabels(observations) {
-    var original = observations.map(function (row) {
-      return row.category + "｜" + (row.measure_label || safetyTermLabel(safetyTermKey(row)));
-    });
-    var candidates = observations.map(safetyObservationDisplayLabel);
-    var firstOriginal = Object.create(null), ambiguous = Object.create(null);
-    candidates.forEach(function (candidate, index) {
-      if (firstOriginal[candidate] && firstOriginal[candidate] !== original[index]) {
-        ambiguous[candidate] = true;
-      } else {
-        firstOriginal[candidate] = original[index];
-      }
-    });
-    return candidates.map(function (candidate, index) {
-      return ambiguous[candidate] ? original[index] : candidate;
-    });
   }
   function safetyTimeWindowLabel(value) {
     var raw = String(value || "").trim();
@@ -623,7 +603,7 @@
       appendInsightField(fields, "事件", row.measure_label || row.term_label || row.term);
       appendInsightField(fields, "安全性维度", row.category);
       appendInsightField(fields, "组别", row.arm_detail || row.arm || "治疗组");
-      appendInsightField(fields, "发生率", insightRowValue(row));
+      appendInsightField(fields, "当前值", insightRowValue(row));
       appendInsightField(fields, "人数", insightCountValue(row));
       appendInsightField(fields, "观察窗", safetyTimeWindowLabel(row.time_window));
     });
@@ -689,7 +669,8 @@
       return;
     }
     appendInsightField(fields, "报告级来源数量", publicSources.length);
-    panel.appendChild(el("h4", "", "报告级资料来源"));
+    var reportSources = el("details", "kz-a-report-sources");
+    reportSources.appendChild(el("summary", "", "报告级资料来源（" + publicSources.length + "项）"));
     var list = el("ol", "kz-a-public-source-list");
     publicSources.forEach(function (source) {
       var item = el("li", "");
@@ -704,8 +685,9 @@
         + "｜数据截止：" + source.data_cutoff));
       list.appendChild(item);
     });
-    panel.appendChild(list);
-    panel.appendChild(el("p", "kz-a-insight-note", "以上是报告级来源集合，不代表每份来源都支持当前产品；行级支持关系尚未在此展开。"));
+    reportSources.appendChild(list);
+    reportSources.appendChild(el("p", "kz-a-insight-note", "以上是报告级来源集合，不代表每份来源都支持当前产品；行级支持关系请核对本次所选观察。"));
+    panel.appendChild(reportSources);
   }
   function setProductInsightTab(tabId, moveFocus) {
     if (!productInsightDrawer) return;
@@ -745,7 +727,9 @@
     renderInsightSafety(product, context);
     renderInsightProfile(product);
     renderInsightEvidence(product, context);
-    setProductInsightTab("efficacy", false);
+    var selectedObservation = context.selectedEfficacy || (context.eventRow && trigger
+      && trigger.getAttribute("data-row-id") === context.eventRow.row_id);
+    setProductInsightTab(selectedObservation ? "evidence" : "efficacy", false);
     return true;
   }
   function writeProductFocusUrl() {
@@ -755,33 +739,74 @@
     var next = window.location.pathname + (query.toString() ? "?" + query.toString() : "");
     window.history.replaceState(null, "", next);
   }
+  function setInsightBackgroundInert(open, panel) {
+    panel = panel || productInsightDrawer;
+    if (open && productInsightInert === null) {
+      productInsightInert = window.__KZ_READING_ISOLATION__.acquire(panel);
+    } else if (!open && productInsightInert !== null) {
+      productInsightInert();
+      productInsightInert = null;
+    }
+  }
   function openProductInsight(productId, trigger, syncUrl) {
     if (!renderProductInsight(productId, trigger)) return false;
+    closeEvidencePanel(false);
     productInsightTrigger = trigger || document.activeElement;
     productInsightDrawer.hidden = false;
+    setInsightBackgroundInert(true);
     document.body.classList.add("kz-a-insight-drawer-open");
     if (productInsightClose) productInsightClose.focus();
     if (syncUrl !== false) writeProductFocusUrl();
     return true;
   }
+  function restoreInsightFocus(trigger) {
+    function available(node) {
+      return node && node.isConnected && !node.hidden && !node.closest("[hidden]")
+        && node.getClientRects().length && typeof node.focus === "function";
+    }
+    if (available(trigger)) { trigger.focus(); return; }
+    var rowId = trigger && (trigger.getAttribute("data-row-id")
+      || trigger.getAttribute("data-efficacy-row-id")
+      || trigger.getAttribute("data-evidence-row-id"));
+    if (rowId) {
+      var candidates = document.querySelectorAll(
+        "button[data-row-id], button[data-efficacy-row-id], button[data-evidence-row-id], [data-row-id] button");
+      for (var i = 0; i < candidates.length; i += 1) {
+        var candidate = candidates[i];
+        var parentRow = candidate.closest("[data-row-id]");
+        var candidateId = candidate.getAttribute("data-row-id")
+          || candidate.getAttribute("data-efficacy-row-id")
+          || candidate.getAttribute("data-evidence-row-id")
+          || (parentRow && parentRow.getAttribute("data-row-id"));
+        if (candidateId === rowId && available(candidate)) { candidate.focus(); return; }
+      }
+    }
+    var anchor = document.querySelector(".kz-a-observation-pagination")
+      || document.querySelector("[data-a-chart]");
+    if (anchor) { anchor.setAttribute("tabindex", "-1"); anchor.focus(); }
+  }
   function closeProductInsight(restoreFocus, syncUrl) {
     var wasOpen = productInsightDrawer && !productInsightDrawer.hidden;
     if (productInsightDrawer) productInsightDrawer.hidden = true;
+    if (wasOpen) setInsightBackgroundInert(false);
     document.body.classList.remove("kz-a-insight-drawer-open");
     var trigger = productInsightTrigger;
     productInsightTrigger = null;
     productInsightId = null;
-    if (restoreFocus !== false && wasOpen && trigger && trigger.isConnected
-      && typeof trigger.focus === "function") trigger.focus();
+    if (restoreFocus !== false && wasOpen) restoreInsightFocus(trigger);
     if (syncUrl !== false && wasOpen) writeProductFocusUrl();
   }
-  function insightFocusableNodes() {
-    if (!productInsightDrawer) return [];
-    return Array.prototype.slice.call(productInsightDrawer.querySelectorAll(
-      'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+  function modalFocusableNodes(panel) {
+    if (!panel) return [];
+    return Array.prototype.slice.call(panel.querySelectorAll(
+      'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), '
+      + 'textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'
     )).filter(function (node) {
       return !node.hidden && !node.closest("[hidden]") && node.getClientRects().length > 0;
     });
+  }
+  function insightFocusableNodes() {
+    return modalFocusableNodes(productInsightDrawer);
   }
   document.addEventListener("keydown", function (event) {
     if (!productInsightDrawer || productInsightDrawer.hidden) return;
@@ -855,6 +880,73 @@
     }
     return value + unitSuffix(projection.plot_unit);
   }
+  // 宿主图表记录由疗效与安全性数值视图共用（函数名沿用既有命名）。
+  function disposeEfficacyCharts(host) {
+    (host._chartRecords || []).forEach(function (record) {
+      if (record.observer) record.observer.disconnect();
+      if (record.instance && !record.instance.isDisposed()) record.instance.dispose();
+    });
+    host._chartRecords = [];
+  }
+  function syncEfficacyCharts(host) {
+    var api = window.__CHART_SYNC__;
+    (host._chartRecords || []).forEach(function (record) {
+      var visibleIds = Array.prototype.filter.call(record.group.querySelectorAll("[data-row-id]"),
+        function (node) { return !node.hidden && !record.group.hidden; })
+        .map(function (node) { return node.getAttribute("data-row-id"); });
+      if (!visibleIds.length) {
+        if (record.observer) record.observer.disconnect();
+        if (record.instance && !record.instance.isDisposed()) record.instance.dispose();
+        record.instance = null;
+        return;
+      }
+      if (!api || !window.echarts) {
+        record.canvas.textContent = "图形组件不可用；原值与依据仍可查看。";
+        return;
+      }
+      var descriptor = Object.assign({}, record.descriptor, {
+        rows: record.descriptor.rows.filter(function (row) { return visibleIds.indexOf(row.row_id) !== -1; })
+      });
+      var plan = api.presentationPlan(descriptor);
+      record.group.style.gridColumn = "span " + plan.grid_span;
+      record.group.setAttribute("data-grid-span", String(plan.grid_span));
+      record.canvas.hidden = descriptor.rows.length === 1;
+      if (record.canvas.hidden) {
+        if (record.observer) record.observer.disconnect();
+        if (record.instance && !record.instance.isDisposed()) record.instance.dispose();
+        record.instance = null;
+        return;
+      }
+      record.canvas.style.height = plan.target_height + "px";
+      if (!record.instance || record.instance.isDisposed()) {
+        record.instance = window.echarts.init(record.canvas, null, {renderer: "canvas"});
+        record.instance.on("click", function (event) {
+          var rowId = event.data && event.data._row_id;
+          if (!rowId) return;
+          var lanes = record.group.querySelectorAll("[data-row-id]");
+          for (var i = 0; i < lanes.length; i += 1) {
+            if (lanes[i].getAttribute("data-row-id") !== String(rowId) || lanes[i].hidden) continue;
+            var trigger = lanes[i].querySelector("button");
+            if (!trigger && String(lanes[i].tagName || "").toLowerCase() === "button") {
+              trigger = lanes[i];
+            }
+            if (trigger) { trigger.focus(); trigger.click(); }
+            break;
+          }
+        });
+      }
+      var option = api.buildBarOption(descriptor);
+      option.animation = false;
+      record.instance.setOption(option, true);
+      record.instance.resize();
+      if (typeof window.ResizeObserver === "function") {
+        if (!record.observer) record.observer = new ResizeObserver(function () {
+          if (record.instance && !record.instance.isDisposed()) record.instance.resize();
+        });
+        record.observer.observe(record.canvas);
+      }
+    });
+  }
   function paginateObservations(host, groupSelector, label) {
     var observations = Array.prototype.slice.call(host.querySelectorAll("[data-row-id]"));
     if (observations.length && observations[0].hasAttribute("data-observation-order")) {
@@ -863,7 +955,12 @@
           - Number(b.getAttribute("data-observation-order"));
       });
     }
-    var pageSize = 60, currentPage = 0;
+    var pageSize = 60;
+    var signature = observations.map(function (node) { return node.getAttribute("data-row-id"); }).join("|");
+    var currentPage = host._observationSignature === signature ? Number(host.dataset.observationPage) || 0 : 0;
+    currentPage = Math.min(currentPage, Math.max(0, Math.ceil(observations.length / pageSize) - 1));
+    host._observationSignature = signature;
+    host.dataset.observationPage = String(currentPage);
     if (observations.length > pageSize) {
       var navigation = el("nav", "kz-a-observation-pagination");
       navigation.setAttribute("aria-label", label + "图表翻页");
@@ -872,6 +969,7 @@
       var status = el("span", ""); status.setAttribute("aria-live", "polite");
       function showPage(index) {
         currentPage = index;
+        host.dataset.observationPage = String(index);
         observations.forEach(function (node, position) {
           node.hidden = position < index * pageSize || position >= (index + 1) * pageSize;
         });
@@ -882,14 +980,16 @@
         next.disabled = (index + 1) * pageSize >= observations.length;
         status.textContent = "第" + (index + 1) + "/" + Math.ceil(observations.length / pageSize)
           + "页，共" + observations.length + "条观察（全部可翻页）";
+        syncEfficacyCharts(host);
       }
       previous.addEventListener("click", function () { showPage(currentPage - 1); });
       next.addEventListener("click", function () { showPage(currentPage + 1); });
       navigation.appendChild(previous); navigation.appendChild(status); navigation.appendChild(next);
-      host.insertBefore(navigation, host.firstChild); showPage(0);
+      host.insertBefore(navigation, host.firstChild); showPage(currentPage);
     }
   }
   function renderEfficacy(host) {
+    disposeEfficacyCharts(host);
     host.innerHTML = "";
     var active = visibleProductNames();
     var productScope = host.getAttribute("data-product-scope");
@@ -917,32 +1017,29 @@
     }
     var observationGrid = el("div", "kz-a-observation-grid");
     host.appendChild(observationGrid);
-    var wideColumns = window.innerWidth >= 1920;
-    var columns = [], columnWeights = [0, 0], observationOrder = 0;
-    if (wideColumns) {
-      for (var columnIndex = 0; columnIndex < 2; columnIndex += 1) {
-        var column = el("div", "kz-a-observation-column");
-        observationGrid.appendChild(column);
-        columns.push(column);
-      }
-    }
+    var observationOrder = 0;
     keys.forEach(function (key) {
       var observations = groups[key];
       var first = observations[0];
       var trial = trialById(first.trial_id);
       var firstProjection = first.numeric_projection;
       var singleObservation = observations.length === 1;
-      var minimum = Math.min.apply(null, [0].concat(observations.map(function (item) {
-        return Number(item.numeric_projection.plot_value);
-      })));
-      var maximum = Math.max.apply(null, [0].concat(observations.map(function (item) {
-        return Number(item.numeric_projection.plot_value);
-      })));
-      var span = maximum - minimum || 1;
+      var descriptor = {chart_type: "bar", orientation: "horizontal", unit: firstProjection.plot_unit,
+        facet_key: firstProjection.facet_key, numeric_frame: firstProjection.kind,
+        rows: observations.map(function (item) {
+          return {row_id: item.row_id, _chart_type: "bar", category: item.arm_detail || item.arm,
+            display_label_zh: item.arm_detail || item.arm, trial_id: item.trial_id,
+            product_zh: productName(item.product_id), numeric_value: item.numeric_projection.plot_value,
+            value: item.numeric_projection.plot_value, unit: item.numeric_projection.plot_unit,
+            numeric_projection: item.numeric_projection, renderable: true};
+        })};
+      var plan = window.__CHART_SYNC__.presentationPlan(descriptor);
       var row = el("div", "kz-a-bar-row kz-a-observation-group"
         + (singleObservation ? " kz-a-observation-group--single" : ""));
       row.setAttribute("data-product-id", first.product_id);
       row.setAttribute("data-trial-id", first.trial_id);
+      row.setAttribute("data-grid-span", String(plan.grid_span));
+      row.style.gridColumn = "span " + plan.grid_span;
       var label = el("div", "kz-a-bar-label");
       var product = el("button", "kz-a-product-trigger", productName(first.product_id));
       product.setAttribute("data-a-product-focus", first.product_id);
@@ -968,94 +1065,140 @@
         observationButton.setAttribute("data-efficacy-row-id", item.row_id);
         observationButton.setAttribute("aria-label", (item.arm_detail || item.arm) + "：查看此项疗效观察");
         lane.appendChild(observationButton);
-        if (!singleObservation) {
-          var track = el("div", "kz-a-bar-track");
-          var zero = el("i", "kz-a-zero-line");
-          zero.style.left = ((0 - minimum) / span * 100) + "%";
-          track.appendChild(zero);
-          var bar = el("div", "kz-a-bar" + (item.arm === "对照组" ? " kz-a-bar--control" : ""));
-          bar.style.left = ((Math.min(0, projectedValue) - minimum) / span * 100) + "%";
-          bar.style.width = (Math.abs(projectedValue) / span * 100) + "%";
-          bar.title = (item.arm_detail || item.arm) + " "
-            + observationValueLabel(projectedValue, projection)
-            + (projection.numerator !== null && projection.denominator !== null
-              ? "（" + projection.numerator + "/" + projection.denominator + "）" : "");
-          track.appendChild(bar);
-          lane.appendChild(track);
-        }
-        lane.appendChild(el("strong", "kz-a-observation-value", observationValueLabel(projectedValue, projection)));
+        var originalValue = el("strong", "kz-a-observation-value", observationValueLabel(projectedValue, projection));
+        originalValue.title = projection.numerator !== null && projection.denominator !== null
+          ? projection.numerator + "/" + projection.denominator : originalValue.textContent;
+        lane.appendChild(originalValue);
         bars.appendChild(lane);
       });
-      if (!singleObservation) bars.appendChild(el("small", "kz-a-local-scale", "本组刻度："
-        + Number(minimum.toPrecision(3)) + " 至 " + Number(maximum.toPrecision(3))
-        + unitSuffix(firstProjection.plot_unit)));
-      row.appendChild(bars);
-      if (wideColumns) {
-        var targetColumn = columnWeights[0] <= columnWeights[1] ? 0 : 1;
-        columns[targetColumn].appendChild(row);
-        columnWeights[targetColumn] += Math.max(2, observations.length);
-      } else {
-        observationGrid.appendChild(row);
+      if (!singleObservation) {
+        var canvas = el("div", "kz-a-efficacy-plot");
+        canvas.setAttribute("role", "img");
+        canvas.setAttribute("aria-label", "本试验同口径疗效观察；完整数值与操作入口列于图下");
+        row.appendChild(canvas);
+        host._chartRecords.push({canvas: canvas, group: row, descriptor: descriptor,
+          instance: null, observer: null});
       }
+      row.appendChild(bars);
+      observationGrid.appendChild(row);
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");
+    syncEfficacyCharts(host);
     host.appendChild(el("p", "kz-a-chart-note", "图中仅保留可安全绘制的观察；单条观察直接列值，多条观察使用组内刻度。未绘制的原始值仍见完整表；图形不代表跨试验可比或排名。"));
   }
-  function color(value, min, max) {
-    var ratio = max === min ? 0.5 : (value - min) / (max - min);
-    var from = [255, 244, 222], to = [192, 0, 0];
-    return "rgb(" + from.map(function (channel, index) {
-      return Math.round(channel + ratio * (to[index] - channel));
-    }).join(",") + ")";
+  // R24-72 执行切片：安全性数值视图的 facet 由精确事件定义/限定词、
+  // 统计基础与单位、分析人群和观察窗共同决定；宽泛的 specific_ae 键或
+  // 仅同试验/同组别都不足以构成一个可共享的数值坐标面。
+  function safetyEventLabel(row) {
+    return String(row.measure_label || safetyTermLabel(safetyTermKey(row)));
+  }
+  function safetyEventIdentity(row) {
+    return [
+      String(row.semantic_filter_key || ""),
+      String(row.term_key || ""),
+      safetyEventLabel(row),
+      String(row.measure_context || ""),
+      String(row.category || "")
+    ].join("\u0001");
+  }
+  function safetyFacetKey(row) {
+    var projection = row.numeric_projection || {};
+    return [
+      row.product_id,
+      row.trial_id,
+      safetyEventIdentity(row),
+      String(projection.kind || ""),
+      String(projection.plot_unit || row.plot_unit || ""),
+      String(projection.direction || ""),
+      String(projection.window || ""),
+      String(projection.estimand || ""),
+      String(row.population || ""),
+      String(row.time_window || "")
+    ].join("\u0001");
   }
   function renderSafety(host) {
+    disposeEfficacyCharts(host);
     host.innerHTML = "";
-    host.removeAttribute("data-safety-layout");
-    var rows = safetyRowsForView(host.getAttribute("data-product-scope"));
-    rows = rows.filter(function (item) {
+    var queryRows = safetyRowsForView(host.getAttribute("data-product-scope"));
+    var rows = queryRows.filter(function (item) {
       return item.numeric_projection && item.numeric_projection.renderable;
     });
+    var unassigned = queryRows.filter(function (item) {
+      return item.group_assignment_state === "unknown";
+    }).length;
+    var remaining = queryRows.length - rows.length - unassigned;
+    var disclosureText = "当前筛选 " + queryRows.length + " 条｜可绘制 " + rows.length + " 条";
+    if (unassigned) disclosureText += "｜" + unassigned + " 条组别—产品关系待核";
+    if (remaining) disclosureText += "｜" + remaining + " 条数值或绘图条件不足";
+    if (queryRows.length !== rows.length) disclosureText += "；未绘制的原值与说明保留在完整表。";
+    var disclosure = el("p", "kz-a-comparability", disclosureText);
+    disclosure.setAttribute("data-safety-query-disclosure", "");
+    disclosure.setAttribute("data-query-count", String(queryRows.length));
+    disclosure.setAttribute("data-drawable-count", String(rows.length));
+    disclosure.setAttribute("data-unassigned-count", String(unassigned));
+    host.appendChild(disclosure);
     if (!rows.length) {
       host.appendChild(el("div", "kz-empty", "当前筛选没有可安全绘制的安全性图形；未绘制的原始值仍可在完整表中核对。"));
       return;
     }
-    var groups = {};
+    var groups = {}, groupOrder = [];
     rows.forEach(function (item) {
-      var key = [item.product_id, item.trial_id, item.arm, item.arm_detail, item.time_window].join("\u0001");
-      if (!groups[key]) groups[key] = [];
+      var key = safetyFacetKey(item);
+      if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
       groups[key].push(item);
     });
-    var groupKeys = Object.keys(groups);
-    var groupLabels = {};
-    groupKeys.forEach(function (key) {
-      groupLabels[key] = safetyGroupDisplayLabels(groups[key]);
-    });
-    var compactSafety = groupKeys.length <= 8 && groupKeys.every(function (key) {
+    var observationGrid = el("div", "kz-a-observation-grid");
+    host.appendChild(observationGrid);
+    var observationOrder = 0;
+    groupOrder.forEach(function (key) {
       var observations = groups[key], first = observations[0];
-      var contextLength = String(first.arm_detail || first.arm).length
-        + String(first.time_window).length;
-      return observations.length <= 4 && contextLength <= 100
-        && groupLabels[key].every(function (label) {
-          return label.length <= 70;
-        });
-    });
-    host.setAttribute("data-safety-layout", compactSafety ? "compact" : "full");
-    groupKeys.forEach(function (key) {
-      var observations = groups[key], first = observations[0];
-      var group = el("section", "kz-a-safety-observation-group");
       var trial = trialById(first.trial_id);
+      var firstProjection = first.numeric_projection;
+      var singleObservation = observations.length === 1;
+      var descriptor = {chart_type: "bar", orientation: "horizontal", unit: firstProjection.plot_unit,
+        facet_key: firstProjection.facet_key, numeric_frame: firstProjection.kind,
+        rows: observations.map(function (item) {
+          var itemProjection = item.numeric_projection;
+          var armLabel = item.arm_detail || item.arm || "组别未列示";
+          return {row_id: item.row_id, _chart_type: "bar", category: armLabel,
+            display_label_zh: armLabel, trial_id: item.trial_id,
+            product_zh: productName(item.product_id), numeric_value: itemProjection.plot_value,
+            value: itemProjection.plot_value, unit: itemProjection.plot_unit,
+            numeric_projection: itemProjection, renderable: true};
+        })};
+      var plan = window.__CHART_SYNC__.presentationPlan(descriptor);
+      var section = el("section", "kz-a-safety-observation-group"
+        + (singleObservation ? " kz-a-observation-group--single" : ""));
+      section.setAttribute("data-grid-span", String(plan.grid_span));
+      section.style.gridColumn = "span " + plan.grid_span;
+      section.setAttribute("data-product-id", first.product_id);
+      section.setAttribute("data-trial-id", first.trial_id);
+      section.setAttribute("data-facet-key", String(firstProjection.facet_key || ""));
       var productLabel = el("h3", "", productName(first.product_id));
       productLabel.setAttribute("data-heat-label", "product");
-      group.appendChild(productLabel);
-      group.appendChild(el("p", "kz-a-safety-context",
-        (trial ? trial.display_id : "未公开试验") + "｜" + (first.arm_detail || first.arm)
-        + "｜" + first.time_window
-        + (first.group_assignment_state === "unknown" ? "｜结果组别归属待核" : "")));
+      section.appendChild(productLabel);
+      var contextParts = [
+        trial ? trial.display_id : "未公开试验",
+        safetyTimeWindowLabel(first.time_window)
+      ];
+      if (first.population) contextParts.push("分析人群：" + first.population);
+      if (first.group_assignment_state === "unknown") contextParts.push("结果组别归属待核");
+      section.appendChild(el("p", "kz-a-safety-context", contextParts.join("｜")));
+      if (!singleObservation) {
+        var canvas = el("div", "kz-a-safety-plot");
+        canvas.setAttribute("role", "img");
+        canvas.setAttribute("aria-label", productName(first.product_id)
+          + "｜" + safetyEventLabel(first) + "：同口径组别观察；完整数值与操作入口列于图下");
+        section.appendChild(canvas);
+        host._chartRecords.push({canvas: canvas, group: section, descriptor: descriptor,
+          instance: null, observer: null});
+      }
       var cells = el("div", "kz-a-safety-observations");
-      observations.forEach(function (record, index) {
+      observations.forEach(function (record) {
         var cell = el("button", "kz-a-safety-observation kz-a-product-trigger");
         cell.type = "button";
         cell.setAttribute("data-row-id", record.row_id);
+        cell.setAttribute("data-observation-order", String(observationOrder++));
         cell.setAttribute("data-a-product-focus", record.product_id);
         cell.setAttribute("data-trial-id", record.trial_id || "");
         cell.setAttribute("data-event-key", safetyTermKey(record));
@@ -1063,40 +1206,39 @@
         cell.setAttribute("data-heat-key", safetyTermKey(record));
         cell.setAttribute("data-heat-product", productName(record.product_id));
         cell.setAttribute("data-heat-event", safetyTermLabel(safetyTermKey(record)));
-        // 独立复核 A r42（issue-2）：分流行事件列带原测量标题，可区分不同测量
-        var eventLabel = el("span", "", groupLabels[key][index]);
+        cell.appendChild(el("span", "kz-a-safety-arm", record.arm_detail || record.arm || "治疗组"));
+        // 独立复核 A r42（issue-2）：分流行事件列带原测量标题，可区分不同测量；
+        // r24-72：同一 facet 内事件同名，逐条仍保留事件定义标签。
+        var eventLabel = el("span", "", safetyEventLabel(record));
         eventLabel.setAttribute("data-heat-label", "event");
-        eventLabel.title = record.category + "｜"
-          + (record.measure_label || safetyTermLabel(safetyTermKey(record)));
+        eventLabel.title = record.category + "｜" + safetyEventLabel(record);
         cell.appendChild(eventLabel);
-        var value = el("strong", "kz-a-heat-value", safetyDisplayValue(record));
-        var projection = record.numeric_projection;
-        if (projection && projection.renderable && projection.plot_unit === "%"
-            && numericValue(projection.plot_value)
-            && projection.plot_value >= 0 && projection.plot_value <= 100) {
-          value.style.background = color(projection.plot_value, 0, 100);
-          value.style.color = projection.plot_value > 55 ? "#fff" : "#17130f";
-        }
-        cell.appendChild(value);
+        // r24-72：不再手绘百分比色阶；数值比较交由共享数值 renderer 的组内柱图。
+        cell.appendChild(el("strong", "kz-a-heat-value", safetyDisplayValue(record)));
         if (record.numerator != null) {
-          cell.appendChild(el("small", "", record.numerator + "/" + record.denominator + "人"));
+          cell.appendChild(el("small", "", record.denominator == null
+            ? record.numerator + "人；分母未列示"
+            : record.numerator + "/" + record.denominator + "人"));
         }
         var edit = userEdits[record.row_id];
         if (edit) {
           cell.appendChild(el("small", "kz-user-edit-status", edit.status_label_zh));
         }
         cell.setAttribute("aria-label", productName(record.product_id) + "："
-          + (record.measure_label || safetyTermLabel(safetyTermKey(record))) + " " + safetyDisplayValue(record)
+          + (record.arm_detail || record.arm || "治疗组")
+          + " " + safetyEventLabel(record) + " " + safetyDisplayValue(record)
           + (edit ? "，" + edit.status_label_zh : "")
           + "，" + record.time_window + "，打开产品档案");
         cells.appendChild(cell);
       });
-      group.appendChild(cells); host.appendChild(group);
+      section.appendChild(cells);
+      observationGrid.appendChild(section);
     });
     paginateObservations(host, ".kz-a-safety-observation-group", "安全性");
+    syncEfficacyCharts(host);
     host.setAttribute("data-view-digest", rows.map(function (item) { return item.row_id; }).join("|"));
     host.appendChild(el("p", "kz-a-heat-note",
-      "图中仅保留可安全绘制的组别与事件；未绘制的原值仍在完整表。百分比颜色使用固定0至100%刻度；其他单位不着色。不同试验、观察窗及分母不默认可比。"));
+      "图中仅保留可安全绘制的同口径观察；单条观察直接列值，不生成无比较意义的坐标轴。零值照常绘入，未绘制的原值仍见完整表。组内刻度由同一口径数据决定，比例估计不自动视为0至100%概率刻度；不同试验、观察窗及分母不默认可比，图形不代表头对头结论。"));
   }
   function updateMatrixTable(points) {
     var byProduct = {};
@@ -1683,21 +1825,53 @@
     });
     content.appendChild(sourceList);
   }
-  function closeEvidencePanel() {
+  function openEvidencePanel(trigger) {
+    var panel = document.getElementById("data-basis-panel");
+    if (!panel || !trigger) return;
+    closeProductInsight(false);
+    evidencePanelTrigger = trigger;
+    panel.hidden = false;
+    var content = panel.querySelector("[data-evidence-content]");
+    var rowId = trigger.getAttribute("data-evidence-row-id");
+    if (content) renderEvidencePanel(content, trigger.getAttribute("data-open-evidence"),
+      trigger.getAttribute("data-evidence-product"), rowId ? {
+        collection: trigger.getAttribute("data-evidence-collection"), rowId: rowId
+      } : null);
+    setInsightBackgroundInert(true, panel);
+    document.body.classList.add("kz-a-insight-drawer-open");
+    var close = panel.querySelector("[data-close-evidence]");
+    if (close) close.focus();
+  }
+  function closeEvidencePanel(restoreFocus) {
     var panel = document.getElementById("data-basis-panel");
     if (!panel || panel.hidden) return;
     panel.hidden = true;
+    setInsightBackgroundInert(false, panel);
+    document.body.classList.remove("kz-a-insight-drawer-open");
     var trigger = evidencePanelTrigger;
     evidencePanelTrigger = null;
-    if (trigger && trigger.isConnected && typeof trigger.focus === "function") trigger.focus();
+    if (restoreFocus !== false) restoreInsightFocus(trigger);
   }
-  document.addEventListener("keydown", function (event) {
+  function evidencePanelKeydown(event) {
     var panel = document.getElementById("data-basis-panel");
-    if (!panel || panel.hidden || (event.key !== "Escape" && event.key !== "Esc")) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    closeEvidencePanel();
-  }, true);
+    if (!panel || panel.hidden) return;
+    if (event.key === "Escape" || event.key === "Esc") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closeEvidencePanel();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    var focusable = modalFocusableNodes(panel);
+    if (!focusable.length) return;
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault(); first.focus();
+    }
+  }
+  document.addEventListener("keydown", evidencePanelKeydown, true);
   function renderNetwork(host) {
     host.innerHTML = "";
     var wrapper = el("div", "kz-a-network-visual");
@@ -1757,6 +1931,13 @@
     host.appendChild(wrapper);
   }
   function renderCharts() {
+    var focused = document.activeElement;
+    var focusedFact = focused && typeof focused.getAttribute === "function"
+      && (focused.getAttribute("data-row-id")
+        || focused.getAttribute("data-efficacy-row-id")
+        || focused.getAttribute("data-evidence-row-id"));
+    var modalOpen = (productInsightDrawer && !productInsightDrawer.hidden)
+      || evidencePanelTrigger !== null;
     var hosts = document.querySelectorAll("[data-a-chart]");
     for (var i = 0; i < hosts.length; i += 1) {
       var type = hosts[i].getAttribute("data-a-chart");
@@ -1769,6 +1950,10 @@
       else if (type === "network") renderNetwork(hosts[i]);
       else renderGeneric(hosts[i]);
     }
+    // A deferred resize may run after Esc restored the original button. Replacing
+    // that button otherwise drops keyboard focus to BODY. Preserve its fact ID;
+    // an open dialog remains the sole focus owner while its background redraws.
+    if (focusedFact && !modalOpen && !focused.isConnected) restoreInsightFocus(focused);
   }
   function applyPagedTables(resetPage) {
     var tables = document.querySelectorAll("[data-paged-table]");
@@ -2017,7 +2202,7 @@
       }
     }
     var evidence = target.closest("[data-open-evidence]");
-    if (evidence) { var panel=document.getElementById("data-basis-panel"); if(panel){evidencePanelTrigger=evidence;panel.hidden=false;var content=panel.querySelector("[data-evidence-content]");var rowId=evidence.getAttribute("data-evidence-row-id");if(content)renderEvidencePanel(content,evidence.getAttribute("data-open-evidence"),evidence.getAttribute("data-evidence-product"),rowId ? {collection:evidence.getAttribute("data-evidence-collection"),rowId:rowId} : null);var close=panel.querySelector("[data-close-evidence]");if(close)close.focus();} }
+    if (evidence) openEvidencePanel(evidence);
     if (target.closest("[data-close-evidence]")) closeEvidencePanel();
     if (target.closest("[data-a-save-view]")) saveCurrentView();
     if (target.closest("[data-a-clear-view]")) clearSavedView();
@@ -2056,6 +2241,19 @@
     initialMatrixHost.setAttribute("data-active-facet", params.get("matrix_facet"));
   }
   var resizeTimer = null;
+  window.addEventListener("pagehide", function () {
+    setInsightBackgroundInert(false);
+    Array.prototype.forEach.call(
+      document.querySelectorAll('[data-a-chart="efficacy"], [data-a-chart="safety"]'),
+      disposeEfficacyCharts
+    );
+  });
+  window.addEventListener("pageshow", function (event) {
+    var evidencePanel = document.getElementById("data-basis-panel");
+    if (productInsightDrawer && !productInsightDrawer.hidden) setInsightBackgroundInert(true);
+    else if (evidencePanel && !evidencePanel.hidden) setInsightBackgroundInert(true, evidencePanel);
+    if (event.persisted) renderCharts();
+  });
   window.addEventListener("resize", function () {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(renderCharts, 120);

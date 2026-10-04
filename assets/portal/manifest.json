@@ -6,52 +6,64 @@
  "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "ebd73ca5439a3e4e9b317b478b35523bcc7ce563ccfbb7fc537f3d2c29e8e5c7",
-   "bytes": 69786
+   "sha256": "6e7603c80600991deaf9d3690696676b6b4e05346f2afdec69b13f89b276f7c3",
+   "bytes": 69940
   },
   "portal.js": {
-   "sha256": "4412aa9a025d3ce1f6b23825a1d86ecf8c75a30852a2a5c0d55bce442bfb2bd6",
-   "bytes": 51112
+   "sha256": "280253e7937a0f5cae05ea626fea98fa5b2e82af6e95a2ce44f8439404e61021",
+   "bytes": 53801
   },
   "charts.js": {
-   "sha256": "636256cc11c664d2a67367fdb0ab3cb69b1aea89352fcbb3c7383f7632de61d3",
-   "bytes": 81496
+   "sha256": "8d04e1ec22e56d697a8b0c1dc1b032ed25b75f7c6290fd3e283b7c9a1211bb7c",
+   "bytes": 88312
   },
   "evidence-drawer.js": {
-   "sha256": "e6eafe02aa4935eb9cabd9e4350a0c55d8ae0bbe80bb159d1f9100b3de5f555e",
-   "bytes": 34373
+   "sha256": "c58895a0fafa9c24cfeba597f4392047d1ffc9c47ccd89f42339af10e7fa9755",
+   "bytes": 37845
   },
   "evidence-drawer.css": {
-   "sha256": "7b3e5c14fbd5ecb8ba1a1b6a043edc79cd1392588b1dbbc9b4f217721de81032",
-   "bytes": 9750
+   "sha256": "e45e2d9f3670616f24fdd6b4f8c7a641fbc591ba4ac8789b5d96a68bbe6f6e91",
+   "bytes": 9824
   },
   "echarts.min.js": {
    "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
    "bytes": 1121883
   },
   "report-a.js": {
-   "sha256": "1527f659748eec5c7a237ca67639b208531621ccf766a151726589b6aeca4580",
-   "bytes": 112043
+   "sha256": "74ee2b62d1a016a0e7433203702c872a6fbad95fd5868d84c7238c1cbccdd081",
+   "bytes": 122515
   },
   "report-a.css": {
-   "sha256": "c5e6322dc23ed76ecc8b977825c861cea27838667b6e55b0d065dff4882bddb2",
-   "bytes": 8176
+   "sha256": "374c10f831afc69809c83e7b3a2b26196bd74a54711699fa87116a502d8c7e8f",
+   "bytes": 8130
   },
   "report-b.js": {
-   "sha256": "1406ac680ee8f7952effa01008d5311610df4deb4530e40c0afa04ebcfe628ec",
-   "bytes": 42125
+   "sha256": "6ef1ee89188b30880f6a993679a15ebc33c09ca80a277fb407e81f531dac2fc2",
+   "bytes": 42706
   },
   "report-b.css": {
-   "sha256": "6ff01454beb39be20ea46ff0a7a5913b9e565eb53fd3d56bd9633258078fdad3",
-   "bytes": 19060
+   "sha256": "48bdf7a04bdf7da266b4ad3432800617698a06cf2ebcbd296c46ba67d512bcda",
+   "bytes": 21253
   },
   "report-c.js": {
-   "sha256": "1b9f50ebe48c72ef1940da96a98eb1efbecc11aebbbac45cb43c0fdf9177afc7",
-   "bytes": 48176
+   "sha256": "48037037985f70fdb6a1e6a9f221e9fa9b4586bbc98d8462d00c3d846f8577e6",
+   "bytes": 69123
   },
   "report-c.css": {
-   "sha256": "1fd06839fff5bff6c9605f5c63163c21fdcda07a6c35d1afdf465b46b2eab2e9",
-   "bytes": 16488
+   "sha256": "25544e1af61c4813e74c4cb34d24229284ec1304792915fb4147cd90759737c6",
+   "bytes": 22041
+  },
+  "kangzhe-site.css": {
+   "sha256": "4e6c490abc3d92784ffc77aedb34cda92694a380bacb3605cecfb9af40d6e2e6",
+   "bytes": 7519
+  },
+  "kangzhe-site.js": {
+   "sha256": "8555e6b7b5838c75aedc814e8be914cd2538de3a58597f5de48a20152a678352",
+   "bytes": 6121
+  },
+  "kz-motion.js": {
+   "sha256": "a7cf487c60c40a3137fa7663894faa98bc76914c0b4efabd41e1f126e8afb2bf",
+   "bytes": 14110
   }
  },
  "logo_source": "assets/brand/cms-logo.svg",

@@ -873,10 +873,10 @@ EGO_RECEIPT_FILENAME = "ego-receipt.json"
 EGO_RECEIPT_SCHEMA_VERSION = "1.0"
 # 首版站点验收的四档桌面视口；回执必须逐项声明覆盖。
 PRESCRIBED_VIEWPORTS: tuple[tuple[int, int], ...] = (
-    (1024, 768),
-    (1280, 800),
     (1440, 900),
+    (1600, 900),
     (1920, 1080),
+    (2560, 1440),
 )
 _ReportValue = Literal["A", "B", "C"]
 
@@ -1045,6 +1045,9 @@ def _ego_receipt_guidance(
     pre_rc_run_id: str,
 ) -> str:
     listing = "\n".join(f"  - {path}" for path in missing)
+    viewport_listing = ", ".join(
+        f"{width}x{height}" for width, height in PRESCRIBED_VIEWPORTS
+    )
     return (
         "等待 ego(lite) 浏览器回执：请由 Codex 使用 ego(lite) 对当前运行的 "
         f"A/B/C 站点完成真实浏览器验收，并将回执写入以下路径（每类报告一份）：\n"
@@ -1052,7 +1055,7 @@ def _ego_receipt_guidance(
         f"回执必须声明 tool=\"{EGO_LITE_TOOL_IDENTITY}\" 并绑定当前 run id "
         f"（{run_id}）、pre-RC 运行身份（{pre_rc_run_id}）、当前产物清单标识、"
         "报告快照标识、站点摘要、实际路由集合、规定视口 "
-        "[1024x768, 1280x800, 1440x900, 1920x1080] 与验收时间；任一页面失败、缺页、"
+        f"[{viewport_listing}] 与验收时间；任一页面失败、缺页、"
         "摘要不符或回执早于本次运行都会失败关闭。本入口不回退、也不接受"
         "任何其他浏览器。"
     )
@@ -1954,6 +1957,7 @@ def build_host_smoke_stage(
     install_root: Path,
     acceptance_root: Path,
     expected_bundle_digest: str | None = None,
+    host_selection: Mapping[str, str | None] | None = None,
     smoke_runner: HostSmokeBatchRunner | None = None,
 ) -> PreRCStageHandler:
     """构造 pre-RC 编排中的 ``host-smoke`` 阶段处理器。
@@ -1962,8 +1966,13 @@ def build_host_smoke_stage(
     重新加载安装根并比对构建时的 bundle digest，防止构建与执行之间发生
     候选包漂移。冒烟回执与宿主项目全部落在隔离验收根下，不写候选安装根，
     也不复用 Task 9.5 的既有宿主回执（证据根预存内容一律失败关闭）。
-    ``smoke_runner`` 只供合同测试注入替身批次；缺省使用真实三宿主批次
-    ``run_installed_host_smoke``，其批次结论 ``real_host_pass`` 必须为真。
+
+    真实批次（``smoke_runner`` 缺省）必须在构建时提供三宿主完整显式选择器
+    ``host_selection``（七项：codex_model/codex_reasoning、hermes_provider/
+    hermes_model/hermes_reasoning、omp_model/omp_thinking）；构建时即失败
+    关闭校验并冻结规范化取值，执行时原样下发，拒绝宿主配置默认。注入
+    ``smoke_runner`` 的合同测试替身保持兼容：未提供 ``host_selection`` 时
+    跳过该校验、不新增下发参数；提供了则同样先校验再冻结下发。
     """
 
     from ci_workflow.application.fresh_install import (
@@ -2011,6 +2020,28 @@ def build_host_smoke_stage(
         raise AcceptanceRunnerError(
             f"{label}不得写入不可变候选 bundle：{protected}"
         )
+
+    # 候选安装根核验先于选择器校验（保持既有失败顺序）；随后构建时校验并
+    # 冻结七项选择器，缺省真实批次缺少即拒绝构建。
+    frozen_host_selection: dict[str, Any] | None = None
+    if host_selection is None:
+        if smoke_runner is None:
+            raise AcceptanceRunnerError(
+                "三宿主真实冒烟阶段必须显式提供当前真实路由的七项模型/强度选择器"
+                "（codex_model/codex_reasoning、hermes_provider/hermes_model/"
+                "hermes_reasoning、omp_model/omp_thinking）；拒绝宿主配置默认，"
+                "缺失时不得构建真实宿主阶段。"
+            )
+    else:
+        from ci_workflow.application.host_smoke import (
+            HostSmokeError,
+            validate_explicit_host_selection,
+        )
+
+        try:
+            frozen_host_selection = dict(validate_explicit_host_selection(host_selection))
+        except HostSmokeError as exc:
+            raise AcceptanceRunnerError(f"三宿主显式选择器不完整或无效：{exc}") from exc
 
     def handler(context: Mapping[str, Any]) -> Mapping[str, Any]:
         from ci_workflow.application.host_smoke_runner import HostSmokeRunnerError
@@ -2069,6 +2100,7 @@ def build_host_smoke_stage(
                 current_layout,
                 evidence_root=evidence_root,
                 project_root=projects_root,
+                **(frozen_host_selection or {}),
             )
         except HostSmokeRunnerError as exc:
             raise AcceptanceRunnerError(f"三宿主真实冒烟失败关闭：{exc}") from exc
@@ -2388,7 +2420,11 @@ def subprocess_verifier_runner(case_id: str, target: str, command: str) -> Scena
     )
 
 
-def resolve_full_matrix_suite(catalog: AcceptanceCatalog) -> tuple[ResolvedAcceptanceCase, ...]:
+def resolve_full_matrix_suite(
+    catalog: AcceptanceCatalog,
+    *,
+    primary_case_id: str = _DEFAULT_CASE_ID,
+) -> tuple[ResolvedAcceptanceCase, ...]:
     """从 catalog 解析 ``--suite full`` 套件：全部 ``execution_scope=full-matrix`` 案例。
 
     套件成员完全由 catalog 决定；出现未登记的执行范围、或套件为空时失败关闭。
@@ -2406,10 +2442,13 @@ def resolve_full_matrix_suite(catalog: AcceptanceCatalog) -> tuple[ResolvedAccep
             suite.append(resolve_acceptance_case(case_id, catalog))
     if not suite:
         raise AcceptanceRunnerError("catalog 中没有任何 execution_scope=full-matrix 的首版案例")
-    if all(resolved.case_id != _DEFAULT_CASE_ID for resolved in suite):
+    primary = next((case for case in suite if case.case_id == primary_case_id), None)
+    if primary is None:
         raise AcceptanceRunnerError(
-            f"full-matrix 套件必须包含 A/B/C 全量基准案例 {_DEFAULT_CASE_ID}"
+            f"full-matrix 套件必须包含 A/B/C 全量基准案例 {primary_case_id}"
         )
+    if set(primary.reports) != {"A", "B", "C"} or len(primary.reports) != 3:
+        raise AcceptanceRunnerError(f"基准案例 {primary_case_id} 必须完整包含 A/B/C")
     return tuple(suite)
 
 
@@ -2600,6 +2639,7 @@ def build_full_matrix_suite_receipts(
     catalog: AcceptanceCatalog,
     *,
     pre_rc_run_id: str,
+    primary_case_id: str = _DEFAULT_CASE_ID,
     host_smoke_summary: Mapping[str, Any] | None = None,
     pipeline_binding: Mapping[str, Any] | None = None,
     verifier_runner: VerifierRunner | None = None,
@@ -2618,12 +2658,8 @@ def build_full_matrix_suite_receipts(
     if not isinstance(pre_rc_run_id, str) or not pre_rc_run_id.strip():
         raise AcceptanceRunnerError("场景回执必须绑定本次 pre-RC 运行身份")
     runner = verifier_runner or subprocess_verifier_runner
-    suite = resolve_full_matrix_suite(catalog)
+    suite = resolve_full_matrix_suite(catalog, primary_case_id=primary_case_id)
     suite_by_id = {resolved.case_id: resolved for resolved in suite}
-    if _DEFAULT_CASE_ID not in suite_by_id:
-        raise AcceptanceRunnerError(
-            f"full-matrix 套件缺少 A/B/C 全量基准案例 {_DEFAULT_CASE_ID}"
-        )
     hosts, host_smoke_bound = _bind_host_smoke_summary(
         host_smoke_summary, pre_rc_run_id=pre_rc_run_id
     )
@@ -2636,7 +2672,7 @@ def build_full_matrix_suite_receipts(
             raise AcceptanceRunnerError("当前运行绑定摘要的报告集合不是 A/B/C")
         if pipeline_binding.get("formats") != ["html"]:
             raise AcceptanceRunnerError("当前运行绑定摘要出现首版范围外格式")
-        if pipeline_binding.get("case_id") != _DEFAULT_CASE_ID:
+        if pipeline_binding.get("case_id") != primary_case_id:
             raise AcceptanceRunnerError("当前运行绑定摘要的案例不是 A/B/C 全量基准")
         binding = dict(pipeline_binding)
 
@@ -2767,7 +2803,7 @@ def build_full_matrix_suite_receipts(
         "catalog_path": str(catalog.path),
         "catalog_sha256": catalog.sha256,
         "release_scope": catalog.release_scope,
-        "primary_case_id": _DEFAULT_CASE_ID,
+        "primary_case_id": primary_case_id,
         "formats": ["html"],
         "hosts": list(hosts),
         "host_smoke_bound": host_smoke_bound,
@@ -2862,6 +2898,7 @@ def build_pre_rc_receipts_stage(
         payload = build_full_matrix_suite_receipts(
             catalog,
             pre_rc_run_id=pre_rc_run_id,
+            primary_case_id=case_id,
             host_smoke_summary=host_summary,
             pipeline_binding=binding,
             verifier_runner=verifier_runner,

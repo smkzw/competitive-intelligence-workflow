@@ -161,6 +161,34 @@ def _evidence_payload(manifest: EvidenceSnapshotManifest) -> dict[str, Any]:
     return manifest.model_dump(mode="json", exclude=excluded)
 
 
+def _require_current_claim_closure(manifest: EvidenceSnapshotManifest) -> None:
+    """Check typed semantics, scientific identity and supports before restoring."""
+    from ci_workflow.application.source_research_service import ResearchClaim
+
+    assert manifest.closure is not None
+    fact_versions = {
+        row["fact"]["fact_id"]: row["fact_version_id"]
+        for row in manifest.closure["facts"]
+    }
+    seen: set[str] = set()
+    for row in manifest.closure["claims"]:
+        try:
+            claim = ResearchClaim.model_validate(row["claim"])
+            supports = [fact_versions[fact_id] for fact_id in claim.fact_ids]
+            version_id = claim.scientific_version_id(supports)
+            if (
+                row["fact_version_ids"] != supports
+                or row["claim_version_id"] != version_id
+                or version_id in seen
+            ):
+                raise ValueError("声明版本或支持事实不一致")
+        except (ValueError, TypeError, KeyError) as error:
+            raise SnapshotIntegrityError("声明闭包合同、科学版本或支持事实不一致") from error
+        seen.add(version_id)
+    if seen != set(manifest.claim_version_ids):
+        raise SnapshotIntegrityError("声明闭包与快照声明集合不一致")
+
+
 class ReportSnapshotManifest(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -384,6 +412,7 @@ class SnapshotStore:
         # is created, so an inconsistent closure cannot half-restore.
         for item in manifest.closure["facts"]:
             _require_fact_context_matches_closure(item)
+        _require_current_claim_closure(manifest)
 
         from ci_workflow.application.source_research_service import SourceCapture
         from ci_workflow.storage.content_store import (
@@ -424,6 +453,23 @@ class SnapshotStore:
                         raise SnapshotIntegrityError("复用的原始资产字节不可核验") from error
                 else:
                     raise SnapshotIntegrityError("来源派生闭包缺少原始资产字节")
+            if capture.public_pdf_availability is not None:
+                from ci_workflow.sources.connectors.public_pdf_availability import (
+                    verify_public_pdf_availability,
+                )
+
+                proof = capture.public_pdf_availability
+                encoded_receipt = item.get("availability_receipt_b64")
+                if proof.receipt_asset is None or not isinstance(encoded_receipt, str):
+                    raise SnapshotIntegrityError("当前获取见证缺少可恢复的实际回执")
+                restored_receipt = content_store.put_bytes(
+                    b64decode(encoded_receipt, validate=True), media_type="application/json",
+                )
+                if restored_receipt != proof.receipt_asset:
+                    raise SnapshotIntegrityError("恢复获取回执摘要不一致")
+                verify_public_pdf_availability(
+                    self.project_root, proof, capture.url, proof.raw_asset, manifest.data_cutoff,
+                )
             version = repository.add_source_version(
                 source_id=capture.source_id,
                 content=capture.content_text.encode("utf-8"),

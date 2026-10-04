@@ -21,7 +21,7 @@ from ci_workflow.reports.b.safety_concepts import describe_safety_concept
 
 
 @pytest.mark.parametrize(("source_class", "expected_key"), [
-    ("Any Treatment-emergent SAE", "any_sae"),
+    ("Any Treatment-emergent SAE", "serious_teae_subset"),
     ("TEAE leading to study drug discontinuation", "discontinuation_ae"),
     ("TEAE leading to death", "specific_ae"),
     ("TEAE at least possibly related to study drug", "specific_ae"),

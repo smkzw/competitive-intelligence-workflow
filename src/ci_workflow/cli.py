@@ -53,6 +53,7 @@ EXPECTED_CLI_CATALOG = [
     "project verify",
     "project run",
     "project share",
+    "project refresh-source",
     "project accept-visual",
     "capability preflight",
     "fixture run",
@@ -417,6 +418,30 @@ def _project_share_handler(args: argparse.Namespace) -> int:
         f"SHARE_READY revision={receipt.current_revision} reports="
         f"{','.join(receipt.reports)} sha256={receipt.sha256} output={receipt.output}"
     )
+    return 0
+
+
+def _project_refresh_source_handler(args: argparse.Namespace) -> int:
+    from pydantic import ValidationError as ModelValidationError
+
+    from ci_workflow.application.source_current_refresh import (
+        SourceCurrentRefreshCommand,
+        SourceCurrentRefreshError,
+        SourceCurrentRefreshService,
+    )
+
+    try:
+        # Parse completely before any service/database initialization. Invalid
+        # command content must neither create a project nor be echoed in errors.
+        command = SourceCurrentRefreshCommand.model_validate(_load_json(Path(args.command)))
+    except ModelValidationError as error:
+        raise ContractError("来源刷新命令字段不符合合同；请核对身份、版本和输入摘要") from error
+    try:
+        project = verify_project_workspace(Path(args.root))
+        result = SourceCurrentRefreshService(project.project_root).refresh(command)
+    except (OSError, ValueError, ProjectWorkspaceError, SourceCurrentRefreshError) as error:
+        raise ContractError(str(error)) from error
+    print("SOURCE_REFRESHED " + result.model_dump_json())
     return 0
 
 
@@ -1052,6 +1077,25 @@ def _review_issue_handler(args: argparse.Namespace) -> int:
     return 0
 
 
+def _review_accept_source_facts_handler(args: argparse.Namespace) -> int:
+    from ci_workflow.application.source_fact_acceptance import (
+        SourceFactAcceptanceError,
+        accept_reviewed_source_facts,
+    )
+
+    try:
+        result = accept_reviewed_source_facts(
+            project_root=Path(args.root),
+            report_kind=args.report,
+            evidence_snapshot_id=args.evidence_snapshot,
+            claim_snapshot_id=args.claim_snapshot,
+        )
+    except (OSError, SourceFactAcceptanceError) as exc:
+        raise ContractError(str(exc)) from exc
+    print("SOURCE_FACTS_ACCEPTED " + result.model_dump_json())
+    return 0
+
+
 def _not_implemented(args: argparse.Namespace) -> int:
     print(
         f"CAPABILITY_NOT_IMPLEMENTED 功能尚未实现：{args.command_path}",
@@ -1126,6 +1170,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--view-config", help="可选的版本绑定视图配置 JSON"
     )
     project_share.set_defaults(handler=_project_share_handler)
+    project_refresh = project_commands.add_parser(
+        "refresh-source", help="以已复核的新来源原子重建实际依赖报告；不接受未审候选"
+    )
+    project_refresh.add_argument(
+        "--root", "--project", dest="root", required=True, help="现有项目目录"
+    )
+    project_refresh.add_argument("--command", required=True, help="类型化来源刷新命令 JSON")
+    project_refresh.set_defaults(handler=_project_refresh_source_handler)
     project_accept_visual = project_commands.add_parser(
         "accept-visual", help="持久化独立网页视觉验收并推进 HTML 状态"
     )
@@ -1312,6 +1364,15 @@ def _build_parser() -> argparse.ArgumentParser:
         help="复核结论 JSON 的项目相对路径",
     )
     review_issue.set_defaults(handler=_review_issue_handler)
+    review_accept = review_commands.add_parser(
+        "accept-source-facts",
+        help="核验已签发的独立回执并接入其精确来源事实集合；不切换报告 current",
+    )
+    review_accept.add_argument("--root", "--project", dest="root", required=True)
+    review_accept.add_argument("--report", required=True, choices=("A", "B", "C"))
+    review_accept.add_argument("--evidence-snapshot", required=True, help="已审证据快照标识")
+    review_accept.add_argument("--claim-snapshot", required=True, help="已审声明快照标识")
+    review_accept.set_defaults(handler=_review_accept_source_facts_handler)
 
     fixture = groups.add_parser("fixture", help="运行固定验收案例")
     fixture_commands = fixture.add_subparsers(dest="fixture_command", required=True)

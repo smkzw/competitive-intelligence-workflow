@@ -158,15 +158,41 @@ def run_installed_single_host_smoke(
     project_root: Path | None = None,
     catalog_path: Path | None = None,
     resume: bool = False,
+    codex_model: str | None = None,
+    codex_reasoning: str | None = None,
+    omp_model: str | None = None,
+    omp_thinking: str | None = None,
     hermes_resume_session: str | None = None,
     hermes_provider: str | None = None,
     hermes_model: str | None = None,
     hermes_reasoning: str | None = None,
 ) -> HostReceipt:
-    """从候选安装入口运行一个真实宿主，并只写该宿主的一份回执。"""
+    """从候选安装入口运行一个真实宿主，并只写该宿主的一份回执。
+
+    显式模型/强度选择器按宿主转发到 Task 9.4 的 ``run_host_smoke``；真实
+    宿主运行缺少必需选择器时由下层在任何子进程启动前失败关闭。
+    """
 
     if host not in HOSTS:
         raise HostSmokeRunnerError(f"不支持的宿主：{host}")
+    from ci_workflow.application.host_smoke import (
+        HostSmokeError,
+        _explicit_host_selectors,
+    )
+
+    try:
+        frozen_selectors = _explicit_host_selectors(
+            host,
+            codex_model=codex_model,
+            codex_reasoning=codex_reasoning,
+            omp_model=omp_model,
+            omp_thinking=omp_thinking,
+            hermes_provider=hermes_provider,
+            hermes_model=hermes_model,
+            hermes_reasoning=hermes_reasoning,
+        )
+    except HostSmokeError as exc:
+        raise HostSmokeRunnerError(f"宿主 {host} 显式选择器无效：{exc}") from exc
     layout.verify_layout()
     destination = _assert_writable_path(
         receipt_path,
@@ -203,9 +229,13 @@ def run_installed_single_host_smoke(
                 resume=resume and any(project.iterdir()),
                 require_external_host_process=True,
                 hermes_resume_session=hermes_resume_session,
-                hermes_provider=hermes_provider,
-                hermes_model=hermes_model,
-                hermes_reasoning=hermes_reasoning,
+                codex_model=frozen_selectors.get("codex_model"),
+                codex_reasoning=frozen_selectors.get("codex_reasoning"),
+                hermes_provider=frozen_selectors.get("hermes_provider"),
+                hermes_model=frozen_selectors.get("hermes_model"),
+                hermes_reasoning=frozen_selectors.get("hermes_reasoning"),
+                omp_model=frozen_selectors.get("omp_model"),
+                omp_thinking=frozen_selectors.get("omp_thinking"),
             )
             verify_host_smoke_receipt(
                 receipt,
@@ -228,6 +258,10 @@ def run_installed_host_smoke(
     hosts: Sequence[str] = HOSTS,
     host_executables: Mapping[str, Path] | None = None,
     resume: bool = False,
+    codex_model: str | None = None,
+    codex_reasoning: str | None = None,
+    omp_model: str | None = None,
+    omp_thinking: str | None = None,
     hermes_resume_session: str | None = None,
     hermes_provider: str | None = None,
     hermes_model: str | None = None,
@@ -238,13 +272,35 @@ def run_installed_host_smoke(
     入口、fixture、包清单和宿主可执行文件均由候选环境解析。``host_executables``
     只供合同测试显式注入替身；缺省路径必须由 PATH 真实解析，才能使批次
     ``real_host_pass`` 为真。三次调用复用 Task 9.4 唯一 ``HostReceipt``，不
-    在本进程伪造语义 JSON 或回执。
+    在本进程伪造语义 JSON 或回执。三宿主七项选择器必须完整且具体，
+    包括全未提供的调用一律先校验，校验先于入口/版本解析与任何
+    宿主子进程（缺一不得先启动 Codex）；通过后按规范化冻结值逐宿主下发，
+    不静默采用配置默认，缺失时不写入项目/恢复身份。
     """
     normalized_hosts = tuple(hosts)
     if normalized_hosts != HOSTS:
         raise HostSmokeRunnerError("候选包真实宿主批次必须按 codex、hermes、omp 全量运行")
     if host_executables is not None and set(host_executables) - set(HOSTS):
         raise HostSmokeRunnerError("宿主替身映射包含未声明宿主")
+    # 无条件预检：全空也不得先解析入口/版本或写入恢复身份。
+    selection: dict[str, str | None] = {
+        "codex_model": codex_model,
+        "codex_reasoning": codex_reasoning,
+        "hermes_provider": hermes_provider,
+        "hermes_model": hermes_model,
+        "hermes_reasoning": hermes_reasoning,
+        "omp_model": omp_model,
+        "omp_thinking": omp_thinking,
+    }
+    from ci_workflow.application.host_smoke import (
+        HostSmokeError,
+        validate_explicit_host_selection,
+    )
+
+    try:
+        frozen_selectors = validate_explicit_host_selection(selection)
+    except HostSmokeError as exc:
+        raise HostSmokeRunnerError(f"三宿主显式选择器不完整或无效：{exc}") from exc
     layout.verify_layout()
     evidence = _assert_writable_path(
         evidence_root or layout.install_root / RECEIPT_DIRECTORY,
@@ -302,9 +358,7 @@ def run_installed_host_smoke(
                     resume=resume and any(host_project.iterdir()),
                     require_external_host_process=True,
                     hermes_resume_session=hermes_resume_session,
-                    hermes_provider=hermes_provider,
-                    hermes_model=hermes_model,
-                    hermes_reasoning=hermes_reasoning,
+                    **frozen_selectors,
                 )
                 # 每一份回执先按当前项目状态深度验证，再进入跨宿主批次比较。
                 verify_host_smoke_receipt(
@@ -397,6 +451,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--project-root", help="三宿主项目父目录，默认安装根/projects")
     parser.add_argument("--catalog", help="候选包内唯一 fixture catalog.yaml")
     parser.add_argument("--resume", action="store_true", help="从已有 fixture 项目恢复")
+    parser.add_argument("--codex-model", help="Codex 真实宿主显式模型")
+    parser.add_argument("--codex-reasoning", help="Codex 真实宿主显式推理强度")
+    parser.add_argument("--omp-model", help="OMP 真实宿主显式提供方限定模型（provider/model）")
+    parser.add_argument("--omp-thinking", help="OMP 真实宿主显式思考强度")
     parser.add_argument("--hermes-resume-session", help="Hermes 技术故障后沿用的会话标识")
     parser.add_argument("--hermes-provider", help="Hermes 同会话切换后的提供方")
     parser.add_argument("--hermes-model", help="Hermes 同会话切换后的模型")
@@ -430,6 +488,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 project_root=Path(args.project_root) if args.project_root else None,
                 catalog_path=Path(args.catalog) if args.catalog else None,
                 resume=args.resume,
+                codex_model=args.codex_model,
+                codex_reasoning=args.codex_reasoning,
+                omp_model=args.omp_model,
+                omp_thinking=args.omp_thinking,
                 hermes_resume_session=args.hermes_resume_session,
                 hermes_provider=args.hermes_provider,
                 hermes_model=args.hermes_model,
@@ -446,6 +508,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             project_root=Path(args.project_root) if args.project_root else None,
             catalog_path=Path(args.catalog) if args.catalog else None,
             resume=args.resume,
+            codex_model=args.codex_model,
+            codex_reasoning=args.codex_reasoning,
+            omp_model=args.omp_model,
+            omp_thinking=args.omp_thinking,
             hermes_resume_session=args.hermes_resume_session,
             hermes_provider=args.hermes_provider,
             hermes_model=args.hermes_model,

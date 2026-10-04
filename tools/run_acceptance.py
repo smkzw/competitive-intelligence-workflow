@@ -20,14 +20,23 @@ Codex 使用 ego(lite) 完成，本入口只接收并严格绑定其回执。
         --project-root <已运行验收项目根>
 
     # 完整六阶段（首次）：构建时即核验候选安装根；项目运行后暂停在 ego(lite)
-    # 回执阶段（退出码 3），宿主冒烟不会在回执绑定前执行
+    # 回执阶段（退出码 3），宿主冒烟不会在回执绑定前执行。七项真实路由模型/
+    # 强度必须由调用者显式提供（占位符示例；留空、auto/default 均失败关闭）
     uv run python tools/run_acceptance.py --pipeline full \\
-        --project-root <隔离验收项目根> --acceptance-root <隔离验收证据根>
+        --project-root <隔离验收项目根> --acceptance-root <隔离验收证据根> \\
+        --codex-model "$CODEX_MODEL" --codex-reasoning "$CODEX_REASONING" \\
+        --hermes-provider "$HERMES_PROVIDER" --hermes-model "$HERMES_MODEL" \\
+        --hermes-reasoning "$HERMES_REASONING" --omp-model "$OMP_MODEL" \\
+        --omp-thinking "$OMP_THINKING"
 
     # 完整六阶段（续跑）：对已绑定回执的项目继续三宿主真实冒烟 → 最终项目
     # 核验 → 场景回执聚合；全部通过后输出 PRE_RC_REHEARSAL_OK
     uv run python tools/run_acceptance.py --pipeline full --bind-ego-receipts \\
-        --project-root <已绑定回执项目根> --acceptance-root <隔离验收证据根>
+        --project-root <已绑定回执项目根> --acceptance-root <隔离验收证据根> \\
+        --codex-model "$CODEX_MODEL" --codex-reasoning "$CODEX_REASONING" \\
+        --hermes-provider "$HERMES_PROVIDER" --hermes-model "$HERMES_MODEL" \\
+        --hermes-reasoning "$HERMES_REASONING" --omp-model "$OMP_MODEL" \\
+        --omp-thinking "$OMP_THINKING"
 
     # --suite full：独立场景 rehearsal——对 catalog 中全部
     # execution_scope=full-matrix 的首版 case/子 case 逐条执行 catalog 声明的
@@ -57,7 +66,8 @@ Codex 使用 ego(lite) 完成，本入口只接收并严格绑定其回执。
 8. ``--pipeline full`` 接入完整六阶段：候选安装根在构建时即核验（无效根
    在任何阶段执行前失败关闭）；首次运行在 ego(lite) 回执阶段暂停（退出码
    3）；``--bind-ego-receipts`` 续跑时从候选安装根执行 Codex/Hermes/OMP
-   三宿主真实冒烟（回执与项目落在 --acceptance-root 下，不复用旧回执，
+   三宿主真实冒烟（七项显式模型/强度选择器由调用者提供，缺失或
+   auto/default 即失败关闭；回执与项目落在 --acceptance-root 下，不复用旧回执，
    三宿主进程/会话/运行互异且绑定同一候选包摘要），随后最终项目核验重新
    打开当前运行并证明产物与回执未被改动，最后聚合 full-matrix 场景回执。
    全部通过后输出 ``PRE_RC_REHEARSAL_OK``；任何阶段失败都不输出通过信号。
@@ -196,6 +206,43 @@ def _build_parser() -> _ChineseArgumentParser:
         help="隔离验收项目根（流水线模式必填且要求不存在或为空；绑定回执要求已运行；"
         "与 --suite 互斥）",
     )
+    parser.add_argument(
+        "--codex-model",
+        default=None,
+        help="真实冒烟：Codex 显式模型（调用者按当前真实路由提供；"
+        "--pipeline full 缺失时失败关闭，不使用宿主配置默认）",
+    )
+    parser.add_argument(
+        "--codex-reasoning",
+        default=None,
+        help="真实冒烟：Codex 显式推理强度（同上，调用者按当前真实路由提供）",
+    )
+    parser.add_argument(
+        "--hermes-provider",
+        default=None,
+        help="真实冒烟：Hermes 显式提供方（同上，调用者按当前真实路由提供）",
+    )
+    parser.add_argument(
+        "--hermes-model",
+        default=None,
+        help="真实冒烟：Hermes 显式模型（同上，调用者按当前真实路由提供）",
+    )
+    parser.add_argument(
+        "--hermes-reasoning",
+        default=None,
+        help="真实冒烟：Hermes 显式推理强度（同上，调用者按当前真实路由提供）",
+    )
+    parser.add_argument(
+        "--omp-model",
+        default=None,
+        help="真实冒烟：OMP 显式提供方限定模型 provider/model"
+        "（同上，调用者按当前真实路由提供；auto/default 及分量别名一律拒绝）",
+    )
+    parser.add_argument(
+        "--omp-thinking",
+        default=None,
+        help="真实冒烟：OMP 显式思考强度（同上，调用者按当前真实路由提供）",
+    )
     return parser
 
 
@@ -248,9 +295,21 @@ def main(argv: list[str] | None = None) -> Never:
             summary = run_full_matrix_suite_rehearsal(catalog_path=options.catalog)
         elif options.pipeline == "full":
             case = options.case or "full-matrix-v1"
+            # 七项真实路由选择器只由调用者显式提供；缺失或 auto/default
+            # 由阶段构建失败关闭，此处不提供任何隐式默认或模型表。
+            host_selection = {
+                "codex_model": options.codex_model,
+                "codex_reasoning": options.codex_reasoning,
+                "hermes_provider": options.hermes_provider,
+                "hermes_model": options.hermes_model,
+                "hermes_reasoning": options.hermes_reasoning,
+                "omp_model": options.omp_model,
+                "omp_thinking": options.omp_thinking,
+            }
             host_smoke_stage = build_host_smoke_stage(
                 install_root=options.install_root,
                 acceptance_root=options.acceptance_root,
+                host_selection=host_selection,
             )
             project_verify_stage = build_project_verify_stage(
                 catalog_path=options.catalog, case_id=case

@@ -410,20 +410,42 @@ class EvidenceRepository:
             media_type=source_version.media_type,
         )
         source_content = self.content_store.read_bytes(blob)
-        if source_version.text_derivation is not None:
-            from ci_workflow.storage.source_derivation import (
-                SourceDerivationError,
-                verify_source_text_derivation,
-            )
+        from ci_workflow.storage.source_derivation import (
+            SourceDerivationError,
+            extract_locator_quote,
+            verify_source_text_derivation,
+        )
 
+        if source_version.text_derivation is not None:
             try:
                 verify_source_text_derivation(
                     self.content_store.project_root, source_version.text_derivation,
                     source_content.decode("utf-8"),
                 )
+                if source_version.text_derivation.method == "pypdf-page-text-v1":
+                    if stored_fragment.locator.page != source_version.text_derivation.page:
+                        raise SourceDerivationError("重开片段页码与分页原文不一致")
+                    decoded_page = source_content.decode("utf-8")
+                    if stored_fragment.original_text != decoded_page and extract_locator_quote(
+                        decoded_page, media_type="application/pdf", locator=stored_fragment.locator,
+                    ) != stored_fragment.original_text:
+                        raise SourceDerivationError("重开片段锚点不能精确证明原文")
             except (UnicodeDecodeError, SourceDerivationError) as error:
                 raise ContentIntegrityError("原始资产与重开文本的派生链校验失败") from error
-        if source_version.media_type.startswith("text/") or any(
+        if source_version.media_type == "application/json":
+            # A native scalar may contain decoded newlines/quotes/Unicode that
+            # do not occur literally in its serialized JSON container. Conversely,
+            # text elsewhere in that container cannot prove this field's value.
+            try:
+                quote = extract_locator_quote(
+                    source_content.decode("utf-8"), media_type="application/json",
+                    locator=stored_fragment.locator,
+                )
+            except (UnicodeDecodeError, SourceDerivationError) as error:
+                raise ContentIntegrityError("JSON证据片段不能按精确字段重提取") from error
+            if quote != stored_fragment.original_text:
+                raise ContentIntegrityError("JSON证据片段原文与定位字段不一致")
+        elif source_version.media_type.startswith("text/") or any(
             marker in source_version.media_type
             for marker in ("json", "xml", "javascript")
         ):

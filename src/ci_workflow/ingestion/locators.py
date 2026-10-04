@@ -11,7 +11,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.domain.ids import stable_id
 
-_FIELD_TOKEN = re.compile(r"(?P<key>[^.\[\]]+)|\[(?P<index>[0-9]+)\]")
+_FIELD_TOKEN = re.compile(
+    r"(?P<key>[A-Za-z_][A-Za-z0-9_-]*)|\[(?P<index>0|[1-9][0-9]*)\]"
+)
 _SHA256 = re.compile(r"[0-9a-f]{64}")
 
 
@@ -128,15 +130,17 @@ class RegistryJsonLocator(BaseModel):
 
 def _parse_field_path(field_path: str) -> tuple[str | int, ...]:
     field_path = _text(field_path)
+    # Historical locator IDs retain their original, unprefixed paths.
+    field_path = field_path.removeprefix("$.")
     tokens: list[str | int] = []
     position = 0
     for match in _FIELD_TOKEN.finditer(field_path):
-        if match.start() != position and not (
-            field_path[position : match.start()] == "."
-        ):
-            raise ValueError("登记字段路径格式不正确")
         key = match.group("key")
         index = match.group("index")
+        separator = field_path[position : match.start()]
+        expected_separator = "." if tokens and key is not None else ""
+        if separator != expected_separator or (not tokens and key is None):
+            raise ValueError("登记字段路径格式不正确")
         tokens.append(int(index) if index is not None else str(key))
         position = match.end()
     if position != len(field_path) or not tokens:
@@ -161,7 +165,8 @@ def _resolve_json_field(payload: Any, field_path: str) -> Any:
 def create_registry_json_locator(
     snapshot: RegistryJsonSnapshot, *, field_path: str
 ) -> RegistryJsonLocator:
-    normalized_path = _text(field_path)
+    supplied_path = _text(field_path)
+    normalized_path = supplied_path if supplied_path.startswith("$.") else "$." + supplied_path
     _resolve_json_field(snapshot.payload, normalized_path)
     evidence_locator = EvidenceLocator(
         document_role=snapshot.document_role_label_zh,

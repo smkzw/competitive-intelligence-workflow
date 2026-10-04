@@ -15,7 +15,7 @@ def _obs(row_id: str, *, trial: str = "T1", outcome: str = "O1", family: str,
          role: str = "primary", group: str = "G1", cohort: str = "C1",
          period: str = "P1", window: str = "W12", text: str = "measure"):
     return SimpleNamespace(
-        row_id=row_id, trial_id=trial, outcome_id=outcome, field_family=family,
+        row_id=row_id, trial_id=trial, product_id="P1", outcome_id=outcome, field_family=family,
         endpoint_key=role, group_id=group, cohort_id=cohort, period=period,
         assessment_timepoint=window, source_text=text, source_version_id="sv1",
     )
@@ -51,6 +51,14 @@ def test_multiple_primary_instances_are_legal_when_each_is_paired() -> None:
     ]
     instances = validate_endpoint_timepoint_pairs(rows, universe_trial_ids={"T1"})
     assert {item.outcome_id for item in instances} == {"O1", "O2"}
+
+
+def test_endpoint_and_timepoint_cannot_pair_across_source_versions() -> None:
+    endpoint = _obs("e1", family="endpoint")
+    timepoint = _obs("t1", family="timepoint", text="Week 12")
+    timepoint.source_version_id = "sv2"
+    with pytest.raises(EndpointInstanceError):
+        validate_endpoint_timepoint_pairs([endpoint, timepoint], universe_trial_ids={"T1"})
 
 
 def test_arm_interventions_follow_explicit_labels_without_arm1_fallback() -> None:

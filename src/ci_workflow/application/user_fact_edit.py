@@ -13,7 +13,7 @@ import json
 import os
 import re
 import shutil
-from collections.abc import Callable
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
 from datetime import datetime
 from enum import StrEnum
@@ -33,6 +33,7 @@ from ci_workflow.application.latest_delivery import (
     read_current_delivery,
 )
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.domain.public_provenance import PublicProvenance
 from ci_workflow.graph.impact import ImpactEdge, ImpactGraph, ImpactLayer, ImpactNode
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFact,
@@ -325,6 +326,334 @@ class RefreshConflictComparison(BaseModel):
     requires_explicit_resolution: bool
 
 
+@contextmanager
+def current_delivery_lock(project_root: Path) -> Iterator[None]:
+    """Exclusive write lock for the atomic current delivery.
+
+    Shared by the user save path and the source current refresh so two writers
+    can never interleave two current generations.
+    """
+    path = project_root / "state" / "user-fact-edit.lock"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(descriptor, fcntl.LOCK_UN)
+        os.close(descriptor)
+
+
+def fact_revision_digest(fact_version_ids: tuple[str, ...]) -> str:
+    """Content digest of one current-delivery fact closure."""
+    return _fact_digest(fact_version_ids)
+
+
+def _fact_impact_graph(
+    revision: int,
+    consumers: tuple[PortalConsumerNode, ...],
+    facts: dict[str, dict[str, Any]],
+) -> ImpactGraph:
+    nodes: list[ImpactNode] = []
+    edges: list[ImpactEdge] = []
+    for consumer in consumers:
+        fact_payload = facts[consumer.fact_id]
+        binding_digest = _digest(consumer.binding_identity.model_dump(mode="json"))
+        fact = ImpactNode(
+            layer=ImpactLayer.FACT,
+            object_id=consumer.fact_id,
+            revision=revision,
+        )
+        semantic = ImpactNode(
+            layer=ImpactLayer.MEDICAL_SEMANTIC,
+            object_id=f"semantic:{consumer.fact_id}:{binding_digest}",
+            revision=revision,
+        )
+        facet = ImpactNode(
+            layer=ImpactLayer.FACET,
+            object_id=(
+                f"facet:{consumer.report}:{consumer.collection}:{consumer.row_id}:"
+                f"{consumer.original_row_sha256}"
+            ),
+            revision=revision,
+        )
+        page = ImpactNode(
+            layer=ImpactLayer.PAGE,
+            object_id=f"page:{consumer.report}:{consumer.page_relative_path}",
+            report_kinds=frozenset({consumer.report}),
+            revision=revision,
+        )
+        fmt = ImpactNode(
+            layer=ImpactLayer.FORMAT,
+            object_id=f"html:{consumer.report}",
+            revision=revision,
+        )
+        identities = {
+            ImpactLayer.CHART: consumer.chart_consumer,
+            ImpactLayer.TABLE: consumer.table_consumer,
+            ImpactLayer.NARRATIVE: consumer.narrative_consumer,
+            ImpactLayer.INDEX: consumer.index_consumer,
+            ImpactLayer.SOURCE_POINTER: consumer.source_binding_consumer,
+        }
+        artifact_nodes = {
+            layer: ImpactNode(layer, identity, revision=revision)
+            for layer, identity in identities.items()
+        }
+        nodes.extend((fact, semantic, facet, page, fmt, *artifact_nodes.values()))
+        edges.extend(
+            (
+                ImpactEdge(fact, semantic),
+                ImpactEdge(semantic, facet),
+                ImpactEdge(fact, artifact_nodes[ImpactLayer.SOURCE_POINTER]),
+                ImpactEdge(page, fmt),
+            )
+        )
+        if (
+            fact_payload.get("statistical_form") == "crude_rate"
+            and fact_payload.get("measure_object") == "participants"
+        ):
+            derivation = ImpactNode(
+                layer=ImpactLayer.DERIVATION,
+                object_id=f"derived:participant-crude-rate:{consumer.fact_id}",
+                revision=revision,
+            )
+            nodes.append(derivation)
+            edges.extend((ImpactEdge(fact, derivation), ImpactEdge(derivation, facet)))
+        for layer in (
+            ImpactLayer.CHART,
+            ImpactLayer.TABLE,
+            ImpactLayer.NARRATIVE,
+            ImpactLayer.INDEX,
+        ):
+            edges.append(ImpactEdge(facet, artifact_nodes[layer]))
+        for artifact_node in artifact_nodes.values():
+            edges.append(ImpactEdge(artifact_node, page))
+    return ImpactGraph(nodes=tuple(nodes), edges=tuple(edges))
+
+
+def _bound_builder_input(
+    project_root: Path,
+    previous: CurrentReportDelivery,
+    builder_binding: tuple[str, str] | None,
+) -> tuple[Path, str, str]:
+    """Resolve and verify the hash-pinned builder input for one report build."""
+    if builder_binding is None:
+        relative = previous.builder_input_relative_path
+        expected = previous.builder_input_sha256
+        if relative is None or expected is None:
+            raise CurrentDeliveryConflictError("当前交付缺少原portal builder输入绑定")
+    else:
+        relative, expected = builder_binding
+    builder_input = project_root / relative
+    if (
+        not builder_input.is_file()
+        or hashlib.sha256(builder_input.read_bytes()).hexdigest() != expected
+    ):
+        raise CurrentDeliveryConflictError("原portal builder输入哈希不一致")
+    return builder_input, relative, expected
+
+
+def preflight_current_report(
+    project_root: Path,
+    previous: CurrentReportDelivery,
+    *,
+    revision: int,
+    request_id: str,
+    fact_version_ids: tuple[str, ...],
+    public_facts: Mapping[str, dict[str, Any]],
+    builder_binding: tuple[str, str] | None = None,
+) -> None:
+    """Validate one report's hash-pinned builder input against an active revision.
+
+    Performs no staging write: callers use it to prove the complete affected
+    set before any report render transaction begins.
+    """
+    facts = {fact_id: dict(payload) for fact_id, payload in public_facts.items()}
+    active_revision = ActiveFactRevision(
+        revision=revision,
+        request_id=request_id,
+        fact_revision_digest=_fact_digest(fact_version_ids),
+        facts=tuple(ActiveFact.model_validate(fact) for fact in facts.values()),
+    )
+    builder_input, _relative, _expected = _bound_builder_input(
+        project_root, previous, builder_binding
+    )
+    try:
+        if previous.report == "A":
+            validate_active_fact_revision_a(
+                ReportAPortalData.model_validate_json(builder_input.read_bytes()),
+                active_revision,
+            )
+        elif previous.report == "B":
+            validate_active_fact_revision_b(
+                ReportBPortalData.model_validate_json(builder_input.read_bytes()),
+                active_revision,
+            )
+        else:
+            validate_active_fact_revision_c(
+                ReportCPortalData.model_validate_json(builder_input.read_bytes()),
+                active_revision,
+            )
+    except ValueError as error:
+        raise CurrentDeliveryConflictError(str(error)) from error
+
+
+def build_current_report(
+    project_root: Path,
+    previous: CurrentReportDelivery,
+    *,
+    revision: int,
+    request_id: str,
+    changed_fact_id: str,
+    fact_version_ids: tuple[str, ...],
+    public_facts: Mapping[str, dict[str, Any]],
+    report_version: str,
+    builder_binding: tuple[str, str] | None = None,
+) -> CurrentReportDelivery:
+    """Build one immutable current report version from a hash-pinned builder input.
+
+    ``public_facts`` carries the caller-resolved active fact payloads so the
+    user save path and the source current refresh share this exact render
+    transaction. ``builder_binding`` re-pins the new delivery's builder input;
+    when omitted the previous binding is retained.
+    """
+    report = previous.report
+    version_root = project_root / "reports" / report / report_version
+    manifest_path = version_root / "html.manifest.json"
+    site = version_root / "html"
+    facts = {fact_id: dict(payload) for fact_id, payload in public_facts.items()}
+    fact_digest = _fact_digest(fact_version_ids)
+    active_revision = ActiveFactRevision(
+        revision=revision,
+        request_id=request_id,
+        fact_revision_digest=fact_digest,
+        facts=tuple(ActiveFact.model_validate(fact) for fact in facts.values()),
+    )
+    builder_input, builder_relative, builder_sha256 = _bound_builder_input(
+        project_root, previous, builder_binding
+    )
+    data_a: ReportAPortalData | None = None
+    data_b: ReportBPortalData | None = None
+    data_c: ReportCPortalData | None = None
+    try:
+        if report == "A":
+            data_a = ReportAPortalData.model_validate_json(builder_input.read_bytes())
+            validate_active_fact_revision_a(data_a, active_revision)
+        elif report == "B":
+            data_b = ReportBPortalData.model_validate_json(builder_input.read_bytes())
+            validate_active_fact_revision_b(data_b, active_revision)
+        else:
+            data_c = ReportCPortalData.model_validate_json(builder_input.read_bytes())
+            validate_active_fact_revision_c(data_c, active_revision)
+    except ValueError as error:
+        raise CurrentDeliveryConflictError(str(error)) from error
+    if manifest_path.is_file():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if (
+            manifest.get("request_id") != request_id
+            or manifest.get("revision") != revision
+            or manifest.get("fact_version_ids") != list(fact_version_ids)
+        ):
+            raise CurrentDeliveryConflictError("已存在的用户修订产物与重试材料不一致")
+        hashes = _file_hashes(site)
+        if hashes != manifest.get("file_hashes"):
+            raise CurrentDeliveryConflictError("已存在的用户修订产物哈希不一致")
+    else:
+        transaction = UnpublishedRenderTransaction(
+            project_root,
+            report=report,
+            report_version=report_version,
+            run_id=f"user-r{revision}-{report.lower()}",
+        )
+        staging = transaction.begin()
+        if report == "A":
+            assert data_a is not None
+            # Read only the already hash-bound previous site, never a browser
+            # patch or guessed source URL. Legacy sites have no such context.
+            context_path = project_root / previous.site_relative_path / "data/render-context.json"
+            public = None
+            limitation = None
+            if context_path.is_file():
+                expected = previous.file_hashes.get("data/render-context.json")
+                if (
+                    context_path.is_symlink()
+                    or hashlib.sha256(context_path.read_bytes()).hexdigest() != expected
+                ):
+                    raise CurrentDeliveryConflictError("来源呈现上下文哈希不一致")
+                context = json.loads(context_path.read_bytes())
+                if context.get("schema_version") != "a-public-render-context-1":
+                    raise CurrentDeliveryConflictError("来源呈现上下文版本不支持")
+                if context["public_provenance"] is not None:
+                    public = PublicProvenance.model_validate(context["public_provenance"])
+                limitation = context["publication_limitation_zh"]
+            render_report_a_site(data_a, staging, active_revision=active_revision,
+                                 public_provenance=public,
+                                 publication_limitation_zh=limitation)
+        elif report == "B":
+            assert data_b is not None
+            render_report_b_site(data_b, staging, active_revision=active_revision)
+        else:
+            assert data_c is not None
+            render_report_c_site(data_c, staging, active_revision=active_revision)
+        receipt_path = staging / "data/consumer-receipt.json"
+        receipt = PortalRenderReceipt.model_validate_json(receipt_path.read_bytes())
+        graph = _fact_impact_graph(revision, receipt.consumers, facts)
+        changed = next(
+            (
+                node
+                for node in graph.nodes
+                if node.layer is ImpactLayer.FACT and node.object_id == changed_fact_id
+            ),
+            None,
+        )
+        impact_plan = graph.impact_closure((changed,)) if changed is not None else None
+        hashes = _file_hashes(staging)
+        manifest = {
+            "schema_version": "1.0",
+            "report": report,
+            "revision": revision,
+            "request_id": request_id,
+            "fact_version_ids": list(fact_version_ids),
+            "fact_revision_digest": fact_digest,
+            "file_hashes": hashes,
+            "portal_integration": receipt.model_dump(mode="json"),
+            "impact_bindings": [
+                {
+                    "fact_id": consumer.fact_id,
+                    "fact_version_id": consumer.fact_version_id,
+                    "binding_identity": consumer.binding_identity.model_dump(mode="json"),
+                    "original_row_sha256": consumer.original_row_sha256,
+                }
+                for consumer in receipt.consumers
+            ],
+            "impact_plan_digest": (
+                impact_plan.plan_digest
+                if impact_plan is not None
+                else _digest({"report": report, "revision": revision, "affected": []})
+            ),
+            "affected_objects": [
+                {"layer": node.layer.value, "object_id": node.object_id}
+                for node in (() if impact_plan is None else impact_plan.affected)
+            ],
+        }
+        transaction.commit((_canonical(manifest) + "\n").encode())
+    manifest_relative = manifest_path.relative_to(project_root).as_posix()
+    return CurrentReportDelivery(
+        report=report,
+        revision=revision,
+        request_id=request_id,
+        report_version=report_version,
+        site_relative_path=site.relative_to(project_root).as_posix(),
+        file_hashes=_file_hashes(site),
+        fact_version_ids=fact_version_ids,
+        fact_revision_digest=_fact_digest(fact_version_ids),
+        transaction_manifest_relative_path=manifest_relative,
+        transaction_manifest_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+        builder_input_relative_path=builder_relative,
+        builder_input_sha256=builder_sha256,
+    )
+
+
 class UserFactEditService:
     """The sole W04 write path for an explicit user fact save."""
 
@@ -337,15 +666,8 @@ class UserFactEditService:
 
     @contextmanager
     def _exclusive(self) -> Any:
-        path = self.project_root / "state" / "user-fact-edit.lock"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        descriptor = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX)
+        with current_delivery_lock(self.project_root):
             yield
-        finally:
-            fcntl.flock(descriptor, fcntl.LOCK_UN)
-            os.close(descriptor)
 
     def initialize_current_delivery(
         self,
@@ -1062,42 +1384,14 @@ class UserFactEditService:
     ) -> None:
         rows = [self._fact_row(version_id) for version_id in fact_version_ids]
         facts = {str(row["fact_id"]): self._public_fact(row) for row in rows}
-        active_revision = ActiveFactRevision(
+        preflight_current_report(
+            self.project_root,
+            previous,
             revision=revision,
             request_id=request_id,
-            fact_revision_digest=_fact_digest(fact_version_ids),
-            facts=tuple(ActiveFact.model_validate(fact) for fact in facts.values()),
+            fact_version_ids=fact_version_ids,
+            public_facts=facts,
         )
-        if (
-            previous.builder_input_relative_path is None
-            or previous.builder_input_sha256 is None
-        ):
-            raise CurrentDeliveryConflictError("当前交付缺少原portal builder输入绑定")
-        builder_input = self.project_root / previous.builder_input_relative_path
-        if (
-            not builder_input.is_file()
-            or hashlib.sha256(builder_input.read_bytes()).hexdigest()
-            != previous.builder_input_sha256
-        ):
-            raise CurrentDeliveryConflictError("原portal builder输入哈希不一致")
-        try:
-            if previous.report == "A":
-                validate_active_fact_revision_a(
-                    ReportAPortalData.model_validate_json(builder_input.read_bytes()),
-                    active_revision,
-                )
-            elif previous.report == "B":
-                validate_active_fact_revision_b(
-                    ReportBPortalData.model_validate_json(builder_input.read_bytes()),
-                    active_revision,
-                )
-            else:
-                validate_active_fact_revision_c(
-                    ReportCPortalData.model_validate_json(builder_input.read_bytes()),
-                    active_revision,
-                )
-        except ValueError as error:
-            raise CurrentDeliveryConflictError(str(error)) from error
 
     def _build_report(
         self,
@@ -1108,131 +1402,17 @@ class UserFactEditService:
         changed_fact_id: str,
         fact_version_ids: tuple[str, ...],
     ) -> CurrentReportDelivery:
-        report = previous.report
-        version = f"v1-user-r{revision}"
-        version_root = self.project_root / "reports" / report / version
-        manifest_path = version_root / "html.manifest.json"
-        site = version_root / "html"
         rows = [self._fact_row(version_id) for version_id in fact_version_ids]
         facts = {str(row["fact_id"]): self._public_fact(row) for row in rows}
-        fact_digest = _fact_digest(fact_version_ids)
-        active_revision = ActiveFactRevision(
+        return build_current_report(
+            self.project_root,
+            previous,
             revision=revision,
             request_id=request_id,
-            fact_revision_digest=fact_digest,
-            facts=tuple(ActiveFact.model_validate(fact) for fact in facts.values()),
-        )
-        if (
-            previous.builder_input_relative_path is None
-            or previous.builder_input_sha256 is None
-        ):
-            raise CurrentDeliveryConflictError("当前交付缺少原portal builder输入绑定")
-        builder_input = self.project_root / previous.builder_input_relative_path
-        if (
-            not builder_input.is_file()
-            or hashlib.sha256(builder_input.read_bytes()).hexdigest()
-            != previous.builder_input_sha256
-        ):
-            raise CurrentDeliveryConflictError("原portal builder输入哈希不一致")
-        data_a: ReportAPortalData | None = None
-        data_b: ReportBPortalData | None = None
-        data_c: ReportCPortalData | None = None
-        try:
-            if report == "A":
-                data_a = ReportAPortalData.model_validate_json(builder_input.read_bytes())
-                validate_active_fact_revision_a(data_a, active_revision)
-            elif report == "B":
-                data_b = ReportBPortalData.model_validate_json(builder_input.read_bytes())
-                validate_active_fact_revision_b(data_b, active_revision)
-            else:
-                data_c = ReportCPortalData.model_validate_json(builder_input.read_bytes())
-                validate_active_fact_revision_c(data_c, active_revision)
-        except ValueError as error:
-            raise CurrentDeliveryConflictError(str(error)) from error
-        if manifest_path.is_file():
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            if (
-                manifest.get("request_id") != request_id
-                or manifest.get("revision") != revision
-                or manifest.get("fact_version_ids") != list(fact_version_ids)
-            ):
-                raise CurrentDeliveryConflictError("已存在的用户修订产物与重试材料不一致")
-            hashes = _file_hashes(site)
-            if hashes != manifest.get("file_hashes"):
-                raise CurrentDeliveryConflictError("已存在的用户修订产物哈希不一致")
-        else:
-            transaction = UnpublishedRenderTransaction(
-                self.project_root,
-                report=report,
-                report_version=version,
-                run_id=f"user-r{revision}-{report.lower()}",
-            )
-            staging = transaction.begin()
-            if report == "A":
-                assert data_a is not None
-                render_report_a_site(data_a, staging, active_revision=active_revision)
-            elif report == "B":
-                assert data_b is not None
-                render_report_b_site(data_b, staging, active_revision=active_revision)
-            else:
-                assert data_c is not None
-                render_report_c_site(data_c, staging, active_revision=active_revision)
-            receipt_path = staging / "data/consumer-receipt.json"
-            receipt = PortalRenderReceipt.model_validate_json(receipt_path.read_bytes())
-            graph = self._impact_graph(revision, receipt.consumers, facts)
-            changed = next(
-                (
-                    node
-                    for node in graph.nodes
-                    if node.layer is ImpactLayer.FACT and node.object_id == changed_fact_id
-                ),
-                None,
-            )
-            impact_plan = graph.impact_closure((changed,)) if changed is not None else None
-            hashes = _file_hashes(staging)
-            manifest = {
-                "schema_version": "1.0",
-                "report": report,
-                "revision": revision,
-                "request_id": request_id,
-                "fact_version_ids": list(fact_version_ids),
-                "fact_revision_digest": fact_digest,
-                "file_hashes": hashes,
-                "portal_integration": receipt.model_dump(mode="json"),
-                "impact_bindings": [
-                    {
-                        "fact_id": consumer.fact_id,
-                        "fact_version_id": consumer.fact_version_id,
-                        "binding_identity": consumer.binding_identity.model_dump(mode="json"),
-                        "original_row_sha256": consumer.original_row_sha256,
-                    }
-                    for consumer in receipt.consumers
-                ],
-                "impact_plan_digest": (
-                    impact_plan.plan_digest
-                    if impact_plan is not None
-                    else _digest({"report": report, "revision": revision, "affected": []})
-                ),
-                "affected_objects": [
-                    {"layer": node.layer.value, "object_id": node.object_id}
-                    for node in (() if impact_plan is None else impact_plan.affected)
-                ],
-            }
-            transaction.commit((_canonical(manifest) + "\n").encode())
-        manifest_relative = manifest_path.relative_to(self.project_root).as_posix()
-        return CurrentReportDelivery(
-            report=report,
-            revision=revision,
-            request_id=request_id,
-            report_version=version,
-            site_relative_path=site.relative_to(self.project_root).as_posix(),
-            file_hashes=_file_hashes(site),
+            changed_fact_id=changed_fact_id,
             fact_version_ids=fact_version_ids,
-            fact_revision_digest=_fact_digest(fact_version_ids),
-            transaction_manifest_relative_path=manifest_relative,
-            transaction_manifest_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
-            builder_input_relative_path=previous.builder_input_relative_path,
-            builder_input_sha256=previous.builder_input_sha256,
+            public_facts=facts,
+            report_version=f"v1-user-r{revision}",
         )
 
     def _copy_tree(self, source: Path, destination: Path) -> None:
@@ -1249,81 +1429,7 @@ class UserFactEditService:
         consumers: tuple[PortalConsumerNode, ...],
         facts: dict[str, dict[str, Any]],
     ) -> ImpactGraph:
-        nodes: list[ImpactNode] = []
-        edges: list[ImpactEdge] = []
-        for consumer in consumers:
-            fact_payload = facts[consumer.fact_id]
-            binding_digest = _digest(consumer.binding_identity.model_dump(mode="json"))
-            fact = ImpactNode(
-                layer=ImpactLayer.FACT,
-                object_id=consumer.fact_id,
-                revision=revision,
-            )
-            semantic = ImpactNode(
-                layer=ImpactLayer.MEDICAL_SEMANTIC,
-                object_id=f"semantic:{consumer.fact_id}:{binding_digest}",
-                revision=revision,
-            )
-            facet = ImpactNode(
-                layer=ImpactLayer.FACET,
-                object_id=(
-                    f"facet:{consumer.report}:{consumer.collection}:{consumer.row_id}:"
-                    f"{consumer.original_row_sha256}"
-                ),
-                revision=revision,
-            )
-            page = ImpactNode(
-                layer=ImpactLayer.PAGE,
-                object_id=f"page:{consumer.report}:{consumer.page_relative_path}",
-                report_kinds=frozenset({consumer.report}),
-                revision=revision,
-            )
-            fmt = ImpactNode(
-                layer=ImpactLayer.FORMAT,
-                object_id=f"html:{consumer.report}",
-                revision=revision,
-            )
-            identities = {
-                ImpactLayer.CHART: consumer.chart_consumer,
-                ImpactLayer.TABLE: consumer.table_consumer,
-                ImpactLayer.NARRATIVE: consumer.narrative_consumer,
-                ImpactLayer.INDEX: consumer.index_consumer,
-                ImpactLayer.SOURCE_POINTER: consumer.source_binding_consumer,
-            }
-            artifact_nodes = {
-                layer: ImpactNode(layer, identity, revision=revision)
-                for layer, identity in identities.items()
-            }
-            nodes.extend((fact, semantic, facet, page, fmt, *artifact_nodes.values()))
-            edges.extend(
-                (
-                    ImpactEdge(fact, semantic),
-                    ImpactEdge(semantic, facet),
-                    ImpactEdge(fact, artifact_nodes[ImpactLayer.SOURCE_POINTER]),
-                    ImpactEdge(page, fmt),
-                )
-            )
-            if (
-                fact_payload.get("statistical_form") == "crude_rate"
-                and fact_payload.get("measure_object") == "participants"
-            ):
-                derivation = ImpactNode(
-                    layer=ImpactLayer.DERIVATION,
-                    object_id=f"derived:participant-crude-rate:{consumer.fact_id}",
-                    revision=revision,
-                )
-                nodes.append(derivation)
-                edges.extend((ImpactEdge(fact, derivation), ImpactEdge(derivation, facet)))
-            for layer in (
-                ImpactLayer.CHART,
-                ImpactLayer.TABLE,
-                ImpactLayer.NARRATIVE,
-                ImpactLayer.INDEX,
-            ):
-                edges.append(ImpactEdge(facet, artifact_nodes[layer]))
-            for artifact_node in artifact_nodes.values():
-                edges.append(ImpactEdge(artifact_node, page))
-        return ImpactGraph(nodes=tuple(nodes), edges=tuple(edges))
+        return _fact_impact_graph(revision, consumers, facts)
 
     def compare_refresh(
         self,

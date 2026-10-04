@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "name": "康哲品牌标识",
-  "source": "contracts/kangzhe/design_specs/assets/logo_bot.svg",
+  "source": "contracts/kangzhe/v6-site/assets/logo_bot.svg",
   "file": "cms-logo.svg",
   "sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
   "bytes": 9542,

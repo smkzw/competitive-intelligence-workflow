@@ -28,6 +28,7 @@ from ci_workflow.domain.public_provenance import (
     PublicProvenance,
     PublicSource,
 )
+from ci_workflow.domain.source_clause_context import SourceClauseContext
 from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData, SafetyRow
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
 from ci_workflow.reports.b.safety_concepts import (
@@ -36,9 +37,15 @@ from ci_workflow.reports.b.safety_concepts import (
     safety_category_zh,
 )
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
+from ci_workflow.sources.connectors.linked_jats import (
+    LinkedJatsInspection,
+    inspect_linked_jats_xml,
+)
+from ci_workflow.sources.connectors.public_pdf_availability import PublicPdfAvailabilityWitness
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
 from ci_workflow.storage.source_derivation import (
+    capture_source_text,
     extract_locator_quote,
     source_json_decoder,
     verify_source_text_derivation,
@@ -74,6 +81,15 @@ class CaptureDatePrecisions(BaseModel):
     first_disclosed_at: DatePrecision = "instant"
 
 
+class CaptureDateLocators(BaseModel):
+    """Optional role-specific locations; document version is not its public upload."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    published_at: EvidenceLocator | None = None
+    effective_at: EvidenceLocator | None = None
+    first_disclosed_at: EvidenceLocator | None = None
+
+
 class SourceCapture(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -90,11 +106,20 @@ class SourceCapture(BaseModel):
     text_derivation: SourceTextDerivation | None = Field(
         default=None, exclude_if=lambda value: value is None,
     )
+    public_pdf_availability: PublicPdfAvailabilityWitness | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     acquired_at: datetime
     published_at: datetime | None
     effective_at: datetime | None
-    first_disclosed_at: datetime
+    # Unknown disclosure remains explicit, never replaced by the download,
+    # printed version or signature date. Existing historical eligibility stays
+    # fail-closed through DateEvidence.is_known_by.
+    first_disclosed_at: datetime | None
     date_precisions: CaptureDatePrecisions | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+    date_locators: CaptureDateLocators | None = Field(
         default=None, exclude_if=lambda value: value is None,
     )
     locator: EvidenceLocator
@@ -103,11 +128,20 @@ class SourceCapture(BaseModel):
         if role not in ("published_at", "effective_at", "first_disclosed_at"):
             raise ValueError("未知来源日期角色")
         value = getattr(self, role)
+        locator = getattr(self.date_locators, role) if self.date_locators is not None else None
         return DateEvidence(
             state="reported" if value is not None else "not_publicly_disclosed",
-            value=value, locator=self.locator,
+            value=value, locator=locator or self.locator,
             precision=getattr(self.date_precisions, role) if self.date_precisions else "instant",
         )
+
+    def is_available_by(self, cutoff: datetime) -> bool:
+        """Structural eligibility only; ingestion must reopen every supplied proof."""
+        proof = self.public_pdf_availability
+        if proof is not None:
+            return bool(cutoff.tzinfo is not None and cutoff.utcoffset() is not None
+                        and proof.observed_available_at <= cutoff)
+        return self.date_evidence("first_disclosed_at").is_known_by(cutoff)
 
     @model_validator(mode="after")
     def _date_precision_matches_values(self) -> Self:
@@ -143,7 +177,56 @@ class SourceCapture(BaseModel):
                 raise ValueError("来源媒体类型与原始资产不一致")
         elif self.media_type == "application/pdf":
             raise ValueError("PDF提取文本必须绑定原始资产及派生回执")
+        proof = self.public_pdf_availability
+        if proof is not None and (
+            self.media_type != "application/pdf" or self.text_derivation is None
+            or proof.raw_asset != self.text_derivation.raw_asset
+            or proof.request_url != self.url or proof.final_url != self.url
+            or proof.receipt_asset is None or proof.observed_available_at > self.acquired_at
+        ):
+            raise ValueError("官方当前获取见证未绑定该来源原件、URL、回执或采集时刻")
         return self
+
+
+def source_capture_from_linked_jats_xml(
+    project_root: Path, raw: bytes, *, expected_pmid: str | None,
+    expected_pmcid: str, expected_doi: str, url: str,
+    acquired_at: datetime, media_type: str = "application/xml",
+) -> tuple[LinkedJatsInspection, SourceCapture | None]:
+    """Bridge exact linked native bytes, never HTTP success, into a text capture.
+
+    The caller owns transport/recovery and preservation of the response receipt.
+    Metadata-only is a successful inspection with NO full-text capture. Neither
+    body presence nor the supplied acquisition time proves historical availability,
+    publication role, scientific correctness or redistribution rights.
+    """
+    if media_type not in {"application/xml", "text/xml"}:
+        raise ValueError("原生论文获取必须声明 XML 媒体类型")
+    if not url.strip() or acquired_at.tzinfo is None or acquired_at.utcoffset() is None:
+        raise ValueError("原生论文 URL 或带时区的实际获取时刻无效")
+    inspection = inspect_linked_jats_xml(
+        raw, expected_pmid=expected_pmid, expected_pmcid=expected_pmcid,
+        expected_doi=expected_doi,
+    )
+    if inspection.body_state == "metadata_only":
+        return inspection, None
+    text, derivation = capture_source_text(project_root, raw, media_type=media_type)
+    verify_source_text_derivation(project_root, derivation, text)
+    capture = SourceCapture(
+        source_id=f"linked-jats-{inspection.pmcid.lower()}",
+        route_id="primary-publication", source_type="journal_publication",
+        title=inspection.title, url=url,
+        query_or_identifier=f"{inspection.pmcid} / DOI {inspection.doi}",
+        language="en", access_method="identity_checked_linked_jats_response",
+        media_type=media_type, content_text=text, text_derivation=derivation,
+        acquired_at=acquired_at, published_at=None, effective_at=None,
+        first_disclosed_at=None,
+        locator=EvidenceLocator(
+            document_role="original_linked_publication", url=url,
+            paragraph=inspection.title,
+        ),
+    )
+    return inspection, capture
 
 
 def source_capture_from_ctgov_study(
@@ -209,7 +292,7 @@ def source_capture_from_ctgov_study(
         ),
         locator=EvidenceLocator(
             document_role="clinical_trial_registry",
-            field_path="$.protocolSection.identificationModule.nctId",
+            field_path="$.protocolSection.statusModule.lastUpdatePostDateStruct.date",
             url=study.record_url,
         ),
     )
@@ -277,6 +360,9 @@ class ResearchFact(BaseModel):
     source_id: str
     locator: EvidenceLocator
     original_text: str
+    source_clause_context: SourceClauseContext | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     result_context: ResearchResultContext | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
@@ -320,9 +406,37 @@ class ResearchClaim(BaseModel):
     calculation: CtgovAeRateCalculation | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    synthesis_method_zh: str | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    ai_disclosure_label_zh: Literal["AI 综合判断"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+
+    @field_validator("synthesis_method_zh")
+    @classmethod
+    def _synthesis_method_not_blank(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = " ".join(value.split())
+        if not normalized:
+            raise ValueError("AI 综合判断必须保存非空方法")
+        return normalized
 
     @model_validator(mode="after")
     def _calculation_has_two_inputs(self) -> Self:
+        if self.claim_kind == "synthesis":
+            if (
+                not self.claim_text.startswith("AI 综合判断：")
+                or self.synthesis_method_zh is None
+                or self.ai_disclosure_label_zh != "AI 综合判断"
+                or self.calculation is not None
+            ):
+                raise ValueError("AI 综合判断必须明确文字标识和方法，不得冒充直接证据或计算")
+        elif self.synthesis_method_zh is not None or self.ai_disclosure_label_zh is not None:
+            raise ValueError("直接证据或确定性计算不得携带 AI 综合字段")
+        if self.claim_kind == "deterministic_calculation" and self.calculation is None:
+            raise ValueError("确定性计算声明必须保存可复算记录")
         if self.calculation is not None and (
             self.claim_kind != "deterministic_calculation"
             or len(self.fact_ids) != 2
@@ -331,6 +445,22 @@ class ResearchClaim(BaseModel):
         ):
             raise ValueError("AE 计算必须引用两条不同原子事实和一个安全性结果行")
         return self
+
+    def scientific_version_id(self, fact_version_ids: Sequence[str]) -> str:
+        """One identity algorithm for ingestion and manifest-only restoration."""
+        if len(fact_version_ids) != len(self.fact_ids) or any(
+            not isinstance(value, str) or not value.strip() for value in fact_version_ids
+        ):
+            raise ValueError("声明事实版本与输入事实不一致")
+        identity = [self.claim_id, self.claim_text, *fact_version_ids]
+        if self.calculation is not None:
+            identity.append(self.calculation.model_dump_json())
+        if self.claim_kind == "synthesis":
+            identity.extend([
+                "synthesis", str(self.synthesis_method_zh), str(self.ai_disclosure_label_zh),
+            ])
+        # Preserve existing direct/calculation identities and original bytes.
+        return stable_id("claim-version", *identity)
 
 
 class RouteAttempt(BaseModel):
@@ -795,7 +925,6 @@ def _outcome_category(
     # classes are separately measured statistical objects. A composite parent
     # cannot be split without such a class, but it cannot overwrite one either.
     title_concept = describe_safety_concept(title)
-    class_concept = describe_safety_concept(class_title) if class_title else None
     selected = describe_measured_safety_concept(title, class_title)
     if title_concept.key == "composite_ae" and selected.key == "composite_ae":
         return "outcome"
@@ -805,14 +934,8 @@ def _outcome_category(
         return "teae"
     if selected.key == "aesi" and selected.polarity == "affirmed":
         return "aesi"
-    if (
-        selected.key == "generic_ae" and class_concept is not None
-        and "non-serious" not in class_title.casefold()
-        and title_concept.key in {"any_sae", "any_teae", "aesi"}
-    ):
-        return {"any_sae": "sae", "any_teae": "teae", "aesi": "aesi"}[
-            title_concept.key
-        ]  # type: ignore[return-value]
+    # A measured generic AE subclass does not prove the parent's SAE/TEAE
+    # qualification; contextual visit labels are already handled upstream.
     if selected.key in {
         "generic_ae", "specific_ae", "discontinuation_ae", "treatment_related_ae",
         "grade_3_plus", "serious_teae_subset", "composite_ae",
@@ -2261,6 +2384,25 @@ def _bind_verified_ctgov_ae_to_a_row(
     return bound, facts, claim
 
 
+def ctgov_direct_safety_measure_identity(
+    endpoint: str, class_title: str, category_title: str, raw_unit: str,
+) -> tuple[str, str, str]:
+    """One unit/object/basis interpretation for binding and downstream consumers."""
+    semantic = describe_measured_safety_concept(endpoint, class_title, category_title)
+    unit = raw_unit.strip().casefold()
+    if unit in {"participants", "participant"}:
+        expected_unit, measure_object = "人", "participant_count"
+    elif unit in {"events", "event"}:
+        expected_unit, measure_object = "次", "event_count"
+    elif "percentage" in unit and "participant" in unit:
+        expected_unit, measure_object = "%", "participant_proportion"
+    else:
+        expected_unit, measure_object = raw_unit, "adjusted_estimate"
+    return expected_unit, measure_object, (
+        "events" if measure_object == "event_count" else semantic.count_basis
+    )
+
+
 def _bind_verified_ctgov_direct_safety_to_a_row(
     source: SourceCapture,
     atom: CtgovAtomicResult,
@@ -2272,17 +2414,8 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
     semantic = describe_measured_safety_concept(
         atom.endpoint, atom.class_title, atom.category_title,
     )
-    unit = atom.raw_unit.strip().casefold()
-    if unit in {"participants", "participant"}:
-        expected_unit, measure_object = "人", "participant_count"
-    elif unit in {"events", "event"}:
-        expected_unit, measure_object = "次", "event_count"
-    elif "percentage" in unit and "participant" in unit:
-        expected_unit, measure_object = "%", "participant_proportion"
-    else:
-        expected_unit, measure_object = atom.raw_unit, "adjusted_estimate"
-    expected_count_basis = (
-        "events" if measure_object == "event_count" else semantic.count_basis
+    expected_unit, measure_object, expected_count_basis = ctgov_direct_safety_measure_identity(
+        atom.endpoint, atom.class_title, atom.category_title, atom.raw_unit,
     )
     expected_time = atom.observation_timepoint or atom.timepoint
     raw_value = _result_number(atom.value_quote)
@@ -3222,7 +3355,7 @@ class FreshAResearchContent(BaseModel):
         source_ids = [item.source_id for item in self.sources]
         if len(source_ids) != len(set(source_ids)):
             raise ValueError("来源标识重复")
-        if any(not item.date_evidence("first_disclosed_at").is_known_by(self.data_cutoff)
+        if any(not item.is_available_by(self.data_cutoff)
                for item in self.sources):
             raise ValueError("截止日之后或无法证明截止时点前首次披露的来源不得进入当前快照")
         source_set = set(source_ids)

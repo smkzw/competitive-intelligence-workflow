@@ -369,6 +369,8 @@ def _trial_designs_payload(
     by_trial: dict[str, str] = {}
     for item in usable:
         by_trial.setdefault(item.trial_id, item.observation_id)
+        if item.field_family is DesignFieldFamily.GROUPING:
+            by_trial[item.trial_id] = item.observation_id
     return [
         {
             "trial_id": trial.id,
@@ -860,7 +862,9 @@ def test_protocol_sap_can_complete_registry_design_coverage(
         item
         for item in _observations()
         if not (
-            item.trial_id == "trial-alpha-1" and item.field_family is DesignFieldFamily.ENDPOINT
+            item.trial_id == "trial-alpha-1" and item.field_family in {
+                DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT,
+            }
         )
     ]
     rows.append(
@@ -870,6 +874,16 @@ def test_protocol_sap_can_complete_registry_design_coverage(
             DesignFieldFamily.ENDPOINT,
             "primary_endpoint_definition",
             "湿疹面积评分（方案第8.1节）",
+            source_role=SourceRole.PROTOCOL_SAP,
+            source_version_id="source-registry-2",
+            group_id="group-trial-alpha-1-arm-1",
+        )
+    )
+    # 方案可补登记设计，但不能把另一版本登记的时间点自动当作方案配对证据。
+    rows.append(
+        _observation(
+            "trial-alpha-1", "product-alpha", DesignFieldFamily.TIMEPOINT,
+            "primary_endpoint_timepoint", "第16周",
             source_role=SourceRole.PROTOCOL_SAP,
             source_version_id="source-registry-2",
             group_id="group-trial-alpha-1-arm-1",
@@ -1452,7 +1466,7 @@ def test_fresh_c_double_exhaustion_publishes_reopenable_terminal_decision(
                 object_type="trial",
                 object_id=object_id,
                 current_state="not_reported",
-                gate_spec_id=_gate_spec().spec_id,
+                gate_spec_id=gate_outcome.spec_id,
             )
             for index, (unit_id, object_id) in enumerate(blocked_pairs, start=1)
         ),

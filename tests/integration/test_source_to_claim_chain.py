@@ -18,6 +18,7 @@ def _repository_for_text(
     source_id: str,
     timestamp: datetime,
     first_disclosed_at: datetime | None = None,
+    media_type: str = "text/plain",
 ):
     from ci_workflow.domain.evidence import DateEvidence, EvidenceLocator
     from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
@@ -36,7 +37,7 @@ def _repository_for_text(
     source_version = repository.add_source_version(
         source_id=source_id,
         content=content.encode("utf-8"),
-        media_type="application/json",
+        media_type=media_type,
         acquired_at=timestamp,
         published_at=disclosed,
         effective_at=DateEvidence(state="not_applicable", value=None, locator=locator),
@@ -60,7 +61,12 @@ def test_extraction_preserves_raw_value_unit_arm_population_time_denominator_met
     timestamp = datetime(2026, 8, 12, 0, 50, tzinfo=ZoneInfo("Asia/Shanghai"))
     repository, source_version = _repository_for_text(
         tmp_path,
-        content="-2.1",
+        content=json.dumps({"resultsSection": {"outcomeMeasuresModule": {
+            "outcomeMeasures": [{"classes": [{"categories": [{
+                "measurements": [{"value": "-2.1"}],
+            }]}]}],
+        }}}),
+        media_type="application/json",
         source_id="source-registry-results-001",
         timestamp=timestamp,
     )
@@ -68,7 +74,8 @@ def test_extraction_preserves_raw_value_unit_arm_population_time_denominator_met
         source_version_id=source_version.source_version_id,
         locator=EvidenceLocator(
             document_role="临床试验登记结果",
-            field_path="resultsSection.outcomeMeasuresModule.outcomeMeasures[0].classes[0].categories[0].measurements[0].value",
+            field_path=("$.resultsSection.outcomeMeasuresModule.outcomeMeasures[0]."
+                        "classes[0].categories[0].measurements[0].value"),
             url="https://clinicaltrials.gov/study/NCT01234567?format=json",
         ),
         original_text="-2.1",
@@ -415,7 +422,9 @@ def test_claim_kind_supporting_facts_and_deterministic_calculation_are_explicit(
     created_at = datetime(2026, 8, 12, 1, 11, tzinfo=ZoneInfo("Asia/Shanghai"))
     repository, source_version = _repository_for_text(
         tmp_path,
-        content="-2.1\n-0.8",
+        content=json.dumps({"results": {"treatment-300mg-q4w": "-2.1",
+                                        "placebo-q4w": "-0.8"}}),
+        media_type="application/json",
         source_id="source-version-claims-test",
         timestamp=created_at,
     )
@@ -423,7 +432,7 @@ def test_claim_kind_supporting_facts_and_deterministic_calculation_are_explicit(
         source_version_id=source_version.source_version_id,
         locator=EvidenceLocator(
             document_role="临床试验登记结果",
-            field_path="results.treatment-300mg-q4w",
+            field_path="$.results.treatment-300mg-q4w",
         ),
         original_text="-2.1",
         created_at=created_at,
@@ -432,7 +441,7 @@ def test_claim_kind_supporting_facts_and_deterministic_calculation_are_explicit(
         source_version_id=source_version.source_version_id,
         locator=EvidenceLocator(
             document_role="临床试验登记结果",
-            field_path="results.placebo-q4w",
+            field_path="$.results.placebo-q4w",
         ),
         original_text="-0.8",
         created_at=created_at,
@@ -744,6 +753,7 @@ def test_phase2_recorded_registry_fixture_rebuilds_source_to_claim_and_route_lin
     repository, source_version = _repository_for_text(
         tmp_path,
         content=canonical_record,
+        media_type="application/json",
         source_id="clinicaltrials_gov",
         timestamp=captured,
         first_disclosed_at=first_disclosed,

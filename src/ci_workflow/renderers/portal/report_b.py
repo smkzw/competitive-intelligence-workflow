@@ -91,6 +91,7 @@ from .active_fact_projection import (
     canonical_sha256,
     canonical_source_pointer,
     numeric_value,
+    source_consumer_node,
     user_edit_disclosure,
     validate_active_fact_binding,
     write_render_receipt,
@@ -100,9 +101,15 @@ from .evidence_drawer import render_evidence_drawer_embed, render_evidence_drawe
 from .report_a import (
     _ARM_CODE_ZH,
     _POPULATION_TOKENS,
+    CompanyRow,
     EfficacyRow,
+    HistoryRow,
+    PatentRow,
+    ProductRow,
+    RegulatoryRow,
     ReportAPortalData,
     SafetyRow,
+    StudyRow,
     TrialRow,
     _git_commit,
     _native_timepoint_zh,
@@ -924,6 +931,16 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
     if value is None or not _text(value):
         return "time_not_reported", _TIME_BAND_LABELS["time_not_reported"]
     text = _text(value)
+    if re.search(r"\bfirst dose\b", text, re.I) and re.search(
+        r"\blast dose\b", text, re.I,
+    ) and re.search(r"\b(?:from|through|until|up to)\b", text, re.I):
+        return _unknown_semantic_key("dose_interval", text), _native_timepoint_zh(text)
+    # A baseline-anchored collection window is not the baseline visit. Retain
+    # exact interval identity; nearby single visits still use the time policy.
+    if re.search(r"\bbaseline\b|\bscreening\b|基线|筛选", text, re.I) and re.search(
+        r"\b(?:from|to|through|until|between|and|every)\b|至|到", text, re.I,
+    ):
+        return _unknown_semantic_key("time_interval", text), _native_timepoint_zh(text)
     # 独立复核第三十二轮：EOT 访视（最长暴露 N 周）不是固定评价时点，
     # 不得折算为"第213.4周"
     if "eot" in text.casefold() or "最大暴露" in text:
@@ -955,6 +972,9 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
     unit = _TIME_UNIT_CANONICAL.get(raw_unit.casefold()) if raw_unit else None
     if unit is None:
         return _unknown_semantic_key("time", text), text
+    if low != high:
+        unit_label = {"day": "天", "week": "周", "month": "个月", "year": "年"}[unit]
+        return f"{unit}_{low:g}-{high:g}", f"第{low:g}–{high:g}{unit_label}"
     weeks = {
         "day": value_num / 7.0,
         "week": value_num,
@@ -1012,6 +1032,15 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
             "original_definition",
             "endpoint",
             default=None,
+        )
+    elif domain == "supporting":
+        concept_value = _first(
+            value, "original_endpoint", "endpoint", "original_variable",
+            "display_label_zh", "clinical_concept", default=None,
+        )
+        fallback_concept = _first(
+            source, "original_endpoint", "endpoint", "original_variable",
+            "display_label_zh", "clinical_concept", default=None,
         )
     elif domain == "baseline":
         concept_value = _first(
@@ -1113,7 +1142,8 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
     else:
         concept, concept_label = _controlled_concept(
             concept_value if concept_value is not None else fallback_concept,
-            domain=domain if domain in _CLINICAL_CONCEPT_LOOKUPS else "efficacy",
+            domain=(domain if domain in _CLINICAL_CONCEPT_LOOKUPS or domain == "supporting"
+                    else "efficacy"),
             fallback=fallback_concept,
         )
     raw_time = _first(
@@ -1362,17 +1392,32 @@ class TypedMatrixView(BaseModel):
 class ReportBPortalData(ReportAPortalData):
     """B 类门户输入合同。
 
-    The legacy report-data rows remain the minimum fixture contract.  Optional
-    immutable view sets are accepted under their Task 6.1--6.8 names so a real
-    B snapshot can be rendered without moving scientific projection into this
-    module's templates or JavaScript.
+    At least one known or explicitly unassigned study is required. A landscape
+    metadata is optional; absent product relationships are never fabricated.
+    Immutable view sets retain their Task 6.1--6.8 names so a real B snapshot
+    can be rendered without moving scientific projection into this module's
+    templates or JavaScript. Render acceptance does not adopt source science.
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True, arbitrary_types_allowed=True)
     require_a_result_completeness: ClassVar[bool] = False
 
-    safety: tuple[ReportBSafetyRow, ...] = Field(min_length=1)
+    # B is a study evidence room, not an A landscape with compulsory patent /
+    # company / regulatory rows. Unknown association stays study-scoped. The
+    # formal research gates, not these render-only defaults, accept science.
+    products: tuple[ProductRow, ...] = ()
+    trials: tuple[TrialRow, ...] = ()
+    safety: tuple[ReportBSafetyRow, ...] = ()
+    regulatory: tuple[RegulatoryRow, ...] = ()
+    companies: tuple[CompanyRow, ...] = ()
+    patents: tuple[PatentRow, ...] = ()
+    history: tuple[HistoryRow, ...] = ()
     report_snapshot_id: str | None = None
+    # Study inclusion is distinct from core/product-bound numeric consumers.
+    # Empty default is omitted to preserve existing payload identities.
+    related_studies: tuple[StudyRow, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
     # 视图容器按结构化映射接收；任意对象（字符串/列表/模型实例）在边界被拒，
     # 使 schema 漂移在此暴露而不是深入渲染后才失败。
     efficacy_views: Mapping[str, Any] | None = None
@@ -1399,6 +1444,49 @@ class ReportBPortalData(ReportAPortalData):
         if self.report_snapshot_id is not None and not self.report_snapshot_id.strip():
             raise ValueError("B 类报告锁定快照标识不得为空")
         return self
+
+    @model_validator(mode="after")
+    def _related_study_references_are_closed(self) -> Self:
+        if not self.trials and not self.related_studies:
+            raise ValueError("B 类门户必须至少包含一项真实研究")
+        ids = [study.id for study in self.related_studies]
+        if len(ids) != len(set(ids)):
+            raise ValueError("相关研究标识重复")
+        if set(ids) & {trial.id for trial in self.trials}:
+            raise ValueError("相关研究与产品关联研究重复")
+        products = set(self.product_ids)
+        for study in self.related_studies:
+            if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", study.id):
+                raise ValueError("相关研究标识必须是安全英文路径片段")
+            if study.product_id is not None and study.product_id not in products:
+                raise ValueError("相关研究引用了未知产品")
+            if any(link.product_id not in products for link in study.product_links):
+                raise ValueError("相关研究干预关系引用了未知产品")
+        studies = {study.id for study in self.all_studies}
+        for view in (self.efficacy_views, self.safety_views, self.baseline_views,
+                     self.disposition_views, self.supporting_evidence_views):
+            if view is None:
+                continue
+            for row in _iter_values(view.get("facts", ())):
+                # Flat source-pool identity; older typed/nested projections
+                # retain their existing projection validation paths.
+                if not isinstance(row, Mapping):
+                    continue
+                trial = row.get("trial_id")
+                product = row.get("product_id")
+                if trial is not None and trial not in studies:
+                    raise ValueError("来源视图引用了未知研究")
+                if product is not None and product not in products:
+                    raise ValueError("来源视图引用了未知产品")
+        return self
+
+    @property
+    def all_studies(self) -> tuple[StudyRow, ...]:
+        return (*self.trials, *self.related_studies)
+
+    @property
+    def trial_ids(self) -> tuple[str, ...]:
+        return tuple(study.id for study in self.all_studies)
 
 
 def load_report_b_data(path: Path) -> ReportBPortalData:
@@ -2334,6 +2422,12 @@ def _project_record(
     )
     plot_numerator = numerator
     plot_denominator = denominator
+    if numeric_kind in {
+        NumericMeasureKind.PARTICIPANT_COUNT, NumericMeasureKind.EVENT_COUNT,
+    } and denominator == 0:
+        # Preserve explicit N=0 in the table/evidence. A raw count can remain
+        # observable, but zero N cannot be supplied as a ratio denominator.
+        plot_denominator = None
     plot_estimand = _text(_source_first(value, source, "estimand", default=label))
     value_basis = _text(_source_first(value, source, "value_basis", default=""))
     if domain == "efficacy":
@@ -2535,6 +2629,26 @@ def _project_record(
             )
         ),
     }
+    if domain == "supporting":
+        # Presentation domain is not scientific typing. Preserve the extractor's
+        # domain/metric and exact measure scope, never map ADA/PK to efficacy.
+        result.update(
+            source_domain=_text(_source_first(
+                value, source, "source_domain", "domain", default="unresolved",
+            ), "unresolved"),
+            source_metric=_text(_source_first(
+                value, source, "source_metric", "metric", default="unresolved",
+            ), "unresolved"),
+            source_measure_path=_text(_source_first(
+                value, source, "source_measure_path", default="",
+            )),
+            source_class_title=_text(_source_first(
+                value, source, "source_class_title", default="",
+            )),
+            source_category_title=_text(_source_first(
+                value, source, "source_category_title", default="",
+            )),
+        )
     if unassigned_product:
         warning = "结果组别与产品关联待核；原始值保留，不进入产品间共轴比较"
         result["difference_note"] = "；".join(
@@ -2921,7 +3035,7 @@ def _synthetic_status_records(
             synthetic_row["_synthetic"] = True
             records.append((synthetic_row, source))
     else:
-        for trial in data.trials:
+        for trial in data.all_studies:
             row_id = f"{page_id}-{trial.id}"
             source = {
                 "row_id": row_id,
@@ -2984,7 +3098,7 @@ def _trial_context_records(
     trial_names: Mapping[str, str],
 ) -> tuple[tuple[dict[str, Any], Any], ...]:
     records: list[tuple[dict[str, Any], Any]] = []
-    for trial in data.trials:
+    for trial in data.all_studies:
         row_id = f"trial-context-{trial.id}"
         source = {
             "row_id": row_id,
@@ -3168,6 +3282,8 @@ def _evidence_view(
             "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
             "不能作为已验科学结论。"
         )
+    if located and _text(_first(source, "review_state", default="")) == "candidate":
+        explanation += " 已定位原始来源，但尚未完成独立复核，不能作为已验科学结论。"
     if row.get("group_assignment_state") == "unknown":
         explanation += " 结果组别与产品关联待核；原始值可查，不进入产品间共轴比较。"
     report_row = ReportRow.model_construct(
@@ -3310,9 +3426,10 @@ def _records_with_semantics(
                     f"观察域与页面域不一致，拒绝静默改写：{existing} → {domain}"
                 )
             copied["_domain"] = domain
-        if domain in _CLINICAL_CONCEPT_LOOKUPS and not copied.get("clinical_concept"):
+        if ((domain in _CLINICAL_CONCEPT_LOOKUPS or domain == "supporting")
+                and not copied.get("clinical_concept")):
             copied.update(_semantic_projection(copied, source, domain=domain))
-        elif domain in _CLINICAL_CONCEPT_LOOKUPS:
+        elif domain in _CLINICAL_CONCEPT_LOOKUPS or domain == "supporting":
             # A partially migrated row may carry only one normalized field.
             semantics = _semantic_projection(copied, source, domain=domain)
             for key, value in semantics.items():
@@ -3425,6 +3542,12 @@ def _group_title(
         parts.insert(0, "基线")
     elif domain == "disposition":
         parts.insert(0, "完成情况")
+    elif domain == "supporting":
+        parts.insert(0, {
+            "immunogenicity": "免疫原性", "pk_pd": "药代与药效学",
+            "biomarkers": "生物标志物", "efficacy": "亚组结果",
+            "other": "其他支持证据", "unresolved": "支持证据（分类待核）",
+        }.get(_text(row.get("source_domain")), "支持证据（分类待核）"))
     return " · ".join(dict.fromkeys(part for part in parts if part))
 
 
@@ -3654,6 +3777,12 @@ def _semantic_group_key(
                 ),
             )
         )
+    elif row.get("_domain") == "supporting":
+        values.extend(_text(row.get(key), f"{key}-not-reported") for key in (
+            "source_domain", "source_metric", "source_measure_path",
+            "source_class_title", "source_category_title", "time", "period", "cohort",
+            "trial_id",
+        ))
     return tuple(values)
 
 
@@ -3935,7 +4064,7 @@ def _groups_for_page(
         return _cross_trial_groups(
             records,
             page_id=page_id,
-            domain="efficacy",
+            domain=("supporting" if page_id == "subgroups-supporting-evidence" else "efficacy"),
             include_time=page_id != "longitudinal-results",
             semantic_proposals=semantic_proposals,
             semantic_adjudications=semantic_adjudications,
@@ -4431,7 +4560,7 @@ def _filter_groups(
     return tuple(_disambiguate_group_titles(groups))
 
 
-def _display_trial_name(trial: TrialRow, product_name: str) -> str:
+def _display_trial_name(trial: StudyRow, product_name: str) -> str:
     del product_name
     return trial.name
 
@@ -4466,6 +4595,9 @@ def _copy_assets(site_root: Path) -> None:
         "charts.js",
         "evidence-drawer.css",
         "evidence-drawer.js",
+        "kangzhe-site.css",
+        "kangzhe-site.js",
+        "kz-motion.js",
     ):
         shutil.copy2(resolve_portal_asset(name), assets / name)
     shutil.copy2(_ASSET_DIR / "report-b.css", assets / "report-b.css")
@@ -4706,8 +4838,8 @@ def semantic_review_domain_inputs(
     """
     names = {product.id: product.name for product in data.products}
     trial_names = {
-        trial.id: _display_trial_name(trial, names.get(trial.product_id, "未列示产品"))
-        for trial in data.trials
+        trial.id: _display_trial_name(trial, names.get(trial.product_id or "", "产品关系待核"))
+        for trial in data.all_studies
     }
     efficacy = _tag_records(
         _efficacy_records(data, names, trial_names), "efficacy",
@@ -4811,10 +4943,6 @@ def _render_page_context(
     chart_groups_json = _json(groups)
     target_by_product = {product.id: product.target for product in data.products}
     filter_rows = _filter_dimensions(records, target_by_product)
-    dimensions = {
-        item["id"]: {key: value for key, value in item.items() if key != "id"}
-        for item in filter_rows
-    }
     filter_groups = _filter_groups(filter_rows, names, trial_names, page_id=page_id)
     essential_filter_dimensions = (
         ("target", "trial", "group", "time")
@@ -4884,17 +5012,19 @@ def _render_page_context(
         "report_title": f"{data.indication}临床试验结果比较",
         "overview_conclusions": (
             [
-                {"label": "试验宇宙", "text": (
-                    f"覆盖 {len(data.products)} 个产品、"
-                    f"{len(data.trials)} 项基线信息完整的注册试验；"
-                    "宇宙按登记检索全闭包，不以名单排序替代。")},
+                {"label": "资料范围", "text": (
+                    f"本资料包列示 {len(data.products)} 个产品、"
+                    f"{len(data.all_studies)} 项研究；"
+                    "不能据此认定竞品检索已完整，范围与缺口需结合来源核查。")},
                 {"label": "疗效证据", "text": (
-                    "公开疗效观察按登记终点族与观察窗分组呈现，与数据表同源，数值可回溯登记来源；"
-                    "特殊观察窗（如基线至某周的窗口期汇总）按窗口口径标注，排除口径见数据依据。")},
+                    "疗效观察按终点、人群与观察窗分组，与数据表同源；"
+                    "数据依据逐条显示来源定位状态，未定位记录不能视为已验科学结论。")},
                 {"label": "安全性证据", "text": (
-                    "严重不良事件与死亡病例按登记组别汇总呈现，并附登记的同组风险人数分母。")},
+                    "事件数、受累人数和比例按来源口径分别呈现，不互相替代；"
+                    "分母缺失时不补算比例。")},
                 {"label": "阅读边界", "text": (
-                    "不同试验的测量与人群不同，数值不默认可比；跨试验比较以同试验内治疗—对照差值为准。")},
+                    "相关研究均可保留，数值是否共轴另按人群、终点、时间窗和统计口径判定；"
+                    "描述性对照不等于头对头研究。")},
             ]
             if page_id == "overview" and detail_kind is None
             else None
@@ -4925,7 +5055,6 @@ def _render_page_context(
         "bubble_presets": tuple(item.model_dump(mode="json") for item in BUBBLE_PRESETS),
         "chart_groups_json": chart_groups_json,
         "filter_rows_json": _json(filter_rows),
-        "row_dimensions_json": _json(dimensions),
         "filter_groups": filter_groups,
         "essential_filter_dimensions": essential_filter_dimensions,
         "filter_dimensions_json": _json(tuple(_FILTER_DIMENSION_LABELS)),
@@ -4934,7 +5063,7 @@ def _render_page_context(
         "evidence_host": render_evidence_drawer_host(),
         "filter_products": tuple({"id": p.id, "name": p.name} for p in data.products),
         "filter_trials": tuple(
-            {"id": t.id, "name": trial_names.get(t.id, t.name)} for t in data.trials
+            {"id": t.id, "name": trial_names.get(t.id, t.name)} for t in data.all_studies
         ),
         "detail_kind": detail_kind or "",
         "detail_id": detail_id or "",
@@ -4990,6 +5119,20 @@ def _project_active_facts_b(
             raise ReportBPortalError(str(error)) from error
         fact_extra = fact.model_extra or {}
         if fact_extra.get("review_state") != "user_modified":
+            source_row_id = str(_b_source_view_row(
+                data, binding.collection, binding.row_id,
+            )["row_id"])
+            # Use the persisted primary fragment after identity validation.
+            # Do not pretend a source refresh is a user-authored amendment.
+            view = payload[f"{binding.collection}_views"]
+            source_view = next(item for item in view["facts"]
+                               if str(item["row_id"]) == source_row_id)
+            source_view["source_text"] = fact.source_quote
+            consumers.append(source_consumer_node(
+                fact, verified_binding,
+                page="safety.html" if binding.collection == "safety" else "efficacy.html",
+                visible_row_id=source_row_id,
+            ))
             continue
         visible_row_id = str(
             _b_source_view_row(data, binding.collection, binding.row_id)["row_id"]
@@ -5271,8 +5414,8 @@ def render_report_b_site(
     catalog = registry.catalog(ReportKind.B)
     names = {product.id: product.name for product in data.products}
     trial_names = {
-        trial.id: _display_trial_name(trial, names.get(trial.product_id, "未列示产品"))
-        for trial in data.trials
+        trial.id: _display_trial_name(trial, names.get(trial.product_id or "", "产品关系待核"))
+        for trial in data.all_studies
     }
     efficacy = _efficacy_records(data, names, trial_names)
     safety = _safety_records(data, names, trial_names)
@@ -5429,7 +5572,7 @@ def render_report_b_site(
                 "status": trial.status,
                 "sample_size": trial.sample_size,
             }
-            for trial in data.trials
+            for trial in data.all_studies
             if trial.product_id == product.id
         )
         context["detail_product_regulatory"] = tuple(
@@ -5449,7 +5592,7 @@ def render_report_b_site(
         output.write_text(dossier_template.render(**context), encoding="utf-8")
         generated.append(output)
 
-    for trial in data.trials:
+    for trial in data.all_studies:
         records = tuple(item for item in detail_pool if item[0].get("trial_id") == trial.id)
         context = _render_page_context(
             data,
@@ -5479,7 +5622,7 @@ def render_report_b_site(
             publication_limitation_zh=publication_limitation_zh,
         )
         context["detail_trial_product_obj"] = next(
-            product for product in data.products if product.id == trial.product_id
+            (product for product in data.products if product.id == trial.product_id), None,
         )
         context["detail_trial_obj"] = trial
         output = trials_dir / f"{trial.id}.html"
@@ -5546,8 +5689,8 @@ def render_report_b_site(
             product.developer,
             product.mechanism,
         )
-    for trial in data.trials:
-        product_name = names.get(trial.product_id, "未列示产品")
+    for trial in data.all_studies:
+        product_name = names.get(trial.product_id or "", "产品关系待核")
         display_name = trial_names.get(trial.id, trial.name)
         add_search_entry(
             f"{display_name} · 试验档案",
@@ -5579,6 +5722,7 @@ def render_report_b_site(
             product_name,
             trial_name,
             row.get("target"),
+            row.get("trial_id"),
             row.get("time"),
             row.get("arm"),
             row.get("population"),
@@ -5605,6 +5749,7 @@ def render_report_b_site(
             product_name,
             trial_name,
             row.get("arm"),
+            row.get("trial_id"),
             row.get("time_window"),
             row.get("population"),
             row.get("unit"),

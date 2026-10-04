@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
+import re
 import sys
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -79,6 +82,49 @@ def _lexical_symlink_target(path: Path) -> Path:
     return Path(os.path.abspath(os.fspath(candidate)))
 
 
+def _recorded_managed_base(root: Path, path: Path, target: Path) -> bool:
+    """An installed private venv's recorded uv base is not packaged source.
+
+    Inspect only local receipt/config/lock bytes, never follow the link. Actual
+    interpreter usability still requires the separate installed-runtime probe.
+    Arbitrary src/assets links and unrecorded environments remain forbidden.
+    """
+    relative = path.relative_to(root)
+    parts = relative.parts
+    managed = Path.home() / ".local/share/uv/python"
+    if (len(parts) < 6 or parts[0] != ".artifacts"
+            or parts[-4:] != ("runtime", "venv", "bin", "python")
+            or not _is_within(target, managed)
+            or target.name != "python3.13"
+            or target.parent.name != "bin"
+            or not target.parent.parent.name.startswith("cpython-3.13-")):
+        return False
+    install = root.joinpath(*parts[:-4])
+    receipt, config = install / "installation.json", install / "runtime/venv/pyvenv.cfg"
+    if receipt.is_symlink() or config.is_symlink():
+        return False
+    try:
+        document = json.loads(receipt.read_text())
+        digest = document.get("bundle_digest", "")
+        if document.get("schema_version") != "1.0" or not re.fullmatch(r"[a-f0-9]{64}", digest):
+            return False
+        version = install / "versions" / digest
+        lock = version / "uv.lock"
+        if (install / "versions").is_symlink() or version.is_symlink() or lock.is_symlink():
+            return False
+        if hashlib.sha256(lock.read_bytes()).hexdigest() != document.get("runtime_lock_sha256"):
+            return False
+        values = dict(
+            line.split(" = ", 1) for line in config.read_text().splitlines() if " = " in line
+        )
+        return (values.get("home") == str(target.parent)
+                and values.get("implementation") == "CPython"
+                and values.get("include-system-site-packages") == "false"
+                and values.get("version_info", "").startswith("3.13."))
+    except (OSError, ValueError, TypeError, AttributeError):
+        return False
+
+
 def _iter_paths(root: Path) -> Iterator[Path]:
     for directory, names, filenames in os.walk(root, followlinks=False):
         names[:] = sorted(name for name in names if name not in SKIPPED_DIRECTORY_NAMES)
@@ -132,7 +178,7 @@ def scan(root: Path, legacy_root: Path) -> list[Finding]:
 
         if path.is_symlink():
             target = _lexical_symlink_target(path)
-            if not _is_within(target, root):
+            if not _is_within(target, root) and not _recorded_managed_base(root, path, target):
                 findings.append(
                     Finding("EXTERNAL_RUNTIME_SYMLINK", relative, f"target={target}")
                 )

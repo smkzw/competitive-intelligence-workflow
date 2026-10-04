@@ -184,8 +184,16 @@ class SourceTextDerivation(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
     raw_asset: ContentBlob
     text_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    method: Literal["utf8-strip-v1", "pypdf-text-v1", "ctgov-study-json-v1"]
+    method: Literal[
+        "utf8-strip-v1", "pypdf-text-v1", "pypdf-page-text-v1", "ctgov-study-json-v1"
+    ]
     extractor_version: str = Field(min_length=1)
+    page: int | None = Field(
+        default=None, ge=1, strict=True, exclude_if=lambda value: value is None,
+    )
+    page_count: int | None = Field(
+        default=None, ge=1, strict=True, exclude_if=lambda value: value is None,
+    )
     record_selector: CtgovRecordSelector | None = Field(
         default=None, exclude_if=lambda value: value is None,
     )
@@ -197,8 +205,20 @@ class SourceTextDerivation(BaseModel):
         digest = self.raw_asset.sha256
         if self.raw_asset.relative_path != f"evidence/raw/sha256/{digest[:2]}/{digest}.bin":
             raise ValueError("原始资产路径必须与摘要绑定")
-        if (self.method == "pypdf-text-v1") != (self.raw_asset.media_type == "application/pdf"):
+        pdf_method = self.method in {"pypdf-text-v1", "pypdf-page-text-v1"}
+        if pdf_method != (self.raw_asset.media_type == "application/pdf"):
             raise ValueError("原始资产媒体类型与提取方法不一致")
+        page_scoped = self.method == "pypdf-page-text-v1"
+        if (page_scoped and (self.page is None or self.page_count is None)) or (
+            not page_scoped and (self.page is not None or self.page_count is not None)
+        ):
+            raise ValueError("分页PDF提取必须且只能绑定页码与总页数")
+        if (
+            self.page is not None
+            and self.page_count is not None
+            and self.page > self.page_count
+        ):
+            raise ValueError("分页PDF页码不得超出总页数")
         if (self.method == "ctgov-study-json-v1") != (self.record_selector is not None):
             raise ValueError("登记记录提取必须且只能绑定明确的记录选择器")
         if self.record_selector is not None and self.raw_asset.media_type != "application/json":

@@ -33,7 +33,7 @@ def test_registry_json_locator_reopens_exact_field() -> None:
     locator = create_registry_json_locator(snapshot, field_path=field_path)
 
     assert reopen_registry_json_locator(snapshot, locator) == "第 24 周"
-    assert locator.evidence_locator.field_path == field_path
+    assert locator.evidence_locator.field_path == "$." + field_path
     assert locator.evidence_locator.url == snapshot.source_url
     assert locator.source_version_id == snapshot.source_version_id
     assert locator.source_content_sha256 == snapshot.content_sha256
@@ -82,6 +82,53 @@ def test_registry_json_locator_reopens_exact_field() -> None:
     )
     with pytest.raises(ValueError, match="定位器身份校验失败"):
         reopen_registry_json_locator(snapshot, tampered_registry_locator)
+
+
+def test_registry_locator_emits_canonical_path_and_reopens_legacy_identity() -> None:
+    from ci_workflow.domain.ids import stable_id
+    from ci_workflow.ingestion.locators import (
+        RegistryJsonSnapshot,
+        _evidence_locator_json,
+        create_registry_json_locator,
+        reopen_registry_json_locator,
+    )
+    from ci_workflow.storage.source_derivation import extract_locator_quote
+
+    snapshot = RegistryJsonSnapshot.create(
+        source_version_id="source-canonical-bridge", payload={"results": [{"value": "0"}]},
+        source_url="https://clinicaltrials.gov/study/NCT01234567",
+        document_role_label_zh="登记结果",
+    )
+    for supplied in ("results[0].value", "$.results[0].value"):
+        locator = create_registry_json_locator(snapshot, field_path=supplied)
+        assert locator.evidence_locator.field_path == "$.results[0].value"
+        assert extract_locator_quote(snapshot.canonical_json, media_type="application/json",
+                                     locator=locator.evidence_locator) == "0"
+        assert reopen_registry_json_locator(snapshot, locator) == "0"
+    legacy_evidence = locator.evidence_locator.model_copy(
+        update={"field_path": "results[0].value"},
+    )
+    legacy_id = stable_id("registry-json-locator", snapshot.source_version_id,
+                          snapshot.content_sha256, _evidence_locator_json(legacy_evidence))
+    legacy = locator.model_copy(update={"evidence_locator": legacy_evidence,
+                                       "locator_id": legacy_id})
+    assert reopen_registry_json_locator(snapshot, legacy) == "0"
+    assert legacy.locator_id == legacy_id
+
+
+@pytest.mark.parametrize("path", ["$.results[0]value", "$..results[0].value",
+                                 "results.[0].value", "results[00].value",
+                                 "results[*].value", "$", ".results[0].value"])
+def test_registry_locator_rejects_paths_persisted_replay_cannot_resolve(path: str) -> None:
+    from ci_workflow.ingestion.locators import RegistryJsonSnapshot, create_registry_json_locator
+
+    snapshot = RegistryJsonSnapshot.create(
+        source_version_id="source-strict-path", payload={"results": [{"value": "0"}]},
+        source_url="https://clinicaltrials.gov/study/NCT01234567",
+        document_role_label_zh="登记结果",
+    )
+    with pytest.raises(ValueError):
+        create_registry_json_locator(snapshot, field_path=path)
 
 
 def test_web_locator_reopens_exact_heading_and_paragraph() -> None:

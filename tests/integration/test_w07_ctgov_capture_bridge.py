@@ -1003,7 +1003,13 @@ def test_ctgov_study_capture_reopens_raw_and_preserves_calendar_day(tmp_path: Pa
     assert capture.text_derivation == study.text_derivation
     assert capture.date_evidence("published_at").precision == "calendar_day"
     assert capture.date_evidence("first_disclosed_at").precision == "calendar_day"
-    assert capture.locator.field_path == "$.protocolSection.identificationModule.nctId"
+    assert capture.locator.field_path == (
+        "$.protocolSection.statusModule.lastUpdatePostDateStruct.date"
+    )
+    from ci_workflow.storage.source_derivation import extract_locator_quote
+
+    assert extract_locator_quote(capture.content_text, media_type=capture.media_type,
+                                 locator=capture.locator) == "2026-08-01"
 
 
 def test_ctgov_study_capture_rejects_identity_date_or_raw_drift(tmp_path: Path) -> None:
@@ -1397,6 +1403,11 @@ def test_verified_registry_outcome_binds_exact_a_row_and_visible_payload(
         claim["fact_ids"] = [
             item for item in claim["fact_ids"] if item not in obsolete
         ]
+        # Normalize this current test copy, never the frozen historical input.
+        if claim["claim_kind"] == "synthesis":
+            claim["claim_text"] = "AI 综合判断：" + claim["claim_text"]
+            claim["synthesis_method_zh"] = "依据已绑定事实综合；不重算或扩展原来源结论。"
+            claim["ai_disclosure_label_zh"] = "AI 综合判断"
     with pytest.raises(ValueError, match="冲突的source_text"):
         FreshAResearchContent.model_validate(candidate)
 

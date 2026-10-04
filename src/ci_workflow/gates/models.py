@@ -544,11 +544,13 @@ class ApplicableUniverseSnapshot(BaseModel):
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    schema_version: Literal["1.0"] = "1.0"
+    # 1.0 remains product-rooted. 1.1 is a C-only study-rooted candidate;
+    # the version itself binds the changed root without altering legacy dumps.
+    schema_version: Literal["1.0", "1.1"] = "1.0"
     project_id: str
     evidence_snapshot_id: str
     research_role_set_id: str
-    product_ids: tuple[str, ...] = Field(min_length=1)
+    product_ids: tuple[str, ...]
     trial_ids: tuple[str, ...] = Field(default=())
     comparison_ids: tuple[str, ...] = Field(default=())
     group_ids: tuple[str, ...] = Field(default=())
@@ -561,6 +563,19 @@ class ApplicableUniverseSnapshot(BaseModel):
     applicable_conditional_predicates: tuple[str, ...] = Field(default=())
     universe_summary: str
     enumeration_complete: bool
+
+    @property
+    def root_object_type(self) -> GateObjectType:
+        return (GateObjectType.TRIAL if self.schema_version == "1.1"
+                else GateObjectType.PRODUCT)
+
+    @model_validator(mode="after")
+    def _root_collection_is_nonempty(self) -> ApplicableUniverseSnapshot:
+        if self.schema_version == "1.0" and not self.product_ids:
+            raise ValueError("1.0 产品根宇宙必须包含产品")
+        if self.schema_version == "1.1" and not self.trial_ids:
+            raise ValueError("1.1 研究根宇宙必须包含试验")
+        return self
 
     @field_validator(
         "project_id",
@@ -601,6 +616,7 @@ class ApplicableUniverseSnapshot(BaseModel):
             trial_design_evidence=self.trial_design_evidence,
             indication_rule_set_id=self.indication_rule_set_id,
             applicable_conditional_predicates=self.applicable_conditional_predicates,
+            root_object_type=self.root_object_type,
         ):
             raise ValueError("适用对象集合摘要与内容不一致")
         if len({proof.object_type for proof in self.empty_set_proofs}) != len(
@@ -1016,6 +1032,7 @@ def compute_universe_summary(
     trial_design_evidence: Sequence[TrialDesignEvidence] = (),
     indication_rule_set_id: str,
     applicable_conditional_predicates: Sequence[str] = (),
+    root_object_type: GateObjectType = GateObjectType.PRODUCT,
 ) -> str:
     """由对象集合、研究角色集、类型化空集合证明、关系图、设计证据与指示规则生成摘要。
 
@@ -1059,6 +1076,8 @@ def compute_universe_summary(
         *design_parts,
         *proof_parts,
         *edge_parts,
+        *(() if root_object_type is GateObjectType.PRODUCT else
+          (f"root:{root_object_type.value}:v1.1",)),
     )
 
 
@@ -1229,6 +1248,11 @@ def assert_applicable_universe_closed(snapshot: ApplicableUniverseSnapshot) -> N
     """
     if not snapshot.enumeration_complete:
         raise GateEvaluationError("适用对象集合未完成穷举，必须失败关闭")
+    study_root = snapshot.root_object_type is GateObjectType.TRIAL
+    if study_root and not snapshot.trial_ids:
+        raise GateEvaluationError("研究根宇宙必须包含试验，必须失败关闭")
+    if not study_root and not snapshot.product_ids:
+        raise GateEvaluationError("产品根宇宙必须包含产品，必须失败关闭")
     collections: tuple[tuple[GateObjectType, tuple[str, ...]], ...] = (
         (GateObjectType.PRODUCT, snapshot.product_ids),
         (GateObjectType.TRIAL, snapshot.trial_ids),
@@ -1249,6 +1273,10 @@ def assert_applicable_universe_closed(snapshot: ApplicableUniverseSnapshot) -> N
         if len(set(ids)) != len(ids):
             raise GateEvaluationError(f"{object_type.value} 包含重复对象，必须失败关闭")
         if not ids:
+            if object_type is GateObjectType.PRODUCT and study_root:
+                # This is absence of an adopted product association, NOT proof
+                # that exhaustive discovery found no competitors.
+                continue
             if object_type not in proofs_by_type:
                 raise GateEvaluationError(
                     f"{object_type.value} 为空且没有对应类型化空集合证明，必须失败关闭"
@@ -1281,6 +1309,7 @@ def assert_applicable_universe_closed(snapshot: ApplicableUniverseSnapshot) -> N
         trial_design_evidence=snapshot.trial_design_evidence,
         indication_rule_set_id=snapshot.indication_rule_set_id,
         applicable_conditional_predicates=snapshot.applicable_conditional_predicates,
+        root_object_type=snapshot.root_object_type,
     ):
         raise GateEvaluationError("适用对象集合摘要与内容不一致，必须失败关闭")
 
@@ -1294,6 +1323,9 @@ def _assert_trial_design_closed(snapshot: ApplicableUniverseSnapshot) -> None:
     design_by_trial = {
         record.trial_id: record for record in snapshot.trial_design_evidence
     }
+    if (len(design_by_trial) != len(snapshot.trial_design_evidence)
+            or set(design_by_trial) != set(snapshot.trial_ids)):
+        raise GateEvaluationError("每项试验必须有且仅有一条当前设计证据")
     comparison_edges_by_trial: dict[str, int] = {}
     comparison_trial: dict[str, str] = {}
     group_trial: dict[str, str] = {}
@@ -1357,6 +1389,8 @@ def _assert_relationship_graph_closed(
     parents: dict[tuple[GateObjectType, str], dict[GateObjectType, str]] = {}
     seen_edges: set[tuple[GateObjectType, str, GateObjectType, str]] = set()
     for edge in snapshot.relationship_edges:
+        if (edge.parent_type, edge.child_type) not in _ALLOWED_PARENT_EDGES:
+            raise GateEvaluationError("不支持的对象关系边类型，必须失败关闭")
         edge_key = (
             edge.parent_type,
             edge.parent_id,
@@ -1392,6 +1426,10 @@ def _assert_relationship_graph_closed(
     }
     for object_type, ids in collections:
         needed = required_parent.get(object_type)
+        if object_type is GateObjectType.TRIAL and snapshot.schema_version == "1.1":
+            # Known product edges remain validated above; unknown association
+            # does not disqualify a source-identified design precedent.
+            continue
         if needed is None:
             continue
         for object_id in ids:
@@ -1399,6 +1437,19 @@ def _assert_relationship_graph_closed(
                 raise GateEvaluationError(
                     f"{object_type.value} 对象缺少必需父边：{object_id}"
                 )
+    # All supported scientific association edges must share trial ownership.
+    # A trial-only consumer cannot expose a wrong endpoint/group association.
+    for edge in snapshot.relationship_edges:
+        if (edge.parent_type, edge.child_type) not in _ASSOCIATION_EDGE_TYPES:
+            continue
+        parent_trial = parents.get((edge.parent_type, edge.parent_id), {}).get(
+            GateObjectType.TRIAL,
+        )
+        child_trial = parents.get((edge.child_type, edge.child_id), {}).get(
+            GateObjectType.TRIAL,
+        )
+        if parent_trial is None or child_trial is None or parent_trial != child_trial:
+            raise GateEvaluationError("科学关联的两端必须位于同一试验，禁止跨试验拼接")
 
 
 def assert_bindings_in_universe(
@@ -1794,6 +1845,11 @@ def _aggregate_report_gates(
     结果标识取自已验证快照与规范规格。保留全部 P0 语义检查。
     公共原子路径是评估器的 evaluate_report；本函数不接收脱离的 unit_results。
     """
+    try:
+        spec = GateSpec.model_validate(spec.model_dump(mode="json"))
+        batch = _GateEvaluationBatch.model_validate(batch.model_dump(mode="json"))
+    except ValueError as error:
+        raise GateEvaluationError(f"评估批不能通过当前合同校验：{error}") from error
     assert_applicable_universe_closed(snapshot)
     _assert_batch_integrity(batch)
     if batch.report_kind is not spec.report_kind:
@@ -1821,6 +1877,8 @@ def _aggregate_report_gates(
         unit_spec = spec_units.get(result.unit_id)
         if unit_spec is None:
             raise GateEvaluationError(f"单元结果不属于当前规格：{result.unit_id}")
+        if result.threshold < unit_spec.threshold:
+            raise GateEvaluationError(f"单元结果阈值低于当前规则：{result.unit_id}")
         if (
             result.outcome is GateUnitOutcome.NOT_APPLICABLE
             and unit_spec.applicability_predicate_id == "always_applicable"

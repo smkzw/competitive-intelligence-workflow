@@ -149,6 +149,54 @@ def test_final_required_content_closes_research_handoff_boundary() -> None:
     assert not [path for path in RESEARCH_HANDOFF_REQUIRED_CONTENT if path not in allowed]
 
 
+def test_host_receipt_resources_are_both_packaged_and_release_required() -> None:
+    paths = {"schemas/host-receipt.schema.json",
+             "src/ci_workflow/schemas/host-receipt.schema.json"}
+    assert paths <= _allowed_files()
+    assert paths <= set(FINAL_REQUIRED_CONTENT)
+    assert len({(ROOT / path).read_bytes() for path in paths}) == 1
+
+
+def test_isolated_installed_recovery_receipt_roundtrip(
+    isolated_install: Path, tmp_path: Path,
+) -> None:
+    """Real installed entry, test-only local shell double: NOT a native model pass."""
+    install = isolated_install.parents[2]
+    driver = r'''
+import json, os, shlex, sys
+from pathlib import Path
+from ci_workflow.application import host_smoke as smoke
+install, work = map(Path,sys.argv[1:])
+assert Path(smoke.__file__).resolve().is_relative_to(install/'versions')
+project=work/'project'
+entry=install/'bin/ci-workflow'
+command=[str(entry),'fixture','run','--case','host-smoke-v1','--reports','A',
+         '--outputs','html','--project',str(project),'--host-smoke-recovery']
+host=work/'omp'
+host.write_text('#!/bin/sh\n'
+                +'if [ "$1" = "--version" ]; then echo "local-installed-test 1"; exit 0; fi\n'
+                +shlex.join(command)+' || exit $?\necho "HOST_SMOKE_DONE exit=0"\n')
+host.chmod(0o700)
+os.environ['PATH']=str(work)+os.pathsep+os.environ.get('PATH','')
+receipt=smoke.run_host_smoke('omp',project_root=project,
+    entry=smoke.resolve_real_entry(explicit=entry),require_external_host_process=True,
+    omp_model='openai-codex/gpt-6.1-sol',omp_thinking='high')
+smoke.verify_host_smoke_receipt(receipt,project_root=project)
+assert Path(receipt.host_executable.path)==host
+assert receipt.interruption.no_draft and receipt.recovery is not None
+assert receipt.manifest.outcome=='rendered'
+assert json.loads((project/'state/host-smoke-v1.json').read_bytes())['phase']=='completed'
+print('INSTALLED_RECOVERY_RECEIPT_SOURCE_CONTRACT_OK')
+'''
+    completed = subprocess.run(
+        [str(install / "runtime/venv/bin/python"), "-I", "-B", "-c", driver,
+         str(install), str(tmp_path)], cwd=tmp_path, capture_output=True,
+        text=True, timeout=120, check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert "INSTALLED_RECOVERY_RECEIPT_SOURCE_CONTRACT_OK" in completed.stdout
+
+
 @pytest.fixture(scope="module")
 def isolated_install(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """构建默认候选包并安装到隔离根，返回安装包内 src 根。"""

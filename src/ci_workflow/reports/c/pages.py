@@ -99,7 +99,7 @@ class EndpointDefinitionTimepointRow(BaseModel):
 
     endpoint_identity: str
     pairing_key: str
-    product_id: str
+    product_id: str | None
     trial_id: str
     cohort_id: str
     group_id: str
@@ -131,7 +131,6 @@ class EndpointDefinitionTimepointRow(BaseModel):
     @field_validator(
         "endpoint_identity",
         "pairing_key",
-        "product_id",
         "trial_id",
         "cohort_id",
         "group_id",
@@ -151,6 +150,15 @@ class EndpointDefinitionTimepointRow(BaseModel):
     def _required_raw(cls, value: str) -> str:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("终点三元投影必填文本不能为空")
+        return value
+
+    @field_validator("product_id")
+    @classmethod
+    def _explicit_product_identity(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("终点三元投影产品标识不能为空")
         return value
 
 
@@ -174,7 +182,7 @@ class DesignFactRow(BaseModel):
     row_id: str
     source_row_id: str
     observation_id: str
-    product_id: str
+    product_id: str | None
     trial_id: str
     cohort_id: str
     group_id: str
@@ -215,7 +223,6 @@ class DesignFactRow(BaseModel):
         "row_id",
         "source_row_id",
         "observation_id",
-        "product_id",
         "trial_id",
         "cohort_id",
         "group_id",
@@ -230,6 +237,15 @@ class DesignFactRow(BaseModel):
     def _required_raw(cls, value: str) -> str:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("设计事实投影必填文本不能为空")
+        return value
+
+    @field_validator("product_id")
+    @classmethod
+    def _explicit_product_identity(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("设计事实投影产品标识不能为空")
         return value
 
 
@@ -300,7 +316,9 @@ def _pairing_key_from_timepoint_field(field: str) -> str | None:
     return None
 
 
-def _scope_key(observation: DesignObservation, pairing_key: str) -> tuple[str, ...]:
+def _scope_key(
+    observation: DesignObservation, pairing_key: str
+) -> tuple[str | None, ...]:
     return (
         observation.product_id,
         observation.trial_id,
@@ -312,6 +330,14 @@ def _scope_key(observation: DesignObservation, pairing_key: str) -> tuple[str, .
     )
 
 
+def _product_sort_key(product_id: str | None) -> tuple[int, str]:
+    """Null-safe stable product ordering; never invents a stored product sentinel."""
+
+    if product_id is None:
+        return (0, "")
+    return (1, product_id)
+
+
 def _endpoint_identity(
     *,
     endpoint: DesignObservation,
@@ -320,9 +346,7 @@ def _endpoint_identity(
     definition: str,
     assessment_timepoint: str,
 ) -> str:
-    return stable_id(
-        "c-endpoint-ternary",
-        endpoint.product_id,
+    study_parts = (
         endpoint.trial_id,
         endpoint.cohort_id,
         endpoint.group_id,
@@ -336,12 +360,17 @@ def _endpoint_identity(
         endpoint.source_version_id,
         endpoint.compatibility_rule,
     )
+    if endpoint.product_id is None:
+        return stable_id("c-endpoint-ternary-study", *study_parts)
+    return stable_id(
+        "c-endpoint-ternary",
+        endpoint.product_id,
+        *study_parts,
+    )
 
 
 def _fact_row_identity(observation: DesignObservation) -> str:
-    return stable_id(
-        "c-design-fact",
-        observation.product_id,
+    study_parts = (
         observation.trial_id,
         observation.cohort_id,
         observation.group_id,
@@ -352,11 +381,18 @@ def _fact_row_identity(observation: DesignObservation) -> str:
         observation.period or "period-unspecified",
         observation.observation_id,
     )
+    if observation.product_id is None:
+        return stable_id("c-design-fact-study", *study_parts)
+    return stable_id(
+        "c-design-fact",
+        observation.product_id,
+        *study_parts,
+    )
 
 
-def _fact_sort_key(row: DesignFactRow) -> tuple[str, ...]:
+def _fact_sort_key(row: DesignFactRow) -> tuple[Any, ...]:
     return (
-        row.product_id,
+        *_product_sort_key(row.product_id),
         row.trial_id,
         row.cohort_id,
         row.group_id,
@@ -367,9 +403,9 @@ def _fact_sort_key(row: DesignFactRow) -> tuple[str, ...]:
     )
 
 
-def _endpoint_sort_key(row: EndpointDefinitionTimepointRow) -> tuple[str, ...]:
+def _endpoint_sort_key(row: EndpointDefinitionTimepointRow) -> tuple[Any, ...]:
     return (
-        row.product_id,
+        *_product_sort_key(row.product_id),
         row.trial_id,
         row.cohort_id,
         row.group_id,
@@ -518,8 +554,8 @@ def project_endpoint_definition_timepoint(
     """
 
     validated = _revalidate_observations(observations)
-    endpoints_by_scope: dict[tuple[str, ...], list[DesignObservation]] = defaultdict(list)
-    timepoints_by_scope: dict[tuple[str, ...], list[DesignObservation]] = defaultdict(
+    endpoints_by_scope: dict[tuple[str | None, ...], list[DesignObservation]] = defaultdict(list)
+    timepoints_by_scope: dict[tuple[str | None, ...], list[DesignObservation]] = defaultdict(
         list
     )
 

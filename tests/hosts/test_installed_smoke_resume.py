@@ -7,6 +7,18 @@ import pytest
 
 from ci_workflow.application import host_smoke_runner as runner
 
+# 真实宿主失败关闭要求显式模型/强度选择器（ci-r24-181）；恢复运行同样
+# 必须显式，禁止隐式替换为配置默认。
+_EXPLICIT_SELECTORS: dict[str, dict[str, str]] = {
+    "codex": {"codex_model": "gpt-5.6-luna", "codex_reasoning": "high"},
+    "hermes": {
+        "hermes_provider": "anthropic",
+        "hermes_model": "anthropic/claude-sonnet-4",
+        "hermes_reasoning": "high",
+    },
+    "omp": {"omp_model": "openai/gpt-5.2", "omp_thinking": "high"},
+}
+
 
 def _setup(tmp_path: Path) -> tuple[Any, Path, Path]:
     catalog = tmp_path / "catalog.yaml"
@@ -84,6 +96,7 @@ def test_single_resume_reaches_lower_layer(tmp_path: Path, monkeypatch: pytest.M
         runner.run_installed_single_host_smoke(
             layout, host="codex", receipt_path=tmp_path / "receipt.json",
             project_root=project, catalog_path=catalog, resume=True,
+            **_EXPLICIT_SELECTORS["codex"],
         )
     assert (project / "sentinel").read_bytes() == b"preserve"
 
@@ -109,7 +122,11 @@ def test_batch_binds_every_project_before_first_dispatch(
 
     monkeypatch.setattr(host_smoke, "run_host_smoke", failed_dispatch)
     with pytest.raises(runner.HostSmokeRunnerError, match="ISOLATED_DISPATCH_FAILURE"):
-        runner.run_installed_host_smoke(layout, project_root=projects, catalog_path=catalog)
+        runner.run_installed_host_smoke(
+            layout, project_root=projects, catalog_path=catalog,
+            **{key: value for selectors in _EXPLICIT_SELECTORS.values()
+               for key, value in selectors.items()},
+        )
 
 
 @pytest.mark.parametrize("host", runner.HOSTS)
@@ -133,9 +150,11 @@ def test_external_host_receives_explicit_project_resume(
         raise host_smoke.HostSmokeError("PROMPT_CAPTURED_WITHOUT_DISPATCH")
 
     monkeypatch.setattr(host_smoke.subprocess, "Popen", capture)
+    selectors: dict[str, Any] = dict(_EXPLICIT_SELECTORS[host])
     with pytest.raises(host_smoke.HostSmokeError, match="PROMPT_CAPTURED_WITHOUT_DISPATCH"):
         host_smoke.run_host_smoke(
             host, project_root=tmp_path / "project",
             entry=SimpleNamespace(command=(str(tmp_path / "ci-workflow"),)),
             resume=True, require_external_host_process=True,
+            **selectors,
         )

@@ -921,7 +921,8 @@ def main() -> None:
                     })
             ae_module = results.get("adverseEventsModule") or {}
             events = ae_module.get("eventGroups") or []
-            ae_time_window = str(ae_module.get("timeFrame") or "收集时间窗未登记").strip()
+            # Missing labels belong in presentation, not the exact source identity.
+            ae_time_window = str(ae_module.get("timeFrame") or "").strip()
             for group_index, group in enumerate(events):
                 arm_title = str(group.get("title") or "登记组别未提供")
                 row_product_id, assignment_state = _linked_product_for_group(

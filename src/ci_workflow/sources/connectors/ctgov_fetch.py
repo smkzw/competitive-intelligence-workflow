@@ -318,6 +318,10 @@ def derive_ctgov_records(
         verified = fetch_ctgov_condition(
             project_root, result.condition, page_size=int(size[0]),
             max_pages=len(result.pages), transport=replay,
+            # Offline verification is bounded by the retained, integrity-checked
+            # pages; it must not silently reapply today's live download budget.
+            max_page_bytes=max(page.raw_asset.byte_size for page in result.pages),
+            max_total_bytes=sum(page.raw_asset.byte_size for page in result.pages),
             clock=lambda: result.pages[page_index - 1].acquired_at,
         )
         if (

@@ -7,6 +7,47 @@
 (function () {
   "use strict";
 
+  // LG-05: isolate disjoint roots behind a modal, never its reading plane.
+  // One shared lease owner preserves prior inert/classes and parallel modals.
+  function createReadingIsolation() {
+    var owners = new WeakMap();
+    return { acquire: function (panel) {
+      var roots = [];
+      for (var path = panel; path && path.parentElement;) {
+        var parent = path.parentElement;
+        Array.prototype.forEach.call(parent.children, function (node) {
+          if (node === path || /^(DIALOG|SCRIPT|STYLE|LINK|TEMPLATE|NOSCRIPT)$/.test(node.tagName)
+              || node.getAttribute("role") === "dialog") return;
+          var record = owners.get(node);
+          if (!record) {
+            record = { count: 0, inert: node.inert,
+              added: !node.classList.contains("kz-reading-background-isolated") };
+            owners.set(node, record);
+          }
+          record.count += 1;
+          node.inert = true;
+          node.classList.add("kz-reading-background-isolated");
+          roots.push(node);
+        });
+        if (parent === document.body) break;
+        path = parent;
+      }
+      var released = false;
+      return function () {
+        if (released) return;
+        released = true;
+        roots.forEach(function (node) {
+          var record = owners.get(node);
+          if (!record || --record.count) return;
+          node.inert = record.inert;
+          if (record.added) node.classList.remove("kz-reading-background-isolated");
+          owners.delete(node);
+        });
+      };
+    } };
+  }
+  window.__KZ_READING_ISOLATION__ = window.__KZ_READING_ISOLATION__ || createReadingIsolation();
+
   var searchInput = document.getElementById("global-search-input");
   var searchResults = document.getElementById("global-search-results");
   var searchIndex = window.__SEARCH_INDEX__ || [];
@@ -1262,8 +1303,14 @@
 })();
 
 /* Portable personal filters. The file contains display selections only. */
-(function () {
+(function personalViews() {
   "use strict";
+  // Report-specific query values are installed by the sibling script before
+  // DOMContentLoaded; restore selections before its deferred first render.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", personalViews, {once: true});
+    return;
+  }
   var body = document.body;
   var report = body.classList.contains("kz-a-site") ? "A" :
     body.classList.contains("kz-b-site") ? "B" :
@@ -1314,7 +1361,15 @@
         }
       }
     }
+    if (report === "C" && typeof window.__C_PERSONAL_QUERY_VALUES__ === "function") {
+      var extras = window.__C_PERSONAL_QUERY_VALUES__();
+      Object.keys(extras).forEach(function (key) { known[key] = extras[key]; });
+    }
     return known;
+  }
+  function knownValue(known, dimension, value) {
+    return Object.prototype.hasOwnProperty.call(known, dimension) &&
+      (known[dimension] === null || known[dimension][value] === true);
   }
   function queryFromPage() {
     var known = knownValues();
@@ -1333,7 +1388,7 @@
         values = params.getAll(dimension);
       }
       values = values.filter(function (value, index) {
-        return known[dimension][value] && values.indexOf(value) === index;
+        return knownValue(known, dimension, value) && values.indexOf(value) === index;
       });
       if (values.length) query[dimension] = values.sort();
     });
@@ -1345,12 +1400,13 @@
     return Object.keys(query).every(function (dimension) {
       var values = query[dimension];
       return /^[a-z][a-z0-9_]{0,39}$/.test(dimension) &&
-        (!requireKnown || !!known[dimension]) &&
+        (!requireKnown || Object.prototype.hasOwnProperty.call(known, dimension)) &&
         Array.isArray(values) && values.length > 0 && values.length <= 60 &&
+        (dimension !== "criteria_q" || values.length === 1) &&
         values.every(function (value, index) {
           return safeText(value) && value.length <= 240 &&
             values.indexOf(value) === index &&
-            (!requireKnown || !!known[dimension][value]);
+            (!requireKnown || knownValue(known, dimension, value));
         });
     });
   }
@@ -1379,8 +1435,9 @@
     var known = knownValues();
     var shared = {};
     Object.keys(stored.query).forEach(function (dimension) {
-      if (!known[dimension]) return;
-      var values = stored.query[dimension].filter(function (value) { return !!known[dimension][value]; });
+      var values = stored.query[dimension].filter(function (value) {
+        return knownValue(known, dimension, value);
+      });
       if (values.length) shared[dimension] = values;
     });
     return shared;
@@ -1406,6 +1463,11 @@
     if (restored && Object.keys(restored).length) applyQuery(restored, false);
   }
 
+  function mountPersonalViewControls(main, bar) {
+    var actions = main.querySelector(".kz-a-workspace-bar__actions");
+    if (actions) actions.appendChild(bar);
+    else main.insertBefore(bar, main.firstChild);
+  }
   var bar = document.createElement("section");
   bar.className = "kz-personal-view";
   bar.setAttribute("aria-label", "个人视图配置");
@@ -1430,7 +1492,7 @@
   bar.appendChild(importButton);
   bar.appendChild(input);
   bar.appendChild(status);
-  main.insertBefore(bar, main.firstChild);
+  mountPersonalViewControls(main, bar);
   exportButton.addEventListener("click", function () {
     status.textContent = "";
     var query = queryFromPage();

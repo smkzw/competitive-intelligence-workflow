@@ -611,30 +611,32 @@ def test_a_matrix_uses_stable_medical_scales_and_restorable_url_settings(
     assert "10.0%" in chart.locator(".kz-a-axis-tick").all_inner_texts()
 
 
-def test_a_safety_heatmap_uses_distinct_continuous_colors_within_each_event(
+def test_a_safety_numeric_views_keep_exact_values_and_scientific_frames(
     page: Page, a_site: Path
 ) -> None:
     _open(page, a_site, "safety.html")
     cells = page.locator(
         '[data-a-chart="safety"] .kz-a-safety-observation[data-event-key="any_teae"]'
     )
-    observations = cells.evaluate_all(
-        "nodes => nodes.map(node => ({rowId: node.dataset.rowId, "
-        "color: node.querySelector('strong').style.background}))"
-    )
-    assert len(observations) >= 4
-    values = dict(page.evaluate(
-        "window.REPORT_A.safety.map(row => [row.row_id, row.numeric_projection?.plot_value])"
-    ))
-    colored = sorted((values[item["rowId"]], item["color"]) for item in observations)
-    assert all(color.startswith("rgb(") for _, color in colored)
-    assert all(left_color == right_color for (left_value, left_color), (right_value, right_color)
-               in zip(colored, colored[1:], strict=False) if left_value == right_value)
-    assert all(
-        int(left_color[4:].split(",", 1)[0]) >= int(right_color[4:].split(",", 1)[0])
-        for (_, left_color), (_, right_color) in zip(colored, colored[1:], strict=False)
-    )
-    assert "固定0至100%刻度" in page.locator('[data-a-chart="safety"]').inner_text()
+    assert cells.count() >= 4
+    assert page.evaluate("""() => {
+        const originals = new Map(window.REPORT_A.safety.map(row => [row.row_id, row]));
+        const host = document.querySelector('[data-a-chart="safety"]');
+        const records = host._chartRecords || [];
+        return Array.from(host.querySelectorAll('[data-row-id]')).every(cell =>
+            originals.has(cell.dataset.rowId) &&
+            !cell.querySelector('strong').style.background) && records.every(record => {
+            if (!record.instance || record.instance.isDisposed()) return true;
+            return record.instance.getOption().series[0].data.every(point => {
+                const row = originals.get(point._row_id);
+                return row && point.value === row.numeric_projection.plot_value;
+            });
+        });
+    }""")
+    assert "单条观察直接列值" in page.locator('[data-a-chart="safety"]').inner_text()
+    assert "比例估计不自动视为0至100%概率刻度" in page.locator(
+        '[data-a-chart="safety"]'
+    ).inner_text()
 
 
 def test_a_evidence_panel_lists_specific_trials_sources_and_cutoff(

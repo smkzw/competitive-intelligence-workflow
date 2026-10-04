@@ -32,7 +32,7 @@
     "row_id": {"type": "string", "minLength": 1},
     "source_row_id": {"type": "string", "minLength": 1},
     "observation_id": {"type": "string", "minLength": 1},
-    "product_id": {"type": "string", "minLength": 1},
+    "product_id": {"type": ["string", "null"], "minLength": 1},
     "trial_id": {"type": "string", "minLength": 1},
     "cohort_id": {"type": "string", "minLength": 1},
     "group_id": {"type": "string", "minLength": 1},
@@ -114,6 +114,9 @@
       "items": {"type": "string", "minLength": 1},
       "uniqueItems": true
     },
+    "source_clause_context": {
+      "anyOf": [{"type": "null"}, {"$ref": "#/$defs/source_clause_context"}]
+    },
     "relationship_status": {
       "type": ["string", "null"],
       "enum": ["bound", "missing_arm_labels", "unknown_arm_label", null]
@@ -122,6 +125,39 @@
     "relationship_blocking": {"type": "boolean"}
   },
   "$defs": {
+    "source_clause_reference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reference_id", "source_id", "label_zh", "locator", "original_text"],
+      "properties": {
+        "reference_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "label_zh": {"type": "string", "minLength": 1},
+        "locator": {"$ref": "#/$defs/evidence_locator"},
+        "original_text": {"type": "string", "minLength": 1}
+      }
+    },
+    "source_clause_relation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relation_id", "status", "description", "references"],
+      "properties": {
+        "relation_id": {"type": "string", "minLength": 1},
+        "status": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "references": {"type": "array", "minItems": 1,
+          "items": {"$ref": "#/$defs/source_clause_reference"}}
+      }
+    },
+    "source_clause_context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label_zh", "scope_note_zh", "scientific_scope"],
+      "properties": {
+        "label_zh": {"type": "string", "minLength": 1},
+        "scope_note_zh": {"type": "string", "minLength": 1},
+        "scientific_scope": {"type": "object"},
+        "continuations": {"type": "array", "items": {"$ref": "#/$defs/source_clause_reference"}},
+        "relations": {"type": "array", "items": {"$ref": "#/$defs/source_clause_relation"}}
+      }
+    },
     "evidence_locator": {
       "type": "object",
       "additionalProperties": false,

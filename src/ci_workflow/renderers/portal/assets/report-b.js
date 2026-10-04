@@ -115,7 +115,7 @@
         var indexedId = String(indexed.row_id || "");
         if (!indexedId) continue;
         if (!rowById[indexedId]) rowById[indexedId] = indexed;
-        var searchText = [indexedId, indexed.product_zh, indexed.trial_zh,
+        var searchText = [indexedId, indexed.product_zh, indexed.trial_zh, indexed.trial_id,
           indexed.display_label_zh, indexed.clinical_concept,
           indexed.original_endpoint, indexed.time_window, indexed.arm_detail]
           .map(function (part) { return String(part || ""); }).join(" ").toLowerCase();
@@ -226,6 +226,10 @@
   }
 
   function disclosureLabel(state) {
+    var shared = window.__CHART_SYNC__;
+    if (shared && typeof shared.disclosureLabel === "function") {
+      return shared.disclosureLabel(state);
+    }
     var labels = {
       reported_value: "已报告值",
       reported_zero: "已报告零值",
@@ -238,16 +242,28 @@
       conflicting_sources: "来源冲突",
       user_cleared: "用户清除，待重新核实"
     };
-    return labels[String(state || "")] || "未报告";
+    return labels[String(state || "")] || "披露状态待核实";
   }
 
   function rowValueText(row) {
-    if (!row || row.renderable === false) {
-      if (row && row.group_assignment_state === "unknown" &&
+    if (!row) return disclosureLabel(null);
+    if (row.renderable === false) {
+      var shared = window.__CHART_SYNC__;
+      if (shared && typeof shared.unplottedValueText === "function") {
+        return shared.unplottedValueText(row);
+      }
+      // Standalone/older asset compatibility: never let stale status text turn
+      // a cleared or unresolved value into a current reported value.
+      if (row.disclosure_state !== "reported_value" && row.disclosure_state !== "reported_zero") {
+        return disclosureLabel(row.disclosure_state);
+      }
+      if (row.group_assignment_state === "unknown" &&
           row.raw_numeric_value !== null && row.raw_numeric_value !== undefined) {
         return String(row.raw_numeric_value) + "（组别产品归属待核）";
       }
-      return row && row.status ? String(row.status) : disclosureLabel(row && row.disclosure_state);
+      if (row.display_value !== null && row.display_value !== undefined && row.display_value !== "") {
+        return String(row.display_value);
+      }
     }
     if (row.numeric_value !== null && row.numeric_value !== undefined) {
       return String(row.numeric_value);
@@ -786,7 +802,7 @@
     window.__CHART_SYNC__.replaceGroups(current);
     updateTableContents();
     addTableSemantics();
-    updateChartStatusMessages();
+    compactRepeatedGroupTitles();
     var label = resultPager.querySelector("[data-b-result-range]");
     var from = matchedGroups.length ? start + 1 : 0;
     var to = Math.min(start + RESULT_PAGE_SIZE, matchedGroups.length);
@@ -881,7 +897,7 @@
       window.__EVIDENCE_DRAWER__.pruneToVisible(visible);
     }
     updateStatus(state);
-    updateChartStatusMessages();
+    compactRepeatedGroupTitles();
   }
 
   function writeFilterUrl(state) {
@@ -1010,29 +1026,24 @@
     panel.removeAttribute("open");
   }
 
-  function updateChartStatusMessages() {
-    var pageId = String(window.__B_PAGE_ID__ || "");
-    var message = "";
-    if (pageId === "product-trial-profiles") {
-      message = "产品与试验属性按完整字段表列示，图形不适用于此页";
-    } else if (pageId.indexOf("baseline-") === 0) {
-      message = "暂无公开记录（基线）；完整字段表保留披露状态";
-    } else if (
-      pageId === "disposition-overview" ||
-      pageId === "participant-flow" ||
-      pageId === "adherence" ||
-      pageId === "loss-exit" ||
-      pageId === "screen-failure" ||
-      pageId === "rescue-treatment" ||
-      pageId === "prohibited-medication" ||
-      pageId === "plan-deviation"
-    ) {
-      message = "暂无公开记录（试验完成情况）；完整字段表保留披露状态";
-    }
-    if (!message) return;
-    var titles = document.querySelectorAll(".kz-chart-undisclosed__title");
-    for (var i = 0; i < titles.length; i += 1) {
-      titles[i].textContent = message;
+  // 独立呈现复核：仅当相邻卡片标题逐字相同（同一显式语境已在上文出现）时
+  // 折叠重复标题；标签仅视觉收起，读屏与完整数据表仍保留全部原文。
+  function compactRepeatedGroupTitles() {
+    var cards = document.querySelectorAll("#kz-chart-module .kz-chart-module__group");
+    var previousText = null;
+    for (var i = 0; i < cards.length; i += 1) {
+      var title = cards[i].querySelector(".kz-chart-group__title");
+      if (!title) {
+        previousText = null;
+        continue;
+      }
+      var text = String(title.textContent || "");
+      if (previousText !== null && text === previousText) {
+        title.classList.add("kz-chart-group__title--repeat");
+      } else {
+        title.classList.remove("kz-chart-group__title--repeat");
+      }
+      previousText = text;
     }
   }
 

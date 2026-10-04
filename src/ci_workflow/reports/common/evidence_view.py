@@ -37,6 +37,7 @@ from typing import Any, Literal, Self
 from pydantic import (
     BaseModel,
     ConfigDict,
+    Field,
     field_validator,
     model_validator,
 )
@@ -46,6 +47,7 @@ from pydantic import (
 
 from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
+from ci_workflow.domain.source_clause_context import SourceClauseContext
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.reports.common.view_state import ReportRow
 
@@ -421,6 +423,9 @@ class EvidenceView(BaseModel):
     original_text_status: OriginalTextStatus = OriginalTextStatus.NOT_PROVIDED
     user_edit: UserEditDisclosure | None = None
 
+    source_clause_context: SourceClauseContext | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     conflicts: tuple[EvidenceConflict, ...] = ()
     historical_versions: tuple[EvidenceHistoricalVersion, ...] = ()
 
@@ -536,6 +541,14 @@ def assert_evidence_trace_contract(view: EvidenceView) -> None:
             raise EvidenceViewBoundaryError(
                 "B/C 类已定位来源必须同时携带逐字原文且状态为已提供"
             )
+        if view.source_clause_context is not None:
+            context = view.source_clause_context
+            references = list(context.continuations)
+            references.extend(ref for relation in context.relations for ref in relation.references)
+            for reference in references:
+                if (locator_local_path_fields(reference.locator)
+                        or precise_locator_anchor(reference.locator) is None):
+                    raise EvidenceViewBoundaryError("相关条款必须保留非本机的独立精确定位")
         return
     leftovers: list[str] = []
     if view.source_version_id is not None:
@@ -546,6 +559,8 @@ def assert_evidence_trace_contract(view: EvidenceView) -> None:
         leftovers.append("原文引文")
     if view.conflicts:
         leftovers.append("冲突")
+    if view.source_clause_context is not None:
+        leftovers.append("来源条款上下文")
     if view.historical_versions:
         leftovers.append("历史版本")
     if view.reason_original_text is not None:

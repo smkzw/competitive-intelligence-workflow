@@ -1715,30 +1715,46 @@ def test_a_empty_represents_truly_zero_products() -> None:
 
 
 def test_critical_unit_count_matches_explicit_yaml_counts() -> None:
-    """独立从 A/B/C YAML 读取阻断关键单元定义，断言显式期望 A=12/B=11/C=8。"""
+    """固定当前关键规则身份；不以历史数量替代真实缺口阻断。"""
     expected = {
-        ReportKind.A: 12,
-        ReportKind.B: 11,
-        ReportKind.C: 8,
+        ReportKind.A: {
+            "a_product_identity", "a_innovation_eligibility", "a_target_mechanism",
+            "a_modality", "a_developer_originator", "a_indication_relationship",
+            "a_china_max_phase_status", "a_global_max_phase_status",
+            "a_core_trial_identity", "a_regulatory_events", "a_efficacy_summary",
+            "a_safety_summary",
+        },
+        ReportKind.B: {
+            "b_trial_identity_role", "b_target_population_groups", "b_baseline_sample_size",
+            "b_baseline_age", "b_baseline_sex", "b_baseline_severity_anchor",
+            "b_core_efficacy_endpoint", "b_safety_minimum_record",
+            "b_source_role_maturity_location",
+        },
+        ReportKind.C: {
+            "c_trial_identity_stage_role", "c_target_population_criteria",
+            "c_arm_randomization_blinding", "c_intervention_control_rescue",
+            "c_dose_schedule_followup", "c_endpoint_definitions_timepoints",
+            "c_planned_or_actual_sample_size", "c_region_visit_operational",
+        },
     }
-    for report_kind, count in expected.items():
+    for report_kind, identities in expected.items():
         spec = spec_yaml(report_kind.value)
-        actual = len(critical_unit_ids(spec))
-        assert actual == count, (
-            f"{report_kind.value} 关键单元数 {actual} != 期望 {count}"
-        )
+        assert set(critical_unit_ids(spec)) == identities
+    # Retaining all related studies does not demand comparative evidence for
+    # study inclusion. The two comparative rules remain enforced extensions,
+    # not deleted evidence checks or a reason to manufacture control arms.
+    b_units = {unit.unit_id: unit for unit in spec_yaml("B").units}
+    for unit_id in ("b_treatment_control_identity", "b_effect_difference_support"):
+        unit = b_units[unit_id]
+        assert unit.blocking_level is GateBlockingLevel.EXTENSION
+        assert unit.applicability_predicate_id == "has_comparator"
+        assert unit.missing_strategy.value == "preserve_disclosure_state"
     # 真实 evaluator 验证每个条件单元的适用性与单缺口
-    total = 0
     for report_kind in (ReportKind.A, ReportKind.B, ReportKind.C):
         spec = spec_yaml(report_kind.value)
         snapshot = snapshot_for(report_kind)
         applicable = applicable_critical_units(spec, snapshot)
-        assert len(applicable) == expected[report_kind], (
-            f"{report_kind.value} 真实适用关键单元 {len(applicable)} "
-            f"!= 期望 {expected[report_kind]}"
-        )
-        total += len(applicable)
-    assert total == 12 + 11 + 8
+        assert set(applicable) == expected[report_kind]
 
 
 ALL_APPLICABLE_UNITS_EXPLICIT: tuple[tuple[ReportKind, str], ...] = (

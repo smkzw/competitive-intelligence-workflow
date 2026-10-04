@@ -12,7 +12,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from importlib.metadata import version as dependency_version
 from pathlib import Path
-from typing import Any, ClassVar, Literal, Self
+from typing import Any, ClassVar, Literal, Self, cast
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -45,6 +45,7 @@ from .active_fact_projection import (
     PortalConsumerNode,
     canonical_sha256,
     numeric_value,
+    source_consumer_node,
     user_edit_disclosure,
     validate_active_fact_binding,
     write_render_receipt,
@@ -102,11 +103,17 @@ class TrialProductLink(BaseModel):
     arm_labels: tuple[str, ...] = ()
 
 
-class TrialRow(BaseModel):
+class StudyRow(BaseModel):
+    """Study metadata independent of proven product ownership.
+
+    Explicit None is an unknown association, not an invented product. A keeps
+    its narrower TrialRow contract; B/C may retain study-first source records.
+    """
+
     model_config = ConfigDict(extra="forbid", frozen=True)
     id: str
     display_id: str
-    product_id: str
+    product_id: str | None
     name: str
     phase: str
     region: str
@@ -122,7 +129,7 @@ class TrialRow(BaseModel):
     role: str
 
     @model_validator(mode="after")
-    def _treatment_group_cannot_exceed_trial(self) -> TrialRow:
+    def _treatment_group_cannot_exceed_trial(self) -> Self:
         if self.enrollment_type == "ESTIMATED" and self.sample_size is not None:
             raise ValueError("计划样本量不得伪装成实际样本量")
         if self.enrollment_type == "ACTUAL" and self.planned_sample_size is not None:
@@ -145,6 +152,12 @@ class TrialRow(BaseModel):
             # 计划与实际并列时必须各自成立，不得互相顶替
             pass
         return self
+
+
+class TrialRow(StudyRow):
+    """Legacy A product-bound study; absence is not allowed in this contract."""
+
+    product_id: str
 
 
 class EfficacyRow(BaseModel):
@@ -830,7 +843,16 @@ def _copy_assets(site_root: Path) -> None:
     assets = site_root / "assets"
     assets.mkdir(parents=True, exist_ok=True)
     shutil.copy2(resolve_logo_src(), assets / "logo.svg")
-    for name in ("portal.css", "portal.js", "report-a.js", "report-a.css"):
+    for name in (
+        "portal.css",
+        "portal.js",
+        "charts.js",
+        "report-a.js",
+        "report-a.css",
+        "kangzhe-site.css",
+        "kangzhe-site.js",
+        "kz-motion.js",
+    ):
         source = _ASSET_DIR / name if name.startswith("report-a.") else resolve_portal_asset(name)
         shutil.copy2(source, assets / name)
     shutil.copy2(resolve_echarts_bundle(), assets / "echarts.min.js")
@@ -865,8 +887,10 @@ _TIMEPOINT_PHRASES: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     ),
     (
         r"from (?:first|single) dose of study drug \(days? (\d+)\) "
-        r"up to (\d+) days?(?: after the last dose(?: of study (?:drug|medication))?)?",
-        r"首次给药（第\1天）后至\2天",
+        r"up to (\d+) days?(?P<after_last> after the last dose"
+        r"(?: of study (?:drug|medication))?)?",
+        lambda m: f"自首次给药（第{m.group(1)}天）至"
+        + ("末次给药后" if m.group("after_last") else "") + f"{m.group(2)}天",
     ),
     (
         r"after the first dose of study medication \(days? (\d+)\) "
@@ -1051,6 +1075,39 @@ def _native_timepoint_zh(value: str) -> str:
     text = " ".join(str(value or "").split())
     if not text:
         return text
+    dose_interval = re.fullmatch(
+        r"from (?:first|single) dose of study (?:drug|medication) "
+        r"\(days? (?P<start>\d+)\) (?:up to|through) (?P<after>\d+) days? "
+        r"after (?:the )?last dose(?: of study (?:drug|medication))?, "
+        r"up to (?P<approx>approximately )?(?P<duration>[\d.]+) days?\.?",
+        text, re.I,
+    )
+    if dose_interval:
+        approximate = "约" if dose_interval.group("approx") else ""
+        return (
+            f"自首次给药（第{dose_interval.group('start')}天）"
+            f"至末次给药后{dose_interval.group('after')}天"
+            f"（最长{approximate}{dose_interval.group('duration')}天）"
+        )
+    anchored = re.fullmatch(
+        r"(?:from\s+)?baseline(?P<dose>\s+\(after first dose\))?\s+"
+        r"(?:to|through|until)\s+(?:the\s+)?end of study\s*"
+        r"(?:\((?P<count>[\d.]+)\s*(?P<unit>years?|months?|weeks?|days?)\))?\.?",
+        text, re.I,
+    )
+    if anchored:
+        label = "基线" + ("（首次给药后）" if anchored.group("dose") else "") + "至研究结束"
+        if anchored.group("count"):
+            unit = anchored.group("unit").casefold().rstrip("s")
+            unit_label = {"year": "年", "month": "个月", "week": "周", "day": "天"}[unit]
+            label += f"（{anchored.group('count')}{unit_label}）"
+        return label
+    anchored_week = re.fullmatch(
+        r"(?:from\s+)?baseline\s+(?:to|through|until)\s+week\s+(?P<week>[\d.]+)\.?",
+        text, re.I,
+    )
+    if anchored_week:
+        return f"基线至第{anchored_week.group('week')}周"
     if _contains_chinese(text) and len(re.findall(r"[A-Za-z]{2,}", text)) == 0:
         return text
     out = text
@@ -2108,6 +2165,14 @@ def _project_active_facts_a(
         except ValueError as error:
             raise ReportAPortalError(str(error)) from error
         if fact_extra.get("review_state") != "user_modified":
+            # Proven immutable fragment, not a synthetic user edit. The source
+            # refresh boundary has checked any supplied quote for disagreement.
+            source_row = row.model_copy(update={"source_text": fact.source_quote})
+            if binding.collection == "safety":
+                safety[index] = cast(SafetyRow, source_row)
+            else:
+                efficacy[index] = cast(EfficacyRow, source_row)
+            consumers.append(source_consumer_node(fact, verified_binding, page=page))
             continue
         unit = str(fact_extra.get("normalized_unit") or fact_extra.get("unit") or row.unit)
         endpoint = (
@@ -2291,8 +2356,8 @@ def render_report_a_site(
 ) -> tuple[Path, ...]:
     """生成 11 个静态责任页及全部产品详情页。"""
     consumers: tuple[PortalConsumerNode, ...] = ()
-    if active_revision is not None:
-        data, consumers = _project_active_facts_a(data, active_revision)
+    # Public provenance binds the immutable builder input/source closure, not a
+    # user-modified value. Validate first; retain the source while projecting current.
     if public_provenance is not None:
         public_provenance = PublicProvenance.model_validate(
             public_provenance.model_dump(mode="json")
@@ -2302,6 +2367,8 @@ def render_report_a_site(
             != hashlib.sha256(data.model_dump_json().encode("utf-8")).hexdigest()
         ):
             raise ReportAPortalError("公共来源与报告内容不一致")
+    if active_revision is not None:
+        data, consumers = _project_active_facts_a(data, active_revision)
     env = Environment(
         loader=FileSystemLoader(_TEMPLATE_DIR),
         autoescape=True,
@@ -2313,6 +2380,12 @@ def render_report_a_site(
     _copy_assets(site_root)
     data_dir = site_root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "render-context.json").write_bytes(_canonical_json({
+        "schema_version": "a-public-render-context-1",
+        "public_provenance": (public_provenance.model_dump(mode="json")
+                              if public_provenance else None),
+        "publication_limitation_zh": publication_limitation_zh,
+    }))
     # One immutable report revision has one presentation projection. Rebuilding
     # thousands of translated rows for every product page is both wasteful and
     # capable of making a large real report appear to hang.

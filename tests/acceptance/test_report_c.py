@@ -228,7 +228,12 @@ def test_adversarial_portal_visible_copy_avoids_raw_enums_and_label_doubling() -
             assert "None" not in visible_dossier
 
 
-def test_eligibility_pages_use_native_chinese_clinical_wording() -> None:
+def test_eligibility_pages_have_chinese_controls_and_preserve_untranslated_original() -> None:
+    """A global English ban would reward dropping/inventing original clauses.
+
+    This bounds controls and marked original text only. It does NOT accept a
+    Chinese medical translation; that remains a separate release requirement.
+    """
     import tempfile
 
     from ci_workflow.renderers.portal.report_c import (  # noqa: WPS433
@@ -249,11 +254,18 @@ def test_eligibility_pages_use_native_chinese_clinical_wording() -> None:
             )
             for page in ("inclusion-criteria.html", "exclusion-criteria.html")
         )
-        assert not re.search(
-            r"\b(?:participants?|subjects?|screening|baseline|treatment|history)\b",
-            visible,
-            re.I,
-        )
+        assert "入选标准" in visible and "排除标准" in visible
+        assert "原文" in visible
+        views = {}
+        for page in ("inclusion-criteria.html", "exclusion-criteria.html"):
+            html = (root / page).read_text(encoding="utf-8")
+            embedded, _ = json.JSONDecoder().raw_decode(
+                html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1]
+            )
+            views.update({item["row"]["row_id"]: item for item in embedded})
+        for row in payload["observations"]:
+            if row["field"] in {"inclusion_criterion", "exclusion_criterion"}:
+                assert views[row["row_id"]]["original_text"] == row["source_text"]
 
 
 def test_adversarial_filter_panel_default_does_not_bury_chart_marker() -> None:
@@ -313,7 +325,7 @@ def test_c_overview_exposes_full_research_design_matrix_and_detail_links() -> No
             encoding="utf-8"
         )
         assert "来源位置" in trial_detail
-        assert "ClinicalTrials.gov · 目标人群" in trial_detail
+        assert "临床试验登记页 · 目标人群" in trial_detail
         assert ">登记字段<" not in trial_detail
         assert ">target_population<" not in trial_detail
         assert ">inclusion_criterion<" not in trial_detail
@@ -327,4 +339,10 @@ def test_c_overview_exposes_full_research_design_matrix_and_detail_links() -> No
         assert '"core-design-matrix": "核心设计事实比较"' in client
         assert "compactCoverage" not in client
         assert "compactTrialAxis ? trialId : trialLabel" in client
-        assert 'return p.data.value[2] ? matrixLabel(p.data.row) : "未公开";' in client
+        # The old exact ternary encoded an obsolete implementation detail. The
+        # replacement executes production matrixOption/formatter, proving reported
+        # zero, unknown and all aggregated source-row IDs remain distinguishable.
+        from tests.integration.test_r24_c_matrix_label_behavior import (
+            test_production_c_matrix_labels_preserve_zero_and_full_detail_mapping,
+        )
+        test_production_c_matrix_labels_preserve_zero_and_full_detail_mapping()

@@ -33,6 +33,7 @@ from ci_workflow.domain.public_provenance import PublicCalculationEvidence
 from ci_workflow.graph.executor import GraphExecutor
 from ci_workflow.graph.recovery import DeliveryContract, PartialDeliveryCoordinator
 from ci_workflow.graph.types import TransitionRequest
+from ci_workflow.qc.scientific import ScientificQcCurrentContext, ScientificQcReviewBundle
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.storage.event_store import (
     EventStore,
@@ -272,6 +273,54 @@ def _last_completed_node(
     return None
 
 
+def _candidate_was_scientifically_reviewed(
+    events: tuple[StoredWorkflowEvent, ...],
+    report_kind: str,
+    context: ScientificQcCurrentContext,
+) -> bool:
+    """只保护本候选的既有晋级；历史其他候选不授权也不阻断本轮。
+
+    旧事件若没有完整候选绑定仍失败关闭，不能用缺失字段默许状态降级。
+    新事件同时保存完整上下文摘要；兼容旧事件时仍核对审阅输入摘要。
+    """
+    bundle = ScientificQcReviewBundle(
+        producer_id=context.producer_id,
+        project_id=context.project_id,
+        report_kind=context.report_kind,
+        report_version=context.report_version,
+        report_object_id=context.report_object_id,
+        candidate_snapshot_id=context.candidate_snapshot_id,
+        candidate_content_digest=context.candidate_content_digest,
+        criteria_version=context.criteria_version,
+        gate_result_key=context.gate_result_key,
+        coverage_set_id=context.coverage_set_id,
+        coverage_digest=context.coverage_digest,
+        source_refs=context.source_refs,
+        locators=context.locators,
+    )
+    expected = {
+        "candidate_snapshot_id": context.candidate_snapshot_id,
+        "candidate_content_digest": context.candidate_content_digest,
+        "review_input_digest": bundle.input_digest,
+    }
+    for event in events:
+        if (
+            event.event_type != "graph.node.completed"
+            or event.payload.get("node_id") != "scientific_qc"
+            or event.payload.get("report_kind") != report_kind
+        ):
+            continue
+        outputs = event.payload.get("outputs")
+        verdict = outputs.get("qc_verdict") if isinstance(outputs, dict) else None
+        if not isinstance(verdict, dict) or any(not verdict.get(key) for key in expected):
+            return True
+        if all(verdict.get(key) == value for key, value in expected.items()) and (
+            "context_digest" not in verdict or verdict["context_digest"] == context.context_digest
+        ):
+            return True
+    return False
+
+
 def _last_evidence_blocked_transition(
     events: tuple[StoredWorkflowEvent, ...],
     report_object_id: str,
@@ -426,13 +475,18 @@ def _check_resume_terminal(
             raise ContractConfigError(
                 f"报告 {kind_value} 的证据不足结论缺少当前研究包，无法安全恢复。"
             )
-        gate_digest = _compute_input_digest(
-            "gate",
-            kind_value,
-            contract.contract_version,
-            extra=evidence_digest,
-        )
         last_gate = _last_completed_node(events, "gate", kind_value)
+        if ctx.universe_evidence is None and kind_value in {"B", "C"}:
+            if package_path is None or last_gate is None:
+                raise ContractConfigError("研究包门槛记录不完整，不能复用证据不足结论。")
+            gate_digest = _restored_research_gate_digest(
+                package_path, kind_value, contract, last_gate,
+                evidence_snapshot_id=_terminal_gate_snapshot_id(project_root, kind_value, contract),
+            )
+        else:
+            gate_digest = _compute_input_digest(
+                "gate", kind_value, contract.contract_version, extra=evidence_digest,
+            )
         if last_gate is None or str(last_gate["input_digest"]) != gate_digest:
             raise ContractConfigError(
                 "宇宙证据内容已变化，既有的「证据不足」结论不再适用。"
@@ -493,6 +547,84 @@ def _research_package_content_digest(path: Path, report_kind: str) -> str:
     except ValueError as error:
         raise ContractConfigError(f"报告 {report_kind} 的研究包已失效，拒绝恢复。") from error
     raise ContractConfigError(f"未知报告类型：{report_kind}")
+
+
+def _research_gate_input_digest(
+    report_kind: str, contract_version: int, content_digest: str, gate_result: Any,
+) -> str:
+    """门槛执行与恢复共同使用科学内容、规则、适用快照和结果身份。"""
+    return _compute_input_digest(
+        "gate", report_kind, contract_version,
+        extra=(f"{content_digest}:{gate_result.spec_fingerprint}:"
+               f"{gate_result.candidate_snapshot_digest}:{gate_result.result_key}"),
+    )
+
+
+def _restored_research_gate_digest(
+    path: Path, report_kind: str, contract: Any, last_gate: dict[str, Any],
+    *, evidence_snapshot_id: str,
+) -> str:
+    """只读重评当前研究包，拒绝变化的规则/适用快照；不改写历史记录。
+
+    临时重评不重摄取、不写快照；结果键绑定候选与规则，不依赖临时事实别名。
+    内容、规则、快照、结果键与逐单元决定均必须与不可变事件一致。
+    """
+    outputs = last_gate.get("outputs", {})
+    if report_kind == "B":
+        from ci_workflow.application.fresh_b_research_package import (
+            evaluate_fresh_b_gate,
+            load_fresh_b_research_package,
+        )
+
+        package: Any = load_fresh_b_research_package(path)
+        current = evaluate_fresh_b_gate(
+            package, evidence_snapshot_id=evidence_snapshot_id,
+            contract_version=str(contract.contract_version),
+        )
+    elif report_kind == "C":
+        from ci_workflow.application.fresh_c_research_package import (
+            evaluate_c_report_gate,
+            load_fresh_c_research_package,
+        )
+
+        package = load_fresh_c_research_package(path)
+        current = evaluate_c_report_gate(
+            package, project_id=contract.project_id, evidence_snapshot_id=evidence_snapshot_id,
+            contract_version=str(contract.contract_version),
+        ).result
+    else:
+        raise ContractConfigError("只有 B/C 研究包使用版本绑定门槛恢复。")
+    digest = _research_gate_input_digest(
+        report_kind, contract.contract_version, package.research_content_digest, current,
+    )
+    if (
+        outputs.get("evidence_digest") != package.research_content_digest
+        or last_gate.get("input_digest") != digest
+        or outputs.get("gate_passed") != (current.decision.value == "passed")
+        or tuple(outputs.get("failures", ())) != current.blocked_unit_ids
+    ):
+        raise ContractConfigError("研究包内容、规则或适用快照已变化，必须显式重新打开。")
+    return digest
+
+
+def _terminal_gate_snapshot_id(project_root: Path, report_kind: str, contract: Any) -> str:
+    """复用既有类型化阻断记录，不扩展图节点合同或另建恢复元数据。"""
+    from ci_workflow.gates.blocker_audit import BlockerAudit, validate_existing_blocker_package
+
+    try:
+        audit = validate_existing_blocker_package(
+            project_root / 'blockers' / report_kind / 'v1',
+            project_id=contract.project_id, report_kind=ReportKind(report_kind),
+            report_version='v1',
+        )
+    except (OSError, ValueError, RuntimeError) as error:
+        raise ContractConfigError("阻断记录无效，无法绑定门槛恢复。") from error
+    if (
+        not isinstance(audit, BlockerAudit)
+        or audit.contract_version != str(contract.contract_version)
+    ):
+        raise ContractConfigError("阻断记录与当前项目或报告不一致。")
+    return audit.evidence_snapshot_id
 
 
 # ─── Node handlers ────────────────────────────────────────────────────────
@@ -1890,8 +2022,9 @@ def run_project(
                 "failures": gate_result.blocked_unit_ids,
                 "evidence_digest": package.research_content_digest,
             },
-            input_digest=_compute_input_digest(
-                "gate", report_kind, contract.contract_version, package.research_content_digest
+            input_digest=_research_gate_input_digest(
+                report_kind, contract.contract_version,
+                package.research_content_digest, gate_result,
             ),
         )
         if gate_result.decision.value != "passed":
@@ -1911,10 +2044,16 @@ def run_project(
                     if report_kind == "B"
                     else gate_outcome.snapshot
                 )
+                # Recovery must use the actual evaluated policy, not silently
+                # reconstruct the historical product-rooted C-v1 contract.
+                policy_version = (
+                    "v2" if report_kind == "C" and gate_result.spec_version == "2.0"
+                    else "v1"
+                )
                 spec = GateSpec.from_yaml(
                     Path(__file__).resolve().parents[3]
                     / "policies"
-                    / f"gates/{report_kind}-v1.yaml"
+                    / f"gates/{report_kind}-{policy_version}.yaml"
                 )
                 report_object_id = f"report_{report_kind}"
                 blocker_json, blocker_markdown = publish_terminal_blocker(
@@ -2065,10 +2204,8 @@ def run_project(
             accepted_verdict_from_receipt,
             build_scientific_review_context,
             capture_portal_artifact_binding,
+            prepare_rendered_scientific_review,
             promote_rendered_candidate,
-            publish_production_context,
-            publish_scientific_review_request,
-            scientific_review_receipt_path,
         )
         from ci_workflow.qc.review_receipt import ScientificReviewReceiptError
 
@@ -2169,12 +2306,11 @@ def run_project(
             )
         except ScientificReviewTransitionError as error:
             raise ContractConfigError(str(error)) from error
-        publish_production_context(project_root, report_kind, review_context)
         try:
-            publish_scientific_review_request(
-                project_root,
-                report_kind,
-                review_context,
+            review_scope = prepare_rendered_scientific_review(
+                project_root=project_root,
+                report_kind=report_kind,
+                context=review_context,
                 producer_session_id=run_id,
                 produced_at=datetime.now(UTC),
                 portal_binding=portal_binding,
@@ -2183,7 +2319,7 @@ def run_project(
             raise ContractConfigError(str(error)) from error
 
         report_state = RENDERED_UNREVIEWED
-        receipt_relative = scientific_review_receipt_path(report_kind)
+        receipt_relative = review_scope.receipt_relative
         if (project_root / receipt_relative).is_file():
             try:
                 promoted_at = datetime.now(UTC)
@@ -2222,6 +2358,7 @@ def run_project(
                         "candidate_snapshot_id": verdict.candidate_snapshot_id,
                         "candidate_content_digest": verdict.candidate_content_digest,
                         "review_input_digest": verdict.review_input_digest,
+                        "context_digest": review_context.context_digest,
                     }
                 },
                 input_digest=_compute_input_digest(
@@ -2231,12 +2368,12 @@ def run_project(
                     receipt.receipt_digest,
                 ),
             )
-        elif _last_completed_node(all_events, "scientific_qc", report_kind) is not None:
+        elif _candidate_was_scientifically_reviewed(all_events, report_kind, review_context):
             raise ContractConfigError(
                 f"{report_kind} 类候选此前已晋级为科学复核完成状态，"
                 "但当前独立复核回执缺失或不可验证："
                 "已晋级候选不可回退为未复核，也不接受无关历史。"
-                f"请恢复 {scientific_review_receipt_path(report_kind)} 后重试 --resume。"
+                f"请恢复 {receipt_relative} 后重试 --resume。"
             )
         _merge_report_metadata(
             ctx.runtime_metadata,
@@ -2248,6 +2385,7 @@ def run_project(
                     report_kind: {"html": _sha256_file(artifact_manifest_path)}
                 },
                 "scientific_review_contexts": {report_kind: review_context.model_dump(mode="json")},
+                "scientific_review_epochs": {report_kind: review_scope.epoch},
                 "scientific_review_portal_bindings": {
                     report_kind: portal_binding.model_dump(mode="json")
                 },
@@ -2458,10 +2596,8 @@ def run_project(
             accepted_verdict_from_receipt,
             build_scientific_review_context,
             capture_portal_artifact_binding,
+            prepare_rendered_scientific_review,
             promote_rendered_candidate,
-            publish_production_context,
-            publish_scientific_review_request,
-            scientific_review_receipt_path,
         )
         from ci_workflow.qc.review_receipt import ScientificReviewReceiptError
         from ci_workflow.storage.manifest_store import ArtifactManifest
@@ -2533,11 +2669,10 @@ def run_project(
                 claims=package.claims,
                 fact_version_by_ref=fact_version_by_ref,
             )
-            publish_production_context(project_root, "A", review_context)
-            publish_scientific_review_request(
-                project_root,
-                "A",
-                review_context,
+            review_scope = prepare_rendered_scientific_review(
+                project_root=project_root,
+                report_kind="A",
+                context=review_context,
                 producer_session_id=run_id,
                 produced_at=datetime.now(UTC),
                 portal_binding=portal_binding,
@@ -2546,7 +2681,7 @@ def run_project(
             raise ContractConfigError(str(error)) from error
 
         report_state = RENDERED_UNREVIEWED
-        receipt_relative = scientific_review_receipt_path("A")
+        receipt_relative = review_scope.receipt_relative
         if (project_root / receipt_relative).is_file():
             try:
                 promoted_at = datetime.now(UTC)
@@ -2585,6 +2720,7 @@ def run_project(
                         "candidate_snapshot_id": verdict.candidate_snapshot_id,
                         "candidate_content_digest": verdict.candidate_content_digest,
                         "review_input_digest": verdict.review_input_digest,
+                        "context_digest": review_context.context_digest,
                     }
                 },
                 input_digest=_compute_input_digest(
@@ -2594,7 +2730,7 @@ def run_project(
                     receipt.receipt_digest,
                 ),
             )
-        elif _last_completed_node(all_events, "scientific_qc", "A") is not None:
+        elif _candidate_was_scientifically_reviewed(all_events, "A", review_context):
             raise ContractConfigError(
                 "A 类候选此前已晋级为科学复核完成状态，但当前独立复核回执"
                 "缺失或不可验证：已晋级候选不可回退为未复核。"
@@ -2608,6 +2744,7 @@ def run_project(
                 "snapshot_ids": {"A": candidate_manifest.report_snapshot_id},
                 "artifact_manifest_sha256": {"A": {"html": _sha256_file(artifact_manifest_path)}},
                 "scientific_review_contexts": {"A": review_context.model_dump(mode="json")},
+                "scientific_review_epochs": {"A": review_scope.epoch},
                 "scientific_review_portal_bindings": {"A": portal_binding.model_dump(mode="json")},
             },
         )
@@ -3662,12 +3799,18 @@ def _append_terminal_decision_events(
             evidence_digest = _sha256_file(ctx.report_data_path)
         else:
             raise RunError("终态决策事件缺少当前证据引用")
-        gate_input_digest = _compute_input_digest(
-            "gate",
-            kind_value,
-            contract.contract_version,
-            extra=evidence_digest,
-        )
+        if ctx.universe_evidence is None and kind_value in {"B", "C"}:
+            last_gate = _last_completed_node(stream, "gate", kind_value)
+            if package_path is None or last_gate is None:
+                raise RunError("终态研究包门槛缺少版本绑定。")
+            gate_input_digest = _restored_research_gate_digest(
+                package_path, kind_value, contract, last_gate,
+                evidence_snapshot_id=_terminal_gate_snapshot_id(project_root, kind_value, contract),
+            )
+        else:
+            gate_input_digest = _compute_input_digest(
+                "gate", kind_value, contract.contract_version, extra=evidence_digest,
+            )
         event_store.append(
             WorkflowEvent(
                 schema_version="1.0",

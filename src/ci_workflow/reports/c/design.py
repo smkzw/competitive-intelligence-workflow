@@ -59,7 +59,7 @@ class EligibilityDrilldownRow(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     indication_id: str
-    product_id: str
+    product_id: str | None
     trial_id: str
     cohort_id: str
     group_id: str
@@ -83,7 +83,6 @@ class EligibilityDrilldownRow(BaseModel):
 
     @field_validator(
         "indication_id",
-        "product_id",
         "trial_id",
         "cohort_id",
         "group_id",
@@ -98,6 +97,15 @@ class EligibilityDrilldownRow(BaseModel):
     def _required_raw(cls, value: str) -> str:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("入排下钻必填文本不能为空")
+        return value
+
+    @field_validator("product_id")
+    @classmethod
+    def _explicit_product_identity(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("入排下钻产品标识不能为空")
         return value
 
 
@@ -186,8 +194,23 @@ def _operator_threshold_projection(
 
 
 def _drilldown_chain_id(indication_id: str, observation: DesignObservation) -> str:
-    """稳定链身份：适应症/产品/试验/队列/组别/设计要素/原始字段/观察 id。"""
+    """稳定链身份：适应症/产品/试验/队列/组别/设计要素/原始字段/观察 id。
 
+    明确 ``product_id=None`` 走独立 study-only 命名空间，且不得把 None/哨兵
+    传入 ``stable_id``；已绑定产品的参数序列与命名空间保持不变。
+    """
+
+    if observation.product_id is None:
+        return stable_id(
+            "c-eligibility-drilldown-study",
+            indication_id,
+            observation.trial_id,
+            observation.cohort_id,
+            observation.group_id,
+            observation.field,
+            observation.source_field_name,
+            observation.observation_id,
+        )
     return stable_id(
         "c-eligibility-drilldown",
         indication_id,

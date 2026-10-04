@@ -72,6 +72,20 @@
   var pinnedOrder = [];
   var pinnedSet = {};
   var lastTrigger = null;
+  var previousInert = null;
+
+  function setBackgroundInert(open) {
+    if (open && previousInert === null) {
+      previousInert = window.__KZ_READING_ISOLATION__.acquire(host);
+    } else if (!open && previousInert !== null) {
+      previousInert();
+      previousInert = null;
+    }
+  }
+  window.addEventListener("pagehide", function () { setBackgroundInert(false); });
+  window.addEventListener("pageshow", function () {
+    if (!host.hidden) setBackgroundInert(true);
+  });
   var filterNotice = document.getElementById("kz-evidence-filter-notice");
   if (!filterNotice) {
     filterNotice = document.createElement("p");
@@ -532,6 +546,29 @@
       }
     }
 
+    var clauseContext = view.source_clause_context;
+    if (clauseContext) {
+      var shownContextReferences = Object.create(null);
+      appendFieldRow(viewFields, "条款适用范围", clauseContext.label_zh, false);
+      appendFieldRow(viewFields, "范围限制", clauseContext.scope_note_zh, false);
+      function appendContextReference(reference, prefix) {
+        if (shownContextReferences[reference.reference_id]) return;
+        shownContextReferences[reference.reference_id] = true;
+        appendFieldRow(viewFields, prefix, reference.label_zh, false);
+        appendQuoteRow(viewFields, "相关条款原文", reference.original_text);
+        appendLocatorRow(viewFields, "相关条款独立定位", reference.locator, NOT_LISTED);
+      }
+      (clauseContext.continuations || []).forEach(function (reference) {
+        appendContextReference(reference, "跨页前后文（各页分别定位）");
+      });
+      (clauseContext.relations || []).forEach(function (relation) {
+        appendFieldRow(viewFields, "并列来源关系（未选结论）", relation.description, false);
+        (relation.references || []).forEach(function (reference) {
+          appendContextReference(reference, "并列条款适用范围");
+        });
+      });
+    }
+
     var conflicts = view.conflicts || [];
     viewConflicts.hidden = conflicts.length === 0;
     if (conflicts.length) renderConflictList(viewConflictList, conflicts);
@@ -766,6 +803,7 @@
       openRowId = null;
       viewSection.hidden = true;
       host.hidden = false;
+      setBackgroundInert(true);
       panel.classList.add("kz-evidence-drawer__panel--in");
       showStatus("此条数据依据在当前页面数据中不存在或已失效，无法展示。");
       if (closeBtn) closeBtn.focus();
@@ -787,6 +825,7 @@
     renderView(view);
     viewSection.hidden = false;
     host.hidden = false;
+    setBackgroundInert(true);
     panel.classList.add("kz-evidence-drawer__panel--in");
     showStatus("");
     updatePinnedSection();
@@ -795,10 +834,42 @@
     return true;
   }
 
+  function restoreSameFactFocus(rowId) {
+    var nodes = document.querySelectorAll("[data-row-id]");
+    for (var i = 0; i < nodes.length; i += 1) {
+      var node = nodes[i];
+      if (node.getAttribute("data-row-id") !== rowId || !node.isConnected) continue;
+      var disclosures = [];
+      var blocked = false;
+      for (var ancestor = node; ancestor; ancestor = ancestor.parentElement) {
+        var style = getComputedStyle(ancestor);
+        if (ancestor.hidden || ancestor.inert || style.display === "none"
+            || style.visibility === "hidden" || style.visibility === "collapse") {
+          blocked = true;
+          break;
+        }
+        if (ancestor.tagName === "DETAILS" && !ancestor.open) disclosures.push(ancestor);
+      }
+      if (blocked) continue; // Never widen a filter or reveal an unrelated fact.
+      disclosures.reverse().forEach(function (details) { details.open = true; });
+      if (!node.getClientRects().length || typeof node.focus !== "function") continue;
+      if (node.tabIndex < 0) node.setAttribute("tabindex", "-1");
+      node.focus();
+      return;
+    }
+    var fallback = document.querySelector("#kz-chart-module") || document.querySelector("main");
+    if (fallback) {
+      if (fallback.tabIndex < 0) fallback.setAttribute("tabindex", "-1");
+      fallback.focus();
+    }
+  }
+
   function closeInternal(restoreFocus) {
     if (host.hidden) return;
     host.hidden = true;
+    setBackgroundInert(false);
     panel.classList.remove("kz-evidence-drawer__panel--in");
+    var closedRowId = openRowId;
     openRowId = null;
     showStatus("");
     var target = lastTrigger;
@@ -806,10 +877,14 @@
     if (
       restoreFocus &&
       target &&
-      target.isConnected &&
+      target.isConnected && target.getClientRects().length > 0 &&
       typeof target.focus === "function"
     ) {
       target.focus();
+    } else if (restoreFocus) {
+      // URL navigation/pagination can remove the opener. Reveal the matching
+      // disclosure without changing the query, then return to its actual fact.
+      restoreSameFactFocus(closedRowId);
     }
     emitChange();
   }

@@ -18,13 +18,15 @@ class EligibilitySourceError(ValueError):
     """登记原文或报告观察无法形成一一对应的完整入排标准。"""
 
 
-_EXCLUSION_HEADING = re.compile(
-    r"(?:<p[^>]*>\s*)?(?:key\s+)?exclusion\s+criteria\s*:?(?:\s*</p>)?",
-    re.IGNORECASE,
+EXCLUSION_HEADING = re.compile(
+    r"(?:^[ \t]*|(?=<p\b))(?:<p[^>]*>[ \t]*)?(?:(?:key|important)[ \t]+)?"
+    r"exclusion[ \t]+criteria(?:[ \t]*:|(?=[ \t]*(?:</p>|$)))[ \t]*(?:</p>)?",
+    re.IGNORECASE | re.MULTILINE,
 )
-_INCLUSION_HEADING = re.compile(
-    r"(?:<p[^>]*>\s*)?(?:key\s+)?inclusion\s+criteria\s*:?(?:\s*</p>)?",
-    re.IGNORECASE,
+INCLUSION_HEADING = re.compile(
+    r"(?:^[ \t]*|(?=<p\b))(?:<p[^>]*>[ \t]*)?(?:(?:key|important)[ \t]+)?"
+    r"inclusion[ \t]+criteria(?:[ \t]*:|(?=[ \t]*(?:</p>|$)))[ \t]*(?:</p>)?",
+    re.IGNORECASE | re.MULTILINE,
 )
 
 
@@ -43,10 +45,10 @@ def extract_eligibility_sections(record: Mapping[str, Any]) -> tuple[str, str]:
     if not isinstance(raw, str) or not raw.strip():
         raise EligibilitySourceError("登记记录缺少 eligibilityCriteria 原文")
 
-    exclusion = _EXCLUSION_HEADING.search(raw)
+    exclusion = EXCLUSION_HEADING.search(raw)
     if exclusion is None:
         raise EligibilitySourceError("登记原文无法定位排除标准标题")
-    inclusion = _INCLUSION_HEADING.search(raw, 0, exclusion.start())
+    inclusion = INCLUSION_HEADING.search(raw, 0, exclusion.start())
     inclusion_start = 0 if inclusion is None else inclusion.end()
     inclusion_text = raw[inclusion_start : exclusion.start()].strip()
     exclusion_text = raw[exclusion.end() :].strip()

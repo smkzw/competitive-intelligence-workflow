@@ -35,7 +35,9 @@ def _fixed_candidate() -> tuple[Path, ReportAPortalData, LockedSnapshot, dict[st
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     manifest_path = root / receipt["snapshot_relative_path"]
     snapshot = LockedSnapshot(
-        snapshot_id=receipt["snapshot_id"], kind="evidence", report=None,
+        snapshot_id=receipt["snapshot_id"],
+        kind="evidence",
+        report=None,
         sha256=receipt["snapshot_sha256"],
         relative_path=receipt["snapshot_relative_path"],
         byte_size=manifest_path.stat().st_size,
@@ -43,13 +45,12 @@ def _fixed_candidate() -> tuple[Path, ReportAPortalData, LockedSnapshot, dict[st
     versions = {
         item["row_ref"]: item["fact_version_id"]
         for item in receipt["fact_bindings"]
-        if item["row_ref"].startswith("safety:")
-        and not item["row_ref"].endswith(":denominator")
+        if item["row_ref"].startswith("safety:") and not item["row_ref"].endswith(":denominator")
     }
     return root, ReportAPortalData.model_validate_json(report_path.read_bytes()), snapshot, versions
 
 
-def test_all_two_study_safety_source_views_are_located_but_unknown_arms_unbound(
+def test_historical_safety_closure_is_immutable_not_current_semantic_acceptance(
     tmp_path: Path,
 ) -> None:
     root, a_report, snapshot, versions = _fixed_candidate()
@@ -60,10 +61,27 @@ def test_all_two_study_safety_source_views_are_located_but_unknown_arms_unbound(
             "SELECT COUNT(*) FROM source_portal_consumer_bindings WHERE report='B'"
         ).fetchone()[0]
 
-    views = project_b_safety_source_views(root, snapshot, a_report, versions)
-    assert len(views) == 92
-    assert len({view["row_id"] for view in views}) == 92
-    assert sum(view["group_assignment_state"] == "unknown" for view in views) == 90
+    assert len(versions) == 92  # preserved historical accepted source set
+    with pytest.raises(PortalConsumerRegistrationError, match="measure_context"):
+        project_b_safety_source_views(root, snapshot, a_report, versions)
+    # The two raw AE-group counts are unchanged. The old compound rows must be
+    # re-extracted and reclassified in a new candidate, never edited in-place.
+    stable_refs = {
+        f"safety:{row_id}"
+        for row_id in (
+            "safe-9fe1ea2f8b52dd3ec294",
+            "safe-7727c2ce1c1803f54bb0",
+        )
+    }
+    views = project_b_safety_source_views(
+        root,
+        snapshot,
+        a_report,
+        {ref: versions[ref] for ref in stable_refs},
+    )
+    assert len(views) == 2
+    assert len({view["row_id"] for view in views}) == 2
+    assert all(view["group_assignment_state"] == "declared" for view in views)
     assert all(view["source_locator"]["field_path"] == view["source_field_path"] for view in views)
     assert all(
         view["source_locator"]["url"].startswith("https://clinicaltrials.gov/study/")
@@ -71,10 +89,12 @@ def test_all_two_study_safety_source_views_are_located_but_unknown_arms_unbound(
     )
     assert all(view["source_text"] is not None for view in views)
 
-    b_report = ReportBPortalData.model_validate({
-        **a_report.model_dump(mode="json"),
-        "safety_views": {"coverage_mode": "partial", "facts": views},
-    })
+    b_report = ReportBPortalData.model_validate(
+        {
+            **a_report.model_dump(mode="json"),
+            "safety_views": {"coverage_mode": "partial", "facts": views},
+        }
+    )
     site = tmp_path / "b-precise-safety"
     render_report_b_site(b_report, site)
     page = (site / "safety.html").read_text(encoding="utf-8")
@@ -85,15 +105,18 @@ def test_all_two_study_safety_source_views_are_located_but_unknown_arms_unbound(
         page.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].lstrip()
     )
     safety_rows = {
-        row["row_id"]: row for group in groups for row in group.get("rows", [])
+        row["row_id"]: row
+        for group in groups
+        for row in group.get("rows", [])
         if row.get("_domain") == "safety"
     }
     assert len(safety_rows) == 514
     selected_evidence = {
-        item["row"]["row_id"]: item for item in evidence
+        item["row"]["row_id"]: item
+        for item in evidence
         if item["row"]["row_id"] in {view["row_id"] for view in views}
     }
-    assert len(selected_evidence) == 92
+    assert len(selected_evidence) == 2
     assert all(item["source_trace_state"] == "located" for item in selected_evidence.values())
     for view in views:
         item = selected_evidence[view["row_id"]]
@@ -105,9 +128,12 @@ def test_all_two_study_safety_source_views_are_located_but_unknown_arms_unbound(
 
     assert sha256(database_path.read_bytes()).hexdigest() == database_before
     with sqlite3.connect(database_path.resolve().as_uri() + "?mode=ro", uri=True) as database:
-        assert database.execute(
-            "SELECT COUNT(*) FROM source_portal_consumer_bindings WHERE report='B'"
-        ).fetchone()[0] == b_before
+        assert (
+            database.execute(
+                "SELECT COUNT(*) FROM source_portal_consumer_bindings WHERE report='B'"
+            ).fetchone()[0]
+            == b_before
+        )
 
 
 def test_source_view_projection_rejects_quote_or_version_drift() -> None:
@@ -119,11 +145,16 @@ def test_source_view_projection_rejects_quote_or_version_drift() -> None:
     row["source_text"] = "not the locked quote"
     with pytest.raises(PortalConsumerRegistrationError):
         project_b_safety_source_views(
-            root, snapshot, ReportAPortalData.model_validate(altered),
+            root,
+            snapshot,
+            ReportAPortalData.model_validate(altered),
             {selected_ref: versions[selected_ref]},
         )
     other_version = next(value for key, value in versions.items() if key != selected_ref)
     with pytest.raises(PortalConsumerRegistrationError):
         project_b_safety_source_views(
-            root, snapshot, a_report, {selected_ref: other_version},
+            root,
+            snapshot,
+            a_report,
+            {selected_ref: other_version},
         )

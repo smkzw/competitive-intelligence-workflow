@@ -1044,6 +1044,22 @@ class ResearchPackage(_StrictModel):
                 raise ResearchPackageValidationError(
                     f"扩展回执未完成：{expansion.receipt_id}（{expansion.result_class}）"
                 )
+        if self.closure.review_digest_version == "2":
+            # Keep legacy snapshots readable; current submission uses v2. A
+            # blocked or partial query cannot establish scientific saturation.
+            dimensions = {"alias", "target", "company", "trial"}
+            for round_id in self.closure.convergence_round_ids:
+                receipts = tuple(
+                    item for item in self.expansion_receipts if item.round_id == round_id
+                )
+                if {item.dimension for item in receipts} != dimensions:
+                    raise ResearchPackageValidationError(
+                        f"收敛轮次 {round_id} 未完整运行四类反向扩展"
+                    )
+                if any(item.result_class == "access_or_permission_blocked" for item in receipts):
+                    raise ResearchPackageValidationError(
+                        f"收敛轮次 {round_id} 有访问受限，不能证明零新增"
+                    )
         rounds = {item.round_number: item for item in self.recovery_rounds}
         recovery_gap_ids = {gap.gap_id for gap in self.gap_strategies if gap.recovery_required}
         if not recovery_gap_ids and not rounds:

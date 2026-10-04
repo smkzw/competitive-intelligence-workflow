@@ -10,7 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from pydantic import TypeAdapter
+from pydantic import TypeAdapter, ValidationError
 
 from ci_workflow.application.capability_preflight import StaticCapabilityProbe
 from ci_workflow.application.fixture_runner import (
@@ -31,8 +31,10 @@ from ci_workflow.application.run_service import (
     run_project,
     validate_run_manifest,
 )
+from ci_workflow.domain.contracts import ProjectContract
 from ci_workflow.graph.executor import GraphExecutor
 from ci_workflow.graph.recovery import DeliveryContract, PartialDeliveryCoordinator
+from ci_workflow.hosts.receipt import HostInterruptionBinding
 from ci_workflow.storage.event_store import EventStore
 
 SCENARIO_RECORD_RELATIVE = Path("state/host-smoke-v1.json")
@@ -47,6 +49,29 @@ class HostSmokeScenarioResult:
     run_result: RunResult
     record_path: Path
     record: dict[str, Any]
+
+
+def interruption_receipt_binding(
+    initial: dict[str, Any], contract: ProjectContract,
+) -> HostInterruptionBinding:
+    """Validate named internal contract proof, then project the strict public shape.
+
+    Old records without the extension remain readable. Only the named extension
+    is removed; unknown fields remain strict errors. The original record is not
+    changed and its embedded contract may not drift from the verified project.
+    """
+    payload = dict(initial)
+    try:
+        if "contract" in payload:
+            recorded = ProjectContract.model_validate(payload.pop("contract"))
+            if recorded != contract:
+                raise HostSmokeScenarioError("初始恢复证据的内部项目合同与当前合同不一致")
+        binding = HostInterruptionBinding.model_validate(payload)
+        if binding.project_id != contract.project_id:
+            raise HostSmokeScenarioError("初始恢复证据的项目身份与当前合同不一致")
+    except ValidationError as error:
+        raise HostSmokeScenarioError("初始恢复证据或内部合同不满足严格回执合同") from error
+    return binding
 
 
 def _sha256(path: Path) -> str:

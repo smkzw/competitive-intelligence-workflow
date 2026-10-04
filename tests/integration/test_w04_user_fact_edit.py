@@ -24,6 +24,7 @@ from ci_workflow.application.latest_delivery import (
     read_effective_delivery,
     read_latest_delivery,
 )
+from ci_workflow.application.project_service import create_project_workspace
 from ci_workflow.application.refresh_service import RefreshService
 from ci_workflow.application.share_export import (
     ShareViewSelection,
@@ -81,7 +82,7 @@ from ci_workflow.storage.migrations import persist_project_contract
 from ci_workflow.storage.sqlite import open_database
 
 NOW = datetime(2026, 9, 22, 18, 0, tzinfo=UTC)
-PROJECT_ID = "project-w04"
+PROJECT_ID = stable_id("project", "w04-development-fixture")
 
 
 def _digest(value: bytes) -> str:
@@ -240,7 +241,7 @@ def test_b_estimated_efficacy_revision_updates_domain_and_explicit_view_without_
     evidence = next(view for view in evidence_views if view["row"]["row_id"] == visible_id)
     assert evidence["user_edit"]["current_value"] == "80.1%"
     assert evidence["user_edit"]["original_value"].startswith("82.3%")
-    assert evidence["source_version_label_zh"] == "来源待核"
+    assert evidence["source_version_label_zh"] == "逐事实来源待核"
 
 
 def test_b_estimated_efficacy_save_rebuilds_current_without_redividing(tmp_path: Path) -> None:
@@ -441,9 +442,24 @@ def _project(
     b_binding_override: tuple[str, object] | None = None,
     cross_report_binding: str | None = None,
     include_b_efficacy: bool = False,
+    complete_workspace: bool = False,
 ) -> tuple[Path, dict[str, str]]:
     root = tmp_path / "w04-project"
-    root.mkdir(parents=True)
+    contract = ProjectContract(
+        contract_version=1,
+        project_id=PROJECT_ID,
+        indication="阵发性睡眠性血红蛋白尿症",
+        reports=(ReportKind.A, ReportKind.B, ReportKind.C),
+        outputs=(OutputFormat.HTML,),
+        timezone="Asia/Shanghai",
+        data_cutoff=datetime(2026, 9, 20, tzinfo=UTC),
+        cutoff_was_user_supplied=True,
+        created_at=NOW,
+    )
+    if complete_workspace:
+        create_project_workspace(root, contract)
+    else:
+        root.mkdir(parents=True)
     fixture_root = Path("fixtures")
     payloads = {
         "A": (
@@ -533,17 +549,7 @@ def _project(
         )
     persist_project_contract(
         root / "state/project.sqlite",
-        ProjectContract(
-            contract_version=1,
-            project_id=PROJECT_ID,
-            indication="阵发性睡眠性血红蛋白尿症",
-            reports=(ReportKind.A, ReportKind.B, ReportKind.C),
-            outputs=(OutputFormat.HTML,),
-            timezone="Asia/Shanghai",
-            data_cutoff=datetime(2026, 9, 20, tzinfo=UTC),
-            cutoff_was_user_supplied=True,
-            created_at=NOW,
-        ),
+        contract,
     )
     with open_database(root / "state/project.sqlite") as database:
         database.execute(

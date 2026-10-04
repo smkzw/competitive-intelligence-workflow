@@ -22,7 +22,10 @@ def test_grouped_bar_category_does_not_repeat_identity_under_the_legend() -> Non
 
     assert "data: categories" in grouped_bar
     assert 'name: group.x_axis_label_zh || "产品｜试验"' not in grouped_bar
-    assert 'type: "scroll"' in grouped_bar
+    # The complete DOM legend supersedes the cropped ECharts scroll legend.
+    assert "show: false" in grouped_bar
+    assert "function renderIdentityLegend(container, group)" in source
+    assert 'legend.setAttribute("aria-label", "完整组别图例")' in source
     assert "top: 2" in grouped_bar
     assert "top: hasLegend ? 52 : 32" in source
 
@@ -84,7 +87,11 @@ def test_c_evidence_explanation_does_not_expose_internal_identifiers() -> None:
     ).read_text(encoding="utf-8")
 
     assert '"Identification": "研究基本信息"' in source
-    assert "本条信息摘自临床试验登记页" in source
+    from ci_workflow.renderers.portal.report_c import _source_kind_zh
+
+    for role in ("registry", "clinical-trial-registry", "clinical_trial_registry"):
+        assert _source_kind_zh(role) == "临床试验登记页"
+    assert 'f"本条信息摘自{source_kind}，"' in source
     explanation = source[
         source.index("explanation=_evidence_field(") : source.index(
             "original_text=", source.index("explanation=_evidence_field(")
@@ -118,8 +125,10 @@ def test_b_safety_uses_chinese_event_labels_and_explains_heatmap_color() -> None
         "因治疗期间不良事件停止治疗",
     ):
         assert label in renderer
-    assert "颜色深浅仅表示同一图内发生率高低" in template
-    assert "不同图的色阶不可直接比较" in template
+    assert "颜色按各图注明的指标与单位呈现" in template
+    assert "事件数、受累人数和比例不可互换" in template
+    assert "不同口径的色阶不可直接比较" in template
+    assert "颜色深浅仅表示同一图内发生率高低" not in template
 
 
 def test_a_product_drawer_separates_program_stage_trial_phase_and_observation_time() -> None:

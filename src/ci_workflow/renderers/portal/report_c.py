@@ -17,12 +17,14 @@ from datetime import datetime
 from html import unescape
 from pathlib import Path
 from typing import Any, Self
+from urllib.parse import urlsplit
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from ci_workflow.domain.enums import FactDisclosureState, FactReviewState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
+from ci_workflow.gates.models import SourceRole
 from ci_workflow.qc.browser import route_to_site_path
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFactBinding,
@@ -30,6 +32,7 @@ from ci_workflow.renderers.portal.active_fact_projection import (
     PortalConsumerNode,
     canonical_sha256,
     canonical_source_pointer,
+    source_consumer_node,
     user_edit_disclosure,
     validate_active_fact_binding,
     write_render_receipt,
@@ -43,14 +46,16 @@ from ci_workflow.renderers.portal.evidence_drawer import (
     render_evidence_drawer_embed,
     render_evidence_drawer_host,
 )
-from ci_workflow.renderers.portal.report_a import ProductRow, TrialRow
+from ci_workflow.renderers.portal.report_a import ProductRow, StudyRow
 from ci_workflow.reports.c import (
     DesignFieldFamily,
     DesignGateDecision,
     DesignObservation,
     evaluate_design_gate,
 )
+from ci_workflow.reports.c.endpoint_instances import _identity as endpoint_instance_identity
 from ci_workflow.reports.common.evidence_view import (
+    EvidenceConflict,
     EvidenceField,
     EvidenceFieldState,
     EvidenceObservationKind,
@@ -80,8 +85,10 @@ _FIELD_LABELS_ZH: dict[str, str] = {
     "control_arm": "对照干预",
     "dosing_regimen": "给药方案",
     "primary_endpoint_definition": "主要终点定义",
+    "primary_endpoint_description": "主要终点完整定义原文",
     "primary_endpoint_timepoint": "主要终点时间点",
     "secondary_endpoint_definition": "次要终点定义",
+    "secondary_endpoint_description": "次要终点完整定义原文",
     "secondary_endpoint_timepoint": "次要终点时间点",
     "analysis_sets": "分析集",
     "statistical_comparisons": "主要比较与统计模型",
@@ -89,11 +96,15 @@ _FIELD_LABELS_ZH: dict[str, str] = {
     "missing_data_handling": "缺失数据处理",
     "visit_schedule": "访视与随访",
     "planned_or_actual_sample_size": "计划或实际样本量",
+    "planned_sample_size_terms": "计划样本量与计数条件",
     "analysis_population": "分析人群",
     "comparison_logic": "比较方法",
     "statistical_model": "统计模型",
     "effect_size": "效应量",
     "multiplicity": "多重性控制",
+    "sample_size_assumptions": "样本量依据",
+    "estimand_intercurrent": "估计目标与伴发事件策略",
+    "missing_data_sensitivity": "缺失数据与敏感性处理",
 }
 
 _PAGE_FIELDS: dict[str, frozenset[str] | None] = {
@@ -116,8 +127,10 @@ _PAGE_FIELDS: dict[str, frozenset[str] | None] = {
     "endpoint-timepoint-matrix": frozenset(
         {
             "primary_endpoint_definition",
+            "primary_endpoint_description",
             "primary_endpoint_timepoint",
             "secondary_endpoint_definition",
+            "secondary_endpoint_description",
             "secondary_endpoint_timepoint",
         }
     ),
@@ -125,11 +138,19 @@ _PAGE_FIELDS: dict[str, frozenset[str] | None] = {
     "sample-analysis-statistics": frozenset(
         {
             "planned_or_actual_sample_size",
+            "planned_sample_size_terms",
             "analysis_population",
             "analysis_sets",
             "statistical_comparisons",
             "multiplicity_adjustment",
             "missing_data_handling",
+            "comparison_logic",
+            "statistical_model",
+            "effect_size",
+            "multiplicity",
+            "sample_size_assumptions",
+            "estimand_intercurrent",
+            "missing_data_sensitivity",
         }
     ),
     "design-patterns": frozenset(
@@ -208,8 +229,8 @@ class ReportCPortalData(BaseModel):
     indication: str = Field(min_length=1)
     data_cutoff: datetime
     report_snapshot_id: str | None = None
-    products: tuple[ProductRow, ...] = Field(min_length=1)
-    trials: tuple[TrialRow, ...] = Field(min_length=1)
+    products: tuple[ProductRow, ...]
+    trials: tuple[StudyRow, ...] = Field(min_length=1)
     observations: tuple[DesignObservation, ...] = Field(min_length=1)
     user_edits: dict[str, UserEditDisclosure] = Field(default_factory=dict)
     # 独立复核 C r19：包内设计路径综合（patterns + candidate_paths）随门户数据下发，
@@ -230,15 +251,19 @@ class ReportCPortalData(BaseModel):
         if len(trial_ids) != len(set(trial_ids)):
             raise ValueError("试验标识不得重复")
         for trial in self.trials:
-            if trial.product_id not in product_ids:
+            if trial.product_id is not None and trial.product_id not in product_ids:
                 raise ValueError(f"试验 {trial.id} 引用了未知产品 {trial.product_id}")
         for observation in self.observations:
-            if observation.product_id not in product_ids:
+            if observation.product_id is not None and observation.product_id not in product_ids:
                 raise ValueError(
                     f"观察 {observation.row_id} 引用了未知产品 {observation.product_id}"
                 )
             if observation.trial_id not in set(trial_ids):
                 raise ValueError(f"观察 {observation.row_id} 引用了未知试验 {observation.trial_id}")
+            trial = next(item for item in self.trials if item.id == observation.trial_id)
+            if (trial.product_id is None or observation.product_id is None) \
+                    and trial.product_id != observation.product_id:
+                raise ValueError(f"观察 {observation.row_id} 的研究与产品关联不一致")
         return self
 
     @property
@@ -379,63 +404,10 @@ def _eligibility_source_text(field: str, text: str) -> str:
         flags=re.I,
     )
     label = "登记入选标准" if field == "inclusion_criterion" else "登记排除标准"
-    folded = value.casefold()
-    phrase_map = (
-        (
-            "participants must be 12 years",
-            "年龄≥12岁；特应性皮炎病程≥1年；"
-            "既往生物制剂或口服JAK抑制剂疗效不足；"
-            "基线vIGA-AD 3或4分；EASI≥16分；"
-            "BSA受累≥10%；峰值瘙痒NRS≥4分；"
-            "体重≥25 kg；能够配合访视及研究操作",
-        ),
-        (
-            "known history of or suspected significant current immunosuppression",
-            "影响特应性皮炎评估的皮肤合并症；当前或疑似显著免疫抑制；恶性肿瘤史（已切除且治愈超过5年的非黑色素瘤皮肤癌除外）；实体器官或干细胞移植史；基线前4周内需系统治疗的活动性或慢性感染；筛选期HIV、乙肝或丙肝阳性；活动性、潜伏性或未充分治疗的结核，疑似肺外结核或结核高风险；规定时间窗内使用禁用治疗；筛选期有临床意义的实验室异常；对研究药物或辅料过敏",
-        ),
-        (
-            "inadequate response is defined",
-            "中高效外用糖皮质激素每日治疗至少28天（或说明书允许的最长疗程，以较短者为准），仍未达到并维持缓解或低疾病活动状态",
-        ),
-        (
-            "moderate to severe atopic dermatitis for at least 12 months",
-            "中重度特应性皮炎病程≥12个月",
-        ),
-        (
-            "diagnosed with atopic dermatitis 6 months duration",
-            "特应性皮炎病程≥6个月（儿童≥3个月），且筛选前4周病情稳定、无显著加重",
-        ),
-        ("iga score of 2 to 3 at the screening and baseline", "筛选期及基线IGA为2–3分"),
-        (
-            "investigator's global assessment (iga) score of 2 to 3",
-            "筛选期及基线IGA为2–3分；第8周长期安全性期IGA为0–4分",
-        ),
-        ("v-iga-ad of 3 or 4", "基线vIGA-AD为3或4分"),
-        ("ad involvement of 10%", "筛选期及基线SCORAD评估的BSA受累≥10%"),
-        ("atopic dermatitis covering ≥5% and ≤ 35%", "特应性皮炎BSA受累5%–35%"),
-        ("ad involvement ≥5% to ≤40%", "可治疗BSA受累5%–40%（不含头皮）"),
-        ("body weight of ≥ 40 kg", "12–17岁受试者基线体重≥40 kg"),
-        ("concurrent enrolment in another clinical trial", "同时参加另一项使用试验用药的临床试验"),
-        ("tcss are medically inadvisable", "研究者认为不宜使用外用糖皮质激素"),
-        ("prior exposure to any janus kinase", "既往使用过JAK抑制剂"),
-        (
-            "other concomitant skin conditions",
-            "存在可能干扰评估的其他皮肤病，或需频繁住院/静脉治疗的红皮病、难治性或不稳定皮肤病",
-        ),
-        ("unstable course of ad", "基线前4周特应性皮炎病情不稳定（自行改善或快速恶化）"),
-        ("serious medical condition", "存在妨碍参研或显著增加风险的严重疾病或有临床意义异常"),
-        ("pregnant or breastfeeding", "妊娠、哺乳，或计划在研究期间及末次给药后90天内妊娠"),
-        (
-            "biological product within 12 weeks or 5 half-lives",
-            "首次给药前12周或5个半衰期内使用过生物制剂（取较长者）",
-        ),
-        ("skin co-morbidity", "存在影响特应性皮炎评估的皮肤合并症"),
-        ("immunocompromised at screening", "筛选期存在免疫功能受损"),
-    )
-    native = next((zh for phrase, zh in phrase_map if phrase in folded), "")
-    if not native:
-        return f"{label}原文：{value}"
-    return f"{label}：{native}"
+    # A substring is not a translation or proof of the rest of a protocol clause.
+    # Preserve all source qualifiers until a source-bound translation exists;
+    # never substitute an indication-specific canned set of requirements.
+    return f"{label}原文：{value}"
 
 
 def _state_label(state: FactDisclosureState | str) -> str:
@@ -491,8 +463,12 @@ def _copy_assets(site_root: Path) -> None:
     for name in (
         "portal.css",
         "portal.js",
+        "charts.js",
         "evidence-drawer.css",
         "evidence-drawer.js",
+        "kangzhe-site.css",
+        "kangzhe-site.js",
+        "kz-motion.js",
     ):
         shutil.copy2(resolve_portal_asset(name), assets / name)
     shutil.copy2(_ASSET_DIR / "report-c.css", assets / "report-c.css")
@@ -525,7 +501,9 @@ def _nav_groups(
     return tuple(groups)
 
 
-def _product_name(data: ReportCPortalData, product_id: str) -> str:
+def _product_name(data: ReportCPortalData, product_id: str | None) -> str:
+    if product_id is None:
+        return "产品关联待核"
     native_name = {
         "lebrikizumab": "来布利珠单抗（Lebrikizumab）",
         "tapinarof": "他匹那罗夫（Tapinarof）",
@@ -545,6 +523,8 @@ def _trial_name(data: ReportCPortalData, trial_id: str) -> str:
     for trial in data.trials:
         if trial.id == trial_id:
             if len(re.findall(r"[A-Za-z]{3,}", trial.name)) >= 5:
+                if trial.product_id is None:
+                    return f"{trial.display_id} · {trial.phase}研究"
                 product = _product_name(data, trial.product_id).split("（", 1)[0]
                 return f"{product} {trial.phase}临床研究"
             return trial.name
@@ -586,7 +566,7 @@ def _trial_display(data: ReportCPortalData, trial_id: str) -> str:
     return trial_id
 
 
-def _product_target(data: ReportCPortalData, product_id: str) -> str:
+def _product_target(data: ReportCPortalData, product_id: str | None) -> str:
     for product in data.products:
         if product.id == product_id:
             return product.target
@@ -595,6 +575,8 @@ def _product_target(data: ReportCPortalData, product_id: str) -> str:
 
 def _group_label_zh(group_id: str | None) -> str:
     value = _text(group_id)
+    if value.endswith("-source-clause"):
+        return "组别适用范围见原文"
     if value.endswith("-experimental"):
         return "试验组"
     if value.endswith("-control"):
@@ -606,6 +588,8 @@ def _group_label_zh(group_id: str | None) -> str:
 
 def _cohort_label_zh(cohort_id: str | None) -> str:
     value = _text(cohort_id)
+    if value.endswith("-source-clause"):
+        return "条款适用范围见原文"
     if not value or value.endswith("-all"):
         return "总体入组人群"
     return "已定义分析队列"
@@ -620,6 +604,124 @@ def _observation_cohort_zh(observation: DesignObservation) -> str:
     if m:
         return f"第{m.group(1)}组"
     return _cohort_label_zh(observation.cohort_id)
+
+
+# 终点族字段：definition/timepoint/description 三类观察共享显式实例身份。
+_ENDPOINT_FIELDS = frozenset(
+    {
+        "primary_endpoint_definition",
+        "primary_endpoint_description",
+        "primary_endpoint_timepoint",
+        "secondary_endpoint_definition",
+        "secondary_endpoint_description",
+        "secondary_endpoint_timepoint",
+    }
+)
+
+_ENDPOINT_ROLE_LABELS_ZH = {
+    "primary_endpoint": "主要终点",
+    "secondary_endpoint": "次要终点",
+}
+
+# 展示组合的九项完整性前提；实际身份复用领域所有者的十轴键，另含原始
+# protocol parent。period 可缺省但参与一致性比较，不由标题推断。
+_ENDPOINT_INSTANCE_IDENTITY_AXES: tuple[tuple[str, str], ...] = (
+    ("trial_id", "研究标识"),
+    ("outcome_id", "终点实例标识"),
+    ("endpoint_key", "终点角色键"),
+    ("group_id", "组别标识"),
+    ("cohort_id", "队列标识"),
+    ("period", "期别"),
+    ("product_id", "产品标识"),
+    ("source_version_id", "来源版本标识"),
+    ("assessment_timepoint", "评估时间点"),
+)
+
+
+def _endpoint_axis_values(observation: DesignObservation) -> dict[str, str | None]:
+    return {
+        "trial_id": observation.trial_id,
+        "outcome_id": _text(observation.outcome_id),
+        "endpoint_key": _text(observation.endpoint_key),
+        "group_id": observation.group_id,
+        "cohort_id": observation.cohort_id,
+        "period": _text(observation.period),
+        "product_id": observation.product_id,
+        "source_version_id": observation.source_version_id,
+        "assessment_timepoint": _text(observation.assessment_timepoint),
+    }
+
+
+def _endpoint_instance_projection(
+    observations: Sequence[DesignObservation],
+) -> dict[str, dict[str, Any]]:
+    """把 validated 观察的显式终点实例上下文投影为逐行载荷。
+
+    组合只发生在同一研究内部：完整性前提满足且领域十轴身份一致的
+    definition/timepoint/description 观察共享实例键；缺少必需上下文时独立
+    列示。不同组、评估时间和原始父路径是不同实例，不自动标记冲突；同一
+    完整身份同一字段的原文或阈值矛盾才标记待核，全部保留。不同研究之间
+    绝不因序号、角色或标题相似而配对，也不聚合或选择第一条。
+    """
+    axis_by_row: dict[str, dict[str, str | None]] = {}
+    identity_by_row: dict[str, tuple[str | None, ...]] = {}
+    values_by_field: dict[tuple[tuple[str | None, ...], str], set[tuple[str, ...]]] = {}
+    projection: dict[str, dict[str, Any]] = {}
+    for observation in observations:
+        if observation.field not in _ENDPOINT_FIELDS:
+            continue
+        values = _endpoint_axis_values(observation)
+        axis_by_row[observation.row_id] = values
+        missing = [
+            label
+            for axis, label in _ENDPOINT_INSTANCE_IDENTITY_AXES
+            if axis != "period" and not values[axis]
+            and not (axis == "product_id" and observation.product_id is None)
+        ]
+        if missing:
+            projection[observation.row_id] = {
+                "instance_id": None,
+                "complete": False,
+                "conflict": False,
+                "reason_zh": (
+                    "终点实例上下文不完整（缺少"
+                    + "、".join(missing)
+                    + "），保持独立列示，不参与同实例组合。"
+                ),
+            }
+            continue
+        # Reuse the scientific owner identity, including exact registry outcome
+        # parent. Different groups/windows are legitimate separate instances,
+        # not proof of a conflict just because outcome_id is the same.
+        identity: tuple[str | None, ...] = endpoint_instance_identity(observation)
+        identity_by_row[observation.row_id] = identity
+        values_by_field.setdefault((identity, observation.field), set()).add((
+            observation.source_text, _text(observation.operator),
+            _text(observation.threshold_value), _text(observation.threshold_unit),
+        ))
+    for observation in observations:
+        row_axes = axis_by_row.get(observation.row_id)
+        if row_axes is None or observation.row_id in projection:
+            continue
+        identity = identity_by_row[observation.row_id]
+        conflicting = any(
+            len(variants) > 1
+            for (context, _field), variants in values_by_field.items()
+            if context == identity
+        )
+        payload = _canonical_json(identity)
+        projection[observation.row_id] = {
+            "instance_id": "epinst-" + hashlib.sha256(payload).hexdigest()[:16],
+            "complete": True,
+            "conflict": conflicting,
+            "reason_zh": (
+                "同一完整终点实例的同一字段存在不同原文或阈值，保留全部观察"
+                "并标明待核冲突，不选择第一条或自动汇总。"
+            )
+            if conflicting
+            else "",
+        }
+    return projection
 
 
 def _page_observations(
@@ -940,6 +1042,10 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             return str(int(numeric))
         return str(numeric)
     source_text = _text(observation.display_text or observation.source_text)
+    if observation.source_clause_context is not None and observation.display_text is None:
+        # A source-qualified reading index is separate from its verbatim quote.
+        # Do not normalize extracted line breaks or silently summarize clauses.
+        return observation.source_text
     text = _registry_display_text(source_text)
     operator = _operator_zh(observation.operator)
     threshold = _text(observation.threshold_value)
@@ -948,7 +1054,7 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
     scale = _text(observation.scale)
 
     if observation.field == "trial_identity":
-        return _trial_name(data, observation.trial_id)
+        return observation.display_text or _trial_name(data, observation.trial_id)
     if observation.field == "target_population":
         # 独立复核 C r20（veto 第8项）：结构化最低年龄优先，
         # 同列口径统一为可比事实，不再自指"已记录（原文见来源）"
@@ -968,21 +1074,10 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             return f"{label} {operator}{threshold}{unit}" + (
                 f"（{timepoint}）" if timepoint else ""
             )
-        phrase_map = {
-            "chronic ad that had been present for at least 3 years": "特应性皮炎病程至少3年",
-            "participation in a prior dupilumab clinical trial": "既往参加过度普利尤单抗临床试验",
-            "prior treatment with dupilumab or tralokinumab": (
-                "既往接受过度普利尤单抗或曲罗芦单抗治疗"
-            ),
-            "treatment with tcs within 1 week before the baseline visit": (
-                "基线前1周内使用过外用糖皮质激素"
-            ),
-        }
-        folded = text.casefold().rstrip(".;")
-        value = next((label for phrase, label in phrase_map.items() if phrase in folded), "")
-        if not value:
-            value = _eligibility_source_text(observation.field, source_text)
+        value = _eligibility_source_text(observation.field, source_text)
         return value + (f"（{timepoint}）" if timepoint else "")
+    if observation.field in {"primary_endpoint_description", "secondary_endpoint_description"}:
+        return f"{_field_label(observation.field)}：{text}"
     if observation.field in {"experimental_arm", "control_arm"}:
         return _compact_arm_zh(data, observation)
     if observation.field == "dosing_regimen":
@@ -1018,7 +1113,7 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             return ep_zh + (f"（{disp}）" if disp else "")
         label = _native_endpoint_zh(source_text)
         if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
-            return "主要终点（原文见证据抽屉）"
+            return "主要终点（原文见数据依据）"
         _d = _tp_disp(timepoint)
         return label + (f"（{_d}）" if _d else "")
     if observation.field == "secondary_endpoint_definition":
@@ -1032,7 +1127,7 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
             # 以观察序号命名，原文保留在证据抽屉"简短原文"
             m_sec = re.search(r"sec(\d+)$", observation.observation_id)
             ordinal = m_sec.group(1) if m_sec else "0"
-            return f"次要终点{ordinal}（原文见证据抽屉）"
+            return f"次要终点{ordinal}（原文见数据依据）"
         _d = _tp_disp(timepoint)
         return label + (f"（{_d}）" if _d else "")
     if observation.field == "secondary_endpoint_timepoint":
@@ -1089,11 +1184,19 @@ _NO_TIMEPOINT_FIELDS = frozenset(
         "control_arm",
         "dosing_regimen",
         "planned_or_actual_sample_size",
+        "planned_sample_size_terms",
         "analysis_population",
         "analysis_sets",
         "statistical_comparisons",
         "multiplicity_adjustment",
         "missing_data_handling",
+        "comparison_logic",
+        "statistical_model",
+        "effect_size",
+        "multiplicity",
+        "sample_size_assumptions",
+        "estimand_intercurrent",
+        "missing_data_sensitivity",
         "design_kind",
         "study_design_type",
     }
@@ -1105,6 +1208,7 @@ def _chart_row(
     observation: DesignObservation,
     *,
     chart_type: str,
+    endpoint_instance: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     numeric = _numeric_for(observation)
     reported = observation.disclosure_state in {
@@ -1158,19 +1262,38 @@ def _chart_row(
         "value": value_text if reported else None,
         "renderable": reported,
         "_chart_type": chart_type,
-        "source_text": _text(observation.source_text),
+        "source_text": (
+            observation.source_text if observation.source_clause_context is not None
+            else _text(observation.source_text)
+        ),
         "source_field_name": _text(observation.source_field_name, "未列示"),
-        "source_location_zh": f"ClinicalTrials.gov · {_field_label(observation.field)}",
+        "source_location_zh": (
+            f"{_source_kind_zh(observation.source_role.value)} · "
+            f"{_field_label(observation.field)}"
+        ),
         "review_state": observation.review_state.value,
         "scale": (
-            lambda s: s + "（登记原文，未译）"
+            lambda s: s + _untranslated_note(observation.source_role.value)
             if (
                 s and len(re.findall(r"[A-Za-z]{3,}", s)) >= 2
                 and not re.search(r"[\u4e00-\u9fff]", s)
             )
             else s
         )(_text(observation.scale)),
+        # R24-146 有界执行及 R24-154 主线程修复：显式上下文逐行投影，
+        # 组合判据由 _endpoint_instance_projection 给出，浏览器只读不重算。
+        "source_version_id": _text(observation.source_version_id) or None,
+        "assessment_timepoint_raw": _text(observation.assessment_timepoint) or None,
+        "outcome_id": _text(observation.outcome_id) or None,
+        "endpoint_role_key": _text(observation.endpoint_key) or None,
+        "period": _text(observation.period) or None,
     }
+    if endpoint_instance is not None:
+        row["endpoint_instance"] = dict(endpoint_instance)
+    if observation.source_clause_context is not None:
+        row["source_topic_zh"] = observation.source_clause_context.label_zh
+        if observation.source_clause_context.continuations:
+            row["source_context_note_zh"] = "跨页条款，前后文各页分别定位"
     if numeric is not None and reported:
         projection = project_numeric(
             value=numeric, unit=_text(observation.threshold_unit),
@@ -1204,11 +1327,17 @@ def _chart_groups(
     if not observations:
         return ()
     chart_type = _PAGE_CHART_TYPE.get(page_id, "status_matrix")
+    endpoint_instances = _endpoint_instance_projection(observations)
     if page_id in {"inclusion-criteria", "exclusion-criteria"}:
         label = "公开入选标准条目" if page_id == "inclusion-criteria" else "公开排除标准条目"
         rows = []
         for observation in observations:
-            row = _chart_row(data, observation, chart_type="status_matrix")
+            row = _chart_row(
+                data,
+                observation,
+                chart_type="status_matrix",
+                endpoint_instance=endpoint_instances.get(observation.row_id),
+            )
             # 人工拆分的登记原文段数不是临床事实的数值，也不能代替原条款。
             row.pop("numeric_value", None)
             row.pop("numeric_projection", None)
@@ -1228,35 +1357,27 @@ def _chart_groups(
             },
         )
     if page_id == "sample-analysis-statistics":
-        sample_rows = [
-            item for item in observations if item.field == "planned_or_actual_sample_size"
-        ]
-        analysis_rows = [item for item in observations if item.field == "analysis_population"]
-        groups: list[dict[str, Any]] = []
-        if sample_rows:
-            groups.append(
-                {
-                    "title_zh": "计划或实际样本量",
-                    "rows": [_chart_row(data, item, chart_type="bubble") for item in sample_rows],
-                    "_chart_type": "bubble",
-                    "size_label_zh": "气泡大小表示样本量",
-                }
-            )
-        if analysis_rows:
-            groups.append(
-                {
-                    "title_zh": "分析人群",
-                    "rows": [
-                        _chart_row(data, item, chart_type="status_matrix") for item in analysis_rows
-                    ],
-                    "_chart_type": "status_matrix",
-                }
-            )
-        return tuple(groups)
+        # Source-comparison mode consumes one complete query. The former
+        # sample-size/analysis-only groups hid other statistics from search and
+        # its table even though they existed in a separate secondary matrix.
+        return ({
+            "title_zh": "样本量与统计分析原文对照",
+            "rows": [_chart_row(data, item, chart_type="status_matrix")
+                     for item in observations],
+            "_chart_type": "status_matrix",
+        },)
     return (
         {
             "title_zh": title,
-            "rows": [_chart_row(data, item, chart_type=chart_type) for item in observations],
+            "rows": [
+                _chart_row(
+                    data,
+                    item,
+                    chart_type=chart_type,
+                    endpoint_instance=endpoint_instances.get(item.row_id),
+                )
+                for item in observations
+            ],
             "_chart_type": chart_type,
         },
     )
@@ -1280,6 +1401,7 @@ def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
 _C_DOCUMENT_ROLE_ZH: dict[str, str] = {
     "registry": "临床试验登记页",
     "clinical-trial-registry": "临床试验登记页",
+    "clinical_trial_registry": "临床试验登记页",
     "primary_registry": "主要登记记录",
     "registry_result": "登记结果记录",
     "primary_trial_report": "主要试验报告",
@@ -1295,6 +1417,7 @@ _C_DOCUMENT_ROLE_ZH: dict[str, str] = {
 }
 _C_DOCUMENT_ROLE_ALIASES: dict[str, str] = {
     "clinical-trial-registry": "registry",
+    "clinical_trial_registry": "registry",
 }
 _C_HEADING_ZH: dict[str, str] = {
     "Identification": "研究基本信息",
@@ -1311,6 +1434,13 @@ _C_HEADING_ZH: dict[str, str] = {
 
 def _source_kind_zh(role: str) -> str:
     return _C_DOCUMENT_ROLE_ZH.get(role, "来源记录")
+
+
+def _untranslated_note(role: str) -> str:
+    kind = "登记" if role in {
+        "registry", "clinical-trial-registry", "clinical_trial_registry",
+    } else _source_kind_zh(role)
+    return f"（{kind}原文，未译）"
 
 
 def _safe_locator(observation: DesignObservation) -> EvidenceLocator | None:
@@ -1414,6 +1544,9 @@ def _evidence_view(
         explanation=_evidence_field(
             f"本条信息摘自{source_kind}，"
             f"适用于{_observation_cohort_zh(observation)}；"
+            + ("本条为方案/SAP的设计或分析约定，不代表已观察的临床结果；"
+               if observation.source_role is SourceRole.PROTOCOL_SAP else "")
+            +
             "来源版本、逐字原文与精确位置均已定位，仍不代替医学裁决；"
             f"当前公开情况为{_state_label(observation.disclosure_state)}。"
             if located
@@ -1429,7 +1562,28 @@ def _evidence_view(
             else OriginalTextStatus.NOT_PROVIDED
         ),
         user_edit=data.user_edits.get(observation.row_id),
-        conflicts=(),
+        source_clause_context=observation.source_clause_context if located else None,
+        conflicts=tuple(
+            EvidenceConflict(
+                conflicting_source_version_id=ref.source_id,
+                conflicting_value_zh=ref.original_text,
+                conflict_note_zh=(
+                    "来源表述存在待裁决差异，未自动选定优先来源或结论。"
+                    + relation.description
+                ),
+                locator=ref.locator,
+            )
+            for relation in (
+                observation.source_clause_context.relations
+                if observation.source_clause_context is not None and located else ()
+            )
+            if relation.status in {
+                "unresolved_internal_tension", "unresolved_version_divergence",
+                "unresolved_wording_divergence", "unresolved_scope_difference",
+            }
+            for ref in relation.references
+            if ref.reference_id != observation.source_row_id
+        ),
         historical_versions=(),
     )
 
@@ -1437,9 +1591,9 @@ def _evidence_view(
 def _filter_dimensions_for_rows(
     data: ReportCPortalData,
     observations: Sequence[DesignObservation],
-) -> tuple[list[dict[str, str]], dict[str, dict[str, str]]]:
-    filter_rows: list[dict[str, str]] = []
-    dimensions: dict[str, dict[str, str]] = {}
+) -> tuple[list[dict[str, str | None]], dict[str, dict[str, str | None]]]:
+    filter_rows: list[dict[str, str | None]] = []
+    dimensions: dict[str, dict[str, str | None]] = {}
     for observation in observations:
         row = {
             "id": observation.row_id,
@@ -1459,7 +1613,7 @@ def _filter_dimensions_for_rows(
 
 def _filter_groups(
     data: ReportCPortalData,
-    filter_rows: Sequence[Mapping[str, str]],
+    filter_rows: Sequence[Mapping[str, str | None]],
 ) -> tuple[dict[str, Any], ...]:
     groups: list[dict[str, Any]] = []
     for dimension, label in _FILTER_DIMENSION_LABELS.items():
@@ -1617,11 +1771,13 @@ def _table_rows(
     page_id: str,
 ) -> tuple[dict[str, Any], ...]:
     rows: list[dict[str, Any]] = []
+    endpoint_instances = _endpoint_instance_projection(observations)
     for observation in observations:
         chart = _chart_row(
             data,
             observation,
             chart_type=_PAGE_CHART_TYPE.get(page_id, "status_matrix"),
+            endpoint_instance=endpoint_instances.get(observation.row_id),
         )
         chart["source_version"] = observation.source_version_id
         if chart.get("value") is None:
@@ -1634,9 +1790,9 @@ def _table_rows(
         elif (
             isinstance(_v, str)
             and re.findall(r"[A-Za-z]{3,}", _v)
-            and not _v.endswith("（登记原文，未译）")
+            and not _v.endswith(_untranslated_note(observation.source_role.value))
         ):
-            chart["value"] = _v + "（登记原文，未译）"
+            chart["value"] = _v + _untranslated_note(observation.source_role.value)
         if chart.get("scale") in {None, ""}:
             chart["scale"] = "不适用"
         if chart.get("group_id") in {None, ""}:
@@ -1861,14 +2017,25 @@ def _external_source_entries(
     entries: list[dict[str, str]] = []
     seen: set[str] = set()
     for observation in observations:
-        # 独立复核修复：外链按试验落到具体登记号页面（含 NCT 编号），
-        # 同试验多字段合并为一条，不再折疊成单条首页链接。
-        nct = observation.trial_id.upper()
-        url = f"https://clinicaltrials.gov/study/{nct}"
-        label = f"{_trial_name(data, observation.trial_id)} · {nct}"
-        if label in seen:
+        # A protocol/publication is not the registry page. Preserve the actual
+        # source URL. Audience document links collapse identical URLs only;
+        # per-observation scientific source versions and locators stay intact.
+        locator = clean_evidence_locator(observation.source_locator)
+        url = locator.url if locator is not None else None
+        if not url:
             continue
-        seen.add(label)
+        parsed = urlsplit(url)
+        if parsed.scheme not in {"https", "http"} or not parsed.netloc:
+            continue
+        key = url
+        if key in seen:
+            continue
+        seen.add(key)
+        kind = _source_kind_zh(observation.source_role.value)
+        label = (
+            f"{_trial_name(data, observation.trial_id)} · "
+            f"{observation.trial_id.upper()} · {kind}"
+        )
         entries.append({"label": label, "url": url})
     return tuple(entries)
 
@@ -1880,7 +2047,7 @@ def _render_page_context(
     catalog: ReportCatalog,
     prefix: str = "",
     current: str | None = None,
-    trial: TrialRow | None = None,
+    trial: StudyRow | None = None,
     publication_limitation_zh: str | None = None,
 ) -> dict[str, Any]:
     page_id = page.id if trial is None else "trial-detail"
@@ -1931,13 +2098,11 @@ def _render_page_context(
             # 证据不足收口：不再渲染无信息量的空轴图
             groups = ()
     if catalog_page_id == "evidence-limitations" and trial is None:
-        nct_routes = sorted(
-            {
-                f"https://clinicaltrials.gov/study/{o.trial_id.upper()}"
-                for o in data.observations
-                if re.fullmatch(r"nct\d{8}", o.trial_id, re.I)
-            }
-        )
+        source_routes = sorted({entry["url"] for entry in
+                                _external_source_entries(data, data.observations)})
+        source_kinds = "、".join(sorted({
+            _source_kind_zh(o.source_role.value) for o in data.observations
+        }))
         evidence_limitations = {
             "data_cutoff": _text(data.data_cutoff)[:10],
             "source_count": len(
@@ -1946,13 +2111,12 @@ def _render_page_context(
             "trial_count": len(data.trials),
             "product_count": len(data.products),
             "fact_count": len(data.observations),
-            "registry_links": tuple(nct_routes),
+            "source_links": tuple(source_routes),
             "notes": (
-                "本报告的设计事实仅来自 ClinicalTrials.gov 当前记录检索报文"
-                "（数据截止见上），未接入监管、专利与文献层来源；"
-                "中国境内登记路线访问受阻，已按合同如实记档；"
-                "样本量未披露的试验未纳入试验明细；"
-                "统计与分析维度登记未公开处以显式声明呈现，不推断。"
+                f"本包实际绑定的来源类型为{source_kinds}（数据截止见上）。"
+                "此处列示实际来源和覆盖范围，不据此宣称全球或中国竞品检索已闭合；"
+                "未提取与未公开应在具体事实中区分，缺失样本量不构成删除研究的理由；"
+                "统计语境按原文保留，不将缺失补成零或推断来源中没有的设计。"
             ),
         }
     # 核心比较页省略首屏快速筛选，但折叠面板仍保留试验/产品选择。
@@ -1968,6 +2132,8 @@ def _render_page_context(
         observations,
         page_id=catalog_page_id if trial is None else "trial-detail",
     )
+    # Statistics now has one complete, searchable source comparison plus its
+    # folded full table. Do not repeat every paragraph in a second matrix.
     show_design_matrix = catalog_page_id in {"overview", "design-map", "trial-profile"}
     if show_design_matrix:
         design_matrix_rows, design_matrix_groups, design_matrix_trials = _design_matrix(
@@ -1984,7 +2150,7 @@ def _render_page_context(
                 f"围绕 {n_trials} 项注册试验，从试验设计、人群定义、入选标准、"
                 "终点与随访时间窗等维度并列呈现登记事实。")},
             {"label": "设计证据", "text": (
-                "全部设计事实来自登记来源并绑定观察定位；模式与权衡并列展示，不作排名。")},
+                "设计事实按实际绑定来源保留观察定位；模式与权衡并列展示，不作排名。")},
             {"label": "阅读边界", "text": (
                 "设计要素差异反映各试验的科学问题不同，不构成优劣判断；"
                 "入排与人群定义以登记原文为准。")},
@@ -2068,9 +2234,12 @@ def render_report_c_site(
     *,
     publication_limitation_zh: str | None = None,
     active_revision: ActiveFactRevision | None = None,
+    review_candidate: bool = False,
 ) -> tuple[Path, ...]:
-    """Render all C catalog pages plus every trial dossier page."""
+    """Render C pages; explicit review candidates cannot become current deliveries."""
     site_root = Path(site_root)
+    if review_candidate and active_revision is not None:
+        raise ReportCPortalError("待复核资料不能消费当前事实修订")
     consumers: list[PortalConsumerNode] = []
     if active_revision is not None:
         observations = list(data.observations)
@@ -2095,6 +2264,13 @@ def render_report_c_site(
             except ValueError as error:
                 raise ReportCPortalError(str(error)) from error
             if (fact.model_extra or {}).get("review_state") != "user_modified":
+                pages = [page_id for page_id, fields in _PAGE_FIELDS.items()
+                         if fields is not None and observations[index].field in fields]
+                if not pages:
+                    raise ReportCPortalError("C来源设计观察没有既有专题消费者")
+                consumers.append(source_consumer_node(
+                    fact, verified_binding, page=f"{pages[0]}.html",
+                ))
                 continue
             row_payload = observations[index].model_dump(mode="python")
             original_value = (
@@ -2173,10 +2349,15 @@ def render_report_c_site(
         data = data.model_copy(
             update={"observations": tuple(observations), "user_edits": user_edits}
         )
-    _assert_design_gate(data)
+    if not review_candidate:
+        _assert_design_gate(data)
     _reset_site_root(site_root)
     _copy_assets(site_root)
     (site_root / "data").mkdir(parents=True, exist_ok=True)
+    research_status = "unreviewed_candidate" if review_candidate else "design_gate_passed"
+    (site_root / "data/research-status.json").write_bytes(_canonical_json({
+        "schema_version": "1.0", "report": "C", "delivery_status": research_status,
+    }))
 
     registry = PageRegistry.load()
     catalog = registry.catalog(ReportKind.C)
@@ -2206,6 +2387,7 @@ def render_report_c_site(
             publication_limitation_zh=publication_limitation_zh,
         )
         context["current_revision"] = active_revision.revision if active_revision else 0
+        context["review_status"] = research_status
         output = site_root / f"{page.id}.html"
         output.write_text(page_template.render(**context), encoding="utf-8")
         generated.append(output)
@@ -2225,6 +2407,7 @@ def render_report_c_site(
         )
         output = trials_dir / f"{trial.id}.html"
         context["current_revision"] = active_revision.revision if active_revision else 0
+        context["review_status"] = research_status
         output.write_text(trial_template.render(**context), encoding="utf-8")
         generated.append(output)
 
@@ -2330,6 +2513,29 @@ def render_report_c_site(
     return tuple(generated)
 
 
+def render_report_c_review_candidate(
+    data: ReportCPortalData,
+    site_root: Path,
+    *,
+    publication_limitation_zh: str | None = None,
+) -> tuple[Path, ...]:
+    """Render the same C library for review, preserving unresolved/incomplete facts.
+
+    This is not a fourth report, an accepted delivery, or a gate bypass for current.
+    The immutable review-only marker is verified by the current publication layer.
+    Existing artifacts are never overwritten by this explicit candidate entry.
+    """
+    site_root = Path(site_root)
+    if site_root.is_symlink() or (site_root.exists() and (
+        not site_root.is_dir() or any(site_root.iterdir())
+    )):
+        raise ReportCPortalError("待复核资料需要新的空目录，不覆盖既有证据")
+    return render_report_c_site(
+        data, site_root, publication_limitation_zh=publication_limitation_zh,
+        review_candidate=True,
+    )
+
+
 def validate_active_fact_revision_c(
     data: ReportCPortalData,
     active_revision: ActiveFactRevision,
@@ -2369,7 +2575,7 @@ def active_fact_binding_for_c(
         collection="observations",
         row_id=row.row_id,
         product_id=row.product_id,
-        drug_name=products[row.product_id].name,
+        drug_name=(products[row.product_id].name if row.product_id is not None else None),
         trial_id=row.trial_id,
         registry_id=trials[row.trial_id].display_id,
         group_id=row.group_id,

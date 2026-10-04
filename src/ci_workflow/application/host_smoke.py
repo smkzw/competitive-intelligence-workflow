@@ -27,6 +27,7 @@ import os
 import shutil
 import subprocess
 import sys
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from importlib import metadata
@@ -47,6 +48,8 @@ from ci_workflow.application.fixture_runner import (
     _resolve_case_dir,
     _validate_catalog,
 )
+from ci_workflow.application.host_smoke_scenario import interruption_receipt_binding
+from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.hosts.receipt import (
     HostArtifactBinding,
@@ -93,6 +96,8 @@ _VERSION_PROBE_TIMEOUT_SECONDS = 15
 _SMOKE_TIMEOUT_SECONDS = 7200
 _TAIL_CHARS = 400
 _HOST_COMPLETION_MARKER = "HOST_SMOKE_DONE exit=0"
+# 不透明选择器：真实宿主冒烟拒绝 auto/default，必须给出具体模型/强度。
+_OPAQUE_SELECTOR_VALUES = frozenset({"auto", "default"})
 
 
 class HostSmokeError(RuntimeError):
@@ -442,6 +447,138 @@ def _run_evidence(
 # ─── 真实入口冒烟运行器 ────────────────────────────────────────────────────
 
 
+def _require_explicit_selector(host: str, label: str, value: str | None) -> str:
+    """校验单个显式选择器：拒绝未指定、空值与不透明 auto/default。
+
+    失败关闭发生在任何子进程（含宿主/模型子进程）启动之前；返回去除首尾
+    空白的规范化取值。
+    """
+    if value is None or not value.strip():
+        raise HostSmokeError(
+            f"真实宿主 {host} 的{label}必须显式指定；"
+            "拒绝未指定或空值，禁止回退到宿主配置默认（失败关闭，未启动子进程）"
+        )
+    normalized = value.strip()
+    if normalized.casefold() in _OPAQUE_SELECTOR_VALUES:
+        raise HostSmokeError(
+            f"真实宿主 {host} 的{label}不得使用不透明取值 {normalized!r}；"
+            "请给出具体模型/强度（失败关闭，未启动子进程）"
+        )
+    return normalized
+
+
+def _require_provider_qualified_omp_model(value: str) -> str:
+    """OMP 模型必须提供方限定（provider/model），拒绝模糊匹配与分量别名。
+
+    OMP ``--model`` 支持模糊匹配（如 ``opus``、``gpt-5.2``），会随本机配置
+    静默解析到不同提供方/模型；真实宿主冒烟只接受 ``openai/gpt-5.2`` 这类
+    提供方限定的显式身份。提供方或模型分量本身为 ``auto``/``default``
+    时同样是不透明选择（如 ``openai/auto``、``default/gpt-5.2``），一律拒绝。
+    """
+    provider, separator, model = value.partition("/")
+    if not separator or not provider.strip() or not model.strip():
+        raise HostSmokeError(
+            f"真实宿主 omp 的模型必须是提供方限定形式 provider/model，当前为 {value!r}；"
+            "拒绝模糊匹配的隐式提供方选择（失败关闭，未启动子进程）"
+        )
+    if (
+        provider.strip().casefold() in _OPAQUE_SELECTOR_VALUES
+        or model.strip().casefold() in _OPAQUE_SELECTOR_VALUES
+    ):
+        raise HostSmokeError(
+            f"真实宿主 omp 的模型提供方或模型分量不得为不透明取值 auto/default，"
+            f"当前为 {value!r}；请显式给出具体 provider/model"
+            "（失败关闭，未启动子进程）"
+        )
+    return value
+
+
+def _explicit_host_selectors(
+    host: str,
+    *,
+    codex_model: str | None,
+    codex_reasoning: str | None,
+    omp_model: str | None,
+    omp_thinking: str | None,
+    hermes_provider: str | None,
+    hermes_model: str | None,
+    hermes_reasoning: str | None,
+) -> dict[str, str]:
+    """校验并返回该真实宿主必需的显式模型/强度选择器（失败关闭）。
+
+    选择器是**请求身份**：命令行按请求值构造宿主进程。宿主最终实际使用的
+    模型/强度不在本进程可观测范围内，本模块不据此主张已观测运行身份。
+    """
+    if host == "codex":
+        return {
+            "codex_model": _require_explicit_selector(host, "模型（--model）", codex_model),
+            "codex_reasoning": _require_explicit_selector(
+                host, "推理强度（model_reasoning_effort）", codex_reasoning
+            ),
+        }
+    if host == "hermes":
+        return {
+            "hermes_provider": _require_explicit_selector(
+                host, "提供方（--provider）", hermes_provider
+            ),
+            "hermes_model": _require_explicit_selector(host, "模型（--model）", hermes_model),
+            "hermes_reasoning": _require_explicit_selector(
+                host, "推理强度（--reasoning）", hermes_reasoning
+            ),
+        }
+    return {
+        "omp_model": _require_provider_qualified_omp_model(
+            _require_explicit_selector(host, "模型（--model）", omp_model)
+        ),
+        "omp_thinking": _require_explicit_selector(host, "思考强度（--thinking）", omp_thinking),
+    }
+
+
+# 三宿主完整选择器的七项字段名与宿主参数名一致（批次/阶段/CLI 共用同一映射）。
+HOST_SELECTION_KEYS: tuple[str, ...] = (
+    "codex_model",
+    "codex_reasoning",
+    "hermes_provider",
+    "hermes_model",
+    "hermes_reasoning",
+    "omp_model",
+    "omp_thinking",
+)
+
+
+def validate_explicit_host_selection(
+    selection: Mapping[str, str | None],
+) -> dict[str, str]:
+    """校验三宿主完整显式选择器映射并返回规范化冻结副本（失败关闭）。
+
+    - 未声明字段立即拒绝；七项字段必须齐全（未指定/空值/不透明 auto/default
+      任一即拒绝，包括 OMP 的提供方/模型分量别名）；
+    - 校验发生在任何宿主入口或版本解析与任何宿主子进程启动之前；
+    - 返回去除首尾空白的七项规范化取值，供批次与验收阶段冻结后原样下发。
+
+    选择器是**请求身份**；宿主实际运行身份不在本进程可观测范围内。
+    """
+    unknown = sorted(set(selection) - set(HOST_SELECTION_KEYS))
+    if unknown:
+        raise HostSmokeError(f"真实宿主选择器包含未声明字段：{'、'.join(unknown)}")
+    values = {key: selection.get(key) for key in HOST_SELECTION_KEYS}
+    normalized: dict[str, str] = {}
+    for host in HOSTS:
+        normalized.update(
+            _explicit_host_selectors(
+                host,
+                codex_model=values["codex_model"],
+                codex_reasoning=values["codex_reasoning"],
+                omp_model=values["omp_model"],
+                omp_thinking=values["omp_thinking"],
+                hermes_provider=values["hermes_provider"],
+                hermes_model=values["hermes_model"],
+                hermes_reasoning=values["hermes_reasoning"],
+            )
+        )
+    return normalized
+
+
 def run_host_smoke(
     host: str,
     *,
@@ -452,6 +589,10 @@ def run_host_smoke(
     catalog_path: Path | None = None,
     resume: bool = False,
     require_external_host_process: bool = False,
+    codex_model: str | None = None,
+    codex_reasoning: str | None = None,
+    omp_model: str | None = None,
+    omp_thinking: str | None = None,
     hermes_resume_session: str | None = None,
     hermes_provider: str | None = None,
     hermes_model: str | None = None,
@@ -464,9 +605,30 @@ def run_host_smoke(
     ``model_dump(mode="json")``。运行结果与 catalog 预期不一致时诚实失败
     （不产回执）；宿主可执行文件证据缺失时产 ``provenance="unavailable"``
     证据块（status 由合同推导为 host_unavailable，不冒充真实宿主通过）。
+
+    真实宿主失败关闭（``require_external_host_process=True``）：Codex 必须
+    显式给出模型与推理强度，Hermes 必须显式给出提供方/模型/推理强度，OMP
+    必须显式给出提供方限定模型与思考强度；未指定、空值或 ``auto``/``default``
+    等不透明取值在任何子进程启动之前拒绝，不静默采用宿主配置默认。显式选择器
+    是**请求身份**，不是对宿主实际运行身份的观测；回执不承载该主张。
     """
     if host not in HOSTS:
         raise HostSmokeError(f"未知宿主：{host}（可用：{'、'.join(HOSTS)}）")
+    host_selectors: dict[str, str] = {}
+    if require_external_host_process:
+        host_selectors = _explicit_host_selectors(
+            host,
+            codex_model=codex_model,
+            codex_reasoning=codex_reasoning,
+            omp_model=omp_model,
+            omp_thinking=omp_thinking,
+            hermes_provider=hermes_provider,
+            hermes_model=hermes_model,
+            hermes_reasoning=hermes_reasoning,
+        )
+    # Fail before even probing a native host: successful model work cannot
+    # compensate for an installation that cannot validate its final receipt.
+    _host_receipt_schema_validators()
     project_root = project_root.expanduser().resolve()
     real_entry = entry if entry is not None else resolve_real_entry()
     case, _case_dir = _load_smoke_case(catalog_path)
@@ -518,12 +680,19 @@ def run_host_smoke(
             f"{_HOST_COMPLETION_MARKER}"
         )
         if host == "codex":
+            # 显式模型与推理强度是本次运行的请求身份（codex exec 支持
+            # -m/--model 与 -c model_reasoning_effort）；宿主实际运行身份
+            # 不在本进程可观测范围内。
             argv = [
                 host_path,
                 "exec",
                 "--skip-git-repo-check",
                 "--sandbox",
                 "danger-full-access",
+                "-m",
+                host_selectors["codex_model"],
+                "-c",
+                f'model_reasoning_effort="{host_selectors["codex_reasoning"]}"',
                 "-C",
                 str(_ROOT),
                 prompt,
@@ -543,14 +712,20 @@ def run_host_smoke(
             ]
             if hermes_resume_session:
                 argv.extend(["--resume", hermes_resume_session, "--no-restore-cwd"])
-            if hermes_provider:
-                argv.extend(["--provider", hermes_provider])
-            if hermes_model:
-                argv.extend(["--model", hermes_model])
-            if hermes_reasoning:
-                argv.extend(["--reasoning", hermes_reasoning])
+            # 已通过失败关闭校验：提供方/模型/推理强度在此分支必然显式。
+            argv.extend(
+                [
+                    "--provider",
+                    host_selectors["hermes_provider"],
+                    "--model",
+                    host_selectors["hermes_model"],
+                    "--reasoning",
+                    host_selectors["hermes_reasoning"],
+                ]
+            )
             argv.extend(["-q", prompt])
         else:
+            # OMP --model 要求 provider/model 形式；--thinking 为具体强度。
             argv = [
                 host_path,
                 "--print",
@@ -561,6 +736,10 @@ def run_host_smoke(
                 "120m",
                 "--approval-mode",
                 "yolo",
+                "--model",
+                host_selectors["omp_model"],
+                "--thinking",
+                host_selectors["omp_thinking"],
                 prompt,
             ]
     else:
@@ -633,6 +812,7 @@ def run_host_smoke(
         raise HostSmokeError(f"真实入口运行后事件链不可读：{exc}") from exc
 
     scenario_record: dict[str, Any] | None = None
+    interruption_evidence: HostInterruptionBinding | None = None
     if require_external_host_process:
         scenario_path = project_root / "state/host-smoke-v1.json"
         try:
@@ -642,6 +822,12 @@ def run_host_smoke(
         if not isinstance(loaded, dict):
             raise HostSmokeError("真实宿主的阻断与恢复记录不是 JSON 对象")
         scenario_record = loaded
+        try:
+            interruption_evidence = interruption_receipt_binding(
+                loaded["initial"], verify_project_workspace(project_root).contract,
+            )
+        except (KeyError, TypeError, ValueError, RuntimeError) as exc:
+            raise HostSmokeError("真实宿主初始恢复证据或内部项目合同无效") from exc
 
     package_identity = _installed_package_identity()
     run_evidence = _run_evidence(
@@ -683,11 +869,7 @@ def run_host_smoke(
                 case_digest=case["case_digest"],
                 inputs={inp["path"]: inp["sha256"] for inp in case["inputs"]},
             ),
-            interruption=(
-                HostInterruptionBinding(**scenario_record["initial"])
-                if scenario_record is not None
-                else None
-            ),
+            interruption=interruption_evidence,
             recovery=(
                 HostRecoveryBinding(**scenario_record["recovery"])
                 if scenario_record is not None
@@ -919,7 +1101,13 @@ def verify_host_smoke_receipt(
             raise HostSmokeReceiptError("宿主回执验证失败：阻断恢复记录不可读") from exc
         if not isinstance(scenario, dict):
             raise HostSmokeReceiptError("宿主回执验证失败：阻断恢复记录不是对象")
-        if scenario.get("initial") != model.interruption.model_dump(mode="json"):
+        try:
+            initial_binding = interruption_receipt_binding(
+                scenario["initial"], verify_project_workspace(resolved_root).contract,
+            )
+        except (KeyError, TypeError, ValueError, RuntimeError) as exc:
+            raise HostSmokeReceiptError("宿主回执验证失败：初始内部合同或恢复记录无效") from exc
+        if initial_binding != model.interruption:
             raise HostSmokeReceiptError("宿主回执验证失败：初始 no-draft 记录与回执不一致")
         if scenario.get("recovery") != model.recovery.model_dump(mode="json"):
             raise HostSmokeReceiptError("宿主回执验证失败：补件恢复记录与回执不一致")

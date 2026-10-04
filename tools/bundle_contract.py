@@ -40,6 +40,9 @@ PORTAL_ASSET_MIRROR_FILES: tuple[str, ...] = (
     "report-b.js",
     "report-c.css",
     "report-c.js",
+    "kangzhe-site.css",
+    "kangzhe-site.js",
+    "kz-motion.js",
 )
 
 # These names are never valid payloads for a portable candidate bundle. The
@@ -113,6 +116,7 @@ _FORBIDDEN_SUFFIXES = frozenset({".pyc", ".pyo", ".log", ".tmp", ".swp"})
 _V1_DEFERRED_PATHS = frozenset(
     {
         "assets/html-ppt",
+        "contracts/kangzhe/design_specs/assets/htmlppt",
         "fixtures/synthetic/pdf-native-slice",
         "src/ci_workflow/application/monitoring_service.py",
         "src/ci_workflow/application/ppt_master_job.py",
@@ -395,11 +399,15 @@ DEFAULT_ALLOWLIST: tuple[str, ...] = (
     "src/ci_workflow/renderers/portal",
     "src/ci_workflow/sources",
     "src/ci_workflow/storage",
+    "src/ci_workflow/schemas/host-receipt.schema.json",
     "skills/competitive-intelligence-workflow",
     "skills/_internal",
     "schemas",
     "policies",
-    "contracts/kangzhe",
+    "contracts/kangzhe/manifest.json",
+    "contracts/kangzhe/design.md",
+    "contracts/kangzhe/v6-site",
+    "contracts/kangzhe/design_specs/schemas",
     "assets/brand",
     "assets/portal",
     "assets/third-party/echarts",
@@ -439,6 +447,8 @@ FINAL_REQUIRED_CONTENT: tuple[str, ...] = (
     "schemas/package-manifest.schema.json",
     "schemas/research-package.schema.json",
     "schemas/user-fact-save.schema.json",
+    "schemas/host-receipt.schema.json",
+    "src/ci_workflow/schemas/host-receipt.schema.json",
     "schemas/scientific-qc-verdict.schema.json",
     "schemas/scientific-review-receipt.schema.json",
     "assets/portal/manifest.json",

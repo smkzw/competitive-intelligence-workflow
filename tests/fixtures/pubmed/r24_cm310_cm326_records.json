@@ -1,0 +1,92 @@
+{
+  "provenance": {
+    "discovery_sha256": "d85aa730a69e3fbce76cab2b41793d0ecb7bc18d4f0de03b061f04082101c620",
+    "record_page": {
+      "page_number": 1,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&rettype=abstract&id=41022848%2C40824573%2C39220573%2C38482462%2C37483544",
+      "acquired_at": "2026-10-03T20:22:39.381667Z",
+      "raw_asset": {
+        "sha256": "6cb10a2e79525c1c919c3413d96ae01d5bd0d4ebca27e597062b2f3eb382748c",
+        "relative_path": "evidence/raw/sha256/6c/6cb10a2e79525c1c919c3413d96ae01d5bd0d4ebca27e597062b2f3eb382748c.bin",
+        "byte_size": 129664,
+        "media_type": "application/xml"
+      },
+      "pmids": [
+        "41022848",
+        "40824573",
+        "39220573",
+        "38482462",
+        "37483544"
+      ]
+    },
+    "classification_authority": "Unreviewed candidate metadata; not accepted clinical evidence"
+  },
+  "target_nct_ids": [
+    "NCT04805398",
+    "NCT05131464",
+    "NCT05324137",
+    "NCT05436275",
+    "NCT06372678",
+    "NCT07420257"
+  ],
+  "records": [
+    {
+      "pmid": "41022848",
+      "title": "An anti-TSLP monoclonal antibody for uncontrolled CRSwNP: the DUBHE randomized clinical trial.",
+      "abstract": "To explore the therapeutic potential of blocking thymic stromal lymphopoietin (TSLP) in patients with chronic rhinosinusitis with nasal polyps (CRSwNP), we conducted a phase 1b/2a, randomized, double-blind, placebo-controlled trial to assess the safety and efficacy of CM326, a monoclonal antibody against TSLP. We enrolled 84 eligible patients with uncontrolled CRSwNP and stratified them based on baseline tissue eosinophil count. Patients are assigned to receive CM326 220 mg (n = 40) or placebo (n = 20) every 2 weeks (Q2W) and CM326 220 mg (n = 20) or placebo (n = 4) every 4 weeks (Q4W) for 16 weeks. Subsequently, all patients continue on CM326 220 mg Q2W or Q4W for an additional 36 weeks, followed by a 12-week follow up. Primary endpoints are safety of CM326 and change from baseline in NPS at week 16 in patients with eosinophilic CRSwNP (ECRSwNP). Main secondary endpoints include the change from baseline in NPS at week 16 in non-eosinophilic CRSwNP (nonECRwNP) and pharmacodynamic markers. Throughout the 64-week study, all treatment-emergent adverse events (TEAEs) are mild or moderate. CM326 Q2W improves NPS in patients with ECRSwNP compared with placebo at week 16 (mean difference [95% CI], -1.2 [-2.3 to -0.1], P = 0.04), with sustained benefits during the open-label and follow-up periods. Notably, peripheral blood and tissue eosinophil counts and concentrations of plasma IL-13 and IL-5 are reduced by week 16 with the treatment of CM326 Q2W versus placebo. A post-hoc analysis demonstrates that all participants with baseline TSLP > 330 fg/mL achieve a substantial reduction in NPS by week 16 with the treatment of CM326 Q2W (mean difference vs. placebo: -1.75 [95%CI, -3.06 to -0.44], P = 0.01). Overall, CM326 is well tolerated and effective in patients with uncontrolled ECRSwNP. A baseline plasma TSLP level of 330 fg/mL may serve as a predictive marker for treatment efficacy of CM326. ClinicalTrials.gov Identifier: NCT05324137.",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Clinical Trial, Phase II",
+        "Clinical Trial, Phase I"
+      ],
+      "registry_nct_ids": [
+        "NCT05324137"
+      ]
+    },
+    {
+      "pmid": "40824573",
+      "title": "Stapokibart for Severe Uncontrolled Chronic Rhinosinusitis With Nasal Polyps: The CROWNS-2 Randomized Clinical Trial.",
+      "abstract": "IMPORTANCE: Chronic rhinosinusitis with nasal polyps causes severe symptoms and impaired quality of life. Stapokibart is a novel monoclonal antibody that targets interleukin 4Rα. OBJECTIVE: To assess the efficacy and safety of stapokibart as an add-on treatment to intranasal corticosteroids in patients with severe uncontrolled chronic rhinosinusitis with nasal polyps. DESIGN, SETTING, AND PARTICIPANTS: From August 9, 2022, to April 28, 2023, this randomized, double-blind, phase 3 clinical trial, conducted at 51 hospitals in China, enrolled adult patients with chronic rhinosinusitis with nasal polyps who had a history of systemic corticosteroid use or sinonasal surgery and a bilateral nasal polyp score of 5 or greater (on a scale of 0-8) and a weekly mean nasal congestion score of 2 or greater (on a scale of 0-3). Eosinophilic chronic rhinosinusitis with nasal polyps was defined as blood eosinophils of 6.9% or greater (without asthma) or 3.7% or greater (with asthma) or an eosinophil count of 55 per high-power field or greater or 27% or greater in nasal polyp tissue. Patient follow-up was completed on June 25, 2024. INTERVENTIONS: Four weeks after initiation of mometasone furoate nasal spray, 100 µg in each nostril daily, patients were randomized to receive subcutaneous stapokibart, 300 mg, or placebo (1:1) every 2 weeks for 24 weeks. Both groups then received stapokibart for 28 weeks. MAIN OUTCOMES AND MEASURES: Co-primary end points were changes from baseline in nasal polyp score (meaningful change threshold [MCT] ≥1 point) and nasal congestion score (MCT ≥0.5 points) at week 24 in all patients and in the population with eosinophilia. RESULTS: Among 180 patients randomized, 179 (mean age, 45 [SD, 12.9] years; 61 [34.1%] women) received at least 1 treatment dose (n = 90 for stapokibart; n = 89 for placebo). In the overall population, the least-squares (LS) mean change in nasal polyp score from baseline to week 24 in the stapokibart vs placebo groups was -2.6 vs -0.3 points, respectively, (LS mean difference, -2.3; 95% CI, -2.6 to -1.9; P < .001); in the population with eosinophilia, the change was -3.0 vs -0.4 points, respectively (LS mean difference, -2.5; 95% CI, -2.9 to -2.1; P < .001). The LS mean change in nasal congestion score from baseline to week 24 in the stapokibart vs placebo groups was -1.2 vs -0.5 points, respectively, in the overall population (LS mean difference, -0.7; 95% CI, -0.9 to -0.5; P < .001) and -1.3 vs -0.5 points, respectively, in the population with eosinophilia (LS mean difference, -0.8; 95% CI, -1.0 to -0.6; P < .001). Serious adverse events were rare (2.2% in the stapokibart group vs 1.1% in the placebo group). Higher rates of arthralgia (7.8% vs 0%) and hyperuricemia (5.6% vs 1.1%) were reported with stapokibart vs placebo, respectively. CONCLUSIONS AND RELEVANCE: Among patients with severe chronic rhinosinusitis with nasal polyps treated with a daily intranasal corticosteroid, stapokibart reduced polyp size and severity of nasal symptoms at 24 weeks. TRIAL REGISTRATION: ClinicalTrials.gov Identifier: NCT05436275.",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "registry_nct_ids": [
+        "NCT05436275"
+      ]
+    },
+    {
+      "pmid": "39220573",
+      "title": "Anti-IL-4Rα monoclonal antibody (CM310) in patients with chronic rhinosinusitis with nasal polyps (CROWNS-2): Rationale and design of a multicenter, randomized, double-blind, placebo-controlled, parallel-group study.",
+      "abstract": "BACKGROUND: Chronic rhinosinusitis with nasal polyps (CRSwNP) is a heterogeneous disease that affects a large proportion of the global population. The treatment of CRSwNP, especially eosinophilic CRSwNP (ECRSwNP), has always been of great obstacle. Our previous phase 2 trial showed that CM310, a monoclonal antibody that targets interleukin-4 receptor alpha, was both safe and effective in reducing the size of nasal polyps, improving symptom scores, and increasing the quality of life for those with severe ECRSwNP. OBJECTIVE: This phase 3 trial aims to evaluate the efficacy, safety, pharmacokinetic, pharmacodynamic, and immunogenicity of CM310 in participants with CRSwNP. RESULT: The CROWNS-2 is a multicenter, randomized, double-blind, placebo-controlled, parallel-group, phase 3 trial. The study consisted of a screening/run-in period (up to 4 weeks), a treatment period (24-week double-blind treatment period plus 28-week maintenance period), and a safety follow-up period (8 weeks). The study planned to enroll 180 participants with CRSwNP (at least 60% of ECRSwNP) to receive CM310 300 mg/placebo every 2 weeks (Q2W) subcutaneously for a total of 12 doses in double-blind treatment period and 300 mg CM310 Q2W subcutaneously for a total of 14 doses in maintenance period. Enrolled participants continued to use mometasone furoate nasal spray throughout the study. The primary endpoints are a change from baseline in nasal polyp score and nasal congestion score at week 24 between CM310 and placebo in both ECRSwNP and CRSwNP. CONCLUSION: The CROWNS-2 is a multicenter, randomized, double-blind, placebo-controlled, parallel-group, phase 3 clinical study to evaluate the efficacy and safety of CM310 in patients with CRSwNP. TRIAL REGISTRATION: NCT05436275.",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "registry_nct_ids": [
+        "NCT05436275"
+      ]
+    },
+    {
+      "pmid": "38482462",
+      "title": "Anti-thymic stromal lymphopoietin monoclonal antibody in patients with chronic rhinosinusitis with nasal polyps (DUBHE): Rationale and design of a multicenter, randomized, double-blind, placebo-controlled study.",
+      "abstract": "BACKGROUND: Chronic rhinosinusitis with nasal polyps (CRSwNP) has a complex pathogenesis and is difficult to treat, which brings a huge economic burden to society. Despite all the progress in the treatment of CRSwNP, some patients with CRSwNP still experience recurrence. Therefore, there is an urgent need to develop novel drugs and treatments for CRSwNP. Thymic stromal lymphopoietin (TSLP) is produced by epithelial cells and mediates type 2 and nontype 2 inflammation through various downstream cellular immune and inflammatory pathways. Anti-TSLP treatment with tezepelumab has been proven to be effective in treating patients with uncontrolled asthma, regardless of their peripheral blood eosinophil levels being low or high. However, there is no relevant research on the usage of anti-TSLP monoclonal antibodies for the treatment of uncontrolled CRSwNP. OBJECTIVE: This is the first phase Ib/IIa study for subjects with uncontrolled CRSwNP, aiming to evaluate the safety, tolerability, pharmacokinetics, pharmacodynamics, immunogenicity, and preliminary efficacy of multiple ascending doses (MAD) of anti-TSLP monoclonal antibody. METHODS: The DUBHE is a multicenter, randomized, double-blind, placebo-controlled, phase Ib/IIa clinical study. The study will be composed of 3 periods: a screening/run-in period of 4 weeks, a treatment period of 52 weeks (16 weeks of double-blind treatment period +36 weeks of open-label treatment period), and a safety follow-up period of 12 weeks. No more than 113 subjects with uncontrolled CRSwNP will be divided into 4 groups to receive different doses of CM326 or placebo treatments (55 mg every two weeks [Q2W] group, 110 mg Q2W group, 220 mg Q2W group, and 220 mg every four weeks [Q4W] group). Enrolled patients will be stratified by tissue eosinophil count (TEC). RESULTS: The safety of the monoclonal antibody that targets TSLP in uncontrolled CRSwNP and its preliminary efficacy at 16 weeks of treatment. CONCLUSION: In this study, for the first time, the safety and preliminary efficacy of MAD of CM326 will be verified. The efficacy of CM326 in patients with eosinophilic CRSwNP (TEC ≥55/high power field [HPF]), as well as noneosinophilic CRSwNP (TEC <55/HPF) will be testified. TRIAL REGISTRATION: NCT05324137.",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "registry_nct_ids": [
+        "NCT05324137"
+      ]
+    },
+    {
+      "pmid": "37483544",
+      "title": "Efficacy and safety of CM310 in severe eosinophilic chronic rhinosinusitis with nasal polyps (CROWNS-1): a multicentre, randomised, double-blind, placebo-controlled phase 2 clinical trial.",
+      "abstract": "BACKGROUND: Severe eosinophilic chronic rhinosinusitis with nasal polyps (ECRSwNP) remains the most relapsed subtype of uncontrolled CRSwNP. CM310, a humanised anti-interleukin (IL)-4 receptor alpha monoclonal antibody, inhibits IL-4 and IL-13 signaling which underlying eosinophilic inflammation. This study aims to evaluate the efficacy and safety of CM310 in patients with severe ECRSwNP. METHODS: A multicentre, randomised, double-blind, and placebo-controlled phase 2 clinical trial was conducted. 56 eligible adult patients with severe ECRSwNP were randomised 1:1 to receive subcutaneously either CM310 (300 mg) or placebo every 2 weeks under the background therapy of mometasone furoate nasal spray (MFNS) for 16 weeks, with 8 weeks of follow-up. Coprimary endpoints included the changes from baseline in nasal polyp score (NPS) and nasal congestion score (NCS) at week 16. Key secondary endpoints included sinus Lund-Mackay CT score, change in sinus volume occupied by disease, University of Pennsylvania Smell Identification Test score, 22-item Sino-nasal Outcome Test score, and total symptom score. Safety, pharmacodynamics, and changes in type 2 inflammation biomarkers were assessed. This study is registered with ClinicalTrials.gov, NCT04805398. FINDINGS: Between April 6, 2021, and March 18, 2022, 27 patients respectively in both the CM310 and placebo groups completed the study. Findings suggested that CM310 improved the coprimary efficacy endpoints of decreasing nasal polyp size and alleviating nasal congestion compared with the placebo. Least squares (LS) mean differences (CM310 vs placebo) of change from baseline in NPS and NCS at week 16 were -2.1 (95% CI -2.9, -1.4; p < 0.0001) and -0.9 (95% CI -1.4, -0.5; p < 0.0001), respectively. Sinus CT scan revealed that Lund-Mackay CT score (LS mean difference [95% CI] -7.6, [-9.4, -5.8]; p < 0.0001) and sinus volume occupied by disease (LS mean difference [95% CI] -37%, [-47%, -28%]; p < 0.0001) were significantly improved with CM310 compared with placebo. In addition, CM310 significantly relieved the daily symptoms of patients with CRSwNP and improved their quality of life reflected by the improvements in the TSS (-2.6 [95% CI -3.5, -1.6]), UPSIT (10.4 [95% CI 6.8, 14.0]) and SNOT-22 score (-19.1 [95% CI -29.8, -8.5]). Compared with placebo, CM310 administration significantly reduced type 2-related biomarkers including the serum TARC and total IgE, and tissue eosinophils. The most common adverse events were upper respiratory tract infection, blood cholesterol increased, and tinnitus, but none were considered drug-related. INTERPRETATION: These findings support CM310 as an effective additional treatment option to the standard of care in patients with severe ECRSwNP. FUNDING: KeyMed Biosciences (Chengdu) Limited.",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "registry_nct_ids": [
+        "NCT04805398"
+      ]
+    }
+  ]
+}

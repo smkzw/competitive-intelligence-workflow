@@ -17,9 +17,9 @@
     <div class="kz-evidence-field"><dt>覆盖范围</dt><dd>{{ evidence_limitations.trial_count }} 项试验 · {{ evidence_limitations.product_count }} 个产品 · {{ evidence_limitations.fact_count }} 条设计事实</dd></div>
   </dl>
   <p>{{ evidence_limitations.notes }}</p>
-  <h3>登记记录入口</h3>
+  <h3>实际来源入口</h3>
   <ul class="kz-c-registry-links">
-    {% for link in evidence_limitations.registry_links %}<li><a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ link }}</a></li>{% endfor %}
+    {% for link in evidence_limitations.source_links %}<li><a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ link }}</a></li>{% endfor %}
   </ul>
 </section>
 {% endif %}
@@ -28,7 +28,6 @@
     <div class="kz-c-page-meta" aria-label="页面范围">
       <span>适应症：{{ report.indication }}</span>
       <span>观察截止：{{ cutoff_text }}</span>
-      <span>比较视角：试验设计（医学）｜统计口径（生物统计）｜安全性设计（药物警戒）</span>
     </div>
     <p class="kz-c-page-lead">{{ lead }}</p>
   </header>
@@ -116,13 +115,22 @@
         <button type="button" class="kz-c-filter-reset" data-filter-reset>清除筛选</button>
         <span class="kz-c-filter-status" data-filter-status aria-live="polite">显示全部可用记录</span>
       </div>
+      <details class="kz-c-personal">
+        <summary>个人视图配置</summary>
+        <div class="kz-c-personal__body kz-a-workspace-bar__actions"></div>
+      </details>
     </div>
   </details>
 
   <section class="kz-c-visual-section" aria-labelledby="visual-heading">
     <div class="kz-c-section-heading">
       <h2 id="visual-heading" class="visually-hidden">{{ section_title }}</h2>
-      <p class="kz-c-evidence-hint">点击数值或表格单元格查看数据依据。同一研究内出现多条同名登记定义时，以“登记定义1、登记定义2…”逐条编号区分——序号仅表示按登记原文顺序的条目编号，不代表排名；各条原文可在证据抽屉中核对。</p>
+      <p class="kz-c-evidence-hint">点击事实或表格单元格查看数据依据；并列展示不代表临床可比。</p>
+      <details class="kz-c-reading-method">
+        <summary>比较方法与编号说明</summary>
+        <p>比较视角：试验设计（医学）｜统计口径（生物统计）｜安全性设计（药物警戒）。</p>
+        <p>同一研究内出现多条同名登记定义时，以“登记定义1、登记定义2…”逐条编号区分——序号仅表示按登记原文顺序的条目编号，不代表排名；各条原文可在数据依据中核对。</p>
+      </details>
     </div>
     <div id="kz-chart-module" class="kz-chart-module" aria-live="polite">
       <div id="kz-c-chart-visuals" class="kz-c-chart-visuals"></div>
@@ -141,7 +149,7 @@
               <tr>
                 <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__field-th">设计领域 / 设计要素</th>
                 {% for trial in design_matrix_trials %}
-                <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__trial-th" data-matrix-trial="{{ trial.id }}" data-matrix-product="{{ trial.product_id }}">
+                <th scope="col" class="kz-c-design-matrix__th kz-c-design-matrix__trial-th" data-matrix-trial="{{ trial.id }}" data-matrix-product="{{ trial.product_id or '' }}">
                   <span class="kz-c-design-matrix__trial-id">{{ trial.display_id }}</span>
                   <span class="kz-c-design-matrix__trial-product">{{ trial.product_zh }}</span>
                   <span class="kz-c-design-matrix__trial-meta">{{ trial.phase }} · {{ trial.status }}</span>
@@ -165,7 +173,7 @@
                   <span class="kz-c-design-matrix__field-family">{{ row.family_label }}</span>
                 </th>
                 {% for cell in row.cells %}
-                <td class="kz-c-design-matrix__cell{% if cell.empty %} kz-c-design-matrix__cell--empty{% endif %}" data-matrix-cell data-matrix-field="{{ row.field }}" data-matrix-family="{{ row.family_id }}" data-matrix-trial="{{ cell.trial_id }}" data-matrix-product="{{ cell.product_id }}" data-row-ids="{{ cell.row_ids | join(' ') }}">
+                <td class="kz-c-design-matrix__cell{% if cell.empty %} kz-c-design-matrix__cell--empty{% endif %}" data-matrix-cell data-matrix-field="{{ row.field }}" data-matrix-family="{{ row.family_id }}" data-matrix-trial="{{ cell.trial_id }}" data-matrix-product="{{ cell.product_id or '' }}" data-row-ids="{{ cell.row_ids | join(' ') }}">
                   {% if cell["items"] %}
                   <ul class="kz-c-design-matrix__items">
                     {% for item in cell["items"] %}
@@ -198,7 +206,7 @@
         </thead>
         <tbody>
           {% for row in table_rows %}
-          <tr class="kz-chart-table__row" data-row-id="{{ row.row_id }}" data-table-item-id="{{ row.table_item_id }}" data-trial-id="{{ row.trial_id }}" data-product-id="{{ row.product_id }}" tabindex="0">
+          <tr class="kz-chart-table__row" data-row-id="{{ row.row_id }}" data-table-item-id="{{ row.table_item_id }}" data-trial-id="{{ row.trial_id }}" data-product-id="{{ row.product_id or '' }}" tabindex="0">
             {% for key, label in table_columns %}
             <td class="kz-chart-table__cell" data-evidence-open="{{ row.row_id }}" data-row-id="{{ row.row_id }}">{{ row[key] }}</td>
             {% endfor %}

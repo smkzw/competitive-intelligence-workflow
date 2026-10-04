@@ -238,8 +238,7 @@
     var status = document.querySelector("[data-filter-status]");
     if (!status) return;
     var visible = visibleRowIds().length;
-    var criteriaActive = (window.__C_PAGE_ID__ === "inclusion-criteria" ||
-      window.__C_PAGE_ID__ === "exclusion-criteria") &&
+    var criteriaActive = usesSourceComparison(window.__C_PAGE_ID__ || "") &&
       (criteriaSearchQuery.trim() || Object.keys(excludedCriteriaTrials).some(function (trialId) {
         return excludedCriteriaTrials[trialId];
       }));
@@ -264,10 +263,17 @@
       var keyed = document.querySelectorAll("[data-product-id], [data-trial-id]");
       for (var k = 0; k < keyed.length; k += 1) {
         var el = keyed[k];
+        // A row's complete query result is authoritative. A second product/
+        // trial-only pass must not restore null-product or other-axis misses.
+        var keyedRowId = el.getAttribute("data-row-id");
+        if (keyedRowId) {
+          el.style.display = matches(keyedRowId, state) ? "" : "none";
+          continue;
+        }
         var pid = el.getAttribute("data-product-id");
         var tid = el.getAttribute("data-trial-id");
         var show = true;
-        if (productFilter.length && pid) {
+        if (productFilter.length && pid !== null) {
           show = productFilter.indexOf(pid) !== -1;
         }
         if (show && trialFilter.length && tid) {
@@ -306,11 +312,25 @@
   // 独立视觉复核（v57 charts_tables）：筛选变化后按状态重绘 ECharts——
   // 此前只过滤表格行，图表 series 恒不更新
   function updateChartFromState(state) {
-    if (!cChart || !chartState.rows.length) return;
+    if (!cChart) return;
     var visible = chartState.rows.filter(function (row) {
       return matches(String(row.row_id), state);
     });
-    if (!visible.length) visible = chartState.rows.slice();
+    if (!visible.length) {
+      cChart.clear();
+      if (chartState.chart && !chartState.emptyNote) {
+        var emptyNote = document.createElement("p");
+        emptyNote.className = "kz-c-evidence-hint";
+        emptyNote.textContent = "当前筛选无匹配记录；调整或清除筛选后可重新查看。";
+        chartState.chart.appendChild(emptyNote);
+        chartState.emptyNote = emptyNote;
+      }
+      return;
+    }
+    if (chartState.emptyNote) {
+      chartState.emptyNote.remove();
+      chartState.emptyNote = null;
+    }
     var kind = chartState.kind;
     var option = kind === "sample-size-bar" ? sampleOption(visible)
       : kind === "criteria-comparison" ? criteriaCountOption(visible)
@@ -446,6 +466,7 @@
   }
 
   var cChart = null;
+  var sharedPresentationPlan = window.__PRESENTATION_PLAN__;
   var chartState = {rows: [], kind: "", chart: null};
   var chartContainerWidth = 0;
 
@@ -501,6 +522,14 @@
       pageId === "exclusion-criteria"
     ) return "criteria-comparison";
     return "design-fact-matrix";
+  }
+
+  function usesSourceComparison(pageId) {
+    return pageId === "inclusion-criteria" || pageId === "exclusion-criteria" ||
+      pageId === "endpoint-timepoint-matrix" || pageId === "population-disease-definition" ||
+      pageId === "treatment-arms" || pageId === "sample-analysis-statistics" ||
+      chartKind(pageId) === "design-fact-matrix" ||
+      chartKind(pageId) === "trial-design-summary";
   }
 
   function trialLabel(row) {
@@ -649,10 +678,10 @@
           interval: 0,
           rotate: readableCore ? 0 : compactTrialAxis && trialIds.length > 8
             ? 48 : (trialIds.length > 3 ? 24 : 0),
-          fontSize: readableCore ? 14 : 12,
+          fontSize: 16,
           width: readableCore ? 160 : compactTrialAxis ? 90 : 160,
           overflow: "break",
-          lineHeight: readableCore ? 18 : 15,
+          lineHeight: 23,
           margin: 14
         }
       },
@@ -664,10 +693,10 @@
         axisLabel: {
           color: "#243650",
           fontWeight: 600,
-          fontSize: readableCore ? 14 : 12,
+          fontSize: 16,
           width: 150,
           overflow: "break",
-          lineHeight: readableCore ? 18 : 15
+          lineHeight: 23
         }
       },
       series: [{
@@ -677,8 +706,8 @@
         label: {
           show: true,
           color: "#243650",
-          fontSize: readableCore ? 14 : 12,
-          lineHeight: readableCore ? 18 : 14,
+          fontSize: 16,
+          lineHeight: 23,
           // 独立视觉复核（typography/charts）：单元格长文本限宽截断，
           // 完整内容保留在 tooltip 与同源数据表
           width: readableCore ? coreLabelWidth : compactTrialAxis
@@ -784,7 +813,7 @@
         axisTick: {show: false},
         axisLabel: {
           color: "#243650",
-          fontSize: 13,
+          fontSize: 16,
           lineHeight: 16,
           width: 220,
           overflow: "break"
@@ -820,15 +849,51 @@
     };
   }
 
-  function renderCriteriaSources(chart, rows) {
+  // R24-146 有界执行及 R24-154 主线程修复：只消费领域十轴实例键，
+  // 包括原始父路径；角色或标题相似不构成组合依据，跨研究永不配对。
+  function isEndpointField(row) {
+    return /^primary_endpoint_|^secondary_endpoint_/.test(String(row.element || ""));
+  }
+
+  function endpointRoleOf(row) {
+    var match = /^(primary|secondary)_endpoint_/.exec(String(row.element || ""));
+    return match ? match[1] + "_endpoint" : "";
+  }
+
+  function endpointRoleLabelZh(role) {
+    return { "primary_endpoint": "主要终点", "secondary_endpoint": "次要终点" }[role]
+      || "终点实例";
+  }
+
+  // 入排标准「研究列登记原文对照表」：不做语义配对、不改写原文与当前值；
+  // 序号按各研究登记原文顺序一次确定，检索、勾选、清空都不重排。
+  function renderCriteriaSources(chart, rows, designMode) {
     chart.setAttribute("role", "region");
     chart.classList.add("kz-c-chart-canvas--criteria-sources");
     chart.style.height = "auto";
 
     var note = document.createElement("p");
     note.className = "kz-c-criteria-note";
-    note.textContent = "按研究并列登记原文；不按并列位置推断条款等价。点击条款可读全文，来源按钮可核对登记记录。";
-    chart.appendChild(note);
+    note.textContent = designMode
+      ? "按设计要素与研究并列来源条款；同类字段不代表终点、人群或时间窗等价。"
+        + "同一研究内，终点的定义、时间点与完整定义原文只在显式实例身份完整一致时"
+        + "组合为一个终点实例；实例上下文缺失或矛盾时保持独立列示并给出原因，"
+        + "不同研究之间不按序号或标题配对。各观察分别保留，不汇总或取第一条；"
+        + "可检索当前内容与完整原文，并核对来源。检索未命中的同实例事实以上下文"
+        + "标记展示，不计入命中条数。"
+      : "按研究并列各条登记原文，仅作原始记录逐一对照；"
+      + "不按并列位置推断条款等价，序号是各研究登记原文顺序编号，不代表排名或临床可比。"
+      + "点击条款可读全文，来源按钮可核对登记记录。";
+    if (designMode) {
+      var method = document.createElement("details");
+      method.className = "kz-c-criteria-method";
+      var methodSummary = document.createElement("summary");
+      methodSummary.textContent = "条款组合与检索说明（并列不代表临床等价）";
+      method.appendChild(methodSummary);
+      method.appendChild(note);
+    } else {
+      chart.appendChild(note);
+    }
 
     var toolbar = document.createElement("div");
     toolbar.className = "kz-c-criteria-toolbar";
@@ -849,12 +914,41 @@
     chart.appendChild(toolbar);
 
     var byTrial = {};
+    var trialOrder = [];
     rows.forEach(function (row) {
       var key = String(row.trial_display_id || row.trial_zh || "试验未列示");
-      if (!byTrial[key]) byTrial[key] = [];
+      if (!byTrial[key]) {
+        byTrial[key] = [];
+        trialOrder.push(key);
+      }
       byTrial[key].push(row);
     });
-    var trialIds = Object.keys(byTrial).sort();
+    var trialIds = trialOrder.slice().sort();
+    var pageRows = allChartRows();
+    var studyMeta = {};
+    var definitionsByTrial = {};
+    trialIds.forEach(function (trialId) {
+      var trialRows = byTrial[trialId];
+      studyMeta[trialId] = {
+        product: String(trialRows[0].product_zh || "产品未列示")
+      };
+      // 稳定序号以整页登记原文顺序为基准，一次确定：页面维度筛选、检索、
+      // 勾选与清空都只筛选可见条目，不重新编号。
+      var originalOrder = {};
+      var ordinalCursor = 0;
+      pageRows.forEach(function (row) {
+        if (String(row.trial_display_id || row.trial_zh || "试验未列示") !== trialId) return;
+        ordinalCursor += 1;
+        originalOrder[String(row.row_id)] = ordinalCursor;
+      });
+      definitionsByTrial[trialId] = trialRows.map(function (row, index) {
+        return {
+          row: row,
+          ordinal: originalOrder[String(row.row_id)] || index + 1
+        };
+      });
+    });
+
     var choice = document.createElement("details");
     choice.className = "kz-c-criteria-choose";
     var choiceSummary = document.createElement("summary");
@@ -878,74 +972,383 @@
       choices.appendChild(checkboxLabel);
     });
     choice.appendChild(choices);
-    chart.appendChild(choice);
+    toolbar.appendChild(choice);
+    if (designMode) toolbar.appendChild(method);
 
-    var grid = document.createElement("div");
-    grid.className = "kz-c-criteria-grid";
-    chart.appendChild(grid);
+    var region = document.createElement("div");
+    region.className = "kz-c-criteria-table-region";
+    chart.appendChild(region);
+
+    function searchableText(row, trialId) {
+      return [row.product_zh, trialId, row.trial_zh, row.source_text, row.original_text,
+        row.value, row.element_zh, row.source_topic_zh, row.time, row.group_zh,
+        row.cohort_zh, row.scale]
+        .map(function (value) { return String(value || ""); }).join(" ").toLocaleLowerCase();
+    }
+
+    function applyCurrentState(item, row) {
+      var currentState = row.disclosure_state === "user_cleared"
+        ? "user_cleared"
+        : row.review_state === "user_modified" ? "user_modified" : "";
+      if (!currentState) return;
+      item.setAttribute("data-criterion-current-state", currentState);
+      var revision = document.createElement("p");
+      revision.className = "kz-c-criteria-revision";
+      revision.textContent = currentState === "user_cleared"
+        ? "当前值：用户清除，待重新核实"
+        : "当前修订（未独立复核）：" + String(row.value == null ? row.status || "待核" : row.value);
+      item.appendChild(revision);
+    }
+
+    function buildDefinition(def, trialId, contextOnly) {
+      var row = def.row;
+      var item = document.createElement("li");
+      item.className = "kz-c-criteria-item";
+      item.setAttribute("data-criterion-row-id", String(row.row_id));
+      item.setAttribute("data-criterion-ordinal", String(def.ordinal));
+      item.setAttribute("value", String(def.ordinal));
+      item.setAttribute("data-criterion-trial-id", String(row.trial_id || ""));
+      item.setAttribute("data-criterion-product-id", String(row.product_id || ""));
+      item.setAttribute("data-criterion-review-state", String(row.review_state || ""));
+      item.setAttribute("data-criterion-disclosure-state", String(row.disclosure_state || ""));
+      if (contextOnly) {
+        // 检索命中同实例其他事实时，未命中兄弟仅作标记上下文：
+        // 不计入命中条数、不进入完整表可见行，仍可读原文与来源。
+        item.setAttribute("data-criterion-context-only", "true");
+        var contextNote = document.createElement("p");
+        contextNote.className = "kz-c-criteria-context-note";
+        contextNote.textContent = "同实例上下文（未匹配当前检索词），仅帮助阅读，不计入命中条数。";
+        item.appendChild(contextNote);
+      }
+      applyCurrentState(item, row);
+      if (designMode && row.disclosure_state !== "user_cleared") {
+        var current = document.createElement("p");
+        current.className = "kz-c-design-source-value";
+        var valueText = String(row.value == null ? row.status || "当前值待核" : row.value);
+        var element = String(row.element || "");
+        // Full descriptions already remain verbatim in the native disclosure and
+        // source drawer. Do not duplicate paragraphs on the reading surface or
+        // invent a clinical summary. User edits remain explicitly visible.
+        current.textContent = row.source_topic_zh && row.review_state !== "user_modified"
+          ? "来源条款：" + String(row.source_topic_zh)
+          : /_description$/.test(element) && row.review_state !== "user_modified"
+          ? "完整定义：展开下方原文与限定条件"
+          : /_timepoint$/.test(element) ? "评估时间点：" + valueText : valueText;
+        item.appendChild(current);
+      }
+      var detail = document.createElement("details");
+      detail.className = "kz-c-criteria-def-fold";
+      var summary = document.createElement("summary");
+      var sourceText = String(row.source_text || row.original_text || "").trim();
+      var preview = sourceText.replace(/\s+/g, " ");
+      summary.textContent = designMode ? "完整原文与限定条件（" + String(def.ordinal) + "）"
+        : "登记原文 " + String(def.ordinal) + "｜" +
+          (preview ? preview.slice(0, 80) + (preview.length > 80 ? "…" : "") : "原文待核");
+      var original = document.createElement("div");
+      original.className = "kz-c-criteria-original";
+      original.textContent = sourceText || "原文未在本数据包提供；请核对下方完整表与来源。";
+      var provenance = document.createElement("p");
+      provenance.className = "kz-c-criteria-provenance";
+      var provenanceParts = [
+        (designMode ? "来源：" : "登记记录：") +
+          String(row.source_location_zh || "来源定位见数据依据")
+      ];
+      var trialRef = String(row.trial_display_id || row.trial_id || "");
+      if (trialRef) provenanceParts.push(trialRef + " · " + studyMeta[trialId].product);
+      provenance.textContent = provenanceParts.join("｜");
+      detail.appendChild(summary);
+      detail.appendChild(original);
+      if (row.source_context_note_zh) {
+        var continuationNote = document.createElement("p");
+        continuationNote.className = "kz-c-criteria-provenance";
+        continuationNote.textContent = String(row.source_context_note_zh);
+        detail.appendChild(continuationNote);
+      }
+      detail.appendChild(provenance);
+      item.appendChild(detail);
+      var source = document.createElement("button");
+      source.type = "button";
+      source.className = "kz-c-criteria-source";
+      source.setAttribute("data-evidence-open", String(row.row_id));
+      source.setAttribute("data-row-id", String(row.row_id));
+      source.textContent = row.source_context_note_zh ? "查看来源与跨页前后文" : "查看来源";
+      item.appendChild(source);
+      return item;
+    }
+
+    // 终点实例组合：只信投影的显式实例键。实例序号在可见性过滤之前按页面
+    // 登记顺序一次确定，检索、勾选、清空都不重排。
+    function composeEndpointBlocks(roleDefs, matchedByRow) {
+      var blocks = [];
+      var byInstance = {};
+      roleDefs.forEach(function (def) {
+        var inst = def.row.endpoint_instance || null;
+        var id = inst && inst.instance_id ? String(inst.instance_id) : null;
+        if (!id) {
+          blocks.push({
+            instanceId: null,
+            defs: [def],
+            complete: false,
+            conflict: false,
+            reason: inst && inst.reason_zh ? String(inst.reason_zh) : "",
+          });
+          return;
+        }
+        var block = byInstance[id];
+        if (!block) {
+          block = {
+            instanceId: id,
+            defs: [],
+            complete: inst.complete !== false,
+            conflict: inst.conflict === true,
+            reason: inst.reason_zh ? String(inst.reason_zh) : "",
+          };
+          byInstance[id] = block;
+          blocks.push(block);
+        }
+        block.defs.push(def);
+      });
+      blocks.forEach(function (block, index) { block.ordinal = index + 1; });
+      return blocks.filter(function (block) {
+        return block.defs.some(function (def) {
+          return matchedByRow[String(def.row.row_id)];
+        });
+      });
+    }
+
+    function buildInstanceBlock(block, trialId, matchedByRow) {
+      var item = document.createElement("li");
+      item.className = "kz-c-endpoint-instance";
+      item.setAttribute("data-endpoint-instance", "");
+      if (block.instanceId) {
+        item.setAttribute("data-endpoint-instance-id", block.instanceId);
+        item.setAttribute("data-endpoint-complete", block.complete ? "true" : "false");
+      } else {
+        item.setAttribute("data-endpoint-standalone", "true");
+        item.setAttribute("data-endpoint-complete", "false");
+      }
+      item.setAttribute("data-endpoint-conflict", block.conflict ? "true" : "false");
+      item.setAttribute("data-endpoint-ordinal", String(block.ordinal));
+      item.setAttribute("data-endpoint-role-zh", block.roleZh);
+      var heading = document.createElement("p");
+      heading.className = "kz-c-endpoint-instance__heading";
+      heading.textContent = block.roleZh + " " + String(block.ordinal)
+        + "（" + String(block.defs.length) + " 条登记事实）";
+      item.appendChild(heading);
+      if (block.reason) {
+        var reason = document.createElement("p");
+        reason.className = "kz-c-endpoint-instance__reason";
+        reason.textContent = block.reason;
+        item.appendChild(reason);
+      }
+      var list = document.createElement("ol");
+      list.className = "kz-c-criteria-defs";
+      block.defs.forEach(function (def) {
+        list.appendChild(
+          buildDefinition(def, trialId, !matchedByRow[String(def.row.row_id)])
+        );
+      });
+      item.appendChild(list);
+      return item;
+    }
+
+    function buildTable(shownTrials, matchedByRow, query) {
+      var wrap = document.createElement("div");
+      wrap.className = "kz-c-criteria-table-wrap";
+      wrap.setAttribute("role", "region");
+      wrap.setAttribute("tabindex", "0");
+      wrap.setAttribute("aria-label", designMode
+        ? "按设计要素与研究并列的来源条款对照表；可横向滚动查看全部研究列"
+        : "按研究并列的登记原文对照表；可横向滚动查看全部研究列");
+      var table = document.createElement("table");
+      table.className = "kz-c-criteria-table" + (designMode ? " kz-c-criteria-table--design" : "");
+      if (designMode) table.style.minWidth = Math.max(1, shownTrials.length) * 300 + 168 + "px";
+      var caption = document.createElement("caption");
+      caption.className = "kz-c-criteria-table-caption";
+      caption.textContent = designMode
+        ? "设计要素与完整来源条款（同一研究内实例身份完整一致时组合终点实例；"
+          + "同类字段并列不代表临床等价；编号保留本研究条款顺序）"
+        : "各研究登记原文逐条对照（按各研究登记顺序编号；并列仅为原始记录对照）";
+      table.appendChild(caption);
+      var thead = document.createElement("thead");
+      var headRow = document.createElement("tr");
+      var ordinalTh = document.createElement("th");
+      ordinalTh.className = "kz-c-criteria-table__ordinal-th";
+      ordinalTh.setAttribute("scope", "col");
+      ordinalTh.setAttribute("id", "kz-c-criteria-ordinal-column");
+      ordinalTh.textContent = designMode ? "设计要素" : "登记原文";
+      headRow.appendChild(ordinalTh);
+      shownTrials.forEach(function (trialId, index) {
+        var th = document.createElement("th");
+        th.className = "kz-c-criteria-table__study-th kz-c-criteria-trial";
+        th.setAttribute("scope", "col");
+        th.setAttribute("id", "kz-c-criteria-study-" + String(index + 1));
+        th.setAttribute("data-criteria-study", trialId);
+        var idSpan = document.createElement("span");
+        idSpan.className = "kz-c-criteria-table__trial-id";
+        idSpan.textContent = trialId;
+        th.appendChild(idSpan);
+        var productSpan = document.createElement("span");
+        productSpan.className = "kz-c-criteria-table__trial-product";
+        productSpan.textContent = studyMeta[trialId].product;
+        th.appendChild(productSpan);
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+      var tbody = document.createElement("tbody");
+      var matched = {};
+      var endpointRoles = [];
+      shownTrials.forEach(function (trialId) {
+        matched[trialId] = [];
+        definitionsByTrial[trialId].forEach(function (def) {
+          if (!matchedByRow[String(def.row.row_id)]) return;
+          matched[trialId].push(def);
+          if (designMode && isEndpointField(def.row)) {
+            var role = endpointRoleOf(def.row);
+            if (role && endpointRoles.indexOf(role) === -1) endpointRoles.push(role);
+          }
+        });
+      });
+      endpointRoles.forEach(function (role) {
+        var bodyRow = document.createElement("tr");
+        bodyRow.className = "kz-c-criteria-table__row";
+        var rowHeader = document.createElement("th");
+        rowHeader.className = "kz-c-criteria-table__ordinal-cell";
+        rowHeader.setAttribute("scope", "row");
+        var headerId = "kz-c-criteria-ordinal-row-endpoint-" + role;
+        rowHeader.setAttribute("id", headerId);
+        rowHeader.textContent = endpointRoleLabelZh(role) + "实例";
+        bodyRow.appendChild(rowHeader);
+        shownTrials.forEach(function (trialId, index) {
+          var td = document.createElement("td");
+          td.className = "kz-c-criteria-table__cell";
+          td.setAttribute("headers", headerId + " kz-c-criteria-study-" + String(index + 1));
+          var roleDefs = definitionsByTrial[trialId].filter(function (def) {
+            return endpointRoleOf(def.row) === role;
+          });
+          var blocks = composeEndpointBlocks(roleDefs, matchedByRow);
+          if (!blocks.length) {
+            var emptyCell = document.createElement("p");
+            emptyCell.className = "kz-c-criteria-cell-empty";
+            emptyCell.textContent = query
+              ? "本列无匹配的该类终点实例"
+              : "本列未列示该类终点实例";
+            td.appendChild(emptyCell);
+          } else {
+            var list = document.createElement("ol");
+            list.className = "kz-c-endpoint-instances";
+            blocks.forEach(function (block) {
+              block.roleZh = endpointRoleLabelZh(role);
+              list.appendChild(buildInstanceBlock(block, trialId, matchedByRow));
+            });
+            td.appendChild(list);
+          }
+          bodyRow.appendChild(td);
+        });
+        tbody.appendChild(bodyRow);
+      });
+      var elements = designMode ? uniqueValues(shownTrials.flatMap(function (trialId) {
+        return matched[trialId].filter(function (def) { return !isEndpointField(def.row); })
+          .map(function (def) { return def.row; });
+      }), "element") : [null];
+      elements.forEach(function (element, elementIndex) {
+      var bodyRow = document.createElement("tr");
+      bodyRow.className = "kz-c-criteria-table__row";
+      var rowHeader = document.createElement("th");
+      rowHeader.className = "kz-c-criteria-table__ordinal-cell";
+      rowHeader.setAttribute("scope", "row");
+      var headerId = "kz-c-criteria-ordinal-row" + (designMode ? "-" + elementIndex : "");
+      rowHeader.setAttribute("id", headerId);
+      var sectionRow = designMode && rows.find(function (row) {
+        return String(row.element || "未列示") === element;
+      });
+      rowHeader.textContent = sectionRow ? String(sectionRow.element_zh || element)
+        : "登记原文（按各研究登记顺序逐条列出）";
+      bodyRow.appendChild(rowHeader);
+      shownTrials.forEach(function (trialId, index) {
+        var td = document.createElement("td");
+        td.className = "kz-c-criteria-table__cell";
+        td.setAttribute(
+          "headers",
+          headerId + " kz-c-criteria-study-" + String(index + 1)
+        );
+        var matchedDefs = designMode ? matched[trialId].filter(function (def) {
+          return String(def.row.element || "未列示") === element;
+        }) : matched[trialId];
+        if (!matchedDefs.length) {
+          var emptyCell = document.createElement("p");
+          emptyCell.className = "kz-c-criteria-cell-empty";
+          emptyCell.textContent = designMode ? "该研究在本查询范围未列示此类条款"
+            : query ? "本列无匹配原文" : "本列未列示登记原文";
+          td.appendChild(emptyCell);
+        } else {
+          var list = document.createElement("ol");
+          list.className = "kz-c-criteria-defs";
+          matchedDefs.forEach(function (def) {
+            list.appendChild(buildDefinition(def, trialId));
+          });
+          td.appendChild(list);
+        }
+        bodyRow.appendChild(td);
+      });
+      tbody.appendChild(bodyRow);
+      });
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+      return wrap;
+    }
 
     function draw() {
-      grid.replaceChildren();
+      region.replaceChildren();
       var query = criteriaSearchQuery.trim().toLocaleLowerCase();
-      var shownRows = [];
-      var shownTrials = 0;
-      trialIds.forEach(function (trialId) {
-        if (excludedCriteriaTrials[trialId]) return;
-        var trialRows = byTrial[trialId].filter(function (row) {
-          var searchable = [row.product_zh, trialId, row.source_text, row.original_text]
-            .map(function (value) { return String(value || ""); }).join(" ").toLocaleLowerCase();
-          return !query || searchable.indexOf(query) !== -1;
-        });
-        if (!trialRows.length) return;
-        shownTrials += 1;
-        var card = document.createElement("section");
-        card.className = "kz-c-criteria-trial";
-        var heading = document.createElement("h3");
-        heading.textContent = String(trialRows[0].product_zh || "产品未列示") + "｜" + trialId;
-        card.appendChild(heading);
-        trialRows.forEach(function (row, index) {
-          shownRows.push(row);
-          var item = document.createElement("div");
-          item.className = "kz-c-criteria-item";
-          item.setAttribute("data-criterion-row-id", String(row.row_id));
-          if (row.review_state === "user_modified" || row.disclosure_state === "user_cleared") {
-            var revision = document.createElement("p");
-            revision.className = "kz-c-criteria-revision";
-            revision.textContent = row.disclosure_state === "user_cleared"
-              ? "当前值：用户清除，待重新核实"
-              : "当前修订（未独立复核）：" + String(row.value == null ? row.status || "待核" : row.value);
-            item.appendChild(revision);
-          }
-          var detail = document.createElement("details");
-          var summary = document.createElement("summary");
-          var sourceText = String(row.source_text || row.original_text || "").trim();
-          var preview = sourceText.replace(/\s+/g, " ");
-          summary.textContent = "登记原文 " + String(index + 1) + "｜" +
-            (preview ? preview.slice(0, 80) + (preview.length > 80 ? "…" : "") : "原文待核");
-          var original = document.createElement("div");
-          original.className = "kz-c-criteria-original";
-          original.textContent = sourceText || "原文未在本数据包提供；请核对下方完整表与来源。";
-          detail.appendChild(summary);
-          detail.appendChild(original);
-          item.appendChild(detail);
-          var source = document.createElement("button");
-          source.type = "button";
-          source.className = "kz-c-criteria-source";
-          source.setAttribute("data-evidence-open", String(row.row_id));
-          source.setAttribute("data-row-id", String(row.row_id));
-          source.textContent = "查看来源";
-          item.appendChild(source);
-          card.appendChild(item);
-        });
-        grid.appendChild(card);
+      var shownTrials = trialIds.filter(function (trialId) {
+        return excludedCriteriaTrials[trialId] !== true;
       });
+      // 精确同一 Q：命中按事实判定。同实例未命中兄弟仅在可见实例块内以
+      // 上下文标记展示，不进入命中集合、计数或完整表可见行。
+      var matchedByRow = {};
+      var shownRows = [];
+      var shownStudies = 0;
+      var matchedTrials = [];
+      var unmatchedSelected = [];
+      shownTrials.forEach(function (trialId) {
+        definitionsByTrial[trialId].forEach(function (def) {
+          var isMatch = !query || searchableText(def.row, trialId).indexOf(query) !== -1;
+          if (!isMatch) return;
+          matchedByRow[String(def.row.row_id)] = true;
+          shownRows.push(def.row);
+        });
+        var studyMatched = definitionsByTrial[trialId].some(function (def) {
+          return matchedByRow[String(def.row.row_id)];
+        });
+        if (studyMatched) {
+          shownStudies += 1;
+          matchedTrials.push(trialId);
+        } else if (query) {
+          unmatchedSelected.push(trialId);
+        }
+      });
+      // 无命中不是取消研究选择，也不是来源无数据。检索中的空列只从阅读
+      // 表面收起，明确保留其选择和 ID；清空关键词恢复原先列顺序及所有事实。
+      if (unmatchedSelected.length) {
+        var unmatched = document.createElement("p");
+        unmatched.className = "kz-c-criteria-note";
+        unmatched.setAttribute("data-criteria-unmatched-selected", "");
+        unmatched.textContent = "本次检索无命中，保留选择并暂收起空列："
+          + unmatchedSelected.join("、") + "；清空关键词可恢复研究列。";
+        region.appendChild(unmatched);
+      }
       if (!shownRows.length) {
         var empty = document.createElement("p");
         empty.className = "kz-c-criteria-empty";
         empty.textContent = "当前关键词与所选研究下没有匹配原文；可清空检索或重新选择研究。";
-        grid.appendChild(empty);
+        region.appendChild(empty);
+      } else {
+        region.appendChild(buildTable(query ? matchedTrials : shownTrials, matchedByRow, query));
       }
-      status.textContent = "当前可达 " + shownTrials + " 项研究、" + shownRows.length + " 组登记原文";
+      status.textContent = "当前可达 " + shownStudies + " 项研究、" + shownRows.length +
+        (designMode ? " 条设计观察" : " 组登记原文");
       window.__C_VISIBLE_CHART_ROW_IDS__ = shownRows.map(function (row) {
         return String(row.row_id);
       });
@@ -1017,7 +1420,8 @@
       window.__C_PAGE_ID__ === "exclusion-criteria";
     // A local keyword/choice hides table rows, but must not become the input
     // universe for the next redraw: clearing the search restores every match.
-    var rows = criteriaPage
+    var sourceComparison = usesSourceComparison(window.__C_PAGE_ID__ || "");
+    var rows = sourceComparison
       ? allChartRows().filter(function (row) {
           return matches(String(row.row_id), sanitizeState(selectedState()));
         })
@@ -1030,11 +1434,12 @@
       cChart.dispose();
       cChart = null;
     }
+    chartState = {rows: [], kind: "", chart: null};
     host.innerHTML = "";
     var title = document.createElement("div");
     title.className = "kz-c-chart-title";
     title.textContent = {
-      "sample-size-bar": "各试验样本量",
+      "sample-size-bar": "样本量与统计分析原文对照",
       "visit-timeline": "关键评估与随访时间",
       "endpoint-timepoint-matrix": "主要终点与评估时间",
       "treatment-structure-matrix": "分组、干预与给药结构",
@@ -1053,11 +1458,15 @@
     chart.setAttribute("aria-label", title.textContent);
     host.appendChild(chart);
     if (!rows.length) {
+      chart.style.height = "auto";
+      chart.setAttribute("role", "status");
+      host.setAttribute("data-grid-span", "12");
       chart.textContent = "当前筛选条件下暂无可显示的设计信息";
       return;
     }
-    if (kind === "criteria-comparison" && criteriaPage) {
-      renderCriteriaSources(chart, rows);
+    if (sourceComparison) {
+      host.setAttribute("data-grid-span", "12");
+      renderCriteriaSources(chart, rows, !criteriaPage);
       return;
     }
     if (kind === "design-choice-matrix" && rows.every(function (row) {
@@ -1068,6 +1477,7 @@
       chart.setAttribute("data-chart-type", "design-choice-summary");
       chart.setAttribute("role", "region");
       chart.classList.add("kz-c-chart-canvas--design-summary");
+      host.setAttribute("data-grid-span", "12");
       var note = document.createElement("p");
       note.className = "kz-c-design-summary__note";
       note.textContent = "这些研究均已公开所列设计要素；按研究对照具体定义，点击任一条查看来源。";
@@ -1103,26 +1513,11 @@
       chart.appendChild(grid);
       return;
     }
-    var elementCount = uniqueValues(rows, "element_zh").length;
-    // 独立视觉复核（v58 typography）：折行标签需要更多行高——按最长标签
-    // 的换行数联动增加每行高度，避免 SVG 文本互相叠压
-    var maxLabelLines = 1;
-    rows.forEach(function (row) {
-      var lbl = String(row.display_label_zh || row.element_zh || "");
-      var lines = Math.ceil(lbl.length / 14);
-      if (lines > maxLabelLines) maxLabelLines = lines;
-    });
-    var rowH = elementCount <= 4 ? 58 : 66;
-    rowH += (maxLabelLines - 1) * 14;
-    var matrixHeight = kind === "criteria-comparison"
-      ? rows.length * 36 + 88
-      : elementCount * rowH + 150;
-    chart.style.height = Math.max(360, Math.min(1800, matrixHeight)) + "px";
-    chartState.rows = rows.slice();
-    chartState.kind = kind;
-    chartState.chart = chart;
-    chartContainerWidth = chart.clientWidth;
-    cChart = window.echarts.init(chart, null, {renderer: "svg"});
+    if (typeof sharedPresentationPlan !== "function") {
+      chart.setAttribute("role", "status");
+      chart.textContent = "图形组件未就绪；完整设计资料仍可在下方查阅";
+      return;
+    }
     var option = kind === "sample-size-bar"
         ? sampleOption(rows)
       : kind === "criteria-comparison"
@@ -1132,6 +1527,31 @@
         : kind === "evidence-coverage"
             ? evidenceOption(rows)
             : matrixOption(rows, kind, chart && chart.clientWidth ? chart.clientWidth : 900);
+    var glyphCount = 0;
+    var paintedLines = 1;
+    (option.series || []).forEach(function (series) {
+      glyphCount += (series.data || []).length;
+      if (series.label && typeof series.label.formatter === "function") {
+        (series.data || []).forEach(function (point) {
+          paintedLines = Math.max(paintedLines,
+            String(series.label.formatter({data: point})).split("\n").length);
+        });
+      }
+    });
+    var plan = sharedPresentationPlan({rows: rows, design_layout: {
+      kind: kind, x_labels: option.xAxis.data || [], y_labels: option.yAxis.data || [],
+      row_height: Math.max(32, paintedLines * 23 + 12),
+      axis_inset: Number(option.grid.top || 0) + Number(option.grid.bottom || 0),
+      glyph_count: glyphCount, series_count: option.series.length
+    }});
+    host.setAttribute("data-grid-span", String(plan.grid_span));
+    host.setAttribute("data-observation-count", String(plan.observation_count));
+    chart.style.height = plan.target_height + "px";
+    chartState.rows = rows.slice();
+    chartState.kind = kind;
+    chartState.chart = chart;
+    chartContainerWidth = chart.clientWidth;
+    cChart = window.echarts.init(chart, null, {renderer: "svg"});
     cChart.setOption(option);
     cChart.on("click", function (params) {
       var rowId = params.data && params.data.rowId;
@@ -1146,10 +1566,13 @@
     if (!cChart || !chartState.chart) return;
     var width = chartState.chart.clientWidth;
     cChart.resize();
+    // Width-driven matrix redraw must reuse the current query filter.
+    // Reconstructing from chartState.rows alone restores excluded studies and
+    // can repaint a chart that updateChartFromState already cleared.
     if (chartState.kind === "core-design-matrix" && width > 0
         && width !== chartContainerWidth) {
       chartContainerWidth = width;
-      cChart.setOption(matrixOption(chartState.rows, chartState.kind, width), true);
+      updateChartFromState(sanitizeState(selectedState()));
     }
   }
 
@@ -1165,6 +1588,14 @@
   function start() {
     if (started) return;
     started = true;
+    // Personal reuse may restore the URL after this script was loaded, but
+    // before the first render. Read the current query rather than stale input.
+    var restoredCriteria = new URLSearchParams(window.location.search || "");
+    criteriaSearchQuery = restoredCriteria.get("criteria_q") || "";
+    excludedCriteriaTrials = {};
+    restoredCriteria.getAll("criteria_hide").forEach(function (trialId) {
+      excludedCriteriaTrials[trialId] = true;
+    });
     removeSharedHash();
     decorateRows();
     renderCChart();
@@ -1200,6 +1631,7 @@
   }
 
   window.__CHART_SYNC__ = {
+    presentationPlan: sharedPresentationPlan,
     syncWithFilter: renderCChart,
     clearSelection: function () {},
     selectByRowId: function () {},
@@ -1217,5 +1649,13 @@
         "evidence-coverage"
       ];
     }
+  };
+  window.__C_PERSONAL_QUERY_VALUES__ = function () {
+    if (!usesSourceComparison(window.__C_PAGE_ID__ || "")) return {};
+    var trials = Object.create(null);
+    allChartRows().forEach(function (row) {
+      if (row.trial_display_id) trials[String(row.trial_display_id)] = true;
+    });
+    return {criteria_q: null, criteria_hide: trials};
   };
 })();

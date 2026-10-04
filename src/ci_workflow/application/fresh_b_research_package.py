@@ -786,7 +786,7 @@ def _assert_fact_coverage(content: FreshBResearchContent, source_set: set[str]) 
 
 def _assert_sources_within_cutoff(content: FreshBResearchContent) -> None:
     for source in content.sources:
-        if not source.date_evidence("first_disclosed_at").is_known_by(content.data_cutoff):
+        if not source.is_available_by(content.data_cutoff):
             raise ValueError(
                 "截止日之后或无法证明截止时点前首次披露的来源不得进入当前 B 类快照："
                 f"{source.source_id}"

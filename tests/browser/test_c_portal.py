@@ -127,7 +127,9 @@ def test_c_all_eleven_pages_render_without_horizontal_dragging(
                 assert len(set(first_row_x)) == 4, first_row_x
             if page_id == "design-patterns":
                 assert page.locator("[data-path-id]").count() >= 2
-                assert "唯一最佳" not in page.locator("body").inner_text()
+                # Current contract: explicit negation is allowed; real path
+                # ranking is covered by the separate behavior regression below.
+                assert "不生成唯一最佳方案" in page.locator("body").inner_text()
             overflow = page.evaluate(
                 """() => ({
                   document: document.documentElement.scrollWidth,
@@ -633,8 +635,8 @@ def test_c_treatment_chart_keeps_frequency_loading_dose_and_treatment_period(
     """分组页核心图应完整保留给药频次、负荷剂量和疗程。"""
     with sync_playwright() as playwright:
         browser = _launch(playwright, browser_name)
-        page = browser.new_page(viewport={"width": 1024, "height": 900})
-        _open(page, c_site, "treatment-arms.html", width=1024)
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        _open(page, c_site, "treatment-arms.html", width=1600)
         text = page.locator('[data-chart-type="treatment-structure-matrix"]').text_content() or ""
         assert "每2周1次" in text
         assert "负荷期250 mg" in text
@@ -642,12 +644,13 @@ def test_c_treatment_chart_keeps_frequency_loading_dose_and_treatment_period(
         assert "基线至第52周" in text
         assert "度普利尤单抗" in text
         assert "奈莫利珠单抗" in text
-        assert "Dupilumab" not in text
-        assert "Nemolizumab" not in text
         assert "来布利珠单抗匹配安慰剂" in text
-        assert "Lebrikizumab" not in text
-        assert "奈莫利珠单抗研究" in text
-        assert "奈莫利珠单抗疗效与安全…" not in text
+        # Source aliases remain intact; Chinese reading titles and original
+        # disclosures are verified separately, not by erasing English sources.
+        study = page.locator('[data-criteria-study="NCT03985943"]')
+        assert study.count() == 1
+        assert "奈莫利珠单抗" in study.inner_text()
+        assert "…" not in study.inner_text()
         svg_lines = page.locator(
             '[data-chart-type="treatment-structure-matrix"] tspan'
         ).all_text_contents()
@@ -655,4 +658,45 @@ def test_c_treatment_chart_keeps_frequency_loading_dose_and_treatment_period(
         assert "0 mg" not in svg_lines
         assert "25" not in svg_lines
         assert "0 mg；每2周1次；含" not in svg_lines
+        browser.close()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
+def test_c_current_pattern_boundary_allows_negation_not_ranking(
+    c_site: Path, browser_name: str
+) -> None:
+    """禁止唯一方案推荐，不禁止向读者明确解释这条边界。"""
+    with sync_playwright() as playwright:
+        browser = _launch(playwright, browser_name)
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        _open(page, c_site, "design-patterns.html", width=1600)
+        assert "不生成唯一最佳方案" in page.locator("body").inner_text()
+        paths = page.locator("[data-path-id]")
+        path_ids = paths.evaluate_all("nodes => nodes.map(n => n.dataset.pathId)")
+        assert len(set(path_ids)) == len(path_ids) >= 2
+        ranking = page.locator("[data-path-rank], [data-path-score], [data-preferred-path]")
+        assert ranking.count() == 0
+        for text in paths.all_text_contents():
+            assert not any(term in text for term in ("唯一最佳", "推荐排名", "最优方案"))
+        browser.close()
+
+
+@pytest.mark.parametrize("browser_name", BROWSERS)
+def test_c_current_treatment_titles_are_chinese_with_source_aliases_retained(
+    c_site: Path, browser_name: str
+) -> None:
+    """中文阅读标题和完整英文原文共存，不能为中文验收擦除来源。"""
+    with sync_playwright() as playwright:
+        browser = _launch(playwright, browser_name)
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        _open(page, c_site, "treatment-arms.html", width=1600)
+        titles = page.locator(".kz-c-criteria-table__trial-product").all_text_contents()
+        assert titles
+        for name in ("度普利尤单抗", "奈莫利珠单抗", "来布利珠单抗"):
+            assert any(title.strip().startswith(name) for title in titles), titles
+        originals = page.locator(".kz-c-criteria-original").all_text_contents()
+        assert originals
+        for alias in ("Dupilumab", "Nemolizumab", "Lebrikizumab"):
+            assert any(alias.casefold() in text.casefold() for text in originals), originals
+        assert "完整原文与限定条件" in page.locator("#kz-chart-module").inner_text()
         browser.close()

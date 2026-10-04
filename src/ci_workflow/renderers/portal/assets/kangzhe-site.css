@@ -1,0 +1,187 @@
+/* Kangzhe 6.0 shared site owner. Compact reading profile, not a slide theme.
+ * Geometry/colour/type derived from the user-selected 6.0 tokens snapshot.
+ * Business templates, chart scale decisions and source disclosure stay separate.
+ */
+:root {
+  --kz-type-body: 16px;
+  --kz-type-card-title: 24px;
+  --kz-type-page-title: 32px;
+  --portal-canvas-max: 100%;
+  --portal-gutter: clamp(20px, 2vw, 48px);
+  --portal-card-padding: 16px;
+  --portal-card-gap: 16px;
+  --lh-body: 1.4;
+  --radius: 18px;
+  --b-radius: 18px;
+  --bg: #FBFCFD;
+  --text-3: #64676B;
+  --kz-glass-border: rgba(190, 178, 161, .45);
+  --kz-glass-face: rgba(255, 255, 255, .90);
+  --kz-glass-shadow: 0 3px 7px rgba(35, 31, 23, .04), 0 12px 24px rgba(35, 31, 23, .07);
+}
+
+body[data-kz-design="6.0"] { background: var(--bg); }
+/* Only leased background roots; no nested blur inside modal/data reading planes. */
+.kz-reading-background-isolated { filter: blur(5px); }
+.kz-reading-background-isolated,
+.kz-reading-background-isolated *,
+.kz-reading-background-isolated::before,
+.kz-reading-background-isolated::after,
+.kz-reading-background-isolated *::before,
+.kz-reading-background-isolated *::after { animation-play-state: paused; }
+body[data-kz-design="6.0"] .kz-personal-view {
+  justify-content: flex-end;
+  border: 0;
+  padding: 0;
+  margin-bottom: 6px;
+  background: transparent;
+  color: var(--text-2);
+}
+body[data-kz-design="6.0"] .kz-personal-view button {
+  border-color: var(--kz-glass-border);
+  color: var(--text-1);
+}
+body[data-kz-design="6.0"] .kz-a-workspace-bar__actions .kz-personal-view {
+  margin-bottom: 0;
+}
+body[data-kz-design="6.0"] .publication-limitation {
+  width: calc(100% - 2 * var(--portal-gutter));
+  max-width: none;
+  margin: 8px auto;
+  padding: 6px 12px;
+}
+.kz-a-site .kz-a-section-head > div { flex: 1; min-width: 0; }
+.kz-a-site .kz-a-section-head > button { flex-shrink: 0; }
+.kz-a-site .kz-a-section-head p { max-width: none; }
+.kz-a-main, .kz-b-main, .kz-c-main {
+  padding: 16px var(--portal-gutter) 40px;
+}
+.kz-a-site .site-header__inner, .kz-b-site .site-header__inner, .kz-c-site .site-header__inner,
+.kz-a-site .portal-source-section__inner, .kz-b-site .portal-source-section__inner, .kz-c-site .portal-source-section__inner,
+.kz-a-site .site-footer__inner, .kz-b-site .site-footer__inner, .kz-c-site .site-footer__inner {
+  max-width: var(--portal-canvas-max);
+  padding-inline: var(--portal-gutter);
+}
+.kz-a-site :is(p, li, dt, dd, label, button, input, select, textarea, summary, small, th, td),
+.kz-b-site :is(p, li, dt, dd, label, button, input, select, textarea, summary, small, th, td),
+.kz-c-site :is(p, li, dt, dd, label, button, input, select, textarea, summary, small, th, td) {
+  font-size: var(--kz-type-body);
+  line-height: var(--lh-body);
+}
+.kz-a-site .portal-page-title, .kz-b-site .portal-page-title, .kz-c-site .portal-page-title {
+  font-size: var(--kz-type-page-title);
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.kz-a-panel > h2, .kz-a-section-head h2, .kz-b-section-heading h2,
+.kz-c-section-heading h2, .kz-c-profile-index > h2, .kz-c-path-section > h2,
+.kz-chart-group__title, .kz-a-safety-observation-group > h3 {
+  font-size: var(--kz-type-card-title);
+  line-height: 1.25;
+}
+.kz-a-panel, .kz-a-summary, .kz-b-visual-section, .kz-b-reading-notes,
+.kz-b-dossier-summary, .kz-b-profile-index, .kz-c-visual-section,
+.kz-c-path-section, .kz-c-profile-index {
+  position: relative;
+  min-width: 0;
+  padding: var(--portal-card-padding);
+  margin-block: 0 var(--portal-card-gap);
+  border: 1px solid var(--kz-glass-border);
+  border-radius: var(--radius);
+  background: radial-gradient(ellipse at var(--kz-mx, 14%) var(--kz-my, 0%), rgba(255, 245, 220, .38), transparent 32%), var(--kz-glass-face);
+  box-shadow: var(--kz-glass-shadow);
+  backdrop-filter: blur(18px);
+}
+/* A quiet opaque reading plane inside one glass shell; never a second blur. */
+.kz-a-site .kz-chart, .kz-b-site .kz-chart-module, .kz-c-site .kz-chart-module {
+  background: rgba(255, 255, 255, .96);
+}
+.kz-a-site .kz-a-hero-grid { gap: var(--portal-card-gap); }
+.kz-a-site .kz-a-panel[data-module="safety"] .kz-a-filter-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.kz-a-site .kz-a-panel[data-module="safety"] .kz-a-filter { margin: 0; }
+.kz-a-site .kz-a-panel[data-module="safety"] .kz-a-filter-disclosure summary {
+  gap: 8px;
+  padding: 8px 10px;
+}
+.kz-a-site .kz-a-panel[data-module="safety"] .kz-a-filter-disclosure summary::after {
+  content: "⌄";
+}
+.kz-a-site .kz-a-panel[data-module="safety"] .kz-a-filter-disclosure[open] summary::after {
+  content: "⌃";
+}
+.kz-a-site .kz-a-observation-pagination { margin-bottom: 8px; }
+.kz-a-site .kz-a-observation-pagination button {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid var(--kz-glass-border);
+  border-radius: 10px;
+  background: white;
+  color: var(--text-1);
+  cursor: pointer;
+}
+.kz-a-site .kz-a-observation-pagination button:disabled { opacity: .55; cursor: default; }
+.kz-b-site .kz-b-filters { gap: 16px; margin-bottom: 16px; padding: 16px; }
+.kz-b-site .kz-b-filter-panel .kz-b-filters { margin: 0; }
+.kz-b-site .kz-b-filter-summary { border-top: 1px solid var(--kz-glass-border); }
+.kz-b-site .kz-b-section-heading { align-items: center; margin-bottom: 6px; gap: 16px; }
+.kz-b-site .kz-b-section-heading .kz-b-evidence-hint { margin: 0; }
+.kz-chart-group__context {
+  margin: 4px 0 8px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+.kz-a-site .kz-a-page-head { padding-right: 0; }
+.kz-a-page-ambient { display: none; }
+
+/* The compact, shared evidence organisation scene occupies existing headroom. */
+.portal-page-head:has(.kz-site-story) {
+  display: grid;
+  grid-template-columns: minmax(360px, 2fr) minmax(540px, 3fr);
+  grid-template-rows: auto;
+  gap: 2px 24px;
+  align-content: center;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.portal-page-head:has(.kz-site-story) > :not(.kz-site-story) { grid-column: 1; }
+.kz-site-story { grid-column: 2; grid-row: 1 / span 6; min-width: 0; }
+.kz-site-story .kz-film-stage {
+  height: 80px;
+  min-height: 80px;
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 16% 28%, rgba(255, 204, 0, .08), transparent 48%);
+}
+.kz-site-story .kz-film-carrier {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid var(--kz-glass-border);
+  box-shadow: var(--kz-glass-shadow), inset 0 1px 0 rgba(255, 255, 255, .75);
+  color: var(--text-1);
+}
+.kz-film-carrier-label { font-size: 24px; line-height: 1.25; font-weight: 700; }
+.kz-site-story__details { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.kz-site-story__details span { font-size: 16px; line-height: 1.4; }
+.kz-site-story__details[hidden] { display: none; }
+.kz-film-caption { margin: 4px 0 0; color: var(--text-2); font-size: 16px; line-height: 1.4; }
+.kz-tilt { transition: transform 160ms ease-out; }
+.kz-content-reveal { min-width: 0; }
+.kz-site-story__light { position: absolute; right: 2%; top: 10%; width: 18%; height: 70%; border-radius: 50%; box-shadow: inset 5px 2px 12px rgba(255, 255, 255, .85), 5px 4px 18px rgba(255, 153, 0, .08); transform: rotate(-18deg); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .kz-tilt { transition: none; }
+}
+@media print {
+  .kz-site-story { display: none; }
+  .portal-page-head:has(.kz-site-story) { display: block; }
+}

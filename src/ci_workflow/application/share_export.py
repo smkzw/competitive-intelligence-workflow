@@ -31,6 +31,10 @@ _PRIVATE_DATA = re.compile(
     rb"\b(?:sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,})\b|"
     rb'"(?:access_token|refresh_token|session_token|api_key)"\s*:)'
 )
+# Static JS legitimately documents support for the bare "file://" protocol;
+# actual local file URLs and the same private-path/credential patterns remain
+# forbidden in every asset, including CSS/SVG rather than just report JSON.
+_PRIVATE_ASSET_DATA = re.compile(_PRIVATE_DATA.pattern.replace(rb"file://", rb"file:///"))
 _QUERY_KEY = re.compile(r"[a-z][a-z0-9_]{0,39}\Z")
 
 
@@ -177,6 +181,13 @@ def _check_local_reference(
 def _validate_static_resources(files: dict[str, bytes]) -> None:
     available = set(files)
     for relative, content in files.items():
+        private = (
+            _PRIVATE_DATA
+            if relative.endswith((".html", ".json")) or relative.startswith("data/")
+            else _PRIVATE_ASSET_DATA
+        )
+        if private.search(content):
+            raise ValueError("当前站点含本地绝对路径或凭据样式内容，拒绝分享")
         if relative.endswith(".html"):
             inventory = _ResourceInventory()
             inventory.feed(content.decode("utf-8"))
@@ -255,11 +266,6 @@ def export_current_html_share(
             content = path.read_bytes()
             if hashlib.sha256(content).hexdigest() != expected:
                 raise ValueError("当前站点文件哈希漂移")
-            if (
-                (path.suffix.lower() in {".html", ".json"} or relative.startswith("data/"))
-                and _PRIVATE_DATA.search(content)
-            ):
-                raise ValueError("当前站点含本地绝对路径或凭据样式内容，拒绝分享")
             copied_hashes[relative] = expected
             site_files[relative] = content
             members.append((f"{selection.report}/{relative}", content))

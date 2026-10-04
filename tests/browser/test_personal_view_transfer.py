@@ -8,7 +8,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 import pytest
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import Page, sync_playwright
 
 from ci_workflow.application.fixture_runner import run_fixture_case
 from ci_workflow.application.latest_delivery import read_current_delivery
@@ -21,6 +21,18 @@ from tests.integration.test_w04_user_fact_edit import _command, _project
 
 ROOT = Path(__file__).resolve().parents[2]
 PORTAL = ROOT / "src/ci_workflow/renderers/portal/assets/portal.js"
+
+
+def _open_personal_controls(page: Page) -> None:
+    """Follow native disclosures as a reader; never force hidden controls open."""
+    for selector in (
+        "details.kz-a-workspace-bar",
+        "details#kz-filter-panel",
+        "details.kz-b-personal, details.kz-c-personal",
+    ):
+        disclosure = page.locator(selector)
+        if disclosure.count() and disclosure.get_attribute("open") is None:
+            disclosure.locator(":scope > summary").click()
 
 
 def _page(path: Path, report: str, selected: bool = False) -> None:
@@ -66,6 +78,7 @@ def test_personal_view_export_import_cross_page_and_reject_bad_file(
         if report != "A":
             url += "?product=product-one"
         page.goto(url)
+        _open_personal_controls(page)
         with page.expect_download() as downloaded:
             page.get_by_role("button", name="导出配置").click()
         saved = tmp_path / f"{report}.json"
@@ -85,6 +98,7 @@ def test_personal_view_export_import_cross_page_and_reject_bad_file(
         fresh = browser.new_context()
         target = fresh.new_page()
         target.goto((site / "overview.html").as_uri())
+        _open_personal_controls(target)
         target.locator('input[aria-label="选择个人视图 JSON 文件"]').set_input_files(saved)
         target.wait_for_url("**/overview.html?product=product-one")
         target.goto((site / "efficacy.html").as_uri())
@@ -130,6 +144,7 @@ def test_personal_view_export_import_cross_page_and_reject_bad_file(
                 encoding="utf-8",
             )
             target.goto((site / "overview.html").as_uri() + "?trial=trial-one")
+            _open_personal_controls(target)
             target.locator('input[aria-label="选择个人视图 JSON 文件"]').set_input_files(bad)
             target.get_by_role("status").wait_for()
             assert "trial=trial-one" in target.url
@@ -157,6 +172,7 @@ def test_rendered_b_portal_uses_exported_filter_on_another_page(tmp_path: Path) 
         assert value
         filter_button.click()
         assert value in page.url
+        _open_personal_controls(page)
         with page.expect_download() as downloaded:
             page.get_by_role("button", name="导出配置").click()
         saved = tmp_path / "rendered-b-view.json"
@@ -170,6 +186,7 @@ def test_rendered_b_portal_uses_exported_filter_on_another_page(tmp_path: Path) 
         )
         other = browser.new_context().new_page()
         other.goto((site / "overview.html").as_uri())
+        _open_personal_controls(other)
         other.locator('input[aria-label="选择个人视图 JSON 文件"]').set_input_files(saved)
         other.wait_for_url("**/overview.html?product=*")
         other.goto((site / "efficacy.html").as_uri())
@@ -206,6 +223,7 @@ def test_rendered_a_c_pages_export_cli_view_config(tmp_path: Path, report: str) 
         page = browser.new_page(accept_downloads=True)
         page.goto((site / "overview.html").as_uri())
         assert page.locator("body").get_attribute("data-current-revision") == "0"
+        _open_personal_controls(page)
         with page.expect_download() as downloaded:
             page.get_by_role("button", name="导出配置").click()
         saved = tmp_path / f"rendered-{report}.json"
@@ -220,6 +238,7 @@ def test_rendered_a_c_pages_export_cli_view_config(tmp_path: Path, report: str) 
         )
         page.goto((site / second_page).as_uri())
         assert page.locator("body").get_attribute("data-current-revision") == "0"
+        _open_personal_controls(page)
         assert page.get_by_role("button", name="导出配置").count() == 1
         browser.close()
 
@@ -250,6 +269,7 @@ def test_browser_download_is_direct_cli_input_for_committed_b_current(
         ).first
         assert button.count() == 1
         button.click()
+        _open_personal_controls(page)
         with page.expect_download() as downloaded:
             page.get_by_role("button", name="导出配置").click()
         config = tmp_path / "downloaded-view.json"
@@ -288,6 +308,7 @@ def test_unchanged_c_page_config_remains_shareable_in_newer_current(
         page = browser.new_page(accept_downloads=True)
         page.goto((root / c_delivery.site_relative_path / "overview.html").as_uri())
         assert page.locator("body").get_attribute("data-current-revision") == "0"
+        _open_personal_controls(page)
         with page.expect_download() as downloaded:
             page.get_by_role("button", name="导出配置").click()
         config = tmp_path / "unchanged-c.json"

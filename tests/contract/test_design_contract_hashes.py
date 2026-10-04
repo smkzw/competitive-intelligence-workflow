@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import cast
 
@@ -60,7 +61,7 @@ def _load_manifest() -> dict[str, object]:
     return cast(dict[str, object], data)
 
 
-def test_latest_stable_source_and_user_internalization_decision_are_recorded() -> None:
+def test_historical_source_and_user_internalization_decision_are_preserved() -> None:
     manifest = _load_manifest()
     source = manifest["source"]
     decision = manifest["decision"]
@@ -82,11 +83,17 @@ def test_project_contract_is_self_contained_and_has_one_runtime_authority() -> N
     runtime = manifest["runtime"]
     assert isinstance(runtime, dict)
     assert runtime["entrypoint"] == "design.md"
-    assert runtime["authority"] == "design_specs"
+    assert runtime["authority"] == "v6-site"
     assert DESIGN_ENTRY.is_file()
-    assert _sha256(DESIGN_ENTRY) == PROJECT_ENTRY_SHA256
+    # Preserve the old checkpoint hash; validate that historical commit, not
+    # force the current user-authorized entry back to its August bytes.
+    old_entry = subprocess.check_output(
+        ["git", "show", "c129a575a403ea39027e112c1acd80ca77b43117:contracts/kangzhe/design.md"],
+        cwd=ROOT,
+    )
+    assert hashlib.sha256(old_entry).hexdigest() == PROJECT_ENTRY_SHA256
     entry = DESIGN_ENTRY.read_text(encoding="utf-8")
-    assert "design_specs/ROUTER.md" in entry
+    assert "v6-site/project-profile.md" in entry
     assert "非全文" in entry
 
     required = {
@@ -117,9 +124,13 @@ def test_project_contract_is_self_contained_and_has_one_runtime_authority() -> N
     assert "不读取通用版" in local_map
 
 
-def test_latest_site_track_was_refreshed_once_then_frozen_in_project() -> None:
+def test_historical_site_track_was_refreshed_once_then_frozen_in_project() -> None:
     manifest = _load_manifest()
-    runtime = manifest["runtime"]
+    historical = json.loads((CONTRACT_ROOT / "history/2026-08-27-manifest.json").read_text())
+    assert _sha256(CONTRACT_ROOT / "history/2026-08-27-manifest.json") == (
+        cast(dict[str, str], manifest["historical_manifest"])["sha256"]
+    )
+    runtime = historical["runtime"]
     assert isinstance(runtime, dict)
     refresh = runtime["latest_site_refresh"]
     assert isinstance(refresh, dict)
@@ -140,11 +151,8 @@ def test_runtime_manifest_binds_every_project_contract_file() -> None:
     actual_files = sorted(
         [
             DESIGN_ENTRY,
-            *[
-                path
-                for path in DESIGN_PACKAGE.rglob("*")
-                if path.is_file() and "__pycache__" not in path.parts
-            ],
+            *[path for path in (CONTRACT_ROOT / "v6-site").rglob("*") if path.is_file()],
+            *DESIGN_PACKAGE.glob("schemas/*.schema.json"),
         ]
     )
     actual = {path.relative_to(CONTRACT_ROOT).as_posix(): _sha256(path) for path in actual_files}

@@ -24,7 +24,7 @@ from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
 from ci_workflow.storage.source_derivation import extract_locator_quote
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-_CAS_ROOT = _REPO_ROOT / ".artifacts" / "r24-50-source-expansion-20260926" / "project-v2"
+_CAS_ROOT = _REPO_ROOT / "tests" / "fixtures" / "ctgov-c-source"
 _CAS_DIGEST = "5d35c3ce835ebea73cc28e53cc6216773247fb77e0b1053b45eb83036ce6b3be"
 _REPLAYED_AT = datetime(2026, 9, 26, tzinfo=UTC)
 
@@ -203,8 +203,8 @@ def test_extraction_is_deterministic_and_infers_no_product_or_group_binding() ->
             0
         ].update(armGroupLabels=["Ghost Arm"]),
         lambda record: record["protocolSection"]["outcomesModule"].update(primaryOutcomes={}),
-        lambda record: record["protocolSection"]["outcomesModule"]["primaryOutcomes"][0].pop(
-            "timeFrame"
+        lambda record: record["protocolSection"]["outcomesModule"]["primaryOutcomes"][0].update(
+            timeFrame=["Week 24"]
         ),
         lambda record: record["protocolSection"]["outcomesModule"].update(secondaryOutcomes=0),
     ],

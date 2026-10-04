@@ -31,6 +31,13 @@
 
 分层边界：回执结构与授权裁决留在 ``qc`` 层真源（``Task 9.4`` 权能边界）；
 本模块只做运行时接线（状态迁移与上下文物化），不得绕过或复制授权门。
+
+R24 epoch 生命周期：同项目重复科学复核经由显式 ``advance_scientific_review_epoch``
+推进——绑定预期前驱上下文（摘要等于当前活跃上下文）、同项目/同报告、真实
+新科学上下文与真实门户字节后，在版本化目录物化新纪元上下文/请求并原子激活
+指针（``storage.scientific_review_epoch``）。既有单例路径是隐式 epoch 0：
+遗留发布者保持原拒绝语义；活跃 epoch 是发布/重载/回执/请求/晋级作用域的
+唯一权威，历史纪元字节只追加、不可变。
 """
 
 from __future__ import annotations
@@ -42,7 +49,7 @@ from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Final, Literal, cast
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 from pydantic import ValidationError as PydanticValidationError
 
 from ci_workflow.application.source_research_service import (
@@ -50,6 +57,7 @@ from ci_workflow.application.source_research_service import (
     ResearchFact,
     SourceCapture,
 )
+from ci_workflow.application.user_fact_edit import current_delivery_lock
 from ci_workflow.capabilities.scientific_qc import (
     ScientificQcBoundaryError,
     validate_scientific_qc_verdict_payload,
@@ -72,6 +80,17 @@ from ci_workflow.qc.scientific import (
     ScientificQcReviewBundle,
     ScientificQcVerdict,
     SourceRef,
+)
+from ci_workflow.storage.scientific_review_epoch import (
+    ScientificReviewEpochEntry,
+    ScientificReviewEpochPointer,
+    ScientificReviewEpochStateError,
+    build_scientific_review_epoch_pointer,
+    epoch_production_context_path,
+    epoch_receipt_path,
+    epoch_review_request_path,
+    read_epoch_pointer,
+    write_epoch_pointer,
 )
 
 ReportKindCode = Literal["A", "B", "C"]
@@ -131,6 +150,55 @@ def _sha256_hex(value: object) -> str:
 
 def _sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+class ActiveScientificReviewScope(BaseModel):
+    """当前活跃科学复核作用域：epoch 0 为既有单例布局（隐式纪元）。"""
+
+    model_config = ConfigDict(frozen=True)
+
+    epoch: int
+    production_context_relative: str
+    review_request_relative: str
+    receipt_relative: str
+
+    @field_validator("epoch")
+    @classmethod
+    def _epoch_non_negative(cls, value: int) -> int:
+        if value < 0:
+            raise ValueError("epoch 序号不得为负")
+        return value
+
+
+def active_scientific_review_scope(
+    project_root: Path, report_kind: str
+) -> ActiveScientificReviewScope:
+    """解析当前活跃作用域：有 epoch 指针则版本化目录，否则既有单例路径。
+
+    指针文件损坏或摘要漂移一律失败关闭；本函数是发布、重载、请求与回执
+    读取共同的作用域解析点（issuer 经 ``review_issuer`` 复用同一解析）。
+    """
+    kind = _validated_kind(report_kind)
+    try:
+        pointer = read_epoch_pointer(project_root, kind)
+    except ScientificReviewEpochStateError as error:
+        raise ScientificReviewTransitionError(f"科学复核 epoch 指针无效：{error}") from error
+    if pointer is None:
+        return ActiveScientificReviewScope(
+            epoch=0,
+            production_context_relative=production_context_publication_path(
+                kind
+            ).as_posix(),
+            review_request_relative=scientific_review_request_path(kind).as_posix(),
+            receipt_relative=scientific_review_receipt_path(kind).as_posix(),
+        )
+    epoch = pointer.active_epoch
+    return ActiveScientificReviewScope(
+        epoch=epoch,
+        production_context_relative=epoch_production_context_path(kind, epoch).as_posix(),
+        review_request_relative=epoch_review_request_path(kind, epoch).as_posix(),
+        receipt_relative=epoch_receipt_path(kind, epoch).as_posix(),
+    )
 
 
 def capture_portal_artifact_binding(
@@ -373,9 +441,14 @@ def publish_production_context(
     report_kind: str,
     context: ScientificQcCurrentContext,
 ) -> Path:
-    """把权威生产上下文物化为确定性状态文件，供外部复核会话绑定。"""
+    """把权威生产上下文物化为确定性状态文件，供外部复核会话绑定。
+
+    作用域随活跃 epoch：epoch 0 写既有单例路径（历史行为逐字节兼容）；
+    epoch ≥ 1 写活跃纪元版本化路径。既有文件的隐式覆盖拒绝语义不变。
+    """
     kind = _validated_kind(report_kind)
-    path = project_root / production_context_publication_path(kind)
+    scope = active_scientific_review_scope(project_root, kind)
+    path = project_root / scope.production_context_relative
     payload = (_canonical_json(context.model_dump(mode="json")) + "\n").encode("utf-8")
     if path.is_file():
         try:
@@ -392,6 +465,39 @@ def publish_production_context(
     return path
 
 
+def _review_request_body(
+    context: ScientificQcCurrentContext,
+    *,
+    report_kind: ReportKindCode,
+    producer_session_id: str,
+    produced_at: datetime,
+    portal_binding: PortalArtifactBinding,
+) -> dict[str, object]:
+    """构造复核请求体（发布与 epoch 物化共用同一格式与摘要算法）。"""
+    bundle = _review_bundle(context)
+    production = ReviewProductionContext(
+        project_id=context.project_id,
+        report_kind=report_kind,
+        report_version=context.report_version,
+        report_object_id=context.report_object_id,
+        candidate_snapshot_id=context.candidate_snapshot_id,
+        candidate_content_digest=context.candidate_content_digest,
+        producer_id=context.producer_id,
+        producer_session_id=producer_session_id,
+        criteria_version=context.criteria_version,
+        gate_result_key=context.gate_result_key,
+        produced_at=produced_at,
+        production_context_digest=context.context_digest,
+    )
+    return {
+        "scientific_context": context.model_dump(mode="json"),
+        "production": production.model_dump(mode="json"),
+        "review_input_digest": bundle.input_digest,
+        "portal_binding": portal_binding.model_dump(mode="json"),
+    }
+
+
+
 def publish_scientific_review_request(
     project_root: Path,
     report_kind: str,
@@ -406,31 +512,20 @@ def publish_scientific_review_request(
     ``portal_binding`` 必须来自 format 完成后的真实磁盘字节
     （``capture_portal_artifact_binding``）。同一候选重跑时以重新捕获的
     字节重验首次绑定（漂移即失败关闭）；既有请求属于其他候选或项目时
-    拒绝覆盖（不接受跨候选/跨项目/无关历史）。
+    拒绝覆盖（不接受跨候选/跨项目/无关历史）。作用域随活跃 epoch：
+    epoch 0 写既有单例路径，epoch ≥ 1 写活跃纪元版本化路径；隐式发布者
+    永远不能越过显式 epoch 推进写入新候选。
     """
     kind = _validated_kind(report_kind)
-    path = project_root / scientific_review_request_path(kind)
-    bundle = _review_bundle(context)
-    production = ReviewProductionContext(
-        project_id=context.project_id,
+    scope = active_scientific_review_scope(project_root, kind)
+    path = project_root / scope.review_request_relative
+    body = _review_request_body(
+        context,
         report_kind=kind,
-        report_version=context.report_version,
-        report_object_id=context.report_object_id,
-        candidate_snapshot_id=context.candidate_snapshot_id,
-        candidate_content_digest=context.candidate_content_digest,
-        producer_id=context.producer_id,
         producer_session_id=producer_session_id,
-        criteria_version=context.criteria_version,
-        gate_result_key=context.gate_result_key,
         produced_at=produced_at,
-        production_context_digest=context.context_digest,
+        portal_binding=portal_binding,
     )
-    body: dict[str, object] = {
-        "scientific_context": context.model_dump(mode="json"),
-        "production": production.model_dump(mode="json"),
-        "review_input_digest": bundle.input_digest,
-        "portal_binding": portal_binding.model_dump(mode="json"),
-    }
     if path.is_file():
         try:
             existing = json.loads(path.read_text(encoding="utf-8"))
@@ -468,7 +563,9 @@ def _load_scientific_review_request(
     report_kind: str,
     context: ScientificQcCurrentContext,
 ) -> tuple[ReviewProductionContext, str, PortalArtifactBinding]:
-    path = project_root / scientific_review_request_path(report_kind)
+    kind = _validated_kind(report_kind)
+    scope = active_scientific_review_scope(project_root, kind)
+    path = project_root / scope.review_request_relative
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -508,12 +605,17 @@ def reload_production_context(
     project_root: Path,
     report_kind: str,
 ) -> ScientificQcCurrentContext:
-    """重载物化的权威上下文；缺失、损坏或摘要不一致一律失败关闭。"""
+    """重载活跃作用域的物化权威上下文；缺失、损坏或摘要不一致一律失败关闭。
+
+    活跃 epoch 是唯一权威：epoch ≥ 1 读版本化纪元路径，epoch 0 读既有
+    单例路径。旧纪元文件即使存在也不再是活跃上下文。
+    """
     kind = _validated_kind(report_kind)
-    path = project_root / production_context_publication_path(kind)
+    scope = active_scientific_review_scope(project_root, kind)
+    path = project_root / scope.production_context_relative
     if not path.is_file():
         raise ScientificReviewTransitionError(
-            f"权威生产上下文未发布：{production_context_publication_path(report_kind)}"
+            f"权威生产上下文未发布：{scope.production_context_relative}"
         )
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
@@ -535,6 +637,13 @@ def reload_production_context(
         raise ScientificReviewTransitionError(
             "权威生产上下文摘要与物化内容不一致：文件已被篡改或损坏"
         )
+    pointer = read_epoch_pointer(project_root, kind)
+    if pointer is not None and (
+        pointer.project_id != context.project_id
+        or context.report_kind.value != kind
+        or pointer.epochs[-1].context_digest != context.context_digest
+    ):
+        raise ScientificReviewTransitionError("epoch 指针与活跃生产上下文绑定不一致")
     return context
 
 
@@ -542,12 +651,16 @@ def load_scientific_review_receipt(
     project_root: Path,
     report_kind: str,
 ) -> ScientificReviewReceipt:
-    """读取并完整验证独立复核回执；缺回执或伪回执失败关闭。"""
+    """读取并完整验证活跃作用域的独立复核回执；缺回执或伪回执失败关闭。
+
+    旧纪元回执不在活跃作用域内：即使字节完好，也不能授权新活跃 epoch。
+    """
     kind = _validated_kind(report_kind)
-    path = project_root / scientific_review_receipt_path(kind)
+    scope = active_scientific_review_scope(project_root, kind)
+    path = project_root / scope.receipt_relative
     if not path.is_file():
         raise ScientificReviewTransitionError(
-            f"独立复核回执缺失：{scientific_review_receipt_path(report_kind)}"
+            f"独立复核回执缺失：{scope.receipt_relative}"
         )
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
@@ -651,6 +764,368 @@ def accepted_verdict_from_receipt(
     return verdict
 
 
+# ── R24 显式 epoch 推进：同项目重复科学复核的唯一通道 ─────────────────────────
+
+
+class ScientificReviewEpochAdvance(BaseModel):
+    """一次成功 epoch 推进（或精确重放）的追加式结果回执。"""
+
+    model_config = ConfigDict(frozen=True)
+
+    schema_version: Literal["1.0"] = "1.0"
+    project_id: str
+    report_kind: ReportKindCode
+    activated_epoch: int
+    active_context_digest: str
+    predecessor_context_digest: str
+    advanced_at: datetime
+    production_context_relative: str
+    review_request_relative: str
+    receipt_relative: str
+
+    @field_validator("project_id", "production_context_relative",
+                     "review_request_relative", "receipt_relative")
+    @classmethod
+    def _text_fields_not_blank(cls, value: str) -> str:
+        normalized = " ".join(value.split())
+        if not normalized:
+            raise ValueError("epoch 推进结果字段不能为空")
+        return normalized
+
+    @field_validator("active_context_digest", "predecessor_context_digest")
+    @classmethod
+    def _digests_are_sha256(cls, value: str) -> str:
+        if len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+            raise ValueError("epoch 推进结果摘要必须是小写 SHA-256")
+        return value
+
+    @field_validator("advanced_at")
+    @classmethod
+    def _advanced_at_has_offset(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("epoch 推进时间必须包含明确时区")
+        return value
+
+    @field_validator("activated_epoch")
+    @classmethod
+    def _activated_epoch_positive(cls, value: int) -> int:
+        if value < 1:
+            raise ValueError("epoch 推进结果纪元必须从 1 开始")
+        return value
+
+
+def _bind_epoch_contexts(
+    *,
+    pointer: ScientificReviewEpochPointer | None,
+    active: ScientificQcCurrentContext,
+    expected_predecessor_context: ScientificQcCurrentContext,
+    next_context: ScientificQcCurrentContext,
+) -> None:
+    """绑定前驱/项目/真实新科学上下文；任何不绑定即拒绝推进。"""
+    if expected_predecessor_context.context_digest != active.context_digest:
+        raise ScientificReviewTransitionError(
+            "预期前驱上下文与当前活跃上下文不一致（陈旧前驱或重复推进）："
+            "epoch 只能从真实活跃纪元显式推进"
+        )
+    if (
+        next_context.project_id != active.project_id
+        or expected_predecessor_context.project_id != active.project_id
+    ):
+        raise ScientificReviewTransitionError("epoch 推进不接受跨项目上下文")
+    known_digests = {active.context_digest}
+    if pointer is not None:
+        for entry in pointer.epochs:
+            known_digests.add(entry.context_digest)
+            known_digests.add(entry.predecessor_context_digest)
+    if next_context.context_digest in known_digests:
+        raise ScientificReviewTransitionError(
+            "epoch 推进的新上下文与活跃或历史纪元上下文相同："
+            "不是真实新科学复核对象，不得重复占用或回退纪元"
+        )
+
+
+def _stage_epoch_materials(
+    *,
+    project_root: Path,
+    report_kind: str,
+    epoch: int,
+    context: ScientificQcCurrentContext,
+    producer_session_id: str,
+    produced_at: datetime,
+    portal_binding: PortalArtifactBinding,
+) -> None:
+    """在版本化纪元目录物化上下文与请求；指针激活前对外不可见。
+
+    指针最后原子激活：staged 写入或回读失败时旧活跃作用域原样保留；
+    同一纪元重试只接受逐字节相同的材料，拒绝混合纪元残留。
+    """
+    kind = _validated_kind(report_kind)
+    context_path = project_root / epoch_production_context_path(kind, epoch)
+    context_payload = (
+        _canonical_json(context.model_dump(mode="json")) + "\n"
+    ).encode("utf-8")
+    body = _review_request_body(
+        context,
+        report_kind=kind,
+        producer_session_id=producer_session_id,
+        produced_at=produced_at,
+        portal_binding=portal_binding,
+    )
+    body["request_digest"] = _sha256_hex(body)
+    request_path = project_root / epoch_review_request_path(kind, epoch)
+    request_payload = (_canonical_json(body) + "\n").encode("utf-8")
+    for path, payload in (
+        (context_path, context_payload),
+        (request_path, request_payload),
+    ):
+        if path.is_file() and path.read_bytes() != payload:
+            raise ScientificReviewTransitionError(
+                f"epoch 目录已存在不同字节的前次推进残留，拒绝混合纪元材料：{path.name}"
+            )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(payload)
+    staged = json.loads(context_path.read_text(encoding="utf-8"))
+    if not isinstance(staged, dict) or staged.get("context_digest") != (
+        context.context_digest
+    ):
+        raise ScientificReviewTransitionError("epoch 上下文物化回读失败：拒绝激活")
+
+
+def _replay_epoch_activation(
+    *,
+    project_root: Path,
+    report_kind: str,
+    pointer: ScientificReviewEpochPointer,
+    next_context: ScientificQcCurrentContext,
+    portal_binding: PortalArtifactBinding,
+    producer_session_id: str,
+    produced_at: datetime,
+) -> ScientificReviewEpochAdvance:
+    """精确重放已激活纪元：逐字节校验后返回已记录结果（幂等）。"""
+    kind = _validated_kind(report_kind)
+    last = pointer.epochs[-1]
+    if pointer.active_epoch != last.epoch:
+        raise ScientificReviewTransitionError("epoch 指针活跃纪元与记录链不一致")
+    context_path = project_root / epoch_production_context_path(kind, last.epoch)
+    expected_context_payload = (
+        _canonical_json(next_context.model_dump(mode="json")) + "\n"
+    ).encode("utf-8")
+    if not context_path.is_file() or context_path.read_bytes() != (
+        expected_context_payload
+    ):
+        raise ScientificReviewTransitionError(
+            "epoch 精确重放与已激活上下文字节不一致：拒绝覆盖或混合纪元"
+        )
+    production, _digest, published_binding = _load_scientific_review_request(
+        project_root, kind, next_context,
+    )
+    if (
+        published_binding != portal_binding
+        or production.producer_session_id != producer_session_id
+        or production.produced_at != produced_at
+    ):
+        raise ScientificReviewTransitionError("epoch 精确重放的请求绑定与已记录材料不一致")
+    return ScientificReviewEpochAdvance(
+        project_id=next_context.project_id,
+        report_kind=kind,
+        activated_epoch=last.epoch,
+        active_context_digest=next_context.context_digest,
+        predecessor_context_digest=last.predecessor_context_digest,
+        advanced_at=last.advanced_at,
+        production_context_relative=epoch_production_context_path(
+            kind, last.epoch
+        ).as_posix(),
+        review_request_relative=epoch_review_request_path(kind, last.epoch).as_posix(),
+        receipt_relative=epoch_receipt_path(kind, last.epoch).as_posix(),
+    )
+
+
+def _activate_epoch_pointer(
+    project_root: Path, report_kind: str, pointer: ScientificReviewEpochPointer
+) -> Path:
+    """原子激活 epoch 指针（测试在此注入激活故障；失败保留旧活跃纪元）。"""
+    try:
+        return write_epoch_pointer(project_root, report_kind, pointer)
+    except ScientificReviewEpochStateError as error:
+        raise ScientificReviewTransitionError(f"epoch 指针激活失败：{error}") from error
+
+
+def advance_scientific_review_epoch(
+    *,
+    project_root: Path,
+    report_kind: str,
+    expected_predecessor_context: ScientificQcCurrentContext,
+    next_context: ScientificQcCurrentContext,
+    producer_session_id: str,
+    produced_at: datetime,
+    portal_binding: PortalArtifactBinding,
+    advanced_at: datetime | None = None,
+) -> ScientificReviewEpochAdvance:
+    """显式版本化 epoch 推进：同项目重复科学复核的唯一通道。
+
+    按序绑定：预期前驱上下文（摘要必须等于当前活跃上下文，陈旧前驱拒绝）、
+    同项目/同报告、真实新科学上下文（摘要不得等于活跃或任何历史纪元，
+    同上下文重复与回退拒绝）与真实门户字节（当前磁盘重验，漂移拒绝）。
+    新纪元上下文/请求先物化到版本化目录，指针最后原子激活；共享项目锁内
+    任何失败都保留旧活跃上下文/回执/请求，精确重试幂等。隐式发布者不能
+    经由既有发布入口越过本 API 写入新候选。
+    """
+    kind = _validated_kind(report_kind)
+    root = project_root.expanduser().resolve()
+    if (
+        expected_predecessor_context.report_kind.value != kind
+        or next_context.report_kind.value != kind
+    ):
+        raise ScientificReviewTransitionError(
+            "epoch 推进的上下文报告类型与目标报告类型不一致"
+        )
+    if not producer_session_id.strip():
+        raise ScientificReviewTransitionError("epoch 推进缺少生产者会话标识")
+    moment = datetime.now(UTC) if advanced_at is None else advanced_at
+    if moment.tzinfo is None or moment.utcoffset() is None:
+        raise ScientificReviewTransitionError("epoch 推进时间必须包含明确时区")
+    if produced_at.tzinfo is None or produced_at.utcoffset() is None:
+        raise ScientificReviewTransitionError("epoch 生产完成时间必须包含明确时区")
+
+    with current_delivery_lock(root):
+        try:
+            pointer = read_epoch_pointer(root, kind)
+        except ScientificReviewEpochStateError as error:
+            raise ScientificReviewTransitionError(
+                f"科学复核 epoch 指针无效：{error}"
+            ) from error
+        if pointer is not None:
+            last = pointer.epochs[-1]
+            if (
+                last.context_digest == next_context.context_digest
+                and last.predecessor_context_digest
+                == expected_predecessor_context.context_digest
+            ):
+                return _replay_epoch_activation(
+                    project_root=root,
+                    report_kind=kind,
+                    pointer=pointer,
+                    next_context=next_context,
+                    portal_binding=portal_binding,
+                    producer_session_id=producer_session_id,
+                    produced_at=produced_at,
+                )
+        try:
+            active = reload_production_context(root, kind)
+        except ScientificReviewTransitionError as error:
+            raise ScientificReviewTransitionError(
+                f"epoch 推进需要既有活跃生产上下文：{error}"
+            ) from error
+        _bind_epoch_contexts(
+            pointer=pointer,
+            active=active,
+            expected_predecessor_context=expected_predecessor_context,
+            next_context=next_context,
+        )
+        verify_portal_artifact_binding(root, kind, portal_binding)
+        next_epoch = (pointer.active_epoch if pointer is not None else 0) + 1
+        _stage_epoch_materials(
+            project_root=root,
+            report_kind=kind,
+            epoch=next_epoch,
+            context=next_context,
+            producer_session_id=producer_session_id,
+            produced_at=produced_at,
+            portal_binding=portal_binding,
+        )
+        entry = ScientificReviewEpochEntry(
+            epoch=next_epoch,
+            context_digest=next_context.context_digest,
+            predecessor_context_digest=active.context_digest,
+            advanced_at=moment,
+        )
+        new_pointer = build_scientific_review_epoch_pointer(
+            project_id=next_context.project_id,
+            report_kind=kind,
+            epochs=(
+                *(pointer.epochs if pointer is not None else ()),
+                entry,
+            ),
+            active_epoch=next_epoch,
+        )
+        _activate_epoch_pointer(root, kind, new_pointer)
+        return ScientificReviewEpochAdvance(
+            project_id=next_context.project_id,
+            report_kind=kind,
+            activated_epoch=next_epoch,
+            active_context_digest=next_context.context_digest,
+            predecessor_context_digest=active.context_digest,
+            advanced_at=moment,
+            production_context_relative=epoch_production_context_path(
+                kind, next_epoch
+            ).as_posix(),
+            review_request_relative=epoch_review_request_path(
+                kind, next_epoch
+            ).as_posix(),
+            receipt_relative=epoch_receipt_path(kind, next_epoch).as_posix(),
+        )
+
+
+def prepare_rendered_scientific_review(
+    *,
+    project_root: Path,
+    report_kind: str,
+    context: ScientificQcCurrentContext,
+    producer_session_id: str,
+    produced_at: datetime,
+    portal_binding: PortalArtifactBinding,
+) -> ActiveScientificReviewScope:
+    """普通手动运行发布本轮请求；新候选推进纪元，同候选保留首次绑定。
+
+    初始化和同候选恢复在共享项目锁内完成。新候选先捕获当前前驱，释放
+    非重入锁后交给显式推进 API 再核验前驱，避免竞态或嵌套锁死锁。
+    此处只发布未复核候选，绝不复用历史回执作为新候选的科学授权。
+    """
+    kind = _validated_kind(report_kind)
+    root = project_root.expanduser().resolve()
+    if context.report_kind.value != kind:
+        raise ScientificReviewTransitionError("本轮上下文与目标报告类型不一致")
+    _review_request_body(
+        context,
+        report_kind=kind,
+        producer_session_id=producer_session_id,
+        produced_at=produced_at,
+        portal_binding=portal_binding,
+    )
+    with current_delivery_lock(root):
+        verify_portal_artifact_binding(root, kind, portal_binding)
+        scope = active_scientific_review_scope(root, kind)
+        context_path = root / scope.production_context_relative
+        if context_path.exists() or context_path.is_symlink() or scope.epoch > 0:
+            predecessor = reload_production_context(root, kind)
+        else:
+            predecessor = None
+        if predecessor is None or predecessor == context:
+            publish_production_context(root, kind, context)
+            publish_scientific_review_request(
+                root, kind, context,
+                producer_session_id=producer_session_id,
+                produced_at=produced_at,
+                portal_binding=portal_binding,
+            )
+            return scope
+    advanced = advance_scientific_review_epoch(
+        project_root=root,
+        report_kind=kind,
+        expected_predecessor_context=predecessor,
+        next_context=context,
+        producer_session_id=producer_session_id,
+        produced_at=produced_at,
+        portal_binding=portal_binding,
+    )
+    return ActiveScientificReviewScope(
+        epoch=advanced.activated_epoch,
+        production_context_relative=advanced.production_context_relative,
+        review_request_relative=advanced.review_request_relative,
+        receipt_relative=advanced.receipt_relative,
+    )
+
+
 def promote_rendered_candidate(
     *,
     project_root: Path,
@@ -718,14 +1193,19 @@ def promote_rendered_candidate(
 __all__ = [
     "RENDERED_UNREVIEWED",
     "SCIENTIFICALLY_REVIEWED_RENDERED_CANDIDATE",
+    "ActiveScientificReviewScope",
     "PortalArtifactBinding",
+    "ScientificReviewEpochAdvance",
     "ScientificReviewTransitionError",
     "accepted_verdict_from_receipt",
+    "active_scientific_review_scope",
+    "advance_scientific_review_epoch",
     "build_scientific_review_context",
     "capture_portal_artifact_binding",
     "derive_scientific_source_refs",
     "load_scientific_review_receipt",
     "production_context_publication_path",
+    "prepare_rendered_scientific_review",
     "promote_rendered_candidate",
     "publish_production_context",
     "publish_scientific_review_request",

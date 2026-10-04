@@ -543,6 +543,22 @@ def _clone_single_signature_trial(
     return tuple(rows)
 
 
+def _twin_signature_corpus(*, label: str, arm_text: str) -> tuple[DesignObservation, ...]:
+    """构造一对同签名试验，并统一替换试验组干预文本。"""
+
+    return _clone_single_signature_trial(
+        trial_id=f"trial-{label}-1",
+        product_id=f"product-{label}-1",
+        cohort_id=f"cohort-{label}-1",
+        mutate_experimental_arm=arm_text,
+    ) + _clone_single_signature_trial(
+        trial_id=f"trial-{label}-2",
+        product_id=f"product-{label}-2",
+        cohort_id=f"cohort-{label}-2",
+        mutate_experimental_arm=arm_text,
+    )
+
+
 def test_cosmetic_punctuation_only_difference_cannot_pad_second_path() -> None:
     """凑数路径攻击：仅标点差异不得拆成两条“不同”设计签名。"""
 
@@ -587,6 +603,179 @@ def test_cosmetic_punctuation_only_difference_cannot_pad_second_path() -> None:
     assert any(
         token in message for token in ("一条", "不足", "无法", "不能", "至少两条", "签名")
     ), f"标点级差异凑数应失败关闭：{message!r}"
+
+
+# 根因同族：句读级标点替换只改书写，不得拆出第二条设计签名。
+_PUNCTUATION_EQUIVALENCE_CASES = (
+    pytest.param("试验组接受静脉给药。", "试验组接受静脉给药.", id="句末句号"),
+    pytest.param("试验组先负荷给药，随后维持给药。", "试验组先负荷给药, 随后维持给药。", id="逗号"),
+    pytest.param("试验组先负荷给药；随后维持给药。", "试验组先负荷给药; 随后维持给药。", id="分号"),
+    pytest.param("给药方式：静脉输注。", "给药方式: 静脉输注。", id="冒号非数值位"),
+    pytest.param("试验组接受静脉给药—按体重调整。", "试验组接受静脉给药 按体重调整。", id="破折号"),
+    pytest.param("试验组接受静脉给药（按体重）。", "试验组接受静脉给药(按体重)。", id="括号"),
+)
+
+
+@pytest.mark.parametrize(("plain_arm", "variant_arm"), _PUNCTUATION_EQUIVALENCE_CASES)
+def test_root_punctuation_equivalence_cannot_pad_second_path(
+    plain_arm: str,
+    variant_arm: str,
+) -> None:
+    """根因同族标点攻击：句读级标点替换后仍只有一条设计签名。"""
+
+    assert plain_arm != variant_arm
+    module = _synthesis()
+    error_type = _error_type(module)
+
+    corpus = _twin_signature_corpus(
+        label="punct-plain", arm_text=plain_arm
+    ) + _twin_signature_corpus(label="punct-variant", arm_text=variant_arm)
+
+    with pytest.raises(error_type) as exc_info:
+        _synthesize(module, corpus)
+
+    _assert_failure_note_zh(exc_info.value)
+    message = str(exc_info.value)
+    assert any(
+        token in message for token in ("一条", "不足", "无法", "不能", "至少两条", "签名")
+    ), f"句读级标点差异凑数应失败关闭：{message!r}"
+
+
+# 数值边界控制：小数、范围、比较符、百分号与日期分隔符差异必须保持独立签名。
+_NUMERIC_BOUNDARY_CASES = (
+    pytest.param(
+        "试验组目标变化为 -5 单位。", "试验组目标变化为 5 单位。",
+        "-5", id="负号",
+    ),
+    pytest.param(
+        "试验组阈值为 10‰。", "试验组阈值为 10。",
+        "10‰", id="千分号",
+    ),
+    pytest.param(
+        "试验组接受 0.5 mg 静脉给药。",
+        "试验组接受 0.05 mg 静脉给药。",
+        "0.5",
+        id="小数位",
+    ),
+    pytest.param(
+        "试验组接受 0.5 mg 静脉给药。",
+        "试验组接受 5 mg 静脉给药。",
+        "0.5",
+        id="小数点消失",
+    ),
+    pytest.param(
+        "试验组接受 5-10 mg 静脉给药。",
+        "试验组接受 5.10 mg 静脉给药。",
+        "5-10",
+        id="范围与小数",
+    ),
+    pytest.param(
+        "试验组接受 5-10 mg 静脉给药。",
+        "试验组接受 5 10 mg 静脉给药。",
+        "5-10",
+        id="范围与空格",
+    ),
+    pytest.param(
+        "试验组接受 ≤2 mg 静脉给药。",
+        "试验组接受 ≥2 mg 静脉给药。",
+        "≤2",
+        id="比较符",
+    ),
+    pytest.param(
+        "试验组接受 10% 剂量静脉给药。",
+        "试验组接受 10 剂量静脉给药。",
+        "10%",
+        id="百分号",
+    ),
+    pytest.param(
+        "试验组自 2024-01-05 起接受静脉给药。",
+        "试验组自 2024 01 05 起接受静脉给药。",
+        "2024-01-05",
+        id="日期分隔符",
+    ),
+)
+
+
+@pytest.mark.parametrize(("left_arm", "right_arm", "fragment"), _NUMERIC_BOUNDARY_CASES)
+def test_numeric_boundary_difference_keeps_two_distinct_paths(
+    left_arm: str,
+    right_arm: str,
+    fragment: str,
+) -> None:
+    """数值边界控制：标点折叠不得吞掉有意义的数值差异。"""
+
+    module = _synthesis()
+    result = _synthesize(
+        module,
+        _twin_signature_corpus(label="num-left", arm_text=left_arm)
+        + _twin_signature_corpus(label="num-right", arm_text=right_arm),
+    )
+
+    paths = tuple(getattr(result, "candidate_paths", ()))
+    assert len(paths) == 2, "数值边界不同的两条签名应各自形成一条候选路径"
+    signatures = {str(path.design_signature) for path in paths}
+    assert len(signatures) == 2, "两条数值边界路径必须对应两个不同设计签名"
+
+    joined_summary = "\n".join(str(path.summary_zh) for path in paths)
+    assert fragment in joined_summary, (
+        f"数值片段 {fragment!r} 不得在用户可见文本中被标点折叠破坏：{joined_summary!r}"
+    )
+
+
+def test_normalization_distinguishes_numeric_role_from_sentence_role() -> None:
+    """同一标点字符的数值角色与句子角色必须被区分处理。"""
+
+    module = _synthesis()
+    normalize = getattr(module, "_normalize_text", None)
+    assert callable(normalize), "需要 _normalize_text 归一入口"
+
+    # 句子角色：句末句号与英文句点等价。
+    assert normalize("给药。") == normalize("给药.")
+    assert normalize("第 26 周 LDH 正常化。") == normalize("第 26 周 LDH 正常化.")
+
+    # 数值角色：小数点、范围、比值与百分号必须保留。
+    assert "0.5" in normalize("0.5 mg")
+    assert "5-10" in normalize("5-10 mg")
+    assert "%" in normalize("10 % 剂量")
+    assert normalize("0.5 mg") != normalize("5 mg")
+    assert normalize("0.5 mg") != normalize("0.05 mg")
+    assert normalize("5-10 mg") != normalize("5.10 mg")
+    assert normalize("5-10 mg") != normalize("5 10 mg")
+    assert normalize("≤2 mg") != normalize("≥2 mg")
+    assert normalize("1:1 随机") != normalize("1 1 随机")
+    assert normalize("10% 剂量") != normalize("10 剂量")
+    assert normalize("10%-20% 剂量") != normalize("10% 20% 剂量")
+
+
+@pytest.mark.parametrize("field", ["experimental_arm", "primary_endpoint_definition"])
+def test_same_field_distinct_observations_cannot_be_first_wins_path_evidence(field: str) -> None:
+    module = _synthesis()
+    rows = (_twin_signature_corpus(label="ambiguous", arm_text="干预甲")
+            + _twin_signature_corpus(label="peer", arm_text="干预乙"))
+    chosen = next(row for row in rows if row.field == field)
+    other = chosen.model_copy(update={
+        "observation_id": "zz-distinct-evidence", "row_id": "zz-distinct-evidence",
+        "source_row_id": "zz-distinct-evidence", "source_text": "另一独立设计安排",
+    })
+    # A path cannot claim both inputs but derive its identity from the arbitrary
+    # first ID. This narrow synthesis rejects unknown combinations, not the
+    # searchable source-precedent library or either original observation.
+    for corpus in ((*rows, other), (other, *reversed(rows))):
+        with pytest.raises(_error_type(module), match="多个.*观察|组合关系"):
+            _synthesize(module, corpus)
+
+
+def test_same_field_equivalent_observation_does_not_invent_another_design() -> None:
+    module = _synthesis()
+    rows = _twin_signature_corpus(label="duplicate", arm_text="干预甲")
+    chosen = next(row for row in rows if row.field == "experimental_arm")
+    duplicate = chosen.model_copy(update={
+        "observation_id": "zz-equivalent", "row_id": "zz-equivalent",
+        "source_row_id": "zz-equivalent",
+    })
+    # The ordinary one-signature insufficiency remains, not a false ambiguity.
+    with pytest.raises(_error_type(module), match="一条独立设计签名"):
+        _synthesize(module, (*rows, duplicate))
 
 
 def test_one_multi_trial_signature_plus_lone_divergent_trial_cannot_pad() -> None:

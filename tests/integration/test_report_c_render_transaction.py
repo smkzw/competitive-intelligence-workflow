@@ -8,8 +8,8 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -18,6 +18,8 @@ from ci_workflow.application.run_service import (
     RunContext,
     _render_html_c_minimal,
 )
+from ci_workflow.domain.contracts import ProjectContract
+from ci_workflow.domain.enums import OutputFormat, ReportKind
 from ci_workflow.storage.manifest_store import ArtifactManifest, ManifestStore
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -62,9 +64,16 @@ def _data_path(tmp_path: Path) -> Path:
 def _context(project_root: Path) -> RunContext:
     return RunContext(
         project_root=project_root,
-        contract=SimpleNamespace(
+        contract=ProjectContract(
             project_id=PROJECT_ID,
             contract_version=CONTRACT_VERSION,
+            indication=str(_report_data()["indication"]),
+            reports=(ReportKind.C,),
+            outputs=(OutputFormat.HTML,),
+            timezone="Asia/Shanghai",
+            data_cutoff=datetime.fromisoformat(str(_report_data()["data_cutoff"])),
+            cutoff_was_user_supplied=True,
+            created_at=datetime.fromisoformat("2026-08-30T09:00:00+08:00"),
         ),
     )
 

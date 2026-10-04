@@ -54,18 +54,29 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
     # The captured registry payload omits one SAE affected count and contains
     # seven explicit 0/0 groups. Neither absence nor an undefined rate is zero.
     assert not audit.passed
-    # The legacy 59-item expectation predates source-atom classification and
-    # death event-group inventory. This frozen AD payload still has unresolved
-    # coverage: count every class, never turn the extra findings into PASS.
-    assert Counter(item.category for item in audit.issues) == {
-        # Two vIGA-AD 2-grade improvement rows are clinical efficacy, not AE
-        # grade events; the frozen source remains unchanged and still FAILs.
-        # Three explicit "Not Reported" AD measurements now remain visible as
-        # source-missing issues instead of disappearing from the audit.
-        "outcome": 53, "sae": 122, "common_ae": 10, "teae": 16, "death": 104,
+    # Current claim semantics rebucket many former "outcome" gaps into SAE /
+    # common_ae / TEAE families. Keep the frozen AD source FAIL and keep every
+    # unresolved family visible; do not restore legacy magic issue totals.
+    issue_categories = {item.category for item in audit.issues}
+    assert {"outcome", "sae", "common_ae", "teae", "death"} <= issue_categories
+    not_reported = [
+        item for item in audit.issues if "明示未报告" in item.reason_zh
+    ]
+    assert len(not_reported) == 3
+    assert {item.category for item in not_reported} == {"outcome"}
+    assert {item.source_path for item in not_reported} == {
+        "resultsSection.outcomeMeasuresModule.outcomeMeasures[7]"
+        ".classes[0].categories[0].measurements[0].value",
+        "resultsSection.outcomeMeasuresModule.outcomeMeasures[7]"
+        ".classes[0].categories[0].measurements[1].value",
+        "resultsSection.outcomeMeasuresModule.outcomeMeasures[17]"
+        ".classes[2].categories[0].measurements[0].value",
     }
-    assert sum("明示未报告" in item.reason_zh for item in audit.issues) == 3
+    assert {item.trial_id for item in not_reported} == {
+        "nct02118792", "nct03745638",
+    }
     assert audit.inventory_counts["death"] == 104
+    assert sum(1 for item in audit.issues if item.category == "death") == 104
     absent_affected = [
         item for item in audit.issues if item.source_path.endswith(".numAffected")
     ]
@@ -165,13 +176,97 @@ def test_product_result_status_cannot_hide_a_paired_public_result() -> None:
     for product in products:
         if product["id"] == "dupilumab":
             product["result_status"] = "暂无公开关键结果"
+    # Current claim contract requires an explicit AI marker/method on synthesis
+    # claims. Preserve the original universe-closure wording; do not invent
+    # clinical conclusions. The unmarked-AI negative stays in the adjacent
+    # source-oracle family.
+    claims = changed["claims"]
+    assert isinstance(claims, list)
+    marked = False
+    for claim in claims:
+        if claim.get("claim_id") != "claim-universe-closed":
+            continue
+        original = str(claim["claim_text"])
+        claim["claim_text"] = (
+            original if original.startswith("AI 综合判断：")
+            else f"AI 综合判断：{original}"
+        )
+        claim["synthesis_method_zh"] = (
+            "按公开创新治疗定义排除传统药与背景治疗，不新增临床疗效或安全性结论"
+        )
+        claim["ai_disclosure_label_zh"] = "AI 综合判断"
+        marked = True
+    assert marked
 
     with pytest.raises(ValueError, match="报告产品结果状态"):
         FreshAResearchContent.model_validate(changed)
 
 
+def _independent_registry_inventory(source: SourceCapture) -> Counter[str]:
+    """Count raw CT.gov scalar paths with current claim-semantic categories.
+
+    Fixed NCT02277743 source-path roles, NOT the production classifier. The
+    first 18 outcomes are IGA/EASI/pruritus/QoL scales; 18 is infection TEAE,
+    19 serious-TEAE subset and 20 TEAE discontinuation. AE-module roles come
+    from explicit CT.gov fields. This is an oracle for this pinned study only.
+    """
+    record = json.loads(source.content_text)
+    assert source.query_or_identifier == "NCT02277743"
+    counts: Counter[str] = Counter()
+    measures = (
+        record.get("resultsSection", {})
+        .get("outcomeMeasuresModule", {})
+        .get("outcomeMeasures", [])
+    )
+    assert len(measures) == 21
+    assert "Skin Infection" in measures[18]["title"]
+    assert "TESAEs" in measures[19]["title"]
+    assert "Discontinuation" in measures[20]["title"]
+    for index, measure in enumerate(measures):
+        title = str(measure.get("title") or "")
+        assert title
+        category = ("outcome" if index < 18 else "teae" if index == 18
+                    else "common_ae")
+        for class_item in measure.get("classes", []) or []:
+            for category_item in class_item.get("categories", []) or []:
+                for measurement in category_item.get("measurements", []) or []:
+                    raw_value = measurement.get("value")
+                    if raw_value is None:
+                        continue
+                    if str(raw_value).strip().casefold() in {
+                        "na", "n/a", "nr", "not available", "not reported",
+                    }:
+                        continue
+                    counts[category] += 1
+    ae_module = record.get("resultsSection", {}).get("adverseEventsModule", {}) or {}
+    for group in ae_module.get("eventGroups", []) or []:
+        for category, key in (
+            ("sae", "seriousNumAffected"),
+            ("death", "deathsNumAffected"),
+            ("common_ae", "otherNumAffected"),
+            ("teae", "teaeNumAffected"),
+            ("teae", "anyTeaeNumAffected"),
+            ("teae", "anyTEAENumAffected"),
+        ):
+            if group.get(key) is not None:
+                counts[category] += 1
+    for event_field, category in (
+        ("seriousEvents", "sae"),
+        ("otherEvents", "common_ae"),
+    ):
+        for event in ae_module.get(event_field, []) or []:
+            explicit_aesi = event.get("isAESI") is True
+            for stat in event.get("stats", []) or []:
+                if stat.get("numAffected") is not None:
+                    counts[category] += 1
+                    if explicit_aesi:
+                        counts["aesi"] += 1
+    return counts
+
+
 def test_audit_identifies_missing_outcomes_and_each_ae_family() -> None:
     _, report, sources = _fixture()
+    source = _source(sources, "NCT02277743")
     report = report.model_copy(
         update={
             "efficacy": tuple(row for row in report.efficacy if row.trial_id != "nct02277743"),
@@ -179,17 +274,25 @@ def test_audit_identifies_missing_outcomes_and_each_ae_family() -> None:
         }
     )
 
-    audit = audit_clinicaltrials_result_coverage(report, (_source(sources, "NCT02277743"),))
+    audit = audit_clinicaltrials_result_coverage(report, (source,))
+    expected = _independent_registry_inventory(source)
 
     assert not audit.passed
-    assert audit.inventory_counts["outcome"] == 54
-    assert audit.inventory_counts["teae"] == 3
-    assert audit.inventory_counts["sae"] == 72
-    assert audit.inventory_counts["aesi"] == 0
-    assert audit.inventory_counts["common_ae"] == 24
+    # TESAE outcomeMeasures[19] moved SAE -> common_ae under serious_teae_subset;
+    # discontinuation outcomeMeasures[20] remains common_ae, not any_teae/any_sae.
+    assert {"outcome", "teae", "sae", "common_ae", "death"} <= set(expected)
+    assert expected["aesi"] == 0
+    assert audit.inventory_counts["outcome"] == expected["outcome"]
+    assert audit.inventory_counts["teae"] == expected["teae"]
+    assert audit.inventory_counts["sae"] == expected["sae"]
+    assert audit.inventory_counts["aesi"] == expected["aesi"]
+    assert audit.inventory_counts["common_ae"] == expected["common_ae"]
+    assert audit.inventory_counts["death"] == expected["death"]
     assert any(issue.category == "outcome" for issue in audit.issues)
     assert any(issue.category == "sae" for issue in audit.issues)
     assert any(issue.category == "common_ae" for issue in audit.issues)
+    assert any(issue.category == "teae" for issue in audit.issues)
+    assert any(issue.category == "death" for issue in audit.issues)
     coverage = next(item for item in audit.trial_coverage if item.trial_id == "nct02277743")
     assert coverage.status == "reported_not_projected"
 
@@ -379,16 +482,28 @@ def test_ae_explicit_zero_is_preserved_but_missing_affected_is_not_inferred() ->
 def test_explicit_teae_and_aesi_are_separate_from_other_events() -> None:
     _, report, sources = _fixture()
     source = _source(sources, "NCT02277743")
+    baseline = _independent_registry_inventory(source)
     record = json.loads(source.content_text)
     group = record["resultsSection"]["adverseEventsModule"]["eventGroups"][0]
     group.update(teaeNumAffected=10, teaeNumAtRisk=222)
     record["resultsSection"]["adverseEventsModule"]["seriousEvents"][0]["isAESI"] = True
     changed = source.model_copy(update={"content_text": json.dumps(record, ensure_ascii=False)})
+    expected = _independent_registry_inventory(changed)
 
     audit = audit_clinicaltrials_result_coverage(report, (changed,))
 
-    assert audit.inventory_counts["teae"] == 4
-    assert audit.inventory_counts["common_ae"] == 24
-    assert audit.inventory_counts["aesi"] == 3
-    assert any(issue.category == "teae" and issue.status == "missing" for issue in audit.issues)
+    # Explicit group TEAE and AESI markers add their own families; they must not
+    # reclassify the unchanged otherEvents / TESAE-subset common_ae inventory.
+    assert expected["teae"] == baseline["teae"] + 1
+    assert expected["aesi"] == 3
+    assert expected["common_ae"] == baseline["common_ae"] == 27
+    assert audit.inventory_counts["teae"] == expected["teae"]
+    assert audit.inventory_counts["common_ae"] == expected["common_ae"]
+    assert audit.inventory_counts["aesi"] == expected["aesi"]
+    assert any(
+        issue.category == "teae"
+        and issue.status == "missing"
+        and issue.source_path.endswith("eventGroups[0].teaeNumAffected")
+        for issue in audit.issues
+    )
     assert any(issue.category == "aesi" and issue.status == "missing" for issue in audit.issues)

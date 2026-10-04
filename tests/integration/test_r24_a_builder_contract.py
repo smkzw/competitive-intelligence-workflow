@@ -7,11 +7,20 @@ import json
 import subprocess
 import sys
 from copy import deepcopy
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+import pytest
+
+from ci_workflow.application.source_research_service import (
+    SourceCapture,
+    build_ctgov_a_safety_candidate_batch,
+)
+from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
+    SafetyRow,
     TrialRow,
     _display_efficacy_rows,
     render_report_a_site,
@@ -370,3 +379,55 @@ def test_ae_event_group_uses_declared_arm_relationship_not_focus_product(
     assert "查看完整观察窗" in html
     assert long_window in html
     assert "1 条安全性观察的组别—产品关系待核" in html
+
+
+@pytest.mark.parametrize("window", ("absent", None, "", "   ", "Week 48"))
+def test_absent_ae_window_remains_unknown_and_exact_source_binding_survives(
+    tmp_path: Path, window: str | None,
+) -> None:
+    study = _study("NCT00000010", 40, "ACTUAL", [
+        {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]},
+    ])
+    # An unrelated protocol window cannot stand in for AE collection time.
+    study["protocolSection"]["outcomesModule"] = {"primaryOutcomes": [{
+        "measure": "Clinical response", "timeFrame": "Week 24",
+    }]}
+    module = {"eventGroups": [{
+        "id": "EG1", "title": "Drug arm", "seriousNumAffected": 3,
+        "seriousNumAtRisk": 20, "deathsNumAffected": 0, "deathsNumAtRisk": 20,
+    }]}
+    if window != "absent":
+        module["timeFrame"] = window
+    study["resultsSection"] = {"adverseEventsModule": module}
+    payload = _build(tmp_path, [study])
+    expected = "Week 48" if window == "Week 48" else ""
+    assert len(payload["safety"]) == 2
+    assert {row["time_window"] for row in payload["safety"]} == {expected}
+    sidecar = json.loads((tmp_path / "report.derivation.json").read_text())
+    assert {row["timepoint"] for row in sidecar["row_source_map"]} == {expected}
+    now = datetime(2026, 10, 4, tzinfo=UTC)
+    source = SourceCapture(
+        source_id="synthetic-ae-window", route_id="synthetic",
+        source_type="clinical_trial_registry",
+        title="Synthetic registry", url="https://clinicaltrials.gov/study/NCT00000010",
+        query_or_identifier="NCT00000010", language="en", access_method="synthetic",
+        content_text=json.dumps(study), acquired_at=now, published_at=None,
+        effective_at=None, first_disclosed_at=None,
+        locator=EvidenceLocator(document_role="clinical_trial_registry", field_path="$"),
+    )
+    rows = tuple(SafetyRow.model_validate(row) for row in payload["safety"])
+    batch = build_ctgov_a_safety_candidate_batch((source,), rows)
+    assert batch.gaps == ()
+    assert len(batch.bound_rows) == 2
+    assert {row.term_key: row.value for row in batch.bound_rows} == {"any_sae": 3, "death": 0}
+    assert all(row.source_field_path and row.source_version_id for row in batch.bound_rows)
+    if not expected:
+        site = tmp_path / "missing-window-site"
+        render_report_a_site(ReportAPortalData.model_validate(payload), site)
+        html = (site / "safety.html").read_text(encoding="utf-8")
+        assert "观察窗未列示" in html
+        mismatched = tuple(row.model_copy(update={"time_window": "Week 24"}) for row in rows)
+        rejected = build_ctgov_a_safety_candidate_batch((source,), mismatched)
+        assert rejected.bound_rows == ()
+        assert len(rejected.gaps) == 2
+        assert all(gap.reason == "no_exact_match" for gap in rejected.gaps)

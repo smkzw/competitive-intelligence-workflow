@@ -284,6 +284,20 @@ def _verify_current_report(root: Path, item: CurrentReportDelivery) -> None:
             actual[path.relative_to(site).as_posix()] = _sha256(path)
     if actual != item.file_hashes:
         raise ValueError("当前交付站点实际文件与绑定哈希不一致")
+    status_path = site / "data/research-status.json"
+    if status_path.exists():
+        try:
+            status = json.loads(status_path.read_bytes())
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError("报告研究状态文件无法核验") from error
+        if not isinstance(status, dict) or set(status) != {
+            "schema_version", "report", "delivery_status",
+        } or status["schema_version"] != "1.0" or status["report"] != item.report:
+            raise ValueError("报告研究状态与当前交付合同不一致")
+        if status["delivery_status"] == "unreviewed_candidate":
+            raise ValueError("待复核资料不能发布到current")
+        if status["delivery_status"] != "design_gate_passed":
+            raise ValueError("报告研究状态未经识别，不能发布到current")
     expected = hashlib.sha256(
         json.dumps(sorted(item.fact_version_ids), ensure_ascii=False, separators=(",", ":")).encode(
             "utf-8"

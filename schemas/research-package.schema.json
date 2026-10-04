@@ -46,11 +46,20 @@
           }
         },
         "else": {"properties": {"record_selector": {"type": "null"}}}
+      }, {
+        "if": {"properties": {"method": {"const": "pypdf-page-text-v1"}}},
+        "then": {
+          "required": ["page", "page_count"],
+          "properties": {"raw_asset": {"properties": {"media_type": {"const": "application/pdf"}}}}
+        },
+        "else": {"not": {"anyOf": [{"required": ["page"]}, {"required": ["page_count"]}]}}
       }],
       "properties": {
         "schema_version": {"const": "1.0"},
         "text_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "method": {"enum": ["utf8-strip-v1", "pypdf-text-v1", "ctgov-study-json-v1"]},
+        "method": {"enum": ["utf8-strip-v1", "pypdf-text-v1", "pypdf-page-text-v1", "ctgov-study-json-v1"]},
+        "page": {"type": "integer", "minimum": 1},
+        "page_count": {"type": "integer", "minimum": 1},
         "record_selector": {
           "type": ["object", "null"], "additionalProperties": false,
           "required": ["study_index", "nct_id"],

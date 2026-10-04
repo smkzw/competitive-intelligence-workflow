@@ -20,6 +20,7 @@ import shutil
 import subprocess
 import sys
 import time
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -63,11 +64,17 @@ from ci_workflow.application.acceptance_runner import (
     subprocess_verifier_runner,
 )
 from ci_workflow.application.host_smoke import receipt_digest
+from ci_workflow.qc.browser import LockedSitemapSourceError
 
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = ROOT / "fixtures/acceptance/catalog.yaml"
 FULL_MATRIX_ROOT = ROOT / "fixtures/acceptance/full-matrix-v1"
 CLI_PATH = ROOT / "tools/run_acceptance.py"
+# 当前可运行流水线绑定显式命名的 current-v2 候选切片；冻结 catalog/历史输入
+# 只保留给历史真值与摘要核验测试（下方 catalog 真值套件）。
+CURRENT_V2_CATALOG = ROOT / "fixtures/acceptance/current-v2/catalog.yaml"
+CURRENT_V2_CASE = "current-v2"
+CURRENT_V2_VERSION = "v2.0.0-current"
 
 _DECLARED_INPUT_PATHS = (
     "inputs/report-a-data.json",
@@ -383,20 +390,56 @@ def test_cli_catalog_stage_fails_closed_on_preexisting_project(tmp_path: Path) -
 _PRE_RC_TEST_ID = "pre-rc-test-fixed"
 
 
+def _write_independent_context_probe(base: Path) -> Path:
+    """写入合成独立上下文探针（测试 seam），返回可执行探针路径。
+
+    探针按当前真实合同被真实执行并返回合法运行时回执（不是静态覆盖）；
+    它只是合成测试绑定，不构成真实评审、真实宿主或 RC 证据。
+    """
+
+    probe = base / "independent-context-probe"
+    probe.write_text(
+        "#!/bin/sh\nprintf '%s\\n' '"
+        + json.dumps(
+            {
+                "schema_version": "1.0",
+                "available": True,
+                "mechanism": "independent_session",
+                "producer_context": "producer-main-run",
+                "reviewer_context": "reviewer-synthetic-ri186",
+                "invocation_id": "ri186-independent-context-probe-1",
+            }
+        )
+        + "'\n",
+        encoding="utf-8",
+    )
+    os.chmod(probe, 0o700)
+    return probe
+
+
 @pytest.fixture(scope="module")
 def ran_project(tmp_path_factory: pytest.TempPathFactory) -> dict[str, Any]:
-    """真实执行阶段 1-2 一次，供回执合同测试复制使用（不涉及任何浏览器）。"""
+    """真实执行阶段 1-2 一次，供回执合同测试复制使用（不涉及任何浏览器）。
+
+    当前可运行流水线显式绑定 current-v2 候选切片（冻结 full-matrix-v1 已不能
+    在当前封闭合同下运行：旧矩阵绝对坐标与旧版本身份都失败关闭）。独立上下文
+    审阅能力通过合同提供的可执行探针 seam 提供合成回执（见
+    ``_write_independent_context_probe``）。
+    """
 
     base = tmp_path_factory.mktemp("ran-project")
     root = base / "project"
-    catalog = load_acceptance_catalog()
-    resolved = resolve_acceptance_case("full-matrix-v1", catalog)
-    run_project_stage(
-        catalog=catalog,
-        resolved=resolved,
-        project_root=root,
-        pre_rc_run_id=_PRE_RC_TEST_ID,
-    )
+    probe = _write_independent_context_probe(base)
+    catalog = load_acceptance_catalog(CURRENT_V2_CATALOG)
+    resolved = resolve_acceptance_case(CURRENT_V2_CASE, catalog)
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setenv("CI_WORKFLOW_INDEPENDENT_CONTEXT_PROBE", str(probe))
+        run_project_stage(
+            catalog=catalog,
+            resolved=resolved,
+            project_root=root,
+            pre_rc_run_id=_PRE_RC_TEST_ID,
+        )
     artifacts, _sources, run_info = _discover_current_html_artifacts(
         root.resolve(),
         resolved=resolved,
@@ -488,11 +531,17 @@ def test_runner_orders_project_render_browser_hosts_and_project_verify(
         "project-run",
     ]
     # 空项目目录上的阶段 1 独立可执行（阶段 2 已在 fixture 中真实运行）。
-    catalog_stage = run_catalog_input_stage(project_root=tmp_path / "fresh-root")
+    catalog_stage = run_catalog_input_stage(
+        catalog_path=CURRENT_V2_CATALOG,
+        case_id=CURRENT_V2_CASE,
+        project_root=tmp_path / "fresh-root",
+    )
     assert catalog_stage["stage"] == stage_names[0]
 
     # 阶段 3（回执绑定）作用于已运行项目；阶段 4-6 由注入处理器按声明顺序接入。
-    bound = bind_ego_receipts_pipeline(project_root=root)
+    bound = bind_ego_receipts_pipeline(
+        catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE, project_root=root
+    )
     assert [stage["stage"] for stage in bound["stages"]] == list(PRE_RC_STAGE_ORDER)[:3]
     stage_names.append(bound["stages"][2]["stage"])
 
@@ -534,7 +583,9 @@ def test_current_run_manifest_binds_three_html_artifacts_and_browser_verdicts(
     root = _copy_ran_project(ran, tmp_path, "bind-root")
     _write_all_receipts(root, ran)
 
-    summary = bind_ego_receipts_pipeline(project_root=root)
+    summary = bind_ego_receipts_pipeline(
+        catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE, project_root=root
+    )
     assert summary["ok"] is True
     receipt_stage = summary["stages"][2]
 
@@ -542,8 +593,8 @@ def test_current_run_manifest_binds_three_html_artifacts_and_browser_verdicts(
     artifacts = receipt_stage["artifacts"]
     assert set(artifacts) == {"A", "B", "C"}
     for report, artifact in artifacts.items():
-        assert artifact["version"] == "v-fixture-001"
-        assert artifact["site_relative_path"] == f"reports/{report}/v-fixture-001/html"
+        assert artifact["version"] == CURRENT_V2_VERSION
+        assert artifact["site_relative_path"] == f"reports/{report}/{CURRENT_V2_VERSION}/html"
         assert artifact["generated_at"]
         assert artifact["entry_route"].startswith(f"/{report.lower()}/")
         entry_file = root / artifact["entry_relative_path"]
@@ -577,7 +628,7 @@ def test_current_run_manifest_binds_three_html_artifacts_and_browser_verdicts(
     resolved_root = root.resolve()
 
     # 旧回执：文件时间回拨到运行开始之前 → 拒绝。
-    receipt_path = expected_ego_receipt_path(resolved_root, "A", "v-fixture-001")
+    receipt_path = expected_ego_receipt_path(resolved_root, "A", CURRENT_V2_VERSION)
     old = int(time.time() - 3600)
     os.utime(receipt_path, (old, old))
     with pytest.raises(AcceptanceRunnerError, match="早于当前运行"):
@@ -602,9 +653,11 @@ def test_current_run_manifest_binds_three_html_artifacts_and_browser_verdicts(
         )
 
     # 篡改当前站点文件：站点目录摘要与锁定清单不一致 → 拒绝（旧运行/伪产物不可通过）。
+    # 当前生产路径在重开运行清单时直接抛类型化的锁定站点来源错误（未再包成
+    # AcceptanceRunnerError）：失败关闭边界不变。
     entry = root / ran["artifacts"]["C"].entry_relative_path
     entry.write_bytes(entry.read_bytes() + b"<!-- tampered -->\n")
-    with pytest.raises(AcceptanceRunnerError, match="无法核验"):
+    with pytest.raises(LockedSitemapSourceError, match="站点摘要与清单不一致"):
         run_ego_receipt_stage(
             project_root=resolved_root, resolved=resolved, pre_rc_run_id=ran["pre_rc_run_id"]
         )
@@ -622,7 +675,7 @@ def test_current_run_manifest_binds_three_html_artifacts_and_browser_verdicts(
         ("wrong-manifest-id", "清单标识"),
         ("wrong-viewport", "视口"),
         ("stale-receipt-file", "早于当前运行"),
-        ("missing-artifact", "无法核验"),
+        ("missing-artifact", "站点目录不存在"),
     ),
 )
 def test_runner_fails_closed_on_any_missing_artifact_failed_verifier_or_nonzero_command(
@@ -654,8 +707,11 @@ def test_runner_fails_closed_on_any_missing_artifact_failed_verifier_or_nonzero_
 
     if fault == "missing-artifact":
         _write_all_receipts(root, ran)
-        shutil.rmtree(root / "reports" / "C" / "v-fixture-001" / "html")
-        with pytest.raises(AcceptanceRunnerError, match=match):
+        shutil.rmtree(
+            root / "reports" / "C" / str(ran["artifacts"]["C"].to_summary()["version"]) / "html"
+        )
+        # 缺失站点目录由当前运行清单重开校验直接抛类型化锁定来源错误（失败关闭不变）。
+        with pytest.raises(LockedSitemapSourceError, match=match):
             run_ego_receipt_stage(
                 project_root=root, resolved=ran["resolved"], pre_rc_run_id=ran["pre_rc_run_id"]
             )
@@ -699,23 +755,33 @@ def test_runner_fails_closed_on_any_missing_artifact_failed_verifier_or_nonzero_
     assert bound_marker.is_file()  # 项目运行记录保留用于诊断，但无通过信号输出
 
 
-def test_html_pipeline_runs_project_then_requests_ego_receipts(tmp_path: Path) -> None:
+def test_html_pipeline_runs_project_then_requests_ego_receipts(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """阶段 1 → 2 真实执行后，阶段 3 以明确指引等待 Codex 的 ego(lite) 回执；
     runner 自身不启动任何浏览器，也不回退到其他浏览器。"""
     root = tmp_path / "fresh-root"
+    probe = _write_independent_context_probe(tmp_path)
+    monkeypatch.setenv("CI_WORKFLOW_INDEPENDENT_CONTEXT_PROBE", str(probe))
     with pytest.raises(EgoReceiptPendingError) as pending:
-        run_html_pipeline(project_root=root, pre_rc_run_id=_PRE_RC_TEST_ID)
+        run_html_pipeline(
+            catalog_path=CURRENT_V2_CATALOG,
+            case_id=CURRENT_V2_CASE,
+            project_root=root,
+            pre_rc_run_id=_PRE_RC_TEST_ID,
+        )
 
     message = str(pending.value)
     assert "ego(lite)" in message and EGO_LITE_TOOL_IDENTITY in message
     assert "回执" in message
-    assert "verification/A/v-fixture-001/ego-receipt.json" in message
+    assert f"verification/A/{CURRENT_V2_VERSION}/ego-receipt.json" in message
     assert pending.value.missing_paths and all(
         path.name == EGO_RECEIPT_FILENAME for path in pending.value.missing_paths
     )
     # 阶段 1-2 确已执行：当前运行清单存在且绑定案例与 pre-RC 身份。
     manifest = json.loads((root / "manifests" / "current_run.json").read_text(encoding="utf-8"))
-    assert manifest["case_id"] == "full-matrix-v1"
+    assert manifest["case_id"] == CURRENT_V2_CASE
     assert manifest["pre_rc_run_id"] == _PRE_RC_TEST_ID
     assert manifest["resume"] is False
 
@@ -730,6 +796,7 @@ def test_pre_rc_rehearsal_preflight_fails_closed_before_any_work(tmp_path: Path)
 def test_cli_html_pipeline_prompts_for_ego_receipts(tmp_path: Path) -> None:
     """CLI html 流水线在回执缺失时提示需要 Codex 使用 ego(lite)，退出码 3，
     不输出任何成功信号。"""
+    probe = _write_independent_context_probe(tmp_path)
     completed = subprocess.run(
         [
             sys.executable,
@@ -738,12 +805,17 @@ def test_cli_html_pipeline_prompts_for_ego_receipts(tmp_path: Path) -> None:
             "html",
             "--project-root",
             str(tmp_path / "fresh-root"),
+            "--catalog",
+            str(CURRENT_V2_CATALOG),
+            "--case",
+            CURRENT_V2_CASE,
         ],
         cwd=ROOT,
         capture_output=True,
         text=True,
         timeout=300,
         check=False,
+        env={**os.environ, "CI_WORKFLOW_INDEPENDENT_CONTEXT_PROBE": str(probe)},
     )
     assert completed.returncode == 3, (completed.stdout, completed.stderr)
     assert "ego(lite)" in completed.stderr
@@ -769,6 +841,10 @@ def test_cli_bind_ego_receipts_reports_missing_receipts(
             "--bind-ego-receipts",
             "--project-root",
             str(root),
+            "--catalog",
+            str(CURRENT_V2_CATALOG),
+            "--case",
+            CURRENT_V2_CASE,
         ],
         cwd=ROOT,
         capture_output=True,
@@ -793,6 +869,10 @@ def test_cli_bind_ego_receipts_reports_missing_receipts(
             "--bind-ego-receipts",
             "--project-root",
             str(bind_root),
+            "--catalog",
+            str(CURRENT_V2_CATALOG),
+            "--case",
+            CURRENT_V2_CASE,
         ],
         cwd=ROOT,
         capture_output=True,
@@ -1328,10 +1408,16 @@ def test_cli_pipeline_mode_requires_project_root() -> None:
 def _make_fake_install_root(base: Path) -> Path:
     """构造可通过 ``load_fresh_install_layout`` 核验的最小候选安装根。
 
-    版本目录名取 package-manifest.json 字节的 SHA-256，与真实安装的
-    内容地址语义一致；shared 与 OMP 链接指向同一 bundle，入口可执行。
+    与当前真实安装合同对齐：内容地址版本目录、逐文件 release_records 的
+    installation.json、bootstrap 引导文件、独立运行环境占位，以及由
+    ``_entrypoint_content`` 按真实合同生成的候选入口；不复制安装器逻辑，
+    也不执行入口。版本目录名取 package-manifest.json 字节的 SHA-256，与
+    真实安装的内容地址语义一致；shared 与 OMP 链接指向同一 bundle。
     """
 
+    from ci_workflow.application.fresh_install import _entrypoint_content
+
+    root = base.expanduser().resolve()
     manifest_payload = {
         "package": {"name": "competitive-intelligence-workflow", "version": "0.1.0+candidate"},
         "public_skill": "skills/competitive-intelligence-workflow/SKILL.md",
@@ -1340,22 +1426,71 @@ def _make_fake_install_root(base: Path) -> Path:
         manifest_payload, ensure_ascii=False, sort_keys=True
     ).encode("utf-8")
     digest = hashlib.sha256(manifest_bytes).hexdigest()
-    bundle = base / "versions" / digest
+    bundle = root / "versions" / digest
     skill_dir = bundle / "skills" / "competitive-intelligence-workflow"
     skill_dir.mkdir(parents=True)
     (skill_dir / "SKILL.md").write_text("# 公共 Skill 替身\n", encoding="utf-8")
     (bundle / "fixtures").mkdir()
     (bundle / "fixtures" / "catalog.yaml").write_text("cases: []\n", encoding="utf-8")
     (bundle / "package-manifest.json").write_bytes(manifest_bytes)
-    (base / "shared").symlink_to(bundle, target_is_directory=True)
-    omp_link = base / "omp" / "skills" / "competitive-intelligence-workflow"
-    omp_link.parent.mkdir(parents=True)
+    release_records: dict[str, list[Any]] = {}
+    for path in sorted(bundle.rglob("*")):
+        if not path.is_file():
+            continue
+        os.chmod(path, 0o644)
+        release_records[path.relative_to(bundle).as_posix()] = [
+            hashlib.sha256(path.read_bytes()).hexdigest(),
+            path.stat().st_size,
+            0o644,
+        ]
+    for directory in (bundle, *(path for path in bundle.rglob("*") if path.is_dir())):
+        os.chmod(directory, 0o755)
+    # 真实安装的受保护目录与独立运行环境占位：入口不会被本套件执行，
+    # 仅按合同核验目录/文件存在与权限。
+    for relative in ("bin", "omp/skills", "bootstrap", "runtime/venv/bin"):
+        (root / relative).mkdir(parents=True, exist_ok=True)
+    for relative in (
+        ".",
+        "versions",
+        "bin",
+        "omp",
+        "omp/skills",
+        "bootstrap",
+        "runtime",
+        "runtime/venv",
+        "runtime/venv/bin",
+    ):
+        os.chmod(root / relative, 0o755)
+    for name in ("fresh_install.py", "bundle_contract.py"):
+        bootstrap_file = root / "bootstrap" / name
+        bootstrap_file.write_text(f"# 引导文件替身：{name}\n", encoding="utf-8")
+        os.chmod(bootstrap_file, 0o644)
+    runtime_python = root / "runtime/venv/bin/python"
+    runtime_python.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    os.chmod(runtime_python, 0o755)
+    installation = root / "installation.json"
+    installation.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "install_root": str(root),
+                "bundle_digest": digest,
+                "release_records": release_records,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    os.chmod(installation, 0o644)
+    entry = root / "bin" / "ci-workflow"
+    entry.write_bytes(_entrypoint_content(root))
+    os.chmod(entry, 0o755)
+    (root / "shared").symlink_to(bundle, target_is_directory=True)
+    omp_link = root / "omp" / "skills" / "competitive-intelligence-workflow"
     omp_link.symlink_to(skill_dir, target_is_directory=True)
-    entry = base / "bin" / "ci-workflow"
-    entry.parent.mkdir(parents=True)
-    entry.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
-    entry.chmod(0o755)
-    return base
+    return root
 
 
 def _fake_host_receipt(
@@ -1662,8 +1797,17 @@ def test_host_smoke_stage_fails_closed_on_install_root_and_batch_faults(
         smoke_runner=runner,
     )
     if fault == "entrypoint-drift":
+        # 构建与执行之间整个安装根被另一份仍自洽的合法安装替换：入口随
+        # bootstrap 回执一起重算，布局核验仍通过，只有阶段自己的入口摘要
+        # 对照能发现漂移（原地追加字节会先被布局核验拒绝，属另一层防线）。
+        from ci_workflow.application.fresh_install import _entrypoint_content
+
+        bootstrap = install_root / "bootstrap" / "fresh_install.py"
+        bootstrap.write_text("# 漂移后的引导文件\n", encoding="utf-8")
+        os.chmod(bootstrap, 0o644)
         entrypoint = install_root / "bin" / "ci-workflow"
-        entrypoint.write_bytes(entrypoint.read_bytes() + b"\n# drift\n")
+        entrypoint.write_bytes(_entrypoint_content(install_root))
+        os.chmod(entrypoint, 0o755)
     if fault == "install-root-drift":
         shutil.rmtree(install_root / "versions")
     with pytest.raises(AcceptanceRunnerError, match=match):
@@ -1838,7 +1982,9 @@ def test_project_verify_stage_rebinds_current_run_after_host_smoke(
     ran = ran_project
     root = _copy_ran_project(ran, tmp_path, "verify-root")
     _write_all_receipts(root, ran)
-    bound = bind_ego_receipts_pipeline(project_root=root)
+    bound = bind_ego_receipts_pipeline(
+        catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE, project_root=root
+    )
     context: dict[str, Any] = {
         "pre_rc_run_id": ran["pre_rc_run_id"],
         "project_root": str(root),
@@ -1849,11 +1995,13 @@ def test_project_verify_stage_rebinds_current_run_after_host_smoke(
         "html_pipeline": bound["stages"][2],
     }
 
-    summary = build_project_verify_stage()(context)
+    summary = build_project_verify_stage(
+        catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE
+    )(context)
 
     assert summary["run_id"] == ran["run_id"]
     assert summary["pre_rc_run_id"] == ran["pre_rc_run_id"]
-    assert summary["case_id"] == "full-matrix-v1"
+    assert summary["case_id"] == CURRENT_V2_CASE
     assert set(summary["artifacts"]) == {"A", "B", "C"}
     assert summary["browser_receipts_unchanged"] is True
     assert summary["manifest_sha256"] == hashlib.sha256(
@@ -1870,7 +2018,9 @@ def test_project_verify_stage_fails_closed_on_project_contract_drift(
     ran = ran_project
     root = _copy_ran_project(ran, tmp_path, "verify-contract-drift")
     _write_all_receipts(root, ran)
-    bound = bind_ego_receipts_pipeline(project_root=root)
+    bound = bind_ego_receipts_pipeline(
+        catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE, project_root=root
+    )
     context: dict[str, Any] = {
         "pre_rc_run_id": ran["pre_rc_run_id"],
         "project_root": str(root),
@@ -1888,7 +2038,9 @@ def test_project_verify_stage_fails_closed_on_project_contract_drift(
     )
 
     with pytest.raises(AcceptanceRunnerError, match="项目合同"):
-        build_project_verify_stage()(context)
+        build_project_verify_stage(
+            catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE
+        )(context)
 
 
 @pytest.mark.parametrize(
@@ -1912,7 +2064,9 @@ def test_project_verify_stage_fails_closed_on_post_bind_mutations(
     ran = ran_project
     root = _copy_ran_project(ran, tmp_path, f"verify-fault-{fault}")
     _write_all_receipts(root, ran)
-    bound = bind_ego_receipts_pipeline(project_root=root)
+    bound = bind_ego_receipts_pipeline(
+        catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE, project_root=root
+    )
     context: dict[str, Any] = {
         "pre_rc_run_id": ran["pre_rc_run_id"],
         "project_root": str(root),
@@ -1943,16 +2097,19 @@ def test_project_verify_stage_fails_closed_on_post_bind_mutations(
     elif fault == "missing-prior-stage":
         context.pop("html_pipeline")
 
-    with pytest.raises(AcceptanceRunnerError, match=match):
-        build_project_verify_stage()(context)
+    # site-tamper 由当前运行清单重开校验直接抛类型化锁定来源错误；其余故障仍为
+    # AcceptanceRunnerError。两者都是失败关闭，消息匹配保持精确。
+    with pytest.raises((AcceptanceRunnerError, LockedSitemapSourceError), match=match):
+        build_project_verify_stage(
+            catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE
+        )(context)
 
 
-def test_complete_pre_rc_rehearsal_runs_six_stages_and_renders_signal(
+def test_complete_pre_rc_rehearsal_uses_explicit_current_v2_suite_anchor(
     ran_project: dict[str, Any],
     tmp_path: Path,
 ) -> None:
-    """六阶段续跑编排：阶段 1-3 重新核验绑定，宿主冒烟 → 最终项目核验 →
-    场景回执聚合按序执行；全部通过后渲染固定 ``PRE_RC_REHEARSAL_OK`` 信号。"""
+    """当前显式案例六阶段合成续跑；历史默认锚点与真实发布责任不变。"""
     ran = ran_project
     root = _copy_ran_project(ran, tmp_path, "complete-root")
     _write_all_receipts(root, ran)
@@ -1962,33 +2119,80 @@ def test_complete_pre_rc_rehearsal_runs_six_stages_and_renders_signal(
     verifier = _stub_verifier_runner()
 
     summary = complete_pre_rc_rehearsal(
-        project_root=root,
-        host_smoke_stage=build_host_smoke_stage(
-            install_root=install_root,
-            acceptance_root=acceptance_root,
-            smoke_runner=runner,
-        ),
-        project_verify_stage=build_project_verify_stage(),
-        receipts_stage=build_pre_rc_receipts_stage(verifier_runner=verifier),
+            project_root=root,
+            catalog_path=CURRENT_V2_CATALOG,
+            case_id=CURRENT_V2_CASE,
+            host_smoke_stage=build_host_smoke_stage(
+                install_root=install_root,
+                acceptance_root=acceptance_root,
+                smoke_runner=runner,
+            ),
+            project_verify_stage=build_project_verify_stage(
+                catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE
+            ),
+            receipts_stage=build_pre_rc_receipts_stage(
+                catalog_path=CURRENT_V2_CATALOG,
+                case_id=CURRENT_V2_CASE,
+                verifier_runner=verifier,
+            ),
     )
 
-    assert summary["ok"] is True
+    assert len(runner.calls) == 1
+    assert (acceptance_root / "host-smoke" / "batch.json").is_file()
     assert [stage["stage"] for stage in summary["stages"]] == list(PRE_RC_STAGE_ORDER)
-    host_stage = summary["stages"][3]
-    assert host_stage["pre_rc_run_id"] == summary["pre_rc_run_id"]
-    assert set(host_stage["hosts"]) == {"codex", "hermes", "omp"}
-    assert all(entry["ok"] is True for entry in host_stage["hosts"].values())
-    project_stage = summary["stages"][4]
-    assert project_stage["browser_receipts_unchanged"] is True
-    receipts_stage = summary["stages"][5]
-    assert receipts_stage["release_cases_closed"] == 0
-    assert receipts_stage["counts"]["rehearsed"] == 16
-    assert receipts_stage["hosts"] == ["codex", "hermes", "omp"]
+    assert all(stage["ok"] for stage in summary["stages"])
+    receipts = summary["stages"][-1]
+    assert receipts["primary_case_id"] == CURRENT_V2_CASE
+    assert receipts["pipeline_binding"]["case_id"] == CURRENT_V2_CASE
+    assert receipts["release_cases_closed"] == 0
+    assert all(not item["release_case_closed"] for item in receipts["receipts"])
+    assert format_pre_rc_rehearsal_ok(summary).startswith("PRE_RC_REHEARSAL_OK reports=3")
 
-    signal = format_pre_rc_rehearsal_ok(summary)
-    assert signal.startswith("PRE_RC_REHEARSAL_OK reports=3 formats=1 hosts=3 ")
-    assert "release_cases_closed=0" in signal
-    assert f"pre_rc_run_id={summary['pre_rc_run_id']}" in signal
+
+def test_current_suite_keeps_historical_default_anchor_fail_closed() -> None:
+    catalog = load_acceptance_catalog(CURRENT_V2_CATALOG)
+    with pytest.raises(AcceptanceRunnerError, match="基准案例 full-matrix-v1"):
+        resolve_full_matrix_suite(catalog)
+
+
+def test_current_suite_accepts_explicit_registered_abc_anchor() -> None:
+    catalog = load_acceptance_catalog(CURRENT_V2_CATALOG)
+    suite = resolve_full_matrix_suite(catalog, primary_case_id=CURRENT_V2_CASE)
+    assert [case.case_id for case in suite] == [CURRENT_V2_CASE]
+    result = build_full_matrix_suite_receipts(
+        catalog,
+        primary_case_id=CURRENT_V2_CASE,
+        pre_rc_run_id=_PRE_RC_TEST_ID,
+        verifier_runner=_stub_verifier_runner(),
+    )
+    assert result["primary_case_id"] == CURRENT_V2_CASE
+    assert result["release_cases_closed"] == 0
+    assert result["host_smoke_bound"] is False
+
+
+@pytest.mark.parametrize("reports", (["A"], ["A", "B"]))
+def test_current_suite_rejects_partial_report_anchor(reports: list[str]) -> None:
+    catalog = load_acceptance_catalog(CURRENT_V2_CATALOG)
+    case = {**catalog.cases[CURRENT_V2_CASE], "reports": reports}
+    case["case_digest"] = compute_case_digest(case)
+    catalog = replace(catalog, cases={CURRENT_V2_CASE: case})
+    with pytest.raises(AcceptanceRunnerError, match="基准案例.*A/B/C"):
+        resolve_full_matrix_suite(catalog, primary_case_id=CURRENT_V2_CASE)
+
+
+def test_current_suite_rejects_foreign_pipeline_anchor() -> None:
+    catalog = load_acceptance_catalog(CURRENT_V2_CATALOG)
+    with pytest.raises(AcceptanceRunnerError, match="绑定摘要的案例"):
+        build_full_matrix_suite_receipts(
+            catalog,
+            primary_case_id=CURRENT_V2_CASE,
+            pre_rc_run_id=_PRE_RC_TEST_ID,
+            pipeline_binding={
+                "ok": True, "case_id": "full-matrix-v1",
+                "reports": ["A", "B", "C"], "formats": ["html"],
+            },
+            verifier_runner=_stub_verifier_runner(),
+        )
 
 
 def test_complete_pre_rc_rehearsal_requires_all_handlers(tmp_path: Path) -> None:
@@ -2018,24 +2222,33 @@ def test_complete_pre_rc_rehearsal_requires_all_handlers(tmp_path: Path) -> None
 def test_full_pipeline_from_empty_root_pauses_at_ego_receipts(
     ran_project: dict[str, Any],
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """完整六阶段首次运行：阶段 1-2 真实执行后暂停在 ego(lite) 回执阶段；
     宿主冒烟绝不先于回执绑定执行，验收证据根保持未创建。"""
     install_root = _make_fake_install_root(tmp_path / "install")
     acceptance_root = tmp_path / "acceptance-root"
     runner = _make_fake_smoke_runner()
+    probe = _write_independent_context_probe(tmp_path)
+    monkeypatch.setenv("CI_WORKFLOW_INDEPENDENT_CONTEXT_PROBE", str(probe))
 
     with pytest.raises(EgoReceiptPendingError):
         run_pre_rc_rehearsal(
             project_root=tmp_path / "fresh-full-root",
+            catalog_path=CURRENT_V2_CATALOG,
+            case_id=CURRENT_V2_CASE,
             host_smoke_stage=build_host_smoke_stage(
                 install_root=install_root,
                 acceptance_root=acceptance_root,
                 smoke_runner=runner,
             ),
-            project_verify_stage=build_project_verify_stage(),
+            project_verify_stage=build_project_verify_stage(
+                catalog_path=CURRENT_V2_CATALOG, case_id=CURRENT_V2_CASE
+            ),
             receipts_stage=build_pre_rc_receipts_stage(
-                verifier_runner=_stub_verifier_runner()
+                catalog_path=CURRENT_V2_CATALOG,
+                case_id=CURRENT_V2_CASE,
+                verifier_runner=_stub_verifier_runner(),
             ),
         )
 
@@ -2118,6 +2331,10 @@ def test_cli_full_resume_fails_closed_before_host_work_on_invalid_install_root(
             str(root),
             "--acceptance-root",
             str(acceptance_root),
+            "--catalog",
+            str(CURRENT_V2_CATALOG),
+            "--case",
+            CURRENT_V2_CASE,
             "--install-root",
             str(tmp_path / "not-installed"),
         ],

@@ -391,8 +391,8 @@ def test_fetch_cli_requires_a_verified_project_root(
     assert "CONTRACT_ERROR" in capsys.readouterr().err
 
 
-def test_efetch_attrition_classified_via_esummary(tmp_path: Path) -> None:
-    """G8-1：efatch 缺失经 esummary 分类后按属性完成，不冒充完整记录集。"""
+def test_missing_efetch_identity_stays_open_despite_summary_status(tmp_path: Path) -> None:
+    """出版状态可保留诊断，但不是无法获取证明，不能闭合遗漏。"""
     root = tmp_path / "proj"
     (root / "state").mkdir(parents=True)
     search = _search_page(3, 0, 10, ["1", "2", "3"])
@@ -408,8 +408,8 @@ def test_efetch_attrition_classified_via_esummary(tmp_path: Path) -> None:
     result = fetch_pubmed_results(
         root, "q", page_size=10, max_pages=1, transport=transport,
     )
-    assert result.status == "complete_with_attrition"
-    assert result.pagination_complete is True
+    assert result.status == "incomplete"
+    assert result.pagination_complete is False
     assert [record.pmid for record in result.records] == ["1"]
     assert {item.pmid: item.state for item in result.attrition} == {
         "2": "in process", "3": "not_in_pubmed",

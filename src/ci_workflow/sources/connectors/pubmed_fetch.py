@@ -8,10 +8,12 @@ No cookies, authentication, alternate hosts, implicit retries or web environment
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Lock
 from typing import Any, ClassVar, Literal, Protocol
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
@@ -28,14 +30,18 @@ from ci_workflow.sources.connectors.pubmed import (
 from ci_workflow.storage.content_store import ContentAddressedStore
 from ci_workflow.storage.source_derivation import source_json_decoder
 
-_EFETCH_AVAILABLE_STATES = frozenset({"pubmed", "aheadofprint"})
-
 FetchStatus = Literal[
     "complete", "complete_with_attrition", "no_records", "incomplete",
     "network_error", "rate_limited", "access_denied", "invalid_response",
 ]
 _JSON_MEDIA = "application/json"
 _XML_MEDIA_TYPES = {"application/xml", "text/xml"}
+# NCBI's no-key limit is shared by all E-utilities, not per endpoint.
+# ponytail: process-local admission; other processes sharing the IP may still
+# cause 429, which stays an explicit failure rather than an automatic retry.
+_REQUEST_LOCK = Lock()
+_LAST_REQUEST_STARTED: float | None = None
+_REQUEST_INTERVAL = 0.35
 
 
 class PubMedFetchError(RuntimeError):
@@ -121,10 +127,17 @@ class _NoRedirect(HTTPRedirectHandler):
 
 def _download(url: str, timeout: float, max_bytes: int) -> HttpPage:
     """Bounded single request; a server error page is classified but never retained."""
+    global _LAST_REQUEST_STARTED
     request = Request(url, headers={
         "Accept": "application/json, application/xml, text/xml",
         "User-Agent": "CI-Workflow/1.4 public-research",
     })
+    with _REQUEST_LOCK:
+        if _LAST_REQUEST_STARTED is not None:
+            remaining = _REQUEST_INTERVAL - (time.monotonic() - _LAST_REQUEST_STARTED)
+            if remaining > 0:
+                time.sleep(remaining)
+        _LAST_REQUEST_STARTED = time.monotonic()
     try:
         with build_opener(_NoRedirect()).open(request, timeout=timeout) as response:
             return HttpPage(
@@ -267,7 +280,7 @@ class CapturedPage(BaseModel):
 
 
 class AttritionRecord(BaseModel):
-    """efetch 未返回但经 esummary 分类解释的标识；不是已获取记录。"""
+    """未返回标识的来源状态诊断；状态字符串不证明记录不可获取。"""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -442,9 +455,8 @@ def fetch_pubmed_results(
             if previous is not None and previous != record:
                 return finish("incomplete", "同一标识的记录内容冲突；需重新获取一致集合")
             records[record.pmid] = record
-    # G8-1：efetch 属性差（非 PubMed 中央库/在处理/已删除标识永不返回）经
-    # esummary 逐批分类解释；已解释的属性=完成（complete_with_attrition），
-    # 不可解释的缺失仍是截断。不冒充完整记录集，attrition 单列。
+    # A publication status is not an EFetch availability contract. Retain the
+    # original summary diagnostics, but every still-missing identity stays open.
     attrition: list[AttritionRecord] = []
     summary_pages_local: list[CapturedPage] = []
     missing = [pmid for pmid in pmids if pmid not in records]
@@ -492,31 +504,17 @@ def fetch_pubmed_results(
             entry = results.get(pmid)
             if isinstance(entry, dict) and entry.get("uid") == pmid:
                 state = str(entry.get("pubstatus") or "unknown")
-                if state in _EFETCH_AVAILABLE_STATES:
-                    # esummary 显示可获取却未被 efetch 返回：真截断，不是属性。
-                    unclassified.append(pmid)
-                else:
-                    attrition.append(AttritionRecord(
-                        pmid=pmid, state=state,
-                        detail_zh="efetch 未返回该标识；esummary 状态已分类",
-                    ))
+                attrition.append(AttritionRecord(
+                    pmid=pmid, state=state,
+                    detail_zh="记录未解析取得；来源出版状态不证明其无法获取，需恢复核查",
+                ))
             else:
                 unclassified.append(pmid)
-    if unclassified:
-        return finish(
-            "incomplete",
-            f"有标识既不在 efetch 也不在 esummary 结果中，无法解释：{unclassified[:5]}",
-        )
-    if attrition:
-        states: dict[str, int] = {}
-        for item in attrition:
-            states[item.state] = states.get(item.state, 0) + 1
-        state_text = "、".join(f"{key}×{value}" for key, value in sorted(states.items()))
+    if missing:
         result = finish(
-            "complete_with_attrition",
-            f"检索分页完整；efetch 返回 {len(records)} 条，另有 {len(attrition)} 个标识"
-            f"经 esummary 分类为非可获取记录（{state_text}）。属性差异已解释，"
-            "不代表论文—试验关系判定或竞品闭包",
+            "incomplete",
+            f"检索标识{len(pmids)}个，解析取得{len(records)}条，缺少{len(missing)}条；"
+            f"其中{len(unclassified)}条缺少来源状态。出版状态不能代替获取完整性，需恢复核查",
         )
         return result.model_copy(update={
             "attrition": tuple(attrition),

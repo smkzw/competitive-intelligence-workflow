@@ -6,10 +6,11 @@
 - 类型化内容只绑定 C 类门户模型 ``ReportCPortalData``，不复制 A 类门户模型；
 - 设计事实沿用 ``reports.c`` 的强类型 ``DesignObservation``，并以官方登记
   来源为唯一关键设计权威（论文只作身份交叉核验，方案/SAP 可补充）；
-- GateSpec 评估复用共享证据门槛引擎（``policies/gates/C-v1.yaml``）：
+- GateSpec 评估复用共享证据门槛引擎（当前 ``policies/gates/C-v2.yaml``，
+  旧 C-v1 保持产品根兼容）：
   内容确定性推导适用宇宙快照与证据绑定，不接受调用方传入门槛结论；
-- 多路径是证据支持的选项空间：候选路径不足两条、签名重复或元数据携带
-  排名语义均失败关闭，不生成唯一"最佳方案"；
+- 多路径是证据支持的选项空间；先例数量不设两条最低门，签名重复或元数据
+  携带排名语义仍失败关闭，不生成唯一"最佳方案"；
 - 独立科学复核绑定重算内容摘要：未接受或摘要不一致的包不得进入投影；
 - 报告快照仅在确定性 GateSpec 通过且独立复核接受后锁定，投影幂等，
   门户数据回绑锁定快照标识；``rendered_unreviewed`` 快捷路径不受影响。
@@ -23,7 +24,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -38,6 +39,11 @@ from pydantic import (
     model_validator,
 )
 
+from ci_workflow.application.ctgov_c_design_projection import (
+    ELIGIBILITY_SECTION_COMPATIBILITY_RULE,
+    replay_ctgov_eligibility_section,
+)
+from ci_workflow.application.ctgov_design_atoms import extract_ctgov_protocol_design_atoms
 from ci_workflow.application.fresh_research_primitives import (
     ResearchClaim,
     ResearchFact,
@@ -47,6 +53,7 @@ from ci_workflow.application.fresh_research_primitives import (
 )
 from ci_workflow.domain.enums import (
     FactDisclosureState,
+    FactReviewState,
     ReportKind,
 )
 from ci_workflow.domain.evidence import EvidenceLocator
@@ -63,14 +70,20 @@ from ci_workflow.gates.models import (
     ObservationKind,
     ReportDecision,
     ReportGateResult,
+    SourceRole,
     TrialDesignEvidence,
     TrialDesignKind,
     UniverseEdge,
     compute_gate_result_key,
     compute_universe_summary,
+    evidence_binding_qualifies,
 )
 from ci_workflow.renderers.portal.report_c import ReportCPortalData
 from ci_workflow.reports.c import DesignFieldFamily, DesignObservation
+from ci_workflow.reports.c.endpoint_instances import (
+    EndpointInstanceError,
+    validate_endpoint_timepoint_pairs,
+)
 from ci_workflow.reports.c.synthesis import DesignPathSynthesisResult
 from ci_workflow.storage.snapshot_store import (
     EvidenceSnapshotManifest,
@@ -80,9 +93,10 @@ from ci_workflow.storage.snapshot_store import (
     SnapshotStore,
     compute_locked_snapshot,
 )
+from ci_workflow.storage.source_derivation import SourceDerivationError, extract_locator_quote
 
 _C_GATE_SPEC_PATH = (
-    Path(__file__).resolve().parents[3] / "policies" / "gates" / "C-v1.yaml"
+    Path(__file__).resolve().parents[3] / "policies" / "gates" / "C-v2.yaml"
 )
 
 # C 研究角色与指示规则集合的稳定标识：登记优先设计事实的封闭来源角色
@@ -97,8 +111,6 @@ _FAMILY_UNIT_BY_FAMILY: Mapping[DesignFieldFamily, str] = {
     DesignFieldFamily.GROUPING: "c_arm_randomization_blinding",
     DesignFieldFamily.INTERVENTION: "c_intervention_control_rescue",
     DesignFieldFamily.DOSE_SCHEDULE: "c_dose_schedule_followup",
-    DesignFieldFamily.ENDPOINT: "c_endpoint_definitions_timepoints",
-    DesignFieldFamily.TIMEPOINT: "c_endpoint_definitions_timepoints",
     DesignFieldFamily.SAMPLE_SIZE: "c_planned_or_actual_sample_size",
     DesignFieldFamily.OPERATIONAL: "c_region_visit_operational",
 }
@@ -261,7 +273,7 @@ class FreshCResearchContent(BaseModel):
             raise FreshCPackageError("研究包与报告数据的报告版本不一致")
         if self.design_paths.indication_id != self.indication_id:
             raise FreshCPackageError("候选设计路径与研究包的适应症标识不一致")
-        if any(not item.date_evidence("first_disclosed_at").is_known_by(self.data_cutoff)
+        if any(not item.is_available_by(self.data_cutoff)
                for item in self.sources):
             raise FreshCPackageError("截止日之后或无法证明截止时点前首次披露的来源不得进入当前快照")
 
@@ -311,6 +323,11 @@ class FreshCResearchContent(BaseModel):
         validate_endpoint_timepoint_pairs(
             self.report_data.observations,
             universe_trial_ids=set(self.universe_trial_ids),
+            protocol_sources={
+                source.source_id: source.content_text for source in self.sources
+                if source.media_type == "application/json"
+                and source.source_type == "clinical_trial_registry"
+            },
         )
 
     def _validate_trial_designs(self) -> None:
@@ -368,7 +385,7 @@ def validate_fresh_c_content(
 ) -> FreshCResearchContent:
     """公共边界：校验 C 类科学内容，全部合同错误统一为 FreshCPackageError。"""
     if isinstance(payload, FreshCResearchContent):
-        return payload
+        payload = payload.model_dump(mode="json", exclude={"scientific_review"})
     try:
         return FreshCResearchContent.model_validate(payload)
     except ValidationError as error:
@@ -415,25 +432,72 @@ def derive_c_research_facts(
 ) -> tuple[ResearchFact, ...]:
     """Project typed design observations into shared atomic evidence facts."""
     trial_names = {item.id: item.name for item in content.report_data.trials}
-    return tuple(
-        ResearchFact.model_validate(
-            {
+    return research_facts_from_c_observations(
+        content.report_data.observations, sources=content.sources, trial_names=trial_names,
+    )
+
+
+def research_facts_from_c_observations(
+    observations: Sequence[DesignObservation], *, sources: Sequence[SourceCapture],
+    trial_names: Mapping[str, str],
+) -> tuple[ResearchFact, ...]:
+    """Prepare C candidate atoms for shared ingestion; never approve or persist here.
+
+    CT.gov derived eligibility text is the normalized section, not an invented
+    scalar quote. Its original/raw value remains the full source scalar. Generic
+    legacy documents retain their original contract and ingestion's locator gate.
+    """
+    by_source = {source.source_id: source for source in sources}
+    if len(by_source) != len(sources):
+        raise FreshCPackageError("C 事实来源实例重复")
+    facts = []
+    for item in observations:
+        source = by_source.get(item.source_version_id)
+        if source is None or item.trial_id not in trial_names:
+            raise FreshCPackageError("C 事实引用了集合外的来源或试验")
+        original = item.source_text
+        path = item.source_locator.field_path or ""
+        if (source.media_type == "application/json"
+                and source.source_type == "clinical_trial_registry"
+                and path.startswith("$.protocolSection.")):
+            try:
+                record = json.loads(source.content_text)
+                nct_id = record["protocolSection"]["identificationModule"]["nctId"]
+                original = extract_locator_quote(
+                    source.content_text, media_type=source.media_type, locator=item.source_locator,
+                )
+            except (ValueError, KeyError, TypeError, SourceDerivationError) as error:
+                raise FreshCPackageError("C 登记事实不能从来源精确重提取") from error
+            if (str(nct_id).casefold() != item.trial_id.casefold()
+                    or item.source_locator.url != source.url):
+                raise FreshCPackageError("C 登记事实的试验或来源链接不匹配")
+            if original != item.source_text:
+                if (path != "$.protocolSection.eligibilityModule.eligibilityCriteria"
+                        or item.compatibility_rule != ELIGIBILITY_SECTION_COMPATIBILITY_RULE):
+                    raise FreshCPackageError("C 原文与精确来源不一致，且没有合法分段规则")
+                try:
+                    section = replay_ctgov_eligibility_section(original, item.field)
+                except ValueError as error:
+                    raise FreshCPackageError("C 入排段落不能按已声明规则重放") from error
+                if section != item.source_text:
+                    raise FreshCPackageError("C 入排段落与完整来源的确定性分段不一致")
+        facts.append(ResearchFact.model_validate({
                 "fact_id": item.row_id,
                 "row_ref": item.row_id,
                 "entity_id": item.trial_id,
                 "entity_type": "trial",
                 "canonical_name": trial_names[item.trial_id],
                 "field_id": f"c.{item.field_family.value}.{item.field}",
-                "raw_value": item.source_text,
+                "raw_value": original,
                 "normalized_value": item.source_text,
                 "disclosure_state": item.disclosure_state.value,
                 "source_id": item.source_version_id,
                 "locator": item.source_locator,
-                "original_text": item.source_text,
-            }
-        )
-        for item in content.report_data.observations
-    )
+                "original_text": original,
+                **({"source_clause_context": item.source_clause_context}
+                   if item.source_clause_context is not None else {}),
+            }))
+    return tuple(facts)
 
 
 def validate_fresh_c_package(
@@ -441,7 +505,7 @@ def validate_fresh_c_package(
 ) -> FreshCResearchPackage:
     """公共边界：校验完整 C 类交接包，合同错误统一为 FreshCPackageError。"""
     if isinstance(payload, FreshCResearchPackage):
-        return payload
+        payload = payload.model_dump(mode="json")
     try:
         return FreshCResearchPackage.model_validate(payload)
     except ValidationError as error:
@@ -452,6 +516,15 @@ def validate_fresh_c_package(
 
 
 def _unit_id_for(observation: DesignObservation) -> str | None:
+    if observation.field_family in {DesignFieldFamily.ENDPOINT, DesignFieldFamily.TIMEPOINT}:
+        # ENDPOINT is a scientific domain, not proof of primary/key-secondary
+        # status. Preserve all other endpoint facts in the report, without
+        # using them to fill the critical C-v1 coverage unit.
+        if observation.endpoint_key in {
+            "primary_endpoint", "important_secondary_endpoint", "key_secondary_endpoint",
+        }:
+            return "c_endpoint_definitions_timepoints"
+        return None
     if observation.field_family is DesignFieldFamily.STATISTICAL:
         return _STATISTICAL_FIELD_UNITS.get(observation.field)
     return _FAMILY_UNIT_BY_FAMILY.get(observation.field_family)
@@ -461,6 +534,8 @@ def build_c_gate_bindings(
     content: FreshCResearchContent,
     *,
     fact_version_by_ref: Mapping[str, str] | None = None,
+    study_first: bool = False,
+    spec: GateSpec | None = None,
 ) -> tuple[GateEvidenceBinding, ...]:
     """从设计观察确定性推导 C 类证据绑定。
 
@@ -471,9 +546,28 @@ def build_c_gate_bindings(
       显式零值原文，不适用事实不携带数值。
     """
     bindings: list[GateEvidenceBinding] = []
+    binding_by_observation: dict[str, GateEvidenceBinding] = {}
+    observations = {row.observation_id: row for row in content.report_data.observations}
+    qualified_design_trials = {
+        design.trial_id for design in content.trial_designs
+        if (observations[design.observation_id].field_family is DesignFieldFamily.GROUPING
+            and observations[design.observation_id].review_state is FactReviewState.ACCEPTED
+            and observations[design.observation_id].source_role in {
+                SourceRole.CLINICAL_TRIAL_REGISTRY, SourceRole.PROTOCOL_SAP,
+            }
+            and observations[design.observation_id].disclosure_state in {
+                FactDisclosureState.REPORTED_VALUE, FactDisclosureState.REPORTED_ZERO,
+            })
+    }
     for observation in content.report_data.observations:
         unit_id = _unit_id_for(observation)
         if unit_id is None:
+            continue
+        if (study_first and unit_id == "c_arm_randomization_blinding"
+                and observation.trial_id not in qualified_design_trials):
+            # Other accepted grouping rows cannot launder a wrong-family or
+            # unaccepted design anchor into critical coverage. Keep the source
+            # observations; the existing engine reports missing evidence.
             continue
         numeric_value: float | None = None
         unit_text: str | None = None
@@ -529,7 +623,147 @@ def build_c_gate_bindings(
                 reported_zero_text=observation.reported_zero_text,
             )
         )
+        binding_by_observation[observation.observation_id] = bindings[-1]
+    if study_first:
+        gate_spec = spec if spec is not None else GateSpec.from_yaml(_C_GATE_SPEC_PATH)
+        incomplete = _incomplete_c_compound_units(content, binding_by_observation, gate_spec)
+        return tuple(binding for binding in bindings
+                     if (binding.trial_id, binding.unit_id) not in incomplete)
     return tuple(bindings)
+
+
+def _incomplete_c_compound_units(
+    content: FreshCResearchContent,
+    bindings: Mapping[str, GateEvidenceBinding],
+    spec: GateSpec,
+) -> set[tuple[str, str]]:
+    """Only complete qualified source families may prove a compound C unit.
+
+    Preserve original observations and candidate status. This filters proof
+    bindings, not report facts; the existing evaluator reports a blocked unit.
+    No counts, new ontology or approval path substitute for scientific coverage.
+    """
+    units = {unit.unit_id: unit for unit in spec.units}
+    source_text = {source.source_id: source.content_text for source in content.sources
+                   if source.media_type == "application/json"
+                   and source.source_type == "clinical_trial_registry"}
+    design_by_trial = {design.trial_id: design for design in content.trial_designs}
+    incomplete: set[tuple[str, str]] = set()
+    for trial_id in content.universe_trial_ids:
+        rows = tuple(row for row in content.report_data.observations if row.trial_id == trial_id)
+
+        def eligible(
+            unit_id: str, candidates: tuple[DesignObservation, ...] = rows,
+        ) -> tuple[DesignObservation, ...]:
+            return tuple(row for row in candidates
+                         if (binding := bindings.get(row.observation_id)) is not None
+                         and binding.unit_id == unit_id
+                         and evidence_binding_qualifies(binding, units[unit_id]))
+
+        population_unit = "c_target_population_criteria"
+        population = eligible(population_unit)
+        # The current native adapter assigns both minimumAge and the complete
+        # eligibility scalar to target_population. The age scalar cannot prove
+        # the combined population/criteria requirement.
+        population_complete = any(
+            row.field == "target_population"
+            and (row.source_locator.field_path ==
+                 "$.protocolSection.eligibilityModule.eligibilityCriteria"
+                 if row.source_locator.field_path and
+                 row.source_locator.field_path.startswith("$.protocolSection.")
+                 else row.source_field_name not in {"minimumAge", "maximumAge", "age"})
+            for row in population
+        )
+        if not population_complete:
+            incomplete.add((trial_id, population_unit))
+
+        grouping_unit = "c_arm_randomization_blinding"
+        grouping = eligible(grouping_unit)
+        grouping_complete = any(
+            row.randomization is not None and row.blinding is not None
+            and not (row.source_locator.field_path or "").startswith("$.protocolSection.")
+            for row in grouping
+        )
+        required_paths = {
+            "$.protocolSection.designModule.designInfo.allocation",
+            "$.protocolSection.designModule.designInfo.interventionModel",
+            "$.protocolSection.designModule.designInfo.maskingInfo.masking",
+        }
+        for source_id in {row.source_version_id for row in grouping}:
+            native = [row for row in grouping if row.source_version_id == source_id]
+            if not required_paths <= {row.source_locator.field_path for row in native}:
+                continue
+            model_values = {row.source_text for row in native if row.source_locator.field_path ==
+                            "$.protocolSection.designModule.designInfo.interventionModel"}
+            design = design_by_trial[trial_id]
+            single = design.design_kind is TrialDesignKind.SINGLE_ARM
+            recognized_models = {"SINGLE_GROUP", "PARALLEL", "CROSSOVER", "FACTORIAL", "SEQUENTIAL"}
+            if (len(model_values) == 1 and model_values <= recognized_models
+                    and (("SINGLE_GROUP" in model_values) == single)):
+                grouping_complete = True
+        if not grouping_complete:
+            incomplete.add((trial_id, grouping_unit))
+
+        endpoint_unit = "c_endpoint_definitions_timepoints"
+        critical = tuple(row for row in rows if _unit_id_for(row) == endpoint_unit)
+        try:
+            original_instances = set(validate_endpoint_timepoint_pairs(
+                critical, universe_trial_ids={trial_id}, protocol_sources=source_text,
+            ))
+            qualified_instances = set(validate_endpoint_timepoint_pairs(
+                eligible(endpoint_unit), universe_trial_ids={trial_id},
+                protocol_sources=source_text,
+            ))
+            endpoint_complete = (bool(original_instances)
+                                 and original_instances == qualified_instances)
+        except EndpointInstanceError:
+            endpoint_complete = False
+        if not endpoint_complete:
+            incomplete.add((trial_id, endpoint_unit))
+
+        # Coverage must not shrink with submitted rows. Reuse the source-atom
+        # extractor to enumerate independently retained official source paths;
+        # do not rebuild expected objects from the surviving observations.
+        # A complete selected source version may prove a unit. Other historical
+        # versions are not silently merged into that version's coverage.
+        native_expected: set[str] = set()
+        native_complete: set[str] = set()
+        native_fields = {
+            "ctgov.protocol.design.study_type": "c_trial_identity_stage_role",
+            "ctgov.protocol.design.phase": "c_trial_identity_stage_role",
+            "ctgov.protocol.arm.intervention_name": "c_intervention_control_rescue",
+            "ctgov.protocol.arm.description": "c_dose_schedule_followup",
+            "ctgov.protocol.primary_outcome.measure": endpoint_unit,
+            "ctgov.protocol.primary_outcome.time_frame": endpoint_unit,
+        }
+        for source in content.sources:
+            if (source.source_id not in source_text
+                    or source.query_or_identifier.casefold() != trial_id.casefold()):
+                continue
+            record = json.loads(source.content_text)
+            if not isinstance(record, dict) or "protocolSection" not in record:
+                continue  # Generic documents retain their existing contracts.
+            atoms = extract_ctgov_protocol_design_atoms(source)
+            expected_by_unit: dict[str, set[tuple[str | None, str | None]]] = {}
+            for atom in atoms.facts:
+                if (unit_id := native_fields.get(atom.field_id)) is not None:
+                    expected_by_unit.setdefault(unit_id, set()).add(
+                        (atom.locator.field_path, atom.raw_value)
+                    )
+            for unit_id, expected in expected_by_unit.items():
+                native_expected.add(unit_id)
+                observed = {
+                    (row.source_locator.field_path, row.source_text)
+                    for row in eligible(unit_id)
+                    if row.source_version_id == source.source_id
+                    and (unit_id not in {"c_intervention_control_rescue",
+                                         "c_dose_schedule_followup"}
+                         or row.relationship_status == "bound")
+                }
+                if expected <= observed:
+                    native_complete.add(unit_id)
+        incomplete.update((trial_id, unit_id) for unit_id in native_expected - native_complete)
+    return incomplete
 
 
 def build_c_gate_snapshot(
@@ -537,8 +771,9 @@ def build_c_gate_snapshot(
     *,
     project_id: str,
     evidence_snapshot_id: str,
+    study_first: bool = False,
 ) -> ApplicableUniverseSnapshot:
-    """从 C 类内容确定性推导已闭合适用宇宙快照。
+    """从 C 内容枚举当前输入内的适用对象，非全球/中国发现闭包证明。
 
     C GateSpec 单元全部为试验级：比较/组别对象仅在设计类型声明为比较
     试验且观察携带组别作用域时按证据推导，其余对象类为带类型化证明的
@@ -546,6 +781,8 @@ def build_c_gate_snapshot(
     """
     product_ids = content.universe_product_ids
     trial_ids = content.universe_trial_ids
+    indication_rule_set_id = ("c-design-source-object-coverage-v2" if study_first
+                              else _C_INDICATION_RULE_SET_ID)
     observations_by_trial: dict[str, list[DesignObservation]] = {
         trial_id: [] for trial_id in trial_ids
     }
@@ -559,15 +796,21 @@ def build_c_gate_snapshot(
     edges: list[UniverseEdge] = []
     group_ids: set[str] = set()
     comparison_ids: list[str] = []
+    endpoint_ids: list[str] = []
+    timepoint_ids: list[str] = []
     for trial in content.report_data.trials:
-        edges.append(
-            UniverseEdge(
-                parent_type=GateObjectType.PRODUCT,
-                parent_id=trial.product_id,
-                child_type=GateObjectType.TRIAL,
-                child_id=trial.id,
+        if trial.product_id is None:
+            if not study_first:
+                raise FreshCPackageError("旧产品根合同不接受待核产品关联的试验")
+        else:
+            edges.append(
+                UniverseEdge(
+                    parent_type=GateObjectType.PRODUCT,
+                    parent_id=trial.product_id,
+                    child_type=GateObjectType.TRIAL,
+                    child_id=trial.id,
+                )
             )
-        )
         for group_id in group_ids_by_trial[trial.id]:
             group_ids.add(group_id)
             edges.append(
@@ -606,33 +849,84 @@ def build_c_gate_snapshot(
                 )
             )
 
+    if study_first:
+        # Reuse the source-backed instance validator, including exact protocol
+        # parent checks. Do not collapse different sources/groups/windows by
+        # endpoint role or invent a missing results-period field.
+        instances = validate_endpoint_timepoint_pairs(
+            content.report_data.observations,
+            universe_trial_ids=set(trial_ids),
+            protocol_sources={
+                source.source_id: source.content_text for source in content.sources
+                if source.media_type == "application/json"
+                and source.source_type == "clinical_trial_registry"
+            },
+        )
+        for instance in instances:
+            endpoint_id = stable_id("c-endpoint-instance", _digest(vars(instance)))
+            timepoint_id = stable_id("c-timepoint-instance", endpoint_id, instance.timepoint or "")
+            endpoint_ids.append(endpoint_id)
+            timepoint_ids.append(timepoint_id)
+            edges.extend((
+                UniverseEdge(parent_type=GateObjectType.TRIAL, parent_id=instance.trial_id,
+                             child_type=GateObjectType.ENDPOINT, child_id=endpoint_id),
+                UniverseEdge(parent_type=GateObjectType.ENDPOINT, parent_id=endpoint_id,
+                             child_type=GateObjectType.GROUP, child_id=instance.group_id),
+                UniverseEdge(parent_type=GateObjectType.ENDPOINT, parent_id=endpoint_id,
+                             child_type=GateObjectType.TIMEPOINT, child_id=timepoint_id),
+            ))
+
+    observation_by_id = {row.observation_id: row for row in content.report_data.observations}
+    source_by_id = {source.source_id: source for source in content.sources}
+
+    def design_evidence_id(design: CTrialDesign) -> str:
+        if not study_first:
+            return stable_id("c-design-evidence", design.observation_id, design.design_kind.value)
+        anchor = observation_by_id[design.observation_id]
+        # Consumer row/display choices do not constitute scientific change.
+        scientific = anchor.model_dump(mode="json", exclude={
+            "row_id", "source_row_id", "display_text", "difference_labels_zh",
+        })
+        source = source_by_id[anchor.source_version_id]
+        source_material = {"source_id": source.source_id, "url": source.url,
+                           "source_type": source.source_type, "media_type": source.media_type,
+                           "content_text": source.content_text}
+        return stable_id("c-design-evidence", design.observation_id, design.design_kind.value,
+                         _digest(scientific), _digest(source_material))
+
     trial_design_evidence = tuple(
         TrialDesignEvidence(
             trial_id=design.trial_id,
             design_kind=design.design_kind,
-            evidence_version_id=stable_id(
-                "c-design-evidence",
-                design.observation_id,
-                design.design_kind.value,
-            ),
+            evidence_version_id=design_evidence_id(design),
             explanation_zh="试验设计类型声明，证据锚定该试验的设计观察",
         )
         for design in content.trial_designs
     )
 
+    single_arm_only = study_first and all(
+        row.design_kind is TrialDesignKind.SINGLE_ARM for row in content.trial_designs
+    )
     empty_set_proofs = tuple(
         EmptySetProof(
             object_type=object_type,
-            reason_code=EmptySetReasonCode.EXHAUSTIVE_SEARCH_NO_OBJECTS,
-            evidence_version_id=f"c-empty-{object_type.value}-v1",
-            explanation_zh="登记设计事实按试验级门槛评估，该对象类无适用对象",
+            reason_code=(EmptySetReasonCode.STUDY_DESIGN_SINGLE_ARM
+                         if single_arm_only and object_type is GateObjectType.COMPARISON
+                         else EmptySetReasonCode.EXHAUSTIVE_SEARCH_NO_OBJECTS),
+            evidence_version_id=(stable_id("c-empty-comparison", *(
+                row.evidence_version_id for row in trial_design_evidence
+            )) if single_arm_only and object_type is GateObjectType.COMPARISON
+                else f"c-empty-{object_type.value}-v1"),
+            explanation_zh=("当前输入的研究声明为单组设计；不表示已完成竞品发现闭包"
+                            if single_arm_only and object_type is GateObjectType.COMPARISON
+                            else "登记设计事实按试验级门槛评估，该对象类无适用对象"),
         )
         for object_type, member_ids in (
             (GateObjectType.TRIAL, trial_ids),
             (GateObjectType.COMPARISON, tuple(comparison_ids)),
             (GateObjectType.GROUP, tuple(sorted(group_ids))),
-            (GateObjectType.ENDPOINT, ()),
-            (GateObjectType.TIMEPOINT, ()),
+            (GateObjectType.ENDPOINT, tuple(endpoint_ids)),
+            (GateObjectType.TIMEPOINT, tuple(timepoint_ids)),
         )
         if not member_ids
     )
@@ -645,16 +939,17 @@ def build_c_gate_snapshot(
         trial_ids=trial_ids,
         comparison_ids=tuple(comparison_ids),
         group_ids=tuple(sorted(group_ids)),
-        endpoint_ids=(),
-        timepoint_ids=(),
+        endpoint_ids=tuple(endpoint_ids),
+        timepoint_ids=tuple(timepoint_ids),
         empty_set_proofs=empty_set_proofs,
         relationship_edges=tuple(edges),
         trial_design_evidence=trial_design_evidence,
-        indication_rule_set_id=_C_INDICATION_RULE_SET_ID,
+        indication_rule_set_id=indication_rule_set_id,
         applicable_conditional_predicates=content.applicable_conditional_predicates,
+        root_object_type=(GateObjectType.TRIAL if study_first else GateObjectType.PRODUCT),
     )
     return ApplicableUniverseSnapshot(
-        schema_version="1.0",
+        schema_version="1.1" if study_first else "1.0",
         project_id=project_id,
         evidence_snapshot_id=evidence_snapshot_id,
         research_role_set_id=_C_RESEARCH_ROLE_SET_ID,
@@ -662,12 +957,12 @@ def build_c_gate_snapshot(
         trial_ids=trial_ids,
         comparison_ids=tuple(comparison_ids),
         group_ids=tuple(sorted(group_ids)),
-        endpoint_ids=(),
-        timepoint_ids=(),
+        endpoint_ids=tuple(endpoint_ids),
+        timepoint_ids=tuple(timepoint_ids),
         empty_set_proofs=empty_set_proofs,
         relationship_edges=tuple(edges),
         trial_design_evidence=trial_design_evidence,
-        indication_rule_set_id=_C_INDICATION_RULE_SET_ID,
+        indication_rule_set_id=indication_rule_set_id,
         applicable_conditional_predicates=content.applicable_conditional_predicates,
         universe_summary=universe_summary,
         enumeration_complete=True,
@@ -707,16 +1002,25 @@ def evaluate_c_report_gate(
     适用性谓词、来源角色与披露成熟度全部由引擎从绑定推导；调用方只能
     提供身份与版本，不能传入门槛结论。报告类型不匹配即失败关闭。
     """
-    gate_spec = spec if spec is not None else GateSpec.from_yaml(_C_GATE_SPEC_PATH)
+    content = validate_fresh_c_content(content)
+    gate_spec = (GateSpec.model_validate(spec.model_dump(mode="json"))
+                 if spec is not None else GateSpec.from_yaml(_C_GATE_SPEC_PATH))
     if gate_spec.report_kind is not ReportKind.C:
         raise FreshCPackageError("C 类研究包只能使用 C 类证据门槛规格")
+    if (gate_spec.spec_id, gate_spec.version) not in {
+        ("gate-spec-c-v1", "1.0"), ("gate-spec-c-v2", "2.0"),
+    }:
+        raise FreshCPackageError("C 门槛规格标识与支持的规则版本不一致")
     snapshot = build_c_gate_snapshot(
         content,
         project_id=project_id,
         evidence_snapshot_id=evidence_snapshot_id,
+        study_first=gate_spec.spec_id == "gate-spec-c-v2",
     )
     bindings = build_c_gate_bindings(
-        content, fact_version_by_ref=fact_version_by_ref
+        content, fact_version_by_ref=fact_version_by_ref,
+        study_first=gate_spec.spec_id == "gate-spec-c-v2",
+        spec=gate_spec,
     )
     result = evaluate_report(
         gate_spec, snapshot, bindings, contract_version=contract_version
@@ -786,12 +1090,56 @@ def project_c_report_snapshot(
         raise FreshCPackageError("C 报告快照投影只接受 C 类新鲜来源研究包")
     if not isinstance(outcome, CReportGateOutcome):
         raise FreshCPackageError("C 报告快照投影只接受 C 类门槛评估结果")
+    package = validate_fresh_c_package(package)
     if outcome.report_kind is not ReportKind.C:
         raise FreshCPackageError("报告快照投影的报告类型必须为 C")
     if package.scientific_review.status != "accepted":
         raise FreshCPackageError("独立科学复核未接受，不得锁定报告快照")
     if outcome.candidate_content_digest != package.research_content_digest:
         raise FreshCPackageError("门槛评估对象与当前研究包内容摘要不一致")
+    if (outcome.project_id != project_id
+            or outcome.contract_version != str(contract_version)
+            or outcome.evidence_snapshot_id != evidence_snapshot_id):
+        raise FreshCPackageError("门槛评估与当前项目、合同或证据快照身份不一致")
+    policy_paths = {("gate-spec-c-v1", "1.0"): "C-v1.yaml",
+                    ("gate-spec-c-v2", "2.0"): "C-v2.yaml"}
+    policy_name = policy_paths.get((outcome.spec_id, outcome.spec_version))
+    if policy_name is None:
+        raise FreshCPackageError("门槛评估的规格身份或版本不受支持")
+    spec = GateSpec.from_yaml(_C_GATE_SPEC_PATH.parent / policy_name)
+    if outcome.spec_fingerprint != spec.spec_fingerprint:
+        raise FreshCPackageError("门槛评估与当前规则指纹不一致")
+    expected_snapshot = build_c_gate_snapshot(
+        package, project_id=project_id, evidence_snapshot_id=evidence_snapshot_id,
+        study_first=outcome.spec_id == "gate-spec-c-v2",
+    )
+    if expected_snapshot.model_dump(mode="json") != outcome.snapshot.model_dump(mode="json"):
+        raise FreshCPackageError("门槛候选快照与当前研究包绑定不一致")
+    # Version IDs come from immutable ingestion; all scientific binding fields
+    # must still exactly project from the current source observations.
+    expected_bindings = {binding.binding_id: binding for binding in build_c_gate_bindings(
+        package, study_first=outcome.spec_id == "gate-spec-c-v2",
+        spec=spec,
+    )}
+    actual_bindings = {binding.binding_id: binding for binding in outcome.bindings}
+    if (len(actual_bindings) != len(outcome.bindings)
+            or actual_bindings.keys() != expected_bindings.keys()
+            or any(binding.model_dump(mode="json", exclude={"fact_version_id"})
+                   != expected_bindings[key].model_dump(mode="json", exclude={"fact_version_id"})
+                   for key, binding in actual_bindings.items())):
+        raise FreshCPackageError("门槛科学绑定与当前研究观察不一致")
+    recomputed_result = evaluate_report(
+        spec, outcome.snapshot, outcome.bindings, contract_version=str(contract_version),
+    )
+    expected_key = compute_gate_result_key(
+        ReportKind.C, evidence_snapshot_id, package.research_content_digest,
+        spec.version, str(contract_version), expected_snapshot.universe_summary,
+        spec_fingerprint=spec.spec_fingerprint,
+    )
+    if (outcome.universe_summary != expected_snapshot.universe_summary
+            or outcome.gate_result_key != expected_key
+            or outcome.result.model_dump(mode="json") != recomputed_result.model_dump(mode="json")):
+        raise FreshCPackageError("门槛结果、候选或评估键与当前规则绑定不一致")
     if outcome.result.decision is not ReportDecision.PASSED:
         raise FreshCPackageError("确定性证据门槛未通过，不得锁定 C 报告快照")
     if evidence_snapshot is not None:

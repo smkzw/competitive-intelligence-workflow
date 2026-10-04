@@ -16,6 +16,7 @@ from typing import Any, Literal, Self
 from pydantic import (
     BaseModel,
     ConfigDict,
+    Field,
     ValidationError,
     field_validator,
     model_validator,
@@ -23,6 +24,7 @@ from pydantic import (
 
 from ci_workflow.domain.enums import FactDisclosureState, FactReviewState
 from ci_workflow.domain.evidence import EvidenceLocator
+from ci_workflow.domain.source_clause_context import SourceClauseContext
 from ci_workflow.gates.models import ConflictDisposition, DisclosureMaturity, SourceRole
 
 SCHEMA_PATH = (
@@ -151,7 +153,7 @@ class DesignObservation(BaseModel):
     row_id: str
     source_row_id: str
     observation_id: str
-    product_id: str
+    product_id: str | None
     trial_id: str
     cohort_id: str
     group_id: str
@@ -165,6 +167,9 @@ class DesignObservation(BaseModel):
     source_field_name: str
     source_field_definition: str
     source_text: str
+    source_clause_context: SourceClauseContext | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
     display_text: str | None = None
     scale: str | None = None
     scale_version: str | None = None
@@ -196,7 +201,6 @@ class DesignObservation(BaseModel):
         "row_id",
         "source_row_id",
         "observation_id",
-        "product_id",
         "trial_id",
         "cohort_id",
         "group_id",
@@ -214,6 +218,11 @@ class DesignObservation(BaseModel):
             "field": "设计字段",
         }
         return _text(value, field_name=labels.get(info.field_name, "设计合同文本"))
+
+    @field_validator("product_id")
+    @classmethod
+    def _explicit_product_identity(cls, value: str | None) -> str | None:
+        return None if value is None else _text(value, field_name="产品标识")
 
     @field_validator("source_field_name", "source_field_definition", "source_text")
     @classmethod
@@ -446,12 +455,18 @@ def _missing_failure(
     family: DesignFieldFamily,
     field_id: str,
     label: str,
+    available_unverified: bool = False,
 ) -> DesignGateFailure:
     token = _CRITICAL_LABEL_TOKENS[family]
     note = (
         f"该项试验（{trial_id}）缺少{token}相关的{label}信息，"
         f"请补充官方登记平台中的对应设计字段。"
     )
+    if available_unverified:
+        note = (
+            f"该项试验（{trial_id}）已取得官方登记中的{label}资料，"
+            "但尚未通过复核或冲突裁决；完成核验前仍不满足关键设计要求。"
+        )
     return DesignGateFailure(
         failure_code=f"c_missing_{family.value}",
         trial_id=trial_id,
@@ -522,7 +537,7 @@ def _statistical_gap_note_zh(
     if disclosure_state is FactDisclosureState.USER_CLEARED:
         return f"该项试验（{trial_id}）的{label}由用户清除，待重新核实。"
     return (
-        f"该项试验（{trial_id}）的{label}尚未公开；"
+        f"当前资料尚未取得该项试验（{trial_id}）的{label}；"
         f"统计细节缺失不阻断本报告通过。如已公开，请补充来源。"
     )
 
@@ -534,7 +549,18 @@ def _statistical_gap(
     field_id: str,
     label: str,
     disclosure_state: FactDisclosureState,
+    available_unverified: bool = False,
 ) -> DesignNonblockingGap:
+    note = _statistical_gap_note_zh(
+        trial_id=trial_id, label=label, disclosure_state=disclosure_state,
+    )
+    if available_unverified and disclosure_state in _DISCLOSED_STATISTICAL_STATES:
+        note = (
+            f"该项试验（{trial_id}）的{label}已有来源资料，尚待复核；"
+            "不作为已核验统计证据，也不替代关键设计要求。"
+        )
+    elif available_unverified:
+        note += "该项来源披露记录尚待复核。"
     return DesignNonblockingGap(
         trial_id=trial_id,
         group_id=group_id,
@@ -542,11 +568,7 @@ def _statistical_gap(
         field_family=DesignFieldFamily.STATISTICAL,
         disclosure_state=disclosure_state,
         blocking=False,
-        user_note_zh=_statistical_gap_note_zh(
-            trial_id=trial_id,
-            label=label,
-            disclosure_state=disclosure_state,
-        ),
+        user_note_zh=note,
     )
 
 
@@ -655,6 +677,11 @@ def evaluate_design_gate(
                     family=family,
                     field_id=field_id,
                     label=label,
+                    available_unverified=any(
+                        item.field_family is family and _is_registry_design(item)
+                        and item.disclosure_state in _ACCEPTED_FACT_STATES
+                        for item in trial_obs
+                    ),
                 )
             )
 
@@ -680,6 +707,24 @@ def evaluate_design_gate(
                 if observed is not None
                 else FactDisclosureState.NOT_PUBLICLY_DISCLOSED
             )
+            unverified = tuple(
+                item for item in trial_obs
+                if item.field_family is DesignFieldFamily.STATISTICAL
+                and item.field == field_id and item.review_state is FactReviewState.CANDIDATE
+            ) if observed is None else ()
+            if unverified:
+                # A gate summary does not adjudicate heterogeneous group evidence.
+                # Keep each explicit disclosure/group pair; do not select first or
+                # turn different contexts into a newly invented scientific conflict.
+                scopes = {(item.group_id, item.disclosure_state) for item in unverified}
+                for source_group, state in sorted(
+                    scopes, key=lambda pair: (pair[0] or "", pair[1].value),
+                ):
+                    gaps.append(_statistical_gap(
+                        trial_id=trial_id, group_id=source_group, field_id=field_id,
+                        label=label, disclosure_state=state, available_unverified=True,
+                    ))
+                continue
             gaps.append(
                 _statistical_gap(
                     trial_id=trial_id,
@@ -687,6 +732,7 @@ def evaluate_design_gate(
                     field_id=field_id,
                     label=label,
                     disclosure_state=disclosure_state,
+                    available_unverified=bool(unverified),
                 )
             )
 

@@ -1,0 +1,179 @@
+{
+  "kind": "public-rendered-cde-review-task-directory",
+  "url": "https://www.cde.org.cn/main/xxgk/listpage/369ac7cfeb67c6000c33f85e6f374044",
+  "acquired_at": "2026-10-03T12:44:31.240Z",
+  "query": {
+    "acceptance_number": "JYSB2600265",
+    "sequence": "生物",
+    "application_type": "BCSQ",
+    "drug_type": "治疗用生物制品"
+  },
+  "tables": [
+    {
+      "html": "<table class=\"layui-table txt-center mt10\">\n                <thead>\n                <tr><td width=\"80\">序号</td>\n                <td width=\"100\">受理号</td>\n                <td width=\"150\">药品名称</td>\n                <td width=\"120\">进入中心时间</td>\n                <td width=\"120\">审评状态</td>\n                <td width=\"100\">药理毒理</td>\n                <td width=\"80\">临床</td>\n                <td width=\"80\">药学</td>\n                <td width=\"80\">统计</td>\n                <td width=\"80\">临床药理</td>\n                <td width=\"80\">合规</td>\n                <td width=\"120\">备注</td>\n                </tr></thead>\n                <tbody id=\"newReportTbody\">\n                    \n                    \n                    <tr>\n                        <td>451</td>\n                        <td>\n                            \n                            \n                            JXSB2600179\n                            \n                        </td>\n                        <td>德莫奇单抗注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>452</td>\n                        <td>\n                            \n                            <font style=\"color:#d30b15;\">JYSB2600265</font>\n                            \n                            \n                        </td>\n                        <td>度普利尤单抗注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>453</td>\n                        <td>\n                            \n                            \n                            CXSB2600279\n                            \n                        </td>\n                        <td>注射用TJ101</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>454</td>\n                        <td>\n                            \n                            \n                            CYSB2600317\n                            \n                        </td>\n                        <td>尼妥珠单抗注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>455</td>\n                        <td>\n                            \n                            \n                            CYSB2600316\n                            \n                        </td>\n                        <td>注射用人干扰素α2b</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>456</td>\n                        <td>\n                            \n                            \n                            CXSB2600274\n                            \n                        </td>\n                        <td>CM512注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>457</td>\n                        <td>\n                            \n                            \n                            JYSB2600263\n                            \n                        </td>\n                        <td>度普利尤单抗注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>458</td>\n                        <td>\n                            \n                            \n                            CXSB2600276\n                            \n                        </td>\n                        <td>CM512注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>459</td>\n                        <td>\n                            \n                            \n                            JYSB2600264\n                            \n                        </td>\n                        <td>度普利尤单抗注射液</td>\n                        <td>2026-09-22</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            <img src=\"/main/img/lamp_y.jpg\">\n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    <tr>\n                        <td>460</td>\n                        <td>\n                            \n                            \n                            CXSB2600283\n                            \n                        </td>\n                        <td>CM512注射液</td>\n                        <td>2026-09-23</td>\n                        <td>排队待审评</td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td>\n                            \n                            \n                        </td>\n                        <td></td>\n                    </tr>\n                    \n                    \n                    \n                </tbody>\n            </table>",
+      "rows": [
+        [
+          "序号",
+          "受理号",
+          "药品名称",
+          "进入中心时间",
+          "审评状态",
+          "药理毒理",
+          "临床",
+          "药学",
+          "统计",
+          "临床药理",
+          "合规",
+          "备注"
+        ],
+        [
+          "451",
+          "JXSB2600179",
+          "德莫奇单抗注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "452",
+          "JYSB2600265",
+          "度普利尤单抗注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "453",
+          "CXSB2600279",
+          "注射用TJ101",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "454",
+          "CYSB2600317",
+          "尼妥珠单抗注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "455",
+          "CYSB2600316",
+          "注射用人干扰素α2b",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "456",
+          "CXSB2600274",
+          "CM512注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "457",
+          "JYSB2600263",
+          "度普利尤单抗注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "458",
+          "CXSB2600276",
+          "CM512注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "459",
+          "JYSB2600264",
+          "度普利尤单抗注射液",
+          "2026-09-22",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "460",
+          "CXSB2600283",
+          "CM512注射液",
+          "2026-09-23",
+          "排队待审评",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ]
+    }
+  ],
+  "pager": [
+    {
+      "id": "layui-laypage-9",
+      "text": "共 478 条上一页至首页…4445\n464748下一页\n10 条/页\n20 条/页\n30 条/页\n40 条/页\n50 条/页\n到第页确定",
+      "page": "46"
+    }
+  ]
+}

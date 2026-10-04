@@ -44,6 +44,8 @@ from ci_workflow.gates.models import (
     GateUnitOutcome,
     ReportDecision,
     ReportGateResult,
+    assert_applicable_universe_closed,
+    compute_candidate_snapshot_digest,
 )
 from ci_workflow.qc.scientific import (
     LocatorRef,
@@ -1404,6 +1406,7 @@ def _build_blocker_audit(
         snapshot = ApplicableUniverseSnapshot.model_validate(
             _strip_computed(snapshot.model_dump(mode="json"))
         )
+        assert_applicable_universe_closed(snapshot)
     if gate_result is not None:
         gate_result = ReportGateResult.model_validate(
             _strip_computed(gate_result.model_dump(mode="json"))
@@ -1424,7 +1427,7 @@ def _build_blocker_audit(
         raise ValueError("双重穷尽记录必须绑定同一项目与报告类型")
     if spec.report_kind is not report_kind:
         raise ValueError("GateSpec 与阻断说明报告类型不一致")
-    if spec.spec_id != _expected_spec_id(report_kind):
+    if spec.spec_id != _expected_spec_id(report_kind, spec.version):
         raise ValueError("GateSpec 标识与报告规则不符")
 
     if empty_universe is not None:
@@ -1520,6 +1523,8 @@ def _build_blocker_audit(
             raise ValueError("宇宙快照与门槛评估结果证据快照不一致")
         if snapshot.universe_summary != gate_result.universe_summary:
             raise ValueError("宇宙快照与门槛评估结果宇宙摘要不一致")
+        if compute_candidate_snapshot_digest(snapshot) != gate_result.candidate_snapshot_digest:
+            raise ValueError("门槛评估与当前候选快照摘要不一致")
         resolved_snapshot_id = gate_result.evidence_snapshot_id
         resolved_universe_summary = gate_result.universe_summary
         resolved_gate_result_key = gate_result.result_key
@@ -1650,7 +1655,11 @@ def _build_blocker_audit(
     return BlockerAudit.model_validate(fields)
 
 
-def _expected_spec_id(report_kind: ReportKind) -> str:
+def _expected_spec_id(report_kind: ReportKind, version: str = "1.0") -> str:
+    if report_kind is ReportKind.C and version == "2.0":
+        return "gate-spec-c-v2"
+    if version != "1.0":
+        raise ValueError("未登记的报告规则版本")
     return f"gate-spec-{report_kind.value.lower()}-v1"
 
 

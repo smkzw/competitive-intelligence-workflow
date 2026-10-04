@@ -17,7 +17,7 @@ from ci_workflow.reports.b.semantic_contract import (
     time_policy_identity,
 )
 
-SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v2"
+SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v3"
 _SOURCE_JSON = TypeAdapter(Any)
 
 
@@ -186,6 +186,15 @@ def proposed_semantic_buckets(
         approved_pairs[key] = merge
 
     def compatible(left_id: str, right_id: str) -> bool:
+        left_row, right_row = rows[left_id][0], rows[right_id][0]
+        if left_row.get("_domain") == "supporting" or right_row.get("_domain") == "supporting":
+            # Wording equivalence cannot turn different scientific domains or
+            # metrics into the same observation, even with a positive receipt.
+            for key in ("source_domain", "source_metric"):
+                left_axis, right_axis = left_row.get(key), right_row.get(key)
+                if (semantic_value_is_unknown(left_axis)
+                        or semantic_value_is_unknown(right_axis) or left_axis != right_axis):
+                    return False
         proposal = pairs.get(frozenset((left_id, right_id)))
         if (proposal is not None and proposal.compatible
                 and frozenset((left_id, right_id)) not in approved_pairs):

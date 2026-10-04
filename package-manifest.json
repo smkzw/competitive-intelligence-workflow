@@ -82,6 +82,7 @@
       "policies/gates/A-v1.yaml",
       "policies/gates/B-v1.yaml",
       "policies/gates/C-v1.yaml",
+      "policies/gates/C-v2.yaml",
       "policies/ontology/innovation-therapy-v1.yaml",
       "policies/recovery/source-strategies-v1.yaml",
       "policies/sources/source-policy-v1.yaml"
@@ -89,8 +90,10 @@
     "contracts": [
       "contracts/kangzhe/manifest.json",
       "contracts/kangzhe/design.md",
-      "contracts/kangzhe/design_specs/project_profile.md",
-      "contracts/kangzhe/design_specs/ROUTER.md"
+      "contracts/kangzhe/v6-site/project-profile.md",
+      "contracts/kangzhe/v6-site/design_specs/00-authority.md",
+      "contracts/kangzhe/v6-site/design_specs/tracks-site.md",
+      "contracts/kangzhe/v6-site/tokens/tokens.json"
     ],
     "assets": [
       "assets/brand/manifest.json",
@@ -124,6 +127,7 @@
       "project verify",
       "project run",
       "project share",
+      "project refresh-source",
       "project accept-visual",
       "capability preflight",
       "fixture run",

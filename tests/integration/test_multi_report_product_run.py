@@ -176,6 +176,10 @@ def _expansion_receipts(product_ids: list[str], source_id: str) -> list[dict[str
         ("trial-1", "trial", "1", "china-registry", []),
         ("alias-2", "alias", "2", "global-registry", []),
         ("target-2", "target", "2", "china-registry", []),
+        ("alias-repeat-1", "alias", "1", "global-registry", []),
+        ("target-repeat-1", "target", "1", "global-registry", []),
+        ("company-repeat-2", "company", "2", "china-registry", []),
+        ("trial-repeat-2", "trial", "2", "china-registry", []),
     )
     return [
         {
@@ -277,10 +281,10 @@ def _audit_payload(
             "closed": True,
             "global_route_ids": ["global-registry"],
             "china_route_ids": ["china-registry"],
-            "alias_expansion_receipts": ["alias-1", "alias-2"],
-            "target_expansion_receipts": ["target-1", "target-2"],
-            "company_expansion_receipts": ["company-1"],
-            "trial_expansion_receipts": ["trial-1"],
+            "alias_expansion_receipts": ["alias-1", "alias-2", "alias-repeat-1"],
+            "target_expansion_receipts": ["target-1", "target-2", "target-repeat-1"],
+            "company_expansion_receipts": ["company-1", "company-repeat-2"],
+            "trial_expansion_receipts": ["trial-1", "trial-repeat-2"],
             "independent_review_id": "review-1",
             "independent_reviewer_id": "independent-reviewer-1",
             "independent_context": "clean-context-1",

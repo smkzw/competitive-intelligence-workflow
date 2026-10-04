@@ -497,7 +497,22 @@ def evaluate_report(
     - 结果键绑定报告类型、证据快照、规则指纹、合同版本与集合摘要。
     - A/B/C 共享证据版本，不共享证据规则结果。
     """
+    # Existing instances are not an authorization boundary: model_copy skips
+    # nested validation. Reconstruct before any fact can contribute to a gate.
+    try:
+        spec = GateSpec.model_validate(spec.model_dump(mode="json"))
+        snapshot = ApplicableUniverseSnapshot.model_validate(snapshot.model_dump(mode="json"))
+        bindings = tuple(GateEvidenceBinding.model_validate(binding.model_dump(mode="json"))
+                         for binding in bindings)
+    except ValueError as error:
+        raise GateEvaluationError(f"评估输入不能通过当前合同校验：{error}") from error
     assert_applicable_universe_closed(snapshot)
+    if snapshot.schema_version == "1.1" and (
+        spec.report_kind.value != "C"
+        or any(unit.object_type is not GateObjectType.TRIAL
+               or unit.scope_parent is not None for unit in spec.units)
+    ):
+        raise GateEvaluationError("研究根快照仅可用于逐试验评估的 C 规则")
     assert_bindings_in_universe(snapshot, bindings)
 
     index = _UniverseIndex(snapshot)

@@ -48,17 +48,19 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
         r"|(?<![a-z])aesis?(?![a-z])", re.I)),
     # 严重 TEAE 子集：特定子集，不得归 any_teae/any_sae
     ("serious_teae_subset", re.compile(
-        r"serious\s+(?:treatment[\s-]*emergent|teaes?)", re.I)),
+        r"serious\s+(?:treatment[\s-]*emergent|teaes?)"
+        r"|treatment[\s-]*emergent\s+(?:saes?|serious\s+(?:adverse\s+events?|aes?))",
+        re.I)),
 )
 
 # 总体族（特定族未命中才判定）
 _GENERAL_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     # SAE must precede the broad "any treatment-emergent" TEAE alias.
-    ("any_sae", re.compile(r"\bserious\s+adverse\s+events?\b", re.I)),
+    ("any_sae", re.compile(r"\bserious\s+(?:adverse\s+events?|aes?)\b", re.I)),
     ("any_sae", re.compile(r"(?<![a-z\-])saes?(?![a-z])", re.I)),
     ("any_teae", re.compile(r"(?<![a-z\-])teaes?(?![a-z])", re.I)),
     ("any_teae", re.compile(
-        r"^treatment[\s-]*emergent\s+adverse\s+events?\s*$", re.I)),
+        r"\btreatment[\s-]*emergent\s+adverse\s+events?\b", re.I)),
     ("any_teae", re.compile(
         r"\b(?:any|overall|all)\b[^.;]{0,40}treatment[\s-]*emergent", re.I)),
     ("death", re.compile(r"\bdeaths?\b|\bmortality\b", re.I)),
@@ -110,15 +112,33 @@ class SafetyConcept:
 def _fragments(text: str) -> list[str]:
     # Parenthetical commas describe one event and are not list separators.
     scrubbed = re.sub(r"\([^)]*\)", lambda m: m.group(0).replace(",", "，"), text)
-    return [item.strip(" ,;:") for item in re.split(r",|;|\band\b", scrubbed, flags=re.I)
+    # "Grade 3 and 4" is one grade set, not two measured outcomes.
+    return [item.strip(" ,;:") for item in re.split(
+        r",|;|\band\b(?!\s*(?:grades?\s*)?\d\b)", scrubbed, flags=re.I)
             if item.strip(" ,;:")]
 
 
 def describe_safety_concept(title: str) -> SafetyConcept:
+    """Classify complete measured conjuncts before single-measure shortcuts."""
+    children: list[str] = []
+    for fragment in _fragments(str(title or "")):
+        child = _describe_single_safety_concept(fragment)
+        if (child.key != "unknown" or child.polarity != "affirmed") and child.key not in children:
+            children.append(child.key)
+    if len(children) > 1:
+        return SafetyConcept("composite_ae", children=tuple(children), count_basis="mixed")
+    return _describe_single_safety_concept(title)
+
+
+def _describe_single_safety_concept(title: str) -> SafetyConcept:
     text = " ".join(str(title or "").split())
     if not text:
         return SafetyConcept(key="unknown")
     lowered = text.casefold()
+    if re.search(r"\b(?:no|not|without)\s+(?:any\s+)?teaes?\b", lowered):
+        # No catalog key for absence of TEAE: preserve the negative qualifier,
+        # never reinterpret its reported participant count as zero TEAE events.
+        return SafetyConcept("unknown", polarity="negative_presence")
     grades = tuple(sorted({int(value) for value in re.findall(r"\b([1-5])\b", lowered)})) \
         if "grade" in lowered else ()
     if re.search(r"\bnon[\s-]*serious\b", lowered) and re.search(
@@ -130,6 +150,23 @@ def describe_safety_concept(title: str) -> SafetyConcept:
     if re.search(r"\b(?:without|no|not)\s+(?:any\s+)?saes?\b", lowered):
         return SafetyConcept("absence_sae", "negative_presence", grades, "serious", False,
                              at_risk_stat=spec_of("absence_sae").at_risk_stat)
+    # Positive qualifiers use the same negation-stripped text as the key.
+    # Seeing 'non-treatment-emergent' must not set teae=True on a generic AE.
+    affirmed = lowered
+    for pattern in _NEGATION_PATTERNS:
+        affirmed = pattern.sub(" ", affirmed)
+    teae_present = bool(re.search(r"\bteaes?\b|treatment[\s-]*emergent", affirmed))
+    relatedness = "unspecified"
+    for qualifier, qualifier_regex in (
+        ("unrelated", r"\bunrelated\b"),
+        ("at_least_possibly_related", r"\bat\s+least\s+possibly\s+related\b"),
+        ("probably_related", r"\bprobably\s+related\b"),
+        ("possibly_related", r"\bpossibly\s+related\b"),
+        ("definitely_related", r"\bdefinitely\s+related\b"),
+    ):
+        if re.search(qualifier_regex, lowered):
+            relatedness = qualifier
+            break
     if grades:
         if re.search(
             r"grade\s*3\s*(?:or|and|/)\s*(?:4|5)|grade\s*(?:≥|>=)\s*3"
@@ -138,18 +175,12 @@ def describe_safety_concept(title: str) -> SafetyConcept:
             key = "grade_3_plus"
         else:
             key = "grade_specific"
-        return SafetyConcept(key, grade_set=grades, seriousness="graded",
+        return SafetyConcept(key, grade_set=grades,
+                             seriousness="serious" if re.search(r"\bserious\b", affirmed)
+                             else "graded",
+                             relatedness=relatedness,
+                             teae=True if teae_present else None,
                              parent="generic_ae", at_risk_stat=spec_of(key).at_risk_stat)
-    teae_present = bool(re.search(r"\bteaes?\b|treatment[\s-]*emergent", lowered))
-    relatedness = "unspecified"
-    for qualifier, qualifier_regex in (
-        ("unrelated", r"\bunrelated\b"),
-        ("at_least_possibly_related", r"\bat\s+least\s+possibly\s+related\b"),
-        ("probably_related", r"\bprobably\s+related\b"),
-    ):
-        if re.search(qualifier_regex, lowered):
-            relatedness = qualifier
-            break
     if (
         teae_present
         and re.search(r"\b(?:mild|moderate|severe|life[\s-]*threatening)\b", lowered)
@@ -163,34 +194,29 @@ def describe_safety_concept(title: str) -> SafetyConcept:
     # A treatment-emergent AE leading to death is not the number of deaths.
     # EOI is not automatically a registry-designated AESI; qualified
     # relatedness is not the unqualified overall TEAE population.
-    if teae_present and (
-        re.search(r"\bleading\s+to\s+death\b", lowered)
-        or re.search(r"\beoi\b", lowered)
-        or relatedness != "unspecified"
+    if (
+        re.search(r"(?:adverse\s+events?|\baes?\b|\bteaes?\b).*"
+                  r"\bleading\s+to\s+death\b", lowered)
+        or teae_present and (
+            re.search(r"\beoi\b", lowered) or relatedness != "unspecified"
+        )
     ):
         key = "specific_ae"
         return SafetyConcept(
-            key, teae=True, relatedness=relatedness,
+            key, teae=True if teae_present else None, relatedness=relatedness,
+            seriousness="serious" if re.search(r"\bserious\b", affirmed) else "unspecified",
             at_risk_stat=spec_of(key).at_risk_stat,
         )
-    children: list[str] = []
-    for fragment in _fragments(text):
-        stripped = fragment
-        for pattern in _NEGATION_PATTERNS:
-            stripped = pattern.sub(" ", stripped)
-        fragment_key = _classify_single(stripped)
-        if fragment_key and fragment_key not in children:
-            children.append(fragment_key)
-    if len(children) > 1:
-        return SafetyConcept("composite_ae", children=tuple(children), count_basis="mixed")
-    chosen_key = children[0] if children else "unknown"
+    chosen_key = _classify_single(affirmed) or "unknown"
+    non_serious = bool(re.search(r"\bnon[\s-]*serious\b", lowered))
     return SafetyConcept(
         key=chosen_key,
+        polarity="negative_seriousness" if non_serious else "affirmed",
         seriousness=(
+            "non_serious" if non_serious else
             "serious" if chosen_key in {"any_sae", "serious_teae_subset"} else "unspecified"
         ),
-        teae=(True if chosen_key in {"any_teae", "serious_teae_subset"}
-              or (chosen_key == "any_sae" and teae_present) else None),
+        teae=True if teae_present else None,
         relatedness="related" if chosen_key == "treatment_related_ae" else "unspecified",
         at_risk_stat=spec_of(chosen_key).at_risk_stat,
     )
@@ -252,36 +278,9 @@ def classify_safety_concept(title: str) -> str:
     "TEAEs, SAEs, Grade 3/4 AEs, And Events Leading To Discontinuation"）
     不得按首个特定键收类——逐片段独立分类，≥2 个不同概念即判
     composite_ae（复合不良事件指标），描述性呈现不冒充单一族。"""
-    described = describe_safety_concept(title)
-    if described.key in {
-        "non_serious_teae", "absence_sae", "grade_specific", "grade_3_plus", "composite_ae",
-    }:
-        return described.key
-    text = " ".join(str(title or "").split())
-    if not text:
-        return "unknown"
-    stripped = text
-    for pattern in _NEGATION_PATTERNS:
-        stripped = pattern.sub(" ", stripped)
-    fragments = [
-        fragment.strip(" ,;:")
-        for fragment in re.split(r",|;|\band\b", stripped, flags=re.I)
-        if fragment.strip(" ,;:")
-    ]
-    fragment_concepts = [
-        concept
-        for fragment in fragments
-        if (concept := _classify_single(fragment)) is not None
-    ]
-    distinct = set(fragment_concepts)
-    if len(distinct) == 1:
-        return fragment_concepts[0]
-    if len(distinct) > 1:
-        return "composite_ae"
-    whole = _classify_single(stripped)
-    if whole is not None:
-        return whole
-    return "unknown"
+    # One semantic decision: the key-only API must not reclassify qualified
+    # relatedness / EOI / fatal subsets as their enclosing overall TEAE.
+    return describe_safety_concept(title).key
 
 
 def safety_category_zh(concept: str) -> str:

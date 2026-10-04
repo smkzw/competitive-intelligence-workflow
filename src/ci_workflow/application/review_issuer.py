@@ -4,9 +4,10 @@
 本入口供**独立复核宿主会话**（不得是生产者会话）重复调用：
 
 1. 绑定现有请求：只接受运行时发布的权威生产上下文
-   （``reload_production_context``）与唯一科学复核请求
-   （``state/scientific_review/<kind>/review_request.json``，含请求摘要
-   核验）；请求与当前候选上下文不一致即拒绝；
+   （``reload_production_context``）与活跃作用域的唯一科学复核请求
+   （epoch 0 为 ``state/scientific_review/<kind>/review_request.json``，
+   epoch ≥ 1 为版本化纪元路径，含请求摘要核验）；请求与当前候选上下文
+   不一致即拒绝；
 2. 真实 reviewer/producer 分离：复核者身份、复核会话与请求中的生产者
    身份/会话逐字比较，相同即在**任何执行前**失败关闭；
 3. runner/host 执行证据：``review.process`` 只能来自本入口真实启动的
@@ -44,13 +45,15 @@ from typing import Any, Final
 from pydantic import ValidationError as PydanticValidationError
 
 from ci_workflow.application.scientific_review_transition import (
+    PortalArtifactBinding,
     ScientificReviewTransitionError,
     accepted_verdict_from_receipt,
+    active_scientific_review_scope,
     load_scientific_review_receipt,
     reload_production_context,
-    scientific_review_receipt_path,
-    scientific_review_request_path,
+    verify_portal_artifact_binding,
 )
+from ci_workflow.application.user_fact_edit import current_delivery_lock
 from ci_workflow.capabilities.scientific_qc import (
     ScientificQcBoundaryError,
     validate_scientific_qc_verdict_payload,
@@ -73,6 +76,7 @@ from ci_workflow.qc.review_receipt import (
     ScientificReviewReceipt,
     build_scientific_review_receipt,
 )
+from ci_workflow.storage.scientific_review_epoch import epoch_issuance_record_path
 
 REVIEW_ISSUANCE_RECORD_KIND: Final = "scientific-review-issuance-v1"
 _DEFAULT_TIMEOUT_SECONDS: Final = 3600.0
@@ -253,7 +257,8 @@ def _body_digest(body: dict[str, Any]) -> str:
 
 
 def _read_request_body(project_root: Path, kind: str) -> tuple[dict[str, Any], str]:
-    path = project_root / scientific_review_request_path(kind)
+    scope = active_scientific_review_scope(project_root, kind)
+    path = project_root / scope.review_request_relative
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -286,14 +291,27 @@ def _load_published_request(
     review_input_digest = body.get("review_input_digest")
     if not isinstance(review_input_digest, str):
         raise ReviewIssuanceError("科学复核请求缺少审阅输入摘要")
+    try:
+        binding = PortalArtifactBinding.model_validate(body.get("portal_binding"))
+        verify_portal_artifact_binding(project_root, kind, binding)
+    except (PydanticValidationError, ScientificReviewTransitionError) as error:
+        raise ReviewIssuanceError(f"复核请求的门户字节绑定无效：{error}") from error
     return production, review_input_digest, digest
 
 
 def review_issuance_record_path(report_kind: str) -> PurePosixPath:
-    """真实签发记录的确定性项目相对路径。"""
+    """真实签发记录的确定性项目相对路径（epoch 0 单例布局）。"""
 
     kind = _validated_kind(report_kind)
     return PurePosixPath("state") / "scientific_review" / kind / "issuance.json"
+
+
+def _resolve_issuance_record_path(project_root: Path, kind: str) -> Path:
+    """签发记录随活跃 epoch 作用域：epoch 0 单例路径，epoch ≥ 1 版本化路径。"""
+    scope = active_scientific_review_scope(project_root, kind)
+    if scope.epoch == 0:
+        return project_root / review_issuance_record_path(kind)
+    return project_root / epoch_issuance_record_path(kind, scope.epoch)
 
 
 def _bind_formal_verdict(
@@ -352,13 +370,21 @@ def issue_review_receipt(
     now = clock if clock is not None else _system_clock
     root = project_root.expanduser().resolve()
 
-    try:
-        context = reload_production_context(root, kind)
-    except ScientificReviewTransitionError as error:
-        raise ReviewIssuanceError(f"权威生产上下文未就绪：{error}") from error
-    production, review_input_digest, request_digest = _load_published_request(
-        root, kind, context.context_digest
-    )
+    # Bind a single epoch under the existing project lock, but never hold it
+    # across the long external review. Revalidate before immutable issuance.
+    with current_delivery_lock(root):
+        try:
+            initial_scope = active_scientific_review_scope(root, kind)
+            context = reload_production_context(root, kind)
+        except ScientificReviewTransitionError as error:
+            raise ReviewIssuanceError(f"权威生产上下文未就绪：{error}") from error
+        production, review_input_digest, request_digest = _load_published_request(
+            root, kind, context.context_digest
+        )
+        receipt_path = root / initial_scope.receipt_relative
+        record_path = _resolve_issuance_record_path(root, kind)
+        if any(path.exists() or path.is_symlink() for path in (receipt_path, record_path)):
+            raise ReviewIssuanceError("本纪元已签发或留有签发材料，不可覆盖；使用新复核纪元")
 
     if reviewer_id == production.producer_id:
         raise ReviewIssuanceError(
@@ -426,8 +452,6 @@ def issue_review_receipt(
     except ScientificReviewTransitionError as error:
         raise ReviewIssuanceError(f"复核结论不能授权签发：{error}") from error
 
-    receipt_path = root / scientific_review_receipt_path(kind)
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
     receipt_payload = receipt.model_dump(mode="json")
     record: dict[str, Any] = {
         "record_kind": REVIEW_ISSUANCE_RECORD_KIND,
@@ -441,10 +465,33 @@ def issue_review_receipt(
         "artifact": receipt_payload["artifact"],
     }
     record["record_digest"] = _body_digest(record)
-    record_path = root / review_issuance_record_path(kind)
-    record_path.parent.mkdir(parents=True, exist_ok=True)
-    record_path.write_bytes(_canonical_json_bytes(record) + b"\n")
-    receipt_path.write_bytes(_canonical_json_bytes(receipt_payload) + b"\n")
+    with current_delivery_lock(root):
+        try:
+            active_scope = active_scientific_review_scope(root, kind)
+            active_context = reload_production_context(root, kind)
+        except ScientificReviewTransitionError as error:
+            raise ReviewIssuanceError(f"签发前活跃作用域不可验证：{error}") from error
+        if active_scope != initial_scope or active_context != context:
+            raise ReviewIssuanceError("复核期间活跃纪元/上下文已变化，拒绝将旧结果写入新作用域")
+        active_production, active_input_digest, active_request_digest = (
+            _load_published_request(root, kind, context.context_digest)
+        )
+        if (active_production, active_input_digest, active_request_digest) != (
+            production, review_input_digest, request_digest,
+        ):
+            raise ReviewIssuanceError("签发前复核请求发生变化，拒绝混合复核材料")
+        if any(path.exists() or path.is_symlink() for path in (receipt_path, record_path)):
+            raise ReviewIssuanceError("本纪元已签发或留有签发材料，不可覆盖；使用新复核纪元")
+        record_path.parent.mkdir(parents=True, exist_ok=True)
+        receipt_path.parent.mkdir(parents=True, exist_ok=True)
+        with record_path.open("xb") as stream:
+            stream.write(_canonical_json_bytes(record) + b"\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        with receipt_path.open("xb") as stream:
+            stream.write(_canonical_json_bytes(receipt_payload) + b"\n")
+            stream.flush()
+            os.fsync(stream.fileno())
     return ReviewIssuanceOutcome(
         receipt=receipt, receipt_path=receipt_path, record_path=record_path
     )
@@ -465,7 +512,7 @@ def verify_receipt_issuance(
 
     kind = _validated_kind(report_kind)
     root = project_root.expanduser().resolve()
-    record_path = root / review_issuance_record_path(kind)
+    record_path = _resolve_issuance_record_path(root, kind)
     if not record_path.is_file():
         raise ReviewIssuanceError(
             "真实签发记录缺失：只有自洽 JSON、没有经签发入口的回执不被接受"

@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from ci_workflow.application.project_service import verify_project_workspace
+from ci_workflow.application.source_research_service import ctgov_direct_safety_measure_identity
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFactBinding,
@@ -32,6 +33,10 @@ from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
     _b_source_view_row,
     active_fact_binding_for_b,
+)
+from ci_workflow.reports.b.safety_concepts import (
+    describe_measured_safety_concept,
+    safety_category_zh,
 )
 from ci_workflow.reports.common.evidence_view import (
     clean_evidence_locator,
@@ -65,6 +70,94 @@ def _source_pointer(locator_text: str) -> str | None:
         return None
     path = locator.get("field_path")
     return path if isinstance(path, str) else None
+
+
+def _safety_source_context_matches(
+    context: Mapping[str, Any],
+    row: SafetyRow,
+    numeric: float,
+) -> bool:
+    """Prove raw event counts and direct safety outcomes without inventing rates."""
+    if context.get("domain") != "adverse_events" or not math.isfinite(numeric):
+        return False
+    endpoint = context.get("endpoint")
+    direct = isinstance(endpoint, str) and bool(endpoint.strip())
+    expected_window = (
+        context.get("observation_timepoint") or context.get("timepoint")
+        if direct
+        else context.get("timepoint")
+    )
+    if row.time_window != expected_window:
+        return False
+    if direct:
+        assert isinstance(endpoint, str)
+        source_class = context.get("class_title") or ""
+        source_category = context.get("category_title") or ""
+        raw_unit = context.get("source_unit")
+        if not isinstance(raw_unit, str):
+            return False
+        # Count facts carry the normalized unit from research_facts_from_ctgov_atom.
+        # Recover this *typed* participant-count identity, not an arbitrary label
+        # heuristic: reported estimates must never be converted into n/N.
+        if (
+            raw_unit == "人"
+            and context.get("value_role") == "participant_count"
+            and context.get("metric") == "participant_count"
+        ):
+            raw_unit = "Participants"
+        unit, measure, basis = ctgov_direct_safety_measure_identity(
+            endpoint,
+            source_class,
+            source_category,
+            raw_unit,
+        )
+        semantic = describe_measured_safety_concept(endpoint, source_class, source_category)
+        if (
+            row.term != endpoint
+            or row.term_key != semantic.key
+            or row.category != safety_category_zh(semantic.key)
+            or row.source_class_title != (source_class or None)
+            or row.source_category_title != (source_category or None)
+            or (row.unit, row.measure_object, row.count_basis) != (unit, measure, basis)
+            or context.get("value_role")
+            != ("participant_count" if measure == "participant_count" else "reported_measure")
+        ):
+            return False
+        if measure != "participant_count":
+            return (
+                row.numerator is None
+                and row.denominator is None
+                and (measure != "event_count" or (numeric >= 0 and numeric.is_integer()))
+            )
+    elif (
+        context.get("value_role") != "affected_count"
+        or row.measure_object != "participant_count"
+        or row.unit != "人"
+        or (context.get("category"), row.term_key, row.term)
+        not in {
+            ("sae", "any_sae", "严重不良事件组别汇总计数"),
+            ("death", "death", "死亡病例组别汇总计数"),
+        }
+    ):
+        return False
+    if not numeric.is_integer() or numeric < 0:
+        return False
+    denoms = {
+        item["parsed_value"]
+        for item in context.get("denominator_candidates") or ()
+        if isinstance(item, dict)
+        and item.get("group_id") == row.group_id
+        and type(item.get("parsed_value")) in {int, float}
+    }
+    if direct and row.count_basis == "mixed":
+        return row.numerator is None and row.denominator is None
+    if len(denoms) > 1:
+        return False
+    denominator = next(iter(denoms), None)
+    expected = (
+        (int(numeric), denominator) if denominator is not None and denominator > 0 else (None, None)
+    )
+    return (row.numerator, row.denominator) == expected
 
 
 def project_b_safety_source_views(
@@ -129,7 +222,8 @@ def project_b_safety_source_views(
                     "SELECT v.raw_value,v.scientific_context_json,v.primary_fragment_id,"
                     "f.source_version_id,f.locator,f.content_text FROM fact_versions v "
                     "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
-                    "WHERE v.fact_version_id=?", (version_id,),
+                    "WHERE v.fact_version_id=?",
+                    (version_id,),
                 ).fetchone()
                 if source is None or version_id not in facts:
                     raise PortalConsumerRegistrationError("来源数值原子缺失")
@@ -149,36 +243,6 @@ def project_b_safety_source_views(
                 exact_locator = clean_evidence_locator(locator)
                 if exact_locator is None or precise_locator_anchor(exact_locator) is None:
                     raise PortalConsumerRegistrationError("来源原子缺少精确非本机定位")
-                source_endpoint = observation.get("endpoint")
-                endpoint_matches = (
-                    source_endpoint == row.term
-                    if isinstance(source_endpoint, str) and source_endpoint.strip()
-                    else (observation.get("category"), row.term_key, row.term) in {
-                        ("sae", "any_sae", "严重不良事件组别汇总计数"),
-                        ("death", "death", "死亡病例组别汇总计数"),
-                    }
-                )
-                source_unit = observation.get("source_unit")
-                metric = observation.get("metric")
-                unit_matches = (
-                    source_unit == row.unit
-                    or (
-                        isinstance(source_unit, str)
-                        and source_unit.casefold() == "percentage of participants"
-                        and row.unit == "%"
-                        and row.measure_object == "participant_proportion"
-                        and metric == "reported_percentage"
-                        and observation.get("source_param_type") == "NUMBER"
-                        and 0 <= numeric <= 100
-                    )
-                    or (
-                        source_unit == "Events" and row.unit == "次"
-                        and row.measure_object == "event_count"
-                        and metric == "reported_measure"
-                        and observation.get("source_param_type") == "NUMBER"
-                        and numeric.is_integer()
-                    )
-                )
                 checks = {
                     "snapshot_fact": (
                         facts[version_id]["primary_fragment_id"] == fragment_id
@@ -190,8 +254,7 @@ def project_b_safety_source_views(
                         and fragment["original_text"] == quote
                     ),
                     "source_identity": (
-                        row.source_version_id == source_id
-                        and locator.get("url") == capture_url
+                        row.source_version_id == source_id and locator.get("url") == capture_url
                     ),
                     "source_pointer": (
                         context["locator"] == locator
@@ -200,7 +263,8 @@ def project_b_safety_source_views(
                     "source_value": (
                         context["raw_value"] == raw_value
                         and row.source_text == quote
-                        and row.value is not None and math.isfinite(numeric)
+                        and row.value is not None
+                        and math.isfinite(numeric)
                         and math.isclose(row.value, numeric, rel_tol=0, abs_tol=1e-9)
                     ),
                     "safety_domain": (
@@ -208,30 +272,26 @@ def project_b_safety_source_views(
                         and observation.get("value_role") != "denominator"
                     ),
                     "trial_and_group": (
-                        str(observation.get("trial_id", "")).casefold()
-                        == row.trial_id.casefold()
+                        str(observation.get("trial_id", "")).casefold() == row.trial_id.casefold()
                         and observation.get("group_id") == row.group_id
                         and observation.get("group_title") == row.arm
                     ),
-                    "measure_context": (
-                        endpoint_matches
-                        and observation.get("timepoint") == row.time_window
-                        and unit_matches
-                        and observation.get("class_title") == row.source_class_title
-                    ),
+                    "measure_context": (_safety_source_context_matches(observation, row, numeric)),
                 }
                 invalid = [scope for scope, valid in checks.items() if not valid]
                 if invalid:
                     raise PortalConsumerRegistrationError(
                         f"安全结果 {row.row_id} 与锁定来源不一致：{','.join(invalid)}"
                     )
-                result_views.append({
-                    **row.model_dump(mode="json"),
-                    "arm_id": row.group_id,
-                    "arm_label": row.arm,
-                    "source_locator": exact_locator.model_dump(mode="json"),
-                    "source_text": quote,
-                })
+                result_views.append(
+                    {
+                        **row.model_dump(mode="json"),
+                        "arm_id": row.group_id,
+                        "arm_label": row.arm,
+                        "source_locator": exact_locator.model_dump(mode="json"),
+                        "source_text": quote,
+                    }
+                )
     except sqlite3.Error as error:
         raise PortalConsumerRegistrationError("只读来源库不可用") from error
     if len(result_views) != len(row_versions):
@@ -306,7 +366,8 @@ def register_a_source_consumers(
                 "SELECT v.raw_value,v.scientific_context_json,f.source_version_id,"
                 "f.locator,f.content_text FROM fact_versions v "
                 "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
-                "WHERE v.fact_version_id=?", (version_id,),
+                "WHERE v.fact_version_id=?",
+                (version_id,),
             ).fetchone()
             if source is None:
                 raise PortalConsumerRegistrationError("来源事实版本未持久化")
@@ -321,16 +382,16 @@ def register_a_source_consumers(
             if not isinstance(source_group_title, str) or not (
                 any(
                     link.product_id == row.product_id
-                    and source_group_title.strip().casefold() in {
-                        label.strip().casefold() for label in link.arm_labels
-                    }
+                    and source_group_title.strip().casefold()
+                    in {label.strip().casefold() for label in link.arm_labels}
                     for link in trial.product_links
                 )
                 or (not trial.product_links and trial.product_id == row.product_id)
             ):
                 raise PortalConsumerRegistrationError("来源组别不在试验—产品干预关系中")
             if (
-                not math.isfinite(numeric) or row.value is None
+                not math.isfinite(numeric)
+                or row.value is None
                 or not math.isclose(row.value, numeric, rel_tol=0, abs_tol=1e-9)
                 or row.source_version_id != source_version
                 or row.source_field_path != _source_pointer(str(locator_json))
@@ -338,9 +399,8 @@ def register_a_source_consumers(
                 or str(result.get("trial_id", "")).casefold() != row.trial_id.casefold()
                 or result.get("group_id") != row.group_id
                 or result.get("value_role") == "denominator"
-                or result.get("domain") != (
-                    "efficacy" if collection == "efficacy" else "adverse_events"
-                )
+                or result.get("domain")
+                != ("efficacy" if collection == "efficacy" else "adverse_events")
             ):
                 raise PortalConsumerRegistrationError("报告行与来源原子数值、组别或精确定位不一致")
             if collection == "efficacy":
@@ -358,10 +418,10 @@ def register_a_source_consumers(
                         or original.value_path != row.source_field_path
                     ):
                         raise PortalConsumerRegistrationError("中文呈现行的原文对照与来源原子冲突")
-                elif (
-                    row.endpoint != source_endpoint
-                    or row.timepoint not in {source_timepoint, source_observation}
-                ):
+                elif row.endpoint != source_endpoint or row.timepoint not in {
+                    source_timepoint,
+                    source_observation,
+                }:
                     raise PortalConsumerRegistrationError("翻译后的终点/时间窗缺少精确原文对照")
                 if result.get("value_role") == "participant_count" and row.unit in {"%", "％"}:
                     raise PortalConsumerRegistrationError("疗效终点或观察时间与来源原子不一致")
@@ -373,18 +433,20 @@ def register_a_source_consumers(
                         if isinstance(item, dict) and item.get("group_id") == row.group_id
                     }
                     if (
-                        row.numerator != int(numeric) or int(numeric) != numeric
-                        or len(values) != 1 or row.denominator not in values
+                        row.numerator != int(numeric)
+                        or int(numeric) != numeric
+                        or len(values) != 1
+                        or row.denominator not in values
                     ):
                         raise PortalConsumerRegistrationError("登记人数与独立同组分母不一致")
                 binding = active_fact_binding_for_a(report, "efficacy", row_id)
             else:
-                if not isinstance(row, SafetyRow) or (
-                    result.get("timepoint") != row.time_window
-                    or result.get("value_role") != "affected_count"
-                    or row.measure_object not in {"participant_count", "event_count"}
+                if not isinstance(row, SafetyRow) or not _safety_source_context_matches(
+                    result,
+                    row,
+                    numeric,
                 ):
-                    raise PortalConsumerRegistrationError("安全性观察窗与来源原子不一致")
+                    raise PortalConsumerRegistrationError("安全性统计对象、观察窗或来源原子不一致")
                 binding = active_fact_binding_for_a(report, "safety", row_id)
             candidates.append((version_id, binding))
 
@@ -394,10 +456,13 @@ def register_a_source_consumers(
             existing = database.execute(
                 "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='A'", (version_id,),
+                "AND report='A'",
+                (version_id,),
             ).fetchone()
             if existing is not None and tuple(existing) != (
-                binding.collection, binding.row_id, encoded,
+                binding.collection,
+                binding.row_id,
+                encoded,
                 evidence_snapshot.snapshot_id,
             ):
                 raise PortalConsumerRegistrationError("已登记消费者身份与当前候选冲突")
@@ -409,10 +474,15 @@ def register_a_source_consumers(
                 "collection,row_id,binding_json,binding_sha256,created_at) "
                 "VALUES (?,?,?,?,?,?,?,?,?)",
                 (
-                    stable_id("source-portal-binding", version_id, "A",
-                              binding.collection, binding.row_id),
-                    version_id, evidence_snapshot.snapshot_id, "A",
-                    binding.collection, binding.row_id, encoded,
+                    stable_id(
+                        "source-portal-binding", version_id, "A", binding.collection, binding.row_id
+                    ),
+                    version_id,
+                    evidence_snapshot.snapshot_id,
+                    "A",
+                    binding.collection,
+                    binding.row_id,
+                    encoded,
                     hashlib.sha256(encoded.encode()).hexdigest(),
                     registered_at.isoformat(),
                 ),
@@ -467,12 +537,14 @@ def register_b_shared_source_consumers(
                 "SELECT v.raw_value,v.scientific_context_json,f.source_version_id,"
                 "f.locator,f.content_text FROM fact_versions v "
                 "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
-                "WHERE v.fact_version_id=?", (version_id,),
+                "WHERE v.fact_version_id=?",
+                (version_id,),
             ).fetchone()
             declared_a = database.execute(
                 "SELECT binding_json,binding_sha256,evidence_snapshot_id FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='A'", (version_id,),
+                "AND report='A'",
+                (version_id,),
             ).fetchone()
             if source is None or declared_a is None:
                 raise PortalConsumerRegistrationError("共享 B 消费者缺少已核验 A 来源身份")
@@ -495,73 +567,106 @@ def register_b_shared_source_consumers(
             source_denominators = {
                 item.get("parsed_value")
                 for item in context.get("denominator_candidates") or ()
-                if isinstance(item, dict) and item.get("group_id") == row.group_id
+                if isinstance(item, dict)
+                and item.get("group_id") == row.group_id
                 and type(item.get("parsed_value")) in {int, float}
             }
             value_role = context.get("value_role")
             reported_count = value_role == "participant_count"
             reported_measure = value_role == "reported_measure"
             count_matches = (
-                numeric.is_integer()
-                and row.numerator == int(numeric)
-                and b_binding.statistical_form == "count"
-            ) if reported_count and math.isfinite(numeric) else False
+                (
+                    numeric.is_integer()
+                    and row.numerator == int(numeric)
+                    and b_binding.statistical_form == "count"
+                )
+                if reported_count and math.isfinite(numeric)
+                else False
+            )
             measure_matches = (
-                row.numerator is None
-                and b_binding.measure_object == "estimate"
-                and b_binding.statistical_form == "estimate"
-            ) if reported_measure else False
+                (
+                    row.numerator is None
+                    and b_binding.measure_object == "estimate"
+                    and b_binding.statistical_form == "estimate"
+                )
+                if reported_measure
+                else False
+            )
             shared_fields = (
-                "product_id", "drug_name", "trial_id", "registry_id", "group_id",
-                "arm", "cohort_id", "period", "endpoint_definition", "event_definition",
-                "statistical_form", "measure_object", "unit", "normalized_unit",
+                "product_id",
+                "drug_name",
+                "trial_id",
+                "registry_id",
+                "group_id",
+                "arm",
+                "cohort_id",
+                "period",
+                "endpoint_definition",
+                "event_definition",
+                "statistical_form",
+                "measure_object",
+                "unit",
+                "normalized_unit",
                 "source_version_id",
             )
             efficacy_matches = (
-                context.get("domain") == "efficacy"
-                and (count_matches or measure_matches)
-                and len(source_denominators) <= 1
-                and (
-                    len(source_denominators) != 1
-                    or row.denominator in source_denominators
+                (
+                    context.get("domain") == "efficacy"
+                    and (count_matches or measure_matches)
+                    and len(source_denominators) <= 1
+                    and (len(source_denominators) != 1 or row.denominator in source_denominators)
+                    and (source_denominators or row.denominator is None)
+                    and (not reported_count or bool(source_denominators))
+                    and view.get("numerator") == row.numerator
+                    and view.get("denominator") == row.denominator
                 )
-                and (source_denominators or row.denominator is None)
-                and (not reported_count or bool(source_denominators))
-                and view.get("numerator") == row.numerator
-                and view.get("denominator") == row.denominator
-            ) if collection == "efficacy" else False
+                if collection == "efficacy"
+                else False
+            )
             source_category = context.get("category")
-            safety_identity = {
-                "sae": ("any_sae", "serious"),
-                "death": ("death", "deaths"),
-            }.get(source_category) if isinstance(source_category, str) else None
+            safety_identity = (
+                {
+                    "sae": ("any_sae", "serious"),
+                    "death": ("death", "deaths"),
+                }.get(source_category)
+                if isinstance(source_category, str)
+                else None
+            )
             safety_matches = (
-                isinstance(row, SafetyRow)
-                and context.get("domain") == "adverse_events"
-                and value_role == "affected_count"
-                and safety_identity is not None
-                and (row.term_key, row.at_risk_stat) == safety_identity
-                and row.measure_object == "participant_count"
-                and b_binding.statistical_form == "count"
-                and b_binding.measure_object == "participants"
-                and numeric.is_integer()
-                and row.numerator == int(numeric)
-                and len(source_denominators) == 1
-                and row.denominator in source_denominators
-                and all(view.get(field) == expected for field, expected in (
-                    ("product_id", row.product_id),
-                    ("trial_id", row.trial_id),
-                    ("arm_id", row.group_id),
-                    ("arm_label", row.arm),
-                    ("term", row.term),
-                    ("term_key", row.term_key),
-                    ("time_window", row.time_window),
-                    ("value", row.value),
-                    ("unit", row.unit),
-                    ("numerator", row.numerator),
-                    ("denominator", row.denominator),
-                ))
-            ) if collection == "safety" else False
+                (
+                    isinstance(row, SafetyRow)
+                    and _safety_source_context_matches(context, row, numeric)
+                    and (
+                        bool(context.get("endpoint"))
+                        or (
+                            safety_identity is not None
+                            and (row.term_key, row.at_risk_stat) == safety_identity
+                        )
+                    )
+                    and all(
+                        view.get(field) == expected
+                        for field, expected in (
+                            ("product_id", row.product_id),
+                            ("trial_id", row.trial_id),
+                            ("arm_id", row.group_id),
+                            ("arm_label", row.arm),
+                            ("term", row.term),
+                            ("term_key", row.term_key),
+                            ("measure_object", row.measure_object),
+                            ("count_basis", row.count_basis),
+                            ("source_class_title", row.source_class_title),
+                            ("source_category_title", row.source_category_title),
+                            ("time_window", row.time_window),
+                            ("value", row.value),
+                            ("unit", row.unit),
+                            ("numerator", row.numerator),
+                            ("denominator", row.denominator),
+                        )
+                    )
+                )
+                if collection == "safety"
+                else False
+            )
             if (
                 not math.isfinite(numeric)
                 or not (efficacy_matches or safety_matches)
@@ -572,8 +677,10 @@ def register_b_shared_source_consumers(
                 or str(context.get("trial_id", "")).casefold() != row.trial_id.casefold()
                 or canonical_source_pointer(view.get("source_locator")) != str(source[3])
                 or view.get("source_text") != source[4]
-                or any(getattr(a_binding, field) != getattr(b_binding, field)
-                       for field in shared_fields)
+                or any(
+                    getattr(a_binding, field) != getattr(b_binding, field)
+                    for field in shared_fields
+                )
             ):
                 raise PortalConsumerRegistrationError("B 来源行与 A 科学身份、原子或原文不一致")
             candidates.append((version_id, b_binding))
@@ -583,10 +690,14 @@ def register_b_shared_source_consumers(
             existing = database.execute(
                 "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='B'", (version_id,),
+                "AND report='B'",
+                (version_id,),
             ).fetchone()
             if existing is not None and tuple(existing) != (
-                binding.collection, binding.row_id, encoded, evidence_snapshot.snapshot_id,
+                binding.collection,
+                binding.row_id,
+                encoded,
+                evidence_snapshot.snapshot_id,
             ):
                 raise PortalConsumerRegistrationError("已登记 B 消费者与当前候选冲突")
         for version_id, binding in candidates:
@@ -597,10 +708,15 @@ def register_b_shared_source_consumers(
                 "collection,row_id,binding_json,binding_sha256,created_at) "
                 "VALUES (?,?,?,?,?,?,?,?,?)",
                 (
-                    stable_id("source-portal-binding", version_id, "B",
-                              binding.collection, binding.row_id),
-                    version_id, evidence_snapshot.snapshot_id, "B",
-                    binding.collection, binding.row_id, encoded,
+                    stable_id(
+                        "source-portal-binding", version_id, "B", binding.collection, binding.row_id
+                    ),
+                    version_id,
+                    evidence_snapshot.snapshot_id,
+                    "B",
+                    binding.collection,
+                    binding.row_id,
+                    encoded,
                     hashlib.sha256(encoded.encode()).hexdigest(),
                     registered_at.isoformat(),
                 ),

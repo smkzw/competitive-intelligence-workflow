@@ -8,8 +8,9 @@
   <title>{% block title %}{% endblock %}｜{{ report.indication }}竞品全景</title>
   <link rel="stylesheet" href="{{ asset_prefix }}/portal.css">
   <link rel="stylesheet" href="{{ asset_prefix }}/report-a.css">
+  <link rel="stylesheet" href="{{ asset_prefix }}/kangzhe-site.css">
 </head>
-<body class="kz-a-site" data-page-id="{{ current }}" data-report-version="{{ report.report_version }}" data-current-revision="{{ current_revision }}">
+<body class="kz-a-site" data-kz-design="6.0" data-page-id="{{ current }}" data-report-version="{{ report.report_version }}" data-current-revision="{{ current_revision }}">
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="site-header__logo" href="{{ root_prefix }}overview.html" aria-label="返回首页">
@@ -59,7 +60,7 @@
       <h1 class="portal-page-title">{% block heading %}{% endblock %}</h1>
       <p class="portal-lead">{% block lead %}{% endblock %}</p>
     </header>
-    <details class="kz-a-workspace-bar" data-responsive-workspace open>
+    <details class="kz-a-workspace-bar">
       <summary>视图与修订配置{% if user_edits %}<span class="kz-a-review-state">{{ user_edits|length }} 项用户修订</span>{% endif %}</summary>
       <div class="kz-a-workspace-bar__content" aria-label="当前视图与事实状态">
         <div>
@@ -96,13 +97,15 @@
     </div>
   </section>
 
-  <aside class="kz-evidence-panel" id="data-basis-panel" hidden aria-labelledby="data-basis-title">
+  <aside class="kz-evidence-panel" id="data-basis-panel" hidden role="dialog" aria-modal="true" aria-labelledby="data-basis-title">
+    <div class="kz-evidence-panel__body">
     <div class="kz-evidence-panel__head">
       <h2 id="data-basis-title">数据依据</h2>
       <button type="button" data-close-evidence aria-label="关闭数据依据">×</button>
     </div>
     <div data-evidence-content>
       <p>选择图形或表格中的“查看数据依据”，可核对定义、时间点与来源范围（分母仅在登记按组披露风险人数时显示为“分子/分母人”；登记组名无法与安全性组对应时显示“分母无法归属”，登记未按人单位披露时显示“分母未列示”）。</p>
+    </div>
     </div>
   </aside>
 
@@ -158,6 +161,9 @@
   {% if root_prefix %}<script>window.__SEARCH_INDEX__=(window.__SEARCH_INDEX__||[]).map(function(x){return Object.assign({},x,{slug:"../"+x.slug});});</script>{% endif %}
   <script src="{{ asset_prefix }}/echarts.min.js"></script>
   <script src="{{ asset_prefix }}/portal.js"></script>
+  <script src="{{ asset_prefix }}/charts.js"></script>
   <script src="{{ asset_prefix }}/report-a.js"></script>
+  <script src="{{ asset_prefix }}/kz-motion.js"></script>
+  <script src="{{ asset_prefix }}/kangzhe-site.js"></script>
 </body>
 </html>

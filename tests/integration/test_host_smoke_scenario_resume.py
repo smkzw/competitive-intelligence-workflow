@@ -187,17 +187,29 @@ def test_tamper_rejected(tmp_path, target):
     assert path.read_bytes() == before
 
 
-def test_cli_surface_stays_seventeen():
+def test_cli_surface_matches_current_authorized_workflow():
     import argparse
 
     from ci_workflow.cli import _build_parser
 
-    def leaves(parser):
+    def leaves(parser, prefix=()):
         actions = [a for a in parser._actions if isinstance(a, argparse._SubParsersAction)]
-        return sum(leaves(child) for a in actions for child in a.choices.values()) if actions else 1
+        return {
+            leaf for action in actions for name, child in action.choices.items()
+            for leaf in leaves(child, (*prefix, name))
+        } if actions else {prefix}
 
-    # 17 = 15 + fetch-pubmed + semantic-review（P2 路线与 P3.7 流程接线，均经主线程验收）。
-    assert leaves(_build_parser()) == 17
+    # Assert the actual authorized commands, not an obsolete numerical cap that
+    # would force removal of source acceptance/current visual/refresh behavior.
+    expected = {
+        "package verify", "project create", "project verify", "project run",
+        "project share", "project refresh-source", "project accept-visual",
+        "capability preflight", "research capture", "research fetch-ctgov",
+        "research fetch-pubmed", "research semantic-review", "research submit",
+        "publication unavailable", "yaozh answer", "yaozh observe", "yaozh check",
+        "review issue", "review accept-source-facts", "fixture run",
+    }
+    assert {" ".join(path) for path in leaves(_build_parser())} == expected
 
 
 def test_committed_artifact_without_node_completion_recovers_without_overwrite(

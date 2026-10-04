@@ -21,7 +21,6 @@
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden;
 }
 
 body {
@@ -48,11 +47,26 @@ body {
 .kz-b-main {
   width: 100%;
   max-width: var(--portal-canvas-max);
-  padding: 20px clamp(16px, 3vw, 48px) 56px;
+  padding: 12px clamp(16px, 3vw, 48px) 56px;
 }
 
 .kz-b-page-head {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+}
+
+/* 桌面首屏密度：标题区收窄但保留临床问题层级，阅读路径场景同步收窄。 */
+.kz-b-site .portal-page-title {
+  font-size: clamp(24px, 2.2vw, 30px);
+  margin-bottom: 6px;
+}
+
+.kz-b-site .kz-site-story .kz-film-stage {
+  height: 56px;
+  min-height: 56px;
+}
+
+.kz-b-site .kz-film-caption {
+  margin-top: 2px;
 }
 
 .kz-b-page-head .portal-lead {
@@ -85,23 +99,23 @@ body {
   padding: 18px;
   background: var(--b-surface);
   border: 1px solid var(--b-line);
-  border-top: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: var(--b-radius);
   box-shadow: 0 2px 9px rgba(15, 17, 21, 0.06);
 }
 
 .kz-b-filter-panel {
   min-width: 0;
-  margin: 0 0 16px;
+  margin: 0 0 10px;
 }
 
 .kz-b-filter-quick {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 12px;
+  gap: 6px 10px;
   margin: 0 0 6px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   border: 1px solid var(--b-line);
   border-radius: 10px;
   background: #fffdf9;
@@ -111,17 +125,20 @@ body {
   color: var(--b-muted);
   font-size: 16px;
   font-weight: 600;
+  flex: none;
 }
 
 .kz-b-filter-quick__group {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
 .kz-b-filter-quick__button {
-  min-height: 32px;
-  padding: 5px 10px;
+  min-height: 30px;
+  padding: 4px 10px;
   font-size: 16px;
 }
 
@@ -137,7 +154,7 @@ body {
 
 .kz-b-site--overview #kz-chart-module {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -156,7 +173,7 @@ body {
   border-radius: 10px;
   color: var(--b-muted);
   background: #fffdf9;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .kz-b-bubble-presets__label {
@@ -174,10 +191,10 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 50px;
-  padding: 12px 18px;
+  min-height: 40px;
+  padding: 8px 14px;
   border: 1px solid var(--b-line);
-  border-top: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: var(--b-radius);
   color: var(--b-ink);
   background: var(--b-surface);
@@ -223,6 +240,91 @@ body {
   border-top: 0;
   border-radius: 0 0 var(--b-radius) var(--b-radius);
   box-shadow: 0 2px 9px rgba(15, 17, 21, 0.06);
+}
+
+/* 首屏密度：快速筛选与筛选条件合并为一张卡片，去掉双层边框与空隙；
+   个人保存/导入/导出配置收进筛选面板内的二级展开，收起时不占首屏。 */
+.kz-b-filter-bar {
+  min-width: 0;
+  margin: 0 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--b-radius);
+  background: var(--b-surface);
+  box-shadow: 0 2px 9px rgba(15, 17, 21, 0.06);
+}
+
+.kz-b-filter-bar .kz-b-filter-quick {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--b-line);
+  border-radius: var(--b-radius) var(--b-radius) 0 0;
+}
+
+.kz-b-filter-bar .kz-b-filter-panel {
+  margin: 0;
+}
+
+.kz-b-filter-bar .kz-b-filter-summary {
+  border: 0;
+  border-radius: 0 0 var(--b-radius) var(--b-radius);
+  box-shadow: none;
+}
+
+.kz-b-filter-bar .kz-b-filter-panel[open] .kz-b-filter-summary {
+  border-bottom: 1px solid var(--b-line);
+  border-radius: 0;
+}
+
+.kz-b-filter-bar .kz-b-filters {
+  border: 0;
+  border-radius: 0 0 var(--b-radius) var(--b-radius);
+  box-shadow: none;
+  gap: 14px;
+  padding: 14px;
+}
+
+.kz-b-personal {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.kz-b-personal > summary {
+  min-height: 32px;
+  color: var(--b-muted);
+  font-size: 16px;
+  line-height: 1.4;
+  cursor: pointer;
+  list-style: none;
+}
+
+.kz-b-personal > summary::-webkit-details-marker {
+  display: none;
+}
+
+.kz-b-personal > summary::before {
+  content: "+";
+  margin-right: 6px;
+  color: var(--b-orange-text);
+  font-weight: 400;
+}
+
+.kz-b-personal[open] > summary::before {
+  content: "−";
+}
+
+.kz-b-personal__body {
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 6px;
+}
+
+.kz-b-personal .kz-personal-view {
+  margin-bottom: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--b-line);
+  border-radius: 8px;
+  background: #fffdf9;
+  color: var(--b-muted);
 }
 
 .kz-b-filter-note {
@@ -339,8 +441,8 @@ body {
 .kz-b-dossier-summary,
 .kz-b-profile-index {
   min-width: 0;
-  margin-bottom: 20px;
-  padding: clamp(16px, 2vw, 24px);
+  margin-bottom: 16px;
+  padding: clamp(12px, 1.5vw, 18px);
   background: var(--b-surface);
   border: 1px solid var(--b-line);
   border-radius: var(--b-radius);
@@ -351,8 +453,8 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 22px;
-  margin-bottom: 10px;
+  gap: 16px;
+  margin-bottom: 8px;
 }
 
 .kz-b-section-heading h2 {
@@ -380,7 +482,7 @@ body {
 }
 
 .kz-b-evidence-hint {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   color: var(--b-muted);
   font-size: 16px;
   line-height: 1.5;
@@ -391,13 +493,13 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px 12px;
-  margin: 0 0 12px;
-  padding: 10px 12px;
+  margin: 0 0 10px;
+  padding: 6px 10px;
   border: 1px solid var(--b-line);
   border-radius: 8px;
   background: #f6f5f3;
   color: var(--b-ink);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .kz-b-result-pager label {
@@ -439,7 +541,6 @@ body {
 
 .kz-chart-module__group {
   min-width: 0;
-  overflow: hidden;
 }
 
 .kz-chart-group__chart {
@@ -482,6 +583,19 @@ body {
   font-size: 16px;
 }
 
+/* 重复标题只收起视觉占位：同一显式语境已在上文出现，读屏树保留完整文字。 */
+.kz-chart-group__title--repeat {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .kz-chart-table caption {
   padding: 10px 0;
   color: var(--b-muted);
@@ -512,7 +626,7 @@ body {
   min-width: 0;
   padding: 16px;
   border: 1px solid #e5e1db;
-  border-left: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: 9px;
   background: #fffdf9;
 }
@@ -541,7 +655,7 @@ body {
   gap: 7px;
   padding: 16px;
   border: 1px solid #e3dfd8;
-  border-top: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--b-ink);
   background: #fffdf9;
@@ -674,7 +788,7 @@ body {
   gap: 6px;
   padding: 15px;
   border: 1px solid #e3dfd8;
-  border-left: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: 9px;
   color: var(--b-ink);
   background: #fffdf9;
@@ -729,7 +843,7 @@ body {
 .kz-b-page-empty {
   margin: 18px 0 0;
   padding: 14px 16px;
-  border-left: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   color: var(--b-muted);
   background: #fff8ef;
   font-size: 16px;
@@ -740,7 +854,7 @@ body {
   margin: 16px 0 0;
   padding: 14px 16px;
   border: 1px solid #e8e4de;
-  border-left: 4px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: 8px;
   background: #fffdf9;
 }
@@ -829,7 +943,7 @@ body {
 .kz-chart-group__status-note {
   margin: 10px 0 0;
   padding: 10px 12px;
-  border-left: 3px solid var(--b-orange);
+  border: 1px solid var(--border);
   border-radius: 6px;
   background: #fff8ed;
   color: var(--b-text);
@@ -955,26 +1069,15 @@ body {
 }
 
 .kz-b-site--safety .kz-b-main {
-  padding-top: 20px;
+  padding-top: 12px;
 }
 
 .kz-b-site--safety .kz-b-page-head {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .kz-b-site--safety .kz-b-page-meta {
   margin-top: 8px;
-}
-
-.kz-b-site--safety .kz-b-filter-panel {
-  margin-bottom: 16px;
-}
-
-@media (max-width: 1350px) {
-  .kz-b-filter-panel[open] .kz-b-filters {
-    max-height: 360px;
-    overflow-y: auto;
-  }
 }
 
 @media (max-width: 1100px) {

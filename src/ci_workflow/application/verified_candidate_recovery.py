@@ -96,15 +96,22 @@ def seal_verified_candidate(
     evidence_snapshot: LockedSnapshot,
     sidecar_path: Path,
     manifest_path: Path,
+    *,
+    c_report_data_path: Path | None = None,
 ) -> str:
-    """Seal exactly the registered rows, not a sidecar-selected subset."""
+    """Seal exactly the registered rows, not a sidecar-selected subset.
+
+    A C consumer set additionally needs its pinned original report data so the
+    re-export can re-prove every C row before the manifest is written.
+    """
     try:
         evidence = SnapshotStore(project_root).read(evidence_snapshot)
         sidecar_bytes = sidecar_path.read_bytes()
         with tempfile.TemporaryDirectory(prefix="ci-candidate-consumers-") as directory:
             expected_path = Path(directory) / "verified-consumers.json"
             bindings = export_verified_consumer_bindings(
-                project_root, evidence_snapshot, expected_path
+                project_root, evidence_snapshot, expected_path,
+                c_report_data_path=c_report_data_path,
             )
             if expected_path.read_bytes() != sidecar_bytes:
                 raise VerifiedCandidateRecoveryError(
@@ -134,8 +141,13 @@ def restore_verified_candidate(
     target: Path,
     *,
     expected_manifest_sha256: str,
+    c_report_data_path: Path | None = None,
 ) -> tuple[LockedSnapshot, tuple[ActiveFactBinding, ...]]:
-    """Restore both pinned inputs off-target; publish only the complete pair."""
+    """Restore both pinned inputs off-target; publish only the complete pair.
+
+    The pinned manifest digest stays the only external approval; C consumer
+    proof is verified against the pinned original report data supplied here.
+    """
     if _SHA256.fullmatch(expected_manifest_sha256) is None:
         raise VerifiedCandidateRecoveryError("批准的候选 manifest 摘要无效")
     try:
@@ -167,7 +179,9 @@ def restore_verified_candidate(
             or SnapshotStore(staged).read(locked)["project_id"] != manifest.project_id
         ):
             raise VerifiedCandidateRecoveryError("恢复出的证据快照身份不匹配")
-        bindings = recover_verified_consumer_bindings(staged, sidecar_path)
+        bindings = recover_verified_consumer_bindings(
+            staged, sidecar_path, c_report_data_path=c_report_data_path
+        )
         if len(bindings) != manifest.consumer_binding_count:
             raise VerifiedCandidateRecoveryError("已核验消费者数量与候选 manifest 不一致")
         try:
