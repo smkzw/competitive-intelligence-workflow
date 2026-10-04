@@ -1,0 +1,33 @@
+{
+  "id": "r24-resumed-delivery",
+  "name": "r24-resumed-delivery",
+  "title": "R24 resumed delivery: C bridge, safety review and Kangzhe desktop",
+  "description": "Resume authorized W00-W10; shared owner coordinates current source and Kangzhe 6.0 portal adaptation, bounded C implementation and independent frozen safety review.",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P1",
+  "creator": "宋旻恺",
+  "assignee": "宋旻恺",
+  "createdAt": "2026-10-03",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "2026-10-04 user requested whole-phase close, detailed retrospective/handoff, GitHub preservation then lossless pause. Goal actually paused; project not completed. See packets/2026-09-22-sol-delivery/HANDOFF_20261004_R24_252_PAUSE.md. Historical raw, failures and unrelated dirty edits retained.",
+  "meta": {
+    "execution_state": "paused",
+    "pause_requested_by_user": true,
+    "handoff": "packets/2026-09-22-sol-delivery/HANDOFF_20261004_R24_252_PAUSE.md",
+    "last_stage": "R24-251-source-object-closure; R24-252-current-checkpoint",
+    "product_release_state": "development-candidate",
+    "project_completed": false
+  }
+}

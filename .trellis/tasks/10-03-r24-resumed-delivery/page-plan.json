@@ -1,0 +1,35 @@
+{
+  "schema_version": "6.0",
+  "contract_revision": "R24-80-KZ6-20261003",
+  "track": "site",
+  "canvas": [1600, 900],
+  "target_viewports": [[1440, 900], [1600, 900], [1920, 1080], [2560, 1440]],
+  "pages": [{
+    "id": "b-safety-real-first", "kind": "body", "title": "安全性", "body_profile": "compact", "takeaway": null,
+    "image": {"generation_required": false, "origin": "procedural", "exemption": "global_procedural_optical_field", "runtime_files": ["kangzhe-site.css", "kangzhe-site.js", "kz-motion.js"], "review_status": "pending"},
+    "sources": ["PRD.md:shared-query-evidence", "fixed-r24-71-a.json:safety"],
+    "protected_regions": [],
+    "cards": [{"id": "safety-results", "layout_mode": "compact", "detail": "available", "reason": "All related observations and precise evidence where present; unknown mapping retained, not graphed as a product."}],
+    "elements": [
+      {"id": "page-title", "role": "page_title", "font_px": 32, "line_height": 1.25, "static_reason": "stable clinical page identity"},
+      {"id": "safety-reading", "role": "body", "font_px": 16, "line_height": 1.4, "enter": "grouped", "exit": "document-navigation", "hover": "light-only", "ambient": "none", "data_progress": "existing-chart-clock", "film_id": null},
+      {"id": "reading-path-carrier", "role": "card_title", "font_px": 24, "line_height": 1.25, "enter": "automatic", "exit": "lifecycle-dispose", "hover": "none", "ambient": "continuous", "data_progress": null, "film_id": "shared-evidence-reading-path"}
+    ]
+  }],
+  "current_evidence": {
+    "a_candidate": ".artifacts/r24-86-a-resize-focus-v1-20261003/a",
+    "b_candidate": ".artifacts/r24-80-source-modal-desktop-v1-20261003/b",
+    "a_geometry": ".artifacts/r24-80-source-modal-desktop-v1-20261003/geometry-and-modal.json",
+    "b_four_states": ".artifacts/r24-73-b-compact-v3-20261003",
+    "c_source_candidate": ".artifacts/r24-82-c-source-candidate-v2-20261003",
+    "c_fresh_portal": "not_generated",
+    "a_1600_first_three_cards": {"width_css_px": 489.3, "top_css_px": 585.9, "bottom_css_px": [890.1, 845.3, 845.3]},
+    "a_source_modal": {"width_css_px": 1312, "background_inert": true, "escape_focus_return": true, "resize_focus_receipt": "packets/2026-09-22-sol-delivery/evidence/0924V1-r24/r24-86-a-resize-focus-green-v2.json", "prior_resize_failure_retained": true},
+    "protected_information": ["source scalar and locator", "original and current values", "complete chart-table query IDs", "clinical context and unknown qualifiers"],
+    "geometry_caveat": "Motion can change measured positions; this is runtime geometry, not a stable screenshot or subjective visual verdict.",
+    "screenshot_status": "NOT_VERIFIED: same Ego page screenshot timeout and non-surface capture failure; no alternate browser used",
+    "all_physical_pages_four_states": "pending",
+    "motion_full_cycle_and_visual_acceptance": "pending"
+  },
+  "status": "active development; actual A geometry/modal and B representative states recorded, complete visual and C source-consumer portal gates not passed"
+}

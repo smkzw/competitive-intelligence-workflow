@@ -89,20 +89,51 @@ Codex 和 Hermes 使用 `$SHARED_INSTALL/shared`；OMP 使用安装器创建的�
 
 命令必须显式携带 `--allow-real-host`；缺少该开关只会返回环境阻断，不会启动宿主。
 
+模型与推理强度必须由调用者按**当前真实路由**显式提供（下方变量为占位符示例）：
+留空、空白、`auto`/`default` 一律失败关闭，不会回退到宿主配置默认；OMP 模型必须是
+提供方限定形式 `provider/model`，其提供方或模型分量都不得是 `auto`/`default`。
+显式选择器是请求身份，不代表已观测到的宿主实际运行身份。
+
+```bash
+# 调用者按当前真实路由导出七项占位变量（示例名；取值由调用者填写）
+export CODEX_MODEL="<当前 Codex 模型>"
+export CODEX_REASONING="<当前 Codex 推理强度>"
+export HERMES_PROVIDER="<当前 Hermes 提供方>"
+export HERMES_MODEL="<当前 Hermes 模型>"
+export HERMES_REASONING="<当前 Hermes 推理强度>"
+export OMP_MODEL="<当前 OMP provider/model，必须提供方限定>"
+export OMP_THINKING="<当前 OMP 思考强度>"
+```
 
 ```bash
 uv run python tools/run_host_smoke.py --allow-real-host \
   --install-root "$SHARED_INSTALL" --host codex --case host-smoke-v1 \
   --require-external-host-process --project-root "$SHARED_INSTALL/projects/codex" \
+  --codex-model "$CODEX_MODEL" --codex-reasoning "$CODEX_REASONING" \
   --receipt "$PWD/docs/acceptance/host-smoke/codex.json"
 uv run python tools/run_host_smoke.py --allow-real-host \
   --install-root "$SHARED_INSTALL" --host hermes --case host-smoke-v1 \
   --require-external-host-process --project-root "$SHARED_INSTALL/projects/hermes" \
+  --hermes-provider "$HERMES_PROVIDER" --hermes-model "$HERMES_MODEL" \
+  --hermes-reasoning "$HERMES_REASONING" \
   --receipt "$PWD/docs/acceptance/host-smoke/hermes.json"
 uv run python tools/run_host_smoke.py --allow-real-host \
   --install-root "$SHARED_INSTALL" --host omp --case host-smoke-v1 \
   --require-external-host-process --project-root "$SHARED_INSTALL/projects/omp" \
+  --omp-model "$OMP_MODEL" --omp-thinking "$OMP_THINKING" \
   --receipt "$PWD/docs/acceptance/host-smoke/omp.json"
+```
+
+完整 pre-RC 验收入口使用同一组七项取值；缺失或 `auto`/`default` 会在构建
+真实宿主阶段时失败关闭：
+
+```bash
+uv run python tools/run_acceptance.py --pipeline full --bind-ego-receipts \
+  --project-root <已绑定回执项目根> --acceptance-root <隔离验收证据根> \
+  --codex-model "$CODEX_MODEL" --codex-reasoning "$CODEX_REASONING" \
+  --hermes-provider "$HERMES_PROVIDER" --hermes-model "$HERMES_MODEL" \
+  --hermes-reasoning "$HERMES_REASONING" --omp-model "$OMP_MODEL" \
+  --omp-thinking "$OMP_THINKING"
 ```
 
 完成后运行：

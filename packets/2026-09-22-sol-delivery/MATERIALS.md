@@ -1,6 +1,72 @@
 # 资料包与文件导航
 
-工程唯一根：/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow。以下源码路径相对此根；本包内部链接可直接打开。大体积原始数据不再复制一套；应使用manifest/CAS引用并在W00核验可得性。
+**2026-10-04唯一当前资料入口：**[完整交接](HANDOFF_20261004_R24_252_PAUSE.md)、
+[复盘](RETROSPECTIVE_20261004_R24_252.md)及[STATUS](STATUS.md)顶节。
+R251冻结22文件与原始source、四RED/212GREEN、实际独立21测试和原REVISE均留存；
+R252当前源码/质量日志/包/安装/保护清单与远端结果见交接第12节。raw仅本地受控
+保存，不能拿GitHub精简md代替原件恢复。下面“最新/在途”均按原时点保留。
+
+最新[R202 owner集成](evidence/0924V1-r24/r24-202-owner-c-geometry-integration.md)：
+模型无工作/实际回退保留，owner四RED后修普通入口/共享几何；源码、67邻接、新
+quality门/14真实候选/3fba安装包/受限清理均绑定，不继承旧包或视觉。
+
+最新[R204 登记关联论文恢复](evidence/0924V1-r24/r24-204-registry-publication-recovery.md)：
+全2256边、26获取回执、52原始页核对与7247精确编号集合均有CAS/定位/digest；
+未接受角色不变，不重复复制全文。199/202在途产物不QA；实时状态以STATUS顶节为准。
+
+最新[R202–203来源与前端](evidence/0924V1-r24/r24-202-203-c-geometry-and-native-pubmed.md)
+绑定AD123165原子候选清单、PubMed5993精确重放/原始页hash/定位/元数据digest、
+203生产RED/GREEN与202实际执行。原料复用CAS，不重复复制全文。199/202在途不读取QA。
+
+新增R200–201见[AD来源与接口恢复](evidence/0924V1-r24/r24-200-201-ad-source-and-transport.md)：
+`.artifacts/r24-200-ad-current-research-20261004/`保存新项目CAS、全量来源清单、
+私有原子重放脚本与结果；`.artifacts/r24-201-pubmed-request-pacing-20261004/`保存
+共享transport成族RED/GREEN。最新源码门/包不能继承旧81ad。唯一实时状态为STATUS顶节。
+
+当前R194–199见[STATUS](STATUS.md)顶节、[安装回执资源闭包](evidence/0924V1-r24/r24-196-installed-receipt-resource-closure.md)、[三宿主切片](evidence/0924V1-r24/r24-197-three-native-host-installed-journeys.md)和[安装内当前分享链](evidence/0924V1-r24/r24-198-installed-current-share-chain.md)。实物索引（相对唯一英文工程）：
+
+- `.artifacts/r24-194-linked-jats-boundary-20261004/owner-replay-v1/replay.json`：四原CAS当前生产桥重放，三正文一元数据，不采用医学值。
+- 同目录`stable-gate-v1.log`：1115活跃/271strict的quality-only门，不是全产品验收。
+- 同目录`bundle/ci-r24-194-development.tar.zst`及manifest：历史389文件开发候选，不进入发布状态。
+- 同目录`installed-runtime-v1.json`：390安装记录逐字节核对、三运行检查；不是三个真实宿主。
+- `runs/conference/ci-r24-193-publication-role-review-20261004/evidence_single_object-root-closure.md`：三命名根因bounded关闭，已知规则局限仍需逐论文裁决。
+
+R195两个真实OMP均终态FAIL，各自旧项目/包保持不变。v2包91dd60d9…2d2a8亦是
+历史失败候选，不继承到196新源。集中批/新包/实际宿主状态见STATUS，不读取
+在途项目/回执做QA。下方全部在途说明为历史状态。
+
+最新 R190–193 以[真实签发/接受及当前流水线](evidence/0924V1-r24/r24-186-187-current-fixture-and-identity.md)
+和[STATUS](STATUS.md)顶节为准。185隔离项目127来源事实/直接声明已接受，
+原182/报告current未晋级；190正向恢复、191quality-only新门/私有安装、
+192C读取与193分类复核在途边界明确分层。真实PubMed原记录工件、规范化回归样例
+为`.artifacts/r24-187-china-molecule-identity-20261004/publication-discovery-v1.json`
+和`tests/fixtures/pubmed/r24_cm310_cm326_records.json`；不是已接受论文集。
+以下导航保留原时点，不据此重派已终态节点。
+
+历史 R180–184 以[实际推进回执](evidence/0924V1-r24/r24-180-184-source-and-host-integration.md)
+和[STATUS](STATUS.md)顶节为准。旧段中的在途均是原时点，不据此重派。
+新普通C127条来源候选已生成但未科学接受；宿主显式选择器已接CLI/验收stage，
+父线程早期预检整族77通过仅是代码/模拟流程，非3真实宿主。以下导航保留历史。
+
+2026-10-04 当前导航更新：唯一实时状态为[STATUS](STATUS.md)顶节，
+最新来源/终态结果见[170–172](evidence/0924V1-r24/r24-170-172-source-and-scope.md)，
+普通C174完整统计查询/原文阅读及C恢复执行见[173–175](evidence/0924V1-r24/r24-173-175-reading-and-recovery-dispatch.md)。
+174产物/源码/科学版本与未验项均有摘要，不以旧门/包或测试总数接受新门户。
+两在途节点24487/88685各自专有范围不读取/QA；以下当前导航按原时点保留。
+
+2026-10-04 当前导航：先读[STATUS](STATUS.md)顶节及[166–167回执](evidence/0924V1-r24/r24-166-167-native-context.md)。
+原Goal文件是历史暂停记录，实际Goal已active；旧固定GitHub地址仍只代表表列历史。
+前端唯一作者为src/ci_workflow/renderers/portal/assets，根assets/portal是机械镜像，
+不是另一作者。最新167来源/候选/普通页/完整原生页可读包与确定性重建命令在上述回执。
+以下导航与基线按原时点保留；不能把旧门户/旧PASS当最新候选的接受证据。
+
+工程唯一根是用户指定的英文 competitive-intelligence-workflow checkout，绝对本机路径仅保留本地执行上下文；以下源码路径相对此根，本包内部链接可直接打开。大体积原始数据不再复制一套；应使用manifest/CAS引用并在W00核验可得性。
+
+Current R192 replay: `.artifacts/r24-192-reviewed-c-read-projection-20261004/owner-candidate-v1/owner-replay-v1.json`
+binds exact old snapshot/report/decision and all new14C pages;93accepted-source rows/34conflict candidates,
+not accepted whole portal/current. R193 full original metadata reading view:
+`context/ci-r24-193-publication-role-review-20261004_full-metadata-reading.md`;
+first review/log and new follow-up remain separately versioned in `runs/conference/` and `logs/conference/`.
 
 ## 1. 权威与沿革
 
@@ -43,7 +109,7 @@
 | B完整语义 | reports/b/semantic_contract.py、semantic_grouping.py、registry_observation.py、baseline_views.py、disposition_views.py；policies/timepoints/compatibility-v1.yaml |
 | C先例/实例 | reports/c/endpoint_instances.py、contracts.py、pages.py、synthesis.py、eligibility_source.py；application/fresh_c_research_package.py；PNH build_pnh_c_audit.py |
 | 共同视图 | reports/common/view_state.py、page_registry.py、coverage.py、chart_specs.py；reports/common/page-catalogs/A.yaml、B.yaml、C.yaml |
-| 三门户前端 | renderers/portal/report_a.py、report_b.py、report_c.py、builder.py；同目录assets及templates；根assets/portal是另一副本，先确认消费者 |
+| 三门户前端 | renderers/portal/report_a.py、report_b.py、report_c.py、builder.py；模块assets为唯一作者及templates；根assets/portal仅机械镜像，构建校验消费字节 |
 | 修订/刷新 | application/correction_service.py、refresh_service.py；graph/impact.py；storage/render_transaction.py；application/latest_delivery.py、delivered_artifacts.py |
 | 安装/宿主 | application/fresh_install.py、host_smoke_runner.py、host_smoke_scenario.py、acceptance_runner.py；tools/bundle_contract.py、package-manifest.json |
 | 质量 | tools/gate.sh；tests/unit、contract、integration、reports、browser；不能只读测试名称当生产行为已覆盖 |

@@ -1,0 +1,20 @@
+{
+  "id": "shared-evidence-reading-path", "page_id": "b-safety-real-first",
+  "question": "How does a reader move from related studies to complete detail and evidence?",
+  "audience_message": "从相关研究进入完整明细，再核对原文与定位。",
+  "source_claim_ids": ["packet-PRD:all-related-studies", "packet-DESIGN:shared-query", "packet-ACCEPTANCE:source-trace"],
+  "carrier_id": "persistent-kz-film-carrier",
+  "protected_regions": ["stable-page-title", "header-logo-navigation", "scientific-data-plane"],
+  "states": [
+    {"label": "相关研究", "x": 0.02, "y": 0.05, "w": 0.43, "h": 0.90, "source_claim_ids": ["packet-PRD:all-related-studies"], "explanation_task": "Establish report membership without implying all sources verified."},
+    {"label": "定义与条件", "x": 0.02, "y": 0.05, "w": 0.65, "h": 0.90, "source_claim_ids": ["packet-DESIGN:numeric-eligibility"], "explanation_task": "Comparability requires scientific context, not topic similarity."},
+    {"label": "完整明细与原文", "x": 0.02, "y": 0.05, "w": 0.92, "h": 0.90, "source_claim_ids": ["packet-DESIGN:shared-query", "packet-ACCEPTANCE:source-trace"], "explanation_task": "Expand same carrier to show membership, conditions, complete detail and evidence as distinct reading tasks."}
+  ],
+  "relations": [], "timing": {"duration_ms": 36000, "clock_owner": "KZMotion.Film"},
+  "loop_contract": "append t=1 identical first carrier frame; text controlled by same sampled index",
+  "static_summary": "从本页相关研究进入完整明细，再核对原文与定位。比较资格以各项定义和条件为准。",
+  "audience_playback_ui": false, "lifecycle_api": ["pause(reason)", "resume(reason)", "snapshot()", "dispose()"],
+  "reduced_motion": "expanded static state; report data remains fully readable",
+  "cleanup": "pagehide disposes motion, film, observer/listeners; pageshow remounts",
+  "acceptance": "pending actual full-cycle/readability and four-width protected-region evidence"
+}

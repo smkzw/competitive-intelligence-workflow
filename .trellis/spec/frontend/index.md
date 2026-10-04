@@ -6,7 +6,11 @@
 
 ## Overview
 
-This directory contains guidelines for frontend development. Fill in each file with your project's specific conventions.
+This project renders independent A/B/C static sites with Python/Jinja and packaged
+vanilla JavaScript/ECharts. Product authority remains in
+`packets/2026-09-22-sol-delivery/`; these guides describe implementation practice,
+not a second product specification. User-selected Kangzhe Design 6.0 applies to
+current presentation; historical screenshots/receipts are not rewritten.
 
 ---
 
@@ -15,10 +19,10 @@ This directory contains guidelines for frontend development. Fill in each file w
 | Guide | Description | Status |
 |-------|-------------|--------|
 | [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Component Guidelines](./component-guidelines.md) | Component patterns, props, composition | To fill |
+| [Component Guidelines](./component-guidelines.md) | Shared asset owner, report adapters, motion and evidence | Documented R24-66 |
 | [Hook Guidelines](./hook-guidelines.md) | Custom hooks, data fetching patterns | To fill |
 | [State Management](./state-management.md) | Local state, global state, server state | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
+| [Quality Guidelines](./quality-guidelines.md) | Grouped tests, actual browser evidence, release boundaries | Documented R24-66 |
 | [Type Safety](./type-safety.md) | Type patterns, validation | To fill |
 
 ---
