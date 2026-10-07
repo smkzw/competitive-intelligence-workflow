@@ -177,30 +177,100 @@ def _normalized(value: str) -> str:
     return " ".join(value.split()).casefold()
 
 
-def semantic_value_is_unknown(value: object) -> bool:
-    """Missing markers are absence of knowledge, never an equivalence class."""
-    if not isinstance(value, str) or not value.strip():
-        return True
-    text = unicodedata.normalize("NFKC", value).casefold().strip().rstrip(".。!！?？;；:")
+_LIST_SEPARATORS = frozenset({",", "、", "，"})
+_OPEN_BRACKETS = "([【〔「"
+_CLOSE_BRACKETS = ")]】〕」"
+_UNKNOWN_MARKERS = frozenset({
+    "unknown", "not-reported", "not-publicly-disclosed", "not-specified",
+    "unspecified", "missing", "null", "none", "n/a", "na", "-", "—",
+    "未报告", "未披露", "未公开", "未注明", "未提供", "未知", "不详",
+    "not-available", "unavailable", "n.a", "tbd", "待核", "未明确", "未公开披露",
+    "用户清除,待重新核实",
+})
+_NONCLINICAL_METRICS = frozenset({
+    "ada", "anti_drug_antibody", "immunogenicity", "pk", "pd", "pk_pd", "biomarker",
+    "other", "unresolved", "cmax", "tmax",
+})
+
+
+def _split_top_level_list(text: str) -> tuple[str, ...]:
+    """Split only outside brackets so a qualifier cannot hide a later real tail."""
+    parts: list[str] = []
+    buf: list[str] = []
+    depth = 0
+    for char in text:
+        if char in _OPEN_BRACKETS:
+            depth += 1
+            buf.append(char)
+            continue
+        if char in _CLOSE_BRACKETS:
+            depth = max(0, depth - 1)
+            buf.append(char)
+            continue
+        if depth == 0 and char in _LIST_SEPARATORS:
+            part = "".join(buf).strip()
+            if part:
+                parts.append(part)
+            buf = []
+            continue
+        buf.append(char)
+    part = "".join(buf).strip()
+    if part:
+        parts.append(part)
+    return tuple(parts)
+
+
+def _strip_leading_qualifier_head(text: str) -> str:
     # A qualifier cannot turn a missing head into a known clinical definition.
-    text = re.split(r"[\(\[【〔「]", text, maxsplit=1)[0].strip()
-    if not text:
-        return True
-    parts = text.split("、")
-    if len(parts) > 1:
-        return all(semantic_value_is_unknown(part) for part in parts)
+    return re.split(r"[\(\[【〔「]", text, maxsplit=1)[0].strip()
+
+
+def _is_unknown_marker_token(text: str, *, allow_suffix: bool = True) -> bool:
     text = re.sub(r"(?<=[\u4e00-\u9fff])\s+(?=[\u4e00-\u9fff])", "", text)
     normalized = "-".join(text.replace("_", "-").split())
     abbreviation = re.sub(r"[.\s]", "", text)
     if abbreviation in {"tbd", "na"}:
         return True
-    return normalized in {
-        "unknown", "not-reported", "not-publicly-disclosed", "not-specified",
-        "unspecified", "missing", "null", "none", "n/a", "na", "-", "—",
-        "未报告", "未披露", "未公开", "未注明", "未提供", "未知", "不详",
-        "not-available", "unavailable", "n.a", "tbd", "待核", "未明确", "未公开披露",
-        "用户清除,待重新核实",
-    } or normalized.endswith(("-not-reported", ":unknown"))
+    return normalized in _UNKNOWN_MARKERS or (
+        allow_suffix and normalized.endswith(("-not-reported", ":unknown")))
+
+
+def semantic_value_is_unknown(value: object) -> bool:
+    """Missing markers are absence of knowledge, never an equivalence class."""
+    if not isinstance(value, str) or not value.strip():
+        return True
+    text = unicodedata.normalize("NFKC", value).casefold().strip().rstrip(".。!！?？;；:")
+    if not text:
+        return True
+    # Whole-phrase markers may contain commas; keep them before list splitting.
+    if _is_unknown_marker_token(text, allow_suffix=False):
+        return True
+    parts = _split_top_level_list(text)
+    if len(parts) > 1:
+        return all(semantic_value_is_unknown(part) for part in parts)
+    head = _strip_leading_qualifier_head(parts[0] if parts else text)
+    if not head:
+        return True
+    return _is_unknown_marker_token(head)
+
+
+def _metric_token_is_nonclinical(metric: str) -> bool:
+    text = unicodedata.normalize("NFKC", metric).casefold().strip()
+    if not text:
+        return False
+    parts = _split_top_level_list(text)
+    if len(parts) > 1:
+        return any(_metric_token_is_nonclinical(part) for part in parts)
+    head = _strip_leading_qualifier_head(parts[0] if parts else text)
+    if not head:
+        return False
+    normalized_metric = re.sub(r"[-\s_/]+", "_", head).strip("_")
+    # Compact spelling equivalence is exact, not a new broad substring veto.
+    # In particular adaptive_response must not become an ADA observation.
+    return normalized_metric.replace("_", "") in _NONCLINICAL_METRICS or any(
+        normalized_metric == token or normalized_metric.startswith(token + "_")
+        for token in _NONCLINICAL_METRICS
+    )
 
 
 def source_domain_conflicts(row: Mapping[str, Any], domain: str) -> bool:
@@ -216,19 +286,9 @@ def source_domain_conflicts(row: Mapping[str, Any], domain: str) -> bool:
     metric = row.get("source_metric")
     if "source_metric" in row and semantic_value_is_unknown(metric):
         return True
-    normalized_metric = re.sub(r"[-\s_/]+", "_", unicodedata.normalize(
-        "NFKC", str(metric),
-    ).casefold()).strip("_")
-    nonclinical_metrics = {
-        "ada", "anti_drug_antibody", "immunogenicity", "pk", "pd", "pk_pd", "biomarker",
-        "other", "unresolved", "cmax", "tmax",
-    }
-    # Compact spelling equivalence is exact, not a new broad substring veto.
-    # In particular adaptive_response must not become an ADA observation.
-    return normalized_metric.replace("_", "") in nonclinical_metrics or any(
-        normalized_metric == token or normalized_metric.startswith(token + "_")
-        for token in nonclinical_metrics
-    )
+    if "source_metric" not in row:
+        return False
+    return _metric_token_is_nonclinical(str(metric))
 
 
 def time_policy_identity(

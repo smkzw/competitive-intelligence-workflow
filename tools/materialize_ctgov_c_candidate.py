@@ -38,6 +38,7 @@ from ci_workflow.renderers.portal.report_c import (
     render_report_c_review_candidate,
 )
 from ci_workflow.reports.c.endpoint_instances import validate_endpoint_timepoint_pairs
+from ci_workflow.reports.common.identity_projection import load_project_identity_context
 from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
 from ci_workflow.storage.content_store import ContentAddressedStore, ContentIntegrityError
 from ci_workflow.storage.snapshot_store import LockedSnapshot
@@ -75,6 +76,7 @@ def materialize(
     *, source_root: Path, raw_asset: ContentBlob, output: Path,
     bindings: tuple[CtgovCTrialBinding, ...], indication_id: str, indication: str,
     cutoff: str, observed_at: datetime,
+    project_root: Path | None = None,
 ) -> dict[str, Any]:
     """Validate before creating a fresh output; retain exact originals and gaps."""
     _validate_recorded_time(observed_at)
@@ -82,10 +84,20 @@ def materialize(
         raise ValueError("C candidate output requires a fresh/new directory")
     if not bindings:
         raise ValueError("C candidate requires explicit trial bindings")
-    contract = create_project_contract(
-        indication=indication, reports=["C"], outputs=["html"],
-        cutoff=cutoff, created_at=observed_at,
-    )
+    if project_root is None:
+        contract = create_project_contract(
+            indication=indication, reports=["C"], outputs=["html"],
+            cutoff=cutoff, created_at=observed_at,
+        )
+    else:
+        root = project_root.resolve()
+        if project_root.is_symlink() or not output.resolve().is_relative_to(root):
+            raise ValueError("既有C候选输出必须留在项目内")
+        ContentAddressedStore(root).resolve_relative(output.resolve().relative_to(root).as_posix())
+        contract = verify_project_workspace(root).contract
+        if (contract.indication != indication or cutoff != contract.data_cutoff.date().isoformat()
+                or "C" not in {kind.value for kind in contract.reports}):
+            raise ValueError("C来源摄取与既有项目合同不一致")
     try:
         original = ContentAddressedStore(source_root).read_bytes(raw_asset)
     except (OSError, ContentIntegrityError, ValueError) as error:
@@ -128,8 +140,9 @@ def materialize(
     # No gate or current-generation writer is called here. A failed materialization
     # remains a recoverable failed directory, never a published candidate.
     output.mkdir(parents=True, exist_ok=False)
-    root = output / "project"
-    create_project_workspace(root, contract)
+    root = project_root.resolve() if project_root is not None else output / "project"
+    if project_root is None:
+        create_project_workspace(root, contract)
     copied = ContentAddressedStore(root).put_bytes(original, media_type=raw_asset.media_type)
     if copied != raw_asset:
         raise ValueError("C candidate original CAS descriptor changed while copying")
@@ -191,7 +204,8 @@ def materialize(
     return manifest
 
 
-def render_review_preview(output: Path, *, rendered_at: datetime) -> dict[str, Any]:
+def render_review_preview(output: Path, *, rendered_at: datetime,
+                          project_root: Path | None = None) -> dict[str, Any]:
     """Reach ordinary C pages from a verified candidate; never publish current.
 
     Product identity stays an explicit caller proposal. Registry trial metadata is
@@ -271,8 +285,10 @@ def render_review_preview(output: Path, *, rendered_at: datetime) -> dict[str, A
             reported_sample_size=count if enrollment_type != "ESTIMATED" else None,
             enrollment_type=enrollment_type, role="设计先例（待复核）",
         ))
-    root = output / "project"
+    root = project_root.resolve() if project_root is not None else output / "project"
     contract = verify_project_workspace(root).contract
+    if inputs["contract"] != contract.model_dump(mode="json"):
+        raise ValueError("C候选来源与呈现项目合同不一致")
     report = ReportCPortalData(
         schema_version="1.0", report_version="r24-source-review-candidate",
         indication_id=inputs["indication_id"], indication=contract.indication,
@@ -289,7 +305,8 @@ def render_review_preview(output: Path, *, rendered_at: datetime) -> dict[str, A
         manifest["fact_version_by_ref"], {source.source_id: source for source in sources},
         registered_at=rendered_at,
     )
-    pages = render_report_c_review_candidate(report, site, publication_limitation_zh=(
+    pages = render_report_c_review_candidate(report, site,
+        identity_context=load_project_identity_context(root), publication_limitation_zh=(
         "仅展示本候选已捕获的登记研究，不代表竞品宇宙完整；产品对应关系待复核，"
         "研究阶段与地点不是产品管线或监管批准状态。方案/SAP全文尚未并入，统计细节仍有缺口。"
     ))
@@ -297,7 +314,9 @@ def render_review_preview(output: Path, *, rendered_at: datetime) -> dict[str, A
     result: dict[str, Any] = {
         "schema_version": "c-review-preview-1", "observations": len(report.observations),
         "registered_consumers": len(registered), "physical_pages": len(pages),
-        "site_relative_path": site.relative_to(output).as_posix(),
+        "site_relative_path": site.relative_to(
+            root if project_root is not None else output).as_posix(),
+        "site_path_base": "project" if project_root is not None else "candidate",
         "scientific_acceptance": False, "current_generation_switched": False,
         "source_manifest_sha256": _digest((output / "candidate-manifest.json").read_bytes()),
         "report_data_sha256": _digest((output / "review-portal-data.json").read_bytes()),
@@ -319,6 +338,8 @@ def main() -> None:
     parser.add_argument("--cutoff", required=True)
     parser.add_argument("--observed-at", required=True)
     parser.add_argument("--render-review-preview", action="store_true")
+    parser.add_argument("--project", type=Path,
+                        help="Ingest C into this existing project; preserve its contract")
     args = parser.parse_args()
     result = materialize(
         source_root=args.source_root,
@@ -328,9 +349,11 @@ def main() -> None:
                        for item in json.loads(args.bindings.read_bytes())),
         indication_id=args.indication_id, indication=args.indication, cutoff=args.cutoff,
         observed_at=datetime.fromisoformat(args.observed_at),
+        project_root=args.project,
     )
     if args.render_review_preview:
-        render_review_preview(args.output, rendered_at=datetime.fromisoformat(args.observed_at))
+        render_review_preview(args.output, rendered_at=datetime.fromisoformat(args.observed_at),
+                              project_root=args.project)
     print(json.dumps({key: result[key] for key in (
         "observations", "source_versions", "endpoint_instances",
         "scientific_acceptance", "current_generation_switched", "scientific_content_digest",

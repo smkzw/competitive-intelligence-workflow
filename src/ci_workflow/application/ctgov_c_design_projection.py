@@ -597,7 +597,9 @@ def _build_context(
     capture: SourceCapture,
     binding: CtgovCTrialBinding | None,
 ) -> _StudyContext:
-    report_trial_id = binding.trial_id if binding is not None else study.trial_id
+    # Registry spellings are preserved in source atoms; report identifiers must
+    # share the case-insensitive identity used by the declared study universe.
+    report_trial_id = (binding.trial_id if binding is not None else study.trial_id).casefold()
     arm_label_by_index: dict[int, str] = {}
     outcome_timeframe: dict[tuple[str, int], str] = {}
     for fact in study.facts:

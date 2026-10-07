@@ -102,6 +102,7 @@ class _FilterInventory(HTMLParser):
         self.values: dict[str, set[str]] = {}
         self.comparison = False
         self.scripts: list[str] = []
+        self.script_sources: list[str] = []
         self._script: list[str] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -111,7 +112,12 @@ class _FilterInventory(HTMLParser):
         ):
             self.comparison = True
         if tag == "script":
-            self._script = []
+            source = attributes.get("src")
+            if source:
+                self.script_sources.append(source)
+                self._script = None
+            else:
+                self._script = []
         dimension = attributes.get("data-filter-dimension")
         inherited = next((item for _tag, item in reversed(self._stack) if item), None)
         active = dimension or inherited
@@ -137,11 +143,27 @@ class _FilterInventory(HTMLParser):
 
     def comparison_questions(self, report: ReportCode) -> dict[str, int]:
         """Read generated JSON only. Never evaluate a source or script string."""
-        prefix = f"window.__{report}_COMPARISON_WORKSPACE__ = "
+        inventory_prefix = f"window.__{report}_COMPARISON_QUERY_INVENTORY__ = "
+        workspace_prefix = f"window.__{report}_COMPARISON_WORKSPACE__ = "
         for script in self.scripts:
-            if script.strip().startswith(prefix):
-                payload, _end = json.JSONDecoder().raw_decode(script.strip()[len(prefix):])
+            stripped = script.strip()
+            if stripped.startswith(inventory_prefix):
+                payload, _end = json.JSONDecoder().raw_decode(
+                    stripped[len(inventory_prefix):]
+                )
+                if not isinstance(payload, dict):
+                    raise ValueError("分享比较问题清单无效")
                 counts: dict[str, int] = {}
+                for question, count in payload.items():
+                    if not isinstance(question, str) or not isinstance(count, int) or count < 1:
+                        raise ValueError("分享比较问题标识无效")
+                    counts[question] = count
+                return counts
+            if stripped.startswith(workspace_prefix):
+                payload, _end = json.JSONDecoder().raw_decode(
+                    stripped[len(workspace_prefix):]
+                )
+                counts = {}
                 for column in payload["columns"]:
                     question = column["question_id"]
                     if not isinstance(question, str):
@@ -151,7 +173,62 @@ class _FilterInventory(HTMLParser):
         return {}
 
 
-def _validate_view_selection(selection: ShareViewSelection, page: bytes) -> None:
+def _contained_site_file(site_root: Path, page_relative: str, reference: str) -> Path | None:
+    """Resolve a same-site relative script reference; reject escapes and schemes."""
+    parsed = urlsplit(reference)
+    if parsed.scheme or parsed.netloc or parsed.path.startswith(("/", "\\")):
+        return None
+    root = site_root.expanduser().resolve()
+    target = (root / PurePosixPath(page_relative).parent / parsed.path).resolve()
+    try:
+        target.relative_to(root)
+    except ValueError:
+        return None
+    if not target.is_file() or target.suffix.lower() != ".js":
+        return None
+    return target
+
+
+def _comparison_questions_from_page(
+    inventory: _FilterInventory,
+    report: ReportCode,
+    *,
+    site_root: Path | None = None,
+    page_relative: str | None = None,
+) -> dict[str, int]:
+    questions = inventory.comparison_questions(report)
+    if questions or site_root is None or page_relative is None:
+        return questions
+    # After B payload externalization, prefer compact inline inventory; when a
+    # caller also supplies the site root, recover questions from the generated
+    # page-payload script without evaluating JavaScript.
+    marker = f"window.__{report}_COMPARISON_WORKSPACE__ = "
+    for reference in inventory.script_sources:
+        path = _contained_site_file(site_root, page_relative, reference)
+        if path is None:
+            continue
+        source = path.read_text(encoding="utf-8")
+        pos = source.find(marker)
+        if pos < 0:
+            continue
+        payload, _end = json.JSONDecoder().raw_decode(source[pos + len(marker):])
+        counts: dict[str, int] = {}
+        for column in payload["columns"]:
+            question = column["question_id"]
+            if not isinstance(question, str):
+                raise ValueError("分享比较问题标识无效")
+            counts[question] = counts.get(question, 0) + 1
+        return counts
+    return {}
+
+
+def _validate_view_selection(
+    selection: ShareViewSelection,
+    page: bytes,
+    *,
+    site_root: Path | None = None,
+    page_relative: str | None = None,
+) -> None:
     if not selection.query:
         return
     inventory = _FilterInventory()
@@ -170,11 +247,19 @@ def _validate_view_selection(selection: ShareViewSelection, page: bytes) -> None
     if inventory.comparison:
         special["view"] = {"comparison"}
         if selection.report in {"A", "B"}:
-            questions = inventory.comparison_questions(selection.report)
+            questions = _comparison_questions_from_page(
+                inventory,
+                selection.report,
+                site_root=site_root,
+                page_relative=page_relative or selection.entry_page,
+            )
             special["cmp"] = set(questions)
             chosen = selection.query.get("cmp", (next(iter(sorted(questions)), ""),))
             count = questions.get(chosen[0], 0) if len(chosen) == 1 else 0
-            special["cmp_page"] = {str(page) for page in range(1, max(1, (count + 3) // 4) + 1)}
+            special["cmp_page"] = {
+                str(page_number)
+                for page_number in range(1, max(1, (count + 3) // 4) + 1)
+            }
     for key, values in selection.query.items():
         if key in {"view", "cmp", "cmp_page"} and len(values) != 1:
             raise ValueError(f"分享比较选择必须唯一：{key}")
@@ -295,7 +380,12 @@ def export_current_html_share(
         if selection.entry_page not in delivery.file_hashes:
             raise ValueError("分享配置入口页面不属于当前报告")
         site = root / delivery.site_relative_path
-        _validate_view_selection(selection, (site / selection.entry_page).read_bytes())
+        _validate_view_selection(
+            selection,
+            (site / selection.entry_page).read_bytes(),
+            site_root=site,
+            page_relative=selection.entry_page,
+        )
         copied_hashes: dict[str, str] = {}
         site_files: dict[str, bytes] = {}
         for relative, expected in sorted(delivery.file_hashes.items()):

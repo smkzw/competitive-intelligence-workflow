@@ -82,7 +82,15 @@ def _report_literal(site: Path) -> dict[str, Any]:
 
 
 def _page_json_assignment(site: Path, relative: str, name: str) -> Any:
-    return _json_assignment(_text(site, relative), name)
+    html = _text(site, relative)
+    sources = [html]
+    for reference in re.findall(
+        r'<script src="([^"]*data/shared-payloads/[^"]+\.js)"></script>', html,
+    ):
+        path = (site / Path(relative).parent / reference).resolve()
+        assert path.is_relative_to(site.resolve()) and path.is_file()
+        sources.append(path.read_text(encoding="utf-8"))
+    return _json_assignment("\n".join(sources), name)
 
 
 def test_partial_precise_view_keeps_all_related_rows_in_physical_b_pages(
@@ -249,8 +257,8 @@ def test_b_core_pages_install_chart_data_before_complete_table_shell(b_site: Pat
             html,
         )
         assert chart_shell is not None, page_id
-        assert "window.__CHART_GROUPS__" in html, page_id
-        assert "window.__EVIDENCE_VIEWS__" in html, page_id
+        assert "data/shared-payloads/" in html, page_id
+        assert html.index("data/shared-payloads/") < html.index("report-b.js")
         # 完整表格由离线脚本在此壳中生成；浏览器合同核验实际 DOM 顺序。
 
         groups = _page_json_assignment(b_site, relative, "__CHART_GROUPS__")

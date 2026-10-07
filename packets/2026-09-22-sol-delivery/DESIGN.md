@@ -12,6 +12,14 @@
 条件；来源是否具有正式命名/许可/控股语义仍需核验。可变内存图不能冒用既有CAS，
 删除/损坏已绑定来源不能空投影降级。历史公开与动态监管核验不由本地mtime通过。
 
+公开知识的当前实现边界：身份片段的published_at/first_disclosed_at明确日期或
+既有PublicPdfAvailabilityWitness可证明截止日可知性；acquired_at仅记录实际导入，
+不单独证明公开。见证必须重开CAS原PDF及获取回执，URL/字节/时间一致；该路径
+不填写首次发布日期。控制关系observed_at晚于cutoff时拒绝，即使effective_from
+更早；as-of财务观察不制造次日失效。见证作为现有图CAS的fragment绑定保存，
+绝对机器路径不入科学摘要；内存修改、缺回执、异版本均失败关闭。此必要门与
+来源命名/许可/控股语义、动态刷新及独立接受分开。
+
 来源绑定身份上下文复用EntityGraph、CAS及原片段库，在普通A/B/C渲染后落
 `data/identity-context.json`（源图资产绑定）与`identity-projection.json`（呈现投影）。
 current编辑/清除重建核上一版本文件hash并重开原PDF精确页；丢失或篡改失败关闭，

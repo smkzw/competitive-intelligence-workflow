@@ -6,7 +6,9 @@ from pathlib import Path
 import pytest
 
 from ci_workflow.domain.entities import EntityGraph, EntityIdentity, EntityRelation, EntityType
-from tests.integration.test_competitor_universe import _evidence_registry
+from tests.integration.test_1007_identity_public_knowledge import (
+    _published_registry as _evidence_registry,
+)
 
 
 @pytest.fixture

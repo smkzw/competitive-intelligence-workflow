@@ -1,0 +1,256 @@
+{
+  "candidate_only": true,
+  "limitation": "Exact official public GET receipts observed on 2026-10-07 prove only current retrieval of these pinned bytes. Printed label revision and group financial as-of dates are not first-publication or termination dates. China regulatory dynamic status, current group verification and independent identity acceptance remain open. No source-set-v1, historical snapshot or report receipt is rewritten.",
+  "sources": [
+    {
+      "key": "official_name",
+      "filename": "dupixent-china-label-20250711.pdf",
+      "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+      "page": 1,
+      "paragraph": "核准日期：2020 年 6 月 17 日 修改日期：2021 年 9 月 7 日 2022 年 2 月 18 日 2023 年 5 月 26 日 2023 年 9 月 19 日 2023 年 9 月 26 日 2023 年 11 月 14 日 2024 年 6 月 13 日 2024 年 9 月 26 日 2024 年 9 月 30 日 2025 年 1 月 23 日 2025 年 1 月 24 日 2025 年 7 月 11 日 度普利尤单抗注射液说明书 请仔细阅读说明书并在医师或药师指导下使用。 【药品名称】 通用名称：度普利尤单抗注射液 商品名称：达必妥®/ Dupixent® 英文名称：Dupilumab Injection",
+      "url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+        "final_url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+        "request_started_at": "2026-10-07T09:45:27.140550Z",
+        "observed_available_at": "2026-10-07T09:45:28.321981Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 2294375,
+        "expected_raw_asset": {
+          "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+          "relative_path": "evidence/raw/sha256/1f/1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2.bin",
+          "byte_size": 2294375,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+          "relative_path": "evidence/raw/sha256/1f/1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2.bin",
+          "byte_size": 2294375,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "799ecd5ca1d24780336f53e5f94b0bee4a89a1e2fe05fe01f2f3849c09bb0492",
+          "relative_path": "evidence/raw/sha256/79/799ecd5ca1d24780336f53e5f94b0bee4a89a1e2fe05fe01f2f3849c09bb0492.bin",
+          "byte_size": 976,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "china_mah",
+      "filename": "dupixent-china-label-20250711.pdf",
+      "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+      "page": 55,
+      "paragraph": "【批准文号】 国药准字 SJ20200017 【上市许可持有人】 名称： Sanofi Winthrop Industrie",
+      "url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+        "final_url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+        "request_started_at": "2026-10-07T09:45:27.140550Z",
+        "observed_available_at": "2026-10-07T09:45:28.321981Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 2294375,
+        "expected_raw_asset": {
+          "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+          "relative_path": "evidence/raw/sha256/1f/1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2.bin",
+          "byte_size": 2294375,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+          "relative_path": "evidence/raw/sha256/1f/1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2.bin",
+          "byte_size": 2294375,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "799ecd5ca1d24780336f53e5f94b0bee4a89a1e2fe05fe01f2f3849c09bb0492",
+          "relative_path": "evidence/raw/sha256/79/799ecd5ca1d24780336f53e5f94b0bee4a89a1e2fe05fe01f2f3849c09bb0492.bin",
+          "byte_size": 976,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "group_relationship",
+      "filename": "sanofi-form20f-2025.pdf",
+      "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+      "page": 295,
+      "paragraph": "Sanofi Winthrop Industrie France 100.0",
+      "url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+        "final_url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+        "request_started_at": "2026-10-07T09:45:27.160354Z",
+        "observed_available_at": "2026-10-07T09:45:27.763307Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 11698399,
+        "expected_raw_asset": {
+          "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+          "relative_path": "evidence/raw/sha256/31/3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e.bin",
+          "byte_size": 11698399,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+          "relative_path": "evidence/raw/sha256/31/3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e.bin",
+          "byte_size": 11698399,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "2686a58eafaaeb4246a24b4ab611db85b8269507667fac86f3a11a59aa6f39c4",
+          "relative_path": "evidence/raw/sha256/26/2686a58eafaaeb4246a24b4ab611db85b8269507667fac86f3a11a59aa6f39c4.bin",
+          "byte_size": 993,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "group_scope",
+      "filename": "sanofi-form20f-2025.pdf",
+      "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+      "page": 295,
+      "paragraph": "F/ List of principal companies included in the scope of consolidation during 2025 F.1. Principal fully consolidated companies The table below shows Sanofi’s principal subsidiaries and their country of incorporation: Europe Financial interest (%) as of December 31, 2025",
+      "url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+        "final_url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+        "request_started_at": "2026-10-07T09:45:27.160354Z",
+        "observed_available_at": "2026-10-07T09:45:27.763307Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 11698399,
+        "expected_raw_asset": {
+          "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+          "relative_path": "evidence/raw/sha256/31/3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e.bin",
+          "byte_size": 11698399,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+          "relative_path": "evidence/raw/sha256/31/3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e.bin",
+          "byte_size": 11698399,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "2686a58eafaaeb4246a24b4ab611db85b8269507667fac86f3a11a59aa6f39c4",
+          "relative_path": "evidence/raw/sha256/26/2686a58eafaaeb4246a24b4ab611db85b8269507667fac86f3a11a59aa6f39c4.bin",
+          "byte_size": 993,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "target",
+      "filename": "dupixent-china-label-20250711.pdf",
+      "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+      "page": 1,
+      "paragraph": "靶向白细胞介素-4 受体亚基 α（IL-4R-α）的全人单克隆",
+      "url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+        "final_url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf",
+        "request_started_at": "2026-10-07T09:45:27.140550Z",
+        "observed_available_at": "2026-10-07T09:45:28.321981Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 2294375,
+        "expected_raw_asset": {
+          "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+          "relative_path": "evidence/raw/sha256/1f/1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2.bin",
+          "byte_size": 2294375,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+          "relative_path": "evidence/raw/sha256/1f/1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2.bin",
+          "byte_size": 2294375,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "799ecd5ca1d24780336f53e5f94b0bee4a89a1e2fe05fe01f2f3849c09bb0492",
+          "relative_path": "evidence/raw/sha256/79/799ecd5ca1d24780336f53e5f94b0bee4a89a1e2fe05fe01f2f3849c09bb0492.bin",
+          "byte_size": 976,
+          "media_type": "application/json"
+        }
+      }
+    }
+  ],
+  "entities": [
+    {
+      "key": "drug",
+      "entity_type": "product",
+      "canonical_name": "Dupilumab",
+      "identity_basis": "molecular-antibody-il4ra-dupilumab",
+      "aliases": [
+        "Dupixent",
+        "达必妥"
+      ],
+      "official_chinese_name": "度普利尤单抗注射液",
+      "name_source_key": "official_name"
+    },
+    {
+      "key": "holder",
+      "entity_type": "organization",
+      "canonical_name": "Sanofi Winthrop Industrie",
+      "identity_basis": "france-legal-sanofi-winthrop-industrie"
+    },
+    {
+      "key": "group",
+      "entity_type": "organization",
+      "canonical_name": "Sanofi",
+      "identity_basis": "sanofi-consolidated-group"
+    },
+    {
+      "key": "target_entity",
+      "entity_type": "target",
+      "canonical_name": "IL-4Rα",
+      "identity_basis": "interleukin-4-receptor-alpha"
+    }
+  ],
+  "relations": [
+    {
+      "subject": "drug",
+      "object": "holder",
+      "predicate": "has_mah",
+      "source_key": "china_mah",
+      "jurisdiction": "CN",
+      "authorization_scope": "国药准字SJ20200017；300mg/2mL预充式注射器说明书版本2025-07-11，未完成本轮监管动态核对",
+      "observed_at": "2025-07-11T00:00:00+08:00"
+    },
+    {
+      "subject": "holder",
+      "object": "group",
+      "predicate": "controlled_by",
+      "source_key": "group_relationship",
+      "authorization_scope": "2025年度完全合并主要子公司表，2025-12-31财务权益100%；表格上下文另存group_scope片段",
+      "observed_at": "2025-12-31T23:59:59+00:00"
+    },
+    {
+      "subject": "holder",
+      "object": "group",
+      "predicate": "controlled_by",
+      "source_key": "group_scope",
+      "authorization_scope": "完全合并主要子公司表的Sanofi母集团上下文，与同页具体公司行共同解释",
+      "observed_at": "2025-12-31T23:59:59+00:00"
+    },
+    {
+      "subject": "drug",
+      "object": "target_entity",
+      "predicate": "has_target",
+      "source_key": "target",
+      "observed_at": "2025-07-11T00:00:00+08:00"
+    }
+  ],
+  "product_entity_ids": {
+    "dupilumab": "drug"
+  },
+  "previous_source_set_sha256": "d6cbe4200ab21ad6ece27f195c308dbf3937714e1339c566256b5b2b5a7272d3"
+}

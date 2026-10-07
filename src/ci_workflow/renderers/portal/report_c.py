@@ -2544,6 +2544,7 @@ def render_report_c_review_candidate(
     site_root: Path,
     *,
     publication_limitation_zh: str | None = None,
+    identity_context: PortalIdentityContext | None = None,
 ) -> tuple[Path, ...]:
     """Render the same C library for review, preserving unresolved/incomplete facts.
 
@@ -2559,6 +2560,7 @@ def render_report_c_review_candidate(
     return render_report_c_site(
         data, site_root, publication_limitation_zh=publication_limitation_zh,
         review_candidate=True,
+        identity_context=identity_context,
     )
 
 

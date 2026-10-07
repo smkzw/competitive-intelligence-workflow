@@ -1,12 +1,12 @@
-"""Bounded official CT.gov large-document availability witness over the existing CAS.
+"""Bounded official-document availability witness over the existing CAS.
 
 One full public GET proves only that the pinned exact bytes were publicly
 retrievable at the observation instant; it is never evidence of first
 publication, posting, effective or historical availability, and it never
 rewrites a source-version identity. Hosts are restricted to the official
-clinicaltrials.gov document hosts; this adapter limit is not a global product
-policy and other channels remain open. No credentials, cookies, query URLs,
-implicit retries or unofficial redirects are used; failures stay scoped.
+clinicaltrials.gov and explicitly supported company document hosts; this adapter
+limit is not a global product policy and other channels remain open. No credentials,
+cookies, query URLs, implicit retries or unofficial redirects are used; failures stay scoped.
 """
 
 from __future__ import annotations
@@ -26,7 +26,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from ci_workflow.domain.evidence import ContentBlob
 from ci_workflow.storage.content_store import ContentAddressedStore, ContentIntegrityError
 
-OFFICIAL_PDF_HOSTS = frozenset({"cdn.clinicaltrials.gov", "clinicaltrials.gov"})
+OFFICIAL_PDF_HOSTS = frozenset({
+    "cdn.clinicaltrials.gov", "clinicaltrials.gov", "www.sanofi.cn", "www.sanofi.com",
+})
 PdfAvailabilityStatus = Literal[
     "available", "unavailable", "access_denied", "network_error", "mismatch",
     "invalid_response",
@@ -52,7 +54,7 @@ def _utc_instant(value: datetime) -> datetime:
 def _require_official_pdf_url(url: str) -> None:
     parts = urlsplit(url)
     if parts.scheme != "https" or parts.hostname not in OFFICIAL_PDF_HOSTS:
-        raise PublicPdfAvailabilityError("仅支持 clinicaltrials.gov 官方域名的公开 HTTPS 附件")
+        raise PublicPdfAvailabilityError("仅支持明确接通的官方文档域名的公开 HTTPS 附件")
     if parts.username is not None or parts.password is not None:
         raise PublicPdfAvailabilityError("官方附件 URL 不得包含用户凭据")
     try:

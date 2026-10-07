@@ -15,12 +15,27 @@ def _inputs(tmp_path):
     source.mkdir()
     raw = _pdf_pages([["China MAH: Holder Ltd", "Group Ltd controls Holder Ltd"]])
     (source / "synthetic.pdf").write_bytes(raw)
+    from ci_workflow.sources.connectors.public_pdf_availability import (
+        PdfHttpPage,
+        capture_public_pdf_availability,
+    )
+    from ci_workflow.storage.content_store import ContentAddressedStore
+
+    url = "https://cdn.clinicaltrials.gov/large-docs/test/synthetic.pdf"
+    asset = ContentAddressedStore(source).put_bytes(raw, media_type="application/pdf")
+    captured = capture_public_pdf_availability(source, url, asset,
+        transport=lambda requested, timeout, limit: PdfHttpPage(
+            200, "application/pdf", len(raw), raw, requested))
+    assert captured.witness is not None
+    proof = captured.witness.model_dump(mode="json")
     now = datetime.now(UTC).isoformat()
     spec = {"candidate_only": True, "sources": [{
         "key": "holder", "filename": "synthetic.pdf", "sha256": hashlib.sha256(raw).hexdigest(),
-        "page": 1, "paragraph": "China MAH: Holder Ltd", "url": "https://example.org/label.pdf",
+        "page": 1, "paragraph": "China MAH: Holder Ltd", "url": url,
+        "public_pdf_availability": proof,
     }, {"key": "group", "filename": "synthetic.pdf", "sha256": hashlib.sha256(raw).hexdigest(),
-        "page": 1, "paragraph": "Group Ltd controls Holder Ltd", "url": "https://example.org/label.pdf",
+        "page": 1, "paragraph": "Group Ltd controls Holder Ltd", "url": url,
+        "public_pdf_availability": proof,
     }], "entities": [
         {"key": "product", "entity_type": "product", "canonical_name": "DrugX",
          "identity_basis": "synthetic-drug"},

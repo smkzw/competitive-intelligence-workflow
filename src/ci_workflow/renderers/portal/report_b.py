@@ -18,7 +18,7 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from enum import Enum
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, ClassVar, Literal, Self, cast
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
@@ -5018,6 +5018,83 @@ def _comparison_workspace(
     }
 
 
+def _comparison_query_inventory(workspace: Mapping[str, Any]) -> dict[str, int]:
+    """Compact cmp/cmp_page inventory derived from the real workspace columns."""
+    counts: dict[str, int] = {}
+    for column in workspace.get("columns", ()):
+        question = column.get("question_id")
+        if not isinstance(question, str) or not question:
+            raise ReportBPortalError("比较工作区缺少有效 question_id")
+        counts[question] = counts.get(question, 0) + 1
+    return counts
+
+
+def _evidence_drawer_script_body(embed_html: str) -> str:
+    match = re.fullmatch(r"<script>\n?(.*)\n?</script>", embed_html.strip(), flags=re.S)
+    if match is None:
+        raise ReportBPortalError("数据依据嵌入脚本格式无效")
+    return match.group(1).strip() + "\n"
+
+
+def _write_b_page_payload(
+    site_root: Path,
+    page_relative_html: str,
+    *,
+    filter_rows_json: str,
+    chart_groups_json: str,
+    comparison_workspace_json: str,
+    evidence_embed_html: str,
+) -> tuple[str, ...]:
+    """Reuse identical components across pages, with ordinary offline scripts."""
+    page = PurePosixPath(page_relative_html)
+    if page.suffix != ".html" or page.is_absolute() or ".." in page.parts:
+        raise ReportBPortalError(f"B 页面载荷路径无效：{page_relative_html}")
+    bodies = (
+        f"window.__FILTER_ROWS__ = {filter_rows_json};\n",
+        f"window.__CHART_GROUPS__ = {chart_groups_json};\n",
+        f"window.__B_COMPARISON_WORKSPACE__ = {comparison_workspace_json};\n",
+        _evidence_drawer_script_body(evidence_embed_html),
+    )
+    relatives: list[str] = []
+    for body in bodies:
+        raw = body.encode("utf-8")
+        digest = hashlib.sha256(raw).hexdigest()
+        relative = f"data/shared-payloads/{digest}.js"
+        target = site_root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            if target.is_symlink() or target.read_bytes() != raw:
+                raise ReportBPortalError("B 共享数据块内容冲突")
+        else:
+            target.write_bytes(raw)
+        relatives.append(relative)
+    return tuple(relatives)
+
+
+def _attach_b_page_payload(
+    site_root: Path,
+    context: dict[str, Any],
+    page_relative_html: str,
+) -> dict[str, Any]:
+    """Externalize large row/evidence JSON; keep only compact query metadata inline."""
+    payload_relatives = _write_b_page_payload(
+        site_root,
+        page_relative_html,
+        filter_rows_json=str(context["filter_rows_json"]),
+        chart_groups_json=str(context["chart_groups_json"]),
+        comparison_workspace_json=str(context["comparison_workspace_json"]),
+        evidence_embed_html=str(context["evidence_embed"]),
+    )
+    prefix = str(context.get("site_prefix") or "")
+    attached = dict(context)
+    attached["page_payload_hrefs"] = tuple(f"{prefix}{path}" for path in payload_relatives)
+    attached["filter_rows_json"] = "[]"
+    attached["chart_groups_json"] = "[]"
+    attached["comparison_workspace_json"] = "{}"
+    attached["evidence_embed"] = ""
+    return attached
+
+
 def _render_page_context(
     data: ReportBPortalData,
     *,
@@ -5095,6 +5172,9 @@ def _render_page_context(
     # 序列化边界复核：本页嵌入前逐条确认来源追溯合同（model_construct 不豁免）
     assert_evidence_views_serializable(views)
     chart_groups_json = _json(groups)
+    comparison_workspace = _comparison_workspace(
+        records, groups, tuple(study.id for study in data.all_studies),
+    )
     target_by_product = {product.id: product.target for product in data.products}
     filter_rows = _filter_dimensions(records, target_by_product)
     filter_groups = _filter_groups(filter_rows, names, trial_names, page_id=page_id)
@@ -5208,14 +5288,16 @@ def _render_page_context(
         "external_sources": _external_source_entries(data),
         "bubble_presets": tuple(item.model_dump(mode="json") for item in BUBBLE_PRESETS),
         "chart_groups_json": chart_groups_json,
-        "comparison_workspace_json": _json(_comparison_workspace(
-            records, groups, tuple(study.id for study in data.all_studies),
-        )),
+        "comparison_workspace_json": _json(comparison_workspace),
+        "comparison_query_inventory_json": _json(
+            _comparison_query_inventory(comparison_workspace)
+        ),
         "filter_rows_json": _json(filter_rows),
         "filter_groups": filter_groups,
         "essential_filter_dimensions": essential_filter_dimensions,
         "filter_dimensions_json": _json(tuple(_FILTER_DIMENSION_LABELS)),
         "evidence_embed": render_evidence_drawer_embed(views),
+        "page_payload_hrefs": (),
         "quick_filter_groups": quick_filter_groups,
         "evidence_host": render_evidence_drawer_host(),
         "filter_products": tuple({"id": p.id, "name": p.name} for p in data.products),
@@ -5677,18 +5759,22 @@ def render_report_b_site(
     generated: list[Path] = []
 
     for page in catalog.pages:
-        context = _render_page_context(
-            data,
-            page=page,
-            catalog=catalog,
-            names=names,
-            trial_names=trial_names,
-            efficacy=efficacy,
-            safety=safety,
-            scientific_groups=scientific_groups,
-            longitudinal_groups=longitudinal_groups,
-            publication_limitation_zh=publication_limitation_zh,
-            semantic_adjudications=data.semantic_adjudications,
+        context = _attach_b_page_payload(
+            site_root,
+            _render_page_context(
+                data,
+                page=page,
+                catalog=catalog,
+                names=names,
+                trial_names=trial_names,
+                efficacy=efficacy,
+                safety=safety,
+                scientific_groups=scientific_groups,
+                longitudinal_groups=longitudinal_groups,
+                publication_limitation_zh=publication_limitation_zh,
+                semantic_adjudications=data.semantic_adjudications,
+            ),
+            f"{page.id}.html",
         )
         context["current_revision"] = active_revision.revision if active_revision else 0
         context["identity_headers_html"] = render_identity_headers(identities)
@@ -5704,33 +5790,37 @@ def render_report_b_site(
 
     for product in data.products:
         records = tuple(item for item in detail_pool if item[0].get("product_id") == product.id)
-        context = _render_page_context(
-            data,
-            page=profile_page,
-            catalog=catalog,
-            names=names,
-            trial_names=trial_names,
-            efficacy=efficacy,
-            safety=safety,
-            scientific_groups=scientific_groups,
-            prefix="../",
-            current=profile_page.id,
-            semantic_adjudications=data.semantic_adjudications,
-            detail_records=records
-            or tuple(
-                item
-                for item in _synthetic_status_records(
-                    data,
-                    page_id=f"product-{product.id}",
-                    names=names,
-                    trial_names=trial_names,
-                    include_products=True,
-                )
-                if item[0].get("product_id") == product.id
+        context = _attach_b_page_payload(
+            site_root,
+            _render_page_context(
+                data,
+                page=profile_page,
+                catalog=catalog,
+                names=names,
+                trial_names=trial_names,
+                efficacy=efficacy,
+                safety=safety,
+                scientific_groups=scientific_groups,
+                prefix="../",
+                current=profile_page.id,
+                semantic_adjudications=data.semantic_adjudications,
+                detail_records=records
+                or tuple(
+                    item
+                    for item in _synthetic_status_records(
+                        data,
+                        page_id=f"product-{product.id}",
+                        names=names,
+                        trial_names=trial_names,
+                        include_products=True,
+                    )
+                    if item[0].get("product_id") == product.id
+                ),
+                detail_kind="product",
+                detail_id=product.id,
+                publication_limitation_zh=publication_limitation_zh,
             ),
-            detail_kind="product",
-            detail_id=product.id,
-            publication_limitation_zh=publication_limitation_zh,
+            f"products/{product.id}.html",
         )
         context["detail_product_obj"] = product
         context["identity_headers_html"] = render_identity_headers(
@@ -5768,32 +5858,36 @@ def render_report_b_site(
 
     for trial in data.all_studies:
         records = tuple(item for item in detail_pool if item[0].get("trial_id") == trial.id)
-        context = _render_page_context(
-            data,
-            page=profile_page,
-            catalog=catalog,
-            names=names,
-            trial_names=trial_names,
-            efficacy=efficacy,
-            safety=safety,
-            scientific_groups=scientific_groups,
-            prefix="../",
-            current=profile_page.id,
-            semantic_adjudications=data.semantic_adjudications,
-            detail_records=records
-            or tuple(
-                item
-                for item in _synthetic_status_records(
-                    data,
-                    page_id=f"trial-{trial.id}",
-                    names=names,
-                    trial_names=trial_names,
-                )
-                if item[0].get("trial_id") == trial.id
+        context = _attach_b_page_payload(
+            site_root,
+            _render_page_context(
+                data,
+                page=profile_page,
+                catalog=catalog,
+                names=names,
+                trial_names=trial_names,
+                efficacy=efficacy,
+                safety=safety,
+                scientific_groups=scientific_groups,
+                prefix="../",
+                current=profile_page.id,
+                semantic_adjudications=data.semantic_adjudications,
+                detail_records=records
+                or tuple(
+                    item
+                    for item in _synthetic_status_records(
+                        data,
+                        page_id=f"trial-{trial.id}",
+                        names=names,
+                        trial_names=trial_names,
+                    )
+                    if item[0].get("trial_id") == trial.id
+                ),
+                detail_kind="trial",
+                detail_id=trial.id,
+                publication_limitation_zh=publication_limitation_zh,
             ),
-            detail_kind="trial",
-            detail_id=trial.id,
-            publication_limitation_zh=publication_limitation_zh,
+            f"trials/{trial.id}.html",
         )
         context["detail_trial_product_obj"] = next(
             (product for product in data.products if product.id == trial.product_id), None,

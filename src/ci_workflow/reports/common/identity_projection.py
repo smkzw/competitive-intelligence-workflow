@@ -8,8 +8,9 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass, replace
-from datetime import datetime
+import re
+from dataclasses import dataclass, field, replace
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 from urllib.parse import urlsplit
@@ -22,12 +23,18 @@ from ci_workflow.capabilities.extraction_normalization import verify_reopened_fr
 from ci_workflow.capabilities.lineage_registry import ScientificLineageRegistry
 from ci_workflow.domain.entities import EntityGraph, EntityIdentity, EntityRelation, EntityType
 from ci_workflow.domain.evidence import ContentBlob
+from ci_workflow.sources.connectors.public_pdf_availability import (
+    PublicPdfAvailabilityWitness,
+    verify_public_pdf_availability,
+)
 from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
 from ci_workflow.storage.source_derivation import source_json_decoder
 
 
 def project_product_identity(
     entity_id: str, graph: EntityGraph, evidence: ScientificLineageRegistry, *, cutoff: datetime,
+    public_pdf_availability: dict[str, PublicPdfAvailabilityWitness] | None = None,
+    evidence_root: Path | None = None,
 ) -> dict[str, Any]:
     if cutoff.tzinfo is None or cutoff.utcoffset() is None:
         raise ValueError("身份投影截止时点必须包含时区")
@@ -36,21 +43,37 @@ def project_product_identity(
         raise ValueError("身份头必须引用药物、研发项目或方案")
     by_fragment = {item.fragment.fragment_id: item for item in evidence.verified_fragments}
     name_refs: set[str] = set()
+    witnesses = public_pdf_availability or {}
+    publicly_available: dict[str, bool] = {}
 
     def known(fragment_id: str) -> bool:
         item = by_fragment.get(fragment_id)
-        return item is not None and (
-            item.source_version.acquired_at <= cutoff
-            or item.source_version.published_at.is_known_by(cutoff)
-            or item.source_version.first_disclosed_at.is_known_by(cutoff)
-        )
+        if item is None:
+            return False
+        if fragment_id not in publicly_available:
+            witness = witnesses.get(fragment_id)
+            if witness is not None:
+                derivation = item.source_version.text_derivation
+                if evidence_root is None or derivation is None or not item.fragment.locator.url:
+                    raise ValueError("身份公开获取凭证缺少原始来源绑定")
+                # Always verify the receipt, even when a separate publication date exists.
+                # A past cutoff simply cannot use this later observation.
+                verify_public_pdf_availability(evidence_root, witness,
+                    item.fragment.locator.url, derivation.raw_asset, datetime.now(UTC))
+            publicly_available[fragment_id] = (
+                item.source_version.published_at.is_known_by(cutoff)
+                or item.source_version.first_disclosed_at.is_known_by(cutoff)
+                or (witness is not None and witness.observed_available_at <= cutoff)
+            )
+        return publicly_available[fragment_id]
 
     def display(entity: EntityIdentity) -> str:
         if (entity.official_chinese_name and entity.name_evidence_fragment_id
                 and known(entity.name_evidence_fragment_id)
-                and "".join(entity.official_chinese_name.split()) in "".join(
-                    by_fragment[entity.name_evidence_fragment_id].reopened_original_text.split()
-                )):
+                and re.search(r"(?<!\w)" + r"\s*".join(
+                    re.escape(char) for char in entity.official_chinese_name if not char.isspace()
+                ) + r"(?!\w)",
+                    by_fragment[entity.name_evidence_fragment_id].reopened_original_text)):
             name_refs.add(entity.name_evidence_fragment_id)
             return entity.official_chinese_name
         return entity.canonical_name
@@ -62,9 +85,7 @@ def project_product_identity(
             return "not_known_at_cutoff"
         if edge.observed_at is None:
             return "observation_date_unknown"
-        if edge.observed_at > cutoff and (
-            edge.effective_from is None or edge.effective_from > cutoff
-        ):
+        if edge.observed_at > cutoff:
             return "not_known_at_cutoff"
         if edge.effective_from is not None and edge.effective_from > cutoff:
             return "not_yet_effective"
@@ -181,6 +202,8 @@ def project_product_identity(
             "url": safe_url, "page": item.fragment.locator.page,
             "original_text": item.reopened_original_text,
             "acquired_at": item.source_version.acquired_at,
+            "observed_publicly_available_at": (
+                witnesses[ref].observed_available_at if ref in witnesses else None),
         })
     return {
         "entity_id": entity_id, "display_name": display_name,
@@ -201,6 +224,8 @@ class PortalIdentityContext:
     product_entity_ids: dict[str, str]
     graph_asset: ContentBlob | None = None
     context_digest: str | None = None
+    public_pdf_availability: dict[str, PublicPdfAvailabilityWitness] = field(default_factory=dict)
+    evidence_root: Path | None = None
 
     def _digest(self) -> str:
         payload = {
@@ -210,6 +235,8 @@ class PortalIdentityContext:
                           for _, value in sorted(self.graph.relations.items())],
             "evidence": self.evidence.model_dump(mode="json"),
             "product_entity_ids": self.product_entity_ids,
+            "public_pdf_availability": {key: value.model_dump(mode="json")
+                for key, value in sorted(self.public_pdf_availability.items())},
         }
         return hashlib.sha256(json.dumps(payload, ensure_ascii=False,
                                         sort_keys=True).encode()).hexdigest()
@@ -239,6 +266,7 @@ class PortalIdentityContext:
             raise ValueError("共同身份映射引用了报告外产品")
         headers = {product_id: project_product_identity(
             entity_id, self.graph, self.evidence, cutoff=cutoff,
+            public_pdf_availability=self.public_pdf_availability, evidence_root=self.evidence_root,
         ) for product_id, entity_id in self.product_entity_ids.items()}
         return cast(dict[str, Any], TypeAdapter(dict[str, Any]).dump_python(headers, mode="json"))
 
@@ -260,9 +288,19 @@ def load_identity_context(root: Path, graph_asset: dict[str, Any]) -> PortalIden
             fragment, reopened_original_text=fragment.original_text,
             source_version_id=fragment.source_version_id, repository=repository,
         ))
+    witnesses = {key: PublicPdfAvailabilityWitness.model_validate(value)
+                 for key, value in payload.get("public_pdf_availability", {}).items()}
+    by_fragment = {item.fragment.fragment_id: item for item in fragments}
+    for key, witness in witnesses.items():
+        item = by_fragment.get(key)
+        if (item is None or item.source_version.text_derivation is None
+                or not item.fragment.locator.url):
+            raise ValueError("身份公开获取凭证引用未知或无原始材料的片段")
+        verify_public_pdf_availability(root, witness, item.fragment.locator.url,
+            item.source_version.text_derivation.raw_asset, datetime.now(UTC))
     context = PortalIdentityContext(graph, ScientificLineageRegistry.from_verified_fragments(
         tuple(fragments),
-    ), payload["product_entity_ids"], asset)
+    ), payload["product_entity_ids"], asset, public_pdf_availability=witnesses, evidence_root=root)
     return replace(context, context_digest=context._digest())
 
 

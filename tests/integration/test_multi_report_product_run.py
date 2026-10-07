@@ -903,6 +903,15 @@ def test_manual_publication_pauses_only_affected_report_and_is_not_reprompted(
     assert validated_blocker.no_draft is True
     assert validated_blocker.resume_node == "recovery"
     assert blocker["reason"] == "required_publication_unavailable"
+    completed_a = insufficient_project / "reports/A/v1/html/overview.html"
+    completed_a_bytes = completed_a.read_bytes()
+    blocked_resume = run_project(
+        insufficient_project, resume=True, capability_probe=StaticCapabilityProbe(),
+    )
+    assert blocked_resume.outcome == "evidence_blocked"
+    assert completed_a.read_bytes() == completed_a_bytes
+    assert validate_run_manifest(insufficient_project)["run_id"] == blocked_resume.run_id
+    assert not (insufficient_project / "reports/B/v1/html").exists()
     b_transitions = [
         event.payload
         for event in EventStore(insufficient_project).read_all()
@@ -918,6 +927,8 @@ def test_manual_publication_pauses_only_affected_report_and_is_not_reprompted(
         / f"{validated_blocker.evidence_snapshot_id}.json"
     )
     bound_gate_path.write_bytes(bound_gate_path.read_bytes() + b" ")
+    with pytest.raises(ContractConfigError, match="漂移"):
+        run_project(insufficient_project, resume=True, capability_probe=StaticCapabilityProbe())
     with pytest.raises(BlockerAuditDriftError, match="补件门字节"):
         validate_existing_blocker_package(
             insufficient_project / "blockers/B/v1",

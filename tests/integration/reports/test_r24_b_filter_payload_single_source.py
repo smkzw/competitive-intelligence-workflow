@@ -25,9 +25,15 @@ def test_filter_lookup_preserves_dimensions_without_a_duplicate_literal(
     site = tmp_path / "site"
     render_report_b_site(ReportBPortalData.model_validate(payload), site)
     html = (site / "efficacy.html").read_text(encoding="utf-8")
-    match = re.search(r"<script>(window\.__SNAPSHOT_ID__.*?)</script>", html, re.S)
+    match = re.search(r"<script>\s*(window\.__SNAPSHOT_ID__.*?)</script>", html, re.S)
     assert match is not None
-    script = match.group(1)
+    references = re.findall(
+        r'<script src="([^"]*data/shared-payloads/[^"]+\.js)"></script>', html,
+    )
+    assert len(references) == 4
+    payloads = [(site / reference).resolve() for reference in references]
+    assert all(path.is_relative_to(site.resolve()) and path.is_file() for path in payloads)
+    script = "\n".join(path.read_text(encoding="utf-8") for path in payloads) + match.group(1)
     result = subprocess.run(
         ["node", "-e", (
             "var window={};" + script

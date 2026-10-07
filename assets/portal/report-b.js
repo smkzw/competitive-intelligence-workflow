@@ -17,6 +17,19 @@
   var comparisonQuestion = "";
   var comparisonPage = 1;
 
+  function requireSharedPagePayload() {
+    if (
+      !Array.isArray(window.__FILTER_ROWS__) ||
+      !Array.isArray(window.__CHART_GROUPS__) ||
+      !window.__B_COMPARISON_WORKSPACE__ ||
+      !Array.isArray(window.__EVIDENCE_VIEWS__)
+    ) {
+      throw new Error("B page payload script missing before report-b.js");
+    }
+  }
+
+  requireSharedPagePayload();
+
   function renderComparisonWorkspace(state) {
     var workspace = window.__B_COMPARISON_WORKSPACE__;
     var host = document.getElementById("full-study-comparison");

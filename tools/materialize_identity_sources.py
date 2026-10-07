@@ -16,9 +16,14 @@ from typing import Any
 
 from pypdf import PdfReader
 
+from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.domain.entities import EntityGraph, EntityIdentity, EntityRelation, EntityType
 from ci_workflow.domain.evidence import DateEvidence, EvidenceLocator
 from ci_workflow.reports.common.identity_projection import load_identity_context
+from ci_workflow.sources.connectors.public_pdf_availability import (
+    PublicPdfAvailabilityWitness,
+    verify_public_pdf_availability,
+)
 from ci_workflow.storage.content_store import ContentAddressedStore, EvidenceRepository
 from ci_workflow.storage.migrations import apply_migrations
 from ci_workflow.storage.source_derivation import (
@@ -62,11 +67,20 @@ def _graph(spec: dict[str, Any], refs: dict[str, str]) -> tuple[EntityGraph, dic
 
 def materialize(
     source_root: Path, source_set: Path, expected_sha: str, output: Path,
+    *, project_workspace: bool = False,
 ) -> dict[str, Any]:
     raw_spec = source_set.read_bytes()
-    if (output.exists() or output.is_symlink()
+    if (output.is_symlink() or (output.exists() and not project_workspace)
             or hashlib.sha256(raw_spec).hexdigest() != expected_sha):
         raise ValueError("Requires pinned source-set and fresh candidate output")
+    canonical = None
+    if project_workspace:
+        store = ContentAddressedStore(output)
+        canonical = store.resolve_relative("evidence/library/portal-identity-context.json")
+        checkpoint = store.resolve_relative("identity-checkpoint.json")
+        if canonical.exists() or checkpoint.exists():
+            raise ValueError("已有身份绑定或检查点；初次摄取不得覆盖，请使用版本化更新流程")
+        verify_project_workspace(output)
     spec = source_json_decoder().decode(raw_spec.decode("utf-8"))
     if spec.get("candidate_only") is not True:
         raise ValueError("Identity source replay cannot claim scientific acceptance")
@@ -88,16 +102,22 @@ def materialize(
         locator = EvidenceLocator(document_role="identity_source", page=page,
                                   paragraph=item["paragraph"], url=item["url"])
         quote = extract_locator_quote(text, media_type="application/pdf", locator=locator)
-        acquired = datetime.fromtimestamp(path.stat().st_mtime, UTC)
-        if acquired > datetime.now(UTC):
-            raise ValueError("Source local acquisition is in the future")
-        planned.append((item, raw, locator, quote, acquired))
+        acquired = datetime.now(UTC)
+        witness = (PublicPdfAvailabilityWitness.model_validate(item["public_pdf_availability"])
+                   if item.get("public_pdf_availability") is not None else None)
+        if witness is not None:
+            witnessed_raw = verify_public_pdf_availability(source_root, witness, item["url"],
+                witness.expected_raw_asset, acquired)
+            if witnessed_raw != raw:
+                raise ValueError("Identity public availability does not match the pinned PDF")
+        planned.append((item, raw, locator, quote, acquired, witness))
     _graph(spec, {key: key for key in keys})  # Validate all relationships before writing.
     apply_migrations(output / "state/project.sqlite")
     store = ContentAddressedStore(output)
     repository = EvidenceRepository(output / "state/project.sqlite", store)
     refs = {}
-    for item, raw, locator, quote, acquired in planned:
+    witnesses = {}
+    for item, raw, locator, quote, acquired, witness in planned:
         text, derivation = capture_pdf_page_text(output, raw, page=item["page"])
         unknown_date = DateEvidence(state="not_publicly_disclosed", value=None, locator=locator)
         source = repository.add_source_version(
@@ -108,20 +128,34 @@ def materialize(
         fragment = repository.add_fragment(source_version_id=source.source_version_id,
             locator=locator, original_text=quote, created_at=datetime.now(UTC))
         refs[item["key"]] = fragment.fragment_id
+        if witness is not None:
+            assert witness.receipt_asset is not None  # Already reopened and verified above.
+            copied = store.put_bytes(ContentAddressedStore(source_root).read_bytes(
+                witness.receipt_asset), media_type="application/json")
+            if copied != witness.receipt_asset or derivation.raw_asset != witness.raw_asset:
+                raise ValueError("Portable identity evidence changed during materialization")
+            witnesses[fragment.fragment_id] = witness.model_dump(mode="json")
     graph, product_ids = _graph(spec, refs)
     payload = {"entities": [e.model_dump(mode="json") for e in graph.entities.values()],
                "relations": [e.model_dump(mode="json") for e in graph.relations.values()],
-               "source_fragment_ids": sorted(refs.values()), "product_entity_ids": product_ids}
+               "source_fragment_ids": sorted(refs.values()), "product_entity_ids": product_ids,
+               "public_pdf_availability": witnesses}
     asset = store.put_bytes(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode(),
                             media_type="application/json")
     load_identity_context(output, asset.model_dump(mode="json"))  # Actual repository reopen.
     receipt = {"source_set_sha256": expected_sha, "graph_asset": asset.model_dump(mode="json"),
                "source_raw_sha256": sorted({item[0]["sha256"] for item in planned}),
                "source_fragments": len(refs), "science_accepted": False, "current_promoted": False,
-               "acquisition_timestamp_kind": "local_download_file_mtime_not_first_publication"}
-    (output / "identity-checkpoint.json").write_text(
-        json.dumps(receipt, ensure_ascii=False, indent=2),
-    )
+               "public_availability_witnesses": len(witnesses),
+               "acquisition_timestamp_kind": "source_import_clock_not_publication"}
+    with (output / "identity-checkpoint.json").open("x", encoding="utf-8") as stream:
+        json.dump(receipt, stream, ensure_ascii=False, indent=2)
+    if canonical is not None:
+        canonical.parent.mkdir(parents=True, exist_ok=True)
+        with canonical.open("x", encoding="utf-8") as stream:
+            json.dump({"schema_version": "portal-identity-context-1",
+                       "graph_asset": asset.model_dump(mode="json")}, stream,
+                      ensure_ascii=False, indent=2)
     return receipt
 
 
@@ -131,6 +165,9 @@ if __name__ == "__main__":
     parser.add_argument("--source-set", required=True, type=Path)
     parser.add_argument("--sha256", required=True)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--project-workspace", action="store_true",
+                        help="Initial identity install into a verified project; no overwrite")
     args = parser.parse_args()
-    print(json.dumps(materialize(args.source_root, args.source_set, args.sha256, args.output),
+    print(json.dumps(materialize(args.source_root, args.source_set, args.sha256, args.output,
+                                project_workspace=args.project_workspace),
                      ensure_ascii=False))

@@ -97,10 +97,15 @@
       return copy;
     });
   </script>
-  <script>window.__SNAPSHOT_ID__ = {{ snapshot_id | tojson }}; window.__ROW_SET_DIGEST__ = {{ row_set_digest | tojson }}; window.__FILTER_ROWS__ = {{ filter_rows_json | safe }};
+  <script>window.__B_COMPARISON_QUERY_INVENTORY__ = {{ comparison_query_inventory_json | safe }};</script>
+  {% for href in page_payload_hrefs %}<script src="{{ href }}"></script>
+  {% endfor %}
+  <script>
+    window.__SNAPSHOT_ID__ = {{ snapshot_id | tojson }};
+    window.__ROW_SET_DIGEST__ = {{ row_set_digest | tojson }};
     window.__B_ROW_DIMENSIONS__ = (function (rows) {
       var lookup = Object.create(null);
-      rows.forEach(function (row) {
+      (rows || []).forEach(function (row) {
         var dimensions = Object.create(null);
         Object.keys(row).forEach(function (key) {
           if (key !== "id") dimensions[key] = row[key];
@@ -109,10 +114,12 @@
       });
       return lookup;
     })(window.__FILTER_ROWS__);
-    window.__B_FILTER_DIMENSIONS__ = {{ filter_dimensions_json | safe }}; window.__B_PAGE_TITLE__ = {{ page_title | tojson }}; window.__B_PAGE_ID__ = {{ page_id | tojson }}; window.__B_SITE_PREFIX__ = {{ site_prefix | tojson }}; window.__B_EMPTY_STATE__ = {{ empty_state_title | tojson }};</script>
-  <script>window.__CHART_GROUPS__ = {{ chart_groups_json | safe }};</script>
-  <script>window.__B_COMPARISON_WORKSPACE__ = {{ comparison_workspace_json | safe }};</script>
-  {{ evidence_embed | safe }}
+    window.__B_FILTER_DIMENSIONS__ = {{ filter_dimensions_json | safe }};
+    window.__B_PAGE_TITLE__ = {{ page_title | tojson }};
+    window.__B_PAGE_ID__ = {{ page_id | tojson }};
+    window.__B_SITE_PREFIX__ = {{ site_prefix | tojson }};
+    window.__B_EMPTY_STATE__ = {{ empty_state_title | tojson }};
+  </script>
   <script src="{{ asset_prefix }}/portal.js"></script>
   <script src="{{ asset_prefix }}/echarts.min.js"></script>
   <script src="{{ asset_prefix }}/evidence-drawer.js"></script>

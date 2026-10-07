@@ -2,6 +2,46 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Current owner delta: real-source AB render terminal A49/B101 pages; B166496240
+bytes,404 component references/246 unique,25877799 exact duplicate bytes avoided.
+Real source QA clone operation terminal set/clear/restore/undo plus idempotence,
+legal shared A+B rebuilt4times; invalid184>183 rejects unchanged current. Original
+112 retained, hypothetical113 is not clinical correction. revision4 A/B/AB static
+share closure passed; original DB unchanged/no current; C review not promoted.
+C same-project16review pages/254consumers. v5 quality gate terminalexit0 sixsteps,
+strict276/active1136in1009.58s/retained20/layer7, all manifestsource hashes verified.
+Quality only, not science/browser/install/RC. Current PMC OA discovery retired per official
+Aug25 notice; use documented Cloud exact-PMC listing, not repeated old404.
+Continue bounded source/identity root after milestone; no ceremonial pause.
+
+Owner checkpoint10:37UTC: identityC03v2 terminal boundedACCEPT,14SHA verified;
+preflightFAIL mistaken dispatch/permission escalation/actor warning retained.
+New sameABC project identity install+guard; C uppercase registry productionRED
+repaired,74adjacentPASS,actual4studies254observations/60instances review-only.
+Shared adapters41PASS+1historicalPublicationFAIL,baseline766 direct callRED;
+actual manual-gate terminal binding+resume/tamper22PASS. B executionterminal
+509.489s selectorpi/cursor/default, actual modelunknown; owner true shared
+componentRED->42PASS. Current source AB render running; nofullgate/newbundle/
+browser/science/current promotion. Direct source work+bounded parallel executor
+chosen for separate write sets; conference used for interpretive date/identity
+boundary, not repeated per-label/full-page review. Continue, noauto-pause.
+
+Current delta 10:10 UTC: milestone7661717 pushed/remote verified. Source-public
+knowledge/future-observation/name-boundary repair93 adjacentPASS; delimiter
+worker terminal249.606s pi/cursor/default (underlying model unknown), owner
+two additional realRED then181 adjacentGREEN, policyv8. New bytes do not
+inherit v4 broad-gate/package acceptance. Identity C03 v2 same-session bounded
+review still pending,14 frozen paths held. Prompt preflight failed but owner
+erroneously dispatched; preserve that failure and do not claim compliant launch.
+Next dispatch must be gated on actual exit0. No polling/in-flight rewrite.
+Actual current CT.gov52 records,4 representative studies538 raw values;
+normal materialization4sources/450facts/378claims,14+10 A direct consumers,
+36 B precise safety source views, no science/current/browser promotion.
+Full source payload retained; representative scope is not universe truncation.
+Continue B/C real-source operation chain, then terminal review integration.
+Ego recovery and missing01-06 Ask remain open, only affected acceptance blocked.
+Following checkpoint paragraphs are earlier observations, not current status.
+
 Execution-plus-conference: owner holds shared comparison/identity contracts;
 one disjoint unit/arm display worker provides parallel implementation. Independent
 review is required for substantive medical equivalence/MAH attribution and final

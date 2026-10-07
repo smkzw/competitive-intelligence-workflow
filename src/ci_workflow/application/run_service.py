@@ -42,6 +42,7 @@ from ci_workflow.reports.common.identity_projection import (
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.storage.event_store import (
     EventStore,
+    EventStoreError,
     StoredWorkflowEvent,
     WorkflowEvent,
 )
@@ -480,8 +481,13 @@ def _check_resume_terminal(
             raise ContractConfigError(
                 f"报告 {kind_value} 的证据不足结论缺少当前研究包，无法安全恢复。"
             )
+        publication_digest = _publication_terminal_digest(
+            project_root, contract, kind_value, evidence_digest,
+        )
         last_gate = _last_completed_node(events, "gate", kind_value)
-        if ctx.universe_evidence is None and kind_value in {"B", "C"}:
+        if publication_digest is not None:
+            gate_digest = publication_digest
+        elif ctx.universe_evidence is None and kind_value in {"B", "C"}:
             if package_path is None or last_gate is None:
                 raise ContractConfigError("研究包门槛记录不完整，不能复用证据不足结论。")
             gate_digest = _restored_research_gate_digest(
@@ -492,7 +498,15 @@ def _check_resume_terminal(
             gate_digest = _compute_input_digest(
                 "gate", kind_value, contract.contract_version, extra=evidence_digest,
             )
-        if last_gate is None or str(last_gate["input_digest"]) != gate_digest:
+        recorded_digest = (
+            _last_terminal_decision_event(events, f"report_{kind_value}")
+            if publication_digest is not None else None
+        )
+        prior_digest = (
+            recorded_digest.payload.get("gate_input_digest") if recorded_digest is not None
+            else last_gate.get("input_digest") if last_gate is not None else None
+        )
+        if prior_digest != gate_digest:
             raise ContractConfigError(
                 "宇宙证据内容已变化，既有的「证据不足」结论不再适用。"
                 "请勿用 --resume 直接重跑；"
@@ -842,6 +856,39 @@ def _publication_limitation(ctx: RunContext, report_kind: str) -> str | None:
     return value if isinstance(value, str) and value.strip() else None
 
 
+def _identity_previously_bound(project_root: Path) -> bool:
+    """Read existing run records, not process memory or a new identity registry.
+
+    Only the prior requirement is recovered here. Source bytes are reopened by
+    the ordinary loader; changing other inputs must not require old output mtimes
+    to pass the full historical run gate before a new legitimate run can start.
+    """
+    events_path = project_root / "events/events.jsonl"
+    if events_path.is_symlink():
+        raise ValueError("身份来源运行记录不能为符号链接")
+    if events_path.is_file() and any(
+        event.event_type == MANIFEST_RECORDED_EVENT
+        and event.payload.get("identity_input_digest") is not None
+        for event in EventStore(project_root).read_all()
+    ):
+        return True
+    # Pre-marker manifests remain read-only compatible, never rewritten.
+    path = project_root / MANIFEST_RELATIVE_PATH
+    if path.is_symlink():
+        raise ValueError("身份来源运行清单不能为符号链接")
+    if not path.is_file():
+        return False
+    data = json.loads(path.read_bytes())
+    if not isinstance(data, dict) or not isinstance(data.get("input_hashes"), dict):
+        raise ValueError("身份来源运行清单无法验证")
+    digest = _sha256_bytes(_canonical_json({k: v for k, v in data.items()
+                                          if k != "manifest_digest"}))
+    if data.get("manifest_digest") != digest:
+        raise ValueError("身份来源运行清单摘要不匹配")
+    return (IDENTITY_INPUT_PATH in data["input_hashes"]
+            or data.get("identity_input_digest") is not None)
+
+
 def _project_identity(
     ctx: RunContext, product_ids: tuple[str, ...] | None = None,
 ) -> PortalIdentityContext | None:
@@ -853,7 +900,8 @@ def _project_identity(
     try:
         context = load_project_identity_context(ctx.project_root)
         if context is None:
-            if "portal-identity" in ctx.source_input_paths:
+            if ("portal-identity" in ctx.source_input_paths
+                    or _identity_previously_bound(ctx.project_root)):
                 raise ValueError("已绑定的身份来源输入丢失")
             return None
         path = ctx.project_root / IDENTITY_INPUT_PATH
@@ -866,7 +914,8 @@ def _project_identity(
                                           cutoff=ctx.data_cutoff),
         }))
         return context.for_products(product_ids) if product_ids is not None else context
-    except (ValueError, KeyError, OSError, sqlite3.DatabaseError, ContentIntegrityError) as error:
+    except (ValueError, KeyError, OSError, sqlite3.DatabaseError,
+            ContentIntegrityError, EventStoreError) as error:
         raise ContractConfigError(f"身份来源输入无法验证：{error}") from error
 
 
@@ -3796,6 +3845,45 @@ def _drive_blocker_write(
 # ─── Terminal decision reuse ───────────────────────────────────────────────
 
 
+def _publication_terminal_digest(
+    project_root: Path, contract: Any, report_kind: str, evidence_digest: str,
+) -> str | None:
+    """Bind publication exhaustion to its real gate, not an unexecuted results gate."""
+    from ci_workflow.gates.blocker_audit import (
+        BlockerAuditDriftError,
+        BlockerPackageIntegrityError,
+        PublicationUnavailableBlockerAudit,
+        validate_existing_blocker_package,
+    )
+
+    directory = project_root / "blockers" / report_kind / "v1"
+    path = directory / "audit.json"
+    if directory.is_symlink() or path.is_symlink():
+        raise ContractConfigError("Publication 终态审计路径不得为符号链接。")
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_bytes())
+        if not isinstance(payload, dict):
+            raise ValueError("阻断审计必须为对象")
+        if payload.get("blocker_kind") != "publication_unavailable":
+            return None
+        audit = validate_existing_blocker_package(
+            directory, project_id=contract.project_id,
+            report_kind=ReportKind(report_kind), report_version="v1",
+        )
+        if not isinstance(audit, PublicationUnavailableBlockerAudit):
+            raise ValueError("Publication 阻断类型不一致")
+        if audit.contract_version != str(contract.contract_version):
+            raise ValueError("Publication 阻断合同版本不一致")
+    except (OSError, ValueError, BlockerAuditDriftError, BlockerPackageIntegrityError) as error:
+        raise ContractConfigError("Publication 终态审计或补件门漂移，拒绝恢复。") from error
+    return _compute_input_digest(
+        "publication_manual_gate", report_kind, contract.contract_version,
+        extra=f"{evidence_digest}:{audit.audit_digest}:{audit.manual_gate_sha256}",
+    )
+
+
 def _append_terminal_decision_events(
     event_store: EventStore,
     project_root: Path,
@@ -3847,7 +3935,12 @@ def _append_terminal_decision_events(
             evidence_digest = _sha256_file(ctx.report_data_path)
         else:
             raise RunError("终态决策事件缺少当前证据引用")
-        if ctx.universe_evidence is None and kind_value in {"B", "C"}:
+        publication_digest = _publication_terminal_digest(
+            project_root, contract, kind_value, evidence_digest,
+        )
+        if publication_digest is not None:
+            gate_input_digest = publication_digest
+        elif ctx.universe_evidence is None and kind_value in {"B", "C"}:
             last_gate = _last_completed_node(stream, "gate", kind_value)
             if package_path is None or last_gate is None:
                 raise RunError("终态研究包门槛缺少版本绑定。")
@@ -4121,6 +4214,9 @@ def _finalize_run(
                 "input_hashes_digest": compute_input_hashes_digest(input_hashes),
                 "pre_record_event_stream_digest": pre_record_stream_digest,
                 "pre_record_event_count": pre_record_count,
+                **({"identity_input_digest": run_context.runtime_metadata["identity_input_digest"]}
+                   if run_context is not None
+                   and "identity_input_digest" in run_context.runtime_metadata else {}),
             },
         )
     )

@@ -1,0 +1,276 @@
+{
+  "contract": "1007V1-user-prompt",
+  "stage": "development-owner-milestone-3",
+  "parent_commit": "7661717b84ce62bdb76d09848b68d4023243f20f",
+  "commit_binding": "containing Git commit; changed bytes invalidate affected results",
+  "source_sha256": {
+    "assets/portal/manifest.json": "12393d2355073b09ca26b14ee0a7cef5216a09e76fe67e8a7a084450bc83b7b0",
+    "assets/portal/report-b.js": "8be7af5698b85a1a0d7ba80e4085c65f2bda514c7785340555764066fd7d38f7",
+    "src/ci_workflow/application/ctgov_c_design_projection.py": "a64f710e982bd609ac371c90aa8d2508b75322de3159083c6f6dc9d7b504909e",
+    "src/ci_workflow/application/run_service.py": "08666d8236c9a81aebb3bcde924d4fccbf5cfc53700edc13b6f3933866b82414",
+    "src/ci_workflow/application/share_export.py": "b96a73f5e34898c9643534cf52d5ece45cdc4a334286eb134d9c7bc203e6261c",
+    "src/ci_workflow/application/user_fact_edit.py": "c6b2aa334c8f291be173b45adb08ad61e744c090665f87ab08a5e90ce2c56bdf",
+    "src/ci_workflow/domain/entities.py": "03bc627fad36722bd347a7304e20a5f0b1a09a2b7c04a037b683fd0c4e24f9b6",
+    "src/ci_workflow/renderers/portal/assets/report-b.js": "8be7af5698b85a1a0d7ba80e4085c65f2bda514c7785340555764066fd7d38f7",
+    "src/ci_workflow/renderers/portal/report_a.py": "be566b18ff14604b11b70a0de2118a0a0dd5e1a41fdd0a3bb7aaec7273b2e7cc",
+    "src/ci_workflow/renderers/portal/report_b.py": "ebd51e5f7f4c9d19225163afa1b9594ce3c7d2e74c288bba94b863053a90f202",
+    "src/ci_workflow/renderers/portal/report_c.py": "c20002712c40c803db091899f79ea1cd455097b445229c6cd3aa15aa7261a915",
+    "src/ci_workflow/renderers/portal/templates/b/base.html.j2": "fcd35f9433ae9aed22fdc733ab935a11bf93b0e76fee327e440d0a43aafe93a0",
+    "src/ci_workflow/reports/b/semantic_contract.py": "3020a3a7b2286efea5ccd1431ab3b69494aecfbf55586716a7edbbfd062f8edd",
+    "src/ci_workflow/reports/b/semantic_grouping.py": "a0ac903571014fee5ecbf87da783a0c93950be6717d9c55bcf284f43b61f1bcb",
+    "src/ci_workflow/reports/common/identity_projection.py": "275f656a674996dc57b350a234606a326b50c5ecc91806736ecbdb21470a186d",
+    "src/ci_workflow/sources/connectors/public_pdf_availability.py": "3c61f9004b0d136a996309ecd8f3de7dd8d1b86f5b076140465869eff0ea2758",
+    "tools/build_a_payload.py": "8f673fb896243b0d88ea7e726f8e801a4db3985d6034aea74f0a8724e88fc469",
+    "tools/materialize_ctgov_c_candidate.py": "5b5d6aebb19a1087dd7f501130a628e23b5fde38bf4e6fa85d2e0f5a595d3b36",
+    "tools/materialize_identity_sources.py": "7ae56113d1fb7093aae5e50258264462465c51229d8a1f6b9877f1e5a2e8d023"
+  },
+  "evidence": [
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-ctgov-fetch-v1.json",
+      "sha256": "b05b0a83eea648424fdbb6d230a0321eaf48630ab441305d2e5b2317234c91b5",
+      "bytes": 3324975
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-four-study-materialize-v1.json",
+      "sha256": "8bb98259299f1032e585e984bf5452f6df947e3cd05c8cdcefc41660ecbae6b6",
+      "bytes": 107582
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-identity-install-v1.json",
+      "sha256": "1b305e84c4278cf8570c69ea2e99b1f5acb1c3d81fdedfb514dfbca13ce7911a",
+      "bytes": 691
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-ab-render-v2.json",
+      "sha256": "e912cca2a7ce9c4deb976843f435dc41aad705bf01d8756aa94f27c2380ceff8",
+      "bytes": 817
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-b-consumer-bindings-v1.json",
+      "sha256": "49b5d48a1b9017f5d19c242e8e95badcce51c745338ec77fed334d395c1d018d",
+      "bytes": 1267
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-real-current-chain-v1.jsonl",
+      "sha256": "3233b61cdc95031828f9934ae1e2f620608508dcf2568864591a18f65f5d57b0",
+      "bytes": 3692
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-nemolizumab-official-raw-v1.json",
+      "sha256": "c8e3d340c5bbafb1bf0684243d94bbee7eb006d26558040fc3b68a8e304631e4",
+      "bytes": 1087
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-publication-terminal-baseline-red-v1.txt",
+      "sha256": "7de5ae9a43e2eafe619d4e3f7c8096f381fcb69249d6c2b9f3885cb8f429d5f9",
+      "bytes": 1230
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-publication-terminal-green-v1.txt",
+      "sha256": "1f5309f5ed8228dca7b134bd99dcb0828943c5d9e1def6defd7b832aa9e2b197",
+      "bytes": 100
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-c-registry-case-red-v1.txt",
+      "sha256": "cc37106afbc8628ba93e1ea390e60460f236a5ff9ebb44d31bb9ea59b9c38dcc",
+      "bytes": 1309
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-c-registry-case-green-v1.txt",
+      "sha256": "72fd6f9be2f82329620359fcb2c6fd5b76bc999dc642f4897605a17af9a0e5cc",
+      "bytes": 180
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-c-source-v2.txt",
+      "sha256": "83423458f9406f1a827d3d273ec0cead070be0e32fa7a3381fa27720f3feeeda",
+      "bytes": 246
+    },
+    {
+      "path": "runs/execution/ci-1007-b-payload/owner-shared-components-red-v1.txt",
+      "sha256": "7efc6c4667c79ad10cb84e6f01526ac191debc84956d3b262355d60efd1abfa2",
+      "bytes": 1239
+    },
+    {
+      "path": "runs/execution/ci-1007-b-payload/owner-shared-components-green-v1.txt",
+      "sha256": "4275b5d7c446f8181bc460bc67621b2d5af059cf3c83383bbcd4b98c96c77e3a",
+      "bytes": 100
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-publication-current-cloud-v1.json",
+      "sha256": "8459f82fa97f0acf1c16ac870957eeaecd1d55f412978bd39e2b25a34c2e9d90",
+      "bytes": 1681
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-nemolizumab-official-raw-v2.json",
+      "sha256": "4540ce8b2483aba9a88cd99e9042844cb6d4bd8aa1a0be27e5d07a9a0eca08bb",
+      "bytes": 2121
+    }
+  ],
+  "checks": [
+    {
+      "id": "shared-B-component-family",
+      "passed": 42,
+      "seconds": 12.73,
+      "result": "PASS-bounded-Node-Python-not-browser"
+    },
+    {
+      "id": "C-registry-normalization",
+      "passed": 74,
+      "seconds": 40.52,
+      "result": "PASS-bounded"
+    },
+    {
+      "id": "publication-terminal-recovery",
+      "passed": 22,
+      "seconds": 18.53,
+      "result": "PASS-bounded-baseline-RED-preserved"
+    },
+    {
+      "id": "milestone-quality-v5",
+      "result": "PASS-quality-only-six-steps",
+      "command": "bash tools/gate.sh",
+      "scope": "Ruff src/tests/tools; strict mypy src/tools; active unit/contract; bounded retained compatibility; layering; old-path string checks (no old directory access)",
+      "strict_source_files": 276,
+      "active_passed": 1136,
+      "active_seconds": 1009.58,
+      "retained_passed": 20,
+      "retained_seconds": 1.09,
+      "layer_passed": 7,
+      "evidence": "runs/execution/ci-1007-display/owner-milestone-gate-v5.txt",
+      "evidence_sha256": "9a9bed6dcb8d178ea9c853076fcc2c798389136e77c7564e53a794aac7804bfc"
+    }
+  ],
+  "current_source_candidate": {
+    "project_id": "project_2e9fb92961f25d3f4f838ac8",
+    "root": ".artifacts/1007-pn-current-project-v1",
+    "source_records": 52,
+    "representative_studies": 4,
+    "raw_atoms": 538,
+    "materialized_facts": 450,
+    "claims": 378,
+    "A_direct_consumers": 24,
+    "B_same_atomic_consumers": 10,
+    "B_precise_source_views": 36,
+    "C_review_consumers": 254,
+    "C_design_observations": 254,
+    "C_endpoint_instances": 60,
+    "C_review_pages": 16,
+    "snapshot_sha256": "be809c7d3d0e543e218eb7a821ce5460add29c68ef2e54df77eb91a1aa1a3e2f",
+    "identity_graph_sha256": "e8d2627583c08194fddf123116f7cd5bfef4eabfc4166a41d2dff1bfa585e28d",
+    "A": {
+      "pages": 49,
+      "bytes": 57141260,
+      "site_sha256": "a5ebd6dac0450cf6990c910fc09dc01a5a8d91b4e63320342bc161b6be826537"
+    },
+    "B": {
+      "pages": 101,
+      "bytes": 166496240,
+      "html_bytes": 5048342,
+      "component_references": 404,
+      "unique_components": 246,
+      "stored_component_bytes": 153871754,
+      "same_input_duplicate_bytes_avoided": 25877799,
+      "site_sha256": "001caa71bb33b6ad0bb883ccdff9c34ecd3cdf2fac6c382999966761ce08b3f9"
+    },
+    "original_project_current": false,
+    "science_accepted": false,
+    "universe_closed": false,
+    "historical_input_compression_comparison": false
+  },
+  "real_source_QA_operation": {
+    "root": ".artifacts/1007-pn-operation-rehearsal-v1/project",
+    "original_count": 112,
+    "denominator": 183,
+    "hypothetical_QA_count": 113,
+    "clinical_correction": false,
+    "sequence": [
+      "invalid184reject_current_unchanged",
+      "set113",
+      "clear",
+      "restore113",
+      "undo_restore_to_clear"
+    ],
+    "revision": 4,
+    "A_B_rebuilt_per_valid_step": true,
+    "idempotence_verified": true,
+    "original_source_project_unchanged": true,
+    "C_current_promoted": false,
+    "shares": [
+      {
+        "reports": [
+          "A"
+        ],
+        "sha256": "c9b92a0fa9b9514b3533ae98299bec75a9bcfd8b3aed0adbd80a0616ca3ccc7d"
+      },
+      {
+        "reports": [
+          "B"
+        ],
+        "sha256": "3cdef50ddb52386a85b3ece78d015ca04766e7b3dc79ce69fb0bab878a2931ff"
+      },
+      {
+        "reports": [
+          "A",
+          "B"
+        ],
+        "sha256": "cacc2a4c8c65ae1348d97a6fa9f5bd5aaf524fef58c202ab186fd3f5e0db086a"
+      }
+    ],
+    "static_closure": true,
+    "browser_offline_open": "NOT_RUN"
+  },
+  "independent_review": {
+    "route": "grok/grok-build/grok-4.7:high",
+    "session": "9ef470ef-a86a-4854-96c8-0354adb5cf29",
+    "seconds": 948.338,
+    "result": "ACCEPT-bounded-14-frozen-files-only",
+    "report_sha256": "bd4cbd33a5411a0b376ab751b26cc4ae89b97ad964139e8214e3fa66e898b33a",
+    "newer_project_UI_code_included": false,
+    "limitations": [
+      "same-session bounded follow-up",
+      "prompt preflight failed but erroneously dispatched",
+      "executor permission escalation and terminal actor warning preserved"
+    ]
+  },
+  "PMC_recovery": {
+    "legacy_endpoint_result": 404,
+    "official_retirement_notice": "https://pmc.ncbi.nlm.nih.gov/tools/oa-service/",
+    "current_documentation": "https://pmc.ncbi.nlm.nih.gov/tools/pmcaws/",
+    "cloud_discovery": "terminal-HTTP200-not-truncated-no-distributable-PMC11840645-version; not paper absence",
+    "not_article_absence": true
+  },
+  "unresolved": [
+    "external1007_01_06_reference_cases_not_received",
+    "Ego_space12_NOT_FOUND_native_choice_pending",
+    "real_multi_drug_semantic_positive_not_accepted",
+    "whole_B_source_closure",
+    "current_MAH_group_status",
+    "required_publication_recovery",
+    "four_width_four_state_pixels_keyboard_NOT_RUN",
+    "new_browser_offline_NOT_RUN",
+    "current_new_bundle_three_hosts_24portals_recovery_RC_not_accepted"
+  ],
+  "release_accepted": false,
+  "test_sha256": {
+    "tests/integration/test_1007_b_payload_deduplication.py": "fb1c166e9fa5b78b930b8436e466186c33c3908f29160952290ea9d6080df967",
+    "tests/integration/test_1007_c_existing_project.py": "1a8d1abb98a0151928580d7549d24fe6685d22c2b10bb14c073fb43367a584f9",
+    "tests/integration/test_1007_identity_fresh_context.py": "c001c155a37f682d0dad1dbd96a93f6e393a64f1489382689fca029c30c4bbe5",
+    "tests/integration/test_1007_identity_public_knowledge.py": "6041ac09ab75c6104edc2215e35cf129461e22676f8ac9cda50a97bd476a392c",
+    "tests/integration/test_1007_identity_workspace_install.py": "220461d225582d3fa64bb67938679f0f8644f72b57c07592f8ba63dfac08a692",
+    "tests/reports/b/test_1007_semantic_delimiters.py": "a3deb23a15aa955cee92dd96c4e60aca252c597ecd4399918ed215ca45bce9fb",
+    "tests/integration/test_multi_report_product_run.py": "c350712fff01ff4add8cfa025b58d1b980bcfc5f0aee96ea24f7d31efcfd98fa",
+    "tests/integration/reports/test_b_report_portal.py": "c5c959f38b56461784dcdb692161bad7cc7ca74c43989187509334d80c6a8457",
+    "tests/integration/reports/test_r24_b_filter_payload_single_source.py": "ada134cb8e2b66e0c459fb6a6d1c33c7874efe51fdee57499cc64169b250bf69"
+  },
+  "official_nemolizumab_raw": {
+    "root": ".artifacts/1007-nemolizumab-official-source-v1",
+    "FDA_license_letter_sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+    "FDA_pages": 7,
+    "Galderma_2025_financial_sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+    "Galderma_pages": 146,
+    "science_adopted": false,
+    "China_approval": "unresolved",
+    "first_publication": "not_inferred_from_GET",
+    "old_failed_receipt_preserved": true
+  }
+}
