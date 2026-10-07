@@ -45,6 +45,12 @@ def rendered(tmp_path: Path):
         disclosure_state="用户清除，待重新核实",
     )
     payload["safety"][1].update(value=0.0, unit="人", numerator=0, denominator=60)
+    payload["efficacy"][0].update(
+        value=None, numerator=None, denominator=None, disclosure_state="user_cleared",
+    )
+    payload["efficacy"][1].update(
+        value=None, numerator=None, denominator=None, disclosure_state="not_reported",
+    )
     data = ReportAPortalData.model_validate(payload)
     render_report_a_site(data, tmp_path)
     html = (tmp_path / "safety.html").read_text()
@@ -78,3 +84,34 @@ def test_whole_number_display_preserves_explicit_zero_and_original_float(rendere
     assert data.safety[1].value == 0.0
     assert isinstance(data.safety[1].value, float)
     assert "0/60人" in texts
+
+
+@pytest.mark.parametrize("collection,page", [
+    ("safety", "safety.html"), ("efficacy", "efficacy.html"),
+    ("safety", "product"), ("efficacy", "product"),
+])
+def test_cleared_current_value_is_consistent_in_summary_and_product_detail(
+    rendered, tmp_path: Path, collection: str, page: str,
+) -> None:
+    data, _, _ = rendered
+    row = getattr(data, collection)[0]
+    relative = f"products/{row.product_id}.html" if page == "product" else page
+    parser = _ViewParser()
+    parser.feed((tmp_path / relative).read_text())
+    assert row.row_id in parser.rows
+    text = " ".join(parser.rows[row.row_id])
+    assert "用户清除，待重新核实" in text
+    assert "None" not in text and "未公开" not in text
+
+
+def test_unknown_source_value_is_not_user_clear_and_keeps_its_source_state(
+    rendered, tmp_path: Path,
+) -> None:
+    data, _, _ = rendered
+    row = data.efficacy[1]
+    for relative in ("efficacy.html", f"products/{row.product_id}.html"):
+        parser = _ViewParser()
+        parser.feed((tmp_path / relative).read_text())
+        text = " ".join(parser.rows[row.row_id])
+        assert "来源未列示" in text
+        assert "None" not in text and "用户清除" not in text

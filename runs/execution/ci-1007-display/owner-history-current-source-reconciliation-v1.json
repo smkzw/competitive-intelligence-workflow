@@ -1,0 +1,46 @@
+{
+  "kind": "1007-frozen-history-current-ingestion-reconciliation-1",
+  "scope": "fixed September26 capture under current code, not fresh October7 source or clinical acceptance",
+  "historical": {
+    "fact_version_id": "fact-version_fc4fd5ad5d1c3bafae8a3055",
+    "content_sha256": "9ed41dfbb0eb520b7ce16c31d55f4047f06f1f8f1608571c071416d4aa5ef568",
+    "raw_value": "92.2",
+    "source_version_id": "source-version_73c373185062ea7054e135c8",
+    "acquired_at": "2026-09-26T10:00:00+00:00",
+    "source_locator": {
+      "column": null,
+      "document_role": "clinical_trial_registry",
+      "field_path": "$.protocolSection.identificationModule.nctId",
+      "heading": null,
+      "page": null,
+      "paragraph": null,
+      "row": null,
+      "table": null,
+      "url": "https://clinicaltrials.gov/study/NCT04820530"
+    }
+  },
+  "current_ingestion": {
+    "fact_version_id": "fact-version_3bc8cde0f114027e85562b82",
+    "content_sha256": "9ed41dfbb0eb520b7ce16c31d55f4047f06f1f8f1608571c071416d4aa5ef568",
+    "raw_value": "92.2",
+    "source_version_id": "source-version_75d51dbae6a6f36d89635089",
+    "acquired_at": "2026-09-26T10:05:00+00:00",
+    "source_locator": {
+      "column": null,
+      "document_role": "clinical_trial_registry",
+      "field_path": "$.protocolSection.statusModule.lastUpdatePostDateStruct.date",
+      "heading": null,
+      "page": null,
+      "paragraph": null,
+      "row": null,
+      "table": null,
+      "url": "https://clinicaltrials.gov/study/NCT04820530"
+    }
+  },
+  "science_equal": true,
+  "old_source_database_sha256": "74330a821f722f22f56174b859cf098f289c6b1bd1f2307789f93e16db56d030",
+  "old_user_current_database_sha256": "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1",
+  "historic_hashes_updated": false,
+  "test_result": "1 passed in50.57s; immutable historical contract and pinned three-way neighbor2passed86.02s",
+  "cause": "new observation10:05 versus historical10:00 and corrected lastUpdate source-date locator, not clinical value/context drift"
+}

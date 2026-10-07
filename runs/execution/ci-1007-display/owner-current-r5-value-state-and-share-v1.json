@@ -1,0 +1,71 @@
+{
+  "status": "isolated_current_r5_clear_all_surface_and_static_share_verified_not_browser_or_science",
+  "revision": 5,
+  "request_id": "1007-value-state-current-r5",
+  "current_bundle_sha256": "d3fce3e39c0465ee652eeb34a2bd870267cf0f91dc028f8aba1c6da79d90454f",
+  "sites": {
+    "A": {
+      "site": ".artifacts/1007-pn-source-v3-operation-v2/project/reports/A/v1-user-r5/html",
+      "file_map_sha256": "d78f30087599fd97be8579a3354c9e9ce457bcd58f8344a73a80b0bed529fedd",
+      "html_value_state_checked": [
+        "safety.html",
+        "products/dupilumab-sar231893.html"
+      ],
+      "identity_binding_sha256": "dff9ae2145329c2733acea07403ce2c404d7459f5416d4ffe35e63e1915e3914"
+    },
+    "B": {
+      "site": ".artifacts/1007-pn-source-v3-operation-v2/project/reports/B/v1-user-r5/html",
+      "file_map_sha256": "df1b5166a93f08c36a87796c4f72846c7641757b8c2b388b120d33a645d8ae60",
+      "html_value_state_checked": [],
+      "identity_binding_sha256": "dff9ae2145329c2733acea07403ce2c404d7459f5416d4ffe35e63e1915e3914"
+    }
+  },
+  "shares": [
+    {
+      "reports": [
+        "A"
+      ],
+      "sha256": "33c85203115bcf5b382d096ac152155287c3b80f69736ff4dbb0acab8ea14154",
+      "path": "share-A.zip",
+      "revision": 5
+    },
+    {
+      "reports": [
+        "B"
+      ],
+      "sha256": "1a400f3d68f6205509d7257f87337438783ae033c4985c437e2bc184698c11d0",
+      "path": "share-B.zip",
+      "revision": 5
+    },
+    {
+      "reports": [
+        "A",
+        "B"
+      ],
+      "sha256": "a9d6e09782d57dd2743b8408ce6d9c4a528c1e40ef9ba8e5b6bbfd0e35958d15",
+      "path": "share-A-B.zip",
+      "revision": 5
+    }
+  ],
+  "source_unchanged": true,
+  "old_r4_zips_and_failure_unchanged": true,
+  "saves_in_recovery": 0,
+  "elapsed_seconds": 19.285,
+  "scope": "one new save completed in v1 probe; v1 metadata field assumption failed after commit; this recovery does not repeat save; C and new-browser offline NOT_RUN",
+  "kind": "1007-current-value-state-rebuild-1",
+  "current_is_release": false,
+  "generation_source_sha256": {
+    "src/ci_workflow/reports/b/semantic_grouping.py": "8c2f3a34d8822eee678c122c0e112a19660cb99fe2ef888af359a94dbf3ea5e8",
+    "src/ci_workflow/renderers/portal/templates/a/_macros.html.j2": "469177e439c2c3ed643a73883470967bcd80c9622ef82e72e146e8c7d0b023de",
+    "src/ci_workflow/renderers/portal/templates/a/product.html.j2": "bcaade2b0a442842db7203038924773f586193f5a542cb0c78f56a46cdf60a6d",
+    "src/ci_workflow/renderers/portal/templates/a/safety.html.j2": "64e1e6e85f7066eee23e73f44dcc44ad054c9f97665f2a176166fd0535c48287",
+    "src/ci_workflow/renderers/portal/templates/a/efficacy.html.j2": "c3fec4978a6be4b31832b49c8c347a09dbd130e65402df1dcbf7bd95811df5be",
+    "src/ci_workflow/renderers/portal/report_b.py": "ebd51e5f7f4c9d19225163afa1b9594ce3c7d2e74c288bba94b863053a90f202"
+  },
+  "later_source_change": "Supporting descriptive route repair occurred after r5; its 1007 current-page acceptance is not inherited by r5 or its share.",
+  "actual_failed_owner_probe": {
+    "path": "runs/execution/ci-1007-display/owner-current-r5-clear-and-share-v1.txt",
+    "sha256": "d59558206064db1040f545c4ac81bb1491c03dce50796d0e247bd0e0599f27f0",
+    "cause": "Owner metadata probe assumed nonexistent CurrentReportDelivery.site_sha256 after successful save; recovered without another save."
+  }
+}

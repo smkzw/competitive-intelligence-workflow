@@ -10,6 +10,7 @@ import pytest
 from ci_workflow.application.ctgov_b_result_views import project_unassigned_ctgov_results
 from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.renderers.portal.report_b import ReportBPortalData, render_report_b_site
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 from tests.integration.reports.test_r24_b_related_study_catalog import _payload, _study
 from tests.integration.test_r24_b_unassigned_source_results import _source
 
@@ -36,10 +37,16 @@ def test_source_only_b_uses_ordinary_renderer_without_fake_product(tmp_path: Pat
     render_report_b_site(data, site, publication_limitation_zh='固定原源开发候选，尚未独立复核。')
     overview = (site / 'overview.html').read_text()
     assert '1 项研究' in overview and '不能据此认定竞品检索已完整' in overview
-    page = (site / 'efficacy.html').read_text()
-    assert 'group_product_relationship_unresolved' in page
+    groups = _page_json_assignment(site, 'efficacy.html', '__CHART_GROUPS__')
+    rows = {row['row_id']: row for group in groups for row in group['rows']}
+    evidence = {view['row']['row_id']: view for view in
+                _page_json_assignment(site, 'efficacy.html', '__EVIDENCE_VIEWS__')}
     for row in _pool_payload()['efficacy_views']['facts']:
-        assert row['row_id'] in page and row['source_version_id'] in page
+        assert rows[row['row_id']]['numeric_projection']['unrenderable_reason'] == (
+            'group_product_relationship_unresolved'
+        )
+        assert evidence[row['row_id']]['source_version_id'] == row['source_version_id']
+        assert evidence[row['row_id']]['original_text'] == row['source_text']
     assert (site / 'trials/nct00001999.html').exists()
     assert not list((site / 'products').glob('*.html'))
     offline = (site / 'data/report.js').read_text()

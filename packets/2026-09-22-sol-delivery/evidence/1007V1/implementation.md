@@ -1,5 +1,78 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 里程碑5：真实r5及相邻根因，非发布
+
+精简机器清单owner-milestone-v5.json绑定本批生产/测试及本地日志SHA。
+真实r5清除总表/产品明细一致，原值2与来源保留，A/B/AB静态分享完成。
+首探针用不存在的site_sha256属性FAIL；save已成功，直接从committed
+r5恢复导出，不重复save。原失败日志、r4站点/ZIP不改；新B支持性修复
+晚于r5，不继承r5版本接受。
+
+语义复用执行实际CodeBuddy/deepseek-v4.1-flash:max，731.189s/73tools/exit0。
+owner134相关PASS2.05s、768冻结9e对照零差异，Ruff/strict通过。完整上下文、
+审批/否决、来源域和原点身份作为单次缓存键；不全局缓存、不放宽时间窗/
+分母/等价守卫。worker66,720差分为worker证据，owner另跑768，不混计。
+
+支持性结果整族四旧失败中，一项是真实同源同测量拆散；三项为内联数据
+读取合同过时。保留1FAIL/7PASS真正RED，支持性来源同研究/同测量描述
+并列，未知测量与不同域保持隔离；全部原值/原文/locator/glyph断言迁移
+到实际离线共享资产。中间reason键猜错和row_id层级错的失败保留，阅读
+生产定义后用unrenderable_reason与row.row_id，不通过弱化断言救测试。
+最终100相关PASS3.14s；支持性描述不宣布临床等价。
+
+历史fc4版本科学内容与新3bc版本SHA9ed41df…f568完全一致，但新获取时点/
+日期定位产生不同来源版本；旧数据库74330a…d030与fd9ad8…bca1字节保持。
+冻结合同从project.yaml读取，SQLite immutable只读，不触发迁移。当前
+fanout1PASS50.57s，历史纯读/三方邻接2PASS86.02s。旧AD7PASS/2旧内联
+FAIL3174.28s保留，新整模块另验；CPU重复计算不能凭慢就归因环境。
+
+v7里程碑一次宽门实际六步quality-only通过：Ruff全src/tests/tools，strict276，
+active1136/387.17s、兼容20、分层7、旧路径字符串检查。之后仅历史测试
+纯读合同修正，相关2PASS和Ruff通过，不每行重跑全仓。质量门不证明
+医学/实屏/安装/终验。四研究baseline来源会商另行新上下文已派发；
+Ego12仍NOT_FOUND，全部实屏门NOT_RUN，不借旧图或换浏览器通过。
+
+复盘：来源事实、当前编辑层、显示状态、分享筛选、版本身份须各自核验；
+真实save成功后的辅助探针失败不应重做事务。过时测试必须替换实现读取
+路径而保留行为断言；真实生产缺陷不能混成“旧测试”。大邻接按根因计量，
+只在里程碑宽验，pending会商不当PASS。持续实施，无清理或新暂停。
+
+## 本次source-v3操作闭合与全消费面状态纠漏
+
+9e438004已实际push/origin同HEAD。E03worker终态2506.319s/exit0、124tools，
+模型CodeBuddy/deepseek-v4.1-flash:max，无fallback。owner发现五真实边界漏洞
+及未校验ProjectContract，完整最小修复复用既有布局，最终41PASS/22.55s及
+strict/Ruff。worker首次readonly SQLite仍创建源0B WAL/32KB SHM，保留已知
+事件，不能宣称源目录完全未改；主8235ddeb…及来源输入/快照不改。
+
+隔离副本真实四次A+B保存/clear/restore/undo及幂等、非法人数回滚完成。
+分享失败是演练用一个ID套两种不同facet合同；不降低合法筛选值校验。
+5真实行为RED后按当前A正式名/B稳定ID选择，同一科学product不变，23邻接
+PASS/23.14s和strict/Ruff。原失败receiptSHA18101a46…9d47保留；同r4直接
+恢复A/B/AB静态ZIP，零新save，DB/输入/快照/身份/journal/current再次核不变。
+第一次恢复探针JSON列表与tuple比较失败，源哈希未漂移、未执行导出；转回
+精确同类型后通过，不改旧回执。恢复回执单独owner-source-v3-share-recovery-v1.json。
+
+复盘没有止于数值JSON通过：实际生成的产品明细显示用户清除为“未公开”，
+同族疗效None也直接露出。4有效RED/4已有PASS，A共用current_value宏消费
+当前披露状态，summary/details同原子ID一致；零保持零，未知不伪清除。
+四模板/既有测试最小修复后26相关PASS/14.55s。既有原来源/数值字节未改。
+旧r4 HTML/分享不改；下一新current重建单独接受，不挪用旧export的PASS。
+
+旧B四内联读取失败被实际共享离线资产读取替代，内容/估计不重算/数值/原始
+证据断言均保留。第一次新批67PASS/1剩余原HTML可见字符串FAIL，记录后补
+精确引用的用户状态/current/original/glyph断言；合批68PASS/129.22s及Ruff
+通过。真正目视待Ego。历史fanout事实ID差异另查：原值/科学内容SHA完全
+相同，真实获取时间及来源日期定位不同，应分开历史与本次版本验证，不
+更新历史SHA或通过当前迁移器打开旧库。
+大AD来源观察17,008条，邻接进程实际CPU计算，不能凭worker被SIGTERM就归因
+环境。执行-plus-direct：一有界E03拥有旧语义分组/一新测试，owner持共享合同，
+单次确定性计算复用而非规则放宽；不轮询模型，不无限多页会商。
+
+Goal实核现blocked，现有API不能恢复；不造新Goal或冒充active/complete，用户
+本条授权普通连续实施不受工具状态障碍阻塞。无清理、无用户旧目录接触，
+未知资料/五历史脏文件/原失败均保留；PUBLIC仓只递交精简证据与SHA指针。
+
 ## 第四里程碑递交后：新源保存接入及Nemolizumab身份来源
 
 最新本根终态：身份C03初次实际323.887s/exit0，86独立测试2.61s及PDF/CAS

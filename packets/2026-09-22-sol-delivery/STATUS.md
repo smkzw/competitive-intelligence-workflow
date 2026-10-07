@@ -1,16 +1,74 @@
 # 唯一当前状态：1007V1 连续实施
 
-用户2026-10-07解除暂停并授权构建、阶段GitHub递交；Goal实核active。启动基线ef6b23d，最近实核已推送7d6e82a3e5a60d796b506fd709a8a9b237dda5e2；[v4清单](evidence/1007V1/owner-milestone-v4.json)绑定。新在途字节不继承旧包/门/截图。
+用户2026-10-07解除暂停并授权构建、阶段GitHub递交；最新Goal API实核blocked，无恢复接口，保留真实状态但继续普通授权实施。启动基线ef6b23d，最近实核已推送9e438004b23b6db656a72d9b43b6dbd002642adf；[v4清单](evidence/1007V1/owner-milestone-v4.json)仅绑定更早7d6e82a。新在途字节不继承旧包/门/截图。
+
+## 当前里程碑5：实际r5、语义复用与支持性来源收口
+
+包含[evidence/1007V1/owner-milestone-v5.json](evidence/1007V1/owner-milestone-v5.json)
+的提交绑定本批源码和实际结果；父HEAD为9e438004。下面较早r4/PENDING
+表述均为历史范围，不覆盖本节。
+
+- 实际committed r5重新生成A总表与产品明细：清除显示“用户清除，待重新核实”，
+  原值2可查；同版本A/B/AB静态ZIP导出，current/来源输入/快照/身份未漂移。
+  首次owner探针错读元数据字段导致命令FAIL，但save已成功；从committed
+  r5恢复导出，没有重复save。浏览器/C/科学接受不由静态导出推出。
+- 语义E03终态实际codebuddy/codebuddy-cli/deepseek-v4.1-flash:max，731.189s，
+  exit0，无fallback。owner134相关PASS/2.05s、冻结9e与当前768反例零差异、
+  Ruff/strict通过；只复用单调用完整上下文计算，不放宽科学门。全AD性能另验。
+- 支持性同源同测量并列：旧1FAIL/7PASS留存；最小生产修复与离线资产测试
+  迁移后100相关PASS/3.14s。未知测量保持独立，描述性并列不冒充临床等价。
+  此修复晚于r5，r5站点/分享不能继承当前B修复接受。
+- 历史与当前来源版本科学内容SHA相同，但获取时点/精确定位不同；不改
+  历史事实SHA、不经迁移器打开冻结DB。fanout1PASS/50.57s；历史纯读与
+  三方邻接2PASS/86.02s。旧AD整模块52分54秒7PASS/2旧内联FAIL保留；
+  新字节整模块另行在途，不记环境故障或已通过。
+- v7六步quality-only实际exit0：Ruff(src/tests/tools)、strict276(src/tools)、
+  活跃1136/387.17s、保留兼容20、分层7、旧路径字符串规则。门后仅历史
+  测试合同改纯读取，2相关PASS及测试Ruff通过；不是全integration/科学/
+  浏览器/安装/发布门。
+- 独立C03四研究baseline原源会商预检exit0并实际派发，终态前不接受。
+  下一有界实现是精确原子摄取与既有BaselineObservation共同描述列；
+  Total不作治疗组，不按数组猜臂，不将计数换成估计比例。
+- Ego空间12再次实际NOT_FOUND；既有恢复Ask与1007附件Ask待答。
+  四宽四态/L1L2/键盘/新浏览器离线NOT_RUN。完整宇宙、实际同current
+  ABC全旅程、三宿主/24门户/RC仍未通过；继续普通授权实施，不阶段暂停。
+
+## 此前真实操作及展示修复（历史范围）
+
+- E03源replay已终态CodeBuddy/deepseek-v4.1-flash:max2506.319s/exit0，
+  owner边界/合同反例收口41PASS/22.55s及Ruff/strict。工作副本复制29MB
+  必需材料而非旧站点。源DB8235ddeb…不改；worker初次readonly打开确实
+  新建0B WAL/32KB SHM，已披露留存，不声称源目录零变化。
+- 本次v3真源副本四save实际A+B重建，非法人数拒绝、current不切、重试幂等。
+  分享初次失败：演练把产品ID传给A正式药名facet；不是放宽来源/分享守卫。
+  五行为RED→23相关PASS/23.14s；Ruff/strict通过。直接从committed r4
+  导出A/B/AB三ZIP，没有重做四次save；原失败SHA18101a46…9d47保留。
+  [恢复](../../runs/execution/ci-1007-display/owner-source-v3-share-recovery-v1.json)
+  绑定current不变、源输入/快照/身份/DB/已知journal不变，只是静态导出。
+- 随后实际r4产品详情仍把清除显示未公开（疗效亦会显示None）。统一A
+  当前值组件，明确user-cleared/来源未列示/零/数值；四有效RED→26相关
+  PASS/14.55s。旧r4站点和三ZIP未改且不接受为新显示版本，实际新current
+  重建/分享尚待；不是浏览器或科学接受。
+- B共享数据外置后四历史内联断言迁移，实际科学原值/派生/编辑/来源断言
+  保留。首批67PASS/1旧HTML断言FAIL，合批修后68PASS/129.22s及Ruff
+  通过；旧失败留存，不掩盖。历史固定事实ID的邻接另行分开旧/新来源
+  版本：科学材料相同，实际获取时间/日期定位不同，不改历史SHA。
+  大AD邻接仍在处理6,780疗效+10,228安全观察，process sample只证明实际
+  重复模型计算，不证明环境杀进程原因。另E03只负责单次语义确定性复用，
+  不放宽任何科学门或另建框架，终态与owner核验前不接受。
+- Ego空间12恢复Ask/原1007附件Ask仍待；四宽四态/L1L2/键盘/新浏览器
+  离线NOT_RUN。真正多药正例、完整来源/宇宙、ABC同current、三宿主24
+  门户及RC仍未完成，不以技术局部绿灯代表最终交付。
 
 随后本次有界身份来源关闭按包含[机器清单](evidence/1007V1/owner-identity-source-close-v1.json)
 的提交绑定，七模块最终真实88PASS及两源strict/Ruff，不是新全仓/里程碑门；
-下一完整replay里程碑再跑一次宽门。不将仍PENDING的replay文件混入身份关闭。
+下一完整replay/展示里程碑再跑一次宽门。先前PENDING的replay不在该身份提交，现已另行owner整合。
 
 本包规范+用户1007V1主指令为合同。01–06/reference/cases.json未取得，原生Ask待答；不阻断明确修复，D1/D2不重问。唯一英文根，旧中文根零接触；五历史脏修改与未知/raw资料保留。
 
 ## 实际实现及边界
 
-### 当前并行：本次源保存演练接入与第二药物身份来源
+### 此前源保存演练接入与第二药物身份来源（历史范围）
 
 - E03 `ci-1007-source-replay-code`执行PENDING，只有既有replay工具/单测试文件
   允许写；owner持有共享合同。E02误初始化未派发，正确E03单独初始化并实际

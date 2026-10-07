@@ -4,32 +4,33 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
 
 from ci_workflow.application.portal_consumer_registry import register_b_shared_source_consumers
-from ci_workflow.application.project_service import (
-    create_project_workspace,
-    verify_project_workspace,
-)
+from ci_workflow.application.project_service import create_project_workspace
 from ci_workflow.application.user_fact_edit import (
     FactEdit,
     FactTargetIdentity,
     UserFactEditService,
     UserFactSaveCommand,
 )
+from ci_workflow.domain.contracts import ProjectContract
 from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_report_a_site
 from ci_workflow.renderers.portal.report_b import render_report_b_site
 from ci_workflow.storage.snapshot_store import LockedSnapshot
 from ci_workflow.storage.sqlite import open_database
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 from tests.integration.test_w04_source_consumer_registry import _b_direct_source_view
 from tools.materialize_ctgov_a_candidate import materialize
 
 ROW_ID = "eff-9f54cd0202c1f000619a"
 SOURCE_VERSION = "fact-version_fc4fd5ad5d1c3bafae8a3055"
 OLD_CURRENT_SHA256 = "fd9ad81d4d7122dbfd3f1c15af75b5c0800ff2ca2de44aca58c0e906b6f5bca1"
+HISTORICAL_SOURCE_SHA256 = "74330a821f722f22f56174b859cf098f289c6b1bd1f2307789f93e16db56d030"
 AT = datetime(2026, 9, 26, 10, 5, tzinfo=UTC)
 
 
@@ -39,14 +40,32 @@ def test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project
     repo = Path(__file__).resolve().parents[2]
     source = repo / ".artifacts/r24-pnh-current-ctgov-20260926"
     old = repo / ".artifacts/r24-pnh-real-ab-20260926"
+    historical_db = repo / ".artifacts/r24-pnh-refresh-slice-20260926/state/project.sqlite"
     payload = source / "report-a-ctgov-20260926-sponsor-separate-v5.json"
     sidecar = source / "report-a-ctgov-20260926-sponsor-separate-v5.derivation.json"
-    if not all(path.exists() for path in (payload, sidecar, old / "project.yaml")):
+    if not all(path.exists() for path in (payload, sidecar, old / "project.yaml", historical_db)):
         pytest.skip("pinned current source or old development project unavailable")
     old_db = old / "state/project.sqlite"
     assert hashlib.sha256(old_db.read_bytes()).hexdigest() == OLD_CURRENT_SHA256
+    assert hashlib.sha256(historical_db.read_bytes()).hexdigest() == HISTORICAL_SOURCE_SHA256
+    # Frozen history is inspected immutably, never opened through the current
+    # workspace verifier (which applies current database migrations).
+    with sqlite3.connect(f"{historical_db.as_uri()}?mode=ro&immutable=1", uri=True) as database:
+        historic = database.execute(
+            "SELECT v.content_sha256,v.scientific_context_json,f.source_version_id "
+            "FROM fact_versions v JOIN evidence_fragments f "
+            "ON f.fragment_id=v.primary_fragment_id WHERE v.fact_version_id=?",
+            (SOURCE_VERSION,),
+        ).fetchone()
+    assert historic is not None
+    assert historic[0] == "9ed41dfbb0eb520b7ce16c31d55f4047f06f1f8f1608571c071416d4aa5ef568"
+    assert historic[2] == "source-version_73c373185062ea7054e135c8"
     root = tmp_path / "current-source-ab-development"
-    contract = verify_project_workspace(old).contract
+    document = json.loads((old / "project.yaml").read_bytes())
+    contract = ProjectContract.model_validate(next(
+        item for item in document["project_contract_versions"]
+        if item["contract_version"] == document["active_contract_version"]
+    ))
     create_project_workspace(root, contract)
     a_input = root / "inputs/r24-46-a-bound.json"
     receipt = materialize(
@@ -64,7 +83,8 @@ def test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project
     )
     versions = {item["row_ref"]: item["fact_version_id"]
                 for item in receipt["fact_bindings"]}
-    assert versions[f"efficacy:{ROW_ID}"] == SOURCE_VERSION
+    current_version = versions[f"efficacy:{ROW_ID}"]
+    assert current_version != SOURCE_VERSION
     snapshot_file = root / receipt["snapshot_relative_path"]
     snapshot = LockedSnapshot(
         snapshot_id=receipt["snapshot_id"], kind="evidence", report=None,
@@ -77,13 +97,31 @@ def test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project
         locator, quote = database.execute(
             "SELECT f.locator,f.content_text FROM fact_versions v "
             "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
-            "WHERE v.fact_version_id=?", (SOURCE_VERSION,),
+            "WHERE v.fact_version_id=?", (current_version,),
         ).fetchone()
+        current_science = database.execute(
+            "SELECT content_sha256,scientific_context_json FROM fact_versions "
+            "WHERE fact_version_id=?", (current_version,),
+        ).fetchone()
+        current_source = database.execute(
+            "SELECT s.source_version_id,s.acquired_at,s.source_locator FROM source_versions s "
+            "JOIN evidence_fragments f ON f.source_version_id=s.source_version_id "
+            "JOIN fact_versions v ON v.primary_fragment_id=f.fragment_id "
+            "WHERE v.fact_version_id=?", (current_version,),
+        ).fetchone()
+    assert current_science == historic[:2]
+    assert current_source[0] != historic[2]
+    assert datetime.fromisoformat(current_source[1]) == AT
+    source_locator = json.loads(current_source[2])
+    assert source_locator["field_path"] == (
+        "$.protocolSection.statusModule.lastUpdatePostDateStruct.date"
+    )
+    assert source_locator["url"] == "https://clinicaltrials.gov/study/NCT04820530"
     assert quote == "92.2"
     b_report = _b_direct_source_view(a_report, locator, source_text=quote)
     assert b_report.model_dump(mode="json")["efficacy_views"]["facts"][0]["row_id"] == ROW_ID
     b_binding = register_b_shared_source_consumers(
-        root, snapshot, b_report, {f"efficacy:{ROW_ID}": SOURCE_VERSION},
+        root, snapshot, b_report, {f"efficacy:{ROW_ID}": current_version},
         registered_at=AT,
     )[0]
     assert (b_binding.report, b_binding.source_version_id) == (
@@ -95,7 +133,7 @@ def test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project
             "WHERE report='B' AND collection='efficacy' AND row_id=?",
             (ROW_ID,),
         ).fetchone()
-    assert registered == (SOURCE_VERSION,)
+    assert registered == (current_version,)
 
     b_input = root / "inputs/r24-46-b-direct-source.json"
     b_input.write_text(b_report.model_dump_json(), encoding="utf-8")
@@ -113,12 +151,12 @@ def test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project
         ),
         created_at=AT,
     )
-    fact = service._fact_row(SOURCE_VERSION)
+    fact = service._fact_row(current_version)
     command = UserFactSaveCommand(
         request_id="r24-46-current-cas-ab-hypothetical-edit",
         project_id=contract.project_id, expected_revision=0,
         target=FactTargetIdentity(
-            fact_id=fact["fact_id"], fact_version_id=SOURCE_VERSION,
+            fact_id=fact["fact_id"], fact_version_id=current_version,
             entity_id=fact["entity_id"], field_id=fact["field_id"],
         ),
         edits=FactEdit(raw_value="90.1", normalized_value=90.1),
@@ -141,12 +179,10 @@ def test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project
             "92.2 Percentage of responders"
         )
         if item.report == "B":
-            html = (site / "efficacy.html").read_text(encoding="utf-8")
-            evidence = json.loads(
-                html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
-            )
+            evidence = _page_json_assignment(site, "efficacy.html", "__EVIDENCE_VIEWS__")
             assert evidence[0]["user_edit"]["original_value"] == (
                 "92.2 Percentage of responders"
             )
             assert "Day 126 and Day 168" in evidence[0]["timepoint"]["value"]
     assert hashlib.sha256(old_db.read_bytes()).hexdigest() == OLD_CURRENT_SHA256
+    assert hashlib.sha256(historical_db.read_bytes()).hexdigest() == HISTORICAL_SOURCE_SHA256

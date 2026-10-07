@@ -80,6 +80,7 @@ from ci_workflow.renderers.portal.report_c import (
 from ci_workflow.storage.event_store import EventStore, EventStoreError, WorkflowEvent
 from ci_workflow.storage.migrations import persist_project_contract
 from ci_workflow.storage.sqlite import open_database
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 
 NOW = datetime(2026, 9, 22, 18, 0, tzinfo=UTC)
 PROJECT_ID = stable_id("project", "w04-development-fixture")
@@ -225,19 +226,14 @@ def test_b_estimated_efficacy_revision_updates_domain_and_explicit_view_without_
     assert report_payload["efficacy"][0]["numerator"] == 51
     visible_id = "eff-row-nct04558918-apply-treatment"
     assert report_payload["user_edits"][visible_id]["current_value"] == "80.1%"
-    efficacy_html = (site / "efficacy.html").read_text(encoding="utf-8")
-    chart_groups = json.loads(
-        efficacy_html.split("window.__CHART_GROUPS__ = ", 1)[1].split(";</script>", 1)[0]
-    )
+    chart_groups = _page_json_assignment(site, "efficacy.html", "__CHART_GROUPS__")
     treatment_chart_row = next(
         row for group in chart_groups for row in group["rows"]
         if row["row_id"] == "eff-row-nct04558918-apply-treatment"
     )
     assert treatment_chart_row["numeric_value"] == 80.1
     assert treatment_chart_row["numeric_projection"]["plot_value"] == 80.1
-    evidence_views = json.loads(
-        efficacy_html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
-    )
+    evidence_views = _page_json_assignment(site, "efficacy.html", "__EVIDENCE_VIEWS__")
     evidence = next(view for view in evidence_views if view["row"]["row_id"] == visible_id)
     assert evidence["user_edit"]["current_value"] == "80.1%"
     assert evidence["user_edit"]["original_value"].startswith("82.3%")
@@ -318,11 +314,8 @@ def test_second_b_edit_preserves_first_b_edit_provenance(tmp_path: Path) -> None
     b_delivery = next(
         entry for entry in service.read_current_delivery().reports if entry.report == "B"
     )
-    efficacy_html = (
-        root / b_delivery.site_relative_path / "efficacy.html"
-    ).read_text(encoding="utf-8")
-    chart_groups = json.loads(
-        efficacy_html.split("window.__CHART_GROUPS__ = ", 1)[1].split(";</script>", 1)[0]
+    chart_groups = _page_json_assignment(
+        root / b_delivery.site_relative_path, "efficacy.html", "__CHART_GROUPS__",
     )
     treatment_chart_row = next(
         row for group in chart_groups for row in group["rows"]
@@ -823,10 +816,7 @@ def _evidence_view_projection(root: Path, report: str, row_id: str) -> dict[str,
     current = UserFactEditService(root).read_current_delivery()
     delivery = next(item for item in current.reports if item.report == report)
     page = "inclusion-criteria.html" if report == "C" else "safety.html"
-    html = (root / delivery.site_relative_path / page).read_text(encoding="utf-8")
-    marker = "window.__EVIDENCE_VIEWS__ = "
-    payload = html.split(marker, 1)[1].split(";\n", 1)[0]
-    views = json.loads(payload)
+    views = _page_json_assignment(root / delivery.site_relative_path, page, "__EVIDENCE_VIEWS__")
     return next(item for item in views if item["row"]["row_id"] == row_id)
 
 
@@ -1904,11 +1894,23 @@ def test_rereview3_user_values_never_replace_original_source_layers(
         site = root / delivery.site_relative_path
         page = "inclusion-criteria.html" if report == "C" else "safety.html"
         html = (site / page).read_text(encoding="utf-8")
-        assert "用户修订，未独立复核" in html
-        assert expected[report][1] in html
-        assert expected[report][2] in html
         if report == "B":
-            assert '"_user_edit":' in html
+            # B stores its full page data in contained offline script assets.
+            # Assert the exact current/source values in those consumed bytes,
+            # not the obsolete requirement to duplicate all data inline.
+            views = _page_json_assignment(site, page, "__EVIDENCE_VIEWS__")
+            view = next(item for item in views if item["row"]["row_id"] == expected[report][0])
+            assert view["user_edit"]["status_label_zh"] == "用户修订，未独立复核"
+            assert view["user_edit"]["current_value"] == expected[report][1]
+            assert view["user_edit"]["original_value"] == expected[report][2]
+            groups = _page_json_assignment(site, page, "__CHART_GROUPS__")
+            row = next(item for group in groups for item in group["rows"]
+                       if item["row_id"] == expected[report][0])
+            assert row["_user_edit"]
+        else:
+            assert "用户修订，未独立复核" in html
+            assert expected[report][1] in html
+            assert expected[report][2] in html
     assert a_saved.rebuilt_reports == ("A",)
     assert b_saved.rebuilt_reports == ("B",)
 

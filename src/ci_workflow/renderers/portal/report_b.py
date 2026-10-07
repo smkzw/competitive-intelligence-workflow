@@ -3880,6 +3880,13 @@ def _cross_trial_groups(
     for item in records:
         row = item[0]
         key = _semantic_group_key(row, include_time=include_time)
+        if domain == "supporting" and (
+            semantic_value_is_unknown(row.get("source_measure_path"))
+            or semantic_value_is_unknown(row.get("trial_id"))
+        ):
+            # A source-specific descriptive panel needs an actual study and
+            # measurement identity; shared missing markers do not establish it.
+            key += ("unresolved-measure-identity", _text(row.get("row_id")))
         if any(semantic_value_is_unknown(value) for value in key):
             # Retain source observations, but unknown axes cannot license cross-trial comparison.
             # Without a trial identity even a within-trial descriptive grouping is unproven.
@@ -3891,13 +3898,18 @@ def _cross_trial_groups(
         buckets[key].append(item)
     merged = proposed_semantic_buckets(
         tuple(buckets.values()), semantic_proposals,
+        descriptive_only=domain == "supporting",
         approved_merges=semantic_adjudications,
     )
-    return _dress_membership_groups(
+    groups = _dress_membership_groups(
         tuple(tuple(bucket) for bucket in merged),
         page_id=page_id, domain=domain, include_time=include_time,
         chart_type=chart_type, semantic_proposals=semantic_proposals,
     )
+    if domain == "supporting":
+        return tuple({**group, "comparison_purpose": "within_trial_source_descriptive"}
+                     for group in groups)
+    return groups
 
 
 def _actual_observation_times(

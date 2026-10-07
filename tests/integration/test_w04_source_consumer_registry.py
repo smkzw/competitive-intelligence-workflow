@@ -38,6 +38,7 @@ from ci_workflow.application.user_fact_edit import (
     UserFactSaveCommand,
     UserFactSaveError,
 )
+from ci_workflow.domain.contracts import ProjectContract
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFact,
     validate_active_fact_binding,
@@ -54,6 +55,7 @@ from ci_workflow.renderers.portal.report_b import (
 )
 from ci_workflow.storage.snapshot_store import LockedSnapshot
 from ci_workflow.storage.sqlite import open_database
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 from tests.integration.test_research_package_submission import _project
 from tests.integration.test_w07_ctgov_capture_bridge import _reported_count_source
 from tools.materialize_ctgov_a_candidate import materialize
@@ -277,9 +279,8 @@ def test_captured_synthetic_count_save_fans_out_to_a_and_b_atomically(tmp_path: 
     sites = {"A": root / "reports/A/v1/html", "B": root / "reports/B/v1/html"}
     render_report_a_site(a_report, sites["A"])
     render_report_b_site(b_report, sites["B"])
-    b_html = (sites["B"] / "efficacy.html").read_text(encoding="utf-8")
-    embedded = b_html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
-    evidence = next(item for item in json.loads(embedded) if item["row"]["row_id"] == row_id)
+    views = _page_json_assignment(sites["B"], "efficacy.html", "__EVIDENCE_VIEWS__")
+    evidence = next(item for item in views if item["row"]["row_id"] == row_id)
     assert evidence["original_text"] == quote
     inputs = {"A": root / "inputs/a-source.json", "B": root / "inputs/b-source.json"}
     inputs["A"].parent.mkdir(parents=True)
@@ -342,7 +343,13 @@ def test_fixed_real_ctgov_pnh_atom_rebuilds_a_and_b_from_one_user_save(
         "2cbba015597af4cefbd1fb8104fc7c00e33563fdf515350d4e9046b955d0ad09"
     )
     root = tmp_path / "real-pnh-a-b-development"
-    contract = verify_project_workspace(previous).contract
+    previous_database = previous / "state/project.sqlite"
+    previous_sha = sha256(previous_database.read_bytes()).hexdigest()
+    document = json.loads((previous / "project.yaml").read_bytes())
+    contract = ProjectContract.model_validate(next(
+        item for item in document["project_contract_versions"]
+        if item["contract_version"] == document["active_contract_version"]
+    ))
     create_project_workspace(root, contract)
     a_input = root / "inputs/a-bound.json"
     receipt = materialize(
@@ -407,10 +414,9 @@ def test_fixed_real_ctgov_pnh_atom_rebuilds_a_and_b_from_one_user_save(
         row = next(entry for entry in projection["efficacy"] if entry["row_id"] == "eff-1")
         assert row["value"] == 90.1 and row["source_text"] == "92.2"
         if item.report == "B":
-            evidence = (site / "efficacy.html").read_text(encoding="utf-8")
-            embedded = evidence.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
+            evidence = _page_json_assignment(site, "efficacy.html", "__EVIDENCE_VIEWS__")
             view = next(
-                entry for entry in json.loads(embedded) if entry["row"]["row_id"] == "eff-1"
+                entry for entry in evidence if entry["row"]["row_id"] == "eff-1"
             )
             assert view["value"]["value"] == "90.1"
             assert view["original_text"] == "92.2"
@@ -450,6 +456,7 @@ def test_fixed_real_ctgov_pnh_atom_rebuilds_a_and_b_from_one_user_save(
     ))
     assert restored.rebuilt_reports == ("A", "B")
     assert service.read_current_delivery().revision == 3
+    assert sha256(previous_database.read_bytes()).hexdigest() == previous_sha
     share_path = tmp_path / "real-ab-current-share.zip"
     receipt = export_current_html_share(
         root, share_path,

@@ -52,6 +52,24 @@
 {{ value|int if value is not none and value == value|int else value }}
 {%- endmacro %}
 
+{% macro current_value(row) -%}
+{%- if row.value is not none -%}
+{{ precise_number(row.value) }}{{ row.unit }}
+{%- else -%}
+{%- set state = row.disclosure_state.value|default(row.disclosure_state) -%}
+{%- set labels = {
+  'user_cleared': '用户清除，待重新核实',
+  'not_reported': '来源未列示',
+  'not_publicly_disclosed': '尚未公开',
+  'not_applicable': '不适用',
+  'below_reporting_threshold': '低于报告阈值',
+  'conflicting': '来源冲突，待核',
+  'unresolved_due_to_route': '来源获取未完成'
+} -%}
+{{ labels.get(state, state if state in ['未公开', '不适用', '用户清除，待重新核实'] else '数值待核') }}
+{%- endif -%}
+{%- endmacro %}
+
 {% macro empty_state() -%}
 <div class="kz-a-empty" data-filter-empty hidden><strong>当前选择下暂无可比较数据</strong><span>请清除部分条件后继续查看。</span></div>
 {%- endmacro %}

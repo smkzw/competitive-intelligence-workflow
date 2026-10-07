@@ -16,6 +16,7 @@ from ci_workflow.application.source_research_service import (
 )
 from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.renderers.portal.report_b import ReportBPortalData, render_report_b_site
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 
 
 def _source(title: str, unit: str, value: str, denominator: str | None) -> SourceCapture:
@@ -112,12 +113,18 @@ def test_raw_source_views_reach_b_without_product_or_rate_guess(
     render_report_b_site(ReportBPortalData.model_validate(payload), site)
     page = ("efficacy" if views.efficacy else "safety" if views.safety
             else "subgroups-supporting-evidence")
-    html = (site / f"{page}.html").read_text(encoding="utf-8")
+    groups = _page_json_assignment(site, f"{page}.html", "__CHART_GROUPS__")
+    rendered_rows = {row["row_id"]: row for group in groups for row in group["rows"]}
+    evidence = _page_json_assignment(site, f"{page}.html", "__EVIDENCE_VIEWS__")
+    by_id = {view["row"]["row_id"]: view for view in evidence}
     for row in rows:
-        assert row["row_id"] in html and row["source_version_id"] in html
+        assert row["row_id"] in rendered_rows
+        assert by_id[row["row_id"]]["source_version_id"] == row["source_version_id"]
+        assert by_id[row["row_id"]]["original_text"] == row["source_text"]
+        assert "不能作为已验科学结论" in by_id[row["row_id"]]["explanation"]["value"]
     if domain in {"efficacy", "adverse_events"}:
-        assert "group_product_relationship_unresolved" in html
-    assert "已验科学结论" in html  # source evidence does not auto-approve the candidate.
+        assert all(rendered_rows[row["row_id"]]["numeric_projection"]["unrenderable_reason"] ==
+                   "group_product_relationship_unresolved" for row in rows)
 
 
 def test_duplicate_source_identity_is_rejected() -> None:

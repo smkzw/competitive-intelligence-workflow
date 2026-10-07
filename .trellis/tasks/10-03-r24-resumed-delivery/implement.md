@@ -2,6 +2,46 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Milestone5 current, supersedes older pending/r4 paragraphs: actual r5 main/detail
+cleared state preserves original2, current A/B/AB static exports completed.
+Wrong owner metadata attribute failed after successful save; recovered directly
+without another transaction. Later supporting B root is not covered by r5 export.
+Semantic execution terminalCodeBuddy/deepseek-v4.1-flash:max731.189s/73tools/exit0;
+owner134PASS2.05s and768 frozen9e differential cases equal, Ruff/strict pass.
+Supporting source same-measure realRED1FAIL/7PASS ->100 relatedPASS3.14s;
+old inline loaders replaced, exact values/quotes/unplotted reasons retained.
+Historical science hash equal/current provenance different:1PASS50.57s,
+immutable contract+three-way2PASS86.02s; historical bytes/SHA never rewritten.
+Old AD fullneighbor7PASS/2obsolete-inlineFAIL3174.28s, new fullneighbor pending.
+v7quality sixsteps actualexit0: Ruff allsrc/tests/tools, strict276, active1136
+387.17s, retained20, layering7, legacy string checker. Later only test-contract
+read changed, covered2PASS/Ruff, not new fullgate/science/browser/install.
+Bounded fresh C03 four-study baseline source conference preflight0/dispatched;
+terminal not accepted. Ego12 actualNOT_FOUND, all real browser gatesNOT_RUN.
+Ordinary continuous authority active despite GoalAPIblocked/no resume endpoint.
+Source/test/artifact scope in owner-milestone-v5.json. No cleanup/self-pause/RC.
+
+Current9e438004b23b6db656a72d9b43b6dbd002642adf pushed. Owner E03 replay
+integration: real source-v3 clone completed four A+B saves, clear/restore/undo,
+invalid-count rollback and retry idempotence. Share first failed because replay
+passed product ID to A's display-name facet; failed receipt unchanged. Five
+behavioral RED→23 neighboringPASS/23.14s plus Ruff/strict; current revision4
+A/B/AB static exports then completed without repeating saves. SourceDB8235ddeb…,
+inputs/snapshot/identity/known journal states and committed current unchanged.
+Receipt owner-source-v3-share-recovery-v1.json; browser/C/science remain separate.
+Actual product detail exposed cleared-as-unpublished while the main table was
+correct. Shared current-value macro and row IDs: four behavioral RED then26
+adjacentPASS14.55s. Old r4 sites/shares retained, new generation still pending.
+Current external-payload loaders now68PASS129.22s plus Ruff; first67/1FAIL kept.
+No old QA passes inherited. Goal API now blocked, cannot resume via tool; user's
+current continuous implementation authority remains active, no self-pause/complete.
+
+Execution-plus-direct chosen: bounded E03 semantic reuse owns existing grouping
+and one new test; owner owns sharing/current and test-loader migration. AD neighbor
+has6780+10228 facts and is actively computing, not silently labeled environment
+failure. Reuse deterministic per-invocation work without changing any science
+guard or full-pool membership. Owner will independently inspect frozen behavior.
+
 Milestone4 committed/pushed7d6e82a3e5a60d796b506fd709a8a9b237dda5e2, remote
 actual same; five unrelated dirty files preserved. Next execution-plus-direct:
 one E03 bounded existing replay adapter owns two disjoint paths; owner prepares
@@ -18,7 +58,7 @@ definition retained context not independent control, observed_at exact witness.
 New source not main/current adoption; no dynamic-China/browser/universe claim.
 Failed prompt preflight and nonexistent-manifest initialization preserved, no
 model attempt before corrected same-session continuation. E03 replay still
-pending, do not edit its two owned files or retry merely due latency.
+terminal and owner-integrated as above; that earlier pending state is historical.
 
 Owner current: shared-background and single-link role repair72PASS/113.97s;
 C03 same-session v2 actualcodebuddy/deepseek-v4.1-flash:max431.988s/exit0,

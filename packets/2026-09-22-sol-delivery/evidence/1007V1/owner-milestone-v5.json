@@ -1,0 +1,209 @@
+{
+  "contract": "1007V1-user-prompt",
+  "stage": "development-owner-milestone-5",
+  "parent_commit": "9e438004b23b6db656a72d9b43b6dbd002642adf",
+  "commit_binding": "containing Git commit; verify exact source/artifact hashes, never inherit changed criteria",
+  "source_sha256": {
+    "src/ci_workflow/renderers/portal/report_b.py": "dd454c5d78dcfe4730ca710464bc5e4bd3405f5dbae35910ae65b48ffbb6405b",
+    "src/ci_workflow/renderers/portal/templates/a/_macros.html.j2": "469177e439c2c3ed643a73883470967bcd80c9622ef82e72e146e8c7d0b023de",
+    "src/ci_workflow/renderers/portal/templates/a/efficacy.html.j2": "c3fec4978a6be4b31832b49c8c347a09dbd130e65402df1dcbf7bd95811df5be",
+    "src/ci_workflow/renderers/portal/templates/a/product.html.j2": "bcaade2b0a442842db7203038924773f586193f5a542cb0c78f56a46cdf60a6d",
+    "src/ci_workflow/renderers/portal/templates/a/safety.html.j2": "64e1e6e85f7066eee23e73f44dcc44ad054c9f97665f2a176166fd0535c48287",
+    "src/ci_workflow/reports/b/semantic_grouping.py": "8c2f3a34d8822eee678c122c0e112a19660cb99fe2ef888af359a94dbf3ea5e8",
+    "tests/integration/reports/test_r24_b_study_only_source_pool.py": "cfa20b13475ea91ba166a061a79818fb1c96dcd3f66f5cbe4d5fd573bcdac195",
+    "tests/integration/reports/test_r24_b_supporting_domain.py": "6e7ad2a3c0b74ff6a5a1091887d589ecd7d2d2c91755435d8065431cf1be9a8c",
+    "tests/integration/test_r24_a_compact_workspace.py": "7e58a5a28499e4b337ecce01de98ca8e3d710a057ddbb4c8a786eb67dbe594cd",
+    "tests/integration/test_r24_b_unassigned_source_results.py": "909a558ee19205d7b4200b22b51d8d3679bbd1f6bf89d46c24102ab94a9f2c48",
+    "tests/integration/test_r24_current_chain_replay.py": "49a04d7dd5a283997cc987b57936f73d83fbf75d5ec2b2a43c3b9eb507678822",
+    "tests/integration/test_r24_current_source_ab_fanout.py": "fccc1abe9191dd1932110e02b5077d5e5bc768f4ce7f94e36e1ec849f45391e1",
+    "tests/integration/test_w04_source_consumer_registry.py": "0c22494ff2e61ccadf13d7622c8ceb90a56320a69a5269f9d5010cbbea91c40f",
+    "tests/integration/test_w04_user_fact_edit.py": "652f375a98e38e698220e3600595cba10a6f5674599e22f6e077e15e19447d50",
+    "tools/replay_r24_current_chain.py": "6eb784f643f5c1a30dea7666fb8668dfbe11238043f49ad1e4c28558311261e6",
+    "tests/reports/b/test_1007_semantic_reuse.py": "e8acbad6920681c916f1e2c84895a0fe8b543791f457bff0847594ef2143bd4e"
+  },
+  "evidence": [
+    {
+      "path": "runs/execution/ci-1007-display/owner-quality-v7.txt",
+      "sha256": "638e3ac14be566730dc369c32c37e454dd18f6c69d35ee2b17ddbf8f4f097c4b",
+      "bytes": 3088,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-semantic-reuse-green-v1.txt",
+      "sha256": "c4c308a2b9f603989f05f46898d60caded0e8a96ec1ff5bd0b01c0ed71936b7c",
+      "bytes": 180,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-semantic-reuse-differential-v1.txt",
+      "sha256": "47ea571a55da4389985ecb4eb4d6f7e8308c52ae2d1178bab9d388615fcf7652",
+      "bytes": 174,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-supporting-same-measure-red-v1.txt",
+      "sha256": "f321f43c8d8c2c84a0dca68b40c164117aee83bb5705095ae3f21c990e0c75f2",
+      "bytes": 1805,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-supporting-same-measure-green-v4.txt",
+      "sha256": "213b9976f5a91cef2a54bf431def969a61303df5e27119f25480df3b36f01d73",
+      "bytes": 180,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-historical-current-source-fanout-v3.txt",
+      "sha256": "d59b79368c36f9cf1b4e38268561b2b7ae94f4e508e0e9a4b17b8d9fea136c01",
+      "bytes": 99,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-immutable-historical-contract-neighbor-v1.txt",
+      "sha256": "21c4ce569f6612a92e64dcdf9a546e0b2f4cf67ee86c689f38a72f92a8a96e68",
+      "bytes": 109,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-current-r5-value-state-and-share-v1.json",
+      "sha256": "36dee43dd48b3788ded2eada1a1659f30ba878932718c5436939ddaca8292822",
+      "bytes": 3333,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-history-current-source-reconciliation-v1.json",
+      "sha256": "53263719f40c351fe39c895a5cfefc5fe1bd565a32ba01b767277930968f55ab",
+      "bytes": 2031,
+      "raw_log_public": false
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-ego-space12-current-r5-v1.txt",
+      "sha256": "f2b80bec681e4604aa37edadecfd1e92b1939ee2f6bcf4857a5ea437ef2588a2",
+      "bytes": 212,
+      "raw_log_public": false
+    }
+  ],
+  "quality_gate": {
+    "status": "quality-only",
+    "terminal_exit": 0,
+    "steps": 6,
+    "scope": "Ruff src/tests/tools; strict276 src/tools; active unit+contract1136; retained20; layering7; legacy string references; NOT all integration/science/browser/install",
+    "active_duration_seconds": 387.17,
+    "post_gate_change": "Only historical-contract integration test read changed; exact two tests PASS86.02s and four-test Ruff PASS; production source unchanged"
+  },
+  "bounded_results": [
+    {
+      "scope": "semantic per-call reuse",
+      "owner_pass": 134,
+      "seconds": 2.05,
+      "owner_frozen_differential_cases": 768,
+      "mismatches": 0,
+      "worker_differential_cases": 66720,
+      "worker_claim_not_owner_result": true
+    },
+    {
+      "scope": "supporting same-source measure descriptive rows and real offline loader",
+      "owner_pass": 100,
+      "seconds": 3.14,
+      "positive_comparison": "within_trial_source_descriptive",
+      "clinical_equivalence_accepted": false
+    },
+    {
+      "scope": "historical-current source fanout",
+      "owner_pass": 1,
+      "seconds": 50.57,
+      "history_bytes_unchanged": true
+    },
+    {
+      "scope": "immutable frozen contract plus three-way neighbor",
+      "owner_pass": 2,
+      "seconds": 86.02
+    },
+    {
+      "scope": "current user-edit offline loader family",
+      "owner_pass": 68,
+      "seconds": 129.22
+    }
+  ],
+  "execution_receipts": [
+    {
+      "task": "ci-1007-source-replay-code",
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4.1-flash",
+      "effort": "max",
+      "seconds": 2506.319,
+      "tools": 124,
+      "terminal_exit": 0,
+      "fallback": false,
+      "owner_integration": "five behavioral boundary RED plus contract RED;41PASS22.55s/Ruff/strict"
+    },
+    {
+      "task": "ci-1007-semantic-reuse",
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4.1-flash",
+      "effort": "max",
+      "seconds": 731.189,
+      "tools": 73,
+      "terminal_exit": 0,
+      "fallback": false,
+      "worker_report_sha256": "ef0d5ff9429b63622b010e742c77fe01f20c0a3acf4384fa524bed1801b34fe3",
+      "runtime_receipt_sha256": "80de8a0750d6989f5fdb3143cc9fffa13711f798cd34b576f0a3e1cb7b5cf795"
+    }
+  ],
+  "current_revision_scope": {
+    "project": "1007-pn-source-v3-operation-v2",
+    "revision": 5,
+    "bundle_sha256": "d3fce3e39c0465ee652eeb34a2bd870267cf0f91dc028f8aba1c6da79d90454f",
+    "shared_fact_original": 2,
+    "current": null,
+    "disclosure": "user_cleared",
+    "reports": [
+      "A",
+      "B"
+    ],
+    "static_shares": [
+      "A",
+      "B",
+      "AB"
+    ],
+    "late_B_supporting_root_covered": false,
+    "browser_offline_open": "NOT_RUN",
+    "C_current": "NOT_RUN",
+    "source_db_unchanged": true
+  },
+  "history_reconciliation": {
+    "science_content_sha256": "9ed41dfbb0eb520b7ce16c31d55f4047f06f1f8f1608571c071416d4aa5ef568",
+    "frozen_version": "fact-version_fc4fd5ad5d1c3bafae8a3055",
+    "current_version": "fact-version_3bc8cde0f114027e85562b82",
+    "science_equal": true,
+    "source_versions_differ": true,
+    "fixture_is_not_fresh_October7_source": true
+  },
+  "failures_preserved": [
+    "source-replay worker initial readonly SQLite created 0B WAL/32768B SHM; immutable capture repaired, original incident retained",
+    "first r4 share failed from A display-name facet versus B product-ID facet mismatch; same committed r4 recovered without save",
+    "r4 product detail cleared-as-unpublished; four genuine production RED; immutable old sites retained",
+    "r5 metadata probe failed after successful save; recovered export without repeating transaction",
+    "cache first null/missing-domain mismatch found and repaired; old guards preserved",
+    "supporting same-measure real RED; intermediate incorrect payload-key test failures retained",
+    "old AD whole neighbor7PASS/2obsolete-inlineFAIL3174.28s; new whole neighbor pending, not environment waiver"
+  ],
+  "pending": {
+    "baseline_source_independent_review": "C03 dispatched after preflight0; PENDING not acceptance",
+    "whole_source_consumer_neighbor": "PENDING",
+    "original_1007_01_06_reference_cases": "missing; Ask pending; no fabricated IDs",
+    "ego_space_12": "actual NOT_FOUND; recovery Ask pending",
+    "desktop_four_width_four_state": "NOT_RUN",
+    "L1_L2_keyboard": "NOT_RUN",
+    "complete_competitor_universe": "NOT_ACCEPTED",
+    "same_current_ABC_journey": "NOT_ACCEPTED",
+    "fresh_install_three_hosts": "NOT_ACCEPTED",
+    "real_24_portals": "NOT_ACCEPTED"
+  },
+  "goal_api_state": "blocked_no_resume_endpoint",
+  "ordinary_user_authorized_execution": "continues",
+  "release_accepted": false,
+  "RC_FROZEN": false,
+  "protected_user_dirty_files": 5,
+  "cleanup": "none; raw logs/prompts/CAS/sites and unknown files retained local; public minimal summaries/hash pointers only"
+}
