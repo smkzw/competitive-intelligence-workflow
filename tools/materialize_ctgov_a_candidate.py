@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from ci_workflow.application.b_efficacy_source_views import project_b_efficacy_source_views
 from ci_workflow.application.ctgov_baseline_atoms import extract_ctgov_baseline_atoms
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
 from ci_workflow.application.portal_consumer_registry import (
@@ -22,6 +23,7 @@ from ci_workflow.application.portal_consumer_registry import (
     project_b_safety_source_views,
     register_a_source_consumers,
     register_b_baseline_source_consumers,
+    register_b_shared_source_consumers,
 )
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import (
@@ -389,6 +391,8 @@ def materialize(
         }
     bound_b_report_asset: dict[str, object] | None = None
     located_b_safety_views = 0
+    located_b_efficacy_views = 0
+    registered_b_shared: tuple[ActiveFactBinding, ...] = ()
     registered_baseline: tuple[ActiveFactBinding, ...] = ()
     non_editable_baseline_rows: list[dict[str, str]] = []
     if bound_b_report_output is not None:
@@ -402,14 +406,33 @@ def materialize(
         views = project_b_safety_source_views(
             project_root, lineage.evidence_snapshot, bound_report, safety_versions,
         )
+        efficacy_versions = {
+            ref: version for ref, version in direct_versions.items()
+            if ref in declared_efficacy
+        }
+        projected_efficacy_views = project_b_efficacy_source_views(
+            project_root, lineage.evidence_snapshot, bound_report, efficacy_versions,
+        ) if efficacy_versions else ()
+        efficacy_views = tuple({
+            **view, "source_fact_version_id": efficacy_versions[f"efficacy:{view['row_id']}"],
+        } for view in projected_efficacy_views)
         b_report = ReportBPortalData.model_validate({
             **bound_report.model_dump(mode="json"),
+            "efficacy_views": {"coverage_mode": "partial", "facts": efficacy_views},
             "safety_views": {"coverage_mode": "partial", "facts": views},
             "baseline_views": build_source_baseline_view(
                 baseline_facts, source_versions=source_version_by_id,
                 fact_versions=lineage.fact_version_by_ref,
             ),
         })
+        # Only already source-proven A direct atoms gain B consumers. Partial
+        # views preserve the remaining study pool and do not accept science or
+        # infer unknown product/arm relations. The registry preflights the batch.
+        if direct_versions:
+            registered_b_shared = register_b_shared_source_consumers(
+                project_root, lineage.evidence_snapshot, b_report, direct_versions,
+                registered_at=observed_at,
+            )
         baseline_refs = {row["row_id"]: row["source_fact_version_id"]
             for row in (b_report.baseline_views or {}).get("facts", ())
             if row["statistic_form"] in {
@@ -439,6 +462,7 @@ def materialize(
             "sha256": _sha256(encoded_b), "bytes": len(encoded_b),
         }
         located_b_safety_views = len(views)
+        located_b_efficacy_views = len(efficacy_views)
     preview: dict[str, object] | None = None
     if preview_site is not None:
         destination = preview_site.resolve()
@@ -498,6 +522,10 @@ def materialize(
         "registered_a_safety_consumers": [
             binding.row_id for binding in registered_safety
         ],
+        "registered_b_efficacy_consumers": [binding.row_id for binding in registered_b_shared
+                                            if binding.collection == "efficacy"],
+        "registered_b_safety_consumers": [binding.row_id for binding in registered_b_shared
+                                          if binding.collection == "safety"],
         "other_domain_source_rows_without_portal_binding": [row.row_id for row in other],
         "baseline_source_issues": [asdict(issue) for batch in baseline_batches
                                    for issue in batch.issues],
@@ -535,6 +563,8 @@ def materialize(
             "registered_a_efficacy_consumers": len(registered_efficacy),
             "registered_a_safety_consumers": len(registered_safety),
             "located_b_safety_source_views": located_b_safety_views,
+            "located_b_efficacy_source_views": located_b_efficacy_views,
+            "registered_b_shared_source_consumers": len(registered_b_shared),
             "baseline_source_facts": len(baseline_facts),
             "baseline_numeric_atoms": sum(f.result_context is not None for f in baseline_facts),
             "registered_b_baseline_scalar_consumers": len(registered_baseline),
@@ -545,9 +575,10 @@ def materialize(
             "Offline replay is not a new live status check or historical-as-of reconstruction.",
             "Other-domain source facts have no A/B/C portal consumer binding yet.",
             "Unknown arm-product relations, China sources and required publications remain open.",
-            "Only declared direct A efficacy/safety consumers are registered; B/C remain open.",
-            "B source views do not register edit consumers or prove "
-            "unknown arm-product identity.",
+            "Only declared direct A atoms gain shared B efficacy/safety consumers; "
+            "C and the remaining related-study pool are not thereby source-closed.",
+            "Partial B source views and shared consumers do not accept science or "
+            "prove unknown arm-product identity.",
             "Portal consumer registry is not part of the source snapshot-only recovery yet.",
         ],
     }

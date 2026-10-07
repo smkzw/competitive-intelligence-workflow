@@ -1,0 +1,341 @@
+{
+  "schema_version": "1.0",
+  "stage": "1007V1 W03/W07 source denominator and B source bridge",
+  "source_commit_parent": "05eb27730c0c3e24ac6f1c36dee69544c6d33898",
+  "status": "development_candidate_not_scientific_or_current",
+  "goal_status": "active",
+  "code": [
+    {
+      "path": "src/ci_workflow/application/source_research_service.py",
+      "sha256": "ac23c07ddc957b947daa28f9d8c784e530395eeeb116bd1b350b3efb214a6bbb",
+      "byte_size": 170919
+    },
+    {
+      "path": "src/ci_workflow/application/b_efficacy_source_views.py",
+      "sha256": "0c9b99f8457bf588ab726eb9939d8b458bb00f4f8040a621c3a888304c3c430f",
+      "byte_size": 15616
+    },
+    {
+      "path": "tools/build_a_payload.py",
+      "sha256": "bda6d2877befaec2788ffd70f1baf44e0511cd85d944d6a76d9207d9ba1f224c",
+      "byte_size": 58585
+    },
+    {
+      "path": "tools/materialize_ctgov_a_candidate.py",
+      "sha256": "5a7bb08e7fce3d4e2c84549559ad40a9df4cfdd520866fc993d1614e53b94380",
+      "byte_size": 31910
+    },
+    {
+      "path": "tests/integration/test_1007_outcome_denominator_scope.py",
+      "sha256": "f750520a2b09c5cff2d00270b73287ab5ee0d6ac631f5dfebcc55b32b32c9af8",
+      "byte_size": 7423
+    },
+    {
+      "path": "tests/integration/test_1007_b_efficacy_source_views.py",
+      "sha256": "b3bd8fc2bd72a9dbf066040b994fc6e5df63002c030d91987af0def38fbee97b",
+      "byte_size": 21792
+    },
+    {
+      "path": "tests/integration/test_1007_b_efficacy_materialization.py",
+      "sha256": "5eb278a94f23882d9b3443704409968d4405771b75301f5aca6fdca0a692e351",
+      "byte_size": 4820
+    },
+    {
+      "path": "tests/integration/test_r24_real_b_safety_consumer.py",
+      "sha256": "77f016d2c5c01c80966d591b1a50a8305e855bc004c8802ba0c79c6a6f65cb0f",
+      "byte_size": 13247
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".artifacts/1007-outcome-scope-current-v1/a.json",
+      "sha256": "f11cf94aba4c6d5e3bcf51f81938837c6135936b7532c457526f6dd8216ddefb",
+      "byte_size": 2062457
+    },
+    {
+      "path": ".artifacts/1007-outcome-scope-current-v1/a.derivation.json",
+      "sha256": "fd6198f977d3a6ee61480a21829559ef86a8adc484a576c4105c6ef453019507",
+      "byte_size": 4331670
+    },
+    {
+      "path": ".artifacts/1007-outcome-scope-current-v2/receipt.json",
+      "sha256": "1a430ed1c6bec1c4a89bcf02c7160f6536616ac005cbd754c5336b4c6af6665c",
+      "byte_size": 272911
+    },
+    {
+      "path": ".artifacts/1007-outcome-scope-current-v2/project/inputs/a-bound.json",
+      "sha256": "2b8c906815a4f94a3eeadb6bf3f7f17db4c2203529eeb3fc83c7f1c5d28a57fe",
+      "byte_size": 2382904
+    },
+    {
+      "path": ".artifacts/1007-outcome-scope-current-v2/project/inputs/b-bound.json",
+      "sha256": "351c16c6d2bd4e73712293e87ae4093322211103e2beaf68650447452600a157",
+      "byte_size": 3892589
+    },
+    {
+      "path": ".artifacts/1007-outcome-scope-current-v2/project/snapshots/evidence/evidence-snapshot_3621c822c9ec63601dfe17b6.json",
+      "sha256": "de741a5b74f29e0077b69ace7e991bc1a68633529ba2c70e9fcdf1852addcb1f",
+      "byte_size": 11014600
+    },
+    {
+      "path": ".artifacts/1007-real-efficacy-context-v1/source-contexts.json",
+      "sha256": "cbee819398df7a71ce7b32ca68f98353c4e7333785f99ee05419329a3efa0d1d",
+      "byte_size": 375037
+    },
+    {
+      "path": ".artifacts/1007-pn-current-source-v1/a-source-payload-v3.json",
+      "sha256": "695df430ffeff6a1df82aff39282f72c1c24f683ba9f3b5f6499a06f65f1483e",
+      "byte_size": 2062635
+    },
+    {
+      "path": ".artifacts/1007-pn-current-source-v1/a-source-payload-v3.derivation.json",
+      "sha256": "cd318d683355ae915683f7a4550212aee3e44e857f19638e5a0616e20f1c2fd5",
+      "byte_size": 4208020
+    }
+  ],
+  "completed_logs": [
+    {"path":"runs/execution/ci-1007-display/owner-outcome-scope-widegate-v1.txt","sha256":"5de511eaca770caaf85c13a59cf73f98bdb87899479322934a85b11721750ece","byte_size":3168},
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-scope-red-v1.txt",
+      "sha256": "b93d0522d98ed9816fbdbcee0c11fc7cf4835f251f4b807690a32742b97ca618",
+      "byte_size": 11526
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-scope-red-v2.txt",
+      "sha256": "4c8c6e412bcb1f9c62e56eb2432100b5f1adee8c3a2877b3e8e62b2f91d0f54b",
+      "byte_size": 12413
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-scope-green-v1.txt",
+      "sha256": "8e1400bd3cc29b6c42ae7916ae37fa998d7d83e8e595932516288136dd429330",
+      "byte_size": 12852
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-scope-green-v2.txt",
+      "sha256": "6022b29dce66dad2a1f902da3e1278ae8c16764c07a5769ce01f8756bd6cead4",
+      "byte_size": 180
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-efficacy-materializer-green-v2.txt",
+      "sha256": "bb79becf1792dbf347c6a81c9643c9b996982548c20fb22e69b95c6ad287d294",
+      "byte_size": 99
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-real-shared-consumer-green-v1.txt",
+      "sha256": "bfc4c73900e8b2ab0895af0532e7e9e573d8d664fea28585ec8d2206b5f95a2d",
+      "byte_size": 109
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-current-build-v1.txt",
+      "sha256": "2fb19bf85e98f88a7e994170f415e535d962def4470d439be24c79a47e52c897",
+      "byte_size": 96
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-current-materialize-v1.txt",
+      "sha256": "acfdf537cb93dc8dc9a393dc69883c56d227bf43ab25183d6dbe31aa84b02cd2",
+      "byte_size": 461
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-outcome-current-materialize-v2.txt",
+      "sha256": "acfdf537cb93dc8dc9a393dc69883c56d227bf43ab25183d6dbe31aa84b02cd2",
+      "byte_size": 461
+    }
+  ],
+  "scope": {
+    "products": 38,
+    "studies": 43,
+    "efficacy_rows": 3544,
+    "safety_rows": 189,
+    "other_rows": 48,
+    "efficacy_N_changed": 1750,
+    "efficacy_values_changed": 0,
+    "efficacy_row_ids_added_or_removed": 0,
+    "review_contexts": 35,
+    "review_adopted_atoms": 91,
+    "old_adopted_N_mismatches": 25,
+    "old_N_mismatches_by_measure": {
+      "11": 1,
+      "13": 23,
+      "18": 1
+    }
+  },
+  "candidate": {
+    "counts": {
+      "sources": 4,
+      "facts": 949,
+      "claims": 877,
+      "other_rows": 8,
+      "registered_a_efficacy_consumers": 91,
+      "registered_a_safety_consumers": 14,
+      "located_b_safety_source_views": 36,
+      "located_b_efficacy_source_views": 91,
+      "registered_b_shared_source_consumers": 105,
+      "baseline_source_facts": 499,
+      "baseline_numeric_atoms": 183,
+      "registered_b_baseline_scalar_consumers": 183,
+      "binding_gaps": 0,
+      "source_issues": 0
+    },
+    "snapshot_id": "evidence-snapshot_3621c822c9ec63601dfe17b6",
+    "snapshot_sha256": "de741a5b74f29e0077b69ace7e991bc1a68633529ba2c70e9fcdf1852addcb1f",
+    "shared_A_B_efficacy_fact_version_ids": [
+      "fact-version_009e0651155a85931a08ab32",
+      "fact-version_0aca6ec5ef93b8e35ebb014f",
+      "fact-version_0af008c81d481daa5d7931c0",
+      "fact-version_0b7c256178fb6ec9e97b2721",
+      "fact-version_0eec1efb6faefe6e5eaa9e50",
+      "fact-version_0fdb753e292372855bf9aa0f",
+      "fact-version_13400647ae353874d615a535",
+      "fact-version_185e199794108d2b8644659d",
+      "fact-version_18c9e4faa16c137f6b50f12c",
+      "fact-version_1ae4f74889e26e37213dc17f",
+      "fact-version_2017053cb34c910ba784e56a",
+      "fact-version_22290545964c2041a37a1b96",
+      "fact-version_22f62dcdc951410ac3da7795",
+      "fact-version_2459b533f450eb21b260f4a7",
+      "fact-version_27c3f4094c146524ee9f4398",
+      "fact-version_27f68263692a8b3b2700781b",
+      "fact-version_2879db031fc5b2e365ebcdde",
+      "fact-version_2bb20156e6ee06f68b2accab",
+      "fact-version_2db0ea0faa2818a4a4c76d83",
+      "fact-version_2f56630ccfb8eb83ff4f7433",
+      "fact-version_2fe100d84641b101d5a8ce21",
+      "fact-version_300e33a740e38fcb10d29ecb",
+      "fact-version_32a89930a55d9470c996b352",
+      "fact-version_32bbe371b7b7199e97364c21",
+      "fact-version_36eb35b1a8cfbd64dae2fade",
+      "fact-version_393d5c3e812604063f9f3e63",
+      "fact-version_3e8a666fca6d145df6821176",
+      "fact-version_4241a00c19bfbf844bbccd7a",
+      "fact-version_4addfc47843fdd44e098137b",
+      "fact-version_4c80ebc1ce4a831ff1e3c1c1",
+      "fact-version_52b2fefb320b33755d5f5a59",
+      "fact-version_598b5e85506321c25136a583",
+      "fact-version_5ea5ecec59736b083e83ae3e",
+      "fact-version_6442e5f1bd1cf3d54c448ee7",
+      "fact-version_64e5d9b96ac9077dac33c810",
+      "fact-version_6723d01505cd2832ec4f635c",
+      "fact-version_67e25b59f22624b9bfb38e05",
+      "fact-version_6977c0500e23d771d88aacf0",
+      "fact-version_6b9b2edf9359a6ca1b25eb50",
+      "fact-version_6cbdbc75eafb66c961fb301b",
+      "fact-version_6d9f87cc33f3f048604dcb81",
+      "fact-version_6e72a0283c037cf383aebe8f",
+      "fact-version_6f2cae6deee6d40f4d441d4d",
+      "fact-version_714b6b92e44aaebbcae36be5",
+      "fact-version_7793cd4d60abdbb1f462a6ed",
+      "fact-version_7beb18bd3c58e9d706c66823",
+      "fact-version_7d254fa7d7f844d798c9df49",
+      "fact-version_87e0f613bdfc679a213fab52",
+      "fact-version_892bcadcf477e28acb4b1d41",
+      "fact-version_8b8e7b6aa93b82277df11e21",
+      "fact-version_8e6c26ddd7e6baebbb1e2113",
+      "fact-version_92994ba8cdd010e6c0df31f7",
+      "fact-version_94f1d8777cfe69e118834264",
+      "fact-version_9797dd33d24e73ee232a1691",
+      "fact-version_9926e8b58d3b3fd82209f125",
+      "fact-version_9a2ce3c8820b58b6b28e58fa",
+      "fact-version_9c7a5349c7666dac49d9e42e",
+      "fact-version_9d305a63a4a6ad5743ba6ebb",
+      "fact-version_9db6b518a3bd982952b0b7de",
+      "fact-version_a09ba4aec16f7078897f7a19",
+      "fact-version_a108910b2bca6244ab886bfe",
+      "fact-version_a3178dd8121bace6b21f5495",
+      "fact-version_a542ccfdcd96505181c36535",
+      "fact-version_a724fd0680b05f837078ac7f",
+      "fact-version_b17775789fa6dd0ed537d493",
+      "fact-version_b279602ddcbee3270dc8466d",
+      "fact-version_b4ba6b44228f7296abc44d74",
+      "fact-version_b4c48d5a7aed84fd532d5385",
+      "fact-version_bcac6a3f25871a3a16a3145a",
+      "fact-version_c0b64c5e74ca5cb002a80617",
+      "fact-version_c6729de82e2ad624e75c1e72",
+      "fact-version_c701dd65936448c585e287e8",
+      "fact-version_c76790e04f0126d509458f69",
+      "fact-version_c8ca49481853c12265b2da53",
+      "fact-version_c984807be5b2cfccd3ba31ca",
+      "fact-version_cb345a9188b72c1630954f85",
+      "fact-version_ce7669bc42ba061a0ff70f5f",
+      "fact-version_cf0f1fd0beb6a4f8d5ac853b",
+      "fact-version_cf45a6637f3a0a2e91fe0417",
+      "fact-version_d01fb8fa02119956c0624a2e",
+      "fact-version_d9be1ef01fba87c54babd992",
+      "fact-version_ddccfd5e02b3608130db7014",
+      "fact-version_de385db2e87d5bd2747dd78d",
+      "fact-version_e1d4edb9f263b1ec9993bc53",
+      "fact-version_e6d3958bca09491e638ea12a",
+      "fact-version_ee12bf091095c4f3f57ea671",
+      "fact-version_f6f174dcd7a2eeed7f6b2a6f",
+      "fact-version_f9ba1fda0ff3336cbd30abb3",
+      "fact-version_faa89bb8580c55c7deb2ee26",
+      "fact-version_fcf94ae92646b3e49890c4f7",
+      "fact-version_ff95e3222feee49bff8b9aa8"
+    ],
+    "full_pool_retained": true,
+    "coverage_mode": "partial",
+    "current_promoted": false,
+    "user_edits": 0,
+    "observed_at": "2026-10-07T22:20:19+00:00",
+    "source_replay_not_new_live_check": true
+  },
+  "checks": {
+    "initial_red_v1": "8 product failures plus1 wrong test packet key; preserved",
+    "initial_red_v2": "9 product failures including actual24-week source",
+    "superseded_integration": "111PASS/1FAIL344.65s; old payload N rejected, no history rewrite",
+    "current_related": "83PASS20.73s, including real sources, no SKIP",
+    "current_materializer": "1PASS12.53s; fresh-rule rebuild from fixed raw bytes",
+    "shared_save_and_payload": "6PASS86.14s; actual linked public payload plus same-source edit",
+    "widegate": {"status":"GATE_OK quality-only","steps":6,"ruff":"src/tests/tools","strict_mypy":"src/tools 283 files","active_tests":"1185PASS254.52s","retained_compat":"20PASS1.18s, bounded compat","layering":"7PASS0.19s","legacy":"PASS lexical scan without old-root contact","not_release":true}
+  },
+  "delegation": {
+    "executor": {
+      "requested": "codebuddy-cli/deepseek-v4.1-flash:max",
+      "actual": "zcode/GLM-5.3-Flash:max",
+      "fallback": "predeclared, primary incomplete before usable resumable session",
+      "runtime_model_request_response_verified": true,
+      "exit_code": 0,
+      "duration_seconds": 1412.038,
+      "tool_calls": 14,
+      "worker_scoped_tests": "8PASS; mutation RED not initial TDD",
+      "parent_tests_strict": "63 errors, not full PASS"
+    },
+    "reviewer": {
+      "actual": "codebuddy-cli/deepseek-v4.1-flash",
+      "dispatch_effort": "max",
+      "response_effort_attestation": false,
+      "exit_code": 0,
+      "duration_seconds": 266.413,
+      "tool_calls": 37,
+      "bash": "denied",
+      "verdict": "REVISE",
+      "numeric_positive_subset_proven": false
+    }
+  },
+  "quarantine": {
+    "path": ".artifacts/1007-outcome-scope-current-v1/receipt.json",
+    "reason": "owner supplied future UTC00:00 after confusing localOct8 with UTC; retained unchanged, NOT_ACCEPTED",
+    "replacement": ".artifacts/1007-outcome-scope-current-v2/receipt.json",
+    "replacement_clock_witness": "2026-10-07T22:20:19+00:00"
+  },
+  "replay": {
+    "build": "uv run python tools/build_a_payload.py --cas-dir .artifacts/1007-pn-discovery-current-v1/project --capture-receipt .artifacts/1007-pn-discovery-current-v1/project/evidence/raw/sha256/57/57e282aa471c868fa2ed80959928d3a4f6ee9b834e2804a0ff517a6f57cfb19a.bin --alias-map .artifacts/1007-pn-current-source-v1/empty-source-alias-map.json --indication 结节性痒疹 --indication-id pn --cutoff 2026-10-08 --output <new-a-json>",
+    "materialize": "uv run python -m tools.materialize_ctgov_a_candidate --project <new-project-root> --cas-dir .artifacts/1007-pn-discovery-current-v1/project --payload <new-a-json> --sidecar <new-a-derivation-json> --observed-at <verified-current-offset-time> --trial nct04183335 --trial nct04202679 --trial nct04501666 --trial nct04501679 --bound-report-output <new-project-root>/inputs/a-bound.json --bound-b-report-output <new-project-root>/inputs/b-bound.json --output <new-receipt-json>"
+  },
+  "open": [
+    "scientific review of rebuilt changed rows",
+    "source-qualified positive numerical comparison and missing measure binding",
+    "full universe/China MAH/group/required papers",
+    "same-current A/B/C task chain and fresh-browser offline sharing",
+    "Ego12 recovery and shared translation capacity",
+    "four desktop widths/four states/L1L2/keyboard",
+    "24 portals/three hosts/install/recovery/RC"
+  ],
+  "boundaries": [
+    "old root untouched",
+    "historical source/snapshot/receipts unchanged",
+    "five unrelated user changes excluded",
+    "no raw reports/prompts/fulltexts/sites in Git",
+    "no new dependency/router/platform",
+    "no pause or release declaration"
+  ]
+}

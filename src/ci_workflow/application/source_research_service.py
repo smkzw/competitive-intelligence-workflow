@@ -1164,6 +1164,72 @@ def _report_safety_term_matches(row: object, expected: _RegistryResult) -> bool:
     return False
 
 
+def ctgov_outcome_denominator_candidates(
+    container: Mapping[str, Any], *, source_path: str,
+    groups: Mapping[str, str], trial_id: str, source_id: str,
+    issues: list[ClinicalTrialsResultCoverageIssue],
+) -> dict[str, list[RegistryDenominatorCandidate]]:
+    """Parse one explicit N scope shared by extraction and payload projection.
+
+    Callers choose the deepest *present* denoms scope. A local empty/invalid N
+    never inherits overall N. An invalid candidate blocks only its own group;
+    dropping it and using a valid sibling would hide a source conflict.
+    """
+    candidates: dict[str, list[RegistryDenominatorCandidate]] = {}
+    blocked: set[str] = set()
+    try:
+        denoms = _list_at(container.get("denoms", []), f"{source_path}.denoms")
+    except (TypeError, ValueError) as exc:
+        _parse_failure(issues=issues, trial_id=trial_id, source_id=source_id,
+                       source_path=f"{source_path}.denoms", detail=str(exc))
+        return candidates
+    for index, raw in enumerate(denoms):
+        path = f"{source_path}.denoms[{index}]"
+        try:
+            denom = _mapping_at(raw, path)
+            counts = _list_at(denom.get("counts", []), f"{path}.counts")
+        except (TypeError, ValueError) as exc:
+            _parse_failure(issues=issues, trial_id=trial_id, source_id=source_id,
+                           source_path=path, detail=str(exc))
+            # An unidentifiable malformed scope cannot prove any group's N.
+            blocked.update(groups)
+            continue
+        for count_index, raw_count in enumerate(counts):
+            count_path = f"{path}.counts[{count_index}]"
+            group_id = ""
+            try:
+                count = _mapping_at(raw_count, count_path)
+                group_id = _result_text(count.get("groupId"))
+                if group_id not in groups:
+                    raise ValueError(f"分母组别未定义：{group_id or '空值'}")
+                value = count.get("value")
+                candidates.setdefault(group_id, []).append(RegistryDenominatorCandidate(
+                    group_id=group_id, raw_value=str(value),
+                    raw_value_type=type(value).__name__, parsed_value=_result_int(value),
+                    unit=_result_text(denom.get("units")), value_path=f"{count_path}.value",
+                ))
+            except (TypeError, ValueError, KeyError) as exc:
+                if group_id in groups:
+                    blocked.add(group_id)
+                _parse_failure(issues=issues, trial_id=trial_id, source_id=source_id,
+                               source_path=count_path, detail=str(exc))
+    return {group: values for group, values in candidates.items() if group not in blocked}
+
+
+def ctgov_participant_denominator(
+    candidates: Sequence[RegistryDenominatorCandidate], *, param_type: str = "",
+) -> RegistryDenominatorCandidate | None:
+    """One compatible source N, including explicit zero; never a ratio claim."""
+    distinct = {(item.parsed_value, item.unit.casefold()) for item in candidates}
+    if len(distinct) != 1 or not all(
+        _is_participant_count_unit(unit)
+        or (not unit and "count_of_participants" in param_type.casefold())
+        for _, unit in distinct
+    ):
+        return None
+    return candidates[0]
+
+
 def _iter_outcome_results(
     *,
     record: Mapping[str, Any],
@@ -1200,41 +1266,10 @@ def _iter_outcome_results(
             }
             if any(not title for title in groups.values()):
                 raise ValueError("结果组别缺少标题")
-            denominator_candidates: dict[str, list[RegistryDenominatorCandidate]] = {}
-            for denom_index, raw_denom in enumerate(measure.get("denoms", [])):
-                denom_path = f"{path}.denoms[{denom_index}]"
-                try:
-                    denom = _mapping_at(raw_denom, denom_path)
-                    for count_index, raw_count in enumerate(
-                        _list_at(denom.get("counts", []), f"{denom_path}.counts")
-                    ):
-                        count_path = f"{denom_path}.counts[{count_index}]"
-                        try:
-                            count = _mapping_at(raw_count, count_path)
-                            group_id = _result_text(count.get("groupId"))
-                            if group_id not in groups:
-                                raise ValueError(f"分母组别未定义：{group_id or '空值'}")
-                            raw_count_value = count.get("value")
-                            denominator_candidates.setdefault(group_id, []).append(
-                                RegistryDenominatorCandidate(
-                                    group_id=group_id,
-                                    raw_value=str(raw_count_value),
-                                    raw_value_type=type(raw_count_value).__name__,
-                                    parsed_value=_result_int(raw_count_value),
-                                    unit=_result_text(denom.get("units")),
-                                    value_path=f"{count_path}.value",
-                                )
-                            )
-                        except (TypeError, ValueError, KeyError) as exc:
-                            _parse_failure(
-                                issues=issues, trial_id=trial_id, source_id=source_id,
-                                source_path=count_path, detail=str(exc),
-                            )
-                except (TypeError, ValueError, KeyError) as exc:
-                    _parse_failure(
-                        issues=issues, trial_id=trial_id, source_id=source_id,
-                        source_path=denom_path, detail=str(exc),
-                    )
+            denominator_candidates = ctgov_outcome_denominator_candidates(
+                measure, source_path=path, groups=groups, trial_id=trial_id,
+                source_id=source_id, issues=issues,
+            )
             unit_raw = _result_text(measure.get("unitOfMeasure"))
             unit = unit_raw.casefold()
             source_param_type = _result_text(measure.get("paramType"))
@@ -1256,12 +1291,19 @@ def _iter_outcome_results(
             )
             classes = _list_at(measure.get("classes", []), f"{path}.classes")
             measurements: list[
-                tuple[str, float, str, _ParsedOutcomeCategory, str, str, str, str]
+                tuple[str, float, str, _ParsedOutcomeCategory, str, str, str, str,
+                      list[RegistryDenominatorCandidate], str]
             ] = []
             saw_not_reported = False
             saw_measurement_node = False
             for class_index, raw_class in enumerate(classes):
-                class_mapping = _mapping_at(raw_class, f"{path}.classes[{class_index}]")
+                class_path = f"{path}.classes[{class_index}]"
+                class_mapping = _mapping_at(raw_class, class_path)
+                class_candidates = ctgov_outcome_denominator_candidates(
+                    class_mapping, source_path=class_path, groups=groups, trial_id=trial_id,
+                    source_id=source_id, issues=issues,
+                ) if "denoms" in class_mapping else denominator_candidates
+                class_n_path = class_path if "denoms" in class_mapping else path
                 class_title = _result_text(class_mapping.get("title"))
                 observation_timepoint = ctgov_class_observation_timepoint(class_title)
                 result_category = _outcome_category(title, class_title)
@@ -1284,6 +1326,13 @@ def _iter_outcome_results(
                         f"{path}.classes[{class_index}].categories[{category_index}]",
                     )
                     category_title = _result_text(category_mapping.get("title"))
+                    category_path = f"{class_path}.categories[{category_index}]"
+                    category_candidates = ctgov_outcome_denominator_candidates(
+                        category_mapping, source_path=category_path, groups=groups,
+                        trial_id=trial_id, source_id=source_id, issues=issues,
+                    ) if "denoms" in category_mapping else class_candidates
+                    denominator_scope = (category_path if "denoms" in category_mapping
+                                         else class_n_path)
                     for measurement_index, raw_measurement in enumerate(
                         _list_at(
                             category_mapping.get("measurements", []),
@@ -1332,6 +1381,8 @@ def _iter_outcome_results(
                                     category_title,
                                     observation_timepoint,
                                     type(raw_value).__name__,
+                                    category_candidates.get(group_id, []),
+                                    denominator_scope,
                                 )
                             )
                         except (TypeError, ValueError, KeyError) as exc:
@@ -1372,12 +1423,12 @@ def _iter_outcome_results(
             for (
                 group_id, value, measurement_path, result_category,
                 class_title, category_title, observation_timepoint, raw_value_type,
+                candidates, denominator_scope,
             ) in measurements:
                 report_term = _outcome_report_term(result_category, title, class_title)
                 numerator = None
                 denominator = None
                 denominator_path = None
-                candidates = denominator_candidates.get(group_id, [])
                 normalized_value = value
                 normalized_unit = "%" if is_percentage else (
                     "人" if is_participant_count else unit_raw
@@ -1398,7 +1449,7 @@ def _iter_outcome_results(
                             status="missing",
                             trial_id=trial_id,
                             source_id=source_id,
-                            source_path=f"{path}.denoms",
+                            source_path=f"{denominator_scope}.denoms",
                             result_key=result_identity,
                             reason_zh=(
                                 f"{group_id} 直接报告人数，但同终点分母缺失；"
@@ -1413,7 +1464,7 @@ def _iter_outcome_results(
                         _result_issue(
                             issues=issues, category=result_category,
                             status="conflicting", trial_id=trial_id,
-                            source_id=source_id, source_path=f"{path}.denoms",
+                            source_id=source_id, source_path=f"{denominator_scope}.denoms",
                             result_key=result_identity,
                             reason_zh=(
                                 f"{group_id} 同终点分母候选的数值或统计单位不一致："
@@ -1421,8 +1472,10 @@ def _iter_outcome_results(
                             ),
                         )
                     else:
-                        denominator = candidates[0].parsed_value
-                        denominator_path = candidates[0].value_path
+                        resolved = ctgov_participant_denominator(candidates, param_type=param_type)
+                        if resolved is not None:
+                            denominator = resolved.parsed_value
+                            denominator_path = resolved.value_path
                     if numerator < 0 or (denominator is not None and numerator > denominator):
                         _result_issue(
                             issues=issues, category=result_category,
@@ -1444,7 +1497,7 @@ def _iter_outcome_results(
                             status="missing",
                             trial_id=trial_id,
                             source_id=source_id,
-                            source_path=denominator_path or f"{path}.denoms",
+                            source_path=denominator_path or f"{denominator_scope}.denoms",
                             result_key=result_identity,
                             reason_zh="来源明确记录 0/0；比例未定义，不得报告零风险率",
                         )
@@ -2025,6 +2078,12 @@ def _bind_verified_ctgov_outcome_to_a_row(
     if atom.category != "outcome" or is_safety_domain_endpoint(atom.endpoint):
         raise ResearchPackageError("此绑定仅接受登记疗效结局")
     is_count = atom.numerator is not None
+    if not is_count and row.denominator is not None:
+        source_n = ctgov_participant_denominator(
+            atom.denominator_candidates, param_type=atom.source_param_type or "",
+        )
+        if source_n is None or row.denominator != source_n.parsed_value:
+            raise ResearchPackageError("疗效测量人数与当前访视来源分母不一致；不接受旧总人数")
     if is_count and (
         atom.denominator is None or not _is_participant_count_unit(row.unit)
         or row.numerator not in {None, atom.numerator}

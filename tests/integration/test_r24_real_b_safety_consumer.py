@@ -6,6 +6,7 @@ import json
 from datetime import UTC, datetime
 from hashlib import sha256
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -29,7 +30,26 @@ from ci_workflow.renderers.portal.report_a import ReportAPortalData, render_repo
 from ci_workflow.renderers.portal.report_b import ReportBPortalData, render_report_b_site
 from ci_workflow.storage.snapshot_store import LockedSnapshot
 from ci_workflow.storage.sqlite import open_database
+from tests.integration.test_1007_b_payload_deduplication import _assignment, _payload_paths
 from tools.materialize_ctgov_a_candidate import materialize
+
+
+def _page_rows(site: Path, page: Path, name: str) -> list[dict[str, Any]]:
+    """Consume the actual linked production payload, not obsolete inline JS.
+
+    Require one reachable assignment inside the exported site. All source/value,
+    unknown-group, user-save and shared-consumer assertions below stay intact.
+    """
+    matches = []
+    for path in _payload_paths(page):
+        assert path.is_relative_to(site.resolve()) and path.is_file()
+        text = path.read_text(encoding="utf-8")
+        if f"window.{name} = " in text:
+            matches.append(_assignment(text, name))
+    assert len(matches) == 1
+    rows = matches[0]
+    assert isinstance(rows, list) and all(isinstance(row, dict) for row in rows)
+    return rows
 
 
 def test_two_real_safety_counts_share_exact_a_b_source_and_reject_drift(
@@ -139,10 +159,7 @@ def test_two_real_safety_counts_share_exact_a_b_source_and_reject_drift(
         for row in a_report.safety
         if row.trial_id == "nct02264639" and row.group_assignment_state == "unknown"
     )
-    initial_b_html = (sites["B"] / "safety.html").read_text(encoding="utf-8")
-    initial_groups, _ = json.JSONDecoder().raw_decode(
-        initial_b_html.split("window.__CHART_GROUPS__ = ", 1)[1].lstrip()
-    )
+    initial_groups = _page_rows(sites["B"], sites["B"] / "safety.html", "__CHART_GROUPS__")
     unknown_chart_row = next(
         row
         for group in initial_groups
@@ -154,9 +171,7 @@ def test_two_real_safety_counts_share_exact_a_b_source_and_reject_drift(
     assert unknown_chart_row["renderable"] is False
     assert unknown_chart_row["product_zh"] == "结果组别产品归属待核"
     assert unknown_chart_row["disclosure_state"] in {"reported_value", "reported_zero"}
-    initial_views, _ = json.JSONDecoder().raw_decode(
-        initial_b_html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].lstrip()
-    )
+    initial_views = _page_rows(sites["B"], sites["B"] / "safety.html", "__EVIDENCE_VIEWS__")
     unknown_view = next(view for view in initial_views if view["row"]["row_id"] == unknown.row_id)
     located_ids = {
         view["row"]["row_id"] for view in initial_views if view["source_trace_state"] == "located"
@@ -240,15 +255,13 @@ def test_two_real_safety_counts_share_exact_a_b_source_and_reject_drift(
             assert indexed["slug"] == "safety"
             assert zero_row_id in indexed["keywords"]
             assert "1" in indexed["keywords"]
-            html = (site / "safety.html").read_text(encoding="utf-8")
-            embedded = html.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].split(";\n", 1)[0]
+            all_views = _page_rows(site, site / "safety.html", "__EVIDENCE_VIEWS__")
             view = next(
-                item for item in json.loads(embedded) if item["row"]["row_id"] == zero_row_id
+                item for item in all_views if item["row"]["row_id"] == zero_row_id
             )
             assert view["source_trace_state"] == "located"
             assert view["original_text"] == "0"
             assert view["value"]["value"] == "1"
-            all_views = json.loads(embedded)
             after_unknown = next(
                 item for item in all_views if item["row"]["row_id"] == unknown.row_id
             )

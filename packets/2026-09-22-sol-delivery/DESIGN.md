@@ -90,6 +90,14 @@ current编辑/清除重建核上一版本文件hash并重开原PDF精确页；�
 
 ## 1. 最小架构
 
+结局N复用source_research_service同一个作用域解析与参与者N解析函数，
+generic A builder不再自行挑总体denoms。measure→class→category仅在子层
+没有denoms字段时继承；子层存在但空、坏或该组缺失时不回退。坏候选只
+阻断该组N，不吞其他组/下一访视，来源定位及问题scope保留。当前报告绑定
+对连续测量已携带N也核源，拒绝旧总体N而非静默覆盖。B源视图只读锁定
+原子/片段和合法A消费者；materializer显式附相同fact-version ID，登记
+合法B消费者并标partial；不补estimand、方向、分析集或共轴许可。
+
 1007V1基线来源增量：复用ResearchFact/ResearchResultContext，保留完整
 原子（value、spread、上下限、N各自定位）及原始人群/组/统计形式/单位。
 均值/SD不是人数，years/Years只在连续量的plot_unit层规范为years；

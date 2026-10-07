@@ -1,5 +1,52 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前批：共同逐访视N与B来源桥（父05eb277，连续实施）
+
+模式execution-plus-conference沿用实际已派节点；owner统一共同身份/parser/
+materializer。两个节点已终态，不新增chair或全页循环。源桥primary输出不全、
+无可用续接上下文，按预声明fallback实际ZCode GLM-5.3-Flash:max/1412.038s，
+模型request/response/effort真实核对；顶层wrapper仍称primary，未照抄。审阅
+CodeBuddy deepseek-v4.1-flash:max调度/266.413s，Read/Grep、Bash拒绝，未做
+hash/浏览器/测试。全报告及35源核对，REVISE，不借会商返回当医学接受。
+
+实核25旧采用原子N与class不符，measure11:1/13:23/18:1。先9反例，其中首轮
+8产品FAIL+1误用raw_measure包键；修测试键后真实9FAIL，再共同最小完整改动。
+parser与generic builder共用作用域/参与者N解析；class/category字段存在就
+不回退，即使空/缺组/坏值；该组坏候选不留好候选计算比例，不吞后续访视。
+原n/估计量/零值各保留；当前绑定对测量N也核源，旧总N不静默覆盖。
+
+第一次相关批111PASS/1FAIL344.65s，新桥准确拦了旧v3输入错误N；不能为91
+通过强改旧快照或guard。普通materializer回归改用固定原件+当前生产builder
+重建，83当前相关PASS20.73s、1真实普通materializer PASS12.53s。前七文件
+scoped Ruff、四源strict随后由一次宽门扩大，绝不按每行跑全仓。
+本次宽门实际终态GATE_OK quality-only/6：Ruff src/tests/tools、strict
+src/tools283文件、活跃1185PASS254.52s、保留兼容20PASS1.18s、层级7PASS
+0.19s及旧路径 lexical scan；没缩范围，没把开发门说成科学或发布完成。
+旧历史只读投影证明字节/锁定一致性，不证明当时N科学正确。
+
+原当前分页重新构建38产品/43研究/3544疗效/189安全/48其他，1750 N修正，
+原值/行身份未减。v2隔离项目四源949事实/877claim、91疗效A+B同事实ID、
+14安全共享/183基线消费者，局部0gap/0issue只对四源成立。实际SQL核相同91、
+完整池相同、0用户修改、无current。不是其余科学采用/医学匹配/恢复证明。
+输入/快照/精确hash/重建命令见owner-outcome-scope-v1.json，大原文/DB留本地。
+
+Worker邻接曾9PASS/1FAIL771.08s，真实原因旧测试硬找inline大JS；owner改
+读页面实际链接公共载荷且唯一赋值/站内文件可达，保留来源/数值/unknown/
+真实保存全部行为断言。当前6相关PASS86.14s，未恢复旧庞大inline策略。
+Worker mutation RED不是先RED TDD，parent测试strict63errors不冒全仓PASS。
+
+复盘：不能把“同源/锁定一致”替代原始作用域正确；复用论文/数据不等于
+复用已知有误的提取结果；不同测量恰好同值不能自动去重；来源语义差异不
+靠签发补齐。首次回执误把本地Oct8填成未来UTC00:00，未覆写/接受，另建
+v2按真实clock2026-10-07T22:20:19+00重放，明确隔离错误v1。既有数据不丢，
+但今后临床获取时刻必须时区显式且核实际时钟，不能拿默认日期编造。
+
+下一步源支持复用语义与遗漏绑定、真实正向横比、同currentABC任务链；独立
+审阅未证明数值正例，保留量表/分析集/ICE/估计量等硬界。Ego/共享译文容量/
+附件Ask仍只阻断有关分支；24/三宿主/安装/恢复/RC未完。Goal ACTIVE，无暂停。
+
+以下上一批现场为05eb277历史，PENDING状态不再代表当前：
+
 ## 当前批：W07真实检索与论文解析根因（父dc3712c，连续实施）
 
 两已派节点仍PENDING，owner选inline：论文关系/角色解析及来源差异是同一

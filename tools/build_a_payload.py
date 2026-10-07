@@ -14,14 +14,18 @@ import json
 import re
 import sys
 import unicodedata
+from dataclasses import asdict
 from datetime import UTC, date, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from ci_workflow.application.source_research_service import (  # noqa: E402
+    ClinicalTrialsResultCoverageIssue,
     classify_source_outcome,
     ctgov_class_observation_timepoint,
+    ctgov_outcome_denominator_candidates,
+    ctgov_participant_denominator,
 )
 from ci_workflow.reports.b.safety_concepts import (  # noqa: E402
     describe_measured_safety_concept,
@@ -366,7 +370,7 @@ def main() -> None:
     safety_rows: list[dict[str, Any]] = []
     dev_candidates: dict[str, list[tuple[bool, str]]] = {}
     enrollment_issues: list[dict[str, str]] = []
-    denominator_conflicts: list[dict[str, str]] = []
+    denominator_conflicts: list[dict[str, Any]] = []
     product_regions: dict[str, set[str]] = {}
     product_phase: dict[str, str] = {}
     product_status: dict[str, str] = {}
@@ -699,44 +703,23 @@ def main() -> None:
                         group_titles[gid] = gtitle
 
                 unit = str(measure.get("unitOfMeasure") or "") or "值"
-                denominator_by_group: dict[str, int] = {}
-                conflicting_denominator_groups: set[str] = set()
-                denominator_candidates: dict[str, list[dict[str, Any]]] = {}
-                for denom_index, denom in enumerate(measure.get("denoms") or []):
-                    for count_index, count in enumerate(denom.get("counts") or []):
-                        group_id = str(count.get("groupId") or "").strip()
-                        raw_count = count.get("value")
-                        if group_id:
-                            denominator_candidates.setdefault(group_id, []).append({
-                                "value_path": (
-                                    "$.resultsSection.outcomeMeasuresModule.outcomeMeasures"
-                                    f"[{measure_index}].denoms[{denom_index}]"
-                                    f".counts[{count_index}].value"
-                                ),
-                                "raw_value": raw_count,
-                                "raw_value_type": type(raw_count).__name__,
-                                "param_type": denom.get("paramType"),
-                                "unit": denom.get("units"),
-                            })
-                        if not group_id or isinstance(raw_count, bool):
-                            continue
-                        try:
-                            count_value = int(str(raw_count))
-                        except (TypeError, ValueError):
-                            continue
-                        if count_value > 0 and group_id not in conflicting_denominator_groups:
-                            if group_id in denominator_by_group and (
-                                denominator_by_group[group_id] != count_value
-                            ):
-                                conflicting_denominator_groups.add(group_id)
-                                denominator_by_group.pop(group_id)
-                                denominator_conflicts.append({
-                                    "trial_id": nct.lower(), "endpoint": title,
-                                    "group_id": group_id,
-                                })
-                                continue
-                            denominator_by_group[group_id] = count_value
+                measure_path = (
+                    "$.resultsSection.outcomeMeasuresModule.outcomeMeasures"
+                    f"[{measure_index}]"
+                )
+                n_issues: list[ClinicalTrialsResultCoverageIssue] = []
+                measure_ns = ctgov_outcome_denominator_candidates(
+                    measure, source_path=measure_path, groups=group_titles,
+                    trial_id=nct.lower(), source_id=page_meta[page_no - 1][1],
+                    issues=n_issues,
+                )
                 for class_index, cls in enumerate(measure.get("classes") or []):
+                    class_path = f"{measure_path}.classes[{class_index}]"
+                    class_ns = ctgov_outcome_denominator_candidates(
+                        cls, source_path=class_path, groups=group_titles,
+                        trial_id=nct.lower(), source_id=page_meta[page_no - 1][1],
+                        issues=n_issues,
+                    ) if "denoms" in cls else measure_ns
                     # 独立复核修复：携带分析集标签（Interim/Full Analysis 等），
                     # 同终点的不同分析集行并列呈现，口径不再被压成单一标签
                     cls_title = str(cls.get("title") or "").strip()
@@ -751,6 +734,25 @@ def main() -> None:
                         f"登记结果人群（{cls_title}）" if cls_title else "登记结果人群"
                     )
                     for category_index, cat in enumerate(cls.get("categories") or []):
+                        category_path = f"{class_path}.categories[{category_index}]"
+                        scoped_ns = ctgov_outcome_denominator_candidates(
+                            cat, source_path=category_path, groups=group_titles,
+                            trial_id=nct.lower(), source_id=page_meta[page_no - 1][1],
+                            issues=n_issues,
+                        ) if "denoms" in cat else class_ns
+                        denominator_by_group: dict[str, int] = {}
+                        for group_id, candidates in scoped_ns.items():
+                            resolved = ctgov_participant_denominator(
+                                candidates, param_type=str(measure.get("paramType") or ""),
+                            )
+                            if resolved is not None:
+                                denominator_by_group[group_id] = resolved.parsed_value
+                            else:
+                                denominator_conflicts.append({
+                                    "trial_id": nct.lower(), "endpoint": title,
+                                    "group_id": group_id, "source_path": category_path,
+                                    "reason": "incompatible_denominator_candidates",
+                                })
                         # 独立复核第二十一轮 veto：登记测量的互斥子类
                         # （如 Improved/Worsened from Baseline）必须进入行标签，
                         # 否则同臂同测量的 4 行同名并列，数值含义无法还原
@@ -801,9 +803,8 @@ def main() -> None:
                                 "group_id": group_id,
                                 "group_title": group_title,
                                 "timepoint": row_time_frame,
-                                "denominator_candidates": denominator_candidates.get(
-                                    group_id, [],
-                                ),
+                                "denominator_candidates": [candidate.model_dump(mode="json")
+                                    for candidate in scoped_ns.get(group_id, [])],
                             }
                             domain = classify_source_outcome(
                                 title, source_class_title, cat_title,
@@ -938,6 +939,7 @@ def main() -> None:
                                 "domain": "efficacy", "row_id": row_id,
                                 **source_atom,
                             })
+                denominator_conflicts.extend(asdict(issue) for issue in n_issues)
             # 会商 P0 #3（矩阵三轴）：治疗臂样本量从 participantFlow
             # Started 里程碑数提取，喂饱矩阵气泡图的样本量轴
             _flow_groups = (results.get("participantFlowModule") or {}).get("groups") or []
