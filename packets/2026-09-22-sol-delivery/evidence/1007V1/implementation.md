@@ -1,5 +1,48 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前批：W07真实检索与论文解析根因（父dc3712c，连续实施）
+
+两已派节点仍PENDING，owner选inline：论文关系/角色解析及来源差异是同一
+生产合同，额外worker会增加共享写入成本；既有独立源语义挑战继续，不增
+chair/重复全页会商。NLM官方DTD给CommentsCorrections方向/字段决定性证据，
+本批保留/候选拦截是确定性路径修复，未作临床等价或正式Publication裁决。
+[当前完整机器清单v2](owner-source-discovery-v2.json)为唯一新范围；非RC。
+
+三次当前真实CTgov条件52/58/52→58唯一、无版本冲突，较旧原始52增加六个
+发现会员，不等于六个创新竞品。原52差异全部仅平台versionHolder从10-06
+到10-07，其他源字段相同；旧门户43研究全部保留，15集合差异待资格核验。
+新GET与内容比较分开，不因为raw SHA改变就生成新的临床结论。
+
+三PubMed查询103/186/13→257唯一题名。依技能先esearch、ESummary全题名
+分选、9短名单efetch；初资源预算200显式失败，原响应保留，下一显式核查
+扩大500而非截Top-N。9摘要不当完整论文；PMC批量四份中三body/一metadata。
+既有source_capture_from_linked_jats_xml只收单篇，不能重序列化子树当原件，
+另取真实四单篇响应、原DOI/PMC/PMID一致：三capture/189+45+33正文块，一
+metadata-only/no capture。published/first-disclosed仍未知，acquired不倒填。
+原文受控本地，不进Git或安装/分享包，也不将许可文本当商业再分发批准。
+
+当前生产解析曾丢日本主要论文及勘误双向关联，修自身关系/方向/精确位置到
+PubMedRecord与CLI紧凑回执；原源不改，旧空字段不追加。未核更正/撤稿/关注/
+更新候选unclassified，不自动推荐主要结果；普通评论不阻断，也不等于更正
+已经解决。真实PRIME、OLYMPIA2被漏成support，OLYMPIA1因后段ad hoc误降
+整篇；增加明确实际应答句式，规划/人口样本数字/整篇次级/方案门不放宽。
+三真主要报告全部production函数重放，仍只是候选，不授权WI/PP量表等价。
+
+初整族23FAIL/1PASS，返回工具有截断、完整stdout未落档，明确不造日志hash；
+CLI生产回执另1RED持久保存。应答初-k作用全选集而误排三真用例，4FAIL/
+3PASS/33deselected不算真实测试；更正选择器后7FAIL/3PASS含三真RED，再
+完整最小改动。最终11文件155PASS2.23s、Ruff五文件/strict两源，非全仓/屏幕/
+临床或发布门。最初两处超行长按完整batch修，无每行全仓重跑。union脚本
+直接路径启动因tools import失败，改用既有python -m，不把环境失败改产品。
+
+v1机器清单后运行脚本增加生产桥；旧脚本已逐字重建保留为retrieve-pre-bridge，
+SHAa0a216c29c52a1843de178d48eb59e250d48b61eabddb37a06661f82a3a3f91f
+与v1精确一致；v2记录迁址和当前脚本，不更新历史hash冒充通过。v2/raw/各
+失败/旧投影均保留。反思：当前获取≠历史可得，raw改变≠科学值改变，规则
+“没识别到”≠没有主要论文，元数据≠全文；真正补件/完整性/独立分类仍需运行。
+共享源桥/materializer未验证代码不混提交；Ego/容量/附件、同currentABC和
+24门户/三宿主/安装/恢复/RC仍开放，继续就绪分支，不人为阶段暂停。
+
 ## 里程碑12：临床问题共列与数值分面分离（在途）
 
 父提交20a89bfb6b68b4857b39eda014683c3ab4a0ac4e。Owner直接实施共享A/B

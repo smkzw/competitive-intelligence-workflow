@@ -795,11 +795,9 @@ def _research_fetch_pubmed_handler(args: argparse.Namespace) -> int:
             "acquisition": result.model_dump(mode="json", exclude={"records"}),
             "record_count": len(result.records),
             "records": [
-                {
-                    "pmid": record.pmid,
-                    "title": record.title,
-                    "publication_types": list(record.publication_types),
-                }
+                record.model_dump(mode="json", include={
+                    "pmid", "title", "publication_types", "relation_candidates",
+                })
                 for record in result.records
             ],
             "limitation": (

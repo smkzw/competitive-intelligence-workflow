@@ -184,3 +184,31 @@ def test_followup_whole_scope_not_any_secondary_sentence_or_planned_estimate(
     assert result.role == expected
     assert result.record == record
     assert result.can_replace_primary_report is (expected == "primary_report")
+
+
+@pytest.mark.parametrize(("abstract", "expected"), (
+    ("Primary endpoints were responder outcomes. RESULTS: Participants achieved itch "
+     "response (53% versus 19%, P < .01). NCT04501666.", "primary_report"),
+    ("The primary endpoint was a reduction in itch. A reduction was achieved by 53% "
+     "and 19% of participants, respectively. NCT04501666.", "primary_report"),
+    ("METHODS: Primary endpoints were responder outcomes. RESULTS: A greater percentage "
+     "had an itch response (53% versus 19%; adjusted difference 31%, 95% CI 20-40). "
+     "NCT04501666.", "primary_report"),
+    ("METHODS: Primary endpoint was response. RESULTS: Participants achieved itch response "
+     "(53% versus 19%, P < .01). A later post-hoc biomarker analysis was also reported. "
+     "NCT04501666.", "primary_report"),
+    ("Primary endpoint response will be achieved by 53% according to the sample-size "
+     "assumption. NCT04501666.", "supporting_publication"),
+    ("Primary endpoint was response. METHODS: We enrolled 53% female participants and "
+     "met the enrollment target. NCT04501666.", "supporting_publication"),
+    ("Primary endpoint was response. RESULTS: The anticipated response was 53%. "
+     "NCT04501666.", "supporting_publication"),
+))
+def test_source_response_language_is_not_demographic_or_planned_efficacy(
+    abstract: str, expected: str,
+) -> None:
+    record = PubMedRecord(pmid="99900004", title="Randomized phase 3 trial",
+                          abstract=abstract, publication_types=("Randomized Controlled Trial",))
+    result, = classify_pubmed_records((record,), target_nct_ids=("NCT04501666",))
+    assert result.role == expected
+    assert result.can_replace_primary_report is (expected == "primary_report")

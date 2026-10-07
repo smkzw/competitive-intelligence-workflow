@@ -2,6 +2,25 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Current parentdc3712c/origin verified. Owner inline W07 parser/source batch while
+the already-dispatched source executor and independent35-context challenge stay
+PENDING. Same scientific contract owner; no extra shared writer/chair/allpage loop.
+Official NLM relationship definition decisive for preservation/guard, no new final
+clinical interpretation. Current source manifest owner-source-discovery-v2.json.
+Three CTgov queries52/58/52 ->58; six wider-query members pending eligibility,
+old52 only versionHolder differs, oldportal43 preserved. PubMed103/186/13 ->257
+titles ->9 abstracts; original production single-JATS bridge3 captures/1metadata,
+unknown publication date, no current/adoption/source overwrite. Root integrity23
+FAIL/1PASS (complete initial stdout not persisted, no invented hash); CLI1RED;
+response7FAIL/3PASS includes three real failures ->155relatedPASS2.23s, scoped
+Rufffive/stricttwo. Earlier -k accidentally deselected real cases explicitly NOT_RUN,
+then selector corrected before repair. v1 old script byte-exact retained with v2
+relocation record; no rewritten history. Current widegate waits common source
+interface stable, no per-line fullgate. User five/unknown/raw/old-root exclusion
+preserved. All scientific/browser/ABC/24/hosts/install/recovery/RC open, no pause.
+
+The following milestone12 checkpoint is historical to dc3712c, not new acceptance.
+
 Milestone12 active, HEAD/origin20a89bfb verified (milestone11 committed/pushed).
 Execution-plus-conference: disjoint source bridge still PENDING; owner changed
 known-question matrix columns while retaining separate unchanged numeric facets,

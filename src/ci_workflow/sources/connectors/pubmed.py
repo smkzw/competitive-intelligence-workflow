@@ -38,6 +38,22 @@ class PubMedIdentifierCandidate(BaseModel):
     field_path: str
 
 
+class PubMedRelationCandidate(BaseModel):
+    """Own citation relationship, preserving incomplete/conflicting native evidence.
+
+    NLM RefType conveys direction; a comment is not an erratum. The target is
+    not another retrieved article or an identity alias, even when its PMID is
+    missing. Unknown future types remain recoverable rather than first-wins.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    ref_type: str
+    pmid: str
+    reference: str
+    note: str
+    field_path: str
+
+
 class PubMedRecord(BaseModel):
     """由 PubMed EFetch 原文解析得到的最小不可变记录。"""
 
@@ -49,6 +65,9 @@ class PubMedRecord(BaseModel):
     publication_types: tuple[str, ...]
     registry_nct_ids: tuple[str, ...] = ()
     identifier_candidates: tuple[PubMedIdentifierCandidate, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
+    relation_candidates: tuple[PubMedRelationCandidate, ...] = Field(
         default=(), exclude_if=lambda value: not value,
     )
 
@@ -171,6 +190,29 @@ def _own_identifier_candidates(
     return tuple(candidates)
 
 
+def _own_relation_candidates(
+    article_node: ElementTree.Element, *, is_book: bool,
+) -> tuple[PubMedRelationCandidate, ...]:
+    # Exact own-citation paths only; do not descend into bibliography IDs.
+    # https://dtd.nlm.nih.gov/ncbi/pubmed/doc/out/250101/el-CommentsCorrections.html
+    tag = "BookDocument" if is_book else "MedlineCitation"
+    candidates: list[PubMedRelationCandidate] = []
+    for citation_index, citation in enumerate(article_node.findall(f"./{tag}"), 1):
+        for list_index, relation_list in enumerate(
+            citation.findall("./CommentsCorrectionsList"), 1,
+        ):
+            for index, node in enumerate(relation_list.findall("./CommentsCorrections"), 1):
+                candidates.append(PubMedRelationCandidate(
+                    ref_type=node.get("RefType", ""),
+                    pmid=_element_text(node.find("./PMID")),
+                    reference=_element_text(node.find("./RefSource")),
+                    note=_element_text(node.find("./Note")),
+                    field_path=(f"./{tag}[{citation_index}]/CommentsCorrectionsList[{list_index}]"
+                                f"/CommentsCorrections[{index}]"),
+                ))
+    return tuple(candidates)
+
+
 def parse_pubmed_efetch_xml(xml_text: str) -> tuple[PubMedRecord, ...]:
     """Parse own journal/book citation identity, never nested relation PMIDs."""
     try:
@@ -225,6 +267,7 @@ def parse_pubmed_efetch_xml(xml_text: str) -> tuple[PubMedRecord, ...]:
                 publication_types=publication_types,
                 registry_nct_ids=registry_nct_ids,
                 identifier_candidates=_own_identifier_candidates(article_node, is_book=is_book),
+                relation_candidates=_own_relation_candidates(article_node, is_book=is_book),
             )
         )
     return tuple(records)
@@ -274,14 +317,23 @@ def _is_observed_result(sentence: str) -> bool:
         return True
     measured_result = re.search(
         r"\b(?:mean difference|hazard ratio|risk ratio|odds ratio|"
-        r"least[- ]squares|least squares|response rate|improved|reduced|"
+        r"least[- ]squares|least squares|adjusted difference|response rate|improved|reduced|"
         r"increased|decreased)\b", text,
+    )
+    # Observed responder outcomes can be reported as achieved/had a response,
+    # not just "response rate". Restrict the verb to an outcome noun in the
+    # same clause; enrollment counts and planned responses remain excluded.
+    responder_result = re.search(
+        r"\b(?:achieved|attained|had)\s+(?:\w+[ -]){0,6}"
+        r"(?:response|reduction|improvement|remission|success)\b|"
+        r"\b(?:response|reduction|improvement|remission|success)\b"
+        r"[^.!?;]{0,100}\b(?:was|were)\s+(?:achieved|attained|observed)\b", text,
     )
     outcome_statistic = re.search(
         r"(?:\d(?:\.\d+)?\s*%|\d\s*/\s*\d|\b\d+(?:\.\d+)?\s*%?\s*ci\b|"
         r"\bp\s*[=<]\s*\.?\d)", text,
     )
-    return bool(measured_result and outcome_statistic)
+    return bool((measured_result or responder_result) and outcome_statistic)
 
 
 def _main_result_offset(abstract: str) -> int | None:
@@ -333,9 +385,35 @@ def _classify(record: PubMedRecord, matched: tuple[str, ...]) -> ClassifiedPubli
         r"\b(?:co[- ]?)?primary (?:end ?points?|outcomes?)\b", combined,
     ))
     result_signal = main_result_offset is not None
+    # This is an unresolved-integrity guard, not a final exclusion verdict or
+    # proof of a successful freshness check. Existing independent publication
+    # review must resolve the original paper and linked correction together.
+    integrity_relation_types = {
+        "ErratumIn", "ErratumFor", "RetractionIn", "RetractionOf",
+        "ExpressionOfConcernIn", "ExpressionOfConcernFor",
+        "CorrectedandRepublishedIn", "CorrectedandRepublishedFrom",
+        "RetractedandRepublishedIn", "RetractedandRepublishedFrom", "UpdateIn", "UpdateOf",
+    }
+    integrity_publication_types = {
+        "retracted publication", "retraction of publication", "expression of concern",
+        "published erratum", "corrected and republished article",
+    }
+    integrity_signals = tuple(dict.fromkeys(
+        [item.ref_type for item in record.relation_candidates
+         if item.ref_type in integrity_relation_types]
+        + [item for item in record.publication_types
+           if item.casefold() in integrity_publication_types]
+    ))
     signals: tuple[str, ...]
-    if not matched:
+    if integrity_signals:
         role: PublicationRole = "unclassified"
+        signals = (*integrity_signals, "更正/撤稿/关注或更新关系待核，保留独立复核")
+        rationale = (
+            "原始出版元数据标记更正、撤稿、关注或更新；须结合原文和关联材料复核。"
+            "当前不得自动推荐替代主要结果，不等于排除整篇，也不改变原始来源。"
+        )
+    elif not matched:
+        role = "unclassified"
         signals = ("未匹配目标 NCT", "关系未确定，保留模型及独立复核")
         rationale = (
             "当前元数据未匹配目标试验登记号，论文—试验关系未确定；"

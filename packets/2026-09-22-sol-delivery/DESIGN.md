@@ -4,6 +4,13 @@
 
 ## 1007V1 当前增量合同
 
+PubMed复用现有PubMedRecord，只加有来源位置的relation_candidates，空集合
+不追加到旧序列化。仅取自身citation的CommentsCorrections，不借参考文献身份；
+RefType方向、空/冲突标识完整保留。紧凑CLI回执同样保留关系。更正/撤稿/关注/
+更新标记使规则候选暂为unclassified，留给既有独立Publication门，不改原源或
+另建审批平台。实际应答比例句式可识别主要结果，规划/入组数字和次级整篇范围
+不放宽。论文类型识别不许可量表等价、数值共轴、发布时间或再分发。
+
 共同研究矩阵复用原WorkspaceMembership/FacetPlan/NumericFrameEligibility。
 已知概念及定义的同问题列可聚合描述性单元格；每列显式保留
 scientific_facet_ids、scientific_facets和事实对应条件标签。原科学分组、数值

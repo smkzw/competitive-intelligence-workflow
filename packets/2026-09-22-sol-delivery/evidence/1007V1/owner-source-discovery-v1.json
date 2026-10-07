@@ -1,0 +1,240 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 108431,
+      "path": ".artifacts/1007-pn-discovery-current-v1/union.json",
+      "sha256": "817871c138e92d29a9feeb5c33994120746a1133de77722494a99593acfe5f64"
+    },
+    {
+      "byte_size": 2062635,
+      "path": ".artifacts/1007-pn-current-source-v1/a-source-payload-v3.json",
+      "sha256": "695df430ffeff6a1df82aff39282f72c1c24f683ba9f3b5f6499a06f65f1483e"
+    },
+    {
+      "byte_size": 2978130,
+      "path": ".artifacts/1007-pn-current-source-v1/evidence/raw/sha256/82/82b4ed9ab0c63e227a2c4c34b85727dd988e55062850d42b41517f0749168edf.bin",
+      "sha256": "82b4ed9ab0c63e227a2c4c34b85727dd988e55062850d42b41517f0749168edf"
+    },
+    {
+      "byte_size": 9738,
+      "path": ".artifacts/1007-pn-publications-current-v1/retrieve.py",
+      "sha256": "a0a216c29c52a1843de178d48eb59e250d48b61eabddb37a06661f82a3a3f91f"
+    },
+    {
+      "byte_size": 16401,
+      "path": ".artifacts/1007-pn-publications-current-v1/searches.json",
+      "sha256": "6a3cd357f583fdda1f611fc93bed16181fe49a2294103cc9cfbd5346c50d47c8"
+    },
+    {
+      "byte_size": 215015,
+      "path": ".artifacts/1007-pn-publications-current-v1/title-triage.json",
+      "sha256": "10efadadb73b73084ebb0e3ee5165423b033ea913dbd00c0a42e5f66140b90ff"
+    },
+    {
+      "byte_size": 1673,
+      "path": ".artifacts/1007-pn-publications-current-v1/shortlist.json",
+      "sha256": "ef35dfd88f09bee7655b1aa1e9111cd3e7f07e0a2b46a19c23f7896c2addf729"
+    },
+    {
+      "byte_size": 27673,
+      "path": ".artifacts/1007-pn-publications-current-v1/abstracts.json",
+      "sha256": "aa0b8c122452b98e1dc510035835c83fba3d3f81427a8e077db94eb5fe6728e6"
+    },
+    {
+      "byte_size": 4099,
+      "path": ".artifacts/1007-pn-publications-current-v1/pmc-fulltext.json",
+      "sha256": "1c0de77dbcbde8d4e1474bf46911d00b61a43dd0e9f1e162dbafa92e8c6fc883"
+    },
+    {
+      "byte_size": 34360,
+      "path": ".artifacts/1007-pn-publications-current-v1/source-projection-v2.json",
+      "sha256": "32d64b63ec2e26c7bb26b9fb84d403479bdd493af77b279276f197429d33c91c"
+    },
+    {
+      "byte_size": 34562,
+      "path": ".artifacts/1007-pn-publications-current-v1/source-projection-v3.json",
+      "sha256": "ee119a024c205ad4a56d78750d3c09093a4b60a5786370b5eaf5a38ed6c4308d"
+    }
+  ],
+  "code_parent": "dc3712c1ca269972e93fff15d04e23e5f34aa4c6",
+  "evidence": {
+    "runs/execution/ci-1007-display/owner-pubmed-integrity-cli-red-v1.txt": "1c58bb99242007d7349a5129270f4b540b45607a6c61896394c820fdc373bc4a",
+    "runs/execution/ci-1007-display/owner-pubmed-integrity-green-v1.txt": "4e55ee89ad02de03adcaca94c9c64a3130d48eed8480fad8ef34c5908a30e470",
+    "runs/execution/ci-1007-display/owner-pubmed-integrity-green-v2.txt": "f81676f3933e3697b304dcb6fc0ef7a62c049772b19ff643f979aa477910a807",
+    "runs/execution/ci-1007-display/owner-pubmed-integrity-green-v3.txt": "2df350672023e921e5ce0199ebce7574f22e72e0af62bebc72160ebd8b8fb854",
+    "runs/execution/ci-1007-display/owner-pubmed-response-red-v1.txt": "9cfe3de3e3f211c0fd65b2c2013a9d4f1c513980a8f469b1317266c45721ba02",
+    "runs/execution/ci-1007-display/owner-pubmed-response-red-v2.txt": "ea26f85bed9393407e4dab5ef48a7e190e03f496e3629bb3b161912bc40a49b5"
+  },
+  "independent_nodes": "ci-1007-b-source-efficacy and ci-1007-real-efficacy-semantics PENDING; no progress polling/re-dispatch/acceptance",
+  "pubmed": {
+    "bidirectional_erratum_pmids": [
+      "38629497",
+      "39226086"
+    ],
+    "freshness": "Correction links retained; absence of links is not proof of complete freshness; first publication not inferred from GET, accepted/received or journal issue date",
+    "full_bodies": 3,
+    "fulltext_missing_pmids": [
+      "39602139"
+    ],
+    "fulltext_raw_sha256": "7fafb5ecbb55f71cc2f8e3237d7c18479af57140e1fa1570f4175284e0eeeb6a",
+    "fulltext_requested": 4,
+    "fulltext_route_status": "incomplete",
+    "heuristic_role_counts": {
+      "primary_report": 4,
+      "supporting_publication": 2,
+      "unclassified": 3
+    },
+    "initial_200_title_budget": "FAILED_EXPLICITLY; all 257 retained, no Top-N truncation; raised bounded budget500 with new explicit lookup",
+    "primary_heuristic_positive_pmids": [
+      "37142763",
+      "37888917",
+      "39602139"
+    ],
+    "publication_gate": "NOT_CLOSED; heuristics are not independent verdicts",
+    "query_counts": [
+      103,
+      186,
+      13
+    ],
+    "raw_text_distribution": "No full source text in Skill/share/Git",
+    "raw_xml_sha256": "aca1ddec84f31256eb8c876ff32d6e87eba7e204163f19b4c6b32002c6826472",
+    "remaining_required_fulltext_and_classification": "OPEN",
+    "selected_abstract_count": 9,
+    "unique_title_count": 257
+  },
+  "query_receipts": [
+    {
+      "condition": "prurigo nodularis",
+      "count": 52,
+      "pages": [
+        {
+          "acquired_at": "2026-10-07T21:42:34.879609Z",
+          "raw_sha256": "1d6b1d82e3ae359f70b84d03fdf2e2c890d1022a6b87187fbebb45d3e47683bb",
+          "request_url": "https://clinicaltrials.gov/api/v2/studies?query.cond=prurigo+nodularis&format=json&pageSize=100&countTotal=true"
+        }
+      ],
+      "pagination_complete": true,
+      "receipt": {
+        "byte_size": 33131,
+        "path": ".artifacts/1007-pn-discovery-current-v1/project/evidence/raw/sha256/57/57e282aa471c868fa2ed80959928d3a4f6ee9b834e2804a0ff517a6f57cfb19a.bin",
+        "sha256": "57e282aa471c868fa2ed80959928d3a4f6ee9b834e2804a0ff517a6f57cfb19a"
+      },
+      "source_set_sha256": "daf1e816519b8cba7bbe8c883bd05cad656a48067cb5ed02314b894e9b117871"
+    },
+    {
+      "condition": "prurigo",
+      "count": 58,
+      "pages": [
+        {
+          "acquired_at": "2026-10-07T21:42:47.970982Z",
+          "raw_sha256": "fe14e7051512b7d33ad6165e2359d984ff406ca271d4b9e4736018319c853b0f",
+          "request_url": "https://clinicaltrials.gov/api/v2/studies?query.cond=prurigo&format=json&pageSize=100&countTotal=true"
+        }
+      ],
+      "pagination_complete": true,
+      "receipt": {
+        "byte_size": 36600,
+        "path": ".artifacts/1007-pn-discovery-current-v1/project/evidence/raw/sha256/cc/cc63e027d79b51ae1dfb6896624cc39f6e2ee075d3a881a688bffdd7d3b483a3.bin",
+        "sha256": "cc63e027d79b51ae1dfb6896624cc39f6e2ee075d3a881a688bffdd7d3b483a3"
+      },
+      "source_set_sha256": "119ba833caceaf4f1a2e186d992a1a6d7de7cebf9ab99ebe3596df0b09758f99"
+    },
+    {
+      "condition": "nodular prurigo",
+      "count": 52,
+      "pages": [
+        {
+          "acquired_at": "2026-10-07T21:43:05.589728Z",
+          "raw_sha256": "1d6b1d82e3ae359f70b84d03fdf2e2c890d1022a6b87187fbebb45d3e47683bb",
+          "request_url": "https://clinicaltrials.gov/api/v2/studies?query.cond=nodular+prurigo&format=json&pageSize=100&countTotal=true"
+        }
+      ],
+      "pagination_complete": true,
+      "receipt": {
+        "byte_size": 33127,
+        "path": ".artifacts/1007-pn-discovery-current-v1/project/evidence/raw/sha256/7c/7ccf5bbfa1fd498e76c0bf9fc77c048de74e71d0bfc8b457ae4d3cb3620a93f2.bin",
+        "sha256": "7ccf5bbfa1fd498e76c0bf9fc77c048de74e71d0bfc8b457ae4d3cb3620a93f2"
+      },
+      "source_set_sha256": "3e54b194216e602301fdd4c6a50dd1c305fa1bb6a590337e3573a77441ffc4f1"
+    }
+  ],
+  "registry_union": {
+    "China_and_reverse_expansion": "NOT_COMPLETE",
+    "all_other_source_fields_equal_count": 52,
+    "older_portal_not_current_registry": [],
+    "older_portal_trials": 43,
+    "query_memberships": 162,
+    "raw_added_ids": [
+      "NCT01963793",
+      "NCT03340155",
+      "NCT04193670",
+      "NCT04776694",
+      "NCT05528913",
+      "NCT07055009"
+    ],
+    "raw_original_studies": 52,
+    "raw_removed_ids": [],
+    "registry_not_older_portal": [
+      "NCT01963793",
+      "NCT03340155",
+      "NCT03540160",
+      "NCT03546816",
+      "NCT03677401",
+      "NCT04193670",
+      "NCT04681300",
+      "NCT04776694",
+      "NCT05316805",
+      "NCT05451316",
+      "NCT05528913",
+      "NCT06427122",
+      "NCT06779136",
+      "NCT06988618",
+      "NCT07055009"
+    ],
+    "same_id_versionHolder_only_change_count": 52,
+    "scientific_or_innovation_inclusion": "NOT_ACCEPTED",
+    "source_version_conflicts": 0,
+    "unique_studies": 58,
+    "universe_closed": false
+  },
+  "release_acceptance": false,
+  "schema_version": "1007-current-source-receipt-1",
+  "source_code": {
+    "src/ci_workflow/cli.py": "e5e1f2d6fcca43db32f40fdd3c75be227556b2e9c78f5d293690ed88eec1312d",
+    "src/ci_workflow/sources/connectors/pubmed.py": "c803c4b90ba2b87720f66e11e30eecd6c90e90a39a8c8df7a27e423b2db7a2d3",
+    "tests/integration/sources/test_1007_pubmed_integrity_relations.py": "936a151823308d8bb50608cc12eab72e66a7488df05477b86fdf0f5d6aebeb46",
+    "tests/integration/sources/test_1007_real_pn_publication_roles.py": "336798dd5d30df473d508f5e03b876a3f4323b8c317529ac4691eede2edc1c25",
+    "tests/unit/test_r24_pubmed_publication_roles.py": "4c2d3fcdaaafb4723fd84fa860355658995a8fc95b9b7cc9d251a20a1749bbe4"
+  },
+  "status": "unaccepted_discovery_and_parser_verification",
+  "verification": {
+    "cli_receipt_red": {
+      "failed": 1
+    },
+    "current_switched": false,
+    "integrity_family_initial_red": {
+      "complete_stdout": "NOT_PERSISTED; tool result truncated; exact test/source-parent re-playable",
+      "failed": 23,
+      "passed": 1
+    },
+    "related_final": {
+      "passed": 155,
+      "scope": "11 related files; 3 current real-source cases included, no SKIP; no full gate/browser/scientific acceptance",
+      "seconds": 2.23
+    },
+    "response_family_red": {
+      "deselected": 30,
+      "failed": 7,
+      "passed": 3,
+      "real_failures": 3
+    },
+    "response_first_selector": {
+      "deselected": 33,
+      "failed": 4,
+      "passed": 3,
+      "real_cases": "NOT_RUN due global -k; corrected selector in next RED"
+    },
+    "ruff": "PASS five changed files",
+    "strict_mypy": "PASS two production sources"
+  }
+}
