@@ -1729,8 +1729,9 @@ def _b_native_label(text: str) -> str | None:
         out = re.sub(pattern, rep, out, flags=re.I)
     for pattern, population_rep in _POPULATION_TOKENS:
         out = re.sub(pattern, population_rep, out, flags=re.I)
-    out = re.sub(r"\s*and\s*", "、", out, flags=re.I)
+    out = re.sub(r"\s*\band\b\s*", "、", out, flags=re.I)
     out = re.sub(r",\s*", "、", out)
+    out = re.sub(r"\s*、\s*", "、", out)
     out = re.sub(r"\(\s*", "（", out)
     out = re.sub(r"\s*\)", "）", out)
     out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
@@ -3320,7 +3321,7 @@ def _evidence_view(
         product_id=(None if row.get("group_assignment_state") == "unknown"
                     else product_id or None),
         trial_id=trial_id or None,
-        group_id=None,
+        group_id=_text(row.get("group_id")) or None,
         endpoint_id=None,
         event_id=None,
         timepoint_id=None,

@@ -1,0 +1,112 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "217e3cc479f2695e032e7060f08bf60976b28013",
+  "status": "development_candidate_continuing",
+  "scope": "source group identity and whole-word display repair; same-project C source bootstrap and independent owner reopen",
+  "source_code_sha256": {
+    "src/ci_workflow/renderers/portal/report_a.py": "117f5a0df2ddad056a1372c7e015d76f0b5c8dc10a223ca9f1d963a37a54d393",
+    "src/ci_workflow/renderers/portal/report_b.py": "cc5154b6e530d6369477c916d03181c350cd8be9681106d66fe475ed194b1879"
+  },
+  "test_code_sha256": {
+    "tests/reports/b/test_source_display_identity.py": "70cda5fdfd9ce2eaaf7ccca60124de1f3a898d3dec3ad2ca25fa9b6ec361b25a",
+    "tests/integration/test_1007_joint_c_bootstrap.py": "c6539dfe9c8ffd24b8047b8df6d978064fc1fb4f28e053db6ecbde4fe69a3eca"
+  },
+  "display_source_preview": {
+    "candidate": ".artifacts/1007-pn-baseline-b-preview-v3",
+    "physical_pages": 24,
+    "numeric_observations": 183,
+    "workspace_columns": 26,
+    "input_sha256": "566c91cdeb24c756d01d83289b13564f51a25cd8cd6d4f0e16c01e15570c4471",
+    "input_equal_to_previous_candidate": true,
+    "site_sha256": "9e4f3df5e7a53d47ed1f7f5515e8ebe71769167e654eba8c25b42224aa636e8a",
+    "preview_manifest_sha256": "751836404c71a9fef839df802654ae1336f36c10319bb747f1af94d842304469",
+    "source_group_values_quotes_versions_locators_population_preserved": true,
+    "static_audit_log_sha256": "9b780361f051e92ae1a5c24ca29773d26826e22ebaddfd522c4dbe7d6d5f9d04",
+    "unknown_product_stays_unknown": true,
+    "browser_visual_keyboard": "NOT_RUN"
+  },
+  "joint_C_source_bootstrap": {
+    "candidate": ".artifacts/1007-pn-joint-abc-source-v1/recovery/working/project",
+    "project_id": "project_3ee3ab2627f01ef9a757365b",
+    "shared_A_B_C_source_versions": [
+      "source-version_0f3c63f7f5acf2cd2aa83a7b",
+      "source-version_a6c43a83dd64957ec923e735",
+      "source-version_c17a4653ec8903dc9c822c60",
+      "source-version_c3fc5ac6e6f0a02c8744c4c7"
+    ],
+    "manifest_sha256": "2c1606cbf53716a127107bff9f66b24e08dd01b214a7ebcd11524efbfef277d1",
+    "snapshot_sha256": "b517a8c40c3f45024fc28dbcfb1d98140aa0b6146fabb99ea014a15aec797989",
+    "inputs_sha256": "9a726318828b55d2dde8d5fab705441a54e4ceefaec5b1e992034af63f6534e7",
+    "projection_sha256": "0601c5310ec3b9aaf5f9b7f0ab2c6bb1ba0156d25a313c021621df4e51bc7417",
+    "identity_graph_sha256": "d78750a4b3c908e299f1544651f965d68e0432d0fa8e2b7956857dbd75bd3aab",
+    "identity_context_digest": "16e80cb7fe342a5506ed89d3236fa42574f54a34209ebde9a80d77dc1ba18d2f",
+    "worker_receipt_sha256": "2f971483316faf52176567fecc5fd9a3cee540cae59163fa45412265cccd0ef3",
+    "owner_readonly_reopen_sha256": "6a5e104e30273bb92603399c210604611dd887fe134adeb3f7bb12aefbdbc175",
+    "observations_exact_quote_reextracted_by_owner": 254,
+    "consumer_rows_independently_read_from_database": 254,
+    "physical_C_pages_hash_checked": 16,
+    "endpoint_instances": 60,
+    "unsupported_atoms": 94,
+    "unresolved_atoms": 2,
+    "protocol_gaps": 18,
+    "unresolved_reason": "two placebo descriptions lack explicit dose; no dose invented",
+    "primary_product_status": "explicit caller proposals checked against A links and original protocol, not independent medical acceptance",
+    "background_intervention_links_retained": true,
+    "original_source_main_db_sha256": "63c826d738ac7281b0199defda8d6a18d089ded48a77eccfdee4df1b8b32dbed",
+    "original_source_inputs_snapshot_and_sidecars_unchanged": true,
+    "current_created_or_switched": false,
+    "scientific_acceptance": false,
+    "browser": "NOT_RUN"
+  },
+  "execution": {
+    "task": "ci-1007-joint-c-bootstrap",
+    "actual_route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "runtime_model_usage_key": "deepseek-v4.1-flash",
+    "duration_seconds": 683.159,
+    "observed_tool_calls": 94,
+    "exit_code": 0,
+    "fallback": false,
+    "worker_report_sha256": "fb814313effb80981b89c79545c296241cb9888a74b9d9ac418ffc7eeb34b106"
+  },
+  "verification": {
+    "word_group_family": {"behavior_red": 11, "initial_pass": 3, "related_pass": 38, "seconds": 1.64},
+    "time_disposition_identity_neighbors": {"pass": 30, "seconds": 0.92},
+    "owner_joint_C_display_neighbors": {"pass": 29, "seconds": 5.08, "log_sha256": "4fcc19e313ef12d0c73f841021b97ae7d94a40e885fe01721774b1bce121e3c7"},
+    "scoped_ruff_and_strict_two_source_files": "PASS",
+    "quality_gate_v11": {
+      "exit_code": 0, "steps": 6, "ruff": "src/tests/tools",
+      "strict_mypy_files": 281,
+      "active_test_scope": "tests/unit tests/contract excluding retained_legacy_format",
+      "active_pass": 1167, "active_seconds": 446.94,
+      "retained_compat_smoke_pass": 20, "layer_audit_pass": 7,
+      "legacy_check": "string_reference_scan_not_old_root_contact",
+      "log_sha256": "119f8a7a10a6b705e02f59ee20c6e20bea11d1d57a234e64537327af643d87e2",
+      "semantics": "quality_only_not_all_integration_or_browser_or_release"
+    }
+  },
+  "independent_C_source_review": {
+    "task": "ci-1007-joint-c-source",
+    "guard_excludes_execution_model": true,
+    "assigned_route": "zcode/zcode/GLM-5.3-Flash:max",
+    "preflight": "exit_0",
+    "status": "DISPATCHED_PENDING_NOT_ACCEPTED",
+    "scope": "fresh raw-source challenge of four-study C design meaning, not worker account or full visual review"
+  },
+  "failures_preserved": [
+    "Initial family used nonexistent point_estimate token; StopIteration is test setup, corrected before counting 11 behavior RED",
+    "Owner array-only page JSON helper could not parse workspace object; existing object decoder used without product repair",
+    "Worker first-attempt diagnostic SQLite read failed after C ingestion; distinct recovery subtree uses canonical access, failed attempt not accepted"
+  ],
+  "prior_current_r8_sha256_unchanged": "f716382f7509306eb1bed320d518ccd92d7a6e0891e82e4c2e954d4554e4aa7a",
+  "prior_current_acceptance_inherited": false,
+  "not_accepted": [
+    "Same-current C source scientific/review closure and complete A/B/C edit/share journey",
+    "Actual four desktop widths/four states/L1-L2/keyboard/offline fresh browser; Ego recovery decision outstanding",
+    "Baseline count/N/limit editing, comprehensive source-native semantics, positive multi-drug efficacy equivalence",
+    "Full competitive universe/publication/protocol/SAP/dynamic regulatory/group freshness",
+    "24 portals,three hosts,full install/recovery,RC/release"
+  ],
+  "preserved_unrelated_dirty_files": 5,
+  "general_cleanup_performed": false,
+  "next_bounded_step": "evaluate independent C raw-source challenge and close established source/consumer roots; never initialize current from review-only C marker"
+}

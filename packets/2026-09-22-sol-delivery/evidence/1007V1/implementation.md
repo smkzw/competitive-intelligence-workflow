@@ -1,5 +1,45 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 里程碑7已递交后：源组身份和词边界整族
+
+217e3cc479f2695e032e7060f08bf60976b28013已push/origin实核相同，只有五
+用户旧修改留存。发现B证据projection硬编码group_id=None，来源已有BG
+而产品关系未知不等于组ID未知；common路径改读已投影原组ID，不猜臂。
+A时间窗/B通用文字把单词内部and作连词，药名/Randomized被破坏；完整
+词边界修复，中文顿号空白收紧，真实连词/时间枚举仍正常。14整族初有
+一项测试错role造成StopIteration，未计有效RED；查生产枚举后11行为
+RED/3PASS，最小两文件改动后38相关PASS1.64s/30邻接PASS0.92s及Ruff/
+strict2源通过。不是每行重跑全仓，不扩药名公司字典或医学推理。
+
+普通B新真实基线预览v3从原不可变候选重放，24物理页/183观察/26比较列。
+183逐条原组/试验/值/引文/源版本/精确定位/人群核验，旧v2/v3原输入SHA
+566c91cd…4471完全相同，旧联合r8 generationSHAf716382f…4aa7a不变。
+最初owner借用了数组专用helper解析workspace对象失败，保留原trace；
+复用现有JSONDecoder对象读取后静态核验通过，没有改产品来救探针。
+实屏/键盘/离线新浏览器仍NOT_RUN，不能用静态JSON断言声称审美通过。
+
+E03一个新C同项目bootstrap测试/新产物目录已终态，确实CodeBuddy
+deepseek-v4.1-flash:max683.159s/94工具/exit0，无fallback；runtime modelUsage
+与命令核同。recovery工作副本复用同A/B/C合同、相同四来源版本和联合身份，
+254观察/60终点实例/16物理页。owner从原源精确locator逐一重提254原文/
+资格父子分段，SQL确实254绑定，不只相信worker返回计数；16页hash、
+快照、联合身份和原源DB/sidecar均核验。相关新29PASS5.08s，两个源strict/
+Ruff通过；只在worker终态和源冻结后一次v11完整开发门，实际六步exit0：
+全src/tests/tools Ruff、strict281源、活跃1167PASS446.94s、兼容20、分层7、
+旧路径字符串扫描，非全部integration/浏览器/发布。
+
+94未支持原子/18缺口/2安慰剂描述无显式剂量保留。组角色按原protocol
+类型，稳定group ID取既定label-to-ID显式提案而非数组/results分组；原
+背景联合干预保留。首次诊断SQLite直读失败，不复用无完整回执目录，
+新recovery使用既有canonical DB API；两尝试和失败回执都保留，不清理
+唯一证据。复盘：产物生成与辅助探针失败分别处理；C review-only标记
+明确禁止直接切current，不为跑通操作链改写标记或伪签科学通过。
+
+C来源医学解释触发一个独立会商而非再生产，guard排除已用执行模型，
+ZCode GLM-5.3-Flash:max预检0后实际派发。冻结原资料与候选，不给worker
+私有推理；pending不标通过。owner继续可就绪任务，候选/当前版本接受
+不可混合；完整ABC任务、实屏/科学/三宿主/24/RC仍未通过。
+
 ## 里程碑7：联合来源、基线事务和同版本分享（在途递交）
 
 共同源候选v5包含949事实/877claims/183基线观察，24条mean/median/SD建立

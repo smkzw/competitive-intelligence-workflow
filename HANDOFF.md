@@ -3,7 +3,7 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 用户已授权连续构建及阶段GitHub递交。本次Goal API重新读取已实际active；
 较早blocked为当时观察，不曾伪造恢复/覆盖/complete。接手实核HEAD/remote/脏树。
-最新已推送HEAD为21c726f560b24bdd10b229b94fb024552c8bcae2；
+最新已推送HEAD为217e3cc479f2695e032e7060f08bf60976b28013；
 本次源码/结果以包含新里程碑清单的提交及实际hash为准，不继承旧接受。
 
 合同：[PRD](packets/2026-09-22-sol-delivery/PRD.md)、
@@ -15,6 +15,19 @@
 Ask待答，不猜造编号。详细实施/复盘：[回执](packets/2026-09-22-sol-delivery/evidence/1007V1/implementation.md)。
 
 ## 本批实际结果
+
+当前新增显示族11行为RED/3PASS→38PASS1.64s，另30相邻PASS0.92s：A/B
+转写只识别完整and词，真实连词仍正常中文呈现；B下钻继承已知原结果组
+ID，即使产品关系未知也不丢ID。新普通B基线预览v3保留183观察/26比较列、
+原值/原文/源版本/精确定位/人群，未改旧r8 current或旧候选；静态核验不是
+实屏。E03 C bootstrap已实际683.159s/94工具调用/exit0，runtime模型使用
+deepseek-v4.1-flash:max，无fallback。新恢复副本在同一个项目生成C候选，
+254观察/60终点实例/16物理页；owner逐条重提原文且实际查库254消费者，
+复用A/B四个来源版本和联合身份。94未支持原子/18缺口/2无显式安慰剂剂量
+保留，不补造；首次诊断DB读取失败及原目录保留，采用recovery子树。
+review-only标记禁止直接进入current；不是科学或浏览器接受。新C03排除
+执行模型后实际启动ZCode独立原源挑战，pending不算接受；不重复全页会商。
+[里程碑8具体版本与范围](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-milestone-v8.json)。
 
 综合v5已摄取949事实/183基线观察，24条均值/中位数/SD建立精确来源编辑
 绑定；0017前向迁移保留旧binding/科学哈希，人数/N/上下限编辑仍未接通。
@@ -73,10 +86,12 @@ integration/浏览器/发布门。不改断言掩盖安装失败。原owner探�
 
 ## 未完成与下一有界动作
 
-1. 当前v10宽门与精简源码/产物hash回执已完成，按明确白名单递交GitHub。
-   下批修复共同下钻组ID与英文词中and被误替换的文字显示族；旧候选
-   不继承新修复。人数/N/上下限需独立科学字段/派生守卫，不冒称全编辑。
-2. 同current C接入、医学语义多药疗效正例和可操作横比仍待；不能把
+1. 217e3cc已实际GitHub递交并远端核同。新显示/来源接缝owner29相关PASS
+   5.08s，v11一次里程碑宽门已终态exit0：Ruff全src/tests/tools、strict281、
+   活跃1167PASS446.94s、兼容20、分层7、旧路径字符串扫描，quality-only。
+   旧r8不继承新显示修复。人数/N/上下限仍待。
+2. 先评估独立C原源挑战，修真实根因、关闭对应来源/消费者门，再进入
+   合法同current接入。医学语义多药疗效正例和可操作横比仍待；不能把
    四研究基线描述列或两药身份重开当疗效等价/完整ABC任务通过。
 3. Ego空间12本批再次实际NOT_FOUND，恢复Ask待答。四宽四态、L1/L2、
    键盘、新浏览器离线NOT_RUN；不新开空间或换浏览器绕过。

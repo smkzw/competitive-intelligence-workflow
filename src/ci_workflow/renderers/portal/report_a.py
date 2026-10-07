@@ -1116,7 +1116,7 @@ def _native_timepoint_zh(value: str) -> str:
     out = text
     for pattern, rep in _TIMEPOINT_PHRASES:
         out = re.sub(pattern, rep, out, flags=re.I)
-    out = re.sub(r"\s*(?:and|&)\s*", "、", out, flags=re.I)
+    out = re.sub(r"\s*(?:\band\b|&)\s*", "、", out, flags=re.I)
     out = re.sub(r"\s*\bat\s+", "", out, flags=re.I)
     out = re.sub(r"\s*\bto\b\s*", "至", out, flags=re.I)
     out = re.sub(r"\s*\bof the\b\s*|\s*\bof\b\s*", "", out, flags=re.I)

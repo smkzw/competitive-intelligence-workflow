@@ -2,6 +2,33 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+E03 Cbootstrap actualterminal CodeBuddy/deepseek-v4.1-flash:max683.159s/
+94tools/exit0, runtime modelUsage match, nofallback. SameABC project recovery
+candidate254observations/60endpointinstances/16pages shares4ABsourceversions
+andjointidentity; owner exactquotes/eligibilitysections reextracted254 andSQL
+consumer rows254, no originalsource/sidecar mutation, currentfalse.94unsupported/
+18gaps/2missingexplicitplacebodose preserved. FirstDBdiagnosticfailure retained,
+onlyrecovery subtree receipted. Owner29relatedPASS5.08s, scopedRuff/strict2.
+Source frozen, v11milestonequalityonce actualterminalexit0: Ruffallsrc/tests/tools,
+strict281,active1167PASS446.94s,compat20,layer7,legacystringcheck.Quality-only.
+One C03 independent sourceinterpretation challenge needed, not routine wording:
+guard excludesexecutionmodel, ZCode GLM-5.3-Flash:max preflight0/actualdispatched;
+no worker private reasoning in context, no extra chair/production. Do not bypass
+review-only C current guard. Browser/science/24/hosts incomplete, no selfpause.
+These current observations supersede the earlierpendingbootstrap lines below.
+
+217e3cc479f2695e032e7060f08bf60976b28013 actualpush/origin same; five user
+dirtyfilesonlyleft. Owner display/identity root actual11behaviorRED/3PASS after
+repairingone test's wrongrole token (first StopIteration notbehaviorRED). Existing
+A/B full-word conjunction and B evidence group-ID projection minimallyfixed;
+38familyPASS1.64s,30time/disposition/identityneighborsPASS0.92s. NewordinaryB
+realbaselinepreviewv3 preserves183source values/inputSHA; exact group/word static
+audit stillpending, browserNOT_RUN. Public/internal guides clarify actual bindings
+and remainingcount/N/limits, no fake medical annotation/full field acceptance.
+Execution-plus-direct next: bounded E03 newCbootstrap artifact+one newtest owns
+disjoint paths whileowner audits display/sharedcurrent/commits. Init is not dispatch;
+exact actual route/terminal mustbeverified, no extra chair/scientific approval.
+
 Latest bounded runtime on same joint source working project: safety edits rebuilt
 A+B fourtimes throughr4, then actual SD set/clear/restore/undo throughr8; 24scalar
 baseline versions initialized, Bonly affected legitimately, A4/B8 in samegeneration8.

@@ -2,7 +2,36 @@
 
 用户2026-10-07解除暂停并授权构建、阶段GitHub递交；本次重新读取Goal API
 实际返回active，目标文本未变，未调用覆盖/假完成。较早blocked记录只代表
-当时观察。启动基线ef6b23d，最近实核已推送21c726f560b24bdd10b229b94fb024552c8bcae2；新在途字节不继承旧包/门/截图。
+当时观察。启动基线ef6b23d，最近实核已推送217e3cc479f2695e032e7060f08bf60976b28013；新在途字节不继承旧包/门/截图。
+
+## 最新在途：下钻身份/完整单词显示修复与同项目C接缝
+
+11行为RED/3PASS→38相关PASS1.64s，30时间窗/完成情况/共同身份邻接
+PASS0.92s；一次初测试误用不存在的point_estimate token StopIteration
+不计行为RED，原失败保留。A/B完整词and边界防止破坏Randomized、药名
+和科学token；B证据保留来源group_id，未知产品仍未知，不猜BG/臂。
+新普通B预览v3实际183观察/26比较列，所有来源group/原值/原文/版本/
+精确路径/原人群核对，输入SHA566c91cd…4471与旧v2相同，current8和
+旧候选不改。最初静态探针用仅支持数组的helper读取workspace对象失败，
+现有JSONDecoder对象读取后通过；不是产品失败或浏览器通过。
+
+有界E03 ci-1007-joint-c-bootstrap实际终态683.159s/94观察工具/exit0，
+runtime modelUsage为deepseek-v4.1-flash、CLI effort max，无fallback。
+recovery副本同A/B/C合同、相同四来源版本和联合身份，实际C254观察/
+60终点实例/16物理页；owner254逐条原源locator/资格分段重提、实际SQL
+254来源消费者、快照/16页hash/原源DB及sidecar不变核验，非科学/实屏。
+94未支持/18缺口/2无显式剂量未决保留；首次脚本诊断DB读取失败保留，
+不采用初次目录。owner新29相关PASS5.08s。只生成review-candidate，
+current仍未建立；该标记不能绕过正常发布验证。
+
+共享源冻结后只运行一次v11六步开发宽门，已终态exit0：Ruff全src/tests/tools、
+strict281源、活跃1167PASS446.94s、兼容20、分层7、旧路径字符串扫描。
+quality-only不是全部integration/浏览器或发布，范围/hash由机器清单固定；
+[里程碑8](evidence/1007V1/owner-milestone-v8.json)。C设计科学含义存在
+解释风险，新增一个独立C03原源挑战，guard已排除执行模型，实际派发
+ZCode GLM-5.3-Flash:max，pending不算接受；原资料+冻结候选，不看worker
+私有推理，不再生产或审美全页复审。Ego与原附件Ask仍待，实屏和ABC
+同current完整旅程未完成；不阶段暂停，继续就绪分支。
 
 ## 当前里程碑7在途：同候选联合身份与基线保存/分享
 
