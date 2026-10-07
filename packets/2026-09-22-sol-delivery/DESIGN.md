@@ -41,6 +41,17 @@ current编辑/清除重建核上一版本文件hash并重开原PDF精确页；�
 
 ## 1. 最小架构
 
+1007V1基线来源增量：复用ResearchFact/ResearchResultContext，保留完整
+原子（value、spread、上下限、N各自定位）及原始人群/组/统计形式/单位。
+均值/SD不是人数，years/Years只在连续量的plot_unit层规范为years；
+raw_unit和引文不改。源Total有明确汇总描述时按研究汇总呈现，绝不绑定
+治疗产品；未证实的BG/FG/协议臂关系保持unknown。限定已核实的随机入组
+措辞可形成描述共同列，原analysis_population、入排/背景/方案差异仍可查，
+comparison_purpose=baseline_descriptive_only，不成为人群/疗效等价签发。
+通过既有B baseline_views、WorkspaceMembership/FacetPlan及来源上下文
+下钻消费；来源版本从快照显式关系读取，不按排序数组配对。源重放预览
+不切current、不证明来源本次新鲜度、完整宇宙或浏览器接受。
+
 当前实现约束补记（不新增产品权限）：B语义确定性复用仅限同一次调用，
 缓存键保留完整临床维度、来源冲突、原桶与真实观察对的否决/签发状态；
 新修改/新调用必须重新校验，不以缓存接受未知或跨过既有科学门。支持性

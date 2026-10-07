@@ -59,7 +59,7 @@ class ResearchPackageError(ValueError):
 
 ObservationDomain = Literal[
     "efficacy", "adverse_events", "immunogenicity", "pk_pd",
-    "biomarkers", "other", "unresolved",
+    "biomarkers", "other", "unresolved", "baseline",
 ]
 
 
@@ -316,7 +316,7 @@ class ResearchResultContext(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     result_key: str
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death"]
+    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death", "baseline"]
     trial_id: str
     group_id: str
     group_title: str
@@ -324,7 +324,9 @@ class ResearchResultContext(BaseModel):
     term: str
     endpoint: str
     timepoint: str
-    value_role: Literal["reported_measure", "participant_count", "affected_count", "denominator"]
+    value_role: Literal[
+        "reported_measure", "participant_count", "affected_count", "denominator", "dispersion"
+    ]
     source_unit: str
     domain: ObservationDomain = "unresolved"
     metric: str = "unresolved"
@@ -333,6 +335,7 @@ class ResearchResultContext(BaseModel):
     source_dispersion_type: str | None = None
     raw_value_type: str | None = None
     analysis_population: str | None = None
+    group_description: str | None = Field(default=None, exclude_if=lambda value: value is None)
     denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
     class_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
     category_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
@@ -369,13 +372,20 @@ class ResearchFact(BaseModel):
 
     @field_validator(
         "fact_id", "row_ref", "entity_id", "entity_type", "canonical_name",
-        "field_id", "source_id", "original_text",
+        "field_id", "source_id",
     )
     @classmethod
     def _required_text_is_not_blank(cls, value: str) -> str:
         if not value.strip():
             raise ValueError("事实字段不能为空")
         return value.strip()
+
+    @field_validator("original_text")
+    @classmethod
+    def _original_quote_is_not_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("事实原文不能为空")
+        return value
 
 
 class CtgovAeRateCalculation(BaseModel):
@@ -536,7 +546,7 @@ class ScientificReview(BaseModel):
 
 
 ClinicalTrialsResultCategory = Literal[
-    "outcome", "teae", "sae", "aesi", "common_ae", "death", "parse_failure"
+    "outcome", "teae", "sae", "aesi", "common_ae", "death", "parse_failure", "baseline"
 ]
 ClinicalTrialsResultIssueStatus = Literal[
     "missing", "misclassified", "conflicting", "parse_failure"

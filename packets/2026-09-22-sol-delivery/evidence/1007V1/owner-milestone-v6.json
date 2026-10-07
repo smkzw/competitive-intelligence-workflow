@@ -1,0 +1,115 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "ac564dba06765b9a13fc0a5909eec04a88c65c68",
+  "status": "development_candidate_continuing",
+  "scope": "four-study baseline source atoms and ordinary B descriptive workspace",
+  "goal_api_status_observed": "blocked_no_resume_interface",
+  "user_implementation_authority": "continuous",
+  "source_code_sha256": {
+    "src/ci_workflow/application/source_research_service.py": "236757654243e3101182ba52a277f284121ffa38186253e7d012d2a7c5884ed3",
+    "src/ci_workflow/application/ctgov_baseline_atoms.py": "61a931785d0e0ec764dd3da8ae49908085199b3a53e12e6024bf57ff463796a3",
+    "src/ci_workflow/reports/b/source_baseline.py": "775b9d59f78b400d8b65b06d1210fe1fd83fd131edcc0111c3bc96142201b727",
+    "src/ci_workflow/reports/common/numeric_projection.py": "a3d491727a4046b7c53fc8aab023702899e0c2cdbdc6708ea060a63541ee4a65",
+    "src/ci_workflow/renderers/portal/report_b.py": "99b38efa466c1307431405d8e6b70af79ae04906b2a963549d2e28960609ffe5",
+    "tools/materialize_ctgov_baseline_candidate.py": "b64a60adae08e5a295b161a76d4228c204bf5ecc6f8848bcc3bbc134d33b2e99",
+    "tools/render_baseline_source_candidate.py": "702cf31e56a42bf5bc47b31083148481c756e67b49bbced8db421ce3b662fced"
+  },
+  "test_code_sha256": {
+    "tests/unit/test_ctgov_baseline_atoms.py": "6b578c5123308684156e421888d48c45d8c60cdaa14b943e2a2413b9d3928ae4",
+    "tests/unit/test_baseline_numeric_projection.py": "2291ad964f8a5ec55b7932827d32467166af602ad4b83ead49b30b7c03e1292b",
+    "tests/reports/b/test_source_baseline_view.py": "bcd056a9d2ca8fb278e384d2954ebbc4e41406a683114e4fe89db7bdc0a9795b",
+    "tests/integration/test_1007_baseline_source_candidate.py": "c775c68f9afe0f24ad13ed2f3ea4629d324cc51a3a680b89c067b7746f64fc2d"
+  },
+  "source_checkpoint": {
+    "candidate": ".artifacts/1007-pn-baseline-source-candidate-v1",
+    "manifest_sha256": "7e0c6e5d7028f5a9fb5efe6baa5eafc0b67a0daf908e91b6d1a8048f562e309a",
+    "raw_sha256": "82b4ed9ab0c63e227a2c4c34b85727dd988e55062850d42b41517f0749168edf",
+    "raw_bytes": 2978130,
+    "source_snapshot_sha256": "6dfcc64d85d6df6ba631b55a82ac4f425ddca668bbc0c6aa4a018cd2de300fd3",
+    "snapshot_bytes": 8439997,
+    "scientific_content_digest": "d77ff97abf38c810f80988901a051a35bb8d5035d9311c5a7f91c53f6de4b05d",
+    "study_ids": ["NCT04202679", "NCT04183335", "NCT04501666", "NCT04501679"],
+    "source_facts": 499,
+    "numeric_atoms": 183,
+    "observed_extraction_issues": 0,
+    "acquisition_mode": "offline_cas_replay_not_new_get",
+    "original_source_directory_written": false,
+    "historical_checkpoint_rewritten": false,
+    "current_generation_switched": false,
+    "universe_closed": false
+  },
+  "ordinary_b_preview": {
+    "candidate": ".artifacts/1007-pn-baseline-b-preview-v2",
+    "manifest_sha256": "525d5a83a31534214d0b29f055097731b0430b545de144ca40260bedc017eebd",
+    "report_data_sha256": "566c91cdeb24c756d01d83289b13564f51a25cd8cd6d4f0e16c01e15570c4471",
+    "site_sha256": "93c1ea069ddfd80e6198ac82cd78b68a331973b770a4473bf2516d3fd887f263",
+    "site_bytes": 8883501,
+    "physical_pages_not_report_projects": 24,
+    "workspace_numeric_rows": 183,
+    "exact_evidence_views": 183,
+    "workspace_columns": 26,
+    "age_mean_common_column": {"studies": 4, "observations": 12},
+    "age_sd_separate_common_column": {"studies": 4, "observations": 12},
+    "original_population_wordings": 3,
+    "group_product_relations": "unknown_not_inferred",
+    "comparison_purpose": "baseline_descriptive_only",
+    "effect_equivalence_accepted": false,
+    "same_current_edit_share_chain": "not_run_for_this_preview"
+  },
+  "verification": {
+    "family": {"pass": 143, "seconds": 1.27, "log_sha256": "5b35a4441153e2047344d0752c7eea56cb3b30fd5f2c1f1ca0cce3f0c85cd160"},
+    "quality_gate_v8": {
+      "exit_code": 0,
+      "steps": 6,
+      "ruff": "src/tests/tools",
+      "strict_mypy": "280 src/tools files, no-incremental",
+      "active_test_scope": "tests/unit tests/contract excluding retained_legacy_format",
+      "active_pass": 1167,
+      "active_seconds": 227.19,
+      "retained_compat_smoke_pass": 20,
+      "layer_audit_pass": 7,
+      "legacy_check": "string_reference_scan_not_old_root_contact",
+      "log_sha256": "d519870637111248a203517caa1067d7d404c12ff0340a8bce94d618c16bdebe",
+      "semantics": "quality_only_not_all_integration_or_release"
+    },
+    "actual_page_byte_audit": {"status": "PASS", "log_sha256": "d0f70a7f39756808cc934a895a932251294ff0c9b673de550d9cece5ab355f41"},
+    "source_consumer_registry_neighbor": {
+      "pass": 9,
+      "seconds": 1080.38,
+      "log_sha256": "5020a8c9d6186c27966511e53e991fb69a0c31d0ed1e7dfe80c10ba6ec81d3ac",
+      "scope": "ac564 supporting/source bytes, not new baseline; test loaded before last immutable-contract refinement separately covered by 2 tests",
+      "controlled_performance_benchmark": false
+    },
+    "source_conference": {
+      "actual_route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+      "initial_seconds": 648.962,
+      "initial_result": "incomplete_read_capability_denied_recursive_boundary_incident",
+      "recovery_seconds": 137.889,
+      "recovery_tools_observed": 5,
+      "recovery_exit_code": 0,
+      "fallback": false,
+      "same_session_recovery_reduced_context_independence": true,
+      "stdout_sha256": "7ff4779e866ec5fc79d7b2fc01871f78e136acaab6b4954a4c4ef4b73161bc36",
+      "owner_decision": "limited_source_descriptive_findings_only"
+    }
+  },
+  "failed_checks_preserved": [
+    "Initial extractor/view missing-module collection errors are not behavioral RED",
+    "Extractor behavior family6FAIL/14PASS then fixed; scoped blank context fixed later",
+    "Numeric-family4FAIL/7PASS before continuous-age and display-unit correction",
+    "Preview schema missing required sources then fixed before real preview",
+    "Owner byte audit assumed evidence dict not list; v3 corrected parser, no product-data rewrite",
+    "Source review initial incomplete and follow-up preflight failure retained",
+    "Old AD neighbor7PASS/2obsolete-inlineFAIL retained, not rewritten as PASS"
+  ],
+  "not_accepted": [
+    "Desktop four-width/four-state actual browser and keyboard",
+    "Offline new browser reopen and current A/B/C single/joint sharing for this candidate",
+    "Full competitive universe and medically equivalent multi-drug efficacy positive case",
+    "Joint official identities adopted into main current and dynamic China/group freshness",
+    "Publication/protocol/SAP closure, three hosts, install/recovery,24 portals,RC/release"
+  ],
+  "preserved_unrelated_dirty_files": 5,
+  "general_cleanup_performed": false,
+  "next_bounded_step": "existing joint identity replay then baseline integrated source-consumer binding, with owner holding shared contracts"
+}

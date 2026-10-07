@@ -391,3 +391,62 @@ uv run python -m tools.replay_1007_b_workspace \
 5. 历史入口墙造成接手误判：原字节归档，根入口只指当前状态，旧FAIL/暂停/哈希不改写。无关脏树与原始证据未清理。
 
 下一步按依赖解锁身份消费、A/C横比、同候选编辑/清除/同步/配置/离线分享，再补真实浏览器和正式矩阵；不将全资料闭包作为无依赖交互实现的永久前置。
+# 当前基线来源/描述横比阶段（1007V1，非暂停）
+
+父HEAD ac564dba06765b9a13fc0a5909eec04a88c65c68。源/测试/产物/终态绑定
+见owner-milestone-v6.json，不复用旧RC或分享接受。执行选择：公共来源/
+统计/渲染由owner保持单一责任；一个C03独立源解读会商，后续一个E03
+联合身份重放单元可并行减轻上下文，禁止多路全页重复审阅。
+
+实际推进：既有ResearchFact新增baseline/dispersion可选字段，原始引文
+不再strip而丢空白，旧不带字段的序列化不增加占位。完整原子保存value/
+spread/上下限/N及原始类型、单位、组、class/category、人口定义、精确
+JSON定位；近作用域空N不回落全局，冲突/解析失败不吞后续健康测量。
+空上下文记作用域问题，不以空原文事实导致整批崩溃，不补零。
+
+初缺模块只算collection RED；成族行为6FAIL/14PASS后源原子修复，后续
+空上下文失败保留。连续年龄/大小写单位族4FAIL/7PASS；生产最小修复
+只把有明确统计形式和单位的baseline均值/SD当连续量，NUMBER和未知不
+被强行解释。years/Years仅plotunit层归一，raw值和source unit不改。
+B科学stat token不经中文词替换再推断，中文stat label独立；计数、均值
+与SD分别成列，未知产品组与研究Total不分配治疗身份。
+
+四真实NCT原CAS重放499sourcefacts/183numeric/0观察提取问题，原来源
+目录未写；既有snapshot8,439,997B可重开。新B预览复用正常renderer，
+没有手写demo；v2为24物理页/8,883,501B，非24个项目。实际共享JS字节
+核183workspace成员/183精确证据、26列；年龄mean/SD各自4研究/12观察，
+原始3人口措辞保留；上下文source_clause_context真正传至证据下钻。
+所有产品关系unknown，无基于标题、组顺序、相同N的猜测。没有切current
+或生成未标记比例。第一次owner审计误把evidence list当dict失败，改审计
+解析而非产品数据，v3静态检查通过。不能作为浏览器/临床等价接受。
+
+当前相关family143PASS1.27s；v8宽门六步exit0，Ruff全src/tests/tools、
+strict280文件、active1167PASS227.19s、compat20、layer7、旧路径字符串
+规则。不是全integration/浏览器/安装/终发布。旧AD邻接新字节9PASS
+1080.38s；该测试加载时早于最终纯读合同小改，后者另2PASS/Ruff。旧
+7PASS/2obsolete-inlineFAIL3174.28s原件不改；不称控制性能基准。
+
+C03实际初648.962s exit0但未完整、read Bash权限拒绝且发生递归Explore
+边界事件；不接受其截断阅读、未核Nem简称或标题推断。修正既有runner
+headless能力 flag，但提示词仍只读；一次预检FAIL停止派发，固定预检0
+后同session137.889s实际CodeBuddy/flash:max/no fallback终态，仅限定源
+解读收口。不是第二模型观点；不采纳“需要签字/人工映射”新审批提议。
+原文、runtime/private路径日志留本地，公开精简review/metrics和SHA。
+
+确定性重建（只新目录，不覆历史；时间用原源获取/离线重放回执，不冒充GET）：
+
+```sh
+uv run python -m tools.materialize_ctgov_baseline_candidate --source-root .artifacts/1007-pn-current-source-v1 --raw-descriptor .artifacts/1007-pn-current-source-v1/raw-descriptor.json --trial NCT04202679 --trial NCT04183335 --trial NCT04501666 --trial NCT04501679 --output .artifacts/1007-pn-baseline-source-replay-new --indication 结节性痒疹 --cutoff 2026-10-07 --observed-at 2026-10-07T09:50:52.585475+00:00
+uv run python -m tools.render_baseline_source_candidate --candidate .artifacts/1007-pn-baseline-source-candidate-v1 --output .artifacts/1007-pn-baseline-b-preview-new
+```
+
+第一个命令是当前提取器可重放路线，不保证使用不同时间/提取器后的快照
+ID与旧v1相同；旧v1原hash保留。第二命令消费旧完整源快照并绑定当前展示
+代码，原源/DB不初始化，不按source_version_ids排序猜输入对应关系。
+
+下一有界动作：两药已核官方源集合联合重放，之后把baseline接入已有
+综合A+B源候选/consumer注册，验证合法编辑/clear/undo；不能只留独立
+预览。Ego12实际NOT_FOUND/附件Ask待答，四宽四态/L1L2/键盘/新浏览器
+离线NOT_RUN；疗效多药正例、完整宇宙、中国动态/当前控股核查、同current
+ABC全旅程、24门户/三宿主/安装恢复/RC未完成。无旧中文根接触、无一般
+清理；五历史脏修改和未知raw资料全部保留。继续实施，不自建暂停点。

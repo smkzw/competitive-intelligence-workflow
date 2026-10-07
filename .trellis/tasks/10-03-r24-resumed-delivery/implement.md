@@ -2,6 +2,26 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Current source/preview stage after pushedac564d:143 relatedPASS1.27s and source
+snapshot reopen/ordinary B preview. Four real NCTs499source facts/183numeric/0
+observed extraction issues; actual B24physical pages,183workspace/evidence rows,
+age mean and SD separate common columns4studies/12observations each. Raw3population
+wordings and source units/quotes retained, no group/product inference/current.
+Static byte auditv3 passed; owner auditv2 assumed evidence dict instead of list
+and failed, retained as diagnostic—not product failure or a passing browser test.
+C03 initial648.962s incomplete/tool denied/recursive boundary incident preserved;
+same-session137.889s CodeBuddy flash:max nofallback closes source interpretation
+only. Manual approvals/acronyms/product mappings not adopted. Shared science raw
+stat tokens preserved before Chinese labels; SD/spread distinct, baseline mean
+continuous,years case display-only. Empty source context scoped instead of crash.
+AD consumer neighbor actual9PASS1080.38s (new test loaded before final immutable
+contract refinement, that refinement separately2PASS); not a controlled benchmark.
+v8quality gate terminalexit0/sixsteps: Ruff allsrc/tests/tools, strict280files,
+active1167PASS227.19s,compat20,layer7,legacystringcheck. Not allintegration/release.
+Scope/hash owner-milestone-v6.json. Next actual joint
+identity boundedE03 initialized/preflight0, not dispatched/accepted merely by init.
+Owner holds shared source/schema; no source-root/old-root/general cleanup changes.
+
 Milestone5 current, supersedes older pending/r4 paragraphs: actual r5 main/detail
 cleared state preserves original2, current A/B/AB static exports completed.
 Wrong owner metadata attribute failed after successful save; recovered directly

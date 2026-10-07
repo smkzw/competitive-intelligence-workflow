@@ -27,6 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.domain.source_clause_context import SourceClauseContext
 from ci_workflow.qc.browser import route_to_site_path, site_directory_digest
 from ci_workflow.reports.b.concept_catalog import SAFETY_CONCEPTS
 from ci_workflow.reports.b.portal_science import (
@@ -706,6 +707,7 @@ _STATISTICAL_FORM_GROUPS = {
     "adherence_summary": ("adherence summary", "adherence_summary", "依从性概览"),
     "other": ("other", "other statistic", "其他统计形式"),
     "range": ("range", "interval", "范围", "区间"),
+    "standard_deviation": ("standard deviation", "standard_deviation", "sd", "标准差"),
 }
 _STATISTICAL_FORM_LOOKUP = _alias_lookup(_STATISTICAL_FORM_GROUPS)
 _STATISTICAL_FORM_LABELS = {
@@ -725,6 +727,7 @@ _STATISTICAL_FORM_LABELS = {
     "adherence_summary": "依从性概览",
     "other": "其他统计形式",
     "range": "区间",
+    "standard_deviation": "标准差",
     "not_reported": "报告未注明统计口径",
 }
 
@@ -2256,6 +2259,9 @@ def _project_record(
         "结果组别产品归属待核"
         if unassigned_product else names.get(product_id, "未列示产品")
     )
+    if domain == "baseline" and not product_id:
+        product_name = ("研究汇总（非治疗组）" if _get(source, "is_source_aggregate", False)
+                        else "研究结果组（产品关联待核）")
     trial_name = trial_names.get(trial_id, "未列示试验")
     label = _label_for(value, domain)
     arm = _arm_label(value)
@@ -2291,7 +2297,7 @@ def _project_record(
     field_family = _native_text(
         _source_first(value, source, "field_family", "variable_domain", default="")
     )
-    statistic_form = _native_text(
+    statistic_form = _text(
         _source_first(
             value,
             source,
@@ -2675,6 +2681,7 @@ def _project_record(
     if domain == "safety":
         result["value_matrix"] = numeric
     if domain == "baseline":
+        result["analysis_population"] = population
         result["variable"] = label
         result["statistic"] = (
             _native_text(
@@ -3241,6 +3248,8 @@ def _evidence_view(
         if row.get("group_assignment_state") == "unknown"
         else names.get(product_id, "未列示产品")
     )
+    if row.get("_domain") == "baseline" and not product_id:
+        product = _text(row.get("product_zh"), "研究结果组（产品关联待核）")
     trial = trial_names.get(trial_id, "未列示试验")
     if page_id == "evidence-limitations" and not product_id and not trial_id:
         product = ""
@@ -3353,6 +3362,10 @@ def _evidence_view(
         "conflicts": (),
         "historical_versions": (),
     }
+    if located:
+        clause_context = _first(source, "source_clause_context", default=None)
+        if clause_context is not None:
+            common["source_clause_context"] = SourceClauseContext.model_validate(clause_context)
     if observation_kind in {
         EvidenceObservationKind.BASELINE_OBSERVATION,
         EvidenceObservationKind.TRIAL_DISPOSITION_OBSERVATION,
@@ -4247,7 +4260,7 @@ def _groups_for_page(
                     # 第十三轮复核修复：粗粒度统计族参与分组——
                     # 均值/中位数等中心趋势可并图，计数/比例不得与连续量混轴
                     _BASELINE_STAT_FAMILY.get(
-                        _text(item[0].get("statistic_form"), "other"), "central"),
+                        _text(item[0].get("statistical_form_family"), "other"), "central"),
                 )
             ].append(item)
         groups: list[dict[str, Any]] = []
@@ -4309,6 +4322,7 @@ def _groups_for_page(
                 x_axis_label_zh="产品｜试验",
             )
             group["title_complete"] = True
+            group["comparison_purpose"] = "baseline_descriptive_only"
             groups.append(group)
         return tuple(groups)
     if page_id in _DISPOSITION_PAGE_IDS:

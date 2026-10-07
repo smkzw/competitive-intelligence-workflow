@@ -113,6 +113,10 @@ def project_numeric(
     elif kind is NumericMeasureKind.ADJUSTED_ESTIMATE and not estimand:
         plot_value = None
         reason = "adjusted_estimate_requires_estimand"
+    elif kind is NumericMeasureKind.CONTINUOUS_MEASURE and plot_unit.casefold() == "years":
+        # Case spelling is a presentation convention, not a source mutation or
+        # a unit conversion. Do not case-normalize arbitrary laboratory units.
+        plot_unit = "years"
     if value is None and reason is None:
         reason = "missing_numeric_value"
     renderable = plot_value is not None and reason is None
@@ -171,6 +175,15 @@ def infer_numeric_kind(
         "人", "受试者",
     }:
         return NumericMeasureKind.PARTICIPANT_COUNT
+    if (
+        domain == "baseline"
+        and statistic_form.strip().casefold() in {"mean", "median", "standard_deviation"}
+        and unit.strip()
+        and unit.strip() not in {"%", "百分比"}
+    ):
+        # A baseline mean/SD with a reported physical unit is not a count.
+        # NUMBER and unspecified statistical objects remain unresolved here.
+        return NumericMeasureKind.CONTINUOUS_MEASURE
     if domain == "efficacy" and unit.strip() and unit.strip() not in {"%", "百分比"}:
         # A reported score, laboratory value or other continuous endpoint is
         # not a participant proportion. Its raw unit and estimand stay in the
