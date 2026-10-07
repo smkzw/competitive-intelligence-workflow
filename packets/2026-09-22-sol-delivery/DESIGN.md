@@ -4,6 +4,23 @@
 
 ## 1007V1 当前增量合同
 
+正式RunContext/run_service普通A/B/C渲染读取项目内
+`evidence/library/portal-identity-context.json`，复用已有CAS ContentBlob图指针与片段库。
+可选product_ids只能选择源图已有映射；各报告按实际产品取子集，current重建保留
+该子集。来源输入摘要纳入格式节点复用，A已提交渲染恢复同时绑定身份源/投影；
+临床事实快照ID不因名义显示改变。正式名必须在绑定原文出现，这是必要而非充分
+条件；来源是否具有正式命名/许可/控股语义仍需核验。可变内存图不能冒用既有CAS，
+删除/损坏已绑定来源不能空投影降级。历史公开与动态监管核验不由本地mtime通过。
+
+来源绑定身份上下文复用EntityGraph、CAS及原片段库，在普通A/B/C渲染后落
+`data/identity-context.json`（源图资产绑定）与`identity-projection.json`（呈现投影）。
+current编辑/清除重建核上一版本文件hash并重开原PDF精确页；丢失或篡改失败关闭，
+不删除身份信息继续发布。A亦可消费既有B语义来源views，领域行与来源行不同ID
+须显式source_view_row_id；不按位置或相同值猜测关联。source_domain/source_metric
+的省略与明确null分开，明确未知不得借页面领域获得数值共轴资格。
+横比view/cmp/cmp_page由实际入口和该版本问题/分面集合约束；个人配置与current
+分享复用同一参数，不能导入不存在的问题或超过该问题范围的条件分页。
+
 复用 `domain/entities.py` 的 EntityIdentity/EntityRelation 及实际来源片段、版本，构成共同身份投影：正式中文名、原名、靶点/作用方式、明确公司角色、MAH 法律实体及有来源的集团关系。名义显示不改科学 ID。仅在必要时扩展关系有效范围/名称状态，不在 renderer 增加药名或公司字典，不把研发代号按字符串猜成 INN。
 
 将既有 WorkspaceMembership、FacetPlan、NumericFrameEligibility 接入普通报告入口。相关研究集合、维度匹配、差异分面与数值共轴分别记录；严格科学 bucket 不是天然图卡边界。全研究横比必须显式包含研究行、共同列、匹配条件、事实引用及缺口，真实等价多药多研究有正向共同列/图。未知关键条件留可查未解部分；确定性边界保留，不新建逐观察对人工签发流水线。

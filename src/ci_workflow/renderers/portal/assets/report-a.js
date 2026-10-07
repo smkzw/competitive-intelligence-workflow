@@ -1982,6 +1982,113 @@
       if (next) next.disabled = page >= pageCount || !matches.length;
     }
   }
+  var aComparisonPage = 1;
+  function renderAComparison() {
+    var host = document.getElementById("full-study-comparison");
+    var workspace = window.__A_COMPARISON_WORKSPACE__, rows = window.__A_COMPARISON_ROWS__;
+    if (!host || !workspace || !rows) return;
+    var params = new URLSearchParams(window.location.search || "");
+    host.hidden = params.get("view") !== "comparison";
+    var summary = document.querySelector("[data-a-portfolio-summary]");
+    if (summary) summary.hidden = !host.hidden;
+    if (host.hidden) return;
+    var select = host.querySelector("[data-a-comparison-question]");
+    var questions = Object.create(null);
+    workspace.columns.forEach(function (column) {
+      if (!questions[column.question_id]) questions[column.question_id] = [];
+      questions[column.question_id].push(column);
+    });
+    var keys = Object.keys(questions).sort();
+    if (!select.options.length) {
+      keys.forEach(function (key) {
+        var option = document.createElement("option"); option.value = key;
+        option.textContent = questions[key][0].question_label;
+        select.appendChild(option);
+      });
+      select.value = questions[params.get("cmp")] ? params.get("cmp") : keys[0] || "";
+      aComparisonPage = Math.max(1, Number(params.get("cmp_page")) || 1);
+      select.addEventListener("change", function () {aComparisonPage = 1; renderAComparison();});
+      host.querySelector("[data-a-comparison-prev]").addEventListener("click", function () {
+        aComparisonPage -= 1; renderAComparison();
+      });
+      host.querySelector("[data-a-comparison-next]").addEventListener("click", function () {
+        aComparisonPage += 1; renderAComparison();
+      });
+    }
+    var allColumns = questions[select.value] || [];
+    aComparisonPage = Math.max(1, Math.min(aComparisonPage, Math.ceil(allColumns.length / 4) || 1));
+    var columns = allColumns.slice((aComparisonPage - 1) * 4, aComparisonPage * 4);
+    var allowed = Object.create(null);
+    Object.keys(rows).forEach(function (id) {
+      var row = rows[id], product = productById(row.product_id) || {};
+      var trial = trials.filter(function (item) {return item.id === row.trial_id;})[0] || {};
+      var dimensions = {product: product.name || row.product_zh, target: product.target,
+                        phase: trial.phase, region: trial.region};
+      if (Object.keys(selected).every(function (key) {
+        return !dimensions[key] || selected[key].some(function (value) {
+          return dimensionMatches(key, dimensions[key], value);
+        });
+      })) allowed[id] = true;
+    });
+    var table = host.querySelector("[data-a-comparison-table]");
+    var head = table.querySelector("thead"), body = table.querySelector("tbody");
+    head.replaceChildren(); body.replaceChildren();
+    var heading = document.createElement("tr"), first = document.createElement("th");
+    first.scope = "col"; first.textContent = "研究"; heading.appendChild(first);
+    columns.forEach(function (column) {
+      var th = document.createElement("th"); th.scope = "col"; th.textContent = column.title;
+      heading.appendChild(th);
+    });
+    head.appendChild(heading);
+    var displayed = Object.create(null), filtered = Object.keys(selected).length > 0, retained = 0;
+    workspace.study_ids.forEach(function (study) {
+      var studyRows = Object.keys(rows).filter(function (id) {
+        return rows[id].trial_id === study && allowed[id];
+      });
+      if (filtered && !studyRows.length) return;
+      var tr = document.createElement("tr"), label = document.createElement("th");
+      label.scope = "row"; label.textContent = study; tr.appendChild(label); retained += 1;
+      columns.forEach(function (column) {
+        var cell = document.createElement("td");
+        (column.cells[study] || []).filter(function (id) {return allowed[id];}).forEach(function (id) {
+          var row = rows[id], button = document.createElement("button"); button.type = "button";
+          button.setAttribute("data-open-evidence", "");
+          button.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
+          var value = row.value == null ? (window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核")
+            : String(row.value) + " " + (row.unit || "");
+          button.textContent = [row.product_zh, row.arm_detail || row.arm, value, row.time,
+                                row.difference_note].filter(Boolean).join("｜");
+          cell.appendChild(button); displayed[id] = true;
+        });
+        if (!cell.children.length) cell.textContent = "当前问题无匹配事实，不代表零结果";
+        tr.appendChild(cell);
+      });
+      body.appendChild(tr);
+    });
+    host.querySelector("[data-a-comparison-prev]").disabled = aComparisonPage <= 1;
+    host.querySelector("[data-a-comparison-next]").disabled = aComparisonPage * 4 >= allColumns.length;
+    host.querySelector("[data-a-comparison-status]").textContent = retained + "项研究；条件组 " +
+      aComparisonPage + " / " + (Math.ceil(allColumns.length / 4) || 1) + "；本页 " + Object.keys(displayed).length + " 条事实";
+    host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
+    host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
+    host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
+    if (window.__CHART_SYNC__) {
+      var groups = (window.__A_COMPARISON_GROUPS__ || []).filter(function (group) {
+        return columns.some(function (column) {return column.id === group.scientific_group_id;});
+      }).map(function (group) {
+        return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
+      }).filter(function (group) {return group.rows.length;});
+      window.__CHART_SYNC__.replaceGroups(groups);
+    }
+    params.set("cmp", select.value); params.set("cmp_page", String(aComparisonPage));
+    window.history.replaceState(null, "", window.location.pathname + "?" + params.toString());
+  }
+  window.__A_COMPARISON_EVIDENCE__ = function (rowId, trigger) {
+    var row = (window.__A_COMPARISON_ROWS__ || {})[rowId];
+    if (!row || !trigger || !trigger.setAttribute) return;
+    trigger.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
+    openEvidencePanel(trigger);
+  };
   function applyFilters(resetPage) {
     var items = document.querySelectorAll("[data-filter-dimension] button[aria-pressed='true']");
     selected = {};
@@ -2029,6 +2136,10 @@
     var summaries = document.querySelectorAll("[data-filter-summary]");
     for (var u = 0; u < summaries.length; u += 1) summaries[u].textContent = Object.keys(selected).length ? "筛选范围：已选择" : "筛选范围：全部";
     var query = new URLSearchParams();
+    var priorComparison = new URLSearchParams(window.location.search || "");
+    ["view", "cmp", "cmp_page"].forEach(function (key) {
+      if (priorComparison.has(key)) query.set(key, priorComparison.get(key));
+    });
     Object.keys(selected).forEach(function (dim) { selected[dim].forEach(function (value) { query.append(dim, value); }); });
     var matrixControls = document.querySelectorAll("[data-matrix-control]");
     if (matrixControls.length) {
@@ -2045,6 +2156,7 @@
     window.history.replaceState(null, "", next);
     applyPagedTables(resetPage !== false);
     renderCharts();
+    renderAComparison();
   }
   function savedViewStorageKey() {
     var pageId = document.body.getAttribute("data-page-id") || "unknown";
@@ -2058,6 +2170,10 @@
       allowedDimensions[node.getAttribute("data-filter-dimension")] = true;
     });
     var query = {};
+    var comparison = new URLSearchParams(window.location.search || "");
+    ["view", "cmp", "cmp_page"].forEach(function (key) {
+      if (comparison.has(key)) query[key] = [comparison.get(key)];
+    });
     Object.keys(selected).forEach(function (dimension) {
       if (allowedDimensions[dimension]) query[dimension] = selected[dimension].slice();
     });
@@ -2095,6 +2211,7 @@
     });
     scientificKeys.matrix_x = scientificKeys.matrix_y = scientificKeys.matrix_size = true;
     scientificKeys.matrix_facet = true;
+    scientificKeys.view = scientificKeys.cmp = scientificKeys.cmp_page = true;
     var hasExplicitState = false;
     params.forEach(function (_value, key) { if (scientificKeys[key]) hasExplicitState = true; });
     if (hasExplicitState) return false;
@@ -2221,7 +2338,9 @@
   });
   var params = new URLSearchParams(window.location.search);
   configureReturnLink(params);
-  restoreSavedView(params);
+  if (restoreSavedView(params)) {
+    window.history.replaceState(null, "", window.location.pathname + "?" + params.toString());
+  }
   var initialProductFocus = params.get("focus");
   if (initialProductFocus && productById(initialProductFocus)) productInsightId = initialProductFocus;
   var parameterDimensions = {};

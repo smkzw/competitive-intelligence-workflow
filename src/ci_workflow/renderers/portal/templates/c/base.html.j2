@@ -19,6 +19,7 @@
       </a>
       <span class="site-header__title">{{ report_title }}</span>
       <nav class="site-header__nav" id="site-primary-nav" aria-label="主导航">
+        <a href="{{ comparison_href }}" class="site-header__nav-item" data-c-comparison-nav>全研究横比</a>
         {% for group in nav_groups %}
         <div class="site-nav-group{% if group.pages | selectattr('active') | list %} site-nav-group--current{% endif %}">
           {% if group.pages | length == 1 %}
@@ -56,6 +57,7 @@
   {% endif %}
 
   <main class="portal-main kz-c-main" id="main" role="main">
+    {{ identity_headers_html }}
     {% if review_status == "unreviewed_candidate" %}
     <aside class="publication-limitation" role="note" aria-label="待复核资料与证据限制">
       <strong>待复核资料{% if publication_limitation_zh %}与证据限制{% endif %}</strong>

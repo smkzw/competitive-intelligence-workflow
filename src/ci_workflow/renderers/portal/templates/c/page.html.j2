@@ -43,6 +43,16 @@
   </section>
   {% endif %}
 
+  {% if show_comparison_entry %}
+  <section class="kz-c-comparison-entry" aria-labelledby="kz-c-comparison-entry-heading">
+    <div class="kz-c-comparison-entry__copy">
+      <h2 id="kz-c-comparison-entry-heading">全研究横比</h2>
+      <p>独立于首页摘要：按设计主题与关键词检索完整来源条款，点选研究列并列对照；保留原文、来源编号与当前值/清除状态。并列不代表临床等价。</p>
+    </div>
+    <a class="kz-c-comparison-entry__action" href="{{ comparison_href }}" data-c-enter-comparison>打开全研究横比</a>
+  </section>
+  {% endif %}
+
   {% if show_trial_index %}
   <section class="kz-c-profile-index kz-c-profile-index--primary" aria-labelledby="profile-index-heading">
     <h2 id="profile-index-heading">选择试验查看完整档案</h2>

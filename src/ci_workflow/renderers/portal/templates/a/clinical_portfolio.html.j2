@@ -9,6 +9,19 @@
     {{ ui.filter_group('phase', '阶段', trials|map(attribute='phase')|unique|list) }}
     {{ ui.filter_group('region', '地域', trials|map(attribute='region')|unique|list) }}
   </div>
+  <section id="full-study-comparison" hidden aria-labelledby="a-comparison-title">
+    <h2 id="a-comparison-title">全研究横比</h2>
+    <p>同一临床问题按明确语义匹配的条件列对照；差异与未知保留，不能解释为头对头研究。</p>
+    <label>比较问题<select data-a-comparison-question aria-label="比较问题"></select></label>
+    <button type="button" data-a-comparison-prev>上一组条件</button>
+    <button type="button" data-a-comparison-next>下一组条件</button>
+    <p data-a-comparison-status aria-live="polite"></p>
+    <div class="kz-a-table-wrap" tabindex="0" aria-label="全研究横比矩阵，可横向滚动">
+      <table data-a-comparison-table><thead></thead><tbody></tbody></table>
+    </div>
+    <div id="kz-chart-module" aria-label="当前比较问题联动图"></div>
+  </section>
+  <div data-a-portfolio-summary>
   {{ ui.section_head('临床试验一览', '按产品、阶段和地域并列查看核心与支持研究') }}
   {{ ui.chart('portfolio', 'clinical-portfolio', '产品试验阶段地域组合') }}
   <details class="kz-complete-table"><summary class="kz-complete-table__summary">展开当前筛选的完整试验表</summary><div class="kz-a-table-wrap"><table><thead><tr><th>产品</th><th>靶点</th><th>试验</th><th>研究角色</th><th>阶段</th><th>地域</th><th>样本量</th><th>状态</th></tr></thead><tbody>
@@ -33,6 +46,11 @@
       <td>{{ row.status }}</td>
     </tr>
   {% endfor %}
-  </tbody></table></div></details>{{ ui.empty_state() }}
+  </tbody></table></div></details>{{ ui.empty_state() }}</div>
 </section>
+<script>
+window.__A_COMPARISON_WORKSPACE__ = {{ comparison_workspace|tojson }};
+window.__A_COMPARISON_ROWS__ = {{ comparison_rows|tojson }};
+window.__A_COMPARISON_GROUPS__ = {{ comparison_groups|tojson }};
+</script>
 {% endblock %}

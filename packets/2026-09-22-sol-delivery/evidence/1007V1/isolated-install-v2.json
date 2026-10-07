@@ -1,0 +1,51 @@
+{
+  "contract": "1007V1-user-prompt",
+  "stage": "isolated-development-install",
+  "source_commit_at_build": "a65050336259c58cdd4f1276e8c29ad478cbba78",
+  "source_mode": "explicit release allowlist from dirty development tree; not clean commit provenance",
+  "bundle": {
+    "path": ".artifacts/1007-bundle-dev-v2/ci-workflow-1007-dev-v2.tar.zst",
+    "sha256": "d8c9f2cb3d8cab15360f9d91b5093a2640d1987a2a69bed3382d51b552cf2452",
+    "files": 393,
+    "verify": "PASS-final-content"
+  },
+  "installation": {
+    "root": ".artifacts/1007-isolated-install-v2",
+    "receipt_sha256": "84cbc3291c386b9bb615ad1e7374a22014a3015edc76f0f4014d8b99418e03db",
+    "result": "PASS-private-runtime-install",
+    "global_agent_changed": false
+  },
+  "checks": [
+    {
+      "command": "uv run python -m tools.verify_bundle --bundle .artifacts/1007-bundle-dev-v2/ci-workflow-1007-dev-v2.tar.zst --require-final-content",
+      "result": "PASS-content-and-path-closure"
+    },
+    {
+      "command": "uv run python -m tools.install_bundle --bundle .artifacts/1007-bundle-dev-v2/ci-workflow-1007-dev-v2.tar.zst --root .artifacts/1007-isolated-install-v2",
+      "result": "PASS",
+      "private_runtime_metadata_and_resource_probe": "PASS-installer-runtime-probe"
+    },
+    {
+      "command": ".artifacts/1007-isolated-install-v2/bin/ci-workflow --help",
+      "result": "PASS-actual-installed-entry"
+    },
+    {
+      "command": ".artifacts/1007-isolated-install-v2/bin/ci-workflow package verify --root .artifacts/1007-isolated-install-v2/versions/d8c9f2cb3d8cab15360f9d91b5093a2640d1987a2a69bed3382d51b552cf2452",
+      "result": "PASS-development-candidate",
+      "evidence": "runs/execution/ci-1007-display/owner-installed-package-v2.txt",
+      "evidence_sha256": "bca0afe533df79af5f8c7dc040046ab6e6bbb63fc3e6ec3c24610969aae00022"
+    },
+    {
+      "result": "PASS-installed-core-bounded",
+      "isolation": "private installed Python -I -B; seven module origins verified within installed version",
+      "scope": "three explicitly synthetic observations; two study/product records share one numeric column; unknown user-cleared observation retained but excluded from numeric axis",
+      "evidence": "runs/execution/ci-1007-display/owner-isolated-install-v2.json",
+      "evidence_sha256": "d8f09a574612fc9e29abf31f3bb521689f839decc28501427f56e6ad53e8b6f9"
+    }
+  ],
+  "browser": "NOT_RUN",
+  "three_hosts": "NOT_RUN",
+  "real_project_journey": "NOT_ACCEPTED",
+  "release_accepted": false,
+  "rebuild": "Use the source hashes of the subsequent containing milestone receipt, the pinned uv.lock and existing tools.build_bundle/install_bundle. Preserve this exact local archive and installation as the tested checkpoint; a rebuild has a new digest and requires revalidation."
+}

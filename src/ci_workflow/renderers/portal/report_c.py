@@ -66,6 +66,10 @@ from ci_workflow.reports.common.evidence_view import (
     clean_evidence_locator,
     precise_locator_anchor,
 )
+from ci_workflow.reports.common.identity_projection import (
+    PortalIdentityContext,
+    render_identity_headers,
+)
 from ci_workflow.reports.common.numeric_projection import NumericMeasureKind, project_numeric
 from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
 from ci_workflow.reports.common.view_state import ReportRow
@@ -2225,6 +2229,10 @@ def _render_page_context(
         "show_trial_index": catalog_page_id == "trial-profile" and trial is None,
         "cutoff_text": data.data_cutoff.strftime("%Y-%m-%d"),
         "publication_limitation_zh": publication_limitation_zh,
+        # FR20: homepage summary and first-level all-study comparison stay distinct.
+        # The comparison entry reuses the existing source-comparison query surface.
+        "comparison_href": f"{prefix}overview.html?view=comparison",
+        "show_comparison_entry": catalog_page_id == "overview" and trial is None,
     }
 
 
@@ -2235,6 +2243,7 @@ def render_report_c_site(
     publication_limitation_zh: str | None = None,
     active_revision: ActiveFactRevision | None = None,
     review_candidate: bool = False,
+    identity_context: PortalIdentityContext | None = None,
 ) -> tuple[Path, ...]:
     """Render C pages; explicit review candidates cannot become current deliveries."""
     site_root = Path(site_root)
@@ -2351,9 +2360,21 @@ def render_report_c_site(
         )
     if not review_candidate:
         _assert_design_gate(data)
+    identities = (identity_context.project(data.product_ids, cutoff=data.data_cutoff)
+                  if identity_context else {})
+    if identities:
+        data = data.model_copy(update={"products": tuple(
+            product.model_copy(update={"name": identities[product.id]["display_name"]})
+            if product.id in identities else product for product in data.products
+        )})
     _reset_site_root(site_root)
     _copy_assets(site_root)
     (site_root / "data").mkdir(parents=True, exist_ok=True)
+    (site_root / "data/identity-projection.json").write_bytes(_canonical_json(identities))
+    if identity_context is not None:
+        (site_root / "data/identity-context.json").write_bytes(
+            _canonical_json(identity_context.render_binding())
+        )
     research_status = "unreviewed_candidate" if review_candidate else "design_gate_passed"
     (site_root / "data/research-status.json").write_bytes(_canonical_json({
         "schema_version": "1.0", "report": "C", "delivery_status": research_status,
@@ -2388,6 +2409,7 @@ def render_report_c_site(
         )
         context["current_revision"] = active_revision.revision if active_revision else 0
         context["review_status"] = research_status
+        context["identity_headers_html"] = render_identity_headers(identities)
         output = site_root / f"{page.id}.html"
         output.write_text(page_template.render(**context), encoding="utf-8")
         generated.append(output)
@@ -2408,6 +2430,10 @@ def render_report_c_site(
         output = trials_dir / f"{trial.id}.html"
         context["current_revision"] = active_revision.revision if active_revision else 0
         context["review_status"] = research_status
+        product_ids = {trial.product_id, *(link.product_id for link in trial.product_links)}
+        context["identity_headers_html"] = render_identity_headers({
+            key: value for key, value in identities.items() if key in product_ids
+        })
         output.write_text(trial_template.render(**context), encoding="utf-8")
         generated.append(output)
 

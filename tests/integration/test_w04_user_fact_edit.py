@@ -498,6 +498,15 @@ def _project(
         a_payload = b_data.model_dump(
             mode="python", include=set(ReportAPortalData.model_fields)
         )
+        # A now consumes explicit source views. Bind the known fixture pointers
+        # rather than copying B's differently named view rows as if IDs matched.
+        # Historical fixture bytes/values remain unchanged; no array-order join.
+        known_links = {
+            row.row_id: row.source_view_row_id
+            for row in _b_efficacy_data_with_linked_view().efficacy
+        }
+        for row in a_payload["efficacy"]:
+            row["source_view_row_id"] = known_links[row["row_id"]]
         a_payload["safety"] = [
             {key: value for key, value in row.items() if key in SafetyRow.model_fields}
             for row in a_payload["safety"]

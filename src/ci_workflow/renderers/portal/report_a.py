@@ -8,7 +8,7 @@ import math
 import re
 import shutil
 import subprocess
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
 from importlib.metadata import version as dependency_version
 from pathlib import Path
@@ -22,6 +22,10 @@ from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicCalculationEvidence, PublicProvenance
 from ci_workflow.qc.browser import load_locked_sitemap_source, site_directory_digest
 from ci_workflow.reports.common.evidence_view import UserEditDisclosure
+from ci_workflow.reports.common.identity_projection import (
+    PortalIdentityContext,
+    render_identity_headers,
+)
 from ci_workflow.reports.common.numeric_projection import infer_numeric_kind, project_numeric
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.storage.manifest_store import (
@@ -398,6 +402,13 @@ class ReportAPortalData(BaseModel):
     history: tuple[HistoryRow, ...] = Field(min_length=1)
     sources: tuple[SourceRow, ...] = Field(min_length=1)
     user_edits: dict[str, UserEditDisclosure] = Field(default_factory=dict)
+    # Reuse the evidence-room source views, omitted on historical A payloads.
+    efficacy_views: Mapping[str, Any] | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+    safety_views: Mapping[str, Any] | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
 
     @model_validator(mode="after")
     def _relations_are_closed(self) -> Self:
@@ -492,11 +503,6 @@ _TRIAL_STATUS_ZH = {
     "WITHDRAWN": "启动前撤回",
     "UNKNOWN": "登记状态尚不明确",
 }
-
-_PRODUCT_DISPLAY_NAMES_ZH = {
-    "amlitelimab": "阿姆特利单抗（Amlitelimab）",
-}
-
 
 # 仅把明确批准的中英文/大小写变体放入同一展示维度；未列入的术语
 # 只做大小写和空白稳定化，不按相似词或前后缀猜测临床等价性。
@@ -593,10 +599,7 @@ def _contains_chinese(value: str) -> bool:
 
 
 def _display_products(data: ReportAPortalData) -> tuple[ProductRow, ...]:
-    return tuple(
-        product.model_copy(update={"name": _PRODUCT_DISPLAY_NAMES_ZH.get(product.id, product.name)})
-        for product in data.products
-    )
+    return data.products
 
 
 def _safety_term_projection(term: str, term_key: str | None = None) -> tuple[str, str]:
@@ -2346,6 +2349,62 @@ def active_fact_binding_for_a(
     )
 
 
+def _a_comparison_workspace(data: ReportAPortalData) -> tuple[
+    dict[str, Any], tuple[dict[str, Any], ...], dict[str, dict[str, Any]],
+]:
+    """A adapter over the existing shared scientific engine, not another policy.
+
+    Legacy rows without complete context remain reachable but separate. Source
+    view coverage must bind real A consumers; source values stay immutable while
+    an explicit current user edit updates only the local presentation copy.
+    """
+    from ci_workflow.renderers.portal import report_b
+
+    payload = data.model_dump(mode="json")
+    origins: dict[str, tuple[str, EfficacyRow | SafetyRow]] = {}
+    for collection in ("efficacy", "safety"):
+        native = getattr(data, collection)
+        for row in native:
+            source_id = getattr(row, "source_view_row_id", None) or row.row_id
+            if source_id in origins:
+                raise ReportAPortalError("A横比来源观察不能绑定多个消费者")
+            origins[source_id] = (collection, row)
+        view = payload.get(f"{collection}_views")
+        if view is not None:
+            view["coverage_mode"] = view.get("coverage_mode", "partial")
+            for item in view.get("facts", ()):
+                origin = origins.get(str(item.get("row_id")))
+                if origin is None or origin[0] != collection:
+                    raise ReportAPortalError("A横比来源视图引用了无实际消费者的观察")
+                row = origin[1]
+                if row.row_id in data.user_edits:
+                    item.update(value=row.value, numerator=row.numerator,
+                                denominator=row.denominator, unit=row.unit,
+                                disclosure_state=row.disclosure_state)
+    adapted = report_b.ReportBPortalData.model_validate(payload)
+    names = {product.id: product.name for product in data.products}
+    trials = {trial.id: trial.display_id for trial in data.trials}
+    records = (*report_b._efficacy_records(adapted, names, trials),
+               *report_b._safety_records(adapted, names, trials))
+    rows: dict[str, dict[str, Any]] = {}
+    tagged = []
+    for row, source in records:
+        row_id = str(row["row_id"])
+        origin = origins.get(row_id)
+        if origin is None:
+            raise ReportAPortalError("A横比观察缺少原生事实映射")
+        domain, original = origin
+        projected = {**row, "_domain": domain, "a_row_id": original.row_id}
+        if original.row_id in data.user_edits:
+            projected["_user_edit"] = data.user_edits[original.row_id].model_dump(mode="json")
+        rows[row_id] = projected
+        tagged.append((projected, source))
+    if set(rows) != set(origins):
+        raise ReportAPortalError("A横比遗漏了原生事实")
+    groups = report_b._adjudicate_full_pool(tagged, semantic_proposals=())
+    return report_b._comparison_workspace(tagged, groups, data.trial_ids), groups, rows
+
+
 def render_report_a_site(
     data: ReportAPortalData,
     site_root: Path,
@@ -2354,6 +2413,7 @@ def render_report_a_site(
     public_provenance: PublicProvenance | None = None,
     calculation_evidence: tuple[PublicCalculationEvidence, ...] = (),
     active_revision: ActiveFactRevision | None = None,
+    identity_context: PortalIdentityContext | None = None,
 ) -> tuple[Path, ...]:
     """生成 11 个静态责任页及全部产品详情页。"""
     consumers: tuple[PortalConsumerNode, ...] = ()
@@ -2370,6 +2430,13 @@ def render_report_a_site(
             raise ReportAPortalError("公共来源与报告内容不一致")
     if active_revision is not None:
         data, consumers = _project_active_facts_a(data, active_revision)
+    identities = (identity_context.project(data.product_ids, cutoff=data.data_cutoff)
+                  if identity_context else {})
+    if identities:
+        data = data.model_copy(update={"products": tuple(
+            product.model_copy(update={"name": identities[product.id]["display_name"]})
+            if product.id in identities else product for product in data.products
+        )})
     env = Environment(
         loader=FileSystemLoader(_TEMPLATE_DIR),
         autoescape=True,
@@ -2381,6 +2448,10 @@ def render_report_a_site(
     _copy_assets(site_root)
     data_dir = site_root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+    if identity_context is not None:
+        (data_dir / "identity-context.json").write_bytes(
+            _canonical_json(identity_context.render_binding())
+        )
     (data_dir / "render-context.json").write_bytes(_canonical_json({
         "schema_version": "a-public-render-context-1",
         "public_provenance": (public_provenance.model_dump(mode="json")
@@ -2397,6 +2468,8 @@ def render_report_a_site(
         publication_limitation_zh=publication_limitation_zh,
     )
     base_context["current_revision"] = active_revision.revision if active_revision else 0
+    base_context["identity_headers_html"] = render_identity_headers(identities)
+    (data_dir / "identity-projection.json").write_bytes(_canonical_json(identities))
     display_payload = data.model_dump(mode="json")
     display_payload["calculation_evidence"] = [
         item.model_dump(mode="json") for item in calculation_evidence
@@ -2417,11 +2490,16 @@ def render_report_a_site(
     (data_dir / "report.js").write_text(f"window.REPORT_A={literal};\n", encoding="utf-8")
 
     generated: list[Path] = []
+    comparison, comparison_groups, comparison_rows = _a_comparison_workspace(data)
     for page_id, template_name in _STATIC_TEMPLATES:
         output = site_root / f"{page_id}.html"
         output.write_text(
             env.get_template(template_name).render(
-                **{**base_context, "current": page_id}
+                **{**base_context, "current": page_id,
+                   "comparison_workspace": comparison if page_id == "clinical-portfolio" else {},
+                   "comparison_groups": (comparison_groups
+                                         if page_id == "clinical-portfolio" else ()),
+                   "comparison_rows": comparison_rows if page_id == "clinical-portfolio" else {}}
             ),
             encoding="utf-8",
         )
@@ -2441,6 +2519,9 @@ def render_report_a_site(
             "data_prefix": "../data",
         }
         context["product"] = display_products[product.id]
+        context["identity_headers_html"] = render_identity_headers({
+            product.id: identities[product.id],
+        } if product.id in identities else {})
         context["product_trials"] = tuple(
             row for row in context["trials"]
             if row["product_id"] == product.id
@@ -2572,6 +2653,7 @@ def _render_recovery_digest(
     public_provenance: PublicProvenance | None,
     calculation_evidence: tuple[PublicCalculationEvidence, ...],
     limitation: str | None,
+    identity_context: PortalIdentityContext | None = None,
 ) -> str:
     """Bind exact inputs and installed renderer resources, never infer old bindings."""
     root = Path(__file__).resolve().parents[4]
@@ -2589,6 +2671,9 @@ def _render_recovery_digest(
                     item.model_dump(mode="json") for item in calculation_evidence
                 ],
                 "publication_limitation": limitation,
+                "identity_binding": identity_context.render_binding() if identity_context else None,
+                "identity_projection": (identity_context.project(
+                    data.product_ids, cutoff=data.data_cutoff) if identity_context else None),
                 "runtime_versions": {
                     name: dependency_version(name) for name in ("Jinja2", "pydantic")
                 },
@@ -2630,6 +2715,7 @@ def build_report_a_artifact(
     calculation_evidence: tuple[PublicCalculationEvidence, ...] = (),
     publication_limitation_zh: str | None = None,
     recover_committed: bool = False,
+    identity_context: PortalIdentityContext | None = None,
 ) -> tuple[Path, Path]:
     """生成站点、锁定报告快照并写入 generated 清单。
 
@@ -2678,6 +2764,7 @@ def build_report_a_artifact(
         public_provenance,
         calculation_evidence,
         publication_limitation_zh,
+        identity_context,
     )
     if recover_committed and transaction.manifest_path.exists():
         for path in (transaction.manifest_path, transaction.version_root, transaction.site_root):
@@ -2709,6 +2796,7 @@ def build_report_a_artifact(
         public_provenance=public_provenance,
         calculation_evidence=calculation_evidence,
         publication_limitation_zh=publication_limitation_zh,
+        identity_context=identity_context,
     )
 
     result_rows: tuple[EfficacyRow | SafetyRow, ...] = (*data.efficacy, *data.safety)

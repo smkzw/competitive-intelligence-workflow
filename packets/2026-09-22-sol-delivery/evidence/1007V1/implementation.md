@@ -1,11 +1,105 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前第二里程碑候选（连续实施，非暂停/RC）
+
+最新终态：宽门v4质量-only实过，活跃1136/1254.06s、兼容20、分层7、
+Ruff/strict276/引用规则均通过，SHA
+`0971ef503d0637d062689def2ee95b93f95d0a2c77983763d979224639711061`。
+身份C03终态REVISE（实际grok-4.7:high/890.275s），原文/source-set/14生产冻结
+SHA不改。未来观察不得由早生效日放行；local mtime不证明公开；缺失日期/表头
+上下文须补。拒绝从2025财务观察伪造2026-01-01关系失效，既定用户规则无需重问。
+新三论文CAS准备保留真实原件；OLYMPIA1的HTTP200原生响应是metadata_only，
+不是全文或无数据。下一根因批次有边界修复，不重复全页会商。
+[第二里程碑源/证据/范围清单](owner-milestone-v2.json)。以下PENDING为当时现场，不覆盖本终态。
+
+隔离安装开发包v2实际完成：393文件，包摘要
+`d8c9f2cb3d8cab15360f9d91b5093a2640d1987a2a69bed3382d51b552cf2452`。
+安装入口真实`--help`、`package verify`成功；私有Python`-I -B`中七个业务
+模块均来自安装版本，合成两研究共享列与未知/清除行保留通过。
+最小可重放指向及明确范围见[安装回执](isolated-install-v2.json)。
+未修改全局Agent；不是三宿主、浏览器、临床资料或clean-commit发布接受。
+
+最新（2026-10-07）：普通项目入口读取共同身份CAS/真源库，ABC按实际消费者
+取子集并写绑定；A恢复摘要及格式节点复用包含身份输入。中文名必须出现在
+绑定原文；已绑定内存图或产品映射漂移失败关闭。身份入口/来源/重建/当前操作
+及运行邻接合批53 PASS/15.32s，`owner-identity-entry-source-green-v2.xml`；
+Ruff当前src/tests/tools与strict276源均通过。第一RED因测试版本号不合法而无效，
+修正为v1-identity-entry后6实际入口RED；名称/内存来源3真实RED保留。
+
+科学v3真实终态REVISE（grok/grok-build/grok-4.7:high，15冻结SHA实核）。
+大部分v2残留被独立探针关闭，仍有括号未知与分隔Cmax/Tmax误共框；owner集中
+10有效RED→159邻接GREEN/2.32s，policy v7。没有改写REVISE或声称独立接受。
+本轮新身份/时间/源语义C03独立节点已预检并实际派发，14冻结文件只读/PENDING；
+误以E02初始化的identity-source草案未派发，不算模型执行或必需已完成节点。
+
+筛选时间节点实际终态成功（pi/cursor/default selector，底层型号未核实），
+owner完整审阅代码后补行排序/未知时间守卫；原parent、事实及科学框ID不改。
+作者源与镜像同步，前端家族37 PASS/1.66s，
+`runs/execution/ci-1007-filtered-frame/owner-integrated-green.xml`。Node不计浏览器。
+宽门v3已实过质量-only：Ruff/strict276/活跃1136/兼容20/分层7/旧路径规则，
+日志SHA65949a2d7c8ebaa885d04e7398ef6366daa1313de478b98eb40932fe85daba31；
+不覆盖之后新字节。稳定当前候选宽门v4一次运行中，尚不计PASS。
+
+Owner原PDF实屏核对说明书物理55页（实际MAH及批准号）及20F物理295页
+（Sanofi主要全合并子公司表、Sanofi Winthrop Industrie/France/100.0）。截图只证
+该历史版本原件关系，不是门户视觉或今日许可查询。正式监管动态和历史公开
+日期边界仍待独立关闭；不能把本地mtime当官方获取回执。
+
+首里程碑a650503已递交GitHub。后续科学policy v6/共同身份/ABC横比及配置为新字节，
+不继承原门。C执行节点实际终态并完整整合（pi/cursor/default selector，底层模型
+未核实），owner C邻接与身份46 PASS/5.84s；不是实屏或医学接受。
+
+A复用B语义引擎/成员/分面/数值资格，来源行不同ID必须显式绑定实际消费者；
+不按位置或值猜关系，不用未知语义强造共轴。B来源适配保留source_domain/source_metric，
+明确null与省略分开。ABC配置/current分享接实际比较入口/问题/分页，坏参数拒绝；
+丢失已绑定身份上下文，即使投影被替换为空也失败关闭。
+导航/来源领域/身份恢复/语义合批117 PASS/19.40s，
+`runs/execution/ci-1007-display/owner-navigation-identity-green-v3.xml`。
+原导航与身份7有效RED保留；Node脚手架少row_id、调用少names/trial_names
+及公开层中文清除标签与存储enum的误断言为测试输入/层级错误，未放松科学守卫。
+
+单一开发项目生产事务链（标明的测试研究资料，不叫临床真源接受）：
+合法A+B清除、中途异常不切current、同请求重试/幂等、undo、A/B/C三单包和联合包，
+目录移动及本地资源闭合，相关3 PASS/6.26s，`owner-current-comparison-chain-v3.xml`。
+C不实际依赖该结果，保持原revision；独立C阈值清除例仍验证。旧W04测试构造器
+因新增A来源views暴露不同source row IDs，改为复用已明确的三条fixture指针，
+不改历史fixture字节、不按顺序推断。不含Ego点击/键盘/新浏览器离线，非完整JOURNEY。
+
+真实公开身份PDF已物化5精确片段，源集合/graph CAS见下节。
+普通A/B重放工具`tools/replay_1007_identity_portals.py`，固定PN源SHA
+`89f4b03dc09f71836d491f8d567ac57305903f39c2a831944fc5356688aa83d7`。
+候选`.artifacts/1007-official-identity-candidate-v1/portals-v1`：
+A48页/15,885,604字节/site SHA `a3a5f77da70dd6402c0c4bfaab41b9621ed8516b72724593cc2098f17f48f52c`；
+B101页/194,107,746字节/site SHA `a57e7f996f4fe0174f27a545daf76a402aaecac4402ca1fd154bdabfbf983d02`。
+早于新A横比/联动资产，不继承后续回归；临床池旧源、2025版说明书及2025年底
+集团记录不伪装今日动态监管核查。science/current/browser/RC全false。
+
+阶段复盘：来源类型丢失会绕过下游正确守卫，须验证普通入口；矩阵还需要图形与
+配置同一个query；源绑定损坏须在事务前拒绝，不能空投影降级。B全源接近194MB，
+逐页重复数据是资源/可读性风险；保留唯一恢复点，不以删历史或Top-N控制。
+下一批先消除重复呈现/载荷，再扩真源矩阵。原REVISE/失败/旧hash保留。
+
+科学v3同会话有界复审15冻结文件实际派发，宽门v3一次运行中；未提前记PASS。
+下文为较早阶段记录，PENDING/旧计数不覆盖本节；唯一当前状态仍指STATUS。
+
 启动基线 `ef6b23d8d6311ac0be9594aa3b578b4460e0e465`；owner开发里程碑以包含本记录的Git commit及`owner-milestone-v1.json`绑定，后续在途修改另验。远端递交只以实际Git核验为准。
 唯一英文工程；旧中文工程零接触；五项历史脏修改、未知文件和原始证据保留。
 执行加独立会商：显示和布局有边界并行，科学分组由独立节点挑战冻结源码。
 用户主指令为当前1007合同；01–06/reference/cases.json尚未取得，不伪造外部案例编号。
 
 ## 实际代码与测试
+
+### 当前后续批（a650503已推送后的新字节）
+
+独立科学v2实际终态REVISE：冻结14文件一致、55测试通过，仍发现限定未知词、ADA/Cmax领域、纵向arm_role残留。原件 `runs/conference/ci-1007-semantic/evidence_single_object-v2.md` 不改写。owner一次成族修复policy v6：20有效RED→158相关GREEN，详情标题只列实际可见时间、保留原框说明及稳定ID；随后身份/科学合批192 PASS/3.27s。未独立接受。
+
+身份：逐级显式控股链含冲突/循环/有效范围，普通A/B摘要与详情消费原名/正式名/MAH法律实体/集团/靶点/来源，不变更输入科学身份。精确PDF源回放复用既有CAS/SQLite；来源集合文件 `dupilumab-identity-source-set-v1.json`，SHA `d6cbe4200ab21ad6ece27f195c308dbf3937714e1339c566256b5b2b5a7272d3`，候选 `.artifacts/1007-official-identity-candidate-v1` 含5来源片段，原始SHA与图CAS在identity-checkpoint.json。没有新数据库/执行器；没有当前动态核查/医学接受/current切换。
+
+重建：来源loader移入可安装共同模块，报告仅保存相对CAS指针；编辑/明确清除前重开来源，上一站点hash不一致、原PDF篡改或缺可恢复上下文失败关闭。12 A/B正负测试覆盖save/clear及context/source损坏；连邻接共36 PASS/6.79s、66明确未选，`owner-identity-rebuild-green-v3.xml`。Ruff/strict5通过。最早RED包含无active消费者/无B来源view的无效fixture，失败留存，后续换合法生产绑定；不据无效RED声称生产根因。该批不等于真实save/current/分享全旅程。
+
+上一合批192记录 `owner-identity-and-science-batch-v2.xml`，本批36记录如上；没有对新字节跑全仓宽门或实屏。C仍独占运行中，不做在途QA。
+
+阶段复盘：身份不能仅是首次渲染装饰，必须与后续事务同源恢复；正负测试必须具有真实消费者合同，测试fixture失配不能倒逼削弱生产守卫；日期/来源版本/数值类别与展示分别保留，不将本次下载解释为首次公开。
 
 | 根因族 | 生产改动 | 实际证据及范围 |
 |---|---|---|

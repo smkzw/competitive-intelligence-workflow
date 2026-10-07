@@ -18,6 +18,7 @@
       </a>
       <span class="site-header__title">{{ report.indication }}竞品全景</span>
       <nav class="site-header__nav kz-a-nav" id="site-primary-nav" aria-label="主导航">
+        <a href="{{ root_prefix }}clinical-portfolio.html?view=comparison" class="site-header__nav-item">全研究横比</a>
         {% for item in navigation[:7] %}
         <a href="{{ root_prefix }}{{ item.id }}.html"
            class="site-header__nav-item{% if item.id == current %} site-header__nav-item--active{% endif %}"
@@ -74,6 +75,7 @@
         {% if user_edits %}<span class="kz-a-review-state">用户修订，未独立复核｜{{ user_edits|length }} 项</span>{% endif %}
       </div>
     </details>
+    {{ identity_headers_html }}
     {% block content %}{% endblock %}
   </main>
 

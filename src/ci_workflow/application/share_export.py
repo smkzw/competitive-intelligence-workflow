@@ -100,9 +100,18 @@ class _FilterInventory(HTMLParser):
         super().__init__(convert_charrefs=True)
         self._stack: list[tuple[str, str | None]] = []
         self.values: dict[str, set[str]] = {}
+        self.comparison = False
+        self.scripts: list[str] = []
+        self._script: list[str] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attributes = dict(attrs)
+        if attributes.get("id") == "full-study-comparison" or (
+            "data-c-enter-comparison" in attributes
+        ):
+            self.comparison = True
+        if tag == "script":
+            self._script = []
         dimension = attributes.get("data-filter-dimension")
         inherited = next((item for _tag, item in reversed(self._stack) if item), None)
         active = dimension or inherited
@@ -114,10 +123,32 @@ class _FilterInventory(HTMLParser):
         self._stack.append((tag, dimension))
 
     def handle_endtag(self, tag: str) -> None:
+        if tag == "script" and self._script is not None:
+            self.scripts.append("".join(self._script))
+            self._script = None
         for index in range(len(self._stack) - 1, -1, -1):
             if self._stack[index][0] == tag:
                 del self._stack[index:]
                 break
+
+    def handle_data(self, data: str) -> None:
+        if self._script is not None:
+            self._script.append(data)
+
+    def comparison_questions(self, report: ReportCode) -> dict[str, int]:
+        """Read generated JSON only. Never evaluate a source or script string."""
+        prefix = f"window.__{report}_COMPARISON_WORKSPACE__ = "
+        for script in self.scripts:
+            if script.strip().startswith(prefix):
+                payload, _end = json.JSONDecoder().raw_decode(script.strip()[len(prefix):])
+                counts: dict[str, int] = {}
+                for column in payload["columns"]:
+                    question = column["question_id"]
+                    if not isinstance(question, str):
+                        raise ValueError("分享比较问题标识无效")
+                    counts[question] = counts.get(question, 0) + 1
+                return counts
+        return {}
 
 
 def _validate_view_selection(selection: ShareViewSelection, page: bytes) -> None:
@@ -136,7 +167,17 @@ def _validate_view_selection(selection: ShareViewSelection, page: bytes) -> None
         }
     elif selection.report == "C":
         special = {"criteria_q": None, "criteria_hide": None, "focus": None}
+    if inventory.comparison:
+        special["view"] = {"comparison"}
+        if selection.report in {"A", "B"}:
+            questions = inventory.comparison_questions(selection.report)
+            special["cmp"] = set(questions)
+            chosen = selection.query.get("cmp", (next(iter(sorted(questions)), ""),))
+            count = questions.get(chosen[0], 0) if len(chosen) == 1 else 0
+            special["cmp_page"] = {str(page) for page in range(1, max(1, (count + 3) // 4) + 1)}
     for key, values in selection.query.items():
+        if key in {"view", "cmp", "cmp_page"} and len(values) != 1:
+            raise ValueError(f"分享比较选择必须唯一：{key}")
         allowed = inventory.values.get(key, special.get(key))
         if key not in inventory.values and key not in special:
             raise ValueError(f"分享视图筛选键不属于{selection.report}入口页面：{key}")

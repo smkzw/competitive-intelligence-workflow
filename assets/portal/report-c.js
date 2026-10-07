@@ -524,12 +524,54 @@
     return "design-fact-matrix";
   }
 
+  function wantsFullStudyComparison(pageId) {
+    // FR20 first-level all-study design-precedent comparison lives on the C
+    // homepage as a distinct task from the independent summary bullets.
+    pageId = pageId || window.__C_PAGE_ID__ || "";
+    if (pageId !== "overview") return false;
+    return new URLSearchParams(window.location.search || "").get("view") === "comparison";
+  }
+
   function usesSourceComparison(pageId) {
+    pageId = pageId || window.__C_PAGE_ID__ || "";
+    if (wantsFullStudyComparison(pageId)) return true;
     return pageId === "inclusion-criteria" || pageId === "exclusion-criteria" ||
       pageId === "endpoint-timepoint-matrix" || pageId === "population-disease-definition" ||
       pageId === "treatment-arms" || pageId === "sample-analysis-statistics" ||
       chartKind(pageId) === "design-fact-matrix" ||
       chartKind(pageId) === "trial-design-summary";
+  }
+
+  function syncComparisonChrome() {
+    var active = wantsFullStudyComparison();
+    if (document.body && document.body.setAttribute) {
+      document.body.setAttribute("data-c-view", active ? "comparison" : "summary");
+    }
+    var nav = document.querySelector("[data-c-comparison-nav]");
+    if (nav) {
+      nav.setAttribute("aria-current", active ? "page" : "false");
+      if (active) nav.classList.add("site-header__nav-item--active");
+      else nav.classList.remove("site-header__nav-item--active");
+    }
+    var entry = document.querySelector(".kz-c-comparison-entry");
+    var action = document.querySelector("[data-c-enter-comparison]");
+    if (entry && action) {
+      if (active) {
+        entry.setAttribute("data-c-comparison-active", "true");
+        action.textContent = "返回首页摘要";
+        action.setAttribute(
+          "href",
+          (window.__C_SITE_PREFIX__ || "") + "overview.html"
+        );
+      } else {
+        entry.removeAttribute("data-c-comparison-active");
+        action.textContent = "打开全研究横比";
+        action.setAttribute(
+          "href",
+          (window.__C_SITE_PREFIX__ || "") + "overview.html?view=comparison"
+        );
+      }
+    }
   }
 
   function trialLabel(row) {
@@ -903,7 +945,9 @@
     var search = document.createElement("input");
     search.id = "kz-c-criteria-search";
     search.type = "search";
-    search.placeholder = "关键词、产品或试验号";
+    search.placeholder = designMode
+      ? "主题、关键词、产品或试验号"
+      : "关键词、产品或试验号";
     search.value = criteriaSearchQuery;
     label.appendChild(search);
     toolbar.appendChild(label);
@@ -981,8 +1025,8 @@
 
     function searchableText(row, trialId) {
       return [row.product_zh, trialId, row.trial_zh, row.source_text, row.original_text,
-        row.value, row.element_zh, row.source_topic_zh, row.time, row.group_zh,
-        row.cohort_zh, row.scale]
+        row.value, row.element_zh, row.field_family_zh, row.source_topic_zh, row.time,
+        row.group_zh, row.cohort_zh, row.scale, row.source_version_id]
         .map(function (value) { return String(value || ""); }).join(" ").toLocaleLowerCase();
     }
 
@@ -1011,6 +1055,9 @@
       item.setAttribute("data-criterion-product-id", String(row.product_id || ""));
       item.setAttribute("data-criterion-review-state", String(row.review_state || ""));
       item.setAttribute("data-criterion-disclosure-state", String(row.disclosure_state || ""));
+      if (row.source_version_id) {
+        item.setAttribute("data-criterion-source-version-id", String(row.source_version_id));
+      }
       if (contextOnly) {
         // 检索命中同实例其他事实时，未命中兄弟仅作标记上下文：
         // 不计入命中条数、不进入完整表可见行，仍可读原文与来源。
@@ -1055,6 +1102,9 @@
       ];
       var trialRef = String(row.trial_display_id || row.trial_id || "");
       if (trialRef) provenanceParts.push(trialRef + " · " + studyMeta[trialId].product);
+      if (row.source_version_id) {
+        provenanceParts.push("来源编号 " + String(row.source_version_id));
+      }
       provenance.textContent = provenanceParts.join("｜");
       detail.appendChild(summary);
       detail.appendChild(original);
@@ -1416,6 +1466,7 @@
   function renderCChart() {
     var host = document.getElementById("kz-c-chart-visuals");
     if (!host || !window.echarts) return;
+    syncComparisonChrome();
     var criteriaPage = window.__C_PAGE_ID__ === "inclusion-criteria" ||
       window.__C_PAGE_ID__ === "exclusion-criteria";
     // A local keyword/choice hides table rows, but must not become the input
@@ -1438,7 +1489,9 @@
     host.innerHTML = "";
     var title = document.createElement("div");
     title.className = "kz-c-chart-title";
-    title.textContent = {
+    title.textContent = wantsFullStudyComparison()
+      ? "全研究横比"
+      : {
       "sample-size-bar": "样本量与统计分析原文对照",
       "visit-timeline": "关键评估与随访时间",
       "endpoint-timepoint-matrix": "主要终点与评估时间",
@@ -1597,6 +1650,7 @@
       excludedCriteriaTrials[trialId] = true;
     });
     removeSharedHash();
+    syncComparisonChrome();
     decorateRows();
     renderCChart();
     placeDesignPathsBetweenChartAndTable();

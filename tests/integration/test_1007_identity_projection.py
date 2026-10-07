@@ -11,7 +11,7 @@ from tests.integration.test_competitor_universe import _evidence_registry
 
 @pytest.fixture
 def identity_inputs(tmp_path: Path):
-    registry = _evidence_registry(tmp_path, ("name", "mah", "group", "rights", "target"))
+    registry = _evidence_registry(tmp_path, ("正式中文名", "mah", "group", "rights", "target"))
     fragments = [item.fragment.fragment_id for item in registry.verified_fragments]
     observed = registry.verified_fragments[0].source_version.acquired_at
     product = EntityIdentity.create(EntityType.PRODUCT, "Original-INN", "molecule-fixture")
@@ -84,6 +84,17 @@ def test_official_chinese_name_needs_reopened_evidence_and_keeps_identity(identi
         cutoff=observed)["display_name"] == "Original-INN"
 
 
+def test_reopened_unrelated_fragment_does_not_verify_a_chinese_name(identity_inputs):
+    from ci_workflow.reports.common.identity_projection import project_product_identity
+
+    graph, registry, fragments, observed, product, _, _ = identity_inputs
+    graph.entities[product.entity_id] = product.model_copy(update={
+        "official_chinese_name": "来源没有的中文名", "name_evidence_fragment_id": fragments[1]})
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert result["display_name"] == "Original-INN"
+    assert result["entity_id"] == product.entity_id
+
+
 def test_expired_china_license_falls_back_to_explicit_overseas_role(identity_inputs):
     from ci_workflow.reports.common.identity_projection import project_product_identity
 
@@ -109,3 +120,68 @@ def test_scope_and_timezone_metadata_are_fail_closed_and_legacy_relation_bytes_s
     dated = EntityRelation.create(product, "has_mah", holder, "fragment",
         jurisdiction="CN", observed_at=datetime(2026, 10, 7, tzinfo=UTC))
     assert dated.relation_id != legacy.relation_id
+
+
+def test_ultimate_group_chain_keeps_all_control_sources_and_legal_holder(identity_inputs):
+    from ci_workflow.reports.common.identity_projection import project_product_identity
+
+    graph, registry, fragments, observed, product, holder, group = identity_inputs
+    subsidiary = EntityIdentity.create(EntityType.ORGANIZATION, "Intermediate Legal", "middle")
+    graph.add_entity(subsidiary)
+    graph.add_relation(EntityRelation.create(product, "has_mah", holder, fragments[1],
+        jurisdiction="CN", authorization_scope="已核中国许可", observed_at=observed))
+    graph.add_relation(EntityRelation.create(holder, "controlled_by", subsidiary, fragments[2],
+        observed_at=observed))
+    graph.add_relation(EntityRelation.create(subsidiary, "controlled_by", group, fragments[3],
+        observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert result["company_label"] == "公司：已核集团｜中国MAH所属集团"
+    company = result["companies"][0]
+    assert company["legal_entity_id"] == holder.entity_id
+    assert company["group_entity_id"] == group.entity_id
+    assert set(company["evidence_fragment_ids"]) == set(fragments[1:4])
+    assert company["group_chain_entity_ids"] == [holder.entity_id, subsidiary.entity_id,
+                                                group.entity_id]
+
+
+@pytest.mark.parametrize("failure", ["conflict", "cycle", "missing_control_source"])
+def test_unresolved_group_chain_does_not_claim_an_intermediate_or_guess_group(
+    identity_inputs, failure,
+):
+    from ci_workflow.reports.common.identity_projection import project_product_identity
+
+    graph, registry, fragments, observed, product, holder, group = identity_inputs
+    intermediate = EntityIdentity.create(EntityType.ORGANIZATION, "Intermediate", "unresolved")
+    graph.add_entity(intermediate)
+    graph.add_relation(EntityRelation.create(product, "has_mah", holder, fragments[1],
+        jurisdiction="CN", authorization_scope="中国许可", observed_at=observed))
+    graph.add_relation(EntityRelation.create(holder, "controlled_by", intermediate, fragments[2],
+        observed_at=observed))
+    if failure == "conflict":
+        graph.add_relation(EntityRelation.create(intermediate, "controlled_by", holder,
+            fragments[3], observed_at=observed))
+        graph.add_relation(EntityRelation.create(intermediate, "controlled_by", group,
+            fragments[4], observed_at=observed))
+    elif failure == "cycle":
+        graph.add_relation(EntityRelation.create(intermediate, "controlled_by", holder,
+            fragments[3], observed_at=observed))
+    else:
+        graph.add_relation(EntityRelation.create(intermediate, "controlled_by", group,
+            "not-reopened", observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert result["company_label"] == "公司：Foreign Legal Holder｜集团归属待核"
+    assert result["companies"][0]["group_entity_id"] is None
+    assert result["unresolved_relations"]
+
+
+def test_verified_group_itself_as_mah_has_explicit_role_not_subsidiary_label(identity_inputs):
+    from ci_workflow.reports.common.identity_projection import project_product_identity
+
+    graph, registry, fragments, observed, product, _, group = identity_inputs
+    graph.add_relation(EntityRelation.create(product, "has_mah", group, fragments[1],
+        jurisdiction="CN", authorization_scope="中国许可", observed_at=observed))
+    graph.add_relation(EntityRelation.create(group, "controlled_by", group, fragments[2],
+        observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert result["company_label"] == "公司：已核集团｜中国MAH"
+    assert result["companies"][0]["group_chain_entity_ids"] == [group.entity_id]

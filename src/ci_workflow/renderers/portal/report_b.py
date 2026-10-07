@@ -58,6 +58,10 @@ from ci_workflow.reports.common.evidence_view import (
     is_local_path_shape,
     precise_locator_anchor,
 )
+from ci_workflow.reports.common.identity_projection import (
+    PortalIdentityContext,
+    render_identity_headers,
+)
 from ci_workflow.reports.common.numeric_projection import (
     NumericMeasureKind,
     infer_numeric_kind,
@@ -2634,6 +2638,14 @@ def _project_record(
             )
         ),
     }
+    # Every source adapter must retain explicit scientific typing, not just
+    # supporting pages. Omitting these axes would defeat the downstream veto.
+    for field in ("source_domain", "source_metric"):
+        declared = _get(value, field, _MISSING)
+        if declared is _MISSING:
+            declared = _get(source, field, _MISSING)
+        if declared is not _MISSING:
+            result[field] = _enum_value(declared)
     if domain == "supporting":
         # Presentation domain is not scientific typing. Preserve the extractor's
         # domain/metric and exact measure scope, never map ADA/PK to efficacy.
@@ -3722,8 +3734,25 @@ def _project_scientific_groups(
                 copied["_user_edit"] = selected_row["_user_edit"]
             rows.append(copied)
         if rows:
-            result.append({**group, "rows": rows,
-                           "cross_trial": _bucket_spans_trials([(row, None) for row in rows])})
+            projected = {**group, "rows": rows,
+                         "cross_trial": _bucket_spans_trials([(row, None) for row in rows])}
+            full_times = tuple(group.get("actual_times", ()))
+            current_times = _actual_observation_times([(row, None) for row in rows])
+            if full_times and current_times != full_times:
+                projected["frame_actual_times"] = full_times
+                projected["actual_times"] = current_times
+                projected["title_zh"] = str(group["title_zh"]).replace(
+                    "实际观察时间：" + " / ".join(full_times),
+                    "实际观察时间：" + " / ".join(current_times), 1,
+                )
+                note = group.get("time_window_note_zh")
+                if note:
+                    current_note = "原比较框：" + str(note)
+                    projected["time_window_note_zh"] = current_note
+                    projected["title_zh"] = projected["title_zh"].replace(
+                        str(note), current_note, 1,
+                    )
+            result.append(projected)
     return tuple(result)
 
 
@@ -3871,6 +3900,19 @@ def _cross_trial_groups(
     )
 
 
+def _actual_observation_times(
+    records: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[str, ...]:
+    return tuple(dict.fromkeys(
+        f'{row.get("actual_timepoint")} '
+        + {"week": "周", "day": "天", "month": "个月", "year": "年"}.get(
+            str(row.get("actual_timepoint_unit")), str(row.get("actual_timepoint_unit")),
+        ) for row, _source in records
+        if row.get("actual_timepoint") is not None
+        and row.get("actual_timepoint_unit") is not None
+    ))
+
+
 def _dress_membership_groups(
     membership: Sequence[Sequence[tuple[dict[str, Any], Any]]],
     *,
@@ -3906,15 +3948,7 @@ def _dress_membership_groups(
             "line" if page_id == "longitudinal-results" and len(times) > 1 else "bar"
         )
         title = _group_title(first, domain=domain, include_time=include_time)
-        actual_times = tuple(dict.fromkeys(
-                f'{row.get("actual_timepoint")} '
-                + {"week": "周", "day": "天", "month": "个月", "year": "年"}.get(
-                    str(row.get("actual_timepoint_unit")), str(row.get("actual_timepoint_unit")),
-                )
-                for row, _source in bucket
-                if row.get("actual_timepoint") is not None
-                and row.get("actual_timepoint_unit") is not None
-        ))
+        actual_times = _actual_observation_times(bucket)
         if actual_times:
             title += " · 实际观察时间：" + " / ".join(actual_times)
         time_note = (("同研究同组的描述性随访，不代表跨研究等价或时间点相同"
@@ -4081,10 +4115,11 @@ def _groups_for_page(
         series: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
         for row, source in records:
             identity = tuple(_text(row.get(key)) for key in
-                             ("product_id", "trial_id", "group_id"))
+                             ("product_id", "trial_id", "group_id", "arm_role"))
             key = (*identity, *_semantic_group_key(row, include_time=False),
                    _text(row.get("period")), _text(row.get("cohort")))
-            if (not all(identity) or semantic_value_is_unknown(row.get("semantic_definition"))
+            if (any(semantic_value_is_unknown(value) for value in identity)
+                    or semantic_value_is_unknown(row.get("semantic_definition"))
                     or source_domain_conflicts(row, "efficacy")):
                 key += (_text(row.get("row_id")),)
             series[key].append((row, source))
@@ -5525,12 +5560,20 @@ def render_report_b_site(
     *,
     publication_limitation_zh: str | None = None,
     active_revision: ActiveFactRevision | None = None,
+    identity_context: PortalIdentityContext | None = None,
 ) -> tuple[Path, ...]:
     """Render all B catalog pages plus every product and trial dossier."""
     site_root = Path(site_root)
     consumers: tuple[PortalConsumerNode, ...] = ()
     if active_revision is not None:
         data, consumers = _project_active_facts_b(data, active_revision)
+    identities = (identity_context.project(data.product_ids, cutoff=data.data_cutoff)
+                  if identity_context else {})
+    if identities:
+        data = data.model_copy(update={"products": tuple(
+            product.model_copy(update={"name": identities[product.id]["display_name"]})
+            if product.id in identities else product for product in data.products
+        )})
 
     registry = PageRegistry.load()
     catalog = registry.catalog(ReportKind.B)
@@ -5590,6 +5633,11 @@ def render_report_b_site(
     _reset_site_root(site_root)
     _copy_assets(site_root)
     (site_root / "data").mkdir(parents=True, exist_ok=True)
+    if identity_context is not None:
+        (site_root / "data/identity-context.json").write_bytes(
+            _canonical_json(identity_context.render_binding())
+        )
+    (site_root / "data/identity-projection.json").write_bytes(_canonical_json(identities))
 
     # The standalone report literal intentionally contains only source rows and
     # metadata.  The optional B view objects are implementation inputs, not a
@@ -5643,6 +5691,7 @@ def render_report_b_site(
             semantic_adjudications=data.semantic_adjudications,
         )
         context["current_revision"] = active_revision.revision if active_revision else 0
+        context["identity_headers_html"] = render_identity_headers(identities)
         output = site_root / f"{page.id}.html"
         output.write_text(page_template.render(**context), encoding="utf-8")
         generated.append(output)
@@ -5684,6 +5733,9 @@ def render_report_b_site(
             publication_limitation_zh=publication_limitation_zh,
         )
         context["detail_product_obj"] = product
+        context["identity_headers_html"] = render_identity_headers(
+            {product.id: identities[product.id]} if product.id in identities else {},
+        )
         context["detail_product_trials"] = tuple(
             {
                 "id": trial.id,
@@ -5747,6 +5799,10 @@ def render_report_b_site(
             (product for product in data.products if product.id == trial.product_id), None,
         )
         context["detail_trial_obj"] = trial
+        context["identity_headers_html"] = render_identity_headers(
+            {trial.product_id: identities[trial.product_id]}
+            if trial.product_id in identities else {},
+        )
         output = trials_dir / f"{trial.id}.html"
         context["current_revision"] = active_revision.revision if active_revision else 0
         output.write_text(dossier_template.render(**context), encoding="utf-8")
@@ -5927,6 +5983,7 @@ def build_report_b_artifact(
     run_id: str,
     publication_limitation_zh: str | None = None,
     extra_adjudications: Sequence[ApprovedSemanticMerge] = (),
+    identity_context: PortalIdentityContext | None = None,
 ) -> tuple[Path, Path, str]:
     """生成 B 类站点、锁定报告快照并写入当前运行产物清单。
 
@@ -5962,6 +6019,7 @@ def build_report_b_artifact(
         data,
         staging_root,
         publication_limitation_zh=publication_limitation_zh,
+        identity_context=identity_context,
     )
 
     data_digest = hashlib.sha256(_canonical_json(data.model_dump(mode="json"))).hexdigest()

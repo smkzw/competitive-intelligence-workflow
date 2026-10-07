@@ -57,6 +57,10 @@ from ci_workflow.renderers.portal.report_c import (
     render_report_c_site,
     validate_active_fact_revision_c,
 )
+from ci_workflow.reports.common.identity_projection import (
+    PortalIdentityContext,
+    load_identity_binding,
+)
 from ci_workflow.storage.event_store import EventStore, WorkflowEvent
 from ci_workflow.storage.migrations import apply_migrations
 from ci_workflow.storage.render_transaction import UnpublishedRenderTransaction
@@ -453,6 +457,40 @@ def _bound_builder_input(
     return builder_input, relative, expected
 
 
+def _bound_identity_context(
+    project_root: Path, previous: CurrentReportDelivery,
+) -> PortalIdentityContext | None:
+    """Restore only the pinned prior source context; never silently discard it."""
+    from ci_workflow.storage.content_store import ContentAddressedStore, ContentIntegrityError
+    from ci_workflow.storage.source_derivation import source_json_decoder
+
+    store = ContentAddressedStore(project_root)
+    relative = f"{previous.site_relative_path}/data/identity-context.json"
+    try:
+        path = store.resolve_relative(relative)
+        projection = store.resolve_relative(
+            f"{previous.site_relative_path}/data/identity-projection.json"
+        )
+        if not path.exists():
+            if "data/identity-context.json" in previous.file_hashes:
+                raise ValueError("已绑定的身份来源上下文丢失")
+            if projection.exists() and json.loads(projection.read_bytes()):
+                raise ValueError("旧身份展示缺少可恢复的来源绑定")
+            return None
+        if hashlib.sha256(path.read_bytes()).hexdigest() != previous.file_hashes.get(
+            "data/identity-context.json"
+        ):
+            raise ValueError("身份来源上下文哈希不一致")
+        payload = source_json_decoder().decode(path.read_text())
+        if payload.get("schema_version") != "portal-identity-context-1" or not payload.get(
+            "graph_asset"
+        ):
+            raise ValueError("身份来源上下文缺少可重放的资产")
+        return load_identity_binding(project_root, payload)
+    except (ValueError, KeyError, OSError, ContentIntegrityError) as error:
+        raise CurrentDeliveryConflictError(f"身份来源无法恢复：{error}") from error
+
+
 def preflight_current_report(
     project_root: Path,
     previous: CurrentReportDelivery,
@@ -478,22 +516,29 @@ def preflight_current_report(
     builder_input, _relative, _expected = _bound_builder_input(
         project_root, previous, builder_binding
     )
+    identity_context = _bound_identity_context(project_root, previous)
     try:
+        data: ReportAPortalData | ReportBPortalData | ReportCPortalData
         if previous.report == "A":
+            data = ReportAPortalData.model_validate_json(builder_input.read_bytes())
             validate_active_fact_revision_a(
-                ReportAPortalData.model_validate_json(builder_input.read_bytes()),
+                data,
                 active_revision,
             )
         elif previous.report == "B":
+            data = ReportBPortalData.model_validate_json(builder_input.read_bytes())
             validate_active_fact_revision_b(
-                ReportBPortalData.model_validate_json(builder_input.read_bytes()),
+                data,
                 active_revision,
             )
         else:
+            data = ReportCPortalData.model_validate_json(builder_input.read_bytes())
             validate_active_fact_revision_c(
-                ReportCPortalData.model_validate_json(builder_input.read_bytes()),
+                data,
                 active_revision,
             )
+        if identity_context is not None:
+            identity_context.project(data.product_ids, cutoff=data.data_cutoff)
     except ValueError as error:
         raise CurrentDeliveryConflictError(str(error)) from error
 
@@ -532,6 +577,7 @@ def build_current_report(
     builder_input, builder_relative, builder_sha256 = _bound_builder_input(
         project_root, previous, builder_binding
     )
+    identity_context = _bound_identity_context(project_root, previous)
     data_a: ReportAPortalData | None = None
     data_b: ReportBPortalData | None = None
     data_c: ReportCPortalData | None = None
@@ -545,6 +591,9 @@ def build_current_report(
         else:
             data_c = ReportCPortalData.model_validate_json(builder_input.read_bytes())
             validate_active_fact_revision_c(data_c, active_revision)
+        identity_data = data_a or data_b or data_c
+        if identity_context is not None and identity_data is not None:
+            identity_context.project(identity_data.product_ids, cutoff=identity_data.data_cutoff)
     except ValueError as error:
         raise CurrentDeliveryConflictError(str(error)) from error
     if manifest_path.is_file():
@@ -588,13 +637,16 @@ def build_current_report(
                 limitation = context["publication_limitation_zh"]
             render_report_a_site(data_a, staging, active_revision=active_revision,
                                  public_provenance=public,
-                                 publication_limitation_zh=limitation)
+                                 publication_limitation_zh=limitation,
+                                 identity_context=identity_context)
         elif report == "B":
             assert data_b is not None
-            render_report_b_site(data_b, staging, active_revision=active_revision)
+            render_report_b_site(data_b, staging, active_revision=active_revision,
+                                 identity_context=identity_context)
         else:
             assert data_c is not None
-            render_report_c_site(data_c, staging, active_revision=active_revision)
+            render_report_c_site(data_c, staging, active_revision=active_revision,
+                                 identity_context=identity_context)
         receipt_path = staging / "data/consumer-receipt.json"
         receipt = PortalRenderReceipt.model_validate_json(receipt_path.read_bytes())
         graph = _fact_impact_graph(revision, receipt.consumers, facts)

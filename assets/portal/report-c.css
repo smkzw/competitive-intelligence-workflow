@@ -41,6 +41,58 @@
   max-width: none;
 }
 
+/* FR20: homepage summary stays separate from the actionable comparison entry. */
+.kz-c-comparison-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+  background: var(--kz-c-accent-soft);
+}
+.kz-c-comparison-entry__copy {
+  min-width: min(100%, 48rem);
+  max-width: 72ch;
+}
+.kz-c-comparison-entry h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+.kz-c-comparison-entry p {
+  margin: 0;
+  color: var(--kz-c-muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.kz-c-comparison-entry__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid #d98200;
+  border-radius: 999px;
+  background: #fff;
+  color: #8b4a00;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+.kz-c-comparison-entry__action:focus-visible {
+  outline: 3px solid var(--kz-c-focus);
+  outline-offset: 2px;
+}
+.kz-c-site[data-c-view="comparison"] .kz-c-design-matrix-section {
+  display: none;
+}
+.kz-c-site[data-c-view="comparison"] .kz-c-comparison-entry {
+  background: #fff;
+}
+
 /* Desktop reading chrome: use existing disclosure/mount and movie, not a
    separate compact template or smaller data typography. */
 .kz-c-site .kz-site-story .kz-film-stage { height: 56px; min-height: 56px; }

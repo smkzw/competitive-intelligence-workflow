@@ -70,6 +70,8 @@ def test_descriptive_buckets_do_not_claim_clinical_equivalence() -> None:
 @pytest.mark.parametrize("marker", [
     "not available", "N.A.", "n.a.", "not reported.", "TBD", "待核", "未明确",
     "未公开披露", "未知。", "未 知", "用户清除，待重新核实",
+    "T.B.D.", "n. a.", "未知（待核）", "unknown (pending)", "NA (awaiting source)",
+    "（未知）", "【未知】", "〔未知〕", "「未知」", "未知、待核", "（未知）EASI改善",
 ])
 def test_unknown_spellings_never_license_a_shared_definition(marker: str) -> None:
     left, right = _equivalent_rows()
@@ -99,3 +101,29 @@ def test_page_domain_stamp_cannot_override_explicit_source_domain(source_domain:
     left.update(_domain="efficacy", source_domain="efficacy")
     right.update(_domain="efficacy", source_domain=source_domain)
     assert len(proposed_semantic_buckets((((left, None), (right, None)),), ())) == 2
+
+
+@pytest.mark.parametrize("metric", [
+    "ada_positive", "anti-drug antibody", "anti drug antibody positive", "PK/PD",
+    "Cmax", "Cmax_geometric_mean", "tmax", "immunogenicity_response", "biomarker_level",
+    "c-max", "C max", "t-max", "T max",
+])
+def test_explicit_nonclinical_metric_variants_never_borrow_an_efficacy_frame(metric) -> None:
+    left, right = _equivalent_rows()
+    right["source_metric"] = metric
+    assert len(proposed_semantic_buckets((((left, None), (right, None)),), ())) == 2
+
+
+def test_metric_token_boundary_does_not_misclassify_adaptive_clinical_response() -> None:
+    from ci_workflow.reports.b.semantic_contract import source_domain_conflicts
+
+    assert not source_domain_conflicts({"source_metric": "adaptive_response"}, "efficacy")
+
+
+@pytest.mark.parametrize("definition", [
+    "EASI改善不少于75%（FAS）", "EASI改善、FAS分析", "未知、EASI改善",
+])
+def test_real_definition_head_is_not_erased_by_unknown_normalization(definition: str) -> None:
+    from ci_workflow.reports.b.semantic_contract import semantic_value_is_unknown
+
+    assert not semantic_value_is_unknown(definition)

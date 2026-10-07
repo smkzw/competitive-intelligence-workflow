@@ -1443,6 +1443,125 @@
       : { title: String(text || ""), context: "" };
   }
 
+  function cloneGroupShell(group) {
+    var projected = {};
+    var keys = Object.keys(group || {});
+    for (var i = 0; i < keys.length; i++) projected[keys[i]] = group[keys[i]];
+    return projected;
+  }
+
+  function toTimeList(value) {
+    if (Array.isArray(value)) {
+      return value.map(function (item) { return String(item); }).filter(Boolean);
+    }
+    if (value == null) return [];
+    if (typeof value === "object" && typeof value.length === "number") {
+      var listed = [];
+      for (var i = 0; i < value.length; i++) {
+        if (value[i] != null && String(value[i])) listed.push(String(value[i]));
+      }
+      return listed;
+    }
+    return String(value) ? [String(value)] : [];
+  }
+
+  function sameTimeList(left, right) {
+    if (left.length !== right.length) return false;
+    for (var i = 0; i < left.length; i++) {
+      if (String(left[i]) !== String(right[i])) return false;
+    }
+    return true;
+  }
+
+  function formatActualTime(row) {
+    if (!row || typeof row.actual_timepoint !== "number" ||
+        !Number.isFinite(row.actual_timepoint) || row.actual_timepoint < 0 ||
+        row.actual_timepoint_unit == null) return "";
+    var unit = String(row.actual_timepoint_unit);
+    var unitLabel = ({ week: "周", day: "天", month: "个月", year: "年" })[unit] || unit;
+    return String(row.actual_timepoint) + " " + unitLabel;
+  }
+
+  function collectActualTimes(rows) {
+    var times = [];
+    var seen = {};
+    var list = Array.isArray(rows) ? rows : [];
+    for (var i = 0; i < list.length; i++) {
+      var label = formatActualTime(list[i]);
+      if (!label || seen[label]) continue;
+      seen[label] = true;
+      times.push(label);
+    }
+    return times;
+  }
+
+  function bareFrameNote(note) {
+    if (note == null) return null;
+    var text = String(note);
+    return text.indexOf("原比较框：") === 0 ? text.slice("原比较框：".length) : text;
+  }
+
+  function replaceTitleTimes(title, fromTimes, toTimes) {
+    if (!fromTimes.length) return title;
+    var needle = "实际观察时间：" + fromTimes.join(" / ");
+    if (title.indexOf(needle) === -1) return title;
+    return title.replace(needle, "实际观察时间：" + toTimes.join(" / "));
+  }
+
+  // View-only projection after A/B already filtered rows: keep frame identity,
+  // rewrite visible actual times / notes, never repartition scientific membership.
+  function projectVisibleFrame(group) {
+    var source = group || {};
+    var projected = cloneGroupShell(source);
+    var rows = Array.isArray(source.rows) ? source.rows : [];
+    projected.rows = rows;
+
+    var frameTimes = toTimeList(source.frame_actual_times);
+    if (!frameTimes.length) frameTimes = toTimeList(source.actual_times);
+    if (!frameTimes.length) return projected;
+
+    var currentTimes = collectActualTimes(rows);
+    // Sorting/filtering rows does not create a scientific time difference.
+    // Preserve the parent time order; retain any genuinely new visible label.
+    currentTimes.sort(function (left, right) {
+      var li = frameTimes.indexOf(left), ri = frameTimes.indexOf(right);
+      if (li === -1 && ri === -1) return left.localeCompare(right);
+      if (li === -1) return 1;
+      if (ri === -1) return -1;
+      return li - ri;
+    });
+    var title = String(source.title_zh || "");
+    var note = source.time_window_note_zh == null ? null : String(source.time_window_note_zh);
+    var plainNote = bareFrameNote(note);
+    var priorTimes = toTimeList(source.actual_times);
+
+    if (sameTimeList(currentTimes, frameTimes)) {
+      projected.actual_times = frameTimes.slice();
+      delete projected.frame_actual_times;
+      if (plainNote != null) projected.time_window_note_zh = plainNote;
+      if (note && plainNote != null && note !== plainNote) {
+        title = title.split(note).join(plainNote);
+      }
+      title = replaceTitleTimes(title, priorTimes, frameTimes);
+      title = replaceTitleTimes(title, currentTimes, frameTimes);
+      projected.title_zh = title;
+      return projected;
+    }
+
+    projected.frame_actual_times = frameTimes.slice();
+    projected.actual_times = currentTimes.slice();
+    title = replaceTitleTimes(title, priorTimes, currentTimes);
+    title = replaceTitleTimes(title, frameTimes, currentTimes);
+    if (plainNote) {
+      var framedNote = "原比较框：" + plainNote;
+      projected.time_window_note_zh = framedNote;
+      if (note && title.indexOf(note) !== -1) title = title.split(note).join(framedNote);
+      else if (title.indexOf(plainNote) !== -1) title = title.split(plainNote).join(framedNote);
+    }
+    projected.title_zh = title;
+    return projected;
+  }
+
   function renderChartContainer(container, groupIndex, group) {
     container.setAttribute("data-group-index", String(groupIndex));
     var plan = presentationPlan(group);
@@ -1763,6 +1882,8 @@
       }
       api.openByRowId(rowId, triggerEl || null);
       window.scrollTo(x, y);
+    } else if (typeof window.__A_COMPARISON_EVIDENCE__ === "function") {
+      window.__A_COMPARISON_EVIDENCE__(rowId, triggerEl);
     }
   }
 
@@ -2257,8 +2378,10 @@
     unplottedValueText: unplottedValueText,
     buildBarOption: buildBarOption,
     syncWithFilter: syncChartWithFilter,
+    projectVisibleFrame: projectVisibleFrame,
     replaceGroups: function (groups) {
-      chartGroups = Array.isArray(groups) ? groups : [];
+      var incoming = Array.isArray(groups) ? groups : [];
+      chartGroups = incoming.map(projectVisibleFrame);
       window.__CHART_GROUPS__ = chartGroups;
       init();
     },

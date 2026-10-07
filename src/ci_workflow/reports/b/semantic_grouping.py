@@ -19,7 +19,7 @@ from ci_workflow.reports.b.semantic_contract import (
     time_policy_identity,
 )
 
-SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v5"
+SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v7"
 _SOURCE_JSON = TypeAdapter(Any)
 
 

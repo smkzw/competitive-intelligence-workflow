@@ -9,13 +9,44 @@ visual acceptance, not for every edit. Actual Goal active; HEAD ef6b23d matches
 review baseline. No legacy workspace access. Five historical dirty files protected.
 Current contract is user 1007V1 prompt; 01-06/reference/cases unavailable, native
 Ask outstanding. Do not invent their contents or blocked release PASS.
-Current: B ordinary matrix wired; review remediation family181PASS; owner gatev2
+Current: owner milestone a650503 pushed and remote verified. B ordinary matrix wired;
+Latest terminal owner update: v4 gate quality-only1136/20/7/strict276 passed;
+393-file development bundle installed into private isolated runtime. Public
+entry/package verification and installed-origin synthetic comparison probe
+passed. Identity C03 terminal REVISE, actualgrok/grok-build/grok-4.7:high,
+890.275s,14 frozen production hashes unchanged. Date/scope and local delimiter
+residuals stay open; invented year-end expiry rejected. Next source-knowledge
+root family after exact-path GitHub milestone preservation. No automatic
+pause, current clinical/regulatory acceptance, browser or RC. Source preparation
+is three real PubMed records; one linked JATS has body, another metadata_only.
+See owner-milestone-v2.json for precise source/receipt/bundle identities.
+Older in-flight observations below record their earlier time only:
+v3 gate terminal quality-only1136/20/7/strict276;
+v3 science still REVISE, bracket unknown/segmented PK repaired10RED->159GREEN,
+policyv7. Normal run A/B/C identity entry, portable subsets and memory/source
+guards53PASS; filtered-time worker terminal, owner integrated37PASS. Same dev
+current/share operation3PASS, not clinical/browser journey. Full current Ruff
+and strict276 passed; one v4 broad gate and bounded C03 identity/source review
+actually running/PENDING.14 frozen source paths held. E02 draft initialized
+but never dispatched; not a scientific review. Next new isolated package probe
+and source/temporal closure; no auto-pause or fake RC. Older lines below history.
+source-bound identity now consumed by A/B and restored during save/clear rebuild.
+Official identity PDFs materialized as five exact fragments (candidate, not current).
+Post-milestone identity/science family192PASS; rebuild family36PASS/66 deselected,
+Ruff/strict5 passed. Reviewv2 terminal REVISE; residual root causes repaired as
+policyv6, not independently accepted. No new broad gate for these changed bytes.
+Historical milestone: review remediation family181PASS; owner gatev2
 EXIT0 quality-only (strict274/active1136/compat20/layer7). PN real v3 source slice
 18 observations/18 columns/22 pages retains unknown identity and original values.
-Display/layout nodes terminal; semantic frozen14-file same-session reviewv2 and
-disjoint C code node pending. Do not inherit owner gate for in-flight C bytes.
-Next: preserve owner milestone to GitHub, wire source-bound shared identity and
-A comparison; integrate terminal review/C, then same-candidate actual journey.
+Display/layout/reviewv2/C nodes terminal; C integrated owner46PASS. A shared
+comparison adapter/matrix/chart and ABC current-config navigation wired;
+navigation/identity/semantic family117PASS19.40s. Current transaction/share chain
+in progress; development fixture pointer migration explicit, history unchanged.
+Owner broad gatev3 running once for stable milestone. Scientific reviewv3
+same-session actually dispatched,15 frozen copies held unchanged; no status polling.
+Real source identity candidate rendered ordinary A48/B101 pages, source set pinned,
+clinical pool historical and dynamic/science/current flags false. Next: finish
+current operation/share chain, then integrate review terminal at dependency boundary.
 Ego space12 NOT_FOUND means physical/browser NOT_RUN, not accepted delivery.
 Reuse current W plan, no new execution platform. October 4 sections below historical.
 

@@ -1365,6 +1365,26 @@
       var extras = window.__C_PERSONAL_QUERY_VALUES__();
       Object.keys(extras).forEach(function (key) { known[key] = extras[key]; });
     }
+    var comparison = document.getElementById("full-study-comparison");
+    if (comparison || (report === "C" && document.querySelector("[data-c-enter-comparison]"))) {
+      known.view = {comparison: true};
+      var workspace = report === "A" ? window.__A_COMPARISON_WORKSPACE__ : window.__B_COMPARISON_WORKSPACE__;
+      if (workspace && comparison) {
+        known.cmp = Object.create(null);
+        known.cmp_page = Object.create(null);
+        var counts = Object.create(null);
+        workspace.columns.forEach(function (column) {
+          known.cmp[column.question_id] = true;
+          counts[column.question_id] = (counts[column.question_id] || 0) + 1;
+        });
+        var maxPages = Math.max.apply(Math, [1].concat(Object.keys(counts).map(function (key) {
+          return Math.ceil(counts[key] / 4);
+        })));
+        for (var pageNumber = 1; pageNumber <= maxPages; pageNumber++) {
+          known.cmp_page[String(pageNumber)] = true;
+        }
+      }
+    }
     return known;
   }
   function knownValue(known, dimension, value) {
@@ -1377,7 +1397,7 @@
     var query = {};
     Object.keys(known).sort().forEach(function (dimension) {
       var values = [];
-      if (report === "A") {
+      if (report === "A" && ["view", "cmp", "cmp_page"].indexOf(dimension) === -1) {
         document.querySelectorAll("[data-filter-dimension]").forEach(function (group) {
           if (group.getAttribute("data-filter-dimension") !== dimension) return;
           group.querySelectorAll("button[data-filter-value][aria-pressed='true']").forEach(function (button) {
@@ -1397,18 +1417,25 @@
   function validQuery(query, known, requireKnown) {
     if (!query || typeof query !== "object" || Array.isArray(query) ||
         Object.keys(query).length > 32) return false;
-    return Object.keys(query).every(function (dimension) {
+    var keysValid = Object.keys(query).every(function (dimension) {
       var values = query[dimension];
       return /^[a-z][a-z0-9_]{0,39}$/.test(dimension) &&
         (!requireKnown || Object.prototype.hasOwnProperty.call(known, dimension)) &&
         Array.isArray(values) && values.length > 0 && values.length <= 60 &&
-        (dimension !== "criteria_q" || values.length === 1) &&
+        (["criteria_q", "view", "cmp", "cmp_page"].indexOf(dimension) === -1 || values.length === 1) &&
         values.every(function (value, index) {
           return safeText(value) && value.length <= 240 &&
             values.indexOf(value) === index &&
             (!requireKnown || knownValue(known, dimension, value));
         });
     });
+    if (!keysValid || !requireKnown || !query.cmp_page) return keysValid;
+    var workspace = report === "A" ? window.__A_COMPARISON_WORKSPACE__ : window.__B_COMPARISON_WORKSPACE__;
+    if (!workspace) return false;
+    var questions = Array.from(new Set(workspace.columns.map(function (column) {return column.question_id;}))).sort();
+    var chosen = query.cmp ? query.cmp[0] : questions[0];
+    var count = workspace.columns.filter(function (column) {return column.question_id === chosen;}).length;
+    return Number(query.cmp_page[0]) <= Math.max(1, Math.ceil(count / 4));
   }
   function validSelection(selection) {
     return exactKeys(selection, ["report", "revision", "entry_page", "query"]) &&

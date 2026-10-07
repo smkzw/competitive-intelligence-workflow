@@ -10,12 +10,12 @@
    "bytes": 69940
   },
   "portal.js": {
-   "sha256": "280253e7937a0f5cae05ea626fea98fa5b2e82af6e95a2ce44f8439404e61021",
-   "bytes": 53801
+   "sha256": "a1c80f3ba6d08cb788770fc734683fe446ecc2b9b2dab4d06c95991cafdbbca9",
+   "bytes": 55464
   },
   "charts.js": {
-   "sha256": "8d04e1ec22e56d697a8b0c1dc1b032ed25b75f7c6290fd3e283b7c9a1211bb7c",
-   "bytes": 88312
+   "sha256": "213ba90745953ca4a9a2f15b2f434e9ef9fe32b5cdea6eaa2b6a612193027350",
+   "bytes": 93164
   },
   "evidence-drawer.js": {
    "sha256": "c58895a0fafa9c24cfeba597f4392047d1ffc9c47ccd89f42339af10e7fa9755",
@@ -30,28 +30,28 @@
    "bytes": 1121883
   },
   "report-a.js": {
-   "sha256": "74ee2b62d1a016a0e7433203702c872a6fbad95fd5868d84c7238c1cbccdd081",
-   "bytes": 122515
+   "sha256": "23c75e47e8963122848f5b896be27a9a17df379df16d59fabe76160a50e6d47a",
+   "bytes": 129558
   },
   "report-a.css": {
    "sha256": "374c10f831afc69809c83e7b3a2b26196bd74a54711699fa87116a502d8c7e8f",
    "bytes": 8130
   },
   "report-b.js": {
-   "sha256": "3f643d859e7dbced50db930b6b42cc4912a34ed987eabb54af5b1a7803e53f8b",
-   "bytes": 48772
+   "sha256": "1da06d38b1bdc3da8f2822c5bb2e6c28ed165069005008993bc6531607e4c85a",
+   "bytes": 49724
   },
   "report-b.css": {
    "sha256": "c8ab81b8e46cf6621f70d6891dec54bcc3766eacef82774b57bf8613e4423a23",
    "bytes": 22285
   },
   "report-c.js": {
-   "sha256": "48037037985f70fdb6a1e6a9f221e9fa9b4586bbc98d8462d00c3d846f8577e6",
-   "bytes": 69123
+   "sha256": "9bfa40f5085af78ff1d7b0c01385e4cf76b26fa3b3b725cf753bb5d58912911a",
+   "bytes": 71320
   },
   "report-c.css": {
-   "sha256": "25544e1af61c4813e74c4cb34d24229284ec1304792915fb4147cd90759737c6",
-   "bytes": 22041
+   "sha256": "ca316fee0df0f6cd0c5c312697e44528d1cb252724e9c9d05c334183b6328b2b",
+   "bytes": 23272
   },
   "kangzhe-site.css": {
    "sha256": "4e6c490abc3d92784ffc77aedb34cda92694a380bacb3605cecfb9af40d6e2e6",

@@ -29,16 +29,19 @@ const host=new Node();
 const rows={a:{trial_id:'trial-a',value:0,unit:'%',product_zh:'<script>bad</script>',arm:'治疗组'},
  b:{trial_id:'trial-b',value:50,unit:'%',arm:'治疗组'},
  c:{trial_id:'trial-c',value:null,disclosure_state:'user_cleared',arm:'治疗组'}};
+Object.keys(rows).forEach(id=>rows[id].row_id=id);
 const workspace={study_ids:['trial-a','trial-b','trial-c','trial-no-results'],
  membership:{row_ids:['a','b','c']},columns:Array.from({length:9},(_,i)=>({
   id:'column-'+i,question_id:'efficacy::easi75',question_label:'EASI75',title:'临床条件'+i,
   cells:{'trial-a':['a'],'trial-b':['b'],'trial-c':['c']}}))};
-let state={},url='https://example.test/overview.html?view=comparison';
+let state={},url='https://example.test/overview.html?view=comparison',currentGroups=[];
 const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:rows,searchById:{},
+ fullChartGroups:workspace.columns.map(c=>({scientific_group_id:c.id,rows:Object.values(rows)})),
  URL,URLSearchParams,JSON,Object,String,Math,
  window:{__B_COMPARISON_WORKSPACE__:workspace,location:{get search(){return new URL(url).search;},
  get href(){return url;}},history:{replaceState(_,__,next){url=next;}},
- __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';}}},
+ __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';},
+ replaceGroups(g){currentGroups=g;}}},
  document:{getElementById(){return host;},createElement(){return new Node();}},
  matches(id,current){return !current.trial||rows[id].trial_id===current.trial;},
  selectedState(){return state;}};
@@ -57,8 +60,10 @@ JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));
 lookup['[data-comparison-next]'].listeners.click();
 JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));
 assert.equal(seen.size,9);assert.equal(lookup['[data-comparison-next]'].disabled,true);
+assert.equal(new URL(url).searchParams.get('cmp_page'),'3');
 state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
 assert.equal(lookup.tbody.children.length,1);assert.match(text(lookup.tbody),/trial-b/);
+assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].rows[0].row_id,'b');
 state={trial:'no-match'};sandbox.renderComparisonWorkspace(state);
 assert.equal(lookup.tbody.children.length,0);assert.equal(JSON.parse(host.dataset.queryRowIds).length,0);
 state={};sandbox.renderComparisonWorkspace(state);assert.equal(lookup.tbody.children.length,4);

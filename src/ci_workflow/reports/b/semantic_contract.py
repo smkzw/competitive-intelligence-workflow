@@ -182,8 +182,18 @@ def semantic_value_is_unknown(value: object) -> bool:
     if not isinstance(value, str) or not value.strip():
         return True
     text = unicodedata.normalize("NFKC", value).casefold().strip().rstrip(".。!！?？;；:")
+    # A qualifier cannot turn a missing head into a known clinical definition.
+    text = re.split(r"[\(\[【〔「]", text, maxsplit=1)[0].strip()
+    if not text:
+        return True
+    parts = text.split("、")
+    if len(parts) > 1:
+        return all(semantic_value_is_unknown(part) for part in parts)
     text = re.sub(r"(?<=[\u4e00-\u9fff])\s+(?=[\u4e00-\u9fff])", "", text)
     normalized = "-".join(text.replace("_", "-").split())
+    abbreviation = re.sub(r"[.\s]", "", text)
+    if abbreviation in {"tbd", "na"}:
+        return True
     return normalized in {
         "unknown", "not-reported", "not-publicly-disclosed", "not-specified",
         "unspecified", "missing", "null", "none", "n/a", "na", "-", "—",
@@ -195,20 +205,30 @@ def semantic_value_is_unknown(value: object) -> bool:
 
 def source_domain_conflicts(row: Mapping[str, Any], domain: str) -> bool:
     """An operational page domain cannot overwrite explicit scientific provenance."""
-    if domain not in {"efficacy", "safety"}:
+    if domain not in {"efficacy", "safety", ""}:
         return False
     if "source_domain" in row and (
         semantic_value_is_unknown(row["source_domain"])
-        or str(row["source_domain"]).casefold() != domain
+        or (bool(domain) and str(row["source_domain"]).casefold() != domain)
+        or (not domain and str(row["source_domain"]).casefold() not in {"efficacy", "safety"})
     ):
         return True
     metric = row.get("source_metric")
     if "source_metric" in row and semantic_value_is_unknown(metric):
         return True
-    return str(metric).casefold() in {
+    normalized_metric = re.sub(r"[-\s_/]+", "_", unicodedata.normalize(
+        "NFKC", str(metric),
+    ).casefold()).strip("_")
+    nonclinical_metrics = {
         "ada", "anti_drug_antibody", "immunogenicity", "pk", "pd", "pk_pd", "biomarker",
-        "other", "unresolved",
+        "other", "unresolved", "cmax", "tmax",
     }
+    # Compact spelling equivalence is exact, not a new broad substring veto.
+    # In particular adaptive_response must not become an ADA observation.
+    return normalized_metric.replace("_", "") in nonclinical_metrics or any(
+        normalized_metric == token or normalized_metric.startswith(token + "_")
+        for token in nonclinical_metrics
+    )
 
 
 def time_policy_identity(

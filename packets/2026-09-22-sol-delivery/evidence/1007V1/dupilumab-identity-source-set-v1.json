@@ -1,0 +1,71 @@
+{
+  "candidate_only": true,
+  "limitation": "Official documents retrieved this run. Printed version/as-of dates are not first-publication dates; China regulatory current status and independent identity acceptance remain open.",
+  "sources": [
+    {
+      "key": "official_name",
+      "filename": "dupixent-china-label-20250711.pdf",
+      "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+      "page": 1,
+      "paragraph": "通用名称：度普利尤单抗注射液",
+      "url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf"
+    },
+    {
+      "key": "china_mah",
+      "filename": "dupixent-china-label-20250711.pdf",
+      "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+      "page": 55,
+      "paragraph": "【上市许可持有人】 名称： Sanofi Winthrop Industrie",
+      "url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf"
+    },
+    {
+      "key": "group_relationship",
+      "filename": "sanofi-form20f-2025.pdf",
+      "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+      "page": 295,
+      "paragraph": "Sanofi Winthrop Industrie France 100.0",
+      "url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf"
+    },
+    {
+      "key": "group_scope",
+      "filename": "sanofi-form20f-2025.pdf",
+      "sha256": "3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e",
+      "page": 295,
+      "paragraph": "The table below shows Sanofi’s principal subsidiaries and their country of incorporation:",
+      "url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf"
+    },
+    {
+      "key": "target",
+      "filename": "dupixent-china-label-20250711.pdf",
+      "sha256": "1ff411ba5abdfec4b6388731e330f288b7bed9290072567f5f373d79c27073b2",
+      "page": 1,
+      "paragraph": "靶向白细胞介素-4 受体亚基 α（IL-4R-α）的全人单克隆",
+      "url": "https://www.sanofi.cn/assets/dot-cn/pages/docs/products/prescription-products/Dupixent-20250711-300mg-PFS-S-PI.pdf"
+    }
+  ],
+  "entities": [
+    {"key": "drug", "entity_type": "product", "canonical_name": "Dupilumab",
+     "identity_basis": "molecular-antibody-il4ra-dupilumab", "aliases": ["Dupixent", "达必妥"],
+     "official_chinese_name": "度普利尤单抗注射液", "name_source_key": "official_name"},
+    {"key": "holder", "entity_type": "organization", "canonical_name": "Sanofi Winthrop Industrie",
+     "identity_basis": "france-legal-sanofi-winthrop-industrie"},
+    {"key": "group", "entity_type": "organization", "canonical_name": "Sanofi",
+     "identity_basis": "sanofi-consolidated-group"},
+    {"key": "target_entity", "entity_type": "target", "canonical_name": "IL-4Rα",
+     "identity_basis": "interleukin-4-receptor-alpha"}
+  ],
+  "relations": [
+    {"subject": "drug", "object": "holder", "predicate": "has_mah", "source_key": "china_mah",
+     "jurisdiction": "CN", "authorization_scope": "国药准字SJ20200017；300mg/2mL预充式注射器说明书版本2025-07-11，未完成本轮监管动态核对",
+     "observed_at": "2025-07-11T00:00:00+08:00"},
+    {"subject": "holder", "object": "group", "predicate": "controlled_by",
+     "source_key": "group_relationship", "authorization_scope": "2025年度完全合并主要子公司表，2025-12-31财务权益100%；表格上下文另存group_scope片段",
+     "observed_at": "2025-12-31T23:59:59+00:00"},
+    {"subject": "holder", "object": "group", "predicate": "controlled_by",
+     "source_key": "group_scope", "authorization_scope": "完全合并主要子公司表的Sanofi母集团上下文，与同页具体公司行共同解释",
+     "observed_at": "2025-12-31T23:59:59+00:00"},
+    {"subject": "drug", "object": "target_entity", "predicate": "has_target",
+     "source_key": "target", "observed_at": "2025-07-11T00:00:00+08:00"}
+  ],
+  "product_entity_ids": {"dupilumab": "drug"}
+}

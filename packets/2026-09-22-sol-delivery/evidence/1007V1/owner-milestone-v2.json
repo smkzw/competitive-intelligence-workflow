@@ -1,0 +1,112 @@
+{
+  "contract": "1007V1-user-prompt",
+  "stage": "development-owner-milestone-2",
+  "parent_commit": "a65050336259c58cdd4f1276e8c29ad478cbba78",
+  "commit_binding": "containing Git commit; tested code and bundle pinned below; subsequent edits do not inherit these results",
+  "release_accepted": false,
+  "source_sha256": {
+    "src/ci_workflow/application/run_service.py": "45343a0d3a404020da3128b561bce8aae3ea8c8ca3739e13e431356bd96523af",
+    "src/ci_workflow/application/share_export.py": "d65d9164bc1242f848f9c8f24364dbd396d492e5375d829dea4cbaeff8df90ad",
+    "src/ci_workflow/application/user_fact_edit.py": "c6b2aa334c8f291be173b45adb08ad61e744c090665f87ab08a5e90ce2c56bdf",
+    "src/ci_workflow/domain/entities.py": "03bc627fad36722bd347a7304e20a5f0b1a09a2b7c04a037b683fd0c4e24f9b6",
+    "src/ci_workflow/renderers/portal/report_a.py": "be566b18ff14604b11b70a0de2118a0a0dd5e1a41fdd0a3bb7aaec7273b2e7cc",
+    "src/ci_workflow/renderers/portal/report_b.py": "aec997c8648195574886ef37d0e4fb1890fcdd4e55728ff7e83652b8bc4e3d77",
+    "src/ci_workflow/renderers/portal/report_c.py": "eadcd95373e5ea56b5eb6da0a021da09b80bc9b1533e3ada46c138a557d4ecd7",
+    "src/ci_workflow/reports/b/semantic_contract.py": "b78243d8fe31f89b2f92678cdc9ea0966bd2ff8f248903439810561df1538fcb",
+    "src/ci_workflow/reports/b/semantic_grouping.py": "5f3c9734b618967ce454b73dd72e3cb3dd2877c4eba17ecc83b58f54115ca7df",
+    "src/ci_workflow/reports/common/identity_projection.py": "37fbdd33d9527d7dc880e7542b05b38ee7d056215e7f052f3f5b8e34c3da912f",
+    "src/ci_workflow/renderers/portal/assets/charts.js": "213ba90745953ca4a9a2f15b2f434e9ef9fe32b5cdea6eaa2b6a612193027350",
+    "src/ci_workflow/renderers/portal/assets/portal.js": "a1c80f3ba6d08cb788770fc734683fe446ecc2b9b2dab4d06c95991cafdbbca9",
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "23c75e47e8963122848f5b896be27a9a17df379df16d59fabe76160a50e6d47a",
+    "src/ci_workflow/renderers/portal/assets/report-b.js": "1da06d38b1bdc3da8f2822c5bb2e6c28ed165069005008993bc6531607e4c85a",
+    "src/ci_workflow/renderers/portal/assets/report-c.js": "9bfa40f5085af78ff1d7b0c01385e4cf76b26fa3b3b725cf753bb5d58912911a",
+    "src/ci_workflow/renderers/portal/assets/report-c.css": "ca316fee0df0f6cd0c5c312697e44528d1cb252724e9c9d05c334183b6328b2b",
+    "assets/portal/manifest.json": "75eb77954c6ae9490a37b9c9a256f43e666048cb8ce4b370f6b3dd0aac15054c",
+    "tools/materialize_identity_sources.py": "29dfdd1259f728678bb036b22c9b122350884e7382fef92c6b33d0cf9817cf54",
+    "tools/replay_1007_identity_portals.py": "4e525db216853da5bf2162944f5a0d0f984ce68d657a820bb82d17c77ed7c981"
+  },
+  "checks": [
+    {
+      "id": "owner-quality-v4",
+      "command": "bash tools/gate.sh",
+      "result": "PASS-quality-only",
+      "scope": "Ruff src/tests/tools; strict mypy src/tools; active unit/contract; retained bounded compatibility; layering; forbidden-path references (not old directory access)",
+      "strict_source_files": 276,
+      "active_passed": 1136,
+      "active_seconds": 1254.06,
+      "retained_passed": 20,
+      "retained_seconds": 1.28,
+      "layer_passed": 7,
+      "evidence": "runs/execution/ci-1007-display/owner-milestone-gate-v4.txt",
+      "evidence_sha256": "0971ef503d0637d062689def2ee95b93f95d0a2c77983763d979224639711061"
+    },
+    {
+      "id": "identity-normal-entry-source-family",
+      "result": "PASS-bounded",
+      "passed": 53,
+      "seconds": 15.32,
+      "scope": "normal A/B/C render adapters, source reopen/name occurrence, pinned-memory drift, scoped current rebuild and adjacent run behavior; synthetic evidence is not official acceptance",
+      "evidence": "runs/execution/ci-1007-display/owner-identity-entry-source-green-v2.xml",
+      "evidence_sha256": "47bc2cd2901b64c7e66b5b6041b636cfbe8fe27b0499094be1e6820b7f6b41f2"
+    },
+    {
+      "id": "semantic-local-family-v7",
+      "result": "PASS-bounded-not-independent",
+      "passed": 159,
+      "seconds": 2.32,
+      "evidence": "runs/execution/ci-1007-display/owner-semantic-v4-green.xml",
+      "evidence_sha256": "381e56255c8d1f62bc3d279b10f65197031613e64933e6156cc5942562b7cc73"
+    },
+    {
+      "id": "filtered-time-navigation-family",
+      "result": "PASS-Node-and-Python-not-pixels",
+      "passed": 37,
+      "seconds": 1.66,
+      "evidence": "runs/execution/ci-1007-filtered-frame/owner-integrated-green.xml"
+    },
+    {
+      "id": "same-development-current-share-chain",
+      "result": "PASS-synthetic-project-bounded",
+      "passed": 3,
+      "seconds": 6.26,
+      "evidence": "runs/execution/ci-1007-display/owner-current-comparison-chain-v3.xml",
+      "scope": "legal A+B clear/save/failure rollback/retry/idempotence/undo; C without actual dependency unchanged; three single and joint share resource/config closure after moving directory; no new-browser or real-clinical acceptance"
+    }
+  ],
+  "development_install": "isolated-install-v2.json",
+  "independent_review": {
+    "result": "REVISE",
+    "actual_route": "grok/grok-build/grok-4.7:high",
+    "session_id": "9ef470ef-a86a-4854-96c8-0354adb5cf29",
+    "seconds": 890.275,
+    "frozen_production_files": 14,
+    "hashes_reverified": true,
+    "report_path": "runs/conference/ci-1007-identity-evidence/evidence_single_object.md",
+    "report_sha256": "47b1e793d692e9b2cffcf664cfbde466eac0744db4158b841e6d5b7ffa9496ab",
+    "residuals": ["acquired file time is not public disclosure proof", "future observation waived by earlier effective date", "missing source scope/date context", "local semantic delimiter counterexamples"],
+    "owner_rejected_recommendation": "Do not invent year-end relationship termination from financial as-of evidence. User freshness/current-acquisition/historical-cutoff rules prevail over synthetic fixtures."
+  },
+  "real_source_prep": {
+    "root": ".artifacts/1007-pn-primary-source-v1",
+    "pmids": ["37142763", "37888917", "39602139"],
+    "pubmed_raw_sha256": "d33a5f58f09265a4ecd7f66e783e25ebb132b28cfcdd1479740e44aedf410658",
+    "fetch_receipt_sha256": "573063b94a11f321e0cdb22090b8f33b6224da8d6b367143cc33ca36f6d5ac82",
+    "linked_jats_receipt_sha256": "d97e93d14d6769628f7812cacab134fa7aebf3afc4b8fea9c1889718d02cdacb",
+    "linked_jats": {
+      "PMC10202800": {"body": "body_present", "sha256": "2bb91f3c0ec34d8aebf9a6c4bf879d866cc66d214f4fc5e6e81a59ec6992dd71"},
+      "PMC11840645": {"body": "metadata_only", "sha256": "bb45ea20954bd8ad9cd99370fe6cc8775cb8a5303af29dbf412862b53d0e485b"}
+    },
+    "universe_closed": false,
+    "science_accepted": false,
+    "redistribution_accepted": false,
+    "note": "Explicit representative source preparation, not a completeness search. HTTP200 metadata is not full text. WI-NRS/PP-NRS and time/analysis distinctions must be source-resolved before numerical co-axis."
+  },
+  "unresolved": {
+    "external_1007_01_06_reference_cases": "not_received",
+    "identity_dates_scope_current_authority": "NOT_ACCEPTED-root-family-next",
+    "local_semantic_residuals": "NOT_ACCEPTED",
+    "real_multi_drug_full_journey": "NOT_ACCEPTED",
+    "ego_browser": "NOT_RUN-space-12-not-found-native-choice-pending",
+    "24_portals_3_hosts_recovery_rc": "NOT_ACCEPTED"
+  }
+}

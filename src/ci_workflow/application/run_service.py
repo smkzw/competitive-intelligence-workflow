@@ -34,6 +34,11 @@ from ci_workflow.graph.executor import GraphExecutor
 from ci_workflow.graph.recovery import DeliveryContract, PartialDeliveryCoordinator
 from ci_workflow.graph.types import TransitionRequest
 from ci_workflow.qc.scientific import ScientificQcCurrentContext, ScientificQcReviewBundle
+from ci_workflow.reports.common.identity_projection import (
+    IDENTITY_INPUT_PATH,
+    PortalIdentityContext,
+    load_project_identity_context,
+)
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.storage.event_store import (
     EventStore,
@@ -837,6 +842,34 @@ def _publication_limitation(ctx: RunContext, report_kind: str) -> str | None:
     return value if isinstance(value, str) and value.strip() else None
 
 
+def _project_identity(
+    ctx: RunContext, product_ids: tuple[str, ...] | None = None,
+) -> PortalIdentityContext | None:
+    """Reopen normal identity inputs before render or reuse; do not sign science."""
+    import sqlite3
+
+    from ci_workflow.storage.content_store import ContentIntegrityError
+
+    try:
+        context = load_project_identity_context(ctx.project_root)
+        if context is None:
+            if "portal-identity" in ctx.source_input_paths:
+                raise ValueError("已绑定的身份来源输入丢失")
+            return None
+        path = ctx.project_root / IDENTITY_INPUT_PATH
+        ctx.bind_source_input("portal-identity", path)
+        ctx.run_inputs[IDENTITY_INPUT_PATH] = _sha256_file(path)
+        ctx.runtime_metadata["identity_input_digest"] = _sha256_bytes(_canonical_json({
+            "input_sha256": ctx.run_inputs[IDENTITY_INPUT_PATH],
+            "binding": context.render_binding(),
+            "projection": context.project(tuple(context.product_entity_ids),
+                                          cutoff=ctx.data_cutoff),
+        }))
+        return context.for_products(product_ids) if product_ids is not None else context
+    except (ValueError, KeyError, OSError, sqlite3.DatabaseError, ContentIntegrityError) as error:
+        raise ContractConfigError(f"身份来源输入无法验证：{error}") from error
+
+
 def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
     """当前唯一生产 HTML 渲染适配：A 类已校验报告数据包。"""
     if ctx.report_data_path is None:
@@ -844,6 +877,7 @@ def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
     from ci_workflow.renderers.portal.report_a import (
         ReportALineageBinding,
         build_report_a_artifact,
+        load_report_a_data,
     )
 
     binding = None
@@ -886,6 +920,9 @@ def _render_html_a(ctx: RunContext, run_id: str) -> tuple[str, str]:
         calculation_evidence=calculation_evidence,
         publication_limitation_zh=_publication_limitation(ctx, "A"),
         recover_committed=ctx.recover_committed_render,
+        identity_context=_project_identity(
+            ctx, load_report_a_data(ctx.report_data_path).product_ids,
+        ),
     )
     return (
         site_root.relative_to(ctx.project_root).as_posix(),
@@ -900,7 +937,7 @@ def _render_html_b(ctx: RunContext, run_id: str) -> tuple[str, str, str]:
     from ci_workflow.application.semantic_review_task import (
         load_semantic_adjudications_for_render,
     )
-    from ci_workflow.renderers.portal.report_b import build_report_b_artifact
+    from ci_workflow.renderers.portal.report_b import build_report_b_artifact, load_report_b_data
 
     project_adjudications = load_semantic_adjudications_for_render(
         ctx.project_root,
@@ -916,6 +953,9 @@ def _render_html_b(ctx: RunContext, run_id: str) -> tuple[str, str, str]:
         run_id=run_id,
         publication_limitation_zh=_publication_limitation(ctx, "B"),
         extra_adjudications=project_adjudications,
+        identity_context=_project_identity(
+            ctx, load_report_b_data(ctx.report_data_path).product_ids,
+        ),
     )
     return (
         site_root.relative_to(ctx.project_root).as_posix(),
@@ -961,6 +1001,7 @@ def _render_html_c_minimal(ctx: RunContext, run_id: str, data_path: Path) -> tup
     )
 
     data = load_report_c_data(data_path)
+    identity_context = _project_identity(ctx, data.product_ids)
     started_at = datetime.now(UTC)
     transaction = UnpublishedRenderTransaction(
         ctx.project_root,
@@ -976,6 +1017,7 @@ def _render_html_c_minimal(ctx: RunContext, run_id: str, data_path: Path) -> tup
         data,
         staging_root,
         publication_limitation_zh=_publication_limitation(ctx, "C"),
+        identity_context=identity_context,
     )
     data_digest = hashlib.sha256(_canonical_json(data.model_dump(mode="json"))).hexdigest()
     claim_ids = tuple(
@@ -1485,6 +1527,7 @@ def run_project(
     ):
         raise ContractConfigError("RunContext 项目、适应症、报告或截止日与当前合同不一致")
     ctx.recover_committed_render = resume
+    _project_identity(ctx)
     if capability_probe is not None:
         ctx.capability_probe = capability_probe
     if capability_host is not None:
@@ -1607,6 +1650,11 @@ def run_project(
         allow_reuse: bool = True,
     ) -> dict[str, Any]:
         nonlocal outcome
+        if node_id == "format" and ctx.runtime_metadata.get("identity_input_digest"):
+            input_digest = _compute_input_digest(
+                node_id, report_kind, contract.contract_version,
+                extra=input_digest + ":identity:" + ctx.runtime_metadata["identity_input_digest"],
+            )
         key = _node_key(node_id, report_kind)
         current_key = (key, input_digest)
         if allow_reuse and current_key in current_outputs:

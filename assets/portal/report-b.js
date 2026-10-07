@@ -40,6 +40,8 @@
       });
       var stored = new URLSearchParams(window.location.search || "").get("cmp");
       comparisonQuestion = questions[stored] ? stored : keys[0] || "";
+      var savedPage = Number(new URLSearchParams(window.location.search || "").get("cmp_page"));
+      comparisonPage = Number.isSafeInteger(savedPage) && savedPage > 0 ? savedPage : 1;
       select.value = comparisonQuestion;
       select.addEventListener("change", function () {
         comparisonQuestion = select.value;
@@ -112,6 +114,18 @@
     host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
     host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
+    if (window.__CHART_SYNC__ && window.__CHART_SYNC__.replaceGroups) {
+      var groups = fullChartGroups.filter(function (group) {
+        return columns.some(function (column) {return column.id === group.scientific_group_id;});
+      }).map(function (group) {
+        return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
+      }).filter(function (group) {return group.rows.length;});
+      window.__CHART_SYNC__.replaceGroups(groups);
+    }
+    var position = new URL(window.location.href);
+    position.searchParams.set("cmp", comparisonQuestion);
+    position.searchParams.set("cmp_page", String(comparisonPage));
+    window.history.replaceState({}, "", position.href);
   }
 
   function armText(row) {
@@ -902,6 +916,7 @@
     updateTableContents();
     addTableSemantics();
     compactRepeatedGroupTitles();
+    renderComparisonWorkspace(state);
     var label = resultPager.querySelector("[data-b-result-range]");
     var from = matchedGroups.length ? start + 1 : 0;
     var to = Math.min(start + RESULT_PAGE_SIZE, matchedGroups.length);

@@ -66,6 +66,7 @@ def test_source_domain_mismatch_stays_visible_but_not_in_efficacy_numeric_frame(
 @pytest.mark.parametrize("change", [
     {"trial_id": "another-trial"}, {"group_id": "another-arm"},
     {"semantic_definition": "未知"}, {"source_domain": "immunogenicity"},
+    {"arm_role": "control"}, {"arm_role": "unknown"},
 ])
 def test_descriptive_time_axis_never_borrows_other_trial_arm_or_unknown_definition(change) -> None:
     first = _records()[0][0]
@@ -76,3 +77,25 @@ def test_descriptive_time_axis_never_borrows_other_trial_arm_or_unknown_definiti
     assert all(group["cross_trial"] is False for group in groups)
     assert all(group["comparison_purpose"] == "within_trial_descriptive_time_axis"
                for group in groups)
+
+
+def test_detail_retains_frame_identity_but_describes_only_visible_times() -> None:
+    records = _records()[:2]
+    groups = report_b._groups_for_page("efficacy", records)
+    assert len(groups) == 1
+    projected = report_b._project_scientific_groups(groups, records[:1])
+    assert projected[0]["scientific_group_id"] == groups[0]["scientific_group_id"]
+    assert projected[0]["actual_times"] == ("48 周",)
+    assert projected[0]["frame_actual_times"] == ("48 周", "50 周")
+    assert "实际观察时间：48 周 / 50 周" not in projected[0]["title_zh"]
+    assert "原比较框" in projected[0]["time_window_note_zh"]
+
+
+@pytest.mark.parametrize("metric", ["ada_positive", "anti-drug antibody", "cmax"])
+def test_nonclinical_metric_is_retained_undrawable_on_the_ordinary_page(metric) -> None:
+    first, second, _ = _records()
+    second[0]["source_metric"] = metric
+    groups = report_b._groups_for_page("efficacy", (first, second))
+    workspace = report_b._comparison_workspace((first, second), groups, ())
+    assert set(workspace["membership"]["row_ids"]) == {"first", "second"}
+    assert "second" not in workspace["numeric_eligibility"]["drawable_row_ids"]
