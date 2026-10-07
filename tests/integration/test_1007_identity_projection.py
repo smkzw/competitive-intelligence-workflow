@@ -187,3 +187,86 @@ def test_verified_group_itself_as_mah_has_explicit_role_not_subsidiary_label(ide
     result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
     assert result["company_label"] == "公司：已核集团｜中国MAH"
     assert result["companies"][0]["group_chain_entity_ids"] == [group.entity_id]
+
+
+@pytest.mark.parametrize(("predicate", "jurisdiction", "role", "label"), [
+    ("has_mah", "US", "境外MAH（US）", "已核集团｜境外MAH所属集团（US）"),
+    ("has_development_rights_holder", "GLOBAL", "研发权益方", "已核集团｜研发权益方所属集团"),
+])
+def test_non_china_role_uses_verified_group_and_preserves_holder_scope(
+    identity_inputs, predicate, jurisdiction, role, label,
+):
+    from ci_workflow.reports.common.identity_projection import project_product_identity
+
+    graph, registry, fragments, observed, product, holder, group = identity_inputs
+    graph.add_relation(EntityRelation.create(product, predicate, holder, fragments[1],
+        jurisdiction=jurisdiction, authorization_scope="已核许可或研发权益范围",
+        observed_at=observed))
+    graph.add_relation(EntityRelation.create(holder, "controlled_by", group, fragments[2],
+        observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert result["company_label"] == "公司：" + label
+    company = result["companies"][0]
+    assert company["role"] == role and company["jurisdiction"] == jurisdiction
+    assert company["legal_entity_name"] == holder.canonical_name
+    assert company["group_entity_id"] == group.entity_id
+    assert company["evidence_fragment_ids"] == [fragments[1], fragments[2]]
+    assert "中国MAH" not in result["company_label"]
+
+
+@pytest.mark.parametrize("predicate", ["collaborates_with", "minority_investment"])
+def test_overseas_relationship_is_not_guessed_group(identity_inputs, predicate):
+    from ci_workflow.reports.common.identity_projection import project_product_identity
+
+    graph, registry, fragments, observed, product, holder, group = identity_inputs
+    graph.add_relation(EntityRelation.create(product, "has_mah", holder, fragments[1],
+        jurisdiction="US", authorization_scope="美国许可", observed_at=observed))
+    graph.add_relation(EntityRelation.create(holder, predicate, group, fragments[2],
+        observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert result["company_label"] == "公司：Foreign Legal Holder｜境外MAH（US）"
+    assert result["companies"][0]["group_entity_id"] is None
+
+
+def test_identity_header_deduplicates_display_not_source_evidence(identity_inputs):
+    from ci_workflow.reports.common.identity_projection import (
+        project_product_identity,
+        render_identity_headers,
+    )
+
+    graph, registry, fragments, observed, product, holder, group = identity_inputs
+    target = EntityIdentity.create(EntityType.TARGET, "IL-31RA", "receptor-alpha")
+    graph.add_entity(target)
+    for fragment in fragments[1:3]:
+        graph.add_relation(EntityRelation.create(product, "has_mah", holder, fragment,
+            jurisdiction="US", authorization_scope="许可范围相同", observed_at=observed))
+        graph.add_relation(EntityRelation.create(product, "has_target", target, fragment,
+            observed_at=observed))
+    for fragment in fragments[3:5]:
+        graph.add_relation(EntityRelation.create(holder, "controlled_by", group, fragment,
+            authorization_scope="财报版本范围相同", observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    assert len(result["companies"]) == len(result["targets"]) == 2
+    html = str(render_identity_headers({"drug": result}))
+    assert html.count("IL-31RA") == 1
+    assert html.count("持有人法律实体") == 1
+    assert html.count("集团关系范围") == 1
+    assert html.count("<blockquote>") == len(result["sources"]) == 4
+    assert "关系记录日期（含义见范围）" in html and " · 观察于" not in html
+    assert len(result["companies"]) == len(result["targets"]) == 2
+
+
+def test_identity_header_keeps_distinct_authorization_scopes(identity_inputs):
+    from ci_workflow.reports.common.identity_projection import (
+        project_product_identity,
+        render_identity_headers,
+    )
+
+    graph, registry, fragments, observed, product, holder, _ = identity_inputs
+    for fragment, scope in zip(fragments[1:3], ("适应症甲", "适应症乙"), strict=True):
+        graph.add_relation(EntityRelation.create(product, "has_mah", holder, fragment,
+            jurisdiction="US", authorization_scope=scope, observed_at=observed))
+    result = project_product_identity(product.entity_id, graph, registry, cutoff=observed)
+    html = str(render_identity_headers({"drug": result}))
+    assert "适应症甲" in html and "适应症乙" in html
+    assert html.count("持有人法律实体") == 2

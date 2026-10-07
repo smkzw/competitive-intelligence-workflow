@@ -1,0 +1,253 @@
+{
+  "status": "candidate_projection_verified_not_independently_accepted",
+  "observed_at": "2026-10-07T12:33:55.027269+00:00",
+  "source_set_sha256": "bd35253de336fdb2934e56ff4e479be8d49c99d33f5ce3de3ade91109bf01080",
+  "graph_asset": {
+    "sha256": "6125f936f344004ecd6634f2772d0d18c1b53ee011c5e9381341c7e4825b4915",
+    "relative_path": "evidence/raw/sha256/61/6125f936f344004ecd6634f2772d0d18c1b53ee011c5e9381341c7e4825b4915.bin",
+    "byte_size": 13877,
+    "media_type": "application/json"
+  },
+  "source_fragments": 7,
+  "current_projection": {
+    "entity_id": "entity_fdb25397e045c31d13b5ead8",
+    "display_name": "Nemolizumab",
+    "original_name": "Nemolizumab",
+    "aliases": [
+      "Nemolizumab-ilto",
+      "Nemluvio"
+    ],
+    "targets": [
+      {
+        "entity_id": "entity_8ca05a47b477d717e127a93c",
+        "name": "IL-31RA",
+        "evidence_fragment_id": "evidence-fragment_ba147eefa9b15cc6aef2a56a"
+      },
+      {
+        "entity_id": "entity_8ca05a47b477d717e127a93c",
+        "name": "IL-31RA",
+        "evidence_fragment_id": "evidence-fragment_e47607f0a98710c6dc4c21cd"
+      }
+    ],
+    "companies": [
+      {
+        "legal_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+        "legal_entity_name": "Galderma Laboratories, L.P.",
+        "group_entity_id": "entity_13767d12ee3674bbc86636ed",
+        "group_chain_entity_ids": [
+          "entity_b4ff2d7a45d32d11f3b50b6e",
+          "entity_13767d12ee3674bbc86636ed"
+        ],
+        "group_relations": [
+          {
+            "relation_id": "entity-relation_81cf2e7ebce6e25857a8995e",
+            "subject_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+            "predicate": "controlled_by",
+            "object_entity_id": "entity_13767d12ee3674bbc86636ed",
+            "evidence_fragment_id": "evidence-fragment_0efaefeb690e3fb7f873eabf",
+            "authorization_scope": "2025年度集团财务合并范围：通过Galderma Holding SA间接控制，LP持股及投票权均100%；不得解释为2026-10-07控股动态接受",
+            "observed_at": "2025-12-31T23:59:59Z"
+          },
+          {
+            "relation_id": "entity-relation_d22ffd94b5fd486f6cbab774",
+            "subject_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+            "predicate": "controlled_by",
+            "object_entity_id": "entity_13767d12ee3674bbc86636ed",
+            "evidence_fragment_id": "evidence-fragment_34a95f7b79b25c8084779ff8",
+            "authorization_scope": "2025年度集团财务合并范围：通过Galderma Holding SA间接控制，LP持股及投票权均100%；不得解释为2026-10-07控股动态接受",
+            "observed_at": "2025-12-31T23:59:59Z"
+          },
+          {
+            "relation_id": "entity-relation_fa0558b121058ad7f3122cf3",
+            "subject_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+            "predicate": "controlled_by",
+            "object_entity_id": "entity_13767d12ee3674bbc86636ed",
+            "evidence_fragment_id": "evidence-fragment_00f7b7509e3cd3b2c8bd2832",
+            "authorization_scope": "2025年度集团财务合并范围：通过Galderma Holding SA间接控制，LP持股及投票权均100%；不得解释为2026-10-07控股动态接受",
+            "observed_at": "2025-12-31T23:59:59Z"
+          }
+        ],
+        "role": "境外MAH（US）",
+        "jurisdiction": "US",
+        "authorization_scope": "BLA761390/Original1，U.S. License2289，成人结节性痒疹；FDA许可函版本观察，不证明当前中国许可或美国无后续变化",
+        "effective_from": null,
+        "effective_until": null,
+        "observed_at": "2024-08-12T00:00:00Z",
+        "label": "Galderma Group AG｜境外MAH所属集团（US）",
+        "evidence_fragment_ids": [
+          "evidence-fragment_ea75c3eac7dbf923d4e4c81c",
+          "evidence-fragment_00f7b7509e3cd3b2c8bd2832",
+          "evidence-fragment_0efaefeb690e3fb7f873eabf",
+          "evidence-fragment_34a95f7b79b25c8084779ff8"
+        ]
+      },
+      {
+        "legal_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+        "legal_entity_name": "Galderma Laboratories, L.P.",
+        "group_entity_id": "entity_13767d12ee3674bbc86636ed",
+        "group_chain_entity_ids": [
+          "entity_b4ff2d7a45d32d11f3b50b6e",
+          "entity_13767d12ee3674bbc86636ed"
+        ],
+        "group_relations": [
+          {
+            "relation_id": "entity-relation_81cf2e7ebce6e25857a8995e",
+            "subject_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+            "predicate": "controlled_by",
+            "object_entity_id": "entity_13767d12ee3674bbc86636ed",
+            "evidence_fragment_id": "evidence-fragment_0efaefeb690e3fb7f873eabf",
+            "authorization_scope": "2025年度集团财务合并范围：通过Galderma Holding SA间接控制，LP持股及投票权均100%；不得解释为2026-10-07控股动态接受",
+            "observed_at": "2025-12-31T23:59:59Z"
+          },
+          {
+            "relation_id": "entity-relation_d22ffd94b5fd486f6cbab774",
+            "subject_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+            "predicate": "controlled_by",
+            "object_entity_id": "entity_13767d12ee3674bbc86636ed",
+            "evidence_fragment_id": "evidence-fragment_34a95f7b79b25c8084779ff8",
+            "authorization_scope": "2025年度集团财务合并范围：通过Galderma Holding SA间接控制，LP持股及投票权均100%；不得解释为2026-10-07控股动态接受",
+            "observed_at": "2025-12-31T23:59:59Z"
+          },
+          {
+            "relation_id": "entity-relation_fa0558b121058ad7f3122cf3",
+            "subject_entity_id": "entity_b4ff2d7a45d32d11f3b50b6e",
+            "predicate": "controlled_by",
+            "object_entity_id": "entity_13767d12ee3674bbc86636ed",
+            "evidence_fragment_id": "evidence-fragment_00f7b7509e3cd3b2c8bd2832",
+            "authorization_scope": "2025年度集团财务合并范围：通过Galderma Holding SA间接控制，LP持股及投票权均100%；不得解释为2026-10-07控股动态接受",
+            "observed_at": "2025-12-31T23:59:59Z"
+          }
+        ],
+        "role": "境外MAH（US）",
+        "jurisdiction": "US",
+        "authorization_scope": "BLA761390/Original1，U.S. License2289，成人结节性痒疹；FDA许可函版本观察，不证明当前中国许可或美国无后续变化",
+        "effective_from": null,
+        "effective_until": null,
+        "observed_at": "2024-08-12T00:00:00Z",
+        "label": "Galderma Group AG｜境外MAH所属集团（US）",
+        "evidence_fragment_ids": [
+          "evidence-fragment_5be733b959eeed5bd0b6f0c7",
+          "evidence-fragment_00f7b7509e3cd3b2c8bd2832",
+          "evidence-fragment_0efaefeb690e3fb7f873eabf",
+          "evidence-fragment_34a95f7b79b25c8084779ff8"
+        ]
+      }
+    ],
+    "unresolved_relations": [],
+    "sources": [
+      {
+        "fragment_id": "evidence-fragment_00f7b7509e3cd3b2c8bd2832",
+        "source_version_id": "source-version_c10e84aad3925c381271a02f",
+        "source_sha256": "0fa3f9d6279151f33bd577dd4ab2c820da83be18673917b6c076048aeed6048d",
+        "raw_sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+        "url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "page": 141,
+        "original_text": "Galderma Laboratories LP Dallas United States n/a n/a1 100% 100%",
+        "acquired_at": "2026-10-07T12:33:01.114338Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:06.708538Z"
+      },
+      {
+        "fragment_id": "evidence-fragment_0efaefeb690e3fb7f873eabf",
+        "source_version_id": "source-version_0a23ee7aae4de5b720931684",
+        "source_sha256": "0fa3f9d6279151f33bd577dd4ab2c820da83be18673917b6c076048aeed6048d",
+        "raw_sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+        "url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "page": 141,
+        "original_text": "The table below shows affiliates that are indirectly controlled by the Company \nthrough Galderma Holding SA. The Company obtained control of these affiliates when \nit became the parent of Galderma Holding SA on March 21, 2024.",
+        "acquired_at": "2026-10-07T12:33:01.249113Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:06.708538Z"
+      },
+      {
+        "fragment_id": "evidence-fragment_34a95f7b79b25c8084779ff8",
+        "source_version_id": "source-version_383a0b34726ecd9e25f5b225",
+        "source_sha256": "e818ffe6ccc6fb1fe83564d1cb87ea01029802af8bc1f89c3c0e533247a32199",
+        "raw_sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+        "url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "page": 106,
+        "original_text": "These consolidated financial statements for the year ended December 31, 2025, \ncomprise Galderma Group AG and all its subsidiaries. The terms “Galderma”, “Galderma \nGroup” or “the Group” refer to Galderma Group AG together with its subsidiaries \nincluded in the scope of consolidation.",
+        "acquired_at": "2026-10-07T12:33:01.357789Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:06.708538Z"
+      },
+      {
+        "fragment_id": "evidence-fragment_5be733b959eeed5bd0b6f0c7",
+        "source_version_id": "source-version_12a12ec238ea2689c4519ab8",
+        "source_sha256": "eb7f64d0fa681fa525fe4da8abbfeff849ff0c20597770de2a79849ac6ad33bf",
+        "raw_sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "page": 1,
+        "original_text": "We are issuing Department of Health and Human Services U.S. License No. 2289 to \nGalderma Laboratories, L.P., Dallas, Texas, under the provisions of section 351 (a) of \nthe Public Health Service Act controlling the manufacture and sale of biological \nproducts.",
+        "acquired_at": "2026-10-07T12:33:00.992926Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:05.046284Z"
+      },
+      {
+        "fragment_id": "evidence-fragment_ba147eefa9b15cc6aef2a56a",
+        "source_version_id": "source-version_ce9a4fb77a84819fba2ac2e6",
+        "source_sha256": "3cb7d8502fb9919abe4f5aba143977e071dd60ca635a4c1c2e95e1cf729cd1f5",
+        "raw_sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+        "page": 8,
+        "original_text": "Nemolizumab-ilto, an interleukin-31 receptor alpha (IL-31RA) antagonist, is a humanized monoclonal modified \nimmunoglobulin G (IgG) antibody with a molecular weight of approximately 144 kDa.",
+        "acquired_at": "2026-10-07T12:33:01.399833Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:06.672448Z"
+      },
+      {
+        "fragment_id": "evidence-fragment_e47607f0a98710c6dc4c21cd",
+        "source_version_id": "source-version_ee08de2ff385ef0595f4d86b",
+        "source_sha256": "87cb8ee2da66aced2308003cb0242d41317ea04393e5a8ab284ee6d1d16e0161",
+        "raw_sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+        "page": 9,
+        "original_text": "Nemolizumab-ilto is a humanized IgG2 monoclonal antibody that inhibits IL-31 signaling by binding \nselectively to IL-31 RA.",
+        "acquired_at": "2026-10-07T12:33:01.417412Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:06.672448Z"
+      },
+      {
+        "fragment_id": "evidence-fragment_ea75c3eac7dbf923d4e4c81c",
+        "source_version_id": "source-version_58884b2301d149422e726bb9",
+        "source_sha256": "eb7f64d0fa681fa525fe4da8abbfeff849ff0c20597770de2a79849ac6ad33bf",
+        "raw_sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "page": 1,
+        "original_text": "Under this license, you are authorized to manufacture the product Nemluvio \n(nemolizumab-ilto). Nemluvio (nemolizumab-i lto) is indicated for adults with prurigo \nnodularis.",
+        "acquired_at": "2026-10-07T12:33:01.014425Z",
+        "observed_publicly_available_at": "2026-10-07T12:28:05.046284Z"
+      }
+    ],
+    "company_label": "公司：Galderma Group AG｜境外MAH所属集团（US）"
+  },
+  "historical_projection_before_actual_availability": {
+    "entity_id": "entity_fdb25397e045c31d13b5ead8",
+    "display_name": "Nemolizumab",
+    "original_name": "Nemolizumab",
+    "aliases": [
+      "Nemolizumab-ilto",
+      "Nemluvio"
+    ],
+    "targets": [],
+    "companies": [],
+    "unresolved_relations": [
+      {
+        "relation_id": "entity-relation_538675c377d0036e4cda02a6",
+        "reason": "not_known_at_cutoff"
+      },
+      {
+        "relation_id": "entity-relation_53fd2e66824f46412b0ef7dd",
+        "reason": "not_known_at_cutoff"
+      },
+      {
+        "relation_id": "entity-relation_c1378e02a117a157f5cc338c",
+        "reason": "not_known_at_cutoff"
+      },
+      {
+        "relation_id": "entity-relation_de9022d47aad201d6a5aabb0",
+        "reason": "not_known_at_cutoff"
+      }
+    ],
+    "sources": [],
+    "company_label": "公司归属待核"
+  },
+  "Chinese_name": "not_verified_not_translated",
+  "China_status": "unknown_not_absent",
+  "today_holder_control_acceptance": false,
+  "browser_inspected": false
+}

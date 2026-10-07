@@ -161,9 +161,16 @@ def project_product_identity(
         china = edge.predicate == "has_mah" and edge.jurisdiction == "CN"
         role = ("中国MAH" if china else f"境外MAH（{edge.jurisdiction}）"
                 if edge.predicate == "has_mah" else "研发权益方")
-        if china and parent is not None:
-            label = (f"{display(parent)}｜中国MAH" if parent.entity_id == other.entity_id
-                     else f"{display(parent)}｜中国MAH所属集团")
+        if parent is not None:
+            if parent.entity_id == other.entity_id:
+                group_role = role
+            elif china:
+                group_role = "中国MAH所属集团"
+            elif edge.predicate == "has_mah":
+                group_role = f"境外MAH所属集团（{edge.jurisdiction}）"
+            else:
+                group_role = "研发权益方所属集团"
+            label = f"{display(parent)}｜{group_role}"
         elif china:
             label = f"{display(other)}｜集团归属待核"
         else:
@@ -338,31 +345,54 @@ def render_identity_headers(headers: dict[str, Any]) -> Markup:
     """Safe, compact identity/source details shared by independent portals."""
     if not headers:
         return Markup("")
+    # Multiple proof edges remain in the projection and source list. Only equal
+    # presentation rows are collapsed; distinct scope/date/role stays visible.
+    presented = {}
+    for product_id, item in headers.items():
+        companies: dict[tuple[Any, ...], dict[str, Any]] = {}
+        for company in item["companies"]:
+            relations: dict[tuple[Any, ...], dict[str, Any]] = {}
+            for relation in company["group_relations"]:
+                key = tuple(relation.get(name) for name in (
+                    "subject_entity_id", "object_entity_id", "authorization_scope",
+                    "effective_from", "effective_until", "observed_at",
+                ))
+                relations.setdefault(key, relation)
+            key = tuple(company.get(name) for name in (
+                "legal_entity_id", "group_entity_id", "role", "jurisdiction",
+                "authorization_scope", "effective_from", "effective_until", "observed_at",
+            ))
+            companies.setdefault(key, {**company, "group_relations": list(relations.values())})
+        presented[product_id] = {**item, "companies": list(companies.values())}
     template = Environment(autoescape=True, undefined=StrictUndefined).from_string("""
 <section class="portal-identity" aria-label="药物身份与公司来源">
 {% for product_id, item in headers.items() %}
 <details data-identity-product="{{ product_id }}">
 <summary>{{ item.display_name }} · {{ item.company_label }}</summary>
 <dl><div><dt>原名 / INN / 研发代号</dt><dd>{{ item.original_name }}</dd></div>
-{% if item.targets %}<div><dt>靶点</dt><dd>{% for target in item.targets %}
+{% if item.targets %}<div><dt>靶点</dt><dd>
+{% for target in item.targets|unique(attribute='entity_id') %}
 {{ target.name }}{% if not loop.last %}；{% endif %}{% endfor %}</dd></div>{% endif %}
 {% for company in item.companies %}
 <div><dt>{{ company.role }} · 持有人法律实体</dt><dd>{{ company.legal_entity_name }}</dd></div>
 <div><dt>许可/权益范围</dt><dd>{{ company.authorization_scope or '来源未注明' }}
- · {{ company.jurisdiction or '辖区待核' }} · 观察于 {{ company.observed_at }}</dd></div>
+ · {{ company.jurisdiction or '辖区待核' }}
+ · 关系记录日期（含义见范围） {{ company.observed_at }}</dd></div>
 {% if company.effective_from or company.effective_until %}<div><dt>关系有效期</dt>
 <dd>{{ company.effective_from or '起点未注明' }} —
 {{ company.effective_until or '终点未注明' }}</dd>
 </div>{% endif %}
 {% for relation in company.group_relations %}<div><dt>集团关系范围</dt>
 <dd>{{ relation.get('authorization_scope', '明确控股关系') }}
- · 观察于 {{ relation.get('observed_at', '待核') }}</dd></div>{% endfor %}
+ · 关系记录日期（含义见范围） {{ relation.get('observed_at', '待核') }}</dd></div>{% endfor %}
 {% endfor %}</dl>
 <details><summary>身份来源（{{ item.sources|length }}）</summary><ul>
 {% for source in item.sources %}<li>{% if source.url %}
 <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">原始来源</a>
 {% else %}原始来源{% endif %}{% if source.page %} · 第{{ source.page }}页{% endif %}
+{% if source.observed_publicly_available_at %}
+ · 本次公开可得核查 {{ source.observed_publicly_available_at }}{% endif %}
 <blockquote>{{ source.original_text }}</blockquote></li>{% endfor %}
 </ul></details></details>{% endfor %}</section>
 """)
-    return Markup(template.render(headers=headers))
+    return Markup(template.render(headers=presented))

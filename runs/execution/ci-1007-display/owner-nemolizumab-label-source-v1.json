@@ -1,0 +1,47 @@
+{
+  "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+  "raw_asset": {
+    "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+    "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+    "byte_size": 1274683,
+    "media_type": "application/pdf"
+  },
+  "pages": 29,
+  "observed_at": "2026-10-07T12:28:06.999168+00:00",
+  "capture": {
+    "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+    "status": "available",
+    "witness": {
+      "schema_version": "1.0",
+      "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+      "final_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+      "request_started_at": "2026-10-07T12:28:06.479975Z",
+      "observed_available_at": "2026-10-07T12:28:06.672448Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "content_length": 1274683,
+      "expected_raw_asset": {
+        "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+        "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+        "byte_size": 1274683,
+        "media_type": "application/pdf"
+      },
+      "raw_asset": {
+        "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+        "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+        "byte_size": 1274683,
+        "media_type": "application/pdf"
+      },
+      "receipt_asset": {
+        "sha256": "dd40b121726dae795f91056e4e09bcd4a864194cb1059045340550c7bbe124ba",
+        "relative_path": "evidence/raw/sha256/dd/dd40b121726dae795f91056e4e09bcd4a864194cb1059045340550c7bbe124ba.bin",
+        "byte_size": 924,
+        "media_type": "application/json"
+      }
+    },
+    "diagnostic": "官方附件当前完整可公开获取；仅为当前可用性观察"
+  },
+  "target_page_candidates": [],
+  "source_only": true,
+  "latest_FDA_version_not_proven": true
+}

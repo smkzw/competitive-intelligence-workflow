@@ -1,0 +1,361 @@
+{
+  "candidate_only": true,
+  "limitation": "Official current exact-byte availability is not first publication or today regulatory/control review. No China approval/absence inference. LP punctuation/US suffix relation is a candidate subject to independent review, not scientific identity mutation. No verified Chinese name is supplied.",
+  "sources": [
+    {
+      "key": "us_license",
+      "filename": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+      "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+      "page": 1,
+      "paragraph": "We are issuing Department of Health and Human Services U.S. License No. 2289 to Galderma Laboratories, L.P., Dallas, Texas, under the provisions of section 351 (a) of the Public Health Service Act controlling the manufacture and sale of biological products.",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "final_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "request_started_at": "2026-10-07T12:28:04.251238Z",
+        "observed_available_at": "2026-10-07T12:28:05.046284Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 3232946,
+        "expected_raw_asset": {
+          "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+          "relative_path": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+          "byte_size": 3232946,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+          "relative_path": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+          "byte_size": 3232946,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "3f151b5b22ce36d806a88449b44bd05587557a38e8cc6dce741dca770c1a4bfe",
+          "relative_path": "evidence/raw/sha256/3f/3f151b5b22ce36d806a88449b44bd05587557a38e8cc6dce741dca770c1a4bfe.bin",
+          "byte_size": 916,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "us_scope",
+      "filename": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+      "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+      "page": 1,
+      "paragraph": "Under this license, you are authorized to manufacture the product Nemluvio (nemolizumab-ilto). Nemluvio (nemolizumab-i lto) is indicated for adults with prurigo nodularis.",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "final_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "request_started_at": "2026-10-07T12:28:04.251238Z",
+        "observed_available_at": "2026-10-07T12:28:05.046284Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 3232946,
+        "expected_raw_asset": {
+          "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+          "relative_path": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+          "byte_size": 3232946,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+          "relative_path": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+          "byte_size": 3232946,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "3f151b5b22ce36d806a88449b44bd05587557a38e8cc6dce741dca770c1a4bfe",
+          "relative_path": "evidence/raw/sha256/3f/3f151b5b22ce36d806a88449b44bd05587557a38e8cc6dce741dca770c1a4bfe.bin",
+          "byte_size": 916,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "group_row",
+      "filename": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+      "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+      "page": 141,
+      "paragraph": "Galderma Laboratories LP Dallas United States n/a n/a1 100% 100%",
+      "url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "final_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "request_started_at": "2026-10-07T12:28:04.267548Z",
+        "observed_available_at": "2026-10-07T12:28:06.708538Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 26036393,
+        "expected_raw_asset": {
+          "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+          "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+          "byte_size": 26036393,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+          "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+          "byte_size": 26036393,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758",
+          "relative_path": "evidence/raw/sha256/73/73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758.bin",
+          "byte_size": 965,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "group_control_scope",
+      "filename": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+      "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+      "page": 141,
+      "paragraph": "The table below shows affiliates that are indirectly controlled by the Company through Galderma Holding SA. The Company obtained control of these affiliates when it became the parent of Galderma Holding SA on March 21, 2024.",
+      "url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "final_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "request_started_at": "2026-10-07T12:28:04.267548Z",
+        "observed_available_at": "2026-10-07T12:28:06.708538Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 26036393,
+        "expected_raw_asset": {
+          "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+          "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+          "byte_size": 26036393,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+          "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+          "byte_size": 26036393,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758",
+          "relative_path": "evidence/raw/sha256/73/73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758.bin",
+          "byte_size": 965,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "group_company_definition",
+      "filename": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+      "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+      "page": 106,
+      "paragraph": "These consolidated financial statements for the year ended December 31, 2025, comprise Galderma Group AG and all its subsidiaries. The terms “Galderma”, “Galderma Group” or “the Group” refer to Galderma Group AG together with its subsidiaries included in the scope of consolidation.",
+      "url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "final_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "request_started_at": "2026-10-07T12:28:04.267548Z",
+        "observed_available_at": "2026-10-07T12:28:06.708538Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 26036393,
+        "expected_raw_asset": {
+          "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+          "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+          "byte_size": 26036393,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+          "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+          "byte_size": 26036393,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758",
+          "relative_path": "evidence/raw/sha256/73/73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758.bin",
+          "byte_size": 965,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "target",
+      "filename": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+      "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+      "page": 8,
+      "paragraph": "Nemolizumab-ilto, an interleukin-31 receptor alpha (IL-31RA) antagonist, is a humanized monoclonal modified immunoglobulin G (IgG) antibody with a molecular weight of approximately 144 kDa.",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+        "final_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+        "request_started_at": "2026-10-07T12:28:06.479975Z",
+        "observed_available_at": "2026-10-07T12:28:06.672448Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 1274683,
+        "expected_raw_asset": {
+          "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+          "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+          "byte_size": 1274683,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+          "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+          "byte_size": 1274683,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "dd40b121726dae795f91056e4e09bcd4a864194cb1059045340550c7bbe124ba",
+          "relative_path": "evidence/raw/sha256/dd/dd40b121726dae795f91056e4e09bcd4a864194cb1059045340550c7bbe124ba.bin",
+          "byte_size": 924,
+          "media_type": "application/json"
+        }
+      }
+    },
+    {
+      "key": "target_mechanism",
+      "filename": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+      "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+      "page": 9,
+      "paragraph": "Nemolizumab-ilto is a humanized IgG2 monoclonal antibody that inhibits IL-31 signaling by binding selectively to IL-31 RA.",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+      "public_pdf_availability": {
+        "schema_version": "1.0",
+        "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+        "final_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761390s002%2C761391s001lbl.pdf",
+        "request_started_at": "2026-10-07T12:28:06.479975Z",
+        "observed_available_at": "2026-10-07T12:28:06.672448Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "content_length": 1274683,
+        "expected_raw_asset": {
+          "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+          "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+          "byte_size": 1274683,
+          "media_type": "application/pdf"
+        },
+        "raw_asset": {
+          "sha256": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786",
+          "relative_path": "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin",
+          "byte_size": 1274683,
+          "media_type": "application/pdf"
+        },
+        "receipt_asset": {
+          "sha256": "dd40b121726dae795f91056e4e09bcd4a864194cb1059045340550c7bbe124ba",
+          "relative_path": "evidence/raw/sha256/dd/dd40b121726dae795f91056e4e09bcd4a864194cb1059045340550c7bbe124ba.bin",
+          "byte_size": 924,
+          "media_type": "application/json"
+        }
+      }
+    }
+  ],
+  "entities": [
+    {
+      "key": "drug",
+      "entity_type": "product",
+      "canonical_name": "Nemolizumab",
+      "identity_basis": "nemolizumab-il31ra-monoclonal-antibody",
+      "aliases": [
+        "Nemolizumab-ilto",
+        "Nemluvio"
+      ]
+    },
+    {
+      "key": "holder",
+      "entity_type": "organization",
+      "canonical_name": "Galderma Laboratories, L.P.",
+      "identity_basis": "us-legal-galderma-laboratories-limited-partnership",
+      "aliases": [
+        "Galderma Laboratories LP"
+      ]
+    },
+    {
+      "key": "group",
+      "entity_type": "organization",
+      "canonical_name": "Galderma Group AG",
+      "identity_basis": "swiss-galderma-group-ag",
+      "aliases": [
+        "Galderma"
+      ]
+    },
+    {
+      "key": "target",
+      "entity_type": "target",
+      "canonical_name": "IL-31RA",
+      "identity_basis": "interleukin-31-receptor-alpha"
+    }
+  ],
+  "relations": [
+    {
+      "subject": "drug",
+      "object": "holder",
+      "predicate": "has_mah",
+      "source_key": "us_license",
+      "jurisdiction": "US",
+      "authorization_scope": "BLA761390/Original1，U.S. License2289，成人结节性痒疹；2024版FDA许可函，不证明当前中国许可、美国全部适应症或无后续变化；observed_at仅为本次真实资料核查时点",
+      "observed_at": "2026-10-07T12:28:05.046284Z"
+    },
+    {
+      "subject": "drug",
+      "object": "holder",
+      "predicate": "has_mah",
+      "source_key": "us_scope",
+      "jurisdiction": "US",
+      "authorization_scope": "BLA761390/Original1，U.S. License2289，成人结节性痒疹；2024版FDA许可函，不证明当前中国许可、美国全部适应症或无后续变化；observed_at仅为本次真实资料核查时点",
+      "observed_at": "2026-10-07T12:28:05.046284Z"
+    },
+    {
+      "subject": "holder",
+      "object": "group",
+      "predicate": "controlled_by",
+      "source_key": "group_row",
+      "authorization_scope": "截至2025-12-31财报合并范围，经Galderma Holding SA间接控制，LP持股及投票权100%；表格行与同页控制范围共同支持；集团定义片段仅是上下文；不证明2026-10-07动态控股状态；observed_at仅为本次真实资料核查时点",
+      "observed_at": "2026-10-07T12:28:06.708538Z"
+    },
+    {
+      "subject": "holder",
+      "object": "group",
+      "predicate": "controlled_by",
+      "source_key": "group_control_scope",
+      "authorization_scope": "截至2025-12-31财报合并范围，经Galderma Holding SA间接控制，LP持股及投票权100%；表格行与同页控制范围共同支持；集团定义片段仅是上下文；不证明2026-10-07动态控股状态；observed_at仅为本次真实资料核查时点",
+      "observed_at": "2026-10-07T12:28:06.708538Z"
+    },
+    {
+      "subject": "drug",
+      "object": "target",
+      "predicate": "has_target",
+      "source_key": "target",
+      "authorization_scope": "2025-06美国标签，结合IL-31受体alpha而非IL-31细胞因子本身；标签仅明确2025-06，不擅填首次/生效的具体日，observed_at为本次实际同字节观察",
+      "observed_at": "2026-10-07T12:28:06.672448Z"
+    },
+    {
+      "subject": "drug",
+      "object": "target",
+      "predicate": "has_target",
+      "source_key": "target_mechanism",
+      "authorization_scope": "2025-06美国标签，结合IL-31受体alpha而非IL-31细胞因子本身；标签仅明确2025-06，不擅填首次/生效的具体日，observed_at为本次实际同字节观察",
+      "observed_at": "2026-10-07T12:28:06.672448Z"
+    }
+  ],
+  "product_entity_ids": {
+    "nemolizumab": "drug"
+  },
+  "mapping_limitation": "Explicit INN display association and U.S. proper-name suffix independently reproduced in bounded v2 review; v3 source/copy correction pending focused verification, no source fact identity mutation.",
+  "owner_source_page_visual_check": [
+    "FDA physical1",
+    "Galderma physical106 and141",
+    "FDA combined label physical8 and9"
+  ],
+  "current_China_status": "unknown_not_negative",
+  "current_control_or_regulatory_acceptance": false,
+  "previous_unaccepted_source_set_sha256": "bd35253de336fdb2934e56ff4e479be8d49c99d33f5ce3de3ade91109bf01080",
+  "date_correction": "v1月转日及v2事实日期混入observed_at均保留原未采纳材料；v3全部observed_at采用已固定的同字节真实GET核查时间，财报截至日留在范围，许可函签字日不作为本单元独立主张。未知首次公开不回填。",
+  "context_fragment_policy": "group_company_definition保留为原始集团定义上下文，不作为单独controlled_by边；不主张控股变更日期、EQT或当前中国上市状态。",
+  "witness_count_semantics": "3 distinct exact-byte GET receipts bind 7 source fragments; not 7 independent fetches."
+}

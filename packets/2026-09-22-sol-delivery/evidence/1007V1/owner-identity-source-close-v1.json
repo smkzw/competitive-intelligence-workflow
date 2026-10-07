@@ -1,0 +1,169 @@
+{
+  "kind": "1007-identity-source-close-1",
+  "parent_committed_head": "7d6e82a3e5a60d796b506fd709a8a9b237dda5e2",
+  "recorded_at": "2026-10-07T13:10:01.555116+00:00",
+  "scope": "official source identity/date/group/compact copy root only, not full milestone or delivery",
+  "publication_policy": "GitHub visibility actually PUBLIC. Original red logs and runtime prompts remain local; publish concise red node/results receipt and exact hash pointers, not private paths or original traces. No originals deleted or rewritten.",
+  "retained_local_only_paths": [
+    "runs/execution/ci-1007-display/owner-overseas-identity-host-red-v1.txt",
+    "runs/execution/ci-1007-display/owner-identity-copy-red-v1.txt",
+    "prompts/conference/ci-1007-nemolizumab-source/evidence_single_object.md",
+    "prompts/conference/ci-1007-nemolizumab-source/evidence_single_object_followup_v2.md"
+  ],
+  "files": {
+    "src/ci_workflow/reports/common/identity_projection.py": {
+      "sha256": "694f15c0ac732dc57082916e0dcf5cf122acdc23c5c152fd2ca1d60cb779fac1",
+      "bytes": 21273
+    },
+    "src/ci_workflow/sources/connectors/public_pdf_availability.py": {
+      "sha256": "10b428632818ddeb4c3f13564a1f9c93fad14afd01f037d3e3e204636b8b4c07",
+      "bytes": 17235
+    },
+    "tests/integration/test_1007_identity_projection.py": {
+      "sha256": "65b184cfd79670d0d4ab312dde1d60f71c380d868d28226e9c3bab0fadd3d067",
+      "bytes": 15778
+    },
+    "tests/integration/test_r24_public_pdf_availability.py": {
+      "sha256": "1fa30e7632d1a163d5bcd15c9352cb45b0a72cf219242981a0131f8d3d4f6ecd",
+      "bytes": 13539
+    },
+    "packets/2026-09-22-sol-delivery/evidence/1007V1/nemolizumab-official-identity-source-set-v1.json": {
+      "sha256": "cc1fb9fd8773e1950b70606100f61aa2dc052babae31efb9402cc3ab1a45425a",
+      "bytes": 18872
+    },
+    "packets/2026-09-22-sol-delivery/evidence/1007V1/nemolizumab-official-identity-source-set-v2.json": {
+      "sha256": "bd35253de336fdb2934e56ff4e479be8d49c99d33f5ce3de3ade91109bf01080",
+      "bytes": 19477
+    },
+    "packets/2026-09-22-sol-delivery/evidence/1007V1/nemolizumab-official-identity-source-set-v3.json": {
+      "sha256": "00d0465470d30cb4adf5d520ced3c82693a91a258a4fac849a10abdf8c0fc176",
+      "bytes": 19841
+    },
+    "runs/execution/ci-1007-display/owner-nemolizumab-current-availability-v1.json": {
+      "sha256": "8142e060eef036066247581f46863703959be5edbb45ae14be2f9191a3de6a14",
+      "bytes": 3945
+    },
+    "runs/execution/ci-1007-display/owner-nemolizumab-label-source-v1.json": {
+      "sha256": "089cd936caca559045c9b00ba8b6a2daa43372e1e0014e6a0fb3c4af485a8cb2",
+      "bytes": 2225
+    },
+    "runs/execution/ci-1007-display/owner-nemolizumab-identity-materialize-v2.json": {
+      "sha256": "de9e2436d8fede2a611a5ad9408c6082455b77e3fcf421b24f2bd5a7348a947f",
+      "bytes": 814
+    },
+    "runs/execution/ci-1007-display/owner-nemolizumab-identity-materialize-v3.json": {
+      "sha256": "3a1741d727b9a05ab79900858dec3f779f52ff611777cbaf1764953102600f84",
+      "bytes": 760
+    },
+    "runs/execution/ci-1007-display/owner-nemolizumab-identity-projection-v2.json": {
+      "sha256": "590a6214e8d529ad7d77376ae050df8426932cbae1817937c91ea73bc9a07e3c",
+      "bytes": 13794
+    },
+    "runs/execution/ci-1007-display/owner-nemolizumab-identity-projection-v3.json": {
+      "sha256": "f3112ee280ac00d01a906e1d67a367c0dec4dbf2ef4f57f092046f9ef149ef4c",
+      "bytes": 13052
+    },
+    "runs/execution/ci-1007-display/owner-overseas-identity-host-red-v1.txt": {
+      "sha256": "0c911423f039c23ad7120316c373d5e1cbdf4bca5498e0bef2e47b3d7e6ae8d1",
+      "bytes": 9395
+    },
+    "runs/execution/ci-1007-display/owner-overseas-identity-host-green-v1.txt": {
+      "sha256": "33ce6e238d89c60ee61adc7df2064112a8dcee2dcc5e63f16a5461bc6de8f653",
+      "bytes": 179
+    },
+    "runs/execution/ci-1007-display/owner-identity-copy-red-v1.txt": {
+      "sha256": "8f7bc7201ef46f72712baab4245232ee0248fcbaa1c83148f29dd08a3554fa95",
+      "bytes": 2608
+    },
+    "runs/execution/ci-1007-display/owner-identity-copy-green-v1.txt": {
+      "sha256": "b672da839c5d52fbea44f7e7818f9807c7e1011c40e763a13e37d723c22e4fdf",
+      "bytes": 179
+    },
+    "runs/execution/ci-1007-display/owner-identity-copy-final-green-v2.txt": {
+      "sha256": "3504f0573ef26b4c0ad0735dde0c2e4c3d532a20740554f9ea23f04819fb06e8",
+      "bytes": 179
+    },
+    "runs/execution/ci-1007-display/owner-identity-copy-static-v2.txt": {
+      "sha256": "437dc01ff77a3b8c1c6f8ac3b2b73fa98ec9207f049ae6c3691555728582ca46",
+      "bytes": 62
+    },
+    "runs/conference/ci-1007-nemolizumab-source/evidence_single_object.md": {
+      "sha256": "ffcdc19f1a2cc653fa0b9d5e5f845ae88d1422ef476f3cc802fcfd36fca9a4a8",
+      "bytes": 13893
+    },
+    "runs/conference/ci-1007-nemolizumab-source/evidence_single_object_v2.md": {
+      "sha256": "b934901a163f2d1ad5a221a4ed41f5a99cc32de966bd6fc2115fbcfa4429e54f",
+      "bytes": 151
+    },
+    "runs/conference/ci-1007-nemolizumab-source/evidence_single_object_v3.md": {
+      "sha256": "1d9305285c703d1d09805d7ea2a2f69c4d700950d77a19eca822ebcf95fcfb24",
+      "bytes": 10467
+    }
+  },
+  "frozen_review_manifest_sha256": "37a7637e172b6422db1d59c23368e410fd28513060dc27e4a9404d3ce20ce638",
+  "raw_sources": {
+    "retained_root": ".artifacts/1007-nemolizumab-official-source-v1",
+    "sha256_by_relative_path": {
+      "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+      "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+      "evidence/raw/sha256/9a/9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786.bin": "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786"
+    },
+    "fetch_receipts": 3,
+    "fragment_bound_witnesses": 7,
+    "raw_not_committed": true,
+    "retention": "retain controlled local CAS and identity candidates; no cleanup authorized"
+  },
+  "source_candidate": {
+    "source_set_sha256": "00d0465470d30cb4adf5d520ced3c82693a91a258a4fac849a10abdf8c0fc176",
+    "graph_asset": {
+      "sha256": "562d951926094dc1516fd21bc2be36901a6d9bb5876df0f75f590e4f79440aea",
+      "relative_path": "evidence/raw/sha256/56/562d951926094dc1516fd21bc2be36901a6d9bb5876df0f75f590e4f79440aea.bin",
+      "byte_size": 13781,
+      "media_type": "application/json"
+    },
+    "source_raw_sha256": [
+      "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+      "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+      "9a50b06f42aad22785c85821cc561a7655a2ec9f218e51603e9ff0fdafca4786"
+    ],
+    "source_fragments": 7,
+    "science_accepted": false,
+    "current_promoted": false,
+    "public_availability_witnesses": 7,
+    "acquisition_timestamp_kind": "source_import_clock_not_publication"
+  },
+  "owner_tests": {
+    "scope": "seven named identity/availability modules only",
+    "actual_tail": "........................................................................ [ 81%]\n................                                                         [100%]\n88 passed in 2.47s",
+    "static": "All checks passed!\nSuccess: no issues found in 2 source files",
+    "whole_repository_gate": "NOT_RUN for these new bytes; next coherent replay milestone, no inherited v6"
+  },
+  "review": {
+    "initial": {
+      "route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+      "duration_seconds": 323.887,
+      "returncode": 0,
+      "actual_tests": 86,
+      "scope": "bounded source identity with F1-F4"
+    },
+    "followup": {
+      "route": "same actual route/session, reduced context independence",
+      "duration_seconds": 133.11,
+      "returncode": 0,
+      "actual_tests": 2,
+      "scope": "F1-F4 corrections and actual CAS/cutoff/markup probes"
+    },
+    "failed_v2": "missing manifest path, zero live route attempts, not review or fallback",
+    "session_id": "01a1165f-1910-717f-a7f2-1d66f7c9534f",
+    "advisory": "ACCEPT in scope, not professional approval"
+  },
+  "remaining": {
+    "O1": "P3 duplicate unresolved audit entries at intermediate cutoff, unique IDs must not be inflated",
+    "browser": "NOT_RUN; existing Ego TaskSpace recovery Ask pending",
+    "dynamic_China_US_control": "not accepted by historical-document unit",
+    "generic_multidrug_comparison": "NOT_RUN",
+    "source_save_replay_executor": "PENDING; its two edited files excluded from this commit",
+    "three_hosts_24_portals_RC": "NOT_RUN / not frozen"
+  },
+  "rebuild": "uv run python -m tools.materialize_identity_sources --source-root .artifacts/1007-nemolizumab-official-source-v1 --source-set packets/2026-09-22-sol-delivery/evidence/1007V1/nemolizumab-official-identity-source-set-v3.json --sha256 00d0465470d30cb4adf5d520ced3c82693a91a258a4fac849a10abdf8c0fc176 --output <fresh contained English candidate directory>"
+}

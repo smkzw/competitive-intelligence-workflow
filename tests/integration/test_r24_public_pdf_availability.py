@@ -206,6 +206,46 @@ def test_other_official_host_large_document_path_is_admitted(tmp_path: Path) -> 
     assert capture.status == "available" and calls == [OTHER_OFFICIAL_URL]
 
 
+@pytest.mark.parametrize("url", [
+    "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+    "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025.pdf",
+])
+def test_declared_regulatory_and_holder_group_hosts_use_same_exact_byte_witness(
+    tmp_path: Path, url: str,
+) -> None:
+    pinned = _pin(tmp_path, PDF_A)
+    transport, calls = _cassette()
+    capture = capture_public_pdf_availability(
+        tmp_path, url, pinned, timeout=10, transport=transport,
+        clock=lambda: OBSERVED_AT,
+    )
+    assert capture.status == "available" and capture.witness is not None
+    assert calls == [url]
+    assert verify_public_pdf_availability(
+        tmp_path, capture.witness, url, pinned, cutoff=LATER_CUTOFF,
+    ) == PDF_A
+    with pytest.raises(PublicPdfAvailabilityError, match="截止早于"):
+        verify_public_pdf_availability(
+            tmp_path, capture.witness, url, pinned,
+            cutoff=OBSERVED_AT - timedelta(seconds=1),
+        )
+
+
+@pytest.mark.parametrize("url", [
+    "https://www.accessdata.fda.gov.evil.example/test.pdf",
+    "https://www.galderma.com.evil.example/test.pdf",
+    "https://unverified.galderma.com/test.pdf",
+])
+def test_new_official_hosts_do_not_admit_suffix_or_unknown_subdomain(
+    tmp_path: Path, url: str,
+) -> None:
+    pinned = _pin(tmp_path, PDF_A)
+    transport, calls = _cassette()
+    with pytest.raises(PublicPdfAvailabilityError):
+        capture_public_pdf_availability(tmp_path, url, pinned, transport=transport)
+    assert calls == []
+
+
 def test_verify_rederives_every_field_against_model_copy_forgery(tmp_path: Path) -> None:
     pinned, witness = _witness(tmp_path)
 

@@ -1,0 +1,31 @@
+{
+  "kind": "1007-identity-family-red-summary-1",
+  "publication_policy": "Concise public receipt only. Original raw logs retain exact bytes and hashes locally; do not publish local filesystem traces or rewrite originals to remove whitespace.",
+  "runs": [
+    {
+      "raw_log": "runs/execution/ci-1007-display/owner-overseas-identity-host-red-v1.txt",
+      "raw_sha256": "0c911423f039c23ad7120316c373d5e1cbdf4bca5498e0bef2e47b3d7e6ae8d1",
+      "raw_bytes": 9395,
+      "raw_version_control": "retained_local_only",
+      "actual_summary": "4 failed, 5 passed, 41 deselected in 0.53s",
+      "failed_nodeids": [
+        "tests/integration/test_r24_public_pdf_availability.py::test_declared_regulatory_and_holder_group_hosts_use_same_exact_byte_witness[https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf]",
+        "tests/integration/test_r24_public_pdf_availability.py::test_declared_regulatory_and_holder_group_hosts_use_same_exact_byte_witness[https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025.pdf]",
+        "tests/integration/test_1007_identity_projection.py::test_non_china_role_uses_verified_group_and_preserves_holder_scope[has_mah-US-\\u5883\\u5916MAH\\uff08US\\uff09-\\u5df2\\u6838\\u96c6\\u56e2\\uff5c\\u5883\\u5916MAH\\u6240\\u5c5e\\u96c6\\u56e2\\uff08US\\uff09]",
+        "tests/integration/test_1007_identity_projection.py::test_non_china_role_uses_verified_group_and_preserves_holder_scope[has_development_rights_holder-GLOBAL-\\u7814\\u53d1\\u6743\\u76ca\\u65b9-\\u5df2\\u6838\\u96c6\\u56e2\\uff5c\\u7814\\u53d1\\u6743\\u76ca\\u65b9\\u6240\\u5c5e\\u96c6\\u56e2]"
+      ],
+      "failure_kind": "production regression before corresponding coherent repair, not a post-repair pass"
+    },
+    {
+      "raw_log": "runs/execution/ci-1007-display/owner-identity-copy-red-v1.txt",
+      "raw_sha256": "8f7bc7201ef46f72712baab4245232ee0248fcbaa1c83148f29dd08a3554fa95",
+      "raw_bytes": 2608,
+      "raw_version_control": "retained_local_only",
+      "actual_summary": "1 failed, 1 passed, 18 deselected in 0.30s",
+      "failed_nodeids": [
+        "tests/integration/test_1007_identity_projection.py::test_identity_header_deduplicates_display_not_source_evidence"
+      ],
+      "failure_kind": "production regression before corresponding coherent repair, not a post-repair pass"
+    }
+  ]
+}

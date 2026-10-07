@@ -1,0 +1,77 @@
+{
+  "captures": [
+    {
+      "document": "FDA-PN-approval-letter",
+      "capture": {
+        "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+        "status": "available",
+        "witness": {
+          "schema_version": "1.0",
+          "request_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+          "final_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/761390Orig1s000ltr.pdf",
+          "request_started_at": "2026-10-07T12:28:04.251238Z",
+          "observed_available_at": "2026-10-07T12:28:05.046284Z",
+          "http_status": 200,
+          "content_type": "application/pdf",
+          "content_length": 3232946,
+          "expected_raw_asset": {
+            "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+            "relative_path": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+            "byte_size": 3232946,
+            "media_type": "application/pdf"
+          },
+          "raw_asset": {
+            "sha256": "2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d",
+            "relative_path": "evidence/raw/sha256/23/2337bb6e03bf41928b34692647b57f2fa80e238e9b23f67a5f1e229984090b1d.bin",
+            "byte_size": 3232946,
+            "media_type": "application/pdf"
+          },
+          "receipt_asset": {
+            "sha256": "3f151b5b22ce36d806a88449b44bd05587557a38e8cc6dce741dca770c1a4bfe",
+            "relative_path": "evidence/raw/sha256/3f/3f151b5b22ce36d806a88449b44bd05587557a38e8cc6dce741dca770c1a4bfe.bin",
+            "byte_size": 916,
+            "media_type": "application/json"
+          }
+        },
+        "diagnostic": "官方附件当前完整可公开获取；仅为当前可用性观察"
+      }
+    },
+    {
+      "document": "Galderma-2025-consolidated-report",
+      "capture": {
+        "request_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+        "status": "available",
+        "witness": {
+          "schema_version": "1.0",
+          "request_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+          "final_url": "https://www.galderma.com/sites/default/files/2026-03/galderma_ar_2025_consolidated-doc_8b_260304_-_full.pdf",
+          "request_started_at": "2026-10-07T12:28:04.267548Z",
+          "observed_available_at": "2026-10-07T12:28:06.708538Z",
+          "http_status": 200,
+          "content_type": "application/pdf",
+          "content_length": 26036393,
+          "expected_raw_asset": {
+            "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+            "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+            "byte_size": 26036393,
+            "media_type": "application/pdf"
+          },
+          "raw_asset": {
+            "sha256": "5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc",
+            "relative_path": "evidence/raw/sha256/5b/5b4bbacfd9b460a756541ee5dc5282225461d38db8c900dd411c074f715796dc.bin",
+            "byte_size": 26036393,
+            "media_type": "application/pdf"
+          },
+          "receipt_asset": {
+            "sha256": "73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758",
+            "relative_path": "evidence/raw/sha256/73/73cbcc5bfb0243bf65d05b202ea1257cb5b815f8927f8356bb833c2e27457758.bin",
+            "byte_size": 965,
+            "media_type": "application/json"
+          }
+        },
+        "diagnostic": "官方附件当前完整可公开获取；仅为当前可用性观察"
+      }
+    }
+  ],
+  "scope": "real exact-byte official GET, current availability only; no first-publication, China absence or current control acceptance"
+}

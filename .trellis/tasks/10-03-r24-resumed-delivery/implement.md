@@ -2,6 +2,24 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Milestone4 committed/pushed7d6e82a3e5a60d796b506fd709a8a9b237dda5e2, remote
+actual same; five unrelated dirty files preserved. Next execution-plus-direct:
+one E03 bounded existing replay adapter owns two disjoint paths; owner prepares
+official identity source fragments. No new interpretive acceptance without sources
+and bounded conference. E02 mistakenly initialized semantic packet, never dispatched;
+correct finite-code E03 has separate packet, no silent route substitution. Final
+browser/clinical/current acceptance remains owner-owned and not claimed.
+
+New bounded Nem identity source/C03 terminal: initial323.887s and same-session
+focused133.11s actualCodeBuddy/deepseek-v4.1-flash:max/exit0/no fallback, bounded
+ACCEPT; owner F1–F4 source/copy corrections,88adjacentPASS2.71s/Ruff/strict.
+New v3 source00d04654…c176/graph562d9519…0aea; three GETs bind seven fragments,
+definition retained context not independent control, observed_at exact witness.
+New source not main/current adoption; no dynamic-China/browser/universe claim.
+Failed prompt preflight and nonexistent-manifest initialization preserved, no
+model attempt before corrected same-session continuation. E03 replay still
+pending, do not edit its two owned files or retry merely due latency.
+
 Owner current: shared-background and single-link role repair72PASS/113.97s;
 C03 same-session v2 actualcodebuddy/deepseek-v4.1-flash:max431.988s/exit0,
 72independentPASS/no skips/110.21s+14SHA+ordinaryCLI, boundedACCEPT; original

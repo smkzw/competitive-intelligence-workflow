@@ -28,6 +28,7 @@ from ci_workflow.storage.content_store import ContentAddressedStore, ContentInte
 
 OFFICIAL_PDF_HOSTS = frozenset({
     "cdn.clinicaltrials.gov", "clinicaltrials.gov", "www.sanofi.cn", "www.sanofi.com",
+    "www.accessdata.fda.gov", "www.galderma.com",
 })
 PdfAvailabilityStatus = Literal[
     "available", "unavailable", "access_denied", "network_error", "mismatch",
