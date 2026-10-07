@@ -1,13 +1,17 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交3fd19f7；实际HEAD以Git核对。Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-source-context-v1.json)，
+本批父提交1deed8f；实际HEAD以Git核对。Goal ACTIVE已核，非暂停/RC。
+[当前机器清单](evidence/1007V1/owner-ab-context-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
 
 | 单元 | 当前实际证据 | 仍未接受 |
 |---|---|---|
+| 普通A/B来源一致 | A-only/A+B两真实RED→34相关PASS41.78s；同91原文、参数、人群和值进入A矩阵，B视图相同；33当前分享/查询/来源邻接PASS8.34s | 源语境消费不等于临床问题匹配/共轴或完整ABC旅程 |
+| 新A候选 | 四源949事实；A实际49页/62916627字节，所有91上下文逐项比对实际A页面与B输入；3733成员/3633列 | full3544保留但横比仍碎片化；无current/实屏/科学或RC接受 |
+| 邻接失败 | 10PASS/1FAIL8.65s，历史数据库期待74330a…实际a1094f…，在当前新生产调用前失败；原hash及字节不改 | 历史完整性/恢复未关闭，不宣称全邻接通过；原因未查明 |
+| 临床问题映射执行 | E08 live guard/runner一次派发；当前35/91完整源包eb1db185…，执行创建proposal而不是又一轮审阅 | PENDING，不接受模型身份/完整结果/科学；结果后独立挑战与来源核实 |
 | 普通B源语境 | 13FAIL/1PASS→48相关PASS3.37s，145邻接PASS8.57s；原人群/完整定义/源统计类型送入比较；40LS均值/14计数/37待核，原估计不由n/N重算 | 91estimand仍未知；不以原文可达宣称共轴/中文/科学接受 |
 | 本轮普通新候选 | 四源949事实、91 A+B疗效消费者；普通B实际101页，91条完整语境/原值/单位/quote进入链接数据及证据 | 3916成员/3659列仍未达到可用横比；无current/实屏/完整ABC任务链 |
 | 遗漏疑点核实 | T66测量2是TEAE/AESI/SAE安全性，生产6源观察、A/B各6行；不是漏失疗效 | 只关错误归类疑点，不接受全量科学来源 |
@@ -31,10 +35,13 @@ current或历史回执覆写；原文只在受控本地，不进Git/Skill/分享
 
 旧155属于论文批次，不是新来源门。上一批一次宽门Ruff
 src/tests/tools、strict src/tools283文件、活跃1185、兼容20、层级7及旧路径
-检查全部终态通过：GATE_OK quality-only/6，不覆盖本轮改动。本轮稳定接口
+检查全部终态通过：GATE_OK quality-only/6，不覆盖本轮改动。上一轮稳定接口
 仅运行一次宽门，实际GATE_OK quality-only/6：Ruff src/tests/tools、strict
 src/tools283、活跃1185PASS270.55s、兼容20PASS0.61s、层级7PASS0.19s、
-旧路径词法检查PASS；终态和源码绑定见当前机器清单。终验/发布不属于开发门。
+旧路径词法检查PASS；终态和源码绑定见历史owner-source-context-v1.json。
+本轮稳定A/B接口仅一次宽门，实际GATE_OK quality-only/6：Ruff src/tests/tools、
+strict src/tools283、活跃1185PASS265.37s、兼容20PASS0.56s、层级7PASS0.19s、
+旧路径词法PASS。它不覆盖上述历史资料库FAIL/完整集成；终验不属于开发门。
 v1回执误填未来UTC00:00隔离不接受；v2真实时钟22:20:19+00重建，旧字节不改。
 
 ## 下一步

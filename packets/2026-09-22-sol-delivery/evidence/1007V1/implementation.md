@@ -1,5 +1,51 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前批：普通A/B来源语境一致（父1deed8f，连续实施）
+
+采用execution-plus-conference：owner直接修共同source-view消费；一个边界
+E08专业执行节点生成source-backed临床问题提案，医学采用前独立挑战。此处
+客观保留原句有原件/生产比对证据，不为接线本身另派重复全页会商。复用
+现有Python/locator/SourceClauseContext；无新依赖、框架、本体或审批步骤。
+
+普通A-only/A+B两真实反例2FAIL13.58s显示A没有任何efficacy_views。最小
+完整修复把已登记A原子的同一只读桥移至A序列化之前；B使用相同载荷。
+34相关PASS41.78s核91真实观察、全部3544池、原人群/完整定义/源统计形式/
+值/单位/estimand未知保留；A-only不暗建B/基线/current。33当前保存/分享/
+查询/来源邻接PASS8.34s只是其运行范围，非本批完整真实ABC旅程或浏览器。
+
+邻接10PASS/1FAIL8.65s：冻结资料库实际SHAa1094ff…与期待74330a…不符，
+在新materialize调用前失败。没有足够证据归因为旧代码/本次修复/外部修改，
+原因未定，原历史SHA、源字节和失败不改；历史恢复未通过。另一邻接初次
+猜错文件名，0tests/exit4保留，改用rg确认路径；初strict仅指定tool缺src
+导入根22import错误，不冒产品类型错误或全局PASS。显式MYPYPATH=src后
+strict一工具通过；一处E501修排版后Ruff两文件通过，无逐行全仓重跑。
+
+新候选四源949事实/877claim、91 A+B疗效/14安全共享/183基线，普通A49页/
+62916627字节。实际clinical-portfolio页面的所有91 source上下文、科学限定/
+值/单位与B输入逐项相同。A3733成员/3633条件列仍碎片化；原40LSmean/
+14count/37统计未知、91estimand未知不改。B输入byte-exact与上轮一致。
+新观察时刻真实2026-10-07T22:58:53.979250+00:00，离线重放不是动态核查。
+初重放误指旧CAS，当前payload实际引用新1d6b…原页，FileNotFound保留；
+改指当前discovery CAS，在新v2目录完成。原失败小项目和唯一正确检查点
+不清理、不覆写。大站点/raw/DB私有，Git仅清单及可取指针。
+
+35当前完整测量/91原子提案输入375189字节、SHAeb1db185…，七块精确并集
+与来源DB不变核实。一次live E08专业路线/worker_01 preflight0，runner
+已派发，PENDING不是结果接受或实际模型/effort证明。只写proposal.json，
+不改值/事实/current或给共轴许可；输出后核完整覆盖及每项source引用，再
+由一个新上下文独立挑战所冻结提案，不重复上一轮原文review或逐对签发。
+
+本批稳定共享接口只一次宽门，源码/测试冻结后实际GATE_OK quality-only/6：
+Ruff src/tests/tools、strict283、活跃1185PASS265.37s、兼容20PASS0.56s、层级
+7PASS0.19s和旧路径词法PASS。它没有运行/抵销历史资料库FAIL，不能称整个
+工程所有测试通过。剩余问题匹配/
+真正正向框、中文、Ego实屏、同currentABC、宇宙/全文、24/三宿主/安装/恢复/
+RC仍开放。复盘：共同底座不是B专有路径；同一事实在A/B的来源语境也必须
+一致，不能以存在consumer登记替代实际页面消费。真正语义匹配仍需来源
+支持的医学归并，不靠减少条数、关键词强拼或等价许可“绿灯”。Goal ACTIVE。
+
+以下源语境批是1deed8f历史，不能拼成新候选验收：
+
 ## 当前批：完整来源语境进入普通B（父3fd19f7，连续实施）
 
 采用direct共享合同修复：原来源字段/精确路径与实际生产结果足以验证保留，

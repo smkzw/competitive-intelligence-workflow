@@ -1,5 +1,25 @@
 # Continuous implementation checkpoint
 
+## Current owner unit: A/B source-context parity, parent1deed8f
+
+Execution-plus-conference: owner repairs objective source-context consumption in
+A; one disjoint E08 source-semantic proposal writer is dispatched through the
+live guard/runner, with independent challenge required before medical adoption.
+No duplicate whole-page review or per-observation signing. Root2FAIL13.58s in
+ordinary A-only/A+B materialization proves A lost already-verified source views.
+Reusing the existing read-only B source projection before A serialization avoids
+a second parser/scientific identity; B consumes exactly those same views. Current
+related34PASS41.78s; no clinical equivalence/numeric permission inferred. Worker
+input35/91 current corrected contexts eb1db185..., source DB unchanged. Dispatch
+is not acceptance; preserve receipt/terminal and do not poll long wait.
+Current adjacency33PASS8.34s; another10PASS/1FAIL8.65s frozen database digest
+mismatch before current call, cause unknown, no historical byte/hash rewrite.
+Actual A49pages62916627bytes and91 source contexts match B input, full3544pool;
+3733members/3633columns still product gap. Once frozen milestone gate terminal
+GATE_OK quality-only/6: strict283/active1185PASS265.37s/compat20/layer7/lexical.
+It does not cover historical integrity/integration/science/browser/RC. Manifest
+owner-ab-context-v1.json16 pointers, task and Goal stay ACTIVE. E08 remains pending.
+
 ## Current owner unit: source context through ordinary B, parent3fd19f7
 
 Direct shared-contract repair: complete original source fields/paths provide

@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "stage": "1007V1 ordinary A/B source-context parity",
+  "source_commit_parent": "1deed8f0550286ba557c1384b4318a829fd3839d",
+  "status": "development_candidate_not_scientific_current_or_browser_accepted",
+  "goal_status": "active_verified",
+  "mode": "owner_direct_source_preservation_plus_disjoint_E08_semantic_proposal",
+  "code": [
+    {"path": "tools/materialize_ctgov_a_candidate.py", "sha256": "da6b17edb8feb4a163f412a9c48c59cf582f09741baec4b6a86598e5b5c857cc", "byte_size": 32279},
+    {"path": "tests/integration/test_1007_b_efficacy_materialization.py", "sha256": "3edb6961c3fec949df0983b5fc12d8fbf8f4e3619030f902c3855baaa7673299", "byte_size": 6957}
+  ],
+  "artifacts": [
+    {"path": ".artifacts/1007-ab-context-current-v2/receipt.json", "sha256": "d4f189b5258448f81ad4a02a1b609b6d2c89fff6d6cdc8a6331f8bf1ffddcba7", "byte_size": 288052},
+    {"path": ".artifacts/1007-ab-context-current-v2/checkpoint.json", "sha256": "113ad42addb2d21038a65fba5f03b7604be9b4c0ea28133921c8725e6ba3e0a2", "byte_size": 2478},
+    {"path": ".artifacts/1007-ab-context-current-v2/project/inputs/a-bound.json", "sha256": "2ef1ffb9c3bdd800e3eb67f93d477dd91f036f40d69631449d58421c5b5b10b9", "byte_size": 2873439},
+    {"path": ".artifacts/1007-ab-context-current-v2/project/inputs/b-bound.json", "sha256": "64d5ffa14d1ed63dee9029c42123a2d1feb1f9e049c18e0c94399aa5ec638824", "byte_size": 4190538},
+    {"path": ".artifacts/1007-source-question-proposals-v1/parts.json", "sha256": "cb49d10e067636209a3276c4088465780ddcb219f72940f531bdf27a73a21dc9", "byte_size": 1362},
+    {"path": ".artifacts/1007-source-question-proposals-v1/source-contexts.json", "sha256": "eb1db1855f75f936dc80f36b4155c509a293c124af81d3de1c6b954829b9a534", "byte_size": 375189}
+  ],
+  "completed_logs": [
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-red-v1.txt", "sha256": "06dac7c5bdba966b6b18a81b91348fa8322200e6f3151e7296944adbbd49ca10", "byte_size": 7628},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-green-v1.txt", "sha256": "3c127eacc22ce4d325cd50ef8a3778942a84213d39e798854283727467e4f25d", "byte_size": 100},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-adjacent-v1.txt", "sha256": "2f4bff96bc6ed846219b70f02196b3cc1325d67d8db6bbbc290a2e4d4e55e83c", "byte_size": 108},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-adjacent-v2.txt", "sha256": "355b998d3df2f822acb4eac4bb35f4aa93c1123870ec9883678aaa0681978319", "byte_size": 1957},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-current-adjacent-v1.txt", "sha256": "5fed70d9252fdfc6fbe2588e6fc5a0c935ec01f951d24f8d256aa4170e1f250a", "byte_size": 99},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-replay-v1.txt", "sha256": "50911d7701a3a1ccdff8d456914268a9d18bce5c73aaca9af3de6e02595cb990", "byte_size": 1766},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-replay-v2.txt", "sha256": "652fe8546e0c23d25f8ef48939d9e96e595131c0d7816703c0e85c282ead4e48", "byte_size": 2298},
+    {"path": "runs/execution/ci-1007-display/owner-ab-context-widegate-v1.txt", "sha256": "c90abc5e6bb8ded565b7fac1c122d3793cb0f6a05cc138bd1a64ec558e95422d", "byte_size": 3168}
+  ],
+  "candidate": {
+    "project_id": "project_65987d3abc8eacd50aa3aae5",
+    "observed_at": "2026-10-07T22:58:53.979250+00:00",
+    "source_access_method": "offline_cas_replay_not_new_live_check",
+    "snapshot_id": "evidence-snapshot_7447cde28c8ae6beda9a60a2",
+    "snapshot_sha256": "0ac5547d15b13dd94a03de5c2d5b174b9a2bbd0672c31b7c877a51c4cb25c0b5",
+    "source_page_sha256": "1d6b1d82e3ae359f70b84d03fdf2e2c890d1022a6b87187fbebb45d3e47683bb",
+    "source_count": 4,
+    "facts": 949,
+    "shared_efficacy_consumers": 91,
+    "safety_shared_consumers": 14,
+    "baseline_consumers": 183,
+    "full_efficacy_pool": 3544,
+    "a_preview": {"pages": 49, "bytes": 62916627, "sha256": "8d215003bea60a8d0a7c9d2ce129e855cde931d0b5a2524a6181b1bdab573969", "comparison_page_sha256": "83ec9696483e5f5d1ebd5a1437ce479fb998a0a3fb7a86f4f8d67fe7e4757ad2", "members": 3733, "columns": 3633, "all91_contexts_match_actual_A_page_and_B_input": true},
+    "scientific_equivalence_accepted": false,
+    "browser_inspected": false,
+    "current_promoted": false
+  },
+  "checks": {
+    "root": "2FAIL13.58s; A-only and A+B ordinary materialization",
+    "related": "34PASS41.78s; no SKIP",
+    "adjacent": "10PASS/1FAIL8.65s; historical fixture integrity fails before new materializer invocation",
+    "current_adjacent": "33PASS8.34s; current save/share/query/source-boundary tests, not real browser or complete ABC journey",
+    "scoped_ruff": "two files passed after one E501 formatting repair",
+    "scoped_strict": "MYPYPATH=src mypy strict tool: one source file passed; initial missing-path invocation produced22 import errors, not a product/global PASS",
+    "widegate": "GATE_OK quality-only/6: Ruff src/tests/tools; strict src/tools283; active1185PASS265.37s; retained compatibility20PASS0.56s; layering7PASS0.19s; lexical old-path PASS. Not the integration/science/browser/install/release matrix. No source/test changes while running."
+  },
+  "unresolved_integrity": {
+    "path": ".artifacts/r24-pnh-refresh-slice-20260926/state/project.sqlite",
+    "expected_sha256": "74330a821f722f22f56174b859cf098f289c6b1bd1f2307789f93e16db56d030",
+    "actual_sha256": "a1094ffed963a17c3070c2ca9b3bae4dfa2f44ba4f5910679b0fe50f87ce5a04",
+    "status": "FAIL_preserved_cause_not_established_no_hash_or_byte_rewrite"
+  },
+  "execution": {
+    "task_id": "ci-1007-source-question-proposal",
+    "node": "E08 clinical_evidence_analysis",
+    "declared_route": "grok/grok-build/grok-4.7:high; live manifest governs permitted fallbacks",
+    "status": "PENDING_not_identity_or_output_accepted",
+    "input_sha256": "eb1db1855f75f936dc80f36b4155c509a293c124af81d3de1c6b954829b9a534",
+    "contexts": 35,
+    "atoms": 91,
+    "preflight_exit": 0,
+    "actual_runtime_and_effort": "not_yet_verified_from_terminal_receipt",
+    "allowed_output": ".artifacts/1007-source-question-proposals-v1/proposal.json",
+    "independent_review_before_medical_adoption": true
+  },
+  "replay": {
+    "command": "PYTHONPATH=.:src uv run python .artifacts/1007-ab-context-current-v1/replay.py --output .artifacts/1007-ab-context-replay-NEW",
+    "limits": "Choose a fresh English-root artifact directory; script requires original CAS and pinned current payload. No current switch or network; first wrong-CAS attempt and partial project preserved. Script/raw/site local-only, not bundled or public."
+  },
+  "remaining": ["Source-backed clinical-question matching and genuinely qualified positive frames", "full source/universe and required publications", "C faithful Chinese and same-current ABC journey", "Ego four-width/four-state/L1L2/keyboard/offline browser", "historical integrity recovery", "24 portals, three hosts, install, recovery, RC"],
+  "boundaries": "Five unrelated user changes/unknown/history/source bytes preserved; no old-root access, cleanup, new platform or silent model substitution."
+}

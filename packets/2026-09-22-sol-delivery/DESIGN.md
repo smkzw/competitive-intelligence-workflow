@@ -4,6 +4,13 @@
 
 ## 1007V1 当前增量合同
 
+普通materialize在A原子登记成功后、A输入序列化之前，复用既有只读疗效
+source-view桥形成partial efficacy_views；A-only与A+B使用同一路径。B读取
+已经加入A载荷的相同视图，不再次解析或建立同义科学身份。其余3544池中的
+未定位项不删除、不冒充closed。新增回执located_a_efficacy_source_views明确
+实际范围；原B桥公开函数名保持兼容，不借此重建服务。预览、输入digest与
+公共来源仍绑定同一新载荷；原事实/源/消费者/历史快照不改。
+
 B直接疗效桥复用锁定闭包、精确locator、SourceClauseContext与来源版本：按
 source_version_id/测量路径在本次调用内重提完整原句及字段引用，不改旧原子、
 快照或消费者科学身份。完整定义替代仅标题的语义输入；原人群明确null则

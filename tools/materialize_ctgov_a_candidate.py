@@ -378,6 +378,22 @@ def materialize(
     registered_safety = tuple(
         binding for binding in registered if binding.collection == "safety"
     )
+    # A owns the source-proven atoms: its comparison must retain their complete
+    # context even when B is not requested. Reuse the exact read-only projection
+    # after registration; do not establish a second parser or scientific identity.
+    efficacy_versions = {
+        ref: version for ref, version in direct_versions.items() if ref in declared_efficacy
+    }
+    projected_efficacy_views = project_b_efficacy_source_views(
+        project_root, lineage.evidence_snapshot, bound_report, efficacy_versions,
+    ) if efficacy_versions else ()
+    efficacy_views = tuple({
+        **view, "source_fact_version_id": efficacy_versions[f"efficacy:{view['row_id']}"],
+    } for view in projected_efficacy_views)
+    bound_report = ReportAPortalData.model_validate({
+        **bound_report.model_dump(mode="json"),
+        "efficacy_views": {"coverage_mode": "partial", "facts": efficacy_views},
+    })
     bound_report_bytes = bound_report.model_dump_json().encode()
     bound_report_asset: dict[str, object] | None = None
     if bound_report_output is not None:
@@ -406,19 +422,8 @@ def materialize(
         views = project_b_safety_source_views(
             project_root, lineage.evidence_snapshot, bound_report, safety_versions,
         )
-        efficacy_versions = {
-            ref: version for ref, version in direct_versions.items()
-            if ref in declared_efficacy
-        }
-        projected_efficacy_views = project_b_efficacy_source_views(
-            project_root, lineage.evidence_snapshot, bound_report, efficacy_versions,
-        ) if efficacy_versions else ()
-        efficacy_views = tuple({
-            **view, "source_fact_version_id": efficacy_versions[f"efficacy:{view['row_id']}"],
-        } for view in projected_efficacy_views)
         b_report = ReportBPortalData.model_validate({
             **bound_report.model_dump(mode="json"),
-            "efficacy_views": {"coverage_mode": "partial", "facts": efficacy_views},
             "safety_views": {"coverage_mode": "partial", "facts": views},
             "baseline_views": build_source_baseline_view(
                 baseline_facts, source_versions=source_version_by_id,
@@ -562,6 +567,7 @@ def materialize(
             "claims": len(lineage.claim_version_ids), "other_rows": len(other),
             "registered_a_efficacy_consumers": len(registered_efficacy),
             "registered_a_safety_consumers": len(registered_safety),
+            "located_a_efficacy_source_views": len(efficacy_views),
             "located_b_safety_source_views": located_b_safety_views,
             "located_b_efficacy_source_views": located_b_efficacy_views,
             "registered_b_shared_source_consumers": len(registered_b_shared),
