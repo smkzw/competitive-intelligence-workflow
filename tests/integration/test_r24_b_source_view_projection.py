@@ -16,6 +16,7 @@ from ci_workflow.application.portal_consumer_registry import (
 from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.renderers.portal.report_b import ReportBPortalData, render_report_b_site
 from ci_workflow.storage.snapshot_store import LockedSnapshot
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 
 
 def _fixed_candidate() -> tuple[Path, ReportAPortalData, LockedSnapshot, dict[str, str]]:
@@ -97,13 +98,8 @@ def test_historical_safety_closure_is_immutable_not_current_semantic_acceptance(
     )
     site = tmp_path / "b-precise-safety"
     render_report_b_site(b_report, site)
-    page = (site / "safety.html").read_text(encoding="utf-8")
-    groups, _ = json.JSONDecoder().raw_decode(
-        page.split("window.__CHART_GROUPS__ = ", 1)[1].lstrip()
-    )
-    evidence, _ = json.JSONDecoder().raw_decode(
-        page.split("window.__EVIDENCE_VIEWS__ = ", 1)[1].lstrip()
-    )
+    groups = _page_json_assignment(site, "safety.html", "__CHART_GROUPS__")
+    evidence = _page_json_assignment(site, "safety.html", "__EVIDENCE_VIEWS__")
     safety_rows = {
         row["row_id"]: row
         for group in groups

@@ -18,6 +18,7 @@ from ci_workflow.renderers.portal.report_a import _safety_term_projection
 from ci_workflow.renderers.portal.report_b import _project_record
 from ci_workflow.reports.b.concept_catalog import spec_of
 from ci_workflow.reports.b.safety_concepts import describe_safety_concept
+from ci_workflow.storage.source_derivation import _json_path_value
 
 
 @pytest.mark.parametrize(("source_class", "expected_key"), [
@@ -293,8 +294,30 @@ def test_fixed_50_study_source_paths_rebuild_without_array_order_identity(
         (row["trial_id"], row["value_path"]): row["row_id"]
         for row in sidecar["row_source_map"] if row["domain"] == "safety"
     }
-    assert len(old_by_source) == len(source_map) == len(new_by_id) == 514
-    assert set(old_by_source) == set(source_map)
+    assert len(source_map) == len(new_by_id)
+    assert set(old_by_source) <= set(source_map)
+    # The current builder correctly retains source observations from a study
+    # the historical intervention filter dropped. Preserve the old artifact;
+    # verify additions against exact raw source paths, not a frozen row count.
+    assert set(source_map) - set(old_by_source) == {
+        ("nct00566696", "$.resultsSection.adverseEventsModule.eventGroups[0].deathsNumAffected"),
+        ("nct00566696", "$.resultsSection.adverseEventsModule.eventGroups[0].seriousNumAffected"),
+        ("nct00566696", "$.resultsSection.outcomeMeasuresModule.outcomeMeasures[4]"
+         ".classes[0].categories[0].measurements[0].value"),
+    }
+    raw_studies = {
+        study["protocolSection"]["identificationModule"]["nctId"].casefold(): json.dumps(study)
+        for page in sorted((cas / "evidence/raw").rglob("*.bin"))
+        for study in json.loads(page.read_text())["studies"]
+    }
+    for source_row in sidecar["row_source_map"]:
+        if source_row["domain"] != "safety":
+            continue
+        raw_value = _json_path_value(
+            raw_studies[source_row["trial_id"]], source_row["value_path"],
+        )
+        assert source_row["raw_value"] == raw_value
+        assert new_by_id[source_row["row_id"]]["value"] == float(raw_value)
     for old_id, expected_key, expected_basis in (
         # A composite parent also mentions grade 3/4; the measured class is
         # the statistical object, so its SAE/TEAE/discontinuation rows must

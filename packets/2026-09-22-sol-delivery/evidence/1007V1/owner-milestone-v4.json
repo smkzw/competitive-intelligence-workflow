@@ -1,0 +1,248 @@
+{
+  "contract": "1007V1-user-prompt",
+  "stage": "development-owner-milestone-4",
+  "parent_commit": "651e79a8e04ea8ed2cbbaba09553720125a35550",
+  "commit_binding": "containing Git commit; new bytes invalidate affected criteria",
+  "source_sha256": {
+    "tools/build_a_payload.py": "1e363658e9106f8c5b1beff1b32a03d6c8e391963ece6cf9f6e04ea33460fec4",
+    "tests/integration/test_r24_a_builder_contract.py": "3166a93b0e0a2e437e881b12b5eef1d8d0092d182d5ccc06b88fd63efdfc6347",
+    "tests/integration/test_r24_safety_class_context.py": "6ec8c6ae1dfa957da07d607c6f3e917488ff2b173b5cbf813cb7be0da3066c7c",
+    "tests/integration/test_r24_b_source_view_projection.py": "e325ee8781171b707795a7cd8358bd1b26aee0f3d61ebeb38a6e81b4b78cb891",
+    "tests/integration/test_r24_full_b_safety_source_view_projection.py": "38e6d2e0c55e78b4580cd53e56b3b9b75bfec8805d3a2276a2abcad648a9b54d",
+    "src/ci_workflow/application/portal_consumer_registry.py": "26a5655e9c9dd0c3a285a92793a7c1ffba18fb012b096d8a3b25adcb0598fefd",
+    "src/ci_workflow/renderers/portal/report_a.py": "be566b18ff14604b11b70a0de2118a0a0dd5e1a41fdd0a3bb7aaec7273b2e7cc",
+    "src/ci_workflow/renderers/portal/report_b.py": "ebd51e5f7f4c9d19225163afa1b9594ce3c7d2e74c288bba94b863053a90f202",
+    "src/ci_workflow/storage/source_derivation.py": "59d3f2979f19e9d4760d95ce832d54df2b7ad4674dd3a998d77943782da09eb9"
+  },
+  "evidence": [
+    {
+      "path": "runs/execution/ci-1007-display/owner-shared-background-red-v1.txt",
+      "sha256": "4d3cfa95b8328b383270276c5d7b122ca1417d970b3432d74fadbd06597923f1",
+      "bytes": 4736
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-single-link-role-red-v1.txt",
+      "sha256": "dde04572b008373430a6429af8ed01bf6234bbdcd4dc0d879b88d03caadb4d38",
+      "bytes": 6196
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-shared-background-role-green-v3.txt",
+      "sha256": "8031208bf98c5a7752e243d2fc911eee177628b2044d854d8d1764c3ecc88ac0",
+      "bytes": 14576
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-shared-background-role-green-v4.txt",
+      "sha256": "160173f34a219ccd28b09ca596b00e3205b91b00b905ddaba17369399843f46c",
+      "bytes": 100
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-shared-background-role-green-v5.txt",
+      "sha256": "10b80092febd9870d089caf79d0b65e7501794ae9ef310835b16476aed722261",
+      "bytes": 2233
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-shared-background-role-green-v6.txt",
+      "sha256": "e0b14532b19b4acbfd345eff76318852ff59abbe9cbad8e382e4bacd5215b448",
+      "bytes": 111
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-v3-view-projection-v1.txt",
+      "sha256": "13c66620a5883c6d2bd4cded44fa5778d45dfba8bd6d092153363173d1d48411",
+      "bytes": 7626
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-v3-view-projection-v2.txt",
+      "sha256": "97e8b3b0740c612ddf432942cf5f1e7d2896bce21a6c68be628feadb3b0ca487",
+      "bytes": 110
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-current-four-study-materialize-v3.json",
+      "sha256": "be0f695a70aac210797380c1ab4b06459a60df050d1c335261747bd5a5b23e4c",
+      "bytes": 110016
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-source-v3-identity.json",
+      "sha256": "1b305e84c4278cf8570c69ea2e99b1f5acb1c3d81fdedfb514dfbca13ce7911a",
+      "bytes": 691
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-source-v3-b-bindings.json",
+      "sha256": "8c424e7dfa1616e01bf6f28498e31b70b32ccebdad1a3128890bcef75dd8a103",
+      "bytes": 17495
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-pn-source-v3-ab-render-v3.json",
+      "sha256": "40f01fe541b225bc023f09bdd5a9b20482e826e67f6e25765f8985529eb30c77",
+      "bytes": 2102
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-milestone-gate-v6.txt",
+      "sha256": "69ba08aad3c8ac203677773c0a2da18312b457044b8a73a2507ab474546c3648",
+      "bytes": 3088
+    },
+    {
+      "path": "runs/conference/ci-1007-arm-background/evidence_single_object.md",
+      "sha256": "c32933839534aaca27b52547ba2a7a812674f1b942c8479e4fcd029f6e21654b",
+      "bytes": 25627
+    },
+    {
+      "path": "runs/conference/ci-1007-arm-background/evidence_single_object-v2.md",
+      "sha256": "ec9718587a0f4d8d3e405404d5ecde85cfe772ec4a10e26eef15ccda7d4f94b8",
+      "bytes": 17208
+    },
+    {
+      "path": "logs/conference/ci-1007-arm-background/preflight-v2.json",
+      "sha256": "988049f9f3b5082df935e2b771d73052e805acf9bc162fb1c0cd13bf058df138",
+      "bytes": 3174
+    },
+    {
+      "path": ".artifacts/1007-arm-background-review-v2/MANIFEST.json",
+      "sha256": "2bf1ea88e3345bb75544dc9a78a1a51243225dc2d58543ac999bdf146c94d197",
+      "bytes": 28256
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-v3-generated-safety-audit-v4.json",
+      "sha256": "8531d04d381748a00b36e7e26633b35cf360c6be41ef0eef40cb01d7ce19d9e8",
+      "bytes": 1257
+    }
+  ],
+  "quality_gate": {
+    "scope": "Ruff src/tests/tools; strict276 src/tools; active unit+contract1136; retained compatibility20; layering7; legacy STRING references; not all integration/science/browser/install",
+    "terminal_exit": 0,
+    "active_duration_seconds": 820.18,
+    "steps": 6,
+    "status": "quality-only"
+  },
+  "independent_review": {
+    "scope": "frozen source role attribution only",
+    "model": "deepseek-v4.1-flash",
+    "provider": "codebuddy-cli",
+    "effort": "max",
+    "session_id": "01a11612-7872-7c98-addb-1975031aad4e",
+    "duration_seconds": 431.988,
+    "terminal_exit": 0,
+    "verdict": "bounded ACCEPT; stale-materialization F1 separately rebuilt",
+    "source_hashes_verified": 14,
+    "tests_actual": 72,
+    "context_independence": "reduced same-session follow-up; capability change disclosed",
+    "old_REVISE_preserved": true
+  },
+  "current_candidate": {
+    "project_root": ".artifacts/1007-pn-source-v3-candidate/project",
+    "source_payload_sha256": "695df430ffeff6a1df82aff39282f72c1c24f683ba9f3b5f6499a06f65f1483e",
+    "snapshot_sha256": "4ca1cb96258898eb7b45987a59becef648d94f67c7bd37f5638cfebe4323c70b",
+    "snapshot_path": "snapshots/evidence/evidence-snapshot_c228ba64892cf102e738a83d.json",
+    "bound_inputs": {
+      "A": {
+        "relative_path": "evidence/library/a-candidate-v3.json",
+        "sha256": "cedd505751b9b37f0f84070712eec2eef52b2e9b2c0524796b7d566622d911c4",
+        "bytes": 2383082
+      },
+      "B": {
+        "relative_path": "evidence/library/b-candidate-v3.json",
+        "sha256": "2684fbbbe1abd12dfd5bb28da0e5a18a3ba2e8fb39588d4f968f96b133a27733",
+        "bytes": 2435995
+      }
+    },
+    "source_version_ids": [
+      "source-version_0f3c63f7f5acf2cd2aa83a7b",
+      "source-version_a6c43a83dd64957ec923e735",
+      "source-version_c17a4653ec8903dc9c822c60",
+      "source-version_c3fc5ac6e6f0a02c8744c4c7"
+    ],
+    "fact_versions_same_as_v1": true,
+    "fact_version_count": 450,
+    "legal_A_efficacy": 91,
+    "legal_A_safety": 14,
+    "legal_B_safety": 14,
+    "precise_B_views": 36,
+    "precise_unknown": 22,
+    "precise_declared": 14,
+    "related_safety_query_rows": 189,
+    "current_promoted": false,
+    "sites": {
+      "A": {
+        "relative_path": "reports/source-v3/A",
+        "site_sha256": "b8f12eda355aa2705487e15c02addf6d3c7bdb0c90f7fadbe36e550e3bc1fbfd",
+        "bytes": 57111074,
+        "physical_pages": 49
+      },
+      "B": {
+        "relative_path": "reports/source-v3/B",
+        "site_sha256": "456fe0389fabe9dea400259c3dd458fe531b75899bf3d215b209184d00be5be9",
+        "bytes": 166386934,
+        "physical_pages": 101
+      }
+    }
+  },
+  "real_observation_diff": {
+    "total_observations": 3781,
+    "unknown_to_declared_PRIME2": 83,
+    "declared_to_unknown_PRISM": 13,
+    "non_state_scientific_changes": 0,
+    "reclassification_not_clinical_equivalence": true
+  },
+  "projection_tests": {
+    "source_family": {
+      "passed": 72,
+      "seconds": 113.97
+    },
+    "new_old_display_projection": {
+      "passed": 5,
+      "seconds": 136.6
+    },
+    "first_new_projection_failure": "owner concurrent B registration changed SQLite during read-only assertion; preserved, serialized unchanged test then passed",
+    "historic_514_and_92_current_semantics": "rejected; immutable corpus SHA not rewritten; known full-source gaps remain",
+    "owner_audit_recovery": "Initial label byte-equality assumption rejected native display; v2 wrong module import and v3 invalid product-null assumption failed. Actual source/model contexts then checked separately from production native display, and actual B chart/evidence guards verified; no re-render or source change."
+  },
+  "recovery": {
+    "source_root": ".artifacts/1007-pn-current-source-v1",
+    "source_raw_sha256": "82b4ed9ab0c63e227a2c4c34b85727dd988e55062850d42b41517f0749168edf",
+    "source_input_v3": ".artifacts/1007-pn-current-source-v1/a-source-payload-v3.json",
+    "sidecar_v3": ".artifacts/1007-pn-current-source-v1/a-source-payload-v3.derivation.json",
+    "replay": "new project using original ProjectContract; python -m tools.materialize_ctgov_a_candidate with pinned v3 payload/sidecar, four trial IDs, observed_at from bound receipt and fresh outputs; then original identity-source-set install and ordinary A/B render",
+    "original_source_project_db_sha256": "d4a6ec754ce6435b05b6ebc50aa6535fcb0ba9065bae15cad6dee970698cd95b",
+    "raws_and_candidates_retained": true,
+    "sidecar_v3_sha256": "cd318d683355ae915683f7a4550212aee3e44e857f19638e5a0616e20f1c2fd5",
+    "materialization_observed_at": "2026-10-07T11:51:17+00:00"
+  },
+  "unresolved": [
+    "1007V1 01-06/reference/cases.json not obtained; do not invent supplied case IDs",
+    "Ego TaskSpace12 NOT_FOUND; recovery Ask outstanding; actual desktop four-width/four-state/L1L2/keyboard NOT_RUN",
+    "mandatory papers/protocol/SAP, universe/China dynamic source closure remain open",
+    "new candidate current save/clear/undo/config/single and combined shares not yet rerun; old QA receipts not inherited",
+    "real multi-drug clinical semantic positive acceptance and independent clinical interpretation remain open",
+    "fresh-install of this commit, three hosts, recovery, 24 portals and RC not complete"
+  ],
+  "generated_payload_audit": {
+    "status": "PASS",
+    "scope": "actual generated A/B data and B safety chart/evidence payloads, not browser or clinical equivalence",
+    "rows": 189,
+    "input_scientific_fields_equal": true,
+    "A_actual_native_projection_exact": true,
+    "B_actual_source_context_exact": true,
+    "B_actual_chart_and_evidence_rows": 189,
+    "display_differences": {
+      "arm": 188,
+      "arm_detail": 26,
+      "time_window": 185
+    },
+    "display_rule": "existing production _display_safety_rows; raw source context preserved in bound input and B payload",
+    "Prime2_declared": [
+      "safe-45b7532dc2da8a8de661",
+      "safe-e5e0b4524553ae12affb",
+      "safe-1c409ad9a8b3e6c96a19",
+      "safe-9e56eeec839114a66dd1"
+    ],
+    "PRISM_unknown_unplotted_and_evidence_unassigned": [
+      "safe-4ee65a1642dd469c3999",
+      "safe-5ea755ecb3102ed94e05",
+      "safe-1b27ad493d6b61633d09"
+    ],
+    "legacy_study_product_scope": "payload product_id is study display fallback, not exposure acceptance; unknown excluded by actual chart/evidence projection",
+    "old_source_database": ".artifacts/1007-pn-current-project-v1/state/project.sqlite",
+    "old_source_database_sha256": "d4a6ec754ce6435b05b6ebc50aa6535fcb0ba9065bae15cad6dee970698cd95b",
+    "browser_inspected": false,
+    "current_promoted": false
+  }
+}

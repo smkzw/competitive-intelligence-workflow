@@ -296,6 +296,125 @@ def test_outcome_group_is_not_inferred_from_unrelated_array_positions(
     assert "Participants With Response · studydrug" not in search
 
 
+@pytest.mark.parametrize("reverse", [False, True])
+def test_shared_background_preserves_declared_focal_drug_for_results_and_ae(
+    tmp_path: Path, reverse: bool,
+) -> None:
+    interventions = [
+        {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]},
+        {"name": "BackgroundDrug", "type": "DRUG",
+         "armGroupLabels": ["Drug arm", "Comparator arm"]},
+        {"name": "SupportDrug", "type": "DRUG",
+         "armGroupLabels": ["Comparator arm", "Drug arm"]},
+    ]
+    if reverse:
+        interventions.reverse()
+    study = _study("NCT00000061", 40, "ACTUAL", interventions)
+    study["resultsSection"] = {
+        "outcomeMeasuresModule": {"outcomeMeasures": [{
+            "title": "Participants With Response", "timeFrame": "Week 24",
+            "unitOfMeasure": "Participants",
+            "groups": [{"id": "OG1", "title": "Drug arm"}],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": "OG1", "value": "4"},
+            ]}]}],
+        }]},
+        "adverseEventsModule": {"timeFrame": "Week 24", "eventGroups": [{
+            "id": "EG1", "title": "Drug arm", "seriousNumAffected": 2,
+            "seriousNumAtRisk": 20,
+        }]},
+    }
+    payload = _build(tmp_path, [study])
+    for row in [*payload["efficacy"], *payload["safety"]]:
+        assert (row["product_id"], row["group_assignment_state"]) == (
+            "studydrug", "declared",
+        )
+    assert payload["trials"][0]["product_id"] == "studydrug"
+    # Attribution does not delete concomitant drugs or replace a regimen by
+    # monotherapy. Full arm-to-intervention links remain the source of truth.
+    links = payload["trials"][0]["product_links"]
+    assert {link["product_id"] for link in links} == {
+        "studydrug", "backgrounddrug", "supportdrug",
+    }
+    assert {label for link in links if link["product_id"] == "backgrounddrug"
+            for label in link["arm_labels"]} == {"Drug arm", "Comparator arm"}
+
+
+@pytest.mark.parametrize("case", [
+    "exclusive_combination", "single_arm", "unknown_role",
+    "unmatched_result_group", "no_common_background_comparator",
+])
+def test_background_does_not_license_ambiguous_product_attribution(
+    tmp_path: Path, case: str,
+) -> None:
+    interventions = [
+        {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]},
+        {"name": "BackgroundDrug", "type": "DRUG",
+         "armGroupLabels": ["Drug arm", "Comparator arm"]},
+    ]
+    study = _study("NCT00000062", 40, "ACTUAL", interventions)
+    arms = study["protocolSection"]["armsInterventionsModule"]["armGroups"]
+    result_group = "Drug arm"
+    if case == "exclusive_combination":
+        interventions.append({"name": "SecondDrug", "type": "DRUG",
+                              "armGroupLabels": ["Drug arm"]})
+    elif case == "single_arm":
+        arms[:] = arms[:1]
+        interventions[1]["armGroupLabels"] = ["Drug arm"]
+    elif case == "unknown_role":
+        arms[0].pop("type")
+    elif case == "unmatched_result_group":
+        result_group = "OG1"
+    else:
+        arms.append({"label": "Third arm", "type": "ACTIVE_COMPARATOR"})
+        interventions.append({"name": "SupportDrug", "type": "DRUG",
+                              "armGroupLabels": ["Drug arm", "Third arm"]})
+    study["resultsSection"] = {"outcomeMeasuresModule": {"outcomeMeasures": [{
+        "title": "Participants With Response", "timeFrame": "Week 24",
+        "unitOfMeasure": "Participants",
+        "groups": [{"id": "OG1", "title": result_group}],
+        "classes": [{"categories": [{"measurements": [
+            {"groupId": "OG1", "value": "4"},
+        ]}]}],
+    }]}}
+    payload = _build(tmp_path, [study])
+    assert len(payload["efficacy"]) == 1
+    assert payload["efficacy"][0]["group_assignment_state"] == "unknown"
+
+
+@pytest.mark.parametrize("role", ["PLACEBO_COMPARATOR", "OTHER", None])
+def test_single_link_without_treatment_role_is_not_drug_exposure(
+    tmp_path: Path, role: str | None,
+) -> None:
+    study = _study("NCT00000063", 40, "ACTUAL", [
+        {"name": "Studydrug", "type": "DRUG",
+         "armGroupLabels": ["Drug arm", "Comparator arm"]},
+    ])
+    arm = study["protocolSection"]["armsInterventionsModule"]["armGroups"][1]
+    if role is None:
+        arm.pop("type")
+    else:
+        arm["type"] = role
+    study["resultsSection"] = {
+        "outcomeMeasuresModule": {"outcomeMeasures": [{
+            "title": "Participants With Response", "timeFrame": "Week 24",
+            "unitOfMeasure": "Participants",
+            "groups": [{"id": "OG1", "title": "Comparator arm"}],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": "OG1", "value": "4"},
+            ]}]}],
+        }]},
+        "adverseEventsModule": {"timeFrame": "Week 24", "eventGroups": [{
+            "id": "EG1", "title": "Comparator arm", "seriousNumAffected": 2,
+            "seriousNumAtRisk": 20,
+        }]},
+    }
+    payload = _build(tmp_path, [study])
+    for row in [*payload["efficacy"], *payload["safety"]]:
+        assert row["group_assignment_state"] == "unknown"
+    assert len(payload["efficacy"]) == len(payload["safety"]) == 1
+
+
 def test_ada_is_not_delivered_as_a_clinical_efficacy_row(tmp_path: Path) -> None:
     study = _study("NCT00000007", 40, "ACTUAL", [
         {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]},

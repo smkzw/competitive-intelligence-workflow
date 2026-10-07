@@ -284,15 +284,44 @@ def slugify(name: str) -> str:
 def _linked_product_for_group(
     group_title: str, product_links: list[dict[str, Any]], focus_product_id: str,
 ) -> tuple[str, str]:
-    declared = {
-        str(link["product_id"])
-        for link in product_links
-        if group_title.strip().casefold() in {
-            str(label).strip().casefold() for label in link["arm_labels"]
-        }
-    }
+    group = group_title.strip().casefold()
+    labels_by_product: dict[str, set[str]] = {}
+    roles_by_product_arm: dict[tuple[str, str], set[str]] = {}
+    for link in product_links:
+        product = str(link["product_id"])
+        labels = {str(label).strip().casefold() for label in link["arm_labels"]
+                  if str(label).strip()}
+        labels_by_product.setdefault(product, set()).update(labels)
+        for label in labels:
+            roles_by_product_arm.setdefault((product, label), set()).add(link["arm_role"])
+    declared = {product for product, labels in labels_by_product.items() if group in labels}
     if len(declared) == 1:
-        return next(iter(declared)), "declared"
+        product = next(iter(declared))
+        if roles_by_product_arm[product, group] in (
+            {"experimental"}, {"active_comparator"},
+        ):
+            return product, "declared"
+        return focus_product_id, "unknown"
+    # Exact source arm links can distinguish one focal drug from common
+    # background treatment. This is regimen attribution, not monotherapy or a
+    # causal claim: all intervention links and original values remain intact.
+    exclusive = {
+        product for product in declared
+        if labels_by_product[product] == {group}
+        and roles_by_product_arm[product, group] in (
+            {"experimental"}, {"active_comparator"},
+        )
+    }
+    if len(exclusive) == 1 and len(declared) > 1:
+        product = next(iter(exclusive))
+        background = declared - {product}
+        common_other_arms = set.intersection(
+            *(labels_by_product[item] for item in background),
+        ) - {group}
+        if any(all(roles_by_product_arm[item, label] in (
+            {"active_comparator"}, {"other_comparator"},
+        ) for item in background) for label in common_other_arms):
+            return product, "declared"
     return focus_product_id, "unknown"
 
 
@@ -525,7 +554,13 @@ def main() -> None:
         if not canonical_drugs:
             NON_PRODUCT_RECORDS.append(nct)  # 记录明细，可审计
             continue
-        product_name = (experimental_drugs or canonical_drugs)[0]
+        focal_products = {
+            product for label, role in arm_types.items() if role == "EXPERIMENTAL"
+            for product, state in [_linked_product_for_group(label, product_links, "")]
+            if state == "declared"
+        }
+        focal_drugs = [drug for drug in experimental_drugs if slugify(drug) in focal_products]
+        product_name = (focal_drugs or experimental_drugs or canonical_drugs)[0]
         # R13-f 联合治疗全记录（模型单 product_id 限制内的最诚实表达）。
         COMBO_RECORDS.append({"nct_id": nct, "canonical_drugs": canonical_drugs})
         pid = slugify(product_name)

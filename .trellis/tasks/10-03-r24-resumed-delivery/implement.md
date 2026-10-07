@@ -2,6 +2,34 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Owner current: shared-background and single-link role repair72PASS/113.97s;
+C03 same-session v2 actualcodebuddy/deepseek-v4.1-flash:max431.988s/exit0,
+72independentPASS/no skips/110.21s+14SHA+ordinaryCLI, boundedACCEPT; original
+staticREVISE/tool denial preserved. Two v2 preflight syntax failures stopped
+dispatch; correctedactualexit0. Read-only production+scratch contract unchanged,
+runtime capability through existingrunnerflag; reducedsame-sessionindependence.
+F1 staleB adoption caught: fresh v3project candidate reuses4sources/450facts;
+A91efficacy14safety/B14legal shared,36preciseviews22unknown14declared/full189.
+OriginalprojectDBunchanged; 5projectionPASS136.60s after owner concurrent-write
+failure was preserved and writes serialized. No assertion weakening. New A49/B101
+actual normal pages generated,189 common input safety fields equal. Actual A
+native display and B raw-source context separately verified, actual B chart/evidence
+unknowns unplotted/unassigned. Failed owner display/null assumptions preserved;
+no source change or weakened scientific guard. v6six-step quality
+gate terminalexit0 strict276/active1136in820.18s/compat20/layer7; no source writes
+during gate. v4machine manifest binds new currentcandidate source+site bytes,
+not previous651 QA shares/install. No current/science/browser/hosts24/RCpromotion. Subsequent older
+paragraphs are historical timestamps, not latestpending/acceptedstate.
+
+Latest:651e79a actualcommit/push/remote verified. Next root shared-background
+attribution2RED/5negativePASS ->49adjacentPASS19.75s. Frozen six files for one
+C03 independent source/combination challenge, actualpreflightexit0. Current source
+v2 keeps38products/43studies/3544efficacy/189safety/48other; PRIME2treatment77
+attributions repaired, PRIME mismatch remainsunknown. Numbers/units/paths/analysis
+unchanged, no clinical common-axis acceptance. Historical fixed514 assertion failed
+already651baseline/517; raw three added points verified, historical original retained.
+New root does not inherit v5 or source/current/site/install acceptance.
+
 Current owner delta: real-source AB render terminal A49/B101 pages; B166496240
 bytes,404 component references/246 unique,25877799 exact duplicate bytes avoided.
 Real source QA clone operation terminal set/clear/restore/undo plus idempotence,
