@@ -1,5 +1,40 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 里程碑7：联合来源、基线事务和同版本分享（在途递交）
+
+共同源候选v5包含949事实/877claims/183基线观察，24条mean/median/SD建立
+真实来源consumer绑定。完整行/科学内容hash/版本/精确locator/原文/人群
+逐一验证，任何篡改在登记前整组失败；不把row_ref混入科学hash。不改原
+0016迁移，新0017前向复制旧表保留旧记录、唯一约束和append-only守卫。
+最初INSERT OR IGNORE隐藏旧CHECK错误导致实际0行，新增落库计数反例
+并改成只忽略binding_id冲突；原失败保留。人数/N/限值编辑不在本切片。
+
+联合身份E03实际CodeBuddy/deepseek-v4.1-flash:max526.863s/53工具调用/exit0，
+owner21PASS2.06s及正确MYPYPATH strict通过；两个独立源集合和联合投影
+重开一致。工具只命名空间ref，不改科学产品ID/原名/日期/引文/源字节；
+联合一次摄取、两独立比较基线一次性核对，无新身份推理或原数据库写。
+
+在v5新隔离副本采用联合身份，实际安全事实四次A+B编辑/清除/恢复/undo、
+非法人数旧current保留、重试幂等；再在同一项目真实SD四次至current8。
+基线仅B消费者，A合法保持revision4，B8。原源DB/输入/快照/身份未漂移。
+新A/B/AB分享按同current8配置导出，每一成员hash和generation闭合；不是
+新浏览器重开。源项目current0，所有演练值明显QA假设，非临床订正。
+
+31小批合成及99整邻接PASS936.67s覆盖迁移/来源/保存/幂等；v9宽门真实
+1164PASS/1FAIL/2ERROR，是0017漏进安装清单造成独立安装错误，不能称环境
+故障。补manifest后17相关PASS18.33s，完整v10已六步exit0：Ruff全src/tests/tools、
+strict281、活跃1167PASS265.07s、兼容20、分层7、旧路径字符串扫描；不是
+全部integration/实屏或发布门。owner runtime
+初错bundle_digest属性在任何基线save前失败，读取现有定义后从current4
+恢复，不重放已经成功的安全事务；current_bundle_sha256是实际接口。
+
+复盘：模型输出不代替owner字节/行为检查；新增迁移必须同时进入分发
+manifest。报告group/source/value三层不要凭直觉猜字段；元数据探针失败
+与实际事务失败分开，成功save后只从committed版本恢复。整个根因族成批
+验证，宽门只在里程碑/完整修复后跑；未做浏览器、C、完整科学/24/宿主/RC
+的项目不标PASS。当前还需下钻组ID/文字转写族、同current ABC完整操作；
+不因阶段完成自动暂停，继续既有用户授权。
+
 ## 里程碑5：真实r5及相邻根因，非发布
 
 精简机器清单owner-milestone-v5.json绑定本批生产/测试及本地日志SHA。

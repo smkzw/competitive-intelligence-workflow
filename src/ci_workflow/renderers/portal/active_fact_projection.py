@@ -17,7 +17,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from ci_workflow.reports.common.evidence_view import UserEditDisclosure
 
 ReportCode = Literal["A", "B", "C"]
-DomainCollection = Literal["safety", "efficacy", "observations"]
+DomainCollection = Literal["safety", "efficacy", "observations", "baseline"]
 
 
 class ActiveFactBinding(BaseModel):
@@ -54,10 +54,11 @@ class ActiveFactBinding(BaseModel):
     def _identity_is_complete(self) -> ActiveFactBinding:
         unassigned = self.product_id is None or self.drug_name is None
         if unassigned and not (
-            self.report == "C" and self.collection == "observations"
+            ((self.report == "C" and self.collection == "observations")
+             or (self.report == "B" and self.collection == "baseline"))
             and self.product_id is None and self.drug_name is None
         ):
-            raise ValueError("仅 C 设计观察允许明确未知的产品与药物身份；两字段必须同时为空")
+            raise ValueError("仅 C 设计/B 基线观察允许明确未知产品身份；两字段必须同时为空")
         required_text = (
             "row_id",
             "trial_id",
@@ -80,7 +81,8 @@ class ActiveFactBinding(BaseModel):
             raise ValueError("active fact消费者必须且只能声明endpoint或event定义之一")
         if self.collection == "safety" and self.event_definition is None:
             raise ValueError("安全性消费者必须声明事件定义")
-        if self.collection in {"efficacy", "observations"} and self.endpoint_definition is None:
+        if (self.collection in {"efficacy", "observations", "baseline"}
+                and self.endpoint_definition is None):
             raise ValueError("疗效/设计消费者必须声明终点或设计定义")
         return self
 
@@ -200,7 +202,7 @@ def validate_active_fact_binding(
         ]
         raise ValueError("active fact原消费者科学身份不一致：" + ",".join(differing))
     extra = fact.model_extra or {}
-    if actual.report == "C" and actual.product_id is None:
+    if actual.product_id is None:
         missing = [field for field in ("product_id", "drug_name") if field not in extra]
         if missing:
             raise ValueError("active fact缺少明确空值身份：" + ",".join(missing))

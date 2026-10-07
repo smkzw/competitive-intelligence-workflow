@@ -17,10 +17,14 @@ from pathlib import Path
 from typing import Any, Literal
 
 from ci_workflow.application.project_service import verify_project_workspace
-from ci_workflow.application.source_research_service import ctgov_direct_safety_measure_identity
+from ci_workflow.application.source_research_service import (
+    ResearchFact,
+    ctgov_direct_safety_measure_identity,
+)
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFactBinding,
+    canonical_sha256,
     canonical_source_pointer,
 )
 from ci_workflow.renderers.portal.report_a import (
@@ -38,6 +42,7 @@ from ci_workflow.reports.b.safety_concepts import (
     describe_measured_safety_concept,
     safety_category_zh,
 )
+from ci_workflow.reports.b.source_baseline import build_source_baseline_view
 from ci_workflow.reports.common.evidence_view import (
     clean_evidence_locator,
     precise_locator_anchor,
@@ -59,6 +64,108 @@ class SourceRowContext:
     timepoint: str
     group_title: str
     value_path: str
+
+
+def register_b_baseline_source_consumers(
+    project_root: Path, evidence_snapshot: LockedSnapshot, report: ReportBPortalData,
+    row_versions: Mapping[str, str], *, registered_at: datetime,
+) -> tuple[ActiveFactBinding, ...]:
+    """Attach study-only scalar baseline consumers without guessing a product.
+
+    Rebuild expected view rows from the locked ResearchFacts, then prove both
+    that complete row and the persisted original fragment. No new scientific
+    version, source alteration, current promotion, or rate derivation occurs.
+    Count/N editing is not admitted by this scalar bridge.
+    """
+    if registered_at.tzinfo is None or registered_at.utcoffset() is None:
+        raise PortalConsumerRegistrationError("基线消费者登记时间缺少时区")
+    if evidence_snapshot.kind != "evidence" or evidence_snapshot.report is not None:
+        raise PortalConsumerRegistrationError("基线消费者只能引用证据快照")
+    if not row_versions or len(set(row_versions.values())) != len(row_versions):
+        raise PortalConsumerRegistrationError("基线消费者缺少唯一明确来源原子")
+    snapshot = SnapshotStore(project_root).read(evidence_snapshot)
+    contract = verify_project_workspace(project_root).contract
+    if (snapshot["project_id"] != contract.project_id
+            or snapshot["contract_version"] != contract.contract_version
+            or report.indication != contract.indication
+            or report.data_cutoff != datetime.fromisoformat(snapshot["data_cutoff"])):
+        raise PortalConsumerRegistrationError("基线报告、来源快照与项目合同不一致")
+    closure = snapshot.get("closure")
+    if not isinstance(closure, dict):
+        raise PortalConsumerRegistrationError("基线来源缺少完整闭包")
+    facts = {item["fact_version_id"]: item for item in closure["facts"]}
+    fragments = {item["fragment_id"]: item for item in closure["fragments"]}
+    source_versions = {item["capture"]["source_id"]: item["source_version_id"]
+                       for item in closure["sources"]}
+    if (len(facts) != len(closure["facts"]) or len(fragments) != len(closure["fragments"])
+            or len(source_versions) != len(closure["sources"])):
+        raise PortalConsumerRegistrationError("基线闭包存在重复身份")
+    source_facts: list[ResearchFact] = []
+    versions_by_fact: dict[str, str] = {}
+    for row_id, version_id in row_versions.items():
+        item = facts.get(version_id)
+        if item is None or version_id not in snapshot["fact_version_ids"]:
+            raise PortalConsumerRegistrationError("基线事实版本不在本次来源闭包")
+        # Row references live in the separate consumer declaration, not in the
+        # scientific content hash. Reconstruct only that explicit source ref.
+        fact = ResearchFact.model_validate({**item["fact"],
+            "row_ref": item["consumer_binding"]["row_ref"]})
+        if (fact.fact_id != row_id or fact.result_context is None
+                or fact.result_context.category != "baseline"):
+            raise PortalConsumerRegistrationError("基线行与原始来源事实身份不一致")
+        source_facts.append(fact)
+        versions_by_fact[fact.fact_id] = version_id
+    expected = {row["row_id"]: row for row in build_source_baseline_view(
+        source_facts, source_versions=source_versions, fact_versions=versions_by_fact,
+    )["facts"]}
+    candidates: list[tuple[str, ActiveFactBinding]] = []
+    database_path = project_root / "state/project.sqlite"
+    apply_migrations(database_path)
+    with open_database(database_path) as database:
+        for row_id, version_id in sorted(row_versions.items()):
+            view = _b_source_view_row(report, "baseline", row_id)
+            if canonical_sha256(view) != canonical_sha256(expected.get(row_id)):
+                raise PortalConsumerRegistrationError("基线报告行与锁定原子、上下文或原文不一致")
+            item = facts[version_id]
+            fragment = fragments.get(item["primary_fragment_id"])
+            persisted = database.execute(
+                "SELECT v.content_sha256,v.scientific_context_json,v.primary_fragment_id,"
+                "f.source_version_id,f.locator,f.content_text FROM fact_versions v "
+                "JOIN evidence_fragments f ON f.fragment_id=v.primary_fragment_id "
+                "WHERE v.fact_version_id=?", (version_id,),
+            ).fetchone()
+            if fragment is None or persisted is None or tuple(persisted) != (
+                item["content_sha256"], item["scientific_context_json"],
+                item["primary_fragment_id"], fragment["source_version_id"],
+                canonical_source_pointer(fragment["locator"]), fragment["original_text"],
+            ):
+                raise PortalConsumerRegistrationError("基线持久化事实与锁定来源片段不一致")
+            binding = active_fact_binding_for_b(report, "baseline", row_id)
+            candidates.append((version_id, binding))
+        # Preflight the entire set before inserting append-only declarations.
+        for version_id, binding in candidates:
+            encoded = binding.model_dump_json()
+            existing = database.execute(
+                "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
+                "source_portal_consumer_bindings WHERE source_fact_version_id=? AND report='B'",
+                (version_id,),
+            ).fetchone()
+            if existing is not None and tuple(existing) != (
+                "baseline", binding.row_id, encoded, evidence_snapshot.snapshot_id,
+            ):
+                raise PortalConsumerRegistrationError("已登记基线消费者与当前候选冲突")
+        for version_id, binding in candidates:
+            encoded = binding.model_dump_json()
+            database.execute(
+                "INSERT INTO source_portal_consumer_bindings "
+                "(binding_id,source_fact_version_id,evidence_snapshot_id,report,"
+                "collection,row_id,binding_json,binding_sha256,created_at) "
+                "VALUES (?,?,?,?,?,?,?,?,?) ON CONFLICT(binding_id) DO NOTHING",
+                (stable_id("source-portal-binding", version_id, "B", "baseline", binding.row_id),
+                 version_id, evidence_snapshot.snapshot_id, "B", "baseline", binding.row_id,
+                 encoded, hashlib.sha256(encoded.encode()).hexdigest(), registered_at.isoformat()),
+            )
+    return tuple(binding for _, binding in candidates)
 
 
 def _source_pointer(locator_text: str) -> str | None:

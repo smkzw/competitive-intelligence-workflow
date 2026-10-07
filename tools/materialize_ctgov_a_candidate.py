@@ -10,15 +10,18 @@ import argparse
 import hashlib
 import json
 from collections import Counter, defaultdict
+from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from ci_workflow.application.ctgov_baseline_atoms import extract_ctgov_baseline_atoms
 from ci_workflow.application.fresh_research_ingestion import ingest_research_evidence
 from ci_workflow.application.portal_consumer_registry import (
     SourceRowContext,
     project_b_safety_source_views,
     register_a_source_consumers,
+    register_b_baseline_source_consumers,
 )
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import (
@@ -37,12 +40,14 @@ from ci_workflow.domain.evidence import source_version_identity
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.qc.browser import site_directory_digest
+from ci_workflow.renderers.portal.active_fact_projection import ActiveFactBinding
 from ci_workflow.renderers.portal.report_a import (
     AdditionalObservationRow,
     ReportAPortalData,
     render_report_a_site,
 )
 from ci_workflow.renderers.portal.report_b import ReportBPortalData
+from ci_workflow.reports.b.source_baseline import build_source_baseline_view
 from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
 from ci_workflow.storage.content_store import ContentAddressedStore
 from ci_workflow.storage.snapshot_store import (
@@ -268,8 +273,18 @@ def materialize(
         captures, safety, row_source_refs=tuple(refs[row.row_id] for row in safety),
     )
     extra_facts, extra_claims = _extra_facts(other, sources, page_hashes)
-    facts = (*outcomes.facts, *safety_batch.facts, *extra_facts)
-    claims = (*outcomes.claims, *safety_batch.claims, *extra_claims)
+    # A-only historical replay keeps its original declared source scope. A+B
+    # requests ingest baseline from the same captures/snapshot, not another demo
+    # project or a display-only overlay without source fact versions.
+    baseline_batches = (tuple(extract_ctgov_baseline_atoms(source) for source in captures)
+                        if bound_b_report_output is not None else ())
+    baseline_facts = tuple(fact for batch in baseline_batches for fact in batch.facts)
+    baseline_claims = tuple(ResearchClaim(
+        claim_id=stable_id("ctgov-baseline-source-claim", fact.fact_id),
+        claim_text=fact.original_text, claim_kind="direct_evidence", fact_ids=(fact.fact_id,),
+    ) for fact in baseline_facts)
+    facts = (*outcomes.facts, *safety_batch.facts, *extra_facts, *baseline_facts)
+    claims = (*outcomes.claims, *safety_batch.claims, *extra_claims, *baseline_claims)
     if len({fact.fact_id for fact in facts}) != len(facts):
         raise ValueError("one source atom was reused across candidate display rows")
     if len({claim.claim_id for claim in claims}) != len(claims):
@@ -281,11 +296,18 @@ def materialize(
     ] + [
         {"row_id": gap.row_id, "reason": gap.reason} for gap in safety_batch.gaps
     ]
-    content_digest = _sha256(json.dumps({
+    digest_input = {
         "payload": _sha256(payload_bytes), "sidecar": _sha256(sidecar_bytes),
         "trials": sorted(selected), "fact_ids": sorted(fact.fact_id for fact in facts),
         "claim_ids": sorted(claim.claim_id for claim in claims),
-    }, sort_keys=True, separators=(",", ":")).encode())
+    }
+    if baseline_batches:
+        digest_input["baseline_source_content"] = _sha256(json.dumps({
+            "facts": [fact.model_dump(mode="json") for fact in baseline_facts],
+            "issues": [asdict(issue) for batch in baseline_batches for issue in batch.issues],
+        }, sort_keys=True, separators=(",", ":")).encode())
+    content_digest = _sha256(json.dumps(digest_input, sort_keys=True,
+                                       separators=(",", ":")).encode())
     lineage = ingest_research_evidence(
         project_root=project_root, project_id=workspace.contract.project_id,
         contract_version=workspace.contract.contract_version, report_kind="A",
@@ -367,6 +389,7 @@ def materialize(
         }
     bound_b_report_asset: dict[str, object] | None = None
     located_b_safety_views = 0
+    registered_baseline: tuple[ActiveFactBinding, ...] = ()
     if bound_b_report_output is not None:
         safety_refs = {f"safety:{row.row_id}" for row in safety_batch.bound_rows}
         safety_versions = {
@@ -381,7 +404,20 @@ def materialize(
         b_report = ReportBPortalData.model_validate({
             **bound_report.model_dump(mode="json"),
             "safety_views": {"coverage_mode": "partial", "facts": views},
+            "baseline_views": build_source_baseline_view(
+                baseline_facts, source_versions=source_version_by_id,
+                fact_versions=lineage.fact_version_by_ref,
+            ),
         })
+        baseline_refs = {row["row_id"]: row["source_fact_version_id"]
+            for row in (b_report.baseline_views or {}).get("facts", ())
+            if row["statistic_form"] in {"MEAN", "MEDIAN", "STANDARD_DEVIATION"}
+            and row["value"] is not None and row["unit"]}
+        if baseline_refs:
+            registered_baseline = register_b_baseline_source_consumers(
+                project_root, lineage.evidence_snapshot, b_report, baseline_refs,
+                registered_at=observed_at,
+            )
         destination = bound_b_report_output.resolve()
         destination.parent.mkdir(parents=True, exist_ok=True)
         encoded_b = b_report.model_dump_json().encode()
@@ -438,6 +474,7 @@ def materialize(
         "observed_at": observed_at.isoformat(),
         "payload_sha256": _sha256(payload_bytes),
         "sidecar_sha256": _sha256(sidecar_bytes),
+        "scientific_content_digest": content_digest,
         "source_pages": page_hashes,
         "source_version_by_source_id": source_version_by_id,
         "selected_trials": sorted(selected),
@@ -451,6 +488,10 @@ def materialize(
             binding.row_id for binding in registered_safety
         ],
         "other_domain_source_rows_without_portal_binding": [row.row_id for row in other],
+        "baseline_source_issues": [asdict(issue) for batch in baseline_batches
+                                   for issue in batch.issues],
+        "baseline_edit_consumers": [b.row_id for b in registered_baseline],
+        "baseline_edit_scope": "mean_median_sd_only_no_count_or_N_edit_no_current_acceptance",
         "binding_gaps": unresolved,
         "fact_bindings": [
             {"row_ref": fact.row_ref, "fact_version_id":
@@ -480,6 +521,9 @@ def materialize(
             "registered_a_efficacy_consumers": len(registered_efficacy),
             "registered_a_safety_consumers": len(registered_safety),
             "located_b_safety_source_views": located_b_safety_views,
+            "baseline_source_facts": len(baseline_facts),
+            "baseline_numeric_atoms": sum(f.result_context is not None for f in baseline_facts),
+            "registered_b_baseline_scalar_consumers": len(registered_baseline),
             "binding_gaps": len(unresolved), "source_issues": len(issues),
         },
         "limits": [

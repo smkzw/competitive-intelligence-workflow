@@ -97,6 +97,7 @@ from ci_workflow.storage.snapshot_store import (
 )
 
 from .active_fact_projection import (
+    ActiveFact,
     ActiveFactBinding,
     ActiveFactRevision,
     PortalConsumerNode,
@@ -5365,6 +5366,31 @@ def _project_active_facts_b(
     user_edits = dict(data.user_edits)
     consumers: list[PortalConsumerNode] = []
     for fact, binding in active_revision.bindings_for("B"):
+        if binding.collection == "baseline":
+            actual = active_fact_binding_for_b(data, "baseline", binding.row_id)
+            validate_active_fact_binding(fact, binding, actual)
+            _validate_baseline_scalar_revision(fact, binding)
+            original = _b_source_view_row(data, "baseline", binding.row_id)
+            current = next(row for row in payload["baseline_views"]["facts"]
+                           if row["row_id"] == binding.row_id)
+            current["source_text"] = fact.source_quote
+            consumer = source_consumer_node(fact, actual, page="baseline-overview.html")
+            if (fact.model_extra or {}).get("review_state") == "user_modified":
+                cleared = fact.disclosure_state == "user_cleared"
+                number = None if cleared else numeric_value(fact)
+                current.update(value=number, raw_value=None if cleared else fact.raw_value,
+                    disclosure_state=("user_cleared" if cleared else
+                                      "reported_zero" if number == 0 else "reported_value"))
+                original_value = f"{original['value']:g} {binding.unit}"
+                user_edits[binding.row_id] = user_edit_disclosure(
+                    fact, active_revision, original_value=original_value,
+                )
+                consumer = consumer.model_copy(update={
+                    "chart_consumer": f"__CHART_GROUPS__.rows[row_id={binding.row_id}].value",
+                    "narrative_consumer": f"evidence-view:{binding.row_id}.user_edit.current_value",
+                })
+            consumers.append(consumer)
+            continue
         if binding.collection not in {"safety", "efficacy"}:
             raise ReportBPortalError("B renderer只接受safety/efficacy领域绑定")
         collection = cast(list[dict[str, Any]], payload[binding.collection])
@@ -5517,14 +5543,16 @@ def validate_active_fact_revision_b(
 ) -> None:
     """Validate every B binding before a render transaction can begin."""
     for fact, binding in active_revision.bindings_for("B"):
-        if binding.collection not in {"safety", "efficacy"}:
-            raise ReportBPortalError("B renderer只接受safety/efficacy领域绑定")
+        if binding.collection not in {"safety", "efficacy", "baseline"}:
+            raise ReportBPortalError("B renderer只接受safety/efficacy/baseline领域绑定")
         try:
             validate_active_fact_binding(
                 fact,
                 binding,
                 active_fact_binding_for_b(data, binding.collection, binding.row_id),
             )
+            if binding.collection == "baseline":
+                _validate_baseline_scalar_revision(fact, binding)
         except ValueError as error:
             raise ReportBPortalError(str(error)) from error
 
@@ -5534,6 +5562,13 @@ def _b_source_view_row(
     collection: str,
     row_id: str,
 ) -> dict[str, Any]:
+    if collection == "baseline":
+        view = data.baseline_views
+        matches = [row for row in (view.get("facts", ()) if view else ())
+                   if isinstance(row, dict) and row.get("row_id") == row_id]
+        if len(matches) != 1:
+            raise ReportBPortalError("B 基线目标必须有唯一来源view行")
+        return dict(matches[0])
     domain_rows = getattr(data, collection, ())
     domain_matches = [row for row in domain_rows if row.row_id == row_id]
     if len(domain_matches) != 1:
@@ -5608,12 +5643,56 @@ def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
     return forms[row.measure_object]
 
 
+def _validate_baseline_scalar_revision(fact: ActiveFact, binding: ActiveFactBinding) -> None:
+    if fact.disclosure_state == "user_cleared":
+        if fact.raw_value is not None or fact.normalized_value is not None:
+            raise ReportBPortalError("清除基线数值不能保留当前数值")
+        return
+    number = numeric_value(fact)
+    if not math.isfinite(number):
+        raise ReportBPortalError("基线修订必须为有限数值")
+    if binding.statistical_form == "standard_deviation" and number < 0:
+        raise ReportBPortalError("基线标准差不能为负")
+    if (fact.model_extra or {}).get("review_state") == "user_modified":
+        try:
+            raw = float(str(fact.raw_value))
+        except ValueError as error:
+            raise ReportBPortalError("基线修订原值必须为数值文本") from error
+        if raw != number:
+            raise ReportBPortalError("基线修订原值与规范值不一致")
+
+
+def _baseline_scalar_binding(data: ReportBPortalData, row_id: str) -> ActiveFactBinding:
+    row = _b_source_view_row(data, "baseline", row_id)
+    forms = {"MEAN": "mean", "MEDIAN": "median", "STANDARD_DEVIATION": "standard_deviation"}
+    form = forms.get(str(row.get("statistic_form")))
+    unit = str(row.get("unit") or "")
+    if form is None or row.get("value") is None or not unit:
+        raise ReportBPortalError("基线编辑当前只接受有明确单位的均值/中位数/标准差原子")
+    if row.get("product_id") is not None:
+        raise ReportBPortalError("本基线来源绑定不推断产品关系")
+    trial = next((trial for trial in data.all_studies if trial.id == row.get("trial_id")), None)
+    locator = row.get("source_locator")
+    if trial is None or not isinstance(locator, Mapping):
+        raise ReportBPortalError("基线消费者缺少研究或精确来源")
+    return ActiveFactBinding(report="B", collection="baseline", row_id=row_id,
+        product_id=None, drug_name=None, trial_id=trial.id, registry_id=trial.display_id,
+        group_id=row.get("group_id"), arm=row.get("source_group_title"),
+        cohort_id=row.get("analysis_population") or None,
+        period=row.get("baseline_timepoint"), endpoint_definition=row.get("source_definition"),
+        event_definition=None, statistical_form=form, measure_object="continuous",
+        unit=unit, normalized_unit=unit, source_version_id=str(row.get("source_version_id") or ""),
+        source_pointer=canonical_source_pointer(locator), original_row_sha256=canonical_sha256(row))
+
+
 def active_fact_binding_for_b(
     data: ReportBPortalData,
-    collection: Literal["safety", "efficacy"],
+    collection: Literal["safety", "efficacy", "baseline"],
     row_id: str,
 ) -> ActiveFactBinding:
     """Resolve a B row together with its immutable evidence-view identity."""
+    if collection == "baseline":
+        return _baseline_scalar_binding(data, row_id)
     if collection not in {"safety", "efficacy"}:
         raise ReportBPortalError("B renderer只接受safety/efficacy领域绑定")
     rows = getattr(data, collection)

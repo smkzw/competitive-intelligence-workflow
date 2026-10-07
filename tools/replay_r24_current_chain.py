@@ -570,10 +570,16 @@ def _run_rehearsal(
     contract = verify_project_workspace(project).contract
     initial_versions = tuple(versions[f"efficacy:{row_id}"]
                              for row_id in source_receipt["registered_a_efficacy_consumers"])
+    baseline_ids = set(source_receipt.get("baseline_edit_consumers", ()))
+    baseline_versions = tuple(row["source_fact_version_id"]
+        for row in (b.baseline_views or {}).get("facts", ()) if row["row_id"] in baseline_ids)
+    if len(baseline_versions) != len(baseline_ids):
+        raise ValueError("source baseline consumers lack explicit fact-version mappings")
     service.initialize_current_delivery(
         project_id=contract.project_id, report_sites=sites,
         report_data_paths={"A": a_input, "B": b_input},
-        fact_version_ids=(*initial_versions, *safety_versions.values()), created_at=at,
+        fact_version_ids=(*initial_versions, *safety_versions.values(), *baseline_versions),
+        created_at=at,
     )
     source = service._fact_row(version_id)
 

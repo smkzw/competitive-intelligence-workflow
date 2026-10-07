@@ -1,6 +1,54 @@
 # 唯一当前状态：1007V1 连续实施
 
-用户2026-10-07解除暂停并授权构建、阶段GitHub递交；最新Goal API实核blocked，无恢复接口，保留真实状态但继续普通授权实施。启动基线ef6b23d，最近实核已推送ac564dba06765b9a13fc0a5909eec04a88c65c68；新在途字节不继承旧包/门/截图。
+用户2026-10-07解除暂停并授权构建、阶段GitHub递交；本次重新读取Goal API
+实际返回active，目标文本未变，未调用覆盖/假完成。较早blocked记录只代表
+当时观察。启动基线ef6b23d，最近实核已推送21c726f560b24bdd10b229b94fb024552c8bcae2；新在途字节不继承旧包/门/截图。
+
+## 当前里程碑7在途：同候选联合身份与基线保存/分享
+
+综合v5真实4源/949事实/183基线观察/24精确来源scalar编辑绑定，science
+digest204b2e04…b8df8；原源DB63c826d7…dbed及输入/快照未变，源项目
+current记录0。联合来源graphd78750a4…d3aab并入隔离工作副本；A/B实际
+身份投影一致：杜普来源支持的Sanofi中国MAH集团/真实法律实体；Nem
+来源支持的Galderma美国MAH集团，不推断中国许可或核实中文名。
+
+同一项目先安全事实四次合法A+B同步至current4，再24baseline版本中一条
+真实SD修改/清除/恢复/undo至current8；负SD失败保留旧current，重试幂等。
+SD只合法绑定B，A报告revision4在generation8保持不变，不强制无依赖扇出。
+当前generationSHAf716382f…4aa7a；baseline操作receiptSHAa707f79b…d35b。
+新的A/B/AB三个baseline-share ZIP静态全成员hash闭合，绑定同一current8；
+原r4分享保持不变。非医学订正/科学/浏览器/C/完整发布接受。
+
+99相邻回归实际PASS936.67s。v9质量宽门实际1FAIL/2ERROR/1164PASS：
+新增0017未进入安装manifest，导致fresh-install资源校验失败；失败保留。
+安装清单已修正，17相关打包/事务PASS18.33s，v10完整六步quality-only
+已终态exit0：Ruff全src/tests/tools、strict281、活跃1167PASS265.07s、兼容20、
+分层7及旧路径字符串扫描。非全部integration/浏览器/发布门；
+[本批源码与真实同current产物](evidence/1007V1/owner-milestone-v7.json)。
+owner基线探针错用不存在的bundle_digest，在任何save前失败；用现有
+current_bundle_sha256从committed r4恢复，不重复原源摄取或安全四次save。
+人数/N/上下限编辑、真实中文可读性/下钻组ID等仍有待处理族。
+
+以下v4/31PASS/在途说明为前序调查，不能覆盖本节已实际完成范围。
+
+### 前序调查记录
+
+综合来源v4已确实持久化4源/949事实/183基线行，快照重开SHAec590b92…2525ae；
+owner输出探针误用不存在的字典键，未重跑摄取或切current。SQL current记录
+确实为0，不能只凭旧文件路径不存在推断。新v5摄取/消费者相关回归在途。
+
+基线编辑原合同只接受疗效/安全；整族9行为RED后补B基线显式未知产品身份，
+不放宽B疗效产品门。再有8注册RED，发现旧collection CHECK与INSERT OR IGNORE
+静默丢绑定；新增0017前向迁移保留旧记录/守卫/科学哈希，精确来源闭包全组
+预检后真实落库。均值/中位数/SD先接通；人数、N及上下限编辑仍待，不冒称全字段。
+31相关PASS/2.76s覆盖合成保存/清除/恢复/undo、幂等、负SD旧current不变、
+迁移保留；新全门/真实同候选旅程尚待。中间测试读错前端数据层的失败保留。
+
+E03联合身份实际codebuddy/codebuddy-cli/deepseek-v4.1-flash:max，526.863s/
+53观察工具调用/exit0，无fallback；owner21PASS/2.06s及strict新工具通过，
+原来源与暂存字节相同、联合与两独立投影重开一致。两药当前只作来源重放，
+不代表中国状态新核查/科学/临床/current接受。此前初始化或pending文字为历史。
+Ego12/附件Ask仍待，实屏NOT_RUN；不阶段暂停，继续就绪分支。
 
 ## 当前增量：真实基线共同描述列
 

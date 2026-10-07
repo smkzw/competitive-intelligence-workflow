@@ -2,6 +2,48 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Latest bounded runtime on same joint source working project: safety edits rebuilt
+A+B fourtimes throughr4, then actual SD set/clear/restore/undo throughr8; 24scalar
+baseline versions initialized, Bonly affected legitimately, A4/B8 in samegeneration8.
+NegativeSD leavesoldcurrent, retriesidempotent, originalquote/science/input unchanged.
+NewA/B/AB baseline-share ZIPs all generation8 staticbyteclosed; browser/C/science
+not accepted. Sourcev5 DB63c826d7…dbed/receipt/input/snapshot unchanged andcurrent0.
+99neighborPASS936.67s. v9qualitygate1FAIL/2ERROR/1164PASS due0017 omittedinstall
+manifest; fixedmanifest, 17relatedPASS18.33s. v10sixstepquality-onlyexit0: Ruff
+allsrc/tests/tools,strict281,active1167PASS265.07s,compat20,layer7,legacystringcheck.
+Not allintegration/browser/release. Scope/hash inowner-milestone-v7.json.
+Owner runtime first usednonexistentbundle_digest beforeanybaseline save; retained
+failure, resumedexistingr4 withcurrent_bundle_sha256, no repeatedsource/safetysaves.
+Next display/group-ID root startsdirect: two existing shared functions, deterministic
+source/identity assertions; concurrent writes to owner renderer would cost more
+than separation while finalcandidate/gate frozen. Keep priorE03 actualevidence,
+no new scientific equivalence acceptance or additional role merely for wording.
+
+Below earlier31PASS/inprogress observations are historical, superseded by this top.
+
+Latest verified pushedHEAD21c726f560b24bdd10b229b94fb024552c8bcae2. Goal API
+fresh read actuallyACTIVE with unchanged1007objective; previous blocked only
+historical observation. Execution-plus-direct: bounded E03 owns two new joint
+identity glue/test files; owner holds common schema, snapshot and current edits.
+Worker actualCodeBuddy/deepseek-v4.1-flash:max526.863s/53observedcalls/exit0,
+no fallback; owner21PASS2.06s/strict and joint/original stagedbytes+projection
+reopen equal. No new science/current/China-status acceptance. Worker baseline
+mypy claim lacked owning MYPYPATH; correct owner scoped strict passed, not wholegate.
+
+Combinedsourcev4 actual4sources949facts183baseline rows locked SHAec590b92…2525ae;
+owner output probe used nonexistentreceipt/snapshot keys then wrong function
+signature, retained; read existing complete definitions and lockedreopen recovered,
+SQLcurrent0, no repeatedmaterialize/source mutation. Newv5/current operation still
+in progress. Baseline9behaviorRED/8registryRED; source-onlyscalar binding and0017
+forward migration needed because oldCHECK plusIGNORE silently insertedzero rows.
+Actual row-count and preserved olddata/triggers tested; no edits of0016/history.
+31relatedPASS2.76s synthetic save/clear/restore/undo/idempotence/negative-SD old
+current intact; full consumer neighbor is running. Current scalar scope mean/
+median/SD; count/N/limits still pending, no fakeunknown-product efficacy scope.
+Interim tests read metadata-onlyreport literal/filter identity instead of actual
+chart/evidence fields: failures retained, production output not weakened/reverted.
+BrowserNOT_RUN/EgoAsk and original01–06Ask remain; no pause/RC/full24 claims.
+
 Current source/preview stage after pushedac564d:143 relatedPASS1.27s and source
 snapshot reopen/ordinary B preview. Four real NCTs499source facts/183numeric/0
 observed extraction issues; actual B24physical pages,183workspace/evidence rows,

@@ -1,0 +1,117 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "21c726f560b24bdd10b229b94fb024552c8bcae2",
+  "status": "development_candidate_continuing",
+  "scope": "joint official identity replay, exact baseline scalar consumers, real same-current save and static share chain",
+  "goal_api_status_observed": "active_unchanged_objective",
+  "user_implementation_authority": "continuous",
+  "source_code_sha256": {
+    "src/ci_workflow/application/portal_consumer_registry.py": "8e2e57274179000db618914b775503b9b256443c0c3b50be189030d0e7a1f229",
+    "src/ci_workflow/renderers/portal/active_fact_projection.py": "fe13af08772465fd1dbe759b5305ea398c6bae6659a7ff4903cc2d7fbc31ca57",
+    "src/ci_workflow/renderers/portal/report_b.py": "bde18018c68c6f2e7a0bca9bae0c1dcbd479f7ebdfd37f9757a4e3292d7afef1",
+    "tools/materialize_ctgov_a_candidate.py": "5db9dda175f28bb9daa8278e3e82f0e798d4692f163e74dbcafce21d876d7ef1",
+    "tools/replay_r24_current_chain.py": "e70af5ac890d7cc276c455e4dd00f0e8b31f67173319871f459be3bff5ab7421",
+    "tools/merge_identity_source_sets.py": "9773bd630b9dd7fb75d27dcb7d922155b0905ea62b8fc6d4b8554179ce0551f6",
+    "migrations/0017_baseline_portal_consumers.sql": "24cbf94b8a12dad9d271aae73b0c7aefac3797d7fcd3862c3faf803ffd780e61",
+    "package-manifest.json": "f79f4c97474a222b02bc8275ddf2674e7c1ab632b9cf98a43ad508c67dced456"
+  },
+  "test_code_sha256": {
+    "tests/integration/test_1007_baseline_edit_consumers.py": "474a49e44802f1a714cf9c3206057216e0c1bfb869a9e301b9d00901812f9f7f",
+    "tests/reports/b/test_baseline_active_projection.py": "48823e81c3eca1cc62ff361d614beabb190d79284096ff5993122cf365117f25",
+    "tests/integration/test_1007_combined_source_baseline.py": "1369e57cc9cc0d2e6fbd09887a43362313c5b5b513cf2e085226d7d9f17a65b1",
+    "tests/integration/test_1007_joint_identity_source_sets.py": "b75aa8de6914e4fdffe49487e08d62c03736e2d8327c8c893056f08720eab794",
+    "tests/integration/test_sqlite_migrations.py": "f8d43052ca5dda8e09ee704ac2d5c68b01c5187568e696f5b8a26204a6e71075"
+  },
+  "source_checkpoint": {
+    "candidate": ".artifacts/1007-pn-combined-source-v5/project",
+    "receipt": "evidence/library/combined-source-receipt-v5.json",
+    "receipt_sha256": "8c72878db97b66dfd1fc411a236e37269d272ccb85c20cad6e5da16880e2d555",
+    "database_sha256": "63c826d738ac7281b0199defda8d6a18d089ded48a77eccfdee4df1b8b32dbed",
+    "snapshot_id": "evidence-snapshot_8699a156703a5c5295788435",
+    "snapshot_sha256": "6d3fdf0e5925c63ce2978ebe32582bb8f71ead7ff4e61894f0070e6a39027f89",
+    "scientific_content_digest": "204b2e04e7cf3519354b913a8daee294302e47982d2daaf01079be63b91b8df8",
+    "raw_sha256": "82b4ed9ab0c63e227a2c4c34b85727dd988e55062850d42b41517f0749168edf",
+    "study_ids": ["NCT04202679", "NCT04183335", "NCT04501666", "NCT04501679"],
+    "counts": {"sources": 4, "facts": 949, "claims": 877, "baseline_facts": 499, "baseline_numeric_atoms": 183, "baseline_scalar_consumers": 24, "observed_binding_gaps": 0, "observed_source_issues": 0},
+    "acquisition_mode": "offline_cas_replay_not_new_get",
+    "original_current_rows": 0,
+    "original_source_database_inputs_snapshot_unchanged": true,
+    "universe_closed": false,
+    "editable_baseline_scope": "mean_median_sd_only; real transaction checked SD; count_N_limits_not_implemented"
+  },
+  "joint_identity": {
+    "candidate": ".artifacts/1007-joint-identity-worker-v1",
+    "merged_source_set_sha256": "dc22d7cb0853f417a108d563b21348931c952efa7d3a0c672f0d9aa37c8f0a12",
+    "graph_sha256": "d78750a4b3c908e299f1544651f965d68e0432d0fa8e2b7956857dbd75bd3aab",
+    "projection_sha256": "c9d8254d1b5824befe01ecfe43a8818ce3cebdb54a320f8d4f58858a9a9ac492",
+    "actual_route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "seconds": 526.863,
+    "observed_tool_calls": 53,
+    "exit_code": 0,
+    "fallback": false,
+    "owner_related_pass": 21,
+    "owner_seconds": 2.06,
+    "owner_log_sha256": "861543062d710b65017ee5b578e177ec15f5c7c25f6963f24777a5abb0109d08",
+    "worker_report_sha256": "27c4521b00eb544829a564ec7dd4958de409ccd1fb245bd74ef6ac1186047789",
+    "source_staged_bytes_and_independent_projection_equal": true,
+    "adopted_into_isolated_current_A_B": true,
+    "dynamic_china_or_today_group_state_verified": false
+  },
+  "real_current_chain": {
+    "candidate": ".artifacts/1007-pn-joint-combined-current-v1",
+    "safety_operation_receipt_sha256": "5101654f225e51c8c8aa0feffb6ab94c71d49ed6e6cca5215adecb22b7186db9",
+    "safety_shared_consumers": 14,
+    "safety_operations": "set_clear_restore_undo_A_B_rebuilt_four_times_to_r4",
+    "baseline_operation_receipt_sha256": "a707f79b2a70645d8c25a450c550fca7a7ee1929ad0818506b92243dbad6d35b",
+    "baseline_operations": "SD_set_clear_restore_undo_B_only_r5_r6_r7_r8",
+    "baseline_unrelated_A_unchanged": true,
+    "negative_SD_failed_old_current_retained": true,
+    "retry_idempotence": true,
+    "current_revision": 8,
+    "report_revisions": {"A": 4, "B": 8},
+    "current_generation_sha256": "f716382f7509306eb1bed320d518ccd92d7a6e0891e82e4c2e954d4554e4aa7a",
+    "same_A_B_identity_context_sha256": "184e3e83f2473d32616c58af2700bebbdeb3af9f2cdd4adbff951d894e3c4ec7",
+    "shares": [
+      {"reports": ["A"], "name": "baseline-share-A.zip", "members": 67, "sha256": "3e20f5cf8f1ee7f59dace13199c059131006edfc8c3ac33ca65eef36800983f1"},
+      {"reports": ["B"], "name": "baseline-share-B.zip", "members": 358, "sha256": "007aa2b53d083a479309339fa5dd0d1a612813f8e0724fd9df816f1ae2906989"},
+      {"reports": ["A", "B"], "name": "baseline-share-A-B.zip", "members": 423, "sha256": "fd8f484472ed146274442cb2782f18ec01ee11300ef63daf266d1129b6bb23c7"}
+    ],
+    "share_static_member_and_current_identity_closed": true,
+    "browser_offline_reopen": "NOT_RUN",
+    "values": "QA_hypotheses_not_medical_corrections",
+    "C": "NOT_RUN",
+    "scientific_release_acceptance": false
+  },
+  "verification": {
+    "final_combined_joint_source_family": {"pass": 10, "seconds": 7.15, "log_sha256": "24a94a4b796c437cb3a21fbe5dc89a5c9c760632ae0ce35394ee68728b833451"},
+    "consumer_neighbors": {"pass": 99, "seconds": 936.67, "log_sha256": "19c1fb05864c254f5e67b79f54d0cc1bf5133c19f646e6d7be5fb112cb808bfe"},
+    "manifest_fix_related": {"pass": 17, "seconds": 18.33, "log_sha256": "6afc97f733d6e8d29821a91b9e8533c93cb76e3a74658c4530e4783ab0ca0b7c"},
+    "quality_gate_v9": {"failed": 1, "errors": 2, "passed": 1164, "cause": "0017_migration_omitted_from_install_manifest", "log_sha256": "62b3b602d5251579064a7a846b285b0fbb36bf2ae2d966251a806b7e0ae2ee98"},
+    "quality_gate_v10": {
+      "exit_code": 0, "steps": 6, "ruff": "src/tests/tools", "strict_mypy_files": 281,
+      "active_test_scope": "tests/unit tests/contract excluding retained_legacy_format",
+      "active_pass": 1167, "active_seconds": 265.07,
+      "retained_compat_smoke_pass": 20, "layer_audit_pass": 7,
+      "legacy_check": "string_reference_scan_not_old_root_contact",
+      "log_sha256": "32666c82dfc7ff6308fa141e8ccdf5d49579f8161e1a24667d13ba1e32a13248",
+      "semantics": "quality_only_not_all_integration_or_release"
+    }
+  },
+  "failures_preserved": [
+    "Original baseline binding collection CHECK silently ignored by INSERT OR IGNORE; forward migration and exact row-count tests added",
+    "Owner metadata probe used nonexistent bundle_digest before any baseline save; resumed committed r4 using existing API without redoing safety saves",
+    "Whole quality v9 actual install failures preserved; manifest corrected rather than assertions weakened",
+    "Synthetic tests initially read metadata-only report.js and wrong evidence layer; actual typed value assertions used",
+    "Combined v4 output probe failed after ingestion; snapshot recovered read-only, not re-ingested"
+  ],
+  "not_accepted": [
+    "Actual four desktop widths/four states/L1-L2/keyboard; Ego recovery decision outstanding",
+    "C in same current, A/B/C single and joint offline new browser reopening",
+    "All baseline count/N/limit editing, source-native wording and evidence group identity complete",
+    "Full competitive universe, medical equivalent multi-drug efficacy case, publication/protocol/SAP closure",
+    "Dynamic China/group freshness, three hosts, full install/recovery acceptance,24 portals,RC/release"
+  ],
+  "preserved_unrelated_dirty_files": 5,
+  "general_cleanup_performed": false,
+  "next_bounded_step": "shared B evidence group identity and native word-boundary display root family; preserve current r8 artifact and rerender only a new candidate"
+}
