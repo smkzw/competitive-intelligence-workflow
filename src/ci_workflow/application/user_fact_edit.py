@@ -920,6 +920,7 @@ class UserFactEditService:
             if (
                 registered[0].statistical_form == "count"
                 and registered[0].measure_object == "participants"
+                and registered[0].collection != "baseline"
             ):
                 denominator = _source_count_denominator(context)
                 user_edit = context.get("user_edit")
@@ -1073,7 +1074,8 @@ class UserFactEditService:
             bindings = self._registered_source_bindings(source)
             source_direct_count = bool(bindings) and all(
                 binding.statistical_form == "count"
-                and binding.measure_object == "participants" for binding in bindings
+                and binding.measure_object == "participants"
+                and binding.collection != "baseline" for binding in bindings
             )
             if source_direct_count and changes:
                 if set(changes) - {"raw_value", "normalized_value"}:

@@ -2,6 +2,26 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Milestone10 current overrides following historical paragraphs: parentffa86646,
+source-count/C-workspace boundaries plus source-bound Chinese display projection.
+B real183atoms/177bindings/6NUMBER noteditable, original24unchanged; isolatedB-only
+r8set/clear/re-enteroriginal/undo/retry/source-preservation, notolderA4/B8. Real
+sourcehasnolimitatoms, realm限值operationNOT_RUN. Ctypedworkspace258members15fields,
+323clauseitems16pages,4numericN; safe-locator candidatev2review-only, noCurrent.
+E02actualGLMhigh1319.002s/no fallback; C03actualCodeBuddyflash:max522.992s/no
+fallback, Bashdeniedstatic-only. Owner14rootRED->79relatedPASS13.35s; scopedstrict4
+andRuffpass. Owner rejects historic24-vs177as same-code conflict and missingCpin
+generalization; sourcequote and science identity remain. Finalv14quality-only6steps
+exit0 strict282/active1178PASS253.42s/compat20/layer7; oldv13notnewcodeacceptance.
+CChinese gate7PASS/1FAIL remains. Displaypacket11bindingtests covered within45
+relatedPASS; wrongfixturepath10setupfail and nonexistentneighborNO_TESTS_RUN retained.
+SharedoMLXgate actualHy-MT2 generated126wholeclause candidates/174rows259.486s,
+allleasesreleased. Owner found PN disease and q2w frequency semantic defects,
+notpublished. One independent frozen translation-fidelity C03 preflight0/live
+dispatched, pending notPASS; no fixed polling/redispatch. Continue bounded content
+repair and genuine multi-drug comparison; no newstagepause. Currententry/history
+split, milestone9root/STATUS bytearchives verified. No oldroot/generalcleanup.
+
 Milestone9: source-faithful display plus explicit public provenance; execution+
 conference because C medical source meaning was materially uncertain. One
 independent raw-source challenge finished on declared Grok/grok-4.7:high fallback,
@@ -2039,3 +2059,31 @@ Next operating choice: execution-plus-owner integration for bounded C workspace 
 with disjoint owner B edits; independent source conference already challenged the frozen
 prior C artifact, and new consequential equivalence acceptance still requires source review.
 No new full-page conference loop or per-line wide gate.
+# 1007V1 next bounded parallel batch (active)
+
+Milestone9 commit ffa8664637faa017114b759c704db95c834744dc is pushed and remote
+SHA verified. Guard initializes one E02 C workspace executor, preflight exit0,
+runner dispatched with declared fallback chain/7200s; PENDING is not acceptance
+or proof of actual completion model. Parent disjoint B count/N/limit family:
+15 unsupported production RED, 33PASS/3 test-output-shape failures (not product
+FAIL), then63PASS23.25s. Exact count/N scope additions plus neighbors67PASS59.92s,
+scoped Ruff/strict4 pass. Real fixed-source current rehearsal running in fresh
+minimal copy, not original source or release. No per-line broad gate.
+
+1007V1 parallel batch actual results: B count/N/limit related67PASS59.92s,
+strict4/Ruff pass. Fixed real source QA registered177/183 baseline consumers;
+six reported_measure NUMBER atoms remain independently visible but not editable
+in this batch. Original24 bindings unchanged. New isolated B-only r8 after eight
+count/N set/clear/restore/undo operations is NOT the earlier A4/B8 project r8.
+Retries idempotent, source bytes unchanged, implicit rate derivations0. Static
+share is byte-verified, not new-browser offline acceptance.
+
+C E02 terminal actualGLM-5.3-Flash:high1319.002s/no fallback, bounded owner
+acceptance only. Typed members/facets/numeric permissions drive production matrix;
+owner added sample-N/page-binding6RED then59relatedPASS. No-deselection C
+acceptance7PASS/1FAIL: original English regimens remain a native-Chinese product
+failure, not a reason to drop source conditions. One C03 source/current invariant
+conference preflight0/live dispatched, currently PENDING until terminal receipt.
+Frozen source bytes under review are not edited. Source-bound Chinese display
+projection is a separate bounded unit; shared oMLX gate chooses actual translator,
+one lease per request with keepalive/release. Its output is candidate, not review.

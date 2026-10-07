@@ -1,0 +1,205 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "ffa8664637faa017114b759c704db95c834744dc",
+  "status": "development_candidate_continuing",
+  "scope": "B source scalar/current boundaries, C typed design workspace, safe locator/snapshot kind, display-only source-bound translation projection",
+  "source_code_sha256": {
+    "src/ci_workflow/renderers/portal/report_b.py": "19e5ce890e2304a9f7cb3a4fff02d6145cdc1c9867b7133f33af9d806f3c33c1",
+    "src/ci_workflow/renderers/portal/report_c.py": "59694fe2ee5002556a81b1bb9b29a8f63ab6991bf052d8fd566fceaecb53bd2c",
+    "src/ci_workflow/renderers/portal/templates/c/base.html.j2": "a1487f09b1ae92f1537c8961e5c52d267ea4e7b0f7e440247a58e5f1929ccff6",
+    "src/ci_workflow/application/user_fact_edit.py": "e13d9aadf97770bf3209a87ea5371ed41882af53ad1190f00b0ff3fd3e003150",
+    "src/ci_workflow/application/portal_consumer_registry.py": "572135700ab847b289299483763b4785c7319fc993136c410048630aa781628b",
+    "src/ci_workflow/application/c_design_display_projection.py": "928cb7cffb9107816a5a0d8f5ad1661e1f00dedc1f01e2b1417f64e910dc64be",
+    "tools/materialize_ctgov_a_candidate.py": "c75ad4aedd23071cfd816f3576077f6d56a49e2071a7618cb8a2b733ad6f49d3"
+  },
+  "evidence_sha256": {
+    "runs/execution/ci-1007-display/owner-gate-v14.txt": "ccfa10c125a4c268162bc7d0b79cb83f51f780281010d79bd0138b739ecd6535",
+    "runs/execution/ci-1007-display/owner-bc-review-boundaries-red-v1.txt": "b817ba93f53c2c2f85aa1a88a9d5d951d4d55b9ab059e4dcb44e6936438eebdc",
+    "runs/execution/ci-1007-display/owner-bc-review-boundaries-green-v1.txt": "2a208497840b5ce079d15f8aef4d2cce0791cf4640273ea3da0cd0583eb9955c",
+    ".artifacts/1007-c-workspace-preview-v1/safe-locator-v2/receipt.json": "41d7f75807e1f9425b8487b1842c63df27e5ddaee72f26a82a44e6f5050e0c2d",
+    ".artifacts/1007-baseline-count-current-v1/receipt.json": "a387d4259c760a3c6a38ffc303e17a8276ad829680e9f00938821b4780dd864a",
+    ".artifacts/1007-c-translations-v1/receipt.json": "70ff0e34c483664f4027cc0080e5b8e785c33460e793851625ba13c4b3d03f8f",
+    "packets/2026-09-22-sol-delivery/archive/milestone9-1007V1/HANDOFF.md": "46e5a1b708171419d58dd9bae1e2cc6942e176ec16d521ef577d48045ae2d23e",
+    "packets/2026-09-22-sol-delivery/archive/milestone9-1007V1/STATUS.md": "65cd03c44ffdad87f348a5a7756e696164838799a3c5603122ac909b6c4763af"
+  },
+  "verification": {
+    "root_cause_family": {
+      "red_fail": 14,
+      "red_pass": 34,
+      "green_pass": 79,
+      "duration_seconds": 13.35
+    },
+    "display_binding": {
+      "pass": 11,
+      "related_pass": 45,
+      "duration_seconds": 1.01,
+      "semantics": "provenance_only_not_translation_fidelity"
+    },
+    "wide_gate_v14": {
+      "exit_code": 0,
+      "steps": 6,
+      "strict_source_files": 282,
+      "active_pass": 1178,
+      "duration_seconds": 253.42,
+      "compat_pass": 20,
+      "layer_pass": 7,
+      "scope": "quality_only_not_all_integration_reports_science_browser_or_release"
+    },
+    "C_product_acceptance": {
+      "pass": 7,
+      "fail": 1,
+      "failed_requirement": "full_original_English_regimens_not_native_Chinese",
+      "no_deselection": true
+    }
+  },
+  "B_real_current_QA": {
+    "current_revision": 8,
+    "registered_edit_consumers": 177,
+    "current_generation_sha256": "4551a7ffeaf3af4fa04c41b413fada3403c810dcc5477718a561a84334f38b52",
+    "B_share_sha256": "e204eb730ce4470c78ea26841cb6d8c2483b0fe889e0b93f26753115d11d5542",
+    "code_sha256": {
+      "src/ci_workflow/renderers/portal/report_b.py": "43550a88e9ef87e9a16aa704aff78f4a7cb46e92e98f87907d5423d3ee6fbf57",
+      "src/ci_workflow/application/user_fact_edit.py": "e13d9aadf97770bf3209a87ea5371ed41882af53ad1190f00b0ff3fd3e003150",
+      "src/ci_workflow/application/portal_consumer_registry.py": "572135700ab847b289299483763b4785c7319fc993136c410048630aa781628b",
+      "tools/materialize_ctgov_a_candidate.py": "f86cbd146c4ff5de719367a8bd9ea2561dc908b1de7443280d5c20e0b4fb5fd6"
+    },
+    "source_baseline_rows": 183,
+    "not_editable": [
+      {
+        "row_id": "ctgov-baseline-fact_54bf7cc5a2471e9b5412675a",
+        "source_statistical_form": "NUMBER",
+        "source_value_role": "reported_measure",
+        "reason": "unsupported_statistical_form_not_reclassified"
+      },
+      {
+        "row_id": "ctgov-baseline-fact_57e20d32d59294c6e2f8ef8f",
+        "source_statistical_form": "NUMBER",
+        "source_value_role": "reported_measure",
+        "reason": "unsupported_statistical_form_not_reclassified"
+      },
+      {
+        "row_id": "ctgov-baseline-fact_ba501d39b549cf4b1a055570",
+        "source_statistical_form": "NUMBER",
+        "source_value_role": "reported_measure",
+        "reason": "unsupported_statistical_form_not_reclassified"
+      },
+      {
+        "row_id": "ctgov-baseline-fact_9e2cc6a4c04fecbfc666eb45",
+        "source_statistical_form": "NUMBER",
+        "source_value_role": "reported_measure",
+        "reason": "unsupported_statistical_form_not_reclassified"
+      },
+      {
+        "row_id": "ctgov-baseline-fact_13e3a777bb95ed9f818c907a",
+        "source_statistical_form": "NUMBER",
+        "source_value_role": "reported_measure",
+        "reason": "unsupported_statistical_form_not_reclassified"
+      },
+      {
+        "row_id": "ctgov-baseline-fact_005baa03f1ad0913aed5177e",
+        "source_statistical_form": "NUMBER",
+        "source_value_role": "reported_measure",
+        "reason": "unsupported_statistical_form_not_reclassified"
+      }
+    ],
+    "actual_ordinary_B_pages": 101,
+    "operations": 8,
+    "explicit_invalid_fraction_rejected": true,
+    "source_unchanged": true,
+    "implicit_rate_derivations": 0,
+    "share_browser": "NOT_RUN",
+    "namespace": ".artifacts/1007-baseline-count-current-v1",
+    "note": "B-only r8 is not prior A4/B8 r8; receipt binds prior four source-code hashes, later boundaries not retroactively accepted",
+    "real_limit_atom_count": 0,
+    "real_limit_save": "NOT_RUN"
+  },
+  "C_real_review_preview": {
+    "physical_pages": 16,
+    "membership": 258,
+    "rendered_clause_items": 323,
+    "matched_design_columns": 15,
+    "multi_observation_cells": 50,
+    "source_unchanged": {
+      "evidence/library/c-candidate/source-context-v3-portal-data.json": "184b788cfa703cc083f2aca74f863ff9276e48b09c9af70eeb24977d713b3a6d",
+      "state/project.sqlite": "07ae539d8243a62130f7294ca2c741276ae1126575c34e87ae7522ac363a4a0d",
+      "evidence/library/c-candidate/candidate-manifest.json": "9d597f013aeadafd345022e0b7c64a6d7ac636a2b7b0f6fb66b426382017f12d"
+    },
+    "file_set_sha256": "d7329a7b2dfbdf77047e87936cfc674e0155e5bd046ea820c8a275880e3348b9",
+    "code_sha256": {
+      "src/ci_workflow/renderers/portal/report_c.py": "59694fe2ee5002556a81b1bb9b29a8f63ab6991bf052d8fd566fceaecb53bd2c",
+      "src/ci_workflow/renderers/portal/templates/c/base.html.j2": "a1487f09b1ae92f1537c8961e5c52d267ea4e7b0f7e440247a58e5f1929ccff6"
+    },
+    "namespace": ".artifacts/1007-c-workspace-preview-v1/safe-locator-v2",
+    "numeric_sample_N_rows": 4,
+    "source_candidate_accepted": false,
+    "current_created_or_switched": false,
+    "clinical_equivalence_issued": false,
+    "report_snapshot_id": null,
+    "source_evidence_snapshot_id": "evidence-snapshot_ec181d09751972a09cf62bb6",
+    "source_input_sha256": "184b788cfa703cc083f2aca74f863ff9276e48b09c9af70eeb24977d713b3a6d"
+  },
+  "execution": {
+    "task": "ci-1007-c-matched-workspace",
+    "actual": "zcode/zcode/GLM-5.3-Flash:high",
+    "duration_seconds": 1319.002,
+    "exit_code": 0,
+    "fallback": false,
+    "runtime_sha256": "301f82ca5da60b25395e2c55ecd70adaf8684863232767e1804f837ea8acd2ea",
+    "acceptance": "bounded_structure_owner_integrated_not_full_product"
+  },
+  "independent_review": {
+    "task": "ci-1007-bc-boundary-review",
+    "actual": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "duration_seconds": 522.992,
+    "exit_code": 0,
+    "fallback": false,
+    "runtime_sha256": "9c1ce32ab8d6d81acec24a245a06456a088334c21c4da1c97d9528cb8d50a6ac",
+    "report_sha256": "99b0dcf9ddee5f1116b8e2bd69267ab97f73c71bd3c7cef963003efc7221f694",
+    "verdict": "REVISE_frozen_candidate",
+    "limitation": "Bash denied; static read only, not independent hash or test execution",
+    "owner_disposition": {
+      "F1": "stale scope repaired; historical24 remains valid old code",
+      "F2": "latent public locator bypass reproduced and safe projection reused",
+      "F3": "kind and separate IDs added; reject requiring report/evidence equality",
+      "F4": "complement listed; real limit atom coverage NOT_RUN",
+      "F5": "absent-C-pin generalization rejected; milestone9 and new preview bind actual digest",
+      "additional": "unverified unit/invalid source N cannot cap participant n; three actual REDs"
+    }
+  },
+  "translation": {
+    "actual_gate_selected_model": "dawncr0w--Hy-MT2-30B-A3B-oQ8-MLX",
+    "unique_complete_clauses": 126,
+    "source_rows": 174,
+    "duration_seconds": 259.486,
+    "leases_released": true,
+    "numeric_token_diagnostics": 21,
+    "owner_material_defects": [
+      "PN mistranslated as psoriasis",
+      "q2w mistranslated as twice weekly"
+    ],
+    "published": false,
+    "scientific_or_Chinese_acceptance": false,
+    "independent_task": "ci-1007-c-translation-fidelity",
+    "status": "live_dispatched_PENDING_not_acceptance",
+    "prompt_primary_reference": "https://github.com/Tencent-Hunyuan/Hy-MT2/blob/main/README.md"
+  },
+  "failures_preserved": [
+    "C preview audit initially wrong import/helper whitespace/page scope; repaired audit against all-observation overview and canonical member IDs without dropping clauses",
+    "translation fixture wrong directory produced10 setup failures; nonexistent neighbor produced NO_TESTS_RUN; both not product RED/PASS",
+    "legacy guard required Hermes term; documents explicitly say actual runtime was not Hermes, no identity substitution",
+    "two invalid document patch hunks rejected atomically, no partial authority rewrite",
+    "full C Chinese product assertion remains FAIL; original source maintained"
+  ],
+  "remaining": [
+    "source-bound Chinese content correction and whole-batch fidelity",
+    "true multi-drug efficacy common dimensions",
+    "six NUMBER baseline atoms explicit not editable yet",
+    "complete universe and source/publication/protocol/SAP closure",
+    "fresh dynamic China MAH/group verification",
+    "same-current A/B/C configuration/edit/sync and three single plus joint offline sharing",
+    "four-width four-state real Ego/keyboard acceptance; recovery Ask unanswered",
+    "original1007 01-06/reference/cases source packet absent",
+    "24 portals, three hosts, fresh install, recovery and RC"
+  ],
+  "final_acceptance": false
+}

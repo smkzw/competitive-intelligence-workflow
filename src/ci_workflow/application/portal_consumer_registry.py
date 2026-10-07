@@ -75,7 +75,7 @@ def register_b_baseline_source_consumers(
     Rebuild expected view rows from the locked ResearchFacts, then prove both
     that complete row and the persisted original fragment. No new scientific
     version, source alteration, current promotion, or rate derivation occurs.
-    Count/N editing is not admitted by this scalar bridge.
+    Count/N and source limits remain independent scalars, never implicit rates.
     """
     if registered_at.tzinfo is None or registered_at.utcoffset() is None:
         raise PortalConsumerRegistrationError("基线消费者登记时间缺少时区")

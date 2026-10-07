@@ -1,0 +1,6 @@
+# 里程碑9入口和状态原件
+
+只作历史证据，不是当前权威。原内容逐字保留；当前见根HANDOFF与STATUS。
+
+- HANDOFF.md: SHA-256 46e5a1b708171419d58dd9bae1e2cc6942e176ec16d521ef577d48045ae2d23e
+- packets/2026-09-22-sol-delivery/STATUS.md: SHA-256 65cd03c44ffdad87f348a5a7756e696164838799a3c5603122ac909b6c4763af

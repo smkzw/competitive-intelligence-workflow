@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 import shutil
 from collections.abc import Mapping, Sequence
@@ -72,7 +73,13 @@ from ci_workflow.reports.common.identity_projection import (
 )
 from ci_workflow.reports.common.numeric_projection import NumericMeasureKind, project_numeric
 from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
-from ci_workflow.reports.common.view_state import ReportRow
+from ci_workflow.reports.common.view_state import (
+    FacetAssignment,
+    FacetPlan,
+    NumericFrameEligibility,
+    ReportRow,
+    WorkspaceMembership,
+)
 
 from .report_a import _native_endpoint_zh, _native_timepoint_zh
 
@@ -763,7 +770,8 @@ def _numeric_for(observation: DesignObservation) -> float | None:
     if observation.field == "planned_or_actual_sample_size":
         raw = observation.threshold_value or observation.source_text
         try:
-            return float(str(raw).replace(",", "").strip())
+            number = float(str(raw).replace(",", "").strip())
+            return number if math.isfinite(number) and number >= 0 and number.is_integer() else None
         except (TypeError, ValueError):
             return None
     return None
@@ -1693,6 +1701,166 @@ def _matrix_trial_context(
     )
 
 
+_DESIGN_FIELD_FACET_PREFIX = "design-field::"
+
+_NUMERIC_DISCLOSED_STATES = frozenset(
+    {FactDisclosureState.REPORTED_VALUE, FactDisclosureState.REPORTED_ZERO}
+)
+
+
+def _numeric_frame_reason_zh(observation: DesignObservation) -> str:
+    """每条不可绘行一个如实的显式原因；成员身份与可检索性不受影响。"""
+    if _numeric_for(observation) is None:
+        if observation.field == "planned_or_actual_sample_size":
+            return "样本量不能核实为非负整数，保留原值与来源，不进入数值同轴"
+        return "设计条款为原文文本，不进入数值同轴，仍在完整表与检索中保留"
+    return (
+        f"数值当前状态为{_state_label(observation.disclosure_state)}，"
+        "不进入数值同轴，仍在完整表与检索中保留"
+    )
+
+
+def _workspace_cell_item(
+    data: ReportCPortalData,
+    observation: DesignObservation,
+    summary: str,
+) -> dict[str, Any]:
+    """单个矩阵单元格条目：来源身份逐字段挂在观察自身，不跨研究借位。"""
+    locator = _safe_locator(observation)
+    return {
+        "row_id": observation.row_id,
+        "observation_id": observation.observation_id,
+        "source_row_id": observation.source_row_id,
+        "summary": summary,
+        "source_text": observation.source_text,
+        "display_text": observation.display_text,
+        "outcome_id": _text(observation.outcome_id) or None,
+        "endpoint_key": _text(observation.endpoint_key) or None,
+        "product_id": observation.product_id,
+        "trial_id": observation.trial_id,
+        "group_id": observation.group_id,
+        "cohort_id": observation.cohort_id,
+        "arm_zh": _group_label_zh(observation.group_id),
+        "source_version_id": _public_source_version(data, observation.source_version_id),
+        "source_locator": locator.model_dump(mode="json") if locator is not None else None,
+        "source_role": observation.source_role.value,
+        "disclosure_state": observation.disclosure_state.value,
+        "scale": _text(observation.scale, "未列示"),
+        "operator": observation.operator,
+        "threshold_value": observation.threshold_value,
+        "threshold_unit": observation.threshold_unit,
+        "timepoint": _text(observation.assessment_timepoint, "未列示"),
+        "assessment_timepoint": observation.assessment_timepoint,
+    }
+
+
+def design_comparison_workspace(
+    data: ReportCPortalData,
+    observations: Sequence[DesignObservation],
+) -> dict[str, Any]:
+    """Compile the C design comparison workspace from the shared typed contracts.
+
+    ``WorkspaceMembership`` retains every observation exactly once; the
+    ``FacetPlan`` is a presentation classification by design field and never
+    declares clinical equivalence; ``NumericFrameEligibility`` only decides
+    numeric chart permission, keeping text/unknown/cleared rows queryable
+    members with an explicit reason. Each column cell preserves the
+    observation's own clause, source version, product/trial/arm,
+    scale/operator/timepoint and missing/unknown status. Different endpoint
+    definitions, scales or thresholds stay distinct; nothing here merges
+    them or infers semantic equality.
+    """
+    row_ids = tuple(observation.row_id for observation in observations)
+    membership = WorkspaceMembership(row_ids=row_ids)
+    facets = FacetPlan(
+        membership_row_ids=row_ids,
+        assignments=tuple(
+            FacetAssignment(
+                row_id=observation.row_id,
+                facet_id=f"{_DESIGN_FIELD_FACET_PREFIX}{observation.field}",
+            )
+            for observation in observations
+        ),
+    )
+    drawable: list[str] = []
+    undrawable: dict[str, str] = {}
+    for observation in observations:
+        if (
+            _numeric_for(observation) is not None
+            and observation.disclosure_state in _NUMERIC_DISCLOSED_STATES
+        ):
+            drawable.append(observation.row_id)
+        else:
+            undrawable[observation.row_id] = _numeric_frame_reason_zh(observation)
+    eligibility = NumericFrameEligibility(
+        membership_row_ids=row_ids,
+        drawable_row_ids=tuple(drawable),
+        undrawable_reasons=undrawable,
+    )
+    eligible_ids = frozenset(drawable)
+    trial_scope = tuple(
+        trial for trial in data.trials
+        if trial.id in {observation.trial_id for observation in observations}
+    )
+    grouped: dict[tuple[str, str], list[DesignObservation]] = {}
+    for observation in observations:
+        grouped.setdefault((observation.field, observation.trial_id), []).append(observation)
+    columns: list[dict[str, Any]] = []
+    field_order = list(dict.fromkeys(observation.field for observation in observations))
+    for field in field_order:
+        cells: list[dict[str, Any]] = []
+        present_trials: list[str] = []
+        for trial in trial_scope:
+            cell_observations = grouped.get((field, trial.id), ())
+            if cell_observations:
+                present_trials.append(trial.id)
+            items = tuple(
+                _workspace_cell_item(data, observation, summary)
+                for observation in cell_observations
+                for summary in _matrix_item_summaries(data, observation)
+            )
+            cells.append(
+                {
+                    "trial_id": trial.id,
+                    "product_id": trial.product_id,
+                    "row_ids": tuple(dict.fromkeys(
+                        observation.row_id for observation in cell_observations
+                    )),
+                    "items": items,
+                    "missing": not cell_observations,
+                    "numeric_eligible_row_ids": tuple(
+                        observation.row_id for observation in cell_observations
+                        if observation.row_id in eligible_ids
+                    ),
+                    "numeric_ineligible_row_ids": tuple(
+                        observation.row_id for observation in cell_observations
+                        if observation.row_id not in eligible_ids
+                    ),
+                }
+            )
+        columns.append(
+            {
+                "facet_id": f"{_DESIGN_FIELD_FACET_PREFIX}{field}",
+                "facet_label_zh": _field_label(field),
+                "facet_kind": "design_field_presentation",
+                "presentation_only": True,
+                "facet_note_zh": (
+                    "分面标签只是呈现归类，不声明各研究临床等价；"
+                    "各单元格保留登记原文、量表、阈值、时间窗与来源版本。"
+                ),
+                "cross_study": len(set(present_trials)) >= 2,
+                "trial_ids": tuple(present_trials),
+                "cells": tuple(cells),
+            }
+        )
+    return {
+        "membership": membership,
+        "facets": facets,
+        "numeric_eligibility": eligibility,
+        "columns": tuple(columns),
+    }
+
+
 def _design_matrix(
     data: ReportCPortalData,
     observations: Sequence[DesignObservation],
@@ -1702,50 +1870,59 @@ def _design_matrix(
     tuple[dict[str, Any], ...],
 ]:
     trials = _matrix_trial_context(data, observations)
-    grouped: dict[tuple[str, str], list[DesignObservation]] = {}
-    for observation in observations:
-        grouped.setdefault((observation.field, observation.trial_id), []).append(observation)
+    workspace = design_comparison_workspace(data, observations)
+    columns_by_facet = {column["facet_id"]: column for column in workspace["columns"]}
+    trials_by_id = {trial["id"]: trial for trial in trials}
 
     rows: list[dict[str, Any]] = []
     for field in _matrix_field_order(observations):
+        column = columns_by_facet[f"{_DESIGN_FIELD_FACET_PREFIX}{field}"]
         field_observations = tuple(item for item in observations if item.field == field)
-        first = field_observations[0]
+        field_row_ids = {item.row_id for item in field_observations}
         cells: list[dict[str, Any]] = []
-        for trial in trials:
-            cell_observations = tuple(grouped.get((field, trial["id"]), ()))
-            items = tuple(
-                {
-                    "row_id": item.row_id,
-                    "summary": summary,
-                    "source_text": _text(item.source_text),
-                    "disclosure_state": item.disclosure_state.value,
-                    "scale": _text(item.scale, "未列示"),
-                    "timepoint": _text(item.assessment_timepoint, "未列示"),
-                }
-                for item in cell_observations
-                for summary in _matrix_item_summaries(data, item)
-            )
+        for compiled in column["cells"]:
+            trial = trials_by_id[compiled["trial_id"]]
+            items = compiled["items"]
             cells.append(
                 {
-                    "trial_id": trial["id"],
+                    "trial_id": compiled["trial_id"],
                     "product_id": trial["product_id"],
                     "trial_label": f"{trial['display_id']} · {trial['name']}",
-                    "row_ids": tuple(item["row_id"] for item in items),
+                    "row_ids": compiled["row_ids"],
                     "items": items,
                     "summary": "；".join(item["summary"] for item in items) or "未提取",
                     "empty": not items,
                     "scale_values": tuple(dict.fromkeys(item["scale"] for item in items)),
-                    "timepoint_values": tuple(dict.fromkeys(item["timepoint"] for item in items)),
+                    "timepoint_values": tuple(
+                        dict.fromkeys(item["timepoint"] for item in items)
+                    ),
+                    "numeric_eligible_row_ids": compiled["numeric_eligible_row_ids"],
+                    "numeric_ineligible_row_ids": compiled["numeric_ineligible_row_ids"],
                 }
             )
         rows.append(
             {
                 "field": field,
                 "label": _matrix_field_label(field, field_observations),
-                "family_id": first.field_family.value,
-                "family_label": _family_label(first.field_family),
+                "family_id": field_observations[0].field_family.value,
+                "family_label": _family_label(field_observations[0].field_family),
                 "cells": tuple(cells),
                 "observation_count": len(field_observations),
+                "facet_id": column["facet_id"],
+                "facet_label_zh": column["facet_label_zh"],
+                "presentation_only": column["presentation_only"],
+                "facet_note_zh": column["facet_note_zh"],
+                "numeric_eligible_row_ids": tuple(dict.fromkeys(
+                    row_id
+                    for cell in column["cells"]
+                    for row_id in cell["numeric_eligible_row_ids"]
+                )),
+                "undrawable_reasons": tuple(
+                    {"row_id": row_id, "reason_zh": reason}
+                    for row_id, reason in workspace["numeric_eligibility"]
+                    .undrawable_reasons.items()
+                    if row_id in field_row_ids
+                ),
             }
         )
 
@@ -1900,6 +2077,23 @@ def _render_page_context(
         )
     else:
         design_matrix_rows, design_matrix_groups, design_matrix_trials = (), (), ()
+    workspace = design_comparison_workspace(data, observations)
+    snapshot_id = _text(
+        data.report_snapshot_id or data.source_evidence_snapshot_id, f"c-{data.report_version}"
+    )
+    row_set_digest = hashlib.sha256(_canonical_json([o.row_id for o in observations])).hexdigest()
+    workspace_json = _json({
+        "snapshot_id": snapshot_id,
+        "snapshot_kind": ("report" if data.report_snapshot_id else "evidence"
+                          if data.source_evidence_snapshot_id else "candidate"),
+        "report_snapshot_id": data.report_snapshot_id,
+        "source_evidence_snapshot_id": data.source_evidence_snapshot_id,
+        "row_set_digest": row_set_digest,
+        "membership": workspace["membership"].model_dump(mode="json"),
+        "facets": workspace["facets"].model_dump(mode="json"),
+        "numeric_eligibility": workspace["numeric_eligibility"].model_dump(mode="json"),
+        "columns": workspace["columns"],
+    })
     overview_conclusions = None
     if catalog_page_id == "overview" and trial is None:
         n_trials = len({obs.trial_id for obs in observations if obs.trial_id})
@@ -1932,12 +2126,9 @@ def _render_page_context(
         "home_href": f"{prefix}{catalog.pages[0].id}.html",
         "data_prefix": f"{prefix}data",
         "asset_prefix": f"{prefix}assets",
-        "snapshot_id": _text(
-            data.report_snapshot_id or data.source_evidence_snapshot_id, f"c-{data.report_version}"
-        ),
-        "row_set_digest": hashlib.sha256(
-            _canonical_json([item.row_id for item in observations])
-        ).hexdigest(),
+        "snapshot_id": snapshot_id,
+        "row_set_digest": row_set_digest,
+        "design_workspace_json": workspace_json,
         "lead": (
             "在有来源的设计事实之上并列呈现模式、权衡与可选路径，不作排名。"
             if catalog_page_id == "design-patterns"

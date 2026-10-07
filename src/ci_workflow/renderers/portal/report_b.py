@@ -5531,6 +5531,8 @@ def _project_active_facts_b(
             )
         )
     payload["user_edits"] = user_edits
+    _validate_baseline_limit_pairs(data, active_revision)
+    _validate_baseline_count_scopes(data, active_revision)
     try:
         projected_data = ReportBPortalData.model_validate(payload)
     except ValueError as error:
@@ -5556,6 +5558,112 @@ def validate_active_fact_revision_b(
                 _validate_baseline_scalar_revision(fact, binding)
         except ValueError as error:
             raise ReportBPortalError(str(error)) from error
+
+    _validate_baseline_limit_pairs(data, active_revision)
+    _validate_baseline_count_scopes(data, active_revision)
+
+
+def _baseline_participant_unit(row: Mapping[str, Any]) -> bool:
+    return str(row.get("unit") or "").casefold() in {
+        "participants", "participant", "subjects", "subject", "人", "例",
+    }
+
+
+def _validate_baseline_count_scopes(
+    data: ReportBPortalData, revision: ActiveFactRevision,
+) -> None:
+    """Validate edited n/N only where the source explicitly establishes scope.
+
+    Registry denominator nesting and group ID, never array order or group
+    wording, choose the most specific source scope. Missing/conflicting Ns do
+    not invalidate a raw count or become zero; no proportion is constructed.
+    """
+    changed = {binding.row_id: fact for fact, binding in revision.bindings_for("B")
+               if binding.collection == "baseline"
+               and (fact.model_extra or {}).get("review_state") == "user_modified"}
+    if not changed:
+        return
+    rows = (data.baseline_views or {}).get("facts", ())
+
+    def value(row: Mapping[str, Any]) -> float | None:
+        fact = changed.get(str(row["row_id"]))
+        number = ((None if fact.disclosure_state == "user_cleared" else numeric_value(fact)
+                   ) if fact else _number(row.get("value")))
+        if row.get("source_value_role") == "denominator" and (
+            not _baseline_participant_unit(row) or number is None
+            or not math.isfinite(number) or number < 0 or not float(number).is_integer()
+        ):
+            return None  # unknown/invalid source N is not a participant cap
+        return number
+
+    for row in rows:
+        if row.get("source_value_role") != "participant_count":
+            continue
+        path = (row.get("source_locator") or {}).get("field_path", "")
+        matches = []
+        for denom in rows:
+            if (denom.get("source_value_role") != "denominator"
+                or denom.get("source_version_id") != row.get("source_version_id")
+                or denom.get("group_id") != row.get("group_id")):
+                continue
+            npath = (denom.get("source_locator") or {}).get("field_path", "")
+            if not isinstance(npath, str) or ".denoms[" not in npath:
+                continue
+            scope = npath.rsplit(".denoms[", 1)[0]
+            if isinstance(path, str) and path.startswith(scope + "."):
+                matches.append((scope, denom))
+        if not matches:
+            continue
+        depth = max(len(scope) for scope, _ in matches)
+        selected = [denom for scope, denom in matches if len(scope) == depth]
+        if not changed.keys() & {str(r["row_id"]) for r in (row, *selected)}:
+            continue
+        ns = {value(denom) for denom in selected}
+        count = value(row)
+        if len(ns) == 1 and None not in ns and count is not None:
+            n = next(iter(ns))
+            if n is not None and count > n:
+                raise ReportBPortalError("基线当前人数大于同来源同组作用域N；不生成比例")
+
+
+def _validate_baseline_limit_pairs(
+    data: ReportBPortalData, revision: ActiveFactRevision,
+) -> None:
+    """Check only explicitly edited limits of the same source measurement.
+
+    No inferred error bars, confidence interval type, unit conversion or
+    cross-study pairing. Unchanged source contradictions remain source issues.
+    """
+    changed = {binding.row_id: fact for fact, binding in revision.bindings_for("B")
+               if binding.collection == "baseline"
+               and (fact.model_extra or {}).get("review_state") == "user_modified"}
+    pairs: dict[tuple[str, str, str], dict[str, tuple[str, float | None]]] = {}
+    for row in (data.baseline_views or {}).get("facts", ()):
+        if row.get("statistic_form") not in {"下限", "上限"}:
+            continue
+        locator = row.get("source_locator")
+        path = locator.get("field_path") if isinstance(locator, Mapping) else None
+        if not isinstance(path, str) or not path.endswith((".lowerLimit", ".upperLimit")):
+            raise ReportBPortalError("基线上下限缺少明确测量定位")
+        key = (str(row.get("source_version_id")), str(row.get("group_id")),
+               path.rsplit(".", 1)[0])
+        part = pairs.setdefault(key, {})
+        stat = str(row["statistic_form"])
+        if stat in part:
+            raise ReportBPortalError("同一来源测量上下限重复，不能first-wins")
+        row_id = str(row["row_id"])
+        fact = changed.get(row_id)
+        value = (None if fact.disclosure_state == "user_cleared" else numeric_value(fact)
+                 ) if fact is not None else _number(row.get("value"))
+        part[stat] = (row_id, value)
+    for part in pairs.values():
+        if set(part) != {"下限", "上限"} or not changed.keys() & {
+            item[0] for item in part.values()
+        }:
+            continue
+        lower, upper = part["下限"][1], part["上限"][1]
+        if lower is not None and upper is not None and lower > upper:
+            raise ReportBPortalError("基线同一测量当前上下限倒置")
 
 
 def _b_source_view_row(
@@ -5654,6 +5762,11 @@ def _validate_baseline_scalar_revision(fact: ActiveFact, binding: ActiveFactBind
         raise ReportBPortalError("基线修订必须为有限数值")
     if binding.statistical_form == "standard_deviation" and number < 0:
         raise ReportBPortalError("基线标准差不能为负")
+    if binding.statistical_form in {"count", "denominator"} and (
+        number < 0 or not number.is_integer()
+        or isinstance(fact.normalized_value, bool)
+    ):
+        raise ReportBPortalError("基线人数或N必须为非负整数；不据此派生比例")
     if (fact.model_extra or {}).get("review_state") == "user_modified":
         try:
             raw = float(str(fact.raw_value))
@@ -5667,9 +5780,16 @@ def _baseline_scalar_binding(data: ReportBPortalData, row_id: str) -> ActiveFact
     row = _b_source_view_row(data, "baseline", row_id)
     forms = {"MEAN": "mean", "MEDIAN": "median", "STANDARD_DEVIATION": "standard_deviation"}
     form = forms.get(str(row.get("statistic_form")))
+    role = row.get("source_value_role")
+    if row.get("statistic_form") == "count" and role in {"participant_count", "denominator"}:
+        form = "count" if role == "participant_count" else "denominator"
+    elif row.get("statistic_form") in {"下限", "上限"}:
+        form = "lower_limit" if row["statistic_form"] == "下限" else "upper_limit"
     unit = str(row.get("unit") or "")
     if form is None or row.get("value") is None or not unit:
-        raise ReportBPortalError("基线编辑当前只接受有明确单位的均值/中位数/标准差原子")
+        raise ReportBPortalError("基线编辑只接受有明确单位的原始均值/中位数/标准差/人数/N/限值")
+    if form in {"count", "denominator"} and not _baseline_participant_unit(row):
+        raise ReportBPortalError("基线人数/N单位不是明确参与者，不猜统计对象")
     if row.get("product_id") is not None:
         raise ReportBPortalError("本基线来源绑定不推断产品关系")
     trial = next((trial for trial in data.all_studies if trial.id == row.get("trial_id")), None)
@@ -5681,7 +5801,8 @@ def _baseline_scalar_binding(data: ReportBPortalData, row_id: str) -> ActiveFact
         group_id=row.get("group_id"), arm=row.get("source_group_title"),
         cohort_id=row.get("analysis_population") or None,
         period=row.get("baseline_timepoint"), endpoint_definition=row.get("source_definition"),
-        event_definition=None, statistical_form=form, measure_object="continuous",
+        event_definition=None, statistical_form=form,
+        measure_object="participants" if form in {"count", "denominator"} else "continuous",
         unit=unit, normalized_unit=unit, source_version_id=str(row.get("source_version_id") or ""),
         source_pointer=canonical_source_pointer(locator), original_row_sha256=canonical_sha256(row))
 

@@ -390,6 +390,7 @@ def materialize(
     bound_b_report_asset: dict[str, object] | None = None
     located_b_safety_views = 0
     registered_baseline: tuple[ActiveFactBinding, ...] = ()
+    non_editable_baseline_rows: list[dict[str, str]] = []
     if bound_b_report_output is not None:
         safety_refs = {f"safety:{row.row_id}" for row in safety_batch.bound_rows}
         safety_versions = {
@@ -411,8 +412,18 @@ def materialize(
         })
         baseline_refs = {row["row_id"]: row["source_fact_version_id"]
             for row in (b_report.baseline_views or {}).get("facts", ())
-            if row["statistic_form"] in {"MEAN", "MEDIAN", "STANDARD_DEVIATION"}
+            if row["statistic_form"] in {
+                "MEAN", "MEDIAN", "STANDARD_DEVIATION", "count", "下限", "上限",
+            }
             and row["value"] is not None and row["unit"]}
+        non_editable_baseline_rows = [
+            {"row_id": row["row_id"], "reason": (
+                "missing_value" if row["value"] is None else "missing_unit"
+                if not row["unit"] else "unsupported_statistical_form"
+            )}
+            for row in (b_report.baseline_views or {}).get("facts", ())
+            if row["row_id"] not in baseline_refs
+        ]
         if baseline_refs:
             registered_baseline = register_b_baseline_source_consumers(
                 project_root, lineage.evidence_snapshot, b_report, baseline_refs,
@@ -491,7 +502,10 @@ def materialize(
         "baseline_source_issues": [asdict(issue) for batch in baseline_batches
                                    for issue in batch.issues],
         "baseline_edit_consumers": [b.row_id for b in registered_baseline],
-        "baseline_edit_scope": "mean_median_sd_only_no_count_or_N_edit_no_current_acceptance",
+        "baseline_edit_scope": (
+            "mean_median_sd_count_denominator_limits_scalars_no_implicit_rate_no_current_acceptance"
+        ),
+        "non_editable_baseline_rows": non_editable_baseline_rows,
         "binding_gaps": unresolved,
         "fact_bindings": [
             {"row_ref": fact.row_ref, "fact_version_id":

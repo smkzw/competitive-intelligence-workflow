@@ -579,3 +579,76 @@ is not runtime provenance, so direct owner replay is labeled and original receip
 Fixture/argument mistakes and guessed missing test paths stay setup/NOT_RUN, not RED/PASS.
 Next C semantic workspace work uses the existing contracts, parallel to independent B
 coverage; source-only preview cannot substitute Chinese, medical or browser acceptance.
+
+## Milestone10: B scalar boundaries and C shared source workspace
+
+Parentffa86646 pushed/remote verified before this batch. Owner remains the shared
+schema/current integrator; one bounded C executor ran in parallel with owner B
+changes. Actual E02 ZCode/GLM-5.3-Flash:high1319.002s/exit0/no fallback (not just
+runner heading). Worker two-file scope preserved; owner added sample-N and page
+binding6RED→59relatedPASS. Field facets are presentation-only, not clinical
+equivalence. C product cases rerun without deselection7PASS/1FAIL, full English
+regimen fidelity not yet native-Chinese reading. The failure remains original.
+
+B n/N/limit scalar operations reuse the existing binding/save/current chain,
+without new approval or ratio. Initial15 unsupported RED; 33PASS/3 output-shape
+fixture failures then63PASS; scoped source count/N add+neighbors67PASS59.92s.
+Fixed real source contains183numeric baseline atoms,177exact registered consumers,
+old24identities unchanged. Six NUMBER/reported_measure region atoms stay visible,
+not silently interpreted as participant_count. Real source has no lower/upper
+limit atoms; those behavioral tests are synthetic, real-limit operationNOT_RUN.
+New minimum working copy ran B101pages and8 set/clear/re-enteroriginal/undo saves
+for n andN, invalid0.5 current-unchanged, retry idempotent, source quotes/version
+bytes preserved and implicit rate derivations0. This r8 is B-only, not earlier
+A4/B8. Its static share/receipt remain bound to earlier four code hashes; later
+boundary fixes cannot borrow this as same-candidate ABC/browser acceptance.
+
+One independent C03 actualCodeBuddy/flash:max522.992s/no fallback challenged frozen
+source, not an all-page loop. Bash denied headless tools, so static read only,
+not independent executed hashes/tests. Owner upheld stale future materializer
+scope and latent raw locator exposure;14productionRED/34PASS then79PASS13.35s.
+Same shared participant-unit guard excludes unverified/negative/fractional source
+N as a count cap, keeps deepest unknown scope unknown. Safe locator is reused,
+query labels report/evidence/candidate with separate true IDs. Reject requiring
+report/evidence IDs to match, rewriting old24receipts, and missing-C-pin generality:
+milestone9/ABCv4 already pinned184b788c…3b3a6d, independently recomputed.
+
+Ordinary C all-observation source preview rebuilt16pages/258canonical members,
+15fields/323clauseitems/4numericN,50multi-itemcells, explicit source/version/locator.
+Source/DB bytes unchanged, no current or fake formal report. Initial audit import,
+whitespace-assignment helper, wrong thematic query and clause-item-versus-member
+expectations failed setup assertions; owner changed the audit to the actual
+all-member query and canonical identities, not the product data. Original logs
+retained. New safe-locator candidate site hashd7329a7b…3348b9. No visual acceptance.
+
+Pure c_design_display_projection reuses display_text, full source quote hash,
+row/version/locator, whole-batch fail-closed and current-layer exclusion. Does not
+select a model, mutate science/review state/source/snapshot or grant acceptance.
+Initial missing-module collection RED, wrong fixture directory10setup failures
+and missing neighbor NO_TESTS_RUN are distinct; final11bindingcases covered in
+45relatedPASS1.01s. Owner used the existing shared oMLX gate with one lease/request,
+mandatory keepalive/finally release, actual gate-selected Hy-MT2. Official prompt
+shape checked against https://github.com/Tencent-Hunyuan/Hy-MT2/blob/main/README.md;
+this is not a new executable dependency or install requirement.126unique complete
+clauses/174source rows generated259.486s, allcomplete stop/model identity recorded.
+21numeric-token diagnostics are not21clinical errors: Arabic/word digits and
+redundant source abbreviations differ. Owner found actual PN→psoriasis and
+q2w→twice-weekly semantic failures; no translation published. One fresh bounded
+content-fidelity reviewer actually dispatched after preflight0, no repeated
+translation/extraction or intervals/redispatch while pending.
+
+Final frozen v14six-stepquality-onlyexit0: Ruff src/tests/tools, strict282,
+active1178PASS253.42s, retainedcompat20/.54s, layering7/.18s, legacy STRINGscan,
+not old-root access. v13 cannot cover these new bytes. Guard summary reviews were
+not first accepted because of legacy Hermes keyword check; documents explicitly
+state actual runtime was not Hermes, no fake identity substitution. Two invalid
+document patch hunks were rejected atomically and retried as exact inspected
+definitions, not partial authority changes. Review summaries finally gate0.
+
+Milestone9root/STATUS archived byte-exactly, sole current entries kept concise.
+Compact version binding is owner-milestone-v10.json. Five unrelated dirty files,
+unknown/raw sources and history untouched; no general cache/session/history
+cleanup or old Chinese-root contact. Continue after precise GitHub delivery, no
+newpause. NativeChinese, true multi-drug efficacy, complete source/universe,
+dynamicChinaMAH/group, same-currentABCfulljourney, Ego four-width/four-state and
+newbrowser offline,24portals/threehosts/install/recovery/RC still open.

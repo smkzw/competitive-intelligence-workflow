@@ -39,8 +39,18 @@ def test_existing_combined_builder_sources_all_selected_baseline_observations(tm
     assert receipt["counts"]["baseline_numeric_atoms"] == 183
     assert receipt["counts"]["baseline_source_facts"] == 499
     assert receipt["baseline_source_issues"] == []
-    assert receipt["counts"]["registered_b_baseline_scalar_consumers"] == 24
-    assert len(receipt["baseline_edit_consumers"]) == 24
+    eligible_ids = {r["row_id"] for r in rows if r["value"] is not None and r["unit"]
+                    and r["statistic_form"] in {
+                        "MEAN", "MEDIAN", "STANDARD_DEVIATION", "count", "下限", "上限",
+                    }}
+    assert len(eligible_ids) > 24  # previous scalar coverage remains, now including n/N
+    assert receipt["counts"]["registered_b_baseline_scalar_consumers"] == len(eligible_ids)
+    assert set(receipt["baseline_edit_consumers"]) == eligible_ids
+    assert "count_denominator" in receipt["baseline_edit_scope"]
+    assert "no_implicit_rate" in receipt["baseline_edit_scope"]
+    non_editable = receipt["non_editable_baseline_rows"]
+    assert {r["row_id"] for r in non_editable} == {r["row_id"] for r in rows} - eligible_ids
+    assert all(r["reason"] for r in non_editable)
     locked = LockedSnapshot(snapshot_id=receipt["snapshot_id"], kind="evidence", report=None,
         sha256=receipt["snapshot_sha256"], relative_path=receipt["snapshot_relative_path"],
         byte_size=(root / receipt["snapshot_relative_path"]).stat().st_size)
