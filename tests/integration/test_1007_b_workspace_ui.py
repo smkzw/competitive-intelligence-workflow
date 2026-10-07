@@ -31,6 +31,7 @@ const rows={a:{trial_id:'trial-a',value:0,unit:'%',product_zh:'<script>bad</scri
  c:{trial_id:'trial-c',value:null,disclosure_state:'user_cleared',arm:'治疗组'}};
 Object.keys(rows).forEach(id=>rows[id].row_id=id);
 const workspace={study_ids:['trial-a','trial-b','trial-c','trial-no-results'],
+ study_labels:{'trial-a':'PRIME｜NCT04202679','trial-b':'ARCADIA｜NCT04501666'},
  membership:{row_ids:['a','b','c']},columns:Array.from({length:9},(_,i)=>({
   id:'column-'+i,question_id:'efficacy::easi75',question_label:'EASI75',title:'临床条件'+i,
   cells:{'trial-a':['a'],'trial-b':['b'],'trial-c':['c']}}))};
@@ -51,6 +52,7 @@ assert.equal(host.hidden,false);assert.equal(lookup.tbody.children.length,4);
 assert.equal(lookup.thead.children[0].children.length,5); // four columns plus study
 function text(node){return [node.textContent||'',...node.children.map(text)].join('|');}
 assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除，待重新核实/);
+assert.match(text(lookup.tbody),/PRIME｜NCT04202679/);
 assert.doesNotMatch(text(lookup.tbody),/None|null/);
 assert.ok(text(lookup.tbody).includes('<script>bad</script>')); // literal safe text only
 assert.ok(lookup.tbody.children[0].children[1].children[0].attributes['data-evidence-open']==='a');
@@ -62,11 +64,29 @@ JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));
 assert.equal(seen.size,9);assert.equal(lookup['[data-comparison-next]'].disabled,true);
 assert.equal(new URL(url).searchParams.get('cmp_page'),'3');
 state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
-assert.equal(lookup.tbody.children.length,1);assert.match(text(lookup.tbody),/trial-b/);
+assert.equal(lookup.tbody.children.length,1);assert.match(text(lookup.tbody),/ARCADIA｜NCT04501666/);
 assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].rows[0].row_id,'b');
 state={trial:'no-match'};sandbox.renderComparisonWorkspace(state);
 assert.equal(lookup.tbody.children.length,0);assert.equal(JSON.parse(host.dataset.queryRowIds).length,0);
 state={};sandbox.renderComparisonWorkspace(state);assert.equal(lookup.tbody.children.length,4);
+// Matrix question columns may contain multiple incompatible scientific frames.
+// They must reach their own linked charts, never turn into one invented frame.
+workspace.columns.forEach(c=>{
+ c.scientific_facet_ids=[c.id+'-left',c.id+'-right'];
+ c.facet_label_by_row={a:'FAS，48周',b:'PPS，24周',c:'用户清除，待重新核实'};
+});
+sandbox.fullChartGroups=workspace.columns.flatMap(c=>c.scientific_facet_ids.map((id,i)=>({
+ scientific_group_id:id,rows:[rows[i===0?'a':'b']]})));
+sandbox.renderComparisonWorkspace(state);
+assert.equal(currentGroups.length,2);
+assert.match(lookup['[data-comparison-status]'].textContent,/2个科学条件分面/);
+assert.doesNotMatch(lookup['[data-comparison-status]'].textContent,/本问题条件分面/);
+assert.notEqual(currentGroups[0].scientific_group_id,currentGroups[1].scientific_group_id);
+assert.match(text(lookup.tbody),/FAS，48周/);
+assert.match(text(lookup.tbody),/PPS，24周/);
+state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
+assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].rows[0].row_id,'b');
+assert.match(lookup['[data-comparison-status]'].textContent,/1个科学条件分面/);
 """
     result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr

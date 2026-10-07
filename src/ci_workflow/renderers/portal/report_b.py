@@ -4978,8 +4978,10 @@ def _comparison_workspace(
     records: Sequence[tuple[dict[str, Any], Any]],
     groups: Sequence[dict[str, Any]],
     study_ids: Sequence[str],
+    *,
+    study_labels: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
-    """Project already adjudicated groups into a reachable study-column matrix.
+    """Project known questions into columns, preserving scientific subfacets.
 
     No values are recalculated and no new scientific equivalence is inferred.
     Membership, faceting and numeric eligibility retain their existing typed
@@ -4996,6 +4998,7 @@ def _comparison_workspace(
     drawable: list[str] = []
     reasons: dict[str, str] = {}
     studies = set(study_ids)
+    question_columns: dict[str, dict[str, Any]] = {}
     for group in groups:
         group_rows = [row for row in group["rows"] if is_observation(row)]
         if not group_rows:
@@ -5018,7 +5021,7 @@ def _comparison_workspace(
                     _text(row.get("difference_note")) or _text(row.get("reason")) or
                     _state_label(_text(row.get("disclosure_state"), "unknown"))
                 )
-        columns.append({
+        column = {
             "id": facet_id, "title": group["title_zh"],
             "question_id": "::".join((
                 _text(group_rows[0].get("_domain")),
@@ -5032,7 +5035,67 @@ def _comparison_workspace(
             "actual_times": group.get("actual_times", ()),
             "time_window_note_zh": group.get("time_window_note_zh"),
             "comparison_purpose": group.get("comparison_purpose", "semantic_numeric_frame"),
-        })
+            "scientific_facet_ids": (facet_id,),
+            "scientific_facets": ({
+                "id": facet_id, "title": group["title_zh"],
+                "row_ids": tuple(str(row["row_id"]) for row in group_rows),
+                "actual_times": group.get("actual_times", ()),
+                "time_window_note_zh": group.get("time_window_note_zh"),
+                "comparison_purpose": group.get("comparison_purpose", "semantic_numeric_frame"),
+            },),
+            "facet_label_by_row": {str(row["row_id"]): group["title_zh"] for row in group_rows},
+        }
+        # A shared clinical question is not a shared numeric frame. Known
+        # concepts can occupy the same study-column matrix despite differences
+        # in time, scale, analysis population, estimand or unit. The original
+        # scientific groups remain unchanged and each row keeps its facet.
+        known_question = all(
+            not semantic_value_is_unknown(row.get("clinical_concept"))
+            and not semantic_value_is_unknown(row.get("semantic_definition"))
+            and not source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
+            for row in group_rows
+        )
+        column["question_known"] = known_question
+        column["question_state_reason"] = ""
+        if not known_question:
+            if any(semantic_value_is_unknown(row.get("clinical_concept")) for row in group_rows):
+                reason = "临床问题待核"
+            elif any(semantic_value_is_unknown(row.get("semantic_definition"))
+                     for row in group_rows):
+                reason = "定义待核"
+            else:
+                reason = "来源领域或指标冲突"
+            # Client selectors/config inventories must not reunify the
+            # question identities deliberately left unresolved by the server.
+            column["question_id"] = stable_id("b-unresolved-question", facet_id)
+            column["question_state_reason"] = reason
+            column["question_label"] = "｜".join((str(column["question_label"]), reason,
+                _text(group_rows[0].get("trial_zh"), "研究身份待核")))
+        question_id = str(column["question_id"])
+        prior = question_columns.get(question_id) if known_question else None
+        if prior is None:
+            columns.append(column)
+            if known_question:
+                question_columns[question_id] = column
+            continue
+        prior["id"] = stable_id("b-question-column", question_id)
+        prior["title"] = prior["question_label"]
+        prior["comparison_purpose"] = "clinical_question_descriptive"
+        prior["row_ids"] += column["row_ids"]
+        for study_key, ids in column["cells"].items():
+            prior["cells"].setdefault(study_key, []).extend(ids)
+        prior["scientific_facet_ids"] += column["scientific_facet_ids"]
+        prior["scientific_facets"] += column["scientific_facets"]
+        prior["facet_label_by_row"].update(column["facet_label_by_row"])
+        prior["actual_times"] = tuple(dict.fromkeys(
+            (*prior["actual_times"], *column["actual_times"]),
+        ))
+        prior["time_window_note_zh"] = (
+            "同一临床问题下描述性并列；条件差异保留，不代表数值可以共轴。"
+        )
+        # True means at least one constituent facet is already qualified for
+        # cross-trial comparison, never that this column union is a frame.
+        prior["cross_trial"] = prior["cross_trial"] or column["cross_trial"]
     facets = FacetPlan(membership_row_ids=membership.row_ids, assignments=tuple(assignments))
     numeric = NumericFrameEligibility(
         membership_row_ids=membership.row_ids, drawable_row_ids=tuple(drawable),
@@ -5042,7 +5105,10 @@ def _comparison_workspace(
         "membership": membership.model_dump(mode="json"),
         "facets": facets.model_dump(mode="json"),
         "numeric_eligibility": numeric.model_dump(mode="json"),
-        "study_ids": tuple(sorted(studies)), "columns": tuple(columns),
+        "study_ids": tuple(sorted(studies)),
+        "study_labels": {study: _text((study_labels or {}).get(study), study)
+                         for study in sorted(studies)},
+        "columns": tuple(columns),
     }
 
 
@@ -5202,6 +5268,7 @@ def _render_page_context(
     chart_groups_json = _json(groups)
     comparison_workspace = _comparison_workspace(
         records, groups, tuple(study.id for study in data.all_studies),
+        study_labels=trial_names,
     )
     target_by_product = {product.id: product.target for product in data.products}
     filter_rows = _filter_dimensions(records, target_by_product)

@@ -34,8 +34,9 @@ const columns=Array.from({length:9},(_,i)=>({id:'col-'+i,question_id:'easi',
  question_label:'EASI',title:'条件'+i,
  cells:i===0?{'trial-a':['a'],'trial-b':['b']}:i===1?{'trial-c':['c']}:i===8?{'trial-c':['last']}:{}}));
 const workspace={membership:{row_ids:Object.keys(rows)},
- study_ids:['trial-a','trial-b','trial-c','trial-empty'],columns};
-let url='https://example.test/clinical-portfolio.html?view=comparison',currentGroups=[];
+ study_ids:['trial-a','trial-b','trial-c','trial-empty'],
+ study_labels:{'trial-a':'PRIME｜NCT04202679'},columns};
+let url='https://example.test/clinical-portfolio.html?view=comparison&cmp_page=1.5',currentGroups=[];
 const groups=columns.map(c=>({scientific_group_id:c.id,
  rows:Object.values(c.cells).flat().map(id=>rows[id])}));
 const sandbox={aComparisonPage:1,selected:{},
@@ -52,9 +53,11 @@ const sandbox={aComparisonPage:1,selected:{},
  createElement(){return new Node();}}};
 vm.runInNewContext(source.slice(start,end),sandbox);
 sandbox.renderAComparison();
+assert.equal(new URL(url).searchParams.get('cmp_page'),'1');
 assert.equal(host.hidden,false);assert.equal(summary.hidden,true);assert.equal(lookup.tbody.children.length,4);
 function text(n){return [n.textContent||'',...n.children.map(text)].join('|');}
 assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除/);
+assert.match(text(lookup.tbody),/PRIME｜NCT04202679/);
 assert.ok(text(lookup.tbody).includes('<img onerror=bad()>')); // literal text, no HTML parsing
 assert.equal(lookup.tbody.children[0].children[1].children[0]
  .attrs['data-efficacy-row-id'],'source-a');
@@ -73,6 +76,16 @@ sandbox.selected={product:['no-match']};sandbox.renderAComparison();
 assert.equal(lookup.tbody.children.length,0);assert.equal(currentGroups.length,0);
 sandbox.selected={};sandbox.renderAComparison();assert.equal(lookup.tbody.children.length,4);
 assert.ok(JSON.parse(host.dataset.queryRowIds).includes('last'));
+columns[0].scientific_facet_ids=['frame-a','frame-b'];
+columns[0].facet_label_by_row={a:'FAS，48周',b:'PPS，24周'};
+sandbox.window.__A_COMPARISON_GROUPS__=[
+ {scientific_group_id:'frame-a',rows:[rows.a]},
+ {scientific_group_id:'frame-b',rows:[rows.b]}];
+sandbox.renderAComparison();
+assert.equal(currentGroups.length,2);
+assert.match(text(lookup.tbody),/FAS，48周/);assert.match(text(lookup.tbody),/PPS，24周/);
+sandbox.selected={product:['drug-b']};sandbox.renderAComparison();
+assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].scientific_group_id,'frame-b');
 """
     result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr

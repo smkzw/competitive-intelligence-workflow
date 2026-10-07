@@ -2006,7 +2006,8 @@
         select.appendChild(option);
       });
       select.value = questions[params.get("cmp")] ? params.get("cmp") : keys[0] || "";
-      aComparisonPage = Math.max(1, Number(params.get("cmp_page")) || 1);
+      var savedComparisonPage = Number(params.get("cmp_page"));
+      aComparisonPage = Number.isSafeInteger(savedComparisonPage) && savedComparisonPage > 0 ? savedComparisonPage : 1;
       select.addEventListener("change", function () {aComparisonPage = 1; renderAComparison();});
       host.querySelector("[data-a-comparison-prev]").addEventListener("click", function () {
         aComparisonPage -= 1; renderAComparison();
@@ -2047,7 +2048,8 @@
       });
       if (filtered && !studyRows.length) return;
       var tr = document.createElement("tr"), label = document.createElement("th");
-      label.scope = "row"; label.textContent = study; tr.appendChild(label); retained += 1;
+      label.scope = "row"; label.textContent = (workspace.study_labels || {})[study] || study;
+      tr.appendChild(label); retained += 1;
       columns.forEach(function (column) {
         var cell = document.createElement("td");
         (column.cells[study] || []).filter(function (id) {return allowed[id];}).forEach(function (id) {
@@ -2057,7 +2059,9 @@
           var value = row.value == null ? (window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核")
             : String(row.value) + " " + (row.unit || "");
           button.textContent = [row.product_zh, row.arm_detail || row.arm, value, row.time,
-                                row.difference_note].filter(Boolean).join("｜");
+            row.difference_note,
+            column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
+              (column.facet_label_by_row || {})[id] : ""].filter(Boolean).join("｜");
           cell.appendChild(button); displayed[id] = true;
         });
         if (!cell.children.length) cell.textContent = "当前问题无匹配事实，不代表零结果";
@@ -2074,7 +2078,9 @@
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__) {
       var groups = (window.__A_COMPARISON_GROUPS__ || []).filter(function (group) {
-        return columns.some(function (column) {return column.id === group.scientific_group_id;});
+        return columns.some(function (column) {
+          return (column.scientific_facet_ids || [column.id]).indexOf(group.scientific_group_id) !== -1;
+        });
       }).map(function (group) {
         return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
       }).filter(function (group) {return group.rows.length;});

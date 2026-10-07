@@ -2342,7 +2342,9 @@ def _a_comparison_workspace(data: ReportAPortalData) -> tuple[
     if set(rows) != set(origins):
         raise ReportAPortalError("A横比遗漏了原生事实")
     groups = report_b._adjudicate_full_pool(tagged, semantic_proposals=())
-    return report_b._comparison_workspace(tagged, groups, data.trial_ids), groups, rows
+    return report_b._comparison_workspace(
+        tagged, groups, data.trial_ids, study_labels=trials,
+    ), groups, rows
 
 
 def render_report_a_site(

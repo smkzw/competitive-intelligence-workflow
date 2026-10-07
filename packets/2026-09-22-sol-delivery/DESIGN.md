@@ -4,6 +4,14 @@
 
 ## 1007V1 当前增量合同
 
+共同研究矩阵复用原WorkspaceMembership/FacetPlan/NumericFrameEligibility。
+已知概念及定义的同问题列可聚合描述性单元格；每列显式保留
+scientific_facet_ids、scientific_facets和事实对应条件标签。原科学分组、数值
+资格、来源与当前事实不改变；未知定义/构念和领域冲突不借此授权归并。
+A/B联动图按列所引用的多个实际科学分面选择，筛选只投影可见行，不重建
+一个并集共轴框。旧单分面列读路径兼容，配置query库存从当前真实列生成。
+这是比较列/单元格扩展，不另建科学对象、执行器或逐观察审批平台。
+
 共同设计工作区复用现有成员/分面/数值资格合同；字段归列明确presentation-only，
 不宣告医学等价。单元格保留同研究全部观察与完整父原文，来源定位消费既有
 safe public projection，不把本机定位字段带入公开JSON。查询snapshot_kind明确

@@ -1,47 +1,42 @@
 # 唯一当前状态：1007V1 连续实施
 
-用户授权实际构建和阶段GitHub递交，非暂停/RC。本批父提交89969179；
-当前HEAD以Git核对。Goal保持实际ACTIVE，未伪造替换/完成/暂停。
-01–06/reference/cases.json未取得，Ask待答，不造专家编号。
-详细[实施/复盘](evidence/1007V1/implementation.md)，
-[里程碑11机器清单](evidence/1007V1/owner-milestone-v11.json)绑定源/候选/真实范围。
+本批父提交20a89bf；实际HEAD以Git核对。Goal ACTIVE，非暂停/RC。
+[里程碑12机器清单](evidence/1007V1/owner-milestone-v12.json)，
+[详细实施/复盘](evidence/1007V1/implementation.md)。01–06/reference/cases.json
+未取得，原生Ask待答，不冒造专家case编号或生产终验。
 
-## 已完成、待验、阻断分开
+## 完成、待验与阻断
 
-| 单元 | 当前实际范围 | 不可扩张为 |
+| 单元 | 当前实际证据 | 仍未接受 |
 |---|---|---|
-| B NUMBER | 六条sourceNUMBER以中性reported_number编辑；source参数/角色不变；当前183/183基线绑定，旧24/177回执保持历史 | 不是自动比例、全结果字段或所有来源科学接受 |
-| 根因检查 | 9FAIL/1PASS→50相关PASS12.02s；当前scoped Ruff/strict3；三次错误测试读取形状如实留存 | v14历史宽门不覆盖新字节，当前未跑全仓门 |
-| 真实B链 | 新四源项目、B101页、141→140/set→clear→undo140、非法0.5拒绝current不变、重试幂等/源原文版本输入不变；r3B静态分享 | 不是旧r8、不是同currentABC或新浏览器离线接受 |
-| 中文独立挑战 | actualCodeBuddy/deepseek-v4.1-flash:max335.658s/exit0/no fallback REVISE；工具Bash拒绝，静态Read/Grep | 126候选阅读≠126完整来源接受，4长源行仍有截断说明 |
-| 中文修复 | 保留v1，根因术语上下文/完整句v2脚本；首请求HTTP507，gate lease释放，没有新receipt | 不换模型/改服务/卸载/清理，不发布失败候选 |
-| B疗效共列 | 生产诊断3544行/3544独立条件组/零efficacy_views；已派一名限两文件源桥执行节点，PENDING尚未接受 | 不把资料可达、类型测试或partial91源闭合冒充真实共享横比 |
+| A/B问题列 | 同已知问题描述共列，原数值分面/精确成员保留；未知/冲突独立可检索 | 真多药临床等价/共享数值正例 |
+| 边界挑战 | actualCodeBuddyflash:max339.518s/exit0/no fallback；Read/Grep、Bash拒绝；F1/F2/F3/F4/Q1采纳 | reviewer审早版冻结字节，新字节不是独立PASS |
+| 整族修复 | 6FAIL/21PASS→106相关PASS6.48s、scoped Ruff/strict2、作者镜像验证 | Node不是浏览器；宽门待共同来源集成稳定 |
+| 真实普通B切片 | 183基线/4研究/29页/26列/26分面，DB/输入不变、未切current | 预览早版列代码，不拼新selector/疗效/ABC接受 |
+| 源桥接线 | 普通materializer缺疗效view1RED6.60s；owner准备partial/合法B登记，限两文件executor仍PENDING | 终态字节、生产回归、实际登记和普通生成页 |
+| 语义来源挑战 | 冻结35完整源实例/91 A原子，七块精确并集，DB不变；一名新C03已派PENDING | 不猜estimand/ITT分母/共轴；不是全3544来源闭合 |
+| 前批NUMBER | 六条中性NUMBER接183/183，真实B-onlyr3 set/clear/undo/retry/分享 | 不是所有域或同currentABC/新浏览器 |
+| 中文C | 独立挑战REVISE；v2首请求HTTP507，lease释放、未改模型服务 | 容量Ask待答，译文未发布；4长源行需完整复核 |
 
-NUMBER真实QA新receipt8363ebab6e2e0417ea7f5175b997fe9bf0968ceff297299e75d0e3d2dfe8de2b，
-current generation3f18a57a38eceebfa1d337fb38fd0de7bbe8972b6de988fcac6f1b2208a4cab3，
-B分享890f6d488fcfe6d70d0b68a00cd0798ff0c9e7ad4bead406dcce2eb55769696a。
-产物.artifacts/1007-baseline-number-current-v1，源/代码/hash全部在机器清单，
-旧B-onlyr8/A4B8/ABCv4/安全定位C预览保持各自版本，不拼接成新接受。
+规范与摘要进Git，raw/site/local上下文保留受控指针/hash。源桥未验证的
+materializer和新反例不混入界面批次接受。v14不能覆盖新字节；稳定共同接口
+时宽门一次，不逐行全仓跑。
 
-翻译实际失败：当时共享选定Hy-MT2 resident估计33553517925bytes，
-服务ceiling27536302291bytes，磁盘337GiBfree；无活动translation lease。
-容量处理nativeAsk待用户选择，未改配置或静默替代模型。
-原译文有病种、频次、量表/方向、负荷/总量/INN错误；35/17审阅分类是建议
-而非机器核验问题总数。Owner保留Nemolizumab INN，不重新让用户选未核中文名。
-四条长源文字后续须无损拆分并验证拼接hash；所有原失败回执保留。
+## 下一步
 
-## 继续顺序
+1. 等已派源桥终态，核模型/effort/完整报告/两文件和源证明；owner合并既有
+   partial视图、合法共享绑定，相关回归。不读未完输出当PASS、不重派。
+2. 消费35实例会商；按源复用临床问题规范化，未知保留，数值共轴另判。
+   在普通真实A/B入口验证，不通过宽松守卫造“可比”。
+3. 翻译容量恢复后只修同族源句及正向对照；模型/服务变更待已发Ask选择。
+4. 宇宙/必需Publication/方案SAP/中国动态许可与集团，与桌面并行。
+   本次官方检索未关闭监管集合；NHC中文名线索直接获取412，搜索摘录不采用。
+5. 同currentABC摘要→横比→筛选/L1L2→编辑/清除/依赖同步→配置→三单包/
+   联合分享→新浏览器重开；Ego12恢复Ask待答，四宽四态/键盘/离线NOT_RUN。
+6. HTML-only新包/fresh-install/三宿主/恢复/八适应症24门户，分层终验后唯一RC。
 
-1. 消费已派ci-1007-b-source-efficacy终态，按实际模型/能力/文件/源证明核验；
-   owner接既有materializer/partial视图并跑相关源/当前邻接，不新增平台或猜语义。
-2. 恢复原共享翻译容量后只修同族含正向对照的句子，原文/上下文/source hash
-   不变；再独立源忠实复核、普通生产C重建，不能source绑定PASS代内容接受。
-3. 完整来源宇宙/必需论文方案SAP/动态ChinaMAH集团，与无依赖桌面功能并行。
-4. 同一合法current ABC摘要→横比→筛选/L1L2→编辑/清除/依赖同步→配置→三单包/
-   联合分享→新浏览器重开。Ego12恢复Ask待答，四宽四态/键盘/离线NOT_RUN。
-5. 稳定接口一次宽门、fresh-install/三宿主/恢复/24门户/唯一RC；分层结论，
-   PENDING/未执行/历史PASS不能替代本候选真实验收。精确GitHub递交后继续。
-
-[里程碑10原入口/状态](archive/milestone10-1007V1/README.md)，
-[里程碑10清单](evidence/1007V1/owner-milestone-v10.json)及更早索引作历史。
-旧中文根零接触；五项用户修改、unknown/raw及历史保留，无一般缓存/会话清理。
+仍缺完整科学/视觉/交互/分享新浏览器/安装和终验；局部PASS不宣布RC。
+连续构建和阶段GitHub递交已授权，不新设暂停。五项用户修改、unknown/raw/
+历史保留；旧中文工程零接触，无一般清理。
+前批入口/状态在20a89bf Git历史；[里程碑11](evidence/1007V1/owner-milestone-v11.json)
+及[较早归档索引](archive/milestone10-1007V1/README.md)只作历史。

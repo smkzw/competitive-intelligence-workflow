@@ -64,6 +64,82 @@ def test_source_domain_mismatch_stays_visible_but_not_in_efficacy_numeric_frame(
 
 
 @pytest.mark.parametrize("change", [
+    {"actual_timepoint": 24}, {"semantic_analysis_set": "per_protocol"},
+    {"semantic_instrument_or_scale": "EASI v2.0"},
+    {"semantic_estimand": "hypothetical"}, {"unit": "points"},
+])
+def test_known_question_has_one_matrix_column_but_keeps_conflicting_numeric_facets(change) -> None:
+    first, second, _ = _records()
+    second[0].update(change)
+    records = (first, second)
+    groups = report_b._groups_for_page("efficacy", records)
+    assert len(groups) == 2  # Different scientific conditions never get a joint axis.
+    before = json.dumps(groups, sort_keys=True, ensure_ascii=False)
+    workspace = report_b._comparison_workspace(records, groups, ())
+    assert len(workspace["columns"]) == 1
+    column = workspace["columns"][0]
+    assert set(column["row_ids"]) == {"first", "second"}
+    assert column["cells"] == {"trial-a": ["first"], "trial-b": ["second"]}
+    assert set(column["scientific_facet_ids"]) == {g["scientific_group_id"] for g in groups}
+    assert {f["id"] for f in column["scientific_facets"]} == set(column["scientific_facet_ids"])
+    assert set(column["facet_label_by_row"]) == {"first", "second"}
+    assert column["comparison_purpose"] == "clinical_question_descriptive"
+    assert column["cross_trial"] is False  # The column itself is not an equivalent numeric frame.
+    assert json.dumps(groups, sort_keys=True, ensure_ascii=False) == before
+
+
+def test_unknown_construct_is_not_inferred_from_the_only_known_question() -> None:
+    first, second, _ = _records()
+    second[0].update(clinical_concept="unknown", semantic_definition="unknown")
+    groups = report_b._groups_for_page("efficacy", (first, second))
+    workspace = report_b._comparison_workspace((first, second), groups, ())
+    assert len(workspace["columns"]) == 2
+    assert set(workspace["membership"]["row_ids"]) == {"first", "second"}
+
+
+@pytest.mark.parametrize("change", [
+    {"clinical_concept": "efficacy:not_reported", "semantic_definition": "unknown"},
+    {"semantic_definition": "unknown"}, {"source_domain": "immunogenicity"},
+])
+def test_unresolved_question_columns_do_not_recombine_in_client_question_inventory(change) -> None:
+    first, second, _ = _records()
+    first[0].update(change)
+    second[0].update(change)
+    groups = report_b._groups_for_page("efficacy", (first, second))
+    workspace = report_b._comparison_workspace((first, second), groups, ())
+    columns = workspace["columns"]
+    assert len(columns) == 2
+    assert len({c["question_id"] for c in columns}) == 2
+    assert all(c["question_known"] is False and c["question_state_reason"] for c in columns)
+    assert set(report_b._comparison_query_inventory(workspace).values()) == {1}
+    assert set(workspace["membership"]["row_ids"]) == {"first", "second"}
+
+
+def test_matrix_study_labels_use_existing_display_identity_not_internal_row_keys() -> None:
+    records = _records()
+    groups = report_b._groups_for_page("efficacy", records)
+    labels = {"trial-a": "PRIME｜NCT04202679", "trial-b": "ARCADIA｜NCT04501666",
+              "trial-no-results": "研究无已公开结果｜NCT12345678"}
+    workspace = report_b._comparison_workspace(records, groups, tuple(labels), study_labels=labels)
+    assert workspace["study_labels"]["trial-a"] == labels["trial-a"]
+    assert workspace["study_labels"]["trial-no-results"] == labels["trial-no-results"]
+    assert set(labels) <= set(workspace["study_ids"])
+
+
+def test_question_column_union_does_not_drop_cleared_or_unknown_definition_rows() -> None:
+    records = _records()
+    groups = report_b._groups_for_page("efficacy", records)
+    workspace = report_b._comparison_workspace(records, groups, ())
+    assert set().union(*(set(c["row_ids"]) for c in workspace["columns"])) == {
+        "first", "second", "unknown",
+    }
+    assert any(set(c["row_ids"]) == {"unknown"} for c in workspace["columns"])
+    assert workspace["numeric_eligibility"]["undrawable_reasons"]["unknown"] == (
+        "用户清除，待重新核实"
+    )
+
+
+@pytest.mark.parametrize("change", [
     {"trial_id": "another-trial"}, {"group_id": "another-arm"},
     {"semantic_definition": "未知"}, {"source_domain": "immunogenicity"},
     {"arm_role": "control"}, {"arm_role": "unknown"},

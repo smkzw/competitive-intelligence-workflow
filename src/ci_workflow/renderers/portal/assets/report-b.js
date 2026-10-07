@@ -48,7 +48,7 @@
       keys.forEach(function (key) {
         var option = document.createElement("option");
         option.value = key;
-        option.textContent = questions[key].label + "（" + questions[key].columns.length + "个条件分面）";
+        option.textContent = questions[key].label + "（" + questions[key].columns.length + "列记录）";
         select.appendChild(option);
       });
       var stored = new URLSearchParams(window.location.search || "").get("cmp");
@@ -99,7 +99,8 @@
       });
       if (constrained && !hasQueryRows) return;
       var tr = document.createElement("tr"), label = document.createElement("th");
-      label.scope = "row"; label.textContent = studyId === "study-identity-unresolved" ? "研究身份待核" : studyId;
+      label.scope = "row"; label.textContent = studyId === "study-identity-unresolved" ?
+        "研究身份待核" : (workspace.study_labels || {})[studyId] || studyId;
       tr.appendChild(label); retained += 1;
       columns.forEach(function (column) {
         var cell = document.createElement("td");
@@ -113,7 +114,9 @@
           var status = window.__CHART_SYNC__ && window.__CHART_SYNC__.unplottedValueText;
           item.textContent = [row.product_zh, row.arm_detail || row.arm,
             value ? value + (row.unit ? " " + row.unit : "") : status ? status(row) : "状态待核",
-            row.time || row.time_window, row.difference_note].filter(Boolean).join("｜");
+            row.time || row.time_window, row.difference_note,
+            column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
+              (column.facet_label_by_row || {})[id] : ""].filter(Boolean).join("｜");
           cell.appendChild(item);
         });
         if (!ids.length) cell.textContent = "当前问题无匹配记录，不代表未研究或零结果";
@@ -121,19 +124,22 @@
       });
       body.appendChild(tr);
     });
+    var comparisonGroups = fullChartGroups.filter(function (group) {
+      return columns.some(function (column) {
+        return (column.scientific_facet_ids || [column.id]).indexOf(group.scientific_group_id) !== -1;
+      });
+    }).map(function (group) {
+      return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
+    }).filter(function (group) {return group.rows.length;});
     host.querySelector("[data-comparison-status]").textContent =
-      retained + "项研究；本问题条件分面 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
-      "，本页" + Object.keys(displayed).length + "条事实。数值共轴按各分面的科学资格另判。";
+      retained + "项研究；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
+      "，本页" + Object.keys(displayed).length + "条事实，" + comparisonGroups.length +
+      "个科学条件分面。数值共轴按各分面的科学资格另判。";
     host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
     host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__ && window.__CHART_SYNC__.replaceGroups) {
-      var groups = fullChartGroups.filter(function (group) {
-        return columns.some(function (column) {return column.id === group.scientific_group_id;});
-      }).map(function (group) {
-        return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
-      }).filter(function (group) {return group.rows.length;});
-      window.__CHART_SYNC__.replaceGroups(groups);
+      window.__CHART_SYNC__.replaceGroups(comparisonGroups);
     }
     var position = new URL(window.location.href);
     position.searchParams.set("cmp", comparisonQuestion);

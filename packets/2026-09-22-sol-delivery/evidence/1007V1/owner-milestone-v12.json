@@ -1,0 +1,83 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "20a89bfb6b68b4857b39eda014683c3ab4a0ac4e",
+  "status": "development_candidate_continuing_not_release",
+  "scope": "A/B descriptive clinical-question columns, separate numerical facets, selector/count/page/study-label corrections",
+  "source_code_sha256": {
+    "src/ci_workflow/renderers/portal/report_a.py": "b40864de8547f35ead28df7e7c31d475161fe2ce7010fa005dff1f360a591dbd",
+    "src/ci_workflow/renderers/portal/report_b.py": "b5a6650b6365113bca93ba415c759658b6208ad94e2875858c0dbc218b8e96e3",
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "c629f89fce30445016d0226fbe5f9c4eee6d1bc7f71d61e6f813467467a0f4f0",
+    "src/ci_workflow/renderers/portal/assets/report-b.js": "c60196c27b032bee8eb76b96050693c9c1931d447c3170e546274edd4be5e8a5",
+    "assets/portal/manifest.json": "bd661701d8a90881eca584fbe3690e4240967acf8278fcedffa5bccd044d17fb"
+  },
+  "verification": {
+    "question_column_root_red": {"fail": 6, "pass": 16},
+    "linked_A_root_red": {"fail": 1},
+    "question_column_related": {"pass": 96, "seconds": 1.48},
+    "adjacent_share_payload": {"pass": 6, "seconds": 5.66},
+    "selector_root_red": {"fail": 6, "pass": 21},
+    "first_selector_batch": {"pass": 105, "fail": 1, "reason": "old internal-slug expectation; actual source-friendly study label preserved"},
+    "final_related": {
+      "pass": 106,
+      "seconds": 6.48,
+      "command": "uv run pytest -q tests/reports/b/test_1007_comparison_workspace.py tests/integration/test_1007_b_workspace_ui.py tests/reports/b/test_1007_shared_semantic_frame.py tests/reports/b/test_source_baseline_view.py tests/integration/test_1007_a_workspace.py tests/integration/test_1007_a_workspace_ui.py tests/integration/test_1007_filtered_frame_ui.py tests/integration/test_1007_b_payload_deduplication.py tests/integration/test_1007_current_comparison_share.py",
+      "scope": "nine related files, Node simulation not real browser; no current-source efficacy acceptance"
+    },
+    "scoped_ruff": "PASS",
+    "strict_changed_renderers": {"sources": 2, "status": "PASS"},
+    "author_mirror_manifest": "PASS",
+    "git_diff_check": "PASS",
+    "current_wide_gate": "NOT_RUN; pending shared-source integration, not historical-v14 PASS",
+    "review_document_gate": "PASS after documenting actual non-Hermes identity; not scientific acceptance"
+  },
+  "evidence_sha256": {
+    "runs/execution/ci-1007-display/owner-question-columns-red-v1.txt": "00a567f073eb29b3a69e6ffa069b9622717985bb14539e26dd512aabf7d1f300",
+    "runs/execution/ci-1007-display/owner-question-selector-red-v1.txt": "bf6379a5b4623bde1f098f47bf6a7360dcc28f3818e0e01a6513682ccb63d196",
+    "runs/execution/ci-1007-display/owner-question-selector-green-v2.txt": "c614daf73c4dc9dbbab41330a144466e69aeaec2241da60c493ab08028550a4f",
+    "runs/execution/ci-1007-display/owner-b-efficacy-materializer-red-v1.txt": "e43ca17b0602497b299fd0e210cda16599961e2b55e245f58a0222d143adb74d",
+    "reviews/codex_conference_ci-1007-question-column-boundary_review.md": "443b54536d64bf09e1ccc272b2cf163a7691a9d45845d5017cf488a83dd37cc8",
+    "logs/conference/ci-1007-question-column-boundary/evidence_single_object_stdout.txt": "15c4762a3b8193a25ea48591e5c6849282f88fdfd93ae65de40b02c07152cd3f",
+    "runs/conference/ci-1007-question-column-boundary/evidence_single_object.md": "7c78bca13bdfa7d1c33172b53a233f89977699786fc28368b544543d9168333a",
+    ".artifacts/1007-question-columns-real-v1/receipt.json": "40a07a9e9b2c567266175674b570590448e4a6d63a7dfa44f57caa65ad05caa8",
+    ".artifacts/1007-real-efficacy-context-v1/source-contexts.json": "cbee819398df7a71ce7b32ca68f98353c4e7333785f99ee05419329a3efa0d1d"
+  },
+  "independent_boundary_challenge": {
+    "actual_agent": "codebuddy", "actual_provider": "codebuddy-cli",
+    "actual_model": "deepseek-v4.1-flash", "effort": "max",
+    "seconds": 339.518, "exit_code": 0, "fallback": null,
+    "tools": "static Read/Grep; Bash denied",
+    "observed_tool_calls": 69, "api_calls": "UNKNOWN",
+    "decision": "ACCEPT_BOUNDED numeric separation; REVISE F1-F4 and Q1 presentation",
+    "owner_disposition": "F1 unresolved selector separation; F2 actual filtered facet counts; F3 safe integer pagination; F4 union qualification comment; Q1 existing source-friendly study labels",
+    "final_repaired_bytes": "owner verified; not a second independent PASS",
+    "independence": "fresh context verified, parent model identity unavailable"
+  },
+  "real_B_preview": {
+    "directory": ".artifacts/1007-question-columns-real-v1",
+    "replay_command": "uv run python .artifacts/1007-question-columns-real-v1/replay.py",
+    "input_sha256": "579585a912e44a6fea7570a15080cfef25e87ef00256b8d847719cc8d6132b38",
+    "site_sha256": "d519a37f07999cf04ee36cc73b40318371ffdcaf505e044d65cfcb917b98ef8b",
+    "site_bytes": 10586787,
+    "physical_pages": 29, "source_baseline_observations": 183,
+    "studies": 4, "columns": 26, "scientific_facets": 26,
+    "source_unchanged": true, "current_switched": false,
+    "source_code_scope": "earlier question-column bytes; not final selector or efficacy acceptance",
+    "browser": "NOT_RUN", "scientific_acceptance": false,
+    "receipt_note": "original html_sha256 field is digest/size pair; do not rewrite immutable receipt"
+  },
+  "in_progress_not_committed_as_accepted": {
+    "source_bridge": "ci-1007-b-source-efficacy dispatched once, PENDING; owner materializer integration/new real1RED excluded from verified code batch",
+    "source_semantics": "ci-1007-real-efficacy-semantics dispatched once after preflight0, PENDING;35 full contexts/91 atoms in seven exact-union chunks; no scientific acceptance",
+    "source_context_replay": "uv run python .artifacts/1007-real-efficacy-context-v1/freeze.py; exclusive new output only",
+    "source_context_database_unchanged": true
+  },
+  "acceptance_open": [
+    "original1007 attachments; no invented case IDs",
+    "source bridge terminal/integration, true positive multi-drug numerical frame",
+    "source/required publications/universe/current ChinaMAH group",
+    "capacity-blocked Chinese source fidelity repair",
+    "Ego12 recovery, four desktop widths/four states/L1L2/keyboard/fresh offline browser",
+    "same-current ABC edits/sync/config/three single shares/joint share/reopen",
+    "24 portals/three hosts/fresh-install/recovery/unique RC"
+  ]
+}

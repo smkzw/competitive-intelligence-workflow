@@ -2,6 +2,39 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Milestone12 active, HEAD/origin20a89bfb verified (milestone11 committed/pushed).
+Execution-plus-conference: disjoint source bridge still PENDING; owner changed
+known-question matrix columns while retaining separate unchanged numeric facets,
+with one completed fresh boundary challenge, no extra chair. Exact
+review set excludes worker-in-progress files. Related family6RED/16PASS,
+A linked-glyph1RED; coherent A/B change96PASS1.48s, scoped strict1 PASS and
+Ruff formatting fixed without repeating full tests per line. Three adjacent A
+assertions previously confused descriptive columns with axes; replacement tests
+retain real no-shared-numeric-facet checks plus descriptive reachability. Node
+execution is not browser QA. Adjacent share/payload6PASS5.66s. Reviewer actual
+CodeBuddy/deepseek-v4.1-flash:max339.518s/exit0/no fallback; static Read/Grep,
+Bash denied. F1 unknown selector isolation, F2 filtered facet count, F3 integer
+pagination, F4 cross_trial comment, Q1 source-friendly study labels repaired by
+owner: root6FAIL/21PASS ->106relatedPASS6.48s, scoped Ruff/strict2. Review was
+on earlier frozen bytes, not an independent PASS for repaired code. No new wide
+gate yet; planned once common source integration stabilizes. Author assets mirrored;
+source/public claims/current remain unchanged. Continue source and same-current
+journey. Ego/capacity/originalpacket Ask stillopen, no new pause or model switch.
+
+Ordinary real materializer efficacy view regression1RED6.60s; owner prepared
+partial-view/append-only legal shared-consumer integration in its own tool file,
+not QA against pending worker bytes. Integration tests/gate await executor's
+terminal output. Scientific context parallel branch: owner read-only froze35
+source instances/91 A-bound atoms, seven complete exact-union chunks (packet
+cbee819398df7a71ce7b32ca68f98353c4e7333785f99ee05419329a3efa0d1d),
+source DB unchanged; one fresh ci-1007-real-efficacy-semantics C03 actually
+dispatched after preflight0, PENDING not accepted. Existing question-column
+review is completed, not repeated. This new challenge is medically uncertain
+real-source concepts/eligibility only, no code repair or whole-page loop.
+
+Following milestone11 entry is historical to its20a89bf commit, not current
+worker/reviewer acceptance or a live operation to restart.
+
 Milestone11 in progress, parent8996917. Execution-plus-conference: one completed
 source/translation challenge with genuine interpretive defects; a disjoint two-file
 B efficacy source bridge executor while owner retains registry/materializer and
