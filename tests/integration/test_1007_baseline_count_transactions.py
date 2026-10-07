@@ -18,8 +18,18 @@ from tests.integration.reports.test_b_report_portal import _page_json_assignment
 from tests.integration.test_1007_baseline_edit_consumers import AT, _candidate
 
 
-@pytest.mark.parametrize("role", ["participant_count", "denominator"])
-def test_counts_and_N_save_clear_restore_undo_with_no_implicit_rate(tmp_path, role):
+@pytest.mark.parametrize("role", ["participant_count", "denominator", "reported_measure"])
+def test_counts_and_N_save_clear_restore_undo_with_no_implicit_rate(tmp_path, role, monkeypatch):
+    if role == "reported_measure":
+        from tests.integration import test_1007_baseline_edit_consumers as fixture
+        from tests.unit.test_ctgov_baseline_atoms import _module, _record
+
+        def source_NUMBER():
+            record = _record()
+            _module(record)["measures"][1]["paramType"] = "NUMBER"
+            return record
+
+        monkeypatch.setattr(fixture, "_record", source_NUMBER)
     root, contract, snapshot, data, _ = _candidate(tmp_path)
     mapping = {r["row_id"]: r["source_fact_version_id"] for r in data.baseline_views["facts"]}
     bindings = register_b_baseline_source_consumers(root, snapshot, data, mapping, registered_at=AT)
@@ -34,7 +44,8 @@ def test_counts_and_N_save_clear_restore_undo_with_no_implicit_rate(tmp_path, ro
         report_sites={"B": site}, report_data_paths={"B": inputs},
         fact_version_ids=tuple(mapping.values()), created_at=AT)
     row = next(r for r in data.baseline_views["facts"]
-               if r["source_value_role"] == role and r["group_id"] == "BG7")
+               if r["source_value_role"] == role and r["group_id"] == "BG7"
+               and (role != "reported_measure" or r["statistic_form"] == "NUMBER"))
     source = service._fact_row(mapping[row["row_id"]])
     before_digest = source["content_sha256"]
 
@@ -73,6 +84,10 @@ def test_counts_and_N_save_clear_restore_undo_with_no_implicit_rate(tmp_path, ro
         assert evidence["original_text"] == row["source_text"]
         public = service.current_facts()[source["fact_id"]]
         assert public.get("numerator") is None and public.get("denominator") is None
+        if role == "reported_measure":
+            assert public["statistical_form"] == "reported_number"
+            assert public["measure_object"] == "participants"
+            assert evidence["statistical_form_or_measurement_object"]["value"] == "NUMBER"
         if expected is None:
             assert evidence["value"]["state"] == "user_cleared"
             assert payload["user_edits"][row["row_id"]]["current_value"] == "用户清除，待重新核实"

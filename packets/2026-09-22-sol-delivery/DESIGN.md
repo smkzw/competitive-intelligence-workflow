@@ -18,7 +18,11 @@ report/evidence/candidate，分别序列化正式报告和来源证据ID；候�
 
 人数/N仅明确参与者单位、有限非负整数才能施加n≤N约束；最深作用域N无效
 或单位未核时保持未知，不借更浅N、零或组名补足。工具回执如实列全源原子、
-可编辑子集和未接通ID/原因，不重写旧24项或旧声明来冒充新177项接受。
+可编辑子集和未接通ID/原因，不重写旧24项或旧177项声明来冒充当前接受。
+源NUMBER/reported_measure复用同一消费者与修订事务，binding使用中性
+reported_number，源paramType/metric/value_role保持原样。明确参与者单位才能
+约束整数/n≤N；其他NUMBER保持原数值类型，不制造统计分布或隐式比例。
+呈现标签为“源报告数值（NUMBER）”，不让流畅名称改变原始科学类型。
 
 C公共来源复用现有ReportCPortalData，新增有界来源关系投影
 source_version_by_source_id及source_evidence_snapshot_id；科学观察继续使用原捕获

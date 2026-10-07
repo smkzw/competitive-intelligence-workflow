@@ -54,7 +54,8 @@ def build_source_baseline_view(
         elif context.value_role in {"denominator", "participant_count"}:
             stat = "count"
         stat_label = {"MEAN": "均值", "MEDIAN": "中位数",
-                      "STANDARD_DEVIATION": "标准差", "count": "人数"}.get(stat, stat)
+                      "STANDARD_DEVIATION": "标准差", "count": "人数",
+                      "NUMBER": "源报告数值（NUMBER）"}.get(stat, stat)
         labels = tuple(label for label in (
             context.term, context.class_title, context.category_title,
         ) if label)

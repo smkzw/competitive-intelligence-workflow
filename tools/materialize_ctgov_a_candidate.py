@@ -413,7 +413,7 @@ def materialize(
         baseline_refs = {row["row_id"]: row["source_fact_version_id"]
             for row in (b_report.baseline_views or {}).get("facts", ())
             if row["statistic_form"] in {
-                "MEAN", "MEDIAN", "STANDARD_DEVIATION", "count", "下限", "上限",
+                "MEAN", "MEDIAN", "STANDARD_DEVIATION", "count", "下限", "上限", "NUMBER",
             }
             and row["value"] is not None and row["unit"]}
         non_editable_baseline_rows = [
@@ -503,7 +503,7 @@ def materialize(
                                    for issue in batch.issues],
         "baseline_edit_consumers": [b.row_id for b in registered_baseline],
         "baseline_edit_scope": (
-            "mean_median_sd_count_denominator_limits_scalars_no_implicit_rate_no_current_acceptance"
+            "mean_median_sd_count_denominator_limits_number_scalars_no_implicit_rate_no_current_acceptance"
         ),
         "non_editable_baseline_rows": non_editable_baseline_rows,
         "binding_gaps": unresolved,

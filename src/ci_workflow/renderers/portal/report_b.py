@@ -5597,7 +5597,12 @@ def _validate_baseline_count_scopes(
         return number
 
     for row in rows:
-        if row.get("source_value_role") != "participant_count":
+        is_participant_number = (
+            row.get("statistic_form") == "NUMBER"
+            and row.get("source_value_role") == "reported_measure"
+            and _baseline_participant_unit(row)
+        )
+        if row.get("source_value_role") != "participant_count" and not is_participant_number:
             continue
         path = (row.get("source_locator") or {}).get("field_path", "")
         matches = []
@@ -5762,7 +5767,10 @@ def _validate_baseline_scalar_revision(fact: ActiveFact, binding: ActiveFactBind
         raise ReportBPortalError("基线修订必须为有限数值")
     if binding.statistical_form == "standard_deviation" and number < 0:
         raise ReportBPortalError("基线标准差不能为负")
-    if binding.statistical_form in {"count", "denominator"} and (
+    participant_scalar = binding.statistical_form in {"count", "denominator"} or (
+        binding.statistical_form == "reported_number" and binding.measure_object == "participants"
+    )
+    if participant_scalar and (
         number < 0 or not number.is_integer()
         or isinstance(fact.normalized_value, bool)
     ):
@@ -5781,13 +5789,17 @@ def _baseline_scalar_binding(data: ReportBPortalData, row_id: str) -> ActiveFact
     forms = {"MEAN": "mean", "MEDIAN": "median", "STANDARD_DEVIATION": "standard_deviation"}
     form = forms.get(str(row.get("statistic_form")))
     role = row.get("source_value_role")
-    if row.get("statistic_form") == "count" and role in {"participant_count", "denominator"}:
+    if row.get("statistic_form") == "NUMBER" and role == "reported_measure":
+        form = "reported_number"  # source NUMBER stays neutral, never mean/count/rate
+    elif row.get("statistic_form") == "count" and role in {"participant_count", "denominator"}:
         form = "count" if role == "participant_count" else "denominator"
     elif row.get("statistic_form") in {"下限", "上限"}:
         form = "lower_limit" if row["statistic_form"] == "下限" else "upper_limit"
     unit = str(row.get("unit") or "")
     if form is None or row.get("value") is None or not unit:
-        raise ReportBPortalError("基线编辑只接受有明确单位的原始均值/中位数/标准差/人数/N/限值")
+        raise ReportBPortalError(
+            "基线编辑只接受有明确单位的原始均值/中位数/标准差/人数/N/限值/NUMBER"
+        )
     if form in {"count", "denominator"} and not _baseline_participant_unit(row):
         raise ReportBPortalError("基线人数/N单位不是明确参与者，不猜统计对象")
     if row.get("product_id") is not None:
@@ -5802,7 +5814,9 @@ def _baseline_scalar_binding(data: ReportBPortalData, row_id: str) -> ActiveFact
         cohort_id=row.get("analysis_population") or None,
         period=row.get("baseline_timepoint"), endpoint_definition=row.get("source_definition"),
         event_definition=None, statistical_form=form,
-        measure_object="participants" if form in {"count", "denominator"} else "continuous",
+        measure_object=("participants" if form in {"count", "denominator"}
+                        or (form == "reported_number" and _baseline_participant_unit(row))
+                        else "reported_measure" if form == "reported_number" else "continuous"),
         unit=unit, normalized_unit=unit, source_version_id=str(row.get("source_version_id") or ""),
         source_pointer=canonical_source_pointer(locator), original_row_sha256=canonical_sha256(row))
 

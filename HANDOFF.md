@@ -1,47 +1,45 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交ffa8664637faa017114b759c704db95c834744dc；实际HEAD以Git核对。
-[本批机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-milestone-v10.json)
-绑定实际源代码、候选和验证范围，不是发布证明。
-用户授权连续构建与阶段GitHub递交；不因旧暂停记录停止，不等待旧PID、不拼接旧PASS。
+本批父提交89969179a00cbf32ab51e8c578c8e349236084e8；实际HEAD以Git核对。
+[里程碑11机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-milestone-v11.json)
+绑定实际源代码、候选与范围，不是发布证明。用户授权连续构建与阶段GitHub递交，
+不因旧暂停停工，不等待旧PID，不拼接旧PASS。
 
 权威仍为本包[PRD](packets/2026-09-22-sol-delivery/PRD.md)、
 [DESIGN](packets/2026-09-22-sol-delivery/DESIGN.md)、
 [PLAN](packets/2026-09-22-sol-delivery/PLAN.md)、
 [执行规范](packets/2026-09-22-sol-delivery/EXECUTION_RULES.md)、
-[验收](packets/2026-09-22-sol-delivery/ACCEPTANCE.md)，以1007V1用户裁决优先。
-[详细实施和复盘](packets/2026-09-22-sol-delivery/evidence/1007V1/implementation.md)。
+[验收](packets/2026-09-22-sol-delivery/ACCEPTANCE.md)，1007V1用户裁决优先。
+[详细实施/复盘](packets/2026-09-22-sol-delivery/evidence/1007V1/implementation.md)。
 
-## 本批已做与当前界限
+## 本批真正完成
 
-- B源基线人数、N、上下限接入真实编辑；无隐式比例、n/N单位和作用域不猜。
-  177/183可编辑，6条NUMBER源原子仍可查但本批未接；旧24绑定不变。
-  独立真实副本八次人数/N保存、清除、重输原值和undo、重试幂等/原源不变。
-  新B-only r8不是旧A4/B8；真实源无上下限，不能说限值真实链已验。
-- C复用成员/分面/数值资格进入生产共享列；字段分组是呈现，不是医学等价。
-  源候选258成员、15列、323呈现条目、16页；父条款展开仍只登记一次成员。
-  safe-locator新候选显式快照类型/源定位，review-only，不切current。
-- E02实际GLM-5.3-Flash:high1319.002s/no fallback；C03实际deepseek-v4.1-flash:max
-  522.992s/no fallback静态挑战（Bash被宿主拒绝），不是独立运行验收。
-  14生产反例修复后79相关PASS；历史24和遗漏哈希概括不照单采信。
-- 中文候选绑定复用display_text，完整原文/版本/定位/hash错配整批拒绝，
-  不改来源/科学状态/用户当前值。共享本地翻译进行中，不是医学或中文终验。
-- 当前C中文阅读仍7PASS/1FAIL，未删断言；v14六步quality-only终态exit0：
-  strict282、活跃1178PASS253.42s、兼容20、分层7，非全部集成/浏览器/发布。
-  Ego12恢复Ask与原1007附件Ask待答；四宽四态/L1L2/键盘/新浏览器离线NOT_RUN。
+- B六条源NUMBER接入同一真实编辑路径，183/183基线绑定；原类型/单位/角色
+  不改成均值、计数统计或比例。9RED/1PASS→50相关PASS12.02s，strict3/Ruff。
+- 新四源隔离QA：B101页，真实141→140→清除→undo回140，错误0.5拒绝且
+  current不变、重试幂等、源引文/版本/输入不变、隐式比例0；r3及B静态分享。
+  这是B-only行为证据，不是同current ABC/浏览器/医学发布。
+- 中文C03实际CodeBuddy/deepseek-v4.1-flash:max335.658s/exit0/no fallback REVISE；
+  PN、q2w、量表、厚度、负荷/总量、INN错误已定位，译文未发布。
+  126候选文本读完，但4源长行截断，不记无条件完整来源接受。
+- 版本化术语上下文修复因共享Hy-MT2 HTTP507失败，lease已释放；
+  模型约33.55GB而当时服务上限约27.54GB，磁盘337GiB可用。
+  容量Ask待答，没有改模型/服务/卸载/清理，也没有新译文PASS。
 
-## 下一条有界任务
+## 当前下一条有界任务
 
-完成当前质量门和最小机器清单、精确GitHub递交后继续源绑定中文内容复核与
-真正多药疗效共列；不重复八次旧操作或启动全页多路会商。
-随后同一合法current ABC任务、配置与三单包/联合分享、完整宇宙/来源、
-动态中国MAH集团、24门户/三宿主/安装/恢复/RC终验。未达终验不报完成。
+B真实诊断3544疗效行仍全是singleton条件组、efficacy_views=0；不能宣告横比。
+一名执行节点ci-1007-b-source-efficacy已实际派发，只写两新文件，结果PENDING
+尚未接受；owner持有共享registry/materializer。接91个A已核验疗效原子的B精确
+来源视图、保留partial剩余集合及未知科学条件，再真实语义共列/联动图。
+不要等待全资料才开发，也不放松量表/方向/分析集等硬门去凑共享列。
 
-唯一英文工程；旧中文工程零接触，五项用户旧修改、未知/raw/历史保留。
-不reset/checkout/clean/git add .、不无差别清理或伪造模型/审阅/Goal状态。
-[里程碑9原入口/状态](packets/2026-09-22-sol-delivery/archive/milestone9-1007V1/README.md)
-与更早归档只作历史，不重写原文。
+Ego12恢复及原01–06附件Ask待答；四桌面四态/L1L2/键盘/新浏览器离线NOT_RUN。
+C中文/完整宇宙来源/动态中国MAH集团、同current ABC配置和三单包/联合包、
+24门户/三宿主/安装/恢复/RC未完成。v14只覆盖历史代码，当前未跑宽门不写PASS。
 
-中文126条/174源行候选已由实际Hy-MT2产生，owner发现PN病种和q2w频次失真，
-未发布。一次有界内容会商已实际派发，PENDING不是通过，不因延迟重派或轮询。
+唯一英文工程；旧中文工程零接触，五项用户脏修改、未知/raw/历史保留。
+不reset/checkout/clean/git add .、无一般清理，Goal继续ACTIVE，不新设阶段暂停。
+[里程碑10原入口/状态](packets/2026-09-22-sol-delivery/archive/milestone10-1007V1/README.md)
+及更早索引只作历史，不重写原文。

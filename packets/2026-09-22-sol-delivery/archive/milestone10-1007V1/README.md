@@ -1,0 +1,6 @@
+# 里程碑10入口/状态原字节归档
+
+本目录只记录历史，不是当前在途任务或新的产品权威。
+HANDOFF.md SHA2b716c11c9624ec60a40233a49cc1ceaa2c37e6aeaa314e4f065714286c1e415；
+STATUS.md SHA04bcf7efff1a29d7945ccee3b6767bffdc5f54b167e4455016f815264f5926f2。
+原内容/错误/范围说明不修改。唯一当前入口为根HANDOFF及现行STATUS。

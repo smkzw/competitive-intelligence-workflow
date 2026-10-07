@@ -41,11 +41,12 @@ def test_existing_combined_builder_sources_all_selected_baseline_observations(tm
     assert receipt["baseline_source_issues"] == []
     eligible_ids = {r["row_id"] for r in rows if r["value"] is not None and r["unit"]
                     and r["statistic_form"] in {
-                        "MEAN", "MEDIAN", "STANDARD_DEVIATION", "count", "下限", "上限",
+                        "MEAN", "MEDIAN", "STANDARD_DEVIATION", "count", "下限", "上限", "NUMBER",
                     }}
     assert len(eligible_ids) > 24  # previous scalar coverage remains, now including n/N
     assert receipt["counts"]["registered_b_baseline_scalar_consumers"] == len(eligible_ids)
     assert set(receipt["baseline_edit_consumers"]) == eligible_ids
+    assert len(eligible_ids) == 183  # six real NUMBER atoms remain NUMBER, not inferred counts
     assert "count_denominator" in receipt["baseline_edit_scope"]
     assert "no_implicit_rate" in receipt["baseline_edit_scope"]
     non_editable = receipt["non_editable_baseline_rows"]

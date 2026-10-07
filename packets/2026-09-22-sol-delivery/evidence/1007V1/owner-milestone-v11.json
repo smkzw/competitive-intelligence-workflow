@@ -1,0 +1,165 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "89969179a00cbf32ab51e8c578c8e349236084e8",
+  "status": "development_candidate_continuing",
+  "scope": "neutral source NUMBER editing, isolated current/save/clear/undo/share, completed Chinese source challenge and capacity-blocked root repair",
+  "source_code_sha256": {
+    "src/ci_workflow/renderers/portal/report_b.py": "4ab1e49e26abdaf01fed247e381e02a9bb9d0e054744ff34b03d94fd318bd266",
+    "src/ci_workflow/reports/b/source_baseline.py": "e174560bbbc1d4313c4271d3eecfcaeb694b8b6ab1eeac71ebe9776322fdffd9",
+    "tools/materialize_ctgov_a_candidate.py": "aeca24a2f6bddf569c10e6d80a94654d666c20c23988a6be37284cf270d1c7e0",
+    "src/ci_workflow/application/user_fact_edit.py": "e13d9aadf97770bf3209a87ea5371ed41882af53ad1190f00b0ff3fd3e003150",
+    "src/ci_workflow/application/portal_consumer_registry.py": "572135700ab847b289299483763b4785c7319fc993136c410048630aa781628b"
+  },
+  "evidence_sha256": {
+    "runs/execution/ci-1007-display/owner-baseline-number-red-v1.txt": "ee81887b62e13e1e53ddb8325748d222a9345fa8e53f738a06ae6c9488889e38",
+    "runs/execution/ci-1007-display/owner-baseline-number-green-v4.txt": "bc11251ec7d75a97a8eea8ed305feba7f8e87bd57082ac7286158a7c1d42e446",
+    ".artifacts/1007-baseline-number-current-v1/receipt.json": "8363ebab6e2e0417ea7f5175b997fe9bf0968ceff297299e75d0e3d2dfe8de2b",
+    ".artifacts/1007-baseline-number-current-v1/source-receipt.json": "10b8b6b3132d3862ee02124a1351d4486b9fe503928061003a08614eebed49c7",
+    "runs/execution/ci-1007-display/owner-c-translations-v2.txt": "2acc856d334ceb1f706cbb45bc408946eed9bcbad74ec950898cdf74fc4d2b89",
+    "logs/conference/ci-1007-c-translation-fidelity/evidence_single_object_stdout.txt": "efe40559a5f6ac43f5d3d8d7408749c3e1d4febfde9b7106bd78e3c57164f8a4",
+    "runs/conference/ci-1007-c-translation-fidelity/evidence_single_object.md": "9005684bee2ff0b28213bbcef6aa6f28ddc9008a3d50632a7622bf7b9afc7596",
+    "packets/2026-09-22-sol-delivery/archive/milestone10-1007V1/HANDOFF.md": "2b716c11c9624ec60a40233a49cc1ceaa2c37e6aeaa314e4f065714286c1e415",
+    "packets/2026-09-22-sol-delivery/archive/milestone10-1007V1/STATUS.md": "04bcf7efff1a29d7945ccee3b6767bffdc5f54b167e4455016f815264f5926f2",
+    "runs/execution/ci-1007-display/owner-baseline-number-final-fixture-v1.txt": "52128d6647445200f33d6e544253518ff28348e58af52b4db7b76ca286d96cb1"
+  },
+  "verification": {
+    "root_red": {
+      "fail": 9,
+      "pass": 1
+    },
+    "related_green": {
+      "pass": 50,
+      "duration_seconds": 12.02,
+      "scope": "baseline sources/projection/transactions, not whole repository or release"
+    },
+    "scoped_static": {
+      "ruff": "PASS",
+      "strict_source_files": 3,
+      "scope": "changed baseline renderer/source view/materializer"
+    },
+    "prior_wide_gate_v14": "historical code only; not new code whole-gate acceptance",
+    "test_setup_failures": [
+      "evidence.row is identity not raw view",
+      "report.js is public projection not complete builder input",
+      "unified evidence field is value/state object not bare string"
+    ],
+    "final_fixture_check": {
+      "result": ".........                                                                [100%]\n9 passed in 0.37s",
+      "scope": "NUMBER family only; fixture wording adjusted, not whole milestone gate"
+    }
+  },
+  "real_current_QA": {
+    "registered_baseline_consumers": 183,
+    "physical_B_pages": 101,
+    "current_revision": 3,
+    "current_generation_sha256": "3f18a57a38eceebfa1d337fb38fd0de7bbe8972b6de988fcac6f1b2208a4cab3",
+    "B_share_sha256": "890f6d488fcfe6d70d0b68a00cd0798ff0c9e7ad4bead406dcce2eb55769696a",
+    "tested_fact_id": "ctgov-baseline-fact_54bf7cc5a2471e9b5412675a",
+    "operations": [
+      {
+        "operation": "set",
+        "revision": 1,
+        "expected": 140,
+        "payload_sha256": "d7f3e9aeb31e529b35b76ef6a6e23a5387138df965ad864eabed0a52f66ac6b5",
+        "original_quote_preserved": true,
+        "retry_idempotent": true
+      },
+      {
+        "operation": "clear",
+        "revision": 2,
+        "expected": null,
+        "payload_sha256": "72482b439f45a52a51a4808327d71927d1f33903a5fe94b82bad47561f6b601f",
+        "original_quote_preserved": true,
+        "retry_idempotent": true
+      },
+      {
+        "operation": "undo",
+        "revision": 3,
+        "expected": 140,
+        "payload_sha256": "523e4a2f9b89c4ccb2e710ea07b969a743706ad8b85e0f05f168cd40717bb592",
+        "original_quote_preserved": true,
+        "retry_idempotent": true
+      }
+    ],
+    "invalid_integer": "REJECTED_CURRENT_UNCHANGED",
+    "implicit_rate_derivations": 0,
+    "B_input_sha256": "579585a912e44a6fea7570a15080cfef25e87ef00256b8d847719cc8d6132b38",
+    "source_receipt_sha256": "10b8b6b3132d3862ee02124a1351d4486b9fe503928061003a08614eebed49c7"
+  },
+  "source_NUMBER_rows": [
+    {
+      "row_id": "ctgov-baseline-fact_54bf7cc5a2471e9b5412675a",
+      "statistic_form": "NUMBER",
+      "source_value_role": "reported_measure",
+      "source_version_id": "source-version_c17a4653ec8903dc9c822c60"
+    },
+    {
+      "row_id": "ctgov-baseline-fact_57e20d32d59294c6e2f8ef8f",
+      "statistic_form": "NUMBER",
+      "source_value_role": "reported_measure",
+      "source_version_id": "source-version_c17a4653ec8903dc9c822c60"
+    },
+    {
+      "row_id": "ctgov-baseline-fact_ba501d39b549cf4b1a055570",
+      "statistic_form": "NUMBER",
+      "source_value_role": "reported_measure",
+      "source_version_id": "source-version_c17a4653ec8903dc9c822c60"
+    },
+    {
+      "row_id": "ctgov-baseline-fact_9e2cc6a4c04fecbfc666eb45",
+      "statistic_form": "NUMBER",
+      "source_value_role": "reported_measure",
+      "source_version_id": "source-version_c17a4653ec8903dc9c822c60"
+    },
+    {
+      "row_id": "ctgov-baseline-fact_13e3a777bb95ed9f818c907a",
+      "statistic_form": "NUMBER",
+      "source_value_role": "reported_measure",
+      "source_version_id": "source-version_c17a4653ec8903dc9c822c60"
+    },
+    {
+      "row_id": "ctgov-baseline-fact_005baa03f1ad0913aed5177e",
+      "statistic_form": "NUMBER",
+      "source_value_role": "reported_measure",
+      "source_version_id": "source-version_c17a4653ec8903dc9c822c60"
+    }
+  ],
+  "translation_challenge": {
+    "actual_agent": "codebuddy",
+    "actual_provider": "codebuddy-cli",
+    "actual_model": "deepseek-v4.1-flash",
+    "effort": "max",
+    "duration_seconds": 335.658,
+    "exit_code": 0,
+    "fallback": null,
+    "decision": "REVISE",
+    "candidate_text_reads": 126,
+    "direct_uncapped_source_pairs": 122,
+    "source_tail_cap_notes": 4,
+    "scope": "static content/source fidelity; not independent executed hashes/tests or scientific equivalence"
+  },
+  "translation_repair": {
+    "status": "FAILED_CAPACITY",
+    "HTTP": 507,
+    "selected_model": "dawncr0w--Hy-MT2-30B-A3B-oQ8-MLX",
+    "resident_estimated_bytes": 33553517925,
+    "observed_ceiling_bytes": 27536302291,
+    "candidate_receipt_created": false,
+    "gate_lease_released": true,
+    "source_or_server_mutated": false,
+    "native_capacity_ask": "AWAITING_USER_CHOICE"
+  },
+  "next_bounded_executor": {
+    "task_id": "ci-1007-b-source-efficacy",
+    "status": "DISPATCHED_PENDING_NOT_ACCEPTED",
+    "owner_scope": "registry/materializer/renderer integration retained by Codex"
+  },
+  "acceptance_open": [
+    "Ego12 recovery and four desktop widths/four states",
+    "original1007 attachments",
+    "true multi-drug efficacy shared frame",
+    "complete universe/source and current dynamic ChinaMAH/group",
+    "same-current ABC task/config/three single shares/joint share/reopen",
+    "24 portals/three hosts/fresh-install/recovery/RC"
+  ]
+}

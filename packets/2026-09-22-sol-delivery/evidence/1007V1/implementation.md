@@ -652,3 +652,70 @@ cleanup or old Chinese-root contact. Continue after precise GitHub delivery, no
 newpause. NativeChinese, true multi-drug efficacy, complete source/universe,
 dynamicChinaMAH/group, same-currentABCfulljourney, Ego four-width/four-state and
 newbrowser offline,24portals/threehosts/install/recovery/RC still open.
+
+## Milestone11: neutral source NUMBER and completed translation challenge
+
+Parent89969179a00cbf32ab51e8c578c8e349236084e8 actually pushed/origin same.
+GlobalAGENTS93lines refreshed; no change of identity/authority or old Chinese-root
+contact. Owner keeps shared registry/materializer; one disjoint two-new-file E03
+B efficacy source bridge dispatched under live guard/manifest after preflight0.
+Pending output cannot count as execution acceptance. Its source input shows actual
+3544 B efficacy records,3544 singleton groups,zeroefficacy_views. Source precision
+and genuine clinical comparison are separate problems; no unknowns filled to
+force co-axis. Related-study membership retained even while a91-source subset is
+being connected. No per-observation approval platform or another ontology.
+
+Source NUMBER root9FAIL/1PASS; coherent minimal change keeps NUMBER parameter and
+reported_measure source role, neutral reported_number consumer, source labels
+and original quote unchanged. Explicit participant units constrain integers and
+valid most-specific same-source/group N; other units do not become participant
+caps or distributions. Zero/raw numbers do not generate proportions. Three later
+integration failures were test setup mistakes: identity evidence.row is not the
+full source view; data/report.js is not complete builder input; unified evidence
+field is a value/state object. Owner inspected actual generated payload and
+persisted public facts instead of guessing again. 49PASS/1setupFAIL retained each;
+corrected family50PASS12.02s, scoped Ruff/strict3. A cosmetic fixture unit changed
+from weight to change-points to avoid suggesting clinically negative body weight;
+current milestone broad coverage will be rerun after common source integration,
+not inherited from historicalv14 or per edited line.
+
+Actual fresh fixed four-source QA at.artifacts/1007-baseline-number-current-v1:
+productionmaterializer183/183source baseline consumers, original sixNUMBER typed
+andsource-reextract proof; ordinaryB101physicalpages. A real European enrollment
+NUMBER141→140,clear,undo→140 throughr3;0.5rejected/oldcurrent intact, everyretry
+idempotent, originalsourcequote/version/input unchanged andimplicitrateSQL0.
+B current staticshareSHA890f6d488fcfe6d70d0b68a00cd0798ff0c9e7ad4bead406dcce2eb55769696a;
+receiptSHA8363ebab6e2e0417ea7f5175b997fe9bf0968ceff297299e75d0e3d2dfe8de2b.
+This is isolatedB-onlybehavior, not clinicalpublication/currentABC/browser acceptance.
+SourceCAS/payload/sidecar and old snapshots unchanged, no old8saves repeated.
+
+Chinese C03 actualCodeBuddy/deepseek-v4.1-flash:max335.658s/exit0/no fallback,
+16observed tool calls not API count. Bash denied; static Read/Grep, no independently
+executed hashes/tests. REVISE: PN misexpanded as psoriasis/peripheral neuropathy,
+q2w inverted to twiceweekly, itch/pain/direction andthickness/activity drift,
+loading/total qualifiers andinvented ChineseNem names. Reviewer read126candidate
+texts;4longsource lines capped despite sibling exclusions crosscheck, so owner
+records122uncapped sourcepairs+4limitations, not unconditional126fullsourcePASS.
+Reviewer counts35material/17normalization advisory only. Owner rejects choosing
+unverifiedNem Chinese name; keepINN. Source-supported routine terminology needs
+no new userapproval. Reviewer mistyped3a42497448prefix; exact frozenreceipt resolves
+3a42497457 uniquely; positivecontrols included in root-family repair selection.
+
+Newtranslationv2script keeps originalreceipt/source/current unchanged and uses
+sharedgate selectedHy-MT2/onelease/heartbeat/finallyrelease. FirstrequestHTTP507,
+no clause or newreceipt produced. Read-only documentedAPI andresource diagnosis:
+selectedmodelresidentestimate33553517925bytes>observedceiling27536302291bytes,
+disk337GiBfree, noactivegateleases; no evidence of diskfull. CapacitynativeAsk
+pending. Do not unload usermodels/raiseconfig/clearfiles/switchroutes blindly.
+Originalv1failedcandidate preserved; lease release is nottranslationacceptance.
+
+Old currententry/STATUS byte-exact milestone10archive, sole newentry concise;
+machine bindingowner-milestone-v11.json. One documentation patch rejected before
+edits due redundant unmatchedcontext, retried with exact inspectedlines. Large
+raw runtime grep produced excessive private output; subsequent runtime metadata
+parsed selectively instead. No rawlogs/prompts/localpaths publiccommit. No broad
+cache/session/historycleanup, fiveunrelateddirtyfiles+unknown/raw retained.
+Continue source bridge integration and science/Chinese/current/desktop branches,
+not newpause. Goal active; fulluniverse/dynamicChinaMAHgroup/samecurrentABCtask/
+Ego fourwidthfourstate/keyboard/offlinenewbrowser/24portals/threehosts/install/
+recovery/RC remainopen. Partialgreen/exit0/shareZIP donotclose those gates.
