@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 import sys
+import unicodedata
 from datetime import UTC, date, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -230,10 +231,19 @@ _STATUS_RANK = {
     "已撤回": 0,
 }
 ALIAS = json.loads(Path(_args.alias_map).read_text(encoding="utf-8"))
-NORMALIZED_ALIAS: dict[str, str] = {
-    re.sub(r"[^a-z0-9]+", "", alias.lower()): str(canonical)
-    for alias, canonical in ALIAS["canonical_by_alias"].items()
-}
+
+
+def _alias_key(name: str) -> str:
+    # NFKC unifies width, not different development codes. Never erase hyphens.
+    return " ".join(unicodedata.normalize("NFKC", name).casefold().split())
+
+
+NORMALIZED_ALIAS: dict[str, str] = {}
+for alias, canonical in ALIAS["canonical_by_alias"].items():
+    key = _alias_key(alias)
+    if not key or (key in NORMALIZED_ALIAS and NORMALIZED_ALIAS[key] != canonical):
+        raise SystemExit("别名身份为空或存在冲突；不能按映射顺序覆盖")
+    NORMALIZED_ALIAS[key] = str(canonical)
 COMBO_RECORDS: list[dict[str, Any]] = []
 NON_PRODUCT_RECORDS: list[str] = []
 BORDERLINE: set[str] = set()
@@ -265,6 +275,9 @@ PHASE_MAP = {
 
 def slugify(name: str) -> str:
     text = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    if any(char.isalnum() and not char.isascii() for char in name):
+        digest = hashlib.sha256(name.casefold().encode("utf-8")).hexdigest()[:20]
+        return f"{text or 'intervention'}-{digest}"
     return text or "intervention"
 
 
@@ -399,8 +412,6 @@ def main() -> None:
             "g-csf",
             "filgrastim",
             "rituximab",
-            "cell infusion",
-            "infusion",
             "prednisone",
             "steroid",
             "glucocorticoid",
@@ -412,30 +423,31 @@ def main() -> None:
             "methotrexate",
         )
 
-        def _split_brand_combo(normalized_base: str) -> str | None:
-            # R16-c 窄规则：连字符各段均为已知别名时归并为映射序首（如 soliris-ultomiris）。
-            parts = [seg for seg in re.split(r"[-/]", normalized_base) if seg.strip()]
+        def _split_brand_combo(normalized_base: str) -> tuple[str, ...] | None:
+            # Resolve only explicitly supplied aliases, retaining every component.
+            # Unknown hyphenated development codes remain one original identity.
+            parts = [seg for seg in re.split(r"[-/–—−、]", normalized_base) if seg.strip()]
             if len(parts) >= 2 and all(
-                re.sub(r"[^a-z0-9]+", "", seg) in NORMALIZED_ALIAS for seg in parts
+                _alias_key(seg) in NORMALIZED_ALIAS for seg in parts
             ):
-                first_known = next(
-                    NORMALIZED_ALIAS[re.sub(r"[^a-z0-9]+", "", seg)] for seg in parts
-                )
-                return first_known
+                return tuple(dict.fromkeys(NORMALIZED_ALIAS[_alias_key(seg)] for seg in parts))
             return None
 
-        def _norm_drug(name: str, markers: tuple[str, ...] = NON_PRODUCT_MARKERS) -> str | None:
-            lowered = name.lower().strip()
+        def _norm_drugs(
+            name: str, markers: tuple[str, ...] = NON_PRODUCT_MARKERS,
+        ) -> tuple[str, ...]:
+            lowered = unicodedata.normalize("NFKC", name).casefold().strip()
             if "sirolimus" in lowered or "levamisole" in lowered:
-                return lowered  # R18-d 边界再定位候选：豁免黑名单，标 borderline 待纳排审查。
-            if any(marker in lowered for marker in markers):
-                return None
+                return (lowered,)  # Borderline relevance is not scientific acceptance.
+            if any(re.search(r"(?<!\w)" + re.escape(marker.strip()) + r"(?!\w)", lowered)
+                   for marker in markers):
+                return ()
             if re.fullmatch(r"nct\d+", lowered):
-                return None
+                return ()
             # R13-c 复合/制剂名称：取括号外主体再归一。
             base = re.sub(r"\s*\([^)]*\)\s*", " ", lowered).strip()
             base = re.sub(
-                r"\b(injections?|infusions?|tablets?|capsules?|solutions?|"
+                r"\b(cell infusions?|injections?|infusions?|tablets?|capsules?|solutions?|"
                 r"monotherapy|study drug|dose \d+|part ?\d+)\b",
                 "",
                 base,
@@ -446,16 +458,17 @@ def main() -> None:
             # R17-e 冒号/Part 前缀残留清理。
             base = re.sub(r"^[\s:;,-]+", "", base).strip()
             base = re.sub(r"[\s:;,-]+$", "", base).strip()
-            normalized = re.sub(r"[^a-z0-9]+", "", base)
+            normalized = _alias_key(base)
             if not normalized:
-                return None
+                return ()
+            if normalized in NORMALIZED_ALIAS:
+                return (NORMALIZED_ALIAS[normalized],)
             combo = _split_brand_combo(base)
             if combo is not None:
                 return combo
-            # R13-a 映射表键做同样归一，双侧一致。
-            return NORMALIZED_ALIAS.get(normalized, base)
+            return (base,)
 
-        raw_drugs = []
+        raw_drugs: list[str] = []
         for item in arms_mod.get("interventions", []) or []:
             name = str(item.get("name") or "").strip()
             itype = str(item.get("type") or "").upper()
@@ -466,9 +479,7 @@ def main() -> None:
                 BORDERLINE.add(name.strip())
             # R15-b 中文分号/英文分号复合名切分为独立干预段。
             for segment in re.split(r"[;；]", name):
-                normalized = _norm_drug(segment)
-                if normalized:
-                    raw_drugs.append(normalized)
+                raw_drugs.extend(_norm_drugs(segment))
         canonical_drugs = sorted(set(raw_drugs))
         arm_types = {
             str(arm.get("label") or "").strip(): str(arm.get("type") or "").upper()
@@ -487,7 +498,7 @@ def main() -> None:
             by_role: dict[str, set[str]] = {}
             for intervention in arms_mod.get("interventions", []) or []:
                 if not any(
-                    _norm_drug(segment) == drug
+                    drug in _norm_drugs(segment)
                     for segment in re.split(r"[;；]", str(intervention.get("name") or ""))
                 ):
                     continue

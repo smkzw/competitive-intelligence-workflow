@@ -177,7 +177,7 @@ def test_statistical_form_and_time_band_remain_separate_axes() -> None:
     groups = _groups_for_page("efficacy", rows)
 
     assert len(groups) == 3
-    assert {group["title_zh"] for group in groups} == {
+    assert {group["title_zh"].split(" · 实际观察时间：")[0] for group in groups} == {
         "EASI-75应答 · 应答率 · 约6个月 · 全分析集",
         "EASI-75应答 · 均值 · 约6个月 · 全分析集",
         "EASI-75应答 · 应答率 · 约第12周 · 全分析集",
@@ -206,7 +206,10 @@ def test_incomplete_fixture_semantics_preserve_trials_and_both_arm_roles_without
 
     groups = _groups_for_page("efficacy", efficacy)
     # 此历史fixture缺关键比较语义；不向真实输入补造参数来保留旧的跨试验预期。
-    assert len(groups) == 2
+    assert len(groups) == len(efficacy)
+    assert {row["row_id"] for group in groups for row in group["rows"]} == {
+        row["row_id"] for row, _ in efficacy
+    }
     assert all(group["cross_trial"] is False for group in groups)
     assert all(group["x_axis_label_zh"] == "产品｜试验" for group in groups)
     assert {row["trial_id"] for row, _source in efficacy} == {
@@ -234,6 +237,12 @@ def test_duplicate_same_role_arms_keep_distinct_human_labels() -> None:
     high["arm_detail"] = "高剂量"
     low["group_id"] = "treatment-low"
     low["arm_detail"] = "低剂量"
+    # This label/arm test uses complete synthetic scientific semantics; missing
+    # semantics no longer authorize same-trial numeric equivalence.
+    for row in (high, low):
+        row.update(semantic_direction="higher_is_better", semantic_estimand="treatment_policy",
+                   semantic_denominator="full_analysis_set",
+                   semantic_instrument_or_scale="EASI v1.0")
 
     groups = _groups_for_page(
         "efficacy",
@@ -602,6 +611,8 @@ def test_longitudinal_group_uses_one_series_across_time_bands() -> None:
     )
 
     assert len(groups) == 1
+    assert groups[0]["comparison_purpose"] == "within_trial_descriptive_time_axis"
+    assert "不代表跨研究等价" in groups[0]["time_window_note_zh"]
     assert {row["_chart_type"] for row in groups[0]["rows"]} == {"line"}
     assert {row["_chart_series_key"] for row in groups[0]["rows"]} == {"treatment"}
     assert {row["_chart_time_key"] for row in groups[0]["rows"]} == {

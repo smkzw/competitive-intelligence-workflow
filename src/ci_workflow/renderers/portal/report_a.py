@@ -1413,7 +1413,6 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
     (r"\bchemistry\b", "生化"),
     (r"\burinalysis\b", "尿液分析"),
     (r"\bsince\b", "自"),
-    (r"\blnp023\b", "伊普可泮"),
     (r"\bquality\b", "质量"),
     (r"\banytime\b", "任何时候"),
     (r"at/?before baseline", "基线时/前"),
@@ -1690,10 +1689,12 @@ def _native_unit_zh(unit: str) -> str:
         low,
     )
     if m:
+        if "equivalent" in low or re.search(r"[/*]", m.group(1)):
+            return text  # Outer denominator/compound dimensions must remain visible.
         sym = (m.group(2) or m.group(1) or "").replace(" ", "")
         sym = re.sub(r"ug", "μg", sym)
         sym = re.sub(r"umol", "μmol", sym)
-        return sym
+        return sym if m.group(2) else f"{sym}/L"
     m = re.fullmatch(
         r"(?:kilo|milli|micro|nano)?(gram|mole)s? per (?:deci|milli|micro|nano)?lit(?:er|re)",
         low,
@@ -1724,52 +1725,7 @@ def _native_unit_zh(unit: str) -> str:
         return "U"
     if low == "ln(ratio)":
         return "ln(比值)"
-    # 符号规范化（A r34 修订）：仅对"符号形"单位（含 / 且 ≤14 字符）做
-    # 拼写统一；不得对多词英文单位做整串空格剥离（A r35 回归：单位被
-    # 压成 percentageofresponders 之类的无空格串）
-    canonical = re.sub(r"[\s]", "", low)
-    if "/" in canonical and len(canonical) <= 16:
-        c2 = canonical
-        c2 = re.sub(r"\bmicromol", "μmol", c2)
-        c2 = c2.replace("ug/", "μg/").replace("mcg/", "μg/")
-        c2 = c2.replace("umol", "μmol").replace("μmol/l", "μmol/L")
-        c2 = c2.replace("/ml", "/mL").replace("/l", "/L")
-        c2 = c2.replace("μmoles", "μmol")
-        if c2 != canonical:
-            return c2
-    # 拼写式单位第二形状：前缀词直接连在 gram/mole 上、符号在括注里
-    # （A r24：'micrograms per litre (ug/L)' 类 500+ 行被占位串误吞）
-    m = re.fullmatch(
-        r"(kilo|milli|micro|nano)?(gram|mole)s?\s*(?:\([^)]*\))?\s*per\s*"
-        r"(deci|milli|micro|nano|kilo)?\s*lit(?:er|re)\s*(?:\(([^)]+)\))?",
-        low,
-    )
-    if m:
-        # 注意分组：3=分母词前缀（deci/milli/...），4=括注符号
-        num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(
-            m.group(1) or "", ""
-        )
-        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(
-            m.group(3) or "", ""
-        )
-        stem = "g" if (m.group(2) or "").startswith("gram") else "mol"
-        return f"{num_prefix}{stem}/{den_prefix}L"
-    m = re.fullmatch(
-        r"(?:international\s*)?units?\s*(?:\([^)]*\))?\s*(?:per\s*(?:lit(?:er|re)|ml)|/\s*lit(?:er|re)|/\s*ml|/l)"
-        r"(?:\s*\(([^)]+)\))?",
-        low,
-    )
-    if m:
-        paren_sym = (m.group(1) or "").replace(" ", "")
-        return paren_sym if paren_sym else ("IU/L" if "international" in low else "U/L")
-    # 括注符号直取（"micromoles (μmol)/liter" → μmol/L）
-    m = re.search(r"\(([^)]*/[^)]+)\)", text)
-    if m and re.fullmatch(
-        r"[kμµMmGgdUIn]?[A-Za-zμμ]{0,5}/[kμµMmGdn]?[A-Za-zμL]{1,5}", m.group(1).strip()
-    ):
-        sym = m.group(1).strip().replace("µ", "μ")
-        return sym
-    # 常见派生形状
+    # 常见派生形状：先于符号抽取，避免把带时间维/百分比变化限定的单位压成裸符号
     _DERIVED_UNIT_ZH = {
         "% of pnh-rbc within total rbc population": "PNH红细胞占比",
         "prbc units": "红细胞单位",
@@ -1818,11 +1774,70 @@ def _native_unit_zh(unit: str) -> str:
         "micromoles (μmol)/liter": "μmol/L",
         "micromole (μmol)/l": "μmol/L",
         "percent change from baseline in ldh": "较基线LDH百分比变化",
-        "u*day/l/week": "U·天/周",
+        # 1007V1：保留 U·天/L/周 的体积维 L，不得压成 U·天/周
+        "u*day/l/week": "U·天/L/周",
         "microgram per milliliter (ug/ml)": "μg/mL",
     }
     if low in _DERIVED_UNIT_ZH:
         return _DERIVED_UNIT_ZH[low]
+    if low in _UNIT_LITERAL_ZH:
+        return _UNIT_LITERAL_ZH[low]
+    if text in _UNIT_LITERAL_ZH:
+        return _UNIT_LITERAL_ZH[text]
+    # 拼写式单位第二形状：前缀词直接连在 gram/mole 上、符号在括注里
+    # （A r24：'micrograms per litre (ug/L)' 类 500+ 行被占位串误吞）
+    m = re.fullmatch(
+        r"(kilo|milli|micro|nano)?(gram|mole)s?\s*(?:\([^)]*\))?\s*per\s*"
+        r"(deci|milli|micro|nano|kilo)?\s*lit(?:er|re)\s*(?:\(([^)]+)\))?",
+        low,
+    )
+    if m:
+        # 注意分组：3=分母词前缀（deci/milli/...），4=括注符号
+        num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(
+            m.group(1) or "", ""
+        )
+        den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(
+            m.group(3) or "", ""
+        )
+        stem = "g" if (m.group(2) or "").startswith("gram") else "mol"
+        return f"{num_prefix}{stem}/{den_prefix}L"
+    m = re.fullmatch(
+        r"(?:international\s*)?units?\s*(?:\([^)]*\))?\s*(?:per\s*(?:lit(?:er|re)|ml)|/\s*lit(?:er|re)|/\s*ml|/l)"
+        r"(?:\s*\(([^)]+)\))?",
+        low,
+    )
+    if m:
+        paren_sym = (m.group(1) or "").replace(" ", "")
+        return paren_sym if paren_sym else ("IU/L" if "international" in low else "U/L")
+    # 括注符号直取（"micromoles (μmol)/liter" → μmol/L）；
+    # 1007V1：外层若仍含百分比变化/时间维限定，不得丢弃限定只留裸符号
+    m = re.search(r"\(([^)]*/[^)]+)\)", text)
+    if m and re.fullmatch(
+        r"[kμµMmGgdUIn]?[A-Za-zμμ]{0,5}/[kμµMmGdn]?[A-Za-zμL]{1,5}", m.group(1).strip()
+    ):
+        prefix = text[: m.start()]
+        suffix = text[m.end() :]
+        qualifier = f"{prefix} {suffix}".casefold()
+        if not re.search(
+            r"(percent|percentage|%|change|hour|\bhr\b|\bday\b|\bweek\b|\byear\b|"
+            r"/week|/day|/year|\*\s*day|per\s+week|per\s+day|per\s+year)",
+            qualifier,
+        ):
+            sym = m.group(1).strip().replace("µ", "μ")
+            return sym
+    # 符号规范化（A r34 修订）：仅对"符号形"单位（含 / 且 ≤14 字符）做
+    # 拼写统一；不得对多词英文单位做整串空格剥离（A r35 回归：单位被
+    # 压成 percentageofresponders 之类的无空格串）
+    canonical = re.sub(r"[\s]", "", low)
+    if "/" in canonical and len(canonical) <= 16:
+        c2 = canonical
+        c2 = re.sub(r"\bmicromol", "μmol", c2)
+        c2 = c2.replace("ug/", "μg/").replace("mcg/", "μg/")
+        c2 = c2.replace("umol", "μmol").replace("μmol/l", "μmol/L")
+        c2 = c2.replace("/ml", "/mL").replace("/l", "/L")
+        c2 = c2.replace("μmoles", "μmol")
+        if c2 != canonical:
+            return c2
     # 指数计数单位：空格无关的容差匹配（round-3 IPF：'10^9 cells/ liter (L)' 类变体）
     compact = re.sub(r"\s+", "", low)
     m = re.fullmatch(
@@ -1852,13 +1867,7 @@ def _native_unit_zh(unit: str) -> str:
         return "×10¹²/L"
     if low in {"10^9 cells/l", "10^9 cells/liter (l)", "10^9/l"}:
         return "×10⁹/L"
-    if low in _UNIT_LITERAL_ZH:
-        return _UNIT_LITERAL_ZH[low]
-    if text in _UNIT_LITERAL_ZH:
-        return _UNIT_LITERAL_ZH[text]
-    # 回退：残余多词英文 → 显式声明；短符号（g/L、U/L、μmol/L 等）保留
-    if len(re.findall(r"[A-Za-z]{3,}", text)) >= 2:
-        return "登记报告单位（详见登记来源）"
+    # 1007V1：未知来源单位保留原文，不再用泛化占位掩盖科学单位
     return text
 
 
@@ -1909,18 +1918,13 @@ def _native_history_zh(text: str) -> str:
     return out
 
 
-# 研发代号 → 已确立中文名（构成式转写的药名层；仅收录可核实条目）
-_ARM_CODE_ZH = {
-    "LNP023": "伊普可泮",
-    "RVA576": "Coversin",
-    "ALXN2050": "Danicopan",
-    "ACH-0144471": "Danicopan",
-    "ALN-CC5": "ALN-CC5",
-}
+# 1007V1：展示层不再把研发代号替换为猜测商品名/通用名。
+# 保留空导出供 report_b 等既有 import 兼容；调用方对未收录代号应保留原文。
+_ARM_CODE_ZH: dict[str, str] = {}
 
 
 def _native_arm_zh(value: str) -> str:
-    """登记组别名的确定性中文转写；残余多词英文回退显式声明。"""
+    """登记组别名的确定性中文转写；研发代号原样保留，不做别名替换。"""
     out = " ".join(str(value or "").split())
     if not out:
         return out
@@ -1932,10 +1936,7 @@ def _native_arm_zh(value: str) -> str:
     out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
     out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
     if len([w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]) >= 2:
-        # 构成式转写：研发代号→中文名，剂量/频次词保留
-        for code, zhname in _ARM_CODE_ZH.items():
-            if re.search(code, out, re.I):
-                out = re.sub(code, zhname, out, flags=re.I)
+        # 1007V1：保留 ALXN2050 等原始代号，仅转写剂量/频次词
         out = re.sub(r"\bBid\b|\bBID\b|\bb\.i\.d\.?\b", "每日2次", out, flags=re.I)
         out = re.sub(r"\bQD\b|\bqd\b", "每日1次", out, flags=re.I)
         out = re.sub(r"\bQ4W\b", "每4周1次", out, flags=re.I)

@@ -1,0 +1,65 @@
+{
+  "contract": "1007V1-user-prompt",
+  "baseline_commit": "ef6b23d8d6311ac0be9594aa3b578b4460e0e465",
+  "stage": "development-owner-milestone",
+  "commit_binding": "containing Git commit; source hashes below are the tested bytes",
+  "release_accepted": false,
+  "source_sha256": {
+    "src/ci_workflow/domain/entities.py": "03bc627fad36722bd347a7304e20a5f0b1a09a2b7c04a037b683fd0c4e24f9b6",
+    "src/ci_workflow/reports/common/identity_projection.py": "a114732257299f980b45b875c4d5b8342525bfefd6102a6b380d1a65a20c7481",
+    "src/ci_workflow/renderers/portal/report_a.py": "cdebca846a6447a501c3902eec03cc838588472b415285dffacbedadf50181f6",
+    "src/ci_workflow/renderers/portal/report_b.py": "293375340d86ffbbce3d846f0cad9a64a36e113b1e8d79a8533f6909b41c26dd",
+    "src/ci_workflow/renderers/portal/assets/report-b.js": "3f643d859e7dbced50db930b6b42cc4912a34ed987eabb54af5b1a7803e53f8b",
+    "src/ci_workflow/renderers/portal/assets/kangzhe-site.js": "51570de43b8f0bd9b17bf07d91521d3c37de0c3834bf39e8247f3e11b974fa88",
+    "src/ci_workflow/reports/b/semantic_grouping.py": "6e2d2f919056fa586b642dd065087bd8fbd6e53f02a91f7b05c7b32aeb14f697",
+    "src/ci_workflow/reports/b/semantic_contract.py": "f1445f50f60def9291f6d40ebc968d77f0e8e03e831fe22269b93f39614e3929",
+    "tools/build_a_payload.py": "8f673fb896243b0d88ea7e726f8e801a4db3985d6034aea74f0a8724e88fc469",
+    "tools/replay_1007_b_workspace.py": "d7c4b7bc9b0fc8e7b24542f7ff226280598de83b3e7e95af3c64d9245b8025aa"
+  },
+  "checks": [
+    {
+      "id": "owner-quality-v2",
+      "command": "bash tools/gate.sh",
+      "scope": "ruff src/tests/tools; strict mypy src/tools; active unit/contract; retained bounded compatibility; layer audit; forbidden-path references",
+      "result": "PASS-quality-only",
+      "strict_source_files": 274,
+      "active_passed": 1136,
+      "retained_passed": 20,
+      "layer_audit_passed": 7,
+      "evidence": "runs/execution/ci-1007-display/owner-milestone-gate-v2.txt",
+      "evidence_sha256": "271eef4b39309b238eab5d782e7ac9bbf3cf1b6f923a2b2001f7e4d5211b4437"
+    },
+    {
+      "id": "owner-rootcause-family-v4",
+      "replay_command": "uv run pytest -q tests/unit/test_1007_display_source_fidelity.py tests/unit/test_1007_shared_arm_identity.py tests/integration/test_1007_a_intervention_identity.py tests/integration/test_1007_b_workspace_ui.py tests/integration/test_1007_identity_projection.py tests/integration/test_1007_motion_layout_ownership.py tests/integration/test_a_payload_builder_measure_context.py tests/integration/test_r24_a_builder_contract.py tests/reports/b/test_1007_comparison_workspace.py tests/reports/b/test_1007_shared_semantic_frame.py tests/reports/b/test_r13_semantic_grouping.py tests/reports/b/test_semantic_grouping_proposals.py tests/reports/b/test_v13_semantic_contract.py",
+      "result": "PASS-bounded",
+      "passed": 181,
+      "seconds": 32.10,
+      "evidence": "runs/execution/ci-1007-display/owner-review-remediation-green-v4.xml",
+      "evidence_sha256": "68089087084e74e0d3b5a56f8e59c82e61929ea5114933dd882bdd33cb143813"
+    }
+  ],
+  "candidate": {
+    "indication": "prurigo nodularis",
+    "directory": ".artifacts/1007-b-workspace-real-v3",
+    "source_sha256": "66a647f74f2988d62da0c5fc04db4e0ee8c854d8da34100fed601f8615483ea3",
+    "input_sha256": "2b23456aea56e0a9c18c634f5568b361f5beb64c7dcd0aa494d4475a2ad02bfd",
+    "site_sha256": "4f72ee1772d97345bb2e41637d2e2c49389f890ec8d36b3c63d28a4fd4322afc",
+    "source_observations": 18,
+    "matrix_members": 18,
+    "matrix_columns": 18,
+    "physical_pages": 22,
+    "current_promoted": false,
+    "independent_science_accepted": false
+  },
+  "unresolved": {
+    "external_1007_01_06_reference_cases": "not_received",
+    "science_review_v2": "PENDING-same-session-grok-4.7-high; original REVISE retained",
+    "c_executor": "PENDING; its new bytes excluded from this gate binding",
+    "shared_identity_consumers_and_real_mah": "NOT_ACCEPTED",
+    "real_multi_drug_shared_frame": "NOT_ACCEPTED",
+    "ego_browser": "NOT_RUN-existing-space-12-not-found",
+    "same_candidate_edit_clear_sync_config_share": "NOT_RUN",
+    "24_portals_3_hosts_install_recovery_rc": "NOT_ACCEPTED"
+  }
+}

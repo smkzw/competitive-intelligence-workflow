@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
+from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from ci_workflow.domain.ids import stable_id
 
@@ -22,6 +24,7 @@ class EntityType(Enum):
     TRIAL = "trial"
     COHORT = "cohort"
     ARM = "arm"
+    TARGET = "target"
 
 
 class ExternalIdentifier(BaseModel):
@@ -49,6 +52,21 @@ class EntityIdentity(BaseModel):
     identity_basis: str
     aliases: tuple[str, ...]
     external_identifiers: tuple[ExternalIdentifier, ...]
+    official_chinese_name: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    name_evidence_fragment_id: str | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+
+    @field_validator("official_chinese_name", "name_evidence_fragment_id")
+    @classmethod
+    def _optional_name_has_text(cls, value: str | None) -> str | None:
+        return None if value is None else _text(value)
+
+    @model_validator(mode="after")
+    def _official_name_has_evidence(self) -> EntityIdentity:
+        if bool(self.official_chinese_name) != bool(self.name_evidence_fragment_id):
+            raise ValueError("正式中文名须同时提供来源片段")
+        return self
 
     @classmethod
     def create(
@@ -58,6 +76,8 @@ class EntityIdentity(BaseModel):
         identity_basis: str,
         aliases: tuple[str, ...] = (),
         external_identifiers: tuple[ExternalIdentifier, ...] = (),
+        official_chinese_name: str | None = None,
+        name_evidence_fragment_id: str | None = None,
     ) -> EntityIdentity:
         canonical = _text(canonical_name)
         basis = _text(identity_basis)
@@ -77,6 +97,12 @@ class EntityIdentity(BaseModel):
             identity_basis=basis,
             aliases=normalized_aliases,
             external_identifiers=normalized_identifiers,
+            official_chinese_name=(
+                _text(official_chinese_name) if official_chinese_name is not None else None
+            ),
+            name_evidence_fragment_id=(
+                _text(name_evidence_fragment_id) if name_evidence_fragment_id is not None else None
+            ),
         )
 
 
@@ -88,6 +114,30 @@ class EntityRelation(BaseModel):
     predicate: str
     object_entity_id: str
     evidence_fragment_id: str
+    jurisdiction: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    authorization_scope: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    effective_from: datetime | None = Field(default=None, exclude_if=lambda value: value is None)
+    effective_until: datetime | None = Field(default=None, exclude_if=lambda value: value is None)
+    observed_at: datetime | None = Field(default=None, exclude_if=lambda value: value is None)
+
+    @field_validator("jurisdiction", "authorization_scope")
+    @classmethod
+    def _optional_scope_is_nonblank(cls, value: str | None) -> str | None:
+        return None if value is None else _text(value)
+
+    @field_validator("effective_from", "effective_until", "observed_at")
+    @classmethod
+    def _date_has_timezone(cls, value: datetime | None) -> datetime | None:
+        if value is not None and (value.tzinfo is None or value.utcoffset() is None):
+            raise ValueError("关系日期必须包含时区")
+        return value
+
+    @model_validator(mode="after")
+    def _scope_interval_is_ordered(self) -> EntityRelation:
+        if (self.effective_from is not None and self.effective_until is not None
+                and self.effective_until <= self.effective_from):
+            raise ValueError("关系有效区间必须递增")
+        return self
 
     @classmethod
     def create(
@@ -96,9 +146,25 @@ class EntityRelation(BaseModel):
         predicate: str,
         object_: EntityIdentity,
         evidence_fragment_id: str,
+        *,
+        jurisdiction: str | None = None,
+        authorization_scope: str | None = None,
+        effective_from: datetime | None = None,
+        effective_until: datetime | None = None,
+        observed_at: datetime | None = None,
     ) -> EntityRelation:
         predicate = _text(predicate)
         evidence_fragment_id = _text(evidence_fragment_id)
+        metadata = {
+            "jurisdiction": jurisdiction, "authorization_scope": authorization_scope,
+            "effective_from": effective_from, "effective_until": effective_until,
+            "observed_at": observed_at,
+        }
+        scope = {
+            key: value.isoformat() if isinstance(value, datetime) else value
+            for key, value in metadata.items() if value is not None
+        }
+        scope_key = (json.dumps(scope, sort_keys=True, ensure_ascii=False),) if scope else ()
         return cls(
             relation_id=stable_id(
                 "entity-relation",
@@ -106,11 +172,17 @@ class EntityRelation(BaseModel):
                 predicate,
                 object_.entity_id,
                 evidence_fragment_id,
+                *scope_key,
             ),
             subject_entity_id=subject.entity_id,
             predicate=predicate,
             object_entity_id=object_.entity_id,
             evidence_fragment_id=evidence_fragment_id,
+            jurisdiction=jurisdiction,
+            authorization_scope=authorization_scope,
+            effective_from=effective_from,
+            effective_until=effective_until,
+            observed_at=observed_at,
         )
 
 

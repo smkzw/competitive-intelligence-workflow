@@ -14,6 +14,105 @@
   var initialFocus = "";
   var resultPager = null;
   var RESULT_PAGE_SIZE = 24;
+  var comparisonQuestion = "";
+  var comparisonPage = 1;
+
+  function renderComparisonWorkspace(state) {
+    var workspace = window.__B_COMPARISON_WORKSPACE__;
+    var host = document.getElementById("full-study-comparison");
+    if (!workspace || !host) return;
+    var requested = new URLSearchParams(window.location.search || "").get("view") === "comparison";
+    host.hidden = !requested;
+    if (!requested) return;
+    var select = host.querySelector("[data-comparison-column]");
+    var questions = Object.create(null);
+    workspace.columns.forEach(function (column) {
+      if (!questions[column.question_id]) questions[column.question_id] = {label: column.question_label, columns: []};
+      questions[column.question_id].columns.push(column);
+    });
+    var keys = Object.keys(questions).sort();
+    if (!select.options.length) {
+      keys.forEach(function (key) {
+        var option = document.createElement("option");
+        option.value = key;
+        option.textContent = questions[key].label + "（" + questions[key].columns.length + "个条件分面）";
+        select.appendChild(option);
+      });
+      var stored = new URLSearchParams(window.location.search || "").get("cmp");
+      comparisonQuestion = questions[stored] ? stored : keys[0] || "";
+      select.value = comparisonQuestion;
+      select.addEventListener("change", function () {
+        comparisonQuestion = select.value;
+        comparisonPage = 1;
+        var url = new URL(window.location.href);
+        url.searchParams.set("cmp", comparisonQuestion);
+        window.history.replaceState({}, "", url.href);
+        renderComparisonWorkspace(selectedState());
+      });
+      host.querySelector("[data-comparison-prev]").addEventListener("click", function () {
+        comparisonPage -= 1; renderComparisonWorkspace(selectedState());
+      });
+      host.querySelector("[data-comparison-next]").addEventListener("click", function () {
+        comparisonPage += 1; renderComparisonWorkspace(selectedState());
+      });
+    }
+    var allColumns = questions[comparisonQuestion] ? questions[comparisonQuestion].columns : [];
+    var pages = Math.max(1, Math.ceil(allColumns.length / 4));
+    comparisonPage = Math.max(1, Math.min(comparisonPage, pages));
+    var offset = (comparisonPage - 1) * 4;
+    var columns = allColumns.slice(offset, offset + 4);
+    host.querySelector("[data-comparison-prev]").disabled = comparisonPage <= 1;
+    host.querySelector("[data-comparison-next]").disabled = comparisonPage >= pages;
+    var allowed = Object.create(null), query = resultQuery.trim().toLowerCase();
+    workspace.membership.row_ids.forEach(function (id) {
+      if (matches(id, state) && (!query || String(searchById[id] || "").indexOf(query) !== -1)) allowed[id] = true;
+    });
+    var constrained = query || Object.keys(state).some(function (dimension) {return (state[dimension] || []).length > 0;});
+    var table = host.querySelector("table"), head = table.querySelector("thead"), body = table.querySelector("tbody");
+    head.replaceChildren(); body.replaceChildren();
+    var heading = document.createElement("tr"), first = document.createElement("th");
+    first.textContent = "研究"; first.scope = "col"; heading.appendChild(first);
+    columns.forEach(function (column) {
+      var th = document.createElement("th"); th.scope = "col"; th.textContent = column.title;
+      heading.appendChild(th);
+    });
+    head.appendChild(heading);
+    var retained = 0, displayed = Object.create(null);
+    workspace.study_ids.forEach(function (studyId) {
+      var hasQueryRows = workspace.membership.row_ids.some(function (id) {
+        return allowed[id] && rowById[id] && String(rowById[id].trial_id || "study-identity-unresolved") === studyId;
+      });
+      if (constrained && !hasQueryRows) return;
+      var tr = document.createElement("tr"), label = document.createElement("th");
+      label.scope = "row"; label.textContent = studyId === "study-identity-unresolved" ? "研究身份待核" : studyId;
+      tr.appendChild(label); retained += 1;
+      columns.forEach(function (column) {
+        var cell = document.createElement("td");
+        var ids = (column.cells[studyId] || []).filter(function (id) {return !!allowed[id];});
+        ids.forEach(function (id) {
+          var row = rowById[id]; if (!row) return;
+          displayed[id] = true;
+          var item = document.createElement("button"); item.type = "button";
+          item.setAttribute("data-evidence-open", id); item.setAttribute("data-row-id", id);
+          var value = row.value == null ? "" : String(row.value);
+          var status = window.__CHART_SYNC__ && window.__CHART_SYNC__.unplottedValueText;
+          item.textContent = [row.product_zh, row.arm_detail || row.arm,
+            value ? value + (row.unit ? " " + row.unit : "") : status ? status(row) : "状态待核",
+            row.time || row.time_window, row.difference_note].filter(Boolean).join("｜");
+          cell.appendChild(item);
+        });
+        if (!ids.length) cell.textContent = "当前问题无匹配记录，不代表未研究或零结果";
+        tr.appendChild(cell);
+      });
+      body.appendChild(tr);
+    });
+    host.querySelector("[data-comparison-status]").textContent =
+      retained + "项研究；本问题条件分面 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
+      "，本页" + Object.keys(displayed).length + "条事实。数值共轴按各分面的科学资格另判。";
+    host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
+    host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
+    host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
+  }
 
   function armText(row) {
     var explicit = row && (row.arm || row.group);
@@ -815,6 +914,7 @@
     resultPager.setAttribute("data-page", String(resultPage));
     resultPager.setAttribute("data-page-count", String(pages));
     writeResultPosition();
+    renderComparisonWorkspace(state);
   }
 
   function installResultPager() {
@@ -898,6 +998,7 @@
     }
     updateStatus(state);
     compactRepeatedGroupTitles();
+    renderComparisonWorkspace(state);
   }
 
   function writeFilterUrl(state) {
@@ -970,6 +1071,10 @@
       var drawer = window.__EVIDENCE_DRAWER__;
       if (rowId && drawer && typeof drawer.openByRowId === "function") {
         event.preventDefault();
+        if (trigger.closest("#full-study-comparison") && window.__CHART_SYNC__) {
+          if (pagedResults) {initialFocus = rowId; renderPagedResults(selectedState());}
+          window.__CHART_SYNC__.selectByRowId(rowId);
+        }
         drawer.openByRowId(rowId, trigger);
       }
     });

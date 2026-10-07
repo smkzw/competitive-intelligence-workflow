@@ -38,12 +38,12 @@
    "bytes": 8130
   },
   "report-b.js": {
-   "sha256": "6ef1ee89188b30880f6a993679a15ebc33c09ca80a277fb407e81f531dac2fc2",
-   "bytes": 42706
+   "sha256": "3f643d859e7dbced50db930b6b42cc4912a34ed987eabb54af5b1a7803e53f8b",
+   "bytes": 48772
   },
   "report-b.css": {
-   "sha256": "48bdf7a04bdf7da266b4ad3432800617698a06cf2ebcbd296c46ba67d512bcda",
-   "bytes": 21253
+   "sha256": "c8ab81b8e46cf6621f70d6891dec54bcc3766eacef82774b57bf8613e4423a23",
+   "bytes": 22285
   },
   "report-c.js": {
    "sha256": "48037037985f70fdb6a1e6a9f221e9fa9b4586bbc98d8462d00c3d846f8577e6",
@@ -58,8 +58,8 @@
    "bytes": 7519
   },
   "kangzhe-site.js": {
-   "sha256": "8555e6b7b5838c75aedc814e8be914cd2538de3a58597f5de48a20152a678352",
-   "bytes": 6121
+   "sha256": "51570de43b8f0bd9b17bf07d91521d3c37de0c3834bf39e8247f3e11b974fa88",
+   "bytes": 7540
   },
   "kz-motion.js": {
    "sha256": "a7cf487c60c40a3137fa7663894faa98bc76914c0b4efabd41e1f126e8afb2bf",

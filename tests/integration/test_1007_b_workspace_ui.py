@@ -1,0 +1,67 @@
+"""Execute the production matrix renderer; not a substitute for Ego pixels."""
+
+import subprocess
+from pathlib import Path
+
+
+def test_production_matrix_keeps_shared_cells_clear_states_and_all_facets() -> None:
+    root = Path(__file__).resolve().parents[2]
+    script = root / "src/ci_workflow/renderers/portal/assets/report-b.js"
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const start=source.indexOf('  function renderComparisonWorkspace(');
+const end=source.indexOf('\n  function ',start+5);
+assert.ok(start>=0&&end>start);
+class Node {
+ constructor(){this.children=[];this.dataset={};this.listeners={};this.attributes={};this.hidden=false;}
+ appendChild(n){this.children.push(n);return n;}
+ replaceChildren(){this.children=[];}
+ setAttribute(k,v){this.attributes[k]=v;}
+ addEventListener(k,fn){this.listeners[k]=fn;}
+ querySelector(k){return lookup[k];}
+ get options(){return this.children;}
+}
+const lookup={};
+['[data-comparison-column]','[data-comparison-prev]','[data-comparison-next]',
+ '[data-comparison-status]','table','thead','tbody'].forEach(k=>lookup[k]=new Node());
+const host=new Node();
+const rows={a:{trial_id:'trial-a',value:0,unit:'%',product_zh:'<script>bad</script>',arm:'治疗组'},
+ b:{trial_id:'trial-b',value:50,unit:'%',arm:'治疗组'},
+ c:{trial_id:'trial-c',value:null,disclosure_state:'user_cleared',arm:'治疗组'}};
+const workspace={study_ids:['trial-a','trial-b','trial-c','trial-no-results'],
+ membership:{row_ids:['a','b','c']},columns:Array.from({length:9},(_,i)=>({
+  id:'column-'+i,question_id:'efficacy::easi75',question_label:'EASI75',title:'临床条件'+i,
+  cells:{'trial-a':['a'],'trial-b':['b'],'trial-c':['c']}}))};
+let state={},url='https://example.test/overview.html?view=comparison';
+const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:rows,searchById:{},
+ URL,URLSearchParams,JSON,Object,String,Math,
+ window:{__B_COMPARISON_WORKSPACE__:workspace,location:{get search(){return new URL(url).search;},
+ get href(){return url;}},history:{replaceState(_,__,next){url=next;}},
+ __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';}}},
+ document:{getElementById(){return host;},createElement(){return new Node();}},
+ matches(id,current){return !current.trial||rows[id].trial_id===current.trial;},
+ selectedState(){return state;}};
+vm.runInNewContext(source.slice(start,end),sandbox);
+sandbox.renderComparisonWorkspace({});
+assert.equal(host.hidden,false);assert.equal(lookup.tbody.children.length,4);
+assert.equal(lookup.thead.children[0].children.length,5); // four columns plus study
+function text(node){return [node.textContent||'',...node.children.map(text)].join('|');}
+assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除，待重新核实/);
+assert.doesNotMatch(text(lookup.tbody),/None|null/);
+assert.ok(text(lookup.tbody).includes('<script>bad</script>')); // literal safe text only
+assert.ok(lookup.tbody.children[0].children[1].children[0].attributes['data-evidence-open']==='a');
+const seen=new Set(JSON.parse(host.dataset.columnIds));
+lookup['[data-comparison-next]'].listeners.click();
+JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));
+lookup['[data-comparison-next]'].listeners.click();
+JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));
+assert.equal(seen.size,9);assert.equal(lookup['[data-comparison-next]'].disabled,true);
+state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
+assert.equal(lookup.tbody.children.length,1);assert.match(text(lookup.tbody),/trial-b/);
+state={trial:'no-match'};sandbox.renderComparisonWorkspace(state);
+assert.equal(lookup.tbody.children.length,0);assert.equal(JSON.parse(host.dataset.queryRowIds).length,0);
+state={};sandbox.renderComparisonWorkspace(state);assert.equal(lookup.tbody.children.length,4);
+"""
+    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr

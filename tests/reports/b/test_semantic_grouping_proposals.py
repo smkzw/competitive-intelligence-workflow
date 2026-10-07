@@ -182,10 +182,13 @@ def test_detail_projects_full_scientific_partition_without_regrouping() -> None:
                             semantic_adjudications=approved)
     detail = _project_scientific_groups(full, [(second, None), (third, None)])
     assert {frozenset(row["row_id"] for row in group["rows"]) for group in detail} == {
-        frozenset(("second",)), frozenset(("third",)),
-    }
+        ids for group in full
+        if (ids := frozenset(row["row_id"] for row in group["rows"])
+            & {"second", "third"})
+    }  # Filtering preserves the full canonical-time partition, never re-adjudicates.
     assert {group["scientific_group_id"] for group in detail} == {
         group["scientific_group_id"] for group in full
+        if any(row["row_id"] in {"second", "third"} for row in group["rows"])
     }
 
 

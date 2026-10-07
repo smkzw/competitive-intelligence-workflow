@@ -13,11 +13,13 @@ from ci_workflow.reports.b.semantic_contract import (
     ClinicalConstructObservation,
     SemanticAdjudicationReceipt,
     compare_clinical_constructs,
+    semantic_time_order,
     semantic_value_is_unknown,
+    source_domain_conflicts,
     time_policy_identity,
 )
 
-SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v3"
+SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v5"
 _SOURCE_JSON = TypeAdapter(Any)
 
 
@@ -187,6 +189,11 @@ def proposed_semantic_buckets(
 
     def compatible(left_id: str, right_id: str) -> bool:
         left_row, right_row = rows[left_id][0], rows[right_id][0]
+        if left_row.get("_domain") != right_row.get("_domain"):
+            return False
+        domain = str(left_row.get("_domain", ""))
+        if source_domain_conflicts(left_row, domain) or source_domain_conflicts(right_row, domain):
+            return False
         if left_row.get("_domain") == "supporting" or right_row.get("_domain") == "supporting":
             # Wording equivalence cannot turn different scientific domains or
             # metrics into the same observation, even with a positive receipt.
@@ -202,15 +209,8 @@ def proposed_semantic_buckets(
             # 回退到确定性路径（同桶 + 守卫）或维持分离。
             proposal = None
         if proposal is None:
-            if origin[left_id] != origin[right_id]:
-                return False
             if descriptive_only:
-                return True
-            left_row, right_row = rows[left_id][0], rows[right_id][0]
-            if (left_row.get("trial_id") and
-                    left_row.get("trial_id") == right_row.get("trial_id") and
-                    left_row.get("product_id") == right_row.get("product_id")):
-                return True  # Within-trial longitudinal description, not cross-trial equivalence.
+                return origin[left_id] == origin[right_id]
         elif not proposal.compatible:
             return False
         try:
@@ -232,7 +232,13 @@ def proposed_semantic_buckets(
         return compare_clinical_constructs(left, right_for_guard).compatible
 
     groups: list[list[str]] = []
-    for row_id in sorted(rows):
+    def clinical_order(row_id: str) -> tuple[str, float, float, str]:
+        try:
+            return (*semantic_time_order(_observation(rows[row_id][0])), row_id)
+        except ValueError:
+            return ("unresolved", float("inf"), float("inf"), row_id)
+
+    for row_id in sorted(rows, key=clinical_order):
         for group in groups:
             if all(compatible(row_id, existing) for existing in group):
                 group.append(row_id)

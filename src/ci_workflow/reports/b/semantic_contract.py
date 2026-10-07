@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+import re
+import unicodedata
 from collections.abc import Mapping, Sequence
 from enum import StrEnum
 from functools import lru_cache
@@ -179,12 +181,34 @@ def semantic_value_is_unknown(value: object) -> bool:
     """Missing markers are absence of knowledge, never an equivalence class."""
     if not isinstance(value, str) or not value.strip():
         return True
-    normalized = "-".join(value.casefold().replace("_", "-").split())
+    text = unicodedata.normalize("NFKC", value).casefold().strip().rstrip(".。!！?？;；:")
+    text = re.sub(r"(?<=[\u4e00-\u9fff])\s+(?=[\u4e00-\u9fff])", "", text)
+    normalized = "-".join(text.replace("_", "-").split())
     return normalized in {
         "unknown", "not-reported", "not-publicly-disclosed", "not-specified",
         "unspecified", "missing", "null", "none", "n/a", "na", "-", "—",
         "未报告", "未披露", "未公开", "未注明", "未提供", "未知", "不详",
+        "not-available", "unavailable", "n.a", "tbd", "待核", "未明确", "未公开披露",
+        "用户清除,待重新核实",
     } or normalized.endswith(("-not-reported", ":unknown"))
+
+
+def source_domain_conflicts(row: Mapping[str, Any], domain: str) -> bool:
+    """An operational page domain cannot overwrite explicit scientific provenance."""
+    if domain not in {"efficacy", "safety"}:
+        return False
+    if "source_domain" in row and (
+        semantic_value_is_unknown(row["source_domain"])
+        or str(row["source_domain"]).casefold() != domain
+    ):
+        return True
+    metric = row.get("source_metric")
+    if "source_metric" in row and semantic_value_is_unknown(metric):
+        return True
+    return str(metric).casefold() in {
+        "ada", "anti_drug_antibody", "immunogenicity", "pk", "pd", "pk_pd", "biomarker",
+        "other", "unresolved",
+    }
 
 
 def time_policy_identity(
@@ -218,6 +242,17 @@ def _resolve_timepoint_rule(
         # 配置层已拒绝重叠政策；此路径只挡未重验对象的注入，保守视为不可比。
         return None
     return matches[0] if matches else None
+
+
+def semantic_time_order(observation: ClinicalConstructObservation) -> tuple[str, float, float]:
+    """Stable nearest-canonical seed for non-transitive complete-link frames."""
+    rule = _resolve_timepoint_rule(observation, _default_timepoint_policy())
+    if rule is None:
+        return ("unresolved", math.inf, observation.timepoint_weeks)
+    canonical = rule.canonical_value
+    distance = (abs(observation.actual_timepoint - canonical)
+                if canonical is not None else 0.0)
+    return (rule.rule_id, distance, observation.timepoint_weeks)
 
 
 def compare_clinical_constructs(

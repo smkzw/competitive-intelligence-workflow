@@ -37,6 +37,7 @@ from ci_workflow.reports.b.portal_science import (
 from ci_workflow.reports.b.semantic_contract import (
     BUBBLE_PRESETS,
     semantic_value_is_unknown,
+    source_domain_conflicts,
 )
 from ci_workflow.reports.b.semantic_grouping import (
     ApprovedSemanticMerge,
@@ -63,7 +64,13 @@ from ci_workflow.reports.common.numeric_projection import (
     project_numeric,
 )
 from ci_workflow.reports.common.page_registry import PageRegistry, ReportCatalog, StaticPage
-from ci_workflow.reports.common.view_state import ReportRow
+from ci_workflow.reports.common.view_state import (
+    FacetAssignment,
+    FacetPlan,
+    NumericFrameEligibility,
+    ReportRow,
+    WorkspaceMembership,
+)
 from ci_workflow.storage.manifest_store import (
     ArtifactFileBinding,
     ArtifactManifest,
@@ -99,7 +106,6 @@ from .active_fact_projection import (
 from .builder import resolve_echarts_bundle, resolve_logo_src, resolve_portal_asset
 from .evidence_drawer import render_evidence_drawer_embed, render_evidence_drawer_host
 from .report_a import (
-    _ARM_CODE_ZH,
     _POPULATION_TOKENS,
     CompanyRow,
     EfficacyRow,
@@ -2019,14 +2025,10 @@ def _is_pure_role_label(raw: str) -> bool:
 
 
 def _arm_code_zh(code: str) -> str:
-    """组标识中的药名/角色代码 → 展示名（拉丁药名按登记惯例保留）。"""
+    """仅转写明确角色；药物身份由共同实体投影提供，不从代号猜药名。"""
     if code.casefold() == "placebo":
         return "安慰剂"
-    known = _ARM_CODE_ZH.get(code.upper())
-    if known:
-        return known
-    out = _b_native_label(code) or code
-    return out[:1].upper() + out[1:] if out and out[0].isalpha() else out
+    return code
 
 
 def _decode_arm_identifier(identifier: str) -> str | None:
@@ -2034,7 +2036,8 @@ def _decode_arm_identifier(identifier: str) -> str | None:
 
     独立复核 B r51/r55/r56：行标签与图表系列标签共用本解码，
     SVG 文本层与表格不再各说各话。"""
-    human = re.sub(r"^nct[0-9]+-arm-", "", identifier.casefold()).replace("-", " ").strip()
+    original = re.sub(r"^nct[0-9]+-arm-", "", identifier, flags=re.I).strip()
+    human = original.casefold().replace("-", " ").strip()
     if not human:
         return None
     canonical, canonical_label = _canonical_arm_role(human)
@@ -2048,10 +2051,12 @@ def _decode_arm_identifier(identifier: str) -> str | None:
         qualifier = _b_native_label(m_group.group(2) or "") if m_group.group(2) else ""
         base = f"第{m_group.group(1)}组"
         return f"{base}（{qualifier}）" if qualifier else base
-    m_tp = re.search(r"(?:^|\s)([a-z0-9]+)\s*tp(\d+)$", human)
+    # Decode only the period suffix; replacing every hyphen and taking the last
+    # word would silently turn ACH-0144471 into 0144471 or ALN-CC5 into CC5.
+    m_tp = re.fullmatch(r"(.+?)[\s-]+tp(\d+)", original, re.I)
     if m_tp:
         return f"第{m_tp.group(2)}期 {_arm_code_zh(m_tp.group(1))}"
-    m_lte = re.search(r"(?:^|\s)([a-z0-9]+)\s*lte$", human)
+    m_lte = re.fullmatch(r"(.+?)[\s-]+lte", original, re.I)
     if m_lte:
         return f"长期扩展期 {_arm_code_zh(m_lte.group(1))}"
     return None
@@ -3426,6 +3431,12 @@ def _records_with_semantics(
                     f"观察域与页面域不一致，拒绝静默改写：{existing} → {domain}"
                 )
             copied["_domain"] = domain
+        if source_domain_conflicts(copied, domain):
+            copied["renderable"] = False
+            copied["difference_note"] = "；".join(filter(None, (
+                _text(copied.get("difference_note")),
+                "来源领域/指标不属于本页数值框，保留原值与来源，待核科学归属",
+            )))
         if ((domain in _CLINICAL_CONCEPT_LOOKUPS or domain == "supporting")
                 and not copied.get("clinical_concept")):
             copied.update(_semantic_projection(copied, source, domain=domain))
@@ -3895,16 +3906,21 @@ def _dress_membership_groups(
             "line" if page_id == "longitudinal-results" and len(times) > 1 else "bar"
         )
         title = _group_title(first, domain=domain, include_time=include_time)
-        ids = {str(row["row_id"]) for row, _source in bucket}
-        if any(set(proposal.row_ids).issubset(ids) for proposal in semantic_proposals):
-            actual_times = tuple(dict.fromkeys(
+        actual_times = tuple(dict.fromkeys(
                 f'{row.get("actual_timepoint")} '
                 + {"week": "周", "day": "天", "month": "个月", "year": "年"}.get(
                     str(row.get("actual_timepoint_unit")), str(row.get("actual_timepoint_unit")),
                 )
                 for row, _source in bucket
-            ))
+                if row.get("actual_timepoint") is not None
+                and row.get("actual_timepoint_unit") is not None
+        ))
+        if actual_times:
             title += " · 实际观察时间：" + " / ".join(actual_times)
+        time_note = (("同研究同组的描述性随访，不代表跨研究等价或时间点相同"
+                      if page_id == "longitudinal-results" else
+                      "同框仅表示临床构念兼容，不代表时间点相同")
+                     if len(actual_times) > 1 else None)
         # 独立复核 B r39（issue-2）：合并标记按"事实是否发生"判定——
         # 仅当桶内确实合并了多个登记臂（或分组键含未知值且臂缺失）时标注；
         # 此前按分组键含未知值判定，834 张组别完整的图被错误标注
@@ -3926,6 +3942,10 @@ def _dress_membership_groups(
             x_axis_label_zh="产品｜试验",
         )
         group["title_complete"] = True
+        group["actual_times"] = actual_times
+        group["time_window_note_zh"] = time_note
+        if time_note:
+            group["title_zh"] += " · " + time_note
         if page_id == "longitudinal-results":
             values = [
                 float(row["numeric_value"])
@@ -3969,10 +3989,11 @@ def _disambiguate_group_titles(groups: list[dict[str, Any]]) -> list[dict[str, A
         # 无论签名是否相异，同名图卡一律顺序编号，保证页内标题唯一可归属；
         # 序号同时落到行级 _endpoint_ordinal（下划线键不参与事实摘要），
         # 展开表按行也能归属到具体终点定义
+        distinction = "登记终点定义" if len(set(signatures)) > 1 else "比较条件"
         for i, group in enumerate(dups, start=1):
-            group["title_zh"] = f"{title}（登记终点定义{i}）"
+            group["title_zh"] = f"{title}（{distinction}{i}）"
             for row in group.get("rows", ()):
-                row["_endpoint_ordinal"] = f"登记终点定义{i}"
+                row["_endpoint_ordinal"] = f"{distinction}{i}"
     return groups
 
 
@@ -4054,6 +4075,25 @@ def _groups_for_page(
     if not records:
         return ()
     records = _records_with_semantics(records, page_id=page_id)
+    if page_id == "longitudinal-results":
+        # A descriptive time axis is not a numeric equivalence column. Never
+        # restore the general same-trial bypass in the scientific partition.
+        series: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+        for row, source in records:
+            identity = tuple(_text(row.get(key)) for key in
+                             ("product_id", "trial_id", "group_id"))
+            key = (*identity, *_semantic_group_key(row, include_time=False),
+                   _text(row.get("period")), _text(row.get("cohort")))
+            if (not all(identity) or semantic_value_is_unknown(row.get("semantic_definition"))
+                    or source_domain_conflicts(row, "efficacy")):
+                key += (_text(row.get("row_id")),)
+            series[key].append((row, source))
+        return tuple({**group, "comparison_purpose": "within_trial_descriptive_time_axis"}
+                     for group in _dress_membership_groups(
+                         tuple(tuple(series[key]) for key in sorted(series)),
+                         page_id=page_id, domain="efficacy", include_time=False,
+                         chart_type="line", semantic_proposals=(),
+                     ))
     if page_id in {"overview", "product-trial-profiles"}:
         by_id = {str(row["row_id"]): row for row, _source in _dedupe_records(records)}
         for proposal in semantic_proposals:
@@ -4085,6 +4125,7 @@ def _groups_for_page(
         matrix = [item for item in records if item[0].get("_domain") == "matrix"]
         baseline = [item for item in records if item[0].get("_domain") == "baseline"]
         disposition = [item for item in records if item[0].get("_domain") == "disposition"]
+        supporting = [item for item in records if item[0].get("_domain") == "supporting"]
         overview_groups: list[dict[str, Any]] = []
         if efficacy:
             overview_groups.extend(_groups_for_page(
@@ -4100,6 +4141,7 @@ def _groups_for_page(
             ("efficacy-safety-matrix", matrix),
             ("baseline-overview", baseline),
             ("disposition-overview", disposition),
+            ("subgroups-supporting-evidence", supporting),
         ):
             if related_records:
                 overview_groups.extend(_groups_for_page(
@@ -4677,6 +4719,10 @@ def _page_records_unfiltered(
             safety=safety,
         )
         matrix = _matrix_records(data, names, trial_names)
+        supporting = _page_records(
+            data, page_id="subgroups-supporting-evidence", names=names,
+            trial_names=trial_names, efficacy=efficacy, safety=safety,
+        )
         return _dedupe_records(
             (
                 *tagged(efficacy, "efficacy"),
@@ -4684,6 +4730,7 @@ def _page_records_unfiltered(
                 *tagged(matrix, "matrix"),
                 *tagged(baseline, "baseline"),
                 *tagged(disposition, "disposition"),
+                *tagged(supporting, "supporting"),
             )
         )
     if page_id in {"efficacy", "longitudinal-results"}:
@@ -4862,6 +4909,78 @@ def semantic_review_buckets_for(
     for item in records:
         grouped[_semantic_group_key(item[0], include_time=True)].append(item)
     return tuple(tuple(grouped[key]) for key in sorted(grouped))
+
+
+def _comparison_workspace(
+    records: Sequence[tuple[dict[str, Any], Any]],
+    groups: Sequence[dict[str, Any]],
+    study_ids: Sequence[str],
+) -> dict[str, Any]:
+    """Project already adjudicated groups into a reachable study-column matrix.
+
+    No values are recalculated and no new scientific equivalence is inferred.
+    Membership, faceting and numeric eligibility retain their existing typed
+    contracts; a missing/duplicate observation in the groups fails closed.
+    """
+    def is_observation(row: Mapping[str, Any]) -> bool:
+        return row.get("_synthetic") is not True and row.get("_empty_state") is not True
+
+    membership = WorkspaceMembership(row_ids=tuple(
+        str(row["row_id"]) for row, _ in records if is_observation(row)
+    ))
+    assignments: list[FacetAssignment] = []
+    columns: list[dict[str, Any]] = []
+    drawable: list[str] = []
+    reasons: dict[str, str] = {}
+    studies = set(study_ids)
+    for group in groups:
+        group_rows = [row for row in group["rows"] if is_observation(row)]
+        if not group_rows:
+            continue
+        facet_id = str(group["scientific_group_id"])
+        cells: dict[str, list[str]] = defaultdict(list)
+        for row in group_rows:
+            row_id = str(row["row_id"])
+            trial_id = _text(row.get("trial_id"))
+            # Unknown study identity is retained explicitly, never assigned by
+            # array position or guessed product relationship.
+            study_key = trial_id or "study-identity-unresolved"
+            studies.add(study_key)
+            cells[study_key].append(row_id)
+            assignments.append(FacetAssignment(row_id=row_id, facet_id=facet_id))
+            if row.get("renderable") is True:
+                drawable.append(row_id)
+            else:
+                reasons[row_id] = (
+                    _text(row.get("difference_note")) or _text(row.get("reason")) or
+                    _state_label(_text(row.get("disclosure_state"), "unknown"))
+                )
+        columns.append({
+            "id": facet_id, "title": group["title_zh"],
+            "question_id": "::".join((
+                _text(group_rows[0].get("_domain")),
+                _text(group_rows[0].get("clinical_concept"),
+                      _text(group_rows[0].get("display_label_zh"))),
+            )),
+            "question_label": _text(group_rows[0].get("clinical_concept_label_zh"),
+                                    _text(group_rows[0].get("display_label_zh"), "研究记录")),
+            "row_ids": tuple(row_id for ids in cells.values() for row_id in ids),
+            "cells": dict(cells), "cross_trial": bool(group.get("cross_trial")),
+            "actual_times": group.get("actual_times", ()),
+            "time_window_note_zh": group.get("time_window_note_zh"),
+            "comparison_purpose": group.get("comparison_purpose", "semantic_numeric_frame"),
+        })
+    facets = FacetPlan(membership_row_ids=membership.row_ids, assignments=tuple(assignments))
+    numeric = NumericFrameEligibility(
+        membership_row_ids=membership.row_ids, drawable_row_ids=tuple(drawable),
+        undrawable_reasons=reasons,
+    )
+    return {
+        "membership": membership.model_dump(mode="json"),
+        "facets": facets.model_dump(mode="json"),
+        "numeric_eligibility": numeric.model_dump(mode="json"),
+        "study_ids": tuple(sorted(studies)), "columns": tuple(columns),
+    }
 
 
 def _render_page_context(
@@ -5054,6 +5173,9 @@ def _render_page_context(
         "external_sources": _external_source_entries(data),
         "bubble_presets": tuple(item.model_dump(mode="json") for item in BUBBLE_PRESETS),
         "chart_groups_json": chart_groups_json,
+        "comparison_workspace_json": _json(_comparison_workspace(
+            records, groups, tuple(study.id for study in data.all_studies),
+        )),
         "filter_rows_json": _json(filter_rows),
         "filter_groups": filter_groups,
         "essential_filter_dimensions": essential_filter_dimensions,

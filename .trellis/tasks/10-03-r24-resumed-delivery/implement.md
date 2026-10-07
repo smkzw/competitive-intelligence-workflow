@@ -1,5 +1,24 @@
 # Continuous implementation checkpoint
 
+## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
+
+Execution-plus-conference: owner holds shared comparison/identity contracts;
+one disjoint unit/arm display worker provides parallel implementation. Independent
+review is required for substantive medical equivalence/MAH attribution and final
+visual acceptance, not for every edit. Actual Goal active; HEAD ef6b23d matches
+review baseline. No legacy workspace access. Five historical dirty files protected.
+Current contract is user 1007V1 prompt; 01-06/reference/cases unavailable, native
+Ask outstanding. Do not invent their contents or blocked release PASS.
+Current: B ordinary matrix wired; review remediation family181PASS; owner gatev2
+EXIT0 quality-only (strict274/active1136/compat20/layer7). PN real v3 source slice
+18 observations/18 columns/22 pages retains unknown identity and original values.
+Display/layout nodes terminal; semantic frozen14-file same-session reviewv2 and
+disjoint C code node pending. Do not inherit owner gate for in-flight C bytes.
+Next: preserve owner milestone to GitHub, wire source-bound shared identity and
+A comparison; integrate terminal review/C, then same-candidate actual journey.
+Ego space12 NOT_FOUND means physical/browser NOT_RUN, not accepted delivery.
+Reuse current W plan, no new execution platform. October 4 sections below historical.
+
 ## Current owner checkpoint: phase close and lossless pause, 2026-10-04
 
 User now requests whole-current-phase completion, detailed retrospective/handoff
