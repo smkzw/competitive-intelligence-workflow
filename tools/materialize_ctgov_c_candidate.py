@@ -41,7 +41,7 @@ from ci_workflow.reports.c.endpoint_instances import validate_endpoint_timepoint
 from ci_workflow.reports.common.identity_projection import load_project_identity_context
 from ci_workflow.sources.connectors.ctgov_fetch import derive_saved_ctgov_record
 from ci_workflow.storage.content_store import ContentAddressedStore, ContentIntegrityError
-from ci_workflow.storage.snapshot_store import LockedSnapshot
+from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
 
 # Keep this importable helper independent of command-line modules, which parse
 # argv on import. These are registry display labels, not product-state claims.
@@ -289,11 +289,19 @@ def render_review_preview(output: Path, *, rendered_at: datetime,
     contract = verify_project_workspace(root).contract
     if inputs["contract"] != contract.model_dump(mode="json"):
         raise ValueError("C候选来源与呈现项目合同不一致")
+    locked = LockedSnapshot.model_validate(manifest["snapshot"])
+    snapshot = SnapshotStore(root).read(locked)
+    version_by_capture = {
+        entry["capture"]["source_id"]: entry["source_version_id"]
+        for entry in snapshot["closure"]["sources"]
+    }
     report = ReportCPortalData(
         schema_version="1.0", report_version="r24-source-review-candidate",
         indication_id=inputs["indication_id"], indication=contract.indication,
         data_cutoff=contract.data_cutoff, products=products, trials=tuple(trials),
         observations=tuple(projection["observations"]),
+        source_evidence_snapshot_id=locked.snapshot_id,
+        source_version_by_source_id=version_by_capture,
     )
     site = root / "reports/C/review-candidate/html"
     if site.is_symlink() or (site.exists() and (not site.is_dir() or any(site.iterdir()))):
@@ -301,7 +309,7 @@ def render_review_preview(output: Path, *, rendered_at: datetime,
             "C review preview requires a new empty site; earlier evidence stays intact"
         )
     registered = register_c_source_consumers(
-        root, LockedSnapshot.model_validate(manifest["snapshot"]), report,
+        root, locked, report,
         manifest["fact_version_by_ref"], {source.source_id: source for source in sources},
         registered_at=rendered_at,
     )

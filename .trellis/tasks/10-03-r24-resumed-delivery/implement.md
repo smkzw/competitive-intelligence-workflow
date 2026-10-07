@@ -2,6 +2,36 @@
 
 ## Current owner checkpoint: 1007V1 resumed, 2026-10-07 Europe/Rome
 
+Milestone9: source-faithful display plus explicit public provenance; execution+
+conference because C medical source meaning was materially uncertain. One
+independent raw-source challenge finished on declared Grok/grok-4.7:high fallback,
+571.161s/exit0, not top-levelZCode. Owner source checks upheld real defects,
+rejected new ontology/approval and role-vs-outcome-id reconstruction proposals.
+A22RED/4PASS->88related/82ordinaryABC+capture neighbors. Csource5RED/1PASS;
+frozen-production18display/projectionRED aftercorrectingtestsetup;130related,
+79consumers/recovery neighbors. Laterdistinct-report/evidence-snapshot1RED->63
+formalC/source/snapshotPASS; v12quality-only6steps1167/326.40s precededthatfix
+andisnotlatestsourceacceptance. Final frozen gate+machine receipt stillpending.
+Newsource258observations/258actualSQLbindings/16pages/4ABsourceversions; old254
+scientificrows unchanged, new2maxage+2placeboinjectionclauses. Unsupported92/
+gaps18notclosed. OwnerdirectscriptreplaynotnewCodeBuddydispatch; inheritedroute
+receiptcorrected with original retained. Finalsource-contextC v3review-only
+hasactualsourceversionmapping anddistinctsource_evidence_snapshot_id; noCurrent.
+PRD/DESIGN/PLAN/ACCEPTANCE/internalCguideupdated; root/statusoldtextbytearchived,
+nowoneconciseentry, notrewrittenhistory. TwowrongtestpathsNO_RUN preserved.
+Continue Chinese-source-linked comparison/current/fullsource branches; Ego12
+andoriginalpacketAskoutstanding, browser/science/24/hosts/RCnotaccepted.
+Followingoldercheckpoint paragraphs arehistorical, notpendingliveoperations.
+
+31f1b009bb9baa077a63f8ad87289405ffa72094 actualpushed/origin same. New direct
+source-display root22behaviorRED/4PASS afterfixture setup repaired (initial row
+truncation failedmodelguard, notbehaviorRED); 88relatedPASS1.87s/strict1.
+Wholelabel-onlypopulationtranslation replaces invented exposure/evaluation/
+response/rescue/MMRM conditions, unknownfullsource retained. Eventoccurrences
+use次 not例; genericserumtrough no longerinsertsTezepelumab. One newtestRuff
+longlinefailed thenformatfixed; actual ordinaryABC/capture neighborpending.
+No newwidegate perline, v11/history notinherited. Csource conferencepending.
+
 E03 Cbootstrap actualterminal CodeBuddy/deepseek-v4.1-flash:max683.159s/
 94tools/exit0, runtime modelUsage match, nofallback. SameABC project recovery
 candidate254observations/60endpointinstances/16pages shares4ABsourceversions
@@ -1999,3 +2029,13 @@ SIGINT(exit130), not a latency timeout. No report/acceptance/current produced. C
 packet now has explicit delegated boundaries/read-set/output; require preflightexit0
 before dispatch recovery. Keep this process failure visible. Science trio frozen anew
 at endpoint9dd5dcf1…, other2 unchanged; do not edit until reviewer actually terminates.
+# 1007V1 milestone9 final binding
+
+Continuous authorized work, no pause/RC. Final source regression27PASS3.18s;
+v13 six-step quality-only exit0 (strict281, active1167/447.31s, compat20, layering7).
+Same-project ABCv4 49/101/16 physical pages reopened against current code/input/file hashes.
+No current or scientific/visual acceptance. Public compact evidence is owner-milestone-v9.json.
+Next operating choice: execution-plus-owner integration for bounded C workspace semantics,
+with disjoint owner B edits; independent source conference already challenged the frozen
+prior C artifact, and new consequential equivalence acceptance still requires source review.
+No new full-page conference loop or per-line wide gate.

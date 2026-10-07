@@ -85,8 +85,8 @@ _FIELD_LABELS_ZH: dict[str, str] = {
     "inclusion_criterion": "入选标准",
     "exclusion_criterion": "排除标准",
     "arm_randomization_blinding": "随机与盲法",
-    "experimental_arm": "试验组干预",
-    "control_arm": "对照干预",
+    "experimental_arm": "试验组内干预",
+    "control_arm": "对照组内干预",
     "dosing_regimen": "给药方案",
     "primary_endpoint_definition": "主要终点定义",
     "primary_endpoint_description": "主要终点完整定义原文",
@@ -233,6 +233,14 @@ class ReportCPortalData(BaseModel):
     indication: str = Field(min_length=1)
     data_cutoff: datetime
     report_snapshot_id: str | None = None
+    source_evidence_snapshot_id: str | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+    # Origin capture IDs stay in scientific observations. Public versions come
+    # only from an explicit projection of the verified evidence snapshot.
+    source_version_by_source_id: Mapping[str, str] = Field(
+        default_factory=dict, exclude_if=lambda value: not value,
+    )
     products: tuple[ProductRow, ...]
     trials: tuple[StudyRow, ...] = Field(min_length=1)
     observations: tuple[DesignObservation, ...] = Field(min_length=1)
@@ -241,7 +249,7 @@ class ReportCPortalData(BaseModel):
     # design-patterns 页不再空转为核心事实表
     design_paths: Mapping[str, Any] | None = None
 
-    @field_validator("report_snapshot_id")
+    @field_validator("report_snapshot_id", "source_evidence_snapshot_id")
     @classmethod
     def _snapshot_not_blank(cls, value: str | None) -> str | None:
         if value is not None and not value.strip():
@@ -250,6 +258,14 @@ class ReportCPortalData(BaseModel):
 
     @model_validator(mode="after")
     def _products_and_trials_align(self) -> Self:
+        if self.source_evidence_snapshot_id is not None or self.source_version_by_source_id:
+            if self.source_evidence_snapshot_id is None:
+                raise ValueError("C 类来源版本投影必须绑定明确锁定快照")
+            if set(self.source_version_by_source_id) != {
+                row.source_version_id for row in self.observations
+            } or any(not key.strip() or not value.strip()
+                     for key, value in self.source_version_by_source_id.items()):
+                raise ValueError("C 类来源版本投影必须完整覆盖观察来源且不得为空")
         product_ids = {item.id for item in self.products}
         trial_ids = [item.id for item in self.trials]
         if len(trial_ids) != len(set(trial_ids)):
@@ -762,207 +778,23 @@ def _operator_zh(value: str | None) -> str:
     }.get(_text(value), _text(value))
 
 
-_DOSE_PATTERN = re.compile(
-    r"\b\d+(?:\.\d+)?\s*(?:mg|milligrams?)\s*(?:/\s*(?:kg|kilogram)\b|/\s*m2|m²)?",
-    re.I,
-)
+def _source_design_text(observation: DesignObservation) -> str:
+    """Never substitute a study product or guessed regimen for a source clause.
 
-
-def _segment_doses(segment: str) -> list[str]:
-    """剂量抽取：保留 /kg 体重口径（独立复核 C r19：0.57mg/kg 不得丢失分母）。"""
-    doses: list[str] = []
-    for match in _DOSE_PATTERN.findall(segment):
-        dose = re.sub(r"\s*milligrams?", " mg", match, flags=re.I)
-        dose = re.sub(r"\s+", " ", dose).strip()
-        if dose not in doses:
-            doses.append(dose)
-    return doses
-
-
-def _segment_frequency(segment: str) -> str:
-    if re.search(r"\bq2w\b|every two weeks|every 2 weeks", segment, re.I):
-        return "每2周1次"
-    if re.search(r"once a week|once per week", segment, re.I):
-        return "每周1次"
-    if re.search(r"\bq4w\b|every four weeks|every 4 weeks", segment, re.I):
-        return "每4周1次"
-    if re.search(r"\bqw\b|once weekly|every week", segment, re.I):
-        return "每周1次"
-    if re.search(r"\bbid\b|twice daily", segment, re.I):
-        return "每日2次"
-    if re.search(r"\btid\b|three times (?:a )?day", segment, re.I):
-        return "每日3次"
-    if re.search(r"once a day|\bqd\b|daily", segment, re.I):
-        return "每日1次"
-    return ""
+    Explicit display text is the caller's source-bound translation or current
+    user projection. Otherwise keep every qualifier, dose, branch and negation.
+    Scientific names remain in the shared identity header, not inferred here.
+    """
+    return (observation.display_text if observation.display_text is not None
+            else observation.source_text)
 
 
 def _compact_regimen_zh(data: ReportCPortalData, observation: DesignObservation) -> str:
-    """给药方案压缩：负荷期/维持期分开标注（独立复核 C r19）。"""
-    source = _text(observation.source_text)
-    product = _product_name(data, observation.product_id).split("（", 1)[0]
-    timepoint = _text(observation.assessment_timepoint)
-
-    # 按给药阶段切分：负荷/初始 vs 之后/维持
-    segments = [
-        s for s in re.split(r"\bthen\b|\bfollowed by\b|;|\.\s+", source, flags=re.I)
-        if s.strip()
-    ]
-    load_seg = next((s for s in segments if re.search(r"loading|initially|first", s, re.I)), None)
-    dose_segments = [s for s in segments if _segment_doses(s)]
-    if load_seg is None and len(dose_segments) >= 2:
-        # 无显式 loading 关键词但存在先后两个剂量段
-        # （"receive 600 mg once a week …, and then 900 mg every 2 weeks"）
-        load_seg = dose_segments[0]
-        later_segs = dose_segments[1:]
-    else:
-        later_segs = [s for s in segments if s is not load_seg and _segment_doses(s)]
-
-    parts = [product]
-    if load_seg and later_segs:
-        load_doses = _segment_doses(load_seg)
-        load_freq = _segment_frequency(load_seg) or _segment_frequency(source)
-        parts.append("负荷期" + ("、".join(load_doses) if load_doses else "剂量见登记原文")
-                     + ((f"（{load_freq}）") if load_freq else ""))
-        maint = later_segs[0]
-        maint_doses = _segment_doses(maint)
-        maint_freq = _segment_frequency(maint) or _segment_frequency(source)
-        parts.append("维持期" + ("、".join(maint_doses) if maint_doses else "剂量见登记原文")
-                     + ((f"（{maint_freq}）") if maint_freq else ""))
-    elif load_seg:
-        load_doses = _segment_doses(load_seg) or _segment_doses(source)
-        parts.append("负荷剂量" + ("、".join(load_doses) if load_doses else "见登记原文"))
-        if re.search(r"titrat|adjust", source, re.I):
-            parts.append("维持期按临床反应滴定")
-    else:
-        doses = _segment_doses(source)
-        frequency = _segment_frequency(source)
-        if doses:
-            parts.append("剂量" + "、".join(doses))
-        if frequency:
-            parts.append(frequency)
-    timepoint = _text(observation.assessment_timepoint)
-    if timepoint:
-        parts.append(timepoint)
-    body = "；".join(dict.fromkeys(p for p in parts if p))
-    # 独立复核 C r20（veto 第3项）：无剂量句时提取给药途径，
-    # 不得只剩产品名与"试验组干预"列重复
-    if not _segment_doses(source):
-        route = ""
-        if re.search(r"IV infusion|intravenous", source, re.I):
-            route = "静脉输注"
-        elif re.search(r"subcutaneous", source, re.I):
-            route = "皮下注射"
-        elif re.search(r"oral", source, re.I):
-            route = "口服"
-        elif re.search(r"topical", source, re.I):
-            route = "外用"
-        if route:
-            body = (body + "；" + route) if body else route
-    return body
+    return _source_design_text(observation)
 
 
 def _compact_arm_zh(data: ReportCPortalData, observation: DesignObservation) -> str:
-    """把登记平台的长句干预描述压缩为医学经理可扫读的中文方案。"""
-    source = _text(observation.source_text)
-    folded = source.casefold()
-    product = _product_name(data, observation.product_id).split("（", 1)[0]
-    product_map = {
-        "dupilumab": "度普利尤单抗",
-        "nemolizumab": "奈莫利珠单抗",
-        "lebrikizumab": "来布利珠单抗",
-        "rocatinlimab": "罗卡替单抗",
-        "difamilast": "迪法米司特",
-        "tapinarof": "他匹那罗夫",
-        "amlitelimab": "阿姆特利单抗",
-    }
-    matched_product = next((label for key, label in product_map.items() if key in folded), "")
-    # 独立复核 C r21（issue-2）：组合限定（+ C5 Inhibitor 等）是登记事实，
-    # 折叠为裸产品名会丢失关键干预语义
-    combo_suffix = ""
-    combo_match = re.search(r"\+\s*(C5 inhibitor|C3 inhibitor|background therapy)", folded)
-    if combo_match:
-        combo_suffix = (
-            f"（+{combo_match.group(1)}抑制剂）"
-            if "inhibitor" in combo_match.group(1) else "（+背景治疗）"
-        )
-    if "escape" in folded or "rescue" in folded:
-        product = "补救治疗"
-    elif "vehicle" in folded:
-        product = "赋形剂对照"
-    elif "placebo" in folded:
-        product = f"{matched_product}匹配安慰剂" if matched_product else "安慰剂"
-    else:
-        product = (matched_product or product) + combo_suffix
-
-    doses: list[str] = []
-    for match in re.findall(r"\b\d+(?:\.\d+)?\s*(?:mg|milligrams?)\b", source, re.I):
-        dose = re.sub(r"\s*milligrams?", " mg", match, flags=re.I)
-        dose = re.sub(r"\s+", " ", dose).strip()
-        if dose not in doses:
-            doses.append(dose)
-    frequency = ""
-    if re.search(r"\bq2w\b|every two weeks|every 2 weeks", source, re.I):
-        frequency = "每2周1次"
-    elif re.search(r"\bq4w\b|every four weeks|every 4 weeks", source, re.I):
-        frequency = "每4周1次"
-    elif re.search(r"\bq?w\b|once weekly|every week", source, re.I):
-        frequency = "每周1次"
-    elif re.search(r"\bbid\b|twice daily", source, re.I):
-        frequency = "每日2次"
-    route = ""
-    if "subcutaneous" in folded:
-        route = "皮下注射"
-    elif "topical" in folded or "cream" in folded or "ointment" in folded:
-        route = "外用"
-    week_range = ""
-    week_match = re.search(r"weeks?\s+(\d+)\s*(?:through|to|-)\s*(\d+)", source, re.I)
-    if week_match:
-        week_range = f"第{week_match.group(1)}–{week_match.group(2)}周"
-    elif observation.assessment_timepoint:
-        week_range = _text(observation.assessment_timepoint)
-
-    parts = [product]
-    if doses:
-        parts.append("剂量" + "、".join(doses))
-    if route:
-        parts.append(route)
-    if frequency:
-        parts.append(frequency)
-    if week_range:
-        parts.append(week_range)
-    return "；".join(part for part in parts if part) or "方案详见登记信息"
-
-
-_REGISTRY_ENDPOINT_TERM_ZH = {
-    # 顺序关键：长词/特定词先于其子串（clone→hemoglobin、avoidance→transfusion）
-    "pnh clone size": "PNH 克隆大小",
-    "clone size": "克隆大小",
-    "pnh clone": "PNH 克隆",
-    "transfusion avoidance": "输血规避",
-    "breakthrough hemolysis": "突破性溶血发生比例",
-    "haptoglobin": "触珠蛋白",
-    "facit": "FACIT 量表",
-    "quality of life questionnaire": "生活质量问卷",
-    "free hemoglobin": "游离血红蛋白",
-    "free hgb": "游离血红蛋白",
-    "hemoglobin": "血红蛋白",
-    "hgb": "血红蛋白",
-    "ldh": "LDH",
-    "lactate dehydrogenase": "LDH",
-    "transfusion": "输血",
-    "facit-fatigue": "FACIT 疲乏评分",
-    "chc": "慢性溶血标志物",
-}
-
-
-def _registry_endpoint_term_zh(text: str) -> str | None:
-    """登记终点指标术语的确定性中文映射；未登记术语返回原文。"""
-    folded = text.casefold()
-    for needle, label in _REGISTRY_ENDPOINT_TERM_ZH.items():
-        if needle in folded:
-            return label
-    return None
+    return _source_design_text(observation)
 
 
 def _registry_timeframe_zh(text: str) -> str | None:
@@ -986,52 +818,6 @@ def _registry_timeframe_zh(text: str) -> str | None:
     if m:
         return f"第{m.group(1)}、{m.group(2)}与{m.group(3)}天"
     return None
-
-
-def _registry_endpoint_zh(text: str) -> str | None:
-    """把 CT.gov 常见主要终点措辞确定性转写为中文；未匹配返回 None。
-
-    只改写演示措辞，不改写事实：来源原文保留在观察的 source_text。
-    """
-    value = " ".join(str(text or "").split())
-    if not value:
-        return None
-    term = _registry_endpoint_term_zh(value)
-    if term is None:
-        return None
-    m = re.fullmatch(
-        r"[Pp]ercentage [Cc]hange [Ff]rom [Bb]aseline in (.+?) at (.+)", value
-    ) or re.fullmatch(
-        r"[Pp]ercent [Cc]hange [Ii]n (.+?) [Ff]rom [Bb]aseline [Tt]o (.+)", value
-    )
-    if m:
-        window = (
-            _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2))
-            or m.group(2)
-        )
-        return f"{term}较基线百分比变化（{window}）"
-    m = re.fullmatch(
-        r"[Cc]hange [Ff]rom [Bb]aseline in (.+?) at (.+)", value
-    )
-    if m:
-        window = (
-            _registry_timeframe_zh(m.group(2)) or _native_timepoint_zh(m.group(2))
-            or m.group(2)
-        )
-        return f"{term}较基线变化（{window}）"
-    m = re.fullmatch(
-        r"[Mm]easurement of [Rr]atio of (.+?) to the [Uu]pper [Ll]imit of [Nn]ormal(.*)",
-        value,
-    )
-    if m:
-        window = (
-            _registry_timeframe_zh(m.group(2).strip(" (),"))
-            if m.group(2).strip(" (),") else None
-        )
-        return f"{term}/正常上限比值" + (f"（{window}）" if window else "")
-    # 独立复核 C r32/r37：术语命中但句式未匹配时，至少返回术语本身
-    # （如"突破性溶血发生比例"），不再返回 None 导致英文直出
-    return term
 
 
 def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
@@ -1065,7 +851,8 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         structured_age = _text(observation.threshold_value)
         if structured_age:
             unit = _text(observation.threshold_unit, "岁")
-            return f"登记最低年龄：{structured_age}{unit}"
+            bound = "最高" if observation.operator in {"≤", "<="} else "最低"
+            return f"登记{bound}年龄：{structured_age}{unit}"
         return _target_population_text(text)
     if observation.field in {"inclusion_criterion", "exclusion_criterion"}:
         if not source_text:
@@ -1086,54 +873,14 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         return _compact_arm_zh(data, observation)
     if observation.field == "dosing_regimen":
         return _compact_regimen_zh(data, observation)
-    if observation.field == "primary_endpoint_definition":
-        folded = text.casefold()
-        is_iga = scale.upper() == "IGA" or "investigator's global assessment" in folded
-        if is_iga and threshold:
-            return f"IGA达到0或1分，且较基线降低{operator}{threshold}{unit}" + (
-                f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else ""
-            )
-        if (scale.upper() == "EASI" or "easi" in text.casefold()) and threshold:
-            endpoint_unit = unit.replace("改善", "")
-            return f"EASI较基线改善{operator}{threshold}{endpoint_unit}" + (
-                f"（{_tp_disp(timepoint)}）" if _tp_disp(timepoint) else ""
-            )
-        if is_iga or " iga " in f" {folded} ":
-            return "IGA 0/1应答率" + ((f"（{_tp_disp(timepoint)}）") if _tp_disp(timepoint) else "")
-        if "easi" in text.casefold():
-            return "EASI应答" + ((f"（{_tp_disp(timepoint)}）") if _tp_disp(timepoint) else "")
-        registry_zh = _registry_endpoint_zh(text)
-        if registry_zh:
-            return registry_zh
+    if observation.field in {"primary_endpoint_definition", "secondary_endpoint_definition"}:
+        # A metric keyword is not proof of its threshold, denominator, estimator
+        # or scale variant. Preserve the complete definition until an explicit
+        # source-bound translation exists; the description remains alongside it.
+        return _source_design_text(observation)
     if observation.field == "primary_endpoint_timepoint":
         translated = _registry_timeframe_zh(timepoint) if timepoint else None
         return translated or timepoint or "主要终点评估时间未公开"
-    # 独立复核 C r20（veto 第1项）：次要终点定义/时间点走同一确定性转写，
-    # 不得直出登记英文原句
-    if observation.field == "primary_endpoint_definition":
-        ep_zh = _registry_endpoint_zh(source_text)
-        if ep_zh:
-            disp = _tp_disp(timepoint)
-            return ep_zh + (f"（{disp}）" if disp else "")
-        label = _native_endpoint_zh(source_text)
-        if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
-            return "主要终点（原文见数据依据）"
-        _d = _tp_disp(timepoint)
-        return label + (f"（{_d}）" if _d else "")
-    if observation.field == "secondary_endpoint_definition":
-        ep_zh = _registry_endpoint_zh(source_text)
-        if ep_zh:
-            disp = _tp_disp(timepoint)
-            return ep_zh + (f"（{disp}）" if disp else "")
-        label = _native_endpoint_zh(source_text)
-        if len(re.findall(r"[A-Za-z]{3,}", label)) >= 2:
-            # 独立复核 C r21（issue-1）：不同次要终点的兜底标签必须可区分，
-            # 以观察序号命名，原文保留在证据抽屉"简短原文"
-            m_sec = re.search(r"sec(\d+)$", observation.observation_id)
-            ordinal = m_sec.group(1) if m_sec else "0"
-            return f"次要终点{ordinal}（原文见数据依据）"
-        _d = _tp_disp(timepoint)
-        return label + (f"（{_d}）" if _d else "")
     if observation.field == "secondary_endpoint_timepoint":
         translated = _registry_timeframe_zh(timepoint) if timepoint else None
         return translated or _native_timepoint_zh(timepoint or "") or timepoint or "未公开"
@@ -1286,7 +1033,7 @@ def _chart_row(
         )(_text(observation.scale)),
         # R24-146 有界执行及 R24-154 主线程修复：显式上下文逐行投影，
         # 组合判据由 _endpoint_instance_projection 给出，浏览器只读不重算。
-        "source_version_id": _text(observation.source_version_id) or None,
+        "source_version_id": _public_source_version(data, observation.source_version_id),
         "assessment_timepoint_raw": _text(observation.assessment_timepoint) or None,
         "outcome_id": _text(observation.outcome_id) or None,
         "endpoint_role_key": _text(observation.endpoint_key) or None,
@@ -1478,6 +1225,13 @@ def _safe_locator(observation: DesignObservation) -> EvidenceLocator | None:
         return None
 
 
+def _public_source_version(data: ReportCPortalData, source_id: str) -> str:
+    """Explicit snapshot projection, or unchanged legacy identity for reading."""
+    if data.source_version_by_source_id:
+        return data.source_version_by_source_id[source_id]
+    return source_id
+
+
 def _evidence_view(
     data: ReportCPortalData,
     observation: DesignObservation,
@@ -1486,7 +1240,7 @@ def _evidence_view(
 ) -> EvidenceView:
     state = observation.disclosure_state.value
     snapshot = _text(
-        data.report_snapshot_id,
+        data.report_snapshot_id or data.source_evidence_snapshot_id,
         f"c-{data.report_version}",
     )
     label = _field_label(observation.field)
@@ -1507,7 +1261,7 @@ def _evidence_view(
     )
     value_text = _value_text(data, observation)
     locator = _safe_locator(observation)
-    source_version_id = _text(observation.source_version_id) or None
+    source_version_id = _public_source_version(data, observation.source_version_id)
     # 精确来源原文不得经过用户可见标签的空白归一化函数。
     source_text = (
         observation.source_text
@@ -1569,7 +1323,7 @@ def _evidence_view(
         source_clause_context=observation.source_clause_context if located else None,
         conflicts=tuple(
             EvidenceConflict(
-                conflicting_source_version_id=ref.source_id,
+                conflicting_source_version_id=_public_source_version(data, ref.source_id),
                 conflicting_value_zh=ref.original_text,
                 conflict_note_zh=(
                     "来源表述存在待裁决差异，未自动选定优先来源或结论。"
@@ -1783,7 +1537,7 @@ def _table_rows(
             chart_type=_PAGE_CHART_TYPE.get(page_id, "status_matrix"),
             endpoint_instance=endpoint_instances.get(observation.row_id),
         )
-        chart["source_version"] = observation.source_version_id
+        chart["source_version"] = _public_source_version(data, observation.source_version_id)
         if chart.get("value") is None:
             chart["value"] = _state_label(observation.disclosure_state)
         # 独立复核 C r42（issue-4）/C r46（issue-1）：值列残留英文
@@ -2110,7 +1864,7 @@ def _render_page_context(
         evidence_limitations = {
             "data_cutoff": _text(data.data_cutoff)[:10],
             "source_count": len(
-                {o.source_version_id for o in data.observations if o.source_version_id}
+                {_public_source_version(data, o.source_version_id) for o in data.observations}
             ),
             "trial_count": len(data.trials),
             "product_count": len(data.products),
@@ -2178,7 +1932,9 @@ def _render_page_context(
         "home_href": f"{prefix}{catalog.pages[0].id}.html",
         "data_prefix": f"{prefix}data",
         "asset_prefix": f"{prefix}assets",
-        "snapshot_id": _text(data.report_snapshot_id, f"c-{data.report_version}"),
+        "snapshot_id": _text(
+            data.report_snapshot_id or data.source_evidence_snapshot_id, f"c-{data.report_version}"
+        ),
         "row_set_digest": hashlib.sha256(
             _canonical_json([item.row_id for item in observations])
         ).hexdigest(),

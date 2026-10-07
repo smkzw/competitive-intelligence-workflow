@@ -172,6 +172,11 @@ def register_c_source_consumers(
         if not isinstance(capture_id, str) or not capture_id or capture_id in version_by_capture:
             raise CPortalConsumerRegistrationError("锁定闭包存在缺失或重复来源实例")
         version_by_capture[capture_id] = source_version_id
+    if (report.source_evidence_snapshot_id is not None or report.source_version_by_source_id) and (
+        report.source_evidence_snapshot_id != evidence_snapshot.snapshot_id
+        or dict(report.source_version_by_source_id) != version_by_capture
+    ):
+        raise CPortalConsumerRegistrationError("C 公开来源版本投影与锁定快照不一致")
     snapshot_fact_versions = {str(item) for item in snapshot["fact_version_ids"]}
     snapshot_source_versions = {str(item) for item in snapshot["source_version_ids"]}
 

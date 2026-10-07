@@ -1,5 +1,42 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 里程碑9在途：来源忠实值与公共版本，不是最终交付
+
+执行-plus-conference后owner直接修共享路径：一个有界原源挑战已经结束，
+不新增chair/三路全页会商；共享schema/科学观察/current仍单owner。
+A人群短标签曾补造入组/暴露/应答/MMRM条件，事件次数误写例数，通用PK
+套特定药。26族初一项fixture被截断触发其他产品模型门，不计行为RED；
+完整fixture22行为RED/4PASS→88相关PASS1.87s、普通ABC/摄取82PASS376.94s。
+
+C03实际预声明回退Grok/grok-build/grok-4.7:high571.161s/exit0，不是顶层
+仍显示的ZCode；初始化/退出0不是审阅证据。原始报告/回退/预检/会话保留。
+owner原源核对确认背景药/安慰剂被替换、体重/负荷/剂量限定丢失、终点量表/
+阈值/KM估计量压缩错误。删除这组renderer推断所有者，保留明确译文或完整
+源句。各组共用不能自动标背景，协议组角色不等于主药；outcome_id已有正确
+实例键，不采信审阅关于role键不够的扩大重构建议。不新增人工医学批准。
+
+来源ID显示独立5RED/1PASS先于修改；源值/投影反例用冻结31f1b00生产函数
+内存重放，不checkout/写回源，纠正初次测试错误参数名后18行为RED。
+完整改动130PASS21.78s及79消费者/恢复邻接PASS31.70s。又发现既有正式C包
+的报告快照不是证据快照，另1真实RED，显式分层后63来源/正式C包PASS11.67s。
+两个邻接命令路径猜错没有执行任何测试；一组格式Ruff失败后修格式；日志不删，
+不归因产品或环境、不记PASS。v12宽门早于最终快照修复，不能继承新源码。
+最终冻结检查另计；不是逐行全仓重跑，也不修改断言恢复错误显示。
+
+同项目新源v2复用原确定性bootstrap直接由owner执行，不是CodeBuddy新运行；
+脚本继承worker/route静态字段，已纠正并保留原回执/hash，不据该标题伪报模型。
+258来源观察/60实例/16页，旧254行科学字节完全一致，新增两个80岁上限与
+两个无mg但有明确注射安排的安慰剂方案；92未支持/18缺口，不因0未决宣称全闭包。
+owner原源重提258引文、实际SQL258消费者/四AB源版本/逐页hash，原源v5 DB/
+旧v1清单不变。最终源上下文C v3把source_evidence_snapshot_id与报告快照分开；
+旧v1/v2数据/站点不覆写。原文、来源版本闭合不等于中文可读/医学等价/科学/实屏。
+
+复盘：来源原文没被改并不能证明读者看到的值正确；审阅报告也须分出真正根因、
+已实现基础与建议。先读现有函数签名/表名再组装检查，防止探针误报；正式快照
+语义应在宽门冻结前查邻接，不能把一项绿门扩大到未运行范围。当前入口/状态
+旧文本已逐字归档，收拢当前状态，原历史hash/失败/五用户修改/raw资料都保留。
+继续源绑定中文比较/正式科学包与当前旅程，不自暂停；Ego与附件Ask仍待答。
+
 ## 里程碑7已递交后：源组身份和词边界整族
 
 217e3cc479f2695e032e7060f08bf60976b28013已push/origin实核相同，只有五
@@ -525,3 +562,20 @@ ID与旧v1相同；旧v1原hash保留。第二命令消费旧完整源快照并�
 离线NOT_RUN；疗效多药正例、完整宇宙、中国动态/当前控股核查、同current
 ABC全旅程、24门户/三宿主/安装恢复/RC未完成。无旧中文根接触、无一般
 清理；五历史脏修改和未知raw资料全部保留。继续实施，不自建暂停点。
+# Milestone9 final source and evidence binding
+
+Final27 source regressions pass in3.18s. v13 six-step quality-only gate exit0:
+strict281, active1167PASS447.31s, retained compatibility20, layering7, Ruff,
+legacy string reference scan (not legacy directory access). v12 is older code coverage.
+ABCv4 same-project49/101/16 pages rebuilt and all declared code/input/site hashes
+independently reopened; C review-only, no current. Raw source, old254 observations,
+older snapshots and receipts retained. Compact version binding: owner-milestone-v9.json.
+
+Retrospective: exact quotes alone failed to protect visible dose/endpoint meaning;
+display consumers also need source-bound full conditions. Report and evidence snapshots
+are different contracts; the late formal-package counterexample forced a separate field
+and honest revalidation, not renaming old scientific identities. Template worker metadata
+is not runtime provenance, so direct owner replay is labeled and original receipt preserved.
+Fixture/argument mistakes and guessed missing test paths stay setup/NOT_RUN, not RED/PASS.
+Next C semantic workspace work uses the existing contracts, parallel to independent B
+coverage; source-only preview cannot substitute Chinese, medical or browser acceptance.

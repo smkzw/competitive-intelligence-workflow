@@ -4,6 +4,20 @@
 
 ## 1007V1 当前增量合同
 
+C公共来源复用现有ReportCPortalData，新增有界来源关系投影
+source_version_by_source_id及source_evidence_snapshot_id；科学观察继续使用原捕获
+身份，不就地改历史行/事实版本/hash。映射从SnapshotStore核验后的closure.sources
+按capture.source_id构建，消费者登记再次完整比对，不能按数组顺序或ID前缀猜。
+证据快照与report_snapshot_id所指的报告快照不是同一对象；未接受候选只持真实
+证据快照，不制造正式报告快照。图、表、证据共用公开版本投影；旧缺省空字段
+不追加到科学序列化，历史输入只读兼容，不自动补签为新候选接受。
+
+C干预/给药/终点的源绑定display_text与原source_text分开：有明确译文或用户
+当前投影则消费它，否则保留完整来源定义，不再使用renderer药名字典、试验
+product_id、指标关键词或全句频次猜测局部事实。组内干预角色不自动表示主药；
+各组共用不自动证明背景性质。既有outcome_id与源父路径仍区分终点实例，
+endpoint_key保留角色语义，不扩大成逐观察对人工批准平台。
+
 正式RunContext/run_service普通A/B/C渲染读取项目内
 `evidence/library/portal-identity-context.json`，复用已有CAS ContentBlob图指针与片段库。
 可选product_ids只能选择源图已有映射；各报告按实际产品取子集，current重建保留

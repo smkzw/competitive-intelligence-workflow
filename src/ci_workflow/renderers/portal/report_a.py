@@ -1552,97 +1552,40 @@ _POPULATION_TOKENS: tuple[tuple[str, str | Callable[[re.Match[str]], str]], ...]
 
 
 def _native_population_zh(value: str) -> str:
-    """将登记平台分析人群长句压缩为可比较的中文定义。"""
-    folded = value.casefold()
-    if re.search(r"pk (?:evaluable )?population|pharmacokinetic", value, re.I):
-        return "药代动力学分析集：至少接受1次研究药物且相应时间点样本可分析者"
-    if "safety population" in folded or "safety analysis set" in folded:
-        return "安全性分析集：至少接受1次研究药物且有基线后评估者"
-    if "per-protocol analysis set" in folded:
-        return "符合方案分析集：接受研究治疗且无重大方案违背的随机受试者"
-    if "severe pruritus population" in folded:
-        return "重度瘙痒人群：基线峰值瘙痒NRS≥7分的随机受试者"
-    if "maintenance analysis set" in folded:
-        response = "IGA 0/1" if "iga 0/1" in folded else "EASI-75"
-        return f"维持期分析集：第16周达到{response}且未使用补救治疗者"
-    if "re-randomized" in folded or "randomly reassigned" in folded:
-        if "lebrikizumab" in folded:
-            return "维持期分析集：基线接受Lebrikizumab、第16周再随机且至少接受1次维持期治疗者"
-        if "week 24" in folded:
-            response = (
-                "IGA 0/1"
-                if "iga response" in folded
-                else "EASI-50"
-                if "easi 50" in folded
-                else "EASI-75"
-                if "easi 75" in folded
-                else "相应疗效"
-            )
-            return f"维持期再随机分析集：第24周达到{response}并完成再随机者"
-    if "part 1" in folded and ("full analysis set" in folded or "ky1005" in folded):
-        return "第1部分全分析集：随机后至少接受1次研究药物且相应时间点有可用数据者"
-    if "part 2" in folded and ("full analysis set" in folded or "ky1005" in folded):
-        return "第2部分全分析集：再随机后至少接受1次研究药物且相应时间点有可用数据者"
-    if "lts evaluable population" in folded:
-        age = (
-            "；年龄<16岁"
-            if "age \\< 16" in folded
-            else "；年龄≥16岁"
-            if "age \\>= 16" in folded
-            else ""
-        )
-        return f"长期安全性可评价人群：长期研究期内至少使用1次研究药物且相应时间点有可用数据者{age}"
-    if "intent-to-treat" in folded or "itt population" in folded:
-        scope = (
-            "青少年"
-            if "adolescent" in folded
-            else "主研究"
-            if "main study" in folded
-            else "全部随机"
-        )
-        method = (
-            "；采用重复测量混合效应模型"
-            if "mixed-effect" in folded or "mmrm" in folded
-            else "；缺失数据按方案预设方法处理"
-            if "imputation" in folded
-            else ""
-        )
-        return f"意向治疗人群：{scope}受试者{method}"
-    if re.search(
-        r"\bfas\b|full analysis set|all randomized|all participants randomized", value, re.I
-    ):
-        method = (
-            "；采用重复测量混合效应模型"
-            if "mmrm" in folded
-            else "；缺失数据按方案预设方法处理"
-            if "imput" in folded
-            else ""
-        )
-        return f"全分析集：所有随机受试者；按相应时间点可用数据统计{method}"
-    if "analysis set included all randomized" in folded:
-        return "分析集：至少接受1次研究药物且相应时间点有可用数据的随机受试者"
-    if "participants who" in folded or "subjects who" in folded:
-        return "预设分析人群：达到相应应答或基线条件并有可用数据者"
-    # 登记类标题残留英文：确定性转写；全大写缩写（EORTC/QLQ/FACIT 等）保留；
-    # 转写后仍剩 ≥2 个非缩写英文词才回退通用声明
-    out = " ".join(str(value or "").split())
-    for pattern, rep in _POPULATION_TOKENS:
-        out = re.sub(pattern, rep, out, flags=re.I)
-    out = re.sub(r"、\s*、", "、", out)
-    out = re.sub(r"\(\s*", "（", out)
-    out = re.sub(r"\s*\)", "）", out)
-    out = re.sub(r"(?<=[\u4e00-\u9fff]) (?=[\u4e00-\u9fff])", "", out)
-    out = re.sub(r"\s{2,}", " ", out).strip(" 、（")
-    residual = [w for w in re.findall(r"[A-Za-z]{3,}", out) if not w.isupper()]
-    if len(residual) >= 2:
-        return "预设分析人群：按登记平台分析集定义及相应时间点可用数据纳入"
-    return out
+    """Translate only whole population labels; never synthesize membership rules.
+
+    A label alone cannot establish treatment exposure, assessment availability,
+    responder threshold, rescue restriction or imputation. Long definitions
+    retain their exact source wording until a source-faithful translation exists.
+    """
+    text = str(value or "")
+    labels = (
+        (r"all (?:randomized (?:participants|subjects)|participants randomized)", "全部随机受试者"),
+        (r"full analysis set", "全分析集"),
+        (r"fas", "全分析集（FAS）"),
+        (r"safety population", "安全性分析人群"),
+        (r"safety analysis set", "安全性分析集"),
+        (r"pk evaluable population", "药代动力学可评价人群"),
+        (r"pk population|pharmacokinetic population", "药代动力学分析人群"),
+        (r"per[- ]protocol analysis set", "符合方案分析集"),
+        (r"severe pruritus population", "重度瘙痒人群"),
+        (r"maintenance analysis set", "维持期分析集"),
+        (r"itt population", "意向治疗人群（ITT）"),
+        (r"intent[- ]to[- ]treat(?: population)?", "意向治疗人群"),
+    )
+    for pattern, label in labels:
+        if re.fullmatch(pattern, " ".join(text.split()), re.I):
+            return label
+    if _contains_chinese(text) or not re.search(r"[A-Za-z]", text):
+        return text
+    suffix = "（登记原文，未译）"
+    return text if text.endswith(suffix) else text + suffix
 
 
 _UNIT_LITERAL_ZH = {
     "participants": "例",
-    "events": "例",
-    "number of events": "例数",
+    "events": "次",
+    "number of events": "次",
     "number of participants": "例",
     "score on a scale": "分",
     "scores on a scale": "分",
@@ -1972,9 +1915,6 @@ def _display_efficacy_rows(data: ReportAPortalData) -> tuple[dict[str, Any], ...
         )
         endpoint = re.sub(
             r"Change from Baseline in Pruritus NRS.*", "瘙痒NRS较基线变化", endpoint, flags=re.I
-        )
-        endpoint = re.sub(
-            r"Serum Trough Concentration.*", "Tezepelumab血清谷浓度", endpoint, flags=re.I
         )
         endpoint = re.sub(r"Participants.*IGA.*", "IGA 0/1应答率", endpoint, flags=re.I)
         endpoint_rules = (

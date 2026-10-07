@@ -1,0 +1,97 @@
+{
+  "schema_version": "1007-owner-milestone-1",
+  "parent_commit": "31f1b009bb9baa077a63f8ad87289405ffa72094",
+  "status": "development_candidate_continuing",
+  "scope": "source-faithful A/C display and distinct source-evidence/report snapshot projection; fixed-source same-project ABC rebuild",
+  "source_code_sha256": {
+    "src/ci_workflow/renderers/portal/report_a.py": "c3e88513ad2b7b7e044c30fef75a1a7c991efb99acf62cea5c0360b36178dc40",
+    "src/ci_workflow/renderers/portal/report_b.py": "cc5154b6e530d6369477c916d03181c350cd8be9681106d66fe475ed194b1879",
+    "src/ci_workflow/renderers/portal/report_c.py": "5278949f189bda6ab36833b75881a44e962b75e9505a55faee2870a16a47c691",
+    "src/ci_workflow/application/ctgov_c_design_projection.py": "96c8c2a6ec70ee506cbe728759f7a4d845f9ae48d6ecbac45c502ec8f4b726e6",
+    "src/ci_workflow/application/c_portal_consumer_registry.py": "629d3ee25b9226bb2cfbef1c3e101b40451b2b5547bb7851759b883db1541117",
+    "tools/materialize_ctgov_c_candidate.py": "be1870580a1c691932a0841e6d0330e7c8680fa947210901012967625f41969c"
+  },
+  "test_code_sha256": {
+    "tests/integration/test_1007_c_locked_source_display.py": "32b5138152c38639217c5ca2bebe49eacd543d08d185f312f165e04648b8f159",
+    "tests/reports/a/test_source_native_semantics.py": "2c61f63111edc66990937a9fdf4899afd4d3263ccfbc2553e019cb699d94fa7c",
+    "tests/reports/c/test_source_faithful_design_values.py": "5db71514fd25a6eb00b044bce2777c8c61a400ec362aa21dc0907eb838c1a1c1"
+  },
+  "verification": {
+    "A_behavior_red": 22,
+    "A_related_pass": 88,
+    "A_ordinary_ABC_ingestion_neighbors": {"pass": 82, "seconds": 376.94, "log_sha256": "427d21a1fac213bc3bb2903f2b1bdb0fa61f931b5431f8f0bbcac0337fd7af40"},
+    "C_source_mapping_behavior_red": 5,
+    "C_frozen_production_source_display_behavior_red": 18,
+    "C_distinct_snapshot_behavior_red": 1,
+    "C_related_pass": 130,
+    "C_neighbors_pass": 79,
+    "C_formal_package_snapshot_neighbors_pass": 63,
+    "C_final_source_regression": {"pass": 27, "seconds": 3.18, "log_sha256": "12044e5fac12f712200dc9f19d6a35736cf55b466a8bfdd677aab75a419d8f44"},
+    "quality_gate_v13": {
+      "exit_code": 0, "steps": 6, "ruff": "src/tests/tools",
+      "strict_mypy_files": 281,
+      "active_test_scope": "tests/unit tests/contract excluding retained_legacy_format",
+      "active_pass": 1167, "active_seconds": 447.31,
+      "retained_compat_smoke_pass": 20, "layer_audit_pass": 7,
+      "legacy_check": "string_reference_scan_not_old_root_contact",
+      "log_sha256": "a15f036d5cf0c585d75639975df2bc23b7b6454542018c3e33c288552c503fba",
+      "semantics": "quality_only_not_all_integration_browser_science_or_release"
+    },
+    "v12": "passed but preceded final distinct-snapshot repair; not accepted for current bytes"
+  },
+  "independent_review": {
+    "task": "ci-1007-joint-c-source",
+    "assigned_primary": "zcode/zcode/GLM-5.3-Flash:max",
+    "completed_actual_predeclared_fallback": "grok/grok-build/grok-4.7:high",
+    "duration_seconds": 571.161, "exit_code": 0,
+    "report_sha256": "2a874709692217124f436f684f5076cc868597491474b45d5efd3c211e762835",
+    "verdict_on_frozen_old_candidate": "REVISE",
+    "owner_disposition": "source-checked background/placebo, weight branches, endpoint qualifiers and missing maximum ages repaired; existing outcome_id retained; no automatic group alias or clinical equivalence",
+    "not_current_scientific_or_visual_acceptance": true
+  },
+  "candidate": {
+    "project_id": "project_3ee3ab2627f01ef9a757365b",
+    "relative_root": ".artifacts/1007-pn-joint-abc-source-v1/source-values-v2/working/project",
+    "owner_direct_replay_not_new_model_dispatch": true,
+    "inherited_worker_metadata_preserved_and_explicitly_corrected": true,
+    "inherited_receipt_sha256": "fd4e952a9dd7f0fc8c26c2ccb20aada6c4e34c7e38f4fee186cb44b021cf6451",
+    "C_observations_and_actual_SQL_consumers": 258,
+    "old_254_observations_byte_equal": true,
+    "added_maximum_ages": 2, "added_placebo_regimens": 2,
+    "unsupported_atoms": 92, "protocol_gaps": 18,
+    "manifest_sha256": "9d597f013aeadafd345022e0b7c64a6d7ac636a2b7b0f6fb66b426382017f12d",
+    "scientific_digest": "bffede512351405fa67b3a74037d37c09ca6b8e4178f0cf3758abe60c06a194f",
+    "evidence_snapshot_id": "evidence-snapshot_ec181d09751972a09cf62bb6",
+    "evidence_snapshot_sha256": "83bc80c6f879ce8d6aae9ca11eb63e0ea1baf80b5db3be6240a19050e717a327",
+    "four_AB_source_versions_reused": true,
+    "original_source_v5_DB_and_old_C_manifest_unchanged": true,
+    "current_created_or_switched": false,
+    "formal_report_snapshot_invented": false
+  },
+  "same_candidate_ABC_preview_v4": {
+    "manifest_sha256": "d555eaa093742d06b7c5cf7b75320fc9734a95566934d14a3ecae19c79e779f5",
+    "identity_context_digest": "fd6bd52bd771ad540249ad69cda169d725f7fbeea1ae6c8b73a7792de120bd35",
+    "identity_bytes_and_all_file_hashes_independently_reopened": true,
+    "reports": {
+      "A": {"physical_pages": 49, "file_set_sha256": "5ca8c23ca78336821dff90ba501fc682c1ee1b9ee6e9ad79feb4a9ff89e0cc50", "input_sha256": "cedd505751b9b37f0f84070712eec2eef52b2e9b2c0524796b7d566622d911c4"},
+      "B": {"physical_pages": 101, "file_set_sha256": "4697e106c8774a1c42278465077a080caca0bcffa6a2f1660541ec799d791eeb", "input_sha256": "89faa54d43af24fb2749122b3f9ff8af37829a4d495c184ded7d57e792020cf0"},
+      "C": {"physical_pages": 16, "file_set_sha256": "b964ad909823baeae51086d14559d4970066798b2fd11727306c7c2dc0da26b9", "input_sha256": "184b788cfa703cc083f2aca74f863ff9276e48b09c9af70eeb24977d713b3a6d"}
+    },
+    "C_review_only": true,
+    "not_current_or_medical_visual_acceptance": true,
+    "broader_38_products_43_studies_not_source_closed_universe": true
+  },
+  "archive_sha256": {
+    "archive/milestone8-1007V1/HANDOFF.md": "f27de50313e7d53ae88f8bcbf6a794ca68558448ca6ba2ae532cf0231aca70b7",
+    "archive/milestone8-1007V1/STATUS.md": "32350d77950c0612df918dc385985c1e9897d414377b664bf53c07509c576c1b"
+  },
+  "failures_preserved": [
+    "Truncated fixture and incorrect function keyword were setup failures, not counted as behavioral RED",
+    "Two guessed nonexistent neighbor test paths produced NO_TESTS_RUN, not PASS",
+    "Initial Ruff formatting findings repaired; later snapshot boundary finding invalidated v12 coverage and required v13",
+    "Source script inherited old worker/model receipt fields; explicit current-owner correction plus original receipt hash retained",
+    "Ego TaskSpace12 NOT_FOUND; recovery Ask unanswered, no substituted browser acceptance"
+  ],
+  "remaining": ["source-bound Chinese C reading and real multi-study semantic design comparison", "multi-drug efficacy columns", "count/N/limit edit coverage", "full source and required publications/protocol/SAP closure", "current dynamic China MAH/group verification", "same-current ABC editing/configuration/single and joint sharing", "four-width four-state visual and keyboard acceptance", "24 portals, three hosts, fresh install, recovery and RC"],
+  "final_acceptance": false
+}

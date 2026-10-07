@@ -66,6 +66,10 @@ _YEAR_SCALAR = re.compile(r"^(?P<years>\d+(?:\.\d+)?)\s+years?$", re.IGNORECASE)
 _DOSE_QUANTITY = re.compile(
     r"(?<!\w)\d+(?:\.\d+)?\s*(?:mg|mcg|[uµμ]g|g|units?|iu)\b", re.IGNORECASE
 )
+_REGIMEN_CUE = re.compile(
+    r"\b(?:injections?|infusions?|subcutaneous|oral|q\d+[dw]|matching placebo)\b",
+    re.IGNORECASE,
+)
 _ARM_INDEX = re.compile(r"armGroups\[(?P<index>\d+)\]")
 _ARM_NAME_INDEX = re.compile(r"interventionNames\[(?P<index>\d+)\]")
 _OUTCOME_INDEX = re.compile(r"(?P<collection>primaryOutcomes|secondaryOutcomes)\[(?P<index>\d+)\]")
@@ -99,6 +103,7 @@ _SUPPORTED_FIELD_IDS = frozenset(
     {
         "ctgov.protocol.eligibility.criteria",
         "ctgov.protocol.eligibility.minimum_age",
+        "ctgov.protocol.eligibility.maximum_age",
         "ctgov.protocol.design.phase",
         "ctgov.protocol.design.study_type",
         "ctgov.protocol.design.allocation",
@@ -740,7 +745,8 @@ def _project_arm_fact(
             ),
         ), None
     if fact.field_id == "ctgov.protocol.arm.description":
-        if _DOSE_QUANTITY.search(_fact_quote(fact)) is None:
+        if (_DOSE_QUANTITY.search(_fact_quote(fact)) is None
+                and _REGIMEN_CUE.search(_fact_quote(fact)) is None):
             return (), CtgovCUnresolvedReason.ARM_DESCRIPTION_WITHOUT_DOSE
         return (
             _observation(
@@ -922,7 +928,9 @@ def _project_fact(
         ))
     if field_id == "ctgov.protocol.eligibility.criteria":
         return _project_eligibility_criteria(ctx, binding, fact, path)
-    if field_id == "ctgov.protocol.eligibility.minimum_age":
+    if field_id in {
+        "ctgov.protocol.eligibility.minimum_age", "ctgov.protocol.eligibility.maximum_age",
+    }:
         years = _YEAR_SCALAR.match(_fact_quote(fact))
         if years is None:
             return _FactProjection(
@@ -938,8 +946,8 @@ def _project_fact(
                     path,
                     family=DesignFieldFamily.POPULATION,
                     field="target_population",
-                    suffix="min-age",
-                    operator="≥",
+                    suffix="min-age" if field_id.endswith(".minimum_age") else "max-age",
+                    operator="≥" if field_id.endswith(".minimum_age") else "≤",
                     threshold_value=years.group("years"),
                     threshold_unit="岁",
                 ),
