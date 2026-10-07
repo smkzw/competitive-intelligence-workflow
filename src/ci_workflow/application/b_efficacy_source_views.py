@@ -19,6 +19,9 @@ from typing import Any
 
 from ci_workflow.application.project_service import verify_project_workspace
 from ci_workflow.application.source_research_service import ResearchFact, ResearchResultContext
+from ci_workflow.domain.evidence import EvidenceLocator
+from ci_workflow.domain.ids import stable_id
+from ci_workflow.domain.source_clause_context import SourceClauseContext, SourceClauseReference
 from ci_workflow.renderers.portal.active_fact_projection import ActiveFactBinding
 from ci_workflow.renderers.portal.report_a import (
     EfficacyRow,
@@ -30,6 +33,7 @@ from ci_workflow.reports.common.evidence_view import (
     precise_locator_anchor,
 )
 from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
+from ci_workflow.storage.source_derivation import extract_locator_quote, source_json_decoder
 
 # 只有直接报告值或登记人数是本文来源视图可证明的原子角色；派生率、离散度
 # 或分析集语义必须由独立规则证明，不得在此处被推断为估计目标。
@@ -89,6 +93,50 @@ def _denominator_relation_ok(
     )
 
 
+def _measure_context(
+    capture: Mapping[str, Any], observation: ResearchResultContext, source_version_id: str,
+) -> tuple[str, SourceClauseContext | None]:
+    """Read complete source clauses, not model-normalized scientific equivalents."""
+    path = observation.source_measure_path
+    if not path:
+        return "", None
+    try:
+        measure = source_json_decoder().decode(extract_locator_quote(
+            capture["content_text"], media_type=capture["media_type"],
+            locator=EvidenceLocator(document_role="clinical_trial_registry",
+                field_path=f"$.{path}", url=capture["url"]),
+        ))
+        if not isinstance(measure, dict):
+            raise ValueError("测量上下文不是对象")
+        references = []
+        for field, label in (
+            ("description", "结局完整定义"), ("populationDescription", "原分析人群"),
+            ("analysisPopulationDescription", "原分析人群补充"),
+            ("paramType", "原统计形式"), ("timeFrame", "原访视或区间"),
+        ):
+            text = measure.get(field)
+            if text is None or text == "":
+                continue
+            if not isinstance(text, str):
+                raise ValueError("测量语境字段不是来源文本")
+            references.append(SourceClauseReference(
+                reference_id=stable_id("source-context", source_version_id, path, field),
+                source_id=capture["source_id"], label_zh=label,
+                locator=EvidenceLocator(document_role="clinical_trial_registry",
+                    field_path=f"$.{path}.{field}", url=capture["url"]),
+                original_text=text,
+            ))
+        return measure.get("description") or "", SourceClauseContext(
+            label_zh="登记结局语境",
+            scope_note_zh="完整原文保留，不代表量表、分析集或估计目标已经等价。",
+            scientific_scope={"source_version_id": source_version_id,
+                              "source_measure_path": path},
+            continuations=tuple(references),
+        )
+    except (KeyError, TypeError, ValueError) as error:
+        raise BEfficacySourceViewError("锁定测量语境不能从精确路径重提取") from error
+
+
 def project_b_efficacy_source_views(
     project_root: Path,
     evidence_snapshot: LockedSnapshot,
@@ -143,6 +191,7 @@ def project_b_efficacy_source_views(
         raise BEfficacySourceViewError("B 疗效来源事实版本不在锁定快照")
 
     result_views: list[dict[str, Any]] = []
+    measure_contexts: dict[tuple[str, str | None], tuple[str, SourceClauseContext | None]] = {}
     database_path = project_root / "state/project.sqlite"
     try:
         with sqlite3.connect(database_path.resolve().as_uri() + "?mode=ro", uri=True) as database:
@@ -249,6 +298,12 @@ def project_b_efficacy_source_views(
                 _verified_a_consumer_proof(
                     database, evidence_snapshot, report, row, version_id,
                 )
+                measure_key = (source_id, observation.source_measure_path)
+                if measure_key not in measure_contexts:
+                    measure_contexts[measure_key] = _measure_context(
+                        captured["capture"], observation, source_id,
+                    )
+                definition, clause_context = measure_contexts[measure_key]
                 result_views.append(
                     {
                         **row.model_dump(mode="json"),
@@ -259,6 +314,11 @@ def project_b_efficacy_source_views(
                         "source_locator": exact_locator.model_dump(mode="json"),
                         "source_text": quote,
                         "source_endpoint": observation.endpoint,
+                        "source_measure_path": observation.source_measure_path,
+                        "source_measure_definition": definition,
+                        "source_clause_context": (
+                            clause_context.model_dump(mode="json") if clause_context else None
+                        ),
                         "source_timepoint": observation.timepoint,
                         "source_observation_timepoint": observation.observation_timepoint,
                         "source_param_type": observation.source_param_type,

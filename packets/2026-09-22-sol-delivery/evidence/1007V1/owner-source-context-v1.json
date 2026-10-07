@@ -1,0 +1,180 @@
+{
+  "schema_version": "1.0",
+  "stage": "1007V1 ordinary B exact source context",
+  "source_commit_parent": "3fd19f77181bf79f4c3ff43b861a3aeceda06ae8",
+  "recorded_at": "2026-10-07T22:45:06Z",
+  "status": "development_candidate_not_scientific_current_or_browser_accepted",
+  "goal_status": "active_verified",
+  "mode": "direct_objective_preservation_existing_execution_conference_terminal",
+  "code": [
+    {
+      "path": "src/ci_workflow/application/b_efficacy_source_views.py",
+      "sha256": "3507e9c3ce92abe4994f96d0a6fc27cbec13513cdbeed273e7a435cc9378c875",
+      "byte_size": 18931
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/report_b.py",
+      "sha256": "b70ae1b55e461ddca871299c56dae8251849277cad3e68aff86a4a4ec31f2811",
+      "byte_size": 270568
+    },
+    {
+      "path": "src/ci_workflow/reports/common/numeric_projection.py",
+      "sha256": "989505bddb579c559f3cb6a0a2a002b748c32c1e4639288e2f10916780bd3963",
+      "byte_size": 9354
+    },
+    {
+      "path": "tests/integration/test_1007_b_source_context_projection.py",
+      "sha256": "ed3e4cfa5a3426e343238d76e261afa8de1ba092cfc76fa75aa79e27262ba8ae",
+      "byte_size": 6598
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".artifacts/1007-b-source-context-current-v1/receipt.json",
+      "sha256": "76c569412d067c4112982c40078f653f4c6c9a4dde0a3526bece761a28298fb6",
+      "byte_size": 272911
+    },
+    {
+      "path": ".artifacts/1007-b-source-context-current-v1/project/inputs/a-bound.json",
+      "sha256": "2b8c906815a4f94a3eeadb6bf3f7f17db4c2203529eeb3fc83c7f1c5d28a57fe",
+      "byte_size": 2382904
+    },
+    {
+      "path": ".artifacts/1007-b-source-context-current-v1/project/inputs/b-bound.json",
+      "sha256": "64d5ffa14d1ed63dee9029c42123a2d1feb1f9e049c18e0c94399aa5ec638824",
+      "byte_size": 4190538
+    },
+    {
+      "path": ".artifacts/1007-b-source-context-current-v1/project/snapshots/evidence/evidence-snapshot_b555a4b12dc089975d85ce22.json",
+      "sha256": "4f4f827e5cda3dfcd98172089969df1bcc80fa762c304630f0a890db4cd10778",
+      "byte_size": 11014600
+    },
+    {
+      "path": ".artifacts/1007-b-source-context-current-v1/render-checkpoint.json",
+      "sha256": "d740ea5ed6138bfb4e164bdd33146de50bc536b0205fd47f280c684056bb5a93",
+      "byte_size": 791
+    }
+  ],
+  "completed_logs": [
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-red-v1.txt",
+      "sha256": "5e73e582a01f01501ffe9a80d6d4d00d320edc74d09ce99b316a770cb0243dce",
+      "byte_size": 13894
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-green-v1.txt",
+      "sha256": "c8ee9fbbad85ae0a0490d8f6bb5778276968d2980f363189f184a726e987310b",
+      "byte_size": 57444
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-green-v2.txt",
+      "sha256": "0b2e2f02d63a156470be8a4010538452c108ff6db76c0f9ca904ff9ec581a72c",
+      "byte_size": 99
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-adjacent-v1.txt",
+      "sha256": "a0bff6f29b8d6b1a5f01df6065eff7935ba36cd7a896603d2feddd21338ed94e",
+      "byte_size": 260
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-materialize-v1.txt",
+      "sha256": "acfdf537cb93dc8dc9a393dc69883c56d227bf43ab25183d6dbe31aa84b02cd2",
+      "byte_size": 461
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-render-v1.txt",
+      "sha256": "73ad06e42e9b6a9040292806521c77e8b87a409d675c63e8ffe11125e3d2540c",
+      "byte_size": 728
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-source-context-widegate-v1.txt",
+      "sha256": "5904ce7170c7d2f0eda983b9839b2b7a37311ae3f2c0baa14dc3482b64589b81",
+      "byte_size": 3168
+    }
+  ],
+  "candidate": {
+    "project_id": "project_410e968d92fa664ddf03dbe3",
+    "snapshot_id": "evidence-snapshot_b555a4b12dc089975d85ce22",
+    "observed_at": "2026-10-07T22:36:54+00:00",
+    "access": "offline_cas_replay_not_new_live_check",
+    "counts": {
+      "sources": 4,
+      "facts": 949,
+      "claims": 877,
+      "other_rows": 8,
+      "registered_a_efficacy_consumers": 91,
+      "registered_a_safety_consumers": 14,
+      "located_b_safety_source_views": 36,
+      "located_b_efficacy_source_views": 91,
+      "registered_b_shared_source_consumers": 105,
+      "baseline_source_facts": 499,
+      "baseline_numeric_atoms": 183,
+      "registered_b_baseline_scalar_consumers": 183,
+      "binding_gaps": 0,
+      "source_issues": 0
+    },
+    "render": {
+      "status": "development_source_context_candidate_not_accepted",
+      "input_sha256": "64d5ffa14d1ed63dee9029c42123a2d1feb1f9e049c18e0c94399aa5ec638824",
+      "site_sha256": "c77a724742601782732a43a60350e60ae9c4016de03560906732c2cd37c0e1f6",
+      "site_bytes": 195518795,
+      "physical_pages": 101,
+      "source_context_observations": 91,
+      "source_statistics": {
+        "NUMBER": 37,
+        "LEAST_SQUARES_MEAN": 40,
+        "COUNT_OF_PARTICIPANTS": 14
+      },
+      "projected_source_forms": {
+        "not_reported": 37,
+        "least_squares_mean": 40,
+        "count": 14
+      },
+      "matrix_members": 3916,
+      "matrix_columns": 3659,
+      "all_91_contexts_values_units_quotes_reach_ordinary_overview": true,
+      "browser_inspected": false,
+      "numerical_equivalence_accepted": false,
+      "current_promoted": false,
+      "rc_accepted": false
+    }
+  },
+  "checks": {
+    "root": "13FAIL/1PASS0.50s",
+    "first_fix": "10FAIL/38PASS2.13s; missing required locator role and present-null fallback retained",
+    "related": "48PASS3.37s; no SKIP",
+    "adjacent": "145PASS8.57s; ordinary current materializer, linked payload and clinical boundary/reuse tests",
+    "scoped_ruff": "four files passed",
+    "scoped_strict": "three source files passed",
+    "widegate": "GATE_OK quality-only/6: Ruff src/tests/tools; strict src/tools283; active1185PASS270.55s; compatibility20PASS0.61s; layering7PASS0.19s; lexical old-path PASS"
+  },
+  "source_diagnosis": {
+    "t66_measure_2": "Exact full path: six TEAE/AESI/SAE production source observations; A/B each six safety rows. First suffix-only diagnostic mixed other modules; corrected. Not missing efficacy.",
+    "previous_b91_forms": "91 not_reported; display population instead of original clause",
+    "new_b91_forms": {
+      "least_squares_mean": 40,
+      "count": 14,
+      "not_reported": 37
+    },
+    "unknown_clinical_estimands": 91
+  },
+  "limits": [
+    "No numerical clinical equivalence or ICE/instrument decision accepted",
+    "3916 members and3659 columns remain a genuine usability/matching gap",
+    "No same-current ABC operation chain, independent new-code acceptance or current promotion",
+    "Ego actual NOT_FOUND and four-desktop/focus/offline-browser NOT_RUN",
+    "Chinese translation capacity507 unresolved; no model or service substitution",
+    "Universe/China/publications/24 portals/three hosts/fresh-install/recovery/RC remain open"
+  ],
+  "next": [
+    "Reusable source-qualified clinical question/context mapping with positive and heterogeneity cases; numeric guard separate",
+    "Same-current A/B/C revision/config/static-share journey; actual screens require browser route",
+    "Complete source closure and final gates without old receipt stitching"
+  ],
+  "rebuild": {
+    "input_sha256": "64d5ffa14d1ed63dee9029c42123a2d1feb1f9e049c18e0c94399aa5ec638824",
+    "materialize_command": "uv run python -m tools.materialize_ctgov_a_candidate --project <fresh-project> --cas-dir .artifacts/1007-pn-discovery-current-v1/project --payload .artifacts/1007-outcome-scope-current-v1/a.json --sidecar .artifacts/1007-outcome-scope-current-v1/a.derivation.json --observed-at <actual-offset-clock> --trial nct04183335 --trial nct04202679 --trial nct04501666 --trial nct04501679 --bound-report-output <fresh-project>/inputs/a-bound.json --bound-b-report-output <fresh-project>/inputs/b-bound.json --output <fresh-receipt>",
+    "render_command": "uv run python -c 'from pathlib import Path; from ci_workflow.renderers.portal.report_b import ReportBPortalData,render_report_b_site; p=Path(\".artifacts/1007-b-source-context-current-v1/project/inputs/b-bound.json\"); render_report_b_site(ReportBPortalData.model_validate_json(p.read_bytes()),Path(\"<fresh-owned-B-site>\"))'",
+    "limits": "The retained pinned input/receipt/CAS are needed. Choose a fresh owned site; never point render reset at history. Source materialization replay is not live access or scientific acceptance; no hash rewrite. Rebuilding with another project/clock may have a different identity."
+  }
+}

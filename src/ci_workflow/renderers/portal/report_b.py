@@ -699,6 +699,9 @@ _STATISTICAL_FORM_GROUPS = {
     "mean_difference": ("mean difference", "均值差", "平均值差"),
     "median_difference": ("median difference", "中位数差"),
     "mean": ("mean", "average", "均值", "平均值"),
+    "least_squares_mean": (
+        "least_squares_mean", "least squares mean", "ls mean", "最小二乘均值",
+    ),
     "median": ("median", "中位数"),
     "proportion": (
         "proportion", "participant_proportion", "percentage", "percent", "比例", "百分比",
@@ -709,6 +712,7 @@ _STATISTICAL_FORM_GROUPS = {
     "other": ("other", "other statistic", "其他统计形式"),
     "range": ("range", "interval", "范围", "区间"),
     "standard_deviation": ("standard deviation", "standard_deviation", "sd", "标准差"),
+    "not_reported": ("not_reported",),
 }
 _STATISTICAL_FORM_LOOKUP = _alias_lookup(_STATISTICAL_FORM_GROUPS)
 _STATISTICAL_FORM_LABELS = {
@@ -721,6 +725,7 @@ _STATISTICAL_FORM_LABELS = {
     "mean_difference": "均值差",
     "median_difference": "中位数差",
     "mean": "均值",
+    "least_squares_mean": "最小二乘均值",
     "median": "中位数",
     "proportion": "比例",
     "count": "例数",
@@ -1226,6 +1231,7 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
             "statistical_form",
             default=None,
         )
+    raw_statistic = _source_statistic_form(value, source, raw_statistic)
     statistic, statistic_label = _canonical_statistical_form(
         raw_statistic,
         domain=domain,
@@ -1259,6 +1265,7 @@ def _semantic_projection(value: Any, source: Any, *, domain: str) -> dict[str, s
             "population",
             default=None,
         )
+    raw_population = _source_analysis_population(value, source, raw_population)
     population, population_label = _canonical_population(raw_population)
     raw_arm = _first(
         value,
@@ -2231,6 +2238,28 @@ def _source_first(value: Any, source: Any, *names: str, default: Any = None) -> 
     return _first(source, *names, default=default)
 
 
+def _source_statistic_form(value: Any, source: Any, fallback: Any) -> Any:
+    """Registry paramType is a distinct enum; NUMBER does not mean a count."""
+    param = _get(value, "source_param_type", _MISSING)
+    if param is _MISSING:
+        param = _get(source, "source_param_type", _MISSING)
+    if param is _MISSING:
+        return fallback
+    return {
+        "LEAST_SQUARES_MEAN": "least_squares_mean", "MEAN": "mean", "MEDIAN": "median",
+        "COUNT_OF_PARTICIPANTS": "count",
+    }.get(_text(param).upper(), "not_reported")
+
+
+def _source_analysis_population(value: Any, source: Any, fallback: Any) -> Any:
+    population = _get(value, "source_analysis_population", _MISSING)
+    if population is _MISSING:
+        population = _get(source, "source_analysis_population", _MISSING)
+    # Present-null means unresolved source population, not permission to borrow
+    # a generic display label or to reduce a full ITT clause to its acronym.
+    return fallback if population is _MISSING else population
+
+
 def _project_record(
     value: Any,
     *,
@@ -2296,6 +2325,7 @@ def _project_record(
             default="",
         ),
     )
+    population = _text(_source_analysis_population(value, source, population))
     field_family = _native_text(
         _source_first(value, source, "field_family", "variable_domain", default="")
     )
@@ -2309,6 +2339,7 @@ def _project_record(
             default="",
         )
     )
+    statistic_form = _text(_source_statistic_form(value, source, statistic_form))
     denominator_role = _native_text(_source_first(value, source, "denominator_role", default=""))
     # A machine enum is scientific typing, not display copy: translating only
     # part of it would make numeric-kind and statistical-form inference diverge.
@@ -2387,6 +2418,9 @@ def _project_record(
             "baseline_definition",
         )
     )
+    source_definition = _text(_source_first(value, source, "source_measure_definition", default=""))
+    if source_definition:
+        original_definition = source_definition
     if domain == "safety" and not original_definition:
         original_definition = "｜".join(
             part for part in (
@@ -2439,6 +2473,9 @@ def _project_record(
     )
     plot_numerator = numerator
     plot_denominator = denominator
+    if numeric_kind is NumericMeasureKind.ADJUSTED_ESTIMATE:
+        plot_numerator = None
+        plot_denominator = None
     if numeric_kind in {
         NumericMeasureKind.PARTICIPANT_COUNT, NumericMeasureKind.EVENT_COUNT,
     } and denominator == 0:
@@ -2648,7 +2685,10 @@ def _project_record(
     }
     # Every source adapter must retain explicit scientific typing, not just
     # supporting pages. Omitting these axes would defeat the downstream veto.
-    for field in ("source_domain", "source_metric"):
+    for field in (
+        "source_domain", "source_metric", "source_param_type", "source_analysis_population",
+        "source_measure_path", "source_measure_definition", "source_clause_context",
+    ):
         declared = _get(value, field, _MISSING)
         if declared is _MISSING:
             declared = _get(source, field, _MISSING)

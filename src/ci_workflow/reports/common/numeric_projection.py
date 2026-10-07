@@ -146,6 +146,13 @@ def infer_numeric_kind(
     *, measure_object: str = "", statistic_form: str = "", unit: str = "", domain: str = ""
 ) -> NumericMeasureKind:
     text = " ".join((measure_object, statistic_form, unit)).casefold()
+    # An explicitly reported adjusted statistic outranks its unit. Percent is
+    # not proof of a crude response proportion (nor an inferred numerator).
+    if any(token in text for token in (
+        "adjusted", "ls mean", "least_squares_mean", "least squares mean",
+        "hazard ratio", "odds ratio", "调整",
+    )):
+        return NumericMeasureKind.ADJUSTED_ESTIMATE
     if unit.strip().casefold() in _PARTICIPANT_PERCENT_UNITS:
         return NumericMeasureKind.PARTICIPANT_PROPORTION
     if unit.strip().casefold() in _AMBIGUOUS_PROPORTION_UNITS:
@@ -154,10 +161,6 @@ def infer_numeric_kind(
         return NumericMeasureKind.PARTICIPANT_PROPORTION
     if any(token in text for token in ("person_time", "人年", "patient-year", "person-year")):
         return NumericMeasureKind.PERSON_TIME_RATE
-    if any(
-        token in text for token in ("adjusted", "ls mean", "hazard ratio", "odds ratio", "调整")
-    ):
-        return NumericMeasureKind.ADJUSTED_ESTIMATE
     if (
         any(token in text for token in ("event_count", "num_events", "事件次数", "次数"))
         or unit == "次"

@@ -1,5 +1,30 @@
 # Continuous implementation checkpoint
 
+## Current owner unit: source context through ordinary B, parent3fd19f7
+
+Direct shared-contract repair: complete original source fields/paths provide
+decisive evidence for preservation; this is not clinical equivalence acceptance.
+Previous execution/conference terminals remain recorded, no redundant chair or
+per-observation signature. Root13FAIL/1PASS0.50s: actual source statistic and
+population ignored, adjusted-percent typing loses its form, full source definition
+not exposed. Preserve existing raw/fact/consumer identities; reuse locator and
+SourceClauseContext, local invocation cache by version/measure, no new platform.
+One coherent batch then adjacent regression, not per-line full repository gate.
+Actual missing T66 measure2 inspected: source TEAE/AESI/SAE safety composite, not
+an absent efficacy endpoint; audit safety mapping next, not fabricate efficacy.
+Root13RED/1PASS ->48relatedPASS3.37s +145adjacentPASS8.57s; firstfix10FAIL/38PASS
+retained (required locator role/present-null). Current ordinary partial source
+candidate949facts/91 A+B efficacy/14safety/183baseline, no current. B101pages
+195518795bytes, actual linked overview retains91 value/unit/quote/fullcontext.
+3916members/3659columns and91unknownestimands remain; no numerical or visual
+acceptance. T66 exact full measure path gives6 production safety observations
+and6 rows in each A/B; suffix-only diagnostic initially mixed modules, corrected.
+Stable code frozen for one wide development gate; no per-line full rerun.
+Terminal GATE_OK quality-only/6: Ruff src/tests/tools, strict src/tools283,
+active1185PASS270.55s,compat20PASS0.61s,layer7PASS0.19s,lexical-old-path PASS.
+Machine bindings owner-source-context-v1.json; Goal actualAPI ACTIVE verified.
+Next reusable source-qualified question/context matching and same-currentABC.
+
 ## Current owner checkpoint: 2026-10-08 Europe/Rome, parent05eb277
 
 Execution-plus-conference continued existing disjoint bridge/source challenge;

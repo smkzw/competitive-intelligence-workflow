@@ -4,6 +4,15 @@
 
 ## 1007V1 当前增量合同
 
+B直接疗效桥复用锁定闭包、精确locator、SourceClauseContext与来源版本：按
+source_version_id/测量路径在本次调用内重提完整原句及字段引用，不改旧原子、
+快照或消费者科学身份。完整定义替代仅标题的语义输入；原人群明确null则
+保持未知，不借展示人群。登记paramType独立于通用statistic别名，NUMBER不
+误按number=count解释。LEAST_SQUARES_MEAN作为原统计形式进入共同数值
+投影，先于单位判定；估计图点不使用原计数重新计算，表/证据保留原n/N。
+原estimand、方向、量表与区间未解决时仍未知，不制造等价回执；公共来源区
+复用现有完整原文上下文，不新建本体、服务或逐观察签发平台。
+
 PubMed复用现有PubMedRecord，只加有来源位置的relation_candidates，空集合
 不追加到旧序列化。仅取自身citation的CommentsCorrections，不借参考文献身份；
 RefType方向、空/冲突标识完整保留。紧凑CLI回执同样保留关系。更正/撤稿/关注/
