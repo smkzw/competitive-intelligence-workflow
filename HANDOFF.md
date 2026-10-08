@@ -3,6 +3,11 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 最新暂停：[精确续接记录](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。
 最新固定已push源码及导航新安装 c6dbb71cfe054238dd485afd909bad66c3bd0793。
+最新记录父47aaaebe7742398d3c1bc5b3a713ac5f0186ea20；当前C中文候选v4
+[源显示回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-translation-v4.json)，
+全258行/126条款174译行，32来源修正；非正式科学接受/current。
+[C操作准确诊断](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-current-diagnostic-v1.json)：
+16关键门阻断、内部stage不是正式save；新有界源复核输入接线进行中。
 [固定安装真实r10导航回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-current-navigation-v1.json)。
 [同固定安装r10新分享回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-r10-share-v1.json)：A/B/AB64/355/419文件及真实配置核验，零重新保存；离线浏览器NOT_RUN。
 历史事务修复安装 b6e6ca3 保留，不重复其原旅程。
@@ -59,9 +64,14 @@ current仍r9，DB/events/journal/2132文件检查项与427父pin不变，没有�
 不以complete状态或ready journal代替真正已提交generation证据，不回退current。
 纯呈现/导航/新安装本批已闭有限范围。新版r10分享另绑同候选，不借原r9回执。
 本地翻译兼容续接已exit0：126条/174行、63重译63复用，冻结receipt d33776f5；
-ci-1007-c-translation-v2-fidelity独立源对照待终态，不当医学接受或切current。
-ci-1007-real-c-current-chain-v1仍PENDING（占位report文件存在不是终态），不得
-因延迟轮询/重派，不与r10A/B候选混签ABC。
+独立初始REVISE→v3修31/31 ACCEPT_BOUNDED，另发现5615251a窗口误译。
+Owner v4仅修该指定句，同258真实行正常review渲染/4绑定负例再核；原文/
+174定位及旧v1–v3不改，截断non-responde仍披露，未猜补。不是科学采用。
+ci-1007-real-c-current-chain-v1已终态：ZCode实际GLM-5.3-Flash/max观测，
+源258绑定闭合，但普通报告16关键门拒绝；四假设stage不能计正式保存。
+旧脚本没有正向current分支且blocked journal不重试，不能照其建议原地重跑。
+同会话review-entry-v2只建真实typed pending研究/复核输入，preflight实PASS
+后派发；PENDING只指这一跟进，终态前不轮询/重派、不与r10A/B混签ABC。
 科学/实屏分别签范围，不建立任意文件浏览或改变离线分享的静态只读属性。
 
 ## 发布尚未完成
@@ -71,4 +81,7 @@ ci-1007-real-c-current-chain-v1仍PENDING（占位report文件存在不是终态
 Ego原space12 NOT_FOUND及替换空间、论文当前可得政策、专家01–06/
 reference/cases.json缺件各Ask待答；不重复问、不私换浏览器/模型/源政策。
 HyMT先前507保留；本次同通道完成关闭此次运行容量阻断，不代表医学翻译通过。
+本批两复盘点：翻译review跟进启动时漏拦格式preflight exit1，后补PASS非
+追认；请求48轮未强制，native87→167。Cworker源SHM实际32768不为0，
+源DB与五pin仍原hash。全部偏差保留，不借runner exit0代内容/流程接受。
 只阻断对应分支，继续不受阻实现。历史数据库hash FAIL原因未明，旧hash不改。

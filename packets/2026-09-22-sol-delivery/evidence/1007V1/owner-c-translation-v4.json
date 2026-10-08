@@ -1,0 +1,61 @@
+{
+  "schema_version": "1007-owner-c-translation-display-v4-1",
+  "source_commit": "c6dbb71cfe054238dd485afd909bad66c3bd0793",
+  "record_parent_commit": "47aaaebe7742398d3c1bc5b3a713ac5f0186ea20",
+  "scope": "Four pinned prurigo-nodularis registry studies; source-to-Chinese display, not scientific adoption or exhaustive universe",
+  "source_rows": 258,
+  "unique_clauses": 126,
+  "translated_source_rows": 174,
+  "corrections_from_v2": 32,
+  "v3_independent_changed_keys_accepted": 31,
+  "v4_owner_exact_prescribed_fix": "5615251a12a877d6966966bec181048d050feb142b830940796de4bff5ea9b3b: applied TO week16, not extended UNTIL week16",
+  "independent_route": {
+    "provider": "codebuddy-cli",
+    "model_actual_init_and_final": "deepseek-v4.1-flash",
+    "effort_requested": "max",
+    "effort_provider_attested": false,
+    "session": "01a11c31-7dde-7e7a-91f6-00120a7e7498",
+    "initial_seconds": 357.906,
+    "followup_seconds": 274.902,
+    "total_seconds": 632.808,
+    "initial_native_turns": 87,
+    "followup_native_cumulative_turns": 167,
+    "followup_turn_limit_requested": 48,
+    "followup_limit_enforced": false,
+    "fallback": null,
+    "shell_unavailable": true,
+    "independent_hash_recomputation": false,
+    "deviation": "follow-up launched after format-only preflight exit1; post-dispatch addendum PASS is not retroactive"
+  },
+  "artifacts": [
+    {"path": ".artifacts/1007-c-translations-v2/receipt.json", "sha256": "d33776f5bd2c783859ce0ecf78cc10071e073557a82defaa125f72f5161ec314"},
+    {"path": ".artifacts/1007-c-translations-v3/receipt.json", "sha256": "2f2bae2580605a2f8c2ef2ea0b6300aa7626d620acc19d365f5ae46ae01adda7"},
+    {"path": ".artifacts/1007-c-translations-v4/receipt.json", "sha256": "bce94b9d7b621a76538399b9312ff227faa34617e341e0f4d15bbc799b23126e"},
+    {"path": ".artifacts/1007-c-translations-v4/correction.json", "sha256": "e4348d1cc579867fbb81ff2f3b46ef1ad2834e36cc68555b84da88388b02c655"},
+    {"path": ".artifacts/1007-c-translations-v4/owner-source-display-replay.json", "sha256": "aa283ed9121ffad9f49ed3b6a0c706fdd8f909d100034fb7ecce72bd8941684a"},
+    {"path": "runs/conference/ci-1007-c-translation-v2-fidelity/evidence_single_object.md", "sha256": "72f17d07497cb9608f4b5a3cdcb88f7a7997d2bd95bbec12a748a00232e8e7bf"},
+    {"path": "runs/conference/ci-1007-c-translation-v2-fidelity/evidence_single_object_v3_followup.md", "sha256": "a9d0331247c3d8a4e03d7c0301c961e6d9635f015c0307b0ceb97c7a051e4733"}
+  ],
+  "candidate_site": ".artifacts/1007-c-translations-v4/site",
+  "replay_command": ".venv/bin/python -B .artifacts/1007-c-translations-v4/repair_one_window.py",
+  "replay_policy": "Already completed. Outputs are exclusive-create; do not rerun in place. Preserve v2/v3/v4, original inputs and per-file hashes in owner-source-display-replay.json. Cross-machine source-set is local-required, not claimed downloadable.",
+  "production_checks": {
+    "source_hashes_and_row_locators": "PASS126/174",
+    "all_observations_preserved_except_display": "PASS258",
+    "invalid_source_version_hash_locator_empty_display": "PASS4 rejected without partial mutation",
+    "ordinary_c_renderer": "PASS review_candidate only",
+    "research_status": "unreviewed_candidate",
+    "identity_headers": [
+      {"name": "度普利尤单抗注射液", "company": "公司：Sanofi｜中国MAH所属集团"},
+      {"name": "Nemolizumab", "company": "公司：Galderma Group AG｜境外MAH所属集团（US）"}
+    ]
+  },
+  "remaining": {
+    "upstream_source_tail": "c31af306 exact raw registry sentence ends non-responde; disclosed, not inferred",
+    "independent_v4_artifact_acceptance": "Not separately run; owner verified the reviewer prescribed exact fix",
+    "scientific_acceptance": false,
+    "current_switched": false,
+    "browser": "NOT_RUN",
+    "whole_universe_publication_and_release": "NOT_ACCEPTED"
+  }
+}

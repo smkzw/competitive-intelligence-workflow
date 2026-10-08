@@ -1,5 +1,31 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前：记录父47aaaeb，C中文v4和正式源复核接线
+
+源显示32有依据修正，全258设计行/126条款174中文行和原始定位保留；
+同当前源码C review渲染接已有MAH/集团/合法INN身份，四绑定负例拒绝。
+不是正式current。独立review31/31 ACCEPT_BOUNDED之外，owner按明确同族
+原文修一条applied-to-week16，不另译、不再整页会商。原文截断non-responde
+明确披露且保持原字节。v2/v3两个REVISE与原receipt保留，不改历史接受。
+
+C初轮执行已返回：258源/manifest/消费者集合相等，真实ACTUAL N151/160/
+286/274及locator齐；16关键候选门阻断，普通render与无current保存拒绝。
+_stage_fact验证四假设变化/分数拒绝，但不是完整save/幂等/同步。Owner全读
+650行脚本发现其正向分支未实现且blocked journal永久skip，拒绝“先接受再
+原地重跑”的建议；新同会话有界单元改为现有合同的typed pending源复核
+输入，不伪造科学采用。SHM实际32768不是报告声称的0，五原源hash保持。
+
+流程复盘：翻译follow-up原格式preflight exit1却被owner下一调用启动，后补
+addendum PASS不能追认；接下来C跟进实际PASS后才启动。CodeBuddy请求48
+跟进轮未强制，native87→167；actual两轮632.808s、同模型init/final可证，
+effort不可独立attest。ZCode request/response GLM-5.3-Flash/max可观测。
+不拿runner exit0代真正内容、预算、科学、产品或浏览器接受。
+
+准确分层证据为owner-c-translation-v4.json及owner-c-current-diagnostic-v1.json。
+新候选本地受控20MB/完整filehash与源pin保存，未删除唯一产物；Git只纳
+精简回执/审阅/任务记录。未再运行旧r6–r9/save/install/share或宽门；五用户
+修改/未知资料/旧中文工程安全边界保持。以下旧“当前”仅历史版本范围。
+
 ## 当前接手索引：固定a36真实安装操作链与原请求恢复缺陷
 
 本节先于下面版本特定历史。唯一当前认STATUS和

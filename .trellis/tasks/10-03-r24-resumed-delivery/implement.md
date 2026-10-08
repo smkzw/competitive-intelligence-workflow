@@ -1,14 +1,21 @@
 # Continuous implementation checkpoint
 
-## 唯一当前检查点：1007导航c6dbb71，记录父6881ee5，持续实施
+## 唯一当前检查点：1007C中文v4/源复核输入，源码c6dbb71，记录父47aaaeb
 
 详细当前以根HANDOFF/包STATUS为准。以下旧“当前”标题均为其历史版本，不恢复旧PID。
 新版r10同安装A/B/AB分享64/355/419及真实配置/全成员hash通过，2580文件不变、
 零save；owner-installed-r10-share-v1准确限定字节层，Ego/离线/C未验。
-HyMT兼容续接exit0、126条174行63重译63复用、原源/旧译/旧审阅未改；d33776f5
-冻结新receipt。采用单独有界conference：医学翻译实质含义需与原文独立挑战，
-仅126条而非全页；C真实current任务采用单execution：独占新QA避免共享可变源。
-两个runner未终态不接受；PENDING占位文件不是完成事件，不轮询/重派。
+HyMT126条174行63重译63复用，独立初始REVISE→v3 31条ACCEPT_BOUNDED，
+一条同族窗口误译owner按指定源修v4，共32修正。同258行生产review路径/
+身份头/4绑定负例通过，源和旧候选不改、截断尾句不补猜、科学/current未切。
+C初轮已终态ZCode实际GLM-5.3-Flash/max，16关键门阻断；stage不是save，
+旧script无正向current分支且blocked journal不会重试。执行跟进只生成
+typed pending源复核输入，独占review-entry-v2，preflight实际PASS后启动。
+采用execution+有界conference：实际资料构建可分离，临床译文含义需独立
+源对照；复核非整页，当前共用事实/正式状态仍单owner。不伪审批/放宽gate。
+翻译review跟进格式preflight失败仍启动、48轮请求未强制（native87→167）
+两偏差保持；源SHM32768/WAL0/journal0纠正。新C跟进未终态不接受，不轮询/
+重派，不恢复旧PID。唯一当前见STATUS及两个新owner回执。
 不重跑r6–r9保存、r10重建/安装/分享或已验宽门；docs-only无需再跑全仓。
 
 ## 当前：2026-10-08 已解除暂停，直接续接导航

@@ -1,6 +1,6 @@
-# 唯一当前状态：1007V1 持续实施，导航源码与真实新呈现已验
+# 唯一当前状态：1007V1 持续实施，C中文v4候选及正式源复核接线
 
-2026-10-08：用户重新授权连续实施；Goal API实际active，非完成/RC。HEAD e1a0126，五用户修改保持；从保留导航RED直接续接，不重跑四步保存/已验安装/原分享。
+2026-10-08：用户重新授权连续实施；Goal API实际active，非完成/RC。最新记录父47aaaebe7742398d3c1bc5b3a713ac5f0186ea20，生产源码c6dbb71；五用户修改保持。已完成导航修复/安装/r10分享不重跑，正式C当前仍未建立。
 [精确暂停与续接记录](../../.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。
 
 最新固定已push导航代码及新安装：c6dbb71cfe054238dd485afd909bad66c3bd0793。
@@ -24,8 +24,8 @@
 | 当前操作 | 实际安装HTTP，真实来源估计值set/clear/undo/restore r6–r9，A+B同步，原引文与427父pin不变 | 隔离假设QA；C不在current；不继承科学接受 |
 | 幂等与冲突 | b6安装两次原r6请求HTTP200返回原结果，current保持r9；改载荷/新stale409；2132文件检查项、DB/events/journal及427父pin不变 | 修复后安装范围通过；a36原FAIL保持，不拼科学/浏览器PASS |
 | 分享 | 同固定c6db安装r10新A/B/AB、真实问题配置/逐成员hash分别64/355/419通过；2580项目文件不变/零save。原r9另留 | 静态字节/配置层；离线浏览器未运行，C不在该current |
-| C中文 | HyMT原通道兼容续接exit0，126唯一条款/174行，63重译63复用；原源/旧译/旧REVISE未改 | 新receipt d33776f5，独立源对照已派发待终态；科学false/current未切，非翻译验收 |
-| C真实操作 | 一个E04有界执行，独占新QA产物，源项目只读、全258设计行，不修改产品源码 | PENDING；report占位文件存在不等于完成；不与r10混签ABC |
+| C中文 | HyMT v2后实际独立源对照REVISE；v3修31/31 ACCEPT_BOUNDED，另有一条窗口误译；owner按指定原文修v4，同258行生产review渲染、174定位/4绑定负例通过 | 当前v4 bce94b9d/owner aa283ed9；32源支持修正、截断尾句仍披露；独立v4整件未再签，科学false/current未切/实屏NOT_RUN，不再整批重译 |
+| C真实操作 | E04实际ZCode GLM-5.3-Flash/max，258真实绑定；普通render因16关键候选门拒绝，无current保存拒绝；内部四stage及非法人数检查 | BLOCKED_CURRENT；stage不是public save/sync/idempotency。旧script无正向current分支，原件不重跑；同会话typed pending源复核输入跟进PENDING，不能混签ABC |
 | 浏览器/产品 | Ego旧space12 NOT_FOUND，新空间Ask待答 | 四宽四态/L1L2/键盘/目视/离线新浏览器NOT_RUN |
 | 新导航源码 | current清单/世代读路由、B显式view身份、共享原生链接/旧深链拒绝；最终50PASS111.71s、Ruff2/strict1；独立初始REVISE→同会话ACCEPT_BOUNDED F1/F3/F4 | 模型实际deepseek-v4.1-flash，effort仅请求max；审核未运行shell/测试，owner另验；非科学/浏览器/安装 |
 | 新真实呈现 | 隔离APFS克隆r10，949事实及绑定完全不变，A105/B288真实深链HTTP200；新版portal.js实际消费，65/356文件清单，2155父文件不变、零临床save；新安装另验2580文件不变 | 原r9/旧安装未改；C不在此current；源码/安装两层均限定HTTP；Ego/CSP实际NOT_RUN |
@@ -34,6 +34,12 @@
 当前机器回执中的每个PASS只对实际commit/安装/项目revision成立。a36的旧
 请求重试FAIL保留；b6独立安装已明确重绑并复跑，两个版本证据不互相改写。
 Node VM不是Ego，ZIP校验不是离线重开，开发wide gate不是终验。
+[C中文v4来源/显示准确回执](evidence/1007V1/owner-c-translation-v4.json) /
+[C操作诊断准确回执](evidence/1007V1/owner-c-current-diagnostic-v1.json)。
+翻译C03 actualdeepseek-v4.1-flash，源对照初始357.906s/跟进274.902s，
+native87→167，请求48跟进轮数未强制；effort仅请求max。原跟进preflight
+格式exit1仍被owner误启动，后补addendum PASS不得追认。下一C跟进preflight
+实PASS后启动。原件/偏差/REVISE全部保留，未无限全页会商或重跑宽门。
 
 ## 已返回的有界根因包
 
@@ -72,5 +78,9 @@ C共享helper的旧审查推断已更正，不重建第二实现；ECharts缺JSO
 新r10纯呈现及真实导航已验；原r9保存/重试/分享不重跑。稳定宽门6步全绿；下一
 代码已push GitHub、固定新版安装已验；继续C/共同横比，Ego只阻断实际浏览器分支。
 本次3.0G可重建干净源码worktree已正常移除；包/安装/真实候选及回执保留。
-翻译原通道兼容续接已exit0，不更换模型/资源上限或覆盖旧候选；先前507保留，
-关闭此次运行容量阻断，126条源对照独立review待终态。不重复译制/全页会商。
+翻译v4真实review候选已建立，全258条保留并消费来源绑定中文/身份；32明确
+错误已修、未补截断source、不签current。下一源复核接线使用现有FreshC内容/
+摄取/正式签发合同，先生成真实typed pending输入、定位实际守卫顺序，不能
+SQL翻accepted、伪签receipt、主Agent自证或把四研究当完整竞品宇宙。原内部
+stage/脚本与旧r9/r10均只读；新有界跟进完成后只验受影响路径，不重复安装/
+四次保存/分享。Ego只阻断实屏，其他执行继续；无自动阶段暂停。

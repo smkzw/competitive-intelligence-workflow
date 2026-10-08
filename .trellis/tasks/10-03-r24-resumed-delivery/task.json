@@ -27,7 +27,7 @@
     "goal_api_state": "active_verified",
     "pause_requested_by_user": false,
     "handoff": ".trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md",
-    "last_stage": "20261008 c6dbb71 pushed; fixed398-member bundle/private399-member fresh install and real r10 A+B navigation HTTP PASS,2580files unchanged/no save. Clean3G source copy removed, receipts/candidate/install kept. Original C translation repair resumed once after observed live lease-state change, terminal pending; no model/config switch. Ego/science/C/full delivery still open.",
+    "last_stage": "20261008 record parent47aaaeb/sourcec6dbb71. Installed r10 shares A64/B355/AB419 and original source preserved, no replay. C translation v4:32 source-literal corrections,126clauses/174translated/258rows,31 independently accepted plus1 owner prescribed fix; source tail disclosed/sciencefalse/currentfalse. C initial execution terminal blocked16critical,internalstage notpublicsave,oldscript no positive current branch. Same-session review-entry-v2 typed pending source-review input PENDING after actual preflightPASS. Ego and final delivery open; limits/preflight deviations retained.",
     "product_release_state": "development-candidate",
     "project_completed": false
   }

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1007-owner-c-current-diagnostic-1",
+  "source_commit": "c6dbb71cfe054238dd485afd909bad66c3bd0793",
+  "scope": "Real four-study PN source bindings and failed current entry; internal staging is not formal save",
+  "worker": {
+    "provider_actual": "zcode-live-bigmodel",
+    "request_model": "GLM-5.3-Flash",
+    "response_model": "GLM-5.3-Flash",
+    "requested_effort": "max",
+    "observed_effort": "max",
+    "identity_verified": true,
+    "seconds": 1672.158,
+    "tool_calls": 59,
+    "fallback": null,
+    "exit_code": 0,
+    "turn_limit_requested": 128,
+    "turn_limit_enforcement": "runtime-managed; not established"
+  },
+  "artifacts": [
+    {"path": ".artifacts/1007-real-c-current-chain-v1/replay.py", "sha256": "eeebc1d408452682d582854d848629d0f4f9149c5116d56c7ed025d6185d4bc6"},
+    {"path": ".artifacts/1007-real-c-current-chain-v1/attempt-venv-312/receipts/chain-receipt.json", "sha256": "bbafea2aa302559ee1783d95f4d0c7318765b5787b68c34cb7c67e75eb578125"},
+    {"path": "runs/execution/ci-1007-real-c-current-chain-v1/worker_01.md", "sha256": "418f00fce64d64b1c835dd0ad1ff9229ab5f0facc42ca09e601088508f37c93a"}
+  ],
+  "bindings": {"observations": 258, "manifest_refs": 258, "consumer_rows": 258, "sets_equal": true, "source_versions": 4},
+  "sample_source": {"NCT04183335": 151, "NCT04202679": 160, "NCT04501666": 286, "NCT04501679": 274, "type": "ACTUAL", "locator": "$.protocolSection.designModule.enrollmentInfo.count"},
+  "formal_current": {"status": "BLOCKED", "critical_gate_failures": 16, "ordinary_render_refused": "ReportCPortalError", "save_without_current_refused": "CurrentDeliveryConflictError", "request_count_at_refusal": 0, "current_generation_switched": false},
+  "staging_seam_only": {"method": "_stage_fact, not UserFactEditService.save", "steps": ["151 source→hypothetical152", "clear", "restore152", "undo restore→clear"], "hypothetical_versions": 4, "fraction_0_5_rejected_before_write": true, "duplicate_stage": "UNIQUE constraint rejection, not public idempotency acceptance", "derived_rate_created": false},
+  "owner_corrections": [
+    "Old replay has no implemented positive-current branch; do not rerun it expecting full save after acceptance.",
+    "Blocked journal steps are terminal; use a distinct pinned reviewed input/new bounded implementation.",
+    "Actual source sidecars before/after SHM32768/WAL0/journal0, not all zero.",
+    "Python3.14 missing pypdf attempt is retained FAIL; later existing .venv3.12.13/pypdf6.15.0 run is distinct."
+  ],
+  "source_root": ".artifacts/1007-pn-joint-abc-source-v1/source-values-v2/working/project",
+  "unchanged_source_pins": {
+    "state/project.sqlite": "07ae539d8243a62130f7294ca2c741276ae1126575c34e87ae7522ac363a4a0d",
+    "project.yaml": "0bfb2cc67a7eed05eb8eff9b7b96855a1a754d132d1499540ec4cd83ada07cab",
+    "evidence/library/c-candidate/source-context-v3-portal-data.json": "184b788cfa703cc083f2aca74f863ff9276e48b09c9af70eeb24977d713b3a6d",
+    "evidence/library/c-candidate/candidate-manifest.json": "9d597f013aeadafd345022e0b7c64a6d7ac636a2b7b0f6fb66b426382017f12d",
+    "evidence/library/c-candidate/inputs.json": "9a726318828b55d2dde8d5fab705441a54e4ceefaec5b1e992034af63f6534e7"
+  },
+  "next": "Same-session bounded review-entry-v2 prepares typed pending source-review input; no manual accepted flags, science/current/receipt invented or old save rerun.",
+  "scientific_acceptance": false,
+  "browser": "NOT_RUN",
+  "release": "NOT_ACCEPTED"
+}

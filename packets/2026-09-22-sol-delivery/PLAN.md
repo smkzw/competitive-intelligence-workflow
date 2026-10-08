@@ -11,9 +11,13 @@
 2155父文件不变，零临床save。一次稳定quality-only宽门6步全绿；c6dbb71已push，
 固定新版包/实际安装/r10导航已验。仅3.0G可重建干净源码副本正常移除，候选保留。
 同固定安装新版r10分享已实际导出/核验A64/B355/AB419、真实配置、2580文件不变，
-零save；离线浏览器NOT_RUN。C独占新QA执行仍PENDING，不重复派发。
-翻译兼容续接已exit0，126条/174行、63重译63复用；原件保留，医学源对照独立
-ci-1007-c-translation-v2-fidelity待终态，不因模型生成即发布current。
+零save；离线浏览器NOT_RUN。C独占QA初轮已終态且正式current被16关键门拒绝，
+四内部stage不当正式save；旧脚本无正向分支/blocked journal不可直接重跑。
+同会话有界review-entry-v2建typed pending源复核输入，不修改生产/科学接受。
+翻译126条/174行独立REVISE后31v3修正ACCEPT_BOUNDED，另有一条窗口
+误译owner按指定源字面修v4；共32修正，全258行生产review路径、身份头及4
+错误绑定检查通过。科学/current/实屏仍未接受，原源/旧译/失败留存；不重译/
+再全页review。当前owner-c-translation-v4及owner-c-current-diagnostic-v1为范围。
 继续就绪C/共同横比，不重存r6–r9或覆写原证明。Ego space12仍NOT_FOUND；
 实屏/键盘/离线门NOT_RUN，不以Node或HTTP代替。准确回执owner-current-navigation-postreview-v1。
 以下各批是历史范围，不能作为当前在途/验收声明。
