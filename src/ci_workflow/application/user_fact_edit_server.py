@@ -8,8 +8,10 @@ and a per-session CSRF token.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
+import re
 import secrets
 import threading
 from http import HTTPStatus
@@ -17,16 +19,76 @@ from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
+from ci_workflow.application.delivered_artifacts import _ordinary
+from ci_workflow.application.latest_delivery import CurrentDeliveryBundle, current_bundle_sha256
 from ci_workflow.application.user_fact_edit import (
     UserFactEditService,
     UserFactSaveCommand,
     UserFactSaveConflictError,
     UserFactSaveError,
+    current_delivery_lock,
 )
+from ci_workflow.renderers.portal.active_fact_projection import ActiveFactBinding
+from ci_workflow.renderers.portal.report_b import ReportBPortalData, _b_source_view_row
 
 _MAX_BODY = 64 * 1024
+_WEB_TYPES = {
+    ".html": "text/html; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".webp": "image/webp",
+    ".ico": "image/x-icon",
+}
+
+
+def _report_links(current: CurrentDeliveryBundle) -> list[dict[str, str]]:
+    generation = current_bundle_sha256(current)
+    return [
+        {"report": item.report, "href": f"/reports/{generation}/{item.report}/overview.html"}
+        for item in current.reports
+        if "overview.html" in item.file_hashes
+    ]
+
+
+def _edit_context(
+    service: UserFactEditService,
+    current: CurrentDeliveryBundle,
+    report: str,
+) -> dict[str, Any]:
+    item = next(item for item in current.reports if item.report == report)
+    data_b = None
+    if report == "B":
+        if item.builder_input_relative_path is None:
+            raise ValueError("B编辑导航缺少已绑定输入")
+        source = service.project_root / item.builder_input_relative_path
+        _ordinary(service.project_root, source)
+        data_b = ReportBPortalData.model_validate_json(source.read_bytes())
+    bindings = []
+    for fact_id, fact in service.current_facts().items():
+        declarations = fact.get("consumer_bindings", ())
+        if not isinstance(declarations, (list, tuple)):
+            raise ValueError("事实消费者绑定无法核验")
+        for declaration in declarations:
+            binding = ActiveFactBinding.model_validate(declaration)
+            if binding.report != report:
+                continue
+            row_id = binding.row_id
+            if data_b is not None:
+                row_id = _b_source_view_row(data_b, binding.collection, row_id)["row_id"]
+            bindings.append(
+                {"collection": binding.collection, "row_id": row_id, "fact_id": fact_id}
+            )
+    return {
+        "revision": current.revision,
+        "generation": current_bundle_sha256(current),
+        "report": report,
+        "bindings": bindings,
+    }
 
 
 def _safe_json(payload: object) -> str:
@@ -42,30 +104,39 @@ def _safe_json(payload: object) -> str:
 _EDITOR_TEMPLATE = """<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>事实修订</title><style>
-body{font:15px/1.55 system-ui,sans-serif;margin:1.5rem;max-width:1180px;color:#17212b}
-h1{font-size:1.25rem;margin:0 0 .6rem}
-h2{font-size:1.05rem;margin:.2rem 0 .6rem}
+*{box-sizing:border-box}
+body{font:18px/1.4 "Microsoft YaHei","PingFang SC",Arial,sans-serif;
+margin:24px;color:#0F1115;background:#FBFCFD}
+h1{font-size:32px;margin:0 0 .6rem}
+h2{font-size:24px;margin:.2rem 0 .6rem}
+#report-links{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 16px}
+a{color:#404040;text-decoration:underline;text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid #C00000;outline-offset:3px}
 #status{padding:.6rem .75rem;background:#f3f6f8;border-radius:8px;margin:0 0 1rem}
 main{display:grid;grid-template-columns:minmax(17rem,23rem) 1fr;gap:1rem;align-items:start}
-section{border:1px solid #ccd6df;border-radius:12px;padding:.9rem}
+section{min-width:0;border:1px solid rgba(190,178,161,.45);border-radius:18px;padding:16px;
+background:linear-gradient(135deg,rgba(255,253,251,.62),
+rgba(255,251,242,.55) 48%,rgba(255,245,228,.5));
+box-shadow:0 5px 18px rgba(15,17,21,.07)}
 input,select,textarea{font:inherit;padding:.35rem .5rem;border:1px solid #aab6c0;
 border-radius:6px;width:100%}
 #fact-list{list-style:none;margin:.6rem 0 0;padding:0;max-height:62vh;overflow:auto}
 #fact-list li{padding:.45rem .5rem;border-bottom:1px solid #eef2f5;cursor:pointer}
 #fact-list li span{display:block}
 #fact-list button{width:100%;text-align:left;background:transparent;color:inherit;margin:0}
-#fact-list button:focus-visible{outline:2px solid #8b1e2d;outline-offset:2px}
-.wiring{color:#5c6b7a;font-size:.78rem;overflow-wrap:anywhere}
+#fact-list button:focus-visible{outline:2px solid #C00000;outline-offset:2px}
+.wiring{color:#64676B;font-size:16px;overflow-wrap:anywhere}
 label{display:block;margin:.5rem 0}
-button{font:inherit;padding:.45rem .9rem;margin-right:.5rem;background:#8b1e2d;color:#fff;
+button{font:inherit;padding:.45rem .9rem;margin-right:.5rem;background:#FF9900;color:#0F1115;
 border:0;border-radius:8px}
 dl{display:grid;grid-template-columns:auto 1fr;gap:.25rem .8rem;margin:.5rem 0}
 dt{color:#5c6b7a}dd{margin:0;overflow-wrap:anywhere}
-#controls label{max-width:26rem}
-#result{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.8rem;color:#33424f}
+#controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(20rem,1fr));gap:0 16px}
+#result{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;color:#404040}
 </style></head><body>
 <h1>当前事实修订</h1>
 <p id="status" role="status">正在读取当前 revision…</p>
+<nav id="report-links" aria-label="返回当前报告"></nav>
 <main>
 <section id="selector"><label for="search">搜索事实（药物/研究/终点/标识）</label>
 <input id="search" type="search" autocomplete="off" placeholder="输入关键词筛选">
@@ -101,6 +172,19 @@ placeholder="写明本次修订的用户依据"></textarea></label>
     facts: envelope.facts,
     selected: null,
   };
+  function renderReportLinks(links) {
+    const nav = document.getElementById('report-links');
+    if (!nav) return;
+    nav.replaceChildren();
+    const labels = { A: '竞品全景台', B: '临床结果证据室', C: '试验设计图谱' };
+    (links || []).forEach(function (item) {
+      const link = document.createElement('a');
+      link.href = item.href;
+      link.textContent = '返回' + labels[item.report];
+      nav.appendChild(link);
+    });
+  }
+  renderReportLinks(envelope.report_links);
   let editor = null;
   const requestedFact = new URLSearchParams(
     typeof location === 'undefined' ? '' : location.search
@@ -394,6 +478,7 @@ placeholder="写明本次修订的用户依据"></textarea></label>
       }
       state.revision = data.current_revision === undefined ? data.revision : data.current_revision;
       state.facts = data.facts;
+      renderReportLinks(data.report_links);
       renderList();
       renderDetail();
       resultEl.textContent = JSON.stringify(data.result, null, 2);
@@ -421,7 +506,13 @@ placeholder="写明本次修订的用户依据"></textarea></label>
 </script></body></html>"""
 
 
-def _editor_page(*, facts: dict[str, dict[str, Any]], revision: int, project_id: str) -> bytes:
+def _editor_page(
+    *,
+    facts: dict[str, dict[str, Any]],
+    revision: int,
+    project_id: str,
+    report_links: list[dict[str, str]] | None = None,
+) -> bytes:
     """Render the compact editor over the current facts.
 
     All fact and identity data is embedded through one escaped JSON envelope and
@@ -429,7 +520,12 @@ def _editor_page(*, facts: dict[str, dict[str, Any]], revision: int, project_id:
     the same path as every other fact field.
     """
     envelope = _safe_json(
-        {"project_id": project_id, "revision": revision, "facts": facts}
+        {
+            "project_id": project_id,
+            "revision": revision,
+            "facts": facts,
+            "report_links": report_links or [],
+        }
     )
     return _EDITOR_TEMPLATE.replace("__FACTS_JSON__", envelope, 1).encode("utf-8")
 
@@ -464,11 +560,13 @@ class LoopbackEditServer:
                 self.send_header("Cache-Control", "no-store")
                 self.send_header("X-Content-Type-Options", "nosniff")
                 content_security_policy = (
-                    "default-src 'self'; script-src 'unsafe-inline'; "
-                    "style-src 'unsafe-inline'; object-src 'none'; "
+                    "default-src 'self'; script-src 'self' 'unsafe-inline'; "
+                    "style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; "
                     "base-uri 'none'; frame-ancestors 'none'"
                 )
                 self.send_header("Content-Security-Policy", content_security_policy)
+                self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+                self.send_header("Referrer-Policy", "no-referrer")
                 for key, value in (headers or {}).items():
                     self.send_header(key, value)
                 self.end_headers()
@@ -503,7 +601,11 @@ class LoopbackEditServer:
                     return False
                 session = self._session()
                 csrf = self.headers.get("X-CSRF-Token", "")
-                if session is None or not secrets.compare_digest(session[1], csrf):
+                if (
+                    session is None
+                    or not csrf.isascii()
+                    or not secrets.compare_digest(session[1], csrf)
+                ):
                     self._json(HTTPStatus.FORBIDDEN, {"error": "会话或CSRF校验失败"})
                     return False
                 return True
@@ -513,21 +615,41 @@ class LoopbackEditServer:
                     self._json(HTTPStatus.FORBIDDEN, {"error": "Host不受信任"})
                     return
                 path = urlsplit(self.path).path
+                if path.startswith("/reports/"):
+                    self._report(path)
+                    return
                 if path == "/favicon.ico":
                     self._send(HTTPStatus.NO_CONTENT, b"", content_type="image/x-icon")
                     return
                 if path != "/":
                     self._json(HTTPStatus.NOT_FOUND, {"error": "资源不存在"})
                     return
+                try:
+                    with current_delivery_lock(owner.service.project_root):
+                        current = owner.service.read_current_delivery()
+                        expected_generation = parse_qs(
+                            urlsplit(self.path).query,
+                            keep_blank_values=True,
+                        ).get("generation")
+                        if expected_generation is not None and expected_generation != [
+                            current_bundle_sha256(current)
+                        ]:
+                            self._json(
+                                HTTPStatus.CONFLICT, {"error": "报告版本已变化，请重新打开当前报告"}
+                            )
+                            return
+                        page = _editor_page(
+                            facts=owner.service.current_facts(),
+                            revision=current.revision,
+                            project_id=current.project_id,
+                            report_links=_report_links(current),
+                        )
+                except (UserFactSaveError, OSError, ValueError):
+                    self._json(HTTPStatus.CONFLICT, {"error": "当前交付未能完整核验"})
+                    return
                 session_id = secrets.token_urlsafe(32)
                 csrf = secrets.token_urlsafe(32)
                 owner._sessions[session_id] = csrf
-                current = owner.service.read_current_delivery()
-                page = _editor_page(
-                    facts=owner.service.current_facts(),
-                    revision=current.revision,
-                    project_id=current.project_id,
-                )
                 marker = b"<head>"
                 page = page.replace(
                     marker,
@@ -543,6 +665,59 @@ class LoopbackEditServer:
                         "X-CSRF-Token": csrf,
                     },
                 )
+
+            def _report(self, path: str) -> None:
+                if self._session() is None:
+                    self._json(HTTPStatus.FORBIDDEN, {"error": "请先打开事实编辑页建立会话"})
+                    return
+                match = re.fullmatch(r"/reports/([0-9a-f]{64})/([ABC])/(.+)", unquote(path))
+                if match is None:
+                    self._json(HTTPStatus.NOT_FOUND, {"error": "资源不存在"})
+                    return
+                generation, report, relative = match.groups()
+                parts = relative.split("/")
+                if (
+                    any(part in {"", ".", ".."} for part in parts)
+                    or any(char in relative for char in ("%", "\\", "\x00"))
+                    or Path(relative).suffix not in _WEB_TYPES
+                ):
+                    self._json(HTTPStatus.NOT_FOUND, {"error": "资源不存在"})
+                    return
+                try:
+                    # ponytail: whole-current validation under the existing lock;
+                    # profile before adding a validated-generation cache.
+                    with current_delivery_lock(owner.service.project_root):
+                        current = owner.service.read_current_delivery()
+                        if current_bundle_sha256(current) != generation:
+                            self._json(
+                                HTTPStatus.CONFLICT,
+                                {"error": "报告版本已变化，请从编辑页打开当前报告"},
+                            )
+                            return
+                        item = next(
+                            (item for item in current.reports if item.report == report), None
+                        )
+                        if item is None or relative not in item.file_hashes:
+                            self._json(HTTPStatus.NOT_FOUND, {"error": "资源不存在"})
+                            return
+                        target = owner.service.project_root / item.site_relative_path / relative
+                        _ordinary(owner.service.project_root, target)
+                        body = target.read_bytes()
+                        if hashlib.sha256(body).hexdigest() != item.file_hashes[relative]:
+                            raise ValueError("报告文件摘要已变化")
+                        if relative.endswith(".html"):
+                            if b"<head>" not in body:
+                                raise ValueError("报告缺少导航注入位置")
+                            context = _safe_json(_edit_context(owner.service, current, report))
+                            marker = '<script id="ci-current-edit" type="application/json">'
+                            body = body.replace(
+                                b"<head>",
+                                b"<head>" + (marker + context + "</script>").encode("utf-8"),
+                                1,
+                            )
+                    self._send(HTTPStatus.OK, body, content_type=_WEB_TYPES[Path(relative).suffix])
+                except (UserFactSaveError, OSError, ValueError):
+                    self._json(HTTPStatus.CONFLICT, {"error": "当前交付未能完整核验"})
 
             def do_POST(self) -> None:  # noqa: N802
                 path = urlsplit(self.path).path
@@ -580,16 +755,24 @@ class LoopbackEditServer:
                 saved = result.model_dump(mode="json")
                 response: dict[str, Any] = {**saved, "result": saved}
                 try:
-                    facts = owner.service.current_facts()
-                    current = owner.service.read_current_delivery()
-                    response.update(current_revision=current.revision, facts=facts,
-                                    refresh_required=False)
+                    with current_delivery_lock(owner.service.project_root):
+                        facts = owner.service.current_facts()
+                        current = owner.service.read_current_delivery()
+                        response.update(
+                            current_revision=current.revision,
+                            facts=facts,
+                            report_links=_report_links(current),
+                            refresh_required=False,
+                        )
                 except (UserFactSaveError, OSError, ValueError):
                     # The transaction already committed. A read failure must
                     # not invite a second save with a new request identity.
-                    response.update(current_revision=None, facts=None, refresh_required=True,
-                                    message="已保存，但当前数据未能重新载入。请重开编辑页核对，"
-                                            "不要重复保存。")
+                    response.update(
+                        current_revision=None,
+                        facts=None,
+                        refresh_required=True,
+                        message="已保存，但当前数据未能重新载入。请重开编辑页核对，不要重复保存。",
+                    )
                 self._json(HTTPStatus.OK, response)
 
         self._httpd = ThreadingHTTPServer(("127.0.0.1", port), Handler)

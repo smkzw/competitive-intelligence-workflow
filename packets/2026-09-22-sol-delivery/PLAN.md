@@ -4,6 +4,15 @@
 
 ## 既有依赖和生产出口
 
+2026-10-08最新续接：用户解除暂停，Goal实查active，e1a0126导航RED直接
+实施同服务/锁/绑定与共享链接；初批45例后独立REVISE，一批完整修复后
+50PASS111.71s、Ruff2/strict1；同会话有限ACCEPT_BOUNDED F1/F3/F4，原件保留。
+新隔离r10真实呈现与导航已核：949事实不变、A105/B288、新assets实际消费、
+2155父文件不变，零临床save。一次稳定quality-only宽门6步全绿；下一精确提交/新版安装，
+继续就绪C/共同横比，不重存r6–r9或覆写原证明。Ego space12仍NOT_FOUND；
+实屏/键盘/离线门NOT_RUN，不以Node或HTTP代替。准确回执owner-current-navigation-postreview-v1。
+以下各批是历史范围，不能作为当前在途/验收声明。
+
 最新W04/W06真实安装切片已跑，准确范围见STATUS/
 owner-installed-real-ab-journey-v1：固定a36安装，r6–r9假设set/clear/undo/
 restore及A+B同步；同r9三分享包/配置/成员hash通过。C/浏览器不在范围。
@@ -84,7 +93,7 @@ W00→W01/02/03；01+02+03→04；02+03→05ABC，与04交错；04+05→06。07�
 
 ## 1007V1连续次序（不冒充附件编号）
 
-执行状态2026-10-08：用户要求无损暂停，Goal实际paused。产品顺序不变；
+以下为2026-10-08早前暂停时的历史记录，当前已解除暂停、Goal active。产品顺序不变；
 精确续接见根HANDOFF及当前Trellis的PAUSE_HANDOFF_20261008_064027.md。
 下一报告→编辑导航已留3RED起点，不重跑已通过的b6安装重试或r6–r9四步。
 只有用户解除暂停后继续，不以此规划条款自动恢复执行。

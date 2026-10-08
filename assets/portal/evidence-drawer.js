@@ -470,6 +470,9 @@
   function renderView(view) {
     viewSubject.textContent = view.product_zh + " · " + view.element_zh;
     clearChildren(viewFields);
+    if (window.__CURRENT_FACT_EDIT__ && view.row) {
+      window.__CURRENT_FACT_EDIT__(viewFields, view.row.row_id);
+    }
 
     var i;
     for (i = 0; i < GENERAL_FIELDS.length; i++) {

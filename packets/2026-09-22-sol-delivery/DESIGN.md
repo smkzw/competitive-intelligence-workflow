@@ -4,6 +4,17 @@
 
 ## 1007V1 当前增量合同
 
+报告读路由复用LoopbackEditServer：/reports/{current generation digest}/{A|B|C}/{file}。
+精确Host与会话、已提交清单、web扩展白名单、普通路径与symlink拒绝、实际
+字节hash在既有current锁内校验；不开放JSON、DB、原始源或任意目录。旧
+世代409。仅返回HTML动态插入转义的事实消费绑定，不写入原报告/快照/分享。
+B领域行到证据view行复用既有_b_source_view_row，A/C使用真实binding；多
+事实不first-wins。共享portal.js小组件由A证据页与B/C抽屉使用，fact深链携带
+世代，编辑页拒绝过期深链；保存后的报告链接读取同锁下新current。
+来源/数值仍由原合同守卫，不因导航注入接受科学事实或赋予静态分享写权限。
+编辑工作面采用Kangzhe6.1.3/KZ6-1007-A08的宽数据区、18px正文、至少16px
+辅助阅读、深色文字/橙按钮；不机械增加电影或双菱形，不缩字/隐藏事实。
+
 事实编辑复用现有LoopbackEditServer/UserFactEditService，不新增报告或执行器。
 当前事实以安全JSON嵌入、DOM textContent呈现，来源/项目字符串不得关闭脚本。
 搜索/原生按钮/真实fact深链选择，保存/清除/undo后读取当前版本保留选择；

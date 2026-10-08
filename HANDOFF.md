@@ -1,11 +1,11 @@
-# 1007V1 当前接手入口（用户要求无损暂停，非完成/RC）
+# 1007V1 当前接手入口（2026-10-08 已解除暂停，持续实施，非完成/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 最新暂停：[精确续接记录](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。
 固定已push源码 b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7；实际新安装也绑定该提交。
 [修复后实际安装重试](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-historical-retry-v1.json)。
 [同安装真实A+B操作/分享回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-real-ab-journey-v1.json)。
-Goal实际PAUSED；仅用户解除暂停后继续。只操作英文工程。旧中文根零接触，五用户修改、
+Goal已实查ACTIVE，用户本轮明确解除暂停；从保留导航RED续接，不重跑已完成保存/安装/分享。只操作英文工程。旧中文根零接触，五用户修改、
 未知/raw/原始源、历史FAIL及暂停记录保留，不恢复旧PID或声明RC。
 [历史原件索引](packets/2026-09-22-sol-delivery/evidence/1007V1/history-index.md)。
 
@@ -40,14 +40,20 @@ Trellis活动任务10-03-r24-resumed-delivery，仍in_progress。
 
 ## 下一条有界动作
 
-导航成族检查已终态3RED/8基础拒绝PASS，未接生产路由；恢复时从这个保留起点实施，
-先校正draft的B fixture事实ID，不重跑旧基线或重存四步。当前无本轮在途job。
+用户已解除暂停；导航由保留RED续接，B fixture事实ID已按生产登记校正。
+同服务清单/世代读取、真实绑定和共享证据链接已实施，修后50PASS111.71s、
+Ruff2/strict1、三JS语法/镜像通过。C03初始REVISE保留，同会话有限跟进接受
+F1/F3/F4；实际deepseek-v4.1-flash，无替换，审核未执行shell/测试。新版r10
+隔离纯呈现：949事实/绑定不变、A105/B288深链HTTP200，65/356文件及新版
+资产实际消费，2155父文件不变、零save。[修后准确回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current-navigation-postreview-v1.json)。
+实际Ego/CSP/新安装及C不在此proof。此前真实r9只读HTTP：949事实、A105/B288合法绑定，
+2155原文件hash保持，零保存；原页面旧assets不计新增按钮/实屏通过。
 上述源码/成族相关门/历史提交证明已核；b6固定安装只重放原r6请求两次HTTP200，
 current仍r9，DB/events/journal/2132文件检查项与427父pin不变，没有重存四步。
 新载荷/新stale仍409；原a36FAIL保留。临时干净源码副本3GB正常worktree移除，
 包/安装/QA/回执保留，按固定commit可恢复，不清理未知资料。
 不以complete状态或ready journal代替真正已提交generation证据，不回退current。
-下一接同服务manifest绑定报告→编辑导航及就绪C/共同横比链；新安装、科学
+下一在新隔离候选升级纯呈现并接导航，再就绪C/共同横比链；新安装、科学
 和实屏分别签范围，不建立任意文件浏览服务或改变离线分享的静态只读属性。
 
 ## 发布尚未完成

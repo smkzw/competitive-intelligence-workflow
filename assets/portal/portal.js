@@ -7,6 +7,33 @@
 (function () {
   "use strict";
 
+  // Only the protected loopback route injects this context. Static shares remain
+  // read-only, with no baked session, CSRF token or absolute workspace path.
+  function appendCurrentFactEditLinks(parent, rowId, collection) {
+    var marker = document.getElementById("ci-current-edit");
+    if (!marker || !rowId) return;
+    var context;
+    try { context = JSON.parse(marker.textContent); } catch (_error) { return; }
+    if (!context || !/^[0-9a-f]{64}$/.test(context.generation)
+        || !Array.isArray(context.bindings)) return;
+    var seen = Object.create(null);
+    var labels = { efficacy: "疗效", safety: "安全性", baseline: "基线", observations: "设计" };
+    context.bindings.forEach(function (binding) {
+      if (binding.row_id !== rowId || (collection && binding.collection !== collection)
+          || typeof binding.fact_id !== "string" || !binding.fact_id || seen[binding.fact_id]) return;
+      seen[binding.fact_id] = true;
+      var link = document.createElement("a");
+      link.className = "ci-current-fact-edit";
+      link.href = "/?fact=" + encodeURIComponent(binding.fact_id)
+        + "&generation=" + encodeURIComponent(context.generation);
+      link.textContent = "修订当前" + (labels[binding.collection] || "") + "事实";
+      var line = document.createElement("p");
+      line.appendChild(link);
+      parent.appendChild(line);
+    });
+  }
+  window.__CURRENT_FACT_EDIT__ = appendCurrentFactEditLinks;
+
   // LG-05: isolate disjoint roots behind a modal, never its reading plane.
   // One shared lease owner preserves prior inert/classes and parallel modals.
   function createReadingIsolation() {

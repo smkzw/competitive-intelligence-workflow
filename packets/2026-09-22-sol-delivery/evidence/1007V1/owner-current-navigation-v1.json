@@ -1,0 +1,34 @@
+{
+  "schema_version": "owner-bounded-evidence-1",
+  "base_commit": "e1a0126d5f5255c767faf0c6b97dffe3cef88f2b",
+  "date": "2026-10-08",
+  "goal_state_observed": "active",
+  "scope": "W04/W05 existing loopback manifest-bound current report and shared real-fact edit navigation",
+  "sources": {
+    "src/ci_workflow/application/user_fact_edit_server.py": "a8e1b65c0c905dcf00da8bc00e85c1312a509d064420ba9910134497de62d14a",
+    "src/ci_workflow/renderers/portal/assets/portal.js": "e2d52a9fe62f9ee388a7800e631d74dc57d4c3fa651b585575c80470e4f4def8",
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "ed141dfcca54747b56650d9520902339d8cb8ea4ea753329d2ab905c28176fbf",
+    "src/ci_workflow/renderers/portal/assets/evidence-drawer.js": "a794704e9380b3f44b73b0dd2085c2e0da7dcc5ba8650e249760dcddcd78adcd",
+    "tests/integration/test_1007_current_report_edit_navigation.py": "66d72bd61597d5a4d365bc336b8f499279ca5936a9df34262e02112c4c8e0c9d",
+    "assets/portal/manifest.json": "ff7ed14b6c5761ee77690829f07bdeee60dfea382e41e0fc99bb579671ef9884"
+  },
+  "retained_red": {"record": ".trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md", "failed": 3, "basic_rejection_passed": 8, "seconds": 16.44, "rerun": false, "fixture_correction": "fact-b-estimated-efficacy is registered, not fact-estimated-efficacy"},
+  "related_check": {
+    "command": ".venv/bin/python -m pytest -q tests/integration/test_1007_current_report_edit_navigation.py tests/integration/test_1007_real_fact_editor.py tests/integration/test_1007_historical_save_retry.py -k 'not test_current_share_exports_committed_a_b_edit_and_unchanged_c' --tb=short",
+    "result": "PASS", "passed": 45, "seconds": 85.06,
+    "note": "The excluded-name expression matches no case in these three files; no deselected cases reported. This is not the old 93-case batch or browser acceptance."
+  },
+  "static": {"ruff": "PASS two changed Python files", "strict_mypy": "PASS server only", "js_syntax": "PASS portal.js/report-a.js/evidence-drawer.js", "author_asset_mirror": "PASS validate_portal_asset_mirror", "wide_gate": "NOT_RUN this patch"},
+  "independent_review": {"packet": "ci-1007-current-navigation-security-v1", "status": "PENDING", "requested_route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max", "actual_identity": "NOT_YET_OBSERVED", "runner_hard_timeout_seconds": 7200, "max_turns_requested": 128},
+  "real_read_only": {
+    "proof": ".artifacts/1007-current-navigation-v1/existing-current-http.json",
+    "scope": "new source-checkout server; existing OLD report assets, not new installed navigation",
+    "revision": 9, "generation": "627d8ac3251ad82a22c34bfb46c10fba93f2eb1203ae5b941fcf258f041d5564",
+    "facts": 949, "A_bindings": 105, "B_bindings": 288, "project_file_hashes_unchanged": 2155, "saves": 0,
+    "new_report_buttons": "NOT_RUN", "new_install": "NOT_RUN", "browser": "NOT_RUN"
+  },
+  "design": {"package_version": "6.1.3", "revision": "KZ6-1007-A08", "application": "selective function-first editor geometry, 18px main/16px auxiliary, dark text/orange action; no new narrative or framework", "visual_acceptance": "NOT_RUN"},
+  "remaining": ["independent security terminal integration", "same-candidate new current presentation and install", "Ego actual desktop/keyboard", "current C and all fields", "offline fresh browser", "full source universe and scientific comparison", "24 portals", "three hosts", "recovery", "RC"],
+  "preservation": {"five_user_changes": "hash verified unchanged; not staged", "old_chinese_workspace": "zero contact", "historical_failures_receipts": "unchanged", "completed_four_saves_install_retry_shares": "not replayed"},
+  "release_state": "DEVELOPMENT_CANDIDATE"
+}

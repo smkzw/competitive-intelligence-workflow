@@ -1,0 +1,55 @@
+{
+  "schema_version": "owner-bounded-evidence-1",
+  "base_commit": "e1a0126d5f5255c767faf0c6b97dffe3cef88f2b",
+  "date": "2026-10-08",
+  "scope": "W04/W05 manifest-bound real-current report/editor navigation, post-review source candidate",
+  "previous_evidence": "owner-current-navigation-v1.json records first frozen bytes/45-case batch; its PENDING is capture-time, superseded here, not rewritten",
+  "sources": {
+    "src/ci_workflow/application/user_fact_edit_server.py": "d4fe5de012c89cea6f253c2a90963251f9f6105ba7e92866f076d998f96b8d13",
+    "src/ci_workflow/renderers/portal/assets/portal.js": "e2d52a9fe62f9ee388a7800e631d74dc57d4c3fa651b585575c80470e4f4def8",
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "ed141dfcca54747b56650d9520902339d8cb8ea4ea753329d2ab905c28176fbf",
+    "src/ci_workflow/renderers/portal/assets/evidence-drawer.js": "a794704e9380b3f44b73b0dd2085c2e0da7dcc5ba8650e249760dcddcd78adcd",
+    "tests/integration/test_1007_current_report_edit_navigation.py": "2cc8675cf2bdac61f1e68a69cf4867a77b8b0060dbbaa2d916b0b793fa5d3723",
+    "assets/portal/manifest.json": "ff7ed14b6c5761ee77690829f07bdeee60dfea382e41e0fc99bb579671ef9884"
+  },
+  "related_check": {
+    "command": ".venv/bin/python -m pytest -q tests/integration/test_1007_current_report_edit_navigation.py tests/integration/test_1007_real_fact_editor.py tests/integration/test_1007_historical_save_retry.py --tb=short",
+    "result": "PASS", "passed": 50, "seconds": 111.71,
+    "scope": "HTTP/Node/editor/history, including malformed old bindings409, non-ASCII-CSRF403 and post-save A/B/C readback; no deselected browser claim"
+  },
+  "static": {"ruff": "PASS two changed Python files", "strict_mypy": "PASS server only", "js_syntax_and_author_mirror": "PASS unchanged from first frozen JS bytes", "wide_gate": {"command": "tools/gate.sh", "result": "GATE_OK quality-only steps6", "ruff": "src/tests/tools PASS", "strict_mypy_source_files": 283, "active_unit_contract": {"passed": 1185, "deselected_retained": 20, "seconds": 280.34}, "retained_compat_subset": {"passed": 20, "seconds": 0.77}, "layer_audit": {"passed": 7, "seconds": 0.21}, "legacy_refs": "PASS English root only", "release_acceptance": false}},
+  "review": {
+    "packet": "ci-1007-current-navigation-security-v1",
+    "model_observed": "codebuddy/codebuddy-cli/deepseek-v4.1-flash",
+    "effort": "max requested, not provider-attested", "fallback": null,
+    "session": "01a11bfd-348c-7cde-8b84-6d653f313870",
+    "initial": {"verdict": "REVISE", "seconds": 382.035, "sha256": "2d38f7caad209e4d3c31ba66bd0f764bb91218868725ef1298a41da32b69d5c7"},
+    "followup": {"verdict": "ACCEPT_BOUNDED F1/F3/F4 only", "seconds": 60.806, "sha256": "19fd47af701a4acb3efe2f911f0886616cf24c65351795562e1535de9cc51731", "independence": "same compatible review session, not a second fresh opinion"},
+    "limitations": "Read tools worked; reviewer shell/hash/tests unavailable. Provider cumulative turns166->181; requested caps not independently enforced by wrapper. Raw private logs stay local. Initial REVISE retained."
+  },
+  "csp_vendor": {"echarts_sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0", "new_Function": "one GeoJSON legacy fallback only without JSON.parse", "node_vm_string_codegen_disabled": "PASS 3021 SVG bytes, negative-valued bar", "initial_probe": "ReferenceError missing setTimeout; corrected environment, not CSP failure", "unsafe_eval_relaxed": false, "browser_CSP": "NOT_RUN"},
+  "new_real_presentation": {
+    "project": ".artifacts/1007-current-navigation-v1/presentation-project",
+    "scope": "source checkout, isolated APFS clone, real fixed source A+B; not new install or browser",
+    "revision": 10, "generation": "8b401c48fe178f7cb1f780071d818e35ae6628201a868e910ffb6c09d8f02558",
+    "presentation_source_digest": "e474afb147d199fc77625c4a50beabcf2fdeb04ba87f011171f9f111a9e338e5",
+    "facts": 949, "A_bindings": 105, "B_bindings": 288, "A_files": 65, "B_files": 356,
+    "current_facts_and_bindings_unchanged": true, "parent_files_unchanged": 2155, "clinical_saves": 0,
+    "consumed_new_portal_js": "e2d52a9fe62f9ee388a7800e631d74dc57d4c3fa651b585575c80470e4f4def8",
+    "real_fact_deep_links": "A and B HTTP200; ctgov-atomic-fact_cfdd1523eabee2d918cecbcf -> eff-33fed02c88c291b4d802",
+    "C": "absent from this current; synthetic C metadata tested, not real C acceptance",
+    "receipt": ".artifacts/1007-current-navigation-v1/new-presentation-http.json",
+    "receipt_sha256": "4b114a7e5708dec17a02668b52bd27db8f9588b7c39e3efa46698dbc867783ac",
+    "prepared": ".artifacts/1007-current-navigation-v1/presentation-prepared.json",
+    "prepared_sha256": "4c37f7c5823b3e0227821bfa45def32a0e55cd720a1b768fbce726e3b6642e63",
+    "replay_script": ".artifacts/1007-current-navigation-v1/verify_new_presentation.py",
+    "replay_script_sha256": "89494c95a8b2cb259f03cba0bc488ab01ce357d66eefd19594ffa4627182b742",
+    "resume": "Terminal receipt exists: DO NOT rerun. Prepared command supports exact recovery only if receipt absent. Keep both r9 parent and r10 candidate plus full manifest. No temporary cleanup may delete the only candidate.",
+    "new_install": "NOT_RUN", "browser": "NOT_RUN"
+  },
+  "design": {"version": "6.1.3", "revision": "KZ6-1007-A08", "function_first": true, "editor_changes": "full desktop width,18px body/16px auxiliary,24/32 headings,orange actions/dark text/native anchors", "actual_visual": "NOT_RUN"},
+  "preservation": {"five_user_files": "verified unchanged and never staged", "old_root": "zero contact", "historical_receipts_and_failures": "preserved", "previous_saves_install_retries_shares": "not repeated"},
+  "release_state": "DEVELOPMENT_CANDIDATE",
+  "next": "After single stable wide gate and explicit commit, bind new installation to that commit; continue unblocked real current C/common comparison; Ego actual visual remains separate.",
+  "not_complete": ["real current ABC/all fields", "science/full universe/major publications/MAH", "four widths/four states/L1L2/keyboard", "offline new browser", "24 portals", "three hosts/recovery", "RC"]
+}

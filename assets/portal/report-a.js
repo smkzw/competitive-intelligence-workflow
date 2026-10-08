@@ -1720,6 +1720,9 @@
         return;
       }
       var isEfficacy = rowRef.collection === "efficacy";
+      if (window.__CURRENT_FACT_EDIT__) {
+        window.__CURRENT_FACT_EDIT__(content, selectedRow.row_id, rowRef.collection);
+      }
       content.appendChild(el("p", "", (isEfficacy ? selectedRow.endpoint + "｜" + selectedRow.timepoint : selectedRow.measure_label || selectedRow.term)
         + "｜" + (selectedRow.arm_detail || selectedRow.arm) + "｜"
         + (selectedRow.value == null ? (selectedRow.disclosure_state || "数值未提供") : selectedRow.value + unitSuffix(selectedRow.unit))));
