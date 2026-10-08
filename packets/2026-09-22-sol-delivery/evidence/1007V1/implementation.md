@@ -1426,3 +1426,50 @@ source ID，再追加两日期version，共4/16；源字节/派生/父库/原捕
 就地改。scope/model/results分别记录，长节点静默完成等待，不重派。
 下一正文数值/语境候选到既有片段/事实合同，医疗解释独立挑战后再采用，
 就绪C/比较分支继续。Goal ACTIVE，无阶段暂停、旧根接触或一般清理。
+
+# 1007V1 真实事实编辑入口（parent6493e37）
+
+为何做：准备安装版真实旅程时发现编辑API通用、页面却固定两示例；不是
+重做已接事务。875安装版在949事实项目HTTP200仍显示两不存在的示例、无
+事实选择，DB/current未变，已保留实际观察。单一两文件E03执行，owner统一
+事务/来源并准备另一隔离目录。427文件/输入/manifest pins、949事实从r5
+复制和不可变旧站点硬链，父项目不改；这是current-onlyQA，不是历史恢复。
+
+实际节点CodeBuddy/deepseek-v4.1-flash init/result attested，931.107s/96calls，
+无fallback；max是请求非响应证明，native272turns与CLI128非同口径未核。
+模型使用集合和session保留。Cursor default无法验证底层模型，开工前选
+既定E03合格替代，不把没启动的Cursor说成失败，不改全局路由。节点8RED/
+9relatedGREEN；四越界临时ruff探针和多跑两次小族如实记录，未为掩盖而
+清理。下次简单代码包用完整受影响定义而非无差别长文件读取，控制成本；
+仍保留必要检查，不能因为调用量大就跳过实际源码或临床守卫。
+
+改什么：安全JSON封装所有当前事实/项目身份；原生JS搜索/真实ID定位/
+人类可读上下文/保留原文，估计、独立人数、样本、阈值及旧合法比例分开。
+零不靠truthy、空白拒绝、null实际清除、undo原事务；当前版本读取刷新。
+没有新表/执行器/报告/来源许可/医学批注。原Host/Origin/session/CSRF保持。
+
+Owner review发现相邻三缺陷，真实3RED4.89s：wrapper丢原API结果字段、
+已commit但读取异常断开HTTP诱发重存、事实选择只是点击li。整族修复兼容
+结果字段和明确refresh_required，不重存；选择改原生按钮并恢复重绘焦点。
+输入搜索事件不能误作回焦boolean，加入生产脚本防抢焦。最终12PASS20.14s/
+Ruff2/strict1；两次23PASS分别是较早字节，不能合并签最新版本。Node模拟DOM
+与真实fixtureHTTP不是Ego/CSP/键盘/视觉证据。真实registered count保存未在
+本fixture全链验证，不宣称所有字段或ABC皆可用。
+
+一次稳定宽门6步：src/tests/tools Ruff、src/tools严格283、unit/contract活跃
+1185PASS271.12s、兼容子集20PASS1.06s、分层7PASS0.22s、旧路径词法PASS。
+825输入由旧清单+明确覆盖项可重建，无意外漂移。五用户修改hash全不变。
+不叫全仓全部测试、医学/浏览器/候选安装或RC通过，不重跑每一行宽门。
+
+记录踩坑：初派发文本虽明确准确route，没保留guard标准解析字段、stdout
+名也未匹配，full audit实际FAIL3项。原context/prompt先逐字归档/hash核对，
+原prompt SHA还与native实际command一致；只补当前解析索引、已终态JSON
+同字节硬链接，不复制大trace或改原receipt/判定。规范后full audit0，初FAIL
+仍在machine。不能把事后索引说成原来实际发送的输入或改动全局检查器。
+RCA需要同时验证正式check入口和实际runtime，不只挑成功的局部审计。
+
+下一：稳定commit并push，以新固定commit重建隔离安装包，在本QA实际
+HTTP完成同估计值A+B同步、清除/撤销/恢复/旧请求/失败及当前单份联合分享。
+都是隔离假设编辑，不把改值当临床真相，不改父源。报告→编辑连接、C实际
+current、Ego四宽四态与新浏览器离线、24/三宿主/恢复/RC保持未完成。
+Goal ACTIVE继续；没有暂停、全量清理或旧中文工程操作。

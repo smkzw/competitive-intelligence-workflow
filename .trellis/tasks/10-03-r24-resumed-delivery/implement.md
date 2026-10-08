@@ -2510,6 +2510,29 @@ no bypass/body or additional acquired source claimed. Private recipe/evidence
 kept local, compact pointer only. Healthy terminal wait quiet per user instruction.
 ## 1007V1 current publication boundary terminal (parent6ef0aaf)
 
+Real editor unit parent6493e37 terminal: native CodeBuddy/deepseek-v4.1-flash,
+931.107s/96calls/exit0/nofallback; effortmax requested notresponseattested.
+Owner3RED→API compatibility + committed-read-failure + native choice/focus family.
+Final12PASS20.14s/Ruff2/strict1; once stable quality-only6 gate,strict283/1185active
+271.12s/20compat1.06s/7layer0.22s/lexicallegacy.825inputs no drift,5userhashes match.
+Initial full audit metadataFAIL preserved, original dispatch bytes SHA-archived and
+native command checked; post-dispatch parse index + same-byte receipt hardlink
+normalizes full audit0, not pretending original input/check was different. Worker
+4outside temp probes and excessGREEN rounds disclosed. Pending precursor above is
+historical progress, not acceptance. Real875installed949facts showed nonexistent
+demo editor; new427pin current-onlyQA prepared originalunchanged. Next stable
+commit/push/newisolatedinstall/realA+B save+share, no pause/browser/medical/RC claim.
+
+Current bounded follow-on ci-1007-real-fact-editor-v1 (parent6493e37): execution
+chosen for distinct server/test ownership and parallel private source replay
+preparation. Fixed fixture-only page is an observed production usage gap, not
+proof that service transactions are missing. One approved exact E03 CodeBuddy
+alternative selected before launch because Cursor default cannot attest exact
+underlying model; no failed-primary/global-policy claim. Worker owns two files,
+single root-cause RED and related GREEN; no browser/full gate/Git/source writes.
+Pending worker is not accepted; final owner evidence and installed real journey
+still required. Existing5protected edits/unknowns retained, continuous Goal.
+
 E03 terminal actual native init/result modelUsage CodeBuddy/deepseek-v4.1-flash,
 requestedmax responseeffortunattested,296.566s/nofallback/49calls/nodenials.
 Worker3backend/newtest11RED/1positive ->41GREEN, owner41PASS11.40s. Owner then

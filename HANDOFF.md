@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交8d24b42（已push核远端）；安装源固定875c6b9，实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-closure-v1.json)。
+本批父提交6493e37（已push核远端）；旧安装源875c6b9，新安装待本批固定commit。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-real-fact-editor-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,14 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- 真实事实编辑页替换两固定示例；估计/人数/样本/阈值、0/空白/清除/undo、
+  安全原文、原生按钮/回焦/真实ID选择接既有事务。E03实际CodeBuddy931.107s/
+  96tools/exit0；owner三相邻RED后收口原API及已保存刷新失败语义，最终12
+  相关PASS/静态门。一次稳定quality-only宽门6步通过；原部署949事实仍只有两不存在的
+  示例已HTTP确认，新安装旅程就绪，原项目未改。原始派发件/原FAIL保留，
+  元数据标准索引后审计通过，不是事后伪造原输入PASS。报告连接/Ego/current
+  ABC/24/三宿主/恢复/RC仍开，不暂停。详情机器清单与复盘。
 
 - 原论文v4同会话定点确认R1/R2/R3已闭合，actual gpt-6.1-sol/high请求未
   attest，162.392s/14tools/exit0/no fallback；不是新独立全候选clearance。

@@ -1,0 +1,88 @@
+{
+  "schema_version": "1007-real-fact-editor-1",
+  "parent_commit": "6493e3719a742abb5a9bb85e5141cbfc849fe9bc",
+  "state": "bounded_editor_development_verified_installed_journey_pending",
+  "goal_status": "active",
+  "mode_reason": "one finite two-file worker; owner integrates deterministic service/JS/security behavior, prepares disjoint real source QA; no independent medical or visual acceptance claimed",
+  "code": [
+    {"path": "src/ci_workflow/application/user_fact_edit_server.py", "sha256": "1e4585a8acf073bb61e50b65d3da244b75678701062463e6b095333b0a71a06e"},
+    {"path": "tests/integration/test_1007_real_fact_editor.py", "sha256": "9eb5215ff721f21f77b00f6ef2d7b3ab8db8fa6f877fc44384914e62ba9b50ee"}
+  ],
+  "source_inputs": {
+    "base": "owner-c-current-reading-source-set-v1.json",
+    "base_sha256": "33010b6fa268073f5b21b1c1f85342b8fefb626115e3b38594bf1e09535355b6",
+    "existing_overrides": "owner-c-sample-save-v1.json#/source_inputs/overrides",
+    "additional_overrides": "this document #/code",
+    "input_count": 825,
+    "unanticipated_drift": []
+  },
+  "execution": {
+    "task": "ci-1007-real-fact-editor-v1",
+    "route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash",
+    "preselected_before_launch": true,
+    "reason": "existing approved E03 alternative has exact model identity; Cursor default not dispatched or reported failed",
+    "effort_requested": "max",
+    "response_effort_attested": false,
+    "native_init_and_result_modelUsage_match": true,
+    "session_id": "01a119e7-ec9a-701f-8ac7-45e6c9a25232",
+    "duration_seconds": 931.107,
+    "tool_calls": 96,
+    "exit_code": 0,
+    "fallback": null,
+    "cli_max_turns_requested": 128,
+    "native_num_turns_observed": 272,
+    "counter_semantics_equivalence": "NOT_VERIFIED; do not claim native counter <= CLI request",
+    "runtime_receipt_sha256": "fcffb417804cb941b3ac3e9ae5b1799f2f4c0afa4ea2dbff2876e9b1ea83a9fb",
+    "output_path": "runs/execution/ci-1007-real-fact-editor-v1/worker_01.md",
+    "output_sha256": "956cb1044265e181175fb5bb9ecca0b41f2caade11edf171c2476236f68f258c",
+    "original_context": "archives/execution/ci-1007-real-fact-editor-v1/dispatch-context.md",
+    "original_context_sha256": "ec37335194fb77f7392513f7bbc846dc52ae47d12a676ad98683445f92cf6bb7",
+    "original_prompt": "archives/execution/ci-1007-real-fact-editor-v1/dispatch-worker-prompt.md",
+    "original_prompt_sha256": "5a522cf6e6746935b15bec3df4b89bc0fc1b1cb42ff3eb226e38e3de8d93bf7a",
+    "first_full_guard_audit": {"exit_code": 1, "errors": ["context route prose not parseable", "prompt route prose not parseable", "receipt filename not matched"]},
+    "direct_receipt_audit_errors": [],
+    "normalized_full_guard_audit": {"exit_code": 0, "errors": [], "scope": "post-dispatch parse index, not the executed prompt/context"},
+    "normalization": "original context/prompt byte-preserved before additive parse fields; terminal receipt indexed by a same-byte hardlink worker_01_stdout.txt, originals/manifest/native command/output unchanged; initial FAIL retained",
+    "worker_scope_deviations": ["four unrelated ruff probes outside authorized pytest/workspace temp surface, reported not removed", "additional family/frozen-byte GREEN batches beyond single requested batch"],
+    "parent_review_trigger": "deterministic code/source/artifact checks decisive for bounded editor; no science or visual review substituted"
+  },
+  "worker_tests": {"red": 8, "green_related": 9, "duration_seconds": 16.43, "scope": "development fixtures + actual Node production script, not installed or browser"},
+  "owner_tests": {
+    "red": {"failed": 3, "deselected": 8, "duration_seconds": 4.89, "causes": ["old top-level API fields lost", "post-commit refresh failure disconnects HTTP and falsely invites retry", "fact choices not native keyboard controls"]},
+    "interim": [{"passed": 23, "duration_seconds": 32.15}, {"passed": 23, "duration_seconds": 29.48}],
+    "final": {"passed": 12, "duration_seconds": 20.14, "exit_code": 0,
+      "command": ".venv/bin/python -m pytest -q tests/integration/test_1007_real_fact_editor.py tests/integration/test_w04_user_fact_edit.py::test_loopback_editor_rejects_malicious_host_origin_csrf_session_and_import --tb=short -o tmp_path_retention_count=1000",
+      "scope": "final actual page/script/HTTP/security, includes URL selection, native choices/redraw focus and search not stealing focus; Node is NOT browser keyboard evidence"},
+    "ruff": "two affected files PASS", "strict_mypy": "affected production file with MYPYPATH=src PASS"
+  },
+  "wide_gate": {
+    "status": "GATE_OK quality-only steps=6", "exit_code": 0, "command": "bash tools/gate.sh",
+    "scope": "one stable quality-only gate; no all-integration, scientific, browser or RC acceptance",
+    "ruff": "src/tests/tools PASS", "strict_mypy": "src/tools283 files PASS",
+    "active_unit_contract": {"passed": 1185, "deselected": 20, "duration_seconds": 271.12},
+    "retained_compatibility_subset": {"passed": 20, "deselected": 1185, "duration_seconds": 1.06},
+    "layer_audit": {"passed": 7, "duration_seconds": 0.22},
+    "legacy_references": "PASS lexical only; old root not accessed"
+  },
+  "actual_installed_before": {
+    "install_source_commit": "875c6b93c363f2de0e3c50449bf439a4a3f59721",
+    "proof": ".artifacts/1007-installed-current-journey-v1/installed-before.json",
+    "sha256": "121d2c1d9fea4db225c43fbaecae8b63d305ed2bb9d84cc131ebe5c2a28d98b4",
+    "http_status": 200, "active_facts": 949,
+    "real_selector": false, "both_demo_facts_absent_from_real_project": true,
+    "save_called": false, "project_database_unchanged": true, "browser": "NOT_RUN"
+  },
+  "actual_journey_preparation": {
+    "path": ".artifacts/1007-installed-current-journey-v1/prepared.json",
+    "sha256": "af2a0b7ac19165654084df40660ba000ff8270c2df52676a69531d31d6a2bf5e",
+    "parent_revision": 5,
+    "parent_generation_sha256": "7b7704a61ab1f62647159d173e480b3f996072aff9c8edf98e4046cfc5b12aad",
+    "files_verified": 427, "active_facts": 949,
+    "scope": "isolated current-only A+B QA fork, not complete historical recovery",
+    "parent_unchanged": true, "C": "not_present_not_claimed",
+    "next": "freeze/push stable code, new isolated fixed-commit install then actual HTTP set/clear/undo/restore and current A/B/AB shares"
+  },
+  "protected_five_user_hashes_unchanged": true,
+  "general_cleanup": false,
+  "not_run": ["new installed real source A+B journey", "report-to-editor navigation", "Ego four widths/four states/keyboard/CSP", "moved offline new-browser share", "current real ABC", "24 portals", "three hosts", "full historical recovery", "RC"]
+}

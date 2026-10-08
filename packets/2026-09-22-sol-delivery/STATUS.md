@@ -1,11 +1,22 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交8d24b42（已push核远端）；安装源固定875c6b9，实际HEAD以Git核对。
+本批父提交6493e37（已push核远端）；旧安装875c6b9，新候选待本批固定提交。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-publication-closure-v1.json)，
+[当前机器清单](evidence/1007V1/owner-real-fact-editor-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+真实编辑入口E03终态931.107s/96tools/actual native deepseek-v4.1-flash，max请求
+不冒称响应effort。旧安装949事实仍只有两不存在的固定示例已HTTP实证，原
+项目/DB未变。两文件修复+owner三相邻RED→最终12相关PASS20.14s/Ruff2/
+strict1：真实搜索/选择、原文、估计/人数/样本/阈值、清除/undo、API兼容、
+已提交刷新失败不重存。Node不是Ego键盘/视觉。一次稳定quality-only宽门6步
+通过：strict283/活跃1185PASS271.12s/保留兼容20PASS1.06s/层级7PASS0.22s，825
+源码输入无意外漂移。原派发context/prompt/receipt/FAIL保持，标准解析字段
+及同字节日志索引后full audit0；worker四越界临时probe与额外小批如实保留。
+当前A+B隔离QA就绪427pins/949facts，下一固定新commit安装再实跑保存/分享。
+报告→编辑连接/C/四宽/离线新浏览器/24/三宿主/恢复/RC未完成，Goal ACTIVE。
 
 论文v4第三定点确认终态R1/R2/R3 ACCEPT_BOUNDED：actual同Pi/gpt-6.1-sol
 session，162.392s/14tools/exit0，无回退、effort响应未attest。不是新独立
