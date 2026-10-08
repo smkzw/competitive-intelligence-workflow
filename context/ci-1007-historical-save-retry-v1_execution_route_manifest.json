@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "policy": "beijing-daily-peak-off-peak-v3",
+  "timezone": "Asia/Shanghai",
+  "peak_start": "11:00",
+  "peak_end": "19:00",
+  "days": "all",
+  "period_labels": {
+    "peak": "高峰",
+    "off_peak": "非高峰"
+  },
+  "packet_period": "peak",
+  "packet_evaluated_at": "2026-10-08T13:54:25.774519+08:00",
+  "variants": {
+    "peak": {
+      "agent": "pi",
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "default_provider": "openai-codex",
+      "default_model": "gpt-6-luna",
+      "default_effort": "max",
+      "escalate_provider": "openai-codex",
+      "escalate_model": "gpt-6-luna",
+      "escalate_effort": "max",
+      "primary": {
+        "agent": "pi",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "effort": "max"
+      },
+      "fallbacks": [],
+      "execution_route": "pi/openai-codex/gpt-6-luna:max"
+    },
+    "off_peak": {
+      "agent": "pi",
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "default_provider": "openai-codex",
+      "default_model": "gpt-6-luna",
+      "default_effort": "max",
+      "escalate_provider": "openai-codex",
+      "escalate_model": "gpt-6-luna",
+      "escalate_effort": "max",
+      "primary": {
+        "agent": "pi",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "effort": "max"
+      },
+      "fallbacks": [],
+      "execution_route": "pi/openai-codex/gpt-6-luna:max"
+    }
+  },
+  "owner_preselection_reason": "Existing exact E03 alternative before first dispatch; known account21% weekly used, other pool quota unknown. Balance after CodeBuddy, no Cursor failed-primary claim or global edits. Native tool visibility acknowledged; existing Pi CLI adapter not claimed native."
+}

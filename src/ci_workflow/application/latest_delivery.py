@@ -267,6 +267,76 @@ def current_transaction_committed(project_root: Path, request_id: str) -> bool:
     )
 
 
+def read_committed_historical_generation(
+    project_root: Path,
+    *,
+    request_id: str,
+    project_id: str,
+    revision: int,
+    generation_sha256: str,
+    previous_fact_version_id: str,
+    fact_version_id: str,
+) -> CurrentDeliveryBundle | None:
+    """Return a verified committed generation for an earlier user request."""
+    root = project_root.expanduser().resolve()
+    journal_path = _journal_path(root, request_id)
+    database_path = root / "state/project.sqlite"
+    try:
+        if not journal_path.is_file():
+            return None
+        journal = CurrentDeliveryJournal.model_validate_json(journal_path.read_bytes())
+        if (
+            journal.phase != "ready"
+            or journal.request_id != request_id
+            or journal.candidate_sha256 != generation_sha256
+            or journal.previous.project_id != project_id
+            or journal.previous.revision + 1 != revision
+            or previous_fact_version_id not in journal.previous.active_fact_version_ids
+        ):
+            return None
+        _ordinary(root, database_path)
+        if not database_path.is_file():
+            return None
+        with open_database(database_path) as database:
+            row = database.execute(
+                "SELECT project_id,revision,request_id,generation_relative_path,bundle_json "
+                "FROM current_delivery_generations WHERE generation_sha256=?",
+                (generation_sha256,),
+            ).fetchone()
+        generation_relative = f"reports/generations/{generation_sha256}.json"
+        if row is None or (
+            str(row[0]) != project_id
+            or int(row[1]) != revision
+            or row[2] != request_id
+            or str(row[3]) != generation_relative
+        ):
+            return None
+        generation_path = root / generation_relative
+        _ordinary(root, generation_path)
+        if not generation_path.is_file():
+            return None
+        payload = generation_path.read_bytes()
+        if (
+            hashlib.sha256(payload).hexdigest() != generation_sha256
+            or str(row[4]).encode("utf-8") != payload
+        ):
+            return None
+        bundle = CurrentDeliveryBundle.model_validate_json(payload)
+        if (
+            bundle.project_id != project_id
+            or bundle.revision != revision
+            or bundle.request_id != request_id
+            or _bundle_sha256(bundle) != generation_sha256
+            or fact_version_id not in bundle.active_fact_version_ids
+            or previous_fact_version_id in bundle.active_fact_version_ids
+        ):
+            return None
+        _validate_current_bundle(root, bundle)
+        return bundle
+    except (OSError, ValueError, TypeError, sqlite3.DatabaseError):
+        return None
+
+
 def _verify_current_report(root: Path, item: CurrentReportDelivery) -> None:
     relative = Path(item.site_relative_path)
     if relative.is_absolute() or ".." in relative.parts or "\\" in item.site_relative_path:

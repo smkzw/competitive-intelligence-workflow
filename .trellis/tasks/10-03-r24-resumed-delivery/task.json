@@ -21,13 +21,13 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "1007V1 ACTIVE fixed a36 installed; owner-installed-real-ab-journey-v1.json current evidence. Real source isolated installed HTTP set/clear/undo/restore r6-r9 A+B propagation and current A/B/AB shares byte/config verified;427 parent pins unchanged, hypothetical QA not clinical acceptance. Owner optional-field checker recovery retained; real historical earlier-request replay409 FAIL after later current, no rollback. Single bounded E03 ci-1007-historical-save-retry-v1 dispatched, no acceptance before terminal; owner disjoint fixed-install shares. Corrected candidate must actually rebind and replay missing behavior; do not resave four operations. C/browser/all-universe/24/three hosts/full recovery/RC open. Five edits/unknown/raw/historyFAIL protected. Root entry slim with immutable Git history links; no pause/general cleanup/old-root contact.",
+  "notes": "1007V1 ACTIVE fixed a36 installed proof retained, not science acceptance. Same-session Pi/Luna historical retry repair returned; owner93PASS/1browser exclusion and Ruff3/strict2. Initial incomplete permission question, actual route, unattested effort and unenforced128-turn budget retained. Source proof owner-historical-save-retry-v1.json; corrected fixed install still must replay original r6 request on existing QA r9 without resaving four operations. Original a36 historical409FAIL remains. Real A+B shares byte/config verified,427 parent pins unchanged. Report navigation/current C/browser/universe/24/three hosts/full recovery/RC open. Five edits/unknown/raw/history protected, no pause/general cleanup/old-root contact.",
   "meta": {
     "execution_state": "active",
     "goal_api_state": "active_verified_after_prior_blocked",
     "pause_requested_by_user": false,
     "handoff": "HANDOFF.md",
-    "last_stage": "Fixed a36 installation and real-source A+B current r9/share verified at byte/HTTP layer; historical retry production defect preserved and bounded repair dispatched.",
+    "last_stage": "Historical retry source repair passed owner93 related checks; corrected installation replay pending, original a36 failure retained.",
     "product_release_state": "development-candidate",
     "project_completed": false
   }

@@ -33,6 +33,7 @@ from ci_workflow.application.latest_delivery import (
     current_transaction_committed,
     prepare_current_transaction,
     publish_current_delivery,
+    read_committed_historical_generation,
     read_current_delivery,
 )
 from ci_workflow.domain.ids import stable_id
@@ -1108,15 +1109,28 @@ class UserFactEditService:
                 if existing["request_digest"] != request_digest:
                     raise UserFactSaveConflictError("同一请求标识对应了不同保存载荷")
                 if existing["status"] == "complete":
-                    visible = self.read_current_delivery()
-                    legacy_visible = (
-                        visible.request_id == command.request_id
-                        and visible.revision == int(existing["result_revision"])
+                    completed_result = self._validate_completed_save_request(
+                        command, request_digest, existing
                     )
-                    if current_transaction_committed(
-                        self.project_root, command.request_id
-                    ) or legacy_visible:
-                        return UserFactSaveResult.model_validate_json(existing["result_json"])
+                    committed = read_committed_historical_generation(
+                        self.project_root,
+                        request_id=command.request_id,
+                        project_id=command.project_id,
+                        revision=completed_result.revision,
+                        generation_sha256=completed_result.current_generation_sha256,
+                        previous_fact_version_id=command.target.fact_version_id,
+                        fact_version_id=completed_result.fact_version_id,
+                    )
+                    if committed is not None:
+                        rebuilt_reports = tuple(
+                            item.report for item in committed.reports
+                            if item.revision == completed_result.revision
+                        )
+                        if completed_result.rebuilt_reports != rebuilt_reports:
+                            raise UserFactSaveConflictError(
+                                "已完成请求结果与历史current generation不一致"
+                            )
+                        return completed_result
                 result_fact_id = str(existing["result_fact_version_id"])
                 revision = int(existing["result_revision"])
                 derived_rate = self._derivation_rate(revision, result_fact_id)
@@ -1150,7 +1164,9 @@ class UserFactEditService:
     def _request_row(self, request_id: str) -> dict[str, Any] | None:
         with open_database(self.database_path) as database:
             row = database.execute(
-                "SELECT request_digest,status,result_fact_version_id,result_revision,result_json "
+                "SELECT request_id,project_id,request_digest,expected_revision,"
+                "target_fact_id,target_fact_version_id,result_fact_version_id,"
+                "result_revision,status,command_json,result_json "
                 "FROM user_fact_edit_requests WHERE request_id=?",
                 (request_id,),
             ).fetchone()
@@ -1159,16 +1175,76 @@ class UserFactEditService:
         return dict(
             zip(
                 (
+                    "request_id",
+                    "project_id",
                     "request_digest",
-                    "status",
+                    "expected_revision",
+                    "target_fact_id",
+                    "target_fact_version_id",
                     "result_fact_version_id",
                     "result_revision",
+                    "status",
+                    "command_json",
                     "result_json",
                 ),
                 row,
                 strict=True,
             )
         )
+
+    def _validate_completed_save_request(
+        self,
+        command: UserFactSaveCommand,
+        request_digest: str,
+        existing: dict[str, Any],
+    ) -> UserFactSaveResult:
+        try:
+            stored_command = UserFactSaveCommand.model_validate_json(
+                str(existing["command_json"])
+            )
+            result = UserFactSaveResult.model_validate_json(str(existing["result_json"]))
+            expected_revision = int(existing["expected_revision"])
+            result_revision = int(existing["result_revision"])
+        except (TypeError, ValueError) as error:
+            raise UserFactSaveConflictError("已完成请求记录无法核验") from error
+        if (
+            existing["request_id"] != command.request_id
+            or existing["project_id"] != command.project_id
+            or existing["request_digest"] != request_digest
+            or _digest(stored_command.model_dump(mode="json", exclude_unset=True))
+            != request_digest
+            or expected_revision != command.expected_revision
+            or existing["target_fact_id"] != command.target.fact_id
+            or existing["target_fact_version_id"] != command.target.fact_version_id
+            or existing["result_fact_version_id"] != result.fact_version_id
+            or result_revision != command.expected_revision + 1
+            or result.request_id != command.request_id
+            or result.project_id != command.project_id
+            or result.revision != command.expected_revision + 1
+            or result.fact_id != command.target.fact_id
+            or result.fact_version_id == command.target.fact_version_id
+            or result.supersedes_fact_version_id != command.target.fact_version_id
+        ):
+            raise UserFactSaveConflictError("已完成请求与原保存结果身份不一致")
+        with open_database(self.database_path) as database:
+            target = database.execute(
+                "SELECT fact_id FROM fact_versions WHERE fact_version_id=?",
+                (command.target.fact_version_id,),
+            ).fetchone()
+            result_fact = database.execute(
+                "SELECT fact_id,supersedes_fact_version_id FROM fact_versions "
+                "WHERE fact_version_id=?",
+                (result.fact_version_id,),
+            ).fetchone()
+        if (
+            target is None
+            or result_fact is None
+            or str(target[0]) != command.target.fact_id
+            or str(result_fact[0]) != command.target.fact_id
+            or str(result_fact[1]) != command.target.fact_version_id
+        ):
+            raise UserFactSaveConflictError("已完成请求事实版本与保存结果身份不一致")
+        return result
 
     def _stage_fact(
         self,

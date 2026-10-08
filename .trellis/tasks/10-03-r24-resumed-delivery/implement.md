@@ -10,6 +10,11 @@ command恢复；第二真实旧请求后续版本409 FAIL/current不变，明确
 当前机器清单owner-installed-real-ab-journey-v1；ci-1007-historical-save-
 retry-v1已派发，终态前不接纳/轮询/重派。新安装只复跑未关闭行为；报告
 导航/C/实屏/离线浏览器/24/宿主/恢复/RC仍开。Goal ACTIVE，不暂停。
+历史重试节点现已终态：初始只提问未执行，原件保留；同Pi/Luna续接
+769.462s，三文件修复。Owner93PASS/1准确排除浏览器、Ruff3/strict2；
+ready/complete不单独证明发布，DB世代与文件/journal/result/lineage闭合。
+128轮未被Pi强制执行、effort未attest，两项限制保留。新安装尚待只重放
+原r6请求到r9，不重存四步；当前a36FAIL不改，不签RC或全项目完成。
 以下段落是各批历史范围，不恢复旧PID或重复生产。
 
 ## 1007V1 论文v4有界确认（parent8d24b42，当前实施）

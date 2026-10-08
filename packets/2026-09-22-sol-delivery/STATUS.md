@@ -23,14 +23,19 @@
 请求重试FAIL不借修复后源码测试关闭；下一安装必须明确重绑并复跑该行为。
 Node VM不是Ego，ZIP校验不是离线重开，开发wide gate不是终验。
 
-## 正在实施的有界根因包
+## 已返回的有界根因包
 
 ci-1007-historical-save-retry-v1：后续保存后原已提交请求错误冲突。existing E03
 qualified Pi/openai-codex/gpt-6-luna:max预选、单节点、三文件范围、7200s硬等候。
 初始化/preflight不当实际模型或完成证据；以终态回执、源码diff和owner验证为准。
 保持current可见性函数原语义，历史重试须有DB提交世代、不可变文件、journal
 及原result身份闭合；不能用complete/ready单独通过或重新发布旧世代。
+Owner相关93PASS/1准确排除旧浏览器，Ruff3/strict2通过；
+[源码回执](evidence/1007V1/owner-historical-save-retry-v1.json)绑定三文件hash。
+初始节点仅提问而未修复，原件保留；同Pi会话续接actual模型已核，effort
+未独立attest，128轮上限未被运行器强制执行，不能宣称预算全合规。
 Owner同步完成冻结a36分享与结果归档，没有重复生产修复或修改原项目。
+新源码通过不改变a36安装FAIL；下一固定安装重放既有r9中的旧请求。
 
 ## 尚未完成与阻断
 
@@ -48,7 +53,7 @@ Ego空间、HyMT中文容量507、论文获取日期政策、专家01–06/refer
 
 ## 下一安全动作
 
-执行节点终态后审完整共享路径与历史负例，再用固定下一安装对既有QA r9
+已审完整共享路径与历史负例；再用固定下一安装对既有QA r9
 只复跑旧请求与保存后current读取，不重新提交四步。保持原a36证明/FAIL。
 继续报告导航、就绪C和共同匹配；稳定里程碑一次宽门，阶段精简复盘与GitHub
 提交，不逐行全仓、无限全页会商或假签完整科学包。

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1007-historical-save-retry-1",
+  "parent_commit": "1cf2cd43c5cc6aa1a35cd22b24372f074627e07d",
+  "status": "source_related_checks_passed_installed_retry_not_run",
+  "scope": "historical exact request replay, not science, visual, hosts or release acceptance",
+  "source_sha256": {
+    "src/ci_workflow/application/latest_delivery.py": "d988f91451f19e3f7b1428680582ae6debc122ea7ced90b130417e2b7c5eeb72",
+    "src/ci_workflow/application/user_fact_edit.py": "15298f19257a64ccde161c62f2b21c87f47372e760da153e61dd7ab5909321bd",
+    "tests/integration/test_1007_historical_save_retry.py": "54a6d8a152ba1a4894511e300f659706c6c5c52426027599852d7c61348c16f6"
+  },
+  "execution": {
+    "task_id": "ci-1007-historical-save-retry-v1",
+    "route": "pi/openai-codex/gpt-6-luna",
+    "effort_requested": "max",
+    "effort_attestation": "NOT_VERIFIED",
+    "session_id": "01a11a15-b240-7000-b933-f1f2491c983f",
+    "initial": {"duration_seconds": 17.485, "status": "INCOMPLETE_permission_question_no_repair", "output_sha256": "e892f53d785b02da748aaf4f046e874e3f7d8e88652dae13049967a3c76403a6"},
+    "same_session_resume": {"duration_seconds": 769.462, "exit_code": 0, "output_sha256": "1e32eefbd824808822123a4f5f42a92e297092748573f293601657e481d2a7f0", "receipt_sha256": "f8628ac8472c061e73575fe95273c7b14e8818668589853398b975dec3c247dd", "receipt_route_and_output_audit_errors": []},
+    "budget_limitation": "Pi declares runtime-managed loop, no artificial max-turns flag. Requested128 was not enforced; runner tool_call_count1486 is not independently deduplicated or equivalent to turns. Actual total786.947 seconds is below7200. No fallback or recursive dispatch claimed.",
+    "worker_red": {"failed": 1, "scope": "initial historical retry production regression"},
+    "worker_green": {"passed": 82, "deselected": 1, "scope": "new historical retry family and W04, accurate old browser exclusion"}
+  },
+  "owner_verification": {
+    "command": ".venv/bin/python -m pytest -q tests/integration/test_1007_historical_save_retry.py tests/integration/test_w04_user_fact_edit.py tests/integration/test_1007_real_fact_editor.py -k 'not test_current_share_exports_committed_a_b_edit_and_unchanged_c' --tb=short",
+    "passed": 93, "deselected": 1, "duration_seconds": 120.49, "exit_code": 0,
+    "ruff": "three affected files PASS",
+    "strict_mypy": "two production files with MYPYPATH=src PASS",
+    "diff_check": "affected production files PASS",
+    "protected_five_user_hashes_unchanged": true
+  },
+  "verified_contract": [
+    "current_transaction_committed retains current-selector semantics",
+    "historical result requires matching request, command, fact lineage, ready journal, committed SQLite generation, immutable file bytes and original result",
+    "exact historical replay returns original result without report rebuild, new facts, events or current rollback",
+    "corrupt identity or bytes reject; ready but unpublished request recovers rather than pretending committed",
+    "changed payload under same request ID rejects"
+  ],
+  "installed_validation": "NOT_RUN: freeze and install corrected source, only replay original r6 request on existing isolated r9; do not resave four operations",
+  "retained_previous_failure": "owner-installed-real-ab-journey-v1.json and checkpoint-a36-partial.json remain unchanged FAIL for a36 historical retry",
+  "not_run": ["Ego", "current real ABC", "offline new-browser share", "full science/universe", "24 portals", "three hosts", "full historical recovery", "RC"]
+}

@@ -32,11 +32,13 @@ Trellis活动任务10-03-r24-resumed-delivery，仍in_progress。
   原命令恢复检查，不新造request重存。原脚本/hash/失败保留。
 - 第二处是实际生产缺陷：后续current前移后，较早已完成请求仍错误409。
   current/DB没有回退。已派发有界根因修复ci-1007-historical-save-retry-v1，
-  三文件范围；终态前不得接受或轮询/重派。不能把a36旧安装FAIL改PASS。
+  三文件范围；节点已终态，owner93PASS/1浏览器排除、Ruff3/strict2。
+  [源码回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-historical-save-retry-v1.json)
+  保留初始未执行和预算限制。不能把a36旧安装FAIL改PASS。
 
 ## 下一条有界动作
 
-等上述执行节点的完成事件，审源码/成族相关门/历史提交证明；新字节绑定下一
+上述源码/成族相关门/历史提交证明已核；新字节绑定下一
 固定候选后只重放缺失的历史同请求重试，不重跑四次已提交的假设修订。
 不以complete状态或ready journal代替真正已提交generation证据，不回退current。
 继而接报告→编辑导航及就绪C/共同横比链；新安装、科学和实屏分别签范围。
