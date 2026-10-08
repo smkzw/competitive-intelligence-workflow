@@ -1,7 +1,8 @@
 # 唯一当前状态：1007V1 持续实施，C真实来源已采用，报告候选继续推进
 
-本批基线d5adb2c5a52181be2b03d8893ecdf4f092d8fc4f；源码/源采用绑定本批
-owner回执逐文件hash，所在提交及远端另实核，不借旧安装。
+本批实现fad1aa9665de2bdd0b69a2f17d66c57535bad196已push，远端main实核一致；
+基线d5adb2c5，源码/源采用绑定owner逐文件hash，不借旧安装。
+[实际递交/隐私及下一执行](evidence/1007V1/owner-c-source-adoption-push-v1.json)。
 Goal实际ACTIVE，无新暂停。English-only/五用户修改/未知历史均保护。
 
 PN四研究258来源观察/60终点实例：独立OMP C0真实否决6译义后，修正6处，
@@ -22,7 +23,8 @@ compat20/0.85s、layer7/0.21s、Ruff及lexical旧路径；只签该源码质量�
 推进新报告前，新的C source-read接续反例真实RED1failed6.74s：合法开启新的
 未签报告epoch后，旧已物化源接受只读加载却强求新active回执而失败。旧源
 采用并未失效；实际项目仍在e1未推进，保护证明。现交单一有界E03修历史
-exact-source proof读取，不能让旧回执授权新来源/报告；未修前不冒称新C2完成。
+exact-source proof读取，preflight实际PASS后runner已启动，模型/完成以终态为准；
+不能让旧回执授权新来源/报告，未修前不冒称新C2完成。
 下一步根因修复/负向验证后再新报告投影、渲染和独立复核。
 以下旧标题和在途是各批历史范围；“正式来源采用未跑”已被本批真实结果取代。
 

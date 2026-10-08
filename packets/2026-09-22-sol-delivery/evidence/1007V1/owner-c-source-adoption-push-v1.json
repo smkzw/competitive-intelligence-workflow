@@ -1,0 +1,15 @@
+{
+  "schema_version": "1007-source-adoption-delivery-1",
+  "implementation_commit": "fad1aa9665de2bdd0b69a2f17d66c57535bad196",
+  "remote": "smkzw/competitive-intelligence-workflow",
+  "branch": "main",
+  "remote_verified": "git ls-remote origin refs/heads/main returned exact implementation_commit after normal push",
+  "scope_receipt": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-source-adoption-v1.json",
+  "scope_receipt_sha256": "2295bf8f2493b9582043584c41957befbea1381cfa7e6c9ffc6bc71c17d55e6b",
+  "public_privacy": "repository is public; two execution prompts containing local absolute paths deliberately not staged; original prompts/runtime logs remain controlled local evidence",
+  "protected_user_files": "five pre-existing tracked changes remain unstaged and hash-preserved",
+  "full_release_accepted": false,
+  "goal": "active, continuous",
+  "next_execution": "ci-1007-source-proof-epoch-reopen-v1 started after preflight PASS; runner live result pending; no actual-model or PASS inferred from initialization",
+  "actual_source_project": "remains e1 with no current; owner-only"
+}

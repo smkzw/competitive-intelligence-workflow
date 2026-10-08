@@ -2,7 +2,8 @@
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 历史最新暂停：[20261008原件](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)，不恢复旧PID。
-本批基线d5adb2c5a52181be2b03d8893ecdf4f092d8fc4f；新提交/远端以当前STATUS实核为准。
+本批实现fad1aa9665de2bdd0b69a2f17d66c57535bad196已正常push，远端main实核一致；
+基线d5adb2c5保留。新报告源码后续改动不借本批验收；当前以STATUS为准。
 固定已push导航源码/安装c6dbb71cfe054238dd485afd909bad66c3bd0793。
 本批258条C来源已真实独立签发并采用；完整报告/current尚未发布，不能混签。
 Goal实际ACTIVE。唯一英文工程；旧中文根零接触。五用户修改、未知资料、
