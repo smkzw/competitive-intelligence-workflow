@@ -92,7 +92,7 @@ def main() -> None:
     facts_by_ref = {
         str(ref): str(item["fact_version_id"])
         for item in closure["facts"]
-        for ref in (item["fact"]["fact_id"], item["fact"]["row_ref"])
+        for ref in (item["fact"]["fact_id"], item["consumer_binding"]["row_ref"])
     }
     lineage = ResearchEvidenceLineage(
         evidence_snapshot=locked,
