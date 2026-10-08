@@ -1,11 +1,26 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交23b21f6b3800b4045c80e45da204c9d7fd9adc59；实际HEAD以Git核对。
+本批父提交e87d8e2ec871af7eeb2a414a290c5e4439baf8a4；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-presentation-current-v1.json)，
+[当前机器清单](evidence/1007V1/owner-publication-source-dates-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+四已核论文接四typed ResearchSource；两真实正文源库持久化，两缺件保持。
+显式电子发表日opt-in执行E03已终态：actual deepseek-v4.1-flash/max CLI
+响应effort未证明，719.592s/38calls/exit0无回退；原29RED/1positive是缺
+关键字，不夸为29独立语义缺陷。Owner发现date定位不能走生产quote重放，
+1FAIL/3positive→115相关PASS0.56s，无SKIP，Ruff3/strict2源。此小族无
+宽门；e87稳定quality-only门仅历史，不覆盖新源码。
+两真实原件exact epub2023-05-04/2025-12-17，calendar_day、默认捕获/派生
+字节保持；新隔离库重放两旧ID后追加两新日期版本，4源版本/16日期断言/
+0facts/0fragments/0edit/0current。父来源库DB与所有pin不变；公开/生效
+首日未知，不能借发表日签历史可得。当前论文获取见证原生Ask待答，不扩
+已批准方案/SAP政策。正文医学采用/完整包/补件门/宇宙/currentABC/浏览器/
+分享新浏览器/安装/24/三宿主/RC仍开放。下一真实正文提取与就绪C/比较。
+
+### e87d8e2纯呈现单元（以下只按其版本成立）
 
 纯呈现current节点终态E03实际deepseek-v4.1-flash/max CLI响应effort未证明，
 946.096s/118calls/exit0，无fallback。现有服务/普通CLI复用锁/journal/selector，

@@ -4,6 +4,15 @@
 
 ## 1007V1 当前增量合同
 
+原生JATS日期复用现有SourceCapture/CaptureDatePrecisions/Locators：桥接
+显式opt-in读取front/article-meta完整电子发表日（epub或pub/electronic），
+calendar_day不冒充精确时刻。默认旧capture不变；部分未知、不补1日，
+冲突/非法完整日期在CAS写入前拒绝。精确pub-date定位可在现有重提取API
+重放，但不借history/正文/引用/印刷或计划解禁日期作首次披露。身份巡检、
+实体拒绝、原件/派生摘要及metadata-only无capture保持。新日期用现有源
+版本身份追加，历史捕获/来源库不覆写；当前论文取得见证是否可替代未知
+首次披露仍待用户原生Ask，不能套用方案/SAP已批准范围自动放行论文。
+
 纯呈现升级复用 UserFactEditService、build_current_report、全批预检及既有
 锁/journal/committed selector，不写 fact/source/derivation/edit-request 表。
 CurrentPresentationRebuildCommand 绑定项目、request_id、expected_revision、

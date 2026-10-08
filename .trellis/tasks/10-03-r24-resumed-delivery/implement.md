@@ -1,5 +1,21 @@
 # Continuous implementation checkpoint
 
+## 1007V1 显式论文日期小族（parent e87d8e2，终态有界整合）
+
+采用execution：原生JATS精确日期提取两路径可与owner来源叶绑定分离，
+无新科学判断或呈现变化。先补失败族，默认旧capture不变；opt-in只读
+原电子发表完整日历日期，首公开未知/历史不可推断。一次相关批回归，
+不逐行全仓。节点actual CodeBuddy/deepseek-v4.1-flash,max CLI响应effort
+未证明，719.592s/38calls/exit0无回退。Owner补日期生产重提取1RED/3positive，
+终态115相关PASS0.56s/Ruff3/strict2源；两真实原件2023-05-04/2025-12-17
+重放、旧default/原源库/父pin保持，新库4source version/16日期断言，无
+事实/片段/用户改值/current。本小族无宽门，不借e87旧门或虚构科学接受。
+已隔离绑定四typed ResearchSource叶、两source version、八日期断言；
+两缺正文保持缺件，零事实/fragment/current，17父pin保持。原公开日期缺失
+可否以本次取得证据支持当前论文报告已原生选择题询问，待答不绕门。
+当前清单owner-publication-source-dates-v1.json。下一正文上下文提取可在
+候选层继续；医学判断需要确切材料独立复核，完整包仍不得伪闭。
+
 ## 1007V1 当前呈现重建执行（parent23b21f6，终态/有界整合）
 
 采用execution：既有current出口缺独立于真实用户/来源改值的呈现升级操作，

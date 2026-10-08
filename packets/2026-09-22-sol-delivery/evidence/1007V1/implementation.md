@@ -1236,3 +1236,33 @@ native摘要一次选择过宽打印被截，改只选身份/耗时/计数/hash�
 下一有界工作为已审论文的实际源/快照/单补件接缝，不能假签宇宙closed或
 套上一叶级PASS成完整包。Ego/中文/原附件问题只阻断相应分支，GoalACTIVE
 继续，无阶段pause/oldroot/cleanup/sessionstore修改；五用户变化与历史DBFAIL保持。
+# 1007V1 论文来源叶/显式日期有界补记（parent e87d8e2）
+
+不是新产品权威；当前入口见STATUS/owner-publication-source-dates-v1.json。
+直接确定性来源绑定+一有界E03执行，owner统一共享源/日期/最终接受。
+四已reviewdigest分类叶与确切原生正文ID显式映射，四ResearchSource含两
+available/两not_accessible；未获取项retrieved_at为最近真实尝试，不称正文
+取得时刻。原取得两正文的捕获first/published/effective均未知，源库2version/
+8日期断言，没有whole package/fact/fragment/current/假科学接受。
+
+查原XML发现明确电子发表日；原NLM官方资料区分pub-date/history/计划PMC
+release。opt-in保留旧默认/未知首次，完整calendar_day定位追加新源版本，
+不是迁移旧capture。E03实际deepseek-v4.1-flash719.592s/38calls/exit0无回退；
+max是CLI请求，不冒称响应已证明。原29RED/1positive仅新关键字缺失，
+不能夸为29个原代码科学bug。Worker邻接CT.gov较慢，组合窗口不完整不记
+PASS，后续独立30PASS297.62s另列；不每改一行全仓重跑。
+
+owner实际发现生产重提取函数不能接date locator，1FAIL/3positive0.47s；
+只增front[1]/article-meta[1]/pub-date[N]精确quote，粗路径/history/body拒绝。
+整族115PASS0.56s/Ruff3/strict2。两真实原件2023-05-04及2025-12-17；quote
+按原XML文本序而非新造ISO引文，年月日另逐字段比对。新隔离库重播两旧
+source ID，再追加两日期version，共4/16；源字节/派生/父库/原捕获不变。
+两必需正文缺件保持；首次/生效未知，获取可否当前论文采用Ask待答，不能
+借方案/SAP范围直接扩论文、造closed包或发补件gate。源叶/日期不是医学
+数值/完整宇宙/视觉接受，不重复本小族宽门；e87 gate是历史。
+
+复盘：必须走真实生产重提取，而非新测试自己造路径解析即称来源闭合；
+同source内容加已证日期用原版本身份自然产生新ID，旧库和已hash快照不得
+就地改。scope/model/results分别记录，长节点静默完成等待，不重派。
+下一正文数值/语境候选到既有片段/事实合同，医疗解释独立挑战后再采用，
+就绪C/比较分支继续。Goal ACTIVE，无阶段暂停、旧根接触或一般清理。

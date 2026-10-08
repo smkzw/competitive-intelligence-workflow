@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交23b21f6b3800b4045c80e45da204c9d7fd9adc59；实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-presentation-current-v1.json)。
+本批父提交e87d8e2ec871af7eeb2a414a290c5e4439baf8a4；实际HEAD以Git核对。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-source-dates-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,20 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- 四已核论文接四typed源叶；两真实全文与既有CAS/来源版本绑定，两缺正文
+  保持缺件。原生XML显式电子发表日opt-in接通，默认旧捕获不变，精度为
+  日历日，不是首次公开/历史可得性。两真实原件分别2023-05-04/2025-12-17。
+- E03实际deepseek-v4.1-flash/max请求未attest，719.592s/38calls/exit0无回退。
+  Owner补生产日期locator重提取1RED/3positive，最终115相关PASS0.56s/
+  Ruff3/strict2源；这批不重复宽门，不冒充e87旧门覆盖新源码。
+- 新隔离库先重放两旧source version，再追加两日期版本，4version/16日期
+  断言；零医学fact/fragment/edit/current。原来源库/旧捕获/父pin不变。
+  见[日期/source整合复盘](reviews/codex_execution_ci-1007-jats-publication-date-v1_review.md)。
+- 原生Ask等待论文当前获取见证范围裁决。未伪造完整研究包/宇宙闭包来
+  触发补件门；下一有界正文数值/上下文提取，候选不等于科学采用。
+
+## 上一纯呈现单元（e87d8e2历史范围）
 
 - 不假改临床值的纯呈现重建已接到现有服务/普通CLI及原子current事务。
   E03实际deepseek-v4.1-flash，max请求/响应effort未证明，946.096s/118calls，
@@ -70,7 +84,8 @@ Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复�
 
 四确切材料新digest已审；只关分类叶，不虚构宇宙闭包或完整补件门。保留
 日本登记未知、原剂量身份及原生勘误。纯呈现r5及同版本分享已真实重放，
-下一接正式论文叶的真实来源/快照绑定和一次补件门，不能假签closed包；
+四typed源叶及原生发表日期已绑定隔离来源库，下一正文精确数值/上下文；
+完整快照/一次补件门仍不能假签closed包；
 同currentABC及完整宇宙仍待实际闭合。
 并行继续共同当前ABC/配置/分享任务，不因全来源未齐永久停前端，不回逐症状
 全页三路循环。新导航已在r5资产中，实际浏览器旅程仍待验，不拼旧r4 PASS。

@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime, time
 from pathlib import Path
 from typing import Any, Literal, Self
+from xml.etree import ElementTree as ET
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -39,6 +40,9 @@ from ci_workflow.reports.b.safety_concepts import (
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
 from ci_workflow.sources.connectors.linked_jats import (
     LinkedJatsInspection,
+    LinkedJatsStructureError,
+    _article_element,
+    _normalized_text,
     inspect_linked_jats_xml,
 )
 from ci_workflow.sources.connectors.public_pdf_availability import PublicPdfAvailabilityWitness
@@ -188,10 +192,90 @@ class SourceCapture(BaseModel):
         return self
 
 
+# 电子出版日只认显式完整声明：旧版 pub-type="epub" 与现代
+# date-type="pub" publication-format="electronic" 是同一声明的两代写法；
+# history、pmc-release、印刷 ppub、参考文献与正文日期都不进入读取范围。
+_ELECTRONIC_PUB_DATE_PUB_TYPES = frozenset({"epub"})
+_ELECTRONIC_PUB_DATE_DATE_TYPES = frozenset({"pub"})
+_ELECTRONIC_PUB_DATE_FORMATS = frozenset({"electronic"})
+_PUB_DATE_FIELDS = ("year", "month", "day")
+_PUB_DATE_FIELD_PATTERNS = {
+    "year": re.compile(r"[0-9]{4}"),
+    "month": re.compile(r"[0-9]{1,2}"),
+    "day": re.compile(r"[0-9]{1,2}"),
+}
+
+
+def _is_electronic_pub_date(node: ET.Element) -> bool:
+    """旧版 epub 或现代 pub/electronic 声明；其他 pub-type/date-type 一律不认。"""
+    pub_type = (node.get("pub-type") or "").strip().lower()
+    date_type = (node.get("date-type") or "").strip().lower()
+    publication_format = (node.get("publication-format") or "").strip().lower()
+    return pub_type in _ELECTRONIC_PUB_DATE_PUB_TYPES or (
+        date_type in _ELECTRONIC_PUB_DATE_DATE_TYPES
+        and publication_format in _ELECTRONIC_PUB_DATE_FORMATS
+    )
+
+
+def _declared_electronic_publication_day(raw: bytes) -> tuple[date, int] | None:
+    """读取身份已核验原件中明确声明的完整电子出版自然日及其一基序号。
+
+    只读取 ``front/article-meta`` 的直接 ``pub-date`` 子节点；带命名空间前缀的
+    节点因标签不精确相等而自然忽略，不会被误读或借用。缺 year/month/day 任一
+    字段的部分声明保持未知，绝不补齐 1 日；同一字段重复声明、完整但非法的
+    日历日期、以及多个互不相同的完整电子日期都显式拒绝，不取第一个。
+    完整日期重复出现时共享首个出现的确定序号，供调用方生成精确定位器。
+    本函数只在既有有界巡检（实体拒绝、身份核验、结构唯一）通过后的同一不可变
+    字节上重放结构规则。
+    """
+    article = _article_element(ET.fromstring(raw))
+    fronts = [child for child in article if child.tag == "front"]
+    if len(fronts) != 1:
+        raise LinkedJatsStructureError("article 未唯一包含 front；不能读取声明日期")
+    article_metas = [child for child in fronts[0] if child.tag == "article-meta"]
+    if len(article_metas) != 1:
+        raise LinkedJatsStructureError("front 未唯一包含 article-meta；不能读取声明日期")
+    declared_days: dict[date, int] = {}
+    pub_dates = [child for child in article_metas[0] if child.tag == "pub-date"]
+    for ordinal, node in enumerate(pub_dates, start=1):
+        if not _is_electronic_pub_date(node):
+            continue
+        fields: dict[str, str] = {}
+        for name in _PUB_DATE_FIELDS:
+            values = [child for child in node if child.tag == name]
+            if len(values) > 1:
+                raise ResearchPackageError(
+                    f"电子 pub-date 重复声明 {name} 字段；完整日期有歧义"
+                )
+            fields[name] = _normalized_text(values[0]) if values else ""
+        if any(not fields[name] for name in _PUB_DATE_FIELDS):
+            # 部分日期保持未知：不以 1 日或其他推断补齐，也不构成冲突。
+            continue
+        if any(
+            _PUB_DATE_FIELD_PATTERNS[name].fullmatch(fields[name]) is None
+            for name in _PUB_DATE_FIELDS
+        ):
+            raise ResearchPackageError("电子 pub-date 完整日期字段格式非法；显式拒绝")
+        try:
+            day = date(int(fields["year"]), int(fields["month"]), int(fields["day"]))
+        except ValueError as error:
+            raise ResearchPackageError(
+                "电子 pub-date 完整日期不是有效日历日；显式拒绝"
+            ) from error
+        declared_days.setdefault(day, ordinal)
+    if not declared_days:
+        return None
+    if len(declared_days) > 1:
+        raise ResearchPackageError("出现多个互不相同的完整电子出版日期；不得取第一个")
+    day, ordinal = next(iter(declared_days.items()))
+    return day, ordinal
+
+
 def source_capture_from_linked_jats_xml(
     project_root: Path, raw: bytes, *, expected_pmid: str | None,
     expected_pmcid: str, expected_doi: str, url: str,
     acquired_at: datetime, media_type: str = "application/xml",
+    use_declared_publication_date: bool = False,
 ) -> tuple[LinkedJatsInspection, SourceCapture | None]:
     """Bridge exact linked native bytes, never HTTP success, into a text capture.
 
@@ -199,7 +283,16 @@ def source_capture_from_linked_jats_xml(
     Metadata-only is a successful inspection with NO full-text capture. Neither
     body presence nor the supplied acquisition time proves historical availability,
     publication role, scientific correctness or redistribution rights.
+    Only the explicit ``use_declared_publication_date`` opt-in reads a complete
+    declared electronic publication calendar day from the identity-checked
+    original XML: partial dates stay unknown, conflicting or malformed complete
+    dates fail before any raw asset is written, and the declared day never
+    becomes first/effective disclosure or an availability proof. The default
+    call is byte-identical to the previous contract, including absent optional
+    date metadata.
     """
+    if not isinstance(use_declared_publication_date, bool):
+        raise ValueError("use_declared_publication_date 必须是显式布尔开关")
     if media_type not in {"application/xml", "text/xml"}:
         raise ValueError("原生论文获取必须声明 XML 媒体类型")
     if not url.strip() or acquired_at.tzinfo is None or acquired_at.utcoffset() is None:
@@ -210,6 +303,20 @@ def source_capture_from_linked_jats_xml(
     )
     if inspection.body_state == "metadata_only":
         return inspection, None
+    published_at: datetime | None = None
+    date_precisions: CaptureDatePrecisions | None = None
+    date_locators: CaptureDateLocators | None = None
+    if use_declared_publication_date:
+        declared_day = _declared_electronic_publication_day(raw)
+        if declared_day is not None:
+            day, ordinal = declared_day
+            published_at = datetime.combine(day, time.min, tzinfo=UTC)
+            date_precisions = CaptureDatePrecisions(published_at="calendar_day")
+            date_locators = CaptureDateLocators(published_at=EvidenceLocator(
+                document_role="original_linked_publication",
+                field_path=f"/article/front[1]/article-meta[1]/pub-date[{ordinal}]",
+                url=url,
+            ))
     text, derivation = capture_source_text(project_root, raw, media_type=media_type)
     verify_source_text_derivation(project_root, derivation, text)
     capture = SourceCapture(
@@ -219,8 +326,9 @@ def source_capture_from_linked_jats_xml(
         query_or_identifier=f"{inspection.pmcid} / DOI {inspection.doi}",
         language="en", access_method="identity_checked_linked_jats_response",
         media_type=media_type, content_text=text, text_derivation=derivation,
-        acquired_at=acquired_at, published_at=None, effective_at=None,
+        acquired_at=acquired_at, published_at=published_at, effective_at=None,
         first_disclosed_at=None,
+        date_precisions=date_precisions, date_locators=date_locators,
         locator=EvidenceLocator(
             document_role="original_linked_publication", url=url,
             paragraph=inspection.title,

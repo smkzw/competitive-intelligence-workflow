@@ -55,7 +55,13 @@ def _jats_locator_quote(content_text: str, field_path: str | None) -> str:
         if match is None:
             raise SourceDerivationError("JATS路径只允许明确的元素名和一基序号")
         steps.append((match[1], int(match[2])))
-    if steps[-1][0] not in _JATS_QUOTE_TAGS:
+    # Date evidence reuses exact native metadata, never a whole front/history
+    # or a body/reference date. This permits replay, not adoption/availability.
+    is_publication_date = (
+        len(steps) == 3 and steps[:2] == [("front", 1), ("article-meta", 1)]
+        and steps[-1][0] == "pub-date"
+    )
+    if steps[-1][0] not in _JATS_QUOTE_TAGS and not is_publication_date:
         raise SourceDerivationError("JATS事实必须精确到段落、单元格或原始注释")
     raw = content_text.encode("utf-8")
     if not raw or len(raw) > DEFAULT_MAX_BYTES:

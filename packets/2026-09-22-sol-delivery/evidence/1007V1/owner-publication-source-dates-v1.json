@@ -1,0 +1,36 @@
+{
+  "schema_version": "1007-publication-source-dates-1",
+  "parent_commit": "e87d8e2ec871af7eeb2a414a290c5e4439baf8a4",
+  "state": "continuous_implementation_bounded_source_leaves_not_rc",
+  "execution": {"task": "ci-1007-jats-publication-date-v1", "model": "codebuddy/deepseek-v4.1-flash", "effort_requested": "max", "response_effort_attested": false, "session": "01a1195c-fe8a-714b-b621-445d93adfe7e", "duration_seconds": 719.592, "tools": 38, "returncode": 0, "fallback": null, "native_init_and_result_verified": true},
+  "source": [
+    {"path": "src/ci_workflow/application/source_research_service.py", "sha256": "c9eb4330d1598409506a5e27ec7d15e4aaccbb0bc7b528c390fa1a5d577c640a"},
+    {"path": "src/ci_workflow/storage/source_derivation.py", "sha256": "7ef9eaa3f198f009b9cbcd0df7c1c73adaa5ad9ed75cfb9ad08495015202cb56"},
+    {"path": "tests/integration/sources/test_1007_jats_publication_date.py", "sha256": "cfb3a492e0a4c7623b6fd9322b8bd5a816d0ca146aacb29155c576f915425b69"}
+  ],
+  "process": {"worker_red": "29FAIL/1positive, missing opt-in signature; not 29 independent parser defects", "owner_red": "production date locator1FAIL/3positive0.47s", "adjacent_ctgov": "worker30PASS297.62s; prior combined invocation exceeded terminal window, not PASS"},
+  "related_gate": {"command": ".venv/bin/pytest tests/integration/sources/test_1007_jats_publication_date.py tests/integration/sources/test_r24_linked_jats.py tests/integration/sources/test_r24_linked_jats_capture.py tests/integration/sources/test_r24_jats_exact_locator.py tests/integration/test_r24_source_date_role_locators.py tests/unit/test_source_capture_date_precision.py -q", "passed": 115, "seconds": 0.56, "skips": 0, "returncode": 0, "terminal_chunk": "5790ef", "ruff": "three affected files; one import-order auto-fix", "strict_mypy": "two production source files passed", "wide_gate": "NOT_RUN this minor family; e87 gate is historical only"},
+  "private_materials": [
+    {"path": ".artifacts/1007-publication-source-leaves-v1/bind_sources.py", "sha256": "5acb74be4ae4de5deb7f623c6b9583f1d26d132117b5f55d5709163944d6e431"},
+    {"path": ".artifacts/1007-publication-source-leaves-v1/checkpoint.json", "sha256": "3354468222f21eb01a17ac4e94e04474ee69e93250a157443aea970c669adeec"},
+    {"path": ".artifacts/1007-publication-source-dates-v1/replay.py", "sha256": "216fd85d6bc987ffa5e2a2ee821232c425d3dc3880aa5bd7b9d6a2f6a0612629"},
+    {"path": ".artifacts/1007-publication-source-dates-v1/checkpoint.json", "sha256": "d095549b329ea47a4c210c5af2b65654d85f01fe3b6eff1879e26f7950e33b09"},
+    {"path": "runs/execution/ci-1007-jats-publication-date-v1/worker_01.md", "sha256": "5c59f6144e82091e13e34b4b8b02742c8cb3d0ad1ca3a69faceb1538e1e4139c"}
+  ],
+  "native_stdout_sha256": "e6c144d8aa50c2bca0a9ed117ba0da509009aa1c964c7af67bd1b431e5b6d51f",
+  "real_replay": {"command": ".venv/bin/python .artifacts/1007-publication-source-dates-v1/replay.py", "returncode": 0, "terminal_chunk": "661ec1", "source_versions": 4, "source_date_assertions": 16, "facts": 0, "fragments": 0, "edit_requests": 0, "current_selectors": 0, "missing_required_bodies": 2, "default_captures_and_parent_pins_unchanged": true, "database_sha256": "248976c2f7edd748230b471a396ff0081faf5f60493d3c49dfa64115e4fad563"},
+  "dated_sources": [
+    {"pmid": "37142763", "declared_epub_calendar_day": "2023-05-04", "prior_version_id": "source-version_6fe3006e0eb427dee157dba2", "dated_version_id": "source-version_97ae44d7c91576211da4b0fe"},
+    {"pmid": "41405008", "declared_epub_calendar_day": "2025-12-17", "prior_version_id": "source-version_84d7f9e55ba22dfe3949bea8", "dated_version_id": "source-version_714c9a5ab64c8a4ab8e12890"}
+  ],
+  "first_disclosure_and_effective_dates": "unknown; declared day never fills them or proves body-version availability",
+  "policy_question": "native multiple-choice Ask pending: current public-repository acquisition witness for required body with unknown first disclosure; do not enable override without answer",
+  "primary_references": ["https://pmc.ncbi.nlm.nih.gov/tagging-guidelines/article/dobs/", "https://dtd.nlm.nih.gov/ncbi/pubmed/doc/out/240101/att-PubStatus-c.html"],
+  "whole_research_package": false,
+  "manual_gate_materialized": false,
+  "scientific_acceptance": false,
+  "current_modified": false,
+  "browser": "NOT_RUN: previously verified Ego Lite space12 unavailable; no silent substitution",
+  "release_acceptance": false,
+  "next": "reopen exact source-body numerical context under existing fragment/fact contracts while current availability is pending; continue ready C/comparison, no fabricated universe closure"
+}
