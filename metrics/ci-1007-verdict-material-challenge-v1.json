@@ -1,0 +1,14 @@
+{
+  "task": "ci-1007-verdict-material-challenge-v1",
+  "state": "terminal_bounded_leaf_adoption_not_package",
+  "parent_commit": "2fd2cb402a6717ce0c8c7c727f8296ec48efb112",
+  "route": {"agent": "codebuddy", "model": "deepseek-v4.1-flash", "effort_requested": "max", "response_effort_attested": false, "session_id": "01a1191c-aadf-78eb-a359-cf96a5313940", "duration_seconds": 305.776, "calls": 58, "returncode": 0, "fallback": null},
+  "reviewer_checks": {"source_read": "four full original abstracts and frozen materials", "command_hash_checks": "NOT_RUN", "actual_command_permission_rejections": true, "native_permission_denials_empty_is_not_evidence": true},
+  "owner": {"production_candidate_digests": 4, "parent_pins_reopened": 16, "explicit_selected_asset_paths": 6, "formal_typed_leaf_records": 4, "changed_material_rejected": 4},
+  "whole_package": false,
+  "manual_gate": false,
+  "current_modified": false,
+  "scientific_numerical_acceptance": false,
+  "browser": "NOT_RUN",
+  "release": "NOT_ACCEPTED"
+}

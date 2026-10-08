@@ -1,11 +1,27 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交1b46cf8fd6ba0286509050ef30b82f13b94b23af；实际HEAD以Git核对。
+本批父提交2fd2cb402a6717ce0c8c7c727f8296ec48efb112；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-jrct-document-v1.json)，
+[当前机器清单](evidence/1007V1/owner-verdict-material-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+四篇确切论文新digest独立挑战已终态：C03实际CodeBuddy/deepseek-v4.1-flash，
+max CLI/响应effort未证明，305.776s/58calls/exit0，无回退。Read/Grep完成
+四完整原始摘要；命令实际拒绝，原报告条件接受不冒充独立hash计算。Owner
+四生产digest、16源pin前后、六精确资产路径均重算通过，四typed分类叶通过；
+四次改材料借旧reviewdigest拒绝。正式叶分类3主要/1关键长期安全性，获取
+2 acquired/2 manual_required。SourceRecord/完整包/DB/补件门/current未写，
+正文医学数值/宇宙/历史未接受。All Fields零检出不意味着无全文，LTE导入
+身份不强配；methods父背景和双项目同hash路径分开。一次组合稳定质量门
+已终态exit0/GATE_OK quality-only/6：Ruff src/tests/tools、strict283、活跃
+1185PASS253.65s、兼容子集20PASS0.65s、分层7PASS0.18s与旧路径词法通过。
+期间源码不改，819文件实际摘要和保留用户fixture修改绑定机器清单；不是
+全集成/医学/视觉/发布门。下一有界节点初始化/preflight完成但尚未派发，
+实现现有current纯呈现重建，不造临床编辑；仍按实际receipt记录模型和结果。
+
+以下jRCT及更早行均为已提交、版本特定历史，不能冒充本批全交付。
 
 论文入口边界1b46cf8已push核远端。本批接通官方jRCT数字附件路径的既有
 PDF witness；E03 native init/result deepseek-v4.1-flash、max请求/effort未证明，
@@ -87,10 +103,11 @@ v1回执误填未来UTC00:00隔离不接受；v2真实时钟22:20:19+00重建，
 
 ## 下一步
 
-先将确切研究/角色/源/获取回执冻结为新分类候选；新的reviewdigest只由实际
-读取该材料的独立上下文核验，不用旧角色审阅签新payload，也不造closed包
-去调用门。16pin实际绑定资料仍是候选，原日本缺号、剂量身份、勘误内容
-继续未知。代码边界有确定反例闭合，不另加科学许可/审批或多路整页审查。
+四新digest的独立挑战与条件计算已完成，仅四分类叶采用，未造closed包调用
+补件门；16pin原件保留，日本缺号、剂量身份与勘误仍未知。组合质量门终态
+之后实施现有current纯呈现重建，保留既有事实/修订与合法消费者，再做真实
+同源重建/分享。扩大匹配与C工作并行，不用旧r4或不同候选拼发布。
+代码边界成族验证，不另加科学许可/审批或多路整页审查。
 旧导航/HANDOFF已逐字归档SHA030342c4…；根入口只保留当前/下一任务。
 
 当前稳定导航一次宽门终态exit0：Ruff src/tests/tools，strict src/tools283，

@@ -1,0 +1,33 @@
+{
+  "schema_version": "1007-verdict-material-1",
+  "created_at": "2026-10-08T01:34:46+00:00",
+  "parent_commit": "2fd2cb402a6717ce0c8c7c727f8296ec48efb112",
+  "state": "continuous_implementation_bounded_leaf_adoption_not_rc",
+  "review": {"task": "ci-1007-verdict-material-challenge-v1", "actual_model": "codebuddy/deepseek-v4.1-flash", "session_id": "01a1191c-aadf-78eb-a359-cf96a5313940", "effort_requested": "max", "response_effort_attested": false, "duration_seconds": 305.776, "tool_calls": 58, "returncode": 0, "fallback": null, "computational_checks": "NOT_RUN: actual command permission rejections; owner closes explicit report condition"},
+  "private_materials": [
+    {"path": ".artifacts/1007-publication-verdict-candidates-v1/prepare.py", "sha256": "048efb22156d352d3bc1c4162c87acf4b9b91b009c1b15f6b38035e8e0ddc742"},
+    {"path": ".artifacts/1007-publication-verdict-candidates-v1/candidates.json", "sha256": "66522a645ed29e1d223a0cc6256495e18b650bb89944e3641d4332478621aea2"},
+    {"path": ".artifacts/1007-publication-verdict-candidates-v1/source-readable.md", "sha256": "63daf6b7c657897abaef150aee95be86431dd5aba3bcf504319c7aa002960399"},
+    {"path": ".artifacts/1007-publication-verdict-candidates-v1/verify_and_adopt.py", "sha256": "a1b08512a5c283d367b36ff52e9630d9b0ad2c5cf62d8d7e0cacbe8138e9f541"},
+    {"path": ".artifacts/1007-publication-verdict-candidates-v1/owner-adoption-v1.json", "sha256": "d0ccdd33571b939b10ee130ae63bf40e3acd1e12e316d805f1beb52aba066301"},
+    {"path": "runs/conference/ci-1007-verdict-material-challenge-v1/evidence_single_object.md", "sha256": "b5c1b481392ede0efc23ec266122b43efe821d8318e3680fe33f49d4ebe1469b"},
+    {"path": "logs/conference/ci-1007-verdict-material-challenge-v1/evidence_single_object_stdout.txt", "sha256": "16ce70c345eea913ca9214447d2dc056cb7e5067f737ac66453e043f3ea00a15"}
+  ],
+  "owner_actual_checks": {"candidate_digests": 4, "parent_source_pins_before_after": 16, "explicit_asset_paths": 6, "typed_leaf_records": 4, "altered_material_rejected": 4},
+  "classifications": [
+    {"pmid": "37142763", "class": "primary_result", "acquisition": "acquired", "candidate_sha256": "beeb9940a1a764aae351604ec539b03f1cd21a614e0d65108d2f2f0941a148fe"},
+    {"pmid": "37888917", "class": "primary_result", "acquisition": "manual_required", "candidate_sha256": "909dec943f8730a783fe28fd37ff7049a89001d04e0c65bb37e4f4e7c484312c"},
+    {"pmid": "39602139", "class": "primary_result", "acquisition": "manual_required", "candidate_sha256": "54bfc1ffe3df4b2902fd24f9e6515703201d959890e3d310044fe147f16d9c00"},
+    {"pmid": "41405008", "class": "key_safety_or_long_term", "acquisition": "acquired", "candidate_sha256": "e57a6bb0c3463bd895a14edf6526ac3ed3df09997f111f2d1c5e40b5543d0504"}
+  ],
+  "source_record_persisted": false,
+  "whole_research_package": false,
+  "manual_gate_materialized": false,
+  "scientific_fact_adoption": false,
+  "current_modified": false,
+  "universe_closed": false,
+  "historical_availability_proven": false,
+  "wide_gate": {"state": "GATE_OK quality-only/6", "command": "bash tools/gate.sh", "returncode": 0, "source_commit": "2fd2cb402a6717ce0c8c7c727f8296ec48efb112", "scope": "Ruff src/tests/tools; strict no-incremental src/tools 283 files; active unit/contract 1185PASS253.65s; retained compatibility subset20PASS0.65s; layering7PASS0.18s; lexical legacy references. Not full integration, retained formats, browser, science or release", "clean_required": false, "source_test_tool_files": 819, "source_test_tool_set_sha256": "44239f131da362eb2be49bda77ee4a9718a75dca164f64b9e5b6d7685af3774d", "protected_user_fixture_sha256": "4744f33d51b757ed41036cd56cebdcb503a202d910bbf9c3761f52c723765a3c", "actual_terminal_tool_chunk": "b6b3a8", "source_changes_during_gate": false},
+  "portal_assets_manifest_sha256": "cdc4b4bb60f9c8fcb803cd4c804aab3cb2f75a188ec8287a2904e1e58ecb3b8b",
+  "next": "current presentation rebuild using existing immutable report/current transaction, no fabricated clinical edit; preserve unresolved full universe and required-body gaps"
+}

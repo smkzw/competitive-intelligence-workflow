@@ -1155,3 +1155,30 @@ Ego实际12仍NOT_FOUND，不新建空间/换浏览器，四宽实屏NOT_RUN。
 再次复制大站点；唯一恢复资料、五用户修改、unknown与历史FAIL不删除。
 接下来冻确切论文分类/获取材料有界独立挑战，再继续同currentABC旅程，
 来源未闭不假组包、旧PASS不拼RC，Goal保持ACTIVE。
+
+## 确切四论文材料分类叶采用，parent2fd2cb4
+
+采用conference：新的材料digest不能借旧角色审阅。owner固定原始摘要、16pin、
+43既有研究和获取回执，四候选无复核字段时生产拒绝。C03 fresh读取完整四
+摘要和新材料，实际CodeBuddy/deepseek-v4.1-flash，max CLI响应effort未证明，
+305.776s/58calls/exit0，无回退。命令工具实际拒绝（虽native denial数组为空），
+原报告条件接受依赖owner计算，不能称独立hash已算。owner四生产digest与
+16pin前后、六精确资产路径均通过，四typed分类叶通过；四改题名借旧digest
+拒绝。没有SourceRecord/完整包/DB/补件门/current写入或医学数值采用。
+
+三主要报告、一关键长期安全性；两实际正文已取、两manual_required。首次
+可得/历史及未解日本/剂量身份不猜。Reviewer把All Fields零检出推导DOI域
+等价的意见不采用，原请求/实际翻译/零结果分别保留。e9方法论文只是父背景，
+bb同bytes两个项目根显式记录，第三旧桥获取不按数组排序当时间；LTE命名
+导入研究不补猜NCT关联。局部材料4通过不等于全宇宙或专业批准。
+
+踩坑：私有准备脚本将Pydantic封装错误错按PublicationContractError捕获，
+先发现后改窄异常、尚无部分输出；通过已冻结新材料重开而非改历史。路径
+一次缺1007V1目录、猜不存在current模块/asset_contract，属于发现命令失败，
+不是产品测试失败。完整生产render/current函数已读，更新前端应新增有界
+呈现重建操作并复用事务，不伪造用户医学编辑、不重复来源采用。稳定组合
+门最终exit0/GATE_OK quality-only/6，strict283/活跃1185PASS253.65s、兼容
+子集20PASS0.65s、层级7PASS0.18s、Ruff/旧路径词法通过。末步扫描私有恢复
+树较久但实际CPU工作，不杀进程/縮范围；无源码同时写，819文件摘要绑定。
+不是全集成/医学/浏览器/发布。下一步current呈现/分享继续，Ego/中文仅阻断相应
+分支。全套原始证据私有，Git摘要/指针；保留五用户修改与历史FAIL，未清理。

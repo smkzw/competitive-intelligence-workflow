@@ -4,6 +4,12 @@
 
 ## 1007V1 当前增量合同
 
+四篇确切材料的独立分类回执只覆盖同一candidate digest中的角色、研究绑定和
+获取处置。只有生产重算digest及原始资产hash一致才能有界采用；复核命令
+不可用须明确由owner补计算，不能伪称独立工具通过。typed PublicationRecord
+叶记录不等于SourceRecord持久化、完整ResearchPackage、数值医学接受或补件
+门。来源querytranslation与实际路径逐字保留，检出零不宣称不存在全文。
+
 官方jRCT公开附件复用既有PDF同字节见证/CAS，限定HTTPS精确域名与
 `/reports/file-download/[0-9]{1,20}`；其他域名仍要求PDF路径。不得保留网页
 会话安全字段，禁止query/userinfo/port/fragment/跳转；实际响应仍须200、

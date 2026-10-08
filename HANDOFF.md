@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交1b46cf8fd6ba0286509050ef30b82f13b94b23af；实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-jrct-document-v1.json)。
+本批父提交2fd2cb402a6717ce0c8c7c727f8296ec48efb112；实际HEAD以Git核对。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-verdict-material-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,18 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- 四确切论文材料fresh独立挑战已终态，实际CodeBuddy/deepseek-v4.1-flash，
+  max CLI响应effort未证明，305.776s/58calls/no fallback。命令实际拒绝，
+  不能称独立hash通过。Owner补四生产digest/16pin/六路径；四typed分类叶
+  有界采用，四改题名借旧digest拒绝。3主要/1关键长期，2正文已取/2补件
+  待取；没有SourceRecord/完整包/门/current/数值医学采用。
+- 一次组合稳定quality-only/6门终态：Ruff/strict283/活跃1185PASS253.65s/
+  兼容子集20/分层7/旧路径词法通过，819输入文件摘要已绑定，不是医学/
+  全集成/浏览器/发布通过。现有current纯呈现
+  重建节点已初始化/preflight，尚未派发；不伪造临床保存来更新前端。
+
+## 上一官方附件单元（2fd2cb4，已push核远端）
 
 - jRCT官方数字附件路径接通既有同字节PDF见证，不新建下载/来源平台。
   E03 native deepseek-v4.1-flash/max CLI（响应effort未证明）148.03s/no fallback。
@@ -43,9 +55,9 @@ Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复�
 
 ## 下一有界任务与仍未完成
 
-把实际已核研究、来源、角色和获取回执组成确切分类候选；新候选digest必须
-由真正读取其材料的独立上下文核验，不借旧审阅签新摘要，不虚构宇宙闭包。
-保留日本登记未知、原剂量身份及原生勘误。再接既有研究快照一次性补件门。
+四确切材料新digest已审；只关分类叶，不虚构宇宙闭包或完整补件门。保留
+日本登记未知、原剂量身份及原生勘误。组合质量门已完成，接着实现/验证纯呈现
+current重建和同源分享；同currentABC/一次性补件及完整宇宙仍待实际闭合。
 并行继续共同当前ABC/配置/分享任务，不因全来源未齐永久停前端，不回逐症状
 全页三路循环。新的默认导航仍需同current重建及实际浏览器旅程，不拼旧r4。
 
@@ -60,6 +72,7 @@ fresh-install/恢复/RC仍开放。历史DB期待74330a…实际a1094f…原因�
 [上一导航接手原件](packets/2026-09-22-sol-delivery/archive/1007-navigation-6ef0aaf/HANDOFF.md)
 与6ef0aaf根HANDOFF逐字SHA一致，原历史入口保留其中。
 [导航清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-navigation-v1.json)、
+[官方附件清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-jrct-document-v1.json)、
 [论文入口边界清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-boundary-v1.json)、
 [论文角色/恢复清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-scope-v1.json)、
 [来源问题/r4清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-projection-v1.json)

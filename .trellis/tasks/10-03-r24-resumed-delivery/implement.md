@@ -1,5 +1,25 @@
 # Continuous implementation checkpoint
 
+## 1007V1 确切论文材料挑战（parent2fd2cb4，终态/有界采用）
+
+采用 conference：四篇当前分类/获取/已核身份的新digest有实质解释边界，
+旧角色审阅不能签新材料。Owner冻结实际源/获取回执，四无review字段候选
+经生产分类入口都拒绝；C03 fresh只挑战同四原文/材料，不读旧private reasoning，
+不重做正文医学提取/全页审阅、不造closed包。只读来源hash与生产digest重算；
+终态前不写accepted，原body/Japan/缺ID/余宇宙边界保留。
+C03实际CodeBuddy/deepseek-v4.1-flash/max CLI响应effort未证明，305.776s/
+58calls、exit0无回退。Read/Grep可用，但Bash/Monitor/DeferExecute实际拒绝，
+native permission_denials空不能冒充工具无拒绝。原报告保留，四项内容认可
+明确以owner重算为条件；owner四生产digest/16源pin/六显式资产路径逐一核验，
+四条typed PublicationRecord通过，四次改题名借旧reviewdigest均拒绝。
+只采用四条分类/获取叶记录，不写SourceRecord/ResearchPackage/DB/门/current，
+不接受正文医学数值、全宇宙或历史可得性。All Fields零查询不推导DOI域等价
+或没有正文；同hash不同项目路径显式记录，38865146只是父背景。Goal ACTIVE。
+一次组合稳定宽门exit0/GATE_OK quality-only/6：Ruff/strict283/1185PASS
+253.65s/兼容子集20/层级7/旧路径词法；819源/测试/tools摘要绑定当前清单，
+不是全集成/医学/视觉/发布。随后继续current呈现重建，不造
+用户事实修改。当前指向STATUS/owner-verdict-material-v1.json。
+
 ## 1007V1 官方 jRCT 附件接通（2026-10-08，连续实施）
 
 采用 execution：单一有界 URL 合同/反例修改可与 owner 原始附件采集并行，共享
