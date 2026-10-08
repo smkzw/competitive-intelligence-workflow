@@ -1,7 +1,19 @@
 # Continuous implementation checkpoint
 
-Current authority STATUS/owner-publication-boundary-v1.json and EOF terminal
-record, parent6ef0aaf. Earlier 'Current owner unit' headings below are chronological
+## 1007V1 官方 jRCT 附件接通（2026-10-08，连续实施）
+
+采用 execution：单一有界 URL 合同/反例修改可与 owner 原始附件采集并行，共享
+科学身份与最终接受仍由 owner 管理；不派重复全页会商。官方公开登记按钮实际
+指向数字下载路径，200/PDF/605050字节；HTML含会话安全字段，未入文件或日志。
+E03 只改既有 witness URL 验证与新反例测试，owner 只写专属私有CAS/来源候选。
+当前获取不回溯历史，无登记页 token 留存，不造完整研究包或 RC。
+终态：E03 native deepseek-v4.1-flash/max请求未attest，148.03s/26calls无拒绝
+或回退；16RED+17positive→73GREEN，owner129相关PASS11.67s/Ruff2/strict2。
+真实605050原PDF同字节见证/17SourceCapture/4引用重放，科学采用0，首次
+未知；无snapshot/current/门。Ego12仍NOT_FOUND，无替代浏览器/实屏PASS。
+
+Current authority STATUS/owner-jrct-document-v1.json and top terminal
+record, parent1b46cf8. Earlier 'Current owner unit' headings below are chronological
 history, not active jobs or current acceptance. Goal ACTIVE; no pause/RC.
 
 ## Current owner unit: publication link scope, parent929399f

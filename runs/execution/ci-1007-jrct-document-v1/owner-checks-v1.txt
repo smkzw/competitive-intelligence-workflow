@@ -1,0 +1,11 @@
+Owner terminal verification; no source or publication acceptance implied.
+uv run pytest -q tests/integration/test_1007_jrct_pdf_availability.py tests/integration/test_r24_public_pdf_availability.py tests/integration/test_r24_public_pdf_current_ingestion.py tests/integration/test_1007_publication_instance_boundary.py tests/integration/test_v13_publication_gate.py tests/contract/test_v13_intake_package.py tests/integration/test_research_package_submission.py tests/integration/test_multi_report_product_run.py tests/integration/sources/test_1007_publication_link_scope.py tests/integration/sources/test_1007_real_pn_publication_roles.py
+129 passed in 11.67s; no skipped. Exit 0.
+uv run ruff check src/ci_workflow/sources/connectors/public_pdf_availability.py tests/integration/test_1007_jrct_pdf_availability.py
+All checks passed! Exit 0.
+uv run mypy --strict src/ci_workflow/sources/connectors/public_pdf_availability.py tests/integration/test_1007_jrct_pdf_availability.py
+Success: no issues found in 2 source files. Exit 0.
+Actual official native PDF GET and verify: 605050 original bytes, b48e1f76ff233dbc83c7b9a53545cb86783ecf52de2312e5c506a36e206bab7f. Public current witness 2026-10-08T01:15:51.089566Z; exact raw/receipt reopened. 17 page-scoped captures, four literal quote replays; earlier 2025 cutoff structurally refused. Not a complete protocol/SAP, registry identity adoption or historical source proof.
+ego-browser nodejs -e 'const task = await taskSpace(12); console.log({spaceId:task.spaceId,pages:await task.pages()});'
+Exit 1: task space not found: 12. No replacement/new task space or visual PASS.
+Broad gate: NOT_RUN this root unit; final release matrices remain open.

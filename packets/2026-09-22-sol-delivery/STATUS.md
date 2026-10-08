@@ -1,11 +1,23 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9；实际HEAD以Git核对。
+本批父提交1b46cf8fd6ba0286509050ef30b82f13b94b23af；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-publication-boundary-v1.json)，
+[当前机器清单](evidence/1007V1/owner-jrct-document-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+论文入口边界1b46cf8已push核远端。本批接通官方jRCT数字附件路径的既有
+PDF witness；E03 native init/result deepseek-v4.1-flash、max请求/effort未证明，
+148.03s/no fallback/26calls无拒绝。16RED+17positive→73PASS；owner合并论文/
+包/补件/原生回放10相关文件129PASS11.67s无SKIP，Ruff2/strict2。
+真实原始PDF605050字节/17物理页同hash再GET见证，17SourceCapture/4原文
+重放，首次日期未知/历史不可回溯；方案摘要不等于完整方案/SAP，科学采用0。
+登记网页安全字段不保存，研究关联仍待核，不强配PMID38629497。Ego12重新
+观察仍NOT_FOUND，不私换space/profile/browser。无新current/包/gate/实屏，
+宽门在下个合并稳定里程碑一次运行，不把上一门当当前产品验收。
+
+以下既有单元各自按源码/材料清单成立，不是本候选的合并发布结论。
 
 导航单元6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9已push并核远端。
 有界代码节点ci-1007-publication-boundary-v1已终态：native init/result证实
@@ -24,6 +36,7 @@ PMC11840645网页实际reCAPTCHA，无绕过/正文，旧metadata-only回执保�
 
 | 单元 | 当前实际证据 | 仍未接受 |
 |---|---|---|
+| 官方jRCT公开附件 | 生产捕获/复核相同605050 PDF字节、17分页派生、当前获取见证及4引用重提取；成族+邻接129PASS11.67s | 非完整方案/SAP/历史证明；关联、医学采用、门户/current及实屏仍未接受 |
 | 论文/包实际字段边界 | 单节点终态与owner补同族，原复制及混合字典均拒绝；最终56相关PASS11.46s/无SKIP、Ruff4/strict4 | 合成生产链不是真实临床包；源码/候选hash绑定当前清单，宽门/真实门/全交付另验 |
 | 横比默认入口 | 一族5FAIL/1PASS0.25s→6PASS0.25s；147邻接PASS7.29s；真实普通A/B载荷连同原源校验4PASS31.34s无SKIP；最终150PASS38.33s，一次稳定quality-only/6终态通过 | 未改科学条件或减少事实；Node非浏览器，旧候选未覆写，新前端尚无实屏/current分享接受；精确绑定见当前清单 |
 | 本批论文执行/独立挑战 | E08实际modelUsageGrok4.7-build/highCLI690.675s；新C03实际init/resultmodelUsageflash/maxCLI367.064s+同会话103.551s，九摘要补读EOF545 | reviewer命令工具拒绝，hash/JSON未执行；owner另核70引用/6关系/13ID/9原生记录等值；不是正文/数字接受 |

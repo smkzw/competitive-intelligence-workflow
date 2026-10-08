@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9；实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-boundary-v1.json)。
+本批父提交1b46cf8fd6ba0286509050ef30b82f13b94b23af；实际HEAD以Git核对。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-jrct-document-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,17 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- jRCT官方数字附件路径接通既有同字节PDF见证，不新建下载/来源平台。
+  E03 native deepseek-v4.1-flash/max CLI（响应effort未证明）148.03s/no fallback。
+  成族16RED/17positive→73PASS；owner合并此前论文门相关10文件129PASS11.67s，
+  Ruff2/strict2，无SKIP；本有界根因未重复宽门，旧宽门不覆盖新代码。
+- 实际官方GET保留605050原PDF字节、17物理页、获取/CAS回执；生产见证
+  再GET同hash b48e1f76…，17SourceCapture/4逐字quote重放。仅方案摘要，不是
+  完整方案/SAP；首次公开未知、早于获取的历史不可用，采用科学事实0。
+  登记页含安全字段未保存，关联研究不凭相似度接受。Ego12重检仍NOT_FOUND。
+
+## 上一已提交后端单元（1b46cf8，已push核远端）
 
 - E03有限代码节点终态，实际native init/result modelUsage为CodeBuddy
   deepseek-v4.1-flash，CLI请求max、响应effort未证明；296.566s/no fallback，
@@ -49,6 +60,7 @@ fresh-install/恢复/RC仍开放。历史DB期待74330a…实际a1094f…原因�
 [上一导航接手原件](packets/2026-09-22-sol-delivery/archive/1007-navigation-6ef0aaf/HANDOFF.md)
 与6ef0aaf根HANDOFF逐字SHA一致，原历史入口保留其中。
 [导航清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-navigation-v1.json)、
+[论文入口边界清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-boundary-v1.json)、
 [论文角色/恢复清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-scope-v1.json)、
 [来源问题/r4清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-projection-v1.json)
 分别只对当时固定源码/材料/产物成立。

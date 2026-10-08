@@ -1124,3 +1124,34 @@ GoalACTIVE无暂停，五用户变化/unknown/唯一恢复证据及历史FAIL保
 零接触、无清理。接下来冻结实际分类/获取材料并有界独立核验新digest，
 再接既有科学包/快照门，不冒造closed或借旧审阅签新payload。其他就绪
 currentABC/前端旅程继续；Ego/中文/原附件只阻断相应分支。
+
+## 官方jRCT原始附件与既有见证接通，parent1b46cf8
+
+主人翁复盘：不是重复全页审阅，而是补当前来源缺口中可安全独立推进的
+一个实际能力。公开登记页native GET成功，但含会话安全字段，未保存HTML、
+token/headers或用其伪造可重放注册快照；观察真实按钮的公开数字下载URL。
+直接无Cookie/凭据/重定向GET返回605050 PDF字节，SHA b48e1f76…；CAS保留
+原件，既有pypdf物理分页17页全部owner读到EOF。它是方案摘要，不是完整
+方案/SAP；物理第12页印刷11、后续错位不能把印刷号当证据页码。
+
+任务采用execution：E03有界URL合同可与owner原始来源工作并行，共享身份
+和科学采用仍单owner，不增加椅子/全页循环。节点实际init/resultModelUsage
+CodeBuddy deepseek-v4.1-flash，max CLI/响应effort未证明，148.03s无fallback、
+26tools无拒绝。16RED/17positive0.20s→73PASS0.83s，测试protocol类型标注
+一次修正后同批重跑；不为format旧基线改变全仓风格。owner完整读diff/test/
+report/native，并将此前论文/包/门/原生回放合并10文件129PASS11.67s，无SKIP，
+Ruff2/strict2。未每次小改跑宽门，上一次宽门不覆盖本次新源码。
+
+真实生产witness再GET相同原件，获取2026-10-08T01:15:51.089566Z，回执818e41…
+可重开；17实际SourceCapture保留首次/发表/生效未知，2025截止拒绝，四引用
+逐字重提取。无新的科学事实/关联研究采用、current、ResearchPackage或补件
+门。旧43研究不因名字/相似人群新增/猜配日本研究，也不强配38629497。
+Ego实际12仍NOT_FOUND，不新建空间/换浏览器，四宽实屏NOT_RUN。
+
+踩坑：guard subcommand一次误用init被CLI拒绝后按help改init-execution，无
+错误dispatch；两个多文件apply_patch因猜标题原子失败后查当前标题再修，
+未产生半份权威；路径猜测遇不存在后改rg发现，不能把命令失败当测试失败。
+原文只在受控私有CAS，Git只精简指针/回执，新增体积约一个605KB原件而非
+再次复制大站点；唯一恢复资料、五用户修改、unknown与历史FAIL不删除。
+接下来冻确切论文分类/获取材料有界独立挑战，再继续同currentABC旅程，
+来源未闭不假组包、旧PASS不拼RC，Goal保持ACTIVE。

@@ -4,14 +4,16 @@ One full public GET proves only that the pinned exact bytes were publicly
 retrievable at the observation instant; it is never evidence of first
 publication, posting, effective or historical availability, and it never
 rewrites a source-version identity. Hosts are restricted to the official
-clinicaltrials.gov and explicitly supported company document hosts; this adapter
-limit is not a global product policy and other channels remain open. No credentials,
-cookies, query URLs, implicit retries or unofficial redirects are used; failures stay scoped.
+clinicaltrials.gov and explicitly supported company document hosts, plus the
+exact jRCT numeric file-download path; this adapter limit is not a global
+product policy and other channels remain open. No credentials, cookies, query
+URLs, implicit retries or unofficial redirects are used; failures stay scoped.
 """
 
 from __future__ import annotations
 
 import hashlib
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -30,6 +32,8 @@ OFFICIAL_PDF_HOSTS = frozenset({
     "cdn.clinicaltrials.gov", "clinicaltrials.gov", "www.sanofi.cn", "www.sanofi.com",
     "www.accessdata.fda.gov", "www.galderma.com",
 })
+JRCT_DOCUMENT_HOST = "jrct.mhlw.go.jp"
+JRCT_FILE_DOWNLOAD_PATH = re.compile(r"/reports/file-download/[0-9]{1,20}")
 PdfAvailabilityStatus = Literal[
     "available", "unavailable", "access_denied", "network_error", "mismatch",
     "invalid_response",
@@ -54,7 +58,8 @@ def _utc_instant(value: datetime) -> datetime:
 
 def _require_official_pdf_url(url: str) -> None:
     parts = urlsplit(url)
-    if parts.scheme != "https" or parts.hostname not in OFFICIAL_PDF_HOSTS:
+    admitted_host = parts.hostname in OFFICIAL_PDF_HOSTS or parts.hostname == JRCT_DOCUMENT_HOST
+    if parts.scheme != "https" or not admitted_host:
         raise PublicPdfAvailabilityError("仅支持明确接通的官方文档域名的公开 HTTPS 附件")
     if parts.username is not None or parts.password is not None:
         raise PublicPdfAvailabilityError("官方附件 URL 不得包含用户凭据")
@@ -66,8 +71,12 @@ def _require_official_pdf_url(url: str) -> None:
         raise PublicPdfAvailabilityError("官方附件 URL 不得包含显式端口")
     if parts.query or parts.fragment:
         raise PublicPdfAvailabilityError("官方附件 URL 必须是精确路径，不含查询或片段")
-    if not parts.path.lower().endswith(".pdf"):
-        raise PublicPdfAvailabilityError("官方附件 URL 必须指向 PDF 附件路径")
+    if parts.hostname == JRCT_DOCUMENT_HOST:
+        admitted_path = JRCT_FILE_DOWNLOAD_PATH.fullmatch(parts.path) is not None
+    else:
+        admitted_path = parts.path.lower().endswith(".pdf")
+    if not admitted_path:
+        raise PublicPdfAvailabilityError("官方附件 URL 必须指向 PDF 附件或精确的 jRCT 数字下载路径")
 
 
 def _require_cas_binding(blob: ContentBlob) -> None:
