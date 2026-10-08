@@ -48,6 +48,33 @@
   }
   window.__KZ_READING_ISOLATION__ = window.__KZ_READING_ISOLATION__ || createReadingIsolation();
 
+  // Choose a useful initial task, not a drug ranking or numeric eligibility.
+  // Keep every unresolved question reachable and never alter source columns.
+  function createComparisonQuestionOrder() {
+    return { questionIds: function (columns) {
+      var questions = Object.create(null);
+      columns.forEach(function (column) {
+        var id = column.question_id;
+        if (!questions[id]) questions[id] = { known: true, studies: new Set() };
+        var question = questions[id];
+        question.known = question.known && column.question_known === true;
+        Object.keys(column.cells || {}).forEach(function (study) {
+          if (study !== "study-identity-unresolved" && column.cells[study].length) {
+            question.studies.add(study);
+          }
+        });
+      });
+      function priority(id) {
+        var question = questions[id];
+        return !question.known ? 2 : question.studies.size >= 2 ? 0 : 1;
+      }
+      return Object.keys(questions).sort(function (left, right) {
+        return priority(left) - priority(right) || (left < right ? -1 : left > right ? 1 : 0);
+      });
+    } };
+  }
+  window.__COMPARISON_QUERY__ = createComparisonQuestionOrder();
+
   var searchInput = document.getElementById("global-search-input");
   var searchResults = document.getElementById("global-search-results");
   var searchIndex = window.__SEARCH_INDEX__ || [];
@@ -1432,7 +1459,7 @@
     if (!keysValid || !requireKnown || !query.cmp_page) return keysValid;
     var workspace = report === "A" ? window.__A_COMPARISON_WORKSPACE__ : window.__B_COMPARISON_WORKSPACE__;
     if (!workspace) return false;
-    var questions = Array.from(new Set(workspace.columns.map(function (column) {return column.question_id;}))).sort();
+    var questions = window.__COMPARISON_QUERY__.questionIds(workspace.columns);
     var chosen = query.cmp ? query.cmp[0] : questions[0];
     var count = workspace.columns.filter(function (column) {return column.question_id === chosen;}).length;
     return Number(query.cmp_page[0]) <= Math.max(1, Math.ceil(count / 4));

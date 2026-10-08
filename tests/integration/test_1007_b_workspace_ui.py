@@ -10,6 +10,7 @@ def test_production_matrix_keeps_shared_cells_clear_states_and_all_facets() -> N
     probe = r"""
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(process.argv[1],'utf8');
+const common=fs.readFileSync(process.argv[2],'utf8');
 const start=source.indexOf('  function renderComparisonWorkspace(');
 const end=source.indexOf('\n  function ',start+5);
 assert.ok(start>=0&&end>start);
@@ -33,8 +34,10 @@ Object.keys(rows).forEach(id=>rows[id].row_id=id);
 const workspace={study_ids:['trial-a','trial-b','trial-c','trial-no-results'],
  study_labels:{'trial-a':'PRIME｜NCT04202679','trial-b':'ARCADIA｜NCT04501666'},
  membership:{row_ids:['a','b','c']},columns:Array.from({length:9},(_,i)=>({
-  id:'column-'+i,question_id:'efficacy::easi75',question_label:'EASI75',title:'临床条件'+i,
+  id:'column-'+i,question_id:'efficacy::easi75',question_known:true,question_label:'EASI75',title:'临床条件'+i,
   cells:{'trial-a':['a'],'trial-b':['b'],'trial-c':['c']}}))};
+workspace.columns.push({id:'unknown-column',question_id:'aa-unknown',question_known:false,
+ question_label:'问题待核',title:'问题待核',cells:{'trial-c':['c']}});
 let state={},url='https://example.test/overview.html?view=comparison',currentGroups=[];
 const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:rows,searchById:{},
  fullChartGroups:workspace.columns.map(c=>({scientific_group_id:c.id,rows:Object.values(rows)})),
@@ -46,8 +49,16 @@ const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:row
  document:{getElementById(){return host;},createElement(){return new Node();}},
  matches(id,current){return !current.trial||rows[id].trial_id===current.trial;},
  selectedState(){return state;}};
+const orderStart=common.indexOf('  function createComparisonQuestionOrder(');
+const orderEnd=common.indexOf('\n  window.__COMPARISON_QUERY__',orderStart);
+if(orderStart>=0){
+ vm.runInNewContext(common.slice(orderStart,orderEnd),sandbox);
+ sandbox.window.__COMPARISON_QUERY__=sandbox.createComparisonQuestionOrder();
+}
 vm.runInNewContext(source.slice(start,end),sandbox);
 sandbox.renderComparisonWorkspace({});
+assert.equal(lookup['[data-comparison-column]'].value,'efficacy::easi75');
+assert.equal(lookup['[data-comparison-column]'].options.length,2);
 assert.equal(host.hidden,false);assert.equal(lookup.tbody.children.length,4);
 assert.equal(lookup.thead.children[0].children.length,5); // four columns plus study
 function text(node){return [node.textContent||'',...node.children.map(text)].join('|');}
@@ -87,6 +98,10 @@ assert.match(text(lookup.tbody),/PPS，24周/);
 state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
 assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].rows[0].row_id,'b');
 assert.match(lookup['[data-comparison-status]'].textContent,/1个科学条件分面/);
+lookup['[data-comparison-column]'].value='aa-unknown';
+lookup['[data-comparison-column]'].listeners.change();
+assert.equal(new URL(url).searchParams.get('cmp'),'aa-unknown'); // keep unresolved access
 """
-    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    result = subprocess.run(["node", "-e", probe, str(script), str(script.parent / "portal.js")],
+                            capture_output=True, text=True)
     assert result.returncode == 0, result.stderr

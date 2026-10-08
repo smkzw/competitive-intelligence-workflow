@@ -2304,3 +2304,25 @@ conference preflight0/live dispatched, currently PENDING until terminal receipt.
 Frozen source bytes under review are not edited. Source-bound Chinese display
 projection is a separate bounded unit; shared oMLX gate chooses actual translator,
 one lease per request with keepalive/release. Its output is candidate, not review.
+
+# 1007V1 current navigation unit, parent187953b (2026-10-08)
+
+Current authority STATUS/owner-question-navigation-v1.json supersedes historical
+PENDING above; completed paper E08/C03 are recorded in187953b, not active PIDs.
+Mode: direct owner because shared A/B/config query ordering is deterministic,
+read-only and a single-write-owner contract; extra producers or whole-page panels
+would add no decisive evidence. Source interpretation has its separate bounded
+independent review, not a new visual acceptance.
+
+One root family5FAIL/1PASS0.25s ->6PASS0.25s. Single common portal.js owner picks
+known real multi-study question before unknown, retaining every ID and explicit
+saved choices. A/B selector and implicit page validation share it. Science rows,
+facets and eligibility are untouched; module load order verified A/B shared
+portal first. Mechanical author-to-mirror sync changes only3JS+manifest.
+147neighborsPASS7.29s;4fixed real source/ordinary A/B reopeningPASS31.34s; final
+batch150PASS38.33s/noSKIP. No source/candidate/current rewrite or hypothetical
+medical edit. One stable wide gate, exact result/hash in machine manifest;
+Node is not Ego/browser/geometry/keyboard/share/RC evidence. Five user changes,
+unknown files and unique private recovery sources retained, no general cleanup.
+Goal remains ACTIVE; next bounded unit exact publication snapshot/manual gate
+and remaining current ABC chain, not pause or historical complete claims.

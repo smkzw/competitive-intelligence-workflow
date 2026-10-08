@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交929399f798f2d9ec7737530cb517872d4fb7a90e；实际HEAD以Git核对。
-[本批机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-scope-v1.json)。
+本批父提交187953b40a87c153eefb5c40aeda024bb4eab373；实际HEAD以Git核对。
+[本批机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-navigation-v1.json)。
 Goal ACTIVE；1007V1用户裁决高于旧规格。原01–06/reference/cases.json仍缺，
 不冒造专家编号。唯一英文工程；旧中文根零接触，五用户修改及历史保留。
 
@@ -15,6 +15,16 @@ Goal ACTIVE；1007V1用户裁决高于旧规格。原01–06/reference/cases.jso
 Trellis活动任务为10-03-r24-resumed-delivery，不另开产品权威。
 
 ## 本批实际完成
+
+- A/B“全研究横比”默认先选明确已知且真正覆盖多个研究的问题，而不是
+  内部编号最小的未解项；未解/旧项仍全可选，用户保存的选择不被覆盖。
+  共同portal.js函数同时服务选择器和配置页码校验，原列/科学分面/事实不改。
+  5RED/1PASS→6GREEN，147邻接及4固定真实源重开PASS，无SKIP；最终批与
+  一次质量宽门结果见当前机器清单，Node不能充四宽/键盘/审美验收。
+- 三作者JS→镜像/hash机械同步，未添加CSS覆盖或改变字体/布局/动效；旧
+  门户、来源及r4分享未覆写，不把历史保存/分享盖成新前端同current接受。
+
+## 上一187953b论文单元（非新前端接受）
 
 - 九原始PubMed摘要：E08实际Grok4.7-build/highCLI，C03实际CodeBuddy flash/
   maxCLI新上下文挑战，同会话补读长行后EOF545；owner核70引文/6关系/13ID/
@@ -65,6 +75,9 @@ Ego Lite space12 NOT_FOUND、中文翻译容量HTTP507、原附件缺失各Ask�
 期待74330a…实际a1094f…的FAIL原因未明，禁止改旧hash或称恢复通过。
 
 ## 历史入口
+
+上一论文角色/真实恢复：[机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-scope-v1.json)
+及187953b根HANDOFF，原70引文/6关系/13ID/12获取尝试均固定历史范围。
 
 上一问题投影/current操作/分享：[机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-projection-v1.json)
 及929399f的根HANDOFF，仅对当时固定源码/产物范围成立。

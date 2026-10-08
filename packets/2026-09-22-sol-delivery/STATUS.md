@@ -1,14 +1,15 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交929399f798f2d9ec7737530cb517872d4fb7a90e；实际HEAD以Git核对。
+本批父提交187953b40a87c153eefb5c40aeda024bb4eab373；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-publication-scope-v1.json)，
+[当前机器清单](evidence/1007V1/owner-question-navigation-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
 
 | 单元 | 当前实际证据 | 仍未接受 |
 |---|---|---|
+| 横比默认入口 | 一族5FAIL/1PASS0.25s→6PASS0.25s；147邻接PASS7.29s；真实普通A/B载荷连同原源校验4PASS31.34s无SKIP；最终150PASS38.33s，一次稳定quality-only/6终态通过 | 未改科学条件或减少事实；Node非浏览器，旧候选未覆写，新前端尚无实屏/current分享接受；精确绑定见当前清单 |
 | 本批论文执行/独立挑战 | E08实际modelUsageGrok4.7-build/highCLI690.675s；新C03实际init/resultmodelUsageflash/maxCLI367.064s+同会话103.551s，九摘要补读EOF545 | reviewer命令工具拒绝，hash/JSON未执行；owner另核70引用/6关系/13ID/9原生记录等值；不是正文/数字接受 |
 | 有界论文采用 | 7必需结果类、1可保留方法学、1原生勘误；索引/导入ID分开，原提案/源/首报告保留 | 未创建正式PublicationRecord，缺登记号与日本主/延长期身份不强配；更正内容未知，六类合同不扩本体 |
 | 结果关联生产根因 | 8FAIL/5PASS0.34s→97PASS0.59s→171邻接PASS2.14s无SKIP；真实LTE只候选关联NCT04204616，导入NCT03181503另列；B母研究保持 | 一项RED是新字段未实现时schema拒绝而非独立绑定缺陷；规则仍不是正式科学接受。量表二次论文不推荐主要报告，原研究/源不删 |
@@ -56,6 +57,19 @@ strict src/tools283、活跃1185PASS265.37s、兼容20PASS0.56s、层级7PASS0.1
 v1回执误填未来UTC00:00隔离不接受；v2真实时钟22:20:19+00重建，旧字节不改。
 
 ## 下一步
+
+当前稳定导航一次宽门终态exit0：Ruff src/tests/tools，strict src/tools283，
+活跃1185PASS262.32s、保留兼容20PASS0.62s、层级7PASS0.19s、旧路径词法
+PASS。是quality-only/6，非全集成/历史恢复/科学/浏览器/安装/发布。源和JS
+在该门期间保持不变，raw stdout保留本地不可变，Git存摘要/校验指针。
+
+本批默认导航共用单一portal.js函数，A/B选择器和保存配置默认页码校验一致；
+明确已知多研究→其他已知→未解的任务顺序不改变药物排名/数值资格。未知
+研究占位不计多研究、显式保存选择不被默认替换。三作者JS→镜像/hash机械
+同步，CSS/布局/动效未改。原附件/Ego/中文Ask未答，不重复询问或私换配置。
+上一论文单元的实际12恢复尝试/有界角色判断继续有效，原件与清单保留在
+[owner-publication-scope-v1.json](evidence/1007V1/owner-publication-scope-v1.json)；
+不是当前前端或同current全旅程接受。
 
 本批论文关联稳定字节质量门v1实际GATE_OK quality-only/6：Ruff src/tests/tools，
 strict src/tools283、活跃1185PASS267.23s、兼容20PASS0.65s、层级7PASS0.20s、

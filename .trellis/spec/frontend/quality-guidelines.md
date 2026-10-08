@@ -14,6 +14,12 @@ pending review is not PASS.
 
 ## Current frontend checks
 
+Default comparison selection and saved-query page validation share portal.js's
+single question-order owner. Known multi-study questions precede unresolved
+ones; explicit valid saved choices and the complete inventory remain intact.
+Count real, nonempty study cells, not unresolved identity placeholders. Test
+ordinary A/B payloads and negative/legacy cases without editing historical sites.
+
 `tests/integration/test_r24_kangzhe_shared_desktop.py` verifies ordinary A/B/C
 packaging and executes production JS presentation in Node without a browser.
 It does not prove appearance. Keep shared interaction/report regressions;

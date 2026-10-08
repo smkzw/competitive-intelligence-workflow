@@ -20,6 +20,8 @@ const button={getAttribute(k){return k==='data-filter-value'?'product-a':null;}}
 const group={getAttribute(){return 'product';},matches(){return false;},
  querySelectorAll(){return [button];}};
 const columns=Array.from({length:9},()=>({question_id:'easi'})).concat([{question_id:'safety'}]);
+columns.forEach(c=>{c.question_known=true;c.cells={s1:['a'],s2:['b']};});
+columns.push({question_id:'aa-unknown',question_known:false,cells:{s1:['a']}});
 const workspace={columns};
 const sandbox={report,URLSearchParams,Object,String,Number,Math,Array,Set,
  window:{location:{search:report==='C'?'?view=comparison&product=product-a':
@@ -27,6 +29,12 @@ const sandbox={report,URLSearchParams,Object,String,Number,Math,Array,Set,
  __A_COMPARISON_WORKSPACE__:workspace,__B_COMPARISON_WORKSPACE__:workspace},
  document:{querySelectorAll(){return [group];},
  getElementById(){return report==='C'?null:{};},querySelector(){return {};}}};
+const orderStart=source.indexOf('  function createComparisonQuestionOrder(');
+const orderEnd=source.indexOf('\n  window.__COMPARISON_QUERY__',orderStart);
+if(orderStart>=0){
+ vm.runInNewContext(source.slice(orderStart,orderEnd),sandbox);
+ sandbox.window.__COMPARISON_QUERY__=sandbox.createComparisonQuestionOrder();
+}
 vm.runInNewContext(source.slice(start,end),sandbox);
 const known=sandbox.knownValues(),query=sandbox.queryFromPage();
 assert.equal(query.view[0],'comparison');assert.equal(query.product[0],'product-a');
@@ -37,6 +45,8 @@ if(report!=='C'){
  assert.equal(sandbox.validQuery({cmp:['safety'],cmp_page:['3']},known,true),false);
  assert.equal(sandbox.validQuery({cmp:['missing']},known,true),false);
  assert.ok(sandbox.validQuery({cmp:['safety'],cmp_page:['1']},known,true));
+ assert.ok(sandbox.validQuery({view:['comparison'],cmp_page:['3']},known,true));
+ assert.ok(sandbox.validQuery({cmp:['aa-unknown'],cmp_page:['1']},known,true));
 }
 """
     result = subprocess.run(["node", "-e", probe, str(script), report],

@@ -10,6 +10,7 @@ def test_a_matrix_filter_paging_linked_groups_and_fact_buttons():
     probe = r"""
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(process.argv[1],'utf8');
+const common=fs.readFileSync(process.argv[2],'utf8');
 const start=source.indexOf('  function renderAComparison(');
 const end=source.indexOf('\n  window.__A_COMPARISON_EVIDENCE__',start);
 assert.ok(start>=0&&end>start);
@@ -30,9 +31,11 @@ const rows={a:{a_row_id:'source-a',trial_id:'trial-a',product_id:'drug-a',
  c:{a_row_id:'source-c',trial_id:'trial-c',product_id:'drug-c',value:null,_domain:'safety'},
  last:{a_row_id:'source-last',trial_id:'trial-c',product_id:'drug-c',value:2,_domain:'safety'}};
 Object.keys(rows).forEach(id=>rows[id].row_id=id);
-const columns=Array.from({length:9},(_,i)=>({id:'col-'+i,question_id:'easi',
+const columns=Array.from({length:9},(_,i)=>({id:'col-'+i,question_id:'easi',question_known:true,
  question_label:'EASI',title:'条件'+i,
  cells:i===0?{'trial-a':['a'],'trial-b':['b']}:i===1?{'trial-c':['c']}:i===8?{'trial-c':['last']}:{}}));
+columns.push({id:'unknown-col',question_id:'aa-unknown',question_known:false,
+ question_label:'问题待核',title:'问题待核',cells:{'trial-c':['c']}});
 const workspace={membership:{row_ids:Object.keys(rows)},
  study_ids:['trial-a','trial-b','trial-c','trial-empty'],
  study_labels:{'trial-a':'PRIME｜NCT04202679'},columns};
@@ -51,8 +54,16 @@ const sandbox={aComparisonPage:1,selected:{},
  replaceGroups(g){currentGroups=g;}}},
  document:{getElementById(){return host;},querySelector(){return summary;},
  createElement(){return new Node();}}};
+const orderStart=common.indexOf('  function createComparisonQuestionOrder(');
+const orderEnd=common.indexOf('\n  window.__COMPARISON_QUERY__',orderStart);
+if(orderStart>=0){
+ vm.runInNewContext(common.slice(orderStart,orderEnd),sandbox);
+ sandbox.window.__COMPARISON_QUERY__=sandbox.createComparisonQuestionOrder();
+}
 vm.runInNewContext(source.slice(start,end),sandbox);
 sandbox.renderAComparison();
+assert.equal(lookup['[data-a-comparison-question]'].value,'easi');
+assert.equal(lookup['[data-a-comparison-question]'].options.length,2);
 assert.equal(new URL(url).searchParams.get('cmp_page'),'1');
 assert.equal(host.hidden,false);assert.equal(summary.hidden,true);assert.equal(lookup.tbody.children.length,4);
 function text(n){return [n.textContent||'',...n.children.map(text)].join('|');}
@@ -86,6 +97,10 @@ assert.equal(currentGroups.length,2);
 assert.match(text(lookup.tbody),/FAS，48周/);assert.match(text(lookup.tbody),/PPS，24周/);
 sandbox.selected={product:['drug-b']};sandbox.renderAComparison();
 assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].scientific_group_id,'frame-b');
+lookup['[data-a-comparison-question]'].value='aa-unknown';
+lookup['[data-a-comparison-question]'].listeners.change();
+assert.equal(new URL(url).searchParams.get('cmp'),'aa-unknown'); // unresolved still reachable
 """
-    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    result = subprocess.run(["node", "-e", probe, str(script), str(script.parent / "portal.js")],
+                            capture_output=True, text=True)
     assert result.returncode == 0, result.stderr

@@ -43,7 +43,7 @@
       if (!questions[column.question_id]) questions[column.question_id] = {label: column.question_label, columns: []};
       questions[column.question_id].columns.push(column);
     });
-    var keys = Object.keys(questions).sort();
+    var keys = window.__COMPARISON_QUERY__.questionIds(workspace.columns);
     if (!select.options.length) {
       keys.forEach(function (key) {
         var option = document.createElement("option");
