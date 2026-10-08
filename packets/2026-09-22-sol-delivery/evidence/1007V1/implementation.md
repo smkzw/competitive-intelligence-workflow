@@ -1347,6 +1347,28 @@ native摘要一次选择过宽打印被截，改只选身份/耗时/计数/hash�
 下一有界工作为已审论文的实际源/快照/单补件接缝，不能假签宇宙closed或
 套上一叶级PASS成完整包。Ego/中文/原附件问题只阻断相应分支，GoalACTIVE
 继续，无阶段pause/oldroot/cleanup/sessionstore修改；五用户变化与历史DBFAIL保持。
+# 1007V1 固定当前版本独立安装复盘（source875c6b9）
+
+复用现有builder/verifier/bootstrap，不造新的包系统或把脏主树清成干净。
+明确英文根下自建固定提交分离工作树，包含8642已跟踪历史文件，观测3GB；
+default allowlist真正安装只398文件，包/sidecar/installer约2.5MB。构建前后
+源Git干净，manifest绑定875c6b9、新人数代码hash一致，BUNDLE_OK严格内容。
+独立uv-managed基础Python启动ZIP内可信bootstrap；399MB私有runtime，
+七依赖实际版本与导入位置、新项目ABC合同/DB验证。毒化三个Python覆盖
+变量不借开发venv，PACKAGE_OK开发候选，创建项目不等于执行研究或生成报告。
+29成批相关PASS17.49s、九归档变异及外摘要错误拒绝；没有再跑全仓。
+
+踩坑：按名称猜capability detector/hosts preflight路径两个rg找不到，仅
+发现命令失败不是产品FAIL；改读实际application/capability_preflight。
+现有自动预检会启动Playwright，用户明确Ego，故未执行预检并标NOT_RUN，
+不使用旧浏览器/override自证实机能力。build backend版本范围虽有合同，
+本次未捕获真实隔离构建版本，不称完全可复现工具链或离线首装。
+为减少磁盘，仅确认干净且可从固定commit恢复的本轮自建分离树正常
+git worktree remove（无force），回收观测3GB；保留包/安装/current源码/
+原主树/历史及未知材料、五用户hash不变。不做通用cleanup或改会话存储。
+三宿主/真实ABC旅程/Ego四宽/24/恢复/RC仍开，下一ready源限定当前旅程，
+不暂停、不把客观安装检查升级成医学/独立发布接受。
+
 # 1007V1 当前人数保存补充核验
 
 真实登记来源接缝测试的 saved_at 原沿用早于来源取得的 fixture NOW，已改为

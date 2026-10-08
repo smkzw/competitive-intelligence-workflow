@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交5dd1480a3cdb252ef64743592a02cf30b4d44244（已push核远端）；实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-sample-save-v1.json)。
+本批来源提交875c6b93c363f2de0e3c50449bf439a4a3f59721（已push核远端）；实际HEAD以Git核对。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current-install-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,12 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- 固定提交398文件HTML-only开发候选、独立bootstrap/runtime安装、毒化Python
+  环境下PACKAGE_OK及ABC空项目创建通过；29相关打包/负向检查17.49s。没有
+  模型宿主或浏览器启动，也不是医学/报告验收。现有能力预检会自动开
+  Playwright，本轮不调用替代Ego。仅清除本轮自建、确认干净可重建的3GB
+  分离工作树；398文件安装源/包/主树/未知及历史资料保留。
 
 - 样本量实际保存不再被旧阈值覆回原人数；set/0/清除/重新输入/undo/重复
   请求及非法人数拒绝走生产service/current/原生页。9RED→最终102相关PASS/

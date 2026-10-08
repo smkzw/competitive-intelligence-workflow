@@ -1,5 +1,20 @@
 # Continuous implementation checkpoint
 
+## 1007V1 当前提交的隔离安装切片（parent875c6b9，当前有界实施）
+
+采用direct：现有打包/安装器的来源与bootstrap信任链由同一owner核验，
+以固定提交只读分离工作树构建，真实独立runtime与负向摘要/字节检查关闭
+客观安装判断；不新增执行器，不把安装或能力override当三宿主/医学接受。
+保留主树五项用户修改和未知材料；仅新隔离开发候选，不安装到用户Agent
+生产目录。相关根因族一次批量，不重复全仓；大产物本地保留、Git仅摘要。
+
+终态：固定875c6b9/default398文件、BUNDLE_OK/required内容；独立bootstrap
+exit0及private Python3.13.13/七依赖导入位置实核。毒化覆盖变量仍PACKAGE_OK
+与ABC空项目创建；29相关PASS17.49s。自动能力预检会开Playwright，未调用，
+不签Ego/真实宿主/医学/24/RC。全新source工作树3GB，干净状态核后无force
+正常remove，固定commit/安装源/包可重建；不清主树未知/用户或历史资料。
+owner-current-install-v1.json记录每层范围/命令/hash/未运行，ACTIVE继续。
+
 ## 1007V1 C样本量实际保存链（parent5dd1480，当前有界实施）
 
 采用direct：source/current共享事务需单owner，沿真实生产保存/原生重建核

@@ -1,11 +1,19 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交5dd1480a3cdb252ef64743592a02cf30b4d44244（已push核远端）；实际HEAD以Git核对。
+本批来源提交875c6b93c363f2de0e3c50449bf439a4a3f59721（已push核远端）；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-c-sample-save-v1.json)，
+[当前机器清单](evidence/1007V1/owner-current-install-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+当前提交398文件HTML-only候选从干净分离工作树构建且绑定完整commit。
+独立bootstrap/private runtime实际安装成功，毒化PYTHONPATH/PYTHONHOME/
+CI_WORKFLOW_PYTHON下PACKAGE_OK及ABC空项目创建；七依赖版本/导入位置
+实核。相关打包/来源/信任链/九变异/外摘要拒绝29PASS17.49s。不调用自动
+Playwright能力预检来冒充Ego，不称三宿主/医学/四宽/24/恢复/RC通过。
+临时分离工作树自建、Git状态干净、按固定提交可恢复，正常worktree remove
+回收观测3GB；包2.5MB及安装399MB、主树/历史/未知材料保留。不是一般清理。
 
 C sample实际保存发现旧740覆回新500/0与clear恢复无轴；9RED10.68s后限定
 用户当前数值更新及当前读法，source/科学身份不改。规范值/旧threshold冲突、

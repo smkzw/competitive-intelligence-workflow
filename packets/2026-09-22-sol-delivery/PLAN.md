@@ -4,6 +4,11 @@
 
 ## 既有依赖和生产出口
 
+当前875c6b9隔离安装切片已跑：固定commit/default398文件、独立bootstrap/
+runtime、PACKAGE_OK及ABC空项目创建，29相关负向检查。只关闭开发包实机
+安装这一层；三宿主/真实ABC旅程/视觉/24/恢复仍开。新候选变化时重绑包，
+不把此前安装或能力静态声明沿用成新版本PASS，详情owner-current-install-v1。
+
 最新C sample实际保存小族：set/zero/clear/restore/undo/幂等、非法人数与
 真实源绑定接线分别验证；旧阈值不得覆回新人数，normalized-only旧当前层
 可读。当前owner-c-sample-save-v1回执准确限定102相关/静态门，不借5dd旧

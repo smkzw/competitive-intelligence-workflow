@@ -1,0 +1,73 @@
+{
+  "schema_version": "1007-current-install-1",
+  "source_commit": "875c6b93c363f2de0e3c50449bf439a4a3f59721",
+  "state": "isolated_development_install_verified_not_release",
+  "mode": "direct: fixed commit, existing builder and independently launched trusted bootstrap; objective byte/runtime checks, no clinical or independent acceptance claim",
+  "bundle": {
+    "path": ".artifacts/1007-current-install-v1/dist/ci-1007-current-875c6b9.tar.zst",
+    "sha256": "d774e5f4f867bd6d76b06ff1e870270b0afec5fe99f6fa30d06ae452a4230dbc",
+    "manifest_sha256": "afa9842e8c1bed0d7a80fae737bdc8b920f7879a2cb9f9ae59533301f6d63b6e",
+    "installer_sha256": "ae8543559725f602ba1d05e39f74ca86ecdda7e0be9c270e602f6c1d56f84843",
+    "files": 398,
+    "default_allowlist": true,
+    "source_tree_clean_before_and_after_build": true,
+    "required_content_check": "BUNDLE_OK exit0",
+    "deferred_renderers_monitoring_outputs_logs_tests_in_manifest": [],
+    "current_sample_save_code_hashes": {
+      "src/ci_workflow/application/user_fact_edit.py": "fa20a293d847a659ce1cb21aa459528393b8e3c14008cb1473f00f23b7c5010d",
+      "src/ci_workflow/renderers/portal/report_c.py": "720ad4d56784d6b4a120e24bb0c8f761d3450b053524fd7b2acbf2b830ec1e7d"
+    }
+  },
+  "commands": {
+    "create_source": "git worktree add --detach .artifacts/1007-current-install-v1/source 875c6b93c363f2de0e3c50449bf439a4a3f59721",
+    "build": "uv run python -B tools/build_bundle.py --source-root .artifacts/1007-current-install-v1/source --output .artifacts/1007-current-install-v1/dist --archive-name ci-1007-current-875c6b9.tar.zst --from-clean-commit 875c6b93c363f2de0e3c50449bf439a4a3f59721",
+    "verify": "uv run python -B tools/verify_bundle.py --bundle .artifacts/1007-current-install-v1/dist/ci-1007-current-875c6b9.tar.zst --expect-source-commit 875c6b93c363f2de0e3c50449bf439a4a3f59721 --require-final-content",
+    "bootstrap": "<uv-managed Python3.13> -I -B .artifacts/1007-current-install-v1/trusted-installer/bootstrap/install.py --bundle .artifacts/1007-current-install-v1/dist/ci-1007-current-875c6b9.tar.zst --root .artifacts/1007-current-install-v1/install --expected-digest d774e5f4f867bd6d76b06ff1e870270b0afec5fe99f6fa30d06ae452a4230dbc",
+    "installed_cli": "env PYTHONPATH=/nonexistent-poison PYTHONHOME=/nonexistent-poison CI_WORKFLOW_PYTHON=/nonexistent-poison <install>/bin/ci-workflow package verify --root <install>/shared; separate invocation project create --root <new-project> --indication <installation-only label> --reports A,B,C",
+    "note": "commands are replay templates rooted at the authorized English repository; package/creation invocations were run separately, not as an unchecked shell chain"
+  },
+  "installation": {
+    "path": ".artifacts/1007-current-install-v1/install",
+    "bootstrap_exit": 0,
+    "package_verify_exit": 0,
+    "package_verify_signal": "PACKAGE_OK version=0.1.0a0 stage=development-candidate",
+    "project_create_exit": 0,
+    "new_project": ".artifacts/1007-current-install-v1/new-project",
+    "receipt_sha256": "67b4a5f20c59805be349f0e1939aab1a4ebf5fe4b5ebb09685766a30e663a4af",
+    "project_yaml_sha256": "280e6f26b7ee4fa5451344f2ee72356a08c8faa123f23f4148c35551931fa3c0",
+    "initial_project_database_sha256": "87188b2adf408176c164c57d22e1895d1f3923c351b141710f8d25e6b31c592d",
+    "python": "3.13.13",
+    "uv": "0.11.7 (9d177269e)",
+    "dependency_versions_private_runtime_verified": {
+      "pydantic": "2.13.4", "Jinja2": "3.1.6", "pypdf": "6.15.0",
+      "pdfplumber": "0.11.10", "playwright": "1.61.0",
+      "PyYAML": "6.0.3", "jsonschema": "4.26.0"
+    },
+    "pdf_parsers_are_source_ingestion_not_pdf_delivery": true,
+    "actual_isolated_build_backend_version": "NOT_VERIFIED; range remains documented, do not claim completely reproducible toolchain",
+    "runtime_size_observed": "399M"
+  },
+  "related_checks": {
+    "command": "uv run python -m pytest tests/contract/test_bundle_packaging.py tests/contract/test_bundle_provenance.py tests/contract/test_bundle_scientific_closure.py tests/hosts/test_fresh_install_integrity.py::test_first_install_verifies_every_release_byte tests/hosts/test_fresh_install_integrity.py::test_external_digest_mismatch_does_not_create_install -q --tb=short -o tmp_path_retention_count=1000",
+    "passed": 29, "duration_seconds": 17.49, "exit_code": 0,
+    "scope": "builder/provenance/trust-root content plus nine archive mutations and wrong external digest; no model host launch or browser"
+  },
+  "cleanup": {
+    "target": ".artifacts/1007-current-install-v1/source",
+    "kind": "only owner-created redundant detached worktree",
+    "pre_remove_git_status": "clean",
+    "command": "git worktree remove <exact source path>; no --force",
+    "exit_code": 0,
+    "observed_size_before": "3.0G",
+    "recoverability": "exact committed input recoverable by create_source; bundle, installer, installed source, main checkout and historical/unknown evidence retained",
+    "general_or_user_cleanup": false
+  },
+  "protected_user_hashes_match": true,
+  "not_run": [
+    "runtime capability preflight would launch Playwright; not invoked under Ego-only contract",
+    "three actual model hosts", "Ego desktop four widths and four states",
+    "actual source-bound ABC editing/share/reopen journey", "24 portals", "historical recovery", "RC"
+  ],
+  "goal_status": "active, no phase pause",
+  "next_safe_action": "ready source-bound current journey and complete comparison paths; existing blocked browser/translation/publication branches remain explicitly open"
+}
