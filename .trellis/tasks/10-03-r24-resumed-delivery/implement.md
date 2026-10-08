@@ -1,5 +1,19 @@
 # Continuous implementation checkpoint
 
+## 1007V1 论文v4有界确认（parent8d24b42，当前实施）
+
+采用conference同会话续接：已修的severe行身份/标签和覆盖说明签在新digest
+前需有界挑战，只有原R1/R2/R3及保留性核查，不重新全文提取或全页发现。
+沿实际Pi/openai-codex/gpt-6.1-sol/high会话，不换模型、不称fresh独立轮；
+当前/数值资格/可得日期/宇宙仍不授权。120min runner终态前不轮询/重派。
+
+终态actual Pi/openai-codex/gpt-6.1-sol/high请求未attest，162.392s/14tools/
+exit0/no fallback，同session R1/R2/R3 ACCEPT_BOUNDED。118schema保留、9格/
+32唯一原文、5行指针及23叶差异实核。Owner同生产重放、原源/holding DB
+hash保持，初始检查漏locator document_role只纠输入。旧两REVISE不改；
+nominal timeout未扣前轮，actual累计800.847s<原7200，记录偏差无假预算。
+仍不提升proposal/current/数值资格，下一installed候选真实A+B链，就绪继续。
+
 ## 1007V1 当前提交的隔离安装切片（parent875c6b9，当前有界实施）
 
 采用direct：现有打包/安装器的来源与bootstrap信任链由同一owner核验，

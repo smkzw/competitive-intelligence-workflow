@@ -1,11 +1,18 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批来源提交875c6b93c363f2de0e3c50449bf439a4a3f59721（已push核远端）；实际HEAD以Git核对。
+本批父提交8d24b42（已push核远端）；安装源固定875c6b9，实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-current-install-v1.json)，
+[当前机器清单](evidence/1007V1/owner-publication-closure-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+论文v4第三定点确认终态R1/R2/R3 ACCEPT_BOUNDED：actual同Pi/gpt-6.1-sol
+session，162.392s/14tools/exit0，无回退、effort响应未attest。不是新独立
+全候选clearance。118schema/9格/32唯一引用/5指针/23叶差异及原值保留，
+owner生产重放一致，原源/holding DB不变。旧v2/v3 REVISE原样保留；没有
+把proposal改accepted、发表日期改可得或授数值资格/current。下一installed
+开发候选真实A+B链，C/四宽/24/三宿主/恢复/RC保持开放。
 
 当前提交398文件HTML-only候选从干净分离工作树构建且绑定完整commit。
 独立bootstrap/private runtime实际安装成功，毒化PYTHONPATH/PYTHONHOME/

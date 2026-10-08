@@ -6,6 +6,7 @@ Date: 2026-10-08
 |---|---|---|---|---:|---:|---:|---|
 | fresh `evidence_single_object` | Pi/openai-codex | actual gpt-6.1-sol/high requested | exit0/no fallback | 391.036s | 63 tool calls | not aggregated | REVISE v2 |
 | same-session follow-up | Pi/openai-codex | actual gpt-6.1-sol/high requested | exit0/no fallback | 247.419s | 23 tool calls | not aggregated | REVISE v3 |
+| same-session targeted confirmation | Pi/openai-codex | actual gpt-6.1-sol/high requested | exit0/no fallback | 162.392s | 14 tool calls | 181466 native reported incl cache | ACCEPT_BOUNDED R1/R2/R3 v4 only |
 
 ## Timeout And Retry Evidence
 
@@ -20,3 +21,13 @@ Pi route逐一核验均errors=[]。这是执行身份/材料完整性，不是�
 round3 prompt仅准备、NOT_RUN，不计第三复核；无第三报告或第三独立意见。
 
 Two REVISE retained. Owner-v4 conditional literal closure does not create independent ACCEPT. Native stdout hashes84a2d4ae9a1c3ed41457dcdc2a7a12a0b1b8dd9f89e929446a5b1d48ebc484ce / 3e77591d45d2d6195d5fcaf998798acf6582cb1af02b0878e06573994e98f2fb；raw runs private. Science/current/browser/universe/release remain open.
+
+## 后续实际第三确认（上述NOT_RUN为当时状态）
+
+第三prompt已补确切v4/原件/只读范围并preflight0，实际同session终态；不是
+新独立轮。162.392s，累计800.847s；本次CLI nominal7200s未扣前638.455s，
+保留预算参数偏差，实际未突破原7200s总额，不称新增总预算。内部request80
+（guard ceiling128），actual14tools，high响应effort未attest。原生模型身份
+与requested一致，stop/exit0/no fallback，guard审真实report/receipt errors=[]。
+输出SHA1cf361da…、private stdoutSHAf8bf6ffd…；只32unique affected引用与
+9格重放、118schema/保留性核验，不说全部118逐格或全部1149引用重新接受。

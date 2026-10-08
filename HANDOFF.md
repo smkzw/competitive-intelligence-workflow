@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批来源提交875c6b93c363f2de0e3c50449bf439a4a3f59721（已push核远端）；实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current-install-v1.json)。
+本批父提交8d24b42（已push核远端）；安装源固定875c6b9，实际HEAD以Git核对。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-closure-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,11 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- 原论文v4同会话定点确认R1/R2/R3已闭合，actual gpt-6.1-sol/high请求未
+  attest，162.392s/14tools/exit0/no fallback；不是新独立全候选clearance。
+  Owner重放118schema/9格/32上下文，值/状态/原件/holding保持。原两REVISE
+  保留，候选不采用；下一用已安装候选核真实源A+B当前操作链，不暂停。
 
 - 固定提交398文件HTML-only开发候选、独立bootstrap/runtime安装、毒化Python
   环境下PACKAGE_OK及ABC空项目创建通过；29相关打包/负向检查17.49s。没有

@@ -4,6 +4,10 @@ Date: 2026-10-08
 
 ## Verdict
 
+更新（parent8d24b42）：同会话定点第三确认终态ACCEPT_BOUNDED，只关闭v4
+精确digest上的R1/R2/R3。不是fresh独立全候选clearance，不授current/数值
+资格/医学发布，候选仍proposal_not_accepted。原两轮REVISE及材料保持。
+
 REVISE两轮，保留原判定；owner按第二轮明确条件关闭字面/路径问题，v4保持proposal_not_accepted，没有新digest独立ACCEPT。
 
 ## Boundary Compliance
@@ -29,3 +33,15 @@ Owner v4将LTE tr1 Any TEAE指针修至实际tr8 Any severe TEAE，9个重度标
 ## Final Decision
 
 有限source holding可用，医学fact/current adoption仍未授权/未验证；本次没有独立ACCEPT签v4，不重复无限全页会商。当前清单绑定所有材料与代码摘要，后续采用按实际风险/变化检查，不重问已锁产品决策。
+
+## 同会话第三定点确认（不改上述历史判定）
+
+162.392s/14tools/exit0/no fallback，actual Pi/openai-codex/gpt-6.1-sol，
+high请求、响应effort未attest；会话未换，guard receipt errors=[]。候选hash
+6e545087…不改；118schema、9格/32唯一上下文重放、5severe行定位、九中文
+限定及51+67数量通过；只23叶字段变化，原值/源/状态/ICE/EAIR上下文保持。
+Owner独立工具重放同样通过，初次check漏document_role导致输入ValidationError，
+仅纠正检查器输入，不当产品RED。源字节/holding checkpoint/DB原hash保留。
+第三轮是confirmatory，不是第三fresh opinion或整个118的逐格重审。当前
+机器清单owner-publication-closure-v1.json，正式采用/可得日期/宇宙/current/
+Ego/中文/发布仍开放，不绕门。

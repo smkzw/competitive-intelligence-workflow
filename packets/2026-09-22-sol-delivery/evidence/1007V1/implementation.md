@@ -1347,6 +1347,26 @@ native摘要一次选择过宽打印被截，改只选身份/耗时/计数/hash�
 下一有界工作为已审论文的实际源/快照/单补件接缝，不能假签宇宙closed或
 套上一叶级PASS成完整包。Ego/中文/原附件问题只阻断相应分支，GoalACTIVE
 继续，无阶段pause/oldroot/cleanup/sessionstore修改；五用户变化与历史DBFAIL保持。
+# 1007V1 论文v4定点会商收口（parent8d24b42）
+
+将预备generic round3改成真实冻结v4/原件及原R1/R2/R3只读范围，不再提取
+全文或审整产品。沿same actual Pi/openai-codex/gpt-6.1-sol session/high
+请求（响应effort未attest），162.392s/14tools/exit0无fallback；原模型与
+writer不同，但这轮是confirmatory，不是fresh第三clearance。新digest上
+R1/R2/R3 ACCEPT_BOUNDED；118schema、九格/32独特上下文引用/5定位/23叶
+差异与原值保留，source/holding checkpoint/DB原hash保持。Owner自重放
+同样通过，首check漏EvidenceLocator.document_role只纠输入，不修产品或
+称RED。旧两REVISE、候选proposal_not_accepted及其旧闭包meta不改。
+
+预算偏差：CLI nominal7200未扣前638.455s，actual累计800.847s未超原总额；
+记录不是新总预算。内部request80低于guard128 ceiling，14实际tools。
+只有一次native completion等待至终态，无文件/进程轮询/重派；简洁owner
+更新遵循更高优先级通信要求。Guard report摘要/模型/终态核errors=[]，
+原始stdout本地，Git只报告/精简receipt，不泄native traces。
+缺两正文/论文当前可得选择/科学采用/数值共轴/完整宇宙/中文/Ego/ABC/24/
+宿主/恢复/RC不被确认闭包替代。下一实际installed当前源A+B操作链，仍
+ACTIVE，无阶段暂停或重复全页循环。
+
 # 1007V1 固定当前版本独立安装复盘（source875c6b9）
 
 复用现有builder/verifier/bootstrap，不造新的包系统或把脏主树清成干净。

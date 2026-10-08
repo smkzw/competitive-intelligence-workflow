@@ -1,0 +1,50 @@
+{
+  "schema_version": "1007-publication-confirmatory-closure-1",
+  "parent_commit": "8d24b42",
+  "state": "three_specified_corrections_closed_proposal_not_adopted",
+  "mode": "conference same-session targeted confirmation; not fresh discovery or whole-candidate acceptance",
+  "candidate": {
+    "path": ".artifacts/1007-publication-atoms-v1/candidate-v4.json",
+    "sha256": "6e545087d448f04b49046327ee9628c5c574447337320e254e6a88a3947f1c82",
+    "state": "proposal_not_accepted",
+    "facts": 118,
+    "changed_facts_from_v3": 9,
+    "changed_leaf_fields": 23,
+    "scientific_adoption": false,
+    "current_promoted": false
+  },
+  "review": {
+    "task": "ci-1007-publication-atoms-review-v1",
+    "session": "01a11982-3005-7000-8dae-7ae2df6bcc3b",
+    "actual_agent": "pi", "actual_provider": "openai-codex", "actual_model": "gpt-6.1-sol",
+    "requested_effort": "high", "response_effort_attested": false,
+    "duration_seconds": 162.392, "observed_tool_calls": 14,
+    "exit_code": 0, "fallback": null,
+    "verdict": "ACCEPT_BOUNDED R1/R2/R3 only",
+    "report": "runs/conference/ci-1007-publication-atoms-review-v1/evidence_single_object_round3.md",
+    "report_sha256": "1cf361dac3e6459fc3b77f748e5e9d9137827a88a8bf32078c7c715730a1d1d3",
+    "prompt_sha256": "e4c9e841bcb11d285465156848b79f48c990b922558a9fbfd41fb1e959a8224a",
+    "private_stdout_sha256": "f8bf6ffd72f8c45336a62d4bf1be7cf983aa7fec2904035a0e62b8f4ce7dba9b",
+    "guard_audit_runner_receipt": [],
+    "schedule": "same healthy session retained; no route switching, runtime requested/observed agree",
+    "timeout_scope": "runner request7200s, prior two rounds638.455s; actual cumulative800.847s remains below original7200s. Nominal request not reduced to remaining6561s; retain deviation, do not claim a new total budget.",
+    "internal_turn_budget": "bounded request80, below guard participant128 ceiling; 14 actual tool calls",
+    "wait": "one runner hard wait; one native completion wait held until exit; no file/process progress polling or redispatch. Concise parent commentary follows higher-priority communication requirement.",
+    "independence": "different model from original writer, but same reviewer context; confirmatory, not fresh independent clearance"
+  },
+  "owner_replay": {
+    "production_schema": 118, "affected_cells": 9,
+    "unique_affected_context_quotes": 32,
+    "severe_lte_row_paths": 5,
+    "value_state_identity_original_quote_preservation": true,
+    "command_kind": "one grouped read-only Python production validation/re-extraction, exit0",
+    "initial_check_error": "owner locator construction omitted required document_role; exit1 validation, corrected check input only, not a product defect",
+    "source_bytes_and_holding_checkpoint_database_hashes_unchanged": true
+  },
+  "closed": ["R1 five LTE severe scope paths", "R2 nine severe labels/notes retaining unit/period", "R3 coverage51+67=118"],
+  "historical": "old v2/v3 REVISE and old reports/material hashes retained; proposal metadata not overwritten",
+  "not_accepted": ["whole-candidate numeric equivalence", "source first/effective or retrospective availability", "fulltext or universe closure", "C Chinese", "browser", "current ABC", "24/hosts/recovery/RC"],
+  "protected_user_hashes_match": true,
+  "goal_status": "active, no phase pause",
+  "next_safe_action": "exercise ready current source A/B journey through the installed candidate; C and source availability limitations remain explicit"
+}

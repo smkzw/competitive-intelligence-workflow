@@ -70,3 +70,4 @@ This packet uses one serial Codex-led conference object. Each declared role rece
 ## Loop Log
 
 - 2026-10-08 11:11:40 CST: Conference initialized by `hermes_workflow_guard.py init-conference`.
+- Later same-session targeted v4 closure completed: exact prompt round3 supersedes only the historical v2 candidate scope for that continuation. R1/R2/R3 confirmatory ACCEPT_BOUNDED, not fresh clearance/adoption. Source set and read-only boundaries unchanged; actual identity/limits in owner-publication-closure-v1.json.
