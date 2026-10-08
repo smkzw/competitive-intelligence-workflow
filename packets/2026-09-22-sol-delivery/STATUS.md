@@ -1,11 +1,33 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交eed9ebb22b766ac64a71c3f15271ccd95d49fb52；实际HEAD以Git核对。
+本批父提交51f8d1ee33feb2218f6b302b4610f207e90aee57（已push核远端）；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-publication-atoms-v1.json)，
+[当前机器清单](evidence/1007V1/owner-c-current-reading-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+最新官方API真实GET保存2978130原字节、52记录/1终页（非宇宙闭包），
+四目标源版本/36字段精确重开。PRIME/PRIME2由登记briefTitle明确文字对应
+NCT04183335/04202679，LTE由原NCT及方案号RD.06.SPR.202699对应04204616；
+三现有EntityIdentity/EntityRelation/SourceClauseRelation候选覆盖104材料，
+原118论文候选不改。导入03181503的登记PHASE2不能解开论文2a/2b表述，
+保持未知。当前查询比旧输入43多9，尚未证明同查询口径，不宣称9新试验。
+源身份库4versions/36fragments/0facts/edit/current，无新医学或数值资格。
+Owner首猜PRIME列th1实际是Efficacy endpoints，精确引用assert及时拒绝；核
+原th2后在既有幂等库重试，未改历史或重抓。Ego Lite space12实际重检仍
+NOT_FOUND。C当前阅读节点已终态：actual deepseek-v4.1-flash/max请求未attest，
+498.373s/76tools/exit0/no fallback。原生完整final被runner漏摘，保留原receipt
+及派生完整报告，不重复派发。Owner六非已报告状态6RED/11positive后一致
+阅读；原文、成员、state保持。旧B十二失败在payload guard前，按真实四块
+数据修测试环境且四负例保guard，不改生产B JS/CSS。相关事务138PASS/1
+明确排除、两原生clear/edit整页生成PASS，最终六文件97PASS6.17s，无SKIP。
+Ruff/strict和一次稳定quality-only宽门实际终态见当前清单，不拼旧门。
+工人额外批与旧Playwright路径、owner错误排除名exit130均保留，不能当Ego
+验收；后续准确排除。五用户hash、七源身份文件hash全保持。医学/currentABC/
+四宽实屏/全量闭包/离线新浏览器/24/三宿主/恢复/RC仍开放，继续就绪分支。
+
+### 51f8d1e正文原文holding（以下仅该批范围）
 
 两真实原生论文118候选/1267引用/163独特原文经生产精确定位重放，holding
 库4source versions/16日期断言/163fragments、0fact版本/0edit/0current。
@@ -23,7 +45,8 @@ PASS244.86s/兼容20PASS1.15s/层级7PASS0.18s/Ruff/旧路径词法；当时源�
 不是全集成/医学/浏览器/发布，历史数据库hash FAIL未关。
 当前论文公开获取Ask待答、两必需正文待取得、源限定研究身份/完整包/宇宙/
 同currentABC/四宽实屏/离线新浏览器/安装/24/三宿主/恢复/RC仍开放。
-下一源限定研究身份、就绪C和共同横比，不伪闭宇宙或停止其他无依赖实现。
+源限定研究身份已在新holding候选核三条；下一C当前阅读值和共同横比，不
+伪闭宇宙或停止其他无依赖实现。
 
 ### eed9ebb日期单元（以下仅原版本范围）
 

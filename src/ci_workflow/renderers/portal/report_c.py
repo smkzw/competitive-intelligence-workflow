@@ -766,15 +766,35 @@ def _page_observations(
     return tuple(item for item in selected if item.field in fields)
 
 
+def _user_current_state(observation: DesignObservation) -> bool:
+    """用户清除/用户修订：当前读法以当前状态为先，不得回填原始来源。
+
+    这两类观察的当前值来自显式当前投影（display_text）或状态标签；
+    source_text 只作为原始来源证据逐字保留，不能充当"当前值"。
+    """
+    return (
+        observation.disclosure_state is FactDisclosureState.USER_CLEARED
+        or observation.review_state is FactReviewState.USER_MODIFIED
+    )
+
+
 def _numeric_for(observation: DesignObservation) -> float | None:
-    if observation.field == "planned_or_actual_sample_size":
-        raw = observation.threshold_value or observation.source_text
-        try:
-            number = float(str(raw).replace(",", "").strip())
-            return number if math.isfinite(number) and number >= 0 and number.is_integer() else None
-        except (TypeError, ValueError):
-            return None
-    return None
+    if observation.field != "planned_or_actual_sample_size":
+        return None
+    if observation.disclosure_state not in _NUMERIC_DISCLOSED_STATES:
+        # 非已报告状态没有当前可核实数值；原始数值只留在来源证据中。
+        return None
+    raw = observation.threshold_value
+    if raw is None and observation.review_state is not FactReviewState.USER_MODIFIED:
+        # 用户修订未给出当前数值时，同样不得用原文旧值充当当前读法。
+        raw = observation.source_text
+    if raw is None:
+        return None
+    try:
+        number = float(str(raw).replace(",", "").strip())
+        return number if math.isfinite(number) and number >= 0 and number.is_integer() else None
+    except (TypeError, ValueError):
+        return None
 
 
 def _operator_zh(value: str | None) -> str:
@@ -839,6 +859,15 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
         if numeric.is_integer():
             return str(int(numeric))
         return str(numeric)
+    if _user_current_state(observation):
+        # 用户清除/用户修订且当前没有可核实数值：当前读法只来自显式当前投影
+        # 或状态标签，不再回退原始来源文本或原文分段。
+        return _text(observation.display_text) or _state_label(observation.disclosure_state)
+    if (
+        observation.field == "planned_or_actual_sample_size"
+        and observation.disclosure_state not in _NUMERIC_DISCLOSED_STATES
+    ):
+        return _state_label(observation.disclosure_state)
     source_text = _text(observation.display_text or observation.source_text)
     if observation.source_clause_context is not None and observation.display_text is None:
         # A source-qualified reading index is separate from its verbatim quote.
@@ -1565,7 +1594,11 @@ def _table_rows(
             chart["group_id"] = "未细分"
         if chart.get("cohort_id") in {None, ""}:
             chart["cohort_id"] = "未细分"
-        if observation.field in {"inclusion_criterion", "exclusion_criterion"}:
+        if (
+            observation.field in {"inclusion_criterion", "exclusion_criterion"}
+            and not _user_current_state(observation)
+        ):
+            # 用户清除/修订行不按原始条款分段：当前值保持 _chart_row 的当前读法。
             parts = _criterion_parts(observation.source_text)
             if len(parts) > 1:
                 timepoint = _text(observation.assessment_timepoint)
@@ -1663,7 +1696,12 @@ def _matrix_item_summaries(
     observation: DesignObservation,
 ) -> tuple[str, ...]:
     """为矩阵首层生成逐条中文入排摘要；原文仍由抽屉完整展示。"""
-    if observation.field not in {"inclusion_criterion", "exclusion_criterion"}:
+    if (
+        observation.field not in {"inclusion_criterion", "exclusion_criterion"}
+        or _user_current_state(observation)
+    ):
+        # 用户清除/修订行的当前读法只有一个：显式当前投影或状态标签。
+        # 不得把原始多段条款拆成"当前"摘要（来源原文只在来源字段保留）。
         return (_value_text(data, observation),)
     parts = _criterion_parts(observation.source_text)
     if len(parts) <= 1:
@@ -1710,10 +1748,15 @@ _NUMERIC_DISCLOSED_STATES = frozenset(
 
 def _numeric_frame_reason_zh(observation: DesignObservation) -> str:
     """每条不可绘行一个如实的显式原因；成员身份与可检索性不受影响。"""
-    if _numeric_for(observation) is None:
-        if observation.field == "planned_or_actual_sample_size":
-            return "样本量不能核实为非负整数，保留原值与来源，不进入数值同轴"
+    if observation.field != "planned_or_actual_sample_size":
         return "设计条款为原文文本，不进入数值同轴，仍在完整表与检索中保留"
+    if observation.disclosure_state not in _NUMERIC_DISCLOSED_STATES:
+        return (
+            f"数值当前状态为{_state_label(observation.disclosure_state)}，"
+            "不进入数值同轴，仍在完整表与检索中保留"
+        )
+    if _numeric_for(observation) is None:
+        return "样本量不能核实为非负整数，保留原值与来源，不进入数值同轴"
     return (
         f"数值当前状态为{_state_label(observation.disclosure_state)}，"
         "不进入数值同轴，仍在完整表与检索中保留"

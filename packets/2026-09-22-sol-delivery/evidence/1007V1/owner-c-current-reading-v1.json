@@ -1,0 +1,148 @@
+{
+  "schema_version": "1007-c-current-reading-1",
+  "parent_commit": "51f8d1ee33feb2218f6b302b4610f207e90aee57",
+  "state": "continuous_implementation_bounded_c_reading_not_release",
+  "goal_status": "active_verified",
+  "mode_reason": "bounded executor for disjoint C renderer family; owner closes objective state/harness neighbors with decisive source/production checks, no new clinical equivalence judgment or conference claimed",
+  "code": [
+    {
+      "path": "src/ci_workflow/renderers/portal/report_c.py",
+      "sha256": "4eb427db637e065afba88e3ef13c1faab6a4f7757c4790566f04424f0ccbaafa"
+    },
+    {
+      "path": "tests/reports/c/test_1007_current_reading_state.py",
+      "sha256": "4c2a6193c31d1c4c3d41e8a0bfa1d26d39e1b98f180bc5aec0bfe2b72e21d595"
+    },
+    {
+      "path": "tests/integration/test_r24_unplotted_table_values.py",
+      "sha256": "e43e17483e562bdecd7c51f5fdc2b21a2011f6106faa61c06c8e71969fd290b2"
+    }
+  ],
+  "source_set": {
+    "path": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-current-reading-source-set-v1.json",
+    "sha256": "33010b6fa268073f5b21b1c1f85342b8fefb626115e3b38594bf1e09535355b6",
+    "files": 823,
+    "files_digest": "0db4d693add661700bbca8a758c71ddf423cb8e5fde88b3108261a84c264ea78"
+  },
+  "source_study_identity": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-study-identity-v1.json",
+  "source_study_identity_recheck": {
+    "files": 7,
+    "protected_user_files": 5,
+    "hash_mismatches": 0,
+    "scientific_facts": 0,
+    "current_updates": 0
+  },
+  "worker": {
+    "agent": "codebuddy",
+    "provider": "codebuddy-cli",
+    "actual_model": "deepseek-v4.1-flash",
+    "requested_effort": "max",
+    "response_effort": "not_attested",
+    "duration_seconds": 498.373,
+    "session_id": "01a119a9-d908-75bc-afb1-41f3be9a0a0e",
+    "exit_code": 0,
+    "fallback": null,
+    "tool_calls": 76,
+    "native_tool_result_events": 76,
+    "runner_tool_result_count": 0,
+    "guard_audit": "ok=true, not completeness proof",
+    "original_report_sha256": "2b9849a2b4ebb13daec4de51e0f9d8e24fce7fd2e85f5997a2f742789294db77",
+    "native_final_sha256": "bc4b35699f10899e180e5aa5d3bb94a1e3520956c628fd741868abb59639dd5d",
+    "derived_report_sha256": "8cbc9500a7cf87c2cf7e820ba0ec92c95ff5508e9ec0fe436b66ca975467b7a8",
+    "derived_report": "runs/execution/ci-1007-c-cleared-reading-v1/worker_01_native_result.md",
+    "extraction": "native final preserved with one terminal newline; trim equality true; runner captured intermediate 2025-character output instead of complete 10777-character result",
+    "scope_deviation": "extra batches including legacy Playwright-containing W04 file beyond assigned two batches; no Ego acceptance inherited"
+  },
+  "checks": [
+    {
+      "scope": "original worker family",
+      "red": {
+        "failed": 5,
+        "passed": 4,
+        "native_result_verified": true
+      },
+      "green": {
+        "passed": 11,
+        "owner_not_repeating_original_receipt": true
+      }
+    },
+    {
+      "scope": "owner nonreported current-reading family",
+      "command": "uv run python -m pytest tests/reports/c/test_1007_current_reading_state.py -q --tb=short",
+      "failed": 6,
+      "passed": 11,
+      "duration_seconds": 0.37,
+      "state": "RED_before_owner_state_first_fix"
+    },
+    {
+      "scope": "old shared/B value probe",
+      "failed": 12,
+      "passed": 12,
+      "duration_seconds": 0.73,
+      "state": "guard_failed_before_values; harness fixed against emitted production payload plus four required-component negatives"
+    },
+    {
+      "scope": "first owner command with wrong exclusion",
+      "exit_code": 130,
+      "state": "INTERRUPTED_not_PASS; browser entry not established or denied by terminal output"
+    },
+    {
+      "scope": "four-file current state/workspace/B value/W04 service batch",
+      "command": "uv run python -m pytest tests/reports/c/test_1007_current_reading_state.py tests/reports/c/test_1007_workspace_contracts.py tests/integration/test_r24_unplotted_table_values.py tests/integration/test_w04_user_fact_edit.py -q --tb=short -k 'not test_current_share_exports_committed_a_b_edit_and_unchanged_c' -o tmp_path_retention_policy=all -o tmp_path_retention_count=1000",
+      "passed": 138,
+      "deselected": 1,
+      "duration_seconds": 77.89,
+      "exit_code": 0
+    },
+    {
+      "scope": "native C revision render, development fixture, not actual user project or browser",
+      "command": "uv run python -m pytest tests/reports/c/test_1007_current_reading_state.py -q --tb=short -k native_revision -o tmp_path_retention_count=1000",
+      "passed": 2,
+      "deselected": 17,
+      "duration_seconds": 0.57,
+      "exit_code": 0
+    },
+    {
+      "scope": "final current six-file family and source neighbors",
+      "command": "uv run python -m pytest tests/reports/c/test_1007_current_reading_state.py tests/reports/c/test_1007_workspace_contracts.py tests/integration/test_r24_unplotted_table_values.py tests/integration/test_r24_c_eligibility_source_fidelity.py tests/integration/test_r24_c_text_source_comparison.py tests/integration/test_1007_c_locked_source_display.py -q --tb=short -o tmp_path_retention_count=1000",
+      "passed": 97,
+      "skipped": 0,
+      "duration_seconds": 6.17,
+      "exit_code": 0
+    }
+  ],
+  "wide_gate": {
+    "command": "bash tools/gate.sh",
+    "scope": "quality-only/6; not all integration, source science, UI, browser or release",
+    "status": "GATE_OK quality-only steps=6",
+    "exit_code": 0,
+    "source_files": 823,
+    "known_completed": {
+      "ruff": "src/tests/tools PASS",
+      "strict_mypy": "283 files PASS",
+      "active_unit_contract": "1185 PASS,20 deselected,267.65s",
+      "retained_compat_subset": "20 PASS,1185 deselected,0.54s",
+      "layer_audit": "7 PASS,0.19s"
+    },
+    "legacy_references": "LEGACY_REF_OK lexical scan only; no old-root access"
+  },
+  "product_code_scope": "C current reading only; no production B assets/CSS/geometry/source/DB/current/scientific acceptance writes",
+  "not_run": [
+    "Ego Lite four widths/four states/keyboard/focus/L1L2",
+    "current real project ABC journey",
+    "new-browser moved offline share",
+    "24 portals",
+    "three host install/recovery",
+    "RC"
+  ],
+  "unresolved": [
+    "existing Ego Lite space12 NOT_FOUND",
+    "current-publication acquisition policy Ask unanswered",
+    "two required publication fulltexts",
+    "clinical adoption of publication v4",
+    "full global/China universe closure",
+    "faithful C Chinese candidate",
+    "historical database hash FAIL"
+  ],
+  "next_safe_action": "finish exact gate terminal and phase commit/push; continue true current C/sample edit and source-bound comparison ready branches without fake source adoption or phase pause"
+}

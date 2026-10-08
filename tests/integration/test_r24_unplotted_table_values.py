@@ -13,7 +13,10 @@ const before=JSON.stringify(row);
 function node(){return {children:[],style:{},classList:{add(){},remove(){}},
  setAttribute(){},addEventListener(){},querySelector(){return null},
  appendChild(n){this.children.push(n)}}}
-const env={window:{__CHART_GROUPS__:[],__B_PAGE_ID__:'baseline-overview'},
+// B's linked page payload is mandatory in production, including for helper probes.
+const env={window:{__CHART_GROUPS__:[],__B_PAGE_ID__:'baseline-overview',
+ __FILTER_ROWS__:[],__B_COMPARISON_WORKSPACE__:{columns:[],study_ids:[],membership:{row_ids:[]}},
+ __EVIDENCE_VIEWS__:[]},
  document:{readyState:'loading',addEventListener(){},querySelectorAll(){return[]},
  createElement:node,getElementById(){return null},querySelector(){return null}}};
 let shared=fs.readFileSync(process.argv[4],'utf8').replace(
@@ -68,3 +71,24 @@ def test_unplotted_current_table_retains_source_value_and_state(
         expected,str(ASSETS/'charts.js'),str(ASSETS/'report-b.js')],
         capture_output=True,text=True,check=False)
     assert result.returncode==0,result.stderr
+
+
+@pytest.mark.parametrize('key', [
+    '__FILTER_ROWS__', '__CHART_GROUPS__', '__B_COMPARISON_WORKSPACE__',
+    '__EVIDENCE_VIEWS__',
+])
+def test_b_still_rejects_missing_required_page_payload(key: str) -> None:
+    probe = r'''
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const window={__FILTER_ROWS__:[],__CHART_GROUPS__:[],
+ __B_COMPARISON_WORKSPACE__:{columns:[],study_ids:[],membership:{row_ids:[]}},
+ __EVIDENCE_VIEWS__:[]};
+delete window[process.argv[1]];
+assert.throws(()=>vm.runInNewContext(fs.readFileSync(process.argv[2],'utf8'),{window}),
+ /B page payload script missing before report-b.js/);
+'''
+    result = subprocess.run(
+        ['node', '-e', probe, key, str(ASSETS / 'report-b.js')],
+        capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 0, result.stderr

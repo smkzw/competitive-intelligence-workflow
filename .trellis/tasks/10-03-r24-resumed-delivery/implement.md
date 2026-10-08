@@ -1,5 +1,31 @@
 # Continuous implementation checkpoint
 
+## 1007V1 C当前阅读值（parent51f8d1e，终态/owner收口）
+
+采用execution：C样本量清除后_numeric_for/_value_text从保留原文读回旧
+人数，直接生产探针已证220与0；矩阵summary共因可有界修改，与owner来源
+身份资料工作分离，不共享写入。允许单renderer和一个成族test，完整当前
+值/原文、图/表/矩阵/来源守卫；无CSS/几何/新科学判断或全页会商。节点
+actual CodeBuddy/deepseek-v4.1-flash,max请求未attest，498.373s/76tools/exit0
+无fallback；原生完整final存在，runner只摘中途段落，保留两者，不重复派发。
+原5RED/4positive→11GREEN。Owner六未报告状态6RED/11positive统一矩阵/证据
+当前读法，原文/成员/state不改。B十二失败生产payload缺失，按真实四块输入
+修测试环境，四负例保持生产guard，无JS/CSS变更。最终六文件97PASS6.17s，
+事务相关138PASS/1明确排除旧Playwright例；两个原生revision整页生成PASS。
+一次稳定quality-only宽门实际终态另记；不称医学/实屏/currentABC/发布。
+节点额外批次和含Playwright旧测试超出两批约束，owner错误排除名首命令
+exit130保留；后按准确名排除。不用非Ego结果冒充浏览器接受。五用户hash
+及七新源身份文件保持；下一来源绑定C/共同横比，ACTIVE无暂停。
+
+## 1007V1 论文研究身份接线（parent51f8d1e，当前有界实施）
+
+采用direct：共同身份owner持有源ID，官方登记明确acronym与论文原研究
+名称可直接精确比对，没有新增医学等价判断；不派重复生产/会商。先用既有
+CTgov连接器抓当前PN查询且保存实际获取/CAS回执，再对三结果研究和一个
+导入研究精确字段重开。论文并列NCT不按数组顺序分配；阶段冲突保持未知。
+仅新来源候选/关联材料，不改118候选、holding/旧源/clinical/current；不能
+把分页完整等同全球/中国宇宙闭包。下一根据实际字段决定可接或未解。
+
 ## 1007V1 原生论文数值候选（parent eed9ebb，终态/有界原文holding）
 
 采用execution-plus-conference：两精确正文主要结局/长期安全性语境提取独立

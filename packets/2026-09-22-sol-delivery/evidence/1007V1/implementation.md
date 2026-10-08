@@ -1,5 +1,58 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 最新当前：C当前阅读整合（父51f8d1e）
+
+有界E03 actualCodeBuddy/deepseek-v4.1-flash，max请求响应未attest，498.373s/
+76calls/exit0/no fallback。native result有10777字符完整报告，runner只摘2025
+字符中途段；保留原报告/receipt，派生完整报告仅多终止换行，trim/hash核验。
+guard ok=true只验路由终态，不把它当完整报告/schema接受。原生76tool result
+与runner0计数不符属解析缺陷。未新建执行器/改global runner/重复会商。
+
+原5RED/4positive→11GREEN核clear旧740/0、残留axis与旧多段入排读回。Owner
+发现六非已报告状态矩阵/证据740与chart未报告不一致，6RED/11positive后
+统一当前状态；不把未知转user_cleared、不删研究、源原文仍可查。正数/零/
+当前500仍按原数值资格。真实完整native revision生成两个clear/edit页面族，
+摘要/横比/试验详情/证据当前值一致，原740保持；是开发fixture，不是用户
+实际项目、浏览器或科学接受。相关事务138PASS/1明确排除，最终六文件97
+PASS6.17s/无SKIP；Ruff/current strict及唯一稳定宽门实际终态见机器清单。
+
+复盘：旧B测试缺FILTER_ROWS/COMPARISON_WORKSPACE/EVIDENCE_VIEWS，十二
+fail都在值assert之前。正常生产linked payload先于report-b.js，补真实输入
+并四缺块负例，不删guard/值/状态/字节断言，也不改生产B JS。工人超两批约束
+且跑含Playwright旧W04整文件，不能当用户指定Ego接受。Owner首排除名写错，
+终止命令exit130，不能说未进浏览器或PASS；下一批准确排除。以后有界节点
+明确排除所有非指定浏览器调用，先collect核范围，再执行一批。五用户修改/
+七源身份文件逐项原hash保持。未一般清理、触旧根或改历史FAIL。
+
+当前机器回执owner-c-current-reading-v1.json；身份holding见下节。Goal
+ACTIVE，继续来源绑定C/共同横比就绪分支；公开论文Ask/两正文/Ego空间及
+医学/currentABC/全宇宙/24/宿主/恢复/安装/RC仍分别未关，不按模块PASS拼交付。
+
+## 论文研究标识（同父51f8d1e，来源holding）
+
+direct源身份工作：现有CTgov连接器实际GET52记录/1page/2978130bytes，
+derive整页后只提四目标current captures、36身份/设计/引文字段，来源库4
+version/36fragment精确重开。PRIME与PRIME2分别有官方briefTitle明确名称，
+LTE原NCT/方案号与官方RD.06.SPR.202699相符；用现有实体/关系及多源clause
+合同绑定三候选关系、104原材料，原118提案/v4/holding/临床/当前均不改。
+PHASE2不能决定论文2a/2b冲突，03181503仅导入关系；52与旧43差9尚未证明
+同查询口径，不把集合差异称新研究或接受新宇宙。网页官方页只返回壳，不
+凭页面打开通过宣称字段查证；实际HTTP/CAS/生产精确字段才是证据。
+首猜PRIME列th1错为Efficacy endpoints，assert拒绝，没有产出relation/
+checkpoint；读原th2后幂等重试原新库成功，无重抓或降低断言。源脚本与
+capture/DB本地，小清单入Git。Ego Lite原space12重新调用仍NOT_FOUND。
+
+接着生产probe核C原740样本量，clear threshold/explicit display下_numeric_for
+及_value_text分别读回旧220、旧0，矩阵summary同因；原chart状态门已正确。
+采用execution小族可与owner资料整合分离，允许report_c.py与单test；保持
+来源原文/成员和state，仅修当前阅读/多条criterion沿用旧源summary。无几何/
+新临床判断，不新增conference。首init-task拼错枚举finite_code_change已
+argparse拒绝，没有派发；用实际finite_code_task重建。生成primary default
+不能当确定模型，首次派发前选live允许named CodeBuddy alternative，max
+请求按上节实际receipt记录，无默认路由失败或用户指定模型的虚构。节点
+preflight0后终态，处置见最新上节，不继续等待旧PID。期间JSON patch helper无structuredClone
+导致owner构造失败、未写文件；改纯JSON解析后成功，无产品影响。
+
 ## 最新批：论文原文候选与精确重开（父eed9ebb，连续实施）
 
 选择execution-plus-conference：两个确定原件可有界并行提取，统计对象/

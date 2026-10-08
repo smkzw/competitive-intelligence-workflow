@@ -1,0 +1,110 @@
+{
+  "schema_version": "1007-publication-study-identity-1",
+  "parent_commit": "51f8d1ee33feb2218f6b302b4610f207e90aee57",
+  "state": "continuous_implementation_source_identity_holding_not_rc",
+  "mode_reason": "direct: exact official title/protocol identifier plus native publication identifiers decisive; no new clinical equivalence judgment or model opinion claimed",
+  "protected_hashes": {
+    "docs/acceptance/runs/8.4/browser-contract-evidence.md": "15c62c6ccf7d8a0c21cbe0513a429fe36bf1324b2d7d6b4f546c8d45cadef164",
+    "docs/acceptance/runs/8.4/browser-contract-ledger.json": "80927ee2e9ffecb8614ff75fe66be28ad3b455617bada716434d7a3d4b30b23d",
+    "docs/acceptance/runs/8.4/screenshots/chromium-1280x720-slide-2.png": "0862a4822f36b0140dc5a4554bfa287edb528fa6b032eef8cb0339c14f7b2770",
+    "docs/acceptance/runs/8.4/screenshots/webkit-1280x720-slide-2.png": "6e2c133a5ca3651eba61dc768c6ba15374ec60e0aa2d7a9ffd7b329f84223e4a",
+    "tests/fixtures/task45-evidence-drawer/source_evidence.py": "4744f33d51b757ed41036cd56cebdcb503a202d910bbf9c3761f52c723765a3c"
+  },
+  "counts": {
+    "source_versions": 4,
+    "evidence_fragments": 36,
+    "fact_versions": 0,
+    "user_fact_edit_requests": 0,
+    "current_delivery_state": 0
+  },
+  "pages": [
+    {
+      "request_url": "https://clinicaltrials.gov/api/v2/studies?query.cond=prurigo+nodularis&format=json&pageSize=100&countTotal=true",
+      "acquired_at": "2026-10-08T03:48:45.156272Z",
+      "raw_asset": {
+        "sha256": "1d6b1d82e3ae359f70b84d03fdf2e2c890d1022a6b87187fbebb45d3e47683bb",
+        "relative_path": "evidence/raw/sha256/1d/1d6b1d82e3ae359f70b84d03fdf2e2c890d1022a6b87187fbebb45d3e47683bb.bin",
+        "byte_size": 2978130,
+        "media_type": "application/json"
+      },
+      "records": 52
+    }
+  ],
+  "relations": [
+    {
+      "nct_id": "NCT04183335",
+      "source_entity_id": "pubmed-record-37142763:source-trial-label:PRIME",
+      "fact_count": 19
+    },
+    {
+      "nct_id": "NCT04202679",
+      "source_entity_id": "pubmed-record-37142763:source-trial-label:PRIME2",
+      "fact_count": 19
+    },
+    {
+      "nct_id": "NCT04204616",
+      "source_entity_id": "pubmed-record-41405008:source-trial-label:OLYMPIA-LTE",
+      "fact_count": 66
+    }
+  ],
+  "files": [
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/fetch_registry.py",
+      "sha256": "da80e8abecb72a64e2da7cbeb61d0534a69257e227c97730572fc319328a6336"
+    },
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/fetch-result.json",
+      "sha256": "bd54341270861396e9cd2222a04be2313e5f5aadba4a6f0f3ef3290eac1743ab"
+    },
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/target-captures.json",
+      "sha256": "9edbbbd1bde836c550fd6002ed458421a65e7f6838e1eda8e91634781ea8439d"
+    },
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/identity-fields.json",
+      "sha256": "787e60d0d11735833f7b3926e085fc26c40b8987fd6164689b2291664b8e5c66"
+    },
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/bind_exact_identities.py",
+      "sha256": "87f9bf4d0b4c7d12443793290b390925ea38d3d4bb359d415117c311829422fd"
+    },
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/identity-checkpoint.json",
+      "sha256": "2ceefe282ca8c1009025ea4c20da896823f07c14e413983ca1299e96e76bacc0"
+    },
+    {
+      "path": ".artifacts/1007-publication-study-identity-v1/identity-library/state/project.sqlite",
+      "sha256": "7e210c561853dca89280ff3fdd514d2f4932e076b0f046205085e3fbe6b7754a"
+    }
+  ],
+  "source_fact_candidate_unchanged": "6e545087d448f04b49046327ee9628c5c574447337320e254e6a88a3947f1c82",
+  "collection_diff": {
+    "old_input_trials": 43,
+    "current_query_records": 52,
+    "added_to_query_not_proved_new_trials": [
+      "NCT03540160",
+      "NCT03546816",
+      "NCT03677401",
+      "NCT04681300",
+      "NCT05316805",
+      "NCT05451316",
+      "NCT06427122",
+      "NCT06779136",
+      "NCT06988618"
+    ],
+    "removed": [],
+    "same_query_identity_proved": false
+  },
+  "known_limits": [
+    "Source-labelled PRIME→NCT04183335; PRIME2→NCT04202679 from explicit briefTitle; LTE→NCT04204616 from native NCT/protocol RD.06.SPR.202699, not NCT order",
+    "NCT03181503 contextual lead-in; PHASE2 does not resolve manuscript phase2a/2b discrepancy",
+    "Web official record shell returned no clinical fields; actual production API fetch/derivation, not page load, establishes cited fields",
+    "Initial owner PRIME table-column path th1 selected Efficacy endpoints; exact quote assertion failed before checkpoint/relations. Correct actual th2 proved from native text and retry existing idempotent source library; no weakened assertion/new fetch/history mutation"
+  ],
+  "clinical_adoption": false,
+  "current_modified": false,
+  "universe_closed": false,
+  "release_acceptance": false,
+  "browser": "Ego Lite existing space12 actual NOT_FOUND, no substitution",
+  "next": "C bounded node terminal and owner state-family corrections integrated; see owner-c-current-reading-v1.json. This identity holding still has no scientific fact/current adoption."
+}

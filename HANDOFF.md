@@ -1,8 +1,8 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交eed9ebb22b766ac64a71c3f15271ccd95d49fb52；实际HEAD以Git核对。
-[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-atoms-v1.json)。
+本批父提交51f8d1ee33feb2218f6b302b4610f207e90aee57（已push核远端）；实际HEAD以Git核对。
+[当前机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-current-reading-v1.json)。
 Goal ACTIVE，用户授权继续。唯一英文工程；旧中文根零接触；五用户修改、
 unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 
@@ -15,6 +15,22 @@ unknown/raw/唯一来源和历史FAIL保留，无一般清理或虚构RC。
 Trellis活动任务10-03-r24-resumed-delivery，不另建产品权威或恢复旧PID。
 
 ## 本批真正完成
+
+- 官方API真实GET52当前记录/1终页，四目标版本/36字段原文重开。PRIME/
+  PRIME2/LTE三登记对应由明确名称/方案号原文而非数组順序证明，现有实体/
+  多源clause关系候选覆盖104材料。0医学fact/edit/current；原118材料不改。
+  导入阶段2a/2b仍未解，旧43与新52的口径未证明相同，不称9新试验。
+- C清除/修订当前读法已修，原文仍保留。E03 actual deepseek-v4.1-flash/max
+  请求未attest，498.373s/76tools/exit0；原生完整报告被runner漏摘，已留存，
+  无重复派发。Owner六未知状态同族收口，旧B环境十二失败按真实payload修复
+  并保留四负例。相关事务138PASS/1排除、两原生页生成PASS、最终97相关PASS；
+  唯一稳定quality-only宽门以当前机器回执实际终态为准。不是医学/实屏/发布。
+- 额外测试批与旧非Ego浏览器路径属于执行范围偏差，不当用户指定浏览器验收。
+  Owner错误排除名首命令exit130保留，后按准确名排除。Ego12仍NOT_FOUND；
+  五用户修改/七源身份文件保持原hash，旧FAIL未关。Goal ACTIVE，下一源绑定
+  C/共同横比和同current旅程就绪分支，不重跑原全文提取或旧PID。
+
+## 前一正文原文holding（51f8d1e历史范围）
 
 - 两真实论文的主要终点/总体和长期安全性提取接既有typed模型。E08实际
   Grok4.7-build/high请求，787.689s；独立fresh C03换已批准不同模型
@@ -94,7 +110,8 @@ PASS0.56s/Ruff3/strict2，无当批宽门；源库4version/16日期/0医学fact�
 
 四确切材料新digest已审；只关分类叶，不虚构宇宙闭包或完整补件门。保留
 日本登记未知、原剂量身份及原生勘误。纯呈现r5及同版本分享已真实重放，
-四typed源叶/日期与两篇正文候选原文已绑定隔离holding库，下一源限定研究身份；
+四typed源叶/日期与两篇正文候选原文已绑定隔离holding库，三源限定研究身份
+关系候选已核；下一C当前阅读值族；
 完整快照/一次补件门仍不能假签closed包；
 同currentABC及完整宇宙仍待实际闭合。
 并行继续共同当前ABC/配置/分享任务，不因全来源未齐永久停前端，不回逐症状
