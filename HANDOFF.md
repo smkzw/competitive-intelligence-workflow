@@ -2,7 +2,9 @@
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 最新暂停：[精确续接记录](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。
-固定已push源码 b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7；实际新安装也绑定该提交。
+最新固定已push源码及导航新安装 c6dbb71cfe054238dd485afd909bad66c3bd0793。
+[固定安装真实r10导航回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-current-navigation-v1.json)。
+历史事务修复安装 b6e6ca3 保留，不重复其原旅程。
 [修复后实际安装重试](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-historical-retry-v1.json)。
 [同安装真实A+B操作/分享回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-real-ab-journey-v1.json)。
 Goal已实查ACTIVE，用户本轮明确解除暂停；从保留导航RED续接，不重跑已完成保存/安装/分享。只操作英文工程。旧中文根零接触，五用户修改、
@@ -46,15 +48,17 @@ Ruff2/strict1、三JS语法/镜像通过。C03初始REVISE保留，同会话有�
 F1/F3/F4；实际deepseek-v4.1-flash，无替换，审核未执行shell/测试。新版r10
 隔离纯呈现：949事实/绑定不变、A105/B288深链HTTP200，65/356文件及新版
 资产实际消费，2155父文件不变、零save。[修后准确回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current-navigation-postreview-v1.json)。
-实际Ego/CSP/新安装及C不在此proof。此前真实r9只读HTTP：949事实、A105/B288合法绑定，
+固定c6dbb71新包398/实际安装399成员校验及r10 A+B导航通过，2580文件不变。
+实际Ego/CSP及C不在此proof。此前真实r9只读HTTP：949事实、A105/B288合法绑定，
 2155原文件hash保持，零保存；原页面旧assets不计新增按钮/实屏通过。
 上述源码/成族相关门/历史提交证明已核；b6固定安装只重放原r6请求两次HTTP200，
 current仍r9，DB/events/journal/2132文件检查项与427父pin不变，没有重存四步。
 新载荷/新stale仍409；原a36FAIL保留。临时干净源码副本3GB正常worktree移除，
 包/安装/QA/回执保留，按固定commit可恢复，不清理未知资料。
 不以complete状态或ready journal代替真正已提交generation证据，不回退current。
-下一在新隔离候选升级纯呈现并接导航，再就绪C/共同横比链；新安装、科学
-和实屏分别签范围，不建立任意文件浏览服务或改变离线分享的静态只读属性。
+纯呈现/导航/新安装本批已闭有限范围。当前继续就绪C/共同横比链；本地翻译
+服务live lease状态已变，原通道/修复脚本尝试一次兼容续接，未终态不当接受。
+科学/实屏分别签范围，不建立任意文件浏览或改变离线分享的静态只读属性。
 
 ## 发布尚未完成
 

@@ -8,7 +8,9 @@
 实施同服务/锁/绑定与共享链接；初批45例后独立REVISE，一批完整修复后
 50PASS111.71s、Ruff2/strict1；同会话有限ACCEPT_BOUNDED F1/F3/F4，原件保留。
 新隔离r10真实呈现与导航已核：949事实不变、A105/B288、新assets实际消费、
-2155父文件不变，零临床save。一次稳定quality-only宽门6步全绿；下一精确提交/新版安装，
+2155父文件不变，零临床save。一次稳定quality-only宽门6步全绿；c6dbb71已push，
+固定新版包/实际安装/r10导航已验。仅3.0G可重建干净源码副本正常移除，候选保留。
+继续C/共同横比；本地翻译live lease已变化，原通道兼容续接一次，未終态不计接受。
 继续就绪C/共同横比，不重存r6–r9或覆写原证明。Ego space12仍NOT_FOUND；
 实屏/键盘/离线门NOT_RUN，不以Node或HTTP代替。准确回执owner-current-navigation-postreview-v1。
 以下各批是历史范围，不能作为当前在途/验收声明。

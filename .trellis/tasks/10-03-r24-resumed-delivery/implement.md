@@ -2621,3 +2621,20 @@ Ruff src/tests/tools and no-runtime-legacy-ref check; not all integrations/RC.
 Exact commit/newinstall follows; no second line-by-line full gate.
 Kangzhe6.1.3 A08 selectively applied to full-width editor font/actions; no movie,
 hero or new framework for utility page; aesthetic acceptance still NOT_RUN.
+
+Fixed c6dbb71 pushed/remoteHEAD verified. Clean detached source/default398-member
+bundle/three-file trusted bootstrap/private runtime/PACKAGE_OK,399 actual install
+file hashes/modes; installed server reopens real r10 A105/B288/949facts and native
+deepedit URLs HTTP200, forbidden Host/session403/stale409/traversal404.2580project
+files unchanged,zero saves. First verification positional argument and first
+package shell-root invocation errors retained as owner invocation mistakes, not
+installation failure. Bundle/digests/replay pointers in owner-installed-current-navigation-v1.
+Rebuildable clean3.0G source worktree normally removed after exact HEAD/status/
+provenance check; installed source/bundle/r10/originalr9/receipts retained. Noforce,
+unknown cleanup or old-root touch. Current actualC/Chinese/browser/science remains.
+
+Read-only live oMLX gate now translation-active1 (previously0); original HyMT2
+still gate authority. One compatible existing repair.py attempt resumed, new
+terminal pending; preserve v1/source/current, one lease/request, heartbeat/finally
+release. No model substitution/config change/resource override; missing completion
+is not translation acceptance. New code/source scientific task remains separate.
