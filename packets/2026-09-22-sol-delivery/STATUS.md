@@ -5,6 +5,7 @@
 
 最新固定已push导航代码及新安装：c6dbb71cfe054238dd485afd909bad66c3bd0793。
 [该版本真实r10安装导航](evidence/1007V1/owner-installed-current-navigation-v1.json)。
+[新版r10分享](evidence/1007V1/owner-installed-r10-share-v1.json)，另绑新资产，非原r9。
 旧b6修复/原r9旅程验证保持，不重跑；新版导航安装只验受影响范围。
 [修复后实际安装重试](evidence/1007V1/owner-installed-historical-retry-v1.json) /
 [本轮机器回执](evidence/1007V1/owner-installed-real-ab-journey-v1.json) /
@@ -22,7 +23,9 @@
 | 新安装 | 固定c6dbb71、398文件包、BUNDLE_OK、独立bootstrap/private runtime、399安装成员hash及PACKAGE_OK；安装后r10 A/B真实导航/拒绝检查通过，2580项目文件不变、零save | 只关闭该候选安装及HTTP层；不是Ego、三宿主或科学/报告终验；b6旧证明保留 |
 | 当前操作 | 实际安装HTTP，真实来源估计值set/clear/undo/restore r6–r9，A+B同步，原引文与427父pin不变 | 隔离假设QA；C不在current；不继承科学接受 |
 | 幂等与冲突 | b6安装两次原r6请求HTTP200返回原结果，current保持r9；改载荷/新stale409；2132文件检查项、DB/events/journal及427父pin不变 | 修复后安装范围通过；a36原FAIL保持，不拼科学/浏览器PASS |
-| 分享 | 同r9 A/B/AB、真实问题配置/逐成员hash分别64/355/419通过 | 静态字节/配置层；离线浏览器未运行 |
+| 分享 | 同固定c6db安装r10新A/B/AB、真实问题配置/逐成员hash分别64/355/419通过；2580项目文件不变/零save。原r9另留 | 静态字节/配置层；离线浏览器未运行，C不在该current |
+| C中文 | HyMT原通道兼容续接exit0，126唯一条款/174行，63重译63复用；原源/旧译/旧REVISE未改 | 新receipt d33776f5，独立源对照已派发待终态；科学false/current未切，非翻译验收 |
+| C真实操作 | 一个E04有界执行，独占新QA产物，源项目只读、全258设计行，不修改产品源码 | PENDING；report占位文件存在不等于完成；不与r10混签ABC |
 | 浏览器/产品 | Ego旧space12 NOT_FOUND，新空间Ask待答 | 四宽四态/L1L2/键盘/目视/离线新浏览器NOT_RUN |
 | 新导航源码 | current清单/世代读路由、B显式view身份、共享原生链接/旧深链拒绝；最终50PASS111.71s、Ruff2/strict1；独立初始REVISE→同会话ACCEPT_BOUNDED F1/F3/F4 | 模型实际deepseek-v4.1-flash，effort仅请求max；审核未运行shell/测试，owner另验；非科学/浏览器/安装 |
 | 新真实呈现 | 隔离APFS克隆r10，949事实及绑定完全不变，A105/B288真实深链HTTP200；新版portal.js实际消费，65/356文件清单，2155父文件不变、零临床save；新安装另验2580文件不变 | 原r9/旧安装未改；C不在此current；源码/安装两层均限定HTTP；Ego/CSP实际NOT_RUN |
@@ -55,7 +58,7 @@ Owner同步完成冻结a36分享与结果归档，没有重复生产修复或修
 - 分享移动目录/断网/新浏览器清存储后的实际重开；三个模型宿主/完整恢复。
 - 八适应症×A/B/C24门户的同候选科学、产品和独立复核；RC/RELEASED。
 
-Ego空间、HyMT中文容量507、论文获取日期政策、专家01–06/reference/cases.json
+Ego空间、论文获取日期政策、专家01–06/reference/cases.json
 材料各Ask待答，只阻断相应分支，不阻断其他代码/客观验证。旧数据库hash
 期待74330a…实际a1094f…原因未明，原FAIL/hash不改。五用户修改hash再核保持，
 旧中文根零接触，未知/唯一来源/历史证据不清理或无差别提交。
@@ -69,5 +72,5 @@ C共享helper的旧审查推断已更正，不重建第二实现；ECharts缺JSO
 新r10纯呈现及真实导航已验；原r9保存/重试/分享不重跑。稳定宽门6步全绿；下一
 代码已push GitHub、固定新版安装已验；继续C/共同横比，Ego只阻断实际浏览器分支。
 本次3.0G可重建干净源码worktree已正常移除；包/安装/真实候选及回执保留。
-翻译服务当前active lease1，与先前无lease不同；原通道/原脚本兼容续接一次，
-终态未到前不计翻译通过，不更换模型/资源上限或覆盖旧候选。
+翻译原通道兼容续接已exit0，不更换模型/资源上限或覆盖旧候选；先前507保留，
+关闭此次运行容量阻断，126条源对照独立review待终态。不重复译制/全页会商。

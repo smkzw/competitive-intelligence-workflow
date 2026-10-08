@@ -1,0 +1,28 @@
+{
+  "schema_version": "1007-owner-installed-r10-share-1",
+  "source_commit": "c6dbb71cfe054238dd485afd909bad66c3bd0793",
+  "parent_checkpoint_commit": "6881ee57fe56472871db71c97deb69fdd95c2725",
+  "bundle_sha256": "45b54f1866e8701ab83b880eb8b9834b10c47c9ead418da6c5994e32e5840a48",
+  "candidate_revision": 10,
+  "generation": "8b401c48fe178f7cb1f780071d818e35ae6628201a868e910ffb6c09d8f02558",
+  "actual_receipt": ".artifacts/1007-current-navigation-install-v1/shares-r10.json",
+  "actual_receipt_sha256": "d1768334b95cf7a17a0a0841dad3331ba9b7affb85afba9c8c81499facab1c98",
+  "replay_script": ".artifacts/1007-current-navigation-install-v1/share_new_current.py",
+  "replay_script_sha256": "67e497b50ecbe0e37e70c3ef04deb83982df0ff4f1ab062b2401be46c52282cf",
+  "already_executed_do_not_reexport": true,
+  "cli_runtime": "fixed bundle private installed Python; source imports verified",
+  "shares": {
+    "A": {"path": ".artifacts/1007-current-navigation-install-v1/shares-r10/current-r10-A.zip", "sha256": "ab9a16fc6a5301b3912398abe48f5c8145a382704540ca68152a0464b61c0519", "config_sha256": "4464f3bc6b017e11488b0a10ed18a5db89b5b7296c08f5bc4c669b1856ddb91e", "members_verified": 64},
+    "B": {"path": ".artifacts/1007-current-navigation-install-v1/shares-r10/current-r10-B.zip", "sha256": "f49144c3200d5f200336926529887b73844ace02bedd8caf35df627fd25655c5", "config_sha256": "a8f9ed79dc8ca7e947c0f8c468ac9d4ab6d23de0a4a9f63ac90c82ebf9f265dd", "members_verified": 355},
+    "AB": {"path": ".artifacts/1007-current-navigation-install-v1/shares-r10/current-r10-AB.zip", "sha256": "b456d314678da94f79f4b971d286d8d5b2413c7eb93aa1caa690b3b9b128bda0", "config_sha256": "da6cc5b830344ad58619b6245077049bd044bb862ea8c4b4920163d574a06b88", "members_verified": 419}
+  },
+  "saved_configuration": {"query": "q-wi-nrs-percent-change", "view": "comparison", "cmp_page": 1},
+  "project_files_unchanged": 2580,
+  "clinical_saves": 0,
+  "static_checks": "exact member hashes/configuration/new portal.js; no runtime editor marker, CSRF, user absolute paths, DB or bootstrap",
+  "browser": "NOT_RUN",
+  "offline_reopen": "NOT_RUN",
+  "C": "not generated in this current",
+  "science": "not accepted",
+  "scope": "new r10 byte/configuration layer only; does not inherit r9, browser, ABC or release acceptance"
+}
