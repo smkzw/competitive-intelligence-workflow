@@ -81,6 +81,9 @@ class TrialRoleOutput(BaseModel):
     publication_role: PublicationRoleValue = "unclassified"
     publication_rationale_zh: str | None = None
     publication_matched_study_ids: tuple[str, ...] = ()
+    publication_contextual_study_ids: tuple[str, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
     publication_signals: tuple[str, ...] = ()
 
     @field_validator(
@@ -99,7 +102,10 @@ class TrialRoleOutput(BaseModel):
     def _optional_text(cls, value: str | None) -> str | None:
         return None if value is None else _text(value)
 
-    @field_validator("matched_rule_ids", "publication_matched_study_ids", "publication_signals")
+    @field_validator(
+        "matched_rule_ids", "publication_matched_study_ids",
+        "publication_contextual_study_ids", "publication_signals",
+    )
     @classmethod
     def _unique_text_tuple(cls, values: tuple[str, ...]) -> tuple[str, ...]:
         normalized = tuple(_text(value) for value in values)
@@ -210,6 +216,9 @@ def build_trial_role_output(
         ),
         publication_matched_study_ids=(
             () if publication_record is None else publication_record.matched_nct_ids
+        ),
+        publication_contextual_study_ids=(
+            () if publication_record is None else publication_record.contextual_nct_ids
         ),
         publication_signals=(
             () if publication_record is None else publication_record.classification_signals

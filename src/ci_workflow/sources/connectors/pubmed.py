@@ -107,6 +107,9 @@ class ClassifiedPublication(BaseModel):
     record: PubMedRecord
     role: PublicationRole
     matched_nct_ids: tuple[str, ...]
+    contextual_nct_ids: tuple[str, ...] = Field(
+        default=(), exclude_if=lambda value: not value,
+    )
     classification_signals: tuple[str, ...]
     rationale_zh: str
     can_replace_primary_report: bool
@@ -274,11 +277,12 @@ def parse_pubmed_efetch_xml(xml_text: str) -> tuple[PubMedRecord, ...]:
 
 
 _SECONDARY_ANALYSIS = re.compile(
-    r"\b(?:post[- ]hoc|ad[- ]hoc|subgroup analys(?:is|es)|exploratory analys(?:is|es))\b"
+    r"\b(?:post[- ]hoc|ad[- ]hoc|subgroup analys(?:is|es)|exploratory analys(?:is|es)|"
+    r"secondary analys(?:is|es) of)\b"
 )
 _SECONDARY_FRAMING = re.compile(
     r"\b(?:(?:in this|this|(?:here )?we (?:performed|conducted|presented|"
-    r"report|present|describe))\s+(?:\w+[ -]){0,3}(?:post[- ]hoc|ad[- ]hoc|subgroup|"
+    r"report|present|describe))\s+(?:\w+[ -]){0,3}(?:post[- ]hoc|ad[- ]hoc|secondary|subgroup|"
     r"exploratory)\b|(?:a|an)\s+(?:post[- ]hoc|ad[- ]hoc|subgroup|exploratory)\s+"
     r"analys(?:is|es)\s+of\b)", re.IGNORECASE,
 )
@@ -350,7 +354,9 @@ def _main_result_offset(abstract: str) -> int | None:
     return None
 
 
-def _classify(record: PubMedRecord, matched: tuple[str, ...]) -> ClassifiedPublication:
+def _classify(
+    record: PubMedRecord, matched: tuple[str, ...], *, contextual: tuple[str, ...] = (),
+) -> ClassifiedPublication:
     combined = f"{record.title}\n{record.abstract}".casefold()
     title = record.title.casefold()
     publication_types = {item.casefold() for item in record.publication_types}
@@ -419,6 +425,9 @@ def _classify(record: PubMedRecord, matched: tuple[str, ...]) -> ClassifiedPubli
             "当前元数据未匹配目标试验登记号，论文—试验关系未确定；"
             "缺少登记号不证明无关，不据此排除，也不能替代主要结果报告。"
         )
+        if contextual:
+            signals = (*signals, "仅在导入/历史研究语境提及目标 NCT，不绑定本篇结果")
+            rationale += "原文的导入/历史研究提及另列保留，不作为本篇结果研究关联。"
     elif review_signals:
         role = "review"
         signals = ("综述或荟萃分析出版类型",)
@@ -449,10 +458,38 @@ def _classify(record: PubMedRecord, matched: tuple[str, ...]) -> ClassifiedPubli
         record=record,
         role=role,
         matched_nct_ids=matched,
+        contextual_nct_ids=contextual,
         classification_signals=signals,
         rationale_zh=rationale,
         can_replace_primary_report=role == "primary_report",
     )
+
+
+_CONTEXTUAL_TRIAL = re.compile(
+    r"\blead[- ]in\b|\b(?:previous|prior|earlier)\s+"
+    r"(?:\w+[ -]){0,3}(?:trials?|stud(?:y|ies))\b", re.IGNORECASE,
+)
+
+
+def _context_only_nct_ids(record: PubMedRecord) -> set[str]:
+    """Conservative negative guard, not a resolver or scientific link verdict.
+
+    A DataBank association or literal mention cannot override an explicit
+    background/lead-in scope. If an ID also occurs in a separate non-context
+    clause (e.g. own trial registration), it is not context-only. Mixed clauses
+    remain conservative candidates for the existing independent review; no
+    IDs or parent-study relationship are inferred from names or order.
+    """
+    contextual: set[str] = set()
+    other: set[str] = set()
+    for text in (record.title, record.abstract):
+        for clause in re.split(r"(?<=[.!?。！？;])\s+|\n+", text):
+            identifiers = {item.upper() for item in _NCT_ID.findall(clause)}
+            if _CONTEXTUAL_TRIAL.search(clause):
+                contextual.update(identifiers)
+            else:
+                other.update(identifiers)
+    return contextual - other
 
 
 def classify_pubmed_records(
@@ -468,8 +505,12 @@ def classify_pubmed_records(
     for record in records:
         text = f"{record.title}\n{record.abstract}"
         mentioned = {item.upper() for item in _NCT_ID.findall(text)} | set(record.registry_nct_ids)
-        matched = tuple(item for item in normalized_targets if item in mentioned & target_set)
-        classified.append(_classify(record, matched))
+        context_only = _context_only_nct_ids(record)
+        matched = tuple(
+            item for item in normalized_targets if item in mentioned & target_set - context_only
+        )
+        contextual = tuple(item for item in normalized_targets if item in context_only)
+        classified.append(_classify(record, matched, contextual=contextual))
     return tuple(classified)
 
 

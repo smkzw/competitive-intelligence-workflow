@@ -41,3 +41,9 @@ PubMed原生CommentsCorrections关系必须连同RefType方向、PMID/RefSource/
 应答比例不因未出现“response rate”字样遗漏。规则识别仍不是正式分类/等价。
 多篇JATS发现响应不能直接冒充单篇原件，也不把重序列化子树当原始字节；用
 既有精确身份桥读取实际单篇响应。metadata-only和正文分开，原文不进分享/安装包。
+
+结果研究与导入/历史语境分开：ClassifiedPublication.contextual_nct_ids及B
+角色的publication_contextual_study_ids保留非结果候选；不能因DataBank或
+字面提及把LTE结果归给导入研究。独立量表验证二次论文可留方法学，不作为
+主要报告替代；六类正式PublicationRecord不扩词表，无登记关联不造join key，
+勘误仍用原生关系。分行源展示只补读取能力，不是新来源或正文获取。

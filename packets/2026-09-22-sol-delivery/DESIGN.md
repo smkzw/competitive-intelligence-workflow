@@ -38,6 +38,13 @@ RefType方向、空/冲突标识完整保留。紧凑CLI回执同样保留关系
 更新标记使规则候选暂为unclassified，留给既有独立Publication门，不改原源或
 另建审批平台。实际应答比例句式可识别主要结果，规划/入组数字和次级整篇范围
 不放宽。论文类型识别不许可量表等价、数值共轴、发布时间或再分发。
+既有ClassifiedPublication增加可选contextual_nct_ids，空时不改变旧序列化；
+matched_nct_ids仅保留未被明确导入/历史语境排除的候选结果关联。相同编号
+若另有独立本篇登记句不因背景提及丢弃；混合语境仍由已有独立复核解决，
+不是新的关系自动签发器。B角色输出同步保留publication_contextual_study_ids，
+重算当前原文拒绝model-copy伪造，母试验纳排不变。原始PubMedRecord不改。
+六类PublicationRecord保持：无登记关联的原件停留候选，勘误用已有原生关系，
+不造join key或integrity枚举；有界角色采用与获取、事实采用及最终门分开。
 
 共同研究矩阵复用原WorkspaceMembership/FacetPlan/NumericFrameEligibility。
 已知概念及定义的同问题列可聚合描述性单元格；每列显式保留

@@ -37,6 +37,10 @@ instances produced by `model_copy(update=...)`.
 ## Testing Requirements
 
 - Every authoritative Pydantic boundary needs a `model_copy` adversarial test.
+- Publication identity mentions need scope negatives: index versus lead-in/prior
+  trial, DataBank overlap, independent index registration and non-trial treatment
+  history. Preserve raw records, contextual links and mother-study eligibility;
+  test the real classifier/B consumer, not only a proposal dictionary.
 - Changed-snapshot and same-version changed-rule tests must prove recomputation,
   not only key inequality.
 - Public-surface tests must verify unsupported detached constructors are absent,

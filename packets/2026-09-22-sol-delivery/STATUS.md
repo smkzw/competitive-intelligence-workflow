@@ -1,14 +1,18 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交b81dcc14c4455c42616a6f4d40a71fb3a221075a；实际HEAD以Git核对。
+本批父提交929399f798f2d9ec7737530cb517872d4fb7a90e；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-question-projection-v1.json)，
+[当前机器清单](evidence/1007V1/owner-publication-scope-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
 
 | 单元 | 当前实际证据 | 仍未接受 |
 |---|---|---|
+| 本批论文执行/独立挑战 | E08实际modelUsageGrok4.7-build/highCLI690.675s；新C03实际init/resultmodelUsageflash/maxCLI367.064s+同会话103.551s，九摘要补读EOF545 | reviewer命令工具拒绝，hash/JSON未执行；owner另核70引用/6关系/13ID/9原生记录等值；不是正文/数字接受 |
+| 有界论文采用 | 7必需结果类、1可保留方法学、1原生勘误；索引/导入ID分开，原提案/源/首报告保留 | 未创建正式PublicationRecord，缺登记号与日本主/延长期身份不强配；更正内容未知，六类合同不扩本体 |
+| 结果关联生产根因 | 8FAIL/5PASS0.34s→97PASS0.59s→171邻接PASS2.14s无SKIP；真实LTE只候选关联NCT04204616，导入NCT03181503另列；B母研究保持 | 一项RED是新字段未实现时schema拒绝而非独立绑定缺陷；规则仍不是正式科学接受。量表二次论文不推荐主要报告，原研究/源不删 |
+| 两路线真实恢复 | 六缺失/勘误对象，出版社/PMC共12实际尝试；5确切DOI零查询、1metadata-only，出版社权限/能力阻断分别记录 | 未取得新的可关闭缺口正文；不以HTML打开、HTTP200或零PMC检出当没有公开资料。正式快照补件门仍待接通 |
 | 普通A/B来源一致 | A-only/A+B两真实RED→34相关PASS41.78s；同91原文、参数、人群和值进入A矩阵，B视图相同；33当前分享/查询/来源邻接PASS8.34s | 源语境消费不等于临床问题匹配/共轴或完整ABC旅程 |
 | 新A候选 | 四源949事实；A实际49页/62916627字节，所有91上下文逐项比对实际A页面与B输入；3733成员/3633列 | full3544保留但横比仍碎片化；无current/实屏/科学或RC接受 |
 | 邻接失败 | 10PASS/1FAIL8.65s，历史数据库期待74330a…实际a1094f…，在当前新生产调用前失败；原hash及字节不改 | 历史完整性/恢复未关闭，不宣称全邻接通过；原因未查明 |
@@ -53,15 +57,16 @@ v1回执误填未来UTC00:00隔离不接受；v2真实时钟22:20:19+00重建，
 
 ## 下一步
 
-本批最终稳定字节质量门v2实际GATE_OK quality-only/6：Ruff src/tests/tools，
-strict src/tools283、活跃1185PASS266.58s、兼容20PASS0.61s、层级7PASS0.21s、
+本批论文关联稳定字节质量门v1实际GATE_OK quality-only/6：Ruff src/tests/tools，
+strict src/tools283、活跃1185PASS267.23s、兼容20PASS0.65s、层级7PASS0.20s、
 旧路径词法PASS；精确源码/日志摘要绑定当前机器清单。它不覆盖历史资料库
 完整性FAIL，亦非科学/视觉/安装/RC证明。旧core/v1门不覆盖末model-copy边界。
 
 1. 扩大可复用问题/上下文匹配及真实合格数值框，并补同current的C真实依赖
    和浏览器旅程。已完成隔离A+B操作不重复重造；仍不把3620列当横比完成。不把相似题名、
    共享临床问题、ITT措辞或91合法消费者当等价。完整研究集合和原实例不删。
-2. 当前原件进入既有独立Publication分类和补件/恢复；完善当前58集合的
+2. 九摘要已有有界独立角色/关联判断与六对象实际恢复；将已核身份的必需
+   条目接正式研究快照与一次性补件门，不造缺号/勘误join key。完善当前58集合的
    来源域/创新/中国/别名/靶点/企业闭包，不以数量收敛或摘要充全文。
 3. 中文容量/Ego/附件仅阻断相关分支。就绪共享比较/同currentABC保存清除、
    合法同步、配置与三单包/联合包继续，实际屏幕和新浏览器才能接受。
@@ -73,3 +78,5 @@ strict src/tools283、活跃1185PASS266.58s、兼容20PASS0.61s、层级7PASS0.2
 [上一批清单](evidence/1007V1/owner-outcome-scope-v1.json)、
 [里程碑12](evidence/1007V1/owner-milestone-v12.json)及
 [较早索引](archive/milestone10-1007V1/README.md)仅为历史。
+上一929399f问题投影/r4机器清单为[有界原件](evidence/1007V1/owner-question-projection-v1.json)，
+不将其分享/操作PASS拼成新全ABC/浏览器/RC验收。

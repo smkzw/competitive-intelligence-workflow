@@ -1,0 +1,7 @@
+{"pmid": "32074418", "attempt_results": ["tool_capability_gap", "searched_no_evidence"]}
+{"pmid": "37888917", "attempt_results": ["tool_capability_gap", "searched_no_evidence"]}
+{"pmid": "38629497", "attempt_results": ["access_or_permission_blocked", "searched_no_evidence"]}
+{"pmid": "39226086", "attempt_results": ["access_or_permission_blocked", "searched_no_evidence"]}
+{"pmid": "39602139", "attempt_results": ["access_or_permission_blocked", "tool_capability_gap"]}
+{"pmid": "40112876", "attempt_results": ["access_or_permission_blocked", "searched_no_evidence"]}
+{"checkpoint_sha256": "b5032489d57a24da731c3171797a24575678670f36595656c37551e76d1ca2b5"}

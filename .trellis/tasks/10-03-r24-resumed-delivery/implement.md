@@ -1,5 +1,29 @@
 # Continuous implementation checkpoint
 
+## Current owner unit: publication link scope, parent929399f
+
+Execution-plus-conference: one bounded nine-record E08 writer and one fresh C03
+challenge address role/link uncertainty; owner fixes shared production and retains
+source bytes. E08 modelUsageGrok4.7-build/high CLI, terminal690.675s. Owner70quotes/
+6native relations/13ID literals; rawEFetch→9records→projection equality checked.
+C03 CodeBuddy init/resultmodelUsagedeepseek-v4.1-flash/max CLI367.064s; command
+tools denied and6long abstracts truncated, not full reading or hash PASS. Lossless
+source545lines, same-session103.551s completes reading; original report retained,
+DOI transcription fixed. Advisory 'two full texts read' means abstracts only.
+Owner adopts7required/1optional methods/1native integrity relation, not formal
+PublicationRecord, bodies, numerical science or universe closure. Six missing/
+integrity objects each actualpublisher/openrepository attempts, no body acquired;
+HTTP403, zeroDOIquery, metadata-only and capability limits separate. No credentials.
+Productionroot8FAIL/5PASS0.34s (one missing-field forgery shape fail disclosed)
+→97PASS0.59s→171adjacentPASS2.14s; Ruff4files/strict2files. ActualLTE NCT03181503
+context only, NCT04204616 result candidate; B preserves both scopes, source/mother
+study unchanged. Methods secondary paper no longer recommended primary. One
+frozen-interface widegateRuff/src-toolsstrict283/active1185PASS267.23s/retained20
+0.65s/layer7.20s/lexical =>quality-only6; not historicalDB/science/browser/RC.
+Next formal snapshot publication binding/single supply gate, ready comparison/C
+branches and actual browser when capability restored. Goal ACTIVE, no new pause,
+cleanup, asset edits or user authority expansion. Raw/review/private artifacts local.
+
 ## Current owner unit: source-backed descriptive questions, parentb81dcc1
 
 Execution-plus-conference: one completed source writer and one fresh concrete

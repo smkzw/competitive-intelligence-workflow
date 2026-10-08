@@ -1,0 +1,242 @@
+{
+  "schema_version": "1007-publication-scope-1",
+  "created_at": "2026-10-08T00:32:43+00:00",
+  "parent_commit": "929399f798f2d9ec7737530cb517872d4fb7a90e",
+  "state": "continuous_implementation_not_rc",
+  "goal": "active_verified_api",
+  "unit": "W03/W07 publication role, index versus contextual link guard",
+  "source_scope": {
+    "raw_efetch_sha256": "aca1ddec84f31256eb8c876ff32d6e87eba7e204163f19b4c6b32002c6826472",
+    "projection_sha256": "ee119a024c205ad4a56d78750d3c09093a4b60a5786370b5eaf5a38ed6c4308d",
+    "records": 9,
+    "literal_quotes": 70,
+    "native_relation_checks": 6,
+    "same_record_literal_ids": 13,
+    "raw_parsed_record_equality": 9,
+    "universe_closed": false
+  },
+  "execution": {
+    "agent": "grok",
+    "provider": "grok-build",
+    "model": "grok-4.7",
+    "runtime_model_usage": "grok-4.7-build",
+    "effort_requested": "high",
+    "response_effort_attested": false,
+    "session_id": "c4ed684f-b655-44f4-93e8-31804ef869f6",
+    "duration_seconds": 690.675,
+    "returncode": 0,
+    "fallback": null
+  },
+  "conference": {
+    "agent": "codebuddy",
+    "provider": "codebuddy-cli",
+    "model": "deepseek-v4.1-flash",
+    "native_init_and_result_model_usage_verified": true,
+    "effort_requested": "max",
+    "response_effort_attested": false,
+    "session_id": "01a118dc-4c1d-7083-9b6d-5515bce4522b",
+    "durations_seconds": [
+      367.064,
+      103.551
+    ],
+    "returncodes": [
+      0,
+      0
+    ],
+    "fallback": null,
+    "limits": [
+      "command tools denied: reviewer hashes/JSON not executed",
+      "six long abstract truncations cured by same-session lossless display, EOF545",
+      "article bodies and correction content unreviewed",
+      "review addendum fulltexts wording refers to abstracts only; body claim rejected by owner",
+      "one preflight output-path phrase failure corrected before resume launch"
+    ]
+  },
+  "adoption": {
+    "required": 7,
+    "optional_methods": 1,
+    "native_integrity_relation": 1,
+    "official_publication_records_created": 0,
+    "registry_join_fabricated": false,
+    "context_scope_binding_to_results": false,
+    "body_scientific_acceptance": false
+  },
+  "production_checks": {
+    "red": {
+      "command": "uv run pytest -q tests/integration/sources/test_1007_publication_link_scope.py tests/integration/sources/test_1007_real_pn_publication_roles.py",
+      "failed": 8,
+      "passed": 5,
+      "seconds": 0.34,
+      "scope_note": "one copied-forgery negative initially extra-field schema rejection; seven behavioral/source failures"
+    },
+    "green": {
+      "command": "uv run pytest -q tests/integration/sources/test_1007_publication_link_scope.py tests/integration/sources/test_1007_real_pn_publication_roles.py tests/unit/test_r24_pubmed_publication_roles.py tests/integration/sources/test_r24_pubmed_registry_association.py tests/integration/sources/test_r24_pubmed_unresolved_relation.py tests/integration/sources/test_1007_pubmed_integrity_relations.py tests/reports/b/test_trial_roles.py",
+      "passed": 97,
+      "seconds": 0.59,
+      "skipped": 0
+    },
+    "adjacent": {
+      "command": "uv run pytest -q tests/integration/sources/test_1007_publication_link_scope.py tests/integration/sources/test_1007_real_pn_publication_roles.py tests/unit/test_r24_pubmed_publication_roles.py tests/integration/sources/test_r24_pubmed_registry_association.py tests/integration/sources/test_r24_pubmed_unresolved_relation.py tests/integration/sources/test_1007_pubmed_integrity_relations.py tests/reports/b/test_trial_roles.py tests/integration/sources/test_pubmed_cross_reference.py tests/integration/sources/test_pubmed_fetch.py tests/integration/sources/test_r24_pubmed_identifier_preservation.py tests/integration/sources/test_r24_pubmed_book_preservation.py tests/integration/sources/test_r24_pubmed_request_pacing.py tests/integration/test_v13_publication_gate.py",
+      "passed": 171,
+      "seconds": 2.14,
+      "skipped": 0,
+      "log": "runs/execution/ci-1007-publication-role-proposal/owner-link-related-v1.txt"
+    },
+    "static": {
+      "ruff": "four affected files passed",
+      "strict_mypy": "two affected source files passed"
+    },
+    "wide_gate": {
+      "command": "set -o pipefail; bash tools/gate.sh | tee runs/execution/ci-1007-publication-role-proposal/owner-link-widegate-v1.txt",
+      "exit": 0,
+      "scope": "quality-only/6, not release or whole integration",
+      "ruff": "src tests tools",
+      "mypy": "strict src tools 283",
+      "active_tests": {
+        "passed": 1185,
+        "seconds": 267.23
+      },
+      "retained_smoke": {
+        "passed": 20,
+        "seconds": 0.65
+      },
+      "layering": {
+        "passed": 7,
+        "seconds": 0.2
+      },
+      "lexical_old_path": "passed",
+      "source_frozen": true
+    }
+  },
+  "public_recovery": {
+    "pmids": [
+      "32074418",
+      "37888917",
+      "38629497",
+      "39226086",
+      "39602139",
+      "40112876"
+    ],
+    "route_families": [
+      "publisher",
+      "open_repository"
+    ],
+    "actual_objects": 6,
+    "attempts": 12,
+    "new_validated_bodies": 0,
+    "checkpoint": ".artifacts/1007-publication-recovery-v1/checkpoint.json",
+    "credentials_used": false,
+    "manual_gate_closed": false,
+    "scope_note": "403 access blocked, exact DOI query zero, metadata-only, or capability boundaries kept distinct; not missing scientific data"
+  },
+  "pins": {
+    "src/ci_workflow/sources/connectors/pubmed.py": {
+      "sha256": "7ab26be2835764d9207e2d9174645a2fd68abaeecfce262e972c18b2994cf7e1",
+      "bytes": 23995
+    },
+    "src/ci_workflow/reports/b/contracts.py": {
+      "sha256": "a979942b32cd98d0a09cd083f2b931d6abdeb28d7f4a7100a300b7df1617f43d",
+      "bytes": 37752
+    },
+    "tests/integration/sources/test_1007_publication_link_scope.py": {
+      "sha256": "babdf77e4627fab3b8f1278a4bdbe8afeec16dfc41b4c62a137d82fb1efcf300",
+      "bytes": 5049
+    },
+    "tests/integration/sources/test_1007_real_pn_publication_roles.py": {
+      "sha256": "030eb201c0da761edbddf24a9580f052c633642a8b9c1dd5689328d7860ef89f",
+      "bytes": 2539
+    },
+    ".artifacts/1007-publication-role-proposals-v1/source-records.json": {
+      "sha256": "e3db1d0ee07a41d7245a5e75bbf4b9e68e6aecb1e4b7ce982e7c80a6e187655f",
+      "bytes": 29358
+    },
+    ".artifacts/1007-publication-role-proposals-v1/proposal.json": {
+      "sha256": "1d8cd9b90a55c42c642b267f5adca8ae725645cf5ae4dc4d50e9df104d70c685",
+      "bytes": 33384
+    },
+    ".artifacts/1007-publication-role-proposals-v1/owner-literal-validation.json": {
+      "sha256": "3c842a00d83079268fb76a518620d6129d493a57146d5112b68f4cb5aac88131",
+      "bytes": 960
+    },
+    ".artifacts/1007-publication-role-proposals-v1/source-readable-v1.md": {
+      "sha256": "5991b4300ec2138b376318d66f84280beac9d442a83e24a8418d4d463cd4eb00",
+      "bytes": 28754
+    },
+    ".artifacts/1007-publication-role-proposals-v1/production-link-scope-v1.json": {
+      "sha256": "5318daef55b0c7c499fdc421d318d6325b383c4604a2aff9f617f2591ff7ed5f",
+      "bytes": 34568
+    },
+    ".artifacts/1007-publication-role-proposals-v1/owner-role-disposition-v1.json": {
+      "sha256": "d8f7fefba9d7e4a9ede1c6928565a611b50aa52b22390800d89e58734d91b9db",
+      "bytes": 14339
+    },
+    ".artifacts/1007-publication-role-proposals-v1/validate_proposal.py": {
+      "sha256": "c8fe09382a7c12cb107f926f9b6c78f0358cc6b8fe5f7b3dd4a7812eeb285546",
+      "bytes": 3599
+    },
+    ".artifacts/1007-publication-role-proposals-v1/prepare_readable_source.py": {
+      "sha256": "a79563ada7a8607299e3a527d70eada9c94894512e0bb0a53adc13f664fe93cc",
+      "bytes": 2867
+    },
+    ".artifacts/1007-publication-role-proposals-v1/replay_classifier.py": {
+      "sha256": "80cf5dd7c9b65d1cdc2004adba9a12437be842ad12ed67fe05d6c194c9526df4",
+      "bytes": 2220
+    },
+    ".artifacts/1007-publication-role-proposals-v1/adopt_roles.py": {
+      "sha256": "54e0dbc2470fdffcbb86e6c323cdfe241cc347f96e649213aaf5d198e4677c08",
+      "bytes": 3365
+    },
+    ".artifacts/1007-publication-recovery-v1/recover.py": {
+      "sha256": "14f8d7ea5da5e99c912c0cf34c31300135b680e7e1a9ff901da7c5b436134bdd",
+      "bytes": 9194
+    },
+    ".artifacts/1007-publication-recovery-v1/checkpoint.json": {
+      "sha256": "b5032489d57a24da731c3171797a24575678670f36595656c37551e76d1ca2b5",
+      "bytes": 1766
+    },
+    "runs/execution/ci-1007-publication-role-proposal/worker_01.md": {
+      "sha256": "c50c35181fb761783d222d0ddab39cc330c64e6ea4313081fd15831288767bff",
+      "bytes": 7583
+    },
+    "logs/execution/ci-1007-publication-role-proposal/worker_01_stdout.txt": {
+      "sha256": "825451c70aa31a5bfbb2fd4d676bf10cb536583f66517d5842ec5c115cda37f4",
+      "bytes": 84259
+    },
+    "runs/conference/ci-1007-publication-role-challenge/evidence_single_object.md": {
+      "sha256": "dfb71c40cf40630ae7a789b37f48d7da004d327ab6db246dfdbefb61a8ba4346",
+      "bytes": 23372
+    },
+    "runs/conference/ci-1007-publication-role-challenge/evidence_single_object_read_resume.md": {
+      "sha256": "84aa2329705b642f30ad3d2d038490b775b07e8e4f91381cff3f74acee20c0fe",
+      "bytes": 12013
+    },
+    "logs/conference/ci-1007-publication-role-challenge/evidence_single_object_stdout.txt": {
+      "sha256": "db6aadb975033255a146563384bf52f74f8ae43ceda55eb5f0c6822c77ad3b02",
+      "bytes": 590800
+    },
+    "logs/conference/ci-1007-publication-role-challenge/evidence_single_object_read_resume_stdout.txt": {
+      "sha256": "4e67fd1a4562c646497aab6b765fda6ed27d602b36432faa4b4f8822016205d7",
+      "bytes": 163659
+    },
+    "runs/execution/ci-1007-publication-role-proposal/owner-link-related-v1.txt": {
+      "sha256": "2c471743ace89750540e4ddc976bbbfd53dd679b9849920bee5cdf6d73276655",
+      "bytes": 260
+    },
+    "runs/execution/ci-1007-publication-role-proposal/owner-link-widegate-v1.txt": {
+      "sha256": "98f0c5e1df82cb8f4db1d16abbfd9376b09a30c71cdb3b2797311ce2c6fb341e",
+      "bytes": 3168
+    },
+    "runs/execution/ci-1007-publication-role-proposal/owner-public-recovery-v1.txt": {
+      "sha256": "73cf8604015a089b031cac6765ed135bd9408e753fc6ada11405c8124ddaedff",
+      "bytes": 659
+    }
+  },
+  "material_limits": [
+    "private raw/reviews/fulltext/CAS/DB local; public compact pointers only",
+    "source-question r4 A/B and shares are previous unit, not new whole ABC/current acceptance",
+    "EgoLite space12 NOT_FOUND; Chinese HTTP507; original1007 attachment absent asks pending",
+    "historical DB digest mismatch remains FAIL unchanged",
+    "full question matching, MAH/group, source universe, currentABC, browser, 24 portals, three hosts, installation/recovery/RC open"
+  ],
+  "next_safe_action": "Bind identity-closed required records to actual research snapshot and existing once-only supply gate; unresolved joins/native correction not forced. Continue ready comparison and C task chain, no new pause."
+}

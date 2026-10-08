@@ -32,3 +32,22 @@ def test_actual_primary_report_with_response_proportions_is_not_demoted(pmid: st
     assert verdict.can_replace_primary_report  # heuristic, not scientific adoption
     assert verdict.record == record
     assert hashlib.sha256(store.read_bytes(blob)).hexdigest() == blob.sha256
+
+
+def test_actual_lte_lead_in_id_does_not_receive_lte_results() -> None:
+    receipt = ROOT / "abstracts.json"
+    if not receipt.is_file():
+        pytest.skip("Pinned local real source unavailable; not actual-source acceptance")
+    evidence = json.loads(receipt.read_bytes())
+    blob = ContentBlob.model_validate(evidence["receipt"]["raw_asset"])
+    store = ContentAddressedStore(ROOT)
+    raw = store.read_bytes(blob)
+    record = next(row for row in parse_pubmed_efetch_xml(raw.decode()) if row.pmid == "41405008")
+    result, = classify_pubmed_records((record,), target_nct_ids=("NCT03181503", "NCT04204616"))
+    assert result.matched_nct_ids == ("NCT04204616",)
+    assert result.model_dump().get("contextual_nct_ids") == ("NCT03181503",)
+    assert result.record == record
+    lead_in, = classify_pubmed_records((record,), target_nct_ids=("NCT03181503",))
+    assert not lead_in.can_replace_primary_report
+    assert lead_in.matched_nct_ids == ()
+    assert hashlib.sha256(store.read_bytes(blob)).hexdigest() == blob.sha256

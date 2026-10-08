@@ -1022,3 +1022,48 @@ raw/history/old-root boundary preserved. No broad cleanup/session migration,
 new dependency or silent browser/model/config change. Goal ACTIVE; remaining
 source universe/ChinaMAHgroup/required fulltexts/faithfulCChinese/currentABC/
 fourwidth-fourstate browser/24/threehosts/install/recovery/RC stay open.
+# 1007V1 论文关联根因与有界采用复盘（父929399f）
+
+采用execution-plus-conference：九PubMed原文角色/关联存在实质医学解释风险，
+一个E08写提案，一个新C03挑战；共享生产由owner改。不是再审全部页面或另
+造计划/本体。E08实际modelUsageGrok4.7-build/highCLI690.675s，无回退；九
+候选源/原提案冻结。owner70逐字引用、6原生关系方向、13同记录ID和原生XML
+重解析9记录→投影相等；不根据别名/序号补登记号。C03实际CodeBuddy init/
+resultmodelUsagedeepseek-v4.1-flash/maxCLI367.064s，命令工具拒绝、6长摘要
+Read截断。为相同原文生成无损分行545行，同会话103.551s补读EOF，原首报告
+未改、勘误DOI转写纠正。响应effort未独立证明；reviewer未执行hash/JSON，
+owner实际补核，不把owner检查盖成reviewer执行。首补读prompt输出路径表述
+不满足guard语法，preflight失败后修正再启动；非模型失败/重派。
+
+有界采用7required、1optional methods、1native integrity relation。保持正式
+PublicationRecord六类及必填身份，38629497无登记号不强配40112876的jRCT；
+39226086作为已有原生勘误而非新结果类型。独立量表验证属于方法学，可留
+参考而不触发三类结果全文门；不是丢研究。角色/关联判断不接受本文数值、
+全文或竞品宇宙。补读报告“两侧全文读毕”实际指完整摘要，本记录显式拒绝
+全文论文含义；勘误更正范围及日本两个报告身份尚未闭合。
+
+最有价值反例是41405008：NCT03181503在明确lead-in语境中被旧classifier
+当成该LTE结果登记号。新成族8FAIL/5PASS0.34s（复制伪造一项首次是未加
+字段的schema拒绝，不能夸为第八独立科学缺陷）。最小生产改动复用原记录/
+规则/B消费者：contextual_nct_ids与B对应字段空时不改旧序列化，明确背景/
+导入提及从结果关联排除、另有本篇登记句则不丢，DataBank重叠/目标顺序/
+既往用药/伪造值等反例同族；不把全部既往治疗错误当历史试验。独立secondary
+analysis整篇范围不误作primary，附带次级分析主报告保持。97PASS0.59s，
+扩大邻接171PASS2.14s含4真实源重放且无SKIP。Ruff4/strict2文件通过。
+
+同接口源码冻结仅一次宽门：Ruff src/tests/tools，strict src/tools283，活跃
+1185PASS267.23s，兼容20PASS0.65s，层级7PASS0.20s，旧路径词法PASS：
+GATE_OK quality-only/6。完整集成/历史数据库FAIL/科学/视觉/安装/RC不在该
+接受范围。所有源码/源/候选/运行/会商SHA见owner-publication-scope-v1.json。
+六缺失或勘误对象实际出版社/PMC两路线12尝试：未取得新合格正文。出版社
+403权限、重定向/页面能力边界、5明确PMC DOI零查询、39602139身份正确但
+metadata-only分别保存；不是不存在或无公开数据。无账号/凭据/绕限制。
+缓存重开/原元数据可用性不伪装新医学事实或首公开日。
+
+复盘：候选supported_trial_ids的字面正确不保证下游结果语义正确；作用域
+须消费到生产并以真实原文重放，不停在审阅建议。长行工具限制应从初源包
+就提供无损分行，避免一次定向补读；原文不可用与解析/访问失败必须分开。
+正式补件门仍待已核身份→研究快照绑定，不能用统计文字假装门关闭。上一
+r4 A/B保存/分享不借来拼新ABC全旅程；UI与来源可就绪并行，Ego/中文容量/
+原附件Ask不重发、不私换配置。当前Goal ACTIVE、未暂停/交付；保留五用户
+修改/历史/原件，旧中文根零接触，不清理唯一证据。
