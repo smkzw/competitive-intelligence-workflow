@@ -14,6 +14,8 @@
     "limitations": "Not all integrations, not full retained format track, not scientific/browser/installed/RC acceptance"
   },
   "parent_commit": "7aeaac2cc040b6df7af475b162061fdf4e0b14a4",
+  "implementation_commit": "7b6bbaf51d3e0986de282247b2d1ef5f972be3cb",
+  "GitHub_main_verified": "7b6bbaf51d3e0986de282247b2d1ef5f972be3cb",
   "goal_status": "active_verified",
   "sources": {
     "src/ci_workflow/application/c_source_review_entry.py": "a4301d23791198aabb5cb3740cabcce806d86bacd46a0dfadb903ba6af337760",

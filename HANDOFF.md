@@ -2,9 +2,9 @@
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 历史最新暂停：[20261008原件](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)，不恢复旧PID。
-当前记录父7aeaac2cc040b6df7af475b162061fdf4e0b14a4；
+最新本轮源码及记录7b6bbaf51d3e0986de282247b2d1ef5f972be3cb，已push且GitHub实核；
 固定已push导航源码/安装c6dbb71cfe054238dd485afd909bad66c3bd0793。
-本批C来源入口及发布守卫完成有限验收，提交中；不能借旧安装PASS覆盖。
+本批C来源入口及发布守卫完成有限验收；新安装未跑，不能借旧安装PASS覆盖。
 Goal实际ACTIVE。唯一英文工程；旧中文根零接触。五用户修改、未知资料、
 原始来源、历史FAIL和暂停记录保留；无全量清理、reset/clean或无差别提交。
 
