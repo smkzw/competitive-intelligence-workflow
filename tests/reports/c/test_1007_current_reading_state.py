@@ -375,9 +375,12 @@ def test_nonreported_sample_current_reading_never_revives_numeric_axis(
     assert current in workspace["numeric_eligibility"].undrawable_reasons[unknown.row_id]
 
 
-@pytest.mark.parametrize("current_number", [None, 500])
+@pytest.mark.parametrize(("current_number", "threshold_present"), [
+    (None, True), (500, True), (500, False),
+])
 def test_native_revision_rebuild_keeps_current_and_original_sample_separate(
     report: ReportCPortalData, tmp_path: Path, current_number: int | None,
+    threshold_present: bool,
 ) -> None:
     """Full native render of a source-bound development edit, not a browser acceptance."""
     original = _observation(report, SAMPLE_ROW_ID)
@@ -390,7 +393,8 @@ def test_native_revision_rebuild_keeps_current_and_original_sample_separate(
         **identity, fact_id="development-sample", fact_version_id="development-sample-v2",
         field_id="design.sample_size", primary_fragment_id="development-source-fragment",
         raw_value=None if current_number is None else str(current_number),
-        normalized_value=current_number, threshold_value=current_number,
+        normalized_value=current_number,
+        threshold_value=current_number if threshold_present else None,
         threshold_unit=original.threshold_unit, threshold_operator=original.operator,
         source_locator=binding.source_pointer, source_quote=original.source_text,
         consumer_bindings=(binding,), review_state="user_modified",

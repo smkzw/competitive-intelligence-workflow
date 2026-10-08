@@ -10,12 +10,14 @@ from __future__ import annotations
 import fcntl
 import hashlib
 import json
+import math
 import os
 import re
 import shutil
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 from enum import StrEnum
 from importlib import metadata
 from pathlib import Path
@@ -1253,6 +1255,37 @@ class UserFactEditService:
             ):
                 raise UserFactSaveError("估计值的原始计数变化必须同时提供重新核实的估计值")
             context.update(changes)
+            declarations = (
+                [binding.model_dump(mode="json") for binding in bindings]
+                if bindings else (context.get("consumer_bindings") or [])
+            )
+            sample_size = any(
+                isinstance(binding, dict) and binding.get("report") == "C"
+                and binding.get("collection") == "observations"
+                and binding.get("endpoint_definition") == "planned_or_actual_sample_size"
+                for binding in declarations
+            )
+            if sample_size and not clear_fields and (
+                {"raw_value", "normalized_value"} & changes.keys()
+            ):
+                if not {"raw_value", "normalized_value"}.issubset(changes):
+                    raise UserFactSaveError("样本量修订须同时提供数值文本和规范值")
+                try:
+                    raw_number = float(str(changes["raw_value"]))
+                    number = float(str(changes["normalized_value"]))
+                    exact = Decimal(str(changes["normalized_value"]))
+                    raw_exact = Decimal(str(changes["raw_value"]))
+                except (TypeError, ValueError, InvalidOperation) as error:
+                    raise UserFactSaveError("样本量须为非负整数，原值与规范值一致") from error
+                if (isinstance(changes["normalized_value"], bool)
+                    or not math.isfinite(number) or number < 0 or not number.is_integer()
+                    or raw_number != number or raw_exact != exact
+                    or Decimal(str(number)) != exact):
+                    raise UserFactSaveError("样本量须为非负整数，原值与规范值一致")
+                # This is the user current axis, never an update to source evidence.
+                # Prevent the legacy threshold calculation from reviving the old N.
+                context["threshold_value"] = number
+                context.setdefault("threshold_unit", context.get("unit"))
             raw_value = changes.get("raw_value", source["raw_value"])
             normalized_value = changes.get("normalized_value", source["normalized_value"])
             source_edit = context.get("user_edit")

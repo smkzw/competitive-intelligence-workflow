@@ -436,6 +436,7 @@ def _project(
     cross_report_binding: str | None = None,
     include_b_efficacy: bool = False,
     complete_workspace: bool = False,
+    c_sample_size: bool = False,
 ) -> tuple[Path, dict[str, str]]:
     root = tmp_path / "w04-project"
     contract = ProjectContract(
@@ -522,7 +523,8 @@ def _project(
         active_fact_binding_for_b(report_data["B"], "efficacy", "eff-apply-treatment")
         if include_b_efficacy else None
     )
-    c_binding = active_fact_binding_for_c(report_data["C"], "c-nct04178967-inclusion")
+    c_row_id = "c-nct02260986-sample-size" if c_sample_size else "c-nct04178967-inclusion"
+    c_binding = active_fact_binding_for_c(report_data["C"], c_row_id)
     if b_binding_override is not None:
         field, replacement = b_binding_override
         b_binding = b_binding.model_copy(update={field: replacement})
@@ -592,7 +594,7 @@ def _project(
             "a": "任何TEAE在治疗组中的原始门户值为66.2%。",
             "adjusted": "调整后发生率为23.7%。",
             "lsmean": "最小二乘均值变化为20.0。",
-            "threshold": "入选标准阈值为至少16分。",
+            "threshold": "740" if c_sample_size else "入选标准阈值为至少16分。",
             "unrelated": "另一研究共有20例受试者。",
         }
         if b_efficacy_binding is not None:
@@ -722,18 +724,18 @@ def _project(
             fact_id="fact-c-threshold",
             version_id="fact-c-threshold-v1",
             entity_id="entity-arm",
-            field_id="eligibility.score_threshold",
-            raw_value=">=16 分",
-            normalized_value="16",
+            field_id="design.sample_size" if c_sample_size else "eligibility.score_threshold",
+            raw_value="740" if c_sample_size else ">=16 分",
+            normalized_value="740" if c_sample_size else "16",
             fragment_id=fragments["threshold"],
             context={
                 **c_binding.model_dump(
                     mode="json",
                     exclude={"report", "collection", "row_id", "original_row_sha256"},
                 ),
-                "threshold_operator": ">=",
-                "threshold_value": 16.0,
-                "threshold_unit": "分",
+                "threshold_operator": "=" if c_sample_size else ">=",
+                "threshold_value": 740.0 if c_sample_size else 16.0,
+                "threshold_unit": "例" if c_sample_size else "分",
                 "consumer_bindings": [c_binding.model_dump(mode="json")],
             },
         )

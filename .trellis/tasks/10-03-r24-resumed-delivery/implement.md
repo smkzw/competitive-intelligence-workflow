@@ -1,5 +1,23 @@
 # Continuous implementation checkpoint
 
+## 1007V1 C样本量实际保存链（parent5dd1480，当前有界实施）
+
+采用direct：source/current共享事务需单owner，沿真实生产保存/原生重建核
+current标量，不需要新医学等价判断或重复节点。现有C用户读法已修；当前
+进一步核普通raw+normalized保存是否被保留source threshold回写旧人数，
+以及C登记源当前标量能否进入数值消费。成族set/zero/clear/restore/undo与
+非法人数反例一批；仅现有服务/renderer和相关测试，不写实际用户项目、
+不提升候选科学状态或借开发fixture签真实ABC/浏览器接受。
+
+9真实RED10.68s：set500/0被旧740覆回，六非法人数未拒绝，clear后restore
+没有数值轴。只在明确C sample消费者更新用户当前axis；原样本量/源/身份
+不改，不加分母或比例。补normalized-only兼容和预检一致性；Decimal只验
+float不会失真，拒绝静默舍入。第一次33PASS14.05s只覆盖前一修订，最终
+四文件102PASS/1准确排除旧浏览器90.18s，Ruff5/strict2通过。真实源side seam
+验证既有登记/版本/quote/identity与新用户轴50，原源hash/state不改且无
+current；不把内部stage当正式save/临床采用。5dd宽门仅覆盖前代码，此族
+相关门准确声明范围，不逐族重复全仓。当前owner-c-sample-save-v1。
+
 ## 1007V1 C当前阅读值（parent51f8d1e，终态/owner收口）
 
 采用execution：C样本量清除后_numeric_for/_value_text从保留原文读回旧

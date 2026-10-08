@@ -15,6 +15,7 @@ import re
 import shutil
 from collections.abc import Mapping, Sequence
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 from html import unescape
 from pathlib import Path
 from typing import Any, Self
@@ -28,6 +29,7 @@ from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.gates.models import SourceRole
 from ci_workflow.qc.browser import route_to_site_path
 from ci_workflow.renderers.portal.active_fact_projection import (
+    ActiveFact,
     ActiveFactBinding,
     ActiveFactRevision,
     PortalConsumerNode,
@@ -2287,6 +2289,9 @@ def render_report_c_site(
             )
             cleared = fact.disclosure_state == "user_cleared"
             display_numeric = threshold if threshold is not None else fact.normalized_value
+            if observations[index].field == "planned_or_actual_sample_size":
+                threshold = _current_sample_number(fact)
+                display_numeric = threshold
             narrative = (
                 f"{endpoint}：用户清除，待重新核实。"
                 if cleared else (
@@ -2570,6 +2575,31 @@ def validate_active_fact_revision_c(
             )
         except ValueError as error:
             raise ReportCPortalError(str(error)) from error
+        if (
+            binding.endpoint_definition == "planned_or_actual_sample_size"
+            and (fact.model_extra or {}).get("review_state") == "user_modified"
+        ):
+            _current_sample_number(fact)
+
+
+def _current_sample_number(fact: ActiveFact) -> float | None:
+    """Current sample scalar, not the retained source threshold or an inferred rate."""
+    if fact.disclosure_state == "user_cleared":
+        return None
+    threshold = (fact.model_extra or {}).get("threshold_value")
+    value = threshold if threshold is not None else fact.normalized_value
+    try:
+        number = float(str(value))
+        normalized = (float(str(fact.normalized_value))
+                      if fact.normalized_value is not None else number)
+        exact = Decimal(str(fact.normalized_value if fact.normalized_value is not None else value))
+    except (TypeError, ValueError, InvalidOperation) as error:
+        raise ReportCPortalError("当前样本量必须为一致的非负整数") from error
+    if (isinstance(value, bool) or isinstance(fact.normalized_value, bool)
+        or not math.isfinite(number) or number < 0 or not number.is_integer()
+        or number != normalized or Decimal(str(number)) != exact):
+        raise ReportCPortalError("当前样本量必须为一致的非负整数")
+    return number
 
 
 def active_fact_binding_for_c(

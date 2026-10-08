@@ -1,0 +1,118 @@
+{
+  "schema_version": "1007-c-sample-save-1",
+  "parent_commit": "5dd1480a3cdb252ef64743592a02cf30b4d44244",
+  "state": "bounded_current_sample_save_development_not_release",
+  "goal_status": "active_verified",
+  "mode_reason": "direct: one owner holds shared current/source transaction, objective production counterexamples and exact source-side replay close this bounded scalar judgment; no independent medical equivalence review claimed",
+  "code": [
+    {
+      "path": "src/ci_workflow/application/user_fact_edit.py",
+      "sha256": "fa20a293d847a659ce1cb21aa459528393b8e3c14008cb1473f00f23b7c5010d"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/report_c.py",
+      "sha256": "720ad4d56784d6b4a120e24bb0c8f761d3450b053524fd7b2acbf2b830ec1e7d"
+    },
+    {
+      "path": "tests/integration/test_w04_user_fact_edit.py",
+      "sha256": "7eec735f8d7ac3d7c142409fc16ffc342cb53313d1c4b0003e18c4fac5b13293"
+    },
+    {
+      "path": "tests/integration/test_1007_c_sample_current_save.py",
+      "sha256": "6b4606ca499e29cf712c4887eeb8e570cc75f7fdeb446001b0713160145b7654"
+    },
+    {
+      "path": "tests/reports/c/test_1007_current_reading_state.py",
+      "sha256": "87b84678e5381e2fd7aa85132467ed856a67318f235e8228b5335f7d1ee751cb"
+    }
+  ],
+  "source_inputs": {
+    "parent_source_set": {
+      "path": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-current-reading-source-set-v1.json",
+      "sha256": "33010b6fa268073f5b21b1c1f85342b8fefb626115e3b38594bf1e09535355b6"
+    },
+    "overrides": [
+      {
+        "path": "src/ci_workflow/application/user_fact_edit.py",
+        "sha256": "fa20a293d847a659ce1cb21aa459528393b8e3c14008cb1473f00f23b7c5010d"
+      },
+      {
+        "path": "src/ci_workflow/renderers/portal/report_c.py",
+        "sha256": "720ad4d56784d6b4a120e24bb0c8f761d3450b053524fd7b2acbf2b830ec1e7d"
+      },
+      {
+        "path": "tests/integration/test_w04_user_fact_edit.py",
+        "sha256": "7eec735f8d7ac3d7c142409fc16ffc342cb53313d1c4b0003e18c4fac5b13293"
+      },
+      {
+        "path": "tests/integration/test_1007_c_sample_current_save.py",
+        "sha256": "6b4606ca499e29cf712c4887eeb8e570cc75f7fdeb446001b0713160145b7654"
+      },
+      {
+        "path": "tests/reports/c/test_1007_current_reading_state.py",
+        "sha256": "87b84678e5381e2fd7aa85132467ed856a67318f235e8228b5335f7d1ee751cb"
+      }
+    ],
+    "input_count": 824,
+    "unanticipated_drift": []
+  },
+  "red": {
+    "scope": "nine sample save family cases",
+    "failed": 9,
+    "duration_seconds": 10.68,
+    "causes": [
+      "new500/0 reverted to original740",
+      "negative/fraction/bool/nonfinite/raw-normalized mismatch not refused",
+      "clear then re-enter value lacked numeric axis"
+    ]
+  },
+  "intermediate": {
+    "scope": "first three-file batch before precision/import supplement",
+    "passed": 33,
+    "duration_seconds": 14.05,
+    "not_final_bytes": true
+  },
+  "related": {
+    "command": "uv run python -m pytest tests/integration/test_1007_c_sample_current_save.py tests/reports/c/test_1007_current_reading_state.py tests/integration/test_r24_c_source_consumers.py tests/integration/test_w04_user_fact_edit.py -q --tb=short -k 'not test_current_share_exports_committed_a_b_edit_and_unchanged_c' -o tmp_path_retention_count=1000",
+    "passed": 102,
+    "deselected": 1,
+    "duration_seconds": 90.18,
+    "exit_code": 0,
+    "final_production_bytes": true,
+    "source_seam_saved_at": "later corrected from fixture NOW to actual candidate acquisition _AT; selected seam recheck recorded separately"
+  },
+  "source_seam_recheck": {
+    "reason": "test saved_at corrected from fixture NOW to actual candidate acquisition _AT; no production change or backdating",
+    "passed": 1,
+    "deselected": 10,
+    "duration_seconds": 1.25,
+    "exit_code": 0,
+    "ruff_affected_files": "five PASS after test correction"
+  },
+  "static": {
+    "ruff": "five affected files PASS",
+    "strict_mypy": "two production files PASS"
+  },
+  "previous_wide_gate": {
+    "commit": "5dd1480a3cdb252ef64743592a02cf30b4d44244",
+    "status": "quality-only/6 PASS, only previous 823 input bytes",
+    "current_wide_gate": "NOT_RUN; grouped related/static closure for this bounded family, not repeated per scalar"
+  },
+  "source_seam": {
+    "scope": "fixed real registry candidate plus production register/stage/public-fact/current-sample/identity functions; no actual current/publication",
+    "current_sample": 50,
+    "derived_rate": null,
+    "original_source_version_quote_identity_scientific_state": "unchanged checked",
+    "current_exists": false,
+    "scientific_acceptance": false
+  },
+  "browser": "Ego space12 unavailable; exact old Playwright test excluded; no browser PASS",
+  "limits": [
+    "development current fixture is not the actual real ABC journey",
+    "private source-side stage is not an accepted C or public user save",
+    "historical database hash FAIL unchanged",
+    "24 portals/three-host/install/recovery/RC open"
+  ],
+  "protected_user_files": "all five hashes match pre-dispatch; not staged",
+  "next_safe_action": "current HTML-only bundle/fresh-install and ready source/current journey paths; no goal pause or clinical promotion"
+}

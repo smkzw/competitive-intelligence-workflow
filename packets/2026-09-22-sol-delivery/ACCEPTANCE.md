@@ -9,6 +9,11 @@ C当前阅读：清除正数/真实零/残留阈值、多段入排修订/清除�
 组件逐项拒绝，不能删生产守卫或数值断言通过旧测试。Node/原生HTML验收
 不计Ego Lite实屏；包含其他浏览器的历史自动化不替代当前指定浏览器门。
 
+C样本量保存须经过生产service→current→原生页：set/显式0、清除、重新
+输入、undo、重复请求；负数、小数、bool、非有限、原值/规范值矛盾与数值
+转换失真在写入前拒绝，current/source/请求计数保持。真实源登记与stage
+接线另记，不将无current候选库当已发表C。用户层/源层分离且不推导比例。
+
 来源库重开：XML两种MIME，inline有效quote正向，错误/缺失/过粗locator
 反向；JSON原有精确守卫保持。PDF提案边缘space/newline/tab可按实际源quote
 持久化，但内部数值改写必须拒绝，原proposal bytes/hash不改。真实64条

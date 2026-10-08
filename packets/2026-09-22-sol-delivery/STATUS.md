@@ -1,11 +1,19 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交51f8d1ee33feb2218f6b302b4610f207e90aee57（已push核远端）；实际HEAD以Git核对。
+本批父提交5dd1480a3cdb252ef64743592a02cf30b4d44244（已push核远端）；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-c-current-reading-v1.json)，
+[当前机器清单](evidence/1007V1/owner-c-sample-save-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+C sample实际保存发现旧740覆回新500/0与clear恢复无轴；9RED10.68s后限定
+用户当前数值更新及当前读法，source/科学身份不改。规范值/旧threshold冲突、
+负/小数/bool/非有限/舍入失真拒绝；source sample不假加分母/比例。最终
+四文件102PASS/1准确排除旧浏览器90.18s，Ruff5/strict2。真实源侧stage/
+别名/原文/身份核过但不发布C/接受候选；两个完整数值状态及恢复/undo通过
+开发fixture实际save链，不当真实ABC旅程。没有当批新宽门，5dd一次宽门
+只对原823字节集合成立。继续安装包/当前旅程就绪分支，Goal ACTIVE。
 
 最新官方API真实GET保存2978130原字节、52记录/1终页（非宇宙闭包），
 四目标源版本/36字段精确重开。PRIME/PRIME2由登记briefTitle明确文字对应

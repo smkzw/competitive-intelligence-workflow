@@ -1,5 +1,28 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 最新当前：C样本量保存链（父5dd1480）
+
+direct：共享事务单owner，源绑定、计数与当前轴可由精确原件/生产结果
+判定，无新的医学等价判断或重复会商。先9真实RED10.68s：500/0保存被旧
+740覆盖，六非法人数未拒绝，clear后restore没有数值轴。仅明确C样本量
+消费者把用户当前raw/normalized一致非负整数同步到用户轴，source/source
+threshold/原子身份不改；clear/undo仍沿旧事务，既有normalize-only当前
+层可读取。Decimal仅检查浮点是否无损，不添加单位转换/比例或审批。
+
+第一次33PASS14.05s是在精度/import补齐前，不能签最终字节；最终四文件
+102PASS/1准确排除旧Playwright分享90.18s，Ruff5/current strict2通过。前
+5dd统一宽门已终态quality-only6/strict283/1185PASS267.65s/兼容20/.54s/
+层级7/.19s/词法，只签原823输入，不能覆盖后来两生产文件。这一小族
+按当前相关门收口，不机械每一数值再全仓。完整开发fixture实际save/current
+页支持两值/清除恢复undo/幂等与写入前拒绝；真实登记样本源的独立stage
+核当前50、sourcequote/version/alias/binding/science旧hash保持且无current。
+内部stage不是完整用户save、医学采用或正式C。所有源/用户/历史失败不改。
+
+五用户文件hash再核完全一致。无几何/框架/执行器/依赖/真实项目修改。一次
+文档patch末块行匹配错误全部拒绝，重读准确小段后整批修正，未部分写入。
+当前owner-c-sample-save-v1.json；继续可安装性及真实旅程就绪分支，ACTIVE。
+Ego/忠实中文/论文公开Ask/两正文/完整宇宙/当前ABC/24/三宿主/恢复/RC未关。
+
 ## 最新当前：C当前阅读整合（父51f8d1e）
 
 有界E03 actualCodeBuddy/deepseek-v4.1-flash，max请求响应未attest，498.373s/
@@ -1324,6 +1347,13 @@ native摘要一次选择过宽打印被截，改只选身份/耗时/计数/hash�
 下一有界工作为已审论文的实际源/快照/单补件接缝，不能假签宇宙closed或
 套上一叶级PASS成完整包。Ego/中文/原附件问题只阻断相应分支，GoalACTIVE
 继续，无阶段pause/oldroot/cleanup/sessionstore修改；五用户变化与历史DBFAIL保持。
+# 1007V1 当前人数保存补充核验
+
+真实登记来源接缝测试的 saved_at 原沿用早于来源取得的 fixture NOW，已改为
+来源实际取得 _AT；仅纠正测试输入，不改生产代码或回溯来源可得性。
+该接缝最终单独1PASS/10deselected1.25s，受影响五文件Ruff仍通过。
+102PASS批与后续这一输入修正分开记录，未借旧宽门声称新源码全仓通过。
+
 # 1007V1 论文来源叶/显式日期有界补记（parent e87d8e2）
 
 不是新产品权威；当前入口见STATUS/owner-publication-source-dates-v1.json。
