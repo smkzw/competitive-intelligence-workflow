@@ -21,13 +21,13 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "1007V1 ACTIVE fixed a36 installed proof retained, not science acceptance. Same-session Pi/Luna historical retry repair returned; owner93PASS/1browser exclusion and Ruff3/strict2. Initial incomplete permission question, actual route, unattested effort and unenforced128-turn budget retained. Source proof owner-historical-save-retry-v1.json; corrected fixed install still must replay original r6 request on existing QA r9 without resaving four operations. Original a36 historical409FAIL remains. Real A+B shares byte/config verified,427 parent pins unchanged. Report navigation/current C/browser/universe/24/three hosts/full recovery/RC open. Five edits/unknown/raw/history protected, no pause/general cleanup/old-root contact.",
+  "notes": "1007V1 ACTIVE fixed b6 installed historical retry proof owner-installed-historical-retry-v1.json. Original r6 request twiceHTTP200 returns original result, current r9; altered payload/new stale409,2132file checks/DB/events/journal and427parent pins unchanged. Original a36FAIL and source93PASS/1browser exclusion retained, not science acceptance. Pi initial incomplete permission question, actual route, unattested effort and unenforced128-turn budget retained. Next shared-service manifest-bound report-to-editor navigation inline, native finite-code admission not matching; frozen security boundary requires bounded review. Own clean3GB worktree recovered by fixedcommit, bundle/install/QA retained. Current C/browser/universe/24/three hosts/full recovery/RC open. Five edits/unknown/raw/history protected, no pause/general cleanup/old-root contact.",
   "meta": {
     "execution_state": "active",
     "goal_api_state": "active_verified_after_prior_blocked",
     "pause_requested_by_user": false,
     "handoff": "HANDOFF.md",
-    "last_stage": "Historical retry source repair passed owner93 related checks; corrected installation replay pending, original a36 failure retained.",
+    "last_stage": "Fixed b6 installed HTTP historical retry verified without r9 rollback or new versions; report-to-editor navigation next, no RC.",
     "product_release_state": "development-candidate",
     "project_completed": false
   }

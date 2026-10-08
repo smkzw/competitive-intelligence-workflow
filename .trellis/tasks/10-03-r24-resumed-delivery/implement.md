@@ -15,6 +15,13 @@ retry-v1已派发，终态前不接纳/轮询/重派。新安装只复跑未关�
 ready/complete不单独证明发布，DB世代与文件/journal/result/lineage闭合。
 128轮未被Pi强制执行、effort未attest，两项限制保留。新安装尚待只重放
 原r6请求到r9，不重存四步；当前a36FAIL不改，不签RC或全项目完成。
+随后b6固定398包/399安装成员重核，新独立runtime只重放原r6请求两次HTTP200，
+返回原结果但current仍r9；改同ID载荷/新stale409。2132检查项/DB/events/journal
+及427父pin不变。owner-installed-historical-retry-v1为当前证明，a36FAIL不改。
+只回收own clean3GB源码副本，包/安装/QA/证据留存，固定commit可恢复。
+下一报告→编辑导航先inline：同服务路由、科学消费绑定和前端链接紧耦合，
+现live finite-code native admission明确不匹配，不强制绕过或继承模型。
+冻结新增安全边界后有界独立挑战，非无限全页会商；科学和实屏门不代签。
 以下段落是各批历史范围，不恢复旧PID或重复生产。
 
 ## 1007V1 论文v4有界确认（parent8d24b42，当前实施）

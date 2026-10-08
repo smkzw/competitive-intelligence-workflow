@@ -1,0 +1,23 @@
+{
+  "schema_version": "1007-installed-historical-retry-1",
+  "source_commit": "b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7",
+  "status": "PASS_bounded_installed_HTTP_historical_retry",
+  "bundle": {"path": ".artifacts/1007-historical-retry-install-v1/dist/ci-1007-historical-retry-b6e6ca3.tar.zst", "sha256": "3ebfd8c737cfc102d22ae0dac4a76048a421049e9fb6fc08099357b984e215a5", "source_files": 398, "manifest_sha256": "5d078acaddd92ff802b09ed89162bb235a2ec681e445a211a9523ec25580c145", "installer_zip_sha256": "ae8543559725f602ba1d05e39f74ca86ecdda7e0be9c270e602f6c1d56f84843", "verify_exit": 0},
+  "install": {"path": ".artifacts/1007-historical-retry-install-v1/install", "bootstrap_exit": 0, "package_verify_exit": 0, "poisoned_developer_overrides_removed": true, "installed_members_verified": 399, "bad_members": [], "receipt_sha256": "53e14d2e7f2f59361f1be04c59329b7dd0fba91ae136d5c73d2024a89ee850e6", "build_backend_exact_version": "NOT_VERIFIED"},
+  "actual_proof": {"path": ".artifacts/1007-historical-retry-install-v1/replay.json", "sha256": "ade960eabd48de1fc16ec2e8c7b3294ab5d6e0d3984daf8c296c919bbfc1321f", "script": ".artifacts/1007-historical-retry-install-v1/replay.py", "script_sha256": "ef4a914ddcc5eeecc991b5f7e5eb76e39a44e56003d71217f527964836f50563", "runtime": "installed private venv Python -I -B, verified module imports under content-addressed installed release", "command": "CI_QA_INSTALL_ROOT=<fixed installation> <fixed installation>/runtime/venv/bin/python -I -B .artifacts/1007-historical-retry-install-v1/replay.py"},
+  "replays": [{"http": 200, "saved_result_revision": 6, "current_revision": 9}, {"http": 200, "saved_result_revision": 6, "current_revision": 9}],
+  "changed_same_id_payload_http": 409,
+  "new_stale_request_http": 409,
+  "current_generation_sha256": "627d8ac3251ad82a22c34bfb46c10fba93f2eb1203ae5b941fcf258f041d5564",
+  "current_value": -59.34,
+  "current_fact_version": "fact-version_9de279fbdaa45f41a1e11cd4",
+  "current_reports": {"A": {"files": 65, "row_values_checked": 1}, "B": {"files": 356, "row_values_checked": 1}},
+  "snapshot_files_verified": 2132,
+  "snapshot_set_sha256": "d9c027901ebebc67cef21bc88958122c140d0bd3cec6d03e41df5de99224339a",
+  "database_events_reports_journals_unchanged": true,
+  "parent_pins_verified": 427,
+  "parent_unchanged": true,
+  "retained_a36_FAIL_sha256": "ede9850d610de6de6cf6a3803aaf3b83fe5f419dcfbf4409058d8e7c51b9fab9",
+  "cleanup": {"exact_target": ".artifacts/1007-historical-retry-install-v1/source", "fixed_commit": "b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7", "precheck": "exact toplevel, fixed HEAD, no tracked or untracked changes, observed3.0G", "action": "git worktree remove exact absolute target, no force", "exit": 0, "postcheck": "source absent, installed source and fixed bundle/QA retained", "recovery": "git worktree add --detach <same exact target> b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7"},
+  "limitations": ["isolated hypothetical QA, not a clinical edit", "C absent from current", "no new current generation or resaving four operations", "a36 failure preserved rather than rewritten", "report render bytes remain previous current; new transaction runtime does not create visual acceptance", "Ego and moved offline new-browser share NOT_RUN", "24 portals, three hosts, full recovery and RC NOT_ACCEPTED"]
+}
