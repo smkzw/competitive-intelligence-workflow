@@ -1066,6 +1066,32 @@ def _fixture_run_handler(args: argparse.Namespace) -> int:
         return 0
 
 
+def _review_prepare_source_c_handler(args: argparse.Namespace) -> int:
+    from ci_workflow.application.c_source_review_entry import (
+        CSourceReviewEntryError,
+        prepare_c_source_review,
+    )
+
+    try:
+        outcome = prepare_c_source_review(
+            project_root=Path(args.root),
+            content_path=Path(args.content),
+            producer_session_id=args.producer_session_id,
+        )
+    except (OSError, CSourceReviewEntryError) as exc:
+        raise ContractError(str(exc)) from exc
+    print("SOURCE_REVIEW_PREPARED " + json.dumps({
+        "report": "C", "gate_decision": outcome.gate.result.decision.value,
+        "evidence_snapshot_id": outcome.evidence_snapshot_id,
+        "claim_snapshot_id": outcome.claim_snapshot_id,
+        "coverage_set_id": outcome.coverage_set_id,
+        "review_request": outcome.scope.review_request_relative,
+        "entry_receipt": outcome.receipt_path.relative_to(Path(args.root).resolve()).as_posix(),
+        "delivery_status": "unreviewed_candidate",
+    }, ensure_ascii=False))
+    return 0
+
+
 def _review_issue_handler(args: argparse.Namespace) -> int:
     from ci_workflow.application.review_issuer import (
         ReviewIssuanceError,
@@ -1371,6 +1397,13 @@ def _build_parser() -> argparse.ArgumentParser:
 
     review = groups.add_parser("review", help="独立科学复核签发入口（供独立复核宿主会话使用）")
     review_commands = review.add_subparsers(dest="review_command", required=True)
+    review_prepare = review_commands.add_parser(
+        "prepare-source-c", help="从待确认 C 内容准备真实来源复核，不接受事实、不切换 current"
+    )
+    review_prepare.add_argument("--root", "--project", dest="root", required=True)
+    review_prepare.add_argument("--content", required=True, help="项目根内纯研究内容 JSON")
+    review_prepare.add_argument("--producer-session-id", required=True, help="实际生产会话标识")
+    review_prepare.set_defaults(handler=_review_prepare_source_c_handler)
     review_issue = review_commands.add_parser(
         "issue",
         help="绑定已发布的科学复核请求，运行独立复核进程并签发正式回执",

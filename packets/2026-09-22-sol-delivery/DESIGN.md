@@ -4,6 +4,17 @@
 
 ## 1007V1 当前增量合同
 
+C 来源复核 bootstrap 复用 FreshCResearchContent、摄取、消费者登记、未接受
+预览、现有 request/issuer/materialization。纯内容输入无需伪造前置 accepted
+ScientificReview；候选观察保持 candidate。request 保存实际完整门结果而非
+布尔，review_input_digest 同时绑定既有 bundle 与门结果；发布、重放、epoch
+推进与读取采用相同路径。CReportGateOutcome.review_result 只把既有已评估
+单元映射至科学内容摘要键，不改历史 engine/outcome 的标识或判定。
+正式 C 晋级必须有可验证且 PASSED 的本次门结果；阻断或缺门的来源回执可按
+真实 issuer 用于精确来源采用，但不能晋级报告。历史材料仍只读兼容，不能
+据此授权新的 C 发布。来源投影改变报告摘要后，最终报告仍须按新摘要复核。
+共享 schema/授权由 owner 管理，不新增平台、逐观察签发或人工审批。
+
 报告读路由复用LoopbackEditServer：/reports/{current generation digest}/{A|B|C}/{file}。
 精确Host与会话、已提交清单、web扩展白名单、普通路径与symlink拒绝、实际
 字节hash在既有current锁内校验；不开放JSON、DB、原始源或任意目录。旧

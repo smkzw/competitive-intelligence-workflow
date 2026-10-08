@@ -2,6 +2,13 @@
 
 ## 1007V1 当前新增合同（不是外部cases.json的替代原件）
 
+C 源复核与报告晋级分层：全 candidate 的纯研究内容可形成真实复核请求/
+未接受预览，DB 状态不自动翻 accepted/current 不切。真实 issuer 的阻断门
+回执可重开并采用其精确来源，但 promotion 必须拒绝；缺门、错内容/规则/
+合同/快照、改决定仍同旧key、布尔伪PASS、门与审阅摘要漂移和 epoch 精确
+重放漂移均拒绝。PASS 正例须用同候选实际门结果及正式签发链；测试 runner
+seam 不算实际医学复核。旧历史哈希不改，producer summary 不算逐事实采用。
+
 报告→编辑导航单族：实际现有报告入口、HTML/JS真实字节、B显式view身份、
 同一行多合法事实、保存后新世代返回与旧深链拒绝。负向含Host/会话、编码
 遍历/反斜线/NUL/symlink、未列出/私有JSON、旧世代及asset篡改。原文件/DB

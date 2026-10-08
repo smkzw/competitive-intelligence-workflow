@@ -1013,7 +1013,9 @@ def _render_html_b(ctx: RunContext, run_id: str) -> tuple[str, str, str]:
     )
 
 
-def _render_html_c_minimal(ctx: RunContext, run_id: str, data_path: Path) -> tuple[str, str]:
+def _render_html_c_minimal(
+    ctx: RunContext, run_id: str, data_path: Path, *, review_candidate: bool = False,
+) -> tuple[str, str]:
     """C 类站点最小产物写入：供 three-report-complete 多报告路径使用。
 
     通过共享未发布渲染事务写入：中断残留可恢复；已绑定产物拒绝覆盖。
@@ -1067,6 +1069,7 @@ def _render_html_c_minimal(ctx: RunContext, run_id: str, data_path: Path) -> tup
         staging_root,
         publication_limitation_zh=_publication_limitation(ctx, "C"),
         identity_context=identity_context,
+        review_candidate=review_candidate,
     )
     data_digest = hashlib.sha256(_canonical_json(data.model_dump(mode="json"))).hexdigest()
     claim_ids = tuple(
@@ -1080,6 +1083,22 @@ def _render_html_c_minimal(ctx: RunContext, run_id: str, data_path: Path) -> tup
     coverage_projection_id = stable_id(
         "coverage-projection", ctx.contract.project_id, "C", data.report_version
     )
+    if review_candidate:
+        from ci_workflow.application.fresh_research_ingestion import ResearchEvidenceLineage
+
+        if not isinstance(ctx.research_lineage, ResearchEvidenceLineage):
+            raise ContractConfigError("C 来源复核预览必须绑定真实摄取谱系")
+        lineage = ctx.research_lineage
+        evidence = SnapshotStore(ctx.project_root).read(lineage.evidence_snapshot)
+        evidence_snapshot_id = lineage.evidence_snapshot.snapshot_id
+        claim_ids = lineage.claim_ids
+        claim_snapshot_id = stable_id(
+            "claim-snapshot", ctx.contract.project_id,
+            str(evidence["scientific_content_digest"]), *claim_ids,
+        )
+        coverage_set_id = stable_id(
+            "coverage-set", ctx.contract.project_id, "C", evidence_snapshot_id, claim_snapshot_id,
+        )
     declared_snapshot: ReportSnapshotManifest | None = None
     locked: LockedSnapshot | None = None
     if data.report_snapshot_id is not None:
@@ -2411,6 +2430,7 @@ def run_project(
                 producer_session_id=run_id,
                 produced_at=datetime.now(UTC),
                 portal_binding=portal_binding,
+                gate_result=gate_outcome.review_result if report_kind == "C" else None,
             )
         except ScientificReviewTransitionError as error:
             raise ContractConfigError(str(error)) from error

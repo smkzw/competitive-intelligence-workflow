@@ -1,0 +1,37 @@
+{
+  "schema_version": "1007-owner-c-review-entry-diagnosis-1",
+  "record_parent_commit": "7aeaac2cc040b6df7af475b162061fdf4e0b14a4",
+  "scope": "Four real registry studies/258 observations; source-review bootstrap diagnosis only, not whole PN universe or clinical adoption",
+  "worker_followup": {
+    "status": "terminal",
+    "actual_model": "GLM-5.3-Flash",
+    "actual_adapter": "zcode",
+    "session": "sess_aae189ae-2200-4694-8289-ceb6f780f0e3",
+    "report": "runs/execution/ci-1007-real-c-current-chain-v1/worker_01_review_entry_followup.md",
+    "report_sha256": "6fb9941228f755312ed4b774948511a213ac8224299faf1ddf9b7e637e7df533",
+    "timing_limit": "Recorded64.941s/0tools is last same-session report recovery only, not total assembly duration; do not infer whole-run budget compliance",
+    "owner_decision": "Typed input and pins verified; reject claim that an independent summary alone qualifies candidate observations"
+  },
+  "artifacts": [
+    {"path": ".artifacts/1007-real-c-current-chain-v1/review-entry-v2/pending-content.json", "sha256": "9100b6062003249a7ed013fe1052955e0a89d131c1a75a0eed8b123556ad20ca"},
+    {"path": ".artifacts/1007-real-c-current-chain-v1/review-entry-v2/assemble_review_entry.py", "sha256": "96173febda93f1275c59c73a6805ee239025ac51109301adce1688995a533367"},
+    {"path": ".artifacts/1007-real-c-current-chain-v1/review-entry-v2/source-review-inventory.json", "sha256": "68f9a988c4cd380d54f969ac75997447274f91e6d77c65ef62ffcb2342556cb2"},
+    {"path": ".artifacts/1007-real-c-current-chain-v1/review-entry-v2/batch-results.json", "sha256": "321b1fa5152c3dcb6941f1480f4973b24e1298cf6e0a2cb4ea45904a3d17081f"},
+    {"path": ".artifacts/1007-c-stage-owner-v1/owner-pending-input.json", "sha256": "3393189975c0cb9971d14a20ab4bfb155818a5151cf5b8076048defa63707d3c"},
+    {"path": ".artifacts/1007-c-source-review-input-v3/pending-content.json", "sha256": "ef1c9841d2a030f33e90a008dd5140a4f4c420635e4cb5d388002385d13403cd"},
+    {"path": ".artifacts/1007-c-source-review-input-v3/receipt.json", "sha256": "f286721561d368a1bd43be2bf07b991b53112eeafbc078a1b7c6c84c55982a81"},
+    {"path": "runs/conference/ci-1007-c-source-review-entry-boundary-v1/evidence_single_object.md", "sha256": "e63ce241255938417e5d14bf9421e94ec1732580f9f9fd949f49aa9bf5d23a24"}
+  ],
+  "owner_checks": {
+    "typed_facts_sources_claims": "PASS258/4/258; all258 source observations unchanged",
+    "Chinese_join": "PASS174 display rows only, original candidate states/facts/claims/source bytes unchanged",
+    "metadata_only_counterexample": "Valid package shape in memory leaves gate BLOCKED; not a real review and no accepted package persisted",
+    "source_pins": "PASS five pinned source hashes unchanged",
+    "source_adoption": "NOT_RUN",
+    "current_C": "NOT_ESTABLISHED",
+    "browser": "NOT_RUN"
+  },
+  "next_action": "Complete actual-gate promotion guard plus pure-content source-review preparation; real eligible-host source adoption and newly bound report review afterwards, not fake accepted flags",
+  "history_preserved": true,
+  "whole_delivery_accepted": false
+}

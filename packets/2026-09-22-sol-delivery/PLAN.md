@@ -4,6 +4,15 @@
 
 ## 既有依赖和生产出口
 
+当前7aeaac2后根因动作：C typed输入已真实完成（9100b606/中文ef1c9841），不再
+当在途。独立源码诊断证实source candidate→gate→post-render request的循环。
+P1完整实际门/审阅输入绑定及C fail-closed promotion与P2纯内容来源复核入口
+已完成有限源码/真实258切片验收：102+82相关PASS、strict5/Ruff9、独立静态
+ACCEPT_BOUNDED；版本only新候选ea2cda0c不接受来源、不切current。E03终态，
+owner保留单一共享责任。下一真实eligible-host源
+回执/materialization之后才投影新C1并复核报告。禁止fake summary/SQL接受。
+不用重跑旧安装/r6–r9/r10分享或C全量翻译；四宽门等Ego选择，不阻断代码。
+
 2026-10-08最新续接：用户解除暂停，Goal实查active，e1a0126导航RED直接
 实施同服务/锁/绑定与共享链接；初批45例后独立REVISE，一批完整修复后
 50PASS111.71s、Ruff2/strict1；同会话有限ACCEPT_BOUNDED F1/F3/F4，原件保留。

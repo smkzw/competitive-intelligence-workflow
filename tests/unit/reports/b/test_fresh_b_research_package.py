@@ -1060,7 +1060,6 @@ def _write_verified_scientific_review(
     )
     from ci_workflow.qc.scientific import (
         ScientificQcCurrentContext,
-        ScientificQcReviewBundle,
         ScientificQcVerdict,
     )
 
@@ -1068,21 +1067,6 @@ def _write_verified_scientific_review(
         {key: value for key, value in context_payload.items() if key != "context_digest"}
     )
     report_kind = context.report_kind.value
-    bundle = ScientificQcReviewBundle(
-        producer_id=context.producer_id,
-        project_id=context.project_id,
-        report_kind=context.report_kind,
-        report_version=context.report_version,
-        report_object_id=context.report_object_id,
-        candidate_snapshot_id=context.candidate_snapshot_id,
-        candidate_content_digest=context.candidate_content_digest,
-        criteria_version=context.criteria_version,
-        gate_result_key=context.gate_result_key,
-        coverage_set_id=context.coverage_set_id,
-        coverage_digest=context.coverage_digest,
-        source_refs=context.source_refs,
-        locators=context.locators,
-    )
     request = json.loads(
         (
             project_root
@@ -1112,7 +1096,7 @@ def _write_verified_scientific_review(
         source_refs=context.source_refs,
         locators=context.locators,
         reviewer_id="independent-reviewer",
-        review_input_digest=bundle.input_digest,
+        review_input_digest=request["review_input_digest"],
         reviewed_at=finished_at,
         valid_until=issued_at + timedelta(days=7),
     )

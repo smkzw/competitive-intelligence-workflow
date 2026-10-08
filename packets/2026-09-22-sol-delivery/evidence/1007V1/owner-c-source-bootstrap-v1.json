@@ -1,0 +1,122 @@
+{
+  "schema_version": "owner-1007-c-source-bootstrap-v1",
+  "status": "bounded_implementation_verified_not_release",
+  "milestone_quality_gate": {
+    "command": "bash tools/gate.sh",
+    "result": "GATE_OK quality-only steps=6",
+    "exit_code": 0,
+    "ruff_scope": "src tests tools",
+    "strict_mypy_scope": "src tools; no incremental; 284 files",
+    "active_tests": {"passed": 1185, "deselected": 20, "seconds": 260.56},
+    "retained_compat_subset": {"passed": 20, "deselected": 1185, "seconds": 0.62},
+    "layer_audit": {"passed": 7, "seconds": 0.19},
+    "legacy_check": "LEGACY_REF_OK lexical scan; no legacy filesystem contact",
+    "limitations": "Not all integrations, not full retained format track, not scientific/browser/installed/RC acceptance"
+  },
+  "parent_commit": "7aeaac2cc040b6df7af475b162061fdf4e0b14a4",
+  "goal_status": "active_verified",
+  "sources": {
+    "src/ci_workflow/application/c_source_review_entry.py": "a4301d23791198aabb5cb3740cabcce806d86bacd46a0dfadb903ba6af337760",
+    "src/ci_workflow/application/scientific_review_transition.py": "2b1a95da3e4abbc066f0b11ca79bbdd47c3f43a6afc7db4632fe6e82a16f2687",
+    "src/ci_workflow/application/fresh_c_research_package.py": "fd0cdfa31bd2be185fd6ed3b5fc333201933181c0ed0947c327dfb276d1ef21e",
+    "src/ci_workflow/application/run_service.py": "50e9ab8a311aa5e0702c334a095ec247c1bdd91cf7d615790712037c80083ff9",
+    "src/ci_workflow/cli.py": "690fec9c80f0fc8e09c68d1cc4e95205b7c753f6379dbe99b2b049ff19d095b8",
+    "tests/integration/test_1007_c_source_review_entry.py": "b7bd2c77beade71b089ddd6fc3b74db6e88bc7c396f298b21147dc3f11f23363",
+    "tests/integration/test_1007_review_gate_binding.py": "ed55f13c533d64bf2c0e306c10c2009d6e39261a00daabd1dd1ce9f04ae5f3f9",
+    "tests/integration/test_r24_scientific_review_epochs.py": "90384fcc0d2663b8116d79628176d99657817e6a64bccfc7a8c72e892b4092bf",
+    "tests/unit/reports/b/test_fresh_b_research_package.py": "8354d83107fbcf4d637c85451745ef793b43560f0aee2c7175bc42f3dd514395",
+    "skills/_internal/analysis-c/SKILL.md": "2dc0e8111c635d3f4c80f10eb293d3b5629bb6678d03a0cc0f24eef875bd0f6f",
+    "skills/_internal/scientific-qc/SKILL.md": "9b5a3fdb4b27e52277ee7ca99972ee67c24b679965336927512ac3787bbff96d",
+    "runs/conference/ci-1007-c-source-bootstrap-guard-review-v1/evidence_single_object.md": "ecfab7410d5941bed83e16a03720bb6959df6586483218af93ab051c84a358fe",
+    "runs/execution/ci-1007-c-source-review-bootstrap-v1/worker_01.md": "8978856852f948299d2d37feaf923f31ceb5221ca493b62fe21545539c7e85c5"
+  },
+  "execution": {
+    "task": "ci-1007-c-source-review-bootstrap-v1",
+    "actual_agent": "codebuddy",
+    "provider": "codebuddy-cli",
+    "model": "deepseek-v4.1-flash",
+    "effort": "max_requested_not_independently_attested",
+    "session": "01a11c73-39f2-714d-b554-097850cd0c92",
+    "duration_seconds": 927.723,
+    "tool_calls": 113,
+    "exit_code": 0,
+    "fallback": null,
+    "owner_changes": "Unified replay/preparation, reused ingest quote validation, typed contracts, exclusive first-writer publishing, CLI; 1133 lines reduced to 1000, no new framework"
+  },
+  "independent_review": {
+    "task": "ci-1007-c-source-bootstrap-guard-review-v1",
+    "actual_agent": "zcode",
+    "provider": "zcode",
+    "model": "GLM-5.3-Flash",
+    "effort": "max_requested",
+    "session": "sess_d909c56e-78d8-4072-bfbd-95d52e1456e0",
+    "duration_seconds": 711.756,
+    "tool_calls": 37,
+    "tokens": 146893,
+    "exit_code": 0,
+    "fallback": null,
+    "verdict": "ACCEPT_BOUNDED_STATIC",
+    "executable_checks": "NOT_RUN",
+    "owner_disposition": [
+      "Deleted unused helper after review; no behavioral change",
+      "Pre-existing torn request/context publish recovery recorded, not falsely closed",
+      "Missing frozen report-data requires verified restoration, not regenerate with newer time as reviewer suggested",
+      "Legacy A/B missing-gate promotion compatibility remains; reviewer wording read-only corrected, not all reports closed"
+    ]
+  },
+  "verification": [
+    {
+      "scope": "source entry + gate binding + epochs + fresh C + fresh B",
+      "command": ".venv/bin/python -m pytest tests/integration/test_1007_c_source_review_entry.py tests/integration/test_1007_review_gate_binding.py tests/integration/test_r24_scientific_review_epochs.py tests/integration/test_fresh_c_research_package.py tests/unit/reports/b/test_fresh_b_research_package.py -q",
+      "result": "PASS",
+      "passed": 102,
+      "duration_seconds": 15.24
+    },
+    {
+      "scope": "review transition + real issuer + reviewed source adoption + CLI help/catalog",
+      "command": ".venv/bin/python -m pytest tests/integration/test_scientific_review_transition.py tests/integration/test_review_issuer.py tests/integration/test_r24_reviewed_source_fact_acceptance.py tests/integration/test_cli_help.py tests/integration/test_cli_command_catalog.py -q",
+      "result": "PASS",
+      "passed": 82,
+      "duration_seconds": 9.19
+    },
+    {
+      "scope": "five affected production source files",
+      "command": ".venv/bin/python -m mypy --strict src/ci_workflow/application/c_source_review_entry.py src/ci_workflow/application/scientific_review_transition.py src/ci_workflow/application/fresh_c_research_package.py src/ci_workflow/application/run_service.py src/ci_workflow/cli.py",
+      "result": "PASS"
+    },
+    {
+      "scope": "nine affected source/test files",
+      "result": "RUFF_PASS"
+    },
+    {
+      "scope": "new actual CLI on isolated existing real 258-row candidate",
+      "result": "PREPARED_BLOCKED",
+      "exit_code": 0
+    }
+  ],
+  "real_slice": {
+    "root_relative": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project",
+    "original_input_sha256": "ef1c9841d2a030f33e90a008dd5140a4f4c420635e4cb5d388002385d13403cd",
+    "valid_input_sha256": "15c86dd170de46718b47e061b922f2ca67fabacc2c86003786b819da862dc5d4",
+    "only_change": "report_version in content and report header -> v0-r24-source-review-candidate",
+    "content_digest": "ea2cda0c98b2e01ebc1a4fc050972244126198091c6bbe69d088f582aac95b50",
+    "fact_states": {
+      "candidate": 258
+    },
+    "C_consumer_bindings": 258,
+    "evidence_snapshot_id": "evidence-snapshot_30aeabd46916fdb3cdb69581",
+    "claim_snapshot_id": "claim-snapshot_0a00df7a897ff7826655daf1",
+    "coverage_set_id": "coverage-set_55b5ade4415793bb89ba0526",
+    "gate_result_key": "gate-result_e2114353a94841ff8d08d575",
+    "gate_decision": "blocked",
+    "entry_receipt_sha256": "d91881f77771c65800f096877e3a95a4a02050853dcb945970d676f024ff0f60",
+    "report_data_sha256": "80aeb75f4e6255f26882e4a0814ca2aec645a32fcecfac0c381b313a24d57f05",
+    "source_adoption": "NOT_RUN",
+    "current_C": "NOT_ESTABLISHED",
+    "browser": "NOT_RUN",
+    "universe_closure": "NOT_COMPLETE",
+    "warning": "Never rerun worker scratch script: it deletes its existing isolated project; use idempotent CLI replay above instead"
+  },
+  "protected": "Five unrelated user modifications hashes unchanged; legacy root untouched; all unknown/history/raw proof preserved; no cleanup",
+  "next": "Actual qualified-host source review through issuer, materialized adoption, new C1 digest and report review; in parallel continue common comparison/UI where evidence ready"
+}

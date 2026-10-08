@@ -987,6 +987,23 @@ class CReportGateOutcome:
     bindings: tuple[GateEvidenceBinding, ...]
     result: ReportGateResult
 
+    @property
+    def review_result(self) -> ReportGateResult:
+        """Bind the evaluated units to C's scientific-content review key.
+
+        The engine result identifies the gate universe/bindings; the existing
+        C outcome identifies the actual research content. Preserve both old
+        identities and derive this request-only projection from those same
+        evaluated units, never from a supplied PASS flag.
+        """
+        return ReportGateResult.from_unit_results(
+            report_kind=self.report_kind, unit_results=self.result.unit_results,
+            evidence_snapshot_id=self.evidence_snapshot_id,
+            candidate_snapshot_digest=self.candidate_content_digest,
+            spec_version=self.spec_version, contract_version=self.contract_version,
+            universe_summary=self.universe_summary, spec_fingerprint=self.spec_fingerprint,
+        )
+
 
 def evaluate_c_report_gate(
     content: FreshCResearchContent,

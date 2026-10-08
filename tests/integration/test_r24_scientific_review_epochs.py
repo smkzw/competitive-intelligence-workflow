@@ -1044,6 +1044,7 @@ def test_epoch_advance_public_surface_binds_full_contexts() -> None:
         "produced_at",
         "portal_binding",
         "advanced_at",
+        "gate_result",
     }
     assert all(
         parameter.kind is inspect.Parameter.KEYWORD_ONLY

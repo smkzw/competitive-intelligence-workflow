@@ -1,4 +1,20 @@
-# 唯一当前状态：1007V1 持续实施，C中文v4候选及正式源复核接线
+# 唯一当前状态：1007V1 持续实施，C来源入口有限验收完成，正式采用待运行
+
+最新记录父7aeaac2；源c6dbb71固定安装不变。本批共享源码P1及来源入口
+完成102+82相关PASS、strict5/Ruff9；本批一次宽门实际GATE_OK6：strict284、
+active1185/260.56s、compat20/0.62s、layer7/0.19s、Ruff和旧路径检查通过。
+这仍只签开发质量，不代表完整集成、医学、浏览器或安装；Goal实际ACTIVE。
+ZCode review-entry-v2已终态，typed9100b606/中文ef1c9841保持258 candidate；
+owner实际反例证明仅补摘要仍BLOCKED。fresh C03实际CodeBuddy/deepseek-v4.1-flash
+425.756s/48tools静态诊断证实复核入口循环/晋级缺实际门判定。当前落实typed
+门结果+审阅摘要绑定、C缺门/阻断拒绝晋级。初期113相关PASS只签当时修订。
+入口E03实际CodeBuddy/deepseek-v4.1-flash927.723s/113tools终态；owner缩减
+重复恢复/原文校验并接CLI、首写不可覆盖。fresh独立ZCodeGLM-5.3-Flash
+711.756s/37tools静态ACCEPT_BOUNDED，未跑测试/医学/浏览器。版本only候选
+ea2cda0c实际CLI258candidate/258消费者、真实阻断预览，原ef1c9841未覆盖。
+[本批准确回执](evidence/1007V1/owner-c-source-bootstrap-v1.json)。
+[本批准确输入/诊断](evidence/1007V1/owner-c-review-entry-diagnosis-v1.json)。
+正式来源采用/currentC/实际浏览器未完成；以下旧标题和在途为各批历史范围。
 
 2026-10-08：用户重新授权连续实施；Goal API实际active，非完成/RC。最新记录父47aaaebe7742398d3c1bc5b3a713ac5f0186ea20，生产源码c6dbb71；五用户修改保持。已完成导航修复/安装/r10分享不重跑，正式C当前仍未建立。
 [精确暂停与续接记录](../../.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。
@@ -25,7 +41,7 @@
 | 幂等与冲突 | b6安装两次原r6请求HTTP200返回原结果，current保持r9；改载荷/新stale409；2132文件检查项、DB/events/journal及427父pin不变 | 修复后安装范围通过；a36原FAIL保持，不拼科学/浏览器PASS |
 | 分享 | 同固定c6db安装r10新A/B/AB、真实问题配置/逐成员hash分别64/355/419通过；2580项目文件不变/零save。原r9另留 | 静态字节/配置层；离线浏览器未运行，C不在该current |
 | C中文 | HyMT v2后实际独立源对照REVISE；v3修31/31 ACCEPT_BOUNDED，另有一条窗口误译；owner按指定原文修v4，同258行生产review渲染、174定位/4绑定负例通过 | 当前v4 bce94b9d/owner aa283ed9；32源支持修正、截断尾句仍披露；独立v4整件未再签，科学false/current未切/实屏NOT_RUN，不再整批重译 |
-| C真实操作 | E04实际ZCode GLM-5.3-Flash/max，258真实绑定；普通render因16关键候选门拒绝，无current保存拒绝；内部四stage及非法人数检查 | BLOCKED_CURRENT；stage不是public save/sync/idempotency。旧script无正向current分支，原件不重跑；同会话typed pending源复核输入跟进PENDING，不能混签ABC |
+| C真实操作 | E04实际ZCode GLM-5.3-Flash/max，258真实绑定；普通render因16关键候选门拒绝，无current保存拒绝；内部四stage及非法人数检查；typed输入跟进已终态 | BLOCKED_CURRENT；stage不是public save/sync/idempotency。旧script无正向current分支，原件不重跑；不能混签ABC。新源入口实现见顶节 |
 | 浏览器/产品 | Ego旧space12 NOT_FOUND，新空间Ask待答 | 四宽四态/L1L2/键盘/目视/离线新浏览器NOT_RUN |
 | 新导航源码 | current清单/世代读路由、B显式view身份、共享原生链接/旧深链拒绝；最终50PASS111.71s、Ruff2/strict1；独立初始REVISE→同会话ACCEPT_BOUNDED F1/F3/F4 | 模型实际deepseek-v4.1-flash，effort仅请求max；审核未运行shell/测试，owner另验；非科学/浏览器/安装 |
 | 新真实呈现 | 隔离APFS克隆r10，949事实及绑定完全不变，A105/B288真实深链HTTP200；新版portal.js实际消费，65/356文件清单，2155父文件不变、零临床save；新安装另验2580文件不变 | 原r9/旧安装未改；C不在此current；源码/安装两层均限定HTTP；Ego/CSP实际NOT_RUN |

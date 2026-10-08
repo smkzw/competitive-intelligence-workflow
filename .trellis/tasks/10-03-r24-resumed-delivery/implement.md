@@ -1,5 +1,11 @@
 # Continuous implementation checkpoint
 
+## 1007C 来源复核 bootstrap 根因：7aeaac2 后继续实施
+
+采用 inline execution + 已完成 fresh 有界 conference：复核请求/epoch/晋级的共享授权边界由单一 owner 改动；C03 已静态证实循环，源码和生产数据由 owner 独立核实。先集中成族 RED，完成最小完整授权修复后相关批回归，不重跑旧 A/B 保存、安装、分享、翻译或宽门。source candidate 的真实复核入口与最终 gate PASS 晋级分开；来源接受仍必须真实 issuer/materialization，禁止 producer summary、SQL 翻状态或假 formal receipt。
+
+执行跟进 review-entry-v2 已终态，不是 PENDING：258 条原子/4 来源不改；owner 实测仅添加 accepted summary 不改变逐观察状态，门仍 BLOCKED。经 v4 显示译文合入后的 typed pending 内容 ef1c9841 保留 candidate，不是科学接受。新 C03 425.756s/48 tools exit0，actual CodeBuddy/deepseek-v4.1-flash、effort 请求未 attest；静态审阅不替代医学采用或实际浏览器。当前实现不接触旧中文根、五用户修改、历史源/快照。
+
 ## 唯一当前检查点：1007C中文v4/源复核输入，源码c6dbb71，记录父47aaaeb
 
 详细当前以根HANDOFF/包STATUS为准。以下旧“当前”标题均为其历史版本，不恢复旧PID。
@@ -2656,3 +2662,21 @@ still gate authority. One compatible existing repair.py attempt resumed, new
 terminal pending; preserve v1/source/current, one lease/request, heartbeat/finally
 release. No model substitution/config change/resource override; missing completion
 is not translation acceptance. New code/source scientific task remains separate.
+# 1007V1 当前有界推进：C来源复核入口与完整实际门绑定
+
+Execution-plus-conference：独立两新文件有界执行、owner单一共享合同责任；
+真实来源/晋级权限需fresh独立挑战，非重复生产/逐行全仓测试。
+E03实际CodeBuddy/deepseek-v4.1-flash927.723s113calls终态。原1133行恢复/原文
+检查重复，owner合并共同路径/复用ingest校验至1000行，保留失败/原文/回执。
+102相关PASS15.24s+82邻接PASS9.19s、strict5/Ruff9；一项成族→完整修复→批验。
+独立ZCodeGLM-5.3-Flash711.756s37calls静态ACCEPT_BOUNDED；main静默事件等候，
+无模型进度轮询、重派或fallback。两个preflight格式错误launch前修正，不追认。
+实际CLI新入口仅准备258candidate/258consumer、真实blocked预览，零接受/current。
+原ef1c版本不符合既有v路径，另建version-onlyea2候选，来源/值/译文不改。
+后续真实eligible-host源回执→materialize→C1实际报告复核仍开；旧A/B/r10安装/
+四步save/中文翻译不重跑。五用户修改hash保持，旧中文根零接触，无清理。
+独立建议缺冻结报告data重建不采纳：需恢复可验证原件；旧shared torn-publish
+风险记录后续，不假称已修复或删除坏文件。宽门只在本里程碑运行一次：
+实际GATE_OK6/exit0，strict284、active1185/260.56s、compat20/0.62s、layer7/0.19s、
+Ruff与旧路径扫描PASS；非全集成/非医学/非浏览器/非安装/非RC。
+详细范围/全部源码hash：packets/.../evidence/1007V1/owner-c-source-bootstrap-v1.json。

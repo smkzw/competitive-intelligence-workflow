@@ -16,3 +16,14 @@
 - [既有实施复盘](implementation.md)及各owner-*.json保留版本特定证据；
   原有暂停/handoff文件保留，最新用户实施授权高于历史暂停。
 - [原设计/计划历史](../../archive/pre-1007V1/)不作为新产品权威。
+# 1007C bootstrap 当前接线历史索引增量
+
+7aeaac2cc040b6df7af475b162061fdf4e0b14a4 的完整根HANDOFF/STATUS是上一现场，
+Git可恢复，不重写其历史内容。ZCode review-entry-v2现已终态、typed9100b606；
+owner中文合入ef1c9841及独立C03根因诊断指向owner-c-review-entry-diagnosis-v1.json。
+其中来源状态均candidate，不能将准备输入/咨询报告升为科学/current。
+# 1007C来源bootstrap当前有限验收
+
+新精简机器记录owner-c-source-bootstrap-v1.json；新源码不借c6旧安装，真实
+258candidate/258消费者仍阻断/current未建立；原ef1c输入保持，valid版本onlyea2。
+E03/C03真实终态与静默事件等待保留，旧源/译文/AB旅程不重跑。不建立暂停点。

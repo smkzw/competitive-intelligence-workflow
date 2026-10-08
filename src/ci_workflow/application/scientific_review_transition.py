@@ -65,6 +65,7 @@ from ci_workflow.capabilities.scientific_qc import (
 from ci_workflow.domain.enums import ReportKind
 from ci_workflow.domain.evidence import source_version_identity
 from ci_workflow.domain.ids import stable_id
+from ci_workflow.gates.models import ReportDecision, ReportGateResult
 from ci_workflow.qc.review_receipt import (
     ReviewProductionContext,
     ScientificReviewReceipt,
@@ -465,6 +466,43 @@ def publish_production_context(
     return path
 
 
+def _bound_gate_result(
+    context: ScientificQcCurrentContext, payload: object,
+) -> ReportGateResult | None:
+    """Revalidate the actual evaluated result, not a PASS flag or opaque key.
+
+    Missing results remain readable for historical source receipts. They do
+    not authorize a new C report promotion.
+    """
+    if payload is None:
+        return None
+    try:
+        result = ReportGateResult.model_validate(payload)
+    except PydanticValidationError as error:
+        raise ScientificReviewTransitionError(f"科学门槛结果无效：{error}") from error
+    if (
+        result.report_kind != context.report_kind
+        or result.result_key != context.gate_result_key
+        or result.spec_version != context.criteria_version
+        or result.contract_version != context.contract_version
+        or result.candidate_snapshot_digest != context.candidate_content_digest
+    ):
+        raise ScientificReviewTransitionError("科学门槛结果与当前复核上下文绑定不一致")
+    return result
+
+
+def _bound_review_input_digest(
+    context: ScientificQcCurrentContext, gate_result: ReportGateResult | None,
+) -> str:
+    bundle_digest = _review_bundle(context).input_digest
+    if gate_result is None:
+        return bundle_digest  # Immutable legacy request/receipt compatibility.
+    return _sha256_hex({
+        "scientific_bundle_digest": bundle_digest,
+        "gate_result": gate_result.model_dump(mode="json"),
+    })
+
+
 def _review_request_body(
     context: ScientificQcCurrentContext,
     *,
@@ -472,9 +510,10 @@ def _review_request_body(
     producer_session_id: str,
     produced_at: datetime,
     portal_binding: PortalArtifactBinding,
+    gate_result: ReportGateResult | None = None,
 ) -> dict[str, object]:
     """构造复核请求体（发布与 epoch 物化共用同一格式与摘要算法）。"""
-    bundle = _review_bundle(context)
+    evaluated_gate = _bound_gate_result(context, gate_result)
     production = ReviewProductionContext(
         project_id=context.project_id,
         report_kind=report_kind,
@@ -489,12 +528,15 @@ def _review_request_body(
         produced_at=produced_at,
         production_context_digest=context.context_digest,
     )
-    return {
+    body: dict[str, object] = {
         "scientific_context": context.model_dump(mode="json"),
         "production": production.model_dump(mode="json"),
-        "review_input_digest": bundle.input_digest,
+        "review_input_digest": _bound_review_input_digest(context, evaluated_gate),
         "portal_binding": portal_binding.model_dump(mode="json"),
     }
+    if evaluated_gate is not None:
+        body["gate_result"] = evaluated_gate.model_dump(mode="json")
+    return body
 
 
 
@@ -506,6 +548,7 @@ def publish_scientific_review_request(
     producer_session_id: str,
     produced_at: datetime,
     portal_binding: PortalArtifactBinding,
+    gate_result: ReportGateResult | None = None,
 ) -> Path:
     """发布审查输入、生产身份与首次门户字节绑定；同一候选重跑保留首次绑定。
 
@@ -525,6 +568,7 @@ def publish_scientific_review_request(
         producer_session_id=producer_session_id,
         produced_at=produced_at,
         portal_binding=portal_binding,
+        gate_result=gate_result,
     )
     if path.is_file():
         try:
@@ -537,6 +581,10 @@ def publish_scientific_review_request(
             raise ScientificReviewTransitionError("既有科学复核请求损坏")
         existing_context = existing["scientific_context"]
         if existing_context.get("context_digest") == context.context_digest:
+            if existing.get("gate_result") != body.get("gate_result"):
+                raise ScientificReviewTransitionError(
+                    "科学门槛结果与首次复核请求不同：同键决定也不得被覆盖"
+                )
             existing_binding = existing.get("portal_binding")
             if existing_binding != portal_binding.model_dump(mode="json"):
                 raise ScientificReviewTransitionError(
@@ -562,7 +610,7 @@ def _load_scientific_review_request(
     project_root: Path,
     report_kind: str,
     context: ScientificQcCurrentContext,
-) -> tuple[ReviewProductionContext, str, PortalArtifactBinding]:
+) -> tuple[ReviewProductionContext, str, PortalArtifactBinding, ReportGateResult | None]:
     kind = _validated_kind(report_kind)
     scope = active_scientific_review_scope(project_root, kind)
     path = project_root / scope.review_request_relative
@@ -587,6 +635,9 @@ def _load_scientific_review_request(
     review_input_digest = raw.get("review_input_digest")
     if not isinstance(review_input_digest, str):
         raise ScientificReviewTransitionError("科学复核请求缺少审阅输入摘要")
+    evaluated_gate = _bound_gate_result(context, raw.get("gate_result"))
+    if review_input_digest != _bound_review_input_digest(context, evaluated_gate):
+        raise ScientificReviewTransitionError("科学复核请求审阅输入摘要与门槛/上下文不一致")
     binding_payload = raw.get("portal_binding")
     if not isinstance(binding_payload, dict):
         raise ScientificReviewTransitionError(
@@ -598,7 +649,7 @@ def _load_scientific_review_request(
         raise ScientificReviewTransitionError(f"门户产物绑定无效：{error}") from error
     # 恢复/晋级前重验门户字节：站点或清单漂移失败关闭
     verify_portal_artifact_binding(project_root, report_kind, binding)
-    return production, review_input_digest, binding
+    return production, review_input_digest, binding, evaluated_gate
 
 
 def reload_production_context(
@@ -719,7 +770,9 @@ def accepted_verdict_from_receipt(
             f"科学质控结论产物验证失败：{error}"
         ) from error
 
-    bundle = _review_bundle(context)
+    _production, input_digest, _portal, _gate = _load_scientific_review_request(
+        project_root, context.report_kind.value, context,
+    )
     agreement: tuple[tuple[object, object, str], ...] = (
         (verdict.project_id, context.project_id, "项目"),
         (verdict.contract_version, context.contract_version, "合同版本"),
@@ -738,10 +791,10 @@ def accepted_verdict_from_receipt(
         (verdict.coverage_digest, context.coverage_digest, "覆盖摘要"),
         (verdict.source_refs, context.source_refs, "来源引用"),
         (verdict.locators, context.locators, "来源定位"),
-        (verdict.review_input_digest, bundle.input_digest, "审阅输入摘要"),
+        (verdict.review_input_digest, input_digest, "审阅输入摘要"),
         (
             receipt.content.review_input_digest,
-            bundle.input_digest,
+            input_digest,
             "回执审阅输入摘要",
         ),
         (verdict.reviewer_id, receipt.review.reviewer_id, "独立审查者"),
@@ -853,6 +906,7 @@ def _stage_epoch_materials(
     producer_session_id: str,
     produced_at: datetime,
     portal_binding: PortalArtifactBinding,
+    gate_result: ReportGateResult | None = None,
 ) -> None:
     """在版本化纪元目录物化上下文与请求；指针激活前对外不可见。
 
@@ -870,6 +924,7 @@ def _stage_epoch_materials(
         producer_session_id=producer_session_id,
         produced_at=produced_at,
         portal_binding=portal_binding,
+        gate_result=gate_result,
     )
     body["request_digest"] = _sha256_hex(body)
     request_path = project_root / epoch_review_request_path(kind, epoch)
@@ -900,6 +955,7 @@ def _replay_epoch_activation(
     portal_binding: PortalArtifactBinding,
     producer_session_id: str,
     produced_at: datetime,
+    gate_result: ReportGateResult | None = None,
 ) -> ScientificReviewEpochAdvance:
     """精确重放已激活纪元：逐字节校验后返回已记录结果（幂等）。"""
     kind = _validated_kind(report_kind)
@@ -916,13 +972,14 @@ def _replay_epoch_activation(
         raise ScientificReviewTransitionError(
             "epoch 精确重放与已激活上下文字节不一致：拒绝覆盖或混合纪元"
         )
-    production, _digest, published_binding = _load_scientific_review_request(
+    production, _digest, published_binding, published_gate = _load_scientific_review_request(
         project_root, kind, next_context,
     )
     if (
         published_binding != portal_binding
         or production.producer_session_id != producer_session_id
         or production.produced_at != produced_at
+        or published_gate != _bound_gate_result(next_context, gate_result)
     ):
         raise ScientificReviewTransitionError("epoch 精确重放的请求绑定与已记录材料不一致")
     return ScientificReviewEpochAdvance(
@@ -960,6 +1017,7 @@ def advance_scientific_review_epoch(
     produced_at: datetime,
     portal_binding: PortalArtifactBinding,
     advanced_at: datetime | None = None,
+    gate_result: ReportGateResult | None = None,
 ) -> ScientificReviewEpochAdvance:
     """显式版本化 epoch 推进：同项目重复科学复核的唯一通道。
 
@@ -971,6 +1029,7 @@ def advance_scientific_review_epoch(
     经由既有发布入口越过本 API 写入新候选。
     """
     kind = _validated_kind(report_kind)
+    _bound_gate_result(next_context, gate_result)
     root = project_root.expanduser().resolve()
     if (
         expected_predecessor_context.report_kind.value != kind
@@ -1009,6 +1068,7 @@ def advance_scientific_review_epoch(
                     portal_binding=portal_binding,
                     producer_session_id=producer_session_id,
                     produced_at=produced_at,
+                    gate_result=gate_result,
                 )
         try:
             active = reload_production_context(root, kind)
@@ -1032,6 +1092,7 @@ def advance_scientific_review_epoch(
             producer_session_id=producer_session_id,
             produced_at=produced_at,
             portal_binding=portal_binding,
+            gate_result=gate_result,
         )
         entry = ScientificReviewEpochEntry(
             epoch=next_epoch,
@@ -1074,6 +1135,7 @@ def prepare_rendered_scientific_review(
     producer_session_id: str,
     produced_at: datetime,
     portal_binding: PortalArtifactBinding,
+    gate_result: ReportGateResult | None = None,
 ) -> ActiveScientificReviewScope:
     """普通手动运行发布本轮请求；新候选推进纪元，同候选保留首次绑定。
 
@@ -1091,6 +1153,7 @@ def prepare_rendered_scientific_review(
         producer_session_id=producer_session_id,
         produced_at=produced_at,
         portal_binding=portal_binding,
+        gate_result=gate_result,
     )
     with current_delivery_lock(root):
         verify_portal_artifact_binding(root, kind, portal_binding)
@@ -1107,6 +1170,7 @@ def prepare_rendered_scientific_review(
                 producer_session_id=producer_session_id,
                 produced_at=produced_at,
                 portal_binding=portal_binding,
+                gate_result=gate_result,
             )
             return scope
     advanced = advance_scientific_review_epoch(
@@ -1117,6 +1181,7 @@ def prepare_rendered_scientific_review(
         producer_session_id=producer_session_id,
         produced_at=produced_at,
         portal_binding=portal_binding,
+        gate_result=gate_result,
     )
     return ActiveScientificReviewScope(
         epoch=advanced.activated_epoch,
@@ -1147,11 +1212,15 @@ def promote_rendered_candidate(
         )
     require_verified_review_receipt(receipt, project_root=project_root)
     bind_receipt_to_production_context(receipt, context)
-    production, review_input_digest, _portal_binding = (
+    production, review_input_digest, _portal_binding, evaluated_gate = (
         _load_scientific_review_request(
             project_root, context.report_kind.value, context
         )
     )
+    if evaluated_gate is None and context.report_kind is ReportKind.C:
+        raise ScientificReviewTransitionError("科学门槛结果缺失：历史来源回执不能授权新 C 晋级")
+    if evaluated_gate is not None and evaluated_gate.decision is not ReportDecision.PASSED:
+        raise ScientificReviewTransitionError("科学门槛尚未通过：来源复核回执不能晋级报告")
     if receipt.production != production:
         raise ScientificReviewTransitionError("回执生产身份与运行时发布请求不一致")
     if receipt.content.review_input_digest != review_input_digest:
