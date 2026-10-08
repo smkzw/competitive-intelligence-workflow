@@ -1,0 +1,37 @@
+{
+  "schema_version": "1007-presentation-current-1",
+  "parent_commit": "23b21f6b3800b4045c80e45da204c9d7fd9adc59",
+  "state": "continuous_implementation_bounded_current_QA_not_rc",
+  "goal": "active_verified",
+  "execution": {"task": "ci-1007-presentation-current-v1", "model": "codebuddy/deepseek-v4.1-flash", "effort_requested": "max", "response_effort_attested": false, "session": "01a1192d-7986-7ce3-b2d6-1cf410174563", "duration_seconds": 946.096, "tools": 118, "returncode": 0, "fallback": null},
+  "code": [
+    {"path": "src/ci_workflow/application/user_fact_edit.py", "sha256": "629c034b9763b63ca058208f5cdc82c87254730bce37422b98501fb3cab0894c"},
+    {"path": "src/ci_workflow/application/source_current_refresh.py", "sha256": "a52f7fa838bc78a2d60e6efb4215bd7683670cde58a656607d6ad4023397006f"},
+    {"path": "src/ci_workflow/cli.py", "sha256": "a1314ba423a463ccd6be6a7e768d17ba7d994dc63fc75e8b6b97725c6fe40dd0"},
+    {"path": "tests/integration/test_1007_presentation_current.py", "sha256": "9f1878ec36d5ce397bfd78a8dffcbaccda418d11c79e0660416b6be6ee7668d1"},
+    {"path": "tests/integration/test_r24_source_current_refresh.py", "sha256": "a0e47098414d9cc7d9f72c19de2c09555c0506f099e5d024e1624b96c88f2439"}
+  ],
+  "private_materials": [
+    {"path": ".artifacts/1007-presentation-current-source-v1/replay.py", "sha256": "7ffedebccabf13276425fd98bba52184b63336351008489dae1d36610a22eb61"},
+    {"path": ".artifacts/1007-presentation-current-source-v1/prepared.json", "sha256": "a507d0643f148d44e3b38c12d6d71f3bbb7193fbf501ff8eb4aef322d0aed253"},
+    {"path": ".artifacts/1007-presentation-current-source-v1/checkpoint.json", "sha256": "8ef3ac22f27d7b374eafb3b80caed8f0e9dcfc8a1fdf0715809cfc3c124bf987"},
+    {"path": ".artifacts/1007-presentation-current-source-v1/presentation-command.json", "sha256": "9b65716f07d95e869752f1d5fa7a902e11361d6ee26ef4e1807bffc4e8bee2b3"},
+    {"path": "runs/execution/ci-1007-presentation-current-v1/worker_01.md", "sha256": "8a42e1b80677b5c23894ad15caae68adaeb9bd1d5399371bd45a52a7bfad78af"},
+    {"path": "logs/execution/ci-1007-presentation-current-v1/worker_01_stdout.txt", "sha256": "ecc71ae6a335b08855e8fef73600cecfaf0c3f6b85a3fa1e8d230686cd050d47"}
+  ],
+  "related_regression": {"command": "uv run python -m pytest tests/integration/test_1007_presentation_current.py tests/integration/test_1007_current_comparison_share.py tests/integration/test_1007_identity_rebuild.py tests/integration/test_latest_delivery.py tests/integration/test_r24_source_current_refresh.py tests/integration/test_r24_source_refresh_cli.py -q --tb=short", "returncode": 0, "passed": 63, "seconds": 71.20, "skips": 0, "actual_terminal_chunk": "2a148f"},
+  "static": {"ruff": "5 affected files passed", "strict_mypy": "3 production files passed, not tests transitive typing"},
+  "checked_source_set": {"files": 820, "sha256": "bdc17ba84c63ef45879894fe8ee3d1d95ff7bbb1aedb1a5a305b582955817689", "algorithm": "sha256 compact UTF8 JSON sorted [relative path,sha256] pairs under src/tests/tools, no symlinks/pyc/__pycache__", "protected_user_fixture_sha256": "4744f33d51b757ed41036cd56cebdcb503a202d910bbf9c3761f52c723765a3c", "parent_real_project_db_unchanged_sha256": "40b96a9be440ca4002212661293541a62181e709c9f3695036c23fc462b019af"},
+  "wide_gate": {"state": "GATE_OK quality-only/6", "command": "bash tools/gate.sh", "returncode": 0, "actual_terminal_chunk": "4f1415", "scope": "Ruff src/tests/tools; strict no-incremental src/tools 283 files; active unit/contract1185PASS254.58s; retained compatibility subset20PASS1.43s; layering7PASS0.19s; lexical legacy references. Not whole integration/retained outputs/browser/science/install/release", "clean_required": false, "source_edits_during_gate": false},
+  "real_replay": {"command": "uv run python .artifacts/1007-presentation-current-source-v1/replay.py", "returncode": 0, "actual_terminal_chunk": "377739", "parent_revision": 4, "current_revision": 5, "current_generation_sha256": "7b7704a61ab1f62647159d173e480b3f996072aff9c8edf98e4046cfc5b12aad", "active_facts": 949, "A_consumers": 105, "B_consumers": 288, "A_files": 65, "B_files": 356, "clinical_payload_and_tables_unchanged": true, "parent_pins_unchanged": true, "retry_idempotent": true, "C": "not_in_real_current_not_claimed", "fork": "current-only QA, operational empty surfaces reconstructed, not historical recovery package"},
+  "shares": [
+    {"path": ".artifacts/1007-presentation-current-source-v1/current-r5-A.zip", "sha256": "9a42d34dfbc81bc25be3712a4b5a9d8e40180969aeeeee9013f41e3343a57402"},
+    {"path": ".artifacts/1007-presentation-current-source-v1/current-r5-B.zip", "sha256": "95344afb3235b6af3beb494210403fe0347636704430ab19219d509cd98da94e"},
+    {"path": ".artifacts/1007-presentation-current-source-v1/current-r5-AB.zip", "sha256": "e9162d8259eade426a00069921c0a499b0cfe4318637a73fa2fb34de2411f3a5"}
+  ],
+  "skill_validation": {"internal": "3 quick_validate passed", "public": "exit1 existing Chinese name rejected by generic hyphen-case validator; no renaming or new interface policy", "independent_forward_test": "not required for bounded documentation delta; actual CLI exercised, not semantic proof of skill"},
+  "browser": "NOT_RUN: ego Lite space12 NOT_FOUND; no substituted profile/browser",
+  "scientific_acceptance": false,
+  "release_acceptance": false,
+  "next": "real source binding of four reviewed publication leaves into existing package/snapshot supply gate without fabricated universe closure; ready C/comparison work continues"
+}

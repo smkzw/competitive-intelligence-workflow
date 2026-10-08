@@ -1,5 +1,23 @@
 # Continuous implementation checkpoint
 
+## 1007V1 当前呈现重建执行（parent23b21f6，终态/有界整合）
+
+采用execution：既有current出口缺独立于真实用户/来源改值的呈现升级操作，
+有界两路径代码可与owner资料/文档工作分开；最终事务/来源接受单owner。
+guard有限代码节点preflight0，按live manifest派发一次，120min长程等候，
+不轮询文件/重复派发。原事实/派生/修订/源/历史current不改；预检/失败恢复/
+安装呈现摘要/同generation分享成族验。只允许既有user_fact_edit.py与一个新
+测试；未完成前不采纳，不放宽科学/current消费者门，无新执行器/审批。
+E03实际deepseek-v4.1-flash/max CLI未attest，946.096s/118calls/exit0无回退。
+Owner独占CLI/相邻source refresh；共同builder及批次中途安装漂移3RED修复，
+A明细来源3RED整体预检，既有清除与普通入口；最终63PASS71.20s无SKIP、
+Ruff5/strict3源。真实隔离r5 A+B及单份/AB分享保持949事实/载荷/七表/原
+项目pin，重试同generation。当前机器清单owner-presentation-current-v1.json；
+一次稳定宽门终态exit0/quality-only6，strict283/活跃1185PASS254.58s/兼容
+子集20PASS1.43s/层级7PASS0.19s/Ruff/词法；不代表产品通过。
+C未在实际current、实屏/离线新浏览器/医学/安装/RC
+开放，不设置暂停。下一真实Publication到既有源/快照/一次补件门，不伪闭包。
+
 ## 1007V1 确切论文材料挑战（parent2fd2cb4，终态/有界采用）
 
 采用 conference：四篇当前分类/获取/已核身份的新digest有实质解释边界，

@@ -46,6 +46,7 @@ from ci_workflow.renderers.portal.report_b import (
 )
 from ci_workflow.reports.common.evidence_view import EvidenceField
 from ci_workflow.storage.sqlite import open_database
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 from tests.integration.test_w04_user_fact_edit import (
     NOW,
     PROJECT_ID,
@@ -146,6 +147,16 @@ def _write_new_inputs(
     if not keep_old_binding and "A" not in keep_old_binding_reports:
         a_row["source_version_id"] = source_version
     a_row.update(value=value, numerator=numerator, denominator=denominator)
+    # A now consumes the explicit source view too. A valid refreshed fixture
+    # must update both representations; leaving its v1 view attached to the
+    # v2 domain row is a source conflict, not a positive refresh example.
+    a_view = a_payload.get("safety_views")
+    if a_view is not None:
+        a_view_row = next(row for row in a_view["facts"] if row["row_id"] == ROW_ID)
+        if not keep_old_binding and "A" not in keep_old_binding_reports:
+            a_view_row["source_version_id"] = source_version
+        a_view_row.update(value=value, raw_value=raw,
+                          numerator=numerator, denominator=denominator)
     b_row = next(row for row in b_payload["safety"] if row["row_id"] == ROW_ID)
     if not keep_old_binding and "B" not in keep_old_binding_reports:
         b_row["source_version_id"] = source_version
@@ -177,6 +188,31 @@ def _new_bindings(root: Path, paths: dict[str, str]) -> tuple[ActiveFactBinding,
         active_fact_binding_for_a(a_data, "safety", ROW_ID),
         active_fact_binding_for_b(b_data, "safety", ROW_ID),
     )
+
+
+@pytest.mark.parametrize("field,bad", (
+    ("source_version_id", SOURCE_VERSION_1),
+    ("value", 99.0),
+    ("source_text", "synthetic mismatched source quotation"),
+))
+def test_source_refresh_refuses_conflicting_a_view_before_render(
+    tmp_path: Path, field: str, bad: object,
+) -> None:
+    world = _world(tmp_path)
+    paths = _write_new_inputs(world.root, source_version=SOURCE_VERSION_2,
+                             value=50.0, raw="50.0% (31/62)", numerator=31, denominator=62)
+    _seed_source_atom(world.root, version_id=SOURCE_FACT_2, source_version=SOURCE_VERSION_2,
+                      raw="50.0% (31/62)", normalized="50.0", numerator=31, denominator=62,
+                      bindings=_new_bindings(world.root, paths))
+    path = world.root / paths["A"]
+    payload = json.loads(path.read_bytes())
+    next(row for row in payload["safety_views"]["facts"] if row["row_id"] == ROW_ID)[field] = bad
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(SourceFactRefusalError, match="A来源.*明细view"):
+        SourceCurrentRefreshService(world.root).refresh(_refresh_command(world, paths=paths))
+    assert _read_current(world.root) == world.current
+    assert not (world.root / "reports/A/v1-source-r1").exists()
+    assert not (world.root / "reports/B/v1-source-r1").exists()
 
 
 def _seed_source_atom(
@@ -417,11 +453,7 @@ def test_no_user_source_update_rebuilds_a_and_b_and_preserves_c(tmp_path: Path) 
         search = (root / delivery.site_relative_path / "data/search-index.js").read_text()
         assert "50" in search
     b_site = root / _delivery(root, "B").site_relative_path
-    chart_groups = json.loads(
-        (b_site / "safety.html").read_text(encoding="utf-8")
-        .split("window.__CHART_GROUPS__ = ", 1)[1]
-        .split(";</script>", 1)[0]
-    )
+    chart_groups = _page_json_assignment(b_site, "safety.html", "__CHART_GROUPS__")
     chart_row = next(
         row
         for group in chart_groups
@@ -429,11 +461,7 @@ def test_no_user_source_update_rebuilds_a_and_b_and_preserves_c(tmp_path: Path) 
         if row["row_id"] == ROW_ID
     )
     assert chart_row["value"] == 50.0
-    evidence_views = json.loads(
-        (b_site / "safety.html").read_text(encoding="utf-8")
-        .split("window.__EVIDENCE_VIEWS__ = ", 1)[1]
-        .split(";\n", 1)[0]
-    )
+    evidence_views = _page_json_assignment(b_site, "safety.html", "__EVIDENCE_VIEWS__")
     evidence_row = next(
         view for view in evidence_views
         if view.get("row", {}).get("row_id") == ROW_ID
@@ -1044,7 +1072,8 @@ def test_builder_input_row_binding_drift_refuses(tmp_path: Path) -> None:
     bindings = _new_bindings(root, paths)
     assert all(item.source_version_id == SOURCE_VERSION_1 for item in bindings)
 
-    with pytest.raises(SourceFactRefusalError, match="未通过核验"):
+    # The view identity is now rejected in the all-consumer preflight, before rendering.
+    with pytest.raises(SourceFactRefusalError, match="A来源版本与明细view不一致"):
         SourceCurrentRefreshService(root).refresh(
             _refresh_command(
                 world,
@@ -1078,7 +1107,7 @@ def test_bad_later_consumer_leaves_no_partial_staging(tmp_path: Path) -> None:
     )
     before = _read_current(root)
 
-    with pytest.raises(SourceFactRefusalError, match="B类报告builder输入未通过核验"):
+    with pytest.raises(SourceFactRefusalError, match="B来源版本与明细view不一致"):
         SourceCurrentRefreshService(root).refresh(command)
 
     assert _read_current(root) == before

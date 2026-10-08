@@ -1182,3 +1182,57 @@ bb同bytes两个项目根显式记录，第三旧桥获取不按数组排序当�
 树较久但实际CPU工作，不杀进程/縮范围；无源码同时写，819文件摘要绑定。
 不是全集成/医学/浏览器/发布。下一步current呈现/分享继续，Ego/中文仅阻断相应
 分支。全套原始证据私有，Git摘要/指针；保留五用户修改与历史FAIL，未清理。
+
+## 纯呈现current与同源r5分享，parent23b21f6
+
+主人翁选择：新版页面必须有真实current出口，但来源refresh要求新原子、
+用户save要求真实改值，不能为了刷新前端假改医学事实。复用既有服务与
+build/preflight/锁/journal/selector，不增加平台、表、审批或双作者资产。
+execution有界两路径与owner资料/文档分开；E03一次live派发，nativeinit/result
+证实CodeBuddy deepseek-v4.1-flash，maxCLI未attest，946.096s/118tools/exit0/
+无fallback。120min长程等待期间静默、不轮询/重派；终态后owner整合。
+原报告/native回执私有hash保留，节点自称成功不等接受。
+
+节点最初RED是收集ImportError，不冒行为RED；12族和33组通过，owner33
+PASS28.70s。完整读实现后发现安装摘要漏共同builder且中途资产变化未拦：
+3真实RED修入现有摘要及逐份render后校验，缓存不参与；已记录candidate按
+原字节恢复，不借新资源重建旧候选。补已有用户clear保持、公开typed CLI，
+无效字段先于项目触碰。CLI正例第一次缺测试inputs目录是fixture失败，非
+生产RED；test传递mypy旧64typing错误不伪称全testsstrict通过，生产范围
+单列。用户原源/当前层分开，不清掉已存修订或给原事实重签医学接受。
+
+扩相邻source refresh8FAIL47PASS：有效factory更新A域行但没更新既有源视图，
+原renderer版本冲突正确拒绝；另3生产反例证明A view错误原文能漏过、旧版本/
+数值直到render才失败。将源视图唯一性/版本/quote/值/nN在整体preflight
+核验，保留未带视图的历史读路径，不放宽来源保护。fixture正向两表示同步；
+两旧错误消息迁到更早拒绝，inline断言改实际共享脚本reader，不删源值/
+quote/版本断言。过程4FAIL59PASS66.39s、1FAIL62PASS70.13s保留，不算PASS；
+最终六文件63PASS71.20s无SKIP、Ruff5/strict3生产文件，当前一次宽门终态
+exit0/GATE_OKquality-only6：Ruff全范围/strict283/1185PASS254.58s/兼容子集
+20PASS1.43s/分层7PASS0.19s/旧路径词法。源码期间不改，820文件摘要及
+保留用户fixture绑定，不是全集成/医学/视觉/24/安装/RC通过。
+
+真实已投影父r4 DB40b96a…未改。一个新current-only副本，DB/状态/输入普通
+复制，只链接不可变r4站点字节，不复制4轮大历史站点。准备三次分别被
+缺可选目录、缺current协议/selected generation、缺事务manifest拒绝；按
+实际完整current读取依赖补全，同一副本继续，失败证据不删。新fork补空
+操作目录仅用于CLI preflight，不造科学来源/历史恢复。普通CLI实际A+B r5，
+generation7b7704a…，两个同请求返回相同，949activefacts及七表、完整临床
+payload、原源与既有user_edit不变；A105/B288消费者、65/356文件，新portal
+SHA55e78f…实际消费。C未在父current，不补造/放宽guard，合成C正例不抵销。
+
+r5 A/B/AB ZIP从committed current直接产生，保存问题/页码配置、逐成员SHA
+及generation重开核验，大小约4.16/11.35/15.52MB。仅结构/资源和原字节闭合，
+非移目录新浏览器离线/四宽L1L2/视觉接受。所有原始站点/ZIP保留受控本地，
+Git只精简指针/回执。技能指引补同一出口，skill-creator只推动必要边界，不
+造新router；3内部generic验证通过，公开原中文name因hyphen-case规则exit1，
+不无授权改用户触发名或声称4份全绿。内部旧768/1024移动发布门按既定
+桌面四宽迁出，历史证据不改，不恢复固定三轮全页循环。
+
+踩坑：一次多文件patch猜文案导致整体未应用，读取后重做，没有半份规格。
+部分发现命令猜不存在路径/未匹配glob属于工具发现错误，不是生产测试失败。
+native摘要一次选择过宽打印被截，改只选身份/耗时/计数/hash，不把截断
+当完整审阅或把native traces放Git。当前源码/规范/公开及内部指引/台账同步；
+下一有界工作为已审论文的实际源/快照/单补件接缝，不能假签宇宙closed或
+套上一叶级PASS成完整包。Ego/中文/原附件问题只阻断相应分支，GoalACTIVE
+继续，无阶段pause/oldroot/cleanup/sessionstore修改；五用户变化与历史DBFAIL保持。

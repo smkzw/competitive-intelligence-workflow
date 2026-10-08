@@ -944,15 +944,28 @@ class SourceCurrentRefreshService:
                     if (field in source and hasattr(row, field)
                             and getattr(row, field) != source[field]):
                         raise SourceFactRefusalError(f"{report}来源{field}与builder不一致")
+                view: dict[str, Any] | None = None
                 if isinstance(data, ReportBPortalData):
                     view = _b_source_view_row(data, binding["collection"], binding["row_id"])
+                elif isinstance(data, ReportAPortalData):
+                    source_view = getattr(data, f"{binding['collection']}_views", None)
+                    if source_view is not None:
+                        view_id = getattr(row, "source_view_row_id", None) or row.row_id
+                        views = [entry for entry in source_view.get("facts", ())
+                                 if isinstance(entry, dict) and entry.get("row_id") == view_id]
+                        if len(views) != 1:
+                            raise SourceFactRefusalError("A来源缺少唯一明细view")
+                        view = dict(views[0])
+                if view is not None:
+                    if view.get("source_version_id") != item.replacement_source_version_id:
+                        raise SourceFactRefusalError(f"{report}来源版本与明细view不一致")
                     quote = view.get("source_text")
                     if quote is not None and quote != source["source_quote"]:
-                        raise SourceFactRefusalError("B来源原文与明细view不一致")
+                        raise SourceFactRefusalError(f"{report}来源原文与明细view不一致")
                     for field in ("value", "numerator", "denominator"):
                         expected = numeric if field == "value" else source.get(field)
                         if (field == "value" or field in source) and view.get(field) != expected:
-                            raise SourceFactRefusalError(f"B来源{field}与明细view不一致")
+                            raise SourceFactRefusalError(f"{report}来源{field}与明细view不一致")
 
     def _previous_report(
         self, current: CurrentDeliveryBundle, report: ReportCode

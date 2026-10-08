@@ -4,6 +4,23 @@
 
 ## 1007V1 当前增量合同
 
+纯呈现升级复用 UserFactEditService、build_current_report、全批预检及既有
+锁/journal/committed selector，不写 fact/source/derivation/edit-request 表。
+CurrentPresentationRebuildCommand 绑定项目、request_id、expected_revision、
+所选已存在报告、请求者与带时区时间；API 重开实际字段，公开 CLI 为
+`ci-workflow project rebuild-presentation --root <项目> --command <命令JSON>`。
+无已存 current/缺报告/错误绑定不得绕过原门补造报告。全批预检先于任何
+报告暂存；所有选中报告完成后才原子切换 generation。已记录候选按原字节
+恢复，同请求不同载荷、过期版本拒绝；记录候选前，开工及每个报告完成后
+均校验安装代码/模板/资产和依赖版本摘要，禁止混用新版/旧版。摘要覆盖安装
+ci_workflow 包（排除字节缓存）、共享 builder 文件及 Jinja/Pydantic 版本，
+不是科学或 release digest。current 源值/清除/原文保持；分享从新 committed
+generation 导出，不继承历史视觉 PASS。不增新平台、审批或科学接受状态。
+
+来源刷新中 A 的源明细与 B 明细一样，写入前核对真实来源版本、原文、数值
+及明确 n/N。错误明细在整体预检中拒绝，不留前序报告暂存，不将用户当前值
+写作新原始源。A 无视图的旧输入保持原有兼容路径，有视图则必须唯一且一致。
+
 四篇确切材料的独立分类回执只覆盖同一candidate digest中的角色、研究绑定和
 获取处置。只有生产重算digest及原始资产hash一致才能有界采用；复核命令
 不可用须明确由owner补计算，不能伪称独立工具通过。typed PublicationRecord

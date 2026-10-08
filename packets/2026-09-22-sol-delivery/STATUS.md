@@ -1,11 +1,34 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交2fd2cb402a6717ce0c8c7c727f8296ec48efb112；实际HEAD以Git核对。
+本批父提交23b21f6b3800b4045c80e45da204c9d7fd9adc59；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-verdict-material-v1.json)，
+[当前机器清单](evidence/1007V1/owner-presentation-current-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
+
+纯呈现current节点终态E03实际deepseek-v4.1-flash/max CLI响应effort未证明，
+946.096s/118calls/exit0，无fallback。现有服务/普通CLI复用锁/journal/selector，
+不伪造用户改值。Owner真实3RED补安装共同builder和中途资产漂移保护，
+已有清除保持；相邻source refresh3RED补A明细版本/原文/值整体预检。
+有效factory同步A源明细、旧inline断言迁到实际linked payload，数值/来源
+断言不减。过程8FAIL47PASS→4FAIL59PASS→1FAIL62PASS均不是PASS，最终
+六文件63PASS71.20s无SKIP，Ruff5/strict3生产文件通过；当前一次稳定宽门
+已终态exit0/GATE_OK quality-only6，strict283/活跃1185PASS254.58s/兼容子集
+20PASS1.43s/层级7PASS0.19s/Ruff/旧路径词法；非全产品接受，不借旧门。
+
+真实固定源原项目r4未改，隔离current-only fork经普通CLI生成r5，重复命令
+同generation7b7704a…；949事实、七临床表、既有用户层和完整临床载荷保持。
+A105/B288消费者，65/356文件，新共享JS实际消费；r5 A/B/AB分享逐成员hash
+与保存问题/页码重开核验。准备曾遗漏可选目录/current协议/generation/事务
+manifest，原门分别拒绝，补依赖复用同一副本，不新造项目或删除失败证据。
+C不在真实current，不假补；此fork不是完整历史恢复包。浏览器、移动目录/
+新浏览器离线、临床/宇宙/currentABC/安装/24/三宿主/RC仍未通过。
+指引同步纯呈现出口；内部3技能通用校验通过，公开中文name被generic
+hyphen-case校验拒绝exit1（既有命名，保留用户入口，不虚称4份PASS）。
+下一真实论文源/快照/单补件门，不能假签完整闭包；就绪C/比较继续，Goal ACTIVE。
+
+以下四论文/jRCT各条只对以前固定版本成立，不是当前全部产品接受。
 
 四篇确切论文新digest独立挑战已终态：C03实际CodeBuddy/deepseek-v4.1-flash，
 max CLI/响应effort未证明，305.776s/58calls/exit0，无回退。Read/Grep完成

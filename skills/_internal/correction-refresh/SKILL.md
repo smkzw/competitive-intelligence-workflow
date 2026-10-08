@@ -28,6 +28,13 @@ generation可保留未受影响A的旧消费revision；不能为“同步”复�
 
 ## 禁止行为
 
+纯呈现升级不是来源刷新或用户改值。使用既有
+`project rebuild-presentation` 与 CurrentPresentationRebuildCommand，复用已存
+current、原输入及真实消费者；未选择报告保持原版。字段省略/报告不存在/
+绑定损坏/安装资源漂移均须明确拒绝，不能借虚假临床编辑升级前端。
+此操作只追加呈现事务/generation，不写源/事实/派生/用户编辑表；新分享
+从新 committed current 导出。版本/幂等/故障恢复按实际回执，不继承旧PASS。
+
 不得直接覆盖原始来源、旧事实或历史快照；不得替用户擅自保存修改；用户已经明确保存时不得要求第二次审批。不得无差别重建未受影响产物或把未审候选写为 accepted。
 
 ## 失败与恢复

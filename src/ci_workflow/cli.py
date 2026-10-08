@@ -421,6 +421,34 @@ def _project_share_handler(args: argparse.Namespace) -> int:
     return 0
 
 
+def _project_rebuild_presentation_handler(args: argparse.Namespace) -> int:
+    from pydantic import ValidationError as ModelValidationError
+
+    from ci_workflow.application.latest_delivery import current_bundle_sha256
+    from ci_workflow.application.user_fact_edit import (
+        CurrentPresentationRebuildCommand,
+        PresentationRebuildError,
+        UserFactEditService,
+        UserFactSaveError,
+    )
+
+    try:
+        command = CurrentPresentationRebuildCommand.model_validate(_load_json(Path(args.command)))
+    except ModelValidationError as error:
+        raise ContractError("呈现重建命令字段不符合合同；请核对项目、版本和报告选择") from error
+    try:
+        project = verify_project_workspace(Path(args.root))
+        current = UserFactEditService(project.project_root).rebuild_current_presentation(command)
+    except (OSError, ValueError, ProjectWorkspaceError,
+            PresentationRebuildError, UserFactSaveError) as error:
+        raise ContractError(str(error)) from error
+    reports = ",".join(item.report for item in current.reports
+                       if item.revision == current.revision)
+    print(f"PRESENTATION_REBUILT revision={current.revision} reports={reports} "
+          f"generation_sha256={current_bundle_sha256(current)}")
+    return 0
+
+
 def _project_refresh_source_handler(args: argparse.Namespace) -> int:
     from pydantic import ValidationError as ModelValidationError
 
@@ -1168,6 +1196,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--view-config", help="可选的版本绑定视图配置 JSON"
     )
     project_share.set_defaults(handler=_project_share_handler)
+    presentation_rebuild = project_commands.add_parser(
+        "rebuild-presentation", help="仅升级已保存报告的页面呈现；不修改事实或来源"
+    )
+    presentation_rebuild.add_argument(
+        "--root", "--project", dest="root", required=True, help="现有项目目录"
+    )
+    presentation_rebuild.add_argument("--command", required=True, help="类型化呈现重建命令 JSON")
+    presentation_rebuild.set_defaults(handler=_project_rebuild_presentation_handler)
     project_refresh = project_commands.add_parser(
         "refresh-source", help="以已复核的新来源原子重建实际依赖报告；不接受未审候选"
     )

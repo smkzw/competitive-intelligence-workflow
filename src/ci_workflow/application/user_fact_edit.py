@@ -17,6 +17,7 @@ from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
 from datetime import datetime
 from enum import StrEnum
+from importlib import metadata
 from pathlib import Path
 from typing import Any, Literal
 
@@ -69,6 +70,17 @@ from ci_workflow.storage.sqlite import open_database
 ReportCode = Literal["A", "B", "C"]
 _REPORTS: tuple[ReportCode, ...] = ("A", "B", "C")
 _RESOURCE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+_PRESENTATION_SOURCE_ROOTS: tuple[tuple[str, Path], ...] = (
+    # Conservative retry boundary includes shared science/projection/build code,
+    # not just JS/templates: changing any installed first-party source refuses
+    # an incomplete retry instead of combining outputs from two versions.
+    ("workflow", Path(__file__).resolve().parent.parent),
+)
+_PRESENTATION_SOURCE_EVENT_TYPE = "user.presentation.render.source"
+_PRESENTATION_CANDIDATE_EVENT_TYPE = "user.presentation.rebuilt"
+_PRESENTATION_SOURCE_EVENT_KIND = "user-presentation-render-source"
+_PRESENTATION_CANDIDATE_EVENT_KIND = "user-presentation-rebuild"
+_PRESENTATION_RUN_ID = "user-presentation-rebuild"
 
 
 class UserFactSaveError(RuntimeError):
@@ -81,6 +93,14 @@ class UserFactSaveConflictError(UserFactSaveError):
 
 class CurrentDeliveryConflictError(UserFactSaveError):
     """The atomic current pointer or one of its bound files is invalid."""
+
+
+class PresentationRebuildError(RuntimeError):
+    """The presentation-only current rebuild cannot be applied safely."""
+
+
+class PresentationRebuildConflictError(PresentationRebuildError):
+    """A request id, revision, project, or render-source conflict blocks the rebuild."""
 
 
 def _text(value: str) -> str:
@@ -143,6 +163,68 @@ def _source_count_denominator(context: dict[str, Any]) -> int:
     if not isinstance(denominator, int) or denominator <= 0:
         raise UserFactSaveError("直接报告人数的分母不可用于当前计数")
     return denominator
+
+
+def _presentation_source_files(root: Path) -> tuple[tuple[str, str], ...]:
+    """Hash the installed presentation files under one component root.
+
+    Byte caches never decide rendered output and must not enter the digest.
+    """
+    records: list[tuple[str, str]] = []
+    for path in sorted(root.rglob("*")):
+        if "__pycache__" in path.parts or path.suffix == ".pyc" or not path.is_file():
+            continue
+        records.append(
+            (path.relative_to(root).as_posix(), hashlib.sha256(path.read_bytes()).hexdigest())
+        )
+    return tuple(records)
+
+
+def _installed_presentation_versions() -> dict[str, str]:
+    try:
+        return {
+            "jinja2": metadata.version("jinja2"),
+            "pydantic": metadata.version("pydantic"),
+        }
+    except metadata.PackageNotFoundError as error:
+        raise PresentationRebuildError("已安装呈现依赖版本无法读取") from error
+
+
+def _presentation_render_source_digest() -> str:
+    """Digest the exact installed presentation that decides rendered bytes.
+
+    Installed first-party code/templates/assets and Jinja/pydantic versions
+    are covered; caches are excluded. This is not a clinical acceptance digest.
+    """
+    files: list[list[str]] = []
+    for name, root in _PRESENTATION_SOURCE_ROOTS:
+        if not root.is_dir():
+            raise PresentationRebuildError(f"呈现来源目录缺失：{name}")
+        files.extend(
+            [f"{name}/{relative}", digest]
+            for relative, digest in _presentation_source_files(root)
+        )
+    return _digest({"files": files, "versions": _installed_presentation_versions(),
+                    "shared_builder_sha256": hashlib.sha256(
+                        Path(__file__).read_bytes()).hexdigest()})
+
+
+def _presentation_selection(
+    current: CurrentDeliveryBundle, requested: tuple[ReportCode, ...] | None
+) -> tuple[ReportCode, ...]:
+    """Resolve the requested presentation rebuild set against the committed bundle.
+
+    A selection that names a report the committed generation does not contain
+    fails closed; it never invents a missing report.
+    """
+    existing = tuple(item.report for item in current.reports)
+    selected = existing if requested is None else requested
+    missing = tuple(code for code in selected if code not in existing)
+    if missing:
+        raise PresentationRebuildConflictError(
+            "当前交付不存在所选报告，拒绝凭空重建：" + ",".join(missing)
+        )
+    return selected
 
 
 class FactTargetIdentity(BaseModel):
@@ -288,6 +370,46 @@ class UserFactSaveResult(BaseModel):
     rebuilt_reports: tuple[Literal["A", "B", "C"], ...]
     current_generation_sha256: str
     independent_scientific_acceptance: Literal["not_inherited"] = "not_inherited"
+
+
+class CurrentPresentationRebuildCommand(BaseModel):
+    """Presentation-only current rebuild; it never carries a clinical edit."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_version: Literal["1.0"] = "1.0"
+    request_id: str
+    project_id: str
+    expected_revision: int = Field(ge=0)
+    reports: tuple[ReportCode, ...] | None = None
+    requested_by: str
+    requested_at: datetime
+
+    @field_validator("request_id", "project_id", "requested_by")
+    @classmethod
+    def _id_text(cls, value: str) -> str:
+        normalized = _text(value)
+        if _RESOURCE_ID.fullmatch(normalized) is None:
+            raise ValueError("呈现重建命令身份字段不合法")
+        return normalized
+
+    @field_validator("reports")
+    @classmethod
+    def _reports(
+        cls, value: tuple[ReportCode, ...] | None
+    ) -> tuple[ReportCode, ...] | None:
+        if value is None:
+            return None
+        if not value:
+            raise ValueError("呈现重建报告选择不能为空")
+        if len(set(value)) != len(value):
+            raise ValueError("呈现重建报告选择不得重复")
+        return value
+
+    @field_validator("requested_at")
+    @classmethod
+    def _requested_at(cls, value: datetime) -> datetime:
+        return _offset(value)
 
 
 class RefreshFieldState(StrEnum):
@@ -1468,6 +1590,252 @@ class UserFactEditService:
             public_facts=facts,
             report_version=f"v1-user-r{revision}",
         )
+
+    def rebuild_current_presentation(
+        self, command: CurrentPresentationRebuildCommand
+    ) -> CurrentDeliveryBundle:
+        """Rebuild only the presentation of the selected existing reports.
+
+        The generation revision advances exactly once while the active fact
+        closure, source bindings, derivations, and prior user edits stay as
+        committed; unselected reports keep their existing delivery.
+        """
+        command = CurrentPresentationRebuildCommand.model_validate(
+            command.model_dump(mode="python", exclude_unset=True)
+        )
+        request_digest = _digest(command.model_dump(mode="json", exclude_unset=True))
+        with self._exclusive():
+            current = self.read_current_delivery()
+            if current.project_id != command.project_id:
+                raise PresentationRebuildConflictError("重建请求与当前项目身份不一致")
+            recovered = self._recover_presentation_candidate(
+                command, request_digest=request_digest, current=current
+            )
+            if recovered is not None:
+                return recovered
+            if current.revision != command.expected_revision:
+                raise PresentationRebuildConflictError("版本冲突：当前交付已发生其他更新")
+            selected = _presentation_selection(current, command.reports)
+            self._bind_presentation_render_source(command, request_digest=request_digest)
+            revision = current.revision + 1
+            # Validate the complete selected set before any report transaction
+            # begins, so a bad later report cannot leave an earlier staging tree.
+            for report in current.reports:
+                if report.report not in selected:
+                    continue
+                try:
+                    self._preflight_report(
+                        report,
+                        revision=revision,
+                        request_id=command.request_id,
+                        fact_version_ids=report.fact_version_ids,
+                    )
+                except UserFactSaveError as error:
+                    raise PresentationRebuildConflictError(
+                        f"{report.report}类报告预检未通过：{error}"
+                    ) from error
+            reports: list[CurrentReportDelivery] = []
+            for report in current.reports:
+                if report.report not in selected:
+                    reports.append(report)
+                    continue
+                try:
+                    rebuilt = self._rebuild_presentation_report(
+                        report, revision=revision, request_id=command.request_id
+                    )
+                except UserFactSaveError as error:
+                    raise PresentationRebuildConflictError(
+                        f"{report.report}类报告重建未通过核验：{error}"
+                    ) from error
+                reports.append(rebuilt)
+                self._after_report_built(report.report)
+                # Verify after each complete render as well as before starting.
+                # Mid-batch deployment must never select a mixed generation.
+                self._bind_presentation_render_source(command, request_digest=request_digest)
+            candidate = CurrentDeliveryBundle(
+                project_id=command.project_id,
+                revision=revision,
+                request_id=command.request_id,
+                active_fact_version_ids=current.active_fact_version_ids,
+                fact_revision_digest=_fact_digest(current.active_fact_version_ids),
+                reports=tuple(reports),
+                created_at=command.requested_at,
+            )
+            self._publish_presentation_candidate(
+                command,
+                previous=current,
+                candidate=candidate,
+                request_digest=request_digest,
+                announce=True,
+            )
+            return candidate
+
+    def _recover_presentation_candidate(
+        self,
+        command: CurrentPresentationRebuildCommand,
+        *,
+        request_digest: str,
+        current: CurrentDeliveryBundle,
+    ) -> CurrentDeliveryBundle | None:
+        """Return the committed or recorded candidate for an exact replay."""
+        payload = self._presentation_event_payload(
+            _PRESENTATION_CANDIDATE_EVENT_TYPE, command.request_id
+        )
+        if payload is None:
+            return None
+        if str(payload.get("command_digest")) != request_digest:
+            raise PresentationRebuildConflictError("同一请求标识对应了不同重建载荷")
+        try:
+            candidate = CurrentDeliveryBundle.model_validate(payload["candidate"])
+        except (KeyError, ValueError) as error:
+            raise PresentationRebuildConflictError("已记录重建候选无法读取") from error
+        if candidate.project_id != command.project_id:
+            raise PresentationRebuildConflictError("已记录重建候选与请求项目不一致")
+        if current.request_id == command.request_id:
+            if (
+                current.revision != candidate.revision
+                or current_bundle_sha256(current) != current_bundle_sha256(candidate)
+                or not current_transaction_committed(self.project_root, command.request_id)
+            ):
+                raise PresentationRebuildConflictError("已记录重建结果与已提交current不一致")
+            return current
+        if current.revision != command.expected_revision:
+            raise PresentationRebuildConflictError("版本冲突：当前交付已发生其他更新")
+        # The recorded candidate is recovered byte for byte; a retry never
+        # re-renders reports and never mixes old and new presentation assets.
+        self._publish_presentation_candidate(
+            command,
+            previous=current,
+            candidate=candidate,
+            request_digest=request_digest,
+            announce=False,
+        )
+        return candidate
+
+    def _bind_presentation_render_source(
+        self, command: CurrentPresentationRebuildCommand, *, request_digest: str
+    ) -> None:
+        """Record or re-verify the installed render source before any rendering."""
+        digest = _presentation_render_source_digest()
+        payload = self._presentation_event_payload(
+            _PRESENTATION_SOURCE_EVENT_TYPE, command.request_id
+        )
+        if payload is not None:
+            if str(payload.get("command_digest")) != request_digest:
+                raise PresentationRebuildConflictError("同一请求标识对应了不同重建载荷")
+            if str(payload.get("render_source_digest")) != digest:
+                raise PresentationRebuildConflictError("呈现资源已变化，拒绝混用旧新渲染资源")
+            return
+        self.event_store.append(
+            WorkflowEvent(
+                schema_version="1.0",
+                event_id=stable_id(
+                    _PRESENTATION_SOURCE_EVENT_KIND, command.project_id, command.request_id
+                ),
+                project_id=command.project_id,
+                run_id=_PRESENTATION_RUN_ID,
+                event_type=_PRESENTATION_SOURCE_EVENT_TYPE,
+                occurred_at=command.requested_at,
+                actor_id=command.requested_by,
+                idempotency_key=f"user.presentation.render.source:{command.request_id}",
+                payload={
+                    "request_id": command.request_id,
+                    "command_digest": request_digest,
+                    "render_source_digest": digest,
+                },
+            )
+        )
+
+    def _publish_presentation_candidate(
+        self,
+        command: CurrentPresentationRebuildCommand,
+        *,
+        previous: CurrentDeliveryBundle,
+        candidate: CurrentDeliveryBundle,
+        request_digest: str,
+        announce: bool,
+    ) -> None:
+        """Journal, record, and atomically select one immutable candidate."""
+        try:
+            prepare_current_transaction(
+                self.project_root,
+                request_id=command.request_id,
+                previous=previous,
+                candidate=candidate,
+            )
+        except ValueError as error:
+            raise PresentationRebuildConflictError(
+                f"重建事务journal与既有记录不一致：{error}"
+            ) from error
+        if announce:
+            self.event_store.append(
+                WorkflowEvent(
+                    schema_version="1.0",
+                    event_id=stable_id(
+                        _PRESENTATION_CANDIDATE_EVENT_KIND,
+                        command.project_id,
+                        command.request_id,
+                    ),
+                    project_id=command.project_id,
+                    run_id=_PRESENTATION_RUN_ID,
+                    event_type=_PRESENTATION_CANDIDATE_EVENT_TYPE,
+                    occurred_at=command.requested_at,
+                    actor_id=command.requested_by,
+                    idempotency_key=f"user.presentation.rebuilt:{command.request_id}",
+                    payload={
+                        "request_id": command.request_id,
+                        "command_digest": request_digest,
+                        "candidate": candidate.model_dump(mode="json"),
+                    },
+                )
+            )
+        try:
+            commit_current_transaction(
+                self.project_root, request_id=command.request_id, candidate=candidate
+            )
+        except ValueError as error:
+            raise PresentationRebuildConflictError(
+                f"重建事务journal与候选不一致：{error}"
+            ) from error
+        try:
+            publish_current_delivery(
+                self.project_root, candidate, expected_revision=previous.revision
+            )
+        except ValueError as error:
+            raise PresentationRebuildConflictError(str(error)) from error
+
+    def _rebuild_presentation_report(
+        self,
+        previous: CurrentReportDelivery,
+        *,
+        revision: int,
+        request_id: str,
+    ) -> CurrentReportDelivery:
+        """Rebuild one selected report from its pinned inputs and current facts.
+
+        ``changed_fact_id=""`` keeps the impact record explicitly empty: this
+        operation stages no fact, derivation, or source replacement.
+        """
+        rows = [self._fact_row(version_id) for version_id in previous.fact_version_ids]
+        facts = {str(row["fact_id"]): self._public_fact(row) for row in rows}
+        return build_current_report(
+            self.project_root,
+            previous,
+            revision=revision,
+            request_id=request_id,
+            changed_fact_id="",
+            fact_version_ids=previous.fact_version_ids,
+            public_facts=facts,
+            report_version=f"v1-presentation-r{revision}",
+        )
+
+    def _presentation_event_payload(
+        self, event_type: str, request_id: str
+    ) -> dict[str, Any] | None:
+        for event in self.event_store.read_all():
+            if event.event_type == event_type and event.payload.get("request_id") == request_id:
+                return dict(event.payload)
+        return None
 
     def _copy_tree(self, source: Path, destination: Path) -> None:
         if not source.is_dir() or not source.resolve().is_relative_to(self.project_root):
