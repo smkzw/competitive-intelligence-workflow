@@ -925,3 +925,100 @@ Continue source bridge integration and science/Chinese/current/desktop branches,
 not newpause. Goal active; fulluniverse/dynamicChinaMAHgroup/samecurrentABCtask/
 Ego fourwidthfourstate/keyboard/offlinenewbrowser/24portals/threehosts/install/
 recovery/RC remainopen. Partialgreen/exit0/shareZIP donotclose those gates.
+
+## 1007V1 source questions and current A/B operations, parentb81dcc1
+
+Execution-plus-conference: a disjoint E08 source semantic writer and one fresh
+bounded C03 challenge resolve material normalization uncertainty; owner alone
+integrates shared models/renderers/current behavior. No new ontology/router,
+scientific identity or per-pair approval. Named Kangzhe 6.1 used function-first:
+source limitations/condition hierarchy remain explicit; no CSS/asset change or
+unperformed visual acceptance. Ponytail reuses existing views/facets/transactions.
+
+E08 terminal actual modelUsageGrok4.7-build/high CLI; same-session completion,
+whole duration/tool totals unknown. Source35measurements/91atoms/15families and
+375quoted fields exact. Worker temporary script creation/deletion outside the
+sole allowed output reported as deviation, not hidden. Immutable proposal status
+remains proposal_not_accepted; owner adoption stored separately.
+
+C03 actualCodeBuddy/deepseek-v4.1-flash:max CLI, fresh source/proposal context.
+First525.454s/32observed tools/exit0 returns progress only: INCOMPLETE retained.
+Two failed resume preflights fixed before launch; same session remaining6674s,
+then213.456s/9observed tools/no fallback, complete144line result. Total738.910s.
+All15family/35context dispositions returned. Reviewer did not execute hashes,
+tests or scientific code; owner checks attributed separately. Different model
+from actual Grok executor, owner model identity unavailable, no fabricated full
+model independence/response effort/professional approval.
+
+Owner exact-source dispositions accept only descriptive clinical questions.
+Distinct source measurement instances retained despite equal values; NUMBER
+percentages are source reported, not proved crude rates. KM probability/count/
+percentage/LSmean do not become one scalar. Preserve PP/WI differences, whole
+IGA conjunction, opposite sleep directions, rescue strategies and literal
+truncated non-responde. Week4 change is not proof of first onset atWeek4. Unused
+proposal composite flag and unverified ChineseNem name not imported. One study
+cell may hold distinct labelled entries without an inferred common numeric axis.
+
+Production SourceQuestionProjection sits beside facts; exact source version/
+measurement/reference/domain checks, original groups/digests/membership/facets/
+numeric partition preserved. Typed-model-copy contents revalidated at consumption.
+Root10RED; fixture-copy/domain tagging mistakes distinguished from actual unknown
+normalized-label bug. 35PASS1.67s then69adjacentPASS9.01s. Conditions1RED;
+69PASS/1FAIL selected a legitimate single-study dossier by hash file order,
+corrected selection without weakening two-study assertion ->70PASS9.07s.
+Real sources added ->72PASS38.35s/no SKIP. Late generic mixed-domain1RED after
+existing efficacy page guard exposed initial setup error ->17PASS30.45s. Typed
+model-copy1RED ->18specific/realPASS33.14s. Ruff E501 formatting errors retained
+and fixed. Final broad gatev2 covers final source/test bytes; exact terminal
+result in current manifest, not inherited from earlier gates. No source/test
+edits during a running broad gate. Lesson: include copied-instance and mixed-page
+domain boundaries in the initial root-cause batch to avoid a late extra wide run.
+
+Actual ordinary candidate timestamp2026-10-07T23:40:11.721385+00:00, fixedCAS
+replay not newGET/first publication. A49pages63125976bytes; B101pages196232480bytes.
+Both ordinary pages retain same source question links: two drugs/three studies/
+32observations,32sciencefacets and unknownestimands. Full3544efficacy/3733members
+retained; old3633columns ->3620 still significant unfinished product coverage.
+Original DB/snapshot/inputs/proposal/source bytes unchanged, no originalcurrent.
+Local checkpoint digest tuples normalized only in new public manifest, original
+checkpoint bytes not edited. Tests follow actual Boverview script references,
+not arbitrary dossier files. No synthetic demo or page count used as release.
+
+Isolated current copy uses unchanged real source DB/CAS and current ordinary
+A/B builder inputs/sites. True source LSmean-59.34 set to hypothetical-58.34,
+clear,undo back to-58.34; both reports rebuiltr1/r2/r3. Every duplicate command
+idempotent; unpaired numeric request and stale revision reject with old current
+intact. Original quote/source version/input preserved. First two QA failures
+used wrong extraction shapes (array helper vs A dictionary, B identity vs value),
+not product failures; changed inspection method after the second failure.
+Resumed same already committedr1 using exact saved command audit and idempotency;
+no duplicate project/DB or rerender just to erase the failure. Complete receipt
+9344ded9e66081718c6434ca060a5b1c7b338ed4a9c963450d3b46ee031e4aa5.
+Currentr3 A share f4b8c8418a7808a034c416f6f7b97f039024e6828af27bbe0b57272696b803d1,
+B84996401547a9ab7a49047aee5272aa567bcd0de28cb216a0909ab030cfa0116,
+ABafebf3034b614beb0cff4092c6caca48c712fc58882f7aaa3d1bf471eae1b891.
+All share member hashes/currentrevision/saved comparison question+page verified
+after ZIP reopen; not a new-browser/offline behavior, C or wholeABC acceptance.
+Hypothetical edit is local QA, not changing source clinical results.
+
+After the final typed-model boundary patch, do not stamp earlier loaded renderer
+sessions with later code hashes. Fresh run pins five final source digests before
+and after one actual restore-to-source-value save; A+B both r4=-59.34 retain the
+same source-bound q-wi-nrs-percent-change, retries idempotent. New r4 A/B/AB
+shares bind current generation, saved target question/page and all member bytes.
+Checkpoint f59a454dbec063c06b4a93eaae65c933d3366087600179d7a9013bfb4ed0956e;
+generation a4d7343cac374c54bd8f60a473d32e5f72bd68c80d7e90f225505471f8fb089b.
+No earlier r3 checkpoint/ZIP rewritten. This is the final-code current behavior
+anchor, not medical or offline-new-browser acceptance; exact SHA in manifest.
+
+Next one bounded E08 Publication role writer launched after preflight0 on9
+complete PubMed records including native correction/retraction relations. Input
+e3db1d0ee07a41d7245a5e75bbf4b9e68e6aecb1e4b7ce982e7c80a6e187655f.
+No prior classifier rationale/fullbody in source packet, abstract-only limitation
+explicit; source-independent role challenge before adopting material judgments.
+Pending is not accepted. RootHANDOFF compressed with historical Git/manifest
+links, not repeated contradictory in-flight history. User five files/unknown/
+raw/history/old-root boundary preserved. No broad cleanup/session migration,
+new dependency or silent browser/model/config change. Goal ACTIVE; remaining
+source universe/ChinaMAHgroup/required fulltexts/faithfulCChinese/currentABC/
+fourwidth-fourstate browser/24/threehosts/install/recovery/RC stay open.

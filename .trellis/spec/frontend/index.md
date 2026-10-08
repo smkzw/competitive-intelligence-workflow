@@ -9,8 +9,9 @@
 This project renders independent A/B/C static sites with Python/Jinja and packaged
 vanilla JavaScript/ECharts. Product authority remains in
 `packets/2026-09-22-sol-delivery/`; these guides describe implementation practice,
-not a second product specification. User-selected Kangzhe Design 6.0 applies to
-current presentation; historical screenshots/receipts are not rewritten.
+not a second product specification. Latest user-selected Kangzhe Design 6.1
+is used selectively under the
+1007V1 function-first contract; historical screenshots/receipts are not rewritten.
 
 ---
 

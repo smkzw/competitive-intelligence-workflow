@@ -46,3 +46,19 @@ Use ordinary renderers. Bind actual input/asset/render hashes, gaps and source
 set in a small machine manifest. Offline fixed CAS is not live recheck/universe
 closure. Only committed current can feed accepted shares, not old HTML+patch.
 Historical C visual prototypes stay distinct from the new C source bridge.
+
+## Source-backed descriptive questions
+
+Reuse `SourceQuestionProjection` beside source facts, never inside their science
+digest. Require exact source version/measurement scope and source-context
+reference bindings. Efficacy descriptors cannot qualify other scientific domains.
+Revalidate typed instance content: `model_copy` bypasses constructor validation.
+Clinical-question columns may share studies while retaining different scientific
+facets, values and numeric guards. Verify the positive shared column and negative
+binding/domain/permission boundaries together. Full source coverage and actual
+current save/clear/share are separate evidence layers.
+
+Read actual linked payloads from the page being tested. B evidence `row` carries
+identity, not its separately disclosed `value`; array-only extraction helpers do
+not parse A comparison dictionaries. Fix the inspection helper, not production
+data or assertions, when a check uses the wrong shape.

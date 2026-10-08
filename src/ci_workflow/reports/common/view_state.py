@@ -218,6 +218,51 @@ class WorkspaceMembership(BaseModel):
         return cls(row_ids=tuple(row.row_id for row in view.rows))
 
 
+class SourceQuestionProjection(BaseModel):
+    """Source-scoped descriptive column metadata, never a scientific fact edit.
+
+    Store alongside view facts, not inside their scientific content/digests.
+    Runtime consumption must verify the source context and cited reference IDs.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    source_version_id: str
+    source_measure_path: str
+    question_id: str
+    question_label_zh: str
+    basis_reference_ids: tuple[str, ...] = Field(min_length=1)
+    comparison_purpose: Literal["clinical_question_descriptive"]
+    condition_notes_zh: tuple[str, ...] = ()
+
+    @field_validator("source_version_id", "source_measure_path", "question_id")
+    @classmethod
+    def _nonblank(cls, value: str) -> str:
+        return _text(value)
+
+    @field_validator("question_label_zh")
+    @classmethod
+    def _chinese_label(cls, value: str) -> str:
+        value = _text(value)
+        if not _has_chinese(value):
+            raise ValueError("临床问题标签必须包含中文")
+        return value
+
+    @field_validator("basis_reference_ids")
+    @classmethod
+    def _unique_references(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        if len(values) != len(set(values)) or any(not value.strip() for value in values):
+            raise ValueError("临床问题来源引用必须非空且唯一")
+        return values
+
+    @field_validator("condition_notes_zh")
+    @classmethod
+    def _condition_notes(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        if any(not value.strip() or not _has_chinese(value) for value in values):
+            raise ValueError("临床问题条件说明必须含中文且非空")
+        return values
+
+
 class FacetAssignment(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 

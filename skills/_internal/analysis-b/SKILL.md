@@ -22,6 +22,13 @@ description: 由竞品调研控制图调用的 B 类临床试验结果分析能�
 列的所有行重新混成一个坐标框。未知构念/定义与来源领域冲突不借同问题
 文字获得归并许可；图/表/来源/当前修订仍消费同一事实。
 
+独立来源复核后的描述性问题映射放在efficacy_views.clinical_questions，
+与facts并列，不修改单事实科学摘要。复用SourceQuestionProjection及原
+SourceClauseContext作用域/引用校验：临床问题ID/标签可以已知，原数值构念、
+量表或estimand仍未知。普通A/B共用同题列而保留原科学分面；缺依据/作用域
+冲突仍可查未解，重复绑定/冲突标签显式失败。主题相近不是同题，不能添加
+数值许可字段或要求用户逐观察审批。提案和已采用映射分别记录。
+
 直接疗效source views须消费原分析人群、统计paramType及完整测量定义，不
 仅把它们留在旁路字段。精确原文引用复用SourceClauseContext；缺失人群
 保持未知，不能借“登记结果人群”。LEAST_SQUARES_MEAN不因单位为百分比

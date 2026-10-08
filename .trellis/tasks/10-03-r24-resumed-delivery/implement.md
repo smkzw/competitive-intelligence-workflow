@@ -1,6 +1,48 @@
 # Continuous implementation checkpoint
 
-## Current owner unit: A/B source-context parity, parent1deed8f
+## Current owner unit: source-backed descriptive questions, parentb81dcc1
+
+Execution-plus-conference: one completed source writer and one fresh concrete
+proposal challenge address material clinical normalization uncertainty; owner
+keeps shared code, no duplicate panel/platform. E08 terminal/modelUsageGrok4.7-
+build/high CLI;35/91/15proposal and375verbatim quotes exact; proposal unchanged.
+Temporary-script scope deviation in worker report retained. C03 actualCodeBuddy/
+deepseek-v4.1-flash:max CLI525.454s32observed tools/no fallback, first output only
+progress before proposal read: INCOMPLETE. Two resume preflight errors corrected
+before same-session dispatch; remaining6674s. Resume terminal213.456s/9tools/
+exit0/no fallback;15family/35key decisions, owner source corrections accept only
+descriptive metadata. No reviewer hashes/tests/science code or visual acceptance.
+Owner separate SourceQuestionProjection alongside facts, exact source scope/ref
+checks, ordinaryA/B common descriptive column, original scientific facets/digests/
+numeric unchanged.10RED; first32PASS/3FAIL copied-group fixture fault + normalized
+unknown-label issue; next32PASS/3FAIL clarified unknown labels were real display
+bug; final35PASS1.67s and ordinaryA/B/current share/source adjacency69PASS9.01s.
+Core widegate terminal1185PASS270.57s precedes condition notes; not inherited.
+Notes1RED->70PASS9.07s; real-source addition72PASS38.35s/no SKIP. Late page-domain
+fixture first hit existing tagging guard (not productionRED); generic mixed-domain
+1RED->17specific/realPASS30.45s; source question is efficacy-scoped only.
+Ruff formatting failures retained/corrected; final frozen milestone gate completed,
+no source/test edits during it. Finalv2 terminalGATE_OK quality-only/6: strict283,
+active1185PASS266.58s,compat20PASS0.61s,layer7PASS0.21s,Ruff/oldpath; not science/
+browser/integrity/RC. New ordinary A49/B101 candidate,35/91/15; two drugs/
+three studies32 observations share one question,32scientificfacets unchanged,
+full3544/3733 retained/3620columns still gap. Same-current operations next.
+Ego/Chinese/attachment/
+universe/currentABC/24/hosts/install/recovery/RC remainopen. No pause or cleanup.
+
+Current real source operation QA in isolated copy terminal: LSmean-59.34->-58.34,
+clear,user_cleared,undo->-58.34; each A+B rebuilt r1/r2/r3, retries idempotent,
+unpaired/stale request rejected with current intact. Original project/candidate
+bytes unchanged. First two failures inspected wrong payload shapes (array-only
+helper vs A dictionary, B identity row vs separate value), not product failures.
+Recovered same committed r1 with exact original command audit; no duplicate DB/
+site tree. A/B/AB share each committed r3+saved comparison query, all ZIP member
+hashes reopened. Browser/C/wholeABC not accepted. Typed-model-copy boundary
+1RED->18specific/realPASS33.14s; final milestone gatev2 terminal, source frozen.
+Next9-record Publication role executor preflight0 and live launch; output pending,
+no medical adoption/identity claims until terminal. Owner contract shared code.
+
+## Historical unit: A/B source-context parity, parent1deed8f
 
 Execution-plus-conference: owner repairs objective source-context consumption in
 A; one disjoint E08 source-semantic proposal writer is dispatched through the
@@ -2188,6 +2230,19 @@ packet now has explicit delegated boundaries/read-set/output; require preflighte
 before dispatch recovery. Keep this process failure visible. Science trio frozen anew
 at endpoint9dd5dcf1…, other2 unchanged; do not edit until reviewer actually terminates.
 # 1007V1 milestone9 final binding
+
+1007V1 current bounded source-question unit (owner continues, no pause): E08
+terminal actual Grok4.7-build/high CLI request, same-session report completion;
+35 contexts/91 atoms/15 proposal families, 375 verbatim field quotes exact and
+source DB unchanged. Medical proposal not accepted; report's temporary script
+write-scope deviation retained. One fresh linked C03 is PENDING after preflight0;
+no in-flight QA/latency redispatch. Owner's separate descriptive metadata contract
+began with10RED. First related32PASS/3FAIL included stale copied-group test setup;
+next32PASS/3FAIL exposes normalized unknown concept labels incorrectly treated
+as known descriptive questions. Fix the display-known guard, not scientific
+identity or numeric permission; ordinary A/B consume the same metadata outside
+fact digests. Scope limited; no full gate per edit or clinical adoption before
+fresh review and exact-source owner dispositions.
 
 Continuous authorized work, no pause/RC. Final source regression27PASS3.18s;
 v13 six-step quality-only exit0 (strict281, active1167/447.31s, compat20, layering7).

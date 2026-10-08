@@ -1,96 +1,61 @@
 # 1007V1 当前接手入口（连续实施，非暂停/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-本批父提交1deed8f0550286ba557c1384b4318a829fd3839d；实际HEAD以Git核对。
-[本批来源/代码/验证清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-ab-context-v1.json)
-是候选与相关检查，不是发布证明。Goal ACTIVE，继续授权实施。
+本批父提交b81dcc14c4455c42616a6f4d40a71fb3a221075a；实际HEAD以Git核对。
+[本批机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-projection-v1.json)。
+Goal ACTIVE；1007V1用户裁决高于旧规格。原01–06/reference/cases.json仍缺，
+不冒造专家编号。唯一英文工程；旧中文根零接触，五用户修改及历史保留。
 
 权威：[PRD](packets/2026-09-22-sol-delivery/PRD.md)、
 [DESIGN](packets/2026-09-22-sol-delivery/DESIGN.md)、
 [PLAN](packets/2026-09-22-sol-delivery/PLAN.md)、
 [执行规范](packets/2026-09-22-sol-delivery/EXECUTION_RULES.md)、
-[验收](packets/2026-09-22-sol-delivery/ACCEPTANCE.md)；1007V1用户裁决优先。
-[详细实施/复盘](packets/2026-09-22-sol-delivery/evidence/1007V1/implementation.md)。
-原01–06/reference/cases.json仍未取得，不冒造专家编号。
+[验收](packets/2026-09-22-sol-delivery/ACCEPTANCE.md)。
+[详细实施/复盘](packets/2026-09-22-sol-delivery/evidence/1007V1/implementation.md)，
+Trellis活动任务为10-03-r24-resumed-delivery，不另开产品权威。
 
-## 本批真正完成
+## 本批实际完成
 
-- 补普通A的来源语境缺口：不论A-only还是A+B，在已有A登记后复用同一
-  只读疗效桥再序列化A；B消费相同视图，无第二解析器/科学身份。91完整
-  源定义、人群、统计形式与值进入真实A横比，3544完整池及unknown保留。
-- 两普通模式2FAIL13.58s→34相关PASS41.78s；33当前分享/查询/来源邻接
-  PASS8.34s，另批10PASS/1FAIL8.65s。失败是冻结历史资料库期待74330a…
-  而实际a1094f…，在新生产调用前发生；原因未明，不改SHA/字节或称全绿。
-- 新四源949事实/91 A+B疗效/14安全共享/183基线，无current。A普通49页
-  62916627字节；实际页面91语境与B输入逐项相同，3733成员/3633条件列
-  仍不满足可用横比。B输入与上轮相同字节，不重建整套B仅重复存储。
-- 新候选时刻实际2026-10-07T22:58:53.979250+00:00，offline replay不是
-  新GET；错误CAS路径初次失败与小型partial项目保留，新v2从正确CAS生成。
-- 一个E08临床源语义执行节点已通过preflight/runner派发。完整35测量/91
-  当前正确源包eb1db185…、DB不变；只创建机器可读proposal，不写代码或
-  接受数值等价。目前PENDING；不把初始化/选择器当实际模型或完整结果。
-  终态后核原件/覆盖/输出及运行身份，再做一次必要的独立科学挑战后接线。
-- Ruff两文件/strict正确src路径的一工具通过；一次稳定接口宽门终态
-  GATE_OK quality-only/6，strict283/活跃1185PASS265.37s等全范围见清单。
-  不覆盖历史资料库FAIL；科学/中文/实屏/同currentABC/24/宿主/安装/恢复/RC开放。
+- 复用既有来源语境和比较列，新增与facts并列的有界来源问题元数据。普通
+  A/B可同题并列，不改单事实科学digest、原科学分面或数值资格；精确scope/
+  引用/领域及typed-model-copy内容重验，不能混入数值许可。
+- E08实际Grok4.7-build/high CLI提案，375引文逐字校验；临时脚本写路径偏离
+  保留。C03实际CodeBuddy/deepseek-v4.1-flash:max CLI，一次同会话续接完成，
+  累计738.910s。首INCOMPLETE不改成PASS；15问题/35测量描述性判断经owner
+  核源采用，NUMBER非已证实粗率、IGA完整合取、起效/方向/救援/截断说明保留。
+  reviewer未执行hash/tests或科学代码，不是正式医学批准或数值等价。
+- 新普通A49页/B101页：91源观察，两个药物三个研究32观察共享同题列，
+  原32科学分面/unknown不变。3544完整疗效池/3733成员保留；3620列仍碎片化。
+  固定CAS重放不是新GET，原项目不提升current，不接受完整横比/实屏/RC。
+- 10RED、条件说明/领域/model-copy各真实RED；相关普通门户/分享/来源72PASS
+  38.35s无SKIP，最终专属/真实18PASS33.14s。错误测试设置、B dossier选择和
+  Ruff格式失败均记录，不抹掉。最终稳定质量门v2终态以STATUS/清单为准，
+  不继承前一质量门或历史验收。
+- 同源隔离副本真实LS均值-59.34→-58.34→清除→undo，两报告同步r1/r2/r3，
+  重试幂等；不完整值/旧revision拒绝、current不变、原源/候选字节未改。
+  A/B/AB三分享包绑定r3和保存比较配置，ZIP逐成员校验。首次检查工具形状
+  错误后复用已提交r1续接，未另造重复项目；C/浏览器不在此次完成范围。
+- 末源码边界修复后不借早期生成接受：五源码hash锁定，真实恢复原值-59.34
+  产生A+B r4，源问题仍在；r4 A/B/AB三个新分享包配置/逐文件hash闭合。
+  当前机器清单绑定最终源码、r4 generation和各包SHA；旧r3原件保留。
 
-上一轮完整B源语境修复和101页候选见1deed8f Git历史及
-[其精确机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-context-v1.json)，
-不再作为本轮科学/视觉验收。T66测量2是已有六安全行，非漏失疗效。
+## 仍未交付与下一有界单元
 
-## 上一批历史（3fd19f7，不能当本轮验收）
+当前九论文角色/更正关系执行节点已启动；终态、实际身份、源校验及一次
+独立挑战后方可采用，不能把初始化或进度当接受。继续扩大来源问题及真正
+合格数值框，接C当前依赖和同候选完整任务链，不回到逐症状全页多路循环。
 
-- 已消费源桥执行/35上下文会商终态。执行实际为预声明ZCode/GLM-5.3-Flash:max
-  回退；审阅实际CodeBuddy/deepseek-v4.1-flash:max调度。未把请求/顶层旧路由
-  当实际模型。审阅REVISE，原91采用事实中25分母确实误用总体N。
-- 共同来源解析和普通A构建器按最深明确N作用域；局部缺失/坏值/冲突不借
-  总体N、不吞其他访视，当前绑定拒绝旧总体N。整族9真实RED，当前83相关
-  PASS及1普通materializer PASS；旧输入引起1FAIL/111PASS保留，不改历史。
-- 当前原始分页重建38产品/43研究/3544疗效/189安全/48其他，1750疗效N修正，
-  数值和行集合无减少。新v2项目91疗效A/B同事实、14安全共享/183基线数值
-  消费者，949来源候选事实；partial、不提升current、不接受全池或医学共轴。
-- 旧共享安全测试改读实际链接的公共载荷，不恢复大inline JS、不删原值/来源/
-  unknown/真实保存断言；6相关PASS86.14s。一次宽门只证开发层，详情见STATUS。
-- 首次候选回执误填未来UTC00:00，已保留隔离、不得接受；新v2按真实时钟
-  2026-10-07T22:20:19+00:00重建。下载/重放日不冒充论文首发日。
+Ego Lite space12 NOT_FOUND、中文翻译容量HTTP507、原附件缺失各Ask待答。
+不私换浏览器/模型/服务配置；对应实屏/中文检查NOT_RUN，其他分支继续。
+中国MAH→集团/创新与来源宇宙/必需全文/同currentABC/四宽四态/L1L2/键盘/
+离线新浏览器/24门户/三宿主/fresh-install/恢复/RC仍开放。历史资料库
+期待74330a…实际a1094f…的FAIL原因未明，禁止改旧hash或称恢复通过。
 
-以下论文/发现工作是05eb277批历史，未因此接受新候选：
+## 历史入口
 
-- 保留PubMed自身更正/撤稿/关注/更新关联及方向/位置，紧凑CLI也不丢；
-  未核不自动推荐替代主要结果，普通评论不误阻断。主要报告真实应答比例
-  不再漏识别，不因正文后段附带事后分析误降整篇。仍为规则候选，不是
-  正式Publication接受或量表/数值等价。
-- 整族初23FAIL/1PASS，CLI1真实RED；应答7FAIL/3PASS含三真实论文。
-  最终11相关文件155PASS2.23s（含三真实、无SKIP）、scoped Ruff五文件/
-  strict两源。不是全仓/科学/浏览器门。初次-k误排真实用例已单列并修选择器，
-  原失败保留；初23RED完整stdout未落档，明示不造日志hash。
-- 真实三登记查询52/58/52，58唯一/无版本冲突；宽检索新增6项待资格核验，
-  不是6个创新竞品。旧52条只有平台versionHolder日期变，其他源字段相同；
-  旧门户43研究全部仍在，15项集合差异不是自动纳入。原项目/快照未改。
-- 三论文查询103/186/13，257唯一题名→显式9篇摘要。初摘要容量200超限
-  显式失败，扩大500而不截Top-N。普通生产JATS桥核四份自身DOI/PMC/PMID：
-  三份真正文（189/45/33块）、一份metadata-only且无全文capture。
-  原源/GET时刻/CAS/旧清单保留；下载日不冒充首发日，原全文不进Git/包。
-
-## 下一条有界任务
-
-先前两节点已终态，不等待旧PID；新的source-question-proposal E08尚PENDING，
-不重派/固定轮询/读取在途产物QA。新A候选在.artifacts/1007-ab-context-current-v2；
-源码/来源/候选/49页digest及重建命令见当前机器清单；前一N/B候选及错误
-时刻/路径回执保留不重写。下一有界任务：根据完整源语境建立可复用临床
-问题/上下文映射和实际正例，保留异量表/统计形式/ICE分面；
-不能仅凭REVISE建议签发等价或删重复值。然后同一候选实际横比/下钻/保存/
-分享链，A/B/C同优先；91只为合法共享子集，不是全部3544闭合。
-
-继续真实论文学术分类、更正原件、缺失全文/中国监管和反向扩展；三篇主要
-报告重放只是规则回归。未知分析集/estimand仍未知，同current真多药横比
-及ABC完整操作链未接受。当前宽门已终态，不为下一行修改重复全仓或借旧PASS。
-
-Ego12恢复、共享Hy-MT2容量、原附件Ask待答；译文HTTP507未修成PASS。
-四宽四态/L1L2/键盘/新浏览器离线NOT_RUN。完整宇宙/必需论文/动态中国MAH集团、
-同currentABC编辑同步配置/三单包及联合包、24门户/三宿主/安装/恢复/RC仍开放。
-唯一英文工程；旧中文根零接触，五用户修改/unknown/raw/历史保留，无一般清理。
-里程碑12入口/状态在dc3712c Git历史，
-[里程碑12清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-milestone-v12.json)
-及[较早归档索引](packets/2026-09-22-sol-delivery/archive/milestone10-1007V1/README.md)
-仅作历史，不改旧hash或因旧暂停拒绝当前授权。
+前一A/B源语境单元：[机器清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-ab-context-v1.json)
+及b81dcc1的根HANDOFF；更早记录见其Git历史、
+[来源桥清单](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-context-v1.json)、
+[里程碑12](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-milestone-v12.json)和
+[归档索引](packets/2026-09-22-sol-delivery/archive/milestone10-1007V1/README.md)。
+历史PENDING/PASS/FAIL均绑定当时版本，不作为当前在途/完成状态。

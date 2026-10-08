@@ -74,6 +74,7 @@ from ci_workflow.reports.common.view_state import (
     FacetPlan,
     NumericFrameEligibility,
     ReportRow,
+    SourceQuestionProjection,
     WorkspaceMembership,
 )
 from ci_workflow.storage.manifest_store import (
@@ -5014,12 +5015,75 @@ def semantic_review_buckets_for(
     return tuple(tuple(grouped[key]) for key in sorted(grouped))
 
 
+def _question_display_groups(
+    groups: Sequence[dict[str, Any]], projections: Sequence[Any],
+) -> tuple[dict[str, Any], ...]:
+    """Reuse source contexts to group descriptive columns after science guards.
+
+    No input row/group is changed. Invalid source bindings remain visible and
+    unresolved; malformed or duplicate contracts fail explicitly, not first-wins.
+    """
+    index: dict[tuple[str, str], SourceQuestionProjection] = {}
+    labels: dict[str, str] = {}
+    try:
+        for raw in projections:
+            content = (
+                raw.model_dump(mode="python") if isinstance(raw, SourceQuestionProjection) else raw
+            )
+            item = SourceQuestionProjection.model_validate(content)
+            key = item.source_version_id, item.source_measure_path
+            if key in index or labels.get(item.question_id, item.question_label_zh) != (
+                item.question_label_zh
+            ):
+                raise ValueError("重复来源或问题标签冲突")
+            index[key] = item
+            labels[item.question_id] = item.question_label_zh
+    except (TypeError, ValueError) as error:
+        raise ReportBPortalError("临床问题投影合同无效") from error
+    result = []
+    for group in groups:
+        buckets: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+        resolved: dict[str, SourceQuestionProjection] = {}
+        for row in group["rows"]:
+            key = _text(row.get("source_version_id")), _text(row.get("source_measure_path"))
+            projection = index.get(key)
+            reason = ""
+            if projection is not None:
+                try:
+                    context = SourceClauseContext.model_validate(row.get("source_clause_context"))
+                    scope = context.scientific_scope
+                    references = {r.reference_id: r for r in context.continuations}
+                    if (
+                        _text(row.get("_domain"), "efficacy") != "efficacy"
+                        or (scope.get("source_version_id"), scope.get("source_measure_path")) != key
+                        or len(references) != len(context.continuations)
+                        or not set(projection.basis_reference_ids) <= set(references)
+                        or any(not str(references[ref].locator.field_path or "").startswith(
+                               f"$.{key[1]}.")
+                               for ref in projection.basis_reference_ids)
+                        or source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
+                    ):
+                        raise ValueError("源作用域或引用不匹配")
+                except (TypeError, ValueError):
+                    reason = "临床问题来源绑定待核"
+                    projection = None
+            question = projection.question_id if projection is not None else ""
+            buckets[(question, reason)].append(row)
+            if projection is not None:
+                resolved[question] = projection
+        for (question, reason), rows in buckets.items():
+            result.append({**group, "rows": rows, "_source_question": resolved.get(question),
+                           "_source_question_reason": reason})
+    return tuple(result)
+
+
 def _comparison_workspace(
     records: Sequence[tuple[dict[str, Any], Any]],
     groups: Sequence[dict[str, Any]],
     study_ids: Sequence[str],
     *,
     study_labels: Mapping[str, str] | None = None,
+    question_projections: Sequence[Any] = (),
 ) -> dict[str, Any]:
     """Project known questions into columns, preserving scientific subfacets.
 
@@ -5039,7 +5103,7 @@ def _comparison_workspace(
     reasons: dict[str, str] = {}
     studies = set(study_ids)
     question_columns: dict[str, dict[str, Any]] = {}
-    for group in groups:
+    for group in _question_display_groups(groups, question_projections):
         group_rows = [row for row in group["rows"] if is_observation(row)]
         if not group_rows:
             continue
@@ -5084,21 +5148,46 @@ def _comparison_workspace(
                 "comparison_purpose": group.get("comparison_purpose", "semantic_numeric_frame"),
             },),
             "facet_label_by_row": {str(row["row_id"]): group["title_zh"] for row in group_rows},
+            "question_source_bindings": (),
         }
         # A shared clinical question is not a shared numeric frame. Known
         # concepts can occupy the same study-column matrix despite differences
         # in time, scale, analysis population, estimand or unit. The original
         # scientific groups remain unchanged and each row keeps its facet.
-        known_question = all(
+        source_question = group.get("_source_question")
+        source_question_reason = str(group.get("_source_question_reason", ""))
+        known_question = not source_question_reason and all(
             not semantic_value_is_unknown(row.get("clinical_concept"))
+            and not semantic_value_is_unknown(row.get("clinical_concept_label_zh",
+                                                      row.get("clinical_concept")))
             and not semantic_value_is_unknown(row.get("semantic_definition"))
             and not source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
             for row in group_rows
         )
+        if isinstance(source_question, SourceQuestionProjection):
+            known_question = True
+            column.update(
+                id=stable_id("b-question-column", _text(group_rows[0].get("_domain")),
+                             source_question.question_id),
+                question_id="::".join((_text(group_rows[0].get("_domain")),
+                                       source_question.question_id)),
+                question_label=source_question.question_label_zh,
+                title=source_question.question_label_zh,
+                comparison_purpose="clinical_question_descriptive",
+                question_source_bindings=(source_question.model_dump(mode="json"),),
+                facet_label_by_row={str(row["row_id"]): "；".join((
+                    group["title_zh"], *source_question.condition_notes_zh,
+                )) for row in group_rows},
+            )
         column["question_known"] = known_question
         column["question_state_reason"] = ""
         if not known_question:
-            if any(semantic_value_is_unknown(row.get("clinical_concept")) for row in group_rows):
+            if source_question_reason:
+                reason = source_question_reason
+            elif any(semantic_value_is_unknown(row.get("clinical_concept")) or
+                     semantic_value_is_unknown(row.get("clinical_concept_label_zh",
+                                                       row.get("clinical_concept")))
+                     for row in group_rows):
                 reason = "临床问题待核"
             elif any(semantic_value_is_unknown(row.get("semantic_definition"))
                      for row in group_rows):
@@ -5108,6 +5197,12 @@ def _comparison_workspace(
             # Client selectors/config inventories must not reunify the
             # question identities deliberately left unresolved by the server.
             column["question_id"] = stable_id("b-unresolved-question", facet_id)
+            if source_question_reason:
+                # A previously qualified science facet can contain both valid
+                # and invalid descriptive bindings. Retain separate, unique
+                # display identities without changing that science facet.
+                column["id"] = stable_id("b-unresolved-column", facet_id, *column["row_ids"])
+                column["question_id"] = stable_id("b-unresolved-question", column["id"])
             column["question_state_reason"] = reason
             column["question_label"] = "｜".join((str(column["question_label"]), reason,
                 _text(group_rows[0].get("trial_zh"), "研究身份待核")))
@@ -5126,6 +5221,7 @@ def _comparison_workspace(
             prior["cells"].setdefault(study_key, []).extend(ids)
         prior["scientific_facet_ids"] += column["scientific_facet_ids"]
         prior["scientific_facets"] += column["scientific_facets"]
+        prior["question_source_bindings"] += column["question_source_bindings"]
         prior["facet_label_by_row"].update(column["facet_label_by_row"])
         prior["actual_times"] = tuple(dict.fromkeys(
             (*prior["actual_times"], *column["actual_times"]),
@@ -5309,6 +5405,7 @@ def _render_page_context(
     comparison_workspace = _comparison_workspace(
         records, groups, tuple(study.id for study in data.all_studies),
         study_labels=trial_names,
+        question_projections=_get(data.efficacy_views, "clinical_questions", ()),
     )
     target_by_product = {product.id: product.target for product in data.products}
     filter_rows = _filter_dimensions(records, target_by_product)

@@ -4,6 +4,18 @@
 
 ## 1007V1 当前增量合同
 
+临床问题规范化复用SourceClauseContext及现有比较列，不增加本体、执行器或
+逐观察对签发。`efficacy_views.clinical_questions`是与`facts`并列的有界
+SourceQuestionProjection：源版本、测量路径、问题ID/中文标签、原语境引用ID及
+可选condition_notes_zh（统计形式、方向、救援或原文截断的来源限定），
+用途固定clinical_question_descriptive。它不进入单事实内容/科学digest，也不
+填写estimand、方向、分析集或数值许可。普通A/B使用同一投影；source scope与
+精确引用必须匹配，重复来源/冲突标签/额外数值许可显式拒绝，未证明绑定保持
+可达未解；efficacy_views问题映射不得赋给其他科学领域。真实语义候选按既有
+独立来源复核后采用，不另加用户审批。临床问题
+已知并不意味着原科学构念或量表已知：可同列描述但原科学分面/数值守卫不变，
+每列保留问题的源绑定依据；宽泛主题不能代替共同临床问题。
+
 普通materialize在A原子登记成功后、A输入序列化之前，复用既有只读疗效
 source-view桥形成partial efficacy_views；A-only与A+B使用同一路径。B读取
 已经加入A载荷的相同视图，不再次解析或建立同义科学身份。其余3544池中的

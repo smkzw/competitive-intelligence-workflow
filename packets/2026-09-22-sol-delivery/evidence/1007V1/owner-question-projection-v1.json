@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0",
+  "stage": "1007V1 source-backed descriptive questions and isolated current A/B operations",
+  "source_commit_parent": "b81dcc14c4455c42616a6f4d40a71fb3a221075a",
+  "status": "development_candidate_not_release",
+  "goal_status": "active_verified",
+  "mode": "bounded_E08_source_execution_plus_fresh_C03_challenge_owner_shared_integration",
+  "code": [
+    {
+      "path": "src/ci_workflow/reports/common/view_state.py",
+      "sha256": "bc1af896387d2941bee32d68199f1bb9a6de33e54d276d3ded4fa9df19d91d51"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/report_a.py",
+      "sha256": "c893d3eb240f40d07c35773f31e64d5633f9487ad22d26965d9dbf0f4fdaef18"
+    },
+    {
+      "path": "src/ci_workflow/renderers/portal/report_b.py",
+      "sha256": "4e596ebd0af2a5a0c8aa13d0b767ee655976a5f7bee87ab7d630d5b9130211b0"
+    },
+    {
+      "path": "tests/integration/test_1007_source_question_projection.py",
+      "sha256": "d8db6652abbdd1ba9ce36c249c64c5eb9f11101bd63315f0305080478dff9b43"
+    },
+    {
+      "path": "tests/integration/test_1007_real_source_question_projection.py",
+      "sha256": "39f2035acb55c3977abc7b501c8a2be74c6d99ccd2a9176a93424e79518ff5e9"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".artifacts/1007-source-questions-current-v2/checkpoint.json",
+      "sha256": "d872176ad9775117006f74e288a061ace69433f1427c990df05ba09cf38a149a"
+    },
+    {
+      "path": ".artifacts/1007-source-questions-current-v2/projection.json",
+      "sha256": "b29d1af7f82fc02ffb6def004f60225b2e90fdb2f4a3580ca8317d25d6146459"
+    },
+    {
+      "path": ".artifacts/1007-source-questions-current-v2/owner-dispositions.json",
+      "sha256": "cef3775919634735d7b3876f2907c442c54ee3c8d320f444a8fb168cda0a1bdb"
+    },
+    {
+      "path": ".artifacts/1007-source-questions-current-v2/a-input.json",
+      "sha256": "e6477b559214ce3575a3d07861e8a52a980589c51636259e15e7c9940c6dc82d"
+    },
+    {
+      "path": ".artifacts/1007-source-questions-current-v2/b-input.json",
+      "sha256": "9840423ab4db0d45ac9516c750d48a24506dd7d24c3cc6d198e079c7cf631e6e"
+    },
+    {
+      "path": "runs/conference/ci-1007-source-question-challenge/evidence_single_object_resume.md",
+      "sha256": "e04516eb5ea5baf1756e55eae385ed00b9bb37e87d6b6ed81641e808afc3b7e7"
+    },
+    {
+      "path": ".artifacts/1007-source-questions-current-v1/replay.py",
+      "sha256": "2bbbe7e389954d4649194b6ed4b932e875f5e6182f25573558ae80953162ae81"
+    },
+    {
+      "path": ".artifacts/1007-source-question-current-operations-v1/checkpoint.json",
+      "sha256": "9344ded9e66081718c6434ca060a5b1c7b338ed4a9c963450d3b46ee031e4aa5"
+    },
+    {
+      "path": ".artifacts/1007-source-question-current-operations-v1/replay.py",
+      "sha256": "b4c74c347632158def56509813a48bce0057c832646ff2fd9630ab676608b470"
+    },
+    {
+      "path": ".artifacts/1007-publication-role-proposals-v1/source-records.json",
+      "sha256": "e3db1d0ee07a41d7245a5e75bbf4b9e68e6aecb1e4b7ce982e7c80a6e187655f"
+    },
+    {
+      "path": ".artifacts/1007-source-question-current-operations-v1/final-code-checkpoint.json",
+      "sha256": "f59a454dbec063c06b4a93eaae65c933d3366087600179d7a9013bfb4ed0956e"
+    },
+    {
+      "path": ".artifacts/1007-source-question-current-operations-v1/final_replay.py",
+      "sha256": "ca4951a5184ff3430bf92a0bb29cd74c638d5181d6c93484e43c6fc0dbd5eef9"
+    }
+  ],
+  "completed_logs": [
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-final-related-v2.txt",
+      "sha256": "9a5c1688190f6706c688f26c814c77809099412314810ae908b1eae3309f0f1c"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-domain-red-v2.txt",
+      "sha256": "cd03e573fbbae414dd6cf03c0590659c5403a65a9a3b49cad3bb616685db7012"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-model-copy-red-v1.txt",
+      "sha256": "fc059672a54632d08de9e8542450f3eb7554abafda84e28e7b62856d0344dc11"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-current-operations-v1.txt",
+      "sha256": "1610ace2b8e3b0c51e3293dbca38ae91b69eb467c3d73c9db74e769ad2f9c559"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-current-operations-resume-v1.txt",
+      "sha256": "09bdcada077f515cd790dfb3fb7a7a1626310363a5e10ec7694529b12752f42c"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-current-operations-resume-v2.txt",
+      "sha256": "f3720df3fd93edf2e35955685a13f33ebb9ea313157e68f71e5d16581128f82e"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-current-final-v1.txt",
+      "sha256": "3744b779acc014d52a2e10efc643a89f983eeba5b3c36299d8bdf1f7b81c4306"
+    },
+    {
+      "path": "runs/execution/ci-1007-display/owner-question-final-widegate-v2.txt",
+      "sha256": "85a3cce7258e87b735d3fef9e1e611c88a5c23b058ab037a22d06b3d73074d50"
+    }
+  ],
+  "candidate": {
+    "project_id": "project_65987d3abc8eacd50aa3aae5",
+    "generated_at": "2026-10-07T23:40:11.721385+00:00",
+    "access": "fixed_CAS_replay_not_new_GET",
+    "source_contexts": 35,
+    "source_atoms": 91,
+    "question_families": 15,
+    "full_efficacy_pool": 3544,
+    "full_members": 3733,
+    "columns": 3620,
+    "positive": {
+      "drugs": 2,
+      "studies": 3,
+      "observations": 32,
+      "retained_scientific_facets": 32
+    },
+    "A": {
+      "pages": 49,
+      "byte_size": 63125976,
+      "sha256": "3046a7e70193ecb25e36df6639ecb019a4c162fcb0d5866e8d17d76bd0752bca"
+    },
+    "B": {
+      "pages": 101,
+      "byte_size": 196232480,
+      "sha256": "53f9c5d29e074c02b3c12d6138b30e4e9bf4317fb3f165358084bcd41e6798bd"
+    },
+    "original_source_database_inputs_snapshots_unchanged": true,
+    "original_current_promoted": false,
+    "scientific_numeric_equivalence_accepted": false,
+    "browser_inspected": false
+  },
+  "checks": {
+    "root": "10RED; source scope/context separate from science; condition-note/domain/typed-model-copy real1RED each; wrong-domain-page initial fixture failure separate",
+    "related": "72PASS38.35s no SKIP including2 actual source tests; final18 specific/real PASS33.14s no SKIP",
+    "quality": "GATE_OK quality-only/6 on final frozen source/test bytes: Ruff src/tests/tools, strict src/tools283, active1185PASS266.58s, retained compatibility20PASS0.61s, layer7PASS0.21s, lexical old-path PASS. Not full integration/science/browser/install/release; historical integrity FAIL retained.",
+    "historical_integrity": "FAIL retained: expected74330a...actuala1094f...; no hash or byte rewrite, cause unresolved"
+  },
+  "source_judgment": {
+    "executor": {
+      "task_id": "ci-1007-source-question-proposal",
+      "actual_model": "grok-4.7-build",
+      "effort": "high CLI requested; response effort not attested",
+      "status": "terminal_completed",
+      "scope_deviation": "reported temporary-script write/delete outside sole allowed output; retained"
+    },
+    "reviewer": {
+      "task_id": "ci-1007-source-question-challenge",
+      "actual_model": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash",
+      "effort": "max CLI; response effort not attested",
+      "session": "01a118a5-8ccc-7897-8827-895ec8c214c2",
+      "initial": "INCOMPLETE progress-only preserved;525.454s32 observed tool calls",
+      "resume": "same-session terminal213.456s9observed tool calls, no fallback",
+      "total_seconds": 738.91,
+      "coverage": "15family/35key dispositions",
+      "not_reviewed": [
+        "independent executable hashes/tests",
+        "science code",
+        "full universe",
+        "numeric equivalence",
+        "visual"
+      ]
+    },
+    "owner_disposition": "bounded source-supported descriptive metadata only; immutable proposal remains proposal_not_accepted",
+    "limits": "No professional medical approval; owner actual model unavailable, no fabricated full model independence"
+  },
+  "current_operations": {
+    "scope": "isolated copy of real source project; not original-current or full ABC release",
+    "completed": "A+B r1 set LSmean -59.34 to hypothetical -58.34, r2clear user_cleared, r3undo -58.34; each retry idempotent; unpaired/stale request rejected with current intact",
+    "share": "A/B/AB r3 current ZIPs with saved question/page; all members reopened and hashes verified; no browser evidence",
+    "final_code_binding": "2026-10-08T00:02:04.723718+00:00: final frozen five source hashes unchanged during fresh current restore r4; A+B LSmean -59.34, same known source-backed descriptive question, saved views and per-member ZIP hashes; retry idempotent",
+    "source_unchanged": true,
+    "C_dependency": "not claimed",
+    "browser": "NOT_RUN",
+    "final_current_generation_sha256": "a4d7343cac374c54bd8f60a473d32e5f72bd68c80d7e90f225505471f8fb089b",
+    "final_shares": {
+      "A": "f76193e6b6aa1427c50dc09059add389f935b6c2828309e7ad35a4333d0840e6",
+      "B": "55dc5cf0a65d9bf29986cb59f055d3bc95eb3a41fc8ee36ecd49d4c853fd4f24",
+      "AB": "30c50e6ed871b62090bd253ea7970086621bf829b8036074d9ad19981655e635"
+    }
+  },
+  "replay": {
+    "candidate": "PYTHONPATH=.:src uv run python .artifacts/1007-source-questions-current-v1/replay.py --output .artifacts/1007-source-questions-replay-NEW",
+    "current": "PYTHONPATH=.:src uv run python .artifacts/1007-source-question-current-operations-v1/replay.py",
+    "limits": "Private scripts/raw/sites/database/CAS required; new candidate output only; current script resumes only documented r1 parse-inspection boundary. Never rerun against finalized current blindly. Local-only, not Skill or public bundle."
+  },
+  "next_execution": {
+    "task": "ci-1007-publication-role-proposal",
+    "status": "live_launched_after_preflight0_pending_not_accepted",
+    "records": 9,
+    "input_sha256": "e3db1d0ee07a41d7245a5e75bbf4b9e68e6aecb1e4b7ce982e7c80a6e187655f",
+    "scope": "complete bibliographic/abstract originals and native integrity links; no full-body or scientific acceptance"
+  },
+  "remaining": [
+    "full source/innovation universe and China MAH-group evidence",
+    "required fulltexts and independent publication judgments",
+    "qualified numeric comparisons",
+    "faithful C Chinese and same-current ABC journey",
+    "Ego four-width/four-state/L1L2/keyboard/offline new browser",
+    "24 portals/three hosts/fresh install/recovery/RC"
+  ],
+  "boundaries": "Five unrelated user changes, unknown/raw/history preserved. Zero old-root access, no new framework/dependency, broad cleanup, hash rewrite or silent browser/model/config change."
+}

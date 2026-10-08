@@ -2344,6 +2344,7 @@ def _a_comparison_workspace(data: ReportAPortalData) -> tuple[
     groups = report_b._adjudicate_full_pool(tagged, semantic_proposals=())
     return report_b._comparison_workspace(
         tagged, groups, data.trial_ids, study_labels=trials,
+        question_projections=report_b._get(data.efficacy_views, "clinical_questions", ()),
     ), groups, rows
 
 
