@@ -1,255 +1,54 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交6493e37（已push核远端）；旧安装875c6b9，新候选待本批固定提交。
-Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-real-fact-editor-v1.json)，
-[详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
+固定已push代码：a36e4ff33b0b7d19951970d65e2683f018bd2496。
+当前安装也使用该提交；Goal ACTIVE，非暂停、非RC。
+[本轮机器回执](evidence/1007V1/owner-installed-real-ab-journey-v1.json) /
+[编辑器代码门](evidence/1007V1/owner-real-fact-editor-v1.json) /
+[详细复盘](evidence/1007V1/implementation.md) /
+[历史版本索引](evidence/1007V1/history-index.md)。
 
-## 完成、待验与阻断
+## 当前准确范围
 
-真实编辑入口E03终态931.107s/96tools/actual native deepseek-v4.1-flash，max请求
-不冒称响应effort。旧安装949事实仍只有两不存在的固定示例已HTTP实证，原
-项目/DB未变。两文件修复+owner三相邻RED→最终12相关PASS20.14s/Ruff2/
-strict1：真实搜索/选择、原文、估计/人数/样本/阈值、清除/undo、API兼容、
-已提交刷新失败不重存。Node不是Ego键盘/视觉。一次稳定quality-only宽门6步
-通过：strict283/活跃1185PASS271.12s/保留兼容20PASS1.06s/层级7PASS0.22s，825
-源码输入无意外漂移。原派发context/prompt/receipt/FAIL保持，标准解析字段
-及同字节日志索引后full audit0；worker四越界临时probe与额外小批如实保留。
-当前A+B隔离QA就绪427pins/949facts，下一固定新commit安装再实跑保存/分享。
-报告→编辑连接/C/四宽/离线新浏览器/24/三宿主/恢复/RC未完成，Goal ACTIVE。
-
-论文v4第三定点确认终态R1/R2/R3 ACCEPT_BOUNDED：actual同Pi/gpt-6.1-sol
-session，162.392s/14tools/exit0，无回退、effort响应未attest。不是新独立
-全候选clearance。118schema/9格/32唯一引用/5指针/23叶差异及原值保留，
-owner生产重放一致，原源/holding DB不变。旧v2/v3 REVISE原样保留；没有
-把proposal改accepted、发表日期改可得或授数值资格/current。下一installed
-开发候选真实A+B链，C/四宽/24/三宿主/恢复/RC保持开放。
-
-当前提交398文件HTML-only候选从干净分离工作树构建且绑定完整commit。
-独立bootstrap/private runtime实际安装成功，毒化PYTHONPATH/PYTHONHOME/
-CI_WORKFLOW_PYTHON下PACKAGE_OK及ABC空项目创建；七依赖版本/导入位置
-实核。相关打包/来源/信任链/九变异/外摘要拒绝29PASS17.49s。不调用自动
-Playwright能力预检来冒充Ego，不称三宿主/医学/四宽/24/恢复/RC通过。
-临时分离工作树自建、Git状态干净、按固定提交可恢复，正常worktree remove
-回收观测3GB；包2.5MB及安装399MB、主树/历史/未知材料保留。不是一般清理。
-
-C sample实际保存发现旧740覆回新500/0与clear恢复无轴；9RED10.68s后限定
-用户当前数值更新及当前读法，source/科学身份不改。规范值/旧threshold冲突、
-负/小数/bool/非有限/舍入失真拒绝；source sample不假加分母/比例。最终
-四文件102PASS/1准确排除旧浏览器90.18s，Ruff5/strict2。真实源侧stage/
-别名/原文/身份核过但不发布C/接受候选；两个完整数值状态及恢复/undo通过
-开发fixture实际save链，不当真实ABC旅程。没有当批新宽门，5dd一次宽门
-只对原823字节集合成立。继续安装包/当前旅程就绪分支，Goal ACTIVE。
-
-最新官方API真实GET保存2978130原字节、52记录/1终页（非宇宙闭包），
-四目标源版本/36字段精确重开。PRIME/PRIME2由登记briefTitle明确文字对应
-NCT04183335/04202679，LTE由原NCT及方案号RD.06.SPR.202699对应04204616；
-三现有EntityIdentity/EntityRelation/SourceClauseRelation候选覆盖104材料，
-原118论文候选不改。导入03181503的登记PHASE2不能解开论文2a/2b表述，
-保持未知。当前查询比旧输入43多9，尚未证明同查询口径，不宣称9新试验。
-源身份库4versions/36fragments/0facts/edit/current，无新医学或数值资格。
-Owner首猜PRIME列th1实际是Efficacy endpoints，精确引用assert及时拒绝；核
-原th2后在既有幂等库重试，未改历史或重抓。Ego Lite space12实际重检仍
-NOT_FOUND。C当前阅读节点已终态：actual deepseek-v4.1-flash/max请求未attest，
-498.373s/76tools/exit0/no fallback。原生完整final被runner漏摘，保留原receipt
-及派生完整报告，不重复派发。Owner六非已报告状态6RED/11positive后一致
-阅读；原文、成员、state保持。旧B十二失败在payload guard前，按真实四块
-数据修测试环境且四负例保guard，不改生产B JS/CSS。相关事务138PASS/1
-明确排除、两原生clear/edit整页生成PASS，最终六文件97PASS6.17s，无SKIP。
-Ruff/strict和一次稳定quality-only宽门实际终态见当前清单，不拼旧门。
-工人额外批与旧Playwright路径、owner错误排除名exit130均保留，不能当Ego
-验收；后续准确排除。五用户hash、七源身份文件hash全保持。医学/currentABC/
-四宽实屏/全量闭包/离线新浏览器/24/三宿主/恢复/RC仍开放，继续就绪分支。
-
-### 51f8d1e正文原文holding（以下仅该批范围）
-
-两真实原生论文118候选/1267引用/163独特原文经生产精确定位重放，holding
-库4source versions/16日期断言/163fragments、0fact版本/0edit/0current。
-E08 actualGrok4.7-build/high请求787.689s/no fallback；fresh不同模型C03
-Pi/openai-codex/gpt-6.1-sol/high请求391.036s及同会话247.419s，两轮REVISE
-保留，effort响应未证明。时间窗/EAIR复合单位/ICE/重度/脚注修正；v4只按
-指定剩余条件关闭5行指针/9中文标签/coverage51+67，没有新digest独立ACCEPT。
-源ID别名及重度clone错误真实记录，不因quote/schema通过冒充医学通过。
-XML重开8真实RED→精确定位；邻接PDF一FAIL核两段尾空格，成族3RED/
-1positive→新候选采用实际quote，旧proposal bytes/hash不改。首修3FAIL
-119PASS来自新增测试closure字段错误，修后最终九文件122PASS4.90s/无SKIP，
-Ruff4/strict2。稳定quality-only6宽门此前终态通过：strict283/活跃1185
-PASS244.86s/兼容20PASS1.15s/层级7PASS0.18s/Ruff/旧路径词法；当时源码
-集合822文件摘要badf7ac6…，PDF之后两文件由相关批及静态检查另验。
-不是全集成/医学/浏览器/发布，历史数据库hash FAIL未关。
-当前论文公开获取Ask待答、两必需正文待取得、源限定研究身份/完整包/宇宙/
-同currentABC/四宽实屏/离线新浏览器/安装/24/三宿主/恢复/RC仍开放。
-源限定研究身份已在新holding候选核三条；下一C当前阅读值和共同横比，不
-伪闭宇宙或停止其他无依赖实现。
-
-### eed9ebb日期单元（以下仅原版本范围）
-
-原生epub opt-in：115相关PASS0.56s/Ruff3/strict2；E03 actualflash/max请求
-719.592s，无当批宽门。四typed源叶/两真实正文/两缺件、calendar_day不
-等于首次公开/历史可得；日期库4version/16日期/0facts/fragments/current。
-原库/pins不变。[原清单](evidence/1007V1/owner-publication-source-dates-v1.json)。
-
-### e87d8e2纯呈现单元（以下只按其版本成立）
-
-纯呈现current节点终态E03实际deepseek-v4.1-flash/max CLI响应effort未证明，
-946.096s/118calls/exit0，无fallback。现有服务/普通CLI复用锁/journal/selector，
-不伪造用户改值。Owner真实3RED补安装共同builder和中途资产漂移保护，
-已有清除保持；相邻source refresh3RED补A明细版本/原文/值整体预检。
-有效factory同步A源明细、旧inline断言迁到实际linked payload，数值/来源
-断言不减。过程8FAIL47PASS→4FAIL59PASS→1FAIL62PASS均不是PASS，最终
-六文件63PASS71.20s无SKIP，Ruff5/strict3生产文件通过；当前一次稳定宽门
-已终态exit0/GATE_OK quality-only6，strict283/活跃1185PASS254.58s/兼容子集
-20PASS1.43s/层级7PASS0.19s/Ruff/旧路径词法；非全产品接受，不借旧门。
-
-真实固定源原项目r4未改，隔离current-only fork经普通CLI生成r5，重复命令
-同generation7b7704a…；949事实、七临床表、既有用户层和完整临床载荷保持。
-A105/B288消费者，65/356文件，新共享JS实际消费；r5 A/B/AB分享逐成员hash
-与保存问题/页码重开核验。准备曾遗漏可选目录/current协议/generation/事务
-manifest，原门分别拒绝，补依赖复用同一副本，不新造项目或删除失败证据。
-C不在真实current，不假补；此fork不是完整历史恢复包。浏览器、移动目录/
-新浏览器离线、临床/宇宙/currentABC/安装/24/三宿主/RC仍未通过。
-指引同步纯呈现出口；内部3技能通用校验通过，公开中文name被generic
-hyphen-case校验拒绝exit1（既有命名，保留用户入口，不虚称4份PASS）。
-下一真实论文源/快照/单补件门，不能假签完整闭包；就绪C/比较继续，Goal ACTIVE。
-
-以下四论文/jRCT各条只对以前固定版本成立，不是当前全部产品接受。
-
-四篇确切论文新digest独立挑战已终态：C03实际CodeBuddy/deepseek-v4.1-flash，
-max CLI/响应effort未证明，305.776s/58calls/exit0，无回退。Read/Grep完成
-四完整原始摘要；命令实际拒绝，原报告条件接受不冒充独立hash计算。Owner
-四生产digest、16源pin前后、六精确资产路径均重算通过，四typed分类叶通过；
-四次改材料借旧reviewdigest拒绝。正式叶分类3主要/1关键长期安全性，获取
-2 acquired/2 manual_required。SourceRecord/完整包/DB/补件门/current未写，
-正文医学数值/宇宙/历史未接受。All Fields零检出不意味着无全文，LTE导入
-身份不强配；methods父背景和双项目同hash路径分开。一次组合稳定质量门
-已终态exit0/GATE_OK quality-only/6：Ruff src/tests/tools、strict283、活跃
-1185PASS253.65s、兼容子集20PASS0.65s、分层7PASS0.18s与旧路径词法通过。
-期间源码不改，819文件实际摘要和保留用户fixture修改绑定机器清单；不是
-全集成/医学/视觉/发布门。下一有界节点初始化/preflight完成但尚未派发，
-实现现有current纯呈现重建，不造临床编辑；仍按实际receipt记录模型和结果。
-
-以下jRCT及更早行均为已提交、版本特定历史，不能冒充本批全交付。
-
-论文入口边界1b46cf8已push核远端。本批接通官方jRCT数字附件路径的既有
-PDF witness；E03 native init/result deepseek-v4.1-flash、max请求/effort未证明，
-148.03s/no fallback/26calls无拒绝。16RED+17positive→73PASS；owner合并论文/
-包/补件/原生回放10相关文件129PASS11.67s无SKIP，Ruff2/strict2。
-真实原始PDF605050字节/17物理页同hash再GET见证，17SourceCapture/4原文
-重放，首次日期未知/历史不可回溯；方案摘要不等于完整方案/SAP，科学采用0。
-登记网页安全字段不保存，研究关联仍待核，不强配PMID38629497。Ego12重新
-观察仍NOT_FOUND，不私换space/profile/browser。无新current/包/gate/实屏，
-宽门在下个合并稳定里程碑一次运行，不把上一门当当前产品验收。
-
-以下既有单元各自按源码/材料清单成立，不是本候选的合并发布结论。
-
-导航单元6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9已push并核远端。
-有界代码节点ci-1007-publication-boundary-v1已终态：native init/result证实
-CodeBuddy/deepseek-v4.1-flash，CLI请求max响应effort未证明，296.566s/no fallback，
-49工具调用/无拒绝。三个后端文件+新成族测试，owner在终态后整合，不竞争
-写入。节点11RED/1positive→41GREEN，owner41PASS11.40s；字典嵌复制对象
-字段验证仍缺2实际RED，补同族重开序列化字段后最终56PASS11.46s、Ruff4/
-strict4。非法包在DB/inbox/请求/Markdown前失败，原对象/有效门保持。这批
-不重复宽门、不借6ef0aaf门盖当前backend；非真实临床包/补件门或新医学判断。
-owner并行重开实际9论文、6获取回执、43研究：16源hash、6本篇研究候选链、
-1导入链、2方法学来源链，缺登记/原剂量产品身份不强配。私有bindings-v2
-SHA b5cde13679a965b3c8f3d001f3cb47786cbdd6f93813229fe521baff6a140b69，
-非正式ResearchPackage/PublicationRecord/补件门。首v1误将方法来源计在
-indexed字段，原件保留且不采用；v2分开并核正负例，不修改先前采用文件。
-PMC11840645网页实际reCAPTCHA，无绕过/正文，旧metadata-only回执保留。
-
-| 单元 | 当前实际证据 | 仍未接受 |
+| 层 | 已运行 | 结论及限制 |
 |---|---|---|
-| 官方jRCT公开附件 | 生产捕获/复核相同605050 PDF字节、17分页派生、当前获取见证及4引用重提取；成族+邻接129PASS11.67s | 非完整方案/SAP/历史证明；关联、医学采用、门户/current及实屏仍未接受 |
-| 论文/包实际字段边界 | 单节点终态与owner补同族，原复制及混合字典均拒绝；最终56相关PASS11.46s/无SKIP、Ruff4/strict4 | 合成生产链不是真实临床包；源码/候选hash绑定当前清单，宽门/真实门/全交付另验 |
-| 横比默认入口 | 一族5FAIL/1PASS0.25s→6PASS0.25s；147邻接PASS7.29s；真实普通A/B载荷连同原源校验4PASS31.34s无SKIP；最终150PASS38.33s，一次稳定quality-only/6终态通过 | 未改科学条件或减少事实；Node非浏览器，旧候选未覆写，新前端尚无实屏/current分享接受；精确绑定见当前清单 |
-| 本批论文执行/独立挑战 | E08实际modelUsageGrok4.7-build/highCLI690.675s；新C03实际init/resultmodelUsageflash/maxCLI367.064s+同会话103.551s，九摘要补读EOF545 | reviewer命令工具拒绝，hash/JSON未执行；owner另核70引用/6关系/13ID/9原生记录等值；不是正文/数字接受 |
-| 有界论文采用 | 7必需结果类、1可保留方法学、1原生勘误；索引/导入ID分开，原提案/源/首报告保留 | 未创建正式PublicationRecord，缺登记号与日本主/延长期身份不强配；更正内容未知，六类合同不扩本体 |
-| 结果关联生产根因 | 8FAIL/5PASS0.34s→97PASS0.59s→171邻接PASS2.14s无SKIP；真实LTE只候选关联NCT04204616，导入NCT03181503另列；B母研究保持 | 一项RED是新字段未实现时schema拒绝而非独立绑定缺陷；规则仍不是正式科学接受。量表二次论文不推荐主要报告，原研究/源不删 |
-| 两路线真实恢复 | 六缺失/勘误对象，出版社/PMC共12实际尝试；5确切DOI零查询、1metadata-only，出版社权限/能力阻断分别记录 | 未取得新的可关闭缺口正文；不以HTML打开、HTTP200或零PMC检出当没有公开资料。正式快照补件门仍待接通 |
-| 普通A/B来源一致 | A-only/A+B两真实RED→34相关PASS41.78s；同91原文、参数、人群和值进入A矩阵，B视图相同；33当前分享/查询/来源邻接PASS8.34s | 源语境消费不等于临床问题匹配/共轴或完整ABC旅程 |
-| 新A候选 | 四源949事实；A实际49页/62916627字节，所有91上下文逐项比对实际A页面与B输入；3733成员/3633列 | full3544保留但横比仍碎片化；无current/实屏/科学或RC接受 |
-| 邻接失败 | 10PASS/1FAIL8.65s，历史数据库期待74330a…实际a1094f…，在当前新生产调用前失败；原hash及字节不改 | 历史完整性/恢复未关闭，不宣称全邻接通过；原因未查明 |
-| 临床问题映射执行 | E08终态实际Grok4.7-build，CLI请求high；同会话补完整报告。35上下文/91观察/15同题候选；375引用逐字重提取、DB未变 | proposal_not_accepted；报告称曾临时建/删脚本超唯一写路径，偏离保留；结构校验不是医学接受 |
-| 具体提案独立挑战 | 首终态525.454s进度，原INCOMPLETE保留；同CodeBuddy/deepseek-v4.1-flash会话max CLI续接213.456s/9观察工具调用，15问题/35键已判断；owner核源限定采用描述性投影 | reviewer未执行hash/tests或科学代码；不是数值等价/全来源/实屏接受，响应effort未独立证明 |
-| 描述性共享投影 | 10RED→69邻接PASS；条件说明1RED→70PASS；两真实源重放加入后72PASS38.35s无SKIP；末领域与model-copy各真实1RED→最终18专属/真实PASS33.14s | Ruff格式失败已修；最终稳定质量门v2终态通过，不等于实屏/全同currentABC旅程 |
-| 真实普通A/B同题 | 新49页A/101页B；35上下文91观察15问题、375引文；两个药物三个研究32观察同列，32科学分面/unknown/原digest不变；完整3544池/3733成员保留 | 3620列仍碎片化，非全量医学匹配；只重放锁定源，不冒充新GET；无current/浏览器/RC |
-| 同源current操作 | 隔离副本中的真实LS均值-59.34→-58.34、清除、undo→-58.34，A/B每次一起生成r1/r2/r3；三次重试幂等；不完整值/旧revision拒绝且current不变；原源/候选输入不改 | 仅隔离A+B实际操作，不是源医学修订或全ABC浏览器旅程；首次两失败来自检查工具错误形状，复用已提交r1续接，不重造项目 |
-| 当前分享包 | 新r3 A/B/AB三包，保存比较问题/页码配置，ZIP重开逐成员hash及current revision一致 | 非新浏览器/断网可用性接受；C单包、联合ABC、安装包和正式分发另验 |
-| 最终源码current绑定 | 不把早期操作盖成最后源码PASS；五最终源码hash锁定，再真实恢复原报告值-59.34产生A+B r4，共同问题/源绑定保留，重试幂等；r4 A/B/AB分享及配置/逐成员hash另核 | 仅真实行为与字节闭合；浏览器、C、医学源采用、安装/RC开放，早期r3原件保留 |
-| 普通B源语境 | 13FAIL/1PASS→48相关PASS3.37s，145邻接PASS8.57s；原人群/完整定义/源统计类型送入比较；40LS均值/14计数/37待核，原估计不由n/N重算 | 91estimand仍未知；不以原文可达宣称共轴/中文/科学接受 |
-| 本轮普通新候选 | 四源949事实、91 A+B疗效消费者；普通B实际101页，91条完整语境/原值/单位/quote进入链接数据及证据 | 3916成员/3659列仍未达到可用横比；无current/实屏/完整ABC任务链 |
-| 遗漏疑点核实 | T66测量2是TEAE/AESI/SAE安全性，生产6源观察、A/B各6行；不是漏失疗效 | 只关错误归类疑点，不接受全量科学来源 |
-| PubMed原生关系 | 自身更正/撤稿/关注/更新及方向/定位，CLI关系不丢；评论不误判 | 原件更正解决/独立正式分类/必需全文 |
-| 主要报告规则 | 正文实际应答句式/附带次级分析保留整篇主要范围；三真实论文重放 | 医学等价、量表共轴、正式来源事实接受 |
-| 根因批次 | 23FAIL/1PASS及CLI1RED；应答7FAIL/3PASS含三真实→155相关PASS2.23s；Ruff五文件/strict两源 | 全仓宽门、实屏、科学或发布；最初-k误排实际测试已单列 |
-| 当前登记发现 | 三查询52/58/52→58唯一、0版本冲突，宽检索多6待资格研究 | 中国/别名/靶点/企业反扩、纳排及独立宇宙闭包 |
-| 旧/新源差异 | 原52仅平台versionHolder日期变，其他字段同；旧门户43全保留，注册集合多15 | 不把数据平台更新或集合差异当新增科学事实/竞品 |
-| 当前论文 | 三查询103/186/13→257题名，9完整摘要；4单篇生产桥→3真正文/1metadata-only | 其余全文、两路线恢复、学术/时间/关联独立裁决；无关系不证明新鲜度完整 |
-| A/B问题列 | dc3712c已push；已知问题描述共列但保留全部科学分面，106相关PASS | 真多药同current完整比较及实屏，不借旧版本接受 |
-| B源桥/语义挑战 | 两节点终态；执行实际预声明ZCode GLM:max回退，审阅CodeBuddy flash:max调度/REVISE，25原N误绑核实 | 不是完整科学或浏览器接受；不签发ICE/量表等价 |
-| 共同结局N修复 | 9根因RED→83当前相关PASS20.73s、普通materializer1PASS12.53s；旧输入1FAIL/111PASS保留 | 1750修正行全量科学终审，未知与原测量实例不得误合并 |
-| 当前四源候选 | v2项目949事实/91疗效A+B同ID/14安全共享/183基线；完整3544池保留、partial、无current | 其余研究/源/当前任务链和合法科学接受 |
-| 共享保存/公共载荷 | 6PASS86.14s；普通页面实际链接载荷，原值/unknown/来源及同源修改断言不减 | 浏览器焦点/像素/离线、新当前ABC与新科学候选不拼旧PASS |
-| 中文C/浏览器 | HTTP507 lease已释放；Ego12 NOT_FOUND，各Ask待答 | 未切模型/服务/新浏览器；译文/四宽四态/L1L2/键盘/离线NOT_RUN |
+| 开发质量 | a36相关最终12PASS/Ruff2/strict1；稳定quality-only6宽门strict283/活跃1185/兼容子集20/分层7 | 仅准确源码集合，非全部集成/科学/浏览器 |
+| 新安装 | 固定a36、398文件包、BUNDLE_OK、独立bootstrap/private runtime、399安装成员hash | 开发安装通过；不是三宿主或报告终验 |
+| 当前操作 | 实际安装HTTP，真实来源估计值set/clear/undo/restore r6–r9，A+B同步，原引文与427父pin不变 | 隔离假设QA；C不在current；不继承科学接受 |
+| 幂等与冲突 | 每步即时同请求重试不新增；新stale409且current/DB保持 | 后续版本之后旧请求仍409，真实FAIL，待修 |
+| 分享 | 同r9 A/B/AB、真实问题配置/逐成员hash分别64/355/419通过 | 静态字节/配置层；离线浏览器未运行 |
+| 浏览器/产品 | Ego旧space12 NOT_FOUND，新空间Ask待答 | 四宽四态/L1L2/键盘/目视/离线新浏览器NOT_RUN |
+| 科学 | 四论文分类叶、两真实全文holding、三结果研究源身份关系与v4限定挑战 | 非完整研究包、医学数值接受、闭宇宙或current ABC |
 
-论文采用esearch→257题名摘要分选→9短名单efetch；初容量200失败，显式扩大
-500，不截Top-N。批量JATS原件保留，不重新序列化子树冒充单篇原件；
-既有单篇生产桥另取四原生响应，三capture/一无正文不capture。无来源/快照/
-current或历史回执覆写；原文只在受控本地，不进Git/Skill/分享。
+当前机器回执中的每个PASS只对实际commit/安装/项目revision成立。a36的旧
+请求重试FAIL不借修复后源码测试关闭；下一安装必须明确重绑并复跑该行为。
+Node VM不是Ego，ZIP校验不是离线重开，开发wide gate不是终验。
 
-旧155属于论文批次，不是新来源门。上一批一次宽门Ruff
-src/tests/tools、strict src/tools283文件、活跃1185、兼容20、层级7及旧路径
-检查全部终态通过：GATE_OK quality-only/6，不覆盖本轮改动。上一轮稳定接口
-仅运行一次宽门，实际GATE_OK quality-only/6：Ruff src/tests/tools、strict
-src/tools283、活跃1185PASS270.55s、兼容20PASS0.61s、层级7PASS0.19s、
-旧路径词法检查PASS；终态和源码绑定见历史owner-source-context-v1.json。
-本轮稳定A/B接口仅一次宽门，实际GATE_OK quality-only/6：Ruff src/tests/tools、
-strict src/tools283、活跃1185PASS265.37s、兼容20PASS0.56s、层级7PASS0.19s、
-旧路径词法PASS。它不覆盖上述历史资料库FAIL/完整集成；终验不属于开发门。
-v1回执误填未来UTC00:00隔离不接受；v2真实时钟22:20:19+00重建，旧字节不改。
+## 正在实施的有界根因包
 
-## 下一步
+ci-1007-historical-save-retry-v1：后续保存后原已提交请求错误冲突。existing E03
+qualified Pi/openai-codex/gpt-6-luna:max预选、单节点、三文件范围、7200s硬等候。
+初始化/preflight不当实际模型或完成证据；以终态回执、源码diff和owner验证为准。
+保持current可见性函数原语义，历史重试须有DB提交世代、不可变文件、journal
+及原result身份闭合；不能用complete/ready单独通过或重新发布旧世代。
+Owner同步完成冻结a36分享与结果归档，没有重复生产修复或修改原项目。
 
-四新digest的独立挑战与条件计算已完成，仅四分类叶采用，未造closed包调用
-补件门；16pin原件保留，日本缺号、剂量身份与勘误仍未知。组合质量门终态
-之后实施现有current纯呈现重建，保留既有事实/修订与合法消费者，再做真实
-同源重建/分享。扩大匹配与C工作并行，不用旧r4或不同候选拼发布。
-代码边界成族验证，不另加科学许可/审批或多路整页审查。
-旧导航/HANDOFF已逐字归档SHA030342c4…；根入口只保留当前/下一任务。
+## 尚未完成与阻断
 
-当前稳定导航一次宽门终态exit0：Ruff src/tests/tools，strict src/tools283，
-活跃1185PASS262.32s、保留兼容20PASS0.62s、层级7PASS0.19s、旧路径词法
-PASS。是quality-only/6，非全集成/历史恢复/科学/浏览器/安装/发布。源和JS
-在该门期间保持不变，raw stdout保留本地不可变，Git存摘要/校验指针。
+- 报告→真实编辑页导航、同一current ABC、全部可编辑字段/后续未生成报告消费。
+- 全研究医学匹配、数值共同资格与完整来源宇宙；四typed论文尚缺两必需全文。
+- 中国许可MAH至集团的全部动态/来源支持关系；未核药物中文名不猜造。
+- A/B/C每个物理页四桌面宽度×四状态、筛选与L1L2、实际键盘/来源操作。
+- 分享移动目录/断网/新浏览器清存储后的实际重开；三个模型宿主/完整恢复。
+- 八适应症×A/B/C24门户的同候选科学、产品和独立复核；RC/RELEASED。
 
-本批默认导航共用单一portal.js函数，A/B选择器和保存配置默认页码校验一致；
-明确已知多研究→其他已知→未解的任务顺序不改变药物排名/数值资格。未知
-研究占位不计多研究、显式保存选择不被默认替换。三作者JS→镜像/hash机械
-同步，CSS/布局/动效未改。原附件/Ego/中文Ask未答，不重复询问或私换配置。
-上一论文单元的实际12恢复尝试/有界角色判断继续有效，原件与清单保留在
-[owner-publication-scope-v1.json](evidence/1007V1/owner-publication-scope-v1.json)；
-不是当前前端或同current全旅程接受。
+Ego空间、HyMT中文容量507、论文获取日期政策、专家01–06/reference/cases.json
+材料各Ask待答，只阻断相应分支，不阻断其他代码/客观验证。旧数据库hash
+期待74330a…实际a1094f…原因未明，原FAIL/hash不改。五用户修改hash再核保持，
+旧中文根零接触，未知/唯一来源/历史证据不清理或无差别提交。
 
-本批论文关联稳定字节质量门v1实际GATE_OK quality-only/6：Ruff src/tests/tools，
-strict src/tools283、活跃1185PASS267.23s、兼容20PASS0.65s、层级7PASS0.20s、
-旧路径词法PASS；精确源码/日志摘要绑定当前机器清单。它不覆盖历史资料库
-完整性FAIL，亦非科学/视觉/安装/RC证明。旧core/v1门不覆盖末model-copy边界。
+## 下一安全动作
 
-1. 扩大可复用问题/上下文匹配及真实合格数值框，并补同current的C真实依赖
-   和浏览器旅程。已完成隔离A+B操作不重复重造；仍不把3620列当横比完成。不把相似题名、
-   共享临床问题、ITT措辞或91合法消费者当等价。完整研究集合和原实例不删。
-2. 九摘要已有有界独立角色/关联判断与六对象实际恢复；将已核身份的必需
-   条目接正式研究快照与一次性补件门，不造缺号/勘误join key。完善当前58集合的
-   来源域/创新/中国/别名/靶点/企业闭包，不以数量收敛或摘要充全文。
-3. 中文容量/Ego/附件仅阻断相关分支。就绪共享比较/同currentABC保存清除、
-   合法同步、配置与三单包/联合包继续，实际屏幕和新浏览器才能接受。
-4. 稳定共同接口一次宽门；新HTML-only包/三宿主/fresh-install/恢复及24门户，
-   科学/视觉/交互/保存/分享/安装分层全过才唯一RC。
-
-仍缺完整交付；Goal持续，不新设暂停。五用户修改/unknown/raw/唯一来源/
-历史保留；旧中文根零接触，无一般清理。上一批状态在3fd19f7 Git历史，
-[上一批清单](evidence/1007V1/owner-outcome-scope-v1.json)、
-[里程碑12](evidence/1007V1/owner-milestone-v12.json)及
-[较早索引](archive/milestone10-1007V1/README.md)仅为历史。
-上一929399f问题投影/r4机器清单为[有界原件](evidence/1007V1/owner-question-projection-v1.json)，
-不将其分享/操作PASS拼成新全ABC/浏览器/RC验收。
+执行节点终态后审完整共享路径与历史负例，再用固定下一安装对既有QA r9
+只复跑旧请求与保存后current读取，不重新提交四步。保持原a36证明/FAIL。
+继续报告导航、就绪C和共同匹配；稳定里程碑一次宽门，阶段精简复盘与GitHub
+提交，不逐行全仓、无限全页会商或假签完整科学包。

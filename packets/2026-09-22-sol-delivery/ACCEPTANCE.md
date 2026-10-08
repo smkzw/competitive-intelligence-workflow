@@ -8,6 +8,12 @@
 和搜索不抢焦在生产JS测试；真正键盘/布局/CSP另用Ego验收。真实源安装版
 独立QA的同事实A+B传播、当前分享配置与成员hash须另记，C缺席不能计ABC。
 
+追加同族行为：set/clear/undo/restore后，再重试较早已完成请求，须返回原
+保存回执且最新current、源/历史文件、事件/版本/派生计数不变；接口同时给
+最新current_revision。改载荷同ID拒绝；staged/complete/ready但未提交、错误
+项目/request/revision/digest/事实和坏世代/journal不能冒充已提交。原失败保留，
+源码GREEN不能签旧安装PASS，新候选必须实际复跑缺失行为。
+
 C当前阅读：清除正数/真实零/残留阈值、多段入排修订/清除与六非已报告
 状态组成同族；矩阵、表、证据、成员和数值资格一致，旧原文逐字保留。
 普通active revision原生页面重建须覆盖摘要、横比和试验详情，清除不显示

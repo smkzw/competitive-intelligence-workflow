@@ -1,5 +1,17 @@
 # Continuous implementation checkpoint
 
+## 最新当前：a36固定安装与真实A+B操作（连续实施）
+
+采用direct客观安装/同源当前/字节证明；历史重试共享代码修复单execution
+节点可与冻结a36分享验证分开，owner保留科学/QA状态。安装398文件、399
+实际成员核验；set/clear/undo/restore r6–r9 A+B同步，三分享配置/成员hash
+闭合，427父pin不变。第一owner可选字段检查错误在保存后发生，读原DB
+command恢复；第二真实旧请求后续版本409 FAIL/current不变，明确保留。
+当前机器清单owner-installed-real-ab-journey-v1；ci-1007-historical-save-
+retry-v1已派发，终态前不接纳/轮询/重派。新安装只复跑未关闭行为；报告
+导航/C/实屏/离线浏览器/24/宿主/恢复/RC仍开。Goal ACTIVE，不暂停。
+以下段落是各批历史范围，不恢复旧PID或重复生产。
+
 ## 1007V1 论文v4有界确认（parent8d24b42，当前实施）
 
 采用conference同会话续接：已修的severe行身份/标签和覆盖说明签在新digest

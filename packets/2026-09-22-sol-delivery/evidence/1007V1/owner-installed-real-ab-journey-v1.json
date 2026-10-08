@@ -1,0 +1,280 @@
+{
+  "schema_version": "1007-installed-real-ab-journey-1",
+  "source_commit": "a36e4ff33b0b7d19951970d65e2683f018bd2496",
+  "state": "isolated_installed_AB_current_operations_and_shares_verified_historical_retry_failed",
+  "goal_status": "active_no_pause",
+  "mode": "direct objective installed runtime/current/hash checks; historical replay fix dispatched separately under existing W04",
+  "bundle": {
+    "path": ".artifacts/1007-real-editor-install-v1/dist/ci-1007-editor-a36e4ff.tar.zst",
+    "sha256": "cfce428c9921c608926199c9b346576e111546f09e60ddd8347697222eeb9212",
+    "manifest_sha256": "242dc30e8e085e6a3b9b01cbdf58a01114ee5ad1fc841db663ef95d40a041666",
+    "installer_sha256": "ae8543559725f602ba1d05e39f74ca86ecdda7e0be9c270e602f6c1d56f84843",
+    "allowlisted_files": 398,
+    "actual_installed_files_verified": 399,
+    "source_worktree": "clean",
+    "build_verify": "BUNDLE_OK",
+    "bootstrap_exit": 0
+  },
+  "installation": {
+    "path": ".artifacts/1007-real-editor-install-v1/install",
+    "receipt_sha256": "27c9f81d3204e8e3ace579f81579d097e86b53f47c783dedb52a339a5bf0524a",
+    "python": "3.13.13",
+    "module_import_from_installed_version_verified": true,
+    "editor_sha256": "1e4585a8acf073bb61e50b65d3da244b75678701062463e6b095333b0a71a06e",
+    "package_verify": "PACKAGE_OK version=0.1.0a0 stage=development-candidate",
+    "poisoned_python_environment": true,
+    "dependencies": {
+      "pydantic": "2.13.4",
+      "Jinja2": "3.1.6",
+      "pypdf": "6.15.0",
+      "pdfplumber": "0.11.10",
+      "playwright": "1.61.0",
+      "PyYAML": "6.0.3",
+      "jsonschema": "4.26.0"
+    },
+    "build_backend_version": "NOT_VERIFIED",
+    "browser_or_model_host_launched": false
+  },
+  "isolated_current": {
+    "revision": 9,
+    "generation": "627d8ac3251ad82a22c34bfb46c10fba93f2eb1203ae5b941fcf258f041d5564",
+    "fact_version": "fact-version_9de279fbdaa45f41a1e11cd4",
+    "reports": {
+      "A": {
+        "revision": 9,
+        "site": "reports/A/v1-user-r9/html",
+        "files": 65,
+        "rows_checked": 1,
+        "expected_current_value": -59.34,
+        "all_file_hashes_valid": true
+      },
+      "B": {
+        "revision": 9,
+        "site": "reports/B/v1-user-r9/html",
+        "files": 356,
+        "rows_checked": 1,
+        "expected_current_value": -59.34,
+        "all_file_hashes_valid": true
+      }
+    }
+  },
+  "operations": [
+    {
+      "receipt_sha256": "7471e43e01d14bff1648f65c960d81f42cc1e83f6ce9c0fbdf91cbeaacd7a2d4",
+      "request_id": "installed-real-estimate-set",
+      "operation": "save",
+      "idempotent": true,
+      "command_sha256": "1a9e8747f2ac0f096bdd07ddcd85f64b32b01f1a300f626e551768df03dce036",
+      "initial_save_recovered": true,
+      "revision": 6,
+      "generation": "6d7f71d2c3824688c1a11518e3319c0b0eaae7396a9f92f6f196b43942706c72",
+      "fact_version": "fact-version_a001fe9ceab8b45733d4b0a0",
+      "reports": {
+        "A": {
+          "revision": 6,
+          "site": "reports/A/v1-user-r6/html",
+          "files": 65,
+          "rows_checked": 1,
+          "expected_current_value": -58.34,
+          "all_file_hashes_valid": true
+        },
+        "B": {
+          "revision": 6,
+          "site": "reports/B/v1-user-r6/html",
+          "files": 356,
+          "rows_checked": 1,
+          "expected_current_value": -58.34,
+          "all_file_hashes_valid": true
+        }
+      }
+    },
+    {
+      "receipt_sha256": "58f1d1c2b97048456d8ed9c9f6b1af53d011c6de99f9dd837b7dd672de4d04a9",
+      "request_id": "installed-real-estimate-clear",
+      "operation": "save",
+      "idempotent": true,
+      "command_sha256": "3291a2c0dcffd80c9af809b7bf11b9794862edef5f1ed1fc51559c311f9efc14",
+      "initial_save_recovered": false,
+      "revision": 7,
+      "generation": "594972d8727644627c0b0e8bccbae3212c5a81b2b2f678b2dd1fc4d7985b1938",
+      "fact_version": "fact-version_eeebaa022d2da5e6972e4e39",
+      "reports": {
+        "A": {
+          "revision": 7,
+          "site": "reports/A/v1-user-r7/html",
+          "files": 65,
+          "rows_checked": 1,
+          "expected_current_value": null,
+          "all_file_hashes_valid": true
+        },
+        "B": {
+          "revision": 7,
+          "site": "reports/B/v1-user-r7/html",
+          "files": 356,
+          "rows_checked": 1,
+          "expected_current_value": null,
+          "all_file_hashes_valid": true
+        }
+      }
+    },
+    {
+      "receipt_sha256": "78e7f416483bdd5bc8b959f86d7cf36c6c59ad482939664639a803ae640f3cff",
+      "request_id": "installed-real-estimate-undo",
+      "operation": "undo",
+      "idempotent": true,
+      "command_sha256": "55371c1c29c7266762ba9b6734fc0859a1efb2a1bee786827937199feab3a3f5",
+      "initial_save_recovered": false,
+      "revision": 8,
+      "generation": "955b722e36a58650cd3c76cf96dba3cfc9e22fb602363130c405dabe064ba679",
+      "fact_version": "fact-version_4aa263158a37a44a86fd4507",
+      "reports": {
+        "A": {
+          "revision": 8,
+          "site": "reports/A/v1-user-r8/html",
+          "files": 65,
+          "rows_checked": 1,
+          "expected_current_value": -58.34,
+          "all_file_hashes_valid": true
+        },
+        "B": {
+          "revision": 8,
+          "site": "reports/B/v1-user-r8/html",
+          "files": 356,
+          "rows_checked": 1,
+          "expected_current_value": -58.34,
+          "all_file_hashes_valid": true
+        }
+      }
+    },
+    {
+      "receipt_sha256": "865abb2a3affbbe83e711ca0ff8311d367040eed900d987474c49a6e7a5b2e92",
+      "request_id": "installed-real-estimate-restore",
+      "operation": "save",
+      "idempotent": true,
+      "command_sha256": "a635905cc6fd8237d2a56756f98c9ab8bdab23e933630f46b910240a97d0257b",
+      "initial_save_recovered": false,
+      "revision": 9,
+      "generation": "627d8ac3251ad82a22c34bfb46c10fba93f2eb1203ae5b941fcf258f041d5564",
+      "fact_version": "fact-version_9de279fbdaa45f41a1e11cd4",
+      "reports": {
+        "A": {
+          "revision": 9,
+          "site": "reports/A/v1-user-r9/html",
+          "files": 65,
+          "rows_checked": 1,
+          "expected_current_value": -59.34,
+          "all_file_hashes_valid": true
+        },
+        "B": {
+          "revision": 9,
+          "site": "reports/B/v1-user-r9/html",
+          "files": 356,
+          "rows_checked": 1,
+          "expected_current_value": -59.34,
+          "all_file_hashes_valid": true
+        }
+      }
+    }
+  ],
+  "shares": {
+    "A": {
+      "path": ".artifacts/1007-installed-current-journey-v1/installed-current-A.zip",
+      "sha256": "1cd5134590e1f94cec7739aacdb318e1aa84a3faa7b1325cd6a1538f122dfd3c",
+      "files_verified": 64,
+      "cli_exit": 0,
+      "browser": "NOT_RUN"
+    },
+    "B": {
+      "path": ".artifacts/1007-installed-current-journey-v1/installed-current-B.zip",
+      "sha256": "f22eb27ee42d2be5e2b95a56febd0e6e033798dd3a1b4457166a23216a83b4cc",
+      "files_verified": 355,
+      "cli_exit": 0,
+      "browser": "NOT_RUN"
+    },
+    "AB": {
+      "path": ".artifacts/1007-installed-current-journey-v1/installed-current-AB.zip",
+      "sha256": "41f21ea8bcd68f7015cfa1426f2d6a85eb7db8303f4297dffe242af90cc8e088",
+      "files_verified": 419,
+      "cli_exit": 0,
+      "browser": "NOT_RUN"
+    }
+  },
+  "historical_retry": {
+    "status": "FAIL",
+    "http": 409,
+    "error": "版本冲突：当前交付已发生其他更新",
+    "current_unchanged": true,
+    "database_unchanged": true
+  },
+  "new_stale_request": {
+    "http": 409,
+    "error": "版本冲突：当前事实已被另一标签页更新",
+    "current_unchanged": true
+  },
+  "real_source": {
+    "registry_id": "NCT04202679",
+    "fact_id": "ctgov-atomic-fact_cfdd1523eabee2d918cecbcf",
+    "row_id": "eff-33fed02c88c291b4d802",
+    "source_version_id": "source-version_15c5c6bd8ce940fc0d2f98a0",
+    "source_quote": "-59.34",
+    "statistical_form": "estimate",
+    "endpoint": "Percent Change From Baseline in WI-NRS Scores at Week 24",
+    "analysis_N_not_denominator_for_estimate": 76,
+    "source_and_original_parent_unchanged": true,
+    "user_edits": "hypothetical isolated QA; not a clinical correction or inherited scientific acceptance"
+  },
+  "parent": {
+    "revision": 5,
+    "generation_sha256": "7b7704a61ab1f62647159d173e480b3f996072aff9c8edf98e4046cfc5b12aad",
+    "files_checked": 427,
+    "active_facts": 949,
+    "unchanged": true,
+    "scope": "current-only fork, not complete historical recovery"
+  },
+  "failure_and_recovery": {
+    "first": "Owner KeyError on optional absent numerator after r6 committed. Corrected checker uses missing/null equally, not product patch.",
+    "first_failed_script_sha256": "6883fc0f91adb07b30884eeec5d604a04725c27fc7a343167e7f18f9b878d34b",
+    "recovery_path": ".artifacts/1007-installed-current-journey-v1/recovery-first-checker-failure.json",
+    "recovery_sha256": "2b10d69c28fba1a92c5345368414fe470876e45acb10ca7691fe5ce4ded52bf2",
+    "recovered_command": "exact canonical persisted command_json read from SQLite; original request retry did not append new save",
+    "second": "Real installed a36 historical identical retry after r9 returns409. Current/DB remain unchanged. Preserve FAIL; do not rerun all operations.",
+    "second_failed_script_sha256": "65147353dc70a628a4c06db9944831e5f8f4bff7949a8f34571d56ebd5d5fe38",
+    "correction_task": "ci-1007-historical-save-retry-v1",
+    "correction_state": "dispatched_pending_not_accepted"
+  },
+  "evidence": {
+    "checkpoint": ".artifacts/1007-installed-current-journey-v1/checkpoint-a36-partial.json",
+    "sha256": "ede9850d610de6de6cf6a3803aaf3b83fe5f419dcfbf4409058d8e7c51b9fab9",
+    "script": ".artifacts/1007-installed-current-journey-v1/share-after-replay-fail.py",
+    "script_sha256": "d2927ca60cc15c4b23b3168dac155e489b2a529437fdfb54edbc7bfd362928d5",
+    "scope": "actual installed HTTP/production-rendered payloads/config/ZIP bytes; no visual or browser acceptance"
+  },
+  "protected_five_user_hashes_unchanged": true,
+  "general_cleanup": false,
+  "cleanup": {
+    "target": ".artifacts/1007-real-editor-install-v1/source",
+    "type": "only owner-created redundant detached Git worktree",
+    "head": "a36e4ff33b0b7d19951970d65e2683f018bd2496",
+    "pre_remove_status": "clean including untracked",
+    "observed_size_before": "3.0G",
+    "command": "git worktree remove <exact target>; no force",
+    "exit_code": 0,
+    "recoverability": "git worktree add --detach <exact target> a36e4ff33b0b7d19951970d65e2683f018bd2496; fixed bundle, installation, QA, receipts and sources retained",
+    "df_before_available": "314Gi",
+    "df_after_available": "333Gi",
+    "df_change_attribution": "global volume changed concurrently; do not attribute entire change to this 3.0G checkout",
+    "session_user_or_historical_cleanup": false
+  },
+  "not_run": [
+    "report-to-editor navigation",
+    "Ego four widths/four states/L1/L2/keyboard",
+    "offline new-browser reopen",
+    "current real ABC",
+    "complete scientific/source universe",
+    "24 portals",
+    "three model hosts",
+    "full historical recovery",
+    "RC"
+  ],
+  "next_safe_action": "After terminal repair, owner inspect/grouped regression, bind changed bytes to next fixed candidate, then repeat only missing historical retry against the already committed r9 without resaving clinical values. Report navigation/current C continue independently."
+}
