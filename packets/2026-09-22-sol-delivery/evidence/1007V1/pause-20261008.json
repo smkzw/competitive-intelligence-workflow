@@ -1,0 +1,31 @@
+{
+  "schema_version": "1007-pause-1",
+  "state": "user_paused",
+  "requested_by": "user",
+  "checkpoint_utc": "2026-10-08T06:40:27Z",
+  "goal_api_observed": "paused",
+  "project_completed": false,
+  "recording_parent_commit": "450b32404b4545f0905b970d519560a1e778fc4e",
+  "fixed_verified_product_commit": "b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7",
+  "handoff": ".trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md",
+  "current_proof": "owner-installed-historical-retry-v1.json",
+  "current_project_revision": 9,
+  "current_generation_sha256": "627d8ac3251ad82a22c34bfb46c10fba93f2eb1203ae5b941fcf258f041d5564",
+  "pending_unit": {
+    "name": "current report to real editor navigation",
+    "production_changed": false,
+    "draft_test": "tests/integration/test_1007_current_report_edit_navigation.py",
+    "draft_sha256": "db5b3c1a8e67f0abb01778256611fed8446f2da813ed47d70fb393bffd6dbb92",
+    "command": ".venv/bin/python -m pytest -q tests/integration/test_1007_current_report_edit_navigation.py --tb=short",
+    "exit": 1, "failed": 3, "passed": 8, "seconds": 16.44,
+    "meaning": "missing report_links and current-report routes; eight nonexistent-resource rejections do not prove new feature security",
+    "unreached_fixture_correction": "fact-estimated-efficacy must be verified against actual _project fact-b-estimated-efficacy before GREEN",
+    "resume": "keep observed RED; correct draft fixture, implement coherent existing-service/typed-binding path then one related regression; no baseline RED rerun"
+  },
+  "owned_jobs": "all known this-round tool jobs terminal; no worker/server waiting",
+  "protected_five_user_edits": "unchanged, excluded from commit",
+  "cleanup": "only previously verified redundant owned worktrees removed; bundle/install/QA/source/evidence retained; no general cleanup",
+  "do_not_repeat": ["four QA saves r6-r9", "b6 installed historical retry", "r9 share generation", "unchanged source re-extraction", "already closed bounded reviews"],
+  "verification_rule": "on explicit resume compare relevant source/environment/artifact identities; changed inputs require affected revalidation, unchanged passes are retained",
+  "remaining": ["navigation", "current real ABC", "science and full universe", "Ego visual/keyboard", "offline new-browser share", "24 portals", "three hosts", "full recovery", "RC"]
+}

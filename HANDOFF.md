@@ -1,10 +1,11 @@
-# 1007V1 当前接手入口（连续实施，非暂停/RC）
+# 1007V1 当前接手入口（用户要求无损暂停，非完成/RC）
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
+最新暂停：[精确续接记录](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。
 固定已push源码 b6e6ca362ac67d345b8c0cf527f7edbfb20fd8b7；实际新安装也绑定该提交。
 [修复后实际安装重试](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-historical-retry-v1.json)。
 [同安装真实A+B操作/分享回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-installed-real-ab-journey-v1.json)。
-Goal ACTIVE，用户已授权继续；只操作英文工程。旧中文根零接触，五用户修改、
+Goal实际PAUSED；仅用户解除暂停后继续。只操作英文工程。旧中文根零接触，五用户修改、
 未知/raw/原始源、历史FAIL及暂停记录保留，不恢复旧PID或声明RC。
 [历史原件索引](packets/2026-09-22-sol-delivery/evidence/1007V1/history-index.md)。
 
@@ -39,6 +40,8 @@ Trellis活动任务10-03-r24-resumed-delivery，仍in_progress。
 
 ## 下一条有界动作
 
+导航成族检查已终态3RED/8基础拒绝PASS，未接生产路由；恢复时从这个保留起点实施，
+先校正draft的B fixture事实ID，不重跑旧基线或重存四步。当前无本轮在途job。
 上述源码/成族相关门/历史提交证明已核；b6固定安装只重放原r6请求两次HTTP200，
 current仍r9，DB/events/journal/2132文件检查项与427父pin不变，没有重存四步。
 新载荷/新stale仍409；原a36FAIL保留。临时干净源码副本3GB正常worktree移除，
