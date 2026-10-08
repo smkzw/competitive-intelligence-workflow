@@ -1,0 +1,31 @@
+{
+  "schema_version": "1007-publication-boundary-1",
+  "created_at": "2026-10-08T00:59:41+00:00",
+  "parent_commit": "6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9",
+  "state": "continuous_implementation_not_rc",
+  "mode": "bounded E03 execution plus owner source preparation and deterministic verification",
+  "execution": {"agent": "codebuddy", "provider": "codebuddy-cli", "model": "deepseek-v4.1-flash", "native_init_and_result_model_usage_verified": true, "effort_requested": "max", "response_effort_attested": false, "session_id": "01a118fd-d505-7520-9400-4fd6ea877939", "duration_seconds": 296.566, "returncode": 0, "fallback": null, "tool_calls": 49, "permission_denials": [], "report_sha256": "aed309b90da2a7254d4f8854eb99cc43594e5e0c4cbef935fa528ca40283205f", "private_runtime_sha256": "cf86f03e2e4e999e492c8e1aa4f737b15d91e068a8284a9c259b1364a03f92c8"},
+  "worker_red": {"failed": 11, "passed": 1, "seconds": 0.48, "source": "private native tool trace, report", "synthetic_not_clinical": true},
+  "owner_first_related": {"passed": 41, "seconds": 11.40, "log_sha256": "2ee93291429fb9a005f0fbae0af1c64a0a1d338f3b4964079906637d08b60650"},
+  "owner_mixed_mapping_red": {"failed": 2, "seconds": 0.19, "log_sha256": "6f77260d4de670b81e09baaaa833a5ad4240e37ff811143e488521f0cf551600"},
+  "final_related": {"passed": 56, "seconds": 11.46, "skipped": 0, "log_sha256": "9f3e204068e5599988d66e0b855caaf4978334a468147d38fa36aa9dd7c23264", "scope": "14 new synthetic guards, existing manual/package/product consumers and native publication role/scope replay"},
+  "static": {"ruff": "four affected files passed", "strict_mypy": "four affected files passed"},
+  "wide_gate": {"state": "NOT_RUN this bounded root unit", "previous": "6ef0aaf navigation quality-only/6 does not cover changed backend code", "reason": "root family and related consumers grouped; widen at combined stable milestone, not every edit"},
+  "code": [
+    {"path": "src/ci_workflow/domain/publication.py", "before_sha256": "70db4861f1a89cbee15db6c69eededac20075ed5cad7db1ffa2123b7c658b418", "sha256": "4b1bdd50e7cb27c4fb1d9327d26e124d0d4adefc56d9567a5efb57e27ed4672f"},
+    {"path": "src/ci_workflow/domain/research_package.py", "before_sha256": "4e7eca26bb885ae70b440d832559ca15797a33ee7cbdca588d0d95732ffff6bc", "sha256": "2b14c21a7b41628aebc779a023844c4359f20c6091097ffc2108696701388eed"},
+    {"path": "src/ci_workflow/application/publication_manual_gate.py", "before_sha256": "4fc90c47c8e1ba8488c6c3364180908db6143e00cd1da358e5f6e3d2a37f7ad6", "sha256": "fa6af296d47b99a14525eb9c4bf28dfe4484b6dd834d0641cd06ee7a80f5c637"},
+    {"path": "tests/integration/test_1007_publication_instance_boundary.py", "sha256": "c736f80a49aeb60726ae39c7131fc86ac91f56b99d47aba2ce9ad2126ca6b29a"}
+  ],
+  "private_materials": [
+    {"path": "runs/execution/ci-1007-publication-boundary-v1/worker_01.md", "sha256": "aed309b90da2a7254d4f8854eb99cc43594e5e0c4cbef935fa528ca40283205f"},
+    {"path": "logs/execution/ci-1007-publication-boundary-v1/worker_01_stdout.txt", "sha256": "cf86f03e2e4e999e492c8e1aa4f737b15d91e068a8284a9c259b1364a03f92c8"},
+    {"path": ".artifacts/1007-publication-binding-candidates-v1/prepare.py", "sha256": "8109f1b034c4a992e4e2a5e36cbc62d91ab8d361c612c05b81da8a996822b9f6"},
+    {"path": ".artifacts/1007-publication-binding-candidates-v1/bindings-v2.json", "sha256": "b5cde13679a965b3c8f3d001f3cb47786cbdd6f93813229fe521baff6a140b69"}
+  ],
+  "real_binding_input": {"objects": 9, "source_pins": 16, "in_project_trials": 43, "indexed_candidate_links": 6, "contextual_links": 1, "methods_data_origin_links": 2, "v1_methods_index_count_rejected_and_preserved": true, "source_unchanged": true, "official_publication_record_created": false, "manual_gate_materialized": false, "current_modified": false, "universe_closed": false},
+  "additional_source_access": {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11840645/", "method": "web source open", "result": "anti_bot_or_captcha", "body_acquired": false, "bypass": false},
+  "history_archive": {"path": "packets/2026-09-22-sol-delivery/archive/1007-navigation-6ef0aaf/HANDOFF.md", "sha256": "030342c454e7b8b47ef0c9a99f0ce7a48f01ec0bd63e110512e2afcc60a7aa77", "same_bytes_as_parent_root": true},
+  "limits": ["not an independent medical judgment or professional approval", "no real full closed research package or actual one-time publication gate yet", "Ego/Chinese capacity/attachment Ask pending", "current ABC/visual/keyboard/offline/24/hosts/install/recovery/RC incomplete", "historical database integrity FAIL and five user changes preserved", "no old-root contact or general cleanup"],
+  "next": "freeze exact source/identity/acquisition publication candidates for bounded independent review; no fabricated closure or reused digest; continue current ABC report journey"
+}

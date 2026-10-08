@@ -1,0 +1,33 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_mapping_with_copied_nested_attempt_rechecks_field_validators _______
+
+    def test_mapping_with_copied_nested_attempt_rechecks_field_validators() -> None:
+        record = PublicationRecord.model_validate(_synthetic_record_payload())
+        mapping = record.model_dump(mode="python")
+        mapping["fetch_attempts"] = (
+            record.fetch_attempts[0].model_copy(update={"attempted_at": datetime(2026, 9, 4)}),
+            record.fetch_attempts[1],
+        )
+>       with pytest.raises(ValueError, match="时区"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/integration/test_1007_publication_instance_boundary.py:355: Failed
+______ test_mapping_with_copied_nested_verdict_rechecks_field_validators _______
+
+    def test_mapping_with_copied_nested_verdict_rechecks_field_validators() -> None:
+        package = _synthetic_package()
+        mapping = package.model_dump(mode="python")
+        mapping["publication_records"] = (
+            package.publication_records[0].model_copy(update={"title": ""}),
+        )
+>       with pytest.raises(ResearchPackageValidationError, match="title"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ResearchPackageValidationError
+
+tests/integration/test_1007_publication_instance_boundary.py:366: Failed
+=========================== short test summary info ============================
+FAILED tests/integration/test_1007_publication_instance_boundary.py::test_mapping_with_copied_nested_attempt_rechecks_field_validators
+FAILED tests/integration/test_1007_publication_instance_boundary.py::test_mapping_with_copied_nested_verdict_rechecks_field_validators
+2 failed, 12 deselected in 0.19s

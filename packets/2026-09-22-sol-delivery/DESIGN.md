@@ -54,6 +54,13 @@ matched_nct_ids仅保留未被明确导入/历史语境排除的候选结果关�
 六类PublicationRecord保持：无登记关联的原件停留候选，勘误用已有原生关系，
 不造join key或integrity枚举；有界角色采用与获取、事实采用及最终门分开。
 
+classify_publication和validate_research_package在返回权威结果前重开实际
+序列化字段，覆盖已有typed实例与字典内嵌typed实例。不能只依赖after-model
+验证，因为字段类型/时区/空文案验证可能跳过。materialize_publication_manual_gate
+首先重验完整包，再创建inbox/DB/请求/Markdown；失败用既有
+PublicationManualGateError传递。不会新加require_gate_ready审批、改变六类
+合同或给未闭合真实来源伪造accepted/closed。原有效ID/复核digest不改。
+
 共同研究矩阵复用原WorkspaceMembership/FacetPlan/NumericFrameEligibility。
 已知概念及定义的同问题列可聚合描述性单元格；每列显式保留
 scientific_facet_ids、scientific_facets和事实对应条件标签。原科学分组、数值

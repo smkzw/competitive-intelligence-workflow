@@ -47,3 +47,9 @@ PubMed原生CommentsCorrections关系必须连同RefType方向、PMID/RefSource/
 字面提及把LTE结果归给导入研究。独立量表验证二次论文可留方法学，不作为
 主要报告替代；六类正式PublicationRecord不扩词表，无登记关联不造join key，
 勘误仍用原生关系。分行源展示只补读取能力，不是新来源或正文获取。
+
+已有PublicationRecord/研究包对象和普通字典内嵌对象也须重验实际序列化内容；
+不能用frozen/model_copy或旧构造成功绕过复核摘要、字段、时区与获取诊断。
+非法包须在任何补件投递目录/DB/Markdown写入前拒绝。候选角色、真实获取
+回执、正式论文分类、宇宙/事实科学接受及同快照一次性补件分别绑定；来源
+尚未闭合不得组装虚构closed包来调用补件门，不能重用旧审阅签新候选digest。

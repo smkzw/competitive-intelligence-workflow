@@ -12,7 +12,11 @@ from urllib.parse import urlsplit
 
 from ci_workflow.domain.enums import DownloadRequestState
 from ci_workflow.domain.ids import stable_id
-from ci_workflow.domain.research_package import ResearchPackage
+from ci_workflow.domain.research_package import (
+    ResearchPackage,
+    ResearchPackageValidationError,
+    validate_research_package,
+)
 from ci_workflow.gates.models import GateSpec
 from ci_workflow.ingestion.manual_inbox import ManualInboxService
 from ci_workflow.ingestion.publication_gate import (
@@ -24,7 +28,7 @@ from ci_workflow.ingestion.publication_gate import (
 
 
 class PublicationManualGateError(ValueError):
-    """The persisted snapshot gate is missing, drifted, or malformed."""
+    """The persisted gate is missing, drifted, or malformed, or its input package is not valid."""
 
 
 @dataclass(frozen=True)
@@ -135,6 +139,15 @@ def materialize_publication_manual_gate(
 ) -> MaterializedManualGate | None:
     """Create or replay one immutable-identity gate for required missing publications."""
 
+    # 补件门是用户可见的第一处写入边界：先按当前序列化内容整体重验研究包，
+    # 拒绝 model_copy(update=...) 伪造的 publication/attempt/package 内容，
+    # 在任何子请求、投递目录、门文件或 Markdown 写入之前失败关闭。
+    try:
+        package = validate_research_package(package)
+    except ResearchPackageValidationError as error:
+        raise PublicationManualGateError(
+            "研究快照包未通过完整合同校验，不得写入 publication 补件门"
+        ) from error
     missing = tuple(
         record for record in package.publication_records if record.manual_supply_required
     )

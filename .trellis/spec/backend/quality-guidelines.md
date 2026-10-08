@@ -37,6 +37,11 @@ instances produced by `model_copy(update=...)`.
 ## Testing Requirements
 
 - Every authoritative Pydantic boundary needs a `model_copy` adversarial test.
+- Include mixed mapping inputs with copied nested models, not only top-level
+  instances. After-model validators may run without revalidating field types,
+  empty text or timezone constraints. Reopen plain serialized content before
+  declaring a verdict/package valid; test invalid input before any manual-inbox
+  DB, directory, request or Markdown write. Preserve valid IDs/review digests.
 - Publication identity mentions need scope negatives: index versus lead-in/prior
   trial, DataBank overlap, independent index registration and non-trial treatment
   history. Preserve raw records, contextual links and mother-study eligibility;

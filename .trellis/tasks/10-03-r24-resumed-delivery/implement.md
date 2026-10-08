@@ -1,5 +1,9 @@
 # Continuous implementation checkpoint
 
+Current authority STATUS/owner-publication-boundary-v1.json and EOF terminal
+record, parent6ef0aaf. Earlier 'Current owner unit' headings below are chronological
+history, not active jobs or current acceptance. Goal ACTIVE; no pause/RC.
+
 ## Current owner unit: publication link scope, parent929399f
 
 Execution-plus-conference: one bounded nine-record E08 writer and one fresh C03
@@ -2326,3 +2330,41 @@ Node is not Ego/browser/geometry/keyboard/share/RC evidence. Five user changes,
 unknown files and unique private recovery sources retained, no general cleanup.
 Goal remains ACTIVE; next bounded unit exact publication snapshot/manual gate
 and remaining current ABC chain, not pause or historical complete claims.
+
+Next boundary E03 preflight0/requested CodeBuddy/deepseek-v4.1-flash:max runner
+7200s started, PENDING not accepted. Initial E02 packet was wrong node family,
+corrected before any dispatch to finite_code_task/E03; no worker or substituted
+runtime under the abandoned initialization. One worker owns3backend files/new
+test; owner prepares disjoint actual source bindings. Public classify copied
+stale review/removed attempts/removed reports all wrongly return required=True,
+original unchanged. Required exact source tests and no-write-before-error check,
+no worker whole gate/source edits/Git. Actual route/tool/model receipt awaits
+terminal result; parent does not inspect files or poll/re-dispatch a slow worker.
+
+Owner disjoint real binding-input v2:9objects/16source pins/6index links/1lead-in/
+2methods origin links, sourceDB unchanged. v1 counted2method links underindexed,
+retained unaccepted; v2 same-record role scope negatives verified. Missing Japan
+registration / dose-specific product identity / whole-package closure stay open,
+no fabricated accepted universe/manual gate. Native PMC HTML reCAPTCHA observed,
+no bypass/body or additional acquired source claimed. Private recipe/evidence
+kept local, compact pointer only. Healthy terminal wait quiet per user instruction.
+## 1007V1 current publication boundary terminal (parent6ef0aaf)
+
+E03 terminal actual native init/result modelUsage CodeBuddy/deepseek-v4.1-flash,
+requestedmax responseeffortunattested,296.566s/nofallback/49calls/nodenials.
+Worker3backend/newtest11RED/1positive ->41GREEN, owner41PASS11.40s. Owner then
+actual mixed-mapping nested naive-time/empty-title2RED0.19s -> final56PASS11.46s,
+Ruff4/strict4. Every invalid case rejects before inbox/DB/request/Markdown; valid
+gate and original objects unchanged. No blanket model config/readiness approval.
+Worker beforehash notcaptured is collection gap, not Gitpermission necessity;
+owner binds actual parent blobs and finalbytes in owner-publication-boundary-v1.
+
+Preceding PENDING is historical progress, superseded by this terminal record.
+No small-unit whole gate; previous navigation gate cannot cover new backend.
+Direct code acceptance decisive synthetic production/source replay, not clinical
+package/one-time gate or independent professional review. Private actual binding
+v2 remains9objects/16pins/6index/1lead-in/2methods candidate, no source/current or
+accepted closure write. Earlier misleading method index v1 preserved unaccepted.
+Next freeze exact classification/acquisition candidate for required source review,
+no old digest signing or fabricated universe. Current ABC, Ego/Chinese/attachment,
+24/hosts/install/recovery/RC open. Continuous Goal, no pause/cleanup/old root.

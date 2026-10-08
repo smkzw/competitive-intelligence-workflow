@@ -1097,12 +1097,22 @@ class ResearchPackage(_StrictModel):
 
 
 def validate_research_package(
-    payload: Mapping[str, Any], *, require_gate_ready: bool = False
+    payload: Mapping[str, Any] | ResearchPackage, *, require_gate_ready: bool = False
 ) -> ResearchPackage:
-    """Validate a mapping and optionally enforce pre-gate closure."""
+    """Validate a mapping or an existing instance and optionally enforce pre-gate closure.
+
+    An existing instance is not a validation authority: ``model_copy(update=...)``
+    skips construction-time validation, so instance input is revalidated from its
+    current serialized content, including reference closure and review digest.
+    """
 
     try:
+        if isinstance(payload, ResearchPackage):
+            payload = payload.model_dump(mode="json")
         package = ResearchPackage.model_validate(payload)
+        # Mapping input may also carry copied nested verdict/source instances.
+        # Reopen plain serialized fields before declaring this a valid package.
+        package = ResearchPackage.model_validate(package.model_dump(mode="json"))
         if require_gate_ready:
             package.assert_gate_ready()
         return package

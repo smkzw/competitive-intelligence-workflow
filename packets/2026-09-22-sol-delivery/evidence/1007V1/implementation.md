@@ -1092,3 +1092,35 @@ r4 A/B保存/分享不借来拼新ABC全旅程；UI与来源可就绪并行，Eg
 论文角色/12恢复尝试属于187953b固定证据；正式快照补件身份、当前C链和
 完整科学匹配仍未完成。Goal连续ACTIVE，不产生暂停点。保留五用户变化、
 历史FAIL、unknown/raw/CAS；不清理唯一证据，不触旧根。
+## 1007V1 论文typed输入写入边界复盘（父6ef0aaf）
+
+有限代码E03，实际native init/result modelUsage CodeBuddy/deepseek-v4.1-flash，
+CLI请求max响应effort未证，296.566s无回退、49calls无拒绝。初始E02节点族
+误选在派发前改成finite_code/E03；原初始化不是模型执行或替换。单worker
+只写3后端/1新合成测试，owner并行真实来源准备，终态等候静默，无进度
+文件轮询/延迟重派。报告读EOF130与全测试/完整diff核验后才整合。
+
+复制typed对象跳过构造字段验证，旧classifier直接返回、包验证信任实例、
+补件写入前没有重验。节点11RED/1positive→41GREEN11.22s；owner41PASS
+11.40s。owner额外实测混合字典内嵌复制实例仍跳过字段层的时区/空题名：
+2RED0.19s，最小同族补重开序列化字段后最终56PASS11.46s、Ruff4/strict4。
+after-model验证可以重跑，不能据此推断字段验证也运行。非法包必须在任何
+inbox/DB/请求/Markdown前失败；有效已有门与原实例、复核digest保留。
+无新增审批/readiness门/全局模型策略，不借上一宽门覆盖新代码；相关批
+足以这一确定根因，组合稳定里程碑再宽门，不每行/小族重跑全仓。
+
+报告beforehash未采集是记录缺口，非Git禁止就不能采集：修改前本可hash
+文件。owner从父6ef原blob补绑定，不改历史SHA。节点“real consumer”指
+合成production-path端到端，不是真临床包。全文/科学/正式门/实屏未接受。
+owner准备9对象/16pin、43研究原件、6本篇候选/1导入/2方法链；v1误把方法
+链计入indexed，原件保留不采用，v2明确分开并核正负例。未造日本登记关联
+或剂量产品canonical合并，未创建PublicationRecord/closed包/门/current。
+PMC11840645网页实际captcha，不绕过；原metadata-only不覆写。一次原件
+grep/读取打印巨大单行被截断，后改JSON选择性摘要；不把截断输出称完整
+正文阅读，私有全文不进Git。全部16来源/DBhash再次验证保持。
+
+根HANDOFF上一6ef逐字归档hash030342c4…，当前只给完成/缺口/下一任务。
+GoalACTIVE无暂停，五用户变化/unknown/唯一恢复证据及历史FAIL保留；旧根
+零接触、无清理。接下来冻结实际分类/获取材料并有界独立核验新digest，
+再接既有科学包/快照门，不冒造closed或借旧审阅签新payload。其他就绪
+currentABC/前端旅程继续；Ego/中文/原附件只阻断相应分支。

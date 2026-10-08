@@ -361,9 +361,19 @@ class PublicationRecord(_PublicationReviewMaterial):
 
 
 def classify_publication(payload: PublicationRecord | Mapping[str, object]) -> PublicationRecord:
+    """Return the authoritative verdict for a mapping or an existing instance.
+
+    An existing instance is not a validation authority: ``model_copy(update=...)``
+    skips construction-time validation, so instance input is reconstructed from
+    its current serialized content before it can act as a publication verdict.
+    """
+
     if isinstance(payload, PublicationRecord):
-        return payload
-    return PublicationRecord.model_validate(payload)
+        payload = payload.model_dump(mode="json")
+    candidate = PublicationRecord.model_validate(payload)
+    # A mapping can itself contain copied typed attempts. Nested after-model
+    # validators alone do not rerun their timezone/type/field validators.
+    return PublicationRecord.model_validate(candidate.model_dump(mode="json"))
 
 
 __all__ = [

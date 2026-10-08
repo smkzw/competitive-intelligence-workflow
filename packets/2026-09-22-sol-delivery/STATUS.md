@@ -1,14 +1,30 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交187953b40a87c153eefb5c40aeda024bb4eab373；实际HEAD以Git核对。
+本批父提交6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-question-navigation-v1.json)，
+[当前机器清单](evidence/1007V1/owner-publication-boundary-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
 
+导航单元6ef0aaf28f4c3f03d66c724aefa81bae17cd9bf9已push并核远端。
+有界代码节点ci-1007-publication-boundary-v1已终态：native init/result证实
+CodeBuddy/deepseek-v4.1-flash，CLI请求max响应effort未证明，296.566s/no fallback，
+49工具调用/无拒绝。三个后端文件+新成族测试，owner在终态后整合，不竞争
+写入。节点11RED/1positive→41GREEN，owner41PASS11.40s；字典嵌复制对象
+字段验证仍缺2实际RED，补同族重开序列化字段后最终56PASS11.46s、Ruff4/
+strict4。非法包在DB/inbox/请求/Markdown前失败，原对象/有效门保持。这批
+不重复宽门、不借6ef0aaf门盖当前backend；非真实临床包/补件门或新医学判断。
+owner并行重开实际9论文、6获取回执、43研究：16源hash、6本篇研究候选链、
+1导入链、2方法学来源链，缺登记/原剂量产品身份不强配。私有bindings-v2
+SHA b5cde13679a965b3c8f3d001f3cb47786cbdd6f93813229fe521baff6a140b69，
+非正式ResearchPackage/PublicationRecord/补件门。首v1误将方法来源计在
+indexed字段，原件保留且不采用；v2分开并核正负例，不修改先前采用文件。
+PMC11840645网页实际reCAPTCHA，无绕过/正文，旧metadata-only回执保留。
+
 | 单元 | 当前实际证据 | 仍未接受 |
 |---|---|---|
+| 论文/包实际字段边界 | 单节点终态与owner补同族，原复制及混合字典均拒绝；最终56相关PASS11.46s/无SKIP、Ruff4/strict4 | 合成生产链不是真实临床包；源码/候选hash绑定当前清单，宽门/真实门/全交付另验 |
 | 横比默认入口 | 一族5FAIL/1PASS0.25s→6PASS0.25s；147邻接PASS7.29s；真实普通A/B载荷连同原源校验4PASS31.34s无SKIP；最终150PASS38.33s，一次稳定quality-only/6终态通过 | 未改科学条件或减少事实；Node非浏览器，旧候选未覆写，新前端尚无实屏/current分享接受；精确绑定见当前清单 |
 | 本批论文执行/独立挑战 | E08实际modelUsageGrok4.7-build/highCLI690.675s；新C03实际init/resultmodelUsageflash/maxCLI367.064s+同会话103.551s，九摘要补读EOF545 | reviewer命令工具拒绝，hash/JSON未执行；owner另核70引用/6关系/13ID/9原生记录等值；不是正文/数字接受 |
 | 有界论文采用 | 7必需结果类、1可保留方法学、1原生勘误；索引/导入ID分开，原提案/源/首报告保留 | 未创建正式PublicationRecord，缺登记号与日本主/延长期身份不强配；更正内容未知，六类合同不扩本体 |
@@ -57,6 +73,12 @@ strict src/tools283、活跃1185PASS265.37s、兼容20PASS0.56s、层级7PASS0.1
 v1回执误填未来UTC00:00隔离不接受；v2真实时钟22:20:19+00重建，旧字节不改。
 
 ## 下一步
+
+先将确切研究/角色/源/获取回执冻结为新分类候选；新的reviewdigest只由实际
+读取该材料的独立上下文核验，不用旧角色审阅签新payload，也不造closed包
+去调用门。16pin实际绑定资料仍是候选，原日本缺号、剂量身份、勘误内容
+继续未知。代码边界有确定反例闭合，不另加科学许可/审批或多路整页审查。
+旧导航/HANDOFF已逐字归档SHA030342c4…；根入口只保留当前/下一任务。
 
 当前稳定导航一次宽门终态exit0：Ruff src/tests/tools，strict src/tools283，
 活跃1185PASS262.32s、保留兼容20PASS0.62s、层级7PASS0.19s、旧路径词法
