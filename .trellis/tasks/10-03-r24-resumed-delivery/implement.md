@@ -1,5 +1,24 @@
 # Continuous implementation checkpoint
 
+## 1007C 真实独立来源采用及快照消费者修复（2026-10-08，持续，非暂停）
+
+方法：bounded execution+independent source conference；共享schema/current由
+owner协调，事实译义需独立源核，实际路由/偏差详reviews及owner回执。
+真实C0 OMP VETO六译义→原文修正6/其余252保持→新e1请求/站点。主CodeBuddy
+写快照消费者根因，备用ZCode仅验证；fallback理由与主session矛盾保留。
+owner追加current缓存变化RED后同根因补齐；79PASS107.51s，strict6/Ruff。
+issuer3600秒缩短等待违反既有120min边界，真实RED后改7200，45PASS5.29s。
+真实正式OMP同会话复核PID10418/266.801s/exit0/accepted，normal adoption
+258facts/258claims，receipt689eb49f/decisione8c7e210；只读projection28核心满足、
+32扩展缺失/4N/A；原DB/request/context/report未被projection改写，没有current。
+初次宽门包清单漏0018，1FAIL+2ERROR/1182PASS保留；清单修后8包/安装合同
+PASS213.70s，最终GATE_OK6/strict284/active1185/414.51s/compat20/layer7/Ruff/
+legacy实际通过。旧保存/share/安装/翻译不重跑，不清未知历史。
+下一前置真实source-proof新epoch RED1failed6.74s，旧已采用source证明被新
+active回执绑死；只交有界E03修历史exact-scope只读，NEW采用/晋级不放宽，
+实际PN项目保持e1未推进。修后按同接受来源生成新报告候选并新摘要复核，绝不把
+source/coregate/安装合同组合冒称完整交付。STATUS为当前，不恢复下面旧PID。
+
 ## 1007C 来源复核 bootstrap 根因：7aeaac2 后继续实施
 
 采用 inline execution + 已完成 fresh 有界 conference：复核请求/epoch/晋级的共享授权边界由单一 owner 改动；C03 已静态证实循环，源码和生产数据由 owner 独立核实。先集中成族 RED，完成最小完整授权修复后相关批回归，不重跑旧 A/B 保存、安装、分享、翻译或宽门。source candidate 的真实复核入口与最终 gate PASS 晋级分开；来源接受仍必须真实 issuer/materialization，禁止 producer summary、SQL 翻状态或假 formal receipt。

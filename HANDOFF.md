@@ -2,38 +2,36 @@
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 历史最新暂停：[20261008原件](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)，不恢复旧PID。
-最新本轮源码及记录7b6bbaf51d3e0986de282247b2d1ef5f972be3cb，已push且GitHub实核；
+本批基线d5adb2c5a52181be2b03d8893ecdf4f092d8fc4f；新提交/远端以当前STATUS实核为准。
 固定已push导航源码/安装c6dbb71cfe054238dd485afd909bad66c3bd0793。
-本批C来源入口及发布守卫完成有限验收；新安装未跑，不能借旧安装PASS覆盖。
+本批258条C来源已真实独立签发并采用；完整报告/current尚未发布，不能混签。
 Goal实际ACTIVE。唯一英文工程；旧中文根零接触。五用户修改、未知资料、
 原始来源、历史FAIL和暂停记录保留；无全量清理、reset/clean或无差别提交。
 
 ## 当前在做什么
 
-C正式报告有真实bootstrap循环：摄取candidate→门要求accepted→复核请求又
-放在过门/生成之后。独立有界C03已定位，owner源码与真实258行反例核实。
-[准确诊断及新输入指针](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-review-entry-diagnosis-v1.json)。
+真实项目为PN结节性痒疹四研究，不是PNH或完整宇宙。本批独立OMP源审查
+C0否决六处医学译义；按原文修六处、其余252行及科学事实/来源不变。
+新C1/e1内容dcf6d665，在真实项目产生新预览/请求，旧C0及36历史文件保持。
 
-- ZCode review-entry-v2已终态，typed原始内容9100b606；不是PENDING。
-- 已将v4来源绑定中文接入typed pending ef1c9841，258原子/4来源/258声明
-  和candidate状态不变。174显示行、32原文支持修正；非科学接受/current。
-- Owner P1已实现实际完整门结果绑定和晋级守卫。request审阅摘要同时绑定
-  科学bundle及门结果；新C缺门/阻断不得晋级，旧来源回执只读兼容。
-  新入口整合后102PASS15.24s+邻接82PASS9.19s、strict5/Ruff9通过。
-  一次里程碑quality-only宽门6步通过：strict284、active1185/260.56s、compat20、
-  layer7、Ruff及旧路径检查；不是全量集成、科学、浏览器或新版安装。
-- E03已真实终态CodeBuddy/deepseek-v4.1-flash，927.723s/113tools；owner合并
-  重复恢复/原文校验、类型与首写不可覆盖保护，接入review prepare-source-c。
-  独立ZCode GLM-5.3-Flash711.756s/37tools静态ACCEPT_BOUNDED，不代执行验。
-- 原ef1c9841输入版本不合既有路径合同，原件保持；仅版本名修正的新候选
-  ea2cda0c通过实际CLI，258candidate/258真实消费者、阻断预览，不切current。
-  [本批范围与恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-source-bootstrap-v1.json)。
-- 下一步真实来源采用必须经过合格codex/hermes/omp宿主、正式issuer回执及
-  materialization。不能把CodeBuddy咨询报告、构建者摘要、手动accepted状态
-  或内部_stage_fact当真实临床采用/save/current。
+- 新迁移0018让同一科学事实在不同快照有合法消费者；同快照冲突仍拒绝，
+  旧绑定/迁移/hash不改。当前读取随current更新，历史改名行不再混入。
+  成族RED后相关79PASS107.51s；issuer等候3600→7200秒，相关45PASS5.29s。
+- 实际OMP/openai-codex/gpt-6.1-sol:high同独立会话复核；正常产品issuer
+  真PID10418/266.801s/exit0，回执689eb49f、verdict bec98cfb，非伪造runner。
+  正常accept-source-facts真实物化258facts/258claims；原C0否决保持。
+- 只读状态投影重新核验实际接受证明/绑定/原文，258accepted，项目字节未改；
+  C核心门28satisfied，扩展32missing，4N/A。PASSED只指核心门，不是完整报告。
+- 首次里程碑宽门发现包遗漏0018：1FAIL/2ERROR/1182PASS，原失败不改。
+  清单补齐后相关包/独立安装合同8PASS213.70s；最终宽门GATE_OK6、active1185。
+- 执行节点主CodeBuddy写代码，备用ZCode仅验证；备用原因“未建会话”与
+  已记录主会话矛盾，已单独复盘，不借它宣称正常同会话恢复或独立临床review。
 
-采用现有类型/摄取/消费者/预览/epoch，不新增平台、图数据库、审批或第四门户。
-源C0接受后，报告投影C1摘要改变须另绑实际报告复核；不借原C0回执发布C1。
+[本批源码/源接受及恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-source-adoption-v1.json)。
+后续真实反例1RED：新报告epoch未签时，旧已采用源证明加载被active回执
+绑死。实际项目保持e1，未破坏旧证明；新E03有界修历史exact-source只读
+读取，NEW采用/报告仍只允许current epoch。修后再准备新报告候选、按新摘要复核。
+未切current，不以C1来源回执授权新报告；不重存旧A/B或整批重译。
 
 ## 已完成，恢复时不要重跑
 

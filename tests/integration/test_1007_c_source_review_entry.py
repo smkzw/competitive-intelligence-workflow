@@ -478,3 +478,45 @@ def test_frozen_entry_publish_never_overwrites_a_concurrent_writer(
     with pytest.raises(CSourceReviewEntryError, match="拒绝覆盖"):
         _write_frozen(target, b"second-writer", label="并发回执")
     assert target.read_bytes() == b"first-writer"
+
+
+def test_corrected_display_prepares_new_epoch_without_reaccepting_source_facts(
+    world: tuple[Path, Path, dict[str, object]],
+) -> None:
+    """A rejected translation is repaired as a new candidate, not overwritten."""
+    from ci_workflow.application.latest_delivery import read_current_delivery
+
+    root, content_path, payload = world
+    first = _prepare(root, content_path)
+    historical = {
+        relative: (root / relative).read_bytes()
+        for relative in (
+            first.scope.review_request_relative,
+            first.scope.production_context_relative,
+            first.receipt_path.relative_to(root).as_posix(),
+            _MANIFEST_RELATIVE,
+        )
+    }
+    historical_site = _file_digests(root, _SITE_RELATIVE)
+    fact_states = _fact_states(root)
+    changed = json.loads(json.dumps(payload, default=str))
+    changed["report_version"] = "v2"
+    changed["report_data"]["report_version"] = "v2"
+    changed["report_data"]["observations"][0]["display_text"] = "经原文核对的新中文呈现"
+    next_input = content_path.with_name("corrected-content.json")
+    next_input.write_text(json.dumps(changed, ensure_ascii=False), encoding="utf-8")
+
+    second = _prepare(root, next_input, produced_at=_AT + timedelta(minutes=5))
+
+    assert second.scope.epoch == 1
+    assert second.context.context_digest != first.context.context_digest
+    assert second.evidence_snapshot_id != first.evidence_snapshot_id
+    assert second.gate.review_result.decision is ReportDecision.BLOCKED
+    assert second.context.source_refs == first.context.source_refs
+    assert _fact_states(root) == fact_states
+    assert set(fact_states.values()) == {"candidate"}
+    assert read_current_delivery(root) is None
+    for relative, original_bytes in historical.items():
+        assert (root / relative).read_bytes() == original_bytes
+    assert _file_digests(root, _SITE_RELATIVE) == historical_site
+    assert _prepare(root, next_input, produced_at=None).receipt_path == second.receipt_path

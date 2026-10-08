@@ -178,7 +178,9 @@ def test_forward_migration_preserves_old_bindings_and_append_only_guards(tmp_pat
                    old_record)
         facts_before = db.execute("SELECT fact_version_id,content_sha256 FROM fact_versions "
                                   "ORDER BY fact_version_id").fetchall()
-    assert [m.version for m in migrations.apply_migrations(root / "state/project.sqlite")] == [17]
+    assert [
+        m.version for m in migrations.apply_migrations(root / "state/project.sqlite")
+    ] == [17, 18]
     with open_database(root / "state/project.sqlite") as db:
         assert db.execute("SELECT * FROM source_portal_consumer_bindings").fetchall() == (
             [old_record])

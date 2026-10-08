@@ -1,21 +1,30 @@
-# 唯一当前状态：1007V1 持续实施，C来源入口有限验收完成，正式采用待运行
+# 唯一当前状态：1007V1 持续实施，C真实来源已采用，报告候选继续推进
 
-最新本批源码7b6bbaf51d3e0986de282247b2d1ef5f972be3cb已push且远端实核；
-源c6dbb71固定旧安装不变。本批共享源码P1及来源入口
-完成102+82相关PASS、strict5/Ruff9；本批一次宽门实际GATE_OK6：strict284、
-active1185/260.56s、compat20/0.62s、layer7/0.19s、Ruff和旧路径检查通过。
-这仍只签开发质量，不代表完整集成、医学、浏览器或安装；Goal实际ACTIVE。
-ZCode review-entry-v2已终态，typed9100b606/中文ef1c9841保持258 candidate；
-owner实际反例证明仅补摘要仍BLOCKED。fresh C03实际CodeBuddy/deepseek-v4.1-flash
-425.756s/48tools静态诊断证实复核入口循环/晋级缺实际门判定。当前落实typed
-门结果+审阅摘要绑定、C缺门/阻断拒绝晋级。初期113相关PASS只签当时修订。
-入口E03实际CodeBuddy/deepseek-v4.1-flash927.723s/113tools终态；owner缩减
-重复恢复/原文校验并接CLI、首写不可覆盖。fresh独立ZCodeGLM-5.3-Flash
-711.756s/37tools静态ACCEPT_BOUNDED，未跑测试/医学/浏览器。版本only候选
-ea2cda0c实际CLI258candidate/258消费者、真实阻断预览，原ef1c9841未覆盖。
-[本批准确回执](evidence/1007V1/owner-c-source-bootstrap-v1.json)。
-[本批准确输入/诊断](evidence/1007V1/owner-c-review-entry-diagnosis-v1.json)。
-正式来源采用/currentC/实际浏览器未完成；以下旧标题和在途为各批历史范围。
+本批基线d5adb2c5a52181be2b03d8893ecdf4f092d8fc4f；源码/源采用绑定本批
+owner回执逐文件hash，所在提交及远端另实核，不借旧安装。
+Goal实际ACTIVE，无新暂停。English-only/五用户修改/未知历史均保护。
+
+PN四研究258来源观察/60终点实例：独立OMP C0真实否决6译义后，修正6处，
+252其余行、科学事实及来源不变；新C1/e1内容dcf6d665、旧C0原件保留。
+OMP/openai-codex/gpt-6.1-sol请求high同独立会话正常issuer签发，实际PID10418、
+266.801s/exit0；verdict bec98cfb/回执689eb49f，正常来源采用258facts/258claims。
+只读accepted投影核验正式证明/原绑定且不改项目字节。核心门PASSED：28满足、
+32扩展缺口、4N/A；不是全文/宇宙闭包，也不代表报告/current/浏览器验收。
+
+共享快照消费者迁移0018+exact-scope恢复/读取+current缓存刷新真实RED→GREEN，
+owner相关79PASS107.51s、strict6/Ruff；issuer120分钟相关45PASS5.29s。
+首次宽门保留FAIL1+ERROR2/1182PASS：包清单漏0018；修后包/独立安装合同
+8PASS213.70s。最终开发宽门实际GATE_OK6：strict284、active1185/414.51s、
+compat20/0.85s、layer7/0.21s、Ruff及lexical旧路径；只签该源码质量范围。
+执行实际CodeBuddy作者→ZCode仅验证，有主会话却记录“未建会话”的备用原因
+矛盾，已记偏差；不伪称独立review。source review为真实独立OMP，二者不混签。
+[本批精确证据及下一动作](evidence/1007V1/owner-c-source-adoption-v1.json)。
+推进新报告前，新的C source-read接续反例真实RED1failed6.74s：合法开启新的
+未签报告epoch后，旧已物化源接受只读加载却强求新active回执而失败。旧源
+采用并未失效；实际项目仍在e1未推进，保护证明。现交单一有界E03修历史
+exact-source proof读取，不能让旧回执授权新来源/报告；未修前不冒称新C2完成。
+下一步根因修复/负向验证后再新报告投影、渲染和独立复核。
+以下旧标题和在途是各批历史范围；“正式来源采用未跑”已被本批真实结果取代。
 
 2026-10-08：用户重新授权连续实施；Goal API实际active，非完成/RC。最新记录父47aaaebe7742398d3c1bc5b3a713ac5f0186ea20，生产源码c6dbb71；五用户修改保持。已完成导航修复/安装/r10分享不重跑，正式C当前仍未建立。
 [精确暂停与续接记录](../../.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261008_064027.md)。

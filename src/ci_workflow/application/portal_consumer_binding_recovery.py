@@ -4,7 +4,10 @@ v2证据快照在A/B消费者登记**之前**锁定，因此 ``closure.facts[].c
 只是摄取提示（报告类型+行引用），不是已核验消费者身份；恢复空项目时不得把它
 当作已接受绑定。已核验绑定只存在于 ``source_portal_consumer_bindings``，本模块
 用一个小的版本化sidecar把它绑定到唯一锁定证据快照，并在导入时逐项复核快照
-身份、被引用的来源事实、绑定标识/摘要以及报告与领域行语义后才写入。
+身份、被引用的来源事实、绑定标识/摘要以及报告与领域行语义后才写入。同一科学
+事实可在多个不可变快照下各自登记消费者：新登记使用包含证据快照的限定标识，
+历史遗留标识只在各自原始快照作用域下接受；冲突预检只在sidecar的精确快照
+作用域内比较，其他快照的既有行保持原样。
 
 C 消费者的 ``binding_json`` 使用捕获实例标识承载来源身份，持久化片段使用不可变
 来源版本标识；因此 C 绑定必须同时提供外部钉固的原始 C 报告数据（按摘要记入
@@ -490,18 +493,32 @@ def _validated_binding(
     entry: ConsumerBindingSidecarEntry,
     snapshot_versions: frozenset[str],
     *,
+    evidence_snapshot_id: str,
     c_proof: _CPortalOriginalProof | None = None,
     c_closure: _CPortalClosure | None = None,
 ) -> ActiveFactBinding:
     if entry.collection not in _REPORT_COLLECTIONS[entry.report]:
         raise PortalConsumerBindingRecoveryError("消费者报告与领域集合不匹配")
-    if entry.binding_id != stable_id(
+    # New bindings carry the exact evidence snapshot in their id; original
+    # historical rows keep the pre-snapshot legacy id and are accepted only
+    # under the exact scope being exported or restored. Any other id form is
+    # not a source-fact identity and fails closed.
+    legacy_id = stable_id(
         _BINDING_ID_KIND,
         entry.source_fact_version_id,
         entry.report,
         entry.collection,
         entry.row_id,
-    ):
+    )
+    snapshot_scoped_id = stable_id(
+        _BINDING_ID_KIND,
+        entry.source_fact_version_id,
+        entry.report,
+        entry.collection,
+        entry.row_id,
+        evidence_snapshot_id,
+    )
+    if entry.binding_id not in {legacy_id, snapshot_scoped_id}:
         raise PortalConsumerBindingRecoveryError("消费者绑定标识与来源事实身份不一致")
     if hashlib.sha256(entry.binding_json.encode("utf-8")).hexdigest() != (
         entry.binding_sha256
@@ -679,6 +696,7 @@ def export_verified_consumer_bindings(
         bindings = tuple(
             _validated_binding(
                 database, entry, snapshot_versions,
+                evidence_snapshot_id=evidence_snapshot.snapshot_id,
                 c_proof=c_proof, c_closure=c_closure,
             )
             for entry in entries
@@ -739,20 +757,37 @@ def recover_verified_consumer_bindings(
         bindings = tuple(
             _validated_binding(
                 database, entry, snapshot_versions,
+                evidence_snapshot_id=sidecar.evidence_snapshot_id,
                 c_proof=c_proof, c_closure=c_closure,
             )
             for entry in sidecar.bindings
         )
         by_fact = _report_relations(sidecar.bindings)
         # Preflight the whole requested set before writing any append-only row.
+        # Identity is checked both by exact binding id and inside the sidecar's
+        # exact snapshot scope: the same fact may already be restored under a
+        # different immutable snapshot, and those rows are never overwritten.
         for entry in sidecar.bindings:
             existing = database.execute(
-                "SELECT binding_id,collection,row_id,binding_json,binding_sha256,"
-                "evidence_snapshot_id FROM source_portal_consumer_bindings "
-                "WHERE source_fact_version_id=? AND report=?",
-                (entry.source_fact_version_id, entry.report),
+                "SELECT collection,row_id,binding_json,binding_sha256,evidence_snapshot_id "
+                "FROM source_portal_consumer_bindings WHERE binding_id=?",
+                (entry.binding_id,),
             ).fetchone()
             if existing is not None and tuple(existing) != (
+                entry.collection,
+                entry.row_id,
+                entry.binding_json,
+                entry.binding_sha256,
+                sidecar.evidence_snapshot_id,
+            ):
+                raise PortalConsumerBindingRecoveryError("已登记消费者绑定与该来源事实冲突")
+            scoped = database.execute(
+                "SELECT binding_id,collection,row_id,binding_json,binding_sha256,"
+                "evidence_snapshot_id FROM source_portal_consumer_bindings "
+                "WHERE source_fact_version_id=? AND report=? AND evidence_snapshot_id=?",
+                (entry.source_fact_version_id, entry.report, sidecar.evidence_snapshot_id),
+            ).fetchone()
+            if scoped is not None and tuple(scoped) != (
                 entry.binding_id,
                 entry.collection,
                 entry.row_id,
@@ -766,8 +801,8 @@ def recover_verified_consumer_bindings(
                 anchor = database.execute(
                     "SELECT binding_json,binding_sha256,evidence_snapshot_id FROM "
                     "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                    "AND report='A'",
-                    (version_id,),
+                    "AND report='A' AND evidence_snapshot_id=?",
+                    (version_id, sidecar.evidence_snapshot_id),
                 ).fetchone()
                 if (
                     anchor is None

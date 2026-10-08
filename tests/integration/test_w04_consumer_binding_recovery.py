@@ -211,6 +211,7 @@ def test_export_contains_only_verified_registry_entries_of_one_locked_snapshot(
         assert item["binding_id"] == stable_id(
             "source-portal-binding", str(item["source_fact_version_id"]),
             str(item["report"]), str(item["collection"]), str(item["row_id"]),
+            snapshot.snapshot_id,
         )
         assert "consumer_binding" not in binding.model_dump()
 

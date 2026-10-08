@@ -79,7 +79,9 @@ from ci_workflow.qc.review_receipt import (
 from ci_workflow.storage.scientific_review_epoch import epoch_issuance_record_path
 
 REVIEW_ISSUANCE_RECORD_KIND: Final = "scientific-review-issuance-v1"
-_DEFAULT_TIMEOUT_SECONDS: Final = 3600.0
+# Keep the real subprocess inside the approved 120-minute long-wait contract;
+# the issuer must not kill a healthy host halfway through that same review.
+_DEFAULT_TIMEOUT_SECONDS: Final = 7200.0
 _STDOUT_TAIL_CHARS: Final = 2000
 _VERSION_PROBE_TIMEOUT_SECONDS: Final = 30.0
 

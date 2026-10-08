@@ -274,7 +274,7 @@ def _fake_runner(
     def _run(argv: tuple[str, ...], cwd: str, timeout: float) -> ExternalProcessResult:
         assert argv == (HOST_PATH, *REVIEW_ARGV), "复核进程 argv 必须以宿主可执行文件开头"
         assert cwd == str(project_root)
-        assert timeout > 0
+        assert timeout == 7200, "正式签发不得在既定120分钟长等待结束前截断宿主复核"
         if verdict_payload is not None:
             _write_verdict(project_root, verdict_payload)
         return ExternalProcessResult(

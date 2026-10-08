@@ -143,15 +143,18 @@ def register_b_baseline_source_consumers(
             binding = active_fact_binding_for_b(report, "baseline", row_id)
             candidates.append((version_id, binding))
         # Preflight the entire set before inserting append-only declarations.
+        # Conflicts are scoped to this exact evidence snapshot; the same fact
+        # may already be consumed under other immutable snapshots.
         for version_id, binding in candidates:
             encoded = binding.model_dump_json()
             existing = database.execute(
-                "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
-                "source_portal_consumer_bindings WHERE source_fact_version_id=? AND report='B'",
-                (version_id,),
+                "SELECT collection,row_id,binding_json FROM "
+                "source_portal_consumer_bindings WHERE source_fact_version_id=? "
+                "AND report='B' AND evidence_snapshot_id=?",
+                (version_id, evidence_snapshot.snapshot_id),
             ).fetchone()
             if existing is not None and tuple(existing) != (
-                "baseline", binding.row_id, encoded, evidence_snapshot.snapshot_id,
+                "baseline", binding.row_id, encoded,
             ):
                 raise PortalConsumerRegistrationError("已登记基线消费者与当前候选冲突")
         for version_id, binding in candidates:
@@ -161,7 +164,8 @@ def register_b_baseline_source_consumers(
                 "(binding_id,source_fact_version_id,evidence_snapshot_id,report,"
                 "collection,row_id,binding_json,binding_sha256,created_at) "
                 "VALUES (?,?,?,?,?,?,?,?,?) ON CONFLICT(binding_id) DO NOTHING",
-                (stable_id("source-portal-binding", version_id, "B", "baseline", binding.row_id),
+                (stable_id("source-portal-binding", version_id, "B", "baseline",
+                           binding.row_id, evidence_snapshot.snapshot_id),
                  version_id, evidence_snapshot.snapshot_id, "B", "baseline", binding.row_id,
                  encoded, hashlib.sha256(encoded.encode()).hexdigest(), registered_at.isoformat()),
             )
@@ -558,19 +562,20 @@ def register_a_source_consumers(
             candidates.append((version_id, binding))
 
         # Preflight the entire requested set before writing any append-only row.
+        # A new candidate snapshot may reuse the same scientific fact: only rows
+        # inside this exact snapshot can conflict with the request.
         for version_id, binding in candidates:
             encoded = binding.model_dump_json()
             existing = database.execute(
-                "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
+                "SELECT collection,row_id,binding_json FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='A'",
-                (version_id,),
+                "AND report='A' AND evidence_snapshot_id=?",
+                (version_id, evidence_snapshot.snapshot_id),
             ).fetchone()
             if existing is not None and tuple(existing) != (
                 binding.collection,
                 binding.row_id,
                 encoded,
-                evidence_snapshot.snapshot_id,
             ):
                 raise PortalConsumerRegistrationError("已登记消费者身份与当前候选冲突")
         for version_id, binding in candidates:
@@ -582,7 +587,8 @@ def register_a_source_consumers(
                 "VALUES (?,?,?,?,?,?,?,?,?)",
                 (
                     stable_id(
-                        "source-portal-binding", version_id, "A", binding.collection, binding.row_id
+                        "source-portal-binding", version_id, "A", binding.collection,
+                        binding.row_id, evidence_snapshot.snapshot_id,
                     ),
                     version_id,
                     evidence_snapshot.snapshot_id,
@@ -647,11 +653,14 @@ def register_b_shared_source_consumers(
                 "WHERE v.fact_version_id=?",
                 (version_id,),
             ).fetchone()
+            # The shared A anchor must belong to this exact evidence snapshot;
+            # another immutable snapshot may hold the same fact with its own
+            # consumer identity and must never be picked arbitrarily.
             declared_a = database.execute(
                 "SELECT binding_json,binding_sha256,evidence_snapshot_id FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='A'",
-                (version_id,),
+                "AND report='A' AND evidence_snapshot_id=?",
+                (version_id, evidence_snapshot.snapshot_id),
             ).fetchone()
             if source is None or declared_a is None:
                 raise PortalConsumerRegistrationError("共享 B 消费者缺少已核验 A 来源身份")
@@ -795,16 +804,15 @@ def register_b_shared_source_consumers(
         for version_id, binding in candidates:
             encoded = binding.model_dump_json()
             existing = database.execute(
-                "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
+                "SELECT collection,row_id,binding_json FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='B'",
-                (version_id,),
+                "AND report='B' AND evidence_snapshot_id=?",
+                (version_id, evidence_snapshot.snapshot_id),
             ).fetchone()
             if existing is not None and tuple(existing) != (
                 binding.collection,
                 binding.row_id,
                 encoded,
-                evidence_snapshot.snapshot_id,
             ):
                 raise PortalConsumerRegistrationError("已登记 B 消费者与当前候选冲突")
         for version_id, binding in candidates:
@@ -816,7 +824,8 @@ def register_b_shared_source_consumers(
                 "VALUES (?,?,?,?,?,?,?,?,?)",
                 (
                     stable_id(
-                        "source-portal-binding", version_id, "B", binding.collection, binding.row_id
+                        "source-portal-binding", version_id, "B", binding.collection,
+                        binding.row_id, evidence_snapshot.snapshot_id,
                     ),
                     version_id,
                     evidence_snapshot.snapshot_id,

@@ -347,11 +347,17 @@ def _verified_a_consumer_proof(
     row: EfficacyRow,
     version_id: str,
 ) -> None:
-    """Fail closed unless the append-only A registration proves this exact atom."""
+    """Fail closed unless the append-only A registration proves this exact atom.
+
+    Only the A consumer registered under this exact evidence snapshot counts;
+    the same fact may carry its own identity under another immutable snapshot
+    and must never be selected arbitrarily across history.
+    """
     declared = database.execute(
         "SELECT collection,row_id,binding_json,binding_sha256,evidence_snapshot_id FROM "
-        "source_portal_consumer_bindings WHERE source_fact_version_id=? AND report='A'",
-        (version_id,),
+        "source_portal_consumer_bindings WHERE source_fact_version_id=? AND report='A' "
+        "AND evidence_snapshot_id=?",
+        (version_id, evidence_snapshot.snapshot_id),
     ).fetchall()
     if len(declared) != 1:
         raise BEfficacySourceViewError("疗效来源行缺少唯一已核验 A 来源身份")

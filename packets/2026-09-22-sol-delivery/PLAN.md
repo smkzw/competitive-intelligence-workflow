@@ -9,8 +9,15 @@
 P1完整实际门/审阅输入绑定及C fail-closed promotion与P2纯内容来源复核入口
 已完成有限源码/真实258切片验收：102+82相关PASS、strict5/Ruff9、独立静态
 ACCEPT_BOUNDED；版本only新候选ea2cda0c不接受来源、不切current。E03终态，
-owner保留单一共享责任。下一真实eligible-host源
-回执/materialization之后才投影新C1并复核报告。禁止fake summary/SQL接受。
+owner保留单一共享责任。本批eligible OMP实际来源回执/materialization已完成：
+六处独立VETO后原文支持修正，258facts/258claims正式采用；只读投影核心门通过，
+32扩展缺口保留。下一新报告候选须新摘要/门/产物绑定和正式报告复核，不借
+来源回执发报告；现有投影/渲染/epoch足够，不新增bootstrap平台。禁止fake
+summary/SQL接受。共享0018/current-scope缓存修复已相关验证；最终质量门
+修复包迁移遗漏后实际GATE_OK6/active1185。新增真实source-read接续RED：新
+报告epoch后旧已物化源证明被active回执绑死，交有界E03修历史exact-scope读取，
+NEW采用/晋级仍current-only；实际PN项目保持e1，修后再推进报告候选。
+同步A/B无依赖单元不受C全文/浏览器阻断。
 不用重跑旧安装/r6–r9/r10分享或C全量翻译；四宽门等Ego选择，不阻断代码。
 
 2026-10-08最新续接：用户解除暂停，Goal实查active，e1a0126导航RED直接

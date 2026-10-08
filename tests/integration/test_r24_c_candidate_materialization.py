@@ -84,6 +84,12 @@ def test_real_candidate_preview_preserves_source_status_and_unknown_product_meta
     assert result["scientific_acceptance"] is False
     assert result["current_generation_switched"] is False
     data = json.loads((output / "review-portal-data.json").read_bytes())
+    from ci_workflow.domain.enums import ReportKind
+    from ci_workflow.storage.paths import ArtifactPathService
+
+    # The ordinary producer must emit a valid version, not leave downstream
+    # source-review preparation to repair its version by hand.
+    ArtifactPathService().version_root(ReportKind.C, data["report_version"])
     assert {row["review_state"] for row in data["observations"]} == {"candidate"}
     assert {row["developer_basis"] for row in data["products"]} == {"unverified"}
     trial = next(row for row in data["trials"] if row["display_id"] == "NCT03829449")

@@ -1,5 +1,30 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前：d5adb2c5后，C来源真实采用/快照消费者根因关闭
+
+不另写规格或整批重译。独立OMP逐源258观察发现6处医学译义问题，而非
+旧31条抽样可替代整件；真实原文小批修6/余252不动。current不存在，旧e0
+否决/预览/原输入保持。新0018精确快照消费者解决“同一事实新显示不能登记”，
+owner补充current缓存变化与改名旧行的RED，最小共享修复后79PASS；不是复制
+科学事实、覆盖旧绑定或增加审批。120min实际issuer上限修复另45PASS。
+真实同独立OMP会话正常issuer ACCEPTED source slice，normal adoption258facts
+258claims，回执689eb49f，决策e8c7e210。只读投影28核心满足、32扩展缺口/4N/A，
+项目DB/request/context/原report字节未改，不切current；新报告仍需新摘要复核。
+
+踩坑与调整：主执行写完代码却最终报告不完整，runner转备用ZCode仅验已有
+代码；备用理由声称未建会话，与已记录主session矛盾。保留actual证据，不
+采信解释/伪称same-session recovery。主会场随后抓到备用遗漏的current缓存
+变化反例并修正。一次宽门又发现迁移忘入包，1FAIL+2ERROR/1182PASS保持；
+补manifest后包/真实隔离安装合同8PASS，最后宽门按真实终态记录，不缩范围。
+只读projection回执helper误用status而非outcome，资料记录helper取decision
+摘要字段不存在；均先保留失败，再重开已有实物修helper，没重做科学采用。
+
+准确machine receipt：owner-c-source-adoption-v1.json。源输入/正式签发/决策/
+修复清单/本地候选可重开且hash钉固；不以“258/258”统计替代独立来源/门
+结果。大站点本地受控保留，Git精简记录。未清理缓存/历史/唯一材料。
+下一实际报告投影遵守既有render/epoch，源采用已完成不再待做；浏览器、
+同current ABC/保存分享/24门户三宿主等均仍开，不借旧c6安装覆盖本批。
+
 ## 当前：记录父47aaaeb，C中文v4和正式源复核接线
 
 源显示32有依据修正，全258设计行/126条款174中文行和原始定位保留；

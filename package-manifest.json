@@ -117,7 +117,8 @@
       "migrations/0014_current_generation_protocol.sql",
       "migrations/0015_evidence_calculation_derivations.sql",
       "migrations/0016_source_portal_consumer_bindings.sql",
-      "migrations/0017_baseline_portal_consumers.sql"
+      "migrations/0017_baseline_portal_consumers.sql",
+      "migrations/0018_snapshot_scoped_portal_consumers.sql"
     ]
   },
   "cli": {

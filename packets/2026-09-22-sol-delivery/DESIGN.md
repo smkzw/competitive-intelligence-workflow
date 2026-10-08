@@ -4,6 +4,14 @@
 
 ## 1007V1 当前增量合同
 
+同一科学事实/报告可在不同证据快照登记不同消费者；唯一约束为
+fact_version+report+evidence_snapshot，new binding ID带快照，旧ID及字节保持。
+只读恢复/登记/来源证明必须核验精确快照，不以首行、时间或页面改名挑选。
+current消费范围按其hash钉固builder输入读取，current世代变化刷新缓存，旧
+快照行不进入新current；未知或损坏明确拒绝，不新增科学事实来容纳显示修订。
+实际迁移0018进入安装包，0016/0017和历史快照不改。正常issuer真实复核进程
+上限7200s；版本探测仍30s。源事实采用与报告复核/发布严格分层。
+
 C 来源复核 bootstrap 复用 FreshCResearchContent、摄取、消费者登记、未接受
 预览、现有 request/issuer/materialization。纯内容输入无需伪造前置 accepted
 ScientificReview；候选观察保持 candidate。request 保存实际完整门结果而非

@@ -44,6 +44,7 @@ EXPECTED_MIGRATIONS = (
     "0015_evidence_calculation_derivations.sql",
     "0016_source_portal_consumer_bindings.sql",
     "0017_baseline_portal_consumers.sql",
+    "0018_snapshot_scoped_portal_consumers.sql",
 )
 
 EXPECTED_TABLES = {
@@ -133,7 +134,7 @@ def test_calculation_migration_preserves_old_rows_and_append_only_guards(
             ("old-normalization", "normalization", "[]", "old-rule", "1", "{}", "t"),
         )
 
-    assert [item.version for item in apply_migrations(database_path)] == [15, 16, 17]
+    assert [item.version for item in apply_migrations(database_path)] == [15, 16, 17, 18]
     with open_database(database_path) as database:
         assert database.execute(
             "SELECT derivation_kind,rule_id FROM evidence_derivations "

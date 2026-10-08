@@ -138,8 +138,12 @@ def register_c_source_consumers(
     is proven against the locked evidence snapshot and persisted bytes before any
     append-only insert; wrong value/path/product/section/version/snapshot or a
     duplicate/missing mapping rejects the whole batch. Repeating the identical
-    batch is idempotent. Registration alone never accepts science, promotes a
-    review state, renders a portal, or switches current.
+    batch is idempotent. A new candidate snapshot may reuse scientific facts
+    unchanged: consumers are identified by snapshot-qualified binding ids, the
+    same-snapshot conflict preflight never reads another snapshot's rows, and
+    already-registered rows in older snapshots keep their ids and payloads.
+    Registration alone never accepts science, promotes a review state, renders a
+    portal, or switches current.
     """
     if registered_at.tzinfo is None or registered_at.utcoffset() is None:
         raise CPortalConsumerRegistrationError("消费者登记时间缺少时区")
@@ -386,19 +390,21 @@ def register_c_source_consumers(
             raise CPortalConsumerRegistrationError("消费者登记未覆盖全部请求行")
 
         # Preflight the entire requested set before writing any append-only row.
+        # The conflict scope is the current evidence snapshot only: the same
+        # scientific fact may already be registered under other immutable
+        # snapshots, and those rows keep their own identity.
         for version_id, binding in candidates:
             encoded = binding.model_dump_json()
             existing = database.execute(
-                "SELECT collection,row_id,binding_json,evidence_snapshot_id FROM "
+                "SELECT collection,row_id,binding_json FROM "
                 "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                "AND report='C'",
-                (version_id,),
+                "AND report='C' AND evidence_snapshot_id=?",
+                (version_id, evidence_snapshot.snapshot_id),
             ).fetchone()
             if existing is not None and tuple(existing) != (
                 binding.collection,
                 binding.row_id,
                 encoded,
-                evidence_snapshot.snapshot_id,
             ):
                 raise CPortalConsumerRegistrationError("已登记 C 消费者身份与当前候选冲突")
         for version_id, binding in candidates:
@@ -410,7 +416,8 @@ def register_c_source_consumers(
                 "VALUES (?,?,?,?,?,?,?,?,?)",
                 (
                     stable_id(
-                        "source-portal-binding", version_id, "C", binding.collection, binding.row_id
+                        "source-portal-binding", version_id, "C", binding.collection,
+                        binding.row_id, evidence_snapshot.snapshot_id,
                     ),
                     version_id,
                     evidence_snapshot.snapshot_id,
@@ -567,12 +574,23 @@ def project_reviewed_c_source_states(
             try:
                 entry = _entry_from_row(row)
                 binding = _validated_binding(
-                    database, entry, snapshot_versions, c_proof=proof, c_closure=c_closure
+                    database,
+                    entry,
+                    snapshot_versions,
+                    evidence_snapshot_id=evidence_snapshot.snapshot_id,
+                    c_proof=proof,
+                    c_closure=c_closure,
                 )
             except PortalConsumerBindingRecoveryError as error:
                 raise CPortalReviewedProjectionError(
                     f"C 消费者绑定未通过原始报告或锁定闭包重开证明：{error}"
                 ) from error
+            if entry.row_id in bindings:
+                # One row cannot carry two conflicting consumer declarations in
+                # the same exact snapshot; first/last wins is not honest proof.
+                raise CPortalReviewedProjectionError(
+                    "同一证据快照存在重复的 C 消费者行声明"
+                )
             bindings[entry.row_id] = (entry.source_fact_version_id, binding)
     except sqlite3.Error as error:
         raise CPortalReviewedProjectionError(f"项目科学真源读取失败：{error}") from error

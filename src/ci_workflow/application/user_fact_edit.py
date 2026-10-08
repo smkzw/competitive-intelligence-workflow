@@ -14,7 +14,7 @@ import math
 import os
 import re
 import shutil
-from collections.abc import Callable, Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
@@ -840,6 +840,8 @@ class UserFactEditService:
         apply_migrations(self.database_path)
         self.event_store = EventStore(self.project_root)
         self._after_report_built: Callable[[ReportCode], None] = lambda _report: None
+        self._source_scope_cache: dict[str, str] | None = None
+        self._source_scope_cache_key: str | None = None
 
     @contextmanager
     def _exclusive(self) -> Any:
@@ -860,6 +862,20 @@ class UserFactEditService:
             raise CurrentDeliveryConflictError("当前交付已经初始化")
         reports: list[CurrentReportDelivery] = []
         digest = _fact_digest(fact_version_ids)
+        # The reports being adopted define the actual rendered source scope:
+        # resolve it from the exact caller bytes before any public fact reads
+        # consumer declarations that exist under more than one snapshot.
+        scopes: dict[str, str] = {}
+        for report, data_path in report_data_paths.items():
+            try:
+                encoded = Path(data_path).read_bytes()
+            except OSError:
+                continue
+            scope = self._portal_data_scope_from_bytes(encoded)
+            if scope is not None:
+                scopes[str(report)] = scope
+        self._source_scope_cache = scopes
+        self._source_scope_cache_key = None
         public_facts = {
             version_id: self._public_fact(self._fact_row(version_id))
             for version_id in fact_version_ids
@@ -987,7 +1003,16 @@ class UserFactEditService:
         return facts
 
     def _registered_source_bindings(self, row: dict[str, Any]) -> tuple[ActiveFactBinding, ...]:
-        """Follow user revisions to their immutable source-side consumer declarations."""
+        """Follow user revisions to their immutable source-side consumer declarations.
+
+        One scientific fact may carry separately verified consumers under more
+        than one immutable evidence snapshot. Identical declarations collapse to
+        one; conflicting declarations for the same report row are resolved only
+        by the source scope of the actual current rendering, never by insertion
+        order or by returning every duplicate declaration. With no resolvable
+        current scope a unique single candidate is preserved and genuine
+        ambiguity fails closed.
+        """
         version_id = str(row["fact_version_id"])
         visited: set[str] = set()
         with open_database(self.database_path) as database:
@@ -996,17 +1021,14 @@ class UserFactEditService:
                     raise UserFactSaveError("事实版本继承链存在循环")
                 visited.add(version_id)
                 records = database.execute(
-                    "SELECT binding_json,binding_sha256 FROM "
-                    "source_portal_consumer_bindings WHERE source_fact_version_id=? "
-                    "ORDER BY report,collection,row_id", (version_id,),
+                    "SELECT report,collection,row_id,binding_json,binding_sha256,"
+                    "evidence_snapshot_id FROM source_portal_consumer_bindings "
+                    "WHERE source_fact_version_id=? "
+                    "ORDER BY report,collection,row_id,evidence_snapshot_id",
+                    (version_id,),
                 ).fetchall()
                 if records:
-                    bindings: list[ActiveFactBinding] = []
-                    for encoded, digest in records:
-                        if hashlib.sha256(str(encoded).encode()).hexdigest() != str(digest):
-                            raise UserFactSaveError("来源消费者绑定摘要不一致")
-                        bindings.append(ActiveFactBinding.model_validate_json(str(encoded)))
-                    return tuple(bindings)
+                    return self._scoped_source_bindings(records)
                 predecessor = database.execute(
                     "SELECT supersedes_fact_version_id,fact_id FROM fact_versions "
                     "WHERE fact_version_id=?", (version_id,),
@@ -1015,6 +1037,85 @@ class UserFactEditService:
                     raise UserFactSaveError("来源消费者绑定继承链身份不一致")
                 version_id = str(predecessor[0]) if predecessor[0] else ""
         return ()
+
+    def _scoped_source_bindings(
+        self, records: Sequence[Sequence[Any]],
+    ) -> tuple[ActiveFactBinding, ...]:
+        """One verified declaration per report row inside the legitimate scope."""
+        grouped: dict[tuple[str, str, str], dict[str, list[str]]] = {}
+        current_scopes = self._current_source_scopes()
+        for report, collection, row_id, encoded, digest, snapshot_id in records:
+            text = str(encoded)
+            if hashlib.sha256(text.encode()).hexdigest() != str(digest):
+                raise UserFactSaveError("来源消费者绑定摘要不一致")
+            # Current scope excludes historical rows even when a display row
+            # was renamed or its bytes happen to be identical.
+            scope = current_scopes.get(str(report))
+            if scope is not None and str(snapshot_id) != scope:
+                continue
+            grouped.setdefault(
+                (str(report), str(collection), str(row_id)), {}
+            ).setdefault(str(snapshot_id), []).append(text)
+        bindings: list[ActiveFactBinding] = []
+        for key in sorted(grouped):
+            by_snapshot = grouped[key]
+            variants = {text for texts in by_snapshot.values() for text in texts}
+            if len(variants) == 1:
+                bindings.append(ActiveFactBinding.model_validate_json(next(iter(variants))))
+                continue
+            scope = current_scopes.get(key[0])
+            scoped = {text for text in by_snapshot.get(scope, ())} if scope is not None else set()
+            if len(scoped) == 1:
+                bindings.append(ActiveFactBinding.model_validate_json(next(iter(scoped))))
+                continue
+            raise UserFactSaveError(
+                "同一报告行存在多个来源快照的消费者声明，且无法由当前渲染来源作用域裁决"
+            )
+        return tuple(bindings)
+
+    def _current_source_scopes(self) -> dict[str, str]:
+        """Report → evidence snapshot scope of the actual current rendering.
+
+        The scope is read from the hash-pinned builder input of each committed
+        current report. A legacy input without that binding yields no scope;
+        an explicitly pinned but unavailable/corrupt input fails closed. Cache
+        entries belong to the current bundle, not a long-lived service instance.
+        """
+        try:
+            current = read_current_delivery(self.project_root)
+        except ValueError as error:
+            raise UserFactSaveError("当前交付来源作用域不可核验") from error
+        key = current_bundle_sha256(current) if current is not None else None
+        if self._source_scope_cache is None or self._source_scope_cache_key != key:
+            scopes: dict[str, str] = {}
+            if current is not None:
+                for delivery in current.reports:
+                    relative = delivery.builder_input_relative_path
+                    expected = delivery.builder_input_sha256
+                    if relative is None or expected is None:
+                        continue
+                    try:
+                        encoded = (self.project_root / relative).read_bytes()
+                    except OSError as error:
+                        raise UserFactSaveError("当前报告钉固的来源输入不可读") from error
+                    if hashlib.sha256(encoded).hexdigest() != expected:
+                        raise UserFactSaveError("当前报告钉固的来源输入摘要不一致")
+                    scope = self._portal_data_scope_from_bytes(encoded)
+                    if scope is not None:
+                        scopes[delivery.report] = scope
+            self._source_scope_cache = scopes
+            self._source_scope_cache_key = key
+        return self._source_scope_cache
+
+    @staticmethod
+    def _portal_data_scope_from_bytes(encoded: bytes) -> str | None:
+        """Evidence snapshot scope declared by one report-data builder input."""
+        try:
+            payload = json.loads(encoded)
+        except json.JSONDecodeError:
+            return None
+        scope = payload.get("source_evidence_snapshot_id") if isinstance(payload, dict) else None
+        return scope if isinstance(scope, str) and scope else None
 
     def _public_fact(self, row: dict[str, Any]) -> dict[str, Any]:
         context = dict(row["context_payload"])

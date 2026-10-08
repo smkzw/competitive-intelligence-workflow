@@ -230,6 +230,7 @@ def test_current_c_consumers_survive_pinned_restore_and_idempotent_replay(
             "C",
             "observations",
             str(entry["row_id"]),
+            registered.snapshot.snapshot_id,
         )
     again = tmp_path / "c-consumers-again.json"
     _export_c(registered, again)

@@ -2,6 +2,15 @@
 
 ## 1007V1 当前新增合同（不是外部cases.json的替代原件）
 
+快照消费者族：同一fact/report跨快照合法复用，同快照不同声明拒绝且不部分
+写入；旧ID/载荷/hash/time/迁移字节保持。恢复绑定与sidecar/原报告/锁定来源
+精确scope一致，伪ID或混入其他scope拒绝。current更新后同服务必须重读合法
+scope；历史改名行不能漏入，坏current或坏builder输入失败关闭。新迁移进入
+包并在隔离安装回归，不拿源码迁移成功当安装成功。
+来源采用后只读投影重开真实issuer/decision/ledger/绑定证明，不再次采用，
+原始输入/快照/current不改。核心gate通过仍披露扩展缺口，新报告摘要另复核；
+正式review7200s真实进程等待，版本探测30s，停止/未跑/旧版本不记PASS。
+
 C 源复核与报告晋级分层：全 candidate 的纯研究内容可形成真实复核请求/
 未接受预览，DB 状态不自动翻 accepted/current 不切。真实 issuer 的阻断门
 回执可重开并采用其精确来源，但 promotion 必须拒绝；缺门、错内容/规则/

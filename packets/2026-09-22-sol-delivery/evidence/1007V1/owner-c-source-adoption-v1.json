@@ -1,0 +1,238 @@
+{
+  "schema_version": "1007-c-source-adoption-1",
+  "authority": "existing 1007V1 / W00-W10 continuous user authorization",
+  "baseline_commit": "d5adb2c5a52181be2b03d8893ecdf4f092d8fc4f",
+  "recorded_at_head": "d5adb2c5a52181be2b03d8893ecdf4f092d8fc4f",
+  "goal": "active verified; not complete/paused/RC",
+  "project": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project",
+  "indication": "PN 结节性痒疹, not PNH",
+  "source_scope": {
+    "studies": [
+      "NCT04183335",
+      "NCT04202679",
+      "NCT04501666",
+      "NCT04501679"
+    ],
+    "observations": 258,
+    "endpoint_instances": 60,
+    "universe_complete": false,
+    "live_refresh": "NOT_RUN"
+  },
+  "repairs": {
+    "changed_display_rows": 6,
+    "other_rows_unchanged": 252,
+    "scientific_source_facts_unchanged": true,
+    "original_C0_veto_preserved": true,
+    "original_preview_historical_files_preserved": 36
+  },
+  "source_review": {
+    "agent": "omp",
+    "provider": "openai-codex",
+    "model": "gpt-6.1-sol",
+    "effort_requested": "high",
+    "server_effort_attested": false,
+    "session": "01a11ca8-aac1-7000-81e2-901b1c5fe3de",
+    "C0": "six-description recoverable veto",
+    "C1": "same-reviewer continuation, accepted source slice only",
+    "PID": 10418,
+    "started_at": "2026-10-08T19:24:49.542773Z",
+    "finished_at": "2026-10-08T19:29:16.343438Z",
+    "returncode": 0,
+    "receipt_digest": "689eb49fee8bdf47540505befb9756baf3b6fba0330f74e463b37979bf584796"
+  },
+  "source_adoption": {
+    "decision_digest": "e8c7e2109871d2a505c6991a207f0a4d40124e94a81e5d4f9e5e843c0aa0dce5",
+    "accepted_at": "2026-10-08T19:29:51.348112Z",
+    "verdict_id": "scientific-qc-verdict_ci-1007-c1-omp-independent-v1-final",
+    "facts": 258,
+    "claims": 258
+  },
+  "projection": {
+    "accepted_observations": 258,
+    "browser": "NOT_RUN",
+    "current_switched": false,
+    "evidence_snapshot_id": "evidence-snapshot_bb614ad31e8c7e599c3d2073",
+    "full_report_acceptance": false,
+    "gate_decision": "passed",
+    "gate_result_sha256": "09599797795e1b53623581a816b4866a3a42b7645ec215e16dc87a81577e94f9",
+    "gate_unit_count": 64,
+    "gate_unit_states": {
+      "extension_missing": 32,
+      "not_applicable": 4,
+      "satisfied": 28
+    },
+    "observations": 258,
+    "project_files_unchanged": {
+      "evidence/library/c-source-review/dcf6d665dace3322b39c8414d0ac07aa7ce624ab6ccf6e2cd6f9a91239e17881/report-data.json": "958bb6df6d5c1d2c4b843ea1fd285d05a9d2adc41495a791ca655819291216cf",
+      "snapshots/evidence/evidence-snapshot_bb614ad31e8c7e599c3d2073.json": "0c63abe640262d343b5cccf67442e967af102e27e71926f50c13263f458d83f0",
+      "state/project.sqlite": "79ccefa56a141d374fbf1c4d5334cc13da994923cbaa627cbd4670bbddc5a9d8",
+      "state/scientific_review/C/epochs/e1/production_context.json": "a13b8e468fbe5803303dc637aaeb9313614d6e2037a944a4318e0767c54d872c",
+      "state/scientific_review/C/epochs/e1/review_request.json": "a0202c12bdca7ab42c2683d3acea98b9fac276eab5fd208feb28668fdba9b845"
+    },
+    "project_relative": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project",
+    "projected_content_digest": "8fa2c393676acd246b686d7a587ddc4720740354b012ed5de399c6f002cf834c",
+    "report_data_sha256": "4375773b51008482f1c93be40466f6e5880360b115e343042eafcf7f192bddcd",
+    "schema_version": "1007-accepted-source-projection-1",
+    "source_content_digest": "dcf6d665dace3322b39c8414d0ac07aa7ce624ab6ccf6e2cd6f9a91239e17881",
+    "source_fact_versions_columns": []
+  },
+  "code_pins": [
+    {
+      "path": "migrations/0018_snapshot_scoped_portal_consumers.sql",
+      "sha256": "3500f438a139a65ad6160aba4d95164f697e7308f442c5b888618a9a8db38618",
+      "bytes": 2105
+    },
+    {
+      "path": "package-manifest.json",
+      "sha256": "db882e3996f2c7d51df3224bd9ace8736d74f911ff01a907a366d02f556d1385",
+      "bytes": 6743
+    },
+    {
+      "path": "src/ci_workflow/application/c_portal_consumer_registry.py",
+      "sha256": "cca6a2e02578afc3ed6ccbae624765575329efe9a57c9597b246e4b9d796f5a5",
+      "bytes": 31573
+    },
+    {
+      "path": "src/ci_workflow/application/portal_consumer_registry.py",
+      "sha256": "5fb7014358ad6534b9300d55b0239166f25a0dc6d4f409bb51235b16d698a68f",
+      "bytes": 43071
+    },
+    {
+      "path": "src/ci_workflow/application/portal_consumer_binding_recovery.py",
+      "sha256": "e9d169eb49bb7309da27b4839aab9d5d247db09d92a7cd4c0dab5bbdead38ff1",
+      "bytes": 36234
+    },
+    {
+      "path": "src/ci_workflow/application/user_fact_edit.py",
+      "sha256": "025401b39ea46805a89286962364e2e18e6aa2bbb81d33a59f8e73cb4a7a9666",
+      "bytes": 92490
+    },
+    {
+      "path": "src/ci_workflow/application/b_efficacy_source_views.py",
+      "sha256": "e27fcf2f013bc7c7029e578566479df657b535dd74780d7f523aac3e42854964",
+      "bytes": 19220
+    },
+    {
+      "path": "src/ci_workflow/application/review_issuer.py",
+      "sha256": "f2b2762c167f1ca8326ef31c7cd949f39676b81457a4d5cb61a0b8d98e52c303",
+      "bytes": 24724
+    },
+    {
+      "path": "tools/materialize_ctgov_c_candidate.py",
+      "sha256": "bfe0902e3fc34738487ef474b05a842a71db9b0db8983ea54d60880c13cb55f6",
+      "bytes": 19859
+    }
+  ],
+  "source_acceptance_pins": [
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/inputs/c-source-review/corrected-content-v1.json",
+      "sha256": "dcf6d665dace3322b39c8414d0ac07aa7ce624ab6ccf6e2cd6f9a91239e17881",
+      "bytes": 1042228
+    },
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/state/scientific_review/C/epochs/e1/production_context.json",
+      "sha256": "a13b8e468fbe5803303dc637aaeb9313614d6e2037a944a4318e0767c54d872c",
+      "bytes": 196741
+    },
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/state/scientific_review/C/epochs/e1/review_request.json",
+      "sha256": "a0202c12bdca7ab42c2683d3acea98b9fac276eab5fd208feb28668fdba9b845",
+      "bytes": 230129
+    },
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/runs/c1-source-review/verdict.json",
+      "sha256": "bec98cfb4524a67a4b45e37581afe49b2bb9d271c3d971abde00290eff2e49aa",
+      "bytes": 279719
+    },
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/receipts/scientific_review/C/epochs/e1/receipt.json",
+      "sha256": "089cb0213e0a7eeb7b4701bcb0a4725f71e61a1db03936258c4935cc7fa07ee5",
+      "bytes": 4740
+    },
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/state/scientific_review/C/epochs/e1/issuance.json",
+      "sha256": "2500a418bdfc2232a4e6faa86aa70831da7f45ccb99ce408bb8d7cced4ec9024",
+      "bytes": 3638
+    },
+    {
+      "path": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/receipts/source_fact_acceptance/C/689eb49fee8bdf47540505befb9756baf3b6fba0330f74e463b37979bf584796.json",
+      "sha256": "e8c7e2109871d2a505c6991a207f0a4d40124e94a81e5d4f9e5e843c0aa0dce5",
+      "bytes": 21510
+    }
+  ],
+  "local_recovery_pins": [
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/prepare_corrected_candidate.py",
+      "sha256": "a32a00c8fc3bb1a89ee1f7763fc3566371f55ff1752993c9f8b06ab798c728aa",
+      "bytes": 9128
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/source-bound-display-repairs.json",
+      "sha256": "4d7f10ce218f64804024128b16d7c45b6dfd690881e32164a4c042b39ded958f",
+      "bytes": 16308
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/candidate-repair-receipt.json",
+      "sha256": "941a752fc760c7dfdb2c3fc1f0891827e1a48bb1ea133e3d1dfb86cf6e6cb7d9",
+      "bytes": 1432
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/project_accepted_source_slice.py",
+      "sha256": "98cd21d54a117f3f546464e1a3aa02117a1e48409e2d35614aac008865fc210b",
+      "bytes": 4435
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/accepted-source-report-data.json",
+      "sha256": "4375773b51008482f1c93be40466f6e5880360b115e343042eafcf7f192bddcd",
+      "bytes": 552429
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/accepted-source-gate-result.json",
+      "sha256": "09599797795e1b53623581a816b4866a3a42b7645ec215e16dc87a81577e94f9",
+      "bytes": 38843
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/accepted-source-projection-receipt.json",
+      "sha256": "965421437155b2fa49c1e26f4bdb60b263ce74647c869e189ba9a0a17092b796",
+      "bytes": 1538
+    },
+    {
+      "path": ".artifacts/1007-c-source-repairs-v1/formal-issuer-c1.log",
+      "sha256": "c18f5abaa09a5751e17f9552cfaa636ce19194e5de152641d6f97fe7a2896e8c",
+      "bytes": 443
+    }
+  ],
+  "verification": {
+    "materializer_family": "40 PASS50.81s",
+    "owner_consumer_current_related": "79 PASS107.51s",
+    "issuer_source_related": "45 PASS5.29s",
+    "strict": "6 affected files PASS; whole284 scope in gate log",
+    "initial_wide": "FAIL1+ERROR2/1182PASS: manifest omitted migration0018",
+    "package_related": "8 PASS213.70s including isolated runtime install",
+    "final_wide": "GATE_OK6",
+    "wide_scope": "Ruff src/tests/tools, strict src/tools, active unit+contract, retained smoke, layer, lexical legacy; not full release",
+    "source_review": "actual independent OMP source slice PASS",
+    "report_review": "NOT_RUN for new accepted projection",
+    "browser_four_width_four_state": "NOT_RUN: Ego replacement space question pending",
+    "new_final_three_host_install": "NOT_RUN",
+    "24_portals": "NOT_COMPLETE"
+  },
+  "execution_deviation": {
+    "primary_author": "CodeBuddy/deepseek-v4.1-flash; session01a11cb6-93da-7801-a34a-7b38fdd8c7ca recorded",
+    "fallback_verifier": "ZCode/GLM-5.3-Flash; sess_77161992-5c4a-4afd-85bf-397ff21b36ae,994.755s,36tools; no source authored",
+    "reason_conflict": "fallback no-resumable-session explanation contradicts recorded primary session; preserved, not endorsed",
+    "owner_extra_RED": "current cache stale after generation changes; repaired shared root",
+    "helper_failure": "projection receipt writer used status not outcome; preserved; read-only replay corrected, no repeated adoption"
+  },
+  "current_switched": false,
+  "full_report_accepted": false,
+  "release_accepted": false,
+  "no_cleanup": true,
+  "legacy_root_accessed": false,
+  "next_bounded_action": "Genuine new RED1failed6.74s: unsigned next report epoch hides old materialized source-read proof. Repair historical exact-source read under bounded E03 before moving real e1; NEW adoption/promotion remain current-only. Then new report candidate/review with new digest.",
+  "final_gate_log": {
+    "path": ".artifacts/1007-c-source-repairs-v1/final-development-gate.log",
+    "sha256": "f3c6657f18489e9f63998aafab24ac1f06ce34cc0168030f231eebf5270f54ac",
+    "bytes": 3168
+  }
+}

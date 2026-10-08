@@ -296,7 +296,7 @@ def render_review_preview(output: Path, *, rendered_at: datetime,
         for entry in snapshot["closure"]["sources"]
     }
     report = ReportCPortalData(
-        schema_version="1.0", report_version="r24-source-review-candidate",
+        schema_version="1.0", report_version="v0-r24-source-review-candidate",
         indication_id=inputs["indication_id"], indication=contract.indication,
         data_cutoff=contract.data_cutoff, products=products, trials=tuple(trials),
         observations=tuple(projection["observations"]),
