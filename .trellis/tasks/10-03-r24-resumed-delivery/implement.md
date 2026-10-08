@@ -1,5 +1,19 @@
 # Continuous implementation checkpoint
 
+## 1007C 历史来源证明与新报告隔离（2026-10-08，持续）
+
+方法仍execution+fresh bounded conference：共享来源授权由owner统一，独立
+模型只挑战新增读路，不重做临床/全页审阅。原1RED已修，CodeBuddy实际
+1399.781s单会话exit0，无fallback；ZCode新干净上下文652.308s/17PASS120.89s。
+Owner补反向授权与旧报告面独立性，62relatedPASS174.57s、Ruff/strict2及工具1。
+读路径绑定历史真实issuer/request/context/verdict/decision/ledger和精确snapshot，
+只读；NEW采用/晋级守卫未放宽。跳过未物化域不认定其回执有效，文档已收紧。
+Reviewer把untracked新测试空diff等同HEAD字节的推断已纠正，原报告保持；
+worker system3.14证据不计supported范围，ownerRED实际venv3.12，原件不改。
+Actual PN仍e1，下一新C2按正常renderer+现有snapshot/epoch请求生成，不重采
+258源、重跑旧AB、重做翻译/安装或重写历史。机器owner-source-proof-epoch-v1。
+无本轮宽门或browser/current/RC声明；不清未知资料，五用户修改保持。
+
 ## 1007C 真实独立来源采用及快照消费者修复（2026-10-08，持续，非暂停）
 
 方法：bounded execution+independent source conference；共享schema/current由

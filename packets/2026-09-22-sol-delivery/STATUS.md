@@ -20,12 +20,15 @@ compat20/0.85s、layer7/0.21s、Ruff及lexical旧路径；只签该源码质量�
 执行实际CodeBuddy作者→ZCode仅验证，有主会话却记录“未建会话”的备用原因
 矛盾，已记偏差；不伪称独立review。source review为真实独立OMP，二者不混签。
 [本批精确证据及下一动作](evidence/1007V1/owner-c-source-adoption-v1.json)。
-推进新报告前，新的C source-read接续反例真实RED1failed6.74s：合法开启新的
-未签报告epoch后，旧已物化源接受只读加载却强求新active回执而失败。旧源
-采用并未失效；实际项目仍在e1未推进，保护证明。现交单一有界E03修历史
-exact-source proof读取，preflight实际PASS后runner已启动，模型/完成以终态为准；
-不能让旧回执授权新来源/报告，未修前不冒称新C2完成。
-下一步根因修复/负向验证后再新报告投影、渲染和独立复核。
+新C source-read接续RED1failed6.74s已关闭：历史已物化精确来源证明可跨
+后续未签/未采用报告epoch只读重开，NEW采用/报告晋级仍只认本轮。单一
+E03实际CodeBuddy1399.781s/exit0无fallback；独立ZCode652.308s/exit0、
+17PASS120.89s。Owner补已签新报告拒绝重采旧源及旧门户变更不抹源证明，
+相关62PASS174.57s，Ruff/strict生产2及replay工具1PASS。本轮未再跑宽门，
+不借前批宽门覆盖新代码。未物化域仅结构检查后跳过、不授科学权威；匹配
+已采用证明完整失败关闭。实际PN仍e1、current未建；下一步正常渲染新C2，
+单独新摘要复核，不重采258源或回写旧站点。
+[根因关闭/精确恢复回执](evidence/1007V1/owner-source-proof-epoch-v1.json)。
 以下旧标题和在途是各批历史范围；“正式来源采用未跑”已被本批真实结果取代。
 
 2026-10-08：用户重新授权连续实施；Goal API实际active，非完成/RC。最新记录父47aaaebe7742398d3c1bc5b3a713ac5f0186ea20，生产源码c6dbb71；五用户修改保持。已完成导航修复/安装/r10分享不重跑，正式C当前仍未建立。

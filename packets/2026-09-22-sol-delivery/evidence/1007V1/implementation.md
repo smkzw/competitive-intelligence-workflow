@@ -1,5 +1,18 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 当前：dfe0a086后，来源证明跨轮次根因关闭，准备真实新报告
+
+已核实事实不应因新报告尚未签字而变成不可读；同时旧签字不能接受新报告。
+新增有界读取修复并保留current-only写入，CodeBuddy单会话实际完成，fresh
+ZCode独立审查未见范围内阻塞；owner62相关PASS覆盖两面。小工具复用正常
+snapshot/renderer/prepare-request，下一步生成新C2而不是复制旧PASS。
+
+坑：独立review把untracked测试的空tracked diff说成与HEAD相同，owner按实际
+Git成员纠正；worker误述ownerRED解释器，supported3.12证据单列，原件不改。
+新版工具预检发现int/string合同边界及MYPYPATH配置缺口，修后strict1PASS；
+没有因此扩大到反复全仓测试。历史验证器重复是明确维护项，当前不加平台。
+精确源码/hash/运行层见owner-source-proof-epoch-v1；未实屏、未current、未RC。
+
 ## 当前：d5adb2c5后，C来源真实采用/快照消费者根因关闭
 
 不另写规格或整批重译。独立OMP逐源258观察发现6处医学译义问题，而非

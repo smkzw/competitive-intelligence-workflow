@@ -1,0 +1,57 @@
+{
+  "schema_version": "1007-source-proof-epoch-owner-1",
+  "baseline_commit": "dfe0a0860a4e79802b7b7ee7c7dc180b9b50fb0d",
+  "scope": "readonly reopening of genuinely materialized exact source acceptance across report epochs",
+  "files": {
+    "src/ci_workflow/application/source_fact_acceptance.py": "b6464121152a5807f0c11a4a924d8577a856953452ead1207de4c5b09027c108",
+    "src/ci_workflow/application/c_portal_consumer_registry.py": "213e993ab42dd79a2c7e45a75c9a9b88a4f86b0e02cbaf7a415e4f2f7b40ac88",
+    "tests/integration/test_1007_source_proof_after_epoch.py": "88a8a4461fb55e14c4a74986e7d85413665de3e1a73fafa6a022b16410da84dd",
+    "tools/ci_1007_prepare_c_report_candidate.py": "77347195e73f606bf376e75ff85ce5f44ad47231610c5bee7a681bacd60d9f32"
+  },
+  "execution": {
+    "model": "deepseek-v4.1-flash",
+    "adapter": "codebuddy-cli",
+    "requested_effort": "max",
+    "session_id": "01a11d0f-f613-7bf6-9267-87b871b7e790",
+    "duration_seconds": 1399.781,
+    "exit_code": 0,
+    "fallback": null
+  },
+  "independent_review": {
+    "model": "GLM-5.3-Flash",
+    "adapter": "zcode",
+    "requested_effort": "max",
+    "session_id": "sess_e82c9b76-e070-42fb-a4f1-58ed1c6864fd",
+    "duration_seconds": 652.308,
+    "exit_code": 0,
+    "fallback": null,
+    "actual_test_count": 17,
+    "actual_test_seconds": 120.89,
+    "scope": "frozen source-reader code boundary, not medical/report/browser/release acceptance"
+  },
+  "owner_regression": {
+    "command": ".venv/bin/python -m pytest tests/integration/test_1007_source_proof_after_epoch.py tests/integration/test_r24_reviewed_c_read_projection.py tests/integration/test_r24_reviewed_source_fact_acceptance.py tests/integration/test_r24_scientific_review_epochs.py -q",
+    "result": "PASSED",
+    "passed": 62,
+    "seconds": 174.57,
+    "log_relative": ".artifacts/1007-c-source-repairs-v1/source-proof-owner-regression.log",
+    "additional_negatives": ["signed changed report cannot re-adopt old exact source", "old report surface changes do not erase historical source proof"],
+    "ruff": "changed source/test/tool PASS",
+    "strict": "production2 and replay_tool1 PASS",
+    "wide_gate": "NOT_RUN; previous committed milestone remains historical"
+  },
+  "boundaries": {
+    "new_source_adoption": "active epoch only, unchanged",
+    "new_report_promotion": "active epoch and fresh exact report proof only, unchanged",
+    "unmaterialized_scope": "JSON/digest-shape check then skip; no scientific authority granted",
+    "historical_expiry": "valid at original issuance/adoption; later expiry is not retroactive source revocation",
+    "source_snapshot_and_consumers": "caller reopens exact locked bytes and registered bindings",
+    "canonical_verifier_deduplication": "bounded maintenance follow-up, not a release blocker",
+    "old_project_and_user_files": "preserved; actual PN remains e1 at this receipt",
+    "browser": "NOT_RUN",
+    "report_current": "NOT_RUN",
+    "release": false
+  },
+  "next_safe_action": "Run tools/ci_1007_prepare_c_report_candidate.py once after committing source, then independently review new C2 report; do not re-adopt258 source facts or rerender historical C0/C1.",
+  "privacy": "public compact relative evidence only; runtime logs and original absolute-path prompts stay local"
+}

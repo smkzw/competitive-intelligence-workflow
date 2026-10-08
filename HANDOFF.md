@@ -29,9 +29,11 @@ C0否决六处医学译义；按原文修六处、其余252行及科学事实/�
   已记录主会话矛盾，已单独复盘，不借它宣称正常同会话恢复或独立临床review。
 
 [本批源码/源接受及恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-source-adoption-v1.json)。
-后续真实反例1RED：新报告epoch未签时，旧已采用源证明加载被active回执
-绑死。实际项目保持e1，未破坏旧证明；新E03有界修历史exact-source只读
-读取，NEW采用/报告仍只允许current epoch。修后再准备新报告候选、按新摘要复核。
+后续真实反例1RED已修：新报告epoch不再使历史已采纳精确源证明失读。
+Actual CodeBuddy单节点终态无fallback；fresh独立ZCode限定源码边界复核，
+owner62相关PASS174.57s、Ruff及strict生产2/工具1。NEW采用/报告仍只允许
+current epoch；实际PN暂保持e1，不重采来源。下一步正常新C2渲染与新摘要复核。
+[跨轮次来源证明/下一动作](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-proof-epoch-v1.json)。
 未切current，不以C1来源回执授权新报告；不重存旧A/B或整批重译。
 
 ## 已完成，恢复时不要重跑

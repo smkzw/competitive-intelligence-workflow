@@ -39,6 +39,10 @@
    落盘，作为持久意向；``idempotency_keys`` 与物化同一 SQLite 事务提交，
    作为物化完成证明；接受事件经既有 ``EventStore`` 追加。事件缺失（物化后
    崩溃）由同一回执重放补齐；同一回执重放幂等且不重复版本、不重复事件。
+7. 只读入口（``load_materialized_source_acceptance``）按已验证的 epoch 指针
+   链重开**已完成**的精确来源接受：后续报告纪元（未签发或已签发未物化）不
+   使历史接受失效，历史材料也不得代表新对象；本模块的写入入口始终只使用
+   当前活跃纪元，活跃纪元是产生新接受的唯一通道。
 
 失败关闭边界：任何拒绝都不改变旧 current、既有快照、权威上下文与无关候选；
 不重写历史快照 closure 的 review_state（接受是新决策，不是回填）。
@@ -68,26 +72,39 @@ from ci_workflow.application.fresh_research_primitives import (
     SourceCapture,
 )
 from ci_workflow.application.review_issuer import (
+    REVIEW_ISSUANCE_RECORD_KIND,
     ReviewIssuanceError,
+    review_issuance_record_path,
     verify_receipt_issuance,
 )
 from ci_workflow.application.scientific_review_transition import (
+    PortalArtifactBinding,
     ScientificReviewTransitionError,
     accepted_verdict_from_receipt,
     derive_scientific_source_refs,
     load_scientific_review_receipt,
+    production_context_publication_path,
     reload_production_context,
+    scientific_review_receipt_path,
+    scientific_review_request_path,
 )
 from ci_workflow.application.user_fact_edit import current_delivery_lock
+from ci_workflow.capabilities.scientific_qc import (
+    ScientificQcBoundaryError,
+    validate_scientific_qc_verdict_payload,
+)
 from ci_workflow.domain.evidence import (
     EvidenceFragmentRecord,
     source_version_identity,
 )
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.qc.review_receipt import (
+    ReviewProductionContext,
+    ScientificReviewReceipt,
     ScientificReviewReceiptError,
     bind_receipt_to_production_context,
     require_verified_review_receipt,
+    validate_scientific_review_receipt_payload,
 )
 from ci_workflow.qc.scientific import ScientificQcCurrentContext
 from ci_workflow.storage.content_store import (
@@ -97,6 +114,16 @@ from ci_workflow.storage.content_store import (
 )
 from ci_workflow.storage.event_store import EventStore, WorkflowEvent
 from ci_workflow.storage.migrations import apply_migrations
+from ci_workflow.storage.scientific_review_epoch import (
+    ScientificReviewEpochPointer,
+    ScientificReviewEpochStateError,
+    epoch_issuance_record_path,
+    epoch_production_context_path,
+    epoch_receipt_path,
+    epoch_review_request_path,
+    load_epoch_entry,
+    read_epoch_pointer,
+)
 from ci_workflow.storage.snapshot_store import (
     EvidenceSnapshotManifest,
     SnapshotIntegrityError,
@@ -1034,15 +1061,10 @@ def _verify_materialized_from_database(
             raise SourceFactAcceptanceError("边界声明状态与已记录决策不一致：拒绝重放")
 
 
-def _read_replay_decision(
-    *,
-    root: Path,
-    kind: ReportCode,
-    receipt_digest: str,
-    evidence_snapshot_id: str,
-    claim_snapshot_id: str | None,
-    ledger_result_digest: str,
-) -> ReviewedSourceFactAcceptanceResult:
+def _load_decision_record(
+    root: Path, kind: ReportCode, receipt_digest: str
+) -> tuple[_AcceptanceDecisionRecord, str, bytes]:
+    """只读重开按回执摘要寻址的接受决策记录；缺失/损坏/身份不符一律失败关闭。"""
     relative = source_fact_acceptance_decision_path(kind, receipt_digest).as_posix()
     path = root / relative
     if not path.is_file():
@@ -1054,11 +1076,23 @@ def _read_replay_decision(
         )
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, PydanticValidationError) as error:
         raise SourceFactAcceptanceError("接受决策记录不可读或损坏") from error
-    if (
-        record.report_kind != kind
-        or record.receipt_digest != receipt_digest
-        or record.evidence_snapshot_id != evidence_snapshot_id
-        or (claim_snapshot_id is not None and record.claim_snapshot_id != claim_snapshot_id)
+    if record.report_kind != kind or record.receipt_digest != receipt_digest:
+        raise SourceFactAcceptanceError("重放请求与已记录接受决策不一致")
+    return record, relative, encoded
+
+
+def _read_replay_decision(
+    *,
+    root: Path,
+    kind: ReportCode,
+    receipt_digest: str,
+    evidence_snapshot_id: str,
+    claim_snapshot_id: str | None,
+    ledger_result_digest: str,
+) -> ReviewedSourceFactAcceptanceResult:
+    record, relative, encoded = _load_decision_record(root, kind, receipt_digest)
+    if record.evidence_snapshot_id != evidence_snapshot_id or (
+        claim_snapshot_id is not None and record.claim_snapshot_id != claim_snapshot_id
     ):
         raise SourceFactAcceptanceError("重放请求与已记录接受决策不一致")
     result = _result_from_decision(
@@ -1090,17 +1124,326 @@ def _replay(
     return result
 
 
+# ── 跨报告纪元的历史精确来源接受（只读重开） ─────────────────────────────────
+
+
+@dataclass(frozen=True)
+class _ReviewScope:
+    """一个科学复核作用域的只读材料路径（epoch 0 既有单例或版本化纪元）。"""
+
+    epoch: int
+    receipt_relative: str
+    request_relative: str
+    context_relative: str
+    issuance_relative: str
+
+
+def _scope_for_epoch(kind: ReportCode, epoch: int) -> _ReviewScope:
+    if epoch == 0:
+        return _ReviewScope(
+            epoch=0,
+            receipt_relative=scientific_review_receipt_path(kind).as_posix(),
+            request_relative=scientific_review_request_path(kind).as_posix(),
+            context_relative=production_context_publication_path(kind).as_posix(),
+            issuance_relative=review_issuance_record_path(kind).as_posix(),
+        )
+    return _ReviewScope(
+        epoch=epoch,
+        receipt_relative=epoch_receipt_path(kind, epoch).as_posix(),
+        request_relative=epoch_review_request_path(kind, epoch).as_posix(),
+        context_relative=epoch_production_context_path(kind, epoch).as_posix(),
+        issuance_relative=epoch_issuance_record_path(kind, epoch).as_posix(),
+    )
+
+
+def _historical_review_scopes(
+    root: Path, kind: ReportCode
+) -> tuple[ScientificReviewEpochPointer | None, tuple[_ReviewScope, ...]]:
+    """按“活跃纪元 → 历史纪元（新到旧）→ 隐式 epoch 0”枚举只读作用域。
+
+    枚举只来自已激活的 epoch 指针链（损坏即失败关闭），不扫描目录、不按
+    文件名先后猜测；新纪元优先的确定性顺序保证同一科学事实存在多条合法
+    决策时结果唯一。epoch 0 是既有单例布局的隐式纪元，永远最后考察。
+    """
+    try:
+        pointer = read_epoch_pointer(root, kind)
+    except ScientificReviewEpochStateError as error:
+        raise SourceFactAcceptanceError(f"科学复核 epoch 指针无效：{error}") from error
+    epochs = [entry.epoch for entry in reversed(pointer.epochs)] if pointer else []
+    epochs.append(0)
+    return pointer, tuple(_scope_for_epoch(kind, epoch) for epoch in epochs)
+
+
+def _read_scope_json(root: Path, relative: str, label: str) -> dict[str, Any]:
+    path = root / relative
+    if not path.is_file():
+        raise SourceFactAcceptanceError(f"{label}缺失：{relative}")
+    try:
+        raw = json.loads(path.read_bytes().decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise SourceFactAcceptanceError(f"{label}不可读或不是有效 JSON") from error
+    if not isinstance(raw, dict):
+        raise SourceFactAcceptanceError(f"{label}根节点必须是对象")
+    return raw
+
+
+def _load_scope_receipt(
+    root: Path, scope: _ReviewScope, kind: ReportCode
+) -> ScientificReviewReceipt:
+    """重开一个作用域的回执并过既有授权门；任何漂移失败关闭。"""
+    raw = _read_scope_json(root, scope.receipt_relative, "独立复核回执")
+    try:
+        receipt = validate_scientific_review_receipt_payload(raw)
+    except ScientificReviewReceiptError as error:
+        raise SourceFactAcceptanceError(f"独立复核回执验证失败：{error}") from error
+    if receipt.production.report_kind != kind:
+        raise SourceFactAcceptanceError("独立复核回执报告类型与其所在作用域不一致")
+    try:
+        require_verified_review_receipt(receipt, project_root=root)
+    except ScientificReviewReceiptError as error:
+        raise SourceFactAcceptanceError(f"独立复核回执未通过授权门：{error}") from error
+    return receipt
+
+
+def _verify_scope_lifecycle(
+    *,
+    root: Path,
+    kind: ReportCode,
+    scope: _ReviewScope,
+    pointer: ScientificReviewEpochPointer | None,
+    receipt: ScientificReviewReceipt,
+    decision: _AcceptanceDecisionRecord,
+) -> None:
+    """重开该作用域的签发记录/请求/权威上下文/结论，并绑定到精确快照。
+
+    有效性只在**原始签发与接受时刻**判定：结论有效期必须覆盖回执签发与接受
+    物化时间；之后的时间流逝（含有效期已过）不追溯否定已经完成的合法接受。
+    请求的门户字节属于报告复核面，不构成精确来源接受的科学权威，因此本只读
+    入口不因报告门户随后被合法替换而否定历史来源接受；请求自身字节、生产身份
+    与上下文绑定仍逐项重验。
+    """
+    request_payload = _read_scope_json(root, scope.request_relative, "科学复核请求")
+    request_digest = request_payload.pop("request_digest", None)
+    if not isinstance(request_digest, str) or request_digest != _scoped_digest(
+        request_payload
+    ):
+        raise SourceFactAcceptanceError("科学复核请求摘要漂移：请求已被篡改或损坏")
+    scientific_context = request_payload.get("scientific_context")
+    if (
+        not isinstance(scientific_context, dict)
+        or scientific_context.get("context_digest")
+        != receipt.production.production_context_digest
+    ):
+        raise SourceFactAcceptanceError("科学复核请求不属于该回执的生产上下文")
+    try:
+        request_production = ReviewProductionContext.model_validate(
+            request_payload.get("production")
+        )
+    except PydanticValidationError as error:
+        raise SourceFactAcceptanceError(f"科学复核请求生产身份无效：{error}") from error
+    if request_production != receipt.production:
+        raise SourceFactAcceptanceError("科学复核请求生产身份与回执不一致")
+    review_input_digest = request_payload.get("review_input_digest")
+    if (
+        not isinstance(review_input_digest, str)
+        or _SHA256.fullmatch(review_input_digest) is None
+    ):
+        raise SourceFactAcceptanceError("科学复核请求缺少有效审阅输入摘要")
+    portal_binding = request_payload.get("portal_binding")
+    if not isinstance(portal_binding, dict):
+        raise SourceFactAcceptanceError("科学复核请求缺少门户产物绑定")
+    try:
+        PortalArtifactBinding.model_validate(portal_binding)
+    except (PydanticValidationError, ValueError) as error:
+        raise SourceFactAcceptanceError(f"复核请求门户产物绑定无效：{error}") from error
+
+    issuance_payload = _read_scope_json(root, scope.issuance_relative, "真实签发记录")
+    if issuance_payload.get("record_kind") != REVIEW_ISSUANCE_RECORD_KIND:
+        raise SourceFactAcceptanceError("真实签发记录类别无效")
+    record_digest = issuance_payload.pop("record_digest", None)
+    if not isinstance(record_digest, str) or record_digest != _scoped_digest(
+        issuance_payload
+    ):
+        raise SourceFactAcceptanceError("真实签发记录摘要漂移：记录已被篡改或损坏")
+    if issuance_payload.get("request_digest") != request_digest:
+        raise SourceFactAcceptanceError("签发记录不属于该科学复核请求")
+    receipt_payload = receipt.model_dump(mode="json")
+    expected: tuple[tuple[str, object], ...] = (
+        ("receipt_digest", receipt.receipt_digest),
+        ("report_kind", kind),
+        ("host", receipt_payload["host"]),
+        ("reviewer_id", receipt_payload["review"]["reviewer_id"]),
+        ("issued_at", receipt_payload["issued_at"]),
+        ("process", receipt_payload["review"]["process"]),
+        ("artifact", receipt_payload["artifact"]),
+    )
+    for field, value in expected:
+        if issuance_payload.get(field) != value:
+            raise SourceFactAcceptanceError(
+                f"真实签发记录与回执的 {field} 不一致：回执可能已被替换"
+            )
+
+    context_raw = _read_scope_json(root, scope.context_relative, "权威生产上下文")
+    stored_digest = context_raw.get("context_digest")
+    payload = {key: value for key, value in context_raw.items() if key != "context_digest"}
+    try:
+        context = ScientificQcCurrentContext.model_validate(payload)
+    except (PydanticValidationError, ValueError) as error:
+        raise SourceFactAcceptanceError(f"权威生产上下文重建失败：{error}") from error
+    if stored_digest != context.context_digest:
+        raise SourceFactAcceptanceError(
+            "权威生产上下文摘要与物化内容不一致：文件已被篡改或损坏"
+        )
+    try:
+        bind_receipt_to_production_context(receipt, context)
+    except ScientificReviewReceiptError as error:
+        raise SourceFactAcceptanceError(
+            f"回执与该纪元权威生产上下文不一致：{error}"
+        ) from error
+    if decision.project_id != context.project_id:
+        raise SourceFactAcceptanceError("接受决策项目与该纪元权威上下文不一致")
+    expected_coverage_set_id = stable_id(
+        "coverage-set",
+        context.project_id,
+        kind,
+        decision.evidence_snapshot_id,
+        decision.claim_snapshot_id,
+    )
+    if context.coverage_set_id != expected_coverage_set_id:
+        raise SourceFactAcceptanceError("接受决策快照与该纪元权威上下文覆盖集合不一致")
+    if scope.epoch >= 1:
+        if pointer is None:
+            raise SourceFactAcceptanceError("epoch 指针缺失：版本化纪元材料失去绑定")
+        try:
+            entry = load_epoch_entry(pointer, scope.epoch)
+        except ScientificReviewEpochStateError as error:
+            raise SourceFactAcceptanceError(f"epoch 指针缺少该纪元条目：{error}") from error
+        if (
+            entry.context_digest != context.context_digest
+            or pointer.project_id != context.project_id
+        ):
+            raise SourceFactAcceptanceError("epoch 指针与该纪元权威上下文绑定不一致")
+
+    artifact = receipt.artifact
+    if artifact is None:  # require_verified_review_receipt 已拒绝；保留类型收窄
+        raise SourceFactAcceptanceError("独立复核回执缺少科学质控结论产物")
+    verdict_raw = _read_scope_json(root, artifact.path, "科学质控结论产物")
+    try:
+        verdict = validate_scientific_qc_verdict_payload(verdict_raw)
+    except ScientificQcBoundaryError as error:
+        raise SourceFactAcceptanceError(f"科学质控结论产物验证失败：{error}") from error
+    agreement: tuple[tuple[object, object, str], ...] = (
+        (verdict.project_id, context.project_id, "项目"),
+        (verdict.contract_version, context.contract_version, "合同版本"),
+        (verdict.report_kind, context.report_kind, "报告类型"),
+        (verdict.report_version, context.report_version, "报告版本"),
+        (verdict.report_object_id, context.report_object_id, "报告对象"),
+        (verdict.candidate_snapshot_id, context.candidate_snapshot_id, "候选快照"),
+        (
+            verdict.candidate_content_digest,
+            context.candidate_content_digest,
+            "候选内容摘要",
+        ),
+        (verdict.criteria_version, context.criteria_version, "标准版本"),
+        (verdict.gate_result_key, context.gate_result_key, "门槛结果键"),
+        (verdict.coverage_set_id, context.coverage_set_id, "覆盖集"),
+        (verdict.coverage_digest, context.coverage_digest, "覆盖摘要"),
+        (verdict.source_refs, context.source_refs, "来源引用"),
+        (verdict.locators, context.locators, "来源定位"),
+        (verdict.review_input_digest, review_input_digest, "审阅输入摘要"),
+        (receipt.content.review_input_digest, review_input_digest, "回执审阅输入摘要"),
+        (verdict.reviewer_id, receipt.review.reviewer_id, "独立审查者"),
+    )
+    for verdict_value, current_value, label in agreement:
+        if verdict_value != current_value:
+            raise SourceFactAcceptanceError(
+                f"科学质控结论{label}与该纪元权威材料不一致"
+            )
+    if verdict.verdict != "accepted" or verdict.has_blocking_issues():
+        raise SourceFactAcceptanceError("科学质控结论未接受该纪元候选")
+    if not (
+        receipt.review.process.started_at
+        <= verdict.reviewed_at
+        <= receipt.review.process.finished_at
+    ):
+        raise SourceFactAcceptanceError("科学质控结论时间不在独立复核进程内")
+    if verdict.valid_until <= receipt.issued_at:
+        raise SourceFactAcceptanceError("科学质控接受结论在回执签发时已失效")
+    if decision.accepted_at < receipt.issued_at:
+        raise SourceFactAcceptanceError("接受决策时间早于回执签发时间")
+    if verdict.valid_until <= decision.accepted_at:
+        raise SourceFactAcceptanceError("科学质控接受结论在来源接受物化时已失效")
+
+
+def _reopen_scope_decision(
+    database: sqlite3.Connection,
+    *,
+    root: Path,
+    kind: ReportCode,
+    evidence_snapshot_id: str,
+    scope: _ReviewScope,
+    pointer: ScientificReviewEpochPointer | None,
+) -> ReviewedSourceFactAcceptanceResult | None:
+    """在一个作用域内重开与请求快照完全一致且已完成物化的接受决策。
+
+    返回 ``None`` 表示该作用域没有针对该精确快照的已完成接受（未签发、已
+    签发但未物化或决策属于其他快照）：跳过不改变任何材料，也不构成该纪元
+    对其他对象的授权。尚无完成台账的回执仅核验 JSON 和摘要格式后跳过，
+    不据此认定其科学性；声明已完成接受的材料须完整核验，漂移失败关闭。
+    """
+    receipt_path = root / scope.receipt_relative
+    if not receipt_path.is_file():
+        return None
+    claimed = _read_scope_json(root, scope.receipt_relative, "独立复核回执")
+    receipt_digest = claimed.get("receipt_digest")
+    if not isinstance(receipt_digest, str) or _SHA256.fullmatch(receipt_digest) is None:
+        raise SourceFactAcceptanceError("独立复核回执摘要缺失或不是小写 SHA-256")
+    ledger = _ledger_result_digest_from_database(database, f"{_OPERATION}:{receipt_digest}")
+    if ledger is None:
+        # 已签发但未物化：不是候选，也不允许该纪元的材料代表其他快照。
+        return None
+    receipt = _load_scope_receipt(root, scope, kind)
+    if receipt.receipt_digest != receipt_digest:
+        raise SourceFactAcceptanceError("独立复核回执摘要与载荷不一致：回执已被替换")
+    record, relative, encoded = _load_decision_record(root, kind, receipt_digest)
+    if record.evidence_snapshot_id != evidence_snapshot_id:
+        return None
+    result = _result_from_decision(
+        record, relative=relative, decision_digest=_sha256_bytes(encoded)
+    )
+    if _digest(result.model_dump(mode="json")) != ledger:
+        raise SourceFactAcceptanceError("重放结果与已记录接受台账摘要不一致")
+    _verify_scope_lifecycle(
+        root=root,
+        kind=kind,
+        scope=scope,
+        pointer=pointer,
+        receipt=receipt,
+        decision=record,
+    )
+    return result
+
+
 # ── 公开入口 ─────────────────────────────────────────────────────────────────
 
 
 def load_materialized_source_acceptance(
     *, project_root: Path, report_kind: str, evidence_snapshot_id: str,
 ) -> ReviewedSourceFactAcceptanceResult:
-    """只读重开活跃回执已物化的精确接受决策，不接受新事实或修补事件。
+    """只读重开与精确证据快照完全一致且已完成物化的来源接受决策。
 
-    复用接受/重放的同一决策摘要与物化校验；不迁移、不加锁写入、不 checkpoint
-    SQLite、不追加事件，也不改历史快照。调用者仍须核验自己的精确快照和消费者。
-    返回既往已完成的授权，不是新的医学复核或整个报告的接受。
+    活跃 epoch 仍是唯一可写入的作用域，但已经完成的精确来源接受不因后续
+    报告纪元（未签发或已签发未物化）而失效：按“活跃纪元 → 历史纪元（新到
+    旧）→ 隐式 epoch 0”的确定性顺序，逐作用域重开回执、真实签发记录、复核
+    请求、权威生产上下文、独立结论、接受决策、幂等台账与已物化状态，全部
+    绑定到请求的精确项目/报告/快照后才返回；同一科学事实存在多条合法决策
+    时取最新纪元，结果唯一。未签发、未物化或决策属于其他快照的作用域被
+    跳过。未物化作用域仅核验回执 JSON 和摘要格式，不认定该回执有效；已声明
+    完成物化的匹配作用域须完整核验，损坏材料与损坏的 epoch 指针失败关闭。
+
+    本入口既不产生新决策，也不加锁写入、不追加事件、不迁移、不改写指针或
+    任何既有字节：它只返回既往已完成的授权，不是新的医学复核或整个报告的
+    接受。调用者仍须核验自己的精确快照和消费者。
     """
     kind = _validated_kind(report_kind)
     evidence_id = _validated_identifier(evidence_snapshot_id, "证据快照")
@@ -1108,28 +1451,25 @@ def load_materialized_source_acceptance(
     database_path = root / "state/project.sqlite"
     if not database_path.is_file():
         raise SourceFactAcceptanceError("项目科学真源缺失：不能读取接受决策")
-    try:
-        receipt = load_scientific_review_receipt(root, kind)
-    except ScientificReviewTransitionError as error:
-        raise SourceFactAcceptanceError(f"活跃独立复核回执不可用：{error}") from error
+    pointer, scopes = _historical_review_scopes(root, kind)
     try:
         database = sqlite3.connect(database_path.as_uri() + "?mode=ro", uri=True)
         try:
             database.execute("BEGIN")
-            digest = _ledger_result_digest_from_database(
-                database, f"{_OPERATION}:{receipt.receipt_digest}",
-            )
-            if digest is None:
-                raise SourceFactAcceptanceError("来源事实接受尚未物化：拒绝隐式接受")
-            result = _read_replay_decision(
-                root=root, kind=kind, receipt_digest=receipt.receipt_digest,
-                evidence_snapshot_id=evidence_id, claim_snapshot_id=None,
-                ledger_result_digest=digest,
-            )
-            if result.project_id != receipt.production.project_id:
-                raise SourceFactAcceptanceError("接受决策与活跃回执项目不一致")
-            _verify_materialized_from_database(database, result)
-            return result
+            for scope in scopes:
+                result = _reopen_scope_decision(
+                    database,
+                    root=root,
+                    kind=kind,
+                    evidence_snapshot_id=evidence_id,
+                    scope=scope,
+                    pointer=pointer,
+                )
+                if result is None:
+                    continue
+                _verify_materialized_from_database(database, result)
+                return result
+            raise SourceFactAcceptanceError("来源事实接受尚未物化：拒绝隐式接受")
         finally:
             database.close()
     except sqlite3.Error as error:
