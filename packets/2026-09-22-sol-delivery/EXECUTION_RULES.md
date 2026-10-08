@@ -4,6 +4,15 @@
 
 ## 1. 工作单位与权限
 
+本批正文execution-plus-conference：writer有界提取冻结两原件，fresh不同
+模型挑战科学语境；不读writer私人推理。生成route字面不同但同模型族时，
+在首次派发前选live允许alternative并留原因，不把不同transport算独立意见。
+终态后同会话定点返修复核共用剩余预算；两REVISE保留，owner只关闭明确
+原格/标签条件，不改签新digest。163原文holding与医学采用分开。Storage
+XML/PDF根因由owner执行：可确定locator/quote证据无需再派医学审查；成族
+RED→完整修改→相关122GREEN。当批稳定宽门只一次，后发现的PDF小族不
+借旧宽门、不逐改重跑全仓，准确记录其静态和邻接范围。
+
 当前纯呈现节点采用execution：共同服务两路径有界代码与owner资料工作可
 分离；owner补公开CLI/相邻源明细检查并整合实际byte/current证明。来源精确
 等值与事务属于可确定验证，本单元不宣称医学或视觉独立接受。节点等待

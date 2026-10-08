@@ -1,0 +1,148 @@
+{
+  "schema_version": "1007-publication-atoms-holding-1",
+  "parent_commit": "eed9ebb22b766ac64a71c3f15271ccd95d49fb52",
+  "state": "continuous_implementation_holding_not_medical_adoption",
+  "execution": {
+    "task": "ci-1007-publication-atoms-v1",
+    "actual_model": "grok-build/grok-4.7-build",
+    "effort_requested": "high",
+    "response_effort_attested": false,
+    "session": "13627831-2590-4fc8-b4c6-618ce49a9592",
+    "duration_seconds": 787.689,
+    "model_calls": 31,
+    "returncode": 0,
+    "fallback": null
+  },
+  "conference": {
+    "task": "ci-1007-publication-atoms-review-v1",
+    "actual_provider": "openai-codex",
+    "actual_model": "gpt-6.1-sol",
+    "effort_requested": "high",
+    "response_effort_attested": false,
+    "session": "01a11982-3005-7000-8dae-7ae2df6bcc3b",
+    "model_independence": "generated same-family primary excluded before first dispatch; explicitly selected live approved alternative",
+    "rounds": [
+      {
+        "candidate": "v2",
+        "seconds": 391.036,
+        "tools": 63,
+        "verdict": "REVISE"
+      },
+      {
+        "candidate": "v3",
+        "seconds": 247.419,
+        "tools": 23,
+        "verdict": "REVISE"
+      }
+    ],
+    "returncodes": [
+      0,
+      0
+    ],
+    "fallback": null,
+    "owner_v4": "literal conditional fixes only; no independent ACCEPT for new digest"
+  },
+  "files": [
+    {
+      "path": "src/ci_workflow/storage/content_store.py",
+      "sha256": "cdfd96aeb689e9278bf56e3fe4fba7605371050be80e56bdfea9f19500bf393c"
+    },
+    {
+      "path": "tests/integration/sources/test_1007_jats_fragment_reopen.py",
+      "sha256": "4581298465751f31b64480dfa7547865400f90ed2ab9f81da48e4f8ec3ee3183"
+    },
+    {
+      "path": "tools/materialize_pdf_scope_candidate.py",
+      "sha256": "556dc10f98f7b4259a21a442cd7224ad5138485495bf0b6148d0f11a2fb6a338"
+    },
+    {
+      "path": "tests/integration/test_r24_pdf_scope_materialization.py",
+      "sha256": "bf1e6970fa821e86239d71dd149907a2e5f494fa016a147043205c463d85c744"
+    },
+    {
+      "path": ".artifacts/1007-publication-atoms-v1/candidate-v4.json",
+      "sha256": "6e545087d448f04b49046327ee9628c5c574447337320e254e6a88a3947f1c82"
+    },
+    {
+      "path": ".artifacts/1007-publication-atoms-v1/evidence-checkpoint.json",
+      "sha256": "6af206face5d9ebdf18cf9057ae01ccd9ba84663610e1f2dec86c6a63105d4a3"
+    },
+    {
+      "path": ".artifacts/1007-publication-atoms-v1/evidence-library/state/project.sqlite",
+      "sha256": "82371710ec1c79749b464b5b3ca63233f3837e83160b81bfe01bb3312f3d0621"
+    },
+    {
+      "path": "runs/execution/ci-1007-publication-atoms-v1/worker_01.md",
+      "sha256": "b6629a36bb5113125fb9104924addfe10f464b80520eb6607e01b1c826fe8356"
+    },
+    {
+      "path": "runs/conference/ci-1007-publication-atoms-review-v1/evidence_single_object.md",
+      "sha256": "77d595cefdaaa04a287a35795f50d47380c74e592a935586b873db8a24e5f9f6"
+    },
+    {
+      "path": "runs/conference/ci-1007-publication-atoms-review-v1/evidence_single_object_round2.md",
+      "sha256": "9dddb5ca6f4d14a3a75ca3183a4919b5796860198818c1282535baba937bced4"
+    }
+  ],
+  "holding": {
+    "facts_in_proposal": 118,
+    "dupilumab_materials": 51,
+    "nemolizumab_materials": 67,
+    "reference_occurrences": 1267,
+    "unique_reopened_fragments": 163,
+    "source_versions": 4,
+    "source_date_assertions": 16,
+    "scientific_fact_versions": 0,
+    "user_edits": 0,
+    "current": 0,
+    "parent_pins_unchanged": true
+  },
+  "red": {
+    "xml": "8 true RED0.37s; initial8 invalid-fixture errors not product RED",
+    "pdf": "adjacent1FAIL34PASS2.84s; two historical clauses have boundary space, pinned proposal unchanged; family3RED1positive0.70s",
+    "test_fixture_correction": "first repair3FAIL119PASS5.29s: new assertion read closure outer level rather than fact, not product regression"
+  },
+  "related": {
+    "command": ".venv/bin/pytest tests/unit/test_r24_json_fragment_reopen.py tests/integration/test_r24_pdf_page_ingestion.py tests/integration/test_r24_pdf_scope_materialization.py tests/integration/sources/test_1007_jats_fragment_reopen.py tests/unit/test_content_store.py tests/integration/test_source_text_derivation.py tests/integration/sources/test_1007_jats_publication_date.py tests/integration/sources/test_r24_linked_jats_capture.py tests/integration/sources/test_r24_jats_exact_locator.py -q --tb=short",
+    "passed": 122,
+    "seconds": 4.9,
+    "skipped": 0,
+    "returncode": 0,
+    "terminal_chunk": "c428e8",
+    "ruff": "four affected files PASS",
+    "strict": "two production files PASS"
+  },
+  "wide_gate": {
+    "command": "bash tools/gate.sh",
+    "returncode": 0,
+    "terminal_chunk": "8e2265",
+    "status": "quality-only",
+    "steps": 6,
+    "strict_source_files": 283,
+    "active_passed": 1185,
+    "active_seconds": 244.86,
+    "retained_compat_passed": 20,
+    "retained_compat_seconds": 1.15,
+    "layer_passed": 7,
+    "layer_seconds": 0.18,
+    "source_set_sha256": "badf7ac6f4e2a1ec12275996fdba9292895042dcde6bf16669f1a9432e42e68c",
+    "input_files": 822,
+    "source_set_file": "owner-publication-atoms-wide-source-set-v1.json",
+    "coverage_limit": "gate ended BEFORE PDF materializer/test repair; those later2files covered by related122 and static checks, not this wide gate; no full integration/browser/science/release"
+  },
+  "historical_pdf_proposal": {
+    "path": ".artifacts/r24-150-pdf-complete-scope-20261003/proposal-v6.json",
+    "sha256": "e152c0c3e3a10dd5842b0aa71c8d0fb2b7b68821bf0c8822e635597ed93b349e",
+    "bytes_unchanged": true,
+    "real_clauses_reopened": 64,
+    "accepted": false
+  },
+  "policy_question": "native multiple-choice publication current acquisition availability Ask still pending; do not extend approved protocol/SAP exception",
+  "scientific_acceptance": false,
+  "whole_research_package": false,
+  "numerical_equivalence": false,
+  "current_modified": false,
+  "browser": "NOT_RUN Ego Lite space12 unavailable, no substitution",
+  "release_acceptance": false,
+  "next": "exact source-scoped study identity and ready C/comparison; no false universe closure or milestone pause"
+}

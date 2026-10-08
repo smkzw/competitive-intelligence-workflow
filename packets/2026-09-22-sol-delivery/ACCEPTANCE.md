@@ -2,6 +2,12 @@
 
 ## 1007V1 当前新增合同（不是外部cases.json的替代原件）
 
+来源库重开：XML两种MIME，inline有效quote正向，错误/缺失/过粗locator
+反向；JSON原有精确守卫保持。PDF提案边缘space/newline/tab可按实际源quote
+持久化，但内部数值改写必须拒绝，原proposal bytes/hash不改。真实64条
+原生提案重开与两篇118条候选/163片段重开分别记录，后一没有科学fact/
+current。会商REVISE原判定保留；owner条件关闭不能伪签新digest独立ACCEPT。
+
 原生论文日期：默认capture不变、opt-in电子完整日/现代旧写法、同日重复/
 冲突/非法/部分日期、身份/实体拒绝、metadata-only无capture成族验。日期
 定位须走生产精确重提取并核对原年月日，不只测试自己写的XML路径函数；

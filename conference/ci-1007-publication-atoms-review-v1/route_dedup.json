@@ -1,0 +1,81 @@
+{
+  "policy": "execution-used-route-identities-are-excluded-from-conference",
+  "linked_execution_task_id": "ci-1007-publication-atoms-v1",
+  "linked": true,
+  "execution_evidence": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-1007-publication-atoms-v1/worker_01_stdout.txt"
+  ],
+  "excluded_route_nodes": [
+    {
+      "agent": "grok",
+      "provider": "grok-build",
+      "model": "grok-4.7",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-1007-publication-atoms-v1/worker_01_stdout.txt",
+      "reason": "effective execution route"
+    }
+  ],
+  "effective_conference_roles": {
+    "evidence_single_object": {
+      "agent": "pi",
+      "provider": "openai-codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "default_provider": "grok-build",
+      "default_model": "grok-4.7",
+      "default_effort": "high",
+      "escalate_provider": "grok-build",
+      "escalate_model": "grok-4.7",
+      "escalate_effort": "high",
+      "primary": {
+        "agent": "pi",
+        "provider": "openai-codex",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      },
+      "fallbacks": [],
+      "owner_selection": "Before any reviewer launch, select original live approved fallback gpt-6.1-sol/high. Generated Cursor Grok4.7-high is same writer model family; do not claim a different-model opinion by transport. Global route policy unchanged.",
+      "execution_route": "grok/grok-build/grok-4.7:high -> pi/cursor/grok-4.7-high:high -> pi/openai-codex/gpt-6.1-sol:high",
+      "node_id": "C03",
+      "role": "重要证据审阅",
+      "fallback_only": true,
+      "tools_enabled": true,
+      "skills_enabled": true,
+      "schedule": {
+        "policy": "beijing-daily-peak-off-peak-v3",
+        "timezone": "Asia/Shanghai",
+        "period": "peak",
+        "period_label": "高峰",
+        "peak_start": "11:00",
+        "peak_end": "19:00",
+        "days": "all",
+        "evaluated_at": "2026-10-08T11:11:40.859160+08:00"
+      },
+      "schedule_constraints": {
+        "policy": "live-route-manifest-v1",
+        "evaluated_at": "2026-10-08T11:11:40.859160+08:00",
+        "explicit_route": false,
+        "events": [],
+        "route_rewritten": false
+      },
+      "route_contract_frozen": true,
+      "deduplicated_against_execution": [
+        {
+          "agent": "grok",
+          "provider": "grok-build",
+          "model": "grok-4.7"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "policy": "beijing-daily-peak-off-peak-v3",
+    "timezone": "Asia/Shanghai",
+    "period": "peak",
+    "period_label": "高峰",
+    "peak_start": "11:00",
+    "peak_end": "19:00",
+    "days": "all",
+    "evaluated_at": "2026-10-08T11:11:40.859160+08:00"
+  },
+  "generated_at": "2026-10-08 11:11:40 CST"
+}

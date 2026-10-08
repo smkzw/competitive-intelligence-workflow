@@ -1,5 +1,26 @@
 # Continuous implementation checkpoint
 
+## 1007V1 原生论文数值候选（parent eed9ebb，终态/有界原文holding）
+
+采用execution-plus-conference：两精确正文主要结局/长期安全性语境提取独立
+有界单文件，科学人群/期别/分母/数值形式仍有解释边界，候选冻结后需要
+新上下文医学挑战。不重做已接受分类，不伪当前可得/宇宙闭包，不写源库/
+facts/current。明确来源及精确生产quote重放，owner统一科学身份与最终采用。
+
+E08 actual Grok4.7-build/high请求未attest，787.689s/no fallback；109提案。
+不同模型fresh C03 actual Pi/openai-codex/gpt-6.1-sol/high未attest，391.036s
+及同会话247.419s两轮REVISE保留。Owner按原格修LTE时间/单位/EAIR、binary
+ICE、重度总计/脚注，续轮发现新增重度复制残留；v4只按指定条件闭5指针/
+9标签/coverage51+67，不伪独立ACCEPT。118typed/1267引用/163独特原文在
+新holding库重开，4version16日期0fact/current，原库/pins不变。
+Owner追相邻边界：XML全文包含8真实RED→精确locator；PDF64条真实重开
+一FAIL定位两段末尾空白，新增3RED/1positive→源quote入库，原提案不改。
+首修回归3FAIL119PASS是测试读错closure外层而非产品，修测试实际字段后
+最终九文件122PASS4.90s/Ruff4/strict2。宽门在PDF修复前quality-only6终态
+通过，strict283/1185PASS244.86s/兼容20/层级7/词法；不覆盖后来PDF两文件
+或全集成/科学/视觉。机器清单owner-publication-atoms-v1.json。无暂停，下一
+源限定研究身份/就绪C及横比；论文获取Ask未答不得绕门。
+
 ## 1007V1 显式论文日期小族（parent e87d8e2，终态有界整合）
 
 采用execution：原生JATS精确日期提取两路径可与owner来源叶绑定分离，

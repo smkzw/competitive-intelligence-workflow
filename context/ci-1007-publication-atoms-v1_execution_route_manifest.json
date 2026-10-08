@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "policy": "beijing-daily-peak-off-peak-v3",
+  "timezone": "Asia/Shanghai",
+  "peak_start": "11:00",
+  "peak_end": "19:00",
+  "days": "all",
+  "period_labels": {
+    "peak": "高峰",
+    "off_peak": "非高峰"
+  },
+  "packet_period": "off_peak",
+  "packet_evaluated_at": "2026-10-08T10:54:52.173119+08:00",
+  "variants": {
+    "peak": {
+      "agent": "grok",
+      "provider": "grok-build",
+      "model": "grok-4.7",
+      "effort": "high",
+      "default_provider": "grok-build",
+      "default_model": "grok-4.7",
+      "default_effort": "high",
+      "escalate_provider": "grok-build",
+      "escalate_model": "grok-4.7",
+      "escalate_effort": "high",
+      "primary": {
+        "agent": "grok",
+        "provider": "grok-build",
+        "model": "grok-4.7",
+        "effort": "high"
+      },
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "grok-4.7-high",
+          "effort": "high"
+        },
+        {
+          "agent": "codex-subagent",
+          "provider": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "max"
+        }
+      ],
+      "execution_route": "grok/grok-build/grok-4.7:high -> pi/cursor/grok-4.7-high:high -> codex-subagent/codex/gpt-6.1-sol:max"
+    },
+    "off_peak": {
+      "agent": "grok",
+      "provider": "grok-build",
+      "model": "grok-4.7",
+      "effort": "high",
+      "default_provider": "grok-build",
+      "default_model": "grok-4.7",
+      "default_effort": "high",
+      "escalate_provider": "grok-build",
+      "escalate_model": "grok-4.7",
+      "escalate_effort": "high",
+      "primary": {
+        "agent": "grok",
+        "provider": "grok-build",
+        "model": "grok-4.7",
+        "effort": "high"
+      },
+      "fallbacks": [
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "grok-4.7-high",
+          "effort": "high"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-6.1-sol",
+          "effort": "max"
+        }
+      ],
+      "execution_route": "grok/grok-build/grok-4.7:high -> pi/cursor/grok-4.7-high:high -> pi/openai-codex/gpt-6.1-sol:max"
+    }
+  }
+}

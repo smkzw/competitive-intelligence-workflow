@@ -104,6 +104,44 @@ def test_local_acquisition_is_preserved_and_not_turned_into_publication(tmp_path
     assert all("截止日适格" not in r["completeness_checks"] for r in closure["receipts"])
 
 
+@pytest.mark.parametrize("padding", [" ", "\n", "\t"])
+def test_boundary_whitespace_uses_replayed_quote_without_rewriting_proposal(tmp_path: Path,
+                                                                          padding: str):
+    args = _fixture(tmp_path)
+    proposal_path = args["proposal_path"]
+    proposal = json.loads(proposal_path.read_bytes())
+    original = proposal["atoms"][0]["original_quote"]
+    proposal["atoms"][0]["original_quote"] = padding + original + padding
+    proposal_path.write_text(json.dumps(proposal))
+    pinned = proposal_path.read_bytes()
+    args["proposal_sha256"] = hashlib.sha256(pinned).hexdigest()
+
+    manifest = _materialize(**args)
+    closure = SnapshotStore(args["output"]).read(
+        LockedSnapshot.model_validate(manifest["evidence_snapshot"]),
+    )["closure"]
+    fact = next(f["fact"] for f in closure["facts"] if f["fact"]["fact_id"] == "synthetic-0")
+    assert fact["original_text"] == fact["raw_value"] == original
+    assert proposal_path.read_bytes() == pinned
+    store = ContentAddressedStore(args["output"])
+    from ci_workflow.domain.evidence import ContentBlob
+
+    assert store.read_bytes(ContentBlob.model_validate(manifest["proposal_asset"])) == pinned
+    assert not manifest["accepted"]
+
+
+def test_internal_quote_change_is_not_corrected_as_boundary_whitespace(tmp_path: Path):
+    args = _fixture(tmp_path)
+    proposal_path = args["proposal_path"]
+    proposal = json.loads(proposal_path.read_bytes())
+    proposal["atoms"][0]["original_quote"] = "Synthetic alpha: 43 participants "
+    proposal_path.write_text(json.dumps(proposal))
+    args["proposal_sha256"] = hashlib.sha256(proposal_path.read_bytes()).hexdigest()
+    with pytest.raises(ValueError):
+        _materialize(**args)
+    assert not args["output"].exists()
+
+
 @pytest.mark.parametrize("damage", ["wrong_page", "wrong_pdf", "changed_proposal"])
 def test_bad_source_or_page_fails_before_output_is_created(tmp_path: Path, damage: str):
     args = _fixture(tmp_path)

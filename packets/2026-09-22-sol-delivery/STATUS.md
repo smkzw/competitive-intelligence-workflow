@@ -1,24 +1,36 @@
 # 唯一当前状态：1007V1 连续实施
 
-本批父提交e87d8e2ec871af7eeb2a414a290c5e4439baf8a4；实际HEAD以Git核对。
+本批父提交eed9ebb22b766ac64a71c3f15271ccd95d49fb52；实际HEAD以Git核对。
 Goal ACTIVE已核，非暂停/RC。
-[当前机器清单](evidence/1007V1/owner-publication-source-dates-v1.json)，
+[当前机器清单](evidence/1007V1/owner-publication-atoms-v1.json)，
 [详细实施/复盘](evidence/1007V1/implementation.md)。原附件Ask未答，不造专家case。
 
 ## 完成、待验与阻断
 
-四已核论文接四typed ResearchSource；两真实正文源库持久化，两缺件保持。
-显式电子发表日opt-in执行E03已终态：actual deepseek-v4.1-flash/max CLI
-响应effort未证明，719.592s/38calls/exit0无回退；原29RED/1positive是缺
-关键字，不夸为29独立语义缺陷。Owner发现date定位不能走生产quote重放，
-1FAIL/3positive→115相关PASS0.56s，无SKIP，Ruff3/strict2源。此小族无
-宽门；e87稳定quality-only门仅历史，不覆盖新源码。
-两真实原件exact epub2023-05-04/2025-12-17，calendar_day、默认捕获/派生
-字节保持；新隔离库重放两旧ID后追加两新日期版本，4源版本/16日期断言/
-0facts/0fragments/0edit/0current。父来源库DB与所有pin不变；公开/生效
-首日未知，不能借发表日签历史可得。当前论文获取见证原生Ask待答，不扩
-已批准方案/SAP政策。正文医学采用/完整包/补件门/宇宙/currentABC/浏览器/
-分享新浏览器/安装/24/三宿主/RC仍开放。下一真实正文提取与就绪C/比较。
+两真实原生论文118候选/1267引用/163独特原文经生产精确定位重放，holding
+库4source versions/16日期断言/163fragments、0fact版本/0edit/0current。
+E08 actualGrok4.7-build/high请求787.689s/no fallback；fresh不同模型C03
+Pi/openai-codex/gpt-6.1-sol/high请求391.036s及同会话247.419s，两轮REVISE
+保留，effort响应未证明。时间窗/EAIR复合单位/ICE/重度/脚注修正；v4只按
+指定剩余条件关闭5行指针/9中文标签/coverage51+67，没有新digest独立ACCEPT。
+源ID别名及重度clone错误真实记录，不因quote/schema通过冒充医学通过。
+XML重开8真实RED→精确定位；邻接PDF一FAIL核两段尾空格，成族3RED/
+1positive→新候选采用实际quote，旧proposal bytes/hash不改。首修3FAIL
+119PASS来自新增测试closure字段错误，修后最终九文件122PASS4.90s/无SKIP，
+Ruff4/strict2。稳定quality-only6宽门此前终态通过：strict283/活跃1185
+PASS244.86s/兼容20PASS1.15s/层级7PASS0.18s/Ruff/旧路径词法；当时源码
+集合822文件摘要badf7ac6…，PDF之后两文件由相关批及静态检查另验。
+不是全集成/医学/浏览器/发布，历史数据库hash FAIL未关。
+当前论文公开获取Ask待答、两必需正文待取得、源限定研究身份/完整包/宇宙/
+同currentABC/四宽实屏/离线新浏览器/安装/24/三宿主/恢复/RC仍开放。
+下一源限定研究身份、就绪C和共同横比，不伪闭宇宙或停止其他无依赖实现。
+
+### eed9ebb日期单元（以下仅原版本范围）
+
+原生epub opt-in：115相关PASS0.56s/Ruff3/strict2；E03 actualflash/max请求
+719.592s，无当批宽门。四typed源叶/两真实正文/两缺件、calendar_day不
+等于首次公开/历史可得；日期库4version/16日期/0facts/fragments/current。
+原库/pins不变。[原清单](evidence/1007V1/owner-publication-source-dates-v1.json)。
 
 ### e87d8e2纯呈现单元（以下只按其版本成立）
 

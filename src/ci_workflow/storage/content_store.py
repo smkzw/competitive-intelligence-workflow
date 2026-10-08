@@ -432,19 +432,20 @@ class EvidenceRepository:
                         raise SourceDerivationError("重开片段锚点不能精确证明原文")
             except (UnicodeDecodeError, SourceDerivationError) as error:
                 raise ContentIntegrityError("原始资产与重开文本的派生链校验失败") from error
-        if source_version.media_type == "application/json":
+        if source_version.media_type in {"application/json", "application/xml", "text/xml"}:
             # A native scalar may contain decoded newlines/quotes/Unicode that
             # do not occur literally in its serialized JSON container. Conversely,
             # text elsewhere in that container cannot prove this field's value.
+            format_name = "JSON" if source_version.media_type == "application/json" else "XML"
             try:
                 quote = extract_locator_quote(
-                    source_content.decode("utf-8"), media_type="application/json",
+                    source_content.decode("utf-8"), media_type=source_version.media_type,
                     locator=stored_fragment.locator,
                 )
             except (UnicodeDecodeError, SourceDerivationError) as error:
-                raise ContentIntegrityError("JSON证据片段不能按精确字段重提取") from error
+                raise ContentIntegrityError(f"{format_name}证据片段不能按精确字段重提取") from error
             if quote != stored_fragment.original_text:
-                raise ContentIntegrityError("JSON证据片段原文与定位字段不一致")
+                raise ContentIntegrityError(f"{format_name}证据片段原文与定位字段不一致")
         elif source_version.media_type.startswith("text/") or any(
             marker in source_version.media_type
             for marker in ("json", "xml", "javascript")

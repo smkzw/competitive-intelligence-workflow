@@ -1,5 +1,40 @@
 # 1007V1 当前实施回执（持续更新，非最终接受）
 
+## 最新批：论文原文候选与精确重开（父eed9ebb，连续实施）
+
+选择execution-plus-conference：两个确定原件可有界并行提取，统计对象/
+EAIR/ICE有实质医学解释不确定性，冻结后一个fresh reviewer即可；不新增
+平台或逐观察签发。E08实际Grok4.7-build/high请求未attest，787.689s/31
+model calls/exit0无fallback，109候选。Owner v2仅源alias及来源限定身份绑定。
+同模型Grok-via-Cursor不算独立，首次派发前选已批准Pi/openai-codex/
+gpt-6.1-sol/high；391.036s/63tools及同会话247.419s/23tools两REVISE保留。
+
+实际坑：quote逐字/schema通过仍漏LTE列是时间窗而非组、EAIR与复合n(%)
+形式、binary救援/缺失ICE规则；severity-stratum空率不能用重度合计填。
+Owner v3补9重度数值但clone沿用Any TEAE行指针和中文标签，第二轮真实
+抓出；v4按原格收5路径/9标签及coverage51+67=118，保持原109数值/路径/
+状态，不伪新digest独立ACCEPT。另一技术坑原stdout单JSON误当NDJSON，
+owner解析失败后纠正，不把worker有输出说成空；effort只记录请求未attest。
+
+v4全部118现有typed材料，1267引用/163独特原文均生产重提取，独立source
+holding库追加4源版本/16日期/163片段，0医学fact/edit/current，父pins不变。
+真实持久化发现XML重开仅全文contains，正确inline原句拒绝而错误路径可
+放行；8真实RED0.37s（先8fixture缺URL错误不当RED）→共用精确locator。
+相邻PDF1FAIL34PASS2.84s，定位历史64条提案两段末尾空白；预检strip已
+允许但入库用未trim文本。新space/newline/tab三RED与内部改数拒绝positive
+组成一族；persist已重提quote而原proposal bytes/hash不改，不放宽原文守卫。
+首修3FAIL119PASS5.29s是新增测试读closure外层而非fact层，纠实际结构后
+九文件122PASS4.90s无SKIP/Ruff4/strict2，真实64条未接受原文重开通过。
+
+一次稳定宽门在PDF小族修复前终态exit0：quality-only6/Ruff/strict283/
+活跃1185PASS244.86s/兼容20PASS1.15s/层级7PASS0.18s/词法，822输入摘要
+badf7ac6f4e2a1ec12275996fdba9292895042dcde6bf16669f1a9432e42e68c。
+之后两PDF文件由最终相关批+静态验，不宣称宽门覆盖更新/全集成/产品。
+医学采用/公开见证政策/源限定研究身份/缺两正文/宇宙/当前ABC/四宽实屏/
+离线新浏览器/24门户/三宿主/恢复/安装/RC仍开放。历史DBhash FAIL未改。
+仅提交生产/test/规范/小型报告与清单，不提交原始论文/大候选/DB/log。下一
+实际研究身份与C/共同横比，保持ACTIVE，无阶段暂停。
+
 ## 当前批：普通A/B来源语境一致（父1deed8f，连续实施）
 
 采用execution-plus-conference：owner直接修共同source-view消费；一个边界

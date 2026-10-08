@@ -4,6 +4,13 @@
 
 ## 1007V1 当前增量合同
 
+原文证据库重开XML与JSON均调用共同精确locator重提取，不以全文包含作
+证据。inline格式用原生提取器一致规范；不存在/过粗/指向另一格不得因
+全文含相同文本放行。PDF原子预检与入库使用同一已重提取quote，提案边缘
+空白不回灌；完整提案原字节仍留CAS、历史hash不改。只证明来源片段，不
+等于医学事实采用。论文候选time/window/unit/EAIR/ICE/重度限定须独立核
+原文；源片段holding库可先接通，availability/研究身份/完整包/current另门。
+
 原生JATS日期复用现有SourceCapture/CaptureDatePrecisions/Locators：桥接
 显式opt-in读取front/article-meta完整电子发表日（epub或pub/electronic），
 calendar_day不冒充精确时刻。默认旧capture不变；部分未知、不补1日，

@@ -78,6 +78,7 @@ def materialize(
     raw_documents: dict[str, bytes] = {}
     local_acquired_at: dict[str, datetime] = {}
     pages: dict[tuple[str, int], str] = {}
+    replayed_quotes: dict[str, str] = {}
     for name, document in documents.items():
         acquired = acquired_by_name[name]
         raw_blob = ContentBlob.model_validate(acquired["raw_asset"])
@@ -110,6 +111,11 @@ def materialize(
             quote = extract_locator_quote(page_text, media_type="application/pdf", locator=locator)
             if quote != atom["original_quote"].strip():
                 raise ValueError("Clause original quote does not match its exact native page")
+            # Keep the pinned proposal bytes as provenance, but persist exactly
+            # the source span already proved by the production extractor. The
+            # locator normalizes boundary whitespace; ingestion must not revert
+            # to an untrimmed proposal string after successful prevalidation.
+            replayed_quotes[atom["proposal_id"]] = quote
             expected = atom.get("canonical_page_text_sha256")
             if expected is not None and _digest(page_text.encode()) != expected:
                 raise ValueError("Native page extractor bytes differ from the pinned proposal")
@@ -189,12 +195,12 @@ def materialize(
         fact_id=atom["proposal_id"], row_ref="source-clause:" + atom["proposal_id"],
         entity_id=atom["trial_id"].casefold(), entity_type="trial",
         canonical_name=atom["trial_id"], field_id="source_clause",
-        raw_value=atom["original_quote"], normalized_value=None,
+        raw_value=replayed_quotes[atom["proposal_id"]], normalized_value=None,
         disclosure_state="reported_value",
         source_id=captures[atom["document_filename"], atom["physical_page"]].source_id,
         locator=EvidenceLocator(document_role="protocol_sap", page=atom["physical_page"],
                                 paragraph=atom["original_quote"]),
-        original_text=atom["original_quote"],
+        original_text=replayed_quotes[atom["proposal_id"]],
     ) for atom in atoms)
     # Verbatim clauses, not model interpretations, estimated values or synthesized claims.
     claims = tuple(ResearchClaim(
