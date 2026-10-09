@@ -98,10 +98,10 @@ _FIELD_LABELS_ZH: dict[str, str] = {
     "control_arm": "对照组内干预",
     "dosing_regimen": "给药方案",
     "primary_endpoint_definition": "主要终点定义",
-    "primary_endpoint_description": "主要终点完整定义原文",
+    "primary_endpoint_description": "主要终点定义说明",
     "primary_endpoint_timepoint": "主要终点时间点",
     "secondary_endpoint_definition": "次要终点定义",
-    "secondary_endpoint_description": "次要终点完整定义原文",
+    "secondary_endpoint_description": "次要终点定义说明",
     "secondary_endpoint_timepoint": "次要终点时间点",
     "analysis_sets": "分析集",
     "statistical_comparisons": "主要比较与统计模型",
@@ -652,6 +652,10 @@ _ENDPOINT_ROLE_LABELS_ZH = {
     "secondary_endpoint": "次要终点",
 }
 
+# 未结构化提取：来源条款已给出可核实内容，但类型化字段（量表/阈值/单位等）尚未
+# 进入结构化投影。它既不是"来源未列示"，也不是"不适用"；不得据此推断等价。
+_UNSTRUCTURED_EXTRACTION_LABEL_ZH = "未结构化提取"
+
 # 展示组合的九项完整性前提；实际身份复用领域所有者的十轴键，另含原始
 # protocol parent。period 可缺省但参与一致性比较，不由标题推断。
 _ENDPOINT_INSTANCE_IDENTITY_AXES: tuple[tuple[str, str], ...] = (
@@ -799,6 +803,39 @@ def _numeric_for(observation: DesignObservation) -> float | None:
         return None
 
 
+def _qualifier_states_current_count(display: str, numeric: float) -> bool:
+    """限定文本是否与当前可核实计数一致（有序数分隔容忍，不做数值推断）。
+
+    旧的显示文本可能来自上一次捕获或另一次修订；与当前计数不一致时它不是当前
+    读法，只能作为来源证据保留。这里只做一致性守卫，绝不从文本补出数值。
+    """
+    if not numeric.is_integer():
+        return False
+    count = str(int(numeric))
+    normalized = re.sub(r"(?<=\d),(?=\d{3}(?!\d))", "", display)
+    return re.search(rf"(?<!\d){re.escape(count)}(?!\d)", normalized) is not None
+
+
+def _sample_size_qualifier_zh(observation: DesignObservation) -> str | None:
+    """已核实入组限定（实际/计划入组）的来源绑定显示文本。
+
+    只透传投影层基于同一来源版本 ``enrollmentInfo.type`` 生成的限定；不从计数、
+    数组顺序或分组分母推断类型；用户修订/清除行以当前投影为先；与当前计数不一致
+    的过期限定不进入当前读法（当前值仍是可核实计数）。
+    """
+    if observation.field != "planned_or_actual_sample_size":
+        return None
+    if _user_current_state(observation):
+        return None
+    display = _text(observation.display_text)
+    if not display:
+        return None
+    numeric = _numeric_for(observation)
+    if numeric is None or not _qualifier_states_current_count(display, numeric):
+        return None
+    return display
+
+
 def _operator_zh(value: str | None) -> str:
     return {
         ">=": "≥",
@@ -858,6 +895,11 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
 
     numeric = _numeric_for(observation)
     if numeric is not None:
+        # 实际/计划入组限定来自同一来源的已核实类型；数值同轴仍由 numeric_value
+        # 与 numeric_projection 提供，限定文本不替换数值投影。
+        qualifier = _sample_size_qualifier_zh(observation)
+        if qualifier is not None:
+            return qualifier
         if numeric.is_integer():
             return str(int(numeric))
         return str(numeric)
@@ -1097,7 +1139,13 @@ def _chart_row(
         row["numeric_projection"] = projection.as_dict()
         row["numeric_value"] = projection.plot_value
         row["unit"] = projection.plot_unit
-        row["value"] = int(numeric) if numeric.is_integer() else numeric
+        # 已核实入组限定（实际/计划入组 + 计数 + 例）保留在读者面；数值同轴仍由
+        # numeric_value / numeric_projection 承担，限定不替换数值。
+        row["value"] = (
+            value_text
+            if _sample_size_qualifier_zh(observation) is not None
+            else int(numeric) if numeric.is_integer() else numeric
+        )
         row["renderable"] = True
         if chart_type == "bubble":
             row["x_value"] = projection.plot_value
@@ -1173,7 +1221,17 @@ def _chart_groups(
     )
 
 
-def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
+def _evidence_field(
+    value: Any,
+    state: str | None = None,
+    *,
+    missing_default: EvidenceFieldState | None = None,
+) -> EvidenceField:
+    """确定值 XOR 互斥状态；空白不得留白。
+
+    ``missing_default`` 供类型化子字段使用：已报告事实的字段尚未结构化提取时，
+    不得落到"来源未列示"（那是对来源缺失的断言），改用调用方给出的保守状态。
+    """
     if value is not None and _text(value):
         return EvidenceField(value=_text(value))
     state_map = {
@@ -1185,7 +1243,10 @@ def _evidence_field(value: Any, state: str | None = None) -> EvidenceField:
         "conflicting": EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
         "user_cleared": EvidenceFieldState.USER_CLEARED,
     }
-    return EvidenceField(state=state_map.get(state or "", EvidenceFieldState.SOURCE_NOT_LISTED))
+    resolved = state_map.get(state or "")
+    if resolved is None:
+        resolved = missing_default or EvidenceFieldState.SOURCE_NOT_LISTED
+    return EvidenceField(state=resolved)
 
 
 _C_DOCUMENT_ROLE_ZH: dict[str, str] = {
@@ -1231,6 +1292,45 @@ def _untranslated_note(role: str) -> str:
         "registry", "clinical-trial-registry", "clinical_trial_registry",
     } else _source_kind_zh(role)
     return f"（{kind}原文，未译）"
+
+
+def _translation_provenance_note(observation: DesignObservation, value: Any) -> str:
+    """展示文本的来源语种标注：中文译述与未译登记英文互不冒充。
+
+    判定只用既有的 display_text / source_text 关系：
+
+    - 含中文且正是同一来源英文条款的显式译文 → 标注中文译述并指向数据依据；
+      中文门户文案（无英文来源或非 display 文本）不标注，绝不写成"未译"。
+    - 无中文且正是未译的登记英文原文（display_text 未覆盖 source_text）→ 标注
+      "原文，未译"；英文展示文本若与登记原文不同（当前投影/压缩文本），不得冒充
+      登记原文，改为显式指向数据依据中的逐字原文。
+    """
+    text = str(value if value is not None else "")
+    if not text.strip():
+        return ""
+    display = _text(observation.display_text)
+    source = _text(observation.source_text)
+    is_display = bool(display) and display == text.strip()
+    is_source = bool(source) and text.strip() in {
+        source, _registry_display_text(source),
+    }
+    has_cjk = re.search(r"[\u4e00-\u9fff]", text) is not None
+    if has_cjk:
+        if (
+            is_display
+            and display != source
+            and source
+            and re.search(r"[\u4e00-\u9fff]", source) is None
+            # 译述标注只针对条款级文字原文：纯数字/计数来源是数值事实，不称"译述"。
+            and len(re.findall(r"[A-Za-z]{2,}", source)) >= 2
+        ):
+            return "（中文译述，登记原文见数据依据）"
+        return ""
+    if len(re.findall(r"[A-Za-z]{3,}", text)) < 2:
+        return ""
+    if is_display and not is_source:
+        return "（非登记原文，登记原文见数据依据）"
+    return _untranslated_note(observation.source_role.value)
 
 
 def _safe_locator(observation: DesignObservation) -> EvidenceLocator | None:
@@ -1318,6 +1418,30 @@ def _evidence_view(
         source_version_label_zh = f"{source_kind}来源版本"
     else:
         source_version_label_zh = "逐事实来源待核"
+    # 已报告事实的类型化字段缺失＝未结构化提取（来源条款已给出内容），不是来源
+    # 缺失，也不是技术故障；结构上无时间点的字段缺省"不适用"（与完整表口径一致）。
+    field_default = (
+        EvidenceFieldState.NOT_EXTRACTED
+        if observation.disclosure_state in _NUMERIC_DISCLOSED_STATES
+        else None
+    )
+    timepoint_default = (
+        EvidenceFieldState.NOT_APPLICABLE
+        if observation.field in _NO_TIMEPOINT_FIELDS
+        else field_default
+    )
+    missing_typed = [
+        label for label, value in (
+            ("量表", observation.scale),
+            ("阈值", observation.threshold_value),
+        ) if value is None
+    ]
+    extraction_gap_note = (
+        "本条为已报告事实，" + "、".join(missing_typed)
+        + f"等结构化字段尚未提取（{_UNSTRUCTURED_EXTRACTION_LABEL_ZH}），"
+        "不代表来源未公开，也不推断跨研究等价；请以逐字原文为准。"
+        if missing_typed and _unstructured_extraction(observation) else ""
+    )
     return EvidenceView.model_construct(
         None,
         report_kind=ReportKind.C,
@@ -1327,11 +1451,15 @@ def _evidence_view(
         trial_zh=_trial_name(data, observation.trial_id),
         group_zh=_evidence_field(_group_label_zh(observation.group_id), state),
         element_zh=label,
-        scale=_evidence_field(observation.scale, state),
-        timepoint=_evidence_field(observation.assessment_timepoint, state),
+        scale=_evidence_field(observation.scale, state, missing_default=field_default),
+        timepoint=_evidence_field(
+            observation.assessment_timepoint, state, missing_default=timepoint_default,
+        ),
         value=_evidence_field(value_text, state),
-        threshold=_evidence_field(observation.threshold_value, state),
-        unit=_evidence_field(observation.threshold_unit, state),
+        threshold=_evidence_field(
+            observation.threshold_value, state, missing_default=field_default,
+        ),
+        unit=_evidence_field(observation.threshold_unit, state, missing_default=field_default),
         numerator=_evidence_field(None, "not_applicable"),
         denominator=_evidence_field(None, "not_applicable"),
         source_trace_state="located" if located else "unverified",
@@ -1346,6 +1474,7 @@ def _evidence_view(
             +
             "来源版本、逐字原文与精确位置均已定位，仍不代替医学裁决；"
             f"当前公开情况为{_state_label(observation.disclosure_state)}。"
+            + extraction_gap_note
             if located
             else (
                 "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
@@ -1399,7 +1528,7 @@ def _filter_dimensions_for_rows(
             "trial": observation.trial_id,
             "element": observation.field,
             "field_family_zh": _family_label(observation.field_family),
-            "scale": _text(observation.scale, "未列示"),
+            "scale": _scale_presentation_zh(observation, absent="未列示"),
             "timepoint": _text(observation.assessment_timepoint, "未列示"),
             "disclosure_state": observation.disclosure_state.value,
         }
@@ -1584,14 +1713,13 @@ def _table_rows(
         _v = chart.get("value")
         if observation.review_state is FactReviewState.USER_MODIFIED:
             chart["value"] = f"{_v}（用户修订，未独立复核）"
-        elif (
-            isinstance(_v, str)
-            and re.findall(r"[A-Za-z]{3,}", _v)
-            and not _v.endswith(_untranslated_note(observation.source_role.value))
-        ):
-            chart["value"] = _v + _untranslated_note(observation.source_role.value)
+        else:
+            # 中文译述不得标成"未译"；真正未译的登记英文仍须标注。
+            provenance_note = _translation_provenance_note(observation, _v)
+            if provenance_note and not str(_v).endswith(provenance_note):
+                chart["value"] = f"{_v}{provenance_note}"
         if chart.get("scale") in {None, ""}:
-            chart["scale"] = "不适用"
+            chart["scale"] = _scale_presentation_zh(observation, absent="不适用")
         if chart.get("group_id") in {None, ""}:
             chart["group_id"] = "未细分"
         if chart.get("cohort_id") in {None, ""}:
@@ -1748,6 +1876,31 @@ _NUMERIC_DISCLOSED_STATES = frozenset(
 )
 
 
+def _unstructured_extraction(observation: DesignObservation) -> bool:
+    """类型化字段为空时，是"未结构化提取"还是"确实不适用"。
+
+    终点族条款（definition/description/timepoint）在登记来源中自带量表、阈值与
+    时间窗限定；这类观察已报告而类型化字段为空时是提取缺口，既不是来源缺失，
+    也不得写成"不适用"。约定外的字段族不在此列（如样本量计数无量表对象），
+    继续按原文既有缺省表达。
+    """
+    return (
+        observation.disclosure_state in _NUMERIC_DISCLOSED_STATES
+        and observation.field in _ENDPOINT_FIELDS
+        and bool(_text(observation.source_text))
+    )
+
+
+def _scale_presentation_zh(observation: DesignObservation, *, absent: str) -> str:
+    """量表呈现：已提取值原样保留；提取缺口不得冒充"不适用/未列示"。"""
+    scale = _text(observation.scale)
+    if scale:
+        return scale
+    if _unstructured_extraction(observation):
+        return _UNSTRUCTURED_EXTRACTION_LABEL_ZH
+    return absent
+
+
 def _numeric_frame_reason_zh(observation: DesignObservation) -> str:
     """每条不可绘行一个如实的显式原因；成员身份与可检索性不受影响。"""
     if observation.field != "planned_or_actual_sample_size":
@@ -1790,7 +1943,7 @@ def _workspace_cell_item(
         "source_locator": locator.model_dump(mode="json") if locator is not None else None,
         "source_role": observation.source_role.value,
         "disclosure_state": observation.disclosure_state.value,
-        "scale": _text(observation.scale, "未列示"),
+        "scale": _scale_presentation_zh(observation, absent="未列示"),
         "operator": observation.operator,
         "threshold_value": observation.threshold_value,
         "threshold_unit": observation.threshold_unit,
@@ -2020,6 +2173,98 @@ def _external_source_entries(
     return tuple(entries)
 
 
+def _statistics_scope(data: ReportCPortalData) -> dict[str, Any]:
+    """统计页声明字段的覆盖与复核边界：全部从实际观察与冻结目录声明派生。
+
+    "存在观察"不等于"当前有可核实数据"：未报告/用户清除/未公开/路径未解析等
+    占位状态单独列出，不冒充已提取覆盖；完全缺失的字段按冻结声明逐项列出。
+    文档闭合只用实际绑定来源角色与事实计数，不做检索闭合或验收推断。
+    """
+    statistics_page = "sample-analysis-statistics"
+    declared = tuple(
+        field for field in _FIELD_LABELS_ZH
+        if field in (_PAGE_FIELDS[statistics_page] or ())
+    )
+    observations = tuple(
+        observation for observation in data.observations
+        if observation.field in declared
+    )
+    extracted = tuple(
+        field for field in declared
+        if any(
+            observation.field == field
+            and observation.disclosure_state in _NUMERIC_DISCLOSED_STATES
+            for observation in observations
+        )
+    )
+    placeholder = tuple(
+        field for field in declared
+        if field not in extracted and any(
+            observation.field == field for observation in observations
+        )
+    )
+    unextracted = tuple(
+        field for field in declared
+        if field not in extracted and field not in placeholder
+    )
+    # 逐研究缺口只在字段已提取且确有试验缺少当前可核实数据时列出（材料性）。
+    # 研究范围就是本报告自身的研究清单，不引入新的来源或检索闭合声明。
+    trial_label_by_id = {trial.id: _trial_display(data, trial.id) for trial in data.trials}
+    scope_trial_ids = {trial.id for trial in data.trials}
+    per_trial_gaps: list[str] = []
+    for field in extracted:
+        covered = {
+            observation.trial_id for observation in observations
+            if observation.field == field
+            and observation.disclosure_state in _NUMERIC_DISCLOSED_STATES
+        }
+        missing = sorted(scope_trial_ids - covered)
+        if missing:
+            refs = "、".join(trial_label_by_id.get(trial_id, trial_id) for trial_id in missing)
+            per_trial_gaps.append(f"{_field_label(field)}：{refs}")
+    source_kinds = "、".join(sorted({
+        _source_kind_zh(observation.source_role.value) for observation in data.observations
+    }))
+    protocol_facts = sum(
+        1 for observation in data.observations
+        if observation.source_role is SourceRole.PROTOCOL_SAP
+    )
+    publication_facts = sum(
+        1 for observation in data.observations
+        if observation.source_role in {
+            SourceRole.PRIMARY_TRIAL_REPORT, SourceRole.CONFERENCE_DISCLOSURE,
+        }
+    )
+    protocol_closure = (
+        f"本包已绑定研究方案与统计分析计划（Protocol/SAP）来源的条款级事实 "
+        f"{protocol_facts} 条；仅凭条款级绑定不能证明全文是否已纳入，"
+        "也不等于完整统计复核。"
+        if protocol_facts
+        else "本包未绑定研究方案与统计分析计划（Protocol/SAP）来源；"
+             "本报告未纳入 Protocol/SAP 正文。"
+    )
+    publication_closure = (
+        f"本包已绑定主要试验报告或会议披露来源的条款级事实 {publication_facts} 条；"
+        "出版分支以实际绑定来源为限，不构成完整出版检索。"
+        if publication_facts
+        else f"本包绑定来源为{source_kinds}，未绑定出版或会议披露来源；"
+             "出版与结果报告分支未纳入本报告。"
+    )
+    return {
+        "declared_fields": declared,
+        "extracted_fields": extracted,
+        "placeholder_fields": placeholder,
+        "unextracted_fields": unextracted,
+        "extracted_field_labels": tuple(_field_label(field) for field in extracted),
+        "placeholder_field_labels": tuple(_field_label(field) for field in placeholder),
+        "unextracted_field_labels": tuple(_field_label(field) for field in unextracted),
+        "per_trial_gap_zh": tuple(per_trial_gaps),
+        "source_kinds_zh": source_kinds,
+        "protocol_closure_zh": protocol_closure,
+        "publication_closure_zh": publication_closure,
+    }
+
+
 def _render_page_context(
     data: ReportCPortalData,
     *,
@@ -2155,6 +2400,11 @@ def _render_page_context(
     return {
         "report": data,
         "evidence_limitations": evidence_limitations,
+        "statistics_scope": (
+            _statistics_scope(data)
+            if catalog_page_id in {"sample-analysis-statistics", "evidence-limitations"}
+            else None
+        ),
         "visit_insufficient": visit_insufficient,
         "report_title": f"{data.indication}临床试验设计比较",
         "page_title": title,
@@ -2224,6 +2474,7 @@ def _render_page_context(
         # FR20: homepage summary and first-level all-study comparison stay distinct.
         # The comparison entry reuses the existing source-comparison query surface.
         "comparison_href": f"{prefix}overview.html?view=comparison",
+        "endpoint_definitions_href": f"{prefix}endpoint-timepoint-matrix.html",
         "show_comparison_entry": catalog_page_id == "overview" and trial is None,
     }
 

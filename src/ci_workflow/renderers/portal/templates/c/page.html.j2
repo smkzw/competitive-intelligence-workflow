@@ -17,6 +17,21 @@
     <div class="kz-evidence-field"><dt>覆盖范围</dt><dd>{{ evidence_limitations.trial_count }} 项试验 · {{ evidence_limitations.product_count }} 个产品 · {{ evidence_limitations.fact_count }} 条设计事实</dd></div>
   </dl>
   <p>{{ evidence_limitations.notes }}</p>
+  {% if statistics_scope %}
+  <h3>统计复核与文档闭合边界</h3>
+  {% if statistics_scope.extracted_field_labels %}
+  <p>统计页已结构化提取且当前有可核实数据的字段：{{ statistics_scope.extracted_field_labels | join('、') }}。</p>
+  {% endif %}
+  {% if statistics_scope.placeholder_field_labels %}
+  <p>仅有占位状态（不构成当前可核实数据）的统计字段：{{ statistics_scope.placeholder_field_labels | join('、') }}。</p>
+  {% endif %}
+  {% if statistics_scope.unextracted_field_labels %}
+  <p>尚未结构化提取或尚未审阅的统计扩展字段：{{ statistics_scope.unextracted_field_labels | join('、') }}。已核实的样本量不等于完整的统计分析复核；未结构化提取不等于来源未公开，登记统计语境以逐字原文为准。</p>
+  {% elif not statistics_scope.placeholder_field_labels and not statistics_scope.per_trial_gap_zh %}
+  <p>统计扩展字段均已结构化提取；已核实的样本量不等于完整的统计分析复核；未结构化提取不等于来源未公开。</p>
+  {% endif %}
+  <p>{{ statistics_scope.protocol_closure_zh }}{{ statistics_scope.publication_closure_zh }}</p>
+  {% endif %}
   <h3>实际来源入口</h3>
   <ul class="kz-c-registry-links">
     {% for link in evidence_limitations.source_links %}<li><a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ link }}</a></li>{% endfor %}
@@ -31,6 +46,25 @@
     </div>
     <p class="kz-c-page-lead">{{ lead }}</p>
   </header>
+
+  {% if catalog_page_id == "sample-analysis-statistics" and statistics_scope %}
+  <section class="kz-c-limitations" aria-label="统计字段覆盖与复核边界">
+    <h2>统计字段覆盖与复核边界</h2>
+    {% if statistics_scope.extracted_field_labels %}
+    <p>已结构化提取且当前有可核实数据的统计字段：{{ statistics_scope.extracted_field_labels | join('、') }}；见下方完整表与数据依据。</p>
+    {% endif %}
+    {% if statistics_scope.placeholder_field_labels %}
+    <p>以下统计字段在本报告切片中只有占位状态（未报告、用户清除、未公开或路径未解析等），不构成当前可核实数据：{{ statistics_scope.placeholder_field_labels | join('、') }}。</p>
+    {% endif %}
+    {% if statistics_scope.unextracted_field_labels %}
+    <p>以下统计扩展字段在本报告切片中尚未结构化提取或尚未审阅：{{ statistics_scope.unextracted_field_labels | join('、') }}。未结构化提取不等于来源未公开——登记来源中可查的统计语境（分析窗口、补救治疗策略、缺失处理等）以逐字原文为准，可在 <a href="{{ endpoint_definitions_href }}">终点、定义与时间点</a> 的终点定义说明与本页数据依据中核对；绑定来源入口见页末“外部来源”。</p>
+    {% endif %}
+    {% if statistics_scope.per_trial_gap_zh %}
+    <p>逐研究缺口（下列已提取字段在该试验暂无当前可核实数据）：{{ statistics_scope.per_trial_gap_zh | join('；') }}。</p>
+    {% endif %}
+    <p>已核实的样本量与已提取统计字段不等于完整的统计分析复核：分析集、比较方法、效应量、估计目标与伴发事件策略、缺失数据与敏感性、多重性、样本量依据与统计模型等结论，仍需以研究方案与统计分析计划（Protocol/SAP）正文为准。{{ statistics_scope.protocol_closure_zh }}{{ statistics_scope.publication_closure_zh }}</p>
+  </section>
+  {% endif %}
 
   {% if overview_conclusions %}
   <section class="kz-b-conclusions" aria-label="核心结论">

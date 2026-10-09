@@ -1,0 +1,38 @@
+{
+  "schema_version": "1007-c2-report-veto-1",
+  "review_baseline": "ac492a231ea5cccb53807185c669872a77f37628",
+  "report_version": "v2-r24-reviewed-source-report-candidate",
+  "epoch": 2,
+  "candidate_content_digest": "0042956315f3fa48fe012c8b746e36437df40410ed6f93dc738f560b089fba4f",
+  "report_snapshot_id": "report-snapshot_6fb94ce4b88c94d2a5a790d8",
+  "verdict_relative": ".artifacts/1007-c-source-review-bootstrap-worker-v1/project/runs/c2-report-review/verdict.json",
+  "verdict_sha256": "da5ec6cdba3c2888c99d26ba1436e9aaee49a94efc6876e96e3d9528e16ca829",
+  "verdict": "VETO",
+  "reviewed_at": "2026-10-09T06:53:08.209018Z",
+  "blocking_issues": [
+    "actual-enrollment-qualifier",
+    "source-absence-misclassification",
+    "statistical-extension-gap-disclosure"
+  ],
+  "nonblocking_issues": [
+    "translation-provenance-label"
+  ],
+  "issuer": {
+    "pid": 90937,
+    "started_at": "2026-10-09T06:40:36.865620Z",
+    "finished_at": "2026-10-09T06:54:12.579120Z",
+    "exit_code": 2,
+    "reason": "normal issuer rejected a scientifically vetoed report; not transport failure",
+    "requested_host": "omp",
+    "requested_model": "openai-codex/gpt-6.1-sol",
+    "requested_effort": "high",
+    "independent_session": "01a11ca8-aac1-7000-81e2-901b1c5fe3de",
+    "runtime_model_attestation": "No accepted e2 issuance; do not infer new accepted runtime receipt"
+  },
+  "report_receipt_issued": false,
+  "current_switched": false,
+  "source_readopted": false,
+  "scope": "PN four-study C2 only; C1 source acceptance remains separate; original candidate and veto unchanged",
+  "original_candidate_receipt": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c2-report-candidate-v1.json",
+  "next": "repair is code-level only; new C3 candidate and independent report review still NOT_RUN"
+}

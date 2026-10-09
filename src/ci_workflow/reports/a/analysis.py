@@ -121,6 +121,7 @@ _INACTIVE_EVENT_UNITS: dict[str, RegulatoryEventKind] = {
 _MISSING_STATE_LABELS_ZH: dict[EvidenceFieldState, str] = {
     EvidenceFieldState.NOT_YET_DISCLOSED: "尚未公开",
     EvidenceFieldState.SOURCE_NOT_LISTED: "穷尽检索后未找到",
+    EvidenceFieldState.NOT_EXTRACTED: "未结构化提取",
     EvidenceFieldState.TECHNICALLY_UNAVAILABLE: "技术暂不可用",
     EvidenceFieldState.USER_CLEARED: "用户清除，待重新核实",
 }

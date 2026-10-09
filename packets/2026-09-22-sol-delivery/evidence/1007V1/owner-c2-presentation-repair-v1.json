@@ -1,0 +1,94 @@
+{
+  "schema_version": "1007-c2-presentation-repair-1",
+  "baseline_commit": "ac492a231ea5cccb53807185c669872a77f37628",
+  "decision": "BOUNDED_CODE_ACCEPTANCE_NOT_REPORT_OR_RELEASE",
+  "user_pause_requested_after_current_node": true,
+  "method": "bounded execution; source presentation interpretation challenged by real preceding independent C2 veto; owner deterministic/read-only integration; no new independent review after pause request",
+  "root_red": {
+    "worker_reported": "8 failed / 5 passed; first terminal output replaced by incomplete fallback report",
+    "owner_observed": "3 failed / 1 passed / 16 deselected in 2.32s",
+    "owner_roots": [
+      "shared A consumer new-state KeyError",
+      "all-placeholder template incorrectly claims extraction",
+      "clause-role incorrectly claims Protocol/SAP full text absent"
+    ]
+  },
+  "verification": {
+    "owner_related_tests": "151 passed in 4.39s",
+    "owner_regression_log_relative": ".artifacts/1007-c-source-repairs-v1/c2-presentation-owner-regression.log",
+    "owner_regression_log_sha256": "7992d3ccf54809ac7ff67cbcfabdc717e3aced33b0b14120e242c635714b1b3e",
+    "ruff": "5 affected source/test files passed",
+    "strict_mypy": "3 affected production source files passed",
+    "worker_reported_adjacent": "2 failed / 582 passed / 2535 deselected in 570.26s; exact worker frozen bytes, not final owner bytes",
+    "unresolved_tests": [
+      "test_production_c_filter_recomputes_timeline_height_and_retains_controller: stale mock document.querySelector; not independently fixed or accepted",
+      "test_current_capture_has_legitimate_a_b_fanout_without_migrating_old_project: historical sqlite expected74330a versus actuala1094f; original FAIL retained"
+    ],
+    "worker_contracts": "worker reports19 offline/catalog/evidence contracts and12 bundle contracts; not borrowed as final installation acceptance",
+    "browser": "NOT_RUN",
+    "wide_gate": "NOT_RUN for this batch"
+  },
+  "actual_readonly_probe": {
+    "receipt_relative": ".artifacts/1007-c-source-repairs-v1/c2-presentation-owner-probe.json",
+    "sha256": "8a000e8dd99354cacf6324058cec5f071a72e1f1019362732c60d92c5b6699e6",
+    "observations": 258,
+    "actual_enrollment": {
+      "NCT04183335": 151,
+      "NCT04202679": 160,
+      "NCT04501666": 286,
+      "NCT04501679": 274
+    },
+    "scale_and_threshold_state": "not_extracted",
+    "project_files_preserved": 171,
+    "database_sha256": "79ccefa56a141d374fbf1c4d5334cc13da994923cbaa627cbd4670bbddc5a9d8",
+    "current_absent": true,
+    "pins_relative": ".artifacts/1007-c-source-repairs-v1/c2-presentation-pause-pins.json",
+    "pins_sha256": "49c5335057fb332cf4641604c79b2e85fbab1cd70d49f87691d43bbfeef6044f",
+    "candidate_regenerated": false,
+    "probe_first_failure": "owner CJK check wrongly included Chinese provenance suffix; corrected assertion before any receipt/project writes"
+  },
+  "execution": {
+    "task": "ci-1007-c2-report-presentation-veto-v1",
+    "primary_session": "01a11f79-f548-76e1-9fad-36d150c84779",
+    "primary_requested": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "first_envelope_seconds": 1261.909878,
+    "first_runner_pid": 93233,
+    "fallback_actual": "Pi/openai-codex/gpt-6-luna",
+    "fallback_session": "01a11f8c-db74-7000-953c-c79dea38c38c",
+    "first_final": "planning permission question only; not accepted",
+    "deviation": "runner fallback reason says no resumable primary though actual primary session exists; preserve original receipt, no global runner change",
+    "same_primary_resume": true,
+    "followup_runner_pid": 97416,
+    "followup_envelope_seconds": 852.146104,
+    "followup_runtime_seconds": 852.025,
+    "followup_tools": 42,
+    "followup_exit_code": 0,
+    "followup_runtime_init_model": "deepseek-v4.1-flash",
+    "effort": "requested max, adapter records codebuddy_effort=max; not server reasoning attestation",
+    "timeout_seconds_first": 7200,
+    "timeout_seconds_remaining": 5900,
+    "total_envelope_seconds": 2114.055982,
+    "no_progress_polling": true,
+    "budget_limits_not_proven": "internal128-turn enforcement not claimed",
+    "raw_report_relative": "runs/execution/ci-1007-c2-report-presentation-veto-v1/worker_01_followup.md",
+    "raw_report_public": false
+  },
+  "source_hashes": {
+    "src/ci_workflow/renderers/portal/report_c.py": "3dbde8e1027a16b200f5375031a7118c8bdc8e38f0266c828287d9488c082ca9",
+    "src/ci_workflow/renderers/portal/templates/c/page.html.j2": "15071e7315a480d47711ca1b3f526f087d0f171c2dd7193d26355b4968f8b496",
+    "src/ci_workflow/reports/common/evidence_view.py": "8411c0b6db3a12d152a6fb2caef485a560717fd19490c936964c10230d62df47",
+    "src/ci_workflow/reports/a/analysis.py": "57510adab4fcab61fb89d6c75f71180d55a4f2d296a9c62d9e1ccd4f0a8ee05e",
+    "src/ci_workflow/renderers/portal/assets/evidence-drawer.js": "696bbb456e26bd56c0b08e46f3ee133521efe44d2ea218a57dc52e85a1ecb384",
+    "tests/reports/c/test_1007_c2_presentation_veto_root.py": "af547e514aa591163213aa533c0afcff20dc58a68b3637c106cd6689769b653f",
+    "tests/unit/reports/test_evidence_view.py": "f3bd8d4fb311285d2f99ec1ec99fc9213da98b31c83b43575b5e039d3ba68222"
+  },
+  "integration_decisions": [
+    "No unrelated dirty report_c at actual initial status: worker pre-existing-user-code inference corrected; only five known dirty user files excluded",
+    "Keep current unit evidence enum test extension as required adjacent contract; no user reapproval needed",
+    "A missing-state compatibility one-line fix; no A source semantics changed",
+    "No Protocol/SAP full-text absence conclusion from a clause source role alone",
+    "No new C3 rendering/review/current/install/share after pause request"
+  ],
+  "next_safe_action": "light hash re-anchor, then version/output-parameterize existing C report replay helper; generate NEW C3, normal product independent review; do not re-ingest258 sources or rewrite C2",
+  "whole_goal_complete": false
+}

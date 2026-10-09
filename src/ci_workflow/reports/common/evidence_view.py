@@ -8,9 +8,10 @@
 - 产品、试验、组别、终点/事件/设计要素与全部观察值都由本模型携带，
   展示层只能渲染本模型字段，禁止从展示层拼出临床事实；
 - 观察字段（量表/时间点/值/阈值/单位/分子/分母与基线/完成情况扩展字段）
-  只允许"确定值 XOR 互斥状态"：不适用、尚未公开、来源未列示、技术暂不可用。
-  状态互斥且由本模块提供中文标签，不得空白，也不得把缺失当作 0（真零由
-  ``REPORTED_ZERO`` 显式表达）；
+  只允许"确定值 XOR 互斥状态"：不适用、尚未公开、来源未列示、未结构化提取、
+  技术暂不可用。状态互斥且由本模块提供中文标签，不得空白，也不得把缺失当作 0
+  （真零由 ``REPORTED_ZERO`` 显式表达）；"未结构化提取"只说明本包尚未完成类型化
+  提取，绝不表示来源未列示或来源未公开；
 - 披露状态与值严格一致：未报告/未公开/不适用不得携带确定值，已报告必须
   携带确定值，已报告零值必须是数值零；
 - 简短原文与原因原文仅在输入已有且允许时携带，逐字保留，与规范化说明/
@@ -60,6 +61,9 @@ class EvidenceFieldState(StrEnum):
     NOT_APPLICABLE = "not_applicable"
     NOT_YET_DISCLOSED = "not_yet_disclosed"
     SOURCE_NOT_LISTED = "source_not_listed"
+    # 来源条款已给出可核实内容，但类型化字段（量表/阈值/单位等）尚未进入结构化
+    # 提取：既不是来源缺失，也不是技术故障或"不适用"。
+    NOT_EXTRACTED = "not_extracted"
     TECHNICALLY_UNAVAILABLE = "technically_unavailable"
     USER_CLEARED = "user_cleared"
 
@@ -68,6 +72,7 @@ EVIDENCE_FIELD_STATE_LABELS_ZH: dict[EvidenceFieldState, str] = {
     EvidenceFieldState.NOT_APPLICABLE: "不适用",
     EvidenceFieldState.NOT_YET_DISCLOSED: "尚未公开",
     EvidenceFieldState.SOURCE_NOT_LISTED: "来源未列示",
+    EvidenceFieldState.NOT_EXTRACTED: "未结构化提取",
     EvidenceFieldState.TECHNICALLY_UNAVAILABLE: "技术暂不可用",
     EvidenceFieldState.USER_CLEARED: "用户清除，待重新核实",
 }

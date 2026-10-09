@@ -4,7 +4,8 @@
 - 每条证据视图绑定稳定 ``row_id``（ReportRow 本体嵌入）、单一锁定快照、
   来源版本与精确 locator；临床事实由模型本身携带，禁止从展示层拼出。
 - 观察字段（量表/时间点/值/阈值/单位/分子/分母与基线/完成情况扩展字段）
-  只允许"确定值 XOR 互斥状态"：不适用、尚未公开、来源未列示、技术暂不可用，
+  只允许"确定值 XOR 互斥状态"：不适用、尚未公开、来源未列示、未结构化提取、
+  技术暂不可用，
   状态必须互斥且提供中文标签，不得空白或把缺失当作 0。
 - 简短原文与原因原文仅在输入已有且允许时携带，与规范化说明/规范原因
   分离存储，原文不得被规范化文本覆盖。
@@ -222,11 +223,13 @@ def test_missing_and_user_cleared_states_are_mutually_exclusive_with_chinese_lab
         EvidenceFieldState.NOT_APPLICABLE,
         EvidenceFieldState.NOT_YET_DISCLOSED,
         EvidenceFieldState.SOURCE_NOT_LISTED,
+        EvidenceFieldState.NOT_EXTRACTED,
         EvidenceFieldState.TECHNICALLY_UNAVAILABLE,
         EvidenceFieldState.USER_CLEARED,
     }
     assert set(labels.values()) == {
-        "不适用", "尚未公开", "来源未列示", "技术暂不可用", "用户清除，待重新核实",
+        "不适用", "尚未公开", "来源未列示", "未结构化提取", "技术暂不可用",
+        "用户清除，待重新核实",
     }
     for label in labels.values():
         assert any("\u4e00" <= ch <= "\u9fff" for ch in label)
