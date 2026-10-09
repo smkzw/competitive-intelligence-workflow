@@ -1,6 +1,6 @@
 # 唯一当前状态：1007V1 连续实施；共同来源候选接通，桌面横比实屏继续修正
 
-源码8eecf335已push；C e2正常接受/258来源事实和16实态保持，不重跑。
+源码9224f718已push；C e2正常接受/258来源事实和16实态保持，不重跑。
 E03实际结束，无fallback；owner复开105定位/91声明，正常摄取一次、A+B各91绑定。
 35描述性问题已产生2药/3研究/32观察正向例，全3733成员保留；不授予共轴。
 33新科学版本仍candidate/open conflicts：25真实N变化、8同值范围变化。
@@ -9,11 +9,13 @@ NEW A/B v7普通入口49/101页，Ego184真实32态、8来源/Esc通过。
 原32 query告警保持：全工作区Q不等于当前问题/页；新代码明确三层范围。
 owner看A2560/B1440图仍有空白、研究标签居中、访视乱序，不签最终视觉。
 共享最小根因包：事实与限制成对网格、研究顶对齐、显式单Week稳定排序；
-23相关PASS0.80s/三JS语法/作者镜像，NEW v8实屏尚待，不继承v7结果。
+23相关PASS0.80s/三JS语法/作者镜像，NEW v8普通49/101页和32实屏已完成：
+三层范围/实际按钮集合/43研究/来源/Esc/无溢出客观通过，owner看三图。
+密集事实宽屏2/3/5列、研究顶齐/Week排序改善；长访视仍偏高，不签最终美学。
 Fresh C03已preflight PASS，ZCode/GLM-5.3-Flash请求max，只等原单次终态；
 实际返回身份/科学意见尚PENDING。不能用其咨询意见替代正常issuer/来源接受。
-[唯一最新精确恢复](evidence/1007V1/owner-joint-source-binding-and-comparison-grid-v1.json)。
-下一：新v8真实横比；C03终态后走真实source-only接受及冲突解决，不假造宇宙闭包。
+[唯一最新精确恢复](evidence/1007V1/owner-joint-clinical-desktop32-v8.json)。
+下一：C03终态后走真实source-only接受及冲突解决，不假造宇宙闭包。
 current仍无，全终验仍开，Goal实查ACTIVE，非暂停/RC。
 
 ## 以下为版本历史；其中PENDING和“下一”不代表当前任务
