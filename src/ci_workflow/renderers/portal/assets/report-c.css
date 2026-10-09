@@ -229,7 +229,7 @@
 @media (min-width: 1360px) {
   .kz-c-site--overview .kz-c-page-head { margin-bottom: 6px; padding-bottom: 6px; }
   .kz-c-site--overview .kz-c-page-lead { margin-top: 6px; }
-  .kz-c-site--overview .kz-b-conclusions {
+  .kz-c-site--overview .kz-b-conclusions:not([hidden]) {
     display: grid;
     grid-template-columns: 104px minmax(0, 1fr);
     gap: 12px;
