@@ -3,6 +3,10 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 上次暂停原件：[20261009精确恢复](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)。
 用户重新授权连续实施，Goal API实查active；旧暂停原件保留，不恢复旧PID。
+最新公共源码7a66f7b正常A复核只读本候选lineage锁定版本，合法历史不误拒、
+真快照冲突仍拒绝；RED2FAIL→35相关PASS6.95s/Ruff2/strict1，真实数据库
+只读且C9未变。ABC单节点已实际启动，终态待归集，不提前PASS或恢复旧PID。
+[A版本范围精确修复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-a-review-snapshot-scope-v1.json)。
 最新代码067fe3f/current9/generationeda8f0ea：横比表起点486/464→约292px，
 四规范桌面宽高×四态/首页实核，筛选键盘、原151/当前清除、Esc/导航保持。
 258事实/七表/原215文件不变；当前35成员分享c4a27064断网移动重开通过，

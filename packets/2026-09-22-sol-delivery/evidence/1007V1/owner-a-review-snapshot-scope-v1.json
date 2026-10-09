@@ -1,0 +1,14 @@
+{
+  "schema_version": "1007-owner-a-review-snapshot-scope-1",
+  "source_commit": "7a66f7b746c5e473cf1b6102a6f40ceb9984239f",
+  "scope": "Normal run_project fresh A review preparation; select versions already pinned by this ingestion lineage, not all append-only database history",
+  "method": "Direct owner: deterministic snapshot authority defect, original code and full affected closure/source lineage verified. One root-cause RED family then one relevant regression batch; no extra scientific interpretation, conference or framework.",
+  "changes": "One existing mapping guard now checks membership in lineage.fact_version_ids. Genuine multiple versions inside the supplied candidate scope and missing package facts still fail closed. No latest-version, date/order, user-current or name heuristic.",
+  "red": {"command":".venv/bin/python -m pytest tests/integration/test_fresh_a_scientific_review.py::test_fresh_a_review_uses_locked_versions_not_database_history -q","failed":2,"passed":1,"seconds":1.95,"failure":"ContractConfigError: fact-1 exists in multiple persisted versions; both legitimate history-before/history-after paths rejected","historical_conflict_negative":"already correctly rejected; assertion preserved"},
+  "green": {"command":".venv/bin/python -m pytest tests/integration/test_fresh_a_scientific_review.py tests/integration/test_fresh_a_research_package.py tests/integration/test_w01_trust_snapshot_closure.py tests/integration/test_r24_scientific_review_epochs.py -q","passed":35,"seconds":6.95,"positive":"Before/after append-only history preserved; emitted source_refs exactly equal current locked fact version IDs","negative":"Conflicting scope refuses published review request","ruff":"two changed files passed","strict_mypy":"run_service.py passed,1 source file","wide":"NOT_RUN"},
+  "source_sha256": {"src/ci_workflow/application/run_service.py":"26a49d906e1580b1389dc5d1591e86e828efa26bacd956cbeaca17d55c375f88","tests/integration/test_fresh_a_scientific_review.py":"54fcd8d7f523a4562863923c4bd057bfbb84ce01f9def824f424279639be05c0"},
+  "real_readonly_context": {"method":"mode=ro&immutable=1 SQL only; no replay/adoption/rebuild/save","existing_AB_fact_ids_with_multiple_versions":1,"existing_C9_fact_ids_with_multiple_versions":1,"meaning":"The real project legitimately contains history; this is not a new real A run, medical acceptance or ABC integration PASS."},
+  "untouched": ["C9 presentation and current generation", "Original scientific receipts and snapshots", "All source/user fact history and protected user edits"],
+  "next": "Use source-join manifest to connect real A/B/C through existing APIs under one owner; actual new candidate and source review remain pending",
+  "goal": "ACTIVE, not paused/completed/RC"
+}

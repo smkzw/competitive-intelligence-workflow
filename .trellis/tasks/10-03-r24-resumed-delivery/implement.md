@@ -1,5 +1,16 @@
 # Continuous implementation checkpoint
 
+## 正常A候选版本范围根因（7a66f7b，ABC节点运行期间）
+
+Owner沿正常源入口发现全DB扫描误拒同一fact合法历史；阅读完整A执行闭包/
+摄取lineage，2合法时序RED、真冲突原PASS。最小set锁定版本guard，保留
+历史和快照内拒绝；相关35PASS6.95s、Ruff2/strict1。真实AB/C9各一fact有
+多版本只读核验，不叫真实A重建/医学接受。C9前端/current不受改动，不重跑。
+具体owner-a-review-snapshot-scope-v1；方法direct，决定性源/运行反例已消除
+此客观边界不确定性，不为它增模型或平台。单一ABC只读节点实际runner42125/
+child42202已启动，7200s硬边界，原生kqueue单结束事件；未轮询progress或重派。
+产物等待终态再按真实byte/route核验；运行中和初始化不记PASS。共享写入仍owner。
+
 ## 唯一当前：C9紧凑横比已实际验证，连续转入ABC来源接线
 
 方法：紧凑chrome为客观已复现根因，owner直接一批最小修复/26相关PASS31.69s；

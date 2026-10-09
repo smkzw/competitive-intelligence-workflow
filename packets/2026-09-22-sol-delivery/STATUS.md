@@ -1,5 +1,13 @@
 # 唯一当前状态：1007V1 连续实施，真实C current9紧凑横比；转入ABC接线
 
+最新公共源码7a66f7b：正常A复核入口不再把DB全部历史当本候选证据，只选
+本次lineage锁定版本；快照内冲突/缺事实仍拒绝。成族RED2FAIL/1PASS1.95s
+→相关35PASS6.95s、Ruff2/strict生产1。真实AB/C9各一事实有多版本，只读
+核验；没重跑真实A、没改DB/current/C9页面，不借此宣称医学或ABC接受。
+[限定代码与下一动作](evidence/1007V1/owner-a-review-snapshot-scope-v1.json)。
+有界ABC来源接线节点已实际启动CodeBuddy，终态与真实模型回执待归集；不轮询
+progress、不重派、不过早采纳。以下C9证据只签其呈现字节，不是新宽门。
+
 当前代码067fe3f、generationeda8f0ea：高级筛选复用既有details移入工具区，
 横比冗余hero/入口/标题按任务去重，16px文字/临床限制/258观察保留。
 一次相关26PASS31.69s、Ruff/Node/镜像；正常纯呈现r9，无临床save。
