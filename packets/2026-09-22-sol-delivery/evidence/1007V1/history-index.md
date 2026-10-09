@@ -3,6 +3,12 @@
 当前仅认根HANDOFF→STATUS；本索引不激活历史暂停、旧PID或旧接受状态。
 旧入口的全部原文由Git不可变版本保留，不逐轮复制堆入当前入口或改写历史。
 
+- 最新 [20261009无损暂停](../../../../.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)：
+  代码abd22b9，C2实际VETO与呈现修复151相关PASS；新C3/实屏/current未运行。
+  Goal API真实paused，用户明确恢复前不启动下一节点；原171文件pin和无需重跑清单已记录。
+- [ac492a2上一入口](https://github.com/smkzw/competitive-intelligence-workflow/blob/ac492a231ea5cccb53807185c669872a77f37628/HANDOFF.md)：
+  当时C2独立复核待运行，已被新追加VETO回执取代，不覆写创建时PENDING原件。
+
 - [47aaaeb原接手入口](https://github.com/smkzw/competitive-intelligence-workflow/blob/47aaaebe7742398d3c1bc5b3a713ac5f0186ea20/HANDOFF.md)：
   r10新安装分享已核、C初轮/翻译review当时PENDING；之后以当前终态回执为准，
   不把旧在途PID/占位文件当完成，也不覆写该历史状态。

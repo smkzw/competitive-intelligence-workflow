@@ -1,4 +1,24 @@
-# 唯一当前状态：1007V1 持续实施，C真实来源已采用，报告候选继续推进
+# 唯一当前状态：1007V1 已无损暂停，当前代码节点完成，非报告交付
+
+2026-10-09 07:49:37 UTC，用户要求本节点完成后暂停；Goal API实际paused。
+代码检查点abd22b9706879513ecc91c3e613f4462d1cef565（父ac492a2）。
+[最新精确暂停/恢复](../../.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)。
+当前没有运行中的执行节点，不再启动C3、复核或current；以下ACTIVE段落均为
+历史批次现场，不授权自动恢复，不恢复旧PID。
+
+C2实际正常issuer独立VETO三阻断+一非阻断，exit2正确拒签，无e2报告回执。
+[真实否决](evidence/1007V1/owner-c2-report-veto-v1.json)。本批一次根因包修
+实际入组限定、未结构化vs源缺失、统计/全文范围、译文标识。Owner再补共享
+A新状态、全占位误宣称、条款不证明全文缺失三RED，最终151相关PASS4.39s、
+Ruff5/strict3；不借worker582PASS/2FAIL或历史wide gate签全仓/报告。
+[精确代码/运行/限界](evidence/1007V1/owner-c2-presentation-repair-v1.json)。
+真实PN四研究258输入只读核验：实际N151/160/286/274/例，scale/threshold
+not_extracted，13统计字段尚未结构化；171项目文件hash及DB79ccefa5不变。
+源码已修不代表旧C2门户已改：旧HTML/VETO保持，新C3/实屏NOT_RUN，current
+仍无。原来源采用不重跑。五用户脏文件保护/未知历史无清理。下一解除暂停后
+轻核固定hash，最小参数化既有helper生成NEW C3，再走正常独立产品复核。
+
+## 以下为保留的历史批次记录，不是当前活动现场
 
 本批实现fad1aa9665de2bdd0b69a2f17d66c57535bad196已push，远端main实核一致；
 基线d5adb2c5，源码/源采用绑定owner逐文件hash，不借旧安装。
