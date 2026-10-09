@@ -56,12 +56,25 @@
     "requested_route": "Explicit manifest-permitted OMP compatibility adapter/openai-codex/gpt-6.1-sol:high; normal issuer hosts cannot use ZCode app-server",
     "followup_directory": "runs/scoped-source-formal-v2/same-session-plan-followup-v1",
     "followup_started_at": "2026-10-09T23:26:27.102136+00:00",
-    "followup_state": "PENDING: actual terminal model/effort/decision not yet verified",
+    "followup_state": "TERMINAL exit0; normal issuer verified receipt31d3c3ee559dc0c9f503e9dcb2948d85ccbdf6a0c662e6d173288e673f682035. Actual terminal session provider openai-codex/model gpt-6.1-sol checked; high configured in actual issuer argv. Same reviewer session, not a new opinion.",
+    "followup_finished_at": "2026-10-09T23:40:31.066520+00:00",
+    "independent_verification_sha256": "b555e9868306ab941f8ea3bc6360cbadb39d9556f34ff4b2c177f4df40ae010c",
+    "independent_checks": "3989facts/3572claims/20sources, exactquotes/scopes; readonly45.36s. First reviewer script syntax failure retained, corrected script exclusive. Old279rows not re-reviewed; supplied version-posting day is not observation first disclosure/historical archive/freshness.",
     "issuer_pid": 9489,
     "owner_exec": 30440,
     "pure_exit_observer_exec": 19583,
-    "adoption_recipe": "evidence/1007V1/adopt-scoped-source-union-v2.py, prepared and Ruff checked but NOT_RUN; cannot run without actual valid normal issuer receipt",
+    "adoption_recipe": "evidence/1007V1/adopt-scoped-source-union-v2.py; actual normal receipt verified, one invocation started exec75738; pending real adoption return/postconditions. Do not rerun while pending or after partial write.",
     "limits": "Source scalar/context acceptance only. Existing A11 site is unchanged presentation anchor, not new-source report rendering/gate/current/RC. Unknown group links remain unknown; seven true missing fields remain gaps; no freshness/universe/publication/MAH acceptance."
+  },
+  "consumer_preparation": {
+    "state": "PREPARED_ONLY_NOT_REGISTERED_NOT_ACCEPTED_NOT_CURRENT",
+    "path": ".artifacts/1007-scoped-consumer-preparation-v2",
+    "proof_sha256": "e9625f3d899dc846fb3faee4b4e5c02b8e801eec33adbc2249bfbf3121664ce6",
+    "a_sha256": "1c80443079e1ee163111a408c62a89a8069456213b4afb8960a48d26003c5194",
+    "direct_candidates_sha256": "336a5d4d58cd6afc8b8d86ef67b10f2e5d4736b14cdda74353733bd86c132e87",
+    "counts": "46trials/3851allrows retained;886direct candidates including91prior;2951unknown arm links and14without locked primary are not editable/coaxis",
+    "errata": "Original output reason no_adopted_snapshot_primary_for_this_row means no primary in locked snapshot, not adoption status. Source recipe corrected; original output bytes preserved. First KeyError before output/DB write preserved; corrected one preparation succeeded. Ruff/strict recipe PASS.",
+    "next": "Receipt-backed adoption then normal A registration/source projections/B registration; no inferred question equivalence for new concepts, reuse exact35prior mappings only"
   },
   "current": {
     "revision": 11,
@@ -72,7 +85,7 @@
     "row_preservation": "Read-only recheck: zero original row hashes lost vs ingestion prewrite; accepted363/candidate4761/user_modified8; bindings1085. DB byte digest differs from prior observation, not falsely called byte-identical.",
     "operations": "No new save/render/current selection; existing edit server65033 kept, Ego184 not rerun on unchanged pages"
   },
-  "next_safe_action": "Collect original test/reviewer/issuer terminal only; verify model, scope and actual artifact. Receipt-backed adoption through existing API, preserve scientific payload/conflicts/bindings/current and user clears. Then exact legitimate A/B consumers and one normal source-refresh transaction; no destructive replay.",
+  "next_safe_action": "Collect original adoption exec75738 terminal and normal return; never retry completed ingestion/issuer. Verify allowed review_state-only changes with scientific payload/conflicts/bindings/current and user clears preserved. Then exact legitimate A/B consumers and one normal source-refresh transaction; no destructive replay.",
   "release_open": "New source adoption/current integration; full universe/publications/current-status/China MAH; unknown relations; all physical pages/fresh-profile/share/config/cross-browser/install/three hosts/recovery/24 portals. No RC/full delivery.",
   "retention": "No cleanup. Required original failures, new sources, consistent backups and review artifacts retained; unknown untracked files and protected user files untouched."
 }

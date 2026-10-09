@@ -1,6 +1,16 @@
 # 资料包与文件导航
 
-**2026-10-04唯一当前资料入口：**[完整交接](HANDOFF_20261004_R24_252_PAUSE.md)、
+**唯一当前资料入口：**[STATUS](STATUS.md)顶节与
+[精确恢复](evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。
+正常源20/3989/3572的摄取、正式签发、一次接受、A/B登记与一次刷新分别留有
+可恢复脚本/实际返回，不能重复写入。新三脚本为
+`evidence/1007V1/prepare-scoped-consumer-candidate-v2.py`、
+`evidence/1007V1/register-scoped-ab-consumers-v2.py`、
+`evidence/1007V1/refresh-scoped-ab-current-v2.py`；其运行状态以唯一checkpoint
+为准，不把准备或source-only接受冒充当前报告/共轴/发布。
+大产物仍按既有受控CAS/manifest引用，旧资料不清理、不重写。
+
+**以下为2026-10-04历史资料入口：**[完整交接](HANDOFF_20261004_R24_252_PAUSE.md)、
 [复盘](RETROSPECTIVE_20261004_R24_252.md)及[STATUS](STATUS.md)顶节。
 R251冻结22文件与原始source、四RED/212GREEN、实际独立21测试和原REVISE均留存；
 R252当前源码/质量日志/包/安装/保护清单与远端结果见交接第12节。raw仅本地受控

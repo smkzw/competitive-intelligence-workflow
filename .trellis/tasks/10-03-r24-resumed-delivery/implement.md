@@ -9,7 +9,10 @@ C01实际821.427s/exit0/max verified，确认事务保护但首条影响清单�
 C01同原会话修复审查192.734s/exit0/max verified、3PASS/scoped ACCEPT结束。
 正式来源epoch1准备一次；
 原issuer因另建任务询问exit2无verdict/receipt，原失败保留。现既有任务
-in_progress说明后同会话issuer9489/30440，EXIT19583，实际终态尚PENDING。
+in_progress说明后同会话issuer已exit0/正常回执31d3c3ee；实际模型/provider与
+high配置核验。正常来源采用exec75738仅一次运行，待真实返回与后置验证。
+46研究3851行准备全保留，886直接候选；2951未知关系/14缺锁定原子不接编辑。
+下一正常A/B登记/一次refresh，不能把source-only接受当报告/宇宙/共轴接受。
 current11/349/用户清除/C保持，所有原DB行不丢，DBhash变化如实记录。
 owner-mixed-impact-and-formal-source-v2及STATUS为唯一恢复；ACTIVE非暂停。
 下一只收终态/核实际回执，再正常采用/合法消费者/一次refresh及同候选验收。

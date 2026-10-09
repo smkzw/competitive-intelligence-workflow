@@ -7,9 +7,11 @@
 当前3889c943后：C01已实际终态确认核心事务保护，owner修首事实影响清单与
 保留事实单请求scope的共享根因；2RED→126相关PASS；同原C01有限修复复核
 actual192.734s/exit0/max verified、3PASS/scoped ACCEPT已结束。正式source-only
-epoch1已准备，原issuer exit2无结论/回执，未采用；
-按既有in-progress任务同OMP会话正常issuer接续。源/旧接受/current11/清除/C
-保持；新接受recipe未运行，必须等真实正常issuer。准确恢复见STATUS顶节。
+epoch1已准备，原issuer exit2无结论/回执的失败保留；既有任务同会话接续现
+已正常exit0，真实模型/provider/high配置与回执31d3c3ee核验。来源接受仅一次
+运行exec75738，收原返回后验证；随后正常A/B登记与795新增单事务刷新。
+46研究/3851行候选全保留，886直接候选；未知组不接编辑/共轴。源/旧接受/
+current11/清除/C保护，准确恢复见STATUS顶节，不重摄取或重签旧issuer。
 不另建计划平台/新审批，以下均为前节点依赖背景。
 
 当前基线84f8e0ea已push，current11 A11/B11/C9和349可编辑采用事实保持。

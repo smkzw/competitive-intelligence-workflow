@@ -21,16 +21,16 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "1007V1 continuous; baseline3889c943. Independent C01 actual GLM5.3Flash/max terminal821.427s confirmed transaction rollback and found first-fact-only impact metadata. Owner2RED root repair/all seeds/one verified old scope; 126 relatedPASS193.77s and same-session review scopedACCEPT192.734s/3PASS; both terminal. Normal source-only A epoch1 prepared; first issuerexit2 planning question/no verdict or receipt. SameOMPsession normalissuer followup9489/30440 pending. current11 A11/B11/C9 and349/userclear unchanged; no adoption or refresh. STATUS sole current.",
+  "notes": "Continuous1007V1, no pause/RC. Current exact recovery owner-mixed-impact-and-formal-source-v2.json. C01 repair126relatedPASS and same-session independent scopedACCEPT complete. Source-only actual normal OMP/gpt6.1sol/high issuer terminalexit0/receipt31d3c3ee. One normal adoptionexec75738 pending;46trials3851rows/886directconsumer candidates prepared, not registered/current. Preserve349/current11/userclear/C; source/current/product acceptance separate.",
   "meta": {
     "execution_state": "active",
     "goal_api_state": "active_verified",
     "pause_requested_by_user": false,
     "handoff": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json",
-    "last_stage": "1007V1 continuous; baseline3889c943. Independent C01 actual GLM5.3Flash/max terminal821.427s confirmed transaction rollback and found first-fact-only impact metadata. Owner2RED root repair/all seeds/one verified old scope; 126 relatedPASS193.77s and same-session review scopedACCEPT192.734s/3PASS; both terminal. Normal source-only A epoch1 prepared; first issuerexit2 planning question/no verdict or receipt. SameOMPsession normalissuer followup9489/30440 pending. current11 A11/B11/C9 and349/userclear unchanged; no adoption or refresh. STATUS sole current.",
+    "last_stage": "Normal source-only issuer terminal verified; one receipt-backed adoption in progress; exactA/B consumers prepared.",
     "product_release_state": "development-candidate",
     "last_verified_batch": "2RED→126 relatedPASS193.77s/Ruff5/strict2; independent sameGLMmax repair review3PASS9.98s/scopedACCEPT. Not actual source/current/browser or RC.",
     "project_completed": false,
-    "current_stage": "1007V1 continuous; baseline3889c943. Independent C01 actual GLM5.3Flash/max terminal821.427s confirmed transaction rollback and found first-fact-only impact metadata. Owner2RED root repair/all seeds/one verified old scope; 126 relatedPASS193.77s and same-session review scopedACCEPT192.734s/3PASS; both terminal. Normal source-only A epoch1 prepared; first issuerexit2 planning question/no verdict or receipt. SameOMPsession normalissuer followup9489/30440 pending. current11 A11/B11/C9 and349/userclear unchanged; no adoption or refresh. STATUS sole current."
+    "current_stage": "Collect original adoptionexec75738; then normal886A/B consumer registration and795source additions in one actual current transaction. No blind replay."
   }
 }
