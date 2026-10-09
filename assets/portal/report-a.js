@@ -2060,6 +2060,8 @@
           var row = rows[id], button = document.createElement("button"); button.type = "button";
           button.setAttribute("data-open-evidence", "");
           button.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
+          button.setAttribute("data-evidence-row-id", row.a_row_id);
+          button.setAttribute("data-evidence-collection", row._domain);
           var value = row.value == null ? (window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核")
             : String(row.value) + " " + (row.unit || "");
           button.textContent = [row.product_zh, row.arm_detail || row.arm, value, row.time,
@@ -2097,6 +2099,8 @@
     var row = (window.__A_COMPARISON_ROWS__ || {})[rowId];
     if (!row || !trigger || !trigger.setAttribute) return;
     trigger.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
+    trigger.setAttribute("data-evidence-row-id", row.a_row_id);
+    trigger.setAttribute("data-evidence-collection", row._domain);
     openEvidencePanel(trigger);
   };
   function applyFilters(resetPage) {

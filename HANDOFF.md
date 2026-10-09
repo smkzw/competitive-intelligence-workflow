@@ -3,6 +3,12 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 上次暂停原件：[20261009精确恢复](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)。
 用户重新授权连续实施，Goal API实查active；旧暂停原件保留，不恢复旧PID。
+最新C e1已终态ACCEPTED93cd8663，正常签发9d073dad和258事实/258声明采用
+372ca355均owner重开通过；接受状态投影只改review_state，原e0/否决/site保持。
+联合current仍无，非全科学/浏览器/交付通过。A v4实际来源按钮误开全页列表，
+生产矩阵和图回调补源行/集合，46相关PASS50.40s；NEW v5实屏/四宽四态下一。
+[唯一最新精确恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-joint-c-adoption-and-a-source-routing-v1.json)。
+以下在途与旧候选仅为历史，不等待旧PID或拼候选PASS。
 最新：d2ea033已push，A/B v3实屏溢出/主表折叠关闭但516/519px首屏仍需改善。
 下一共享匹配行先列（全研究保留）/桌面辅助区并列已34相关PASS，待NEW v4实际。
 C新候选0f7ab5ae/e1/sitea9a6e21f正常准备，旧258观察/旧请求/否决/站点保持；

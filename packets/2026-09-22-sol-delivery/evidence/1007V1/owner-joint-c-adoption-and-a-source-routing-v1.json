@@ -1,0 +1,49 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "base_commit": "0fe398062a1f82752e9548421665050e2a63c261",
+  "goal_state": "active",
+  "C_joint_e1": {
+    "content_digest": "0f7ab5ae9fde606aedf77fc5511310b07e38be3891f70d43ea222cdfbace65e8",
+    "site_digest": "a9a6e21f67917b77fef33b1aceaad5545a0601faf85024d6c6b6bf2fdce238fe",
+    "independent_session": "01a121d9-213b-7000-b55d-08b5f52a1e7f",
+    "route": "actual Pi/OMP18.8.6/openai-codex/gpt-6.1-sol; requested high; same independent session continuation, not another independent opinion",
+    "actual_issuer_started_at": "2026-10-09T18:35:04.189476Z",
+    "actual_issuer_finished_at": "2026-10-09T18:39:23.176394Z",
+    "exit_code": 0,
+    "verdict": "ACCEPTED",
+    "verdict_digest": "93cd8663aee46670c03a3f4dda1b11d82daa474eba1327fb6fad0ff46b5baa12",
+    "receipt_digest": "9d073dad1e4e0e53c718cf4a5a23625a501862ebe069023b50c834f49d68769d",
+    "actual_scope": "changed missing-state page, eight targeted locators across four registry sources, existing quote/context closure and new epoch binding; no full semantic re-review of 258 rows",
+    "issuance_verification": "normal production verify_receipt_issuance passed",
+    "source_adoption": "normal ci-workflow review accept-source-facts exit0 at 2026-10-09T18:47:12.006130Z",
+    "accepted_facts": 258,
+    "accepted_claims": 258,
+    "decision_digest": "372ca355b97b3d2b10d684302f6e3a624f554d3235935d7b11df8d062a985af4",
+    "owner_read_only_reopen": "materialized acceptance verified; original e0 input/request/context/verdict and site hashes unchanged; current absent",
+    "not_run": "browser, network freshness, universe, publications, Protocol-SAP, current MAH, joint current/save/share/install/hosts/release"
+  },
+  "AB_v4": {
+    "A_site_digest": "85590df44e3d61844901c12c0c7fbdff092a9b299dc062e2cf96c48503675431",
+    "B_site_digest": "65bb5d92802536b9ad4ea34eb460dccdff3e1de7ec59e222f962e4480b7acdee",
+    "actual_A_1440": "43 studies retained; first matching NCT04501666/NCT04501679; table begins approximately416px; no horizontal document overflow",
+    "source_routing_failure": "first 32-valued matrix source button opened generic whole-page trial list, not the selected observation; Esc returned to actual trigger",
+    "B_v4_pixels": "NOT_RUN"
+  },
+  "A_source_routing_root": {
+    "mode": "direct: producer metadata omitted the explicit collection and row identity consumed by the existing evidence panel; deterministic and real-browser reproduction decisive",
+    "change": "matrix buttons and chart callback set data-evidence-row-id plus explicit data-evidence-collection, preserving existing scientific identity and source renderer",
+    "RED": "one root failure in 0.06s",
+    "related_GREEN": "46 passed in 50.40s; A workspace, observation navigation, layout, fact editor and current navigation",
+    "static": "Ruff and Node syntax passed; asset mirror mechanically synchronized",
+    "initial_static_failure": "one overlong test comment corrected; no product change or repeated wide gate",
+    "fixed_bytes_browser": "NOT_RUN at checkpoint; new v5 candidate required, v4 not overwritten",
+    "wide_gate": "NOT_RUN"
+  },
+  "recovery": {
+    "project_relative": ".artifacts/1007-abc-current-integration-v1/working/project",
+    "next": "new A/B v5 normal render; actual selected quote/locator/focus and four desktop states; then same-current ABC integration through existing APIs",
+    "current_initialized": false,
+    "old_evidence": "immutable and retained; no worker pending, no old PID wait",
+    "release": "development candidate, not paused, not complete, not RC"
+  }
+}

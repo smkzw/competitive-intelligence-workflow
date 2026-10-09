@@ -74,6 +74,10 @@ assert.match(text(lookup.tbody),/PRIME｜NCT04202679/);
 assert.ok(text(lookup.tbody).includes('<img onerror=bad()>')); // literal text, no HTML parsing
 assert.equal(lookup.tbody.children[0].children[1].children[0]
  .attrs['data-efficacy-row-id'],'source-a');
+assert.equal(lookup.tbody.children[0].children[1].children[0]
+ .attrs['data-evidence-row-id'],'source-a');
+assert.equal(lookup.tbody.children[0].children[1].children[0]
+ .attrs['data-evidence-collection'],'efficacy');
 const seen=new Set(JSON.parse(host.dataset.columnIds));
 lookup['[data-a-comparison-next]'].listeners.click();
 JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));
@@ -100,8 +104,25 @@ assert.match(text(lookup.tbody),/FAS，48周/);assert.match(text(lookup.tbody),/
 sandbox.selected={product:['drug-b']};sandbox.renderAComparison();
 assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].scientific_group_id,'frame-b');
 lookup['[data-a-comparison-question]'].value='aa-unknown';
+sandbox.selected={};
 lookup['[data-a-comparison-question]'].listeners.change();
 assert.equal(new URL(url).searchParams.get('cmp'),'aa-unknown'); // unresolved still reachable
+const clearedButton=lookup.tbody.children[0].children[1].children[0];
+assert.equal(clearedButton.attrs['data-evidence-row-id'],'source-c');
+assert.equal(clearedButton.attrs['data-evidence-collection'],'safety');
+const callbackStart=source.indexOf('  window.__A_COMPARISON_EVIDENCE__ = ');
+const callbackEnd=source.indexOf('\n  function applyFilters(',callbackStart);
+let opened;
+sandbox.openEvidencePanel=t=>{opened=t;};
+vm.runInNewContext(source.slice(callbackStart,callbackEnd),sandbox);
+const glyph=new Node();sandbox.window.__A_COMPARISON_EVIDENCE__('a',glyph);
+assert.equal(opened,glyph);assert.equal(glyph.attrs['data-evidence-row-id'],'source-a');
+assert.equal(glyph.attrs['data-evidence-collection'],'efficacy');
+sandbox.window.__A_COMPARISON_EVIDENCE__('c',glyph);
+assert.equal(glyph.attrs['data-evidence-row-id'],'source-c');
+assert.equal(glyph.attrs['data-evidence-collection'],'safety');
+const prior=JSON.stringify(glyph.attrs);sandbox.window.__A_COMPARISON_EVIDENCE__('missing',glyph);
+assert.equal(JSON.stringify(glyph.attrs),prior); // unknown row does not open a default source
 """
     result = subprocess.run(["node", "-e", probe, str(script), str(script.parent / "portal.js")],
                             capture_output=True, text=True)
