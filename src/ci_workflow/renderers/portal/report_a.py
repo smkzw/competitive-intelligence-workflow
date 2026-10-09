@@ -1636,26 +1636,6 @@ def _native_unit_zh(unit: str) -> str:
     if not text:
         return text
     low = text.casefold()
-    m = re.fullmatch(
-        r"(?:kilo|milli|micro|nano)?\s*(?:gram|mole|equivalent)s?\s*\(([^)]+)\)\s*/?\s*"
-        r"per\s*(?:deci|milli|micro|nano)?\s*lit(?:er|re)(?:\s*\(([^)]+)\))?",
-        low,
-    )
-    if m:
-        if "equivalent" in low or re.search(r"[/*]", m.group(1)):
-            return text  # Outer denominator/compound dimensions must remain visible.
-        sym = (m.group(2) or m.group(1) or "").replace(" ", "")
-        sym = re.sub(r"ug", "μg", sym)
-        sym = re.sub(r"umol", "μmol", sym)
-        return sym if m.group(2) else f"{sym}/L"
-    m = re.fullmatch(
-        r"(?:kilo|milli|micro|nano)?(gram|mole)s? per (?:deci|milli|micro|nano)?lit(?:er|re)",
-        low,
-    )
-    if m:
-        stem = "g" if m.group(1).startswith("gram") else "mol"
-        prefix = "μ" if "micro" in low else "n" if "nano" in low else "k" if "kilo" in low else ""
-        return f"{prefix}{stem}/L"
     # 指数计数单位写法归一（独立复核 r21：同一量级多种写法并存）
     m = re.fullmatch(
         r"(?:cells?\s*)?[x×*]\s*10\s*\^?\s*(\d+)(?:\s*cells?)?\s*/?\s*l(?:\s*\([^)]*\))?",
@@ -1737,31 +1717,50 @@ def _native_unit_zh(unit: str) -> str:
         return _UNIT_LITERAL_ZH[low]
     if text in _UNIT_LITERAL_ZH:
         return _UNIT_LITERAL_ZH[text]
-    # 拼写式单位第二形状：前缀词直接连在 gram/mole 上、符号在括注里
-    # （A r24：'micrograms per litre (ug/L)' 类 500+ 行被占位串误吞）
+    # One spelled-unit owner: keep numerator AND volume prefixes, no conversion.
+    # Conflicting/compound annotations remain raw instead of losing dimensions.
     m = re.fullmatch(
-        r"(kilo|milli|micro|nano)?(gram|mole)s?\s*(?:\([^)]*\))?\s*per\s*"
+        r"(kilo|milli|micro|nano)?(gram|mole)s?\s*(?:\(([^)]*)\))?\s*per\s*"
         r"(deci|milli|micro|nano|kilo)?\s*lit(?:er|re)\s*(?:\(([^)]+)\))?",
         low,
     )
     if m:
-        # 注意分组：3=分母词前缀（deci/milli/...），4=括注符号
         num_prefix = {"kilo": "k", "milli": "m", "micro": "μ", "nano": "n"}.get(
             m.group(1) or "", ""
         )
         den_prefix = {"deci": "d", "milli": "m", "micro": "μ", "nano": "n", "kilo": "k"}.get(
-            m.group(3) or "", ""
+            m.group(4) or "", ""
         )
         stem = "g" if (m.group(2) or "").startswith("gram") else "mol"
-        return f"{num_prefix}{stem}/{den_prefix}L"
+        numerator, denominator = f"{num_prefix}{stem}", f"{den_prefix}L"
+        symbol = f"{numerator}/{denominator}"
+        for annotation, allowed in (
+            (m.group(3), {numerator.casefold()}),
+            (m.group(5), {denominator.casefold(), symbol.casefold()}),
+        ):
+            if annotation is not None:
+                hint = annotation.replace(" ", "").replace("µ", "μ")
+                hint = hint.replace("mcg", "μg").replace("ug", "μg").replace("umol", "μmol")
+                if hint not in allowed:
+                    return text
+        return symbol
     m = re.fullmatch(
-        r"(?:international\s*)?units?\s*(?:\([^)]*\))?\s*(?:per\s*(?:lit(?:er|re)|ml)|/\s*lit(?:er|re)|/\s*ml|/l)"
+        r"(international\s*)?units?\s*(?:\(([^)]*)\))?\s*"
+        r"(?:per\s*(lit(?:er|re)|ml)|/\s*(lit(?:er|re)|ml|l))"
         r"(?:\s*\(([^)]+)\))?",
         low,
     )
     if m:
-        paren_sym = (m.group(1) or "").replace(" ", "")
-        return paren_sym if paren_sym else ("IU/L" if "international" in low else "U/L")
+        numerator = "IU" if m.group(1) else "U"
+        denominator = "mL" if (m.group(3) or m.group(4)) == "ml" else "L"
+        symbol = f"{numerator}/{denominator}"
+        for annotation, allowed in (
+            (m.group(2), {numerator.casefold()}),
+            (m.group(5), {denominator.casefold(), symbol.casefold()}),
+        ):
+            if annotation is not None and annotation.replace(" ", "") not in allowed:
+                return text
+        return symbol
     # 括注符号直取（"micromoles (μmol)/liter" → μmol/L）；
     # 1007V1：外层若仍含百分比变化/时间维限定，不得丢弃限定只留裸符号
     m = re.search(r"\(([^)]*/[^)]+)\)", text)

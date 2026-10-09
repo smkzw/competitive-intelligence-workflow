@@ -96,3 +96,32 @@ def test_comparison_display_uses_existing_unit_label_without_rewriting_source(un
     assert shown["unit_label_zh"] == display
     assert {k:v for k,v in shown.items() if k != "unit_label_zh"} == row
     assert json.dumps(row, sort_keys=True) == before
+
+
+@pytest.mark.parametrize(("source", "display"), [
+    ("milligram per deciliter", "mg/dL"),
+    ("milligrams per liter", "mg/L"),
+    ("microgram per milliliter", "μg/mL"),
+    ("nanomoles per microlitre", "nmol/μL"),
+    ("millimoles per litre", "mmol/L"),
+    ("micrograms (ug) per milliliter (mL)", "μg/mL"),
+    ("milligrams (mg) per deciliter (dL)", "mg/dL"),
+    ("micrograms per liter (ug/L)", "μg/L"),
+    ("units per ml", "U/mL"),
+    ("international units per ml", "IU/mL"),
+    ("units (U) per ml (mL)", "U/mL"),
+    ("units per liter (U/L)", "U/L"),
+    ("milligrams (kg) per liter (L)", "milligrams (kg) per liter (L)"),
+    ("micrograms (ug/mL) per liter", "micrograms (ug/mL) per liter"),
+    ("units (PRBC) per ml", "units (PRBC) per ml"),
+    ("units per ml (IU/mL)", "units per ml (IU/mL)"),
+    ("milligrams per deciliter per week", "milligrams per deciliter per week"),
+    ("U*day/L/week", "U·天/L/周"),
+])
+def test_scalar_unit_spelling_preserves_prefix_denominator_and_qualifiers(source, display):
+    from ci_workflow.renderers.portal.report_a import _comparison_display_row
+
+    assert _native_unit_zh(source) == display
+    raw = {"row_id": "source-unit", "unit": source, "value": 2.5}
+    assert _comparison_display_row(raw) == {**raw, "unit_label_zh": display}
+    assert raw["unit"] == source and raw["value"] == 2.5

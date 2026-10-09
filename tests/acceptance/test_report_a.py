@@ -13,6 +13,10 @@ from playwright.sync_api import Browser, Page, sync_playwright
 
 from ci_workflow.application.source_research_service import (
     FreshAResearchContent,
+    ResearchFact,
+    SourceCapture,
+    audit_clinicaltrials_result_coverage,
+    validate_clinicaltrials_result_coverage,
 )
 from ci_workflow.qc.report_a_acceptance import inspect_legacy_report_a_sample
 from ci_workflow.renderers.portal.report_a import (
@@ -70,8 +74,8 @@ def _rows(payload: dict[str, object], section: str, product_id: str) -> list[dic
 
 def test_frozen_ad_bytes_remain_intact_but_current_scientific_gate_rejects_gaps() -> None:
     payload = _payload()
-    # This tests historical source bytes without invoking today's stricter
-    # scientific validator or rewriting the old frozen fixture.
+    # Preserve historical bytes; test today's claim gate and source coverage
+    # separately, because claim validation now runs before coverage validation.
     assert hashlib.sha256(FRESH_CONTENT.read_bytes()).hexdigest() == EXPECTED_SOURCE_BYTES_SHA256
     report = ReportAPortalData.model_validate(payload["report_data"])
     assert report.indication == "特应性皮炎"
@@ -81,8 +85,12 @@ def test_frozen_ad_bytes_remain_intact_but_current_scientific_gate_rejects_gaps(
     assert len(payload["facts"]) == 17_124
     assert len(report.efficacy) == 6_780
     assert len(report.safety) == 10_228
-    with pytest.raises(ValueError, match="ClinicalTrials.gov 结果覆盖审计失败"):
+    with pytest.raises(ValueError, match="AI 综合判断必须明确文字标识和方法"):
         FreshAResearchContent.model_validate(payload)
+    sources = tuple(SourceCapture.model_validate(item) for item in payload["sources"])
+    facts = tuple(ResearchFact.model_validate(item) for item in payload["facts"])
+    with pytest.raises(ValueError, match="ClinicalTrials.gov 结果覆盖审计失败"):
+        validate_clinicaltrials_result_coverage(report, sources, facts=facts)
     visible_text = json.dumps(report.model_dump(mode="json"), ensure_ascii=False)
     for forbidden in (
         "Gate",
@@ -267,13 +275,24 @@ def test_result_bearing_product_without_key_safety_is_rejected_before_review() -
             row["numerator"] = None
             row["denominator"] = None
             row["disclosure_state"] = "未公开"
-    with pytest.raises(ValueError) as caught:
-        FreshAResearchContent.model_validate(payload)
-    messages = " ".join(
-        item["msg"]
-        for item in caught.value.errors(include_input=False)  # type: ignore[attr-defined]
+    report = ReportAPortalData.model_validate(payload["report_data"])
+    sources = tuple(SourceCapture.model_validate(item) for item in payload["sources"])
+    facts = tuple(ResearchFact.model_validate(item) for item in payload["facts"])
+    audit = audit_clinicaltrials_result_coverage(report, sources, facts=facts)
+    dupilumab_trials = {trial.id for trial in report.trials if trial.product_id == "dupilumab"}
+    assert not audit.passed
+    assert any(
+        issue.trial_id in dupilumab_trials
+        and issue.category != "outcome"
+        and issue.status == "missing"
+        and "报告没有对应安全性行" in issue.reason_zh
+        for issue in audit.issues
     )
-    assert "报告没有对应安全性行" in messages
+    assert all(
+        coverage.projected_safety_rows == 0
+        for coverage in audit.trial_coverage
+        if coverage.trial_id in dupilumab_trials
+    )
 
 
 @pytest.mark.parametrize(

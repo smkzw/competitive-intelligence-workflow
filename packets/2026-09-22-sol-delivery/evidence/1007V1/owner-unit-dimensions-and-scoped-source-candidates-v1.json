@@ -1,0 +1,65 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "checked_base_commit": "bde53cca1dec3babe0c379f53813417480bda7a3",
+  "status": "CONTINUOUS_IMPLEMENTATION_NOT_PAUSED_NOT_RC",
+  "mode": "execution-plus-conference: owner holds shared scientific adoption; one fresh-context source challenge runs separately while the bounded display-unit family is repaired directly",
+  "current": {
+    "revision": 11,
+    "generation_sha256": "a998b87aa824619d6ea6168278fbd6714a0b9d00229ab0f228f809cb93ba6268",
+    "pointer_file_sha256": "7336654514605085b9ee86e3fedaa664e83406f0c358125fa653683767374d24",
+    "database_sha256": "783e2dec1156b5793087412a724762ed2131e47112330cc2d86f5d982489d03d",
+    "scope": "A11/B11/C9;349 adopted editable facts unchanged; no repeat save, render, ingestion or current selection in this node",
+    "service": "Owned exec28936 loopback65033 remains running"
+  },
+  "unit_root": {
+    "problem": "Duplicate early spelled-unit owners lost numerator/volume prefixes; units per ml became per L. Conflicting/compound annotations could lose dimensions.",
+    "change": "Remove the two faulty early owners; refine the existing scalar-unit path to preserve both prefixes and check annotations. No numerical conversion, scientific identity, source unit/value, JS or geometry change.",
+    "file_sha256": "5f9fc76973c8f301a6a1088937f061ae1547bc1b826c6499f29f2a19178f6f08",
+    "primary_rules": [
+      "https://www.nist.gov/pml/special-publication-811/nist-guide-si-chapter-4-two-classes-si-units-and-si-prefixes",
+      "https://www.nist.gov/pml/special-publication-811/nist-guide-si-chapter-6-rules-and-style-conventions-printing-and-using"
+    ],
+    "red": "18 new production-helper cases:14 FAIL/4 PASS before coherent repair,0.44s. Original tool output retained; no fabricated replay of old RED.",
+    "green": "82 PASS1.23s in tests/reports/a/test_source_native_semantics.py, tests/reports/b/test_1007_comparison_workspace.py, tests/integration/test_1007_comparison_task_layout.py",
+    "green_log": "runs/execution/ci-1007-display/owner-unit-dimensions-related-v2.txt",
+    "fixed_pn_proof": ".artifacts/1007-unit-dimension-preservation-v1/proof.json",
+    "fixed_pn_proof_sha256": "6f13ae0eb72450c123700614fb42d0775177d6885cfd6157f39c2886b0bd72b9",
+    "actual_candidate_effect": "All22 raw unit types/3781 rows have identical before/after display labels. Current11 asset, science and UI bytes unchanged, so no same-page browser rerun claimed.",
+    "static": "Actual Ruff four changed Python files, strict-mypy report_a.py only, diff-check PASS; not an all-repository gate"
+  },
+  "legacy_test_contract": {
+    "failed": "Two old static tests expected coverage failure before the now-earlier unmarked-AI claim guard. Frozen fixture bytes and valid production guards are unchanged.",
+    "red_log": "runs/execution/ci-1007-display/owner-unit-dimensions-legacy-triage-v1.txt",
+    "change": "Test unmarked-AI rejection explicitly, and invoke the public production coverage validator/auditor independently with the same frozen typed sources/facts. Missing dupilumab safety still rejects; no assertion weakening, production guard relaxation or old fixture/hash rewrite.",
+    "green": "7 PASS11.01s: two explicit non-browser acceptance nodeids plus tests/integration/test_r24_current_coverage_oracle.py",
+    "green_log": "runs/execution/ci-1007-display/owner-unit-dimensions-legacy-triage-v2.txt",
+    "frozen_fixture_sha256": "988c1607e08c7f9747a6feb493dcdaf66b6ccd7c26cafefe96e956622196fa1a",
+    "owner_route_mistake": "The first wider related selector included legacy Playwright acceptance tests. Wrong browser route stopped by targeting the owned pytest process; partial log preserved, no Ego acceptance inferred.",
+    "partial_log": "runs/execution/ci-1007-display/owner-unit-dimensions-related-v1.txt",
+    "partial_status": "INTERRUPTED_EXIT143_NOT_ACCEPTED; browser failure not diagnosed or converted to PASS. Formal UI remains Ego Lite workspace184. Unknown browser processes were not killed."
+  },
+  "scoped_source_preparation": {
+    "recipe": "packets/2026-09-22-sol-delivery/evidence/1007V1/reconcile-scoped-source-pool-v1.py",
+    "recipe_sha256": "c81c6c3687c2303a07f8584d33574ea499dc7bc3e189667b04985f7ac17f3033",
+    "candidate": ".artifacts/1007-scoped-source-pool-reconcile-v1/candidate.json",
+    "candidate_sha256": "73ae5683f0de826dc125898173dac7b92a6e638316668ab259f4750b754ceb6c",
+    "payload_sha256": "0f581bf2b30713036ffdd31aa96d316ba736b95ca0b9ca8415d543f6514daa58",
+    "sidecar_sha256": "1a74727cde35d3faeed75ac2b8cac5885c6337716c2080b13f8224eb51b9908f",
+    "source_page_sha256": "82b4ed9ab0c63e227a2c4c34b85727dd988e55062850d42b41517f0749168edf",
+    "counts": {"sources":14,"facts":3726,"claims":3363,"bound_rows":3363,"binding_gaps":0,"original_gaps_bound":1665,"changed_denominators":1750,"unique_true_source_missing_issues":7},
+    "checks": "Normal existing builder on isolated exact fixed page; all3544 efficacy source values/units/identity unchanged, safety exact unchanged. Every quote re-extracted; references complete. Worker14 alleged latent class failures all bind under the actual exact-path candidate; all14 wrong-scope N still reject.",
+    "limits": "Candidate preparation only, not ingested/accepted/current. Four existing trials, old105 adopted facts/91 claims,279 unaccepted rows and C258 remain separate. Offline replay timestamps are NOT live source access/freshness or historical as-of proof. Seven true source-missing issues retained, not zero-imputed."
+  },
+  "independent_source_challenge": {
+    "task": "ci-1007-scoped-pool-source-review-v1",
+    "status": "PENDING_TERMINAL_NOT_ACCEPTED",
+    "requested_primary": "ZCode/zcode/GLM-5.3-Flash:max; generated live route with declared permitted fallbacks",
+    "runner_pid":99332,"runner_exec":46813,"exit_observer_exec":76054,
+    "rule": "Single launched runner; only original EXIT event, no progress inspection/polling/slow redispatch. Actual terminal model/effort must be verified before acceptance. Advisory challenge is not a formal source issuer receipt."
+  },
+  "preservation": {
+    "five_user_files": "Preserved and excluded from staging; unknown/historical untracked files retained. No cleanup or old Chinese-root contact.",
+    "previous_screenshot_defect": "Three current10 navigation PNGs overwritten in the previous node remain unavailable; current11 correction evidence is preserved. This record does not restore or rewrite them."
+  },
+  "next": "Collect original C03 terminal event and challenge frozen source candidates; reconcile provenance/cutoff and accepted ancestry before normal ingestion/formal review/adoption. Keep current11/clear/C intact. Continue the remaining source, universe, actual-browser, installation/three-host/recovery and24-portal gates; no RC or voluntary pause."
+}
