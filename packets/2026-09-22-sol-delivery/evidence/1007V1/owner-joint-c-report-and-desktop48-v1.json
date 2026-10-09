@@ -1,0 +1,50 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "base_commit": "49d4bd2dde23cb94abfc785dc291dc9818bd7090",
+  "goal_state": "active_verified",
+  "C_report": {
+    "content_digest": "2f35433d532054470c1d80df86197f924d3a336ced3c253e86ae69af6c4bfe86",
+    "site_digest": "035901b78f0e39c528c0d15de54dc9a538553c8d74823d2474bd44f392a9aff8",
+    "normal_issuer": "started 2026-10-09T19:01:15.073925Z; finished 19:05:42.411814Z; exit0; same independent OMP18.8.6/openai-codex/gpt-6.1-sol session, requestedhigh, no fallback",
+    "scope": "report assembly only, existing e1 accepted258 source observations reused; not repeated full source extraction or a fresh independent opinion",
+    "verdict": "accepted; issues[]",
+    "verdict_file_sha256": "41c103850aafab0e5ce36a7e2eeda617d002dd8aade42e3787cb5a1600a15cd2",
+    "normal_receipt_digest": "cd9f097893085a9dd00da848da625239fbc5b3944adf42d667f7140d441b49c7",
+    "receipt_file_sha256": "7e33dc0ea2069ccf2fedeb4c0795be7caf61e516ff8fa62ddfb0543c55b174f3",
+    "issuer_record_sha256": "1895a46856cac7e690d682be444259faef3d4ef0091ad8dc83b5094d77dbaf54",
+    "owner_normal_validation": "verify_receipt_issuance and promote_rendered_candidate returned scientifically_reviewed_rendered_candidate; accepted258 source facts reopened; current still absent",
+    "measurement_correction": "initial owner read expected decision key, actual typed verdict key is verdict; subsequent read corrected, issuer result unchanged",
+    "dispatch_deviation": "e2 guard output-file phrase check failed, shell nevertheless launched normal issuer. This is NOT a preflight PASS. Original prompt and failure retained; actual single-output scope and live route validator checked. Future wrapper must fail before Popen when preflight exit code is nonzero.",
+    "actual_qa_relative": ".artifacts/1007-abc-current-integration-v1/c-e2-desktop-actual.json",
+    "actual_qa_sha256": "cfb5a40d837d01ebcc728c9ae3a542d6403a631722271b7ab39840cee5ff8862",
+    "actual_qa": "Ego184/p2; four canonical desktop dimensions x sparse/dense/filtered sparse/source =16 screenshots; reachable258 ->4 sample-size facts ->2 selected studies; all four exact-source/Esc checks passed, no document overflow",
+    "owner_actually_viewed": ["C1440-dense-e2.png", "C2560-source-e2.png"],
+    "observed_source": "151/ACTUAL and exact enrollmentInfo locator; no planned/actual conflation; visit page retains unextracted temporal boundary and links to original arms/endpoints",
+    "remaining": "long endpoint text is legitimately dense but not a full physical-page or cross-browser visual acceptance;32 extension gaps and universe/publication/Protocol-SAP/current regulatory closure remain"
+  },
+  "AB_v6": {
+    "A_site_digest": "c0a987d20152a16f54569785705fcb54827cbe4136298c56c6e9b1bef0c381d1",
+    "B_site_digest": "c9c632709cd700404fec371d7ad15e60a632eb5a424632f2821ae516b7734792",
+    "actual_qa_relative": ".artifacts/1007-abc-current-integration-v1/ab-v6-desktop-actual.json",
+    "actual_qa_sha256": "1d552d61972c16d25532ee142df3529c996359abbc646dff5665935cc9bee82b",
+    "actual_qa": "32 real desktop states; all43 research rows retained; selected original source and eight Escape checks passed; original context disclosure actually opened and closed",
+    "owner_actually_viewed": ["A1440-sparse-v6.png", "A2560-dense-v6.png", "B1440-filtered_sparse-v6.png", "B1920-source-v6.png"],
+    "visual_judgment": "value hierarchy improved but wide values separated too far from identity; two-fact B2560 cell226.98px. NOT final aesthetic acceptance.",
+    "next_change": "module-author CSS uses content-adaptive identity/value/time columns, no smaller font or hidden clinical facts. Pending batch mirror/test/new candidate; existing v6 is immutable.",
+    "input_science_unchanged": true,
+    "current_switched": false
+  },
+  "next_execution": {
+    "task": "ci-1007-joint-ab-context-bind-v1",
+    "mode": "execution: exact source-context preparation is separable and relieves owner scanning; source adoption/current remain one owner; independent science review will follow a frozen prepared artifact",
+    "preflight": "PASS before dispatch",
+    "requested_primary": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash effortmax; startup command confirmed, actual returned identity still pending",
+    "runner_pid_at_start": 59720,
+    "child_pid_at_start": 59762,
+    "allowed_outputs": [".artifacts/1007-joint-ab-context-bind-v1/prepare.py", ".artifacts/1007-joint-ab-context-bind-v1/prepared-source-bindings.json"],
+    "boundary": "read old35 contexts/91 atoms plus exact source correspondence; do not copy old scientific IDs, receipts, database, current or accepted state; no source freshness invented",
+    "state": "PENDING at checkpoint; wait only for terminal event, no progress polling or redispatch"
+  },
+  "still_not_run": "same latest joint A/B/C edit-clear-undo-sync/configuration/single-and-combined share; full source closure, all physical pages, fresh browser/cross-browser,24 portals,3 hosts,fresh install,recovery and RC",
+  "release": "development candidate; active, not paused, not complete, not RC"
+}

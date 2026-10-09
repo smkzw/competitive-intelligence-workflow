@@ -1,4 +1,19 @@
-# 唯一当前状态：1007V1 连续实施；联合C258来源已正常接受，A来源路由实屏缺陷已修
+# 唯一当前状态：1007V1 连续实施；联合C报告正常接受，48桌面状态实际完成
+
+当前源码49d4bd2已push。C e2报告2f35433d/site035901b7正常issuer已exit0，
+同独立OMP会话accepted/无issues，正式回执cd9f0978；owner正常验签/报告晋级通过，
+联合current仍无。Ego184 C四档×四态16图，258→4→2、151/ACTUAL原值/精确来源/
+Esc均实际通过；owner看两图，未签全部页面/全设计资料闭包。
+A/Bv6新字节真实32态/8来源与Esc/限制披露通过；owner看四图仍发现宽屏数值离
+药名过远、单元格偏高，不签最终美学。最小共享CSS收紧正在本批，尚未新候选。
+真实临床问题横比源上下文接线已单一E03启动：guard先PASS，CodeBuddy请求
+deepseek-v4.1-flash/max；实际返回身份/产物尚PENDING，只等终态不progress轮询。
+旧源上下文35/91仅作为证据，不复制旧科学ID/回执/DB，owner独占采用与current。
+[唯一最新精确恢复](evidence/1007V1/owner-joint-c-report-and-desktop48-v1.json)。
+下一：结束事件收worker字节，正常新来源与概念投影，再同当前ABC真实旅程。
+e2预检FAIL后shell启动的偏差保持，不补造预检PASS。全目标ACTIVE，非暂停/RC。
+
+## 以下为版本历史；其中PENDING和“下一”不代表当前任务
 
 最新7b2467c已push，A/B v5真实四桌面×四态32截图，无document溢出/主表折叠/
 来源打开/Esc回焦失败；全43研究保留。Owner实际看四图，仍有条目全文串联弱层级，
