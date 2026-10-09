@@ -284,6 +284,63 @@ def test_fresh_a_without_receipt_stays_rendered_unreviewed(tmp_path: Path) -> No
         require_accepted_origin_report_states(manifest, reports=("A",))
 
 
+@pytest.mark.parametrize("scope", ["history_before", "history_after", "conflicting_scope"])
+def test_fresh_a_review_uses_locked_versions_not_database_history(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, scope: str,
+) -> None:
+    """Legitimate append-only history is neither a conflict nor current evidence."""
+    from dataclasses import replace
+
+    import ci_workflow.application.source_research_service as sources
+    from ci_workflow.storage.sqlite import open_database
+
+    project = _write_a_project(tmp_path)
+    current_package = sources.load_fresh_a_research_package(
+        project / "evidence/library/a-research-package.json"
+    )
+    historical_payload = current_package.model_dump(mode="json")
+    historical_payload["facts"][0]["canonical_name"] += "（另一科学语境）"
+    historical_payload["scientific_review"]["reviewed_content_digest"] = (
+        sources.compute_research_content_digest(historical_payload)
+    )
+    historical_package = sources.FreshAResearchPackage.model_validate(historical_payload)
+    real_ingest = sources.ingest_fresh_a_research_package
+    pins: dict[str, Any] = {}
+
+    def scoped_ingest(**kwargs: Any) -> Any:
+        history_kwargs = {**kwargs, "package": historical_package}
+        if scope == "history_before":
+            history = real_ingest(**history_kwargs)
+        current = real_ingest(**kwargs)
+        if scope != "history_before":
+            history = real_ingest(**history_kwargs)
+        pins.update(current=current, history=history)
+        if scope == "conflicting_scope":
+            return replace(current, fact_version_ids=tuple(dict.fromkeys(
+                (*current.fact_version_ids, *history.fact_version_ids)
+            )))
+        return current
+
+    monkeypatch.setattr(sources, "ingest_fresh_a_research_package", scoped_ingest)
+    if scope == "conflicting_scope":
+        with pytest.raises(ContractConfigError, match="多个持久化事实版本"):
+            _run_ready_project(project)
+        assert not (project / scientific_review_request_path("A")).exists()
+        return
+
+    result = _run_ready_project(project)
+    assert result.outcome == "completed"
+    assert _run_manifest(project)["report_states"] == {"A": RENDERED_UNREVIEWED}
+    context = reload_production_context(project, "A")
+    bound_versions = {version for ref in context.source_refs for version in ref.fact_version_ids}
+    assert bound_versions == set(pins["current"].fact_version_ids)
+    outside = set(pins["history"].fact_version_ids) - bound_versions
+    assert len(outside) == 1
+    with open_database(project / "state/project.sqlite") as database:
+        versions = {row[0] for row in database.execute("SELECT fact_version_id FROM fact_versions")}
+    assert outside <= versions  # historical evidence is retained, not rewritten/deleted
+
+
 # ─── 阶段二：真实独立回执绑定后不可变晋级 ────────────────────────────────────
 
 

@@ -2739,13 +2739,15 @@ def run_project(
             artifact_manifest_path.read_bytes()
         )
         package_fact_ids = {fact.fact_id for fact in package.facts}
+        snapshot_fact_versions = set(lineage.fact_version_ids)
         with open_database(project_root / "state/project.sqlite") as database:
             fact_version_rows = database.execute(
                 "SELECT fact_id, fact_version_id FROM fact_versions"
             ).fetchall()
         fact_version_by_ref: dict[str, str] = {}
         for fact_id, version_id in fact_version_rows:
-            if fact_id not in package_fact_ids:
+            # Append-only user/source history is not this locked candidate's evidence.
+            if fact_id not in package_fact_ids or version_id not in snapshot_fact_versions:
                 continue
             if fact_id in fact_version_by_ref:
                 raise ContractConfigError(
