@@ -32,7 +32,10 @@ C0否决六处医学译义；按原文修六处、其余252行及科学事实/�
 后续真实反例1RED已修：新报告epoch不再使历史已采纳精确源证明失读。
 Actual CodeBuddy单节点终态无fallback；fresh独立ZCode限定源码边界复核，
 owner62相关PASS174.57s、Ruff及strict生产2/工具1。NEW采用/报告仍只允许
-current epoch；实际PN暂保持e1，不重采来源。下一步正常新C2渲染与新摘要复核。
+current epoch；实际PN新C2已正常渲染/准备e2，未重采来源或切current。
+新00429563内容/6fb94ce4报告快照/e021d5dc站点，126旧文件保持、DB不变，
+跨新e2旧source仍能严格只读重开；独立新报告复核待实际issuer，不借C1旧回执。
+[新C2候选/精确下一步](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c2-report-candidate-v1.json)。
 [跨轮次来源证明/下一动作](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-proof-epoch-v1.json)。
 未切current，不以C1来源回执授权新报告；不重存旧A/B或整批重译。
 

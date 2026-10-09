@@ -10,8 +10,13 @@ Owner补反向授权与旧报告面独立性，62relatedPASS174.57s、Ruff/stric
 只读；NEW采用/晋级守卫未放宽。跳过未物化域不认定其回执有效，文档已收紧。
 Reviewer把untracked新测试空diff等同HEAD字节的推断已纠正，原报告保持；
 worker system3.14证据不计supported范围，ownerRED实际venv3.12，原件不改。
-Actual PN仍e1，下一新C2按正常renderer+现有snapshot/epoch请求生成，不重采
-258源、重跑旧AB、重做翻译/安装或重写历史。机器owner-source-proof-epoch-v1。
+Actual PN新C2正常renderer（未用review_candidate放宽门）已生成/e2，
+00429563内容/6fb94ce4报告快照/e021d5dc站点，126旧文件实际保持、DB不变。
+258源未再采用，新epoch后旧e1严格proof重开实际成功；core28满足、extension32
+仍缺/4N/A，new报告科学及browser未签。首helper误从科学atom取row_ref，
+真实KeyError保留；按已锁consumer_binding修正，失败发生在项目写入前。
+不重跑旧AB、翻译/安装或重写历史。机器owner-source-proof-epoch-v1 /
+owner-c2-report-candidate-v1；下一正常issuer同独立OMP新报告复核。
 无本轮宽门或browser/current/RC声明；不清未知资料，五用户修改保持。
 
 ## 1007C 真实独立来源采用及快照消费者修复（2026-10-08，持续，非暂停）

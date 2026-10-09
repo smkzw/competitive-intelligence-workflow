@@ -26,8 +26,13 @@ E03实际CodeBuddy1399.781s/exit0无fallback；独立ZCode652.308s/exit0、
 17PASS120.89s。Owner补已签新报告拒绝重采旧源及旧门户变更不抹源证明，
 相关62PASS174.57s，Ruff/strict生产2及replay工具1PASS。本轮未再跑宽门，
 不借前批宽门覆盖新代码。未物化域仅结构检查后跳过、不授科学权威；匹配
-已采用证明完整失败关闭。实际PN仍e1、current未建；下一步正常渲染新C2，
-单独新摘要复核，不重采258源或回写旧站点。
+已采用证明完整失败关闭。本批新C2已正常非review-only渲染并进入e2：
+报告摘要00429563、报告快照6fb94ce4、contextdad814c6、站点e021d5dc。
+旧126项目文件实际pre/post保持（仅epoch指针合法前进），DB79ccefa5不变；
+跨e2重新读旧e1源采用仍正确，未重采258源、未切current。28核心满足、
+32扩展缺口/4N/A仍明示，不冒充闭宇宙/ProtocolSAP齐全。新报告独立复核
+待正常产品issuer实际完成，实屏NOT_RUN；不能借C1源回执接受C2。
+[新报告候选/恢复](evidence/1007V1/owner-c2-report-candidate-v1.json)。
 [根因关闭/精确恢复回执](evidence/1007V1/owner-source-proof-epoch-v1.json)。
 以下旧标题和在途是各批历史范围；“正式来源采用未跑”已被本批真实结果取代。
 
