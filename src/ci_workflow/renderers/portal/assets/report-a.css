@@ -1,5 +1,11 @@
 /* Observation panels preserve readable labels and exact values at narrow widths. */
 .kz-a-site #full-study-comparison { min-width: 0; }
+@media (min-width: 1200px) {
+  .kz-a-site[data-comparison-view="comparison"] .kz-a-main { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 8px 12px; align-items: start; }
+  .kz-a-site[data-comparison-view="comparison"] .kz-a-main > * { grid-column: 1 / -1; }
+  .kz-a-site[data-comparison-view="comparison"] .kz-a-main > .kz-a-workspace-bar { grid-column: 1; margin: 0; }
+  .kz-a-site[data-comparison-view="comparison"] .kz-a-main > .portal-identity { grid-column: 2; }
+}
 .kz-a-site #full-study-comparison[hidden] { display: none; }
 .kz-a-site #full-study-comparison > .kz-a-table-wrap { margin-top: 8px; }
 .kz-a-site [data-a-comparison-table] th { white-space: normal; overflow-wrap: anywhere; }

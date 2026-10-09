@@ -34,6 +34,11 @@ body[data-kz-design="6.0"] { background: var(--bg); }
 .kz-comparison-controls > button { min-height: 40px; padding: 6px 12px; font: inherit; color: var(--text-1); background: white; border: 1px solid var(--kz-glass-border); border-radius: 8px; cursor: pointer; }
 .kz-comparison-controls > button:disabled { opacity: .55; cursor: default; }
 .kz-comparison-scope { color: var(--text-2); }
+.kz-comparison-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-block: 8px; }
+.kz-comparison-heading > :is(h1, p) { margin: 0; }
+body[data-comparison-view="comparison"] .portal-identity { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 8px; min-width: 0; }
+body[data-comparison-view="comparison"] .portal-identity > details { min-width: 0; }
+body[data-comparison-view="comparison"] .portal-identity summary { overflow-wrap: anywhere; }
 body[data-comparison-view="comparison"] :is(#full-study-comparison > p) { margin-block: 4px 8px; }
 /* Only leased background roots; no nested blur inside modal/data reading planes. */
 .kz-reading-background-isolated { filter: blur(5px); }

@@ -3,6 +3,11 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 上次暂停原件：[20261009精确恢复](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)。
 用户重新授权连续实施，Goal API实查active；旧暂停原件保留，不恢复旧PID。
+最新：d2ea033已push，A/B v3实屏溢出/主表折叠关闭但516/519px首屏仍需改善。
+下一共享匹配行先列（全研究保留）/桌面辅助区并列已34相关PASS，待NEW v4实际。
+C新候选0f7ab5ae/e1/sitea9a6e21f正常准备，旧258观察/旧请求/否决/站点保持；
+正常issuer真实同独立会话续接18:35UTC已启动，仅终态后验签采用，当前未采用。
+[当前精确恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-joint-v3-pixels-and-c-v2-preparation.json)。
 当前批基线6530fea：联合C618518ed/site17239d9e独立复核已exit0，可恢复VETO，
 不是运行中。原文有时间窗，未提取不能写成未公开。旧站点/否决保留，无issuer/采用。
 C缺口表述与A/B共享横比空间/主表折叠根因已最小修复，48相关PASS/静态/镜像；

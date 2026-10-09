@@ -1,5 +1,17 @@
 # 唯一当前状态：1007V1 连续实施；联合C可恢复否决已落档，新布局与缺口根因已修
 
+最新有界状态：d2ea033已push。普通A/B v3真实49/101页，DB/冻结C保持；Ego184
+1440首屏scroll1440、主表不折叠，表起点516/519px（原884/880）。Owner目视
+两图仍发现大量无匹配行抢首屏与辅助区纵向浪费，不当最终视觉PASS。本批共享
+问题匹配行先列且全研究保留、不按数值排名；桌面辅助区并列与B研究列有界。
+1RED→34相关PASS5.66s/Node3/Ruff3/镜像，NEW v4四宽状态尚待真实运行。
+NEW C v2内容0f7ab5ae/context3b320d1f/sitea9a6e21f，正常准备e1；258观察原值/
+来源不改，e0请求/上下文/旧站点/否决保持，无current。正常产品issuer已实际
+启动18:35:04UTC，同独立Pi/OMP gpt6.1sol请求high真实会话续接，只审具体缺口
+与新绑定，不重复全258；终态/签发/采用仍待。不轮询progress，不延迟重派。
+[真实v3不足、新批与C2精确恢复](evidence/1007V1/owner-joint-v3-pixels-and-c-v2-preparation.json)。
+以下记录签各自历史候选；下一新A/B v4实屏与C正常终态处理，全目标ACTIVE。
+
 源码基线6530fea；fresh Pi/OMP gpt-6.1-sol请求high C03已终态exit0/no fallback，
 不是PENDING：四研究同根因——未提取时间线被误写成来源未公开。Owner生产Schema
 核验veto9618e065/文件903014d7、4来源/250定位；只是未签名可恢复否决，无采用/current。

@@ -98,6 +98,17 @@
       return Object.keys(questions).sort(function (left, right) {
         return priority(left) - priority(right) || (left < right ? -1 : left > right ? 1 : 0);
       });
+    }, studyIds: function (studyIds, columns, allowed) {
+      // Task relevance only: put actual cells in view, retain every other study.
+      // Neither numeric values nor scientific eligibility influence this order.
+      return studyIds.map(function (id, index) {
+        var matched = columns.some(function (column) {
+          return (column.cells[id] || []).some(function (rowId) { return !!allowed[rowId]; });
+        });
+        return {id: id, index: index, matched: matched};
+      }).sort(function (left, right) {
+        return Number(right.matched) - Number(left.matched) || left.index - right.index;
+      }).map(function (item) { return item.id; });
     }, applyLayout: function (root, comparison) {
       var mode = comparison ? "comparison" : "summary";
       if (root.body.dataset.comparisonView === mode) return;

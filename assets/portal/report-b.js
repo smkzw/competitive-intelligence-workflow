@@ -94,7 +94,7 @@
     });
     head.appendChild(heading);
     var retained = 0, displayed = Object.create(null);
-    workspace.study_ids.forEach(function (studyId) {
+    window.__COMPARISON_QUERY__.studyIds(workspace.study_ids, columns, allowed).forEach(function (studyId) {
       var hasQueryRows = workspace.membership.row_ids.some(function (id) {
         return allowed[id] && rowById[id] && String(rowById[id].trial_id || "study-identity-unresolved") === studyId;
       });
@@ -135,7 +135,7 @@
     host.querySelector("[data-comparison-status]").textContent =
       retained + "项研究；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
       "，本页" + Object.keys(displayed).length + "条事实，" + comparisonGroups.length +
-      "个科学条件分面。数值共轴按各分面的科学资格另判。";
+      "个科学条件分面。匹配当前问题的研究先列，其余保留；数值共轴资格另判。";
     host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
     host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));

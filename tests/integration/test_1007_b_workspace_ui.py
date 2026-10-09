@@ -31,7 +31,7 @@ const rows={a:{trial_id:'trial-a',value:0,unit:'%',product_zh:'<script>bad</scri
  b:{trial_id:'trial-b',value:50,unit:'%',arm:'治疗组'},
  c:{trial_id:'trial-c',value:null,disclosure_state:'user_cleared',arm:'治疗组'}};
 Object.keys(rows).forEach(id=>rows[id].row_id=id);
-const workspace={study_ids:['trial-a','trial-b','trial-c','trial-no-results'],
+const workspace={study_ids:['trial-no-results','trial-a','trial-b','trial-c'],
  study_labels:{'trial-a':'PRIME｜NCT04202679','trial-b':'ARCADIA｜NCT04501666'},
  membership:{row_ids:['a','b','c']},columns:Array.from({length:9},(_,i)=>({
   id:'column-'+i,question_id:'efficacy::easi75',question_known:true,question_label:'EASI75',title:'临床条件'+i,

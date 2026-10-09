@@ -2,6 +2,15 @@
 
 ## 当前：同来源联合ABC副本与fresh C03科学复核
 
+最新d2ea033已push；A/Bv3真实49/101普通页，Ego1841440scroll无溢出/主矩阵
+不折叠，table516/519仍有无匹配行占首屏（两图实际目视），故不签视觉全通过。
+下一匹配当前问题行先列且保留全部/零清除未知不排名、桌面辅助行并列/B研究列
+有界根因包1RED→34相关PASS5.66s/Node3/Ruff3/镜像，NEW v4实际待。
+C正常NEW内容0f7ab5ae/e1/sitea9a6e21f，258原观察不改/e0与veto保留/current无；
+正常issuer53123/exec3581真实18:35:04UTC启动，同独立Pi/OMP会话续接，只具体
+缺口与新绑定，7200s只等终态。句柄只本轮运行中，不作为未来恢复旧PID。
+待正常终态、签发核验、采用，不能借旧接受。owner-joint-v3-pixels-and-c-v2-preparation。
+
 最新终态：Pi/OMP gpt6.1sol请求high session01a121d9已exit0/no fallback，四源
 同根因未提取≠未公开，unsignedrecoverableVETO903014d7/schema9618e065如实保留。
 Owner生产Schema核4source/250locator；没有接受/DB/current写入。Direct最小根因

@@ -37,7 +37,7 @@ const columns=Array.from({length:9},(_,i)=>({id:'col-'+i,question_id:'easi',ques
 columns.push({id:'unknown-col',question_id:'aa-unknown',question_known:false,
  question_label:'问题待核',title:'问题待核',cells:{'trial-c':['c']}});
 const workspace={membership:{row_ids:Object.keys(rows)},
- study_ids:['trial-a','trial-b','trial-c','trial-empty'],
+ study_ids:['trial-empty','trial-a','trial-b','trial-c'],
  study_labels:{'trial-a':'PRIME｜NCT04202679'},columns};
 let url='https://example.test/clinical-portfolio.html?view=comparison&cmp_page=1.5',currentGroups=[];
 const groups=columns.map(c=>({scientific_group_id:c.id,

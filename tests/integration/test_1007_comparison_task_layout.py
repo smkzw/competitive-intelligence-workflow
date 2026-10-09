@@ -4,6 +4,30 @@ import subprocess
 from pathlib import Path
 
 
+def test_matching_studies_are_visible_first_without_dropping_or_ranking_studies() -> None:
+    script = (Path(__file__).resolve().parents[2]
+              / "src/ci_workflow/renderers/portal/assets/portal.js")
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const start=source.indexOf('  function createComparisonQuestionOrder(');
+const end=source.indexOf('\n  window.__COMPARISON_QUERY__',start);
+const sandbox={};vm.runInNewContext(source.slice(start,end),sandbox);
+const query=sandbox.createComparisonQuestionOrder(),studies=['empty','zero','clear','unknown'];
+const columns=[{cells:{zero:['a'],clear:['b'],unknown:['c']}}],allowed={a:true,b:true};
+const before=JSON.stringify({studies,columns,allowed});
+assert.equal(JSON.stringify(query.studyIds(studies,columns,allowed)),
+ JSON.stringify(['zero','clear','empty','unknown'])); // no ranking of 0 versus cleared
+assert.equal(JSON.stringify(query.studyIds(studies,columns,{c:true})),
+ JSON.stringify(['unknown','empty','zero','clear']));
+assert.equal(JSON.stringify(query.studyIds(studies,columns,{})),JSON.stringify(studies));
+assert.equal(JSON.stringify(query.studyIds(studies,[],allowed)),JSON.stringify(studies));
+assert.equal(JSON.stringify({studies,columns,allowed}),before);
+"""
+    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+
+
 def test_comparison_preserves_facts_and_user_disclosures_across_filter_renders() -> None:
     script = (Path(__file__).resolve().parents[2]
               / "src/ci_workflow/renderers/portal/assets/portal.js")
