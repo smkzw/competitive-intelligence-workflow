@@ -1,5 +1,19 @@
 # Continuous implementation checkpoint
 
+## 唯一当前：current11读链/默认分享已验；源诊断终态接入
+
+direct：当前11读链/455分享成员/实际断网三入口已验，正常自有服务重启，
+无重复save/render。三旧current10导航PNG因owner复用名覆盖，原JSON不变；
+缺损显式UNAVAILABLE，当前11图片唯一路径/hash保留，新截图拒绝覆盖。
+原E03实际CodeBuddy/deepseek4.1flash/max CLI，817.124s/exit0无fallback，
+guard audit oktrue；一次EXIT收取，无progress轮询/重派。全部1665来自
+measure/访视N不一致，不是源缺失。Worker14标签次生判断不是候选exact-path
+条件，须owner核验；当前builder已取scoped N，不照旧载荷盲修生产。
+模式execution-plus-conference继续：owner科学口径/共同采用单一责任；独立
+源诊断已完成，下一按原源正常新构建/根因相关批，冻结后独立科学复核。
+唯一STATUS与owner-current11-navigation-share-and-source-terminal-v1为恢复；
+ACTIVE不暂停，全源/新安装/三宿主/恢复/24门户仍开，旧新版证据不拼接。
+
 ## 唯一当前：中文横比单位根因批次完成；current11复用已验清单
 
 direct：复用现有native_unit/helper，标签在科学分组后添加，A/B共用valueText。

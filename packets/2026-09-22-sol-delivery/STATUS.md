@@ -1,4 +1,21 @@
-# 唯一当前状态：1007V1 连续实施；current11中文单位呈现已选，源缺口诊断在途
+# 唯一当前状态：1007V1 连续实施；current11导航/默认分享已验，源诊断已终态
+
+2a3a176c已push。自有65033一次正常重启后，current11三真实来源→对应编辑
+链已过；未save/再render。默认联合包ca538c11移动后455成员hash已验，三报告
+launcher→摘要→横比→来源/Esc实际断网通过，网络恢复；同profile，非fresh/
+清缓存/新三单包或配置终验。Owner复用旧截图名误覆盖三张current10导航图；
+原current10 JSON原字节不变，但三旧PNG现明确不可作历史视觉证据，未伪造
+恢复。实际current11图另存唯一路径/hash；新截图拒绝覆盖，缺损记录不隐藏。
+原E03已EXIT终态，实际CodeBuddy/deepseek4.1flash，CLI --effort max，817.124s/
+exit0/no fallback，guard audit oktrue。1665缺口为1526展示/139人数的结局总分析N
+与访视N冲突，源原子真实存在；不放宽科学守卫。Worker14次生标签判断用了
+原row而非exact-path candidate，尚未接受；当前通用builder已取scoped N，
+不能把冻结旧载荷当当前代码缺陷。下一只核真实谓词和固定原源正常新构建，
+再科学复核/正常采用；新1698/1922仍未采用。精确恢复：
+[当前11运行、分享与诊断终态](evidence/1007V1/owner-current11-navigation-share-and-source-terminal-v1.json)。
+Goal ACTIVE，非暂停/RC；全源/24门户/三宿主/新安装/恢复等终验仍开。
+
+## 历史：current11中文单位与选定（以下下一动作已完成）
 
 基线a2539da已push；本批复用已有中文单位helper并共用A/B valueText，只添
 显示标签，不换算值/单位/零/清除或改变科学分组。8成族RED→74相关PASS

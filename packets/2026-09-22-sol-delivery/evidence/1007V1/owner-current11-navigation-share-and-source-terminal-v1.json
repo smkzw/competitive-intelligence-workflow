@@ -1,0 +1,48 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "checked_code_commit": "2a3a176c5937411dfcb22c03ec7159c9efafa121",
+  "status": "CONTINUOUS_IMPLEMENTATION_NOT_PAUSED_NOT_RC",
+  "current": {
+    "revision": 11,
+    "generation_sha256": "a998b87aa824619d6ea6168278fbd6714a0b9d00229ab0f228f809cb93ba6268",
+    "fact_revision_digest": "a95fda6e5ddb1961c5cd92fc96446f1a08fe86cf39da6fba63499f190fe1f6a3",
+    "reports": "A11/B11/C9;349 adopted editable facts. No repeated save/render/source adoption.",
+    "service": "Owned loopback65033 gracefully restarted once to load the coherent Python batch. New exec28936 active; old exec24410 closed."
+  },
+  "actual_current11_browser": {
+    "workspace": 184,
+    "navigation": ".artifacts/1007-abc-current-integration-v1/native-unit-current11-navigation-actual-v1.json",
+    "navigation_sha256": "e825358933ed254e5dccd0116e96365655cd048accec2aadc21ee455edf7c7bb",
+    "scope": "Three real source→selected editor flows, correct report and generation revisions,349 facts, user-cleared current empty and original source retained; failures[]. No save.",
+    "archive_sha256": "ca538c1199ee249d316266aaeb20bef1c07616dc2a158aafb545cfa67b744079",
+    "members": ".artifacts/1007-abc-current-integration-v1/current11-default-share-members-v1.json",
+    "members_sha256": "a90f801aadad0e57cbd83ad5940307a806a1c59d3f8f5e34e4e0ff23acd35631",
+    "offline": ".artifacts/1007-abc-current-integration-v1/current11-default-share-offline-actual-v1.json",
+    "offline_sha256": "467f5639874393bdfaeed32627e1708caecf0f03c2c0225abe63a7b859d84026",
+    "offline_scope": "455 moved members hash verified; actual launcher→summary→comparison→source/Esc for A/B/C. Public GET succeeds online then fails offline; network restored. Same profile, no cleared storage/fresh profile/new single shares/saved-config acceptance."
+  },
+  "evidence_preservation_defect": {
+    "issue": "Owner reused current10 screenshot basenames for current11; three historical raw PNGs overwritten. Historical current10 JSON byte hash remains exact; original PNG bytes unavailable. This is NOT harmless preservation or restored history.",
+    "affected": "screenshots/current10-{A,B,C}-source-navigation.png only",
+    "old_visual_status": "UNAVAILABLE_PATH_COLLISION_NOT_VERIFIED",
+    "correction": ".artifacts/1007-abc-current-integration-v1/native-unit-current11-navigation-image-correction-v1.json",
+    "correction_sha256": "b0e0b3b819488038de994cdd7156f98948d9597e2b67b674b342bbba07444f0b",
+    "remedy": "Actual current11 bytes copied to revision-specific paths and hashes verified; no replay/fabrication/rewrite of old receipts. Future screenshot existence guards prevent overwrite. No product/scientific/current/user change due to collision."
+  },
+  "source_diagnostic_terminal": {
+    "task": "ci-1007-source-binding-gap-root-v1",
+    "route": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash;requested max and actual CLI --effort max, not independent proof of provider internal reasoning",
+    "session": "01a122a3-bfea-71d6-8f54-4d34c25bdd7d",
+    "duration_seconds": 817.124,
+    "returncode": 0,
+    "rounds": 1,
+    "fallback": null,
+    "guard_audit": "actual oktrue/errors[]; original runner EXIT event collected once, no progress polling/redispatch",
+    "root_families": ".artifacts/1007-source-binding-gap-root-v1/root-families.json",
+    "root_families_sha256": "61976e54b8a26d45c81db49e67e1333face1e616edef0f8af111b31e913d51ec",
+    "diagnose_sha256": "983e48b7f5f48662470e512c450425e8de96a0451714c9307d972608a05bc5a4",
+    "scope": "1665 rejected rows reconciled to measure-vs-visit denominator guards,1526 display and139 count. No unavailable raw atom/source or permissive near match needed. Preparation only, not scientific acceptance.467 lines exceeds≈200 target; bounded artifact91955bytes.",
+    "owner_caveat": "Worker late_predicate_failures evaluates original row rather than candidate_row with verified exact path. Its14 latent class failures are not yet owner accepted. Read production path and recheck decisive representatives before any source repair; upstream builder current code already chooses scoped denominator, so frozen old payload is not proof of current build defect."
+  },
+  "next": "Owner verify exact predicates and fresh normal build from fixed raw source, preserve old payloads and current11, then root-family scientific tests/review and normal source ingestion/adoption. No relaxed guards, old-source replay adoption, all-page review or new platform. Full source/universe/24portals/three-host/fresh-install/recovery/final gates remain open."
+}
