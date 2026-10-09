@@ -1,0 +1,38 @@
+{
+  "schema_version": "1007-c-desktop-current-root-family-1",
+  "parent_commit": "85d5e1abcdc85720730737969f1ea5f70312dc79",
+  "scope": "C current4 real PN representative four-study slice, not all C physical pages, A/B or release",
+  "browser": {
+    "space": 184,
+    "page": "p1",
+    "engine": "Ego Lite, actual task-owned current generation",
+    "capture_recovery": "normal open of existing Ego application restored capture; same space/page/profile, no reinstall or replacement browser",
+    "receipt": ".artifacts/1007-c3-desktop-ego-v1/four-width-cases-v1.json",
+    "receipt_sha256": "82e2f998afa137e59b112e82e636b858c94f6252e9e8ef93da85bb8a16408bae",
+    "widths_css": [1440,1600,1920,2560],
+    "height_css": 1000,
+    "states": {"dense":258,"sparse":4,"filtered-sparse":2,"source":2},
+    "screenshots": 16,
+    "actual_owner_image_inspection": "all16 inspected;2560 displayed at2048 but original2560 retained",
+    "objective_result": "no document horizontal overflow at these states; actual source opener and Esc focus preserved at all4 widths; source original151 remains visible",
+    "visual_acceptance": "REVISE: comparison repeated summary and retained home heading/active nav; current evidence leaked internal field key and incorrectly labelled absent sample scale/timepoint user-cleared",
+    "screenshot_directory": ".artifacts/1007-c3-desktop-ego-v1/screenshots"
+  },
+  "root_repairs": [
+    "Distinct comparison task heading/lead/nav; summary bullets remain available on independent home task, no source rows removed; duplicate entry copy hidden only in comparison",
+    "Current narrative uses existing typed public field label when definition equals internal field identity, preserving genuine free-text definition",
+    "Enrollment scale and structurally inapplicable timepoint are not user-cleared by a numeric-value clear; threshold/current-value still explicitly user-cleared",
+    "Current-value state is no longer described as source-publication status"
+  ],
+  "verification": {
+    "red": "four failed4.39s using production renderer/save and real JS Node harness",
+    "green": "51 related passed18.59s;18 presentation-only transaction cases passed40.98s",
+    "static": "Ruff4 passed; strict report_c1 passed; real Node syntax passed; existing author-mirror mechanical sync",
+    "invocation_limitation": "one guessed additional test filename absent: no tests ran; corrected command ran the four actual suites without modifying assertions",
+    "wide_gate": "RUNNING, local quality-gate-v1.log; not a PASS claim",
+    "corrected_real_current": "NOT_RUN at this code checkpoint; next normal presentation-only rebuild and new-bound browser evidence"
+  },
+  "retained": ["all source atoms/bindings/raw values", "C3 independent science receipt and frozen candidate", "original project current-none", "old C current4 screenshots and share", "five user modified files", "unknown historical artifacts"],
+  "method": "owner direct minimal family; shared C producer and page state under one owner, no duplicate worker/platform. Deterministic root closure only, no aesthetic acceptance or new independent scientific sign-off",
+  "release": false
+}

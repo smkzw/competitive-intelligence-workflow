@@ -553,6 +553,30 @@
       if (active) nav.classList.add("site-header__nav-item--active");
       else nav.classList.remove("site-header__nav-item--active");
     }
+    if (window.__C_PAGE_ID__ === "overview") {
+      var summaryTitle = window.__C_PAGE_TITLE__ || "首页";
+      var taskTitle = document.querySelector("[data-c-task-title]");
+      if (taskTitle) taskTitle.textContent = active ? "全研究横比" : summaryTitle;
+      var summaryOnly = document.querySelectorAll("[data-c-summary-only]");
+      for (var i = 0; i < summaryOnly.length; i += 1) summaryOnly[i].hidden = active;
+      var summaryNav = document.querySelector("[data-c-summary-nav]");
+      if (summaryNav) {
+        summaryNav.setAttribute("aria-current", active ? "false" : "page");
+        if (active) summaryNav.classList.remove("site-header__nav-item--active");
+        else summaryNav.classList.add("site-header__nav-item--active");
+      }
+      var lead = document.querySelector("[data-c-task-lead]");
+      if (lead) lead.textContent = active
+        ? "检索设计条款、选择研究并列核对；已知差异与未解项保留，不把并列描述当成临床等价。"
+        : lead.getAttribute("data-c-summary-text") || "";
+      var copy = document.querySelector(".kz-c-comparison-entry__copy");
+      if (copy) copy.hidden = active;
+      if (typeof document.title === "string") {
+        var prefix = document.title.indexOf(" - ");
+        document.title = (active ? "全研究横比" : summaryTitle)
+          + (prefix === -1 ? "" : document.title.slice(prefix));
+      }
+    }
     var entry = document.querySelector(".kz-c-comparison-entry");
     var action = document.querySelector("[data-c-enter-comparison]");
     if (entry && action) {

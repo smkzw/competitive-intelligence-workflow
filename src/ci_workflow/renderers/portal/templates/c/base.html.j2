@@ -24,7 +24,7 @@
         <div class="site-nav-group{% if group.pages | selectattr('active') | list %} site-nav-group--current{% endif %}">
           {% if group.pages | length == 1 %}
           {% set nav_page = group.pages[0] %}
-          <a href="{{ nav_page.href }}" class="site-header__nav-item{% if nav_page.active %} site-header__nav-item--active{% endif %}" aria-current="{% if nav_page.active %}page{% else %}false{% endif %}">{{ nav_page.title }}</a>
+          <a href="{{ nav_page.href }}" class="site-header__nav-item{% if nav_page.active %} site-header__nav-item--active{% endif %}" aria-current="{% if nav_page.active %}page{% else %}false{% endif %}"{% if nav_page.href == home_href %} data-c-summary-nav{% endif %}>{{ nav_page.title }}</a>
           {% else %}
           <button type="button" class="site-nav-group__trigger{% if group.pages | selectattr('active') | list %} site-nav-group__trigger--current{% endif %}" aria-expanded="false" aria-haspopup="true" aria-controls="nav-group-{{ loop.index }}">
             <span class="site-nav-group__label">{{ group.label }}</span>

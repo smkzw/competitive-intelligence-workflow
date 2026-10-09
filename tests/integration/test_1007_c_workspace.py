@@ -261,9 +261,17 @@ function buildSkeleton(doc, page) {
   body.getAttribute = function (k) {
     return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null;
   };
-  body.appendChild(doc.createElement("header")).className = "kz-c-page-head";
+  const head = body.appendChild(doc.createElement("header"));
+  head.className = "kz-c-page-head";
+  const taskTitle = head.appendChild(doc.createElement("h1"));
+  taskTitle.setAttribute("data-c-task-title", "");
+  taskTitle.textContent = "首页";
+  const homeNav = body.appendChild(doc.createElement("a"));
+  homeNav.setAttribute("data-c-summary-nav", "");
+  homeNav.setAttribute("aria-current", "page");
   const conclusions = doc.createElement("section");
   conclusions.className = "kz-b-conclusions";
+  conclusions.setAttribute("data-c-summary-only", "");
   conclusions.textContent = "核心结论";
   body.appendChild(conclusions);
   const entry = doc.createElement("section");
@@ -416,6 +424,9 @@ function snapshot(ctx) {
     echarts_calls: ctx.win.__ECHARTS_INIT_COUNT__ || 0,
     last_reachable: Boolean(last && last.querySelector(".kz-c-criteria-original")),
     body_view: doc.body.getAttribute("data-c-view"),
+    task_title: collectText(doc.querySelector("[data-c-task-title]")),
+    summary_hidden: doc.querySelector("[data-c-summary-only]").hidden,
+    summary_nav: doc.querySelector("[data-c-summary-nav]").getAttribute("aria-current"),
   };
 }
 
@@ -602,6 +613,17 @@ def test_comparison_view_uses_source_comparison_not_echarts_or_raw_matrix_alone(
     assert "登记原文" not in headers
     assert "入选标准" in headers or "主要终点" in headers
     assert len(initial["study_headers"]) == 4
+
+
+def test_comparison_has_one_task_heading_and_no_duplicate_summary(
+    comparison_harness: dict[str, Any],
+) -> None:
+    initial = comparison_harness["snapshots"]["initial"]
+    assert initial["task_title"] == "全研究横比"
+    assert initial["summary_hidden"] is True
+    assert initial["summary_nav"] == "false"
+    # Matrix membership, source details and the return-summary link stay intact.
+    assert initial["table_present"] and initial["last_reachable"]
 
 
 def test_empty_query_last_clause_study_reload_and_clear_states(

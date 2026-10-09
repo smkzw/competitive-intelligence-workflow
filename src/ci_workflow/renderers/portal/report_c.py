@@ -1451,9 +1451,16 @@ def _evidence_view(
         trial_zh=_trial_name(data, observation.trial_id),
         group_zh=_evidence_field(_group_label_zh(observation.group_id), state),
         element_zh=label,
-        scale=_evidence_field(observation.scale, state, missing_default=field_default),
+        scale=_evidence_field(
+            observation.scale,
+            "not_applicable" if observation.field == "planned_or_actual_sample_size"
+            else state,
+            missing_default=field_default,
+        ),
         timepoint=_evidence_field(
-            observation.assessment_timepoint, state, missing_default=timepoint_default,
+            observation.assessment_timepoint,
+            "not_applicable" if observation.field in _NO_TIMEPOINT_FIELDS else state,
+            missing_default=timepoint_default,
         ),
         value=_evidence_field(value_text, state),
         threshold=_evidence_field(
@@ -1473,7 +1480,7 @@ def _evidence_view(
                if observation.source_role is SourceRole.PROTOCOL_SAP else "")
             +
             "来源版本、逐字原文与精确位置均已定位，仍不代替医学裁决；"
-            f"当前公开情况为{_state_label(observation.disclosure_state)}。"
+            f"当前值状态为{_state_label(observation.disclosure_state)}。"
             + extraction_gap_note
             if located
             else (
@@ -2535,6 +2542,10 @@ def render_report_c_site(
                 fact_extra.get("endpoint_definition")
                 or row_payload["source_field_name"]
             )
+            # Typed field keys are identity, not audience-facing clinical labels.
+            # Preserve genuinely supplied free-text definitions without translating.
+            if endpoint in {row_payload["field"], row_payload["source_field_name"]}:
+                endpoint = _field_label(str(row_payload["field"]))
             cleared = fact.disclosure_state == "user_cleared"
             display_numeric = threshold if threshold is not None else fact.normalized_value
             if observations[index].field == "planned_or_actual_sample_size":

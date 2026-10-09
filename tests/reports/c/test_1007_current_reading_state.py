@@ -156,6 +156,19 @@ def test_cleared_reported_zero_does_not_revive_zero_value(
     assert chart["status"] == "用户清除，待重新核实"
 
 
+def test_sample_value_clear_does_not_claim_its_scale_and_time_were_cleared(
+    report: ReportCPortalData,
+) -> None:
+    cleared = _cleared_sample_size(report)
+    evidence = report_c._evidence_view(report, cleared, page_id="sample-analysis-statistics")
+    assert evidence.scale.state is report_c.EvidenceFieldState.NOT_APPLICABLE
+    assert evidence.timepoint.state is report_c.EvidenceFieldState.NOT_APPLICABLE
+    assert evidence.threshold.state is report_c.EvidenceFieldState.USER_CLEARED
+    assert "当前公开情况为用户清除" not in evidence.explanation.value
+    assert "当前值状态为用户清除" in evidence.explanation.value
+    assert evidence.original_text == "740"
+
+
 def test_edited_sample_size_current_threshold_still_reads_and_plots(
     report: ReportCPortalData,
 ) -> None:

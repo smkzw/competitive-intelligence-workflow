@@ -107,6 +107,21 @@ def test_sample_clear_restore_and_undo_keep_original_source(tmp_path: Path):
     assert "None" not in json.dumps(row["display_text"], ensure_ascii=False)
 
 
+@pytest.mark.parametrize("cleared", [False, True])
+def test_saved_current_narrative_uses_public_field_label_not_internal_key(
+    tmp_path: Path, cleared: bool,
+) -> None:
+    root, _ = _project(tmp_path, c_sample_size=True)
+    edits = FactEdit(normalized_value=None) if cleared else FactEdit(
+        raw_value="500", normalized_value=500,
+    )
+    UserFactEditService(root).save(_command(edits))
+    row = _current_row(root)
+    assert "planned_or_actual_sample_size" not in row["display_text"]
+    assert "计划或实际样本量" in row["display_text"]
+    assert row["source_text"] == "740"
+
+
 def test_registered_real_source_sample_stage_keeps_source_and_identity(tmp_path: Path):
     """Source-side seam only: no current exists and no candidate is published/accepted."""
     from ci_workflow.application.c_portal_consumer_registry import register_c_source_consumers
