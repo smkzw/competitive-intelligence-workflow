@@ -8,9 +8,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 
+
+@pytest.mark.parametrize("known_participant_unit", [True, False])
 def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
-    tmp_path: Path,
+    tmp_path: Path, known_participant_unit: bool,
 ) -> None:
     root = Path(__file__).resolve().parents[2]
     cas = tmp_path / "cas" / "evidence" / "raw" / "sha256" / "aa"
@@ -44,7 +47,10 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
         measures.append({
             "title": title, "timeFrame": "Week 4", "unitOfMeasure": unit,
             "groups": [{"id": "OG1", "title": "Drug 10 mg (TP1)"}],
-            "denoms": [{"counts": [{"groupId": "OG1", "value": "30"}]}],
+            "denoms": [{
+                **({"units": "Participants"} if known_participant_unit else {}),
+                "counts": [{"groupId": "OG1", "value": "30"}],
+            }],
             "classes": [{"title": "Week 4" if is_first_safety else "",
                          "categories": [{"title": "Any" if is_first_safety else "",
                                          "measurements": [
@@ -100,9 +106,21 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
     derivation = json.loads(
         output.with_name("a-payload.derivation.json").read_text(encoding="utf-8")
     )
-    assert derivation["denominator_conflicts"] == [{
-        "trial_id": "nct00000001", "endpoint": "Response B", "group_id": "OG1",
-    }]
+    # Current common resolver preserves scoped reasons/paths. A denominator
+    # with no unit is not automatically a participant population.
+    conflict_indices = [1] if known_participant_unit else list(range(1, 6))
+    assert derivation["denominator_conflicts"] == [
+        {
+            "trial_id": "nct00000001", "endpoint": measures[index]["title"],
+            "group_id": "OG1",
+            "source_path": (
+                f"$.resultsSection.outcomeMeasuresModule.outcomeMeasures[{index}]"
+                ".classes[0].categories[0]"
+            ),
+            "reason": "incompatible_denominator_candidates",
+        }
+        for index in conflict_indices
+    ]
     row_sources = {item["row_id"]: item for item in derivation["row_source_map"]}
     assert set(row_sources) == {
         *(item["row_id"] for item in rows),
@@ -144,7 +162,10 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
         ("%", "participant_proportion", 20.0),
         ("人", "participant_count", 9.0),
     ]
-    assert (safety[0]["numerator"], safety[0]["denominator"]) == (8, 30)
+    assert (safety[0]["numerator"], safety[0]["denominator"]) == (
+        (8, 30) if known_participant_unit else (None, None)
+    )
+    assert safety[0]["value"] == 8  # Raw n survives even without a usable N/rate.
     assert all(item["numerator"] is None and item["denominator"] is None
                for item in safety[1:4])
     assert safety[3]["count_basis"] == "mixed"

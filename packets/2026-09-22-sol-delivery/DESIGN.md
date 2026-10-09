@@ -38,6 +38,13 @@ A/B 与 C 共用 source_evidence_snapshot_id 输入字段；A父类声明、B继
 hash绑定输入裁决；旧无字段或None不序列化，原载荷不变。缺省保留历史
 兼容，不意味着新候选可以按历史行名或数组顺序猜选择。
 
+来源refresh的可选additions接入新接受逻辑事实，与既有replacements共用
+事务，至少一条且身份不可重复。新增显式fact/version/source，不捏造旧版本；
+当前已有逻辑事实（含用户清除层）只能按替换重基线处理。新增的每个实际
+消费者都必须在本次hash钉固普通builder输入明确声明snapshot，禁止旧唯一
+声明fallback；replacement-only保留历史兼容。未受影响活动事实/C保持，
+新事实由合法消费者确定扇出，不自动接受候选或增加审批/初始化旁路。
+
 同一科学事实/报告可在不同证据快照登记不同消费者；唯一约束为
 fact_version+report+evidence_snapshot，new binding ID带快照，旧ID及字节保持。
 只读恢复/登记/来源证明必须核验精确快照，不以首行、时间或页面改名挑选。

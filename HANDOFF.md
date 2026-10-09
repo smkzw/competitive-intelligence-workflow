@@ -1,7 +1,8 @@
-# 1007V1 当前接手入口｜单位量纲修复、3363来源候选准备，连续实施
+# 1007V1 当前接手入口｜来源3989候选入库与新增刷新，连续实施
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-精确恢复：[单位量纲、旧测试合同与来源候选](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-unit-dimensions-and-scoped-source-candidates-v1.json)。
+精确恢复：[剂量修复、正常来源入库与新增刷新](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json)。
+前一节点：[单位量纲、旧测试合同与来源候选](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-unit-dimensions-and-scoped-source-candidates-v1.json)。
 前一节点：[当前11导航、分享、证据缺损与诊断终态](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current11-navigation-share-and-source-terminal-v1.json)。
 前一节点：[当前11、中文单位与原地恢复证据](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-native-unit-current11-v1.json)。
 上一完整链：[当前10、来源准备终态与可恢复资料](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current10-source-preparation-recovery-v1.json)，不拼作当前11验收。
@@ -9,6 +10,18 @@
 上一完整操作：[联合 current9 操作、配置、分享、桌面记录](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-joint-current9-operations-config-share-desktop-v1.json)，已完成范围不重跑。
 旧根入口原字节：[历史归档](docs/handoffs/HANDOFF_archive_20261009_before_joint_r9.md)。
 上次暂停原件：[20261009 暂停](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)，已获授权恢复，不是当前状态。
+
+Goal实查ACTIVE；非暂停/完成/RC。剂量根因6RED→57PASS，三研究118行恢复。
+C03实际同GLM会话v2 scoped ACCEPT，仅建议。正常20源/3989事实/3572声明
+已入库；105旧接受祖先精确复用，3884新原子仍candidate，snapshot70170bf1/
+e8197d2c。旧DB行与7122资料保持，current11/349采用事实/用户清除/C不变。
+来源新增refresh复用原事务，owner补“每个消费者须明确本次scope”2RED→55
+相关PASS。单C01freshreview已preflight/原runner6612/exec10156/EXIT84767，
+终态PENDING，禁止progress轮询或迟缓重派。下一正常正式来源issuer/采用/
+合法消费者与一次refresh；不能把建议/夹具PASS当真实源或发布接受。
+只重验受影响链；全宇宙/三宿主/恢复/安装/24门户仍开；旧中文工程零接触。
+
+## 历史依赖摘要（下述在途句不代表当前排程）
 
 Goal 实查 active；非暂停、非完成、非 RC。仅英文工程，旧中文工程零接触。
 正式采用固定登记切片105事实/91声明/33追加范围证明及原C258；不签全宇宙/共轴。

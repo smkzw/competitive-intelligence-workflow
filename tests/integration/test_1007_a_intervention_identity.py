@@ -31,6 +31,14 @@ from ci_workflow.renderers.portal.report_a import ReportAPortalData
         (["nonsteroidal-noveldrug"], {}, {"nonsteroidal-noveldrug"}),
         (["XYZ123 cell infusion"], {}, {"xyz123"}),
         (["transplantation-sparing ABC9"], {}, {"transplantation-sparing abc9"}),
+        (["5 mg Serlopitant Tablets"], {}, {"serlopitant"}),
+        (["5mg Serlopitant Tablets"], {}, {"serlopitant"}),
+        (["0.5 mg Serlopitant Tablets"], {}, {"serlopitant"}),
+        (["30 mg 甲药注射液"], {}, {"甲药注射液"}),
+        (["10 mcg Noveldrug infusion"], {}, {"noveldrug"}),
+        (["5mg Serlopitant; 30mg Nemolizumab"], {}, {"serlopitant", "nemolizumab"}),
+        (["Serlopitant 5mg QD"], {}, {"serlopitant"}),
+        (["AB-123 100mg QD"], {}, {"ab-123"}),
     ],
 )
 def test_source_names_survive_without_collapse_or_false_exclusion(

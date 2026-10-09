@@ -1,4 +1,24 @@
-# 唯一当前状态：1007V1 连续实施；单位量纲修复、3363来源候选已准备
+# 唯一当前状态：1007V1连续实施；来源3989候选正常入库，新增刷新链已实现待独立核验
+
+84f8e0ea基线。剂量前缀清洗误删药名的根因6RED→57相关PASS，新v2恢复三
+Serlopitant研究/118行，46研究/17来源/3884事实/3481声明，旧事实与声明全为
+精确子集。C03同原GLM5.3Flash/max会话404.239s/exit0/no fallback完成v2
+针对性复核，scoped ACCEPT仅建议，不是正式issuer/来源采用/完整宇宙。
+正常摄取20源/3989事实/3572声明（含105精确既有接受祖先）；3884新原子仍
+candidate，snapshot70170bf1/e8197d2c。全部旧DB行不变，7122旧资料保持，
+来源回执仅追加，current11 A11/B11/C9与349可编辑事实/用户清除均不变。
+本地CAS重放不是本次在线核查；固定10/7截止不偷改，unknown2686组不伪归属。
+来源刷新执行节点实际CodeBuddy/deepseek4.1flash/maxCLI，828.412s/exit0，
+46+7相关PASS。Owner发现无scope新增会借旧唯一绑定，2RED→55相关PASS，
+每个新增消费者都要求明确本次scope；旧replacement保持兼容。Ruff/strict
+限定通过，非宽门/真实项目接受。C01新鲜独立代码复核已preflight/单次启动，
+runner6612/exec10156、EXIT84767；只收终态，不progress轮询或慢重派。
+精确恢复：[剂量、来源入库与新增刷新](evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json)。
+下一正式source-only context/正常issuer/采用与合法消费者，再接现有refresh
+事务/同候选报告实屏。保留原接受epochs/清除/C；已完成入库绝不盲重试。
+Goal ACTIVE，非暂停/RC；全宇宙/全部页面/三宿主/安装/恢复/24门户仍开。
+
+## 历史：单位量纲修复、3363来源候选（下一动作已完成）
 
 基线bde53cca。本节点未重做保存/渲染/摄取/选current，仍A11/B11/C9、349采用
 可编辑事实。单位拼写重复owner曾丢milli/每毫升维度，已合并至现有标量路径，

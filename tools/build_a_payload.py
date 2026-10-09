@@ -485,9 +485,11 @@ def main() -> None:
                 "",
                 base,
             ).strip()
-            # R17-c 剂量/频次尾部剔除（如 ntq5082 100mg qd）。
-            base = re.sub(r"\b\d+\s*(mg|mcg|g|iu)\b.*$", "", base).strip()
+            # A dose may precede the substance; never discard the text after it.
+            # Remove the dose token only, preserving decimal doses and drug codes.
+            base = re.sub(r"(?<!\w)\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu)\b", "", base)
             base = re.sub(r"\b(qd|bid|tid|q24h|q12h|q2w|q4w|q8w)\b", "", base).strip()
+            base = " ".join(base.split())
             # R17-e 冒号/Part 前缀残留清理。
             base = re.sub(r"^[\s:;,-]+", "", base).strip()
             base = re.sub(r"[\s:;,-]+$", "", base).strip()

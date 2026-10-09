@@ -1,6 +1,18 @@
 # Continuous implementation checkpoint
 
-## 唯一当前：量纲与旧测试根因完成；3363来源候选准备
+## 唯一当前：剂量修复、3989来源候选正常入库与新增刷新
+
+execution-plus-conference继续，owner共同源/current单一责任。三Serlopitant
+研究漏失最小剂量正则修复，6RED→57相关PASS；C03v2实际同会话scoped
+ACCEPT，仅建议。正常20源/3989事实/3572声明候选入库，105接受祖先精确
+复用/3884候选，不采用/切current。旧DB行/7122文件/用户清除/C/current11
+保持。新增refresh执行终态828.412s，owner补全部消费者明确scope，2RED→
+55相关PASS/Ruff/strict限定。Fresh C01复核单次启动，6612/10156/EXIT84767，
+不轮询慢重派。STATUS与owner-dose-source-union-and-refresh-additions-v1唯一
+恢复，ACTIVE。下一正常source-only issuer/接受/合法消费者及事务真实接通，
+旧摄取不得重跑；所有未完发布门仍开，不拼历史PASS。
+
+## 历史：量纲与旧测试根因完成；3363来源候选准备
 
 模式execution-plus-conference继续：公共科学采用由owner管理，独立C03对
 冻结源候选挑战，owner直接修独立单位根因，无共享写入。14RED→82相关PASS，

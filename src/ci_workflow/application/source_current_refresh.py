@@ -5,6 +5,10 @@
 - 来源刷新不是用户保存。只接受已经入库且 ``review_state='accepted'`` 的来源
   事实原子；候选或未接受原子一律拒绝，来源候选不得自动晋级，也不得伪造
   ``user_modified`` 或改写既有来源原子。
+- 刷新请求可选携带“新增条目”：把新接受的来源事实原子作为新的逻辑事实并集
+  接入，不伪造旧 current 版本；既有逻辑事实（含用户修订/清除层）必须走替换
+  重基线语义。新增与替换的新原子消费者都按本次请求钉固的普通 builder 输入
+  快照作用域解析，未受影响的既有事实保持原 current 谱系。
 - 用户修订/清除层通过既有 typed 三方比较（base source / user current /
   new source，复用 :class:`~ci_workflow.application.refresh_service.RefreshService`）
   追加式重基线到新来源，保留原来源/用户谱系与 provenance；字段分歧或来源
@@ -25,7 +29,7 @@ import math
 import os
 import re
 import tempfile
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Literal
@@ -159,6 +163,34 @@ class SourceFactReplacement(BaseModel):
         return self
 
 
+class SourceFactAddition(BaseModel):
+    """一个新增逻辑事实：把已接受的来源事实原子并集接入当前交付。
+
+    新增条目只声明来源侧身份（逻辑事实、已接受原子版本、真实来源版本与理
+    由），没有旧 current 版本可声明；既有逻辑事实必须使用替换重基线语义。
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    fact_id: str
+    fact_version_id: str
+    source_version_id: str
+    rationale_zh: str
+
+    @field_validator("fact_id", "fact_version_id", "source_version_id")
+    @classmethod
+    def _ids_are_resources(cls, value: str) -> str:
+        normalized = _text(value)
+        if _RESOURCE_ID.fullmatch(normalized) is None:
+            raise ValueError("新增来源事实身份不是合法资源标识")
+        return normalized
+
+    @field_validator("rationale_zh")
+    @classmethod
+    def _rationale_is_not_blank(cls, value: str) -> str:
+        return _text(value)
+
+
 class SourceReportBuilderInput(BaseModel):
     """一个受影响报告的哈希钉住普通 builder 输入。"""
 
@@ -189,7 +221,7 @@ class SourceReportBuilderInput(BaseModel):
 
 
 class SourceCurrentRefreshCommand(BaseModel):
-    """来源当前刷新命令：请求身份、期望版本、来源替换与 builder 输入。"""
+    """来源当前刷新命令：请求身份、期望版本、来源替换/新增与 builder 输入。"""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -199,7 +231,8 @@ class SourceCurrentRefreshCommand(BaseModel):
     expected_revision: int = Field(ge=0)
     requested_by: str
     requested_at: datetime
-    replacements: tuple[SourceFactReplacement, ...] = Field(min_length=1)
+    replacements: tuple[SourceFactReplacement, ...] = ()
+    additions: tuple[SourceFactAddition, ...] = ()
     builder_inputs: tuple[SourceReportBuilderInput, ...] = Field(min_length=1)
 
     @field_validator("request_id", "project_id", "requested_by")
@@ -217,9 +250,23 @@ class SourceCurrentRefreshCommand(BaseModel):
 
     @model_validator(mode="after")
     def _sets_are_unique(self) -> SourceCurrentRefreshCommand:
+        if not self.replacements and not self.additions:
+            raise ValueError("同一刷新请求至少需要一条来源替换或新增条目")
         fact_ids = [item.fact_id for item in self.replacements]
         if len(set(fact_ids)) != len(fact_ids):
             raise ValueError("同一逻辑事实只能有一条来源替换")
+        addition_fact_ids = [item.fact_id for item in self.additions]
+        if len(set(addition_fact_ids)) != len(addition_fact_ids):
+            raise ValueError("同一逻辑事实只能有一条新增条目")
+        addition_versions = [item.fact_version_id for item in self.additions]
+        if len(set(addition_versions)) != len(addition_versions):
+            raise ValueError("同一来源事实版本只能新增一次")
+        replaced_fact_ids = set(fact_ids) & set(addition_fact_ids)
+        replaced_versions = {
+            item.replacement_fact_version_id for item in self.replacements
+        } | {item.current_fact_version_id for item in self.replacements}
+        if replaced_fact_ids or replaced_versions & set(addition_versions):
+            raise ValueError("同一逻辑事实或来源事实版本不能同时作为替换与新增")
         reports = [item.report for item in self.builder_inputs]
         if len(set(reports)) != len(reports):
             raise ValueError("同一报告只能提供一个builder输入")
@@ -252,11 +299,25 @@ class _ResolvedReplacement(BaseModel):
     effective_fact_version_id: str
     replacement_fact_version_id: str
     replacement_source_version_id: str
+    source_public: dict[str, Any]
     rebased_context_json: str | None = None
     rebased_raw_value: str | None = None
     rebased_normalized_value: str | None = None
     rebase_version_id: str | None = None
     comparison: RefreshConflictComparison | None = None
+    bindings: tuple[dict[str, Any], ...]
+    binding_reports: tuple[ReportCode, ...]
+
+
+class _ResolvedAddition(BaseModel):
+    """一个新增逻辑事实在通过全部身份/接受/消费者校验后的解析结果。"""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    fact_id: str
+    fact_version_id: str
+    source_version_id: str
+    source_public: dict[str, Any]
     bindings: tuple[dict[str, Any], ...]
     binding_reports: tuple[ReportCode, ...]
 
@@ -297,17 +358,32 @@ class SourceCurrentRefreshService:
                 if committed is not None:
                     return committed
             current = self._require_current(command)
-            resolved = self._resolve_replacements(command, current)
-            affected_reports = self._affected_reports(resolved)
+            # 本次请求钉固的普通 builder 输入定义新原子消费者的精确快照作用
+            # 域；旧 current 快照只服务未受影响的既有事实谱系。
+            new_scopes = self._declared_source_scopes(command)
+            resolved = self._resolve_replacements(
+                command, current, source_scopes=new_scopes
+            )
+            additions = self._resolve_additions(
+                command, current, source_scopes=new_scopes
+            )
+            affected_reports = self._affected_reports(resolved, additions)
             revision = current.revision + 1
-            new_active_ids = self._new_active_ids(current, resolved)
+            new_active_ids = self._new_active_ids(current, resolved, additions)
             builder_pins = self._verify_builder_inputs(command, affected_reports)
-            self._verify_source_builder_values(resolved, builder_pins)
+            self._verify_source_builder_values(resolved, additions, builder_pins)
             appended = self._stage_rebases(
                 occurred_at=command.requested_at, resolved=resolved
             )
+            refreshed_atom_ids = {
+                item.effective_fact_version_id for item in resolved
+            } | {item.fact_version_id for item in additions}
             public_by_version = {
-                version_id: self._public_fact(version_id) for version_id in new_active_ids
+                version_id: self._public_fact(
+                    version_id,
+                    source_scopes=new_scopes if version_id in refreshed_atom_ids else None,
+                )
+                for version_id in new_active_ids
             }
             report_fact_ids = self._report_fact_ids(
                 affected_reports, new_active_ids, public_by_version
@@ -343,10 +419,19 @@ class SourceCurrentRefreshService:
                     reports.append(delivery)
                     continue
                 changed_fact_id = next(
-                    item.fact_id
-                    for item in resolved
-                    if delivery.report in item.binding_reports
+                    (
+                        item.fact_id
+                        for item in resolved
+                        if delivery.report in item.binding_reports
+                    ),
+                    None,
                 )
+                if changed_fact_id is None:
+                    changed_fact_id = next(
+                        item.fact_id
+                        for item in additions
+                        if delivery.report in item.binding_reports
+                    )
                 try:
                     built = build_current_report(
                         self.project_root,
@@ -391,9 +476,15 @@ class SourceCurrentRefreshService:
                 revision=revision,
                 rebuilt_reports=affected_reports,
                 effective_fact_version_ids={
-                    item.fact_id: item.effective_fact_version_id for item in resolved
+                    **{
+                        item.fact_id: item.effective_fact_version_id
+                        for item in resolved
+                    },
+                    **{item.fact_id: item.fact_version_id for item in additions},
                 },
-                appended_fact_version_ids=tuple(sorted(appended)),
+                appended_fact_version_ids=tuple(
+                    sorted((*appended, *(item.fact_version_id for item in additions)))
+                ),
                 replacement_source_version_ids=tuple(
                     sorted({item.replacement_source_version_id for item in resolved})
                 ),
@@ -501,6 +592,8 @@ class SourceCurrentRefreshService:
         self,
         command: SourceCurrentRefreshCommand,
         current: CurrentDeliveryBundle,
+        *,
+        source_scopes: Mapping[str, str] | None,
     ) -> tuple[_ResolvedReplacement, ...]:
         resolved: list[_ResolvedReplacement] = []
         for replacement in command.replacements:
@@ -513,7 +606,13 @@ class SourceCurrentRefreshService:
             self._assert_accepted_atom(replacement, current_row, replacement_row)
             if replacement.user_fact_version_id is not None:
                 resolved.append(
-                    self._resolve_user_lineage(command, replacement, current_row, replacement_row)
+                    self._resolve_user_lineage(
+                        command,
+                        replacement,
+                        current_row,
+                        replacement_row,
+                        source_scopes=source_scopes,
+                    )
                 )
             else:
                 if str(current_row["review_state"]) == "user_modified":
@@ -521,9 +620,126 @@ class SourceCurrentRefreshService:
                         "当前事实存在用户修订层，来源刷新必须显式声明base/user谱系"
                     )
                 resolved.append(
-                    self._resolved_plain_replacement(replacement, replacement_row)
+                    self._resolved_plain_replacement(
+                        replacement, replacement_row, source_scopes=source_scopes
+                    )
                 )
         return tuple(resolved)
+
+    def _resolve_additions(
+        self,
+        command: SourceCurrentRefreshCommand,
+        current: CurrentDeliveryBundle,
+        *,
+        source_scopes: Mapping[str, str] | None,
+    ) -> tuple[_ResolvedAddition, ...]:
+        """解析新增条目：新逻辑事实、已接受原子、精确快照作用域消费者。
+
+        既有逻辑事实（含用户修订/清除层）与当前活动版本的继承链都不允许作为
+        新增接入；它们必须使用既有替换重基线语义。新增消费者只按本次请求钉固
+        的 builder 输入作用域解析，缺失或跨作用域一律失败关闭。
+        """
+        if not command.additions:
+            return ()
+        active_fact_ids = {
+            str(self._fact_row(version_id)["fact_id"]): version_id
+            for version_id in current.active_fact_version_ids
+        }
+        resolved: list[_ResolvedAddition] = []
+        for addition in command.additions:
+            row = self._fact_row(addition.fact_version_id)
+            if str(row["fact_id"]) != addition.fact_id:
+                raise SourceFactRefusalError("新增来源事实身份与记录不一致")
+            if addition.fact_version_id in current.active_fact_version_ids:
+                raise SourceFactRefusalError(
+                    "新增来源事实版本已经是当前交付的活动事实，不能重复接入"
+                )
+            if addition.fact_id in active_fact_ids:
+                raise SourceFactRefusalError(
+                    "该逻辑事实已经存在于当前交付（包括用户修订与显式清除层），"
+                    "不能作为新增条目，必须使用来源替换重基线语义"
+                )
+            self._assert_addition_lineage_is_new(row, current)
+            self._assert_accepted_addition(addition, row)
+            if not source_scopes:
+                raise SourceFactRefusalError("新增来源事实必须明确声明本次输入的快照作用域")
+            public = self._public_fact_for_row(row, source_scopes=source_scopes)
+            try:
+                bindings, reports = self._legal_bindings(public)
+            except SourceFactRefusalError as error:
+                raise SourceFactRefusalError(
+                    f"新增来源事实缺少本次钉固快照作用域内的合法消费者：{error}"
+                ) from error
+            if any(report not in source_scopes for report in reports):
+                raise SourceFactRefusalError("新增来源事实的每个消费者必须明确声明快照作用域")
+            resolved.append(
+                _ResolvedAddition(
+                    fact_id=addition.fact_id,
+                    fact_version_id=addition.fact_version_id,
+                    source_version_id=addition.source_version_id,
+                    source_public=public,
+                    bindings=bindings,
+                    binding_reports=reports,
+                )
+            )
+        return tuple(resolved)
+
+    def _assert_addition_lineage_is_new(
+        self,
+        row: dict[str, Any],
+        current: CurrentDeliveryBundle,
+    ) -> None:
+        """新增原子不得在继承链上指向任何当前活动版本。"""
+        visited: set[str] = set()
+        predecessor = row.get("supersedes_fact_version_id")
+        while predecessor:
+            version_id = str(predecessor)
+            if version_id in visited:
+                raise SourceFactRefusalError("新增来源事实继承链存在循环")
+            visited.add(version_id)
+            if version_id in current.active_fact_version_ids:
+                raise SourceFactRefusalError(
+                    "新增来源事实的继承链指向当前活动版本，必须使用来源替换语义"
+                )
+            predecessor = self._fact_row(version_id).get("supersedes_fact_version_id")
+
+    def _assert_accepted_addition(
+        self,
+        addition: SourceFactAddition,
+        row: dict[str, Any],
+    ) -> None:
+        """只在已接受、非用户层原子上证明事实、字段、真实来源与主证据绑定。"""
+        review_state = str(row["review_state"])
+        if review_state != "accepted":
+            raise SourceFactRefusalError(
+                f"新增来源事实必须是已接受原子，当前状态为{review_state}，候选不得自动晋级"
+            )
+        context_text = str(row["scientific_context_json"] or "")
+        try:
+            context = json.loads(context_text)
+        except json.JSONDecodeError as error:
+            raise SourceFactRefusalError("新增来源事实缺少可读取的科学语义上下文") from error
+        if not isinstance(context, dict) or not context:
+            raise SourceFactRefusalError("新增来源事实缺少完整科学语义上下文")
+        if isinstance(context.get("user_edit"), dict):
+            raise SourceFactRefusalError("新增来源事实不得携带用户修订层，用户层必须经替换语义接入")
+        for column in ("raw_value", "normalized_value", "entity_id", "field_id"):
+            if column in context and context[column] != row[column]:
+                raise SourceFactRefusalError(f"新增来源事实的{column}与科学语义上下文不一致")
+        fragment = self._fragment_row(str(row["primary_fragment_id"]))
+        if str(fragment["source_version_id"]) != addition.source_version_id:
+            raise SourceFactRefusalError("新增来源事实的声明来源版本与实际片段绑定不一致")
+        with open_database(self.database_path) as database:
+            evidence = database.execute(
+                "SELECT 1 FROM fact_evidence WHERE fact_version_id=? AND fragment_id=? "
+                "AND evidence_role='primary'",
+                (
+                    str(row["fact_version_id"]),
+                    str(row["primary_fragment_id"]),
+                ),
+            ).fetchone()
+        if evidence is None:
+            raise SourceFactRefusalError("新增来源事实缺少主证据片段绑定")
 
     def _assert_accepted_atom(
         self,
@@ -571,8 +787,10 @@ class SourceCurrentRefreshService:
         self,
         replacement: SourceFactReplacement,
         replacement_row: dict[str, Any],
+        *,
+        source_scopes: Mapping[str, str] | None,
     ) -> _ResolvedReplacement:
-        public = self._public_fact_for_row(replacement_row)
+        public = self._public_fact_for_row(replacement_row, source_scopes=source_scopes)
         bindings, reports = self._legal_bindings(public)
         return _ResolvedReplacement(
             fact_id=replacement.fact_id,
@@ -580,6 +798,7 @@ class SourceCurrentRefreshService:
             effective_fact_version_id=replacement.replacement_fact_version_id,
             replacement_fact_version_id=replacement.replacement_fact_version_id,
             replacement_source_version_id=replacement.replacement_source_version_id,
+            source_public=public,
             bindings=bindings,
             binding_reports=reports,
         )
@@ -590,6 +809,8 @@ class SourceCurrentRefreshService:
         replacement: SourceFactReplacement,
         current_row: dict[str, Any],
         replacement_row: dict[str, Any],
+        *,
+        source_scopes: Mapping[str, str] | None,
     ) -> _ResolvedReplacement:
         base_id = replacement.base_fact_version_id
         user_id = replacement.user_fact_version_id
@@ -601,7 +822,7 @@ class SourceCurrentRefreshService:
             if str(row["fact_id"]) != replacement.fact_id:
                 raise SourceFactRefusalError("用户层谱系跨越了逻辑事实身份")
         self._assert_rebase_lineage(current_row, replacement, base_id, user_id)
-        public = self._public_fact_for_row(replacement_row)
+        public = self._public_fact_for_row(replacement_row, source_scopes=source_scopes)
         bindings, reports = self._legal_bindings(public)
         try:
             comparison = self._compare_service().compare_user_fact_refresh(
@@ -642,6 +863,7 @@ class SourceCurrentRefreshService:
             effective_fact_version_id=version_id,
             replacement_fact_version_id=replacement.replacement_fact_version_id,
             replacement_source_version_id=replacement.replacement_source_version_id,
+            source_public=public,
             rebased_context_json=context,
             rebased_raw_value=raw_value,
             rebased_normalized_value=normalized_value,
@@ -796,10 +1018,42 @@ class SourceCurrentRefreshService:
     # ── 受影响报告与builder输入 ────────────────────────────────────────────
 
     def _affected_reports(
-        self, resolved: tuple[_ResolvedReplacement, ...]
+        self,
+        resolved: tuple[_ResolvedReplacement, ...],
+        additions: tuple[_ResolvedAddition, ...],
     ) -> tuple[ReportCode, ...]:
         reports = {report for item in resolved for report in item.binding_reports}
+        reports.update(report for item in additions for report in item.binding_reports)
         return tuple(sorted(reports, key=lambda item: _REPORTS.index(item)))
+
+    def _declared_source_scopes(
+        self, command: SourceCurrentRefreshCommand
+    ) -> dict[str, str]:
+        """本次请求钉固 builder 输入声明的证据快照作用域。
+
+        新接受的来源原子（替换与新增）只能在该作用域内解析已登记消费者；旧
+        current 快照只服务未受影响事实的既有谱系。这里只读取声明输入的字节并
+        复核摘要；完整的内容寻址钉固仍由 :meth:`_verify_builder_inputs` 在任何
+        暂存写入前完成。
+        """
+        scopes: dict[str, str] = {}
+        for item in command.builder_inputs:
+            source = self.project_root / item.input_relative_path
+            try:
+                _ordinary(self.project_root, source)
+            except ValueError as error:
+                raise SourceFactRefusalError(
+                    f"{item.report}类报告builder输入路径越界"
+                ) from error
+            if source.is_symlink() or not source.is_file():
+                raise SourceFactRefusalError(f"{item.report}类报告builder输入不存在或不可读")
+            payload = source.read_bytes()
+            if _sha256_bytes(payload) != item.input_sha256:
+                raise SourceFactRefusalError(f"{item.report}类报告builder输入哈希不一致")
+            scope = self._facts._portal_data_scope_from_bytes(payload)
+            if scope is not None:
+                scopes[item.report] = scope
+        return scopes
 
     def _verify_builder_inputs(
         self,
@@ -862,12 +1116,14 @@ class SourceCurrentRefreshService:
         self,
         current: CurrentDeliveryBundle,
         resolved: tuple[_ResolvedReplacement, ...],
+        additions: tuple[_ResolvedAddition, ...],
     ) -> tuple[str, ...]:
         replacements = {
             item.previous_fact_version_id: item.effective_fact_version_id for item in resolved
         }
-        return tuple(replacements.get(version_id, version_id)
-                     for version_id in current.active_fact_version_ids)
+        mapped = tuple(replacements.get(version_id, version_id)
+                       for version_id in current.active_fact_version_ids)
+        return mapped + tuple(item.fact_version_id for item in additions)
 
     def _report_fact_ids(
         self,
@@ -888,7 +1144,9 @@ class SourceCurrentRefreshService:
         return by_report
 
     def _verify_source_builder_values(
-        self, resolved: tuple[_ResolvedReplacement, ...],
+        self,
+        resolved: tuple[_ResolvedReplacement, ...],
+        additions: tuple[_ResolvedAddition, ...],
         pins: dict[ReportCode, tuple[str, str]],
     ) -> None:
         """Identity-correct input must also preserve the new source value/context.
@@ -897,6 +1155,8 @@ class SourceCurrentRefreshService:
         user's edited/cleared value into a new original-source builder payload.
         Estimated values are not recomputed from n/N. Direct atoms without a
         declared numeric value or exact text fail closed, not guessed derivations.
+        Replacement atoms and added atoms are both checked against the pinned
+        inputs of this request under their request-scoped consumer resolution.
         """
         models: dict[ReportCode, ReportAPortalData | ReportBPortalData | ReportCPortalData] = {}
         for report, (relative, _) in pins.items():
@@ -907,9 +1167,30 @@ class SourceCurrentRefreshService:
                 models[report] = ReportBPortalData.model_validate_json(raw)
             else:
                 models[report] = ReportCPortalData.model_validate_json(raw)
-        for item in resolved:
-            source = self._public_fact(item.replacement_fact_version_id)
-            for binding in item.bindings:
+        atoms: tuple[
+            tuple[str, str, dict[str, Any], tuple[dict[str, Any], ...]], ...
+        ] = (
+            *(
+                (
+                    item.replacement_fact_version_id,
+                    item.replacement_source_version_id,
+                    item.source_public,
+                    item.bindings,
+                )
+                for item in resolved
+            ),
+            *(
+                (
+                    item.fact_version_id,
+                    item.source_version_id,
+                    item.source_public,
+                    item.bindings,
+                )
+                for item in additions
+            ),
+        )
+        for _fact_version_id, source_version_id, source, bindings in atoms:
+            for binding in bindings:
                 report = binding["report"]
                 data = models[report]
                 rows = getattr(data, binding["collection"])
@@ -957,7 +1238,7 @@ class SourceCurrentRefreshService:
                             raise SourceFactRefusalError("A来源缺少唯一明细view")
                         view = dict(views[0])
                 if view is not None:
-                    if view.get("source_version_id") != item.replacement_source_version_id:
+                    if view.get("source_version_id") != source_version_id:
                         raise SourceFactRefusalError(f"{report}来源版本与明细view不一致")
                     quote = view.get("source_text")
                     if quote is not None and quote != source["source_quote"]:
@@ -983,12 +1264,24 @@ class SourceCurrentRefreshService:
         except UserFactSaveError as error:
             raise SourceFactRefusalError(str(error)) from error
 
-    def _public_fact(self, fact_version_id: str) -> dict[str, Any]:
-        return self._public_fact_for_row(self._fact_row(fact_version_id))
+    def _public_fact(
+        self,
+        fact_version_id: str,
+        *,
+        source_scopes: Mapping[str, str] | None = None,
+    ) -> dict[str, Any]:
+        return self._public_fact_for_row(
+            self._fact_row(fact_version_id), source_scopes=source_scopes
+        )
 
-    def _public_fact_for_row(self, row: dict[str, Any]) -> dict[str, Any]:
+    def _public_fact_for_row(
+        self,
+        row: dict[str, Any],
+        *,
+        source_scopes: Mapping[str, str] | None = None,
+    ) -> dict[str, Any]:
         try:
-            return self._facts._public_fact(dict(row))
+            return self._facts._public_fact(dict(row), source_scopes=source_scopes)
         except UserFactSaveError as error:
             raise SourceFactRefusalError(f"来源事实消费者绑定无法验证：{error}") from error
 
@@ -1065,6 +1358,7 @@ __all__ = [
     "SourceCurrentRefreshError",
     "SourceCurrentRefreshResult",
     "SourceCurrentRefreshService",
+    "SourceFactAddition",
     "SourceFactRefusalError",
     "SourceFactReplacement",
     "SourceReportBuilderInput",
