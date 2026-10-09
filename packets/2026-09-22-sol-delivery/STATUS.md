@@ -1,4 +1,30 @@
-# 唯一当前状态：1007V1 连续实施；current9保持，A/B r10密度候选32态实验通过
+# 唯一当前状态：1007V1 连续实施；current10已选，来源准备终态已恢复
+
+代码9f5edc6已push。正常presentation API复用已验A/B r10清单，未重渲染、
+未重复临床save，选择current10；A10/B10/C9合法保持，349采用可编辑事实/
+事实摘要不变，61保护文件保持。正常默认CLI联合分享17,586,106bytes，
+SHA8854de9d，逐报告revision及全部复制文件hash已验；未继承旧配置/断网验收。
+原E04已真实终态exit0/no fallback/1248.204s；实际ZCode-live-bigmodel/
+GLM-5.3-Flash/max，session c041033c，guard audit-execution oktrue。无progress
+轮询/迟缓重派。Owner核3781原定位，发现1698声明缺224引用分母payload，
+同生产解析恢复，1922精确原文通过。用户清除的源祖先仍有效，源采用复用91
+不是90；279旧v5未采用/1698新精确候选/1665缺口/48其他域分开。新批未摄取
+未接受，不签完整宇宙/共轴/新鲜度。33正式范围证明不等于25历史变N条目。
+精确current9 DB CAS备份10,334,208bytes已保留；current10之后实际只读恢复
+重放仍一致，不恢复旧DB、不再摄取，原worker/回执/旧失败不改。
+[唯一最新精确恢复](evidence/1007V1/owner-current10-source-preparation-recovery-v1.json)。
+新有界E03源缺口根因诊断已preflight PASS单次启动，只写新scratch；实际终态
+身份/意见PENDING，不轮询。主owner继续current10真实源→编辑导航、新分享
+重开与中文阅读修复；已验证的32密度状态不重跑。Goal ACTIVE；非暂停/完成/RC。
+current10三真实HTTP来源→编辑链已实过，C9正确指向整体10/对应事实，349事实
+可选，清除仍空、原值可查，未save。两次脚本错误（未选事实输入隐藏/错临床
+问题）原失败保留，精确问题修正后三链failures[]，不把原失败改PASS。
+新联合包移动目录455成员hash已验，真实launcher→摘要→横比→来源/Esc三
+断网入口failures[]；实际公共GET在线成功/断网全失败，网络已恢复。不是新
+profile/清缓存/同版本三单包/保存配置验收，不继承current9此类旧结果。
+全源/所有物理页/跨浏览器/新profile/三宿主/新安装/恢复/24门户仍未最终关闭。
+
+## 历史：current9保持期间A/B r10候选准备（节点已结束，不再等待）
 
 817994ee已push。本批默认CLI分享根因1RED2.15s：AB更新后未变化C0仍是当前
 报告，不能硬套整体revision1。现按逐报告revision选择，显式过期配置仍拒绝。

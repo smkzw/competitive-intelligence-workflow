@@ -1,0 +1,57 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "source_code_commit": "9f5edc6ec4221752ae36b0f887fbb20b8c78639f",
+  "status": "CONTINUOUS_IMPLEMENTATION_NOT_PAUSED_NOT_RC",
+  "current": {
+    "project": ".artifacts/1007-abc-current-integration-v1/working/project",
+    "revision": 10,
+    "generation_sha256": "3c53f8091328a35d1fffb822e2fed36eddc8b37f419972f07efa6bb9d725e40d",
+    "fact_revision_digest": "a95fda6e5ddb1961c5cd92fc96446f1a08fe86cf39da6fba63499f190fe1f6a3",
+    "reports": "A10/49pages, B10/101pages, unchanged C9/16pages;349 adopted editable facts. Normal presentation API reused exact verified A/B manifests, not rerendered, no clinical save/source adoption.61 protected files unchanged.",
+    "selection_receipt": ".artifacts/1007-abc-current-integration-v1/density-current-selection-v1.json",
+    "selection_receipt_sha256": "15963c2abc2adfa73a8724d7d0d2fd235e2e2a19bdf89ab2ba219c606ed0cab5",
+    "default_joint_share": "current-r10-default-ABC.zip",
+    "archive_sha256": "8854de9d312d93c44f90d6ee8355e56bf7181071435b5f48be8df449cfbae415",
+    "archive_bytes": 17586106,
+    "share_scope": "Actual normal CLI/default per-report revisions A10/B10/C9 and all copied file hashes verified. No saved-config/new-browser/offline acceptance inherited from current9."
+  },
+  "source_preparation": {
+    "task": "ci-1007-full-pool-source-prepare-v1",
+    "terminal": "One actual E04 ZCode route completed exit0/no fallback/1248.204s; response provider zcode-live-bigmodel, model GLM-5.3-Flash, requested and observed max, protocol_errors[]. Session sess_c041033c-4070-45aa-b336-a8564da056ee. No progress polls; terminal collected once after kqueue EXIT. Guard audit-execution oktrue/errors[].",
+    "runner_output_sha256": "53b35a379fe12062a99fbc18396659b170ed42f554964ddd908ed210ce44d814",
+    "original_output": ".artifacts/1007-joint-full-pool-source-audit-v1/coverage-and-candidates.json",
+    "original_output_sha256": "d66ee467870af7c9552c61ac5bd22c9832e6da6a3f61f2c0e39a7ba436cddc2d",
+    "owner_recovery": "Worker1698 claims omitted224 referenced denominator fact payloads; actual RED224. Same production atom converter recovered them without changing primary payloads/claim IDs/source versions/quotes. Snapshot-scoped bindings plus same-fact ancestry prove91 reused adopted rows rather than worker90; user-cleared fact remains related to source ancestor.",
+    "verified": ".artifacts/1007-joint-full-pool-source-audit-v1/verified-and-complete-v2.json",
+    "verified_sha256": "cbc21dd68890fd7e99e30ebd05487270147cb1809b5ad7a848c14217f2bd622b",
+    "original_locators_verified": 3781,
+    "candidate_rows": 1698,
+    "source_fact_payloads": 1922,
+    "source_captures": 14,
+    "partition": {"reused_adopted_rows":91,"unaccepted_existing_v5_rows":279,"new_exact_candidates":1698,"unresolved_gaps":1665,"additional_domain_separate":48},
+    "scope_proofs": "33 formal scope correction proofs versus25 historical changedN entries; distinct scopes, old scientific conflicts remain unchanged.",
+    "adoption": "NOT_RUN for new1698/1922; offline exact-source replay is not freshness, historical availability, numeric equivalence, universe closure or report acceptance."
+  },
+  "recovery": {
+    "recipe": "packets/2026-09-22-sol-delivery/evidence/1007V1/verify-full-pool-source-v2.py",
+    "recipe_sha256": "71aee9c0fc1000f6288824ccfc0338ac66d55fc84c9fa9cee8cc51c576d984e8",
+    "recipe_check": "Ruff PASS after import/style-only normalization; production replay already performed once before style normalization, no duplicate ingestion or broad gate.",
+    "exact_old_database": ".artifacts/1007-abc-current-integration-v1/recovery-cas/evidence/raw/sha256/f8/f8a458d291a7cb0161d2304291ec02899a8e4249ca2518a16f080fd1d734769c.bin",
+    "database_sha256": "f8a458d291a7cb0161d2304291ec02899a8e4249ca2518a16f080fd1d734769c",
+    "database_bytes": 10334208,
+    "actual_post_current10_replay": ".artifacts/1007-joint-full-pool-source-audit-v1/verified-replay-after-current10-v1.json",
+    "replay_sha256": "95066b0524104312c963c6fb140c819527332b6fb4a8702969df28b5ed70df37",
+    "preservation": "Replay uses exact old DB CAS read-only, never restores live DB/current9. All original worker/source/receipt/current history retained; same1922 quotes/3781 locators/224 corrections/partition recovered."
+  },
+  "current_browser": {
+    "navigation_receipt": ".artifacts/1007-abc-current-integration-v1/current10-navigation-actual-v3.json",
+    "navigation_sha256": "5c1eb4672d51d7034420d51f668c6d305279c4b875b3f8f1cc97ab764d83fb9f",
+    "navigation": "Actual Ego184/p2 three current10 HTTP report-source-to-editor flows; A10/B10/C9 link the correct current-generation10 and chosen fact,349 fact choices, empty cleared current value, original source preserved. failures[]. No save. Original harness v1 unselected-input timeout and v2 wrong clinical question retained, not product failures or rewritten PASS.",
+    "moved_share_members": ".artifacts/1007-abc-current-integration-v1/current10-default-share-members-v1.json",
+    "moved_share_members_sha256": "24e388e52d14dfd0ce963a0902c62121d25aea8e4bb8a71085cf119d5c30e55a",
+    "offline_receipt": ".artifacts/1007-abc-current-integration-v1/current10-default-share-offline-actual-v1.json",
+    "offline_sha256": "4326e571c7fb9e2f633cc967d83ccd0fbf95c1d7f559352d8a57ee439e37e1ce",
+    "offline": "Moved new default joint share, all455 member hashes checked, Ego184 actual launcher→A/B/C summary→comparison→clear/source/Esc; file-origin public GET succeeded online then blocked in all three offline pages, network restored finally. A10/B10/C9, local assets only, no editable session/links baked in. failures[]. Same browser/profile; fresh-profile, cleared-storage, new single-report packages and saved-config-current10 NOT_RUN."
+  },
+  "next": "Single E03 ci-1007-source-binding-gap-root-v1 preflight oktrue, actual CodeBuddy/deepseek-v4.1-flash requested max started; runtime/terminal pending. Writes only new scratch root-family diagnosis, fixed sources read-only. No progress polling/redispatch. Owner retains shared-schema/source acceptance responsibility and continues bounded Chinese comparison-unit presentation root family. Full sources/physical pages/Chinese reading/cross-browser/fresh-profile/three hosts/fresh-install/recovery/24 portals/RC remain open."
+}
