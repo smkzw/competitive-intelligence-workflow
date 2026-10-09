@@ -521,6 +521,7 @@
 .kz-c-design-summary__trial button { width: 100%; padding: 6px 8px; border: 0; border: 1px solid var(--kz-c-line); background: #fff9ee; color: #243650; text-align: left; font: inherit; cursor: pointer; overflow-wrap: anywhere; }
 .kz-c-design-summary__trial button:focus-visible { outline: 2px solid #d98200; outline-offset: 2px; }
 .kz-c-design-matrix-section {
+  grid-column: 1 / -1;
   margin-top: 1rem;
 }
 
