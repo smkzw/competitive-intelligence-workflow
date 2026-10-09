@@ -4,11 +4,16 @@
 
 ## 既有依赖和生产出口
 
-20261009恢复后的唯一下一动作：核验已通过171项目/七源码hash，补齐作者资源
+20261009恢复后的当前动作：核验已通过171项目/七源码hash，补齐作者资源
 发包镜像，既有helper用--candidate-number 3生成正常NEW C3，再走独立正常
 产品issuer。C2 VETO/旧来源采用与快照不改，源258不重采；上一151相关回归
 不重跑，续接/拒覆盖/镜像相关8PASS与strict工具1限定本次代码范围。生成前
 固定新源码commit，渲染/复核/晋级分别记录，不拼旧PASS成新报告通过。
+上述已实际完成：正常C3/e3独立accepted与正式回执/正常晋级检查，原current空。
+下一有界E03 ci-1007-c3-current-journey-v1：隔离COPY内接真正current，QA
+sample151→152→clear→restore→undo、非法值/重试与当前C分享；原项目只读，
+不伪造source接受/视觉/ABC/24/RC。C3的非阻断arm标识歧义另入后续小族，
+不为一行标注再原地覆写候选或展开全页会商。
 
 当前7aeaac2后根因动作：C typed输入已真实完成（9100b606/中文ef1c9841），不再
 当在途。独立源码诊断证实source candidate→gate→post-render request的循环。
