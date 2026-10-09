@@ -1511,6 +1511,10 @@
     }
     chartState = {rows: [], kind: "", chart: null};
     host.innerHTML = "";
+    // FR20: the landing summary and full-source comparison are distinct
+    // tasks. Do not paint long clauses into a redundant homepage heatmap;
+    // all observations remain in the explicit comparison query and payload.
+    if (window.__C_PAGE_ID__ === "overview" && !wantsFullStudyComparison()) return;
     var title = document.createElement("div");
     title.className = "kz-c-chart-title";
     title.textContent = wantsFullStudyComparison()

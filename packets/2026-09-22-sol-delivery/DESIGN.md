@@ -82,6 +82,7 @@ calendar_day不冒充精确时刻。默认旧capture不变；部分未知、不�
 CurrentPresentationRebuildCommand 绑定项目、request_id、expected_revision、
 所选已存在报告、请求者与带时区时间；API 重开实际字段，公开 CLI 为
 `ci-workflow project rebuild-presentation --root <项目> --command <命令JSON>`。
+C首页摘要与全研究横比沿用同一完整事实载荷和显式view状态：摘要只呈现重点、限制与横比入口，不初始化重复的条款ECharts；完整条款比较及其筛选在comparison任务呈现。非首页的专题图/表不受该分工影响。桌面网格的静态矩阵子项须明确跨列，不依赖默认单列放置；不得因隐藏态的单测通过就推定实屏布局正确。
 无已存 current/缺报告/错误绑定不得绕过原门补造报告。全批预检先于任何
 报告暂存；所有选中报告完成后才原子切换 generation。已记录候选按原字节
 恢复，同请求不同载荷、过期版本拒绝；记录候选前，开工及每个报告完成后

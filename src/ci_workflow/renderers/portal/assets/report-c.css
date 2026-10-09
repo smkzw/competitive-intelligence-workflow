@@ -92,6 +92,10 @@
 .kz-c-site[data-c-view="comparison"] .kz-c-comparison-entry {
   background: #fff;
 }
+.kz-c-site--overview[data-c-view="summary"] .kz-c-visual-section,
+.kz-c-site--overview[data-c-view="summary"] #kz-filter-panel {
+  display: none;
+}
 
 /* Desktop reading chrome: use existing disclosure/mount and movie, not a
    separate compact template or smaller data typography. */

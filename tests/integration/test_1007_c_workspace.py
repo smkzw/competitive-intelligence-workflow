@@ -41,7 +41,7 @@ _DEDICATED_HARNESS = r"""
 const fs = require("node:fs");
 const vm = require("node:vm");
 const data = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
-const initialSearch = process.argv[3] || "?view=comparison";
+const initialSearch = process.argv[3] === undefined ? "?view=comparison" : process.argv[3];
 
 function makeNode(tag) {
   const node = {
@@ -451,6 +451,10 @@ const out = { ok: true, snapshots: {} };
 try {
   const A = runContext(initialSearch, data);
   out.snapshots.initial = snapshot(A);
+  if (initialSearch === "") {
+    process.stdout.write(JSON.stringify(out));
+    process.exit(0);
+  }
   searchFor(A, data.search_query);
   out.snapshots.search = snapshot(A);
   searchFor(A, "");
@@ -624,6 +628,17 @@ def test_comparison_has_one_task_heading_and_no_duplicate_summary(
     assert initial["summary_nav"] == "false"
     # Matrix membership, source details and the return-summary link stay intact.
     assert initial["table_present"] and initial["last_reachable"]
+
+
+def test_home_summary_does_not_render_long_clause_heatmap(
+    tmp_path: Path, payload: dict[str, Any],
+) -> None:
+    result = _run_harness(tmp_path, payload, search="")
+    initial = result["snapshots"]["initial"]
+    assert initial["body_view"] == "summary"
+    assert initial["summary_hidden"] is False
+    assert initial["echarts_calls"] == 0
+    assert initial["summary_nav"] == "page"
 
 
 def test_empty_query_last_clause_study_reload_and_clear_states(
