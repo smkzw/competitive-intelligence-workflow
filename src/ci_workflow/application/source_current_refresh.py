@@ -378,10 +378,12 @@ class SourceCurrentRefreshService:
             refreshed_atom_ids = {
                 item.effective_fact_version_id for item in resolved
             } | {item.fact_version_id for item in additions}
+            # Verify the old current once per request, not once per retained fact.
+            old_scopes = self._facts._current_source_scopes()
             public_by_version = {
                 version_id: self._public_fact(
                     version_id,
-                    source_scopes=new_scopes if version_id in refreshed_atom_ids else None,
+                    source_scopes=new_scopes if version_id in refreshed_atom_ids else old_scopes,
                 )
                 for version_id in new_active_ids
             }
@@ -418,27 +420,20 @@ class SourceCurrentRefreshService:
                 if delivery.report not in affected_reports:
                     reports.append(delivery)
                     continue
-                changed_fact_id = next(
-                    (
-                        item.fact_id
-                        for item in resolved
-                        if delivery.report in item.binding_reports
-                    ),
-                    None,
+                changed_fact_ids = (
+                    *(item.fact_id for item in resolved
+                      if delivery.report in item.binding_reports),
+                    *(item.fact_id for item in additions
+                      if delivery.report in item.binding_reports),
                 )
-                if changed_fact_id is None:
-                    changed_fact_id = next(
-                        item.fact_id
-                        for item in additions
-                        if delivery.report in item.binding_reports
-                    )
                 try:
                     built = build_current_report(
                         self.project_root,
                         delivery,
                         revision=revision,
                         request_id=command.request_id,
-                        changed_fact_id=changed_fact_id,
+                        changed_fact_id=changed_fact_ids[0],
+                        changed_fact_ids=changed_fact_ids,
                         fact_version_ids=report_fact_ids[delivery.report],
                         public_facts=report_public_facts[delivery.report],
                         report_version=f"v1-source-r{revision}",

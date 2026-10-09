@@ -1,6 +1,20 @@
 # Continuous implementation checkpoint
 
-## 唯一当前：剂量修复、3989来源候选正常入库与新增刷新
+## 唯一当前：混合刷新修复与正常来源复核同会话接续
+
+execution-plus-conference：owner修公共影响种子与单请求旧scope，独立C01只
+复核冻结修复；正式源采用使用既有正常OMP issuer，两个范围不混用。
+C01实际821.427s/exit0/max verified，确认事务保护但首条影响清单不完整。
+2RED/1PASS8.68s→共享最小修复；Ruff5/strict2过，七相关集成126PASS193.77s。
+C01同原会话修复审查192.734s/exit0/max verified、3PASS/scoped ACCEPT结束。
+正式来源epoch1准备一次；
+原issuer因另建任务询问exit2无verdict/receipt，原失败保留。现既有任务
+in_progress说明后同会话issuer9489/30440，EXIT19583，实际终态尚PENDING。
+current11/349/用户清除/C保持，所有原DB行不丢，DBhash变化如实记录。
+owner-mixed-impact-and-formal-source-v2及STATUS为唯一恢复；ACTIVE非暂停。
+下一只收终态/核实际回执，再正常采用/合法消费者/一次refresh及同候选验收。
+
+## 历史：剂量修复、3989来源候选正常入库与新增刷新
 
 execution-plus-conference继续，owner共同源/current单一责任。三Serlopitant
 研究漏失最小剂量正则修复，6RED→57相关PASS；C03v2实际同会话scoped

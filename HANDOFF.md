@@ -1,7 +1,8 @@
-# 1007V1 当前接手入口｜来源3989候选入库与新增刷新，连续实施
+# 1007V1 当前接手入口｜混合刷新修复与正式来源复核接续，连续实施
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-精确恢复：[剂量修复、正常来源入库与新增刷新](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json)。
+精确恢复：[混合刷新与正式来源接续](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。
+前一节点：[剂量修复、正常来源入库与新增刷新](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json)。
 前一节点：[单位量纲、旧测试合同与来源候选](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-unit-dimensions-and-scoped-source-candidates-v1.json)。
 前一节点：[当前11导航、分享、证据缺损与诊断终态](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current11-navigation-share-and-source-terminal-v1.json)。
 前一节点：[当前11、中文单位与原地恢复证据](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-native-unit-current11-v1.json)。
@@ -11,7 +12,16 @@
 旧根入口原字节：[历史归档](docs/handoffs/HANDOFF_archive_20261009_before_joint_r9.md)。
 上次暂停原件：[20261009 暂停](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)，已获授权恢复，不是当前状态。
 
-Goal实查ACTIVE；非暂停/完成/RC。剂量根因6RED→57PASS，三研究118行恢复。
+Goal实查ACTIVE；非暂停/完成/RC。C01原复核已终态，确认事务保护并发现首条
+影响元数据缺陷。Owner2RED后修复全部种子/单请求旧scope，126相关PASS。
+同原C01修复复核192.734s/exit0/max verified，3PASS/scoped ACCEPT，已结束。
+原正式来源issuer exit2无结论/回执；同一会话已按既有Trellis任务接续正常
+issuer，未获来源采用权限前不切current。当前11/349事实/清除/C保持；只收
+原终态，不progress轮询或慢重派。全部发布门仍开。以下是上一节点历史。
+
+## 历史节点：剂量、来源候选入库与第一版刷新
+
+剂量根因6RED→57PASS，三研究118行恢复。
 C03实际同GLM会话v2 scoped ACCEPT，仅建议。正常20源/3989事实/3572声明
 已入库；105旧接受祖先精确复用，3884新原子仍candidate，snapshot70170bf1/
 e8197d2c。旧DB行与7122资料保持，current11/349采用事实/用户清除/C不变。

@@ -53,12 +53,19 @@ from ci_workflow.renderers.portal.report_b import (
 )
 from ci_workflow.storage.sqlite import open_database
 from tests.integration.test_r24_source_current_refresh import (
+    SOURCE_FACT_1,
+    SOURCE_FACT_2,
+    SOURCE_FACT_ID,
+    SOURCE_VERSION_2,
     _delivery,
+    _new_bindings,
     _projection_any,
     _read_current,
+    _seed_source_atom,
     _site_hashes,
     _source_atom_count,
     _world,
+    _write_new_inputs,
 )
 from tests.integration.test_w04_user_fact_edit import (
     NOW,
@@ -111,7 +118,11 @@ def _current_inputs(root: Path) -> dict[str, SourceReportBuilderInput]:
 
 
 def _append_addition_inputs(
-    root: Path, *, snapshot: str | None, tag: str = "addition-1",
+    root: Path,
+    *,
+    snapshot: str | None,
+    tag: str = "addition-1",
+    base_paths: dict[str, str] | None = None,
 ) -> dict[str, str]:
     """Ordinary new A/B builder inputs adding one consumed safety row.
 
@@ -123,9 +134,8 @@ def _append_addition_inputs(
     for report in ("A", "B"):
         delivery = _delivery(root, report)
         assert delivery.builder_input_relative_path is not None
-        payloads[report] = json.loads(
-            (root / delivery.builder_input_relative_path).read_bytes()
-        )
+        relative = base_paths[report] if base_paths else delivery.builder_input_relative_path
+        payloads[report] = json.loads((root / relative).read_bytes())
     view_source = payloads["B"]["safety_views"]["facts"]
     base_view = next(row for row in view_source if row["row_id"] == "safe-apply-t-1")
     locator = dict(base_view["source_locator"])
@@ -174,7 +184,8 @@ def _append_addition_inputs(
 
 
 def _addition_bindings(
-    root: Path, paths: dict[str, str],
+    root: Path,
+    paths: dict[str, str],
 ) -> tuple[ActiveFactBinding, ActiveFactBinding]:
     a_data = ReportAPortalData.model_validate_json((root / paths["A"]).read_bytes())
     b_data = ReportBPortalData.model_validate_json((root / paths["B"]).read_bytes())
@@ -488,9 +499,7 @@ def test_addition_appends_accepted_atom_preserving_user_layer_and_c(tmp_path: Pa
     # 实际持久化回执证明 A/B 都消费了新增原子的同一逻辑身份。
     for report in ("A", "B"):
         consumers = [
-            item
-            for item in _receipt_consumers(root, report)
-            if item["row_id"] == ADDITION_ROW_ID
+            item for item in _receipt_consumers(root, report) if item["row_id"] == ADDITION_ROW_ID
         ]
         assert len(consumers) == 1
         assert consumers[0]["fact_id"] == ADDITION_FACT_ID
@@ -507,14 +516,16 @@ def test_addition_appends_accepted_atom_preserving_user_layer_and_c(tmp_path: Pa
 
 @pytest.mark.parametrize("review_state", ("candidate", "user_modified"))
 def test_addition_requires_accepted_non_user_atom(
-    tmp_path: Path, review_state: str,
+    tmp_path: Path,
+    review_state: str,
 ) -> None:
     world = _world(tmp_path)
     root = world.root
     paths = _append_addition_inputs(root, snapshot=SNAPSHOT_DEVELOPMENT)
     bindings = _addition_bindings(root, paths)
-    _seed_addition_atom(root, bindings=bindings, snapshots=(SNAPSHOT_DEVELOPMENT,),
-                        review_state=review_state)
+    _seed_addition_atom(
+        root, bindings=bindings, snapshots=(SNAPSHOT_DEVELOPMENT,), review_state=review_state
+    )
 
     with pytest.raises(SourceFactRefusalError, match=f"当前状态为{review_state}"):
         SourceCurrentRefreshService(root).refresh(_addition_command(world, paths=paths))
@@ -528,7 +539,8 @@ def test_addition_requires_accepted_non_user_atom(
 
 @pytest.mark.parametrize("user_edit", (True, False))
 def test_addition_cannot_smuggle_existing_logical_fact(
-    tmp_path: Path, user_edit: bool,
+    tmp_path: Path,
+    user_edit: bool,
 ) -> None:
     world = _world(
         tmp_path,
@@ -614,9 +626,7 @@ def test_addition_consumers_resolve_under_new_pinned_snapshot_scope(tmp_path: Pa
     stale_digest = stale[0].original_row_sha256
     for report in ("A", "B"):
         consumers = [
-            item
-            for item in _receipt_consumers(root, report)
-            if item["row_id"] == ADDITION_ROW_ID
+            item for item in _receipt_consumers(root, report) if item["row_id"] == ADDITION_ROW_ID
         ]
         assert len(consumers) == 1
         assert consumers[0]["binding_identity"]["original_row_sha256"] in fresh_digests
@@ -649,7 +659,8 @@ def test_addition_missing_exact_scope_consumer_refuses_without_dropping_current(
 
 @pytest.mark.parametrize("missing_scope_reports", (("A", "B"), ("B",)))
 def test_addition_requires_explicit_scope_for_every_consumed_report(
-    tmp_path: Path, missing_scope_reports: tuple[str, ...],
+    tmp_path: Path,
+    missing_scope_reports: tuple[str, ...],
 ) -> None:
     world = _world(tmp_path, user_edit=True)
     root = world.root
@@ -685,7 +696,9 @@ def test_addition_requires_explicit_scope_for_every_consumed_report(
     ),
 )
 def test_addition_value_or_source_drift_refuses(
-    tmp_path: Path, tamper: str, match: str,
+    tmp_path: Path,
+    tamper: str,
+    match: str,
 ) -> None:
     world = _world(tmp_path)
     root = world.root
@@ -726,3 +739,167 @@ def test_addition_stale_expected_revision_refuses(tmp_path: Path) -> None:
         )
 
     assert _read_current(root) == world.current
+
+
+def _mixed_refresh_world(tmp_path: Path) -> tuple[Any, SourceCurrentRefreshCommand]:
+    world = _world(tmp_path, user_edit=True, edits=FactEdit(raw_value=None))
+    base = _write_new_inputs(
+        world.root,
+        source_version=SOURCE_VERSION_2,
+        value=54.8,
+        raw="54.8% (34/62)",
+        numerator=34,
+        denominator=62,
+    )
+    paths = _append_addition_inputs(
+        world.root,
+        snapshot=SNAPSHOT_DEVELOPMENT,
+        base_paths=base,
+    )
+    _seed_source_atom(
+        world.root,
+        version_id=SOURCE_FACT_2,
+        source_version=SOURCE_VERSION_2,
+        raw="54.8% (34/62)",
+        normalized="54.8",
+        numerator=34,
+        denominator=62,
+        bindings=_new_bindings(world.root, paths),
+    )
+    _seed_addition_atom(
+        world.root,
+        bindings=_addition_bindings(world.root, paths),
+        snapshots=(SNAPSHOT_DEVELOPMENT,),
+    )
+    command = _addition_command(world, paths=paths, request_id="mixed-source-refresh")
+    command = SourceCurrentRefreshCommand.model_validate(
+        {
+            **command.model_dump(mode="python"),
+            "replacements": (
+                SourceFactReplacement(
+                    fact_id=SOURCE_FACT_ID,
+                    current_fact_version_id=world.user_version,
+                    replacement_fact_version_id=SOURCE_FACT_2,
+                    replacement_source_version_id=SOURCE_VERSION_2,
+                    base_fact_version_id=SOURCE_FACT_1,
+                    user_fact_version_id=world.user_version,
+                    rationale_zh="同值来源重获，保留用户清除层并新增独立事实。",
+                ),
+            ),
+        }
+    )
+    return world, command
+
+
+def test_mixed_refresh_retry_preserves_clear_and_records_all_impact_seeds(tmp_path: Path) -> None:
+    world, command = _mixed_refresh_world(tmp_path)
+    root = world.root
+    before = _read_current(root)
+    user_before = _user_row_snapshot(root, world.user_version)
+    c_before = _delivery(root, "C")
+    c_hashes = _site_hashes(root, c_before)
+    service = SourceCurrentRefreshService(root)
+
+    def interrupt(report: str) -> None:
+        if report == "A":
+            raise OSError("injected failure after A render")
+
+    service._after_report_built = interrupt
+    with pytest.raises(OSError, match="after A render"):
+        service.refresh(command)
+    assert _read_current(root) == before
+    assert _user_row_snapshot(root, world.user_version) == user_before
+    assert _delivery(root, "C") == c_before
+    assert _site_hashes(root, c_before) == c_hashes
+    assert not tuple(root.glob("reports/B/v1-source-r2/*"))
+    journal = hashlib.sha256(command.request_id.encode()).hexdigest() + ".json"
+    assert not (root / "state/user-fact-transactions" / journal).exists()
+    a_manifest = root / "reports/A/v1-source-r2/html.manifest.json"
+    staged_hash = hashlib.sha256(a_manifest.read_bytes()).hexdigest()
+    fact_count = _source_atom_count(root)
+    result = SourceCurrentRefreshService(root).refresh(command)
+    assert result.rebuilt_reports == ("A", "B")
+    assert hashlib.sha256(a_manifest.read_bytes()).hexdigest() == staged_hash
+    assert _source_atom_count(root) == fact_count
+    rebase = result.effective_fact_version_ids[SOURCE_FACT_ID]
+    raw, normalized, _, encoded = _user_row_snapshot(root, rebase)
+    assert raw is None and normalized is None
+    assert json.loads(encoded)["user_edit"]["cleared"] is True
+    assert _delivery(root, "C") == c_before
+    assert _site_hashes(root, c_before) == c_hashes
+    for report in ("A", "B"):
+        delivery = _delivery(root, report)
+        manifest = json.loads((root / delivery.transaction_manifest_relative_path).read_bytes())
+        assert {
+            item["object_id"] for item in manifest["affected_objects"] if item["layer"] == "fact"
+        } == {SOURCE_FACT_ID, ADDITION_FACT_ID}
+        rows = _projection_any(root, report)["safety"]
+        assert next(row for row in rows if row["row_id"] == "safe-apply-t-1")["value"] is None
+        assert (
+            next(row for row in rows if row["row_id"] == ADDITION_ROW_ID)["value"] == ADDITION_VALUE
+        )
+    current = _read_current(root)
+    assert SourceCurrentRefreshService(root).refresh(command) == result
+    assert _read_current(root) == current
+    assert _source_atom_count(root) == fact_count
+    events = [
+        event
+        for event in service.event_store.read_all()
+        if event.idempotency_key == "source.current.refresh:" + command.request_id
+    ]
+    assert len(events) == 1
+
+
+def test_mixed_missing_b_scope_preserves_current_and_original_clear(tmp_path: Path) -> None:
+    world, command = _mixed_refresh_world(tmp_path)
+    root = world.root
+    before = _read_current(root)
+    user_before = _user_row_snapshot(root, world.user_version)
+    pins = []
+    for pin in command.builder_inputs:
+        if pin.report == "B":
+            path = root / pin.input_relative_path
+            payload = json.loads(path.read_bytes())
+            payload.pop("source_evidence_snapshot_id")
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            pin = pin.model_copy(
+                update={"input_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+            )
+        pins.append(pin)
+    command = command.model_copy(update={"builder_inputs": tuple(pins)})
+    with pytest.raises(SourceFactRefusalError, match="每个消费者必须明确声明快照作用域"):
+        SourceCurrentRefreshService(root).refresh(command)
+    assert _read_current(root) == before
+    assert _user_row_snapshot(root, world.user_version) == user_before
+    assert not tuple(root.glob("reports/*/v1-source-r2/*"))
+
+
+def test_refresh_public_fact_batch_pins_old_scope_once_per_request(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world(tmp_path, user_edit=True)
+    paths = _append_addition_inputs(world.root, snapshot=SNAPSHOT_NEW)
+    _seed_addition_atom(
+        world.root, bindings=_addition_bindings(world.root, paths), snapshots=(SNAPSHOT_NEW,)
+    )
+    service = SourceCurrentRefreshService(world.root)
+    original = service._public_fact
+    observed: list[Any] = []
+    scopes_read = service._facts._current_source_scopes
+    reads = []
+
+    def read_scopes() -> dict[str, str]:
+        reads.append(True)
+        return scopes_read()
+
+    def observe(version_id: str, *, source_scopes: Any = None) -> dict[str, Any]:
+        observed.append(source_scopes)
+        return original(version_id, source_scopes=source_scopes)
+
+    monkeypatch.setattr(service, "_public_fact", observe)
+    monkeypatch.setattr(service._facts, "_current_source_scopes", read_scopes)
+    service.refresh(_addition_command(world, paths=paths))
+    assert len(observed) == len(world.current.active_fact_version_ids) + 1
+    assert all(scope is not None for scope in observed)
+    assert len(reads) == 1

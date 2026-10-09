@@ -36,6 +36,14 @@ instances produced by `model_copy(update=...)`.
 
 ## Testing Requirements
 
+- A multi-fact current refresh must seed the shared impact closure with every
+  changed fact consumed by each report, not only its first replacement/addition.
+  Retained facts share one fully verified old-current source scope per request;
+  refreshed atoms use the request-pinned new scope. Do not replace this with a
+  cross-request trust cache. A mixed refresh regression must cover failure after
+  one report render, original clear/unaffected report preservation, staged retry,
+  all impact seeds, missing scope refusal and exact replay without extra events.
+
 - Every authoritative Pydantic boundary needs a `model_copy` adversarial test.
 - Include mixed mapping inputs with copied nested models, not only top-level
   instances. After-model validators may run without revalidating field types,

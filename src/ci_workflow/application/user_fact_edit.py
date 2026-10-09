@@ -679,6 +679,7 @@ def build_current_report(
     public_facts: Mapping[str, dict[str, Any]],
     report_version: str,
     builder_binding: tuple[str, str] | None = None,
+    changed_fact_ids: tuple[str, ...] | None = None,
 ) -> CurrentReportDelivery:
     """Build one immutable current report version from a hash-pinned builder input.
 
@@ -775,15 +776,12 @@ def build_current_report(
         receipt_path = staging / "data/consumer-receipt.json"
         receipt = PortalRenderReceipt.model_validate_json(receipt_path.read_bytes())
         graph = _fact_impact_graph(revision, receipt.consumers, facts)
-        changed = next(
-            (
-                node
-                for node in graph.nodes
-                if node.layer is ImpactLayer.FACT and node.object_id == changed_fact_id
-            ),
-            None,
+        changed_ids = set(changed_fact_ids if changed_fact_ids is not None else (changed_fact_id,))
+        changed = tuple(
+            node for node in graph.nodes
+            if node.layer is ImpactLayer.FACT and node.object_id in changed_ids
         )
-        impact_plan = graph.impact_closure((changed,)) if changed is not None else None
+        impact_plan = graph.impact_closure(changed) if changed else None
         hashes = _file_hashes(staging)
         manifest = {
             "schema_version": "1.0",

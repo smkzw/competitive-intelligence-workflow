@@ -4,6 +4,14 @@
 
 ## 既有依赖和生产出口
 
+当前3889c943后：C01已实际终态确认核心事务保护，owner修首事实影响清单与
+保留事实单请求scope的共享根因；2RED→126相关PASS；同原C01有限修复复核
+actual192.734s/exit0/max verified、3PASS/scoped ACCEPT已结束。正式source-only
+epoch1已准备，原issuer exit2无结论/回执，未采用；
+按既有in-progress任务同OMP会话正常issuer接续。源/旧接受/current11/清除/C
+保持；新接受recipe未运行，必须等真实正常issuer。准确恢复见STATUS顶节。
+不另建计划平台/新审批，以下均为前节点依赖背景。
+
 当前基线84f8e0ea已push，current11 A11/B11/C9和349可编辑采用事实保持。
 原C03已实际终态REVISE：14源标量/原文/N正确，但剂量前缀清洗漏掉三Serlopitant
 研究。现有normalizer最小修复6RED→57相关PASS，旧缺N单位测试按当前真实

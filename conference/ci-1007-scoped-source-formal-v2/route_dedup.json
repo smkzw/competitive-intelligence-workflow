@@ -1,0 +1,99 @@
+{
+  "policy": "execution-used-route-identities-are-excluded-from-conference",
+  "linked_execution_task_id": "ci-1007-source-binding-gap-root-v1",
+  "linked": true,
+  "execution_evidence": [
+    "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-1007-source-binding-gap-root-v1/worker_01_stdout.txt"
+  ],
+  "excluded_route_nodes": [
+    {
+      "agent": "codebuddy",
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4.1-flash",
+      "source": "/Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/logs/execution/ci-1007-source-binding-gap-root-v1/worker_01_stdout.txt",
+      "reason": "effective execution route"
+    }
+  ],
+  "effective_conference_roles": {
+    "evidence_single_object": {
+      "agent": "zcode",
+      "provider": "zcode",
+      "model": "GLM-5.3-Flash",
+      "effort": "max",
+      "default_provider": "codebuddy-cli",
+      "default_model": "deepseek-v4.1-flash",
+      "default_effort": "max",
+      "escalate_provider": "codebuddy-cli",
+      "escalate_model": "deepseek-v4.1-flash",
+      "escalate_effort": "max",
+      "primary": {
+        "agent": "zcode",
+        "provider": "zcode",
+        "model": "GLM-5.3-Flash",
+        "effort": "max"
+      },
+      "fallbacks": [
+        {
+          "agent": "grok",
+          "provider": "grok-build",
+          "model": "grok-4.7",
+          "effort": "high"
+        },
+        {
+          "agent": "pi",
+          "provider": "cursor",
+          "model": "grok-4.7-high",
+          "effort": "high"
+        },
+        {
+          "agent": "pi",
+          "provider": "openai-codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      ],
+      "execution_route": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max -> zcode/zcode/GLM-5.3-Flash:max -> grok/grok-build/grok-4.7:high -> pi/cursor/grok-4.7-high:high -> pi/openai-codex/gpt-6.1-sol:high",
+      "node_id": "C03",
+      "role": "重要证据审阅",
+      "fallback_only": true,
+      "tools_enabled": true,
+      "skills_enabled": true,
+      "schedule": {
+        "policy": "beijing-daily-peak-off-peak-v3",
+        "timezone": "Asia/Shanghai",
+        "period": "off_peak",
+        "period_label": "非高峰",
+        "peak_start": "11:00",
+        "peak_end": "19:00",
+        "days": "all",
+        "evaluated_at": "2026-10-10T07:15:47.457426+08:00"
+      },
+      "schedule_constraints": {
+        "policy": "live-route-manifest-v1",
+        "evaluated_at": "2026-10-10T07:15:47.457426+08:00",
+        "explicit_route": false,
+        "events": [],
+        "route_rewritten": false
+      },
+      "route_contract_frozen": true,
+      "deduplicated_against_execution": [
+        {
+          "agent": "codebuddy",
+          "provider": "codebuddy-cli",
+          "model": "deepseek-v4.1-flash"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "policy": "beijing-daily-peak-off-peak-v3",
+    "timezone": "Asia/Shanghai",
+    "period": "off_peak",
+    "period_label": "非高峰",
+    "peak_start": "11:00",
+    "peak_end": "19:00",
+    "days": "all",
+    "evaluated_at": "2026-10-10T07:15:47.457426+08:00"
+  },
+  "generated_at": "2026-10-10 07:15:47 CST"
+}
