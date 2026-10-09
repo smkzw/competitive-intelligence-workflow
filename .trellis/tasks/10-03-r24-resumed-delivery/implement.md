@@ -4,7 +4,8 @@
 
 49d4bd2已push。正常C e2 accepted/noissues，receiptcd9f0978，owner验签晋级通过，
 current仍无；C16实态/ABv6 32实态均真实来源/Esc通过，owner六图只签所看范围。
-AB仍宽屏数值距离/单元格高度不足，direct最小CSS本批未新渲染，不继承v6PASS。
+AB仍宽屏数值距离/单元格高度不足，direct最小CSS按宽度排身份/值/原时间，
+20相关PASS1.11s、作者与镜像SHA5bba9048一致；本批未新渲染，不继承v6PASS。
 下一execution-plus-conference：独立准备旧35context/91atoms在新项目的真实来源映射，
 owner统一正常采用/共享写入，后续冻结科学材料才独立挑战。单一E03 guard先PASS，
 CodeBuddy请求deepseek-v4.1-flash/max实际启动59720/59762，尚PENDING；终态等候，
