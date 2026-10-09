@@ -6,6 +6,7 @@ No source ingestion, review issuance, adoption or SQL mutations occur here.
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from collections import Counter
@@ -37,9 +38,7 @@ from ci_workflow.storage.snapshot_store import (
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / ".artifacts/1007-c-source-review-bootstrap-worker-v1/project"
-OUT = ROOT / ".artifacts/1007-c-source-repairs-v1/report-candidate-v2"
 SOURCE_DIGEST = "dcf6d665dace3322b39c8414d0ac07aa7ce624ab6ccf6e2cd6f9a91239e17881"
-VERSION = "v2-r24-reviewed-source-report-candidate"
 
 
 def sha(path: Path) -> str:
@@ -62,8 +61,12 @@ def freeze(path: Path, payload: object) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def main() -> None:
-    if (OUT / "candidate-receipt.json").exists():
+def main(*, candidate_number: int = 2) -> None:
+    if candidate_number < 2:
+        raise ValueError("candidate number must be at least 2")
+    version = f"v{candidate_number}-r24-reviewed-source-report-candidate"
+    out = ROOT / f".artifacts/1007-c-source-repairs-v1/report-candidate-v{candidate_number}"
+    if (out / "candidate-receipt.json").exists():
         raise SystemExit(
             "Candidate already prepared: reopen its receipt; do not rerender/re-adopt."
         )
@@ -121,7 +124,7 @@ def main() -> None:
             for item in closure["facts"]
         },
     )
-    stamp_path = OUT / "preparation-time.json"
+    stamp_path = out / "preparation-time.json"
     moment = (
         datetime.fromisoformat(json.loads(stamp_path.read_bytes())["created_at"])
         if stamp_path.exists()
@@ -136,7 +139,7 @@ def main() -> None:
                 project_id=contract.project_id,
                 contract_version=contract.contract_version,
                 report="C",
-                report_version=VERSION,
+                report_version=version,
                 data_cutoff=data.data_cutoff,
                 evidence_snapshot_id=locked.snapshot_id,
                 claim_snapshot_id=entry["claim_snapshot_id"],
@@ -147,16 +150,16 @@ def main() -> None:
         ),
     )
     data = data.model_copy(
-        update={"report_version": VERSION, "report_snapshot_id": report_snapshot.snapshot_id}
+        update={"report_version": version, "report_snapshot_id": report_snapshot.snapshot_id}
     )
     payload = json.loads((PROJECT / entry["content_relative"]).read_bytes())
-    payload.update({"report_version": VERSION, "report_data": data.model_dump(mode="json")})
+    payload.update({"report_version": version, "report_data": data.model_dump(mode="json")})
     content = validate_fresh_c_content(payload)
     assert content.sources and derive_c_research_facts(content) == derive_c_research_facts(
         validate_fresh_c_content(json.loads((PROJECT / entry["content_relative"]).read_bytes()))
     )
-    content_path = PROJECT / "inputs/c-reviewed-report/v2-content.json"
-    data_path = PROJECT / "inputs/c-reviewed-report/v2-report-data.json"
+    content_path = PROJECT / f"inputs/c-reviewed-report/v{candidate_number}-content.json"
+    data_path = PROJECT / f"inputs/c-reviewed-report/v{candidate_number}-report-data.json"
     freeze(content_path, content.model_dump(mode="json"))
     freeze(data_path, data.model_dump(mode="json"))
     gate = evaluate_c_report_gate(
@@ -167,10 +170,10 @@ def main() -> None:
         fact_version_by_ref=fact_ids,
     )
     assert gate.result.decision.value == "passed"
-    freeze(OUT / "gate-result.json", gate.review_result.model_dump(mode="json"))
+    freeze(out / "gate-result.json", gate.review_result.model_dump(mode="json"))
     run_id = stable_id("reviewed-c-report-run", contract.project_id, content.content_digest)
     context = RunContext(project_root=PROJECT, contract=contract, research_lineage=lineage)
-    manifest_relative = f"reports/C/{VERSION}/html.manifest.json"
+    manifest_relative = f"reports/C/{version}/html.manifest.json"
     if (PROJECT / manifest_relative).is_file():
         manifest = ArtifactManifest.model_validate_json((PROJECT / manifest_relative).read_bytes())
         assert (
@@ -188,7 +191,7 @@ def main() -> None:
     qc_context = build_scientific_review_context(
         project_id=contract.project_id,
         report_kind="C",
-        report_version=VERSION,
+        report_version=version,
         producer_id=content.producer_id,
         candidate_snapshot_id=report_snapshot.snapshot_id,
         candidate_content_digest=content.content_digest,
@@ -207,12 +210,12 @@ def main() -> None:
         project_root=PROJECT,
         report_kind="C",
         context=qc_context,
-        producer_session_id="owner-reviewed-source-report-1007-v2",
+        producer_session_id=f"owner-reviewed-source-report-1007-v{candidate_number}",
         produced_at=moment,
         portal_binding=binding,
         gate_result=gate.review_result,
     )
-    assert scope.epoch == 2
+    assert scope.epoch == candidate_number
     assert (
         project_reviewed_c_source_states(
             PROJECT, locked, PROJECT / entry["report_data_relative"]
@@ -226,7 +229,7 @@ def main() -> None:
     receipt = {
         "schema_version": "1007-reviewed-source-report-candidate-1",
         "project_relative": str(PROJECT.relative_to(ROOT)),
-        "report_version": VERSION,
+        "report_version": version,
         "source_content_digest": SOURCE_DIGEST,
         "candidate_content_digest": content.content_digest,
         "source_evidence_snapshot_id": locked.snapshot_id,
@@ -254,9 +257,11 @@ def main() -> None:
         "browser": "NOT_RUN",
         "release": False,
     }
-    freeze(OUT / "candidate-receipt.json", receipt)
+    freeze(out / "candidate-receipt.json", receipt)
     print(json.dumps(receipt, ensure_ascii=False))
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--candidate-number", type=int, default=2)
+    main(candidate_number=parser.parse_args().candidate_number)

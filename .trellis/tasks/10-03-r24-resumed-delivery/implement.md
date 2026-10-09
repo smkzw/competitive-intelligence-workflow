@@ -2733,3 +2733,15 @@ E03实际CodeBuddy/deepseek-v4.1-flash927.723s113calls终态。原1133行恢复/
 实际GATE_OK6/exit0，strict284、active1185/260.56s、compat20/0.62s、layer7/0.19s、
 Ruff与旧路径扫描PASS；非全集成/非医学/非浏览器/非安装/非RC。
 详细范围/全部源码hash：packets/.../evidence/1007V1/owner-c-source-bootstrap-v1.json。
+
+## 20261009 恢复：NEW C3正常候选与独立报告复核
+
+Direct execution + qualified independent report conference：候选/epoch由owner单一
+负责，复用既有生产helper，额外写入节点无并行收益；真实医学报告需已合格OMP
+独立挑战。用户已重新授权，Goal API actualactive，旧paused记录仅作恢复证据。
+恢复171项目pins/七源码hash全部保持，无旧PID恢复、来源258重采或旧旅程重跑。
+先成族RED6/PASS2：新候选参数5、发包镜像1。最小修改后相关8PASS0.43s；
+Ruff2与MYPYPATH=src strict工具1通过。首次strict缺src路径10import-untyped
+仅调用环境错误，原结果保留，不记产品缺陷。镜像只有drawer注释及manifest变化，
+模块assets仍唯一作者源。下一固定源码commit→normal C3→new e3独立issuer。
+旧C2 VETO/171历史文件/DB/current-none/五用户修改保持，C3及实屏未验。
