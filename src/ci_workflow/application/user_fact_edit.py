@@ -877,7 +877,7 @@ class UserFactEditService:
         self._source_scope_cache = scopes
         self._source_scope_cache_key = None
         public_facts = {
-            version_id: self._public_fact(self._fact_row(version_id))
+            version_id: self._public_fact(self._fact_row(version_id), source_scopes=scopes)
             for version_id in fact_version_ids
         }
         input_dir = self.project_root / "state/user-fact-builder-inputs"
@@ -996,13 +996,20 @@ class UserFactEditService:
 
     def current_facts(self) -> dict[str, dict[str, Any]]:
         current = self.read_current_delivery()
+        return self._public_facts([self._fact_row(v) for v in current.active_fact_version_ids])
+
+    def _public_facts(self, rows: Sequence[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+        # One fully verified scope per batch, never a cross-request bypass of
+        # current validation. Repeated whole-site hashing per fact is quadratic.
+        scopes = self._current_source_scopes()
         facts: dict[str, dict[str, Any]] = {}
-        for version_id in current.active_fact_version_ids:
-            row = self._fact_row(version_id)
-            facts[str(row["fact_id"])] = self._public_fact(row)
+        for row in rows:
+            facts[str(row["fact_id"])] = self._public_fact(row, source_scopes=scopes)
         return facts
 
-    def _registered_source_bindings(self, row: dict[str, Any]) -> tuple[ActiveFactBinding, ...]:
+    def _registered_source_bindings(
+        self, row: dict[str, Any], *, source_scopes: Mapping[str, str] | None = None,
+    ) -> tuple[ActiveFactBinding, ...]:
         """Follow user revisions to their immutable source-side consumer declarations.
 
         One scientific fact may carry separately verified consumers under more
@@ -1028,7 +1035,7 @@ class UserFactEditService:
                     (version_id,),
                 ).fetchall()
                 if records:
-                    return self._scoped_source_bindings(records)
+                    return self._scoped_source_bindings(records, source_scopes=source_scopes)
                 predecessor = database.execute(
                     "SELECT supersedes_fact_version_id,fact_id FROM fact_versions "
                     "WHERE fact_version_id=?", (version_id,),
@@ -1039,11 +1046,12 @@ class UserFactEditService:
         return ()
 
     def _scoped_source_bindings(
-        self, records: Sequence[Sequence[Any]],
+        self, records: Sequence[Sequence[Any]], *,
+        source_scopes: Mapping[str, str] | None = None,
     ) -> tuple[ActiveFactBinding, ...]:
         """One verified declaration per report row inside the legitimate scope."""
         grouped: dict[tuple[str, str, str], dict[str, list[str]]] = {}
-        current_scopes = self._current_source_scopes()
+        current_scopes = self._current_source_scopes() if source_scopes is None else source_scopes
         for report, collection, row_id, encoded, digest, snapshot_id in records:
             text = str(encoded)
             if hashlib.sha256(text.encode()).hexdigest() != str(digest):
@@ -1117,9 +1125,11 @@ class UserFactEditService:
         scope = payload.get("source_evidence_snapshot_id") if isinstance(payload, dict) else None
         return scope if isinstance(scope, str) and scope else None
 
-    def _public_fact(self, row: dict[str, Any]) -> dict[str, Any]:
+    def _public_fact(
+        self, row: dict[str, Any], *, source_scopes: Mapping[str, str] | None = None,
+    ) -> dict[str, Any]:
         context = dict(row["context_payload"])
-        registered = self._registered_source_bindings(row)
+        registered = self._registered_source_bindings(row, source_scopes=source_scopes)
         if registered:
             declarations = [binding.model_dump(mode="json") for binding in registered]
             existing = context.get("consumer_bindings")
@@ -1641,9 +1651,7 @@ class UserFactEditService:
             if result_fact_version_id not in new_ids:
                 raise UserFactSaveConflictError("当前事实闭包已不包含目标版本")
             active_rows = [self._fact_row(version_id) for version_id in new_ids]
-            active_facts = {
-                str(row["fact_id"]): self._public_fact(row) for row in active_rows
-            }
+            active_facts = self._public_facts(active_rows)
             affected_reports = {
                 str(binding["report"])
                 for binding in active_facts[command.target.fact_id].get(
@@ -1769,7 +1777,7 @@ class UserFactEditService:
         fact_version_ids: tuple[str, ...],
     ) -> None:
         rows = [self._fact_row(version_id) for version_id in fact_version_ids]
-        facts = {str(row["fact_id"]): self._public_fact(row) for row in rows}
+        facts = self._public_facts(rows)
         preflight_current_report(
             self.project_root,
             previous,
@@ -1789,7 +1797,7 @@ class UserFactEditService:
         fact_version_ids: tuple[str, ...],
     ) -> CurrentReportDelivery:
         rows = [self._fact_row(version_id) for version_id in fact_version_ids]
-        facts = {str(row["fact_id"]): self._public_fact(row) for row in rows}
+        facts = self._public_facts(rows)
         return build_current_report(
             self.project_root,
             previous,
@@ -2027,7 +2035,7 @@ class UserFactEditService:
         operation stages no fact, derivation, or source replacement.
         """
         rows = [self._fact_row(version_id) for version_id in previous.fact_version_ids]
-        facts = {str(row["fact_id"]): self._public_fact(row) for row in rows}
+        facts = self._public_facts(rows)
         return build_current_report(
             self.project_root,
             previous,

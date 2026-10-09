@@ -1,0 +1,39 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "parent_code_commit": "b647ec72",
+  "status": "continuous implementation; not paused, delivered or RC",
+  "formal_source_adoption": {
+    "status": "ACTUALLY_ACCEPTED_SOURCE_SLICE_ONLY",
+    "facts": 105,
+    "claims": 91,
+    "scope_correction_proofs": 33,
+    "snapshot": "evidence-snapshot_fca99fb6250a1d7452356764",
+    "snapshot_sha256": "2d0521aef6132555c4ebd8cd262281a93cb5e6c4da615075036960aa4462b154",
+    "receipt_digest": "0768132e76814c113f44af0dd313d32e3c831f07da63ebdaa279e5489c6a06fc",
+    "decision_digest": "6e7f1d72d635de18ae206dfd0247d65c76e1024c71a3bf501828a51e1c21ac7d",
+    "actual_issuer": "OMP existing independent session01a121d9-213b-7000-b55d-08b5f52a1e7f; explicitly approved live compatibility route openai-codex/gpt-6.1-sol requestedhigh; pid71222 exit0; no test seam; provider internal identity and token usage not independently attested",
+    "duration_seconds": 520.226339,
+    "adoption_relative": ".artifacts/1007-abc-current-integration-v1/working/project/runs/joint-ab-formal-source-v1/adoption.json",
+    "adoption_sha256": "93721820dbc4bb3483bf79858f562ed9c7f4b80e7ab64a7ee9480a9a3ab3ee41",
+    "preservation": "old scientific fields except review_state, original open conflict rows, original bindings and43 protected source/snapshot/C-review files unchanged; no repeat ingestion or registration",
+    "full_report_gate": "NOT_RUN; source-only request never promoted"
+  },
+  "display_execution": {
+    "task": "ci-1007-denominator-scope-disclosure-v1",
+    "terminal": "actual runner oktrue/codebuddy/deepseek-v4.1-flash/one round/no fallback; response-provider identity not separately attested",
+    "worker_result": "34 related passed93.36s; owner read all four changed files and output; no browser acceptance inherited",
+    "owner_integration": "Scope labels from exact own-group denominator paths; source original N stays in paired details, never resurrects a cleared current value. One real current preflight exposed presentation-only additions changing immutable consumer hash; failed before site/current creation. Added root RED and excluded only three redundant disclosure keys from shared scientific digest paths; source scalar/context/locator/version remain fully bound.",
+    "owner_regression": "39 related PASS175.47s; initial root failures retained. Batch source-scope validation33reads32facts RED now at most2 verified reads per request; Ego actual editor1566ms349facts.",
+    "static": "Milestone quality-only gate6PASS: Ruff src/tests/tools, strict286files, active1185PASS20deselected532.05s, compatibility20PASS, layeraudit7PASS, legacy referencesPASS. This gate preceded config placement fix; related placement/query/current-share/privacy24PASS6.23s and Node syntax/mirror sync supplement, browser-specific updated test NOT_RUN (Ego actual only)."
+  },
+  "actual_operations": {
+    "AB": {"path": ".artifacts/1007-abc-current-integration-v1/joint-current-operations-actual-v1.json", "sha256": "b3f86351e8c145cd81c47c03a12266377334f958af92ede52329959e630f45d8", "result": "Actual Ego184 native save/clear/restore/undo r1-r4; legal A+B only; original -48.32 retained; no rate derivation; historical exact retry200 no duplicate, new stale409 no current change"},
+    "C": {"path": ".artifacts/1007-abc-current-integration-v1/joint-c-operations-recovered-v1.json", "sha256": "741c89a4e830f6b84b3b32b4620bc9e28b4782a21769c8bcacb154eadba99101", "result": "Actual set r5 recovered without repeating write after QA stale error; clear/restore/undo r6-r8 C-only, original151 retained; original failed test record preserved"},
+    "current_before_presentation": "8; A4/B4/C8;349facts; QA hypothetical edits not scientific corrections/release acceptance",
+    "configs": "A4 and B4 actual export/import distinct query states. C actual failed because comparison hides legacy filter containing config; shared existing shell now moved outside filter, RED preserved. New normal ABC presentation transaction r9 RUNNING; all new configs/share/browser remain pending.",
+    "visual_limitation": "Owner viewed actual clear editor screenshot; source/current separation correct, but internal identifiers/JSON and English endpoint wording dominate editor; no final editor design acceptance"
+  },
+  "next": "Collect normal presentation-only r9 (no clinical writes), then actual ABC r9 config export/import, current-only single and joint shares, moved/offline Ego pages and same-candidate desktop states; keep old failure records.",
+  "not_run": "r9 config/browser/share, full universe/live sources/current ChinaMAH/publications/Protocol-SAP, all physical pages/cross browser/fresh profile,24 portals/three hosts/fresh install/recovery/RC",
+  "do_not_repeat": "normal105/91 source adoption; original C258 source/report acceptance; C e2 desktop16; ABv8 desktop32; completed issuer/worker handles"
+}

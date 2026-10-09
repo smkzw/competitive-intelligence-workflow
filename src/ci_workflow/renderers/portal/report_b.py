@@ -44,6 +44,7 @@ from ci_workflow.reports.b.semantic_grouping import (
     ApprovedSemanticMerge,
     SemanticGroupingProposal,
     proposed_semantic_buckets,
+    scientific_source_payload,
     semantic_row_digest,
     semantic_source_digest,
 )
@@ -2687,9 +2688,13 @@ def _project_record(
     }
     # Every source adapter must retain explicit scientific typing, not just
     # supporting pages. Omitting these axes would defeat the downstream veto.
+    # Verified denominator scope is data for the paired disclosure only; legacy
+    # pool rows never carry these keys, so their scientific row digest is not
+    # recomputed and no current value is restored from the source.
     for field in (
         "source_domain", "source_metric", "source_param_type", "source_analysis_population",
         "source_measure_path", "source_measure_definition", "source_clause_context",
+        "source_denominator_scope_zh", "source_denominator_value", "source_denominator_path",
     ):
         declared = _get(value, field, _MISSING)
         if declared is _MISSING:
@@ -6051,7 +6056,8 @@ def active_fact_binding_for_b(
     products = {item.id: item for item in data.products}
     trials = {item.id: item for item in data.trials}
     digest = canonical_sha256(
-        {"domain_row": row.model_dump(mode="json"), "evidence_view_row": view_row}
+        {"domain_row": row.model_dump(mode="json"),
+         "evidence_view_row": scientific_source_payload(view_row)}
     )
     statistical_form, measure_object = _b_statistical_identity(row)
     return ActiveFactBinding(

@@ -6,12 +6,12 @@
  "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "6e7603c80600991deaf9d3690696676b6b4e05346f2afdec69b13f89b276f7c3",
-   "bytes": 69940
+   "sha256": "335f6ce375c323c1355e3956a01a1b96645d03999d33cf4ba2d3bf4b132eb43b",
+   "bytes": 70004
   },
   "portal.js": {
-   "sha256": "d3bd23cd7902e79f3360f130b0e2a17e6a1a7090b92941e097c60eb95af31207",
-   "bytes": 63202
+   "sha256": "d87edb68f25a4d531ac84215c138d69a88ee83a5780908e950c930ab6e0f89be",
+   "bytes": 64381
   },
   "charts.js": {
    "sha256": "213ba90745953ca4a9a2f15b2f434e9ef9fe32b5cdea6eaa2b6a612193027350",

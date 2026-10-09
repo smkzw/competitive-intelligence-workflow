@@ -152,10 +152,28 @@
       var notes = [row.difference_note, facet].filter(function (note, index, all) {
         return note && all.indexOf(note) === index;
       });
-      if (notes.length) {
+      // Verified source-denominator scope stays in this paired disclosure: the
+      // fact header keeps its own current value, and a cleared current N is
+      // never restored from the original source on the first screen.
+      var scope = String(row.source_denominator_scope_zh || "").trim();
+      var sourceDenominator = "";
+      if (scope) {
+        sourceDenominator = "来源分母：" + scope;
+        if (row.source_denominator_value !== null
+            && row.source_denominator_value !== undefined
+            && row.source_denominator_value !== "") {
+          sourceDenominator += " N=" + String(row.source_denominator_value)
+            + "（来源原值，非当前值）";
+        }
+      }
+      if (notes.length || sourceDenominator) {
         var details = doc.createElement("details"); details.className = "kz-comparison-context";
         details.appendChild(textNode("summary", "", "条件与限制"));
         notes.forEach(function (note) {details.appendChild(textNode("p", "", note));});
+        if (sourceDenominator) {
+          details.appendChild(textNode("p", "kz-comparison-context__denominator",
+            sourceDenominator));
+        }
         observation.appendChild(details);
       }
     }, recordScope: function (host, allowed, columns, displayed) {
@@ -1636,6 +1654,13 @@
 
   function mountPersonalViewControls(main, bar) {
     var actions = main.querySelector(".kz-a-workspace-bar__actions");
+    if (actions && actions.closest(".kz-b-filter-panel,.kz-c-filter-panel")) {
+      var shell = actions.closest(".kz-b-personal,.kz-c-personal");
+      if (shell) {
+        shell.classList.add("kz-personal-view-shell");
+        main.insertBefore(shell, main.firstChild);
+      }
+    }
     if (actions) actions.appendChild(bar);
     else main.insertBefore(bar, main.firstChild);
   }

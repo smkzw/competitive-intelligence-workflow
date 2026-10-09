@@ -1876,6 +1876,10 @@ input:focus-visible {
   .kz-a-panel[data-module="landscape"] .kz-a-section-head p { width:100%; }
   .kz-a-panel[data-module="landscape"] .kz-a-section-head .kz-a-evidence-button { position:absolute; top:0; right:0; }
 }
+.kz-personal-view-shell {
+  grid-column: 1 / -1;
+  margin: 0;
+}
 .kz-personal-view {
   display: flex;
   align-items: center;

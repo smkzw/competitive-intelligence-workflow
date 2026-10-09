@@ -217,11 +217,22 @@ for(let i=bodyStart;i<source.length;i++){
 }
 const sandbox={};vm.runInNewContext(source.slice(start,bodyEnd),sandbox);
 let joined=0,inserted=0;const bar={};
-const workspace={appendChild(node){assert.equal(node,bar);joined++;}};
+const workspace={closest(){return null;},appendChild(node){assert.equal(node,bar);joined++;}};
 const main={firstChild:{},querySelector(){return workspace;},insertBefore(){inserted++;}};
 sandbox.mountPersonalViewControls(main,bar);assert.equal(joined,1);assert.equal(inserted,0);
 main.querySelector=()=>null;
 sandbox.mountPersonalViewControls(main,bar);assert.equal(inserted,1);
+// B/C hide their old filter panel in comparison mode. Reuse the existing
+// collapsed personal shell outside that panel, never mount inaccessible controls.
+for(const report of ['B','C']){
+ const shell={classList:{add(name){assert.equal(name,'kz-personal-view-shell');}}};
+ const nested={closest(selector){return selector.includes('filter-panel')?{}:shell;},
+  appendChild(node){assert.equal(node,bar);joined++;}};
+ main.querySelector=()=>nested;let relocated=false;
+ main.insertBefore=(node)=>{assert.equal(node,shell);relocated=true;};
+ sandbox.mountPersonalViewControls(main,bar);
+ assert.ok(relocated,report+' config remains inside hidden panel');
+}
 """
     result = subprocess.run(
         ["node", "-e", probe, str(ROOT / "src/ci_workflow/renderers/portal/assets/portal.js")],

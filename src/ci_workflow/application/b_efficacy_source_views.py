@@ -40,6 +40,63 @@ from ci_workflow.storage.source_derivation import extract_locator_quote, source_
 _DIRECT_EFFICACY_ROLES = frozenset({"reported_measure", "participant_count"})
 _COUNT_UNIT_EXCLUSIONS = frozenset({"%", "％"})
 
+# 分母作用范围只按登记披露的 denoms 层级命名，不译成 ITT/全分析集等来源未
+# 证明的分析集含义；无法由精确路径证明时保持待核。
+_SCOPE_MEASURE_ZH = "测量级分析人数"
+_SCOPE_CLASS_ZH = "该访视或类别分析人数"
+_SCOPE_CATEGORY_ZH = "该子类别分析人数"
+_SCOPE_UNRESOLVED_ZH = "分母范围待核"
+
+
+def denominator_scope_disclosure(
+    observation: ResearchResultContext, value_path: str | None,
+) -> tuple[str, int | None, str | None]:
+    """Return the original-source N with only the scope its exact path proves.
+
+    The scope comes from the single verified ``result_context`` denominator
+    candidate of this fact's own group and its precise ``denoms`` path relative
+    to the measure path, checked against the fact's exact value path. A visit,
+    class or category title never proves a scope, and a measure N is not called
+    ITT; missing, duplicated, conflicting, foreign or non-covering candidates
+    keep 分母范围待核 without inventing an N.
+    """
+    candidates = tuple(
+        candidate
+        for candidate in observation.denominator_candidates
+        if candidate.group_id == observation.group_id
+    )
+    if len(candidates) != 1:
+        return (_SCOPE_UNRESOLVED_ZH, None, None)
+    candidate = candidates[0]
+    measure = observation.source_measure_path
+    path = candidate.value_path
+    if (
+        not measure
+        or not isinstance(value_path, str)
+        or not value_path
+        or ".denoms[" not in path
+        or not path.startswith(f"{measure}.")
+    ):
+        return (_SCOPE_UNRESOLVED_ZH, None, None)
+    scope_path = path.rsplit(".denoms[", 1)[0]
+    if (
+        value_path != f"$.{scope_path}"
+        and not value_path.startswith(f"$.{scope_path}.")
+    ):
+        return (_SCOPE_UNRESOLVED_ZH, None, None)
+    suffix = path[len(measure) + 1:]
+    segment = suffix.split(".", 1)[0]
+    if segment.startswith("denoms["):
+        return (_SCOPE_MEASURE_ZH, candidate.parsed_value, f"$.{path}")
+    if segment.startswith("classes["):
+        nested = suffix[len(segment) + 1:].split(".", 1)[0]
+        if nested.startswith("categories["):
+            return (_SCOPE_CATEGORY_ZH, candidate.parsed_value, f"$.{path}")
+        return (_SCOPE_CLASS_ZH, candidate.parsed_value, f"$.{path}")
+    if segment.startswith("categories["):
+        return (_SCOPE_CATEGORY_ZH, candidate.parsed_value, f"$.{path}")
+    return (_SCOPE_UNRESOLVED_ZH, None, None)
+
 
 class BEfficacySourceViewError(ValueError):
     """B 疗效来源视图没有被锁定的 A 已核验原子证明。"""
@@ -298,6 +355,9 @@ def project_b_efficacy_source_views(
                 _verified_a_consumer_proof(
                     database, evidence_snapshot, report, row, version_id,
                 )
+                scope_zh, source_n, source_n_path = denominator_scope_disclosure(
+                    observation, row.source_field_path,
+                )
                 measure_key = (source_id, observation.source_measure_path)
                 if measure_key not in measure_contexts:
                     measure_contexts[measure_key] = _measure_context(
@@ -331,6 +391,9 @@ def project_b_efficacy_source_views(
                         "source_value_role": observation.value_role,
                         "source_unit": observation.source_unit,
                         "source_raw_value": raw_value,
+                        "source_denominator_scope_zh": scope_zh,
+                        "source_denominator_value": source_n,
+                        "source_denominator_path": source_n_path,
                     }
                 )
     except sqlite3.Error as error:

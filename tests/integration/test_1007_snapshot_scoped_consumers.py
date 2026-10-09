@@ -502,6 +502,23 @@ def test_current_delivery_selects_the_legitimate_rendered_source_scope(
     current[0] = bundle
     assert fresh._scoped_source_bindings(records) == (new_binding,)
 
+    # A complete fact query validates one current scope, not the entire report
+    # directory again for every fact. The next query must revalidate afresh.
+    reads = 0
+
+    def counted_current(_root: Path) -> CurrentDeliveryBundle:
+        nonlocal reads
+        reads += 1
+        return current[0]
+
+    monkeypatch.setattr(user_fact_edit_module, "read_current_delivery", counted_current)
+    all_facts = fresh.current_facts()
+    assert len(all_facts) == len(active_ids)
+    assert reads <= 2
+    first_reads = reads
+    fresh.current_facts()
+    assert first_reads < reads <= first_reads + 2
+
 
 def test_conflicting_binding_for_the_same_snapshot_is_rejected_without_partial_write(
     tmp_path: Path,

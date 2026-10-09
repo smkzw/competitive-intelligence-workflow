@@ -1,0 +1,74 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "parent_code_commit": "b647ec72",
+  "status": "CONTINUOUS_IMPLEMENTATION_NOT_PAUSED_NOT_RC",
+  "source_adoption": "105 registry atoms/91 primary claims/33 append-only scope proofs normal accepted; C258 source/report e2 preserved. Fixed slices only, no whole report or universe acceptance inherited.",
+  "current": {
+    "project": ".artifacts/1007-abc-current-integration-v1/working/project",
+    "revision": 9,
+    "request_id": "1007-config-placement-presentation-v1",
+    "generation_sha256": "b14e9f368f2982e7acd338a3517a1803313b68c47ddadd4466b196585b3f53cf",
+    "fact_revision_digest": "a95fda6e5ddb1961c5cd92fc96446f1a08fe86cf39da6fba63499f190fe1f6a3",
+    "editable_adopted_facts": 349,
+    "reports": "A/B/C all revision9; v1-presentation-r9/html;49/101/16 physical HTML pages;3733 related result members retained, not3733 adopted editable facts",
+    "presentation_rebuild": "Normal existing API once, no clinical edit; current8 and source/history unchanged;49 protected files verified",
+    "rebuild_receipt": "current-config-placement-rebuild-v1.json",
+    "rebuild_receipt_sha256": "3e9e76b0c16db7bb7bb3880f9d5c7202164c24055b760da90cac81cdc3add390"
+  },
+  "assets": {
+    "author": "src/ci_workflow/renderers/portal/assets; assets/portal is mechanically synced mirror",
+    "portal.js": "d87edb68f25a4d531ac84215c138d69a88ee83a5780908e950c930ab6e0f89be",
+    "portal.css": "335f6ce375c323c1355e3956a01a1b96645d03999d33cf4ba2d3bf4b132eb43b"
+  },
+  "operations": {
+    "AB": "Ego native save/clear/restore/undo r1-r4, A+B only; source -48.32 retained, no estimate/count conversion; historical exact retry200 no version, new stale409 unchangedcurrent",
+    "AB_receipt": "joint-current-operations-actual-v1.json",
+    "AB_sha256": "b3f86351e8c145cd81c47c03a12266377334f958af92ede52329959e630f45d8",
+    "C": "Ego native sample-size152 set r5, clear/restore/undo r6-r8 C-only, original151 retained. Initial QA stale validation error was recovered from actualcommittedr5, never repeated write; originalfailedreceipt retained",
+    "C_receipt": "joint-c-operations-recovered-v1.json",
+    "C_sha256": "741c89a4e830f6b84b3b32b4620bc9e28b4782a21769c8bcacb154eadba99101",
+    "limitation": "Hypothetical QA values are labelled user modifications, not medical corrections or new scientific report acceptance. Real induced transaction interruption was covered in integration fixture, not in this real project; real stale rejection/idempotence separately passed."
+  },
+  "configuration": {
+    "root_fix": "B/C existing personal shell moved outside mode-hidden legacyfilter, no second toolbar/framework; original RED retained",
+    "actual": "All three r9 actual download/import from distinct explicit task views passed via Ego184. Acomparison entryclinical-portfolio.html, B/Coverview.html. A/Bquestion restored, Csummary->comparison restored.",
+    "receipt": "current-configs-r9-actual-v2.json",
+    "sha256": "6a1281be72336aa2b704cd486290022295126b1926d6fe4eac470d04797f9dee",
+    "prior_failure": "r9v1 used A summary page with emptyquery, not a comparison task. Preserved as failed, no product change to fit test. Earlier v1/v2/v3 config failures retained."
+  },
+  "sharing": {
+    "export_receipt": "current-r9-shares-v1.json",
+    "export_sha256": "b1796fd1c447975e3a65364ea823f332eeb965d8335741978c9debba62c0c697",
+    "archives": {
+      "A": "a8d3e5da78ff2c30935ebb58f81ed3810ff8150a0e6c6dc05f32e4970f9c72c6",
+      "B": "8fba600d4544ff0c62bc46542dfdcdad9862ab5308955b31a881bd61417517e8",
+      "C": "3bbb2e62cfd75104a3ddf8711cfec94549423d8f2e97c8278009400deec5f694",
+      "ABC": "5b2adacf0b9ab92be84d3da103d118e358e9d69418d30ebde76c0e9dffdde59f"
+    },
+    "actual": "Normal current-only exports bound actual downloaded configs, moved directories, all memberhashes verified. Ego six single/joint pages native launcher open under actualblockedpublicnetwork; currentclear/sourceoriginal retained; no localeditservice injection; originals/current unchanged.",
+    "browser_receipt": "current-r9-offline-actual-v4.json",
+    "browser_sha256": "8e1582ffa550283f7368d23564fe58b02d641ca25638f8e4af3f8266d3973ff9",
+    "network_proof": "Public GET succeeds online, fails afterNetworkemulate and onall6pages afterfile navigation. navigator.onLine resets true onfile navigation while requests remain blocked; truthful flag retained, not manipulated. Network restored finally. Earlier flags/async/file-CSP testcontrol failures preserved, notrewritten.",
+    "fresh_browser": "NOT_RUN; same authorized Ego184/p2 profile; no storage/cookie cleanup; not3hostinstallbundle"
+  },
+  "desktop": {
+    "actual": "Samecurrent9ABC four widths1440/1600/1920/2560 x sparse/dense/filtered/source =48 screenshots, sources/Esc focus, no documentoverflow,43studies/32denseABmembers andtypedquery/visiblebutton sets consistent; C4studies258designmembers retained",
+    "receipt": "current-r9-desktop-actual-v1.json",
+    "sha256": "f333733a5d0fa6bb9d6bee5ce558a311885ae87beba86119165de84969c5aff1",
+    "original_failures": "12Cclear assertions inspected sourcebuttontext rather than facttd. Originalfailure list preserved; no code weakened.",
+    "supplement": "Correctfacttd12targetedCcriteria actualpassed across4widths/currentclear/noNone/source151; only failedcriterion rerun, notall48states",
+    "supplement_receipt": "current-r9-c-clear-supplement-v1.json",
+    "supplement_sha256": "083f7a326d16be38e44704e4de458c63dcf9423e49501a57d4589dfb1f299c4a",
+    "owner_visual": "Actually viewed A2560dense,B1440dense,C1440sampleclear andjointofflineCsource1920. Cclear/source separation readable. A/B manyvisits stilltoo tall andmixedEnglish sourcewording persists; NOTfinalaesthetic/allphysicalpageacceptance. EditorJSON/internalidentifier density alsoopen."
+  },
+  "development_checks": "Milestonequalitygate6PASS beforepersonalplacement: Ruff src/tests/tools, strict286files,1185activePASS20deselected532.05s,20compatPASS,7layerauditPASS,legacyrefsPASS. Pythonroot39relatedPASS175.47s; laterplacement/query/current-share/privacy24PASS6.23s,Node syntax/mirrorsync/RuffupdatedtestsPASS. UpdatedPlaywrightbrowsertestNOT_RUN,userEgoonly; actualEgoresultsabove notborrowedoldPASS.",
+  "recovery": {
+    "artifact_base": ".artifacts/1007-abc-current-integration-v1",
+    "do_not_repeat": "Adoption, C e2 review, oldABv8/Ce2desktop, realset/clear/undo, current0init, current9presentation, configexports andshares. Reopen exactcompletedreceipts/current/journals. Do not wait old model/PIDs.",
+    "normal_recipes": ["prepare-joint-operation.py", "rebuild-current-config-placement-v1.py", "export-current-r9-shares-v1.py", "qa-current-r9-desktop-v1.js", "qa-current-r9-c-clear-supplement-v1.js", "qa-current-configs-r9-v1.js", "qa-current-r9-offline-v1.js"],
+    "active_service": "Owned loopback65033; reopen task/service actualstate before reuse, never blindly killoldPID orrepeatwrite",
+    "new_execution": "ci-1007-full-pool-source-prepare-v1; guardpreflightPASS, actualsingleliveE04ZCodeGLM5.3Flashrequestedmax runnerstarted; provider/session/effort evidence PENDINGterminal. Only newpreparation/scratch paths, no DB/current/source/code writes. Waitoriginalnode/no fixedpolling."
+  },
+  "remaining": "Full liveglobal/Chinasources,ChineseMAH/identityfreshness,publications/Protocol-SAP/completeness,sourceadoptionbeyondboundedfixedslices,allphysicalpages/L1L2/crossbrowser/freshprofile,newSkillinstall/3hosts/recovery/24portals/RC. No final delivery claimed.",
+  "next": "Collect originalboundedfull-poolsourcepreparation terminal and verify actualartifacts/protectedhashes, then normal sourceclosure/adoption byexisting APIs. A/B visitdensity and truthfulChineseunit display remain bounded UIwork; no fullpage threewayreview loop. Keep oldsource/current/historyreadonly and unrelated5userchanges unchanged."
+}

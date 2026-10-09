@@ -21,6 +21,21 @@ from ci_workflow.reports.b.semantic_contract import (
 
 SEMANTIC_POLICY_VERSION = "b-candidate-hard-axes-v8"
 _SOURCE_JSON = TypeAdapter(Any)
+_SOURCE_DISCLOSURE_KEYS = frozenset({
+    "source_denominator_scope_zh", "source_denominator_value", "source_denominator_path",
+})
+
+
+def scientific_source_payload(value: Any) -> Any:
+    """Exclude only redundant display disclosures, not their source evidence.
+
+    The original denominator, context, locator and source version remain bound.
+    Adding a translated explanation must not invalidate an immutable consumer.
+    """
+    payload = _SOURCE_JSON.dump_python(value, mode="json")
+    if isinstance(payload, Mapping):
+        return {key: item for key, item in payload.items() if key not in _SOURCE_DISCLOSURE_KEYS}
+    return payload
 
 
 def semantic_source_digest(value: Any) -> str:
@@ -30,7 +45,7 @@ def semantic_source_digest(value: Any) -> str:
     retrieved or independently verified. Those remain acquisition/review gates.
     """
     return hashlib.sha256(json.dumps(
-        _SOURCE_JSON.dump_python(value, mode="json"), ensure_ascii=False,
+        scientific_source_payload(value), ensure_ascii=False,
         sort_keys=True, separators=(",", ":"), allow_nan=False,
     ).encode()).hexdigest()
 
@@ -107,7 +122,8 @@ class ApprovedSemanticMerge(BaseModel):
 
 def semantic_row_digest(row: Mapping[str, Any]) -> str:
     """Bind policy, complete supplied fact digest, and projected clinical values."""
-    payload = {key: value for key, value in row.items() if not key.startswith("_")}
+    payload = {key: value for key, value in row.items()
+               if not key.startswith("_") and key not in _SOURCE_DISCLOSURE_KEYS}
     payload["_source_binding"] = row.get("_source_binding")
     # 时间政策身份入摘要：政策升级使历史裁决摘要失效，必须重新研究和复核。
     payload["_semantic_policy"] = f"{SEMANTIC_POLICY_VERSION}+time:{time_policy_identity()}"

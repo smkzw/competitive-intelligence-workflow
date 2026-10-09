@@ -38,18 +38,15 @@ def test_collapsed_personal_controls_export_through_keyboard(tmp_path: Path, rep
         page = browser.new_page(accept_downloads=True, viewport={"width": 1600, "height": 900})
         page.goto((site / "overview.html").as_uri())
         outer = page.locator(
-            "details.kz-a-workspace-bar" if report == "A" else "details#kz-filter-panel"
+            "details.kz-a-workspace-bar" if report == "A"
+            else f"details.kz-{report.lower()}-personal"
         )
+        if report != "A":
+            assert outer.evaluate("el => !el.closest('#kz-filter-panel')")
         assert outer.get_attribute("open") is None
         outer.locator(":scope > summary").focus()
         page.keyboard.press("Enter")
         assert outer.get_attribute("open") is not None
-        if report != "A":
-            personal = page.locator(f"details.kz-{report.lower()}-personal")
-            assert personal.get_attribute("open") is None
-            personal.locator(":scope > summary").focus()
-            page.keyboard.press("Enter")
-            assert personal.get_attribute("open") is not None
         export = page.get_by_role("button", name="导出配置", exact=True)
         expect(export).to_be_visible()
         expect(page.get_by_role("button", name="导入配置", exact=True)).to_be_visible()

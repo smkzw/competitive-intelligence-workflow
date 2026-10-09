@@ -1,24 +1,39 @@
-# 唯一当前状态：1007V1 连续实施；独立来源挑战完成，正式来源接受运行中
+# 唯一当前状态：1007V1 连续实施；联合ABC current9操作/配置/分享已实测
 
-基线2d6d1016/product9224f718已push。C e2正常接受及16桌面态、ABv8普通
-49/101页及32桌面态保持，不重跑；仍不签所有页面美学或全产品完成。
-Fresh C03已真实结束：ZCode GLM-5.3-Flash返回身份/观察effort max，单轮
-1176.924s/exit0/no fallback，105定位/91观察、33范围修正/35问题复核无阻塞。
-该结论仅咨询来源切片；不能代替正式issuer/采用、数值共轴或报告发布。
-Owner正常接受接缝新增同源同标量分母范围证明：原open冲突/旧事实/快照不改，
-收据绑定修正意向与台账追加，真实值/人群/组/原文/parsedN矛盾仍拒绝。
-30相关PASS2.46s、Ruff两文件/strict生产一文件/diff通过，不是全仓门。
-真实A source-only request已正常准备，snapshotfca99/contentaac3277e，context
-e4b687f3；105事实/91声明仍未采用，无全宇宙门或报告晋级。预检PASS后
-正常issuer20:09:47UTC单次启动，原独立OMP会话续接；requestedgpt6.1sol/high，
-实际终态/回执仍待。正常签发宿主不支持ZCode app-server，显式使用live C03
-允许OMP兼容路线，不静默换模型或称另一个意见。
-四文件人数范围展示E03并行运行；共享schema/接受/current由owner负责。
-A/B输入继承共同source_evidence_snapshot_id，旧缺省载荷不变；2成族RED→
-21相关PASS7.29s/Ruff/strict通过。未借源码GREEN签真实current保存。
-[唯一最新精确恢复](evidence/1007V1/owner-registry-scope-repair-and-formal-source-v1.json)。
-下一只收既有终态，正常来源采用后接最新ABC真实编辑/同步/配置/离线分享。
-current仍无；全源/24门户/三宿主/安装/恢复/RC仍开；Goal实查ACTIVE，非暂停。
+源码b647ec72已push；C e2及ABv8已验范围不重跑，不拼新候选PASS。
+正常独立OMP issuer已exit0/accepted，实际原会话/requestedgpt6.1sol/high，
+真实receipt0768132e；正常采用105事实/91声明/33追加修正证明，decision6e7f1d72。
+原科学字节（除review_state）、open冲突、绑定和43保护文件保持；不重复摄取。
+只签固定来源切片，不授共轴、全宇宙或A/B报告晋级；不再等旧issuer。
+人数范围E03实际CodeBuddy/deepseek4.1flash单轮oktrue/no fallback已结束，owner
+重开四文件和34相关PASS93.36s。原来源N在条件详情，不复活已清除当前值。
+Owner真实预检发现三冗余展示字段改变旧消费者摘要，失败在页面/current创建前。
+最小共享摘要分离保留原数值/定位/上下文/来源版本，39相关PASS175.47s。
+里程碑宽门质量层6PASS：Ruff全范围、strict286文件、1185活跃PASS/20兼容PASS/
+7分层PASS/旧路径检查；不是全部集成/科学/浏览器门。随后配置入口修复24相关
+PASS6.23s、Node/镜像/Ruff补验；不把前宽门冒称后JS完整终验。
+v9开发A49/B101/C16页、349可编辑采用事实已正常初始化及真实操作；3733相关
+成员保留，不是3733采用事实。非报告/发布接受。原C与来源/快照保持。
+真实编辑页逐事实重复整站校验使初次超过15s；最小批读取修复RED33次→每请求
+最多2次完整校验，新请求仍重验。Ego184新实际打开1566ms，349事实可选。
+真实A+B四操作r1–r4完成且只同步合法消费者；旧请求重试200不添版本，过期409。
+C四操作r5–r8完成且只同步C。脚本误读旧错误退出时r5已经提交，原地重开而
+非重复保存；失败原件保留。原值-48.32/151可查，不把调整估计除人数。
+配置入口曾被C横比旧筛选隐藏，现共用原折叠shell移出；成族RED保留。
+正常纯显示current9一次重建，事实闭包/49保护文件不变，三报告同revision9。
+三报告配置导出/不同明确视图恢复实过；A摘要页被脚本误当横比页的失败保持。
+四分享包从committed current9和实际配置生成，移动目录后Ego6入口真阻断
+网络请求仍可读清除值/原来源。Ego文件导航后online标志重置但流量仍阻断，
+用实际成功→失败公共GET证明，没篡改标志；网络已恢复。同profile，fresh未验。
+四宽×四态48截图、查询集合/按钮集合/来源/Esc/无整页溢出已实跑；C脚本
+误选来源按钮的12失败未改，补验正确事实td12项通过。Owner实看四图；A/B
+多访视行仍高、英文单位和编辑页工程字段仍待改，不签最终审美/所有页面。
+[唯一最新精确恢复](evidence/1007V1/owner-joint-current9-operations-config-share-desktop-v1.json)。
+新执行ci-1007-full-pool-source-prepare-v1：E04 live ZCode/GLM5.3Flash请求max，
+preflight实过后单次启动，终态/实际身份PENDING；只新来源准备资料/scratch，
+DB/current/来源/代码只读，原节点不轮询、不因慢重派。下一收终态核实新资料，
+再现有API补源及密度/中文阅读；全源/24门户/三宿主/安装/恢复/RC仍开。
+Goal继续ACTIVE；非暂停、非完成、非RC。下文旧PENDING/current-none均是历史。
 
 ## 以下为版本历史；其中PENDING和“下一”不代表当前任务
 
