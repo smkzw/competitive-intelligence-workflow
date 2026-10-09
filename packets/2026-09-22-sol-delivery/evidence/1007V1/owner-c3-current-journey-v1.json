@@ -1,0 +1,78 @@
+{
+  "schema_version": "1007-c3-current-journey-owner-1",
+  "parent_commit": "b4b3421523d61d521fc4be5ae25e15c48318f6bb",
+  "decision": "BOUNDED_REAL_C_CURRENT_JOURNEY_PASSED_NOT_BROWSER_OR_RELEASE",
+  "project": "PN, four registered trials, 258 source observations; not PNH or universe closure",
+  "scientific_candidate": "C3/e3/c7687ea3; independent report receipt93c4409a; immutable original preserved",
+  "root_repairs": [
+    "C current identity validates the exact candidate-to-accepted lifecycle projection only; retains stored source-row hash and all shared scientific context guards",
+    "Source atoms without a dedicated topical page use their existing trial detail consumer; no dropped observation or new report"
+  ],
+  "changed_product": ["src/ci_workflow/renderers/portal/report_c.py"],
+  "root_tests": "tests/integration/test_1007_c_reviewed_binding_identity.py",
+  "verification": {
+    "first_family": "1 failed, 5 passed; then45 related passed12.37s",
+    "second_family": "1 failed0.31s; then50 related passed12.28s",
+    "final_typed_negative": "11 root cases passed0.47s; Ruff2 and strict production1 passed",
+    "scope": "new root family, C sample current saves, C unassigned binding, current reading state; not all tests or a wide gate",
+    "wide_gate": "NOT_RUN"
+  },
+  "execution": {
+    "task": "ci-1007-c3-current-journey-v1; E03",
+    "preflight": "PASS before launch",
+    "started_at": "2026-10-09T14:42:43.284588Z",
+    "finished_at": "2026-10-09T15:44:28.503558Z",
+    "exit_code": 0,
+    "primary": "actual CodeBuddy/deepseek-v4.1-flash session01a1211d-e2ac-76f4-af76-1038a33dc614, returncode0",
+    "fallback": "actual ZCode/GLM-5.3-Flash session sess_f4f60fd7-914c-4f4a-8541-189f56d075c8, returncode0",
+    "deviation": "controller no-resumable-session explanation contradicts the actual primary handle; not a compliant same-session continuation or independent review",
+    "owner_correction": "worker preexisting-file inference confused UTC and local time; file creation was inside the primary run. Diagnostic utility is overlarge and remains local, not shipped as product",
+    "wait": "single process-exit event wait; owner quiet; no progress polling or redispatch"
+  },
+  "preservation": {
+    "original_files": 215,
+    "original_current": "absent and unchanged",
+    "source_baseline_digest": "b51b7a323bc86a8a2d38379c16f1354d120a9a8b2f1fbea75ca64c523683e126",
+    "isolated_copy": ".artifacts/1007-c3-current-journey-v1/project",
+    "old_blocked_receipt": ".artifacts/1007-c3-current-journey-v1/operation-receipt.json",
+    "old_blocked_receipt_sha256": "3e6261073201f5e4831c7043441be015a33e8d332cc095384410538cf2274b62",
+    "intermediate_failure": ".artifacts/1007-c3-current-journey-v1/owner-continuation-v1.json",
+    "source_readoption": false,
+    "old_operations_replayed": false
+  },
+  "actual_current": {
+    "receipt": ".artifacts/1007-c3-current-journey-v1/owner-continuation-v2.json",
+    "receipt_sha256": "ea33f14b08541317c058e5ad62138b68cf81caf7ab55a22ab0af9533bbea237e",
+    "started_at": "2026-10-09T15:53:14.003981+00:00",
+    "finished_at": "2026-10-09T15:54:54.841761+00:00",
+    "revision": 4,
+    "generation_sha256": "291f866aeb4b089b41ce8459ef527f21ea93ba95e509c814bb2f5044d8d50111",
+    "qa_only": true,
+    "steps": ["152 hypothetical QA edit", "clear current value", "restore151", "undo restoration, current cleared again"],
+    "checks": ["actual HTML/payload/index/evidence consumers", "original151 and ACTUAL qualifier retained", "clear has no numeric placeholder", "user_modified never inherits scientific acceptance", "malformed152.5 rejected and old current unchanged", "four duplicate command replays create no duplicate fact version", "historical first command after later saves keeps current4"],
+    "resumption": "retried the persisted staged first command after root repairs, not new request or duplicate fact"
+  },
+  "share": {
+    "path": ".artifacts/1007-c3-current-journey-v1/current-c-share.zip",
+    "sha256": "6dd92ef9c83cfd1e79578695f0bb26d8af6bca4a4457f62408609101c96fd87a",
+    "members": 35,
+    "reports": ["C"],
+    "entry_href": "C/sample-analysis-statistics.html?trial=nct04183335",
+    "revision": 4,
+    "checks": "committed-current contents/config/member hashes/source and clear-state preservation passed; new browser offline reopen NOT_RUN"
+  },
+  "browser": {
+    "user_choice": "approved creating one replacement space and reuse thereafter",
+    "space": 184,
+    "page": "p1",
+    "name": "CI1007 delivery desktop QA",
+    "engine": "Ego Lite only",
+    "actual_navigation": "generation-bound C overview reached from the normal current editor link",
+    "actual_viewport": "1440x1000 CSS verified after navigation; earlier720/2880 do not count as required widths",
+    "capture": "wrapper screenshot timeouts; direct CDP fromSurface=false Unable to capture screenshot. Diagnosis ongoing; no visual PASS",
+    "four_width_four_state": "NOT_RUN"
+  },
+  "next": "reuse Ego184/p1 for real C summary/comparison/filter/L1-L2/source/focus/offline evidence; do not repeat source adoption, C3 review, four completed saves or share construction",
+  "remaining": ["new current same-version ABC", "source/publication/universe closure", "all MAH relationships", "desktop visual and keyboard", "offline new-browser reopen", "24 portals", "three hosts", "installation/recovery/RC"],
+  "release": false
+}

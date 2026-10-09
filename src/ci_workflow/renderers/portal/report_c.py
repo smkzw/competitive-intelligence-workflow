@@ -2508,20 +2508,17 @@ def render_report_c_site(
                 )
             index = matches[0]
             try:
-                verified_binding = validate_active_fact_binding(
-                    fact,
-                    binding,
-                    active_fact_binding_for_c(data, binding.row_id),
-                )
+                verified_binding = _validate_current_c_binding(data, fact, binding)
             except ValueError as error:
                 raise ReportCPortalError(str(error)) from error
             if (fact.model_extra or {}).get("review_state") != "user_modified":
                 pages = [page_id for page_id, fields in _PAGE_FIELDS.items()
                          if fields is not None and observations[index].field in fields]
-                if not pages:
-                    raise ReportCPortalError("C来源设计观察没有既有专题消费者")
+                # Source-only atoms remain visible in their trial detail even
+                # when they have no dedicated topical page (same as search).
+                source_page = pages[0] if pages else f"trials/{observations[index].trial_id}"
                 consumers.append(source_consumer_node(
-                    fact, verified_binding, page=f"{pages[0]}.html",
+                    fact, verified_binding, page=f"{source_page}.html",
                 ))
                 continue
             row_payload = observations[index].model_dump(mode="python")
@@ -2579,11 +2576,10 @@ def render_report_c_site(
                 for page_id, fields in _PAGE_FIELDS.items()
                 if fields is not None and observations[index].field in fields
             ]
-            if not specific_pages:
-                raise ReportCPortalError(
-                    f"C设计观察没有既有专题消费者：{observations[index].field}"
-                )
-            consumer_page = f"{specific_pages[0]}.html"
+            consumer_page = (
+                f"{specific_pages[0]}.html" if specific_pages
+                else f"trials/{observations[index].trial_id}.html"
+            )
             consumers.append(
                 PortalConsumerNode(
                     report="C",
@@ -2819,11 +2815,7 @@ def validate_active_fact_revision_c(
         if binding.collection != "observations":
             raise ReportCPortalError("C renderer只接受observations领域绑定")
         try:
-            validate_active_fact_binding(
-                fact,
-                binding,
-                active_fact_binding_for_c(data, binding.row_id),
-            )
+            _validate_current_c_binding(data, fact, binding)
         except ValueError as error:
             raise ReportCPortalError(str(error)) from error
         if (
@@ -2831,6 +2823,27 @@ def validate_active_fact_revision_c(
             and (fact.model_extra or {}).get("review_state") == "user_modified"
         ):
             _current_sample_number(fact)
+
+
+def _validate_current_c_binding(
+    data: ReportCPortalData, fact: ActiveFact, binding: ActiveFactBinding,
+) -> ActiveFactBinding:
+    """Keep legacy source-row bytes across the proven candidate→accepted projection.
+
+    Only that lifecycle field can differ. Never rewrite stored bindings or relax
+    scientific fields, source text, value, disclosure or the shared identity guard.
+    """
+    actual = active_fact_binding_for_c(data, binding.row_id)
+    if actual.original_row_sha256 != binding.original_row_sha256:
+        row = next(row for row in data.observations if row.row_id == binding.row_id)
+        if row.review_state is FactReviewState.ACCEPTED:
+            original = row.model_dump(mode="json")
+            original["review_state"] = FactReviewState.CANDIDATE.value
+            if canonical_sha256(original) == binding.original_row_sha256:
+                actual = actual.model_copy(update={
+                    "original_row_sha256": binding.original_row_sha256,
+                })
+    return validate_active_fact_binding(fact, binding, actual)
 
 
 def _current_sample_number(fact: ActiveFact) -> float | None:

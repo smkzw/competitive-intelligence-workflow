@@ -1,4 +1,18 @@
-# 唯一当前状态：1007V1 连续实施，C3科学接受，真实C current旅程待执行
+# 唯一当前状态：1007V1 连续实施，C3科学接受，真实C current旅程完成，实屏待验
+
+20261009真实隔离副本r4：假设152→清除→恢复151→undo恢复；原151/ACTUAL
+来源不改，用户修订不继承科学接受。异常152.5拒绝且current保持；四次幂等及
+旧首次请求在r4后重试通过、不新增事实版本。35成员C分享从committed-current
+生成并校验配置/来源/hash；离线新浏览器重开未验。原215文件/current-none不变。
+实际链暴露两个根因，owner最小修report_c：候选→accepted仅状态差异兼容，
+不改旧科学hash；无专题来源观察用既有研究详情消费者。相关50PASS12.28s，
+最终类型化反例11PASS0.47s/Ruff2/strict生产1；不是全仓/新安装/RC。
+执行主CodeBuddy/备用ZCode皆有真实会话；控制器“无主会话”理由不符实际，
+明确记录偏差。过大的任务重放工具保留本地诊断，不作为产品新平台。
+[实际命令/版本/原件/恢复证据](evidence/1007V1/owner-c3-current-journey-v1.json)。
+用户原生Ask批准唯一替代Ego184/p1，已实际创建并从正常编辑器返回C报告。
+1440x1000 CSS真实核验；截图wrapper超时及直接CDP失败，视觉尚无PASS。
+下一步复用184验摘要/横比/筛选/L1L2/来源回焦/离线，不再重跑四次保存/分享。
 
 NEW C3正常生成：内容c7687ea3/快照a89f9cf6/站点b1a8d74c/e3，源码5c42f257。
 正常产品issuer14103实际Oct9 14:22:43→14:34:18UTC/exit0，外部OMP14105，
@@ -8,8 +22,8 @@ C3 accepted verdict0b8f5f92/verified回执93c4409a。Owner正常真实签发核�
 28核心/32扩展缺口/4NA不变。四C2呈现发现关闭，一条组别范围标注非阻断
 改进留后续，不改被冻结C3。原171暂停pins仅epoch合法前移，DB不变，无current。
 [本轮精确层级证据](evidence/1007V1/owner-c3-report-review-v1.json)。
-下一单一有界E03在新隔离副本重放真实C current/edit/clear/undo/share；不碰
-原项目/不重采源/不重复旧AB保存分享。Ego替代空间原生Ask等待，仅阻断实屏；
+本批E03已完成隔离C current旅程；不碰原项目/不重采源/不重复旧AB保存分享。
+Ego替代空间184已批准/创建，实屏截图故障仍开；
 render_manifest仍generated且浏览器verdict rejected，科学接受不冒充视觉/RC。
 
 ## 本轮恢复与代码准备（已完成的限定范围）
@@ -19,9 +33,9 @@ render_manifest仍generated且浏览器verdict rejected，科学接受不冒充�
 候选生成器支持指定新版本、默认仍拒绝覆盖v2；作者资源镜像补齐注释/hash。
 一组成族RED6/PASS2（参数接口5、镜像1）→8PASS0.43s，Ruff2/strict工具1。
 初次strict调用缺MYPYPATH导致10 import-untyped，指定src后通过；非产品修复。
-下一立即生成正常C3、冻结新产物并正常独立复核；不借C1来源回执或旧宽门。
+此准备批后的正常C3生成/独立复核已完成；不借C1来源回执或旧宽门。
 单一owner直接执行：候选/epoch共享可变状态不宜另派写入；真实报告独立会商
-沿用已合格OMP路线，不增加管理节点。C3/current/实屏尚未运行，不宣称完成。
+沿用已合格OMP路线，不增加管理节点。本准备记录为历史范围，实际最新见顶节。
 
 ## 上次暂停节点（保留历史范围；新授权已解除暂停）
 

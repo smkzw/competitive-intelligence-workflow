@@ -2755,3 +2755,26 @@ NormalC3已生成c7687ea3/e3，源258不重采；normalissuer14103/外部OMP1410
 有实质上下文卸载收益。来源科学判断已独立接受，QA操作用确定性API/实际产物
 验收，不另派重复临床全页会商；若新科学歧义再按global触发。源/值只读原件，
 无cleanup，Owner最终仍负责原件hash/保存一致性/分享及Git阶段递交。
+
+## 20261009 C3真实current节点与下一实屏单元
+
+E03实际CodeBuddy/deepseek-v4.1-flash有会话，ZCode/GLM-5.3-Flash备用完成；
+3705.219s/exit0，owner单次进程事件长等候，未轮询/重派。控制器“未建主会话”
+理由与真实handle矛盾；worker还混淆UTC/localmtime，不能借其报告作事实。
+任务utility1334行过度，保留本地诊断不进入生产/安装；共享根因owner最小修。
+真实链先blocked：candidate→accepted状态误变source-rowhash，再blocked无专题
+字段消费者。两族RED后只修report_c：兼容唯一可证明状态投影、仍检查全科学
+字段；无专题事实在已有trial详情公开。相关50PASS12.28s，最终类型化11根因
+PASS0.47s/Ruff2/strict生产1。首次工具PYTHONPATH缺失、变量类型碰撞保留为
+调用/实现过程问题，非最终全仓FAIL也不冒称宽门PASS。
+重试DB既有staged第一请求，不重建项目、不复制第二事实、不改旧失败回执。
+隔离r4实际152QA→clear→151restore→undo，原151及ACTUAL留存、user_modified；
+异常152.5拒绝/current不切，四幂等/旧首次请求重试保持r4。35成员C分享真正
+取committed-current，配置/来源/hash通过。原215文件/current-none保持，未重采源。
+原失败operation-receipt/v1与新owner-continuation-v2并存，后者不覆盖历史。
+用户Ask授权替代Ego184/p1已建，正常generation链接进入C；1440CSS真实核验。
+截图wrapper及低层capture故障，未目视，不签视觉/离线；四宽四态仍未验。
+下一单元direct：复用184/p1诊断capture并进行真正摘要/横比/下钻/来源/回焦；
+单一浏览器共享状态不可并行写，确定性UI行为先由owner实核。涉及审美接受时
+按global触发独立挑战，不把HTTP/DOM读取当视觉PASS。无需重复医学源审查。
+Goal active/不停在里程碑；本批正常Git明确白名单递交，五用户编辑/未知资料保持。
