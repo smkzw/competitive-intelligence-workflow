@@ -113,12 +113,11 @@
           item.setAttribute("data-evidence-open", id); item.setAttribute("data-row-id", id);
           var value = row.value == null ? "" : String(row.value);
           var status = window.__CHART_SYNC__ && window.__CHART_SYNC__.unplottedValueText;
-          item.textContent = [row.product_zh, row.arm_detail || row.arm,
-            value ? value + (row.unit ? " " + row.unit : "") : status ? status(row) : "状态待核",
-            row.time || row.time_window, row.difference_note,
-            column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
-              (column.facet_label_by_row || {})[id] : ""].filter(Boolean).join("｜");
-          cell.appendChild(item);
+          var displayedValue = value ? value + (row.unit ? " " + row.unit : "") :
+            status ? status(row) : "状态待核";
+          var facet = column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
+            (column.facet_label_by_row || {})[id] : "";
+          window.__COMPARISON_QUERY__.factCell(document, cell, item, row, displayedValue, facet);
         });
         if (!ids.length) cell.textContent = "当前问题无匹配记录，不代表未研究或零结果";
         tr.appendChild(cell);

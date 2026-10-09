@@ -1,5 +1,14 @@
 # 唯一当前状态：1007V1 连续实施；联合C258来源已正常接受，A来源路由实屏缺陷已修
 
+最新7b2467c已push，A/B v5真实四桌面×四态32截图，无document溢出/主表折叠/
+来源打开/Esc回焦失败；全43研究保留。Owner实际看四图，仍有条目全文串联弱层级，
+不签最终美学。共享事实语义层级最小修复1RED→45相关PASS5.50s/静态/镜像；
+新呈現字节尚待NEW候选，不覆盖v5。C正常接受投影新报告2f35433d/site035901b7/
+e2，2246历史文件和DB保持，28核心满足/32扩展缺失/4NA；未切current。
+同独立会话normalissuer实际19:01UTC启动，尚PENDING。预检FAIL后shell仍dispatch
+是实际偏差，详见精确记录；不伪称预检通过，不因延迟重派或改运行中提示词。
+[唯一最新精确恢复与32场景](evidence/1007V1/owner-joint-desktop32-and-c-accepted-assembly-v1.json)。
+
 当前源码基线0fe3980已push。C e1正常issuer已实际exit0，同独立Pi/OMP会话
 gpt6.1sol请求high续接，ACCEPTED93cd8663/回执9d073dad。正常来源采用258事实/
 258声明，决策372ca355；owner只读重开与接受投影通过，仅review_state改变，

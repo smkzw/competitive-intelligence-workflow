@@ -60,3 +60,24 @@ def test_freeze_preserves_original_on_changed_candidate_bytes(tmp_path: Path) ->
     with pytest.raises(AssertionError, match="refuse frozen overwrite"):
         candidate.freeze(path, {"version": 3})
     assert candidate.sha(path) == digest
+
+
+def test_explicit_joint_output_refuses_receipt_before_reading_project(tmp_path: Path) -> None:
+    output = tmp_path / "joint/report-candidate-v2"
+    output.mkdir(parents=True)
+    receipt = output / "candidate-receipt.json"
+    receipt.write_bytes(b"joint source remains accepted")
+    with pytest.raises(SystemExit, match="already prepared"):
+        candidate.main(candidate_number=2, project_root=tmp_path / "missing-project",
+                       source_digest="a" * 64, output_root=tmp_path / "joint")
+    assert receipt.read_bytes() == b"joint source remains accepted"
+
+
+@pytest.mark.parametrize("digest", ["", "../old-project", "a" * 63, "G" * 64])
+def test_invalid_explicit_source_digest_rejected_before_access(
+    tmp_path: Path, digest: str
+) -> None:
+    with pytest.raises(ValueError, match="source digest"):
+        candidate.main(project_root=tmp_path / "missing-project", source_digest=digest,
+                       output_root=tmp_path / "joint")
+    assert not list(tmp_path.iterdir())

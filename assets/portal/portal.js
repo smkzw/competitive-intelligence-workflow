@@ -109,6 +109,33 @@
       }).sort(function (left, right) {
         return Number(right.matched) - Number(left.matched) || left.index - right.index;
       }).map(function (item) { return item.id; });
+    }, factCell: function (doc, cell, button, row, value, facet) {
+      function textNode(tag, className, value) {
+        var node = doc.createElement(tag);
+        node.className = className; node.textContent = String(value);
+        return node;
+      }
+      // Presentation only: explicit identities, values and original context stay intact.
+      var product = row.product_zh || "产品关联待核";
+      var arm = row.arm_detail || row.arm;
+      button.className = "kz-comparison-fact";
+      var main = doc.createElement("span"); main.className = "kz-comparison-fact__main";
+      main.appendChild(textNode("span", "kz-comparison-fact__identity",
+        product + (arm && arm !== product ? "｜" + arm : "")));
+      main.appendChild(textNode("strong", "kz-comparison-fact__value", value));
+      button.appendChild(main);
+      var time = row.time || row.time_window;
+      if (time) button.appendChild(textNode("span", "kz-comparison-fact__time", time));
+      cell.appendChild(button);
+      var notes = [row.difference_note, facet].filter(function (note, index, all) {
+        return note && all.indexOf(note) === index;
+      });
+      if (notes.length) {
+        var details = doc.createElement("details"); details.className = "kz-comparison-context";
+        details.appendChild(textNode("summary", "", "条件与限制"));
+        notes.forEach(function (note) {details.appendChild(textNode("p", "", note));});
+        cell.appendChild(details);
+      }
     }, applyLayout: function (root, comparison) {
       var mode = comparison ? "comparison" : "summary";
       if (root.body.dataset.comparisonView === mode) return;

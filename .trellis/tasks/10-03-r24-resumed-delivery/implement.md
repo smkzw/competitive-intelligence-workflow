@@ -2,6 +2,14 @@
 
 ## 当前：同来源联合ABC副本与fresh C03科学复核
 
+7b2467c后A/Bv5真实32桌面状态，43研究保留/无溢出/正确来源和Esc；4图owner
+看仍有全文串联弱层级，direct共享事实结构化呈现1RED→45相关PASS5.50s，静态/
+镜像通过，新字节实屏待。C工具复用显式项目/源摘要/输出根，5RED→15相关PASS/
+strict1；正常来源接受投影新report2f35433d/e2/site035901b7，2246历史与DB保持。
+normalissuer58208实际19:01UTC启动，只报告组装，同独立会话；尚待终态。guard
+输出措辞未匹配FAIL后shell仍launch偏差保留，不伪PASS，不改运行中提示词。
+未来wrapper必须先检查preflight退出码再Popen。owner-joint-desktop32-and-c-accepted-assembly-v1。
+
 0fe3980后C e1实际终态ACCEPTED93cd8663，normalissuer9d073dad与来源接受
 258事实/258声明decision372ca355；owner只读核验投影仅review_state改变，DB
 保持/原e0旧site和否决保持/current仍无。旧运行句柄已结束，不重派或等待。

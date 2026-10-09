@@ -2064,11 +2064,10 @@
           button.setAttribute("data-evidence-collection", row._domain);
           var value = row.value == null ? (window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核")
             : String(row.value) + " " + (row.unit || "");
-          button.textContent = [row.product_zh, row.arm_detail || row.arm, value, row.time,
-            row.difference_note,
-            column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
-              (column.facet_label_by_row || {})[id] : ""].filter(Boolean).join("｜");
-          cell.appendChild(button); displayed[id] = true;
+          var facet = column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
+            (column.facet_label_by_row || {})[id] : "";
+          window.__COMPARISON_QUERY__.factCell(document, cell, button, row, value, facet);
+          displayed[id] = true;
         });
         if (!cell.children.length) cell.textContent = "当前问题无匹配事实，不代表零结果";
         tr.appendChild(cell);

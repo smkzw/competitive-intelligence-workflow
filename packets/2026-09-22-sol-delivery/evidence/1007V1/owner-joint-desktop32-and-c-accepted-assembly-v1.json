@@ -1,0 +1,53 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "base_commit": "7b2467cf270d98ea8e3b1d6a226d231743dd4c62",
+  "goal_state": "active",
+  "AB_v5_actual": {
+    "A_site_digest": "0b381d3feeea0ce93959870c782a45b3171de98d9f4a0ffbc762b4b72a5fc90f",
+    "B_site_digest": "65bb5d92802536b9ad4ea34eb460dccdff3e1de7ec59e222f962e4480b7acdee",
+    "real_renderer_pages": {"A":49,"B":101},
+    "actual_qa_relative": ".artifacts/1007-abc-current-integration-v1/ab-v5-desktop-completed-v3.json",
+    "actual_qa_sha256": "4d93c7559929bcec70f679f0d9b513394e9fba5a208e908ccdee43526aa7e059",
+    "viewports": [[1440,900],[1600,900],[1920,1080],[2560,1440]],
+    "actual_states": "A/B each sparse, dense, filtered sparse, selected source;32 screenshots; Ego184/p2 same profile",
+    "objective_failures": 0,
+    "actual_table_widths": {"A":[1346.41,1500,1807.2,2428],"B":[1380.41,1534,1841.2,2462]},
+    "retained_studies": 43,
+    "dense_displayed_facts": 16,
+    "selected_source": "actual selected Nemolizumab32 original scalar and exact outcome field, NCT04501666 external link; all eight source-state Esc focus checks passed",
+    "selector_failures": "first unsupported nonterminal nth selector, then incorrect assumption of two A disclosures; both failed receipts retained; actual DOM inspected and single observed disclosure used; first two successful screenshots not rerun/overwritten",
+    "closure_check_correction": "initial observation checked CSS class instead of actual hidden property; actual Escape closes panel.hidden and restores same trigger",
+    "owner_actually_viewed": ["A1440-sparse-v5.png","A2560-dense-v5.png","B1440-source-v5.png","B2560-dense-v5.png"],
+    "visual_judgment": "desktop space and exact source routing improved; dense cells remain pipe-separated text with repeated context and weak value hierarchy, so not final aesthetic acceptance",
+    "not_run": "all physical pages, cross-browser, fresh profile, latest joint current/edit/save/share, full scientific/universe closure"
+  },
+  "next_shared_fact_hierarchy_batch": {
+    "mode": "direct: actual four representative images show the same presentation-only root; no medical equivalence or source values change",
+    "change": "one existing shared query helper renders safe-text entity/arm, prominent exact value and separate original time; native per-fact context disclosure retains complete differences and facets; source-button identity unchanged",
+    "RED": "1 root failure in 0.06s",
+    "GREEN": "45 related tests passed in5.50s; A/B production matrix, layout, personal configuration, current and standalone share, explicit C recovery entry",
+    "static": "Ruff3, Node3 and mechanical asset mirror passed",
+    "new_rendered_bytes": "NOT_RUN; v5 remains immutable, next new candidate required",
+    "wide_gate": "NOT_RUN"
+  },
+  "C_accepted_source_assembly": {
+    "existing_entry_extended": "optional explicit project/source SHA/output root; default prior behavior retained, invalid SHA and frozen attempt refused before access",
+    "RED": "5 new parameter cases failed in0.82s",
+    "related_GREEN": "15 passed in0.67s, strict tool1 passed; Ruff line length corrected then passed",
+    "new_report_content_digest": "2f35433d532054470c1d80df86197f924d3a336ced3c253e86ae69af6c4bfe86",
+    "report_snapshot_id": "report-snapshot_d1365c57cbcf7038cda089d0",
+    "context_digest": "352d22639c59f40d3aa4c8aa1f478c17eb66a8ebcb8af9086097dc95eaf0a46c",
+    "site_digest": "035901b78f0e39c528c0d15de54dc9a538553c8d74823d2474bd44f392a9aff8",
+    "epoch": 2,
+    "accepted_observations": 258,
+    "core_gate": "28 satisfied,32 extension_missing,4 not_applicable; bounded core passed, not full design/universe closure",
+    "historical_files_preserved": 2246,
+    "database_unchanged": true,
+    "source_readopted": false,
+    "current_switched": false,
+    "independent_report_assembly": "normal issuer actually launched 2026-10-09T19:01:15.073925Z, PID58208, same independent Pi/OMP gpt6.1sol requestedhigh; PENDING, not accepted at checkpoint",
+    "dispatch_deviation": "guard preflight FAIL because output phrase lacked required 'file:' syntax; shell continued to issuer despite failure. Actual prompt still explicitly limits one same-project verdict path, route validator passed. Not reported as preflight PASS; frozen dispatched prompt retained, no rewrite/kill/re-dispatch. Future launch must check preflight return code inside wrapper before Popen.",
+    "next": "terminal-only handling: verify exact normal receipt and scoped verdict before report promotion; no source re-review or readoption"
+  },
+  "release": "development candidate, active, not paused or complete or RC"
+}
