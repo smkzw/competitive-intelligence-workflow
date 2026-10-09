@@ -2056,7 +2056,9 @@
       tr.appendChild(label); retained += 1;
       columns.forEach(function (column) {
         var cell = document.createElement("td");
-        (column.cells[study] || []).filter(function (id) {return allowed[id];}).forEach(function (id) {
+        window.__COMPARISON_QUERY__.observationIds(
+          (column.cells[study] || []).filter(function (id) {return allowed[id];}), rows
+        ).forEach(function (id) {
           var row = rows[id], button = document.createElement("button"); button.type = "button";
           button.setAttribute("data-open-evidence", "");
           button.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
@@ -2078,8 +2080,7 @@
     host.querySelector("[data-a-comparison-next]").disabled = aComparisonPage * 4 >= allColumns.length;
     host.querySelector("[data-a-comparison-status]").textContent = retained + "项研究；条件组 " +
       aComparisonPage + " / " + (Math.ceil(allColumns.length / 4) || 1) + "；本页 " + Object.keys(displayed).length + " 条事实。当前问题有匹配事实的研究先列，其余相关研究保留。";
-    host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
-    host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
+    window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__) {
       var groups = (window.__A_COMPARISON_GROUPS__ || []).filter(function (group) {

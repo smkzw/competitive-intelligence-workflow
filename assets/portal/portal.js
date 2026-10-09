@@ -109,6 +109,20 @@
       }).sort(function (left, right) {
         return Number(right.matched) - Number(left.matched) || left.index - right.index;
       }).map(function (item) { return item.id; });
+    }, observationIds: function (ids, rows) {
+      // Only an explicit single Week label can supply this presentation order.
+      // Ranges, other units and unknown labels remain stable; no time conversion
+      // or new clinical equivalence is inferred from display order.
+      return ids.map(function (id, index) {
+        var row = rows[id] || {}, label = String(row.time || row.time_window || "");
+        var match = /^Week\s*(\d+(?:\.\d+)?)$/i.exec(label);
+        return {id: id, index: index, week: match ? Number(match[1]) : null};
+      }).sort(function (left, right) {
+        if (left.week === null || right.week === null) {
+          return Number(left.week === null) - Number(right.week === null) || left.index - right.index;
+        }
+        return left.week - right.week || left.index - right.index;
+      }).map(function (item) {return item.id;});
     }, factCell: function (doc, cell, button, row, value, facet) {
       function textNode(tag, className, value) {
         var node = doc.createElement(tag);
@@ -126,7 +140,15 @@
       button.appendChild(main);
       var time = row.time || row.time_window;
       if (time) button.appendChild(textNode("span", "kz-comparison-fact__time", time));
-      cell.appendChild(button);
+      // Pair each fact with its own disclosure in a responsive list. This is
+      // presentation only; source identity and the trigger's attributes survive.
+      var list = cell.__comparisonObservations;
+      if (!list) {
+        list = doc.createElement("div"); list.className = "kz-comparison-observations";
+        cell.__comparisonObservations = list; cell.appendChild(list);
+      }
+      var observation = doc.createElement("div"); observation.className = "kz-comparison-observation";
+      observation.appendChild(button); list.appendChild(observation);
       var notes = [row.difference_note, facet].filter(function (note, index, all) {
         return note && all.indexOf(note) === index;
       });
@@ -134,8 +156,21 @@
         var details = doc.createElement("details"); details.className = "kz-comparison-context";
         details.appendChild(textNode("summary", "", "条件与限制"));
         notes.forEach(function (note) {details.appendChild(textNode("p", "", note));});
-        cell.appendChild(details);
+        observation.appendChild(details);
       }
+    }, recordScope: function (host, allowed, columns, displayed) {
+      var questionRows = new Set();
+      columns.forEach(function (column) {
+        Object.keys(column.cells || {}).forEach(function (study) {
+          column.cells[study].forEach(function (id) { if (allowed[id]) questionRows.add(id); });
+        });
+      });
+      // Full filtered workspace, selected question and physical page differ.
+      // Pagination cannot redefine complete membership as the visible DOM slice.
+      host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
+      host.dataset.questionRowIds = JSON.stringify(Array.from(questionRows));
+      host.dataset.displayedRowIds = JSON.stringify(displayed);
+      host.dataset.queryScope = "filtered-workspace";
     }, applyLayout: function (root, comparison) {
       var mode = comparison ? "comparison" : "summary";
       if (root.body.dataset.comparisonView === mode) return;

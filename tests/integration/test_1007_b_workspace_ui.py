@@ -64,11 +64,15 @@ assert.equal(host.hidden,false);assert.equal(lookup.tbody.children.length,4);
 assert.equal(sandbox.document.body.dataset.comparisonView,'comparison');
 assert.equal(lookup.thead.children[0].children.length,5); // four columns plus study
 function text(node){return [node.textContent||'',...node.children.map(text)].join('|');}
+function firstFact(n){if(n.attributes['data-evidence-open'])return n;
+ for(const child of n.children){const found=firstFact(child);if(found)return found;}}
 assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除，待重新核实/);
 assert.match(text(lookup.tbody),/PRIME｜NCT04202679/);
 assert.doesNotMatch(text(lookup.tbody),/None|null/);
 assert.ok(text(lookup.tbody).includes('<script>bad</script>')); // literal safe text only
-assert.ok(lookup.tbody.children[0].children[1].children[0].attributes['data-evidence-open']==='a');
+assert.ok(firstFact(lookup.tbody.children[0].children[1]).attributes['data-evidence-open']==='a');
+assert.equal(host.dataset.queryScope,'filtered-workspace');
+assert.equal(JSON.parse(host.dataset.questionRowIds).length,3);
 const seen=new Set(JSON.parse(host.dataset.columnIds));
 lookup['[data-comparison-next]'].listeners.click();
 JSON.parse(host.dataset.columnIds).forEach(id=>seen.add(id));

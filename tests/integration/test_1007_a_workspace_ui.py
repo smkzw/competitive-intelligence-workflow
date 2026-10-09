@@ -69,14 +69,16 @@ assert.equal(new URL(url).searchParams.get('cmp_page'),'1');
 assert.equal(host.hidden,false);assert.equal(summary.hidden,true);assert.equal(lookup.tbody.children.length,4);
 assert.equal(sandbox.document.body.dataset.comparisonView,'comparison');
 function text(n){return [n.textContent||'',...n.children.map(text)].join('|');}
+function firstFact(n){if(n.attrs['data-evidence-row-id'])return n;
+ for(const child of n.children){const found=firstFact(child);if(found)return found;}}
 assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除/);
 assert.match(text(lookup.tbody),/PRIME｜NCT04202679/);
 assert.ok(text(lookup.tbody).includes('<img onerror=bad()>')); // literal text, no HTML parsing
-assert.equal(lookup.tbody.children[0].children[1].children[0]
+assert.equal(firstFact(lookup.tbody.children[0].children[1])
  .attrs['data-efficacy-row-id'],'source-a');
-assert.equal(lookup.tbody.children[0].children[1].children[0]
+assert.equal(firstFact(lookup.tbody.children[0].children[1])
  .attrs['data-evidence-row-id'],'source-a');
-assert.equal(lookup.tbody.children[0].children[1].children[0]
+assert.equal(firstFact(lookup.tbody.children[0].children[1])
  .attrs['data-evidence-collection'],'efficacy');
 const seen=new Set(JSON.parse(host.dataset.columnIds));
 lookup['[data-a-comparison-next]'].listeners.click();
@@ -93,6 +95,9 @@ sandbox.selected={product:['no-match']};sandbox.renderAComparison();
 assert.equal(lookup.tbody.children.length,0);assert.equal(currentGroups.length,0);
 sandbox.selected={};sandbox.renderAComparison();assert.equal(lookup.tbody.children.length,4);
 assert.ok(JSON.parse(host.dataset.queryRowIds).includes('last'));
+assert.equal(host.dataset.queryScope,'filtered-workspace');
+assert.ok(JSON.parse(host.dataset.questionRowIds).includes('last')); // paged off, still in question
+assert.ok(!JSON.parse(host.dataset.displayedRowIds).includes('last')); // first physical page
 columns[0].scientific_facet_ids=['frame-a','frame-b'];
 columns[0].facet_label_by_row={a:'FAS，48周',b:'PPS，24周'};
 sandbox.window.__A_COMPARISON_GROUPS__=[
@@ -107,7 +112,7 @@ lookup['[data-a-comparison-question]'].value='aa-unknown';
 sandbox.selected={};
 lookup['[data-a-comparison-question]'].listeners.change();
 assert.equal(new URL(url).searchParams.get('cmp'),'aa-unknown'); // unresolved still reachable
-const clearedButton=lookup.tbody.children[0].children[1].children[0];
+const clearedButton=firstFact(lookup.tbody.children[0].children[1]);
 assert.equal(clearedButton.attrs['data-evidence-row-id'],'source-c');
 assert.equal(clearedButton.attrs['data-evidence-collection'],'safety');
 const callbackStart=source.indexOf('  window.__A_COMPARISON_EVIDENCE__ = ');

@@ -37,12 +37,15 @@ body[data-kz-design="6.0"] { background: var(--bg); }
 .kz-comparison-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-block: 8px; }
 .kz-comparison-heading > :is(h1, p) { margin: 0; }
 .kz-comparison-fact { width: 100%; text-align: left; font: inherit; }
+#full-study-comparison :is(th, td) { vertical-align: top; }
+.kz-comparison-observations { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; gap: 4px 12px; }
+.kz-comparison-observation { min-width: 0; }
 #full-study-comparison button.kz-comparison-fact { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); align-items: baseline; gap: 2px 16px; }
 .kz-comparison-fact__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
 .kz-comparison-fact__identity { font-weight: 600; overflow-wrap: anywhere; }
 .kz-comparison-fact__value { font-size: 1.125em; font-variant-numeric: tabular-nums; color: var(--text-1); }
 .kz-comparison-fact__time { display: block; margin-top: 2px; color: var(--text-2); overflow-wrap: anywhere; }
-.kz-comparison-context { margin: 2px 0 8px; }
+.kz-comparison-context { margin: 2px 0 4px; }
 .kz-comparison-context > summary { cursor: pointer; color: var(--text-2); }
 .kz-comparison-context > p { margin: 4px 0; overflow-wrap: anywhere; }
 body[data-comparison-view="comparison"] .portal-identity { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 8px; min-width: 0; }

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "base_commit": "8eecf335ce3c276c15fe58e335aa29c006a410da",
+  "goal": "active verified 2026-10-09T19:45:42Z; no pause or release",
+  "execution_review": "reviews/codex_execution_ci-1007-joint-ab-context-bind-v1_review.md",
+  "source_candidate": {
+    "snapshot": "evidence-snapshot_fca99fb6250a1d7452356764",
+    "sha256": "2d0521aef6132555c4ebd8cd262281a93cb5e6c4da615075036960aa4462b154",
+    "prepared_bundle_sha256": "9abb175340ffc51505e70725f04c5e0830ea19dcda3b46d0c0cc54c181ee3784",
+    "recovered_receipt_relative": ".artifacts/1007-abc-current-integration-v1/working/project/evidence/library/joint-ab-source-context-v1/receipt-recovered-v1.json",
+    "recovered_receipt_sha256": "886dec3cd8c48e5d68f5cfd2e6b03f2c47cc8fa31159d4f9122b0ca9e0d670d7",
+    "facts": 105, "claims": 91, "sources": 3, "A_bindings": 91, "B_bindings": 91,
+    "new_versions": 33, "changed_N": 25, "same_value_changed_scope": 8,
+    "state": "candidate; 33 open conflicts; independent challenge and normal source acceptance pending",
+    "positive": "35 descriptive questions; pruritus NRS improvement has 32 observations / 3 studies / 2 products / 32 retained scientific facets; 3733 full members retained",
+    "numeric_equivalence_granted": false,
+    "normal_ingestion_or_registration_repeated": false,
+    "current_initialized": false
+  },
+  "v7_actual_browser": {
+    "A_site": "81faf82e76ac5e732c3600ec76ff23e800fc4dff4d8f1a2a786024ef4362a4e6",
+    "B_site": "3b853107ed41b772fd5ab78a0f3d334eafb38b0ad7135ea7a939ac84e8af71cb",
+    "render_receipt_sha256": "fb7cecb91974f0286c273584c9f4a8bd0fc21ff776e72e0c57d4955876249a30",
+    "qa_relative": ".artifacts/1007-abc-current-integration-v1/ab-v7-clinical-desktop-actual.json",
+    "qa_sha256": "30dfbc26357c6d17365f6251b3e999ff784e0c85339f22c2a49724bf42c2ff38",
+    "execution": "32 actual desktop states; eight source/Esc checks; literal contexts reachable; dense32 observations/43 studies preserved",
+    "raw_failures": "32 query/facts mismatch flags retained unchanged: probe wrongly equated complete filtered-workspace membership with one selected question/page. Existing production paging contract and Node production tests confirm separate scopes; explicit selected-question metadata added in new code, new real checks pending.",
+    "owner_viewed": ["A2560-dense-v7.png", "B1440-source-v7.png"],
+    "visual_defects": "A research label centered below first screen in tall cell; full-width observation/disclosure pairs still waste wide space; literal Week visits in hash order",
+    "accepted_as_final_visual": false
+  },
+  "new_bounded_code": {
+    "mode": "direct: objective real-page geometry and explicit scope artifacts decide the fix; source acceptance separately conference-reviewed",
+    "changes": "shared per-observation wrapper/grid; study cells top-aligned; single explicit Week labels presentation-ordered without conversion/merging; separate workspace/question/current-page membership metadata",
+    "RED": "pairing root case failed before wrapper; literal-week ordering root case failed before implementation",
+    "GREEN": "23 related production Node/pytest tests passed in 0.80s; three Node syntax checks, mechanical asset mirror and diff whitespace check passed; not a whole-repository gate",
+    "portal_js_sha256": "d3bd23cd7902e79f3360f130b0e2a17e6a1a7090b92941e097c60eb95af31207",
+    "kangzhe_site_css_sha256": "bedaab8cfb455ec0dfccadc0e0fff00cd6c589e15e04dc71e27068ed2c038e9c",
+    "report_a_js_sha256": "e6a287a069b0d5c9f5e88d5f8c49469241070546cc6cbe94d1163bb18401ddad",
+    "report_b_js_sha256": "edc4cbf504d1919762620cf1927a70ac5940b8fa6658b651c673dde96667ab6a",
+    "pending": "NEW v8 ordinary-renderer/Ego actual states; do not inherit v7 PASS or edit v7 receipt"
+  },
+  "conference": "ci-1007-joint-ab-source-challenge-v1; fresh readonly ZCode GLM-5.3-Flash/max requested; preflight PASS; running single terminal-event wait, actual identity/result pending",
+  "C": "unchanged e2 site035901b7, normally accepted report cd9f0978 and 258 source facts; existing 16 Ego states not rerun",
+  "remaining": "normal new A/B source acceptance/conflict resolution, latest joint ABC current save-clear-undo-sync/config/share, full source and MAH/publication/protocol closure, all physical pages/cross-browser, 24 portals, three hosts, fresh install/recovery/RC",
+  "next": "new v8 actual clinical comparison tests; collect existing C03 only after terminal; implement truthful normal source-only acceptance seam without faking FreshA universe_closed"
+}

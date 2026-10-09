@@ -4,6 +4,33 @@ import subprocess
 from pathlib import Path
 
 
+def test_comparison_scope_and_literal_visit_order_do_not_change_scientific_membership() -> None:
+    script = (Path(__file__).resolve().parents[2]
+              / "src/ci_workflow/renderers/portal/assets/portal.js")
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const start=source.indexOf('  function createComparisonQuestionOrder(');
+const end=source.indexOf('\n  window.__COMPARISON_QUERY__',start),sandbox={};
+vm.runInNewContext(source.slice(start,end),sandbox);
+const q=sandbox.createComparisonQuestionOrder(),host={dataset:{}},allowed={a:true,b:true,c:true};
+const columns=[{cells:{s:['a','b'],t:['b','blocked']}}],before=JSON.stringify(columns);
+q.recordScope(host,allowed,columns,['a']);
+assert.deepEqual(JSON.parse(host.dataset.queryRowIds),['a','b','c']);
+assert.deepEqual(JSON.parse(host.dataset.questionRowIds),['a','b']);
+assert.deepEqual(JSON.parse(host.dataset.displayedRowIds),['a']);
+assert.equal(host.dataset.queryScope,'filtered-workspace');assert.equal(JSON.stringify(columns),before);
+q.recordScope(host,{},columns,[]);assert.equal(host.dataset.questionRowIds,'[]');
+const rows={ten:{time:'Week10',value:0},two:{time:'Week 2'},again:{time:'Week2'},
+ missing:{value:null},range:{time:'Weeks 1–16'}};
+const ids=['missing','ten','two','range','again'],frozen=JSON.stringify({ids,rows});
+assert.equal(JSON.stringify(q.observationIds(ids,rows)),JSON.stringify(['two','again','ten','missing','range']));
+assert.equal(JSON.stringify({ids,rows}),frozen); // no unit conversion, imputation or eligibility
+"""
+    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+
+
 def test_comparison_fact_has_value_hierarchy_and_reachable_original_context() -> None:
     script = (Path(__file__).resolve().parents[2]
               / "src/ci_workflow/renderers/portal/assets/portal.js")
@@ -21,14 +48,21 @@ const row={row_id:'a',product_zh:'<script>literal</script>',arm:'治疗组',valu
  time:'Week24',difference_note:'分母不同，不共轴'};
 const frozen=JSON.stringify(row);
 query.factCell(doc,cell,button,row,'0 %','FAS，24周');
-assert.equal(cell.children[0],button);assert.equal(button.className,'kz-comparison-fact');
+const list=cell.children[0],observation=list.children[0];
+assert.equal(list.className,'kz-comparison-observations');
+assert.equal(observation.className,'kz-comparison-observation');
+assert.equal(observation.children[0],button);assert.equal(button.className,'kz-comparison-fact');
 assert.equal(button.children[0].children[1].textContent,'0 %');
 assert.equal(button.children[0].children[0].textContent,'<script>literal</script>｜治疗组');
 assert.equal(button.children[1].textContent,'Week24');
-const details=cell.children[1];assert.equal(details.children[0].textContent,'条件与限制');
+const details=observation.children[1];assert.equal(details.children[0].textContent,'条件与限制');
 assert.equal(details.children[1].textContent,'分母不同，不共轴');
 assert.equal(details.children[2].textContent,'FAS，24周');
 assert.equal(JSON.stringify(row),frozen);
+const second=new Node();query.factCell(doc,cell,second,{product_zh:'second',value:1},'1 %','');
+assert.equal(cell.children.length,1);assert.equal(list.children.length,2);
+assert.equal(list.children[1].children[0],second);
+assert.equal(list.children[1].children.length,1); // each disclosure belongs to its own observation
 const clear=new Node(),clearCell=new Node();
 query.factCell(doc,clearCell,clear,{product_zh:'drug',arm:'drug',value:null},
  '用户清除，待重新核实','');

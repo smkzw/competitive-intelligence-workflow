@@ -106,7 +106,7 @@
       columns.forEach(function (column) {
         var cell = document.createElement("td");
         var ids = (column.cells[studyId] || []).filter(function (id) {return !!allowed[id];});
-        ids.forEach(function (id) {
+        window.__COMPARISON_QUERY__.observationIds(ids, rowById).forEach(function (id) {
           var row = rowById[id]; if (!row) return;
           displayed[id] = true;
           var item = document.createElement("button"); item.type = "button";
@@ -135,8 +135,7 @@
       retained + "项研究；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
       "，本页" + Object.keys(displayed).length + "条事实，" + comparisonGroups.length +
       "个科学条件分面。匹配当前问题的研究先列，其余保留；数值共轴资格另判。";
-    host.dataset.queryRowIds = JSON.stringify(Object.keys(allowed));
-    host.dataset.displayedRowIds = JSON.stringify(Object.keys(displayed));
+    window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__ && window.__CHART_SYNC__.replaceGroups) {
       window.__CHART_SYNC__.replaceGroups(comparisonGroups);
