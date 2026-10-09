@@ -52,7 +52,8 @@ const sandbox={aComparisonPage:1,selected:{},
  history:{replaceState(_,__,next){url=new URL(next,url).href;}},
  __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';},
  replaceGroups(g){currentGroups=g;}}},
- document:{getElementById(){return host;},querySelector(){return summary;},
+ document:{body:{dataset:{}},querySelectorAll(){return [];},getElementById(){return host;},
+ querySelector(){return summary;},
  createElement(){return new Node();}}};
 const orderStart=common.indexOf('  function createComparisonQuestionOrder(');
 const orderEnd=common.indexOf('\n  window.__COMPARISON_QUERY__',orderStart);
@@ -66,6 +67,7 @@ assert.equal(lookup['[data-a-comparison-question]'].value,'easi');
 assert.equal(lookup['[data-a-comparison-question]'].options.length,2);
 assert.equal(new URL(url).searchParams.get('cmp_page'),'1');
 assert.equal(host.hidden,false);assert.equal(summary.hidden,true);assert.equal(lookup.tbody.children.length,4);
+assert.equal(sandbox.document.body.dataset.comparisonView,'comparison');
 function text(n){return [n.textContent||'',...n.children.map(text)].join('|');}
 assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除/);
 assert.match(text(lookup.tbody),/PRIME｜NCT04202679/);

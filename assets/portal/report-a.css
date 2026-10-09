@@ -1,4 +1,10 @@
 /* Observation panels preserve readable labels and exact values at narrow widths. */
+.kz-a-site #full-study-comparison { min-width: 0; }
+.kz-a-site #full-study-comparison[hidden] { display: none; }
+.kz-a-site #full-study-comparison > .kz-a-table-wrap { margin-top: 8px; }
+.kz-a-site [data-a-comparison-table] th { white-space: normal; overflow-wrap: anywhere; }
+.kz-a-site [data-a-comparison-table] th:first-child { width: 180px; }
+.kz-a-site [data-a-comparison-table] button { display: block; width: 100%; margin-block: 4px; padding: 6px; text-align: left; font: inherit; background: var(--surface, white); color: inherit; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; overflow-wrap: anywhere; }
 /* Configuration is a native disclosure, never a permanently expanded toolbar.
  * This A-owned rule replaces its desktop-hidden summary, not shared B/C styling.
  */

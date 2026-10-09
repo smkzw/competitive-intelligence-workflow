@@ -36,6 +36,7 @@
     if (!workspace || !host) return;
     var requested = new URLSearchParams(window.location.search || "").get("view") === "comparison";
     host.hidden = !requested;
+    window.__COMPARISON_QUERY__.applyLayout(document, requested);
     if (!requested) return;
     var select = host.querySelector("[data-comparison-column]");
     var questions = Object.create(null);

@@ -1,7 +1,7 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-  <header class="portal-page-head kz-b-page-head">
+  <header class="portal-page-head kz-b-page-head" data-comparison-summary-head>
     <h1 class="portal-page-title">{{ page_title }}</h1>
     <div class="kz-b-page-meta" aria-label="页面范围">
       <span>适应症：{{ report.indication }}</span>
@@ -10,6 +10,8 @@
   </header>
 
   {% if overview_conclusions %}
+  <details class="kz-comparison-disclosure" data-comparison-disclosure open>
+  <summary>首页核心结论与阅读边界</summary>
   <section class="kz-b-conclusions" aria-label="核心结论">
     <h2 class="kz-b-conclusions__title">核心结论</h2>
     <ul class="kz-b-conclusions__list">
@@ -18,10 +20,13 @@
       {% endfor %}
     </ul>
   </section>
+  </details>
   {% endif %}
 
   <div class="kz-b-filter-bar">
   {% if quick_filter_groups %}
+  <details class="kz-comparison-disclosure" data-comparison-disclosure open>
+  <summary>快速筛选产品</summary>
   <div class="kz-b-filter-quick" aria-label="快速筛选产品">
     <span class="kz-b-filter-quick__label">快速筛选产品</span>
     {% for group in quick_filter_groups %}
@@ -32,6 +37,7 @@
     </div>
     {% endfor %}
   </div>
+  </details>
   {% endif %}
   <details id="kz-filter-panel" class="kz-b-filter-panel">
     <summary class="kz-b-filter-summary">
@@ -84,14 +90,17 @@
   </div>
 
   <section class="kz-b-comparison-workspace" id="full-study-comparison" aria-labelledby="full-study-comparison-heading" hidden>
-    <h2 id="full-study-comparison-heading">全研究横比</h2>
+    <h1 id="full-study-comparison-heading" class="portal-page-title">全研究横比</h1>
+    <p class="kz-comparison-scope">{{ report.indication }}｜观察截止：{{ report.data_cutoff.strftime('%Y-%m-%d') }}</p>
     <p>研究行与共同临床问题列交叉查看；已知差异分列保留，缺口不补零。描述性对照不等于头对头证据。</p>
+    <div class="kz-comparison-controls">
     <label>选择比较问题<select data-comparison-column aria-label="选择比较问题"></select></label>
     <button type="button" data-comparison-prev>上一组条件</button>
     <button type="button" data-comparison-next>下一组条件</button>
+    </div>
     <p data-comparison-status aria-live="polite"></p>
     <div class="kz-b-comparison-scroll" tabindex="0" aria-label="全研究比较矩阵，可横向滚动">
-      <table class="kz-b-comparison-table"><thead></thead><tbody></tbody></table>
+      <table class="kz-b-comparison-table" data-primary-comparison-table><thead></thead><tbody></tbody></table>
     </div>
   </section>
 

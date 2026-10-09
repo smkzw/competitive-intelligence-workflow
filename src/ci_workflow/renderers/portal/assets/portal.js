@@ -98,6 +98,22 @@
       return Object.keys(questions).sort(function (left, right) {
         return priority(left) - priority(right) || (left < right ? -1 : left > right ? 1 : 0);
       });
+    }, applyLayout: function (root, comparison) {
+      var mode = comparison ? "comparison" : "summary";
+      if (root.body.dataset.comparisonView === mode) return;
+      root.body.dataset.comparisonView = mode;
+      root.querySelectorAll("[data-comparison-summary-head]").forEach(function (head) {
+        head.hidden = comparison;
+      });
+      root.querySelectorAll("[data-comparison-disclosure]").forEach(function (details) {
+        if (comparison) {
+          details.dataset.summaryOpen = String(details.open);
+          details.open = false;
+        } else if (details.dataset.summaryOpen !== undefined) {
+          details.open = details.dataset.summaryOpen === "true";
+          delete details.dataset.summaryOpen;
+        }
+      });
     } };
   }
   window.__COMPARISON_QUERY__ = createComparisonQuestionOrder();
@@ -1308,6 +1324,7 @@
     var tables = scope.querySelectorAll(".kz-a-table-wrap table, table.kz-chart-table");
     for (var i = 0; i < tables.length; i += 1) {
       var table = tables[i];
+      if (table.hasAttribute("data-primary-comparison-table")) continue;
       if (table.closest && table.closest(".kz-complete-table")) continue;
       if (table.getAttribute("data-kz-complete-table") === "true") continue;
       table.setAttribute("data-kz-complete-table", "true");

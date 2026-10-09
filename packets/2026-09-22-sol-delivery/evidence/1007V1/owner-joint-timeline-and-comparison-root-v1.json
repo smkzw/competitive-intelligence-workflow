@@ -1,0 +1,64 @@
+{
+  "schema_version": "1007-bounded-root-receipt-1",
+  "base_commit": "6530fea8746fdefb256f3d680c8cf22b94401f67",
+  "goal_state": "active_verified",
+  "method": "owner minimal shared-code batch; completed independent source challenge retained; new candidate must be reviewed before adoption",
+  "independent_review": {
+    "task": "ci-1007-joint-c-source-review-v1",
+    "actual_adapter": "pi",
+    "actual_provider": "openai-codex",
+    "actual_model": "gpt-6.1-sol",
+    "requested_effort": "high",
+    "session_id": "01a121d9-213b-7000-b55d-08b5f52a1e7f",
+    "returncode": 0,
+    "fallback": null,
+    "result": "unsigned_proposed_recoverable_veto",
+    "blocking_issues": 4,
+    "root_cause": "timeline not structurally extracted was mislabelled source not disclosed",
+    "candidate_content_digest": "618518ede4aa50421151b0f8381c1c53bd12ad4bce71cdedfdab01f3814315ff",
+    "candidate_site_digest": "17239d9e00c1564574fe03ef442b4f21c41aea0e50c7859ba473bc6b414fe669",
+    "proposed_file_sha256": "903014d7e1c7cb5e2c74c4071aea97db5d0fbe360d81f2b360f593ecffdc2f1d",
+    "verdict_digest": "9618e065879554db23a2a7c4b06f5a42b3e78a8f3ed374f3331deb46bb371fc8",
+    "owner_production_schema_validation": "passed; 4 source references and 250 locators",
+    "signed_issuer": false,
+    "adopted": false,
+    "historical_files_rewritten": false
+  },
+  "source_boundary": {
+    "NCT04183335": "24-week dosing; last IMP plus 14 weeks / up to 36 weeks observation window",
+    "NCT04202679": "24-week dosing; control at arm index 0; observation last IMP plus 14 weeks / up to 36 weeks",
+    "NCT04501666": "16-week arm description versus 24-week safety timeframe retained as original conflict",
+    "NCT04501679": "16-week dosing and source outcome timeframe",
+    "full_visit_calendar": "not closed; no inferred follow-up or reconciled conflict",
+    "new_scientific_acceptance": false
+  },
+  "code_changes": [
+    "C missing/unprojected timeline states now disclose extraction/review boundary, not blanket source absence",
+    "C existing treatment and endpoint pages linked to retained exact source windows",
+    "A/B task-specific comparison heading, bounded native question control and collapsible ancillary summary/filters",
+    "filter rerender preserves native disclosure choices; return to summary restores previous disclosure state",
+    "primary comparison table exempted from generic auxiliary-table folding; auxiliary tables still folded",
+    "no smaller type, overflow masking, synthetic points, numeric regrouping, source/DB/current edits"
+  ],
+  "checks": {
+    "root_red": "4 failed, 20 deselected in 2.05s",
+    "related_green": "48 passed in 5.02s",
+    "related_scope": [
+      "tests/integration/test_1007_comparison_task_layout.py",
+      "tests/integration/test_1007_a_workspace_ui.py",
+      "tests/integration/test_1007_b_workspace_ui.py",
+      "tests/integration/test_1007_a_workspace.py",
+      "tests/integration/test_1007_comparison_question_order.py",
+      "tests/reports/c/test_1007_c2_presentation_veto_root.py",
+      "tests/integration/test_1007_identity_consumers.py"
+    ],
+    "ruff": "5 changed Python files passed after 6 line-length-only failures corrected",
+    "strict_mypy": "report_c.py passed",
+    "node_syntax": "portal.js, report-a.js, report-b.js passed",
+    "asset_mirror": "existing mechanical sync completed",
+    "latest_physical_browser": "NOT_RUN for this new layout batch",
+    "wide_gate": "NOT_RUN for this code revision"
+  },
+  "next_safe_action": "new A/B v3 presentation attempt; new C source-review candidate rather than overwriting old site/verdict; same independent session may challenge changed missing-state page and bindings",
+  "release": "development_candidate_not_RC; same-current ABC, scientific adoption, real matched efficacy, full source/universe/publication/China-MAH closure, fresh offline browser, 24 portals, three hosts and final gates remain open"
+}

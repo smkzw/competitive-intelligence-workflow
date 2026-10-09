@@ -2,6 +2,16 @@
 
 ## 当前：同来源联合ABC副本与fresh C03科学复核
 
+最新终态：Pi/OMP gpt6.1sol请求high session01a121d9已exit0/no fallback，四源
+同根因未提取≠未公开，unsignedrecoverableVETO903014d7/schema9618e065如实保留。
+Owner生产Schema核4source/250locator；没有接受/DB/current写入。Direct最小根因
+修C缺口与A/B任务chrome，独立科学变更须新候选同会话挑战，不重提258行。
+4RED2.05s→48相关PASS5.02s，Ruff5/strictC/Node3/机械镜像；原生筛选手动展开
+不会被rerender关闭，主任务矩阵不折叠，附属表仍折叠；16/24源冲突不推断调和。
+旧A1440scroll1809/table884且折叠/Btable880实屏失败保留；本批NEW v3与C新候选
+尚待真实运行。最新owner-joint-timeline-and-comparison-root-v1/STATUS签精确范围。
+GoalACTIVE连续实施，以下旧PENDING只为当时进度，不等待旧PID或再派同一审查。
+
 共同靶点显示实际Ego复现：身份头已有，图/表/筛选0核实。Direct根因包复用
 cutoff-qualified投影，不做新医学判断/字典/机制；三个renderer同一helper。
 4RED1.19s→56相关PASS8.29s（先前8.91s，fixture补精确target原文后再核同组），

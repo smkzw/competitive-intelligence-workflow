@@ -55,7 +55,7 @@
   {% endif %}
 
   <main class="portal-main kz-a-main" id="main">
-    <header class="portal-page-head kz-a-page-head">
+    <header class="portal-page-head kz-a-page-head"{% if current == 'clinical-portfolio' %} data-comparison-summary-head{% endif %}>
       <span class="kz-a-page-ambient" aria-hidden="true"></span>
       {% block kicker %}{% endblock %}
       <h1 class="portal-page-title">{% block heading %}{% endblock %}</h1>

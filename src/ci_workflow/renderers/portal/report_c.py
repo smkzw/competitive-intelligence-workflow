@@ -2326,7 +2326,7 @@ def _render_page_context(
             and _text(o.assessment_timepoint)
         ]
         _tp_ok = [o for o in _tp_ok if _text(o.assessment_timepoint)]
-        if visit_obs and not _tp_ok:
+        if not _tp_ok:
             visit_insufficient = True
             # 证据不足收口：不再渲染无信息量的空轴图
             groups = ()
@@ -2483,6 +2483,7 @@ def _render_page_context(
         # The comparison entry reuses the existing source-comparison query surface.
         "comparison_href": f"{prefix}overview.html?view=comparison",
         "endpoint_definitions_href": f"{prefix}endpoint-timepoint-matrix.html",
+        "treatment_arms_href": f"{prefix}treatment-arms.html",
         "show_comparison_entry": catalog_page_id == "overview" and trial is None,
     }
 

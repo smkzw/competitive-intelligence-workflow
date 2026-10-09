@@ -46,7 +46,8 @@ const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:row
  get href(){return url;}},history:{replaceState(_,__,next){url=next;}},
  __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';},
  replaceGroups(g){currentGroups=g;}}},
- document:{getElementById(){return host;},createElement(){return new Node();}},
+ document:{body:{dataset:{}},querySelectorAll(){return [];},getElementById(){return host;},
+ createElement(){return new Node();}},
  matches(id,current){return !current.trial||rows[id].trial_id===current.trial;},
  selectedState(){return state;}};
 const orderStart=common.indexOf('  function createComparisonQuestionOrder(');
@@ -60,6 +61,7 @@ sandbox.renderComparisonWorkspace({});
 assert.equal(lookup['[data-comparison-column]'].value,'efficacy::easi75');
 assert.equal(lookup['[data-comparison-column]'].options.length,2);
 assert.equal(host.hidden,false);assert.equal(lookup.tbody.children.length,4);
+assert.equal(sandbox.document.body.dataset.comparisonView,'comparison');
 assert.equal(lookup.thead.children[0].children.length,5); // four columns plus study
 function text(node){return [node.textContent||'',...node.children.map(text)].join('|');}
 assert.match(text(lookup.tbody),/0 %/);assert.match(text(lookup.tbody),/用户清除，待重新核实/);

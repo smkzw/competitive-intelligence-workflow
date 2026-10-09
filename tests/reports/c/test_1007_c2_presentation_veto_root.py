@@ -76,6 +76,36 @@ def _endpoint_definition(report: ReportCPortalData):
                 if item.field == "primary_endpoint_definition")
 
 
+@pytest.mark.parametrize("has_dosing", [True, False])
+def test_unprojected_timeline_never_claims_registry_absence(
+    pnh_report: ReportCPortalData, tmp_path: Path, has_dosing: bool,
+) -> None:
+    observations = tuple(
+        item.model_copy(update={"assessment_timepoint": None})
+        if item.field == "dosing_regimen" else item
+        for item in pnh_report.observations
+        if item.field != "visit_schedule" and (has_dosing or item.field != "dosing_regimen")
+    )
+    data = pnh_report.model_copy(update={"observations": observations})
+    catalog = PageRegistry.load().catalog(ReportKind.C)
+    page = next(item for item in catalog.pages if item.id == "visit-duration-followup")
+    context = _render_page_context(data, page=page, catalog=catalog)
+    assert context["visit_insufficient"] is True
+    assert context["chart_groups_json"] == "[]"  # no invented time axis
+    site = tmp_path / "timeline"
+    render_report_c_site(data, site, review_candidate=True)
+    html = (site / "visit-duration-followup.html").read_text(encoding="utf-8")
+    assert "尚未完成结构化提取或复核" in html
+    assert "未结构化提取不等于来源未公开" in html
+    assert "绑定登记来源未公开本组试验" not in html
+    assert 'href="treatment-arms.html"' in html
+    assert 'href="endpoint-timepoint-matrix.html"' in html
+    # Raw treatment/endpoint windows stay in their own existing evidence surfaces.
+    if has_dosing:
+        dose = next(item for item in observations if item.field == "dosing_regimen")
+        assert dose.source_text[:60] in (site / "treatment-arms.html").read_text()
+
+
 # ─── 根 1：实际入组限定与原始计数/例单位一起可见 ─────────────────────────────
 
 

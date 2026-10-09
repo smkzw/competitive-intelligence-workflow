@@ -1,4 +1,18 @@
-# 唯一当前状态：1007V1 连续实施，同来源联合ABC候选；C独立来源复核运行中
+# 唯一当前状态：1007V1 连续实施；联合C可恢复否决已落档，新布局与缺口根因已修
+
+源码基线6530fea；fresh Pi/OMP gpt-6.1-sol请求high C03已终态exit0/no fallback，
+不是PENDING：四研究同根因——未提取时间线被误写成来源未公开。Owner生产Schema
+核验veto9618e065/文件903014d7、4来源/250定位；只是未签名可恢复否决，无采用/current。
+旧C258/site17239d9e/否决保持。16周给药与24周观察的源冲突不调和、不猜随访。
+本批C改提取/复核边界并接原给药/终点页；A/B共享任务chrome、原生披露状态、
+有界问题选择器及主矩阵不折叠。4成族RED→48相关PASS5.02s，Ruff五文件/strictC、
+Node三文件与作者镜像；初次六行长FAIL保留。不隐藏事实或缩字号，不动DB/current。
+真实旧A横比1440宽溢出1809、表起点884且被折叠；B起点880已复现。NEW布局
+尚待v3普通入口实屏，不能以Node测试签视觉通过或继承旧候选PASS。
+[本批精确范围与已结束复核](evidence/1007V1/owner-joint-timeline-and-comparison-root-v1.json)。
+下一有界动作：生成新A/B v3并做Ego184实际宽屏；新C候选重绑定缺口页后同独立
+会话验证变更，再走正常issuer/采用。全目标ACTIVE，非暂停/完成/RC。
+以下为6530及之前的历史进度，原PENDING已由本节终态取代，不等待旧PID。
 
 实际新A/B呈现49/101物理页已生成，共同身份binding184e3e83、DB/C请求/input
 保持。Ego184新A实屏复现已核靶点只在身份头、图/表/筛选仍旧值的共同缺陷。
@@ -6,14 +20,14 @@
 PASS8.29s/Ruff五文件/strict生产四文件。只签代码范围，最新实屏/宽门仍待。
 [共享靶点显示根因/范围](evidence/1007V1/owner-shared-target-display-v1.json)。
 
-源码01132f9保持；ABC来源接线节点已终态，owner只读核验24个固定输入，四研究
+当时源码01132f9；ABC来源接线节点已终态，owner只读核验24个固定输入，四研究
 JSON仅versionHolder不同。旧AB/C9的来源/当前用户值/接受边界不同，不拼签名。
 复用既有同来源联合项目及12片段身份图，隔离副本48文件/73568448字节，只有
 新副本forward0018；旧来源/current保持。新C258候选618518ed/contextdded65fd/
 site17239d9e已正常准备，gateBLOCKED（未采用）如实保留，没有跨项目继承回执。
 辅助记录字段错误发生于真实准备完成之后，只读恢复原receipt_path，不重跑摄取。
-一次fresh Pi/OMP18.8.6/openai-codex/gpt-6.1-sol请求high C03已实际启动；正常
-产品issuer、来源采用、ABC current及新科学接受仍待完成。仅结束事件等待7200s，
+一次fresh Pi/OMP18.8.6/openai-codex/gpt-6.1-sol请求high C03当时已实际启动；正常
+产品issuer、来源采用、ABC current及新科学接受仍待完成。当时仅结束事件等待7200s，
 不轮询progress、不因延迟换模型。主节点和备用修复均为执行，不能当独立意见。
 [精确接线/副本/运行范围](evidence/1007V1/owner-abc-source-integration-preparation-v1.json)。
 

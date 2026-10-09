@@ -1,14 +1,13 @@
 /* B 类门户视觉层：只扩展共享门户 token，不引入远程字体或组件。 */
 .kz-b-comparison-workspace { margin-block: var(--portal-section-gap, 16px); }
 .kz-b-comparison-workspace[hidden] { display: none; }
-.kz-b-comparison-workspace h2 { margin: 0 0 8px; }
+.kz-b-comparison-workspace h1 { margin: 0 0 8px; }
 .kz-b-comparison-workspace p { margin-block: 8px; }
 .kz-b-comparison-scroll { max-width: 100%; overflow-x: auto; border: 1px solid var(--b-line); border-radius: var(--b-radius); }
 .kz-b-comparison-table { width: 100%; border-collapse: collapse; }
 .kz-b-comparison-table th, .kz-b-comparison-table td { min-width: 180px; max-width: 420px; padding: 10px 12px; vertical-align: top; text-align: left; border-bottom: 1px solid var(--b-line); overflow-wrap: anywhere; }
 .kz-b-comparison-table th:first-child { min-width: 150px; }
 .kz-b-comparison-table button { display: block; width: 100%; margin-block: 6px; padding: 6px; text-align: left; font: inherit; color: inherit; background: var(--b-soft); border: 1px solid var(--b-line); border-radius: 6px; cursor: pointer; }
-.kz-b-comparison-workspace select { max-width: min(600px, 70vw); font: inherit; }
 
 :root {
   --b-ink: #0f1115;

@@ -1992,6 +1992,7 @@
     if (!host || !workspace || !rows) return;
     var params = new URLSearchParams(window.location.search || "");
     host.hidden = params.get("view") !== "comparison";
+    window.__COMPARISON_QUERY__.applyLayout(document, !host.hidden);
     var summary = document.querySelector("[data-a-portfolio-summary]");
     if (summary) summary.hidden = !host.hidden;
     if (host.hidden) return;

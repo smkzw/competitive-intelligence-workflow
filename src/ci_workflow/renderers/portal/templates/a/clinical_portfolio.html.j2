@@ -3,21 +3,27 @@
 {% block lead %}按产品、靶点、阶段和地域多选查看全部核心与支持研究，筛选同时作用于图形和完整表格。{% endblock %}
 {% block content %}
 <section class="kz-a-panel" data-module="clinical-portfolio">
+  <details class="kz-comparison-disclosure" data-comparison-disclosure open>
+  <summary>研究筛选：产品、靶点、阶段与地域</summary>
   <div class="kz-a-filter-grid">
     {{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}
     {{ ui.filter_group('target', '靶点', products|map(attribute='target')|unique|list) }}
     {{ ui.filter_group('phase', '阶段', trials|map(attribute='phase')|unique|list) }}
     {{ ui.filter_group('region', '地域', trials|map(attribute='region')|unique|list) }}
   </div>
+  </details>
   <section id="full-study-comparison" hidden aria-labelledby="a-comparison-title">
-    <h2 id="a-comparison-title">全研究横比</h2>
+    <h1 id="a-comparison-title" class="portal-page-title">全研究横比</h1>
+    <p class="kz-comparison-scope">{{ report.indication }}｜观察截止：{{ report.data_cutoff.strftime('%Y-%m-%d') }}</p>
     <p>同一临床问题按明确语义匹配的条件列对照；差异与未知保留，不能解释为头对头研究。</p>
+    <div class="kz-comparison-controls">
     <label>比较问题<select data-a-comparison-question aria-label="比较问题"></select></label>
     <button type="button" data-a-comparison-prev>上一组条件</button>
     <button type="button" data-a-comparison-next>下一组条件</button>
+    </div>
     <p data-a-comparison-status aria-live="polite"></p>
     <div class="kz-a-table-wrap" tabindex="0" aria-label="全研究横比矩阵，可横向滚动">
-      <table data-a-comparison-table><thead></thead><tbody></tbody></table>
+      <table data-a-comparison-table data-primary-comparison-table><thead></thead><tbody></tbody></table>
     </div>
     <div id="kz-chart-module" aria-label="当前比较问题联动图"></div>
   </section>
