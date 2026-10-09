@@ -571,6 +571,13 @@
         : lead.getAttribute("data-c-summary-text") || "";
       var copy = document.querySelector(".kz-c-comparison-entry__copy");
       if (copy) copy.hidden = active;
+      // Keep the existing advanced filters available without a separate
+      // full-width chrome row ahead of the comparison. No query is changed.
+      var filters = document.getElementById("kz-filter-panel");
+      var tools = document.querySelector(".kz-c-section-heading");
+      if (active && filters && tools && filters.parentNode !== tools) {
+        tools.appendChild(filters);
+      }
       if (typeof document.title === "string") {
         var prefix = document.title.indexOf(" - ");
         document.title = (active ? "全研究横比" : summaryTitle)

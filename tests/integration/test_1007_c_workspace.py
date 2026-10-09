@@ -80,6 +80,9 @@ function makeNode(tag) {
     },
     removeAttribute(k) { delete node.attrs[k]; },
     appendChild(child) {
+      if (child.parentNode) {
+        child.parentNode.children = child.parentNode.children.filter((item) => item !== child);
+      }
       child.parentNode = node;
       node.children.push(child);
       return child;
@@ -295,6 +298,9 @@ function buildSkeleton(doc, page) {
   reset.setAttribute("data-filter-reset", "");
   panel.appendChild(reset);
   body.appendChild(panel);
+  const workbenchTools = doc.createElement("div");
+  workbenchTools.className = "kz-c-section-heading";
+  body.appendChild(workbenchTools);
   const module = doc.createElement("div");
   module.setAttribute("id", "kz-chart-module");
   const visuals = doc.createElement("div");
@@ -427,6 +433,7 @@ function snapshot(ctx) {
     task_title: collectText(doc.querySelector("[data-c-task-title]")),
     summary_hidden: doc.querySelector("[data-c-summary-only]").hidden,
     summary_nav: doc.querySelector("[data-c-summary-nav]").getAttribute("aria-current"),
+    advanced_filter_parent: doc.getElementById("kz-filter-panel").parentNode.className,
   };
 }
 
@@ -626,6 +633,7 @@ def test_comparison_has_one_task_heading_and_no_duplicate_summary(
     assert initial["task_title"] == "全研究横比"
     assert initial["summary_hidden"] is True
     assert initial["summary_nav"] == "false"
+    assert initial["advanced_filter_parent"] == "kz-c-section-heading"
     # Matrix membership, source details and the return-summary link stay intact.
     assert initial["table_present"] and initial["last_reachable"]
 
