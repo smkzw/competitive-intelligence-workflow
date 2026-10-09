@@ -14,6 +14,8 @@ e4b687f3；105事实/91声明仍未采用，无全宇宙门或报告晋级。预
 实际终态/回执仍待。正常签发宿主不支持ZCode app-server，显式使用live C03
 允许OMP兼容路线，不静默换模型或称另一个意见。
 四文件人数范围展示E03并行运行；共享schema/接受/current由owner负责。
+A/B输入继承共同source_evidence_snapshot_id，旧缺省载荷不变；2成族RED→
+21相关PASS7.29s/Ruff/strict通过。未借源码GREEN签真实current保存。
 [唯一最新精确恢复](evidence/1007V1/owner-registry-scope-repair-and-formal-source-v1.json)。
 下一只收既有终态，正常来源采用后接最新ABC真实编辑/同步/配置/离线分享。
 current仍无；全源/24门户/三宿主/安装/恢复/RC仍开；Goal实查ACTIVE，非暂停。

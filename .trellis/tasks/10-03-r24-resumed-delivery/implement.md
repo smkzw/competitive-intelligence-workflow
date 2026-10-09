@@ -9,6 +9,8 @@ issuer分层；同源同标量旧分母范围成族30PASS2.46s，Ruff/strict/dif
 route20:09:47UTC启动，终态未到，105/91仍candidate；无全宇宙门/current。
 四文件展示E03并行，owner单一接受/共享身份责任。C e2及ABv8旧已验不重跑。
 最新STATUS与owner-registry-scope-repair-and-formal-source-v1为恢复点，ACTIVE。
+A/B builder共同scope字段六行补齐，旧payload不变，2RED→21相关PASS7.29s。
+source selector/保存授权不改，NEW真实current未跑；详见owner-ab-builder-source-scope-v1。
 接下来只收既有终态、正常采用后重建NEW显示候选，接同项目ABC真实任务。
 以下均为版本历史，不代表当前PENDING/下一动作。
 

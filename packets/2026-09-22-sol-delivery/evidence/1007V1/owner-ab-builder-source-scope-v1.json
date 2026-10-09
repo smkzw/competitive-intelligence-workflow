@@ -1,0 +1,11 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "parent_commit": "e1fbb7ed",
+  "root_cause": "Existing current source-scope selector reads source_evidence_snapshot_id from hash-pinned input. C supplies it; A/B strict models reject the field, so a new joint builder cannot pin its legitimate scope.",
+  "change": "Six-line optional shared field on ReportAPortalData inherited by B. Existing current selector unchanged; None omitted so legacy payload bytes/digest remain unchanged. Explicit malformed snapshot identifiers refused.",
+  "red": "2 failed/4 passed in1.29s; actual A/B valid scope rejected as extra field",
+  "green": "21 passed in7.29s: new A/B roundtrip/legacy/bad-scope family plus snapshot-scoped consumers and production B efficacy source views",
+  "static": "Ruff two files PASS; strict-mypy report_a module PASS",
+  "not_run": "No live current initialization/save/re-render performed for this code change; source acceptance and display worker remain separate pending nodes, not implied PASS.",
+  "next": "New A/B builder inputs pin exact fca99 snapshot after formal accepted-source projection; C keeps its own exact accepted source snapshot; use normal current APIs without copying historical PASS."
+}

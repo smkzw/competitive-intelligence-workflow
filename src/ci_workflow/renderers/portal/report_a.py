@@ -392,6 +392,12 @@ class ReportAPortalData(BaseModel):
     report_version: str
     indication: str
     data_cutoff: datetime
+    # Shared with C and consumed from hash-pinned builder bytes by the existing
+    # current scope selector. Missing legacy scope stays byte-compatible.
+    source_evidence_snapshot_id: str | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+        pattern=r"^evidence-snapshot[_-][A-Za-z0-9._:-]+$",
+    )
     products: tuple[ProductRow, ...] = Field(min_length=1)
     trials: tuple[TrialRow, ...] = Field(min_length=1)
     efficacy: tuple[EfficacyRow, ...] = ()
