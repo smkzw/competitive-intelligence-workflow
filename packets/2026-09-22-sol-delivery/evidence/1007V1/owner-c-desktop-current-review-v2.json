@@ -1,0 +1,92 @@
+{
+  "schema_version": "1007-c-desktop-current-root-family-2",
+  "code_commit": "9823a35eea4288f89bc0d6b53dd712a6b711d701",
+  "scope": "Real PN four-study C representative overview/summary/comparison; not the full universe, every physical page or release",
+  "current": {
+    "project": ".artifacts/1007-c3-current-journey-v1/project",
+    "revision": 8,
+    "generation_sha256": "8f392a4806632eb7f8a30c8f221ed2bdd911a0cdb3f68c3ebe94328bbc989bd1",
+    "report_path": "reports/C/v1-presentation-r8/html",
+    "render_manifest_sha256": "d62eb3e9d66ccb10d2cc97969f8c1c4c207a8fd70a5c74bf237a0e1d89e35d64",
+    "facts": 258,
+    "fact_revision_digest": "1fff35c76f23090c5395852835adc68e81fa61ecc0712a20ff29edb1527f8d55",
+    "seven_source_fact_edit_tables_unchanged_from_r5_r6": true,
+    "original_files_preserved": 215,
+    "operations": "normal presentation-only r5/r6/r7/r8; no additional clinical saves or source readoption; original project current remains absent",
+    "science_acceptance": "not inherited from frozen C3 for user-modified current"
+  },
+  "source_code_sha256": {
+    "report-c.js": "0baa49ec9db02de5e6d1cd8dbec50a47bcbcd1dce6bb9e32aff41edfdeb5c5d8",
+    "report-c.css": "0015bc5f537c5e461510962c98baa00456530f2fd4a7c268c26c56d7ee16406c"
+  },
+  "failure_and_repair": [
+    "r4 actual16 screenshots REVISE: home heading/nav/summary repeated in comparison; current source leaked internal key and wrongly cleared inapplicable scale/timepoint",
+    "r5 actual CSS computed grid ignored native hidden: fixed authored :not([hidden]) selector and mirror; r6 actual computed none",
+    "r6 genuine independent visual REVISE: default home matrix spanned only one of twelve grid columns; explicit full-span root fix in f3c6a08",
+    "r7 full-span browser GREEN still exposed unsuitable long-clause homepage chart; D2 summary now stops duplicate ECharts and hidden-analysis filter, preserves all facts in genuine independent comparison",
+    "all old source values, hashes, screenshots, ZIPs, VETO and REVISE records retained; no reviewer suggestion to overwrite C6 screenshot adopted"
+  ],
+  "browser": {
+    "engine": "Ego Lite",
+    "space": 184,
+    "pages": ["p1", "p2"],
+    "widths_css": [1440,1600,1920,2560],
+    "height_css": 1000,
+    "canonical_release_viewport_heights": "NOT_RUN; this batch verifies four required widths at height1000, not all canonical width-height combinations",
+    "states": {"dense":258,"sparse":4,"filtered-sparse":2,"source":2},
+    "comparison_receipt": ".artifacts/1007-c3-desktop-ego-v1/four-width-current-r8.json",
+    "comparison_receipt_sha256": "d6f9fb9ab3afb02b292770b9d112b68372a9a54a337597e41d433802b932c2d1",
+    "comparison_screenshots": 16,
+    "summary_receipt": ".artifacts/1007-c3-desktop-ego-v1/summary-current-r8.json",
+    "summary_receipt_sha256": "af611c1dbf386acef989b29a08e8f7dff43903defc5935dcde1d231871d96899",
+    "owner_actual_image_inspection": "all16 r6, all4 r7 summary, and9 specified r8 images; remaining r8 images captured/runtime checked, not separately owner inspected",
+    "objective_checks": "actual counts, no document horizontal overflow, summary/comparison switching, source151 vs current-cleared, Esc actual opener at four widths; home no duplicate chart initialization",
+    "owner_visual_judgment": "P1 collapse and duplicate-task defects closed for inspected object only; full-page/product visual acceptance remains open",
+    "density_open": "comparison table top464.18/486.58CSSpx exceeds PRD suggested280 goal; compact desktop chrome remains a bounded optimization, not hidden by reviewer ACCEPT"
+  },
+  "independent_review": {
+    "agent": "Pi/OMP18.8.6",
+    "provider": "google-antigravity",
+    "observed_model": "gemini-3.8-flash",
+    "requested_effort": "high",
+    "catalog": "image input and high thinking advertised; runtime model exact, no silent substitution",
+    "session": "01a1218b-ebe1-7000-ab06-08e066872232",
+    "fresh_initial_context": true,
+    "followup": "same real session, not a second independent opinion",
+    "initial": {"seconds":560.223,"tools":118,"images":18,"exit":0,"verdict":"REVISE","report_sha256":"3eefc3a79eccfe698156e91932a3e2b10716166b39c70b58d31966678d6f2304"},
+    "followup_result": {"seconds":234.21,"tools":58,"images":9,"exit":0,"verdict":"ACCEPT_BOUNDED","report_sha256":"905e758fe31ad403f8928cf20e6af7acc4122f834663c1f6c73f8cfe422c7aea"},
+    "fallback": null,
+    "waiting": "single kqueue process-exit event; no progress/controller polling, re-dispatch or latency kill",
+    "limitations": "reviewer visual ACCEPT does not prove unlogged resource404 absence, scriptless interactive use, medical equivalence, fresh-browser or full release; followup aimed<=20 calls but actually58, next packet must reduce traversal and only challenge material changes"
+  },
+  "verification": {
+    "root_tests_before_desktop": "51 related18.59s,18 presentation transactions40.98s; staticRuff4/strictreport_c1/Node",
+    "wide": "actual quality-only six steps on78715c7: Ruff src/tests/tools, strict286 files, active1185PASS493.33s, retained20PASS1.15s, layer7PASS0.37s, lexical legacy check",
+    "wide_log_sha256": "f3e120263aaec41403355ecf63204be31ff39e63216821d40a20f746dd19cd26",
+    "later_css_roots": "dd0768 native-hidden7relatedPASS1.11s; f3c6a08 offline-assets6PASS0.03s and author-mirror1PASS0.04s; actual four-width matrix width equals grid",
+    "latest_root": "genuine production summary invokes unwanted graphic RED after correcting empty-query harness bug; minimal complete family26PASS26.28s, Ruff test and Node syntax passed",
+    "wide_not_inherited": "787 wide predates later CSS/summary changes; targeted regression and actual browser binding only for latest code, no full-release claim"
+  },
+  "share": {
+    "revision":8,
+    "path":".artifacts/1007-c3-desktop-ego-v1/current-c-r8-share.zip",
+    "sha256":"2d68dbd205a2b4e4de3fa747c59e457cac209b87743023c6d76ec459cfd39110",
+    "members":35,
+    "current_generation":true,
+    "configured_entry":"C/overview.html?criteria_q=样本量&view=comparison",
+    "moved_directory":".artifacts/1007-c3-desktop-ego-v1/offline-moved-r8",
+    "runtime_receipt_sha256":"7103205d64738b26505505b50ef71158f3deaa8013eba60c49efbe4bb0490811",
+    "runtime":"actual target offline plus cache-disabled; newpage p2, preserved4 observations/config, original151 accessible/currentcleared, Esc opener, offline restoredfalse",
+    "fresh_browser_or_profile":"NOT_RUN, same Ego profile; do not conflate cache-disabled new page with fresh browser"
+  },
+  "recovery": {
+    "do_not_repeat":"258 source adoption/C3 medical review/four current QA saves/completed presentation requests/ZIP generation/translation; reopen existing receipts and exact current8 instead",
+    "runtime_server":"task-owned local edit server may still run; verify before reuse, no future recovery by stale PID",
+    "raw_retention":"unique .artifacts current, sourcecopy, failed/accepted screenshot and ZIPs retained local; compact receipt entersGit; no arbitrary cache/test cleanup",
+    "unknown_user_work":"five unrelated tracked edits and unknown untracked files preserved, no broad staging or old-root access"
+  },
+  "remaining": ["same-current ABC", "full universe and required publications", "verified Chinese MAH/group/name/target enrichment", "C arm-scope label ambiguity", "all physical pages and canonical desktop viewports", "cross-browser and fresh-browser offline", "24 portals/3 hosts/fresh-install/recovery/RC"],
+  "goal": "active, full objective incomplete, no phase pause",
+  "next": "bounded compact comparison chrome under existing task; integrate real C source/bindings with same-project A/B through normal contracts, no new platform or full-review loop",
+  "release":false
+}
