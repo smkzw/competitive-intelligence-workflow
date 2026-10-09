@@ -1,0 +1,52 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "parent_code_commit": "817994ee7b84ea20168e34d86ee9a16a977f837a",
+  "status": "CONTINUOUS_IMPLEMENTATION_NOT_PAUSED_NOT_RC",
+  "current": {
+    "project": ".artifacts/1007-abc-current-integration-v1/working/project",
+    "revision": 9,
+    "generation_sha256": "b14e9f368f2982e7acd338a3517a1803313b68c47ddadd4466b196585b3f53cf",
+    "fact_revision_digest": "a95fda6e5ddb1961c5cd92fc96446f1a08fe86cf39da6fba63499f190fe1f6a3",
+    "database_sha256_after_preparation": "f8a458d291a7cb0161d2304291ec02899a8e4249ca2518a16f080fd1d734769c",
+    "unchanged": "349 adopted editable facts, all source/snapshot/receipt/history/current files;63 protected files compared before/after. No clinical save, source ingestion or current selection."
+  },
+  "roots": {
+    "share": "Default CLI incorrectly selected overallgeneration1 for unchangedC0 afterlegalABsave. ActualproductionCLI ROOT RED onefailure2.15s. Fix defaults use each report revision, explicitstaleconfig stillrejects andcurrentunchanged; noforcedCconsumer/rebuild or exporter guardweakening.",
+    "density": "Ego184 actualB1440baseline1877.46875px list/130.390625px observation/6px0 button margin,16px font. Existing shared stylesheet alone removes repeatmargin and separates identity/value/originalvisit into compact grid; no hidden facts, overflowclip, smallerfont, newbusinessframework or scientificconversion."
+  },
+  "candidate": {
+    "status": "NORMAL_IMMUTABLE_AB_REPORTS_PREPARED_NOT_SELECTED_CURRENT",
+    "report_revision": 10,
+    "report_version": "v1-presentation-r10",
+    "command": "density-presentation-command-v1.json",
+    "command_sha256": "9d93830a22ee18294da73448f44b3aa3163b98033a2de735635e11d725643bd5",
+    "preparation": "density-presentation-candidate-v1.json",
+    "preparation_sha256": "ea0dd201d71fabd4df07f8e41042c7d372d803b4a97d60daf0009fc8bc93de54",
+    "A_manifest_sha256": "e75fb084d0a6b73339f75ba7f0eb965e2b8218894e141c73b8e81a9346e6a244",
+    "B_manifest_sha256": "3f7ede8fd76883bc5e7789c410b4f6caed9d67dc5ae4cdfffca9d49ce1306715",
+    "pages": "A49/B101; unchangedC16 atcommittedr9. Normalbuild_current_report with exact boundbuilder/currentfacts, no manualHTMLpatch. PendingworkerDB/currentinputs remainfixed."
+  },
+  "assets": {
+    "author": "src/ci_workflow/renderers/portal/assets; mechanically syncedmirror assets/portal",
+    "kangzhe-site.css": "5b39e48a57d3dfa735c32f2d08b50b35a6fe7d478e4c6de4c379bd15ef682650",
+    "portal.js": "d87edb68f25a4d531ac84215c138d69a88ee83a5780908e950c930ab6e0f89be",
+    "report-a.js": "e6a287a069b0d5c9f5e88d5f8c49469241070546cc6cbe94d1163bb18401ddad",
+    "report-b.js": "edc4cbf504d1919762620cf1927a70ac5940b8fa6658b651c673dde96667ab6a"
+  },
+  "checks": {
+    "related": "14PASS9.01s: current_comparison_share,comparison_task_layout,kangzhe_shared_desktop. ActualdefaultC/allABCper-reportrevision + explicitstalerejection + priortransaction/config/share/staticlayoutfamilies. RuffCLI/testPASS;strictCLI1filePASS aftertypingannotation correction;author/mirror anddiffcheckPASS. No secondfullrepositorygate for this smallbatch.",
+    "baseline": "comparison-density-red-v1.json",
+    "baseline_sha256": "92e3e6d57014b84905944909d90960a1551120ab087e3b1c4bc41939e62e5739",
+    "browser": "density-candidate-desktop-v1.json",
+    "browser_sha256": "f634e3e7215ed9737ed39dc53012401a6324f57790c6f3fb8d4430829d01dc38",
+    "actual_browser_scope": "Ego184/p2 A/B fourwidths1440/1600/1920/2560 x sparse/dense/filtered/source32states; failures[].16px kept, nooverflow/clippedfactbutton, same32densefactIDs and43studies, sources/Esc focus. Candidateonly, notselectedcurrent9 or finalallphysicalpages/ABC release.",
+    "geometry": "B1440 list1171.890625px/baseline1877.46875 ratio0.6241864878 (37.58% reduction); B2560 550.34375px, A2560 655.95306px. Longvisitfirststudy stilllarge, rawEnglishunits/longstudylabels remainopen.",
+    "owner_visual": "Actually viewedB1440dense,A2560dense,B1440source screenshots; readablecompactvalues andsourcepane, nofinalaesthetic/fullChineseacceptance. Sourceclinicalconditionsremainindividual, noinferrednumericcoaxis."
+  },
+  "mechanism": {
+    "mode": "Existingexecution-plus-conference overall; this boundedpresentation/CLIroot direct because decisiveproductionRED, exactbyte/data preservation andactualbrowser objectivechecks; no newscientificjudgmentorfinalsubjectiveacceptance.",
+    "pending": "ci-1007-full-pool-source-prepare-v1 E04 originalroute/run stillawaited;initselector notactualmodelreceipt. No progresspolling/redispatch. OwnerkqueueprocessEXIToveroriginalPID84937 is onecompletioneventobserver, notsource/resultacceptance; verifyrunneractualterminalthenartifacts.",
+    "preservation": "Fiveprotectedusertrackedchanges andunknownuntracked unchanged/unsubmitted; nocleanup ofsources/recoveryevidence, nooldChineserootcontact."
+  },
+  "next": "Collect originalE04terminal once; verifytypedcandidate/source/locator/gaps andactualmodel/effort. Afterworkerinputsno longerinuse, verifycommand/current9/sourceassethashes then normalrebuild_current_presentation(command) reuse exactA/B r10manifests andselectgeneration10 withC9 unchanged. Do notrerender/repeatclinicalsaves. VerifyactualdefaultCLIjointshare withper-reportrevision. Continueformalremaining-sourceclosure viaexistingAPIs andChineseunit/labelreadability; fullsources/24portals/3hosts/freshinstall/recovery/RC stillopen."
+}

@@ -1,4 +1,22 @@
-# 唯一当前状态：1007V1 连续实施；联合ABC current9操作/配置/分享已实测
+# 唯一当前状态：1007V1 连续实施；current9保持，A/B r10密度候选32态实验通过
+
+817994ee已push。本批默认CLI分享根因1RED2.15s：AB更新后未变化C0仍是当前
+报告，不能硬套整体revision1。现按逐报告revision选择，显式过期配置仍拒绝。
+相关14PASS9.01s、Ruff2/strictCLI1/镜像与限定diff通过；没有逐行全仓重跑。
+真实B1440长访视区1877.47px/16px/6px按钮间距已复现；唯一共享CSS压紧
+重复间距并将原时间并排，不缩字、不裁字、不改事实/科学分面。正常生成
+未切current的A/B v1-presentation-r10：49/101页，current9/DB/源及63保护
+文件不变，保留来源节点固定输入。Ego184新四宽×四态32截图，failures[]；
+43研究/32事实/筛选/来源/Esc/无溢出/无裁字均实过。B1440高度1171.89px，
+降37.58%；owner实际看三图，不签英文阅读/长访视全部问题或最终美学。
+[唯一最新精确恢复](evidence/1007V1/owner-density-and-per-report-share-v1.json)。
+原E04全池源准备继续单次等待，模型/effort终态待验证；不轮询、不迟缓重派。
+一个kqueue EXIT观察器只等原runner结束事件，不读progress。终态后核资料，
+再核命令/当前9/资产hash，正常presentation API复用已成A/B r10清单，不重渲染，
+当前世代10保留未变C9。随后实际默认CLI联合分享和来源正式补齐。
+Goal ACTIVE，非暂停/完成/RC；全源/24门户/三宿主/新安装/恢复仍开。
+
+## 历史：联合ABC current9操作/配置/分享已实测
 
 源码b647ec72已push；C e2及ABv8已验范围不重跑，不拼新候选PASS。
 正常独立OMP issuer已exit0/accepted，实际原会话/requestedgpt6.1sol/high，

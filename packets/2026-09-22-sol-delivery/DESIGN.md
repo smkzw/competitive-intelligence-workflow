@@ -4,6 +4,12 @@
 
 ## 1007V1 当前增量合同
 
+Share默认选择逐CurrentReportDelivery.revision，不等同CurrentDeliveryBundle
+整体revision；未交付选择与显式过期配置继续失败关闭。未受影响报告可保持
+旧报告revision但仍属于最新世代。纯呈现预建复用现有build_current_report
+不可变清单，尚未选current不冒称已发布；正常presentation事务选择前核
+命令/来源资产和旧current，复用匹配清单而非重渲染或再做临床save。
+
 来源人数范围的三个冗余展示字段不参与科学行/消费者摘要；原分母、科学上下文、
 精确定位和来源版本继续完整绑定。新增翻译说明不能使已核验消费者失效，
 也不能让真实数值或来源变更通过；展示保留源N但明确区别于用户当前值。

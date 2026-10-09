@@ -16,6 +16,7 @@ from ci_workflow.application.share_export import (
     export_current_html_share,
 )
 from ci_workflow.application.user_fact_edit import FactEdit, UserFactEditService
+from ci_workflow.cli import main as cli_main
 from tests.integration.test_w04_user_fact_edit import _command, _project, _projection
 
 
@@ -82,4 +83,45 @@ def test_current_comparison_clear_retry_undo_and_four_share_variants(tmp_path):
             archive.extractall(moved)
         for kind in kinds:
             assert (moved / kind / selections[kind].entry_page).is_file()
+    assert service.read_current_delivery() == current
+
+
+def test_default_cli_share_uses_each_current_report_revision_and_rejects_stale_config(
+    tmp_path, capsys,
+):
+    root, _ = _project(tmp_path, cross_report_binding="legal_AB")
+    service = UserFactEditService(root)
+    service.save(_command(request_id="1007-default-share-AB"))
+    current = service.read_current_delivery()
+    revisions = {item.report: item.revision for item in current.reports}
+    assert revisions == {"A": 1, "B": 1, "C": 0}
+
+    # One unchanged report is still current. Default export must not demand an
+    # unrelated C rebuild or silently export an old A/B generation.
+    for reports in ("C", "A,B,C"):
+        output = tmp_path / (reports.replace(",", "-") + "-default.zip")
+        assert cli_main([
+            "project", "share", "--root", str(root), "--reports", reports,
+            "--output", str(output),
+        ]) == 0
+        assert "SHARE_READY revision=1" in capsys.readouterr().out
+        with ZipFile(output) as archive:
+            manifest = json.loads(archive.read("share-manifest.json"))
+            assert manifest["current_revision"] == 1
+            assert {kind: entry["report_revision"]
+                    for kind, entry in manifest["reports"].items()} == {
+                        kind: revisions[kind] for kind in reports.split(",")
+                    }
+
+    stale_config = tmp_path / "stale-config.json"
+    stale_config.write_text(json.dumps({"schema_version": "1.0", "selections": [
+        ShareViewSelection(report="C", revision=1).model_dump(mode="json"),
+    ]}), encoding="utf-8")
+    rejected_output = tmp_path / "rejected.zip"
+    assert cli_main([
+        "project", "share", "--root", str(root), "--reports", "C",
+        "--view-config", str(stale_config), "--output", str(rejected_output),
+    ]) == 2
+    assert "revision" in capsys.readouterr().err
+    assert not rejected_output.exists()
     assert service.read_current_delivery() == current

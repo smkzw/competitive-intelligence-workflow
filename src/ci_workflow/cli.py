@@ -402,10 +402,15 @@ def _project_share_handler(args: argparse.Namespace) -> int:
             if {item.report for item in selections} != set(reports):
                 raise ValueError("分享视图配置的报告集合与--reports不一致")
         else:
+            available_revisions: dict[str, int] = {
+                item.report: item.revision for item in current.reports
+            }
+            if any(report not in available_revisions for report in reports):
+                raise ValueError("分享配置包含当前未交付报告")
             selections = tuple(
                 ShareViewSelection(
                     report=cast(Literal["A", "B", "C"], report),
-                    revision=current.revision,
+                    revision=available_revisions[report],
                 )
                 for report in reports
             )
