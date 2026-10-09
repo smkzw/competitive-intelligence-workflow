@@ -341,6 +341,25 @@ def load_project_identity_context(root: Path) -> PortalIdentityContext | None:
     return load_identity_binding(root, payload)
 
 
+def identity_product_display_updates(
+    product_id: str, headers: dict[str, Any],
+) -> dict[str, str]:
+    """Reuse verified display identity in every consumer; never mutate source facts.
+
+    Only cutoff-qualified ``has_target`` edges reach headers. Multiple proof
+    edges for one entity are one displayed target, not multiple mechanisms.
+    No target evidence leaves the builder's existing value unchanged.
+    """
+    identity = headers.get(product_id)
+    if identity is None:
+        return {}
+    updates = {"name": str(identity["display_name"])}
+    targets = {str(item["entity_id"]): str(item["name"]) for item in identity["targets"]}
+    if targets:
+        updates["target"] = "；".join(targets[key] for key in sorted(targets))
+    return updates
+
+
 def render_identity_headers(headers: dict[str, Any]) -> Markup:
     """Safe, compact identity/source details shared by independent portals."""
     if not headers:

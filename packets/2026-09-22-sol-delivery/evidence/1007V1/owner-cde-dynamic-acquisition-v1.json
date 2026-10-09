@@ -1,0 +1,33 @@
+{
+  "schema_version": "owner-1007-cde-acquisition-1",
+  "scope": "公开资料真实获取与精确定位；所有事实仍为candidate，未接受为当前MAH",
+  "observed_at": "2026-10-09T17:53:08.758346+00:00",
+  "browser": "用户批准的Ego Lite184，复用现有profile；p1目录，真实双击后p3官方详情",
+  "detail_url": "https://www.cde.org.cn/main/xxgk/postmarketpage?acceptidCODE=69978fcd7e0f421b2088d705a5a7253b",
+  "receipts": [
+    {"relative": ".artifacts/1007-china-dynamic-source-v1/cde-dupilumab-2026.json", "sha256": "268b13dab3727f593433871162d640c1962ad0b36774022192161e82a3b6c350", "scope": "2026承办目录15条，两页10+5；含两条CXSL，不按药名字面误合身份"},
+    {"relative": ".artifacts/1007-china-dynamic-source-v1/cde-dupilumab-marketed.json", "sha256": "971a0566a167cad2b8651ca48fc48d38243af398f54bc8293d1d5f0a4a517efc", "scope": "上市品种目录7条；复合公司列不自动推MAH"},
+    {"relative": ".artifacts/1007-china-dynamic-source-v1/cde-jxss2300021-detail.json", "sha256": "e7e8c7793bd117c23ef29bd01354b9b814e35ff144cffcbfa4673a74f0a9fcd6", "scope": "JXSS2300021公开详情、真实下载事件及附件标识"},
+    {"relative": ".artifacts/1007-china-dynamic-source-v1/pdf-page-candidates.json", "sha256": "ad0612fba8683cd3f5ebaa17f4f177fb2b55b4370b8e0c2f5ce87332d4a142af", "scope": "生产capture_pdf_page_text/pypdf6.15.0原PDF页3/4/30及1/37，非OCR推断"}
+  ],
+  "raw_assets": [
+    {"sha256": "dc87461994723165ac110fc79344c894488b92c44dc938dcf6d692bce49bbfb0", "bytes": 652605, "pages": 30, "type": "技术审评报告"},
+    {"sha256": "ed35538fb9989afeb8af36267fdad7f4c84b54ac2e73da0f385a26c70bf0dd2e", "bytes": 1872862, "pages": 46, "type": "附随说明书"}
+  ],
+  "candidate_findings": [
+    "审评PDF物理3明确持有人Sanofi-aventis groupe、生产企业Sanofi Winthrop Industrie及成人PN；两角色不互换。",
+    "审评物理4分别列受理2023-03-06、中心承办2023-03-07；目录字段承办日期不得叫批准日期。",
+    "页面公示2024-03-07不是当前许可证核验或PN批准日期。",
+    "附随说明书有XXXX修订日期占位，不能补猜；物理37列持有人及S20200017。",
+    "与2025厂家说明书MAH不同，保留历史范围；真正变更/当前许可证仍待核验。"
+  ],
+  "limitations": [
+    "初次目录工具仅匹配J前缀遗漏CXSL，真实失败保留；修后完整15行，不把失败记PASS。",
+    "首次目录字段acceptance_date误名：实际是承办日期，以本文显式纠正，不覆写原证据。",
+    "本次获取不伪造历史首次公开时间，不把2026动态目录直接加入截止2026-10-07冻结项目。",
+    "公开原始PDF留本地内容寻址库；不打包全文/凭据/会话材料。"
+  ],
+  "current_MAH_verified": false,
+  "scientific_accepted": false,
+  "next": "按许可/适应症/法律实体/集团/有效日期核定关系，仅新候选新增证据，不覆写旧历史"
+}

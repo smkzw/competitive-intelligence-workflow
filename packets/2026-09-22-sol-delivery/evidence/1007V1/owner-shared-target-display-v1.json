@@ -1,0 +1,22 @@
+{
+  "schema_version": "owner-1007-target-display-1",
+  "parent_commit": "01132f90a84da036838909de3759018579dbba78",
+  "actual_browser_reproduction": "Ego184/p2同来源新A首页：身份详情有已核IL-4Rα/IL-31RA，景观统计却0个已核靶点；横比筛选仅未公开披露",
+  "root_cause": "A/B/C renderer仅投影display_name，未把同一cutoff-qualified has_target关系用于共同ProductRow.target",
+  "change": "复用共同身份投影的一条显示更新路径；按target实体去重且稳定排序，保留证明及原输入，不推断作用方式、不写科学事实或DB",
+  "scope": "只修名义呈现，不改变比较资格、数值共轴、公司归属、事实版本或原文",
+  "RED": "三个正常renderer的data/report.js仍靶点待核，第四共同 helper缺失；4FAIL/6deselected1.19s",
+  "GREEN": "四个相关integration文件56PASS8.91s；fixture补精确target原文后同组56PASS8.29s",
+  "static": "Ruff五个文件通过；MYPYPATH=src strict四个生产文件通过；初次Ruff三处import排序失败已修，原失败不冒称通过",
+  "source_hashes": {
+    "src/ci_workflow/reports/common/identity_projection.py": "49c96db828f61a14cda2a063dc52cb65f6c279728ddbfe30ca022a7987cb8027",
+    "src/ci_workflow/renderers/portal/report_a.py": "406b151153329b8462418414558e6ac465defbd8e283cb1400950344f57d009d",
+    "src/ci_workflow/renderers/portal/report_b.py": "a630509038033fa4f03b27b7da5747dece2caa508cb6c5b5bf9b3c08ead71f3c",
+    "src/ci_workflow/renderers/portal/report_c.py": "906bfa8a73a8cdb446a4b5d1eac523b9384434c037f32003dc0f056850eb86c7",
+    "tests/integration/test_1007_identity_consumers.py": "85217f3558a3f1d930a6e74e7495b8e9e744d8ff9d8d912635d6abf7965b6947"
+  },
+  "frozen_C_review": "C原候选与请求/DB未改，不把新代码当成该冻结候选的新呈现验收",
+  "next": "new v2 A/B正常呈现与Ego实屏；C来源采用后新报告再绑定最新代码",
+  "wide_gate": "NOT_RUN for this revision",
+  "release_accepted": false
+}

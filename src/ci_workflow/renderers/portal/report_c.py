@@ -71,6 +71,7 @@ from ci_workflow.reports.common.evidence_view import (
 )
 from ci_workflow.reports.common.identity_projection import (
     PortalIdentityContext,
+    identity_product_display_updates,
     render_identity_headers,
 )
 from ci_workflow.reports.common.numeric_projection import NumericMeasureKind, project_numeric
@@ -2617,7 +2618,7 @@ def render_report_c_site(
                   if identity_context else {})
     if identities:
         data = data.model_copy(update={"products": tuple(
-            product.model_copy(update={"name": identities[product.id]["display_name"]})
+            product.model_copy(update=identity_product_display_updates(product.id, identities))
             if product.id in identities else product for product in data.products
         )})
     _reset_site_root(site_root)

@@ -3,9 +3,16 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 上次暂停原件：[20261009精确恢复](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)。
 用户重新授权连续实施，Goal API实查active；旧暂停原件保留，不恢复旧PID。
+当前源码01132f9，ABC只读接线已完成；复用既有同来源联合身份项目，新隔离C258
+候选618518ed/contextdded65fd/site17239d9e gateBLOCKED（未采用）。真实fresh
+Pi/OMP C03请求gpt-6.1-sol high已启动，终态/产品签发/采用/ABC current仍待。
+不拼旧C9/AB签名，不重跑已完旧任务；仅结束事件等候7200s。A/B呈现不改冻结C。
+[当前联合候选精确恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-abc-source-integration-preparation-v1.json)。
+[CDE实际获取与历史角色差异](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-cde-dynamic-acquisition-v1.json)。
+以下7a66/C9及更早为历史范围，当前状态以STATUS顶节为准。
 最新公共源码7a66f7b正常A复核只读本候选lineage锁定版本，合法历史不误拒、
 真快照冲突仍拒绝；RED2FAIL→35相关PASS6.95s/Ruff2/strict1，真实数据库
-只读且C9未变。ABC单节点已实际启动，终态待归集，不提前PASS或恢复旧PID。
+只读且C9未变。ABC单节点现已终态，最新接线/偏差见顶节，不提前产品PASS。
 [A版本范围精确修复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-a-review-snapshot-scope-v1.json)。
 最新代码067fe3f/current9/generationeda8f0ea：横比表起点486/464→约292px，
 四规范桌面宽高×四态/首页实核，筛选键盘、原151/当前清除、Esc/导航保持。

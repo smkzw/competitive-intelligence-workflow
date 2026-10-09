@@ -1,0 +1,67 @@
+{
+  "schema_version": "owner-1007-abc-integration-preparation-1",
+  "code_commit": "01132f90a84da036838909de3759018579dbba78",
+  "scope": "PN四研究的同来源联合开发候选；非完整宇宙、非医学发布、非RC",
+  "source_join": {
+    "task": "ci-1007-abc-source-join-v1",
+    "state": "completed_read_only_compatibility_only",
+    "manifest_relative": ".artifacts/1007-abc-source-join-v1/join-manifest.json",
+    "manifest_sha256": "d75ef6d8d54399ea2ccddf608871107b3d5705cf06a61af15a0b573da8ac30c8",
+    "owner_receipt_relative": ".artifacts/1007-abc-source-join-v1/owner-verify.json",
+    "owner_receipt_sha256": "5dbc3609eb2c5a4c6bff406a7b764ace76b7e8ce4bfdc87b24ce2c40e8153a9a",
+    "input_pins_verified": 24,
+    "four_registry_pairs": "原字节版本不同；逐JSON比较仅versionHolder不同，不拼接签名",
+    "current_values": "C9样本量当前已清除，151是原来源值；旧AB当前为-59.34",
+    "actual_execution": [
+      {"adapter": "codebuddy", "model": "deepseek-v4.1-flash", "requested_effort": "max", "session_id": "01a121b0-e841-7b7e-b0e8-2da7966a9b74", "exit_code": 0},
+      {"adapter": "zcode", "model": "GLM-5.3-Flash", "requested_effort": "max", "session_id": "sess_4073ef6e-a568-48d0-884a-853d7c3e26b4", "exit_code": 0}
+    ],
+    "deviations": [
+      "控制器备用理由称主会话未建立，但主会话handle及exit0存在；不采信该理由。",
+      "备用模型参与修复，属于执行而非独立复核。",
+      "worker四次覆盖manifest违反create-new纪律；保留最终字节，owner只读核验，不重跑writer。",
+      "两被审根没有身份图不证明全工程没有；既有联合身份候选确实存在。"
+    ]
+  },
+  "new_joint_candidate": {
+    "decision": "复用既有同来源联合项目，不拼旧AB/C9数据库或跨项目接受回执",
+    "project_relative": ".artifacts/1007-abc-current-integration-v1/working/project",
+    "project_id": "project_3ee3ab2627f01ef9a757365b",
+    "source_relative": ".artifacts/1007-pn-joint-abc-source-v1/source-values-v2/working/project",
+    "copy": "既有prepare_working_copy复制48文件73568448字节；仅新副本forward0018",
+    "identity": "复用12原文片段、12证据关系及既有类型化图，不重造名称/公司字典",
+    "source_adoption_inherited": false,
+    "current_initialized": false,
+    "C_observations": 258,
+    "C_content_digest": "618518ede4aa50421151b0f8381c1c53bd12ad4bce71cdedfdab01f3814315ff",
+    "C_context_digest": "dded65fd5283cbc76cc819b83a9d1496271a1b88f3b6c8a9de2d3ce700486be6",
+    "C_site_digest": "17239d9e00c1564574fe03ef442b4f21c41aea0e50c7859ba473bc6b414fe669",
+    "C_gate": "BLOCKED：candidate来源尚未采用，不是可自动放宽的失败",
+    "recovery_receipt_relative": ".artifacts/1007-abc-current-integration-v1/preparation-recovery.json",
+    "recovery_receipt_sha256": "46d9df4b3d2f51837752d07ec220f47aef2e4ed0a3ff936757bee65942a41922",
+    "helper_failure": "真实管线已完成后读取错误辅助字段receipt失败；失败原件保留，按receipt_path只读恢复，没有重跑摄取/复制。"
+  },
+  "independent_C_source_review": {
+    "task": "ci-1007-joint-c-source-review-v1",
+    "state": "PENDING_actual_dispatch_started",
+    "runner_pid_observed_once": 49347,
+    "child_pid_observed_once": 49356,
+    "adapter": "pi/OMP18.8.6",
+    "provider": "openai-codex",
+    "requested_model": "gpt-6.1-sol",
+    "requested_effort": "high",
+    "actual_result_session_model_attestation": "PENDING",
+    "preflight": "PASS after correcting prompt list/output syntax; failed preflight was not dispatched",
+    "fallbacks": [],
+    "wait": "7200s completion-only kqueue event; no progress polling or latency redispatch",
+    "acceptance": "proposed verdict is not signed; normal product issuer and normal source adoption remain pending"
+  },
+  "remaining": [
+    "正常独立来源签发/采用与报告复核，不继承旧项目回执",
+    "同一current ABC任务链、真实合法编辑依赖、配置及当前单份/联合分享",
+    "四宽四态各物理页、其他浏览器和fresh新浏览器",
+    "完整宇宙、Publication、中国MAH有效范围、24门户、三宿主、安装恢复、最终RC"
+  ],
+  "recovery_rule": "已完成来源接线和副本准备不重跑；恢复先读实际终态及固定receipt，不复活历史PID",
+  "product_accepted": false
+}

@@ -1,12 +1,36 @@
-# 唯一当前状态：1007V1 连续实施，真实C current9紧凑横比；转入ABC接线
+# 唯一当前状态：1007V1 连续实施，同来源联合ABC候选；C独立来源复核运行中
+
+实际新A/B呈现49/101物理页已生成，共同身份binding184e3e83、DB/C请求/input
+保持。Ego184新A实屏复现已核靶点只在身份头、图/表/筛选仍旧值的共同缺陷。
+本批最小共享显示投影修A/B/C，不改源/资格/机制/数据库；成族4RED→56相关
+PASS8.29s/Ruff五文件/strict生产四文件。只签代码范围，最新实屏/宽门仍待。
+[共享靶点显示根因/范围](evidence/1007V1/owner-shared-target-display-v1.json)。
+
+源码01132f9保持；ABC来源接线节点已终态，owner只读核验24个固定输入，四研究
+JSON仅versionHolder不同。旧AB/C9的来源/当前用户值/接受边界不同，不拼签名。
+复用既有同来源联合项目及12片段身份图，隔离副本48文件/73568448字节，只有
+新副本forward0018；旧来源/current保持。新C258候选618518ed/contextdded65fd/
+site17239d9e已正常准备，gateBLOCKED（未采用）如实保留，没有跨项目继承回执。
+辅助记录字段错误发生于真实准备完成之后，只读恢复原receipt_path，不重跑摄取。
+一次fresh Pi/OMP18.8.6/openai-codex/gpt-6.1-sol请求high C03已实际启动；正常
+产品issuer、来源采用、ABC current及新科学接受仍待完成。仅结束事件等待7200s，
+不轮询progress、不因延迟换模型。主节点和备用修复均为执行，不能当独立意见。
+[精确接线/副本/运行范围](evidence/1007V1/owner-abc-source-integration-preparation-v1.json)。
+
+Ego184实际获取CDE目录15+7条及JXSS2300021审评/说明书两公开PDF，生产页定位
+五页；日期角色及历史MAH与2025标签差异保留，未假定变更或签当前许可闭包。
+[原始hash/日期/角色边界](evidence/1007V1/owner-cde-dynamic-acquisition-v1.json)。
+下一有界动作：冻结C独立审查时仅生成A/B呈现候选，不改C/DB/current；审查终态
+后正常签发采用，再接同项目ABC真实任务。全目标ACTIVE，非暂停/完成/RC。
+以下A7a66/C9及更早为已完成范围，不重跑其旧验收、不拿其PASS签新候选。
 
 最新公共源码7a66f7b：正常A复核入口不再把DB全部历史当本候选证据，只选
 本次lineage锁定版本；快照内冲突/缺事实仍拒绝。成族RED2FAIL/1PASS1.95s
 →相关35PASS6.95s、Ruff2/strict生产1。真实AB/C9各一事实有多版本，只读
 核验；没重跑真实A、没改DB/current/C9页面，不借此宣称医学或ABC接受。
 [限定代码与下一动作](evidence/1007V1/owner-a-review-snapshot-scope-v1.json)。
-有界ABC来源接线节点已实际启动CodeBuddy，终态与真实模型回执待归集；不轮询
-progress、不重派、不过早采纳。以下C9证据只签其呈现字节，不是新宽门。
+ABC接线当时为运行中，现已终态并只读核验，实际偏差见最新顶节回执。
+以下C9证据只签其呈现字节，不是新宽门。
 
 当前代码067fe3f、generationeda8f0ea：高级筛选复用既有details移入工具区，
 横比冗余hero/入口/标题按任务去重，16px文字/临床限制/258观察保留。

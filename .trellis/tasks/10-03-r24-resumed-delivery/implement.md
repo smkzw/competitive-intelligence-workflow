@@ -1,5 +1,26 @@
 # Continuous implementation checkpoint
 
+## 当前：同来源联合ABC副本与fresh C03科学复核
+
+共同靶点显示实际Ego复现：身份头已有，图/表/筛选0核实。Direct根因包复用
+cutoff-qualified投影，不做新医学判断/字典/机制；三个renderer同一helper。
+4RED1.19s→56相关PASS8.29s（先前8.91s，fixture补精确target原文后再核同组），
+Ruff五文件/strict四生产文件；初次import排序失败如实保留。新源/current/C冻结
+字节未改，需NEW v2呈现实屏，不用56PASS冒充产品或宽门。
+
+采用execution-plus-conference：只读接线可分离，科学含义需独立挑战，共享写入
+仍owner。接线主CodeBuddy/备用ZCode均有实际会话/exit0；控制器无主会话理由
+错误、worker四次覆盖输出明确记偏差，owner只读核24pins，不重跑writer。
+复用既有同来源联合身份项目，48文件73568448字节隔离复制/新副本0018；
+新C258内容618518ed已真实准备，BLOCKED如实未采用。辅助receipt字段错误
+在管线完成后发生，只读恢复，不重跑。C03 fresh Pi/OMP gpt-6.1-sol high真实
+runner49347/child49356已启动；preflight先失败后修格式PASS才dispatch；7200s
+单结束事件、不progress轮询或迟缓换模型。独立终态/正常issuer/采用仍PENDING。
+CDE15+7真实目录/两PDF五页原文及日期/历史MAH差异已保留，当前许可未签。
+Ponytail复用原图/解析/复制接口，不造平台或字典；不碰旧中文根、用户五文件。
+当前唯一STATUS顶节，owner-abc-source-integration-preparation-v1及
+owner-cde-dynamic-acquisition-v1记录准确范围。下一同项目ABC当前任务，不重跑C9。
+
 ## 正常A候选版本范围根因（7a66f7b，ABC节点运行期间）
 
 Owner沿正常源入口发现全DB扫描误拒同一fact合法历史；阅读完整A执行闭包/
