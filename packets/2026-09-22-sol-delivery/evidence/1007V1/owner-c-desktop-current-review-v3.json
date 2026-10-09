@@ -1,0 +1,49 @@
+{
+  "schema_version": "1007-owner-c-desktop-current-review-3",
+  "source_commit": "067fe3f113fccb6e02e336488dd7b10fb807c458",
+  "project_revision": 9,
+  "generation_sha256": "eda8f0ea45c023a47ae5e492675a7171402f0ead1f13b751bfe2bec425156795",
+  "scope": "C overview summary/comparison, compact chrome only; no clinical saves or new science acceptance",
+  "changes": ["Move existing advanced filter disclosure into comparison tools, retaining ID/state/listeners", "Remove repeated hero/entry/title chrome only in comparison; primary home link and clinical limitations stay visible", "Keep full-size controls, 258 observations, source and current-value distinction"],
+  "source_assets": {
+    "src/ci_workflow/renderers/portal/assets/report-c.js": "99d24d611fc1037bb1230d887a1c4124cd12420d04db585c6829e2181f910f33",
+    "src/ci_workflow/renderers/portal/assets/report-c.css": "646ecc5aa45c77ca9e06297e0864706447685bd511ac6aeffbb9b96b0126f624",
+    "src/ci_workflow/renderers/portal/report_c.py": "987a9e3f06d1d9dd0b2e1c5a6d407d5016bbe0fc57ddb08d19eea7a259a1442d",
+    "tests/integration/test_1007_c_workspace.py": "7fa9c9e0288215d0ebb0c5dc0934b2ec8c321bbe8745c2986f8751983e010625"
+  },
+  "related_batch": {"passed": 26, "seconds": 31.69, "scope": "test_1007_c_workspace, test_1007_presentation_current, author/mirror/manifest contract", "ruff": "workspace test passed", "node_syntax": "report-c.js passed", "latest_wide_gate": "NOT_RUN; prior quality-only gate does not cover this later source"},
+  "runtime": {
+    "browser": "Ego Lite, existing approved space184/p1",
+    "viewports": [[1440,900],[1600,900],[1920,1080],[2560,1440]],
+    "states": {"dense":258,"sparse":4,"filtered_sparse":2,"source":2},
+    "captured": "16 comparison states plus four home screenshots",
+    "no_document_horizontal_overflow": true,
+    "comparison_table_top_css_px": [291.89,292.23,291.94,292.00],
+    "previous_r8_top_css_px": [486.58,486.58,464.18,464.18],
+    "280_target": "Recommendation, not fabricated PASS; about292 reached without shrinking text or hiding facts. Stop pixel-only loops and progress ABC.",
+    "advanced_filter_keyboard": "Enter opens/closes relocated existing details, focus retained and258 rows unchanged at all four widths",
+    "source": "Current user-cleared label and original151 examples preserved; Esc returns actual opener at all four widths",
+    "navigation": "Primary home link returns genuine summary after every state batch",
+    "receipt": ".artifacts/1007-c3-desktop-ego-v1/four-width-current-r9.json",
+    "receipt_sha256": "34d0c322e13ded69ce89fd9beb06d8dfd387ca77dc744258e99990d804fe2d0f",
+    "script_sha256": "d50a53b245918732966e3aac3ca5815cdc51b8da96293d2bf9887a4788155d4d",
+    "owner_images_inspected": ["C-1440-dense-r9.png","C-1600-filtered-sparse-r9.png","C-1920-sparse-r9.png","C-2560-source-r9.png","C-1440-offline-r9.png","C-2560-summary-r9.png"],
+    "owner_conclusion": "ACCEPT_BOUNDED compact geometry and interaction; not every screenshot independently visually read or every physical page",
+    "independent_review": "Prior r8 same-session bounded image review retained; not reused as new r9 review. This objective chrome change directly checked, no extra whole-page conference."
+  },
+  "source_preservation": {"active_facts":258,"fact_revision_digest":"1fff35c76f23090c5395852835adc68e81fa61ecc0712a20ff29edb1527f8d55","seven_tables":"Exact read-only digest equality with r5 baseline","original_files_preserved":215,"original_current":"absent","clinical_saves":0},
+  "share": {
+    "path": ".artifacts/1007-c3-desktop-ego-v1/current-c-r9-share.zip",
+    "sha256": "c4a270642fb03cb85929ba25ab3d7c203b3f0f610582fb00cac8f73615459b9f",
+    "members":35,
+    "receipt_sha256": "ba8728abcd0aad97fb3effb8521ff8a073fdc8e1ba7512f13e724358fbd974c3",
+    "runtime_receipt_sha256": "6034db2968065a004199a9adf5a08510b1e6756d28dc9dbae1bc5dcfa6284f56",
+    "runtime": "Current9 saved sample-size query,4 observations, source original151 and current clear, actual Esc focus, moved directory/offline/cache-disabled p2",
+    "fresh_browser_or_profile": false,
+    "scriptless_or_no404_claim": false
+  },
+  "method": "Ponytail existing disclosure/layout/current/share, selective Kangzhe function-first; one coherent root-cause batch, no wide gate per edit, frozen older failures untouched",
+  "still_open": ["Same-project current A/B/C and actual shared-source identity/bindings", "Full universe, required publications, verified Chinese MAH/group/official names", "Other physical pages, L1/L2, cross-browser/fresh-browser offline", "24 portals,three hosts,current package/install/recovery andRC"],
+  "next_unit": "ci-1007-abc-source-join-v1: one read-only execution node pins existing real A/B and C9 and implements portable compatibility manifest; owner controls all shared writes",
+  "goal": "ACTIVE; not paused, complete or RC"
+}

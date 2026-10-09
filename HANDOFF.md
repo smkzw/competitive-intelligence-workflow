@@ -3,6 +3,14 @@
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 上次暂停原件：[20261009精确恢复](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)。
 用户重新授权连续实施，Goal API实查active；旧暂停原件保留，不恢复旧PID。
+最新代码067fe3f/current9/generationeda8f0ea：横比表起点486/464→约292px，
+四规范桌面宽高×四态/首页实核，筛选键盘、原151/当前清除、Esc/导航保持。
+258事实/七表/原215文件不变；当前35成员分享c4a27064断网移动重开通过，
+同Ego184 profile，不当fresh-browser。一次相关26PASS31.69s，无新增宽门/科学
+或RC。下一ci-1007-abc-source-join-v1单一有界执行只读真实AB/C9来源与消费者，
+产出可重放接线manifest，owner统一共享写入。旧已完工作不重跑，不阶段暂停。
+[唯一最新精确恢复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-desktop-current-review-v3.json)。
+以下current8和更早是版本历史，不是当前等待现场。
 本轮恢复核验171项目文件和七源码hash保持；发现作者资源的注释未同步发包镜像，
 沿用机械同步工具补齐。既有候选生成器最小参数化，NEW C3正常生成并独立科学接受。
 成族RED6/PASS2→相关8PASS0.43s、Ruff及MYPYPATH=src strict工具1通过，非宽门。

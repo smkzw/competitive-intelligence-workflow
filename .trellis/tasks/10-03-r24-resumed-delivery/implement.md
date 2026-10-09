@@ -1,5 +1,21 @@
 # Continuous implementation checkpoint
 
+## 唯一当前：C9紧凑横比已实际验证，连续转入ABC来源接线
+
+方法：紧凑chrome为客观已复现根因，owner直接一批最小修复/26相关PASS31.69s；
+既有独立r8图片审阅不冒充新r9。Ponytail复用既有details/网格，不缩文字或
+隐藏事实；Kangzhe按功能优先去掉重复hero。正常纯呈现current9/eda8f0ea，
+258事实/七表/原215文件保持；四规范桌面宽高×四态16图与首页4图实核，
+表起点486/464→约292，高级筛选Enter/焦点、查询/原值/清除/Esc/导航通过。
+35成员当前分享c4a27064移动/断网/禁缓存/配置重开通过，同profile非fresh。
+复盘：旧hiddenflag测试、旧模型ACCEPT及旧宽门不能签新字节；规范视口明确
+重绑本候选；建议280不值得无限像素修改，剩下业务完整性更重要。六图owner
+实看，不说所有图逐张审美接受；全科学/ABC/三宿主/24/RC仍开。
+下一采用有界execution：ABC两真实底座只读兼容manifest可独立并行产生，避免
+owner重复大源扫描；共享DB/current的后续写入仍一个owner。新任务初始化+
+preflight通过不是已执行/接受；实际路由/终态另记录。当前authority STATUS顶节。
+精确回执owner-c-desktop-current-review-v3，旧r8以下为历史，不再重复已完请求。
+
 ## 唯一当前：2026-10-09 连续实施，C current8桌面切片收口，非暂停/非RC
 
 采用execution-plus-conference：共享呈现/current由owner最小修改，主观可读性

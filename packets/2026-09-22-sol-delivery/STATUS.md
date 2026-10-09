@@ -1,4 +1,20 @@
-# 唯一当前状态：1007V1 连续实施，真实C current8桌面切片闭环；全目标未完成
+# 唯一当前状态：1007V1 连续实施，真实C current9紧凑横比；转入ABC接线
+
+当前代码067fe3f、generationeda8f0ea：高级筛选复用既有details移入工具区，
+横比冗余hero/入口/标题按任务去重，16px文字/临床限制/258观察保留。
+一次相关26PASS31.69s、Ruff/Node/镜像；正常纯呈现r9，无临床save。
+真实Ego184四规范宽高1440×900/1600×900/1920×1080/2560×1440，四态
+16图+首页四图；原486/464px表起点降到约292px，未伪签280建议目标。
+高级筛选Enter展开/折叠/焦点、查询258→4→2、来源原151/当前清除与Esc、
+首页返回均实核。Owner目视六张代表图，不宣称全部页面/所有图逐张审美通过。
+当前35成员C分享c4a27064移动目录、断网/禁缓存、配置/原值/Esc实核；复用
+同profile p2，不是fresh新浏览器。258事实/七表与r5精确一致、原215文件保持。
+相关代码不借787旧宽门或r8独立接受；未跑最新宽门/ABC/科学/发布终验。
+下一有界execution只读两真实来源底座并做可重放接线manifest；owner统一共享
+事实写入。全目标ACTIVE，非暂停/RC，不重跑已完C来源/C3/旧保存/呈现请求。
+[当前精确恢复与限界](evidence/1007V1/owner-c-desktop-current-review-v3.json)。
+
+以下current8是本次上一候选，原证据保持，不再当最新待改状态。
 
 当前代码9823a35，generation8f392a48：正常纯呈现r5–r8，七来源/事实/编辑
 表和258当前事实不变，原215文件保持/current-none。Ego184/p1/p2真实四宽
@@ -37,8 +53,8 @@ C3 accepted verdict0b8f5f92/verified回执93c4409a。Owner正常真实签发核�
 改进留后续，不改被冻结C3。原171暂停pins仅epoch合法前移，DB不变，无current。
 [本轮精确层级证据](evidence/1007V1/owner-c3-report-review-v1.json)。
 本批E03已完成隔离C current旅程；不碰原项目/不重采源/不重复旧AB保存分享。
-Ego替代空间184已批准/创建，实屏截图故障仍开；
-render_manifest仍generated且浏览器verdict rejected，科学接受不冒充视觉/RC。
+当时Ego截图故障/C3原render_manifest generated及browser rejected为历史现场；
+新current9真实浏览器结果见顶节，不覆写冻结原件，科学接受不冒充视觉/RC。
 
 ## 本轮恢复与代码准备（已完成的限定范围）
 
