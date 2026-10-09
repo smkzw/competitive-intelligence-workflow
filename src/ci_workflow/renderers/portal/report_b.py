@@ -126,6 +126,7 @@ from .report_a import (
     SafetyRow,
     StudyRow,
     TrialRow,
+    _comparison_display_row,
     _git_commit,
     _native_timepoint_zh,
 )
@@ -5407,7 +5408,10 @@ def _render_page_context(
     )
     # 序列化边界复核：本页嵌入前逐条确认来源追溯合同（model_construct 不豁免）
     assert_evidence_views_serializable(views)
-    chart_groups_json = _json(groups)
+    chart_groups_json = _json([
+        {**group, "rows": [_comparison_display_row(row) for row in group["rows"]]}
+        for group in groups
+    ])
     comparison_workspace = _comparison_workspace(
         records, groups, tuple(study.id for study in data.all_studies),
         study_labels=trial_names,

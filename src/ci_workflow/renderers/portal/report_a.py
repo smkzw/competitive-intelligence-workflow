@@ -2296,6 +2296,11 @@ def active_fact_binding_for_a(
     )
 
 
+def _comparison_display_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Label-only copy after scientific grouping; never convert source units/values."""
+    return {**row, "unit_label_zh": _native_unit_zh(str(row.get("unit") or ""))}
+
+
 def _a_comparison_workspace(data: ReportAPortalData) -> tuple[
     dict[str, Any], tuple[dict[str, Any], ...], dict[str, dict[str, Any]],
 ]:
@@ -2349,10 +2354,11 @@ def _a_comparison_workspace(data: ReportAPortalData) -> tuple[
     if set(rows) != set(origins):
         raise ReportAPortalError("A横比遗漏了原生事实")
     groups = report_b._adjudicate_full_pool(tagged, semantic_proposals=())
-    return report_b._comparison_workspace(
+    workspace = report_b._comparison_workspace(
         tagged, groups, data.trial_ids, study_labels=trials,
         question_projections=report_b._get(data.efficacy_views, "clinical_questions", ()),
-    ), groups, rows
+    )
+    return workspace, groups, {key: _comparison_display_row(row) for key, row in rows.items()}
 
 
 def render_report_a_site(

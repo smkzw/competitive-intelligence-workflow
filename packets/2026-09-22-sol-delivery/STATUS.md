@@ -1,4 +1,23 @@
-# 唯一当前状态：1007V1 连续实施；current10已选，来源准备终态已恢复
+# 唯一当前状态：1007V1 连续实施；current11中文单位呈现已选，源缺口诊断在途
+
+基线a2539da已push；本批复用已有中文单位helper并共用A/B valueText，只添
+显示标签，不换算值/单位/零/清除或改变科学分组。8成族RED→74相关PASS
+192.07s；Ruff4/strict两renderer/三Node/镜像/diff限定通过，无逐行全仓重跑。
+正常A/B r11候选49/101页；源/DB/current10在预建阶段保持。全不可变载荷
+A3733/B3959行/各科学组/workspace除新unit_label_zh全同；B含基线/处置，
+不能把其live选中32图行当作全体3733。真实A16+B16四宽×密集/清除/来源/
+筛选已实过；原B脚本错误范围FAIL保留，独立全量字节证明后仅B补验。Owner
+实看三图，未知原文单位/长英文研究名仍开，不签最终美学或所有物理页。
+正常API复用已验清单选择current11（a998b87a），A11/B11/C9，349事实摘要
+不变。原脚本误以数据库字节全不变，在提交后FAIL；已只读原地恢复，34
+非current-registry表与旧DB精确全同，仅追加generation10/11及current11登记，
+源/快照/冲突/用户修改/原接受不改。未reset/重试API/再render或save。
+[唯一最新精确恢复](evidence/1007V1/owner-native-unit-current11-v1.json)。
+下一仅重启本批自有65033服务以加载完整新Python代码，再验current11读链/
+分享；原E03源根因单次等待，禁止progress轮询/迟缓重派。1698/1922新源仍
+未采用，1665缺口/全源/24门户/三宿主/新安装/恢复仍开。ACTIVE，非暂停/RC。
+
+## 历史：current10、来源准备终态与真实操作链（不重复已完成范围）
 
 代码9f5edc6已push。正常presentation API复用已验A/B r10清单，未重渲染、
 未重复临床save，选择current10；A10/B10/C9合法保持，349采用可编辑事实/

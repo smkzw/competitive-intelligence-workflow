@@ -73,3 +73,26 @@ def test_ordinary_efficacy_projection_has_no_guessed_drug_or_population():
     assert displayed["endpoint_source"] == row["endpoint"]
     assert displayed["product_id"] == row["product_id"]
     assert data.model_dump_json() == before
+
+
+@pytest.mark.parametrize(("unit", "display", "value"), [
+    ("percentage of participants", "受试者百分比", 82.3),
+    ("percent change", "百分比变化", -48.32),
+    ("Participants", "例", 0),
+    ("Events", "次", 0),
+    ("proportion of participants", "受试者比例", 0.67),
+    ("U*day/L/week", "U·天/L/周", 2.5),
+    ("unresolved activity/day", "unresolved activity/day", None),
+])
+def test_comparison_display_uses_existing_unit_label_without_rewriting_source(unit, display, value):
+    from ci_workflow.renderers.portal.report_a import _comparison_display_row
+
+    row = {"row_id": "source-row", "unit": unit, "value": value,
+           "numeric_value": value, "disclosure_state": "user_cleared" if value is None
+           else "reported_value", "group_id": "OG001",
+           "numeric_projection": {"raw_unit": unit, "plot_value": value}}
+    before = json.dumps(row, sort_keys=True)
+    shown = _comparison_display_row(row)
+    assert shown["unit_label_zh"] == display
+    assert {k:v for k,v in shown.items() if k != "unit_label_zh"} == row
+    assert json.dumps(row, sort_keys=True) == before

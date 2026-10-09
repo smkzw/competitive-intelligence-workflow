@@ -2064,8 +2064,8 @@
           button.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
           button.setAttribute("data-evidence-row-id", row.a_row_id);
           button.setAttribute("data-evidence-collection", row._domain);
-          var value = row.value == null ? (window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核")
-            : String(row.value) + " " + (row.unit || "");
+          var value = window.__COMPARISON_QUERY__.valueText(row,
+            window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核");
           var facet = column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
             (column.facet_label_by_row || {})[id] : "";
           window.__COMPARISON_QUERY__.factCell(document, cell, button, row, value, facet);

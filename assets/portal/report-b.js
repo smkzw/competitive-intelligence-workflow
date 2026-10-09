@@ -111,10 +111,9 @@
           displayed[id] = true;
           var item = document.createElement("button"); item.type = "button";
           item.setAttribute("data-evidence-open", id); item.setAttribute("data-row-id", id);
-          var value = row.value == null ? "" : String(row.value);
           var status = window.__CHART_SYNC__ && window.__CHART_SYNC__.unplottedValueText;
-          var displayedValue = value ? value + (row.unit ? " " + row.unit : "") :
-            status ? status(row) : "状态待核";
+          var displayedValue = window.__COMPARISON_QUERY__.valueText(row,
+            status ? status(row) : "状态待核");
           var facet = column.scientific_facet_ids && column.scientific_facet_ids.length > 1 ?
             (column.facet_label_by_row || {})[id] : "";
           window.__COMPARISON_QUERY__.factCell(document, cell, item, row, displayedValue, facet);

@@ -157,3 +157,26 @@ sandbox.collapseCompleteTables(doc);assert.equal(auxiliary.wrapper.children.leng
 """
     result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_shared_comparison_value_uses_display_unit_but_preserves_zero_clear_and_raw_scale() -> None:
+    script = (Path(__file__).resolve().parents[2]
+              / "src/ci_workflow/renderers/portal/assets/portal.js")
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const start=source.indexOf('  function createComparisonQuestionOrder(');
+const end=source.indexOf('\n  window.__COMPARISON_QUERY__',start),sandbox={};
+vm.runInNewContext(source.slice(start,end),sandbox);
+const q=sandbox.createComparisonQuestionOrder(),cases=[
+ [{value:82.3,unit:'percentage of participants',unit_label_zh:'受试者百分比'},'82.3 受试者百分比'],
+ [{value:0,unit:'Events',unit_label_zh:'次'},'0 次'],
+ [{value:-48.32,unit:'percent change',unit_label_zh:'百分比变化'},'-48.32 百分比变化'],
+ [{value:0.67,unit:'proportion of participants',unit_label_zh:'受试者比例'},'0.67 受试者比例'],
+ [{value:null,unit:'Participants',unit_label_zh:'例'},'用户清除，待重新核实'],
+ [{value:1,unit:'unknown dimensional unit'},'1 unknown dimensional unit']];
+for(const[row,expected]of cases){const before=JSON.stringify(row);
+ assert.equal(q.valueText(row,'用户清除，待重新核实'),expected);assert.equal(JSON.stringify(row),before);}
+"""
+    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr

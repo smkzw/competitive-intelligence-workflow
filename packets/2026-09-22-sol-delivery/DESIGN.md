@@ -4,6 +4,13 @@
 
 ## 1007V1 当前增量合同
 
+A/B横比共用现有单位中文helper与valueText。仅在科学分组/来源校验后复制
+显示unit_label_zh；原单位、数值、统计对象、来源与分面仍原样，不增加科学
+摘要排除字段或偷偷换算概率/百分比。未知单位保留原文，证据层保留原单位。
+纯呈现事务正常追加current_delivery_generations并更新current_delivery_state；
+不得把合法登记变化误判为科学DB不变失败。源/事实/消费者/幂等/修改表需
+逐表精确保持；提交后记录失败先重开current/清单/登记，不盲目再保存或重建。
+
 Share默认选择逐CurrentReportDelivery.revision，不等同CurrentDeliveryBundle
 整体revision；未交付选择与显式过期配置继续失败关闭。未受影响报告可保持
 旧报告revision但仍属于最新世代。纯呈现预建复用现有build_current_report

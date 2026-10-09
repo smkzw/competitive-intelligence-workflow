@@ -123,6 +123,11 @@
         }
         return left.week - right.week || left.index - right.index;
       }).map(function (item) {return item.id;});
+    }, valueText: function (row, missingText) {
+      if (row.value === null || row.value === undefined) return missingText;
+      // A label is not a unit conversion: raw unit/value still govern scientific eligibility.
+      var unit = row.unit_label_zh || row.unit || "";
+      return String(row.value) + (unit ? " " + unit : "");
     }, factCell: function (doc, cell, button, row, value, facet) {
       function textNode(tag, className, value) {
         var node = doc.createElement(tag);

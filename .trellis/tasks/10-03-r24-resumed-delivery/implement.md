@@ -1,6 +1,20 @@
 # Continuous implementation checkpoint
 
-## 唯一当前：current10正常选定、全池来源准备已恢复；缺口根因并行
+## 唯一当前：中文横比单位根因批次完成；current11复用已验清单
+
+direct：复用现有native_unit/helper，标签在科学分组后添加，A/B共用valueText。
+8成族RED0.42s→74相关PASS192.07s、Ruff4/strict2/Node3/镜像，非宽门；
+全A3733/B3959不可变数据/组/workspace仅添unit_label_zh，原科学字段全同。
+Ego184 A16+B16四宽四态实过；原B脚本把live32选中行误当全3733 FAIL保留，
+独立全载荷证明后仅B补验。Owner三图，只签所见、不签长英文/最终美学。
+正常current11A11/B11/C9，349事实/原科学与用户清除保持，不再render/save。
+选择后脚本DB整字节断言错误：实际34非current-registry表全同旧DB，只追加
+generation10/11+指针11；原FAIL保留，已只读恢复，无reset/操作重试。
+精确owner-native-unit-current11-v1及STATUS顶节；下一自有65033一次重启以
+加载完整Python批次，再核当前11读链/分享；源E03继续单次终态等候不轮询。
+来源新1698/1922仍未采用/1665缺口，全部终验开，Goal ACTIVE，不阶段暂停。
+
+## 历史：current10正常选定、全池来源准备已恢复；缺口根因并行
 
 9f5edc6已push，原E04终态实际ZCode/GLM5.3Flash/max/exit0/no fallback，
 无progress轮询。Owner原始3781定位/1922原文复核；补224缺失引用分母payload，
