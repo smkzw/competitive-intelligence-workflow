@@ -25,7 +25,11 @@
 4. 精确绑定集合经 SQLite 真源与内容寻址原文（CAS）重开核验：事实行、主证据
    片段、来源版本、定位重提取与原文引用必须逐字一致；``user_modified``/
    ``rejected``/``superseded`` 行、已有其他已接受版本或无解决的来源冲突
-   一律拒绝。新真实复核可以覆盖与既往已接受**完全相同的原子版本**：这些
+   一律拒绝。仅对同一不可变登记标量的旧解析器分母范围允许收据绑定修复：
+   当前解析重放必须逐字段一致，旧版本除 denominator_candidates 外完全
+   一致且旧人数原文/组别可重放。原冲突记录不更新；只追加修正决策/台账，
+   不接受真实值、人群、组别或来源争议。新真实复核可以覆盖与既往已接受
+   **完全相同的原子版本**：这些
    行经逐字节核验后原样复用（科学载荷/标识/来源字节与 review_state 不变，
    不产生新版本行、不晋升用户修订、不关闭冲突）；声明只有在精确闭合覆盖
    时才接受，否则保持 candidate 并作为边界报告。
@@ -63,7 +67,7 @@ from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any, Final, Literal, cast
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from pydantic import ValidationError as PydanticValidationError
 
 from ci_workflow.application.fresh_research_primitives import (
@@ -95,6 +99,7 @@ from ci_workflow.capabilities.scientific_qc import (
 )
 from ci_workflow.domain.evidence import (
     EvidenceFragmentRecord,
+    EvidenceLocator,
     source_version_identity,
 )
 from ci_workflow.domain.ids import stable_id
@@ -143,6 +148,7 @@ _OPERATION: Final = "source.fact.acceptance"
 _EVENT_TYPE: Final = "source_fact_acceptance.reviewed_facts_accepted"
 _EVENT_KIND: Final = "source-fact-acceptance"
 _RUN_ID: Final = "source-fact-acceptance"
+_SCOPE_CORRECTION_OPERATION: Final = "source.registry.denominator_scope_correction"
 _DECISION_KIND: Final = "source-fact-acceptance-decision-v1"
 _DECISION_DIR: Final = "receipts/source_fact_acceptance"
 _IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$")
@@ -166,9 +172,7 @@ def _text(value: object, label: str) -> str:
 
 def _validated_kind(report_kind: str) -> ReportCode:
     if report_kind not in ("A", "B", "C"):
-        raise SourceFactAcceptanceError(
-            f"已复核来源事实物化只适用于 A/B/C 类报告：{report_kind!r}"
-        )
+        raise SourceFactAcceptanceError(f"已复核来源事实物化只适用于 A/B/C 类报告：{report_kind!r}")
     return cast(ReportCode, report_kind)
 
 
@@ -216,9 +220,7 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def source_fact_acceptance_decision_path(
-    report_kind: str, receipt_digest: str
-) -> PurePosixPath:
+def source_fact_acceptance_decision_path(report_kind: str, receipt_digest: str) -> PurePosixPath:
     """接受决策记录的确定性项目相对路径（按回执摘要内容寻址，只追加）。"""
     kind = _validated_kind(report_kind)
     digest = _validated_digest(receipt_digest, "接受回执摘要")
@@ -226,6 +228,16 @@ def source_fact_acceptance_decision_path(
 
 
 # ── 结果与决策记录 ───────────────────────────────────────────────────────────
+
+
+class RegistryScopeCorrection(BaseModel):
+    """Receipt-bound repair of parser scope; original conflict note is retained."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    conflict_set_id: str
+    selected_fact_version_id: str
+    original_resolution_note: str
+    resolution_note: str
 
 
 class ReviewedSourceFactAcceptanceResult(BaseModel):
@@ -247,6 +259,10 @@ class ReviewedSourceFactAcceptanceResult(BaseModel):
     decision_relative_path: str
     decision_digest: str
     accepted_at: datetime
+    source_scope_corrections: tuple[RegistryScopeCorrection, ...] = Field(
+        default=(),
+        exclude_if=lambda value: not value,
+    )
 
     @field_validator(
         "project_id",
@@ -291,6 +307,10 @@ class _AcceptanceDecisionRecord(BaseModel):
     accepted_claim_version_ids: tuple[str, ...]
     boundary_claim_version_ids: tuple[str, ...]
     accepted_at: datetime
+    source_scope_corrections: tuple[RegistryScopeCorrection, ...] = Field(
+        default=(),
+        exclude_if=lambda value: not value,
+    )
 
 
 # ── 快照闭包重开与材料重建 ───────────────────────────────────────────────────
@@ -355,9 +375,7 @@ def _reopen_evidence_snapshot(root: Path, evidence_snapshot_id: str) -> Evidence
     except (PydanticValidationError, ValueError) as error:
         raise SourceFactAcceptanceError(f"证据快照合同无效：{error}") from error
     if locked.snapshot_id != evidence_snapshot_id:
-        raise SourceFactAcceptanceError(
-            "证据快照字节与声明标识不一致：快照被替换或损坏，拒绝接受"
-        )
+        raise SourceFactAcceptanceError("证据快照字节与声明标识不一致：快照被替换或损坏，拒绝接受")
     if manifest.schema_version != "2.0" or manifest.closure is None:
         raise SourceFactAcceptanceError("历史只读证据快照不参与接受物化：缺少传递闭包")
     try:
@@ -367,9 +385,7 @@ def _reopen_evidence_snapshot(root: Path, evidence_snapshot_id: str) -> Evidence
     return manifest
 
 
-def _reconstruct_closure(
-    manifest: EvidenceSnapshotManifest, kind: ReportCode
-) -> _Closure:
+def _reconstruct_closure(manifest: EvidenceSnapshotManifest, kind: ReportCode) -> _Closure:
     closure = manifest.closure
     if closure is None:  # _reopen_evidence_snapshot 已拒绝；保留类型收窄
         raise SourceFactAcceptanceError("证据快照缺少传递闭包")
@@ -469,9 +485,7 @@ def _reconstruct_closure(
                 fact=fact,
                 source_version_id=source_version_id,
                 capture=capture_by_source[fact.source_id],
-                capture_content_digest=_sha256_text(
-                    capture_by_source[fact.source_id].content_text
-                ),
+                capture_content_digest=_sha256_text(capture_by_source[fact.source_id].content_text),
                 fragment_id=fragment_id,
                 fragment=fact_fragment,
                 fact_content_sha256=fact_content_sha256,
@@ -580,13 +594,135 @@ def _bind_context(
 # ── SQLite 真源与 CAS 重开核验 ───────────────────────────────────────────────
 
 
+def _registry_scope_corrections(
+    database: sqlite3.Connection,
+    item: _ClosureFact,
+    receipt_digest: str,
+    parsed: dict[str, dict[str, ResearchFact]],
+) -> tuple[RegistryScopeCorrection, ...]:
+    """Only repair a stale N scope from the SAME immutable registry scalar.
+
+    This runs after normal issuer authorization. Genuine disagreements, prior
+    accepted/user versions, changed source/identity/analysis/value and unreplayed
+    N quotes still fail closed. A visit label alone is never scope evidence.
+    """
+    from ci_workflow.application.source_research_service import (
+        extract_ctgov_atomic_results,
+        research_facts_from_ctgov_atom,
+    )
+
+    conflicts = database.execute(
+        "SELECT conflict_set_id,resolution_note FROM conflict_sets "
+        "WHERE object_type='fact' AND object_id=? AND resolution_state='open'",
+        (item.fact.fact_id,),
+    ).fetchall()
+    if not conflicts:
+        return ()
+    fail = "绑定事实存在未解决的来源冲突：不符合已复核登记分母范围修复"
+    observation = item.fact.result_context
+    if observation is None or observation.value_role != "reported_measure":
+        raise SourceFactAcceptanceError(fail)
+    if item.source_version_id not in parsed:
+        try:
+            atoms, _issues = extract_ctgov_atomic_results(item.capture)
+            parsed[item.source_version_id] = {
+                fact.fact_id: fact
+                for atom in atoms
+                for fact in research_facts_from_ctgov_atom(atom)
+            }
+        except ValueError as error:
+            raise SourceFactAcceptanceError(fail) from error
+    reproduced = parsed[item.source_version_id].get(item.fact.fact_id)
+    selected = item.fact.model_dump(mode="json", exclude={"row_ref"})
+    if reproduced is None or reproduced.model_dump(mode="json", exclude={"row_ref"}) != selected:
+        raise SourceFactAcceptanceError(fail)
+    selected_without_N = json.loads(_canonical_json(selected))
+    selected_without_N["result_context"].pop("denominator_candidates", None)
+    corrections = []
+    for conflict_id, original_note in conflicts:
+        try:
+            members = json.loads(original_note)["fact_version_ids"]
+            if not isinstance(members, list) or len(set(members)) != len(members):
+                raise ValueError("invalid members")
+            if item.version_id not in members or len(members) < 2:
+                raise ValueError("selected version absent")
+            for version_id in members:
+                if version_id == item.version_id:
+                    continue
+                row = database.execute(
+                    "SELECT review_state,primary_fragment_id,content_sha256,"
+                    "scientific_context_json "
+                    "FROM fact_versions WHERE fact_id=? AND fact_version_id=?",
+                    (item.fact.fact_id, version_id),
+                ).fetchone()
+                if row is None or row[0] != "candidate" or row[1] != item.fragment_id:
+                    raise ValueError("non-candidate or different source scalar")
+                prior = json.loads(row[3])
+                if (
+                    _sha256_text(_canonical_json(prior)) != row[2]
+                    or stable_id(
+                        "fact-version",
+                        "scientific-context-v3",
+                        row[2],
+                        item.source_version_id,
+                        item.fragment_id,
+                    )
+                    != version_id
+                ):
+                    raise ValueError("prior identity drift")
+                old_N = prior["result_context"].pop("denominator_candidates", [])
+                if prior != selected_without_N or old_N == selected["result_context"].get(
+                    "denominator_candidates", []
+                ):
+                    raise ValueError("not exclusively denominator scope")
+                if not old_N:
+                    raise ValueError("missing prior denominator is not this repair")
+                for candidate in old_N:
+                    quote = extract_locator_quote(
+                        item.capture.content_text,
+                        media_type=item.capture.media_type,
+                        locator=EvidenceLocator(
+                            document_role="clinical_trial_registry",
+                            field_path="$." + candidate["value_path"],
+                            url=item.capture.url,
+                        ),
+                    )
+                    if (
+                        candidate["group_id"] != observation.group_id
+                        or quote != candidate["raw_value"]
+                        or candidate["parsed_value"] != int(quote)
+                    ):
+                        raise ValueError("prior N quote/group not replayed")
+            note = _canonical_json(
+                {
+                    "classification": "same_registry_scalar_parser_denominator_scope_correction",
+                    "selected_fact_version_id": item.version_id,
+                    "receipt_digest": receipt_digest,
+                    "source_version_id": item.source_version_id,
+                    "original_resolution_note": original_note,
+                }
+            )
+            corrections.append(
+                RegistryScopeCorrection(
+                    conflict_set_id=conflict_id,
+                    selected_fact_version_id=item.version_id,
+                    original_resolution_note=original_note,
+                    resolution_note=note,
+                )
+            )
+        except (KeyError, TypeError, ValueError) as error:
+            raise SourceFactAcceptanceError(fail) from error
+    return tuple(corrections)
+
+
 def _verify_bound_facts(
     *,
     root: Path,
     database_path: Path,
     closure: _Closure,
     context: ScientificQcCurrentContext,
-) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    receipt_digest: str,
+) -> tuple[tuple[str, ...], tuple[str, ...], tuple[RegistryScopeCorrection, ...]]:
     """核验精确绑定集合并返回（全部绑定版本, 其中先前已接受的精确复用版本）。
 
     新真实复核可以覆盖与既往已接受完全相同的原子版本（逐字节核验后原样
@@ -602,6 +738,8 @@ def _verify_bound_facts(
 
     repository = EvidenceRepository(database_path, ContentAddressedStore(root))
     reused_version_ids: set[str] = set()
+    corrections: list[RegistryScopeCorrection] = []
+    parsed: dict[str, dict[str, ResearchFact]] = {}
     with open_database(database_path) as database:
         for item in closure.bound_facts:
             fact = item.fact
@@ -655,13 +793,7 @@ def _verify_bound_facts(
             ).fetchone()
             if sibling is not None:
                 raise SourceFactAcceptanceError("同一逻辑事实已有其他已接受版本：拒绝重复接受")
-            conflict = database.execute(
-                "SELECT 1 FROM conflict_sets WHERE object_type='fact' AND object_id=? "
-                "AND resolution_state='open'",
-                (fact.fact_id,),
-            ).fetchone()
-            if conflict is not None:
-                raise SourceFactAcceptanceError("绑定事实存在未解决的来源冲突：不得成为来源接受")
+            corrections.extend(_registry_scope_corrections(database, item, receipt_digest, parsed))
             primary = database.execute(
                 "SELECT 1 FROM fact_evidence WHERE fact_version_id=? AND fragment_id=? "
                 "AND evidence_role='primary'",
@@ -735,7 +867,7 @@ def _verify_bound_facts(
         )
         if recomputed_version != item.version_id:
             raise SourceFactAcceptanceError("事实 v3 身份与快照材料不一致：拒绝接受")
-    return tuple(sorted(closure_version_ids)), tuple(sorted(reused_version_ids))
+    return tuple(sorted(closure_version_ids)), tuple(sorted(reused_version_ids)), tuple(corrections)
 
 
 def _verify_bound_claims(
@@ -776,8 +908,7 @@ def _verify_bound_claims(
             if row[4] is not None:
                 raise SourceFactAcceptanceError("绑定声明带有替代谱系：拒绝接受")
             links = database.execute(
-                "SELECT fact_version_id,support_role FROM claim_facts "
-                "WHERE claim_version_id=?",
+                "SELECT fact_version_id,support_role FROM claim_facts WHERE claim_version_id=?",
                 (item.version_id,),
             ).fetchall()
             expected_links = {(version_id, "supports") for version_id in item.fact_version_ids}
@@ -850,9 +981,7 @@ def _suspend_append_only_guards(
     return tuple(suspended)
 
 
-def _restore_append_only_guards(
-    database: Any, suspended: tuple[tuple[str, str], ...]
-) -> None:
+def _restore_append_only_guards(database: Any, suspended: tuple[tuple[str, str], ...]) -> None:
     for name, sql in suspended:
         existing = database.execute(
             "SELECT 1 FROM sqlite_master WHERE type='trigger' AND name=?", (name,)
@@ -869,6 +998,7 @@ def _materialize(
     claim_key: str,
     result_digest: str,
     accepted_at: datetime,
+    source_scope_corrections: tuple[RegistryScopeCorrection, ...] = (),
 ) -> None:
     """在单事务内把仍是候选的精确子集翻转为 accepted 并记录幂等键。
 
@@ -879,6 +1009,26 @@ def _materialize(
 
     with open_database(database_path) as database:
         database.execute("BEGIN IMMEDIATE")
+        for correction in source_scope_corrections:
+            original = database.execute(
+                "SELECT resolution_state,resolution_note FROM conflict_sets "
+                "WHERE conflict_set_id=?",
+                (correction.conflict_set_id,),
+            ).fetchone()
+            if original != ("open", correction.original_resolution_note):
+                raise SourceFactAcceptanceError("来源范围冲突已漂移：事务回滚")
+            # conflict_sets is append-only too. Preserve the historical conflict,
+            # append receipt-bound repair authority in the existing ledger.
+            database.execute(
+                "INSERT INTO idempotency_keys "
+                "(idempotency_key,operation,result_digest,created_at) VALUES (?,?,?,?)",
+                (
+                    _scope_correction_key(correction),
+                    _SCOPE_CORRECTION_OPERATION,
+                    _sha256_text(correction.resolution_note),
+                    accepted_at.isoformat(),
+                ),
+            )
         suspended = _suspend_append_only_guards(database)
         updated_facts = 0
         for version_id in flip_fact_version_ids:
@@ -909,11 +1059,7 @@ def _materialize(
             "SELECT operation,result_digest FROM idempotency_keys WHERE idempotency_key=?",
             (claim_key,),
         ).fetchone()
-        if (
-            ledger is None
-            or str(ledger[0]) != _OPERATION
-            or str(ledger[1]) != result_digest
-        ):
+        if ledger is None or str(ledger[0]) != _OPERATION or str(ledger[1]) != result_digest:
             raise SourceFactAcceptanceError("同一接受请求标识对应了不同载荷")
         _restore_append_only_guards(database, suspended)
 
@@ -951,9 +1097,7 @@ def _write_decision(
             raise SourceFactAcceptanceError("接受决策记录已存在且内容不同：拒绝覆盖")
         return prior, payload
     payload = (_canonical_json(record.model_dump(mode="json")) + "\n").encode("utf-8")
-    descriptor, temporary = tempfile.mkstemp(
-        prefix=".source-fact-acceptance-", dir=path.parent
-    )
+    descriptor, temporary = tempfile.mkstemp(prefix=".source-fact-acceptance-", dir=path.parent)
     try:
         with os.fdopen(descriptor, "wb") as stream:
             stream.write(payload)
@@ -997,7 +1141,8 @@ def _ledger_result_digest(root: Path, claim_key: str) -> str | None:
 
 
 def _ledger_result_digest_from_database(
-    database: sqlite3.Connection, claim_key: str,
+    database: sqlite3.Connection,
+    claim_key: str,
 ) -> str | None:
     row = database.execute(
         "SELECT operation,result_digest FROM idempotency_keys WHERE idempotency_key=?",
@@ -1030,6 +1175,7 @@ def _result_from_decision(
         decision_relative_path=relative,
         decision_digest=decision_digest,
         accepted_at=record.accepted_at,
+        source_scope_corrections=record.source_scope_corrections,
     )
 
 
@@ -1038,24 +1184,50 @@ def _verify_materialized(root: Path, result: ReviewedSourceFactAcceptanceResult)
         _verify_materialized_from_database(database, result)
 
 
+def _scope_correction_key(correction: RegistryScopeCorrection) -> str:
+    return stable_id(
+        "registry-scope-correction",
+        correction.conflict_set_id,
+        _sha256_text(correction.resolution_note),
+    )
+
+
 def _verify_materialized_from_database(
-    database: sqlite3.Connection, result: ReviewedSourceFactAcceptanceResult,
+    database: sqlite3.Connection,
+    result: ReviewedSourceFactAcceptanceResult,
 ) -> None:
+    for correction in result.source_scope_corrections:
+        row = database.execute(
+            "SELECT resolution_state,resolution_note FROM conflict_sets WHERE conflict_set_id=?",
+            (correction.conflict_set_id,),
+        ).fetchone()
+        ledger = database.execute(
+            "SELECT operation,result_digest FROM idempotency_keys WHERE idempotency_key=?",
+            (_scope_correction_key(correction),),
+        ).fetchone()
+        if row != ("open", correction.original_resolution_note) or ledger != (
+            _SCOPE_CORRECTION_OPERATION,
+            _sha256_text(correction.resolution_note),
+        ):
+            raise SourceFactAcceptanceError("已记录来源范围修复未被完整物化：拒绝重放")
     for version_id in result.accepted_fact_version_ids:
         row = database.execute(
-            "SELECT review_state FROM fact_versions WHERE fact_version_id=?", (version_id,),
+            "SELECT review_state FROM fact_versions WHERE fact_version_id=?",
+            (version_id,),
         ).fetchone()
         if row is None or str(row[0]) != "accepted":
             raise SourceFactAcceptanceError("已记录接受未被完整物化：拒绝重放")
     for version_id in result.accepted_claim_version_ids:
         row = database.execute(
-            "SELECT review_state FROM claim_versions WHERE claim_version_id=?", (version_id,),
+            "SELECT review_state FROM claim_versions WHERE claim_version_id=?",
+            (version_id,),
         ).fetchone()
         if row is None or str(row[0]) != "accepted":
             raise SourceFactAcceptanceError("已记录声明接受未被完整物化：拒绝重放")
     for version_id in result.boundary_claim_version_ids:
         row = database.execute(
-            "SELECT review_state FROM claim_versions WHERE claim_version_id=?", (version_id,),
+            "SELECT review_state FROM claim_versions WHERE claim_version_id=?",
+            (version_id,),
         ).fetchone()
         if row is None or str(row[0]) != "candidate":
             raise SourceFactAcceptanceError("边界声明状态与已记录决策不一致：拒绝重放")
@@ -1071,9 +1243,7 @@ def _load_decision_record(
         raise SourceFactAcceptanceError("接受决策记录缺失：已记录接受不能被重放证明")
     try:
         encoded = path.read_bytes()
-        record = _AcceptanceDecisionRecord.model_validate(
-            json.loads(encoded.decode("utf-8"))
-        )
+        record = _AcceptanceDecisionRecord.model_validate(json.loads(encoded.decode("utf-8")))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, PydanticValidationError) as error:
         raise SourceFactAcceptanceError("接受决策记录不可读或损坏") from error
     if record.report_kind != kind or record.receipt_digest != receipt_digest:
@@ -1115,8 +1285,11 @@ def _replay(
     ledger_result_digest: str,
 ) -> ReviewedSourceFactAcceptanceResult:
     result = _read_replay_decision(
-        root=root, kind=kind, receipt_digest=receipt_digest,
-        evidence_snapshot_id=evidence_snapshot_id, claim_snapshot_id=claim_snapshot_id,
+        root=root,
+        kind=kind,
+        receipt_digest=receipt_digest,
+        evidence_snapshot_id=evidence_snapshot_id,
+        claim_snapshot_id=claim_snapshot_id,
         ledger_result_digest=ledger_result_digest,
     )
     _verify_materialized(root, result)
@@ -1224,15 +1397,12 @@ def _verify_scope_lifecycle(
     """
     request_payload = _read_scope_json(root, scope.request_relative, "科学复核请求")
     request_digest = request_payload.pop("request_digest", None)
-    if not isinstance(request_digest, str) or request_digest != _scoped_digest(
-        request_payload
-    ):
+    if not isinstance(request_digest, str) or request_digest != _scoped_digest(request_payload):
         raise SourceFactAcceptanceError("科学复核请求摘要漂移：请求已被篡改或损坏")
     scientific_context = request_payload.get("scientific_context")
     if (
         not isinstance(scientific_context, dict)
-        or scientific_context.get("context_digest")
-        != receipt.production.production_context_digest
+        or scientific_context.get("context_digest") != receipt.production.production_context_digest
     ):
         raise SourceFactAcceptanceError("科学复核请求不属于该回执的生产上下文")
     try:
@@ -1244,10 +1414,7 @@ def _verify_scope_lifecycle(
     if request_production != receipt.production:
         raise SourceFactAcceptanceError("科学复核请求生产身份与回执不一致")
     review_input_digest = request_payload.get("review_input_digest")
-    if (
-        not isinstance(review_input_digest, str)
-        or _SHA256.fullmatch(review_input_digest) is None
-    ):
+    if not isinstance(review_input_digest, str) or _SHA256.fullmatch(review_input_digest) is None:
         raise SourceFactAcceptanceError("科学复核请求缺少有效审阅输入摘要")
     portal_binding = request_payload.get("portal_binding")
     if not isinstance(portal_binding, dict):
@@ -1261,9 +1428,7 @@ def _verify_scope_lifecycle(
     if issuance_payload.get("record_kind") != REVIEW_ISSUANCE_RECORD_KIND:
         raise SourceFactAcceptanceError("真实签发记录类别无效")
     record_digest = issuance_payload.pop("record_digest", None)
-    if not isinstance(record_digest, str) or record_digest != _scoped_digest(
-        issuance_payload
-    ):
+    if not isinstance(record_digest, str) or record_digest != _scoped_digest(issuance_payload):
         raise SourceFactAcceptanceError("真实签发记录摘要漂移：记录已被篡改或损坏")
     if issuance_payload.get("request_digest") != request_digest:
         raise SourceFactAcceptanceError("签发记录不属于该科学复核请求")
@@ -1291,15 +1456,11 @@ def _verify_scope_lifecycle(
     except (PydanticValidationError, ValueError) as error:
         raise SourceFactAcceptanceError(f"权威生产上下文重建失败：{error}") from error
     if stored_digest != context.context_digest:
-        raise SourceFactAcceptanceError(
-            "权威生产上下文摘要与物化内容不一致：文件已被篡改或损坏"
-        )
+        raise SourceFactAcceptanceError("权威生产上下文摘要与物化内容不一致：文件已被篡改或损坏")
     try:
         bind_receipt_to_production_context(receipt, context)
     except ScientificReviewReceiptError as error:
-        raise SourceFactAcceptanceError(
-            f"回执与该纪元权威生产上下文不一致：{error}"
-        ) from error
+        raise SourceFactAcceptanceError(f"回执与该纪元权威生产上下文不一致：{error}") from error
     if decision.project_id != context.project_id:
         raise SourceFactAcceptanceError("接受决策项目与该纪元权威上下文不一致")
     expected_coverage_set_id = stable_id(
@@ -1356,9 +1517,7 @@ def _verify_scope_lifecycle(
     )
     for verdict_value, current_value, label in agreement:
         if verdict_value != current_value:
-            raise SourceFactAcceptanceError(
-                f"科学质控结论{label}与该纪元权威材料不一致"
-            )
+            raise SourceFactAcceptanceError(f"科学质控结论{label}与该纪元权威材料不一致")
     if verdict.verdict != "accepted" or verdict.has_blocking_issues():
         raise SourceFactAcceptanceError("科学质控结论未接受该纪元候选")
     if not (
@@ -1428,7 +1587,10 @@ def _reopen_scope_decision(
 
 
 def load_materialized_source_acceptance(
-    *, project_root: Path, report_kind: str, evidence_snapshot_id: str,
+    *,
+    project_root: Path,
+    report_kind: str,
+    evidence_snapshot_id: str,
 ) -> ReviewedSourceFactAcceptanceResult:
     """只读重开与精确证据快照完全一致且已完成物化的来源接受决策。
 
@@ -1550,11 +1712,12 @@ def accept_reviewed_source_facts(
             evidence_snapshot_id=evidence_id,
             claim_snapshot_id=claim_id,
         )
-        accepted_fact_version_ids, reused_fact_version_ids = _verify_bound_facts(
+        accepted_fact_version_ids, reused_fact_version_ids, scope_corrections = _verify_bound_facts(
             root=root,
             database_path=database_path,
             closure=closure,
             context=context,
+            receipt_digest=receipt.receipt_digest,
         )
         accepted_claim_version_ids, boundary_claim_version_ids, reused_claim_version_ids = (
             _verify_bound_claims(
@@ -1588,10 +1751,9 @@ def accept_reviewed_source_facts(
             accepted_claim_version_ids=accepted_claim_version_ids,
             boundary_claim_version_ids=boundary_claim_version_ids,
             accepted_at=decided_at,
+            source_scope_corrections=scope_corrections,
         )
-        record, payload = _write_decision(
-            root, relative, record, issued_at=receipt.issued_at
-        )
+        record, payload = _write_decision(root, relative, record, issued_at=receipt.issued_at)
         result = _result_from_decision(
             record,
             relative=relative,
@@ -1604,6 +1766,7 @@ def accept_reviewed_source_facts(
             claim_key=claim_key,
             result_digest=_digest(result.model_dump(mode="json")),
             accepted_at=record.accepted_at,
+            source_scope_corrections=scope_corrections,
         )
         _append_acceptance_event(root, result)
         return result

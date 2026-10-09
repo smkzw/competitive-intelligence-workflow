@@ -1,4 +1,24 @@
-# 唯一当前状态：1007V1 连续实施；共同来源候选接通，桌面横比实屏继续修正
+# 唯一当前状态：1007V1 连续实施；独立来源挑战完成，正式来源接受运行中
+
+基线2d6d1016/product9224f718已push。C e2正常接受及16桌面态、ABv8普通
+49/101页及32桌面态保持，不重跑；仍不签所有页面美学或全产品完成。
+Fresh C03已真实结束：ZCode GLM-5.3-Flash返回身份/观察effort max，单轮
+1176.924s/exit0/no fallback，105定位/91观察、33范围修正/35问题复核无阻塞。
+该结论仅咨询来源切片；不能代替正式issuer/采用、数值共轴或报告发布。
+Owner正常接受接缝新增同源同标量分母范围证明：原open冲突/旧事实/快照不改，
+收据绑定修正意向与台账追加，真实值/人群/组/原文/parsedN矛盾仍拒绝。
+30相关PASS2.46s、Ruff两文件/strict生产一文件/diff通过，不是全仓门。
+真实A source-only request已正常准备，snapshotfca99/contentaac3277e，context
+e4b687f3；105事实/91声明仍未采用，无全宇宙门或报告晋级。预检PASS后
+正常issuer20:09:47UTC单次启动，原独立OMP会话续接；requestedgpt6.1sol/high，
+实际终态/回执仍待。正常签发宿主不支持ZCode app-server，显式使用live C03
+允许OMP兼容路线，不静默换模型或称另一个意见。
+四文件人数范围展示E03并行运行；共享schema/接受/current由owner负责。
+[唯一最新精确恢复](evidence/1007V1/owner-registry-scope-repair-and-formal-source-v1.json)。
+下一只收既有终态，正常来源采用后接最新ABC真实编辑/同步/配置/离线分享。
+current仍无；全源/24门户/三宿主/安装/恢复/RC仍开；Goal实查ACTIVE，非暂停。
+
+## 以下为版本历史；其中PENDING和“下一”不代表当前任务
 
 源码9224f718已push；C e2正常接受/258来源事实和16实态保持，不重跑。
 E03实际结束，无fallback；owner复开105定位/91声明，正常摄取一次、A+B各91绑定。

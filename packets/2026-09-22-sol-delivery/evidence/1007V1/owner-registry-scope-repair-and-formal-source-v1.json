@@ -1,0 +1,49 @@
+{
+  "schema_version": "1007-bounded-current-checkpoint-1",
+  "parent_code_commit": "9224f7186a3afdb82b52266cf48864edebe24fcf",
+  "source_snapshot": "evidence-snapshot_fca99fb6250a1d7452356764",
+  "source_snapshot_sha256": "2d0521aef6132555c4ebd8cd262281a93cb5e6c4da615075036960aa4462b154",
+  "advisory_challenge": {
+    "status": "ACCEPT_BOUNDED_NOT_FORMAL_ADOPTION",
+    "output_relative": "runs/conference/ci-1007-joint-ab-source-challenge-v1/evidence_single_object.md",
+    "output_sha256": "dad69e3c3602f966c26970ef841790454ed34474b0c8a49e2225251281ffc991",
+    "actual_route": "ZCode app-server GLM-5.3-Flash requested/response exact, observed effort max",
+    "actual_session": "sess_6c714390-b263-4b58-9999-b4898f9605cb",
+    "runtime": "exit0; one round1176.924s; protocol errors[]; no fallback/re-dispatch/progress polling",
+    "covered": "91 values/N;33 changed scope=25 actualN+8 sameN different path;140 reference IDs/364 clauses;35 descriptive concepts;3733 members retained;no coaxis permission",
+    "owner_review": "reviews/codex_conference_ci-1007-joint-ab-source-challenge-v1_review.md"
+  },
+  "production_repair": "Normal accepted receipt, exact source scalar/parser/quote/group proof only. Append correction decision and existing idempotency ledger; never rewrite original open conflict/fact/snapshot. Genuine disagreements remain rejected.",
+  "verification": {
+    "command": ".venv/bin/pytest -q tests/integration/test_1007_reviewed_denominator_scope_correction.py tests/integration/test_r24_reviewed_source_fact_acceptance.py tests/integration/test_conflicts_preserved.py",
+    "result": "30 passed in2.46s; Ruff two owner files PASS; strict-mypy source acceptance module PASS; diff whitespace PASS",
+    "scope": "source acceptance root family and adjacent regression, not whole repository/real scientific or report delivery",
+    "failures_preserved": "Initial RED2fail4pass; attempted historical conflict UPDATE was correctly rejected by append-only trigger, changed to append-only proof;2 Ruff long lines fixed. Later wrong test filename collected0, not PASS, corrected actual path once. Formal preparation row_ref lives in consumer_binding, failure before output/DB writes, then exact scope restored. Guard rejected brace pseudo-paths before any dispatch, replaced concrete paths."
+  },
+  "formal_source_review": {
+    "status": "RUNNING_NOT_ACCEPTED",
+    "preparation_relative": ".artifacts/1007-abc-current-integration-v1/working/project/runs/joint-ab-formal-source-v1/preparation.json",
+    "context_digest": "e4b687f31011d3320a504fdb1cfc77937d0b49e15c80a11529722b6773417bcf",
+    "claim_snapshot_id": "claim-snapshot_378738818ffb5cc5dc21b313",
+    "criteria": "1007V1-registry-source-slice-only-v1; no full report gate asserted",
+    "actual_started_at": "2026-10-09T20:09:47.667481+00:00",
+    "actual_issuer_pid_at_launch": 71196,
+    "actual_session": "01a121d9-213b-7000-b55d-08b5f52a1e7f",
+    "requested_route": "Pi/OMP openai-codex/gpt-6.1-sol:high",
+    "adapter_reason": "Normal product receipt supports Codex/Hermes/OMP, not ZCode app-server. Explicit live C03 approved compatibility route, not silent substitution or another claimed opinion.",
+    "guard": "preflight PASS before Popen; route manifest verified; actual model result and formal verdict/receipt still pending",
+    "full_report_gate": "NOT_RUN",
+    "current_switched": false
+  },
+  "parallel_display_execution": {
+    "task": "ci-1007-denominator-scope-disclosure-v1",
+    "status": "RUNNING_NOT_ACCEPTED",
+    "scope": "four declared disjoint source/test files only; measure versus visit/categoryN disclosure from exact source paths; owner owns mirror/acceptance/current",
+    "requested_route": "CodeBuddy/deepseek-v4.1-flash:max; runtime identity/result still pending",
+    "runner_pid_at_launch": 68236
+  },
+  "already_complete_do_not_rerun": "C e2 source/report acceptance and16 desktop states;A/B v8 normal49/101 pages and32 actual desktop states are bound in owner-joint-clinical-desktop32-v8.json",
+  "next": "Collect existing terminal events, verify normal issuer and accept exact105/91 through normal API only; integrate four-file display worker, mirror once and render new accepted-source candidate; then latest same-project ABC current/save-clear-undo/config/offline share.",
+  "not_run": "full universe/current ChinaMAH/publications/Protocol-SAP; full report acceptance;latest jointABCcurrent operation/share;24portals/three hosts/install/recovery/RC",
+  "status": "development candidate;goal active;not pause/delivery"
+}
