@@ -3169,3 +3169,20 @@ Owner实际看ABC离线三PNG；只复用Ego184，fresh/跨浏览器未验，原
 Ask待答。三RED→45相关PASS与真实32态绑定本版，宽质量六步只绑定b72/19，
 不为250px同族改动逐行跑宽门。下一白名单Git提交，再fixed-commit隔离安装/
 current运行验证；四save/来源采用/登记/795新增refresh不重做。无暂停/RC/cleanup。
+
+### 固定9d9fa38c隔离安装与current21读取；全物理页结构检查启动
+
+模式direct：现有白名单builder/bootstrap与hash/运行来源可确定验证，不增加
+共享状态writer或医学复核；Ego184/p2单owner，不复制同候选浏览器会话。
+9d9fa38c正常push26365 exit0/远端exact，400文件HTML-only包d564a730，
+可信installer ae854355，原60072私有bootstrap终态exit0。实际已安装CLI在
+污染全局Python变量时PACKAGE_OK；私有Python真实current读取39600 exit0
+（1b3a7b00），1144事实/A21B21C9/合法A+B估计和清除原值、11716原文件exact。
+零save/render/adoption；不是三宿主/科学/RC。Helper Ruff与MYPYPATH=src
+strict1文件通过，错拼变量的失败保留，不缩全仓范围冒称宽门。
+独立新建源码曾空index，修正仅新worktree read-tree后clean才构建；主工作树
+不动。精确已完成后正常移除可重建15M源码；只清理新安装cache1376文件/
+183.4MiB管理器计数，安装及bundle/历史留存，清理后实际PACKAGE_OK。
+原Ego83258在169实际HTML页×四宽676结构访问，代表PNG另外目视；未运行/
+失败不计PASS，不争用p2或重启原批。临时profile原Ask待答。下一原终态及
+来源映射缺口有界调查；不重演四save/795refresh，不阶段暂停或宣布交付。
