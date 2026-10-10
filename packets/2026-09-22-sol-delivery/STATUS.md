@@ -1,4 +1,42 @@
-# 唯一当前状态：1007V1连续实施；组别根因修复通过限定复核，未切当前报告
+# 唯一当前状态：1007V1连续实施；科学修复19候选，A/B可达/键盘四宽通过
+
+当前以本顶节及owner-mixed-impact-and-formal-source-v2.json为准。输入main/origin
+e616f415；current21 A21/B21/C9/1144/generation67b793ef及11716文件仍保持。
+原全169页×四宽83258已经terminal0，676结构访问并非审美/科学接受。
+
+原科学C03 terminal1013.198s/REVISE支持PK边界/ADA人群、TESAE和SD缺口；
+原报告不改。共同生产源修复后冻结四原源19candidate、13既有版本精确复用，
+零采用/save/current。c30ffc35/package86199fda，最终classifier8ad5cab2的原源
+重提取等价532740aa。122相关PASS属于较早qualifier，最终86PASS18.83s及
+UI17PASS1.47s验证当前改动，不混版。宽开发gate53391终态0：Ruff/strict286、
+1185活跃/20兼容/7分层及旧路径六步通过（46a4be9c），quality-only非发布门。
+同会话修复C03原42788/PID73902及NOTE_EXIT82920 PENDING，6180s剩余hardwait，
+不progress轮询/延迟重派。modelvariant未native独立证实，cursor底层UNKNOWN，
+精确跨模型独立性不能声称。咨询不等于正式issuer/来源接受。
+
+普通当前值预览72410已terminal0 A49/B104/1144/11716不变；Ego184/p2原12232
+四宽几何/原生收起/resize保焦/展开、B48人口学与183总基线、图点原文及Esc通过，
+proof bf3c2af5。Owner实看A1440/B1920：A两靶点七阶段修复可用；B整行SD图过大/
+标题重复、C长限制尚开，不以48行可达签全部审美。原A v1/v2及两次焦点失败
+保留，未覆盖为PASS。B worker217.706s底层模型UNKNOWN，owner两RED后28相关PASS。
+
+下一：收原修复会商及宽门，白名单递交；既有正式issuer/有界新科学版本政策
+处理旧已接受PK领域，绝不通用放宽兄弟冲突。之后合格347新消费者/正常current
+事务；旧3989采用/886登记/795刷新/四save不重复。原freshprofile Ask仍待答，
+无profile操作；其他UI/科学分支继续。全源/论文/MAH/全页视觉/三宿主/恢复/
+24门户/RC未关。以下全部为前节点历史记录，旧“最前/最新/下一/PENDING”不再
+代表当前进程，不重读旧PID或重跑已完成操作。
+
+## 历史：半衰期首次修复与初次科学会商派发
+
+最前状态：原半衰期执行91860已终态211.4s/exit0，cursor/default底层模型UNKNOWN
+如实保留。Owner1复数RED→88相关PASS24.06s/Ruff3/strict3；共同classifier
+8ebaa39b。普通原源重放89754一次：3899精确原子保留，仅2条转PK，46研究/
+3620efficacy/229safety/50additional、11716持久文件不变（0e9fdcdf）。旧受理/
+历史源版本不改，current21尚未更新。Fresh科学C03原37628/PID66785已一次
+启动审分类及14现有候选安全原子，原资料/冻结产物，不读执行者论证，不轮询。
+执行底层model未知，精确跨模型独立性不能证明；C03实际identity待终态。
+技术副本349绑定证明不签临床分类，下一只收原终态与正式源/新版本政策处理。
 
 最新：本批3069e00187f7ac24a0b2bad68010a69f5e5d6e67已正常push核验。隔离副本
 生产349A+349B完成，原最后pin断言FAIL保留；只读恢复89f08800核11716持久

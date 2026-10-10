@@ -34,9 +34,9 @@
       <tr id="{{ row.row_id }}" data-additional-row data-additional-text="{{ row.domain_label }} {{ row.endpoint }} {{ row.trial_id }} {{ row.group_title }} {{ row.class_title }} {{ row.category_title }}">
         <td>{{ row.domain_label }}</td>
         <td>{% if row.group_assignment_state == 'declared' %}{{ product_names[row.product_id] }}{% else %}产品归属待核{% endif %}<br><small>{{ row.trial_id|upper }}</small></td>
-        <td>{{ row.endpoint }}<br><small>{{ row.time_window }}{% if row.class_title %}｜{{ row.class_title }}{% endif %}{% if row.category_title %}｜{{ row.category_title }}{% endif %}</small></td>
+        <td>{{ row.endpoint }}<br><small>{{ row.time_window }}{% if row.class_title %}｜{{ row.class_title }}{% endif %}{% if row.category_title %}｜{{ row.category_title }}{% endif %}{% if row.get('analysis_population') %}<br>分析人群：{{ row.analysis_population }}{% endif %}</small></td>
         <td>{{ row.group_title }}</td>
-        <td><strong>{{ row.raw_value }} {{ row.raw_unit }}</strong></td>
+        <td><strong>{{ row.raw_value }} {{ row.raw_unit }}</strong>{% if row.get('source_param_type') %}<br><small>统计形式：{{ row.source_param_type }}</small>{% endif %}{% if row.get('raw_dispersion') is not none %}<br><small>{{ row.source_dispersion_type }}：{{ row.raw_dispersion }} {{ row.raw_unit }}</small>{% endif %}{% if row.get('analysis_n') is not none %}<br><small>分析人数 N={{ row.analysis_n }}；不用于把该值换算成比例</small>{% endif %}{% if row.get('dispersion_parse_issue') %}<br><small>离散程度解析待核：{{ row.dispersion_parse_issue }}</small>{% endif %}</td>
         <td><a href="{{ row.source_url }}" target="_blank" rel="noopener noreferrer">登记原文</a><br><small>逐事实来源核验待完成</small></td>
       </tr>
     {% endfor %}</tbody>

@@ -28,6 +28,8 @@ _NEGATION_PATTERNS = (
     re.compile(r"\bnon[\s-]*treatment[\s-]*emergent\b", re.I),
     re.compile(r"\bnon[\s-]*teaes?\b", re.I),
     re.compile(r"\b(?:not|no|without)\s+teaes?\b", re.I),
+    re.compile(r"\bnon[\s-]*tesaes?\b", re.I),
+    re.compile(r"\b(?:not|no|without)\s+(?:any\s+)?tesaes?\b", re.I),
 )
 
 # 特定族优先（会商 #1：任何 specific 标记先于总体键判定）
@@ -48,7 +50,7 @@ _SPECIFIC_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
         r"|(?<![a-z])aesis?(?![a-z])", re.I)),
     # 严重 TEAE 子集：特定子集，不得归 any_teae/any_sae
     ("serious_teae_subset", re.compile(
-        r"serious\s+(?:treatment[\s-]*emergent|teaes?)"
+        r"\btesaes?\b|serious\s+(?:treatment[\s-]*emergent|teaes?)"
         r"|treatment[\s-]*emergent\s+(?:saes?|serious\s+(?:adverse\s+events?|aes?))",
         re.I)),
 )
@@ -135,7 +137,7 @@ def _describe_single_safety_concept(title: str) -> SafetyConcept:
     if not text:
         return SafetyConcept(key="unknown")
     lowered = text.casefold()
-    if re.search(r"\b(?:no|not|without)\s+(?:any\s+)?teaes?\b", lowered):
+    if re.search(r"\b(?:no|not|without)\s+(?:any\s+)?(?:teaes?|tesaes?)\b", lowered):
         # No catalog key for absence of TEAE: preserve the negative qualifier,
         # never reinterpret its reported participant count as zero TEAE events.
         return SafetyConcept("unknown", polarity="negative_presence")
@@ -155,7 +157,7 @@ def _describe_single_safety_concept(title: str) -> SafetyConcept:
     affirmed = lowered
     for pattern in _NEGATION_PATTERNS:
         affirmed = pattern.sub(" ", affirmed)
-    teae_present = bool(re.search(r"\bteaes?\b|treatment[\s-]*emergent", affirmed))
+    teae_present = bool(re.search(r"\b(?:teaes?|tesaes?)\b|treatment[\s-]*emergent", affirmed))
     relatedness = "unspecified"
     for qualifier, qualifier_regex in (
         ("unrelated", r"\bunrelated\b"),

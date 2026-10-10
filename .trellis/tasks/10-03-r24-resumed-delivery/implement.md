@@ -1,5 +1,40 @@
 # Continuous implementation checkpoint
 
+## 当前：科学19候选与A/B普通预览完成，修复会商及宽门待终态
+
+execution-plus-conference：独立源复核实际REVISE后owner修共同分类/SD/TESAE；
+来源current由owner唯一写，A/B呈现与科学资料互不阻断，Ponytail复用现有组件。
+四原源19candidate c30ffc35/package86199fda，13精确旧安全版本复用；末版ADA
+限定的19事实重提取等价532740aa、classifier8ad5cab2。未采用、未切current。
+122相关PASS不是最终qualifier版；最终86PASS18.83s及UI17PASS1.47s/Ruff8/strict5
+准确记录。原C03 1013.198s REVISE不覆盖；同session93da10df修复42788及
+NOTE_EXIT82920待终态/6180s剩余，不progress轮询。模型variant未native单独证实，
+执行者cursor底层UNKNOWN，独立性限定保留。
+
+普通预览72410 terminal0 A49/B104、1144当前事实/11716文件保持；原12232
+Ego184四宽实际七阶段同行、38产品/原生summary收起/resize焦点/再展开，以及
+B48人口学/183总基线、图点来源/Esc通过（bf3c2af5）。Owner看两实图；B整行
+SD图及重复标题/C长限制仍开。原676结构访问已完成不重跑、不签全部审美。
+开发里程碑gate53391终态0，Ruff/strict286/1185活跃/20兼容/7分层及旧路径六步
+quality-only通过（46a4be9c），不签报告/来源/发布；源guard对不同已接受PK版本
+仍拒绝，须正式issuer与有界新版本政策，不自签咨询。下一收原终态、白名单
+commit/push，合格后正常登记347消费者和current事务。旧3989/886/795/四save
+不重复；Goal ACTIVE无暂停/RC，五用户文件和旧中文根零操作。
+
+以下为历史现场，旧“最新/当前/下一”不是现行运行指令。
+
+## 最新：半衰期开发根因通过，原源重放完成，科学C03待终态
+
+Execution-plus-conference：原E0391860终态211.4s/exit0；实际仅cursor/default
+选择器，底层模型UNKNOWN，不能称已核模型身份。Owner复数1RED后最小共享
+规则修复，88相关PASS24.06s/Ruff3/strict3。普通冻结源重放89754一次通过：
+3899原子/46研究保留，仅2条疗效→PK；11716持久文件不变，0采用/登记/save。
+proof0e9fdcdf；精确执行recipe5e7c1e9d在本地保留，后续仅格式行拆分不重跑。
+Fresh C03原37628/PID66785一次按原始资料审分类和14既有候选原子；已订阅
+kernel NOTE_EXIT，不progress轮询。执行底层模型未知导致跨模型独立性未证明。
+原83258仍唯一p2实页检查；收终态后才允许更新current21。候选、咨询、正式
+issuer/采用与发布分层，旧3989采用/795刷新/四save不重复。非暂停/RC。
+
 ## 最新：隔离绑定结果已收；药代分类根因修复执行中
 
 原38984副本生产登记349A/B均返回，最后全文件pin断言FAIL；原FAIL不覆盖。

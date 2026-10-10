@@ -99,6 +99,60 @@ def test_dermatitis_score_grade_is_not_an_adverse_event_grade() -> None:
     assert _outcome_category(title) == "outcome"
 
 
+@pytest.mark.parametrize(("title", "expected"), [
+    ("Half-life (t1/2) of Nemolizumab", "pk_pd"),
+    ("Half-life(t1/2) of Nemolizumab", "pk_pd"),
+    ("Terminal half-life", "pk_pd"),
+    ("Elimination half-life", "pk_pd"),
+    ("Elimination half-lives of the drug and metabolite", "pk_pd"),
+    ("Half-lives of anti-drug antibodies", "immunogenicity"),
+    ("Pharmacokinetic Cmax", "pk_pd"),
+    ("Participants With Anti-drug Antibodies (ADA)", "immunogenicity"),
+    ("ADA half-life after dosing", "immunogenicity"),
+    ("Duration of clinical response", "efficacy"),
+    ("Time to 50% improvement from baseline", "efficacy"),
+    ("Quality of Life Using the EORTC QLQ-C30", "efficacy"),
+    ("Half the subjects with clinical response", "efficacy"),
+])
+def test_explicit_drug_half_life_is_pk_pd_not_clinical_guess(
+    title: str, expected: str,
+) -> None:
+    assert classify_source_outcome(title) == expected
+
+
+def test_half_life_parser_keeps_raw_number_unit_group_and_visit() -> None:
+    title = "Half-life (t1/2) of Nemolizumab"
+    record = {
+        "resultsSection": {"outcomeMeasuresModule": {"outcomeMeasures": [{
+            "title": title,
+            "timeFrame": (
+                "Pre-dose, 12 hours, 24 hours, Days 3, 4, 5, 6, 7, 8, 9, 10, 11, "
+                "15, 22, 29, 36, 43, 50, 57, 71, and 85 post-dose"
+            ),
+            "unitOfMeasure": "days",
+            "paramType": "NUMBER",
+            "groups": [
+                {"id": "OG000", "title": "Nemolizumab With AI"},
+                {"id": "OG001", "title": "Nemolizumab With DCS"},
+            ],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": "OG000", "value": "18"},
+                {"groupId": "OG001", "value": "18.5"},
+            ]}]}],
+        }]}},
+    }
+    results, issues = _parse(record)
+    assert not issues
+    assert classify_source_outcome(title) == "pk_pd"
+    by_group = {item.group_id: item for item in results}
+    assert set(by_group) == {"OG000", "OG001"}
+    assert (by_group["OG000"].value, by_group["OG000"].unit) == (18.0, "days")
+    assert (by_group["OG001"].value, by_group["OG001"].unit) == (18.5, "days")
+    assert by_group["OG000"].endpoint == title
+    assert "85 post-dose" in by_group["OG000"].timepoint
+    assert by_group["OG000"].category == "outcome"
+
+
 @pytest.mark.parametrize(("unit", "raw", "expected_numerator", "expected_value", "expected_unit"), [
     ("participants", "0", 0, 0.0, "%"),
     ("number of participants", "5", 5, 4.2, "%"),

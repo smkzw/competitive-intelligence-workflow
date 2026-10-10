@@ -1515,6 +1515,16 @@
     if (sizeNote) sizeNote.textContent = "气泡大小：" + (useTotalSample ? "全部随机样本量" : "治疗组样本量");
   }
   function renderLandscape(host) {
+    var previousBands = host.querySelectorAll(".kz-a-landscape-target-band");
+    var disclosureStates = Object.create(null), focusedTarget = null;
+    for (var b = 0; b < previousBands.length; b += 1) {
+      var previousTarget = previousBands[b].getAttribute("data-landscape-target");
+      if (previousTarget === null) continue;
+      disclosureStates[previousTarget] = previousBands[b].open;
+      if (document.activeElement === previousBands[b].querySelector("summary")) {
+        focusedTarget = previousTarget;
+      }
+    }
     host.innerHTML = "";
     var stageOrder = ["临床前", "I期", "I/II期", "II期", "II/III期", "III期", "III/IV期", "IV期", "未知"];
     function stageForProduct(product) {
@@ -1605,7 +1615,9 @@
     }
     verifiedTargets.forEach(function (target) {
       var band = el("details", "kz-a-landscape-target-band");
-      band.open = useMatrix;
+      band.setAttribute("data-landscape-target", target);
+      band.open = Object.prototype.hasOwnProperty.call(disclosureStates, target)
+        ? disclosureStates[target] : useMatrix;
       var targetProducts = scopedProducts.filter(function (product) { return product.target === target; });
       var targetSummary = el("summary", "kz-a-landscape-target");
       targetSummary.appendChild(el("strong", "", knownTarget(target) ? target : "靶点待核"));
@@ -1646,6 +1658,15 @@
       host.appendChild(unresolved);
     }
     host.setAttribute("data-view-digest", scopedProducts.map(function (product) { return product.id; }).sort().join("|"));
+    if (focusedTarget !== null) {
+      var currentBands = host.querySelectorAll(".kz-a-landscape-target-band");
+      for (var f = 0; f < currentBands.length; f += 1) {
+        if (currentBands[f].getAttribute("data-landscape-target") === focusedTarget) {
+          currentBands[f].querySelector("summary").focus();
+          break;
+        }
+      }
+    }
   }
   function renderPortfolio(host) {
     host.innerHTML = "";

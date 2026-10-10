@@ -438,6 +438,95 @@ def test_ada_is_not_delivered_as_a_clinical_efficacy_row(tmp_path: Path) -> None
     assert sidecar["non_efficacy_observations"][0]["raw_value"] == "2"
 
 
+def test_half_life_is_retained_as_pk_pd_additional_observation(
+    tmp_path: Path,
+) -> None:
+    """Explicit drug t1/2 stays PK/PD; clinical and safety peers keep domains."""
+    study = _study("NCT05405985", 191, "ACTUAL", [
+        {"name": "Nemolizumab", "type": "DRUG",
+         "armGroupLabels": ["Nemolizumab With AI", "Nemolizumab With DCS"]},
+    ])
+    study["protocolSection"]["armsInterventionsModule"]["armGroups"] = [
+        {"label": "Nemolizumab With AI", "type": "EXPERIMENTAL"},
+        {"label": "Nemolizumab With DCS", "type": "EXPERIMENTAL"},
+    ]
+    half_life_window = (
+        "Pre-dose, 12 hours, 24 hours, Days 3, 4, 5, 6, 7, 8, 9, 10, 11, "
+        "15, 22, 29, 36, 43, 50, 57, 71, and 85 post-dose"
+    )
+    study["resultsSection"] = {
+        "outcomeMeasuresModule": {"outcomeMeasures": [
+            {
+                "title": "Half-life (t1/2) of Nemolizumab",
+                "timeFrame": half_life_window,
+                "unitOfMeasure": "days",
+                "paramType": "NUMBER",
+                "groups": [
+                    {"id": "OG000", "title": "Nemolizumab With AI"},
+                    {"id": "OG001", "title": "Nemolizumab With DCS"},
+                ],
+                "classes": [{"categories": [{"measurements": [
+                    {"groupId": "OG000", "value": "18"},
+                    {"groupId": "OG001", "value": "18.5"},
+                ]}]}],
+            },
+            {
+                "title": "Participants With Clinical Response",
+                "timeFrame": "Week 24",
+                "unitOfMeasure": "Participants",
+                "groups": [{"id": "OG000", "title": "Nemolizumab With AI"}],
+                "classes": [{"categories": [{"measurements": [
+                    {"groupId": "OG000", "value": "7"},
+                ]}]}],
+            },
+            {
+                "title": "Participants With Anti-drug Antibodies (ADA)",
+                "timeFrame": "Week 24",
+                "unitOfMeasure": "Participants",
+                "groups": [{"id": "OG000", "title": "Nemolizumab With AI"}],
+                "classes": [{"categories": [{"measurements": [
+                    {"groupId": "OG000", "value": "2"},
+                ]}]}],
+            },
+        ]},
+        "adverseEventsModule": {"timeFrame": "Week 24", "eventGroups": [{
+            "id": "EG1", "title": "Nemolizumab With AI",
+            "seriousNumAffected": 0, "seriousNumAtRisk": 95,
+        }]},
+    }
+    payload = _build(tmp_path, [study])
+    assert len(payload["efficacy"]) == 1
+    assert payload["efficacy"][0]["endpoint"] == "Participants With Clinical Response"
+    assert payload["efficacy"][0]["value"] == 7
+    assert all("half-life" not in row["endpoint"].casefold() for row in payload["efficacy"])
+    half_life_rows = [
+        row for row in payload["additional_observations"] if row["domain"] == "pk_pd"
+    ]
+    ada_rows = [
+        row for row in payload["additional_observations"]
+        if row["domain"] == "immunogenicity"
+    ]
+    assert len(half_life_rows) == 2
+    assert {row["endpoint"] for row in half_life_rows} == {
+        "Half-life (t1/2) of Nemolizumab",
+    }
+    assert {(row["raw_value"], row["raw_unit"], row["group_id"]) for row in half_life_rows} == {
+        ("18", "days", "OG000"),
+        ("18.5", "days", "OG001"),
+    }
+    assert all(row["time_window"] == half_life_window for row in half_life_rows)
+    assert len(ada_rows) == 1
+    assert ada_rows[0]["raw_value"] == "2"
+    assert len(payload["safety"]) == 1
+    assert payload["safety"][0]["value"] == 0
+    sidecar = json.loads((tmp_path / "report.derivation.json").read_text())
+    non_efficacy = sidecar["non_efficacy_observations"]
+    assert {
+        (row["domain"], row["raw_value"], row["raw_unit"]) for row in non_efficacy
+        if row["domain"] == "pk_pd"
+    } == {("pk_pd", "18", "days"), ("pk_pd", "18.5", "days")}
+
+
 def test_ambiguous_reported_proportion_explains_why_it_is_not_plotted(
     tmp_path: Path,
 ) -> None:
@@ -511,7 +600,7 @@ def test_absent_ae_window_remains_unknown_and_exact_source_binding_survives(
     study["protocolSection"]["outcomesModule"] = {"primaryOutcomes": [{
         "measure": "Clinical response", "timeFrame": "Week 24",
     }]}
-    module = {"eventGroups": [{
+    module: dict[str, Any] = {"eventGroups": [{
         "id": "EG1", "title": "Drug arm", "seriousNumAffected": 3,
         "seriousNumAtRisk": 20, "deathsNumAffected": 0, "deathsNumAtRisk": 20,
     }]}

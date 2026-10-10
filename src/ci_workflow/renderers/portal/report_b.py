@@ -149,6 +149,13 @@ _BASELINE_PAGE_CONCEPTS: dict[str, frozenset[str]] = {
     "baseline-disease-context": frozenset({"disease_duration"}),
     "baseline-severity": frozenset({"baseline_easi", "baseline_hemoglobin", "baseline_ldh"}),
 }
+# Complete known source measure roots for navigational subpage membership only.
+# Category/dispersion qualifiers after｜/| remain; do not treat arbitrary "age"
+# substrings (e.g. dosage age) as demographic family matches.
+_BASELINE_SOURCE_MEASURE_ROOT_FAMILY: dict[str, str] = {
+    "age, continuous": "age",
+    "sex: female, male": "sex",
+}
 _BASELINE_STAT_FAMILY = {
     "mean": "central", "median": "central", "other": "central",
     "not_reported": "central",
@@ -4776,6 +4783,140 @@ def _tag_records(
     return tuple(({**row, "_domain": domain}, source) for row, source in values)
 
 
+def _baseline_measure_root(title: str) -> str:
+    text = _text(title).strip()
+    if not text:
+        return ""
+    for separator in ("｜", "|"):
+        if separator in text:
+            text = text.split(separator, 1)[0].strip()
+            break
+    return text
+
+
+def _baseline_source_measure_title(row: Mapping[str, Any], source: Any) -> str:
+    """Prefer immutable source measure titles over projected unknown concept keys."""
+    if isinstance(source, Mapping):
+        for key in (
+            "clinical_concept",
+            "variable_label_zh",
+            "original_variable",
+            "standardized_concept",
+        ):
+            text = _text(source.get(key))
+            if text and not text.startswith("baseline:"):
+                return text
+    for key in ("original_variable", "variable_label_zh"):
+        text = _text(row.get(key))
+        if text and not text.startswith("baseline:"):
+            return text
+    return ""
+
+
+def _baseline_navigational_family(
+    row: Mapping[str, Any],
+    source: Any = None,
+) -> str | None:
+    """Map a baseline row to a subpage family without rewriting science fields.
+
+    Legacy canonical clinical_concept values stay authoritative. Source-backed
+    Age, Continuous / Sex: Female, Male titles (plus category/dispersion
+    qualifiers) may classify navigational membership only.
+    """
+    concept = _text(row.get("clinical_concept"))
+    if concept in {
+        "age",
+        "sex",
+        "disease_duration",
+        "baseline_easi",
+        "baseline_hemoglobin",
+        "baseline_ldh",
+        "baseline_sample_size",
+    }:
+        return concept
+    title = _baseline_source_measure_title(row, source)
+    root = _baseline_measure_root(title)
+    if not root:
+        return None
+    known = _BASELINE_SOURCE_MEASURE_ROOT_FAMILY.get(root.casefold())
+    if known is not None:
+        return known
+    # Preserve exact alias roots such as "年龄"/"Age at baseline"; never match
+    # arbitrary multi-word titles that merely contain an age token.
+    canonical = _CLINICAL_CONCEPT_LOOKUPS.get("baseline", {}).get(_semantic_token(root))
+    if canonical in {
+        "age",
+        "sex",
+        "disease_duration",
+        "baseline_easi",
+        "baseline_hemoglobin",
+        "baseline_ldh",
+        "baseline_sample_size",
+    }:
+        return canonical
+    return None
+
+
+def _baseline_row_matches_page(
+    row: Mapping[str, Any],
+    source: Any,
+    *,
+    page_id: str,
+) -> bool:
+    allowed = _BASELINE_PAGE_CONCEPTS.get(page_id)
+    if allowed is None:
+        return True
+    family = _baseline_navigational_family(row, source)
+    return family in allowed
+
+
+def _baseline_has_public_facts(data: ReportBPortalData) -> bool:
+    source = _view_source(data, "baseline_views")
+    if source is None:
+        return False
+    values = _flatten_view_rows(
+        _collection(
+            source,
+            "complete_table",
+            "selected_facts",
+            "facts",
+            "table_rows",
+            "rows",
+        )
+    )
+    return any(not _row_is_declared_shadow(value) for value in values)
+
+
+def _baseline_subpage_empty_copy(
+    page_id: str,
+    *,
+    has_public_baseline: bool,
+    has_matching_rows: bool,
+) -> tuple[str, str]:
+    """Distinguish no public baseline from no matching demographic/subpage family."""
+    default_title = "暂无公开记录（基线）"
+    default_lead = "暂无公开基线记录，完整字段与披露状态见表。"
+    if has_matching_rows:
+        return default_title, "已收录本页匹配的公开基线记录；完整数值、统计形式与来源均保留。"
+    if page_id not in _BASELINE_PAGE_IDS:
+        return default_title, default_lead
+    if not has_public_baseline:
+        return default_title, default_lead
+    if page_id == "baseline-demographics":
+        return (
+            "已有公开基线，但无匹配的人口学记录",
+            "公开基线包中未见年龄/性别人口学家族匹配项；未知或其他基线记录仍在基线总览，未以其他结果页替代。",
+        )
+    family_label = {
+        "baseline-disease-context": "疾病特征",
+        "baseline-severity": "基线疾病严重程度",
+    }.get(page_id, "专属基线")
+    return (
+        f"已有公开基线，但无匹配的{family_label}记录",
+        f"公开基线包中未见本页{family_label}家族匹配项；其他基线记录仍在基线总览，未以其他结果页替代。",
+    )
+
+
 def _page_records(
     data: ReportBPortalData,
     *,
@@ -4877,10 +5018,11 @@ def _page_records_unfiltered(
             trial_names=trial_names,
             domain="baseline",
         )
-        allowed = _BASELINE_PAGE_CONCEPTS.get(page_id)
-        if allowed is not None:
+        if page_id in _BASELINE_PAGE_CONCEPTS:
             values = tuple(
-                item for item in values if _text(item[0].get("clinical_concept")) in allowed
+                item
+                for item in values
+                if _baseline_row_matches_page(item[0], item[1], page_id=page_id)
             )
         if values or _view_source(data, "baseline_views") is not None:
             return values
@@ -5443,16 +5585,23 @@ def _render_page_context(
     elif detail_kind == "trial":
         title = f"{trial_names.get(detail_id or '', '试验')} · 试验档案"
     if page_id in _BASELINE_PAGE_IDS:
-        empty_state_title = "暂无公开记录（基线）"
+        empty_state_title, baseline_empty_lead = _baseline_subpage_empty_copy(
+            page_id,
+            has_public_baseline=_baseline_has_public_facts(data),
+            has_matching_rows=bool(records)
+            and not all(row.get("_empty_state") is True for row, _source in records),
+        )
     elif page_id in _DISPOSITION_PAGE_IDS:
         empty_state_title = "暂无公开记录（试验完成情况）"
+        baseline_empty_lead = ""
     else:
         empty_state_title = "当前选择下暂无可比较数据"
+        baseline_empty_lead = ""
     filter_note = "可同时选择多个条件。"
     if page_id == "efficacy-safety-matrix":
         lead = "暂无可绘制的真实疗效—安全性覆盖值，完整比较状态见表。"
     elif page_id in _BASELINE_PAGE_IDS:
-        lead = "暂无公开基线记录，完整字段与披露状态见表。"
+        lead = baseline_empty_lead
     elif page_id in _DISPOSITION_PAGE_IDS:
         lead = "暂无公开试验完成情况记录，完整字段与披露状态见表。"
     elif not has_drawable_data:

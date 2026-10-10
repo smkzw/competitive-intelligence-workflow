@@ -24,6 +24,7 @@ from ci_workflow.application.source_research_service import (  # noqa: E402
     ClinicalTrialsResultCoverageIssue,
     classify_source_outcome,
     ctgov_class_observation_timepoint,
+    ctgov_measurement_dispersion,
     ctgov_outcome_denominator_candidates,
     ctgov_participant_denominator,
 )
@@ -908,6 +909,18 @@ def main() -> None:
                                 title, source_class_title, cat_title,
                             )
                             if domain not in {"efficacy", "adverse_events"}:
+                                dispersion_type = str(measure.get("dispersionType") or "")
+                                dispersion_issue = None
+                                try:
+                                    raw_dispersion = ctgov_measurement_dispersion(
+                                        measurement, dispersion_type)
+                                except (TypeError, ValueError) as exc:
+                                    raw_dispersion = None
+                                    dispersion_issue = str(exc)
+                                analysis_n = ctgov_participant_denominator(
+                                    scoped_ns.get(group_id, []),
+                                    param_type=str(measure.get("paramType") or ""),
+                                )
                                 other_row_id = "other-" + hashlib.sha256(
                                     f"{nct}|{source_path}".encode()
                                 ).hexdigest()[:16]
@@ -924,6 +937,21 @@ def main() -> None:
                                     "source_url": f"https://clinicaltrials.gov/study/{nct}",
                                     "source_page_sha256": page_meta[page_no - 1][1],
                                     "source_path": source_path,
+                                    "source_param_type": (
+                                        str(measure.get("paramType") or "") or None),
+                                    "source_dispersion_type": dispersion_type or None,
+                                    "raw_dispersion": raw_dispersion,
+                                    "dispersion_source_path": (
+                                        source_path.removesuffix("value") + "spread"
+                                        if raw_dispersion is not None else None),
+                                    "dispersion_parse_issue": dispersion_issue,
+                                    "analysis_population": str(
+                                        measure.get("populationDescription")
+                                        or measure.get("analysisPopulationDescription")
+                                        or "") or None,
+                                    "analysis_n": analysis_n.parsed_value if analysis_n else None,
+                                    "analysis_n_source_path": (
+                                        "$." + analysis_n.value_path if analysis_n else None),
                                 })
                                 ROW_SOURCE_MAP.append({
                                     "domain": "additional_observations",

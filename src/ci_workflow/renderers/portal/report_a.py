@@ -369,6 +369,14 @@ class AdditionalObservationRow(BaseModel):
     source_url: str
     source_page_sha256: str
     source_path: str
+    source_param_type: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    source_dispersion_type: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    raw_dispersion: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    dispersion_source_path: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    dispersion_parse_issue: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    analysis_population: str | None = Field(default=None, exclude_if=lambda v: v is None)
+    analysis_n: int | None = Field(default=None, ge=0, exclude_if=lambda v: v is None)
+    analysis_n_source_path: str | None = Field(default=None, exclude_if=lambda v: v is None)
 
 
 class ReportALineageBinding(BaseModel):

@@ -768,6 +768,7 @@ class _RegistryResult:
     group_title: str = ""
     value_path: str = ""
     denominator_path: str | None = None
+    dispersion_path: str | None = None
     raw_unit: str = ""
     class_title: str = ""
     category_title: str = ""
@@ -816,6 +817,8 @@ class CtgovAtomicResult:
     raw_value_type: str = ""
     analysis_population: str = ""
     denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
+    dispersion_locator: EvidenceLocator | None = None
+    dispersion_quote: str | None = None
 
 
 _RESULT_NCT_ID = re.compile(r"NCT[0-9]{8}", re.IGNORECASE)
@@ -1036,18 +1039,18 @@ def _explicit_aesi(value: Mapping[str, Any]) -> bool:
 
 
 def _outcome_category(
-    title: str, class_title: str = ""
+    title: str, class_title: str = "", category_title: str = "",
 ) -> _ParsedOutcomeCategory | None:
     # Source-domain planning and registry-atom parsing must agree. A clinical
     # score with "no adverse change" is not an AE count merely because the
     # safety vocabulary's fallback sees the word "adverse".
-    if classify_source_outcome(title, class_title) != "adverse_events":
+    if classify_source_outcome(title, class_title, category_title) != "adverse_events":
         return "outcome"
     # The safety vocabulary is the semantic source of truth. Explicit CT.gov
     # classes are separately measured statistical objects. A composite parent
     # cannot be split without such a class, but it cannot overwrite one either.
     title_concept = describe_safety_concept(title)
-    selected = describe_measured_safety_concept(title, class_title)
+    selected = describe_measured_safety_concept(title, class_title, category_title)
     if title_concept.key == "composite_ae" and selected.key == "composite_ae":
         return "outcome"
     if selected.key == "any_sae" and selected.polarity == "affirmed":
@@ -1074,7 +1077,18 @@ _IMMUNOGENICITY_TERM = re.compile(
 )
 _PK_PD_TERM = re.compile(
     r"pharmacokinetic|pharmacodynamic|\bcmax\b|\btmax\b|"
-    r"\bauc(?:0|tau|inf)?\b|(?:plasma|serum) drug concentration", re.I,
+    r"\bauc(?:0|tau|inf)|\bauc\s*\(\s*0|(?:plasma|serum) drug concentration", re.I,
+)
+_HALF_LIFE_TERM = re.compile(r"\bhalf[- ]li(?:fe|ves)\b|\bt(?:1/2|½)", re.I)
+_DRUG_HALF_LIFE_CONTEXT = re.compile(
+    r"\b(?:terminal|elimination|drug|metabolites?|plasma|serum)\b|\bt(?:1/2|½)", re.I,
+)
+_CLINICAL_QUANTITY = re.compile(
+    r"\b(?:clinical|response|platelet|itch|nrs|easi|score)\b|quality of life", re.I,
+)
+_IMMUNE_POPULATION_MODIFIER = re.compile(
+    r"\b(?:in|among|for)\s+(?:adas?|anti[- ]drug antibody)[- ](?:positive|negative)\s+"
+    r"(?:participants?|subjects?|patients?)\b", re.I,
 )
 _BIOMARKER_TERM = re.compile(r"\bbiomarkers?\b|\bserum (?:free|total) c5\b", re.I)
 
@@ -1083,22 +1097,27 @@ def classify_source_outcome(
     title: str, class_title: str = "", category_title: str = "",
 ) -> ObservationDomain:
     """Conservative scientific domain; it does not decide numeric co-axis eligibility."""
-    text = " ".join(part for part in (title, class_title, category_title) if part)
-    if _IMMUNOGENICITY_TERM.search(text):
-        return "immunogenicity"
-    if _PK_PD_TERM.search(text):
-        return "pk_pd"
-    if _BIOMARKER_TERM.search(text):
-        return "biomarkers"
     explicit_safety_concepts = {
         "any_sae", "any_teae", "aesi", "generic_ae", "non_serious_teae",
         "absence_sae", "death", "serious_teae_subset", "discontinuation_ae",
         "treatment_related_ae", "severity_specific_teae", "composite_ae",
     }
-    if any(
-        describe_safety_concept(part).key in explicit_safety_concepts
-        for part in (title, class_title) if part
+    # A separately measured class/category is not the enclosing PK/ADA title.
+    if any(describe_safety_concept(part).key in explicit_safety_concepts
+           for part in (category_title, class_title) if part):
+        return "adverse_events"
+    text = " ".join(part for part in (title, class_title, category_title) if part)
+    quantity = _IMMUNE_POPULATION_MODIFIER.sub(" ", text)
+    if _IMMUNOGENICITY_TERM.search(quantity):
+        return "immunogenicity"
+    if not _CLINICAL_QUANTITY.search(quantity) and (
+        _PK_PD_TERM.search(quantity)
+        or _HALF_LIFE_TERM.search(quantity) and _DRUG_HALF_LIFE_CONTEXT.search(quantity)
     ):
+        return "pk_pd"
+    if _BIOMARKER_TERM.search(quantity):
+        return "biomarkers"
+    if describe_safety_concept(title).key in explicit_safety_concepts:
         return "adverse_events"
     if is_safety_domain_endpoint(title) or is_safety_domain_endpoint(class_title):
         return "adverse_events"
@@ -1106,6 +1125,21 @@ def classify_source_outcome(
     # source-specific rule can decide a narrower one; uncertainty is still
     # explicit in metric/statistical context, never a guessed comparator.
     return "efficacy"
+
+
+def ctgov_measurement_dispersion(
+    measurement: Mapping[str, Any], dispersion_type: str,
+) -> str | None:
+    """Validate one scalar spread without turning it into a mean or a rate."""
+    if "spread" not in measurement:
+        return None
+    value = _result_number(measurement["spread"])
+    if not dispersion_type.strip():
+        raise ValueError("离散程度存在数值，但来源未定义统计形式")
+    kind = dispersion_type.upper().replace(" ", "_")
+    if kind in {"STANDARD_DEVIATION", "STANDARD_ERROR", "COEFFICIENT_OF_VARIATION"} and value < 0:
+        raise ValueError("标准差、标准误或变异系数不能为负")
+    return str(measurement["spread"])
 
 
 def _is_participant_count_unit(unit: str) -> bool:
@@ -1404,7 +1438,7 @@ def _iter_outcome_results(
             classes = _list_at(measure.get("classes", []), f"{path}.classes")
             measurements: list[
                 tuple[str, float, str, _ParsedOutcomeCategory, str, str, str, str,
-                      list[RegistryDenominatorCandidate], str]
+                      list[RegistryDenominatorCandidate], str, str | None]
             ] = []
             saw_not_reported = False
             saw_measurement_node = False
@@ -1438,6 +1472,9 @@ def _iter_outcome_results(
                         f"{path}.classes[{class_index}].categories[{category_index}]",
                     )
                     category_title = _result_text(category_mapping.get("title"))
+                    result_category = _outcome_category(title, class_title, category_title)
+                    if result_category is None:
+                        continue
                     category_path = f"{class_path}.categories[{category_index}]"
                     category_candidates = ctgov_outcome_denominator_candidates(
                         category_mapping, source_path=category_path, groups=groups,
@@ -1483,6 +1520,17 @@ def _iter_outcome_results(
                                     ),
                                 )
                                 continue
+                            dispersion_path = None
+                            try:
+                                if ctgov_measurement_dispersion(
+                                    measurement, source_dispersion_type,
+                                ) is not None:
+                                    dispersion_path = f"{measurement_path}.spread"
+                            except (TypeError, ValueError) as exc:
+                                _parse_failure(
+                                    issues=issues, trial_id=trial_id, source_id=source_id,
+                                    source_path=f"{measurement_path}.spread", detail=str(exc),
+                                )
                             measurements.append(
                                 (
                                     group_id,
@@ -1495,6 +1543,7 @@ def _iter_outcome_results(
                                     type(raw_value).__name__,
                                     category_candidates.get(group_id, []),
                                     denominator_scope,
+                                    dispersion_path,
                                 )
                             )
                         except (TypeError, ValueError, KeyError) as exc:
@@ -1535,7 +1584,7 @@ def _iter_outcome_results(
             for (
                 group_id, value, measurement_path, result_category,
                 class_title, category_title, observation_timepoint, raw_value_type,
-                candidates, denominator_scope,
+                candidates, denominator_scope, dispersion_path,
             ) in measurements:
                 report_term = _outcome_report_term(result_category, title, class_title)
                 numerator = None
@@ -1642,6 +1691,7 @@ def _iter_outcome_results(
                         unit=normalized_unit,
                         value_path=f"{measurement_path}.value",
                         denominator_path=denominator_path,
+                        dispersion_path=dispersion_path,
                         raw_unit=unit_raw,
                         class_title=class_title,
                         category_title=category_title,
@@ -2041,6 +2091,16 @@ def extract_ctgov_atomic_results(
             raise ResearchPackageError("登记结果的原子数值不能按精确路径复核") from error
         denominator_locator = None
         denominator_quote = None
+        dispersion_locator = None
+        dispersion_quote = None
+        if result.dispersion_path is not None:
+            dispersion_locator = EvidenceLocator(
+                document_role="clinical_trial_registry",
+                field_path=f"$.{result.dispersion_path}", url=source.url,
+            )
+            dispersion_quote = extract_locator_quote(
+                source.content_text, media_type=source.media_type, locator=dispersion_locator,
+            )
         if result.denominator is not None:
             if result.denominator_path is None:
                 raise ResearchPackageError("派生比例缺少分母精确路径")
@@ -2081,6 +2141,8 @@ def extract_ctgov_atomic_results(
             raw_value_type=result.raw_value_type,
             analysis_population=result.analysis_population,
             denominator_candidates=result.denominator_candidates,
+            dispersion_locator=dispersion_locator,
+            dispersion_quote=dispersion_quote,
         ))
     return tuple(atoms), tuple(issues)
 
@@ -2106,13 +2168,14 @@ def research_facts_from_ctgov_atom(
 
     def make_fact(
         *, role: Literal[
-            "reported_measure", "participant_count", "affected_count", "denominator"
+            "reported_measure", "participant_count", "affected_count", "denominator", "dispersion"
         ],
         locator: EvidenceLocator, quote: str, reference: str,
     ) -> ResearchFact:
-        numeric = _result_number(quote, integer=role != "reported_measure")
+        scalar = role in {"reported_measure", "dispersion"}
+        numeric = _result_number(quote, integer=not scalar)
         normalized = (
-            str(int(numeric)) if role != "reported_measure" else str(numeric)
+            str(numeric) if scalar else str(int(numeric))
         )
         context = ResearchResultContext(
             result_key=atom.result_key, category=atom.category,
@@ -2123,7 +2186,7 @@ def research_facts_from_ctgov_atom(
             value_role=role,
             source_unit=(
                 (atom.raw_unit or atom.display_unit)
-                if role == "reported_measure" else "人"
+                if scalar else "人"
             ),
             class_title=atom.class_title or None,
             category_title=atom.category_title or None,
@@ -2168,6 +2231,11 @@ def research_facts_from_ctgov_atom(
             role="denominator", locator=atom.denominator_locator,
             quote=atom.denominator_quote, reference=f"{row_ref}:denominator",
         ))
+    if atom.dispersion_locator is not None and atom.dispersion_quote is not None:
+        facts.append(make_fact(
+            role="dispersion", locator=atom.dispersion_locator,
+            quote=atom.dispersion_quote, reference=f"{row_ref}:dispersion",
+        ))
     return tuple(facts)
 
 
@@ -2187,7 +2255,7 @@ def _bind_verified_ctgov_outcome_to_a_row(
     atom: CtgovAtomicResult,
     row: EfficacyRow,
 ) -> tuple[EfficacyRow, tuple[ResearchFact, ...]]:
-    if atom.category != "outcome" or is_safety_domain_endpoint(atom.endpoint):
+    if atom.category != "outcome" or atom.domain != "efficacy":
         raise ResearchPackageError("此绑定仅接受登记疗效结局")
     is_count = atom.numerator is not None
     if not is_count and row.denominator is not None:
@@ -2481,7 +2549,11 @@ def build_ctgov_a_outcome_candidate_batch(
                                *(fact.fact_id for fact in facts)),
             claim_text=(
                 "ClinicalTrials.gov 登记结局原始人数及同组分母"
-                if len(facts) == 2 else "ClinicalTrials.gov 登记结局原始数值"
+                if any(f.result_context and f.result_context.value_role == "denominator"
+                       for f in facts) else (
+                    "ClinicalTrials.gov 登记结局原始数值及离散程度"
+                    if any(f.result_context and f.result_context.value_role == "dispersion"
+                           for f in facts) else "ClinicalTrials.gov 登记结局原始数值")
             ),
             claim_kind="direct_evidence",
             fact_ids=tuple(fact.fact_id for fact in facts),
@@ -2547,16 +2619,19 @@ def _bind_verified_ctgov_ae_to_a_row(
     facts = research_facts_from_ctgov_atom(
         atom, report_row_ref=f"safety:{row.row_id}"
     )
-    if len(facts) != 2:
+    rate_facts = tuple(f for f in facts if f.result_context
+                       and f.result_context.value_role in {"affected_count", "denominator"})
+    if len(rate_facts) != 2:
         raise ResearchPackageError("AE 比例必须同时绑定分子和风险人数来源事实")
     claim = ResearchClaim(
-        claim_id=stable_id("ctgov-ae-rate-claim", row.row_id, *[item.fact_id for item in facts]),
+        claim_id=stable_id("ctgov-ae-rate-claim", row.row_id,
+                           *[item.fact_id for item in rate_facts]),
         claim_text=(
             f"{atom.numerator}/{atom.denominator}×100，按登记结果解析规则保留一位小数"
             f"={atom.display_value}%（{atom.term}；{atom.group_title}）"
         ),
         claim_kind="deterministic_calculation",
-        fact_ids=tuple(item.fact_id for item in facts),
+        fact_ids=tuple(item.fact_id for item in rate_facts),
         calculation=CtgovAeRateCalculation(
             output_value=atom.display_value,
             scope_row_ref=f"safety:{row.row_id}",
@@ -2590,7 +2665,7 @@ def _bind_verified_ctgov_direct_safety_to_a_row(
     row: SafetyRow,
 ) -> tuple[SafetyRow, tuple[ResearchFact, ...], ResearchClaim]:
     """Bind a safety outcome's reported value; never infer a rate from its count."""
-    if not atom.endpoint or not is_safety_domain_endpoint(atom.endpoint):
+    if not atom.endpoint or atom.domain != "adverse_events":
         raise ResearchPackageError("此绑定仅接受直接报告的安全性结局")
     semantic = describe_measured_safety_concept(
         atom.endpoint, atom.class_title, atom.category_title,
@@ -2713,7 +2788,7 @@ def build_ctgov_a_safety_candidate_batch(
             atom_ref = _ctgov_atom_ref_key(source, atom)
             if atom_ref is not None:
                 available_refs.add(atom_ref)
-            if atom.endpoint and is_safety_domain_endpoint(atom.endpoint):
+            if atom.endpoint and atom.domain == "adverse_events":
                 indexed.setdefault(
                     (atom.trial_id.casefold(), _result_text(atom.endpoint).casefold()), []
                 ).append((source, atom))
@@ -2932,11 +3007,27 @@ def _validate_bound_ctgov_a_results(
                 (atom.result_key, atom.value_locator.field_path or ""): atom
                 for atom in atoms
             }
+        if context.value_role == "dispersion":
+            parent_ref = fact.row_ref.removesuffix(":dispersion")
+            matches = [a for a in atom_by_source[fact.source_id].values()
+                       if a.result_key == context.result_key
+                       and a.dispersion_locator == fact.locator]
+            if len(matches) != 1 or parent_ref == fact.row_ref:
+                raise ResearchPackageError("离散程度没有唯一的原子定位或主测量引用")
+            expected = research_facts_from_ctgov_atom(matches[0], report_row_ref=parent_ref)
+            if fact not in expected or facts_by_ref.get(parent_ref) != expected[0]:
+                raise ResearchPackageError("离散程度与同一来源主测量不一致")
+            continue
         atom = atom_by_source[fact.source_id].get(
             (context.result_key, fact.locator.field_path)
         )
         if atom is None:
             raise ResearchPackageError("登记原子事实不能从当前来源精确重提取")
+        for companion in research_facts_from_ctgov_atom(atom, report_row_ref=fact.row_ref):
+            if (companion.result_context
+                and companion.result_context.value_role == "dispersion"
+                and facts_by_ref.get(companion.row_ref) != companion):
+                raise ResearchPackageError("来源离散程度遗漏或绑定到不同测量")
         if fact.row_ref.startswith("efficacy:"):
             row = efficacy_rows.get(fact.row_ref)
             if row is None or context.value_role not in {"reported_measure", "participant_count"}:
@@ -2949,7 +3040,7 @@ def _validate_bound_ctgov_a_results(
             if context.value_role == "participant_count":
                 denominator_ref = f"{fact.row_ref}:denominator"
                 if (
-                    len(expected_facts) != 2
+                    len(expected_facts) < 2
                     or row_ref_counts.get(denominator_ref) != 1
                     or facts_by_ref.get(denominator_ref) != expected_facts[1]
                 ):
@@ -2959,7 +3050,7 @@ def _validate_bound_ctgov_a_results(
         safety_row = safety_rows.get(fact.row_ref)
         if safety_row is None:
             raise ResearchPackageError("已绑定 AE 行缺少受影响人数原子")
-        if atom.endpoint and is_safety_domain_endpoint(atom.endpoint):
+        if atom.endpoint and atom.domain == "adverse_events":
             direct_row, direct_facts, direct_claim = (
                 _bind_verified_ctgov_direct_safety_to_a_row(source, atom, safety_row)
             )
@@ -2968,7 +3059,7 @@ def _validate_bound_ctgov_a_results(
                 or direct_claim not in claims
             ):
                 raise ResearchPackageError("直接报告安全结果缺少同一来源事实与声明")
-            if len(direct_facts) == 2:
+            if atom.denominator_locator is not None:
                 denominator_ref = f"{fact.row_ref}:denominator"
                 if (
                     row_ref_counts.get(denominator_ref) != 1
@@ -2987,7 +3078,7 @@ def _validate_bound_ctgov_a_results(
             )
             if count_row != safety_row or fact != count_facts[0] or count_claim not in claims:
                 raise ResearchPackageError("AE 原始人数缺少同一来源事实与直接声明")
-            if len(count_facts) == 2:
+            if atom.denominator_locator is not None:
                 denominator_ref = f"{fact.row_ref}:denominator"
                 if (
                     row_ref_counts.get(denominator_ref) != 1
@@ -3089,6 +3180,27 @@ def _audit_source_record(
     }
     for result in registry_results:
         inventory[result.category] += 1
+        if result.category == "outcome" and result.domain not in {"efficacy", "adverse_events"}:
+            raw_quote = extract_locator_quote(
+                source.content_text, media_type=source.media_type,
+                locator=EvidenceLocator(
+                    document_role="clinical_trial_registry",
+                    field_path=f"$.{result.value_path}", url=source.url))
+            matching = [row for row in report_data.additional_observations
+                        if row.trial_id.casefold() == trial_id.casefold()
+                        and row.source_path == f"$.{result.value_path}"
+                        and row.group_id == result.group_id and row.domain == result.domain
+                        and row.endpoint == result.endpoint and row.time_window == result.timepoint
+                        and row.raw_unit == result.raw_unit
+                        and _result_text(row.raw_value) == _result_text(raw_quote)]
+            if len(matching) != 1:
+                _result_issue(
+                    issues=issues, category="outcome", status="missing", trial_id=trial_id,
+                    source_id=source.source_id, source_path=result.source_path,
+                    result_key=result.result_key,
+                    reason_zh="非临床疗效/AE 的登记观察缺少唯一的同领域原值记录；不得改列疗效",
+                )
+            continue
         if result.category == "outcome" and not is_safety_domain_endpoint(result.endpoint):
             exact = [
                 row
