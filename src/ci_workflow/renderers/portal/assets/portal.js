@@ -154,6 +154,23 @@
       }
       var observation = doc.createElement("div"); observation.className = "kz-comparison-observation";
       observation.appendChild(button); list.appendChild(observation);
+      // Only remove adjacent repeated display text, not facts or scientific
+      // differences. The factory owns this once for A/B; unknown product
+      // labels stay visible. Original labels remain inside each source trigger.
+      var identityText = row.product_zh ? product + (arm && arm !== product ? "｜" + arm : "") : "";
+      var run = list.__identityRun;
+      if (!identityText) {
+        list.__identityRun = null;
+      } else if (!run || run.text !== identityText) {
+        list.__identityRun = {text: identityText, first: observation, count: 1};
+      } else {
+        run.count += 1;
+        if (run.count === 2) {
+          list.insertBefore(textNode("p", "kz-comparison-identity-header", identityText), run.first);
+          run.first.className += " kz-comparison-observation--compact";
+        }
+        observation.className += " kz-comparison-observation--compact";
+      }
       var notes = [row.difference_note, facet].filter(function (note, index, all) {
         return note && all.indexOf(note) === index;
       });

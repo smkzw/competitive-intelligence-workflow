@@ -41,12 +41,37 @@ body[data-kz-design="6.0"] { background: var(--bg); }
 .kz-comparison-observations { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; gap: 4px 12px; }
 .kz-comparison-observation { min-width: 0; }
 #full-study-comparison button.kz-comparison-fact { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0 8px; margin: 0; padding: 4px 6px; }
-/* Keep identity, value and original visit on one compact reading plane. Neither
- * font reduction nor clipping/hidden facts is used to achieve the density. */
+/* Keep identity, value and original visit on one compact reading plane. Values
+ * are never reduced, clipped or hidden to achieve the density. */
 .kz-comparison-fact__main { display: contents; }
 .kz-comparison-fact__identity { grid-column: 1 / -1; font-weight: 600; overflow-wrap: anywhere; }
 .kz-comparison-fact__value { grid-column: 1; font-size: 1.125em; font-variant-numeric: tabular-nums; color: var(--text-1); overflow-wrap: anywhere; }
 .kz-comparison-fact__time { grid-column: 2; grid-row: 2; color: var(--text-2); overflow-wrap: anywhere; }
+/* Compact identity family: only an exact, explicitly rendered product/arm
+ * identity repeated by adjacent facts folds into one visible group header.
+ * Every repeated copy keeps its full text for reader trees and page search,
+ * and a differing or unreadable identity keeps its own visible label. */
+.kz-comparison-identity-header {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  padding: 0 6px;
+  font-weight: 600;
+  color: var(--text-1);
+  overflow-wrap: anywhere;
+}
+.kz-comparison-observation--compact .kz-comparison-fact__identity {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.kz-comparison-observation--compact .kz-comparison-fact__time { grid-row: 1; }
 .kz-comparison-context { margin: 0; }
 .kz-comparison-context > summary { cursor: pointer; color: var(--text-2); }
 .kz-comparison-context > p { margin: 4px 0; overflow-wrap: anywhere; }

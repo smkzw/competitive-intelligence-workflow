@@ -90,7 +90,8 @@ function card(titleText){
 }
 const same='安全性 · 严重不良事件 · 受累人数（例）';
 const cards=[same,same,same,'安全性 · 感染相关事件 · 受累人数（例）',same].map(card);
-const sandbox={window:{},
+const sandbox={window:{__FILTER_ROWS__:[],__CHART_GROUPS__:[],
+ __B_COMPARISON_WORKSPACE__:{},__EVIDENCE_VIEWS__:[]},
  document:{readyState:'loading',addEventListener(){},querySelectorAll(selector){
   return selector==='#kz-chart-module .kz-chart-module__group'?cards:[];}}};
 vm.runInNewContext(text,sandbox);

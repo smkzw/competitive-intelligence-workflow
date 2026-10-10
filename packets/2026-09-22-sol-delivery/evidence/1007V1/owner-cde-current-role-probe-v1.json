@@ -1,0 +1,32 @@
+{
+  "kind": "1007-current-cde-role-boundary-observation-1",
+  "scope": "Actual current CDE public browser lookup, not source adoption or historical reconstruction",
+  "browser": "Ego Lite existing workspace184/p1; no new workspace, credentials, accounts, source DB or current writes",
+  "source_root": ".artifacts/1007-china-role-live-probe-v1",
+  "actual_at": "2026-10-10T00:27:33.118Z",
+  "actual_sha256": "c42155ba6ef020bd22137b02768a4e7cd6da6c2a47a13f7294711ad4711d175c",
+  "executed_probe_sha256": "ce291f074f0693ef621cf66d72a5769eba454be9917d457d2affb7cd9f6ba8a0",
+  "queries": "All years; drug Nemolizumab/CIM331/Serlopitant and company Galderma/高德美. Hidden native select first failed before query; actual visible Layui select then used. Original failure is not a clinical zero.",
+  "nemolizumab": {
+    "source": "source-1.json",
+    "sha256": "30970597873bab8d2b3cd1852b152f6014806aaf98aaef972929cf87629716e7",
+    "exact_current_rows": [
+      {"acceptance_number": "JXSL2600117", "drug_name": "Nemolizumab注射液", "application_type_original": "进口", "registration_class": "2.2", "applicants_original": "Galderma SA;Q-Med International Trading (Shanghai) Co., Ltd;", "acceptance_date": "2026-05-21"},
+      {"acceptance_number": "JXSL2500208", "drug_name": "Nemolizumab注射液", "application_type_original": "进口", "registration_class": "3.1", "applicants_original": "Galderma SA;Q-Med International Trading (Shanghai) Co.,Ltd;", "acceptance_date": "2025-10-30"}
+    ],
+    "indication_lock": "unresolved: no PN/AD indication shown in this table",
+    "review_status": "Exact-number query attempted. Neither ID occurs in the actual current biological clinical-application sequence of16. This is not a completed-review/approval/withdrawal conclusion; actual current regulatory state remains unresolved.",
+    "China_MAH": "not established; an applicant/agent list is not a Chinese marketing authorization holder",
+    "official_chinese_name": "not established; retain Nemolizumab, no hard translation"
+  },
+  "other_queries": "CIM331 empty rendered table is not no-approval proof. Serlopitant identical/unobserved response explicitly NOT_VERIFIED. Company searches40/41 records show only first10, not full coverage; must not map unrelated dermatology applications to Nemolizumab.",
+  "existing_identity": "Current pinned identity graph d78750a4 contains separately source-backed Dupilumab Chinese MAH/group/name and Nemolizumab US MAH/group/IL31RA. These are preserved, not replaced by applicant list or search result. No repeated original PDF acquisition.",
+  "limits": "Observed now is not proof of first public disclosure by fixed2026-10-07 cutoff. Dates are acceptance dates only. No absence/approval/group relationship/indication/clinical equality accepted, no new report/current transaction.",
+  "review_lookup_correction": "Actual CDE sessionTable method highlights a matching ID and pages to it, not filters. No match retains unrelated full table and shows warning. First raw probe incorrectly read hidden chemical IND filter; actual biological filter is LCSYSQ/临床试验申请. Original raw records preserved; sequence-correction.json separately captures correct filter, all16 IDs and no matches. This is source-tool verification, not medical acceptance.",
+  "review_evidence": ".artifacts/1007-cde-nemolizumab-review-v1/{actual.json,sequence-correction.json,executed-probe.js}",
+  "review_actual_sha256": "5df616a2531697bb787e5ef7f5d226ee078e158304109862c8ce2b971400beff",
+  "review_correction_sha256": "1b8ae389eea4b9cb11f3cb267f4d4f6bc82c6088bb0a7fad2729b705d13ae81d",
+  "review_executed_probe_sha256": "9a637ba13d8630e19b1bd28dd8d81e3e1237bc9b3e3c07c68f986d9500ceb559",
+  "recipe_policy": "Original executed JS retained beside actual observations; public replay recipes use explicitly supplied CI_WORKFLOW_ROOT, not private absolute paths. Do not blindly rerun completed original attempt directories.",
+  "next": "Indication/China license source and current regulatory-state proof remain open, separately from visual candidate work. Do not block independent front-end repair or promote partial lookup to universe/source closure."
+}

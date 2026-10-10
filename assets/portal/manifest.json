@@ -10,8 +10,8 @@
    "bytes": 70004
   },
   "portal.js": {
-   "sha256": "3d33852b8b17e81a1e7381a96231df1b16fcbe9f1dd82b5d5d137a22ad2fee51",
-   "bytes": 64714
+   "sha256": "35cee38ca3ffb767e9eded7b2f3415a6b0f5090305b33e5ae648295b13b99ded",
+   "bytes": 65615
   },
   "charts.js": {
    "sha256": "213ba90745953ca4a9a2f15b2f434e9ef9fe32b5cdea6eaa2b6a612193027350",
@@ -54,8 +54,8 @@
    "bytes": 24525
   },
   "kangzhe-site.css": {
-   "sha256": "5b39e48a57d3dfa735c32f2d08b50b35a6fe7d478e4c6de4c379bd15ef682650",
-   "bytes": 10798
+   "sha256": "2f06a045cd9ff31e0dff0d752eb8d695938d38ace111f09a2eb34cfc0f4159d4",
+   "bytes": 11587
   },
   "kangzhe-site.js": {
    "sha256": "51570de43b8f0bd9b17bf07d91521d3c37de0c3834bf39e8247f3e11b974fa88",
