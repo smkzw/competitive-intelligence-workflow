@@ -4,7 +4,9 @@ const root = globalThis.CI_WORKFLOW_ROOT;
 if (!root) throw new Error("Explicit CI_WORKFLOW_ROOT required");
 const revision = Number(globalThis.CI_WORKFLOW_QA_REVISION || 13);
 if (!Number.isSafeInteger(revision) || revision < 13) throw new Error("Explicit candidate revision required");
-const output = root + `/.artifacts/1007-compact-provenance-current${revision}-desktop-v1`;
+const resumeB = globalThis.CI_WORKFLOW_QA_RESUME_B === true;
+const baseOutput = root + `/.artifacts/1007-compact-provenance-current${revision}-desktop-v1`;
+const output = baseOutput + (resumeB ? "-b-filter-recovery-v1" : "");
 const verified = JSON.parse(await fs.readFile(root + `/.artifacts/1007-compact-provenance-current${revision}-v1/verified.json`, "utf8"));
 if (verified.revision !== revision || verified.facts_unchanged !== 1144) throw new Error("Candidate verification required");
 await fs.mkdir(output);
@@ -67,13 +69,30 @@ try {
   await page.waitForSelector("#input-value",{state:"visible"});
   run.editor_entry = await page.evaluate(()=>{const envelope=JSON.parse(document.querySelector("#facts").textContent);return {revision:envelope.revision,facts:Object.keys(envelope.facts).length};});
   if (run.editor_entry.revision!==revision || run.editor_entry.facts!==1144) throw new Error("Actual current editor mismatch");
+  if (resumeB) {
+    const prior=JSON.parse(await fs.readFile(baseOutput+"/actual.json","utf8"));
+    if (prior.generation!==run.generation || prior.states.length!==16 || prior.failures.length ||
+        !prior.states.every(n=>n.kind==="A") || prior.context_checks.length!==4)
+      throw new Error("Prior16same-candidate A states required, no borrowed acceptance");
+    run.completed_prior_states=prior.states;
+    run.completed_prior_context_checks=prior.context_checks;
+    run.prior_evidence=baseOutput+"/actual.json";
+    run.recovery="B reset requires opening its nested full filter panel. Original16A states/4native expansions retained; production and assertions unchanged.";
+  }
   async function resetFilters(kind) {
+    if (kind === "B" && revision >= 15) {
+      await page.click("#full-study-comparison [data-filter-reset]");
+      return;
+    }
     const selector = kind === "A" ? "details[data-comparison-disclosure]" : ".kz-b-filter-bar details[data-comparison-disclosure]";
     if (!await page.evaluate(selector=>document.querySelector(selector).open,selector)) await page.click(selector+" > summary");
-    await page.click("[data-filter-reset]");
+    if (kind === "B" && !await page.evaluate(()=>document.querySelector("#kz-filter-panel").open))
+      await page.click("#kz-filter-panel > summary");
+    await page.click(kind === "B" ? "#kz-filter-panel [data-filter-reset]" : "[data-filter-reset]");
+    if (kind === "B") await page.click("#kz-filter-panel > summary");
     await page.click(selector+" > summary");
   }
-  for (const kind of ["A","B"]) {
+  for (const kind of resumeB ? ["B"] : ["A","B"]) {
     const entry = kind === "A" ? "clinical-portfolio.html" : "overview.html";
     await page.goto(`http://127.0.0.1:65033/reports/${run.generation}/${kind}/${entry}?view=comparison&cmp=efficacy%3A%3Aq-iga-success-0-or-1-and-ge2-reduction`,{timeout:120000});
     await page.waitForSelector("#full-study-comparison tbody button",{state:"visible"});
@@ -127,7 +146,8 @@ try {
     if (!run.states.at(-1).focus_restored) run.failures.push(`${kind}/${width}: Escape focus`);
   }
   }
-  run.execution = run.failures.length ? "COMPLETED_WITH_FAILURES_NOT_ACCEPTED" : `COMPLETED_32_ACTUAL_CURRENT${revision}_AB_STATES`;
+  run.execution = run.failures.length ? "COMPLETED_WITH_FAILURES_NOT_ACCEPTED" :
+    `COMPLETED_${run.states.length}_NEW_${run.completed_prior_states?.length || 0}_PRIOR_ACTUAL_CURRENT${revision}_AB_STATES`;
 } catch(error) {run.execution="FAILED_NOT_ACCEPTED";run.error=String(error);throw error;}
 finally {run.finished_at=new Date().toISOString();await fs.writeFile(output+"/actual.json",JSON.stringify(run,null,2));}
 console.log(JSON.stringify({execution:run.execution,states:run.states.length,failures:run.failures}));

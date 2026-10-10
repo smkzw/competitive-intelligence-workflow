@@ -1079,12 +1079,17 @@
         });
       })(buttons[i]);
     }
-    var reset = document.querySelector("[data-filter-reset]");
-    if (reset) {
-      reset.addEventListener("click", function () {
+    var resets = document.querySelectorAll("[data-filter-reset]");
+    for (var r = 0; r < resets.length; r += 1) {
+      resets[r].addEventListener("click", function () {
         var state = {};
         var dimensions = filterDimensions();
         for (var i = 0; i < dimensions.length; i += 1) state[dimensions[i]] = [];
+        resultQuery = "";
+        if (resultPager) {
+          var search = resultPager.querySelector("input[type=search]");
+          if (search) search.value = "";
+        }
         if (pagedResults) resultPage = 1;
         applyButtonState(state);
         applyState(state);

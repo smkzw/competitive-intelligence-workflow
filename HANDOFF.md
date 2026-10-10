@@ -1,4 +1,4 @@
-# 1007V1 当前接手入口｜current13实际27态，行高根因修复待新候选，连续实施
+# 1007V1 当前接手入口｜current14已生成，宽屏/条件键盘验收，连续实施
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 精确恢复：[混合刷新与正式来源接续](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。
@@ -11,6 +11,16 @@
 上一完整操作：[联合 current9 操作、配置、分享、桌面记录](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-joint-current9-operations-config-share-desktop-v1.json)，已完成范围不重跑。
 旧根入口原字节：[历史归档](docs/handoffs/HANDOFF_archive_20261009_before_joint_r9.md)。
 上次暂停原件：[20261009 暂停](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)，已获授权恢复，不是当前状态。
+
+唯一当前：源码0f2a876e已push，current14正常呈现仅一次完成，A14/B14/C9/
+1144事实，generation7bdaf970；源/用户/绑定/C9/8030旧文件保持，A20来源。
+真实return d4e7a13d/verified4734c481，原13绝不重跑。Ego184本版32态及8次
+原生条件展开已完成；原B隐藏reset前置FAIL保留，恢复31831b19，非全集终验。
+C02已终态292.164s/实际Gemini3.8Flash/high配置/无fallback，REVISE：1440
+单研究占屏与B重置入口隐蔽。已完成共享最小修复，等待新当前页验，不借旧PASS。
+新增Vixarelimab A+B绑定只读备份已准备，尚未save；下一set/undo/clear/undo
+后验证同版显示/配置/分享，不复采或重新采用来源。所有最终门仍未关闭。
+以下13/12为前节点记录，唯一STATUS顶节与机器检查点覆盖其“下一动作”。
 
 当前源码fed51af7已push。UI原执行65723/89186终态exit0，实际deepseek-v4.1-flash/
 max CLI798.225s/no fallback；owner统一到既有factCell/未知不折叠，26相关PASS。

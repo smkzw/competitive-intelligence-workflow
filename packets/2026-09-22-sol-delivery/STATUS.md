@@ -1,4 +1,18 @@
-# 唯一当前状态：1007V1连续实施；current13真实27态，紧凑行高修复已准备
+# 唯一当前状态：1007V1连续实施；current14已生成，真实宽屏/条件键盘验收
+
+源码0f2a876e已push/远端核验。current14正常呈现仅一次已完成，A14/B14/C9，
+generation7bdaf970，1144事实/七科学用户绑定表/C9/8030旧文件全部保持。
+A20公共来源。command362ae1c3/return d4e7a13d/verified4734c481；原13不重跑。
+Ego184本候选32A/B态及8次原生展开检查完成；原88080 B隐藏reset前置FAIL
+保留，恢复证据31831b19；未对全集签验。C02实际Gemini3.8Flash/high配置/
+292.164s/exit0/无fallback终态REVISE，owner接受1440占屏与B重置入口两项
+P1改善，P2展开留白保留功能安全。已修共享列预算/显性重置/清隐藏检索。
+相关回归最终结果待收，不用14图证明新源码；新的真实A+B Vixarelimab绑定
+只读备份/prewrite已准备，尚未save。自有服务54558正常；下一普通set-67.4/
+undo-67.5/clear/undo-67.5，同版实屏/配置/分享。来源采用/登记/795刷新已完
+不重做；非RC/暂停，三宿主/24门户/所有物理页/新安装/恢复仍开。
+
+## 前一节点：current13呈现、27真实状态与行高根因
 
 当前源码fed51af7已push/远端核验。单前端执行实际CodeBuddy/deepseek-v4.1-flash/
 max CLI，798.225s/exit0/no fallback已收终态；owner去重复A/B helper并统一到

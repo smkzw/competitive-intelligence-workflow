@@ -28,7 +28,8 @@ body[data-kz-design="6.0"] { background: var(--bg); }
 .kz-comparison-disclosure { margin-block: 0 8px; min-width: 0; }
 .kz-comparison-disclosure > summary { padding: 8px 12px; cursor: pointer; border: 1px solid var(--kz-glass-border); border-radius: 8px; }
 .kz-comparison-disclosure > summary:focus-visible { outline: 3px solid var(--kz-co, #407aaa); outline-offset: 2px; }
-.kz-comparison-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: end; min-width: 0; }
+.kz-comparison-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; min-width: 0; }
+.kz-comparison-controls > label { flex: 1 1 420px; }
 .kz-comparison-controls > label { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: center; min-width: 0; }
 .kz-comparison-controls select { width: 100%; max-width: 100%; min-width: 0; min-height: 40px; padding: 6px 8px; font: inherit; color: var(--text-1); background: white; border: 1px solid var(--kz-glass-border); border-radius: 8px; }
 .kz-comparison-controls > button { min-height: 40px; padding: 6px 12px; font: inherit; color: var(--text-1); background: white; border: 1px solid var(--kz-glass-border); border-radius: 8px; cursor: pointer; }
@@ -39,6 +40,11 @@ body[data-kz-design="6.0"] { background: var(--bg); }
 .kz-comparison-fact { width: 100%; text-align: left; font: inherit; }
 #full-study-comparison :is(th, td) { vertical-align: top; }
 .kz-comparison-observations { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; gap: 4px 12px; }
+/* Medium desktop needs multiple studies in view, not a single generous column
+ * budget. Long values may wrap naturally; original text and 16px type survive. */
+@media (min-width: 1400px) and (max-width: 1700px) {
+  .kz-comparison-observations { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+}
 .kz-comparison-observation { min-width: 0; }
 #full-study-comparison button.kz-comparison-fact { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0 8px; margin: 0; padding: 4px 6px; }
 /* Keep identity, value and original visit on one compact reading plane. Values

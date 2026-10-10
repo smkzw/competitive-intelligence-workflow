@@ -298,3 +298,45 @@ def test_expanded_compact_context_retains_full_available_width() -> None:
     block = css[marker : css.index("}", marker)]
     assert "grid-column: 1 / -1" in block
     assert "overflow" not in block and "max-height" not in block
+
+
+def test_medium_desktop_comparison_has_a_three_column_width_budget() -> None:
+    css = (ASSETS / "kangzhe-site.css").read_text(encoding="utf-8")
+    marker = css.index("@media (min-width: 1400px) and (max-width: 1700px)")
+    block = css[marker : css.index("\n}", marker)]
+    assert "minmax(min(100%, 300px), 1fr)" in block
+    assert "font-size" not in block and "overflow: hidden" not in block
+
+
+def test_b_every_reset_entry_clears_filters_search_and_preserves_question() -> None:
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const start=source.indexOf('  function bindFilterButtons(');
+const end=source.indexOf('\n  function bindEvidenceTriggers(',start);
+const resets=[{listeners:{}},{listeners:{}}];
+resets.forEach(n=>n.addEventListener=(type,fn)=>n.listeners[type]=fn);
+const search={value:'Week 30'};let stateSeen,urlSeen;
+const sandbox={pagedResults:true,resultPage:4,resultQuery:'Week 30',
+ comparisonQuestion:'efficacy::itch',resultPager:{querySelector(){return search;}},
+ document:{querySelectorAll(selector){return selector==='[data-filter-reset]'?resets:[];},
+  querySelector(){return resets[0];}},
+ filterDimensions(){return ['product','phase'];},
+ applyButtonState(state){stateSeen=state;},applyState(state){stateSeen=state;},
+ writeFilterUrl(state){urlSeen=state;}};
+vm.runInNewContext(source.slice(start,end),sandbox);sandbox.bindFilterButtons();
+resets.forEach((reset,index)=>{
+ assert.equal(typeof reset.listeners.click,'function','both reset entries are bound');
+ sandbox.resultQuery='Week 30';search.value='Week 30';sandbox.resultPage=4;
+ reset.listeners.click();
+ assert.equal(sandbox.resultQuery,'','reset removes the hidden search constraint');
+ assert.equal(search.value,'');assert.equal(sandbox.resultPage,1);
+ assert.equal(sandbox.comparisonQuestion,'efficacy::itch','clinical question stays selected');
+ assert.equal(JSON.stringify(stateSeen),'\u007b"product":[],"phase":[]\u007d');
+ assert.equal(JSON.stringify(urlSeen),JSON.stringify(stateSeen));
+});
+"""
+    _run_node(probe, str(ASSETS / "report-b.js"))
+    template = (ASSETS.parent / "templates/b/page.html.j2").read_text(encoding="utf-8")
+    controls = template[template.index('<div class="kz-comparison-controls">') :]
+    assert 'data-filter-reset' in controls.split('</div>', 1)[0]

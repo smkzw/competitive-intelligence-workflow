@@ -47,7 +47,7 @@ def test_safety_filters_remain_compact_without_losing_options(
     seed = payload["safety"][0]
     payload["safety"] += [
         {**seed, "row_id": f"density-{index}", "category": f"安全维度{index}",
-         "term": f"特定事件{index}", "term_key": f"specific_event_{index}"}
+         "term": f"特定事件{index}", "term_key": None}
         for index in range(count)
     ]
     render_report_a_site(ReportAPortalData.model_validate(payload), tmp_path)
@@ -69,3 +69,14 @@ def test_safety_filters_remain_compact_without_losing_options(
         f"raw:特定事件{index}" for index in range(count)
     }
     assert html.count('data-row-id="density-') == count
+
+
+def test_invented_typed_safety_key_is_rejected_not_silently_normalized(tmp_path: Path) -> None:
+    payload = json.loads(
+        (ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text()
+    )
+    payload["safety"].append({
+        **payload["safety"][0], "row_id": "invalid-key", "term_key": "specific_event_0",
+    })
+    with pytest.raises(ValueError, match="term_key 不在受控 catalog"):
+        render_report_a_site(ReportAPortalData.model_validate(payload), tmp_path)
