@@ -36,6 +36,7 @@ from ci_workflow.application.latest_delivery import (
     read_committed_historical_generation,
     read_current_delivery,
 )
+from ci_workflow.application.source_research_service import project_locked_a_public_provenance
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance
 from ci_workflow.graph.impact import ImpactEdge, ImpactGraph, ImpactLayer, ImpactNode
@@ -68,6 +69,11 @@ from ci_workflow.reports.common.identity_projection import (
 from ci_workflow.storage.event_store import EventStore, WorkflowEvent
 from ci_workflow.storage.migrations import apply_migrations
 from ci_workflow.storage.render_transaction import UnpublishedRenderTransaction
+from ci_workflow.storage.snapshot_store import (
+    SnapshotIntegrityError,
+    SnapshotStore,
+    compute_locked_snapshot,
+)
 from ci_workflow.storage.sqlite import open_database
 
 ReportCode = Literal["A", "B", "C"]
@@ -616,6 +622,63 @@ def _bound_identity_context(
         raise CurrentDeliveryConflictError(f"身份来源无法恢复：{error}") from error
 
 
+def _bound_a_public_context(
+    project_root: Path, previous: CurrentReportDelivery, data: ReportAPortalData,
+) -> tuple[PublicProvenance | None, str | None]:
+    """Replay hash-bound limitations; project the current declared source scope.
+
+    Legacy non-content-addressed scopes remain read-only compatibility, never
+    newly invented public sources. A canonical scope must reopen exactly and
+    fail closed before staging if unavailable, changed or incorrectly captured.
+    """
+    context_path = project_root / previous.site_relative_path / "data/render-context.json"
+    public = None
+    limitation = None
+    try:
+        if "data/render-context.json" in previous.file_hashes and not context_path.is_file():
+            raise ValueError("钉固的来源呈现上下文缺失")
+        if context_path.is_file():
+            expected = previous.file_hashes.get("data/render-context.json")
+            if (
+                context_path.is_symlink()
+                or hashlib.sha256(context_path.read_bytes()).hexdigest() != expected
+            ):
+                raise ValueError("来源呈现上下文哈希不一致")
+            context = json.loads(context_path.read_bytes())
+            if context.get("schema_version") != "a-public-render-context-1":
+                raise ValueError("来源呈现上下文版本不支持")
+            if context["public_provenance"] is not None:
+                public = PublicProvenance.model_validate(context["public_provenance"])
+                old_input, _relative, _expected = _bound_builder_input(project_root, previous, None)
+                old = ReportAPortalData.model_validate_json(old_input.read_bytes())
+                if public.report_data_digest != hashlib.sha256(
+                    old.model_dump_json().encode()
+                ).hexdigest():
+                    raise ValueError("旧公共来源与原报告内容不一致")
+            limitation = context["publication_limitation_zh"]
+        scope = data.source_evidence_snapshot_id
+        if scope is not None and scope.startswith("evidence-snapshot_"):
+            if re.fullmatch(r"evidence-snapshot_[0-9a-f]{24}", scope) is None:
+                raise ValueError("公共来源快照标识无效")
+            relative = f"snapshots/evidence/{scope}.json"
+            path = project_root / relative
+            if path.is_symlink():
+                raise ValueError("公共来源快照不能为符号链接")
+            store = SnapshotStore(project_root)
+            payload = json.loads(store._resolve(relative).read_bytes())
+            locked = compute_locked_snapshot(kind="evidence", report=None, manifest=payload)
+            if locked.snapshot_id != scope or locked.relative_path != relative:
+                raise ValueError("公共来源快照与声明作用域不一致")
+            public = project_locked_a_public_provenance(project_root, data, locked)
+        elif public is not None and public.report_data_digest != hashlib.sha256(
+            data.model_dump_json().encode()
+        ).hexdigest():
+            raise ValueError("变更报告无法沿用旧公共来源摘要，需可核验来源作用域")
+    except (OSError, ValueError, KeyError, SnapshotIntegrityError) as error:
+        raise CurrentDeliveryConflictError(f"公共来源无法恢复：{error}") from error
+    return public, limitation
+
+
 def preflight_current_report(
     project_root: Path,
     previous: CurrentReportDelivery,
@@ -646,6 +709,7 @@ def preflight_current_report(
         data: ReportAPortalData | ReportBPortalData | ReportCPortalData
         if previous.report == "A":
             data = ReportAPortalData.model_validate_json(builder_input.read_bytes())
+            _bound_a_public_context(project_root, previous, data)
             validate_active_fact_revision_a(
                 data,
                 active_revision,
@@ -707,10 +771,12 @@ def build_current_report(
     data_a: ReportAPortalData | None = None
     data_b: ReportBPortalData | None = None
     data_c: ReportCPortalData | None = None
+    a_public_context: tuple[PublicProvenance | None, str | None] = (None, None)
     try:
         if report == "A":
             data_a = ReportAPortalData.model_validate_json(builder_input.read_bytes())
             validate_active_fact_revision_a(data_a, active_revision)
+            a_public_context = _bound_a_public_context(project_root, previous, data_a)
         elif report == "B":
             data_b = ReportBPortalData.model_validate_json(builder_input.read_bytes())
             validate_active_fact_revision_b(data_b, active_revision)
@@ -743,24 +809,7 @@ def build_current_report(
         staging = transaction.begin()
         if report == "A":
             assert data_a is not None
-            # Read only the already hash-bound previous site, never a browser
-            # patch or guessed source URL. Legacy sites have no such context.
-            context_path = project_root / previous.site_relative_path / "data/render-context.json"
-            public = None
-            limitation = None
-            if context_path.is_file():
-                expected = previous.file_hashes.get("data/render-context.json")
-                if (
-                    context_path.is_symlink()
-                    or hashlib.sha256(context_path.read_bytes()).hexdigest() != expected
-                ):
-                    raise CurrentDeliveryConflictError("来源呈现上下文哈希不一致")
-                context = json.loads(context_path.read_bytes())
-                if context.get("schema_version") != "a-public-render-context-1":
-                    raise CurrentDeliveryConflictError("来源呈现上下文版本不支持")
-                if context["public_provenance"] is not None:
-                    public = PublicProvenance.model_validate(context["public_provenance"])
-                limitation = context["publication_limitation_zh"]
+            public, limitation = a_public_context
             render_report_a_site(data_a, staging, active_revision=active_revision,
                                  public_provenance=public,
                                  publication_limitation_zh=limitation,

@@ -9,6 +9,13 @@
 `evidence/1007V1/refresh-scoped-ab-current-v2.py`；其运行状态以唯一checkpoint
 为准，不把准备或source-only接受冒充当前报告/共轴/发布。
 大产物仍按既有受控CAS/manifest引用，旧资料不清理、不重写。
+当前12四分享正常recipe：`evidence/1007V1/export-scoped-current12-shares-v2.py`；
+Ego32实际前置错误恢复recipe：`evidence/1007V1/qa-scoped-current12-desktop-v2.js`。
+公共来源根因测试：`tests/integration/test_1007_current_a_public_source_scope.py`，
+生产共享路径在source_research_service.project_locked_a_public_provenance，
+current builder通过user_fact_edit._bound_a_public_context调用；tool只保留回执wrapper。
+前端有限packet：`context/ci-1007-compact-study-observations-v1_execution_context.md`。
+上述只有checkpoint记载的实际范围通过，旧current12页面与新代码分开。
 
 **以下为2026-10-04历史资料入口：**[完整交接](HANDOFF_20261004_R24_252_PAUSE.md)、
 [复盘](RETROSPECTIVE_20261004_R24_252.md)及[STATUS](STATUS.md)顶节。

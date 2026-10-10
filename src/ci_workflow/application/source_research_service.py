@@ -47,7 +47,11 @@ from ci_workflow.sources.connectors.linked_jats import (
 )
 from ci_workflow.sources.connectors.public_pdf_availability import PublicPdfAvailabilityWitness
 from ci_workflow.storage.manifest_store import ArtifactManifest
-from ci_workflow.storage.snapshot_store import LockedSnapshot, SnapshotStore
+from ci_workflow.storage.snapshot_store import (
+    LockedSnapshot,
+    SnapshotStore,
+    compute_locked_snapshot,
+)
 from ci_workflow.storage.source_derivation import (
     capture_source_text,
     extract_locator_quote,
@@ -3737,6 +3741,60 @@ def project_a_public_provenance(
         report_data_digest=hashlib.sha256(
             package.report_data.model_dump_json().encode("utf-8")
         ).hexdigest(),
+        sources=tuple(sources),
+    )
+
+
+def project_locked_a_public_provenance(
+    project_root: Path, report: ReportAPortalData, locked: LockedSnapshot,
+) -> PublicProvenance:
+    """Project verified captures for a bound input, not source/medical approval.
+
+    Both candidate and current rendering use this projection. No URL, date or
+    scientific acceptance is inferred from a registry identifier or row count.
+    """
+    if locked.kind != "evidence" or locked.report is not None:
+        raise ValueError("公共来源必须来自证据快照")
+    store = SnapshotStore(project_root)
+    path = project_root / locked.relative_path
+    if path.is_symlink():
+        raise ValueError("公共来源快照不能为符号链接")
+    payload = store.read(locked)
+    if compute_locked_snapshot(kind="evidence", report=None, manifest=payload) != locked:
+        raise ValueError("公共来源快照身份不一致")
+    if report.source_evidence_snapshot_id not in (None, locked.snapshot_id):
+        raise ValueError("公共来源快照与报告来源作用域不一致")
+    closure = payload.get("closure")
+    if not isinstance(closure, dict) or not isinstance(closure.get("sources"), list):
+        raise ValueError("公共来源快照缺少原始捕获闭包")
+    sources = []
+    for entry in closure["sources"]:
+        capture = SourceCapture.model_validate(entry["capture"])
+        version = source_version_identity(
+            capture.source_id, hashlib.sha256(capture.content_text.encode()).hexdigest(),
+            published_at=capture.date_evidence("published_at"),
+            effective_at=capture.date_evidence("effective_at"),
+            first_disclosed_at=capture.date_evidence("first_disclosed_at"),
+            text_derivation=capture.text_derivation,
+        )
+        if version != entry["source_version_id"]:
+            raise ValueError("公共来源版本身份与原始捕获不一致")
+        sources.append(PublicSource(
+            source_version_id=version, label=capture.title, url=capture.url,
+            source_type=("临床试验登记" if capture.source_type == "clinical_trial_registry"
+                         else capture.source_type),
+            published_at=(capture.published_at.date().isoformat()
+                          if capture.published_at else "未知（来源未明确公开）"),
+            data_cutoff=report.data_cutoff.date().isoformat(),
+            limitation="固定来源开发候选；报告级来源清单不代表逐事实或独立医学验收。",
+        ))
+    if sorted(source.source_version_id for source in sources) != sorted(
+        payload["source_version_ids"]
+    ):
+        raise ValueError("公共来源闭包不完整或存在重复版本")
+    return PublicProvenance(
+        evidence_snapshot_id=locked.snapshot_id,
+        report_data_digest=hashlib.sha256(report.model_dump_json().encode()).hexdigest(),
         sources=tuple(sources),
     )
 

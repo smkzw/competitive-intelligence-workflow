@@ -3072,3 +3072,12 @@ ci-1007-compact-study-observations-v1已完整packet/preflight，runner16678/exe
 不progress轮询/慢重派/重跑旧源。Owner来源预检/重建成族6RED1.77s后，复用
 既有PublicProvenance与锁定snapshot路径，先回归相关族；不猜URL/日期/科学许可。
 独立旧路径、五用户文件与未知资料保留，无cleanup；Goal active无阶段暂停。
+
+Owner公共来源根因已完成：既有source service新增锁定捕获投影，开发tool回执
+wrapper复用；current预检/构建统一重开当前canonical作用域与旧bound上下文。
+初始6FAIL含空consumer测试前置无效（非生产缺陷），修正成真实typed consumer；
+第一相关批3FAIL83PASS另暴露helper必填参数，静态同步发现import问题，均修正。
+最终86相关PASS99.28s+含两项bound旧上下文负向的15PASS5.87s，Ruff4/strict3。
+真实current12只读投影20来源/0缺URL/实际snapshot与报告摘要一致；零render/
+current/来源/DB写，原局限说明保持。原FAIL/log保留，不借source清单签医学。
+前端worker终态仍待收，暂无新页面可视接受；下一合并后同一新候选验收。

@@ -35,10 +35,10 @@ from ci_workflow.application.source_research_service import (
     build_ctgov_a_outcome_candidate_batch,
     build_ctgov_a_safety_candidate_batch,
     extract_ctgov_atomic_results,
+    project_locked_a_public_provenance,
     research_facts_from_ctgov_atom,
     source_capture_from_ctgov_study,
 )
-from ci_workflow.domain.evidence import source_version_identity
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.domain.public_provenance import PublicProvenance, PublicSource
 from ci_workflow.qc.browser import site_directory_digest
@@ -93,35 +93,7 @@ def public_provenance_for_candidate(
         raise ValueError("公共来源快照不可核验") from error
     if sorted(payload["source_version_ids"]) != sorted(receipt["source_version_ids"]):
         raise ValueError("公共来源版本与候选回执不一致")
-    sources = []
-    for entry in payload["closure"]["sources"]:
-        capture = SourceCapture.model_validate(entry["capture"])
-        version = source_version_identity(
-            capture.source_id, _sha256(capture.content_text.encode()),
-            published_at=capture.date_evidence("published_at"),
-            effective_at=capture.date_evidence("effective_at"),
-            first_disclosed_at=capture.date_evidence("first_disclosed_at"),
-            text_derivation=capture.text_derivation,
-        )
-        if version != entry["source_version_id"]:
-            raise ValueError("公共来源版本身份与原始捕获不一致")
-        sources.append(PublicSource(
-            source_version_id=version, label=capture.title, url=capture.url,
-            source_type=("临床试验登记" if capture.source_type == "clinical_trial_registry"
-                         else capture.source_type),
-            published_at=(capture.published_at.date().isoformat()
-                          if capture.published_at else "未知（来源未明确公开）"),
-            data_cutoff=report.data_cutoff.date().isoformat(),
-            limitation="固定来源开发候选；报告级来源清单不代表逐事实或独立医学验收。",
-        ))
-    if sorted(source.source_version_id for source in sources) != sorted(
-        payload["source_version_ids"]
-    ):
-        raise ValueError("公共来源闭包不完整或存在重复版本")
-    return PublicProvenance(
-        evidence_snapshot_id=locked.snapshot_id, report_data_digest=report_digest,
-        sources=tuple(sources),
-    )
+    return project_locked_a_public_provenance(project_root, report, locked)
 
 
 def _extra_facts(
