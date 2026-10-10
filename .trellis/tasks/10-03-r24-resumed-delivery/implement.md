@@ -1,5 +1,17 @@
 # Continuous implementation checkpoint
 
+## 最新：隔离绑定结果已收；药代分类根因修复执行中
+
+原38984副本生产登记349A/B均返回，最后全文件pin断言FAIL；原FAIL不覆盖。
+只读60258恢复验证89f08800：11716持久文件/36表一致，仅副本698新增绑定，
+没有登记重跑/live写入。SQLite WAL/SHM已在只读副本实见，原瞬时差异因未捕获
+仅推测。Owner发现2条Half-life(t1/2)错误疗效，不能整批放行349；新有界E03
+原91860/PID63433已启动一次，共同classifier/两集成测试归worker，owner不改
+同文件。Livepeak pi/cursor/default为选择器，终态才核真实model；不编造身份。
+Owner独立只读定位14现有candidate安全原子，原源hash/逐定位引用准确66e0e572。
+current21/原83258保持；下步原终态与科学分类/正式来源采用，不重复摄取。
+模式execution-plus-conference，科学新分类须实际独立复核；非暂停/RC。
+
 ## 当前：源组标题缩写根因闭合，current21保持
 
 execution-plus-conference：一位E03只改builder/test，owner共享源/current唯一写。
