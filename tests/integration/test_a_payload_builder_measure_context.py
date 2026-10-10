@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -193,3 +196,173 @@ def test_builder_uses_measure_group_and_rejects_conflicting_denominators(
     assert sidecar_only.returncode != 0 and "已存在" in sidecar_only.stderr
     assert not output.exists()
     assert output.with_name("a-payload.derivation.json").read_bytes() == original_sidecar
+
+
+def test_result_group_declared_short_form_links_and_other_variants_stay_unknown(
+    tmp_path: Path,
+) -> None:
+    """A declared arm label states its own short form inside the label.
+
+    "Weekly (QW)" declares "QW" for "Weekly"; a result group written as
+    "Testdrug 360 mg SC QW" is the same declared arm with the label's own
+    short form. Frequency suffixes (BID), split period markers
+    ("(Q4W; DBL)"), reordered spellings and ambiguous contractions are not
+    declared short forms and must stay unknown, never dropped or guessed.
+    """
+    root = Path(__file__).resolve().parents[2]
+    cas = tmp_path / "cas" / "evidence" / "raw" / "sha256" / "ab"
+    cas.mkdir(parents=True)
+    declared = [
+        "Testdrug 360 mg SC Weekly (QW)",
+        "Testdrug With Auto-Injector (AI)",
+        "Testdrug 540 mg SC Every 4 Weeks (Q4W; DBL)",
+        "Testdrug 720 mg SC Weekly (QW)",
+        "Testdrug 720 mg SC Once Weekly (QW)",
+    ]
+    measures = []
+    for group_id, title, value in (
+        ("OG1", "Testdrug 360 mg SC QW", "6"),
+        ("OG2", "Testdrug With AI", "5"),
+        ("OG3", "Testdrug 540 mg SC Q4W (DBL)", "4"),
+        ("OG4", "Testdrug 360 mg SC Weekly (QW) BID", "3"),
+        ("OG5", "Testdrug With Auto-Injector (AI)", "2"),
+        ("OG6", "Testdrug 720 mg SC QW", "1"),
+    ):
+        measures.append({
+            "title": f"Endpoint {group_id}", "timeFrame": "Week 4",
+            "unitOfMeasure": "Participants",
+            "groups": [{"id": group_id, "title": title}],
+            "classes": [{"categories": [{"measurements": [
+                {"groupId": group_id, "value": value},
+            ]}]}],
+        })
+    record = {
+        "protocolSection": {
+            "identificationModule": {"nctId": "NCT00000041", "briefTitle": "Arm relation test"},
+            "designModule": {"enrollmentInfo": {"count": 60}},
+            "armsInterventionsModule": {
+                "interventions": [{"name": "Testdrug", "type": "DRUG",
+                                   "armGroupLabels": declared}],
+                "armGroups": [{"label": label, "type": "EXPERIMENTAL"}
+                              for label in declared],
+            },
+        },
+        "resultsSection": {
+            "outcomeMeasuresModule": {"outcomeMeasures": measures},
+            "adverseEventsModule": {
+                "timeFrame": "Week 1 to Week 4",
+                "eventGroups": [{"id": "EG1", "title": "Testdrug 360 mg SC QW",
+                                 "seriousNumAffected": 1, "seriousNumAtRisk": 10}],
+            },
+        },
+    }
+    page = cas / "page.bin"
+    page.write_text(json.dumps({"studies": [record]}), encoding="utf-8")
+    alias = tmp_path / "alias.json"
+    alias.write_text(json.dumps({
+        "map_id": "synthetic-v1", "canonical_by_alias": {"Testdrug": "testdrug"},
+    }), encoding="utf-8")
+    output = tmp_path / "a-payload.json"
+    command = [
+        sys.executable, str(root / "tools/build_a_payload.py"),
+        "--cas-dir", str(tmp_path / "cas"), "--alias-map", str(alias),
+        "--indication", "合成适应症", "--indication-id", "synthetic",
+        "--output", str(output), "--cutoff", "2026-10-10",
+    ]
+    subprocess.run(command, cwd=root, check=True, capture_output=True, text=True)
+    payload = json.loads(output.read_text(encoding="utf-8"))
+    efficacy = {row["arm"]: row for row in payload["efficacy"]}
+    assert set(efficacy) == {
+        "Testdrug 360 mg SC QW", "Testdrug With AI", "Testdrug 540 mg SC Q4W (DBL)",
+        "Testdrug 360 mg SC Weekly (QW) BID", "Testdrug With Auto-Injector (AI)",
+        "Testdrug 720 mg SC QW",
+    }
+    assert [
+        (efficacy["Testdrug 360 mg SC QW"]["product_id"],
+         efficacy["Testdrug 360 mg SC QW"]["group_assignment_state"]),
+        (efficacy["Testdrug With AI"]["product_id"],
+         efficacy["Testdrug With AI"]["group_assignment_state"]),
+        (efficacy["Testdrug With Auto-Injector (AI)"]["product_id"],
+         efficacy["Testdrug With Auto-Injector (AI)"]["group_assignment_state"]),
+    ] == [("testdrug", "declared")] * 3
+    # An added frequency token, a split DBL period group and an ambiguous
+    # contraction (two declared labels share one short form) are not
+    # declared identities: they stay report-visible as unknown.
+    assert [
+        efficacy["Testdrug 540 mg SC Q4W (DBL)"]["group_assignment_state"],
+        efficacy["Testdrug 360 mg SC Weekly (QW) BID"]["group_assignment_state"],
+        efficacy["Testdrug 720 mg SC QW"]["group_assignment_state"],
+    ] == ["unknown"] * 3
+    assert [(row["arm"], row["product_id"], row["group_assignment_state"])
+            for row in payload["safety"]] == [
+        ("Testdrug 360 mg SC QW", "testdrug", "declared"),
+    ]
+    links = payload["trials"][0]["product_links"]
+    assert [(link["product_id"], link["arm_role"], tuple(link["arm_labels"]))
+            for link in links] == [("testdrug", "experimental", (
+                "Testdrug 360 mg SC QW",
+                "Testdrug 360 mg SC Weekly (QW)",
+                "Testdrug 540 mg SC Every 4 Weeks (Q4W; DBL)",
+                "Testdrug 720 mg SC Once Weekly (QW)",
+                "Testdrug 720 mg SC Weekly (QW)",
+                "Testdrug With AI",
+                "Testdrug With Auto-Injector (AI)",
+            ))]
+    derivation = json.loads(
+        output.with_name("a-payload.derivation.json").read_text(encoding="utf-8")
+    )
+    assert derivation["arm_label_derivations"] == [
+        {
+            "trial_id": "nct00000041", "product_id": "testdrug",
+            "declared_label": "Testdrug 360 mg SC Weekly (QW)",
+            "result_label": "Testdrug 360 mg SC QW",
+            "rule": "declared_parenthetical_abbreviation",
+        },
+        {
+            "trial_id": "nct00000041", "product_id": "testdrug",
+            "declared_label": "Testdrug With Auto-Injector (AI)",
+            "result_label": "Testdrug With AI",
+            "rule": "declared_parenthetical_abbreviation",
+        },
+    ]
+
+
+@pytest.mark.parametrize(("declared", "forbidden"), [
+    ("Testdrug 360 mg SC Weekly (QW)", {
+        "testdrug 360 mg qw", "testdrug 360 qw", "testdrug qw",
+    }),
+    ("Testdrug Phase 2a Weekly (QW)", {
+        "testdrug phase qw", "testdrug qw",
+    }),
+    ("Testdrug With Dual Chamber Syringe (DCS)", {
+        "testdrug with dual chamber dcs", "testdrug with dual dcs", "testdrug dcs",
+    }),
+    ("Testdrug 120 mg (A)", {"testdrug 120 a", "testdrug a"}),
+    ("Testdrug Twice Weekly (QW)", {"testdrug twice qw", "testdrug qw"}),
+    ("Testdrug Three Times Weekly (QW)", {
+        "testdrug three times qw", "testdrug three qw", "testdrug qw",
+    }),
+    ("Testdrug Not Once Weekly (QW)", {
+        "testdrug not once qw", "testdrug not qw", "testdrug qw",
+    }),
+    ("Testdrug 2 Weekly (QW)", {"testdrug 2 qw"}),
+    ("Testdrug No Weekly (QW)", {"testdrug no qw", "testdrug qw"}),
+    ("Testdrug Not-Once Weekly (QW)", {"testdrug not-once qw"}),
+])
+def test_declared_short_form_never_erases_dose_route_phase_or_partial_phrase(
+    declared: str, forbidden: set[str],
+) -> None:
+    # Execute the real production helper, not a copied implementation. The
+    # CLI module parses inputs at import time, so isolate its exact AST nodes.
+    path = Path(__file__).resolve().parents[2] / "tools/build_a_payload.py"
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    names = {"_RESULT_LABEL_SHORT_FORM", "_LABEL_WORD", "_declared_result_label_forms"}
+    nodes = [node for node in tree.body if (
+        isinstance(node, ast.FunctionDef) and node.name in names
+        or isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id in names for target in node.targets)
+    )]
+    namespace: dict[str, Any] = {"re": re}
+    exec(compile(ast.Module(body=nodes, type_ignores=[]), str(path), "exec"), namespace)
+    actual = namespace["_declared_result_label_forms"](declared)
+    assert not actual & forbidden, f"Unsupported arm contraction: {actual & forbidden}"

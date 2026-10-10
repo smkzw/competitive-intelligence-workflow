@@ -1,158 +1,29 @@
-# 1007V1 当前接手入口｜current21隔离安装完成，全物理页检查在运行
+# 唯一接手入口｜1007V1 连续实施，非暂停、非 RC
 
-唯一当前为[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)与
-[机器检查点](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。
-源码9d9fa38c已正常push并核对远端；固定该commit的400文件HTML-only包在
-新隔离目录正常bootstrap完成，digest d564a730。私有安装实际读取当前
-A21/B21/C9、1144事实、合法A+B修订与清除/原来源，11716项目文件精确
-不变（1b3a7b00）；没有save、render、来源采用。此为安装/读取验收，不是
-三宿主或科学发布。可重建15M源码副本已正常移除；仅本轮下载缓存清理
-1376文件/183.4MiB（管理器计数），安装本体和证据保留，清理后PACKAGE_OK。
-Ego184/p2原83258正在检查A49/B104/C16共169物理页×四宽=676访问，保持
-冻结generation67b793ef，不启动第二轮或争用p2。结构遍历不是审美通过。
-下一收原运行终态，按根因处置失败/未验；并行厘清来源映射缺口。临时独立
-profile原Ask仍待答。非暂停/RC/全部完成。下述原“下一提交/安装”已完成。
+当前状态只见 [STATUS](packets/2026-09-22-sol-delivery/STATUS.md) 顶节；精确运行、hash与下一安全动作见 [机器检查点](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。旧暂停文件仅是历史，不撤销用户最新连续实施授权。
 
-## current21密度、配置和离线分享已完成记录
+## 当前事实
 
-当前A21/B21/C9，generation67b793ef。3成族RED→45相关PASS；共享原生计数/
-区域阅读/展开与完整标签换行已实施。20原浏览器FAIL30态/7原生检查保留：
-英文完整单词换行和全可见时强求滚动是测试前提错；第二研究值靠下是实际
-缺口，已修28vh/250px，同根因普通21仅一次完成。1144事实/七表/C9/11145
-旧文件精确保持，return18b388e3/verified77953796。Ego184新32态、8区域键盘/
-展开、8条件展开完成（593e0181）；owner四张真PNG已看，第二研究首值A882/
-B835在900内，单位完整。C02原20376与EXIT3084已终态136.727s/exit0，同
-Gemini3.8Flash/high配置、无fallback，四真PNG读过，代表密度根因CLOSED；
-不采其混合n/%临床比较推论。ABC配置39599已完成（4d2b2aee）；四正常分享
-36203移动逐成员hash通过（4e6456f7），六入口真实断网30520通过
-（81bddfb8），finally恢复网络，owner实看ABC三图。Ego184复用，不是新
-浏览器；临时专用profile原Ask待答，不擅自查看/创建profile。前批b72ba2af
-已push；本批下一白名单递交，再固定commit隔离安装/current运行验证。
-不重复四save、来源采用或795新增刷新。非暂停/RC/全部完成。
+- 本批输入源码 ae2c176ac79103b051a3bd892d8fd5524d65b6d5，已正常 push、远端核验。新增组别规则源 hash cd4f581e，尚未用于当前报告；不回退前移代码、不推测旧 PID 在运行。
+- PN 是结节性痒疹，不是 PNH。当前世代 67b793ef865d035092fb27dfeaec8ce87cfaa0e97edb3631724eb07d55518310：A21/B21/C9、1144 活动事实。四次真实保存15–18、来源采用、消费者登记及795刷新已完成，禁止重跑。
+- current21 代表密度32态、区域键盘/展开、个人配置、四分享包移动hash、六入口真实断网已完成。仅复用 Ego184；独立新profile/跨浏览器未验，原profile Ask待答，不擅查登录资料。
+- 固定9d9fa38c的400文件HTML-only包实际隔离安装及私有运行读取通过；不是三宿主或发布接受。只清理新建可重建源码副本与该新安装下载缓存；安装、原来源、历史、用户未知文件仍保留。
+- 原 Ego83258 在 workspace184/p2 检查当前169物理页×四宽676访问；不争用p2、不重开。结构检查不等于全页审美、科学或RC。自有编辑服务54558/65033保持；不要在检查中重启。
 
-## 已完成current19检查点（下述下一动作以顶节为准）
+## 本批组别根因闭合（未采用新事实/绑定）
 
-正常纯呈现19仅一次已完成A19/B19/C9，generation c13321ab；1144事实/七
-科学用户绑定表/C9/10255旧文件精确保持，20公共来源。回执3516e116/
-验证a5df5907；原exec35225结束，不再重建。清除披露/SD-N角色投影修复
-142相关PASS22.62s，限定静态通过。Ego184 A/B四宽四态32项和8次原生展开
-完成（2d0225d0），A/B/C真实配置下载及不同页面导入完成（77520f17）。四份
-正常分享包已移动逐成员校验（5cd4d4bf）；同版六入口真实断网已通过
-（2e46f929），网络finally恢复；仅复用Ego184，不冒称新浏览器。
-宽质量门96189已终态exit0：Ruff、strict286文件、1185常规/20兼容/7分层与
-旧路径词法扫描六步通过（quality-only，非全产品）。C02同原会话189.866s/exit0/no fallback已终态：
-B重置和来源清除分层关闭；密集横比仅部分改善，1600A中文断行/单研究占屏
-仍为P1。原报告0d6a3c46；未签整体视觉、科学或RC。下一提交本批完整修复
-及证据，再做一项有界共享密集横比结构修复，不重复四save。
+一个 E03 实际 CodeBuddy/deepseek-v4.1-flash/max CLI 692.322s：原宽泛缩写规则拒绝。Owner4RED及6限定词RED后，41相关PASS18.27s、本地Ruff3文件/strict2文件通过。原C03实际 Grok/grok-4.7-build/high CLI 983.643s REVISE；同会话162.453s仅对限定词修复SCOPED ACCEPT。首次搜索遇执行者计数摘要，独立性降低，不能称完全干净上下文；原失败及原始回执保留。
 
-## 历史已完成节点（下述“下一动作”仅描述当时，不是当前排程）
+普通生产构建器 v2 一次冻结源重放：46研究/3851主行，349仅 unknown→declared；48辅助行完整保留，其中16仅归属改变（10药代、6免疫原性）。数值、单位、领域、临床上下文均不变，11716当前文件精确不变。证据 `.artifacts/1007-arm-relations-owner-v2/actual.json` hash44ae4b8a；候选不是当前报告、临床可比许可、新鲜度或宇宙闭包。
 
-源码e2b22316已push；新增Vix原子正常set/undo/clear/undo四步仅各一次完成。
-当前A18/B18/C9，generation f1084e38；当前值恢复-67.5，原值/来源不改，
-保留user_modified而非科学接受。四步原回执/只读验证完整；最终实际A+B
-来源/值/Esc通过3ff81795。其它1143事实/C9/8030旧文件/源与绑定表保持。
-实际clear17核心检查通过不代表全部显示正确：A原始user_cleared直出、B缺失
-量表误标用户清除已确认；7成族RED后最小共享修复。邻接回归发现父级MEAN
-覆盖标准差/N，5成族RED后修共同原子角色投影；142相关回归已完成。
-呈现19/四宽/配置/有限同会话复核现已完成，分享离线仍按顶节状态。
-不重复四次save或来源采用/795refresh。非暂停、非RC。
-下方current14及更早仅历史；唯一机器检查点含最新安全动作。
+完整边界/模型/测试记录：[执行审阅](reviews/codex_execution_ci-1007-arm-relations-root-v1_review.md)、[会商审阅](reviews/codex_conference_ci-1007-arm-label-evidence-owner-v1_review.md)。Raw私有追踪仅本地，勿上传GitHub。
 
-唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
-精确恢复：[混合刷新与正式来源接续](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。
-前一节点：[剂量修复、正常来源入库与新增刷新](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json)。
-前一节点：[单位量纲、旧测试合同与来源候选](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-unit-dimensions-and-scoped-source-candidates-v1.json)。
-前一节点：[当前11导航、分享、证据缺损与诊断终态](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current11-navigation-share-and-source-terminal-v1.json)。
-前一节点：[当前11、中文单位与原地恢复证据](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-native-unit-current11-v1.json)。
-上一完整链：[当前10、来源准备终态与可恢复资料](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current10-source-preparation-recovery-v1.json)，不拼作当前11验收。
-密度根因：[已完成候选、逐报告分享修复](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-density-and-per-report-share-v1.json)，其中current9/PENDING均是当时历史。
-上一完整操作：[联合 current9 操作、配置、分享、桌面记录](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-joint-current9-operations-config-share-desktop-v1.json)，已完成范围不重跑。
-旧根入口原字节：[历史归档](docs/handoffs/HANDOFF_archive_20261009_before_joint_r9.md)。
-上次暂停原件：[20261009 暂停](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)，已获授权恢复，不是当前状态。
+## 下一条有界任务
 
-唯一当前：源码0f2a876e已push，current14正常呈现仅一次完成，A14/B14/C9/
-1144事实，generation7bdaf970；源/用户/绑定/C9/8030旧文件保持，A20来源。
-真实return d4e7a13d/verified4734c481，原13绝不重跑。Ego184本版32态及8次
-原生条件展开已完成；原B隐藏reset前置FAIL保留，恢复31831b19，非全集终验。
-C02已终态292.164s/实际Gemini3.8Flash/high配置/无fallback，REVISE：1440
-单研究占屏与B重置入口隐蔽。已完成共享最小修复，等待新当前页验，不借旧PASS。
-新增Vixarelimab A+B绑定只读备份已准备，尚未save；下一set/undo/clear/undo
-后验证同版显示/配置/分享，不复采或重新采用来源。所有最终门仍未关闭。
-以下13/12为前节点记录，唯一STATUS顶节与机器检查点覆盖其“下一动作”。
+先白名单提交本批代码、回归和精简证据。等待原83258终态并收真实失败/未验；同时只读准备349合法新增消费者，核锁定原子、现有接受状态、源上下文与用户层，不在冻结current21检查期间注册或切世代。14缺锁定primary是三研究的14行，不是14研究；其他未知臂/期别/交叉关系不靠顺序或总数补猜。完成下一事务后再验受影响同版任务链，不重做旧保存/接受。
 
-当前源码fed51af7已push。UI原执行65723/89186终态exit0，实际deepseek-v4.1-flash/
-max CLI798.225s/no fallback；owner统一到既有factCell/未知不折叠，26相关PASS。
-正常新呈现只运行一次：current13 A13/B13/C9，1144事实原样，7585旧文件和
-科学/用户/绑定表保持；generation60adbf9e，A20公共来源接通。重建return
-515931d8/verified ee7e6a3c。原Ego58168已FAIL：27态无断言失败，B1920来源
-加载120s超时/随后evaluate15s不响应，原p2已正常恢复；5未验不记PASS。JSON
-1cb25709。A20公共来源实际可见。6真实80px记录证明条件入口仍独占行，新增
-2RED→28相关PASS，已改同带/展开全宽，下一正常current14及少重载完整实屏。
-暂不签新候选视觉/配置/编辑/离线分享/RC；已完source/current12动作禁止重跑。
-唯一状态以STATUS顶节与机器检查点为准。以下current12在途描述是前节点历史。
+科学全宇宙/Publication/中国MAH/动态新鲜度、全部物理页视觉、新浏览器/跨浏览器、三真实宿主、恢复、24门户及RC仍未完成。不得用代表项目、测试计数或单次咨询宣布交付。
 
-## 前节点：current12刷新与呈现修复准备
+## 历史与保护
 
-Goal实查ACTIVE；非暂停/完成/RC。C01原复核已终态，确认事务保护并发现首条
-影响元数据缺陷。Owner2RED后修复全部种子/单请求旧scope，126相关PASS。
-同原C01修复复核192.734s/exit0/max verified，3PASS/scoped ACCEPT，已结束。
-原正式来源issuer exit2无结论/回执；同一会话沿既有任务接续正常issuer已
-exit0。实际gpt-6.1-sol/openai-codex/high配置与正常回执31d3c3ee核验，来源
-正常采用仅一次exec75738已exit0，3989事实/3572声明/33范围证明，decision
-922fe467，原科学/用户层/绑定/冲突与7129旧文件保持。46研究3851行全保留，
-886候选/2951未知关系/14缺锁定原子；正常A/B登记exec49148已exit0，886各自
-合法消费者/863疗效+23直接安全视图，精确复用35问题。795新增刷新exec94187
-已exit0，真实current12 A12/B12/C9、1144可编辑事实；旧349与C9及7142文件保持。
-上述来源动作全部已完成，不重采/重采用/重登记/重刷新。Ego184四宽四态A/B
-32实际几何/ID/来源回焦检查通过；两次前置状态错误原FAIL保留。Owner实看仍
-发现重复药名/方案导致单研究霸屏、A页尾空来源上下文两个P1；不签审美接受。
-四分享包正常从current12生成并移动hash校验，离线/新浏览器/配置仍未验。
-单一有界前端执行runner16678/exec65723实际已启动、终态待收，无进度轮询。
-Owner公共来源接线86相关PASS+15上下文PASS/Ruff4/strict3，真实只读20来源通过；
-原失效fixture/ helper参数失败保留，未生成新可视候选。下一收worker/同步镜像/
-正常新呈现候选/实屏，独立挑战在候选冻结后；当前12旧页不冒称已修。
-Goal ACTIVE，非暂停/RC/全部交付；全部未完发布门保持。以下是上一节点历史。
-
-## 历史节点：剂量、来源候选入库与第一版刷新
-
-剂量根因6RED→57PASS，三研究118行恢复。
-C03实际同GLM会话v2 scoped ACCEPT，仅建议。正常20源/3989事实/3572声明
-已入库；105旧接受祖先精确复用，3884新原子仍candidate，snapshot70170bf1/
-e8197d2c。旧DB行与7122资料保持，current11/349采用事实/用户清除/C不变。
-来源新增refresh复用原事务，owner补“每个消费者须明确本次scope”2RED→55
-相关PASS。单C01freshreview已preflight/原runner6612/exec10156/EXIT84767，
-终态PENDING，禁止progress轮询或迟缓重派。下一正常正式来源issuer/采用/
-合法消费者与一次refresh；不能把建议/夹具PASS当真实源或发布接受。
-只重验受影响链；全宇宙/三宿主/恢复/安装/24门户仍开；旧中文工程零接触。
-
-## 历史依赖摘要（下述在途句不代表当前排程）
-
-Goal 实查 active；非暂停、非完成、非 RC。仅英文工程，旧中文工程零接触。
-正式采用固定登记切片105事实/91声明/33追加范围证明及原C258；不签全宇宙/共轴。
-同一项目实际A+B保存/清除/恢复/undo和C合法独立扇出完成；幂等/过期拒绝有记录。
-current11正常复用已验A/B清单，A11/B11/C9各49/101/16页；349可编辑采用事实、源与历史保持。
-历史current9配置/四包/六入口和48态完成，不拼作current11终验。
-current11 A/B32实态完成；C原16页/r9保持，旧断言错误记录保留。
-默认CLI按逐报告版本修复，过期显式配置仍拒绝；14相关PASS/Ruff/strict限定通过。
-正常A/B r10候选四宽四态32实屏通过后已切current10；C9合法保持。
-B1440代表访视区降37.58%/字号16px；owner实看三图，英文单位/长研究名仍开。
-原E04已终态，实际ZCode/GLM-5.3-Flash:max/exit0无fallback。Owner修复224遗漏
-分母payload、核1922原文和3781定位；当时1698候选/1665缺口现已用固定源正常重建。
-91既有采用通过祖先复用，不再采用；精确旧DB CAS及current10之后恢复重放已验。
-正常current10默认联合分享实际成功，移动目录455成员hash已验；三入口真断网
-launcher→摘要→横比→来源/Esc已过，网络恢复；freshprofile/保存配置新验仍开。
-真实current10三报告源→对应编辑页已过，C9合法指整体10；未save，原值可查。
-本批中文单位8RED→74相关PASS；四宽32实态，全科学载荷除显示标签一致。
-原B范围断言和选择后DB字节断言FAIL均保留，原地证明未改源/事实，未重做保存。
-current11三来源→编辑链已验未save；默认联合包ca538c11/455成员移动与三真断网入口已验。
-三旧current10导航PNG误覆盖，旧JSON不变；旧图不可验，已显式记录及新图独立保存，禁覆盖。
-E03实际CodeBuddy/deepseek4.1flash/max CLI817.124s终态；1665分母范围冲突，原源存在。
-本节点：单位量纲14RED→82相关PASS，两个旧科学门测试隔离AI与覆盖门后7PASS。
-固定PN22单位/3781行标签全不变，未重渲染或重做浏览器。误入旧Playwright的
-批次已停自有pytest，部分FAIL保留、无Ego接受；仅真实执行范围有效。
-固定原源正常builder的14源/3726事实/3363声明和行/0绑定缺口完成，原1665全
-定位，七真实源缺失保留；不是科学采用/完整宇宙/在线新鲜度。Worker14次生
-标签判断已纠正，实际候选exact-path通过、错误N仍拒绝。当前11/清除/C不变。
-下一：仅收原C03终态（runner99332/exec46813、EXIT观察76054），核日期/祖先
-与独立意见后正常摄取/正式复核/采用。禁止progress轮询/迟缓重派或丢旧采用。
-全源/所有页面/跨浏览器/新浏览器/三宿主/新安装/恢复/24门户仍开；旧PASS不拼新PASS。
+[前入口原样归档](docs/handoffs/HANDOFF_archive_20261010_current21_before_arm_relations.md) SHA fcf3af70e2634e2fdaf80f8de99ac7a7751a31f00b6cf4a24ea3a9efc3ccd070；历史内容、FAIL/hash不改写。全局AGENTS、现行PRD/DESIGN/PLAN/EXECUTION_RULES/ACCEPTANCE及既有Trellis为规范入口。仅英文工程；旧中文工程零接触，五项用户脏树/未知资料保留，禁止全量清理或提交。

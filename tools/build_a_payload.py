@@ -251,6 +251,7 @@ for alias, canonical in ALIAS["canonical_by_alias"].items():
 COMBO_RECORDS: list[dict[str, Any]] = []
 NON_PRODUCT_RECORDS: list[str] = []
 BORDERLINE: set[str] = set()
+ARM_LABEL_DERIVATIONS: list[dict[str, Any]] = []
 
 STATUS_MAP = {
     "RECRUITING": "招募中",
@@ -327,6 +328,55 @@ def _linked_product_for_group(
         ) for item in background) for label in common_other_arms):
             return product, "declared"
     return focus_product_id, "unknown"
+
+
+_RESULT_LABEL_SHORT_FORM = re.compile(r"\s+\(([A-Z][A-Z0-9/+.-]*)\)")
+_LABEL_WORD = re.compile(r"[A-Za-z]+(?:-[A-Za-z]+)*")
+
+
+def _declared_result_label_forms(declared_label: str) -> set[str]:
+    """Short forms a declared arm label states for itself.
+
+    "Weekly (QW)" declares "QW" for "Weekly", so a result group written as
+    "Drug 360 mg SC QW" names the same declared arm instead of a new one.
+    Require a spelled-out phrase's initials (including hyphenated words), or
+    the source-declared Weekly/Once Weekly (QW). Never arbitrarily erase the
+    preceding 1–4 tokens: those may be dose, route or phase. Split marker
+    groups and added frequency tokens remain unresolved.
+    """
+    forms: set[str] = set()
+    for match in _RESULT_LABEL_SHORT_FORM.finditer(declared_label):
+        rest = declared_label[:match.start()]
+        suffix = declared_label[match.end():]
+        words: list[str] = []
+        for _ in range(len(match.group(1)) + 1):
+            word = re.search(r"(\s+)(\S+)$", rest)
+            if word is None:
+                break
+            if _LABEL_WORD.fullmatch(word.group(2)) is None:
+                break
+            words.insert(0, word.group(2))
+            rest = rest[:word.start()]
+            initials = "".join(part[0] for token in words for part in token.split("-")).upper()
+            weekly = match.group(1) == "QW" and " ".join(words).casefold() in {
+                "weekly", "once weekly",
+            }
+            if weekly:
+                prior = rest.rsplit(maxsplit=1)[-1].casefold() if rest else ""
+                qualifiers = {
+                    "once", "twice", "thrice", "three", "times", "every", "other",
+                    "bi", "not", "alternate", "no", "never", "without", "neither",
+                }
+                if qualifiers.intersection(prior.split("-")) or re.match(r"\d", prior):
+                    continue
+            if initials != match.group(1) and not weekly:
+                continue
+            short = (
+                f"{rest} {match.group(1)}{suffix}" if rest
+                else f"{match.group(1)}{suffix}"
+            )
+            forms.add(short.strip().casefold())
+    return forms
 
 
 def _source_row_id(
@@ -690,6 +740,52 @@ def main() -> None:
             outcome_measures = (
                 (results.get("outcomeMeasuresModule") or {}).get("outcomeMeasures") or []
             )
+            # 登记结果组名可能只使用协议臂标签自身括号声明的缩写
+            # （"Weekly (QW)"→"QW"、"Auto-Injector (AI)"→"AI"）。仅当完整
+            # 标题唯一对应一个实验/活性对照链接、且不存在任何精确匹配时，
+            # 将结果组名补入该链接（原标签全部保留），并在派生清单记录声明
+            # 来源；频次后缀（BID）、"(Q4W; DBL)" 分程标记、"X to Y" 序列
+            # 与歧义缩写均为实质差异，保持未归属，绝不按药名子串或位置猜测。
+            _result_titles: dict[str, str] = {}
+            for _module_groups in (
+                _om.get("groups") or [],
+                (results.get("participantFlowModule") or {}).get("groups") or [],
+                (results.get("adverseEventsModule") or {}).get("eventGroups") or [],
+                [group for measure in outcome_measures
+                 for group in measure.get("groups") or []],
+            ):
+                for _group in _module_groups:
+                    _group_title = str(_group.get("title") or "").strip()
+                    if _group_title:
+                        _result_titles.setdefault(_group_title.casefold(), _group_title)
+            _declared_pairs = [
+                (link, label) for link in product_links for label in link["arm_labels"]
+            ]
+            _exact_labels = {
+                label.strip().casefold() for _declared_link, label in _declared_pairs
+            }
+            for _folded_title in sorted(_result_titles):
+                if _folded_title in _exact_labels:
+                    continue
+                _short_form_links = [
+                    (link, label) for link, label in _declared_pairs
+                    if _folded_title in _declared_result_label_forms(label)
+                ]
+                if len(_short_form_links) != 1:
+                    continue
+                _link, _declared_label = _short_form_links[0]
+                if _link["arm_role"] not in ("experimental", "active_comparator"):
+                    continue
+                _link["arm_labels"] = sorted(
+                    (*_link["arm_labels"], _result_titles[_folded_title])
+                )
+                ARM_LABEL_DERIVATIONS.append({
+                    "trial_id": nct.lower(),
+                    "product_id": _link["product_id"],
+                    "declared_label": _declared_label,
+                    "result_label": _result_titles[_folded_title],
+                    "rule": "declared_parenthetical_abbreviation",
+                })
             for measure_index, measure in enumerate(outcome_measures):
                 # 独立测试第二轮（UC）：不得截断登记终点标题——截断会
                 # 摧毁 Mayo/时间窗等尾部语义并造成分类漏检
@@ -1173,6 +1269,7 @@ def main() -> None:
     derivation["combo_regimens"] = COMBO_RECORDS
     derivation["alias_map_id"] = ALIAS["map_id"]
     derivation["borderline_repositioning"] = sorted(BORDERLINE)
+    derivation["arm_label_derivations"] = ARM_LABEL_DERIVATIONS
     with OUT.open("x", encoding="utf-8") as handle:
         handle.write(json.dumps(payload, ensure_ascii=False, indent=1))
     with SIDECAR_OUT.open("x", encoding="utf-8") as handle:

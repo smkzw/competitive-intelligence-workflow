@@ -362,6 +362,13 @@ comparison_purpose=baseline_descriptive_only，不成为人群/疗效等价签�
 
 ## 2. 复用与必要改动
 
+原组标题缩写只扩展既有trial_product_links.arm_labels，源显式括号短名与
+完整词组首字母一致，Weekly/OnceWeekly→QW须拒绝前置频次/否定/数字限定。
+sidecar arm_label_derivations保留原臂、原结果标题与确定性理由；消费者仍经
+原精确来源/locator/值/上下文/组关系守卫，不放宽registry。Q4W/DBL/OLE/
+交叉/不明确臂保持unknown。候选主/辅助记录分别字段diff；只改组状态不能
+成为新的疗效等价或科学采用。旧快照与用户有效层不就地迁移。
+
 | 现有组件 | 继续承担 | 补齐 |
 |---|---|---|
 | cli/intake/ProjectContract/capability_preflight | 入口、Ask、能力状态 | 两输入模式同合同；真实独立上下文探测，不能StaticCapabilityProbe冒充 |
