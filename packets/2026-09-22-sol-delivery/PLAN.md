@@ -1,4 +1,8 @@
-# 当前实施计划：1007V1，沿用W00–W10
+# 执行暂挂｜用户要求的current21无损暂停
+
+恢复序列/禁止重跑清单见[最新暂停交接](../../docs/handoffs/PAUSE_HANDOFF_20261010_current21.md)和STATUS。42788科学修复Scoped REVISE、62556接受执行WIP及53391开发门已终态，勿等/重派。N/TESAE/SD覆盖与guard完整集合未闭合，不启动issuer/采用。v4前端预览已生成，直接做受影响实屏，不重生成。fresh临时profile已获权限未创建，不重问。以下旧“当前/下一/PENDING/Ask未答”均历史；不新增产品权威或已完成阶段。
+
+## 历史执行计划：1007V1沿用W00–W10
 
 唯一状态见STATUS，已授权连续实施，不因旧paused拒绝新工作。01–06/reference/cases.json未取得，P0→P1/P2/P3→P4→P5专有编号不猜造；先实现主指令明确单元，到齐后按影响合并，不另建产品权威。
 

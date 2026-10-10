@@ -1,0 +1,174 @@
+{
+  "schema_version": "ci-lossless-pause-v1",
+  "date_utc": "2026-10-10",
+  "state": "USER_REQUESTED_PAUSED_NOT_COMPLETE_NOT_RC",
+  "user_request": "完成目前的工作后无损暂停工作流，做好任务记录，后期能无损恢复继续不重跑。",
+  "mode": "Direct closure: collect original node exits, read-only hashes and durable records; no new execution/review/browser/adoption/save/current transaction.",
+  "goal": {
+    "api_status_verified": "paused",
+    "objective": "基于1007V1 新的、全面的、细节化的任务计划、任务执行规范、资料包（或文件指向链接）、PRD文档、Plan文档，以及分步骤的任务执行包、验收包等等，进行实际的、不间断地任务实现，直至完全交付。 注意对过度设计、构建过程（而非构建完成后）的测试要进行约束，避免出现“改了1处测试1次”的情况",
+    "resume_authority": "Only direct user resume. Do not fake completion or silently resume."
+  },
+  "git": {
+    "base_head_and_verified_remote": "97a85179389635b6190468e00e35aa1f601f63f9",
+    "pause_commit": "Resolve final pause commit via git log; no circular self-hash",
+    "source_guard_wip": "Kept local/dirty and newtest untracked; not in accepted frontend/pause commit. Exact backup retained.",
+    "unrelated_user_changes": "Five known changed files preserve exact hashes; unrelated untracked/history not staged or cleaned."
+  },
+  "handoff": "docs/handoffs/PAUSE_HANDOFF_20261010_current21.md",
+  "current": {
+    "project": ".artifacts/1007-abc-current-integration-v1/working/project",
+    "revision": 21,
+    "reports": {
+      "A": 21,
+      "B": 21,
+      "C": 9
+    },
+    "active_fact_count": 1144,
+    "generation": "67b793ef865d035092fb27dfeaec8ce87cfaa0e97edb3631724eb07d55518310",
+    "durable_files": 11716,
+    "hash_check": "Exact equality with .artifacts/1007-plotted-label-preview-v4/prewrite.json: no changed/extra files",
+    "read_check": "read_current_delivery/current_bundle_sha256, not selector bytes alone"
+  },
+  "nodes": {
+    "scientific_followup": {
+      "exec": 42788,
+      "pid": 73902,
+      "observer_exec": 82920,
+      "state": "TERMINAL_EXIT0_SCOPED_REVISE",
+      "duration_seconds": 826.882,
+      "session": "93da10df-4953-4bee-992f-e118310e56a1",
+      "submitted_route": "grok/grok-build/grok-4.7/high",
+      "native_exact_variant": "unverified",
+      "fallback": null,
+      "report": "runs/conference/ci-1007-pk-and-safety-source-review-v1/evidence_single_object_measured_followup_v2.md",
+      "scope": "Same reviewer session, not new independent opinion; advisory only, no issuer/acceptance/current"
+    },
+    "acceptance_executor": {
+      "exec": 62556,
+      "pid": 76209,
+      "observer_exec": 52354,
+      "state": "TERMINAL_EXIT0_EXECUTION_ONLY_NOT_OWNER_ACCEPTED",
+      "duration_seconds": 532.45,
+      "tool_call_count": 254,
+      "session": "01a12432-df00-7000-a63b-7967ef6e59af",
+      "runtime_selector": "pi/cursor/default",
+      "underlying_model_effort": "UNKNOWN",
+      "fallback": null,
+      "report": "runs/execution/ci-1007-reviewed-pk-domain-version-v1/worker_01.md",
+      "actual_tests": "Initial3FAIL11PASS includes invalid quote fixture;21PASS1.69s/43PASS3.28s; after strict Any fix final43PASS3.00s/Ruff/strict1",
+      "real_project_writes": 0,
+      "owner_guard_acceptance": "NOT_ACCEPTED; ALL accepted sibling versions vs validated conflict-members completeness unproven",
+      "independent_guard_review": "NOT_RUN"
+    },
+    "quality_gate": {
+      "exec": 53391,
+      "state": "TERMINAL_EXIT0_QUALITY_ONLY",
+      "log": ".artifacts/1007-measured-source-layout-milestone-gate-v1.log",
+      "log_sha256": "46a4be9ca9c6f4d41e67a55c0b0cb7fa2e65b027f4556b2e3611e34213167f1c",
+      "scope": "Ruff/strict286/1185active+20compat+7layer+legacy; excludes later new density and source acceptance WIP, no science/report/release"
+    },
+    "normal_preview_v4": {
+      "exec": 97597,
+      "state": "TERMINAL_EXIT0_NORMAL_PREVIEW_NOT_CURRENT",
+      "output": ".artifacts/1007-plotted-label-preview-v4",
+      "pages": {
+        "A": 49,
+        "B": 104
+      },
+      "facts": 1144,
+      "browser": "NOT_RUN; reuse exact bytes, do not rerender"
+    },
+    "browser_and_renderer_active": "NONE; original v3 browser12232 and169x4 structure83258 terminal, do not wait",
+    "passive_editor": {
+      "pid": 20347,
+      "exec": 54558,
+      "port": 65033,
+      "state": "Retained passive user editor only, not ongoing workflow; verify live identity before using after resume"
+    }
+  },
+  "source_candidates": {
+    "candidate": ".artifacts/1007-measured-pk-safety-candidate-v2/actual.json",
+    "sha256": "c30ffc3591698afa72068c279711edb90f233bb5805fb48d06b1cf8e09a75092",
+    "package_sha256": "86199fda5c3b681b8c774a317746a438579144957bd268f97951bf17be2560ad",
+    "qualifier_equivalence_sha256": "532740aae82ba19dc170fb13aefef0db3debf72742d66b4437b692c14caebd62",
+    "facts": 19,
+    "reused_versions": 13,
+    "new_identity_versions": 6,
+    "ingested": false,
+    "accepted": false,
+    "current": false,
+    "remaining": [
+      "analysis N double $.$. locator",
+      "TESAE common_ae vs serious_teae_subset report matching",
+      "SD future coverage guard and additional search/scientific role",
+      "classification edge cases requiring actual production negatives",
+      "source acceptance ALL historical accepted siblings set coverage before formal issuer/live use"
+    ]
+  },
+  "frontend_delta": {
+    "tests": "4RED1PASS ->20relatedPASS1.24s, named Ruff/strict report_b/Node",
+    "source_changes": "Actual visible category/legend planner; unknown study-local groups qualified by explicit source label; exact duplicate statistics suffix removed. No source role inference/point loss/font shrink.",
+    "prior_v3_scope": "A seven aligned stages/native Enter resize focus,38products;B48demographics/183total/source/Esc all4widths verified; not reusable v4 aesthetic acceptance",
+    "current_v4_visual": "NOT_RUN"
+  },
+  "browser_authority": {
+    "existing_workspace": 184,
+    "existing_page": "p2 old v3 preview; p1 source/p3 editor",
+    "fresh_profile": "User explicitly approved clean temporary profile + dedicated space; not created yet; exact creation API still to verify",
+    "constraints": "Do not clone/import existing logins/storage, clean daily browser or re-ask already approved permission"
+  },
+  "do_not_repeat": [
+    "3989 source adoption",
+    "886 legal A+B consumer registrations",
+    "795 additions/current refresh",
+    "four real saves15-18",
+    "current21 configuration and four share exports",
+    "six same-environment offline entries",
+    "fixed9d9 installation proof",
+    "169physical pages x4=676 structure visits",
+    "old candidate v3/v4 render generation",
+    "terminal42788/62556 dispatch or PID waits"
+  ],
+  "next_after_resume": [
+    "Explicit English cwd/current/HEAD/remote/dirty+WIP+5 user hashes and11716pins; no save",
+    "Source N/TESAE/SD guard root-family RED/coherent minimum repair/related batch; new immutable output only",
+    "Source-acceptance WIP full sibling-set guard negatives and independent review before live use; preserve old accepted/user/current",
+    "Open retained v4 for affected four-width dense/sparse/filter/source/legend/hit/focus checks; no rerender",
+    "C functional readable limitations via native details with key visible warning/all original clauses reachable",
+    "Use approved clean temporary profile for independent current21 saved-version/offline shares, not v4 current acceptance",
+    "Only after source/normal issuer acceptance, qualified347bindings and one current transaction; same-version operations/config/share then full W release gates"
+  ],
+  "release_open": [
+    "Full global/China universe/publications/freshness/MAH/unknown roles",
+    "C readability",
+    "all-page scientific+visual/fresh-profile/cross-browser",
+    "three actual hosts/fresh-install/recovery",
+    "24 portals/RC"
+  ],
+  "retention": "No cleanup/reset/checkout/clean/inventory legacy. Original failures/raw logs and unique evidence preserved. Private raw logs/context and WIP backups local only.",
+  "file_sha256": {
+    "src/ci_workflow/application/source_fact_acceptance.py": "9cc22850194bc766555671dab74dd086553ea13b94cba7fa54c23f91f66ace49",
+    "tests/integration/test_1007_reviewed_pk_domain_correction.py": "51ad88a12924a3adf84e29e21cf5d69695380728d0f10be1ffcf3130eb445ec6",
+    "src/ci_workflow/renderers/portal/assets/charts.js": "78834ddaab1ef8344e693adff2f4875ff362c925998142bc275d9c2c4bf4f055",
+    "assets/portal/charts.js": "78834ddaab1ef8344e693adff2f4875ff362c925998142bc275d9c2c4bf4f055",
+    "assets/portal/manifest.json": "e3b5db400cd8b36ccd4661e78ac02b9ce7c9580ccccb0762c88e3aa6f8d31dcb",
+    "src/ci_workflow/renderers/portal/report_b.py": "de9f212887680fdbabc6f60df48c6ac8d2b1a00bbbe62dabfe14155f13337771",
+    "tests/integration/test_1007_plotted_label_density.py": "ca00a633f9ecff5e16af01522c0f335314b489893fffafe509e169029e875c29",
+    "packets/2026-09-22-sol-delivery/evidence/1007V1/capture-baseline-planner-source-v1.js": "2dc44fa54006015370f0bb169d0ad4f75e886ce4c8b95db880bc80de8c56b5a3",
+    "packets/2026-09-22-sol-delivery/evidence/1007V1/render-plotted-label-preview-v4.py": "11ecbc32a56c851d3dd4c3d385c6f38c6ab0d25fde7eeececf155f3b13d264d9",
+    ".artifacts/1007-plotted-label-preview-v4/actual.json": "316e5a3d839175ac893b9ee65da2b470466ad71ff0326c723ca5dd5677798d95",
+    ".artifacts/1007-plotted-label-preview-v4/producer-binding.json": "a3ff9bd142db777d7999a3606426b81739d170d03033f23dd5e187065845ea27",
+    ".artifacts/1007-pause-20261010-worker-wip-v1/source_fact_acceptance.patch": "0b80212a626b89daf69bc797177769b7fee19ffcf462aa9424c2faa332c08e70",
+    ".artifacts/1007-pause-20261010-worker-wip-v1/test_1007_reviewed_pk_domain_correction.py": "51ad88a12924a3adf84e29e21cf5d69695380728d0f10be1ffcf3130eb445ec6",
+    "docs/handoffs/PAUSE_HANDOFF_20261010_current21.md": "f5220b3573d6f6565d806e9fdf231e653daf282e2124893cd10ebd6fdf4965ff",
+    "docs/handoffs/HANDOFF_archive_20261010_before_current21_pause.md": "aedc15c5c7ecf3c44e6c873349163bd4039a2b7e099b80592a42305e60df4f06",
+    "runs/execution/ci-1007-reviewed-pk-domain-version-v1/worker_01.md": "4165e2b58cd49c60df7bc50578bc74216757b66c5116af141b2f5cb436c726da",
+    "runs/conference/ci-1007-pk-and-safety-source-review-v1/evidence_single_object_measured_followup_v2.md": "18e9a54fc58dfb839180b4f141100ad418c9d2e62933a6092a5579b8ee004b3c",
+    "docs/acceptance/runs/8.4/browser-contract-evidence.md": "15c62c6ccf7d8a0c21cbe0513a429fe36bf1324b2d7d6b4f546c8d45cadef164",
+    "docs/acceptance/runs/8.4/browser-contract-ledger.json": "80927ee2e9ffecb8614ff75fe66be28ad3b455617bada716434d7a3d4b30b23d",
+    "docs/acceptance/runs/8.4/screenshots/chromium-1280x720-slide-2.png": "0862a4822f36b0140dc5a4554bfa287edb528fa6b032eef8cb0339c14f7b2770",
+    "docs/acceptance/runs/8.4/screenshots/webkit-1280x720-slide-2.png": "6e2c133a5ca3651eba61dc768c6ba15374ec60e0aa2d7a9ffd7b329f84223e4a",
+    "tests/fixtures/task45-evidence-drawer/source_evidence.py": "4744f33d51b757ed41036cd56cebdcb503a202d910bbf9c3761f52c723765a3c"
+  }
+}

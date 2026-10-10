@@ -3630,7 +3630,7 @@ def _group_title(
     time_band = _text(row.get("time_window_band_label_zh"))
     population = _text(row.get("population_context_label_zh"))
     parts = [concept]
-    if include_statistic:
+    if include_statistic and re.split(r"｜| · ", concept)[-1].strip() != statistic:
         parts.append(statistic)
     if include_time and time_band and time_band != "时间点未列示":
         parts.append(time_band)

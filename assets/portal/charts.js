@@ -152,7 +152,13 @@
   }
 
   function groupedSeriesKey(row) {
-    if (row && row._chart_series_key) return String(row._chart_series_key);
+    if (row && row._chart_series_key) {
+      var supplied = String(row._chart_series_key);
+      // Registry group IDs are study-local. Unknown roles with different
+      // explicit source names cannot inherit the first study's drug legend.
+      return row.arm_role === "unknown" && row._chart_series_label
+        ? supplied + "\u0001" + String(row._chart_series_label) : supplied;
+    }
     // 第十五轮复核修复：类别级行（如性别女/男）按类别分系列，避免同系列柱体重叠
     if (row && row.category_level) {
       var role = row.arm_role || "";
@@ -1362,8 +1368,28 @@
           : [row.product_zh, row.trial_zh, row.arm_role_label_zh].filter(Boolean).join(" · ").length);
     }, String(group.title_zh || "").length);
     var simpleNumeric = kind === "bar" || kind === "line";
+    var assignments = kind === "bar" && usesIdentitySeries(group)
+      ? groupedCategoryAssignments(rows) : null;
+    var entityCount = assignments
+      ? new Set(assignments.map(function (entry) { return entry.key; })).size : rows.length;
+    var seriesCount = usesIdentitySeries(group) ? groupedSeriesOrder(rows).length : 1;
+    if (assignments) {
+      // Match the actual axes/legend consumed by groupedBarOption, not unused
+      // full registry titles. Unknown/conflicting contexts stay separate axes.
+      labelLength = assignments.reduce(function (longest, entry) {
+        return Math.max(longest, entry.label.length);
+      }, 0);
+      labelLength = rows.reduce(function (longest, row) {
+        return Math.max(longest, groupedSeriesLabel(row, groupedSeriesKey(row)).length);
+      }, labelLength);
+    }
+    var compactGrouped = assignments && entityCount <= 4 && seriesCount <= 5 &&
+      plotted.length <= 16 && labelLength <= 48;
     var span = singleFact ? labelLength > 48 ? 6 : 4
       : compactMatrix ? 6
+        : compactGrouped ? 6
+          : assignments && entityCount <= 6 && seriesCount <= 6 &&
+              plotted.length <= 24 && labelLength <= 56 ? 8
         : simpleNumeric && plotted.length <= 5 && labelLength <= 32 ? 6
           : simpleNumeric && plotted.length <= 8 && labelLength <= 56 ? 8 : 12;
     var height = singleFact ? 0 : kind === "heatmap" || kind === "status_matrix"
@@ -1372,7 +1398,7 @@
       : plotted.length <= 1 ? 168
         : plotted.length <= 2 ? 196
           : plotted.length <= 5 ? labelLength > 32 ? 284 : 248
-            : plotted.length <= 8 ? 288 : 380;
+            : plotted.length <= 8 ? 288 : compactGrouped ? 268 : 380;
     if (!singleFact && group.orientation === "horizontal") {
       var longestAxisLabel = rows.reduce(function (longest, row) {
         return Math.max(longest, String(row.category || row.display_label_zh || "").length);
@@ -1391,8 +1417,9 @@
         return { row_id: String(row.row_id || ""), reason: String(row.difference_note || row.reason || row.disclosure_state || "未形成可绘图形") };
       }),
       observation_count: rows.length,
+      entity_count: entityCount,
       glyph_count: singleFact ? 0 : plotted.length,
-      series_count: usesIdentitySeries(group) ? groupedSeriesOrder(rows).length : 1,
+      series_count: seriesCount,
       kind: singleFact ? "single_fact" : kind,
       grid_span: span,
       target_height: height,

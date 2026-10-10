@@ -4,8 +4,8 @@ Date: 2026-10-10
 
 ## Verdict
 
-原有界会商REVISE，支持其中科学根因。原报告不改写；当前同会话修复复核仍
-PENDING，候选19不是来源接受或正式报告。
+原有界会商REVISE，支持其中科学根因。原报告不改写；当前同会话修复复核已
+terminal Scoped REVISE，候选19不是来源接受或正式报告。
 
 ## Boundary Compliance
 
@@ -21,7 +21,7 @@ variant无单独native身份事件，不能从报告标题伪造。执行者curs
 原runs/conference/ci-1007-pk-and-safety-source-review-v1/evidence_single_object.md
 完整阅读。同session93da10df-4953-4bee-992f-e118310e56a1的measured_followup_v2
 在新19原子/四原源/生产定义及final-qualifier证明上跟进；原42788/PID73902，
-NOTE_EXIT82920，6180s剩余hardwait，无progress polls、fallback或另一个意见。
+NOTE_EXIT82920已终态；派发时6180s剩余hardwait，无progress polls、fallback或另一个意见。
 
 ## Conference Panel Review
 
@@ -53,5 +53,9 @@ strict5通过。同源码完整开发宽门53391终态0六步quality-only通过�
 
 ## Final Decision
 
-原REVISE有证据，修复复核PENDING。仅在收到原同会话终态后再评估其具体范围；
-不得据测试计数/候选存在/一次模型结论宣称采用、临床可比、freshness或RC。
+原REVISE保留。42788/82920已terminal0,826.882s/no fallback，同会话不是新意见。
+报告18e9a54fc58dfb839180b4f141100ad418c9d2e62933a6092a5579b8ee004b3c：
+Scoped REVISE。19引用/原捕获一致，但analysisN $.$.与TESAE报告匹配守卫仍
+阻断；owner读当前源码确认前两项结构。SD coverage/索引/边缘分类待生产反例。
+未pytest/DB/浏览器/issuer，不自动采用或切current。用户要求暂停，下一成族
+修复而非重派全页审阅；旧候选/原hash不改。

@@ -1,6 +1,6 @@
 {
   "schema_version": "1007-owner-continuous-checkpoint-1",
-  "state": "ACTIVE_NOT_PAUSED_NOT_RC_NOT_COMPLETE",
+  "state": "USER_REQUESTED_PAUSED_NOT_RC_NOT_COMPLETE",
   "baseline_commit": "3889c943d06ca1719509b1f8dc1543dc4a487ce2",
   "mode": "execution-plus-conference: shared source/current owner; independent code repair follow-up and normal source issuer are separate scopes",
   "prior_checkpoint": "evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json",
@@ -269,7 +269,7 @@
     "offline21_owner_pixels": "Actually viewed offline-ABC-A/B/C-r21.png after terminal. Saved normal queries, source original/clear disclosures and restored Vix user modification remain accessible; C9 preserved; network finally restored. No fresh-profile/cross-browser claim.",
     "limits": "Representative density visual family accepted; not all physical pages/scientific universe/fresh-profile/cross-browser/installation/RC. Quality-only full gate remains bound to b72/current19; current21 delta45 related plus actual32 states, not a new whole gate."
   },
-  "next_safe_action": "Current21 unchanged1144 A21/B21/C9 generation67b793ef,11716durablefiles preserved. Original676physical structure completed; new ordinary A49/B104 preview898e2cb2 and four-width geometry/48demographic/183baseline/sourceEsc bf3c2af5 completed, no render/save replay. Scientific original C03 REVISE supported; corrected19candidate c30ffc35/package86199fda, finalclassifier8ad5cab2/19factsource-equivalence532740aa and86source/17UIrelatedPASS. Collect original same-session42788/PID73902 using NOTE_EXIT82920 only, no progress polling; milestone53391 quality gate running. Update scoped receipts and whitelistcommit/push after actual terminal. Different accepted PK sibling remains blocked by normal source-version policy: bounded formalissuer-backed exact scalar domain correction required, no historical overwrite or general sibling guard waiver/self-sign. Science-qualified347consumers/current transaction after19adoption; B SD density/C caveat independent bounded UI next. Prior3989adoption/886register/795refresh/fourUI saves/config/shares/fixed9d9install not repeated. Fresh-profile Ask pending no profile action; wholeuniverse/publications/MAH/fullvisual/hosts/recovery/24/RC remain open.",
+  "next_safe_action": "USER_REQUESTED_PAUSE. Read latest pause handoff/JSON after explicit resume; all42788/62556/53391/97597 nodes terminal, no waits/redispatch/rerender. Current21/1144/11716 exact. New density20PASS/v4 normal preview316e5a3d not visually accepted. Guard local WIP+exact backups not accepted; source N$.$./TESAE/SDcoverage and ALL accepted siblings completeness are next bounded roots. Fresh clean profile authorized not created. No replay3989/886/795/four saves/config/shares/old install/676visits. Not RC.",
   "isolated_current21_install": {
     "state": "FIXED_COMMIT_PRIVATE_INSTALL_AND_REAL_CURRENT21_ABC_READ_PASSED_NOT_HOST_RELEASE_ACCEPTED",
     "source_commit": "9d9fa38c07d7929c6d8dc045b54d75c135f07f14",
@@ -368,7 +368,7 @@
     "limits": "Original C03 terminal REVISE: TESAE metric wrong and PK lacks numeric SD. This16 packet is preserved, not adopted or overwritten; corrected19 is a separate candidate below."
   },
   "measured_pk_safety_repair_v2": {
-    "state": "CANDIDATE19_FROZEN_FINAL_CLASSIFIER_REPRODUCTION_VERIFIED_REPAIR_REVIEW_PENDING",
+    "state": "CANDIDATE19_FROZEN_REPAIR_REVIEW_TERMINAL_REVISE_NOT_ACCEPTED",
     "original_c03": "37628/PID66785 and NOTE_EXIT30534 terminal0;1013.198s/no fallback. Route grok/grok-build/grok-4.7/high submitted; native session93da10df-4953-4bee-992f-e118310e56a1 and usage observed, no independently attested model variant. Executor underlying cursor model UNKNOWN; exact model independence unproven. Original REVISE preserved.",
     "supported_objections": "Overbroad clinical half-life/AUC PK, ADA population vs analyte, child safety precedence, unknown TESAE, missing numericSD. SourceNCT04501666 safety24weeks not primary16; treatment death0 not studywide0. Historical snapshotcandidate marker is not liveDB acceptance; recipe hash is not builder hash.",
     "repair": "Shared measured-category classifier; conservative drug PK and ADA-population exclusion; TESAEs serious_teae_subset; independent spread locator/quote/fact role/validation; optional A supporting MEAN/SD/analysisN/context. No source/history/user-layer overwrite, no ratio from PKmean/N.",
@@ -381,7 +381,7 @@
     "final_classifier_sha256": "8ad5cab27e120f4c4a0d5c793532e27995ac192ef3b70495debc64d2f1c285fe",
     "qualifier_equivalence_sha256": "532740aae82ba19dc170fb13aefef0db3debf72742d66b4437b692c14caebd62",
     "actual": "Original preparation66387 KeyError before output/DB write retained; corrected29852 terminal0 ordinary builder/four captures19facts19directclaims/13exact existing candidate versions reused. TESAE+N two andPKmean+SD four explicit facts. All46studies/11716durable files unchanged, no ingestion/adoption/registration/save/current. Later narrowADA qualifier independently reproduced19scientific contexts from4originalcaptures; original frozen proof not rewritten.",
-    "followup": "Original42788/PID73902 ACTIVE, same Grok session93da10df. Preflight passed after explicit read/output schema correction before dispatch;6180s remaining hard wait, one targeted repair challenge, no fallback. NOTE_EXIT82920 subscribes completion; no progress polls. No formal issuer or source acceptance from advisory result.",
+    "followup": "Original42788/PID73902 and NOTE_EXIT82920 terminal0; same session93da10df,826.882s,no fallback. Scoped REVISE report18e9a54f; N$.$. /TESAE matching/SDcoverage unresolved, nineteen exact source quotes not acceptance. Variant unverified. Original REVISE preserved.",
     "acceptance_boundary": "Existing source acceptance denominator-scope correction permits only stale candidate N, rejects a different already-accepted sibling. Two PK domain versions require bounded reviewed new-version handling; not permission to rewrite oldaccepted values, weaken sibling guard generally or self-sign owner advice."
   },
   "baseline_landscape_preview_v3": {
@@ -410,6 +410,7 @@
     "actual": "Original53391 terminal0, Ruffsrc/tests/tools PASS, strict286sourcefiles PASS,1185activePASS20deselected307.29s,20retainedboundedcompatPASS0.59s,7layerPASS0.19s,legacy-referencePASS. No source changes while this gate ran. Different later trust-boundary patch must have separate delta verification.",
     "scope": "Existing gate.sh once for coherent source/UI milestone: Ruffsrc/tests/tools, strictsrc/tools, activeunit/contract, retained bounded smoke, layering and forbidden legacy path references. No real report/scientific/visual/release implication. No require-clean on unrelated dirty user tree."
   },
+  "pause_current21": {"state":"USER_REQUESTED_PAUSED_NOT_COMPLETE","handoff":"docs/handoffs/PAUSE_HANDOFF_20261010_current21.md","machine_checkpoint":"packets/2026-09-22-sol-delivery/evidence/1007V1/pause-20261010-current21.json","nodes":"42788/82920 and62556/52354 terminal0","integrity":"11716 exact durable files/1144facts/A21B21C9/generation67b793ef","fresh_profile":"User consent received; not created; do not re-ask or clone ordinary profile"},
   "release_open": "Representative dense/fixed9d9install/current-read CLOSED within pinned scopes;676current21 structural visits and newA/Bordinarypreview four-width stage/focus/baseline48+183/source reachability CLOSED only. B dominant whole-width SD/repeated title andC caveat/wholevisual still open. Corrected19source candidates, formalissuer/domain-version policy/adoption not yet closed. Fulluniverse/publications/currentstatus/ChinaMAH/unknownrelations/freshprofile/cross-browser/threehosts/recovery/24portals/RC open. Current21 configuration/shares/offline complete but not new preview acceptance; no repeated operations or full delivery claim.",
   "retention": "Required original failures, sources, consistent backups, installed runtime/bundle and reviews retained. Only exact newly owned clean source worktree removed normally (15M logical/rebuildable fixed9d9), plus newinstall runtime/cache uv clean1376files/183.4MiB manager count after completion; postcleanup PACKAGE_OK. No exact APFS physical savings claim. Unknown/unrelated/user/history/session/profile/database/old-Chinese-root untouched."
 }
