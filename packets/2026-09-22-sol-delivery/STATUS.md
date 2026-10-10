@@ -1,4 +1,24 @@
-# 唯一当前状态：1007V1连续实施；current12 已接通，修复横比密度与公共来源呈现
+# 唯一当前状态：1007V1连续实施；current13真实27态，紧凑行高修复已准备
+
+当前源码fed51af7已push/远端核验。单前端执行实际CodeBuddy/deepseek-v4.1-flash/
+max CLI，798.225s/exit0/no fallback已收终态；owner去重复A/B helper并统一到
+既有factCell，未知名不折叠、事实/访视/限制/来源保留。26相关PASS1.95s，
+原B mock缺有效payload已修，不放宽生产guard；worker越界/tmp副本已记录保留。
+正常呈现API仅一次完成current13 A13/B13/C9/1144事实，generation60adbf9e；
+七科学/用户/绑定表与7585旧文件保持，A20公共来源绑定完成。真实当前不再12。
+重建verified ee7e6a3c，return515931d8；不重做source接受/登记/795刷新。
+Ego184 p2原58168已终态FAIL：27真实状态无断言失败，B1920来源导航120s
+超时，其后evaluate15s不响应；stopLoading/about:blank在原p2正常恢复，无新space。
+实际current13 JSON1cb25709，未验5态不补PASS。A20链接已实屏，假空来源提示消失。
+Owner真实6记录各80px/闭条件占第二行，eacc46f1；补同根因2RED/4PASS→
+28相关PASS1.98s，值/条件同带、展开全宽、40px操作与16px字号保持。镜像一致。
+下一正常current14单次呈现，再以同页真实筛选/选择替代16次重载做全32态；
+原执行脚本精确副本/hash已留，不覆盖current13失败或截图。自有editor54558正常。
+原QA环境变量未传入Ego的启动失败发生在任何浏览器动作前，已改显式脚本参数；
+未将未执行记PASS。最终视觉/配置/编辑/分享及独立挑战仍待完成；非RC/暂停。
+精确恢复仍为下方唯一机器检查点，已完成动作不盲重跑。
+
+## 前一节点：current12来源刷新、运行和两个呈现根因
 
 3889c943基线。C01实际GLM5.3Flash/max已终态821.427s/exit0/no fallback，
 确认回滚/重试/清除保护，另发现影响清单只含首事实。Owner两项成族RED后

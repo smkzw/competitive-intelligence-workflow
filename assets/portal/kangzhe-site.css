@@ -59,6 +59,15 @@ body[data-kz-design="6.0"] { background: var(--bg); }
   color: var(--text-1);
   overflow-wrap: anywhere;
 }
+/* Closed context is an adjacent control, not a second full observation row.
+ * Opening it restores the full reading width; source text is never clipped. */
+.kz-comparison-observation--compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: start;
+  gap: 4px 8px;
+}
+.kz-comparison-observation--compact > .kz-comparison-context[open] { grid-column: 1 / -1; }
 .kz-comparison-observation--compact .kz-comparison-fact__identity {
   position: absolute;
   width: 1px;

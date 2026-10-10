@@ -7,8 +7,10 @@ blind replay; the API return is durable before postcondition checks.
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
+import re
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
@@ -44,15 +46,25 @@ def tables() -> dict[str, tuple[tuple[object, ...], ...]]:
 
 
 def main() -> None:
+    global OUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--expected-revision", type=int, default=12)
+    parser.add_argument("--expected-generation", default=(
+        "4cdbfeb77e4e4cbffb9eb4ac3318e118cc04951bb3d8c985eda47aacf3d9b284"
+    ))
+    parser.add_argument("--attempt-id", default="1007-compact-provenance-current13-v1")
+    args = parser.parse_args()
+    if not re.fullmatch(r"1007-[a-z0-9-]+", args.attempt_id):
+        raise SystemExit("Attempt must be an explicit exclusive1007 evidence directory")
+    OUT = ROOT / ".artifacts" / args.attempt_id
+    target_revision = args.expected_revision + 1
     if OUT.exists():
         raise SystemExit(
             "Existing attempt: reopen original command/return/current, never blind retry"
         )
     before = read_current_delivery(PROJECT)
-    assert before is not None and before.revision == 12
-    assert current_bundle_sha256(before) == (
-        "4cdbfeb77e4e4cbffb9eb4ac3318e118cc04951bb3d8c985eda47aacf3d9b284"
-    )
+    assert before is not None and before.revision == args.expected_revision
+    assert current_bundle_sha256(before) == args.expected_generation
     assert len(before.active_fact_version_ids) == 1144
     asset_hashes = {}
     for name in ("portal.js", "report-a.js", "report-b.js", "kangzhe-site.css"):
@@ -66,8 +78,8 @@ def main() -> None:
                  for directory in ("reports", "snapshots", "receipts", "evidence/library")
                  for p in (PROJECT / directory).rglob("*") if p.is_file()}
     command = CurrentPresentationRebuildCommand(
-        request_id="owner-1007-compact-provenance-current13-v1",
-        project_id=before.project_id, expected_revision=12, reports=("A", "B"),
+        request_id="owner-" + args.attempt_id,
+        project_id=before.project_id, expected_revision=args.expected_revision, reports=("A", "B"),
         requested_by="owner-1007-presentation", requested_at=datetime.now(UTC),
     )
     OUT.mkdir()
@@ -84,7 +96,7 @@ def main() -> None:
         result = service.rebuild_current_presentation(command)
         write("rebuild-return.json", result.model_dump(mode="json"))
         after = read_current_delivery(PROJECT)
-        assert after == result and result.revision == 13
+        assert after == result and result.revision == target_revision
         assert after.active_fact_version_ids == before.active_fact_version_ids
         assert service.current_facts() == public_before
         assert tables() == frozen
@@ -98,8 +110,10 @@ def main() -> None:
         ]
         assert public is not None and len(public["sources"]) == 20
         write("verified.json", {
-            "state": "CURRENT13_PRESENTATION_COMMITTED_NOT_BROWSER_OR_RELEASE_ACCEPTED",
-            "revision": 13, "reports": {r.report: r.revision for r in after.reports},
+            "state": (
+                f"CURRENT{target_revision}_PRESENTATION_COMMITTED_NOT_BROWSER_OR_RELEASE_ACCEPTED"
+            ),
+            "revision": target_revision, "reports": {r.report: r.revision for r in after.reports},
             "generation": current_bundle_sha256(after), "facts_unchanged": len(public_before),
             "frozen_tables_unchanged": list(FROZEN_TABLES), "old_files_unchanged": len(protected),
             "public_sources": len(public["sources"]), "asset_hashes": asset_hashes,

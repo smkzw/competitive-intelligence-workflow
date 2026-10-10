@@ -1,6 +1,20 @@
 # Continuous implementation checkpoint
 
-## 唯一当前：混合刷新修复与正常来源复核同会话接续
+## 唯一当前：current13呈现候选与真实桌面检查
+
+execution-plus-conference：执行终态后owner整合公共工厂，独立验收只挑战冻结
+真实产物，不重复生产。实际CodeBuddy worker798.225s/exit0/max CLI/no fallback，
+两个helper统一factCell，未知不折叠；26相关PASS，镜像一致，fed51af7已push。
+正常presentation rebuild仅一次current13 A13/B13/C9/1144，源/用户/绑定表与
+7585旧文件保持，A20公共来源实屏。原QA58168已FAIL after27actual/0assertion
+failures；B1920source120s加载与evaluate15s超时，p2正常stopLoading/blank恢复。
+原FAIL/脚本保持，未执行5态不记PASS。Owner6实际80px记录→2RED/4PASS→
+28相关PASS1.98s，关闭条件同带/展开全宽，字号/操作尺寸保留。下一正常14
+及同页真实选择/筛选四宽32态/展开键盘，减少重载不是削减验收。editor54558正常。
+已完source采用/登记/795refresh绝不重跑；本候选视觉/操作/配置/分享未签通过。
+worker临时副本越界已留证，不冒称范围合规，不清理。Goal ACTIVE/无暂停/无RC。
+
+## 历史：混合刷新修复与正常来源复核同会话接续
 
 execution-plus-conference：owner修公共影响种子与单请求旧scope，独立C01只
 复核冻结修复；正式源采用使用既有正常OMP issuer，两个范围不混用。

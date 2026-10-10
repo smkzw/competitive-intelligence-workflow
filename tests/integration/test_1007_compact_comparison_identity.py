@@ -280,3 +280,21 @@ assert.deepEqual(observations.map(n=>n.className.includes('--compact')),
 assert.equal(observations[2].children[0].children[0].children[0].textContent,'产品关联待核');
 """
     _run_node(probe, str(ASSETS / "portal.js"))
+
+
+def test_compact_value_and_closed_context_share_one_reading_band() -> None:
+    css = (ASSETS / "kangzhe-site.css").read_text(encoding="utf-8")
+    marker = css.index(".kz-comparison-observation--compact {")
+    block = css[marker : css.index("}", marker)]
+    assert "display: grid" in block
+    assert "grid-template-columns: minmax(0, 1fr) max-content" in block
+    assert "font-size" not in block and "!important" not in block
+
+
+def test_expanded_compact_context_retains_full_available_width() -> None:
+    css = (ASSETS / "kangzhe-site.css").read_text(encoding="utf-8")
+    selector = ".kz-comparison-observation--compact > .kz-comparison-context[open]"
+    marker = css.index(selector)
+    block = css[marker : css.index("}", marker)]
+    assert "grid-column: 1 / -1" in block
+    assert "overflow" not in block and "max-height" not in block

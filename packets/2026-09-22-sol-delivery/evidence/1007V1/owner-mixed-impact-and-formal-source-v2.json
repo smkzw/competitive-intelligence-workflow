@@ -86,16 +86,16 @@
     "next": "Source refresh exec94187 terminal exit0, actual12. Never repeat ingestion/adoption/registration/795 additions. New clinical-equivalence not inferred."
   },
   "current": {
-    "revision": 12,
-    "reports": "A12/B12/C9",
+    "revision": 13,
+    "reports": "A13/B13/C9",
     "editable_facts": 1144,
     "pointer_sha256": "7336654514605085b9ee86e3fedaa664e83406f0c358125fa653683767374d24",
-    "generation": "4cdbfeb77e4e4cbffb9eb4ac3318e118cc04951bb3d8c985eda47aacf3d9b284",
+    "generation": "60adbf9eec102b17f73a96987f1b7e5a61121b40589685ffff8e9a3a1d08166a",
     "pointer_note": "Selector bytes unchanged by design: read_current_delivery/database generation is authoritative, not selector file hash.",
     "refresh_return_sha256": "7848a77bf696afdcb5a0d9338e5728b0c0c610ae9f527bb3b81e019ffe5eea89",
     "refresh_verified_sha256": "b385a3dbd6e27fd68b8c0fc27fde40b41a5dade1aa17feefcf02c7a80d084f1f",
     "row_preservation": "Actual normal single refresh adds795 facts; old349 public facts exact, original fact versions and7142 original files unchanged; C9 current entry unchanged.",
-    "operations": "Owned editor restarted once on65033 to load repaired code. Ego184 current12 real32 desktop states complete; no new save/edit in this refresh or QA."
+    "operations": "Current13 normal presentation once, source/user/binding tables and7585oldfiles exact,C9 unchanged,A20public sources. Return515931d8c939ce6bfe0bcbccd859b55385f88b4bc916c95a0bffe9039b4a96d5/verified ee7e6a3cc9d0755b51c7bbbcddb75e5d5b110db0ac1cbcb72c47d0c40dcdd03f. Source fed51af7 pushed. Owned editor54558 restarted once65033; Ego184 actual current13QA58168 running. No new save/edit; earlier current12 PASS not reused as current13 acceptance."
   },
   "desktop_current12": {
     "state": "32_ACTUAL_AB_STATES_MECHANICAL_PASS_OWNER_VISUAL_DEFECTS_OPEN",
@@ -126,7 +126,16 @@
     "real_readonly_probe": "Current12 A12:20public sources/0missing URLs, snapshot70170bf1, bound report digest050de9a3b32ea1b63d53a8916b4a84429076ec065bc983f950923fbd4a0f54ec; original publication limitation retained; no current/render/source/DB write. New visible footer still not rendered.",
     "ui_worker": "Original65723/89186 closed0. Actual CodeBuddy/deepseek-v4.1-flash/max CLI,798.225s/no fallback; output3b44e618. Owner revised duplicate A/B helpers into existing shared factCell, unknown labels stay unfolded. Worker /tmp/ci1007-pre copies violated assigned write scope and are retained/recorded. Legacy B mock fixed valid payload without weakening assertions/guard.26 relatedPASS1.95s/Ruff/syntax, mirrors synchronized. New real render/visual acceptance pending."
   },
-  "next_safe_action": "UI worker terminal exit0 audited; owner integrated one shared factCell path/unknown-label protection,26 relatedPASS1.95s, mirror synchronized. Next run prepared normal current13 presentation rebuild once, inspect actual return/current, restart owned editor and affected Ego184 UI/edit/config/share; bounded independent challenge after frozen candidate. No source ingestion/adoption/registration/795-refresh replay.",
+  "desktop_current13": {
+    "state": "27_ACTUAL_STATES_PARTIAL_PASS_THEN_NAVIGATION_TIMEOUT_NOT_ACCEPTED",
+    "evidence": ".artifacts/1007-compact-provenance-current13-desktop-v1/actual.json",
+    "sha256": "1cb25709e813b7f0ce1db880ee16b9a8b95dac27fbd5ae78254d8eab1fdd04e5",
+    "scope": "A16/B11actualstates no assertions failed; B1920source goto120s timed out then evaluation15s unresponsive. Originalp2 stopLoading/aboutblank recovered;5unrun states notPASS. Editor current read13/CPU healthy. No newspace, source write or save.",
+    "public_footer": "Actual1440A public20links, no false empty note; image3ca9a68da309779dc4a1d997bb1788eb04a6a880af38ca7055ea29e633e58239. Owner viewed it, source/publication/universe acceptance not inferred.",
+    "visual_root": "Owner viewed actualA1440dense. Repeated identities now compact, but closed context stacks under value.6real observations80px=40value+40summary RED eacc46f1f0d620eb8dab9b6008925eb0794469ab57d7a32bd1c456358d459dd7. Shared CSS makes closed context adjacent, expands full width.2RED4PASS→28relatedPASS1.98s,Ruff/strict recipe scopedPASS. No reduced16px type/40px target or missing fact.",
+    "executed_sources_preserved": "Original13build script f7047cde91e84fc5113e9254779866aeae478c6d5222fbac23e4842f9f81b286; original13QA3cf76af694f09aa0358b9387978d331508fe19e252a4b621331fe82ae6510f11 copied exactly before parameterizing reusable next-candidate recipes. OriginalJSON/screenshots not overwritten."
+  },
+  "next_safe_action": "Current13/27actual original timeout retained. Same-root one-band CSS/28PASS prepared; normal current14 rebuild once with expected13/gen60adbf9e, unique output; do not replay13. Then Ego184 same-page selection/filter reset acrossfour widths32states plus native context expansion, actual owner PNG review and bounded independent challenge. Editor54558 active; source/adoption/registration/795refresh complete no replay.",
   "independent_current_role_lookup": "Actual Ego184 CDE all-year lookup completed while worker runs, owner-cde-current-role-probe-v1.json. Nemolizumab2exact applications, NOT China MAH/indication/approval. Company first10of40/41 not closed. Serlopitant identical-response NOT_VERIFIED. No adopted source or fixed-cutoff/current mutation; original identity PDFs/graph not reobtained or altered.",
   "release_open": "Dense comparison/public source footer; full universe/publications/current-status/China MAH; unknown relations; all physical pages/fresh-profile/share/config/cross-browser/install/three hosts/recovery/24 portals. No RC/full delivery.",
   "retention": "No cleanup. Required original failures, new sources, consistent backups and review artifacts retained; unknown untracked files and protected user files untouched."

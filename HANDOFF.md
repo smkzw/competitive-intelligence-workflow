@@ -1,4 +1,4 @@
-# 1007V1 当前接手入口｜真实 current12 接通，横比密度与来源呈现修复，连续实施
+# 1007V1 当前接手入口｜current13实际27态，行高根因修复待新候选，连续实施
 
 唯一当前：[STATUS](packets/2026-09-22-sol-delivery/STATUS.md)。
 精确恢复：[混合刷新与正式来源接续](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json)。
@@ -11,6 +11,19 @@
 上一完整操作：[联合 current9 操作、配置、分享、桌面记录](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-joint-current9-operations-config-share-desktop-v1.json)，已完成范围不重跑。
 旧根入口原字节：[历史归档](docs/handoffs/HANDOFF_archive_20261009_before_joint_r9.md)。
 上次暂停原件：[20261009 暂停](.trellis/tasks/10-03-r24-resumed-delivery/PAUSE_HANDOFF_20261009_074937.md)，已获授权恢复，不是当前状态。
+
+当前源码fed51af7已push。UI原执行65723/89186终态exit0，实际deepseek-v4.1-flash/
+max CLI798.225s/no fallback；owner统一到既有factCell/未知不折叠，26相关PASS。
+正常新呈现只运行一次：current13 A13/B13/C9，1144事实原样，7585旧文件和
+科学/用户/绑定表保持；generation60adbf9e，A20公共来源接通。重建return
+515931d8/verified ee7e6a3c。原Ego58168已FAIL：27态无断言失败，B1920来源
+加载120s超时/随后evaluate15s不响应，原p2已正常恢复；5未验不记PASS。JSON
+1cb25709。A20公共来源实际可见。6真实80px记录证明条件入口仍独占行，新增
+2RED→28相关PASS，已改同带/展开全宽，下一正常current14及少重载完整实屏。
+暂不签新候选视觉/配置/编辑/离线分享/RC；已完source/current12动作禁止重跑。
+唯一状态以STATUS顶节与机器检查点为准。以下current12在途描述是前节点历史。
+
+## 前节点：current12刷新与呈现修复准备
 
 Goal实查ACTIVE；非暂停/完成/RC。C01原复核已终态，确认事务保护并发现首条
 影响元数据缺陷。Owner2RED后修复全部种子/单请求旧scope，126相关PASS。
