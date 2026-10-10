@@ -21,16 +21,16 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "Continuous1007V1, no pause/RC. Current exact recovery owner-mixed-impact-and-formal-source-v2.json. C01 repair126relatedPASS and same-session independent scopedACCEPT complete. Source-only actual normal OMP/gpt6.1sol/high issuer terminalexit0/receipt31d3c3ee. One normal adoptionexec75738 pending;46trials3851rows/886directconsumer candidates prepared, not registered/current. Preserve349/current11/userclear/C; source/current/product acceptance separate.",
+  "notes": "Continuous1007V1, no pause/RC. Current recovery owner-mixed-impact-and-formal-source-v2.json. Normal source adoption3989/3572 complete,886A+B consumers registered,795 additions committed once:current12 A12/B12/C9/1144facts. Old349/clears/C9 preserved. Ego184 actual32 mechanical AB states and4share member hashes verified, not visual/offline/fresh accepted. Owner confirmed redundant identity and empty A public footer P1. One bounded governed UI worker launched; owner source projection repair separately. No source replay/cleanup.",
   "meta": {
     "execution_state": "active",
     "goal_api_state": "active_verified",
     "pause_requested_by_user": false,
     "handoff": "packets/2026-09-22-sol-delivery/evidence/1007V1/owner-mixed-impact-and-formal-source-v2.json",
-    "last_stage": "Normal source-only issuer terminal verified; one receipt-backed adoption in progress; exactA/B consumers prepared.",
+    "last_stage": "Normal source adoption/consumer registration/refresh completed once; actual current12 and source-preservation verified.",
     "product_release_state": "development-candidate",
-    "last_verified_batch": "2RED→126 relatedPASS193.77s/Ruff5/strict2; independent sameGLMmax repair review3PASS9.98s/scopedACCEPT. Not actual source/current/browser or RC.",
+    "last_verified_batch": "Prior root126relatedPASS; current12 refresh verified/7142oldfiles;32actual Ego AB desktop states;4normal moved-share hash checks. New owner public-scope6RED1.77s; new fixes regression pending. No visual/all-pages/fresh/offline/RC.",
     "project_completed": false,
-    "current_stage": "Collect original adoptionexec75738; then normal886A/B consumer registration and795source additions in one actual current transaction. No blind replay."
+    "current_stage": "Bounded UI worker ci-1007-compact-study-observations-v1 runner16678/exec65723 started once after preflight; no progress polling. Owner repairs A locked source projection in parallel. Then normal new candidate and affected runtime checks, not repeated source adoption."
   }
 }

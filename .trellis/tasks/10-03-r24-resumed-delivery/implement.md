@@ -10,7 +10,8 @@ C01同原会话修复审查192.734s/exit0/max verified、3PASS/scoped ACCEPT结�
 正式来源epoch1准备一次；
 原issuer因另建任务询问exit2无verdict/receipt，原失败保留。现既有任务
 in_progress说明后同会话issuer已exit0/正常回执31d3c3ee；实际模型/provider与
-high配置核验。正常来源采用exec75738仅一次运行，待真实返回与后置验证。
+high配置核验。正常来源采用exec75738仅一次exit0，实际3989/3572/33scope，
+decision922fe467；旧科学/用户/绑定/冲突/7129文件保持。A/B登记exec49148进行中。
 46研究3851行准备全保留，886直接候选；2951未知关系/14缺锁定原子不接编辑。
 下一正常A/B登记/一次refresh，不能把source-only接受当报告/宇宙/共轴接受。
 current11/349/用户清除/C保持，所有原DB行不丢，DBhash变化如实记录。
@@ -3052,3 +3053,22 @@ PASS0.47s/Ruff2/strict生产1。首次工具PYTHONPATH缺失、变量类型碰�
 单一浏览器共享状态不可并行写，确定性UI行为先由owner实核。涉及审美接受时
 按global触发独立挑战，不把HTTP/DOM读取当视觉PASS。无需重复医学源审查。
 Goal active/不停在里程碑；本批正常Git明确白名单递交，五用户编辑/未知资料保持。
+
+## 20261010 current12 正常接通与真实页面根因修复
+
+既有source-only issuer接续终态；正常采用3989facts/3572claims/20sources/33范围
+证明、合法886A+886B登记、795来源新增刷新均只运行一次且已成功。
+current12 A12/B12/C9/1144事实；旧349公开事实与7142文件/C9保持。静态SQL
+selector hash未变不是current未变，真实generation4cdbfeb7已核。不要重做。
+Ego184四宽四态A/B实际32机械检查完成（29new+同candidate3）；server会话未
+建立/错误Nemolizumab过滤Dupilumab事实导致的两次原FAIL保留，正常恢复前置
+状态后不改断言。Owner实看A1440/B1920确认全宽与16px，但长访视重复身份
+霸屏、A空公共来源上下文两个P1未关；几何PASS不是视觉接受。
+四current12分享包正常导出/移动目录/member hash通过；离线/fresh/config未验。
+Execution-plus-conference：一项前端JS/CSS根因有清晰独立写边界，dispatch有实际
+并行收益；owner单独Python来源接线，候选冻结后独立挑战主观接受，不增管理层。
+ci-1007-compact-study-observations-v1已完整packet/preflight，runner16678/exec65723
+单次启动，CodeBuddy/deepseek-v4.1-flash/max请求；实际终态身份待核，不冒称接受。
+不progress轮询/慢重派/重跑旧源。Owner来源预检/重建成族6RED1.77s后，复用
+既有PublicProvenance与锁定snapshot路径，先回归相关族；不猜URL/日期/科学许可。
+独立旧路径、五用户文件与未知资料保留，无cleanup；Goal active无阶段暂停。
