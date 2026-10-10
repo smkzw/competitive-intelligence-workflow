@@ -15,3 +15,11 @@ Runner23291 terminal. Raw receipt/report retained locally, private paths not pub
 
 Ten PNGs read. Owner accepts two P1 presentation fixes; expanded-grid whitespace P2 functional-safe
 tradeoff. Not science/full universe/hosts/all physical pages/RC acceptance; see corresponding review.
+
+## Bounded same-session current19 challenge
+
+One round189.866s/exit0/no fallback; same Gemini3.8Flash session/runtime model,
+high configured,30 runner-counted tool calls and six unique PNG reads.
+Root reset CLOSED; source clear layering DISPLAY_OK; density PARTIAL/P1 remains.
+Readonly template/tree scope expansion recorded in review, not hidden as compliant.
+No progress polling, slow redispatch or whole-product/medical acceptance.

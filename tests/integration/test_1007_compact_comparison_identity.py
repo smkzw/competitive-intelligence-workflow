@@ -24,6 +24,50 @@ IDENTITY_ONE = "帕博利珠单抗｜200mg Q3W"
 IDENTITY_TWO = "帕博利珠单抗｜100mg Q3W"
 
 
+def test_a_clear_disclosure_is_chinese_on_source_and_adjacent_consumers() -> None:
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const charts=fs.readFileSync(process.argv[2],'utf8');
+function definition(text,name){
+ const start=text.indexOf('  function '+name+'(');
+ if(start<0)return '';
+ const end=text.indexOf('\n  function ',start+5);
+ return text.slice(start,end<0?text.length:end);
+}
+class Node {constructor(){this.children=[];this.textContent='';}
+ appendChild(n){this.children.push(n);return n;}}
+const row={row_id:'cleared-source',endpoint:'WI-NRS',timepoint:'Week 30',
+ arm:'治疗组',value:null,numerator:null,denominator:null,disclosure_state:'user_cleared',
+ source_version_id:'source-v1',source_field_path:'$.results[0].value',source_text:'-67.5'};
+const sandbox={window:{__CHART_SYNC__:{}},efficacy:[row],safety:[],userEdits:{},
+ data:{data_cutoff:'2026-10-07',public_sources:[{source_version_id:'source-v1',
+ label:'登记来源',published_at:'2026-10-07',data_cutoff:'2026-10-07'}]},
+ numericValue:v=>typeof v==='number'&&Number.isFinite(v),compactCrudeRate:()=>null,
+ el:(tag,cls,text)=>Object.assign(new Node(),{textContent:text||''}),
+ formatCutoff:v=>v,unitSuffix:v=>v||'',Number,String};
+vm.runInNewContext(['disclosureLabelZh','hasPublishedDisclosure','unplottedValueText']
+ .map(n=>definition(charts,n)).join('\n'),sandbox);
+sandbox.window.__CHART_SYNC__.unplottedValueText=sandbox.unplottedValueText;
+vm.runInNewContext(['missingValueText','safetyDisplayValue','insightRowValue',
+ 'insightCountValue','renderEvidencePanel'].map(n=>definition(source,n)).join('\n'),sandbox);
+const content=new Node();
+sandbox.renderEvidencePanel(content,'来源',null,{collection:'efficacy',rowId:row.row_id});
+const text=content.children.map(n=>n.textContent).join('|');
+assert.ok(text.includes('用户清除，待重新核实'),text);
+assert.ok(!text.includes('user_cleared'),text);
+assert.ok(text.includes('-67.5'),'original source is intact');
+for(const name of ['safetyDisplayValue','insightRowValue','insightCountValue']){
+ assert.equal(sandbox[name](row),'用户清除，待重新核实',name);
+ assert.equal(sandbox[name]({...row,disclosure_state:'用户清除，待重新核实'}),
+  '用户清除，待重新核实',name+' legacy Chinese state');
+}
+assert.equal(sandbox.insightRowValue({...row,value:0,unit:'%',
+ disclosure_state:'reported_zero'}),'0%','reported zero remains numeric');
+"""
+    _run_node(probe, str(ASSETS / "report-a.js"), str(ASSETS / "charts.js"))
+
+
 def test_a_comparison_compacts_repeated_identity_without_losing_facts() -> None:
     probe = r"""
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');

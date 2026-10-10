@@ -334,6 +334,13 @@
     var row = safetyRecordFor(productId, termView, trialId, armDetail, sourceRows);
     return row ? row.value : null;
   }
+  function missingValueText(row) {
+    if (!row) return "未公开";
+    if (["未公开", "不适用", "用户清除，待重新核实"].indexOf(row.disclosure_state) !== -1) {
+      return row.disclosure_state;
+    }
+    return window.__CHART_SYNC__ ? window.__CHART_SYNC__.unplottedValueText(row) : "状态待核";
+  }
   function safetyDisplayValue(row) {
     if (!row) return "未公开";
     var projection = row.numeric_projection;
@@ -341,7 +348,7 @@
       return compactCrudeRate(row, projection.plot_value)
         || projection.plot_value + (projection.plot_unit || "");
     }
-    return row.disclosure_state || "未公开";
+    return missingValueText(row);
   }
   function safetyTimeWindowLabel(value) {
     var raw = String(value || "").trim();
@@ -399,14 +406,16 @@
     container.appendChild(list);
   }
   function insightRowValue(row) {
-    if (row && row.disclosure_state === "用户清除，待重新核实") return row.disclosure_state;
+    if (row && (row.disclosure_state === "user_cleared"
+      || row.disclosure_state === "用户清除，待重新核实")) return missingValueText(row);
     var projection = row && row.numeric_projection;
     var crudeRate = projection && compactCrudeRate(row, projection.plot_value);
     if (crudeRate) return crudeRate;
-    return row && numericValue(row.value) ? String(row.value) + (row.unit || "") : "未公开";
+    return row && numericValue(row.value) ? String(row.value) + (row.unit || "") : missingValueText(row);
   }
   function insightCountValue(row) {
-    if (row && row.disclosure_state === "用户清除，待重新核实") return row.disclosure_state;
+    if (row && (row.disclosure_state === "user_cleared"
+      || row.disclosure_state === "用户清除，待重新核实")) return missingValueText(row);
     if (!row || row.numerator === null || row.numerator === undefined
       || row.denominator === null || row.denominator === undefined) return "未公开";
     return String(row.numerator) + "/" + String(row.denominator);
@@ -1725,7 +1734,7 @@
       }
       content.appendChild(el("p", "", (isEfficacy ? selectedRow.endpoint + "｜" + selectedRow.timepoint : selectedRow.measure_label || selectedRow.term)
         + "｜" + (selectedRow.arm_detail || selectedRow.arm) + "｜"
-        + (selectedRow.value == null ? (selectedRow.disclosure_state || "数值未提供") : selectedRow.value + unitSuffix(selectedRow.unit))));
+        + (selectedRow.value == null ? missingValueText(selectedRow) : selectedRow.value + unitSuffix(selectedRow.unit))));
       if (userEdits[selectedRow.row_id]) {
         var selectedEdit = userEdits[selectedRow.row_id];
         content.appendChild(el("p", "", selectedEdit.status_label_zh + "｜当前用户修订值："

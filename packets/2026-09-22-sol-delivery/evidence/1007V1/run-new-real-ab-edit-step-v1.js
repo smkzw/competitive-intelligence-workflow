@@ -38,17 +38,18 @@ try {
   await page.click(action === "set" ? "#save" : action === "clear" ? "#clear" : "#undo");
   await page.waitForFunction(() => {
     const text = document.querySelector("#result").textContent.trim();
-    return text !== "";
+    return text !== "" || document.querySelector("#status").textContent.includes("操作未完成");
   },undefined,{timeout:600000});
   const actual = await page.evaluate(()=>({
-    result:JSON.parse(document.querySelector("#result").textContent),
+    result:JSON.parse(document.querySelector("#result").textContent || "null"),
     status:document.querySelector("#status").textContent,
     value:document.querySelector("#input-value").value,
     normalized:document.querySelector("#input-normalized").value,
     links:[...document.querySelectorAll("#report-links a")].map(a=>({text:a.textContent,url:a.href}))
   }));
   actual.step=step;actual.action=action;actual.revision=14+step;
-  actual.error=actual.result.error || actual.result.refresh_required || null;
+  actual.error=actual.result?.error || actual.result?.refresh_required ||
+    (actual.status.includes("操作未完成") ? actual.status : null);
   await fs.writeFile(returned,JSON.stringify(actual,null,2),{flag:"wx"});
   const expectedAfter = ["-67.4","-67.5","","-67.5"][step-1];
   if (actual.error || !actual.status.includes(`revision ${14+step}`) || actual.value !== expectedAfter)

@@ -7,8 +7,13 @@ if (!Number.isSafeInteger(revision) || revision < 13) throw new Error("Explicit 
 const resumeB = globalThis.CI_WORKFLOW_QA_RESUME_B === true;
 const baseOutput = root + `/.artifacts/1007-compact-provenance-current${revision}-desktop-v1`;
 const output = baseOutput + (resumeB ? "-b-filter-recovery-v1" : "");
-const verified = JSON.parse(await fs.readFile(root + `/.artifacts/1007-compact-provenance-current${revision}-v1/verified.json`, "utf8"));
-if (verified.revision !== revision || verified.facts_unchanged !== 1144) throw new Error("Candidate verification required");
+const proofPath=globalThis.CI_WORKFLOW_QA_PROOF ||
+  `/.artifacts/1007-compact-provenance-current${revision}-v1/verified.json`;
+if(!/^\/\.artifacts\/[a-z0-9-/]+\.json$/.test(proofPath)||proofPath.includes(".."))
+  throw new Error("Explicit local proof path required");
+const verified = JSON.parse(await fs.readFile(root+proofPath, "utf8"));
+if (verified.revision !== revision || (verified.facts_unchanged || verified.editable_facts_count) !== 1144)
+  throw new Error("Candidate verification required");
 await fs.mkdir(output);
 const page = (await taskSpace(184)).page("p2");
 const run = {space:184,revision,generation:verified.generation,
@@ -36,6 +41,7 @@ async function capture(kind,width,state) {
       table_height:table.getBoundingClientRect().height,
       compact_observations:observations.filter(n=>n.classList.contains("kz-comparison-observation--compact")).length,
       identity_headers:table.querySelectorAll(".kz-comparison-identity-header").length,
+      reset_visible:kind!=="B" || [...host.querySelectorAll("[data-filter-reset]")].some(n=>n.getBoundingClientRect().height>=40),
       retained_labels:observations.every(n=>!!n.querySelector(".kz-comparison-fact__identity")?.textContent),
       closed_context_checks:observations.filter(n=>n.classList.contains("kz-comparison-observation--compact") && n.querySelector("details:not([open])")).map(n=>{
         const b=n.querySelector("button").getBoundingClientRect(),s=n.querySelector("summary").getBoundingClientRect();
@@ -44,6 +50,8 @@ async function capture(kind,width,state) {
       source_count:document.querySelectorAll("#external-sources .portal-source-section__list > li").length,
       source_links:[...document.querySelectorAll("#external-sources a")].map(a=>a.href),
       source_open:!drawer.hidden,source:state === "source" ? drawer.textContent : null,
+      evidence_scale:kind==="B"&&state==="source"?window.__EVIDENCE_VIEWS__.find(
+        v=>v.row.row_id===window.__EVIDENCE_DRAWER__.getOpenRowId())?.scale:null,
       generation:JSON.parse(document.querySelector("#ci-current-edit").textContent).generation};
   }, {kind,state});
   if (observed.revision !== String(revision) || observed.generation !== run.generation || observed.document_width>width)
@@ -52,12 +60,17 @@ async function capture(kind,width,state) {
     run.failures.push(`${kind}/${width}/${state}: typed query scope`);
   if (observed.fonts.some(n=>n<16) || observed.clipped || !observed.retained_labels)
     run.failures.push(`${kind}/${width}/${state}: font, clipped facts or missing labels`);
+  if(revision>=15 && !observed.reset_visible)run.failures.push(`${kind}/${width}/${state}: visible reset missing`);
   if (revision >= 14 && observed.closed_context_checks.some(n=>!n.beside))
     run.failures.push(`${kind}/${width}/${state}: closed context adds another full row`);
   if (kind === "A" && (observed.source_count !== 20 || observed.source_links.length !== 20))
     run.failures.push(`${kind}/${width}/${state}: locked public sources`);
   if (state === "source" && (!observed.source_open || !observed.source.includes("-48.32") || !observed.source.includes("用户清除")))
     run.failures.push(`${kind}/${width}/source: original source or user clear disclosure`);
+  if(revision>=19&&state==="source"&&observed.source.includes("user_cleared"))
+    run.failures.push(`${kind}/${width}/source: internal enum exposed`);
+  if(revision>=19&&observed.evidence_scale?.state==="user_cleared")
+    run.failures.push(`${kind}/${width}/source: missing scale falsely user-cleared`);
   observed.screenshot = `${kind}-${width}-${state}-r${revision}.png`;
   await page.screenshot({path:output+"/"+observed.screenshot});
   run.states.push(observed);

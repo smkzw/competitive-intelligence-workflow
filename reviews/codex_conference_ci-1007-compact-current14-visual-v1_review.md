@@ -44,3 +44,23 @@ New source requires new-candidate real pixels; frozen14 is not that acceptance.
 Implement bounded fixes, then real new A+B atom edit/undo/clear/undo, same-version QA/config/share.
 No repeated source adoption, no release closure. Final seven-module related rerun54PASS2.84s;
 scoped Ruff3PASS, JS syntax and mirror checked.
+
+## Same-session current19 repair challenge (not a new opinion)
+
+Actual Pi/google-antigravity/gemini-3.8-flash runtime matched, high configured;
+same session01a12353-dfe6-7000-99db-f0be2e383e1a,189.866s/exit0/no fallback.
+Six distinct current19 PNGs genuinely read;30 runner-counted tool calls.
+Receipt SHA3d7e059bea3ecab980b34e4372920bba2f3b57ac239f9d28604c46fe5bc6fca2;
+output SHA0d6a3c462f4a629d016443f35ddf6c33ec74fe499788fa2ae7f4697eaa51ca1a.
+Current19 gen c13321ab;32 actual AB states/8 native expansions are behavior, not aesthetics.
+
+Owner accepts reset closure and numeric-clear versus missing-metadata display.
+Dense cross-study presentation PARTIALLY_IMPROVED:1440 first-study dominance,
+1600A unit text wrapping remain P1. No overall visual/scientific/release acceptance.
+Owner will evaluate one coherent existing-component fix, not automatically copy
+reviewer's360px/min45vh-local-scroll proposal or begin three-way full-page loops.
+
+Boundary erratum: reviewer said eleven-file-only compliant, but actual grep expanded
+into portal tree and read B template outside allowlist. These are readonly related
+assets; no writes/browser/network/tests observed. Record scope expansion instead of
+adopting its unqualified compliance claim. High effort is configured, not service attest.

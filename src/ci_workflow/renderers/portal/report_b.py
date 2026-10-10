@@ -2244,6 +2244,13 @@ def _source_first(value: Any, source: Any, *names: str, default: Any = None) -> 
 
 def _source_statistic_form(value: Any, source: Any, fallback: Any) -> Any:
     """Registry paramType is a distinct enum; NUMBER does not mean a count."""
+    role = _source_first(value, source, "source_value_role", default=None)
+    if role == "dispersion":
+        return _source_first(value, source, "source_dispersion_type", default="not_reported")
+    if role in ("participant_count", "denominator"):
+        return "count"
+    if role == "reported_measure" and fallback in ("下限", "上限"):
+        return fallback  # A limit atom must not inherit its parent's central statistic.
     param = _get(value, "source_param_type", _MISSING)
     if param is _MISSING:
         param = _get(source, "source_param_type", _MISSING)
@@ -2694,6 +2701,7 @@ def _project_record(
     # recomputed and no current value is restored from the source.
     for field in (
         "source_domain", "source_metric", "source_param_type", "source_analysis_population",
+        "source_value_role", "source_dispersion_type",
         "source_measure_path", "source_measure_definition", "source_clause_context",
         "source_denominator_scope_zh", "source_denominator_value", "source_denominator_path",
     ):
@@ -3271,7 +3279,9 @@ def _extension_field(source: Any, row: Mapping[str, Any], *names: str) -> Eviden
         value = row.get(names[0])
     if isinstance(value, (list, tuple)):
         value = "、".join(_text(item) for item in value if _text(item)) or None
-    return _evidence_field(value, str(row.get("disclosure_state", "not_reported")))
+    state = str(row.get("disclosure_state", "not_reported"))
+    # Clearing a numerical value does not clear its scientific metadata.
+    return _evidence_field(value, None if state == "user_cleared" else state)
 
 
 def _evidence_view(
@@ -3286,6 +3296,7 @@ def _evidence_view(
 ) -> EvidenceView:
     row_id = _text(row.get("row_id"), "unknown-row")
     state = _text(row.get("disclosure_state"), "not_reported")
+    context_state = None if state == "user_cleared" else state
     product_id = _text(row.get("product_id"))
     trial_id = _text(row.get("trial_id"))
     snapshot = _text(
@@ -3387,10 +3398,10 @@ def _evidence_view(
         "group_zh": _evidence_field(group),
         "element_zh": label,
         "scale": _extension_field(source, row, "scale", "scale_version"),
-        "timepoint": _evidence_field(row.get("time"), state),
+        "timepoint": _evidence_field(row.get("time"), context_state),
         "value": value_field,
         "threshold": _extension_field(source, row, "threshold", "adherence_threshold"),
-        "unit": _evidence_field(row.get("unit"), state),
+        "unit": _evidence_field(row.get("unit"), context_state),
         "numerator": _evidence_field(
             _first(source, "numerator", default=row.get("numerator")), state
         ),

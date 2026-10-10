@@ -6,6 +6,7 @@ attempts are exclusive. Browser/offline/fresh-profile acceptance remains separat
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -24,20 +25,47 @@ def sha(path: Path) -> str:
 
 
 def main() -> None:
+    global OUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--expected-revision", type=int, default=12)
+    parser.add_argument("--config-dir", type=Path)
+    args = parser.parse_args()
+    revision = args.expected_revision
+    if revision < 12:
+        raise SystemExit("Explicit new current revision required")
+    OUT = ROOT / f".artifacts/1007-scoped-current{revision}-shares-v2"
     if OUT.exists():
         raise SystemExit(
             "Existing share attempt: reopen completed archives/returns, do not overwrite"
         )
     current = read_current_delivery(PROJECT)
-    assert current is not None and current.revision == 12
+    assert current is not None and current.revision == revision
     generation = current_bundle_sha256(current)
     expected_revisions: dict[str, int] = {r.report: r.revision for r in current.reports}
-    assert expected_revisions == {"A": 12, "B": 12, "C": 9}
+    assert expected_revisions == {"A": revision, "B": revision, "C": 9}
+    selections = {}
+    if args.config_dir:
+        config_root = args.config_dir.resolve(strict=True)
+        assert config_root.is_relative_to(ROOT / ".artifacts")
+        for kind in "ABC":
+            config = json.loads((config_root / f"personal-view-{kind}.json").read_bytes())
+            assert config["schema_version"] == "1.0" and len(config["selections"]) == 1
+            selection = config["selections"][0]
+            assert selection["report"] == kind
+            assert selection["revision"] == expected_revisions[kind]
+            selections[kind] = selection
     OUT.mkdir()
     records = []
     for kinds in (("A",), ("B",), ("C",), ("A", "B", "C")):
         tag = "".join(kinds)
-        destination = OUT / f"current12-{tag}.zip"
+        destination = OUT / f"current{revision}-{tag}.zip"
+        view_args = []
+        if selections:
+            config_path = OUT / f"{tag}-view-config.json"
+            with config_path.open("x") as stream:
+                json.dump({"schema_version": "1.0", "selections": [selections[k] for k in kinds]},
+                          stream, ensure_ascii=False)
+            view_args = ["--view-config", str(config_path)]
         assert (
             cli_main(
                 [
@@ -49,6 +77,7 @@ def main() -> None:
                     ",".join(kinds),
                     "--output",
                     str(destination),
+                    *view_args,
                 ]
             )
             == 0
@@ -60,7 +89,7 @@ def main() -> None:
         moved = OUT / f"moved-{tag}"
         with ZipFile(destination) as archive:
             manifest = json.loads(archive.read("share-manifest.json"))
-            assert manifest["current_revision"] == 12
+            assert manifest["current_revision"] == revision
             assert manifest["current_generation_sha256"] == generation
             assert set(manifest["reports"]) == set(kinds)
             for info in archive.infolist():
@@ -96,11 +125,11 @@ def main() -> None:
         json.dump(
             {
                 "state": "FOUR_NORMAL_CURRENT_SHARES_MOVED_HASH_VERIFIED_NOT_BROWSER_ACCEPTED",
-                "current_revision": 12,
+                "current_revision": revision,
                 "report_revisions": expected_revisions,
                 "exports": records,
                 "current_unchanged": True,
-                "saved_config": "NOT_RUN",
+                "saved_config": "ACTUAL_DOWNLOADED_CONFIGS_BOUND" if selections else "NOT_RUN",
                 "fresh_browser": "NOT_RUN",
                 "offline_browser": "NOT_RUN",
                 "limits": "Share is not Skill installation or scientific/RC acceptance",

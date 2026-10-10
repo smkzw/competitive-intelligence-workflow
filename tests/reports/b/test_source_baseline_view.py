@@ -38,6 +38,18 @@ def test_every_numeric_atom_including_sd_and_zero_keeps_exact_source() -> None:
     assert any(r["is_source_aggregate"] and r["value"] == 30 for r in view["facts"])
 
 
+@pytest.mark.parametrize("fields,expected", [
+    ({"source_value_role": "dispersion", "source_dispersion_type": "STANDARD_DEVIATION"},
+     "STANDARD_DEVIATION"),
+    ({"source_value_role": "dispersion", "source_dispersion_type": None}, "not_reported"),
+    ({"source_value_role": "denominator"}, "count"),
+    ({"source_value_role": "participant_count"}, "count"),
+])
+def test_parent_param_type_never_overwrites_another_source_atom_role(fields, expected) -> None:
+    source = {"source_param_type": "MEAN", **fields}
+    assert report_b._source_statistic_form(source, source, "mean") == expected
+
+
 def test_descriptive_common_age_column_retains_populations_and_separates_sd() -> None:
     first = _view()
     record = deepcopy(_record())
@@ -60,7 +72,19 @@ def test_descriptive_common_age_column_retains_populations_and_separates_sd() ->
     assert len(means) == 1
     assert {r["trial_id"] for r in means[0]["rows"]} == {"nct12345678", "nct87654321"}
     assert len({r["analysis_population"] for r in means[0]["rows"]}) == 2
-    assert all(r["statistic_form"] == "MEAN" for r in means[0]["rows"])
+    assert all(r["statistical_form_family"] == "mean" for r in means[0]["rows"])
+    assert all(r["source_param_type"] == "MEAN" for r in means[0]["rows"])
+    spreads = [r for g in groups for r in g["rows"]
+               if r["source_value_role"] == "dispersion"]
+    assert len(spreads) == 4
+    assert all(r["statistical_form_family"] == "standard_deviation" for r in spreads)
+    assert all(r["source_dispersion_type"] == "STANDARD_DEVIATION" for r in spreads)
+    for row in spreads:
+        repeated = report_b._project_record(row, domain="baseline", names={}, trial_names={},
+                                           fallback=row["row_id"])
+        assert repeated["statistical_form_family"] == "standard_deviation"
+        assert repeated["source_value_role"] == "dispersion"
+        assert repeated["value"] == row["value"]
     assert all(g["comparison_purpose"] == "baseline_descriptive_only" for g in groups)
     workspace = report_b._comparison_workspace(rows, groups, ())
     assert len(workspace["membership"]["row_ids"]) == 18

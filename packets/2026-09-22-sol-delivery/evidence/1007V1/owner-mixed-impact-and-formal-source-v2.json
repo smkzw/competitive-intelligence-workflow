@@ -86,16 +86,16 @@
     "next": "Source refresh exec94187 terminal exit0, actual12. Never repeat ingestion/adoption/registration/795 additions. New clinical-equivalence not inferred."
   },
   "current": {
-    "revision": 14,
-    "reports": "A14/B14/C9",
+    "revision": 19,
+    "reports": "A19/B19/C9",
     "editable_facts": 1144,
     "pointer_sha256": "7336654514605085b9ee86e3fedaa664e83406f0c358125fa653683767374d24",
-    "generation": "7bdaf9709abacfabbfe248e93cfa511c160503d874c59a1290fde5cb731575d0",
+    "generation": "c13321ab54579121034b24527f8c98fc94ead6da371039059364d9fc40135bfe",
     "pointer_note": "Selector bytes unchanged by design: read_current_delivery/database generation is authoritative, not selector file hash.",
     "refresh_return_sha256": "7848a77bf696afdcb5a0d9338e5728b0c0c610ae9f527bb3b81e019ffe5eea89",
     "refresh_verified_sha256": "b385a3dbd6e27fd68b8c0fc27fde40b41a5dade1aa17feefcf02c7a80d084f1f",
     "row_preservation": "Actual normal single refresh adds795 facts; old349 public facts exact, original fact versions and7142 original files unchanged; C9 current entry unchanged.",
-    "operations": "Current14 normal presentation once, seven frozen source/user/binding tables and8030oldfiles exact,C9 unchanged,A20public sources. Returnd4e7a13d1d3a443cec06b2cda120538cc5d0ff697272c11513096712de84277a/verified4734c481ed27aaefe82c03f81461216824824ccd0d1a80dd4dc78c422d69b78e. Source0f2a876e pushed. Owned editor54558 healthy65033; Ego184 current14QA88080 underway. No new save/edit; earlier candidate PASS not reused."
+    "operations": "Normal real A+B set15/undo16/clear17/undo18 completed once each, final actual AB source/value/Esc3ff81795. Pure presentation19 completed once, all1144 facts/seven scientific-user-binding tables/C9/10255oldfiles exact;20publicsources. Return3516e116/verifieda5df5907. Root repair142PASS; actual19 AB32states/8expansions/ABC config/four moved shares/six offline entries complete; quality96189 pending. Same-session C02 reset/clear display closed, dense comparison remains P1. No repeated save/source refresh."
   },
   "desktop_current12": {
     "state": "32_ACTUAL_AB_STATES_MECHANICAL_PASS_OWNER_VISUAL_DEFECTS_OPEN",
@@ -152,14 +152,80 @@
     "owner_decision": "Two P1:1440 study occupies first screen; hidden B reset. Minimal shared CSS budget/B reset and search clearing. Expanded grid whitespace P2 functional-safe, no masonry. Not clinical/whole product acceptance."
   },
   "new_real_ab_edit_chain": {
-    "state": "READONLY_PREWRITE_AND_CONSISTENT_BACKUP_COMPLETE_NO_UI_SAVE_YET",
+    "state": "FOUR_NORMAL_UI_STEPS_COMMITTED_AND_READONLY_VERIFIED_FINAL_AB_BROWSER_CORE_PASSED_DISPLAY_DEFECT_SEPARATE",
     "path": ".artifacts/1007-current14-real-ab-edit-v1",
     "fact_id": "ctgov-atomic-fact_6ac934e661c1a374ea7e55f0",
     "source": "NCT03816891,Vixarelimab360mg SC Q4W DBL,Week30,-67.5 percentage change;estimate not n/N",
-    "plan": "Normal set-67.4/undo-67.5/clear/undo-67.5. New795 A+B legal consumer,no C binding; source/otherfacts/C/history preserved. Initial old349 selector rejected before output/DB mutation."
+    "plan": "Normal set-67.4/undo-67.5/clear/undo-67.5 done15-18 once each. New795 A+B legal consumer,no C binding. No operation in flight; never repeat saves. Clear17 raw-A-state/B-missing-metadata defects remain separate from core numeric/source/Esc PASS.",
+    "step4_ui_return_sha256": "b7f071b70ea4b126a84e44381c5be5bd77d75a36e8a27f9567b274bc6e7bb911",
+    "step4_verified_sha256": "e77a4bcbd0f6e2fb64fc9c44f0349b8a248ce4b9b03bca36b6097ceb3f098627",
+    "step4_browser_sha256": "3ff81795e4c48b543bb9881fdc53a99855068da8fe7cdf1b1f5628d4c4df124e",
+    "step1_ui_return_sha256": "8e9249779a1a0b45002e8e975f1042850164adea22f80b2fa81df52717e5c707",
+    "step1_verified_sha256": "d5c0c21360872ea9a7c580208446ad8da1c4b74811b405b07d38fe2e48e7c56e",
+    "step1_browser_original_fail_sha256": "a31f5af7cef0614c829b0691de4aed352aefdeb9e75b3c2cb1f0a6a73acc984b",
+    "step1_browser_recovery_sha256": "fd1ef50d80dfcefa9888b75227488dc4614ebfc502eeb2562af578c96f2d7d14",
+    "errata": "Postcondition initially compared immutable builder input instead of rendered current data; corrected readonly JSON decoding, no repeated save. B browser used row_id rather than production filter id; actual A retained, B recovered separately. Source/original versions/8030files/other1143facts/C unchanged."
   },
-  "next_safe_action": "Collect final bounded regression; scoped push then normal new A+B edit/undo/clear/undo and same-version real desktop/config/shares. Frozen14 review terminal, no replay. Source/adoption/registration/795refresh completed; hosts/24portal/RC open.",
+  "clear_display_and_source_role_repair": {
+    "state": "142_RELATED_PASS_NORMAL_PRESENTATION19_COMPLETED_NOT_VISUAL_ACCEPTED",
+    "red": "7FAIL18PASS0.54s actual clear-disclosure production functions; adjacent94PASS1FAIL exposed SD treated as mean; source-role family5FAIL0.57s",
+    "changes": "Reuse shared charts unplotted label for A source/dossier/safety. Numerical clear does not clear B metadata. Source dispersion/participant/N roles precede parent paramType; carry role+dispersion through projection. No source edit, new framework or weaker scientific gate.",
+    "regression": "142PASS22.62s nine adjacent modules; Ruff product/tests/verification, strict renderer and Node syntax PASS. Not whole development gate or browser acceptance.",
+    "test_errata": "Inserted legacy aggregate assertion initially moved into new param test: NameError preserved, restored original scope. Existing raw MEAN test conflated normalized statistic with source enum: now asserts normalized mean plus exact source_param_type MEAN and SD/source role/reprojection preservation. Missing source-role passthrough found and repaired, not hidden by dropping assertions.",
+    "normal_presentation_attempt": ".artifacts/1007-compact-provenance-current19-v1",
+    "normal_presentation_exec": 35225,
+    "normal_presentation_state": "COMPLETED_ONCE_EXIT0_A19_B19_C9_1144FACTS_SEVEN_TABLES_10255OLD_FILES_EXACT",
+    "normal_presentation_verified_sha256": "a5df590784e375d568fcc9336a0321914b861c6e4ce5ea3bcb1cc9181c3927fd",
+    "normal_presentation_return_sha256": "3516e116de7c012aeef36f814b36822856eb007db72fa45e3e7d4af410001ea0",
+    "desktop_exec": 4643,
+    "development_gate_exec": 96189,
+    "four_width_config_share": "32_NEW_ACTUAL_AB_STATES_8_EXPANSIONS_ABC_CONFIG_4_MOVED_SHARES_6_OFFLINE_ENTRIES_COMPLETE_NOT_FRESH_BROWSER"
+  },
+  "desktop_current19": {
+    "state": "32_NEW_ACTUAL_AB_STATES_AND_8_NATIVE_EXPANSIONS_COMPLETE_NOT_FULL_VISUAL_ACCEPTED",
+    "evidence": ".artifacts/1007-compact-provenance-current19-desktop-v1/actual.json",
+    "sha256": "2d0225d0952f50709ac46a32a455f32eec174fbe3d1cf1a3135fed9d695e0ae6",
+    "owner_pixel_scope": "Actually viewed A1440dense/B1440dense/B1440source. Reset and source clear layering fixed; long B study name/many visits still dominate. Raw visual NOT_RUN field not rewritten to PASS."
+  },
+  "config_current19": {
+    "state": "ACTUAL_ABC_PERSONAL_VIEW_DOWNLOAD_AND_DISTINCT_IMPORT_PASSED",
+    "exec": 91400,
+    "evidence": ".artifacts/1007-current19-config-v1/actual.json",
+    "sha256": "77520f17c1cd21bbe0b068e49a798a5b766053a3812a0a0a4d223462c4f031ff",
+    "limits": "Ego184 reused; fresh browser/profile/storage clearing NOT_RUN; A19/B19/C9 same generation"
+  },
+  "shares_current19": {
+    "state": "FOUR_NORMAL_CURRENT_SHARES_MOVED_HASH_VERIFIED_SIX_ACTUAL_OFFLINE_ENTRIES_PASSED",
+    "export_exec": 20636,
+    "offline_exec": 82530,
+    "evidence": ".artifacts/1007-scoped-current19-shares-v2/verified.json",
+    "sha256": "5cd4d4bf16db72823509ebf9b058a052ae27079c37359f959df42b3b93578973",
+    "offline_evidence": ".artifacts/1007-scoped-current19-shares-v2/offline-actual-v1.json",
+    "offline_sha256": "2e46f9295516722afe1a22f995634fa42cceb41e6d28207c68097b0e1403a57a",
+    "saved_config": "ACTUAL_DOWNLOADED_CONFIGS_BOUND",
+    "limits": "Actual blocked public traffic,6saved single/joint entries/source-clear-original-edit-Esc; network restored. No fresh-profile/cross-browser/Skill installation/scientific/RC acceptance."
+  },
+  "visual_c02_current19": {
+    "state": "TERMINAL_REVISE_DENSITY_PARTIAL_RESET_CLOSED_CLEAR_DISPLAY_OK",
+    "exec": 98722,
+    "route": "Actual Pi/google-antigravity/gemini-3.8-flash runtime matched; high configured in argv, not independently attested",
+    "session": "01a12353-dfe6-7000-99db-f0be2e383e1a",
+    "duration_seconds": 189.866,
+    "exit_code": 0,
+    "fallback": null,
+    "report_sha256": "0d6a3c462f4a629d016443f35ddf6c33ec74fe499788fa2ae7f4697eaa51ca1a",
+    "receipt_sha256": "3d7e059bea3ecab980b34e4372920bba2f3b57ac239f9d28604c46fe5bc6fca2",
+    "actual_tools": "Six distinct named PNGs read;30 runner-counted calls. Reviewer expanded readonly grep into portal tree/template beyond strict eleven-file allowlist; compliance claim not fully accepted. No write/browser/network/test calls observed.",
+    "owner_decision": "Actual B reset and source numeric-clear/missing-metadata display closed only. Density partial; A1600 wrapping and dense first-study dominance remain P1. Evaluate one coherent structural remedy, not blindly adopt360px/local-scroll recommendation or launch all-page review loop."
+  },
+  "development_gate_current19": {
+    "state": "TERMINAL_EXIT0_QUALITY_ONLY_SIX_STEPS",
+    "command": "bash tools/gate.sh",
+    "observed": "Ruff src/tests/tools PASS; strict mypy286files PASS; active unit/contract1185PASS20deselected647.01s; retained compatibility20PASS1185deselected2.00s; layering7PASS0.24s; full English-root lexical legacy scanPASS. GATE_OK quality-only steps6.",
+    "limits": "Default six-step quality-only scope, not full integration/retained tracks/browser/science/release"
+  },
+  "next_safe_action": "Original19 desktop/config/C02/four shares/six actual offline entries and six-step quality gate complete, do not replay. Scoped commit/push full root repair and compact receipts. Then one coherent shared dense comparison root family, candidate20 after this completed19 chain. Four saves/source adoption/registration/795refresh never repeated. Full science/hosts/24portals/RC remain open.",
   "independent_current_role_lookup": "Actual Ego184 CDE all-year lookup completed while worker runs, owner-cde-current-role-probe-v1.json. Nemolizumab2exact applications, NOT China MAH/indication/approval. Company first10of40/41 not closed. Serlopitant identical-response NOT_VERIFIED. No adopted source or fixed-cutoff/current mutation; original identity PDFs/graph not reobtained or altered.",
-  "release_open": "Dense comparison/public source footer; full universe/publications/current-status/China MAH; unknown relations; all physical pages/fresh-profile/share/config/cross-browser/install/three hosts/recovery/24 portals. No RC/full delivery.",
+  "release_open": "Dense comparison P1; full universe/publications/current-status/China MAH; unknown relations; all physical pages/fresh-profile/cross-browser/install/three hosts/recovery/24 portals. Current19 ABC config/moved shares/six offline entries complete. Public footer20sources connected but not universe acceptance. No RC/full delivery.",
   "retention": "No cleanup. Required original failures, new sources, consistent backups and review artifacts retained; unknown untracked files and protected user files untouched."
 }

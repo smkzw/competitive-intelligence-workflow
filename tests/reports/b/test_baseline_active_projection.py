@@ -13,10 +13,12 @@ from ci_workflow.renderers.portal.active_fact_projection import (
 from ci_workflow.renderers.portal.report_a import SourceRow, StudyRow
 from ci_workflow.renderers.portal.report_b import (
     ReportBPortalData,
+    _evidence_view,
     _project_active_facts_b,
     active_fact_binding_for_b,
     validate_active_fact_revision_b,
 )
+from ci_workflow.reports.common.evidence_view import EvidenceFieldState, EvidenceObservationKind
 from tests.reports.b.test_source_baseline_view import _view
 
 
@@ -78,6 +80,32 @@ def test_baseline_clear_is_current_user_state_not_source_nonpublication() -> Non
     assert current["disclosure_state"] == "user_cleared"
     assert current["source_text"] == row["source_text"]
     assert projected.user_edits[row["row_id"]].current_value == "用户清除，待重新核实"
+
+
+@pytest.mark.parametrize("field", ["scale", "threshold", "timepoint", "unit",
+                                  "source_field_definition", "compatibility_rule"])
+def test_clear_value_does_not_clear_missing_scientific_metadata(field) -> None:
+    data = _data()
+    source = {"row_id": "clear-observation", "value": None, "numerator": None,
+              "denominator": None, "disclosure_state": "user_cleared"}
+    view = _evidence_view(data, row=source, source=source, page_id="baseline-overview",
+        observation_kind=EvidenceObservationKind.BASELINE_OBSERVATION,
+        names={}, trial_names={})
+    assert getattr(view, field).state == EvidenceFieldState.SOURCE_NOT_LISTED
+    # Current numerical axes are cleared; missing context is not a user action.
+    for numeric_field in ("value", "numerator", "denominator"):
+        assert getattr(view, numeric_field).state == EvidenceFieldState.USER_CLEARED
+
+
+def test_clear_value_retains_available_context_and_explicit_zero() -> None:
+    data = _data()
+    source = {"row_id": "clear-context", "value": None, "numerator": None,
+              "denominator": None, "disclosure_state": "user_cleared",
+              "scale": "WI-NRS", "threshold": 0, "time": "Week 30", "unit": "%"}
+    view = _evidence_view(data, row=source, source=source, page_id="efficacy",
+        observation_kind=EvidenceObservationKind.GENERAL, names={}, trial_names={})
+    assert (view.scale.value, view.threshold.value, view.timepoint.value, view.unit.value) == (
+        "WI-NRS", "0", "Week 30", "%")
 
 
 def test_baseline_source_projection_is_not_falsely_marked_user_modified() -> None:
